@@ -6,3 +6,7 @@
 	path = cogni-obsidian
 	url = https://github.com/cogni-work/cogni-obsidian.git
 	branch = main
+[submodule "cogni-workspace"]
+	path = cogni-workspace
+	url = https://github.com/cogni-work/cogni-workspace.git
+	branch = main

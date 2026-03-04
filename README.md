@@ -10,6 +10,7 @@ Built and battle-tested at [cogni-work](https://github.com/cogni-work), then ext
 |--------|-------------|
 | [cogni-claims](./cogni-claims) | Verify sourced claims against cited URLs. Catches citation errors, misquotations, and unsupported conclusions before content ships. |
 | [cogni-obsidian](./cogni-obsidian) | Obsidian integration for Claude Code workplaces. Scaffolds vaults with Terminal plugin and manages cross-platform terminal profiles. |
+| [cogni-workspace](./cogni-workspace) | Lean workspace orchestrator. Manages shared foundation (env vars, settings), theme management, plugin discovery, and workspace health. |
 
 ## Quick start
 
@@ -24,6 +25,7 @@ Built and battle-tested at [cogni-work](https://github.com/cogni-work), then ext
 ```shell
 /plugin install cogni-claims@cogni-works
 /plugin install cogni-obsidian@cogni-works
+/plugin install cogni-workspace@cogni-works
 ```
 
 Or browse interactively with `/plugin` and go to the **Discover** tab.
@@ -34,6 +36,7 @@ You work in consulting, B2B sales, or marketing — and you use Claude Code as y
 
 - **Claim verification** — fact-check reports and proposals against their sources
 - **Obsidian workplaces** — set up and manage Obsidian vaults as collaborative Claude Code environments
+- **Workspace orchestration** — shared foundation, themes, plugin discovery, and workspace health
 
 ## How it works
 
@@ -50,6 +53,11 @@ cogni-works/
 │   ├── agents/
 │   └── commands/
 ├── cogni-obsidian/         # Obsidian integration plugin
+│   ├── .claude-plugin/
+│   │   └── plugin.json
+│   ├── skills/
+│   └── commands/
+├── cogni-workspace/        # Workspace orchestrator plugin
 │   ├── .claude-plugin/
 │   │   └── plugin.json
 │   ├── skills/

@@ -12,6 +12,7 @@ Built and battle-tested at [cogni-work](https://github.com/cogni-work), then ext
 | [cogni-obsidian](./cogni-obsidian) | Obsidian integration for Claude Code workplaces. Scaffolds vaults with Terminal plugin, manages vault configuration, and provides note management with frontmatter support. |
 | [cogni-copywriting](./cogni-copywriting) | Professional copywriting toolkit with messaging frameworks (BLUF, Pyramid, SCQA, STAR, PSB, FAB), stakeholder review, sales enhancement (Power Positions), and readability optimization. |
 | [cogni-narrative](./cogni-narrative) | Story arc-driven narrative transformation. Transforms structured content into compelling executive narratives using 6 story arc frameworks. |
+| [cogni-tips](./cogni-tips) | Strategic trend scouting and reporting pipeline. Combines the Smarter Service Trendradar with the TIPS framework for industry trend analysis. Bilingual (EN/DE). |
 | [cogni-workspace](./cogni-workspace) | Lean workspace orchestrator. Manages shared foundation (env vars, settings), theme management, plugin discovery, and workspace health. |
 
 ## Quick start
@@ -29,6 +30,7 @@ Built and battle-tested at [cogni-work](https://github.com/cogni-work), then ext
 /plugin install cogni-obsidian@cogni-works
 /plugin install cogni-copywriting@cogni-works
 /plugin install cogni-narrative@cogni-works
+/plugin install cogni-tips@cogni-works
 /plugin install cogni-workspace@cogni-works
 ```
 
@@ -42,6 +44,7 @@ You work in consulting, B2B sales, or marketing — and you use Claude Code as y
 - **Copywriting** — polish documents with messaging frameworks (BLUF, Pyramid, SCQA, STAR, PSB, FAB), sales enhancement (Power Positions), and stakeholder review
 - **Narrative transformation** — turn structured content into executive narratives using story arc frameworks
 - **Obsidian workplaces** — set up and manage Obsidian vaults as collaborative Claude Code environments
+- **Trend scouting** — strategic trend analysis with TIPS framework and Smarter Service Trendradar, bilingual (EN/DE)
 - **Workspace orchestration** — shared foundation, themes, plugin discovery, and workspace health
 
 ## How it works
@@ -75,6 +78,12 @@ cogni-works/
 │   ├── skills/
 │   ├── agents/
 │   └── commands/
+├── cogni-tips/             # Trend scouting & reporting plugin
+│   ├── .claude-plugin/
+│   │   └── plugin.json
+│   ├── skills/
+│   ├── agents/
+│   └── scripts/
 ├── cogni-workspace/        # Workspace orchestrator plugin
 │   ├── .claude-plugin/
 │   │   └── plugin.json

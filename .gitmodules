@@ -18,3 +18,6 @@
 	path = cogni-copywriting
 	url = https://github.com/cogni-work/cogni-copywriting.git
 	branch = main
+[submodule "cogni-tips"]
+	path = cogni-tips
+	url = https://github.com/cogni-work/cogni-tips.git

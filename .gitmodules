@@ -21,3 +21,4 @@
 [submodule "cogni-tips"]
 	path = cogni-tips
 	url = https://github.com/cogni-work/cogni-tips.git
+	branch = main

@@ -9,8 +9,8 @@ Built and battle-tested at [cogni-work](https://github.com/cogni-work), then ext
 | Plugin | What it does |
 |--------|-------------|
 | [cogni-claims](./cogni-claims) | Verify sourced claims against cited URLs. Catches citation errors, misquotations, and unsupported conclusions before content ships. |
-| [cogni-obsidian](./cogni-obsidian) | Obsidian integration for Claude Code workplaces. Scaffolds vaults with Terminal plugin and manages cross-platform terminal profiles. |
-| [cogni-copywriting](./cogni-copywriting) | Professional copywriting toolkit with messaging frameworks (BLUF, Pyramid, SCQA, STAR), stakeholder review, and readability optimization. |
+| [cogni-obsidian](./cogni-obsidian) | Obsidian integration for Claude Code workplaces. Scaffolds vaults with Terminal plugin, manages vault configuration, and provides note management with frontmatter support. |
+| [cogni-copywriting](./cogni-copywriting) | Professional copywriting toolkit with messaging frameworks (BLUF, Pyramid, SCQA, STAR, PSB, FAB), stakeholder review, sales enhancement (Power Positions), and readability optimization. |
 | [cogni-narrative](./cogni-narrative) | Story arc-driven narrative transformation. Transforms structured content into compelling executive narratives using 6 story arc frameworks. |
 | [cogni-workspace](./cogni-workspace) | Lean workspace orchestrator. Manages shared foundation (env vars, settings), theme management, plugin discovery, and workspace health. |
 
@@ -39,7 +39,7 @@ Or browse interactively with `/plugin` and go to the **Discover** tab.
 You work in consulting, B2B sales, or marketing — and you use Claude Code as your daily driver. These plugins handle the repetitive knowledge work so you can focus on the thinking:
 
 - **Claim verification** — fact-check reports and proposals against their sources
-- **Copywriting** — polish documents with messaging frameworks (BLUF, Pyramid, SCQA, STAR) and stakeholder review
+- **Copywriting** — polish documents with messaging frameworks (BLUF, Pyramid, SCQA, STAR, PSB, FAB), sales enhancement (Power Positions), and stakeholder review
 - **Narrative transformation** — turn structured content into executive narratives using story arc frameworks
 - **Obsidian workplaces** — set up and manage Obsidian vaults as collaborative Claude Code environments
 - **Workspace orchestration** — shared foundation, themes, plugin discovery, and workspace health
@@ -62,7 +62,7 @@ cogni-works/
 │   ├── .claude-plugin/
 │   │   └── plugin.json
 │   ├── skills/
-│   └── commands/
+│   └── hooks/
 ├── cogni-copywriting/       # Copywriting toolkit plugin
 │   ├── .claude-plugin/
 │   │   └── plugin.json
@@ -79,7 +79,8 @@ cogni-works/
 │   ├── .claude-plugin/
 │   │   └── plugin.json
 │   ├── skills/
-│   └── commands/
+│   ├── hooks/
+│   └── scripts/
 └── README.md
 ```
 
@@ -93,4 +94,4 @@ To report issues or suggest improvements, open an issue on the relevant plugin r
 
 ## License
 
-Individual plugins carry their own licenses. See each plugin's repository for details.
+All plugins are licensed under AGPL-3.0-only. See each plugin's repository for details.

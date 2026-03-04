@@ -21,8 +21,8 @@
     },
     {
       "name": "cogni-obsidian",
-      "description": "Obsidian integration for Claude Code workplaces. Scaffolds vaults with Terminal plugin, manages cross-platform terminal profiles, and enables cogni-x plugins to work collaboratively through an Obsidian-based environment.",
-      "version": "0.9.1",
+      "description": "Obsidian integration for Claude Code workplaces. Scaffolds Obsidian vaults with Terminal plugin integration, manages vault configuration, and provides note management with frontmatter support. Enables cogni-x plugins to work on projects collaboratively through an Obsidian-based workplace environment.",
+      "version": "1.0.0",
       "author": { "name": "Stephan de Haas", "email": "stephan@cogni-work.ai" },
       "source": "./cogni-obsidian",
       "category": "productivity",
@@ -38,18 +38,18 @@
       "source": "./cogni-narrative",
       "category": "productivity",
       "license": "AGPL-3.0-only",
-      "keywords": ["narrative", "story-arc", "executive-writing", "strategic-foresight", "trend-panorama"],
+      "keywords": ["narrative", "story-arc", "executive-writing", "strategic-foresight", "trend-panorama", "review", "adapt"],
       "repository": "https://github.com/cogni-work/cogni-narrative"
     },
     {
       "name": "cogni-copywriting",
-      "description": "Professional copywriting toolkit with messaging frameworks (BLUF, Pyramid, SCQA, STAR), stakeholder review, readability optimization, and multi-language support.",
+      "description": "Professional copywriting toolkit providing document polishing with messaging frameworks (BLUF, Pyramid, SCQA, STAR, PSB, FAB), stakeholder review via parallel persona Q&A, readability optimization, sales enhancement (Power Positions), and multi-language support.",
       "version": "0.2.6",
       "author": { "name": "Stephan de Haas", "email": "stephan@cogni-work.ai" },
       "source": "./cogni-copywriting",
       "category": "productivity",
       "license": "AGPL-3.0-only",
-      "keywords": ["copywriting", "document-polishing", "messaging-frameworks", "readability"],
+      "keywords": ["copywriting", "document-polishing", "messaging-frameworks", "readability", "sales-copy", "power-positions"],
       "repository": "https://github.com/cogni-work/cogni-copywriting"
     },
     {

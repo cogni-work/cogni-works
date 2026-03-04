@@ -10,3 +10,7 @@
 	path = cogni-workspace
 	url = https://github.com/cogni-work/cogni-workspace.git
 	branch = main
+[submodule "cogni-narrative"]
+	path = cogni-narrative
+	url = https://github.com/cogni-work/cogni-narrative.git
+	branch = main

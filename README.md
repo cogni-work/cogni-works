@@ -10,6 +10,7 @@ Built and battle-tested at [cogni-work](https://github.com/cogni-work), then ext
 |--------|-------------|
 | [cogni-claims](./cogni-claims) | Verify sourced claims against cited URLs. Catches citation errors, misquotations, and unsupported conclusions before content ships. |
 | [cogni-obsidian](./cogni-obsidian) | Obsidian integration for Claude Code workplaces. Scaffolds vaults with Terminal plugin and manages cross-platform terminal profiles. |
+| [cogni-narrative](./cogni-narrative) | Story arc-driven narrative transformation. Transforms structured content into compelling executive narratives using 6 story arc frameworks. |
 | [cogni-workspace](./cogni-workspace) | Lean workspace orchestrator. Manages shared foundation (env vars, settings), theme management, plugin discovery, and workspace health. |
 
 ## Quick start
@@ -25,6 +26,7 @@ Built and battle-tested at [cogni-work](https://github.com/cogni-work), then ext
 ```shell
 /plugin install cogni-claims@cogni-works
 /plugin install cogni-obsidian@cogni-works
+/plugin install cogni-narrative@cogni-works
 /plugin install cogni-workspace@cogni-works
 ```
 
@@ -35,6 +37,7 @@ Or browse interactively with `/plugin` and go to the **Discover** tab.
 You work in consulting, B2B sales, or marketing — and you use Claude Code as your daily driver. These plugins handle the repetitive knowledge work so you can focus on the thinking:
 
 - **Claim verification** — fact-check reports and proposals against their sources
+- **Narrative transformation** — turn structured content into executive narratives using story arc frameworks
 - **Obsidian workplaces** — set up and manage Obsidian vaults as collaborative Claude Code environments
 - **Workspace orchestration** — shared foundation, themes, plugin discovery, and workspace health
 
@@ -56,6 +59,12 @@ cogni-works/
 │   ├── .claude-plugin/
 │   │   └── plugin.json
 │   ├── skills/
+│   └── commands/
+├── cogni-narrative/         # Narrative transformation plugin
+│   ├── .claude-plugin/
+│   │   └── plugin.json
+│   ├── skills/
+│   ├── agents/
 │   └── commands/
 ├── cogni-workspace/        # Workspace orchestrator plugin
 │   ├── .claude-plugin/

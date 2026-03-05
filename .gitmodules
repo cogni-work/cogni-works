@@ -22,3 +22,7 @@
 	path = cogni-tips
 	url = https://github.com/cogni-work/cogni-tips.git
 	branch = main
+[submodule "cogni-portfolio"]
+	path = cogni-portfolio
+	url = https://github.com/cogni-work/cogni-portfolio.git
+	branch = main

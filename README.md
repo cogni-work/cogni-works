@@ -14,6 +14,7 @@ Built and battle-tested at [cogni-work](https://github.com/cogni-work), then ext
 | [cogni-narrative](./cogni-narrative) | Story arc-driven narrative transformation. Transforms structured content into compelling executive narratives using 6 story arc frameworks. |
 | [cogni-tips](./cogni-tips) | Strategic trend scouting and reporting pipeline. Combines the Smarter Service Trendradar with the TIPS framework for industry trend analysis. Bilingual (EN/DE). |
 | [cogni-portfolio](./cogni-portfolio) | Portfolio messaging and proposition planning for SMEs using IS/DOES/MEANS framework. Features, advantages, and benefits with TAM/SAM/SOM targeting, competitor and customer analysis. |
+| [cogni-visual](./cogni-visual) | Transform polished narratives into visual deliverables — presentation briefs, slide decks, big picture journey maps, scrollable web narratives, poster storyboards, and visual assets. Supports Excalidraw, Pencil MCP, and PPTX rendering. |
 | [cogni-workspace](./cogni-workspace) | Lean workspace orchestrator. Manages shared foundation (env vars, settings), theme management, plugin discovery, and workspace health. |
 
 ## Quick start
@@ -33,6 +34,7 @@ Built and battle-tested at [cogni-work](https://github.com/cogni-work), then ext
 /plugin install cogni-narrative@cogni-works
 /plugin install cogni-tips@cogni-works
 /plugin install cogni-portfolio@cogni-works
+/plugin install cogni-visual@cogni-works
 /plugin install cogni-workspace@cogni-works
 ```
 
@@ -48,6 +50,7 @@ You work in consulting, B2B sales, or marketing — and you use Claude Code as y
 - **Obsidian workplaces** — set up and manage Obsidian vaults as collaborative Claude Code environments
 - **Trend scouting** — strategic trend analysis with TIPS framework and Smarter Service Trendradar, bilingual (EN/DE)
 - **Portfolio messaging** — proposition planning for SMEs with IS/DOES/MEANS framework, competitor research, and market targeting
+- **Visual deliverables** — presentation briefs, slide decks, big picture journey maps, web narratives, and poster storyboards from polished narratives
 - **Workspace orchestration** — shared foundation, themes, plugin discovery, and workspace health
 
 ## How it works
@@ -93,6 +96,14 @@ cogni-works/
 │   ├── skills/
 │   ├── agents/
 │   └── scripts/
+├── cogni-visual/           # Visual deliverables plugin
+│   ├── .claude-plugin/
+│   │   └── plugin.json
+│   ├── skills/
+│   ├── agents/
+│   ├── commands/
+│   ├── hooks/
+│   └── libraries/
 ├── cogni-workspace/        # Workspace orchestrator plugin
 │   ├── .claude-plugin/
 │   │   └── plugin.json

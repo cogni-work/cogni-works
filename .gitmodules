@@ -26,3 +26,6 @@
 	path = cogni-portfolio
 	url = https://github.com/cogni-work/cogni-portfolio.git
 	branch = main
+[submodule "cogni-visual"]
+	path = cogni-visual
+	url = https://github.com/cogni-work/cogni-visual.git

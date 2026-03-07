@@ -29,3 +29,6 @@
 [submodule "cogni-visual"]
 	path = cogni-visual
 	url = https://github.com/cogni-work/cogni-visual.git
+[submodule "cogni-teacher"]
+	path = cogni-teacher
+	url = https://github.com/cogni-work/cogni-teacher.git

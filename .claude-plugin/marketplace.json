@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "cogni-works",
-  "version": "0.3.20",
+  "version": "0.3.21",
   "description": "Open-source Claude Code plugins for knowledge work — consulting, B2B sales, and marketing.",
   "owner": {
     "name": "Stephan de Haas",
@@ -33,7 +33,7 @@
     {
       "name": "cogni-narrative",
       "description": "Story arc-driven narrative transformation. Transforms research syntheses and structured content into compelling executive narratives using 6 story arc frameworks including TIPS-native trend panorama. Includes narrative review scoring and derivative format adaptation.",
-      "version": "1.6.7",
+      "version": "1.6.8",
       "author": { "name": "Stephan de Haas", "email": "stephan@cogni-work.ai" },
       "source": "./cogni-narrative",
       "category": "productivity",
@@ -44,7 +44,7 @@
     {
       "name": "cogni-copywriting",
       "description": "Professional copywriting toolkit providing document polishing with messaging frameworks (BLUF, Pyramid, SCQA, STAR, PSB, FAB), stakeholder review via parallel persona Q&A, readability optimization, sales enhancement (Power Positions), and multi-language support.",
-      "version": "0.2.7",
+      "version": "0.2.8",
       "author": { "name": "Stephan de Haas", "email": "stephan@cogni-work.ai" },
       "source": "./cogni-copywriting",
       "category": "productivity",
@@ -55,7 +55,7 @@
     {
       "name": "cogni-workspace",
       "description": "Lean workspace orchestrator for cogni-works marketplace plugins. Manages shared foundation (env vars, settings), theme management, plugin discovery, and workspace health.",
-      "version": "0.1.9",
+      "version": "0.1.10",
       "author": { "name": "Stephan de Haas", "email": "stephan@cogni-work.ai" },
       "source": "./cogni-workspace",
       "category": "productivity",
@@ -66,7 +66,7 @@
     {
       "name": "cogni-tips",
       "description": "Strategic trend scouting and reporting pipeline. Combines the Smarter Service Trendradar (4-dimension structure) with the TIPS content framework (Trends, Implications, Possibilities, Solutions) for industry trend analysis. Bilingual support (EN/DE).",
-      "version": "0.1.9",
+      "version": "0.1.10",
       "author": { "name": "Stephan de Haas", "email": "stephan@cogni-work.ai" },
       "source": "./cogni-tips",
       "category": "productivity",

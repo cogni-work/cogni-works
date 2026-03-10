@@ -1,11 +1,12 @@
 {
-  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "cogni-works",
-  "version": "0.3.34",
-  "description": "Open-source Claude Code plugins for knowledge work — consulting, B2B sales, and marketing.",
   "owner": {
     "name": "Stephan de Haas",
     "email": "stephan@cogni-work.ai"
+  },
+  "metadata": {
+    "description": "Open-source Claude Code plugins for knowledge work — consulting, B2B sales, and marketing.",
+    "version": "0.3.34"
   },
   "plugins": [
     {

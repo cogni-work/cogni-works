@@ -10,7 +10,7 @@
     {
       "name": "cogni-claims",
       "description": "Claim verification and management system. Verifies sourced claims against cited URLs, detects deviations, and guides users through resolution.",
-      "version": "1.0.1",
+      "version": "1.0.2",
       "author": { "name": "Stephan de Haas", "email": "stephan@cogni-work.ai" },
       "source": "./cogni-claims",
       "category": "productivity",
@@ -21,7 +21,7 @@
     {
       "name": "cogni-obsidian",
       "description": "Obsidian integration for Claude Code workplaces. Scaffolds Obsidian vaults with Terminal plugin integration, manages vault configuration, and provides note management with frontmatter support. Enables cogni-x plugins to work on projects collaboratively through an Obsidian-based workplace environment.",
-      "version": "1.0.1",
+      "version": "1.0.2",
       "author": { "name": "Stephan de Haas", "email": "stephan@cogni-work.ai" },
       "source": "./cogni-obsidian",
       "category": "productivity",
@@ -32,7 +32,7 @@
     {
       "name": "cogni-narrative",
       "description": "Story arc-driven narrative transformation. Transforms research syntheses and structured content into compelling executive narratives using 6 story arc frameworks including TIPS-native trend panorama. Includes narrative review scoring and derivative format adaptation.",
-      "version": "1.6.8",
+      "version": "1.6.9",
       "author": { "name": "Stephan de Haas", "email": "stephan@cogni-work.ai" },
       "source": "./cogni-narrative",
       "category": "productivity",
@@ -43,7 +43,7 @@
     {
       "name": "cogni-copywriting",
       "description": "Professional copywriting toolkit providing document polishing with messaging frameworks (BLUF, Pyramid, SCQA, STAR, PSB, FAB), stakeholder review via parallel persona Q&A, readability optimization, sales enhancement (Power Positions), and multi-language support.",
-      "version": "0.2.8",
+      "version": "0.2.9",
       "author": { "name": "Stephan de Haas", "email": "stephan@cogni-work.ai" },
       "source": "./cogni-copywriting",
       "category": "productivity",
@@ -54,7 +54,7 @@
     {
       "name": "cogni-workspace",
       "description": "Lean workspace orchestrator for cogni-works marketplace plugins. Manages shared foundation (env vars, settings), theme management, plugin discovery, and workspace health.",
-      "version": "0.1.10",
+      "version": "0.1.11",
       "author": { "name": "Stephan de Haas", "email": "stephan@cogni-work.ai" },
       "source": "./cogni-workspace",
       "category": "productivity",
@@ -65,7 +65,7 @@
     {
       "name": "cogni-tips",
       "description": "Strategic trend scouting and reporting pipeline. Combines the Smarter Service Trendradar (4-dimension structure) with the TIPS content framework (Trends, Implications, Possibilities, Solutions) for industry trend analysis. Bilingual support (EN/DE).",
-      "version": "0.1.10",
+      "version": "0.1.11",
       "author": { "name": "Stephan de Haas", "email": "stephan@cogni-work.ai" },
       "source": "./cogni-tips",
       "category": "productivity",
@@ -76,7 +76,7 @@
     {
       "name": "cogni-portfolio",
       "description": "Portfolio messaging and proposition planning for SMEs using IS/DOES/MEANS framework. Features are market-independent (IS). Advantages (DOES) and benefits (MEANS) are market-specific. Includes TAM/SAM/SOM targeting, competitor and customer analysis.",
-      "version": "0.6.2",
+      "version": "0.6.3",
       "author": { "name": "Stephan de Haas", "email": "stephan@cogni-work.ai" },
       "source": "./cogni-portfolio",
       "category": "productivity",
@@ -87,7 +87,7 @@
     {
       "name": "cogni-visual",
       "description": "Transform polished narratives into visual deliverables — presentation briefs, slide decks, big picture journey maps, scrollable web narratives, poster storyboards, and visual assets. Supports Excalidraw, Pencil MCP, and PPTX rendering.",
-      "version": "1.2.13",
+      "version": "1.2.14",
       "author": { "name": "Stephan de Haas", "email": "stephan@cogni-work.ai" },
       "source": "./cogni-visual",
       "category": "productivity",
@@ -98,7 +98,7 @@
     {
       "name": "cogni-teacher",
       "description": "Interactive 45-minute courses teaching Claude Cowork fundamentals and cogni-works marketplace plugins to consultants. 7-course curriculum with hands-on exercises, quizzes, and progress tracking.",
-      "version": "0.1.1",
+      "version": "0.1.2",
       "author": { "name": "Stephan de Haas", "email": "stephan@cogni-work.ai" },
       "source": "./cogni-teacher",
       "category": "productivity",

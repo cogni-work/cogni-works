@@ -6,7 +6,7 @@
   },
   "metadata": {
     "description": "Open-source Claude Code plugins for knowledge work — consulting, B2B sales, and marketing.",
-    "version": "0.3.34"
+    "version": "0.3.35"
   },
   "plugins": [
     {
@@ -78,7 +78,7 @@
     {
       "name": "cogni-portfolio",
       "description": "Portfolio messaging and proposition planning for SMEs using IS/DOES/MEANS framework. Features are market-independent (IS). Advantages (DOES) and benefits (MEANS) are market-specific. Includes TAM/SAM/SOM targeting, competitor and customer analysis.",
-      "version": "0.6.1",
+      "version": "0.6.2",
       "author": { "name": "Stephan de Haas", "email": "stephan@cogni-work.ai" },
       "source": "./cogni-portfolio",
       "category": "productivity",

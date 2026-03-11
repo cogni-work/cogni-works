@@ -494,4 +494,4 @@ When adding new features:
 
 ## License
 
-Copyright 2025-2026. Part of cogni-workplace plugin.
+Copyright 2025-2026. Part of cogni-workspace plugin.

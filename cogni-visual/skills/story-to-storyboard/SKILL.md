@@ -33,7 +33,7 @@ The brief describes WHAT each poster contains and which section types to use. Al
 | Parameter | Default | Description |
 |-----------|---------|-------------|
 | `source_path` | auto-discovered | Narrative file or directory. When omitted with `interactive=true`, Step 0 searches nearby. |
-| `theme` | `smarter-service` | Theme ID from `/cogni-workplace/themes/{theme}/theme.md`. Use `auto` for interactive selection. |
+| `theme` | `smarter-service` | Theme ID from `/cogni-workspace/themes/{theme}/theme.md`. Use `auto` for interactive selection. |
 | `language` | `en` | Language code (en/de) |
 | `title` / `subtitle` | auto-detected | Extracted from narrative if not provided |
 | `customer_name` / `provider_name` | from metadata | Organization names |

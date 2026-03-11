@@ -2,7 +2,7 @@
 
 A visual deliverables plugin for [Claude Code](https://claude.ai/code). Transforms polished narratives into presentation briefs, big-picture journey maps, scrollable web narratives, and printed poster storyboards. Works downstream of cogni-narrative and cogni-copywriting in a compose-polish-visualize pipeline.
 
-> **Note**: This plugin generates intermediate briefs (YAML + Markdown) that are then rendered by downstream tools — `document-skills:pptx` for slide decks, [Excalidraw MCP](https://github.com/yctimlin/mcp_excalidraw) for big-picture journey maps, and [Pencil MCP](https://pencil.li) for web and storyboard canvases. A theme from cogni-workplace is required for branded output.
+> **Note**: This plugin generates intermediate briefs (YAML + Markdown) that are then rendered by downstream tools — `document-skills:pptx` for slide decks, [Excalidraw MCP](https://github.com/yctimlin/mcp_excalidraw) for big-picture journey maps, and [Pencil MCP](https://pencil.li) for web and storyboard canvases. A theme from cogni-workspace is required for branded output.
 
 ## Installation
 
@@ -77,7 +77,7 @@ cogni-narrative  →  cogni-copywriting  →  cogni-visual
 ```
 
 - **Upstream**: Narratives from cogni-narrative, polished by cogni-copywriting
-- **Themes**: Brand themes from `cogni-workplace/themes/{id}/theme.md`
+- **Themes**: Brand themes from `cogni-workspace/themes/{id}/theme.md`
 - **Renderers**: `document-skills:pptx` for slides; Excalidraw MCP for big-picture; Pencil MCP for web and storyboard
 
 ## Architecture
@@ -118,10 +118,10 @@ cogni-visual/
 All visual outputs require a brand theme. Point to your theme file in the narrative frontmatter or provide the path when invoking a skill:
 
 ```yaml
-theme_path: /path/to/cogni-workplace/themes/your-brand/theme.md
+theme_path: /path/to/cogni-workspace/themes/your-brand/theme.md
 ```
 
-Themes define colors, fonts, and visual identity. Create themes using the `grab-theme` skill in cogni-workplace.
+Themes define colors, fonts, and visual identity. Create themes using the `grab-theme` skill in cogni-workspace.
 
 ### Excalidraw MCP (Big Picture)
 
@@ -136,7 +136,7 @@ Two renderers (web, storyboard) require [Pencil MCP](https://pencil.li) for canv
 - [Claude Code](https://claude.ai/code) CLI installed
 - cogni-narrative (upstream — produces narratives)
 - cogni-copywriting (upstream — polishes narratives)
-- cogni-workplace (provides brand themes)
+- cogni-workspace (provides brand themes)
 - document-skills plugin (provides `pptx` skill for slide rendering)
 - Excalidraw MCP (for big-picture rendering — github.com/yctimlin/mcp_excalidraw)
 - Pencil MCP (for web and storyboard rendering)

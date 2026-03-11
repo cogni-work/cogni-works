@@ -52,7 +52,7 @@ Transform any narrative with a story arc into a visual journey map (big picture)
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
 | `source_path` | string | auto-discovered | Path to narrative file(s) or project directory. When omitted and `interactive=true`, auto-discovers nearby narratives. |
-| `theme` | string | `smarter-service` | Theme ID from `/cogni-workplace/themes/{theme}/theme.md` |
+| `theme` | string | `smarter-service` | Theme ID from `/cogni-workspace/themes/{theme}/theme.md` |
 | `language` | string | `en` | Language code (en/de) |
 | `title` | string | auto-detected | Big picture title (extracted from narrative if not provided) |
 | `subtitle` | string | auto-detected | Big picture subtitle |
@@ -72,7 +72,7 @@ Transform any narrative with a story arc into a visual journey map (big picture)
 
 ### Theme Selection
 
-The `theme` parameter accepts any theme ID from `/cogni-workplace/themes/`. Themes are created by `/grab-theme` from websites or PPTX templates. The skill stores the theme path in frontmatter — visual decisions are delegated to the Excalidraw MCP renderer.
+The `theme` parameter accepts any theme ID from `/cogni-workspace/themes/`. Themes are created by `/grab-theme` from websites or PPTX templates. The skill stores the theme path in frontmatter — visual decisions are delegated to the Excalidraw MCP renderer.
 
 ### Canvas Sizes
 
@@ -160,7 +160,7 @@ A `big-picture-brief.md` (v3.0) with this structure:
 type: big-picture-brief
 version: "3.0"
 theme: smarter-service
-theme_path: "/cogni-workplace/themes/smarter-service/theme.md"
+theme_path: "/cogni-workspace/themes/smarter-service/theme.md"
 customer: "Customer Name"
 provider: "Provider Name"
 language: "de"

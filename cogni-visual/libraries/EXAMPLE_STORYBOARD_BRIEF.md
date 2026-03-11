@@ -2,7 +2,7 @@
 type: storyboard-brief
 version: "2.0"
 theme: smarter-service
-theme_path: "/Users/stephandehaas/Library/CloudStorage/Dropbox/2025 InsightsWave/04 Kundenprojekte/cogni-workplace/themes/smarter-service/theme.md"
+theme_path: "/cogni-workspace/themes/smarter-service/theme.md"
 style_guide: "Corporate Tech"
 customer: "Muller Werkzeugmaschinen GmbH"
 provider: "SmartFactory Solutions"

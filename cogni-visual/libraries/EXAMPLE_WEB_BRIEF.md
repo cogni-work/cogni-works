@@ -2,7 +2,7 @@
 type: web-brief
 version: "1.0"
 theme: smarter-service
-theme_path: "/cogni-workplace/themes/smarter-service/theme.md"
+theme_path: "/cogni-workspace/themes/smarter-service/theme.md"
 customer: "Maschinenbau-Mittelstand Deutschland"
 provider: "SmartFactory Solutions"
 language: "de"

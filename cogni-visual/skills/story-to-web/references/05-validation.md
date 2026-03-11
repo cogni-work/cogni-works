@@ -60,9 +60,9 @@ Run every check in the layer. For each check that fails:
 - `[C]` `version` field is `"1.0"`
   - If this fails, the renderer may apply wrong parsing rules. Fix: set `version: "1.0"`
 - `[W]` `theme` field references a valid theme ID
-  - If this fails, the renderer will use fallback colors (generic blue). Fix: verify theme ID exists in `/cogni-workplace/themes/{id}/`
+  - If this fails, the renderer will use fallback colors (generic blue). Fix: verify theme ID exists in `/cogni-workspace/themes/{id}/`
 - `[C]` `theme_path` points to an existing theme.md
-  - If this fails, the renderer cannot extract design tokens and all colors resolve to black. Fix: set path to `/cogni-workplace/themes/{theme_id}/theme.md` and verify the file exists
+  - If this fails, the renderer cannot extract design tokens and all colors resolve to black. Fix: set path to `/cogni-workspace/themes/{theme_id}/theme.md` and verify the file exists
 - `[W]` `language` is `"en"` or `"de"`
   - If this fails, number formatting and CTA copy may be wrong. Fix: set to the language matching the narrative content
 - `[W]` `governing_thought` is a single sentence
@@ -283,7 +283,7 @@ The following example demonstrates the validation process on a brief excerpt wit
 type: web-brief
 version: "1.0"
 theme: smarter-service
-theme_path: "/cogni-workplace/themes/smarter-service/theme.md"
+theme_path: "/cogni-workspace/themes/smarter-service/theme.md"
 language: "de"
 governing_thought: "Predictive Maintenance revolutioniert die Fertigung."
 arc_type: "why-change"

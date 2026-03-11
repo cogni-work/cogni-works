@@ -6,9 +6,7 @@ Lean workspace orchestrator for cogni-works marketplace plugins. Manages shared 
 
 ## Installation
 
-```bash
-claude plugins add cogni-work/cogni-workspace
-```
+This plugin is part of the [cogni-works monorepo](https://github.com/cogni-work/cogni-works) and is installed automatically with the marketplace.
 
 ## Skills
 
@@ -16,6 +14,8 @@ claude plugins add cogni-work/cogni-workspace
 |-------|-------------|
 | `init-workspace` | Initialize a cogni-works workspace with shared foundation — environment variables, directory structure, plugin discovery, and settings generation |
 | `manage-themes` | Extract visual design themes from live websites (via Chrome), PowerPoint templates, or manual definition — stored as reusable theme files for cogni-visual |
+| `pick-theme` | Interactive theme picker — discovers available themes and lets users select one for downstream skills |
+| `cogni-issues` | File and track GitHub issues (bugs, feature requests, change requests) against cogni-works ecosystem plugins |
 | `update-workspace` | Refresh workspace configuration — sync plugin versions, update environment variables, regenerate settings, and re-run discovery |
 | `workspace-status` | Diagnose and report on workspace health — plugin versions, missing dependencies, environment variable status, and configuration issues |
 
@@ -50,9 +50,11 @@ claude plugins add cogni-work/cogni-workspace
 ```
 cogni-workspace/
 ├── .claude-plugin/plugin.json    Plugin manifest
-├── skills/                       4 workspace management skills
+├── skills/                       6 workspace management skills
+│   ├── cogni-issues/
 │   ├── init-workspace/
 │   ├── manage-themes/
+│   ├── pick-theme/
 │   ├── update-workspace/
 │   └── workspace-status/
 ├── hooks/                        Session lifecycle hooks

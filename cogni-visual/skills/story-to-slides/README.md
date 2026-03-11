@@ -56,7 +56,7 @@ Transform any narrative with a story arc into an optimized YAML-based presentati
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
 | `source_path` | string | required | Path to narrative file(s) or project directory |
-| `theme` | string | `smarter-service` | Theme ID from `/cogni-workplace/themes/` (created by `/grab-theme`) |
+| `theme` | string | `smarter-service` | Theme ID from `/cogni-workspace/themes/` (created by `/grab-theme`) |
 | `language` | string | `en` | Language code (en/de) |
 | `title` | string | auto-detected | Presentation title (extracted from narrative if not provided) |
 | `subtitle` | string | auto-detected | Presentation subtitle |
@@ -73,7 +73,7 @@ Transform any narrative with a story arc into an optimized YAML-based presentati
 
 ### Theme Selection
 
-The `theme` parameter accepts any theme ID from `/cogni-workplace/themes/`. Themes are created by `/grab-theme` from websites or PPTX templates. The skill:
+The `theme` parameter accepts any theme ID from `/cogni-workspace/themes/`. Themes are created by `/grab-theme` from websites or PPTX templates. The skill:
 
 1. Loads the theme's compact `theme.md` (~30-50 lines: colors, fonts, design principles)
 2. Stores the `theme_path` in the brief frontmatter
@@ -398,7 +398,7 @@ As of v4.0, presentation briefs are **content-only** — they contain no color f
 type: presentation-brief
 version: "4.0"
 theme: smarter-service
-theme_path: "/cogni-workplace/themes/smarter-service/theme.md"
+theme_path: "/cogni-workspace/themes/smarter-service/theme.md"
 customer: "Customer Name"
 provider: "Provider Name"
 language: "en"

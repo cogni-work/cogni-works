@@ -101,7 +101,7 @@ cogni-narrative -> cogni-copywriting -> cogni-visual
 ```
 
 - **Upstream:** Narratives from cogni-narrative, polished by cogni-copywriting
-- **External:** Themes from cogni-workplace (`/cogni-workplace/themes/{id}/theme.md`)
+- **External:** Themes from cogni-workspace (`/cogni-workspace/themes/{id}/theme.md`)
 - **Downstream:** `document-skills:pptx` renders slide briefs; Excalidraw MCP renders big-picture briefs; Pencil MCP renders web and storyboard briefs
 - **Web HTML export:** Web agent reads rendered .pen design tree to generate self-contained HTML + integration manifest for `export-html-report` landing page overlay
 

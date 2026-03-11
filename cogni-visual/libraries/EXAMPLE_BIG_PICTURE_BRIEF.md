@@ -2,7 +2,7 @@
 type: big-picture-brief
 version: "3.0"
 theme: smarter-service
-theme_path: "/cogni-workplace/themes/smarter-service/theme.md"
+theme_path: "/cogni-workspace/themes/smarter-service/theme.md"
 customer: "Müller Werkzeugmaschinen GmbH"
 provider: "SmartFactory Solutions"
 language: "de"

@@ -39,7 +39,7 @@ The brief describes WHAT to show, not HOW to draw it. Rendering agents own visua
 | Parameter | Default | Description |
 |-----------|---------|-------------|
 | `source_path` | auto-discovered | Narrative file or directory. When omitted with `interactive=true`, Step 0 searches nearby. |
-| `theme` | `smarter-service` | Theme ID from `/cogni-workplace/themes/{theme}/theme.md`. Use `auto` for interactive selection. |
+| `theme` | `smarter-service` | Theme ID from `/cogni-workspace/themes/{theme}/theme.md`. Use `auto` for interactive selection. |
 | `language` | `en` | Language code (en/de) |
 | `title` / `subtitle` | auto-detected | Extracted from narrative if not provided |
 | `customer_name` / `provider_name` | from metadata | Organization names |
@@ -146,7 +146,7 @@ If `arc_definition_path` is provided and exists:
 **Theme resolution:**
 - If `interactive=true` and theme wasn't explicitly set by caller: scan for `themes/*/theme.md` files, present discovered themes via AskUserQuestion
 - Otherwise: use provided theme ID or default `smarter-service`
-- Resolve theme directory: absolute path → use directly; theme ID → check `{WORKPLACE_ROOT}/themes/{theme}/theme.md`, fall back to `/cogni-workplace/themes/{theme}/theme.md`
+- Resolve theme directory: absolute path → use directly; theme ID → check `{WORKPLACE_ROOT}/themes/{theme}/theme.md`, fall back to `/cogni-workspace/themes/{theme}/theme.md`
 - Read `{THEME_DIR}/theme.md`, store theme_path
 
 **Load libraries:**

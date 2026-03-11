@@ -2,7 +2,7 @@
 type: presentation-brief
 version: "4.0"
 theme: smarter-service
-theme_path: "/cogni-workplace/themes/smarter-service/theme.md"
+theme_path: "/cogni-workspace/themes/smarter-service/theme.md"
 customer: "Deutsche Bahn AG"
 provider: "TechVision Solutions"
 language: "de"

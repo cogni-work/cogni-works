@@ -81,7 +81,7 @@
       "source": "./cogni-portfolio",
       "category": "productivity",
       "license": "AGPL-3.0-only",
-      "keywords": ["portfolio", "messaging", "b2b", "fab", "sme", "propositions"],
+      "keywords": ["portfolio", "messaging", "b2b", "fab", "sme", "propositions", "packages"],
       "repository": "https://github.com/cogni-work/cogni-portfolio"
     },
     {

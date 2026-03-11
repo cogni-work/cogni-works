@@ -127,7 +127,6 @@ BALANCE: "Balance"
 
 ```text
 PHASE_0_THEMES_FOUND: "Value model detected: {COUNT} strategic themes available — using theme-organized report"
-PHASE_0_NO_THEMES: "No value model found — using dimensional catalog report"
 PHASE_2_THEME_START: "Assembling strategic theme report..."
 PHASE_2_THEME_WRITTEN: "Theme {N}/{TOTAL}: {NAME}"
 PHASE_2_THEME_COMPLETE: "Strategic report written: {PATH}"

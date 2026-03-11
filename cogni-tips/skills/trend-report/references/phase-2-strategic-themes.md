@@ -1,14 +1,8 @@
-# Phase 2: Strategic Theme Assembly (Theme Mode)
+# Phase 2: Strategic Theme Assembly
 
-When `tips-value-model.json` exists, Phase 2 assembles the report around strategic themes instead of TIPS dimensions. The dimensional evidence still gets enriched in Phase 1 — this phase restructures it into strategic narratives.
+Phase 2 assembles the report around strategic themes from `tips-value-model.json`. The dimensional evidence gets enriched in Phase 1 — this phase restructures it into strategic narratives.
 
 The core idea: themes are the skeleton, individual trends are the evidence woven into each theme's story. A CxO reads themes and investment decisions, not a catalog of 60 trends sorted by dimension.
-
----
-
-## Entry Conditions
-
-Theme mode activates when Phase 0 sets `THEME_MODE = true` (i.e., `tips-value-model.json` was found with at least one theme). If `THEME_MODE = false`, skip this reference entirely and use the standard catalog assembly from `report-structure.md`.
 
 ---
 
@@ -292,7 +286,7 @@ Must end with two trailing newlines.
 
 ## Step 2.6: Generate Claims Registry
 
-Same format as catalog mode, but add a `theme` column:
+Claims registry includes a `theme` column:
 
 ```markdown
 ## {CLAIMS_REGISTRY_LABEL}
@@ -342,7 +336,7 @@ Read first 3 + last 3 lines of the assembled report:
 
 ## Step 2.8: Merge Claims
 
-Same as catalog mode — merge all 4 dimension claims into `tips-trend-report-claims.json`. The claims themselves don't change; only the report structure around them does.
+Merge all 4 dimension claims into `tips-trend-report-claims.json`. The claims themselves don't change; only the report structure around them does.
 
 ---
 
@@ -351,8 +345,7 @@ Same as catalog mode — merge all 4 dimension claims into `tips-trend-report-cl
 | Scenario | Action |
 |----------|--------|
 | `tips-value-model.json` has themes but no value chains | HALT: value-modeler Phase 1 incomplete |
-| enriched-trends JSON missing for a dimension | Fall back to catalog mode for that dimension's trends |
+| enriched-trends JSON missing for a dimension | HALT: Phase 1 agent failed to produce enriched output |
 | Theme references candidate_ref not found in enriched data | Log warning, skip that candidate in the theme narrative |
 | Solution templates empty | Omit "Solution Templates" subsection (value-modeler Phase 2 hasn't run yet) |
 | MECE validation failed in value model | Include as-is with warning in portfolio view |
-| All enriched-trends JSONs missing | Fall back to catalog mode entirely |

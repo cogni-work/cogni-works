@@ -127,7 +127,6 @@ BALANCE: "Balance"
 
 ```text
 PHASE_0_THEMES_FOUND: "Wertmodell erkannt: {COUNT} strategische Themen verfügbar — verwende themenorganisierten Bericht"
-PHASE_0_NO_THEMES: "Kein Wertmodell gefunden — verwende dimensionalen Katalogbericht"
 PHASE_2_THEME_START: "Stelle strategischen Themenbericht zusammen..."
 PHASE_2_THEME_WRITTEN: "Thema {N}/{TOTAL}: {NAME}"
 PHASE_2_THEME_COMPLETE: "Strategischer Bericht geschrieben: {PATH}"

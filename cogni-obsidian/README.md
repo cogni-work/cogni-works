@@ -6,9 +6,7 @@ An Obsidian integration plugin for Claude Code that bridges Obsidian vaults with
 
 ## Installation
 
-```bash
-claude plugins add cogni-obsidian
-```
+This plugin is part of the [cogni-works monorepo](https://github.com/cogni-work/cogni-works) and is installed automatically with the marketplace.
 
 ### Prerequisites
 

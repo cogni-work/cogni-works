@@ -37,9 +37,7 @@ If you ship research, reports, or any content that leans on sourced claims, this
 
 ## Installation
 
-```bash
-claude plugins add cogni-work/cogni-claims
-```
+This plugin is part of the [cogni-works monorepo](https://github.com/cogni-work/cogni-works) and is installed automatically with the marketplace.
 
 ## Quick start
 

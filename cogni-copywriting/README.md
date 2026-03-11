@@ -4,9 +4,7 @@ A copywriting plugin for Claude Code. Polish documents for executive readability
 
 ## Installation
 
-```bash
-claude plugins add cogni-copywriting
-```
+This plugin is part of the [cogni-works monorepo](https://github.com/cogni-work/cogni-works) and is installed automatically with the marketplace.
 
 ## Commands
 

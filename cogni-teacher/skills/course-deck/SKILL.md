@@ -112,7 +112,7 @@ Map user input to course files:
 ## Visual Design: cogni-work Theme
 
 Apply the cogni-work theme. The authoritative theme file lives at:
-`/Users/stephandehaas/GitHub/dev/cogni-workspace/themes/cogni-work/theme.md`
+`$COGNI_WORKSPACE_ROOT/themes/cogni-work/theme.md`
 
 Read it for the full specification. Key rules:
 

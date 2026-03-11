@@ -4,7 +4,7 @@ import json
 import re
 import os
 
-BASE = "/Users/stephandehaas/GitHub/dev/cogni-copywriting/copywriter-workspace/iteration-1"
+BASE = os.path.dirname(os.path.abspath(__file__))
 
 def read_file(path):
     with open(path) as f:

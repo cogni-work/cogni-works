@@ -6,9 +6,7 @@ A visual deliverables plugin for [Claude Code](https://claude.ai/code). Transfor
 
 ## Installation
 
-```bash
-claude plugins add cogni-visual
-```
+This plugin is part of the [cogni-works monorepo](https://github.com/cogni-work/cogni-works) and is installed automatically with the marketplace.
 
 ## Skills
 
@@ -18,6 +16,7 @@ claude plugins add cogni-visual
 | `story-to-big-picture` | Single-canvas visual journey map brief — metaphor selection (6 options), station decomposition, absolute positioning, AI image prompts, and theme-driven rendering |
 | `story-to-web` | Scrollable landing-page-style web brief — style guide selection (200+ tags), 10 section types, design token variables, auto-layout, and responsive typography |
 | `story-to-storyboard` | Multi-poster print storyboard brief — 5-zone poster anatomy, A0-A3 print sizes at 150 DPI, font scaling tables, and CMYK-safe color constraints |
+| `render-big-picture` | Render a big-picture-brief into a richly illustrated Excalidraw scene — station-first pipeline with parallel agents, 1100-1500 elements, dark/light color modes |
 
 ## Example Workflows
 
@@ -85,11 +84,12 @@ cogni-narrative  →  cogni-copywriting  →  cogni-visual
 ```
 cogni-visual/
 ├── .claude-plugin/plugin.json    Plugin manifest
-├── skills/                       4 transformation skills (narrative → brief)
+├── skills/                       5 skills (4 brief generators + 1 renderer)
 │   ├── story-to-slides/
 │   ├── story-to-big-picture/
 │   ├── story-to-web/
-│   └── story-to-storyboard/
+│   ├── story-to-storyboard/
+│   └── render-big-picture/
 ├── agents/                       8 agents (orchestration + rendering)
 │   ├── story-to-slides.md        Orchestrates story-to-slides skill
 │   ├── pptx.md                   Renders briefs into .pptx

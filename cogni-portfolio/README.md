@@ -6,9 +6,7 @@ A portfolio messaging and proposition planning plugin for Claude Code. Helps SME
 
 ## Installation
 
-```bash
-claude plugins add cogni-portfolio
-```
+This plugin is part of the [cogni-works monorepo](https://github.com/cogni-work/cogni-works) and is installed automatically with the marketplace.
 
 ## Skills
 
@@ -21,11 +19,13 @@ claude plugins add cogni-portfolio
 | `markets` | Discover and size target markets with TAM/SAM/SOM — via LLM estimation or delegated web research |
 | `propositions` | Generate IS/DOES/MEANS messaging for each Feature x Market pair, individually or in batch |
 | `solutions` | Define implementation plans and pricing tiers (PoV/S/M/L) per proposition for customer business cases |
+| `packages` | Bundle solutions into sellable packages per Product x Market combination with tiered pricing |
 | `compete` | Analyze 3-5 competitors per proposition with positioning, strengths, weaknesses, and differentiation |
 | `customers` | Create ideal customer profiles and buyer personas per target market |
 | `verify` | Orchestrate claim verification for research-backed assertions (delegates to cogni-claims plugin) |
 | `synthesize` | Generate structured messaging repository with per-market summaries and integrated claim status |
 | `export` | Produce deliverables — proposition proposals, market briefs, portfolio workbooks (markdown and XLSX) |
+| `dashboard` | Generate an interactive HTML dashboard showing the full portfolio status |
 | `resume-portfolio` | Detect current workflow phase and recommend next actions for an existing project |
 
 ## Agents
@@ -35,6 +35,8 @@ claude plugins add cogni-portfolio
 | `market-researcher` | Web research agent for TAM/SAM/SOM sizing data with claim submission for verification |
 | `competitor-researcher` | Web research agent for competitive intelligence per proposition with claim tracking |
 | `proposition-generator` | Generates IS/DOES/MEANS messaging for a single Feature x Market pair with optional web research |
+| `solution-planner` | Plans implementation phases and pricing tiers for a single proposition |
+| `feature-quality-assessor` | Assesses feature description quality using LLM intelligence — works in any language |
 
 ## Example Workflows
 

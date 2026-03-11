@@ -60,9 +60,7 @@ If you need to stay ahead of industry trends for strategy, advisory, or portfoli
 
 ## Installation
 
-```bash
-claude plugins add cogni-work/cogni-tips
-```
+This plugin is part of the [cogni-works monorepo](https://github.com/cogni-work/cogni-works) and is installed automatically with the marketplace.
 
 **Prerequisites:**
 - Web access enabled (for trend research)

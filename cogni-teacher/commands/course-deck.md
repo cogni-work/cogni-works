@@ -19,7 +19,7 @@ Accept either:
 Steps:
 1. Load the course-deck skill to get deck structure, theme, and generation rules
 2. Read the relevant course content from `references/courses/`
-3. Read the cogni-work theme from `/Users/stephandehaas/GitHub/dev/cogni-workspace/themes/cogni-work/theme.md`
+3. Read the cogni-work theme from `$COGNI_WORKSPACE_ROOT/themes/cogni-work/theme.md`
 4. Generate the PPTX using PptxGenJS following the skill's slide templates
 5. Save to the working directory with the correct filename
 

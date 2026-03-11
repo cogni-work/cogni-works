@@ -6,9 +6,7 @@ Interactive 45-minute courses teaching Claude Cowork fundamentals and cogni-work
 
 ## Installation
 
-```bash
-claude plugins add cogni-work/cogni-teacher
-```
+This plugin is part of the [cogni-works monorepo](https://github.com/cogni-work/cogni-works) and is installed automatically with the marketplace.
 
 ## Commands
 

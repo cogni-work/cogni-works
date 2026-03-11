@@ -6,9 +6,7 @@ A story arc-driven narrative plugin primarily designed for [Cowork](https://clau
 
 ## Installation
 
-```bash
-claude plugins add cogni-work/cogni-narrative
-```
+This plugin is part of the [cogni-works monorepo](https://github.com/cogni-work/cogni-works) and is installed automatically with the marketplace.
 
 ## Commands
 

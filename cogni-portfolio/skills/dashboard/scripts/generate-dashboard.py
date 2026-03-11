@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Generate a self-contained HTML dashboard for a cogni-portfolio project.
 
-Usage: python3 generate-dashboard.py <project-dir> [--theme <path-to-theme.md>]
+Usage: python3 generate-dashboard.py <project-dir> [--design-variables <path.json>] [--theme <path-to-theme.md>]
 Output: <project-dir>/output/dashboard.html
-Returns JSON: {"status": "ok", "path": "<output-path>", "theme": "<name>"} or {"error": "..."}
+Returns JSON: {"status": "ok", "path": "<output-path>", "theme": "<name>", "design_variables": "<path-or-null>"} or {"error": "..."}
 """
 
 import json
@@ -45,6 +45,14 @@ DEFAULT_THEME = {
         "headers": "'Bricolage Grotesque', 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
         "body": "'Outfit', 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
         "mono": "'JetBrains Mono', 'Fira Code', Consolas, monospace",
+    },
+    "google_fonts_import": "@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Outfit:wght@300;400;500;600;700&display=swap');",
+    "radius": "12px",
+    "shadows": {
+        "sm": "0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.06)",
+        "md": "0 4px 16px rgba(0,0,0,0.06), 0 1px 4px rgba(0,0,0,0.04)",
+        "lg": "0 12px 40px rgba(0,0,0,0.1), 0 4px 12px rgba(0,0,0,0.05)",
+        "xl": "0 24px 64px rgba(0,0,0,0.14), 0 8px 20px rgba(0,0,0,0.06)",
     },
 }
 
@@ -209,6 +217,69 @@ def google_fonts_url(theme):
 
 
 # ---------------------------------------------------------------------------
+# Design variables loader — reads LLM-generated JSON contract
+# ---------------------------------------------------------------------------
+
+DESIGN_VARS_REQUIRED_COLORS = [
+    "primary", "secondary", "accent", "accent_muted", "accent_dark",
+    "background", "surface", "surface2", "surface_dark",
+    "border", "text", "text_light", "text_muted",
+]
+DESIGN_VARS_REQUIRED_STATUS = ["success", "warning", "danger", "info"]
+DESIGN_VARS_REQUIRED_FONTS = ["headers", "body", "mono"]
+
+DEFAULT_SHADOWS = {
+    "sm": "0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.06)",
+    "md": "0 4px 16px rgba(0,0,0,0.06), 0 1px 4px rgba(0,0,0,0.04)",
+    "lg": "0 12px 40px rgba(0,0,0,0.1), 0 4px 12px rgba(0,0,0,0.05)",
+    "xl": "0 24px 64px rgba(0,0,0,0.14), 0 8px 20px rgba(0,0,0,0.06)",
+}
+
+
+def load_design_variables(path):
+    """Load a design-variables JSON file and return a theme dict.
+
+    Validates required keys and applies defaults for optional fields.
+    Returns a dict compatible with generate_html()'s theme expectations.
+    """
+    with open(path) as f:
+        dv = json.load(f)
+
+    # Validate required top-level keys
+    for key in ["theme_name", "colors", "status", "fonts"]:
+        if key not in dv:
+            raise ValueError(f"design-variables JSON missing required key: {key}")
+
+    # Validate required color keys
+    for k in DESIGN_VARS_REQUIRED_COLORS:
+        if k not in dv["colors"]:
+            raise ValueError(f"design-variables colors missing required key: {k}")
+
+    # Validate required status keys
+    for k in DESIGN_VARS_REQUIRED_STATUS:
+        if k not in dv["status"]:
+            raise ValueError(f"design-variables status missing required key: {k}")
+
+    # Validate required font keys
+    for k in DESIGN_VARS_REQUIRED_FONTS:
+        if k not in dv["fonts"]:
+            raise ValueError(f"design-variables fonts missing required key: {k}")
+
+    # Build theme dict matching generate_html() expectations
+    theme = {
+        "name": dv["theme_name"],
+        "colors": dict(dv["colors"]),
+        "status": dict(dv["status"]),
+        "fonts": dict(dv["fonts"]),
+        "google_fonts_import": dv.get("google_fonts_import", ""),
+        "radius": dv.get("radius", "12px"),
+        "shadows": {**DEFAULT_SHADOWS, **dv.get("shadows", {})},
+    }
+
+    return theme
+
+
+# ---------------------------------------------------------------------------
 # Data loading
 # ---------------------------------------------------------------------------
 
@@ -329,9 +400,16 @@ def generate_html(data, status, project_dir, theme):
     c = theme["colors"]
     s = theme["status"]
     fonts = theme["fonts"]
-    surface2 = derive_surface2(c["surface"])
-    fonts_url = google_fonts_url(theme)
-    fonts_import = f"@import url('{fonts_url}');" if fonts_url else ""
+
+    # Use design-variables fields when present, otherwise compute from theme
+    surface2 = c.get("surface2") or derive_surface2(c["surface"])
+    if "google_fonts_import" in theme and theme["google_fonts_import"]:
+        fonts_import = theme["google_fonts_import"]
+    else:
+        fonts_url = google_fonts_url(theme)
+        fonts_import = f"@import url('{fonts_url}');" if fonts_url else ""
+    radius = theme.get("radius", "12px")
+    shadows = theme.get("shadows", DEFAULT_SHADOWS)
 
     html = f"""<!DOCTYPE html>
 <html lang="{html_lang}">
@@ -362,11 +440,11 @@ def generate_html(data, status, project_dir, theme):
   --font-body: {fonts['body']};
   --font-headers: {fonts['headers']};
   --font-mono: {fonts['mono']};
-  --radius: 12px;
-  --shadow-sm: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.06);
-  --shadow-md: 0 4px 16px rgba(0,0,0,0.06), 0 1px 4px rgba(0,0,0,0.04);
-  --shadow-lg: 0 12px 40px rgba(0,0,0,0.1), 0 4px 12px rgba(0,0,0,0.05);
-  --shadow-xl: 0 24px 64px rgba(0,0,0,0.14), 0 8px 20px rgba(0,0,0,0.06);
+  --radius: {radius};
+  --shadow-sm: {shadows['sm']};
+  --shadow-md: {shadows['md']};
+  --shadow-lg: {shadows['lg']};
+  --shadow-xl: {shadows['xl']};
 }}
 
 * {{ margin: 0; padding: 0; box-sizing: border-box; }}
@@ -2344,29 +2422,20 @@ function fmtCurrency(val, cur) {{
     return html
 
 
-def find_default_theme():
-    """Look for cogni-work theme in standard cogni-workspace locations."""
-    candidates = [
-        os.path.expanduser("~/.claude/plugins/marketplaces/cogni-works/cogni-workspace/themes/cogni-work/theme.md"),
-        os.path.expanduser("~/.claude/plugins/cache/cogni-works/cogni-workspace/*/themes/cogni-work/theme.md"),
-    ]
-    for pattern in candidates:
-        matches = glob.glob(pattern)
-        if matches:
-            return matches[0]
-    return None
-
-
 def main():
     # Parse args
     args = sys.argv[1:]
     project_dir = None
     theme_path = None
+    design_variables_path = None
 
     i = 0
     while i < len(args):
         if args[i] == "--theme" and i + 1 < len(args):
             theme_path = args[i + 1]
+            i += 2
+        elif args[i] == "--design-variables" and i + 1 < len(args):
+            design_variables_path = args[i + 1]
             i += 2
         elif not project_dir:
             project_dir = args[i]
@@ -2375,7 +2444,7 @@ def main():
             i += 1
 
     if not project_dir:
-        print(json.dumps({"error": "Usage: generate-dashboard.py <project-dir> [--theme <theme.md>]"}))
+        print(json.dumps({"error": "Usage: generate-dashboard.py <project-dir> [--design-variables <path.json>] [--theme <theme.md>]"}))
         sys.exit(1)
 
     project_dir = os.path.abspath(project_dir)
@@ -2383,10 +2452,17 @@ def main():
         print(json.dumps({"error": f"Not a cogni-portfolio project (missing portfolio.json): {project_dir}"}))
         sys.exit(1)
 
-    # Load theme
-    if not theme_path:
-        theme_path = find_default_theme()
-    theme = parse_theme(theme_path)
+    # Load theme — precedence: --design-variables > --theme > DEFAULT_THEME
+    if design_variables_path:
+        try:
+            theme = load_design_variables(design_variables_path)
+        except (ValueError, json.JSONDecodeError, FileNotFoundError) as e:
+            print(json.dumps({"error": f"Failed to load design-variables: {e}"}))
+            sys.exit(1)
+    elif theme_path:
+        theme = parse_theme(theme_path)
+    else:
+        theme = DEFAULT_THEME.copy()
 
     data = load_all_entities(project_dir)
     status = get_status(project_dir)
@@ -2399,7 +2475,10 @@ def main():
     with open(output_path, "w") as f:
         f.write(html)
 
-    print(json.dumps({"status": "ok", "path": output_path, "theme": theme["name"]}))
+    result = {"status": "ok", "path": output_path, "theme": theme["name"]}
+    if design_variables_path:
+        result["design_variables"] = os.path.abspath(design_variables_path)
+    print(json.dumps(result))
 
 
 if __name__ == "__main__":

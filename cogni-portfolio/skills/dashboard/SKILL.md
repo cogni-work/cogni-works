@@ -23,25 +23,50 @@ It matters because portfolio data lives in dozens of small JSON files that are h
 
 Scan the workspace for `portfolio.json` files under `cogni-portfolio/` paths. If multiple projects exist, ask the user which one to open. Store the resolved project directory path.
 
-### 2. Generate the Dashboard
+### 2. Pick Theme
 
-Run the dashboard generator script:
+Use the `cogni-workspace:pick-theme` skill to let the user select a theme. The skill returns `theme_path`, `theme_name`, and `theme_slug`.
+
+**Skip conditions** (auto-select without prompting):
+- The caller already provided a `theme_path`
+- Only one theme exists in the workspace (auto-select it)
+
+### 3. Generate Design Variables
+
+Read the selected `theme.md` file and produce a design-variables JSON file at `<project-dir>/output/design-variables.json`.
+
+The JSON must follow the schema at `$CLAUDE_PLUGIN_ROOT/skills/dashboard/schemas/design-variables.schema.json`. See the example at `$CLAUDE_PLUGIN_ROOT/skills/dashboard/examples/design-variables-cogni-work.json` for the exact format.
+
+**What the LLM adds** beyond a raw token extraction:
+- Derives `surface2` (~4% darker than `surface`) if not explicit in the theme
+- Computes `accent_muted` and `accent_dark` variants if the theme only defines `accent`
+- Builds a Google Fonts `@import` URL from the font families
+- Adjusts shadow opacity for dark themes (higher opacity for light-on-dark)
+- Ensures WCAG AA contrast between `text` and `background`, `text_light` and `surface_dark`
+- Sets `radius` and `shadows` appropriate to the theme's visual style
+
+**Required fields**: `theme_name`, `colors` (all 13 keys), `status` (4 keys), `fonts` (3 keys).
+**Optional fields with defaults**: `google_fonts_import` (empty), `radius` ("12px"), `shadows` (standard set).
+
+### 4. Generate the Dashboard
+
+Run the dashboard generator script with the design-variables JSON:
 
 ```bash
-python3 $CLAUDE_PLUGIN_ROOT/skills/dashboard/scripts/generate-dashboard.py "<project-dir>" [--theme <path-to-theme.md>]
+python3 $CLAUDE_PLUGIN_ROOT/skills/dashboard/scripts/generate-dashboard.py "<project-dir>" --design-variables "<project-dir>/output/design-variables.json"
 ```
 
 The script:
 - Reads `portfolio.json` and all entity directories (products, features, markets, propositions, solutions, competitors, customers)
 - Reads `cogni-claims/claims.json` if present
 - Runs `project-status.sh` for counts and completion data
-- Parses a cogni-workspace theme.md file for colors, typography, and status colors (auto-discovers cogni-work theme if no `--theme` is given)
+- Loads the design-variables JSON for colors, typography, shadows, and radius
 - Generates a self-contained HTML file at `<project-dir>/output/dashboard.html`
-- Returns JSON with `{"status": "ok", "path": "<output-path>", "theme": "<name>"}` on success
+- Returns JSON with `{"status": "ok", "path": "<output-path>", "theme": "<name>", "design_variables": "<path>"}` on success
 
-The theme is a runtime variable. Any cogni-workspace theme.md file works — the parser extracts color palette tokens (`**Name**: \`#HEX\``), status colors, and typography from the markdown. To use a different theme, pass `--theme <path>` pointing to any theme.md in the workspace's `themes/` directory.
+**Legacy fallback**: The script still accepts `--theme <path-to-theme.md>` for CI/automated runs. When used, it parses the theme.md directly via the built-in regex parser. Precedence: `--design-variables` > `--theme` > built-in defaults.
 
-### 3. Open in Browser
+### 5. Open in Browser
 
 ```bash
 open "<project-dir>/output/dashboard.html"
@@ -60,9 +85,9 @@ The generated HTML includes these sections, all in a single-page app with drill-
 4. **Feature x Market Matrix** — Interactive grid. Each cell is color-coded (green = proposition + solution, yellow = proposition only, red = missing). Click a cell to expand IS/DOES/MEANS, pricing tiers (type-aware: project/subscription/partnership), unit economics, and competitor summary
 5. **Markets Overview** — Cards per market with TAM/SAM/SOM bars, region badge, priority badge (beachhead/expansion/aspirational), segmentation criteria. Click to see customer profiles and all propositions targeting that market
 6. **Products & Features** — Grouped by product with revenue model chip (subscription/project/partnership/hybrid), maturity stage. Features show readiness indicator (GA/Beta/Planned) with color-coded dot.
-6b. **Taxonomy Coverage** — (shown when `portfolio.json` has a `taxonomy` field) Heatmap grid showing all 8 dimensions × categories from the b2b-ict-portfolio taxonomy. Green cells = category has mapped features, red cells = gap. Summary chip shows X of 57 covered (Y%). Below the heatmap: Gap Analysis listing uncovered categories grouped by dimension.
+6b. **Taxonomy Coverage** — (shown when `portfolio.json` has a `taxonomy` field) Heatmap grid showing all 8 dimensions x categories from the b2b-ict-portfolio taxonomy. Green cells = category has mapped features, red cells = gap. Summary chip shows X of 57 covered (Y%). Below the heatmap: Gap Analysis listing uncovered categories grouped by dimension.
 7. **Solutions & Pricing** — Solutions grouped by type. Project solutions show implementation timeline and pricing tiers (PoV/S/M/L). Subscription solutions show onboarding, subscription tiers (Free/Pro/Enterprise), and professional services. Partnership solutions show program stages and revenue-share terms.
-8. **Packages** — Product bundles as clickable cards. Each package shows product→market, package type chip, positioning, and tier cards with pricing and included solution pills. Click to drill down into full tier detail with bundle savings.
+8. **Packages** — Product bundles as clickable cards. Each package shows product->market, package type chip, positioning, and tier cards with pricing and included solution pills. Click to drill down into full tier detail with bundle savings.
 9. **Margin Health** (if any solutions have `cost_model`) — Separated by solution type. Project solutions show effort-based margins per tier. Subscription solutions show unit economics (LTV/CAC, gross margin, churn). Color-coded: green for healthy, yellow for below-target, red for negative/failing. This section is marked INTERNAL/CONFIDENTIAL.
 10. **Competitive Landscape** — Per-proposition competitor cards with strengths/weaknesses
 11. **Claims Status** — Verification summary (verified, unverified, deviated, resolved) with progress bar

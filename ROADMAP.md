@@ -59,7 +59,7 @@ cogni-tips/catalogs/{industry}/{subsector}/
 - [x] Modify Phase 0 to discover and load relevant industry catalog
 - [x] Modify Phase 5 to write-back with user approval (not just advisory)
 - [x] Add catalog discovery to `resume-tips` status dashboard
-- [ ] Initialize first catalog from b2b-ict-portfolio taxonomy template
+- [x] Initialize first catalog from b2b-ict-portfolio taxonomy template
 
 ### 2. TIPS <> Portfolio Bridge (cogni-portfolio or cogni-workspace)
 
@@ -104,10 +104,10 @@ across 8 dimensions) for enterprise ICT service providers.
 - [x] Design taxonomy schema (dimension/category structure, feature mapping)
 - [x] Add `taxonomy` field to portfolio.json and `taxonomy_mapping` to feature.json
 - [x] Import b2b-ict-portfolio as first taxonomy reference
-- [ ] Add taxonomy coverage heatmap to `/dashboard`
-- [ ] Add gap analysis: dimensions/categories with no features
+- [x] Add taxonomy coverage heatmap to `/dashboard`
+- [x] Add gap analysis: dimensions/categories with no features
 - [x] Add service horizon tagging (Current/Emerging/Future)
-- [ ] Update `validate-entities.sh` for taxonomy validation
+- [x] Update `validate-entities.sh` for taxonomy validation
 
 ### 4. Big Block Visual Rendering (cogni-visual)
 
@@ -121,46 +121,6 @@ This is the patent's "specific diagram of industry solutions" — the key custom
 - [ ] Solution categories as visual blocks, color-coded by BR tier
 - [ ] TIPS path connections shown as links between blocks
 - [ ] Excalidraw and/or PPTX output
-
----
-
-## P3: Analytics & Feedback
-
-### 5. Cross-Pursuit Dashboard (cogni-tips)
-
-**Goal:** Aggregate insights across multiple pursuits for the same industry catalog.
-
-**Plugin:** cogni-tips | **Effort:** Low | **Depends on:** catalog (P1.1)
-
-- [ ] Trend frequency analysis (which TIPs appear across pursuits)
-- [ ] ST selection patterns (portfolio priorities signal)
-- [ ] Catalog maturity tracking (entity counts, coverage over time)
-- [ ] Pursuit conversion tracking (ranked > proposed > delivered)
-
-### 6. Realization Tracking (cogni-portfolio)
-
-**Goal:** Track actual customer outcomes vs. predicted TIPS Metrics.
-Closes the ML feedback loop from patent Claim 4.
-
-**Plugin:** cogni-portfolio | **Effort:** Medium | **Depends on:** bridge (P1.2)
-
-- [ ] Design outcomes schema (metric, predicted, actual, delta)
-- [ ] Add `realize` skill or extend `solutions` with outcome tracking
-- [ ] Feed outcome data back to catalog ranking model calibration
-
----
-
-## P4: Extended Pipeline
-
-### 7. cogni-research > cogni-portfolio Pipeline
-
-**Goal:** Competitor portfolio discovery feeds directly into portfolio gap analysis.
-
-**Plugins:** cogni-research + cogni-portfolio | **Effort:** Medium | **Depends on:** taxonomy (P2.3)
-
-- [ ] cogni-research discovers competitor portfolios mapped to taxonomy
-- [ ] Results feed into cogni-portfolio via `ingest` skill
-- [ ] Competitive analysis pre-populated with taxonomy-aligned data
 
 ---
 
@@ -193,15 +153,15 @@ The bridge skill resolves references at runtime. Loose coupling, independent evo
 | Generate solution subset from paths | 1h | value-modeler Phase 2 | Complete |
 | Ranking value (F1 formula) | 2 | value-modeler Phase 4 (Enhanced F1) | Complete |
 | Curation / repository update | 3 | value-modeler Phase 5 (advisory) | Partial |
-| Machine learning update | 4 | — | P3.6 |
-| Industry catalog inheritance | Fig.4 | — | P1.1 |
+| Machine learning update | 4 | — | Future |
+| Industry catalog inheritance | Fig.4 | catalog skill + b2b-ict/general | Complete |
 | Product portfolio mapping | Fig.1 | portfolio_mapping field | Partial |
 | Bidirectional portfolio flow | Fig.1 | — | P1.2 |
 | Big Block diagram (visual) | Fig.3 | markdown only | P2.4 |
 | Solution Process Improvements | Fig.3 | value-modeler Phase 2 SPIs | Complete |
 | Metrics | Fig.3 | value-modeler Phase 2 | Complete |
 | Collaterals | Fig.3 | value-modeler Phase 2 | Complete |
-| Delivery/Adoption/Realization | Fig.1 | solutions/packages exist, realize missing | P3.6 |
+| Delivery/Adoption/Realization | Fig.1 | solutions/packages exist, realize missing | Future |
 
 ---
 
@@ -213,3 +173,5 @@ The bridge skill resolves references at runtime. Loose coupling, independent evo
 | 2026-03-11 | P1.1: Created catalog skill (SKILL.md, schemas, taxonomy ref), updated Phase 0/5, resume-tips, data-model, plugin.json v0.3.0 |
 | 2026-03-11 | P1.2: Created bridge skill in cogni-portfolio (tips-to-portfolio, portfolio-to-tips, sync), plugin.json v0.8.0 |
 | 2026-03-11 | P2.3: Added taxonomy support to data-model.md (portfolio.json taxonomy, feature taxonomy_mapping, horizon), imported b2b-ict-portfolio taxonomy |
+| 2026-03-11 | P1.1: Initialized first catalog (b2b-ict/general) with taxonomy_template from b2b-ict-portfolio v3.7 |
+| 2026-03-11 | P2.3: Added taxonomy coverage heatmap + gap analysis to dashboard, taxonomy validation to validate-entities.sh |

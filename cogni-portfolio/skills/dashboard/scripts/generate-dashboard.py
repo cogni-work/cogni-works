@@ -847,6 +847,86 @@ body::after {{
   font-size: 11px; font-weight: 600; font-family: var(--font-mono);
 }}
 
+/* Taxonomy Heatmap */
+.tax-grid {{
+  display: grid;
+  gap: 2px;
+  margin-top: 12px;
+}}
+.tax-dim-row {{
+  display: grid;
+  gap: 2px;
+  align-items: stretch;
+}}
+.tax-dim-label {{
+  background: var(--surface-dark);
+  color: var(--text-light);
+  padding: 8px 12px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border-radius: 4px 0 0 4px;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+}}
+.tax-cell {{
+  padding: 6px 8px;
+  font-size: 11px;
+  border-radius: 3px;
+  text-align: center;
+  font-weight: 600;
+  transition: transform 0.15s;
+  cursor: default;
+  line-height: 1.3;
+}}
+.tax-cell:hover {{ transform: scale(1.05); z-index: 2; position: relative; }}
+.tax-covered {{ background: rgba(46,125,50,0.15); color: var(--green); }}
+.tax-empty {{ background: rgba(211,47,47,0.08); color: var(--red); }}
+.tax-summary {{
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 16px;
+  font-size: 13px;
+}}
+.tax-summary-chip {{
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 12px;
+}}
+.tax-gap-item {{
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px 18px;
+  margin-bottom: 6px;
+}}
+.tax-gap-dim {{
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text2);
+  margin-bottom: 6px;
+}}
+.tax-gap-cats {{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}}
+.tax-gap-cat {{
+  background: rgba(211,47,47,0.08);
+  color: var(--red);
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+}}
+
 /* Claims */
 .claims-summary {{ display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }}
 .claims-chip {{
@@ -1276,6 +1356,7 @@ body::after {{
   <a href="#" data-section="Matrix">Matrix</a>
   <a href="#" data-section="Markets">Markets</a>
   <a href="#" data-section="Products">Products</a>
+  <a href="#" data-section="Taxonomy">Taxonomy</a>
   <a href="#" data-section="Solutions">Solutions</a>
   <a href="#" data-section="Packages">Packages</a>
   <a href="#" data-section="Margin">Margins</a>
@@ -1459,6 +1540,108 @@ body::after {{
                 readiness_html = f'<span class="readiness readiness-{escape_html(readiness)}">{escape_html(readiness)}</span>' if readiness else ''
                 html += f'      <div class="feature-item"><span class="fname">{fname}{readiness_html}</span><br><span class="fdesc">{fdesc}</span></div>\n'
             html += "    </div>\n  </div>\n"
+        html += "</div>\n"
+
+    # --- Taxonomy Coverage Heatmap & Gap Analysis ---
+    taxonomy = portfolio.get("taxonomy")
+    if taxonomy and taxonomy.get("type") == "b2b-ict-portfolio":
+        # Build the full taxonomy structure
+        tax_dims = {
+            0: ("Provider Profile Metrics", [
+                ("0.1","Financial Scale"),("0.2","Workforce Capacity"),("0.3","Geographic Presence"),
+                ("0.4","Market Position"),("0.5","Certifications & Accreditations"),("0.6","Partnership Ecosystem")]),
+            1: ("Connectivity Services", [
+                ("1.1","WAN Services"),("1.2","SASE"),("1.3","Internet & Cloud Connect"),
+                ("1.4","5G & IoT Connectivity"),("1.5","Voice Services"),("1.6","LAN/WLAN Services"),("1.7","Network-as-a-Service")]),
+            2: ("Security Services", [
+                ("2.1","SOC/SIEM"),("2.2","IAM"),("2.3","Zero Trust"),("2.4","Cloud Security"),
+                ("2.5","Endpoint Security"),("2.6","Network Security"),("2.7","Vulnerability Mgmt"),
+                ("2.8","Security Awareness"),("2.9","Compliance & GRC"),("2.10","Data Protection")]),
+            3: ("Digital Workplace", [
+                ("3.1","Unified Comms"),("3.2","M365"),("3.3","Device Mgmt"),
+                ("3.4","VDI & DaaS"),("3.5","IT Support"),("3.6","DEX"),("3.7","IT Asset Mgmt")]),
+            4: ("Cloud Services", [
+                ("4.1","Managed Hyperscaler"),("4.2","Multi-Cloud Mgmt"),("4.3","Private Cloud"),
+                ("4.4","Hybrid Cloud"),("4.5","Cloud Migration"),("4.6","Cloud-Native"),("4.7","Sovereign Cloud"),("4.8","Enterprise on Cloud")]),
+            5: ("Managed Infrastructure", [
+                ("5.1","Data Center"),("5.2","Compute & Storage"),("5.3","Backup & DR"),
+                ("5.4","Infra Monitoring"),("5.5","IT Outsourcing"),("5.6","DBA"),("5.7","Infra Automation")]),
+            6: ("Application Services", [
+                ("6.1","Custom Dev"),("6.2","App Modernization"),("6.3","Enterprise Platforms"),
+                ("6.4","Integration & API"),("6.5","Low-Code/No-Code"),("6.6","AI, Data & Analytics"),("6.7","DevOps")]),
+            7: ("Consulting Services", [
+                ("7.1","IT Strategy"),("7.2","Digital Transform"),("7.3","Business Consulting"),
+                ("7.4","Program Mgmt"),("7.5","Vendor Mgmt")]),
+        }
+
+        # Map features to categories
+        cat_features = {}  # category_id -> list of feature slugs
+        for fs, f in data["features"].items():
+            tm = f.get("taxonomy_mapping")
+            if tm and tm.get("category_id"):
+                cid = tm["category_id"]
+                cat_features.setdefault(cid, []).append(fs)
+
+        total_cats = sum(len(cats) for _, cats in tax_dims.values())
+        covered_cats = sum(1 for dim_id, (_, cats) in tax_dims.items() for cid, _ in cats if cid in cat_features)
+        coverage_pct = int(covered_cats / total_cats * 100) if total_cats else 0
+
+        # Max columns needed (Security has 10)
+        max_cols = max(len(cats) for _, cats in tax_dims.values())
+
+        html += f"""
+<!-- Taxonomy Coverage -->
+<div class="section reveal">
+  <div class="section-title">Taxonomy Coverage</div>
+  <div class="tax-summary">
+    <span class="tax-summary-chip" style="background:rgba(46,125,50,0.1);color:var(--green)">{covered_cats} of {total_cats} categories covered ({coverage_pct}%)</span>
+    <span class="tax-summary-chip" style="background:rgba(211,47,47,0.08);color:var(--red)">{total_cats - covered_cats} gaps</span>
+    <span style="font-size:12px;color:var(--text2)">Based on {escape_html(taxonomy.get('type',''))} v{escape_html(str(taxonomy.get('version','')))}</span>
+  </div>
+  <div class="tax-grid">
+"""
+        for dim_id in range(8):
+            dim_name, cats = tax_dims[dim_id]
+            dim_covered = sum(1 for cid, _ in cats if cid in cat_features)
+            html += f'    <div class="tax-dim-row" style="grid-template-columns: 180px repeat({len(cats)}, 1fr)">\n'
+            html += f'      <div class="tax-dim-label">{dim_id}. {escape_html(dim_name)} ({dim_covered}/{len(cats)})</div>\n'
+            for cid, cname in cats:
+                feats = cat_features.get(cid, [])
+                if feats:
+                    feat_names = ", ".join(escape_html(data["features"][fs].get("name", fs)) for fs in feats[:3])
+                    tooltip = f"{cid} {cname}: {feat_names}"
+                    css_class = "tax-covered"
+                    label = f"{cid}"
+                else:
+                    tooltip = f"{cid} {cname}: no features mapped"
+                    css_class = "tax-empty"
+                    label = f"{cid}"
+                html += f'      <div class="tax-cell {css_class}" title="{escape_html(tooltip)}">{label}</div>\n'
+            html += '    </div>\n'
+
+        html += "  </div>\n"
+
+        # Gap analysis: list uncovered categories grouped by dimension
+        gaps = {}
+        for dim_id in range(8):
+            dim_name, cats = tax_dims[dim_id]
+            uncovered = [(cid, cname) for cid, cname in cats if cid not in cat_features]
+            if uncovered:
+                gaps[dim_id] = (dim_name, uncovered)
+
+        if gaps:
+            html += '  <div style="margin-top:20px">\n'
+            html += '    <div style="font-size:13px;font-weight:600;margin-bottom:10px;color:var(--text2)">Coverage Gaps — categories with no mapped features</div>\n'
+            for dim_id, (dim_name, uncovered) in sorted(gaps.items()):
+                html += f'    <div class="tax-gap-item">\n'
+                html += f'      <div class="tax-gap-dim">{dim_id}. {escape_html(dim_name)} — {len(uncovered)} gap{"s" if len(uncovered) != 1 else ""}</div>\n'
+                html += f'      <div class="tax-gap-cats">\n'
+                for cid, cname in uncovered:
+                    html += f'        <span class="tax-gap-cat">{cid} {escape_html(cname)}</span>\n'
+                html += f'      </div>\n'
+                html += f'    </div>\n'
+            html += '  </div>\n'
+
         html += "</div>\n"
 
     # --- Solutions & Pricing ---

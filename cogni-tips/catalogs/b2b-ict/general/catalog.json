@@ -1,0 +1,39 @@
+{
+  "version": "1.0.0",
+  "industry": {
+    "primary": "b2b-ict",
+    "primary_en": "B2B ICT Services",
+    "primary_de": "B2B ICT-Dienstleistungen",
+    "subsector": "general",
+    "subsector_en": "General ICT Portfolio",
+    "subsector_de": "Allgemeines ICT-Portfolio"
+  },
+  "created": "2026-03-11T10:00:00Z",
+  "updated": "2026-03-11T10:00:00Z",
+  "stats": {
+    "tips_entities": 0,
+    "solution_templates": 0,
+    "spis": 0,
+    "metrics": 0,
+    "collaterals": 0,
+    "pursuits_contributed": 0
+  },
+  "taxonomy_template": {
+    "type": "b2b-ict-portfolio",
+    "version": "3.7",
+    "dimensions": 8,
+    "categories": 57,
+    "source": "cogni-tips/references/taxonomies/b2b-ict-portfolio.md",
+    "coverage": {
+      "0": { "name": "Provider Profile Metrics", "categories": 6, "mapped": 0 },
+      "1": { "name": "Connectivity Services", "categories": 7, "mapped": 0 },
+      "2": { "name": "Security Services", "categories": 10, "mapped": 0 },
+      "3": { "name": "Digital Workplace Services", "categories": 7, "mapped": 0 },
+      "4": { "name": "Cloud Services", "categories": 8, "mapped": 0 },
+      "5": { "name": "Managed Infrastructure Services", "categories": 7, "mapped": 0 },
+      "6": { "name": "Application Services", "categories": 7, "mapped": 0 },
+      "7": { "name": "Consulting Services", "categories": 5, "mapped": 0 }
+    }
+  },
+  "pursuit_history": []
+}

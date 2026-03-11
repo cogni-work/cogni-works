@@ -438,6 +438,96 @@ if [ -d "$PROJECT_DIR/customers" ]; then
   done
 fi
 
+# Validate taxonomy_mapping on features when portfolio has taxonomy
+if [ -f "$PROJECT_DIR/portfolio.json" ] && [ -d "$PROJECT_DIR/features" ]; then
+  while IFS='|' read -r etype slug msg; do
+    if [ "$etype" = "E" ]; then
+      add_error "feature" "$slug" "$msg"
+    elif [ "$etype" = "W" ]; then
+      add_warning "feature" "$slug" "$msg"
+    fi
+  done < <(python3 -c "
+import json, os, glob
+
+pf = json.load(open('$PROJECT_DIR/portfolio.json'))
+taxonomy = pf.get('taxonomy')
+if not taxonomy:
+    exit(0)
+
+tax_type = taxonomy.get('type', '')
+
+# Build valid category IDs for b2b-ict-portfolio
+valid_categories = {}
+if tax_type == 'b2b-ict-portfolio':
+    dim_cats = {
+        0: [('0.1','Financial Scale'),('0.2','Workforce Capacity'),('0.3','Geographic Presence'),('0.4','Market Position'),('0.5','Certifications & Accreditations'),('0.6','Partnership Ecosystem')],
+        1: [('1.1','WAN Services'),('1.2','SASE'),('1.3','Internet & Cloud Connect'),('1.4','5G & IoT Connectivity'),('1.5','Voice Services'),('1.6','LAN/WLAN Services'),('1.7','Network-as-a-Service')],
+        2: [('2.1','Security Operations (SOC/SIEM)'),('2.2','Identity & Access Management'),('2.3','Zero Trust Architecture'),('2.4','Cloud Security'),('2.5','Endpoint Security'),('2.6','Network Security'),('2.7','Vulnerability Management'),('2.8','Security Awareness'),('2.9','Compliance & GRC'),('2.10','Data Protection & Privacy')],
+        3: [('3.1','Unified Communications'),('3.2','Modern Workplace / M365'),('3.3','Device Management'),('3.4','Virtual Desktop & DaaS'),('3.5','IT Support Services'),('3.6','Digital Employee Experience'),('3.7','IT Asset Management')],
+        4: [('4.1','Managed Hyperscaler Services'),('4.2','Multi-Cloud Management'),('4.3','Private Cloud'),('4.4','Hybrid Cloud'),('4.5','Cloud Migration Services'),('4.6','Cloud-Native Platform'),('4.7','Sovereign Cloud'),('4.8','Enterprise Platforms on Cloud')],
+        5: [('5.1','Data Center Services'),('5.2','Managed Compute & Storage'),('5.3','Backup & Disaster Recovery'),('5.4','Infrastructure Monitoring'),('5.5','IT Outsourcing (ITO)'),('5.6','Database Administration'),('5.7','Infrastructure Automation')],
+        6: [('6.1','Custom Application Development'),('6.2','Application Modernization'),('6.3','Enterprise Platform Services'),('6.4','System Integration & API'),('6.5','Low-Code/No-Code Platforms'),('6.6','AI, Data & Analytics'),('6.7','DevOps & Platform Engineering')],
+        7: [('7.1','IT Strategy & Architecture'),('7.2','Digital Transformation'),('7.3','Business & Industry Consulting'),('7.4','Program & Project Management'),('7.5','Vendor & Contract Management')],
+    }
+    for dim, cats in dim_cats.items():
+        for cid, cname in cats:
+            valid_categories[cid] = (dim, cname)
+
+valid_horizons = {'current', 'emerging', 'future'}
+features_with_mapping = 0
+features_without_mapping = 0
+dim_counts = {}
+
+for f in glob.glob('$PROJECT_DIR/features/*.json'):
+    try:
+        d = json.load(open(f))
+        slug = os.path.basename(f)[:-5]
+        tm = d.get('taxonomy_mapping')
+        if not tm:
+            features_without_mapping += 1
+            continue
+
+        features_with_mapping += 1
+
+        # Validate dimension range
+        dim = tm.get('dimension')
+        if dim is not None and (not isinstance(dim, int) or dim < 0 or dim > 7):
+            print(f'E|{slug}|taxonomy_mapping.dimension must be 0-7, got {dim}')
+
+        # Validate category_id against taxonomy
+        cid = tm.get('category_id', '')
+        if cid and valid_categories and cid not in valid_categories:
+            print(f'E|{slug}|taxonomy_mapping.category_id {cid} is not a valid {tax_type} category')
+        elif cid and valid_categories:
+            expected_dim = valid_categories[cid][0]
+            if dim is not None and dim != expected_dim:
+                print(f'E|{slug}|taxonomy_mapping.dimension {dim} does not match category_id {cid} (expected dimension {expected_dim})')
+
+        # Validate horizon
+        horizon = tm.get('horizon')
+        if horizon and horizon not in valid_horizons:
+            print(f'E|{slug}|taxonomy_mapping.horizon must be current/emerging/future, got {horizon}')
+
+        # Track dimension coverage
+        if dim is not None:
+            dim_counts[dim] = dim_counts.get(dim, 0) + 1
+
+    except Exception:
+        pass
+
+# Warn if taxonomy set but no features mapped
+if features_with_mapping == 0 and features_without_mapping > 0:
+    print(f'W|portfolio|Portfolio has taxonomy set but no features have taxonomy_mapping')
+
+# Warn on dimensions with zero features
+if valid_categories:
+    for dim in range(8):
+        if dim_counts.get(dim, 0) == 0 and features_with_mapping > 0:
+            dim_names = {0:'Provider Profile',1:'Connectivity',2:'Security',3:'Digital Workplace',4:'Cloud',5:'Managed Infrastructure',6:'Application',7:'Consulting'}
+            print(f'W|portfolio|Dimension {dim} ({dim_names[dim]}) has no mapped features')
+" 2>/dev/null)
+fi
+
 errors="$errors]"
 warnings="$warnings]"
 

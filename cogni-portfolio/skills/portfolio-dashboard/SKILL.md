@@ -1,5 +1,5 @@
 ---
-name: dashboard
+name: portfolio-dashboard
 description: |
   Generate an interactive HTML dashboard showing the full portfolio status.
   Use whenever the user mentions dashboard, portfolio dashboard, portfolio view,
@@ -35,7 +35,7 @@ Use the `cogni-workspace:pick-theme` skill to let the user select a theme. The s
 
 Read the selected `theme.md` file and produce a design-variables JSON file at `<project-dir>/output/design-variables.json`.
 
-The JSON must follow the schema at `$CLAUDE_PLUGIN_ROOT/skills/dashboard/schemas/design-variables.schema.json`. See the example at `$CLAUDE_PLUGIN_ROOT/skills/dashboard/examples/design-variables-cogni-work.json` for the exact format.
+The JSON must follow the schema at `$CLAUDE_PLUGIN_ROOT/skills/portfolio-dashboard/schemas/design-variables.schema.json`. See the example at `$CLAUDE_PLUGIN_ROOT/skills/portfolio-dashboard/examples/design-variables-cogni-work.json` for the exact format.
 
 **What the LLM adds** beyond a raw token extraction:
 - Derives `surface2` (~4% darker than `surface`) if not explicit in the theme
@@ -53,7 +53,7 @@ The JSON must follow the schema at `$CLAUDE_PLUGIN_ROOT/skills/dashboard/schemas
 Run the dashboard generator script with the design-variables JSON:
 
 ```bash
-python3 $CLAUDE_PLUGIN_ROOT/skills/dashboard/scripts/generate-dashboard.py "<project-dir>" --design-variables "<project-dir>/output/design-variables.json"
+python3 $CLAUDE_PLUGIN_ROOT/skills/portfolio-dashboard/scripts/generate-dashboard.py "<project-dir>" --design-variables "<project-dir>/output/design-variables.json"
 ```
 
 The script:

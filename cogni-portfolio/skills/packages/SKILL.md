@@ -287,7 +287,7 @@ Packages have no downstream dependents — they can be deleted freely. Confirm w
 
 ## Session Management
 
-After completing batch package generation or when this skill runs after other heavy skills, first invoke `/dashboard` to generate the portfolio dashboard — this gives the user a visual overview of everything accomplished so far. Then recommend a fresh session:
+After completing batch package generation or when this skill runs after other heavy skills, first invoke `/portfolio-dashboard` to generate the portfolio dashboard — this gives the user a visual overview of everything accomplished so far. Then recommend a fresh session:
 
 > "Packages created for [summary]. I've generated the dashboard so you can see the full picture. For next steps like [synthesize/export], I'd suggest starting a fresh session — just use `/resume-portfolio` to pick up where we left off."
 

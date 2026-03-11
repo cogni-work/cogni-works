@@ -46,6 +46,6 @@ When generating design-variables from a theme file, the LLM should:
 
 ## Reference Implementation
 
-- **Canonical example**: `cogni-portfolio/skills/dashboard/` — full 3-stage flow with schema validation
+- **Canonical example**: `cogni-portfolio/skills/portfolio-dashboard/` — full 3-stage flow with schema validation
 - **Example JSON**: `cogni-workspace/schemas/examples/design-variables-cogni-work.json`
 - **Theme entry point**: `cogni-workspace:pick-theme` skill

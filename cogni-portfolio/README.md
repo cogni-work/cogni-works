@@ -25,7 +25,7 @@ This plugin is part of the [cogni-works monorepo](https://github.com/cogni-work/
 | `verify` | Orchestrate claim verification for research-backed assertions (delegates to cogni-claims plugin) |
 | `synthesize` | Generate structured messaging repository with per-market summaries and integrated claim status |
 | `export` | Produce deliverables — proposition proposals, market briefs, portfolio workbooks (markdown and XLSX) |
-| `dashboard` | Generate an interactive HTML dashboard showing the full portfolio status |
+| `portfolio-dashboard` | Generate an interactive HTML dashboard showing the full portfolio status |
 | `resume-portfolio` | Detect current workflow phase and recommend next actions for an existing project |
 
 ## Agents
@@ -111,7 +111,7 @@ cogni-portfolio/
 │   ├── verify/
 │   ├── synthesize/
 │   ├── export/
-│   ├── dashboard/
+│   ├── portfolio-dashboard/
 │   └── resume-portfolio/
 ├── agents/                       5 delegation agents
 │   ├── market-researcher.md

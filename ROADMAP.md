@@ -104,7 +104,7 @@ across 8 dimensions) for enterprise ICT service providers.
 - [x] Design taxonomy schema (dimension/category structure, feature mapping)
 - [x] Add `taxonomy` field to portfolio.json and `taxonomy_mapping` to feature.json
 - [x] Import b2b-ict-portfolio as first taxonomy reference
-- [x] Add taxonomy coverage heatmap to `/dashboard`
+- [x] Add taxonomy coverage heatmap to `/portfolio-dashboard`
 - [x] Add gap analysis: dimensions/categories with no features
 - [x] Add service horizon tagging (Current/Emerging/Future)
 - [x] Update `validate-entities.sh` for taxonomy validation
@@ -174,6 +174,6 @@ The bridge skill resolves references at runtime. Loose coupling, independent evo
 | 2026-03-11 | P1.2: Created bridge skill in cogni-portfolio (tips-to-portfolio, portfolio-to-tips, sync), plugin.json v0.8.0 |
 | 2026-03-11 | P2.3: Added taxonomy support to data-model.md (portfolio.json taxonomy, feature taxonomy_mapping, horizon), imported b2b-ict-portfolio taxonomy |
 | 2026-03-11 | P1.1: Initialized first catalog (b2b-ict/general) with taxonomy_template from b2b-ict-portfolio v3.7 |
-| 2026-03-11 | P2.3: Added taxonomy coverage heatmap + gap analysis to dashboard, taxonomy validation to validate-entities.sh |
+| 2026-03-11 | P2.3: Added taxonomy coverage heatmap + gap analysis to portfolio-dashboard, taxonomy validation to validate-entities.sh |
 | 2026-03-11 | P2.4: Created story-to-big-block skill + agent, big-block-brief.md format v1.0, big-block-layouts.md, EXAMPLE_BIG_BLOCK_BRIEF.md, cogni-visual v1.3.0 |
 | 2026-03-11 | P2.4: Created render-big-block skill + big-block agent + /render-big-block command, completes Excalidraw rendering pipeline, cogni-visual v1.4.0 |

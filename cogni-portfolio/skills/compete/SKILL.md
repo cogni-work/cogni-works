@@ -103,7 +103,7 @@ After completing competitive analysis across multiple propositions or when this 
 - Three or more different portfolio skills were already invoked this session
 - The user asks about remaining context or capacity
 
-When you notice these signals, first invoke `/dashboard` to generate the portfolio dashboard — this gives the user a visual overview of everything accomplished so far. Then recommend a fresh session:
+When you notice these signals, first invoke `/portfolio-dashboard` to generate the portfolio dashboard — this gives the user a visual overview of everything accomplished so far. Then recommend a fresh session:
 
 > "We got a lot done: [brief summary of accomplishments]. I've generated the dashboard so you can see the full picture. For the next steps like [recommend next skills], I'd suggest starting a fresh session — just use `/resume-portfolio` to pick up where we left off. That loads the current state cleanly without carrying the weight of this session."
 

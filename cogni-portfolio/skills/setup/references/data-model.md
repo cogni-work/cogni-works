@@ -41,7 +41,7 @@ The `taxonomy` object (optional) adopts an industry-standard classification syst
 Currently supported taxonomy types:
 - `b2b-ict-portfolio` — 57 categories across 8 dimensions (0: Provider Profile, 1: Connectivity, 2: Security, 3: Digital Workplace, 4: Cloud, 5: Managed Infrastructure, 6: Application, 7: Consulting). Designed for B2B ICT service providers.
 
-When a taxonomy is set, the `/dashboard` skill shows a coverage heatmap (categories with/without mapped features) and the `/features` skill suggests taxonomy mappings for new features.
+When a taxonomy is set, the `/portfolio-dashboard` skill shows a coverage heatmap (categories with/without mapped features) and the `/features` skill suggests taxonomy mappings for new features.
 
 The `delivery_defaults` object provides company-wide defaults for solution cost modeling:
 

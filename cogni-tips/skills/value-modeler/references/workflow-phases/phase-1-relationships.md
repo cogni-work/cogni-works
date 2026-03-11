@@ -1,16 +1,22 @@
-# Phase 1: Build Relationship Networks
+# Phase 1: Build Relationship Networks & Strategic Themes
 
 ## Objective
 
-Analyze the 60 agreed candidates across all 4 dimensions and build TIPS paths — coherent
-Trend → Implication → Possibility chains that form "value stories."
+Two-pass architecture: First, build granular T→I→P value chains via semantic affinity
+analysis (bottom-up). Then consolidate chains into 3-7 MECE Strategic Themes — the
+distinct investment domains where this customer should allocate budget and executive
+attention (top-down).
 
-## Why Relationships Matter
+## Why Two Passes?
 
-The patent's core insight: trends alone don't tell you what to do. A Trend becomes actionable
-only when you trace its Implications (what it means for your business) and connect those to
-Possibilities (how you can capitalize). This chain is the relationship network — the reasoning
-backbone that makes solution selection systematic rather than ad-hoc.
+Building fine-grained causal chains is analytically rigorous — you need T→I→P reasoning
+to ensure connections are real, not thematic hand-waving. But presenting 8-15 granular
+chains to a CxO produces a flat, overwhelming list where overlapping chains generate
+redundant solutions.
+
+The consolidation pass solves this: chains that answer the same strategic question get
+grouped into a single theme. The customer sees 5 investment areas, not 11 threads. Each
+theme is a distinct budget decision with a clear executive owner.
 
 ## Dimension-to-TIPS Role Mapping
 
@@ -23,9 +29,13 @@ backbone that makes solution selection systematic rather than ad-hoc.
 
 Note: `digitales-fundament` candidates are enablers, not Solutions in the patent sense.
 They serve as constraints or prerequisites that inform Solution Templates but don't map
-directly to TIPS paths. They will be used in Phase 2 as "foundation requirements."
+directly to TIPS value chains. They will be used in Phase 2 as "foundation requirements."
 
-## Step 1: Candidate Analysis
+---
+
+## PASS 1: Bottom-Up Value Chain Construction
+
+### Step 1: Candidate Analysis
 
 For each of the 60 candidates, extract:
 - Its dimension (determines TIPS role)
@@ -39,7 +49,7 @@ Group candidates by dimension:
 - P-pool: all `neue-horizonte` candidates (typically 13)
 - Foundation-pool: all `digitales-fundament` candidates (typically 13)
 
-## Step 2: Semantic Affinity Analysis
+### Step 2: Semantic Affinity Analysis
 
 Use extended thinking to analyze semantic connections between candidates across dimensions.
 For each T candidate, identify which I candidates it logically drives, and which P candidates
@@ -61,46 +71,46 @@ those implications enable.
 
 **Anti-patterns to avoid:**
 - **Forced connections**: If you can't explain T→I causality in one sentence, don't link them.
-  It's better to leave a candidate orphaned than to create a weak path. Orphans are honest;
-  weak paths are misleading.
+  It's better to leave a candidate orphaned than to create a weak chain. Orphans are honest;
+  weak chains are misleading.
 - **Thematic-only grouping**: "Both are about food" or "both mention AI" is not a causal link.
   The T must *cause* the I, and the I must *motivate* the P.
 - **M&A as possibility**: Large corporate deals (acquisitions, mergers) are market events, not
   strategic possibilities a customer can pursue. Use them as Trends, not Possibilities.
 - Creating circular paths (T→I→P where P causes T)
-- Connecting every candidate to every other (paths should be selective)
+- Connecting every candidate to every other (chains should be selective)
 - Ignoring horizon progression (an "observe" Trend shouldn't drive an "act" Implication)
 
-## Step 3: Build TIPS Paths
+### Step 3: Build Value Chains
 
-Construct 8-15 TIPS paths. Each path:
+Construct all valid T→I→P value chains. Each chain:
 
 1. **Starts with a Trend** (from `externe-effekte`)
 2. **Flows through 1-3 Implications** (from `digitale-wertetreiber`)
 3. **Arrives at 1-2 Possibilities** (from `neue-horizonte`)
-4. Has a **human-readable narrative** explaining the chain in 2-3 sentences
+4. Has a **human-readable narrative** explaining the causal chain in 2-3 sentences
 
-**Aim for rich paths.** A path with T=1 I=1 P=1 is the minimum — it works but produces
-weak F1 differentiation because there are only 3 data points. Prefer paths with 2+ Implications
+**Aim for rich chains.** A chain with T=1 I=1 P=1 is the minimum — it works but produces
+weak F1 differentiation because there are only 3 data points. Prefer chains with 2+ Implications
 where a Trend has multiple operational impacts, or 2 Possibilities where an Implication opens
-different strategic responses. The richer the path, the more nuanced the ranking becomes.
-A good target is an average of 4-5 TIPs per path (T=1 I=2 P=1 or T=1 I=1 P=2).
+different strategic responses. The richer the chain, the more nuanced the ranking becomes.
+A good target is an average of 4-5 TIPs per chain (T=1 I=2 P=1 or T=1 I=1 P=2).
 
-**Path naming:** Give each path a descriptive name (3-5 words) that captures the value story.
+**Chain naming:** Give each chain a descriptive name (3-5 words) that captures the causal story.
 
 **Coverage targets:**
-- Each T candidate should appear in at least 1 path (ideally 1-2)
-- Each I candidate should appear in at least 1 path
-- Each P candidate should appear in at least 1 path
-- Some candidates may appear in multiple paths — this is expected and desirable
-- Not every candidate needs to be in a path — orphans are noted but acceptable
+- Each T candidate should appear in at least 1 chain (ideally 1-2)
+- Each I candidate should appear in at least 1 chain
+- Each P candidate should appear in at least 1 chain
+- Some candidates may appear in multiple chains — this is expected and desirable
+- Not every candidate needs to be in a chain — orphans are noted but acceptable
 
-**Foundation tagging:** For each path, identify which `digitales-fundament` candidates
-are prerequisites. Tag them as `foundation_requirements` on the path:
+**Foundation tagging:** For each chain, identify which `digitales-fundament` candidates
+are prerequisites. Tag them as `foundation_requirements` on the chain:
 
 ```json
 {
-  "path_id": "path-001",
+  "chain_id": "vc-001",
   "foundation_requirements": [
     {
       "candidate_ref": "digitales-fundament/act/2",
@@ -111,33 +121,130 @@ are prerequisites. Tag them as `foundation_requirements` on the path:
 }
 ```
 
-## Step 4: Validate & Present
+At this point you'll typically have 8-15 value chains. That's expected — don't reduce yet.
 
-Present the paths to the user in a readable format:
+---
+
+## PASS 2: Top-Down Strategic Theme Consolidation
+
+This is where the MECE discipline turns a list of chains into a structured investment strategy.
+
+### Step 4: Identify Natural Clusters
+
+Analyze the value chains from Step 3 and look for chains that converge:
+
+**Clustering signals — chains should merge when they share:**
+1. **Same "so what?"** — If two chains lead to the same executive decision ("we need to invest
+   in X"), they belong in one theme. Test: would you present these to the same CxO in the same
+   meeting agenda item?
+2. **Solution overlap** — If the chains would naturally produce overlapping Solution Templates
+   (same platforms, same capabilities), they belong together.
+3. **Candidate overlap** — If chains share >40% of their T/I/P candidates, they're telling
+   variants of the same story.
+4. **Same buyer** — If a CxO would own both chains with one budget, merge them.
+
+**Splitting signals — a cluster should split when:**
+1. **Competing solutions** — If the cluster produces STs that are alternatives (not complements),
+   they represent different strategic bets and need separate themes.
+2. **Different time horizons** — If one half is "act now" and the other is "observe," consider
+   splitting so urgency is clear.
+3. **Different value propositions** — If you'd pitch them to fundamentally different buyers
+   (CFO vs CTO vs CPO), they're separate themes.
+
+### Step 5: Form Strategic Themes
+
+Create 3-7 themes. Each theme:
+
+1. **Groups 1-4 value chains** that share the same strategic direction
+2. Has a **name** (3-5 words): the investment area, not the megatrend.
+   Good: "Smart Manufacturing & Supply Chain Resilience"
+   Bad: "Digitalization" (too broad — that's the megatrend, not the investment)
+3. Has a **strategic question** it answers for the customer — the decision this theme forces.
+   Example: "How do we modernize production while de-risking our supply chain?"
+4. Has an **executive sponsor type** — who would own this in the customer's org.
+   Example: "COO / VP Operations"
+5. Has a **theme narrative** (2-3 sentences) explaining why these chains belong together
+   and what the unified investment thesis is.
+
+**The 3-5-7 target:**
+- **3 themes**: Minimum viable strategy. Use for focused engagements, narrow candidate pools
+  (<40 candidates), or when the industry is highly concentrated.
+- **5 themes**: Sweet spot. Cognitively manageable, enough breadth for enterprise accounts.
+  Each theme is like a finger — you can hold the whole strategy in one hand.
+- **7 themes**: Hard maximum (Miller's law: 7±2 chunks). Only for large, complex enterprises
+  with diverse business units spanning multiple subsectors.
+
+Choose the target based on:
+- Number of distinct industry subsectors in the candidate pool
+- Breadth and diversity of the T/I/P candidates
+- Customer organizational complexity (more BUs → more themes)
+- Default to 5 unless there's a clear reason to deviate.
+
+### Step 6: MECE Validation
+
+Before presenting, verify the themes satisfy MECE:
+
+**Mutual Exclusivity check:**
+- For each pair of themes, ask: "Would a CxO confuse these? Would they fund both from the
+  same budget line?" If yes → merge.
+- Each Solution Template (mentally anticipated, not yet generated) should clearly belong to
+  one primary theme. If an ST would naturally serve two themes equally, the themes may need merging.
+
+**Collective Exhaustiveness check:**
+- Count how many of the 45 T/I/P candidates (excluding Foundation) appear in at least one
+  chain within a theme. Target ≥80% coverage.
+- If major candidate clusters are orphaned (not covered by any theme), consider whether a
+  theme is missing or whether those candidates are genuinely low-relevance outliers.
+
+**Balance check:**
+- No single theme should contain >50% of all chains (probably too broad — split it).
+- No theme should have 0 chains (empty themes aren't themes).
+- Aim for roughly even distribution, but don't force symmetry — some themes naturally have
+  more chains than others.
+
+---
+
+## Step 7: Present to User
+
+Present the Strategic Themes as the primary output, with chains nested beneath:
 
 ```markdown
-## TIPS Relationship Networks
+## Strategic Themes (TIPS Value Model)
 
-### Path 1: AI-Driven Quality Optimization
-**Narrative:** Tightening EU quality standards (T) expose gaps in real-time defect
-detection capabilities (I), creating opportunity for predictive quality management (P).
+### Theme 1: Health & Nutrition Transformation
+**Strategic Question:** How do we reformulate our portfolio for the health-conscious, GLP-1-era consumer?
+**Executive Sponsor:** CPO / Head of Product Development
 
-| Role | Candidate | Horizon | Score |
-|------|-----------|---------|-------|
-| T | EU Quality Standards Tightening | act | 0.85 |
-| I | Real-time Defect Detection Gap | act | 0.78 |
-| P | Predictive Quality Management | plan | 0.72 |
+GLP-1 medications and functional food demand are fundamentally reshaping what consumers want.
+This theme covers reformulation, personalization, and nutritional innovation.
 
-**Foundation requires:** Data Infrastructure Maturity, ML Engineering Talent
+**Value Chains:**
+
+#### VC-1: GLP-1 Portfolio Reformulation
+T: GLP-1 Market Impact (act, 0.85) → I: Personalized Digital Experiences (act, 0.78),
+AI Recommendation Engines (act, 0.75) → P: GLP-1 Portfolio Reformulation (act, 0.72)
+Foundation: AI/ML Engineer Demand
+
+#### VC-2: Functional Ingredients Innovation
+T: Functional Food Demand Growth (act, 0.80) → I: Consumer Health Profiling (plan, 0.68)
+→ P: Functional Product Line Extension (plan, 0.65)
+Foundation: Food Scientist Shortage
+
+---
+
+### Theme 2: Regulatory Compliance & Sustainable Packaging
+...
 ```
 
 Also report:
-- Total paths built
+- Total themes formed and total value chains
 - Coverage: how many candidates are linked vs orphaned
+- MECE validation result (pass/issues)
 - Any candidates that couldn't be meaningfully connected (orphans)
 
-Ask the user: "Do these relationship networks make sense? Want to adjust any paths
-before I generate Solution Templates?"
+Ask the user: "Do these Strategic Themes make sense for your customer? Each theme represents
+a distinct investment area. Want to adjust, merge, or split any themes before I generate
+Solution Templates?"
 
 ## Output
 
@@ -145,12 +252,26 @@ Save to `tips-value-model.json` (create or update):
 
 ```json
 {
-  "version": "1.0.0",
+  "version": "2.0.0",
   "project_id": "{project-slug}",
-  "paths": [
+  "themes": [
     {
-      "path_id": "path-001",
-      "name": "AI-Driven Quality Optimization",
+      "theme_id": "theme-001",
+      "name": "Health & Nutrition Transformation",
+      "strategic_question": "How do we reformulate our portfolio for the health-conscious, GLP-1-era consumer?",
+      "executive_sponsor_type": "CPO / Head of Product Development",
+      "narrative": "GLP-1 medications and functional food demand are fundamentally reshaping consumer expectations...",
+      "value_chains": ["vc-001", "vc-002"],
+      "solution_templates": [],
+      "business_relevance_avg": null,
+      "ranking_value": null
+    }
+  ],
+  "value_chains": [
+    {
+      "chain_id": "vc-001",
+      "name": "GLP-1 Portfolio Reformulation",
+      "theme_ref": "theme-001",
       "narrative": "...",
       "trend": { "candidate_ref": "...", "name": "...", "business_relevance": null },
       "implications": [
@@ -171,11 +292,17 @@ Save to `tips-value-model.json` (create or update):
     "orphaned": 4,
     "total": 60,
     "coverage_pct": 0.923
+  },
+  "mece_validation": {
+    "theme_count": 5,
+    "mutual_exclusivity": "pass",
+    "collective_exhaustiveness_pct": 0.87,
+    "balance": "pass"
   }
 }
 ```
 
 Update `.metadata/value-modeler-output.json`:
-- Set `workflow_state` to `"paths-built"`
+- Set `workflow_state` to `"themes-built"`
 - Add `"phase-1"` to `phases_completed`
-- Record `path_count` and `coverage_pct`
+- Record `theme_count`, `chain_count`, and `coverage_pct`

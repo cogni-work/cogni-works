@@ -16,11 +16,11 @@ This phase is optional and advisory. Trigger it when:
 
 ## Step 1: Identify Promotion Candidates
 
-Scan the completed value model for patterns worth promoting to the industry catalog:
+Scan the completed value model (themes, value chains, STs) for patterns worth promoting to the industry catalog:
 
-**High-value TIPS paths** — paths with BR >= 4.0 that represent recurring industry themes:
-- Does this path reflect a broad industry trend or is it customer-specific?
-- Would other customers in the same subsector benefit from this path?
+**High-value Strategic Themes** — themes with avg BR >= 4.0 that represent recurring industry patterns:
+- Does this theme reflect a broad industry investment area or is it customer-specific?
+- Would other customers in the same subsector benefit from this theme and its value chains?
 
 **Proven Solution Templates** — STs ranked in Tier 1-2 that address common needs:
 - Is this ST generalizable beyond the specific customer context?
@@ -39,8 +39,8 @@ For each promotion candidate, generate a recommendation:
 ```json
 {
   "recommendation_id": "cur-001",
-  "entity_type": "path|solution_template|spi|metric",
-  "entity_ref": "path-001",
+  "entity_type": "theme|value_chain|solution_template|spi|metric",
+  "entity_ref": "theme-001",
   "action": "promote|merge|flag",
   "target_catalog": "manufacturing/automotive",
   "rationale": "High-BR path addressing a recurring industry need for predictive quality",

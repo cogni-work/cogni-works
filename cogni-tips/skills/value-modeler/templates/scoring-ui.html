@@ -10,6 +10,7 @@
     --text: #e2e8f0; --muted: #94a3b8; --accent: #3b82f6;
     --t-color: #f59e0b; --i-color: #06b6d4; --p-color: #8b5cf6;
     --high: #22c55e; --mid: #eab308; --low: #ef4444;
+    --theme-bg: #0d1424;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
@@ -24,10 +25,26 @@
     transition: width 0.3s; }
   .progress-text { color: var(--muted); font-size: 0.875rem; white-space: nowrap; }
 
-  .path-card { background: var(--surface); border: 1px solid var(--border);
-    border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; }
-  .path-name { font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem; }
-  .path-narrative { color: var(--muted); font-size: 0.875rem; margin-bottom: 1rem;
+  .theme-section { margin-bottom: 2.5rem; }
+  .theme-header { background: var(--theme-bg); border: 1px solid var(--accent);
+    border-radius: 12px 12px 0 0; padding: 1.25rem 1.5rem;
+    border-bottom: 2px solid var(--accent); }
+  .theme-name { font-size: 1.25rem; font-weight: 700; color: var(--accent); }
+  .theme-question { color: var(--muted); font-size: 0.875rem; margin-top: 0.25rem;
+    font-style: italic; }
+  .theme-sponsor { color: var(--muted); font-size: 0.8rem; margin-top: 0.25rem; }
+  .theme-progress { display: flex; align-items: center; gap: 0.5rem; margin-top: 0.5rem; }
+  .theme-progress-bar { flex: 1; max-width: 200px; height: 4px; background: var(--border);
+    border-radius: 2px; }
+  .theme-progress-fill { height: 100%; background: var(--accent); border-radius: 2px;
+    transition: width 0.3s; }
+  .theme-progress-text { color: var(--muted); font-size: 0.75rem; }
+
+  .chain-card { background: var(--surface); border: 1px solid var(--border);
+    border-radius: 0; padding: 1.5rem; border-top: none; }
+  .chain-card:last-child { border-radius: 0 0 12px 12px; }
+  .chain-name { font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem; }
+  .chain-narrative { color: var(--muted); font-size: 0.875rem; margin-bottom: 1rem;
     font-style: italic; }
 
   .tip-row { display: flex; align-items: center; gap: 1rem; padding: 0.75rem 0;
@@ -88,7 +105,7 @@
   <div class="progress-text" id="progressText">0 / 0 bewertet</div>
 </div>
 
-<div id="paths"></div>
+<div id="themes"></div>
 
 <div class="submit-area">
   <button class="submit-btn" id="submitBtn" onclick="submitScores()">Bewertung exportieren (JSON)</button>
@@ -99,69 +116,121 @@ const MODEL_DATA = __MODEL_DATA_PLACEHOLDER__;
 
 const scores = {};
 let totalTips = 0;
+const themeTipCounts = {};
+const themeScoredCounts = {};
+
+// Build chain lookup
+const chainMap = {};
+(MODEL_DATA.value_chains || []).forEach(vc => { chainMap[vc.chain_id] = vc; });
+
+// Backward compatibility: if no themes, fall back to flat value_chains/paths
+const themes = MODEL_DATA.themes || [{ theme_id: 'default', name: 'TIPS Paths',
+  strategic_question: '', executive_sponsor_type: '',
+  value_chains: (MODEL_DATA.value_chains || MODEL_DATA.paths || []).map(c => c.chain_id || c.path_id) }];
+
+if (!MODEL_DATA.themes && (MODEL_DATA.value_chains || MODEL_DATA.paths)) {
+  (MODEL_DATA.value_chains || MODEL_DATA.paths).forEach(vc => {
+    chainMap[vc.chain_id || vc.path_id] = vc;
+  });
+}
 
 function init() {
-  const container = document.getElementById('paths');
+  const container = document.getElementById('themes');
   const seen = new Set();
 
-  MODEL_DATA.paths.forEach(path => {
-    const card = document.createElement('div');
-    card.className = 'path-card';
-    card.innerHTML = `
-      <div class="path-name">${path.name}</div>
-      <div class="path-narrative">${path.narrative}</div>
+  themes.forEach(theme => {
+    const section = document.createElement('div');
+    section.className = 'theme-section';
+    section.id = `theme-${theme.theme_id}`;
+
+    // Theme header
+    const header = document.createElement('div');
+    header.className = 'theme-header';
+    header.innerHTML = `
+      <div class="theme-name">${theme.name}</div>
+      ${theme.strategic_question ? `<div class="theme-question">${theme.strategic_question}</div>` : ''}
+      ${theme.executive_sponsor_type ? `<div class="theme-sponsor">${theme.executive_sponsor_type}</div>` : ''}
+      <div class="theme-progress">
+        <div class="theme-progress-bar"><div class="theme-progress-fill" id="tpf-${theme.theme_id}" style="width:0%"></div></div>
+        <div class="theme-progress-text" id="tpt-${theme.theme_id}">0 / 0</div>
+      </div>
     `;
+    section.appendChild(header);
 
-    const tips = [];
-    if (path.trend) tips.push({ ...path.trend, role: 'T' });
-    (path.implications || []).forEach(i => tips.push({ ...i, role: 'I' }));
-    (path.possibilities || []).forEach(p => tips.push({ ...p, role: 'P' }));
+    themeTipCounts[theme.theme_id] = 0;
+    themeScoredCounts[theme.theme_id] = 0;
 
-    tips.forEach(tip => {
-      const ref = tip.candidate_ref;
-      if (!seen.has(ref)) {
-        seen.add(ref);
-        totalTips++;
-      }
-      const row = document.createElement('div');
-      row.className = 'tip-row';
-      const roleClass = tip.role === 'T' ? 'role-t' : tip.role === 'I' ? 'role-i' : 'role-p';
-      row.innerHTML = `
-        <div class="tip-role ${roleClass}">${tip.role}</div>
-        <div class="tip-info">
-          <div class="tip-name">${tip.name}</div>
-          <div class="tip-meta">${ref}</div>
-        </div>
-        <div class="br-buttons">
-          ${[1,2,3,4,5].map(n =>
-            `<button class="br-btn s${n}" data-ref="${ref}" data-score="${n}"
-              onclick="setScore('${ref}', ${n}, this)">${n}</button>`
-          ).join('')}
-        </div>
+    // Value chains within theme
+    const chainIds = theme.value_chains || [];
+    chainIds.forEach(cid => {
+      const chain = chainMap[cid];
+      if (!chain) return;
+
+      const card = document.createElement('div');
+      card.className = 'chain-card';
+      card.innerHTML = `
+        <div class="chain-name">${chain.name}</div>
+        ${chain.narrative ? `<div class="chain-narrative">${chain.narrative}</div>` : ''}
       `;
-      card.appendChild(row);
 
-      // Sync already-scored items
-      if (scores[ref] !== undefined) {
-        setTimeout(() => {
-          const btn = row.querySelector(`[data-score="${scores[ref]}"]`);
-          if (btn) btn.classList.add('selected');
-        }, 0);
-      }
+      const tips = [];
+      if (chain.trend) tips.push({ ...chain.trend, role: 'T' });
+      (chain.implications || []).forEach(i => tips.push({ ...i, role: 'I' }));
+      (chain.possibilities || []).forEach(p => tips.push({ ...p, role: 'P' }));
+
+      tips.forEach(tip => {
+        const ref = tip.candidate_ref;
+        if (!seen.has(ref)) {
+          seen.add(ref);
+          totalTips++;
+          themeTipCounts[theme.theme_id]++;
+        }
+        const row = document.createElement('div');
+        row.className = 'tip-row';
+        row.dataset.themeId = theme.theme_id;
+        const roleClass = tip.role === 'T' ? 'role-t' : tip.role === 'I' ? 'role-i' : 'role-p';
+        row.innerHTML = `
+          <div class="tip-role ${roleClass}">${tip.role}</div>
+          <div class="tip-info">
+            <div class="tip-name">${tip.name}</div>
+            <div class="tip-meta">${ref}</div>
+          </div>
+          <div class="br-buttons">
+            ${[1,2,3,4,5].map(n =>
+              `<button class="br-btn s${n}" data-ref="${ref}" data-score="${n}" data-theme="${theme.theme_id}"
+                onclick="setScore('${ref}', ${n}, '${theme.theme_id}')">${n}</button>`
+            ).join('')}
+          </div>
+        `;
+        card.appendChild(row);
+
+        if (scores[ref] !== undefined) {
+          setTimeout(() => {
+            const btn = row.querySelector(`[data-score="${scores[ref]}"]`);
+            if (btn) btn.classList.add('selected');
+          }, 0);
+        }
+      });
+
+      section.appendChild(card);
     });
 
-    container.appendChild(card);
+    container.appendChild(section);
   });
 
   updateProgress();
 }
 
-function setScore(ref, value, btn) {
-  // Deselect siblings
+function setScore(ref, value, themeId) {
+  const wasNew = scores[ref] === undefined;
   document.querySelectorAll(`[data-ref="${ref}"]`).forEach(b => b.classList.remove('selected'));
-  // Select all instances of this ref (may appear in multiple paths)
   document.querySelectorAll(`[data-ref="${ref}"][data-score="${value}"]`).forEach(b => b.classList.add('selected'));
   scores[ref] = value;
+  if (wasNew) {
+    // Increment theme scored count for the theme that "owns" this candidate
+    // (first theme encountered — sync means it only counts once globally)
+    themeScoredCounts[themeId] = (themeScoredCounts[themeId] || 0) + 1;
+  }
   updateProgress();
 }
 
@@ -170,6 +239,17 @@ function updateProgress() {
   const pct = totalTips > 0 ? (scored / totalTips * 100) : 0;
   document.getElementById('progressFill').style.width = pct + '%';
   document.getElementById('progressText').textContent = `${scored} / ${totalTips} bewertet`;
+
+  // Update per-theme progress
+  themes.forEach(theme => {
+    const total = themeTipCounts[theme.theme_id] || 0;
+    const done = themeScoredCounts[theme.theme_id] || 0;
+    const tPct = total > 0 ? (done / total * 100) : 0;
+    const fill = document.getElementById(`tpf-${theme.theme_id}`);
+    const text = document.getElementById(`tpt-${theme.theme_id}`);
+    if (fill) fill.style.width = tPct + '%';
+    if (text) text.textContent = `${done} / ${total}`;
+  });
 }
 
 function submitScores() {

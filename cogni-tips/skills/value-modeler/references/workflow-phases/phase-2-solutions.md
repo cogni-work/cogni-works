@@ -23,7 +23,9 @@ customer, then *this* is what we should propose."
 
 ## Step 1: Generate Solution Templates
 
-For each TIPS path, generate 1-3 Solution Templates using extended thinking:
+For each **Strategic Theme**, generate 2-4 Solution Templates using extended thinking.
+Working at the theme level (rather than per-chain) naturally deduplicates — chains within
+a theme share strategic direction, so a single ST often serves multiple chains.
 
 **For each ST, define:**
 - `st_id`: Sequential identifier (st-001, st-002, ...)
@@ -31,20 +33,27 @@ For each TIPS path, generate 1-3 Solution Templates using extended thinking:
 - `description`: What it does and how (1-2 sentences)
 - `category`: `software` | `hardware` | `service` | `hybrid` | `process`
 - `enabler_type`: `process_improvement` | `capability_building` | `risk_mitigation` | `revenue_enablement`
-- `linked_paths`: Which paths this ST addresses (can be multiple)
+- `theme_ref`: The primary Strategic Theme this ST belongs to
+- `linked_chains`: Which value chains this ST addresses (can span multiple chains within the theme)
 - `foundation_dependencies`: Which foundation candidates are prerequisites
 
 **Generation guidelines:**
-- A single ST can address multiple paths (shared enablers are valuable — they signal high ROI)
+- Consider all value chains within the theme holistically — what enabler would address
+  the theme's strategic question most directly?
+- A single ST can address multiple chains within a theme (this is expected and desirable)
+- Cross-theme STs are rare but allowed — if an ST genuinely serves two themes, link it
+  to both but assign a primary `theme_ref`
 - Prefer concrete over abstract — name specific technologies, platforms, methodologies
 - Consider the project's industry context (automotive solutions differ from pharma)
-- Use the path's horizon alignment to set implementation urgency:
-  - All-act paths → immediate implementation STs
-  - Act-plan paths → near-term STs with phased rollout
-  - Plan-observe paths → strategic initiative STs
+- Use the chain's horizon alignment to set implementation urgency:
+  - All-act chains → immediate implementation STs
+  - Act-plan chains → near-term STs with phased rollout
+  - Plan-observe chains → strategic initiative STs
 
-**Target: 15-25 Solution Templates total.** Fewer means the analysis is too coarse;
-more means insufficient consolidation.
+**Target: 2-4 STs per theme → 8-20 total.** This range reflects that themes consolidate
+what would otherwise be 15-25 STs spread across redundant paths. If you find yourself
+generating >4 STs for a single theme, the theme may be too broad — revisit the Phase 1
+split criteria.
 
 ## Step 2: Portfolio Mapping (if available)
 
@@ -110,27 +119,31 @@ SPIs are the *how* (organizational and process changes needed to realize value f
 
 ## Step 3: Consolidate & Deduplicate
 
-Review all generated STs and:
-- Merge STs that are essentially the same enabler approached from different paths
+Because STs are now generated per theme rather than per chain, most deduplication happens
+naturally. Still, review all generated STs and:
+- Merge any remaining duplicates (especially cross-theme STs that overlap)
 - Ensure each ST has a unique, descriptive name
-- Verify that every path has at least 1 linked ST
-- Check that no ST is orphaned (linked to zero paths)
+- Verify that every theme has at least 2 linked STs
+- Verify that every value chain is covered by at least 1 ST (via its parent theme)
+- Check that no ST is orphaned (linked to zero chains)
 
 ## Step 3.5: Define Success Metrics
 
-For each TIPS path, define 2-4 success Metrics — KPIs that measure whether the solution
-path is delivering expected value. Metrics make the business case tangible and provide
-the basis for post-implementation tracking.
+For each Strategic Theme, define 2-4 success Metrics — KPIs that measure whether the
+theme's solutions are delivering expected value. Metrics make the business case tangible
+and provide the basis for post-implementation tracking. Link metrics to specific value
+chains where appropriate.
 
 **For each Metric, define:**
 - `metric_id`: Sequential identifier (met-001, met-002, ...)
 - `name`: KPI name (e.g., "OEE Improvement %")
 - `unit`: Measurement unit (e.g., "percentage", "hours", "EUR", "count")
 - `direction`: `increase` | `decrease` — which direction indicates improvement
-- `linked_paths`: Which TIPS paths this metric measures
+- `theme_ref`: The Strategic Theme this metric measures
+- `linked_chains`: Which value chains this metric applies to (optional, for granularity)
 
 **Example:**
-- Path: "AI-Driven Quality Optimization"
+- Theme: "Smart Manufacturing & Supply Chain", Chain: "AI-Driven Quality Optimization"
   - Metric: "Defect rate reduction" (percentage, decrease)
   - Metric: "Mean time to defect detection" (hours, decrease)
   - Metric: "First-pass yield improvement" (percentage, increase)
@@ -138,39 +151,34 @@ the basis for post-implementation tracking.
 **Guidelines:**
 - Metrics should be measurable and specific to the industry context
 - Avoid vanity metrics — focus on KPIs the customer already tracks or should track
-- A single metric may apply to multiple paths (e.g., OEE spans several solution areas)
+- A single metric may apply to multiple chains within a theme (e.g., OEE spans several solution areas)
 - Include both leading indicators (early signals) and lagging indicators (outcome measures)
 
 ## Step 4: Present to User
 
-Present the Solution Templates grouped by enabler type:
+Present the Solution Templates grouped by Strategic Theme:
 
 ```markdown
-## Solution Templates
+## Solution Templates by Strategic Theme
 
-### Process Improvements (8 templates)
+### Theme 1: Health & Nutrition Transformation (3 STs)
+Strategic Question: How do we reformulate for the GLP-1-era consumer?
 
-**ST-001: Predictive Quality Analytics Platform**
-Paths: AI-Driven Quality Optimization, Smart Manufacturing Scale-up
-Category: software | Urgency: immediate
+**ST-001: AI Personalization Platform for Health Products**
+Chains: GLP-1 Portfolio Reformulation, Functional Ingredients Innovation
+Category: software | Enabler: revenue_enablement | Urgency: near-term
 Portfolio match: predictive-analytics (high confidence)
-> Deploy ML-based quality prediction integrated with production line sensors,
-> reducing defect rates through real-time anomaly detection.
+> AI-driven product recommendations based on health profiles, GLP-1 medication,
+> and dietary preferences.
 
-**ST-002: Regulatory Compliance Automation Suite**
-Paths: Compliance-Driven Automation
-Category: software | Urgency: near-term
+**ST-002: Protein/Fiber Reformulation Framework**
+Chains: GLP-1 Portfolio Reformulation
+Category: process | Enabler: process_improvement | Urgency: immediate
 Portfolio match: none (PORTFOLIO GAP)
-> Automate EU AI Act audit trails and documentation requirements,
-> turning compliance burden into competitive advantage.
+> Systematic reformulation framework for protein- and fiber-rich product lines.
 
-### Capability Building (5 templates)
-...
-
-### Risk Mitigation (3 templates)
-...
-
-### Revenue Enablement (4 templates)
+### Theme 2: Regulatory Compliance & Sustainable Packaging (3 STs)
+Strategic Question: How do we turn regulatory pressure into competitive advantage?
 ...
 ```
 
@@ -199,17 +207,18 @@ Report summary:
 - Portfolio matches vs gaps
 - Path coverage (every path should have 1+ STs)
 
-Ask: "These are the Solution Templates derived from your trend paths. Want to adjust
+Ask: "These are the Solution Templates derived from your Strategic Themes. Want to adjust
 any before we move to Business Relevance scoring?"
 
 ## Output
 
 Update `tips-value-model.json`:
-- Add `solution_templates` array with all STs
+- Add `solution_templates` array with all STs (each has `theme_ref` and `linked_chains`)
 - Add `solution_process_improvements` array with all SPIs
-- Add `metrics` array with all success Metrics
+- Add `metrics` array with all success Metrics (each has `theme_ref`)
 - Add `collaterals` array with all Collateral items
-- Update each path's `solution_templates` field with linked ST IDs
+- Update each theme's `solution_templates` field with linked ST IDs
+- Update each value chain's `solution_templates` field with linked ST IDs
 - Add `portfolio_gaps` array listing STs with no portfolio match
 
 Update `.metadata/value-modeler-output.json`:

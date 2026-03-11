@@ -22,18 +22,20 @@ Based on the TIPS Value Modeler methodology (Siemens patent WO2018046399A1, free
 The trend-scout skill produces 60 agreed candidates across 4 dimensions. Each candidate lives in its
 dimension as a standalone item. This skill connects them:
 
-1. **Builds TIPS paths** — explicit Trend → Implication → Possibility chains across dimensions
-2. **Generates Solution Templates** — concrete enablers linked to each path
-3. **Generates SPIs** — operational process changes that accompany each Solution Template
-4. **Defines success Metrics** — KPIs that measure value delivery per path
-5. **Suggests Collaterals** — supporting content (case studies, reference architectures) per ST
-6. **Enables Business Relevance scoring** — customer-specific 1-5 ratings per TIP
-7. **Ranks solutions automatically** — using the F1 averaging formula from the patent
-8. **Generates a Big Block diagram** — the customer-specific solution architecture
-9. **Curates catalog feedback** — promotes pursuit-specific insights back to industry catalogs
+1. **Builds TIPS value chains** — explicit Trend → Implication → Possibility causal chains across dimensions
+2. **Consolidates into Strategic Themes** — clusters value chains into 3-7 MECE investment domains
+3. **Generates Solution Templates** — concrete enablers per theme (natural deduplication)
+4. **Generates SPIs** — operational process changes that accompany each Solution Template
+5. **Defines success Metrics** — KPIs that measure value delivery per theme
+6. **Suggests Collaterals** — supporting content (case studies, reference architectures) per ST
+7. **Enables Business Relevance scoring** — customer-specific 1-5 ratings per TIP
+8. **Ranks solutions automatically** — using the F1 averaging formula from the patent
+9. **Generates a Big Block diagram** — the customer-specific solution architecture organized by theme
+10. **Curates catalog feedback** — promotes pursuit-specific insights back to industry catalogs
 
-The output is a ranked list of solutions the customer should pursue, backed by the trend evidence
-from the scout phase and scored for business relevance.
+The output is a structured strategy with 3-7 strategic themes, each containing ranked solutions
+backed by trend evidence and scored for business relevance. This gives the customer a CxO-ready
+investment portfolio — not a flat list of 18 solutions, but 5 distinct areas to fund and champion.
 
 ## Prerequisites
 
@@ -55,18 +57,22 @@ Reference: `references/workflow-phases/phase-0-load.md`
 
 Load the trend-scout output, validate prerequisites, discover optional portfolio.
 
-### Phase 1: Build Relationship Networks
+### Phase 1: Build Relationship Networks & Strategic Themes
 Reference: `references/workflow-phases/phase-1-relationships.md`
 
-Analyze the 60 candidates across all 4 dimensions and build TIPS paths — chains of
-Trend → Implication → Possibility that form coherent narratives. Each path represents
-a "value story" connecting an external force to strategic opportunity.
+Two-pass architecture: First, build granular T→I→P value chains via semantic affinity
+analysis (bottom-up). Then consolidate chains into 3-7 MECE Strategic Themes — the
+distinct investment domains where this customer should allocate budget and executive
+attention (top-down). Each theme groups 1-4 value chains and represents a CxO-level
+strategic decision.
 
 ### Phase 2: Generate Solution Templates
 Reference: `references/workflow-phases/phase-2-solutions.md`
 
-For each relationship network, generate Solution Templates — concrete process improvement
-enablers. If a cogni-portfolio project exists, map templates to existing products/features.
+For each Strategic Theme, generate Solution Templates — concrete process improvement
+enablers. Working at the theme level naturally deduplicates STs that would otherwise
+appear redundantly across overlapping chains. Target 2-4 STs per theme.
+If a cogni-portfolio project exists, map templates to existing products/features.
 
 ### Phase 3: Business Relevance Scoring
 Reference: `references/workflow-phases/phase-3-scoring.md`
@@ -91,46 +97,84 @@ a learning loop where customer engagements improve the base catalog over time.
 
 ```
 {project-dir}/
-├── tips-value-model.json              # Complete value model (paths + solutions + scores)
-├── tips-solution-ranking.md           # Human-readable ranked solution list
-├── tips-big-block.md                  # Big Block solution diagram (markdown)
-├── value-modeler-scoring.html         # Interactive BR scoring UI
+├── tips-value-model.json              # Complete value model (themes + chains + solutions + scores)
+├── tips-solution-ranking.md           # Human-readable ranked solution list by theme
+├── tips-big-block.md                  # Big Block solution diagram organized by theme
+├── value-modeler-scoring.html         # Interactive BR scoring UI grouped by theme
 └── .metadata/
     └── value-modeler-output.json      # Execution state + metadata
 ```
 
 ## Data Model
 
-### TIPS Path (Relationship Network)
+### Strategic Theme
 
-A path connects candidates across dimensions into a coherent value narrative:
+A theme groups 1-4 value chains into a distinct investment domain. Themes are the primary
+organizing unit of the value model — they represent CxO-level decisions about where to invest.
 
 ```json
 {
-  "path_id": "path-001",
-  "name": "AI-Driven Quality Optimization",
-  "narrative": "Regulatory pressure on quality standards (T) drives need for real-time defect detection (I), enabling predictive quality management (P)",
+  "theme_id": "theme-001",
+  "name": "Health & Nutrition Transformation",
+  "strategic_question": "How do we reformulate our portfolio for the health-conscious, GLP-1-era consumer?",
+  "executive_sponsor_type": "CPO / Head of Product Development",
+  "narrative": "GLP-1 medications and functional food demand are fundamentally reshaping what consumers want. This theme covers reformulation, personalization, and nutritional innovation.",
+  "value_chains": ["vc-001", "vc-002"],
+  "solution_templates": ["st-001", "st-002", "st-003"],
+  "business_relevance_avg": null,
+  "ranking_value": null
+}
+```
+
+Themes must satisfy MECE:
+- **Mutually Exclusive**: Each theme answers a different strategic question. Different executive sponsor, different budget line.
+- **Collectively Exhaustive**: Together, themes cover ≥80% of linked candidates.
+
+Target: **5 themes** (ideal). Range: 3 (minimum) to 7 (maximum, Miller's law).
+
+### Value Chain (TIPS Path)
+
+A value chain connects candidates across dimensions into a coherent causal narrative.
+Value chains are nested under their parent Strategic Theme.
+
+```json
+{
+  "chain_id": "vc-001",
+  "name": "GLP-1 Portfolio Reformulation",
+  "theme_ref": "theme-001",
+  "narrative": "GLP-1 medications reshape consumption (T), requiring AI-driven personalization (I), enabling health-optimized portfolio reformulation (P)",
   "trend": {
     "candidate_ref": "externe-effekte/act/1",
-    "name": "EU Quality Standards Tightening",
+    "name": "GLP-1 Market Impact",
     "business_relevance": null
   },
-  "implication": {
-    "candidate_ref": "digitale-wertetreiber/act/3",
-    "name": "Real-time Defect Detection Gap",
-    "business_relevance": null
-  },
-  "possibility": {
-    "candidate_ref": "neue-horizonte/plan/2",
-    "name": "Predictive Quality Management",
-    "business_relevance": null
-  },
+  "implications": [
+    {
+      "candidate_ref": "digitale-wertetreiber/act/29",
+      "name": "Personalized Digital Experiences",
+      "business_relevance": null
+    }
+  ],
+  "possibilities": [
+    {
+      "candidate_ref": "neue-horizonte/act/14",
+      "name": "GLP-1 Portfolio Reformulation",
+      "business_relevance": null
+    }
+  ],
+  "foundation_requirements": [
+    {
+      "candidate_ref": "digitales-fundament/act/41",
+      "name": "AI/ML Engineer Demand",
+      "relationship": "prerequisite"
+    }
+  ],
   "solution_templates": ["st-001", "st-002"]
 }
 ```
 
-A single candidate may appear in multiple paths — the same Trend can drive different
-Implications depending on context. The path captures the *reasoning chain*, not just grouping.
+A single candidate may appear in multiple chains — the same Trend can drive different
+Implications depending on context. The chain captures the *reasoning*, not just grouping.
 
 ### Solution Template
 
@@ -141,7 +185,8 @@ Implications depending on context. The path captures the *reasoning chain*, not 
   "description": "Deploy ML-based quality prediction integrated with production line sensors",
   "category": "software",
   "enabler_type": "process_improvement",
-  "linked_paths": ["path-001", "path-003"],
+  "theme_ref": "theme-003",
+  "linked_chains": ["vc-005", "vc-006"],
   "portfolio_mapping": {
     "product_slug": "cloud-platform",
     "feature_slug": "predictive-analytics",
@@ -175,7 +220,8 @@ Implications depending on context. The path captures the *reasoning chain*, not 
   "name": "Defect rate reduction",
   "unit": "percentage",
   "direction": "decrease",
-  "linked_paths": ["path-001", "path-003"]
+  "theme_ref": "theme-003",
+  "linked_chains": ["vc-005", "vc-006"]
 }
 ```
 
@@ -213,26 +259,26 @@ computed via formula F1.
 ### Ranking Formula: Enhanced F1
 
 The patent's original F1 is a simple average of Business Relevance scores across linked TIPs.
-In practice, simple averaging flattens differentiation — a path with T=5,I=4,P=2 scores
-the same as T=4,I=4,P=3. Cross-cutting solutions serving multiple paths get pulled toward
+In practice, simple averaging flattens differentiation — a chain with T=5,I=4,P=2 scores
+the same as T=4,I=4,P=3. Cross-cutting solutions serving multiple chains get pulled toward
 the mean instead of being rewarded for breadth.
 
 The enhanced formula addresses this with two adjustments:
 
-**Step 1: Per-path score (F1 base)**
+**Step 1: Per-chain score (F1 base)**
 ```
-PathScore(p) = (sum(BR_T_j) + sum(BR_I_n) + sum(BR_P_k)) / (j + n + k)
-```
-
-**Step 2: Peak-weighted aggregation across paths**
-```
-BR(ST_i) = 0.6 × max(PathScore) + 0.4 × avg(PathScore)
+ChainScore(c) = (sum(BR_T_j) + sum(BR_I_n) + sum(BR_P_k)) / (j + n + k)
 ```
 
-For single-path STs, this equals the original F1.
-For multi-path STs, it rewards breadth while still anchoring on the strongest path.
+**Step 2: Peak-weighted aggregation across chains**
+```
+BR(ST_i) = 0.6 × max(ChainScore) + 0.4 × avg(ChainScore)
+```
+
+For single-chain STs, this equals the original F1.
+For multi-chain STs, it rewards breadth while still anchoring on the strongest chain.
 The peak-weighting prevents cross-cutting solutions from being penalized by averaging
-in weaker paths — the best path dominates, with breadth as a bonus.
+in weaker chains — the best chain dominates, with breadth as a bonus.
 
 **Step 3: Foundation readiness adjustment**
 ```
@@ -249,7 +295,7 @@ A solution with BR 4.0 and heavy prerequisites scores 3.60 — still high-priori
 but the risk is visible.
 
 **Fields on each ST:**
-- `path_scores`: array of per-path F1 scores
+- `chain_scores`: array of per-chain F1 scores
 - `business_relevance_calculated`: result of Step 2
 - `foundation_factor`: the readiness multiplier
 - `ranking_value`: final score after Step 3 (or user override if set)

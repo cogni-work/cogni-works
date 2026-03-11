@@ -3,8 +3,8 @@
 ## Objective
 
 Enable the user to assign customer-specific Business Relevance (BR) scores to each TIP
-entity in the relationship networks. This is the step that makes the model customer-specific
-rather than generic.
+entity in the value chains, organized by Strategic Theme. This is the step that makes
+the model customer-specific rather than generic.
 
 ## Why Customer-Specific Scoring?
 
@@ -12,6 +12,11 @@ Two different customers in the same industry will have different priorities. A m
 focused on quality might rate "Real-time Defect Detection" as BR=5, while one focused on
 cost reduction might rate it BR=2. The scoring step captures this customer context and
 propagates it through to solution rankings via formula F1.
+
+Scoring is organized by theme so the user can focus on one strategic area at a time.
+This also naturally surfaces which themes matter most to this customer — a theme where
+all TIPs score 2-3 may be deprioritized entirely, while a theme scoring 4-5 across the
+board is clearly mission-critical.
 
 ## Business Relevance Scale
 
@@ -32,16 +37,19 @@ Use the HTML template at `$CLAUDE_PLUGIN_ROOT/skills/value-modeler/templates/sco
    - `__LANG__` → project language code (`de` or `en`)
    - `__PROJECT_NAME__` → project name from tips-project.json
    - `__INDUSTRY__` → industry display name (in project language)
-   - `__MODEL_DATA_PLACEHOLDER__` → the value model JSON (paths array with candidate refs/names,
-     plus `project_id`). Only include `paths` and `project_id` — not the full model.
+   - `__MODEL_DATA_PLACEHOLDER__` → the value model JSON. Include `themes` and `value_chains`
+     arrays (with candidate refs/names), plus `project_id` — not the full model.
 3. Write to `value-modeler-scoring.html` in the project directory
 4. Open it: `open value-modeler-scoring.html`
 
-The template renders each path as a card with 1-5 button scoring per TIP candidate.
-Candidates appearing in multiple paths are synced — the user scores once, it propagates.
-A progress bar shows scoring coverage. "Export" downloads `br-scores.json`.
+The template renders Strategic Themes as sections, with value chains as cards beneath each
+theme. Each card has 1-5 button scoring per TIP candidate. Candidates appearing in multiple
+chains are synced — the user scores once, it propagates. A progress bar shows scoring
+coverage per theme and overall. "Export" downloads `br-scores.json`.
 
 The user may show this to stakeholders — it's designed to be professional and self-contained.
+The theme-level grouping makes it practical even for non-technical stakeholders to work
+through systematically — one investment area at a time.
 
 ## Step 2: Present to User
 
@@ -56,23 +64,30 @@ unscored items will be excluded from the ranking calculation. When you're done, 
 
 If the user prefers not to use the HTML interface (or it's not practical), offer inline scoring:
 
-Present each path one at a time and ask for scores:
+Present one theme at a time, with its chains:
 
 ```
-Path 1: AI-Driven Quality Optimization
+## Theme 1: Health & Nutrition Transformation
+Strategic Question: How do we reformulate for the GLP-1-era consumer?
 
-T: EU Quality Standards Tightening (score: 0.85, act)
+### VC-1: GLP-1 Portfolio Reformulation
+
+T: GLP-1 Market Impact (score: 0.85, act)
    → How relevant is this for your customer? [1-5 or skip]
 
-I: Real-time Defect Detection Gap (score: 0.78, act)
+I: Personalized Digital Experiences (score: 0.78, act)
    → How relevant is this for your customer? [1-5 or skip]
 
-P: Predictive Quality Management (score: 0.72, plan)
+P: GLP-1 Portfolio Reformulation (score: 0.72, act)
    → How relevant is this for your customer? [1-5 or skip]
+
+### VC-2: Functional Ingredients Innovation
+...
 ```
 
 For efficiency, also offer batch scoring:
 "Want to score all at once? Give me a list like: T1=4, I1=5, P1=3, T2=2, ..."
+Or theme-level shorthand: "Theme 1 = all 4s, Theme 3 = all 2s"
 
 ## Step 4: Process Scores
 

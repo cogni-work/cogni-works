@@ -6,15 +6,14 @@ set -euo pipefail
 # Category: utilities
 #
 # Usage: finalize-candidates.sh --project-path <path> --candidates-file <path> \
-#        --web-count <N> --training-count <N> --user-count <N> \
+#        --web-count <N> --training-count <N> \
 #        --search-timestamp <ISO8601> --web-status <status> [--json]
 #
 # Arguments:
 #   --project-path <path>          Absolute path to project directory (required)
-#   --candidates-file <path>       Path to JSON file with agreed candidates array (required)
+#   --candidates-file <path>       Path to JSON file with candidates array (required)
 #   --web-count <number>           Count of web-sourced candidates (required)
 #   --training-count <number>      Count of training-sourced candidates (required)
-#   --user-count <number>          Count of user-proposed candidates (required)
 #   --search-timestamp <string>    ISO 8601 timestamp of web search (required)
 #   --web-status <string>          Web research status: success|partial|failed|disabled (required)
 #   --json                         Output JSON format (optional flag)
@@ -34,8 +33,8 @@ set -euo pipefail
 #
 # Example:
 #   finalize-candidates.sh --project-path "/path/to/project" \
-#     --candidates-file "/path/to/agreed-candidates.json" \
-#     --web-count 18 --training-count 32 --user-count 2 \
+#     --candidates-file "/path/to/candidates.json" \
+#     --web-count 28 --training-count 32 \
 #     --search-timestamp "2025-12-16T10:25:00Z" --web-status "success" --json
 
 
@@ -44,7 +43,6 @@ PROJECT_PATH=""
 CANDIDATES_FILE=""
 WEB_COUNT=""
 TRAINING_COUNT=""
-USER_COUNT=""
 SEARCH_TIMESTAMP=""
 WEB_STATUS=""
 JSON_OUTPUT=false
@@ -69,7 +67,7 @@ while [[ $# -gt 0 ]]; do
       shift 2
       ;;
     --user-count)
-      USER_COUNT="$2"
+      # Accepted but ignored for backwards compatibility
       shift 2
       ;;
     --search-timestamp)
@@ -97,7 +95,6 @@ MISSING=()
 [[ -z "$CANDIDATES_FILE" ]] && MISSING+=("--candidates-file")
 [[ -z "$WEB_COUNT" ]] && MISSING+=("--web-count")
 [[ -z "$TRAINING_COUNT" ]] && MISSING+=("--training-count")
-[[ -z "$USER_COUNT" ]] && MISSING+=("--user-count")
 [[ -z "$SEARCH_TIMESTAMP" ]] && MISSING+=("--search-timestamp")
 [[ -z "$WEB_STATUS" ]] && MISSING+=("--web-status")
 
@@ -211,7 +208,6 @@ jq \
   --argjson total "$TOTAL_CANDIDATES" \
   --argjson web_count "$WEB_COUNT" \
   --argjson train_count "$TRAINING_COUNT" \
-  --argjson user_count "$USER_COUNT" \
   --arg search_ts "$SEARCH_TIMESTAMP" \
   --arg web_status "$WEB_STATUS" \
   --argjson avg_score "$AVG_SCORE" \
@@ -227,7 +223,6 @@ jq \
   '.tips_candidates.total = $total |
    .tips_candidates.source_distribution.web_signal = $web_count |
    .tips_candidates.source_distribution.training = $train_count |
-   .tips_candidates.source_distribution.user_proposed = $user_count |
    .tips_candidates.web_research_status = $web_status |
    .tips_candidates.search_timestamp = $search_ts |
    .tips_candidates.scoring_metadata.avg_score = $avg_score |
@@ -242,8 +237,8 @@ jq \
    .tips_candidates.scoring_metadata.intensity_distribution.level_5 = $int_5 |
    .tips_candidates.items = $candidates |
    .execution.workflow_state = "agreed" |
-   .execution.current_phase = 5 |
-   .execution.phases_completed = ["phase-0", "phase-1", "phase-2", "phase-3", "phase-4", "phase-5"] |
+   .execution.current_phase = 4 |
+   .execution.phases_completed = ["phase-0", "phase-1", "phase-2", "phase-3", "phase-4"] |
    .execution.agreed_at = $agreed_at' \
   "$OUTPUT_FILE" > "${OUTPUT_FILE}.tmp" && mv "${OUTPUT_FILE}.tmp" "$OUTPUT_FILE"
 

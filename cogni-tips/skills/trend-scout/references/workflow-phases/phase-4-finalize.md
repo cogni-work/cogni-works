@@ -1,18 +1,18 @@
-# Phase 5: Finalize Output
+# Phase 4: Finalize Output
 
-**Reference Checksum:** `sha256:trend-scout-p5-final-v2`
+**Reference Checksum:** `sha256:trend-scout-p4-final-v1`
 
 **Verification Protocol:** After reading, confirm complete load:
 
 ```text
-Reference Loaded: phase-5-finalize.md | Checksum: trend-scout-p5-final-v2
+Reference Loaded: phase-4-finalize.md | Checksum: trend-scout-p4-final-v1
 ```
 
 ---
 
 ## Objective
 
-Update the consolidated `trend-scout-output.json` with agreed candidates for downstream `deeper-research-0` consumption.
+Update the consolidated `trend-scout-output.json` with all 60 candidates for downstream `deeper-research-0` consumption.
 
 **Expected Duration:** 10-15 seconds
 
@@ -20,40 +20,32 @@ Update the consolidated `trend-scout-output.json` with agreed candidates for dow
 
 ## Entry Gate
 
-Before proceeding, verify Phase 4 outputs:
+Before proceeding, verify Phase 3 outputs:
 
-- [ ] VALIDATION_PASSED = true
-- [ ] AGREED_CANDIDATES populated with 60 candidates
+- [ ] TIPS_CANDIDATES_FILE written with all 60 candidates
 - [ ] All metadata available (industry, subsector, topic, language)
 
 ---
 
-## Step 5.1: Initialize Finalization Phase
+## Step 4.1: Initialize Finalization Phase
 
 ```bash
-log_phase "Phase 5: Finalize Output" "start"
-log_conditional INFO "Finalizing ${#AGREED_CANDIDATES[@]} agreed candidates"
+log_phase "Phase 4: Finalize Output" "start"
+log_conditional INFO "Finalizing 60 candidates"
 ```
 
 ---
 
-## Step 5.2: Update Consolidated trend-scout-output.json
+## Step 4.2: Update Consolidated trend-scout-output.json
 
-Update the consolidated output file with agreed candidates and finalize execution state:
+Update the consolidated output file with all candidates and finalize execution state:
 
 ```bash
-# First, write agreed candidates to a temporary JSON file for the script
-CANDIDATES_TMP="${PROJECT_PATH}/.metadata/agreed-candidates-tmp.json"
+# Write candidates to a temporary JSON file for the script
+CANDIDATES_TMP="${PROJECT_PATH}/.metadata/candidates-tmp.json"
 
-# Build candidates array as JSON and write to temp file
-# If input was JSON (Visual Selector App): use SELECTED_CANDIDATES directly
-# If input was Markdown: assemble from parsed output
-if [[ "$INPUT_SOURCE" == "json" ]]; then
-  echo "$SELECTED_CANDIDATES" > "$CANDIDATES_TMP"
-else
-  # Build from AGREED_CANDIDATES array
-  printf '%s\n' "${AGREED_CANDIDATES[@]}" | jq -s '.' > "$CANDIDATES_TMP"
-fi
+# Build candidates array from the full generator output
+jq '.candidates' "${PROJECT_PATH}/.logs/trend-generator-candidates.json" > "$CANDIDATES_TMP"
 
 # Use finalize-candidates.sh script
 # CRITICAL: Use CLAUDE_PLUGIN_ROOT for scripts, NOT COGNI_WORKSPACE_ROOT
@@ -72,7 +64,6 @@ FINALIZE_OUTPUT=$(bash "$FINALIZE_SCRIPT" \
   --candidates-file "$CANDIDATES_TMP" \
   --web-count "$WEB_SOURCED_COUNT" \
   --training-count "$TRAINING_SOURCED_COUNT" \
-  --user-count "$USER_PROPOSED_COUNT" \
   --search-timestamp "$SEARCH_TIMESTAMP" \
   --web-status "$WEB_RESEARCH_STATUS" \
   --json)
@@ -123,38 +114,17 @@ Each candidate in `.tips_candidates.items` has this structure:
 
 ---
 
-## Step 5.3: Update trend-candidates.md Status
-
-Update the frontmatter status to `agreed`:
+## Step 4.3: Log Completion
 
 ```bash
-# trend-candidates.md is in project root (simplified structure)
-TIPS_FILE="${PROJECT_PATH}/trend-candidates.md"
-
-# Update status in frontmatter
-sed -i '' 's/^status: draft/status: agreed/' "$TIPS_FILE"
-sed -i '' 's/^status: pending_review/status: agreed/' "$TIPS_FILE"
-
-# Add agreed_at timestamp
-sed -i '' "/^status: agreed/a\\
-agreed_at: $(date -u +%Y-%m-%dT%H:%M:%SZ)" "$TIPS_FILE"
-
-log_conditional INFO "Updated trend-candidates.md status to 'agreed'"
-```
-
----
-
-## Step 5.4: Log Completion
-
-```bash
-log_phase "Phase 5: Finalize Output" "complete"
+log_phase "Phase 4: Finalize Output" "complete"
 log_conditional INFO "trend-scout workflow complete"
 log_conditional INFO "Output: $OUTPUT_FILE"
 ```
 
 ---
 
-## Step 5.5: Output Success Message
+## Step 4.4: Output Success Message
 
 ### English Output
 
@@ -168,7 +138,7 @@ Successfully finalized 60 trend candidates for {SUBSECTOR_EN}.
 | File | Path |
 |------|------|
 | Consolidated Output | `.metadata/trend-scout-output.json` |
-| Selection File | `trend-candidates.md` |
+| Trend List | `trend-candidates.md` |
 
 ### Candidate Summary
 
@@ -176,7 +146,6 @@ Successfully finalized 60 trend candidates for {SUBSECTOR_EN}.
 |--------|-------|
 | Web Signal | {WEB_COUNT} |
 | Training | {TRAINING_COUNT} |
-| User Proposed | {USER_COUNT} |
 | **Total** | **60** |
 
 ### Next Steps
@@ -208,7 +177,7 @@ To generate a narrative TIPS trend report directly, invoke the `trend-report` sk
 | Datei | Pfad |
 |-------|------|
 | Konsolidierte Ausgabe | `.metadata/trend-scout-output.json` |
-| Auswahldatei | `trend-candidates.md` |
+| Trendliste | `trend-candidates.md` |
 
 ### Kandidatenübersicht
 
@@ -216,7 +185,6 @@ To generate a narrative TIPS trend report directly, invoke the `trend-report` sk
 |--------|--------|
 | Web-Signal | {WEB_COUNT} |
 | Training | {TRAINING_COUNT} |
-| Eigene Vorschläge | {USER_COUNT} |
 | **Gesamt** | **60** |
 
 ### Nächste Schritte
@@ -240,9 +208,8 @@ Um direkt einen narrativen TIPS-Trendbericht zu generieren, rufen Sie das `trend
 
 ## Success Criteria
 
-- [ ] `trend-scout-output.json` updated with agreed candidates
-- [ ] `trend-candidates.md` status updated to `agreed`
-- [ ] All 60 candidates included in consolidated output
+- [ ] `trend-scout-output.json` updated with all 60 candidates
+- [ ] `trend-candidates.md` written with status `agreed`
 - [ ] Metadata complete (industry, subsector, language, sources)
 - [ ] Success message displayed with next steps
 
@@ -253,7 +220,7 @@ Um direkt einen narrativen TIPS-Trendbericht zu generieren, rufen Sie das `trend
 | File | Location | Purpose |
 |------|----------|---------|
 | `trend-scout-output.json` | `.metadata/` | Consolidated output (config + candidates + execution state) |
-| `trend-candidates.md` | `{PROJECT_PATH}/` | User-facing selection file (status: agreed) |
+| `trend-candidates.md` | `{PROJECT_PATH}/` | Final trend list (status: agreed) |
 
 ---
 
@@ -277,8 +244,7 @@ tips_source: {PROJECT_PATH}/.metadata/trend-scout-output.json
 
 3. **Candidate Loading (Phase 2):**
    - Loads candidates from `.tips_candidates.items`
-   - Skips tips-selection workflow
-   - Proceeds directly with 60 agreed candidates
+   - Proceeds directly with 60 candidates
 
 4. **Research Execution:**
    - Uses industry context from `.config.industry`

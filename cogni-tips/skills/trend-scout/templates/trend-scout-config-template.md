@@ -34,7 +34,6 @@ tips_candidates:
   source_distribution:
     web_signal: {WEB_SOURCED_COUNT}
     training: {TRAINING_SOURCED_COUNT}
-    user_proposed: {USER_PROPOSED_COUNT}
   web_research_status: "{WEB_RESEARCH_STATUS}"
   search_timestamp: "{SEARCH_TIMESTAMP}"
 

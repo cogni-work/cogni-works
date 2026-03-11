@@ -1,7 +1,7 @@
 ---
 name: trend-scout
 description: |
-  Interactive trend scouting workflow with industry selection, bilingual support (DE/EN), and deeper-research integration. Scouts trends across 4 dimensions (each trend gets full TIPS expansion). Creates research projects with industry-contextualized trend candidates that can be passed to deeper-research-0. Use when: (1) Starting smarter-service research with industry context, (2) User wants to scout trends for a specific industry and subsector, (3) User mentions "trend scouting", "industry trends", "trend selection", (4) Preparing input configuration for deeper-research-0.
+  Interactive trend scouting workflow with industry selection, bilingual support (DE/EN), and deeper-research integration. Scouts trends across 4 dimensions (each trend gets full TIPS expansion). Creates research projects with 60 industry-contextualized trend candidates that are directly finalized for deeper-research-0. Use when: (1) Starting smarter-service research with industry context, (2) User wants to scout trends for a specific industry and subsector, (3) User mentions "trend scouting", "industry trends", "trend scout", (4) Preparing input configuration for deeper-research-0.
 ---
 
 # Trend Scout
@@ -15,8 +15,7 @@ This skill enables users to:
 1. Select an industry and subsector from a standardized taxonomy
 2. Initialize a research project with semantic slug
 3. Generate 60 trend candidates (5 per cell × 12 cells: 4 dimensions × 3 horizons)
-4. Present all 60 candidates for user selection
-5. Produce configuration for `deeper-research-0` skill
+4. Write the final trend list and produce configuration for `deeper-research-0` skill
 
 ## Bilingual Support
 
@@ -80,9 +79,8 @@ Read references **only when needed** for the specific task:
 | [references/patent-api-queries.md](references/patent-api-queries.md) | Patent API searches - USPTO, Lens.org, EPO (Phase 1) |
 | [references/regulatory-feeds.md](references/regulatory-feeds.md) | Regulatory API searches - EUR-Lex, SEC EDGAR, FDA (Phase 1) |
 | [references/workflow-phases/phase-0-initialize.md](references/workflow-phases/phase-0-initialize.md) | Project init + industry selection |
-| [references/workflow-phases/phase-3-present.md](references/workflow-phases/phase-3-present.md) | Writing trend-candidates.md with scores |
-| [references/workflow-phases/phase-4-process.md](references/workflow-phases/phase-4-process.md) | Processing user selections |
-| [references/workflow-phases/phase-5-finalize.md](references/workflow-phases/phase-5-finalize.md) | Generating deeper-research config |
+| [references/workflow-phases/phase-3-present.md](references/workflow-phases/phase-3-present.md) | Writing final trend-candidates.md with scores |
+| [references/workflow-phases/phase-4-finalize.md](references/workflow-phases/phase-4-finalize.md) | Generating deeper-research config |
 
 ## Immediate Action: Initialize TodoWrite
 
@@ -91,9 +89,8 @@ Read references **only when needed** for the specific task:
 1. Phase 0: Initialize Project + Industry Selection [in_progress]
 2. Phase 1: Bilingual Web Research [pending]
 3. Phase 2: Generate Candidate Pool [pending]
-4. Phase 3: Present Candidates [pending]
-5. Phase 4: Process User Selection [pending]
-6. Phase 5: Finalize deeper-research Config [pending]
+4. Phase 3: Write Final Trend List [pending]
+5. Phase 4: Finalize deeper-research Config [pending]
 
 Update todo status as you progress through each phase.
 
@@ -102,12 +99,10 @@ Update todo status as you progress through each phase.
 ## Core Workflow
 
 ```text
-Phase 0 → Phase 1 → Phase 2 → Phase 3 → [USER EDITS] → Phase 4 → Phase 5
-   │          │          │         │            │            │         │
-   │          │          │         │            │            │         └─ Write config + JSON
-   │          │          │         │            │            └─ Validate selections
-   │          │          │         │            └─ User marks [x], adds proposals
-   │          │          │         └─ Write trend-candidates.md with scores, PAUSE
+Phase 0 → Phase 1 → Phase 2 → Phase 3 → Phase 4
+   │          │          │         │         │
+   │          │          │         │         └─ Write config + JSON, finalize
+   │          │          │         └─ Write final trend-candidates.md with scores
    │          │          └─ Generate + score 60 candidates (mix web + API + training)
    │          └─ 32 web searches + academic/patent/regulatory APIs
    └─ Language detect, industry select, project init
@@ -277,15 +272,13 @@ The agent returns compact JSON:
 
 **Prepare Phase 3 data files:**
 
-Execute data preparation script to generate compact candidate data and browser app JSON:
+Execute data preparation script to generate compact candidate data:
 
 ```bash
 bash "${CLAUDE_PLUGIN_ROOT}/skills/trend-scout/scripts/prepare-phase3-data.sh" "${PROJECT_PATH}"
 ```
 
 This generates:
-- `trend-app-data.json` in project root (full data for browser selector)
-- `trend-selector-app.html` in project root (self-contained HTML with embedded data, works with file:// protocol)
 - `.logs/candidates-compact.json` (compact format for Claude reading)
 
 **Load compact candidate data:**
@@ -307,81 +300,22 @@ Field mapping for compact format:
 
 **Fallback:** If agent returns `{"ok": false}`, log error and halt workflow.
 
-### Phase 3: Present Candidates
+### Phase 3: Write Final Trend List
 
 Read [references/workflow-phases/phase-3-present.md](references/workflow-phases/phase-3-present.md), then execute:
 
-1. Write `trend-candidates.md` to `{PROJECT_PATH}/` (project root)
+1. Write `trend-candidates.md` to `{PROJECT_PATH}/` (project root) as the **final trend list**
 2. Use bilingual template based on PROJECT_LANGUAGE
-3. Include selection tables with checkboxes
-4. Include "User Proposed" section
-5. Include "More?" column for regeneration requests
-6. Include selection summary table
-7. **Open Visual Selector App:**
-   ```bash
-   # HTML was generated by prepare-phase3-data.sh with embedded data
-   # Just open it in browser
-   open "${PROJECT_PATH}/trend-selector-app.html"
-   ```
+3. Include all 60 candidates organized by dimension and horizon with scores and metadata
+4. Include source integrity summary and references
 
-**All 60 candidates** are presented for user review. Users select from them to proceed.
+All 60 generated candidates are the final agreed list — no user selection step. Proceed directly to Phase 4.
 
-**PAUSE:** After writing files and opening the app, provide persistent access info (in detected language):
+### Phase 4: Finalize Output
 
-**English:**
-> **Visual Selector App** (recommended):
-> - The app is now open in your browser
-> - App location: `{PROJECT_PATH}/trend-selector-app.html`
-> - Your selections are auto-saved in browser storage
-> - Click Export when 60 candidates are selected
->
-> **Alternative: Markdown editing:**
-> 1. Open `trend-candidates.md` in the project folder
-> 2. Mark candidates with `[x]` (5 per cell × 12 cells = 60 total)
-> 3. Optionally add proposals in "User Proposed" section
->
-> Re-invoke `trend-scout` skill when ready.
+Read [references/workflow-phases/phase-4-finalize.md](references/workflow-phases/phase-4-finalize.md), then execute:
 
-**German:**
-> **Visual Selector App** (empfohlen):
-> - Die App ist jetzt in Ihrem Browser geöffnet
-> - App-Pfad: `{PROJECT_PATH}/trend-selector-app.html`
-> - Ihre Auswahl wird automatisch im Browser gespeichert
-> - Klicken Sie Export wenn 60 Kandidaten ausgewählt sind
->
-> **Alternative: Markdown-Bearbeitung:**
-> 1. Öffnen Sie `trend-candidates.md` im Projektordner
-> 2. Markieren Sie Kandidaten mit `[x]` (5 pro Zelle × 12 Zellen = 60 insgesamt)
-> 3. Fügen Sie optional Vorschläge im Abschnitt "Eigene Vorschläge" hinzu
->
-> Rufen Sie `trend-scout` erneut auf, wenn Sie bereit sind.
-
-**IMPORTANT:** Always show the full app path so users can reopen it later without asking.
-
-### Phase 4: Process User Selection
-
-Read [references/workflow-phases/phase-4-process.md](references/workflow-phases/phase-4-process.md), then execute:
-
-1. Read `trend-candidates.md` from project
-2. Parse selected candidates (marked with `[x]`)
-3. Parse user-proposed candidates
-4. Parse regeneration requests (`[+N]`)
-5. Validate: 5 per cell × 12 cells = 60 total
-
-**If validation fails:**
-
-- Report which cells have wrong count
-- If regeneration requested: generate N more candidates for those cells
-- Update trend-candidates.md with new candidates
-- **PAUSE** again for user to adjust
-
-**If validation passes:** Proceed to Phase 5
-
-### Phase 5: Finalize Output
-
-Read [references/workflow-phases/phase-5-finalize.md](references/workflow-phases/phase-5-finalize.md), then execute:
-
-1. Update consolidated `trend-scout-output.json` with agreed candidates
+1. Update consolidated `trend-scout-output.json` with all 60 candidates
 2. Update `tips-project.json` with current timestamp (`updated` field)
 3. Update `trend-candidates.md` frontmatter status to `agreed`
 4. Log completion with next-step instructions
@@ -430,7 +364,6 @@ Location: `{PROJECT_PATH}/.metadata/trend-scout-output.json`
     "source_distribution": {
       "web_signal": 28,
       "training": 32,
-      "user_proposed": 0
     },
     "web_research_status": "success",
     "search_timestamp": "2025-12-16T10:25:00Z",
@@ -507,31 +440,20 @@ Location: `{PROJECT_PATH}/.metadata/trend-scout-output.json`
 
   "execution": {
     "workflow_state": "agreed",
-    "current_phase": 5,
-    "phases_completed": ["phase-0", "phase-1", "phase-2", "phase-3", "phase-4", "phase-5"],
+    "current_phase": 4,
+    "phases_completed": ["phase-0", "phase-1", "phase-2", "phase-3", "phase-4"],
     "agreed_at": "2025-12-16T11:45:00Z"
   },
 
   "deeper_analysis_integration": {
     "source_type": "trend-scout",
     "auto_load_candidates": true,
-    "skip_tips_selection": true,
     "auto_configure_research_type": true,
     "auto_configure_dok_level": true,
     "auto_configure_language": true
   }
 }
 ```
-
----
-
-## Selection Constraints
-
-| Constraint | Value |
-|------------|-------|
-| Total candidates generated | 60 (5 per cell × 12 cells) |
-| Candidates per cell | 5 (4 dimensions × 3 horizons = 12 cells) |
-| Total agreed candidates | 60 |
 
 ---
 
@@ -567,9 +489,6 @@ Each dimension is used to scout trends. Each trend discovered in any dimension i
 | Industry not selected | Cannot proceed - prompt user |
 | Project init fails | Exit with error details |
 | All web searches fail | Continue with training-only (warning) |
-| trend-candidates.md not found (Phase 4) | Run Phase 1-3 first |
-| Selection count invalid | Report errors, PAUSE for correction |
-| User proposal off-sector | Warn but allow override |
 
 ---
 
@@ -586,7 +505,7 @@ After `trend-scout` completes:
 2. deeper-research-0 Phase 0 loads configuration from consolidated output
 3. Auto-configures research_type, DOK level, language from `.config`
 4. deeper-research-0 Phase 2 loads candidates from `.tips_candidates.items`
-5. Research proceeds with 60 agreed candidates (5 per cell × 12 cells)
+5. Research proceeds with all 60 candidates (5 per cell × 12 cells)
 
 ---
 
@@ -608,6 +527,4 @@ grep "\[VALIDATION\]" "${PROJECT_PATH}/.logs/trend-scout-execution-log.txt"
 ### Common Issues
 
 1. **"Industry not selected"** - User must select from taxonomy
-2. **"Selection count invalid"** - Wrong number of candidates marked per cell
-3. **"File not found"** - Ensure trend-candidates.md exists before Phase 4
-4. **"Project init failed"** - Check current working directory is writable (or `COGNI_WORKSPACE_ROOT` if set)
+2. **"Project init failed"** - Check current working directory is writable (or `COGNI_WORKSPACE_ROOT` if set)

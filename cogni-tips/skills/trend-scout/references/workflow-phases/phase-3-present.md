@@ -1,20 +1,20 @@
-# Phase 3: Present Candidates
+# Phase 3: Write Final Trend List
 
-**Reference Checksum:** `sha256:trend-scout-p3-present-v1`
+**Reference Checksum:** `sha256:trend-scout-p3-present-v2`
 
 **Verification Protocol:** After reading, confirm complete load:
 
 ```text
-Reference Loaded: phase-3-present.md | Checksum: trend-scout-p3-present-v1
+Reference Loaded: phase-3-present.md | Checksum: trend-scout-p3-present-v2
 ```
 
 ---
 
 ## Objective
 
-Write the generated candidates to `trend-candidates.md` for user review and selection, then PAUSE execution for user interaction.
+Write the final trend list to `trend-candidates.md`. All 60 generated candidates are the agreed list — no user selection step. After writing, proceed directly to Phase 4 (Finalize).
 
-**Expected Duration:** 15-20 seconds (file writing) + user interaction time
+**Expected Duration:** 15-20 seconds (file writing)
 
 ---
 
@@ -41,7 +41,7 @@ log_conditional INFO "Language: ${PROJECT_LANGUAGE}"
 
 ## Step 3.1.5: Prepare Data Files
 
-Execute the data preparation script to generate compact candidate data and browser app JSON:
+Execute the data preparation script to generate compact candidate data:
 
 ```bash
 bash "${CLAUDE_PLUGIN_ROOT}/skills/trend-scout/scripts/prepare-phase3-data.sh" "${PROJECT_PATH}"
@@ -50,11 +50,9 @@ bash "${CLAUDE_PLUGIN_ROOT}/skills/trend-scout/scripts/prepare-phase3-data.sh" "
 This script:
 
 1. Reads `.logs/trend-generator-candidates.json` (full ~27K tokens)
-2. Writes `trend-app-data.json` to project root (full data for browser selector)
-3. Writes `trend-selector-app.html` to project root (self-contained HTML with embedded data, works with `file://` protocol)
-4. Writes `.logs/candidates-compact.json` (~8-10K tokens for Claude)
+2. Writes `.logs/candidates-compact.json` (~8-10K tokens for Claude)
 
-**Important:** From this point forward, read ONLY the compact file (`.logs/candidates-compact.json`). The full data is preserved in `trend-app-data.json` and embedded in the HTML for the visual selector app.
+**Important:** From this point forward, read ONLY the compact file (`.logs/candidates-compact.json`).
 
 **Field mapping for compact format:**
 
@@ -81,7 +79,7 @@ This script:
 ```markdown
 ---
 # Frontmatter
-status: draft
+status: agreed
 project_slug: "{PROJECT_SLUG}"
 industry: "{INDUSTRY_SLUG}"
 industry_en: "{INDUSTRY_EN}"
@@ -94,7 +92,6 @@ project_language: "{PROJECT_LANGUAGE}"
 generated_at: "{ISO_TIMESTAMP}"
 generated_by: "trend-scout"
 total_candidates: 60
-selected_count: 0
 web_research_status: "{success|partial|failed|disabled}"
 web_sourced_candidates: {N}
 training_sourced_candidates: {N}
@@ -105,13 +102,11 @@ search_timestamp: "{ISO_TIMESTAMP}"
 
 {HEADER_SECTION}
 
-{INSTRUCTIONS_SECTION}
-
 {DIMENSION_SECTIONS}
 
-{USER_PROPOSED_SECTION}
+{SOURCE_INTEGRITY_SUMMARY}
 
-{SELECTION_SUMMARY}
+{REFERENCES}
 ```
 
 ---
@@ -121,56 +116,38 @@ search_timestamp: "{ISO_TIMESTAMP}"
 ### English Header
 
 ```markdown
-# TIPS Candidates for {SUBSECTOR_EN}
+# TIPS Trend List for {SUBSECTOR_EN}
 
 **Industry:** {INDUSTRY_EN}
 **Subsector:** {SUBSECTOR_EN}
 **Research Topic:** {RESEARCH_TOPIC}
 **Generated:** {DATE}
 
-This file contains 60 trend candidates across 4 dimensions and 3 planning horizons (5 per cell × 12 cells).
+This file contains the final 60 trend candidates across 4 dimensions and 3 planning horizons (5 per cell × 12 cells).
 ```
 
 ### German Header
 
 ```markdown
-# TIPS-Kandidaten für {SUBSECTOR_DE}
+# TIPS-Trendliste für {SUBSECTOR_DE}
 
 **Branche:** {INDUSTRY_DE}
 **Teilsektor:** {SUBSECTOR_DE}
 **Forschungsthema:** {RESEARCH_TOPIC}
 **Generiert:** {DATE}
 
-Diese Datei enthält 60 Trendkandidaten über 4 Dimensionen und 3 Planungshorizonte (5 pro Zelle × 12 Zellen).
+Diese Datei enthält die finalen 60 Trendkandidaten über 4 Dimensionen und 3 Planungshorizonte (5 pro Zelle × 12 Zellen).
 ```
 
 ---
 
-## Step 3.4: Generate Instructions Section
+## Step 3.4: Generate Legend Section
 
-### English Instructions
+### English Legend
 
 ```markdown
-## Instructions
+## Legend
 
-1. **Review** each candidate in the tables below
-2. **Select** candidates (5 per cell × 12 cells = 60 total) by changing `[ ]` to `[x]`
-3. **Add proposals** (optional) in the "User Proposed" section at the bottom
-4. **Request more** (optional) by adding `[+N]` in the "More?" column (e.g., `[+3]` for 3 more)
-5. **Save** this file and re-invoke the `trend-scout` skill
-
-### Selection Requirements
-
-| Requirement | Value |
-|-------------|-------|
-| Candidates per cell | 5 |
-| Cells (dimensions × horizons) | 12 (4 × 3) |
-| Total candidates | 60 |
-
-### Legend
-
-- `#### [ ]` = Not selected (change to `#### [x]` to select)
-- `#### [x]` = Selected
 - **Statement**: Trend statement (30-50 words) describing what is happening
 - **Research**: Research hint (20-30 words) guiding downstream investigation
 - **Score**: ★★★★★ (0.85) = Star rating + exact composite score (sorted by score)
@@ -179,29 +156,11 @@ Diese Datei enthält 60 Trendkandidaten über 4 Dimensionen und 3 Planungshorizo
 - **Source**: [n] = Web-sourced (see References), 📚 = Hypothesis (training knowledge, unverified), 📚 [corr.] = Hypothesis corroborated by web signal
 ```
 
-### German Instructions
+### German Legend
 
 ```markdown
-## Anleitung
+## Legende
 
-1. **Prüfen** Sie jeden Kandidaten in den untenstehenden Tabellen
-2. **Wählen** Sie Kandidaten (5 pro Zelle × 12 Zellen = 60 insgesamt), indem Sie `[ ]` zu `[x]` ändern
-3. **Eigene Vorschläge** (optional) im Abschnitt "Eigene Vorschläge" am Ende hinzufügen
-4. **Mehr anfordern** (optional) durch Hinzufügen von `[+N]` in der Spalte "Mehr?" (z.B. `[+3]` für 3 weitere)
-5. **Speichern** Sie diese Datei und rufen Sie das `trend-scout` Skill erneut auf
-
-### Auswahlvoraussetzungen
-
-| Anforderung | Wert |
-|-------------|------|
-| Kandidaten pro Zelle | 5 |
-| Zellen (Dimensionen × Horizonte) | 12 (4 × 3) |
-| Gesamtkandidaten | 60 |
-
-### Legende
-
-- `#### [ ]` = Nicht ausgewählt (ändern zu `#### [x]` zum Auswählen)
-- `#### [x]` = Ausgewählt
 - **Statement**: Trend-Statement (30-50 Wörter) beschreibt, was passiert
 - **Forschung**: Forschungshinweis (20-30 Wörter) für die nachgelagerte Untersuchung
 - **Score**: ★★★★★ (0.85) = Sternbewertung + exakter Composite-Score (nach Score sortiert)
@@ -292,11 +251,11 @@ For each horizon within dimension, generate candidate cards with rich details:
 **English:**
 ```markdown
 ### Horizon: {HORIZON_NAME} ({HORIZON_TIMEFRAME})
-*Sorted by score (highest first) — Select exactly 3 candidates*
+*Sorted by score (highest first)*
 
 ---
 
-#### [ ] 1. {name}
+#### 1. {name}
 **Statement:** {trend_statement_30_50_words}
 **Keywords:** `{kw1}` `{kw2}` `{kw3}`
 **Score:** {stars} ({score}) | **Confidence:** {conf} | **Intensity:** {int}/5 | **Source:** {citation}
@@ -305,7 +264,7 @@ For each horizon within dimension, generate candidate cards with rich details:
 
 ---
 
-#### [ ] 2. {name}
+#### 2. {name}
 **Statement:** {trend_statement_30_50_words}
 **Keywords:** `{kw1}` `{kw2}` `{kw3}`
 **Score:** {stars} ({score}) | **Confidence:** {conf} | **Intensity:** {int}/5 | **Source:** {citation}
@@ -320,11 +279,11 @@ For each horizon within dimension, generate candidate cards with rich details:
 
 ```markdown
 ### Horizont: {HORIZON_NAME} ({HORIZON_TIMEFRAME})
-*Sortiert nach Score (höchster zuerst) — Wählen Sie genau 3 Kandidaten*
+*Sortiert nach Score (höchster zuerst)*
 
 ---
 
-#### [ ] 1. {name}
+#### 1. {name}
 **Statement:** {trend_statement_30_50_wörter}
 **Schlüsselwörter:** `{kw1}` `{kw2}` `{kw3}`
 **Score:** {stars} ({score}) | **Konfidenz:** {conf} | **Intensität:** {int}/5 | **Quelle:** {citation}
@@ -333,7 +292,7 @@ For each horizon within dimension, generate candidate cards with rich details:
 
 ---
 
-#### [ ] 2. {name}
+#### 2. {name}
 **Statement:** {trend_statement_30_50_wörter}
 **Schlüsselwörter:** `{kw1}` `{kw2}` `{kw3}`
 **Score:** {stars} ({score}) | **Konfidenz:** {conf} | **Intensität:** {int}/5 | **Quelle:** {citation}
@@ -422,72 +381,12 @@ uncertain → ?○○
 
 ---
 
-## Step 3.6: Generate User Proposed Section
-
-### English
+## Step 3.6: Generate Source Integrity Summary
 
 ```markdown
 ---
 
-## User Proposed Candidates
-
-Add your own trend candidates below. Follow the format in the table.
-
-| Select | Dimension | Horizon | Name | Description | Keywords | Rationale |
-|--------|-----------|---------|------|-------------|----------|-----------|
-| [x] | | | | | | |
-| [x] | | | | | | |
-| [x] | | | | | | |
-
-**Instructions:**
-- Fill in dimension: `externe-effekte`, `neue-horizonte`, `digitale-wertetreiber`, or `digitales-fundament`
-- Fill in horizon: `act`, `plan`, or `observe`
-- Provide name (1-2 words), description (1 sentence), 3 keywords (comma-separated), and rationale
-- User-proposed candidates are automatically selected (`[x]`)
-```
-
-### German
-
-```markdown
----
-
-## Eigene Vorschläge
-
-Fügen Sie unten Ihre eigenen Trendkandidaten hinzu. Folgen Sie dem Format in der Tabelle.
-
-| Auswahl | Dimension | Horizont | Name | Beschreibung | Schlüsselwörter | Begründung |
-|---------|-----------|----------|------|--------------|-----------------|------------|
-| [x] | | | | | | |
-| [x] | | | | | | |
-| [x] | | | | | | |
-
-**Anleitung:**
-- Dimension ausfüllen: `externe-effekte`, `neue-horizonte`, `digitale-wertetreiber`, oder `digitales-fundament`
-- Horizont ausfüllen: `act`, `plan`, oder `observe`
-- Name (1-2 Wörter), Beschreibung (1 Satz), 3 Schlüsselwörter (kommagetrennt) und Begründung angeben
-- Eigene Vorschläge sind automatisch ausgewählt (`[x]`)
-```
-
----
-
-## Step 3.7: Generate Selection Summary
-
-```markdown
----
-
-## Selection Summary
-
-| Dimension | Act | Plan | Observe | Total |
-|-----------|-----|------|---------|-------|
-| Externe Effekte | 0/5 | 0/5 | 0/5 | 0/15 |
-| Neue Horizonte | 0/5 | 0/5 | 0/5 | 0/15 |
-| Digitale Wertetreiber | 0/5 | 0/5 | 0/5 | 0/15 |
-| Digitales Fundament | 0/5 | 0/5 | 0/5 | 0/15 |
-| **Total** | **0/20** | **0/20** | **0/20** | **0/60** |
-
-*This summary updates automatically when you re-invoke trend-scout.*
-
-### Source Integrity
+## Source Integrity
 
 | Metric | Value |
 |--------|-------|
@@ -565,191 +464,12 @@ log_conditional INFO "Written trend-candidates.md to: $TIPS_CANDIDATES_FILE"
 
 ---
 
-## Step 3.8.1: Verify Visual Selector App Data
-
-**Note:** The `trend-app-data.json` file is generated by the `prepare-phase3-data.sh` script in Step 3.1.5. This step verifies the file exists.
-
-### Verification
-
-```bash
-TREND_APP_DATA_FILE="${PROJECT_PATH}/trend-app-data.json"
-
-if [[ -f "$TREND_APP_DATA_FILE" ]]; then
-    log_conditional INFO "trend-app-data.json exists at: $TREND_APP_DATA_FILE"
-else
-    log_conditional ERROR "trend-app-data.json missing - Step 3.1.5 may have failed"
-fi
-```
-
-### JSON Schema Reference
-
-The generated `trend-app-data.json` contains:
-
-```json
-{
-  "meta": {
-    "timestamp": "{ISO_TIMESTAMP}",
-    "subsector": "{SUBSECTOR_SLUG}",
-    "total_candidates": 60,
-    "source_distribution": {"web_signal": N, "training": N}
-  },
-  "sources": {
-    "1": {"url": "{url_1}"},
-    "2": {"url": "{url_2}"}
-  },
-  "candidates": [
-    {
-      "id": "{dim}-{horizon}-{seq}",
-      "dimension": "{dimension_slug}",
-      "dimension_key": "{t|p|i|s}",
-      "horizon": "{act|plan|observe}",
-      "trend_name": "{name}",
-      "trend_statement": "{30_50_word_statement}",
-      "research_hint": "{20_30_word_guidance}",
-      "keywords": ["{kw1}", "{kw2}", "{kw3}"],
-      "score": 0.82,
-      "confidence_tier": "{high|medium|low|uncertain}",
-      "signal_intensity": 4,
-      "source": "{web-signal|training}",
-      "source_url": "{url_if_web}"
-    }
-  ]
-}
-```
-
-### Dimension Key Mapping
-
-| Dimension Slug | Key |
-|----------------|-----|
-| externe-effekte | t |
-| neue-horizonte | p |
-| digitale-wertetreiber | i |
-| digitales-fundament | s |
-
----
-
-## Step 3.8.2: Open Visual Selector App in Browser
-
-The Visual Selector HTML was generated by `prepare-phase3-data.sh` in Step 3.1.5 with embedded JSON data. This self-contained file works with the `file://` protocol (no CORS issues).
-
-**MANDATORY: Execute this Bash command:**
-
-```bash
-SELECTOR_APP="${PROJECT_PATH}/trend-selector-app.html"
-
-# Verify the app was generated
-if [ -f "$SELECTOR_APP" ]; then
-  # Auto-open the selector app in default browser
-  open "$SELECTOR_APP"
-  echo "Opened trend-selector-app.html in browser"
-else
-  echo "ERROR: trend-selector-app.html not found - ensure Step 3.1.5 completed successfully"
-fi
-```
-
-**Note:** The HTML file includes embedded project data, so it works when opened directly via `file://` protocol without needing a local HTTP server.
-
----
-
-## Step 3.9: Output User Instructions
-
-After writing the file, output instructions based on PROJECT_LANGUAGE:
-
-### English Output
-
-```text
-## Action Required: Review and Select Candidates
-
-I've generated 60 trend candidates for {SUBSECTOR_EN}.
-
-### Trend Selector App
-
-**Open the interactive selector:** [{PROJECT_PATH}/trend-selector-app.html]({PROJECT_PATH}/trend-selector-app.html)
-
-The app provides:
-- Visual matrix of all 4 dimensions × 3 horizons
-- Hover-to-expand detailed descriptions
-- Progress tracking with selection counter
-- Export to JSON (for Phase 4)
-
-After making selections, click **Export** and save `trend-selection.json` to your project folder.
-
-### Option B: Edit Markdown Directly
-
-**File:** [{PROJECT_PATH}/trend-candidates.md]({PROJECT_PATH}/trend-candidates.md)
-
-1. Open the file above
-2. Mark exactly 3 candidates per cell with `[x]`
-3. Optionally add your own proposals at the bottom
-4. Save the file
-
----
-
-**Selection requirements:**
-- 5 per cell × 12 cells = 60 total
-
-When you're ready, re-invoke the `trend-scout` skill to continue.
-```
-
-### German Output
-
-```text
-## Aktion erforderlich: Kandidaten prüfen und auswählen
-
-Ich habe 60 Trendkandidaten für {SUBSECTOR_DE} generiert.
-
-### Trend Selector App
-
-**Interaktiven Selektor öffnen:** [{PROJECT_PATH}/trend-selector-app.html]({PROJECT_PATH}/trend-selector-app.html)
-
-Die App bietet:
-- Visuelle Matrix aller 4 Dimensionen × 3 Horizonte
-- Detailansicht beim Hover über Kandidaten
-- Fortschrittsanzeige mit Auswahlzähler
-- Export nach JSON (für Phase 4)
-
-Nach der Auswahl klicken Sie auf **Export** und speichern `trend-selection.json` in Ihrem Projektordner.
-
-### Option B: Markdown direkt bearbeiten
-
-**Datei:** [{PROJECT_PATH}/trend-candidates.md]({PROJECT_PATH}/trend-candidates.md)
-
-1. Öffnen Sie die obige Datei
-2. Markieren Sie genau 3 Kandidaten pro Zelle mit `[x]`
-3. Fügen Sie optional eigene Vorschläge am Ende hinzu
-4. Speichern Sie die Datei
-
----
-
-**Auswahlvoraussetzungen:**
-- 5 pro Zelle × 12 Zellen = 60 insgesamt
-
-Wenn Sie bereit sind, rufen Sie das `trend-scout` Skill erneut auf, um fortzufahren.
-```
-
----
-
-## Step 3.10: PAUSE Execution
-
-**CRITICAL:** After outputting instructions, STOP execution. Do not proceed to Phase 4.
-
-```bash
-log_phase "Phase 3: Present Candidates" "complete"
-log_conditional INFO "PAUSED - Waiting for user to edit trend-candidates.md"
-
-# Exit gracefully - user will re-invoke when ready
-exit 0
-```
-
----
-
 ## Success Criteria
 
 - [ ] trend-candidates.md written to correct location
 - [ ] File contains all 60 candidates organized by dimension/horizon
 - [ ] File uses correct language (EN or DE)
-- [ ] User instructions displayed
-- [ ] Execution paused for user interaction
+- [ ] Frontmatter status set to `agreed`
 
 ---
 
@@ -763,4 +483,4 @@ exit 0
 
 ## Next Phase
 
-User edits file, then re-invokes trend-scout. Proceed to [phase-4-process.md](phase-4-process.md).
+Proceed directly to [phase-4-finalize.md](phase-4-finalize.md).

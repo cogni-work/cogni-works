@@ -111,7 +111,7 @@ If the phase is `complete`, congratulate the user and suggest exporting or visua
 | `scouting` | No candidates yet | Run `trend-scout` |
 | `researching` | Web research in progress | Re-invoke `trend-scout` to continue |
 | `generating` | Candidate generation in progress | Re-invoke `trend-scout` to continue |
-| `selecting` | Candidates ready for user selection | Edit `trend-candidates.md`, then re-invoke `trend-scout` |
+| `selecting` | Candidates presented, finalizing | Re-invoke `trend-scout` to finalize |
 | `reporting` | Candidates agreed, report not yet generated | Run `trend-report` |
 | `verification` | Report done, claims pending verification | Run `cogni-claims:claim-work` |
 | `modeling` | Report done, value model not yet built | Run `value-modeler` |

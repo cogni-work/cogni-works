@@ -68,43 +68,12 @@ GENERATION_COMPLETE: "{TOTAL} Kandidaten generiert ({WEB_SOURCED} webbasiert, {T
 ```text
 PRESENT_WRITING: "Schreibe trend-candidates.md..."
 PRESENT_SUCCESS: "Kandidatendatei geschrieben nach: {PATH}"
-PRESENT_PAUSE_TITLE: "Aktion erforderlich: Kandidaten prüfen und auswählen"
-PRESENT_PAUSE_INSTRUCTIONS: |
-  Bitte prüfen Sie die generierten Kandidaten und treffen Sie Ihre Auswahl:
-
-  1. Öffnen Sie: {FILE_PATH}
-  2. Markieren Sie genau 3 Kandidaten pro Zelle mit [x]
-  3. Fügen Sie optional eigene Vorschläge im Abschnitt "Eigene Vorschläge" hinzu
-  4. Fordern Sie optional mehr Kandidaten mit [+N] in der Spalte "Mehr?" an
-  5. Rufen Sie das trend-scout Skill erneut auf, wenn Sie bereit sind
-
-  Auswahlvoraussetzungen:
-  - 5 pro Zelle × 12 Zellen
-  - 60 Kandidaten insgesamt
+PRESENT_COMPLETE: "Alle 60 Kandidaten automatisch finalisiert. Weiter zur Finalisierung."
 ```
 
 ---
 
-## Phase 4: Verarbeitung
-
-```text
-PROCESS_START: "Verarbeite Ihre Auswahl..."
-PROCESS_READING: "Lese trend-candidates.md..."
-PROCESS_PARSING: "Parse Auswahl..."
-PROCESS_VALIDATING: "Validiere Auswahlzählung..."
-PROCESS_VALID: "Validierung bestanden: {COUNT} Kandidaten ausgewählt"
-PROCESS_INVALID_TITLE: "Auswahlvalidierung fehlgeschlagen"
-PROCESS_INVALID_INTRO: "Die folgenden Zellen haben falsche Auswahlzählungen:"
-PROCESS_INVALID_CELL: "- {DIMENSION} / {HORIZON}: {COUNT} ausgewählt (erwartet 3)"
-PROCESS_INVALID_ACTION: "Bitte passen Sie Ihre Auswahl an und rufen Sie trend-scout erneut auf."
-PROCESS_REGENERATION: "Verarbeite Regenerierungsanfragen..."
-PROCESS_REGENERATION_CELL: "Generiere {COUNT} zusätzliche Kandidaten für {DIMENSION} / {HORIZON}"
-PROCESS_REGENERATION_DONE: "Regenerierung abgeschlossen. Bitte prüfen Sie die aktualisierten Kandidaten."
-```
-
----
-
-## Phase 5: Finalisierung
+## Phase 4: Finalisierung
 
 ```text
 FINALIZE_START: "Finalisiere vereinbarte Kandidaten..."

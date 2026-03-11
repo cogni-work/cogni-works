@@ -5,9 +5,7 @@
 ```
 cogni-tips/{project-slug}/
 ├── tips-project.json              # Root manifest (project config + metadata)
-├── trend-candidates.md            # Human-readable candidate selection (Phase 3)
-├── trend-selector-app.html        # Visual selector app (Phase 3)
-├── trend-app-data.json            # Selector app data (Phase 3)
+├── trend-candidates.md            # Human-readable candidate presentation (Phase 3)
 ├── tips-trend-report.md           # Final assembled report (trend-report)
 ├── tips-trend-report-claims.json  # Merged claims registry (trend-report)
 ├── tips-insight-summary.md        # Narrative insight summary (trend-report Phase 2.5)
@@ -90,7 +88,6 @@ Consolidated output from the trend-scout skill containing project config, candid
     "source_distribution": {
       "web_signal": 28,
       "training": 32,
-      "user_proposed": 0
     },
     "web_research_status": "success",
     "search_timestamp": "2026-01-15T10:25:00Z",
@@ -110,8 +107,8 @@ Consolidated output from the trend-scout skill containing project config, candid
 
   "execution": {
     "workflow_state": "agreed",
-    "current_phase": 5,
-    "phases_completed": ["phase-0", "phase-1", "phase-2", "phase-3", "phase-4", "phase-5"],
+    "current_phase": 4,
+    "phases_completed": ["phase-0", "phase-1", "phase-2", "phase-3", "phase-4"],
     "agreed_at": "2026-01-15T11:45:00Z"
   },
 
@@ -126,7 +123,7 @@ Consolidated output from the trend-scout skill containing project config, candid
 }
 ```
 
-Workflow state values (in order): `initialized` → `phase-1` → `phase-2` → `phase-3` → `phase-4` → `phase-5` → `agreed`
+Workflow state values (in order): `initialized` → `phase-1` → `phase-2` → `phase-3` → `phase-4` → `agreed`
 
 ### Candidate Object
 
@@ -256,9 +253,8 @@ Location: `.metadata/trend-report-verification.json`
 | 0 | trend-scout | `initialized` | Language, industry, topic selection; project creation |
 | 1 | trend-scout | `phase-1` | Bilingual web research (32 queries + APIs) |
 | 2 | trend-scout | `phase-2` | Generate 60 candidates with multi-framework scoring |
-| 3 | trend-scout | `phase-3` | Present candidates for user selection |
-| 4 | trend-scout | `phase-4` | Validate user selection (60 candidates) |
-| 5 | trend-scout | `phase-5` → `agreed` | Finalize output JSON |
+| 3 | trend-scout | `phase-3` | Present candidates (all 60 auto-finalized) |
+| 4 | trend-scout | `phase-4` → `agreed` | Finalize output JSON |
 | R-0 | trend-report | `agreed` | Load input, validate gate, prep agent inputs |
 | R-1 | trend-report | `report-enriching` | 4 parallel agents: evidence + section writing |
 | R-2 | trend-report | `report-assembling` | Exec summary + portfolio analysis + assembly |

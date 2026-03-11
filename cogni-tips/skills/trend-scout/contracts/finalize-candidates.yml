@@ -57,5 +57,5 @@ compatibility:
 changelog:
   - version: "1.0.0"
     date: "2026-02-18"
-    changes: "Initial creation - extracts inline jq from phase-5-finalize.md Step 5.2"
+    changes: "Initial creation - extracts inline jq from phase-4-finalize.md Step 4.2"
     breaking: false

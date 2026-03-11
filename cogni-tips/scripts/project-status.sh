@@ -221,10 +221,8 @@ elif [ "$WORKFLOW_STATE" = "phase-1" ]; then
 elif [ "$WORKFLOW_STATE" = "phase-2" ]; then
   PHASE="generating"
 elif [ "$WORKFLOW_STATE" = "phase-3" ]; then
-  PHASE="selecting"
-elif [ "$WORKFLOW_STATE" = "phase-4" ]; then
-  PHASE="selecting"
-elif [ "$WORKFLOW_STATE" = "phase-5" ] || [ "$WORKFLOW_STATE" = "agreed" ]; then
+  PHASE="presenting"
+elif [ "$WORKFLOW_STATE" = "phase-4" ] || [ "$WORKFLOW_STATE" = "agreed" ]; then
   if [ "$HAS_REPORT" = "true" ]; then
     if [ "$HAS_VERIFICATION" = "true" ]; then
       PHASE="complete"

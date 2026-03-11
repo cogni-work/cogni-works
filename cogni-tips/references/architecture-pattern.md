@@ -101,7 +101,7 @@ These components are market-independent:
 - **TIPS content framework** (Trend, Implications, Possibilities, Solutions)
 - **Scoring frameworks** (Ansoff signal intensity, Rogers diffusion, CRAAP source quality)
 - **Search execution architecture** (parallel bilingual queries, deduplication, authority weighting)
-- **Candidate generation pipeline** (60 candidates → user selection → 60 agreed)
+- **Candidate generation pipeline** (60 candidates → 60 agreed)
 - **Report generation pipeline** (4 parallel dimension writers, evidence enrichment, claims extraction)
 - **Cross-language deduplication logic** (name matching, keyword overlap, URL dedup)
 

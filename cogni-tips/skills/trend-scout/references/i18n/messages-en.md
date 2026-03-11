@@ -68,43 +68,12 @@ GENERATION_COMPLETE: "Generated {TOTAL} candidates ({WEB_SOURCED} web-sourced, {
 ```text
 PRESENT_WRITING: "Writing trend-candidates.md..."
 PRESENT_SUCCESS: "Candidate file written to: {PATH}"
-PRESENT_PAUSE_TITLE: "Action Required: Review and Select Candidates"
-PRESENT_PAUSE_INSTRUCTIONS: |
-  Please review the generated candidates and make your selections:
-
-  1. Open: {FILE_PATH}
-  2. Mark exactly 3 candidates per cell with [x]
-  3. Optionally add your own proposals in the "User Proposed" section
-  4. Optionally request more candidates with [+N] in the "More?" column
-  5. Re-invoke the trend-scout skill when ready
-
-  Selection requirements:
-  - 5 per cell × 12 cells
-  - 60 candidates total
+PRESENT_COMPLETE: "All 60 candidates auto-finalized. Proceeding to finalization."
 ```
 
 ---
 
-## Phase 4: Processing
-
-```text
-PROCESS_START: "Processing your selections..."
-PROCESS_READING: "Reading trend-candidates.md..."
-PROCESS_PARSING: "Parsing selections..."
-PROCESS_VALIDATING: "Validating selection counts..."
-PROCESS_VALID: "Validation passed: {COUNT} candidates selected"
-PROCESS_INVALID_TITLE: "Selection Validation Failed"
-PROCESS_INVALID_INTRO: "The following cells have incorrect selection counts:"
-PROCESS_INVALID_CELL: "- {DIMENSION} / {HORIZON}: {COUNT} selected (expected 3)"
-PROCESS_INVALID_ACTION: "Please adjust your selections and re-invoke trend-scout."
-PROCESS_REGENERATION: "Processing regeneration requests..."
-PROCESS_REGENERATION_CELL: "Generating {COUNT} additional candidates for {DIMENSION} / {HORIZON}"
-PROCESS_REGENERATION_DONE: "Regeneration complete. Please review updated candidates."
-```
-
----
-
-## Phase 5: Finalization
+## Phase 4: Finalization
 
 ```text
 FINALIZE_START: "Finalizing agreed candidates..."

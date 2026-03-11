@@ -1,7 +1,7 @@
 ---
 name: trend-report
 description: |
-  Generate a strategic TIPS trend report organized around investment themes with inline citations and verifiable claims. Produces a theme-first report where 3-7 strategic themes drive the narrative — each theme tells a CxO-level investment story backed by T→I→P value chain evidence. Reads agreed trend candidates, enriches each with web-sourced quantitative evidence via parallel agents, assembles the report with strategic executive summary and portfolio analysis, generates a trend-panorama insight summary via cogni-narrative, and invokes cogni-claims:claim-work for automated verification. Required pipeline: trend-scout → value-modeler → trend-report. Use when: (1) trend-scout and value-modeler have completed, (2) user wants a written trend report, (3) user mentions "trend report", "TIPS report", "write up trends", "summarize trends", "trend analysis document", "strategic stories", (4) preparing a deliverable from scouted trends, (5) user asks to "generate report from trends" or "create trend deliverable". Always use this skill when trend-scout output exists and the user wants any kind of written trend analysis — even if they don't use the exact phrase "trend report".
+  Generate a strategic TIPS trend report organized around investment themes with inline citations and verifiable claims. Produces a theme-first report where 3-7 strategic themes drive the narrative — each theme tells a CxO-level investment story backed by T→I→P value chain evidence. Reads agreed trend candidates, enriches each with web-sourced quantitative evidence via parallel agents, assembles the report with strategic executive summary and portfolio analysis, generates a trend-panorama insight summary via cogni-narrative, invokes cogni-claims:claim-work for automated verification, and polishes the final prose for executive readability via cogni-copywriting. Required pipeline: trend-scout → value-modeler → trend-report. Use when: (1) trend-scout and value-modeler have completed, (2) user wants a written trend report, (3) user mentions "trend report", "TIPS report", "write up trends", "summarize trends", "trend analysis document", "strategic stories", (4) preparing a deliverable from scouted trends, (5) user asks to "generate report from trends" or "create trend deliverable". Always use this skill when trend-scout output exists and the user wants any kind of written trend analysis — even if they don't use the exact phrase "trend report".
 ---
 
 # Trend Report
@@ -19,6 +19,7 @@ Transform agreed trend-scout candidates into a strategic, evidence-backed report
 5. Produce a claims registry compatible with `cogni-claims:claim-work`
 6. Generate a trend-panorama narrative insight summary via cogni-narrative
 7. Optionally verify claims via cogni-claims:claim-work
+8. Polish report prose for executive readability via cogni-copywriting
 
 ## Bilingual Support
 
@@ -31,6 +32,7 @@ Full German and English support. **Always ask the user** for the deliverable lan
 - Web access enabled for evidence enrichment
 - Optional: `cogni-narrative` plugin for insight summary (graceful fallback if absent)
 - Optional: `cogni-claims` plugin for claim verification
+- Optional: `cogni-copywriting` plugin for executive polish (graceful fallback if absent)
 
 ## Path Variables
 
@@ -70,9 +72,10 @@ Read references **only when needed** for the specific phase:
 Track progress through these phases as you go:
 
 ```text
-Phase 0 → Phase 1 → Phase 2 → Phase 2.5 → Phase 3 → Phase 4
-   │          │          │         │            │          │
-   │          │          │         │            │          └─ Update metadata, display summary
+Phase 0 → Phase 1 → Phase 2 → Phase 2.5 → Phase 3 → Phase 3.5 → Phase 4
+   │          │          │         │            │          │           │
+   │          │          │         │            │          │           └─ Update metadata, display summary
+   │          │          │         │            │          └─ Executive polish via cogni-copywriting
    │          │          │         │            └─ Optional claim-work verification
    │          │          │         └─ trend-panorama narrative via cogni-narrative
    │          │          └─ Strategic theme narratives + evidence weaving
@@ -298,6 +301,50 @@ If FAIL: present failed claims as information only — do not auto-correct the r
 
 ---
 
+### Phase 3.5: Executive Polish via cogni-copywriting
+
+Polish the assembled trend report for executive readability. Runs after claim verification so citations and claim references remain stable during extraction and verification. The copywriter preserves all inline citations, German characters, and protected content (diagram placeholders, figure references, kanban tables).
+
+#### Step 3.5.1: Check Availability
+
+If `cogni-copywriting` plugin is not installed, display a warning and skip to Phase 4 — do not halt.
+
+#### Step 3.5.2: Invoke Copywriter
+
+```yaml
+Skill:
+  skill: "cogni-copywriting:copywriter"
+  args: "FILE_PATH={PROJECT_PATH}/tips-trend-report.md SCOPE=tone STAKEHOLDERS=executive REVIEW_MODE=automated"
+```
+
+**Parameter choices:**
+- `SCOPE=tone` — the report structure is already defined by the theme assembly (Phase 2). Only polish prose clarity, paragraph flow, bold anchoring, and sentence rhythm. Do not restructure sections or reorder themes.
+- `STAKEHOLDERS=executive` — the primary audience is CxO-level decision makers.
+- `REVIEW_MODE=automated` — lightweight review pass without interactive feedback.
+
+#### Step 3.5.3: Validate Output
+
+After the copywriter returns:
+
+| Check | Condition | On Failure |
+|-------|-----------|------------|
+| Citation count | polished >= original | REVERT: restore from `.tips-trend-report.md` backup |
+| Frontmatter intact | YAML frontmatter unchanged | REVERT |
+| Theme structure | Same H2/H3 heading count and text | REVERT |
+| Claims registry | Claims table rows unchanged | REVERT |
+
+If any check fails, revert to the backup the copywriter created (`.tips-trend-report.md` in the same directory) and log the failure reason. Partial polish failure does not block Phase 4.
+
+#### Step 3.5.4: Update Metadata
+
+If polish succeeded, note it for the finalization summary:
+
+```json
+{ "copywriter_applied": true, "copywriter_scope": "tone" }
+```
+
+---
+
 ### Phase 4: Finalization
 
 #### Step 4.1: Update Metadata
@@ -318,7 +365,9 @@ Add to `{PROJECT_PATH}/.metadata/trend-scout-output.json`:
   "trend_report_theme_count": N,
   "trend_report_generated_at": "ISO-8601",
   "insight_summary_path": "tips-insight-summary.md or null",
-  "insight_summary_arc": "trend-panorama or null"
+  "insight_summary_arc": "trend-panorama or null",
+  "copywriter_applied": true,
+  "copywriter_scope": "tone or null"
 }
 ```
 
@@ -334,6 +383,7 @@ Insight:      {PROJECT_PATH}/tips-insight-summary.md (or "skipped")
 Trends:       60 across {N} themes ({orphan_count} emerging signals)
 Claims:       {total_claims} quantitative claims extracted
 Verification: {verdict or "skipped"}
+Polish:       {copywriter_applied ? "tone (cogni-copywriting)" : "skipped"}
 
 Recommended next steps:
   1. export-html-report — Generate interactive HTML report
@@ -362,6 +412,9 @@ Use /resume-tips in your next session to pick up where you left off.
 | `cogni-narrative` not installed | WARNING: skip insight summary |
 | `cogni-claims` not installed | WARNING: skip verification |
 | claim-work returns FAIL | Present failed claims. Do not auto-correct. |
+| `cogni-copywriting` not installed | WARNING: skip executive polish |
+| Copywriter drops citations | REVERT to backup, log failure, continue to Phase 4 |
+| Copywriter alters headings/structure | REVERT to backup, log failure, continue to Phase 4 |
 
 ## Integration
 
@@ -371,7 +424,9 @@ Use /resume-tips in your next session to pick up where you left off.
 
 **Pipeline:** `trend-scout → value-modeler → trend-report`
 
-**Downstream:** `export-html-report`, `export-pdf-report`, `cogni-claims:claim-work`
+**Optional cross-plugin:** `cogni-narrative:narrative-writer` (Phase 2.5), `cogni-claims:claim-work` (Phase 3), `cogni-copywriting:copywriter` (Phase 3.5)
+
+**Downstream:** `export-html-report`, `export-pdf-report`
 
 ## Debugging
 

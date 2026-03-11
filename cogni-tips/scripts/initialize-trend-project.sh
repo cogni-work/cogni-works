@@ -150,9 +150,10 @@ fi
 # Create project directory structure
 mkdir -p "$PROJECT_PATH"
 
-# TIPS-specific directories (simplified structure)
+# TIPS-specific directories
 readonly TIPS_DIRS=(
     ".metadata"
+    ".logs"
 )
 
 # Create all directories
@@ -162,6 +163,32 @@ done
 
 # Generate timestamps
 readonly CREATED_TIMESTAMP="$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
+
+# Create tips-project.json (root manifest for project discovery)
+readonly PROJECT_JSON="$PROJECT_PATH/tips-project.json"
+jq -n \
+    --arg slug "$PROJECT_ID" \
+    --arg name "$PROJECT_NAME" \
+    --arg language "$PROJECT_LANGUAGE" \
+    --arg industry "${INDUSTRY:-unspecified}" \
+    --arg research_topic "" \
+    --arg created "$CREATED_TIMESTAMP" \
+    '{
+        slug: $slug,
+        name: $name,
+        language: $language,
+        industry: {
+            primary: $industry,
+            primary_en: null,
+            primary_de: null,
+            subsector: null,
+            subsector_en: null,
+            subsector_de: null
+        },
+        research_topic: $research_topic,
+        created: $created,
+        updated: $created
+    }' > "$PROJECT_JSON"
 
 # Create consolidated trend-scout-output.json
 readonly OUTPUT_FILE="$PROJECT_PATH/.metadata/trend-scout-output.json"
@@ -266,6 +293,7 @@ if [[ "$JSON_OUTPUT" == true ]]; then
         --arg created "$CREATED_TIMESTAMP" \
         --arg output_file "$OUTPUT_FILE" \
         --argjson dirs "$(printf '%s\n' "${TIPS_DIRS[@]}" | jq -R . | jq -s .)" \
+        --arg project_json "$PROJECT_JSON" \
         '{
             success: true,
             project_path: $path,
@@ -275,6 +303,7 @@ if [[ "$JSON_OUTPUT" == true ]]; then
             created: $created,
             directories: $dirs,
             output_file: $output_file,
+            project_json: $project_json,
             readme: "README.md"
         }'
 else
@@ -286,6 +315,7 @@ else
     echo "Language: $PROJECT_LANGUAGE"
     echo ""
     echo "Files created:"
+    echo "  - tips-project.json"
     echo "  - .metadata/trend-scout-output.json"
     echo "  - README.md"
 fi

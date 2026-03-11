@@ -53,6 +53,7 @@ Read references **only when needed** for the specific phase:
 
 | Reference | Read when... |
 |-----------|--------------|
+| [$CLAUDE_PLUGIN_ROOT/references/data-model.md]($CLAUDE_PLUGIN_ROOT/references/data-model.md) | Understanding entity schemas and project structure |
 | [references/report-structure.md](references/report-structure.md) | Assembling the final report (Phase 2) |
 | [references/evidence-enrichment.md](references/evidence-enrichment.md) | Configuring agent web search strategy (Phase 1) |
 | [references/claims-format.md](references/claims-format.md) | Extracting/merging claims (Phase 1-2) |
@@ -339,6 +340,11 @@ If FAIL: present failed claims as information only — do not auto-correct the r
 
 #### Step 4.1: Update Metadata
 
+Update `{PROJECT_PATH}/tips-project.json` with current timestamp:
+```json
+{ "updated": "ISO-8601" }
+```
+
 Add to `{PROJECT_PATH}/.metadata/trend-scout-output.json`:
 
 ```json
@@ -368,6 +374,8 @@ Recommended next steps:
   1. export-html-report — Generate interactive HTML report
   2. export-pdf-report — Generate formal PDF report
   3. cogni-claims:claim-work — Verify claims (if skipped)
+
+Use /resume-tips in your next session to pick up where you left off.
 ```
 
 ---

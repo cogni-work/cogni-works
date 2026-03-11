@@ -67,6 +67,7 @@ Read references **only when needed** for the specific task:
 
 | Reference | Read when... |
 |-----------|--------------|
+| [$CLAUDE_PLUGIN_ROOT/references/data-model.md]($CLAUDE_PLUGIN_ROOT/references/data-model.md) | Understanding entity schemas and project structure |
 | [references/industry-taxonomy.md](references/industry-taxonomy.md) | Presenting industry selection to user |
 | [references/i18n/messages-en.md](references/i18n/messages-en.md) | English user messages |
 | [references/i18n/messages-de.md](references/i18n/messages-de.md) | German user messages |
@@ -123,7 +124,8 @@ Read [references/workflow-phases/phase-0-initialize.md](references/workflow-phas
 5. Capture research topic/focus
 6. Generate project slug: `{subsector}-{topic}-{hash}`
 7. Initialize project via `initialize-trend-project.sh` in the current working directory under `cogni-tips/`
-8. Update `.metadata/trend-scout-output.json` with industry context
+8. Update `tips-project.json` with full industry context (bilingual names, subsector, research_topic)
+9. Update `.metadata/trend-scout-output.json` with industry context
 
 **Required outputs:**
 
@@ -380,12 +382,15 @@ Read [references/workflow-phases/phase-4-process.md](references/workflow-phases/
 Read [references/workflow-phases/phase-5-finalize.md](references/workflow-phases/phase-5-finalize.md), then execute:
 
 1. Update consolidated `trend-scout-output.json` with agreed candidates
-2. Update `trend-candidates.md` frontmatter status to `agreed`
-3. Log completion with next-step instructions
+2. Update `tips-project.json` with current timestamp (`updated` field)
+3. Update `trend-candidates.md` frontmatter status to `agreed`
+4. Log completion with next-step instructions
+5. Recommend `/resume-tips` for the next session
 
 **Required outputs:**
 
 - `.metadata/trend-scout-output.json` - consolidated output (config + candidates)
+- `tips-project.json` - updated timestamp
 - `trend-candidates.md` status updated to `agreed`
 
 ---

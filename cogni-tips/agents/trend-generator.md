@@ -125,6 +125,15 @@ Composite = (0.25 × Impact) + (0.20 × Probability) + (0.20 × Strategic_Fit) +
 | **Signal Strength** | 15% | Recency + source count | 5+ sources, <6mo | 2 sources, 18mo | Unverified |
 | **Uncertainty** | -5% max | Conflicting signals penalty | Low conflict | Some conflict | High conflict |
 
+**Source-Type Scoring Caps (MANDATORY):**
+
+Training-sourced candidates (`source: training`) MUST have capped scores:
+- `source_quality`: MAX 0.4 (CRAAP Authority 1-2, no verifiable source)
+- `signal_strength`: MAX 0.3 (no independent sources, no recency data)
+- `confidence_tier`: MAX "low" (upgrade to "medium" only if web signal corroborates)
+
+Apply caps AFTER initial scoring, then recalculate composite with capped values.
+
 #### Confidence Tiers (Triangulation)
 
 | Tier | Range | Criteria |
@@ -251,8 +260,11 @@ candidate:
   keywords: ["kw1", "kw2", "kw3"]  # Exactly 3
   research_hint: "..."  # 20-30 words: what to investigate
   source: "web-signal" | "training"
+  source_label: "web-sourced" | "hypothesis"  # "hypothesis" for training-sourced
   source_url: "https://..."  # Only for web-signal
   freshness_date: "2024-12"  # Only for web-signal
+  web_corroboration: false  # true if web signal corroborates this training candidate
+  corroborated_by: null  # signal name if corroborated
 ```
 
 ### Step 4: Apply Multi-Framework Scoring
@@ -271,6 +283,13 @@ For each candidate, use extended thinking to calculate scores:
 6. Uncertainty Penalty: Conflicting signals? = [penalty]
 
 **Composite = (0.25 x impact) + (0.20 x probability) + (0.20 x strategic_fit) + (0.15 x source_quality) + (0.15 x signal_strength) - penalty**
+
+**Source-Type Cap Enforcement (if source == "training"):**
+  source_quality = MIN(source_quality, 0.4)
+  signal_strength = MIN(signal_strength, 0.3)
+  Recalculate composite with capped values.
+  confidence_tier = "low" (upgrade to "medium" only if web signal corroborates)
+  Check WEB_RESEARCH_SIGNALS for keyword overlap (2+ match) or name match → web_corroboration
 
 **Confidence Tier:** [HIGH/MEDIUM/LOW/UNCERTAIN]
 **Signal Intensity (Ansoff):** [1-5]
@@ -320,6 +339,14 @@ Add scoring fields to each candidate:
 | ACT horizon intensity | 4 or 5 | Flag mismatch |
 | PLAN horizon intensity | 2, 3, or 4 | Flag mismatch |
 | OBSERVE horizon intensity | 1 or 2 | Flag mismatch |
+
+**Source-Type Cap Validation:**
+
+| Check | Expected | Action if Failed |
+|-------|----------|------------------|
+| Training source_quality | <= 0.4 | Recalculate with cap |
+| Training signal_strength | <= 0.3 | Recalculate with cap |
+| Training confidence_tier | "low" or "medium" (if corroborated) | Downgrade |
 
 **Portfolio Balance:**
 
@@ -388,6 +415,13 @@ Full output structure (~50-100KB):
       "late_majority": 14, "laggards": 5,
       "pre_chasm": 17, "post_chasm": 43
     }
+  },
+  "source_integrity": {
+    "training_capped": true,
+    "training_with_corroboration": 8,
+    "training_without_corroboration": 24,
+    "avg_training_score": 0.48,
+    "avg_web_signal_score": 0.72
   },
   "validation": {"passed": true, "warnings": []},
   "log": ".logs/trend-generator-candidates.json"

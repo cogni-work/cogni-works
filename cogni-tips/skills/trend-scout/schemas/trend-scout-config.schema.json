@@ -98,7 +98,7 @@
       "properties": {
         "total": {
           "type": "integer",
-          "const": 52
+          "const": 60
         },
         "source_distribution": {
           "type": "object",
@@ -160,11 +160,22 @@
             }
           }
         },
+        "source_integrity": {
+          "type": "object",
+          "description": "Source-type scoring integrity metrics",
+          "properties": {
+            "training_capped": { "type": "boolean" },
+            "training_with_corroboration": { "type": "integer", "minimum": 0 },
+            "training_without_corroboration": { "type": "integer", "minimum": 0 },
+            "avg_training_score": { "type": "number", "minimum": 0, "maximum": 1 },
+            "avg_web_signal_score": { "type": "number", "minimum": 0, "maximum": 1 }
+          }
+        },
         "items": {
           "type": "array",
           "items": { "$ref": "#/definitions/candidate" },
-          "minItems": 52,
-          "maxItems": 52
+          "minItems": 60,
+          "maxItems": 60
         }
       }
     },
@@ -228,7 +239,7 @@
   "definitions": {
     "dimensionCounts": {
       "type": "object",
-      "description": "Horizon-specific trend counts per dimension: 5 ACT + 5 PLAN + 3 OBSERVE = 13 per dimension, 52 total",
+      "description": "Horizon-specific trend counts per dimension: 5 ACT + 5 PLAN + 5 OBSERVE = 15 per dimension, 60 total",
       "properties": {
         "act": {
           "type": "integer",
@@ -240,7 +251,7 @@
         },
         "observe": {
           "type": "integer",
-          "const": 3
+          "const": 5
         }
       }
     },
@@ -319,6 +330,20 @@
         "source": {
           "type": "string",
           "enum": ["web-signal", "training", "user_proposed"]
+        },
+        "source_label": {
+          "type": "string",
+          "enum": ["web-sourced", "hypothesis", "user-proposed"],
+          "description": "Human-readable source classification (hypothesis = training-sourced, capped scores)"
+        },
+        "web_corroboration": {
+          "type": "boolean",
+          "default": false,
+          "description": "True if training-sourced candidate is corroborated by a Phase 1 web signal"
+        },
+        "corroborated_by": {
+          "type": ["string", "null"],
+          "description": "Name of corroborating web signal, if any"
         },
         "source_url": {
           "type": ["string", "null"],

@@ -70,8 +70,8 @@ Language: {language}
 | Stage | Status | Details |
 |-------|--------|---------|
 | Web Research | Done / Pending | {web_research_status}, {candidates_web} signals found |
-| Candidate Generation | Done / Pending | 76 generated |
-| Candidate Selection | Done / Pending | {candidates_total}/52 agreed |
+| Candidate Generation | Done / Pending | 60 generated |
+| Candidate Selection | Done / Pending | {candidates_total}/60 agreed |
 | Trend Report | Done / Pending | {report_sections}/4 sections |
 | Claims Registry | Done / Pending | {claims_total} claims extracted |
 | Insight Summary | Done / Skipped | |

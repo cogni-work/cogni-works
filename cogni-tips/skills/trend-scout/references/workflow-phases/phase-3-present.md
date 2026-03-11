@@ -128,8 +128,7 @@ search_timestamp: "{ISO_TIMESTAMP}"
 **Research Topic:** {RESEARCH_TOPIC}
 **Generated:** {DATE}
 
-This file contains 76 trend candidates across 4 dimensions and 3 planning horizons.
-Please select **5 ACT, 5 PLAN, and 3 OBSERVE per dimension** (52 total) to proceed.
+This file contains 60 trend candidates across 4 dimensions and 3 planning horizons (5 per cell × 12 cells).
 ```
 
 ### German Header
@@ -142,8 +141,7 @@ Please select **5 ACT, 5 PLAN, and 3 OBSERVE per dimension** (52 total) to proce
 **Forschungsthema:** {RESEARCH_TOPIC}
 **Generiert:** {DATE}
 
-Diese Datei enthält 76 Trendkandidaten über 4 Dimensionen und 3 Planungshorizonte.
-Bitte wählen Sie **5 ACT, 5 PLAN und 3 OBSERVE pro Dimension** (52 insgesamt) aus, um fortzufahren.
+Diese Datei enthält 60 Trendkandidaten über 4 Dimensionen und 3 Planungshorizonte (5 pro Zelle × 12 Zellen).
 ```
 
 ---
@@ -156,7 +154,7 @@ Bitte wählen Sie **5 ACT, 5 PLAN und 3 OBSERVE pro Dimension** (52 insgesamt) a
 ## Instructions
 
 1. **Review** each candidate in the tables below
-2. **Select** candidates per horizon (5 ACT, 5 PLAN, 3 OBSERVE per dimension) by changing `[ ]` to `[x]`
+2. **Select** candidates (5 per cell × 12 cells = 60 total) by changing `[ ]` to `[x]`
 3. **Add proposals** (optional) in the "User Proposed" section at the bottom
 4. **Request more** (optional) by adding `[+N]` in the "More?" column (e.g., `[+3]` for 3 more)
 5. **Save** this file and re-invoke the `trend-scout` skill
@@ -165,10 +163,9 @@ Bitte wählen Sie **5 ACT, 5 PLAN und 3 OBSERVE pro Dimension** (52 insgesamt) a
 
 | Requirement | Value |
 |-------------|-------|
-| ACT per dimension | 5 |
-| PLAN per dimension | 5 |
-| OBSERVE per dimension | 3 |
-| Total selections | 52 (13 × 4 dimensions) |
+| Candidates per cell | 5 |
+| Cells (dimensions × horizons) | 12 (4 × 3) |
+| Total candidates | 60 |
 
 ### Legend
 
@@ -179,7 +176,7 @@ Bitte wählen Sie **5 ACT, 5 PLAN und 3 OBSERVE pro Dimension** (52 insgesamt) a
 - **Score**: ★★★★★ (0.85) = Star rating + exact composite score (sorted by score)
 - **Confidence**: ✓✓✓ = High, ✓✓○ = Medium, ✓○○ = Low, ?○○ = Uncertain
 - **Intensity**: 1-5 (Ansoff signal level, 1=weak, 5=strong)
-- **Source**: [n] = Numbered citation (see References section), 📚 = Training knowledge
+- **Source**: [n] = Web-sourced (see References), 📚 = Hypothesis (training knowledge, unverified), 📚 [corr.] = Hypothesis corroborated by web signal
 ```
 
 ### German Instructions
@@ -188,7 +185,7 @@ Bitte wählen Sie **5 ACT, 5 PLAN und 3 OBSERVE pro Dimension** (52 insgesamt) a
 ## Anleitung
 
 1. **Prüfen** Sie jeden Kandidaten in den untenstehenden Tabellen
-2. **Wählen** Sie Kandidaten pro Horizont (5 ACT, 5 PLAN, 3 OBSERVE pro Dimension), indem Sie `[ ]` zu `[x]` ändern
+2. **Wählen** Sie Kandidaten (5 pro Zelle × 12 Zellen = 60 insgesamt), indem Sie `[ ]` zu `[x]` ändern
 3. **Eigene Vorschläge** (optional) im Abschnitt "Eigene Vorschläge" am Ende hinzufügen
 4. **Mehr anfordern** (optional) durch Hinzufügen von `[+N]` in der Spalte "Mehr?" (z.B. `[+3]` für 3 weitere)
 5. **Speichern** Sie diese Datei und rufen Sie das `trend-scout` Skill erneut auf
@@ -197,10 +194,9 @@ Bitte wählen Sie **5 ACT, 5 PLAN und 3 OBSERVE pro Dimension** (52 insgesamt) a
 
 | Anforderung | Wert |
 |-------------|------|
-| ACT pro Dimension | 5 |
-| PLAN pro Dimension | 5 |
-| OBSERVE pro Dimension | 3 |
-| Gesamtauswahl | 52 (13 × 4 Dimensionen) |
+| Kandidaten pro Zelle | 5 |
+| Zellen (Dimensionen × Horizonte) | 12 (4 × 3) |
+| Gesamtkandidaten | 60 |
 
 ### Legende
 
@@ -211,7 +207,7 @@ Bitte wählen Sie **5 ACT, 5 PLAN und 3 OBSERVE pro Dimension** (52 insgesamt) a
 - **Score**: ★★★★★ (0.85) = Sternbewertung + exakter Composite-Score (nach Score sortiert)
 - **Konfidenz**: ✓✓✓ = Hoch, ✓✓○ = Mittel, ✓○○ = Niedrig, ?○○ = Unsicher
 - **Intensität**: 1-5 (Ansoff Signalstärke, 1=schwach, 5=stark)
-- **Quelle**: [n] = Nummerierte Zitation (siehe Quellenverzeichnis), 📚 = Trainingswissen
+- **Quelle**: [n] = Web-recherchiert (siehe Quellenverzeichnis), 📚 = Hypothese (Trainingswissen, ungeprüft), 📚 [korr.] = Hypothese bestätigt durch Web-Signal
 ```
 
 ---
@@ -483,13 +479,25 @@ Fügen Sie unten Ihre eigenen Trendkandidaten hinzu. Folgen Sie dem Format in de
 
 | Dimension | Act | Plan | Observe | Total |
 |-----------|-----|------|---------|-------|
-| Externe Effekte | 0/5 | 0/5 | 0/3 | 0/13 |
-| Neue Horizonte | 0/5 | 0/5 | 0/3 | 0/13 |
-| Digitale Wertetreiber | 0/5 | 0/5 | 0/3 | 0/13 |
-| Digitales Fundament | 0/5 | 0/5 | 0/3 | 0/13 |
-| **Total** | **0/20** | **0/20** | **0/12** | **0/52** |
+| Externe Effekte | 0/5 | 0/5 | 0/5 | 0/15 |
+| Neue Horizonte | 0/5 | 0/5 | 0/5 | 0/15 |
+| Digitale Wertetreiber | 0/5 | 0/5 | 0/5 | 0/15 |
+| Digitales Fundament | 0/5 | 0/5 | 0/5 | 0/15 |
+| **Total** | **0/20** | **0/20** | **0/20** | **0/60** |
 
 *This summary updates automatically when you re-invoke trend-scout.*
+
+### Source Integrity
+
+| Metric | Value |
+|--------|-------|
+| Web-sourced candidates | {N} ({pct}%) |
+| Hypotheses (corroborated) | {N} ({pct}%) |
+| Hypotheses (uncorroborated) | {N} ({pct}%) |
+| Avg. web-sourced score | {score} |
+| Avg. hypothesis score | {score} |
+
+*Hypotheses are training-knowledge candidates with capped scores (max source_quality=0.4, max signal_strength=0.3). Corroborated hypotheses found matching web signals during Phase 1 research.*
 ```
 
 ---
@@ -582,7 +590,7 @@ The generated `trend-app-data.json` contains:
   "meta": {
     "timestamp": "{ISO_TIMESTAMP}",
     "subsector": "{SUBSECTOR_SLUG}",
-    "total_candidates": 76,
+    "total_candidates": 60,
     "source_distribution": {"web_signal": N, "training": N}
   },
   "sources": {
@@ -678,8 +686,7 @@ After making selections, click **Export** and save `trend-selection.json` to you
 ---
 
 **Selection requirements:**
-- 5 ACT, 5 PLAN, 3 OBSERVE per dimension
-- 52 total selections
+- 5 per cell × 12 cells = 60 total
 
 When you're ready, re-invoke the `trend-scout` skill to continue.
 ```
@@ -715,8 +722,7 @@ Nach der Auswahl klicken Sie auf **Export** und speichern `trend-selection.json`
 ---
 
 **Auswahlvoraussetzungen:**
-- 5 ACT, 5 PLAN, 3 OBSERVE pro Dimension
-- 52 Auswahlen insgesamt
+- 5 pro Zelle × 12 Zellen = 60 insgesamt
 
 Wenn Sie bereit sind, rufen Sie das `trend-scout` Skill erneut auf, um fortzufahren.
 ```

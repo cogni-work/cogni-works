@@ -23,7 +23,7 @@ Update the consolidated `trend-scout-output.json` with agreed candidates for dow
 Before proceeding, verify Phase 4 outputs:
 
 - [ ] VALIDATION_PASSED = true
-- [ ] AGREED_CANDIDATES populated with 52 candidates
+- [ ] AGREED_CANDIDATES populated with 60 candidates
 - [ ] All metadata available (industry, subsector, topic, language)
 
 ---
@@ -161,7 +161,7 @@ log_conditional INFO "Output: $OUTPUT_FILE"
 ```text
 ## Trend Scout Complete
 
-Successfully finalized 52 trend candidates for {SUBSECTOR_EN}.
+Successfully finalized 60 trend candidates for {SUBSECTOR_EN}.
 
 ### Output Files
 
@@ -177,7 +177,7 @@ Successfully finalized 52 trend candidates for {SUBSECTOR_EN}.
 | Web Signal | {WEB_COUNT} |
 | Training | {TRAINING_COUNT} |
 | User Proposed | {USER_COUNT} |
-| **Total** | **52** |
+| **Total** | **60** |
 
 ### Next Steps
 
@@ -201,7 +201,7 @@ To generate a narrative TIPS trend report directly, invoke the `trend-report` sk
 ```text
 ## Trend Scout abgeschlossen
 
-52 Trendkandidaten für {SUBSECTOR_DE} erfolgreich finalisiert.
+60 Trendkandidaten für {SUBSECTOR_DE} erfolgreich finalisiert.
 
 ### Ausgabedateien
 
@@ -217,7 +217,7 @@ To generate a narrative TIPS trend report directly, invoke the `trend-report` sk
 | Web-Signal | {WEB_COUNT} |
 | Training | {TRAINING_COUNT} |
 | Eigene Vorschläge | {USER_COUNT} |
-| **Gesamt** | **52** |
+| **Gesamt** | **60** |
 
 ### Nächste Schritte
 
@@ -242,7 +242,7 @@ Um direkt einen narrativen TIPS-Trendbericht zu generieren, rufen Sie das `trend
 
 - [ ] `trend-scout-output.json` updated with agreed candidates
 - [ ] `trend-candidates.md` status updated to `agreed`
-- [ ] All 52 candidates included in consolidated output
+- [ ] All 60 candidates included in consolidated output
 - [ ] Metadata complete (industry, subsector, language, sources)
 - [ ] Success message displayed with next steps
 
@@ -278,7 +278,7 @@ tips_source: {PROJECT_PATH}/.metadata/trend-scout-output.json
 3. **Candidate Loading (Phase 2):**
    - Loads candidates from `.tips_candidates.items`
    - Skips tips-selection workflow
-   - Proceeds directly with 52 agreed candidates
+   - Proceeds directly with 60 agreed candidates
 
 4. **Research Execution:**
    - Uses industry context from `.config.industry`

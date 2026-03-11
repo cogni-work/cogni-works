@@ -14,7 +14,7 @@ subsector: {SUBSECTOR_EN}
 language: {LANGUAGE}
 generated_by: trend-report
 source_skill: trend-scout
-total_trends: 52
+total_trends: 60
 total_claims: {N}
 generated_at: "{ISO-8601}"
 dimensions:
@@ -122,7 +122,7 @@ a Z% increase year-over-year [Another Source](url).}
 | {dim2} | N | N | N | N |
 | {dim3} | N | N | N | N |
 | {dim4} | N | N | N | N |
-| **{TOTAL_LABEL}** | **N** | **N** | **N** | **52** |
+| **{TOTAL_LABEL}** | **N** | **N** | **N** | **60** |
 
 ### {CONFIDENCE_DISTRIBUTION_LABEL}
 

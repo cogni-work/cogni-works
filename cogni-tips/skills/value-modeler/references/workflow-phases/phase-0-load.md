@@ -83,7 +83,7 @@ Create `.metadata/value-modeler-output.json`:
   "catalog_path": "cogni-tips/catalogs/manufacturing/automotive" | null,
   "portfolio_discovered": true|false,
   "portfolio_path": "path/to/portfolio.json" | null,
-  "candidate_count": 52,
+  "candidate_count": 60,
   "execution": {
     "workflow_state": "initialized",
     "current_phase": 0,

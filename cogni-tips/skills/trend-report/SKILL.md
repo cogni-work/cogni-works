@@ -24,7 +24,7 @@ Full German and English support. **Always ask the user** for the deliverable lan
 
 ## Prerequisites
 
-- `trend-scout` completed with `execution.workflow_state == "agreed"` and 52 candidates
+- `trend-scout` completed with `execution.workflow_state == "agreed"` and 60 candidates
 - Web access enabled for evidence enrichment
 - Optional: `cogni-narrative` plugin for insight summary (graceful fallback if absent)
 - Optional: `cogni-claims` plugin for claim verification
@@ -87,7 +87,7 @@ Phase 0 → Phase 1 → Phase 2 → Phase 2.5 → Phase 3 → Phase 4
 1. If `--project-path` was provided as argument, use it directly
 2. Otherwise, run `discover-projects.sh --json` to enumerate all projects
 3. For each project, check if `{path}/.metadata/trend-scout-output.json` exists
-4. Read the file and check `execution.workflow_state == "agreed"` and `tips_candidates.total >= 52`
+4. Read the file and check `execution.workflow_state == "agreed"` and `tips_candidates.total >= 60`
 5. Collect eligible projects:
    - 0 eligible: ERROR — "No agreed trend-scout projects found. Run trend-scout first."
    - 1 eligible: Auto-select
@@ -100,7 +100,7 @@ REQUIRED:
   {PROJECT_PATH}/.metadata/trend-scout-output.json
     → Extract: config.industry, config.research_topic
     → Extract: project_language (top-level, NOT config.language)
-    → Extract: tips_candidates.items (52 candidates)
+    → Extract: tips_candidates.items (60 candidates)
 
 OPTIONAL (raw web signals — try in order):
   1. {PROJECT_PATH}/.logs/web-research-raw.json
@@ -115,19 +115,19 @@ OPTIONAL (raw web signals — try in order):
 |-------|-----------|------------|
 | Output exists | `.metadata/trend-scout-output.json` | HALT: Run trend-scout first |
 | Workflow state | `== "agreed"` | HALT: Complete trend-scout selection |
-| Candidate count | `>= 52` | HALT: Expected 52 agreed candidates |
+| Candidate count | `>= 60` | HALT: Expected 60 agreed candidates |
 | Config complete | industry, subsector, language present | HALT: Incomplete config |
 
 #### Step 0.4: Prepare Agent Inputs
 
-Group the 52 candidates by dimension (4 groups of ~13):
+Group the 60 candidates by dimension (4 groups of 15):
 
 | Dimension Slug | TIPS Role | Expected Count |
 |----------------|-----------|----------------|
-| `externe-effekte` | T (Trends) | 13 |
-| `digitale-wertetreiber` | I (Implications) | 13 |
-| `neue-horizonte` | P (Possibilities) | 13 |
-| `digitales-fundament` | S (Solutions) | 13 |
+| `externe-effekte` | T (Trends) | 15 |
+| `digitale-wertetreiber` | I (Implications) | 15 |
+| `neue-horizonte` | P (Possibilities) | 15 |
+| `digitales-fundament` | S (Solutions) | 15 |
 
 For each dimension, prepare: candidate list, matching raw web signals (filtered by dimension, or "none"), and shared config (industry en/de, subsector en/de, topic, language).
 
@@ -366,7 +366,7 @@ Trend Report Complete
 Report:       {PROJECT_PATH}/tips-trend-report.md
 Claims:       {PROJECT_PATH}/tips-trend-report-claims.json
 Insight:      {PROJECT_PATH}/tips-insight-summary.md (or "skipped")
-Trends:       52 across 4 dimensions
+Trends:       60 across 4 dimensions
 Claims:       {total_claims} quantitative claims extracted
 Verification: {verdict or "skipped"}
 
@@ -386,7 +386,7 @@ Use /resume-tips in your next session to pick up where you left off.
 |----------|--------|
 | `trend-scout-output.json` missing | HALT: Run trend-scout first |
 | `workflow_state != "agreed"` | HALT: Complete candidate selection |
-| `tips_candidates.total < 52` | HALT: Expected 52 candidates |
+| `tips_candidates.total < 60` | HALT: Expected 60 candidates |
 | No raw signals file (both sources) | WARNING: proceed without signals (~120 searches) |
 | Agent returns `ok: false` | Retry once, then HALT with dimension name |
 | All 4 agents fail | HALT: Check web access is enabled |

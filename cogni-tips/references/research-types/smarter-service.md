@@ -92,7 +92,7 @@ Each trend is positioned by implementation urgency:
 | **Plan** | 2-5 years | Strategic preparation — capability building required |
 | **Observe** | 5+ years | Monitor and assess — emerging trends |
 
-**Research Deliverable:** 52 TIPS total — (5 ACT + 5 PLAN + 3 OBSERVE) × 4 dimensions (horizon-specific distribution)
+**Research Deliverable:** 60 TIPS total — (5 ACT + 5 PLAN + 5 OBSERVE) × 4 dimensions
 
 ---
 
@@ -215,6 +215,7 @@ Each TIPS trend includes a **B2B ICT Service Enablement** section that maps to p
 
 ## Version History
 
+- **v7.0:** Standardized to 60 TIPS (5 per cell × 12 cells), added source-type scoring caps for training candidates
 - **v6.0 (Sprint 444):** Refined to 52 TIPS (5 ACT + 5 PLAN + 3 OBSERVE per dimension) for horizon-optimized selection
 - **v5.0:** Expanded to 60 TIPS (5 per cell × 12 cells) with auto-selection by composite score
 - **v4.0 (Sprint 441):** Added portfolio file integration (replaces b2b-ict-portfolio project references)

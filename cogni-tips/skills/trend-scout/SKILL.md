@@ -14,8 +14,8 @@ This skill enables users to:
 
 1. Select an industry and subsector from a standardized taxonomy
 2. Initialize a research project with semantic slug
-3. Generate 76 trend candidates (7 ACT + 7 PLAN + 5 OBSERVE per dimension)
-4. Pre-select candidates per cell (5 ACT + 5 PLAN + 3 OBSERVE per dimension = 52 total) for downstream use (user can adjust)
+3. Generate 60 trend candidates (5 per cell × 12 cells: 4 dimensions × 3 horizons)
+4. Present all 60 candidates for user selection
 5. Produce configuration for `deeper-research-0` skill
 
 ## Bilingual Support
@@ -108,7 +108,7 @@ Phase 0 → Phase 1 → Phase 2 → Phase 3 → [USER EDITS] → Phase 4 → Pha
    │          │          │         │            │            └─ Validate selections
    │          │          │         │            └─ User marks [x], adds proposals
    │          │          │         └─ Write trend-candidates.md with scores, PAUSE
-   │          │          └─ Generate + score 76 candidates (mix web + API + training)
+   │          │          └─ Generate + score 60 candidates (mix web + API + training)
    │          └─ 32 web searches + academic/patent/regulatory APIs
    └─ Language detect, industry select, project init
 ```
@@ -235,7 +235,7 @@ This file serves as a fallback for `trend-report` when `.logs/web-research-raw.j
 ```yaml
 Task:
   subagent_type: "cogni-tips:trend-generator"
-  description: "Generate 76 scored trend candidates"
+  description: "Generate 60 scored trend candidates"
   prompt: |
     Execute Phase 2 candidate generation for trend-scout.
 
@@ -253,7 +253,7 @@ Task:
 **Agent responsibilities:**
 
 1. Load scoring-framework.md at runtime
-2. Generate 76 trend candidates using extended thinking (MANDATORY)
+2. Generate 60 trend candidates (5 per cell × 12 cells) using extended thinking (MANDATORY)
 3. Apply multi-framework scoring (TIPS, Ansoff, Rogers, CRAAP)
 4. Classify indicator types (leading/lagging) and diffusion stages
 5. Validate subcategory balance (MIN 1 per subcategory per cell)
@@ -268,7 +268,7 @@ The agent returns compact JSON:
 ```json
 {
   "ok": true,
-  "candidates": {"total": 76, "by_source": {...}, "by_dimension": {...}},
+  "candidates": {"total": 60, "by_source": {...}, "by_dimension": {...}},
   "scoring": {"avg_score": 0.65, "confidence": {...}, "indicator": {...}},
   "validation": {"passed": true, "warnings": []},
   "log": ".logs/trend-generator-candidates.json"
@@ -301,7 +301,7 @@ Field mapping for compact format:
 **Required outputs:**
 
 - CANDIDATES_BY_CELL loaded from log file
-- TOTAL_CANDIDATES = 76
+- TOTAL_CANDIDATES = 60
 - SCORING_METADATA populated from agent response
 - Validation status confirmed
 
@@ -324,7 +324,7 @@ Read [references/workflow-phases/phase-3-present.md](references/workflow-phases/
    open "${PROJECT_PATH}/trend-selector-app.html"
    ```
 
-**Pre-selection:** Top candidates per horizon (5 ACT, 5 PLAN, 3 OBSERVE by score) are automatically pre-selected and marked with a badge. Users can adjust these selections before finalizing. The visual selector app and markdown file both show pre-selected candidates.
+**All 60 candidates** are presented for user review. Users select from them to proceed.
 
 **PAUSE:** After writing files and opening the app, provide persistent access info (in detected language):
 
@@ -333,11 +333,11 @@ Read [references/workflow-phases/phase-3-present.md](references/workflow-phases/
 > - The app is now open in your browser
 > - App location: `{PROJECT_PATH}/trend-selector-app.html`
 > - Your selections are auto-saved in browser storage
-> - Click Export when 52 candidates are selected
+> - Click Export when 60 candidates are selected
 >
 > **Alternative: Markdown editing:**
 > 1. Open `trend-candidates.md` in the project folder
-> 2. Mark candidates with `[x]` (5 ACT, 5 PLAN, 3 OBSERVE per dimension)
+> 2. Mark candidates with `[x]` (5 per cell × 12 cells = 60 total)
 > 3. Optionally add proposals in "User Proposed" section
 >
 > Re-invoke `trend-scout` skill when ready.
@@ -347,11 +347,11 @@ Read [references/workflow-phases/phase-3-present.md](references/workflow-phases/
 > - Die App ist jetzt in Ihrem Browser geöffnet
 > - App-Pfad: `{PROJECT_PATH}/trend-selector-app.html`
 > - Ihre Auswahl wird automatisch im Browser gespeichert
-> - Klicken Sie Export wenn 52 Kandidaten ausgewählt sind
+> - Klicken Sie Export wenn 60 Kandidaten ausgewählt sind
 >
 > **Alternative: Markdown-Bearbeitung:**
 > 1. Öffnen Sie `trend-candidates.md` im Projektordner
-> 2. Markieren Sie Kandidaten mit `[x]` (5 ACT, 5 PLAN, 3 OBSERVE pro Dimension)
+> 2. Markieren Sie Kandidaten mit `[x]` (5 pro Zelle × 12 Zellen = 60 insgesamt)
 > 3. Fügen Sie optional Vorschläge im Abschnitt "Eigene Vorschläge" hinzu
 >
 > Rufen Sie `trend-scout` erneut auf, wenn Sie bereit sind.
@@ -366,7 +366,7 @@ Read [references/workflow-phases/phase-4-process.md](references/workflow-phases/
 2. Parse selected candidates (marked with `[x]`)
 3. Parse user-proposed candidates
 4. Parse regeneration requests (`[+N]`)
-5. Validate: horizon-specific counts (5 ACT, 5 PLAN, 3 OBSERVE per dimension = 52 total)
+5. Validate: 5 per cell × 12 cells = 60 total
 
 **If validation fails:**
 
@@ -426,11 +426,11 @@ Location: `{PROJECT_PATH}/.metadata/trend-scout-output.json`
   },
 
   "tips_candidates": {
-    "total": 52,
+    "total": 60,
     "source_distribution": {
-      "web_signal": 18,
-      "training": 16,
-      "user_proposed": 2
+      "web_signal": 28,
+      "training": 32,
+      "user_proposed": 0
     },
     "web_research_status": "success",
     "search_timestamp": "2025-12-16T10:25:00Z",
@@ -464,6 +464,13 @@ Location: `{PROJECT_PATH}/.metadata/trend-scout-output.json`
         "post_chasm": 25
       },
       "scoring_framework_version": "1.0.0"
+    },
+    "source_integrity": {
+      "training_capped": true,
+      "training_with_corroboration": 8,
+      "training_without_corroboration": 24,
+      "avg_training_score": 0.48,
+      "avg_web_signal_score": 0.72
     },
     "items": [
       {
@@ -522,12 +529,9 @@ Location: `{PROJECT_PATH}/.metadata/trend-scout-output.json`
 
 | Constraint | Value |
 |------------|-------|
-| Total candidates generated | 76 (7 ACT + 7 PLAN + 5 OBSERVE per dimension) |
-| Candidates per horizon | ACT: 7, PLAN: 7, OBSERVE: 5 |
-| Pre-selected per horizon | ACT: 5, PLAN: 5, OBSERVE: 3 |
-| Selection mode | Pre-select top candidates, user adjustable |
-| Total pre-selected | 52 ((5+5+3) × 4 dimensions) |
-| Total agreed candidates | 52 (user can adjust pre-selection) |
+| Total candidates generated | 60 (5 per cell × 12 cells) |
+| Candidates per cell | 5 (4 dimensions × 3 horizons = 12 cells) |
+| Total agreed candidates | 60 |
 
 ---
 
@@ -582,7 +586,7 @@ After `trend-scout` completes:
 2. deeper-research-0 Phase 0 loads configuration from consolidated output
 3. Auto-configures research_type, DOK level, language from `.config`
 4. deeper-research-0 Phase 2 loads candidates from `.tips_candidates.items`
-5. Research proceeds with auto-selected 52 candidates (5 ACT + 5 PLAN + 3 OBSERVE per dimension)
+5. Research proceeds with 60 agreed candidates (5 per cell × 12 cells)
 
 ---
 

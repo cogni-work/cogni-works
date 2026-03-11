@@ -79,8 +79,8 @@ PRESENT_PAUSE_INSTRUCTIONS: |
   5. Re-invoke the trend-scout skill when ready
 
   Selection requirements:
-  - 5 ACT, 5 PLAN, 3 OBSERVE per dimension
-  - 52 candidates total
+  - 5 per cell × 12 cells
+  - 60 candidates total
 ```
 
 ---

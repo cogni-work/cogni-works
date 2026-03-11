@@ -82,7 +82,7 @@ should *automatically surface and rank* the right solutions.
 ```text
 trend-scout          trend-report         value-modeler
 ────────────         ────────────         ─────────────
-52 candidates   →    Enriched report  →   TIPS paths (T→I→P)
+60 candidates   →    Enriched report  →   TIPS paths (T→I→P)
 (T, I, P, found.)   + claims              + Solution Templates
                                            + BR scoring
                                            + F1 ranking

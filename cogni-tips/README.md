@@ -94,7 +94,7 @@ trend-report   → narrative report from agreed candidates
 | Component | Type | What it does |
 |-----------|------|--------------|
 | `trend-scout` | skill | End-to-end trend scouting with industry selection and bilingual research |
-| `tips-selection` | skill | Candidate generation (52 trends across 4 dimensions and 3 horizons) |
+| `tips-selection` | skill | Candidate generation (60 trends across 4 dimensions and 3 horizons) |
 | `trend-report` | skill | Narrative report generation with evidence enrichment and claims extraction |
 | `trend-web-researcher` | agent | Executes 32 bilingual web searches + API queries, returns aggregated signals |
 | `trend-generator` | agent | Generates scored trend candidates using multi-framework analysis (Opus) |

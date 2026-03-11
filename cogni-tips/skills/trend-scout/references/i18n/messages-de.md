@@ -79,8 +79,8 @@ PRESENT_PAUSE_INSTRUCTIONS: |
   5. Rufen Sie das trend-scout Skill erneut auf, wenn Sie bereit sind
 
   Auswahlvoraussetzungen:
-  - 5 ACT, 5 PLAN, 3 OBSERVE pro Dimension
-  - 52 Kandidaten insgesamt
+  - 5 pro Zelle × 12 Zellen
+  - 60 Kandidaten insgesamt
 ```
 
 ---

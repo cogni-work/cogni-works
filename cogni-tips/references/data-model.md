@@ -86,11 +86,11 @@ Consolidated output from the trend-scout skill containing project config, candid
   },
 
   "tips_candidates": {
-    "total": 52,
+    "total": 60,
     "source_distribution": {
-      "web_signal": 18,
+      "web_signal": 28,
       "training": 32,
-      "user_proposed": 2
+      "user_proposed": 0
     },
     "web_research_status": "success",
     "search_timestamp": "2026-01-15T10:25:00Z",
@@ -242,12 +242,12 @@ Location: `.metadata/trend-report-verification.json`
 
 | Dimension | TIPS Role | Subcategories | Candidates per Horizon |
 |-----------|-----------|---------------|----------------------|
-| `externe-effekte` | T (Trends) | wirtschaft, regulierung, gesellschaft | 5 ACT, 5 PLAN, 3 OBSERVE |
-| `neue-horizonte` | P (Possibilities) | strategie, fuehrung, steuerung | 5 ACT, 5 PLAN, 3 OBSERVE |
-| `digitale-wertetreiber` | I (Implications) | customer-experience, produkte-services, geschaeftsprozesse | 5 ACT, 5 PLAN, 3 OBSERVE |
-| `digitales-fundament` | S (Solutions) | kultur, mitarbeitende, technologie | 5 ACT, 5 PLAN, 3 OBSERVE |
+| `externe-effekte` | T (Trends) | wirtschaft, regulierung, gesellschaft | 5 ACT, 5 PLAN, 5 OBSERVE |
+| `neue-horizonte` | P (Possibilities) | strategie, fuehrung, steuerung | 5 ACT, 5 PLAN, 5 OBSERVE |
+| `digitale-wertetreiber` | I (Implications) | customer-experience, produkte-services, geschaeftsprozesse | 5 ACT, 5 PLAN, 5 OBSERVE |
+| `digitales-fundament` | S (Solutions) | kultur, mitarbeitende, technologie | 5 ACT, 5 PLAN, 5 OBSERVE |
 
-**Total**: 4 dimensions x (5 + 5 + 3) = 52 agreed candidates (selected from 76 generated)
+**Total**: 4 dimensions x (5 + 5 + 5) = 60 candidates
 
 ## Workflow Phases
 
@@ -255,9 +255,9 @@ Location: `.metadata/trend-report-verification.json`
 |-------|-------|-------------|-------------|
 | 0 | trend-scout | `initialized` | Language, industry, topic selection; project creation |
 | 1 | trend-scout | `phase-1` | Bilingual web research (32 queries + APIs) |
-| 2 | trend-scout | `phase-2` | Generate 76 candidates with multi-framework scoring |
+| 2 | trend-scout | `phase-2` | Generate 60 candidates with multi-framework scoring |
 | 3 | trend-scout | `phase-3` | Present candidates for user selection |
-| 4 | trend-scout | `phase-4` | Validate user selection (52 candidates) |
+| 4 | trend-scout | `phase-4` | Validate user selection (60 candidates) |
 | 5 | trend-scout | `phase-5` → `agreed` | Finalize output JSON |
 | R-0 | trend-report | `agreed` | Load input, validate gate, prep agent inputs |
 | R-1 | trend-report | `report-enriching` | 4 parallel agents: evidence + section writing |
@@ -278,7 +278,7 @@ Location: `.metadata/trend-report-verification.json`
 tips-project.json (root manifest)
   └── .metadata/trend-scout-output.json (config + candidates + state)
         ├── .logs/web-research-raw.json (raw signals → candidates)
-        ├── .logs/trend-generator-candidates.json (76 generated → 52 selected)
+        ├── .logs/trend-generator-candidates.json (60 candidates)
         ├── tips-trend-report.md (report ← candidates)
         │     ├── .logs/report-section-{dimension}.md (4 sections)
         │     ├── tips-trend-report-claims.json (extracted claims)

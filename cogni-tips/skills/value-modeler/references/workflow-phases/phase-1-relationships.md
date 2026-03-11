@@ -2,7 +2,7 @@
 
 ## Objective
 
-Analyze the 52 agreed candidates across all 4 dimensions and build TIPS paths — coherent
+Analyze the 60 agreed candidates across all 4 dimensions and build TIPS paths — coherent
 Trend → Implication → Possibility chains that form "value stories."
 
 ## Why Relationships Matter
@@ -27,7 +27,7 @@ directly to TIPS paths. They will be used in Phase 2 as "foundation requirements
 
 ## Step 1: Candidate Analysis
 
-For each of the 52 candidates, extract:
+For each of the 60 candidates, extract:
 - Its dimension (determines TIPS role)
 - Its subcategory and horizon
 - Its trend statement and keywords
@@ -169,7 +169,7 @@ Save to `tips-value-model.json` (create or update):
   "coverage": {
     "linked": 48,
     "orphaned": 4,
-    "total": 52,
+    "total": 60,
     "coverage_pct": 0.923
   }
 }

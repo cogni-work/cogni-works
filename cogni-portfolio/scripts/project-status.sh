@@ -218,7 +218,20 @@ packageable_arr="["
 pkg_first=true
 pkgable_first=true
 if [ "$PRODUCTS" -gt 0 ] && [ "$MARKETS" -gt 0 ] && [ -d "$PROJECT_DIR/features" ]; then
-  eval "$(python3 -c "
+  while IFS= read -r line; do
+    case "$line" in
+      MISSING:*)
+        slug="${line#MISSING:}"
+        if $pkg_first; then pkg_first=false; else missing_pkg_arr="$missing_pkg_arr, "; fi
+        missing_pkg_arr="$missing_pkg_arr\"${slug}\""
+        ;;
+      PACKAGEABLE:*)
+        slug="${line#PACKAGEABLE:}"
+        if $pkgable_first; then pkgable_first=false; else packageable_arr="$packageable_arr, "; fi
+        packageable_arr="$packageable_arr\"${slug}\""
+        ;;
+    esac
+  done < <(python3 -c "
 import json, os, glob
 
 proj = '$PROJECT_DIR'
@@ -234,9 +247,6 @@ for f in glob.glob(os.path.join(proj, 'features', '*.json')):
     except Exception:
         pass
 
-missing = []
-packageable = []
-
 for pf in glob.glob(os.path.join(proj, 'products', '*.json')):
     p_slug = os.path.basename(pf)[:-5]
     features = product_features.get(p_slug, [])
@@ -245,7 +255,6 @@ for pf in glob.glob(os.path.join(proj, 'products', '*.json')):
 
     for mf in glob.glob(os.path.join(proj, 'markets', '*.json')):
         m_slug = os.path.basename(mf)[:-5]
-        # Count solutions for this product x market
         sol_count = 0
         for f_slug in features:
             sol_path = os.path.join(proj, 'solutions', f'{f_slug}--{m_slug}.json')
@@ -256,18 +265,14 @@ for pf in glob.glob(os.path.join(proj, 'products', '*.json')):
             continue
 
         pair = f'{p_slug}--{m_slug}'
-        packageable.append(pair)
+        print(f'PACKAGEABLE:{pair}')
         pkg_path = os.path.join(proj, 'packages', f'{pair}.json')
         if not os.path.exists(pkg_path):
-            missing.append(pair)
-
-m_str = ', '.join(f'\"' + s + '\"' for s in missing)
-p_str = ', '.join(f'\"' + s + '\"' for s in packageable)
-print(f'missing_pkg_arr={chr(39)}[{m_str}]{chr(39)}')
-print(f'packageable_arr={chr(39)}[{p_str}]{chr(39)}')
-" 2>/dev/null || echo "missing_pkg_arr='[]'
-packageable_arr='[]'")"
+            print(f'MISSING:{pair}')
+" 2>/dev/null)
 fi
+missing_pkg_arr="$missing_pkg_arr]"
+packageable_arr="$packageable_arr]"
 
 # Compute relevance matrix: tier each Feature x Market pair
 relevance_matrix="[]"
@@ -568,6 +573,22 @@ print(f'margin_health={chr(39)}{{\"target_margin_pct\": {target}, \"solutions_wi
 " 2>/dev/null || echo "margin_health='{}'")"
 fi
 
+# Quality audit: run structural checks when health-check is enabled
+quality_audit="{}"
+if $HEALTH_CHECK; then
+  SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+  quality_audit_output=$("$SCRIPT_DIR/quality-audit.sh" "$PROJECT_DIR" --quick 2>/dev/null || echo '{}')
+  # Extract the quality_audit object from the output
+  quality_audit=$(echo "$quality_audit_output" | python3 -c "
+import json, sys
+try:
+    data = json.load(sys.stdin)
+    print(json.dumps(data.get('quality_audit', {})))
+except Exception:
+    print('{}')
+" 2>/dev/null || echo "{}")
+fi
+
 # Health check: detect stale downstream entities
 stale_entities="[]"
 if $HEALTH_CHECK && [ -d "$PROJECT_DIR/propositions" ]; then
@@ -712,6 +733,7 @@ cat << EOF
     "customers_pct": $CUSTOMERS_PCT
   },
   "margin_health": $margin_health,
-  "stale_entities": $stale_entities
+  "stale_entities": $stale_entities,
+  "quality_audit": $quality_audit
 }
 EOF

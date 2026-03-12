@@ -59,7 +59,32 @@ Scope all searches to the company. The quality assessors correctly identify prob
 missing is company-specific knowledge to fix them. Generic rewrites are worthless; rewrites
 grounded in real product details are gold.
 
+### Language-Aware Search Strategy
+
+The calling skill passes `language`, `domain`, and `regional_url` in the company context.
+
+**Two-pass approach:**
+
+1. **Primary pass — output language on regional domain:**
+   - Translate search keywords into the output language (e.g., "architecture" → "Architektur", "case study" → "Fallstudie")
+   - Use `site:{regional_url}` instead of `site:{domain}` for localized content
+   - Example: `site:t-systems.com/de {Produktname} Architektur`
+   - **For propositions:** Also localize market keywords using the market's region locale from `regions.json` (e.g., `locale: "de-DE"` → search in German). Translate market terms: "mid-market" → "Mittelstand", "use case" → "Anwendungsfall", "customer success" → "Kundenreferenz", "pain points" → "Herausforderungen"
+   - Scope market searches to the region: include region names in queries (e.g., "Deutschland", "DACH", "Europa" instead of "Germany", "DACH region", "Europe")
+
+2. **English backup pass — for gaps and international sources:**
+   - Re-run queries that returned thin or no results using English keywords on the main `site:{domain}`
+   - Always use English for: whitepapers, patents, benchmarks, competitor comparisons, technical architecture docs
+   - Example: `site:t-systems.com {product-name} whitepaper`
+   - English market terms are fine here since international sources use English
+
+**Merge logic:** Prefer localized results for customer-facing content (case studies, product pages, market positioning, testimonials). Prefer English results for technical depth (architecture docs, whitepapers, patents, benchmarks). When both languages return relevant info, use the localized version for the rewrite but cite English sources in evidence if they contain stronger technical detail.
+
+When `language` is `"en"` or absent, skip the two-pass logic — single-pass English search as today.
+
 ### For Features (IS layer)
+
+Construct these queries in the output language for the primary pass, using `site:{regional_url}`. For the English backup pass, use the templates as written with `site:{domain}`.
 
 Run 6-12 WebSearch queries based on which dimensions failed. Batch searches in parallel
 (5-10 at a time) for efficiency.
@@ -88,6 +113,15 @@ Run 6-12 WebSearch queries based on which dimensions failed. Batch searches in p
 - No web research needed — rewrite for clarity using existing content
 
 ### For Propositions (DOES/MEANS layers)
+
+Construct these queries in the output language for the primary pass, using `site:{regional_url}`. For the English backup pass, use the templates as written with `site:{domain}`.
+
+Additionally, translate `{market-keywords}` and `{market-vertical}` into the locale of the market's region (read from `regions.json` via the market's `region` field). Examples for `de-DE`:
+- `{market-vertical}` "SaaS mid-market" → "SaaS Mittelstand"
+- `{market-keywords}` "use case" → "Anwendungsfall", "deployment" → "Implementierung"
+- Region terms: "DACH" stays "DACH", "Germany" → "Deutschland"
+
+Note: the agent receives both `language` (portfolio-level) and the market JSON (which has `region`). Use the region's locale for market-scoped queries — this may differ from the portfolio language (e.g., a German portfolio targeting EU markets should search in English for EU-wide content).
 
 **buyer_centricity** (vendor-centric framing):
 - `"{company}" {product-name} customer success story {market-keywords}`
@@ -227,7 +261,7 @@ Return ONLY valid JSON (no markdown fencing, no explanation before or after):
 1. Read the entity JSON and quality assessment from the task prompt
 2. Read `portfolio.json` for company context (name, domain, language)
 3. For propositions, also read `features/{feature_slug}.json` and `markets/{market_slug}.json`
-4. Construct search queries based on failing dimensions
+4. Construct search queries in the output language (primary pass, regional domain) and English (backup pass, main domain) based on failing dimensions
 5. Execute WebSearch queries in parallel (batch 5-10)
 6. Synthesize findings and draft improved text (or formulate questions if low confidence)
 7. Write research log to `.logs/quality-enricher-{slug}.json` in the project directory
@@ -253,9 +287,12 @@ Return ONLY valid JSON (no markdown fencing, no explanation before or after):
 
 ## Content Language
 
-Read `portfolio.json` for the `language` field. If present, write proposed descriptions and
-statements in that language. Technical English terms in German text (API, Cloud, Monitoring)
-are normal — don't force translation. JSON field names and slugs remain in English.
+Read `portfolio.json` for the `language` field. If present:
+- **Search** in that language first (primary pass on regional domain), English as backup
+- **Write** proposed descriptions and statements in that language
+
+Technical English terms in German text (API, Cloud, Monitoring) are normal — don't force
+translation. JSON field names and slugs remain in English.
 
 ## Quality Constraints Reminder
 

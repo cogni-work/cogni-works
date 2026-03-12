@@ -11,6 +11,11 @@
     "name": "Company Name",
     "description": "What the company does",
     "industry": "Industry sector",
+    "domain": "company.com",
+    "regional_urls": {
+      "de": "company.com/de",
+      "en": "company.com/en"
+    },
     "products": ["Product A", "Product B"]
   },
   "language": "de",
@@ -20,7 +25,9 @@
 ```
 
 Required fields: `slug`, `company.name`, `company.description`, `company.industry`
-Optional fields: `language`, `delivery_defaults`, `taxonomy`, `created`, `updated`
+Optional fields: `company.domain`, `company.regional_urls`, `language`, `delivery_defaults`, `taxonomy`, `created`, `updated`
+
+The `company.domain` field is the company's primary website domain (e.g., `"t-systems.com"`). The `company.regional_urls` object maps ISO 639-1 language codes to regional URL paths (e.g., `{"de": "t-systems.com/de", "en": "t-systems.com/en"}`). When `regional_urls` is absent, the calling skill derives the regional URL as `{domain}/{language}`.
 
 The `language` field is a lowercase ISO 639-1 code (e.g., `"de"`, `"en"`, `"fr"`). If absent, defaults to `"en"`. It controls the language of all generated user-facing text content (descriptions, statements, messaging, proposals, briefs, profile text). JSON field names and slugs always remain in English.
 

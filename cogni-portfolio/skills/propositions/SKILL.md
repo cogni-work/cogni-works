@@ -347,7 +347,9 @@ When proposition quality assessment reveals weak DOES or MEANS messaging, offer 
    - The proposition JSON (full content)
    - The referenced feature JSON and market JSON (for context)
    - The quality assessment results (DOES dimensions, MEANS dimensions, scores, notes)
-   - Company context from `portfolio.json` (company name, domain/website, product names, language)
+   - Company context from `portfolio.json` (company name, domain/website, regional URL for output language, product names, language)
+
+   Derive `regional_url` from the company domain and portfolio language. Common pattern: `{domain}/{lang}` (e.g., `t-systems.com/de`). If the company context already includes an explicit `regional_urls` map, use the entry for the portfolio language. Pass both `domain` (for English backup) and `regional_url` (for localized search). The agent also receives the market JSON (which contains `region`) — it uses this to look up the region locale from `regions.json` for market-scoped search queries.
    - The project directory path
 
    Launch multiple agents in parallel for different propositions.

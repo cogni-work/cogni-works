@@ -196,7 +196,9 @@ When quality assessment reveals warn or fail dimensions, offer to research the c
    Provide the agent with:
    - The feature JSON (full content)
    - The quality assessment results (dimensions, scores, and assessor notes)
-   - Company context from `portfolio.json` (company name, domain/website, product names, language)
+   - Company context from `portfolio.json` (company name, domain/website, regional URL for output language, product names, language)
+
+   Derive `regional_url` from the company domain and portfolio language. Common pattern: `{domain}/{lang}` (e.g., `t-systems.com/de`). If the company context already includes an explicit `regional_urls` map, use the entry for the portfolio language. Pass both `domain` (for English backup) and `regional_url` (for localized search).
    - The project directory path
 
    Launch multiple agents in parallel for different features.

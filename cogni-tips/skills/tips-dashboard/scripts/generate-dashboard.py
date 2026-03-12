@@ -1202,6 +1202,7 @@ body::after {{
 .chain-node.trend {{ background: color-mix(in srgb, var(--tips-trend) 12%, var(--surface)); border-color: var(--tips-trend); color: var(--tips-trend); }}
 .chain-node.implication {{ background: color-mix(in srgb, var(--tips-implication) 12%, var(--surface)); border-color: var(--tips-implication); color: var(--tips-implication); }}
 .chain-node.possibility {{ background: color-mix(in srgb, var(--tips-possibility) 12%, var(--surface)); border-color: var(--tips-possibility); color: var(--tips-possibility); }}
+.chain-node.solution {{ background: color-mix(in srgb, var(--tips-solution) 12%, var(--surface)); border-color: var(--tips-solution); color: var(--tips-solution); }}
 .chain-arrow {{
   color: var(--text2); font-size: 16px; flex-shrink: 0;
 }}
@@ -1614,6 +1615,20 @@ body::after {{
                     p_graph_id = f"chain-p-{chain_id}-{pos_name[:20]}"
                     html += '              <div class="chain-arrow">&rarr;</div>\n'
                     html += f'              <div class="chain-node possibility" onclick="focusGraphNode(\'{esc_js(p_graph_id)}\')">{esc(pos_name[:25])}</div>\n'
+                # Append solution nodes from theme-level solution_templates (P→S)
+                theme_sts = theme_obj.get("solution_templates", [])
+                shown_solutions = 0
+                for st_ref in theme_sts:
+                    if shown_solutions >= 2:
+                        break
+                    st_obj = st_ref if isinstance(st_ref, dict) else vm_st_lookup.get(st_ref) if isinstance(st_ref, str) else None
+                    if not st_obj or not isinstance(st_obj, dict):
+                        continue
+                    s_name = st_obj.get("name", "S")
+                    s_graph_id = f"st-{st_obj.get('st_id', st_obj.get('id', ''))}"
+                    html += '              <div class="chain-arrow">&rarr;</div>\n'
+                    html += f'              <div class="chain-node solution" onclick="focusGraphNode(\'{esc_js(s_graph_id)}\')">{esc(s_name[:25])}</div>\n'
+                    shown_solutions += 1
                 html += '            </div>\n'
                 html += '          </div>\n'
 

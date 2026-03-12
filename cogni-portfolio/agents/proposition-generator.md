@@ -88,26 +88,42 @@ Optional: `evidence`, `created`
 
 ## Content Length Constraints
 
-Every field has a strict length target. Concise messaging is sharper — if a statement needs two sentences, the first sentence was too vague.
+Every field has strict length and word-count targets. Concise messaging is sharper — if a statement needs two sentences, the first sentence was too vague.
 
-| Field | Target |
-|-------|--------|
-| `is_statement` | 1 sentence, max 150 characters |
-| `does_statement` | 1-2 sentences, max 200 characters |
-| `means_statement` | 1-2 sentences, max 200 characters |
-| `evidence[].statement` | 1 sentence |
+| Field | Words | Characters | Sentences |
+|-------|-------|------------|-----------|
+| `is_statement` | 20-35 | max 150 | 1 |
+| `does_statement` | 15-30 | max 200 | 1-2 |
+| `means_statement` | 15-30 | max 200 | 1-2 |
+| `evidence[].statement` | — | — | 1 |
 
 For German content (~15% longer), prioritize precision over completeness — cut filler words, not meaning. If a statement exceeds the limit, tighten wording rather than splitting into multiple sentences.
 
 ## Quality Checklist
 
-Before writing the file, verify:
+Before writing the file, verify each layer against these criteria:
 
-- IS statement is factual and capability-focused -- no superlatives or marketing language
-- DOES statement includes at least one specific metric or quantified improvement
-- DOES statement references a pain point specific to this market segment
-- MEANS statement connects to a business outcome the buyer would measure
+**IS statement:**
+- Factual and capability-focused — no superlatives or marketing language
+- 20-35 words, max 150 characters
+
+**DOES statement:**
+- Written from the buyer's perspective ("you can...", "teams can...") — not "it provides..." or "our solution enables..."
+- References a pain point specific to THIS market segment — would not work if you swapped in a different market
+- Includes implicit or explicit contrast with the buyer's current approach (what changes?)
+- Could not be credibly claimed by a competitor — if it could, sharpen around what's unique
+- 15-30 words, max 200 characters
+
+**MEANS statement:**
+- Names a measurable business outcome the buyer would put in a business case (KPI, dollar figure, named metric)
+- Introduces genuinely new information beyond DOES — not a restatement with an outcome verb prepended
+- Includes or implies quantification (numbers, timeframes, named metrics)
+- Passes the "so what?" test: a CFO would approve budget for this
+- 15-30 words, max 200 characters
+
+**Cross-check:**
 - DOES and MEANS are clearly different from what you'd write for a different market
+- IS → DOES → MEANS reads as a logical escalation, not circular repetition
 - Evidence array is populated when web research was used
 
 ## Claim Submission

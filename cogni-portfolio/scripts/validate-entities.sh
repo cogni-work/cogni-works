@@ -285,6 +285,31 @@ with open('$s') as fh:
       add_error "proposition" "$slug" "Missing required fields (feature_slug, market_slug, is_statement, does_statement, means_statement)"
     fi
   done
+
+  # Proposition DOES/MEANS structural warning: word counts outside 15-30 target
+  # Deep quality assessment (buyer-centricity, market-specificity, differentiation,
+  # escalation, quantification) is handled by the proposition-quality-assessor agent.
+  while IFS='|' read -r slug msg; do
+    add_warning "proposition" "$slug" "$msg"
+  done < <(python3 -c "
+import json, os, glob
+for f in glob.glob('$PROJECT_DIR/propositions/*.json'):
+    try:
+        d = json.load(open(f))
+        slug = os.path.basename(f)[:-5]
+        for field in ['does_statement', 'means_statement']:
+            text = d.get(field, '')
+            words = text.split()
+            label = 'DOES' if 'does' in field else 'MEANS'
+            if len(words) < 10:
+                print(f'{slug}|{label} has only {len(words)} words (target is 15-30 words)')
+            elif len(words) < 15:
+                print(f'{slug}|{label} has {len(words)} words (target is 15-30 words)')
+            elif len(words) > 30:
+                print(f'{slug}|{label} has {len(words)} words (target is 15-30 words)')
+    except Exception:
+        pass
+" 2>/dev/null)
 fi
 
 # Validate solutions reference valid propositions and have required structure

@@ -129,6 +129,22 @@ This pre-check applies to both single-proposition and batch generation paths. In
 
 The `project-status.sh` script reports `feature_quality_warnings` count for structural issues — use for a quick overview. For deep assessment, always use the agent.
 
+## Proposition Quality Post-check
+
+After generating propositions (single or batch), assess messaging quality:
+
+1. **Structural validation** — `$CLAUDE_PLUGIN_ROOT/scripts/validate-entities.sh <project-dir>` checks DOES/MEANS word counts against the 15-30 word target. Fast, catches obvious bloat or terseness.
+
+2. **Messaging quality assessment** — spawn the `proposition-quality-assessor` agent to evaluate DOES and MEANS across 10 dimensions:
+   - DOES: Buyer-centricity, Market-specificity, Differentiation, Status-quo contrast, Conciseness
+   - MEANS: Outcome specificity, Escalation, Quantification, Emotional resonance, Conciseness
+
+If a proposition has an overall "fail" from the assessor (two or more dimension failures), **flag it for rewrite** before it flows into downstream deliverables. Show the specific dimension failures and suggested rewrites to the user.
+
+Propositions with "warn" can proceed but flag the warnings — they represent improvement opportunities the user should be aware of.
+
+This post-check applies to both single-proposition and batch generation paths. In batch mode, present a summary table of pass/warn/fail counts alongside the proposition review table.
+
 ## From Consulting to Capture
 
 After presenting your assessment, the user will confirm, adjust, or push back on your priorities. Once you have agreement, transition to drafting — don't stay in assessment mode indefinitely. The pattern:
@@ -151,28 +167,48 @@ Craft each proposition with the user:
 - Factual, capability-focused
 - No superlatives or marketing language
 
-**DOES** (market-specific advantage):
+**DOES** (market-specific advantage — target 15-30 words):
+- Written from the buyer's perspective: "you can..." / "teams can..." — not "it provides..." or "our solution enables..."
 - Quantified where possible ("reduces X by Y%")
-- References the specific pain point of this market segment
+- References the specific pain point of this market segment — would not work if you swapped in a different market
+- Implies or states what changes vs. the buyer's current approach (status-quo contrast)
 - Action-oriented verb (reduces, eliminates, accelerates, enables)
 - Passes the competitor test: would a competitor's product also claim this?
+- Passes the Snicker Test: a salesperson could say it aloud naturally
 
-**MEANS** (market-specific benefit):
-- Business outcome the buyer cares about and can measure
+**DOES anti-patterns to reject:**
+- Vendor-centric framing: "Our solution enables...", "It provides...", "The platform delivers..."
+- Feature restating: DOES that merely rephrases the IS layer with an action verb prepended
+- Generic advantage: "Saves time and money" — every product claims this. What specifically changes?
+- Parity claims: any product in the category could make the same statement
+- Passive voice / nominalized verbs: "provides optimization" instead of "you can optimize..."
+
+**MEANS** (market-specific benefit — target 15-30 words):
+- Business outcome the buyer cares about and can measure (KPI, dollar figure, named metric)
+- Introduces genuinely new impact beyond DOES — not a restatement with an outcome verb
 - References the buyer's strategic goals or KPIs
+- Uses or implies quantification: "$1.2M savings" is stronger than "significant cost reduction"
+- Includes personal/emotional impact where appropriate (career protection, reduced firefighting, team morale)
 - Connects operational advantage to commercial impact
 - Passes the "so what?" test: would a CFO approve budget for this?
+
+**MEANS anti-patterns to reject:**
+- Vague aspirational language: "drives digital transformation", "delivers ROI", "enhances productivity"
+- Circular restating: MEANS repeats DOES with different wording ("ensures reliability" after DOES says "provides visibility")
+- Disconnected outcomes: business outcomes not causally linked to the DOES claim
+- Press-release tone: "industry-leading performance", "world-class outcomes", "best-in-class results"
+- Missing escalation: MEANS that stays at the same operational level as DOES instead of rising to business/personal impact
 
 ### Content Length Constraints
 
 Every field has a strict length target. Concise messaging is sharper messaging — if a statement needs two sentences, the first sentence was too vague.
 
-| Field | Target |
-|-------|--------|
-| `is_statement` | 1 sentence, max 150 characters |
-| `does_statement` | 1-2 sentences, max 200 characters |
-| `means_statement` | 1-2 sentences, max 200 characters |
-| `evidence[].statement` | 1 sentence |
+| Field | Words | Characters | Sentences |
+|-------|-------|------------|-----------|
+| `is_statement` | 20-35 | max 150 | 1 |
+| `does_statement` | 15-30 | max 200 | 1-2 |
+| `means_statement` | 15-30 | max 200 | 1-2 |
+| `evidence[].statement` | — | — | 1 |
 
 These limits apply to all languages. For German (which runs ~15% longer than English), prioritize precision over completeness — cut filler words, not meaning. If a statement exceeds the limit, tighten the wording rather than splitting into multiple sentences.
 

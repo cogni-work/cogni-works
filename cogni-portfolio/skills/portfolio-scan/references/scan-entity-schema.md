@@ -1,11 +1,12 @@
 # Scan Entity Schema
 
-Each discovered offering is captured with 11 fields during research. These are intermediate research artifacts stored in `research/.logs/` — they are NOT first-class data model entities. After the scan, offerings are mapped to features and products.
+Each discovered offering is captured with 12 fields during research. These are intermediate research artifacts stored in `research/.logs/` — they are NOT first-class data model entities. After the scan, offerings are mapped to features and products.
 
 ## Offering Fields (Research Phase)
 
 | Field | Description | Example Values |
 |-------|-------------|----------------|
+| Category ID | Taxonomy category code from research assignment | "1.1", "3.4", "7.2" |
 | Name | Service/product name as marketed | "Managed SD-WAN Pro" |
 | Description | 1-2 sentence summary | "End-to-end SD-WAN with 24/7 NOC support" |
 | Domain | Source domain where offering was found | "t-systems.com" |

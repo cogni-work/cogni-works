@@ -187,7 +187,7 @@ Path: `{{PROJECT_PATH}}/research/.logs/portfolio-web-research-{domain_slug}.json
   },
   "offerings": [
     {
-      "category": "1.1",
+      "category_id": "1.1",
       "name": "Managed SD-WAN Pro",
       "description": "End-to-end SD-WAN with 24/7 NOC support",
       "domain": "t-systems.com",

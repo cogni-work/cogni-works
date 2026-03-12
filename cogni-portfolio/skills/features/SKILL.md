@@ -59,7 +59,7 @@ Before listing features, understand the product. Have a conversation — but don
 
 Do not ask all of these. If the user has a clear picture and just wants to capture it, move quickly. If they're vague about what their product does ("it's a platform"), spend more time here.
 
-**Web research (optional):** When the user provides a product URL or asks for research-backed features, delegate to a subagent (Agent tool) to extract capabilities from the product's website, documentation, or marketing pages.
+**Web research (optional):** When the user provides a product URL or asks for research-backed features, delegate to a subagent (Agent tool) to extract capabilities from the product's website, documentation, or marketing pages. For improving existing features with quality issues, see the Research & Improve section — the `quality-enricher` agent does targeted company-scoped web research based on specific quality gaps.
 
 ## Feature Shaping
 
@@ -172,9 +172,56 @@ The agent evaluates five dimensions per feature:
 
 The agent returns structured JSON with pass/warn/fail per dimension and improvement suggestions. Features with overall "fail" are not ready for proposition generation.
 
-**When listing or reviewing features**, run both checks. Surface structural warnings and agent assessment results in your listing table. Recommend specific fixes before moving to propositions.
+**When listing or reviewing features**, run both checks. Surface structural warnings and agent assessment results in your listing table. Recommend specific fixes before moving to propositions. If any features scored warn or fail, offer to research and improve them — see Research & Improve below.
 
 **When editing features**, re-run the assessor after edits to confirm quality improved.
+
+## Research & Improve
+
+When quality assessment reveals warn or fail dimensions, offer to research the company and draft improved descriptions. This closes the loop between identifying problems and fixing them — the quality assessor tells you WHAT is weak, web research tells you HOW to fix it with real company-specific information.
+
+### When to Offer
+
+- After quality assessment shows any feature with overall "warn" or "fail"
+- When the user explicitly asks to "improve", "fix", "enrich", or "strengthen" features
+- During Feature Review when you identify vague or generic descriptions
+
+### How It Works
+
+1. Run quality assessment (structural + feature-quality-assessor) to identify gaps
+2. Present the gap summary to the user — which features have issues and on what dimensions
+3. Ask which features to research and improve (all flagged / fails only / specific ones)
+4. For each selected feature, delegate to the `quality-enricher` agent via the Agent tool:
+
+   Provide the agent with:
+   - The feature JSON (full content)
+   - The quality assessment results (dimensions, scores, and assessor notes)
+   - Company context from `portfolio.json` (company name, domain/website, product names, language)
+   - The project directory path
+
+   Launch multiple agents in parallel for different features.
+
+5. Collect agent results and present improvements as before/after comparisons:
+
+   **{feature-name}** — Quality issues: {dimensions}
+
+   | | Current | Proposed |
+   |---|---|---|
+   | Description | "current description..." | "proposed description..." |
+   | Word count | N | N |
+   | Evidence | — | N sources from company website |
+   | Confidence | — | high/medium/low |
+
+   When confidence is low, the agent returns targeted questions instead of a proposed rewrite. Present these questions to the user — their domain knowledge fills gaps that web research can't. After the user answers, you can either rewrite the description yourself using their input or re-delegate to the agent with the additional context.
+
+6. User chooses per feature: **Accept** / **Edit** / **Skip**
+7. Write accepted changes to the feature JSON file, set the `updated` field to today's date
+8. Warn about downstream cascades: "Feature X was updated → N propositions may need refresh. Run the `propositions` skill to review them."
+9. Optionally re-run the quality assessor on changed features to confirm improvement
+
+### When Web Research Isn't Needed
+
+Not all quality issues require research. Conciseness (too long/short) and language quality (awkward phrasing) can be fixed by rewriting from existing content — no web search needed. Offer a direct rewrite for these dimensions and reserve research for mechanism clarity, differentiation, and scope issues where company-specific knowledge is the missing ingredient.
 
 ## Validate Against Portfolio
 
@@ -245,6 +292,8 @@ When the user asks to review or improve their feature set (or when you notice is
 7. **Cross-product check**: Scan sibling products' features for overlaps or bridges.
 
 Present your assessment as a consulting memo — lead with "here's what I'd change and why" backed by specific analysis. Don't list observations and ask "what do you think?" — state your recommended changes and let the user push back.
+
+For features with quality issues that need company-specific information to fix (mechanism clarity, differentiation), offer to research and improve them via the `quality-enricher` agent — see Research & Improve above.
 
 ## Important Notes
 

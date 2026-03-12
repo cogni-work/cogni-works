@@ -323,6 +323,53 @@ When the user asks to review or improve their propositions (or when you notice i
 
 Present your assessment as a consulting memo — lead with "here's what I'd change and why" backed by specific analysis. Don't list observations and ask "what do you think?" — state your recommended changes and let the user push back.
 
+For propositions with quality issues that need company-specific information to fix (buyer centricity, market specificity, quantification, differentiation), offer to research and improve them — see Research & Improve Propositions below.
+
+## Research & Improve Propositions
+
+When proposition quality assessment reveals weak DOES or MEANS messaging, offer to research the company and draft improved statements. The quality assessor identifies WHAT is weak; web research provides the company-specific information to fix it — customer success stories, case studies, market-specific use cases, and concrete metrics.
+
+### When to Offer
+
+- After proposition quality assessment shows any proposition with overall "warn" or "fail"
+- When the user explicitly asks to "improve", "fix", "strengthen", or "sharpen" propositions
+- During Proposition Review when you identify generic or vendor-centric messaging
+
+### How It Works
+
+1. Run quality assessment (proposition-quality-assessor) to identify gaps
+2. Present the gap summary — which propositions have issues and on which DOES/MEANS dimensions
+3. Ask which propositions to research and improve (all flagged / fails only / specific ones)
+4. For each selected proposition, delegate to the `quality-enricher` agent via the Agent tool:
+
+   Provide the agent with:
+   - The proposition JSON (full content)
+   - The referenced feature JSON and market JSON (for context)
+   - The quality assessment results (DOES dimensions, MEANS dimensions, scores, notes)
+   - Company context from `portfolio.json` (company name, domain/website, product names, language)
+   - The project directory path
+
+   Launch multiple agents in parallel for different propositions.
+
+5. Collect results and present improvements as before/after for DOES and MEANS separately:
+
+   **{feature}--{market}** — Issues: {dimensions}
+
+   | Layer | Current | Proposed |
+   |---|---|---|
+   | DOES | "current DOES..." | "proposed DOES..." |
+   | MEANS | "current MEANS..." | "proposed MEANS..." |
+
+   Show evidence found and confidence level. When confidence is low, present the agent's targeted questions to the user instead.
+
+6. User chooses per proposition: **Accept** / **Edit** / **Skip**
+7. Write accepted changes to the proposition JSON, set the `updated` field
+8. The agent submits quantified evidence as claims via `append-claim.sh` for downstream verification
+
+### Not All Dimensions Need Research
+
+Conciseness issues (word count) and escalation problems (MEANS repeats DOES) can be fixed by rewriting from existing content. Reserve web research for dimensions where company-specific information is the missing ingredient: buyer centricity, market specificity, quantification, and differentiation.
+
 ## Important Notes
 
 - Features and markets must exist before propositions can be created — use the `features` and `markets` skills first

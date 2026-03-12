@@ -456,9 +456,9 @@ if not taxonomy:
 
 tax_type = taxonomy.get('type', '')
 
-# Build valid category IDs for b2b-ict-portfolio
+# Build valid category IDs for b2b-ict
 valid_categories = {}
-if tax_type == 'b2b-ict-portfolio':
+if tax_type == 'b2b-ict':
     dim_cats = {
         0: [('0.1','Financial Scale'),('0.2','Workforce Capacity'),('0.3','Geographic Presence'),('0.4','Market Position'),('0.5','Certifications & Accreditations'),('0.6','Partnership Ecosystem')],
         1: [('1.1','WAN Services'),('1.2','SASE'),('1.3','Internet & Cloud Connect'),('1.4','5G & IoT Connectivity'),('1.5','Voice Services'),('1.6','LAN/WLAN Services'),('1.7','Network-as-a-Service')],

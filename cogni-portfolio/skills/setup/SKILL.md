@@ -85,7 +85,28 @@ cogni-portfolio/<project-slug>/
 
 After the script creates directories, write `portfolio.json` in the project root with the confirmed company context, including the `language` field. Follow the schema in `$CLAUDE_PLUGIN_ROOT/skills/setup/references/data-model.md`.
 
-### 5. Confirm and Guide Next Steps
+### 5. Taxonomy Template Selection (Optional)
+
+If the company's industry matches a known portfolio taxonomy template, suggest it:
+
+1. Scan `$CLAUDE_PLUGIN_ROOT/templates/*/template.md` frontmatter for `industry_match` patterns
+2. If `company.industry` matches a template (e.g., "IT Services" matches `b2b-ict`), present it:
+   - "Your industry matches the **B2B ICT Portfolio** template (8 dimensions, 57 service categories). This enables structured portfolio scanning with the `scan` skill. Apply this template?"
+3. If user confirms, add to `portfolio.json`:
+   ```json
+   {
+     "taxonomy": {
+       "type": "b2b-ict",
+       "version": "3.7",
+       "dimensions": 8,
+       "categories": 57,
+       "source": "cogni-portfolio/templates/b2b-ict/template.md"
+     }
+   }
+   ```
+4. If no template matches or user declines, skip — the portfolio works fine without a taxonomy template.
+
+### 6. Confirm and Guide Next Steps
 
 Present the created project structure and suggest the full workflow. If the user has existing documents (product specs, market research, pitch decks, etc.), mention they can drop files into the `uploads/` folder and run the `ingest` skill to import data automatically.
 

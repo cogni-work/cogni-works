@@ -26,7 +26,7 @@ This plugin is part of the [cogni-works monorepo](https://github.com/cogni-work/
 | `synthesize` | Generate structured messaging repository with per-market summaries and integrated claim status |
 | `export` | Produce deliverables — proposition proposals, market briefs, portfolio workbooks (markdown and XLSX) |
 | `portfolio-dashboard` | Generate an interactive HTML dashboard showing the full portfolio status |
-| `ict-scan` | Discover a company's ICT service offerings via web research, classify against B2B ICT taxonomy (8 dimensions / 57 categories), and import as portfolio entities |
+| `scan` | Discover a company's service offerings via web research, classify against a portfolio taxonomy template (e.g., B2B ICT: 8 dimensions / 57 categories), and import as portfolio entities |
 | `resume-portfolio` | Detect current workflow phase and recommend next actions for an existing project |
 
 ## Agents
@@ -38,7 +38,7 @@ This plugin is part of the [cogni-works monorepo](https://github.com/cogni-work/
 | `proposition-generator` | Generates IS/DOES/MEANS messaging for a single Feature x Market pair with optional web research |
 | `solution-planner` | Plans implementation phases and pricing tiers for a single proposition |
 | `feature-quality-assessor` | Assesses feature description quality using LLM intelligence — works in any language |
-| `portfolio-web-researcher` | Parallel web research agent for B2B ICT portfolio mapping across 7 dimensions |
+| `portfolio-web-researcher` | Template-parameterized parallel web research agent for portfolio scanning across taxonomy dimensions |
 
 ## Example Workflows
 
@@ -99,6 +99,8 @@ This plugin works standalone for core messaging workflows. Optional integrations
 ```
 cogni-portfolio/
 ├── .claude-plugin/plugin.json    Plugin manifest
+├── templates/                    Pluggable taxonomy templates
+│   └── b2b-ict/                 B2B ICT taxonomy (8 dims, 57 cats)
 ├── skills/                       16 portfolio skills
 │   ├── setup/
 │   ├── products/
@@ -114,7 +116,7 @@ cogni-portfolio/
 │   ├── synthesize/
 │   ├── export/
 │   ├── portfolio-dashboard/
-│   ├── ict-scan/
+│   ├── scan/
 │   └── resume-portfolio/
 ├── agents/                       6 delegation agents
 │   ├── market-researcher.md
@@ -130,7 +132,7 @@ cogni-portfolio/
     ├── project-status.sh
     ├── sync-portfolio.sh
     ├── validate-entities.sh
-    └── generate-ict-scan-mapping.sh
+    └── generate-scan-mapping.sh
 ```
 
 ## License

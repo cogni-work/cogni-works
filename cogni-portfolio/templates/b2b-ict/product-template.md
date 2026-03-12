@@ -1,4 +1,4 @@
-# ICT Product Template
+# Product Template
 
 The B2B ICT Portfolio taxonomy defines a **product template** — a predefined skeleton that maps taxonomy structure to the cogni-portfolio data model. Any ICT service provider can use this template as a starting point for their portfolio.
 
@@ -7,7 +7,7 @@ The B2B ICT Portfolio taxonomy defines a **product template** — a predefined s
 | Taxonomy Level | Portfolio Entity | Mapping Rule |
 |---|---|---|
 | Dimension 0 (Provider Profile) | Provider metadata in `portfolio.json` | Project-level metrics, not a product |
-| Dimensions 1-7 | **Product** (one per dimension) | Only create if dimension has ≥1 confirmed offering |
+| Dimensions 1-7 | **Product** (one per dimension) | Only create if dimension has >=1 confirmed offering |
 | Category (e.g. 1.1 WAN Services) | Feature classification slot | Categories are taxonomy positions, not features themselves |
 | Discovered offering | **Feature** (`features/{slug}.json`) | Concrete capability with `taxonomy_mapping` field |
 
@@ -68,7 +68,7 @@ A discovered offering mapped to a feature entity:
 
 ## The `taxonomy_mapping` Field
 
-Every feature created from an ICT scan carries a `taxonomy_mapping` object:
+Every feature created from a scan carries a `taxonomy_mapping` object:
 
 | Field | Type | Description |
 |---|---|---|

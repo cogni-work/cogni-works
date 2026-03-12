@@ -1622,7 +1622,7 @@ body::after {{
 
     # --- Taxonomy Coverage Heatmap & Gap Analysis ---
     taxonomy = portfolio.get("taxonomy")
-    if taxonomy and taxonomy.get("type") == "b2b-ict-portfolio":
+    if taxonomy and taxonomy.get("type") == "b2b-ict":
         # Build the full taxonomy structure
         tax_dims = {
             0: ("Provider Profile Metrics", [

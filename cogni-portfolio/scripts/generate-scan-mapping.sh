@@ -1,15 +1,16 @@
 #!/usr/bin/env bash
 set -euo pipefail
-# generate-ict-scan-mapping.sh
-# Version: 2.0.0
-# Purpose: Generate category-to-entity mapping from ict-scan research logs
+# generate-scan-mapping.sh
+# Version: 3.0.0
+# Purpose: Generate category-to-entity mapping from scan research logs
 # Category: utilities
 #
-# Usage: generate-ict-scan-mapping.sh --project-path <path> [--output <path>]
+# Usage: generate-scan-mapping.sh --project-path <path> [--output <path>] [--plugin-root <path>]
 #
 # Arguments:
 #   --project-path <path>  Portfolio project directory (required)
 #   --output <path>        Output path (optional, defaults to research/.metadata/portfolio-category-mapping.json)
+#   --plugin-root <path>   Plugin root directory (optional, defaults to CLAUDE_PLUGIN_ROOT or script's grandparent)
 #
 # Output (JSON):
 #   {
@@ -17,7 +18,7 @@ set -euo pipefail
 #     "data": {
 #       "project_slug": "company-slug",
 #       "generated_at": "ISO-8601",
-#       "category_count": 57,
+#       "category_count": N,
 #       "mapped_count": N,
 #       "mappings": { ... }
 #     }
@@ -28,76 +29,7 @@ set -euo pipefail
 #   1 - Invalid project path
 #   2 - No research logs found
 #   3 - Usage error
-
-# Standard portfolio taxonomy (57 categories, 8 dimensions 0-7)
-# Format: "ID|NAME|DIMENSION"
-TAXONOMY=(
-    # Provider Profile Metrics (6)
-    "0.1|Financial Scale|provider-profile-metrics"
-    "0.2|Workforce Capacity|provider-profile-metrics"
-    "0.3|Geographic Presence|provider-profile-metrics"
-    "0.4|Market Position|provider-profile-metrics"
-    "0.5|Certifications & Accreditations|provider-profile-metrics"
-    "0.6|Partnership Ecosystem|provider-profile-metrics"
-    # Connectivity Services (7)
-    "1.1|WAN Services|connectivity-services"
-    "1.2|SASE|connectivity-services"
-    "1.3|Internet & Cloud Connect|connectivity-services"
-    "1.4|5G & IoT Connectivity|connectivity-services"
-    "1.5|Voice Services|connectivity-services"
-    "1.6|LAN/WLAN Services|connectivity-services"
-    "1.7|Network-as-a-Service|connectivity-services"
-    # Security Services (10)
-    "2.1|Security Operations (SOC/SIEM)|security-services"
-    "2.2|Identity & Access Management|security-services"
-    "2.3|Zero Trust Architecture|security-services"
-    "2.4|Cloud Security|security-services"
-    "2.5|Endpoint Security|security-services"
-    "2.6|Network Security|security-services"
-    "2.7|Vulnerability Management|security-services"
-    "2.8|Security Awareness|security-services"
-    "2.9|Compliance & GRC|security-services"
-    "2.10|Data Protection & Privacy|security-services"
-    # Digital Workplace Services (7)
-    "3.1|Unified Communications|digital-workplace-services"
-    "3.2|Modern Workplace / M365|digital-workplace-services"
-    "3.3|Device Management|digital-workplace-services"
-    "3.4|Virtual Desktop & DaaS|digital-workplace-services"
-    "3.5|IT Support Services|digital-workplace-services"
-    "3.6|Digital Employee Experience|digital-workplace-services"
-    "3.7|IT Asset Management|digital-workplace-services"
-    # Cloud Services (8)
-    "4.1|Managed Hyperscaler Services|cloud-services"
-    "4.2|Multi-Cloud Management|cloud-services"
-    "4.3|Private Cloud|cloud-services"
-    "4.4|Hybrid Cloud|cloud-services"
-    "4.5|Cloud Migration Services|cloud-services"
-    "4.6|Cloud-Native Platform|cloud-services"
-    "4.7|Sovereign Cloud|cloud-services"
-    "4.8|Enterprise Platforms on Cloud|cloud-services"
-    # Managed Infrastructure Services (7)
-    "5.1|Data Center Services|managed-infrastructure-services"
-    "5.2|Managed Compute & Storage|managed-infrastructure-services"
-    "5.3|Backup & Disaster Recovery|managed-infrastructure-services"
-    "5.4|Infrastructure Monitoring|managed-infrastructure-services"
-    "5.5|IT Outsourcing (ITO)|managed-infrastructure-services"
-    "5.6|Database Administration|managed-infrastructure-services"
-    "5.7|Infrastructure Automation|managed-infrastructure-services"
-    # Application Services (7)
-    "6.1|Custom Application Development|application-services"
-    "6.2|Application Modernization|application-services"
-    "6.3|Enterprise Platform Services|application-services"
-    "6.4|System Integration & API|application-services"
-    "6.5|Low-Code/No-Code Platforms|application-services"
-    "6.6|AI, Data & Analytics|application-services"
-    "6.7|DevOps & Platform Engineering|application-services"
-    # Consulting Services (5)
-    "7.1|IT Strategy & Architecture|consulting-services"
-    "7.2|Digital Transformation|consulting-services"
-    "7.3|Business & Industry Consulting|consulting-services"
-    "7.4|Program & Project Management|consulting-services"
-    "7.5|Vendor & Contract Management|consulting-services"
-)
+#   4 - Unsupported taxonomy type
 
 error_json() {
     local message="$1"
@@ -108,13 +40,14 @@ error_json() {
 }
 
 main() {
-    local project_path="" output_path=""
+    local project_path="" output_path="" plugin_root=""
 
     # Parse arguments
     while [[ $# -gt 0 ]]; do
         case "$1" in
             --project-path) project_path="${2:-}"; shift 2 ;;
             --output) output_path="${2:-}"; shift 2 ;;
+            --plugin-root) plugin_root="${2:-}"; shift 2 ;;
             *) error_json "Unknown argument: $1" 3 ;;
         esac
     done
@@ -125,6 +58,33 @@ main() {
 
     local logs_dir="$project_path/research/.logs"
     [[ -d "$logs_dir" ]] || error_json "Research logs directory not found: $logs_dir" 1
+
+    # Resolve plugin root
+    if [[ -z "$plugin_root" ]]; then
+        if [[ -n "${CLAUDE_PLUGIN_ROOT:-}" ]]; then
+            plugin_root="$CLAUDE_PLUGIN_ROOT"
+        else
+            # Default: script is in scripts/, plugin root is parent
+            plugin_root="$(cd "$(dirname "$0")/.." && pwd)"
+        fi
+    fi
+
+    # Resolve taxonomy type from portfolio.json
+    local portfolio_json="$project_path/portfolio.json"
+    local taxonomy_type=""
+    if [[ -f "$portfolio_json" ]]; then
+        taxonomy_type="$(jq -r '.taxonomy.type // ""' "$portfolio_json")"
+    fi
+    [[ -n "$taxonomy_type" ]] || taxonomy_type="b2b-ict"
+
+    # Load categories from template
+    local categories_file="$plugin_root/templates/$taxonomy_type/categories.json"
+    if [[ ! -f "$categories_file" ]]; then
+        error_json "Categories file not found for taxonomy '$taxonomy_type': $categories_file" 4
+    fi
+
+    local category_count
+    category_count="$(jq 'length' "$categories_file")"
 
     # Set default output path
     if [[ -z "$output_path" ]]; then
@@ -150,17 +110,17 @@ main() {
         error_json "No research log files found in $logs_dir" 2
     fi
 
-    # Initialize mappings object with all 57 categories
-    local mappings_json="{}"
-    for entry in "${TAXONOMY[@]}"; do
-        local cat_id cat_name dimension
-        IFS='|' read -r cat_id cat_name dimension <<< "$entry"
-        mappings_json="$(echo "$mappings_json" | jq \
-            --arg id "$cat_id" \
-            --arg name "$cat_name" \
-            --arg dim "$dimension" \
-            '.[$id] = {category_name: $name, dimension: $dim, offerings: []}')"
-    done
+    # Initialize mappings object from categories.json
+    local mappings_json
+    mappings_json="$(jq '
+        reduce .[] as $cat ({};
+            .[$cat.id] = {
+                category_name: $cat.name,
+                dimension: $cat.dimension_slug,
+                offerings: []
+            }
+        )
+    ' "$categories_file")"
 
     # Process each log file
     local total_offerings=0
@@ -201,13 +161,15 @@ main() {
     output_json="$(jq -n \
         --arg project "$project_slug" \
         --arg ts "$generated_at" \
-        --argjson cat_count 57 \
+        --arg taxonomy "$taxonomy_type" \
+        --argjson cat_count "$category_count" \
         --argjson mapped "$categories_with_offerings" \
         --argjson offerings "$total_offerings" \
         --argjson mappings "$mappings_json" \
         '{
             project_slug: $project,
             generated_at: $ts,
+            taxonomy_type: $taxonomy,
             category_count: $cat_count,
             mapped_count: $mapped,
             total_offerings: $offerings,
@@ -220,12 +182,14 @@ main() {
     # Return success response
     jq -n \
         --arg path "$output_path" \
+        --arg taxonomy "$taxonomy_type" \
         --argjson mapped "$categories_with_offerings" \
         --argjson offerings "$total_offerings" \
         '{
             success: true,
             data: {
                 output_file: $path,
+                taxonomy_type: $taxonomy,
                 categories_mapped: $mapped,
                 offerings_processed: $offerings
             }

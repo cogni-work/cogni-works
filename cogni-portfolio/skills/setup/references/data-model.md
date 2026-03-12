@@ -29,19 +29,21 @@ The `taxonomy` object (optional) adopts an industry-standard classification syst
 ```json
 {
   "taxonomy": {
-    "type": "b2b-ict-portfolio",
+    "type": "b2b-ict",
     "version": "3.7",
     "dimensions": 8,
     "categories": 57,
-    "source": "cogni-tips/references/taxonomies/b2b-ict-portfolio.md"
+    "source": "cogni-portfolio/templates/b2b-ict/template.md"
   }
 }
 ```
 
 Currently supported taxonomy types:
-- `b2b-ict-portfolio` — 57 categories across 8 dimensions (0: Provider Profile, 1: Connectivity, 2: Security, 3: Digital Workplace, 4: Cloud, 5: Managed Infrastructure, 6: Application, 7: Consulting). Designed for B2B ICT service providers.
+- `b2b-ict` — 57 categories across 8 dimensions (0: Provider Profile, 1: Connectivity, 2: Security, 3: Digital Workplace, 4: Cloud, 5: Managed Infrastructure, 6: Application, 7: Consulting). Designed for B2B ICT service providers. Template: `cogni-portfolio/templates/b2b-ict/template.md`.
 
-When a taxonomy is set, the `/portfolio-dashboard` skill shows a coverage heatmap (categories with/without mapped features) and the `/features` skill suggests taxonomy mappings for new features.
+Features created by the `scan` skill carry `taxonomy_mapping` (linking to a specific dimension/category) and `source_file` (pointing to the research report) for traceability.
+
+When a taxonomy is set, the `/portfolio-dashboard` skill shows a coverage heatmap (categories with/without mapped features) and the `/features` skill suggests taxonomy mappings for new features. Taxonomy templates live in `$CLAUDE_PLUGIN_ROOT/templates/{type}/` and are resolved by the `scan` and `setup` skills.
 
 The `delivery_defaults` object provides company-wide defaults for solution cost modeling:
 
@@ -131,7 +133,7 @@ The `taxonomy_mapping` object (optional) maps this feature to a category in the 
 }
 ```
 
-- `dimension` (integer): Taxonomy dimension number (0-7 for b2b-ict-portfolio)
+- `dimension` (integer): Taxonomy dimension number (0-7 for b2b-ict)
 - `dimension_name` (string): Human-readable dimension name
 - `category_id` (string): Taxonomy category ID (e.g., "4.6")
 - `category_name` (string): Human-readable category name

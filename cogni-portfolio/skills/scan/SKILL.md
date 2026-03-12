@@ -1,25 +1,33 @@
 ---
-name: ict-scan
+name: scan
 description: |
-  Discover what ICT services a company offers by scanning their websites, classify findings against the B2B ICT taxonomy (8 dimensions, 57 categories), and import them as features and products into the portfolio data model. Use when user asks to scan, map, or research a company's ICT/IT service portfolio, product offerings, or solution catalog. Triggers on "scan [company] portfolio", "what does [company] sell", "map [company] services", "competitor portfolio", "vendor assessment", "ict scan", "[company] service offerings". Also trigger when the user wants to populate a portfolio project from public web data rather than from uploaded documents (that's the ingest skill). Requires an existing cogni-portfolio project (run setup first).
+  Discover what services a company offers by scanning their websites, classify findings
+  against a portfolio taxonomy template, and import them as features and products into
+  the portfolio data model. Use when user asks to scan, map, or research a company's
+  service portfolio, product offerings, or solution catalog. Triggers on "scan [company]
+  portfolio", "what does [company] sell", "map [company] services", "competitor portfolio",
+  "vendor assessment", "ict scan", "[company] service offerings", "portfolio scan".
+  Also trigger when the user wants to populate a portfolio project from public web data
+  rather than from uploaded documents (that's the ingest skill). Requires an existing
+  cogni-portfolio project (run setup first).
 ---
 
-# ICT Web Scan
+# Portfolio Scan
 
 ## Core Concept
 
-This skill is the **web discovery counterpart to `ingest`**. Where `ingest` populates a portfolio from uploaded documents, `ict-scan` populates it from a company's public websites — discovering subsidiaries, scanning their domains for service offerings, classifying everything against the B2B ICT taxonomy, and importing the results as portfolio entities.
+This skill is the **web discovery counterpart to `ingest`**. Where `ingest` populates a portfolio from uploaded documents, `scan` populates it from a company's public websites — discovering subsidiaries, scanning their domains for service offerings, classifying everything against the portfolio's taxonomy template, and importing the results as portfolio entities.
 
 The scan produces two outputs:
-1. A **portfolio report** (`research/{slug}-portfolio.md`) — structured markdown covering all 8 dimensions and 57 categories with evidence-linked offerings
+1. A **portfolio report** (`research/{slug}-portfolio.md`) — structured markdown covering all taxonomy dimensions and categories with evidence-linked offerings
 2. **Portfolio entities** (products and features) — ready for downstream use in propositions, solutions, and packages
 
-The taxonomy maps to the data model via the **ICT product template**: dimensions become products, discovered offerings become features. See [references/ict-product-template.md](references/ict-product-template.md) for the full mapping.
+The taxonomy template maps to the data model via the **product template**: dimensions become products, discovered offerings become features. See the template's `product-template.md` for the full mapping.
 
 **Pipeline position:**
 ```
-setup → ict-scan (web) → features (refine) → products (organize) → propositions → ...
-setup → ingest  (docs) → features (refine) → products (organize) → propositions → ...
+setup → scan (web) → features (refine) → products (organize) → propositions → ...
+setup → ingest (docs) → features (refine) → products (organize) → propositions → ...
 ```
 
 ## Prerequisites
@@ -32,7 +40,7 @@ A cogni-portfolio project must exist for this company. If `cogni-portfolio/{slug
 
 ## Workflow
 
-### Phase 0: Prerequisite Check
+### Phase 0: Prerequisite Check & Template Resolution
 
 1. Identify the target company from the user's request (or ask via AskUserQuestion)
 2. Derive `COMPANY_SLUG` (kebab-case):
@@ -44,7 +52,13 @@ A cogni-portfolio project must exist for this company. If `cogni-portfolio/{slug
    find . -path "*/cogni-portfolio/*/portfolio.json" -type f 2>/dev/null
    ```
 4. Read `portfolio.json` and extract `slug`, `company.name`
-5. Set environment variables:
+5. **Resolve taxonomy template:**
+   - Check `portfolio.json` for `taxonomy.type` field
+   - If set (e.g., `"b2b-ict"`), load template from `$CLAUDE_PLUGIN_ROOT/templates/{taxonomy.type}/template.md`
+   - If absent, scan `$CLAUDE_PLUGIN_ROOT/templates/*/template.md` frontmatter for `industry_match` patterns that match `company.industry`
+   - If multiple matches or no match, present available templates via AskUserQuestion
+   - Once resolved, set `TEMPLATE_PATH=$CLAUDE_PLUGIN_ROOT/templates/{type}`
+6. Set environment variables:
 
 | Variable | Source | Example |
 |----------|--------|---------|
@@ -52,8 +66,18 @@ A cogni-portfolio project must exist for this company. If `cogni-portfolio/{slug
 | COMPANY_SLUG | `portfolio.json` → `slug` | `deutsche-telekom` |
 | PROJECT_PATH | Directory containing `portfolio.json` | `/path/to/cogni-portfolio/deutsche-telekom` |
 | OUTPUT_FILE | `{PROJECT_PATH}/research/{COMPANY_SLUG}-portfolio.md` | |
+| TEMPLATE_PATH | `$CLAUDE_PLUGIN_ROOT/templates/{type}` | `$CLAUDE_PLUGIN_ROOT/templates/b2b-ict` |
+| TEMPLATE_TYPE | `portfolio.json` → `taxonomy.type` | `b2b-ict` |
 
-6. Create research directories lazily:
+7. Read the template files needed for this scan:
+   - `${TEMPLATE_PATH}/template.md` — taxonomy definition (dimensions, categories)
+   - `${TEMPLATE_PATH}/search-patterns.md` — web search queries
+   - `${TEMPLATE_PATH}/delivery-unit-rules.md` — entity inclusion/exclusion
+   - `${TEMPLATE_PATH}/cross-category-rules.md` — dual assignments
+   - `${TEMPLATE_PATH}/product-template.md` — taxonomy→data model mapping
+   - `${TEMPLATE_PATH}/report-template.md` — output format
+
+8. Create research directories lazily:
    ```bash
    mkdir -p "${PROJECT_PATH}/research/.logs"
    mkdir -p "${PROJECT_PATH}/research/.metadata"
@@ -65,11 +89,11 @@ A cogni-portfolio project must exist for this company. If `cogni-portfolio/{slug
 
 ### Phase 1: Company Discovery
 
-Search for the target company and its affiliated entities. See [references/search-patterns.md](references/search-patterns.md) for the full set of WebSearch queries.
+Search for the target company and its affiliated entities. See `${TEMPLATE_PATH}/search-patterns.md` for the full set of WebSearch queries (Phase 1 section).
 
 Extract the parent company, subsidiaries, business units, consulting arms, field services entities, and industry-vertical brands with their web domains.
 
-See [references/delivery-unit-rules.md](references/delivery-unit-rules.md) for inclusion/exclusion criteria. The guiding principle: when in doubt, include — Phase 3 research will naturally return nothing if an entity isn't relevant.
+See `${TEMPLATE_PATH}/delivery-unit-rules.md` for inclusion/exclusion criteria. The guiding principle: when in doubt, include — Phase 3 research will naturally return nothing if an entity isn't relevant.
 
 #### Phase 1 Output Schema
 
@@ -136,15 +160,15 @@ Use `AskUserQuestion` to present the validated entities:
 
 ### Phase 2: Provider Profile Discovery (Dimension 0)
 
-Search for provider business metrics within discovered domains. See [references/search-patterns.md](references/search-patterns.md) for the search queries and category mapping.
+Search for provider business metrics within discovered domains. See `${TEMPLATE_PATH}/search-patterns.md` for the search queries and category mapping (Phase 2 section).
 
-Map findings to the 6 categories of Dimension 0: Financial Scale, Workforce Capacity, Geographic Presence, Market Position, Certifications & Accreditations, Partnership Ecosystem.
+Map findings to the provider profile categories defined in the taxonomy template (Dimension 0).
 
 ---
 
-### Phase 3: Portfolio Discovery (Dimensions 1-7)
+### Phase 3: Portfolio Discovery (Service Dimensions)
 
-Use the `portfolio-web-researcher` agent for parallel, domain-scoped web research. Each agent searches one domain across all 51 service categories (Dimensions 1-7).
+Use the `portfolio-web-researcher` agent for parallel, domain-scoped web research. Each agent searches one domain across all service categories.
 
 #### Step 3.1: Prepare Domain List
 
@@ -173,8 +197,9 @@ PROJECT_PATH={PROJECT_PATH}
 COMPANY_NAME={COMPANY_NAME}
 DOMAIN={domain}
 PROVIDER_UNIT={provider_unit}
+TEMPLATE_PATH={TEMPLATE_PATH}
 
-Execute all 51 searches across Dimensions 1-7 and return compact JSON. NO PROSE."
+Execute all service category searches and return compact JSON. NO PROSE."
 )
 ```
 
@@ -222,17 +247,17 @@ For each domain, read the log file and extract offerings.
 
 #### Step 4.2: Merge Offerings by Category
 
-Combine offerings from all domains, grouped by category ID (1.1, 1.2, ... 7.5). See [references/entity-schema.md](references/entity-schema.md) for the 11-field offering schema and Service Horizon definitions.
+Combine offerings from all domains, grouped by category ID. See [references/scan-entity-schema.md](references/scan-entity-schema.md) for the 11-field offering schema, Service Horizon definitions, and the offering-to-feature mapping.
 
 ### Phase 4.5: Cross-Category Entity Resolution
 
-After merging, analyze each offering for multi-category fit. See [references/cross-category-rules.md](references/cross-category-rules.md) for the detection rules and dual-category assignment patterns.
+After merging, analyze each offering for multi-category fit. See `${TEMPLATE_PATH}/cross-category-rules.md` for the detection rules and dual-category assignment patterns.
 
 ---
 
 ### Phase 5: Discovery Status Assignment
 
-For each of the 57 taxonomy categories, assign a **Discovery Status**:
+For each taxonomy category, assign a **Discovery Status**:
 
 | Status | Meaning | Action |
 |--------|---------|--------|
@@ -241,7 +266,7 @@ For each of the 57 taxonomy categories, assign a **Discovery Status**:
 | Emerging | Announced or pilot status (not yet GA) | Note in Horizon column |
 | Extended | Provider-specific variant beyond standard taxonomy | Capture separately |
 
-Extended discoveries should not exceed ~10-15 additional entities beyond the 57 standard categories.
+Extended discoveries should not exceed ~10-15 additional entities beyond the standard categories.
 
 ---
 
@@ -249,19 +274,19 @@ Extended discoveries should not exceed ~10-15 additional entities beyond the 57 
 
 Create the portfolio report at `${PROJECT_PATH}/research/${COMPANY_SLUG}-portfolio.md`.
 
-Use the template from [references/report-template.md](references/report-template.md) for the complete output structure. Include:
+Use the template from `${TEMPLATE_PATH}/report-template.md` for the complete output structure. Include:
 
 - Header with generation date and analyzed domains
 - Service Horizons and Discovery Status legends
-- All 8 dimensions (0-7), 57 categories
+- All dimensions and categories from the taxonomy
 - Full entity tables with 11 columns
 - Cross-Cutting Attributes section
 
-See [references/ict-taxonomy.md](references/ict-taxonomy.md) for category definitions.
+See `${TEMPLATE_PATH}/template.md` for category definitions.
 
 #### Update Project Metadata
 
-Write portfolio metadata to `research/.metadata/ict-scan-output.json`:
+Write portfolio metadata to `research/.metadata/scan-output.json`:
 
 ```json
 {
@@ -269,7 +294,8 @@ Write portfolio metadata to `research/.metadata/ict-scan-output.json`:
   "company_name": "{COMPANY_NAME}",
   "company_slug": "{COMPANY_SLUG}",
   "created": "{ISO_TIMESTAMP}",
-  "skill": "cogni-portfolio:ict-scan",
+  "skill": "cogni-portfolio:scan",
+  "template_type": "{TEMPLATE_TYPE}",
   "output_file": "research/{COMPANY_SLUG}-portfolio.md",
   "domains_analyzed": ["domain1.com", "domain2.com"],
   "dimensions_covered": 8,
@@ -287,9 +313,9 @@ Write portfolio metadata to `research/.metadata/ict-scan-output.json`:
 
 ### Phase 7: Portfolio Import
 
-Map discovered offerings to the portfolio data model using the ICT product template. This bridges the research output into actionable entities that downstream skills (propositions, solutions, packages) can build on.
+Map discovered offerings to the portfolio data model using the product template. This bridges the research output into actionable entities that downstream skills (propositions, solutions, packages) can build on.
 
-See [references/ict-product-template.md](references/ict-product-template.md) for the taxonomy-to-data-model mapping, default product definitions, and JSON examples.
+See `${TEMPLATE_PATH}/product-template.md` for the taxonomy-to-data-model mapping, default product definitions, and JSON examples.
 
 #### Step 7.1: Map Offerings to Features
 
@@ -298,6 +324,8 @@ For each confirmed offering, generate a feature entity. The template maps:
 - Category ID → `taxonomy_mapping.category_id`
 - Dimension → `taxonomy_mapping.dimension` (first digit of category ID)
 - Horizon → `taxonomy_mapping.horizon` and `readiness` (`current`→`ga`, `emerging`→`beta`, `future`→`planned`)
+
+See [references/scan-entity-schema.md](references/scan-entity-schema.md) for the complete offering-to-feature field mapping.
 
 #### Step 7.2: Map Dimensions to Products
 
@@ -349,11 +377,11 @@ If not already set, update `portfolio.json` to include the taxonomy reference:
 ```json
 {
   "taxonomy": {
-    "type": "b2b-ict-portfolio",
+    "type": "{TEMPLATE_TYPE}",
     "version": "3.7",
     "dimensions": 8,
     "categories": 57,
-    "source": "cogni-portfolio/skills/ict-scan/references/ict-taxonomy.md"
+    "source": "cogni-portfolio/templates/{TEMPLATE_TYPE}/template.md"
   }
 }
 ```
@@ -364,7 +392,7 @@ If not already set, update `portfolio.json` to include the taxonomy reference:
 
 - **Domain restriction:** Only search within discovered company domains
 - **Evidence-based:** Every offering must link to a source page (Domain + Link columns required)
-- **Complete coverage:** Include all 8 dimensions (0-7) and 57 categories
+- **Complete coverage:** Include all dimensions and categories from the taxonomy
 - **Full entity schema:** Capture all 11 fields per offering where available
 - **Discovery Status:** Mark each category with Confirmed/Not Offered/Emerging/Extended
 - **Service Horizons:** Classify each offering as Current/Emerging/Future
@@ -378,3 +406,5 @@ If not already set, update `portfolio.json` to include the taxonomy reference:
 | COMPANY_SLUG | From portfolio.json slug | `deutsche-telekom` |
 | PROJECT_PATH | Path to portfolio project dir | `/path/to/cogni-portfolio/deutsche-telekom` |
 | OUTPUT_FILE | Path to portfolio markdown | `${PROJECT_PATH}/research/${COMPANY_SLUG}-portfolio.md` |
+| TEMPLATE_PATH | Path to taxonomy template dir | `$CLAUDE_PLUGIN_ROOT/templates/b2b-ict` |
+| TEMPLATE_TYPE | Taxonomy type identifier | `b2b-ict` |

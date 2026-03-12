@@ -1,15 +1,15 @@
-# ICT Scan Report Template
+# Scan Report Template
 
 Instructions for generating `<company-slug>-portfolio.md` in Phase 6.
 
 ## Report Structure
 
-Generate the report dynamically from the taxonomy in [ict-taxonomy.md](ict-taxonomy.md). Do NOT hardcode 57 empty table sections — iterate over the taxonomy dimensions and categories to produce each section.
+Generate the report dynamically from the taxonomy in the template's `template.md`. Do NOT hardcode 57 empty table sections — iterate over the taxonomy dimensions and categories to produce each section.
 
 ```markdown
-# <Company Name> ICT Portfolio
+# <Company Name> Portfolio
 
-> ICT scan generated on <YYYY-MM-DD>
+> Portfolio scan generated on <YYYY-MM-DD>
 > Analyzed domains: domain1.com, domain2.com, domain3.com
 ```
 
@@ -34,7 +34,7 @@ Generate the report dynamically from the taxonomy in [ict-taxonomy.md](ict-taxon
 
 ### Per-Category Section Format
 
-For each of the 57 categories (from [ict-taxonomy.md](ict-taxonomy.md)), generate:
+For each category in the taxonomy, generate:
 
 ```markdown
 ### <ID> <Category Name> [Status: <status>]
@@ -75,4 +75,4 @@ Domestic, European, Nearshore, Offshore, Global
 
 ## Column Reference
 
-See [entity-schema.md](entity-schema.md) for the full 11-field offering schema.
+See the scan skill's `scan-entity-schema.md` for the full 11-field offering schema.

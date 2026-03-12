@@ -1,14 +1,31 @@
-# B2B ICT Portfolio Analysis Definition
+---
+type: b2b-ict
+version: "3.7"
+dimensions: 8
+categories: 57
+industry_match:
+  - "B2B ICT"
+  - "IT Services"
+  - "Managed Services"
+  - "Cloud Infrastructure"
+  - "Systems Integration"
+  - "IT Consulting"
+  - "Telecommunications"
+  - "Digital Services"
+  - "ICT"
+---
+
+# B2B ICT Portfolio Taxonomy
+
+Single source of truth for the B2B ICT Portfolio framework — 8 dimensions (0-7), 57 categories.
 
 ## Purpose
 
-The B2B ICT Portfolio framework provides an 8-dimension structure (0-7) for analyzing enterprise ICT service providers, with Dimension 0 covering provider business profile metrics and Dimensions 1-7 covering service offerings.
+The framework provides a MECE structure for analyzing enterprise ICT service providers. Dimension 0 covers provider business profile metrics; Dimensions 1-7 cover service offerings.
 
 ---
 
 ## Dimension Definitions
-
-The framework uses 8 dimensions (0-7): Dimension 0 for provider profile metrics, and Dimensions 1-7 for service domains:
 
 ### 0. Provider Profile Metrics
 
@@ -118,9 +135,7 @@ Each solution is positioned by market maturity and availability:
 
 ---
 
-## Standard Portfolio Taxonomy
-
-The framework defines **57 standard categories** across the 8 dimensions (0-7). Dimension 0 captures provider profile metrics, while Dimensions 1-7 cover service offerings. During research, findings are mapped to these predefined slots. Additional provider-specific offerings beyond this taxonomy are captured as "Extended" discoveries.
+## Standard Portfolio Taxonomy (57 Categories)
 
 ### Taxonomy Summary
 
@@ -233,7 +248,9 @@ The framework defines **57 standard categories** across the 8 dimensions (0-7). 
 | 7.4 | Program & Project Management | Large-scale IT program delivery |
 | 7.5 | Vendor & Contract Management | Procurement, sourcing, SLA negotiation |
 
-### Discovery Status Model
+---
+
+## Discovery Status Model
 
 For each taxonomy category, assign one of these statuses based on research findings:
 
@@ -244,13 +261,13 @@ For each taxonomy category, assign one of these statuses based on research findi
 | **Emerging** | Announced or pilot status (not yet GA) |
 | **Extended** | Provider-specific variant beyond standard taxonomy |
 
-**Note:** Extended discoveries are captured separately and should not exceed ~10-15 additional entities beyond the 57 standard categories.
+Extended discoveries are captured separately and should not exceed ~10-15 additional entities beyond the 57 standard categories.
 
 ---
 
 ## Category Question Templates
 
-Each category has a base question template for portfolio discovery. These templates are used by dimension-planner to generate refined questions when `research_type = b2b-ict-portfolio`.
+Each category has a base question template for portfolio discovery. Use these to generate refined questions during research.
 
 ### Provider Profile Metrics (0.x)
 
@@ -421,14 +438,12 @@ Reports follow a **hybrid portfolio catalog + strategic analysis** structure:
 1. **Executive Summary** — Key findings and portfolio overview
 2. **Provider Profile** — Dimension 0 metrics (financial scale, workforce, geographic presence, market position)
 3. **Portfolio Overview** — Radar diagram showing solutions across service dimensions (1-7) and horizons
-4. **Per-Dimension Sections** (×7, Dimensions 1-7):
+4. **Per-Dimension Sections** (x7, Dimensions 1-7):
    - Strategic Overview narrative
    - Portfolio Entity Catalog table (grouped by horizon)
    - Cross-cutting analysis (verticals, partners)
 5. **Strategic Implications** — Cross-dimensional trends
 6. **Recommendations** — Priority actions
-
-**Note:** B2B ICT Portfolio Solutions can later connect to TIPS Solutions via a separate integration skill.
 
 ---
 

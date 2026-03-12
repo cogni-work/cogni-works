@@ -1,6 +1,8 @@
-# Offering Entity Schema
+# Scan Entity Schema
 
-Each discovered offering is captured with 11 fields:
+Each discovered offering is captured with 11 fields during research. These are intermediate research artifacts stored in `research/.logs/` — they are NOT first-class data model entities. After the scan, offerings are mapped to features and products.
+
+## Offering Fields (Research Phase)
 
 | Field | Description | Example Values |
 |-------|-------------|----------------|
@@ -23,6 +25,28 @@ Each discovered offering is captured with 11 fields:
 | Current | 0-1 years | Generally available, proven deployments |
 | Emerging | 1-3 years | Pilot/beta, limited availability |
 | Future | 3+ years | Announced, conceptual, R&D phase |
+
+## Offering → Feature Field Mapping
+
+When importing offerings as portfolio features (Phase 7), map fields as follows:
+
+| Offering Field | Feature Field | Notes |
+|---|---|---|
+| Name | `name` + `slug` (kebab-case) | Slug derived from name |
+| Description | `description` | Direct mapping |
+| Category ID | `taxonomy_mapping.category_id` | From taxonomy classification |
+| Dimension | `taxonomy_mapping.dimension` | First digit of category ID |
+| Dimension Name | `taxonomy_mapping.dimension_name` | From taxonomy |
+| Category Name | `taxonomy_mapping.category_name` | From taxonomy |
+| Service Horizon | `taxonomy_mapping.horizon` + `readiness` | `current`→`ga`, `emerging`→`beta`, `future`→`planned` |
+| Link | Referenced in `source_file` | Source URL preserved in research report |
+| Domain | — | Research artifact, not persisted in feature |
+| USP | — | Captured downstream in `proposition.is_statement` |
+| Provider Unit | — | Captured in `portfolio.json` company context |
+| Pricing Model | — | Informs `product.revenue_model` (inferred) |
+| Delivery Model | — | Research artifact, not persisted in feature |
+| Technology Partners | — | Captured in provider profile (Dimension 0.6) |
+| Industry Verticals | — | Captured in market definitions downstream |
 
 ## Null-Safe Field Access
 

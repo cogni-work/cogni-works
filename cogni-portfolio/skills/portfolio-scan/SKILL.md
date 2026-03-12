@@ -34,6 +34,10 @@ setup → ingest (docs) → features (refine) → products (organize) → propos
 
 A cogni-portfolio project must exist for this company. If `cogni-portfolio/{slug}/portfolio.json` does not exist, instruct the user to run `cogni-portfolio:setup` first.
 
+**Setup integration:** This skill is typically invoked from `portfolio-setup` Step 5.5 when a company URL and taxonomy template are available. It also works standalone after setup. When invoked from setup, Phase 0 prerequisites are already satisfied.
+
+The `company.products` array in `portfolio.json` (if present) provides initial orientation but will be superseded by scan's structured discovery.
+
 **Note (zsh compatibility):** Do NOT combine variable assignment with `$()` command substitution and pipes in a single command. Use separate Bash tool calls.
 
 ---

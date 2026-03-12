@@ -28,13 +28,13 @@ Collect four required fields:
 - **Company name**: Legal or trading name
 - **Description**: One-sentence summary of what the company does
 - **Industry**: Primary industry sector (e.g., "Cloud Infrastructure", "B2B SaaS")
-- **Products**: List of main products or services offered
+- **Products**: List of main products or services offered *(optional if a company URL was provided — the scan in Step 5.5 will discover these)*
 
 If the user has provided some context already, extract what is available and ask only for missing fields.
 
 **Language detection**: After collecting the four fields above, check if a `.workspace-config.json` file exists in the workspace root directory. If it contains a `language` field, lowercase the value and use it as the portfolio language (e.g., `"DE"` becomes `"de"`). If no workspace config exists or it has no `language` field, ask the user which language to use for generated content (default: `"en"`).
 
-**Web research (optional)**: When the user provides a company URL or website, delegate to a subagent (Agent tool) to extract company description, industry, and product offerings from the company's public pages. This is especially useful when the user knows the company but hasn't articulated structured context yet. Present findings to the user for confirmation — never auto-populate without review.
+**Web research (optional)**: When the user provides a company URL or website, delegate to a subagent (Agent tool) to extract the company description, industry sector, and broad service areas from the company's public pages. Store the company domain for use in Step 5.5. Do NOT attempt detailed product discovery or feature-level analysis — that is the job of the full portfolio scan in Step 5.5. Present findings to the user for confirmation — never auto-populate without review.
 
 ### 2. Review with User
 
@@ -87,39 +87,49 @@ After the script creates directories, write `portfolio.json` in the project root
 
 ### 5. Taxonomy Template Selection (Optional)
 
-If the company's industry matches a known portfolio taxonomy template, suggest it:
+Match the company to a portfolio taxonomy template using all available context — industry field, company description, and broad service areas from web research (if Step 1 included web research). This is more reliable than matching on an industry keyword alone.
 
 1. Scan `$CLAUDE_PLUGIN_ROOT/templates/*/template.md` frontmatter for `industry_match` patterns
-2. If `company.industry` matches a template (e.g., "IT Services" matches `b2b-ict`), present it:
-   - "Your industry matches the **B2B ICT Portfolio** template (8 dimensions, 57 service categories). This enables structured portfolio scanning with the `scan` skill. Apply this template?"
-3. If user confirms, add to `portfolio.json`:
-   ```json
-   {
-     "taxonomy": {
-       "type": "b2b-ict",
-       "version": "3.7",
-       "dimensions": 8,
-       "categories": 57,
-       "source": "cogni-portfolio/templates/b2b-ict/template.md"
-     }
-   }
-   ```
-4. If no template matches or user declines, skip — the portfolio works fine without a taxonomy template.
+2. Evaluate matches against the full company context (industry + description + service areas), not just `company.industry`
+3. If a template matches (e.g., a company offering managed IT services, cloud infrastructure, and consulting maps to `b2b-ict`), present it:
+   - "Based on your company profile, the **B2B ICT Portfolio** template (8 dimensions, 57 service categories) is a good fit. Apply this template?"
+4. If user confirms, add taxonomy to `portfolio.json` (schema unchanged)
+5. If no template matches or user declines, skip — the portfolio works fine without a taxonomy template
+
+### 5.5. Portfolio Scan (when URL and taxonomy available)
+
+If a company URL/domain was captured in Step 1 AND a taxonomy template was selected in Step 5, offer to scan:
+
+> "You have a taxonomy template ({template name}) and a company domain ({domain}). I can scan their public websites now to discover and classify their service portfolio. This typically takes a few minutes. Proceed?"
+
+If the user confirms, invoke the `portfolio-scan` skill. The portfolio project, `portfolio.json`, and taxonomy are already in place, so scan's Phase 0 will resolve immediately.
+
+If the user declines or no URL was provided, skip to Step 6 — they can run `portfolio-scan` separately later.
+
+If no taxonomy template was selected in Step 5, skip — scanning requires a taxonomy to classify against. Mention: "Portfolio scanning requires a taxonomy template. You can apply one later and run `portfolio-scan` separately."
 
 ### 6. Confirm and Guide Next Steps
 
-Present the created project structure and suggest the full workflow. If the user has existing documents (product specs, market research, pitch decks, etc.), mention they can drop files into the `uploads/` folder and run the `ingest` skill to import data automatically.
+Present the created project structure and suggest next steps.
 
-1. (Optional) Drop existing documents into `uploads/` and run the `ingest` skill
-2. Define products with the `products` skill
-3. Add features to each product with the `features` skill
-4. Discover target markets with the `markets` skill
-5. Generate proposition messaging with the `propositions` skill
-6. Define implementation plans and pricing with the `solutions` skill
-7. Enrich with `compete` (competitor analysis) and `customers` (buyer profiles)
-8. Verify web-sourced claims with the `verify` skill
-8. Aggregate into messaging repository with the `synthesize` skill
+**If portfolio scan ran in Step 5.5:** Products and features have been discovered and imported.
+
+1. Refine products with the `products` skill (positioning, pricing tier)
+2. Refine features with the `features` skill (IS-layer descriptions)
+3. Discover target markets with the `markets` skill
+4. Generate proposition messaging with the `propositions` skill
+5. Define implementation plans and pricing with the `solutions` skill
+6. Enrich with `compete` and `customers`
+7. Verify web-sourced claims with the `verify` skill
+8. Aggregate with the `synthesize` skill
 9. Generate deliverables with the `export` skill
+
+**If scan did not run:** Two paths to populate the portfolio:
+
+- **From documents**: Drop files in `uploads/` and run `ingest`
+- **From the web**: Run `scan` to discover and classify offerings
+
+Then continue with downstream skills above.
 
 ## Data Model Overview
 

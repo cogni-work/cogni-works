@@ -286,18 +286,161 @@ Location: `.metadata/trend-report-verification.json`
 
 ## Entity Relationships
 
+```mermaid
+erDiagram
+    Project ||--|| ScoutOutput : produces
+    ScoutOutput ||--|{ Candidate : contains
+    ScoutOutput ||--|| ValueModel : "feeds into"
+    ScoutOutput ||--|| TrendReport : "feeds into"
+    TrendReport ||--|{ Claim : extracts
+    TrendReport ||--o| Verification : "verified by"
+    TrendReport ||--o| InsightSummary : summarizes
+    ValueModel ||--|{ Path : contains
+    ValueModel ||--|{ SolutionTemplate : contains
+    ValueModel ||--|{ SPI : contains
+    ValueModel ||--|{ Metric : contains
+    ValueModel ||--|{ Collateral : contains
+    Path ||--|{ SolutionTemplate : "linked to"
+    SolutionTemplate ||--|{ SPI : "requires"
+    SolutionTemplate ||--o| Collateral : "supported by"
+    Candidate }|--|| Dimension : "belongs to"
+    Path }o--|| Candidate : "references T-I-P"
+    SolutionTemplate }o--o| PortfolioAnchor : "grounded by"
+    Project }o--o| PortfolioSource : "initialized from"
+
+    Project {
+        string slug PK
+        string name
+        string language "de|en"
+        object industry
+        string research_topic
+        string created
+        object portfolio_source "optional"
+    }
+    ScoutOutput {
+        string version "1.0.0"
+        string project_id FK
+        object config
+        object tips_candidates
+        object execution
+        string workflow_state "initialized|phase-1|...|agreed"
+    }
+    Candidate {
+        string dimension "externe-effekte|neue-horizonte|digitale-wertetreiber|digitales-fundament"
+        string subcategory
+        string horizon "act|plan|observe"
+        int sequence
+        string name
+        string trend_statement
+        string source "web-signal|training|user_proposed"
+        float score
+        string confidence_tier "high|medium|low|uncertain"
+        int signal_intensity "1-5 Ansoff scale"
+        object diffusion_stage
+    }
+    Dimension {
+        string name PK
+        string tips_role "T|I|P|S"
+        string[] subcategories
+    }
+    TrendReport {
+        string file_path
+        string language
+    }
+    Claim {
+        string id PK "claim_EE_001"
+        string dimension FK
+        string tips_role "T|I|P|S"
+        string text
+        string value
+        string unit
+        string type "currency|percentage|count|timeframe|ratio"
+        array citations
+    }
+    Verification {
+        string verified_at
+        string verdict "PASS|FAIL"
+        int total_claims
+        int passed
+        int failed
+        int review
+    }
+    InsightSummary {
+        string file_path
+    }
+    ValueModel {
+        string project_id FK
+    }
+    Path {
+        string path_id PK "path-001"
+        string name
+        string narrative
+        object trend "candidate_ref FK"
+        array implications "candidate_ref FKs"
+        array possibilities "candidate_ref FKs"
+        array foundation_requirements
+        array solution_templates "st_id FKs"
+    }
+    SolutionTemplate {
+        string st_id PK "st-001"
+        string name
+        string description
+        string category "software|hardware|service|hybrid|process"
+        string enabler_type
+        string generation_mode "portfolio-anchored|abstract"
+        object portfolio_anchor "optional"
+        array portfolio_grounding "optional"
+        string quality_flag "null|quality_investment_needed"
+        float business_relevance "1-5 scale"
+        float ranking_value
+    }
+    PortfolioAnchor {
+        string feature_slug FK
+        string product_slug FK
+        array theme_needs_delivered
+        array theme_needs_undelivered
+    }
+    SPI {
+        string spi_id PK "spi-001"
+        string name
+        string description
+        string st_ref FK
+        string change_type "governance|training|workflow|organization|measurement"
+    }
+    Metric {
+        string metric_id PK "met-001"
+        string name
+        string unit
+        string direction "increase|decrease"
+        array linked_paths "path_id FKs"
+    }
+    Collateral {
+        string collateral_id PK "col-001"
+        string name
+        string type "case-study|whitepaper|reference-architecture|demo|benchmark"
+        string st_ref FK
+        string status "exists|recommended"
+    }
+    PortfolioSource {
+        string portfolio_slug FK
+        string market_slug FK
+    }
+```
+
+### File Hierarchy
+
 ```
 tips-project.json (root manifest)
   └── .metadata/trend-scout-output.json (config + candidates + state)
-        ├── .logs/web-research-raw.json (raw signals → candidates)
+        ├── .logs/web-research-raw.json (raw signals -> candidates)
         ├── .logs/trend-generator-candidates.json (60 candidates)
-        ├── tips-trend-report.md (report ← candidates)
+        ├── tips-trend-report.md (report <- candidates)
         │     ├── .logs/report-section-{dimension}.md (4 sections)
         │     ├── tips-trend-report-claims.json (extracted claims)
         │     ├── tips-insight-summary.md (narrative summary)
         │     └── .metadata/trend-report-verification.json (verification results)
-        └── tips-value-model.json (value modeler ← candidates)
-              ├── paths[] (T→I→P relationship networks)
+        └── tips-value-model.json (value modeler <- candidates)
+              ├── paths[] (T->I->P relationship networks)
               ├── solution_templates[] (enablers linked to paths)
               ├── solution_process_improvements[] (SPIs per ST)
               ├── metrics[] (success KPIs per path)

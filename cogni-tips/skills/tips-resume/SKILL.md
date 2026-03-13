@@ -15,7 +15,7 @@ Session entry point for returning to trend scouting work. This skill orients the
 
 ## Core Concept
 
-TIPS projects span multiple sessions and skills (trend-scout → trend-report → verification). Without a clear re-entry point, users lose context between sessions and waste time figuring out what they already did. This skill bridges that gap: it reads the project state, surfaces progress at a glance, and recommends the most valuable next step.
+TIPS projects span multiple sessions and skills (trend-scout → value-modeler → trend-report → verification). Without a clear re-entry point, users lose context between sessions and waste time figuring out what they already did. This skill bridges that gap: it reads the project state, surfaces progress at a glance, and recommends the most valuable next step.
 
 ## Workflow
 
@@ -85,11 +85,15 @@ Language: {language}
 | Web Research | Done / Pending | {web_research_status}, {candidates_web} signals found |
 | Candidate Generation | Done / Pending | 60 generated |
 | Candidate Selection | Done / Pending | {candidates_total}/60 agreed |
+| Value Chains & Themes | Done / Pending | {themes_count} strategic themes |
+| Solution Templates | Done / Pending | {solutions_count} solutions generated |
+| BR Scoring & Ranking | Done / Pending | {ranked_count} solutions ranked |
 | Trend Report | Done / Pending | {report_sections}/4 sections |
 | Claims Registry | Done / Pending | {claims_total} claims extracted |
 | Insight Summary | Done / Skipped | |
 | Claim Verification | Done / Pending / Skipped | {verdict}: {passed} passed, {failed} failed |
 | Executive Polish | Done / Skipped | tone (cogni-copywriting) |
+| Dashboard | Done / Skipped | interactive HTML visualization |
 
 **Scoring Summary** (if candidates exist):
 - Average score: {avg_score}
@@ -126,18 +130,18 @@ If the phase is `complete`, congratulate the user and suggest exporting or visua
 | `researching` | Web research in progress | Re-invoke `trend-scout` to continue |
 | `generating` | Candidate generation in progress | Re-invoke `trend-scout` to continue |
 | `selecting` | Candidates presented, finalizing | Re-invoke `trend-scout` to finalize |
-| `reporting` | Candidates agreed, report not yet generated | Run `trend-report` |
-| `verification` | Report done, claims pending verification | Run `cogni-claims:claim-work` |
-| `modeling` | Report done, value model not yet built | Run `value-modeler` |
+| `modeling` | Candidates agreed, value model not yet built | Run `value-modeler` |
 | `modeling-paths` | Relationship networks built, solutions pending | Continue `value-modeler` |
 | `modeling-scoring` | Solutions generated, BR scoring pending | Continue `value-modeler` |
 | `modeling-curating` | Ranked solutions complete, curation pending | Continue `value-modeler` for optional catalog curation |
-| `modeling-complete` | Value model complete with ranked solutions | Run `/tips-catalog import` or export/visualize Big Block |
-| `complete` | All stages finished | Export or visualize results |
+| `modeling-complete` | Value model complete with ranked solutions | Run `trend-report`, or `/tips-catalog import` |
+| `reporting` | Value model complete, report not yet generated | Run `trend-report` |
+| `verification` | Report done, claims pending verification | Run `cogni-claims:claim-work` |
+| `complete` | All stages finished | Export, visualize with `/tips-dashboard`, or run `/tips-catalog import` |
 
 ## Multi-Session Design
 
-This skill is the recommended re-entry point after heavy sessions. TIPS work naturally spans multiple sessions — web research, candidate generation, candidate review, and report writing each consume significant context. Other TIPS skills proactively recommend `/tips-resume` when they detect a heavy session (Phase 1 web research, Phase 2 generation, or report assembly completed).
+This skill is the recommended re-entry point after heavy sessions. TIPS work naturally spans multiple sessions — web research, candidate generation, candidate review, value modeling, and report writing each consume significant context. Other TIPS skills proactively recommend `/tips-resume` when they detect a heavy session (Phase 1 web research, Phase 2 generation, or report assembly completed).
 
 When presenting the status summary, acknowledge what the user accomplished in previous sessions if recent timestamps suggest productive recent work. This continuity helps users feel their work persists and builds confidence in the multi-session workflow.
 

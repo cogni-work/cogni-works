@@ -157,12 +157,18 @@ HAS_INSIGHT="false"
 HAS_VERIFICATION="false"
 HAS_COPYWRITER="false"
 COPYWRITER_SCOPE=""
+HAS_VALUE_MODEL="false"
+VALUE_MODEL_PHASE=""
+THEMES_COUNT=0
+SOLUTIONS_COUNT=0
+RANKED_COUNT=0
 CLAIMS_TOTAL=0
 
 [ -f "$PROJECT_DIR/.logs/web-research-raw.json" ] && HAS_WEB_RESEARCH="true"
 [ -f "$PROJECT_DIR/.logs/trend-generator-candidates.json" ] && HAS_GENERATOR_LOG="true"
 [ -f "$PROJECT_DIR/trend-candidates.md" ] && HAS_CANDIDATES_MD="true"
 [ -f "$PROJECT_DIR/trend-selector-app.html" ] && HAS_SELECTOR_APP="true"
+[ -f "$PROJECT_DIR/tips-value-model.json" ] && HAS_VALUE_MODEL="true"
 [ -f "$PROJECT_DIR/tips-trend-report.md" ] && HAS_REPORT="true"
 [ -f "$PROJECT_DIR/tips-trend-report-claims.json" ] && HAS_CLAIMS="true"
 [ -f "$PROJECT_DIR/tips-insight-summary.md" ] && HAS_INSIGHT="true"
@@ -213,6 +219,37 @@ except Exception:
 " 2>/dev/null)"
 fi
 
+# Extract value-modeler status
+if [ "$HAS_VALUE_MODEL" = "true" ]; then
+  eval "$(python3 -c "
+import json
+try:
+    d = json.load(open('$PROJECT_DIR/tips-value-model.json'))
+    themes = d.get('themes', [])
+    print(f'THEMES_COUNT={len(themes)}')
+    sts = d.get('solution_templates', [])
+    print(f'SOLUTIONS_COUNT={len(sts)}')
+    ranked = [s for s in sts if s.get('f1_score') is not None or s.get('rank') is not None]
+    print(f'RANKED_COUNT={len(ranked)}')
+except Exception:
+    pass
+" 2>/dev/null)"
+fi
+
+# Detect value-modeler sub-phase from output metadata
+VM_OUTPUT="$PROJECT_DIR/.metadata/value-modeler-output.json"
+if [ -f "$VM_OUTPUT" ]; then
+  eval "$(python3 -c "
+import json
+try:
+    d = json.load(open('$VM_OUTPUT'))
+    phase = d.get('execution', {}).get('workflow_phase', '')
+    print(f'VALUE_MODEL_PHASE={chr(39)}{phase}{chr(39)}')
+except Exception:
+    pass
+" 2>/dev/null)"
+fi
+
 # Count report section files
 REPORT_SECTIONS=0
 if [ -d "$PROJECT_DIR/.logs" ]; then
@@ -248,8 +285,27 @@ elif [ "$WORKFLOW_STATE" = "phase-4" ] || [ "$WORKFLOW_STATE" = "agreed" ]; then
     else
       PHASE="complete"
     fi
+  elif [ "$HAS_VALUE_MODEL" = "true" ]; then
+    # Value model exists — check sub-phase or fall through to reporting
+    if [ -n "$VALUE_MODEL_PHASE" ]; then
+      case "$VALUE_MODEL_PHASE" in
+        modeling|paths) PHASE="modeling-paths" ;;
+        scoring) PHASE="modeling-scoring" ;;
+        curating) PHASE="modeling-curating" ;;
+        complete) PHASE="reporting" ;;
+        *) PHASE="reporting" ;;
+      esac
+    elif [ "$RANKED_COUNT" -gt 0 ]; then
+      PHASE="reporting"
+    elif [ "$SOLUTIONS_COUNT" -gt 0 ]; then
+      PHASE="modeling-scoring"
+    elif [ "$THEMES_COUNT" -gt 0 ]; then
+      PHASE="modeling-paths"
+    else
+      PHASE="modeling"
+    fi
   else
-    PHASE="reporting"
+    PHASE="modeling"
   fi
 elif [ "$WORKFLOW_STATE" = "report-enriching" ] || [ "$WORKFLOW_STATE" = "report-assembling" ]; then
   PHASE="reporting"
@@ -282,8 +338,20 @@ case "$PHASE" in
   selecting)
     add_action "trend-scout" "Candidates ready for selection — edit trend-candidates.md then re-invoke"
     ;;
+  modeling)
+    add_action "value-modeler" "Candidates agreed — build value model next"
+    ;;
+  modeling-paths)
+    add_action "value-modeler" "Relationship networks built — continue to generate solution templates"
+    ;;
+  modeling-scoring)
+    add_action "value-modeler" "Solutions generated — continue to BR scoring and ranking"
+    ;;
+  modeling-curating)
+    add_action "value-modeler" "Ranked solutions complete — continue for optional catalog curation"
+    ;;
   reporting)
-    add_action "trend-report" "Candidates agreed — ready to generate trend report"
+    add_action "trend-report" "Value model complete — ready to generate trend report"
     ;;
   verification)
     add_action "cogni-claims:claim-work" "$CLAIMS_TOTAL claims extracted — ready for verification"
@@ -314,6 +382,17 @@ if os.path.exists(scout_file) and os.path.exists(report_file):
         warnings.append({
             'type': 'stale_report',
             'message': 'Trend-scout output was modified after the report was generated — report may need refresh'
+        })
+
+# Check if report is stale relative to value model
+value_model_file = os.path.join(proj, 'tips-value-model.json')
+if os.path.exists(value_model_file) and os.path.exists(report_file):
+    vm_mtime = os.path.getmtime(value_model_file)
+    report_mtime = os.path.getmtime(report_file)
+    if vm_mtime > report_mtime:
+        warnings.append({
+            'type': 'stale_report',
+            'message': 'Value model was modified after the report was generated — report may need refresh'
         })
 
 # Check if web research signals are old (> 30 days)
@@ -389,7 +468,10 @@ cat << EOF
     "candidates_training": $CANDIDATES_TRAINING,
     "candidates_user": $CANDIDATES_USER,
     "claims_total": $CLAIMS_TOTAL,
-    "report_sections": $REPORT_SECTIONS
+    "report_sections": $REPORT_SECTIONS,
+    "themes": $THEMES_COUNT,
+    "solutions": $SOLUTIONS_COUNT,
+    "ranked_solutions": $RANKED_COUNT
   },
   "scoring": {
     "avg_score": $AVG_SCORE,
@@ -402,6 +484,7 @@ cat << EOF
     "generator_log": $HAS_GENERATOR_LOG,
     "candidates_md": $HAS_CANDIDATES_MD,
     "selector_app": $HAS_SELECTOR_APP,
+    "value_model": $HAS_VALUE_MODEL,
     "report": $HAS_REPORT,
     "claims": $HAS_CLAIMS,
     "insight_summary": $HAS_INSIGHT,

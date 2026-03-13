@@ -262,19 +262,57 @@ that don't understand it will ignore it.
 
 Ask the user which product each new feature belongs to.
 
-**Step 4: Enrich Propositions (for "Enrich" actions)**
+**Step 4: Generate Proposition Variants (for "Enrich" actions)**
 
-For features that already have propositions, offer to enrich the DOES and MEANS statements
-with TIPS context:
+For features that already have propositions, generate **variants** instead of modifying
+the primary DOES/MEANS. Each matched ST's value chain produces a distinct variant that
+captures a specific angle.
 
-- **DOES enrichment:** The TIPS path narrative provides trend-driven advantage framing.
-  Example: "Reduces defect rate by 40%" → "Addresses EU quality regulation pressure by
-  reducing defect rate by 40% through AI-driven prediction"
-- **MEANS enrichment:** The BR scoring context provides business outcome framing.
-  Example: "Protects production quality" → "Protects production quality in an environment
-  where regulatory non-compliance carries 2-4% revenue risk"
+**Never auto-replace the primary DOES/MEANS.** The primary remains untouched. Only the
+user can promote a variant to primary via `/propositions variants promote`.
 
-Present before/after for user approval. Never overwrite without confirmation.
+**For each matched ST:**
+
+1. Extract the ST's theme and linked value chains from the TIPS value model
+2. For each value chain narrative, derive:
+   - **Angle**: A kebab-case label from the ST's theme (e.g., `regulatory-compliance`,
+     `predictive-maintenance`, `supply-chain-resilience`)
+   - **Variant DOES**: The feature's advantage framed through this specific T→I→P angle.
+     Example: primary says "Reduces defect rate by 40%" → variant says "Anticipates
+     regulatory audit triggers before they fire, giving quality teams weeks instead of
+     hours to prepare documentation"
+   - **Variant MEANS**: The business outcome framed through the narrative's possibility
+     and urgency. Example: primary says "Protects production quality" → variant says
+     "Avoid the €2-4M cost of a single compliance failure while reducing audit prep
+     effort by 70%"
+3. Delegate to the `proposition-generator` agent in **variant mode** by passing:
+   - `tips_ref`: the cross-reference to the source ST (e.g., `{pursuit-slug}#st-001`)
+   - `value_chain_narrative`: the full T→I→P narrative text from the value chain
+4. The agent generates the variant with 3 narrative evidence entries (`why_now`,
+   `sales_guide`, `proposal_justification`) and appends it to the proposition's
+   `variants` array
+
+**Presentation:**
+
+After all variants are generated, present them alongside the primary for user review:
+
+```
+Proposition: {feature}--{market}
+Primary DOES: "{current primary does_statement}"
+Primary MEANS: "{current primary means_statement}"
+
+Generated Variants:
+| Variant | Angle | DOES (summary) | Source ST |
+|---------|-------|----------------|----------|
+| v-001 | regulatory-compliance | Anticipates audit triggers... | st-001 |
+| v-002 | cost-optimization | Reduces total quality cost... | st-001 |
+| v-003 | talent-retention | Frees quality engineers... | st-003 |
+```
+
+The user can then:
+- **Keep** variants as alternative positioning for different sales contexts
+- **Promote** a variant to primary via `/propositions variants promote {variant_id}`
+- **Delete** variants that don't add value via `/propositions variants delete {variant_id}`
 
 **Step 5: Map TIPS Metrics to Evidence**
 
@@ -295,6 +333,75 @@ evidence's origin without needing to open the TIPS project.
 
 These become candidate evidence entries on the relevant proposition. Mark them as
 unverified — the user can later run `/portfolio-verify` to check sourced claims.
+
+**Step 5.3: Generate Path Narrative Evidence**
+
+For each matched ST, construct evidence entries from its value chain narratives. These
+transform the abstract T→I→P causal story into concrete, sales-ready content that tells
+the buyer *why this matters now* and *how the pieces connect*.
+
+**For each ST with "Enrich" action:**
+
+1. Read the ST's `linked_chains` from the value model
+2. For each linked value chain, extract the `trend`, `implications`, `possibilities`,
+   and the chain's `narrative`
+3. Generate **three evidence entries** per chain, each tagged with `narrative_type` and
+   a `tips_path` object for traceability:
+
+   **a) `why_now` — Trend urgency framing**
+   ```json
+   {
+     "statement": "{Trend name} creates a {horizon}-term window — organizations acting now gain first-mover advantage in {possibility area}",
+     "source_url": null,
+     "source_title": "TIPS Value Model — {pursuit name}",
+     "narrative_type": "why_now",
+     "tips_path": {
+       "trend": "{trend candidate name}",
+       "implication": "{primary implication name}",
+       "possibility": "{primary possibility name}",
+       "urgency": "{act|plan|observe}"
+     }
+   }
+   ```
+   The `why_now` entry frames the trend's urgency in terms the buyer understands. Use
+   the horizon to calibrate urgency: `act` = "immediate window", `plan` = "emerging
+   window, 12-24 months", `observe` = "strategic horizon, position now for future".
+
+   **b) `sales_guide` — Implication→Possibility causal link**
+   ```json
+   {
+     "statement": "Because {implication name} is reshaping {domain}, teams that adopt {possibility/feature} gain {specific advantage from ST description}",
+     "source_url": null,
+     "source_title": "TIPS Value Model — {pursuit name}",
+     "narrative_type": "sales_guide",
+     "tips_path": { ... }
+   }
+   ```
+   The `sales_guide` entry explains the I→P link in buyer language. This is the "bridge
+   sentence" a salesperson uses to connect the customer's pain (implication) to the
+   proposed solution (possibility/feature).
+
+   **c) `proposal_justification` — Full T→I→P narrative**
+   ```json
+   {
+     "statement": "{Full chain narrative adapted to portfolio language: trend drives implication, which creates the need for this feature, enabling the business outcome described in the proposition's MEANS}",
+     "source_url": null,
+     "source_title": "TIPS Value Model — {pursuit name}",
+     "narrative_type": "proposal_justification",
+     "tips_path": { ... }
+   }
+   ```
+   The `proposal_justification` entry is a complete paragraph suitable for proposal
+   background sections. It weaves the T→I→P chain into a coherent argument for
+   investing in this specific feature.
+
+4. **Place the evidence**: If a variant was created for this ST (Step 4), add the
+   narrative evidence to the variant's `evidence` array. If no variant exists (the ST
+   was skipped or mapped to a feature without propositions), add to the primary
+   proposition's `evidence` array.
+
+5. **Deduplication**: If the same value chain feeds multiple STs matched to the same
+   proposition, generate the narrative evidence only once (keyed by chain_id).
 
 **Step 5.5: Propose Solution Stubs**
 
@@ -340,20 +447,103 @@ Valid `enrichment_type` values:
 - `does_refined` — DOES statement was enriched with trend-driven advantage framing
 - `means_refined` — MEANS statement was enriched with business outcome context
 - `evidence_added` — New evidence entries were suggested from TIPS metrics
+- `narrative_evidence_added` — Path narrative evidence (why_now, sales_guide, proposal_justification) was generated from value chains (Step 5.3)
+- `variant_created` — One or more proposition variants were created from TIPS value chains (Step 4)
 - `solution_proposed` — A solution stub was proposed (from Step 5.5)
 
 This metadata is appended to the proposition JSON. Portfolio skills that don't understand
 it will ignore it. It enables future auditing of which TIPS pursuit influenced which
 portfolio positioning.
 
+**Step 5.8: Generate Opportunity Pipeline**
+
+For each Solution Template with `match_confidence: "none"` or `"low"`, generate a
+structured opportunity assessment. This transforms vague "portfolio gaps" into a
+prioritized innovation pipeline with scoring, classification, and roadmap-ready specs.
+
+See `references/opportunity-schema.md` for the full schema definition.
+
+**For each unmatched ST:**
+
+1. **Calculate opportunity score** (0-10):
+   ```
+   opportunity_score = (
+       (ranking_value / 5) × 0.4 +
+       tam_alignment × 0.3 +
+       competitive_whitespace × 0.3
+   ) × 10
+   ```
+   - `ranking_value`: The ST's ranking_value from the TIPS value model (0-5)
+   - `tam_alignment`: Fraction of portfolio markets with `market_relevance` = `"direct"`
+     or `"industry"` for this pursuit (0-1). Read from the market entries in
+     `portfolio-context.json`.
+   - `competitive_whitespace`: If competitive analysis exists for related propositions,
+     estimate whitespace from competitor coverage gaps. Otherwise default to 0.7
+     (moderate whitespace assumption).
+
+2. **Classify the opportunity**:
+   - **build**: The company has adjacent expertise (existing features in the same taxonomy
+     dimension), the opportunity is core to differentiation, and no adequate turnkey
+     solution exists. Requires development investment.
+   - **buy**: A commercial solution exists that covers 80%+ of the need. Faster
+     time-to-market through acquisition or licensing.
+   - **partner**: Requires specialized domain expertise the company lacks. Best addressed
+     through co-development, white-label, or referral partnership.
+
+   Use the ST's `category` and the portfolio's existing feature landscape to guide
+   classification. Provide a rationale and list alternatives.
+
+3. **Estimate revenue** from market TAM data:
+   - Read portfolio markets and filter to those with `market_relevance` = `"direct"`
+   - Use TAM values with conservative penetration assumptions (0.05-0.2%)
+   - Set confidence: `"high"` (validated TAM + comparable pricing), `"medium"` (TAM
+     with assumptions), `"low"` (rough estimate)
+
+4. **Generate feature spec** (roadmap-ready):
+   - `proposed_slug`: Derived from ST name (kebab-case)
+   - `name` and `description`: Adapted from ST for feature language
+   - `category`: Derived from ST category
+   - `readiness`: Always `"planned"`
+   - `unmet_needs`: From `portfolio_anchor.theme_needs_undelivered` (portfolio-anchored
+     STs) or extracted from ST description (abstract STs)
+   - `source_themes` and `source_sts`: Traceability to TIPS value model
+
+5. **Assign priority**: `"high"` (score ≥ 7.0 AND ranking_value ≥ 4.0), `"medium"`
+   (score ≥ 4.0 OR ranking_value ≥ 3.0), `"low"` (everything else)
+
+**Write** `portfolio-opportunities.json` to the TIPS project directory (alongside
+`tips-value-model.json`).
+
+**Present** the opportunities table sorted by score:
+
+```
+Innovation Pipeline ({N} opportunities)
+
+| # | Opportunity | Score | Class | Revenue Est. | Priority |
+|---|-------------|-------|-------|-------------|----------|
+| 1 | Compliance Automation Suite | 8.2 | build | €500K/yr | high |
+| 2 | Edge Analytics Gateway | 6.1 | partner | €200K/yr | medium |
+| 3 | Digital Twin Connector | 3.4 | buy | €80K/yr | low |
+
+Actions: [Accept] creates a feature stub from the spec. [Defer] keeps it in the
+pipeline for future review. [Reject] removes it.
+```
+
+For each opportunity the user accepts, create a feature file from the `feature_spec`
+using the same process as Step 3 (new feature creation). Mark it with
+`tips_ref: "{pursuit-slug}#st-{id}"` for traceability.
+
 **Step 6: Summary**
 
 Report what was created/enriched:
-- N new features created
-- N propositions enriched (with enrichment type breakdown)
-- N evidence entries suggested (with tips_context provenance)
+- N new features created (from Step 3 and accepted opportunities)
+- N proposition variants created (with angle breakdown)
+- N narrative evidence entries generated (why_now, sales_guide, proposal_justification)
+- N metric-based evidence entries suggested (with tips_context provenance)
 - N solution stubs proposed
-- List any high-ranked STs that were skipped (portfolio gaps worth revisiting)
+- N opportunities identified (with classification breakdown: build/buy/partner)
+- Total estimated annual revenue from opportunities: €{total}
+- List high-ranked STs with quality flags needing investment
 
 ### portfolio-to-tips — Load Portfolio as TIPS Constraints
 
@@ -365,10 +555,11 @@ Loads the portfolio's products, features, propositions, and solutions into the T
 model context so that Phase 2 (Solution Template generation) is grounded in what you
 actually sell and how you position it per market.
 
-**This operation is informational** — it writes a `portfolio-context.json` (v2.0) file into
+**This operation is informational** — it writes a `portfolio-context.json` (v3.0) file into
 the TIPS project directory that value-modeler Phase 2 can read. The enriched context gives
-Phase 2 access to proposition language (IS/DOES/MEANS) and solution summaries so that
-Solution Templates are grounded in real portfolio capabilities.
+Phase 2 access to proposition language (IS/DOES/MEANS), quality assessments, variant counts,
+and solution summaries so that Solution Templates are grounded in real portfolio capabilities
+with quality awareness.
 
 **Step 1: Discover Projects**
 
@@ -386,17 +577,47 @@ descriptions, no solutions), report them and continue.
 Read all products from `portfolio/products/*.json` and features from
 `portfolio/features/*.json`. Build the product → feature hierarchy.
 
-**Step 2.5: Enrich Features with Propositions & Solutions**
+**Step 2.5: Enrich Features with Propositions, Solutions & Quality**
 
 For each feature, check for matching proposition and solution files:
 
 1. Read all `portfolio/propositions/{feature-slug}--{market-slug}.json` files
 2. Read all `portfolio/solutions/{feature-slug}--{market-slug}.json` files
 3. Compact each proposition into: `is_statement`, `does_statement`, `means_statement`,
-   and `evidence_count` (number of evidence entries — avoids bloating the context file)
+   `evidence_count` (number of evidence entries), and `variant_count` (length of `variants`
+   array, or 0 if absent)
 4. Compact each solution into: `solution_type`, `pricing_tiers` (tier names only),
    and `price_range` (min, max, currency)
-5. Nest the compacted propositions under their parent feature
+5. **Assess proposition quality**: For each proposition, run the `proposition-quality-assessor`
+   agent (or read cached assessment if `updated` date hasn't changed since last assessment).
+   Compact the result into a `quality_assessment` object:
+   ```json
+   {
+     "quality_assessment": {
+       "overall": "pass|warn|fail",
+       "does_score": {
+         "buyer_centricity": "pass|warn|fail",
+         "market_specificity": "pass|warn|fail",
+         "differentiation": "pass|warn|fail",
+         "status_quo_contrast": "pass|warn|fail",
+         "conciseness": "pass|warn|fail"
+       },
+       "means_score": {
+         "outcome_specificity": "pass|warn|fail",
+         "escalation": "pass|warn|fail",
+         "quantification": "pass|warn|fail",
+         "emotional_resonance": "pass|warn|fail",
+         "conciseness": "pass|warn|fail"
+       },
+       "assessed_at": "2026-03-13"
+     }
+   }
+   ```
+   Quality assessment is cached — only re-run if the proposition's `updated` date is newer
+   than `assessed_at`. If no prior assessment exists, run the assessor. If running assessments
+   would slow down the export significantly (>10 propositions), warn the user and offer to
+   skip: "Quality assessment of {N} propositions may take a few minutes. Skip for now?"
+6. Nest the compacted propositions under their parent feature
 
 **Market-Relevance Matching:**
 
@@ -413,11 +634,11 @@ Assign `market_relevance` and `match_reason` to each market entry in the context
 
 **Step 3: Build Context File**
 
-Assemble `portfolio-context.json` v2.0:
+Assemble `portfolio-context.json` v3.0:
 
 ```json
 {
-  "schema_version": "2.0",
+  "schema_version": "3.0",
   "source": "cogni-portfolio",
   "portfolio_slug": "{portfolio-slug}",
   "extracted_at": "{ISO-8601 timestamp}",
@@ -441,6 +662,25 @@ Assemble `portfolio-context.json` v2.0:
               "does_statement": "Reduces MTTR by 60% through AI-correlated alerting",
               "means_statement": "Protects SaaS uptime SLAs in a market where churn from downtime costs 5-8% ARR",
               "evidence_count": 3,
+              "variant_count": 2,
+              "quality_assessment": {
+                "overall": "pass",
+                "does_score": {
+                  "buyer_centricity": "pass",
+                  "market_specificity": "pass",
+                  "differentiation": "pass",
+                  "status_quo_contrast": "warn",
+                  "conciseness": "pass"
+                },
+                "means_score": {
+                  "outcome_specificity": "pass",
+                  "escalation": "pass",
+                  "quantification": "pass",
+                  "emotional_resonance": "warn",
+                  "conciseness": "pass"
+                },
+                "assessed_at": "2026-03-12"
+              },
               "solution_summary": {
                 "solution_type": "project",
                 "pricing_tiers": ["proof_of_value", "small", "medium", "large"],
@@ -471,9 +711,15 @@ Assemble `portfolio-context.json` v2.0:
 
 Write to `{tips-project-dir}/portfolio-context.json`.
 
-**Backward compatibility:** The `schema_version` field distinguishes v2.0 from earlier
-exports. Phase 2 checks this field and falls back to basic feature matching when v1.0
-(no `schema_version` field) is encountered.
+**Schema version notes:**
+- v3.0 adds `variant_count` and `quality_assessment` per proposition (v2.0 consumers ignore these)
+- v2.0 had propositions without quality or variant data
+- v1.0 (no `schema_version` field) had no embedded propositions at all
+
+**Backward compatibility:** The `schema_version` field distinguishes versions. Phase 2
+checks this field: v3.0 enables quality-aware generation and variant tracking, v2.0
+enables proposition-grounded generation, v1.0 (no field) falls back to basic feature
+matching. Each version is a superset of the previous — new fields are additive.
 
 **Step 4: Advise Value Modeler**
 
@@ -525,29 +771,48 @@ Execute the full `tips-to-portfolio` operation (ST matching, enrichment, evidenc
 Present a unified reconciliation table that shows the full picture across both directions:
 
 ```
-| Feature | Market | Proposition | Solution | TIPS STs | Status |
-|---------|--------|-------------|----------|----------|--------|
-| predictive-analytics | mid-market-dach | Yes | Yes | st-001 | Aligned |
-| compliance-engine | enterprise-eu | Yes | No | st-004 | Needs solution |
-| predictive-analytics | enterprise-eu | No | No | st-001 | Needs enrichment |
-| — | — | — | — | st-007 | Portfolio gap |
-| simulation-engine | mid-market-dach | Yes | Yes | — | TIPS gap |
+| Feature | Market | Proposition | Variants | Solution | TIPS STs | Status |
+|---------|--------|-------------|----------|----------|----------|--------|
+| predictive-analytics | mid-market-dach | Yes | 2 | Yes | st-001 | Aligned |
+| compliance-engine | enterprise-eu | Yes | 0 | No | st-004 | Needs solution |
+| predictive-analytics | enterprise-eu | No | — | No | st-001 | Needs enrichment |
+| — | — | — | — | — | st-007 | Portfolio gap |
+| simulation-engine | mid-market-dach | Yes | 1 | Yes | — | TIPS gap |
+| predictive-analytics | mid-market-dach | Yes (fail) | 2 | Yes | st-001 | Aligned (quality review) |
 ```
 
 **Status values:**
 - **Aligned** — Feature has proposition, solution, and matching ST(s). Full bidirectional coverage.
+- **Aligned (quality review)** — Aligned, but the proposition has quality assessment failures. The matched ST has `ranking_value` ≥ 4.0, making quality investment worthwhile.
 - **Needs solution** — Proposition exists but no solution for this market. Step 5.5 should have proposed a stub.
 - **Needs enrichment** — Feature matches an ST but lacks a proposition for this market.
-- **Portfolio gap** — ST has no matching feature at all. Innovation opportunity.
+- **Portfolio gap** — ST has no matching feature at all. Innovation opportunity — see Innovation Pipeline below.
 - **TIPS gap** — Feature with proposition/solution has no TIPS relevance signal. Validate market need independently.
+
+**Innovation Pipeline** (from `portfolio-opportunities.json`):
+
+If the `tips-to-portfolio` step generated opportunities (Step 5.8), embed the
+innovation pipeline summary in the reconciliation:
+
+```
+Innovation Pipeline ({N} opportunities, €{total}/yr estimated)
+
+| # | Opportunity | Score | Class | Revenue | Priority | Decision |
+|---|-------------|-------|-------|---------|----------|----------|
+| 1 | Compliance Automation | 8.2 | build | €500K/yr | high | — |
+| 2 | Edge Analytics Gateway | 6.1 | partner | €200K/yr | medium | — |
+```
+
+The user can accept/defer/reject opportunities inline during sync review.
 
 **Step 4: Generate Action Plan**
 
-Based on the reconciliation table, generate a prioritized action list:
+Based on the reconciliation table and innovation pipeline, generate a prioritized action list:
 1. **Immediate**: Create solution stubs for "Needs solution" rows (if not already proposed)
-2. **Short-term**: Enrich propositions for "Needs enrichment" rows
-3. **Strategic**: Evaluate "Portfolio gap" STs for new feature creation
-4. **Validate**: Review "TIPS gap" features for market relevance
+2. **Short-term**: Generate variants for "Needs enrichment" rows; run `/propositions variants add` for propositions without TIPS variants
+3. **Quality**: Run proposition quality improvement for "Aligned (quality review)" rows — high-BR STs deserve high-quality propositions
+4. **Innovation**: Evaluate accepted opportunities for roadmap inclusion; create features from approved `feature_spec` entries
+5. **Validate**: Review "TIPS gap" features for market relevance
 
 ## Cross-Reference Convention
 

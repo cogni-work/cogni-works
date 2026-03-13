@@ -152,6 +152,82 @@ bash "$CLAUDE_PLUGIN_ROOT/scripts/append-claim.sh" "<project-dir>" '{
 
 Only submit claims backed by web research sources. Do not submit LLM-derived estimates or claims without a source URL.
 
+## Variant Generation Mode
+
+When invoked with additional parameters `tips_ref` and `value_chain_narrative`, the agent operates in variant mode. Instead of creating or replacing the primary IS/DOES/MEANS proposition, it generates a proposition **variant** and appends it to the proposition's `variants` array.
+
+### How Variant Mode Works
+
+1. **Read the existing proposition JSON** at the path specified in the task. The primary IS/DOES/MEANS stays untouched.
+
+2. **Derive the angle** from the `value_chain_narrative`. Extract a short kebab-case label that captures the T→I→P perspective (e.g., `regulatory-compliance`, `cost-optimization`, `talent-retention`, `supply-chain-resilience`). This becomes the variant's `angle` field.
+
+3. **Generate variant DOES/MEANS** using the specific T→I→P angle described in the `value_chain_narrative`:
+   - **DOES**: Frame the feature's advantage through the lens of the narrative's trend and implication. The DOES must be clearly distinct from the primary — it answers "what does this feature do for a buyer who cares about *this specific trend*?"
+   - **MEANS**: Frame the business outcome through the narrative's possibility and urgency. Connect to the buyer's world through the trend-specific angle.
+   - The IS statement is inherited from the primary proposition (not duplicated in the variant).
+
+4. **Auto-generate 3 narrative evidence entries** with these `narrative_type` values:
+   - `why_now` — Why this angle is urgent today (ties to the trend's momentum)
+   - `sales_guide` — How a salesperson should position this angle in conversation
+   - `proposal_justification` — Business case language suitable for a formal proposal
+
+   Each evidence entry carries a `tips_path` object:
+   ```json
+   {
+     "narrative_type": "why_now",
+     "statement": "EU AI Act enforcement in 2026 makes predictive quality a compliance requirement, not an optimization choice.",
+     "tips_path": {
+       "trend": "{trend name from narrative}",
+       "implication": "{implication from narrative}",
+       "possibility": "{possibility from narrative}",
+       "urgency": "{urgency assessment}"
+     }
+   }
+   ```
+
+5. **Assign a sequential `variant_id`**: Inspect the existing `variants` array (or create it if absent). Assign the next sequential ID: `v-001`, `v-002`, etc.
+
+6. **Append the variant** to the proposition's `variants` array. Never overwrite existing variants or the primary DOES/MEANS.
+
+### Variant JSON Structure
+
+```json
+{
+  "variant_id": "v-001",
+  "angle": "regulatory-compliance",
+  "tips_ref": "automotive-ai-predictive-maintenance-abc12345#st-001",
+  "does_statement": "Anticipates regulatory audit triggers before they fire, giving quality teams weeks instead of hours to prepare documentation.",
+  "means_statement": "Avoid the €2-4M cost of a single compliance failure while reducing audit prep effort by 70%.",
+  "narrative_evidence": [
+    {
+      "narrative_type": "why_now",
+      "statement": "...",
+      "tips_path": { "trend": "...", "implication": "...", "possibility": "...", "urgency": "..." }
+    },
+    {
+      "narrative_type": "sales_guide",
+      "statement": "...",
+      "tips_path": { "trend": "...", "implication": "...", "possibility": "...", "urgency": "..." }
+    },
+    {
+      "narrative_type": "proposal_justification",
+      "statement": "...",
+      "tips_path": { "trend": "...", "implication": "...", "possibility": "...", "urgency": "..." }
+    }
+  ],
+  "created": "YYYY-MM-DD"
+}
+```
+
+### Quality Criteria for Variants
+
+All quality criteria from the primary generation mode apply to variant DOES/MEANS (word counts, market-swap test, competitor test, "so what?" test, circularity test). Additionally:
+
+- The variant DOES/MEANS must be **materially different** from the primary. If the angle doesn't produce a distinct perspective, the variant adds noise — skip it and report why.
+- The `angle` label must be specific enough to distinguish this variant from others. "general" or "default" are not valid angles.
+- Narrative evidence must reference concrete elements from the `value_chain_narrative` — not generic trend statements.
+
 ## Output
 
-Write the proposition JSON file and return a brief summary: the IS/DOES/MEANS statements, how many evidence items were found, and any claims submitted.
+Write the proposition JSON file and return a brief summary: the IS/DOES/MEANS statements (or variant DOES/MEANS with angle in variant mode), how many evidence items were found, and any claims submitted.

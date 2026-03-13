@@ -21,21 +21,162 @@ customer, then *this* is what we should propose."
 - "Digital transformation" — not specific enough
 - "Better analytics" — no clear scope
 
+## Step 0.5: Portfolio-Anchored Generation (when v2.0+ context exists)
+
+This step runs **only** when `portfolio-context.json` has `schema_version` >= `"2.0"`. When the
+context is absent or v1.0, skip directly to Step 1 (unchanged behavior).
+
+Portfolio-anchored generation inverts the normal flow: instead of starting from themes and
+imagining solutions, it starts from **existing products/features** and asks what each theme
+needs that those features can deliver. This produces STs with high portfolio confidence by
+construction.
+
+### 0.5.1: Read Portfolio Context
+
+Read `portfolio-context.json` from the TIPS project directory and extract:
+- All products and their features (slugs, descriptions, categories)
+- All propositions per feature (IS/DOES/MEANS, market slugs, evidence counts)
+- Market relevance tags (`direct`, `industry`, `adjacent`)
+- If v3.0: quality assessments per proposition (`market_specificity`, `differentiation`, `value_quantification`)
+
+### 0.5.2: Match Features to Strategic Themes
+
+For each feature in the portfolio context, use semantic analysis to determine which Strategic
+Themes it could serve. Consider:
+
+- **Description overlap**: Does the feature's description address the theme's strategic question?
+- **Category alignment**: Does the feature's category (software, hardware, service) align with the theme's value chain domains?
+- **Market-relevance filtering**: Only consider features that have at least one proposition in a `direct` or `industry` market. Features with only `adjacent` market propositions are deprioritized.
+- **Proposition language**: Do any DOES/MEANS statements echo the theme's narrative or the needs of its value chains?
+
+Produce a feature-theme match matrix before generating any STs.
+
+### 0.5.3: Generate Portfolio-Anchored STs
+
+For each feature-theme match, generate a Solution Template:
+
+1. **Start from the feature** as the delivery mechanism — the ST describes what can be
+   delivered using this feature's real capabilities
+2. **Ask the grounding questions**:
+   - "What does this theme need that this feature can deliver?" → becomes `theme_needs_delivered`
+   - "What does this theme need that this feature cannot deliver?" → becomes `theme_needs_undelivered`
+3. **Generate the ST** with these fields:
+   - All standard ST fields (`st_id`, `name`, `description`, `category`, `enabler_type`, `theme_ref`, `linked_chains`, `foundation_dependencies`)
+   - `generation_mode: "portfolio-anchored"` — marks this ST as feature-first
+   - `portfolio_anchor`:
+     ```json
+     {
+       "feature_slug": "predictive-analytics",
+       "product_slug": "cloud-platform",
+       "theme_needs_delivered": ["AI-driven quality prediction", "real-time sensor integration"],
+       "theme_needs_undelivered": ["legacy MES integration", "operator training program"]
+     }
+     ```
+   - `portfolio_mapping.match_confidence: "high"` — automatically high because the ST was generated FROM the feature
+   - If the feature has propositions in the context, populate `portfolio_grounding` entries (same format as Step 2.5 in the original flow):
+     ```json
+     {
+       "portfolio_grounding": [
+         {
+           "feature_slug": "predictive-analytics",
+           "market_slug": "mid-market-saas-dach",
+           "does_echo": "Reduces MTTR by 60% through AI-correlated alerting",
+           "evidence_available": true
+         }
+       ]
+     }
+     ```
+
+### 0.5.4: Quality-Aware Generation (v3.0)
+
+When the portfolio context has `quality_assessment` data (v3.0):
+
+- If a matched proposition has quality `"fail"` on `market_specificity` or `differentiation`,
+  add `quality_flag: "quality_investment_needed"` to the ST
+- Include a note in the ST description that adds market-specific language the bridge can use
+  for variant generation later — this creates a feedback loop where TIPS insights improve
+  portfolio quality
+- If all propositions for a feature pass quality checks, omit the `quality_flag` (no flag = healthy)
+
+### 0.5.5: Reduce Abstract Targets
+
+For each theme that received portfolio-anchored STs, reduce the target for Step 1 abstract
+generation:
+
+- **2+ anchored STs**: The theme may not need abstract STs at all. Still generate 1 abstract
+  ST if the anchored STs don't fully cover the theme's strategic question (check whether
+  `theme_needs_undelivered` items suggest a significant gap)
+- **1 anchored ST**: Reduce the abstract target by 1 (e.g., from 2-4 to 1-3)
+- **0 anchored STs**: No change — Step 1 runs at full capacity for this theme
+
+### 0.5.6: Report
+
+Present portfolio-anchored STs first, grouped by theme:
+
+```markdown
+## Portfolio-Anchored Solution Templates
+
+### Theme 1: Smart Manufacturing & Supply Chain (2 anchored STs)
+
+**ST-001: Predictive Quality Analytics Platform** [ANCHORED]
+Feature: predictive-analytics (cloud-platform)
+Delivers: AI-driven quality prediction, real-time sensor integration
+Cannot deliver: legacy MES integration, operator training program
+Quality: OK
+> Deploy ML-based quality prediction using the existing predictive-analytics
+> feature, integrated with production line sensor data.
+
+**ST-002: Digital Twin Production Optimizer** [ANCHORED]
+Feature: digital-twin-engine (cloud-platform)
+Delivers: production line simulation, throughput optimization
+Cannot deliver: physical sensor retrofit, brownfield integration
+Quality: quality_investment_needed (market_specificity: fail)
+> Simulate and optimize line throughput using the digital-twin-engine,
+> grounded in existing DOES claims for mid-market manufacturing.
+```
+
+Then note which themes still need abstract STs:
+```
+Themes needing abstract STs in Step 1:
+- Theme 3: Regulatory Compliance (0 anchored STs → full abstract generation)
+- Theme 5: Sustainability & ESG (1 anchored ST → reduced target: 1-3 abstract STs)
+```
+
 ## Step 1: Generate Solution Templates
+
+> **Note:** If portfolio-anchored STs were generated in Step 0.5, adjust the target per
+> theme — generate abstract STs only for themes or theme areas not covered by anchored STs.
+> Themes with 2+ anchored STs may need only 0-1 abstract STs. Themes with 0 anchored STs
+> use the full 2-4 target.
 
 For each **Strategic Theme**, generate 2-4 Solution Templates using extended thinking.
 Working at the theme level (rather than per-chain) naturally deduplicates — chains within
 a theme share strategic direction, so a single ST often serves multiple chains.
 
-**Portfolio-grounded generation (when `portfolio-context.json` v2.0 exists):**
-When an enriched portfolio context is available (check for `schema_version` = `"2.0"`),
+**Portfolio-grounded generation (when `portfolio-context.json` v2.0+ exists):**
+When an enriched portfolio context is available (check for `schema_version` >= `"2.0"`),
 ST descriptions should reference capability language from matched propositions. Specifically:
 - Use DOES statements to frame the ST's advantage (what measurable improvement it delivers)
 - Use MEANS statements to anchor the ST's business outcome (why the customer should care)
 - The ST remains TIPS-native (solution-oriented), but is **grounded** in what the portfolio
   already articulates — this avoids generating STs in a vacuum
 
-If no v2.0 context exists, generate STs using industry context alone (unchanged behavior).
+**Quality-driven refinement (when v3.0 context with `quality_assessment` exists):**
+When the portfolio context includes quality assessments per proposition, use them to
+improve abstract ST descriptions:
+- If a matched proposition's `quality_assessment.does_score.market_specificity` is `"fail"`,
+  the ST description should compensate by adding market-specific language that the bridge
+  can later use for variant generation. Example: instead of a generic "quality analytics
+  platform", write "quality analytics platform targeting {TIPS subsector} production
+  environments where {specific trend} drives {specific implication}."
+- If `differentiation` is `"fail"`, the ST description should emphasize what makes this
+  solution unique relative to category alternatives — draw on the value chain's specific
+  T→I→P narrative to articulate a competitor-proof angle.
+- Add `quality_flag: "quality_investment_needed"` to abstract STs whose matched propositions
+  have overall quality `"fail"`. Report these in the Phase 2 summary so the user knows
+  which propositions need improvement before customer-facing use.
+
+If no v2.0+ context exists, generate STs using industry context alone (unchanged behavior).
 
 **For each ST, define:**
 - `st_id`: Sequential identifier (st-001, st-002, ...)
@@ -245,10 +386,12 @@ assets, not generated content.
 - Collaterals marked `recommended` are suggestions for future content creation
 
 Report summary:
-- Total STs generated
+- Total STs generated (N portfolio-anchored + M abstract)
 - Distribution by category and enabler type
 - Portfolio matches vs gaps
 - Path coverage (every path should have 1+ STs)
+- Quality flags: N STs flagged with `quality_investment_needed` (list them with the
+  specific quality dimensions that failed, so the user knows what to improve)
 
 Ask: "These are the Solution Templates derived from your Strategic Themes. Want to adjust
 any before we move to Business Relevance scoring?"

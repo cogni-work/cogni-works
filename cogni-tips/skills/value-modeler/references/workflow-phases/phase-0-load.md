@@ -52,14 +52,27 @@ Search the workspace for a cogni-portfolio project:
 After discovering the portfolio project, also check for `portfolio-context.json` in the
 TIPS project directory (written by `/bridge portfolio-to-tips`):
 
-1. If found with `schema_version` = `"2.0"`:
+1. If found with `schema_version` = `"3.0"`:
+   - Count products, features, propositions, and markets
+   - Count markets where `market_relevance` is `direct` or `industry`
+   - Count propositions with `quality_assessment` and report quality summary
+   - Count propositions with `variant_count > 0`
+   - Report: "Found portfolio context (v3.0) with N products, M features, P propositions
+     across K markets (R relevant to this TIPS industry). Q propositions have quality
+     assessments, V have existing variants. Portfolio-anchored ST generation is available —
+     Phase 2 will start from your products as delivery anchors."
+   - Check `extracted_at` against portfolio file modification dates; if portfolio files are
+     newer, warn: "Portfolio context may be stale — consider re-running `/bridge portfolio-to-tips`."
+2. If found with `schema_version` = `"2.0"`:
    - Count products, features, propositions, and markets
    - Count markets where `market_relevance` is `direct` or `industry`
    - Report: "Found portfolio context (v2.0) with N products, M features, P propositions
-     across K markets (R relevant to this TIPS industry)."
+     across K markets (R relevant to this TIPS industry). Portfolio-grounded ST generation
+     is available. Consider re-running `/bridge portfolio-to-tips` to upgrade to v3.0 for
+     quality-aware generation."
    - Check `extracted_at` against portfolio file modification dates; if portfolio files are
      newer, warn: "Portfolio context may be stale — consider re-running `/bridge portfolio-to-tips`."
-2. If found without `schema_version` (v1.0) or absent:
+3. If found without `schema_version` (v1.0) or absent:
    - Suggest: "Run `/bridge portfolio-to-tips` for portfolio-grounded solution generation.
      This exports propositions and solution data so Phase 2 can reference your actual
      positioning when generating Solution Templates."
@@ -68,9 +81,11 @@ Add to the output metadata:
 
 ```json
 {
-  "portfolio_context_version": "2.0",
+  "portfolio_context_version": "3.0",
   "portfolio_context_propositions": 12,
-  "portfolio_context_markets_relevant": 2
+  "portfolio_context_markets_relevant": 2,
+  "portfolio_context_quality_assessed": 10,
+  "portfolio_context_variants_exist": 3
 }
 ```
 

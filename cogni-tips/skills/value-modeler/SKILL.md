@@ -79,6 +79,11 @@ For each Strategic Theme, generate Solution Templates — concrete process impro
 enablers. Working at the theme level naturally deduplicates STs that would otherwise
 appear redundantly across overlapping chains. Target 2-4 STs per theme.
 If a cogni-portfolio project exists, map templates to existing products/features.
+When portfolio context v2.0+ is available, Phase 2 starts with **portfolio-anchored
+generation** (Step 0.5): features from the portfolio are matched to themes and used as
+delivery anchors for STs with automatic high-confidence mapping. This reduces the need
+for abstract ST generation and produces STs grounded in real product capabilities.
+Quality-aware generation (v3.0) flags STs where underlying propositions need improvement.
 
 ### Phase 3: Business Relevance Scoring
 Reference: `references/workflow-phases/phase-3-scoring.md`
@@ -195,6 +200,7 @@ Implications depending on context. The chain captures the *reasoning*, not just 
   "description": "Deploy ML-based quality prediction integrated with production line sensors",
   "category": "software",
   "enabler_type": "process_improvement",
+  "generation_mode": "portfolio-anchored",
   "theme_ref": "theme-003",
   "linked_chains": ["vc-005", "vc-006"],
   "portfolio_mapping": {
@@ -202,6 +208,13 @@ Implications depending on context. The chain captures the *reasoning*, not just 
     "feature_slug": "predictive-analytics",
     "match_confidence": "high"
   },
+  "portfolio_anchor": {
+    "feature_slug": "predictive-analytics",
+    "product_slug": "cloud-platform",
+    "theme_needs_delivered": ["AI-driven quality prediction", "real-time sensor integration"],
+    "theme_needs_undelivered": ["legacy MES integration", "operator training program"]
+  },
+  "quality_flag": null,
   "business_relevance": null,
   "business_relevance_calculated": null,
   "ranking_value": null
@@ -253,6 +266,12 @@ Implications depending on context. The chain captures the *reasoning*, not just 
 `status` values: `exists` | `recommended`
 
 `portfolio_mapping` is only populated when a cogni-portfolio project is discovered.
+`generation_mode`: `"portfolio-anchored"` when generated from Step 0.5 (feature-first),
+`"abstract"` when generated from Step 1 (theme-first). Defaults to `"abstract"`.
+`portfolio_anchor` is only populated for portfolio-anchored STs — it records the source
+feature and what the theme needs that the feature can/cannot deliver.
+`quality_flag`: `"quality_investment_needed"` when v3.0 quality assessment shows a fail
+on `market_specificity` or `differentiation` for a matched proposition. `null` otherwise.
 `business_relevance` is the user override (if set). `business_relevance_calculated` is
 computed via formula F1.
 

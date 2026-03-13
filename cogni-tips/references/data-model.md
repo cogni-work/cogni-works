@@ -325,8 +325,16 @@ tips-project.json (root manifest)
   "description": "Deploy ML-based quality prediction integrated with production line sensors",
   "category": "software|hardware|service|hybrid|process",
   "enabler_type": "process_improvement|capability_building|risk_mitigation|revenue_enablement",
-  "linked_paths": ["path-001", "path-003"],
+  "theme_ref": "theme-001",
+  "linked_chains": ["vc-001", "vc-003"],
   "foundation_dependencies": ["digitales-fundament/act/2"],
+  "generation_mode": "portfolio-anchored|abstract",
+  "portfolio_anchor": {
+    "feature_slug": "predictive-analytics",
+    "product_slug": "cloud-platform",
+    "theme_needs_delivered": ["Real-time quality prediction", "Sensor data integration"],
+    "theme_needs_undelivered": ["Explainable AI audit trails", "Edge deployment"]
+  },
   "portfolio_mapping": {
     "product_slug": "cloud-platform",
     "feature_slug": "predictive-analytics",
@@ -334,10 +342,39 @@ tips-project.json (root manifest)
     "proposition_exists": true,
     "solution_exists": false
   },
+  "portfolio_grounding": [
+    {
+      "feature_slug": "predictive-analytics",
+      "market_slug": "mid-market-saas-dach",
+      "does_echo": "Reduces MTTR by 60% through AI-correlated alerting",
+      "evidence_available": true
+    }
+  ],
+  "quality_flag": null,
   "business_relevance": null,
   "business_relevance_calculated": null,
   "ranking_value": null
 }
+```
+
+New fields (all optional, backward compatible — existing STs without these fields continue working):
+
+- **`generation_mode`** (string): How this ST was created.
+  - `"portfolio-anchored"` — Generated starting from an existing portfolio feature as the delivery anchor. Phase 2.0 creates these when portfolio-context v2.0+ is available.
+  - `"abstract"` — Generated from TIPS theme analysis without portfolio anchoring (the original behavior). **Default when absent.**
+- **`portfolio_anchor`** (object, only when `generation_mode` = `"portfolio-anchored"`): Captures what the anchor feature can and cannot deliver for the theme.
+  - `feature_slug` (string): The portfolio feature that anchors this ST
+  - `product_slug` (string): The parent product
+  - `theme_needs_delivered` (string array): Theme requirements this feature addresses
+  - `theme_needs_undelivered` (string array): Theme requirements this feature cannot address — feeds the opportunity pipeline
+- **`portfolio_grounding`** (array, optional): When portfolio-context v2.0+ exists, captures the specific proposition DOES/MEANS language that grounds this ST.
+  - `feature_slug` (string): Matched feature
+  - `market_slug` (string): Relevant market
+  - `does_echo` (string): The DOES statement from the matched proposition
+  - `evidence_available` (boolean): Whether the proposition has evidence entries
+- **`quality_flag`** (string or null, optional): Set when the anchor feature's proposition has quality assessment failures.
+  - `null` — No quality issues (or no quality data available)
+  - `"quality_investment_needed"` — The matched proposition scored "fail" on one or more quality dimensions; the proposition should be improved before using this ST in customer-facing materials
 ```
 
 ### Solution Process Improvement (SPI)

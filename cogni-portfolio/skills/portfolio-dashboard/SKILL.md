@@ -82,7 +82,7 @@ The generated HTML includes these sections, all in a single-page app with drill-
 1. **Header** — Company name, industry, project slug, last updated. Bricolage Grotesque typography with gradient mesh background.
 2. **Phase & Progress** — Current workflow phase with visual progress bar, completion percentages per entity type
 3. **Entity Counts** — Card grid showing products, features, markets, propositions, solutions, packages, competitors, customers with counts, completion bars, and expected totals
-4. **Feature x Market Matrix** — Interactive grid. Each cell is color-coded (green = proposition + solution, yellow = proposition only, red = missing). Click a cell to expand IS/DOES/MEANS, pricing tiers (type-aware: project/subscription/partnership), unit economics, and competitor summary
+4. **Feature x Market Matrix** — Interactive grid. Each cell is color-coded (green = proposition + solution, yellow = proposition only, red = missing). When a proposition has variants, display a variant count badge on the cell (e.g., "3v" pill). Click a cell to expand IS/DOES/MEANS, pricing tiers (type-aware: project/subscription/partnership), unit economics, and competitor summary. The drill-down panel includes a collapsible "Variants" section that lists all variants with their angle label, DOES/MEANS summary, tips_ref, and quality score. Variants are sorted by variant_id. The section is collapsed by default and shows a count header (e.g., "Variants (3)").
 5. **Markets Overview** — Cards per market with TAM/SAM/SOM bars, region badge, priority badge (beachhead/expansion/aspirational), segmentation criteria. Click to see customer profiles and all propositions targeting that market
 6. **Products & Features** — Grouped by product with revenue model chip (subscription/project/partnership/hybrid), maturity stage. Features show readiness indicator (GA/Beta/Planned) with color-coded dot.
 6b. **Taxonomy Coverage** — (shown when `portfolio.json` has a `taxonomy` field) Heatmap grid showing all 8 dimensions x categories from the b2b-ict taxonomy. Green cells = category has mapped features, red cells = gap. Summary chip shows X of 57 covered (Y%). Below the heatmap: Gap Analysis listing uncovered categories grouped by dimension.
@@ -91,8 +91,9 @@ The generated HTML includes these sections, all in a single-page app with drill-
 9. **Margin Health** (if any solutions have `cost_model`) — Separated by solution type. Project solutions show effort-based margins per tier. Subscription solutions show unit economics (LTV/CAC, gross margin, churn). Color-coded: green for healthy, yellow for below-target, red for negative/failing. This section is marked INTERNAL/CONFIDENTIAL.
 10. **Target Customers** (if any customer files have `named_customers`) — Per-market named company cards with fit score badges (green/yellow/red), industry, headquarters, revenue, and pain points. Click a card to expand full profile with tech stack pills, fit rationale, source URLs, and researched date. Buyer personas for the market are shown below for context. Hidden when no named customers exist.
 11. **Competitive Landscape** — Per-proposition competitor cards with strengths/weaknesses
-12. **Claims Status** — Verification summary (verified, unverified, deviated, resolved) with progress bar
-13. **Next Actions** — Recommended next skills from project-status
+12. **Innovation Pipeline** — (shown when `portfolio-opportunities.json` exists in a linked TIPS project) Opportunity cards sorted by `opportunity_score`. Each card shows: opportunity name, score gauge (0-10, color gradient), classification badge (build/buy/partner), revenue estimate, priority badge (high/medium/low), and the feature spec summary. Unmet needs shown as pills. Cards link back to source ST via `tips_ref`. Summary bar at top: N opportunities, total estimated revenue, classification breakdown pie chart. Hidden when no opportunities file exists.
+13. **Claims Status** — Verification summary (verified, unverified, deviated, resolved) with progress bar
+14. **Next Actions** — Recommended next skills from project-status
 
 ## Shared Pattern
 

@@ -232,9 +232,98 @@ A proposition maps one feature to one target market with market-specific messagi
 ```
 
 Required fields: `slug`, `feature_slug`, `market_slug`, `is_statement`, `does_statement`, `means_statement`
-Optional fields: `evidence`, `created`
+Optional fields: `evidence`, `variants`, `tips_enrichment`, `created`, `updated`
 
 Each evidence entry can be a structured object with `statement` (string, required), `source_url` (string or null), and `source_title` (string or null). When web research produces evidence, include the source URL for claim verification. Entries without a source use null for URL/title fields.
+
+Evidence entries may also carry optional `narrative_type` and `tips_path` fields when derived from TIPS value chains:
+
+- **`narrative_type`** (string, optional): Classifies the evidence by its sales utility.
+  - `"why_now"` — Trend urgency framing. Use as a sales conversation opener.
+  - `"sales_guide"` — Implication→Possibility causal link. Explains why this feature matters for a specific operational impact.
+  - `"proposal_justification"` — Full T→I→P narrative chain. Use in proposal background sections.
+- **`tips_path`** (object, optional): Captures the causal chain for traceability and downstream narrative reconstruction.
+  ```json
+  {
+    "trend": "EU AI Act Compliance",
+    "implication": "Automated audit trail requirements",
+    "possibility": "Compliance-as-differentiator positioning",
+    "urgency": "act"
+  }
+  ```
+  Valid `urgency` values: `"act"`, `"plan"`, `"observe"` (matches TIPS horizon).
+
+#### Proposition Variants
+
+The `variants` array (optional) holds alternative DOES/MEANS messaging derived from different TIPS value chains. Each variant presents the same feature's advantage from a different strategic angle — enabling situational selling, buyer-persona targeting, and A/B message testing.
+
+The top-level `does_statement` and `means_statement` remain the **primary** variant. Downstream consumers (dashboard, quality assessors, packages, export) that do not understand `variants` continue reading the top-level fields unchanged.
+
+```json
+{
+  "variants": [
+    {
+      "variant_id": "v-001",
+      "angle": "regulatory-compliance",
+      "tips_ref": "automotive-pursuit-abc12345#st-003",
+      "value_chain_narrative": "EU AI Act compliance pressure (T) → automated audit trails (I) → compliance-as-differentiator positioning (P)",
+      "does_statement": "Automates compliance audit trails across production lines, reducing manual documentation effort by 80%",
+      "means_statement": "Eliminates 200+ hours/year of compliance overhead while turning regulatory readiness into a customer trust signal worth 3-5% price premium",
+      "evidence": [
+        {
+          "statement": "EU AI Act non-compliance penalties reach up to 7% of global annual turnover",
+          "source_url": "https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai",
+          "source_title": "EU AI Act Regulatory Framework",
+          "narrative_type": "why_now",
+          "tips_path": {
+            "trend": "EU AI Act Compliance",
+            "implication": "Automated audit trail requirements",
+            "possibility": "Compliance-as-differentiator positioning",
+            "urgency": "act"
+          }
+        }
+      ],
+      "quality_score": null,
+      "created": "2026-03-13"
+    }
+  ]
+}
+```
+
+Variant fields:
+- `variant_id` (string, required): Sequential identifier within the proposition (`v-001`, `v-002`, ...)
+- `angle` (string, required): Free-text label describing the strategic angle (e.g., `"regulatory-compliance"`, `"cost-optimization"`, `"customer-satisfaction"`)
+- `tips_ref` (string, required): Cross-reference to the source Solution Template using `{pursuit-slug}#{st-id}` format
+- `value_chain_narrative` (string, required): The T→I→P causal narrative that justifies this variant's angle
+- `does_statement` (string, required): Market-specific advantage from this angle (same quality standards as primary)
+- `means_statement` (string, required): Business outcome from this angle (same quality standards as primary)
+- `evidence` (array, optional): Angle-specific evidence, typically including narrative-typed entries from the TIPS path
+- `quality_score` (string or null, optional): Assessment result from quality post-check (`"pass"`, `"warn"`, `"fail"`, or null if not assessed)
+- `created` (string, required): ISO 8601 date
+
+**Variant operations**: Use `/propositions variants` to list, add, promote-to-primary, or delete variants. Promoting a variant swaps it with the top-level `does_statement`/`means_statement` (the previous primary becomes a variant).
+
+#### TIPS Enrichment Metadata
+
+The `tips_enrichment` object (optional) tracks which TIPS pursuit influenced this proposition's messaging. Appended by the bridge during `tips-to-portfolio` operations.
+
+```json
+{
+  "tips_enrichment": {
+    "pursuit_slug": "automotive-ai-predictive-maintenance-abc12345",
+    "enriched_at": "2026-03-13T14:30:00Z",
+    "st_refs": ["st-001", "st-003"],
+    "enrichment_type": ["does_refined", "means_refined", "evidence_added", "variant_created"]
+  }
+}
+```
+
+Valid `enrichment_type` values:
+- `does_refined` — Primary DOES statement was enriched with trend-driven advantage framing
+- `means_refined` — Primary MEANS statement was enriched with business outcome context
+- `evidence_added` — New evidence entries were suggested from TIPS metrics
+- `variant_created` — One or more proposition variants were created from TIPS value chains
+- `solution_proposed` — A solution stub was proposed based on a matched ST
 
 **Naming convention**: Proposition file names use double-dash (`--`) to join feature and market slugs: `{feature-slug}--{market-slug}.json`
 
@@ -825,6 +914,8 @@ erDiagram
         string does_statement
         string means_statement
         array evidence
+        array variants "optional TIPS-derived alternatives"
+        object tips_enrichment "optional bridge provenance"
     }
     Solution {
         string slug PK "feature--market"

@@ -145,6 +145,8 @@ Propositions with "warn" can proceed but flag the warnings — they represent im
 
 This post-check applies to both single-proposition and batch generation paths. In batch mode, present a summary table of pass/warn/fail counts alongside the proposition review table.
 
+**Variant quality**: When a proposition has variants, assess each variant's DOES/MEANS alongside the primary using the same 10 dimensions. Report variant quality in the summary table with the variant's angle label. Variants with "fail" should be flagged for rewrite or deletion — weak variants dilute the proposition rather than strengthen it.
+
 ## From Consulting to Capture
 
 After presenting your assessment, the user will confirm, adjust, or push back on your priorities. Once you have agreement, transition to drafting — don't stay in assessment mode indefinitely. The pattern:
@@ -247,6 +249,17 @@ Each evidence entry is an object with `statement` (required), `source_url` (stri
 
 **Batch generation**: For multiple propositions, delegate each to the `proposition-generator` agent. Launch agents in parallel for independent Feature x Market pairs. But first, confirm the priority list with the user — don't generate everything blindly.
 
+**Variant-aware batch generation**: During batch generation, scan existing propositions for `tips_enrichment` metadata. When a proposition has `tips_enrichment` with `st_refs`, offer to generate variants for each referenced ST's value chain. Present these as a separate tier after primary generation:
+
+```
+| Feature | Market | ST Ref | Angle | Action |
+|---------|--------|--------|-------|--------|
+| predictive-analytics | mid-market-dach | st-001 | regulatory-compliance | Generate variant? |
+| predictive-analytics | mid-market-dach | st-001 | cost-optimization | Generate variant? |
+```
+
+Delegate variant generation to the `proposition-generator` agent in variant mode (with `tips_ref` and `value_chain_narrative`). Only generate variants after primary propositions are confirmed.
+
 ### Review Presentation
 
 Present propositions with your consulting commentary, not just the raw statements. Group by feature or by market (whichever the user prefers or whichever reveals more insight):
@@ -298,6 +311,46 @@ $CLAUDE_PLUGIN_ROOT/scripts/cascade-rename.sh <project-dir> proposition <old-slu
 ```
 
 This updates solutions and competitors that reference the old proposition slug.
+
+## Variant Operations
+
+Propositions can have multiple DOES/MEANS variants, each representing a different angle derived from TIPS value chains or user-originated perspectives. The primary IS/DOES/MEANS remains the default messaging; variants offer alternative positioning for specific sales contexts.
+
+### `/propositions variants list`
+
+List all variants for a proposition. Read the proposition JSON and display the `variants` array:
+
+| Variant | Angle | TIPS Ref | Quality | Created |
+|---------|-------|----------|---------|---------|
+| v-001 | regulatory-compliance | pursuit#st-001 | pass | 2026-03-10 |
+| v-002 | cost-optimization | pursuit#st-003 | warn | 2026-03-12 |
+
+Show the variant's `angle`, `tips_ref` (or "manual" if no TIPS reference), and `quality_score` if assessed. If no variants exist, report that and suggest using `/propositions variants add` or running the TIPS bridge to generate them.
+
+### `/propositions variants add`
+
+Manually add a variant without TIPS context, for user-originated angles. Prompt the user for:
+
+1. **Angle** — a short kebab-case label (e.g., `talent-retention`, `speed-to-market`)
+2. **DOES statement** — the advantage from this angle's perspective
+3. **MEANS statement** — the business outcome from this angle's perspective
+
+Apply the same quality criteria as primary DOES/MEANS (word counts, market-swap test, competitor test, "so what?" test). Assign the next sequential `variant_id` (v-001, v-002, etc.) and append to the `variants` array. Set `tips_ref` to `null` for manual variants.
+
+### `/propositions variants promote {variant_id}`
+
+Swap a variant with the primary DOES/MEANS. This is the only way to change the primary messaging based on a variant:
+
+1. Read the proposition and find the variant by `variant_id`
+2. Save the current primary `does_statement` and `means_statement` as a new variant (with angle `previous-primary` and the next sequential variant_id)
+3. Copy the variant's `does_statement` and `means_statement` to the primary fields
+4. Remove the promoted variant from the `variants` array
+5. Update the `updated` field to today's date
+6. Present the before/after to the user for confirmation before writing
+
+### `/propositions variants delete {variant_id}`
+
+Remove a specific variant from the `variants` array. Show the variant's angle and DOES/MEANS before deleting, and ask for confirmation. This is permanent — the variant cannot be recovered.
 
 ### Deleting Propositions
 

@@ -25,6 +25,23 @@ Read `.metadata/trend-scout-output.json` from the selected project.
 
 If validation fails, tell the user what's missing and suggest running `trend-scout` first.
 
+**Extract portfolio link from trend-scout:**
+
+Also read `tips-project.json` from the project directory and check for `portfolio_source`:
+
+```json
+{
+  "portfolio_source": {
+    "portfolio_slug": "acme-corp",
+    "market_slug": "mid-market-saas-dach"
+  }
+}
+```
+
+If present, store `PORTFOLIO_SOURCE_SLUG` and `PORTFOLIO_MARKET_SLUG`. This link was
+established when the user chose a portfolio market during trend-scout initialization —
+it tells us exactly which portfolio project and market to connect to, avoiding a blind scan.
+
 ### Step 3: Discover Industry Catalog (Optional)
 
 Search for a matching industry catalog:
@@ -36,7 +53,18 @@ Search for a matching industry catalog:
    - Store catalog path for use in Phases 1 and 2
 4. If not found: "No industry catalog found. You can create one later with `/tips-catalog init` to accumulate knowledge across pursuits."
 
-### Step 4: Discover Portfolio (Optional)
+### Step 4: Discover Portfolio
+
+**When trend-scout linked a portfolio** (`PORTFOLIO_SOURCE_SLUG` set from Step 2):
+
+Use the link directly — look for `*/{PORTFOLIO_SOURCE_SLUG}/portfolio.json` in the workspace.
+This is the portfolio the user explicitly chose during trend-scout, so skip the generic scan.
+
+1. Locate the portfolio by matching `PORTFOLIO_SOURCE_SLUG` against portfolio project directories
+2. Read `portfolio.json` and catalog products, features, markets, propositions, solutions
+3. Report: "This project is linked to portfolio '{PORTFOLIO_SOURCE_SLUG}' (market: '{PORTFOLIO_MARKET_SLUG}') — established during trend-scout. Found X products and Y features."
+
+**When no trend-scout link exists** (fallback to generic discovery):
 
 Search the workspace for a cogni-portfolio project:
 
@@ -47,10 +75,10 @@ Search the workspace for a cogni-portfolio project:
 3. Report to the user: "Found portfolio with X products and Y features. I'll map Solution Templates to these where relevant."
 4. If not found: "No portfolio found. Solution Templates will be standalone — you can connect them to a portfolio later."
 
-**Check for enriched portfolio context:**
+### Step 4b: Check Portfolio Context & Recommend Bridge
 
-After discovering the portfolio project, also check for `portfolio-context.json` in the
-TIPS project directory (written by `/bridge portfolio-to-tips`):
+After discovering the portfolio project (by either method), check for `portfolio-context.json`
+in the TIPS project directory (written by `/bridge portfolio-to-tips`):
 
 1. If found with `schema_version` = `"3.0"`:
    - Count products, features, propositions, and markets
@@ -62,7 +90,9 @@ TIPS project directory (written by `/bridge portfolio-to-tips`):
      assessments, V have existing variants. Portfolio-anchored ST generation is available —
      Phase 2 will start from your products as delivery anchors."
    - Check `extracted_at` against portfolio file modification dates; if portfolio files are
-     newer, warn: "Portfolio context may be stale — consider re-running `/bridge portfolio-to-tips`."
+     newer, recommend: "Portfolio has changed since the last bridge export. Run
+     `/bridge portfolio-to-tips` to refresh the context before we continue."
+   - Offer: "Refresh portfolio context now" vs "Continue with existing context"
 2. If found with `schema_version` = `"2.0"`:
    - Count products, features, propositions, and markets
    - Count markets where `market_relevance` is `direct` or `industry`
@@ -71,11 +101,27 @@ TIPS project directory (written by `/bridge portfolio-to-tips`):
      is available. Consider re-running `/bridge portfolio-to-tips` to upgrade to v3.0 for
      quality-aware generation."
    - Check `extracted_at` against portfolio file modification dates; if portfolio files are
-     newer, warn: "Portfolio context may be stale — consider re-running `/bridge portfolio-to-tips`."
-3. If found without `schema_version` (v1.0) or absent:
-   - Suggest: "Run `/bridge portfolio-to-tips` for portfolio-grounded solution generation.
-     This exports propositions and solution data so Phase 2 can reference your actual
-     positioning when generating Solution Templates."
+     newer, recommend refreshing as above.
+3. **If portfolio was discovered but portfolio-context.json is missing or v1.0:**
+   - This is the most important case to handle well. The user has a portfolio but hasn't
+     bridged it yet, which means Phase 2 will generate abstract Solution Templates instead
+     of grounding them in actual products.
+   - Present to the user:
+
+     "Your TIPS project is connected to portfolio '{slug}'. To get the most out of value
+     modeling, I recommend running `/bridge portfolio-to-tips` first — this exports your
+     product features, propositions, and solution data so I can ground Solution Templates
+     in what you actually sell. Without it, I'll generate abstract solutions that you'd
+     need to manually map to your products later."
+
+   - Offer:
+     - "Run `/bridge portfolio-to-tips` now" — guide the user to invoke the bridge skill,
+       then resume value-modeler from Step 4b
+     - "Continue without portfolio grounding" — proceed with abstract ST generation
+
+4. **If no portfolio was discovered at all:**
+   - "No portfolio found. Solution Templates will be standalone — you can connect them
+     to a portfolio later using `/bridge tips-to-portfolio`."
 
 Add to the output metadata:
 
@@ -127,6 +173,8 @@ Create `.metadata/value-modeler-output.json`:
   "catalog_path": "cogni-tips/catalogs/manufacturing/automotive" | null,
   "portfolio_discovered": true|false,
   "portfolio_path": "path/to/portfolio.json" | null,
+  "portfolio_source_slug": "acme-corp" | null,
+  "portfolio_source_market": "mid-market-saas-dach" | null,
   "portfolio_context_version": "2.0" | null,
   "portfolio_context_propositions": 12 | null,
   "portfolio_context_markets_relevant": 2 | null,
@@ -138,3 +186,7 @@ Create `.metadata/value-modeler-output.json`:
   }
 }
 ```
+
+`portfolio_source_slug` and `portfolio_source_market` are carried forward from the
+trend-scout `portfolio_source` link. They are `null` when trend-scout was initialized
+without a portfolio market selection.

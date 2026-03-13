@@ -40,7 +40,11 @@ investment portfolio — not a flat list of 18 solutions, but 5 distinct areas t
 ## Prerequisites
 
 - A completed trend-scout project with `workflow_state: "agreed"` in `.metadata/trend-scout-output.json`
-- Optionally: a cogni-portfolio project (enables mapping Solution Templates to actual products/features)
+- Optionally: a cogni-portfolio project (enables mapping Solution Templates to actual products/features).
+  If trend-scout was linked to a portfolio market, this skill automatically picks up that connection —
+  no need to re-discover. For best results, run `/bridge portfolio-to-tips` before starting value-modeler
+  so Phase 2 can ground Solution Templates in your actual products and propositions rather than
+  generating abstract solutions.
 
 ## Language Support
 

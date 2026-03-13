@@ -78,7 +78,6 @@ Read references **only when needed** for the specific task:
 | [references/i18n/messages-en.md](references/i18n/messages-en.md) | English user messages |
 | [references/i18n/messages-de.md](references/i18n/messages-de.md) | German user messages |
 | [references/methodology.md](references/methodology.md) | Academic foundations (Ansoff, Rohrbeck, Rogers), full methodology explanation |
-| [references/scoring-framework.md](references/scoring-framework.md) | Scoring candidates, indicator classification, diffusion stage (Phase 2) |
 | [references/dach-sources.md](references/dach-sources.md) | DACH site-specific web searches (Phase 1) |
 | [references/funding-signals.md](references/funding-signals.md) | VC/funding signal queries (Phase 1) |
 | [references/job-market-signals.md](references/job-market-signals.md) | Job market signal queries (Phase 1) |

@@ -729,12 +729,30 @@ Ideal customer profile for a target market (same slug as the market).
       "decision_role": "Economic buyer and technical evaluator"
     }
   ],
+  "named_customers": [
+    {
+      "name": "Siemens AG",
+      "domain": "siemens.com",
+      "industry": "Industrial Manufacturing",
+      "headquarters": "Munich, Germany",
+      "employees": 300000,
+      "revenue": { "value": 72000000000, "currency": "EUR", "year": 2025 },
+      "fit_score": "high",
+      "fit_rationale": "Large industrial customer needing cloud monitoring for global infrastructure with strong digital transformation mandate.",
+      "pain_points": ["Legacy infrastructure migration", "Multi-cloud complexity"],
+      "current_stack": ["ServiceNow", "Splunk"],
+      "source_urls": ["https://example.com/siemens-annual-report"],
+      "researched_at": "2026-03-13"
+    }
+  ],
   "created": "2026-01-25"
 }
 ```
 
 Required fields: `slug`, `market_slug`, `profiles` (array with at least `role`)
-Optional fields: `created`
+Optional fields: `created`, `named_customers`
+
+Each `named_customers` entry may include: `name` (required), `domain`, `industry`, `headquarters`, `employees` (number), `revenue` (object with `value`, `currency`, `year`), `fit_score` (`high`/`medium`/`low`), `fit_rationale`, `pain_points` (array), `current_stack` (array), `source_urls` (array), `researched_at` (ISO date string).
 
 ## Naming Conventions
 
@@ -839,6 +857,7 @@ erDiagram
         string slug PK "market-slug"
         string market_slug FK
         array profiles
+        array named_customers
     }
 ```
 

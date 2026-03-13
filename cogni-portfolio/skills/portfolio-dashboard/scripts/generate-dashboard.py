@@ -1202,6 +1202,54 @@ body::after {{
   background: var(--accent-dark);
 }}
 
+/* Named customers */
+.customer-market-group {{
+  margin-bottom: 20px;
+}}
+.customer-market-group h4 {{
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text2);
+  margin-bottom: 10px;
+  font-weight: 700;
+}}
+.customer-target-card {{
+  background: var(--surface);
+  border-radius: 10px;
+  padding: 14px 18px;
+  margin-bottom: 10px;
+  border: 1px solid var(--border);
+  transition: border-color 0.2s;
+  cursor: pointer;
+}}
+.customer-target-card:hover {{ border-color: var(--accent-muted); }}
+.customer-target-card h5 {{ font-size: 14px; margin-bottom: 4px; }}
+.customer-target-card .ct-meta {{ font-size: 12px; color: var(--text2); margin-bottom: 6px; line-height: 1.5; }}
+.fit-badge {{
+  display: inline-block;
+  font-size: 11px;
+  padding: 2px 10px;
+  border-radius: 5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}}
+.fit-badge.fit-high {{ background: rgba(46,125,50,0.12); color: var(--green); }}
+.fit-badge.fit-medium {{ background: rgba(229,161,0,0.12); color: var(--yellow); }}
+.fit-badge.fit-low {{ background: rgba(211,47,47,0.1); color: var(--red); }}
+.stack-pill {{
+  display: inline-block;
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 5px;
+  background: rgba(21,101,192,0.08);
+  color: var(--info);
+  font-weight: 500;
+  margin-right: 4px;
+  margin-bottom: 4px;
+}}
+
 /* Theme badge */
 .theme-badge {{
   display: inline-flex;
@@ -1438,6 +1486,7 @@ body::after {{
   <a href="#" data-section="Solutions">Solutions</a>
   <a href="#" data-section="Packages">Packages</a>
   <a href="#" data-section="Margin">Margins</a>
+  <a href="#" data-section="Customers">Customers</a>
   <a href="#" data-section="Claims">Claims</a>
   <a href="#" data-section="Next">Actions</a>
 </nav>
@@ -2036,6 +2085,64 @@ body::after {{
 </div>
 """
 
+    # --- Target Customers ---
+    has_named_customers = False
+    for cslug, cdata in data.get("customers", {}).items():
+        if cdata.get("named_customers"):
+            has_named_customers = True
+            break
+
+    if has_named_customers:
+        html += """
+<!-- Target Customers -->
+<div class="section reveal">
+  <div class="section-title">Target Customers</div>
+"""
+        for cslug in sorted(data["customers"].keys()):
+            cdata = data["customers"][cslug]
+            nc_list = cdata.get("named_customers", [])
+            if not nc_list:
+                continue
+            mkt = data.get("markets", {}).get(cdata.get("market_slug", cslug), {})
+            mkt_name = mkt.get("name", cslug)
+            html += f'  <div class="customer-market-group">\n    <h4>{escape_html(mkt_name)}</h4>\n'
+            for idx, nc in enumerate(nc_list):
+                name = escape_html(nc.get("name", "Unknown"))
+                industry = escape_html(nc.get("industry", ""))
+                hq = escape_html(nc.get("headquarters", ""))
+                emps = nc.get("employees")
+                emp_str = f"{emps:,}" if emps else ""
+                rev = nc.get("revenue", {})
+                rev_val = rev.get("value") if isinstance(rev, dict) else None
+                rev_cur = rev.get("currency", "EUR") if isinstance(rev, dict) else "EUR"
+                if rev_val and rev_val >= 1e9:
+                    rev_str = f"{rev_cur} {rev_val/1e9:.1f}B"
+                elif rev_val and rev_val >= 1e6:
+                    rev_str = f"{rev_cur} {rev_val/1e6:.0f}M"
+                elif rev_val:
+                    rev_str = f"{rev_cur} {rev_val:,.0f}"
+                else:
+                    rev_str = ""
+                fit = nc.get("fit_score", "")
+                fit_cls = f"fit-{fit}" if fit in ("high", "medium", "low") else ""
+                pain_pts = nc.get("pain_points", [])
+                pain_html = ", ".join(escape_html(p) for p in pain_pts[:3])
+
+                meta_parts = [x for x in [industry, hq, emp_str + (" employees" if emp_str else ""), rev_str] if x]
+                meta_str = " &bull; ".join(meta_parts)
+
+                html += f"""    <div class="customer-target-card" onclick="openNamedCustomer('{escape_html(cslug)}', {idx})">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <h5>{name}</h5>
+        {f'<span class="fit-badge {fit_cls}">{escape_html(fit)}</span>' if fit else ''}
+      </div>
+      <div class="ct-meta">{meta_str}</div>
+      {f'<div style="font-size:12px;color:var(--text2)">{pain_html}</div>' if pain_html else ''}
+    </div>
+"""
+            html += "  </div>\n"
+        html += "</div>\n"
+
     # --- Claims Status ---
     claims_total = claims_status.get("total", 0)
     if claims_total > 0:
@@ -2279,6 +2386,20 @@ function openMarket(slug) {{
     }});
   }}
 
+  if (cust && cust.named_customers && cust.named_customers.length) {{
+    html += '<div class="section-label">Target Companies (' + cust.named_customers.length + ')</div>';
+    cust.named_customers.forEach(function(nc, idx) {{
+      var fitCls = nc.fit_score === 'high' ? 'fit-high' : (nc.fit_score === 'medium' ? 'fit-medium' : 'fit-low');
+      html += '<div class="customer-target-card" onclick="event.stopPropagation();openNamedCustomer(\\''+slug+'\\', '+idx+')">';
+      html += '<div style="display:flex;justify-content:space-between;align-items:center"><h5>' + esc(nc.name) + '</h5>';
+      if (nc.fit_score) html += '<span class="fit-badge ' + fitCls + '">' + esc(nc.fit_score) + '</span>';
+      html += '</div>';
+      var meta = [nc.industry, nc.headquarters].filter(Boolean).map(esc).join(' &bull; ');
+      if (meta) html += '<div class="ct-meta">' + meta + '</div>';
+      html += '</div>';
+    }});
+  }}
+
   const props = Object.entries(E.propositions).filter(([k,v]) => v.market_slug === slug);
   if (props.length) {{
     html += '<div class="section-label">Propositions (' + props.length + ')</div>';
@@ -2286,6 +2407,76 @@ function openMarket(slug) {{
       const feat = E.features[v.feature_slug] || {{}};
       html += '<div style="background:var(--surface);border-radius:8px;padding:12px 16px;margin-bottom:8px;cursor:pointer" onclick="openProposition(\\''+k+'\\')"><h5>' + esc(feat.name || v.feature_slug) + '</h5>';
       html += '<div style="font-size:12px;color:var(--text2)">' + esc(v.does_statement || '').substring(0,120) + '...</div></div>';
+    }});
+  }}
+
+  document.getElementById('panel').innerHTML = html;
+  var ov = document.getElementById('overlay');
+  ov.style.display = 'flex';
+  requestAnimationFrame(function() {{ ov.classList.add('open'); }});
+}}
+
+function openNamedCustomer(marketSlug, idx) {{
+  var cust = E.customers[marketSlug];
+  if (!cust || !cust.named_customers || !cust.named_customers[idx]) return;
+  var nc = cust.named_customers[idx];
+  var mkt = E.markets[marketSlug] || {{}};
+
+  var html = '<button class="panel-close" onclick="closePanel()">&times;</button>';
+  html += '<h3>' + esc(nc.name) + '</h3>';
+  var fitCls = nc.fit_score === 'high' ? 'fit-high' : (nc.fit_score === 'medium' ? 'fit-medium' : 'fit-low');
+  html += '<div class="panel-sub">' + esc(mkt.name || marketSlug) + (nc.fit_score ? ' &bull; <span class="fit-badge ' + fitCls + '">' + esc(nc.fit_score) + '</span>' : '') + '</div>';
+
+  // Company details
+  html += '<div class="section-label">Company Details</div>';
+  html += '<table><tbody>';
+  if (nc.industry) html += '<tr><td style="color:var(--text2)">Industry</td><td>' + esc(nc.industry) + '</td></tr>';
+  if (nc.headquarters) html += '<tr><td style="color:var(--text2)">Headquarters</td><td>' + esc(nc.headquarters) + '</td></tr>';
+  if (nc.domain) html += '<tr><td style="color:var(--text2)">Domain</td><td>' + esc(nc.domain) + '</td></tr>';
+  if (nc.employees) html += '<tr><td style="color:var(--text2)">Employees</td><td>' + nc.employees.toLocaleString() + '</td></tr>';
+  if (nc.revenue && nc.revenue.value) html += '<tr><td style="color:var(--text2)">Revenue</td><td class="price">' + fmtCurrency(nc.revenue.value, nc.revenue.currency) + (nc.revenue.year ? ' (' + nc.revenue.year + ')' : '') + '</td></tr>';
+  html += '</tbody></table>';
+
+  // Fit rationale
+  if (nc.fit_rationale) {{
+    html += '<div class="section-label">Fit Rationale</div>';
+    html += '<div class="stmt">' + esc(nc.fit_rationale) + '</div>';
+  }}
+
+  // Pain points
+  if (nc.pain_points && nc.pain_points.length) {{
+    html += '<div class="section-label">Pain Points</div><ul class="profile-list">';
+    nc.pain_points.forEach(function(pp) {{ html += '<li>' + esc(pp) + '</li>'; }});
+    html += '</ul>';
+  }}
+
+  // Tech stack
+  if (nc.current_stack && nc.current_stack.length) {{
+    html += '<div class="section-label">Current Stack</div><div style="display:flex;flex-wrap:wrap;gap:4px">';
+    nc.current_stack.forEach(function(t) {{ html += '<span class="stack-pill">' + esc(t) + '</span>'; }});
+    html += '</div>';
+  }}
+
+  // Sources
+  if (nc.source_urls && nc.source_urls.length) {{
+    html += '<div class="section-label">Sources</div>';
+    nc.source_urls.forEach(function(url) {{
+      html += '<div style="font-size:12px;margin-bottom:4px"><a href="' + esc(url) + '" target="_blank" rel="noopener" style="color:var(--info);text-decoration:none">' + esc(url) + '</a></div>';
+    }});
+  }}
+
+  if (nc.researched_at) {{
+    html += '<div style="font-size:11px;color:var(--text2);margin-top:12px">Researched: ' + esc(nc.researched_at) + '</div>';
+  }}
+
+  // Buyer personas context
+  if (cust.profiles && cust.profiles.length) {{
+    html += '<div class="section-label" style="margin-top:20px">Buyer Personas (this market)</div>';
+    cust.profiles.forEach(function(prof) {{
+      html += '<div class="profile-card">';
+      html += '<h5>' + esc(prof.role || '') + '</h5>';
+      html += '<div class="profile-meta">' + esc(prof.seniority || '') + (prof.decision_role ? ' &bull; ' + esc(prof.decision_role) : '') + '</div>';
+      html += '</div>';
     }});
   }}
 

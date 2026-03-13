@@ -99,6 +99,33 @@ Cross-reference customer pain points with proposition DOES/MEANS statements. Eac
 
 These gaps are valuable — they either reveal missing propositions or signal that a profile needs updating.
 
+### 7. Named Customer Research
+
+After completing buyer personas, offer to identify specific named companies in this market:
+
+> "Would you like to identify specific named companies in this market segment?"
+
+Two modes of operation:
+
+**User-provided:** The user names specific companies they want researched. Proceed directly to research.
+
+**Auto-discover:** When the user wants suggestions, search the web for "top {segment} companies in {region}" or similar queries to identify 5-10 candidate companies. Present the list and let the user select which to research.
+
+For each selected company, delegate research to the `customer-researcher` agent (via the Agent tool). Launch agents in parallel when researching multiple companies. Each agent returns a structured JSON object — do NOT let agents write files directly.
+
+Merge all returned results into a `named_customers` array in the customer JSON. Deduplicate by `domain` — if a company already exists, update rather than duplicate.
+
+### 8. Review Named Customers
+
+Present the named customer results for user review:
+
+- Show a summary table: company name, industry, fit score, key pain points
+- Allow the user to remove companies that don't fit
+- Allow the user to add more companies (loops back to Step 7)
+- Confirm final list before writing
+
+Write the updated customer JSON with both `profiles` and `named_customers`.
+
 ## Important Notes
 
 - Customer files share the same slug as their parent market

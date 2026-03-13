@@ -89,9 +89,10 @@ The generated HTML includes these sections, all in a single-page app with drill-
 7. **Solutions & Pricing** — Solutions grouped by type. Project solutions show implementation timeline and pricing tiers (PoV/S/M/L). Subscription solutions show onboarding, subscription tiers (Free/Pro/Enterprise), and professional services. Partnership solutions show program stages and revenue-share terms.
 8. **Packages** — Product bundles as clickable cards. Each package shows product->market, package type chip, positioning, and tier cards with pricing and included solution pills. Click to drill down into full tier detail with bundle savings.
 9. **Margin Health** (if any solutions have `cost_model`) — Separated by solution type. Project solutions show effort-based margins per tier. Subscription solutions show unit economics (LTV/CAC, gross margin, churn). Color-coded: green for healthy, yellow for below-target, red for negative/failing. This section is marked INTERNAL/CONFIDENTIAL.
-10. **Competitive Landscape** — Per-proposition competitor cards with strengths/weaknesses
-11. **Claims Status** — Verification summary (verified, unverified, deviated, resolved) with progress bar
-12. **Next Actions** — Recommended next skills from project-status
+10. **Target Customers** (if any customer files have `named_customers`) — Per-market named company cards with fit score badges (green/yellow/red), industry, headquarters, revenue, and pain points. Click a card to expand full profile with tech stack pills, fit rationale, source URLs, and researched date. Buyer personas for the market are shown below for context. Hidden when no named customers exist.
+11. **Competitive Landscape** — Per-proposition competitor cards with strengths/weaknesses
+12. **Claims Status** — Verification summary (verified, unverified, deviated, resolved) with progress bar
+13. **Next Actions** — Recommended next skills from project-status
 
 ## Shared Pattern
 

@@ -56,6 +56,10 @@ DEFAULT_THEME = {
     },
 }
 
+# Dimension slugs used when candidates lack explicit dimension field
+# Candidates are always produced in groups of 15 per dimension in this order.
+DIMENSION_SLUGS = ["externe-effekte", "neue-horizonte", "digitale-wertetreiber", "digitales-fundament"]
+
 # TIPS dimension colors
 TIPS_COLORS = {
     "trend": "#F59E0B",      # amber
@@ -108,6 +112,7 @@ UI_LABELS = {
         "not_available": "Not yet available",
         "run_skill": "Run",
         "to_generate": "to generate this data",
+        "top_trends": "Top Trends",
         "click_node": "Click a node in the graph or an entity card to see details",
         "dimensions": ["External Effects", "New Horizons", "Digital Value Drivers", "Digital Foundation"],
         "horizons": ["ACT", "PLAN", "OBSERVE"],
@@ -147,6 +152,7 @@ UI_LABELS = {
         "not_available": "Noch nicht verfügbar",
         "run_skill": "Führe",
         "to_generate": "aus, um diese Daten zu generieren",
+        "top_trends": "Top Trends",
         "click_node": "Klicke auf einen Knoten im Graph oder eine Entity-Karte für Details",
         "dimensions": ["Externe Effekte", "Neue Horizonte", "Digitale Wertetreiber", "Digitales Fundament"],
         "horizons": ["ACT", "PLAN", "OBSERVE"],
@@ -432,8 +438,22 @@ def build_graph_data(data):
     for i, c in enumerate(candidates):
         nid = f"candidate-{i}"
         node_ids.add(nid)
+        # Fix 1: derive dimension from position when missing
         dim = c.get("dimension", "")
+        if not dim:
+            dim = DIMENSION_SLUGS[min(i // 15, 3)]
+            c["dimension"] = dim
         dim_idx = _dimension_index(dim)
+        # Fix 2: extract indicator_type from nested indicator_classification
+        indicator = c.get("indicator_type", "")
+        if not indicator:
+            ic = c.get("indicator_classification", {})
+            if isinstance(ic, dict):
+                indicator = ic.get("type", "")
+        # Fix 3: extract diffusion_stage string from dict
+        diffusion = c.get("diffusion_stage", "")
+        if isinstance(diffusion, dict):
+            diffusion = diffusion.get("stage", "")
         nodes.append({
             "id": nid,
             "name": c.get("trend_name", c.get("name", f"Candidate {i+1}")),
@@ -445,8 +465,8 @@ def build_graph_data(data):
             "confidence": c.get("confidence_tier", ""),
             "statement": c.get("trend_statement", c.get("statement", "")),
             "source": c.get("source", ""),
-            "indicator_type": c.get("indicator_type", ""),
-            "diffusion_stage": c.get("diffusion_stage", ""),
+            "indicator_type": indicator,
+            "diffusion_stage": diffusion,
         })
         name_key = (c.get("trend_name") or c.get("name") or "").strip().lower()
         if name_key:
@@ -679,6 +699,11 @@ def generate_html(data, status, project_dir, theme):
 
         if not isinstance(candidates, list):
             candidates = []
+
+    # Fix 1: derive dimension from position when missing
+    for i, c in enumerate(candidates):
+        if not c.get("dimension"):
+            c["dimension"] = DIMENSION_SLUGS[min(i // 15, 3)]
 
     # Build dimension × horizon matrix
     dim_horizon = {}
@@ -1394,6 +1419,18 @@ body::after {{
     leading_pct_val = 0
     confidence_dist = scout_scoring.get("confidence_distribution", {})
     indicator_dist = scout_scoring.get("indicator_distribution", scout_scoring.get("indicator_type_distribution", scout_scoring.get("intensity_distribution", {})))
+    # Fix 4: compute indicator_distribution from candidates when metadata lacks it
+    if not indicator_dist and candidates:
+        computed = {}
+        for c in candidates:
+            ic = c.get("indicator_classification", {})
+            itype = ic.get("type", "") if isinstance(ic, dict) else ""
+            if not itype:
+                itype = c.get("indicator_type", "")
+            if itype:
+                computed[itype] = computed.get(itype, 0) + 1
+        if computed:
+            indicator_dist = computed
     if indicator_dist:
         total_ind = sum(v for v in indicator_dist.values() if isinstance(v, (int, float)))
         # Handle both formats: leading/lagging/coincident or level_1..level_5
@@ -1438,6 +1475,31 @@ body::after {{
         </div>
       </div>
 """
+
+    # Fix 5: Top Trends section in overview
+    if candidates:
+        top_n = sorted(candidates, key=lambda c: c.get("score", 0), reverse=True)[:10]
+        html += f'      <!-- Top trends -->\n'
+        html += f'      <div class="section reveal" id="sec-overview-trends">\n'
+        html += f'        <div class="section-title">{L.get("top_trends", "Top Trends")}</div>\n'
+        for rank, tc in enumerate(top_n, 1):
+            t_name = esc(tc.get("trend_name", tc.get("name", f"Trend {rank}")))
+            t_score = tc.get("score", 0)
+            t_dim = tc.get("dimension", "")
+            t_dim_idx = _dimension_index(t_dim)
+            t_color = DIMENSION_COLORS[t_dim_idx]
+            t_dim_label = esc(_dimension_display_name(t_dim, lang))
+            t_hor = esc(tc.get("horizon", ""))
+            html += f'        <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)">\n'
+            html += f'          <span style="color:var(--text2);font-size:13px;width:20px">{rank}</span>\n'
+            html += f'          <span class="dim-dot" style="background:{t_color};width:10px;height:10px;border-radius:50%;display:inline-block;flex-shrink:0"></span>\n'
+            html += f'          <span style="flex:1;font-weight:500">{t_name}</span>\n'
+            html += f'          <span class="badge badge-score">{t_score:.2f}</span>\n'
+            if t_hor:
+                html += f'          <span class="badge" style="background:var(--surface2);color:var(--text2);font-size:11px">{t_hor}</span>\n'
+            html += f'          <span style="color:var(--text2);font-size:11px">{t_dim_label}</span>\n'
+            html += f'        </div>\n'
+        html += '      </div>\n\n'
 
     # Dimension × Horizon heatmap
     html += f"""
@@ -1528,8 +1590,16 @@ body::after {{
                 score = cand.get("score", 0)
                 conf = cand.get("confidence_tier", "medium").lower()
                 conf_cls = f"badge-confidence-{conf}" if conf in ("high", "medium", "low") else "badge-confidence-medium"
+                # Fix 2: extract indicator_type from nested indicator_classification
                 indicator = cand.get("indicator_type", "")
+                if not indicator:
+                    ic = cand.get("indicator_classification", {})
+                    if isinstance(ic, dict):
+                        indicator = ic.get("type", "")
+                # Fix 3: extract diffusion_stage string from dict
                 diffusion = cand.get("diffusion_stage", "")
+                if isinstance(diffusion, dict):
+                    diffusion = diffusion.get("stage", "")
                 hor = cand.get("horizon", "")
                 name = cand.get("trend_name", cand.get("name", f"Candidate {ci+1}"))
                 stmt = cand.get("trend_statement", cand.get("statement", ""))
@@ -1825,7 +1895,7 @@ function updateLeftPanel(tabId) {
   if (tabId === 'overview') {
     html += '<div class="section-group">';
     html += '<div class="section-label">Sections</div>';
-    ['phase', 'scoring', 'heatmap', 'sources'].forEach(function(s) {
+    ['phase', 'scoring', 'trends', 'heatmap', 'sources'].forEach(function(s) {
       html += '<button class="section-item" onclick="scrollToSection(\\'sec-overview-' + s + '\\')">' +
               s.charAt(0).toUpperCase() + s.slice(1) + '</button>';
     });

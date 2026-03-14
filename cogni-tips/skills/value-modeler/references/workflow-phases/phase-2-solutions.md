@@ -47,6 +47,24 @@ Before generating any Solution Templates, check the Phase 0 output metadata for 
 
 5. **No portfolio discovered**: Proceed silently to Step 1 (abstract generation).
 
+## Phase 2 Decision Flow
+
+The steps in this phase depend on whether portfolio context is available:
+
+```
+Portfolio context v2.0+ exists:
+  Step 0.5 (anchored STs from portfolio features)
+  → Step 1 (abstract STs for themes not fully covered by Step 0.5)
+  → Step 1.5 (blueprint composition for abstract STs, coverage assessed against portfolio)
+  → Step 2 (enrich all blueprints with real portfolio data)
+
+Portfolio context v1.0 or absent:
+  Skip Step 0.5
+  → Step 1 (abstract STs for all themes)
+  → Step 1.5 (blueprint composition with coverage: "unknown" on all blocks)
+  → Skip Step 2 (no portfolio data to enrich from)
+```
+
 ## Step 0.5: Portfolio-Anchored Generation (when v2.0+ context exists)
 
 This step runs **only** when `portfolio-context.json` has `schema_version` >= `"2.0"`. When the

@@ -95,11 +95,14 @@ that need quality improvement before customer-facing use.
 add a readiness annotation in the ranked output:
 
 ```
-Readiness: LOW (0.35) — gaps in Connectivity (1.x), Consulting (7.x)
+Readiness: LOW (0.35) — gaps in Dim 1 Connectivity, Dim 7 Consulting
 ```
 
-List the specific taxonomy dimensions where building blocks have `coverage: "gap"`. This helps
-the user understand *why* the readiness is low and which portfolio investments would improve it.
+List gap dimensions by their `taxonomy_dimension` ID and dimension name (from the B2B ICT
+taxonomy reference). Show dimensions, not individual categories — the annotation is a quick
+summary. For full category-level detail, the Solution Blueprint Panel in the dashboard provides
+the gap heatmap.
+
 For STs without blueprints, omit the readiness annotation.
 
 ## Step 2: Generate Ranked Solution List

@@ -25,6 +25,10 @@ Scan the completed value model (themes, value chains, STs) for patterns worth pr
 **Proven Solution Templates** — STs ranked in Tier 1-2 that address common needs:
 - Is this ST generalizable beyond the specific customer context?
 - Does the ST fill a gap in the current industry catalog?
+- **Blueprint readiness signal**: STs with `readiness_score >= 0.8` are stronger promotion
+  candidates — the portfolio can already deliver them. STs with low readiness (< 0.5) may
+  still be worth promoting as catalog entries, but add a note that portfolio investment is
+  needed before customer-facing delivery
 
 **Validated SPIs** — process improvements that consistently accompany high-value STs:
 - Are these SPIs industry-standard or customer-specific?
@@ -53,7 +57,13 @@ For each promotion candidate, generate a recommendation:
   "target_catalog": "manufacturing/automotive",
   "rationale": "High-BR path addressing a recurring industry need for predictive quality",
   "generalization_notes": "Remove customer-specific sensor references; generalize to 'production line sensors'",
-  "confidence": "high|medium|low"
+  "confidence": "high|medium|low",
+  "blueprint_summary": {
+    "readiness_score": 0.82,
+    "taxonomy_dimensions": [1, 4, 6, 7],
+    "gap_dimensions": [7],
+    "note": "Portfolio-proven across 3 of 4 dimensions; Dim 7 Consulting needs investment"
+  }
 }
 ```
 
@@ -67,6 +77,9 @@ For each promotion candidate, generate a recommendation:
 - Always suggest generalization: strip customer names, specific product references
 - Prefer `flag` over `promote` when unsure about generalizability
 - Target 3-8 recommendations per project — quality over quantity
+- Include `blueprint_summary` on ST recommendations when the ST has a `solution_blueprint`.
+  This tells catalog consumers which taxonomy dimensions the solution spans and where portfolio
+  gaps exist. Omit for entities without blueprints (themes, SPIs, metrics)
 
 ## Step 3: Present Curation Summary
 
@@ -85,6 +98,7 @@ Based on this pursuit, the following patterns could enrich the {industry} catalo
 ### Solution Templates Worth Promoting (1)
 - **st-003: Compliance Automation Suite** — addresses EU AI Act across all manufacturing
   Action: promote to manufacturing (cross-subsector)
+  Readiness: 0.82 (4 dimensions, gap in Dim 7 Consulting)
 
 ### Process Improvements Worth Sharing (1)
 - **spi-002: Train quality engineers on ML interpretation** — standard enabler

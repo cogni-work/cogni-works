@@ -148,7 +148,7 @@ Strategic themes and solution ranking from value-modeler:
 - **Value Chain Flows** — visual T→I→P flow diagrams per theme, showing how trends connect through implications to possibilities. Each node in the flow is clickable (populates entity detail)
 - **Solution Template Ranking** — sorted table of all STs with: name, category, enabler type, theme, BR score, F1+ ranking value, readiness score, linked chains count. Color-coded rows by ranking tier. Portfolio-anchored STs show an anchor badge with their feature slug. Readiness column shows the blueprint readiness score with a colored indicator (green ≥0.8, amber ≥0.5, red <0.5)
 - **Solution Blueprint Panel** — multi-dimensional portfolio composition view for all STs:
-  - **Taxonomy Radar Chart**: 8-spoke radar (one per B2B ICT dimension 0-7) showing aggregate blueprint coverage across all STs. Each spoke = average coverage score for that dimension. Immediately shows portfolio strengths and gaps at a glance
+  - **Taxonomy Radar Chart**: 8-spoke radar (one per B2B ICT dimension 0-7) showing aggregate blueprint coverage across all STs that have blueprints. Each spoke = mean of role-weighted coverage values for that dimension. Coverage numeric mapping: covered=1.0, partial=0.5, gap=0.0, unknown=0.0. Role weights match the readiness formula (lead=0.5, supporting=0.3, enabling=0.2). STs without blueprints are excluded from the aggregation. Immediately shows portfolio strengths and gaps at a glance
   - **Blueprint Cards per ST**: within each theme section, compact blueprint visualization:
     ```
     ST-001: Predictive Quality Analytics Platform
@@ -161,7 +161,7 @@ Strategic themes and solution ranking from value-modeler:
     │ Readiness: 0.68  Span: 4 dimensions              │
     └─────────────────────────────────────────────────┘
     ```
-  - **Taxonomy Gap Heatmap**: 8-dimension heatmap showing which taxonomy categories are needed by STs but have gaps. Red = gap blocks, amber = partial, green = covered. Coverage percentage per dimension
+  - **Taxonomy Gap Heatmap**: rows are dimensions (0-7), cells are individual taxonomy categories within that dimension. Only show categories referenced by at least one ST's blueprint. Color each cell by worst coverage across any ST needing that category: red = at least one ST has it as gap, amber = worst is partial (no gaps), green = all STs have it covered. Show coverage percentage per dimension row (covered cells / total cells in row). Sparse dimensions (few categories referenced) are expected — not all 57 categories will appear
   - Only appears when at least one ST has a `solution_blueprint`
 - **Portfolio Anchor Coverage** — when Solution Templates have `generation_mode: "portfolio-anchored"`, shows anchor coverage stats (anchored vs abstract STs, delivered/unmet needs), collapsible theme cards with per-ST anchor details including feature/product slugs and need pills (green = delivered, red = unmet). Quality flags are surfaced. Only appears when at least one ST is portfolio-anchored
 - **SPIs & Metrics** — collapsible section showing Solution Process Improvements and success KPIs per theme

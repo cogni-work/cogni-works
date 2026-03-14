@@ -131,6 +131,22 @@ The `feature_spec` object contains a roadmap-ready feature definition. When the 
 - `source_themes` / `source_sts` (arrays): Traceability back to the TIPS value model
 - `readiness`: Always `"planned"` for new opportunities
 
+**Example feature_spec without blueprint** (legacy ST or abstract ST without portfolio context):
+```json
+{
+  "proposed_slug": "supply-chain-visibility",
+  "proposed_product_slug": "logistics-platform",
+  "name": "Supply Chain Visibility Dashboard",
+  "description": "Real-time tracking and analytics across the supply chain.",
+  "category": "analytics",
+  "readiness": "planned",
+  "unmet_needs": ["End-to-end shipment tracking", "Supplier performance scoring"],
+  "source_themes": ["theme-003"],
+  "source_sts": ["st-007"]
+}
+```
+Note: no `taxonomy_refs` field — this ST has no blueprint to derive taxonomy categories from.
+
 ### Priority Derivation
 
 - **high**: `opportunity_score >= 7.0` AND `ranking_value >= 4.0`
@@ -161,6 +177,8 @@ unmatched ones). This provides portfolio-level investment priorities:
         }
       ],
       "total_blocks": 7,
+      "total_covered_blocks": 1,
+      "total_partial_blocks": 1,
       "total_gap_blocks": 5,
       "priority": "high"
     }

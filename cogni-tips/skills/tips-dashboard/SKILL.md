@@ -146,7 +146,8 @@ Strategic themes and solution ranking from value-modeler:
 
 - **Theme Cards** — one per strategic theme showing: name, strategic question, executive sponsor type, narrative summary, business relevance average, ranking value. Expandable to show value chains
 - **Value Chain Flows** — visual T→I→P flow diagrams per theme, showing how trends connect through implications to possibilities. Each node in the flow is clickable (populates entity detail)
-- **Solution Template Ranking** — sorted table of all STs with: name, category, enabler type, theme, BR score, F1+ ranking value, linked chains count. Color-coded rows by ranking tier
+- **Solution Template Ranking** — sorted table of all STs with: name, category, enabler type, theme, BR score, F1+ ranking value, linked chains count. Color-coded rows by ranking tier. Portfolio-anchored STs show an anchor badge with their feature slug
+- **Portfolio Anchor Coverage** — when Solution Templates have `generation_mode: "portfolio-anchored"`, shows anchor coverage stats (anchored vs abstract STs, delivered/unmet needs), collapsible theme cards with per-ST anchor details including feature/product slugs and need pills (green = delivered, red = unmet). Quality flags are surfaced. Only appears when at least one ST is portfolio-anchored
 - **SPIs & Metrics** — collapsible section showing Solution Process Improvements and success KPIs per theme
 
 **Left index**: Theme names. Click to scroll to that theme's section.
@@ -184,7 +185,7 @@ The graph is the signature element of this dashboard. It visualizes the TIPS rel
   - Trend (T) — amber circle
   - Implication (I) — cyan diamond
   - Possibility (P) — purple square
-  - Solution (S) — green hexagon
+  - Solution (S) — green hexagon; portfolio-anchored STs show a small anchor (⚓) overlay
 - **Edges**: Value chain links (T→I, I→P, P→S) shown as directed arrows
 - **Grouping**: Nodes cluster by strategic theme (force-directed with theme gravity wells)
 - **Sizing**: Node radius proportional to score or BR value
@@ -201,6 +202,7 @@ The graph is the signature element of this dashboard. It visualizes the TIPS rel
 - Score, confidence, source (for candidates)
 - BR score, ranking value, linked chains (for solution templates)
 - Related entities list (clickable, navigates graph)
+- Portfolio anchor data (feature slug, product slug, delivered/undelivered needs, quality flag) for portfolio-anchored solution nodes
 
 When no entity is selected, shows a prompt: "Click a node in the graph or an entity card to see details."
 

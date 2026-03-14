@@ -114,6 +114,13 @@ UI_LABELS = {
         "to_generate": "to generate this data",
         "top_trends": "Top Trends",
         "click_node": "Click a node in the graph or an entity card to see details",
+        "anchor_coverage": "Portfolio Anchor Coverage",
+        "anchored_sts": "Anchored STs",
+        "abstract_sts": "Abstract STs",
+        "delivered_needs": "Delivered Needs",
+        "unmet_needs": "Unmet Needs",
+        "quality_flag": "Quality Investment Needed",
+        "portfolio_anchored": "Portfolio-Anchored",
         "dimensions": ["External Effects", "New Horizons", "Digital Value Drivers", "Digital Foundation"],
         "horizons": ["ACT", "PLAN", "OBSERVE"],
         "stages": ["Web Research", "Candidate Gen", "Selection", "Report", "Claims", "Insight", "Verification", "Polish"],
@@ -154,6 +161,13 @@ UI_LABELS = {
         "to_generate": "aus, um diese Daten zu generieren",
         "top_trends": "Top Trends",
         "click_node": "Klicke auf einen Knoten im Graph oder eine Entity-Karte für Details",
+        "anchor_coverage": "Portfolio-Anker-Abdeckung",
+        "anchored_sts": "Verankerte STs",
+        "abstract_sts": "Abstrakte STs",
+        "delivered_needs": "Gelieferte Bedarfe",
+        "unmet_needs": "Ungedeckte Bedarfe",
+        "quality_flag": "Qualitätsinvestition nötig",
+        "portfolio_anchored": "Portfolio-verankert",
         "dimensions": ["Externe Effekte", "Neue Horizonte", "Digitale Wertetreiber", "Digitales Fundament"],
         "horizons": ["ACT", "PLAN", "OBSERVE"],
         "stages": ["Web-Recherche", "Kandidaten-Gen.", "Selektion", "Report", "Claims", "Insight", "Verifikation", "Polish"],
@@ -590,6 +604,9 @@ def build_graph_data(data):
                             "br_score": st.get("business_relevance", 0),
                             "ranking_value": st.get("ranking_value", 0),
                             "statement": st.get("description", ""),
+                            "generation_mode": st.get("generation_mode", "abstract"),
+                            "portfolio_anchor": st.get("portfolio_anchor"),
+                            "quality_flag": st.get("quality_flag", ""),
                         })
                     # Link from possibilities to solution
                     for chain in chains:
@@ -754,6 +771,25 @@ def generate_html(data, status, project_dir, theme):
                     all_sts.append(st_copy)
 
         all_sts.sort(key=lambda x: x.get("ranking_value", x.get("business_relevance", 0)), reverse=True)
+
+    # Portfolio anchor stats
+    anchored_sts = [st for st in all_sts if st.get("generation_mode") == "portfolio-anchored"]
+    anchored_count = len(anchored_sts)
+    total_sts_count = len(all_sts)
+    anchored_by_theme = {}
+    all_delivered_needs = set()
+    all_undelivered_needs = set()
+    has_quality_issues = False
+    for st in anchored_sts:
+        theme_name = st.get("_theme_name", "Unknown")
+        anchored_by_theme.setdefault(theme_name, []).append(st)
+        anchor = st.get("portfolio_anchor", {}) or {}
+        for need in anchor.get("theme_needs_delivered", []):
+            all_delivered_needs.add(need)
+        for need in anchor.get("theme_needs_undelivered", []):
+            all_undelivered_needs.add(need)
+        if st.get("quality_flag"):
+            has_quality_issues = True
 
     # Claims data
     claims_list = []
@@ -1256,6 +1292,58 @@ body::after {{
   background: var(--accent); vertical-align: middle;
 }}
 
+/* Anchor coverage */
+.anchor-summary {{
+  display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px;
+}}
+.anchor-summary-chip {{
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 12px; font-weight: 600; padding: 4px 10px;
+  border-radius: 6px;
+}}
+.anchor-card {{
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 14px 16px; margin-bottom: 10px;
+}}
+.anchor-card-header {{
+  display: flex; align-items: center; justify-content: space-between;
+  cursor: pointer;
+}}
+.anchor-card-header h4 {{ margin: 0; font-size: 14px; }}
+.anchor-needs {{
+  display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px;
+}}
+.need-pill {{
+  display: inline-block; font-size: 11px; padding: 2px 8px;
+  border-radius: 4px; font-weight: 500;
+}}
+.need-delivered {{
+  background: rgba(46,125,50,0.1); color: var(--green);
+}}
+.need-undelivered {{
+  background: rgba(211,47,47,0.08); color: var(--red);
+}}
+.anchor-detail {{
+  display: none; margin-top: 10px; padding-top: 10px;
+  border-top: 1px solid var(--border);
+}}
+.anchor-st-item {{
+  padding: 8px 0; border-bottom: 1px solid var(--border);
+}}
+.anchor-st-item:last-child {{ border-bottom: none; }}
+.anchor-st-item h5 {{ margin: 0 0 4px 0; font-size: 13px; }}
+.anchor-badge {{
+  display: inline-flex; align-items: center; gap: 3px;
+  font-size: 10px; font-weight: 600; padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(34,197,94,0.15); color: var(--tips-solution);
+}}
+.quality-flag {{
+  display: inline-block; font-size: 10px; font-weight: 600;
+  padding: 2px 6px; border-radius: 4px;
+  background: rgba(229,161,0,0.12); color: var(--amber);
+}}
+
 /* Claims table */
 .claims-table {{
   width: 100%; border-collapse: collapse; font-size: 13px;
@@ -1471,6 +1559,11 @@ body::after {{
               <span style="color:var(--yellow)">{med_conf} {L['medium']}</span><br>
               <span style="color:var(--red)">{low_conf} {L['low']}</span>
             </div>
+          </div>
+          <div class="card">
+            <div class="label">{L['anchored_sts']}</div>
+            <div class="value">{anchored_count} / {total_sts_count}</div>
+            <div class="sub">{L['portfolio_anchored'].lower()}</div>
           </div>
         </div>
       </div>
@@ -1696,8 +1789,9 @@ body::after {{
                         continue
                     s_name = st_obj.get("name", "S")
                     s_graph_id = f"st-{st_obj.get('st_id', st_obj.get('id', ''))}"
+                    anchor_mark = ' <span title="portfolio-anchored" style="font-size:10px">&#9875;</span>' if st_obj.get("generation_mode") == "portfolio-anchored" else ""
                     html += '              <div class="chain-arrow">&rarr;</div>\n'
-                    html += f'              <div class="chain-node solution" onclick="focusGraphNode(\'{esc_js(s_graph_id)}\')">{esc(s_name[:25])}</div>\n'
+                    html += f'              <div class="chain-node solution" onclick="focusGraphNode(\'{esc_js(s_graph_id)}\')">{esc(s_name[:25])}{anchor_mark}</div>\n'
                     shown_solutions += 1
                 html += '            </div>\n'
                 html += '          </div>\n'
@@ -1711,7 +1805,7 @@ body::after {{
         <div class="section-title">{L['solution_ranking']} ({len(all_sts)})</div>
         <table class="ranking-table">
           <thead><tr>
-            <th>#</th><th>Solution Template</th><th>Theme</th><th>Category</th><th>BR</th><th>Rank</th>
+            <th>#</th><th>Solution Template</th><th>Theme</th><th>Category</th><th>BR</th><th>Rank</th><th>Anchor</th>
           </tr></thead>
           <tbody>
 """
@@ -1721,6 +1815,12 @@ body::after {{
                 bar_w = int(float(br) / 5.0 * 100) if br else 0
                 st_id = st.get("st_id", st.get("id", ""))
                 st_graph_id = f"st-{st_id}"
+                anchor_badge = ""
+                if st.get("generation_mode") == "portfolio-anchored":
+                    pa = st.get("portfolio_anchor", {}) or {}
+                    feat = pa.get("feature_slug", "")
+                    qf_icon = ' <span class="quality-flag">!</span>' if st.get("quality_flag") else ""
+                    anchor_badge = f'<span class="anchor-badge">&#9875; {esc(feat[:18])}{qf_icon}</span>'
                 html += f"""            <tr style="cursor:pointer" onclick="focusGraphNode('{esc_js(st_graph_id)}')">
               <td class="rank-num">{ri+1}</td>
               <td class="st-name">{esc(st.get('name', ''))}</td>
@@ -1728,9 +1828,80 @@ body::after {{
               <td><span class="badge" style="background:var(--surface2);color:var(--text2)">{esc(st.get('category', ''))}</span></td>
               <td><span class="br-bar" style="width:{bar_w}px"></span> {float(br):.1f}</td>
               <td class="mono">{float(rv):.2f}</td>
+              <td>{anchor_badge}</td>
             </tr>
 """
             html += "          </tbody>\n        </table>\n      </div>\n"
+
+        # Anchor coverage section
+        if anchored_sts:
+            html += f"""      <div class="section reveal" id="sec-model-anchor">
+        <div class="section-title">{L['anchor_coverage']}</div>
+        <div class="anchor-summary">
+          <span class="anchor-summary-chip" style="background:rgba(34,197,94,0.1);color:var(--tips-solution)">{anchored_count} {L['anchored_sts']}</span>
+          <span class="anchor-summary-chip" style="background:var(--surface2);color:var(--text2)">{total_sts_count - anchored_count} {L['abstract_sts']}</span>
+          <span class="anchor-summary-chip" style="background:rgba(46,125,50,0.08);color:var(--green)">{len(all_delivered_needs)} {L['delivered_needs']}</span>
+          <span class="anchor-summary-chip" style="background:rgba(211,47,47,0.08);color:var(--red)">{len(all_undelivered_needs)} {L['unmet_needs']}</span>
+          {'<span class="quality-flag">' + L['quality_flag'] + '</span>' if has_quality_issues else ''}
+        </div>
+"""
+            for theme_name in sorted(anchored_by_theme.keys()):
+                theme_sts = anchored_by_theme[theme_name]
+                card_id = f"anchor-theme-{esc(theme_name[:20].replace(' ', '-').lower())}"
+                # Aggregate needs for this theme
+                theme_delivered = set()
+                theme_undelivered = set()
+                theme_quality = False
+                for st in theme_sts:
+                    anchor = st.get("portfolio_anchor", {}) or {}
+                    for n in anchor.get("theme_needs_delivered", []):
+                        theme_delivered.add(n)
+                    for n in anchor.get("theme_needs_undelivered", []):
+                        theme_undelivered.add(n)
+                    if st.get("quality_flag"):
+                        theme_quality = True
+
+                delivered_pills = "".join(f'<span class="need-pill need-delivered">{esc(n)}</span>' for n in sorted(theme_delivered))
+                undelivered_pills = "".join(f'<span class="need-pill need-undelivered">{esc(n)}</span>' for n in sorted(theme_undelivered))
+
+                html += f"""        <div class="anchor-card">
+          <div class="anchor-card-header" onclick="var d=document.getElementById('{card_id}');d.style.display=d.style.display==='none'?'block':'none'">
+            <h4>{esc(theme_name)}{' <span class="quality-flag" style="margin-left:8px">!</span>' if theme_quality else ''}</h4>
+            <span class="badge" style="background:var(--surface2);color:var(--text2)">{len(theme_sts)} ST{'s' if len(theme_sts) != 1 else ''}</span>
+          </div>
+          <div class="anchor-needs">{delivered_pills}{undelivered_pills}</div>
+          <div class="anchor-detail" id="{card_id}">
+"""
+                for st in sorted(theme_sts, key=lambda x: x.get("st_id", "")):
+                    st_name = esc(st.get("name", st.get("st_id", "Unknown")))
+                    st_id_val = esc(st.get("st_id", ""))
+                    pa = st.get("portfolio_anchor", {}) or {}
+                    feat_slug = esc(pa.get("feature_slug", ""))
+                    prod_slug = esc(pa.get("product_slug", ""))
+                    qf = st.get("quality_flag", "")
+                    st_del = "".join(f'<span class="need-pill need-delivered">{esc(n)}</span>' for n in pa.get("theme_needs_delivered", []))
+                    st_undel = "".join(f'<span class="need-pill need-undelivered">{esc(n)}</span>' for n in pa.get("theme_needs_undelivered", []))
+
+                    html += f"""            <div class="anchor-st-item">
+              <h5>{st_name} <span style="font-size:11px;color:var(--text2);font-weight:400">{st_id_val}</span>
+                {f'<span class="quality-flag" style="margin-left:6px">{esc(qf)}</span>' if qf else ''}
+              </h5>
+              <div style="font-size:11px;color:var(--text2);margin-bottom:6px">&#9875; {feat_slug} &middot; {prod_slug}</div>
+              <div class="anchor-needs">{st_del}{st_undel}</div>
+            </div>
+"""
+                html += "          </div>\n        </div>\n"
+
+            # Unmet needs summary
+            if all_undelivered_needs:
+                html += '        <div style="margin-top:16px;padding:14px 18px;background:rgba(211,47,47,0.04);border:1px solid rgba(211,47,47,0.12);border-radius:var(--radius)">\n'
+                html += f'          <div style="font-size:13px;font-weight:600;color:var(--red);margin-bottom:8px">{L["unmet_needs"]}</div>\n'
+                html += '          <div class="anchor-needs">\n'
+                for need in sorted(all_undelivered_needs):
+                    html += f'            <span class="need-pill need-undelivered">{esc(need)}</span>\n'
+                html += '          </div>\n        </div>\n'
+
+            html += "      </div>\n"
 
     html += "    </div>\n"
 
@@ -1918,6 +2089,9 @@ function updateLeftPanel(tabId) {
     if (ALL_STS.length > 0) {
       html += '<button class="section-item" onclick="scrollToSection(\\'sec-model-ranking\\')">Ranking</button>';
     }
+    if (ALL_STS.some(function(st){{ return st.generation_mode === 'portfolio-anchored'; }})) {{
+      html += '<button class="section-item" onclick="scrollToSection(\\'sec-model-anchor\\')">{L["anchor_coverage"]}</button>';
+    }}
     html += '</div>';
   } else if (tabId === 'report') {
     html += '<div class="section-group">';
@@ -1977,6 +2151,30 @@ function showEntityDetail(node) {
   if (node.diffusion_stage) html += '<div class="meta-item"><span class="meta-label">Diffusion:</span> ' + node.diffusion_stage + '</div>';
   if (node.source) html += '<div class="meta-item"><span class="meta-label">Source:</span> ' + node.source + '</div>';
   html += '</div>';
+
+  // Portfolio anchor detail for anchored solution nodes
+  if (node.type === 'solution' && node.generation_mode === 'portfolio-anchored' && node.portfolio_anchor) {{
+    var pa = node.portfolio_anchor;
+    html += '<div style="margin-top:12px;padding:12px;background:rgba(34,197,94,0.06);border:1px solid rgba(34,197,94,0.15);border-radius:8px">';
+    html += '<div style="font-size:11px;font-weight:600;color:var(--tips-solution);margin-bottom:8px">&#9875; {L["portfolio_anchored"]}</div>';
+    if (pa.feature_slug) html += '<div class="meta-item"><span class="meta-label">Feature:</span> ' + esc(pa.feature_slug) + '</div>';
+    if (pa.product_slug) html += '<div class="meta-item"><span class="meta-label">Product:</span> ' + esc(pa.product_slug) + '</div>';
+    if (pa.theme_needs_delivered && pa.theme_needs_delivered.length) {{
+      html += '<div style="margin-top:6px">';
+      pa.theme_needs_delivered.forEach(function(n) {{ html += '<span class="need-pill need-delivered">' + esc(n) + '</span> '; }});
+      html += '</div>';
+    }}
+    if (pa.theme_needs_undelivered && pa.theme_needs_undelivered.length) {{
+      html += '<div style="margin-top:4px">';
+      pa.theme_needs_undelivered.forEach(function(n) {{ html += '<span class="need-pill need-undelivered">' + esc(n) + '</span> '; }});
+      html += '</div>';
+    }}
+    if (node.quality_flag) {{
+      html += '<div class="quality-flag" style="margin-top:8px">' + esc(node.quality_flag) + '</div>';
+    }}
+    html += '</div>';
+  }}
+
   html += '</div>';
 
   content.innerHTML = html;
@@ -2300,6 +2498,17 @@ function initGraph() {
     .attr('fill', nodeColor)
     .attr('stroke', 'var(--bg)')
     .attr('stroke-width', 1.5);
+
+  // Anchor overlay for portfolio-anchored solution nodes
+  nodeGroup.filter(function(d) {{ return d.type === 'solution' && d.generation_mode === 'portfolio-anchored'; }})
+    .append('text')
+    .attr('text-anchor', 'middle')
+    .attr('dominant-baseline', 'central')
+    .attr('font-size', function(d) {{ return Math.max(8, nodeSize(d)); }})
+    .text('\u2693')
+    .style('pointer-events', 'none')
+    .style('fill', 'white')
+    .style('opacity', 0.9);
 
   // Text label — positioned to the right of the circle
   nodeGroup.append('text')

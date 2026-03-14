@@ -45,7 +45,10 @@ Update the consolidated output file with all candidates and finalize execution s
 CANDIDATES_TMP="${PROJECT_PATH}/.metadata/candidates-tmp.json"
 
 # Build candidates array from the full generator output
-jq '.candidates' "${PROJECT_PATH}/.logs/trend-generator-candidates.json" > "$CANDIDATES_TMP"
+# Flatten nested candidates_by_dimension (or candidates_by_cell) into a flat array,
+# injecting the dimension field from the nesting keys onto each candidate object
+jq '[(.candidates_by_dimension // .candidates_by_cell) | to_entries[] | .key as $dim | .value | to_entries[] | .key as $hor | .value[] | . + {dimension: $dim, horizon: $hor}]' \
+  "${PROJECT_PATH}/.logs/trend-generator-candidates.json" > "$CANDIDATES_TMP"
 
 # Use finalize-candidates.sh script
 # CRITICAL: Use CLAUDE_PLUGIN_ROOT for scripts, NOT COGNI_WORKSPACE_ROOT

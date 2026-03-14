@@ -55,7 +55,7 @@ jq '{
     total: .generation_metadata.total_candidates
   },
   c: [
-    .candidates_by_cell | to_entries[] | .value | to_entries[] |
+    (.candidates_by_dimension // .candidates_by_cell) | to_entries[] | .value | to_entries[] |
     # Sort by score descending within each cell
     (.value | sort_by(-.score) | to_entries) | .[] |
     {

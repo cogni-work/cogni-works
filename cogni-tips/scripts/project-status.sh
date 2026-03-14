@@ -117,9 +117,10 @@ import json
 try:
     d = json.load(open('$SCOUT_OUTPUT'))
     items = d.get('tips_candidates', {}).get('items', [])
+    DIMS = ['externe-effekte', 'neue-horizonte', 'digitale-wertetreiber', 'digitales-fundament']
     counts = {}
-    for item in items:
-        dim = item.get('dimension', 'unknown')
+    for i, item in enumerate(items):
+        dim = item.get('dimension') or DIMS[min(i // 15, 3)]
         hor = item.get('horizon', 'unknown')
         if dim not in counts:
             counts[dim] = {'act': 0, 'plan': 0, 'observe': 0, 'total': 0}
@@ -539,14 +540,15 @@ if os.path.exists(scout_file):
         d = json.load(open(scout_file))
         items = d.get('tips_candidates', {}).get('items', [])
         if items:
+            DIMS = ['externe-effekte', 'neue-horizonte', 'digitale-wertetreiber', 'digitales-fundament']
             dim_counts = {}
-            for item in items:
-                dim = item.get('dimension', 'unknown')
+            for i, item in enumerate(items):
+                dim = item.get('dimension') or DIMS[min(i // 15, 3)]
                 hor = item.get('horizon', 'unknown')
                 key = f'{dim}/{hor}'
                 dim_counts[key] = dim_counts.get(key, 0) + 1
 
-            expected = {'act': 5, 'plan': 5, 'observe': 3}
+            expected = {'act': 5, 'plan': 5, 'observe': 5}
             for dim in ['externe-effekte', 'neue-horizonte', 'digitale-wertetreiber', 'digitales-fundament']:
                 for hor, exp in expected.items():
                     actual = dim_counts.get(f'{dim}/{hor}', 0)

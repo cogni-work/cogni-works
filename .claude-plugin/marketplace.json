@@ -87,6 +87,15 @@
       "category": "productivity",
       "license": "AGPL-3.0-only",
       "keywords": ["teaching", "courses", "training", "cogni-works", "cowork", "curriculum"]
+    },
+    {
+      "name": "cogni-marketing",
+      "description": "B2B marketing content engine bridging cogni-tips strategic themes (GTM paths) and cogni-portfolio propositions into channel-ready content. Supports thought leadership, demand generation, lead generation, sales enablement, and ABM across markets with configurable brand voice. Bilingual DE/EN.",
+      "author": { "name": "Stephan de Haas", "email": "stephan@cogni-work.ai" },
+      "source": "./cogni-marketing",
+      "category": "productivity",
+      "license": "AGPL-3.0-only",
+      "keywords": ["marketing", "content-marketing", "b2b", "thought-leadership", "lead-generation", "demand-generation", "sales-enablement", "abm", "campaign", "gtm"]
     }
   ]
 }

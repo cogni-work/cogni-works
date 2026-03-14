@@ -1,3 +1,6 @@
 excalidraw.log
 *.log
 __pycache__/
+
+# Skill eval workspaces (dev-time artifacts)
+*-workspace/

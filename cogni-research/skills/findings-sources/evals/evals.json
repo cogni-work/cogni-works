@@ -1,0 +1,23 @@
+{
+  "skill_name": "findings-sources",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "ok the research plan is done for my AI pharma research project at ~/research-projects/ai-pharma-discovery. go ahead and gather findings and sources",
+      "expected_output": "Should check prerequisites (planning_complete), discover execution batches via script, then begin parallel findings-creator agents. Should explain the two-phase process and report progress per batch.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "I had to stop the research midway through the findings phase on my project at ~/research-projects/ai-pharma-discovery. can you pick up where we left off?",
+      "expected_output": "Should run scan-resumption-state.sh --phase 3 to detect completed vs pending questions. Should skip completed questions and only process pending ones. Should explain what was already done.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "run the web research on my project at ~/research-projects/ai-pharma-discovery but I'm only interested in dimensions 1 and 3 — skip the rest, we're short on time",
+      "expected_output": "Should acknowledge the user's constraint but explain the tradeoff — skipping dimensions creates gaps in coverage that affect downstream claims and synthesis. Should either filter to those dimensions or ask for confirmation before proceeding with partial coverage.",
+      "files": []
+    }
+  ]
+}

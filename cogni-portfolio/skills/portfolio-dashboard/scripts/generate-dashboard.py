@@ -315,7 +315,80 @@ def load_all_entities(project_dir):
     claims_path = os.path.join(project_dir, "cogni-claims", "claims.json")
     if os.path.isfile(claims_path):
         data["claims"] = load_json(claims_path)
+
+    # Load TIPS data (portfolio-anchored STs and opportunities)
+    data["tips"] = load_tips_data(project_dir, data)
+
     return data
+
+
+def discover_tips_project(project_dir, data):
+    """Find the linked TIPS project directory from portfolio data.
+
+    Discovery chain:
+    1. Scan propositions for tips_enrichment.pursuit_slug
+    2. Scan workspace for cogni-tips/*/tips-project.json with matching portfolio_source
+    """
+    portfolio_slug = data.get("portfolio", {}).get("slug", "")
+
+    # Primary: check propositions for tips_enrichment provenance
+    for prop in data.get("propositions", {}).values():
+        te = prop.get("tips_enrichment", {})
+        pursuit_slug = te.get("pursuit_slug", "") if isinstance(te, dict) else ""
+        if pursuit_slug:
+            # Walk up from project_dir to find cogni-tips/{pursuit_slug}
+            workspace = os.path.dirname(project_dir)
+            tips_dir = os.path.join(workspace, "cogni-tips", pursuit_slug)
+            if os.path.isdir(tips_dir):
+                return tips_dir
+            # Also check the portfolio's own parent (portfolio may be nested)
+            for parent in [os.path.dirname(workspace), workspace]:
+                tips_dir = os.path.join(parent, "cogni-tips", pursuit_slug)
+                if os.path.isdir(tips_dir):
+                    return tips_dir
+
+    # Secondary: scan workspace for cogni-tips/*/tips-project.json
+    workspace = os.path.dirname(project_dir)
+    tips_base = os.path.join(workspace, "cogni-tips")
+    if os.path.isdir(tips_base):
+        for entry in os.listdir(tips_base):
+            tp_path = os.path.join(tips_base, entry, "tips-project.json")
+            if os.path.isfile(tp_path):
+                tp = load_json(tp_path)
+                if tp:
+                    ps = tp.get("portfolio_source", {})
+                    if ps.get("portfolio_slug") == portfolio_slug:
+                        return os.path.join(tips_base, entry)
+
+    return None
+
+
+def load_tips_data(project_dir, data):
+    """Load portfolio-anchored Solution Templates and opportunities from linked TIPS project."""
+    tips_dir = discover_tips_project(project_dir, data)
+    if not tips_dir:
+        return {"anchored_sts": {}, "opportunities": None, "tips_dir": None}
+
+    result = {"anchored_sts": {}, "opportunities": None, "tips_dir": tips_dir}
+
+    # Load value model and extract portfolio-anchored STs
+    vm_path = os.path.join(tips_dir, "tips-value-model.json")
+    vm = load_json(vm_path)
+    if vm:
+        for st in vm.get("solution_templates", []):
+            if st.get("generation_mode") == "portfolio-anchored" and st.get("portfolio_anchor"):
+                anchor = st["portfolio_anchor"]
+                feat_slug = anchor.get("feature_slug", "")
+                if feat_slug:
+                    result["anchored_sts"].setdefault(feat_slug, []).append(st)
+
+    # Load opportunities
+    opp_path = os.path.join(tips_dir, "portfolio-opportunities.json")
+    opp_data = load_json(opp_path)
+    if opp_data and opp_data.get("opportunities"):
+        result["opportunities"] = opp_data
+
+    return result
 
 
 def get_status(project_dir):
@@ -385,6 +458,11 @@ def generate_html(data, status, project_dir, theme):
     market_slugs = sorted(data["markets"].keys())
     feature_slugs = sorted(data["features"].keys())
 
+    tips_data = data.get("tips", {})
+    anchored_sts = tips_data.get("anchored_sts", {})
+    opportunities_data = tips_data.get("opportunities")
+    has_tips = bool(anchored_sts) or bool(opportunities_data)
+
     entities_json = json.dumps({
         "products": data["products"],
         "features": data["features"],
@@ -394,6 +472,7 @@ def generate_html(data, status, project_dir, theme):
         "packages": data["packages"],
         "competitors": data["competitors"],
         "customers": data["customers"],
+        "anchored_sts": anchored_sts,
     }, default=str)
 
     # Theme CSS variables
@@ -1393,6 +1472,211 @@ body::after {{
 .readiness-planned {{ color: var(--text2); }}
 .readiness-planned::before {{ background: var(--text2); opacity: 0.5; }}
 
+/* Anchor badge on features */
+.anchor-badge {{
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: rgba(21,101,192,0.1);
+  color: var(--blue);
+  margin-left: 8px;
+  font-family: var(--font-mono);
+  letter-spacing: 0.02em;
+  cursor: pointer;
+}}
+.anchor-badge:hover {{
+  background: rgba(21,101,192,0.18);
+}}
+
+/* Anchor Coverage section */
+.anchor-summary {{
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 20px;
+}}
+.anchor-summary-chip {{
+  display: inline-block;
+  font-size: 12px;
+  padding: 4px 12px;
+  border-radius: 6px;
+  font-weight: 500;
+}}
+.anchor-card {{
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  margin-bottom: 12px;
+  transition: box-shadow 0.2s;
+}}
+.anchor-card:hover {{
+  box-shadow: var(--shadow-sm);
+}}
+.anchor-card-header {{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}}
+.anchor-card-header h4 {{
+  font-size: 15px;
+  font-weight: 600;
+}}
+.anchor-needs {{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}}
+.need-pill {{
+  display: inline-block;
+  font-size: 11px;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-weight: 500;
+}}
+.need-delivered {{
+  background: rgba(46,125,50,0.1);
+  color: var(--green);
+}}
+.need-undelivered {{
+  background: rgba(211,47,47,0.1);
+  color: var(--red);
+}}
+.anchor-detail {{
+  display: none;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+}}
+.anchor-st-item {{
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-bottom: 8px;
+}}
+.anchor-st-item h5 {{
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}}
+.quality-flag {{
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: rgba(211,47,47,0.1);
+  color: var(--red);
+  font-family: var(--font-mono);
+}}
+
+/* Innovation Pipeline section */
+.opp-cards {{
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 16px;
+}}
+.opp-card {{
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: box-shadow 0.2s, transform 0.15s;
+}}
+.opp-card:hover {{
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}}
+.opp-card h4 {{
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}}
+.opp-score-gauge {{
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 20px;
+  font-weight: 700;
+  font-family: var(--font-headers);
+  letter-spacing: -0.02em;
+}}
+.opp-score-bar {{
+  width: 60px;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--border);
+  overflow: hidden;
+}}
+.opp-score-fill {{
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.6s cubic-bezier(0.22,1,0.36,1);
+}}
+.opp-meta {{
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 8px 0;
+}}
+.opp-classify {{
+  display: inline-block;
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-family: var(--font-mono);
+}}
+.opp-classify-build {{ background: rgba(46,125,50,0.12); color: var(--green); }}
+.opp-classify-buy {{ background: rgba(21,101,192,0.12); color: var(--blue); }}
+.opp-classify-partner {{ background: rgba(229,161,0,0.12); color: var(--yellow); }}
+.opp-priority-high {{ background: rgba(211,47,47,0.1); color: var(--red); }}
+.opp-priority-medium {{ background: rgba(229,161,0,0.1); color: var(--yellow); }}
+.opp-priority-low {{ background: rgba(107,114,128,0.1); color: var(--text2); }}
+.pipeline-summary {{
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 20px;
+}}
+.pipeline-stat {{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 24px;
+  min-width: 120px;
+}}
+.pipeline-stat .stat-value {{
+  font-size: 28px;
+  font-weight: 700;
+  font-family: var(--font-headers);
+  letter-spacing: -0.02em;
+  color: var(--primary);
+}}
+.pipeline-stat .stat-label {{
+  font-size: 11px;
+  color: var(--text2);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-weight: 500;
+}}
+
 /* Revenue model chip */
 .revenue-chip {{
   display: inline-block;
@@ -1482,11 +1766,13 @@ body::after {{
   <a href="#" data-section="Matrix">Matrix</a>
   <a href="#" data-section="Markets">Markets</a>
   <a href="#" data-section="Products">Products</a>
+  {'<a href="#" data-section="Anchor">Anchors</a>' if anchored_sts else ''}
   <a href="#" data-section="Taxonomy">Taxonomy</a>
   <a href="#" data-section="Solutions">Solutions</a>
   <a href="#" data-section="Packages">Packages</a>
   <a href="#" data-section="Margin">Margins</a>
   <a href="#" data-section="Customers">Customers</a>
+  {'<a href="#" data-section="Innovation">Pipeline</a>' if opportunities_data else ''}
   <a href="#" data-section="Claims">Claims</a>
   <a href="#" data-section="Next">Actions</a>
 </nav>
@@ -1665,7 +1951,10 @@ body::after {{
                 fdesc = escape_html(f.get("description", ""))
                 readiness = f.get("readiness", "")
                 readiness_html = f'<span class="readiness readiness-{escape_html(readiness)}">{escape_html(readiness)}</span>' if readiness else ''
-                html += f'      <div class="feature-item"><span class="fname">{fname}{readiness_html}</span><br><span class="fdesc">{fdesc}</span></div>\n'
+                # Anchor badge if this feature has portfolio-anchored STs
+                feat_sts = anchored_sts.get(fs, [])
+                anchor_html = f'<span class="anchor-badge" title="{len(feat_sts)} anchored Solution Template{"s" if len(feat_sts) != 1 else ""}">\u2693 {len(feat_sts)} ST{"s" if len(feat_sts) != 1 else ""}</span>' if feat_sts else ''
+                html += f'      <div class="feature-item"><span class="fname">{fname}{readiness_html}{anchor_html}</span><br><span class="fdesc">{fdesc}</span></div>\n'
             html += "    </div>\n  </div>\n"
         html += "</div>\n"
 
@@ -1770,6 +2059,185 @@ body::after {{
             html += '  </div>\n'
 
         html += "</div>\n"
+
+    # --- Portfolio Anchor Coverage ---
+    if anchored_sts:
+        total_features = len(data["features"])
+        anchored_count = len(anchored_sts)
+        total_sts = sum(len(sts) for sts in anchored_sts.values())
+        all_undelivered = set()
+        all_delivered = set()
+        has_quality_issues = False
+        for feat_slug, sts in anchored_sts.items():
+            for st in sts:
+                anchor = st.get("portfolio_anchor", {})
+                for need in anchor.get("theme_needs_delivered", []):
+                    all_delivered.add(need)
+                for need in anchor.get("theme_needs_undelivered", []):
+                    all_undelivered.add(need)
+                if st.get("quality_flag"):
+                    has_quality_issues = True
+
+        html += f"""
+<!-- Anchor Coverage -->
+<div class="section reveal">
+  <div class="section-title">Anchor Coverage</div>
+  <div class="anchor-summary">
+    <span class="anchor-summary-chip" style="background:rgba(21,101,192,0.1);color:var(--blue)">{anchored_count} of {total_features} features anchored</span>
+    <span class="anchor-summary-chip" style="background:rgba(46,125,50,0.1);color:var(--green)">{total_sts} Solution Template{"s" if total_sts != 1 else ""}</span>
+    <span class="anchor-summary-chip" style="background:rgba(46,125,50,0.08);color:var(--green)">{len(all_delivered)} delivered need{"s" if len(all_delivered) != 1 else ""}</span>
+    <span class="anchor-summary-chip" style="background:rgba(211,47,47,0.08);color:var(--red)">{len(all_undelivered)} unmet need{"s" if len(all_undelivered) != 1 else ""}</span>
+    {f'<span class="quality-flag">quality investment needed</span>' if has_quality_issues else ''}
+  </div>
+"""
+        for feat_slug in sorted(anchored_sts.keys()):
+            sts = anchored_sts[feat_slug]
+            feat = data["features"].get(feat_slug, {})
+            feat_name = escape_html(feat.get("name", feat_slug))
+            prod_slug = feat.get("product_slug", "")
+            prod = data["products"].get(prod_slug, {})
+            prod_name = escape_html(prod.get("name", prod_slug))
+
+            # Aggregate needs for this feature
+            feat_delivered = set()
+            feat_undelivered = set()
+            feat_quality = False
+            for st in sts:
+                anchor = st.get("portfolio_anchor", {})
+                for n in anchor.get("theme_needs_delivered", []):
+                    feat_delivered.add(n)
+                for n in anchor.get("theme_needs_undelivered", []):
+                    feat_undelivered.add(n)
+                if st.get("quality_flag"):
+                    feat_quality = True
+
+            delivered_pills = "".join(f'<span class="need-pill need-delivered">{escape_html(n)}</span>' for n in sorted(feat_delivered))
+            undelivered_pills = "".join(f'<span class="need-pill need-undelivered">{escape_html(n)}</span>' for n in sorted(feat_undelivered))
+
+            card_id = f"anchor-{escape_html(feat_slug)}"
+            html += f"""  <div class="anchor-card">
+    <div class="anchor-card-header" onclick="var d=document.getElementById('{card_id}');d.style.display=d.style.display==='none'?'block':'none'">
+      <h4>{feat_name} <span style="font-size:12px;color:var(--text2);font-weight:400;margin-left:8px">{prod_name}</span>
+        {f'<span class="quality-flag" style="margin-left:8px">quality issue</span>' if feat_quality else ''}
+      </h4>
+      <span class="badge">{len(sts)} ST{"s" if len(sts) != 1 else ""}</span>
+    </div>
+    <div class="anchor-needs">
+      {delivered_pills}{undelivered_pills}
+    </div>
+    <div class="anchor-detail" id="{card_id}">
+"""
+            for st in sorted(sts, key=lambda x: x.get("st_id", "")):
+                st_name = escape_html(st.get("name", st.get("st_id", "Unknown")))
+                st_id = escape_html(st.get("st_id", ""))
+                theme_ref = escape_html(st.get("theme_ref", ""))
+                qf = st.get("quality_flag", "")
+                anchor = st.get("portfolio_anchor", {})
+                st_delivered = "".join(f'<span class="need-pill need-delivered">{escape_html(n)}</span>' for n in anchor.get("theme_needs_delivered", []))
+                st_undelivered = "".join(f'<span class="need-pill need-undelivered">{escape_html(n)}</span>' for n in anchor.get("theme_needs_undelivered", []))
+
+                html += f"""      <div class="anchor-st-item">
+        <h5>{st_name} <span style="font-size:11px;color:var(--text2);font-weight:400">{st_id}</span>
+          {f'<span class="quality-flag" style="margin-left:6px">{escape_html(qf)}</span>' if qf else ''}
+        </h5>
+        <div style="font-size:11px;color:var(--text2);margin-bottom:6px">Theme: {theme_ref}</div>
+        <div class="anchor-needs">{st_delivered}{st_undelivered}</div>
+      </div>
+"""
+            html += "    </div>\n  </div>\n"
+
+        # Unmet Needs Summary
+        if all_undelivered:
+            html += '  <div style="margin-top:16px;padding:14px 18px;background:rgba(211,47,47,0.04);border:1px solid rgba(211,47,47,0.12);border-radius:var(--radius)">\n'
+            html += '    <div style="font-size:13px;font-weight:600;color:var(--red);margin-bottom:8px">Unmet Needs Feeding Opportunity Pipeline</div>\n'
+            html += '    <div class="anchor-needs">\n'
+            for need in sorted(all_undelivered):
+                html += f'      <span class="need-pill need-undelivered">{escape_html(need)}</span>\n'
+            html += '    </div>\n  </div>\n'
+
+        html += "</div>\n"
+
+    # --- Innovation Pipeline ---
+    if opportunities_data:
+        opps = opportunities_data.get("opportunities", [])
+        opp_summary = opportunities_data.get("summary", {})
+        total_opps = opp_summary.get("total_opportunities", len(opps))
+        total_rev = opp_summary.get("total_estimated_revenue", 0)
+        opp_currency = opp_summary.get("currency", "EUR")
+        by_class = opp_summary.get("by_classification", {})
+        by_priority = opp_summary.get("by_priority", {})
+
+        html += f"""
+<!-- Innovation Pipeline -->
+<div class="section reveal">
+  <div class="section-title">Innovation Pipeline</div>
+  <div class="pipeline-summary">
+    <div class="pipeline-stat">
+      <span class="stat-value">{total_opps}</span>
+      <span class="stat-label">Opportunities</span>
+    </div>
+    <div class="pipeline-stat">
+      <span class="stat-value">{format_currency(total_rev, opp_currency)}</span>
+      <span class="stat-label">Est. Revenue</span>
+    </div>
+    <div class="pipeline-stat">
+      <span class="stat-value" style="font-size:16px">{by_class.get('build',0)}B / {by_class.get('buy',0)}U / {by_class.get('partner',0)}P</span>
+      <span class="stat-label">Build / Buy / Partner</span>
+    </div>
+  </div>
+  <div class="opp-cards">
+"""
+        for opp in sorted(opps, key=lambda x: x.get("opportunity_score", 0), reverse=True):
+            opp_name = escape_html(opp.get("st_name", opp.get("opportunity_id", "Unknown")))
+            opp_id = escape_html(opp.get("opportunity_id", ""))
+            score = opp.get("opportunity_score", 0)
+            score_pct = min(score * 10, 100)
+            # Color gradient: green > 7, yellow 4-7, red < 4
+            if score >= 7:
+                score_color = "var(--green)"
+            elif score >= 4:
+                score_color = "var(--yellow)"
+            else:
+                score_color = "var(--red)"
+
+            classification = opp.get("classification", "")
+            classify_cls = f"opp-classify-{classification}" if classification in ("build", "buy", "partner") else ""
+
+            priority = opp.get("priority", "")
+            priority_cls = f"opp-priority-{priority}" if priority in ("high", "medium", "low") else ""
+
+            rev_est = opp.get("revenue_estimate", {})
+            rev_val = rev_est.get("annual_value")
+            rev_cur = rev_est.get("currency", opp_currency)
+            rev_str = format_currency(rev_val, rev_cur) if rev_val else "TBD"
+            rev_conf = escape_html(rev_est.get("confidence", ""))
+
+            feat_spec = opp.get("feature_spec", {})
+            feat_desc = escape_html(feat_spec.get("description", ""))
+            unmet = feat_spec.get("unmet_needs", [])
+            unmet_pills = "".join(f'<span class="need-pill need-undelivered">{escape_html(n)}</span>' for n in unmet)
+
+            tips_ref = escape_html(opp.get("st_id", ""))
+
+            html += f"""    <div class="opp-card">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
+        <h4>{opp_name}</h4>
+        <div class="opp-score-gauge">
+          <div class="opp-score-bar"><div class="opp-score-fill" style="width:{score_pct}%;background:{score_color}"></div></div>
+          <span style="color:{score_color}">{score:.1f}</span>
+        </div>
+      </div>
+      <div class="opp-meta">
+        {f'<span class="opp-classify {classify_cls}">{escape_html(classification)}</span>' if classification else ''}
+        {f'<span class="opp-classify {priority_cls}">{escape_html(priority)}</span>' if priority else ''}
+        <span style="font-size:12px;color:var(--text2)">{rev_str}{f" ({rev_conf})" if rev_conf else ""}</span>
+      </div>
+      {f'<div style="font-size:13px;color:var(--text2);margin-bottom:8px">{feat_desc}</div>' if feat_desc else ''}
+      {f'<div class="anchor-needs">{unmet_pills}</div>' if unmet_pills else ''}
+      {f'<div style="font-size:11px;color:var(--text2);margin-top:8px;font-family:var(--font-mono)">ST: {tips_ref}</div>' if tips_ref else ''}
+    </div>
+"""
+        html += "  </div>\n</div>\n"
 
     # --- Solutions & Pricing ---
     if data["solutions"]:

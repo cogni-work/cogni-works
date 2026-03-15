@@ -2,49 +2,147 @@
 
 Multi-agent research report generator for Claude Code. Native re-implementation of GPT-Researcher's STORM-inspired editorial workflow using Claude Code plugin primitives.
 
-## Features
+## Why this exists
 
-- **Three report types**: basic (fast), detailed (multi-section), deep (recursive tree)
-- **Parallel web research**: haiku agents search concurrently per sub-question
-- **Claims-verified review loop**: integrates with cogni-claims for evidence-based quality gates
-- **4 entity types**: sub-questions, contexts, sources, report-claims (Obsidian-browsable)
-- **Resumable**: interrupted runs pick up from existing entities
+LLMs can research and write — but the reports they produce have real problems that undermine trust and usefulness:
 
-## Quick Start
+| Problem | What happens | Impact |
+|---------|-------------|--------|
+| Unverified citations | Reports cite sources confidently, but 14–95% of LLM citations are hallucinated ([GhostCite, 2025](https://arxiv.org/html/2602.06718)) | Readers trust claims that sources don't actually support |
+| Shallow outputs | Most AI research tools produce single-pass summaries from a handful of searches | Surface-level analysis that misses nuance and depth |
+| No traceability | Generated reports have no audit trail from claim to source | Impossible to verify or update findings later |
+| Manual effort | Deep, multi-source research reports still take days of desk research | Outdated by the time they ship |
+| No quality gates | Reports go from draft to final with no systematic review | Errors, gaps, and unsupported conclusions slip through |
+
+This plugin automates the research-heavy parts — parallel web search, source aggregation, claims verification, iterative review — while keeping strategic judgment where it belongs: with you.
+
+## What it does
+
+1. **Decompose** your topic into orthogonal sub-questions grounded by preliminary web search
+2. **Research** in parallel — one agent per sub-question, searching the web and extracting findings
+3. **Aggregate** sources across all sub-questions, deduplicate, and enforce quality thresholds
+4. **Write** a structured report with inline citations linking every claim to its source
+5. **Verify** by extracting claims from the draft and checking them against source URLs via cogni-claims
+6. **Review and revise** through an automated quality gate (up to 3 iterations) until the report meets structural and factual standards
+
+## What it means for you
+
+If you produce research, analysis, or any content that needs to be both sourced and correct, this is your end-to-end pipeline.
+
+- **Fast and parallel.** Basic reports dispatch 5–7 agents concurrently; deep reports run 15–25. Research that would take hours completes in minutes.
+- **Claims-verified, not vibes-verified.** Every factual claim is extracted, matched to its source URL, and checked for deviations — misquotation, unsupported conclusions, selective omission.
+- **Resumable.** Interrupted runs pick up from the first incomplete phase. No lost work.
+- **Traceable.** Every finding links to a source, every claim links to a verification result. The full workspace is Obsidian-browsable.
+- **Three depth levels.** Quick overview (basic), multi-section report (detailed), or recursive tree exploration (deep) — matched to your needs.
+
+## Installation
+
+This plugin is part of the [cogni-works monorepo](https://github.com/cogni-work/cogni-works) and is installed automatically with the marketplace.
+
+**Prerequisites:**
+- Web access enabled (for research)
+- bash, python3 (stdlib only — no pip dependencies)
+- **cogni-claims** plugin (recommended — enables claims-verified review loop)
+- Optional: **cogni-narrative** (story arc polish), **cogni-copywriting** (executive polish), **cogni-visual** (presentation generation)
+
+## Quick start
+
+Describe what you want in natural language:
+
+- "Write a research report on quantum computing's impact on cryptography"
+- "Write a detailed research report on AI adoption in healthcare"
+- "Deep research on the future of autonomous vehicles"
+- "Resume the research on autonomous vehicles"
+
+## Try it
+
+After installing, type one prompt:
+
+> Research the state of AI regulation in the EU and verify the claims
+
+Claude decomposes the topic, dispatches parallel web researchers, compiles a sourced report, then automatically extracts and verifies every factual claim against its cited source. You'll see which claims check out and which don't — and the review loop will revise until quality standards are met.
+
+Results land in your project directory:
 
 ```
-# Basic report
-"Write a research report on quantum computing's impact on cryptography"
-
-# Detailed report
-"Write a detailed research report on AI adoption in healthcare"
-
-# Deep research
-"Deep research on the future of autonomous vehicles"
+cogni-gpt-researcher-<slug>/
+├── 00-sub-questions/data/       Decomposed research questions
+├── 01-contexts/data/            Per-question research findings
+├── 02-sources/data/             Deduplicated source registry
+├── 03-report-claims/data/       Extracted claims with verification status
+├── output/
+│   ├── draft-v1.md              First draft
+│   ├── draft-v2.md              Post-review revision (if needed)
+│   └── report.md                Final accepted report
+└── .metadata/
+    ├── execution-log.json       Phase state for resumability
+    └── review-verdicts/         Reviewer decisions per iteration
 ```
 
-## Report Types
+## Report types
 
-| Type | Sub-questions | Agents | Use Case |
-|------|--------------|--------|----------|
-| Basic | 3-5 | 5-7 | Quick overview, single topic |
-| Detailed | 5-10 | 10-15 | Multi-section report with outline |
-| Deep | 10-20 (tree) | 15-25 | Recursive exploration, maximum depth |
+| Type | Sub-questions | Agents | Words | Use case |
+|------|--------------|--------|-------|----------|
+| Basic | 3–5 | 5–7 | 3,000–5,000 | Quick overview, single topic |
+| Detailed | 5–10 | 10–15 | 5,000–10,000 | Multi-section report with outline |
+| Deep | 10–20 (tree) | 15–25 | 8,000–15,000 | Recursive exploration, maximum depth |
 
-## Pipeline
+## How it works
+
+The **research-report** skill orchestrates six phases. In Phase 0, it initializes the project workspace and runs preliminary web searches to ground the research. In Phase 1, it decomposes the topic into orthogonal sub-questions with search guidance for each. Phase 2 dispatches **section-researcher** agents (haiku, for speed) in batches of 4–5 — each agent runs 3–5 web searches, fetches top results, curates sources with quality scores, and creates context + source entities. For deep reports, **deep-researcher** agents (sonnet) perform recursive tree exploration instead, pursuing follow-up questions at decreasing breadth per depth level.
+
+Phase 3 aggregates all contexts, deduplicates sources, and enforces a 25,000-word context limit. Phase 4 hands the aggregated context to the **writer** agent (sonnet), which produces a structured draft with inline citations. Phase 5 runs the claims-verified review loop: the **claim-extractor** identifies 10–30 verifiable claims, submits them to cogni-claims for source URL verification, then the **reviewer** scores the draft on five structural dimensions and flags factual deviations. If the score is below threshold or critical deviations exist, the **revisor** incorporates feedback and the loop repeats (max 3 iterations). Phase 6 copies the accepted draft to `output/report.md`.
+
+If cogni-claims is unavailable, the review loop degrades gracefully to structural-only review (2 iterations max).
+
+## Components
+
+| Component | Type | What it does |
+|-----------|------|--------------|
+| `research-report` | skill | Main orchestrator — six-phase pipeline from topic to verified report |
+| `export-report` | skill | Export finalized report to HTML, PDF, or Markdown |
+| `section-researcher` | agent (haiku) | Parallel web researcher for a single sub-question |
+| `deep-researcher` | agent (sonnet) | Recursive tree explorer for deep research mode |
+| `writer` | agent (sonnet) | Compiles aggregated context into a structured, cited report |
+| `claim-extractor` | agent (sonnet) | Extracts 10–30 verifiable claims from draft for verification |
+| `reviewer` | agent (sonnet) | Quality gate — scores structure and factual accuracy, issues verdict |
+| `revisor` | agent (sonnet) | Incorporates reviewer feedback and claims deviations into revised draft |
+| `block-entity-writes` | hook (PreToolUse) | Forces entity creation via scripts for consistency and validation |
+| `review-loop-guard` | hook (PostToolUse) | Caps review iterations at 3 to prevent infinite loops |
+
+## Architecture
 
 ```
-Phase 0: Init → Phase 1: Plan → Phase 2: Research → Phase 3: Aggregate
-→ Phase 4: Write → Phase 5: Claims-Verified Review → Phase 6: Finalize
+cogni-gpt-researcher/
+├── .claude-plugin/plugin.json    Plugin manifest
+├── skills/                       2 orchestration skills
+│   ├── research-report/
+│   │   ├── SKILL.md
+│   │   └── references/           5 reference guides
+│   └── export-report/
+│       ├── SKILL.md
+│       └── references/
+├── agents/                       6 research agents
+│   ├── section-researcher.md
+│   ├── deep-researcher.md
+│   ├── writer.md
+│   ├── claim-extractor.md
+│   ├── reviewer.md
+│   └── revisor.md
+├── hooks/                        2 guardrail hooks
+│   ├── hooks.json
+│   ├── block-entity-writes.sh
+│   └── review-loop-guard.sh
+├── schemas/                      4 entity JSON schemas
+├── scripts/                      Entity + project utilities
+└── references/                   Model strategy documentation
 ```
 
-## Cross-Plugin Integration
+## Attribution
 
-- **cogni-claims**: Source verification during review loop (primary)
-- **cogni-narrative**: Story arc polish (optional)
-- **cogni-copywriting**: Executive polish (optional)
-- **cogni-visual**: Presentation generation (optional)
+- **GPT-Researcher** by [Assaf Elovic / Tavily](https://github.com/assafelovic/gpt-researcher) — multi-agent research architecture that inspired this plugin's parallel research and iterative review design.
+- **STORM** by [Stanford OVAL](https://arxiv.org/abs/2402.14207) — perspective-driven article generation framework. GPT-Researcher's editorial workflow builds on STORM's multi-perspective synthesis approach.
 
 ## License
 
-AGPL-3.0-only
+[AGPL-3.0](LICENSE)

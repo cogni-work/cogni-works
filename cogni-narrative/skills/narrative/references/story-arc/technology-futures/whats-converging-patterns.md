@@ -31,7 +31,7 @@ Extract from:
 
 ## Synergy Structure
 
-### Convergence Pattern (80-100 words)
+### Convergence Pattern (~20-25% of element; default ~80-100 words at T=1675)
 
 **What to extract:**
 - Which specific technologies are combining
@@ -52,7 +52,7 @@ Convergence accelerator: EU Digital Product Passport regulation (effective Janua
 
 ---
 
-### Synergy Mechanism (120-150 words)
+### Synergy Mechanism (~30-37% of element; default ~120-150 words at T=1675)
 
 **What to extract:**
 - Why combination creates more value than individual technologies
@@ -81,7 +81,7 @@ BMW Regensburg achieves 99.7% regulatory acceptance of AI-generated quality docu
 
 ---
 
-### Unlock Effect (100-120 words)
+### Unlock Effect (~25-30% of element; default ~100-120 words at T=1675)
 
 **What to extract:**
 - What becomes possible only through convergence
@@ -106,7 +106,7 @@ Neither capability existed before convergence. Edge AI alone lacks audit trust. 
 
 ---
 
-### Adoption Catalyst (70-90 words)
+### Adoption Catalyst (~17-22% of element; default ~70-90 words at T=1675)
 
 **What to extract:**
 - Forces accelerating convergence adoption

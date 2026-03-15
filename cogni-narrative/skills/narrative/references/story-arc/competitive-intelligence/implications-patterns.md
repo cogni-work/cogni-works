@@ -31,7 +31,7 @@ Extract from:
 
 ## Structure Components
 
-### Time-Bound Action Specification (250-350 words)
+### Time-Bound Action Specification (~83-100% of element; default ~250-350 words at T=1675)
 
 **What to extract:**
 - Immediate actions (0-6 months)

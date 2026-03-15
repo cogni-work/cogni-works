@@ -394,7 +394,7 @@ This section demonstrates how to transform Executive Summary findings into Techn
 
 ### Transformation: What's Emerging → What's Converging
 
-**What's Emerging (350-450 words):**
+**What's Emerging (~87-100% of element allocation):**
 
 Hybrid quantum-classical algorithms have crossed the maturity threshold for practical pharmaceutical applications. These algorithms achieve 100x speedup over classical methods when modeling molecular systems with 50+ atoms—precisely the size range where drug candidates operate<sup>[1](12-synthesis/synthesis-molecular.md)</sup>. This isn't theoretical performance: current quantum processors model protein-ligand binding energies with 92% correlation to experimental results, making them reliable enough for initial drug candidate screening<sup>[2](12-synthesis/synthesis-protein.md)</sup>.
 
@@ -408,7 +408,7 @@ The third capability—cloud-accessible quantum platforms—removes the capital 
 
 ---
 
-**What's Converging (350-450 words):**
+**What's Converging (~87-100% of element allocation):**
 
 These three capabilities combine to create multiplicative—not additive—pharmaceutical innovation capacity. Organizations deploying all three technologies report 40% reduction in preclinical development timelines<sup>[4](01-findings/finding-008.md)</sup>. This isn't the sum of individual improvements (quantum speedup + AI generation + cloud access); it's a compounding effect where each technology removes a different bottleneck.
 

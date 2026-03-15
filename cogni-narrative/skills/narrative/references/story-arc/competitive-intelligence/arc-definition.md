@@ -214,7 +214,7 @@ This section demonstrates the Landscape → Shifts transformation using the Clou
 
 > Current market share shows AWS maintaining 32% leadership, Azure growing to 24% (+3pp YoY), Google Cloud at 11% (+2pp YoY), while other providers collectively hold 33%<sup>[1](12-synthesis/synthesis-market.md)</sup>. However, segment-level analysis reveals divergent trajectories: AWS dominates compute and storage (38% share), Azure leads in enterprise SaaS integration (41%), Google Cloud captures AI/ML workloads (47%)<sup>[2](12-synthesis/synthesis-segments.md)</sup>.
 
-### Landscape Transformation (350-450 words)
+### Landscape Transformation (~87-100% of element allocation)
 
 The hyperscale cloud market appears consolidated at first glance—three providers control 67% of overall demand<sup>[1](12-synthesis/synthesis-market.md)</sup>. But this top-line view masks fundamental competitive fragmentation at the segment level.
 
@@ -224,7 +224,7 @@ This segmentation reveals three distinct competitive clusters: infrastructure ge
 
 *Technique: Move from aggregate statistics to segment-level detail. Show divergence ("masks fundamental fragmentation"). Connect positioning to business model (AWS scale, Azure ecosystem, Google tech).*
 
-### Shifts Transformation (300-400 words)
+### Shifts Transformation (~85-100% of element allocation)
 
 While AWS maintains static overall share (32%), its segment-level momentum diverges. Compute/storage growth at 14% annually lags specialized workloads growing 35-47%—a velocity gap that compounds into strategic vulnerability.
 

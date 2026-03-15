@@ -29,7 +29,7 @@ Extract from:
 
 ## Urgency Construction Pattern
 
-### Forcing Function (100 words)
+### Forcing Function (~28% of element; default ~100 words at T=1675)
 
 **What to extract:**
 - External pressure creating urgency
@@ -48,7 +48,7 @@ Extract from:
 
 ---
 
-### Quantified Urgency (100-150 words)
+### Quantified Urgency (~28-43% of element; default ~100-150 words at T=1675)
 
 **What to extract:**
 - Numbers proving "now" is critical
@@ -69,7 +69,7 @@ The math is stark: Building a 15-person AI team today costs €2.1M. The same te
 
 ---
 
-### Window of Opportunity (100-150 words)
+### Window of Opportunity (~28-43% of element; default ~100-150 words at T=1675)
 
 **What to extract:**
 - When window closes

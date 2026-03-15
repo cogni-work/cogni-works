@@ -58,7 +58,7 @@ Two outputs:
   },
   "top_improvements": [
     "Add 3 more citations to reach minimum 15 (currently 12)",
-    "Expand 'Why Now' section by ~40 words to meet 300-word minimum",
+    "Expand 'Why Now' section by ~40 words to meet its 21% element allocation (~299 words at default T=1675)",
     "Add citation to uncited quantitative claim in paragraph 3 of 'Why Change'"
   ]
 }

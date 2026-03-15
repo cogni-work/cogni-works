@@ -31,7 +31,7 @@ Extract from:
 
 ## Opportunity Structure
 
-### Opportunity Description (80-100 words)
+### Opportunity Description (~20-25% of element; default ~80-100 words at T=1675)
 
 **What to extract:**
 - Specific application or use case enabled by technology
@@ -52,7 +52,7 @@ Digital twin simulation + real-time IoT logistics data + AI optimization algorit
 
 ---
 
-### Value Creation (100-120 words)
+### Value Creation (~25-30% of element; default ~100-120 words at T=1675)
 
 **What to extract:**
 - Quantified business value
@@ -77,7 +77,7 @@ Digital twin simulation + real-time IoT logistics data + AI optimization algorit
 
 ---
 
-### Advantage Window (70-90 words)
+### Advantage Window (~17-22% of element; default ~70-90 words at T=1675)
 
 **What to extract:**
 - When is the opportunity window open
@@ -100,7 +100,7 @@ Digital twin simulation + real-time IoT logistics data + AI optimization algorit
 
 ---
 
-### Capability Requirements (70-90 words)
+### Capability Requirements (~17-22% of element; default ~70-90 words at T=1675)
 
 **What to extract:**
 - What's needed to capture this opportunity

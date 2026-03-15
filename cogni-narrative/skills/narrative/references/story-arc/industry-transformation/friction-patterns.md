@@ -30,7 +30,7 @@ Extract from:
 
 ## Structure Components
 
-### Friction Identification (250-350 words)
+### Friction Identification (~71-100% of element; default ~250-350 words at T=1675)
 
 **What to extract:**
 - 2-4 major friction points
@@ -84,7 +84,7 @@ Extract from:
 
 ---
 
-### Friction vs. Force Balance (50 words)
+### Friction vs. Force Balance (~14% of element; default ~50 words at T=1675)
 
 **What to extract:**
 - Net transformation pace
@@ -305,8 +305,8 @@ Organizations treating change management friction as merely "annoying delay" mis
 
 ### Structure Requirements
 
-- [ ] Friction identification section (250-350 words)
-- [ ] Friction vs. force balance (50 words)
+- [ ] Friction identification section (~71-100% of element allocation)
+- [ ] Friction vs. force balance (~14% of element allocation)
 - [ ] Word count: within proportional range for this element (+/-10% tolerance)
 - [ ] Smooth transition from Forces
 - [ ] Smooth transition to Evolution

@@ -31,7 +31,7 @@ Extract from:
 
 ## Structure Components
 
-### Gap Identification (300-400 words)
+### Gap Identification (~66-88% of element; default ~300-400 words at T=1675)
 
 **What to extract:**
 - 2-3 major strategic gaps
@@ -86,7 +86,7 @@ General-purpose LLMs (GPT-4, Claude, Gemini) require extensive fine-tuning for i
 
 ---
 
-### Positioning Approach (100 words)
+### Positioning Approach (~22% of element; default ~100 words at T=1675)
 
 **What to extract:**
 - How to capture identified gaps
@@ -341,8 +341,8 @@ Example:
 
 ### Structure Requirements
 
-- [ ] Gap identification section (300-400 words)
-- [ ] Positioning approach section (100 words)
+- [ ] Gap identification section (~66-88% of element allocation)
+- [ ] Positioning approach section (~22% of element allocation)
 - [ ] Word count: within proportional range for this element (+/-10% tolerance)
 - [ ] Smooth transition from Shifts
 - [ ] Smooth transition to Implications

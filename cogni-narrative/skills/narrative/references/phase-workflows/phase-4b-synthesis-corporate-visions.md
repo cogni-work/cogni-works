@@ -101,18 +101,18 @@ The hook paragraph (10% of target length) opens with the most surprising quantif
 **Element 1 -- Why Change: Unconsidered Needs (27% of target)**
 
 Write using PSB (Problem-Solution-Benefit) structure:
-- **Problem (~150 words):** State the current assumption and why it is incomplete. Use contrast structure: "Most organizations think X. But research shows Y." Ground with 2-3 citations.
-- **Solution (~150 words):** Present the unconsidered reality the research reveals. This is not a product pitch -- it is a reframing of the problem space.
-- **Benefit (~100-200 words):** Articulate the competitive advantage for early recognizers. End with a forward-looking implication that transitions toward urgency.
+- **Problem (~33% of element):** State the current assumption and why it is incomplete. Use contrast structure: "Most organizations think X. But research shows Y." Ground with 2-3 citations.
+- **Solution (~33% of element):** Present the unconsidered reality the research reveals. This is not a product pitch -- it is a reframing of the problem space.
+- **Benefit (~22-44% of element):** Articulate the competitive advantage for early recognizers. End with a forward-looking implication that transitions toward urgency.
 
 Does this section make the reader uncomfortable about their current assumptions? If it merely confirms what they already believe, the unconsidered need is not strong enough.
 
 **Element 2 -- Why Now: Forcing Functions (21% of target)**
 
 Stack 2-3 forcing functions:
-- **Forcing function 1 (~100 words):** External pressure + specific deadline from evidence. Use exact dates/quarters, not "soon" or "rapidly."
-- **Forcing function 2 (~100 words):** Second converging pressure + quantified consequence. Use specific costs/penalties, not "financial risk."
-- **Window of opportunity (~100-150 words):** Contrast early movers vs. late starters. Show the window closing.
+- **Forcing function 1 (~28% of element):** External pressure + specific deadline from evidence. Use exact dates/quarters, not "soon" or "rapidly."
+- **Forcing function 2 (~28% of element):** Second converging pressure + quantified consequence. Use specific costs/penalties, not "financial risk."
+- **Window of opportunity (~28-43% of element):** Contrast early movers vs. late starters. Show the window closing.
 
 Does every forcing function have a specific date AND a quantified consequence? Vague urgency ("the market is changing") fails this quality test.
 
@@ -129,7 +129,7 @@ If any Power Position reads like generic advice ("invest in training"), it is no
 
 Write a compound impact calculation:
 - **Cost dimension stacking (~two-thirds of this element's allocation):** Present 3-4 cost dimensions, each with a specific number and a citation. Use a 3-year horizon.
-- **Simple ratio conclusion (~50-100 words):** Reduce the entire business case to one undeniable comparison: "Action costs less than inaction by N-Mx."
+- **Simple ratio conclusion (~one-third of element):** Reduce the entire business case to one undeniable comparison: "Action costs less than inaction by N-Mx."
 
 Would an executive nod at the final sentence and say "that is clear"? If the comparison requires explanation, simplify further.
 

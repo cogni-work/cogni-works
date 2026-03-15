@@ -29,7 +29,7 @@ Extract from:
 
 ## PSB Structure (Problem-Solution-Benefit)
 
-### Problem (150 words)
+### Problem (~33% of element; default ~150 words at T=1675)
 
 **What to extract:**
 - Current assumption or status quo belief
@@ -50,7 +50,7 @@ This framing makes intuitive sense. Physicians express skepticism about algorith
 
 ---
 
-### Solution (150 words)
+### Solution (~33% of element; default ~150 words at T=1675)
 
 **What to extract:**
 - The unconsidered reality revealed by research
@@ -73,7 +73,7 @@ The research shows that organizations with higher adoption rates didn't invest m
 
 ---
 
-### Benefit (100-200 words)
+### Benefit (~22-44% of element; default ~100-200 words at T=1675)
 
 **What to extract:**
 - What changes when the need is addressed
@@ -266,7 +266,7 @@ Example:
 
 ### Structure Requirements
 
-- [ ] PSB structure followed (Problem 150w, Solution 150w, Benefit 100-200w)
+- [ ] PSB structure followed (Problem ~33%, Solution ~33%, Benefit ~22-44% of element allocation)
 - [ ] Word count: within proportional range for this element (+/-10% tolerance)
 - [ ] At least 3 citations to dimension syntheses
 - [ ] Smooth transition from Hook to Why Change

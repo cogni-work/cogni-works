@@ -26,7 +26,7 @@ Extract from:
 
 ## Structure Components
 
-### Market Structure (100 words)
+### Market Structure (~25% of element; default ~100 words at T=1675)
 
 **What to extract:**
 - Market concentration (fragmented, consolidated, oligopoly)
@@ -48,7 +48,7 @@ This fragmentation creates opportunity but complicates buyer decisions. Organiza
 
 ---
 
-### Current Positions (150 words)
+### Current Positions (~37% of element; default ~150 words at T=1675)
 
 **What to extract:**
 - Leader identification and positions
@@ -79,7 +79,7 @@ Leaders defend through network effects (AWS), switching costs (Azure), or techni
 
 ---
 
-### Competitive Bases (100 words)
+### Competitive Bases (~25% of element; default ~100 words at T=1675)
 
 **What to extract:**
 - Primary competition dimensions
@@ -285,9 +285,9 @@ Example:
 
 ### Structure Requirements
 
-- [ ] Market structure section (100 words)
-- [ ] Current positions section (150 words)
-- [ ] Competitive bases section (100 words)
+- [ ] Market structure section (~25% of element allocation)
+- [ ] Current positions section (~37% of element allocation)
+- [ ] Competitive bases section (~25% of element allocation)
 - [ ] Word count: within proportional range for this element (+/-10% tolerance)
 - [ ] Smooth transition from Hook
 - [ ] Smooth transition to Shifts

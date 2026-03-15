@@ -196,9 +196,9 @@ EU AI Act compliance dominates the regulatory force landscape (score: 0.84, conf
 ### Horizon Cascade Applied
 
 - [ ] **Act -> Plan -> Observe progression within element**
-  - V Act leads with urgency (150-180 words)
-  - V Plan bridges to preparation (120-150 words)
-  - V Observe closes with foresight (80-120 words)
+  - V Act leads with urgency (~37-45% of element allocation)
+  - V Plan bridges to preparation (~30-37% of element allocation)
+  - V Observe closes with foresight (~20-30% of element allocation)
   - X All horizons mixed without progression
   - X Only Act-horizon trends covered
 

@@ -30,7 +30,7 @@ Extract from:
 
 ## Structure Components
 
-### Robust Strategy Identification (250-350 words)
+### Robust Strategy Identification (~62-87% of element; default ~250-350 words at T=1675)
 
 **What to extract:**
 - 2-4 robust strategies (work in all scenarios)
@@ -98,7 +98,7 @@ Cost-effective insurance: 10-15% of AI budget allocated to scenario hedges based
 
 ---
 
-### Flexibility Building (100 words)
+### Flexibility Building (~25% of element; default ~100 words at T=1675)
 
 **What to extract:**
 - Option-creating actions
@@ -359,8 +359,8 @@ Example:
 
 ### Structure Requirements
 
-- [ ] Robust strategy identification (250-350 words)
-- [ ] Flexibility building section (100 words)
+- [ ] Robust strategy identification (~62-87% of element allocation)
+- [ ] Flexibility building section (~25% of element allocation)
 - [ ] Word count: within proportional range for this element (+/-10% tolerance)
 - [ ] Smooth transition from Scenarios
 - [ ] Smooth transition to Decisions

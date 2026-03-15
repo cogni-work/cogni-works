@@ -32,7 +32,7 @@ Extract from:
 
 ## Structure Components
 
-### Signal Identification (250-300 words)
+### Signal Identification (~71-85% of element; default ~250-300 words at T=1675)
 
 **What to extract:**
 - 3-5 weak signals (not strong trends)
@@ -81,7 +81,7 @@ AI model capabilities improved 40% (2023-2024) while enterprise AI spending grow
 
 ---
 
-### Uncertainty Dimensions (50-100 words)
+### Uncertainty Dimensions (~14-28% of element; default ~50-100 words at T=1675)
 
 **What to extract:**
 - What's genuinely unknown
@@ -325,8 +325,8 @@ Example:
 
 ### Structure Requirements
 
-- [ ] Signal identification section (250-300 words)
-- [ ] Uncertainty dimensions section (50-100 words)
+- [ ] Signal identification section (~71-85% of element allocation)
+- [ ] Uncertainty dimensions section (~14-28% of element allocation)
 - [ ] Word count: within proportional range for this element (+/-10% tolerance)
 - [ ] Smooth transition from Hook
 - [ ] Smooth transition to Scenarios

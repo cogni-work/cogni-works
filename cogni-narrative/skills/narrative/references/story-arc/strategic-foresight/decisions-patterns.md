@@ -31,7 +31,7 @@ Extract from:
 
 ## Structure Components
 
-### Decision Specification (250-350 words)
+### Decision Specification (~83-100% of element; default ~250-350 words at T=1675)
 
 **What to extract:**
 - Decide-now items (reversible, low-cost, enabling)
@@ -359,7 +359,7 @@ Example:
 
 ### Structure Requirements
 
-- [ ] Decision specification section (250-350 words)
+- [ ] Decision specification section (~83-100% of element allocation)
 - [ ] Word count: within proportional range for this element (+/-10% tolerance)
 - [ ] Smooth transition from Strategies
 - [ ] Closing emphasizes learning and adaptation

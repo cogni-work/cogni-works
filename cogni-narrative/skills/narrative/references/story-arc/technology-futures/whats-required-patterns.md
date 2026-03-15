@@ -32,7 +32,7 @@ Extract from:
 
 ## Prerequisite Structure
 
-### Requirement Type (60-80 words)
+### Requirement Type (~21-28% of element; default ~60-80 words at T=1675)
 
 **What to extract:**
 - Category of prerequisite (infrastructure, capability, partnership, investment)
@@ -55,7 +55,7 @@ Extract from:
 
 ---
 
-### Build Timeline (50-70 words)
+### Build Timeline (~18-25% of element; default ~50-70 words at T=1675)
 
 **What to extract:**
 - Duration to establish prerequisite
@@ -80,7 +80,7 @@ Extract from:
 
 ---
 
-### Sequencing Logic (50-70 words)
+### Sequencing Logic (~18-25% of element; default ~50-70 words at T=1675)
 
 **What to extract:**
 - Dependencies between prerequisites
@@ -105,7 +105,7 @@ Extract from:
 
 ---
 
-### Make/Buy/Partner Decision (40-60 words)
+### Make/Buy/Partner Decision (~14-21% of element; default ~40-60 words at T=1675)
 
 **What to extract:**
 - Build internally vs. purchase vs. partner options

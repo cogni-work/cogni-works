@@ -263,7 +263,7 @@ This section demonstrates the Signals → Scenarios transformation using the Fut
 
 > Weak signals suggest fundamental assumptions about employment relationships are under stress. Only 42% of knowledge workers expect traditional employment to be their primary income source by 2030 (down from 78% in 2020)<sup>[1](12-synthesis/synthesis-employment.md)</sup>. Simultaneously, 67% of organizations report difficulty defining "employee" vs. "contractor" status under current regulatory frameworks, creating legal uncertainty<sup>[2](12-synthesis/synthesis-regulatory.md)</sup>.
 
-### Signals Transformation (300-400 words)
+### Signals Transformation (~71-85% of element allocation)
 
 Traditional employment assumptions are showing stress fractures in longitudinal data. The proportion of knowledge workers expecting traditional employment as their primary income source collapsed from 78% (2020) to 42% (2026)—a 36-percentage-point shift in six years<sup>[1](12-synthesis/synthesis-employment.md)</sup>. This isn't gradual evolution; it's a preference cascade where each year's shift accelerates the next.
 
@@ -273,7 +273,7 @@ Technology adoption reveals bifurcation rather than democratization: AI-augmente
 
 *Technique: Quantify directional change (78% → 42%, 6-year timeframe). Frame as "stress fractures" and "preference cascade" rather than "trends." Show bifurcation (89% vs. 23%) as divergence signal.*
 
-### Scenarios Transformation (400-500 words)
+### Scenarios Transformation (~66-88% of element allocation)
 
 These weak signals point to three internally consistent futures:
 

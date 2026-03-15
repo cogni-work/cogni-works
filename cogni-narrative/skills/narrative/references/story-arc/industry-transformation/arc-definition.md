@@ -242,7 +242,7 @@ This section demonstrates the Forces → Friction transformation using the Elect
 
 > Regulatory forces are converging globally: EU mandates 100% zero-emission vehicle sales by 2035, California Advanced Clean Cars II requires 68% ZEV by 2030, China's dual-credit system effectively mandates 40% NEV production by 2026<sup>[1](12-synthesis/synthesis-regulatory.md)</sup>. Combined, these policies govern 73% of global automotive demand, creating irreversible industry restructuring pressure<sup>[2](12-synthesis/synthesis-market.md)</sup>.
 
-### Forces Transformation (350-450 words)
+### Forces Transformation (~75-100% of element allocation)
 
 Three regulatory mandates are reshaping global automotive demand architecture. The EU's 2035 zero-emission requirement, California's 68% ZEV mandate by 2030, and China's 40% NEV requirement by 2026 create overlapping compliance windows<sup>[1](12-synthesis/synthesis-regulatory.md)</sup>. These aren't isolated regional policies—they govern 73% of global automotive demand, making compliance unavoidable for any manufacturer with global ambitions<sup>[2](12-synthesis/synthesis-market.md)</sup>.
 
@@ -254,7 +254,7 @@ The third force is supply chain lead time mismatch. Battery gigafactory construc
 
 *Technique: Frame as "irreversible" and "unavoidable" (not "important trends"). Quantify market coverage (73% global demand). Show capital threshold creating binary choice (commit or exit). Identify timing mismatches as structural forces.*
 
-### Friction Transformation (300-400 words)
+### Friction Transformation (~71-100% of element allocation)
 
 The 6-8 year battery production lead time creates immediate friction against 3-5 year regulatory compliance windows<sup>[4](12-synthesis/synthesis-supply.md)</sup>. Automakers facing California's 2030 mandate (4 years away) need battery capacity that won't be production-ready until 2032 if they start construction today. This timing mismatch forces either upstream vertical integration—78% of major OEMs now invest directly in battery production vs. 12% in 2020<sup>[5](12-synthesis/synthesis-integration.md)</sup>—or acceptance of supply constraints that limit market access.
 

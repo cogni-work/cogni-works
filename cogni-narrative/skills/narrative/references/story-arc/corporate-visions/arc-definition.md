@@ -80,9 +80,9 @@ Reframe research findings as an unconsidered need—a problem executives didn't 
 
 **Transformation Approach:**
 Use PSB (Problem-Solution-Benefit) structure:
-- **Problem (150 words):** Current assumption/status quo and why it's incomplete
-- **Solution (150 words):** Unconsidered reality revealed by research
-- **Benefit (100-200 words):** Competitive advantage for early recognizers
+- **Problem (~33% of element):** Current assumption/status quo and why it's incomplete
+- **Solution (~33% of element):** Unconsidered reality revealed by research
+- **Benefit (~22-44% of element):** Competitive advantage for early recognizers
 
 **Key Techniques:**
 - Contrast structure: "Most organizations think X. But research shows Y."
@@ -126,9 +126,9 @@ exclusion and legal liability."
 
 **Transformation Approach:**
 Stack 2-3 forcing functions from loaded Trends:
-- **Forcing function (100 words):** External pressure from trend + specific deadline from trend.timeline
-- **Quantified urgency (100-150 words):** Extract timeline from trend.timeline and cost implications from trend.body_preview
-- **Window of opportunity (100-150 words):** Compare trends with urgency="Act" vs urgency="Plan" to show window closing
+- **Forcing function (~28% of element):** External pressure from trend + specific deadline from trend.timeline
+- **Quantified urgency (~28-43% of element):** Extract timeline from trend.timeline and cost implications from trend.body_preview
+- **Window of opportunity (~28-43% of element):** Compare trends with urgency="Act" vs urgency="Plan" to show window closing
 
 **Key Techniques:**
 - Specific timelines from trend.timeline field ("Q2 2027" not "soon")

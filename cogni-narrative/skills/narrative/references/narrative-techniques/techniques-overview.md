@@ -4,6 +4,8 @@
 
 These techniques are applied during narrative transformation to convert structured content into compelling executive narratives.
 
+> **Note:** Word counts in technique descriptions below are illustrative for a ~1,675-word default narrative. For production targets, use the proportional allocations in each arc's `arc-definition.md` and pattern files. Actual counts scale with `--target-length`.
+
 ---
 
 ## 1. Pyramid Principle (McKinsey)

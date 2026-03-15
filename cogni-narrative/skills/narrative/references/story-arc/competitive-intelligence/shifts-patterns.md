@@ -27,7 +27,7 @@ Extract from:
 
 ## Structure Components
 
-### Shift Identification (250-300 words)
+### Shift Identification (~71-85% of element; default ~250-300 words at T=1675)
 
 **What to extract:**
 - 2-4 major momentum shifts
@@ -64,7 +64,7 @@ First movers use regulatory readiness to displace incumbents in regulated indust
 
 ---
 
-### Threat Assessment (50-100 words)
+### Threat Assessment (~14-28% of element; default ~50-100 words at T=1675)
 
 **What to extract:**
 - Emerging threats to established players
@@ -288,8 +288,8 @@ Example:
 
 ### Structure Requirements
 
-- [ ] Shift identification section (250-300 words)
-- [ ] Threat assessment section (50-100 words)
+- [ ] Shift identification section (~71-85% of element allocation)
+- [ ] Threat assessment section (~14-28% of element allocation)
 - [ ] Word count: within proportional range for this element (+/-10% tolerance)
 - [ ] Smooth transition from Landscape
 - [ ] Smooth transition to Positioning

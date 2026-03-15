@@ -31,7 +31,7 @@ Extract from:
 
 ## Maturity-Signal Structure
 
-### Maturity Indicator (80-100 words)
+### Maturity Indicator (~20-25% of element; default ~80-100 words at T=1675)
 
 **What to extract:**
 - Signal showing technology is emerging now (not distant future)
@@ -52,7 +52,7 @@ Early deployment: BMW Regensburg plant operates 240 edge AI vision systems for q
 
 ---
 
-### Capability Description (100-120 words)
+### Capability Description (~25-30% of element; default ~100-120 words at T=1675)
 
 **What to extract:**
 - What the technology can actually do
@@ -73,7 +73,7 @@ Edge AI eliminates this latency bottleneck. Assembly lines running at 180 units/
 
 ---
 
-### Readiness Timeline (70-90 words)
+### Readiness Timeline (~17-22% of element; default ~70-90 words at T=1675)
 
 **What to extract:**
 - When technology becomes deployable
@@ -94,7 +94,7 @@ Maturity milestones: 20 TOPS/watt threshold (Q4 2026), 8nm chip availability (Q1
 
 ---
 
-### Early Adopter Evidence (80-110 words)
+### Early Adopter Evidence (~20-27% of element; default ~80-110 words at T=1675)
 
 **What to extract:**
 - Organizations using this technology

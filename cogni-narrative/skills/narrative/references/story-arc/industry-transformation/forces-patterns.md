@@ -31,7 +31,7 @@ Extract from:
 
 ## Structure Components
 
-### Force Identification (300-400 words)
+### Force Identification (~75-100% of element; default ~300-400 words at T=1675)
 
 **What to extract:**
 - 3-4 major macro forces
@@ -96,7 +96,7 @@ Extract from:
 
 ---
 
-### Force Interaction Summary (50 words)
+### Force Interaction Summary (~12% of element; default ~50 words at T=1675)
 
 **What to extract:**
 - How forces reinforce each other
@@ -316,8 +316,8 @@ Budget realism demands fast ROI<sup>[3]</sup>. Compliance extends timelines 40-6
 
 ### Structure Requirements
 
-- [ ] Force identification section (300-400 words)
-- [ ] Force interaction summary (50 words)
+- [ ] Force identification section (~75-100% of element allocation)
+- [ ] Force interaction summary (~12% of element allocation)
 - [ ] Word count: within proportional range for this element (+/-10% tolerance)
 - [ ] Smooth transition from Hook
 - [ ] Smooth transition to Friction

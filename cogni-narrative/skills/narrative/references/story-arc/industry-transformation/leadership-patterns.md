@@ -30,7 +30,7 @@ Extract from:
 
 ## Structure Components
 
-### Leadership Positioning (250-350 words)
+### Leadership Positioning (~83-100% of element; default ~250-350 words at T=1675)
 
 **What to extract:**
 - Where to play in new structure (layer, segment, niche)
@@ -451,7 +451,7 @@ Extract from:
 
 ### Structure Requirements
 
-- [ ] Leadership positioning section (250-350 words)
+- [ ] Leadership positioning section (~83-100% of element allocation)
 - [ ] Word count: within proportional range for this element (+/-10% tolerance)
 - [ ] Smooth transition from Evolution
 - [ ] Closing emphasizes action and urgency

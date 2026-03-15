@@ -31,7 +31,7 @@ Extract from:
 
 ## Structure Components
 
-### New Industry Structure (300-400 words)
+### New Industry Structure (~66-88% of element; default ~300-400 words at T=1675)
 
 **What to extract:**
 - Industry organization post-transformation
@@ -93,7 +93,7 @@ AI governance platforms (model monitoring, bias detection, compliance automation
 
 ---
 
-### Power Shifts (100 words)
+### Power Shifts (~22% of element; default ~100 words at T=1675)
 
 **What to extract:**
 - Who gains power in new structure
@@ -371,8 +371,8 @@ AI industry resembles cloud computing structure: Commoditized infrastructure (AW
 
 ### Structure Requirements
 
-- [ ] New industry structure section (300-400 words)
-- [ ] Power shifts section (100 words)
+- [ ] New industry structure section (~66-88% of element allocation)
+- [ ] Power shifts section (~22% of element allocation)
 - [ ] Word count: within proportional range for this element (+/-10% tolerance)
 - [ ] Smooth transition from Friction
 - [ ] Smooth transition to Leadership

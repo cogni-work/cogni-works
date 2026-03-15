@@ -31,7 +31,7 @@ Extract from:
 
 ## Structure Components
 
-### Scenario Construction (300-400 words)
+### Scenario Construction (~66-88% of element; default ~300-400 words at T=1675)
 
 **What to extract:**
 - 2-3 distinct scenarios (not variations)
@@ -91,7 +91,7 @@ Proprietary models maintain 18-24 month performance leads through continued mass
 
 ---
 
-### Scenario Differentiation (100 words)
+### Scenario Differentiation (~22% of element; default ~100 words at T=1675)
 
 **What to extract:**
 - Critical assumptions distinguishing scenarios
@@ -362,8 +362,8 @@ Example:
 
 ### Structure Requirements
 
-- [ ] Scenario construction section (300-400 words)
-- [ ] Scenario differentiation section (100 words)
+- [ ] Scenario construction section (~66-88% of element allocation)
+- [ ] Scenario differentiation section (~22% of element allocation)
 - [ ] Word count: within proportional range for this element (+/-10% tolerance)
 - [ ] Smooth transition from Signals
 - [ ] Smooth transition to Strategies

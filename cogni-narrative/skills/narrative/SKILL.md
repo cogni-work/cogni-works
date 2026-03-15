@@ -101,12 +101,36 @@ source_file_count: {N}
 ## Core Workflow
 
 ```text
-Phase 1      Phase 2        Phase 3          Phase 4            Phase 5       Phase 6
-Setup  --->  Arc      --->  Pattern   --->   Transformation --> Validation -> Write
-& Load       Selection      Loading          (arc-specific)
+Phase 0.5       Phase 1      Phase 2        Phase 3          Phase 4            Phase 5       Phase 6
+Citation  --->  Setup  --->  Arc      --->  Pattern   --->   Transformation --> Validation -> Write
+Bridge          & Load       Selection      Loading          (arc-specific)
+(conditional)
 ```
 
 The quality of each phase depends on the previous one. In particular, Phases 3 and 4 require reading reference files before doing anything -- the arc patterns and narrative techniques are what differentiate a good narrative from a generic summary. Skipping those reads is the single biggest cause of poor output.
+
+---
+
+### Phase 0.5: Citation Bridge (conditional)
+
+Source content from upstream research tools (e.g., cogni-gpt-researcher) may use `[Source: Publisher](URL)` inline citations. These need to be converted into per-source markdown files before Phase 1 can load them as citable references.
+
+**Detection:** Scan the first 500 lines of the source content for the pattern `[Source: ...](...)`. If present, run the bridge. If not, skip to Phase 1.
+
+**When source contains `[Source:]` citations:**
+
+```bash
+python3 "${CLAUDE_PLUGIN_ROOT}/skills/narrative/scripts/bridge-citations.py" \
+  --source-path "${SOURCE_PATH}" --output-dir "${SOURCE_PATH}/narrative-input" --json
+```
+
+This creates:
+- `narrative-input/report-for-narrative.md` — content with `[source-NN-slug.md]` markers
+- `narrative-input/sources/source-NN-*.md` — per-source reference files with YAML frontmatter (`source_index`, `publisher`, `url`)
+
+After running the bridge, redirect `--source-path` to the `narrative-input/` directory for Phase 1 loading.
+
+**Skip this phase** when source files are already individual `.md` files without inline `[Source:]` citations (e.g., trend-scout output, manually curated content, TIPS entities).
 
 ---
 

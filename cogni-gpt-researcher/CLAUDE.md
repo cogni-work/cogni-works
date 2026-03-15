@@ -40,16 +40,9 @@ Entities are ONLY created via `scripts/create-entity.sh` (bash wrapper that dele
 ## Cross-Plugin Integration
 
 - **cogni-claims** — review loop submits claims for source URL verification (primary integration)
-- **cogni-narrative** — story arc transformation via `research-story` pipeline (narrative-writer agent, narrative-review, narrative-adapt)
-- **cogni-copywriting** — arc-aware executive polish via `research-story` pipeline (auto-activated by `arc_id` frontmatter)
+- **cogni-narrative** — story arc transformation of research output. User invokes `/narrative --source-path <report-output-dir>` after research completes. cogni-narrative auto-bridges `[Source: Publisher](URL)` citations into per-source files via its built-in citation bridge (Phase 0.5).
+- **cogni-copywriting** — arc-aware executive polish. User invokes copywriter on narrative output. Auto-activated by `arc_id` frontmatter in narrative output.
 - **cogni-visual** — optional presentation generation
-
-### research-story Pipeline
-
-The `research-story` skill chains three plugins: research-report → cogni-narrative → cogni-copywriting.
-Citation bridge script (`scripts/bridge-citations.py`) converts `[Source: Publisher](URL)` citations
-into per-source `.md` files that cogni-narrative can reference as `<sup>[N](file.md)</sup>`.
-The `arc_id` field in narrative output frontmatter auto-activates cogni-copywriting's arc-aware mode.
 
 ## Model Strategy
 

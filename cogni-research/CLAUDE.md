@@ -11,9 +11,9 @@ research-plan → findings-sources → claims → synthesis
 ```
 
 - **9 skills** (4 pipeline + 4 export + 1 story)
-- **10 agents** (dimension-planner, batch-creator, findings-creator ×3, findings-creator-deep, source-creator, claim-extractor, report-writer, claim-revisor)
+- **9 agents** (dimension-planner, batch-creator, findings-creator ×3, source-creator, claim-extractor, report-writer, claim-revisor)
 - **7 entity types** (00-06)
-- **10 hooks** (anti-hallucination guardrails + review-loop-guard)
+- **9 hooks** (anti-hallucination guardrails + review-loop-guard)
 - **3 research types** (generic, lean-canvas, b2b-ict-portfolio)
 
 ## Entity Creation Rules

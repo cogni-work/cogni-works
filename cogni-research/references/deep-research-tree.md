@@ -1,6 +1,6 @@
 # Deep Research Tree
 
-Reference for the adaptive deep research tree algorithm used by `findings-creator-deep`. This describes how a single refined question is recursively explored through branching sub-aspects with decreasing breadth.
+Reference for the adaptive deep research tree algorithm used by `findings-creator`. This describes how a single refined question is recursively explored through branching sub-aspects with decreasing breadth.
 
 ---
 
@@ -73,24 +73,24 @@ In practice, stopping criteria reduce actual query counts significantly below th
 
 ## Batching Strategy
 
-The findings-sources skill dispatches 4-5 `findings-creator-deep` agents concurrently (one per question). Each agent handles its own internal recursion. This provides parallelism across questions while keeping per-question recursion sequential for context preservation.
+The findings-sources skill dispatches 4-5 `findings-creator` agents concurrently (one per question). Each agent handles its own internal recursion. This provides parallelism across questions while keeping per-question recursion sequential for context preservation.
 
 ```
 Batch 1 (parallel):
-  findings-creator-deep → question-1 (internal tree)
-  findings-creator-deep → question-2 (internal tree)
-  findings-creator-deep → question-3 (internal tree)
-  findings-creator-deep → question-4 (internal tree)
+  findings-creator → question-1 (internal tree)
+  findings-creator → question-2 (internal tree)
+  findings-creator → question-3 (internal tree)
+  findings-creator → question-4 (internal tree)
 
 Batch 2 (parallel):
-  findings-creator-deep → question-5 (internal tree)
-  findings-creator-deep → question-6 (internal tree)
+  findings-creator → question-5 (internal tree)
+  findings-creator → question-6 (internal tree)
   ...
 ```
 
 ## Entity Output
 
-Each `findings-creator-deep` agent produces:
+Each `findings-creator` agent produces:
 
 - **Finding entities** in `04-findings/data/` — one per sub-aspect (not per learning). Created via `create-entity.sh --entity-type 04-findings`.
 - Findings include `deep_research: true` and `depth_reached: N` in frontmatter.
@@ -114,7 +114,7 @@ The `deep_exploration` flag in `.metadata/sprint-log.json` controls which agent 
 
 | Flag | Agent | Set By |
 |------|-------|--------|
-| `deep_exploration: true` | `findings-creator-deep` | research-plan (auto for DOK-4) |
+| `deep_exploration: true` | `findings-creator` | research-plan (auto for DOK-4) |
 | `deep_exploration: false` | `findings-creator` | research-plan (default for DOK 1-3) |
 | User override | Whichever requested | Explicit user instruction |
 

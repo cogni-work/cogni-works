@@ -46,15 +46,15 @@ For WHAT definitions (dimensions, frameworks), see [research-types/](research-ty
 | All types | LLM knowledge (supplementary) | `findings-creator-llm` |
 | All types | File-based RAG (if PDF store available) | `findings-creator-file` |
 
-### Deep Exploration Mode
+### Research Depth (DOK → DEPTH)
 
-| Condition | Flag | Agent |
-|-----------|------|-------|
-| DOK-4 (auto) | `deep_exploration: true` | `findings-creator-deep` |
-| DOK 1-3 (default) | `deep_exploration: false` | `findings-creator` |
-| User override | Explicit request | Whichever was requested |
+| DOK | DEPTH | Behavior |
+|-----|-------|----------|
+| 1-2 | 1 | Sub-aspect decomposition + single search pass (fast, ~4-9 queries/question) |
+| 3 | 2 | + one level of recursive follow-up (~8-15 queries/question) |
+| 4 | 3 | + two levels of recursive follow-up (~12-25 queries/question) |
 
-The `deep_exploration` flag is stored in `.metadata/sprint-log.json` by research-plan (Phase 1). It controls agent selection in findings-sources (Phase 1 step 3). When true, `findings-creator-deep` performs recursive tree exploration within each question — decomposing into 2-3 sub-aspects with decreasing breadth and up to 3 levels of follow-up queries. Deep findings are standard finding entities that flow through claims and synthesis like any other finding.
+DOK level is stored in `.metadata/sprint-log.json` by research-plan. findings-sources maps it to DEPTH and passes it to findings-creator. All DOK levels use the same agent — depth controls whether follow-up questions are pursued.
 
 ---
 

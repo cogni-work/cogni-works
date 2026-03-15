@@ -93,19 +93,6 @@
         ]
       },
       {
-        "matcher": "findings-creator-deep",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/repair-missing-batches.sh",
-            "timeout": 60,
-            "enabled": true,
-            "name": "repair-missing-batches-deep",
-            "description": "Detect and repair missing batch files after findings-creator-deep. Same repair logic as findings-creator."
-          }
-        ]
-      },
-      {
         "matcher": "batch-creator",
         "hooks": [
           {

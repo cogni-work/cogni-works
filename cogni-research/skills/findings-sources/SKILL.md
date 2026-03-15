@@ -66,26 +66,31 @@ Batching by dimension keeps search context coherent — an agent researching "AI
 
 2. **Discover execution batches**: Run `${CLAUDE_PLUGIN_ROOT}/scripts/discover-questions-by-dimension.sh --project-path <path> --json` to group questions by dimension into execution batches. If resuming, filter batches to only include `pending_questions` from the scan result.
 
-3. **Execute batch loop** (sequential batches, parallel agents within):
+3. **Determine research depth** from DOK level in `.metadata/sprint-log.json`:
 
-   **Agent selection:** Check `.metadata/sprint-log.json` for `deep_exploration`. When `deep_exploration: true`, invoke `findings-creator-deep` agents instead of `findings-creator` for each question. The deep agent performs recursive tree exploration within each question's scope, producing the same finding entities (04-findings/) — all downstream steps (reconciliation, source extraction) work unchanged. When `deep_exploration` is false or absent, use `findings-creator` as normal.
+   | DOK | DEPTH | Behavior |
+   |-----|-------|----------|
+   | 1-2 | 1 | Single search pass per sub-aspect (fast) |
+   | 3 | 2 | One level of recursive follow-up |
+   | 4 | 3 | Two levels of recursive follow-up (exhaustive) |
 
-   For each execution batch, invoke `findings-creator` agents in parallel via Task tool (one per question):
+4. **Execute batch loop** (sequential batches, parallel agents within):
+   For each execution batch, invoke `findings-creator` agents in parallel via Agent tool (one per question):
    ```
    Agent: findings-creator
-   Args: --project-path <path> --question-path <question-file.md> --batch-ref <batch-entity-id>
+   Args: --project-path <path> --question-path <question-file.md> --depth <depth>
    ```
-   Each agent handles web search, LLM knowledge extraction, and quality scoring independently. If the project has a `document-store/` directory, agents automatically invoke `findings-creator-file` for local PDFs — no special configuration needed.
+   The agent decomposes each question into 2-3 sub-aspects, searches each, and at depth 2+ pursues recursive follow-up questions with decreasing breadth. If the project has a `document-store/` directory, agents automatically invoke `findings-creator-file` for local PDFs — no special configuration needed.
 
-4. **Report progress**: After each batch completes, tell the user: batch N/M done, X findings created so far, any questions with zero results.
+5. **Report progress**: After each batch completes, tell the user: batch N/M done, X findings created so far, any questions with zero results.
 
-5. **Reconciliation**: After all batches complete:
+6. **Reconciliation**: After all batches complete:
    - Count findings per dimension
    - Identify questions with zero findings
    - Retry those questions in a single reconciliation batch
    - If reconciliation still finds >3 questions with zero findings, pause and ask the user whether to accept the gaps or adjust query strategy
 
-6. **Verify coverage**: Every refined question should have at least 1 finding. Log coverage stats to sprint-log `phase_findings_coverage`.
+7. **Verify coverage**: Every refined question should have at least 1 finding. Log coverage stats to sprint-log `phase_findings_coverage`.
 
 ### Phase 2: Source Extraction (Sequential)
 

@@ -37,11 +37,18 @@ Phase 0 → Phase 1 → Phase 2 → Phase 3
 
 ### Phase 0: Load Draft and Sources
 
+Building the source lookup first enables O(1) citation resolution in Phase 2. Without it, each claim would require scanning all source entities to find its backing URL — quadratic cost that scales poorly as source counts grow in detailed/deep reports.
+
 1. Read the draft file
 2. Read source entities from `02-sources/data/` to resolve citations
 3. Build a source lookup: URL → source entity ID
+4. If the draft has zero inline citations, skip to output with `{"ok": true, "claims_extracted": 0, "claims_skipped": 0, "unsourced_assertions": <count>}`
 
 ### Phase 1: Claim Identification
+
+Statistical and attribution claims are prioritized because they are both the most verifiable (concrete values to check) and the most damaging if wrong (readers trust and repeat specific numbers). Causal and definitional claims follow because they shape the reader's understanding but are harder to verify from a single source.
+
+The 10-30 claim target balances coverage against verification cost. Fewer than 10 risks missing significant misquotations in a multi-section report. More than 30 overwhelms cogni-claims with redundant checks (many claims cite the same source URL, so verification effort scales with unique sources, not claim count). For basic reports, aim for 10-15; for detailed/deep, aim for 20-30.
 
 Scan the draft for verifiable factual claims. A claim is:
 - A specific factual assertion (not an opinion or generalization)
@@ -61,12 +68,16 @@ Skip:
 
 ### Phase 2: Resolve Source References
 
+Claims without resolvable source URLs are skipped because cogni-claims verification requires a fetchable URL to compare against. Logging skipped claims is still valuable — a high skip rate signals that the writer is making assertions without proper attribution, which the reviewer should flag as a structural issue.
+
 For each claim:
 1. Identify which source citation backs it in the draft
 2. Look up the source entity to get `url` and `title`
 3. If no source can be resolved, skip the claim (but log it)
 
 ### Phase 3: Create Report-Claim Entities
+
+Entity creation via the script (not direct Write/Edit) ensures consistency with the schema, generates proper slugs, and respects the `block-entity-writes` hook that protects entity directory integrity.
 
 For each resolved claim, create entity via `scripts/create-entity.sh`:
 
@@ -82,6 +93,11 @@ bash "${CLAUDE_PLUGIN_ROOT}/scripts/create-entity.sh" \
 
 ```json
 {"ok": true, "claims_extracted": 18, "claims_skipped": 3, "unsourced_assertions": 2}
+```
+
+On failure:
+```json
+{"ok": false, "error": "Draft file not found at output/draft-v1.md"}
 ```
 
 ## Extraction Guidelines

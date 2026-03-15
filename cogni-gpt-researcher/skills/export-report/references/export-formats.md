@@ -56,3 +56,85 @@ HTML(filename='output/report.html').write_pdf('output/report.pdf')
 ```
 
 Fallback: inform user to open HTML in browser and use "Print to PDF".
+
+## Table of Contents Generation
+
+The HTML template includes a `.toc` CSS class. Generate the ToC from heading tags:
+
+```python
+import re
+
+def generate_toc(html_content: str) -> str:
+    """Scan for <h2> tags and build a linked table of contents."""
+    headings = re.findall(r'<h2[^>]*>(.*?)</h2>', html_content)
+    if not headings:
+        return ""
+
+    toc_items = []
+    for i, heading in enumerate(headings):
+        anchor = f"section-{i}"
+        toc_items.append(f'<li><a href="#{anchor}">{heading}</a></li>')
+
+    toc_html = f'<div class="toc"><h3>Contents</h3><ul>{"".join(toc_items)}</ul></div>'
+
+    # Inject anchors into headings
+    counter = 0
+    def add_anchor(match):
+        nonlocal counter
+        result = f'<h2 id="section-{counter}">{match.group(1)}</h2>'
+        counter += 1
+        return result
+
+    html_content = re.sub(r'<h2[^>]*>(.*?)</h2>', add_anchor, html_content)
+    return toc_html, html_content
+```
+
+Insert the ToC after the `.meta` div and before the first `<h2>`.
+
+## Print CSS
+
+Add this `@media print` block to the `<style>` section for clean PDF output:
+
+```css
+@media print {
+  body { max-width: 100%; padding: 1rem; font-size: 11pt; }
+  .toc { page-break-after: always; }
+  h2 { page-break-before: always; }
+  a { color: #333; text-decoration: none; }
+  a[href]::after { content: " (" attr(href) ")"; font-size: 0.8em; color: #666; }
+  .source-ref { font-size: 0.75em; }
+}
+```
+
+## Conversion Fallback Chain
+
+Use this decision logic to select the best available converter:
+
+```
+1. weasyprint available?
+   → Yes: HTML → PDF via weasyprint (best quality, supports print CSS)
+   → No: continue
+
+2. markdown package available?
+   → Yes: MD → HTML via markdown(extensions=['toc', 'tables']) → serve as HTML
+   → No: continue
+
+3. Fallback: MD → HTML via simple regex converter (built-in)
+   → Serve as HTML file
+   → Inform user: "Open in browser and use Print to PDF for PDF output"
+```
+
+Check availability at runtime:
+```python
+def get_converter():
+    try:
+        import weasyprint
+        return "weasyprint"
+    except ImportError:
+        pass
+    try:
+        import markdown
+        return "markdown"
+    except ImportError:
+        return "simple"
+```

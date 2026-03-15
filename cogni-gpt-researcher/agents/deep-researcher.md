@@ -99,6 +99,11 @@ Return compact JSON:
 {"ok": true, "sq": "sq-lattice-crypto-a1b2c3d4", "sub_aspects": 3, "sources": 12, "findings": 8, "words": 1500, "depth_reached": 2, "follow_ups_pursued": 4}
 ```
 
+On failure:
+```json
+{"ok": false, "sq": "sq-lattice-crypto-a1b2c3d4", "error": "Sub-question entity not found"}
+```
+
 ## Design Rationale: Single-Agent Execution
 
 The original GPT-Researcher spawns a full researcher instance per search query at each recursion depth, leading to exponential agent counts (`breadth^depth` at worst). This agent performs all branch research internally for three reasons:

@@ -81,6 +81,11 @@ Based on report type:
 {"ok": true, "draft": "output/draft-v1.md", "words": 3500, "sections": 5, "sources_cited": 12}
 ```
 
+On failure:
+```json
+{"ok": false, "error": "No context entities found — cannot write report without research data"}
+```
+
 ## Writing Guidelines
 
 - If `RESEARCHER_ROLE` is provided, adopt that persona's analytical lens, terminology, and tone throughout the report. For example, a "Financial Analyst" should use financial metrics and investor-oriented framing; a "Scientific Literature Reviewer" should use academic citation conventions and methodological rigor

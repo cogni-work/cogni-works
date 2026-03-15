@@ -3,7 +3,8 @@ name: export-report
 description: |
   Export a completed research report to different formats: Markdown (default), HTML, or PDF.
   Use when the user asks to "export report", "save as HTML", "export to PDF", "publish report",
-  "convert report", or wants the research output in a specific format.
+  "convert report", "download report", "share the report", "make it pretty", or wants the
+  research output in a specific format for sharing or presentation.
 ---
 
 # Export Report Skill
@@ -12,36 +13,45 @@ description: |
 
 **User**: "Export the report as HTML"
 
-**Result**: HTML file generated at `output/report.html` from `output/report.md`.
+**Result**: Self-contained HTML file at `output/report.html` with:
+- Professional typography (Georgia serif, max-width 800px)
+- Auto-generated table of contents
+- Clickable source links
+- Print-optimized CSS
 
 ## Prerequisites
 
 - Completed research project with `output/report.md`
-- For PDF: `weasyprint` Python package (optional, falls back to HTML)
+- For PDF: `weasyprint` Python package (optional, falls back to browser print-to-PDF)
 
 ## Workflow
 
 ### Phase 0: Locate Report
 
+The export skill needs to find the right project and verify the report exists. Without a completed report, there is nothing to export — and exporting a draft mid-review would publish unverified content.
+
 1. Find the project directory (ask user if ambiguous)
-2. Verify `output/report.md` exists
-3. Determine requested format(s)
+2. Verify `output/report.md` exists (NOT `draft-v*.md` — only the finalized report)
+3. Determine requested format(s) from user request
 
 ### Phase 1: Export
+
+Each format builds on the previous — HTML is generated from markdown, PDF from HTML. This cascade means the markdown source is always the single source of truth.
 
 **Markdown** (always available):
 - `output/report.md` is already the markdown output
 - Optionally copy to a user-specified location
 
 **HTML**:
-1. Read `output/report.md`
-2. Generate HTML with inline CSS for professional formatting
-3. Include: table of contents, source links, clean typography
-4. Write to `output/report.html`
+1. Read `references/export-formats.md` for the HTML template
+2. Read `output/report.md`
+3. Generate self-contained HTML with inline CSS (no external dependencies)
+4. Include: table of contents from headings, clickable source links, clean typography
+5. Write to `output/report.html`
 
 **PDF**:
 1. First generate HTML (as above)
-2. If `weasyprint` is available: convert HTML to PDF
+2. If `weasyprint` is available: `python3 -c "import weasyprint; weasyprint.HTML('output/report.html').write_pdf('output/report.pdf')"`
 3. If not: inform user HTML is available, suggest browser print-to-PDF
 4. Write to `output/report.pdf`
 
@@ -51,14 +61,24 @@ description: |
 
 ### Phase 2: Report to User
 
-- List exported files with paths
-- File sizes
+- List exported files with paths and file sizes
+- Preview: show first 5 lines of the HTML or confirm PDF page count
 - Suggest next steps (share, present, further research)
 
 ## Supported Formats
 
-| Format | Output Path | Requirements |
-|--------|-------------|-------------|
-| Markdown | `output/report.md` | None (always available) |
-| HTML | `output/report.html` | None (generated via Python) |
-| PDF | `output/report.pdf` | weasyprint (optional) |
+| Format | Output Path | Requirements | Quality |
+|--------|-------------|-------------|---------|
+| Markdown | `output/report.md` | None (always available) | Source format |
+| HTML | `output/report.html` | None (generated inline) | Best for sharing |
+| PDF | `output/report.pdf` | weasyprint (optional) | Best for printing |
+
+## Error Recovery
+
+| Scenario | Recovery |
+|----------|----------|
+| `output/report.md` not found | Check if drafts exist — suggest completing review loop first |
+| `output/report.md` is empty | Report error, suggest re-running Phase 4 (writer) |
+| weasyprint not installed | Generate HTML, suggest `pip install weasyprint` or browser print-to-PDF |
+| HTML generation fails | Fall back to markdown copy with formatting note |
+| cogni-visual not available | Skip presentation option, note in output |

@@ -6,6 +6,8 @@ description: |
   deep (recursive tree exploration). Integrates with cogni-claims for evidence-based quality gates.
   Use when the user asks to "research report", "investigate", "deep research", "write a report",
   "gpt-researcher", "multi-agent research", or requests comprehensive topic analysis with citations.
+  Also use when the user wants to "resume research", "continue research report", "pick up the research",
+  "finish the report", "what happened to my report", or resume an interrupted research run.
 ---
 
 # Research Report Skill
@@ -53,6 +55,8 @@ Read these reference files when the corresponding phase needs them:
 
 ### Phase 0: Project Initialization
 
+A well-structured project directory is the foundation for resumability and cross-agent coordination. Without it, agents cannot find each other's outputs, the review loop cannot track iterations, and a crash mid-research loses all progress.
+
 1. Determine workspace path (use current directory or ask user)
 2. Detect report type from user request (basic/detailed/deep)
 3. Initialize project:
@@ -63,9 +67,24 @@ Read these reference files when the corresponding phase needs them:
    ```
 4. Store returned `project_path` for all subsequent phases
 
+### Phase 0.5: Preliminary Search
+
+Before generating sub-questions, gather context about what information is actually available online. Sub-questions generated in a vacuum often target angles that have no searchable content, wasting researcher agents on dead ends.
+
+1. Run 2-3 broad WebSearch queries on the user's topic
+2. Review top 3-5 result snippets to understand the information landscape
+3. Note: dominant angles, key organizations, recent developments, terminology
+4. Feed these observations as context when generating sub-questions in Phase 1
+
 ### Phase 1: Sub-Question Generation
 
+The quality of sub-questions determines the quality of the entire report. Orthogonal decomposition prevents researchers from duplicating each other's work, while collectively exhaustive coverage prevents blind spots. Poor sub-questions produce redundant contexts and missing perspectives that the review loop cannot fix — it can only catch factual errors, not structural gaps.
+
 **Read**: `references/sub-question-generation.md` for decomposition patterns.
+
+Use the preliminary search context from Phase 0.5 to inform sub-question generation — ensure questions target angles that have actual web content available.
+
+**Agent Role Selection**: Based on the topic, determine an appropriate researcher persona (e.g., "Cybersecurity Analyst", "Market Research Strategist", "Scientific Literature Reviewer"). This role shapes the writer's tone, terminology, and analytical lens. Store it in `project-config.json` as `researcher_role` and pass it to the writer agent as `RESEARCHER_ROLE`.
 
 Generate sub-questions based on report type:
 
@@ -95,6 +114,8 @@ bash "${CLAUDE_PLUGIN_ROOT}/scripts/create-entity.sh" \
 ```
 
 ### Phase 2: Parallel Web Research
+
+Parallel execution is the key throughput optimization — a basic report with 5 sub-questions completes research in the time of one. Batching at 4-5 agents prevents overwhelming the host with concurrent WebFetch requests and avoids rate limiting from search providers. Each agent runs independently, so a failure in one does not block the others.
 
 Spawn section-researcher agents in parallel batches (max 5 per batch):
 
@@ -126,6 +147,8 @@ After all researchers complete:
 
 ### Phase 3: Context Aggregation
 
+Aggregation deduplicates sources and enforces a context word limit (25,000 words) to prevent writer overload. Without this step, deep reports with 15+ researchers can produce far more raw context than a single writer agent can meaningfully synthesize, leading to shallow treatment of all topics rather than deep treatment of each.
+
 ```bash
 python3 "${CLAUDE_PLUGIN_ROOT}/scripts/merge-context.py" \
   --project-path "${PROJECT_PATH}" --json
@@ -140,12 +163,15 @@ Spawn writer agent:
 Task(writer,
   PROJECT_PATH=<project_path>,
   DRAFT_VERSION=1,
-  REPORT_TYPE=<type>)
+  REPORT_TYPE=<type>,
+  RESEARCHER_ROLE=<role from project-config.json>)
 ```
 
 Verify: draft written to `output/draft-v1.md`, reasonable word count.
 
 ### Phase 5: Claims-Verified Review Loop
+
+Structural review alone catches organizational and stylistic issues but misses factual errors — the most damaging kind. Claims-based review fetches the original source URLs and compares what the report says against what the source actually states, catching misquotations, unsupported conclusions, and selective omissions that would otherwise reach the reader as authoritative claims. This is a cogni-works original design replacing GPT-Researcher's human-in-the-loop review.
 
 **Read**: `references/claims-integration.md` for cogni-claims protocol.
 **Read**: `references/review-criteria.md` for scoring rubric.

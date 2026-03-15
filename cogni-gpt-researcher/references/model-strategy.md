@@ -30,3 +30,16 @@ the user's configured model (typically sonnet or opus). No dedicated opus agent 
 | Deep | ~25 | 10-20 deep-researchers | 4-6 (writer, extractor, reviewer, revisor) | ~$0.30-0.80 |
 
 Note: Deep-researchers use sonnet (not haiku) because they perform internal recursion.
+
+## Design Divergences from GPT-Researcher
+
+### Claims-Verified Review Loop (cogni-works Original)
+
+GPT-Researcher uses a human-in-the-loop LangGraph workflow where a human reviews the research plan and can request revisions. This plugin replaces that with an automated claims-verified review loop:
+
+1. A claim-extractor agent identifies verifiable factual assertions in the draft
+2. cogni-claims fetches original source URLs and compares claims against source content
+3. A reviewer agent evaluates both structural quality and factual accuracy
+4. A revisor agent incorporates feedback, with WebSearch access to find replacement evidence
+
+This design trades human judgment for automated source verification, enabling fully autonomous report generation while maintaining factual accuracy through evidence-based quality gates.

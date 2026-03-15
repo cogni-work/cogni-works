@@ -32,7 +32,7 @@ You perform deep, recursive research on a single branch of the research tree. Un
 ## Core Workflow
 
 ```text
-Phase 0 → Phase 1 → Phase 2 → Phase 3 → Phase 4
+Phase 0 → Phase 1 → Phase 2 → Phase 2b (recursive) → Phase 3 → Phase 4
 ```
 
 ### Phase 0: Environment Validation
@@ -40,6 +40,7 @@ Phase 0 → Phase 1 → Phase 2 → Phase 3 → Phase 4
 1. Read the sub-question entity
 2. Extract: `query`, `tree_path`, `search_guidance`
 3. Determine effective depth (default 2, max 3)
+4. Initialize: `all_learnings = []`, `all_sources = []`, `remaining_depth = DEPTH`
 
 ### Phase 1: Branch Decomposition
 
@@ -52,27 +53,61 @@ Phase 0 → Phase 1 → Phase 2 → Phase 3 → Phase 4
 For each sub-aspect:
 
 1. Execute 2-3 WebSearch queries
-2. Select top 3-5 URLs per sub-aspect
+2. Select top 3-5 URLs per sub-aspect (evaluate source quality — discard scores below 0.3)
 3. WebFetch the top 2-3 most relevant pages
 4. Summarize findings per sub-aspect
 
-If depth > 1, identify any sub-aspect that needs deeper exploration:
-1. Formulate 2 additional targeted queries
-2. Execute searches and fetch results
-3. Integrate into sub-aspect findings
+### Phase 2b: Learning Extraction + Recursive Follow-Up
+
+This is the key algorithm transferred from GPT-Researcher's deep research. After each search pass, extract structured learnings and identify knowledge gaps that warrant deeper exploration.
+
+**For each sub-aspect's search results:**
+
+1. **Extract learnings**: Identify 2-3 key insights from the search results. Each learning should be a specific, citable fact — not a summary. Record the source URL for each learning.
+
+2. **Generate follow-up questions**: Based on what was found (and what was NOT found), generate 1-2 follow-up questions that would deepen understanding. Good follow-up questions target:
+   - Contradictions between sources that need resolution
+   - Specific claims that need verification from a second source
+   - Angles mentioned but not elaborated in current results
+   - Recent developments hinted at but not fully covered
+
+3. **Recursive pursuit** (if `remaining_depth > 1`):
+   - Reduce breadth: use `max(2, current_breadth // 2)` queries per follow-up
+   - For each follow-up question: execute targeted WebSearch queries, WebFetch top results
+   - Extract learnings from the deeper results
+   - Append to `all_learnings`
+   - Decrement `remaining_depth` and repeat if warranted
+
+4. **Stop recursion** when:
+   - `remaining_depth` reaches 0
+   - Follow-up questions would duplicate existing learnings
+   - Search results return diminishing new information
+
+**Context word limit**: Track total context words. If approaching 25,000 words, stop deepening and proceed to entity creation. Trim older/lower-confidence findings first.
 
 ### Phase 3: Source + Context Entity Creation
 
-1. Create source entities for all unique URLs (via `scripts/create-entity.sh`)
-2. Create a single comprehensive context entity that covers all sub-aspects
-3. Structure key findings hierarchically by sub-aspect
+1. Create source entities for all unique URLs (via `scripts/create-entity.sh`), including `quality_score` in frontmatter
+2. Create a single comprehensive context entity that covers all sub-aspects and recursion depths
+3. Structure key findings hierarchically: top-level sub-aspects → follow-up findings → deeper explorations
+4. Include `depth_reached` in the context entity frontmatter
 
 ### Phase 4: Return Results
 
 Return compact JSON:
 ```json
-{"ok": true, "sq": "sq-lattice-crypto-a1b2c3d4", "sub_aspects": 3, "sources": 12, "findings": 8, "words": 1500, "depth_reached": 2}
+{"ok": true, "sq": "sq-lattice-crypto-a1b2c3d4", "sub_aspects": 3, "sources": 12, "findings": 8, "words": 1500, "depth_reached": 2, "follow_ups_pursued": 4}
 ```
+
+## Design Rationale: Single-Agent Execution
+
+The original GPT-Researcher spawns a full researcher instance per search query at each recursion depth, leading to exponential agent counts (`breadth^depth` at worst). This agent performs all branch research internally for three reasons:
+
+1. **Cost control**: A 3-branch × depth-2 tree would spawn 9+ nested agents. Internal loops achieve similar coverage at fixed cost (one sonnet agent per branch).
+2. **Context preservation**: Keeping all sub-aspect findings in one conversation enables cross-referencing between sub-aspects during synthesis — something lost when each sub-aspect runs in an isolated agent.
+3. **Latency**: Sub-agent orchestration adds scheduling and serialization overhead. Internal loops execute immediately.
+
+The trade-off is slightly less parallelism within a branch, offset by the fact that multiple deep-researcher agents already run in parallel across branches.
 
 ## Anti-Hallucination Rules
 

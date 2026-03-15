@@ -27,6 +27,9 @@ import sys
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Set, Tuple
 
+# Maximum words allowed in aggregated context (matches GPT-Researcher's safety margin)
+MAX_CONTEXT_WORDS = 25000
+
 
 def parse_frontmatter(text: str) -> Tuple[Dict[str, Any], str]:
     """Parse YAML frontmatter from markdown file. Returns (frontmatter_dict, body)."""
@@ -196,6 +199,23 @@ def main() -> None:
                     seen_source_ids.add(sid)
 
     aggregated["total_words"] = total_words
+
+    # Trim contexts to stay within word limit (keep most recent, matching original's strategy)
+    if total_words > MAX_CONTEXT_WORDS:
+        trimmed_contexts = []
+        running_words = 0
+        # Process in reverse to keep most recent contexts (later sub-questions tend to be deeper)
+        for ctx in reversed(aggregated["contexts"]):
+            wc = ctx["word_count"]
+            if running_words + wc <= MAX_CONTEXT_WORDS:
+                trimmed_contexts.insert(0, ctx)
+                running_words += wc
+            else:
+                break
+        aggregated["contexts"] = trimmed_contexts
+        aggregated["total_words"] = running_words
+        aggregated["trimmed_from"] = total_words
+        total_words = running_words
 
     # Build deduplicated source list (only cited sources)
     aggregated["sources"] = sorted(

@@ -55,16 +55,23 @@ Phase 0 → Phase 1 → Phase 2 → Phase 3 → Phase 4
 4. For remaining URLs: use WebSearch snippet content only
 5. Track: URL, title, publisher, fetch method, content summary
 
-### Phase 3: Source Entity Creation
+### Phase 3: Source Curation + Entity Creation
 
-For each unique URL discovered:
+Before creating entities, evaluate each source for quality. This mirrors GPT-Researcher's source curation step — not all search results deserve equal weight. Rate each source on a 0.0-1.0 scale based on:
+
+- **Relevance**: How directly does this source address the sub-question?
+- **Credibility**: Is this an authoritative source (academic, government, established publication) or user-generated/marketing content?
+- **Currency**: Is the information recent enough to be useful?
+- **Quantitative value**: Does it contain specific data, statistics, or numbers?
+
+Discard sources scoring below 0.3. For remaining sources:
 
 1. Create source entity via `scripts/create-entity.sh`:
    ```bash
    bash "${CLAUDE_PLUGIN_ROOT}/scripts/create-entity.sh" \
      --project-path "${PROJECT_PATH}" \
      --entity-type source \
-     --data '{"frontmatter": {"url": "...", "title": "...", "publisher": "...", "fetch_method": "WebFetch", "fetched_at": "..."}, "content": ""}' \
+     --data '{"frontmatter": {"url": "...", "title": "...", "publisher": "...", "fetch_method": "WebFetch", "fetched_at": "...", "quality_score": 0.85}, "content": ""}' \
      --json
    ```
 2. Record the returned `entity_id` for use in context entity

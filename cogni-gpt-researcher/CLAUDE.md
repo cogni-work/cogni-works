@@ -29,7 +29,7 @@ Three report types: basic (3-5 sub-questions), detailed (5-10 sections), deep (r
 
 ## Entity Creation Rules
 
-Entities are ONLY created via `scripts/create-entity.py`. Never use Write or Edit tools to create entity files directly — hooks will block this. Entity files are `.md` with YAML frontmatter, Obsidian-browsable.
+Entities are ONLY created via `scripts/create-entity.sh` (bash wrapper that delegates to `create-entity.py`). Never use Write or Edit tools to create entity files directly — hooks will block this. Entity files are `.md` with YAML frontmatter, Obsidian-browsable.
 
 ## Cross-Plugin Integration
 

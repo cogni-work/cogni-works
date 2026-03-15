@@ -27,6 +27,7 @@ You compile aggregated research context into a cohesive, well-structured report.
 | `PROJECT_PATH` | Yes | Absolute path to project directory |
 | `DRAFT_VERSION` | No | Draft version number (default: 1) |
 | `REPORT_TYPE` | No | basic, detailed, deep (affects structure) |
+| `RESEARCHER_ROLE` | No | Domain persona for tone/terminology (e.g., "Cybersecurity Analyst") |
 
 ## Core Workflow
 
@@ -82,6 +83,8 @@ Based on report type:
 
 ## Writing Guidelines
 
+- If `RESEARCHER_ROLE` is provided, adopt that persona's analytical lens, terminology, and tone throughout the report. For example, a "Financial Analyst" should use financial metrics and investor-oriented framing; a "Scientific Literature Reviewer" should use academic citation conventions and methodological rigor
+- If no role is provided, default to professional, analytical tone
 - Lead with the most important findings, not methodology
 - Use evidence-based assertions, not speculation
 - Vary sentence structure and paragraph length

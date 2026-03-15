@@ -1,5 +1,9 @@
 # Sub-Question Generation Reference
 
+## Context-Aware Decomposition
+
+Before generating sub-questions, Phase 0.5 performs preliminary web searches on the topic. Use these search results to ground your decomposition in reality — if preliminary results show the topic is dominated by a regulatory debate, ensure one sub-question targets that angle rather than generic templates.
+
 ## Decomposition Strategy
 
 Good sub-questions are:
@@ -7,6 +11,7 @@ Good sub-questions are:
 - **Searchable**: Can be answered via web search (not too abstract)
 - **Specific**: Narrow enough for focused research
 - **Collectively exhaustive**: Together they cover the full topic
+- **Grounded**: Informed by preliminary search results — don't target angles with no available content
 
 ## Templates by Topic Type
 

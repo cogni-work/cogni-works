@@ -1,7 +1,7 @@
 {
   "name": "cogni-research",
-  "version": "1.0.2",
-  "description": "General-purpose deep research engine with three-layer claim assurance. Four-stage pipeline: research-plan, findings-sources, claims, synthesis. Delegates narrative storytelling to cogni-narrative. Supports generic, lean-canvas, and b2b-ict-portfolio research types. Bilingual (EN/DE).",
+  "version": "1.1.0",
+  "description": "General-purpose deep research engine with three-layer claim assurance. Four-stage pipeline: research-plan, findings-sources, claims, synthesis. Adaptive deep research tree for DOK-4, structured report export, research-story pipeline with executive polish, and review-revision loops. Delegates narrative storytelling to cogni-narrative. Supports generic, lean-canvas, and b2b-ict-portfolio research types. Bilingual (EN/DE).",
   "author": {
     "name": "Stephan de Haas",
     "email": "stephan@cogni-work.ai"
@@ -19,6 +19,10 @@
     "synthesis",
     "bilingual",
     "fact-checking",
-    "source-verification"
+    "source-verification",
+    "deep-research-tree",
+    "research-story",
+    "report-export",
+    "review-revision"
   ]
 }

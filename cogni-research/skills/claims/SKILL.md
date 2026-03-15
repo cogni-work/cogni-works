@@ -111,6 +111,34 @@ Source verification is the third layer of assurance — it checks whether source
 
    For the full deviation taxonomy and YAML output format, see `${CLAUDE_PLUGIN_ROOT}/references/claim-assurance.md`.
 
+### Phase 2.5: Revision Loop (Conditional)
+
+Evidence strengthening for weak claims. This phase is OPTIONAL — it only triggers when a significant portion of claims fall below the confidence threshold. When triggered, it finds additional evidence to corroborate weak claims, then re-extracts claims from the new evidence.
+
+For the full criteria, iteration limits, and oscillation detection rules, see `${CLAUDE_PLUGIN_ROOT}/references/review-revision-criteria.md`.
+
+1. **Evaluate claim confidence distribution**: Count claims where `final_confidence < 0.60` (or `confidence_score < 0.60` if source verification was skipped). If ≤ 20% of total claims are below threshold, skip to Phase 3.
+
+2. **Prepare revision**: Collect file paths of all weak claims (final_confidence < 0.60).
+
+3. **Invoke claim-revisor agent** via Agent tool:
+   ```
+   Agent: claim-revisor
+   Args: --project-path <path> --iteration 1 --weak-claim-paths <JSON array of paths> --language <code>
+   ```
+   The agent searches for corroborating evidence and creates new finding entities in `04-findings/data/` marked with `revision_source: true`.
+
+4. **Re-process new evidence**: If the claim-revisor created new findings:
+   - Re-run source-creator to deduplicate and enrich new source URLs
+   - Re-run claim-extractor on revision-generated findings only (filter `04-findings/data/` for entities with `revision_source: true` and `revision_iteration: 1`)
+   - Merge new claims into the claim set
+
+5. **Track revision state**: Update `.metadata/revision-log.json` with iteration details (weak count, revised count, accepted_with_warning count, new findings count).
+
+6. **Evaluate for second iteration**: Re-count claims with final_confidence < 0.60. If still >20% AND iteration < 2, repeat steps 2-5 with `--iteration 2`. The `review-loop-guard` hook enforces the 2-iteration cap.
+
+7. **Report revision results** to user: claims revised, new findings created, accepted with warning count, iterations used.
+
 ### Phase 3: Finalization
 
 Finalization creates the claim inventory that synthesis uses to select and cite claims. The claims README provides the at-a-glance confidence distribution that lets synthesis decide which claims are narrative-grade (high confidence for executive reports, medium for supporting evidence, low for flagged-with-caveat).

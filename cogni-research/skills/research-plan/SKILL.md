@@ -83,6 +83,8 @@ This is the highest-leverage phase. A vague question cascades into vague dimensi
 
 2. **Classify DOK level.** Auto-determined for lean-canvas (DOK-2) and b2b-ict-portfolio (DOK-3). Ask the user for generic type. DOK controls dimension count and question depth downstream.
 
+   When DOK level is 4 (Extended Abstract), auto-set `deep_exploration: true` in `.metadata/sprint-log.json` during project initialization. This activates recursive tree research in findings-sources. The user can override this by explicitly saying "no deep exploration" or "standard depth" — in that case, set `deep_exploration: false`. For DOK 1-3, default to `deep_exploration: false`.
+
 3. **Create initial question entity** via `create-entity.sh --entity-type 00-initial-question`.
    For frontmatter fields see [references/script-reference.md](references/script-reference.md).
 

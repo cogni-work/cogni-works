@@ -67,6 +67,9 @@ Batching by dimension keeps search context coherent — an agent researching "AI
 2. **Discover execution batches**: Run `${CLAUDE_PLUGIN_ROOT}/scripts/discover-questions-by-dimension.sh --project-path <path> --json` to group questions by dimension into execution batches. If resuming, filter batches to only include `pending_questions` from the scan result.
 
 3. **Execute batch loop** (sequential batches, parallel agents within):
+
+   **Agent selection:** Check `.metadata/sprint-log.json` for `deep_exploration`. When `deep_exploration: true`, invoke `findings-creator-deep` agents instead of `findings-creator` for each question. The deep agent performs recursive tree exploration within each question's scope, producing the same finding entities (04-findings/) — all downstream steps (reconciliation, source extraction) work unchanged. When `deep_exploration` is false or absent, use `findings-creator` as normal.
+
    For each execution batch, invoke `findings-creator` agents in parallel via Task tool (one per question):
    ```
    Agent: findings-creator

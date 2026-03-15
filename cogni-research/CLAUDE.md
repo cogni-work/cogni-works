@@ -10,10 +10,10 @@ cogni-research is a general-purpose deep research engine with three-layer claim 
 research-plan → findings-sources → claims → synthesis
 ```
 
-- **7 skills** (4 pipeline + 3 export)
-- **7 agents** (dimension-planner, batch-creator, findings-creator ×3, source-creator, claim-extractor)
+- **9 skills** (4 pipeline + 4 export + 1 story)
+- **10 agents** (dimension-planner, batch-creator, findings-creator ×3, findings-creator-deep, source-creator, claim-extractor, report-writer, claim-revisor)
 - **7 entity types** (00-06)
-- **8 hooks** (anti-hallucination guardrails)
+- **10 hooks** (anti-hallucination guardrails + review-loop-guard)
 - **3 research types** (generic, lean-canvas, b2b-ict-portfolio)
 
 ## Entity Creation Rules
@@ -24,6 +24,7 @@ Entities are ONLY created via `scripts/create-entity.py`. Never use Write or Edi
 
 - **cogni-narrative** — synthesis skill delegates storytelling (6 arc frameworks)
 - **cogni-claims** — claims skill submits for source URL verification (optional)
+- **cogni-copywriting** — research-story skill delegates executive polish
 - **cogni-workspace** — theme support for export skills
 
 ## Research Types

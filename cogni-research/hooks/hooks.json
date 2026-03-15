@@ -93,6 +93,19 @@
         ]
       },
       {
+        "matcher": "findings-creator-deep",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/repair-missing-batches.sh",
+            "timeout": 60,
+            "enabled": true,
+            "name": "repair-missing-batches-deep",
+            "description": "Detect and repair missing batch files after findings-creator-deep. Same repair logic as findings-creator."
+          }
+        ]
+      },
+      {
         "matcher": "batch-creator",
         "hooks": [
           {
@@ -102,6 +115,19 @@
             "enabled": true,
             "name": "verify-batch-creator-output",
             "description": "Anti-hallucination verification: validates batch-creator output against filesystem reality"
+          }
+        ]
+      },
+      {
+        "matcher": "claim-revisor",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/review-loop-guard.sh",
+            "timeout": 10,
+            "enabled": true,
+            "name": "review-loop-guard",
+            "description": "Enforce maximum revision iterations (2). Reads .metadata/revision-log.json and blocks if limit exceeded."
           }
         ]
       }

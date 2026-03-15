@@ -46,6 +46,16 @@ For WHAT definitions (dimensions, frameworks), see [research-types/](research-ty
 | All types | LLM knowledge (supplementary) | `findings-creator-llm` |
 | All types | File-based RAG (if PDF store available) | `findings-creator-file` |
 
+### Deep Exploration Mode
+
+| Condition | Flag | Agent |
+|-----------|------|-------|
+| DOK-4 (auto) | `deep_exploration: true` | `findings-creator-deep` |
+| DOK 1-3 (default) | `deep_exploration: false` | `findings-creator` |
+| User override | Explicit request | Whichever was requested |
+
+The `deep_exploration` flag is stored in `.metadata/sprint-log.json` by research-plan (Phase 1). It controls agent selection in findings-sources (Phase 1 step 3). When true, `findings-creator-deep` performs recursive tree exploration within each question — decomposing into 2-3 sub-aspects with decreasing breadth and up to 3 levels of follow-up queries. Deep findings are standard finding entities that flow through claims and synthesis like any other finding.
+
 ---
 
 ## Synthesis Arc Mapping

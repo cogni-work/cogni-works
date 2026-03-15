@@ -15,6 +15,11 @@ research-plan → findings-sources → claims → synthesis
 | `findings-sources` | Parallel web + LLM research → enriched source extraction | 04-05 |
 | `claims` | Claim extraction + three-layer verification | 06 |
 | `synthesis` | Narrative storytelling via cogni-narrative | insight-summary.md |
+| `research-story` | Synthesis → citation bridge → arc → narrative → polish → derivatives | synthesis/ |
+
+## Story Pipeline
+
+The `research-story` skill transforms completed research synthesis into a polished executive narrative. It chains: synthesis check → citation bridge (with source entity enrichment) → arc selection → cogni-narrative → quality gate → cogni-copywriting → optional derivatives. Requires synthesis to be complete before running. See `skills/research-story/SKILL.md` for the full 7-phase workflow.
 
 ## Research Types
 
@@ -42,6 +47,7 @@ research-plan → findings-sources → claims → synthesis
 
 ## Export
 
+- `export-report` — structured analytical report (no narrative arc)
 - `export-html-report` — interactive HTML with verification badges
 - `export-pdf-report` — formal A4 PDF with verification badges
 - `export-rag` — flat markdown for RAG / Claude Projects

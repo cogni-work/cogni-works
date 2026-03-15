@@ -140,7 +140,9 @@ cogni-gpt-researcher/
 
 ## Attribution
 
-- **GPT-Researcher** by [Assaf Elovic / Tavily](https://github.com/assafelovic/gpt-researcher) — multi-agent research architecture that inspired this plugin's parallel research and iterative review design.
+This plugin is an **independent reimplementation** — no source code from the original projects is used.
+
+- **GPT-Researcher** by [Assaf Elovic / Tavily](https://github.com/assafelovic/gpt-researcher) (Apache-2.0) — multi-agent research architecture that inspired this plugin's parallel research and iterative review design.
 - **STORM** by [Stanford OVAL](https://arxiv.org/abs/2402.14207) — perspective-driven article generation framework. GPT-Researcher's editorial workflow builds on STORM's multi-perspective synthesis approach.
 
 ## License

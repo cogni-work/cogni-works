@@ -1,12 +1,25 @@
 {
   "name": "cogni-gpt-researcher",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Multi-agent research report generator. STORM-inspired editorial workflow with parallel section research, claims-verified review loops, and three report types (basic, detailed, deep). Integrates with cogni-claims for source verification. Native Claude Code implementation using WebSearch + WebFetch.",
   "author": {
     "name": "Stephan de Haas",
     "email": "stephan@cogni-work.ai"
   },
   "license": "AGPL-3.0-only",
+  "acknowledgments": [
+    {
+      "name": "GPT-Researcher",
+      "url": "https://github.com/assafelovic/gpt-researcher",
+      "license": "Apache-2.0",
+      "relation": "architectural inspiration"
+    },
+    {
+      "name": "STORM",
+      "url": "https://arxiv.org/abs/2402.14207",
+      "relation": "editorial workflow inspiration"
+    }
+  ],
   "keywords": [
     "research",
     "report",

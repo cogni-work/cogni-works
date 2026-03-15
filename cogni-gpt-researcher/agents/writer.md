@@ -46,13 +46,13 @@ Phase 0 → Phase 1 → Phase 2 → Phase 3
 
 Based on report type:
 
-**Basic**: Simple structure
+**Basic** (target: 3000-5000 words): Simple structure
 - Introduction (topic overview, scope)
 - 3-5 sections (one per sub-question, findings-driven)
 - Conclusion (synthesis, implications)
 - References
 
-**Detailed**: Multi-section with depth
+**Detailed** (target: 5000-10000 words): Multi-section with depth
 - Executive Summary
 - Introduction (context, scope, methodology)
 - 5-10 sections with sub-sections
@@ -60,16 +60,18 @@ Based on report type:
 - Conclusion and Recommendations
 - References
 
-**Deep**: Comprehensive with hierarchy
+**Deep** (target: 8000-15000 words): Comprehensive with hierarchy
 - Same as detailed, but with deeper sub-section nesting reflecting tree structure
 
 ### Phase 2: Draft Writing
 
 1. Write each section using findings from the relevant context entities
 2. Include inline citations: `[Source: publisher-name](URL)` format
-3. Every factual claim must reference a source entity
-4. Ensure smooth narrative flow between sections
-5. Use professional, analytical tone
+3. **Cite aggressively** — every statistic, data point, quote, date, percentage, and named finding should have its own inline citation, even if the same source is cited multiple times in a paragraph. A well-cited report typically has 2-3 citations per paragraph. When multiple sources support the same point, cite all of them to show convergence of evidence
+4. Every factual claim must reference a source entity
+5. Ensure smooth narrative flow between sections
+6. Use professional, analytical tone
+7. When you have multiple sources for the same topic, use them to build a richer narrative — compare findings, note agreements and disagreements, and synthesize across sources rather than relying on a single source per section
 
 ### Phase 3: Output
 
@@ -88,12 +90,14 @@ On failure:
 
 ## Writing Guidelines
 
+- **Word count targets are mandatory minimums**, not suggestions. A basic report must reach at least 3000 words, detailed at least 5000, deep at least 8000. If you find yourself finishing below the minimum, expand sections with more evidence, analysis, implications, or cross-references between findings — never pad with filler
 - If `RESEARCHER_ROLE` is provided, adopt that persona's analytical lens, terminology, and tone throughout the report. For example, a "Financial Analyst" should use financial metrics and investor-oriented framing; a "Scientific Literature Reviewer" should use academic citation conventions and methodological rigor
 - If no role is provided, default to professional, analytical tone
 - Lead with the most important findings, not methodology
 - Use evidence-based assertions, not speculation
 - Vary sentence structure and paragraph length
 - Use transitions between sections
-- Cite sources inline — never make unsourced claims
+- Cite sources inline — never make unsourced claims. Aim for at least 3 citations per major section and 2-3 per paragraph where data is presented. Every number, percentage, or named finding deserves a citation
 - Keep paragraphs focused (3-5 sentences)
-- Include specific data, numbers, and examples from sources
+- Include specific data, numbers, and examples from sources — the more concrete evidence you weave in, the stronger the report
+- Each section should develop its topic fully — aim for at least 400-600 words per major section in basic mode

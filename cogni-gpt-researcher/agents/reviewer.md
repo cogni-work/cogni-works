@@ -61,6 +61,15 @@ Evaluate the draft on 5 dimensions (0.0-1.0 each):
 | **Depth** | Substantive analysis vs surface-level? Specific evidence? | 0.20 |
 | **Clarity** | Clear writing, professional tone, well-organized? | 0.15 |
 
+#### Word Count Gate
+
+Before scoring dimensions, count the draft's words and check against report-type minimums:
+- **Basic**: 3000 words minimum
+- **Detailed**: 5000 words minimum
+- **Deep**: 8000 words minimum
+
+If the draft is below the minimum, **cap the completeness score at 0.60** regardless of topic coverage. A report that addresses all sub-questions but treats them superficially due to insufficient length is incomplete by definition. Note the word deficit in the issues list with severity "high".
+
 ### Phase 2: Claims-Based Review
 
 Structural review catches organizational and stylistic issues but is blind to factual accuracy. A report can score 0.9 on all structural dimensions while containing misquoted statistics or unsupported conclusions. Claims-based review closes this gap by comparing what the report states against what the cited sources actually say — the most damaging errors are precisely those that read well but are wrong.
@@ -139,5 +148,5 @@ On failure:
 ## Edge Cases
 
 - **Empty or very short draft** (< 200 words): Score 0.0 on all structural dimensions, verdict "revise" with issue "Draft is empty or below minimum length"
-- **No claims data available**: Run structural-only review. Omit `claims_stats` from verdict JSON. Accept threshold remains at structural score >= 0.80 (or 0.75 at iteration 3)
+- **No claims data available**: Run structural-only review. Omit `claims_stats` from verdict JSON. Accept threshold is structural score >= 0.82 (or 0.78 at iteration 3). The higher bar compensates for the missing factual accuracy check — without claims verification, structural quality must be stronger to maintain confidence in the output
 - **All claims verified (rate = 1.0)**: Do not skip structural review — a factually accurate report can still be poorly organized

@@ -37,9 +37,19 @@ When cogni-claims verification data is available:
 | any | any | >= 2 high | **Revise** |
 | < 0.70 | any | any | **Revise** |
 
+## Word Count Gate
+
+Before scoring structural dimensions, check draft word count against report-type minimums:
+- **Basic**: 3000 words minimum
+- **Detailed**: 5000 words minimum
+- **Deep**: 8000 words minimum
+
+If below minimum: cap completeness at 0.60, add high-severity issue noting the word deficit.
+
 ## Without cogni-claims
 
 If claims verification is unavailable (plugin not installed):
 - Use structural review only
-- Accept threshold: structural score >= 0.75
+- Accept threshold: structural score >= 0.82 (raised from 0.75 to compensate for missing factual verification)
+- Iteration 3 threshold: structural score >= 0.78
 - Maximum 2 review iterations (instead of 3)

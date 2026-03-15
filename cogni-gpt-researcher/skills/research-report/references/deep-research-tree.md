@@ -74,7 +74,7 @@ Batch 1: branches 1, 2, 3, 4  (4 agents)
 Batch 2: branch 5             (1 agent, if needed)
 ```
 
-Wait for each batch to complete before starting the next. Deep-researchers use sonnet (not haiku) because they perform internal reasoning loops.
+Wait for each batch to complete before starting the next. All researchers use sonnet for richer findings extraction.
 
 ## Context Tree to Flat Report
 

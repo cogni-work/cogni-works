@@ -83,13 +83,13 @@ cogni-gpt-researcher-<slug>/
 
 | Type | Sub-questions | Agents | Words | Use case |
 |------|--------------|--------|-------|----------|
-| Basic | 3–5 | 5–7 | 3,000–5,000 | Quick overview, single topic |
+| Basic | 5 | 7–9 | 3,000–5,000 | Quick overview, single topic |
 | Detailed | 5–10 | 10–15 | 5,000–10,000 | Multi-section report with outline |
 | Deep | 10–20 (tree) | 15–25 | 8,000–15,000 | Recursive exploration, maximum depth |
 
 ## How it works
 
-The **research-report** skill orchestrates six phases. In Phase 0, it initializes the project workspace and runs preliminary web searches to ground the research. In Phase 1, it decomposes the topic into orthogonal sub-questions with search guidance for each. Phase 2 dispatches **section-researcher** agents (haiku, for speed) in batches of 4–5 — each agent runs 3–5 web searches, fetches top results, curates sources with quality scores, and creates context + source entities. For deep reports, **deep-researcher** agents (sonnet) perform recursive tree exploration instead, pursuing follow-up questions at decreasing breadth per depth level.
+The **research-report** skill orchestrates six phases. In Phase 0, it initializes the project workspace and runs preliminary web searches to ground the research. In Phase 1, it decomposes the topic into orthogonal sub-questions with search guidance for each. Phase 2 dispatches **section-researcher** agents (sonnet) in batches of 4–5 — each agent runs 5–7 web searches, fetches top results, curates sources with quality scores, and creates context + source entities. For deep reports, **deep-researcher** agents (sonnet) perform recursive tree exploration instead, pursuing follow-up questions at decreasing breadth per depth level.
 
 Phase 3 aggregates all contexts, deduplicates sources, and enforces a 25,000-word context limit. Phase 4 hands the aggregated context to the **writer** agent (sonnet), which produces a structured draft with inline citations. Phase 5 runs the claims-verified review loop: the **claim-extractor** identifies 10–30 verifiable claims, submits them to cogni-claims for source URL verification, then the **reviewer** scores the draft on five structural dimensions and flags factual deviations. If the score is below threshold or critical deviations exist, the **revisor** incorporates feedback and the loop repeats (max 3 iterations). Phase 6 copies the accepted draft to `output/report.md`.
 
@@ -101,7 +101,7 @@ If cogni-claims is unavailable, the review loop degrades gracefully to structura
 |-----------|------|--------------|
 | `research-report` | skill | Main orchestrator — six-phase pipeline from topic to verified report |
 | `export-report` | skill | Export finalized report to HTML, PDF, or Markdown |
-| `section-researcher` | agent (haiku) | Parallel web researcher for a single sub-question |
+| `section-researcher` | agent (sonnet) | Parallel web researcher for a single sub-question |
 | `deep-researcher` | agent (sonnet) | Recursive tree explorer for deep research mode |
 | `writer` | agent (sonnet) | Compiles aggregated context into a structured, cited report |
 | `claim-extractor` | agent (sonnet) | Extracts 10–30 verifiable claims from draft for verification |

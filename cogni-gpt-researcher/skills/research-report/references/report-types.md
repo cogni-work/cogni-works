@@ -5,12 +5,12 @@
 **When**: User asks for a "research report", "overview", or doesn't specify type.
 
 **Structure**:
-- 3-5 sub-questions, single-pass parallel research
+- 5 sub-questions, single-pass parallel research
 - 3000-5000 words final report
 - Simple structure: intro → sections → conclusion → references
-- 1 review iteration typical
+- 1-2 review iterations typical
 
-**Agent cost**: ~5-7 agent spawns (3-5 researchers + 1 writer + 1-2 review cycle)
+**Agent cost**: ~7-9 agent spawns (5 researchers + 1 writer + 1-3 review cycle)
 
 ## Detailed Report
 

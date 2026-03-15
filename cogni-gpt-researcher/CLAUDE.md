@@ -8,7 +8,7 @@ cogni-gpt-researcher is a multi-agent research report generator inspired by GPT-
 
 ```
 research-report skill (orchestrator)
-  → section-researcher agents (parallel web research, haiku)
+  → section-researcher agents (parallel web research, sonnet)
   → writer agent (report compilation, sonnet)
   → claim-extractor agent (draft → claims, sonnet)
   → cogni-claims integration (submit + verify)
@@ -38,13 +38,13 @@ Entities are ONLY created via `scripts/create-entity.sh` (bash wrapper that dele
 - **cogni-copywriting** — optional executive polish
 - **cogni-visual** — optional presentation generation
 
-## Model Strategy (3-tier)
+## Model Strategy
 
 | Tier | Model | Used By |
 |------|-------|---------|
-| FAST | haiku | section-researcher (parallel web search) |
-| SMART | sonnet | writer, reviewer, revisor, claim-extractor |
-| STRATEGIC | sonnet (skill context) | Sub-question generation, orchestration |
+| RESEARCH | sonnet | section-researcher, deep-researcher (parallel web search) |
+| SYNTHESIS | sonnet | writer, reviewer, revisor, claim-extractor |
+| ORCHESTRATION | sonnet (skill context) | Sub-question generation, orchestration |
 
 ## Key Conventions
 

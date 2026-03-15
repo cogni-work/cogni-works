@@ -11,7 +11,7 @@ description: |
   assistant: "Invoke section-researcher to execute web searches and create context/source entities."
   <commentary>Each sub-question gets its own section-researcher instance. Results are compact JSON to preserve orchestrator context.</commentary>
   </example>
-model: haiku
+model: sonnet
 tools: ["WebSearch", "WebFetch", "Read", "Write", "Bash", "Glob"]
 ---
 
@@ -43,15 +43,16 @@ Phase 0 → Phase 1 → Phase 2 → Phase 3 → Phase 4
 
 ### Phase 1: Search Query Generation
 
-1. From the sub-question `query` and optional `search_guidance`, generate 3-5 diverse WebSearch queries
-2. Vary query formulations: factual, analytical, recent developments, expert perspectives
-3. Do NOT include date filters — WebSearch handles recency
+1. From the sub-question `query` and optional `search_guidance`, generate 5-7 diverse WebSearch queries
+2. Vary query formulations: factual, analytical, recent developments, expert perspectives, comparative, quantitative/data-focused
+3. Make queries specific to YOUR sub-question's unique angle — avoid generic topic-level queries that other researchers for sibling sub-questions would also use. For example, if your sub-question is about "regulatory advantages", search for specific regulations by name, not just "European streaming competition"
+4. Do NOT include date filters — WebSearch handles recency
 
 ### Phase 2: Web Search + Fetch
 
 1. Execute all WebSearch queries in parallel (single message, multiple tool calls)
-2. From combined results, select the 5-8 most relevant and diverse URLs
-3. For top 3-5 URLs: use WebFetch to get full page content
+2. From combined results, select the 8-12 most relevant and diverse URLs. Prioritize **publisher diversity** — avoid selecting multiple pages from the same domain when alternatives exist. A mix of academic, industry, news, and government sources makes the final report more credible
+3. For top 5-8 URLs: use WebFetch to get full page content
 4. For remaining URLs: use WebSearch snippet content only
 5. Track: URL, title, publisher, fetch method, content summary
 

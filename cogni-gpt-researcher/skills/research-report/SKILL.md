@@ -17,8 +17,8 @@ description: |
 **User**: "Write a research report on quantum computing's impact on cryptography"
 
 **Result**: A 3000-5000 word report with inline citations, produced via:
-1. Topic decomposition into 3-5 sub-questions
-2. Parallel web research (haiku agents, one per sub-question)
+1. Topic decomposition into 5 sub-questions
+2. Parallel web research (sonnet agents, one per sub-question)
 3. Context aggregation and source deduplication
 4. Report compilation (sonnet writer agent)
 5. Claims extraction → cogni-claims verification → evidence-based review
@@ -33,7 +33,7 @@ description: |
 
 | Type | Trigger | Sub-Questions | Depth | Use Case |
 |------|---------|--------------|-------|----------|
-| **basic** | "research report on X" | 3-5 | Single-pass | Quick overview |
+| **basic** | "research report on X" | 5 | Single-pass | Quick overview |
 | **detailed** | "detailed research report on X" | 5-10 | Multi-section | Comprehensive analysis |
 | **deep** | "deep research on X" | 10-20 (tree) | Recursive | Maximum depth + breadth |
 
@@ -88,10 +88,10 @@ Use the preliminary search context from Phase 0.5 to inform sub-question generat
 
 Generate sub-questions based on report type:
 
-**Basic (3-5 sub-questions)**:
-1. Decompose the topic into 3-5 orthogonal research questions
+**Basic (5 sub-questions)**:
+1. Decompose the topic into exactly 5 orthogonal research questions — more sub-questions mean more parallel researchers, which means more diverse sources and richer context for the writer
 2. Each question should target a distinct aspect of the topic
-3. Include: background/context, current state, key developments, implications/outlook
+3. Include: background/context, current state, key developments, challenges/limitations, implications/outlook
 
 **Detailed (5-10 section outline)**:
 1. Generate a multi-section outline first
@@ -115,7 +115,7 @@ bash "${CLAUDE_PLUGIN_ROOT}/scripts/create-entity.sh" \
 
 ### Phase 2: Parallel Web Research
 
-Parallel execution is the key throughput optimization — a basic report with 5 sub-questions completes research in the time of one. Batching at 4-5 agents prevents overwhelming the host with concurrent WebFetch requests and avoids rate limiting from search providers. Each agent runs independently, so a failure in one does not block the others.
+Parallel execution is the key throughput optimization — a basic report with 5 sub-questions completes research in the time of one. All researchers use sonnet for richer source extraction and better findings quality. Batching at 4-5 agents prevents overwhelming the host with concurrent WebFetch requests and avoids rate limiting from search providers. Each agent runs independently, so a failure in one does not block the others.
 
 Spawn section-researcher agents in parallel batches (max 5 per batch):
 

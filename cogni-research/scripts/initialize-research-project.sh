@@ -358,6 +358,7 @@ jq -n \
         sprints: [],
         current_sprint: 0,
         total_entities_cumulative: 0,
+        planning_complete: false,
         discovery_complete: false,
         enrichment_complete: false,
         part2_complete: false

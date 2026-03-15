@@ -61,8 +61,8 @@ Phase 0 → Phase 1 → Phase 2 → Phase 3 → Phase 4 → Phase 5 → Phase 6
 - Classify topic complexity using Webb's Depth of Knowledge (DOK) with extended thinking
 - DOK 1 (Recall): 2-3 dimensions, 8-12 questions
 - DOK 2 (Skill/Concept): 3-4 dimensions, 12-20 questions
-- DOK 3 (Strategic Thinking): 4-6 dimensions, 16-30 questions
-- DOK 4 (Extended Thinking): 6-10 dimensions, 24-50 questions
+- DOK 3 (Strategic Thinking): 5-7 dimensions, 25-35 questions
+- DOK 4 (Extended Thinking): 8-10 dimensions, 40-50 questions
 
 **Lean-Canvas mode:**
 - Load 9 fixed canvas blocks, detect business stage focus
@@ -147,6 +147,17 @@ Return compact JSON:
 ### PICOT Framework
 - Structures each question with Population, Intervention, Comparison, Outcome, Temporal components
 - Ensures questions are specific, measurable, and answerable through research
+
+**Required frontmatter schema** — always use flat keys (not nested):
+```yaml
+picot_population: "..."
+picot_intervention: "..."
+picot_comparison: "..."
+picot_outcome: "..."
+picot_temporal: "..."   # Always use a year or year range (e.g., "2024-2026"), not phrases like "current market"
+```
+
+Do not use a nested `picot:` key. The flat `picot_*` format is required for downstream batch-creator compatibility.
 
 ### Webb's DOK (Generic mode only)
 - Determines topic complexity to calibrate dimension count and question depth

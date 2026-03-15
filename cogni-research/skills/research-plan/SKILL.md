@@ -46,16 +46,12 @@ If the workspace is missing, ask the user where to create the project or default
 
 ## Resumption
 
-If a previous run was interrupted, check state before re-executing phases:
+If working in a project directory that already has files from a previous run, check what exists before re-executing phases:
 
-```bash
-bash ${CLAUDE_PLUGIN_ROOT}/scripts/scan-resumption-state.sh --phase planning --project-path <path>
-```
-
-The script returns a JSON recommendation:
-- **FULL_RUN** — no prior progress. Start from Phase 0.
-- **RESUME** — some phases completed. Skip them, resume from the first incomplete one.
-- **COMPLETE** — planning already finished. Proceed to findings-sources.
+1. Check `00-initial-question/data/` — if it has files, Phase 0-1 are done.
+2. Check `01-research-dimensions/data/` and `02-refined-questions/data/` — if populated, Phase 2 is done.
+3. Check `03-query-batches/data/` — if populated and `planning_complete: true` in sprint-log, planning is fully done. Proceed to findings-sources.
+4. If `.metadata/sprint-log.json` exists but `planning_complete` is false or missing, resume from the first incomplete phase.
 
 ## Workflow
 
@@ -66,7 +62,7 @@ Research type determines the entire downstream dimension strategy — getting it
 1. **Detect research type** from user's request. If ambiguous, ask via AskUserQuestion.
    For routing details see `${CLAUDE_PLUGIN_ROOT}/references/research-type-routing.md`.
 
-2. **Determine output language** (en/de): ask user or detect from workspace config.
+2. **Determine output language** (en/de): ask user or detect from workspace config. Default to `en` if no preference or config exists.
 
 3. **Initialize project** via `initialize-research-project.sh`.
    For script arguments and output format see [references/script-reference.md](references/script-reference.md).
@@ -90,16 +86,37 @@ This is the highest-leverage phase. A vague question cascades into vague dimensi
 3. **Create initial question entity** via `create-entity.sh --entity-type 00-initial-question`.
    For frontmatter fields see [references/script-reference.md](references/script-reference.md).
 
-4. **Confirm with user** before proceeding. Present: refined question, DOK level, research type.
+4. **Confirm with user** before proceeding. Present a summary using this format:
+
+   ```
+   **Research Plan Summary**
+   - Research type: <generic|lean-canvas|b2b-ict-portfolio>
+   - DOK level: <1-4> (<Recall|Skills|Strategic|Extended>)
+   - Language: <en|de>
+   - Refined question: "<the refined question>"
+   - Expected output: ~<N> dimensions, ~<M> questions, ~<M×5> search queries
+
+   Shall I proceed with dimensional planning?
+   ```
 
 ### Phase 2: Dimensional Planning
 
 Dimensions partition the research topic into independent, non-overlapping areas. MECE (Mutually Exclusive, Collectively Exhaustive) dimensions ensure complete coverage without redundant search work — overlapping dimensions waste agent time searching for the same information twice, while gaps create blind spots in the final synthesis.
 
-1. **Invoke dimension-planner agent** via Task tool with: project path, research_type, DOK level, initial question path.
-   The agent creates 2-10 dimensions in `01-research-dimensions/data/` and generates 8-50 refined questions in `02-refined-questions/data/`.
+1. **Route by research type:**
+   - **generic / lean-canvas:** Invoke dimension-planner agent via Task tool with: project path, research_type, DOK level, initial question path.
+   - **b2b-ict-portfolio:** Uses pre-defined portfolio dimensions from the cogni-portfolio plugin. If cogni-portfolio is not installed, fall back to generic with DOK-3 and inform the user.
 
-2. **Verify output:** minimum 2 dimensions, each with at least 2 refined questions.
+2. **Verify output against DOK bounds:**
+
+   | DOK | Dimensions | Questions/Dim (min) | Total Questions |
+   |-----|-----------|---------------------|-----------------|
+   | 1   | 2-3       | 4                   | 8-12            |
+   | 2   | 3-4       | 5                   | 15-20           |
+   | 3   | 5-7       | 5                   | 25-35           |
+   | 4   | 8-10      | 5                   | 40-50           |
+
+   Check: dimension count is within DOK range, each dimension has at least the minimum questions, total question count is within DOK range. If any check fails, re-run dimension-planner with adjusted guidance.
 
 3. **Present dimensions to user** for review. If the user rejects them:
    - Ask which dimensions to add, remove, or rename
@@ -110,24 +127,50 @@ Dimensions partition the research topic into independent, non-overlapping areas.
 
 Each refined question becomes one self-contained query batch, enabling findings-sources to execute them in parallel across independent agents.
 
-1. **Invoke batch-creator agent** via Task tool with: project path, list of refined questions.
-   The agent creates one query batch per refined question in `03-query-batches/data/`, each containing optimized search configurations.
+1. **Create batches** — choose the approach based on DOK level:
 
-2. **Verify output:** one batch per refined question, each with valid query strings.
+   **DOK-1 (fast path):** For simple retrieval research (8-12 questions), create batches inline instead of spawning the batch-creator agent. For each question, generate 3-4 short keyword queries (general + market + industry profiles) and create the batch entity via `create-entity.sh --entity-type 03-query-batches`. This avoids the agent startup overhead that dominates when question count is low — users asking "just the facts" expect fast results.
 
-3. **Mark planning complete:** update sprint-log `planning_complete = true`.
+   **DOK 2-4 (full path):** Invoke batch-creator agent via Task tool with: project path, list of refined questions. The agent creates one query batch per refined question in `03-query-batches/data/`, each containing 4-7 optimized search configurations with adaptive profile selection.
 
-4. **Report to user:** dimension count, question count, batch count, and that the next step is running `findings-sources`.
+2. **Verify output:**
+   - Batch count equals refined question count exactly (no missing, no orphans)
+   - Each batch contains 3-7 search configurations (3-4 for DOK-1, 4-7 for DOK 2+)
+   - Each batch has valid query strings (non-empty, no placeholder text)
+
+3. **Mark planning complete** by updating the sprint-log:
+
+   ```bash
+   cd <project-path>
+   jq '.planning_complete = true | .updated_at = (now | todate)' .metadata/sprint-log.json > .metadata/sprint-log.tmp && mv .metadata/sprint-log.tmp .metadata/sprint-log.json
+   ```
+
+4. **Report to user** with a structured completion summary:
+
+   ```
+   **Research Planning Complete**
+   - Refined question: "<the refined question>"
+   - Dimensions: <N> (<list of dimension names>)
+   - Questions: <M> across <N> dimensions
+   - Query batches: <M> batches, <total configs> search configurations
+   - Sample questions:
+     1. "<first question from first dimension>"
+     2. "<first question from middle dimension>"
+     3. "<first question from last dimension>"
+
+   Next step: run `findings-sources` to execute parallel web search.
+   ```
 
 ## Error Recovery
 
 | Scenario | What to Do |
 |----------|------------|
 | dimension-planner returns < 2 dimensions | Re-examine the question — consider broadening scope or raising DOK level. Re-run dimension-planner. |
+| Dimension/question count outside DOK bounds | Adjust DOK level or re-run dimension-planner with explicit count guidance. |
 | User rejects dimensions | Ask which to add/remove/rename. Provide coverage rationale. Re-run with adjusted guidance. |
 | batch-creator fails for some questions | Check `.logs/batch-creator/` for details. Re-run for failed questions only. |
 | Project init script fails | Verify `CLAUDE_PLUGIN_ROOT` is set and directory is writable. |
-| Resumption detected | Run `scan-resumption-state.sh --phase planning` to identify completed phases. Skip them. |
+| b2b-ict-portfolio without cogni-portfolio | Fall back to generic with DOK-3. Inform user that full portfolio taxonomy requires the cogni-portfolio plugin. |
 
 ## Completion
 

@@ -63,15 +63,41 @@ For each question, generate 4-7 search configurations:
 
 1. **Facet analysis**: Extract searchable facets from PICOT dimensions
 2. **Complexity classification**: Simple (1-2 facets), Moderate (3-4), Complex (5+)
-3. **Profile selection**: Choose from general, localized, industry, academic, trade, population, outcome
-4. **Query generation**: Build optimized search strings per profile
+3. **Profile selection**: Choose profiles that match the question's domain and DOK level. Not every question needs the same profiles — adapt to what will actually return useful results:
+   - `general` — broad web search, always include
+   - `industry` — trade press and analyst reports (e.g., reuters.com, ft.com, domain-specific trade outlets)
+   - `academic` — scholarly databases (arxiv.org, ieee.org, sciencedirect.com, scholar.google.com). Only include when the question involves technical, scientific, or peer-reviewed evidence. Do not use for market sizing or business strategy questions. Never map consulting firms (McKinsey, BCG) to this profile — those belong under `industry`.
+   - `market` — market research firms (statista.com, grandviewresearch.com, marketsandmarkets.com). Best for DOK-1 sizing and segmentation questions.
+   - `trade` — industry-specific publications and associations
+   - `localized` — region-specific sources when the question has geographic scope
+   - `outcome` — sources focused on measurable results, case studies, benchmarks
+
+   Skip profiles that won't help. A DOK-1 market-sizing question needs `general + market + industry` (3 profiles), not 5. A DOK-3 regulatory analysis question might need `general + industry + localized + trade` (4 profiles). Match the profile set to the question, not the other way around.
+
+4. **Query generation**: Write queries as a human would type them into a search engine — short, keyword-rich phrases (5-15 words). Do NOT concatenate PICOT field values verbatim. Instead, distill the question into the most effective search terms:
+
+   **Bad** (mechanical PICOT concatenation):
+   `"Traditional ICE Tier-1 suppliers in Europe Product portfolio pivot to BEV components 2023-2026"`
+
+   **Good** (natural keyword query):
+   `"European Tier-1 automotive suppliers BEV transition strategy 2024"`
+
+   **Bad** (full question text pasted as query):
+   `"What are the most effective go-to-market channels for selling AI-powered wafer inspection systems to semiconductor foundries in Taiwan and South Korea?"`
+
+   **Good** (distilled keywords):
+   `"semiconductor equipment sales channels Taiwan South Korea foundry"`
+
+   Each query in a batch should target a different angle or source type — avoid near-duplicate queries that would return the same results. Vary the keywords, not just the domain filter.
+
 5. **Bilingual strategy**: For non-English projects, generate both original + English queries
 6. **Alignment check**: Verify at least one query covers Intervention keywords, one covers Population
+7. **Deduplication check**: No word should appear twice in the same query string. If PICOT concatenation produces `"semiconductor inspection market market revenue"`, remove the duplicate.
 
 ### Phase 3: Batch Creation (Per Question)
 
 1. Generate UUID-based config IDs for each search configuration
-2. Build batch entity with frontmatter: `search_configs[]`, `picot`, `temporal_constraints`, `question_ref`
+2. Build batch entity with frontmatter: `search_configs[]`, `picot_population`, `picot_intervention`, `picot_comparison`, `picot_outcome`, `picot_temporal`, `temporal_constraints`, `question_ref`. Always copy the flat `picot_*` fields from the source question into the batch entity — this allows downstream consumers to read PICOT context without following the question_ref link.
 3. Create batch entity via `create-entity.sh`:
    - Entity type: `03-query-batches`
    - Entity ID: `{question_id}-batch`

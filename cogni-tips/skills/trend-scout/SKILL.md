@@ -217,11 +217,10 @@ To query the log file directly:
 jq '.raw_signals_before_dedup[] | {dimension, signal, keywords, source}' .logs/web-research-raw.json
 ```
 
-**Convert to WEB_RESEARCH_CONTEXT:**
+**Set availability flag:**
 
-- Expand abbreviated fields from agent response (d→dimension, n→signal_name, k→keywords, u→source_url, f→freshness, a→authority_score, t→source_type, i→indicator_type, lt→lead_time)
-- Group by dimension for Phase 2 consumption
 - Set `WEB_RESEARCH_AVAILABLE = (response.ok == true)`
+- Do NOT expand or group signals — the trend-generator agent self-loads them from disk
 
 **Persist compact response for downstream fallback:**
 
@@ -233,7 +232,7 @@ This file serves as a fallback for `trend-report` when `.logs/web-research-raw.j
 **Required outputs:**
 
 - WEB_RESEARCH_AVAILABLE flag set
-- WEB_RESEARCH_CONTEXT with signals by dimension (including source_type and authority scores)
+- Signal data persisted to disk (agent will self-load from `.logs/web-research-raw.json` or `phase1-research-summary.json`)
 
 **Fallback:** If agent returns `{"ok": false}`, proceed with training-only generation (warning logged).
 
@@ -258,7 +257,6 @@ Task:
     RESEARCH_TOPIC: {{RESEARCH_TOPIC}}
     PROJECT_LANGUAGE: {{PROJECT_LANGUAGE}}
     WEB_RESEARCH_AVAILABLE: {{WEB_RESEARCH_AVAILABLE}}
-    WEB_RESEARCH_SIGNALS: {{WEB_RESEARCH_CONTEXT}}
 ```
 
 **Agent responsibilities:**

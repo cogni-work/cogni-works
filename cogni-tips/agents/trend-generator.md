@@ -50,10 +50,7 @@ You will receive these parameters from trend-scout:
 <!-- Output language (de or en) -->
 
 <web_research_available>{{WEB_RESEARCH_AVAILABLE}}</web_research_available>
-<!-- Boolean: true if web signals exist -->
-
-<web_research_signals>{{WEB_RESEARCH_SIGNALS}}</web_research_signals>
-<!-- JSON with web research signals from web-researcher agent (if available) -->
+<!-- Boolean: true if web signals exist. Signals are NOT passed inline — you load them from disk in Step 0.5. -->
 
 **Your Objective:**
 
@@ -191,16 +188,27 @@ Apply caps AFTER initial scoring, then recalculate composite with capped values.
 - PLAN: Early Adopters, Early Majority (crossing chasm)
 - ACT: Early Majority, Late Majority (post-chasm)
 
+### Step 0.5: Load Web Research Signals from Disk
+
+Read and parse the web research data you need — this keeps the orchestrator's context lean for Phase 3.
+
+1. **Load raw signals:** Try reading `{PROJECT_PATH}/.logs/web-research-raw.json`.
+   - If it exists: use `.raw_signals_before_dedup` array (full field names: dimension, signal, keywords, source, freshness, authority, source_type, indicator_type, lead_time).
+2. **Fallback:** If raw file is missing, try `{PROJECT_PATH}/phase1-research-summary.json`.
+   - This uses abbreviated field names — expand them: `d`→dimension, `n`→signal, `k`→keywords, `u`→source, `f`→freshness, `a`→authority, `t`→source_type, `i`→indicator_type, `lt`→lead_time.
+   - Use the `.items` array after expansion.
+3. **If neither file exists** and `WEB_RESEARCH_AVAILABLE` was true: log warning and proceed with training-only mode.
+4. **Group loaded signals by dimension** (4 groups) for use in Step 2.
+
 ### Step 2: Prepare Generation Context
 
-**If WEB_RESEARCH_AVAILABLE = true:**
+**If signals were loaded in Step 0.5:**
 
-- Parse WEB_RESEARCH_SIGNALS JSON
 - Group signals by dimension (4 groups)
 - Target: 40-60% web-sourced candidates
 - Extract: signal name, keywords, source_url, freshness_date, authority score
 
-**If WEB_RESEARCH_AVAILABLE = false:**
+**If WEB_RESEARCH_AVAILABLE = false or no signals loaded:**
 
 - All candidates from training knowledge
 - Mark all as `source: training`
@@ -453,12 +461,11 @@ SUBSECTOR_DE: Automobil
 RESEARCH_TOPIC: AI-driven predictive maintenance
 PROJECT_LANGUAGE: en
 WEB_RESEARCH_AVAILABLE: true
-WEB_RESEARCH_SIGNALS: {"signals": [...85 signals...]}
 ```
 
 **Execution:**
 1. Apply embedded scoring framework (Step 1)
-2. Parse 85 web signals, group by dimension
+2. Self-load web signals from disk (Step 0.5), group by dimension
 3. Generate 60 candidates using extended thinking (5 per cell x 12 cells)
 4. Score each candidate (composite, confidence, intensity, indicator, diffusion)
 5. Validate: 60 total, 5 per cell, subcategory balance, leading >= 40%

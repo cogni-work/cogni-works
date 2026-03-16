@@ -267,17 +267,31 @@ If any `report-section-{dimension}.md` file is missing, log a WARNING. Phase 2 c
 
 **CRITICAL:** You MUST read [references/phase-2-strategic-themes.md](references/phase-2-strategic-themes.md) before starting Phase 2. The report is organized by **strategic themes** from `tips-value-model.json`, NOT by TIPS dimension. Do NOT simply concatenate the dimension section files from Phase 1 — those are intermediate artifacts for Phase 2.5, not the final report structure.
 
+**EXECUTION — YOU are the report writer.** Phase 2 is your core job as an LLM. Do it yourself, directly, step by step:
+
+- **No subagents.** Do not delegate any part of Phase 2 to an Agent. The JSON files are too large to pass in agent prompts and will cause parsing errors.
+- **No Python scripts.** Do not write Python/Node/shell scripts to generate report sections. You are a language model — writing strategic prose with woven evidence is exactly what you excel at. A script cannot produce the narrative quality this report requires.
+- **No intermediate analysis steps.** Do not generate "lookup documentation", "enriched statistics", or other intermediate artifacts. Go straight from reading the data to writing report sections.
+
+**How to execute Phase 2:**
+
+1. Read each `enriched-trends-{dimension}.json` one at a time using the Read tool. Extract the candidate_ref → evidence mappings you need and hold them in context.
+2. Read each `claims-{dimension}.json` one at a time. Extract claim_id → claim data.
+3. Read `tips-value-model.json` for themes, value_chains, solution_templates.
+4. With all data in context, write each report section directly using the Write tool — `report-header.md`, then each `report-theme-{theme_id}.md`, then `report-emerging-signals.md`, `report-portfolio.md`, `report-claims-registry.md`.
+5. Concatenate the files into `tips-trend-report.md` using cat.
+
 The report reads as a strategy document with 3-7 investment themes (each containing an investment thesis, value chain walkthroughs, and strategic actions), not a catalog of 60 trends sorted by dimension. Each theme section is written to a separate file `report-theme-{theme_id}.md`.
 
-**Summary of steps** (details in the reference):
+**Summary of steps** (details in the reference) — execute each step yourself using Read/Write tools, no agents or scripts:
 
-1. **Build lookups** — Read 4 `enriched-trends-{dimension}.json` + 4 `claims-{dimension}.json` → candidate_ref and claim_id lookups
-2. **Strategic executive summary** — Theme overview table, headline evidence, strategic posture → `report-header.md`
-3. **Theme sections** — One per theme with investment thesis, value chain walkthroughs, solution templates, strategic actions → `report-theme-{theme_id}.md`. **Quality gate per theme:** After writing each theme's investment thesis, check that it has ≥250 words and ≥3 inline citations. If it falls short, pull more evidence from the enriched-trends lookup for that theme's candidates and expand the narrative. The thesis is the CxO-facing argument — it must be substantive, not a summary paragraph.
-4. **Emerging signals** — Orphan candidates not in any theme → `report-emerging-signals.md`
-5. **Strategic portfolio view** — Theme-level metrics, horizon distribution, MECE validation → `report-portfolio.md`
-6. **Claims registry** — All claims with theme column → `report-claims-registry.md`
-7. **Assemble** — Concatenate: header + themes (ordered) + emerging signals + portfolio + claims → `tips-trend-report.md`
+1. **Build lookups** — Read 4 `enriched-trends-{dimension}.json` + 4 `claims-{dimension}.json` one file at a time via Read tool → hold candidate_ref and claim_id mappings in context
+2. **Write executive summary** — Write theme overview table, headline evidence, strategic posture directly to `report-header.md`
+3. **Write theme sections** — For each theme, write investment thesis, value chain walkthroughs, solution templates, strategic actions directly to `report-theme-{theme_id}.md`. **Quality gate per theme:** After writing each theme's investment thesis, check that it has ≥250 words and ≥3 inline citations. If it falls short, pull more evidence from the enriched-trends lookup for that theme's candidates and expand the narrative. The thesis is the CxO-facing argument — it must be substantive, not a summary paragraph.
+4. **Write emerging signals** — Orphan candidates not in any theme → write directly to `report-emerging-signals.md`
+5. **Write portfolio view** — Theme-level metrics, horizon distribution, MECE validation → write directly to `report-portfolio.md`
+6. **Write claims registry** — All claims with theme column → write directly to `report-claims-registry.md`
+7. **Assemble** — Concatenate with cat: header + themes (ordered) + emerging signals + portfolio + claims → `tips-trend-report.md`
 8. **Merge claims** → `tips-trend-report-claims.json`
 
 ---

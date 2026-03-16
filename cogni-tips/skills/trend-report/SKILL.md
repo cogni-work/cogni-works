@@ -125,22 +125,20 @@ Read [$CLAUDE_PLUGIN_ROOT/references/language-resolution.md]($CLAUDE_PLUGIN_ROOT
 #### Step 0.2: Load Input Data
 
 ```
-REQUIRED:
+REQUIRED (validate only — do NOT hold candidates or signals in context):
   {PROJECT_PATH}/.metadata/trend-scout-output.json
     → Extract: config.industry, config.research_topic
     → Extract: project_language (top-level, NOT config.language)
-    → Extract: tips_candidates.items (60 candidates)
+    → Validate: tips_candidates.total >= 60, execution.workflow_state == "agreed"
+    → Do NOT extract tips_candidates.items — agents read these themselves
 
-REQUIRED (value model):
+REQUIRED (value model — keep in context for Phase 2):
   {PROJECT_PATH}/tips-value-model.json
     → Check: themes[] array exists and has ≥1 entry
     → Extract: themes[], value_chains[], solution_templates[]
 
-OPTIONAL (raw web signals — try in order):
-  1. {PROJECT_PATH}/.logs/web-research-raw.json
-     → .raw_signals_before_dedup array (full field names)
-  2. FALLBACK: {PROJECT_PATH}/phase1-research-summary.json
-     → .items array (abbreviated fields: d→dimension, n→signal, k→keywords, u→source, f→freshness, a→authority, t→source_type, i→indicator_type, lt→lead_time)
+NOTE: Raw web signals (web-research-raw.json) are NOT loaded by the orchestrator.
+Phase 1 agents read and filter signals themselves — see trend-report-writer agent.
 ```
 
 Display to the user: `"{PHASE_0_THEMES_FOUND}"` (from i18n labels)
@@ -178,20 +176,7 @@ Read `tips-value-model.json` (already loaded in Step 0.2). Write `{PROJECT_PATH}
 | Value model exists | `tips-value-model.json` with themes[] | HALT: Run value-modeler first |
 | Config complete | industry, subsector, language present | HALT: Incomplete config |
 
-#### Step 0.4: Prepare Agent Inputs
-
-Group the 60 candidates by dimension (4 groups of 15):
-
-| Dimension Slug | TIPS Role | Expected Count |
-|----------------|-----------|----------------|
-| `externe-effekte` | T (Trends) | 15 |
-| `digitale-wertetreiber` | I (Implications) | 15 |
-| `neue-horizonte` | P (Possibilities) | 15 |
-| `digitales-fundament` | S (Solutions) | 15 |
-
-For each dimension, prepare: candidate list, matching raw web signals (filtered by dimension, or "none"), and shared config (industry en/de, subsector en/de, topic, language).
-
-#### Step 0.5: Ask User for Deliverable Language
+#### Step 0.4: Ask User for Deliverable Language
 
 The `project_language` from trend-scout-output.json is the **default** (falling back to workspace language if not set). Always confirm with the user. Present the question in the `INTERACTION_LANGUAGE`:
 
@@ -217,13 +202,13 @@ AskUserQuestion:
 
 The option matching the current default gets the arrow marker. Set `LANGUAGE` to the user's choice. Update `project_language` in trend-scout-output.json if changed.
 
-#### Step 0.6: Load i18n Labels
+#### Step 0.5: Load i18n Labels
 
 Read the labels file matching the chosen language:
 - English: [references/i18n/labels-en.md](references/i18n/labels-en.md)
 - German: [references/i18n/labels-de.md](references/i18n/labels-de.md)
 
-#### Step 0.7: Clean Up Stale Output Files
+#### Step 0.6: Clean Up Stale Output Files
 
 On re-runs, remove stale files to prevent mixing old and new content:
 
@@ -264,10 +249,10 @@ Per agent:
     Industry EN/DE: {INDUSTRY_EN} / {INDUSTRY_DE}
     Subsector EN/DE: {SUBSECTOR_EN} / {SUBSECTOR_DE}
     Topic: {TOPIC}
-    Candidates: {JSON array of ~13 candidates}
-    Raw Signals: {JSON array of matching web signals, or "none"}
     Labels: {relevant i18n labels}
 ```
+
+Agents self-load candidates and raw signals from disk using `PROJECT_PATH` — no need to pass data in the prompt. This keeps the orchestrator context lean for Phase 2.
 
 Dimensions: `externe-effekte` (T), `digitale-wertetreiber` (I), `neue-horizonte` (P), `digitales-fundament` (S).
 

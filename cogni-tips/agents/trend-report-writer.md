@@ -31,9 +31,9 @@ You receive these from trend-report:
 - **INDUSTRY_EN / INDUSTRY_DE** — Industry name in both languages
 - **SUBSECTOR_EN / SUBSECTOR_DE** — Subsector name in both languages
 - **TOPIC** — Research focus topic
-- **CANDIDATES** — JSON array of ~13 trend candidate objects
-- **RAW_SIGNALS** — JSON array of web signals for this dimension (fields: dimension, signal, keywords, source, freshness, authority, source_type, indicator_type, lead_time), or "none"
 - **LABELS** — JSON object with i18n labels for report headings
+
+Candidates and raw signals are NOT passed in the prompt — you load them from disk in Step 0.5.
 
 ## Workflow
 
@@ -41,7 +41,16 @@ You receive these from trend-report:
 
 Parse all parameters. Derive `{CURRENT_YEAR}` and `{PREVIOUS_YEAR}` from today's date.
 
-Group candidates by `horizon` field: `act` (expected: 5), `plan` (expected: 5), `observe` (expected: 3).
+### Step 0.5: Load Candidates and Raw Signals from Disk
+
+Read and filter the data you need — this keeps the orchestrator's context lean for Phase 2.
+
+1. **Load candidates:** Read `{PROJECT_PATH}/.metadata/trend-scout-output.json`. Filter `tips_candidates.items` to only entries matching your `{DIMENSION}`. You should get ~13-15 candidates.
+2. **Group by horizon:** Split your candidates by `horizon` field: `act` (expected: 5), `plan` (expected: 5), `observe` (expected: 3-5).
+3. **Load raw signals (optional):** Try reading `{PROJECT_PATH}/.logs/web-research-raw.json`.
+   - If it exists: filter `.raw_signals_before_dedup` to entries where `dimension` matches your `{DIMENSION}`. These are your pre-collected web signals (fields: dimension, signal, keywords, source, freshness, authority, source_type, indicator_type, lead_time).
+   - If it does not exist: try `{PROJECT_PATH}/phase1-research-summary.json` as fallback. This uses abbreviated field names — expand them: `d`→dimension, `n`→signal, `k`→keywords, `u`→source, `f`→freshness, `a`→authority, `t`→source_type, `i`→indicator_type, `lt`→lead_time. Filter by dimension after expansion.
+   - If neither file exists: set signals to "none" and proceed — all trends will use full WebSearch.
 
 ### Step 1: Evidence Enrichment (Signal-First Strategy)
 

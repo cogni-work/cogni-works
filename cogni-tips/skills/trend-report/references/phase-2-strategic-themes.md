@@ -4,7 +4,7 @@ Phase 2 assembles the report around strategic themes from `tips-value-model.json
 
 The core idea: themes are the skeleton, individual trends are the evidence woven into each theme's story. A CxO reads themes and investment decisions, not a catalog of 60 trends sorted by dimension.
 
-**Architecture:** Theme section writing is delegated to parallel `trend-report-theme-writer` agents (one per theme). Each agent self-loads enriched evidence from disk, writes its theme section, and returns compact JSON. The orchestrator handles the remaining lightweight sections (executive summary, emerging signals, portfolio, claims registry) and final assembly.
+**Architecture:** Theme section writing is delegated to parallel `trend-report-theme-writer` agents (one per theme). Each agent self-loads enriched evidence from disk, writes its theme section, and returns compact JSON. The orchestrator handles the remaining lightweight sections (executive summary, claims registry) and final assembly.
 
 ---
 
@@ -86,47 +86,7 @@ Display `"{PHASE_2_THEME_AGENT_DISPATCH}"` after dispatching.
 
 ---
 
-## Step 2.3: Write Emerging Signals (while agents run)
-
-While theme agents run, the orchestrator writes the emerging signals section — it depends only on orphan candidate data from the value model, not on agent output.
-
-### Emerging Signals
-
-Orphan candidates (trends not in any theme's value chains) still have enriched evidence. Present them as emerging signals worth monitoring — they didn't fit a current theme, which itself is interesting context.
-
-For orphan candidates, the orchestrator reads the enriched-trends files selectively — only the dimensions that contain orphan candidate_refs. This is a lightweight read compared to the old Phase 2 approach where ALL enriched-trends were loaded for theme assembly.
-
-Write `{PROJECT_PATH}/.logs/report-emerging-signals.md`:
-
-```markdown
-## {EMERGING_SIGNALS_LABEL}
-
-{EMERGING_SIGNALS_INTRO}
-
-{For each orphan candidate, grouped by dimension:}
-
-### {candidate.name} ({TIPS_ROLE})
-
-{Pull evidence_md from enriched-trends lookup. Write a condensed 2-3 sentence summary.
-Note the horizon — observe-horizon orphans are expected; act-horizon orphans may
-signal gaps in the theme model.}
-
----
-```
-
-If there are no orphans (100% coverage), write:
-
-```markdown
-## {EMERGING_SIGNALS_LABEL}
-
-{ALL_CANDIDATES_THEMED}
-```
-
-Must end with two trailing newlines.
-
----
-
-## Step 2.4: Collect Agent Results
+## Step 2.3: Collect Agent Results
 
 Wait for all theme agents to complete. Each agent returns compact JSON:
 
@@ -169,7 +129,7 @@ All dispatched agents must succeed before proceeding. Agents that were skipped v
 
 ---
 
-## Step 2.5: Write Executive Summary (after reading theme sections)
+## Step 2.4: Write Executive Summary (after reading theme sections)
 
 The executive summary is written AFTER all theme agents complete. The orchestrator reads every `report-theme-{theme_id}.md` file to synthesize a grounded Zusammenfassung from the actual prose — not from metadata or agent return JSON alone.
 
@@ -217,6 +177,12 @@ NOT neutral landscape framing ("Die Branche steht vor...").
 
 Pattern: "The prevailing assumption is [X]. [N] converging forces reveal: [reframe]."}
 
+{BRIDGE SENTENCE: One sentence that transitions from the opener to the theme list.
+It frames what the bullets are — strategic questions that demand answers.
+
+Pattern: "Fünf strategische Fragestellungen bündeln den Handlungsbedarf:" or
+"[N] themes crystallize the agenda:"}
+
 - **{theme_1.name}**: {theme_1.strategic_question}
 - **{theme_2.name}**: {theme_2.strategic_question}
 - ...
@@ -245,63 +211,7 @@ Must end with two trailing newlines.
 
 ---
 
-## Step 2.6: Generate Strategic Portfolio View
-
-Replace the flat dimensional portfolio analysis with theme-level metrics.
-
-Write `{PROJECT_PATH}/.logs/report-portfolio.md`:
-
-```markdown
-## {PORTFOLIO_ANALYSIS_LABEL}
-
-### {THEME_OVERVIEW_LABEL}
-
-| # | {THEME_LABEL} | {CHAINS_LABEL} | {CANDIDATES_LABEL} | {HORIZON_MIX_LABEL} | {EVIDENCE_LABEL} |
-|---|---------------|----------------|--------------------|--------------------|-------------------|
-| 1 | {theme.name} | {chain_count} | {candidate_count} | {act/plan/observe} | {claims_count} claims |
-| 2 | ... | ... | ... | ... | ... |
-| | **{TOTAL_LABEL}** | **{N}** | **{N}/{total}** | | **{N}** claims |
-
-### {HORIZON_DISTRIBUTION_LABEL}
-
-| {THEME_LABEL} | ACT | PLAN | OBSERVE |
-|---------------|-----|------|---------|
-| {theme.name} | {count} | {count} | {count} |
-| ... | ... | ... | ... |
-| {ORPHANS_LABEL} | {count} | {count} | {count} |
-
-### {MECE_VALIDATION_LABEL}
-
-| {METRIC_LABEL} | {VALUE_LABEL} | {STATUS_LABEL} |
-|-----------------|---------------|----------------|
-| {THEME_COUNT_LABEL} | {N} | {pass/warn} |
-| {MUTUAL_EXCLUSIVITY_LABEL} | {pass/fail} | {from mece_validation} |
-| {COLLECTIVE_EXHAUSTIVENESS_LABEL} | {pct}% | {pass if >=80%} |
-| {BALANCE_LABEL} | {pass/fail} | {from mece_validation} |
-
-### {EVIDENCE_COVERAGE_LABEL}
-
-| {THEME_LABEL} | {WITH_EVIDENCE_LABEL} | {QUALITATIVE_ONLY_LABEL} | {COVERAGE_PCT_LABEL} |
-|---------------|-----------------------|--------------------------|----------------------|
-| {theme.name} | {count} | {count} | {pct}% |
-| ... | ... | ... | ... |
-```
-
-Must end with two trailing newlines.
-
-### Counting Logic
-
-Use a combination of value model data and agent return payloads:
-
-- **Chain count per theme:** Count value chains with matching `theme_ref` in value model
-- **Candidates per theme:** Use `candidates_covered` from agent returns (already deduplicated). For resumed themes (no agent return), count unique candidate_refs from the value model's value chains.
-- **Horizon mix:** Extract horizon from each candidate_ref format (`{dimension}/{horizon}/{seq}`). For more precise counts, read the enriched-trends files — but the candidate_ref format provides the horizon directly.
-- **Claims per theme:** For agents that ran, count from `top_claims`. For precise counts, read claims files in Step 2.7 and count by theme mapping.
-- **Evidence coverage per theme:** Requires reading enriched-trends to check `has_quantitative_evidence`. If this creates too much context pressure, use agent word_count and citations_count as proxies.
-
----
-
-## Step 2.7: Generate Claims Registry
+## Step 2.5: Generate Claims Registry
 
 Claims registry includes a `theme` column. This is the one step where the orchestrator reads the claims JSON files directly.
 
@@ -325,7 +235,7 @@ Must end with two trailing newlines.
 
 ---
 
-## Step 2.8: Assemble Final Report
+## Step 2.6: Assemble Final Report
 
 Verify all files exist, then concatenate in this order:
 
@@ -338,9 +248,7 @@ for theme_id in theme-001 theme-002 ... theme-N; do
   FILES="$FILES {PROJECT_PATH}/.logs/report-theme-${theme_id}.md"
 done
 
-# Remaining sections
-FILES="$FILES {PROJECT_PATH}/.logs/report-emerging-signals.md"
-FILES="$FILES {PROJECT_PATH}/.logs/report-portfolio.md"
+# Claims registry
 FILES="$FILES {PROJECT_PATH}/.logs/report-claims-registry.md"
 
 cat $FILES > "{PROJECT_PATH}/tips-trend-report.md"
@@ -355,7 +263,7 @@ Read first 3 + last 3 lines of the assembled report:
 
 ---
 
-## Step 2.9: Merge Claims
+## Step 2.7: Merge Claims
 
 Merge all 4 dimension claims into `tips-trend-report-claims.json`. The claims themselves don't change; only the report structure around them does.
 
@@ -371,5 +279,4 @@ Merge all 4 dimension claims into `tips-trend-report-claims.json`. The claims th
 | enriched-trends JSON missing (agent reports) | HALT: Phase 1 agent failed to produce enriched output |
 | Theme references candidate_ref not found in enriched data | Agent logs warning, skips that candidate |
 | Solution templates empty | Agents omit "Solution Templates" subsection |
-| MECE validation failed in value model | Include as-is with warning in portfolio view |
 | Resume file exists but is corrupt (<1000 bytes) | Re-dispatch agent for that theme |

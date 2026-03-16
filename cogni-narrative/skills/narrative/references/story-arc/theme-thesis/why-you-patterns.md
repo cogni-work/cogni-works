@@ -1,8 +1,8 @@
-# Why You: Portfolio Power Position Patterns (Theme Thesis)
+# Why You: Portfolio Capability Patterns (Theme Thesis)
 
 ## Element Purpose
 
-Convert the theme's solution templates and strategic possibilities into **Power Positions** — capabilities backed by the value-modeler portfolio that create competitive advantage and are difficult to replicate.
+Convert the theme's solution templates and strategic possibilities into **strategic capabilities** — backed by the value-modeler portfolio, these create lasting value and are difficult to replicate. Write for the customer, not for an internal sales team — explain what the capability does for them and why it's a durable investment.
 
 **Word Target:** 30% of theme section target (largest element — this is the portfolio showcase)
 
@@ -12,8 +12,8 @@ Extract from theme data:
 
 1. **Solution Templates** (primary) — `SOLUTION_TEMPLATES[]` from orchestrator
    - Each ST has `name`, `category`, `enabler_type`
-   - These become the **IS layer** of Power Positions
-   - If empty: construct Power Positions from P-candidates directly
+   - These become the **IS layer** of strategic capabilities
+   - If empty: construct strategic capabilities from P-candidates directly
 
 2. **P-candidates** (Neue Horizonte) — `chain.possibilities[]` for each value chain
    - Strategic opportunities with quantified outcomes
@@ -29,62 +29,40 @@ Extract from theme data:
    - Quantitative outcomes for DOES layer
    - Capability gap costs for MEANS layer
 
-## IS-DOES-MEANS Structure
+## IS-DOES-MEANS as Invisible Scaffolding
 
-### Creating Power Positions from Solution Templates
+The IS-DOES-MEANS logic guides what content to include, but must NEVER appear as visible labels in the output. No "Was es ist:", no "Was es für Sie leistet:", no "Warum das ein nachhaltiger Vorteil ist:". Write flowing prose instead.
 
-For each solution template (1-3 Power Positions per theme):
+### How to apply (invisibly)
 
-#### IS (What it is)
+For each solution template (1-3 capabilities per theme), write 2-3 paragraphs of continuous prose under a bold capability name heading:
 
-**Source:** Solution template `name` + `category` + `enabler_type`
-**Expand with:** P-candidate context that explains what this capability actually does
+1. **Open with a concrete definition** (IS logic) — Source: ST `name` + `category` + P-candidate context. An executive should know what this is in 20 seconds. 1-2 sentences.
 
-**Pattern:**
+2. **Flow into quantified outcomes** (DOES logic) — Source: P-candidates `opportunities_md` + claims. Use You-Phrasing ("Sie reduzieren...", "Ihre ... erreicht...") and Number Plays (ratios, before/after). 2-3 quantified outcomes with citations.
+
+3. **Close with durability** (MEANS logic) — Source: S-candidates `evidence_md` + foundation requirements. Why this is a long-term investment: time, domain expertise, organizational maturity needed. Specific timeframe for capability building.
+
+### Example (flowing prose, no labels)
+
 ```markdown
-**What it is:** [Concrete definition expanding ST name]. A [category] capability that [core function from P-candidate opportunities_md].
+**Smart Grid Digital Twin & Prädiktive Wartung**
+
+Ein Echtzeit-Virtualabbild Ihrer gesamten Netzinfrastruktur, das physische
+Sensordaten mit KI-Analytik verbindet. Sie senken Wartungskosten um 18–25% und
+reduzieren ungeplante Ausfallzeiten um 30–50%<sup>[1]</sup>. Ihre
+Netzoperationszentrale wird zur datengesteuerten Kommandozentrale — KI-Systeme
+erkennen Ausfälle bis zu 72 Stunden im Voraus<sup>[2]</sup>. Ein akkurater
+Digital Twin entsteht nicht über Nacht: 12–18 Monate Sensorkalibrierung und
+domänenspezifische Modellierung machen dies zu einer Investition, die sich mit
+jedem Datenzyklus verstärkt.
 ```
 
-**Requirements:**
-- Specific enough that an executive knows what it is in 20 seconds
-- Not abstract jargon — concrete capability description
-- 1-2 sentences maximum
+Note: no "Was es ist:", no "Was es für Sie leistet:", no labeled sections — just prose that naturally flows from definition → outcomes → durability.
 
-#### DOES (What it does for you)
+## strategic capability When No Solution Templates
 
-**Source:** P-candidates `opportunities_md` + quantitative claims
-**Apply:** You-Phrasing and Number Plays
-
-**Pattern:**
-```markdown
-**What it does for you:** You [outcome 1 with quantification from claims]<sup>[citation]</sup>. Your [capability area] [outcome 2 with quantification]. This translates to [business metric improvement] because [P-candidate evidence].
-```
-
-**Requirements:**
-- Use "You" and "Your" throughout
-- 2-3 concrete, quantified outcomes
-- Citations from enriched-trends evidence
-- Number Plays applied (ratios, before/after, compound)
-
-#### MEANS (Why competitors struggle to copy)
-
-**Source:** S-candidates `evidence_md` + foundation requirements
-**Focus:** Time moats, tacit knowledge, organizational maturity barriers
-
-**Pattern:**
-```markdown
-**Why competitors struggle to copy:** This requires [timeframe from S-candidate evidence] of [capability building activity]<sup>[citation]</sup>. [Fast alternative] is fast; [slow advantage] is slow. Your [first-mover advantage description].
-```
-
-**Requirements:**
-- Specific barrier type (time, tacit knowledge, network, experience)
-- Timeframe for capability building
-- Why purchasing/hiring can't shortcut the moat
-- S-candidate evidence for the barrier
-
-## Power Position When No Solution Templates
-
-If `SOLUTION_TEMPLATES` is empty, construct Power Positions from P-candidates:
+If `SOLUTION_TEMPLATES` is empty, construct strategic capabilities from P-candidates:
 
 1. Group P-candidates by strategic opportunity type
 2. Use the P-candidate's `name` as the IS basis
@@ -93,7 +71,7 @@ If `SOLUTION_TEMPLATES` is empty, construct Power Positions from P-candidates:
 
 ## Solution Templates Table
 
-If `SOLUTION_TEMPLATES` is non-empty, include inline after Power Position prose:
+If `SOLUTION_TEMPLATES` is non-empty, include inline after strategic capability prose:
 
 ```markdown
 | # | Solution | Category | Enabler Type |
@@ -105,40 +83,44 @@ Brief description of each ST and how it addresses the theme's strategic question
 
 ## Quality Checkpoints
 
-- [ ] 1-3 Power Positions created (from STs or P-candidates)
-- [ ] IS layer: Concrete, 20-second definition (not abstract)
-- [ ] DOES layer: You-Phrasing throughout
-- [ ] DOES layer: 2-3 quantified outcomes with citations
-- [ ] MEANS layer: Specific competitive barrier with timeframe
-- [ ] MEANS layer: S-candidate evidence for capability moat
-- [ ] Solution templates table included (if STs available)
+- [ ] 1-3 capabilities described (from STs or P-candidates)
+- [ ] Each opens with a concrete definition (executive understands in 20 seconds)
+- [ ] You-Phrasing for outcomes ("Sie reduzieren...", "Ihre ... erreicht...")
+- [ ] 2-3 quantified outcomes with citations per capability
+- [ ] Durability argument with specific timeframe
+- [ ] S-candidate evidence for why this is a long-term investment
+- [ ] NO visible IS/DOES/MEANS labels — flowing prose only
+- [ ] Solution templates table included after prose (if STs available)
 - [ ] Word count within proportional range (+/-10% tolerance)
-- [ ] Smooth transition from Why Now
-- [ ] Smooth transition to Why Pay
+- [ ] Smooth transitions from Why Now and to Why Pay
 
 ## Common Mistakes
 
+❌ **Labeled template:** "**Was es ist:** ... **Was es für Sie leistet:** ... **Warum das ein nachhaltiger Vorteil ist:** ..."
+✓ **Flowing prose:** "Ein Echtzeit-Virtualabbild Ihrer Netzinfrastruktur, das Sensordaten mit KI-Analytik verbindet. Sie senken Wartungskosten um 18–25%<sup>[1]</sup>. Ein akkurater Digital Twin entsteht nicht über Nacht: 12–18 Monate Kalibrierung machen dies zu einer Investition, die sich mit jedem Datenzyklus verstärkt."
+
 ❌ **Feature list:** "The portfolio includes: Digital Twin Platform, Predictive Maintenance Suite, Customer Portal."
-✓ **Power Position:** "**Digital Twin Platform** — IS: Real-time virtual grid replica integrating OT sensors with IT analytics. DOES: You reduce unplanned outages 34% and extend asset life by 12 years. MEANS: Accurate digital twins require 18 months of sensor calibration — off-the-shelf models miss site-specific failure patterns."
+✓ **Capability narrative:** Each gets its own bold heading and 2-3 paragraphs of prose.
 
-❌ **Missing You-Phrasing:** "Organizations that deploy predictive maintenance achieve 23% cost reduction."
-✓ **You-Phrasing:** "You reduce maintenance costs 23% while competitors still schedule by calendar, not condition."
-
-❌ **Weak MEANS:** "This is a difficult capability to build."
-✓ **Specific moat:** "Building accurate grid digital twins requires 18 months of sensor calibration and domain model tuning. Technology purchases are fast. Calibration wisdom is slow. Your 18-month head start becomes your competitive moat."
+❌ **Weak durability:** "This is a difficult capability to build."
+✓ **Specific:** "12–18 Monate Sensorkalibrierung und domänenspezifische Modellierung — Technologie-Einkauf ist schnell, Kalibrierungswissen ist langsam."
 
 ## Language Variations
 
 ### German Style
 
 ```markdown
-#### Position: Digitale Zwillingsplattform
+**Digitale Zwillingsplattform**
 
-**Was es ist:** Echtzeit-Virtualabbild der Netzinfrastruktur, das OT-Sensordaten mit IT-Analysen integriert. Ermöglicht prädiktive Wartung und Lastoptimierung in einem System.
-
-**Was es für Sie leistet:** Sie reduzieren ungeplante Ausfälle um 34% und verlängern die Anlagenlebensdauer um 12 Jahre<sup>[1]</sup>. Ihre Netzplanung basiert auf Echtzeit-Zustandsdaten statt auf Kalenderintervallen. Resultat: 23% niedrigere Wartungskosten bei 2,3x höherer Prognosegüte<sup>[2]</sup>.
-
-**Warum Wettbewerber nicht kopieren können:** Präzise digitale Zwillinge erfordern 18 Monate Sensorkalibrierung und Domänenmodell-Training<sup>[3]</sup>. Technologie-Kauf ist schnell. Kalibrierungswissen ist langsam. Ihr Vorsprung wird zum Wettbewerbsgraben.
+Echtzeit-Virtualabbild der Netzinfrastruktur, das OT-Sensordaten mit IT-Analysen
+integriert und prädiktive Wartung wie Lastoptimierung in einem System ermöglicht.
+Sie reduzieren ungeplante Ausfälle um 34% und verlängern die Anlagenlebensdauer
+um 12 Jahre<sup>[1]</sup>. Ihre Netzplanung basiert auf Echtzeit-Zustandsdaten
+statt auf Kalenderintervallen — Resultat: 23% niedrigere Wartungskosten bei
+2,3x höherer Prognosegüte<sup>[2]</sup>. Präzise digitale Zwillinge erfordern
+18 Monate Sensorkalibrierung und Domänenmodell-Training<sup>[3]</sup>.
+Technologie-Kauf ist schnell. Kalibrierungswissen ist langsam. Wer heute
+beginnt, hat 2027 ein Asset, dessen Wert sich mit jedem Datenzyklus verstärkt.
 ```
 
 ## Related Patterns

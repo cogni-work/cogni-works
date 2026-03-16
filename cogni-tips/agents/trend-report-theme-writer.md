@@ -1,6 +1,6 @@
 ---
 name: trend-report-theme-writer
-description: Write a single strategic theme section using the Corporate Visions arc (Why Change → Why Now → Why You → Why Pay) with investment thesis, portfolio Power Positions, and business case from enriched trend evidence. DO NOT USE DIRECTLY — invoked by trend-report Phase 2.
+description: Write a single strategic theme section using the Corporate Visions arc (Why Change → Why Now → Why You → Why Pay) with investment thesis, strategic capabilities, and business case from enriched trend evidence. DO NOT USE DIRECTLY — invoked by trend-report Phase 2.
 tools: Read, Write
 model: sonnet
 color: blue
@@ -89,7 +89,7 @@ Before writing, classify each candidate by which arc element it primarily serves
 - **I-dimension candidates** (from `chain.implications[]`) → **Why Change** (concrete impact) + **Why Pay** (disruption cost)
 - **P-dimension candidates** (from `chain.possibilities[]`) → **Why You** (DOES layer — quantified outcomes)
 - **S-dimension candidates** (from `chain.foundation_requirements[]`) → **Why You** (MEANS layer — competitive moat) + **Why Pay** (capability gap costs)
-- **Solution Templates** → **Why You** (IS layer — Power Position definitions)
+- **Solution Templates** → **Why You** (IS layer — strategic capability definitions)
 
 A candidate can serve multiple elements. For example, an Act-horizon I-candidate creates urgency in Why Now AND shows value chain disruption cost in Why Pay.
 
@@ -105,6 +105,7 @@ Write in the target language (`{LANGUAGE}`). The section tells a complete invest
 
 ```markdown
 ## {THEME_INDEX}. {THEME_THESIS_HEADING}
+#### {THEME_NAME}
 
 > {STRATEGIC_QUESTION}
 
@@ -166,34 +167,51 @@ at least one date or number.}
 
 ### {WHY_YOU_MESSAGE_HEADING}
 
-{~30% of section — Convert solution templates to Power Positions using IS-DOES-MEANS:
+{~30% of section — Present 1-3 strategic capabilities derived from solution templates.
+Write for the customer as natural, flowing prose — NOT as a structured template with
+labeled subsections.
 
-For each solution template (1-3 Power Positions):
+Each capability gets a bold name heading (the solution template name), followed by
+2-3 paragraphs of continuous prose. The IS-DOES-MEANS logic guides what you write
+but must be INVISIBLE — no "Was es ist:", no "Was es für Sie leistet:", no labeled
+parts. Instead, let the prose flow naturally:
 
-**IS (What it is):** Concrete capability definition expanding the ST name + category.
-Not abstract — an executive should know what this is in 20 seconds.
+- Open with a concrete definition of the capability (IS logic — 1-2 sentences so
+  an executive knows what this is in 20 seconds)
+- Flow into quantified outcomes using You-Phrasing (DOES logic — "Sie reduzieren...",
+  "Ihre ... erreicht..." with claims and citations)
+- Close with why this is a durable investment (MEANS logic — the time, domain
+  expertise, and organizational maturity needed, without "competitors can't copy"
+  framing)
 
-**DOES (What it does for you):** Quantified outcomes using You-Phrasing. Draw from
-P-candidates' opportunities_md and claims. "You reduce [X] by [N]%." "Your [capability]
-achieves [metric]." Apply Number Plays (ratios, before/after, compound).
+Example flow (German):
+**Smart Grid Digital Twin & Prädiktive Wartung**
 
-**MEANS (Why competitors struggle to copy):** Competitive moat from S-candidates'
-evidence_md. Foundation requirements that take time, tacit knowledge, or organizational
-maturity to build. "This requires [timeframe] of [capability building]. Technology
-purchases are fast; [this advantage] is slow."
+Ein Echtzeit-Virtualabbild Ihrer gesamten Netzinfrastruktur, das physische
+Sensordaten mit KI-Analytik verbindet. Sie senken Wartungskosten um 18–25% und
+reduzieren ungeplante Ausfallzeiten um 30–50%<sup>[1]</sup>. Ihre
+Netzoperationszentrale wird zur datengesteuerten Kommandozentrale — KI-Systeme
+erkennen Ausfälle bis zu 72 Stunden im Voraus<sup>[2]</sup>. Ein akkurater
+Digital Twin entsteht nicht über Nacht: 12–18 Monate Sensorkalibrierung und
+domänenspezifische Modellierung machen dies zu einer Investition, die sich mit
+jedem Datenzyklus verstärkt.
 
-If SOLUTION_TEMPLATES is non-empty, include the solution templates table:
+Do NOT use: "Power Position", "Was es ist:", "Was es für Sie leistet:", "Warum das
+ein nachhaltiger Vorteil ist:", or any other visible IS/DOES/MEANS labels. The prose
+must read like a consulting briefing, not a fill-in-the-blank template.
+
+If SOLUTION_TEMPLATES is non-empty, include the solution templates table AFTER all
+capability descriptions:
 
 | # | {SOLUTION_LABEL} | {CATEGORY_LABEL} | {ENABLER_TYPE_LABEL} |
 |---|-------------------|-------------------|----------------------|
 | 1 | {st.name} | {st.category} | {st.enabler_type} |
 
-Brief description of each ST (1-2 sentences). If SOLUTION_TEMPLATES is empty, construct
-Power Positions from P-candidates directly.
+If SOLUTION_TEMPLATES is empty, construct capabilities from P-candidates directly.
 
-HEADING: After writing, extract the strongest Power Position's capability + unfair advantage
-compressed into <90 chars. Example: "Digital-Twin-Netzbetrieb schafft 23% Kostenvorsprung,
-den Wettbewerber nicht kopieren können".}
+HEADING: After writing, extract the strongest capability + its quantified advantage
+compressed into <90 chars. Example: "Digital-Twin-Netzbetrieb schafft 23% Kostenersparnis
+bei drei Jahren Vorsprung".}
 
 ### {WHY_PAY_MESSAGE_HEADING}
 
@@ -272,7 +290,7 @@ After writing all four element sections, extract the message-driven headings. Wr
 
 3. **H3 Why Now Heading:** Extract the strongest forcing function convergence. Must include a specific date or number. Example: "Drei Regulierungsfristen konvergieren bis August 2026".
 
-4. **H3 Why You Heading:** Extract the strongest Power Position's IS+DOES in compressed form. Name the capability and its quantified advantage.
+4. **H3 Why You Heading:** Extract the strongest capability's IS+DOES in compressed form. Name the capability and its quantified advantage.
 
 5. **H3 Why Pay Heading:** Extract the closing ratio as a declarative sentence. Example: "Verzögern kostet 3x mehr als Handeln — €6,9M vs. €2,3M über drei Jahre".
 
@@ -288,7 +306,7 @@ Now replace the placeholder heading markers in the written file with the actual 
 - Each element meets its proportional word target (+/-10%)
 - **Why Change:** PSB structure applied, Contrast Structure used, ends with competitive implication
 - **Why Now:** ≥2 forcing functions with specific timelines, before/after contrast, window closing statement. FF1 should be a regulatory deadline if evidence contains one.
-- **Why You:** IS-DOES-MEANS applied to ≥1 solution template or P-candidate, You-Phrasing in DOES. No ST-IDs in output.
+- **Why You:** IS-DOES-MEANS logic applied (invisibly) to ≥1 solution template or P-candidate. You-Phrasing for outcomes. No ST-IDs, no "Power Position", no visible IS/DOES/MEANS labels — flowing prose only.
 - **Why Pay:** ≥2 cost dimensions with specific localized € ranges (not global averages), 3-year horizon, closing ratio comparison
 - Hook opens with quantified surprise from theme evidence
 - **Headings:** H2 is thesis statement (not topic label), all H3s are message-driven (not arc element names), each contains a number/date/entity
@@ -308,7 +326,7 @@ If any quality gate fails, self-correct immediately — pull more evidence and r
 
 **Cross-referencing:** When a candidate appears in multiple value chains within your theme, reference it from each element's angle. The same data point can support Why Change (the need), Why Now (the urgency), and Why Pay (the cost).
 
-**Power Position naming:** In the customer-facing output, do NOT include internal solution template IDs (ST-001, ST-002 etc.) in Power Position headings. Write "**Power Position 1 — Smart Grid Digital Twin & Predictive Maintenance**" not "**Power Position 1 — Smart Grid Digital Twin & Predictive Maintenance (ST-001)**". The ST-ID is internal catalog metadata, not reader-facing.
+**Customer-facing language:** The Why You section must read like a consulting briefing, not an internal sales document. Do NOT use: "Power Position", "Was es ist:", "Was es für Sie leistet:", or any visible IS/DOES/MEANS labels. Present solution templates by their names directly as bold headings, followed by flowing prose. Do NOT include internal solution template IDs (ST-001 etc.).
 
 ### Step 4: Identify Top Claims
 

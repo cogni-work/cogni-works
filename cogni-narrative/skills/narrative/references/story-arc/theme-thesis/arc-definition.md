@@ -34,7 +34,7 @@ Unlike `trend-panorama` which maps one TIPS dimension per element, `theme-thesis
 |-------------|--------------------|-----------------------|-------------------|
 | Why Change | **T** (Externe Effekte) | **I** (Digitale Wertetreiber) | T-candidates reveal the unconsidered need; I-candidates make the value chain impact concrete |
 | Why Now | **T** Act-horizon | **I** Act-horizon | Act-horizon candidates from any dimension provide forcing functions with timelines |
-| Why You | **P** (Neue Horizonte) + **Solution Templates** | **S** (Digitales Fundament) | P-candidates quantify opportunity; STs become Power Positions; S-candidates create competitive moat |
+| Why You | **P** (Neue Horizonte) + **Solution Templates** | **S** (Digitales Fundament) | P-candidates quantify opportunity; STs become strategic capabilities; S-candidates create competitive moat |
 | Why Pay | **I** (cost evidence) | **S** (capability gap costs) | I-candidates show disruption cost; S-candidates show cost of missing capabilities |
 
 A single candidate can appear in multiple elements when it serves different rhetorical purposes. For example, an Act-horizon I-candidate may create urgency in Why Now AND quantify disruption cost in Why Pay.
@@ -48,13 +48,13 @@ Section lengths are expressed as proportions of the total theme section target. 
 | Hook | *(Dynamic: strategic question + quantified surprise)* | 8% |
 | Why Change | *(Dynamic: message-driven — the core reframe as assertion)* | 25% |
 | Why Now | *(Dynamic: message-driven — convergence point with date/number)* | 20% |
-| Why You | *(Dynamic: message-driven — strongest Power Position as capability claim)* | 30% |
+| Why You | *(Dynamic: message-driven — strongest strategic capability as capability claim)* | 30% |
 | Why Pay | *(Dynamic: message-driven — cost-of-inaction ratio as punch line)* | 17% |
 
 **Proportions sum to 100%.** Tolerance: +/-10% of computed section midpoint.
 
 **Proportion rationale:**
-- **Why You gets 30%** (vs. 27% in corporate-visions) because the portfolio showcase — solution templates as Power Positions — is the core value of the theme section. This is where the value-modeler's output becomes actionable.
+- **Why You gets 30%** (vs. 27% in corporate-visions) because the portfolio showcase — solution templates as strategic capabilities — is the core value of the theme section. This is where the value-modeler's output becomes actionable.
 - **Why Now gets 20%** (vs. 21% in corporate-visions) because theme-level urgency is narrower than whole-report urgency — typically 2 forcing functions rather than 3.
 - **Why Pay gets 17%** (vs. 15% in corporate-visions) because the business case closure is the single most important differentiator that current theme sections lack.
 - **Hook gets 8%** (vs. 10% in corporate-visions) because the hook serves a more focused role within a multi-theme report — readers already have report-level context.
@@ -93,7 +93,7 @@ Each element sub-heading (`### {heading}`) must carry the **specific message** o
 |---------|---------------------|---------|
 | Why Change | Core reframe — the "Y" from "Most think X, evidence shows Y" | Netzmodernisierung ist keine Hardware-Frage — es ist eine Datenplattform-Transition |
 | Why Now | Convergence point with specific date or number | Drei Regulierungsfristen konvergieren bis August 2026 |
-| Why You | Strongest Power Position's capability + unfair advantage | Digital-Twin-Netzbetrieb schafft 23% Kostenvorsprung, den Wettbewerber nicht kopieren können |
+| Why You | Strongest strategic capability's capability + unfair advantage | Digital-Twin-Netzbetrieb schafft 23% Kostenvorsprung, den Wettbewerber nicht kopieren können |
 | Why Pay | Cost-of-inaction ratio as declarative sentence | Verzögern kostet 3x mehr als Handeln — €6,9M vs. €2,3M über drei Jahre |
 
 **Constraints:**
@@ -205,31 +205,33 @@ If the theme has fewer than 2 Act-horizon candidates, use Plan-horizon candidate
 ### Element 3: Why You (The Portfolio Response)
 
 **Purpose:**
-Convert the theme's solution templates and strategic possibilities into Power Positions — capabilities that create competitive advantage and are difficult to replicate. This is where the value-modeler portfolio becomes actionable: solution templates get the IS-DOES-MEANS treatment that transforms them from catalog entries into strategic capabilities.
+Convert the theme's solution templates and strategic possibilities into strategic capabilities that create lasting value for the customer. This is where the value-modeler portfolio becomes actionable: solution templates get the IS-DOES-MEANS treatment that transforms them from catalog entries into concrete, customer-facing capability descriptions.
+
+IMPORTANT: Write for the customer, not for an internal sales team. Do NOT use "strategic capability" terminology. Frame advantages as durable strategic value, not as competitive moats against rivals.
 
 **Source Content:**
-- **Solution Templates** (primary): From `SOLUTION_TEMPLATES[]` passed by the orchestrator. Each ST has `name`, `category`, `enabler_type`. These become the IS layer of Power Positions.
+- **Solution Templates** (primary): From `SOLUTION_TEMPLATES[]` passed by the orchestrator. Each ST has `name`, `category`, `enabler_type`. These become the IS layer of strategic capabilities.
 - **P-candidates** (Neue Horizonte): Possibilities from `chain.possibilities[]`. These provide the quantified outcomes for the DOES layer — what strategic advantages these capabilities deliver.
-- **S-candidates** (Digitales Fundament): Foundation requirements from `chain.foundation_requirements[]`. These provide the competitive moat for the MEANS layer — capability prerequisites that take time to build and create barriers to replication.
+- **S-candidates** (Digitales Fundament): Foundation requirements from `chain.foundation_requirements[]`. These provide the durability argument for the MEANS layer — capability prerequisites that take time to build and create lasting value.
 - **Enriched evidence**: `opportunities_md` from P-candidates and `evidence_md` from S-candidates.
 
 **Transformation Approach:**
-Create 1-3 Power Positions (count depends on solution template availability):
+Create 1-3 strategic capabilities (count depends on solution template availability):
 
-For each Power Position:
+For each capability:
 - **IS (What it is):** Concrete capability definition derived from the solution template's name and category. Not abstract — an executive should know exactly what this capability is in 20 seconds.
-- **DOES (What it does for you):** Quantified outcomes using You-Phrasing. Draw from P-candidates' `opportunities_md` and claims. "You reduce [X] by [N]%." "Your [capability] achieves [metric]."
-- **MEANS (Why competitors struggle to copy):** Competitive moat from S-candidates. Foundation requirements that take time, tacit knowledge, or organizational maturity to build. "This requires [timeframe] of [capability building]. Technology purchases are fast; [this advantage] is slow."
+- **DOES (What it does for you):** Quantified outcomes using You-Phrasing. Draw from P-candidates' `opportunities_md` and claims. "Sie reduzieren [X] um [N]%." "Ihre [Fähigkeit] erreicht [Kennzahl]."
+- **MEANS (Why this is a durable advantage):** Strategic durability from S-candidates. Foundation requirements that take time, domain expertise, or organizational maturity to build. "This requires [timeframe] of [capability building]. Technology purchases are fast; [this advantage] is slow."
 
-If `SOLUTION_TEMPLATES` is empty: construct Power Positions from P-candidates directly, using their strategic opportunities as the IS layer and S-candidates for the moat.
+If `SOLUTION_TEMPLATES` is empty: construct capabilities from P-candidates directly, using their strategic opportunities as the IS layer and S-candidates for the durability argument.
 
-Include solution templates table inline (if non-empty) after the Power Positions prose.
+Include solution templates table inline (if non-empty) after the capabilities prose.
 
 **Key Techniques:**
-- IS-DOES-MEANS for each Power Position
+- IS-DOES-MEANS for each capability
 - You-Phrasing throughout DOES layer
 - Number Plays for quantified outcomes
-- Competitive moat explanation in MEANS
+- Durability argument in MEANS (not "competitive moat" language)
 
 **Pattern Reference:** `why-you-patterns.md`
 
@@ -394,7 +396,7 @@ Match the citation style used in the enriched-trends data. If enriched-trends us
 - [ ] I-candidates feed Why Change (impact) and Why Pay (disruption cost)
 - [ ] P-candidates feed Why You (DOES layer — quantified outcomes)
 - [ ] S-candidates feed Why You (MEANS layer — capability moat) and Why Pay (gap costs)
-- [ ] Solution templates feed Why You (IS layer — Power Position definitions)
+- [ ] Solution templates feed Why You (IS layer — strategic capability definitions)
 - [ ] Candidate-to-element mapping crosses TIPS dimensions (not one-to-one)
 
 ### Evidence Quality
@@ -410,7 +412,7 @@ Match the citation style used in the enriched-trends data. If enriched-trends us
 - [ ] Hook captures attention with quantified surprise
 - [ ] Why Change reframes trends as unconsidered need (not trend listing)
 - [ ] Why Now creates urgency with specific timelines (not vague "act now")
-- [ ] Why You converts portfolio into Power Positions (not feature listing)
+- [ ] Why You converts portfolio into strategic capabilities (not feature listing)
 - [ ] Why Pay closes with undeniable business case (not generic "invest")
 - [ ] Closing sentence is simple ratio comparison
 
@@ -435,7 +437,7 @@ Match the citation style used in the enriched-trends data. If enriched-trends us
 ### Why You Pitfalls
 
 ❌ **Feature list:** "Solution templates include: Digital Twin Platform, Predictive Maintenance Suite, Customer Portal."
-✓ **Power Position:** "**Digital Twin Platform** — IS: A real-time virtual replica of grid infrastructure integrating OT sensor data with IT analytics. DOES: You reduce unplanned outages by 34% and extend asset life by 12 years. MEANS: Building accurate digital twins requires 18 months of sensor calibration and domain model tuning — competitors buying off-the-shelf get generic models that miss site-specific failure patterns."
+✓ **strategic capability:** "**Digital Twin Platform** — IS: A real-time virtual replica of grid infrastructure integrating OT sensor data with IT analytics. DOES: You reduce unplanned outages by 34% and extend asset life by 12 years. MEANS: Building accurate digital twins requires 18 months of sensor calibration and domain model tuning — competitors buying off-the-shelf get generic models that miss site-specific failure patterns."
 
 ❌ **Missing You-Phrasing:** "Organizations that deploy predictive maintenance achieve 23% cost reduction."
 ✓ **You-Phrasing:** "You reduce maintenance costs by 23% while your competitors still schedule maintenance by calendar, not condition."
@@ -510,5 +512,5 @@ Note: The heading "Netzmodernisierung ist keine Hardware-Frage..." is the core r
 - `../corporate-visions/arc-definition.md` — Parent arc this adapts
 - `why-change-patterns.md` — Unconsidered need from T/I-candidates
 - `why-now-patterns.md` — Forcing functions from Act-horizon candidates
-- `why-you-patterns.md` — Portfolio Power Positions from STs + P/S-candidates
+- `why-you-patterns.md` — Portfolio strategic capabilities from STs + P/S-candidates
 - `why-pay-patterns.md` — Compound impact from theme evidence

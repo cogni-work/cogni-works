@@ -74,6 +74,8 @@ Read references **only when needed** for the specific phase:
 | [references/i18n/labels-en.md](references/i18n/labels-en.md) | English report headings and labels |
 | [references/i18n/labels-de.md](references/i18n/labels-de.md) | German report headings and labels |
 | [references/phase-2.5-insight-summary.md](references/phase-2.5-insight-summary.md) | Generating arc-aware insight summary (Phase 2.5) |
+| [references/phase-3-claim-verification.md](references/phase-3-claim-verification.md) | Running claim verification (Phase 3) |
+| [references/phase-3.5-executive-polish.md](references/phase-3.5-executive-polish.md) | Polishing report prose (Phase 3.5) |
 
 ## Workflow Overview
 
@@ -134,6 +136,29 @@ OPTIONAL (raw web signals — try in order):
 ```
 
 Display to the user: `"{PHASE_0_THEMES_FOUND}"` (from i18n labels)
+
+#### Step 0.2b: Extract Phase 2 Value-Model Subset
+
+The full `tips-value-model.json` contains scoring matrices, blueprints, and reanchor logs that Phase 2 does not need. To reduce context pressure, extract only the fields Phase 2 uses and write a pruned subset.
+
+Read `tips-value-model.json` (already loaded in Step 0.2). Write `{PROJECT_PATH}/.logs/phase2-value-model.json` containing ONLY these top-level keys:
+
+```json
+{
+  "themes": [],
+  "value_chains": [],
+  "orphan_candidates": [],
+  "coverage": {},
+  "mece_validation": {},
+  "solution_templates": [
+    { "st_id": "...", "name": "...", "category": "...", "enabler_type": "...", "theme_ref": "..." }
+  ]
+}
+```
+
+- Copy `themes`, `value_chains`, `orphan_candidates`, `coverage`, `mece_validation` in full
+- For each `solution_templates[]` entry, keep ONLY: `st_id`, `name`, `category`, `enabler_type`, `theme_ref` — omit `solution_blueprint`, `portfolio_grounding`, `description`, and all other fields
+- Omit all other top-level keys (`reanchor_log`, `solution_process_improvements`, `metrics`, `collaterals`, `portfolio_gaps`, etc.)
 
 #### Step 0.3: Validate Entry Gate
 
@@ -204,6 +229,7 @@ rm -f "{PROJECT_PATH}/.logs/report-header.md" \
       "{PROJECT_PATH}/.logs/report-portfolio.md" \
       "{PROJECT_PATH}/.logs/report-claims-registry.md" \
       "{PROJECT_PATH}/tips-trend-report.md" \
+      "{PROJECT_PATH}/.logs/phase2-value-model.json" \
       "{PROJECT_PATH}/tips-trend-report-claims.json"
 ```
 
@@ -310,90 +336,13 @@ All failures in this phase are non-blocking — the insight summary enhances the
 
 ### Phase 3: Claim Verification (Optional)
 
-#### Step 3.1: Ask User
-
-```yaml
-AskUserQuestion:
-  question: "{total_claims} quantitative claims were extracted. Verify them now?"
-  header: "Verify"
-  options:
-    - label: "Verify now (Recommended)"
-      description: "Run automated claim verification against source URLs"
-    - label: "Skip verification"
-      description: "Save claims file for later verification"
-```
-
-#### Step 3.2: Run Verification (if chosen)
-
-```yaml
-Skill:
-  skill: "cogni-claims:claim-work"
-  args: "--file-path {PROJECT_PATH}/tips-trend-report.md --claims-file {PROJECT_PATH}/tips-trend-report-claims.json --verdict-mode --language {LANGUAGE}"
-```
-
-If `cogni-claims` is not installed, display a warning and skip — do not halt.
-
-#### Step 3.3: Process Results
-
-Parse the QualityGateResult, display PASS/REVIEW/FAIL summary, write verification metadata to `.metadata/trend-report-verification.json`:
-
-```json
-{
-  "verified_at": "ISO-8601",
-  "verdict": "PASS|REVIEW|FAIL",
-  "total_claims": N,
-  "verified": N,
-  "passed": N,
-  "failed": N,
-  "review": N
-}
-```
-
-If FAIL: present failed claims as information only — do not auto-correct the report.
+Read [references/phase-3-claim-verification.md](references/phase-3-claim-verification.md) for the full workflow. Asks the user whether to verify extracted claims via `cogni-claims:claim-work`. If the plugin is not installed, skip with a warning.
 
 ---
 
-### Phase 3.5: Executive Polish via cogni-copywriting
+### Phase 3.5: Executive Polish via cogni-copywriting (Optional)
 
-Polish the assembled trend report for executive readability. Runs after claim verification so citations and claim references remain stable during extraction and verification. The copywriter preserves all inline citations, German characters, and protected content (diagram placeholders, figure references, kanban tables).
-
-#### Step 3.5.1: Check Availability
-
-If `cogni-copywriting` plugin is not installed, display a warning and skip to Phase 4 — do not halt.
-
-#### Step 3.5.2: Invoke Copywriter
-
-```yaml
-Skill:
-  skill: "cogni-copywriting:copywriter"
-  args: "FILE_PATH={PROJECT_PATH}/tips-trend-report.md SCOPE=tone STAKEHOLDERS=executive REVIEW_MODE=automated"
-```
-
-**Parameter choices:**
-- `SCOPE=tone` — the report structure is already defined by the theme assembly (Phase 2). Only polish prose clarity, paragraph flow, bold anchoring, and sentence rhythm. Do not restructure sections or reorder themes.
-- `STAKEHOLDERS=executive` — the primary audience is CxO-level decision makers.
-- `REVIEW_MODE=automated` — lightweight review pass without interactive feedback.
-
-#### Step 3.5.3: Validate Output
-
-After the copywriter returns:
-
-| Check | Condition | On Failure |
-|-------|-----------|------------|
-| Citation count | polished >= original | REVERT: restore from `.tips-trend-report.md` backup |
-| Frontmatter intact | YAML frontmatter unchanged | REVERT |
-| Theme structure | Same H2/H3 heading count and text | REVERT |
-| Claims registry | Claims table rows unchanged | REVERT |
-
-If any check fails, revert to the backup the copywriter created (`.tips-trend-report.md` in the same directory) and log the failure reason. Partial polish failure does not block Phase 4.
-
-#### Step 3.5.4: Update Metadata
-
-If polish succeeded, note it for the finalization summary:
-
-```json
-{ "copywriter_applied": true, "copywriter_scope": "tone" }
-```
+Read [references/phase-3.5-executive-polish.md](references/phase-3.5-executive-polish.md) for the full workflow. Polishes report prose via `cogni-copywriting:copywriter` with `SCOPE=tone`. Validates citations and structure are preserved; reverts on failure.
 
 ---
 
@@ -485,6 +434,7 @@ Use /tips-resume in your next session to pick up where you left off.
 Log files in `{PROJECT_PATH}/.logs/`:
 - `report-header.md` — frontmatter + exec summary
 - `report-section-{dimension}.md` — dimension sections (4 files, written by agents)
+- `phase2-value-model.json` — pruned value-model subset for Phase 2
 - `enriched-trends-{dimension}.json` — per-trend evidence blocks (4 files, used in theme assembly)
 - `report-theme-{theme_id}.md` — theme sections (3-7 files)
 - `report-emerging-signals.md` — orphan candidates

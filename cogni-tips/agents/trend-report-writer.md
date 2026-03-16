@@ -170,7 +170,7 @@ Per-trend evidence blocks that the orchestrator uses for theme-organized report 
       "evidence_md": "Description with quantitative evidence and inline citations...",
       "implications_md": "Impact analysis specific to the industry/subsector...",
       "opportunities_md": "Possibilities and strategic opportunities...",
-      "actions_md": "1. First action\n2. Second action\n3. Third action",
+      "actions_md": "pilot predictive maintenance; integrate OT/IT data layer; establish vendor shortlist",
       "claims_refs": ["claim_ee_001", "claim_ee_002"],
       "has_quantitative_evidence": true
     }
@@ -178,7 +178,7 @@ Per-trend evidence blocks that the orchestrator uses for theme-organized report 
 }
 ```
 
-The `*_md` fields contain the prose AFTER the bold label — i.e., the content of "**Trend Overview** — {this part}", not the label itself. This lets the orchestrator re-label or restructure without string surgery. `claims_refs` lists the claim IDs from the claims file that originated from this trend.
+The `evidence_md`, `implications_md`, and `opportunities_md` fields contain the prose AFTER the bold label — i.e., the content of "**Trend Overview** — {this part}", not the label itself. This lets the orchestrator re-label or restructure without string surgery. The `actions_md` field uses semicolon-separated action keywords (3-5 words each) — Phase 2 synthesizes full strategic actions at theme level, so per-trend actions only need to capture the core intent. `claims_refs` lists the claim IDs from the claims file that originated from this trend.
 
 ### Step 5: Return Compact JSON
 

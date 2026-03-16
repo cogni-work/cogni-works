@@ -10,9 +10,9 @@ The core idea: themes are the skeleton, individual trends are the evidence woven
 
 | Source | Content | Read from |
 |--------|---------|-----------|
-| Strategic Themes | Theme definitions with value chains | `{PROJECT_PATH}/tips-value-model.json` → `themes[]` |
-| Value Chains | T→I→P causal paths | `{PROJECT_PATH}/tips-value-model.json` → `value_chains[]` |
-| Solution Templates | What to build per theme | `{PROJECT_PATH}/tips-value-model.json` → `solution_templates[]` (may be empty if value-modeler Phase 2 hasn't run) |
+| Strategic Themes | Theme definitions with value chains | `{PROJECT_PATH}/.logs/phase2-value-model.json` → `themes[]` |
+| Value Chains | T→I→P causal paths | `{PROJECT_PATH}/.logs/phase2-value-model.json` → `value_chains[]` |
+| Solution Templates | What to build per theme | `{PROJECT_PATH}/.logs/phase2-value-model.json` → `solution_templates[]` (may be empty if value-modeler Phase 2 hasn't run) |
 | Per-trend evidence | Evidence blocks keyed by candidate_ref | `{PROJECT_PATH}/.logs/enriched-trends-{dimension}.json` (4 files) |
 | Claims | Quantitative claims keyed by ID | `{PROJECT_PATH}/.logs/claims-{dimension}.json` (4 files) |
 | i18n labels | Section headings in target language | Loaded in Phase 0 |
@@ -33,12 +33,13 @@ Read all 4 `claims-{dimension}.json` files and build a claims lookup:
 claim_id → { text, value, unit, type, context, citations }
 ```
 
-Read `tips-value-model.json` and extract:
+Read `.logs/phase2-value-model.json` (pruned subset created in Phase 0 Step 0.2b) and extract:
 - `themes[]` — ordered list of strategic themes
 - `value_chains[]` — all value chains with candidate_refs
-- `solution_templates[]` — solution templates linked to themes (may be empty)
+- `solution_templates[]` — solution templates linked to themes (may be empty; only `st_id`, `name`, `category`, `enabler_type`, `theme_ref` fields)
 - `coverage` — linked/orphaned/total counts
 - `mece_validation` — theme count, ME/CE status
+- `orphan_candidates[]` — candidates not in any theme
 
 ---
 

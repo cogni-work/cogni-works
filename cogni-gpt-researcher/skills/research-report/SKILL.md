@@ -16,19 +16,40 @@ description: |
 
 # Research Report Skill
 
-**Start immediately.** When this skill loads:
-1. If the user provided a topic → begin Phase 0 (Project Initialization)
-2. If no topic was provided → ask the user: "What topic should I research? You can also specify: report type (basic/detailed/deep), tone, citation format, or provide local documents."
-3. Never greet or wait — this skill means the user wants a research report generated
-
-Do not re-explain the skill's capabilities. Go straight to execution.
+When this skill loads:
+1. If no topic was provided → ask: "What topic should I research?"
+2. If topic provided → extract any options already in the user's prompt (report type, tone, citations, language, source mode, etc.), then present the **Configuration Menu** (Phase 0 Step 2) so the user can confirm or customize before research begins
+3. If the user explicitly said "just go", "defaults", or specified all key options (type + tone + citations) → skip the interactive menu, show a one-line confirmation of detected settings, and proceed directly
+4. Never greet or re-explain capabilities
 
 ## Quick Example
 
 **User**: "Write a research report on quantum computing's impact on cryptography"
 
-**Result**: A 3000-5000 word report with inline citations, produced via:
-1. Topic decomposition into 5 sub-questions
+**Skill presents**:
+> **Research Configuration**
+> Topic: "quantum computing's impact on cryptography"
+> Detected: type = basic
+>
+> **Depth** (research scope):
+> `basic` = 3-5K words, 5 sub-questions — standard report
+> `detailed` = 5-10K words, up to 10 sub-questions — comprehensive
+> `deep` = 8-15K words, recursive tree — maximum depth
+> `outline` = structured framework only (no prose)
+> `resource` = annotated source list / bibliography
+>
+> **Tone**: objective *(default)* | analytical | critical | persuasive | formal | informative | explanatory | descriptive | comparative | speculative | narrative | optimistic | simple
+> **Citations**: APA *(default)* | MLA | Chicago | Harvard | IEEE
+> **Language**: en *(default)* | de (German with DACH sources)
+>
+> Advanced: sub-question count, source mode (web/local/hybrid), domain filter, researcher role, image generation — ask about any of these
+>
+> Reply with your choices, or "go" for defaults.
+
+**User**: "detailed, analytical" *(or just "go")*
+
+**Result**: A 5000-10000 word report with inline citations, produced via:
+1. Topic decomposition into sub-questions
 2. Parallel web research (sonnet agents, one per sub-question)
 3. Context aggregation and source deduplication
 4. Report compilation (sonnet writer agent)
@@ -74,34 +95,67 @@ Read these reference files when the corresponding phase needs them:
 
 A well-structured project directory is the foundation for resumability and cross-agent coordination. Without it, agents cannot find each other's outputs, the review loop cannot track iterations, and a crash mid-research loses all progress.
 
-1. Determine workspace path (use current directory or ask user)
-2. Detect report type from user request (basic/detailed/deep/outline/resource)
-3. Parse optional parameters from user request:
-   - **Tone**: If user specifies a writing style (e.g., "analytical", "persuasive"), map to a tone from `references/writing-tones.md`. Default: "objective"
-   - **Citation format**: If user specifies a citation style (e.g., "use IEEE citations", "APA format"), capture it. Default: "apa". See `references/citation-formats.md`
-   - **Source URLs**: If user provides specific URLs to research (e.g., "research these articles: url1, url2"), collect them
-   - **Query domains**: If user wants to restrict research to specific domains (e.g., "only use .gov and .edu sources"), collect them
-   - **Max subtopics**: If user specifies a sub-question count (e.g., "use 8 sub-questions"), capture it
-   - **Report source**: If user provides local documents (e.g., "analyze these PDFs", "research from my files"), set to "local". If user wants both web and local: "hybrid". Default: "web"
-   - **Document paths**: If report_source is "local" or "hybrid", collect paths to local files or a glob pattern
-   - **Curate sources**: If user wants ranked/prioritized sources (e.g., "prioritize authoritative sources"), enable curation
-   - **Generate images**: If user wants visual illustrations (e.g., "add diagrams", "make it visual"), enable image generation
-4. Initialize project:
-   ```bash
-   bash "${CLAUDE_PLUGIN_ROOT}/scripts/initialize-project.sh" \
-     --topic "<user topic>" --type <basic|detailed|deep|outline|resource> \
-     --workspace "<workspace path>" \
-     [--tone "<tone>"] \
-     [--citation-format "<apa|mla|chicago|harvard|ieee>"] \
-     [--source-urls "<url1,url2,...>"] \
-     [--query-domains "<domain1,domain2,...>"] \
-     [--max-subtopics <N>] \
-     [--report-source "<web|local|hybrid>"] \
-     [--document-paths "<path1,path2,...>"] \
-     [--curate-sources] \
-     [--generate-images]
-   ```
-5. Store returned `project_path` for all subsequent phases
+#### Step 1: Extract options from user's prompt
+
+Scan the user's request and extract any options they already specified. These become "detected" settings that won't be re-asked in the configuration menu.
+
+- **Report type**: keywords like "detailed", "deep research", "outline", "sources" → map to basic/detailed/deep/outline/resource (see `references/report-types.md`)
+- **Tone**: style keywords like "analytical", "persuasive", "formal" → map to tone from `references/writing-tones.md`. Default: "objective"
+- **Citation format**: "IEEE", "APA format", "Chicago style" → capture. Default: "apa". See `references/citation-formats.md`
+- **Language**: "in German", "auf Deutsch" → "de". Default: "en"
+- **Source URLs**: any URLs in the prompt → collect for pre-fetch
+- **Query domains**: "only .gov sources", "restrict to arxiv" → collect domains
+- **Max subtopics**: "use 8 sub-questions", "12 dimensions" → capture count
+- **Report source**: "analyze these PDFs", "research from my files" → "local"; both web and local → "hybrid". Default: "web"
+- **Document paths**: file paths or glob patterns for local/hybrid mode
+- **Curate sources**: "prioritize authoritative sources" → enable
+- **Generate images**: "add diagrams", "make it visual" → enable
+
+#### Step 2: Interactive Configuration
+
+Present the user with a configuration menu using `AskUserQuestion` so they can see what options exist and choose before research starts. This is the heart of Phase 0 — it makes the skill's capabilities discoverable rather than hidden behind keyword detection.
+
+**Assemble the menu dynamically:**
+
+1. Show the detected topic
+2. List any options already extracted from the prompt (e.g., "Detected: type = deep, citations = IEEE")
+3. For **unset primary options**, show the compact chooser:
+   - **Depth** (only if report type not yet detected): list all 5 types with word counts and one-line descriptions
+   - **Tone** (only if not detected): list all 13 options, mark default
+   - **Citations** (only if not detected): list all 5 formats, mark default
+   - **Language** (only if not detected): en | de
+4. Always include one line for advanced options: "Advanced: sub-question count, source mode (web/local/hybrid), domain filter, researcher role, image generation — ask about any of these"
+5. End with: `Reply with your choices, or "go" for defaults.`
+
+**Conditional skip**: If the user's prompt already specified ALL primary options (type + tone + citations) OR included urgency signals ("just go", "start now", "defaults are fine"), collapse the menu to a one-line confirmation:
+> "Starting **detailed** research on X — analytical tone, IEEE citations, English. Change anything? (or 'go')"
+
+**Handling user responses:**
+- "go" / "defaults" / "start" → proceed with detected + default values
+- Specific choices ("deep, analytical, IEEE") → merge with detected values, proceed
+- Question about an advanced option ("what roles are available?") → read the relevant reference file (`references/agent-roles.md`, `references/writing-tones.md`, etc.), explain the option, then re-present the menu
+- Partial choices ("make it detailed") → update that option, ask if anything else or proceed
+
+#### Step 3: Initialize project
+
+Once configuration is confirmed, determine workspace path (current directory or ask user) and initialize:
+
+```bash
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/initialize-project.sh" \
+  --topic "<user topic>" --type <basic|detailed|deep|outline|resource> \
+  --workspace "<workspace path>" \
+  [--tone "<tone>"] \
+  [--citation-format "<apa|mla|chicago|harvard|ieee>"] \
+  [--source-urls "<url1,url2,...>"] \
+  [--query-domains "<domain1,domain2,...>"] \
+  [--max-subtopics <N>] \
+  [--report-source "<web|local|hybrid>"] \
+  [--document-paths "<path1,path2,...>"] \
+  [--curate-sources] \
+  [--generate-images]
+```
+
+Store returned `project_path` for all subsequent phases.
 
 ### Phase 0.1: Language Resolution
 

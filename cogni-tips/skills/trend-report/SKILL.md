@@ -294,9 +294,9 @@ If any `report-section-{dimension}.md` file is missing, log a WARNING. Phase 2 c
 
 1. **Read value model** — Read `.logs/phase2-value-model.json` for themes, value chains, solution templates, orphan candidates, coverage data
 2. **Dispatch theme agents** — For each theme, dispatch a `cogni-tips:trend-report-theme-writer` agent. All agents in a single message (parallel). Each agent self-loads evidence from disk, writes `report-theme-{theme_id}.md`, and returns compact JSON with word count, citation count, quality gate status, and top claims.
-3. **Write executive summary** — Using value model themes + agent-returned `top_claims` for headline evidence, write `report-header.md`
-4. **Write emerging signals** — Using orphan candidates from value model + filtered enriched-trends evidence, write `report-emerging-signals.md`
-5. **Collect agent results** — Validate all agents returned `ok: true` and quality gates passed. Retry once on failure.
+3. **Write emerging signals** — Using orphan candidates from value model + filtered enriched-trends evidence, write `report-emerging-signals.md` (can run while agents execute)
+4. **Collect agent results** — Validate all agents returned `ok: true` and quality gates passed. Retry once on failure.
+5. **Write executive summary** — Read ALL `report-theme-{theme_id}.md` files, then synthesize a flat Zusammenfassung (no subsections, no tables — theme bullet list + punchy closing paragraph). Write `report-header.md`.
 6. **Write portfolio view** — Using value model + agent-reported counts, write `report-portfolio.md`
 7. **Write claims registry** — Read 4 `claims-{dimension}.json` files once, map claims to themes via value model, write `report-claims-registry.md`
 8. **Assemble** — Concatenate with cat: header + themes (ordered) + emerging signals + portfolio + claims → `tips-trend-report.md`

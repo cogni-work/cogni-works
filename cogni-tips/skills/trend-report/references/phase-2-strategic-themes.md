@@ -86,112 +86,9 @@ Display `"{PHASE_2_THEME_AGENT_DISPATCH}"` after dispatching.
 
 ---
 
-## Step 2.3: Write Executive Summary + Emerging Signals
+## Step 2.3: Write Emerging Signals (while agents run)
 
-While theme agents run, the orchestrator writes the sections that don't depend on agent output.
-
-### Executive Summary
-
-The executive summary leads with the strategic themes table — this is the first thing the reader sees after the title. It answers "what are our strategic bets?" before anything else.
-
-Write `{PROJECT_PATH}/.logs/report-header.md` containing:
-
-#### Frontmatter
-
-```yaml
----
-title: "{REPORT_TITLE}"
-industry: {INDUSTRY_EN}
-subsector: {SUBSECTOR_EN}
-language: {LANGUAGE}
-generated_by: trend-report
-source_skills:
-  - trend-scout
-  - value-modeler
-report_mode: strategic-themes
-total_trends: 60
-total_themes: {N}
-total_claims: {N}
-generated_at: "{ISO-8601}"
----
-```
-
-Note `report_mode: strategic-themes` and `source_skills` includes `value-modeler`.
-
-#### Executive Summary Content
-
-The executive summary applies the Corporate Visions arc at the report level: unconsidered need → urgency → evidence → cost of inaction. A CxO reading only this section should feel "I must act" — not just "here are some themes."
-
-```markdown
-# {REPORT_TITLE}
-
-## {EXEC_SUMMARY_LABEL}
-
-{UNCONSIDERED NEED OPENER: 2-3 sentences reframing the industry's conventional
-strategic assumption. NOT neutral landscape framing ("Die Branche steht vor...").
-Instead, challenge the reader's mental model:
-
-Pattern: "The prevailing assumption in [industry] is [X]. But [N] converging
-forces reveal an unconsidered need: [provocative reframe]."
-
-Source: Synthesize from the theme strategic questions — what do they collectively
-reveal that a typical CxO briefing would miss? The opener should make the reader
-feel their current mental model is incomplete. Use a surprising data point from
-the value model or enriched evidence to anchor the reframe.}
-
-### {STRATEGIC_THEMES_OVERVIEW_LABEL}
-
-| # | {THEME_LABEL} | {STRATEGIC_QUESTION_LABEL} | {EXECUTIVE_SPONSOR_LABEL} |
-|---|---------------|---------------------------|---------------------------|
-| 1 | {theme.name} | {theme.strategic_question} | {theme.executive_sponsor_type} |
-| 2 | ... | ... | ... |
-
-{URGENCY BRIDGE: How these themes create COMPOUND urgency — not neutral "dependencies"
-language, but forcing-function convergence across themes.
-
-Pattern: "Any one of these themes justifies action. Together, they create a [N]-month
-window where [specific convergence point]."
-
-Reference the strongest forcing functions from the Why Now elements across themes.
-Include at least one specific date or regulatory deadline. Name which themes require
-immediate action (ACT-horizon) vs. strategic preparation (PLAN-horizon).}
-
-### {HEADLINE_EVIDENCE_LABEL}
-
-{Pick 3-5 of the most impactful quantitative claims across all themes. Each should
-support a different theme. Format as a tight bulleted list with inline citations.
-
-SOURCE: Use `top_claims` from theme agent return payloads. Each agent returns its
-2-3 most impactful claims. Select the best across all agents, ensuring coverage
-of different themes. If agents haven't completed yet, write this section after
-Step 2.4 (collect results).}
-
-### {COST_OF_INACTION_LABEL}
-
-{COST-OF-INACTION PUNCH LINE: Replace the neutral horizon assessment with a
-compelling business case synthesis across all themes.
-
-Source: Use `why_pay_ratio` and `why_pay_closing_statement` from theme agent returns.
-Synthesize the compound cost of inaction across themes.
-
-Pattern: "Organizations that act across [N] themes by [date] position for [advantage].
-Organizations that delay face [aggregate compound cost across themes]."
-
-If 3 themes each show 3x cost-of-inaction ratios, the report-level message is
-multiplicative — "Across five themes, delay compounds from [X] to [Y]."
-
-Close with a single undeniable sentence: the report-level defining choice.
-Example: "Proaktive Investition über fünf Themen: €X Millionen. Kosten der
-Untätigkeit: €Y Millionen über drei Jahre. Die Entscheidung liegt vor Ihnen."}
-```
-
-Must end with two trailing newlines.
-
-**Timing notes:**
-- The unconsidered-need opener, themes table, and urgency bridge can be written from the value model alone (before agents complete).
-- The headline evidence section needs `top_claims` from agent returns.
-- The cost-of-inaction section needs `why_pay_ratio` and `why_pay_closing_statement` from agent returns.
-- If writing the header before agents complete, leave placeholders for headline evidence AND cost-of-inaction, then fill both after Step 2.4 (collect results).
+While theme agents run, the orchestrator writes the emerging signals section — it depends only on orphan candidate data from the value model, not on agent output.
 
 ### Emerging Signals
 
@@ -270,17 +167,85 @@ For each agent result:
 
 All dispatched agents must succeed before proceeding. Agents that were skipped via resume check don't need validation.
 
-### Backfill Headline Evidence + Cost of Inaction
+---
 
-If the executive summary header was written before agents completed (with placeholders), now read `report-header.md` and fill in:
+## Step 2.5: Write Executive Summary (after reading theme sections)
 
-1. **`{HEADLINE_EVIDENCE_LABEL}` section:** Use `top_claims` from across all agent returns. Pick 3-5 claims that each support a different theme.
+The executive summary is written AFTER all theme agents complete. The orchestrator reads every `report-theme-{theme_id}.md` file to synthesize a grounded Zusammenfassung from the actual prose — not from metadata or agent return JSON alone.
 
-2. **`{COST_OF_INACTION_LABEL}` section:** Use `why_pay_ratio` and `why_pay_closing_statement` from each agent's return JSON. Synthesize the compound cost of inaction across all themes into a punchy closing section. If multiple themes show 2-3x cost-of-inaction ratios, the aggregate message is multiplicative.
+**Why this ordering matters:** The Zusammenfassung is crispier and more specific when the LLM has read the full theme narratives. It can pull the most surprising evidence, the sharpest reframes, and the most compelling cost-of-inaction ratios directly from the written sections.
+
+### Process
+
+1. Read ALL `{PROJECT_PATH}/.logs/report-theme-{theme_id}.md` files (in theme order)
+2. Read the value model for theme names and strategic questions
+3. Write `{PROJECT_PATH}/.logs/report-header.md` in a single pass
+
+### Frontmatter
+
+```yaml
+---
+title: "{REPORT_TITLE}"
+industry: {INDUSTRY_EN}
+subsector: {SUBSECTOR_EN}
+language: {LANGUAGE}
+generated_by: trend-report
+source_skills:
+  - trend-scout
+  - value-modeler
+report_mode: strategic-themes
+total_trends: 60
+total_themes: {N}
+total_claims: {N}
+generated_at: "{ISO-8601}"
+---
+```
+
+### Executive Summary Content
+
+The Zusammenfassung is ONE flat section — no subsections (`###`), no tables. A CxO reading only this section should feel "I must act."
+
+```markdown
+# {REPORT_TITLE}
+
+## {EXEC_SUMMARY_LABEL}
+
+{UNCONSIDERED NEED OPENER: 2-3 tight sentences. Synthesized from reading all theme
+sections — pull the most surprising reframe across themes. Challenge the reader's
+mental model. Anchor with one specific data point lifted from the theme prose.
+NOT neutral landscape framing ("Die Branche steht vor...").
+
+Pattern: "The prevailing assumption is [X]. [N] converging forces reveal: [reframe]."}
+
+- **{theme_1.name}**: {theme_1.strategic_question}
+- **{theme_2.name}**: {theme_2.strategic_question}
+- ...
+- **{theme_N.name}**: {theme_N.strategic_question}
+
+{CLOSING PARAGRAPH: 2-3 sentences that weave urgency, headline evidence, and
+cost-of-inaction into a single compelling arc. Source everything from the theme
+sections you just read — specific numbers, deadlines, ratios.
+
+Include: the decisive time window, the aggregate cost-of-inaction ratio across
+themes, and one undeniable closing sentence.
+
+Pattern: "Together these [N] themes create a [window] — [convergence point].
+Proactive investment: €X Mio. Cost of inaction: €Y Mio. over three years.
+Die Entscheidung liegt vor Ihnen."}
+```
+
+**Rules:**
+- NO `###` subsections inside Zusammenfassung
+- NO tables — themes as `- **Name**: Question` bullet list
+- NO separate Kernevidenz section — weave 2-3 evidence highlights into the closing paragraph
+- NO separate Handlungskosten section — merge cost-of-inaction into the closing paragraph
+- The entire Zusammenfassung should be tight: opener (2-3 sentences) + bullet list + closing (2-3 sentences)
+
+Must end with two trailing newlines.
 
 ---
 
-## Step 2.5: Generate Strategic Portfolio View
+## Step 2.6: Generate Strategic Portfolio View
 
 Replace the flat dimensional portfolio analysis with theme-level metrics.
 
@@ -331,12 +296,12 @@ Use a combination of value model data and agent return payloads:
 - **Chain count per theme:** Count value chains with matching `theme_ref` in value model
 - **Candidates per theme:** Use `candidates_covered` from agent returns (already deduplicated). For resumed themes (no agent return), count unique candidate_refs from the value model's value chains.
 - **Horizon mix:** Extract horizon from each candidate_ref format (`{dimension}/{horizon}/{seq}`). For more precise counts, read the enriched-trends files — but the candidate_ref format provides the horizon directly.
-- **Claims per theme:** For agents that ran, count from `top_claims`. For precise counts, read claims files in Step 2.6 and count by theme mapping.
+- **Claims per theme:** For agents that ran, count from `top_claims`. For precise counts, read claims files in Step 2.7 and count by theme mapping.
 - **Evidence coverage per theme:** Requires reading enriched-trends to check `has_quantitative_evidence`. If this creates too much context pressure, use agent word_count and citations_count as proxies.
 
 ---
 
-## Step 2.6: Generate Claims Registry
+## Step 2.7: Generate Claims Registry
 
 Claims registry includes a `theme` column. This is the one step where the orchestrator reads the claims JSON files directly.
 
@@ -360,7 +325,7 @@ Must end with two trailing newlines.
 
 ---
 
-## Step 2.7: Assemble Final Report
+## Step 2.8: Assemble Final Report
 
 Verify all files exist, then concatenate in this order:
 
@@ -390,7 +355,7 @@ Read first 3 + last 3 lines of the assembled report:
 
 ---
 
-## Step 2.8: Merge Claims
+## Step 2.9: Merge Claims
 
 Merge all 4 dimension claims into `tips-trend-report-claims.json`. The claims themselves don't change; only the report structure around them does.
 

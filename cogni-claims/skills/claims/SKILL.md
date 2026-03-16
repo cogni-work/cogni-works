@@ -8,7 +8,8 @@ description: |
   for verification (e.g., after a research or portfolio workflow produces sourced assertions).
   Even if the user doesn't say "claims" explicitly — if they're asking about verifying facts
   against sources, checking citations, finding outdated or mismatched data in cited references,
-  or reviewing what's been flagged, this skill handles it.
+  reviewing what's been flagged, checking for stale sources, outdated data in references,
+  or asking "which claims need attention" or "what did verification find", this skill handles it.
 ---
 
 # Claims Verification Orchestrator
@@ -30,10 +31,10 @@ Determine the operating mode from the user's intent. People rarely say "mode: ve
 | Mode | What triggers it | What it does |
 |------|-----------------|--------------|
 | `submit` | User or plugin provides new claims with sources | Add claims to the registry for tracking |
-| `verify` | "verify", "check", "run verification", or first time after submission | Fetch sources and compare claims against them |
-| `dashboard` | "show", "status", "overview", "what claims", "dashboard" | Display all claims grouped by status |
-| `inspect` | "inspect", "show me", "details on", "what's wrong with" + a claim ID | Deep-dive into one claim's evidence |
-| `resolve` | "resolve", "fix", "handle", "deal with" + a claim ID | Walk the user through resolving a deviation |
+| `verify` | "verify", "check", "re-check", "re-verify", "run verification", or first time after submission | Fetch sources and compare claims against them |
+| `dashboard` | "show", "status", "overview", "what claims", "dashboard", "what did you find", "which claims need attention", "what's the status" | Display all claims grouped by status |
+| `inspect` | "inspect", "show me", "details on", "what's wrong with", "explain this deviation" + a claim ID | Deep-dive into one claim's evidence |
+| `resolve` | "resolve", "fix", "handle", "deal with", "correct" + a claim ID | Walk the user through resolving a deviation |
 
 When in doubt, `dashboard` is a safe default — it gives the user an overview and they can drill down from there.
 
@@ -107,20 +108,13 @@ Verification complete:
 - {n} sources unavailable
 ```
 
-If there are deviated claims with severity `medium` or higher, don't just point the user to the dashboard — proactively offer to open the deviated sources in the browser so they can see the discrepancies in context. This co-browsing step is valuable because LLM-based deviation findings are assessments, and the user will often want to verify them against the actual source page before deciding what to do.
-
-For each deviated claim, briefly show:
-- The claim statement and deviation type
-- The source excerpt that conflicts
-- An offer to open the source in the browser via the `cogni-claims:source-inspector` agent
-
-If the user wants to see the source, launch the source-inspector agent immediately — don't make them go through inspect mode first. The goal is a seamless flow: verify → see the problem → decide what to do.
+If there are deviated claims with severity `medium` or higher, briefly show each one (claim statement, deviation type, source excerpt) and proactively offer co-browsing (see Co-browsing section below). The goal is a seamless flow: verify → see the problem → decide what to do.
 
 ## Dashboard mode
 
 Show the user where things stand. Read `claims.json`, group by status, and render the dashboard. The complete layout spec is in `references/dashboard-format.md` — follow it for section ordering, truncation rules, and sorting.
 
-The dashboard should give the user a clear picture at a glance and make it obvious what needs attention (deviated claims with high severity) vs. what's fine (verified claims).
+The dashboard should give the user a clear picture at a glance and make it obvious what needs attention (deviated claims with high severity) vs. what's fine (verified claims). Show at most 20 claims per status section — see `references/dashboard-format.md` for overflow handling and full layout spec.
 
 For each deviated claim in the "Deviations Requiring Attention" section, include a one-line summary of what the deviation is (not just the type label) so the user can quickly decide which claims to inspect. When presenting action hints, emphasize that `/claims inspect <id>` will open the source in the browser for side-by-side review — this is the primary workflow for handling deviations.
 
@@ -131,14 +125,12 @@ When the user wants to dig into a specific claim's evidence. This mode should fe
 1. Look up the claim by ID
 2. If it has deviations, show each one: type, severity, the verbatim source excerpt, and the explanation. Include a plain-language "What this means" summary that explains the discrepancy in context — why it matters and what a reader would get wrong.
 3. If it's verified, show the supporting excerpt
-4. **Automatically launch the `cogni-claims:source-inspector` agent** to open the source in the browser and highlight the relevant passage. Don't just offer — do it, because the whole point of inspect mode is to let the user see the evidence in its original context. If the user came here, they want to see the source.
-5. Once the source is visible in the browser, offer to transition directly to resolve mode so the user can act on what they see.
-
-The seamless flow should be: inspect → source opens in browser → user reads the passage → resolve options appear. No extra steps.
+4. Automatically launch co-browsing (see Co-browsing section below) — the whole point of inspect mode is to see the evidence in context, so don't just offer, do it
+5. Once the source is visible in the browser, offer to transition directly to resolve mode
 
 ## Resolve mode
 
-Walk the user through resolving a deviated claim. If the source isn't already open in the browser from inspect mode, launch `cogni-claims:source-inspector` to open it now — the user should be able to see the source while making their decision.
+Walk the user through resolving a deviated claim. If the source isn't already open in the browser from inspect mode, launch co-browsing (see Co-browsing section below) — the user should be able to see the source while making their decision.
 
 1. Look up the claim — it must have status `deviated`
 2. Display the claim, its deviations, and the source excerpt
@@ -166,9 +158,35 @@ These aren't arbitrary rules — they reflect the fundamental nature of LLM-base
 
 - **No silent failures**: If a source can't be fetched, that's important information — it means the claim can't be verified, which is different from being verified clean.
 
+## Co-browsing
+
+When the user needs to see a source in context — whether from verify, inspect, or resolve mode — launch the `cogni-claims:source-inspector` agent with the source URL, the verbatim excerpt, the claim statement, and the deviation explanation. This opens the source in the browser and highlights the relevant passage so the user can judge the deviation against the actual page.
+
+Co-browsing is valuable because LLM-based deviation findings are assessments, not verdicts. Seeing the source in its original context helps the user make informed decisions. Don't make the user request it explicitly — if they're looking at a deviation, they almost certainly want to see the source.
+
+If the source-inspector reports that highlighting failed, let the user know they may need to search the page manually for the relevant passage.
+
+## Example flows
+
+**Submit + Verify:**
+- User: "I found these claims in the research report, can you check them?"
+- System: submits claims, groups by URL, dispatches verifiers in parallel, shows summary with deviation counts
+- User: "Show me the one about revenue growth" → transitions to inspect mode
+
+**Dashboard + Resolve:**
+- User: "What's the status of my claims?"
+- System: renders dashboard showing 2 deviations (1 critical, 1 medium), 5 verified, 1 pending
+- User: "Fix the critical one" → transitions to resolve mode with suggested correction
+
+## When things go wrong
+
+- **claims.json is corrupted or malformed**: The init script is idempotent and won't overwrite an existing file. If the file exists but is unreadable, tell the user, offer to back it up (rename to `claims.json.bak`), and reinitialize.
+- **A verifier agent times out or returns malformed JSON**: Mark those claims as `source_unavailable` with a verification note explaining the failure, report to the user, and offer re-verification.
+- **Source content changed since last verification**: This is expected — sources get updated. If `verified_at` is more than 7 days old, note this on the dashboard so the user knows the verification may be stale. Re-verification handles this cleanly.
+
 ## Reference files
 
-- **`references/verification-protocol.md`** — The detailed methodology for how claim-source comparison works, including deviation type definitions, severity criteria, and epistemic humility guidelines. Read this when you need specifics on how to instruct the verifier agents.
+- **`references/verification-protocol.md`** — Quality principles (epistemic humility, conservative detection, batch consistency) and re-verification rules. Read this when you need to understand the philosophical approach to verification or handle re-verification edge cases. The step-by-step methodology lives inline in the claim-verifier agent.
 - **`references/dashboard-format.md`** — Complete dashboard layout spec with section ordering, truncation rules, and sorting. Read this when rendering the dashboard.
 
 ## Scripts

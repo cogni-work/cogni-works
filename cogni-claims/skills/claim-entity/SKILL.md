@@ -25,9 +25,17 @@ A single verifiable claim with its current state. Key fields: `id`, `statement`,
 
 A specific discrepancy between claim and source. Key fields: `type`, `severity`, `source_excerpt`, `explanation`.
 
-**Deviation types:** `misquotation`, `unsupported_conclusion`, `selective_omission`, `data_staleness`, `source_contradiction`
+**Deviation types:**
 
-**Severity levels:** `low`, `medium`, `high`, `critical`
+| Type | Meaning |
+|------|---------|
+| `misquotation` | Claim misrepresents the source's words |
+| `unsupported_conclusion` | Claim draws inference the source does not support |
+| `selective_omission` | Claim omits context that changes meaning |
+| `data_staleness` | Claim uses outdated data from the source |
+| `source_contradiction` | Source directly contradicts the claim |
+
+**Severity levels:** `low` (minor imprecision), `medium` (could mislead), `high` (significant misrepresentation), `critical` (complete contradiction or fabrication)
 
 **Language in `explanation` fields:** Because deviation detection is LLM-based and can be wrong, explanations must use hedged language — "the claim appears to overstate", "the source suggests a different figure", "this may indicate a discrepancy" — rather than definitive assertions like "the claim is wrong" or "significantly overstating". This epistemic humility signals to the user that the finding is an assessment to review, not a verdict.
 

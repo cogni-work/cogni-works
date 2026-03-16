@@ -49,18 +49,21 @@ You will receive these in your task prompt:
 ### Step 1: Fetch Source Content
 
 1. Use WebFetch to retrieve the source URL content
-2. If WebFetch fails (403, timeout, empty content), note the failure
-3. If fetch fails, write a failure cache file and return `source_unavailable` for all claims
+2. If WebFetch fails (403, timeout, empty content) or returns paywall-like content (very short body with login/subscribe keywords), try browser-based fetching as a fallback — many sources block programmatic access but render fine in a browser:
+   - Navigate to the URL using browser automation tools
+   - Wait for the page to load (some sources render content via JavaScript)
+   - Extract the page text
+3. Only mark `source_unavailable` after **both** methods fail — WebFetch failures alone are not sufficient because many legitimate sources use anti-bot measures
 
 Cache the result to `cogni-claims/sources/{url-hash}.json`:
 - Generate the hash: `echo -n "<url>" | shasum -a 256 | cut -c1-16`
-- Write JSON with: url, fetched_at, fetch_method, status, content, error
+- Write JSON with: url, fetched_at, fetch_method (either `webfetch` or `browser`), status, content, error
 
 ### Step 2: Verify Each Claim
 
 For each claim in the input:
 
-1. **Locate relevant passage**: Search the source content for text related to the claim's subject matter. If no relevant passage exists, the source is silent on this claim.
+1. **Locate relevant passage**: Search the source content for text related to the claim's subject matter. If no relevant passage exists, the source is silent on this claim — record this as `unsupported_conclusion` with severity `medium` and explain that the cited source does not address the claim's subject matter. This matters because a source that says nothing about a topic cannot support a claim about it.
 
 2. **Compare claim to source**: Evaluate along five dimensions:
    - **Accuracy**: Does the claim accurately represent the source's words? → `misquotation`

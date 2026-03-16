@@ -18,6 +18,10 @@
 # JSON FORMAT ASSUMPTION: This script expects pretty-printed JSON with one
 # field per line (as produced by Claude's Write tool). Minified single-line
 # JSON will cause incorrect results in has-claims and count-by-status.
+# Trade-off: grep-based parsing avoids a jq dependency (keeping the script
+# portable to any system with bash 3.2+), but if an external tool minifies
+# claims.json, counts will be wrong. If this becomes an issue, pipe through
+# `python3 -m json.tool` first to re-prettify.
 
 set -euo pipefail
 

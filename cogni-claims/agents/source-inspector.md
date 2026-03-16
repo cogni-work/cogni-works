@@ -63,27 +63,35 @@ You will receive in your task prompt:
 
 ### Step 3: Highlight the Passage
 
-Use JavaScript execution to highlight the relevant text on the page:
+Use a tiered approach because source excerpts often span multiple HTML elements (e.g., `<strong>Revenue</strong> grew 45%`), which means single-text-node matching frequently fails on real pages:
 
+**Tier 1 — `window.find()` (handles cross-node text):**
 ```javascript
-// Find and highlight the passage
-const text = "<excerpt keywords>";
-const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
-while (walker.nextNode()) {
-  if (walker.currentNode.textContent.includes(text)) {
+// Pick a distinctive substring (15-30 chars) from the excerpt
+const searchText = "<distinctive substring>";
+if (window.find(searchText)) {
+  const sel = window.getSelection();
+  if (sel.rangeCount > 0) {
+    const range = sel.getRangeAt(0);
     const span = document.createElement('span');
     span.style.backgroundColor = '#ffeb3b';
     span.style.padding = '2px 4px';
     span.style.border = '2px solid #f44336';
     span.style.borderRadius = '3px';
-    const range = document.createRange();
-    range.selectNodeContents(walker.currentNode);
     range.surroundContents(span);
     span.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    break;
+    sel.removeAllRanges();
   }
 }
 ```
+
+**Tier 2 — TreeWalker on shorter substring (if Tier 1 fails):**
+Use the first 20 characters of the excerpt as a fuzzy match against individual text nodes. This catches cases where `window.find()` is not available or the page overrides it.
+
+**Tier 3 — Browser native find (last resort):**
+Use the `find` tool or press `Ctrl+F`/`Cmd+F` to open the browser's built-in search with a key phrase from the excerpt. This always works but provides less visual emphasis.
+
+Report which tier succeeded so the orchestrator knows the highlight quality.
 
 ### Step 4: Take Screenshot
 
@@ -93,8 +101,11 @@ Capture a screenshot showing the highlighted passage in context so the user can 
 
 Return a brief summary:
 - Whether the passage was found on the page
-- A screenshot of the highlighted passage
+- Which highlight tier succeeded (or if highlighting failed entirely)
+- A screenshot of the highlighted passage (or the best-match area if highlighting failed)
 - The URL is now open in the browser for further exploration
+
+If highlighting failed completely, say so explicitly — the orchestrator needs to know so it can guide the user to search manually rather than presenting a screenshot that misleadingly appears to show the right section.
 
 **Edge Cases:**
 

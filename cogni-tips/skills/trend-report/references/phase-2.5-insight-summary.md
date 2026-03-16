@@ -1,6 +1,6 @@
 # Phase 2.5: Insight Summary Generation (trend-panorama)
 
-Generate an arc-aware narrative insight summary by delegating to `cogni-narrative:narrative-writer` using the `trend-panorama` arc.
+Generate an arc-aware narrative insight summary by invoking `cogni-narrative:narrative` skill using the `trend-panorama` arc.
 
 **This phase runs automatically** — no user prompts required. The `trend-panorama` arc is purpose-built for TIPS output, mapping dimensions directly to narrative elements:
 
@@ -25,10 +25,10 @@ Read `{PROJECT_PATH}/tips-trend-report.md`.
 
 ---
 
-## Step 1: Invoke Narrative-Writer Agent
+## Step 1: Invoke Narrative Skill
 
 **Add step-level todos via TodoWrite:**
-- Phase 2.5, Step 1: Invoke narrative-writer agent [in_progress]
+- Phase 2.5, Step 1: Invoke narrative skill [in_progress]
 - Phase 2.5, Step 2: Validate tips-insight-summary.md exists [pending]
 - Phase 2.5, Step 3: Report completion and mark phase complete [pending]
 
@@ -42,30 +42,21 @@ These values were already extracted during Phase 0 Step 0.2. Reuse them directly
 If Phase 0 context is unavailable, re-read `{PROJECT_PATH}/.metadata/trend-scout-output.json`
 and extract from the correct paths above.
 
-**Invoke narrative-writer agent with trend-panorama arc:**
+**Invoke narrative skill directly with trend-panorama arc:**
 
-```python
-Task(
-  subagent_type="cogni-narrative:narrative-writer",
-  prompt="""source_path: {PROJECT_PATH}/
-project_path: {PROJECT_PATH}
-arc_id: trend-panorama
-language: {language}
-output_path: {PROJECT_PATH}/tips-insight-summary.md
-research_question: {topic}
+> **IMPORTANT:** Use the Skill tool, NOT the Agent tool. Do NOT delegate to `cogni-narrative:narrative-writer` agent — that creates a nested agent→agent chain that causes infinite loops. The skill runs in the current context.
 
-content_map:
-  executive_summary: {PROJECT_PATH}/tips-trend-report.md
-  dimension_sections:
-    - {PROJECT_PATH}/.logs/report-section-externe-effekte.md
-    - {PROJECT_PATH}/.logs/report-section-digitale-wertetreiber.md
-    - {PROJECT_PATH}/.logs/report-section-neue-horizonte.md
-    - {PROJECT_PATH}/.logs/report-section-digitales-fundament.md
-  claims_registry: {PROJECT_PATH}/tips-trend-report-claims.json
-  full_report: {PROJECT_PATH}/tips-trend-report.md
-""",
-  description="Generating insight summary (trend-panorama)"
-)
+```yaml
+Skill:
+  name: "cogni-narrative:narrative"
+  args: >-
+    --source-path {PROJECT_PATH}/
+    --project-path {PROJECT_PATH}
+    --arc-id trend-panorama
+    --language {language}
+    --output-path {PROJECT_PATH}/tips-insight-summary.md
+    --research-question "{topic}"
+    --content-map '{"executive_summary": "{PROJECT_PATH}/tips-trend-report.md", "dimension_sections": ["{PROJECT_PATH}/.logs/report-section-externe-effekte.md", "{PROJECT_PATH}/.logs/report-section-digitale-wertetreiber.md", "{PROJECT_PATH}/.logs/report-section-neue-horizonte.md", "{PROJECT_PATH}/.logs/report-section-digitales-fundament.md"], "claims_registry": "{PROJECT_PATH}/tips-trend-report-claims.json", "full_report": "{PROJECT_PATH}/tips-trend-report.md"}'
 ```
 
 - Input: source_path (project root), project_path, arc_id (`trend-panorama`), language, output_path, research_question, content_map
@@ -87,7 +78,7 @@ Read `{PROJECT_PATH}/tips-insight-summary.md`.
 - IF Read fails (file not found): Log WARNING and proceed (non-blocking).
 
 ```text
-WARNING: tips-insight-summary.md not created (narrative-writer returned success=false).
+WARNING: tips-insight-summary.md not created (narrative skill returned success=false).
 This is non-blocking. Continuing to Phase 3.
 ```
 
@@ -110,14 +101,14 @@ Phase 2.5: Generated insight summary (trend-panorama)
 
 ```text
 Phase 2.5: WARNING - tips-insight-summary.md not created
-- narrative-writer agent failed or unavailable
+- narrative skill failed or unavailable
 - Non-blocking: continuing to Phase 3
 ```
 
 **Self-Verification Before Completion:**
 
 1. Did you check tips-trend-report.md exists? YES / NO
-2. Did you invoke narrative-writer agent with arc_id=trend-panorama? YES / NO
+2. Did you invoke narrative skill with arc_id=trend-panorama? YES / NO
 3. Did you validate tips-insight-summary.md exists? YES / NO
 
 **Update TodoWrite:** Phase 2.5 -> completed, Phase 3 -> in_progress
@@ -132,7 +123,7 @@ When initializing Phase 2.5 todos:
 
 ```markdown
 - Phase 2.5: Insight summary generation (trend-panorama) [in_progress]
-  - Step 1: Invoke narrative-writer agent [in_progress]
+  - Step 1: Invoke narrative skill [in_progress]
   - Step 2: Validate tips-insight-summary.md [pending]
   - Step 3: Report completion [pending]
 ```
@@ -143,7 +134,7 @@ When initializing Phase 2.5 todos:
 
 | Failure | Recovery |
 |---------|----------|
-| narrative-writer agent fails | WARNING only - continue to Phase 3 |
+| narrative skill fails | WARNING only - continue to Phase 3 |
 | tips-insight-summary.md not created | WARNING only - continue to Phase 3 |
 | cogni-narrative plugin not installed | WARNING only - continue to Phase 3 |
 | tips-trend-report.md missing | HALT - Phase 2 incomplete |

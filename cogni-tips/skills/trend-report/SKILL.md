@@ -336,7 +336,7 @@ The report reads as a strategy document with 3-7 investment themes (each contain
 
 Read [references/phase-2.5-insight-summary.md](references/phase-2.5-insight-summary.md) for the full workflow.
 
-Verify `tips-trend-report.md` exists and that the 4 dimension section files (`report-section-{dimension}.md`) exist in `.logs/`, then invoke `cogni-narrative:narrative-writer` with arc_id `trend-panorama`. This arc maps TIPS dimensions to narrative elements (Forces → Impact → Horizons → Foundations).
+Verify `tips-trend-report.md` exists and that the 4 dimension section files (`report-section-{dimension}.md`) exist in `.logs/`, then invoke `cogni-narrative:narrative` skill with arc_id `trend-panorama`. This arc maps TIPS dimensions to narrative elements (Forces → Impact → Horizons → Foundations).
 
 All failures in this phase are non-blocking — the insight summary enhances the report but isn't required for downstream consumers.
 
@@ -433,7 +433,7 @@ Use /tips-resume in your next session to pick up where you left off.
 
 **Pipeline:** `trend-scout → value-modeler → trend-report`
 
-**Optional cross-plugin:** `cogni-narrative:narrative-writer` (Phase 2.5), `cogni-claims:claim-work` (Phase 3), `cogni-copywriting:copywriter` (Phase 3.5)
+**Optional cross-plugin:** `cogni-narrative:narrative` skill (Phase 2.5), `cogni-claims:claim-work` (Phase 3), `cogni-copywriting:copywriter` (Phase 3.5)
 
 **Downstream:** `export-html-report`, `export-pdf-report`
 

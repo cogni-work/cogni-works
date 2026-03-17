@@ -167,7 +167,25 @@ bash "${CLAUDE_PLUGIN_ROOT}/scripts/initialize-project.sh" \
   [--generate-images]
 ```
 
-Store returned `project_path` for all subsequent phases.
+Check the `already_exists` field in the JSON output before proceeding.
+
+**If `already_exists` is `false`**: store the returned `project_path` and continue to Phase 0.1.
+
+**If `already_exists` is `true`**: a project with the same slug already exists at that location. Do NOT silently continue — this would overwrite or mix into the user's prior research. Present a choice via `AskUserQuestion`:
+
+> A research project already exists at `{project_path}`
+> - **Topic**: "{existing_topic}"
+> - **Completed phases**: {completed_phases}
+>
+> What would you like to do?
+> 1. **Resume** — continue this existing project from where it left off
+> 2. **New project** — create a separate project alongside the existing one
+> 3. **Different location** — save the new project somewhere else
+
+Handle the user's choice:
+- **Resume**: read `.metadata/execution-log.json` from the existing project and jump to the Resumption logic (skip remaining Phase 0 steps)
+- **New project**: re-run `initialize-project.sh` with `--suffix 2`. If that also collides, increment the suffix (3, 4, ...) until a fresh directory is created
+- **Different location**: ask the user for a path, then re-run `initialize-project.sh` with the new `--workspace` value
 
 ### Phase 0.1: Language Resolution
 

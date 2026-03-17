@@ -3,7 +3,7 @@ set -euo pipefail
 # initialize-project.sh - Create project directory structure for a research report
 # Version: 1.0.0
 #
-# Usage: initialize-project.sh --topic <topic> --type <basic|detailed|deep|outline|resource> --workspace <path> [--language <en|de>] [--tone <tone>] [--researcher-role <role>] [--source-urls <url1,url2,...>] [--query-domains <domain1,domain2,...>] [--max-subtopics <N>] [--citation-format <apa|mla|chicago|harvard|ieee>] [--report-source <web|local|hybrid>] [--document-paths <path1,path2,...>]
+# Usage: initialize-project.sh --topic <topic> --type <basic|detailed|deep|outline|resource> --workspace <path> [--language <en|de>] [--tone <tone>] [--researcher-role <role>] [--source-urls <url1,url2,...>] [--query-domains <domain1,domain2,...>] [--max-subtopics <N>] [--citation-format <apa|mla|chicago|harvard|ieee>] [--report-source <web|local|hybrid>] [--document-paths <path1,path2,...>] [--suffix <N>]
 #
 # Creates:
 #   {workspace}/{slug}-{date}/
@@ -32,6 +32,7 @@ REPORT_SOURCE=""
 DOCUMENT_PATHS=""
 CURATE_SOURCES=""
 GENERATE_IMAGES=""
+SUFFIX=""
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -49,6 +50,7 @@ while [[ $# -gt 0 ]]; do
     --document-paths) DOCUMENT_PATHS="$2"; shift 2;;
     --curate-sources) CURATE_SOURCES="true"; shift 1;;
     --generate-images) GENERATE_IMAGES="true"; shift 1;;
+    --suffix) SUFFIX="$2"; shift 2;;
     *) echo "{\"success\": false, \"error\": \"Unknown argument: $1\"}" >&2; exit 2;;
   esac
 done
@@ -90,11 +92,17 @@ fi
 # Generate slug
 SLUG=$(echo "$TOPIC" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9 ]//g' | tr ' ' '-' | sed 's/-\+/-/g' | head -c 40 | sed 's/-$//')
 DATE=$(date -u +%Y-%m-%d)
-PROJECT_DIR="$WORKSPACE/${SLUG}-${DATE}"
+if [[ -n "$SUFFIX" ]]; then
+  PROJECT_DIR="$WORKSPACE/${SLUG}-${SUFFIX}-${DATE}"
+else
+  PROJECT_DIR="$WORKSPACE/${SLUG}-${DATE}"
+fi
 
 # Check if project already exists
 if [[ -d "$PROJECT_DIR" ]]; then
-  echo "{\"success\": true, \"project_path\": \"$PROJECT_DIR\", \"already_exists\": true}"
+  EXISTING_TOPIC=$(jq -r '.topic // "unknown"' "$PROJECT_DIR/.metadata/project-config.json" 2>/dev/null || echo "unknown")
+  EXISTING_PHASES=$(jq -r '[.phases | to_entries[] | select(.value.status == "completed") | .key] | join(", ")' "$PROJECT_DIR/.metadata/execution-log.json" 2>/dev/null || echo "none")
+  echo "{\"success\": true, \"project_path\": \"$PROJECT_DIR\", \"already_exists\": true, \"existing_topic\": \"$EXISTING_TOPIC\", \"completed_phases\": \"$EXISTING_PHASES\"}"
   exit 0
 fi
 

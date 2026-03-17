@@ -283,6 +283,12 @@ vs. now. Specific € range. Draw from S-candidate evidence.
 **Cost Dimension 3:** Operational opportunity cost — foregone efficiency/quality
 improvements from delay. Specific € range. Draw from P-candidate evidence.
 
+**Source mapping:** Dimension 1 (regulatory/market loss) draws from T-candidate
+and I-candidate enriched claims — regulatory penalties, market share erosion.
+Dimension 2 (capability premium) draws from S-candidate evidence and
+`SOLUTION_PRICING.cost_model` role rates. Dimension 3 (opportunity cost) draws
+from P-candidate evidence and `SOLUTION_PRICING.pricing` tier deltas.
+
 **Synthesis:** "Delay costs [total] over 3 years. Proactive investment: [amount].
 Action costs less than inaction by a factor of [N]x."
 
@@ -324,8 +330,11 @@ already matches the market region). If solution pricing is in a different
 currency than the region's currency, convert and note the original.
 
 Do NOT use hardcoded salary ranges, floor estimates per capability type,
-or invented cost figures. If `SOLUTION_PRICING` is empty, derive cost
-estimates from the enriched evidence only — never fabricate numbers.
+or invented cost figures — portfolio solution data is the authoritative
+source; unsubstantiated numbers destroy credibility when CFO readers
+cross-check against their own procurement data. If `SOLUTION_PRICING`
+is empty, derive cost estimates from the enriched evidence only — never
+fabricate numbers.
 
 Quantify at least 2 of 3 dimensions with specific ranges in the region's
 currency. The third may be qualitative if evidence is thin. Close with a

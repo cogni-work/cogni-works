@@ -49,7 +49,7 @@ You will receive these parameters from trend-scout:
 
 **Your Objective:**
 
-1. Execute 32 WebSearch queries (16 standard + 8 DACH site-specific + 4 funding + 4 job market)
+1. Execute 32 WebSearch queries (16 standard + 8 region-specific site + 4 funding + 4 job market)
 2. Execute API queries (academic, patent, regulatory) - MANDATORY with fallback
 3. Extract and deduplicate trend signals
 4. Classify signals by indicator type (leading/lagging) and diffusion stage
@@ -423,7 +423,7 @@ SUBSECTOR_DE: Automobil
 ```
 
 **Execution:**
-1. Build 32 search queries (16 standard + 8 DACH + 4 funding + 4 jobs)
+1. Build 32 search queries (16 standard + 8 region-specific + 4 funding + 4 jobs)
 2. Execute in parallel batches of 4-6
 3. Execute API queries (academic, patent, regulatory)
 4. Extract ~150 raw signals

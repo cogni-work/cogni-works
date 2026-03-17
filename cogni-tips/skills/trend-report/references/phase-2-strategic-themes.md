@@ -80,9 +80,10 @@ Per agent:
       product_url comes from portfolio-context.json products[].url (if available, else null).
       May be empty [] if no STs or no portfolio_grounding.}
     SOLUTION_PRICING: {JSON array of solution pricing data for this theme's grounded features.
-      Built by: for each unique feature_slug in this theme's STs' portfolio_grounding[],
-      read the solution file from the portfolio project directory
-      (at {PORTFOLIO_PATH}/solutions/{feature_slug}--{market_slug}.json) and extract:
+      Built by: for each unique (feature_slug, market_slug) pair in this theme's
+      STs' portfolio_grounding[] entries, read the solution file from the portfolio
+      project directory (at {PORTFOLIO_PATH}/solutions/{feature_slug}--{market_slug}.json)
+      and extract:
       { feature_slug, market_slug, solution_type, pricing, cost_model, implementation }.
       May be empty [] if no portfolio grounding or solution files not found.
       The orchestrator resolves the portfolio project path from portfolio-context.json →

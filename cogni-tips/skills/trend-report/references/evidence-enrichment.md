@@ -43,7 +43,7 @@ The trend-report-writer loads region configuration from `region-authority-source
 | Regulation / compliance | YES (via region-specific regulatory search) | Regulations are jurisdiction-bound |
 | Growth rate / statistics | NO — global search | Best practices and technology trends are international |
 | DE-language variant | Only if region has `region_qualifiers.de` | US/UK regions have no DE qualifier |
-| Salary / compensation | YES — from `salary_ranges` in region config | Salary levels vary dramatically by region |
+| Salary / compensation | YES — `{REGION_QUALIFIER_EN}` | Salary levels vary by region; cost derivation uses SOLUTION_PRICING, not this file |
 
 **Default behavior:** `MARKET_REGION="dach"` produces identical searches to the pre-regionalization pipeline (backward compatible).
 

@@ -41,6 +41,7 @@ When this skill loads:
 > **Tone**: objective *(default)* | analytical | critical | persuasive | formal | informative | explanatory | descriptive | comparative | speculative | narrative | optimistic | simple
 > **Citations**: APA *(default)* | MLA | Chicago | Harvard | IEEE | Wikilink
 > **Language**: en *(default)* | de (German with DACH sources)
+> **Location**: here *(default, current dir)* | standard (`cogni-gpt-researcher/`) | custom path
 >
 > Advanced: sub-question count, source mode (web/local/hybrid), domain filter, researcher role, image generation — ask about any of these
 >
@@ -110,6 +111,7 @@ Scan the user's request and extract any options they already specified. These be
 - **Document paths**: file paths or glob patterns for local/hybrid mode
 - **Curate sources**: "prioritize authoritative sources" → enable
 - **Generate images**: "add diagrams", "make it visual" → enable
+- **Project location**: "save in standard folder", "store here", "put it in ~/research" → capture. Default: current directory
 
 #### Step 2: Interactive Configuration
 
@@ -124,32 +126,29 @@ Present the user with a configuration menu using `AskUserQuestion` so they can s
    - **Tone** (only if not detected): list all 13 options, mark default
    - **Citations** (only if not detected): list all 5 formats, mark default
    - **Language** (only if not detected): en | de
-4. Always include one line for advanced options: "Advanced: sub-question count, source mode (web/local/hybrid), domain filter, researcher role, image generation — ask about any of these"
-5. End with: `Reply with your choices, or "go" for defaults.`
+4. **Project location** (always shown):
+   - `here` = `{cwd}/{project-slug}` (current directory)
+   - `standard` = `cogni-gpt-researcher/{project-slug}` (plugin workspace)
+   - or provide a custom path
+5. Always include one line for advanced options: "Advanced: sub-question count, source mode (web/local/hybrid), domain filter, researcher role, image generation — ask about any of these"
+6. End with: `Reply with your choices, or "go" for defaults.`
 
-**Conditional skip**: If the user's prompt already specified ALL primary options (type + tone + citations) OR included urgency signals ("just go", "start now", "defaults are fine"), collapse the menu to a one-line confirmation:
-> "Starting **detailed** research on X — analytical tone, IEEE citations, English. Change anything? (or 'go')"
+**Conditional skip**: If the user's prompt already specified ALL primary options (type + tone + citations) OR included urgency signals ("just go", "start now", "defaults are fine"), collapse the menu to a compact confirmation that **always includes location**:
+> "Starting **detailed** research on X — analytical tone, IEEE citations, English. Project location: current directory. Change anything? (or 'go')"
 
 **Handling user responses:**
-- "go" / "defaults" / "start" → proceed with detected + default values
-- Specific choices ("deep, analytical, IEEE") → merge with detected values, proceed
+- "go" / "defaults" / "start" → proceed with detected + default values (location defaults to current directory)
+- Specific choices ("deep, analytical, IEEE, standard") → merge with detected values, proceed
+- Location choices: "here" → current directory; "standard" → `cogni-gpt-researcher/`; any path → use as-is
 - Question about an advanced option ("what roles are available?") → read the relevant reference file (`references/agent-roles.md`, `references/writing-tones.md`, etc.), explain the option, then re-present the menu
 - Partial choices ("make it detailed") → update that option, ask if anything else or proceed
 
 #### Step 3: Initialize project
 
-Once configuration is confirmed, ask the user where to store the project via `AskUserQuestion`:
-
-> **Where should I store this research project?**
-> 1. **Here** — `{cwd}/{project-slug}` (current directory)
-> 2. **Standard** — `cogni-gpt-researcher/{project-slug}` (plugin workspace)
->
-> Reply 1, 2, or provide a custom path.
-
-- If user replies "1" or "here" → use current working directory as workspace
-- If user replies "2" or "standard" → use `cogni-gpt-researcher/` relative to the current working directory
-- If user provides a custom path → use that path directly
-- If user says "go" or "default" without specifying → use current working directory
+Once configuration is confirmed (including project location from Step 2), resolve the workspace path:
+- "here" or default → current working directory
+- "standard" → `cogni-gpt-researcher/` relative to current working directory
+- custom path → use as-is
 
 Then initialize:
 

@@ -165,6 +165,7 @@ Task:
     SUBSECTOR_EN: {{SUBSECTOR_EN}}
     SUBSECTOR_DE: {{SUBSECTOR_DE}}
     RESEARCH_TOPIC: {{RESEARCH_TOPIC}}
+    MARKET_REGION: {{MARKET_REGION}}
 ```
 
 **Agent responsibilities:**

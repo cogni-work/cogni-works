@@ -6,7 +6,7 @@ set -euo pipefail
 # Usage:
 #   pitch-status.sh <project-path>
 #
-# Returns JSON with phase completion, claims count, and deliverable status.
+# Returns JSON with mode, phase completion, claims count, and deliverable status.
 
 if ! command -v jq &> /dev/null; then
     echo '{"error": "jq is required but not installed"}' >&2
@@ -29,10 +29,19 @@ fi
 
 # Read pitch-log
 SLUG=$(jq -r '.slug // "unknown"' "$PITCH_LOG")
-CUSTOMER=$(jq -r '.customer_name // "unknown"' "$PITCH_LOG")
+PITCH_MODE=$(jq -r '.pitch_mode // "customer"' "$PITCH_LOG")
+CUSTOMER=$(jq -r '.customer_name // null' "$PITCH_LOG")
+SEGMENT=$(jq -r '.segment_name // null' "$PITCH_LOG")
 CURRENT_PHASE=$(jq -r '.workflow_state.current_phase // "unknown"' "$PITCH_LOG")
 PHASES_COMPLETED=$(jq -c '.workflow_state.phases_completed // []' "$PITCH_LOG")
 CLAIMS_COUNT=$(jq -r '.workflow_state.claims_registered // 0' "$PITCH_LOG")
+
+# Derive target name based on mode
+if [ "$PITCH_MODE" = "segment" ]; then
+    TARGET_NAME="$SEGMENT"
+else
+    TARGET_NAME="$CUSTOMER"
+fi
 
 # Check deliverables
 PRESENTATION_READY=false
@@ -46,7 +55,10 @@ fi
 
 jq -n \
     --arg slug "$SLUG" \
+    --arg pitch_mode "$PITCH_MODE" \
+    --arg target_name "$TARGET_NAME" \
     --arg customer "$CUSTOMER" \
+    --arg segment "$SEGMENT" \
     --arg current_phase "$CURRENT_PHASE" \
     --argjson phases_completed "$PHASES_COMPLETED" \
     --argjson claims "$CLAIMS_COUNT" \
@@ -54,7 +66,10 @@ jq -n \
     --argjson proposal "$PROPOSAL_READY" \
     '{
         slug: $slug,
-        customer: $customer,
+        pitch_mode: $pitch_mode,
+        target_name: $target_name,
+        customer: (if $customer == "null" then null else $customer end),
+        segment: (if $segment == "null" then null else $segment end),
         current_phase: $current_phase,
         phases_completed: $phases_completed,
         claims_registered: $claims,

@@ -1,17 +1,23 @@
 ---
 name: why-change
-description: "Create a Why Change sales pitch for a named customer. Produces sales-presentation.md and sales-proposal.md using the Corporate Visions methodology (Why Change, Why Now, Why You, Why Pay). Builds on cogni-portfolio propositions and solutions with customer-specific web research. Use when the user mentions 'sales pitch', 'why change', 'acquisition pitch', 'create a pitch for [customer]', 'sales presentation', 'proposal for [customer]', 'pitch for [company]', 'new customer pitch', or wants to create B2B sales materials for a named prospect — even if they don't say 'why change' explicitly."
+description: "Create a Why Change sales pitch for a named customer or a reusable segment pitch for a market. Produces sales-presentation.md and sales-proposal.md using the Corporate Visions methodology (Why Change, Why Now, Why You, Why Pay). Builds on cogni-portfolio propositions and solutions with web research. Use when the user mentions 'sales pitch', 'why change', 'acquisition pitch', 'create a pitch for [customer]', 'sales presentation', 'proposal for [customer]', 'pitch for [company]', 'new customer pitch', 'segment pitch', 'market pitch', 'reusable pitch', 'pitch for a segment', 'pitch template for [market]', or wants to create B2B sales materials for a named prospect or market segment — even if they don't say 'why change' explicitly."
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep, Agent, WebSearch, WebFetch
 ---
 
 # Why Change Pitch
 
-Create a "Why Change" sales pitch for a named customer using the Corporate Visions methodology. Produces two deliverables: `sales-presentation.md` (narrative arc) and `sales-proposal.md` (formal proposal with pricing).
+Create a "Why Change" sales pitch using the Corporate Visions methodology. Supports two modes:
+
+- **Customer mode** — Deal-specific pitch for a named customer. Company-specific web research, personalized framing.
+- **Segment mode** — Reusable pitch for a market segment. Industry-level web research, generic framing that works for any organization in the segment.
+
+Both modes produce two deliverables: `sales-presentation.md` (narrative arc) and `sales-proposal.md` (formal proposal with pricing).
 
 ## Prerequisites
 
 - At least one cogni-portfolio project with products, features, propositions, and solutions
-- A named customer to pitch to (company name + industry)
+- Customer mode: a named customer to pitch to (company name + industry)
+- Segment mode: a market segment from the portfolio (e.g., "Enterprise Manufacturing DACH")
 - Optional: cogni-tips project with value-modeler completed (enriches with trend evidence)
 
 ## Arc Methodology
@@ -45,21 +51,33 @@ Portfolio projects found:
 
 If only one portfolio: confirm automatically. If multiple: ask user to select.
 
-#### Step 0.2: Customer Details
+#### Step 0.2: Pitch Mode & Target
 
-Collect customer information via AskUserQuestion:
+Ask the user via AskUserQuestion:
 
+"Are you creating a pitch for a **named customer** or a **reusable segment pitch** for a market?"
+
+**Customer mode:**
 1. **Customer name** (required): "Which customer are you pitching to?"
 2. **Customer industry** (required): "What industry is {customer} in?"
 3. **Customer domain** (optional): "Do you have their website domain? (helps with research)"
 
+**Segment mode:**
+1. Read available markets from the portfolio (`markets/*.json`)
+2. Present markets to the user: "Which market segment?"
+3. Set `segment_name` from the selected market's display name
+4. Set `customer_industry` from the market's industry field
+5. Skip customer_domain (not applicable)
+
 #### Step 0.3: Market Matching
 
-Read all markets from the selected portfolio (`markets/*.json`). Match `customer_industry` to market segments by vertical/industry alignment.
+**Customer mode:** Read all markets from the selected portfolio (`markets/*.json`). Match `customer_industry` to market segments by vertical/industry alignment.
 
 - If a single market matches: auto-select
 - If multiple match: present options and ask user
 - If none match: warn user that propositions may be generic, proceed with best-fit
+
+**Segment mode:** Market was already selected in Step 0.2 — skip this step.
 
 Set `market_slug` in pitch-log.json.
 
@@ -81,13 +99,15 @@ Read products and features from the portfolio. Ask the user:
 - **Full portfolio**: leave `solution_focus` empty
 - **Specific features**: user selects from list, store slugs in `solution_focus`
 
-#### Step 0.6: Buyer Roles (Lightweight)
+#### Step 0.6: Buyer Roles
 
-Ask the user for key buyer roles:
+**Customer mode:** Ask the user for key buyer roles:
 - "Who is the economic buyer? (title)" — e.g., CIO, CFO, VP Operations
 - "Who evaluates technically? (title)" — e.g., Cloud Architect, Head of IT
 
-Store titles in `buying_center` in pitch-log.json. If the matched market has buyer personas (`customers/{market}.json`), load their priorities as defaults.
+**Segment mode:** Load buyer personas from the portfolio's customer profiles for this market (`customers/{market}.json`). If buyer personas exist, use them as defaults. Otherwise ask for typical titles in this segment.
+
+Store titles in `buying_center` in pitch-log.json.
 
 #### Step 0.7: Language
 
@@ -99,9 +119,20 @@ Check for `.workspace-config.json` in the working directory. If it has a `langua
 
 Run the initialization script:
 
+**Customer mode:**
 ```bash
 "${CLAUDE_PLUGIN_ROOT}/scripts/init-pitch-project.sh" \
   --customer-name "{customer_name}" \
+  --pitch-mode customer \
+  --language "{language}" \
+  --workspace "$(pwd)"
+```
+
+**Segment mode:**
+```bash
+"${CLAUDE_PLUGIN_ROOT}/scripts/init-pitch-project.sh" \
+  --segment-name "{segment_name}" \
+  --pitch-mode segment \
   --language "{language}" \
   --workspace "$(pwd)"
 ```
@@ -127,14 +158,14 @@ Agent tool:
 The agent will:
 - Read `why-change-patterns.md` from cogni-narrative (PSB structure, contrast patterns)
 - Load portfolio propositions (IS/DOES/MEANS for matched market)
-- "Work backwards" from portfolio capabilities to customer problems
-- Perform web research on {customer_name} challenges and industry blind spots
+- "Work backwards" from portfolio capabilities to problems
+- Perform web research — company-specific (customer mode) or industry-level (segment mode)
 - Write `01-why-change/research.json` and `01-why-change/narrative.md`
 
 **Quality Gate:** Present the key findings to the user:
 
 ```
-Phase 1: Why Change — Key Findings for {customer_name}
+Phase 1: Why Change — Key Findings for {target}
 
 Unconsidered needs identified:
 1. [headline] — [one-line summary with key evidence]
@@ -170,7 +201,7 @@ Agent tool:
 The agent will:
 - Read `why-now-patterns.md` from cogni-narrative (forcing functions, urgency quantification)
 - Load Phase 1 bridge file for context
-- Research regulatory deadlines, competitive pressure, market timing for {customer_name}
+- Research timing triggers — company-specific (customer mode) or industry-level (segment mode)
 - Write `02-why-now/research.json` and `02-why-now/narrative.md`
 
 **Quality Gate:** Present timing triggers and cost of inaction summary. Same approve/revise pattern.
@@ -241,7 +272,7 @@ Agent tool:
 
 The agent will:
 - Read all 4 phase bridge files and narratives
-- Read output-specs.md templates
+- Read output-specs.md templates (selecting customer or segment variant)
 - Assemble `output/sales-presentation.md` and `output/sales-proposal.md`
 - Renumber citations sequentially
 
@@ -251,6 +282,7 @@ Update pitch-log.json (`phases_completed += ["synthesize"]`, `current_phase = "d
 
 Present the deliverables to the user:
 
+**Customer mode:**
 ```
 Pitch complete for {customer_name}!
 
@@ -259,6 +291,24 @@ Deliverables:
   - {project_path}/output/sales-proposal.md (formal proposal with pricing)
 
 Claims registered: {N} — run `/claims verify` to validate sources.
+
+Optional next steps:
+  - `/copywrite sales-presentation.md` — polish with cogni-copywriting
+  - `/pptx create sales-presentation.md` — generate slide deck via cogni-visual
+```
+
+**Segment mode:**
+```
+Segment pitch complete for {segment_name}!
+
+Deliverables:
+  - {project_path}/output/sales-presentation.md (Why Change narrative — reusable)
+  - {project_path}/output/sales-proposal.md (segment proposal template — reusable)
+
+Claims registered: {N} — run `/claims verify` to validate sources.
+
+These deliverables serve as reusable templates for any customer in the {segment_name} segment.
+To create a customer-specific pitch based on this template, run `/why-change` in customer mode.
 
 Optional next steps:
   - `/copywrite sales-presentation.md` — polish with cogni-copywriting
@@ -278,5 +328,5 @@ If the user wants to continue a pitch that was interrupted:
 ## Error Handling
 
 - If portfolio has no propositions for the matched market: warn user, suggest running cogni-portfolio propositions skill first
-- If web research returns thin results for named customer: degrade gracefully to industry-level research
+- If web research returns thin results: customer mode degrades to industry-level research; segment mode uses broader search terms
 - If cogni-narrative arc files not found: error — cogni-narrative plugin must be installed

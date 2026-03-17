@@ -24,10 +24,9 @@ if ! command -v jq &> /dev/null; then
     exit 1
 fi
 
-# Default workspace: current directory
-WORKSPACE="${1:-$(pwd)}"
-
 # Parse arguments
+WORKSPACE=""
+
 while [ $# -gt 0 ]; do
     case $1 in
         --workspace)
@@ -39,6 +38,11 @@ while [ $# -gt 0 ]; do
             ;;
     esac
 done
+
+# Default workspace: current directory
+if [ -z "$WORKSPACE" ]; then
+    WORKSPACE="$(pwd)"
+fi
 
 # Resolve to absolute path
 case "$WORKSPACE" in

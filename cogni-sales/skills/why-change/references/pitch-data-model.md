@@ -4,10 +4,14 @@
 
 Master state file for a pitch project. Lives at `{project}/.metadata/pitch-log.json`.
 
+### Customer Mode Example
+
 ```json
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
+  "pitch_mode": "customer",
   "slug": "siemens-manufacturing-pitch",
+  "segment_name": null,
   "customer_name": "Siemens",
   "customer_domain": "siemens.com",
   "customer_industry": "Manufacturing",
@@ -32,13 +36,47 @@ Master state file for a pitch project. Lives at `{project}/.metadata/pitch-log.j
 }
 ```
 
+### Segment Mode Example
+
+```json
+{
+  "schema_version": "1.1",
+  "pitch_mode": "segment",
+  "slug": "enterprise-manufacturing-dach-segment-pitch",
+  "segment_name": "Enterprise Manufacturing DACH",
+  "customer_name": null,
+  "customer_domain": null,
+  "customer_industry": "Manufacturing",
+  "market_slug": "enterprise-manufacturing-dach",
+  "portfolio_path": "/abs/path/to/portfolio-project",
+  "tips_path": "/abs/path/to/tips-project",
+  "company_name": "Acme Cloud",
+  "language": "de",
+  "solution_focus": [],
+  "buying_center": {
+    "economic_buyer": { "title": "CIO", "priorities": ["cost reduction", "risk mitigation"] },
+    "technical_evaluator": { "title": "IT Director", "priorities": ["integration", "scalability"] },
+    "end_users": [{ "group": "Operations Managers", "priorities": ["efficiency", "visibility"] }],
+    "champion": null
+  },
+  "workflow_state": {
+    "current_phase": "setup",
+    "phases_completed": [],
+    "claims_registered": 0
+  },
+  "created_at": "2026-03-17T10:00:00Z"
+}
+```
+
 ### Field Reference
 
 | Field | Required | Description |
 |-------|----------|-------------|
+| `pitch_mode` | Yes | `"customer"` for named-customer pitches, `"segment"` for reusable segment pitches |
 | `slug` | Yes | Kebab-case project identifier |
-| `customer_name` | Yes | Named customer for this pitch |
-| `customer_domain` | No | Website domain for web research |
+| `segment_name` | Segment mode | Market segment label (e.g., "Enterprise Manufacturing DACH") |
+| `customer_name` | Customer mode | Named customer for this pitch |
+| `customer_domain` | No | Website domain for web research (customer mode only) |
 | `customer_industry` | Yes | Industry sector — matched to portfolio markets |
 | `market_slug` | No | Matched portfolio market slug (set during setup) |
 | `portfolio_path` | Yes | Absolute path to cogni-portfolio project |
@@ -46,7 +84,7 @@ Master state file for a pitch project. Lives at `{project}/.metadata/pitch-log.j
 | `company_name` | Yes | Our company name (from portfolio.json) |
 | `language` | Yes | `en` or `de` |
 | `solution_focus` | No | Feature slugs to focus on (empty = full portfolio) |
-| `buying_center` | No | Lightweight buyer role mapping (titles + priorities) |
+| `buying_center` | No | Buyer role mapping — specific titles in customer mode, persona defaults in segment mode |
 
 ### Workflow State
 
@@ -74,7 +112,8 @@ Structured research output consumed by next phase and by the synthesizer.
 ```json
 {
   "phase": "why-change",
-  "customer": "Siemens",
+  "pitch_mode": "customer",
+  "target": "Siemens",
   "findings": [
     {
       "id": "wc-001",
@@ -103,9 +142,13 @@ Structured research output consumed by next phase and by the synthesizer.
 }
 ```
 
+In segment mode, `target` holds the segment name and findings use industry-level evidence rather than company-specific research.
+
 ### narrative.md
 
 Prose output following the cogni-narrative Corporate Visions arc patterns. Written in the configured language. Contains buyer role tags in brackets: `[ECONOMIC-BUYER]`, `[TECH-EVAL]`, `[END-USER]`, `[CHAMPION]`.
+
+In customer mode, the narrative addresses the named customer directly. In segment mode, it uses "organizations in this segment" phrasing to remain reusable.
 
 ---
 

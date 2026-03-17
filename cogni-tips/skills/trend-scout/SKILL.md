@@ -371,8 +371,9 @@ Steps:
 3. Generate 60 candidates (5 per cell x 12 cells) following the same dimension/horizon/subcategory structure
 4. Apply the scoring weights from [references/scoring-framework.md](references/scoring-framework.md) — especially the training source caps (source_quality max 0.4, signal_strength max 0.3 for training-only candidates)
 5. Validate subcategory balance: each cell must have MIN 1 candidate per subcategory. If violated, replace the lowest-scored candidate in the over-represented subcategory
-6. Write results to `{PROJECT_PATH}/.logs/trend-generator-candidates.json`
-7. Run `prepare-phase3-data.sh` to generate compact format
+6. **Validate and repair horizon-intensity alignment:** ACT candidates must have signal_intensity 4-5 (if < 4, set to 4). OBSERVE candidates must have intensity 1-2 (if > 2, set to 2). PLAN candidates: clamp to [2, 4]. This is a core Ansoff methodology constraint — a trend in the "act now" horizon must show strong signals, and a long-horizon OBSERVE trend must show weak/emerging signals.
+7. Write results to `{PROJECT_PATH}/.logs/trend-generator-candidates.json`
+8. Run `prepare-phase3-data.sh` to generate compact format
 
 **Important:** Even in inline mode, enforce the scoring caps for training-sourced candidates. A training-only candidate with `score: 0.78` signals a scoring cap violation — the theoretical max for a pure training candidate is ~0.60 after caps are applied.
 

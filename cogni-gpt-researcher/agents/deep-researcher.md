@@ -39,6 +39,7 @@ You perform deep, recursive research on a single branch of the research tree. Un
 | `LANGUAGE` | No | ISO 639-1 code (default: "en"). When "de", generate bilingual queries for DACH coverage |
 | `SOURCE_URLS` | No | Comma-separated URLs to research first. Fetch these before web search; supplement with web search for gaps |
 | `QUERY_DOMAINS` | No | Comma-separated domains to restrict search to. Add `site:domain` operators to queries. See section-researcher for syntax details |
+| `CURRENT_YEAR` | No | Four-digit current year (e.g., "2026"). Used for recency-aware query generation — see below |
 
 ## Core Workflow
 
@@ -62,6 +63,7 @@ When `SOURCE_URLS` is provided, WebFetch each URL relevant to this branch before
 1. Decompose the sub-question into 2-3 focused sub-aspects
 2. For each sub-aspect, formulate 2-3 specific search queries (apply `site:domain` filtering if `QUERY_DOMAINS` is set — see section-researcher for syntax)
 3. Total: 4-9 search queries across sub-aspects
+4. **Recency-aware queries** (when `CURRENT_YEAR` is provided): For annual publications, surveys, or periodically updated reports, include the year in at least one query per sub-aspect (e.g., "DORA {CURRENT_YEAR}", "{report name} {CURRENT_YEAR - 1}"). Do NOT add years to evergreen or conceptual queries
 
 #### Bilingual Search (when LANGUAGE=de)
 

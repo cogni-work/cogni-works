@@ -44,8 +44,16 @@ For each sub-question, generate `search_guidance` that helps the section-researc
 - Note any region-specific considerations
 - Flag potential misinformation risks
 
+**Recency hints**: When the topic involves rapidly evolving fields or annual publications (DORA, Gartner, industry surveys), include a note in `search_guidance` to search for the latest edition by year. This prevents researchers from citing outdated editions when newer ones exist.
+
 Example:
 ```
 query: "What are the leading post-quantum cryptographic algorithms?"
 search_guidance: "Focus on NIST PQC standardization. Key terms: CRYSTALS-Kyber, CRYSTALS-Dilithium, SPHINCS+, lattice-based. Authoritative sources: NIST, IETF, academic papers. Avoid vendor marketing."
+```
+
+Example with recency hint:
+```
+query: "What do current DevOps metrics reveal about AI adoption impact?"
+search_guidance: "Search for the latest DORA report by year (e.g., 'DORA 2025', 'DORA 2026'). Also check State of DevOps, Accelerate metrics. Prefer the most recent annual edition over older ones."
 ```

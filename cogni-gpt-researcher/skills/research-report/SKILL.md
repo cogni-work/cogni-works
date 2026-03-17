@@ -249,6 +249,11 @@ Read `report_source` from `project-config.json` (default: "web"). This determine
 
 #### Web mode (report_source = "web", default)
 
+Resolve the current year for recency-aware search queries:
+```bash
+CURRENT_YEAR=$(date +%Y)
+```
+
 Spawn section-researcher agents in parallel batches (max 5 per batch):
 
 **Basic/Detailed/Outline/Resource mode**:
@@ -258,6 +263,7 @@ For each sub-question entity in 00-sub-questions/data/:
     SUB_QUESTION_PATH=<path>,
     PROJECT_PATH=<project_path>,
     LANGUAGE=<language>,
+    CURRENT_YEAR=<current_year>,
     SOURCE_URLS=<from project-config.json, if set>,
     QUERY_DOMAINS=<from project-config.json, if set>,
     run_in_background=true)
@@ -270,6 +276,7 @@ For each leaf sub-question in 00-sub-questions/data/:
     SUB_QUESTION_PATH=<path>,
     PROJECT_PATH=<project_path>,
     LANGUAGE=<language>,
+    CURRENT_YEAR=<current_year>,
     SOURCE_URLS=<from project-config.json, if set>,
     QUERY_DOMAINS=<from project-config.json, if set>,
     DEPTH=2,
@@ -311,6 +318,7 @@ For each sub-question entity in 00-sub-questions/data/:
     SUB_QUESTION_PATH=<path>,
     PROJECT_PATH=<project_path>,
     LANGUAGE=<language>,
+    CURRENT_YEAR=<current_year>,
     SOURCE_URLS=<from project-config.json, if set>,
     QUERY_DOMAINS=<from project-config.json, if set>,
     run_in_background=true)

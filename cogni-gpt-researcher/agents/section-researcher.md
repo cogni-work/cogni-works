@@ -38,6 +38,7 @@ You research a single sub-question by executing web searches, fetching relevant 
 | `LANGUAGE` | No | ISO 639-1 code (default: "en"). When "de", generate bilingual queries for DACH coverage |
 | `SOURCE_URLS` | No | Comma-separated list of URLs to research first. When provided, fetch these before web search. If the list provides sufficient coverage, web search supplements gaps only |
 | `QUERY_DOMAINS` | No | Comma-separated list of domains to restrict search to (e.g., "arxiv.org,nature.com"). When set, add `site:domain` operators to search queries |
+| `CURRENT_YEAR` | No | Four-digit current year (e.g., "2026"). Used for recency-aware query generation. If not provided, treat the current year as unknown and omit year-specific queries |
 
 ## Core Workflow
 
@@ -66,7 +67,10 @@ When `SOURCE_URLS` is provided, process the user-specified URLs before generatin
 1. From the sub-question `query` and optional `search_guidance`, generate 5-7 diverse WebSearch queries (or fewer if SOURCE_URLS provided sufficient coverage)
 2. Vary query formulations: factual, analytical, recent developments, expert perspectives, comparative, quantitative/data-focused
 3. Make queries specific to YOUR sub-question's unique angle — avoid generic topic-level queries that other researchers for sibling sub-questions would also use. For example, if your sub-question is about "regulatory advantages", search for specific regulations by name, not just "European streaming competition"
-4. Do NOT include date filters — WebSearch handles recency
+4. **Recency-aware queries** (when `CURRENT_YEAR` is provided):
+   - Include the current year in 1-2 of your queries when the topic involves time-sensitive data, evolving research, or annual publications (e.g., "DORA {CURRENT_YEAR}", "State of DevOps {CURRENT_YEAR}")
+   - For named annual reports, surveys, or indices (DORA, Stack Overflow Developer Survey, Gartner Hype Cycle, etc.), always generate one query with `{CURRENT_YEAR}` and one with `{CURRENT_YEAR - 1}` — the latest edition may not yet be published for the current calendar year
+   - Do NOT blindly append the year to every query — evergreen concepts, technical explanations, and historical context don't need year filtering. Only add years when searching for the latest edition of something that is published periodically
 
 #### Domain Filtering (when QUERY_DOMAINS is set)
 
@@ -110,7 +114,7 @@ Before creating entities, evaluate each source for quality. This mirrors GPT-Res
 
 - **Relevance**: How directly does this source address the sub-question?
 - **Credibility**: Is this an authoritative source (academic, government, established publication) or user-generated/marketing content? When LANGUAGE=de, recognized DACH sources (Fraunhofer, industry associations, quality business media) receive a credibility boost — see `${CLAUDE_PLUGIN_ROOT}/references/dach-sources.md` for the authority scoring matrix
-- **Currency**: Is the information recent enough to be useful?
+- **Currency**: Is the information recent enough to be useful? For annual publications (DORA, Gartner, surveys, state-of reports), actively check whether a newer edition exists before accepting an older one. If `CURRENT_YEAR` is 2026, a 2024 edition scores low on currency when a 2025 edition is available — run one additional WebSearch for "{report name} {CURRENT_YEAR}" or "{report name} {CURRENT_YEAR - 1}" to verify
 - **Quantitative value**: Does it contain specific data, statistics, or numbers?
 
 Discard sources scoring below 0.3. For remaining sources:

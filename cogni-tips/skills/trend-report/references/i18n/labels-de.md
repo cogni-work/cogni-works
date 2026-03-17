@@ -91,11 +91,11 @@ SOURCE: "Quelle"
 CLAIMS: "Aussagen"
 ```
 
-## Strategische Themen (Themenmodus)
+## Handlungsfelder (Themenmodus)
 
 ```text
-STRATEGIC_THEMES_OVERVIEW: "Strategische Themen"
-THEME: "Thema"
+STRATEGIC_INVESTMENT_THEMES_OVERVIEW: "Handlungsfelder"
+INVESTMENT_THEME: "Handlungsfeld"
 STRATEGIC_QUESTION: "Strategische Fragestellung"
 EXECUTIVE_SPONSOR: "Verantwortlicher Sponsor"
 INVESTMENT_THESIS: "Investitionsthese"
@@ -110,10 +110,10 @@ CATEGORY: "Kategorie"
 ENABLER_TYPE: "Enabler-Typ"
 STRATEGIC_ACTIONS: "Strategische Maßnahmen"
 EMERGING_SIGNALS: "Aufkommende Signale"
-EMERGING_SIGNALS_INTRO: "Die folgenden Kandidaten wurden keinem strategischen Thema zugeordnet. Sie repräsentieren frühe Signale, die beobachtet werden sollten — ihre Abwesenheit von den aktuellen Themen ist selbst eine informative Beobachtung."
-ALL_CANDIDATES_THEMED: "Alle 60 Kandidaten sind durch die strategischen Themen oben abgedeckt — keine unzugeordneten Signale."
+EMERGING_SIGNALS_INTRO: "Die folgenden Kandidaten wurden keinem Handlungsfeld zugeordnet. Sie repräsentieren frühe Signale, die beobachtet werden sollten — ihre Abwesenheit von den aktuellen Handlungsfeldern ist selbst eine informative Beobachtung."
+ALL_CANDIDATES_THEMED: "Alle 60 Kandidaten sind durch die Handlungsfelder oben abgedeckt — keine unzugeordneten Signale."
 HEADLINE_EVIDENCE: "Kernevidenz"
-THEME_OVERVIEW: "Themenübersicht"
+INVESTMENT_THEME_OVERVIEW: "Handlungsfeldübersicht"
 CHAINS: "Ketten"
 CANDIDATES: "Kandidaten"
 HORIZON_MIX: "Horizontmix"
@@ -122,7 +122,7 @@ ORPHANS: "Unzugeordnet"
 MECE_VALIDATION: "MECE-Validierung"
 METRIC: "Kennzahl"
 STATUS: "Status"
-THEME_COUNT: "Themenanzahl"
+INVESTMENT_THEME_COUNT: "Anzahl Handlungsfelder"
 MUTUAL_EXCLUSIVITY: "Gegenseitige Ausschließlichkeit"
 COLLECTIVE_EXHAUSTIVENESS: "Kollektive Vollständigkeit"
 BALANCE: "Balance"
@@ -144,17 +144,17 @@ WHY_PAY: "Geschäftliche Auswirkungen: Der Business Case"
 COST_OF_INACTION: "Handlungskosten vs. Untätigkeitskosten"
 ```
 
-## Phasenmeldungen (Themenmodus)
+## Phasenmeldungen (Handlungsfeld-Modus)
 
 ```text
-PHASE_0_THEMES_FOUND: "Wertmodell erkannt: {COUNT} strategische Themen verfügbar — verwende themenorganisierten Bericht"
-PHASE_2_THEME_AGENT_DISPATCH: "Starte {COUNT} Themen-Agenten..."
-PHASE_2_THEME_AGENT_COMPLETE: "Themen-Agent {N}/{TOTAL}: {NAME} ({WORDS} Wörter, {CITATIONS} Zitate)"
-PHASE_2_THEME_AGENT_RETRY: "Wiederhole Themen-Agent: {NAME}"
-PHASE_2_THEME_AGENT_SKIP_RESUME: "Thema {NAME} bereits geschrieben — überspringe Agent"
-PHASE_2_THEME_START: "Stelle strategischen Themenbericht zusammen..."
-PHASE_2_THEME_WRITTEN: "Thema {N}/{TOTAL}: {NAME}"
-PHASE_2_THEME_COMPLETE: "Strategischer Bericht geschrieben: {PATH}"
+PHASE_0_INVESTMENT_THEMES_FOUND: "Wertmodell erkannt: {COUNT} Handlungsfelder verfügbar — verwende Handlungsfeld-organisierten Bericht"
+PHASE_2_INVESTMENT_THEME_AGENT_DISPATCH: "Starte {COUNT} Handlungsfeld-Agenten..."
+PHASE_2_INVESTMENT_THEME_AGENT_COMPLETE: "Handlungsfeld-Agent {N}/{TOTAL}: {NAME} ({WORDS} Wörter, {CITATIONS} Zitate)"
+PHASE_2_INVESTMENT_THEME_AGENT_RETRY: "Wiederhole Handlungsfeld-Agent: {NAME}"
+PHASE_2_INVESTMENT_THEME_AGENT_SKIP_RESUME: "Handlungsfeld {NAME} bereits geschrieben — überspringe Agent"
+PHASE_2_INVESTMENT_THEME_START: "Stelle Handlungsfeld-Bericht zusammen..."
+PHASE_2_INVESTMENT_THEME_WRITTEN: "Handlungsfeld {N}/{TOTAL}: {NAME}"
+PHASE_2_INVESTMENT_THEME_COMPLETE: "Handlungsfeld-Bericht geschrieben: {PATH}"
 ```
 
 ## Kein-Daten-Markierung

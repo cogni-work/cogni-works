@@ -24,17 +24,17 @@ The trend-scout skill produces 60 agreed candidates across 4 dimensions. Each ca
 dimension as a standalone item. This skill connects them:
 
 1. **Builds TIPS value chains** — explicit Trend → Implication → Possibility causal chains across dimensions
-2. **Consolidates into Strategic Themes** — clusters value chains into 3-7 MECE investment domains
-3. **Generates Solution Templates with Blueprints** — concrete enablers per theme with multi-dimensional portfolio composition (natural deduplication)
+2. **Consolidates into Investment Themes (Handlungsfelder)** — clusters value chains into 3-7 MECE investment domains
+3. **Generates Solution Templates with Blueprints** — concrete enablers per investment theme with multi-dimensional portfolio composition (natural deduplication)
 4. **Generates SPIs** — operational process changes that accompany each Solution Template
-5. **Defines success Metrics** — KPIs that measure value delivery per theme
+5. **Defines success Metrics** — KPIs that measure value delivery per investment theme
 6. **Suggests Collaterals** — supporting content (case studies, reference architectures) per ST
 7. **Enables Business Relevance scoring** — customer-specific 1-5 ratings per TIP
 8. **Ranks solutions automatically** — using the F1 averaging formula from the patent
-9. **Generates a Big Block diagram** — the customer-specific solution architecture organized by theme
+9. **Generates a Big Block diagram** — the customer-specific solution architecture organized by investment theme
 10. **Curates catalog feedback** — promotes pursuit-specific insights back to industry catalogs
 
-The output is a structured strategy with 3-7 strategic themes, each containing ranked solutions
+The output is a structured strategy with 3-7 investment themes, each containing ranked solutions
 backed by trend evidence and scored for business relevance. This gives the customer a CxO-ready
 investment portfolio — not a flat list of 18 solutions, but 5 distinct areas to fund and champion.
 
@@ -53,7 +53,7 @@ This skill reads ALL required state from project files (`trend-scout-output.json
 
 **Before executing Phase 0**, run `/compact` to free working memory. This skill's phases — especially Phase 1 (relationship networks with extended thinking) and Phase 2 (solution blueprint generation) — need substantial context for reading candidate data and building structured output. Compacting early prevents context pressure from accumulating across the 5-phase workflow.
 
-If `/compact` is unavailable (e.g., non-interactive mode), proceed without it — the skill will still work, but later phases may hit context limits on projects with many themes.
+If `/compact` is unavailable (e.g., non-interactive mode), proceed without it — the skill will still work, but later phases may hit context limits on projects with many investment themes.
 
 ## Language Support
 
@@ -76,24 +76,24 @@ Reference: `references/workflow-phases/phase-0-load.md`
 
 Load the trend-scout output, validate prerequisites, discover optional portfolio.
 
-### Phase 1: Build Relationship Networks & Strategic Themes
+### Phase 1: Build Relationship Networks & Investment Themes
 Reference: `references/workflow-phases/phase-1-relationships.md`
 
 Two-pass architecture: First, build granular T→I→P value chains via semantic affinity
-analysis (bottom-up). Then consolidate chains into 3-7 MECE Strategic Themes — the
+analysis (bottom-up). Then consolidate chains into 3-7 MECE Investment Themes — the
 distinct investment domains where this customer should allocate budget and executive
-attention (top-down). Each theme groups 1-4 value chains and represents a CxO-level
+attention (top-down). Each investment theme groups 1-4 value chains and represents a CxO-level
 strategic decision.
 
 ### Phase 2: Generate Solution Templates
 Reference: `references/workflow-phases/phase-2-solutions.md`
 
-For each Strategic Theme, generate Solution Templates — concrete process improvement
-enablers. Working at the theme level naturally deduplicates STs that would otherwise
-appear redundantly across overlapping chains. Target 2-4 STs per theme.
+For each Investment Theme, generate Solution Templates — concrete process improvement
+enablers. Working at the investment theme level naturally deduplicates STs that would otherwise
+appear redundantly across overlapping chains. Target 2-4 STs per investment theme.
 If a cogni-portfolio project exists, map templates to existing products/features.
 When portfolio context v2.0+ is available, Phase 2 starts with **portfolio-anchored
-generation** (Step 0.5): features from the portfolio are matched to themes and used as
+generation** (Step 0.5): features from the portfolio are matched to investment themes and used as
 delivery anchors for STs with automatic high-confidence mapping. Each ST gets a **solution
 blueprint** — a multi-dimensional composition of building blocks mapped to B2B ICT taxonomy
 categories (connectivity, security, cloud, applications, consulting, etc.) that captures
@@ -131,24 +131,24 @@ a learning loop where customer engagements improve the base catalog over time.
 
 ```
 {project-dir}/
-├── tips-value-model.json              # Complete value model (themes + chains + solutions + scores)
-├── tips-solution-ranking.md           # Human-readable ranked solution list by theme
-├── tips-big-block.md                  # Big Block solution diagram organized by theme
-├── value-modeler-scoring.html         # Interactive BR scoring UI grouped by theme
+├── tips-value-model.json              # Complete value model (investment themes + chains + solutions + scores)
+├── tips-solution-ranking.md           # Human-readable ranked solution list by investment theme
+├── tips-big-block.md                  # Big Block solution diagram organized by investment theme
+├── value-modeler-scoring.html         # Interactive BR scoring UI grouped by investment theme
 └── .metadata/
     └── value-modeler-output.json      # Execution state + metadata
 ```
 
 ## Data Model
 
-### Strategic Theme
+### Investment Theme
 
-A theme groups 1-4 value chains into a distinct investment domain. Themes are the primary
+An investment theme groups 1-4 value chains into a distinct investment domain. Investment themes are the primary
 organizing unit of the value model — they represent CxO-level decisions about where to invest.
 
 ```json
 {
-  "theme_id": "theme-001",
+  "investment_theme_id": "it-001",
   "name": "Health & Nutrition Transformation",
   "strategic_question": "How do we reformulate our portfolio for the health-conscious, GLP-1-era consumer?",
   "executive_sponsor_type": "CPO / Head of Product Development",
@@ -160,26 +160,26 @@ organizing unit of the value model — they represent CxO-level decisions about 
 }
 ```
 
-Themes must satisfy MECE:
-- **Mutually Exclusive**: Each theme answers a different strategic question. Different executive sponsor, different budget line.
-- **Collectively Exhaustive**: Together, themes cover ≥80% of linked candidates.
+Investment themes must satisfy MECE:
+- **Mutually Exclusive**: Each investment theme answers a different strategic question. Different executive sponsor, different budget line.
+- **Collectively Exhaustive**: Together, investment themes cover ≥80% of linked candidates.
 
-Target: **5 themes** (ideal). Range: 3 (minimum) to 7 (maximum, Miller's law).
+Target: **5 investment themes** (ideal). Range: 3 (minimum) to 7 (maximum, Miller's law).
 
-**Theme-level Business Relevance** is the average `ranking_value` of the theme's Solution
-Templates (calculated after Phase 4). This represents the theme's overall importance to
-the customer as expressed through its solutions' scores. Use this for theme ranking.
+**Investment-theme-level Business Relevance** is the average `ranking_value` of the investment theme's Solution
+Templates (calculated after Phase 4). This represents the investment theme's overall importance to
+the customer as expressed through its solutions' scores. Use this for investment theme ranking.
 
 ### Value Chain (TIPS Path)
 
 A value chain connects candidates across dimensions into a coherent causal narrative.
-Value chains are nested under their parent Strategic Theme.
+Value chains are nested under their parent Investment Theme.
 
 ```json
 {
   "chain_id": "vc-001",
   "name": "GLP-1 Portfolio Reformulation",
-  "theme_ref": "theme-001",
+  "investment_theme_ref": "it-001",
   "narrative": "GLP-1 medications reshape consumption (T), requiring AI-driven personalization (I), enabling health-optimized portfolio reformulation (P)",
   "trend": {
     "candidate_ref": "externe-effekte/act/1",
@@ -224,7 +224,7 @@ Implications depending on context. The chain captures the *reasoning*, not just 
   "category": "software",
   "enabler_type": "process_improvement",
   "generation_mode": "portfolio-anchored",
-  "theme_ref": "theme-003",
+  "investment_theme_ref": "it-003",
   "linked_chains": ["vc-005", "vc-006"],
   "solution_blueprint": {
     "building_blocks": [
@@ -242,8 +242,8 @@ Implications depending on context. The chain captures the *reasoning*, not just 
   "portfolio_anchor": {
     "feature_slug": "predictive-analytics",
     "product_slug": "cloud-platform",
-    "theme_needs_delivered": ["ML model training", "anomaly detection"],
-    "theme_needs_undelivered": ["edge inference"]
+    "investment_theme_needs_delivered": ["ML model training", "anomaly detection"],
+    "investment_theme_needs_undelivered": ["edge inference"]
   },
   "quality_flag": null,
   "business_relevance": null,
@@ -274,7 +274,7 @@ Implications depending on context. The chain captures the *reasoning*, not just 
   "name": "Defect rate reduction",
   "unit": "percentage",
   "direction": "decrease",
-  "theme_ref": "theme-003",
+  "investment_theme_ref": "it-003",
   "linked_chains": ["vc-005", "vc-006"]
 }
 ```

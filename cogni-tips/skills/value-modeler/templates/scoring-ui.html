@@ -123,12 +123,12 @@ const themeScoredCounts = {};
 const chainMap = {};
 (MODEL_DATA.value_chains || []).forEach(vc => { chainMap[vc.chain_id] = vc; });
 
-// Backward compatibility: if no themes, fall back to flat value_chains/paths
-const themes = MODEL_DATA.themes || [{ theme_id: 'default', name: 'TIPS Paths',
+// Backward compatibility: support investment_themes, themes, or flat value_chains/paths
+const themes = MODEL_DATA.investment_themes || MODEL_DATA.themes || [{ investment_theme_id: 'default', name: 'TIPS Paths',
   strategic_question: '', executive_sponsor_type: '',
   value_chains: (MODEL_DATA.value_chains || MODEL_DATA.paths || []).map(c => c.chain_id || c.path_id) }];
 
-if (!MODEL_DATA.themes && (MODEL_DATA.value_chains || MODEL_DATA.paths)) {
+if (!MODEL_DATA.investment_themes && !MODEL_DATA.themes && (MODEL_DATA.value_chains || MODEL_DATA.paths)) {
   (MODEL_DATA.value_chains || MODEL_DATA.paths).forEach(vc => {
     chainMap[vc.chain_id || vc.path_id] = vc;
   });
@@ -139,9 +139,10 @@ function init() {
   const seen = new Set();
 
   themes.forEach(theme => {
+    const itId = theme.investment_theme_id || theme.theme_id || 'unknown';
     const section = document.createElement('div');
     section.className = 'theme-section';
-    section.id = `theme-${theme.theme_id}`;
+    section.id = `theme-${itId}`;
 
     // Theme header
     const header = document.createElement('div');
@@ -151,14 +152,14 @@ function init() {
       ${theme.strategic_question ? `<div class="theme-question">${theme.strategic_question}</div>` : ''}
       ${theme.executive_sponsor_type ? `<div class="theme-sponsor">${theme.executive_sponsor_type}</div>` : ''}
       <div class="theme-progress">
-        <div class="theme-progress-bar"><div class="theme-progress-fill" id="tpf-${theme.theme_id}" style="width:0%"></div></div>
-        <div class="theme-progress-text" id="tpt-${theme.theme_id}">0 / 0</div>
+        <div class="theme-progress-bar"><div class="theme-progress-fill" id="tpf-${itId}" style="width:0%"></div></div>
+        <div class="theme-progress-text" id="tpt-${itId}">0 / 0</div>
       </div>
     `;
     section.appendChild(header);
 
-    themeTipCounts[theme.theme_id] = 0;
-    themeScoredCounts[theme.theme_id] = 0;
+    themeTipCounts[itId] = 0;
+    themeScoredCounts[itId] = 0;
 
     // Value chains within theme
     const chainIds = theme.value_chains || [];
@@ -183,11 +184,11 @@ function init() {
         if (!seen.has(ref)) {
           seen.add(ref);
           totalTips++;
-          themeTipCounts[theme.theme_id]++;
+          themeTipCounts[itId]++;
         }
         const row = document.createElement('div');
         row.className = 'tip-row';
-        row.dataset.themeId = theme.theme_id;
+        row.dataset.themeId = itId;
         const roleClass = tip.role === 'T' ? 'role-t' : tip.role === 'I' ? 'role-i' : 'role-p';
         row.innerHTML = `
           <div class="tip-role ${roleClass}">${tip.role}</div>
@@ -197,8 +198,8 @@ function init() {
           </div>
           <div class="br-buttons">
             ${[1,2,3,4,5].map(n =>
-              `<button class="br-btn s${n}" data-ref="${ref}" data-score="${n}" data-theme="${theme.theme_id}"
-                onclick="setScore('${ref}', ${n}, '${theme.theme_id}')">${n}</button>`
+              `<button class="br-btn s${n}" data-ref="${ref}" data-score="${n}" data-theme="${itId}"
+                onclick="setScore('${ref}', ${n}, '${itId}')">${n}</button>`
             ).join('')}
           </div>
         `;
@@ -242,11 +243,12 @@ function updateProgress() {
 
   // Update per-theme progress
   themes.forEach(theme => {
-    const total = themeTipCounts[theme.theme_id] || 0;
-    const done = themeScoredCounts[theme.theme_id] || 0;
+    const tid = theme.investment_theme_id || theme.theme_id || 'unknown';
+    const total = themeTipCounts[tid] || 0;
+    const done = themeScoredCounts[tid] || 0;
     const tPct = total > 0 ? (done / total * 100) : 0;
-    const fill = document.getElementById(`tpf-${theme.theme_id}`);
-    const text = document.getElementById(`tpt-${theme.theme_id}`);
+    const fill = document.getElementById(`tpf-${tid}`);
+    const text = document.getElementById(`tpt-${tid}`);
     if (fill) fill.style.width = tPct + '%';
     if (text) text.textContent = `${done} / ${total}`;
   });

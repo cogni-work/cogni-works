@@ -99,7 +99,7 @@ UI_LABELS = {
         "web_sourced": "Web-sourced",
         "training_based": "Training-based",
         "corroboration": "Corroboration Rate",
-        "themes": "Strategic Themes",
+        "investment_themes": "Investment Themes",
         "value_chains": "Value Chains",
         "solution_ranking": "Solution Ranking",
         "spis_metrics": "SPIs & Metrics",
@@ -146,7 +146,7 @@ UI_LABELS = {
         "web_sourced": "Web-basiert",
         "training_based": "Trainingsbasiert",
         "corroboration": "Bestätigungsrate",
-        "themes": "Strategische Themen",
+        "investment_themes": "Handlungsfelder",
         "value_chains": "Wertschöpfungsketten",
         "solution_ranking": "Lösungs-Ranking",
         "spis_metrics": "SPIs & Metriken",
@@ -494,10 +494,10 @@ def build_graph_data(data):
         # Track which chain-t id maps to which actual node id (for merging)
         chain_trend_to_node = {}  # chain-t-{chain_id} → actual node id
 
-        themes = vm.get("themes", vm.get("strategic_themes", []))
+        themes = vm.get("investment_themes", vm.get("themes", vm.get("strategic_themes", [])))
         if isinstance(themes, list):
             for theme in themes:
-                theme_id = theme.get("theme_id", theme.get("id", ""))
+                theme_id = theme.get("investment_theme_id", theme.get("theme_id", theme.get("id", "")))
 
                 raw_chains = theme.get("value_chains", [])
                 chains = []
@@ -527,7 +527,7 @@ def build_graph_data(data):
                             for n in nodes:
                                 if n["id"] == merged_id:
                                     n["theme"] = theme.get("name", "")
-                                    n["theme_id"] = theme_id
+                                    n["investment_theme_id"] = theme_id
                                     break
                         else:
                             # No matching candidate — create a new trend node
@@ -538,7 +538,7 @@ def build_graph_data(data):
                                     "name": t_name,
                                     "type": "trend",
                                     "theme": theme.get("name", ""),
-                                    "theme_id": theme_id,
+                                    "investment_theme_id": theme_id,
                                     "statement": t.get("statement", t.get("description", "")),
                                 })
                             chain_trend_to_node[canonical_t_id] = canonical_t_id
@@ -556,7 +556,7 @@ def build_graph_data(data):
                                 "name": imp.get("name", ""),
                                 "type": "implication",
                                 "theme": theme.get("name", ""),
-                                "theme_id": theme_id,
+                                "investment_theme_id": theme_id,
                                 "statement": imp.get("statement", imp.get("description", "")),
                             })
                         if actual_t_id:
@@ -572,7 +572,7 @@ def build_graph_data(data):
                                 "name": pos.get("name", ""),
                                 "type": "possibility",
                                 "theme": theme.get("name", ""),
-                                "theme_id": theme_id,
+                                "investment_theme_id": theme_id,
                                 "statement": pos.get("statement", pos.get("description", "")),
                             })
                         # Link from implications to possibilities
@@ -598,7 +598,7 @@ def build_graph_data(data):
                             "name": st.get("name", ""),
                             "type": "solution",
                             "theme": theme.get("name", ""),
-                            "theme_id": theme_id,
+                            "investment_theme_id": theme_id,
                             "category": st.get("category", ""),
                             "enabler_type": st.get("enabler_type", ""),
                             "br_score": st.get("business_relevance", 0),
@@ -736,7 +736,7 @@ def generate_html(data, status, project_dir, theme):
     vm_st_lookup = {}  # st_id -> ST dict
     vm_vc_lookup = {}  # chain_id -> VC dict
     if vm:
-        themes_list = vm.get("themes", vm.get("strategic_themes", []))
+        themes_list = vm.get("investment_themes", vm.get("themes", vm.get("strategic_themes", [])))
         if not isinstance(themes_list, list):
             themes_list = []
 
@@ -784,9 +784,9 @@ def generate_html(data, status, project_dir, theme):
         theme_name = st.get("_theme_name", "Unknown")
         anchored_by_theme.setdefault(theme_name, []).append(st)
         anchor = st.get("portfolio_anchor", {}) or {}
-        for need in anchor.get("theme_needs_delivered", []):
+        for need in anchor.get("investment_theme_needs_delivered", anchor.get("theme_needs_delivered", [])):
             all_delivered_needs.add(need)
-        for need in anchor.get("theme_needs_undelivered", []):
+        for need in anchor.get("investment_theme_needs_undelivered", anchor.get("theme_needs_undelivered", [])):
             all_undelivered_needs.add(need)
         if st.get("quality_flag"):
             has_quality_issues = True
@@ -1730,8 +1730,8 @@ body::after {{
 """
     else:
         # Theme cards
-        html += f'      <div class="section" id="sec-model-themes">\n'
-        html += f'        <div class="section-title">{L["themes"]} ({len(themes_list)})</div>\n'
+        html += f'      <div class="section" id="sec-model-investment-themes">\n'
+        html += f'        <div class="section-title">{L["investment_themes"]} ({len(themes_list)})</div>\n'
         for ti, theme_obj in enumerate(themes_list):
             theme_name = theme_obj.get("name", f"Theme {ti+1}")
             strategic_q = theme_obj.get("strategic_question", "")
@@ -1854,9 +1854,9 @@ body::after {{
                 theme_quality = False
                 for st in theme_sts:
                     anchor = st.get("portfolio_anchor", {}) or {}
-                    for n in anchor.get("theme_needs_delivered", []):
+                    for n in anchor.get("investment_theme_needs_delivered", anchor.get("theme_needs_delivered", [])):
                         theme_delivered.add(n)
-                    for n in anchor.get("theme_needs_undelivered", []):
+                    for n in anchor.get("investment_theme_needs_undelivered", anchor.get("theme_needs_undelivered", [])):
                         theme_undelivered.add(n)
                     if st.get("quality_flag"):
                         theme_quality = True
@@ -1879,8 +1879,8 @@ body::after {{
                     feat_slug = esc(pa.get("feature_slug", ""))
                     prod_slug = esc(pa.get("product_slug", ""))
                     qf = st.get("quality_flag", "")
-                    st_del = "".join(f'<span class="need-pill need-delivered">{esc(n)}</span>' for n in pa.get("theme_needs_delivered", []))
-                    st_undel = "".join(f'<span class="need-pill need-undelivered">{esc(n)}</span>' for n in pa.get("theme_needs_undelivered", []))
+                    st_del = "".join(f'<span class="need-pill need-delivered">{esc(n)}</span>' for n in pa.get("investment_theme_needs_delivered", pa.get("theme_needs_delivered", [])))
+                    st_undel = "".join(f'<span class="need-pill need-undelivered">{esc(n)}</span>' for n in pa.get("investment_theme_needs_undelivered", pa.get("theme_needs_undelivered", [])))
 
                     html += f"""            <div class="anchor-st-item">
               <h5>{st_name} <span style="font-size:11px;color:var(--text2);font-weight:400">{st_id_val}</span>
@@ -2159,14 +2159,16 @@ function showEntityDetail(node) {
     html += '<div style="font-size:11px;font-weight:600;color:var(--tips-solution);margin-bottom:8px">&#9875; {L["portfolio_anchored"]}</div>';
     if (pa.feature_slug) html += '<div class="meta-item"><span class="meta-label">Feature:</span> ' + esc(pa.feature_slug) + '</div>';
     if (pa.product_slug) html += '<div class="meta-item"><span class="meta-label">Product:</span> ' + esc(pa.product_slug) + '</div>';
-    if (pa.theme_needs_delivered && pa.theme_needs_delivered.length) {{
+    var itnd = pa.investment_theme_needs_delivered || pa.theme_needs_delivered || [];
+    var itnu = pa.investment_theme_needs_undelivered || pa.theme_needs_undelivered || [];
+    if (itnd.length) {{
       html += '<div style="margin-top:6px">';
-      pa.theme_needs_delivered.forEach(function(n) {{ html += '<span class="need-pill need-delivered">' + esc(n) + '</span> '; }});
+      itnd.forEach(function(n) {{ html += '<span class="need-pill need-delivered">' + esc(n) + '</span> '; }});
       html += '</div>';
     }}
-    if (pa.theme_needs_undelivered && pa.theme_needs_undelivered.length) {{
+    if (itnu.length) {{
       html += '<div style="margin-top:4px">';
-      pa.theme_needs_undelivered.forEach(function(n) {{ html += '<span class="need-pill need-undelivered">' + esc(n) + '</span> '; }});
+      itnu.forEach(function(n) {{ html += '<span class="need-pill need-undelivered">' + esc(n) + '</span> '; }});
       html += '</div>';
     }}
     if (node.quality_flag) {{
@@ -2360,7 +2362,7 @@ function initGraph() {
   var themeIds = [];
   var themeMap = {};
   nodes.forEach(function(n) {
-    var tid = n.theme_id || n.theme || '__orphan__';
+    var tid = n.investment_theme_id || n.theme_id || n.theme || '__orphan__';
     if (!themeMap[tid]) { themeMap[tid] = []; themeIds.push(tid); }
     themeMap[tid].push(n);
   });
@@ -2383,7 +2385,7 @@ function initGraph() {
   // T=center, I=ring1, P=ring2, S=ring3
   var tipsRadii = { trend: 0, implication: 70, possibility: 140, solution: 210 };
   nodes.forEach(function(n) {
-    var tid = n.theme_id || n.theme || '__orphan__';
+    var tid = n.investment_theme_id || n.theme_id || n.theme || '__orphan__';
     n._clusterCx = themeCenters[tid].x;
     n._clusterCy = themeCenters[tid].y;
     n._targetR = tipsRadii[n.type] || 100;

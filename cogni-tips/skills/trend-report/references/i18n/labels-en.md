@@ -91,11 +91,11 @@ SOURCE: "Source"
 CLAIMS: "claims"
 ```
 
-## Strategic Theme Labels (Theme Mode)
+## Investment Theme Labels (Theme Mode)
 
 ```text
-STRATEGIC_THEMES_OVERVIEW: "Strategic Themes"
-THEME: "Theme"
+STRATEGIC_INVESTMENT_THEMES_OVERVIEW: "Investment Themes"
+INVESTMENT_THEME: "Investment Theme"
 STRATEGIC_QUESTION: "Strategic Question"
 EXECUTIVE_SPONSOR: "Executive Sponsor"
 INVESTMENT_THESIS: "Investment Thesis"
@@ -110,10 +110,10 @@ CATEGORY: "Category"
 ENABLER_TYPE: "Enabler Type"
 STRATEGIC_ACTIONS: "Strategic Actions"
 EMERGING_SIGNALS: "Emerging Signals"
-EMERGING_SIGNALS_INTRO: "The following candidates were not assigned to any strategic theme. They represent early signals worth monitoring — their absence from current themes may itself be informative."
-ALL_CANDIDATES_THEMED: "All 60 candidates are covered by the strategic themes above — no orphan signals."
+EMERGING_SIGNALS_INTRO: "The following candidates were not assigned to any investment theme. They represent early signals worth monitoring — their absence from current investment themes may itself be informative."
+ALL_CANDIDATES_THEMED: "All 60 candidates are covered by the investment themes above — no orphan signals."
 HEADLINE_EVIDENCE: "Headline Evidence"
-THEME_OVERVIEW: "Theme Overview"
+INVESTMENT_THEME_OVERVIEW: "Investment Theme Overview"
 CHAINS: "Chains"
 CANDIDATES: "Candidates"
 HORIZON_MIX: "Horizon Mix"
@@ -122,7 +122,7 @@ ORPHANS: "Unthemed"
 MECE_VALIDATION: "MECE Validation"
 METRIC: "Metric"
 STATUS: "Status"
-THEME_COUNT: "Theme Count"
+INVESTMENT_THEME_COUNT: "Investment Theme Count"
 MUTUAL_EXCLUSIVITY: "Mutual Exclusivity"
 COLLECTIVE_EXHAUSTIVENESS: "Collective Exhaustiveness"
 BALANCE: "Balance"
@@ -144,17 +144,17 @@ WHY_PAY: "Why Pay: The Business Case"
 COST_OF_INACTION: "Cost of Action vs. Cost of Inaction"
 ```
 
-## Phase Messages (Theme Mode)
+## Phase Messages (Investment Theme Mode)
 
 ```text
-PHASE_0_THEMES_FOUND: "Value model detected: {COUNT} strategic themes available — using theme-organized report"
-PHASE_2_THEME_AGENT_DISPATCH: "Dispatching {COUNT} theme agents..."
-PHASE_2_THEME_AGENT_COMPLETE: "Theme agent {N}/{TOTAL}: {NAME} ({WORDS} words, {CITATIONS} citations)"
-PHASE_2_THEME_AGENT_RETRY: "Retrying theme agent: {NAME}"
-PHASE_2_THEME_AGENT_SKIP_RESUME: "Theme {NAME} already written — skipping agent dispatch"
-PHASE_2_THEME_START: "Assembling strategic theme report..."
-PHASE_2_THEME_WRITTEN: "Theme {N}/{TOTAL}: {NAME}"
-PHASE_2_THEME_COMPLETE: "Strategic report written: {PATH}"
+PHASE_0_INVESTMENT_THEMES_FOUND: "Value model detected: {COUNT} investment themes available — using investment-theme-organized report"
+PHASE_2_INVESTMENT_THEME_AGENT_DISPATCH: "Dispatching {COUNT} investment theme agents..."
+PHASE_2_INVESTMENT_THEME_AGENT_COMPLETE: "Investment theme agent {N}/{TOTAL}: {NAME} ({WORDS} words, {CITATIONS} citations)"
+PHASE_2_INVESTMENT_THEME_AGENT_RETRY: "Retrying investment theme agent: {NAME}"
+PHASE_2_INVESTMENT_THEME_AGENT_SKIP_RESUME: "Investment theme {NAME} already written — skipping agent dispatch"
+PHASE_2_INVESTMENT_THEME_START: "Assembling investment theme report..."
+PHASE_2_INVESTMENT_THEME_WRITTEN: "Investment theme {N}/{TOTAL}: {NAME}"
+PHASE_2_INVESTMENT_THEME_COMPLETE: "Investment theme report written: {PATH}"
 ```
 
 ## No-Data Marker

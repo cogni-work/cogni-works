@@ -7,7 +7,7 @@
   "properties": {
     "theme_name": {
       "type": "string",
-      "description": "Human-readable theme name (e.g. 'cogni-work')"
+      "description": "Human-readable visual/CSS theme name (e.g. 'cogni-work'). This is a workspace styling theme — NOT a TIPS investment theme."
     },
     "colors": {
       "type": "object",

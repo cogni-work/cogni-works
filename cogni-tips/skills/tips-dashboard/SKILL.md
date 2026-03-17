@@ -50,9 +50,9 @@ The layout follows a three-panel design with phase-based navigation:
 
 **Navbar** — sticky horizontal bar with phase tabs. Active tab highlighted with accent color. Hash-based routing (`#overview`, `#scout`, `#model`, `#report`, `#catalog`).
 
-**Left Panel** — persistent section index for the active tab. In Scout: dimension list. In Value Model: theme list. In Report: section list. Clicking scrolls the main content. Highlights current section on scroll.
+**Left Panel** — persistent section index for the active tab. In Scout: dimension list. In Value Model: investment theme list. In Report: section list. Clicking scrolls the main content. Highlights current section on scroll.
 
-**Right Panel** — always visible, collapsible to icon rail. Top 60%: D3 force-directed graph showing TIPS entity relationships colored by dimension, grouped by theme. Bottom 40%: entity detail panel populated when clicking a graph node or entity card. Draggable resize handle between zones.
+**Right Panel** — always visible, collapsible to icon rail. Top 60%: D3 force-directed graph showing TIPS entity relationships colored by dimension, grouped by investment theme. Bottom 40%: entity detail panel populated when clicking a graph node or entity card. Draggable resize handle between zones.
 
 ## Workflow
 

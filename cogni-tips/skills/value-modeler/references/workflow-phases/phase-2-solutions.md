@@ -54,13 +54,13 @@ The steps in this phase depend on whether portfolio context is available:
 ```
 Portfolio context v2.0+ exists:
   Step 0.5 (anchored STs from portfolio features)
-  → Step 1 (abstract STs for themes not fully covered by Step 0.5)
+  → Step 1 (abstract STs for investment themes not fully covered by Step 0.5)
   → Step 1.5 (blueprint composition for abstract STs, coverage assessed against portfolio)
   → Step 2 (enrich all blueprints with real portfolio data)
 
 Portfolio context v1.0 or absent:
   Skip Step 0.5
-  → Step 1 (abstract STs for all themes)
+  → Step 1 (abstract STs for all investment themes)
   → Step 1.5 (blueprint composition with coverage: "unknown" on all blocks)
   → Skip Step 2 (no portfolio data to enrich from)
 
@@ -74,8 +74,8 @@ Re-anchor mode (independent invocation or explicit request):
 This step runs **only** when `portfolio-context.json` has `schema_version` >= `"2.0"`. When the
 context is absent or v1.0, skip directly to Step 1 (unchanged behavior).
 
-Portfolio-anchored generation inverts the normal flow: instead of starting from themes and
-imagining solutions, it starts from **existing products/features** and asks what each theme
+Portfolio-anchored generation inverts the normal flow: instead of starting from investment themes and
+imagining solutions, it starts from **existing products/features** and asks what each investment theme
 needs that those features can deliver. This produces STs with high portfolio confidence by
 construction.
 
@@ -87,21 +87,21 @@ Read `portfolio-context.json` from the TIPS project directory and extract:
 - Market relevance tags (`direct`, `industry`, `adjacent`)
 - If v3.0: quality assessments per proposition (`market_specificity`, `differentiation`, `value_quantification`)
 
-### 0.5.2: Match Features to Strategic Themes
+### 0.5.2: Match Features to Investment Themes
 
-For each feature in the portfolio context, use semantic analysis to determine which Strategic
+For each feature in the portfolio context, use semantic analysis to determine which Investment
 Themes it could serve. Consider:
 
-- **Description overlap**: Does the feature's description address the theme's strategic question?
-- **Category alignment**: Does the feature's category (software, hardware, service) align with the theme's value chain domains?
+- **Description overlap**: Does the feature's description address the investment theme's strategic question?
+- **Category alignment**: Does the feature's category (software, hardware, service) align with the investment theme's value chain domains?
 - **Market-relevance filtering**: Only consider features that have at least one proposition in a `direct` or `industry` market. Features with only `adjacent` market propositions are deprioritized.
-- **Proposition language**: Do any DOES/MEANS statements echo the theme's narrative or the needs of its value chains?
+- **Proposition language**: Do any DOES/MEANS statements echo the investment theme's narrative or the needs of its value chains?
 
-Produce a feature-theme match matrix before generating any STs.
+Produce a feature-to-investment-theme match matrix before generating any STs.
 
 ### 0.5.3: Generate Portfolio-Anchored STs with Solution Blueprints
 
-For each feature-theme match, generate a Solution Template with a full **solution blueprint** —
+For each feature-to-investment-theme match, generate a Solution Template with a full **solution blueprint** —
 a multi-dimensional composition of building blocks that captures what portfolio is needed to
 deliver this solution. This is the core solutioning expertise: knowing that a "Predictive Quality
 Analytics Platform" isn't just one analytics feature, but requires connectivity, cloud, security,
@@ -109,9 +109,9 @@ and consulting capabilities working together.
 
 1. **Start from the feature** as the delivery mechanism — this becomes the `lead` building block
 2. **Ask the grounding questions** for the lead block:
-   - "What does this theme need that this feature can deliver?" → becomes `delivers` on the lead block
-   - "What does this theme need that this feature cannot deliver?" → becomes `gaps` on the lead block
-3. **Identify additional building blocks**: Analyze the theme's strategic question and its
+   - "What does this investment theme need that this feature can deliver?" → becomes `delivers` on the lead block
+   - "What does this investment theme need that this feature cannot deliver?" → becomes `gaps` on the lead block
+3. **Identify additional building blocks**: Analyze the investment theme's strategic question and its
    value chain narratives to determine what other capabilities are required beyond the lead
    feature. Reference the B2B ICT taxonomy (`$CLAUDE_PLUGIN_ROOT/references/taxonomies/b2b-ict-portfolio.md`)
    to categorize each needed capability into its taxonomy dimension and category.
@@ -209,12 +209,12 @@ and consulting capabilities working together.
    ```
    portfolio_anchor.feature_slug = lead.feature_slug
    portfolio_anchor.product_slug = lead.product_slug
-   portfolio_anchor.theme_needs_delivered = lead.delivers
-   portfolio_anchor.theme_needs_undelivered = lead.gaps
+   portfolio_anchor.investment_theme_needs_delivered = lead.delivers
+   portfolio_anchor.investment_theme_needs_undelivered = lead.gaps
    ```
 
 7. **Set remaining ST fields**:
-   - All standard fields (`st_id`, `name`, `description`, `category`, `enabler_type`, `theme_ref`, `linked_chains`, `foundation_dependencies`)
+   - All standard fields (`st_id`, `name`, `description`, `category`, `enabler_type`, `investment_theme_ref`, `linked_chains`, `foundation_dependencies`)
    - `generation_mode: "portfolio-anchored"`
    - `portfolio_mapping.match_confidence: "high"` — automatically high because the ST was generated FROM the feature
    - If the feature has propositions in the context, populate `portfolio_grounding` entries:
@@ -244,25 +244,25 @@ When the portfolio context has `quality_assessment` data (v3.0):
 
 ### 0.5.5: Reduce Abstract Targets
 
-For each theme that received portfolio-anchored STs, reduce the target for Step 1 abstract
+For each investment theme that received portfolio-anchored STs, reduce the target for Step 1 abstract
 generation:
 
-- **2+ anchored STs**: The theme may not need abstract STs at all. Still generate 1 abstract
-  ST if the anchored STs don't fully cover the theme's strategic question (check whether
-  `theme_needs_undelivered` items suggest a significant gap)
+- **2+ anchored STs**: The investment theme may not need abstract STs at all. Still generate 1 abstract
+  ST if the anchored STs don't fully cover the investment theme's strategic question (check whether
+  `investment_theme_needs_undelivered` items suggest a significant gap)
 - **1 anchored ST**: Reduce the abstract target by 1 (e.g., from 2-4 to 1-3)
-- **0 anchored STs**: No change — Step 1 runs at full capacity for this theme
+- **0 anchored STs**: No change — Step 1 runs at full capacity for this investment theme
 
 ### 0.5.6: Report
 
-Present portfolio-anchored STs first, grouped by theme. Show the full blueprint composition
+Present portfolio-anchored STs first, grouped by investment theme. Show the full blueprint composition
 so the user can see the solutioning expertise — which building blocks are needed and which
 are covered, partial, or gaps:
 
 ```markdown
 ## Portfolio-Anchored Solution Templates
 
-### Theme 1: Smart Manufacturing & Supply Chain (2 anchored STs)
+### Investment Theme 1: Smart Manufacturing & Supply Chain (2 anchored STs)
 
 **ST-001: Predictive Quality Analytics Platform** [ANCHORED]
 Blueprint: 4 building blocks across 4 taxonomy dimensions
@@ -286,23 +286,23 @@ Quality: quality_investment_needed (market_specificity: fail)
 > grounded in existing DOES claims for mid-market manufacturing.
 ```
 
-Then note which themes still need abstract STs:
+Then note which investment themes still need abstract STs:
 ```
-Themes needing abstract STs in Step 1:
-- Theme 3: Regulatory Compliance (0 anchored STs → full abstract generation)
-- Theme 5: Sustainability & ESG (1 anchored ST → reduced target: 1-3 abstract STs)
+Investment themes needing abstract STs in Step 1:
+- Investment Theme 3: Regulatory Compliance (0 anchored STs → full abstract generation)
+- Investment Theme 5: Sustainability & ESG (1 anchored ST → reduced target: 1-3 abstract STs)
 ```
 
 ## Step 1: Generate Solution Templates
 
 > **Note:** If portfolio-anchored STs were generated in Step 0.5, adjust the target per
-> theme — generate abstract STs only for themes or theme areas not covered by anchored STs.
-> Themes with 2+ anchored STs may need only 0-1 abstract STs. Themes with 0 anchored STs
+> investment theme — generate abstract STs only for investment themes or investment theme areas not covered by anchored STs.
+> Investment themes with 2+ anchored STs may need only 0-1 abstract STs. Investment themes with 0 anchored STs
 > use the full 2-4 target.
 
-For each **Strategic Theme**, generate 2-4 Solution Templates using extended thinking.
-Working at the theme level (rather than per-chain) naturally deduplicates — chains within
-a theme share strategic direction, so a single ST often serves multiple chains.
+For each **Investment Theme**, generate 2-4 Solution Templates using extended thinking.
+Working at the investment theme level (rather than per-chain) naturally deduplicates — chains within
+an investment theme share strategic direction, so a single ST often serves multiple chains.
 
 **Portfolio-grounded generation (when `portfolio-context.json` v2.0+ exists):**
 When an enriched portfolio context is available (check for `schema_version` >= `"2.0"`),
@@ -335,16 +335,16 @@ If no v2.0+ context exists, generate STs using industry context alone (unchanged
 - `description`: What it does and how (1-2 sentences)
 - `category`: `software` | `hardware` | `service` | `hybrid` | `process`
 - `enabler_type`: `process_improvement` | `capability_building` | `risk_mitigation` | `revenue_enablement`
-- `theme_ref`: The primary Strategic Theme this ST belongs to
-- `linked_chains`: Which value chains this ST addresses (can span multiple chains within the theme)
+- `investment_theme_ref`: The primary Investment Theme this ST belongs to
+- `linked_chains`: Which value chains this ST addresses (can span multiple chains within the investment theme)
 - `foundation_dependencies`: Which foundation candidates are prerequisites
 
 **Generation guidelines:**
-- Consider all value chains within the theme holistically — what enabler would address
-  the theme's strategic question most directly?
-- A single ST can address multiple chains within a theme (this is expected and desirable)
-- Cross-theme STs are rare but allowed — if an ST genuinely serves two themes, link it
-  to both but assign a primary `theme_ref`
+- Consider all value chains within the investment theme holistically — what enabler would address
+  the investment theme's strategic question most directly?
+- A single ST can address multiple chains within an investment theme (this is expected and desirable)
+- Cross-investment-theme STs are rare but allowed — if an ST genuinely serves two investment themes, link it
+  to both but assign a primary `investment_theme_ref`
 - Prefer concrete over abstract — name specific technologies, platforms, methodologies
 - Consider the project's industry context (automotive solutions differ from pharma)
 - Use the chain's horizon alignment to set implementation urgency:
@@ -352,16 +352,16 @@ If no v2.0+ context exists, generate STs using industry context alone (unchanged
   - Act-plan chains → near-term STs with phased rollout
   - Plan-observe chains → strategic initiative STs
 
-**Target: 2-4 STs per theme → 8-20 total.** This range reflects that themes consolidate
+**Target: 2-4 STs per investment theme → 8-20 total.** This range reflects that investment themes consolidate
 what would otherwise be 15-25 STs spread across redundant paths. If you find yourself
-generating >4 STs for a single theme, the theme may be too broad — revisit the Phase 1
+generating >4 STs for a single investment theme, the investment theme may be too broad — revisit the Phase 1
 split criteria.
 
 ## Step 1.5: Blueprint Composition for Abstract STs
 
 Abstract STs also get solution blueprints. While portfolio-anchored STs have their blueprints
 populated from real portfolio matches (Step 0.5.3), abstract STs need their composition
-analyzed from their description and theme context. This ensures every ST carries solutioning
+analyzed from their description and investment theme context. This ensures every ST carries solutioning
 expertise metadata — the knowledge of what portfolio dimensions are needed to deliver it.
 
 For each abstract ST:
@@ -371,7 +371,7 @@ For each abstract ST:
    ST's core capability? This becomes the `lead` building block.
 
 2. **Identify supporting and enabling capabilities** — analyze the ST description, its
-   theme's strategic question, and its linked value chain narratives. What additional
+   investment theme's strategic question, and its linked value chain narratives. What additional
    taxonomy categories are needed to deliver this solution? Typical patterns:
    - Software STs often need cloud infrastructure (Dim 4), connectivity (Dim 1)
    - Process STs often need consulting (Dim 7), training (Dim 7)
@@ -514,7 +514,7 @@ Re-anchoring rebuilds solution blueprints on existing STs using **LLM solutionin
 This is not a mechanical keyword-matching operation — it applies the same solutioning competence
 as Steps 0.5.3 and 1.5, but to STs that already exist rather than generating new ones. The LLM
 must reason about what each solution genuinely needs across B2B ICT taxonomy dimensions, drawing
-on theme narratives, value chain context, and portfolio capabilities.
+on investment theme narratives, value chain context, and portfolio capabilities.
 
 The reason this cannot be scripted: a "Smart Grid Digital Twin" solution doesn't just need "the
 feature with 'digital twin' in the name." It needs IoT connectivity for sensor data, cloud
@@ -538,7 +538,7 @@ Re-anchoring can be triggered in two ways:
 
 ### 2.7.1: Load Current State
 
-1. Read `tips-value-model.json` to get the current `solution_templates` array and `themes` array
+1. Read `tips-value-model.json` to get the current `solution_templates` array and `investment_themes` array
 2. Read `portfolio-context.json` from the TIPS project directory
    - **Requires v2.0+** — if absent or v1.0, abort with:
      > "Re-anchoring requires portfolio context v2.0 or later. Run `/bridge portfolio-to-tips`
@@ -558,7 +558,7 @@ ability to reason about solution architecture in context.
 For each ST:
 
 1. Read the ST's `name`, `description`, `category`, `enabler_type`
-2. Read the parent theme's `strategic_question` and `narrative` (via `theme_ref`)
+2. Read the parent investment theme's `strategic_question` and `narrative` (via `investment_theme_ref`)
 3. Read the linked value chains' narratives (via `linked_chains`) — the T→I→P stories that
    give context to why this solution exists
 4. With this full context, determine from scratch:
@@ -628,8 +628,8 @@ For each building block identified in 2.7.2, scan the portfolio context for matc
    ```
    portfolio_anchor.feature_slug = lead.feature_slug
    portfolio_anchor.product_slug = lead.product_slug
-   portfolio_anchor.theme_needs_delivered = lead.delivers
-   portfolio_anchor.theme_needs_undelivered = lead.gaps
+   portfolio_anchor.investment_theme_needs_delivered = lead.delivers
+   portfolio_anchor.investment_theme_needs_undelivered = lead.gaps
    ```
 
 5. Update `portfolio_mapping`:
@@ -714,7 +714,7 @@ Write back the changes:
   `generation_mode`, and `quality_flag`
 - Append to `reanchor_log` array (create if it doesn't exist)
 - **Preserve unchanged fields**: `st_id`, `name`, `description`, `category`, `enabler_type`,
-  `theme_ref`, `linked_chains`, `foundation_dependencies`, `business_relevance`,
+  `investment_theme_ref`, `linked_chains`, `foundation_dependencies`, `business_relevance`,
   `business_relevance_calculated`, `ranking_value`, `chain_scores`, `foundation_factor`,
   `portfolio_grounding`
 
@@ -734,18 +734,18 @@ After re-anchoring, check whether ranking has already been performed:
 
 ## Step 3: Consolidate & Deduplicate
 
-Because STs are now generated per theme rather than per chain, most deduplication happens
+Because STs are now generated per investment theme rather than per chain, most deduplication happens
 naturally. Still, review all generated STs and:
-- Merge any remaining duplicates (especially cross-theme STs that overlap)
+- Merge any remaining duplicates (especially cross-investment-theme STs that overlap)
 - Ensure each ST has a unique, descriptive name
-- Verify that every theme has at least 2 linked STs
-- Verify that every value chain is covered by at least 1 ST (via its parent theme)
+- Verify that every investment theme has at least 2 linked STs
+- Verify that every value chain is covered by at least 1 ST (via its parent investment theme)
 - Check that no ST is orphaned (linked to zero chains)
 
 ## Step 3.5: Define Success Metrics
 
-For each Strategic Theme, define 2-4 success Metrics — KPIs that measure whether the
-theme's solutions are delivering expected value. Metrics make the business case tangible
+For each Investment Theme, define 2-4 success Metrics — KPIs that measure whether the
+investment theme's solutions are delivering expected value. Metrics make the business case tangible
 and provide the basis for post-implementation tracking. Link metrics to specific value
 chains where appropriate.
 
@@ -754,11 +754,11 @@ chains where appropriate.
 - `name`: KPI name (e.g., "OEE Improvement %")
 - `unit`: Measurement unit (e.g., "percentage", "hours", "EUR", "count")
 - `direction`: `increase` | `decrease` — which direction indicates improvement
-- `theme_ref`: The Strategic Theme this metric measures
+- `investment_theme_ref`: The investment theme this metric measures
 - `linked_chains`: Which value chains this metric applies to (optional, for granularity)
 
 **Example:**
-- Theme: "Smart Manufacturing & Supply Chain", Chain: "AI-Driven Quality Optimization"
+- Investment Theme: "Smart Manufacturing & Supply Chain", Chain: "AI-Driven Quality Optimization"
   - Metric: "Defect rate reduction" (percentage, decrease)
   - Metric: "Mean time to defect detection" (hours, decrease)
   - Metric: "First-pass yield improvement" (percentage, increase)
@@ -766,17 +766,17 @@ chains where appropriate.
 **Guidelines:**
 - Metrics should be measurable and specific to the industry context
 - Avoid vanity metrics — focus on KPIs the customer already tracks or should track
-- A single metric may apply to multiple chains within a theme (e.g., OEE spans several solution areas)
+- A single metric may apply to multiple chains within an investment theme (e.g., OEE spans several solution areas)
 - Include both leading indicators (early signals) and lagging indicators (outcome measures)
 
 ## Step 4: Present to User
 
-Present the Solution Templates grouped by Strategic Theme:
+Present the Solution Templates grouped by Investment Theme:
 
 ```markdown
-## Solution Templates by Strategic Theme
+## Solution Templates by Investment Theme
 
-### Theme 1: Health & Nutrition Transformation (3 STs)
+### Investment Theme 1: Health & Nutrition Transformation (3 STs)
 Strategic Question: How do we reformulate for the GLP-1-era consumer?
 
 **ST-001: AI Personalization Platform for Health Products**
@@ -801,7 +801,7 @@ Portfolio match: none (PORTFOLIO GAP)
 Propositions: —
 > Systematic reformulation framework for protein- and fiber-rich product lines.
 
-### Theme 2: Regulatory Compliance & Sustainable Packaging (3 STs)
+### Investment Theme 2: Regulatory Compliance & Sustainable Packaging (3 STs)
 Strategic Question: How do we turn regulatory pressure into competitive advantage?
 ...
 ```
@@ -838,17 +838,17 @@ Report summary:
   which have gaps. Example: "Solutions span 6 of 8 taxonomy dimensions. Gaps
   concentrated in Dim 2 (Security) and Dim 7 (Consulting)."
 
-Ask: "These are the Solution Templates derived from your Strategic Themes. Want to adjust
+Ask: "These are the Solution Templates derived from your investment themes. Want to adjust
 any before we move to Business Relevance scoring?"
 
 ## Output
 
 Update `tips-value-model.json`:
-- Add `solution_templates` array with all STs (each has `theme_ref` and `linked_chains`)
+- Add `solution_templates` array with all STs (each has `investment_theme_ref` and `linked_chains`)
 - Add `solution_process_improvements` array with all SPIs
-- Add `metrics` array with all success Metrics (each has `theme_ref`)
+- Add `metrics` array with all success Metrics (each has `investment_theme_ref`)
 - Add `collaterals` array with all Collateral items
-- Update each theme's `solution_templates` field with linked ST IDs
+- Update each investment theme's `solution_templates` field with linked ST IDs
 - Update each value chain's `solution_templates` field with linked ST IDs
 - Add `portfolio_gaps` array listing STs with no portfolio match
 

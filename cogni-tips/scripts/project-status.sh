@@ -233,7 +233,7 @@ if [ "$HAS_VALUE_MODEL" = "true" ]; then
 import json
 try:
     d = json.load(open('$PROJECT_DIR/tips-value-model.json'))
-    themes = d.get('themes', [])
+    themes = d.get('investment_themes', d.get('themes', []))
     print(f'THEMES_COUNT={len(themes)}')
     sts = d.get('solution_templates', [])
     print(f'SOLUTIONS_COUNT={len(sts)}')
@@ -258,8 +258,8 @@ try:
         pa = s.get('portfolio_anchor') or {}
         prod = pa.get('product_slug', 'unknown')
         feat = pa.get('feature_slug', 'unknown')
-        nd = len(pa.get('theme_needs_delivered', []))
-        nu = len(pa.get('theme_needs_undelivered', []))
+        nd = len(pa.get('investment_theme_needs_delivered', pa.get('theme_needs_delivered', [])))
+        nu = len(pa.get('investment_theme_needs_undelivered', pa.get('theme_needs_undelivered', [])))
         qi = 1 if s.get('quality_flag') == 'quality_investment_needed' else 0
         anchor_quality += qi
         anchor_delivered += nd
@@ -599,7 +599,7 @@ cat << EOF
     "candidates_user": $CANDIDATES_USER,
     "claims_total": $CLAIMS_TOTAL,
     "report_sections": $REPORT_SECTIONS,
-    "themes": $THEMES_COUNT,
+    "investment_themes": $THEMES_COUNT,
     "solutions": $SOLUTIONS_COUNT,
     "ranked_solutions": $RANKED_COUNT,
     "blueprints": $BLUEPRINT_COUNT,

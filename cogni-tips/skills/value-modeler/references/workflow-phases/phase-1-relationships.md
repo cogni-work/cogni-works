@@ -1,9 +1,9 @@
-# Phase 1: Build Relationship Networks & Strategic Themes
+# Phase 1: Build Relationship Networks & Investment Themes
 
 ## Objective
 
 Two-pass architecture: First, build granular T→I→P value chains via semantic affinity
-analysis (bottom-up). Then consolidate chains into 3-7 MECE Strategic Themes — the
+analysis (bottom-up). Then consolidate chains into 3-7 MECE Investment Themes — the
 distinct investment domains where this customer should allocate budget and executive
 attention (top-down).
 
@@ -15,8 +15,8 @@ chains to a CxO produces a flat, overwhelming list where overlapping chains gene
 redundant solutions.
 
 The consolidation pass solves this: chains that answer the same strategic question get
-grouped into a single theme. The customer sees 5 investment areas, not 11 threads. Each
-theme is a distinct budget decision with a clear executive owner.
+grouped into a single investment theme. The customer sees 5 investment areas, not 11 threads. Each
+investment theme is a distinct budget decision with a clear executive owner.
 
 ## Dimension-to-TIPS Role Mapping
 
@@ -149,7 +149,7 @@ the orphan list. The goal is ≥80% with honest connections, not 80% with forced
 
 ---
 
-## PASS 2: Top-Down Strategic Theme Consolidation
+## PASS 2: Top-Down Investment Theme Consolidation
 
 This is where the MECE discipline turns a list of chains into a structured investment strategy.
 
@@ -159,7 +159,7 @@ Analyze the value chains from Step 3 and look for chains that converge:
 
 **Clustering signals — chains should merge when they share:**
 1. **Same "so what?"** — If two chains lead to the same executive decision ("we need to invest
-   in X"), they belong in one theme. Test: would you present these to the same CxO in the same
+   in X"), they belong in one investment theme. Test: would you present these to the same CxO in the same
    meeting agenda item?
 2. **Solution overlap** — If the chains would naturally produce overlapping Solution Templates
    (same platforms, same capabilities), they belong together.
@@ -169,79 +169,79 @@ Analyze the value chains from Step 3 and look for chains that converge:
 
 **Splitting signals — a cluster should split when:**
 1. **Competing solutions** — If the cluster produces STs that are alternatives (not complements),
-   they represent different strategic bets and need separate themes.
+   they represent different strategic bets and need separate investment themes.
 2. **Different time horizons** — If one half is "act now" and the other is "observe," consider
    splitting so urgency is clear.
 3. **Different value propositions** — If you'd pitch them to fundamentally different buyers
-   (CFO vs CTO vs CPO), they're separate themes.
+   (CFO vs CTO vs CPO), they're separate investment themes.
 
-### Step 5: Form Strategic Themes
+### Step 5: Form Investment Themes
 
-Create 3-7 themes. Each theme:
+Create 3-7 investment themes. Each investment theme:
 
 1. **Groups 1-4 value chains** that share the same strategic direction
 2. Has a **name** (3-5 words): the investment area, not the megatrend.
    Good: "Smart Manufacturing & Supply Chain Resilience"
    Bad: "Digitalization" (too broad — that's the megatrend, not the investment)
-3. Has a **strategic question** it answers for the customer — the decision this theme forces.
+3. Has a **strategic question** it answers for the customer — the decision this investment theme forces.
    Example: "How do we modernize production while de-risking our supply chain?"
 4. Has an **executive sponsor type** — who would own this in the customer's org.
    Example: "COO / VP Operations"
-5. Has a **theme narrative** (2-3 sentences) explaining why these chains belong together
+5. Has an **investment theme narrative** (2-3 sentences) explaining why these chains belong together
    and what the unified investment thesis is.
 
 **The 3-5-7 target:**
-- **3 themes**: Minimum viable strategy. Use for focused engagements, narrow candidate pools
+- **3 investment themes**: Minimum viable strategy. Use for focused engagements, narrow candidate pools
   (<40 candidates), or when the industry is highly concentrated.
-- **5 themes**: Sweet spot. Cognitively manageable, enough breadth for enterprise accounts.
-  Each theme is like a finger — you can hold the whole strategy in one hand.
-- **7 themes**: Hard maximum (Miller's law: 7±2 chunks). Only for large, complex enterprises
+- **5 investment themes**: Sweet spot. Cognitively manageable, enough breadth for enterprise accounts.
+  Each investment theme is like a finger — you can hold the whole strategy in one hand.
+- **7 investment themes**: Hard maximum (Miller's law: 7±2 chunks). Only for large, complex enterprises
   with diverse business units spanning multiple subsectors.
 
 Choose the target based on:
 - Number of distinct industry subsectors in the candidate pool
 - Breadth and diversity of the T/I/P candidates
-- Customer organizational complexity (more BUs → more themes)
+- Customer organizational complexity (more BUs → more investment themes)
 - Default to 5 unless there's a clear reason to deviate.
 
-**Quality over count.** 4 strong themes with solid causal chains beats 5 themes where
-one has forced connections. If you find yourself stretching chains to fill a theme — using
+**Quality over count.** 4 strong investment themes with solid causal chains beats 5 investment themes where
+one has forced connections. If you find yourself stretching chains to fill an investment theme — using
 a regulatory trend as a production driver, or a pricing trend as a workforce trigger — that's
-a signal the theme isn't warranted. Drop it and redistribute any legitimate chains to
-neighboring themes. The customer is better served by 4 sharp themes than 5 blurry ones.
+a signal the investment theme isn't warranted. Drop it and redistribute any legitimate chains to
+neighboring investment themes. The customer is better served by 4 sharp investment themes than 5 blurry ones.
 
 ### Step 6: MECE Validation
 
-Before presenting, verify the themes satisfy MECE:
+Before presenting, verify the investment themes satisfy MECE:
 
 **Mutual Exclusivity check:**
-- For each pair of themes, ask: "Would a CxO confuse these? Would they fund both from the
+- For each pair of investment themes, ask: "Would a CxO confuse these? Would they fund both from the
   same budget line?" If yes → merge.
 - Each Solution Template (mentally anticipated, not yet generated) should clearly belong to
-  one primary theme. If an ST would naturally serve two themes equally, the themes may need merging.
+  one primary investment theme. If an ST would naturally serve two investment themes equally, the investment themes may need merging.
 
 **Collective Exhaustiveness check:**
 - Count how many of the 45 T/I/P candidates (excluding Foundation) appear in at least one
-  chain within a theme. Target ≥80% coverage.
-- If major candidate clusters are orphaned (not covered by any theme), consider whether a
-  theme is missing or whether those candidates are genuinely low-relevance outliers.
+  chain within an investment theme. Target ≥80% coverage.
+- If major candidate clusters are orphaned (not covered by any investment theme), consider whether an
+  investment theme is missing or whether those candidates are genuinely low-relevance outliers.
 
 **Balance check:**
-- No single theme should contain >50% of all chains (probably too broad — split it).
-- No theme should have 0 chains (empty themes aren't themes).
-- Aim for roughly even distribution, but don't force symmetry — some themes naturally have
+- No single investment theme should contain >50% of all chains (probably too broad — split it).
+- No investment theme should have 0 chains (empty investment themes aren't investment themes).
+- Aim for roughly even distribution, but don't force symmetry — some investment themes naturally have
   more chains than others.
 
 ---
 
 ## Step 7: Present to User
 
-Present the Strategic Themes as the primary output, with chains nested beneath:
+Present the Investment Themes as the primary output, with chains nested beneath:
 
 ```markdown
-## Strategic Themes (TIPS Value Model)
+## Investment Themes (TIPS Value Model)
 
-### Theme 1: Health & Nutrition Transformation
+### Investment Theme 1: Health & Nutrition Transformation
 **Strategic Question:** How do we reformulate our portfolio for the health-conscious, GLP-1-era consumer?
 **Executive Sponsor:** CPO / Head of Product Development
 
@@ -262,18 +262,18 @@ Foundation: Food Scientist Shortage
 
 ---
 
-### Theme 2: Regulatory Compliance & Sustainable Packaging
+### Investment Theme 2: Regulatory Compliance & Sustainable Packaging
 ...
 ```
 
 Also report:
-- Total themes formed and total value chains
+- Total investment themes formed and total value chains
 - Coverage: how many candidates are linked vs orphaned
 - MECE validation result (pass/issues)
 - Any candidates that couldn't be meaningfully connected (orphans)
 
-Ask the user: "Do these Strategic Themes make sense for your customer? Each theme represents
-a distinct investment area. Want to adjust, merge, or split any themes before I generate
+Ask the user: "Do these Investment Themes make sense for your customer? Each investment theme represents
+a distinct investment area. Want to adjust, merge, or split any investment themes before I generate
 Solution Templates?"
 
 ## Output
@@ -284,9 +284,9 @@ Save to `tips-value-model.json` (create or update):
 {
   "version": "2.0.0",
   "project_id": "{project-slug}",
-  "themes": [
+  "investment_themes": [
     {
-      "theme_id": "theme-001",
+      "investment_theme_id": "it-001",
       "name": "Health & Nutrition Transformation",
       "strategic_question": "How do we reformulate our portfolio for the health-conscious, GLP-1-era consumer?",
       "executive_sponsor_type": "CPO / Head of Product Development",
@@ -301,7 +301,7 @@ Save to `tips-value-model.json` (create or update):
     {
       "chain_id": "vc-001",
       "name": "GLP-1 Portfolio Reformulation",
-      "theme_ref": "theme-001",
+      "investment_theme_ref": "it-001",
       "narrative": "...",
       "trend": { "candidate_ref": "...", "name": "...", "business_relevance": null },
       "implications": [
@@ -324,7 +324,7 @@ Save to `tips-value-model.json` (create or update):
     "coverage_pct": 0.923
   },
   "mece_validation": {
-    "theme_count": 5,
+    "investment_theme_count": 5,
     "mutual_exclusivity": "pass",
     "collective_exhaustiveness_pct": 0.87,
     "balance": "pass"
@@ -333,6 +333,6 @@ Save to `tips-value-model.json` (create or update):
 ```
 
 Update `.metadata/value-modeler-output.json`:
-- Set `workflow_state` to `"themes-built"`
+- Set `workflow_state` to `"investment-themes-built"`
 - Add `"phase-1"` to `phases_completed`
-- Record `theme_count`, `chain_count`, and `coverage_pct`
+- Record `investment_theme_count`, `chain_count`, and `coverage_pct`

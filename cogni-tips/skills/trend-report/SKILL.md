@@ -1,20 +1,20 @@
 ---
 name: trend-report
 description: |
-  Generate a strategic TIPS trend report organized around investment themes with inline citations and verifiable claims. Produces a theme-first report where 3-7 strategic themes drive the narrative — each theme tells a CxO-level investment story using the Corporate Visions arc (Why Change → Why Now → Why You → Why Pay) backed by T→I→P→S value chain evidence. Reads agreed trend candidates, enriches each with web-sourced quantitative evidence via parallel agents, assembles the report with strategic executive summary and portfolio analysis, invokes cogni-claims:claim-work for automated verification, and polishes the final prose for executive readability via cogni-copywriting. Required pipeline: trend-scout → value-modeler → trend-report. Use when: (1) trend-scout and value-modeler have completed, (2) user wants a written trend report, (3) user mentions "trend report", "TIPS report", "write up trends", "summarize trends", "trend analysis document", "strategic stories", (4) preparing a deliverable from scouted trends, (5) user asks to "generate report from trends" or "create trend deliverable". Always use this skill when trend-scout output exists and the user wants any kind of written trend analysis — even if they don't use the exact phrase "trend report".
+  Generate a strategic TIPS trend report organized around investment themes (Handlungsfelder) with inline citations and verifiable claims. Produces a theme-first report where 3-7 investment themes drive the narrative — each investment theme tells a CxO-level investment story using the Corporate Visions arc (Why Change → Why Now → Why You → Why Pay) backed by T→I→P→S value chain evidence. Reads agreed trend candidates, enriches each with web-sourced quantitative evidence via parallel agents, assembles the report with strategic executive summary and portfolio analysis, invokes cogni-claims:claim-work for automated verification, and polishes the final prose for executive readability via cogni-copywriting. Required pipeline: trend-scout → value-modeler → trend-report. Use when: (1) trend-scout and value-modeler have completed, (2) user wants a written trend report, (3) user mentions "trend report", "TIPS report", "write up trends", "summarize trends", "trend analysis document", "strategic stories", (4) preparing a deliverable from scouted trends, (5) user asks to "generate report from trends" or "create trend deliverable". Always use this skill when trend-scout output exists and the user wants any kind of written trend analysis — even if they don't use the exact phrase "trend report".
 ---
 
 # Trend Report
 
-Generate a strategic TIPS trend report from agreed trend-scout candidates. Organizes the report around strategic investment themes — each theme tells a CxO-level story backed by T→I→P value chain evidence. Dispatches 4 parallel agents to enrich trends with web-sourced quantitative evidence, then assembles a theme-first strategic report with executive summary and claims registry.
+Generate a strategic TIPS trend report from agreed trend-scout candidates. Organizes the report around investment themes — each investment theme tells a CxO-level story backed by T→I→P value chain evidence. Dispatches 4 parallel agents to enrich trends with web-sourced quantitative evidence, then assembles a theme-first strategic report with executive summary and claims registry.
 
 ## Purpose
 
 Transform agreed trend-scout candidates into a strategic, evidence-backed report:
 
-1. Load value-modeler strategic themes and validate prerequisites
+1. Load value-modeler investment themes and validate prerequisites
 2. Enrich each trend with quantitative evidence from web research
-3. Assemble theme narratives using Corporate Visions arc (Why Change → Why Now → Why You → Why Pay) with embedded evidence
+3. Assemble investment theme narratives using Corporate Visions arc (Why Change → Why Now → Why You → Why Pay) with embedded evidence
 4. Generate inline citations for every quantitative claim
 5. Produce a claims registry compatible with `cogni-claims:claim-work`
 6. Optionally verify claims via cogni-claims:claim-work
@@ -34,9 +34,9 @@ Report prose, section headers, and TIPS labels all adapt to the chosen output la
 ## Prerequisites
 
 - `trend-scout` completed with `execution.workflow_state == "agreed"` and 60 candidates
-- `value-modeler` completed with `tips-value-model.json` containing strategic themes
+- `value-modeler` completed with `tips-value-model.json` containing investment themes
 - Web access enabled for evidence enrichment
-- Optional: `cogni-narrative` plugin for theme-thesis arc guidance (graceful fallback if absent — themes use flat structure)
+- Optional: `cogni-narrative` plugin for theme-thesis arc guidance (graceful fallback if absent — investment themes use flat structure)
 - Optional: `cogni-claims` plugin for claim verification
 - Optional: `cogni-copywriting` plugin for executive polish (graceful fallback if absent)
 
@@ -44,7 +44,7 @@ Report prose, section headers, and TIPS labels all adapt to the chosen output la
 
 This skill reads ALL required state from project files — it does not depend on prior conversation context. The tips-resume dashboard, earlier questions, and any preceding chat are not inputs to the report pipeline. This means **context compaction is safe and recommended** before starting.
 
-**Before executing Phase 0**, run `/compact` to free working memory. Phase 2 delegates theme section writing to parallel agents (reducing orchestrator context from ~69% to ~25-35%), but the orchestrator still reads the value model and claims files for assembly sections. Compacting early ensures headroom.
+**Before executing Phase 0**, run `/compact` to free working memory. Phase 2 delegates investment theme section writing to parallel agents (reducing orchestrator context from ~69% to ~25-35%), but the orchestrator still reads the value model and claims files for assembly sections. Compacting early ensures headroom.
 
 If `/compact` is unavailable (e.g., non-interactive mode), proceed without it — Phase 2's agent-based architecture is designed to stay within context limits.
 
@@ -74,7 +74,7 @@ Read references **only when needed** for the specific phase:
 |-----------|--------------|
 | [$CLAUDE_PLUGIN_ROOT/references/language-resolution.md]($CLAUDE_PLUGIN_ROOT/references/language-resolution.md) | Language detection and resolution pattern |
 | [$CLAUDE_PLUGIN_ROOT/references/data-model.md]($CLAUDE_PLUGIN_ROOT/references/data-model.md) | Understanding entity schemas and project structure |
-| [references/phase-2-strategic-themes.md](references/phase-2-strategic-themes.md) | Assembling the strategic theme report (Phase 2) |
+| [references/phase-2-strategic-themes.md](references/phase-2-strategic-themes.md) | Assembling the investment theme report (Phase 2) |
 | [references/report-structure.md](references/report-structure.md) | Dimension section templates (written by Phase 1 agents) |
 | [references/evidence-enrichment.md](references/evidence-enrichment.md) | Configuring agent web search strategy (Phase 1) |
 | [references/claims-format.md](references/claims-format.md) | Extracting/merging claims (Phase 1-2) |
@@ -93,7 +93,7 @@ Phase 0 → Phase 1 → Phase 2 → Phase 3 → Phase 3.5 → Phase 4
    │          │          │         │          │           └─ Update metadata, display summary
    │          │          │         │          └─ Executive polish via cogni-copywriting
    │          │          │         └─ Optional claim-work verification
-   │          │          └─ Theme narratives (Corporate Visions arc) + evidence weaving
+   │          │          └─ Investment theme narratives (Corporate Visions arc) + evidence weaving
    │          └─ 4 parallel agents: enrich trends, write sections + enriched JSONs, extract claims
    └─ Project discovery, load trend-scout + value-modeler output, validate gate
 ```
@@ -131,14 +131,14 @@ REQUIRED (validate only — do NOT hold candidates or signals in context):
 
 REQUIRED (value model — keep in context for Phase 2):
   {PROJECT_PATH}/tips-value-model.json
-    → Check: themes[] array exists and has ≥1 entry
-    → Extract: themes[], value_chains[], solution_templates[]
+    → Check: investment_themes[] array exists and has ≥1 entry
+    → Extract: investment_themes[], value_chains[], solution_templates[]
 
 NOTE: Raw web signals (web-research-raw.json) are NOT loaded by the orchestrator.
 Phase 1 agents read and filter signals themselves — see trend-report-writer agent.
 ```
 
-Display to the user: `"{PHASE_0_THEMES_FOUND}"` (from i18n labels)
+Display to the user: `"{PHASE_0_INVESTMENT_THEMES_FOUND}"` (from i18n labels)
 
 #### Step 0.2b: Extract Phase 2 Value-Model Subset
 
@@ -148,19 +148,19 @@ Read `tips-value-model.json` (already loaded in Step 0.2). Write `{PROJECT_PATH}
 
 ```json
 {
-  "themes": [],
+  "investment_themes": [],
   "value_chains": [],
   "orphan_candidates": [],
   "coverage": {},
   "mece_validation": {},
   "solution_templates": [
-    { "st_id": "...", "name": "...", "category": "...", "enabler_type": "...", "theme_ref": "..." }
+    { "st_id": "...", "name": "...", "category": "...", "enabler_type": "...", "investment_theme_ref": "..." }
   ]
 }
 ```
 
-- Copy `themes`, `value_chains`, `orphan_candidates`, `coverage`, `mece_validation` in full
-- For each `solution_templates[]` entry, keep ONLY: `st_id`, `name`, `category`, `enabler_type`, `theme_ref` — omit `solution_blueprint`, `portfolio_grounding`, `description`, and all other fields
+- Copy `investment_themes`, `value_chains`, `orphan_candidates`, `coverage`, `mece_validation` in full
+- For each `solution_templates[]` entry, keep ONLY: `st_id`, `name`, `category`, `enabler_type`, `investment_theme_ref` — omit `solution_blueprint`, `portfolio_grounding`, `description`, and all other fields
 - Omit all other top-level keys (`reanchor_log`, `solution_process_improvements`, `metrics`, `collaterals`, `portfolio_gaps`, etc.)
 
 #### Step 0.3: Validate Entry Gate
@@ -170,7 +170,7 @@ Read `tips-value-model.json` (already loaded in Step 0.2). Write `{PROJECT_PATH}
 | Output exists | `.metadata/trend-scout-output.json` | HALT: Run trend-scout first |
 | Workflow state | `== "agreed"` | HALT: Complete trend-scout selection |
 | Candidate count | `>= 60` | HALT: Expected 60 agreed candidates |
-| Value model exists | `tips-value-model.json` with themes[] | HALT: Run value-modeler first |
+| Value model exists | `tips-value-model.json` with investment_themes[] | HALT: Run value-modeler first |
 | Config complete | industry, subsector, language present | HALT: Incomplete config |
 
 #### Step 0.4: Ask User for Deliverable Language
@@ -212,7 +212,7 @@ On re-runs, remove stale files to prevent mixing old and new content:
 ```bash
 rm -f "{PROJECT_PATH}/.logs/report-header.md" \
       "{PROJECT_PATH}/.logs/report-section-"*.md \
-      "{PROJECT_PATH}/.logs/report-theme-"*.md \
+      "{PROJECT_PATH}/.logs/report-investment-theme-"*.md \
       "{PROJECT_PATH}/.logs/enriched-trends-"*.json \
       "{PROJECT_PATH}/.logs/claims-"*.json \
       "{PROJECT_PATH}/.logs/report-claims-registry.md" \
@@ -255,7 +255,7 @@ Dimensions: `externe-effekte` (T), `digitale-wertetreiber` (I), `neue-horizonte`
 Each agent writes:
 - `{PROJECT_PATH}/.logs/report-section-{dimension}.md` — narrative section (dimension-level prose)
 - `{PROJECT_PATH}/.logs/claims-{dimension}.json` — extracted claims
-- `{PROJECT_PATH}/.logs/enriched-trends-{dimension}.json` — per-trend evidence blocks keyed by candidate_ref; `actions_md` uses semicolon-separated keywords (used in theme assembly)
+- `{PROJECT_PATH}/.logs/enriched-trends-{dimension}.json` — per-trend evidence blocks keyed by candidate_ref; `actions_md` uses semicolon-separated keywords (used in investment theme assembly)
 
 #### Step 1.2: Collect Agent Results
 
@@ -280,25 +280,25 @@ If any `report-section-{dimension}.md` file is missing, log a WARNING. Phase 2 c
 
 ### Phase 2: Report Assembly — THEME-FIRST (NOT BY DIMENSION)
 
-**CRITICAL:** You MUST read [references/phase-2-strategic-themes.md](references/phase-2-strategic-themes.md) before starting Phase 2. The report is organized by **strategic themes** from `tips-value-model.json`, NOT by TIPS dimension. Do NOT simply concatenate the dimension section files from Phase 1 — those are intermediate artifacts, not the final report structure.
+**CRITICAL:** You MUST read [references/phase-2-strategic-themes.md](references/phase-2-strategic-themes.md) before starting Phase 2. The report is organized by **investment themes** from `tips-value-model.json`, NOT by TIPS dimension. Do NOT simply concatenate the dimension section files from Phase 1 — those are intermediate artifacts, not the final report structure.
 
-**EXECUTION — Agent-assisted theme writing + orchestrator assembly.** Phase 2 delegates the context-heavy theme section writing to parallel `trend-report-theme-writer` agents (one per theme), then the orchestrator writes the remaining lightweight sections (executive summary, claims registry) and concatenates the final report.
+**EXECUTION — Agent-assisted investment theme writing + orchestrator assembly.** Phase 2 delegates the context-heavy investment theme section writing to parallel `trend-report-investment-theme-writer` agents (one per investment theme), then the orchestrator writes the remaining lightweight sections (executive summary, claims registry) and concatenates the final report.
 
-- **Theme sections → agents.** Each theme-writer agent self-loads enriched-trends and claims from disk, filtered to its own candidate_refs. The orchestrator passes only small scalars (theme definition, value chains, labels). This keeps the orchestrator's context lean.
+- **Investment theme sections → agents.** Each investment-theme-writer agent self-loads enriched-trends and claims from disk, filtered to its own candidate_refs. The orchestrator passes only small scalars (investment theme definition, value chains, labels). This keeps the orchestrator's context lean.
 - **No Python scripts.** Do not write scripts to generate report sections. The agents and orchestrator write strategic prose directly.
 - **No intermediate analysis steps.** Do not generate lookup documentation or enriched statistics. Agents go straight from reading data to writing prose.
 
 **Summary of steps** (details in the reference):
 
-1. **Read value model** — Read `.logs/phase2-value-model.json` for themes, value chains, solution templates, orphan candidates, coverage data
-2. **Dispatch theme agents** — For each theme, dispatch a `cogni-tips:trend-report-theme-writer` agent. All agents in a single message (parallel). Each agent self-loads evidence from disk, writes `report-theme-{theme_id}.md`, and returns compact JSON with word count, citation count, quality gate status, and top claims.
+1. **Read value model** — Read `.logs/phase2-value-model.json` for investment themes, value chains, solution templates, orphan candidates, coverage data
+2. **Dispatch investment theme agents** — For each investment theme, dispatch a `cogni-tips:trend-report-investment-theme-writer` agent. All agents in a single message (parallel). Each agent self-loads evidence from disk, writes `report-investment-theme-{investment_theme_id}.md`, and returns compact JSON with word count, citation count, quality gate status, and top claims.
 3. **Collect agent results** — Validate all agents returned `ok: true` and quality gates passed. Retry once on failure.
-4. **Write executive summary** — Read ALL `report-theme-{theme_id}.md` files, then synthesize a flat Zusammenfassung (no subsections, no tables — theme bullet list + punchy closing paragraph). Write `report-header.md`.
-5. **Write claims registry** — Read 4 `claims-{dimension}.json` files once, map claims to themes via value model, write `report-claims-registry.md`
-6. **Assemble** — Concatenate with cat: header + themes (ordered) + claims → `tips-trend-report.md`
+4. **Write executive summary** — Read ALL `report-investment-theme-{investment_theme_id}.md` files, then synthesize a flat Zusammenfassung (no subsections, no tables — investment theme bullet list + punchy closing paragraph). Write `report-header.md`.
+5. **Write claims registry** — Read 4 `claims-{dimension}.json` files once, map claims to investment themes via value model, write `report-claims-registry.md`
+6. **Assemble** — Concatenate with cat: header + investment themes (ordered) + claims → `tips-trend-report.md`
 7. **Merge claims** → `tips-trend-report-claims.json`
 
-**Resume logic:** Before dispatching an agent for a theme, check if `report-theme-{theme_id}.md` already exists and is >1000 bytes. If so, skip that agent — display `"{PHASE_2_THEME_AGENT_SKIP_RESUME}"` and continue. This means re-runs only dispatch for missing themes.
+**Resume logic:** Before dispatching an agent for an investment theme, check if `report-investment-theme-{investment_theme_id}.md` already exists and is >1000 bytes. If so, skip that agent — display `"{PHASE_2_INVESTMENT_THEME_AGENT_SKIP_RESUME}"` and continue. This means re-runs only dispatch for missing investment themes.
 
 ---
 
@@ -331,7 +331,7 @@ Add to `{PROJECT_PATH}/.metadata/trend-scout-output.json`:
   "trend_report_path": "tips-trend-report.md",
   "trend_report_claims_path": "tips-trend-report-claims.json",
   "trend_report_mode": "strategic-themes",
-  "trend_report_theme_count": N,
+  "trend_report_investment_theme_count": N,
   "trend_report_generated_at": "ISO-8601",
   "copywriter_applied": true,
   "copywriter_scope": "tone or null"
@@ -341,12 +341,12 @@ Add to `{PROJECT_PATH}/.metadata/trend-scout-output.json`:
 #### Step 4.2: Display Summary
 
 ```
-Trend Report Complete (Strategic Themes)
-────────────────────────────────────────
+Trend Report Complete (Investment Themes)
+─────────────────────────────────────────
 Report:       {PROJECT_PATH}/tips-trend-report.md
-Themes:       {N} strategic themes (Corporate Visions arc)
+Themes:       {N} investment themes (Corporate Visions arc)
 Claims:       {PROJECT_PATH}/tips-trend-report-claims.json
-Trends:       60 across {N} themes
+Trends:       60 across {N} investment themes
 Claims:       {total_claims} quantitative claims extracted
 Verification: {verdict or "skipped"}
 Polish:       {copywriter_applied ? "tone (cogni-copywriting)" : "skipped"}
@@ -368,16 +368,16 @@ Use /tips-resume in your next session to pick up where you left off.
 | `trend-scout-output.json` missing | HALT: Run trend-scout first |
 | `workflow_state != "agreed"` | HALT: Complete candidate selection |
 | `tips_candidates.total < 60` | HALT: Expected 60 candidates |
-| `tips-value-model.json` missing or no themes | HALT: Run value-modeler first |
-| `tips-value-model.json` has themes but no value chains | HALT: value-modeler Phase 1 incomplete |
+| `tips-value-model.json` missing or no investment themes | HALT: Run value-modeler first |
+| `tips-value-model.json` has investment themes but no value chains | HALT: value-modeler Phase 1 incomplete |
 | No raw signals file (both sources) | WARNING: proceed without signals (~120 searches) |
 | Phase 1 agent returns `ok: false` | Retry once, then HALT with dimension name |
 | All 4 Phase 1 agents fail | HALT: Check web access is enabled |
 | enriched-trends JSON missing | HALT: Phase 1 agent failed to produce enriched output |
-| Theme agent returns `ok: false` | Retry once, then HALT with theme name |
-| Theme agent quality gate fails | WARNING: continue (section written but may be thin) |
-| Theme references unknown candidate_ref | WARNING: agent skips that candidate in theme narrative |
-| `cogni-narrative` not installed | WARNING: theme-writer uses flat structure (no arc guidance) |
+| Investment theme agent returns `ok: false` | Retry once, then HALT with investment theme name |
+| Investment theme agent quality gate fails | WARNING: continue (section written but may be thin) |
+| Investment theme references unknown candidate_ref | WARNING: agent skips that candidate in investment theme narrative |
+| `cogni-narrative` not installed | WARNING: investment-theme-writer uses flat structure (no arc guidance) |
 | `cogni-claims` not installed | WARNING: skip verification |
 | claim-work returns FAIL | Present failed claims. Do not auto-correct. |
 | `cogni-copywriting` not installed | WARNING: skip executive polish |
@@ -392,7 +392,7 @@ Use /tips-resume in your next session to pick up where you left off.
 
 **Pipeline:** `trend-scout → value-modeler → trend-report`
 
-**Optional cross-plugin:** `cogni-narrative` theme-thesis arc (Phase 2 theme writer guidance), `cogni-claims:claim-work` (Phase 3), `cogni-copywriting:copywriter` (Phase 3.5)
+**Optional cross-plugin:** `cogni-narrative` theme-thesis arc (Phase 2 investment theme writer guidance), `cogni-claims:claim-work` (Phase 3), `cogni-copywriting:copywriter` (Phase 3.5)
 
 **Downstream:** `export-html-report`, `export-pdf-report`
 
@@ -402,8 +402,8 @@ Log files in `{PROJECT_PATH}/.logs/`:
 - `report-header.md` — frontmatter + exec summary
 - `report-section-{dimension}.md` — dimension sections (4 files, written by agents)
 - `phase2-value-model.json` — pruned value-model subset for Phase 2
-- `enriched-trends-{dimension}.json` — per-trend evidence blocks (4 files, used in theme assembly)
-- `report-theme-{theme_id}.md` — theme sections (3-7 files, written by theme agents)
+- `enriched-trends-{dimension}.json` — per-trend evidence blocks (4 files, used in investment theme assembly)
+- `report-investment-theme-{investment_theme_id}.md` — investment theme sections (3-7 files, written by investment theme agents)
 - `claims-{dimension}.json` — dimension claims (4 files)
 - `report-claims-registry.md` — claims table
 
@@ -415,7 +415,7 @@ Output files in `{PROJECT_PATH}/`:
 | Issue | Check |
 |-------|-------|
 | Phase 1 agent hangs | Verify web access is enabled |
-| Theme agent hangs | Check enriched-trends files exist in .logs/ |
+| Investment theme agent hangs | Check enriched-trends files exist in .logs/ |
 | Empty claims | Check if trends have quantitative data in trend-scout output |
 | Wrong language | Verify `project_language` in trend-scout-output.json |
 | Missing sections | Check `.logs/` for partial agent output |

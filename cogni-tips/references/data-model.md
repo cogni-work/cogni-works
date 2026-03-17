@@ -278,7 +278,7 @@ Location: `.metadata/trend-report-verification.json`
 | R-3 | trend-report | `report-verifying` | Optional claim verification |
 | R-4 | trend-report | `report-complete` | Finalization + metadata update |
 | V-0 | value-modeler | `initialized` | Load scout output, discover portfolio |
-| V-1 | value-modeler | `paths-built` | Build T→I→P relationship networks |
+| V-1 | value-modeler | `investment-themes-built` | Build investment themes + T→I→P relationship networks |
 | V-2 | value-modeler | `solutions-generated` | Generate Solution Templates |
 | V-3 | value-modeler | `scored` | Customer-specific BR scoring (1-5) |
 | V-4 | value-modeler | `complete` | Apply F1 formula, rank, Big Block diagram |
@@ -295,6 +295,9 @@ erDiagram
     TrendReport ||--|{ Claim : extracts
     TrendReport ||--o| Verification : "verified by"
     TrendReport ||--o| InsightSummary : summarizes
+    ValueModel ||--|{ InvestmentTheme : contains
+    InvestmentTheme ||--|{ Path : groups
+    InvestmentTheme ||--|{ SolutionTemplate : owns
     ValueModel ||--|{ Path : contains
     ValueModel ||--|{ SolutionTemplate : contains
     ValueModel ||--|{ SPI : contains
@@ -374,6 +377,17 @@ erDiagram
     ValueModel {
         string project_id FK
     }
+    InvestmentTheme {
+        string investment_theme_id PK "it-001"
+        string name
+        string strategic_question
+        string executive_sponsor_type
+        string narrative
+        array value_chains "chain_id FKs"
+        array solution_templates "st_id FKs"
+        float business_relevance_avg "nullable"
+        float ranking_value "nullable"
+    }
     Path {
         string path_id PK "path-001"
         string name
@@ -400,8 +414,8 @@ erDiagram
     PortfolioAnchor {
         string feature_slug FK
         string product_slug FK
-        array theme_needs_delivered
-        array theme_needs_undelivered
+        array investment_theme_needs_delivered
+        array investment_theme_needs_undelivered
     }
     SolutionBlueprint {
         array building_blocks "BuildingBlock[]"
@@ -468,6 +482,7 @@ tips-project.json (root manifest)
         │     ├── tips-insight-summary.md (narrative summary)
         │     └── .metadata/trend-report-verification.json (verification results)
         └── tips-value-model.json (value modeler <- candidates)
+              ├── investment_themes[] (strategic Handlungsfelder grouping paths)
               ├── paths[] (T->I->P relationship networks)
               ├── solution_templates[] (enablers linked to paths)
               ├── solution_process_improvements[] (SPIs per ST)
@@ -481,6 +496,26 @@ tips-project.json (root manifest)
 ```
 
 ## Value Modeler Schemas
+
+### Investment Theme (Handlungsfeld)
+
+Groups 1-4 value chains into a CxO-level strategic investment area. German customer-facing label: **Handlungsfeld**.
+
+> **Note:** `theme_name` in `design-variables.schema.json` refers to the CSS/visual theme (e.g., "cogni-work"), NOT a TIPS investment theme. Do not confuse the two.
+
+```json
+{
+  "investment_theme_id": "it-001",
+  "name": "Intelligente Netz- & Asset-Optimierung",
+  "strategic_question": "Wie digitalisieren wir Netzbetrieb und Asset-Management...?",
+  "executive_sponsor_type": "CTO / Leiter Netzbetrieb",
+  "narrative": "Extended narrative explaining the strategic investment area...",
+  "value_chains": ["vc-001", "vc-002", "vc-003"],
+  "solution_templates": ["st-001", "st-002", "st-003"],
+  "business_relevance_avg": 4.527,
+  "ranking_value": 4.527
+}
+```
 
 ### TIPS Path (Relationship Network)
 
@@ -512,7 +547,7 @@ tips-project.json (root manifest)
   "description": "Deploy ML-based quality prediction integrated with production line sensors",
   "category": "software|hardware|service|hybrid|process",
   "enabler_type": "process_improvement|capability_building|risk_mitigation|revenue_enablement",
-  "theme_ref": "theme-001",
+  "investment_theme_ref": "it-001",
   "linked_chains": ["vc-001", "vc-003"],
   "foundation_dependencies": ["digitales-fundament/act/2"],
   "generation_mode": "portfolio-anchored|abstract",
@@ -568,8 +603,8 @@ tips-project.json (root manifest)
   "portfolio_anchor": {
     "feature_slug": "predictive-analytics",
     "product_slug": "cloud-platform",
-    "theme_needs_delivered": ["Real-time quality prediction", "Sensor data integration"],
-    "theme_needs_undelivered": ["Explainable AI audit trails", "Edge deployment"]
+    "investment_theme_needs_delivered": ["Real-time quality prediction", "Sensor data integration"],
+    "investment_theme_needs_undelivered": ["Explainable AI audit trails", "Edge deployment"]
   },
   "portfolio_mapping": {
     "product_slug": "cloud-platform",
@@ -635,20 +670,20 @@ New fields (all optional, backward compatible — existing STs without these fie
     lead = building_blocks.find(b => b.role === "lead")
     portfolio_anchor.feature_slug = lead.feature_slug
     portfolio_anchor.product_slug = lead.product_slug
-    portfolio_anchor.theme_needs_delivered = lead.delivers
-    portfolio_anchor.theme_needs_undelivered = lead.gaps
+    portfolio_anchor.investment_theme_needs_delivered = lead.delivers
+    portfolio_anchor.investment_theme_needs_undelivered = lead.gaps
     ```
     When `solution_blueprint` is absent (older projects), `portfolio_anchor` works standalone as before.
 
 - **`generation_mode`** (string): How this ST was created.
   - `"portfolio-anchored"` — Generated starting from an existing portfolio feature as the delivery anchor. Phase 2.0 creates these when portfolio-context v2.0+ is available (v3.0 adds quality-aware generation with `quality_flag` propagation).
-  - `"abstract"` — Generated from TIPS theme analysis without portfolio anchoring (the original behavior). **Default when absent.**
+  - `"abstract"` — Generated from TIPS investment theme analysis without portfolio anchoring (the original behavior). **Default when absent.**
   - `"re-anchored"` — Blueprint was rebuilt by Step 2.7 re-anchor using LLM solutioning intelligence against the current portfolio. Indicates a re-analysis has occurred (original generation_mode is recorded in the reanchor_log).
-- **`portfolio_anchor`** (object, when `generation_mode` is `"portfolio-anchored"` or `"re-anchored"`): Captures what the anchor feature can and cannot deliver for the theme.
+- **`portfolio_anchor`** (object, when `generation_mode` is `"portfolio-anchored"` or `"re-anchored"`): Captures what the anchor feature can and cannot deliver for the investment theme.
   - `feature_slug` (string): The portfolio feature that anchors this ST
   - `product_slug` (string): The parent product
-  - `theme_needs_delivered` (string array): Theme requirements this feature addresses
-  - `theme_needs_undelivered` (string array): Theme requirements this feature cannot address — feeds the opportunity pipeline
+  - `investment_theme_needs_delivered` (string array): Investment theme requirements this feature addresses
+  - `investment_theme_needs_undelivered` (string array): Investment theme requirements this feature cannot address — feeds the opportunity pipeline
 - **`portfolio_grounding`** (array, optional): When portfolio-context v2.0+ exists, captures the specific proposition DOES/MEANS language that grounds this ST.
   - `feature_slug` (string): Matched feature
   - `market_slug` (string): Relevant market
@@ -771,6 +806,7 @@ See the `catalog` skill SKILL.md for full entity schemas.
 | Project directory | `cogni-tips/{project-slug}/` | `cogni-tips/automotive-ai-predictive-maintenance-abc12345/` |
 | Candidate sequence | `{dimension}/{horizon}/{sequence}` | `externe-effekte/act/1` |
 | Claim ID | `claim_{DIM_PREFIX}_{SEQ}` | `claim_EE_001` |
+| Investment Theme ID | `it-{SEQ}` | `it-001` |
 | Path ID | `path-{SEQ}` | `path-001` |
 | Solution Template ID | `st-{SEQ}` | `st-001` |
 | SPI ID | `spi-{SEQ}` | `spi-001` |
@@ -782,3 +818,15 @@ See the `catalog` skill SKILL.md for full entity schemas.
 | Catalog SPI ID | `cat-spi-{SEQ}` | `cat-spi-001` |
 | Catalog Metric ID | `cat-met-{SEQ}` | `cat-met-001` |
 | Catalog Collateral ID | `cat-col-{SEQ}` | `cat-col-001` |
+
+## Backward Compatibility: Investment Theme Rename
+
+Projects created before v0.4.0 use `themes[]`, `theme_id`, `theme_ref`, `theme_needs_delivered`, `theme_needs_undelivered`. The dashboard generator and project-status script accept both old and new field names via fallback reads. To migrate existing project data, re-run value-modeler Phase 1.
+
+| Old Field | New Field |
+|-----------|-----------|
+| `themes[]` | `investment_themes[]` |
+| `theme_id` / `theme-001` | `investment_theme_id` / `it-001` |
+| `theme_ref` | `investment_theme_ref` |
+| `theme_needs_delivered` | `investment_theme_needs_delivered` |
+| `theme_needs_undelivered` | `investment_theme_needs_undelivered` |

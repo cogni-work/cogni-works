@@ -51,8 +51,8 @@ For each promotion candidate, generate a recommendation:
 ```json
 {
   "recommendation_id": "cur-001",
-  "entity_type": "theme|value_chain|solution_template|spi|metric",
-  "entity_ref": "theme-001",
+  "entity_type": "investment_theme|value_chain|solution_template|spi|metric",
+  "entity_ref": "it-001",
   "action": "promote|merge|flag",
   "target_catalog": "manufacturing/automotive",
   "rationale": "High-BR path addressing a recurring industry need for predictive quality",

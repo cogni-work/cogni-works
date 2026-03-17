@@ -1,10 +1,10 @@
-# Phase 2: Strategic Theme Assembly
+# Phase 2: Investment Theme Assembly
 
-Phase 2 assembles the report around strategic themes from `tips-value-model.json`. The dimensional evidence gets enriched in Phase 1 — this phase restructures it into strategic narratives.
+Phase 2 assembles the report around investment themes from `tips-value-model.json`. The dimensional evidence gets enriched in Phase 1 — this phase restructures it into strategic narratives.
 
-The core idea: themes are the skeleton, individual trends are the evidence woven into each theme's story. A CxO reads themes and investment decisions, not a catalog of 60 trends sorted by dimension.
+The core idea: investment themes are the skeleton, individual trends are the evidence woven into each investment theme's story. A CxO reads investment themes and investment decisions, not a catalog of 60 trends sorted by dimension.
 
-**Architecture:** Theme section writing is delegated to parallel `trend-report-theme-writer` agents (one per theme). Each agent self-loads enriched evidence from disk, writes its theme section, and returns compact JSON. The orchestrator handles the remaining lightweight sections (executive summary, claims registry) and final assembly.
+**Architecture:** Investment theme section writing is delegated to parallel `trend-report-investment-theme-writer` agents (one per investment theme). Each agent self-loads enriched evidence from disk, writes its investment theme section, and returns compact JSON. The orchestrator handles the remaining lightweight sections (executive summary, claims registry) and final assembly.
 
 ---
 
@@ -12,11 +12,11 @@ The core idea: themes are the skeleton, individual trends are the evidence woven
 
 | Source | Content | Read by |
 |--------|---------|---------|
-| Strategic Themes | Theme definitions with value chains | Orchestrator (Step 2.1) |
-| Value Chains | T→I→P causal paths | Orchestrator (Step 2.1) + theme agents |
-| Solution Templates | What to build per theme | Orchestrator (Step 2.1) + theme agents |
-| Per-trend evidence | Evidence blocks keyed by candidate_ref | Theme agents (self-load from disk) |
-| Claims | Quantitative claims keyed by ID | Theme agents (self-load) + orchestrator (Step 2.6) |
+| Investment Themes | Investment theme definitions with value chains | Orchestrator (Step 2.1) |
+| Value Chains | T→I→P causal paths | Orchestrator (Step 2.1) + investment theme agents |
+| Solution Templates | What to build per investment theme | Orchestrator (Step 2.1) + investment theme agents |
+| Per-trend evidence | Evidence blocks keyed by candidate_ref | Investment theme agents (self-load from disk) |
+| Claims | Quantitative claims keyed by ID | Investment theme agents (self-load) + orchestrator (Step 2.6) |
 | i18n labels | Section headings in target language | Loaded in Phase 0, passed to agents |
 
 ---
@@ -24,46 +24,46 @@ The core idea: themes are the skeleton, individual trends are the evidence woven
 ## Step 2.1: Read Value Model
 
 Read `.logs/phase2-value-model.json` (pruned subset created in Phase 0 Step 0.2b) and extract:
-- `themes[]` — ordered list of strategic themes
+- `investment_themes[]` — ordered list of investment themes
 - `value_chains[]` — all value chains with candidate_refs
-- `solution_templates[]` — solution templates linked to themes (may be empty; only `st_id`, `name`, `category`, `enabler_type`, `theme_ref` fields)
+- `solution_templates[]` — solution templates linked to investment themes (may be empty; only `st_id`, `name`, `category`, `enabler_type`, `investment_theme_ref` fields)
 - `coverage` — linked/orphaned/total counts
-- `mece_validation` — theme count, ME/CE status
-- `orphan_candidates[]` — candidates not in any theme
+- `mece_validation` — investment theme count, ME/CE status
+- `orphan_candidates[]` — candidates not in any investment theme
 
-The `actions_md` field in enriched-trends contains semicolon-separated action keywords (3-5 words each), e.g. `"pilot predictive maintenance; integrate OT/IT data layer; establish vendor shortlist"`. These are compressed intent markers, not full prose — theme agents synthesize complete strategic actions at theme level using these as input.
+The `actions_md` field in enriched-trends contains semicolon-separated action keywords (3-5 words each), e.g. `"pilot predictive maintenance; integrate OT/IT data layer; establish vendor shortlist"`. These are compressed intent markers, not full prose — investment theme agents synthesize complete strategic actions at investment theme level using these as input.
 
-Do NOT read the enriched-trends or claims JSON files at this step. Theme agents self-load those files, filtered to their own candidate_refs. The orchestrator only reads claims files later in Step 2.6 for the claims registry.
+Do NOT read the enriched-trends or claims JSON files at this step. Investment theme agents self-load those files, filtered to their own candidate_refs. The orchestrator only reads claims files later in Step 2.6 for the claims registry.
 
 ---
 
-## Step 2.2: Dispatch Theme Agents
+## Step 2.2: Dispatch Investment Theme Agents
 
-For each theme (ordered by `theme_id`), dispatch a `trend-report-theme-writer` agent. Dispatch all agents in a single message (parallel tool calls) so they run concurrently.
+For each investment theme (ordered by `investment_theme_id`), dispatch a `trend-report-investment-theme-writer` agent. Dispatch all agents in a single message (parallel tool calls) so they run concurrently.
 
 ### Resume Check
 
-Before dispatching an agent for a theme, check if `{PROJECT_PATH}/.logs/report-theme-{theme_id}.md` already exists and is >1000 bytes. If so, skip that agent — display `"{PHASE_2_THEME_AGENT_SKIP_RESUME}"` and continue to the next theme. This means re-runs only dispatch for missing or incomplete themes.
+Before dispatching an agent for an investment theme, check if `{PROJECT_PATH}/.logs/report-investment-theme-{investment_theme_id}.md` already exists and is >1000 bytes. If so, skip that agent — display `"{PHASE_2_INVESTMENT_THEME_AGENT_SKIP_RESUME}"` and continue to the next investment theme. This means re-runs only dispatch for missing or incomplete investment themes.
 
 ### Agent Prompt Template
 
 ```yaml
 Per agent:
-  subagent_type: "cogni-tips:trend-report-theme-writer"
+  subagent_type: "cogni-tips:trend-report-investment-theme-writer"
   model: sonnet
   prompt: |
     PROJECT_PATH: {PROJECT_PATH}
-    THEME_ID: {theme.theme_id}
-    THEME_NAME: {theme.name}
+    INVESTMENT_THEME_ID: {theme.investment_theme_id}
+    INVESTMENT_THEME_NAME: {theme.name}
     STRATEGIC_QUESTION: {theme.strategic_question}
     EXECUTIVE_SPONSOR_TYPE: {theme.executive_sponsor_type}
     LANGUAGE: {LANGUAGE}
-    THEME_INDEX: {1-based index in themes array}
-    VALUE_CHAINS: {JSON array of this theme's value chains from value_chains[],
-      filtered by theme_ref == theme_id. Include full chain objects:
+    INVESTMENT_THEME_INDEX: {1-based index in investment_themes array}
+    VALUE_CHAINS: {JSON array of this investment theme's value chains from value_chains[],
+      filtered by investment_theme_ref == investment_theme_id. Include full chain objects:
       chain_id, name, narrative, chain_score, trend, implications,
       possibilities, foundation_requirements — each with candidate_ref and name}
-    SOLUTION_TEMPLATES: {JSON array of STs where theme_ref == theme_id.
+    SOLUTION_TEMPLATES: {JSON array of STs where investment_theme_ref == investment_theme_id.
       Include: st_id, name, category, enabler_type. May be empty []}
     LABELS: {JSON object with relevant i18n labels:
       EXECUTIVE_SPONSOR, INVESTMENT_THESIS, VALUE_CHAINS, TREND,
@@ -76,26 +76,26 @@ Per agent:
 
 ### Resolving cogni-narrative Plugin Root
 
-The theme-writer agent optionally loads the `theme-thesis` arc from cogni-narrative for Corporate Visions-guided storytelling. To resolve the arc path:
+The investment-theme-writer agent optionally loads the `theme-thesis` arc from cogni-narrative for Corporate Visions-guided storytelling. To resolve the arc path:
 
 1. Check if `cogni-narrative` plugin is installed by looking for its arc-definition file at the expected plugin cache path (e.g., `~/.claude/plugins/cache/cogni-works/cogni-narrative/*/skills/narrative/references/story-arc/theme-thesis/arc-definition.md`) or the monorepo path (`{MONOREPO_ROOT}/cogni-narrative/skills/narrative/references/story-arc/theme-thesis/arc-definition.md`)
 2. If the file exists, pass its absolute path as `NARRATIVE_ARC_PATH` and the techniques file as `NARRATIVE_TECHNIQUES_PATH`
 3. If cogni-narrative is not installed, **omit both parameters** — the agent falls back to the flat template structure (backward-compatible)
 
-Display `"{PHASE_2_THEME_AGENT_DISPATCH}"` after dispatching.
+Display `"{PHASE_2_INVESTMENT_THEME_AGENT_DISPATCH}"` after dispatching.
 
 ---
 
 ## Step 2.3: Collect Agent Results
 
-Wait for all theme agents to complete. Each agent returns compact JSON:
+Wait for all investment theme agents to complete. Each agent returns compact JSON:
 
 ```json
 {
   "ok": true,
-  "theme_id": "theme-001",
-  "theme_name": "Theme Name",
-  "theme_thesis_heading": "Bewiesene 10:1-Investitionsthese — und 78% der Branche ignoriert sie",
+  "investment_theme_id": "it-001",
+  "investment_theme_name": "Investment Theme Name",
+  "investment_theme_thesis_heading": "Bewiesene 10:1-Investitionsthese — und 78% der Branche ignoriert sie",
   "element_headings": {
     "why_change": "Netzmodernisierung ist keine Hardware-Frage — es ist eine Datenplattform-Transition",
     "why_now": "Drei Regulierungsfristen konvergieren bis August 2026",
@@ -114,31 +114,31 @@ Wait for all theme agents to complete. Each agent returns compact JSON:
   ],
   "actions_count": 4,
   "chains_written": 3,
-  "theme_file": ".logs/report-theme-theme-001.md"
+  "investment_theme_file": ".logs/report-investment-theme-it-001.md"
 }
 ```
 
 ### Validation
 
 For each agent result:
-1. Check `ok == true`. If `false`: retry once. If retry also fails, HALT with theme name.
-2. Check `quality_gate_pass == true`. If `false`: log WARNING but continue — the theme section is written but may be thin.
-3. Display `"{PHASE_2_THEME_AGENT_COMPLETE}"` for each successful agent.
+1. Check `ok == true`. If `false`: retry once. If retry also fails, HALT with investment theme name.
+2. Check `quality_gate_pass == true`. If `false`: log WARNING but continue — the investment theme section is written but may be thin.
+3. Display `"{PHASE_2_INVESTMENT_THEME_AGENT_COMPLETE}"` for each successful agent.
 
 All dispatched agents must succeed before proceeding. Agents that were skipped via resume check don't need validation.
 
 ---
 
-## Step 2.4: Write Executive Summary (after reading theme sections)
+## Step 2.4: Write Executive Summary (after reading investment theme sections)
 
-The executive summary is written AFTER all theme agents complete. The orchestrator reads every `report-theme-{theme_id}.md` file to synthesize a grounded Zusammenfassung from the actual prose — not from metadata or agent return JSON alone.
+The executive summary is written AFTER all investment theme agents complete. The orchestrator reads every `report-investment-theme-{investment_theme_id}.md` file to synthesize a grounded Zusammenfassung from the actual prose — not from metadata or agent return JSON alone.
 
-**Why this ordering matters:** The Zusammenfassung is crispier and more specific when the LLM has read the full theme narratives. It can pull the most surprising evidence, the sharpest reframes, and the most compelling cost-of-inaction ratios directly from the written sections.
+**Why this ordering matters:** The Zusammenfassung is crispier and more specific when the LLM has read the full investment theme narratives. It can pull the most surprising evidence, the sharpest reframes, and the most compelling cost-of-inaction ratios directly from the written sections.
 
 ### Process
 
-1. Read ALL `{PROJECT_PATH}/.logs/report-theme-{theme_id}.md` files (in theme order)
-2. Read the value model for theme names and strategic questions
+1. Read ALL `{PROJECT_PATH}/.logs/report-investment-theme-{investment_theme_id}.md` files (in investment theme order)
+2. Read the value model for investment theme names and strategic questions
 3. Write `{PROJECT_PATH}/.logs/report-header.md` in a single pass
 
 ### Frontmatter
@@ -155,7 +155,7 @@ source_skills:
   - value-modeler
 report_mode: strategic-themes
 total_trends: 60
-total_themes: {N}
+total_investment_themes: {N}
 total_claims: {N}
 generated_at: "{ISO-8601}"
 ---
@@ -170,18 +170,18 @@ The Zusammenfassung is ONE flat section — no subsections (`###`), no tables. A
 
 ## {EXEC_SUMMARY_LABEL}
 
-{UNCONSIDERED NEED OPENER: 2-3 tight sentences. Synthesized from reading all theme
-sections — pull the most surprising reframe across themes. Challenge the reader's
-mental model. Anchor with one specific data point lifted from the theme prose.
+{UNCONSIDERED NEED OPENER: 2-3 tight sentences. Synthesized from reading all investment theme
+sections — pull the most surprising reframe across investment themes. Challenge the reader's
+mental model. Anchor with one specific data point lifted from the investment theme prose.
 NOT neutral landscape framing ("Die Branche steht vor...").
 
 Pattern: "The prevailing assumption is [X]. [N] converging forces reveal: [reframe]."}
 
-{BRIDGE SENTENCE: One sentence that transitions from the opener to the theme list.
+{BRIDGE SENTENCE: One sentence that transitions from the opener to the investment theme list.
 It frames what the bullets are — strategic questions that demand answers.
 
 Pattern: "Fünf strategische Fragestellungen bündeln den Handlungsbedarf:" or
-"[N] themes crystallize the agenda:"}
+"[N] investment themes crystallize the agenda:"}
 
 - **{theme_1.name}**: {theme_1.strategic_question}
 - **{theme_2.name}**: {theme_2.strategic_question}
@@ -189,20 +189,20 @@ Pattern: "Fünf strategische Fragestellungen bündeln den Handlungsbedarf:" or
 - **{theme_N.name}**: {theme_N.strategic_question}
 
 {CLOSING PARAGRAPH: 2-3 sentences that weave urgency, headline evidence, and
-cost-of-inaction into a single compelling arc. Source everything from the theme
+cost-of-inaction into a single compelling arc. Source everything from the investment theme
 sections you just read — specific numbers, deadlines, ratios.
 
 Include: the decisive time window, the aggregate cost-of-inaction ratio across
-themes, and one undeniable closing sentence.
+investment themes, and one undeniable closing sentence.
 
-Pattern: "Together these [N] themes create a [window] — [convergence point].
+Pattern: "Together these [N] investment themes create a [window] — [convergence point].
 Proactive investment: €X Mio. Cost of inaction: €Y Mio. over three years.
 Die Entscheidung liegt vor Ihnen."}
 ```
 
 **Rules:**
 - NO `###` subsections inside Zusammenfassung
-- NO tables — themes as `- **Name**: Question` bullet list
+- NO tables — investment themes as `- **Name**: Question` bullet list
 - NO separate Kernevidenz section — weave 2-3 evidence highlights into the closing paragraph
 - NO separate Handlungskosten section — merge cost-of-inaction into the closing paragraph
 - The entire Zusammenfassung should be tight: opener (2-3 sentences) + bullet list + closing (2-3 sentences)
@@ -213,11 +213,11 @@ Must end with two trailing newlines.
 
 ## Step 2.5: Generate Claims Registry
 
-Claims registry includes a `theme` column. This is the one step where the orchestrator reads the claims JSON files directly.
+Claims registry includes an `investment_theme` column. This is the one step where the orchestrator reads the claims JSON files directly.
 
 Read all 4 `claims-{dimension}.json` files. Build a `claim_id → claim` lookup.
 
-To determine which theme a claim belongs to: use the value model's value chains to build a `candidate_ref → theme_name` mapping. Then for each claim, find which candidate's `claims_refs` contains it (from the enriched-trends data — or use the agent-returned `candidates_covered` lists as a shortcut). Claims from orphan candidates get "—" in the theme column.
+To determine which investment theme a claim belongs to: use the value model's value chains to build a `candidate_ref → investment_theme_name` mapping. Then for each claim, find which candidate's `claims_refs` contains it (from the enriched-trends data — or use the agent-returned `candidates_covered` lists as a shortcut). Claims from orphan candidates get "---" in the investment theme column.
 
 Write `{PROJECT_PATH}/.logs/report-claims-registry.md`:
 
@@ -226,9 +226,9 @@ Write `{PROJECT_PATH}/.logs/report-claims-registry.md`:
 
 {CLAIMS_REGISTRY_INTRO}
 
-| # | {CLAIM_LABEL} | {VALUE_LABEL} | {SOURCE_LABEL} | {THEME_LABEL} |
-|---|---------------|---------------|-----------------|---------------|
-| 1 | {claim text} | {value + unit} | [{title}](url) | {theme name or "—"} |
+| # | {CLAIM_LABEL} | {VALUE_LABEL} | {SOURCE_LABEL} | {INVESTMENT_THEME_LABEL} |
+|---|---------------|---------------|-----------------|--------------------------|
+| 1 | {claim text} | {value + unit} | [{title}](url) | {investment theme name or "—"} |
 ```
 
 Must end with two trailing newlines.
@@ -240,12 +240,12 @@ Must end with two trailing newlines.
 Verify all files exist, then concatenate in this order:
 
 ```bash
-# Build file list for theme mode
+# Build file list for investment theme mode
 FILES="{PROJECT_PATH}/.logs/report-header.md"
 
-# Theme sections in order
-for theme_id in theme-001 theme-002 ... theme-N; do
-  FILES="$FILES {PROJECT_PATH}/.logs/report-theme-${theme_id}.md"
+# Investment theme sections in order
+for investment_theme_id in it-001 it-002 ... it-N; do
+  FILES="$FILES {PROJECT_PATH}/.logs/report-investment-theme-${investment_theme_id}.md"
 done
 
 # Claims registry
@@ -259,7 +259,7 @@ cat $FILES > "{PROJECT_PATH}/tips-trend-report.md"
 Read first 3 + last 3 lines of the assembled report:
 - First lines should start with `---` (YAML frontmatter)
 - Last lines should contain the claims total
-- Report should contain exactly N theme H2 headers matching `## {N}. {theme.name}`
+- Report should contain exactly N investment theme H2 headers matching `## {N}. {theme.name}`
 
 ---
 
@@ -273,10 +273,10 @@ Merge all 4 dimension claims into `tips-trend-report-claims.json`. The claims th
 
 | Scenario | Action |
 |----------|--------|
-| `tips-value-model.json` has themes but no value chains | HALT: value-modeler Phase 1 incomplete |
-| Theme agent returns `ok: false` | Retry once, then HALT with theme name |
-| Theme agent quality gate fails | WARNING: continue (section written but may be thin) |
+| `tips-value-model.json` has investment themes but no value chains | HALT: value-modeler Phase 1 incomplete |
+| Investment theme agent returns `ok: false` | Retry once, then HALT with investment theme name |
+| Investment theme agent quality gate fails | WARNING: continue (section written but may be thin) |
 | enriched-trends JSON missing (agent reports) | HALT: Phase 1 agent failed to produce enriched output |
-| Theme references candidate_ref not found in enriched data | Agent logs warning, skips that candidate |
+| Investment theme references candidate_ref not found in enriched data | Agent logs warning, skips that candidate |
 | Solution templates empty | Agents omit "Solution Templates" subsection |
-| Resume file exists but is corrupt (<1000 bytes) | Re-dispatch agent for that theme |
+| Resume file exists but is corrupt (<1000 bytes) | Re-dispatch agent for that investment theme |

@@ -78,7 +78,9 @@ The reviewer agent reads:
 
 ## Graceful Degradation
 
-If cogni-claims is not installed or the Skill call fails:
+This fallback exists ONLY for technical failure — cogni-claims plugin not installed or Skill tool returns an error. It must never be chosen as a time-saving optimization. Claims verification is the core quality gate; skipping it voluntarily defeats the purpose of Phase 5.
+
+If cogni-claims is genuinely unavailable (plugin not installed, Skill tool error):
 1. Skip steps 2-5
 2. Run reviewer with structural criteria only (no claims data)
 3. Log a warning: "cogni-claims unavailable — running structural review only"

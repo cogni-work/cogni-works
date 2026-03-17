@@ -389,7 +389,9 @@ Skip for outline and resource report types.
 
 **Basic, Detailed, and Deep modes**: Full review loop as described below.
 
-Structural review alone catches organizational and stylistic issues but misses factual errors — the most damaging kind. Claims-based review fetches the original source URLs and compares what the report says against what the source actually states, catching misquotations, unsupported conclusions, and selective omissions that would otherwise reach the reader as authoritative claims. This is a cogni-works original design replacing GPT-Researcher's human-in-the-loop review.
+Structural review alone catches organizational and stylistic issues but misses factual errors — the most damaging kind. Any LLM can generate fluent prose; the differentiating value of this pipeline is that every factual claim is checked against its original source before publication. Claims verification is where research quality is actually created — it turns a plausible-sounding draft into an evidence-backed report. Without it, the output is no more trustworthy than a single-shot generation. This is the cogni-works original design replacing GPT-Researcher's human-in-the-loop review, and it is the reason users choose this skill over simpler alternatives.
+
+**All steps 5a through 5c.5 are mandatory for basic/detailed/deep reports.** Execute them sequentially regardless of claim count or source count. Do not skip or abbreviate verification to save time — a report with 25 unverified claims is worse than a slower report with 25 verified ones.
 
 **Read**: `references/claims-integration.md` for cogni-claims protocol.
 **Read**: `references/review-criteria.md` for scoring rubric.
@@ -490,7 +492,7 @@ Then goto 5a with new draft version.
 #### 5f: Accept
 When verdict="accept" or iteration reaches 3: proceed to Phase 6.
 
-**Graceful degradation**: If cogni-claims is not available, skip 5b-5c and run reviewer with structural criteria only.
+**Graceful degradation**: If cogni-claims is not installed as a plugin or the Skill call returns a technical error (tool not found, plugin missing), skip 5b-5c and run reviewer with structural criteria only. Never skip claims verification to save time — the whole point of this phase is catching factual errors that structural review cannot detect. A slow verified report is worth far more than a fast unverified one.
 
 ### Phase 6: Finalization
 
@@ -523,7 +525,7 @@ If a project directory already exists at init:
 | All researchers fail | Ask user to rephrase topic or try different sub-questions |
 | Most researchers fail | Proceed with available contexts, note gaps in report |
 | Writer produces empty draft | Re-run with more explicit instructions |
-| cogni-claims unavailable | Fall back to structural-only review |
+| cogni-claims not installed (Skill tool error) | Fall back to structural-only review. Never skip verification voluntarily for speed — only on technical failure |
 | Review loop reaches max (3) | Accept current draft with quality warning |
 | Local documents unreadable | Log skipped files, proceed with readable ones. If none readable, ask user for alternative paths |
 | No relevant content in local docs | Suggest switching to web mode or providing different documents |

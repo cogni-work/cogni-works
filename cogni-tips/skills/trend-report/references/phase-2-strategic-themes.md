@@ -140,6 +140,17 @@ For each agent result:
 
 All dispatched agents must succeed before proceeding. Agents that were skipped via resume check don't need validation.
 
+### Regulatory Deduplication Check
+
+After collecting all agent results, check the `primary_forcing_function` field from each agent's return JSON. If the same forcing function (e.g., "EU AI Act 2. August 2026") appears as the primary in more than 2 themes, log a WARNING:
+
+```
+WARNING: "{forcing_function}" is the primary forcing function in {N} themes ({theme_names}).
+Consider re-running affected themes with guidance to diversify forcing functions.
+```
+
+This does not HALT the pipeline — the report is still usable — but it flags a quality issue that reduces the reader's sense of urgency through repetition. Each theme should ideally lead with a forcing function specific to its domain (Energy-Sharing for CX, NIS2 for Cybersecurity, CCfD for Dekarbonisierung, etc.).
+
 ---
 
 ## Step 2.4: Write Executive Summary (after reading investment theme sections)

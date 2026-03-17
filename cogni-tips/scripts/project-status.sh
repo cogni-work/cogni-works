@@ -300,6 +300,7 @@ HAS_PORTFOLIO_CONTEXT="false"
 PORTFOLIO_CONTEXT_VERSION=""
 HAS_PORTFOLIO_PROJECT="false"
 PORTFOLIO_FEATURES_COUNT=0
+PORTFOLIO_DIFFERENTIATORS_COUNT=0
 
 # Check for portfolio-context.json in the TIPS project directory
 if [ -f "$PROJECT_DIR/portfolio-context.json" ]; then
@@ -313,6 +314,8 @@ try:
     products = d.get('products', [])
     feat_count = sum(len(p.get('features', [])) for p in products)
     print(f'PORTFOLIO_FEATURES_COUNT={feat_count}')
+    diff_count = len(d.get('differentiators', []))
+    print(f'PORTFOLIO_DIFFERENTIATORS_COUNT={diff_count}')
 except Exception:
     pass
 " 2>/dev/null)"
@@ -638,7 +641,8 @@ cat << EOF
     "portfolio_project_found": $HAS_PORTFOLIO_PROJECT,
     "context_file": $HAS_PORTFOLIO_CONTEXT,
     "context_version": $(if [ -n "$PORTFOLIO_CONTEXT_VERSION" ]; then echo "\"$PORTFOLIO_CONTEXT_VERSION\""; else echo "null"; fi),
-    "features_count": $PORTFOLIO_FEATURES_COUNT
+    "features_count": $PORTFOLIO_FEATURES_COUNT,
+    "differentiators_count": ${PORTFOLIO_DIFFERENTIATORS_COUNT:-0}
   },
   "portfolio_anchors": {
     "total": $ANCHORED_COUNT,

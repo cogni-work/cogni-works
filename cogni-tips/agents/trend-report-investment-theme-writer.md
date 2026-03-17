@@ -209,22 +209,53 @@ Do NOT use: "Power Position", "Was es ist:", "Was es für Sie leistet:", "Warum 
 ein nachhaltiger Vorteil ist:", or any other visible IS/DOES/MEANS labels. The prose
 must read like a consulting briefing, not a fill-in-the-blank template.
 
-**NO solution table.** Do not include a table listing solutions, categories, and
-enabler types. The capabilities are presented as flowing prose only.
+**NO solution table.** Do not include ANY table listing solutions, categories, or
+enabler types. No `| # | Lösung |` grids, no `| # | Solution |` grids, no
+taxonomy columns (Kategorie, Enabler-Typ, category, enabler_type). The reader
+must never see internal portfolio taxonomy. All capabilities are presented as
+flowing prose only. If you find yourself writing a markdown table inside Why You,
+stop and convert it to prose paragraphs instead.
 
 **Portfolio close:** After all capability descriptions, close the Why You section
-with a single low-key consultative sentence linking the portfolio products that
-ground these solutions. Use PORTFOLIO_PRODUCTS from the prompt to construct the
-close. Format:
+with 2-3 sentences that link the portfolio products to a provider-specific
+differentiator the reader cannot get elsewhere. The first sentence names the
+products. The second sentence names one concrete asset that creates exclusivity.
 
-- German: "{PORTFOLIO_PROVIDER} kann Sie auf diesem Weg mit [Product A](url),
-  [Product B](url) und [Product C](url) unterstützen."
-- English: "{PORTFOLIO_PROVIDER} can support you on this path with [Product A](url),
-  [Product B](url), and [Product C](url)."
+Format examples (German):
+- "{PORTFOLIO_PROVIDER} kann Sie auf diesem Weg mit [Product A](url),
+  [Product B](url) und [Product C](url) unterstützen — auf Basis von
+  {differentiator from portfolio-context.json}."
+- "{PORTFOLIO_PROVIDER} bringt mit [Product A](url) und [Product B](url)
+  {unique capability that a competitor cannot replicate}."
 
-Use the product names and URLs from PORTFOLIO_PRODUCTS and the provider name from
-PORTFOLIO_PROVIDER. If a product has no URL, use the product name without a link.
-If PORTFOLIO_PRODUCTS is empty, omit the portfolio close entirely.
+**Differentiator derivation:** Do NOT hardcode provider-specific assets.
+Instead, derive the differentiator from `portfolio-context.json`:
+
+1. **Primary source (v3.1+):** Read `{PROJECT_PATH}/portfolio-context.json`
+   and check for a `differentiators[]` array. If present, match by `domain`
+   to this theme:
+   - Infrastructure/cloud themes → `sovereign-infrastructure`, `platform`
+   - Network/IoT themes → `network`
+   - Security themes → `security`, `regulatory`
+   - Customer-facing themes → `scale`, `industry-expertise`
+   Use the matching entry's `claim` field directly in the portfolio close.
+
+2. **Fallback (v3.0 or earlier):** If `differentiators[]` is absent, scan
+   `features[].description` fields for the products grounding this theme.
+   Look for named platforms, certifications, infrastructure claims, or
+   regulatory attestations that suggest provider-specific advantages.
+
+3. **Last resort:** If no differentiating signal is found, write a generic
+   consultative close without a differentiator claim.
+
+The differentiator must pass the "swap test": if you replace
+{PORTFOLIO_PROVIDER} with a competitor name, the sentence should become
+false or implausible. If it remains true for any provider, it is not
+a differentiator — rephrase or omit.
+
+If PORTFOLIO_PROVIDER is empty, omit the portfolio close entirely.
+If PORTFOLIO_PRODUCTS is empty but PORTFOLIO_PROVIDER is set, write the
+differentiator sentence without product links.
 
 If SOLUTION_TEMPLATES is empty, construct capabilities from P-candidates directly
 (and omit the portfolio close).
@@ -258,12 +289,54 @@ target context: "For a German mid-size utility with €500M revenue, this transl
 to €X-YM." Vague framing like "dreistelliger Millionen-Bereich" is too imprecise —
 the CxO needs numbers they can put in a board presentation.
 
+**Proactive investment realism check:** The proactive investment figure must be
+realistic for the scope of capabilities described. A theme with 3 major platform
+capabilities (e.g., Digital Twin + Grid-Enhancing Technologies + Sovereign Cloud)
+cannot have a proactive investment below €5M for a €500M-revenue utility — the
+real cost of enterprise platform implementations, system integration, staffing,
+and change management makes sub-€5M figures incredible to a CFO. Use these
+floor estimates per capability type:
+- Enterprise platform (Digital Twin, CDP, SIEM): €2-4M each
+- Integration/migration project: €1-3M each
+- Upskilling/change program: €0.5-1.5M each
+- Cloud infrastructure setup: €1-2M
+When a theme has 3 capabilities, the proactive investment is typically €5-12M,
+not €1-2M. A lower ratio (2x instead of 4x) with credible numbers is more
+persuasive to a board than an inflated ratio with understated investment.
+
+**Salary and compensation data:** For DACH-targeted reports (LANGUAGE == "de"),
+use German market salary data only. Do NOT convert US salary figures (USD) to
+EUR and present them as German market rates. German ML/AI engineer compensation
+ranges: €80-110K (mid-level), €110-140K (senior), €140-170K (lead/principal).
+If enriched evidence contains only US salary data, either find the German
+equivalent in the evidence or use the German ranges above. Never cite USD
+salary figures in a German-language report.
+
 Quantify at least 2 of 3 dimensions with specific € ranges. The third may be
 qualitative if evidence is thin. Close with a simple, undeniable ratio.
 
 HEADING: After writing, extract the closing ratio as a declarative sentence.
 Example: "Verzögern kostet 3x mehr als Handeln — €6,9M vs. €2,3M über drei Jahre".}
 ```
+
+### Nächste Schritte (Action Roadmap)
+
+After the Why Pay section, add a brief action callout. This addresses the CDO's
+need to walk into a board meeting with sequenced next steps — not just cost-of-inaction
+math. Keep it tight: 3 bullets with specific timeframes.
+
+```markdown
+**Nächste Schritte:**
+
+1. **{Timeframe 1, e.g., "Nächste 6 Wochen"}:** {Specific action — assessment, pilot, governance setup}
+2. **{Timeframe 2, e.g., "Q2-Q3 2026"}:** {Implementation phase — platform build, vendor selection, team staffing}
+3. **{Timeframe 3, e.g., "Q4 2026-Q1 2027"}:** {Scale/optimization — rollout, measurement, iteration}
+```
+
+Each bullet names a concrete deliverable (not a vague "plan further"). The timeframes
+must be calendar-specific (quarters or months, not "short-term / medium-term / long-term").
+Derive the dates from the regulatory deadlines cited in Why Now — if EU AI Act is August
+2026, the prep phase must start well before that.
 
 The file must end with two trailing newlines (`\n\n`) so files concatenate cleanly during report assembly.
 
@@ -326,11 +399,14 @@ Now replace the placeholder heading markers in the written file with the actual 
 **Arc quality gate (when arc is loaded):** After writing, verify:
 - Each element meets its proportional word target (+/-10%)
 - **Why Change:** PSB structure applied, Contrast Structure used, ends with competitive implication
-- **Why Now:** ≥2 forcing functions with specific timelines, before/after contrast, window closing statement. FF1 should be a regulatory deadline if evidence contains one.
+- **Why Now:** ≥2 forcing functions with specific timelines, before/after contrast, window closing statement. FF1 should be a regulatory deadline if evidence contains one. Each forcing function should be SPECIFIC to this theme — avoid reusing the same deadline (e.g., EU AI Act August 2026) that is the primary forcing function in another theme. If the same deadline applies across themes, reference it briefly ("alongside the EU AI Act deadline") but lead with a theme-specific forcing function.
 - **Why You:** IS-DOES-MEANS logic applied (invisibly) to ≥1 solution template or P-candidate. You-Phrasing for outcomes. No ST-IDs, no "Power Position", no visible IS/DOES/MEANS labels — flowing prose only. No solution table. Portfolio close present (if PORTFOLIO_PRODUCTS non-empty). Heading uses "Lösungen"/"solutions" and ties back to urgency.
-- **Why Pay:** ≥2 cost dimensions with specific localized € ranges (not global averages), 3-year horizon, closing ratio comparison
+- **Why Pay:** ≥2 cost dimensions with specific localized € ranges (not global averages), 3-year horizon, closing ratio comparison. Every cost dimension MUST contain EUR amounts (never USD without EUR equivalent) and reference a specific organization size (e.g., "für einen Versorger mit €500M Umsatz"). The proactive investment figure must be realistic for the scope of capabilities described — do not understate to inflate the ratio.
 - Hook opens with quantified surprise from theme evidence
 - **Headings:** H2 is thesis statement (not topic label), all H3s are message-driven (not arc element names), each contains a number/date/entity
+- **Structural integrity:** The output file must contain exactly ONE `## ` line (the H2 theme thesis heading). All other headings within the theme section must be `### ` (H3) or `#### ` (H4). If you find multiple `## ` lines in your output, demote the extras to `### `.
+- **No solution table:** The output must NOT contain any markdown table with solution/capability listings. If the output contains `| # |` followed by solution names, `quality_gate_pass` = false. Remove the table and present capabilities as prose.
+- **Currency consistency:** All monetary figures must be in EUR. If source data is in USD, convert and note the original. Do not mix EUR and USD in the same section.
 
 **Fallback quality gate (no arc):** After writing, verify:
 - Word count ≥250 words (target 300-500). If under 250, expand with additional evidence.
@@ -372,6 +448,7 @@ Return ONLY this JSON — nothing else:
   "heading_fallback": false,
   "why_pay_ratio": "3x",
   "why_pay_closing_statement": "Verzögern kostet 3x mehr als Handeln — €6,9M vs. €2,3M über drei Jahre",
+  "primary_forcing_function": "EU AI Act 2. August 2026",
   "word_count": 720,
   "citations_count": 12,
   "quality_gate_pass": true,
@@ -387,6 +464,7 @@ Return ONLY this JSON — nothing else:
       "source_url": "https://..."
     }
   ],
+  "action_roadmap_present": true,
   "actions_count": 4,
   "chains_written": 3,
   "investment_theme_file": ".logs/report-investment-theme-it-001.md"

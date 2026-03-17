@@ -43,6 +43,28 @@
         "Frontmatter contains language: en",
         "No trend-report-verification.json exists (Phase 3 was skipped)"
       ]
+    },
+    {
+      "id": 3,
+      "prompt": "Erstelle einen Trendbericht aus meinem TIPS-Projekt für Utilities. Überspringe Claim-Verifizierung und Copywriting.",
+      "expected_output": "A complete German trend report passing CDO-utility and CMO-provider stakeholder quality gates: no solution tables, one H2 per theme, EUR-localized costs, action roadmaps in every theme, diversified forcing functions.",
+      "files": [],
+      "expectations": [
+        "tips-trend-report.md exists in the project directory",
+        "tips-trend-report-claims.json exists in the project directory",
+        "Report has valid YAML frontmatter with report_mode: strategic-themes",
+        "No solution tables in theme sections — no '| # | Lösung |' or '| # | Solution |' patterns inside theme H2 blocks",
+        "Each theme has exactly one H2 heading — no stray ## lines within a theme section",
+        "Why Pay sections contain EUR amounts (not USD without EUR equivalent) with organization-size reference",
+        "Each theme has a 'Nächste Schritte' action roadmap with 3 calendar-specific bullets",
+        "EU AI Act as primary forcing function in at most 2 themes",
+        "Each H2 thesis heading is message-driven (contains a number or date, under 90 chars)",
+        "No visible IS/DOES/MEANS labels in Why You sections",
+        "Portfolio close sentence present in each theme (mentions PORTFOLIO_PROVIDER by name)",
+        "Cost-of-inaction total in Zusammenfassung is arithmetically consistent with individual theme totals",
+        "All monetary figures use EUR — no standalone USD amounts in German report",
+        "Zusammenfassung uses numbered list for theme summaries (not bullet list)"
+      ]
     }
   ]
 }

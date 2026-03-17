@@ -45,8 +45,9 @@ DO NOT modify diagram placeholders, figure references, figure captions, Obsidian
 **Extract from user request or agent invocation:**
 
 - `FILE_PATH`: Absolute path to markdown document (required)
-- `PERSONAS`: Array of perspectives to simulate (default: all five)
-  - Options: `executive`, `technical`, `legal`, `marketing`, `end-user`
+- `PERSONAS`: Array of perspectives to simulate (default: all five generic)
+  - Built-in: `executive`, `technical`, `legal`, `marketing`, `end-user`
+  - Custom: any `.md` file in `references/personas/` is a valid persona name (e.g. `cdo-utility`, `cmo-provider`)
 - `AUTO_IMPROVE`: Whether to apply improvements directly (default: true)
 
 **Validate:**
@@ -261,12 +262,14 @@ Each persona file defines:
 - Question generation patterns
 - Common improvement patterns
 
-Available personas:
+Available personas (any `.md` file in this directory is valid):
 - **executive.md** - Decision-readiness, quantification, time respect, clarity, credibility
 - **technical.md** - Accuracy, logical flow, precision, completeness, terminology
 - **legal.md** - Risk language, regulatory alignment, liability, evidence standards, disclosure
 - **marketing.md** - Audience resonance, persuasiveness, brand tone, CTA, emotional connection
 - **end-user.md** - Plain language, immediate clarity, actionability, visual clarity, empathy
+- **cdo-utility.md** - CDO of energy utility (buyer): unconsidered need landing, actionability, regulatory urgency, ROI credibility, operational relevance
+- **cmo-provider.md** - CMO of IT provider (seller): pipeline opening, portfolio differentiation, narrative arc, go-to-market utility, competitive moat
 
 ### Synthesis Protocol (references/synthesis-protocol.md)
 

@@ -80,19 +80,24 @@ Search the workspace for a cogni-portfolio project:
 After discovering the portfolio project (by either method), check for `portfolio-context.json`
 in the TIPS project directory (written by `/bridge portfolio-to-tips`):
 
-1. If found with `schema_version` = `"3.0"`:
+1. If found with `schema_version` = `"3.1"`:
    - Count products, features, propositions, and markets
    - Count markets where `market_relevance` is `direct` or `industry`
    - Count propositions with `quality_assessment` and report quality summary
    - Count propositions with `variant_count > 0`
-   - Report: "Found portfolio context (v3.0) with N products, M features, P propositions
+   - Count `differentiators[]` entries (v3.1 addition) — report: "D provider differentiators available for trend-report portfolio close"
+   - Report: "Found portfolio context (v3.1) with N products, M features, P propositions
      across K markets (R relevant to this TIPS industry). Q propositions have quality
-     assessments, V have existing variants. Portfolio-anchored ST generation is available —
-     Phase 2 will start from your products as delivery anchors."
+     assessments, V have existing variants, D differentiators. Portfolio-anchored ST
+     generation is available — Phase 2 will start from your products as delivery anchors."
    - Check `extracted_at` against portfolio file modification dates; if portfolio files are
      newer, recommend: "Portfolio has changed since the last bridge export. Run
      `/bridge portfolio-to-tips` to refresh the context before we continue."
    - Offer: "Refresh portfolio context now" vs "Continue with existing context"
+1b. If found with `schema_version` = `"3.0"`:
+   - Same as v3.1 checks, but `differentiators[]` will be absent
+   - Report: "Found portfolio context (v3.0) — consider re-running `/bridge portfolio-to-tips`
+     to upgrade to v3.1 for provider differentiators in trend-report portfolio close."
 2. If found with `schema_version` = `"2.0"`:
    - Count products, features, propositions, and markets
    - Count markets where `market_relevance` is `direct` or `industry`

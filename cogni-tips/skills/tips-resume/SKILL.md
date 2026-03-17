@@ -119,10 +119,13 @@ Coverage above 70% (delivered / total needs) indicates healthy anchoring. Produc
 
 **Portfolio Bridge row** — derived from `portfolio_bridge` in status JSON:
 - **Done**: `context_file` is true — show version and features count
+- **Done (upgrade available)**: `context_file` is true but `context_version` < `"3.1"` — show current version and recommend: "Run `/bridge portfolio-to-tips` to upgrade to v3.1 for provider differentiators in trend-report."
 - **Ready**: `portfolio_project_found` is true but `context_file` is false — recommend running `/bridge portfolio-to-tips` before value-modeler
 - **N/A**: `portfolio_project_found` is false — no portfolio project in workspace
 
 When the phase is `modeling` or `modeling-paths` and the Portfolio Bridge status is **Ready**, lead the next action recommendation with: "Before starting the value modeler, run `/bridge portfolio-to-tips` to ground your solutions in real products."
+
+When Portfolio Bridge status is **Done (upgrade available)** and the phase is `reporting` or later, add to recommendations: "Re-run `/bridge portfolio-to-tips` to add provider differentiators — trend-report will use them for stronger portfolio close sections."
 
 **Scoring Summary** (if candidates exist):
 - Average score: {avg_score}

@@ -518,6 +518,20 @@ Written by the tips-bridge `portfolio-to-tips` operation into the TIPS project d
       ]
     }
   ],
+  "differentiators": [
+    {
+      "domain": "sovereign-infrastructure",
+      "claim": "European sovereign cloud with BSI-C5 attestation and German-only data residency",
+      "evidence": "BSI-C5 attestation certificate, data center locations in Biere and Frankfurt",
+      "swap_test_fails": true
+    },
+    {
+      "domain": "network",
+      "claim": "Telco-grade network footprint with edge computing at 30,000+ cell tower sites",
+      "evidence": "Parent company network infrastructure, IoT connectivity platform",
+      "swap_test_fails": true
+    }
+  ],
   "markets": [
     {
       "slug": "mid-market-saas-dach",
@@ -535,7 +549,20 @@ Written by the tips-bridge `portfolio-to-tips` operation into the TIPS project d
 }
 ```
 
-Schema version notes: v3.0 adds `variant_count` and `quality_assessment` per proposition. v2.0 had propositions without quality or variant data. v1.0 (no `schema_version` field) had no embedded propositions.
+Schema version notes: v3.1 adds `differentiators[]` array at the provider level. v3.0 adds `variant_count` and `quality_assessment` per proposition. v2.0 had propositions without quality or variant data. v1.0 (no `schema_version` field) had no embedded propositions.
+
+### differentiators[] (v3.1)
+
+Provider-level competitive differentiators that downstream consumers (e.g., trend-report) use in portfolio close sections. Each entry represents a capability the provider can credibly claim that competitors cannot easily replicate.
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `domain` | string | Capability domain: `sovereign-infrastructure`, `network`, `security`, `scale`, `industry-expertise`, `platform`, `regulatory` |
+| `claim` | string | One-sentence differentiator statement suitable for a portfolio close paragraph |
+| `evidence` | string | Brief factual backing (certifications, infrastructure facts, customer base) |
+| `swap_test_fails` | boolean | True if replacing the provider name with a competitor makes the claim false or implausible |
+
+Only include differentiators where `swap_test_fails` is true — generic capabilities that any provider could claim are not differentiators. Aim for 3-6 entries covering the provider's strongest domains.
 
 Valid `market_relevance` values: `direct` (vertical_codes match), `industry` (subsector match), `broad` (parent industry match), `none` (no relationship)
 

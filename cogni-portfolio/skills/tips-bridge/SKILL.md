@@ -683,16 +683,52 @@ market against the TIPS industry context using a 3-tier heuristic:
 
 Assign `market_relevance` and `match_reason` to each market entry in the context file.
 
+**Step 2.7: Extract Provider Differentiators**
+
+Scan the portfolio's product and feature descriptions for provider-specific
+competitive advantages — assets that pass the "swap test" (replacing the
+provider name with a competitor makes the claim false or implausible).
+
+Sources to scan:
+1. **Product-level descriptions** in `portfolio/products/*.json` — look for
+   named platforms, certifications, infrastructure claims
+2. **Feature-level descriptions** — look for unique technical capabilities,
+   regulatory attestations (BSI-C5, ISO 27001, SOC2), sovereign infrastructure
+3. **Provider metadata** — parent company assets (network footprint, customer
+   base size, data center locations)
+4. **Market-level segmentation** — geographic presence, industry depth
+
+For each differentiator found, classify by domain:
+- `sovereign-infrastructure`: Data residency, cloud sovereignty, regulatory certifications
+- `network`: Telco/ISP network footprint, edge computing, IoT connectivity
+- `security`: Security certifications, SOC operations, KRITIS expertise
+- `scale`: Revenue, employee count, geographic presence
+- `industry-expertise`: Vertical-specific reference customers, domain knowledge
+- `platform`: Named proprietary platforms, unique technology
+- `regulatory`: Compliance certifications, audit attestations
+
+Write 3-6 entries to `differentiators[]`. Only include entries where
+`swap_test_fails` is true. If the portfolio has no provably unique assets
+(e.g., a generic reseller), write an empty array.
+
 **Step 3: Build Context File**
 
-Assemble `portfolio-context.json` v3.0:
+Assemble `portfolio-context.json` v3.1:
 
 ```json
 {
-  "schema_version": "3.0",
+  "schema_version": "3.1",
   "source": "cogni-portfolio",
   "portfolio_slug": "{portfolio-slug}",
   "extracted_at": "{ISO-8601 timestamp}",
+  "differentiators": [
+    {
+      "domain": "sovereign-infrastructure",
+      "claim": "European sovereign cloud with BSI-C5 attestation and German-only data residency",
+      "evidence": "BSI-C5 attestation certificate, data center locations",
+      "swap_test_fails": true
+    }
+  ],
   "products": [
     {
       "slug": "cloud-platform",

@@ -113,7 +113,53 @@ If `tips_path` is null, proceed in portfolio-only mode — all phases work witho
 
 ## Phase 3: Web Research
 
-Research approach depends on pitch_mode.
+Research approach depends on pitch_mode. Before running web searches, check for reusable signals from TIPS data (Phase 2) — if `tips_path` was loaded, scan the trend signals for findings that directly answer this phase's questions. Only search the web for gaps not covered by existing signals. This avoids redundant searches and produces more consistent evidence across the pitch.
+
+### Source Authority Matrix
+
+Score every source you use. This matrix is consistent across the cogni-works marketplace:
+
+| Authority | Source Types | Weight |
+|-----------|-------------|--------|
+| 5 | Government, regulatory, peer-reviewed research (Fraunhofer, Max Planck, IEEE, arXiv, EUR-Lex) | 1.0 |
+| 4 | Industry associations (VDMA, BITKOM, VDA, ZVEI, BDEW), consulting firms (McKinsey, BCG, Gartner, Forrester) | 0.8 |
+| 3 | Quality media (Handelsblatt, Reuters, Financial Times, FAZ, WirtschaftsWoche) | 0.6 |
+| 2 | Trade publications, vendor whitepapers, industry blogs | 0.4 |
+| 1 | Blogs, social media, unverified user-generated content | 0.2 |
+
+Prefer authority 4-5 sources for quantitative claims. Authority 1-2 sources are acceptable only as supporting color, never as the sole basis for a finding.
+
+### Blocked Domains
+
+Never use results from these low-quality domains:
+- pinterest.com, facebook.com, instagram.com, tiktok.com, reddit.com
+
+Skip these in search results and do not fetch them.
+
+### Anti-Hallucination Rules
+
+These rules are non-negotiable:
+1. **Never fabricate URLs** — every citation must come from actual WebSearch or WebFetch results
+2. **Never invent statistics** — if no number is found, say so explicitly rather than approximating
+3. **Never round or adjust numbers** to seem more impressive — use the exact figure from the source
+4. **Always include the exact URL** from the search result or fetched page
+5. **Use domain name as title** if the page title is unclear (e.g., `[gartner.com](url)`)
+6. **Mark unsourced findings** — if a finding cannot be attributed to a specific URL, do not include it in research.json evidence arrays
+
+### DACH Site-Specific Searches
+
+When `language` is `de`, include targeted DACH searches alongside the standard queries. Add 2-3 of the following per phase depending on relevance:
+
+- `site:fraunhofer.de {customer_industry} {topic}` — applied research, technology readiness
+- `site:bitkom.org {topic}` — digital economy statistics, IT market data
+- `site:vdma.org {topic}` — mechanical engineering, Industry 4.0 (if manufacturing)
+- `site:zvei.org {topic}` — electrical industry, automation (if relevant)
+- `site:bdew.de {topic}` — energy sector (if relevant)
+- `site:eur-lex.europa.eu {regulation_topic}` — EU regulations (AI Act, CSRD, Cyber Resilience Act, Data Act)
+- `site:handelsblatt.com "{customer_name}" OR {customer_industry}` — German business context
+- `site:destatis.de {topic}` — German federal statistics
+
+These are high-authority sources that strengthen the pitch with DACH-credible evidence. For non-`de` projects, skip this section.
 
 ### Customer Mode (pitch_mode = "customer")
 
@@ -140,7 +186,7 @@ Perform company-specific web research for the named customer.
 - `{customer_industry} cost of downtime` / `cost of inaction`
 - `"{customer_name}" IT budget technology investment`
 
-Use 4-6 web searches per phase. Mix English and German queries if language is `de`.
+Use 4-6 web searches per phase. Mix English and German queries if language is `de`. Add DACH site-specific searches for `de` projects (see above).
 
 ### Segment Mode (pitch_mode = "segment")
 
@@ -167,7 +213,18 @@ Perform industry-level research for the market segment. The goal is reusable ins
 - `{customer_industry} cost of inaction industry statistics`
 - `{customer_industry} IT investment trends budget allocation`
 
-Use 4-6 web searches per phase. Mix English and German queries if language is `de`. Do NOT fetch a company website in segment mode — there is no single target company.
+Use 4-6 web searches per phase. Mix English and German queries if language is `de`. Add DACH site-specific searches for `de` projects (see above). Do NOT fetch a company website in segment mode — there is no single target company.
+
+### Source Quality Gate
+
+After collecting search results, assess each source before using it in findings:
+
+- **Relevance**: Does it directly address this phase's questions? (discard tangential hits)
+- **Authority**: Score using the authority matrix above — prefer 4-5 for claims
+- **Freshness**: Tag each source with its publication date. Prefer sources from the last 2 years for market data, last 5 years for structural industry analysis
+- **Specificity**: Does it contain concrete numbers, not just general commentary?
+
+Discard sources that score low on both relevance and authority. If a search yields only low-quality results, run a refined query rather than using weak evidence.
 
 ## Phase 4: Synthesize and Write Output
 
@@ -179,9 +236,10 @@ Each finding must include:
 - Unique ID (e.g., `wc-001`, `wn-001`, `wy-001`, `wp-001`)
 - Type classification
 - Headline + detail
-- Evidence with source URLs
+- Evidence with source URLs, `source_authority` (1-5), and `freshness` (YYYY-MM or YYYY)
 - Buyer role relevance tags
 - Portfolio entity references (proposition slugs)
+- `signal_origin`: `"tips"` if reused from TIPS data, `"web"` if from fresh web search
 
 Include `pitch_mode` and `target` fields in the JSON root.
 
@@ -213,12 +271,26 @@ For every web-sourced quantitative claim, append to `${project_path}/.metadata/c
 {
   "claim_id": "{phase_prefix}-{N}-e{M}",
   "phase": "{phase}",
-  "claim_text": "...",
-  "source_url": "...",
-  "source_title": "...",
+  "claim_text": "The global IoT in manufacturing market will reach $1.3 trillion by 2027",
+  "value": 1300000000000,
+  "unit": "USD",
+  "type": "currency",
+  "source_url": "https://...",
+  "source_title": "IoT Analytics Market Report 2025",
+  "source_authority": 4,
+  "freshness": "2025-09",
   "submitted_by": "cogni-sales:why-change-researcher"
 }
 ```
+
+**Evidence type classification** — classify every claim:
+- `currency`: Market sizes, revenue, investment amounts (USD, EUR, GBP)
+- `percentage`: Growth rates, CAGR, adoption rates, market share
+- `count`: Companies, users, deployments, patents
+- `timeframe`: Deadlines, milestones, regulatory dates
+- `ratio`: Efficiency gains, cost reductions (e.g., 3x improvement)
+
+The `value` field stores the raw numeric value without formatting. The `unit` field stores the unit (USD, EUR, %, count, years, etc.). The `source_authority` field stores the authority score (1-5) from the source authority matrix. The `freshness` field stores the source publication date (YYYY-MM or YYYY).
 
 If claims.json doesn't exist, create it as a JSON array. If it exists, read, append, and write back.
 

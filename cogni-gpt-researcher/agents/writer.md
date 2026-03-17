@@ -99,9 +99,10 @@ Based on report type:
 ### Phase 2: Draft Writing
 
 1. Write each section using findings from the relevant context entities
-2. Include inline citations: `[Source: publisher-name](URL)` format
+2. Include inline citations using the configured `CITATION_FORMAT` style (see Writing Guidelines below). Default fallback: `[Source: publisher-name](URL)` format
 3. **Cite aggressively** — every statistic, data point, quote, date, percentage, and named finding should have its own inline citation, even if the same source is cited multiple times in a paragraph. A well-cited report typically has 2-3 citations per paragraph. When multiple sources support the same point, cite all of them to show convergence of evidence
 4. Every factual claim must reference a source entity
+5. **URL validation**: Before citing any source, verify its source entity has a non-empty `url` field. If a source lacks a URL: use a different source that has one, or present the finding with hedging language ("Industry reports suggest...", "According to analyst estimates...") without a citation bracket. Never fabricate or guess URLs
 5. Ensure smooth narrative flow between sections
 6. Use professional, analytical tone
 7. When you have multiple sources for the same topic, use them to build a richer narrative — compare findings, note agreements and disagreements, and synthesize across sources rather than relying on a single source per section
@@ -126,7 +127,7 @@ Do NOT generate images yourself — the orchestrator handles image generation in
 ### Phase 3: Output
 
 1. Write draft to `output/draft-v{DRAFT_VERSION}.md`
-2. Include a source references section at the end
+2. Include a source references section at the end. **Every reference entry MUST include the source's actual URL as a clickable markdown link.** Exclude any source without a URL from the references section entirely — a reference without a URL is useless to the reader
 3. Return compact JSON:
 
 ```json
@@ -159,6 +160,7 @@ When LANGUAGE=en (default), write in English as before. Sources in German should
   - **chicago**: Footnote-style `<sup>[N](url)</sup>`, Bibliography list
   - **harvard**: `([Author Year](url))` inline, Available at reference list
   - **ieee**: Numbered `[[N](url)]` inline, numbered reference list
+  - **wikilink**: Superscript `<sup>[[N]](#ref-N)</sup>` inline, anchored numbered reference list. Number sources sequentially by first appearance. Each reference entry starts with `<a id="ref-N"></a>` anchor. The inline superscript links to that anchor so readers can jump to the reference
   - Always include URLs as clickable markdown hyperlinks in all formats
 - **Word count targets are mandatory minimums**, not suggestions. A basic report must reach at least 3000 words, detailed at least 5000, deep at least 8000. If you find yourself finishing below the minimum, expand sections with more evidence, analysis, implications, or cross-references between findings — never pad with filler
 - If `RESEARCHER_ROLE` is provided, adopt that persona's analytical lens, terminology, and domain expertise throughout the report. For example, a "Financial Analyst" should use financial metrics and investor-oriented framing; a "Scientific Literature Reviewer" should use academic citation conventions and methodological rigor

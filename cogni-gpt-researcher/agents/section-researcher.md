@@ -115,6 +115,8 @@ Before creating entities, evaluate each source for quality. This mirrors GPT-Res
 
 Discard sources scoring below 0.3. For remaining sources:
 
+**URL requirement**: Every source entity MUST have a non-empty `url` field containing a real, fetchable URL from your WebSearch/WebFetch results. Never fabricate or guess URLs from memory. If a finding cannot be attributed to a specific URL you actually fetched or found in search results, do NOT create a source entity for it — instead mark the finding as `unsourced: true` in the context entity's key_findings. The writer will handle unsourced findings with hedging language rather than fabricated citations.
+
 1. Create source entity via `scripts/create-entity.sh`:
    ```bash
    bash "${CLAUDE_PLUGIN_ROOT}/scripts/create-entity.sh" \

@@ -39,7 +39,7 @@ When this skill loads:
 > `resource` = annotated source list / bibliography
 >
 > **Tone**: objective *(default)* | analytical | critical | persuasive | formal | informative | explanatory | descriptive | comparative | speculative | narrative | optimistic | simple
-> **Citations**: APA *(default)* | MLA | Chicago | Harvard | IEEE
+> **Citations**: APA *(default)* | MLA | Chicago | Harvard | IEEE | Wikilink
 > **Language**: en *(default)* | de (German with DACH sources)
 >
 > Advanced: sub-question count, source mode (web/local/hybrid), domain filter, researcher role, image generation — ask about any of these
@@ -101,7 +101,7 @@ Scan the user's request and extract any options they already specified. These be
 
 - **Report type**: keywords like "detailed", "deep research", "outline", "sources" → map to basic/detailed/deep/outline/resource (see `references/report-types.md`)
 - **Tone**: style keywords like "analytical", "persuasive", "formal" → map to tone from `references/writing-tones.md`. Default: "objective"
-- **Citation format**: "IEEE", "APA format", "Chicago style" → capture. Default: "apa". See `references/citation-formats.md`
+- **Citation format**: "IEEE", "APA format", "Chicago style", "wikilink", "superscript citations" → capture. Default: "apa". See `references/citation-formats.md`
 - **Language**: "in German", "auf Deutsch" → "de". Default: "en"
 - **Source URLs**: any URLs in the prompt → collect for pre-fetch
 - **Query domains**: "only .gov sources", "restrict to arxiv" → collect domains
@@ -138,7 +138,20 @@ Present the user with a configuration menu using `AskUserQuestion` so they can s
 
 #### Step 3: Initialize project
 
-Once configuration is confirmed, determine workspace path (current directory or ask user) and initialize:
+Once configuration is confirmed, ask the user where to store the project via `AskUserQuestion`:
+
+> **Where should I store this research project?**
+> 1. **Here** — `{cwd}/{project-slug}` (current directory)
+> 2. **Standard** — `cogni-gpt-researcher/{project-slug}` (plugin workspace)
+>
+> Reply 1, 2, or provide a custom path.
+
+- If user replies "1" or "here" → use current working directory as workspace
+- If user replies "2" or "standard" → use `cogni-gpt-researcher/` relative to the current working directory
+- If user provides a custom path → use that path directly
+- If user says "go" or "default" without specifying → use current working directory
+
+Then initialize:
 
 ```bash
 bash "${CLAUDE_PLUGIN_ROOT}/scripts/initialize-project.sh" \
@@ -406,12 +419,60 @@ Skill(cogni-claims:claims, mode=verify,
   working_dir=<project_path>)
 ```
 
+#### 5c.5: User Claims Review (interactive)
+
+After claims verification completes, present the results to the user before proceeding to the automated reviewer. This step ensures the user has visibility into what was verified and can steer corrections.
+
+1. Read `{PROJECT_PATH}/cogni-claims/claims.json` for verification results
+2. Summarize results into a compact overview:
+   - Total claims verified: N
+   - Claims confirmed: N
+   - Claims with deviations: N (list ALL with deviation type and severity)
+   - Sources unavailable: N (list URLs that could not be fetched)
+3. For each deviated claim, include: the claim statement, what the source actually says, deviation type, and severity
+4. Present to the user via `AskUserQuestion`:
+
+> **Claims Verification Results**
+>
+> Verified: N | Confirmed: N | Deviations: N | Sources unavailable: N
+>
+> **Deviations found:**
+> 1. [claim statement] — *[deviation_type]* ([severity]): [explanation]
+> 2. ...
+>
+> Options:
+> - **proceed** — pass deviations to reviewer + revisor for automated correction
+> - **fix: 1, 3** — flag specific claims for mandatory correction
+> - **drop: 2** — remove specific claims from the report entirely
+> - **accept all** — skip reviewer, accept draft as-is → go to Phase 6
+>
+> How would you like to proceed?
+
+5. Process user response:
+   - `proceed` → continue to Phase 5d with all deviations as reviewer input
+   - `fix: N, M` → add flagged claims to a mandatory-fix list passed to the reviewer
+   - `drop: N` → add to a drop list; revisor will remove these claims from the report
+   - `accept all` → skip Phases 5d-5e, proceed directly to Phase 6
+6. Store user decisions in `.metadata/user-claims-review.json`:
+```json
+{
+  "reviewed_at": "<ISO timestamp>",
+  "total_claims": N,
+  "confirmed": N,
+  "deviated": N,
+  "user_action": "proceed|fix|drop|accept_all",
+  "fix_claims": ["claim-id-1", "claim-id-3"],
+  "drop_claims": ["claim-id-2"]
+}
+```
+
 #### 5d: Review
 ```
 Task(reviewer,
   PROJECT_PATH=<project_path>,
   DRAFT_PATH="output/draft-v{N}.md",
   CLAIMS_DASHBOARD=<project_path>/cogni-claims/claims.json,
+  USER_CLAIMS_REVIEW=<project_path>/.metadata/user-claims-review.json,
   REVIEW_ITERATION=N,
   LANGUAGE=<language>)
 ```

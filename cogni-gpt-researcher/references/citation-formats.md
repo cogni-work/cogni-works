@@ -47,6 +47,32 @@ Author, A.A. Year. Title of article. *Publisher*. Available at: url [Accessed Da
 [1] A. Author, "Title," *Publisher*, Month Year. [Online]. Available: url
 ```
 
+### Wikilink
+
+**Inline**: Superscript number linking to an anchored reference entry: `<sup>[[N]](#ref-N)</sup>`
+**Reference list** (numbered, anchored):
+```
+<a id="ref-1"></a>[1] A. Author, "Title," *Publisher*, Month Year. https://example.com/article
+```
+
+Number sources sequentially by order of first appearance in the report. Each reference entry starts with an `<a id="ref-N"></a>` HTML anchor so the inline superscript links directly to it. Every reference entry must end with the full clickable URL.
+
+**Full paragraph example**:
+
+> Cloud adoption grew 25% year-over-year in 2025<sup>[[1]](#ref-1)</sup>, driven primarily by AI workload
+> migration. Gartner projects that by 2028, over 70% of enterprise AI workloads will run on
+> hyperscaler infrastructure<sup>[[2]](#ref-2)</sup>. However, cost optimization remains a challenge —
+> a recent Flexera survey found that 32% of cloud spend is wasted<sup>[[3]](#ref-3)</sup>, suggesting
+> that governance has not kept pace with adoption.
+>
+> ## References
+>
+> <a id="ref-1"></a>[1] Gartner, "Cloud Infrastructure Report 2025," *Gartner Research*, March 2025. https://gartner.com/cloud-report-2025
+>
+> <a id="ref-2"></a>[2] Gartner, "Top Strategic Technology Trends 2028," *Gartner*, October 2025. https://gartner.com/strategic-trends-2028
+>
+> <a id="ref-3"></a>[3] Flexera, "2025 State of the Cloud Report," *Flexera*, February 2025. https://flexera.com/state-of-cloud-2025
+
 ## Default
 
 When no `citation_format` is specified: **APA**.

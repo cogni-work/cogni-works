@@ -52,13 +52,15 @@ Reading ALL previous verdicts — not just the current one — is critical for p
 2. Read the reviewer verdict (issues, deviations, scores)
 3. Read ALL previous verdicts from `.metadata/review-verdicts/` to understand full issue history
 4. Read relevant source and claim entities for context
+5. Read `.metadata/user-claims-review.json` if present — contains the user's explicit decisions on claims (fix, drop, accept)
 
 ### Phase 1: Triage Issues
 
 Triage order matters because fixing a critical deviation often changes surrounding text enough to resolve lower-priority issues in the same section. Fixing in severity order avoids wasted effort — rewriting a paragraph for a style issue when a factual correction in that same paragraph is about to rewrite it anyway.
 
 Sort issues by priority:
-1. **Critical deviations** — must fix: source contradictions, misquotations with critical severity
+0. **User-mandated drops** — remove these claims and their surrounding assertions from the report entirely. This takes precedence over all other fixes because the user has explicitly decided these claims should not appear. If the surrounding paragraph depends on the dropped claim, restructure the paragraph to flow without it
+1. **User-mandated fixes + Critical deviations** — must fix: claims the user explicitly flagged for correction, plus source contradictions and misquotations with critical severity. User-mandated fixes get maximum correction priority — rewrite with fidelity to the original source
 2. **High deviations** — must fix: significant misrepresentations
 3. **Structural issues** — address: completeness gaps, coherence problems
 4. **Medium deviations** — should fix: noticeable inaccuracies

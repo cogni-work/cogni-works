@@ -59,7 +59,7 @@ Project config (`project-config.json`) supports these optional fields:
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
 | `tone` | string | "objective" | Writing tone — see `references/writing-tones.md` |
-| `citation_format` | string | "apa" | Citation style (apa/mla/chicago/harvard/ieee) — see `references/citation-formats.md` |
+| `citation_format` | string | "apa" | Citation style (apa/mla/chicago/harvard/ieee/wikilink) — see `references/citation-formats.md` |
 | `researcher_role` | string | auto-selected | Domain persona — see `references/agent-roles.md` |
 | `report_source` | string | "web" | Research source: web, local, or hybrid |
 | `document_paths` | string[] | [] | Local files/globs for local/hybrid mode |

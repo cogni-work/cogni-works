@@ -51,6 +51,16 @@ This dispatches claim-verifier agents (one per unique source URL) that:
 4. Assign severity: low, medium, high, critical
 5. Update claims.json with verification results
 
+### Step 4.5: Present Verification Results to User (interactive)
+
+After verification completes, the orchestrator (SKILL.md Phase 5c.5) reads `claims.json` and formats a summary for the user via `AskUserQuestion`. The user can:
+- **proceed** — pass all deviations to the reviewer as normal input
+- **fix: N** — flag specific claims for mandatory correction by the revisor
+- **drop: N** — request that specific claims be removed from the report entirely
+- **accept all** — skip the review loop and finalize the draft as-is
+
+User decisions are stored in `.metadata/user-claims-review.json` and passed to both the reviewer agent (as `USER_CLAIMS_REVIEW` parameter) and the revisor agent.
+
 ### Step 5: Update Report-Claim Entities
 
 After verification, read `cogni-claims/claims.json` and update report-claim entities:
@@ -64,6 +74,7 @@ The reviewer agent reads:
 - The draft
 - Updated report-claim entities with verification status
 - `cogni-claims/claims.json` for full deviation details
+- `.metadata/user-claims-review.json` for user decisions on deviated claims (fix, drop, accept)
 
 ## Graceful Degradation
 

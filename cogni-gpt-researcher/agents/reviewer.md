@@ -54,7 +54,8 @@ Loading previous verdicts is essential for multi-iteration review. Without this 
    - `{PROJECT_PATH}/cogni-claims/claims.json` for verification statuses
    - Report-claim entities from `03-report-claims/data/` for deviation details
 3. Read previous review verdicts from `.metadata/review-verdicts/` (if iteration > 1)
-4. If `CLAIMS_DASHBOARD` is not provided or file does not exist, proceed with structural-only review (skip Phase 2)
+4. Read `.metadata/user-claims-review.json` if present — this contains the user's decisions on deviated claims (mandatory fixes, drops, accepted deviations) from the interactive claims review step
+5. If `CLAIMS_DASHBOARD` is not provided or file does not exist, proceed with structural-only review (skip Phase 2)
 
 ### Phase 1: Structural Review
 
@@ -69,6 +70,10 @@ Evaluate the draft on 5 dimensions (0.0-1.0 each):
 | **Source diversity** | Multiple sources per section? No single-source dependency? | 0.20 |
 | **Depth** | Substantive analysis vs surface-level? Specific evidence? | 0.20 |
 | **Clarity** | Clear writing, professional tone, well-organized? When LANGUAGE=de: evaluate German prose quality — proper umlauts, natural Fachsprache, no awkward literal translations from English | 0.15 |
+
+#### Reference URL Gate
+
+Scan the references section for entries missing URLs. Count references that have "Available:" text or a description but no actual `https://` link. If more than 20% of references lack clickable URLs, flag as a high-severity issue: "References missing URLs: N of M references have no clickable link." This forces a revise verdict because a reference without a URL cannot be verified by the reader.
 
 #### Word Count Gate
 
@@ -95,6 +100,9 @@ If claims verification data is available:
 4. Flag any high/critical deviations as mandatory fixes
 5. Flag medium deviations as recommended fixes
 6. Low deviations are informational only
+7. **User overrides**: If `user-claims-review.json` is present, apply user decisions:
+   - Claims marked `fix` by the user → treat as mandatory high-severity issues regardless of automated severity
+   - Claims marked `drop` by the user → add to the issues list with action `remove-claim` for the revisor to execute
 
 ### Phase 3: Verdict
 

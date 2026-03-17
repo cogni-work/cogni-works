@@ -61,18 +61,25 @@ Branded exports look more professional and help the user's report stand out. Thi
 | `colors.blockquote_border` | `border` | Blockquote left border |
 | `colors.source_ref` | `text_muted` | Source reference annotations |
 
-**Skip conditions** (proceed without prompting):
-- Export format is Markdown only — no theming needed, skip entirely
-- Caller already provided a `theme_path` — use it directly
-- Only one theme exists — auto-select it, tell the user which theme is being applied
+**Always pick a theme** — even for markdown-only exports, since `design-variables.json` feeds downstream skills (cogni-narrative, cogni-visual):
+- If caller already provided a `theme_path`, use it directly
+- If only one theme exists, auto-select and confirm: "Applying theme: {theme_name}"
+- Otherwise, call `cogni-workspace:pick-theme` and prompt the user to choose
 
-**Fallback**: If no themes are found or the user declines, proceed with the hardcoded default styling (Georgia serif, professional neutrals). The export must never fail because of missing themes.
+**Fallback**: If no themes are found at all (empty themes directory), proceed with hardcoded defaults and inform the user: "No themes found — using default styling. Add a theme via cogni-workspace for branded exports." The export must never fail because of missing themes.
 
 ### Phase 2: Export
 
 Each format builds on the previous — HTML is generated from markdown, PDF from HTML. This cascade means the markdown source is always the single source of truth.
 
 **Citation clickability**: All citation links (`[Source: Publisher](URL)` or configured citation style) must remain clickable in every export format. Links must be visually distinct (colored + underlined) in both screen and print views. Never strip `href` attributes or flatten links to plain text.
+
+**Citation normalization for HTML**: The markdown report may use various citation formats (APA inline `([Author](url))`, wikilink `[[N]]`, IEEE `[[N](url)]`, bare `[Source: X](url)`). During HTML conversion, normalize ALL inline citations to superscript numbered references:
+- Body: `<sup class="citation-ref"><a href="URL" title="Source title">[N]</a></sup>`
+- Bottom: `<div class="references-section">` with numbered `<ol>` of clickable source links
+- See `references/export-formats.md` § "Citation Normalization" for the conversion patterns
+
+For wikilink `[[N]]` citations without embedded URLs: resolve reference numbers against the `## References` section at the bottom of the markdown, extract the URL from each reference entry, and link the superscript directly to that source URL.
 
 **Markdown** (always available):
 - `output/report.md` is already the markdown output

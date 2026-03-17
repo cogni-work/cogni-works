@@ -72,6 +72,37 @@ The HTML export uses a self-contained template with CSS custom properties. When 
       color: var(--color-link);
       text-decoration: underline;
     }
+    /* Superscript citation references */
+    .citation-ref {
+      vertical-align: super;
+      font-size: 0.75em;
+      line-height: 0;
+    }
+    .citation-ref a {
+      color: var(--color-link);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .citation-ref a:hover {
+      text-decoration: underline;
+    }
+    /* References section at bottom */
+    .references-section {
+      margin-top: 3rem;
+      border-top: 2px solid var(--color-border);
+      padding-top: 1rem;
+    }
+    .references-section ol {
+      padding-left: 1.5rem;
+      font-size: 0.9em;
+    }
+    .references-section li {
+      margin-bottom: 0.5rem;
+    }
+    .references-section a {
+      color: var(--color-link);
+      word-break: break-all;
+    }
     .toc {
       background: var(--color-toc-bg);
       padding: 1rem;
@@ -120,6 +151,8 @@ The HTML export uses a self-contained template with CSS custom properties. When 
       a { color: var(--color-link); text-decoration: underline; }
       a[href]::after { content: " (" attr(href) ")"; font-size: 0.8em; color: var(--color-text-muted); }
       .source-ref { font-size: 0.75em; }
+      .citation-ref a[href]::after { content: ""; }  /* suppress URL expansion for superscript refs */
+      .references-section { page-break-before: always; }
     }
   </style>
 </head>
@@ -166,6 +199,197 @@ try:
     html = markdown.markdown(md_text, extensions=['toc', 'tables'])
 except ImportError:
     html = simple_md_to_html(md_text)
+```
+
+## Citation Normalization
+
+When generating HTML, normalize all inline citations to superscript numbered references regardless of the input citation format. This produces consistent, professional rendering with clickable source links.
+
+### Processing Order
+
+1. `parse_references_section(md_text)` — extract reference map
+2. `strip_references_section(md_text)` — remove trailing `## References` from markdown
+3. `normalize_inline_citations(md_text, ref_map)` — replace all citation patterns with `<sup>[N](URL)</sup>` markers
+4. Standard MD→HTML conversion (headings, bold, links, etc.)
+5. `convert_sup_markers_to_html(html_text)` — style the superscript markers
+6. Append `build_references_html(references)` before `</body>`
+
+### Step 1: Parse the References Section
+
+Build a map from reference number to `{title, url}` by parsing the trailing `## References` block:
+
+```python
+import re
+
+def parse_references_section(md_text: str) -> dict:
+    """Parse ## References entries into {number: {title, url}} map."""
+    ref_map = {}
+    ref_match = re.search(r'\n## References\s*\n([\s\S]*?)$', md_text)
+    if not ref_match:
+        return ref_map
+
+    for line in ref_match.group(1).strip().split('\n'):
+        # Match: [N] Title text. Retrieved from URL
+        # or:   [N] Title text. URL
+        m = re.match(
+            r'\[(\d+)\]\s+(.+?)\.?\s+(?:Retrieved from\s+)?(https?://\S+)',
+            line.strip()
+        )
+        if m:
+            ref_map[int(m.group(1))] = {
+                'title': m.group(2).strip(),
+                'url': m.group(3).strip()
+            }
+    return ref_map
+```
+
+### Step 2: Normalize Inline Citations
+
+Detect all citation patterns and replace with intermediate `<sup>[N](URL)</sup>` markers. Process patterns from most specific to least specific to avoid double-matching:
+
+```python
+from collections import OrderedDict
+
+def normalize_inline_citations(md_text: str, ref_map: dict) -> tuple:
+    """Replace all citation formats with <sup>[N](URL)</sup> markers.
+    Returns (modified_text, references_list)."""
+    references = OrderedDict()  # url -> {number, title, url}
+    counter = [0]
+
+    def get_or_assign(url: str, title: str) -> int:
+        if url not in references:
+            counter[0] += 1
+            references[url] = {'number': counter[0], 'title': title, 'url': url}
+        return references[url]['number']
+
+    # Pattern 1: Wikilink with anchor — <sup>[[N]](#ref-N)</sup>
+    def repl_wikilink_anchor(m):
+        num = int(m.group(1))
+        ref = ref_map.get(num, {})
+        url = ref.get('url', f'#ref-{num}')
+        title = ref.get('title', f'Reference {num}')
+        n = get_or_assign(url, title)
+        return f'<sup>[{n}]({url})</sup>'
+    md_text = re.sub(
+        r'<sup>\[\[(\d+)\]\]\(#ref-\d+\)</sup>', repl_wikilink_anchor, md_text
+    )
+
+    # Pattern 2: Chicago — <sup>[N](url)</sup>
+    def repl_chicago(m):
+        url = m.group(2)
+        n = get_or_assign(url, f'Reference {m.group(1)}')
+        return f'<sup>[{n}]({url})</sup>'
+    md_text = re.sub(
+        r'<sup>\[(\d+)\]\((https?://[^\)]+)\)</sup>', repl_chicago, md_text
+    )
+
+    # Pattern 3: IEEE — [[N](url)]
+    def repl_ieee(m):
+        url = m.group(2)
+        n = get_or_assign(url, f'Reference {m.group(1)}')
+        return f'<sup>[{n}]({url})</sup>'
+    md_text = re.sub(
+        r'\[\[(\d+)\]\((https?://[^\)]+)\)\]', repl_ieee, md_text
+    )
+
+    # Pattern 4: APA/MLA/Harvard — ([Author, Year](url)) or ([Author](url))
+    def repl_apa(m):
+        title = m.group(1)
+        url = m.group(2)
+        n = get_or_assign(url, title)
+        return f'<sup>[{n}]({url})</sup>'
+    md_text = re.sub(
+        r'\(\[([^\]]+)\]\((https?://[^\)]+)\)\)', repl_apa, md_text
+    )
+
+    # Pattern 5: Bare source ref — [Source: Publisher](url)
+    def repl_source(m):
+        title = m.group(1)
+        url = m.group(2)
+        n = get_or_assign(url, title)
+        return f'<sup>[{n}]({url})</sup>'
+    md_text = re.sub(
+        r'\[Source:\s*([^\]]+)\]\((https?://[^\)]+)\)', repl_source, md_text
+    )
+
+    # Pattern 6: Bare wikilink group — [[1], [2], [3]] or [[4]]
+    # This is the most common malformed pattern — numbers without URLs
+    def repl_bare_wikilink(m):
+        full = m.group(0)
+        nums = re.findall(r'\[(\d+)\]', full)
+        parts = []
+        for num_str in nums:
+            num = int(num_str)
+            ref = ref_map.get(num, {})
+            url = ref.get('url', f'#ref-{num}')
+            title = ref.get('title', f'Reference {num}')
+            n = get_or_assign(url, title)
+            parts.append(f'<sup>[{n}]({url})</sup>')
+        return ''.join(parts)
+    md_text = re.sub(
+        r'\[\[(\d+)\](?:,\s*\[(\d+)\])*\]', repl_bare_wikilink, md_text
+    )
+
+    return md_text, list(references.values())
+```
+
+### Step 3: Convert Markers to HTML
+
+After MD→HTML conversion, convert the intermediate `<sup>[N](url)</sup>` markers to styled superscript links:
+
+```python
+def convert_sup_markers_to_html(html_text: str) -> str:
+    """Convert <sup>[N](url)</sup> markers to citation-ref spans."""
+    def repl(m):
+        num = m.group(1)
+        url = m.group(2)
+        return (
+            f'<sup class="citation-ref">'
+            f'<a href="{url}" title="Reference {num}">[{num}]</a>'
+            f'</sup>'
+        )
+    return re.sub(
+        r'<sup>\[(\d+)\]\((https?://[^\)]+)\)</sup>', repl, html_text
+    )
+```
+
+### Step 4: Build References Section HTML
+
+Generate the numbered references list and insert before `</body>`:
+
+```python
+def build_references_html(references: list) -> str:
+    """Build <div class="references-section"> with numbered <ol>."""
+    if not references:
+        return ""
+    items = []
+    for ref in references:
+        n = ref['number']
+        title = ref['title']
+        url = ref['url']
+        items.append(
+            f'  <li id="ref-{n}" value="{n}">'
+            f'{title} &mdash; <a href="{url}">{url}</a>'
+            f'</li>'
+        )
+    return (
+        '<div class="references-section">\n'
+        '<h2>References</h2>\n'
+        '<ol>\n' + '\n'.join(items) + '\n</ol>\n'
+        '</div>'
+    )
+```
+
+Insert the output just before `</body>` in the final HTML template.
+
+### Strip Original References
+
+Remove the trailing `## References` section from markdown before conversion — the HTML references section replaces it:
+
+```python
+def strip_references_section(md_text: str) -> str:
+    """Remove trailing ## References from markdown."""
+    return re.sub(r'\n## References\s*\n[\s\S]*$', '', md_text)
 ```
 
 ## PDF Generation

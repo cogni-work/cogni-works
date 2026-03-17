@@ -135,7 +135,7 @@ Read [references/workflow-phases/phase-0-initialize.md](references/workflow-phas
 7. Capture research topic/focus (in interaction language) — with optional suggestion from portfolio market
 8. Generate project slug: `{subsector}-{topic}-{hash}`
 9. Initialize project via `initialize-trend-project.sh` in the current working directory under `cogni-tips/`
-10. Update `tips-project.json` with full industry context (bilingual names, subsector, research_topic)
+10. Update `tips-project.json` with full industry context (bilingual names, subsector, research_topic) — see Step 0.8b in phase-0-initialize.md. The `update-industry-metadata.sh` script only updates `.metadata/trend-scout-output.json`, so you MUST also update `tips-project.json` inline with jq (industry.primary, primary_en, primary_de, subsector, subsector_en, subsector_de, research_topic).
 11. Update `.metadata/trend-scout-output.json` with industry context (and portfolio_source if applicable)
 
 **Required outputs:**
@@ -234,7 +234,51 @@ This file serves as a fallback for `trend-report` when `.logs/web-research-raw.j
 - WEB_RESEARCH_AVAILABLE flag set
 - Signal data persisted to disk (agent will self-load from `.logs/web-research-raw.json` or `phase1-research-summary.json`)
 
-**Fallback:** If agent returns `{"ok": false}`, proceed with training-only generation (warning logged).
+**Fallback Hierarchy:**
+
+1. **Agent returns `{"ok": false}`** — proceed to inline fallback research (below)
+2. **Agent unavailable** (subagent dispatch fails) — proceed to inline fallback research (below)
+3. **Inline fallback research also fails** — proceed with training-only generation (warning logged)
+
+**Inline Fallback Research (when web-researcher agent is unavailable):**
+
+If the web-researcher agent cannot be dispatched (e.g., nested subagent context, agent not found), perform a reduced set of web searches directly using WebSearch. This is less thorough than the agent's 32 searches but ensures candidates have some web grounding rather than being 100% training-only.
+
+Execute these 12 targeted searches organized by source authority tier. The first 6 target authoritative institutional sources (CRAAP authority 4-5) to ensure the candidate pool has credible grounding. The remaining 6 broaden coverage.
+
+**Tier 1 — Authoritative institutional sources (run these first):**
+
+```text
+1. "site:fraunhofer.de {SUBSECTOR_DE} {RESEARCH_TOPIC} Studie 2025"
+2. "site:ec.europa.eu OR site:eur-lex.europa.eu {SUBSECTOR_EN} {RESEARCH_TOPIC} regulation"
+3. "site:bitkom.org OR site:{ASSOCIATION_DOMAIN} {SUBSECTOR_DE} {RESEARCH_TOPIC} 2025"
+4. "{SUBSECTOR_EN} {RESEARCH_TOPIC} site:gartner.com OR site:mckinsey.com OR site:rolandberger.com"
+5. "site:destatis.de OR site:bmwk.de {SUBSECTOR_DE} {RESEARCH_TOPIC} Statistik"
+6. "{SUBSECTOR_EN} {RESEARCH_TOPIC} arxiv.org OR ieee.org OR sciencedirect.com 2024 2025"
+```
+
+For search 3, replace `{ASSOCIATION_DOMAIN}` with the subsector's primary industry association from [references/dach-sources.md](references/dach-sources.md) (e.g., `vda.de` for automotive, `bvmed.de` for healthcare).
+
+**Tier 2 — Broader market and signal sources:**
+
+```text
+7. "{SUBSECTOR_EN} trends {RESEARCH_TOPIC} 2025 2026"
+8. "{SUBSECTOR_DE} {RESEARCH_TOPIC} Markt DACH Mittelstand"
+9. "{SUBSECTOR_EN} {RESEARCH_TOPIC} market outlook DACH"
+10. "{SUBSECTOR_DE} Digitalisierung {RESEARCH_TOPIC} Trend"
+11. "{SUBSECTOR_EN} {RESEARCH_TOPIC} funding investment startups DACH"
+12. "{SUBSECTOR_EN} {RESEARCH_TOPIC} patent filing 2024 2025"
+```
+
+For each search result, extract trend signals (name, keywords, source URL, freshness). Write the aggregated signals to `{PROJECT_PATH}/.logs/web-research-raw.json` in the same format the agent would produce, and to `{PROJECT_PATH}/phase1-research-summary.json` as compact fallback. Set `WEB_RESEARCH_AVAILABLE = true`.
+
+**Source tagging:** When extracting signals, tag each with its source authority level based on domain:
+- Authority 5: `.gov`, `.eu`, fraunhofer.de, ieee.org, arxiv.org, nature.com
+- Authority 4: gartner.com, mckinsey.com, rolandberger.com, industry associations (.org)
+- Authority 3: handelsblatt.com, reuters.com, industry trade publications
+- Authority 2-1: commercial blogs, vendor sites, social media
+
+This tagging flows into the trend-generator's CRAAP scoring — candidates grounded in authority 4-5 sources will score higher on the 15% Source Quality weight.
 
 ### Phase 2: Generate Candidate Pool (DELEGATED)
 
@@ -312,7 +356,25 @@ Field mapping for compact format:
 - SCORING_METADATA populated from agent response
 - Validation status confirmed
 
-**Fallback:** If agent returns `{"ok": false}`, log error and halt workflow.
+**Fallback Hierarchy:**
+
+1. **Agent returns `{"ok": false}`** — log error and halt workflow
+2. **Agent unavailable** (subagent dispatch fails) — perform inline candidate generation (below)
+
+**Inline Fallback Generation (when trend-generator agent is unavailable):**
+
+If the trend-generator agent cannot be dispatched, generate the 60 candidates inline. This loses the benefit of extended thinking in a separate context, but still produces the required output.
+
+Steps:
+1. Load web research signals from `{PROJECT_PATH}/.logs/web-research-raw.json` or `{PROJECT_PATH}/phase1-research-summary.json`
+2. **Prioritize web signals for candidate creation:** For each cell, first check if web signals exist for that dimension. Create candidates grounded in web signals first (mark as `source: "web-signal"` with the original URL), then fill remaining slots with training knowledge. Target: at least 50% of candidates should be web-sourced when signals are available.
+3. Generate 60 candidates (5 per cell x 12 cells) following the same dimension/horizon/subcategory structure
+4. Apply the scoring weights from [references/scoring-framework.md](references/scoring-framework.md) — especially the training source caps (source_quality max 0.4, signal_strength max 0.3 for training-only candidates)
+5. Validate subcategory balance: each cell must have MIN 1 candidate per subcategory. If violated, replace the lowest-scored candidate in the over-represented subcategory
+6. Write results to `{PROJECT_PATH}/.logs/trend-generator-candidates.json`
+7. Run `prepare-phase3-data.sh` to generate compact format
+
+**Important:** Even in inline mode, enforce the scoring caps for training-sourced candidates. A training-only candidate with `score: 0.78` signals a scoring cap violation — the theoretical max for a pure training candidate is ~0.60 after caps are applied.
 
 ### Phase 3: Write Final Trend List
 

@@ -483,6 +483,38 @@ fi
 log_conditional INFO "Updated trend-scout-output.json with industry metadata"
 ```
 
+### Step 0.8b: Update tips-project.json with Industry Metadata
+
+The `update-industry-metadata.sh` script only targets `.metadata/trend-scout-output.json`. You MUST also update `tips-project.json` with the same bilingual labels so that downstream skills (value-modeler, trend-report, tips-resume) can read the industry context without parsing the full output file.
+
+```bash
+# Update tips-project.json with bilingual industry metadata
+TIPS_PROJECT_FILE="${PROJECT_PATH}/tips-project.json"
+
+if [[ -f "$TIPS_PROJECT_FILE" ]]; then
+  jq \
+    --arg industry "$INDUSTRY_SLUG" \
+    --arg industry_en "$INDUSTRY_EN" \
+    --arg industry_de "$INDUSTRY_DE" \
+    --arg subsector "$SUBSECTOR_SLUG" \
+    --arg subsector_en "$SUBSECTOR_EN" \
+    --arg subsector_de "$SUBSECTOR_DE" \
+    --arg topic "$RESEARCH_TOPIC" \
+    '.industry.primary = $industry |
+     .industry.primary_en = $industry_en |
+     .industry.primary_de = $industry_de |
+     .industry.subsector = $subsector |
+     .industry.subsector_en = $subsector_en |
+     .industry.subsector_de = $subsector_de |
+     .research_topic = $topic' \
+    "$TIPS_PROJECT_FILE" > "${TIPS_PROJECT_FILE}.tmp" && mv "${TIPS_PROJECT_FILE}.tmp" "$TIPS_PROJECT_FILE"
+
+  log_conditional INFO "Updated tips-project.json with bilingual industry metadata"
+else
+  log_conditional WARN "tips-project.json not found at $TIPS_PROJECT_FILE — skipping metadata update"
+fi
+```
+
 ---
 
 ## Step 0.9: Initialize Logging

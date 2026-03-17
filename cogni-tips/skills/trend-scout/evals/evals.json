@@ -1,0 +1,65 @@
+{
+  "skill_name": "trend-scout",
+  "evals": [
+    {
+      "id": 1,
+      "name": "eval-happy-path-de",
+      "prompt": "Ich möchte Trends für die Fertigungsindustrie scouten, Fokus Automobil und KI-gestützte Qualitätskontrolle",
+      "expected_output": "60 trend candidates in German, organized across 4 dimensions x 3 horizons, with scoring metadata, saved to trend-scout-output.json and trend-candidates.md",
+      "files": [],
+      "expectations": [
+        "trend-scout-output.json exists and is valid JSON",
+        "trend-scout-output.json contains exactly 60 candidates in tips_candidates.items",
+        "All 4 dimensions are present: externe-effekte, neue-horizonte, digitale-wertetreiber, digitales-fundament",
+        "All 3 horizons present per dimension: act, plan, observe",
+        "Each dimension-horizon cell has exactly 5 candidates",
+        "Each cell has at least 1 candidate per subcategory (3 subcategories per dimension)",
+        "Leading indicator ratio is at least 40%",
+        "All candidate scores are in valid range 0.0 to 1.0",
+        "trend-candidates.md exists and is written in German",
+        "tips-project.json exists with industry=Fertigung/manufacturing and subsector=Automobil/automotive",
+        "Project .metadata/ directory exists with trend-scout-output.json",
+        "Project .logs/ directory contains web-research-raw.json or phase1-research-summary.json",
+        "Project .logs/ directory contains trend-generator-candidates.json",
+        "trend-scout-output.json config.industry has bilingual labels (primary_en and primary_de)",
+        "trend-scout-output.json execution.workflow_state is 'agreed'",
+        "No duplicate trend names within the same dimension",
+        "At least 40% of web-signal candidates have source_url pointing to authoritative domains (gov, eu, org, edu, established industry/analyst sites)",
+        "Average source quality score across all candidates is at least 0.5 (CRAAP authority >= 3)",
+        "At least 40% of candidates are web-signal sourced (source_distribution.web_signal >= 24 out of 60)",
+        "Each candidate with source=web-signal has a non-empty source_url field",
+        "ACT candidates have signal_intensity 4-5, OBSERVE candidates have intensity 1-2 (horizon-intensity alignment)"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "eval-happy-path-en",
+      "prompt": "Scout trends for the healthcare industry, digital health subsector, focusing on telemedicine adoption in DACH markets",
+      "expected_output": "60 trend candidates in English, organized across 4 dimensions x 3 horizons, with scoring metadata, saved to trend-scout-output.json and trend-candidates.md",
+      "files": [],
+      "expectations": [
+        "trend-scout-output.json exists and is valid JSON",
+        "trend-scout-output.json contains exactly 60 candidates in tips_candidates.items",
+        "All 4 dimensions are present: externe-effekte, neue-horizonte, digitale-wertetreiber, digitales-fundament",
+        "All 3 horizons present per dimension: act, plan, observe",
+        "Each dimension-horizon cell has exactly 5 candidates",
+        "Each cell has at least 1 candidate per subcategory (3 subcategories per dimension)",
+        "Leading indicator ratio is at least 40%",
+        "All candidate scores are in valid range 0.0 to 1.0",
+        "trend-candidates.md exists and is written in English",
+        "tips-project.json exists with industry=Healthcare and subsector=Digital Health",
+        "Project .metadata/ directory exists with trend-scout-output.json",
+        "Project .logs/ directory contains web-research-raw.json or phase1-research-summary.json",
+        "Project .logs/ directory contains trend-generator-candidates.json",
+        "trend-scout-output.json config.industry has bilingual labels (primary_en and primary_de)",
+        "trend-scout-output.json execution.workflow_state is 'agreed'",
+        "No duplicate trend names within the same dimension",
+        "At least 40% of web-signal candidates have source_url pointing to authoritative domains (gov, eu, org, edu, established industry/analyst sites)",
+        "Average source quality score across all candidates is at least 0.5 (CRAAP authority >= 3)",
+        "At least 40% of candidates are web-signal sourced (source_distribution.web_signal >= 24 out of 60)",
+        "Each candidate with source=web-signal has a non-empty source_url field",
+        "ACT candidates have signal_intensity 4-5, OBSERVE candidates have intensity 1-2 (horizon-intensity alignment)"
+      ]
+    }
+  ]
+}

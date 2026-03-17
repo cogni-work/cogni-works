@@ -205,7 +205,8 @@ Read and parse the web research data you need — this keeps the orchestrator's 
 **If signals were loaded in Step 0.5:**
 
 - Group signals by dimension (4 groups)
-- Target: 40-60% web-sourced candidates
+- Target: 40-60% web-sourced candidates, ideally >= 50%
+- **Web-first generation:** For each cell, create candidates grounded in web signals FIRST, then fill remaining slots with training knowledge. This ensures web-sourced candidates aren't crowded out by training hypotheses. The reason: web-grounded candidates carry real source URLs and authority scores that survive into downstream skills (trend-report evidence enrichment, value-modeler solution blueprints), while training candidates are capped at low confidence.
 - Extract: signal name, keywords, source_url, freshness_date, authority score
 
 **If WEB_RESEARCH_AVAILABLE = false or no signals loaded:**
@@ -328,7 +329,9 @@ Add scoring fields to each candidate:
     uncertainty_penalty: 0.05
 ```
 
-### Step 5: Validate Generation
+### Step 5: Validate and Repair Generation
+
+Subcategory balance violations are the most common generation failure. The validation step below is not advisory — if balance fails, you must repair the specific cell before proceeding.
 
 **Structural Validation:**
 
@@ -336,17 +339,42 @@ Add scoring fields to each candidate:
 |-------|----------|------------------|
 | Total candidates | 60 | Regenerate missing cells |
 | Candidates per cell | 5 | Regenerate specific cell |
-| Per subcategory per horizon | MIN 1 | Regenerate with balance |
+| Per subcategory per cell | MIN 1 | **REPAIR: replace lowest-scored candidate in the over-represented subcategory with a new candidate from the missing subcategory** |
 | Duplicates within dimension | 0 | Remove and regenerate |
+
+**Subcategory Balance Repair Protocol:**
+
+After generating all 60 candidates, check each of the 12 cells (4 dimensions x 3 horizons):
+
+1. For each cell, list the subcategories present among its 5 candidates
+2. If any of the 3 subcategories for that dimension is missing:
+   a. Identify which subcategory has the most candidates in that cell
+   b. Among those over-represented candidates, pick the one with the lowest composite score
+   c. Regenerate that slot as a candidate from the missing subcategory
+   d. Re-score the replacement candidate using the same framework
+3. Re-validate after repair — if balance still fails after 2 repair attempts, log a warning but proceed
+
+This matters because downstream skills (value-modeler, trend-report) rely on complete subcategory coverage to build MECE investment themes. A missing subcategory creates a blind spot in the strategic analysis.
 
 **Score Validation:**
 
 | Check | Expected | Action if Failed |
 |-------|----------|------------------|
 | Score range | 0.0-1.0 | Recalculate |
-| ACT horizon intensity | 4 or 5 | Flag mismatch |
-| PLAN horizon intensity | 2, 3, or 4 | Flag mismatch |
-| OBSERVE horizon intensity | 1 or 2 | Flag mismatch |
+| ACT horizon intensity | 4 or 5 | **REPAIR: adjust intensity to 4** (see Horizon-Intensity Repair below) |
+| PLAN horizon intensity | 2, 3, or 4 | **REPAIR: clamp to nearest valid value** |
+| OBSERVE horizon intensity | 1 or 2 | **REPAIR: adjust intensity to 2** |
+
+**Horizon-Intensity Repair Protocol:**
+
+Ansoff signal intensity must align with time horizon — this is a core methodological constraint, not optional. After scoring all 60 candidates:
+
+1. For each ACT candidate with intensity < 4: set intensity = 4. If the trend genuinely has weak signals (intensity 1-3), it belongs in PLAN or OBSERVE, not ACT. A trend in the "act now" horizon must show strong, actionable signals.
+2. For each OBSERVE candidate with intensity > 2: set intensity = 2. Long-horizon trends are by definition weak/emerging signals. If a trend has strong signals (intensity 4-5), it should be in ACT or PLAN.
+3. For PLAN candidates: clamp to range [2, 4].
+4. After intensity repair, recalculate the composite score only if it included signal_intensity as a component. The Ansoff intensity is a classification, not a scoring input — so typically no recalculation is needed.
+
+This matters because downstream skills (value-modeler, trend-report) use horizon-intensity alignment to determine investment urgency. A misaligned candidate misleads strategic prioritization.
 
 **Source-Type Cap Validation:**
 

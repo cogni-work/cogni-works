@@ -119,6 +119,19 @@ REGION_REGULATORY_SEARCH = REGION_CONFIG.regulatory_search # region-appropriate 
 
 ### Step 1: Build Search Configurations
 
+**Search Priority Tiers:**
+
+Execute searches in priority order. If you hit rate limits, timeouts, or context pressure, sacrifice Tier 2 searches before Tier 1. The reason: Tier 1 produces authoritative signals (CRAAP authority 4-5) that downstream scoring weights heavily (15% Source Quality component). Tier 2 provides breadth but lower authority.
+
+**Tier 1 — Institutional Sources (execute first, 12 searches):**
+- 8 region-specific site searches (associations, research institutes, government)
+- 3 API queries (academic, patent, regulatory)
+- 1 subsector-specific association search using the mapping from `$CLAUDE_PLUGIN_ROOT/skills/trend-scout/references/dach-sources.md` Section 1 "Association Mapping by Subsector" (e.g., automotive → VDA + VDMA, healthcare → BVMed + vfa, banking → BdB + BITKOM). Build a `site:{primary_association} OR site:{secondary_association}` query for the subsector.
+
+**Tier 2 — Broader Market Sources (execute second, 20 searches):**
+- 16 standard searches (4 dimensions × 2 languages × 2 regions)
+- 4 funding signal searches
+
 Create search queries based on input parameters and region configuration:
 
 **16 Standard Searches (4 dimensions × 2 languages × 2 regions):**
@@ -179,11 +192,12 @@ WebSearch:
 
 **Parallel Execution:** Call multiple WebSearch tools in a single response for efficiency.
 
-**For each result, extract:**
+**For each result, extract and tag at extraction time:**
 - Signal name (from title)
 - Keywords (from snippet, max 3)
 - Source URL
 - Freshness indicator (date from URL/snippet or "recent")
+- **Authority score (1-5)** — assign immediately based on the source domain using the Authority Scoring table in Step 4. Tagging at extraction time (rather than after dedup) ensures that when two signals overlap, the deduplication step can keep the higher-authority version.
 
 ### Step 3: Execute API Queries (MANDATORY)
 
@@ -237,10 +251,10 @@ WebSearch: {REGION_REGULATORY_SEARCH}   # with {SUBSECTOR_EN} and {CURRENT_YEAR}
 ### Step 4: Aggregate and Deduplicate
 
 **Deduplication Rules:**
-- Same trend name (case-insensitive) = duplicate
-- Similar keywords (2+ overlap) = potential duplicate, keep most specific
+- Same trend name (case-insensitive) = duplicate → **keep the version with higher authority score**
+- Similar keywords (2+ overlap) = potential duplicate → keep most specific, prefer higher authority
 - Same source URL = duplicate
-- Cross-language equivalents: "AI Act" = "KI-Gesetz"
+- Cross-language equivalents: "AI Act" = "KI-Gesetz" → keep both if from different authority tiers, merge if same tier
 
 **Authority Scoring:**
 | Source Type | Authority Score |

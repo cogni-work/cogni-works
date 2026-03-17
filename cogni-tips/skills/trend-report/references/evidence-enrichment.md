@@ -33,32 +33,46 @@ For each trend candidate, match against raw signals by:
 
 ---
 
+## Region-Aware Search Construction
+
+The trend-report-writer loads region configuration from `region-authority-sources.json` using `MARKET_REGION` (default: "dach"). This determines which searches get region qualifiers (local market facts) and which stay global (best practices).
+
+| Query Type | Region Qualifier? | Rationale |
+|------------|-------------------|-----------|
+| Market size / adoption | YES — `{REGION_QUALIFIER_EN}` | Local market data matters (DACH vs US sizes differ 10x) |
+| Regulation / compliance | YES (via region-specific regulatory search) | Regulations are jurisdiction-bound |
+| Growth rate / statistics | NO — global search | Best practices and technology trends are international |
+| DE-language variant | Only if region has `region_qualifiers.de` | US/UK regions have no DE qualifier |
+| Salary / compensation | YES — from `salary_ranges` in region config | Salary levels vary dramatically by region |
+
+**Default behavior:** `MARKET_REGION="dach"` produces identical searches to the pre-regionalization pipeline (backward compatible).
+
 ## WebSearch Query Templates (Gap-Fill Only)
 
-Only executed for trends classified as `signal_partial` or `signal_none`.
+Only executed for trends classified as `signal_partial` or `signal_none`. The agent loads `REGION_QUALIFIER_EN` (and optionally `REGION_QUALIFIER_DE`) from `region-authority-sources.json[MARKET_REGION]`.
 
 ### Partial Gap (1 query)
 
 ```
-"{trend_name}" market size OR growth rate {CURRENT_YEAR} {SUBSECTOR_EN}
+"{trend_name}" market size OR growth rate {CURRENT_YEAR} {SUBSECTOR_EN} {REGION_QUALIFIER_EN}
 ```
 
 ### Full Gap (2-3 queries)
 
-**Query 1 — Market Size / Adoption:**
+**Query 1 — Market Size / Adoption (local fact → region qualifier):**
 ```
-"{trend_name}" market size {CURRENT_YEAR} {SUBSECTOR_EN}
+"{trend_name}" market size {CURRENT_YEAR} {SUBSECTOR_EN} {REGION_QUALIFIER_EN}
 ```
 
-**Query 2 — Growth / Statistics:**
+**Query 2 — Growth / Statistics (global best practices → NO qualifier):**
 ```
 "{trend_name}" growth rate statistics {SUBSECTOR_EN} {CURRENT_YEAR}
 ```
 
-**Query 3 (conditional) — DACH-specific:**
-Only if language is `de` or trend has DACH relevance:
+**Query 3 (conditional) — Regional language variant:**
+Only if region has a `region_qualifiers.de` entry (dach, de regions — NOT us, uk):
 ```
-"{trend_name_de}" Marktgröße Studie Deutschland {CURRENT_YEAR}
+"{trend_name_de}" Marktgröße Studie {REGION_QUALIFIER_DE} {CURRENT_YEAR}
 ```
 
 ### Blocked Domains

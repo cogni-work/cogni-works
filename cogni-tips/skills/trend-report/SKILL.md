@@ -125,6 +125,7 @@ Read [$CLAUDE_PLUGIN_ROOT/references/language-resolution.md]($CLAUDE_PLUGIN_ROOT
 REQUIRED (validate only — do NOT hold candidates or signals in context):
   {PROJECT_PATH}/.metadata/trend-scout-output.json
     → Extract: config.industry, config.research_topic
+    → Extract: config.market_region (default: "dach" if absent — older projects pre-regionalization)
     → Extract: project_language (top-level, NOT config.language)
     → Validate: tips_candidates.total >= 60, execution.workflow_state == "agreed"
     → Do NOT extract tips_candidates.items — agents read these themselves
@@ -242,6 +243,7 @@ Per agent:
     TIPS Role: {TIPS_ROLE}
     Project Path: {PROJECT_PATH}
     Language: {LANGUAGE}
+    Market Region: {MARKET_REGION}
     Industry EN/DE: {INDUSTRY_EN} / {INDUSTRY_DE}
     Subsector EN/DE: {SUBSECTOR_EN} / {SUBSECTOR_DE}
     Topic: {TOPIC}
@@ -291,7 +293,7 @@ If any `report-section-{dimension}.md` file is missing, log a WARNING. Phase 2 c
 **Summary of steps** (details in the reference):
 
 1. **Read value model** — Read `.logs/phase2-value-model.json` for investment themes, value chains, solution templates, orphan candidates, coverage data
-2. **Dispatch investment theme agents** — For each investment theme, dispatch a `cogni-tips:trend-report-investment-theme-writer` agent. All agents in a single message (parallel). Each agent self-loads evidence from disk, writes `report-investment-theme-{investment_theme_id}.md`, and returns compact JSON with word count, citation count, quality gate status, and top claims.
+2. **Dispatch investment theme agents** — For each investment theme, dispatch a `cogni-tips:trend-report-investment-theme-writer` agent with `MARKET_REGION: {MARKET_REGION}` in the prompt. All agents in a single message (parallel). Each agent self-loads evidence from disk, writes `report-investment-theme-{investment_theme_id}.md`, and returns compact JSON with word count, citation count, quality gate status, and top claims.
 3. **Collect agent results** — Validate all agents returned `ok: true` and quality gates passed. Retry once on failure.
 4. **Write executive summary** — Read ALL `report-investment-theme-{investment_theme_id}.md` files, then synthesize a flat Zusammenfassung (no subsections, no tables — numbered investment theme list using thesis headings + punchy closing paragraph). Write `report-header.md`.
 5. **Write claims registry** — Read 4 `claims-{dimension}.json` files once, map claims to investment themes via value model, write `report-claims-registry.md`

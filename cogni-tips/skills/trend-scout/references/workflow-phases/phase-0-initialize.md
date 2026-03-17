@@ -161,10 +161,12 @@ SUBSECTOR_SLUG=$(echo "$SELECTED_MARKET" | jq -r '.tips_alignment.matched_subsec
 
 PORTFOLIO_SOURCE_SLUG=$(echo "$SELECTED_PROJECT" | jq -r '.slug')
 PORTFOLIO_MARKET_SLUG=$(echo "$SELECTED_MARKET" | jq -r '.slug')
+MARKET_REGION=$(echo "$SELECTED_MARKET" | jq -r '.region // "dach"')
 
 log_conditional INFO "{PORTFOLIO_DISCOVERY_SELECTED}"
 log_conditional INFO "Industry pre-populated: $INDUSTRY_EN / $INDUSTRY_DE"
 log_conditional INFO "Subsector pre-populated: $SUBSECTOR_EN / $SUBSECTOR_DE"
+log_conditional INFO "Market region: $MARKET_REGION"
 
 # SKIP Step 0.2 and Step 0.3 — industry is already resolved
 ```
@@ -174,6 +176,7 @@ log_conditional INFO "Subsector pre-populated: $SUBSECTOR_EN / $SUBSECTOR_DE"
 ```bash
 PORTFOLIO_SOURCE_SLUG=""
 PORTFOLIO_MARKET_SLUG=""
+MARKET_REGION="dach"
 # Fall through to Step 0.2
 ```
 
@@ -464,6 +467,9 @@ if [[ -n "$PORTFOLIO_SOURCE_SLUG" && -n "$PORTFOLIO_MARKET_SLUG" ]]; then
   METADATA_ARGS+=(--portfolio-slug "$PORTFOLIO_SOURCE_SLUG" --portfolio-market "$PORTFOLIO_MARKET_SLUG")
 fi
 
+# Append market region (always — defaults to "dach" if not portfolio-sourced)
+METADATA_ARGS+=(--market-region "$MARKET_REGION")
+
 METADATA_ARGS+=(--json)
 
 METADATA_OUTPUT=$(bash "$METADATA_SCRIPT" "${METADATA_ARGS[@]}")
@@ -496,6 +502,7 @@ log_conditional INFO "Project: ${PROJECT_PATH}"
 log_conditional INFO "Language: ${PROJECT_LANGUAGE}"
 log_conditional INFO "Industry: ${INDUSTRY_EN} / ${INDUSTRY_DE}"
 log_conditional INFO "Subsector: ${SUBSECTOR_EN} / ${SUBSECTOR_DE}"
+log_conditional INFO "Market region: ${MARKET_REGION}"
 log_conditional INFO "Topic: ${RESEARCH_TOPIC}"
 ```
 
@@ -533,7 +540,8 @@ SKIP_TO_PHASE=1  # Proceed to web research
 - [ ] RESEARCH_TOPIC captured
 - [ ] PROJECT_SLUG generated
 - [ ] Project structure initialized in workspace root (`$PROJECT_AGENTS_OPS_ROOT` or current directory)
-- [ ] trend-scout-output.json updated with industry metadata (and portfolio_source if applicable)
+- [ ] MARKET_REGION extracted from portfolio market (or defaulted to "dach")
+- [ ] trend-scout-output.json updated with industry metadata, market_region, and portfolio_source (if applicable)
 - [ ] Logging initialized
 - [ ] WEB_RESEARCH_ENABLED set
 
@@ -558,6 +566,7 @@ SKIP_TO_PHASE=1  # Proceed to web research
 | WEB_RESEARCH_ENABLED | Whether to run web research | `true` |
 | PORTFOLIO_SOURCE_SLUG | Portfolio project slug (empty if manual) | `acme-corp` |
 | PORTFOLIO_MARKET_SLUG | Selected market slug (empty if manual) | `mid-market-saas-dach` |
+| MARKET_REGION | Target market region code (from portfolio or default) | `dach` |
 | SKIP_TO_PHASE | Next phase to execute | `1` |
 
 ---

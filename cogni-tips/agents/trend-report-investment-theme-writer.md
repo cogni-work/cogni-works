@@ -39,6 +39,8 @@ You receive these from trend-report Phase 2:
 - **SOLUTION_TEMPLATES** — JSON array of this theme's solution templates: `[{ st_id, name, category, enabler_type }]` (may be empty)
 - **PORTFOLIO_PROVIDER** — Display name of the portfolio provider (e.g., "T-Systems", "Telekom MMS"). Sourced from `portfolio-context.json` → `portfolio_slug` resolved to a display name. Used in the portfolio close sentence. Empty string if no portfolio context.
 - **PORTFOLIO_PRODUCTS** — JSON array of distinct portfolio products grounding this theme's solution templates: `[{ product_name, product_url }]` (may be empty). Derived from `portfolio_grounding` on each solution template. `product_url` may be null if no URL is available.
+- **SOLUTION_PRICING** — JSON array of solution pricing data for this theme's grounded features: `[{ feature_slug, market_slug, solution_type, pricing, cost_model, implementation }]` (may be empty). Extracted from portfolio solution files by the orchestrator. Used in Why Pay for proactive investment figures. See "Solution costing data" in Why Pay section.
+- **MARKET_REGION** — Target market region code (e.g., "dach", "de", "us", "uk"). Default: "dach". Used to load region-specific currency and organization size references from `$CLAUDE_PLUGIN_ROOT/skills/trend-report/references/region-authority-sources.json`.
 - **LABELS** — JSON object with i18n labels for section headings
 - **THEME_INDEX** — The 1-based display index for this theme in the report
 - **NARRATIVE_ARC_PATH** — (Optional) Path to `theme-thesis/arc-definition.md` from cogni-narrative
@@ -51,6 +53,8 @@ Enriched evidence and claims are NOT passed in the prompt — you load them from
 ### Step 0: Parse Inputs
 
 Parse all parameters from the prompt. Extract the full set of `candidate_ref` values from all value chains (trend + implications + possibilities + foundation_requirements). Deduplicate — a candidate may appear in multiple chains.
+
+Load region configuration from `$CLAUDE_PLUGIN_ROOT/skills/trend-report/references/region-authority-sources.json` using `MARKET_REGION` (fall back to `_default` if not found). Extract `currency` and `org_size_reference` for use in Why Pay localization.
 
 ### Step 1: Determine Which Dimensions to Read
 
@@ -282,39 +286,50 @@ improvements from delay. Specific € range. Draw from P-candidate evidence.
 **Synthesis:** "Delay costs [total] over 3 years. Proactive investment: [amount].
 Action costs less than inaction by a factor of [N]x."
 
-**Localization rule:** Every cost dimension needs a specific € range localized to
-the target reader's organization size (e.g., "€3-4M for a mid-size Netzbetreiber
-over 3 years"), not global averages from analyst reports. If enriched evidence
-contains a global figure (e.g., "$370M average legacy cost"), translate it to the
-target context: "For a German mid-size utility with €500M revenue, this translates
-to €X-YM." Vague framing like "dreistelliger Millionen-Bereich" is too imprecise —
-the CxO needs numbers they can put in a board presentation.
+**Localization rule:** Every cost dimension needs a specific range in the region's
+currency (from `region-authority-sources.json[MARKET_REGION]`) localized to
+the target reader's organization size (use `org_size_reference` from region config,
+e.g., "mid-size organization with €500M revenue" for dach, "mid-size organization
+with $500M revenue" for us), not global averages from analyst reports. If enriched
+evidence contains a figure in a different currency or global scope, translate it to
+the target context using the region's currency and org size reference. Vague framing
+like "dreistelliger Millionen-Bereich" is too imprecise — the CxO needs numbers
+they can put in a board presentation.
 
 **Proactive investment realism check:** The proactive investment figure must be
-realistic for the scope of capabilities described. A theme with 3 major platform
-capabilities (e.g., Digital Twin + Grid-Enhancing Technologies + Sovereign Cloud)
-cannot have a proactive investment below €5M for a €500M-revenue utility — the
-real cost of enterprise platform implementations, system integration, staffing,
-and change management makes sub-€5M figures incredible to a CFO. Use these
-floor estimates per capability type:
-- Enterprise platform (Digital Twin, CDP, SIEM): €2-4M each
-- Integration/migration project: €1-3M each
-- Upskilling/change program: €0.5-1.5M each
-- Cloud infrastructure setup: €1-2M
-When a theme has 3 capabilities, the proactive investment is typically €5-12M,
-not €1-2M. A lower ratio (2x instead of 4x) with credible numbers is more
-persuasive to a board than an inflated ratio with understated investment.
+derived from portfolio solution pricing data (see "Solution costing data" above).
+Sum the relevant pricing tiers from the solution files grounding this theme's
+capabilities. A lower ratio (2x instead of 4x) with credible, portfolio-backed
+numbers is more persuasive to a board than an inflated ratio with understated
+investment. If portfolio solution data is unavailable, use only figures from
+enriched evidence — never invent cost estimates.
 
-**Salary and compensation data:** For DACH-targeted reports (LANGUAGE == "de"),
-use German market salary data only. Do NOT convert US salary figures (USD) to
-EUR and present them as German market rates. German ML/AI engineer compensation
-ranges: €80-110K (mid-level), €110-140K (senior), €140-170K (lead/principal).
-If enriched evidence contains only US salary data, either find the German
-equivalent in the evidence or use the German ranges above. Never cite USD
-salary figures in a German-language report.
+**Solution costing data:** All cost figures in the Why Pay section must be
+derived from the `SOLUTION_PRICING` input parameter (portfolio solution data
+passed by the orchestrator), not from hardcoded estimates or salary ranges.
 
-Quantify at least 2 of 3 dimensions with specific € ranges. The third may be
-qualitative if evidence is thin. Close with a simple, undeniable ratio.
+Each entry in `SOLUTION_PRICING` contains:
+- `pricing` — tier-based pricing (proof_of_value, small, medium, large) with
+  price, currency, and scope per tier
+- `cost_model` — role rates, effort breakdowns, internal costs, margins
+- `implementation` — phased delivery with durations
+
+**Derive proactive investment:** Sum the relevant pricing tiers across
+the solutions grounding this theme's capabilities. Use the tier that matches
+the `org_size_reference` from region config (e.g., "medium" tier for
+mid-size organizations).
+
+**Currency:** Use the currency from the solution pricing data (which
+already matches the market region). If solution pricing is in a different
+currency than the region's currency, convert and note the original.
+
+Do NOT use hardcoded salary ranges, floor estimates per capability type,
+or invented cost figures. If `SOLUTION_PRICING` is empty, derive cost
+estimates from the enriched evidence only — never fabricate numbers.
+
+Quantify at least 2 of 3 dimensions with specific ranges in the region's
+currency. The third may be qualitative if evidence is thin. Close with a
+simple, undeniable ratio.
 
 HEADING: After writing, extract the closing ratio as a declarative sentence.
 Example: "Verzögern kostet 3x mehr als Handeln — €6,9M vs. €2,3M über drei Jahre".}
@@ -402,12 +417,12 @@ Now replace the placeholder heading markers in the written file with the actual 
 - **Why Change:** PSB structure applied, Contrast Structure used, ends with competitive implication
 - **Why Now:** ≥2 forcing functions with specific timelines, before/after contrast, window closing statement. FF1 should be a regulatory deadline if evidence contains one. Each forcing function should be specific to this theme — reusing the same deadline (e.g., EU AI Act August 2026) as the primary forcing function in multiple themes makes the report feel repetitive and weakens urgency. If the same deadline applies across themes, reference it briefly ("alongside the EU AI Act deadline") but lead with a theme-specific forcing function.
 - **Why You:** IS-DOES-MEANS logic applied (invisibly) to ≥1 solution template or P-candidate. You-Phrasing for outcomes. No ST-IDs, no "Power Position", no visible IS/DOES/MEANS labels — flowing prose only. No solution table. Portfolio close present (if PORTFOLIO_PRODUCTS non-empty). Heading uses "Lösungen"/"solutions" and ties back to urgency.
-- **Why Pay:** ≥2 cost dimensions with specific localized EUR ranges (not global averages), 3-year horizon, closing ratio comparison. Every cost dimension should contain EUR amounts and reference a specific organization size (e.g., "für einen Versorger mit €500M Umsatz") — CDO and CFO readers immediately distrust global averages or unsized figures because they can't present them to their board. The proactive investment figure should be realistic for the scope of capabilities described — understating to inflate the ratio destroys credibility when readers do their own math.
+- **Why Pay:** ≥2 cost dimensions with specific localized ranges in the region's currency (not global averages), 3-year horizon, closing ratio comparison. Every cost dimension should contain monetary amounts in the region's currency and reference a specific organization size (from `org_size_reference` in region config) — CDO and CFO readers immediately distrust global averages or unsized figures because they can't present them to their board. The proactive investment figure should be realistic for the scope of capabilities described — understating to inflate the ratio destroys credibility when readers do their own math.
 - Hook opens with quantified surprise from theme evidence
 - **Headings:** H2 is thesis statement (not topic label), all H3s are message-driven (not arc element names), each contains a number/date/entity
 - **Structural integrity:** The output file must contain exactly ONE `## ` line (the H2 theme thesis heading). All other headings within the theme section must be `### ` (H3) or `#### ` (H4). If you find multiple `## ` lines in your output, demote the extras to `### `.
 - **No solution table:** The output must NOT contain any markdown table with solution/capability listings. If the output contains `| # |` followed by solution names, `quality_gate_pass` = false. Remove the table and present capabilities as prose.
-- **Currency consistency:** All monetary figures must be in EUR. If source data is in USD, convert and note the original. Do not mix EUR and USD in the same section.
+- **Currency consistency:** All monetary figures must be in the region's currency (from `region-authority-sources.json[MARKET_REGION].currency` — EUR for dach/de, USD for us, GBP for uk). If source data is in a different currency, convert and note the original. Do not mix currencies in the same section.
 
 **Fallback quality gate (no arc):** After writing, verify:
 - Word count ≥250 words (target 300-500). If under 250, expand with additional evidence.

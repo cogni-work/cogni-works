@@ -72,12 +72,21 @@ Per agent:
     PORTFOLIO_PROVIDER: {Display name from portfolio-context.json, e.g. "T-Systems".
       Resolve portfolio_slug to display name (capitalize, replace hyphens).
       Empty string if no portfolio-context.json.}
+    MARKET_REGION: {MARKET_REGION from config, default "dach"}
     PORTFOLIO_PRODUCTS: {JSON array of distinct portfolio products grounding this theme's STs.
       Built by collecting portfolio_grounding[].product_slug from all STs in this theme,
       deduplicating by product_slug, and resolving each to { product_name, product_url }.
       product_name comes from portfolio-context.json products[].name (matched by slug).
       product_url comes from portfolio-context.json products[].url (if available, else null).
       May be empty [] if no STs or no portfolio_grounding.}
+    SOLUTION_PRICING: {JSON array of solution pricing data for this theme's grounded features.
+      Built by: for each unique feature_slug in this theme's STs' portfolio_grounding[],
+      read the solution file from the portfolio project directory
+      (at {PORTFOLIO_PATH}/solutions/{feature_slug}--{market_slug}.json) and extract:
+      { feature_slug, market_slug, solution_type, pricing, cost_model, implementation }.
+      May be empty [] if no portfolio grounding or solution files not found.
+      The orchestrator resolves the portfolio project path from portfolio-context.json →
+      portfolio_slug → workspace discovery.}
     LABELS: {JSON object with relevant i18n labels:
       EXECUTIVE_SPONSOR, INVESTMENT_THESIS, VALUE_CHAINS, TREND,
       IMPLICATION, POSSIBILITY, FOUNDATION, SOLUTION_TEMPLATES,

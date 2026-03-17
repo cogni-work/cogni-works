@@ -31,6 +31,7 @@ You receive these from trend-report:
 - **INDUSTRY_EN / INDUSTRY_DE** — Industry name in both languages
 - **SUBSECTOR_EN / SUBSECTOR_DE** — Subsector name in both languages
 - **TOPIC** — Research focus topic
+- **MARKET_REGION** — Target market region code (e.g., "dach", "de", "us", "uk"). Default: "dach". Used to load region-specific search qualifiers from `$CLAUDE_PLUGIN_ROOT/skills/trend-report/references/region-authority-sources.json`.
 - **LABELS** — JSON object with i18n labels for report headings
 
 Candidates and raw signals are NOT passed in the prompt — you load them from disk in Step 0.5.
@@ -67,17 +68,27 @@ If raw signals are available (not "none"), scan for matches per trend candidate:
    - `signal_partial`: Matched signals exist but contain no specific numbers, or contain numbers without a source URL. Always run at least 1 WebSearch to find quantitative backing.
    - `signal_none`: No matching signals found for this trend. Run 2-3 WebSearches.
 
-#### Step 1b: Targeted WebSearches for Gaps Only
+#### Step 1b: Load Region Configuration
+
+Load `$CLAUDE_PLUGIN_ROOT/skills/trend-report/references/region-authority-sources.json`. Look up `MARKET_REGION` (fall back to `_default` if not found).
+
+```bash
+REGION_CONFIG = region-authority-sources.json[MARKET_REGION] || region-authority-sources.json["_default"]
+REGION_QUALIFIER_EN = REGION_CONFIG.region_qualifiers.en   # e.g., "Germany Austria Switzerland"
+REGION_QUALIFIER_DE = REGION_CONFIG.region_qualifiers.de   # may be absent for non-DE regions
+```
+
+#### Step 1c: Targeted WebSearches for Gaps Only
 
 - **`signal_sufficient`** — Skip WebSearch. Use signal URLs as citations.
-- **`signal_partial`** — 1 targeted search:
+- **`signal_partial`** — 1 targeted search (local market fact → append region qualifier):
   ```
-  "{trend_name}" market size OR growth rate {CURRENT_YEAR} {SUBSECTOR_EN}
+  "{trend_name}" market size OR growth rate {CURRENT_YEAR} {SUBSECTOR_EN} {REGION_QUALIFIER_EN}
   ```
 - **`signal_none`** — 2-3 searches:
-  - `"{trend_name}" market size {CURRENT_YEAR} {SUBSECTOR_EN}`
-  - `"{trend_name}" growth rate statistics {SUBSECTOR_EN} {CURRENT_YEAR}`
-  - (if language is `de`) `"{trend_name_de}" Marktgröße Studie Deutschland {CURRENT_YEAR}`
+  - Query 1 (market size — local fact → append region qualifier): `"{trend_name}" market size {CURRENT_YEAR} {SUBSECTOR_EN} {REGION_QUALIFIER_EN}`
+  - Query 2 (growth rate — global best practices → NO region qualifier): `"{trend_name}" growth rate statistics {SUBSECTOR_EN} {CURRENT_YEAR}`
+  - Query 3 (conditional — only if `REGION_QUALIFIER_DE` exists for this region): `"{trend_name_de}" Marktgröße Studie {REGION_QUALIFIER_DE} {CURRENT_YEAR}`
 
 Always block: `pinterest.com`, `facebook.com`, `instagram.com`, `tiktok.com`, `reddit.com`.
 
@@ -85,7 +96,7 @@ Call multiple WebSearch tools in a single response for efficiency — process ga
 
 **Minimum search budget:** You MUST execute at least 8 WebSearches per dimension, even when raw signals are available. Signals from trend-scout are often qualitative (topic mentions without hard numbers). If you classify more than 3 trends as `signal_sufficient`, you are being too lenient — re-examine and downgrade borderline cases to `signal_partial`. Most trends benefit from at least one fresh search to find current-year quantitative data. A dimension with 13 trends should typically have 10-15 searches.
 
-#### Step 1c: Merge Evidence
+#### Step 1d: Merge Evidence
 
 Combine signal-sourced and search-sourced evidence into a single per-trend pool. Both are valid citations from real web sources.
 

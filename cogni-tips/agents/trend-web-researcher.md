@@ -42,6 +42,11 @@ You will receive these parameters from trend-scout:
 <research_topic>{{RESEARCH_TOPIC}}</research_topic>
 <!-- Optional focus topic for the research -->
 
+<market_region>{{MARKET_REGION}}</market_region>
+<!-- Target market region code (e.g., "dach", "de", "us", "uk"). Default: "dach".
+     Used to load region-specific search qualifiers, site searches, and regulatory sources
+     from region-authority-sources.json. Falls back to "_default" (= dach) if not found. -->
+
 **Your Objective:**
 
 1. Execute 32 WebSearch queries (16 standard + 8 DACH site-specific + 4 funding + 4 job market)
@@ -99,9 +104,22 @@ Execute this 5-step research workflow:
 
 Replace all year placeholders in the search templates below with these derived values.
 
+### Step 0.5: Load Region Configuration
+
+Load region-specific search parameters from `$CLAUDE_PLUGIN_ROOT/skills/trend-report/references/region-authority-sources.json`.
+
+```bash
+REGION_CONFIG = region-authority-sources.json[MARKET_REGION]
+# Falls back to region-authority-sources.json["_default"] if MARKET_REGION not found
+REGION_QUALIFIER_EN = REGION_CONFIG.region_qualifiers.en   # e.g., "Germany Austria Switzerland"
+REGION_QUALIFIER_DE = REGION_CONFIG.region_qualifiers.de   # e.g., "Deutschland Österreich Schweiz" (may be absent for non-DE regions)
+REGION_SITE_SEARCHES = REGION_CONFIG.site_searches         # 8 region-specific site searches
+REGION_REGULATORY_SEARCH = REGION_CONFIG.regulatory_search # region-appropriate regulatory query
+```
+
 ### Step 1: Build Search Configurations
 
-Create 20 search queries based on input parameters:
+Create search queries based on input parameters and region configuration:
 
 **16 Standard Searches (4 dimensions × 2 languages × 2 regions):**
 
@@ -114,22 +132,17 @@ Create 20 search queries based on input parameters:
 
 For each dimension:
 - EN-global: English query, no region filter
-- EN-dach: English query + "Germany Austria Switzerland"
-- DE-global: German query
-- DE-dach: German query + "Deutschland Österreich Schweiz"
+- EN-regional: English query + `{REGION_QUALIFIER_EN}` (e.g., "Germany Austria Switzerland" for dach, "United States" for us)
+- DE-global: German query (only if `REGION_QUALIFIER_DE` exists for this region)
+- DE-regional: German query + `{REGION_QUALIFIER_DE}` (only if `REGION_QUALIFIER_DE` exists)
 
-**8 DACH Site-Specific Searches:**
+If the region has no DE qualifier (e.g., "us", "uk"), only generate 8 standard searches (EN-global + EN-regional × 4 dimensions) instead of 16.
 
-| # | Dimension | Query |
-|---|-----------|-------|
-| 17 | externe-effekte | `site:vdma.org {SUBSECTOR_DE} Trends Regulierung {CURRENT_YEAR}` |
-| 18 | externe-effekte | `site:bitkom.org {SUBSECTOR_DE} Digitalisierung Politik {CURRENT_YEAR}` |
-| 19 | neue-horizonte | `site:fraunhofer.de {SUBSECTOR_DE} Innovation Studie {CURRENT_YEAR}` |
-| 20 | neue-horizonte | `site:zukunftsinstitut.de Megatrend {RESEARCH_TOPIC} {CURRENT_YEAR}` |
-| 21 | digitale-wertetreiber | `site:handelsblatt.com {SUBSECTOR_DE} Trend Digitalisierung {CURRENT_YEAR}` |
-| 22 | digitale-wertetreiber | `site:zvei.org {SUBSECTOR_DE} Innovation Industrie {CURRENT_YEAR}` |
-| 23 | digitales-fundament | `site:rolandberger.com {SUBSECTOR_EN} trends Germany {CURRENT_YEAR}` |
-| 24 | digitales-fundament | `site:mckinsey.com {SUBSECTOR_EN} Germany digital {CURRENT_YEAR}` |
+**8 Region-Specific Site Searches:**
+
+Loaded from `REGION_SITE_SEARCHES` in the region configuration. Each entry specifies a `dimension` and `query` template. Replace `{SUBSECTOR_DE}`, `{SUBSECTOR_EN}`, `{RESEARCH_TOPIC}`, and `{CURRENT_YEAR}` placeholders in each query.
+
+For DACH regions, these target German industry associations and media (VDMA, Bitkom, Fraunhofer, Handelsblatt, etc.). For US, they target NIST, Congress.gov, HBR, WSJ, etc. For UK, they target gov.uk, UKRI, FT, etc.
 
 **4 Funding Signal Searches:**
 
@@ -192,17 +205,25 @@ WebSearch: site:patents.google.com "{SUBSECTOR_EN}" patent {PREVIOUS_YEAR} {CURR
 Extract: Patent titles, filing dates, and assignee companies from search results. Identify dominant players and emerging technologies.
 ```
 
-**Regulatory (EUR-Lex - FREE):**
+**Regulatory (Region-Aware):**
 
-Focus on key EU regulations with approaching deadlines:
+Use `REGION_REGULATORY_SEARCH` from the region configuration to build the regulatory search query.
+
+For **EU/DACH/DE regions** — focus on key EU regulations with approaching deadlines:
 - AI Act (Aug 2025/2026) - affects AI systems
 - Cyber Resilience Act (Dec 2027) - IoT/software
 - DORA (Jan 2025) - financial sector
 - NIS2 (Oct 2024) - critical infrastructure
 - Data Act (Sep 2025) - data access rights
 
+For **US region** — search `site:federalregister.gov` for federal regulations and compliance deadlines.
+
+For **UK region** — search `site:gov.uk` for UK-specific regulation and policy.
+
+For **other regions** — use generic regulatory search from `REGION_REGULATORY_SEARCH`.
+
 ```text
-WebSearch: "EU regulation" "{SUBSECTOR_EN}" compliance deadline 2025 2026
+WebSearch: {REGION_REGULATORY_SEARCH}   # with {SUBSECTOR_EN} and {CURRENT_YEAR} placeholders replaced
 ```
 
 **API Fallback Protocol:**

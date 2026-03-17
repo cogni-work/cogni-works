@@ -2,7 +2,7 @@
 
 ## HTML Template
 
-The HTML export uses a self-contained template with inline CSS:
+The HTML export uses a self-contained template with CSS custom properties. When `output/design-variables.json` exists, substitute theme tokens into the `:root` block. When no design variables are available, the fallback values (after the `|` pipe) produce the same clean default styling as before.
 
 ```html
 <!DOCTYPE html>
@@ -11,16 +11,116 @@ The HTML export uses a self-contained template with inline CSS:
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{report_title}</title>
+  {google_fonts_import}
   <style>
-    body { font-family: Georgia, serif; max-width: 800px; margin: 0 auto; padding: 2rem; line-height: 1.6; color: #333; }
-    h1 { border-bottom: 2px solid #333; padding-bottom: 0.5rem; }
-    h2 { color: #555; margin-top: 2rem; }
-    a { color: #0066cc; }
-    blockquote { border-left: 3px solid #ccc; padding-left: 1rem; color: #666; }
-    .source-ref { font-size: 0.85em; color: #888; }
-    .toc { background: #f8f8f8; padding: 1rem; border-radius: 4px; margin: 1rem 0; }
-    .toc ul { list-style: none; padding-left: 1rem; }
-    .meta { color: #888; font-size: 0.9em; margin-bottom: 2rem; }
+    :root {
+      --color-bg: {colors.background|#ffffff};
+      --color-surface: {colors.surface|#f8f8f8};
+      --color-text: {colors.text|#333333};
+      --color-text-muted: {colors.text_muted|#888888};
+      --color-accent: {colors.accent|#0066cc};
+      --color-link: {colors.link|#0066cc};
+      --color-link-visited: {colors.link_visited|#004499};
+      --color-border: {colors.border|#cccccc};
+      --color-toc-bg: {colors.toc_background|#f8f8f8};
+      --color-blockquote-border: {colors.blockquote_border|#cccccc};
+      --color-source-ref: {colors.source_ref|#888888};
+      --font-headers: {fonts.headers|Georgia, serif};
+      --font-body: {fonts.body|Georgia, serif};
+      --font-mono: {fonts.mono|monospace};
+      --radius: {radius|4px};
+    }
+    body {
+      font-family: var(--font-body);
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem;
+      line-height: 1.6;
+      color: var(--color-text);
+      background: var(--color-bg);
+    }
+    h1 {
+      font-family: var(--font-headers);
+      border-bottom: 2px solid var(--color-text);
+      padding-bottom: 0.5rem;
+    }
+    h2 {
+      font-family: var(--font-headers);
+      color: var(--color-text);
+      margin-top: 2rem;
+    }
+    h3 {
+      font-family: var(--font-headers);
+    }
+    a {
+      color: var(--color-link);
+      text-decoration: underline;
+    }
+    a:visited {
+      color: var(--color-link-visited);
+    }
+    blockquote {
+      border-left: 3px solid var(--color-blockquote-border);
+      padding-left: 1rem;
+      color: var(--color-text-muted);
+    }
+    .source-ref {
+      font-size: 0.85em;
+      color: var(--color-source-ref);
+    }
+    .source-ref a {
+      color: var(--color-link);
+      text-decoration: underline;
+    }
+    .toc {
+      background: var(--color-toc-bg);
+      padding: 1rem;
+      border-radius: var(--radius);
+      margin: 1rem 0;
+    }
+    .toc ul {
+      list-style: none;
+      padding-left: 1rem;
+    }
+    .toc a {
+      color: var(--color-link);
+      text-decoration: underline;
+    }
+    .meta {
+      color: var(--color-text-muted);
+      font-size: 0.9em;
+      margin-bottom: 2rem;
+    }
+    code {
+      font-family: var(--font-mono);
+      background: var(--color-surface);
+      padding: 0.15em 0.3em;
+      border-radius: 3px;
+      font-size: 0.9em;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 1rem 0;
+    }
+    th, td {
+      border: 1px solid var(--color-border);
+      padding: 0.5rem 0.75rem;
+      text-align: left;
+    }
+    th {
+      background: var(--color-surface);
+      font-family: var(--font-headers);
+    }
+
+    @media print {
+      body { max-width: 100%; padding: 1rem; font-size: 11pt; }
+      .toc { page-break-after: always; }
+      h2 { page-break-before: always; }
+      a { color: var(--color-link); text-decoration: underline; }
+      a[href]::after { content: " (" attr(href) ")"; font-size: 0.8em; color: var(--color-text-muted); }
+      .source-ref { font-size: 0.75em; }
+    }
   </style>
 </head>
 <body>
@@ -29,12 +129,33 @@ The HTML export uses a self-contained template with inline CSS:
 </html>
 ```
 
+The `{google_fonts_import}` placeholder is either a `<style>@import url(...);</style>` tag from the design-variables `google_fonts_import` field, or empty if no theme is selected or the theme uses system fonts.
+
+Each `{token|fallback}` notation means: use the design variable value if present, otherwise use the hardcoded fallback. Values are baked in at generation time — this is not a runtime mechanism.
+
+## Design Variables Integration
+
+When `<project-dir>/output/design-variables.json` exists, load it and inject tokens into the HTML template:
+
+1. Read the JSON file
+2. Extract `colors`, `fonts`, `google_fonts_import`, `radius`
+3. Compute report-specific derived tokens if not already present:
+   - `link` = `accent` (darken if contrast ratio < 4.5:1 against `background`)
+   - `link_visited` = darken `link` by 15%
+   - `toc_background` = `surface`
+   - `blockquote_border` = `border`
+   - `source_ref` = `text_muted`
+4. Substitute values into the HTML template's `:root` custom properties
+5. If `google_fonts_import` is non-empty, wrap in `<style>` tag and place in `<head>`
+
+When no `design-variables.json` exists, use the fallback values directly (identical to the previous hardcoded template).
+
 ## Markdown to HTML Conversion
 
 Use Python stdlib `html` module for escaping, plus simple regex-based markdown conversion:
 - `# heading` → `<h1>heading</h1>`
 - `**bold**` → `<strong>bold</strong>`
-- `[text](url)` → `<a href="url">text</a>`
+- `[text](url)` → `<a href="url">text</a>` — preserves clickable links
 - `- item` → `<li>item</li>`
 - Blank line → `<p>` paragraph break
 
@@ -54,6 +175,8 @@ If `weasyprint` is available:
 from weasyprint import HTML
 HTML(filename='output/report.html').write_pdf('output/report.pdf')
 ```
+
+Weasyprint preserves `<a href>` elements as clickable PDF hyperlinks automatically.
 
 Fallback: inform user to open HTML in browser and use "Print to PDF".
 
@@ -91,21 +214,6 @@ def generate_toc(html_content: str) -> str:
 
 Insert the ToC after the `.meta` div and before the first `<h2>`.
 
-## Print CSS
-
-Add this `@media print` block to the `<style>` section for clean PDF output:
-
-```css
-@media print {
-  body { max-width: 100%; padding: 1rem; font-size: 11pt; }
-  .toc { page-break-after: always; }
-  h2 { page-break-before: always; }
-  a { color: #333; text-decoration: none; }
-  a[href]::after { content: " (" attr(href) ")"; font-size: 0.8em; color: #666; }
-  .source-ref { font-size: 0.75em; }
-}
-```
-
 ## DOCX Generation
 
 If `pandoc` is available, convert markdown to Word format:
@@ -117,6 +225,8 @@ pandoc output/report.md -o output/report.docx \
   --highlight-style=tango
 ```
 
+Pandoc preserves `[text](url)` markdown links as clickable Word hyperlinks.
+
 Optional: use a reference docx for custom styling:
 ```bash
 pandoc output/report.md -o output/report.docx \
@@ -124,6 +234,21 @@ pandoc output/report.md -o output/report.docx \
   --to docx \
   --reference-doc=template.docx
 ```
+
+### Themed DOCX
+
+When `design-variables.json` exists and `document-skills:docx` is available, pass theme tokens as parameters:
+- `heading_font`: fonts.headers
+- `body_font`: fonts.body
+- `accent_color`: colors.accent (used for heading color)
+- `link_color`: colors.link (used for hyperlink color)
+
+For pandoc fallback, generate a minimal `reference.docx` with:
+- Custom heading styles using the theme's header font and accent color
+- Body text using the theme's body font
+- Hyperlink character style preserving the link color
+
+If neither `document-skills:docx` nor reference doc generation is available, plain pandoc output without theming is acceptable — the user still gets a working Word document with clickable links.
 
 Check availability:
 ```bash
@@ -138,11 +263,11 @@ Use this decision logic to select the best available converter:
 
 ```
 1. weasyprint available?
-   → Yes: HTML → PDF via weasyprint (best quality, supports print CSS)
+   → Yes: HTML → PDF via weasyprint (best quality, supports print CSS, preserves hyperlinks)
    → No: continue
 
 2. pandoc available?
-   → Yes: MD → DOCX via pandoc (for Word format)
+   → Yes: MD → DOCX via pandoc (for Word format, preserves clickable links)
    → Also: MD → HTML via pandoc (alternative to markdown package)
    → No: continue
 

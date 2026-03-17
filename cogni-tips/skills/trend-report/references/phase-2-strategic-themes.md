@@ -35,6 +35,10 @@ The `actions_md` field in enriched-trends contains semicolon-separated action ke
 
 Do NOT read the enriched-trends or claims JSON files at this step. Investment theme agents self-load those files, filtered to their own candidate_refs. The orchestrator only reads claims files later in Step 2.6 for the claims registry.
 
+**Portfolio product resolution:** If `{PROJECT_PATH}/portfolio-context.json` exists, read it and:
+1. Extract `portfolio_slug` → resolve to display name (e.g., `"t-systems"` → `"T-Systems"`). This becomes `PORTFOLIO_PROVIDER`.
+2. Build a `product_slug → { product_name, product_url }` lookup from `products[]`. This is used in Step 2.2 to resolve `PORTFOLIO_PRODUCTS` for each investment theme agent. `product_url` comes from `products[].url` if available (may be null).
+
 ---
 
 ## Step 2.2: Dispatch Investment Theme Agents
@@ -65,6 +69,15 @@ Per agent:
       possibilities, foundation_requirements — each with candidate_ref and name}
     SOLUTION_TEMPLATES: {JSON array of STs where investment_theme_ref == investment_theme_id.
       Include: st_id, name, category, enabler_type. May be empty []}
+    PORTFOLIO_PROVIDER: {Display name from portfolio-context.json, e.g. "T-Systems".
+      Resolve portfolio_slug to display name (capitalize, replace hyphens).
+      Empty string if no portfolio-context.json.}
+    PORTFOLIO_PRODUCTS: {JSON array of distinct portfolio products grounding this theme's STs.
+      Built by collecting portfolio_grounding[].product_slug from all STs in this theme,
+      deduplicating by product_slug, and resolving each to { product_name, product_url }.
+      product_name comes from portfolio-context.json products[].name (matched by slug).
+      product_url comes from portfolio-context.json products[].url (if available, else null).
+      May be empty [] if no STs or no portfolio_grounding.}
     LABELS: {JSON object with relevant i18n labels:
       EXECUTIVE_SPONSOR, INVESTMENT_THESIS, VALUE_CHAINS, TREND,
       IMPLICATION, POSSIBILITY, FOUNDATION, SOLUTION_TEMPLATES,
@@ -99,7 +112,7 @@ Wait for all investment theme agents to complete. Each agent returns compact JSO
   "element_headings": {
     "why_change": "Netzmodernisierung ist keine Hardware-Frage — es ist eine Datenplattform-Transition",
     "why_now": "Drei Regulierungsfristen konvergieren bis August 2026",
-    "why_you": "Digital-Twin-Netzbetrieb schafft 23% Kostenvorsprung",
+    "why_you": "Diese drei Lösungen zur Netzdigitalisierung müssen Sie jetzt anpacken",
     "why_pay": "Verzögern kostet 3x mehr als Handeln — €6,9M vs. €2,3M"
   },
   "heading_fallback": false,
@@ -180,13 +193,13 @@ Pattern: "The prevailing assumption is [X]. [N] converging forces reveal: [refra
 {BRIDGE SENTENCE: One sentence that transitions from the opener to the investment theme list.
 It frames what the bullets are — strategic questions that demand answers.
 
-Pattern: "Fünf strategische Fragestellungen bündeln den Handlungsbedarf:" or
+Pattern: "Fünf Handlungsfelder bündeln den Handlungsbedarf:" or
 "[N] investment themes crystallize the agenda:"}
 
-- **{theme_1.name}**: {theme_1.strategic_question}
-- **{theme_2.name}**: {theme_2.strategic_question}
-- ...
-- **{theme_N.name}**: {theme_N.strategic_question}
+1. **{theme_1.name}**: {theme_1.thesis_heading}
+2. **{theme_2.name}**: {theme_2.thesis_heading}
+...
+{N}. **{theme_N.name}**: {theme_N.thesis_heading}
 
 {CLOSING PARAGRAPH: 2-3 sentences that weave urgency, headline evidence, and
 cost-of-inaction into a single compelling arc. Source everything from the investment theme
@@ -202,10 +215,12 @@ Die Entscheidung liegt vor Ihnen."}
 
 **Rules:**
 - NO `###` subsections inside Zusammenfassung
-- NO tables — investment themes as `- **Name**: Question` bullet list
+- NO tables — investment themes as a numbered list: `1. **Name**: Thesis heading`
+- Each list item uses the investment theme's thesis heading (the H2 from the theme section, e.g., "Rechenzentren verdoppeln die Stromlast — Netzdigitalisierung ist jetzt existenziell") as a compressed summary — NOT the strategic question. The thesis heading communicates the insight; the question is internal scaffolding.
+- **No name echo:** If a thesis heading starts with or repeats the theme name, drop the redundant part. Example: `**KI-Gestützte Operative Exzellenz**: KI-Gestützte Operative Exzellenz schafft...` → `**KI-Gestützte Operative Exzellenz**: Regulatorisches und wirtschaftliches Doppel-Advantage durch compliance-geführte Automatisierung`. The colon already separates name from insight — the heading after the colon must add NEW information.
 - NO separate Kernevidenz section — weave 2-3 evidence highlights into the closing paragraph
 - NO separate Handlungskosten section — merge cost-of-inaction into the closing paragraph
-- The entire Zusammenfassung should be tight: opener (2-3 sentences) + bullet list + closing (2-3 sentences)
+- The entire Zusammenfassung should be tight: opener (2-3 sentences) + numbered list + closing (2-3 sentences)
 
 Must end with two trailing newlines.
 

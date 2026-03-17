@@ -37,6 +37,8 @@ You receive these from trend-report Phase 2:
   - `possibilities[]` — `[{ candidate_ref, name }]`
   - `foundation_requirements[]` — `[{ candidate_ref, name }]` (optional)
 - **SOLUTION_TEMPLATES** — JSON array of this theme's solution templates: `[{ st_id, name, category, enabler_type }]` (may be empty)
+- **PORTFOLIO_PROVIDER** — Display name of the portfolio provider (e.g., "T-Systems", "Telekom MMS"). Sourced from `portfolio-context.json` → `portfolio_slug` resolved to a display name. Used in the portfolio close sentence. Empty string if no portfolio context.
+- **PORTFOLIO_PRODUCTS** — JSON array of distinct portfolio products grounding this theme's solution templates: `[{ product_name, product_url }]` (may be empty). Derived from `portfolio_grounding` on each solution template. `product_url` may be null if no URL is available.
 - **LABELS** — JSON object with i18n labels for section headings
 - **THEME_INDEX** — The 1-based display index for this theme in the report
 - **NARRATIVE_ARC_PATH** — (Optional) Path to `theme-thesis/arc-definition.md` from cogni-narrative
@@ -167,9 +169,16 @@ at least one date or number.}
 
 ### {WHY_YOU_MESSAGE_HEADING}
 
-{~30% of section — Present 1-3 strategic capabilities derived from solution templates.
-Write for the customer as natural, flowing prose — NOT as a structured template with
-labeled subsections.
+{~30% of section — Present the strategic capabilities (from solution templates or
+P-candidates) as the answer to the Why Change and Why Now pressures. The tone is
+low-key consultative — a trusted advisor explaining what needs to happen, not a
+sales pitch.
+
+**Heading rule:** The Why You heading must tie back to Why Change + Why Now and
+reference ALL solutions (not just one). Use the word "Lösungen" (de) or "solutions"
+(en) and connect to urgency. Pattern (de): "Diese drei Lösungen zur [domain] müssen
+Sie jetzt anpacken". Pattern (en): "Three [domain] solutions you need to act on now".
+The heading frames the ENTIRE capability set as the collective answer.
 
 Each capability gets a bold name heading (the solution template name), followed by
 2-3 paragraphs of continuous prose. The IS-DOES-MEANS logic guides what you write
@@ -189,9 +198,9 @@ Example flow (German):
 
 Ein Echtzeit-Virtualabbild Ihrer gesamten Netzinfrastruktur, das physische
 Sensordaten mit KI-Analytik verbindet. Sie senken Wartungskosten um 18–25% und
-reduzieren ungeplante Ausfallzeiten um 30–50%<sup>[1]</sup>. Ihre
+reduzieren ungeplante Ausfallzeiten um 30–50%[Source](url). Ihre
 Netzoperationszentrale wird zur datengesteuerten Kommandozentrale — KI-Systeme
-erkennen Ausfälle bis zu 72 Stunden im Voraus<sup>[2]</sup>. Ein akkurater
+erkennen Ausfälle bis zu 72 Stunden im Voraus[Source](url). Ein akkurater
 Digital Twin entsteht nicht über Nacht: 12–18 Monate Sensorkalibrierung und
 domänenspezifische Modellierung machen dies zu einer Investition, die sich mit
 jedem Datenzyklus verstärkt.
@@ -200,18 +209,30 @@ Do NOT use: "Power Position", "Was es ist:", "Was es für Sie leistet:", "Warum 
 ein nachhaltiger Vorteil ist:", or any other visible IS/DOES/MEANS labels. The prose
 must read like a consulting briefing, not a fill-in-the-blank template.
 
-If SOLUTION_TEMPLATES is non-empty, include the solution templates table AFTER all
-capability descriptions:
+**NO solution table.** Do not include a table listing solutions, categories, and
+enabler types. The capabilities are presented as flowing prose only.
 
-| # | {SOLUTION_LABEL} | {CATEGORY_LABEL} | {ENABLER_TYPE_LABEL} |
-|---|-------------------|-------------------|----------------------|
-| 1 | {st.name} | {st.category} | {st.enabler_type} |
+**Portfolio close:** After all capability descriptions, close the Why You section
+with a single low-key consultative sentence linking the portfolio products that
+ground these solutions. Use PORTFOLIO_PRODUCTS from the prompt to construct the
+close. Format:
 
-If SOLUTION_TEMPLATES is empty, construct capabilities from P-candidates directly.
+- German: "{PORTFOLIO_PROVIDER} kann Sie auf diesem Weg mit [Product A](url),
+  [Product B](url) und [Product C](url) unterstützen."
+- English: "{PORTFOLIO_PROVIDER} can support you on this path with [Product A](url),
+  [Product B](url), and [Product C](url)."
 
-HEADING: After writing, extract the strongest capability + its quantified advantage
-compressed into <90 chars. Example: "Digital-Twin-Netzbetrieb schafft 23% Kostenersparnis
-bei drei Jahren Vorsprung".}
+Use the product names and URLs from PORTFOLIO_PRODUCTS and the provider name from
+PORTFOLIO_PROVIDER. If a product has no URL, use the product name without a link.
+If PORTFOLIO_PRODUCTS is empty, omit the portfolio close entirely.
+
+If SOLUTION_TEMPLATES is empty, construct capabilities from P-candidates directly
+(and omit the portfolio close).
+
+HEADING: After writing, compose a heading that ties back to urgency (Why Change +
+Why Now) and references all solutions collectively. Must use the word "Lösungen" (de)
+or "solutions" (en). Example: "Diese drei Lösungen zur Netzdigitalisierung müssen Sie
+jetzt anpacken". Do NOT summarize a single solution.}
 
 ### {WHY_PAY_MESSAGE_HEADING}
 
@@ -290,7 +311,7 @@ After writing all four element sections, extract the message-driven headings. Wr
 
 3. **H3 Why Now Heading:** Extract the strongest forcing function convergence. Must include a specific date or number. Example: "Drei Regulierungsfristen konvergieren bis August 2026".
 
-4. **H3 Why You Heading:** Extract the strongest capability's IS+DOES in compressed form. Name the capability and its quantified advantage.
+4. **H3 Why You Heading:** Tie back to Why Change + Why Now and reference all solutions collectively. Must use the word "Lösungen" (de) or "solutions" (en). Pattern: "Diese drei Lösungen zur [domain] müssen Sie jetzt anpacken".
 
 5. **H3 Why Pay Heading:** Extract the closing ratio as a declarative sentence. Example: "Verzögern kostet 3x mehr als Handeln — €6,9M vs. €2,3M über drei Jahre".
 
@@ -306,7 +327,7 @@ Now replace the placeholder heading markers in the written file with the actual 
 - Each element meets its proportional word target (+/-10%)
 - **Why Change:** PSB structure applied, Contrast Structure used, ends with competitive implication
 - **Why Now:** ≥2 forcing functions with specific timelines, before/after contrast, window closing statement. FF1 should be a regulatory deadline if evidence contains one.
-- **Why You:** IS-DOES-MEANS logic applied (invisibly) to ≥1 solution template or P-candidate. You-Phrasing for outcomes. No ST-IDs, no "Power Position", no visible IS/DOES/MEANS labels — flowing prose only.
+- **Why You:** IS-DOES-MEANS logic applied (invisibly) to ≥1 solution template or P-candidate. You-Phrasing for outcomes. No ST-IDs, no "Power Position", no visible IS/DOES/MEANS labels — flowing prose only. No solution table. Portfolio close present (if PORTFOLIO_PRODUCTS non-empty). Heading uses "Lösungen"/"solutions" and ties back to urgency.
 - **Why Pay:** ≥2 cost dimensions with specific localized € ranges (not global averages), 3-year horizon, closing ratio comparison
 - Hook opens with quantified surprise from theme evidence
 - **Headings:** H2 is thesis statement (not topic label), all H3s are message-driven (not arc element names), each contains a number/date/entity
@@ -345,7 +366,7 @@ Return ONLY this JSON — nothing else:
   "element_headings": {
     "why_change": "Netzmodernisierung ist keine Hardware-Frage — es ist eine Datenplattform-Transition",
     "why_now": "Drei Regulierungsfristen konvergieren bis August 2026",
-    "why_you": "Digital-Twin-Netzbetrieb schafft 23% Kostenvorsprung",
+    "why_you": "Diese drei Lösungen zur Netzdigitalisierung müssen Sie jetzt anpacken",
     "why_pay": "Verzögern kostet 3x mehr als Handeln — €6,9M vs. €2,3M"
   },
   "heading_fallback": false,

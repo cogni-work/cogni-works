@@ -154,13 +154,13 @@ Read `tips-value-model.json` (already loaded in Step 0.2). Write `{PROJECT_PATH}
   "coverage": {},
   "mece_validation": {},
   "solution_templates": [
-    { "st_id": "...", "name": "...", "category": "...", "enabler_type": "...", "investment_theme_ref": "..." }
+    { "st_id": "...", "name": "...", "category": "...", "enabler_type": "...", "investment_theme_ref": "...", "portfolio_grounding": [...] }
   ]
 }
 ```
 
 - Copy `investment_themes`, `value_chains`, `orphan_candidates`, `coverage`, `mece_validation` in full
-- For each `solution_templates[]` entry, keep ONLY: `st_id`, `name`, `category`, `enabler_type`, `investment_theme_ref` — omit `solution_blueprint`, `portfolio_grounding`, `description`, and all other fields
+- For each `solution_templates[]` entry, keep ONLY: `st_id`, `name`, `category`, `enabler_type`, `investment_theme_ref`, `portfolio_grounding` — omit `solution_blueprint`, `description`, and all other fields. `portfolio_grounding` is needed for Phase 2 portfolio close (product names and links)
 - Omit all other top-level keys (`reanchor_log`, `solution_process_improvements`, `metrics`, `collaterals`, `portfolio_gaps`, etc.)
 
 #### Step 0.3: Validate Entry Gate
@@ -293,7 +293,7 @@ If any `report-section-{dimension}.md` file is missing, log a WARNING. Phase 2 c
 1. **Read value model** — Read `.logs/phase2-value-model.json` for investment themes, value chains, solution templates, orphan candidates, coverage data
 2. **Dispatch investment theme agents** — For each investment theme, dispatch a `cogni-tips:trend-report-investment-theme-writer` agent. All agents in a single message (parallel). Each agent self-loads evidence from disk, writes `report-investment-theme-{investment_theme_id}.md`, and returns compact JSON with word count, citation count, quality gate status, and top claims.
 3. **Collect agent results** — Validate all agents returned `ok: true` and quality gates passed. Retry once on failure.
-4. **Write executive summary** — Read ALL `report-investment-theme-{investment_theme_id}.md` files, then synthesize a flat Zusammenfassung (no subsections, no tables — investment theme bullet list + punchy closing paragraph). Write `report-header.md`.
+4. **Write executive summary** — Read ALL `report-investment-theme-{investment_theme_id}.md` files, then synthesize a flat Zusammenfassung (no subsections, no tables — numbered investment theme list using thesis headings + punchy closing paragraph). Write `report-header.md`.
 5. **Write claims registry** — Read 4 `claims-{dimension}.json` files once, map claims to investment themes via value model, write `report-claims-registry.md`
 6. **Assemble** — Concatenate with cat: header + investment themes (ordered) + claims → `tips-trend-report.md`
 7. **Merge claims** → `tips-trend-report-claims.json`

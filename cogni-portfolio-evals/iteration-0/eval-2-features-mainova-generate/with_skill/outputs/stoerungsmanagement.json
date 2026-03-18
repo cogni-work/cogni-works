@@ -1,0 +1,14 @@
+{
+  "slug": "stoerungsmanagement",
+  "name": "Stoerungsmanagement und Entstoerung",
+  "description": "Digitaler Workflow fuer Stoerungsmeldungen mit automatischer Klassifikation nach Sparte und Dringlichkeit, GPS-basierter Disposition von Entstoerteams und mobiler Rueckmeldung im Feld. Anbindung an Leittechnik und Kundenhotline.",
+  "category": "grid-operations",
+  "taxonomy_mapping": {
+    "dimension": 6,
+    "category_id": "6.1",
+    "category_name": "Custom Application Development",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "product_slug": "digitale-netzsteuerung"
+}

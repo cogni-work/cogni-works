@@ -1,0 +1,238 @@
+{
+  "slug": "mittelstaendische-stadtwerke-de",
+  "market_slug": "mittelstaendische-stadtwerke-de",
+  "profiles": [
+    {
+      "role": "CDO / CIO (Bereichsleiter IT & Digitalisierung)",
+      "seniority": "C-1",
+      "pain_points": [
+        "Veraltete SAP-IS-U-Landschaft erfordert Migration auf S/4HANA Utilities unter Zeitdruck (SAP-Wartungsende 2027)",
+        "Heterogene IT-Landschaft aus Eigenentwicklungen, GIS, Billing und CRM ohne einheitliche Integrationsplattform",
+        "Fachkräftemangel in der IT — offene Stellen für Cloud-Architekten, Security-Experten und SAP-Berater bleiben monatelang unbesetzt",
+        "Regulatorischer Druck durch IT-Sicherheitsgesetz 2.0 und KRITIS-Anforderungen bei gleichzeitig begrenztem Budget"
+      ],
+      "buying_criteria": [
+        "BSI-C5-attestierte Cloud-Infrastruktur mit deutscher Datenresidenz",
+        "Nachgewiesene Referenzen bei Stadtwerken und KRITIS-Betreibern",
+        "SAP S/4HANA Utilities Migrationskompetenz (IS-U → S/4HANA)",
+        "Managed-Service-Modelle zur Kompensation fehlender interner IT-Kapazität",
+        "Vergaberechtskonformität (SektVO) und Rahmenvertragsfähigkeit"
+      ],
+      "information_sources": [
+        "BDEW-Kongress und VKU-Verbandstagungen",
+        "DSAG (Deutschsprachige SAP-Anwendergruppe)",
+        "CIO-Magazin Energieversorger-Rankings",
+        "Peer-Netzwerke über kommunale IT-Arbeitskreise",
+        "stadt+werk Fachmagazin"
+      ],
+      "decision_role": "Fachlicher Entscheider und Projektauftraggeber — initiiert Digitalisierungsprojekte und steuert die Anbieterselektion"
+    },
+    {
+      "role": "CISO / Informationssicherheitsbeauftragter",
+      "seniority": "C-2",
+      "pain_points": [
+        "KRITIS-Prüfungen durch BSI alle zwei Jahre mit steigenden Anforderungen an Nachweisführung",
+        "Zunehmende Cyberbedrohungen auf OT-Netze (Leittechnik, SCADA) bei gleichzeitig veralteter Netzwerksegmentierung",
+        "ISMS-Aufbau und -Betrieb (ISO 27001 / IT-Sicherheitskatalog) überfordert kleine Sicherheitsteams",
+        "NIS2-Umsetzungsgesetz verschärft persönliche Haftung der Geschäftsführung für Cybersicherheit"
+      ],
+      "buying_criteria": [
+        "24/7 SOC-Service mit deutschem Personal und BSI-Meldewegkompetenz",
+        "Erfahrung mit OT/IT-Konvergenz in Energienetzen",
+        "ISMS-Beratungskompetenz nach IT-Sicherheitskatalog der BNetzA",
+        "Incident-Response-Zeiten unter 30 Minuten für KRITIS-relevante Systeme"
+      ],
+      "information_sources": [
+        "BSI-Lageberichte und CERT-Bund-Meldungen",
+        "BDEW Whitepaper IT-Sicherheit",
+        "Peergroup-Austausch KRITIS-Betreiber",
+        "secunet/secuview Fachpublikationen"
+      ],
+      "decision_role": "Technischer Evaluator und Veto-Instanz — kann Anbieter ohne BSI-C5 oder KRITIS-Erfahrung disqualifizieren"
+    },
+    {
+      "role": "Netzleiter / Bereichsleiter OT & Netzführung",
+      "seniority": "C-2",
+      "pain_points": [
+        "Smart-Meter-Rollout (iMSys) erzeugt Datenmengen, die bestehende OT-Infrastruktur nicht verarbeiten kann",
+        "Konvergenz von IT und OT erfordert neue Sicherheitskonzepte, ohne die Verfügbarkeit der Leittechnik zu gefährden",
+        "Dezentrale Einspeiser (PV, Wind) erhöhen die Komplexität der Netzsteuerung und erfordern Echtzeitdaten-Plattformen",
+        "Altersbedingte Abgänge von Leittechnik-Spezialisten ohne adäquaten Nachwuchs"
+      ],
+      "buying_criteria": [
+        "Zero-Outage-Qualitätsprogramm für geschäftskritische Systeme",
+        "Edge-Computing- und IoT-Plattformen für Netzmonitoring",
+        "Private-5G-Campusnetz-Kompetenz für Betriebsgelände und Umspannwerke",
+        "Herstellerunabhängigkeit bei Leittechnik-Integration"
+      ],
+      "information_sources": [
+        "VDE/FNN-Fachtagungen",
+        "E-world Messe Essen",
+        "Hersteller-Webinare (Siemens, ABB, Schneider Electric)",
+        "Technische Fachzeitschriften (ew, netzpraxis)"
+      ],
+      "decision_role": "Bedarfsträger und technischer Stakeholder — definiert OT-Anforderungen, die in IT-Ausschreibungen einfließen"
+    },
+    {
+      "role": "CFO / Kaufmännische Leitung",
+      "seniority": "C-Level",
+      "pain_points": [
+        "Investitionsstau bei gleichzeitig sinkenden Netzentgelten und regulierter Erlösobergrenze",
+        "Lange Amortisationszeiten von IT-Großprojekten erschweren die Argumentation gegenüber Aufsichtsrat und Stadtrat",
+        "Vergaberechtliche Anforderungen (SektVO) verlängern Beschaffungszyklen auf 6-12 Monate",
+        "Konzessionsvertragserneuerungen binden Kapital und Management-Aufmerksamkeit"
+      ],
+      "buying_criteria": [
+        "Transparente Preismodelle mit planbaren Betriebskosten (OPEX statt CAPEX)",
+        "Nachweisbare TCO-Reduktion gegenüber Eigenbetrieb",
+        "Rahmenvertragsfähigkeit für mehrstufige Beauftragungen ohne wiederholte Ausschreibung",
+        "Referenzen bei vergleichbaren kommunalen Unternehmen"
+      ],
+      "information_sources": [
+        "VKU-Finanzausschuss und kommunale Wirtschaftsprüfer",
+        "Rödl & Partner / PwC Branchenberichte Stadtwerke",
+        "Aufsichtsratsnetzwerke kommunaler Beteiligungsgesellschaften"
+      ],
+      "decision_role": "Economic Buyer — zeichnet Budgetfreigaben und genehmigt Vergabevorschläge. Stellt TCO-Fragen und fordert Business-Case-Nachweise"
+    }
+  ],
+  "buying_committee": {
+    "dynamics": "Stadtwerke-Buying-Center sind konsensorientiert mit starker Formalisierung durch Vergaberecht. Der CDO/CIO initiiert und steuert IT-Projekte, der CISO hat de-facto-Vetorecht bei Sicherheitsfragen (KRITIS), der Netzleiter bringt OT-Anforderungen ein, und der CFO gibt Budgets frei. Typische Buying-Center-Größe: 5-8 Personen inkl. Einkaufsabteilung und ggf. externer Vergaberechtsberatung.",
+    "procurement_context": "Stadtwerke unterliegen als Sektorenauftraggeber der SektVO (Sektorenverordnung). IT-Beschaffungen über dem EU-Schwellenwert (aktuell 431.000 EUR) erfordern europaweite Ausschreibung. Verhandlungsverfahren mit Teilnahmewettbewerb ist der bevorzugte Vergabemodus für komplexe IT-Projekte. Konzessionsvertragszyklen (typisch 20 Jahre) erzeugen Investitionswellen bei Erneuerung — idealer Zeitpunkt für IT-Modernisierungsgespräche.",
+    "typical_deal_cycle": "6-18 Monate von Bedarfsmeldung bis Zuschlag. Phase 1: Markterkundung und Leistungsbeschreibung (2-3 Monate). Phase 2: Teilnahmewettbewerb und Angebotserstellung (3-4 Monate). Phase 3: Verhandlungsrunden und Zuschlag (2-4 Monate). Phase 4: Gremienbeschluss durch Geschäftsführung/Aufsichtsrat (1-3 Monate).",
+    "stall_points": [
+      "Vergaberechtliche Einsprüche durch unterlegene Bieter (Nachprüfungsverfahren)",
+      "Aufsichtsratsgenehmigung für Investitionen über 500.000 EUR",
+      "Politische Einflussnahme durch Stadtratsfraktionen bei strategischen IT-Entscheidungen",
+      "Personelle Engpässe in der Einkaufsabteilung für IT-Vergaben"
+    ]
+  },
+  "named_customers": [
+    {
+      "name": "Stadtwerke München GmbH (SWM)",
+      "domain": "swm.de",
+      "industry": "Kommunale Versorgung (Energie, Wasser, ÖPNV, Telekommunikation)",
+      "headquarters": "München, Deutschland",
+      "employees": 10000,
+      "revenue": { "value": 4500000000, "currency": "EUR", "year": 2024 },
+      "fit_score": "medium",
+      "fit_rationale": "SWM ist Deutschlands größtes Stadtwerk mit umfangreicher eigener IT-Kompetenz (u.a. Citizen-Development-Community mit 800+ Nutzern). Die S/4HANA-Migration läuft bereits mit Microsoft Azure, Vision11 und Public Cloud Group als Partnern. Für T-Systems bestehen Einstiegsmöglichkeiten bei Sovereign-Cloud-Bedarfen (BSI-C5), Cyber Defence für KRITIS-Systeme und SAP-Betriebsservices. Allerdings ist die bestehende Microsoft-Azure-Bindung stark, und SWM verfügt über signifikante Eigenleistungsfähigkeit, was den Bedarf an externen Managed Services reduziert.",
+      "pain_points": [
+        "S/4HANA-Landscape-Transformation über alle Geschäftsbereiche bis 2027 — Komplexität durch parallelen Betrieb ECC und S/4HANA",
+        "KRITIS-Compliance für Energie- und Wasserversorgung bei gleichzeitiger Cloud-Migration",
+        "Skalierung der M/Smart-Infrastruktur für intelligente Messtechnik stadtweit",
+        "Integration heterogener IT-Systeme über Energie, ÖPNV (MVG), Telekommunikation und Bäder hinweg"
+      ],
+      "current_stack": ["SAP ECC (Migration auf S/4HANA)", "Microsoft Azure", "SAP HANA", "Alpaca/PCG für SAP-Orchestrierung", "Microsoft 365", "Eigenentwickelte GIS- und Dispositionssysteme"],
+      "source_urls": [
+        "https://www.microsoft.com/de-de/customers/story/1757638099522932980-swm-azure-national-government-en-germany",
+        "https://www.visioneleven.com/referenzen/s4hana-swm-gmbh/",
+        "https://www.cio.de/article/3701180/stadtwerke-muenchen-gmbh-it-fakten-und-it-strategie.html",
+        "https://www.swm.de/dam/doc/swm/swm-geschaeftsbericht.pdf"
+      ],
+      "researched_at": "2026-03-18"
+    },
+    {
+      "name": "MVV Energie AG",
+      "domain": "mvv.de",
+      "industry": "Kommunale Versorgung (Energie, Wärme, Wasser, Umwelt)",
+      "headquarters": "Mannheim, Deutschland",
+      "employees": 6800,
+      "revenue": { "value": 6100000000, "currency": "EUR", "year": 2025 },
+      "fit_score": "high",
+      "fit_rationale": "MVV betreibt mit Soluvia IT-Services eine eigene IT-Tochter mit nur 190 Mitarbeitern für 4.300+ IT-Nutzer — ein struktureller Engpass, der Managed-Service-Bedarf erzeugt. Die heterogene SAP-Landschaft (ERP, CRM, BW, PI) erfordert Konsolidierung und S/4HANA-Migration. Als börsennotiertes Stadtwerk mit KRITIS-Status und internationalem Geschäft (Tschechien, UK) benötigt MVV BSI-C5-konforme Cloud-Services und SOC-Leistungen. T-Systems' SAP-Expertise und Sovereign Cloud adressieren die Kernbedarfe direkt.",
+      "pain_points": [
+        "Soluvia IT-Services mit 190 MA für 6.800+ Konzernmitarbeiter kapazitiv am Limit",
+        "SAP-Landschaft aus ERP, CRM on HANA, BW und PI erfordert Konsolidierung auf S/4HANA",
+        "Digitalisierung der Kundenprozesse mit KI, Big Data und IoT erfordert Cloud-Plattform-Kompetenz",
+        "KRITIS-Compliance für Kraftwerke, Fernwärmenetze und Wasserversorgung"
+      ],
+      "current_stack": ["SAP ERP", "SAP CRM (on HANA)", "SAP BW", "SAP Process Integration", "Microsoft 365", "Eigenentwicklungen via Soluvia IT-Services"],
+      "source_urls": [
+        "https://www.cio.de/article/3701148/mvv-energie-ag-it-fakten-und-it-strategie.html",
+        "https://www.mvv.de/ueber-uns/unternehmensgruppe/soluvia",
+        "https://www.predictiveanalyticstoday.com/mvv-energie-goes-live-with-sap-crm/",
+        "https://www.mvv.de/investoren/unternehmensprofil"
+      ],
+      "researched_at": "2026-03-18"
+    },
+    {
+      "name": "Mainova AG",
+      "domain": "mainova.de",
+      "industry": "Kommunale Versorgung (Energie, Wärme, Wasser)",
+      "headquarters": "Frankfurt am Main, Deutschland",
+      "employees": 3347,
+      "revenue": { "value": 5762000000, "currency": "EUR", "year": 2024 },
+      "fit_score": "high",
+      "fit_rationale": "Mainova befindet sich in einer fundamentalen IT-Restrukturierung (CIO.de: 'Radikale IT-Restrukturierung bei Mainova'). Die IT-Abrechnungsplattform wird erneuert, und die Cloud-Strategie ist explizit noch in Entwicklung — ein ideales Zeitfenster für T-Systems als Sovereign-Cloud- und Managed-SAP-Partner. Die Salesforce-SAP-Integration deutet auf Multi-Plattform-Komplexität hin, die T-Systems' Integrationskompetenz erfordert. Mainova investiert auf Rekordniveau in Digitalisierung, hat aber mit 3.347 MA keine IT-Eigenleistungstiefe wie SWM.",
+      "pain_points": [
+        "Radikale IT-Restrukturierung mit Erneuerung der Abrechnungsplattform als Kernprojekt",
+        "Cloud-Strategie noch nicht ausgereift — Bedarf an strategischer Beratung und Implementierungsbegleitung",
+        "Komplexe Datenintegration zwischen SAP ERP, Salesforce CRM und GIS-Systemen",
+        "Rekord-Investitionen in Versorgungssicherheit, Dekarbonisierung und Digitalisierung erfordern IT-Skalierungsfähigkeit",
+        "DSGVO-konforme Datenlöschung und -sperrung im Abrechnungssystem"
+      ],
+      "current_stack": ["SAP ERP", "Salesforce CRM", "Microsoft 365", "GIS-Systeme", "cronos DSGVO-Tools", "Eigenentwickelte Fachverfahren"],
+      "source_urls": [
+        "https://www.cio.de/article/3683271/radikale-it-restrukturierung-bei-mainova.html",
+        "https://www.cio.de/article/3701126/mainova-ag-it-fakten-und-it-strategie.html",
+        "https://www.bpc.ag/success-stories/mainova-datenintegration/",
+        "https://www.mainova.de/de/ihre-mainova/presse/pressemitteilungen/2025/mainova-steigert-ergebnis-und-investitionen-150796"
+      ],
+      "researched_at": "2026-03-18"
+    },
+    {
+      "name": "RheinEnergie AG",
+      "domain": "rheinenergie.com",
+      "industry": "Kommunale Versorgung (Energie, Gas, Wasser, Wärme)",
+      "headquarters": "Köln, Deutschland",
+      "employees": 2653,
+      "revenue": { "value": 3946000000, "currency": "EUR", "year": 2024 },
+      "fit_score": "medium",
+      "fit_rationale": "RheinEnergie verfolgt bereits eine konsequente Cloud-First-Strategie (CIO Cloud Award-Gewinner) und plant langfristig ein Multi-Cloud-Modell (Private Cloud + AWS + Azure + GCP). Die 200-köpfige IT-Abteilung ist gut aufgestellt, und die Rubrik/Nutanix/Aviatrix-Partnerschaften zeigen, dass bereits reife Technologiepartnerschaften bestehen. Für T-Systems ergeben sich Chancen im Bereich SOC/Cyber Defence (KRITIS-Pflicht), Sovereign Cloud als BSI-C5-Alternative zu US-Hyperscalern, und SAP-Betrieb. Die RheinNetz-Ausgründung (01/2025) erzeugt zusätzlichen IT-Separierungs- und Migrationsbedarf.",
+      "pain_points": [
+        "Multi-Cloud-Strategie (Private + AWS + Azure + GCP) erzeugt Governance- und Kostenkontroll-Komplexität",
+        "RheinNetz-Ausgründung erfordert IT-Separation und eigenständige Infrastruktur für die Netzgesellschaft",
+        "KRITIS-Compliance mit ISMS über gesetzliche Anforderungen hinaus — hoher Audit-Aufwand",
+        "84.000 Smart-Meter-Installationen erzeugen Datenvolumen, das Cloud-Skalierung erfordert",
+        "2.000 VMs und 600 TB Backup-Daten erfordern professionelles Datenmanagement"
+      ],
+      "current_stack": ["VMware (99,5% virtualisiert)", "Nutanix HCI", "Rubrik Backup", "Aviatrix Multi-Cloud-Networking", "SAP HANA", "Oracle DB", "MS SQL", "Windows/Linux Server"],
+      "source_urls": [
+        "https://www.cio.de/a/rheinenergie-ag-gewinnt-cloud-award,3687973",
+        "https://www.rubrik.com/content/dam/rubrik/de/resources/case-study/Customer-Success-Rubrik-RheinEnergie.pdf",
+        "https://www.nutanix.com/de/company/local-customers/rhein-energie",
+        "https://pages.aviatrix.com/rs/882-LUR-510/images/RheinEnergie-Case-Study-DE-051021.pdf",
+        "https://www.cio.de/article/3700974/rheinenergie-ag-it-fakten-und-it-strategie.html"
+      ],
+      "researched_at": "2026-03-18"
+    },
+    {
+      "name": "N-ERGIE Aktiengesellschaft",
+      "domain": "n-ergie.de",
+      "industry": "Kommunale Versorgung (Energie, Wasser, Erdgas)",
+      "headquarters": "Nürnberg, Deutschland",
+      "employees": 2500,
+      "revenue": { "value": 5600000000, "currency": "EUR", "year": 2024 },
+      "fit_score": "high",
+      "fit_rationale": "N-ERGIE hat im April 2025 den ersten Teil der SAP S/4HANA Utilities Migration (Marktrolle Lieferant) abgeschlossen — ein zweijähriges Großprojekt mit 250+ Beteiligten. Weitere Marktrollen (Netzbetreiber, Messstellenbetreiber) stehen zur Migration an. Gleichzeitig transformiert N-ERGIE ihre digitalen Kundenportale von einer proprietären Lösung zu einer offenen IT-Architektur. T-Systems kann als SAP Partner of the Year (Public Sector) die Folgephasen der S/4HANA-Migration übernehmen und mit Sovereign Cloud sowie Cyber Defence die KRITIS-Anforderungen adressieren. Der CIO Klaus Vogl (seit 2022, ehemals Semikron) treibt die Modernisierung aktiv voran.",
+      "pain_points": [
+        "SAP S/4HANA Utilities Migration Phase 2+ (Marktrollen Netzbetreiber und Messstellenbetreiber) steht an",
+        "Transformation der Kundenportale von proprietärer Lösung zu offener IT-Architektur erfordert Cloud-native Plattform",
+        "Rekord-Investitionen (157 Mio. EUR in 2024) in Energiewende-Infrastruktur erzeugen parallelen IT-Modernisierungsdruck",
+        "Integration von OT-Daten aus dezentralen Einspeisern (PV, Wind) in die Netzsteuerung",
+        "Eingeschränkte interne IT-Kapazität — IT-Umstellung führte zu einwöchigem Kundenservice-Ausfall"
+      ],
+      "current_stack": ["SAP S/4HANA Utilities (Lieferant, seit 04/2025)", "SAP ECC (verbleibende Marktrollen)", "adesso als Digitalisierungspartner", "cbs consulting für SAP-Migration", "Proprietäre Portalplattform (in Ablösung)"],
+      "source_urls": [
+        "https://www.zfk.de/digitalisierung/it/n-ergie-geht-mit-sap-s-4hana-utilities-fuer-die-marktrolle-lieferant-live",
+        "https://www.cbs-consulting.com/update/n-ergie-digitalisierung-energiewende/",
+        "https://nuernberg.digital/de/events/2025/n-ergie-digitale-portale-it-architektur",
+        "https://www.nn.de/wirtschaft/energieversorger-n-ergie-stellt-ab-4-april-die-it-um-das-mussen-kunden-dazu-wissen-1.14620606",
+        "https://www.cio.de/article/3701212/n-ergie-ag-it-fakten-und-it-strategie.html"
+      ],
+      "researched_at": "2026-03-18"
+    }
+  ],
+  "created": "2026-03-18"
+}

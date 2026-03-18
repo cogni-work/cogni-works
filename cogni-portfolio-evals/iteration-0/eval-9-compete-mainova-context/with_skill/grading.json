@@ -1,0 +1,32 @@
+{
+  "total_checks": 4,
+  "passed": 4,
+  "failed": 0,
+  "pass_rate": 1.0,
+  "expectations": [
+    {
+      "text": "3-5 competitors present (actual: 5)",
+      "passed": true,
+      "evidence": "['Arvato Systems', 'adesso SE', 'Axians (VINCI Energies)', 'Sopra Steria', 'Atos / Eviden']",
+      "entity": "cloud-migration--mittelstaendische-stadtwerke-de"
+    },
+    {
+      "text": "Each has positioning, strengths, weaknesses, differentiation",
+      "passed": true,
+      "evidence": "All fields present",
+      "entity": "cloud-migration--mittelstaendische-stadtwerke-de"
+    },
+    {
+      "text": "Strengths and weaknesses 2-5 items each",
+      "passed": true,
+      "evidence": "All within range",
+      "entity": "cloud-migration--mittelstaendische-stadtwerke-de"
+    },
+    {
+      "text": "2-4 trap questions present (actual: 4)",
+      "passed": true,
+      "evidence": "4 trap questions",
+      "entity": "cloud-migration--mittelstaendische-stadtwerke-de"
+    }
+  ]
+}

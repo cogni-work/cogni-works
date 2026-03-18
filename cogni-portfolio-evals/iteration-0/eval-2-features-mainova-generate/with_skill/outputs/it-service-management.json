@@ -1,0 +1,14 @@
+{
+  "slug": "it-service-management",
+  "name": "IT-Service-Management",
+  "description": "ITIL-basiertes Service-Management mit zentralem Ticket-System, Configuration-Management-Database (CMDB) und strukturierten Change-Management-Prozessen fuer IT- und OT-Landschaft. Steuert Incident-, Problem- und Release-Management spartenuebergreifend.",
+  "category": "operations",
+  "taxonomy_mapping": {
+    "dimension": 3,
+    "category_id": "3.5",
+    "category_name": "IT Support Services",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "product_slug": "it-plattformdienste"
+}

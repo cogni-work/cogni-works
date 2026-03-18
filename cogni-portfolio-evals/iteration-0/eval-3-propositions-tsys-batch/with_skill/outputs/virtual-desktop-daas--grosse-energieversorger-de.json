@@ -1,0 +1,31 @@
+{
+  "slug": "virtual-desktop-daas--grosse-energieversorger-de",
+  "feature_slug": "virtual-desktop-daas",
+  "market_slug": "grosse-energieversorger-de",
+  "is_statement": "Verwaltete virtuelle Desktops über Azure Virtual Desktop und Citrix Cloud mit End-to-End-Betrieb und automatisiertem Provisioning aus deutschen Rechenzentren.",
+  "does_statement": "Leitstellen-Arbeitsplätze und Außendienst-Zugänge werden als virtuelle Desktops bereitgestellt — sicher isoliert von lokalen Endgeräten, sodass ein kompromittiertes Gerät keinen Zugriff auf KRITIS-Systeme gewährt.",
+  "means_statement": "Die Bereitstellung neuer Arbeitsplätze sinkt von Tagen auf Stunden, Endpoint-Sicherheitsrisiken werden durch Isolation eliminiert, und Leiharbeiter oder Dienstleister erhalten kontrollierten Zugang ohne Hardware-Beschaffung.",
+  "evidence": [
+    {
+      "statement": "Gartner berichtet, dass VDI-Lösungen das Risiko von Datenverlust durch kompromittierte Endgeräte um 80-90% reduzieren.",
+      "source_url": null,
+      "source_title": null
+    }
+  ],
+  "quality_assessment": {
+    "dimensions": {
+      "buyer_centricity": "pass",
+      "market_specificity": "pass",
+      "differentiation": "warn",
+      "status_quo_contrast": "pass",
+      "conciseness_does": "pass",
+      "outcome_specificity": "pass",
+      "escalation": "pass",
+      "quantification": "warn",
+      "emotional_resonance": "warn",
+      "conciseness_means": "warn"
+    },
+    "overall": "warn"
+  },
+  "created": "2026-03-18"
+}

@@ -1,0 +1,31 @@
+{
+  "slug": "it-outsourcing--grosse-energieversorger-de",
+  "feature_slug": "it-outsourcing",
+  "market_slug": "grosse-energieversorger-de",
+  "is_statement": "Vollständiges IT-Outsourcing mit End-to-End-Verantwortung für Infrastruktur, Applikationen und Anwender-Support, gestützt auf das TÜV-zertifizierte Zero-Outage-Programm.",
+  "does_statement": "Der gesamte IT-Betrieb — von SAP über Netzleitstellensysteme bis zum Endanwender-Support — wird an einen KRITIS-erfahrenen Partner übergeben, der nachweislich 99,999% Verfügbarkeit bei E.ON über 10+ Jahre geliefert hat.",
+  "means_statement": "Sie setzen 20-30% Ihres IT-Budgets für Energiewende-Investitionen frei und eliminieren das Risiko, dass der operative IT-Betrieb die strategische Transformation kannibalisiert.",
+  "evidence": [
+    {
+      "statement": "T-Systems betreibt die IT-Infrastruktur von E.ON seit über 10 Jahren mit nachgewiesener 99,7% Verfügbarkeit unter dem Zero-Outage-Programm.",
+      "source_url": null,
+      "source_title": null
+    }
+  ],
+  "quality_assessment": {
+    "dimensions": {
+      "buyer_centricity": "pass",
+      "market_specificity": "pass",
+      "differentiation": "pass",
+      "status_quo_contrast": "pass",
+      "conciseness_does": "warn",
+      "outcome_specificity": "pass",
+      "escalation": "pass",
+      "quantification": "pass",
+      "emotional_resonance": "pass",
+      "conciseness_means": "pass"
+    },
+    "overall": "warn"
+  },
+  "created": "2026-03-18"
+}

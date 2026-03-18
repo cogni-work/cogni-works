@@ -1,0 +1,58 @@
+{
+  "slug": "ai-data-analytics",
+  "original_description": "Europäische AI-as-a-Service-Plattform (AIFS) mit Unified API für LLM-Serving, Retrieval-Augmented Generation, Fine-Tuning und Data Analytics — DSGVO-konform auf souveräner Infrastruktur mit Industrial AI Cloud für Hochlast-Workloads.",
+  "improved_description": "OpenAI-kompatible Unified API auf Open Telekom Cloud für LLM-Serving von 15+ Open-Source- und proprietären Modellen, RAG-Pipelines und Fine-Tuning — gehostet auf NVIDIA-Blackwell-GPUs in deutschen Rechenzentren.",
+  "original_assessment": {
+    "mechanism_clarity": {
+      "score": "pass",
+      "note": "Nennt konkrete Mechanismen: Unified API, LLM-Serving, RAG, Fine-Tuning."
+    },
+    "scope_mece": {
+      "score": "pass",
+      "note": "Bleibt im IS-Bereich, keine Outcome-Sprache."
+    },
+    "differentiation": {
+      "score": "warn",
+      "note": "DSGVO-konform und souveräne Infrastruktur sind generisch — jeder europäische Cloud-Anbieter kann das behaupten. Keine konkreten Differenzierungsmerkmale wie Modellanzahl, GPU-Typ oder API-Standard."
+    },
+    "language_quality": {
+      "score": "pass",
+      "note": ""
+    },
+    "conciseness": {
+      "score": "warn",
+      "note": "25 Wörter (im Zielbereich), aber die Beschreibung wirkt überladen: listet AIFS-Akronym, vier Technologien und zwei Infrastruktur-Claims — liest sich wie ein Spec Sheet."
+    }
+  },
+  "improved_assessment": {
+    "mechanism_clarity": {
+      "score": "pass",
+      "note": "Benennt konkreten API-Standard (OpenAI-kompatibel), Hosting-Plattform (Open Telekom Cloud) und drei Kerndienste."
+    },
+    "scope_mece": {
+      "score": "pass",
+      "note": "Rein mechanisch, keine Outcome-Sprache."
+    },
+    "differentiation": {
+      "score": "pass",
+      "note": "15+ Modelle, NVIDIA-Blackwell-GPUs, OpenAI-kompatible API, deutsche Rechenzentren — vier konkrete Differenzierungsmerkmale, die nicht jeder Anbieter hat."
+    },
+    "language_quality": {
+      "score": "pass",
+      "note": "Technische Begriffe (OpenAI, Unified API, RAG, Fine-Tuning) sind in deutschem Tech-Kontext normal."
+    },
+    "conciseness": {
+      "score": "pass",
+      "note": "25 Wörter, kein Spec-Sheet-Effekt mehr — fokussiert auf den Kern-Mechanismus statt aufzulisten."
+    }
+  },
+  "enrichment_sources": [
+    "https://docs.llmhub.t-systems.net/",
+    "https://www.t-systems.com/us/en/artificial-intelligence/solutions/ai-foundation-services",
+    "https://www.telekom.com/en/media/media-information/archive/t-systems-launches-ai-foundation-services-1087430",
+    "https://www.telekom.com/en/media/media-information/archive/launch-industrial-ai-cloud-with-nvidia-1098706",
+    "https://blogs.nvidia.com/blog/germany-industrial-ai-cloud-launch/",
+    "https://www.telekom.com/en/media/media-information/archive/ai-factory-deutsche-telekom-expands-its-german-ai-stack-1103010"
+  ],
+  "improvement_rationale": "Das Original hatte zwei Schwachstellen: (1) Differenzierung war generisch — 'DSGVO-konform auf souveräner Infrastruktur' ist eine Parity-Behauptung, die jeder EU-Anbieter stellen kann. Die verbesserte Version ersetzt das durch konkrete, nachprüfbare Details: OpenAI-kompatible API (reduziert Vendor Lock-in), 15+ Modelle (Breite des Angebots), NVIDIA-Blackwell-GPUs (spezifische HW-Generation der Industrial AI Cloud), deutsche Rechenzentren (statt vagem 'souveräne Infrastruktur'). (2) Das Akronym 'AIFS' und 'Data Analytics' als vierter Listenpunkt machten die Beschreibung überladen; die neue Version streicht beides zugunsten der konkreten Plattform-Identität (Open Telekom Cloud) und fokussiert auf die drei Kerndienste."
+}

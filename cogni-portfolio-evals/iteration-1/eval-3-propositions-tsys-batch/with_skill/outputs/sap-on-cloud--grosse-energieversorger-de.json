@@ -1,0 +1,26 @@
+{
+  "slug": "sap-on-cloud--grosse-energieversorger-de",
+  "feature_slug": "sap-on-cloud",
+  "market_slug": "grosse-energieversorger-de",
+  "is_statement": "SAP Platinum Partner mit SAP-Activate-Zertifizierung: End-to-End-Hosting, Migration und Betrieb von S/4HANA auf Private Cloud, AWS und Azure — als RISE with SAP Premium Supplier mit 4.000+ SAP-Experten und 850.000 verwalteten SAP-Nutzern.",
+  "does_statement": "Sie migrieren Ihre IS-U-Landschaft vor dem SAP-ECC-Wartungsende 2027 auf S/4 Utilities, ohne Abrechnungsläufe für Millionen Endkunden zu unterbrechen — gestützt auf 4.000 SAP-Experten mit nachgewiesener Energie-Branchenkenntnis.",
+  "means_statement": "Ihre SAP-TCO sinkt um bis zu 20 % durch RISE with SAP, Sie vermeiden den Beraterkosten-Spike von 10–20 % im letzten Migrationsjahr und sichern die Bilanzierungsfähigkeit über 2027 hinaus.",
+  "evidence": [
+    {
+      "statement": "SachsenEnergie AG migrierte mit T-Systems erfolgreich auf SAP BW/4HANA mit signifikanten Performance-Gewinnen bei der Massendatenauswertung.",
+      "source_url": "https://www.t-systems.com/de/de/referenzen/digital/sachsenenergie-schnellere-reports-durch-sap-bw-konsolidierung",
+      "source_title": "SAP BW-Konsolidierung für SachsenEnergie – T-Systems"
+    },
+    {
+      "statement": "T-Systems ist RISE with SAP Premium Supplier und SAP Partner of the Year 2026 (Public Sector) — einer der wenigen zertifizierten E2E-SAP-Partner weltweit.",
+      "source_url": "https://news.sap.com/germany/2025/02/cloud-strategien-sicher-effizient-umsetzen/",
+      "source_title": "Thrive with T-Systems: Sicherheit und Effizienz in der Cloud – SAP News Center"
+    },
+    {
+      "statement": "SAP-Beratungskosten steigen voraussichtlich um 10–20 % im letzten Migrationsjahr vor dem ECC-Wartungsende, bei dreifacher Nachfrage gegenüber verfügbaren S/4HANA-Spezialisten bis 2027.",
+      "source_url": "https://www.kellton.com/kellton-tech-blog/sap-ecc-s4hana-migration-2027-deadline",
+      "source_title": "SAP ECC to S/4HANA Migration: 2027 Deadline Guide & Steps"
+    }
+  ],
+  "created": "2026-03-18"
+}

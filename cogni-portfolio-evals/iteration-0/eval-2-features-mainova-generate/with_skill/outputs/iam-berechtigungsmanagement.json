@@ -1,0 +1,14 @@
+{
+  "slug": "iam-berechtigungsmanagement",
+  "name": "IAM und Berechtigungsmanagement",
+  "description": "Zentrales Identity-and-Access-Management mit rollenbasierter Zugriffskontrolle (RBAC), Multi-Faktor-Authentifizierung und automatisiertem User-Lifecycle-Provisioning ueber SAP-, IT- und OT-Systeme hinweg. Single-Sign-On fuer interne und externe Portale.",
+  "category": "security",
+  "taxonomy_mapping": {
+    "dimension": 2,
+    "category_id": "2.2",
+    "category_name": "Identity & Access Management",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "product_slug": "it-plattformdienste"
+}

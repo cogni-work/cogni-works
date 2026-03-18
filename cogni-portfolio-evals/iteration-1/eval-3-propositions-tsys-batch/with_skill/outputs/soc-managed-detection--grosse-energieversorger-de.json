@@ -1,0 +1,26 @@
+{
+  "slug": "soc-managed-detection--grosse-energieversorger-de",
+  "feature_slug": "soc-managed-detection",
+  "market_slug": "grosse-energieversorger-de",
+  "is_statement": "Security Operations Center mit Palo Alto CORTEX XSIAM, Analyse von über einer Milliarde Datenpunkten täglich aus 3.000 Quellen, 200+ Security-Experten, Threat Hunting und Incident Response im 24/7-Betrieb.",
+  "does_statement": "Ihre Sicherheitsteams erkennen Angriffe auf OT- und IT-Systeme in Echtzeit aus einer konsolidierten Lageansicht — statt wie bisher auf fragmentierte Einzelmeldungen aus Netzleit-, SCADA- und Office-IT getrennt reagieren zu müssen.",
+  "means_statement": "Sie erfüllen die NIS2-Meldepflicht innerhalb der 24-Stunden-Frist, vermeiden Bußgelder bis 10 Mio. EUR und reduzieren die durchschnittliche Reaktionszeit bei den 2.000+ wöchentlichen Angriffen auf den Energiesektor um über 80 %.",
+  "evidence": [
+    {
+      "statement": "T-Systems betreibt ein SOC mit 200+ Sicherheitsexperten und verarbeitet täglich über 1 Mrd. Datenpunkte aus 3.000+ Quellen für 50+ KRITIS-Betreiber.",
+      "source_url": "https://www.t-systems.com/de/en/insights/newsroom/expert-blogs/strengthening-resilience-with-siem-and-soc-636006",
+      "source_title": "How SIEM and SOC support compliance – T-Systems"
+    },
+    {
+      "statement": "Energieversorger in Deutschland verzeichneten 2.011 wöchentliche Cyberattacken — die zweithöchste Angriffsrate aller Branchen.",
+      "source_url": "https://www.connect-professional.de/security/cyberangriffe-auf-energiebranche-risiken-und-abwehr-335114.html",
+      "source_title": "Cyberangriffe auf Energiebranche: Risiken und Abwehr – connect professional"
+    },
+    {
+      "statement": "Das BSI verzeichnete allein im ersten Halbjahr 2025 insgesamt 68 kritische Cyberangriffe auf das deutsche Energiesystem.",
+      "source_url": "https://www.riffreporter.de/de/technik/cybersicherheit-energie-stromversorgung-hacker-bedrohung",
+      "source_title": "Cyberangriffe auf deutsche Energieversorgung nehmen zu – RiffReporter"
+    }
+  ],
+  "created": "2026-03-18"
+}

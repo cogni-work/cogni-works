@@ -1,0 +1,26 @@
+{
+  "slug": "hybrid-cloud--grosse-energieversorger-de",
+  "feature_slug": "hybrid-cloud",
+  "market_slug": "grosse-energieversorger-de",
+  "is_statement": "T Cloud Hybrid kombiniert Private- und Public-Cloud mit zentralem Governance-Framework, Multi-Cloud-Konnektivitätsplattform MCCP, branchenspezifischen Varianten und cloudübergreifender Automatisierung für einheitlichen Betrieb.",
+  "does_statement": "Sie steuern Netzleitdaten in der Private Cloud und Analytics-Workloads in der Public Cloud über eine zentrale Governance — statt zwei getrennte IT-Welten mit doppeltem Betriebsaufwand und inkonsistenten Sicherheitsrichtlinien zu managen.",
+  "means_statement": "Ihre Cloud-Provisionierungszeit sinkt von Wochen auf Minuten durch MCCP-Automatisierung, bei 30–40 % niedrigeren Netzwerkkosten gegenüber manuell verwalteten Multi-Cloud-Verbindungen.",
+  "evidence": [
+    {
+      "statement": "Die Multi Cloud Connectivity Platform (MCCP) reduziert Provisionierungszeiten von Wochen auf Minuten mit End-to-End-Automatisierung und bedarfsgerechter Skalierung.",
+      "source_url": "https://www.t-systems.com/us/en/cloud-services/solutions/private-cloud/multi-cloud-connectivity-platform",
+      "source_title": "Improve the connectivity of your multi cloud now – T-Systems"
+    },
+    {
+      "statement": "T-Systems vereint unter T Cloud alle Cloud-Lösungen — Private, Public, Sovereign und Hyperscaler — unter einem zentralen Management-Framework.",
+      "source_url": "https://www.t-systems.com/us/en/insights/newsroom/news/t-cloud-all-cloud-solutions-under-one-roof-1076894",
+      "source_title": "T Cloud: All cloud solutions under one roof – T-Systems"
+    },
+    {
+      "statement": "MCCP basiert auf der physischen Deutsche-Telekom-Netzinfrastruktur — ein Differenzierungsmerkmal, das reine Software-Anbieter strukturell nicht replizieren können.",
+      "source_url": "https://www.telekom.com/en/media/media-information/archive/multi-hybrid-cloud-management-from-t-systems-584216",
+      "source_title": "Making things complex easy: Multi & Hybrid Cloud Management from T-Systems – Deutsche Telekom"
+    }
+  ],
+  "created": "2026-03-18"
+}

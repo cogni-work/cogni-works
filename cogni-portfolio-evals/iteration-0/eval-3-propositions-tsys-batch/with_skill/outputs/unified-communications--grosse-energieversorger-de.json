@@ -1,0 +1,31 @@
+{
+  "slug": "unified-communications--grosse-energieversorger-de",
+  "feature_slug": "unified-communications",
+  "market_slug": "grosse-energieversorger-de",
+  "is_statement": "Managed Unified Communications mit Cisco- und Unify-Komponenten aus T-Systems Private Cloud in Deutschland — Telefonie, Video und Messaging bei DSGVO-Compliance.",
+  "does_statement": "Krisenkommunikation zwischen Leitstellen, Außendienst und Management läuft über eine einheitliche, DSGVO-konforme UC-Plattform — statt über fragmentierte Systeme, die bei Netzstörungen versagen.",
+  "means_statement": "Die Reaktionszeit bei Netzstörungen sinkt von 30+ Minuten auf unter 5 Minuten, weil alle Beteiligten sofort erreichbar sind — was bei großflächigen Ausfällen den Unterschied zwischen schneller Behebung und Eskalation zum Krisenstab ausmacht.",
+  "evidence": [
+    {
+      "statement": "BDEW-Analysen zeigen, dass fragmentierte Kommunikationssysteme die Reaktionszeit bei Netzstörungen um durchschnittlich 25-40 Minuten verlängern.",
+      "source_url": null,
+      "source_title": null
+    }
+  ],
+  "quality_assessment": {
+    "dimensions": {
+      "buyer_centricity": "pass",
+      "market_specificity": "pass",
+      "differentiation": "warn",
+      "status_quo_contrast": "pass",
+      "conciseness_does": "pass",
+      "outcome_specificity": "pass",
+      "escalation": "pass",
+      "quantification": "pass",
+      "emotional_resonance": "pass",
+      "conciseness_means": "warn"
+    },
+    "overall": "warn"
+  },
+  "created": "2026-03-18"
+}

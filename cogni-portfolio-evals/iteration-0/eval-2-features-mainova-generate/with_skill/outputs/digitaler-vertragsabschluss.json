@@ -1,0 +1,14 @@
+{
+  "slug": "digitaler-vertragsabschluss",
+  "name": "Digitaler Vertragsabschluss",
+  "description": "Online-Abschlussstrecke fuer Strom-, Gas- und Fernwaermetarife mit integriertem Tarifrechner, digitalem Identitaetsnachweis und automatisierter Lieferantenwechsel-Abwicklung nach den regulatorischen Wechselprozessen im Messwesen (WiM).",
+  "category": "customer-interaction",
+  "taxonomy_mapping": {
+    "dimension": 6,
+    "category_id": "6.1",
+    "category_name": "Custom Application Development",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "product_slug": "digitale-kundendienste"
+}

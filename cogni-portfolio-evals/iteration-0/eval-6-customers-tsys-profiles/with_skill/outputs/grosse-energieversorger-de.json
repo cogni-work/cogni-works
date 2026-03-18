@@ -1,0 +1,275 @@
+{
+  "slug": "grosse-energieversorger-de",
+  "market_slug": "grosse-energieversorger-de",
+  "profiles": [
+    {
+      "role": "CIO / Bereichsleiter IT",
+      "seniority": "C-1",
+      "pain_points": [
+        "Doppelbelastung Legacy-Modernisierung und SAP S/4HANA-Migration (IS-U Support-Ende 2027) bei gleichzeitigem Betrieb mit 99,9%-Verfügbarkeits-SLA",
+        "Akuter IT-Fachkräftemangel (137.000+ offene IT-Stellen in DE) blockiert Digitalisierungsprojekte um 3-10 Monate",
+        "Cloud-Paradox: Kostenreduktion erfordert Cloud-Adoption, aber KRITIS-konforme Datenresidenz in DE ist 60-80% teurer als US-Hyperscaler-Alternativen",
+        "KI-Druck vom Vorstand ohne klare ROI-Basis — 94% der Utility-CIOs planen +38% KI-Ausgaben in 2025, aber qualifiziertes Personal fehlt",
+        "OT/IT-Konvergenz bindet knappe Architektur-Ressourcen und erfordert Dual-Kompetenz (Elektrotechnik + IT + Security), die intern kaum vorhanden ist"
+      ],
+      "buying_criteria": [
+        "Ende-zu-Ende-Fähigkeit über Cloud, Security, Workplace und OT aus einer Hand",
+        "Rahmenvertragsfähigkeit nach SektVO (bis 8 Jahre mit Call-Off-Struktur)",
+        "Nachgewiesene KRITIS-Zertifizierung und BSI-C5-Konformität",
+        "Referenzen bei vergleichbaren deutschen Energieversorgern oder ÜNB/VNB",
+        "Managed-Services-Modell zur Kompensation des Fachkräftemangels mit deutschsprachigem Support"
+      ],
+      "information_sources": [
+        "Gartner CIO Agenda (Power & Utilities Vertical)",
+        "Lünendonk IT-Services-Ranking und Future-Utility-Studien",
+        "BDEW Kongress (jährlich, Berlin)",
+        "E-world Energy & Water (jährlich, Essen)",
+        "CIO-Peer-Netzwerke (Evanta CIO Inner Circle, CIOnet)"
+      ],
+      "decision_role": "Initiiert die Beschaffung, definiert Architekturvorgaben, steuert Vendor-Auswahl — primärer Deal-Champion und Architektur-Gatekeeper"
+    },
+    {
+      "role": "CISO / Leiter Informationssicherheit",
+      "seniority": "C-1",
+      "pain_points": [
+        "NIS2-Registrierungsfrist April 2026 mit erweitertem Scope von 4.500 auf ca. 29.500 beaufsichtigte Entitäten — Energieversorger als 'Essential Entities' unter verschärfter Aufsicht",
+        "KRITIS-DachG (seit Januar 2026) fordert erstmals physische, digitale und Resilienz-Kontrollen in einem integrierten Framework mit Vorstandshaftung bis 2% des Jahresumsatzes",
+        "OT-Security-Integration unter CISO bei 70% geplant, aber erst bei 9% umgesetzt — Dual-Framework-Komplexität (IEC 62443 + ISO 27001) überfordert bestehende Teams",
+        "Supply-Chain-Risiken durch geopolitische Lage: US-Cloud-Anbieter unter Datenzugriffs-Scrutiny (CLOUD Act), deutsche Alternativen oft nicht skalierbar",
+        "Biannuelle BSI-Audits erfordern lückenlose Compliance-Nachweise über alle Infrastrukturschichten — manuell nicht mehr leistbar bei wachsendem Scope"
+      ],
+      "buying_criteria": [
+        "BSI-C5-Zertifizierung und ISO 27001 / IEC 62443 Konformität",
+        "SOC 24/7 mit Incident-Response unter 15 Minuten (MTTD/MTTR)",
+        "Datenresidenz ausschließlich in deutschen Rechenzentren mit EU-Personal",
+        "Automatisierte Compliance-Reporting für NIS2- und KRITIS-Audits",
+        "Nachgewiesene OT-Security-Expertise mit Energiesektor-Referenzen (50+ KRITIS-Betreiber)"
+      ],
+      "information_sources": [
+        "BSI-Lageberichte und KRITIS-Handlungsempfehlungen",
+        "OpenKRITIS und UP KRITIS Arbeitsgruppen",
+        "BDEW-Whitepaper IT-Sicherheit in der Energiewirtschaft",
+        "VDE/DKE-Normengremien zu IEC 62443",
+        "Morrison Foerster / Gleiss Lutz Compliance-Guidance zu NIS2/KRITIS-DachG"
+      ],
+      "decision_role": "Compliance-Gatekeeper mit unabhängigem Vetorecht — blockiert jeden Deal ohne KRITIS-konforme Sicherheitsarchitektur. Prüft Vendor-Zertifizierungen vor Shortlisting."
+    },
+    {
+      "role": "Leiter OT / Netzleittechnik",
+      "seniority": "Director-Level",
+      "pain_points": [
+        "Smart-Meter-Rollout-Rückstand: nur 15% von 4,6 Mio. iMSys installiert, 95%-Pflicht bis 2030 — massiver Integrationsdruck auf OT-Systeme",
+        "Legacy-SCADA/EMS nicht für Cloud-Integration oder moderne IT-Security-Standards konzipiert — Netzstabilität hat absoluten Vorrang vor Modernisierung",
+        "24h-Lieferantenwechsel-Pflicht seit Januar 2025 erfordert Echtzeit-Datenprozessierung und vollständigen Billing-System-Umbau",
+        "DER-Komplexität: Tausende Microgrids, virtuelle Kraftwerke und Speichersysteme müssen in Echtzeit integriert und gesteuert werden",
+        "Alternde OT-Belegschaft ohne Nachwuchs für die seltene Kombination Elektrotechnik + IT + Cybersecurity"
+      ],
+      "buying_criteria": [
+        "Nachgewiesene OT-Expertise mit praktischer Energienetz-Betriebserfahrung",
+        "Garantierte Netzleitstabilität während jeder Migration oder Integration",
+        "IEC 62351/61850-Konformität und Unterstützung von OT-Protokollen (DNP3, IEC 61850, OPC-UA)",
+        "Fähigkeit zur schrittweisen Migration ohne Big-Bang-Ansatz",
+        "Referenzen bei deutschen Übertragungs- oder Verteilnetzbetreibern"
+      ],
+      "information_sources": [
+        "VDE-Normen und FNN (Forum Netztechnik/Netzbetrieb)",
+        "Herstellerforen und User Groups (Siemens, ABB, Schneider Electric)",
+        "BDEW-Fachausschüsse Netzleittechnik",
+        "E-world Energy & Water (OT-Track)",
+        "Hannover Messe Energie"
+      ],
+      "decision_role": "Technischer Evaluator mit Vetorecht für operative Sicherheit — blockiert Deals, wenn Netzstabilität nicht zweifelsfrei gewährleistet ist. Definiert OT-spezifische Anforderungen im Pflichtenheft."
+    },
+    {
+      "role": "CFO / Kaufmännischer Geschäftsführer",
+      "seniority": "C-Level",
+      "pain_points": [
+        "Regulatorische Capex-Explosion: Smart-Meter-Rollout, KRITIS-Compliance und NIS2-Umsetzung treffen gleichzeitig auf IT-Budgets unter 2% vom Umsatz",
+        "Cloud-Kosten in Deutschland 60-80% höher als US-Alternativen durch Datenresidenz-Aufschlag — ROI-Modelle der Hyperscaler brechen bei KRITIS-Anforderungen zusammen",
+        "Vendor-Lock-in-Risiko bei 8-Jahres-Rahmenverträgen: Wechselkosten (Datenmigration, Nachschulung, Compliance-Re-Zertifizierung) übersteigen oft die initiale Ersparnis",
+        "CSRD/ESRS-Nachhaltigkeitsberichterstattung erfordert neue IT-Plattformen für Scope-1-3-Emissionstracking — zusätzlicher ungeplanter Spend",
+        "Energiemarkt-Volatilität komprimiert operative Margen und erzwingt IT-Investitionsstopps mitten in laufenden Transformationsprogrammen"
+      ],
+      "buying_criteria": [
+        "TCO-Transparenz mit klarer Capex/Opex-Trennung über Vertragslaufzeit",
+        "Festpreismodelle für definierte Scopes mit kalkulierbarem Kostenrahmen",
+        "Exit-Klauseln für Regulierungsänderungen und Vendor-Underperformance",
+        "Nachweisbare Kosteneinsparung >15% gegenüber Status quo",
+        "Volume-Discounts und degressive Preismodelle für Multi-Jahr-Verträge"
+      ],
+      "information_sources": [
+        "Wirtschaftsprüfer-Analysen und IT-Benchmarks (KPMG, Deloitte, PwC)",
+        "Bitkom IT-Markt-Studien Deutschland",
+        "Lünendonk-Preisvergleiche IT-Dienstleister",
+        "BDEW Wirtschaftsberichte Energiebranche",
+        "Board-Netzwerke und CFO-Roundtables"
+      ],
+      "decision_role": "Finale Budgetfreigabe bei ACV >5M EUR — gibt wirtschaftlichen Rahmen vor und genehmigt oder blockiert Investitionen. Kein technisches Detailwissen, entscheidet auf Basis von TCO-Vergleich und Risiko."
+    }
+  ],
+  "buying_committee": {
+    "typical_size": "7-12",
+    "decision_model": "Konsensbasiert mit verteiltem Vetorecht. CIO initiiert und championed. CISO hat unabhängiges Vetorecht (Compliance/Sicherheit). OT-Leiter hat Vetorecht (Betriebssicherheit). CFO gibt finale Budgetfreigabe (>5M EUR ACV). Procurement/Einkauf steuert SektVO-Prozess und Rahmenvertragsverhandlung. Zusätzlich: Betriebsrat bei Personalübergang/Outsourcing, Rechtsabteilung bei Datenschutz und Vertragsgestaltung.",
+    "typical_deal_size": "5-8M EUR ACV bei umfassenden Managed Infrastructure + Cloud Services",
+    "sales_cycle": "9-18 Monate (bis 24 Monate bei komplexen OT-Projekten oder erstmaligem Vendor-Onboarding)",
+    "deal_stall_points": [
+      "BSI-Vetting des Vendors (3-6 Monate): Vor Shortlisting muss der Anbieter BSI-C5-Attestierung und KRITIS-Konformität nachweisen — fehlt diese, stagniert der Prozess bevor er beginnt",
+      "SLA-Verhandlung für 99,9% bei OT-kritischen Systemen: OT-Leiter fordert Penalty-Klauseln, die über übliche IT-SLAs hinausgehen — Vertragsverhandlung dauert 2-4 Monate",
+      "Multi-Stakeholder-Deadlock Cloud vs. On-Prem vs. isoliertes OT-Netz: CIO will Cloud-First, OT-Leiter will Air-Gapped, CISO will Sovereign — Kompromissfindung blockiert Architekturentscheidung",
+      "Budget-Freezes durch Energiemarkt-Volatilität: Strompreisschocks oder regulatorische Änderungen (z.B. EEG-Novelle) führen zu sofortigen Investitionsstopps, unabhängig vom Projektfortschritt",
+      "Betriebsratsbeteiligung bei Personalübergang: Outsourcing-Deals mit Personalübernahme erfordern BR-Zustimmung — Verhandlung kann 3-6 Monate zusätzlich beanspruchen",
+      "Procurement-/SektVO-Vergabeprozess: Formale Vergabeverfahren nach Sektorenverordnung mit EU-weiter Ausschreibungspflicht ab Schwellenwerten — prozedurale Verzögerung von 2-4 Monaten"
+    ]
+  },
+  "named_customers": [
+    {
+      "name": "E.ON SE",
+      "domain": "eon.com",
+      "industry": "Energieversorgung & Distribution",
+      "headquarters": "Essen, Deutschland",
+      "employees": 79000,
+      "revenue": { "value": 89360000000, "currency": "EUR", "year": 2025 },
+      "fit_score": 9,
+      "fit_rationale": "Incumbent mit EUR 1-Mrd.-ICT-Outsourcing-Vertrag seit 2011 (220 transferierte Mitarbeiter). Direkte Alignment über 5+ T-Systems-Produktlinien: Cloud Services (Multi-Cloud-Optimierung über 10 EU-Länder), Infrastructure Services (Vertragsverlängerung und Erweiterung), Security Services (KRITIS/NIS2-Compliance für 10.000+ digitale Umspannwerke), Workplace Services (77.000+ Mitarbeiter), Consulting (Energiewende-Digitalisierung und KI-Strategie). Höchste Retention-Priorität im Portfolio — Verlust hätte Signalwirkung im gesamten Energiesektor.",
+      "pain_points": [
+        "Multi-Cloud-Komplexität über 10+ europäische Länder mit unterschiedlichen Regulierungsregimen (DSGVO, lokale KRITIS-Äquivalente)",
+        "OT/IT-Konvergenz für Smart-Grid-Digitalisierung — 10.000+ digitale Umspannwerke erfordern integriertes Monitoring",
+        "SAP-ECC-End-of-Support bis 2027 — S/4HANA-Skalierung über alle Geschäftsbereiche bei laufendem Betrieb",
+        "KI/Agentic-Systems-Integration für prädiktives Grid-Management ohne Fachkräfte-Aufbau"
+      ],
+      "tech_stack": [
+        "SAP S/4HANA via SAP BTP (Cloud-ERP, IS-U-Nachfolge)",
+        "SAP Datasphere (Analytics / Data Fabric)",
+        "Microsoft 365 mit Copilot (Digital Workplace)",
+        "Infosys (Digital Workplace Partnerschaft, seit Mai 2025)",
+        "Schneider Electric (Smart Grid / OT)",
+        "PSI AG (intelligente Netzleitsysteme)",
+        "T-Systems (ICT-Outsourcing, Festnetz, Mobilfunk, UC, Datennetz)"
+      ],
+      "recent_news": [
+        "Mai 2025: Strategische Infosys-Partnerschaft für KI-gestützten Digital Workplace (77.000+ MA) — potenzielle Konkurrenz zu T-Systems Workplace-Scope",
+        "2025: Cloud-ERP-Transformation abgeschlossen — 5 Rechenzentren geschlossen, 75.000+ Arbeitsplätze migriert",
+        "Juli 2025: 10.000ste digitale Umspannstation (neonpulse) deployed — größtes Smart-Grid-Programm in Europa",
+        "2025: Victoria Ossadnik (Vorstand Digitalisierung, Innovation, Cyber Security) treibt KI-Strategie mit Agentic Systems voran"
+      ],
+      "buying_committee_dynamics": {
+        "champion": "Sebastian Weber (CIO) — steuert IT-Architektur und Vendor-Strategie, langjährige T-Systems-Beziehung",
+        "economic_buyer": "CFO / Vorstand Finanzen — Budgetfreigabe für Vertragsverlängerungen >100M EUR",
+        "influencer": "Victoria Ossadnik (Vorstand Digitalisierung) — definiert KI- und Innovationspriorität, kann Scope erweitern",
+        "gatekeeper": "Christopher d'Arcy (Co-Leader E.ON Digital Technology GmbH) — technische Evaluierung und Delivery-Qualität",
+        "blocker_risk": "Infosys-Partnerschaft für Digital Workplace könnte Scope-Erosion bei Workplace Services verursachen. Schneider Electric als OT-Partner begrenzt T-Systems' Zugang zum Grid-Layer."
+      },
+      "deal_stall_risks": [
+        "Vertragsverlängerung vs. Re-Compete: E.ON könnte bei nächster Vertragsverlängerung formalen SektVO-Wettbewerb fordern — Incumbency-Vorteil schrumpft",
+        "Infosys-Workplace-Expansion: Wenn Infosys Digital-Workplace-Scope übernimmt, verliert T-Systems Touchpoints zu 77.000 Endusern",
+        "Multi-Vendor-Strategie: E.ON diversifiziert bewusst (SAP BTP, Infosys, Schneider) — 'Single Vendor' Argument verliert an Kraft"
+      ],
+      "source_urls": [
+        "https://www.telekom.com/en/media/media-information/detail/e-on-awards-major-ict-deal-to-t-systems-353386",
+        "https://www.cio.de/a/eon-beruft-sebastian-weber-zum-it-chef,3664518",
+        "https://news.sap.com/2025/08/eon-cloud-erp-journey-transformation-speed-trust-agility/",
+        "https://www.infosys.com/newsroom/press-releases/2025/strategic-partnership-eon.html"
+      ]
+    },
+    {
+      "name": "RWE AG",
+      "domain": "rwe.com",
+      "industry": "Stromerzeugung & Erneuerbare Energien",
+      "headquarters": "Essen, Deutschland",
+      "employees": 20500,
+      "revenue": { "value": 24220000000, "currency": "EUR", "year": 2025 },
+      "fit_score": 8,
+      "fit_rationale": "Bestehender 5-Jahres-Workplace-Management-Vertrag als Upsell-Plattform. Multi-Cloud-Umgebung (Azure für SAP RISE, AWS für KI/Datenanalytik, HPE Private Cloud AI) passt ideal zu T-Systems Cloud Services und Multi-Cloud-FinOps. SAP-RISE-Migration auf Azure schafft Bedarf für Application Services (IS-U-Ablösung). KRITIS-Compliance und OT-Security für verteilte erneuerbare Assets (Offshore-Wind, Solar, Onshore-Wind) adressieren Security Services. EUR 35 Mrd. Netto-Investitionsplan 2026-2031 signalisiert Expansionsbudget.",
+      "pain_points": [
+        "Legacy-SAP-Systeme erreichen End-of-Life 2027 — RISE with SAP Migration auf Azure Private Edition beschleunigt, aber IS-U-Ablösung in Progress",
+        "OT/IT-Konvergenz: Integration verteilter erneuerbarer Assets (Offshore-Wind, Solar, Batteriespeicher) mit Enterprise-IT unter einem Monitoring-Framework",
+        "Post-Asset-Swap-Komplexität: Integration der von E.ON übernommenen Erzeugungs-Assets erfordert noch IT-System-Harmonisierung",
+        "High-Volume-Datenstreaming für Grid-Operationen und Feed-in-Monitoring bei exponentiell wachsendem Renewables-Portfolio"
+      ],
+      "tech_stack": [
+        "SAP Cloud ERP Private Edition auf Azure (RISE with SAP, seit 2025)",
+        "AWS (Strategic Collaboration Framework Agreement, Juni 2025 — KI und Datenanalytik)",
+        "HPE Private Cloud AI (On-Premise AI-Inferenz)",
+        "Microsoft 365 (Digital Workplace)",
+        "ServiceNow (IT Service Management)",
+        "Infosys (Digital Workplace Automation, seit Juli 2025)",
+        "T-Systems (Workplace Management, On-Site-Support, IT-Hotline)"
+      ],
+      "recent_news": [
+        "Juni 2025: AWS Strategic Collaboration Framework Agreement für KI und Datenanalytik — signifikante Cloud-Investition außerhalb T-Systems-Scope",
+        "Juli 2025: Infosys-Partnerschaft für automatisierte Digital-Workplace-Transformation — Überschneidung mit T-Systems Workplace-Vertrag",
+        "März 2026: EUR 35 Mrd. Netto-Investitionsplan 2026-2031 angekündigt — massives Budget für Infrastruktur und Digitalisierung",
+        "2025: SAP RISE Migration auf Azure Private Edition abgeschlossen — nächster Schritt ist IS-U-Ablösung und S/4HANA-Skalierung"
+      ],
+      "buying_committee_dynamics": {
+        "champion": "CIO (nicht öffentlich identifiziert) — steuert IT-Strategie und Cloud-Architektur",
+        "economic_buyer": "CFO Michael Müller — Budgetfreigabe für Multi-Jahr-IT-Verträge, fokussiert auf Kosteneffizienz bei EUR 35 Mrd. Investitionsprogramm",
+        "influencer": "Nikk Gilbert (CISO) — definiert Security-Anforderungen, KRITIS/NIS2-Compliance als harte Gate-Kriterien",
+        "gatekeeper": "Procurement / Einkauf — SektVO-konformer Vergabeprozess, achtet auf Multi-Vendor-Diversifikation",
+        "blocker_risk": "AWS-Partnerschaft (KI/Datenanalytik) und Infosys (Workplace) signalisieren Multi-Vendor-Strategie — T-Systems muss differenzieren über Sovereign Cloud und OT-Security, nicht über Workplace oder Public Cloud."
+      },
+      "deal_stall_risks": [
+        "AWS und Infosys Scope-Erosion: Neue Partnerschaften reduzieren T-Systems' potenzielle Erweiterungspfade — Upsell muss über Security und Sovereign Cloud laufen",
+        "CIO-Vakanz/Anonymität: Kein öffentlich identifizierter CIO erschwert Champion-Building und strategische Alignment-Gespräche",
+        "Budget-Konkurrenz: EUR 35 Mrd. Investitionsplan priorisiert Renewables-Capex — IT-Budgets konkurrieren intern mit Windpark- und Solar-Investments"
+      ],
+      "source_urls": [
+        "https://www.telekom.com/en/media/media-information/detail/t-systems-wins-big-deal-from-rwe-359994",
+        "https://www.sap.com/asset/dynamic/2025/08/5a2f883a-167f-0010-bca6-c68f7e60039b.html",
+        "https://www.rwe.com/en/press/rwe-ag/2026-03-12-rwe-delivers-strong-financial-performance/",
+        "https://press.aboutamazon.com/2025/6/aws-and-rwe-announce-strategic-collaboration"
+      ]
+    },
+    {
+      "name": "EnBW Energie Baden-Württemberg AG",
+      "domain": "enbw.com",
+      "industry": "Energieversorgung & Utilities (Konzern)",
+      "headquarters": "Karlsruhe, Deutschland",
+      "employees": 29000,
+      "revenue": { "value": 44400000000, "currency": "EUR", "year": 2024 },
+      "fit_score": 8,
+      "fit_rationale": "Greenfield-Opportunity ohne bestehenden T-Systems IT-Services-Vertrag. Sovereign Cloud als Alternative zum internen OpenStack (Cloud&Heat), Security Services für OT/IT/KRITIS-Konvergenz (EnBW Cyber Security GmbH als potenzieller Partner oder Wettbewerber), Consulting für NIS2-Roadmaps. CIO-Vakanz seit Oktober 2024 (Martin Hölz Abgang) bietet Timing-Fenster für neue Vendor-Beziehung — neuer CIO definiert IT-Strategie neu. DT-Partnerschaft (PASM PPA, Plusnet Open-Access-Glasfaser) als Gesprächsöffner. EUR 50 Mrd. Investitionsprogramm bis 2030 signalisiert massiven IT-Skalierungsbedarf.",
+      "pain_points": [
+        "KRITIS/NIS2-Compliance-Last bei erweitertem Scope und verschärfter Durchsetzung — EnBW Cyber Security GmbH als Tochter zeigt, dass das Thema strategisch priorisiert wird",
+        "OT/IT-Security-Konvergenz: Legacy-SCADA-Systeme neben moderner Cloud-Infrastruktur absichern, bei gleichzeitiger Integration von Smart-Grid-Komponenten",
+        "Multi-Vendor-Integration: Modulare IT-Architektur (powercloud, enersis, Cloud&Heat, meshStack) erfordert aktive Orchestrierung und erhöht Komplexität",
+        "EUR 50 Mrd. Investitionsprogramm bis 2030 erfordert skalierende IT-Infrastruktur — internes IT-Team (~900 MA für 18.000 User) am Kapazitätslimit"
+      ],
+      "tech_stack": [
+        "powercloud (Sales-IT/CRM-Modernisierung — SaaS-basiert)",
+        "enersis (Digital Twins für Smart Grids — Startup-Beteiligung)",
+        "Cloud&Heat (OpenStack Green Cloud — Open-Source-Infrastruktur)",
+        "meshStack (Platform Engineering / Internal Developer Platform)",
+        "EnBW Cyber Security GmbH (Cyber Defense Center — eigene Tochter seit 2022)",
+        "SAP (ERP-Backbone, IS-U für Energievertrieb)",
+        "Microsoft 365 (Digital Workplace, Annahme basierend auf Unternehmensgröße)"
+      ],
+      "recent_news": [
+        "Oktober 2024: CIO Martin Hölz verlässt EnBW — Nachfolgesuche läuft, strategisches Timing-Fenster für neuen Vendor",
+        "2024: Digitalisierungsprojekt EnPower abgeschlossen — 3,5 Mio. Kunden erfolgreich auf neue IT-Plattform migriert",
+        "2024-2025: EnBW Cyber Security GmbH expandiert Marktpräsenz, Teilnahme an it-sa — potenzieller Partner oder Wettbewerber für T-Systems Security Services",
+        "2025: EUR 50 Mrd. Investitionsprogramm bis 2030 bestätigt — Fokus auf Erneuerbare, Netze und Digitalisierung"
+      ],
+      "buying_committee_dynamics": {
+        "champion": "Neuer CIO (noch nicht öffentlich benannt) — wird IT-Strategie und Vendor-Landschaft neu definieren, kritisches Timing für First-Mover-Positionierung",
+        "economic_buyer": "CFO Thomas Kusterer — verantwortet EUR 50 Mrd. Investitionsprogramm, strenge Kostenkontrolle bei IT-Spend",
+        "influencer": "Georg Stamatelopoulos (CEO) — treibt Energiewende-Strategie, priorisiert Digitalisierung als Enabler",
+        "gatekeeper": "EnBW Cyber Security GmbH (Tochter) — eigene Security-Kompetenz kann T-Systems SOC-Angebot als redundant oder als komplementär bewerten",
+        "blocker_risk": "Eigene Cyber-Security-Tochter (EnBW Cyber Security GmbH) könnte externes SOC-Angebot als Konkurrenz zum internen Geschäftsmodell sehen. Modulare Multi-Vendor-Architektur (powercloud, enersis, Cloud&Heat, meshStack) zeigt Präferenz für Best-of-Breed statt Plattform-Anbieter."
+      },
+      "deal_stall_risks": [
+        "CIO-Vakanz: Ohne designierten CIO fehlt ein Champion für strategische IT-Outsourcing-Entscheidungen — Deal kann monatelang in Evaluation hängen",
+        "Eigene Cyber-Security-Tochter: EnBW Cyber Security GmbH kann T-Systems SOC-Angebot als Kannibalisierung eigener Wertschöpfung blockieren",
+        "Best-of-Breed-Präferenz: Modulare Architektur zeigt Abneigung gegen Single-Vendor-Plattformen — T-Systems muss als Integrator, nicht als Plattform-Ersatz positioniert werden",
+        "OpenStack-Commitment: Cloud&Heat-Partnerschaft signalisiert Open-Source-Präferenz — Sovereign Cloud (ebenfalls OpenStack-basiert) könnte Synergien bieten, aber auch als redundant empfunden werden"
+      ],
+      "source_urls": [
+        "https://www.cio.de/article/3700994/enbw-energie-baden-wuerttemberg-ag-it-fakten-und-it-strategie.html",
+        "https://www.enbw.com/cyber-security/gesetzliche-anforderungen/nis2-richtlinie.html",
+        "https://www.enbw.com/press/enbw-annual-general-meeting-2025.html",
+        "https://www.enbw.com/unternehmen/investoren/finanzpublikationen/"
+      ]
+    }
+  ],
+  "created": "2026-03-18"
+}

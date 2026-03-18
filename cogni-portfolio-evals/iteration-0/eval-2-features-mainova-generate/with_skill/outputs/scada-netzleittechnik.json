@@ -1,0 +1,14 @@
+{
+  "slug": "scada-netzleittechnik",
+  "name": "SCADA-Netzleittechnik",
+  "description": "Zentrales Leitsystem mit SCADA-Anbindung zur Echtzeit-Ueberwachung und Fernsteuerung der Strom-, Gas- und Fernwaermenetze ueber redundante Kommunikationsinfrastruktur. Umfasst Schalthandlungen, Zustandsueberwachung und automatisierte Grenzwertueberwachung.",
+  "category": "grid-operations",
+  "taxonomy_mapping": {
+    "dimension": 5,
+    "category_id": "5.4",
+    "category_name": "Infrastructure Monitoring",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "product_slug": "digitale-netzsteuerung"
+}

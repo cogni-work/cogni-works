@@ -1,0 +1,31 @@
+{
+  "slug": "vendor-contract-management--grosse-energieversorger-de",
+  "feature_slug": "vendor-contract-management",
+  "market_slug": "grosse-energieversorger-de",
+  "is_statement": "Optimierung von Vendor-Portfolio und Vertragsstrukturen durch TCO-Analysen und Beschaffungsstruktur-Redesign mittels Detecon IT Cost Compass.",
+  "does_statement": "Ihr IT-Vendor-Portfolio mit 50-100+ Lieferanten wird durch TCO-Analysen und Vertragsrestrukturierung konsolidiert — statt gewachsene Vertragslandschaften mit intransparenten Konditionen fortzuschreiben.",
+  "means_statement": "IT-Beschaffungskosten sinken nachweislich um 15-23%, was bei einem typischen IT-Budget von 50+ Mio. EUR jährlich 7-12 Mio. EUR für Energiewende-Investitionen freisetzt.",
+  "evidence": [
+    {
+      "statement": "Detecon IT Cost Compass identifiziert durchschnittlich 22,8% Einsparpotenzial bei Vendor-Management-Optimierungen.",
+      "source_url": null,
+      "source_title": null
+    }
+  ],
+  "quality_assessment": {
+    "dimensions": {
+      "buyer_centricity": "pass",
+      "market_specificity": "pass",
+      "differentiation": "pass",
+      "status_quo_contrast": "pass",
+      "conciseness_does": "pass",
+      "outcome_specificity": "pass",
+      "escalation": "pass",
+      "quantification": "pass",
+      "emotional_resonance": "warn",
+      "conciseness_means": "pass"
+    },
+    "overall": "warn"
+  },
+  "created": "2026-03-18"
+}

@@ -1,0 +1,14 @@
+{
+  "slug": "rechenzentrumsbetrieb",
+  "name": "Rechenzentrumsbetrieb und Hosting",
+  "description": "Eigenbetriebenes Rechenzentrum mit virtualisierten Server- und Speicherressourcen auf VMware-Basis, georedundantem Backup-Standort und BSI-konformer physischer Zutrittskontrolle. Betrieb als KRITIS-Rechenzentrum mit ISO-27001-Zertifizierung.",
+  "category": "infrastructure",
+  "taxonomy_mapping": {
+    "dimension": 5,
+    "category_id": "5.1",
+    "category_name": "Data Center Services",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "product_slug": "it-plattformdienste"
+}

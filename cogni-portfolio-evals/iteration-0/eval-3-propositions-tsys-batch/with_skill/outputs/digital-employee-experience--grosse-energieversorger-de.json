@@ -1,0 +1,31 @@
+{
+  "slug": "digital-employee-experience--grosse-energieversorger-de",
+  "feature_slug": "digital-employee-experience",
+  "market_slug": "grosse-energieversorger-de",
+  "is_statement": "DEX-Analytik-Plattform für Echtzeit-Messung der Mitarbeiter-Arbeitsplatzerfahrung über individualisierte KPI-Dashboards mit intelligenter Prozessautomatisierung.",
+  "does_statement": "Ihre Außendiensttechniker, Leitstellenmitarbeiter und Verwaltungsteams erhalten messbar bessere digitale Werkzeuge — mit Echtzeit-Dashboards, die Engpässe an verteilten Standorten sofort sichtbar machen.",
+  "means_statement": "Die Mitarbeiterzufriedenheit steigt messbar, was in einem Arbeitsmarkt mit 15.000+ offenen Stellen im Energiesektor direkt die Fluktuation und Recruiting-Kosten senkt.",
+  "evidence": [
+    {
+      "statement": "Der deutsche Energiesektor hatte 2024 laut BDEW über 15.000 offene Stellen, besonders bei Netzfachkräften und IT-Spezialisten.",
+      "source_url": null,
+      "source_title": null
+    }
+  ],
+  "quality_assessment": {
+    "dimensions": {
+      "buyer_centricity": "pass",
+      "market_specificity": "pass",
+      "differentiation": "warn",
+      "status_quo_contrast": "pass",
+      "conciseness_does": "pass",
+      "outcome_specificity": "pass",
+      "escalation": "pass",
+      "quantification": "pass",
+      "emotional_resonance": "pass",
+      "conciseness_means": "pass"
+    },
+    "overall": "warn"
+  },
+  "created": "2026-03-18"
+}

@@ -1,0 +1,31 @@
+{
+  "slug": "cx-digital-marketing--grosse-energieversorger-de",
+  "feature_slug": "cx-digital-marketing",
+  "market_slug": "grosse-energieversorger-de",
+  "is_statement": "CX-Beratung mit Fit-Gap-Analyse, Target Operating Model und omnichannel Customer-Journey-Mapping mit KI-gestützter Kundenkommunikation.",
+  "does_statement": "Ihre Endkunden-Portale, Tarifwechsel-Journeys und Störungsmeldungen werden zu einer nahtlosen Omnichannel-Erfahrung zusammengeführt — statt isolierter Kanäle mit Medienbrüchen.",
+  "means_statement": "Die Wechselquote Ihrer Privatkunden sinkt messbar, weil digitale Self-Service-Prozesse die Kundenzufriedenheit steigern — bei gleichzeitiger Reduktion der Call-Center-Kosten um 25-35%.",
+  "evidence": [
+    {
+      "statement": "Die jährliche Wechselquote im deutschen Strommarkt liegt bei 10-14%, wobei Servicequalität ein Haupttreiber ist laut BDEW-Erhebungen.",
+      "source_url": null,
+      "source_title": null
+    }
+  ],
+  "quality_assessment": {
+    "dimensions": {
+      "buyer_centricity": "pass",
+      "market_specificity": "pass",
+      "differentiation": "warn",
+      "status_quo_contrast": "pass",
+      "conciseness_does": "pass",
+      "outcome_specificity": "pass",
+      "escalation": "pass",
+      "quantification": "pass",
+      "emotional_resonance": "warn",
+      "conciseness_means": "pass"
+    },
+    "overall": "warn"
+  },
+  "created": "2026-03-18"
+}

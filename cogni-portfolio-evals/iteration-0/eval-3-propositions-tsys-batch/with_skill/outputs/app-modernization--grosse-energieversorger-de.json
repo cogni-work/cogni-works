@@ -1,0 +1,31 @@
+{
+  "slug": "app-modernization--grosse-energieversorger-de",
+  "feature_slug": "app-modernization",
+  "market_slug": "grosse-energieversorger-de",
+  "is_statement": "Systematische Legacy-Modernisierung durch intelligente Discovery, Assessment und flexible Rehost-, Replatform- oder Refactor-Strategien, beschleunigt durch AI-gestützte Code-Analyse.",
+  "does_statement": "Ihre IS-U- und Abrechnungssysteme werden schrittweise auf S/4HANA-fähige Architekturen migriert — ohne den laufenden Zähler- und Bilanzkreisbetrieb zu unterbrechen.",
+  "means_statement": "Die S/4HANA-Deadline 2027 wird ohne Betriebsrisiko eingehalten, und die modernisierte Plattform senkt Wartungskosten um 30-40% gegenüber dem fragmentierten Legacy-Betrieb.",
+  "evidence": [
+    {
+      "statement": "SAP beendet Mainstream-Support für ECC 6.0 Ende 2027, was alle IS-U-basierten Abrechnungssysteme betrifft.",
+      "source_url": null,
+      "source_title": null
+    }
+  ],
+  "quality_assessment": {
+    "dimensions": {
+      "buyer_centricity": "pass",
+      "market_specificity": "pass",
+      "differentiation": "warn",
+      "status_quo_contrast": "pass",
+      "conciseness_does": "pass",
+      "outcome_specificity": "pass",
+      "escalation": "pass",
+      "quantification": "pass",
+      "emotional_resonance": "warn",
+      "conciseness_means": "pass"
+    },
+    "overall": "warn"
+  },
+  "created": "2026-03-18"
+}

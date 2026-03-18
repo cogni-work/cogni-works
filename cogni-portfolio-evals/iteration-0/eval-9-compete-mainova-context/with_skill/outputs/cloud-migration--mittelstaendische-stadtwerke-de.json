@@ -1,0 +1,126 @@
+{
+  "slug": "cloud-migration--mittelstaendische-stadtwerke-de",
+  "proposition_slug": "cloud-migration--mittelstaendische-stadtwerke-de",
+  "competitors": [
+    {
+      "name": "Arvato Systems",
+      "positioning": "Spezialisierter IT-Dienstleister fuer Energieversorger mit eigener Branchenloesung AEP.EnergySuite und starker Stadtwerke-Referenzbasis (Leipzig, Potsdam, Dinslaken, Wolfhagen, Muenchen).",
+      "strengths": [
+        "Tiefe Branchenkenntnis Energiewirtschaft mit eigener Branchenloesung AEP.EnergySuite (CRM, Billing, MaKo)",
+        "Nachgewiesene Stadtwerke-Referenzen: SAP S/4HANA-Transformation bei Stadtwerke Potsdam, Digitalisierung Leipziger Stadtwerke",
+        "Cloud-basierte Messstellen-Loesung und MaKo-Cloud fuer regulatorische Marktprozesse",
+        "Kombination aus Microsoft Dynamics 365 und SAP S/4HANA — flexibel je nach Kundenbedarf",
+        "RPA- und KI-Kompetenz fuer Prozessautomatisierung im Versorgungsumfeld"
+      ],
+      "weaknesses": [
+        "Kein eigenes Rechenzentrums- oder Cloud-Infrastrukturangebot — abhaengig von Hyperscalern (Azure, AWS)",
+        "Keine eigene Netzwerk-/Konnektivitaetsinfrastruktur fuer SD-WAN oder Campusnetze",
+        "Begrenzte Cybersecurity-Kapazitaeten im Vergleich zu dedizierten SOC-Anbietern",
+        "Geringere Skalierbarkeit bei KRITIS-spezifischen Hosting-Anforderungen (kein BSI-C5-eigenes Angebot)"
+      ],
+      "differentiation": "T-Systems bietet mit der BSI-C5-attestierten Open Telekom Cloud eine souveraene Infrastruktur, die Arvato Systems nicht aus eigener Hand liefern kann — fuer KRITIS-pflichtige Stadtwerke ein entscheidender Unterschied.",
+      "source_urls": [
+        "https://us.arvato-systems.com/industries/utilities",
+        "https://us.arvato-systems.com/more/press/transformation-to-sap-s4hana-at-stadtwerke-potsdam",
+        "https://us.arvato-systems.com/more/about-arvato-systems/references/digitization-leipziger-stadtwerke"
+      ]
+    },
+    {
+      "name": "adesso SE",
+      "positioning": "Agiler IT-Dienstleister mit dedizierter Stadtwerke-Offensive 2026, der Energieversorger bei Cloud-Transformation, CRM-Integration und digitaler Kundenreise begleitet.",
+      "strengths": [
+        "Dezidierte Stadtwerke-Offensive 2026 mit Fokus auf kommunale Energieversorger",
+        "Starke Cloud-Transformationskompetenz — anerkannter Cloud-Transformationspartner (z.B. ITSC-Referenz)",
+        "GenAI-Loesungen speziell fuer die Energiewirtschaft entwickelt",
+        "End-to-End-Portfolio von Strategie ueber Implementierung bis Managed Services",
+        "Referenzkunden wie Amprion, E.ON, Trianel im Energieumfeld"
+      ],
+      "weaknesses": [
+        "Primaer Beratungs- und Entwicklungshaus — kein eigenes Rechenzentrum oder Cloud-Infrastruktur",
+        "Keine KRITIS-spezifische Hosting-Loesung mit eigener BSI-Attestierung",
+        "Geringere Erfahrung im klassischen IT-Outsourcing und Betrieb im Vergleich zu Managed-Service-Anbietern",
+        "Keine eigene Netzwerkinfrastruktur oder Konnektivitaetsangebote"
+      ],
+      "differentiation": "T-Systems kombiniert Beratung, Migration und souveraenen Betrieb aus einer Hand — adesso kann die Cloud-Strategie entwickeln, muss den Betrieb aber an Dritte uebergeben.",
+      "source_urls": [
+        "https://www.adesso.de/de/branchen/energiewirtschaft/index.jsp",
+        "https://www.adesso.de/de/branchen/energiewirtschaft/referenzen/index.jsp",
+        "https://www.adesso.de/de/news/presse/adesso-wird-cloud-transformationspartner-fuer-das-itsc.jsp"
+      ]
+    },
+    {
+      "name": "Axians (VINCI Energies)",
+      "positioning": "ICT-Loesungsanbieter innerhalb des VINCI-Energies-Konzerns mit breitem Portfolio fuer Kommunen, Netzbetreiber und Stadtwerke — von Netzwerk-Infrastruktur bis Managed IT Services.",
+      "strengths": [
+        "Breites Leistungsspektrum: Cloud, Datacenter, Cybersecurity, Netzwerke und Collaboration aus einer Hand",
+        "Starke kommunale Verankerung durch Axians Infoma (Fachverfahren fuer oeffentliche Verwaltung) und Axians Athos (Abfallwirtschaft)",
+        "VINCI-Energies-Konzern als finanzstarker Mutterkonzern mit industrieller OT/IT-Konvergenzkompetenz",
+        "Regionale Praesenz durch dezentrale Markengesellschaften in ganz Deutschland"
+      ],
+      "weaknesses": [
+        "Fragmentierte Markenstruktur — Axians-Gesellschaften agieren teils unabhaengig, was Gesamtprojektsteuerung erschwert",
+        "Keine eigene souveraene Cloud-Plattform (BSI-C5-attestiert)",
+        "SAP-Energiewirtschaftskompetenz (IS-U/S4HANA Utilities) deutlich schwaecher als spezialisierte SAP-Partner",
+        "Weniger sichtbare Referenzen bei grossen Stadtwerke-Cloud-Migrationsprojekten"
+      ],
+      "differentiation": "T-Systems bietet als SAP Partner of the Year 2026 (Public) die tiefste IS-U/S4HANA-Utilities-Expertise, waehrend Axians staerker im Infrastruktur- als im Applikationsumfeld positioniert ist.",
+      "source_urls": [
+        "https://www.axians.de/",
+        "https://www.axians-infoma.de/emagazin_post/athos-ist-nun-teil-von-axians/",
+        "https://de.wikipedia.org/wiki/Axians"
+      ]
+    },
+    {
+      "name": "Sopra Steria",
+      "positioning": "Europaeischer IT-Beratungs- und Integrationspartner mit SAP-Branchenexpertise fuer Energieversorger, eigener cpX.Energy-Methodik und ueber 450 SAP-Spezialisten in Deutschland.",
+      "strengths": [
+        "Tiefe SAP-Expertise mit eigener cpX.Energy-Methodik fuer S/4HANA-Migrationen bei Energieversorgern",
+        "Ueber 2.500 SAP-Experten weltweit, davon 450+ in Deutschland",
+        "Gruendliche Studienkompetenz zur Digitalisierung kommunaler Versorger (Thought Leadership)",
+        "Greenfield-, Brownfield- und Selective-Data-Transition-Ansaetze fuer SAP-Migrationen"
+      ],
+      "weaknesses": [
+        "Kein eigenes Cloud-Infrastrukturangebot — rein beratungs- und integrationsgetrieben",
+        "Geringere Sichtbarkeit bei mittelstaendischen Stadtwerken im Vergleich zu spezialisierten Anbietern wie Arvato Systems",
+        "Keine KRITIS-konforme eigene Hosting-Plattform",
+        "Skalierungsherausforderung bei Stadtwerken mit begrenztem IT-Budget (eher Enterprise-Preismodell)"
+      ],
+      "differentiation": "T-Systems vereint SAP-Migrationskompetenz mit BSI-C5-attestiertem Hosting auf der Open Telekom Cloud — Sopra Steria muss den Betrieb an Hyperscaler oder Drittanbieter abgeben.",
+      "source_urls": [
+        "https://www.soprasteria.de/services/sap/sap",
+        "https://sap.soprasteria.de/sap-im-geschaeftsfeld/sap-s-4hana",
+        "https://www.soprasteria.de/branchen/energy-utilities"
+      ]
+    },
+    {
+      "name": "Atos / Eviden",
+      "positioning": "Globaler IT-Dienstleister im Transformationsprozess mit neuem KI-getriebenen Betriebsmodell, der ueber die Eviden-Marke Cloud- und Digitalisierungsservices fuer Energieversorger anbietet.",
+      "strengths": [
+        "Globale Skalierung und breites Technologieportfolio (Cloud, KI, HPC, Cybersecurity)",
+        "Langjährige Erfahrung im IT-Outsourcing und Rechenzentrumsbetrieb fuer Grosskunden",
+        "Neue KI-Agentic-Studios fuer datengetriebene Transformation ab 2026",
+        "Starke Cybersecurity-Praxis durch Eviden (ehem. Bull/Atos Cybersecurity)"
+      ],
+      "weaknesses": [
+        "Anhaltende finanzielle Restrukturierung — Unsicherheit ueber langfristige Stabilitaet und Investitionsfaehigkeit",
+        "Markenverwirrung durch Atos/Eviden-Aufspaltung verunsichert oeffentliche Auftraggeber",
+        "Wenig sichtbare Stadtwerke-spezifische Referenzen im Mittelstandssegment",
+        "Kein souveraenes Cloud-Angebot auf BSI-C5-Niveau fuer deutsche KRITIS-Betreiber",
+        "Organisatorischer Umbau bindet interne Ressourcen und kann Projektqualitaet beeintraechtigen"
+      ],
+      "differentiation": "T-Systems bietet mit dem Zero-Outage-Qualitaetsprogramm und der Deutschen-Telekom-Bilanz die Betriebsstabilitaet, die Stadtwerke bei einem finanziell restrukturierenden Anbieter wie Atos nicht garantiert bekommen.",
+      "source_urls": [
+        "https://atos.net/en/services/cloud-and-modern-infrastructure",
+        "https://www.blogist.de/atos-legt-finanzbericht-geschaeftsjahr-2025-vor-erfolge-in-it-infrastruktur-und-technologie-trotz-herausforderungen/",
+        "https://expanding-utilities.podigee.io/"
+      ]
+    }
+  ],
+  "trap_questions": [
+    "Koennen Sie nachweisen, dass Ihre Cloud-Plattform BSI-C5-attestiert ist und die KRITIS-Verordnung fuer Energieversorger vollstaendig erfuellt — oder setzen Sie auf Hyperscaler-Infrastruktur, bei der wir als Stadtwerk selbst fuer die Compliance verantwortlich sind?",
+    "Wie stellen Sie den unterbrechungsfreien Betrieb unserer IS-U/S4HANA-Umgebung waehrend und nach der Migration sicher — verfuegen Sie ueber ein dokumentiertes Qualitaetsprogramm mit definierten Risikoszenarien, oder basiert Ihre SLA-Zusage rein auf vertraglichen Kennzahlen?",
+    "Koennen Sie die Cloud-Migration, den SAP-Applikationsbetrieb und die Netzwerk-Konnektivitaet (SD-WAN, ggf. 5G-Campus) aus einer Hand liefern, oder muessen wir fuer Teilleistungen weitere Unterauftragnehmer managen?",
+    "Welche Stadtwerke-Referenzen im Segment 500-5.000 Mitarbeiter koennen Sie fuer abgeschlossene Cloud-Migrationsprojekte benennen — und duerfen wir mit dem IT-Leiter dieser Referenzkunden direkt sprechen?"
+  ],
+  "created": "2026-03-18"
+}

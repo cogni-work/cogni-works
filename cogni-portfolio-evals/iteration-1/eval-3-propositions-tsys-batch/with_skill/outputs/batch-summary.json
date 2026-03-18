@@ -1,0 +1,109 @@
+{
+  "eval": "eval-3-propositions-tsys-batch",
+  "iteration": 1,
+  "market": "grosse-energieversorger-de",
+  "generated_at": "2026-03-18",
+  "total_propositions": 10,
+  "gates": {
+    "is_20_35_words": 10,
+    "does_15_30_words": 10,
+    "means_15_30_words": 10,
+    "does_buyer_centric": 10,
+    "means_quantified": 10,
+    "evidence_with_urls": 30,
+    "total_evidence": 30,
+    "all_gates_pass": 10
+  },
+  "propositions": [
+    {
+      "slug": "cloud-migration--grosse-energieversorger-de",
+      "is_words": 27,
+      "does_words": 25,
+      "means_words": 25,
+      "evidence_count": 3,
+      "evidence_urls": 3,
+      "all_gates_pass": true
+    },
+    {
+      "slug": "digital-transformation-consulting--grosse-energieversorger-de",
+      "is_words": 24,
+      "does_words": 27,
+      "means_words": 18,
+      "evidence_count": 3,
+      "evidence_urls": 3,
+      "all_gates_pass": true
+    },
+    {
+      "slug": "endpoint-security--grosse-energieversorger-de",
+      "is_words": 21,
+      "does_words": 26,
+      "means_words": 23,
+      "evidence_count": 3,
+      "evidence_urls": 3,
+      "all_gates_pass": true
+    },
+    {
+      "slug": "enterprise-voice--grosse-energieversorger-de",
+      "is_words": 26,
+      "does_words": 25,
+      "means_words": 21,
+      "evidence_count": 3,
+      "evidence_urls": 3,
+      "all_gates_pass": true
+    },
+    {
+      "slug": "hybrid-cloud--grosse-energieversorger-de",
+      "is_words": 20,
+      "does_words": 30,
+      "means_words": 18,
+      "evidence_count": 3,
+      "evidence_urls": 3,
+      "all_gates_pass": true
+    },
+    {
+      "slug": "it-strategy-architecture--grosse-energieversorger-de",
+      "is_words": 23,
+      "does_words": 24,
+      "means_words": 19,
+      "evidence_count": 3,
+      "evidence_urls": 3,
+      "all_gates_pass": true
+    },
+    {
+      "slug": "managed-hyperscaler--grosse-energieversorger-de",
+      "is_words": 24,
+      "does_words": 28,
+      "means_words": 19,
+      "evidence_count": 3,
+      "evidence_urls": 3,
+      "all_gates_pass": true
+    },
+    {
+      "slug": "sap-on-cloud--grosse-energieversorger-de",
+      "is_words": 31,
+      "does_words": 26,
+      "means_words": 29,
+      "evidence_count": 3,
+      "evidence_urls": 3,
+      "all_gates_pass": true
+    },
+    {
+      "slug": "soc-managed-detection--grosse-energieversorger-de",
+      "is_words": 27,
+      "does_words": 30,
+      "means_words": 30,
+      "evidence_count": 3,
+      "evidence_urls": 3,
+      "all_gates_pass": true
+    },
+    {
+      "slug": "sovereign-cloud--grosse-energieversorger-de",
+      "is_words": 22,
+      "does_words": 24,
+      "means_words": 26,
+      "evidence_count": 3,
+      "evidence_urls": 3,
+      "all_gates_pass": true
+    }
+  ]
+}

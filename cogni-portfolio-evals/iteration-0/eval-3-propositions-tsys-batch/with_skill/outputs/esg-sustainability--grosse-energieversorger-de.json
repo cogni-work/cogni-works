@@ -1,0 +1,31 @@
+{
+  "slug": "esg-sustainability--grosse-energieversorger-de",
+  "feature_slug": "esg-sustainability",
+  "market_slug": "grosse-energieversorger-de",
+  "is_statement": "ESG-Strategie mit Carbon-Footprint-Tracking, SAP-Sustainability-Integration und Detecon-gestützte Beratung für regulatorische Compliance mit 80-100 Kennzahlen-Tracking.",
+  "does_statement": "Ihre CSRD-Berichtspflichten werden über automatisiertes Kennzahlen-Tracking entlang der gesamten Energiewertschöpfungskette erfüllt — von Erzeugung über Netz bis Vertrieb, statt durch manuelle Datensammlungen aus Dutzenden Quellsystemen.",
+  "means_statement": "CSRD-Berichte werden fristgerecht und prüfungssicher erstellt, Scope-1-bis-3-Emissionen werden transparent — was Zugang zu grünen Finanzierungsinstrumenten und bessere ESG-Ratings bei Investoren sichert.",
+  "evidence": [
+    {
+      "statement": "Ab 2025 müssen große Energieversorger nach CSRD detaillierte Nachhaltigkeitsberichte nach ESRS-Standards veröffentlichen.",
+      "source_url": null,
+      "source_title": null
+    }
+  ],
+  "quality_assessment": {
+    "dimensions": {
+      "buyer_centricity": "pass",
+      "market_specificity": "pass",
+      "differentiation": "warn",
+      "status_quo_contrast": "pass",
+      "conciseness_does": "warn",
+      "outcome_specificity": "pass",
+      "escalation": "pass",
+      "quantification": "warn",
+      "emotional_resonance": "pass",
+      "conciseness_means": "warn"
+    },
+    "overall": "warn"
+  },
+  "created": "2026-03-18"
+}

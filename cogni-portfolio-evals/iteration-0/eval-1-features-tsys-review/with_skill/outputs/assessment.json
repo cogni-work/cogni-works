@@ -1,0 +1,168 @@
+{
+  "skill": "features",
+  "eval_id": 1,
+  "target": "t-systems",
+  "product_slug": "cloud-services",
+  "features_assessed": [
+    "sap-on-cloud",
+    "private-cloud",
+    "cloud-native-container",
+    "managed-hyperscaler",
+    "hybrid-cloud",
+    "cloud-migration",
+    "multi-cloud-finops",
+    "sovereign-cloud"
+  ],
+  "summary": {
+    "total": 8,
+    "pass": 1,
+    "warn": 5,
+    "fail": 2
+  },
+  "assessments": [
+    {
+      "slug": "sap-on-cloud",
+      "name": "SAP on Cloud",
+      "description": "SAP Platinum Partner mit SAP Activate-Zertifizierung: End-to-End-Hosting, Migration und Betrieb von S/4HANA auf Private Cloud, AWS und Azure — als RISE with SAP Premium Supplier mit 4.000+ SAP-Experten und 850.000 verwalteten SAP-Nutzern.",
+      "word_count": 32,
+      "dimensions": {
+        "mechanism_clarity": "fail",
+        "scope_mece": "warn",
+        "differentiation": "warn",
+        "language_quality": "pass",
+        "conciseness": "warn"
+      },
+      "overall": "fail",
+      "issues": [
+        "Mechanism clarity fail: Description lists partnership credentials (Platinum Partner, RISE Premium Supplier) and headcount statistics (4.000+ Experten, 850.000 Nutzer) instead of explaining HOW S/4HANA hosting, migration, and operations work technically. Partnerships and team size are not mechanisms.",
+        "Scope warn: Bundles three distinct activities — hosting, migration, and operations — without clarifying whether this is a single integrated platform or a service bundle. Scope is too broad for one feature.",
+        "Differentiation warn: Relies on partnership badges and headcount numbers for differentiation rather than mechanism specifics. Any SAP partner could claim hosting, migration, and operations — the description does not convey what T-Systems does differently at the technical level.",
+        "Conciseness warn: Number-stuffing anti-pattern — '4.000+ SAP-Experten und 850.000 verwalteten SAP-Nutzern' reads like a spec sheet. Credential enumeration (Platinum Partner, Activate-Zertifizierung, RISE Premium Supplier) compounds the problem."
+      ]
+    },
+    {
+      "slug": "private-cloud",
+      "name": "Private Cloud Infrastructure",
+      "description": "VMware Cloud Foundation basierte Future Cloud Infrastructure (FCI) mit SDDC auf Lenovo Servern, beheimatet in klimaneutralen europäischen Rechenzentren mit Legacy-IT-Integration.",
+      "word_count": 20,
+      "dimensions": {
+        "mechanism_clarity": "pass",
+        "scope_mece": "pass",
+        "differentiation": "pass",
+        "language_quality": "pass",
+        "conciseness": "pass"
+      },
+      "overall": "pass",
+      "issues": []
+    },
+    {
+      "slug": "cloud-native-container",
+      "name": "Cloud-Native & Container Platform",
+      "description": "Verwaltete Kubernetes-Plattform (EKS, OpenShift, CCE) mit integriertem Container-Lifecycle-Management, Monitoring, Logging, Registries mit Vulnerability-Scanning, GitOps und Knative Serverless auf AWS und Open Telekom Cloud.",
+      "word_count": 23,
+      "dimensions": {
+        "mechanism_clarity": "warn",
+        "scope_mece": "pass",
+        "differentiation": "warn",
+        "language_quality": "pass",
+        "conciseness": "warn"
+      },
+      "overall": "warn",
+      "issues": [
+        "Mechanism clarity warn: The core mechanism (managed Kubernetes) is present but buried under an enumeration of peripheral components. The description lists tools (Monitoring, Logging, Registries, GitOps, Knative) without explaining what the platform actually does as an integrated system.",
+        "Differentiation warn: Listing standard Kubernetes ecosystem components (EKS, OpenShift, monitoring, logging, GitOps) is table stakes — any managed K8s provider offers these. The description does not convey what makes T-Systems' platform distinct.",
+        "Conciseness warn: Kitchen-sink enumeration anti-pattern — lists 8 component categories in a single sentence. Should name the core mechanism and one or two distinctive aspects, not catalog every feature of the platform."
+      ]
+    },
+    {
+      "slug": "managed-hyperscaler",
+      "name": "Managed Hyperscaler Services",
+      "description": "Rundum gemanagte AWS, Azure und GCP Umgebungen mit Well-Architected Reviews, Security Assessments, standardisierten Landing-Zone-Modulen und 24/7 Operations — als zertifizierter MSP Partner auf allen hyperscaler Plattformen.",
+      "word_count": 26,
+      "dimensions": {
+        "mechanism_clarity": "pass",
+        "scope_mece": "pass",
+        "differentiation": "warn",
+        "language_quality": "warn",
+        "conciseness": "pass"
+      },
+      "overall": "warn",
+      "issues": [
+        "Differentiation warn: Well-Architected Reviews, Security Assessments, and Landing Zones are standard managed service offerings from any hyperscaler MSP. The description does not specify what T-Systems adds beyond certified management — e.g., sovereign integration, Telekom network backbone, or specific automation frameworks.",
+        "Language quality warn: 'Rundum gemanagte' is informal/marketing-adjacent phrasing in professional German. 'hyperscaler Plattformen' should be 'Hyperscaler-Plattformen' (compound noun requires hyphenation in German)."
+      ]
+    },
+    {
+      "slug": "hybrid-cloud",
+      "name": "Hybrid Cloud Solutions",
+      "description": "T Cloud Hybrid kombiniert Private- und Public-Cloud mit zentralem Governance-Framework, Multi-Cloud-Konnektivitätsplattform (MCCP), branchenspezifischen Varianten (Health Hybrid Cloud) und cloudübergreifender Automatisierung.",
+      "word_count": 20,
+      "dimensions": {
+        "mechanism_clarity": "warn",
+        "scope_mece": "warn",
+        "differentiation": "pass",
+        "language_quality": "pass",
+        "conciseness": "pass"
+      },
+      "overall": "warn",
+      "issues": [
+        "Mechanism clarity warn: 'kombiniert Private- und Public-Cloud' states what hybrid cloud IS by definition, not how T-Systems implements it. The mechanism — how governance, connectivity, and automation actually work across clouds — is named but not explained.",
+        "Scope warn: Overlap with multi-cloud-finops — both features claim multi-cloud governance territory. 'Zentralem Governance-Framework' here vs. 'Zentralisierte Multi-Cloud-Governance' in multi-cloud-finops describe the same capability. Feature boundaries need clarification."
+      ]
+    },
+    {
+      "slug": "cloud-migration",
+      "name": "Cloud Migration Services",
+      "description": "Strukturiertes Cloud-Migrationsprogramm mit Assessment-Framework, modularer CMF-Methodik (Assess-Mobilize-Modernize), 6R-Migrationsstrategien (Rehost bis Retire), Datenbank-Migrations-Services, Cloud-Migration-Factory-Teams und sprint-basierte Implementierung für sichere, standardisierte Migrations-Durchführung.",
+      "word_count": 20,
+      "dimensions": {
+        "mechanism_clarity": "pass",
+        "scope_mece": "warn",
+        "differentiation": "pass",
+        "language_quality": "pass",
+        "conciseness": "warn"
+      },
+      "overall": "warn",
+      "issues": [
+        "Scope warn: 'für sichere, standardisierte Migrations-Durchführung' is outcome language — it describes what the migration achieves for the buyer rather than what the capability IS. This belongs in propositions, not in the feature description.",
+        "Conciseness warn: Kitchen-sink enumeration — lists Assessment-Framework, CMF-Methodik, 6R-Strategien, Datenbank-Migrations-Services, Factory-Teams, and sprint-basierte Implementierung in a single breath. Despite being 20 words by German compound-word counting, the density of enumerated components creates a spec-sheet feel. The 6R framework reference is borderline number-stuffing."
+      ]
+    },
+    {
+      "slug": "multi-cloud-finops",
+      "name": "Multi-Cloud & FinOps Management",
+      "description": "Zentralisierte Multi-Cloud-Governance über Multi Cloud Connectivity Platform und Future Cloud Infrastructure, mit strukturiertem FinOps-Maturity-Assessment, kontinuierlichem Cost Management und eingebetteten Compliance-Controls für BSI C5, GDPR und lokale Regulierung.",
+      "word_count": 27,
+      "dimensions": {
+        "mechanism_clarity": "warn",
+        "scope_mece": "fail",
+        "differentiation": "warn",
+        "language_quality": "pass",
+        "conciseness": "pass"
+      },
+      "overall": "fail",
+      "issues": [
+        "Mechanism clarity warn: Names platforms (MCCP, FCI) but does not explain how multi-cloud governance or FinOps assessment actually work. 'Zentralisierte Governance' and 'strukturiertem Assessment' are procedural labels, not mechanisms.",
+        "Scope fail: Bundles two distinct domains — multi-cloud governance and FinOps cost management — into one feature. These serve different buyer conversations and would appear independently in propositions: a CFO cares about FinOps; an infrastructure architect cares about multi-cloud governance. Additionally, significant overlap with hybrid-cloud on the governance dimension (both claim centralized multi-cloud governance via MCCP/FCI). This feature fails the proposition-independence test.",
+        "Differentiation warn: FinOps maturity assessments and compliance controls (BSI C5, GDPR) are standard offerings from cloud consultancies. The description does not convey what makes T-Systems' approach unique — e.g., integration with Telekom network telemetry, specific tooling, or sovereign data handling."
+      ]
+    },
+    {
+      "slug": "sovereign-cloud",
+      "name": "Sovereign Cloud",
+      "description": "Europäische Datenhoheit über T Cloud Public, Open Sovereign Cloud (OSC), Google-Cloud- und AWS-Sovereign-Varianten — vollständig in der EU betrieben und BaFin-/KRITIS-konform.",
+      "word_count": 21,
+      "dimensions": {
+        "mechanism_clarity": "warn",
+        "scope_mece": "pass",
+        "differentiation": "pass",
+        "language_quality": "pass",
+        "conciseness": "pass"
+      },
+      "overall": "warn",
+      "issues": [
+        "Mechanism clarity warn: 'Europäische Datenhoheit' is an outcome/benefit claim, not a mechanism. The description names the platforms (T Cloud Public, OSC, sovereign variants) but does not explain HOW sovereignty is technically achieved — e.g., EU-only personnel, isolated control planes, open-source stack (OpenStack/Kubernetes), BSI C5 attestation process. The mechanism that makes this sovereign rather than just EU-hosted is missing."
+      ]
+    }
+  ]
+}

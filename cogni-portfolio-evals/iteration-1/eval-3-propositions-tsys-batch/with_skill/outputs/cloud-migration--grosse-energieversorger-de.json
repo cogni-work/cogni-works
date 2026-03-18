@@ -1,0 +1,26 @@
+{
+  "slug": "cloud-migration--grosse-energieversorger-de",
+  "feature_slug": "cloud-migration",
+  "market_slug": "grosse-energieversorger-de",
+  "is_statement": "Strukturiertes Cloud-Migrationsprogramm mit Assessment-Framework, modularer CMF-Methodik in den Phasen Assess, Mobilize und Modernize, sechs definierten Migrationsstrategien (Rehost bis Retire), Datenbank-Migrations-Services und dedizierten Cloud-Migration-Factory-Teams für sichere, standardisierte Migrations-Durchführung.",
+  "does_statement": "Sie migrieren Ihre KRITIS-regulierten Energiesysteme schrittweise in die Cloud, ohne den Dauerbetrieb kritischer Netzleit- und Abrechnungssysteme zu gefährden — mit Zero-Outage-abgesicherten Migrationswellen statt riskanter Big-Bang-Umstellungen.",
+  "means_statement": "Ihre IT-Betriebskosten sinken um 25–30 % innerhalb von 24 Monaten, während Sie gleichzeitig die NIS2-Registrierungsfrist März 2026 einhalten und Bußgelder bis 10 Mio. EUR vermeiden.",
+  "evidence": [
+    {
+      "statement": "SachsenEnergie AG konsolidierte mit T-Systems erfolgreich SAP-BW-Systeme auf BW/4HANA mit signifikanten Performance-Gewinnen bei der Massendatenauswertung.",
+      "source_url": "https://www.t-systems.com/de/de/referenzen/digital/sachsenenergie-schnellere-reports-durch-sap-bw-konsolidierung",
+      "source_title": "SAP BW-Konsolidierung für SachsenEnergie – T-Systems"
+    },
+    {
+      "statement": "Das TÜV-zertifizierte Zero-Outage-Programm von T-Systems hat die Anzahl schwerwiegender Kundenausfälle seit Programmstart um 95 % reduziert.",
+      "source_url": "https://www.telekom.com/en/media/media-information/detail/t-systems-zero-outage-principle-to-be-industry-standard-363314",
+      "source_title": "T-Systems: Zero outage principle to be industry standard – Deutsche Telekom"
+    },
+    {
+      "statement": "Das NIS2-Umsetzungsgesetz ist seit Dezember 2025 in Kraft und sieht für KRITIS-Betreiber im Energiesektor Bußgelder bis 10 Mio. EUR oder 2 % des weltweiten Umsatzes vor.",
+      "source_url": "https://www.openkritis.de/betreiber/bussgelder-kritis-bsig.html",
+      "source_title": "Bußgelder und Sanktionen in KRITIS und NIS2 – OpenKRITIS"
+    }
+  ],
+  "created": "2026-03-18"
+}

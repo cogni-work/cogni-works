@@ -1,0 +1,26 @@
+{
+  "slug": "it-strategy-architecture--grosse-energieversorger-de",
+  "feature_slug": "it-strategy-architecture",
+  "market_slug": "grosse-energieversorger-de",
+  "is_statement": "Ganzheitliche Digitalisierungsstrategie und Enterprise Architecture nach TOGAF-Standard mit strukturierten Assessments zur IT-Reife, Co-Creation von Zielarchitekturen, Technologie-Roadmaps, Governance-Frameworks und umfassenden IT-Resilienz-Konzepten durch erfahrene Detecon-Branchenexperten.",
+  "does_statement": "Sie erhalten einen IT/OT-übergreifenden Architektur-Blueprint, der Netzleittechnik, Smart-Grid-Plattformen und kaufmännische IT in eine konvergente Zielarchitektur überführt — statt weiter in getrennten Silos zu planen.",
+  "means_statement": "Ihre Transformations-Roadmap verkürzt sich um 6–12 Monate durch vordefinierte Energie-Blueprints, während die WirtschaftsWoche-prämierte Detecon-Methodik das Genehmigungsrisiko beim Vorstand senkt.",
+  "evidence": [
+    {
+      "statement": "Detecon gewann den ersten Platz beim WirtschaftsWoche Best of Consulting Award in der Kategorie 'Energie und Infrastruktur' für ein Projekt mit Uniper.",
+      "source_url": "https://www.detecon.com/en/press-release/uniper-project-honored-with-best-of-consulting-award",
+      "source_title": "Uniper Project Honored with Best of Consulting Award – Detecon"
+    },
+    {
+      "statement": "Detecon definiert moderne IT- und OT-übergreifende Strategien und liefert IT/OT-Blueprints als Navigator für die digitale Transformation von Energieunternehmen.",
+      "source_url": "https://www.detecon.com/de/beratung/branchen/energie",
+      "source_title": "Energie – Detecon"
+    },
+    {
+      "statement": "Lünendonk und ISG stufen T-Systems und Detecon als Leader in Business Consulting und Sustainability ein.",
+      "source_url": "https://www.detecon.com/en/press-release/analysts-rank-t-systems-and-detecon-as-leaders-in-business-consulting-and-sustainability",
+      "source_title": "Analysts rank T-Systems and Detecon as leaders in business consulting and sustainability – Detecon"
+    }
+  ],
+  "created": "2026-03-18"
+}

@@ -1,0 +1,31 @@
+{
+  "slug": "cloud-migration--grosse-energieversorger-de",
+  "feature_slug": "cloud-migration",
+  "market_slug": "grosse-energieversorger-de",
+  "is_statement": "Strukturiertes Cloud-Migrationsprogramm mit Assessment-Framework, modularer CMF-Methodik, 6R-Migrationsstrategien und sprint-basierter Implementierung.",
+  "does_statement": "Ihre IS-U-, SCADA- und ERP-Workloads werden in strukturierten Sprints auf Cloud-Infrastruktur migriert — mit KRITIS-konformer Staging-Umgebung, die den Regelbetrieb nicht gefährdet.",
+  "means_statement": "Die Energiewende-bedingten Kapazitätsanforderungen an IT-Infrastruktur werden elastisch skalierbar, statt durch mehrjährige Hardware-Beschaffungszyklen gebremst zu werden.",
+  "evidence": [
+    {
+      "statement": "Laut McKinsey verzögern langwierige Beschaffungsprozesse die Digitalisierung bei Energieversorgern um durchschnittlich 18-24 Monate.",
+      "source_url": null,
+      "source_title": null
+    }
+  ],
+  "quality_assessment": {
+    "dimensions": {
+      "buyer_centricity": "pass",
+      "market_specificity": "pass",
+      "differentiation": "warn",
+      "status_quo_contrast": "pass",
+      "conciseness_does": "pass",
+      "outcome_specificity": "warn",
+      "escalation": "pass",
+      "quantification": "warn",
+      "emotional_resonance": "warn",
+      "conciseness_means": "pass"
+    },
+    "overall": "warn"
+  },
+  "created": "2026-03-18"
+}

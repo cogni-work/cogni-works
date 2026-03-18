@@ -1,0 +1,14 @@
+{
+  "slug": "smart-metering-infrastruktur",
+  "name": "Smart-Metering-Infrastruktur",
+  "description": "Gateway-Administration und Messdatenmanagement (MDM) fuer intelligente Messsysteme mit BSI-zertifizierten Smart-Meter-Gateways. Umfasst Zaehlerfernauslesung, Plausibilisierung der Messwerte, Tarifprofilsteuerung und Anbindung an Marktkommunikation.",
+  "category": "metering",
+  "taxonomy_mapping": {
+    "dimension": 1,
+    "category_id": "1.4",
+    "category_name": "5G & IoT Connectivity",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "product_slug": "digitale-kundendienste"
+}

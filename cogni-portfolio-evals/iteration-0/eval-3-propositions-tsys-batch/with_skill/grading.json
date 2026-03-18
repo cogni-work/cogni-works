@@ -1,0 +1,2150 @@
+{
+  "total_checks": 357,
+  "passed": 295,
+  "failed": 62,
+  "pass_rate": 0.826,
+  "expectations": [
+    {
+      "text": "DOES statement 15-30 words (actual: 24)",
+      "passed": true,
+      "evidence": "\"Energieversorger verbinden Umspannwerke, Windparks und Netzleittechnik über ein ...\"",
+      "entity": "5g-iot-connectivity--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS statement 15-30 words (actual: 24)",
+      "passed": true,
+      "evidence": "\"Netzstörungen werden in Sekunden statt Minuten erkannt, was ungeplante Ausfallko...\"",
+      "entity": "5g-iot-connectivity--grosse-energieversorger-de"
+    },
+    {
+      "text": "IS statement 20-35 words (actual: 18)",
+      "passed": false,
+      "evidence": "\"Private 5G-Campusnetze mit unter zehn Millisekunden Latenz, Multi-IoT-Plattform ...\"",
+      "entity": "5g-iot-connectivity--grosse-energieversorger-de"
+    },
+    {
+      "text": "Slug follows {feature}--{market} convention",
+      "passed": true,
+      "evidence": "slug=\"5g-iot-connectivity--grosse-energieversorger-de\", expected=\"5g-iot-connectivity--grosse-energieversorger-de\"",
+      "entity": "5g-iot-connectivity--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES is not vendor-centric",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "5g-iot-connectivity--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS contains quantification signal",
+      "passed": true,
+      "evidence": "\"Netzstörungen werden in Sekunden statt Minuten erkannt, was ungeplante Ausfallko...\"",
+      "entity": "5g-iot-connectivity--grosse-energieversorger-de"
+    },
+    {
+      "text": "Evidence array is non-empty",
+      "passed": true,
+      "evidence": "2 evidence entries",
+      "entity": "5g-iot-connectivity--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES statement 15-30 words (actual: 17)",
+      "passed": true,
+      "evidence": "\"Ihre Netzleitstellen nutzen KI-gestützte Lastprognosen und Anomalieerkennung dir...\"",
+      "entity": "ai-data-analytics--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS statement 15-30 words (actual: 18)",
+      "passed": true,
+      "evidence": "\"Prognosefehler bei der Einspeiseplanung sinken um 15-25%, was Redispatch-Kosten ...\"",
+      "entity": "ai-data-analytics--grosse-energieversorger-de"
+    },
+    {
+      "text": "IS statement 20-35 words (actual: 18)",
+      "passed": false,
+      "evidence": "\"Europäische AI-as-a-Service-Plattform mit Unified API für LLM-Serving, Retrieval...\"",
+      "entity": "ai-data-analytics--grosse-energieversorger-de"
+    },
+    {
+      "text": "Slug follows {feature}--{market} convention",
+      "passed": true,
+      "evidence": "slug=\"ai-data-analytics--grosse-energieversorger-de\", expected=\"ai-data-analytics--grosse-energieversorger-de\"",
+      "entity": "ai-data-analytics--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES is not vendor-centric",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "ai-data-analytics--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS contains quantification signal",
+      "passed": true,
+      "evidence": "\"Prognosefehler bei der Einspeiseplanung sinken um 15-25%, was Redispatch-Kosten ...\"",
+      "entity": "ai-data-analytics--grosse-energieversorger-de"
+    },
+    {
+      "text": "Evidence array is non-empty",
+      "passed": true,
+      "evidence": "2 evidence entries",
+      "entity": "ai-data-analytics--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES statement 15-30 words (actual: 19)",
+      "passed": true,
+      "evidence": "\"Ihre IS-U- und Abrechnungssysteme werden schrittweise auf S/4HANA-fähige Archite...\"",
+      "entity": "app-modernization--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS statement 15-30 words (actual: 19)",
+      "passed": true,
+      "evidence": "\"Die S/4HANA-Deadline 2027 wird ohne Betriebsrisiko eingehalten, und die modernis...\"",
+      "entity": "app-modernization--grosse-energieversorger-de"
+    },
+    {
+      "text": "IS statement 20-35 words (actual: 16)",
+      "passed": false,
+      "evidence": "\"Systematische Legacy-Modernisierung durch intelligente Discovery, Assessment und...\"",
+      "entity": "app-modernization--grosse-energieversorger-de"
+    },
+    {
+      "text": "Slug follows {feature}--{market} convention",
+      "passed": true,
+      "evidence": "slug=\"app-modernization--grosse-energieversorger-de\", expected=\"app-modernization--grosse-energieversorger-de\"",
+      "entity": "app-modernization--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES is not vendor-centric",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "app-modernization--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS contains quantification signal",
+      "passed": true,
+      "evidence": "\"Die S/4HANA-Deadline 2027 wird ohne Betriebsrisiko eingehalten, und die modernis...\"",
+      "entity": "app-modernization--grosse-energieversorger-de"
+    },
+    {
+      "text": "Evidence array is non-empty",
+      "passed": true,
+      "evidence": "1 evidence entries",
+      "entity": "app-modernization--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES statement 15-30 words (actual: 19)",
+      "passed": true,
+      "evidence": "\"KRITIS-relevante Leitsysteme und Abrechnungsdaten werden mit Zero-RPO über geore...\"",
+      "entity": "backup-disaster-recovery--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS statement 15-30 words (actual: 19)",
+      "passed": true,
+      "evidence": "\"Im Ernstfall ist der Netzleitstellenbetrieb in unter vier Stunden wiederhergeste...\"",
+      "entity": "backup-disaster-recovery--grosse-energieversorger-de"
+    },
+    {
+      "text": "IS statement 20-35 words (actual: 12)",
+      "passed": false,
+      "evidence": "\"Verwaltete Cloud-Backup-Services mit Operational-Air-Gap, synchroner Replikation...\"",
+      "entity": "backup-disaster-recovery--grosse-energieversorger-de"
+    },
+    {
+      "text": "Slug follows {feature}--{market} convention",
+      "passed": true,
+      "evidence": "slug=\"backup-disaster-recovery--grosse-energieversorger-de\", expected=\"backup-disaster-recovery--grosse-energieversorger-de\"",
+      "entity": "backup-disaster-recovery--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES is not vendor-centric",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "backup-disaster-recovery--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS contains quantification signal",
+      "passed": true,
+      "evidence": "\"Im Ernstfall ist der Netzleitstellenbetrieb in unter vier Stunden wiederhergeste...\"",
+      "entity": "backup-disaster-recovery--grosse-energieversorger-de"
+    },
+    {
+      "text": "Evidence array is non-empty",
+      "passed": true,
+      "evidence": "1 evidence entries",
+      "entity": "backup-disaster-recovery--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES statement 15-30 words (actual: 0)",
+      "passed": false,
+      "evidence": "\"...\"",
+      "entity": "batch-summary"
+    },
+    {
+      "text": "MEANS statement 15-30 words (actual: 0)",
+      "passed": false,
+      "evidence": "\"...\"",
+      "entity": "batch-summary"
+    },
+    {
+      "text": "IS statement 20-35 words (actual: 0)",
+      "passed": false,
+      "evidence": "\"...\"",
+      "entity": "batch-summary"
+    },
+    {
+      "text": "Slug follows {feature}--{market} convention",
+      "passed": false,
+      "evidence": "slug=\"\", expected=\"--grosse-energieversorger-de\"",
+      "entity": "batch-summary"
+    },
+    {
+      "text": "DOES is not vendor-centric",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "batch-summary"
+    },
+    {
+      "text": "MEANS contains quantification signal",
+      "passed": false,
+      "evidence": "\"...\"",
+      "entity": "batch-summary"
+    },
+    {
+      "text": "Evidence array is non-empty",
+      "passed": false,
+      "evidence": "0 evidence entries",
+      "entity": "batch-summary"
+    },
+    {
+      "text": "DOES statement 15-30 words (actual: 19)",
+      "passed": true,
+      "evidence": "\"Ihre Netzleitstellen und SAP-Systeme erhalten dedizierte, verschlüsselte Cloud-A...\"",
+      "entity": "cloud-connect--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS statement 15-30 words (actual: 19)",
+      "passed": true,
+      "evidence": "\"SCADA- und Leitsystemdaten bleiben auf deutschem Netz isoliert, was KRITIS-Compl...\"",
+      "entity": "cloud-connect--grosse-energieversorger-de"
+    },
+    {
+      "text": "IS statement 20-35 words (actual: 20)",
+      "passed": true,
+      "evidence": "\"Dedizierte Netzwerkanbindungen zu AWS, Azure und Open Telekom Cloud über Express...\"",
+      "entity": "cloud-connect--grosse-energieversorger-de"
+    },
+    {
+      "text": "Slug follows {feature}--{market} convention",
+      "passed": true,
+      "evidence": "slug=\"cloud-connect--grosse-energieversorger-de\", expected=\"cloud-connect--grosse-energieversorger-de\"",
+      "entity": "cloud-connect--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES is not vendor-centric",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "cloud-connect--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS contains quantification signal",
+      "passed": true,
+      "evidence": "\"SCADA- und Leitsystemdaten bleiben auf deutschem Netz isoliert, was KRITIS-Compl...\"",
+      "entity": "cloud-connect--grosse-energieversorger-de"
+    },
+    {
+      "text": "Evidence array is non-empty",
+      "passed": true,
+      "evidence": "1 evidence entries",
+      "entity": "cloud-connect--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES statement 15-30 words (actual: 21)",
+      "passed": true,
+      "evidence": "\"Ihre IS-U-, SCADA- und ERP-Workloads werden in strukturierten Sprints auf Cloud-...\"",
+      "entity": "cloud-migration--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS statement 15-30 words (actual: 15)",
+      "passed": true,
+      "evidence": "\"Die Energiewende-bedingten Kapazitätsanforderungen an IT-Infrastruktur werden el...\"",
+      "entity": "cloud-migration--grosse-energieversorger-de"
+    },
+    {
+      "text": "IS statement 20-35 words (actual: 10)",
+      "passed": false,
+      "evidence": "\"Strukturiertes Cloud-Migrationsprogramm mit Assessment-Framework, modularer CMF-...\"",
+      "entity": "cloud-migration--grosse-energieversorger-de"
+    },
+    {
+      "text": "Slug follows {feature}--{market} convention",
+      "passed": true,
+      "evidence": "slug=\"cloud-migration--grosse-energieversorger-de\", expected=\"cloud-migration--grosse-energieversorger-de\"",
+      "entity": "cloud-migration--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES is not vendor-centric",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "cloud-migration--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS contains quantification signal",
+      "passed": false,
+      "evidence": "\"Die Energiewende-bedingten Kapazitätsanforderungen an IT-Infrastruktur werden el...\"",
+      "entity": "cloud-migration--grosse-energieversorger-de"
+    },
+    {
+      "text": "Evidence array is non-empty",
+      "passed": true,
+      "evidence": "1 evidence entries",
+      "entity": "cloud-migration--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES statement 15-30 words (actual: 18)",
+      "passed": true,
+      "evidence": "\"Entwicklerteams deployen neue Smart-Meter-Gateway-Services und Grid-Analytics-An...\"",
+      "entity": "cloud-native-container--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS statement 15-30 words (actual: 23)",
+      "passed": true,
+      "evidence": "\"Die Time-to-Market für Energiewende-relevante Digitalprodukte sinkt um 60-70%, o...\"",
+      "entity": "cloud-native-container--grosse-energieversorger-de"
+    },
+    {
+      "text": "IS statement 20-35 words (actual: 15)",
+      "passed": false,
+      "evidence": "\"Verwaltete Kubernetes-Plattform mit integriertem Container-Lifecycle-Management,...\"",
+      "entity": "cloud-native-container--grosse-energieversorger-de"
+    },
+    {
+      "text": "Slug follows {feature}--{market} convention",
+      "passed": true,
+      "evidence": "slug=\"cloud-native-container--grosse-energieversorger-de\", expected=\"cloud-native-container--grosse-energieversorger-de\"",
+      "entity": "cloud-native-container--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES is not vendor-centric",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "cloud-native-container--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS contains quantification signal",
+      "passed": true,
+      "evidence": "\"Die Time-to-Market für Energiewende-relevante Digitalprodukte sinkt um 60-70%, o...\"",
+      "entity": "cloud-native-container--grosse-energieversorger-de"
+    },
+    {
+      "text": "Evidence array is non-empty",
+      "passed": true,
+      "evidence": "1 evidence entries",
+      "entity": "cloud-native-container--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES statement 15-30 words (actual: 25)",
+      "passed": true,
+      "evidence": "\"Ihre Cloud-Workloads für Netzsteuerung und Energiehandel werden kontinuierlich a...\"",
+      "entity": "cloud-security--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS statement 15-30 words (actual: 25)",
+      "passed": true,
+      "evidence": "\"KRITIS-Audits werden mit nachweisbarer Cloud-Security-Posture bestanden, und das...\"",
+      "entity": "cloud-security--grosse-energieversorger-de"
+    },
+    {
+      "text": "IS statement 20-35 words (actual: 16)",
+      "passed": false,
+      "evidence": "\"Prisma Cloud-basierte Cloud Security Posture Management und Workload Protection ...\"",
+      "entity": "cloud-security--grosse-energieversorger-de"
+    },
+    {
+      "text": "Slug follows {feature}--{market} convention",
+      "passed": true,
+      "evidence": "slug=\"cloud-security--grosse-energieversorger-de\", expected=\"cloud-security--grosse-energieversorger-de\"",
+      "entity": "cloud-security--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES is not vendor-centric",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "cloud-security--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS contains quantification signal",
+      "passed": true,
+      "evidence": "\"KRITIS-Audits werden mit nachweisbarer Cloud-Security-Posture bestanden, und das...\"",
+      "entity": "cloud-security--grosse-energieversorger-de"
+    },
+    {
+      "text": "Evidence array is non-empty",
+      "passed": true,
+      "evidence": "1 evidence entries",
+      "entity": "cloud-security--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES statement 15-30 words (actual: 21)",
+      "passed": true,
+      "evidence": "\"Ihr ISMS, Datenschutz-Management und KRITIS-Nachweisführung laufen auf einer zen...\"",
+      "entity": "compliance-data-protection--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS statement 15-30 words (actual: 20)",
+      "passed": true,
+      "evidence": "\"Der Aufwand für BSI-KRITIS-Audits und BNetzA-Nachweise sinkt um 40-50%, und Ihre...\"",
+      "entity": "compliance-data-protection--grosse-energieversorger-de"
+    },
+    {
+      "text": "IS statement 20-35 words (actual: 16)",
+      "passed": false,
+      "evidence": "\"GRC-SaaS-Plattform mit integriertem ISMS- und Datenschutz-Management, ISO 27001/...\"",
+      "entity": "compliance-data-protection--grosse-energieversorger-de"
+    },
+    {
+      "text": "Slug follows {feature}--{market} convention",
+      "passed": true,
+      "evidence": "slug=\"compliance-data-protection--grosse-energieversorger-de\", expected=\"compliance-data-protection--grosse-energieversorger-de\"",
+      "entity": "compliance-data-protection--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES is not vendor-centric",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "compliance-data-protection--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS contains quantification signal",
+      "passed": true,
+      "evidence": "\"Der Aufwand für BSI-KRITIS-Audits und BNetzA-Nachweise sinkt um 40-50%, und Ihre...\"",
+      "entity": "compliance-data-protection--grosse-energieversorger-de"
+    },
+    {
+      "text": "Evidence array is non-empty",
+      "passed": true,
+      "evidence": "1 evidence entries",
+      "entity": "compliance-data-protection--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES statement 15-30 words (actual: 20)",
+      "passed": true,
+      "evidence": "\"Ihre Energiehandels-, Bilanzkreis- und Smart-Grid-Anwendungen werden als Cloud-n...\"",
+      "entity": "custom-app-development--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS statement 15-30 words (actual: 26)",
+      "passed": true,
+      "evidence": "\"Neue regulatorische Anforderungen wie MaKo 2025 oder Redispatch 2.0 werden in Wo...\"",
+      "entity": "custom-app-development--grosse-energieversorger-de"
+    },
+    {
+      "text": "IS statement 20-35 words (actual: 14)",
+      "passed": false,
+      "evidence": "\"Spezialisierte Softwareentwicklung nach T-Systems AMbition-Rahmenwerk mit Cloud-...\"",
+      "entity": "custom-app-development--grosse-energieversorger-de"
+    },
+    {
+      "text": "Slug follows {feature}--{market} convention",
+      "passed": true,
+      "evidence": "slug=\"custom-app-development--grosse-energieversorger-de\", expected=\"custom-app-development--grosse-energieversorger-de\"",
+      "entity": "custom-app-development--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES is not vendor-centric",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "custom-app-development--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS contains quantification signal",
+      "passed": true,
+      "evidence": "\"Neue regulatorische Anforderungen wie MaKo 2025 oder Redispatch 2.0 werden in Wo...\"",
+      "entity": "custom-app-development--grosse-energieversorger-de"
+    },
+    {
+      "text": "Evidence array is non-empty",
+      "passed": true,
+      "evidence": "1 evidence entries",
+      "entity": "custom-app-development--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES statement 15-30 words (actual: 17)",
+      "passed": true,
+      "evidence": "\"Ihre Endkunden-Portale, Tarifwechsel-Journeys und Störungsmeldungen werden zu ei...\"",
+      "entity": "cx-digital-marketing--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS statement 15-30 words (actual: 20)",
+      "passed": true,
+      "evidence": "\"Die Wechselquote Ihrer Privatkunden sinkt messbar, weil digitale Self-Service-Pr...\"",
+      "entity": "cx-digital-marketing--grosse-energieversorger-de"
+    },
+    {
+      "text": "IS statement 20-35 words (actual: 12)",
+      "passed": false,
+      "evidence": "\"CX-Beratung mit Fit-Gap-Analyse, Target Operating Model und omnichannel Customer...\"",
+      "entity": "cx-digital-marketing--grosse-energieversorger-de"
+    },
+    {
+      "text": "Slug follows {feature}--{market} convention",
+      "passed": true,
+      "evidence": "slug=\"cx-digital-marketing--grosse-energieversorger-de\", expected=\"cx-digital-marketing--grosse-energieversorger-de\"",
+      "entity": "cx-digital-marketing--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES is not vendor-centric",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "cx-digital-marketing--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS contains quantification signal",
+      "passed": true,
+      "evidence": "\"Die Wechselquote Ihrer Privatkunden sinkt messbar, weil digitale Self-Service-Pr...\"",
+      "entity": "cx-digital-marketing--grosse-energieversorger-de"
+    },
+    {
+      "text": "Evidence array is non-empty",
+      "passed": true,
+      "evidence": "1 evidence entries",
+      "entity": "cx-digital-marketing--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES statement 15-30 words (actual: 18)",
+      "passed": true,
+      "evidence": "\"KRITIS-pflichtige Leitsysteme und Handelsplattformen laufen in georedundanten Tw...\"",
+      "entity": "datacenter-colocation--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS statement 15-30 words (actual: 22)",
+      "passed": true,
+      "evidence": "\"Sie vermeiden Investitionen von 50-100 Mio. EUR in eigene RZ-Modernisierung, erf...\"",
+      "entity": "datacenter-colocation--grosse-energieversorger-de"
+    },
+    {
+      "text": "IS statement 20-35 words (actual: 14)",
+      "passed": false,
+      "evidence": "\"Twin-Core-Rechenzentren mit redundanter Stromversorgung, 99,999% Verfügbarkeit d...\"",
+      "entity": "datacenter-colocation--grosse-energieversorger-de"
+    },
+    {
+      "text": "Slug follows {feature}--{market} convention",
+      "passed": true,
+      "evidence": "slug=\"datacenter-colocation--grosse-energieversorger-de\", expected=\"datacenter-colocation--grosse-energieversorger-de\"",
+      "entity": "datacenter-colocation--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES is not vendor-centric",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "datacenter-colocation--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS contains quantification signal",
+      "passed": true,
+      "evidence": "\"Sie vermeiden Investitionen von 50-100 Mio. EUR in eigene RZ-Modernisierung, erf...\"",
+      "entity": "datacenter-colocation--grosse-energieversorger-de"
+    },
+    {
+      "text": "Evidence array is non-empty",
+      "passed": true,
+      "evidence": "1 evidence entries",
+      "entity": "datacenter-colocation--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES statement 15-30 words (actual: 22)",
+      "passed": true,
+      "evidence": "\"Ihre Entwicklerteams deployen Netz- und Abrechnungssoftware über automatisierte ...\"",
+      "entity": "devops-platform-engineering--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS statement 15-30 words (actual: 18)",
+      "passed": true,
+      "evidence": "\"Release-Frequenzen steigen von quartalsweise auf wöchentlich, sodass BNetzA-Meld...\"",
+      "entity": "devops-platform-engineering--grosse-energieversorger-de"
+    },
+    {
+      "text": "IS statement 20-35 words (actual: 13)",
+      "passed": false,
+      "evidence": "\"Automatisierte CI/CD-Pipelines mit Jenkins und GitLab, Managed Kubernetes-Orches...\"",
+      "entity": "devops-platform-engineering--grosse-energieversorger-de"
+    },
+    {
+      "text": "Slug follows {feature}--{market} convention",
+      "passed": true,
+      "evidence": "slug=\"devops-platform-engineering--grosse-energieversorger-de\", expected=\"devops-platform-engineering--grosse-energieversorger-de\"",
+      "entity": "devops-platform-engineering--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES is not vendor-centric",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "devops-platform-engineering--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS contains quantification signal",
+      "passed": false,
+      "evidence": "\"Release-Frequenzen steigen von quartalsweise auf wöchentlich, sodass BNetzA-Meld...\"",
+      "entity": "devops-platform-engineering--grosse-energieversorger-de"
+    },
+    {
+      "text": "Evidence array is non-empty",
+      "passed": true,
+      "evidence": "1 evidence entries",
+      "entity": "devops-platform-engineering--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES statement 15-30 words (actual: 21)",
+      "passed": true,
+      "evidence": "\"Ihre Außendiensttechniker, Leitstellenmitarbeiter und Verwaltungsteams erhalten ...\"",
+      "entity": "digital-employee-experience--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS statement 15-30 words (actual: 20)",
+      "passed": true,
+      "evidence": "\"Die Mitarbeiterzufriedenheit steigt messbar, was in einem Arbeitsmarkt mit 15.00...\"",
+      "entity": "digital-employee-experience--grosse-energieversorger-de"
+    },
+    {
+      "text": "IS statement 20-35 words (actual: 11)",
+      "passed": false,
+      "evidence": "\"DEX-Analytik-Plattform für Echtzeit-Messung der Mitarbeiter-Arbeitsplatzerfahrun...\"",
+      "entity": "digital-employee-experience--grosse-energieversorger-de"
+    },
+    {
+      "text": "Slug follows {feature}--{market} convention",
+      "passed": true,
+      "evidence": "slug=\"digital-employee-experience--grosse-energieversorger-de\", expected=\"digital-employee-experience--grosse-energieversorger-de\"",
+      "entity": "digital-employee-experience--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES is not vendor-centric",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "digital-employee-experience--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS contains quantification signal",
+      "passed": true,
+      "evidence": "\"Die Mitarbeiterzufriedenheit steigt messbar, was in einem Arbeitsmarkt mit 15.00...\"",
+      "entity": "digital-employee-experience--grosse-energieversorger-de"
+    },
+    {
+      "text": "Evidence array is non-empty",
+      "passed": true,
+      "evidence": "1 evidence entries",
+      "entity": "digital-employee-experience--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES statement 15-30 words (actual: 18)",
+      "passed": true,
+      "evidence": "\"Ihre Energiewende-Strategie wird in konkrete Digitalisierungsroadmaps übersetzt ...\"",
+      "entity": "digital-transformation-consulting--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS statement 15-30 words (actual: 26)",
+      "passed": true,
+      "evidence": "\"Transformationsvorhaben erreichen ihre Meilensteine plangemäß statt im typischen...\"",
+      "entity": "digital-transformation-consulting--grosse-energieversorger-de"
+    },
+    {
+      "text": "IS statement 20-35 words (actual: 18)",
+      "passed": false,
+      "evidence": "\"Holistische Transformationsberatung von Strategie bis Deployment: Detecon und T-...\"",
+      "entity": "digital-transformation-consulting--grosse-energieversorger-de"
+    },
+    {
+      "text": "Slug follows {feature}--{market} convention",
+      "passed": true,
+      "evidence": "slug=\"digital-transformation-consulting--grosse-energieversorger-de\", expected=\"digital-transformation-consulting--grosse-energieversorger-de\"",
+      "entity": "digital-transformation-consulting--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES is not vendor-centric",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "digital-transformation-consulting--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS contains quantification signal",
+      "passed": true,
+      "evidence": "\"Transformationsvorhaben erreichen ihre Meilensteine plangemäß statt im typischen...\"",
+      "entity": "digital-transformation-consulting--grosse-energieversorger-de"
+    },
+    {
+      "text": "Evidence array is non-empty",
+      "passed": true,
+      "evidence": "1 evidence entries",
+      "entity": "digital-transformation-consulting--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES statement 15-30 words (actual: 24)",
+      "passed": true,
+      "evidence": "\"Tausende Endgeräte von Leitstellenrechnern über Außendienst-Tablets bis zu OT-Te...\"",
+      "entity": "endpoint-device-management--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS statement 15-30 words (actual: 20)",
+      "passed": true,
+      "evidence": "\"Patch-Compliance steigt auf über 95% innerhalb von 72 Stunden, was BSI-KRITIS-An...\"",
+      "entity": "endpoint-device-management--grosse-energieversorger-de"
+    },
+    {
+      "text": "IS statement 20-35 words (actual: 18)",
+      "passed": false,
+      "evidence": "\"Workspace-ONE-basiertes Unified Endpoint Management mit zentralisierter Verwaltu...\"",
+      "entity": "endpoint-device-management--grosse-energieversorger-de"
+    },
+    {
+      "text": "Slug follows {feature}--{market} convention",
+      "passed": true,
+      "evidence": "slug=\"endpoint-device-management--grosse-energieversorger-de\", expected=\"endpoint-device-management--grosse-energieversorger-de\"",
+      "entity": "endpoint-device-management--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES is not vendor-centric",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "endpoint-device-management--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS contains quantification signal",
+      "passed": true,
+      "evidence": "\"Patch-Compliance steigt auf über 95% innerhalb von 72 Stunden, was BSI-KRITIS-An...\"",
+      "entity": "endpoint-device-management--grosse-energieversorger-de"
+    },
+    {
+      "text": "Evidence array is non-empty",
+      "passed": true,
+      "evidence": "1 evidence entries",
+      "entity": "endpoint-device-management--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES statement 15-30 words (actual: 25)",
+      "passed": true,
+      "evidence": "\"Jeder Arbeitsplatz — vom Leitstand über Außendienst-Laptop bis zur Engineering-W...\"",
+      "entity": "endpoint-security--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS statement 15-30 words (actual: 24)",
+      "passed": true,
+      "evidence": "\"Ransomware-Angriffe auf Energieversorger-Endpunkte werden gestoppt bevor sie OT-...\"",
+      "entity": "endpoint-security--grosse-energieversorger-de"
+    },
+    {
+      "text": "IS statement 20-35 words (actual: 12)",
+      "passed": false,
+      "evidence": "\"Endpoint Protection Platform mit ML-gestützter Verhaltensanalyse, automatisierte...\"",
+      "entity": "endpoint-security--grosse-energieversorger-de"
+    },
+    {
+      "text": "Slug follows {feature}--{market} convention",
+      "passed": true,
+      "evidence": "slug=\"endpoint-security--grosse-energieversorger-de\", expected=\"endpoint-security--grosse-energieversorger-de\"",
+      "entity": "endpoint-security--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES is not vendor-centric",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "endpoint-security--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS contains quantification signal",
+      "passed": true,
+      "evidence": "\"Ransomware-Angriffe auf Energieversorger-Endpunkte werden gestoppt bevor sie OT-...\"",
+      "entity": "endpoint-security--grosse-energieversorger-de"
+    },
+    {
+      "text": "Evidence array is non-empty",
+      "passed": true,
+      "evidence": "1 evidence entries",
+      "entity": "endpoint-security--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES statement 15-30 words (actual: 26)",
+      "passed": true,
+      "evidence": "\"Ihre SAP IS-U-Systeme, ServiceNow-ITSM und Atlassian-Toolchains werden von 4.000...\"",
+      "entity": "enterprise-platform-management--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS statement 15-30 words (actual: 20)",
+      "passed": true,
+      "evidence": "\"Ungeplante SAP-Ausfälle während Abrechnungsläufen werden um 80% reduziert, und I...\"",
+      "entity": "enterprise-platform-management--grosse-energieversorger-de"
+    },
+    {
+      "text": "IS statement 20-35 words (actual: 18)",
+      "passed": false,
+      "evidence": "\"Application Management für SAP, ServiceNow und Atlassian mit ITIL-basierten Proz...\"",
+      "entity": "enterprise-platform-management--grosse-energieversorger-de"
+    },
+    {
+      "text": "Slug follows {feature}--{market} convention",
+      "passed": true,
+      "evidence": "slug=\"enterprise-platform-management--grosse-energieversorger-de\", expected=\"enterprise-platform-management--grosse-energieversorger-de\"",
+      "entity": "enterprise-platform-management--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES is not vendor-centric",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "enterprise-platform-management--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS contains quantification signal",
+      "passed": true,
+      "evidence": "\"Ungeplante SAP-Ausfälle während Abrechnungsläufen werden um 80% reduziert, und I...\"",
+      "entity": "enterprise-platform-management--grosse-energieversorger-de"
+    },
+    {
+      "text": "Evidence array is non-empty",
+      "passed": true,
+      "evidence": "1 evidence entries",
+      "entity": "enterprise-platform-management--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES statement 15-30 words (actual: 21)",
+      "passed": true,
+      "evidence": "\"Verteilte Telefonanlagen an Kraftwerken, Netzleitstellen und Verwaltungsstandort...\"",
+      "entity": "enterprise-voice--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS statement 15-30 words (actual: 17)",
+      "passed": true,
+      "evidence": "\"Telekommunikationskosten sinken um 30-40% durch Konsolidierung, und bei Netzstör...\"",
+      "entity": "enterprise-voice--grosse-energieversorger-de"
+    },
+    {
+      "text": "IS statement 20-35 words (actual: 17)",
+      "passed": false,
+      "evidence": "\"Zentrale SIP-Trunking-Lösung für 18 europäische Länder mit bis zu 50.000 paralle...\"",
+      "entity": "enterprise-voice--grosse-energieversorger-de"
+    },
+    {
+      "text": "Slug follows {feature}--{market} convention",
+      "passed": true,
+      "evidence": "slug=\"enterprise-voice--grosse-energieversorger-de\", expected=\"enterprise-voice--grosse-energieversorger-de\"",
+      "entity": "enterprise-voice--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES is not vendor-centric",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "enterprise-voice--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS contains quantification signal",
+      "passed": true,
+      "evidence": "\"Telekommunikationskosten sinken um 30-40% durch Konsolidierung, und bei Netzstör...\"",
+      "entity": "enterprise-voice--grosse-energieversorger-de"
+    },
+    {
+      "text": "Evidence array is non-empty",
+      "passed": true,
+      "evidence": "1 evidence entries",
+      "entity": "enterprise-voice--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES statement 15-30 words (actual: 25)",
+      "passed": true,
+      "evidence": "\"Ihre CSRD-Berichtspflichten werden über automatisiertes Kennzahlen-Tracking entl...\"",
+      "entity": "esg-sustainability--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS statement 15-30 words (actual: 21)",
+      "passed": true,
+      "evidence": "\"CSRD-Berichte werden fristgerecht und prüfungssicher erstellt, Scope-1-bis-3-Emi...\"",
+      "entity": "esg-sustainability--grosse-energieversorger-de"
+    },
+    {
+      "text": "IS statement 20-35 words (actual: 13)",
+      "passed": false,
+      "evidence": "\"ESG-Strategie mit Carbon-Footprint-Tracking, SAP-Sustainability-Integration und ...\"",
+      "entity": "esg-sustainability--grosse-energieversorger-de"
+    },
+    {
+      "text": "Slug follows {feature}--{market} convention",
+      "passed": true,
+      "evidence": "slug=\"esg-sustainability--grosse-energieversorger-de\", expected=\"esg-sustainability--grosse-energieversorger-de\"",
+      "entity": "esg-sustainability--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES is not vendor-centric",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "esg-sustainability--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS contains quantification signal",
+      "passed": true,
+      "evidence": "\"CSRD-Berichte werden fristgerecht und prüfungssicher erstellt, Scope-1-bis-3-Emi...\"",
+      "entity": "esg-sustainability--grosse-energieversorger-de"
+    },
+    {
+      "text": "Evidence array is non-empty",
+      "passed": true,
+      "evidence": "1 evidence entries",
+      "entity": "esg-sustainability--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES statement 15-30 words (actual: 25)",
+      "passed": true,
+      "evidence": "\"KRITIS-regulierte Workloads bleiben in der privaten Cloud, während Analytics und...\"",
+      "entity": "hybrid-cloud--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS statement 15-30 words (actual: 25)",
+      "passed": true,
+      "evidence": "\"Sie nutzen Cloud-Elastizität für Energiewende-Innovationen, ohne KRITIS-Complian...\"",
+      "entity": "hybrid-cloud--grosse-energieversorger-de"
+    },
+    {
+      "text": "IS statement 20-35 words (actual: 14)",
+      "passed": false,
+      "evidence": "\"T Cloud Hybrid kombiniert Private- und Public-Cloud mit zentralem Governance-Fra...\"",
+      "entity": "hybrid-cloud--grosse-energieversorger-de"
+    },
+    {
+      "text": "Slug follows {feature}--{market} convention",
+      "passed": true,
+      "evidence": "slug=\"hybrid-cloud--grosse-energieversorger-de\", expected=\"hybrid-cloud--grosse-energieversorger-de\"",
+      "entity": "hybrid-cloud--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES is not vendor-centric",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "hybrid-cloud--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS contains quantification signal",
+      "passed": false,
+      "evidence": "\"Sie nutzen Cloud-Elastizität für Energiewende-Innovationen, ohne KRITIS-Complian...\"",
+      "entity": "hybrid-cloud--grosse-energieversorger-de"
+    },
+    {
+      "text": "Evidence array is non-empty",
+      "passed": true,
+      "evidence": "1 evidence entries",
+      "entity": "hybrid-cloud--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES statement 15-30 words (actual: 22)",
+      "passed": true,
+      "evidence": "\"Zugriffe auf Leitsysteme, Energiehandelsplattformen und SAP IS-U werden über ein...\"",
+      "entity": "identity-access-management--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS statement 15-30 words (actual: 20)",
+      "passed": true,
+      "evidence": "\"Privilegierte Zugänge zu KRITIS-Systemen sind lückenlos nachvollziehbar, was BSI...\"",
+      "entity": "identity-access-management--grosse-energieversorger-de"
+    },
+    {
+      "text": "IS statement 20-35 words (actual: 15)",
+      "passed": false,
+      "evidence": "\"Federated IAM-Plattform mit SAML und OpenID Connect für automatische Virtual-Use...\"",
+      "entity": "identity-access-management--grosse-energieversorger-de"
+    },
+    {
+      "text": "Slug follows {feature}--{market} convention",
+      "passed": true,
+      "evidence": "slug=\"identity-access-management--grosse-energieversorger-de\", expected=\"identity-access-management--grosse-energieversorger-de\"",
+      "entity": "identity-access-management--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES is not vendor-centric",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "identity-access-management--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS contains quantification signal",
+      "passed": false,
+      "evidence": "\"Privilegierte Zugänge zu KRITIS-Systemen sind lückenlos nachvollziehbar, was BSI...\"",
+      "entity": "identity-access-management--grosse-energieversorger-de"
+    },
+    {
+      "text": "Evidence array is non-empty",
+      "passed": true,
+      "evidence": "1 evidence entries",
+      "entity": "identity-access-management--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES statement 15-30 words (actual: 18)",
+      "passed": true,
+      "evidence": "\"Detecon-Berater mit Energiebranchenerfahrung übersetzen Ihre Herausforderungen —...\"",
+      "entity": "industry-sector-consulting--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS statement 15-30 words (actual: 25)",
+      "passed": true,
+      "evidence": "\"Transformationsprojekte werden 30-40% schneller produktiv, weil Branchenberater ...\"",
+      "entity": "industry-sector-consulting--grosse-energieversorger-de"
+    },
+    {
+      "text": "IS statement 20-35 words (actual: 13)",
+      "passed": false,
+      "evidence": "\"Branchenspezifische Transformationsberatung durch Detecon mit Design-Thinking-Me...\"",
+      "entity": "industry-sector-consulting--grosse-energieversorger-de"
+    },
+    {
+      "text": "Slug follows {feature}--{market} convention",
+      "passed": true,
+      "evidence": "slug=\"industry-sector-consulting--grosse-energieversorger-de\", expected=\"industry-sector-consulting--grosse-energieversorger-de\"",
+      "entity": "industry-sector-consulting--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES is not vendor-centric",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "industry-sector-consulting--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS contains quantification signal",
+      "passed": true,
+      "evidence": "\"Transformationsprojekte werden 30-40% schneller produktiv, weil Branchenberater ...\"",
+      "entity": "industry-sector-consulting--grosse-energieversorger-de"
+    },
+    {
+      "text": "Evidence array is non-empty",
+      "passed": true,
+      "evidence": "1 evidence entries",
+      "entity": "industry-sector-consulting--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES statement 15-30 words (actual: 25)",
+      "passed": true,
+      "evidence": "\"IT- und OT-Infrastruktur von Leitsystemen bis SAP werden in einer konsolidierten...\"",
+      "entity": "infrastructure-monitoring-aiops--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS statement 15-30 words (actual: 18)",
+      "passed": true,
+      "evidence": "\"Ungeplante IT-bedingte Netzausfälle sinken um 60-70%, was EnWG-Verfügbarkeitspfl...\"",
+      "entity": "infrastructure-monitoring-aiops--grosse-energieversorger-de"
+    },
+    {
+      "text": "IS statement 20-35 words (actual: 15)",
+      "passed": false,
+      "evidence": "\"Konsolidiertes Monitoring über heterogene IT-Infrastrukturen mit Cloud Eye, 24/7...\"",
+      "entity": "infrastructure-monitoring-aiops--grosse-energieversorger-de"
+    },
+    {
+      "text": "Slug follows {feature}--{market} convention",
+      "passed": true,
+      "evidence": "slug=\"infrastructure-monitoring-aiops--grosse-energieversorger-de\", expected=\"infrastructure-monitoring-aiops--grosse-energieversorger-de\"",
+      "entity": "infrastructure-monitoring-aiops--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES is not vendor-centric",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "infrastructure-monitoring-aiops--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS contains quantification signal",
+      "passed": true,
+      "evidence": "\"Ungeplante IT-bedingte Netzausfälle sinken um 60-70%, was EnWG-Verfügbarkeitspfl...\"",
+      "entity": "infrastructure-monitoring-aiops--grosse-energieversorger-de"
+    },
+    {
+      "text": "Evidence array is non-empty",
+      "passed": true,
+      "evidence": "1 evidence entries",
+      "entity": "infrastructure-monitoring-aiops--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES statement 15-30 words (actual: 29)",
+      "passed": true,
+      "evidence": "\"Der gesamte IT-Betrieb — von SAP über Netzleitstellensysteme bis zum Endanwender...\"",
+      "entity": "it-outsourcing--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS statement 15-30 words (actual: 20)",
+      "passed": true,
+      "evidence": "\"Sie setzen 20-30% Ihres IT-Budgets für Energiewende-Investitionen frei und elimi...\"",
+      "entity": "it-outsourcing--grosse-energieversorger-de"
+    },
+    {
+      "text": "IS statement 20-35 words (actual: 14)",
+      "passed": false,
+      "evidence": "\"Vollständiges IT-Outsourcing mit End-to-End-Verantwortung für Infrastruktur, App...\"",
+      "entity": "it-outsourcing--grosse-energieversorger-de"
+    },
+    {
+      "text": "Slug follows {feature}--{market} convention",
+      "passed": true,
+      "evidence": "slug=\"it-outsourcing--grosse-energieversorger-de\", expected=\"it-outsourcing--grosse-energieversorger-de\"",
+      "entity": "it-outsourcing--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES is not vendor-centric",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "it-outsourcing--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS contains quantification signal",
+      "passed": true,
+      "evidence": "\"Sie setzen 20-30% Ihres IT-Budgets für Energiewende-Investitionen frei und elimi...\"",
+      "entity": "it-outsourcing--grosse-energieversorger-de"
+    },
+    {
+      "text": "Evidence array is non-empty",
+      "passed": true,
+      "evidence": "1 evidence entries",
+      "entity": "it-outsourcing--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES statement 15-30 words (actual: 25)",
+      "passed": true,
+      "evidence": "\"Ihre 1.000+ Mitarbeiter an verteilten Standorten — Kraftwerke, Netzleitstellen, ...\"",
+      "entity": "it-service-desk--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS statement 15-30 words (actual: 25)",
+      "passed": true,
+      "evidence": "\"First-Contact-Resolution steigt auf 70%+, Ausfallzeiten pro Mitarbeiter sinken u...\"",
+      "entity": "it-service-desk--grosse-energieversorger-de"
+    },
+    {
+      "text": "IS statement 20-35 words (actual: 12)",
+      "passed": false,
+      "evidence": "\"24/7-Service-Desk mit ITIL-konformem Support und KI-gestützter Incident-Manageme...\"",
+      "entity": "it-service-desk--grosse-energieversorger-de"
+    },
+    {
+      "text": "Slug follows {feature}--{market} convention",
+      "passed": true,
+      "evidence": "slug=\"it-service-desk--grosse-energieversorger-de\", expected=\"it-service-desk--grosse-energieversorger-de\"",
+      "entity": "it-service-desk--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES is not vendor-centric",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "it-service-desk--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS contains quantification signal",
+      "passed": true,
+      "evidence": "\"First-Contact-Resolution steigt auf 70%+, Ausfallzeiten pro Mitarbeiter sinken u...\"",
+      "entity": "it-service-desk--grosse-energieversorger-de"
+    },
+    {
+      "text": "Evidence array is non-empty",
+      "passed": true,
+      "evidence": "1 evidence entries",
+      "entity": "it-service-desk--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES statement 15-30 words (actual: 20)",
+      "passed": true,
+      "evidence": "\"Ihre IT-Zielarchitektur wird gegen EnWG-Anforderungen, KRITIS-Vorgaben und Energ...\"",
+      "entity": "it-strategy-architecture--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS statement 15-30 words (actual: 23)",
+      "passed": true,
+      "evidence": "\"Investitionsentscheidungen von 10-50 Mio. EUR in IT-Modernisierung werden auf ei...\"",
+      "entity": "it-strategy-architecture--grosse-energieversorger-de"
+    },
+    {
+      "text": "IS statement 20-35 words (actual: 13)",
+      "passed": false,
+      "evidence": "\"Ganzheitliche Digitalisierungsstrategie und Enterprise Architecture nach TOGAF-S...\"",
+      "entity": "it-strategy-architecture--grosse-energieversorger-de"
+    },
+    {
+      "text": "Slug follows {feature}--{market} convention",
+      "passed": true,
+      "evidence": "slug=\"it-strategy-architecture--grosse-energieversorger-de\", expected=\"it-strategy-architecture--grosse-energieversorger-de\"",
+      "entity": "it-strategy-architecture--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES is not vendor-centric",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "it-strategy-architecture--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS contains quantification signal",
+      "passed": true,
+      "evidence": "\"Investitionsentscheidungen von 10-50 Mio. EUR in IT-Modernisierung werden auf ei...\"",
+      "entity": "it-strategy-architecture--grosse-energieversorger-de"
+    },
+    {
+      "text": "Evidence array is non-empty",
+      "passed": true,
+      "evidence": "1 evidence entries",
+      "entity": "it-strategy-architecture--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES statement 15-30 words (actual: 24)",
+      "passed": true,
+      "evidence": "\"Fachabteilungen in Netzplanung und Vertrieb erstellen Prozessanwendungen visuell...\"",
+      "entity": "low-code-platform--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS statement 15-30 words (actual: 22)",
+      "passed": true,
+      "evidence": "\"Die Backlog-Wartezeit für Fachanwendungen sinkt von Monaten auf Wochen, was regu...\"",
+      "entity": "low-code-platform--grosse-energieversorger-de"
+    },
+    {
+      "text": "IS statement 20-35 words (actual: 10)",
+      "passed": false,
+      "evidence": "\"Pega-Infinity-basierte Low-Code-Plattform mit Governance-Framework für visuelle ...\"",
+      "entity": "low-code-platform--grosse-energieversorger-de"
+    },
+    {
+      "text": "Slug follows {feature}--{market} convention",
+      "passed": true,
+      "evidence": "slug=\"low-code-platform--grosse-energieversorger-de\", expected=\"low-code-platform--grosse-energieversorger-de\"",
+      "entity": "low-code-platform--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES is not vendor-centric",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "low-code-platform--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS contains quantification signal",
+      "passed": false,
+      "evidence": "\"Die Backlog-Wartezeit für Fachanwendungen sinkt von Monaten auf Wochen, was regu...\"",
+      "entity": "low-code-platform--grosse-energieversorger-de"
+    },
+    {
+      "text": "Evidence array is non-empty",
+      "passed": true,
+      "evidence": "1 evidence entries",
+      "entity": "low-code-platform--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES statement 15-30 words (actual: 22)",
+      "passed": true,
+      "evidence": "\"Ihre Abrechnungs- und Bilanzkreis-Mainframes werden schrittweise modernisiert — ...\"",
+      "entity": "mainframe-automation--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS statement 15-30 words (actual: 19)",
+      "passed": true,
+      "evidence": "\"Das Risiko eines Kompetenzverlusts durch ausscheidende COBOL-Experten wird elimi...\"",
+      "entity": "mainframe-automation--grosse-energieversorger-de"
+    },
+    {
+      "text": "IS statement 20-35 words (actual: 15)",
+      "passed": false,
+      "evidence": "\"Betrieb und Modernisierung von Mainframe-Systemen durch das zFuture-Programm: CO...\"",
+      "entity": "mainframe-automation--grosse-energieversorger-de"
+    },
+    {
+      "text": "Slug follows {feature}--{market} convention",
+      "passed": true,
+      "evidence": "slug=\"mainframe-automation--grosse-energieversorger-de\", expected=\"mainframe-automation--grosse-energieversorger-de\"",
+      "entity": "mainframe-automation--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES is not vendor-centric",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "mainframe-automation--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS contains quantification signal",
+      "passed": true,
+      "evidence": "\"Das Risiko eines Kompetenzverlusts durch ausscheidende COBOL-Experten wird elimi...\"",
+      "entity": "mainframe-automation--grosse-energieversorger-de"
+    },
+    {
+      "text": "Evidence array is non-empty",
+      "passed": true,
+      "evidence": "1 evidence entries",
+      "entity": "mainframe-automation--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES statement 15-30 words (actual: 22)",
+      "passed": true,
+      "evidence": "\"Compute- und Storage-Kapazitäten für Netzleitsysteme, Messdatenverarbeitung und ...\"",
+      "entity": "managed-compute-storage--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS statement 15-30 words (actual: 19)",
+      "passed": true,
+      "evidence": "\"Infrastrukturkosten werden um 20-30% gesenkt durch bedarfsgerechte Skalierung, u...\"",
+      "entity": "managed-compute-storage--grosse-energieversorger-de"
+    },
+    {
+      "text": "IS statement 20-35 words (actual: 17)",
+      "passed": false,
+      "evidence": "\"Automatisierte Verwaltung von Computing- und Storage-Ressourcen durch VMware Clo...\"",
+      "entity": "managed-compute-storage--grosse-energieversorger-de"
+    },
+    {
+      "text": "Slug follows {feature}--{market} convention",
+      "passed": true,
+      "evidence": "slug=\"managed-compute-storage--grosse-energieversorger-de\", expected=\"managed-compute-storage--grosse-energieversorger-de\"",
+      "entity": "managed-compute-storage--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES is not vendor-centric",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "managed-compute-storage--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS contains quantification signal",
+      "passed": true,
+      "evidence": "\"Infrastrukturkosten werden um 20-30% gesenkt durch bedarfsgerechte Skalierung, u...\"",
+      "entity": "managed-compute-storage--grosse-energieversorger-de"
+    },
+    {
+      "text": "Evidence array is non-empty",
+      "passed": true,
+      "evidence": "1 evidence entries",
+      "entity": "managed-compute-storage--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES statement 15-30 words (actual: 23)",
+      "passed": true,
+      "evidence": "\"Ihre AWS- und Azure-Umgebungen für Energiehandel, IoT-Datenplattformen und Analy...\"",
+      "entity": "managed-hyperscaler--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS statement 15-30 words (actual: 18)",
+      "passed": true,
+      "evidence": "\"Cloud-Fehlkonfigurationen als häufigstes Einfallstor für Sicherheitsvorfälle wer...\"",
+      "entity": "managed-hyperscaler--grosse-energieversorger-de"
+    },
+    {
+      "text": "IS statement 20-35 words (actual: 16)",
+      "passed": false,
+      "evidence": "\"Rundum gemanagte AWS, Azure und GCP Umgebungen mit Well-Architected Reviews, Sec...\"",
+      "entity": "managed-hyperscaler--grosse-energieversorger-de"
+    },
+    {
+      "text": "Slug follows {feature}--{market} convention",
+      "passed": true,
+      "evidence": "slug=\"managed-hyperscaler--grosse-energieversorger-de\", expected=\"managed-hyperscaler--grosse-energieversorger-de\"",
+      "entity": "managed-hyperscaler--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES is not vendor-centric",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "managed-hyperscaler--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS contains quantification signal",
+      "passed": true,
+      "evidence": "\"Cloud-Fehlkonfigurationen als häufigstes Einfallstor für Sicherheitsvorfälle wer...\"",
+      "entity": "managed-hyperscaler--grosse-energieversorger-de"
+    },
+    {
+      "text": "Evidence array is non-empty",
+      "passed": true,
+      "evidence": "1 evidence entries",
+      "entity": "managed-hyperscaler--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES statement 15-30 words (actual: 21)",
+      "passed": true,
+      "evidence": "\"Netzwerkinfrastruktur an Kraftwerken, Umspannwerken und Verwaltungsstandorten wi...\"",
+      "entity": "managed-lan-wlan--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS statement 15-30 words (actual: 23)",
+      "passed": true,
+      "evidence": "\"Netzwerk-Incidents an entlegenen Standorten werden remote in Minuten statt durch...\"",
+      "entity": "managed-lan-wlan--grosse-energieversorger-de"
+    },
+    {
+      "text": "IS statement 20-35 words (actual: 14)",
+      "passed": false,
+      "evidence": "\"Cloud-gesteuerte zentrale Verwaltung von LAN/WLAN-Access Points mit Plug-and-Pla...\"",
+      "entity": "managed-lan-wlan--grosse-energieversorger-de"
+    },
+    {
+      "text": "Slug follows {feature}--{market} convention",
+      "passed": true,
+      "evidence": "slug=\"managed-lan-wlan--grosse-energieversorger-de\", expected=\"managed-lan-wlan--grosse-energieversorger-de\"",
+      "entity": "managed-lan-wlan--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES is not vendor-centric",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "managed-lan-wlan--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS contains quantification signal",
+      "passed": true,
+      "evidence": "\"Netzwerk-Incidents an entlegenen Standorten werden remote in Minuten statt durch...\"",
+      "entity": "managed-lan-wlan--grosse-energieversorger-de"
+    },
+    {
+      "text": "Evidence array is non-empty",
+      "passed": true,
+      "evidence": "1 evidence entries",
+      "entity": "managed-lan-wlan--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES statement 15-30 words (actual: 20)",
+      "passed": true,
+      "evidence": "\"Druckinfrastruktur an Verwaltungsstandorten, Kundenzentren und Kraftwerken wird ...\"",
+      "entity": "managed-print--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS statement 15-30 words (actual: 24)",
+      "passed": true,
+      "evidence": "\"Druckkosten sinken um 20-30% durch Konsolidierung und automatisierte Bestandsver...\"",
+      "entity": "managed-print--grosse-energieversorger-de"
+    },
+    {
+      "text": "IS statement 20-35 words (actual: 15)",
+      "passed": false,
+      "evidence": "\"Integriertes Print- und Device-Management für hybride Arbeitsumgebungen mit zent...\"",
+      "entity": "managed-print--grosse-energieversorger-de"
+    },
+    {
+      "text": "Slug follows {feature}--{market} convention",
+      "passed": true,
+      "evidence": "slug=\"managed-print--grosse-energieversorger-de\", expected=\"managed-print--grosse-energieversorger-de\"",
+      "entity": "managed-print--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES is not vendor-centric",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "managed-print--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS contains quantification signal",
+      "passed": true,
+      "evidence": "\"Druckkosten sinken um 20-30% durch Konsolidierung und automatisierte Bestandsver...\"",
+      "entity": "managed-print--grosse-energieversorger-de"
+    },
+    {
+      "text": "Evidence array is non-empty",
+      "passed": true,
+      "evidence": "1 evidence entries",
+      "entity": "managed-print--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES statement 15-30 words (actual: 25)",
+      "passed": true,
+      "evidence": "\"Ihre M365-Umgebung wird mit Cloud Privacy Service in deutschen Rechenzentren ver...\"",
+      "entity": "microsoft-365-workplace--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS statement 15-30 words (actual: 21)",
+      "passed": true,
+      "evidence": "\"Produktivitätssteigerungen von 20-30% durch Copilot-Integration werden realisier...\"",
+      "entity": "microsoft-365-workplace--grosse-energieversorger-de"
+    },
+    {
+      "text": "IS statement 20-35 words (actual: 17)",
+      "passed": false,
+      "evidence": "\"M365-Deployment mit Change Management, Microsoft Copilot-Integration und Cloud P...\"",
+      "entity": "microsoft-365-workplace--grosse-energieversorger-de"
+    },
+    {
+      "text": "Slug follows {feature}--{market} convention",
+      "passed": true,
+      "evidence": "slug=\"microsoft-365-workplace--grosse-energieversorger-de\", expected=\"microsoft-365-workplace--grosse-energieversorger-de\"",
+      "entity": "microsoft-365-workplace--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES is not vendor-centric",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "microsoft-365-workplace--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS contains quantification signal",
+      "passed": true,
+      "evidence": "\"Produktivitätssteigerungen von 20-30% durch Copilot-Integration werden realisier...\"",
+      "entity": "microsoft-365-workplace--grosse-energieversorger-de"
+    },
+    {
+      "text": "Evidence array is non-empty",
+      "passed": true,
+      "evidence": "1 evidence entries",
+      "entity": "microsoft-365-workplace--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES statement 15-30 words (actual: 27)",
+      "passed": true,
+      "evidence": "\"Ihre Cloud-Ausgaben über AWS, Azure und Open Telekom Cloud werden in einem zentr...\"",
+      "entity": "multi-cloud-finops--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS statement 15-30 words (actual: 25)",
+      "passed": true,
+      "evidence": "\"Cloud-Kosten werden um 20-30% optimiert durch RI-Management und Rightsizing, und...\"",
+      "entity": "multi-cloud-finops--grosse-energieversorger-de"
+    },
+    {
+      "text": "IS statement 20-35 words (actual: 16)",
+      "passed": false,
+      "evidence": "\"Zentralisierte Multi-Cloud-Governance mit FinOps-Maturity-Assessment, kontinuier...\"",
+      "entity": "multi-cloud-finops--grosse-energieversorger-de"
+    },
+    {
+      "text": "Slug follows {feature}--{market} convention",
+      "passed": true,
+      "evidence": "slug=\"multi-cloud-finops--grosse-energieversorger-de\", expected=\"multi-cloud-finops--grosse-energieversorger-de\"",
+      "entity": "multi-cloud-finops--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES is not vendor-centric",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "multi-cloud-finops--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS contains quantification signal",
+      "passed": true,
+      "evidence": "\"Cloud-Kosten werden um 20-30% optimiert durch RI-Management und Rightsizing, und...\"",
+      "entity": "multi-cloud-finops--grosse-energieversorger-de"
+    },
+    {
+      "text": "Evidence array is non-empty",
+      "passed": true,
+      "evidence": "1 evidence entries",
+      "entity": "multi-cloud-finops--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES statement 15-30 words (actual: 23)",
+      "passed": true,
+      "evidence": "\"Neue Standorte — Windparks, Solarfelder, Ladeparks — werden über programmierbare...\"",
+      "entity": "network-as-a-service--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS statement 15-30 words (actual: 20)",
+      "passed": true,
+      "evidence": "\"Die Netzanbindung neuer Erzeugungsanlagen hält mit dem Ausbautempo der Energiewe...\"",
+      "entity": "network-as-a-service--grosse-energieversorger-de"
+    },
+    {
+      "text": "IS statement 20-35 words (actual: 10)",
+      "passed": false,
+      "evidence": "\"Programmierbare SDN/NFV-basierte Multi-Cloud-Konnektivität mit vollautomatisiert...\"",
+      "entity": "network-as-a-service--grosse-energieversorger-de"
+    },
+    {
+      "text": "Slug follows {feature}--{market} convention",
+      "passed": true,
+      "evidence": "slug=\"network-as-a-service--grosse-energieversorger-de\", expected=\"network-as-a-service--grosse-energieversorger-de\"",
+      "entity": "network-as-a-service--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES is not vendor-centric",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "network-as-a-service--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS contains quantification signal",
+      "passed": false,
+      "evidence": "\"Die Netzanbindung neuer Erzeugungsanlagen hält mit dem Ausbautempo der Energiewe...\"",
+      "entity": "network-as-a-service--grosse-energieversorger-de"
+    },
+    {
+      "text": "Evidence array is non-empty",
+      "passed": true,
+      "evidence": "1 evidence entries",
+      "entity": "network-as-a-service--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES statement 15-30 words (actual: 23)",
+      "passed": true,
+      "evidence": "\"Ihre Netzleit-, SCADA- und Energiehandelssysteme werden durch verwaltete Next-Ge...\"",
+      "entity": "network-security--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS statement 15-30 words (actual: 26)",
+      "passed": true,
+      "evidence": "\"Ein erfolgreicher Angriff auf OT-Systeme, der bei Energieversorgern durchschnitt...\"",
+      "entity": "network-security--grosse-energieversorger-de"
+    },
+    {
+      "text": "IS statement 20-35 words (actual: 14)",
+      "passed": false,
+      "evidence": "\"Managed Next Generation Firewall mit DDoS-Mitigation, IDS/IPS, Web Application F...\"",
+      "entity": "network-security--grosse-energieversorger-de"
+    },
+    {
+      "text": "Slug follows {feature}--{market} convention",
+      "passed": true,
+      "evidence": "slug=\"network-security--grosse-energieversorger-de\", expected=\"network-security--grosse-energieversorger-de\"",
+      "entity": "network-security--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES is not vendor-centric",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "network-security--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS contains quantification signal",
+      "passed": true,
+      "evidence": "\"Ein erfolgreicher Angriff auf OT-Systeme, der bei Energieversorgern durchschnitt...\"",
+      "entity": "network-security--grosse-energieversorger-de"
+    },
+    {
+      "text": "Evidence array is non-empty",
+      "passed": true,
+      "evidence": "1 evidence entries",
+      "entity": "network-security--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES statement 15-30 words (actual: 26)",
+      "passed": true,
+      "evidence": "\"KRITIS-pflichtige Leitsystem-Workloads und Energiehandelsdaten laufen auf einer ...\"",
+      "entity": "private-cloud--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS statement 15-30 words (actual: 21)",
+      "passed": true,
+      "evidence": "\"Die regulatorische Hürde für Cloud-Adoption wird eliminiert, was den Modernisier...\"",
+      "entity": "private-cloud--grosse-energieversorger-de"
+    },
+    {
+      "text": "IS statement 20-35 words (actual: 18)",
+      "passed": false,
+      "evidence": "\"VMware Cloud Foundation basierte Future Cloud Infrastructure mit SDDC auf Lenovo...\"",
+      "entity": "private-cloud--grosse-energieversorger-de"
+    },
+    {
+      "text": "Slug follows {feature}--{market} convention",
+      "passed": true,
+      "evidence": "slug=\"private-cloud--grosse-energieversorger-de\", expected=\"private-cloud--grosse-energieversorger-de\"",
+      "entity": "private-cloud--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES is not vendor-centric",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "private-cloud--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS contains quantification signal",
+      "passed": true,
+      "evidence": "\"Die regulatorische Hürde für Cloud-Adoption wird eliminiert, was den Modernisier...\"",
+      "entity": "private-cloud--grosse-energieversorger-de"
+    },
+    {
+      "text": "Evidence array is non-empty",
+      "passed": true,
+      "evidence": "1 evidence entries",
+      "entity": "private-cloud--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES statement 15-30 words (actual: 25)",
+      "passed": true,
+      "evidence": "\"Ihre Kundenportale, Smart-Meter-Apps und Abrechnungssysteme werden automatisiert...\"",
+      "entity": "quality-engineering--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS statement 15-30 words (actual: 22)",
+      "passed": true,
+      "evidence": "\"Produktionsfehler in kundenrelevanten Systemen sinken um 50-60%, was Rückrufakti...\"",
+      "entity": "quality-engineering--grosse-energieversorger-de"
+    },
+    {
+      "text": "IS statement 20-35 words (actual: 13)",
+      "passed": false,
+      "evidence": "\"Open-Source-Test-Framework Testerra mit Selenium 4 für Web- und Mobile-Automatis...\"",
+      "entity": "quality-engineering--grosse-energieversorger-de"
+    },
+    {
+      "text": "Slug follows {feature}--{market} convention",
+      "passed": true,
+      "evidence": "slug=\"quality-engineering--grosse-energieversorger-de\", expected=\"quality-engineering--grosse-energieversorger-de\"",
+      "entity": "quality-engineering--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES is not vendor-centric",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "quality-engineering--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS contains quantification signal",
+      "passed": true,
+      "evidence": "\"Produktionsfehler in kundenrelevanten Systemen sinken um 50-60%, was Rückrufakti...\"",
+      "entity": "quality-engineering--grosse-energieversorger-de"
+    },
+    {
+      "text": "Evidence array is non-empty",
+      "passed": true,
+      "evidence": "1 evidence entries",
+      "entity": "quality-engineering--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES statement 15-30 words (actual: 24)",
+      "passed": true,
+      "evidence": "\"Ihre IS-U-zu-S/4HANA-Migration wird durch den einzigen deutschen RISE with SAP P...\"",
+      "entity": "sap-on-cloud--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS statement 15-30 words (actual: 24)",
+      "passed": true,
+      "evidence": "\"Die S/4HANA-Deadline wird ohne Geschäftsunterbrechung eingehalten, und die neue ...\"",
+      "entity": "sap-on-cloud--grosse-energieversorger-de"
+    },
+    {
+      "text": "IS statement 20-35 words (actual: 26)",
+      "passed": true,
+      "evidence": "\"SAP Platinum Partner mit End-to-End-Hosting, Migration und Betrieb von S/4HANA a...\"",
+      "entity": "sap-on-cloud--grosse-energieversorger-de"
+    },
+    {
+      "text": "Slug follows {feature}--{market} convention",
+      "passed": true,
+      "evidence": "slug=\"sap-on-cloud--grosse-energieversorger-de\", expected=\"sap-on-cloud--grosse-energieversorger-de\"",
+      "entity": "sap-on-cloud--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES is not vendor-centric",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "sap-on-cloud--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS contains quantification signal",
+      "passed": true,
+      "evidence": "\"Die S/4HANA-Deadline wird ohne Geschäftsunterbrechung eingehalten, und die neue ...\"",
+      "entity": "sap-on-cloud--grosse-energieversorger-de"
+    },
+    {
+      "text": "Evidence array is non-empty",
+      "passed": true,
+      "evidence": "1 evidence entries",
+      "entity": "sap-on-cloud--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES statement 15-30 words (actual: 25)",
+      "passed": true,
+      "evidence": "\"Außendiensttechniker und Remote-Mitarbeiter greifen auf Leitsysteme und SAP über...\"",
+      "entity": "sase-zero-trust-access--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS statement 15-30 words (actual: 21)",
+      "passed": true,
+      "evidence": "\"Das Lateral-Movement-Risiko nach einem Endpoint-Breach wird eliminiert, was bei ...\"",
+      "entity": "sase-zero-trust-access--grosse-energieversorger-de"
+    },
+    {
+      "text": "IS statement 20-35 words (actual: 16)",
+      "passed": false,
+      "evidence": "\"Cloud-basiertes SASE-Framework mit Zero-Trust-Identitätsverifizierung, das WAN-F...\"",
+      "entity": "sase-zero-trust-access--grosse-energieversorger-de"
+    },
+    {
+      "text": "Slug follows {feature}--{market} convention",
+      "passed": true,
+      "evidence": "slug=\"sase-zero-trust-access--grosse-energieversorger-de\", expected=\"sase-zero-trust-access--grosse-energieversorger-de\"",
+      "entity": "sase-zero-trust-access--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES is not vendor-centric",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "sase-zero-trust-access--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS contains quantification signal",
+      "passed": false,
+      "evidence": "\"Das Lateral-Movement-Risiko nach einem Endpoint-Breach wird eliminiert, was bei ...\"",
+      "entity": "sase-zero-trust-access--grosse-energieversorger-de"
+    },
+    {
+      "text": "Evidence array is non-empty",
+      "passed": true,
+      "evidence": "1 evidence entries",
+      "entity": "sase-zero-trust-access--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES statement 15-30 words (actual: 22)",
+      "passed": true,
+      "evidence": "\"Ihre 50+ Standorte — Kraftwerke, Umspannwerke, Verwaltungszentralen — werden übe...\"",
+      "entity": "sd-wan-services--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS statement 15-30 words (actual: 25)",
+      "passed": true,
+      "evidence": "\"WAN-Kosten sinken um 30-40% gegenüber reinem MPLS, während die Netzqualität für ...\"",
+      "entity": "sd-wan-services--grosse-energieversorger-de"
+    },
+    {
+      "text": "IS statement 20-35 words (actual: 15)",
+      "passed": false,
+      "evidence": "\"Software-definierte WAN-Plattform mit universalem CPE, dynamischem Traffic-Routi...\"",
+      "entity": "sd-wan-services--grosse-energieversorger-de"
+    },
+    {
+      "text": "Slug follows {feature}--{market} convention",
+      "passed": true,
+      "evidence": "slug=\"sd-wan-services--grosse-energieversorger-de\", expected=\"sd-wan-services--grosse-energieversorger-de\"",
+      "entity": "sd-wan-services--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES is not vendor-centric",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "sd-wan-services--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS contains quantification signal",
+      "passed": true,
+      "evidence": "\"WAN-Kosten sinken um 30-40% gegenüber reinem MPLS, während die Netzqualität für ...\"",
+      "entity": "sd-wan-services--grosse-energieversorger-de"
+    },
+    {
+      "text": "Evidence array is non-empty",
+      "passed": true,
+      "evidence": "1 evidence entries",
+      "entity": "sd-wan-services--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES statement 15-30 words (actual: 27)",
+      "passed": true,
+      "evidence": "\"Ihre KRITIS-Infrastruktur wird durch ein SOC mit Erfahrung bei 50+ deutschen KRI...\"",
+      "entity": "soc-managed-detection--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS statement 15-30 words (actual: 28)",
+      "passed": true,
+      "evidence": "\"Mean Time to Detect sinkt von Tagen auf Minuten, was bei einem durchschnittliche...\"",
+      "entity": "soc-managed-detection--grosse-energieversorger-de"
+    },
+    {
+      "text": "IS statement 20-35 words (actual: 21)",
+      "passed": true,
+      "evidence": "\"Security Operations Center mit Palo Alto CORTEX XSIAM, Analyse von über einer Mi...\"",
+      "entity": "soc-managed-detection--grosse-energieversorger-de"
+    },
+    {
+      "text": "Slug follows {feature}--{market} convention",
+      "passed": true,
+      "evidence": "slug=\"soc-managed-detection--grosse-energieversorger-de\", expected=\"soc-managed-detection--grosse-energieversorger-de\"",
+      "entity": "soc-managed-detection--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES is not vendor-centric",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "soc-managed-detection--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS contains quantification signal",
+      "passed": true,
+      "evidence": "\"Mean Time to Detect sinkt von Tagen auf Minuten, was bei einem durchschnittliche...\"",
+      "entity": "soc-managed-detection--grosse-energieversorger-de"
+    },
+    {
+      "text": "Evidence array is non-empty",
+      "passed": true,
+      "evidence": "2 evidence entries",
+      "entity": "soc-managed-detection--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES statement 15-30 words (actual: 23)",
+      "passed": true,
+      "evidence": "\"Ihre sensiblen Energieverbrauchs-, Netz- und Kundendaten laufen auf BSI-C5-attes...\"",
+      "entity": "sovereign-cloud--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS statement 15-30 words (actual: 26)",
+      "passed": true,
+      "evidence": "\"Die Cloud-Strategie wird regulierungssicher, was KRITIS-Audits besteht und das V...\"",
+      "entity": "sovereign-cloud--grosse-energieversorger-de"
+    },
+    {
+      "text": "IS statement 20-35 words (actual: 20)",
+      "passed": true,
+      "evidence": "\"Europäische Datenhoheit über T Cloud Public, Open Sovereign Cloud, Google-Cloud-...\"",
+      "entity": "sovereign-cloud--grosse-energieversorger-de"
+    },
+    {
+      "text": "Slug follows {feature}--{market} convention",
+      "passed": true,
+      "evidence": "slug=\"sovereign-cloud--grosse-energieversorger-de\", expected=\"sovereign-cloud--grosse-energieversorger-de\"",
+      "entity": "sovereign-cloud--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES is not vendor-centric",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "sovereign-cloud--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS contains quantification signal",
+      "passed": false,
+      "evidence": "\"Die Cloud-Strategie wird regulierungssicher, was KRITIS-Audits besteht und das V...\"",
+      "entity": "sovereign-cloud--grosse-energieversorger-de"
+    },
+    {
+      "text": "Evidence array is non-empty",
+      "passed": true,
+      "evidence": "2 evidence entries",
+      "entity": "sovereign-cloud--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES statement 15-30 words (actual: 23)",
+      "passed": true,
+      "evidence": "\"Ihre SAP IS-U-, Leitsystem-, Smart-Meter-Gateway- und Marktpartner-Schnittstelle...\"",
+      "entity": "system-integration-api--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS statement 15-30 words (actual: 27)",
+      "passed": true,
+      "evidence": "\"Integrationsaufwand bei regulatorischen Systemänderungen sinkt um 50-60%, und ne...\"",
+      "entity": "system-integration-api--grosse-energieversorger-de"
+    },
+    {
+      "text": "IS statement 20-35 words (actual: 21)",
+      "passed": true,
+      "evidence": "\"API Gateway mit Policy-gesteuertem Routing und Credential Management zur Integra...\"",
+      "entity": "system-integration-api--grosse-energieversorger-de"
+    },
+    {
+      "text": "Slug follows {feature}--{market} convention",
+      "passed": true,
+      "evidence": "slug=\"system-integration-api--grosse-energieversorger-de\", expected=\"system-integration-api--grosse-energieversorger-de\"",
+      "entity": "system-integration-api--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES is not vendor-centric",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "system-integration-api--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS contains quantification signal",
+      "passed": true,
+      "evidence": "\"Integrationsaufwand bei regulatorischen Systemänderungen sinkt um 50-60%, und ne...\"",
+      "entity": "system-integration-api--grosse-energieversorger-de"
+    },
+    {
+      "text": "Evidence array is non-empty",
+      "passed": true,
+      "evidence": "1 evidence entries",
+      "entity": "system-integration-api--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES statement 15-30 words (actual: 21)",
+      "passed": true,
+      "evidence": "\"Krisenkommunikation zwischen Leitstellen, Außendienst und Management läuft über ...\"",
+      "entity": "unified-communications--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS statement 15-30 words (actual: 33)",
+      "passed": false,
+      "evidence": "\"Die Reaktionszeit bei Netzstörungen sinkt von 30+ Minuten auf unter 5 Minuten, w...\"",
+      "entity": "unified-communications--grosse-energieversorger-de"
+    },
+    {
+      "text": "IS statement 20-35 words (actual: 20)",
+      "passed": true,
+      "evidence": "\"Managed Unified Communications mit Cisco- und Unify-Komponenten aus T-Systems Pr...\"",
+      "entity": "unified-communications--grosse-energieversorger-de"
+    },
+    {
+      "text": "Slug follows {feature}--{market} convention",
+      "passed": true,
+      "evidence": "slug=\"unified-communications--grosse-energieversorger-de\", expected=\"unified-communications--grosse-energieversorger-de\"",
+      "entity": "unified-communications--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES is not vendor-centric",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "unified-communications--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS contains quantification signal",
+      "passed": true,
+      "evidence": "\"Die Reaktionszeit bei Netzstörungen sinkt von 30+ Minuten auf unter 5 Minuten, w...\"",
+      "entity": "unified-communications--grosse-energieversorger-de"
+    },
+    {
+      "text": "Evidence array is non-empty",
+      "passed": true,
+      "evidence": "1 evidence entries",
+      "entity": "unified-communications--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES statement 15-30 words (actual: 19)",
+      "passed": true,
+      "evidence": "\"Ihr IT-Vendor-Portfolio mit 50-100+ Lieferanten wird durch TCO-Analysen und Vert...\"",
+      "entity": "vendor-contract-management--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS statement 15-30 words (actual: 21)",
+      "passed": true,
+      "evidence": "\"IT-Beschaffungskosten sinken nachweislich um 15-23%, was bei einem typischen IT-...\"",
+      "entity": "vendor-contract-management--grosse-energieversorger-de"
+    },
+    {
+      "text": "IS statement 20-35 words (actual: 14)",
+      "passed": false,
+      "evidence": "\"Optimierung von Vendor-Portfolio und Vertragsstrukturen durch TCO-Analysen und B...\"",
+      "entity": "vendor-contract-management--grosse-energieversorger-de"
+    },
+    {
+      "text": "Slug follows {feature}--{market} convention",
+      "passed": true,
+      "evidence": "slug=\"vendor-contract-management--grosse-energieversorger-de\", expected=\"vendor-contract-management--grosse-energieversorger-de\"",
+      "entity": "vendor-contract-management--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES is not vendor-centric",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "vendor-contract-management--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS contains quantification signal",
+      "passed": true,
+      "evidence": "\"IT-Beschaffungskosten sinken nachweislich um 15-23%, was bei einem typischen IT-...\"",
+      "entity": "vendor-contract-management--grosse-energieversorger-de"
+    },
+    {
+      "text": "Evidence array is non-empty",
+      "passed": true,
+      "evidence": "1 evidence entries",
+      "entity": "vendor-contract-management--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES statement 15-30 words (actual: 23)",
+      "passed": true,
+      "evidence": "\"Leitstellen-Arbeitsplätze und Außendienst-Zugänge werden als virtuelle Desktops ...\"",
+      "entity": "virtual-desktop-daas--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS statement 15-30 words (actual: 23)",
+      "passed": true,
+      "evidence": "\"Die Bereitstellung neuer Arbeitsplätze sinkt von Tagen auf Stunden, Endpoint-Sic...\"",
+      "entity": "virtual-desktop-daas--grosse-energieversorger-de"
+    },
+    {
+      "text": "IS statement 20-35 words (actual: 18)",
+      "passed": false,
+      "evidence": "\"Verwaltete virtuelle Desktops über Azure Virtual Desktop und Citrix Cloud mit En...\"",
+      "entity": "virtual-desktop-daas--grosse-energieversorger-de"
+    },
+    {
+      "text": "Slug follows {feature}--{market} convention",
+      "passed": true,
+      "evidence": "slug=\"virtual-desktop-daas--grosse-energieversorger-de\", expected=\"virtual-desktop-daas--grosse-energieversorger-de\"",
+      "entity": "virtual-desktop-daas--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES is not vendor-centric",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "virtual-desktop-daas--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS contains quantification signal",
+      "passed": false,
+      "evidence": "\"Die Bereitstellung neuer Arbeitsplätze sinkt von Tagen auf Stunden, Endpoint-Sic...\"",
+      "entity": "virtual-desktop-daas--grosse-energieversorger-de"
+    },
+    {
+      "text": "Evidence array is non-empty",
+      "passed": true,
+      "evidence": "1 evidence entries",
+      "entity": "virtual-desktop-daas--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES statement 15-30 words (actual: 19)",
+      "passed": true,
+      "evidence": "\"Ihre KRITIS-Infrastruktur wird regelmäßig aus Angreifer-Perspektive getestet — P...\"",
+      "entity": "vulnerability-pentest--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS statement 15-30 words (actual: 28)",
+      "passed": true,
+      "evidence": "\"Schwachstellen werden gefunden und geschlossen bevor Angreifer sie ausnutzen, wa...\"",
+      "entity": "vulnerability-pentest--grosse-energieversorger-de"
+    },
+    {
+      "text": "IS statement 20-35 words (actual: 11)",
+      "passed": false,
+      "evidence": "\"Automatisierte Vulnerability-Scans kombiniert mit manuellen Penetrationstests un...\"",
+      "entity": "vulnerability-pentest--grosse-energieversorger-de"
+    },
+    {
+      "text": "Slug follows {feature}--{market} convention",
+      "passed": true,
+      "evidence": "slug=\"vulnerability-pentest--grosse-energieversorger-de\", expected=\"vulnerability-pentest--grosse-energieversorger-de\"",
+      "entity": "vulnerability-pentest--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES is not vendor-centric",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "vulnerability-pentest--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS contains quantification signal",
+      "passed": false,
+      "evidence": "\"Schwachstellen werden gefunden und geschlossen bevor Angreifer sie ausnutzen, wa...\"",
+      "entity": "vulnerability-pentest--grosse-energieversorger-de"
+    },
+    {
+      "text": "Evidence array is non-empty",
+      "passed": true,
+      "evidence": "1 evidence entries",
+      "entity": "vulnerability-pentest--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES statement 15-30 words (actual: 22)",
+      "passed": true,
+      "evidence": "\"Jeder Zugriff auf Ihre Leitsysteme, Energiehandelsplattformen und SAP wird konte...\"",
+      "entity": "zero-trust-architecture--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS statement 15-30 words (actual: 22)",
+      "passed": true,
+      "evidence": "\"Insider-Threats und kompromittierte Accounts können keinen Flächenschaden anrich...\"",
+      "entity": "zero-trust-architecture--grosse-energieversorger-de"
+    },
+    {
+      "text": "IS statement 20-35 words (actual: 13)",
+      "passed": false,
+      "evidence": "\"Kontinuierliche Verifikation von Benutzeridentität und Gerätesicherheitsstatus m...\"",
+      "entity": "zero-trust-architecture--grosse-energieversorger-de"
+    },
+    {
+      "text": "Slug follows {feature}--{market} convention",
+      "passed": true,
+      "evidence": "slug=\"zero-trust-architecture--grosse-energieversorger-de\", expected=\"zero-trust-architecture--grosse-energieversorger-de\"",
+      "entity": "zero-trust-architecture--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES is not vendor-centric",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "zero-trust-architecture--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS contains quantification signal",
+      "passed": false,
+      "evidence": "\"Insider-Threats und kompromittierte Accounts können keinen Flächenschaden anrich...\"",
+      "entity": "zero-trust-architecture--grosse-energieversorger-de"
+    },
+    {
+      "text": "Evidence array is non-empty",
+      "passed": true,
+      "evidence": "1 evidence entries",
+      "entity": "zero-trust-architecture--grosse-energieversorger-de"
+    }
+  ]
+}

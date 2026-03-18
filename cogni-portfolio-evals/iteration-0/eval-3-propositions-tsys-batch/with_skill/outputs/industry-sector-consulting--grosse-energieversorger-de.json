@@ -1,0 +1,31 @@
+{
+  "slug": "industry-sector-consulting--grosse-energieversorger-de",
+  "feature_slug": "industry-sector-consulting",
+  "market_slug": "grosse-energieversorger-de",
+  "is_statement": "Branchenspezifische Transformationsberatung durch Detecon mit Design-Thinking-Methodik, Branchen-Know-how und integrierten IoT-, AI- und Supply-Chain-Lösungen.",
+  "does_statement": "Detecon-Berater mit Energiebranchenerfahrung übersetzen Ihre Herausforderungen — Netzausbau, Sektorenkopplung, neue Geschäftsmodelle — in umsetzbare IT-Roadmaps statt generischer Beratungspräsentationen.",
+  "means_statement": "Transformationsprojekte werden 30-40% schneller produktiv, weil Branchenberater regulatorische Rahmenbedingungen wie EnWG und IT-SiG bereits kennen — statt sie erst durch Ihre Teams lernen zu müssen.",
+  "evidence": [
+    {
+      "statement": "Detecon berät seit über 20 Jahren Energieversorger in Deutschland und hat Transformationsprogramme bei E.ON, RWE und EnBW begleitet.",
+      "source_url": null,
+      "source_title": null
+    }
+  ],
+  "quality_assessment": {
+    "dimensions": {
+      "buyer_centricity": "pass",
+      "market_specificity": "pass",
+      "differentiation": "pass",
+      "status_quo_contrast": "pass",
+      "conciseness_does": "pass",
+      "outcome_specificity": "pass",
+      "escalation": "pass",
+      "quantification": "pass",
+      "emotional_resonance": "warn",
+      "conciseness_means": "warn"
+    },
+    "overall": "warn"
+  },
+  "created": "2026-03-18"
+}

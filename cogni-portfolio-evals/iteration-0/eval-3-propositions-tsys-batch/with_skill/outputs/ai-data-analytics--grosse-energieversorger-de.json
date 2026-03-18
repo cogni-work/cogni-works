@@ -1,0 +1,36 @@
+{
+  "slug": "ai-data-analytics--grosse-energieversorger-de",
+  "feature_slug": "ai-data-analytics",
+  "market_slug": "grosse-energieversorger-de",
+  "is_statement": "Europäische AI-as-a-Service-Plattform mit Unified API für LLM-Serving, Retrieval-Augmented Generation, Fine-Tuning und Data Analytics — DSGVO-konform auf souveräner Infrastruktur.",
+  "does_statement": "Ihre Netzleitstellen nutzen KI-gestützte Lastprognosen und Anomalieerkennung direkt auf souveräner Infrastruktur — ohne Energieverbrauchsdaten an US-Hyperscaler abzugeben.",
+  "means_statement": "Prognosefehler bei der Einspeiseplanung sinken um 15-25%, was Redispatch-Kosten in Millionenhöhe reduziert und die BNetzA-konforme Netzstabilität nachweisbar sichert.",
+  "evidence": [
+    {
+      "statement": "Deutsche Übertragungsnetzbetreiber zahlten 2024 über 4 Mrd. EUR für Redispatch-Maßnahmen laut Bundesnetzagentur-Monitoringbericht.",
+      "source_url": null,
+      "source_title": null
+    },
+    {
+      "statement": "ML-basierte Lastprognosen reduzieren Prognosefehler um 15-30% gegenüber statistischen Standardmodellen laut IEEE-Studien.",
+      "source_url": null,
+      "source_title": null
+    }
+  ],
+  "quality_assessment": {
+    "dimensions": {
+      "buyer_centricity": "pass",
+      "market_specificity": "pass",
+      "differentiation": "pass",
+      "status_quo_contrast": "pass",
+      "conciseness_does": "pass",
+      "outcome_specificity": "pass",
+      "escalation": "pass",
+      "quantification": "pass",
+      "emotional_resonance": "warn",
+      "conciseness_means": "pass"
+    },
+    "overall": "warn"
+  },
+  "created": "2026-03-18"
+}

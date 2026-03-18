@@ -1,0 +1,31 @@
+{
+  "slug": "zero-trust-architecture--grosse-energieversorger-de",
+  "feature_slug": "zero-trust-architecture",
+  "market_slug": "grosse-energieversorger-de",
+  "is_statement": "Kontinuierliche Verifikation von Benutzeridentität und Gerätesicherheitsstatus mittels kontextabhängiger Richtlinien und Netzwerkmikrosegmentierung mit Least-Privilege-Zugriff.",
+  "does_statement": "Jeder Zugriff auf Ihre Leitsysteme, Energiehandelsplattformen und SAP wird kontextabhängig verifiziert — Gerätestatus, Standort und Rolle bestimmen den Zugang, nicht die Netzwerkzugehörigkeit.",
+  "means_statement": "Insider-Threats und kompromittierte Accounts können keinen Flächenschaden anrichten, was bei Energieversorgern den Unterschied zwischen einem kontrollierten Vorfall und einem KRITIS-meldepflichtigen Ausfall darstellt.",
+  "evidence": [
+    {
+      "statement": "Forrester beziffert die Schadensreduktion durch Zero-Trust-Architekturen auf 50-80% gegenüber traditionellen Perimeter-Sicherheitsmodellen.",
+      "source_url": null,
+      "source_title": null
+    }
+  ],
+  "quality_assessment": {
+    "dimensions": {
+      "buyer_centricity": "pass",
+      "market_specificity": "pass",
+      "differentiation": "warn",
+      "status_quo_contrast": "pass",
+      "conciseness_does": "pass",
+      "outcome_specificity": "pass",
+      "escalation": "pass",
+      "quantification": "warn",
+      "emotional_resonance": "pass",
+      "conciseness_means": "pass"
+    },
+    "overall": "warn"
+  },
+  "created": "2026-03-18"
+}

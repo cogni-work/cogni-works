@@ -1,0 +1,31 @@
+{
+  "slug": "private-cloud--grosse-energieversorger-de",
+  "feature_slug": "private-cloud",
+  "market_slug": "grosse-energieversorger-de",
+  "is_statement": "VMware Cloud Foundation basierte Future Cloud Infrastructure mit SDDC auf Lenovo Servern in klimaneutralen europäischen Rechenzentren mit Legacy-IT-Integration.",
+  "does_statement": "KRITIS-pflichtige Leitsystem-Workloads und Energiehandelsdaten laufen auf einer dedizierten Private Cloud in deutschen Rechenzentren — mit Cloud-Agilität bei voller Datensouveränität, statt zwischen Compliance und Innovation zu wählen.",
+  "means_statement": "Die regulatorische Hürde für Cloud-Adoption wird eliminiert, was den Modernisierungsstau bei KRITIS-Workloads auflöst und jährlich 15-25% Infrastrukturkosten gegenüber eigenbetriebenem Rechenzentrum spart.",
+  "evidence": [
+    {
+      "statement": "Laut Bitkom-Studie zögern 62% der KRITIS-Betreiber bei Cloud-Adoption aus Sorge vor regulatorischen Risiken.",
+      "source_url": null,
+      "source_title": null
+    }
+  ],
+  "quality_assessment": {
+    "dimensions": {
+      "buyer_centricity": "pass",
+      "market_specificity": "pass",
+      "differentiation": "pass",
+      "status_quo_contrast": "pass",
+      "conciseness_does": "warn",
+      "outcome_specificity": "pass",
+      "escalation": "pass",
+      "quantification": "pass",
+      "emotional_resonance": "warn",
+      "conciseness_means": "pass"
+    },
+    "overall": "warn"
+  },
+  "created": "2026-03-18"
+}

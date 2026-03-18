@@ -1,0 +1,36 @@
+{
+  "slug": "soc-managed-detection--grosse-energieversorger-de",
+  "feature_slug": "soc-managed-detection",
+  "market_slug": "grosse-energieversorger-de",
+  "is_statement": "Security Operations Center mit Palo Alto CORTEX XSIAM, Analyse von über einer Milliarde Datenpunkten täglich aus 3.000 Quellen mit 200+ Security-Experten.",
+  "does_statement": "Ihre KRITIS-Infrastruktur wird durch ein SOC mit Erfahrung bei 50+ deutschen KRITIS-Betreibern überwacht — mit OT-spezifischer Threat Intelligence, die Angriffe auf Leitsysteme erkennt, bevor sie Schaden anrichten.",
+  "means_statement": "Mean Time to Detect sinkt von Tagen auf Minuten, was bei einem durchschnittlichen KRITIS-Sicherheitsvorfall den Schaden um 70-80% reduziert und die persönliche Haftung des CISO bei Meldepflicht-Verletzungen absichert.",
+  "evidence": [
+    {
+      "statement": "T-Systems SOC überwacht mehr als 50 deutsche KRITIS-Betreiber und verarbeitet täglich über 1 Mrd. Sicherheitsdatenpunkte.",
+      "source_url": null,
+      "source_title": null
+    },
+    {
+      "statement": "IBM Cost of a Data Breach 2024: Organisationen mit SOC reduzieren die Kosten eines Sicherheitsvorfalls um durchschnittlich 2,7 Mio. USD.",
+      "source_url": null,
+      "source_title": null
+    }
+  ],
+  "quality_assessment": {
+    "dimensions": {
+      "buyer_centricity": "pass",
+      "market_specificity": "pass",
+      "differentiation": "pass",
+      "status_quo_contrast": "pass",
+      "conciseness_does": "pass",
+      "outcome_specificity": "pass",
+      "escalation": "pass",
+      "quantification": "pass",
+      "emotional_resonance": "pass",
+      "conciseness_means": "pass"
+    },
+    "overall": "pass"
+  },
+  "created": "2026-03-18"
+}

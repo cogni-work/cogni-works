@@ -1,0 +1,31 @@
+{
+  "slug": "mainframe-automation--grosse-energieversorger-de",
+  "feature_slug": "mainframe-automation",
+  "market_slug": "grosse-energieversorger-de",
+  "is_statement": "Betrieb und Modernisierung von Mainframe-Systemen durch das zFuture-Programm: COBOL-zu-Java-Migration, RPA/IPA-Automation und Infrastructure-as-Code mit 99,998% Verfügbarkeit.",
+  "does_statement": "Ihre Abrechnungs- und Bilanzkreis-Mainframes werden schrittweise modernisiert — COBOL-Kernlogik wird nach Java migriert, während der laufende Betrieb mit 99,998% Verfügbarkeit gesichert bleibt.",
+  "means_statement": "Das Risiko eines Kompetenzverlusts durch ausscheidende COBOL-Experten wird eliminiert, und die Mainframe-Betriebskosten sinken um 25-35% durch Automatisierung und Plattformkonsolidierung.",
+  "evidence": [
+    {
+      "statement": "Über 60% der COBOL-Entwickler in Deutschland sind über 55 Jahre alt, was ein akutes Kompetenzrisiko für Mainframe-abhängige Energieversorger darstellt.",
+      "source_url": null,
+      "source_title": null
+    }
+  ],
+  "quality_assessment": {
+    "dimensions": {
+      "buyer_centricity": "pass",
+      "market_specificity": "pass",
+      "differentiation": "pass",
+      "status_quo_contrast": "pass",
+      "conciseness_does": "pass",
+      "outcome_specificity": "pass",
+      "escalation": "pass",
+      "quantification": "pass",
+      "emotional_resonance": "pass",
+      "conciseness_means": "pass"
+    },
+    "overall": "pass"
+  },
+  "created": "2026-03-18"
+}

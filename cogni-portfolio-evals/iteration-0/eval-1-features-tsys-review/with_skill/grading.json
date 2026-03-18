@@ -1,0 +1,296 @@
+{
+  "total_checks": 48,
+  "passed": 24,
+  "failed": 24,
+  "pass_rate": 0.5,
+  "expectations": [
+    {
+      "text": "Feature description word count 20-35 (actual: 32)",
+      "passed": true,
+      "evidence": "\"SAP Platinum Partner mit SAP Activate-Zertifizierung: End-to-End-Hosting, Migrat...\" (32 words)",
+      "entity": "sap-on-cloud"
+    },
+    {
+      "text": "All required fields present (slug, product_slug, name, description)",
+      "passed": false,
+      "evidence": "Missing: ['product_slug']",
+      "entity": "sap-on-cloud"
+    },
+    {
+      "text": "taxonomy_mapping present with dimension, category_id, category_name",
+      "passed": false,
+      "evidence": "Missing: ['dimension', 'category_id', 'category_name']",
+      "entity": "sap-on-cloud"
+    },
+    {
+      "text": "readiness is one of ga, beta, planned",
+      "passed": false,
+      "evidence": "readiness=\"\"",
+      "entity": "sap-on-cloud"
+    },
+    {
+      "text": "No outcome verbs in description",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "sap-on-cloud"
+    },
+    {
+      "text": "No parity adjectives in description",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "sap-on-cloud"
+    },
+    {
+      "text": "Feature description word count 20-35 (actual: 20)",
+      "passed": true,
+      "evidence": "\"VMware Cloud Foundation basierte Future Cloud Infrastructure (FCI) mit SDDC auf ...\" (20 words)",
+      "entity": "private-cloud"
+    },
+    {
+      "text": "All required fields present (slug, product_slug, name, description)",
+      "passed": false,
+      "evidence": "Missing: ['product_slug']",
+      "entity": "private-cloud"
+    },
+    {
+      "text": "taxonomy_mapping present with dimension, category_id, category_name",
+      "passed": false,
+      "evidence": "Missing: ['dimension', 'category_id', 'category_name']",
+      "entity": "private-cloud"
+    },
+    {
+      "text": "readiness is one of ga, beta, planned",
+      "passed": false,
+      "evidence": "readiness=\"\"",
+      "entity": "private-cloud"
+    },
+    {
+      "text": "No outcome verbs in description",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "private-cloud"
+    },
+    {
+      "text": "No parity adjectives in description",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "private-cloud"
+    },
+    {
+      "text": "Feature description word count 20-35 (actual: 23)",
+      "passed": true,
+      "evidence": "\"Verwaltete Kubernetes-Plattform (EKS, OpenShift, CCE) mit integriertem Container...\" (23 words)",
+      "entity": "cloud-native-container"
+    },
+    {
+      "text": "All required fields present (slug, product_slug, name, description)",
+      "passed": false,
+      "evidence": "Missing: ['product_slug']",
+      "entity": "cloud-native-container"
+    },
+    {
+      "text": "taxonomy_mapping present with dimension, category_id, category_name",
+      "passed": false,
+      "evidence": "Missing: ['dimension', 'category_id', 'category_name']",
+      "entity": "cloud-native-container"
+    },
+    {
+      "text": "readiness is one of ga, beta, planned",
+      "passed": false,
+      "evidence": "readiness=\"\"",
+      "entity": "cloud-native-container"
+    },
+    {
+      "text": "No outcome verbs in description",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "cloud-native-container"
+    },
+    {
+      "text": "No parity adjectives in description",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "cloud-native-container"
+    },
+    {
+      "text": "Feature description word count 20-35 (actual: 26)",
+      "passed": true,
+      "evidence": "\"Rundum gemanagte AWS, Azure und GCP Umgebungen mit Well-Architected Reviews, Sec...\" (26 words)",
+      "entity": "managed-hyperscaler"
+    },
+    {
+      "text": "All required fields present (slug, product_slug, name, description)",
+      "passed": false,
+      "evidence": "Missing: ['product_slug']",
+      "entity": "managed-hyperscaler"
+    },
+    {
+      "text": "taxonomy_mapping present with dimension, category_id, category_name",
+      "passed": false,
+      "evidence": "Missing: ['dimension', 'category_id', 'category_name']",
+      "entity": "managed-hyperscaler"
+    },
+    {
+      "text": "readiness is one of ga, beta, planned",
+      "passed": false,
+      "evidence": "readiness=\"\"",
+      "entity": "managed-hyperscaler"
+    },
+    {
+      "text": "No outcome verbs in description",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "managed-hyperscaler"
+    },
+    {
+      "text": "No parity adjectives in description",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "managed-hyperscaler"
+    },
+    {
+      "text": "Feature description word count 20-35 (actual: 20)",
+      "passed": true,
+      "evidence": "\"T Cloud Hybrid kombiniert Private- und Public-Cloud mit zentralem Governance-Fra...\" (20 words)",
+      "entity": "hybrid-cloud"
+    },
+    {
+      "text": "All required fields present (slug, product_slug, name, description)",
+      "passed": false,
+      "evidence": "Missing: ['product_slug']",
+      "entity": "hybrid-cloud"
+    },
+    {
+      "text": "taxonomy_mapping present with dimension, category_id, category_name",
+      "passed": false,
+      "evidence": "Missing: ['dimension', 'category_id', 'category_name']",
+      "entity": "hybrid-cloud"
+    },
+    {
+      "text": "readiness is one of ga, beta, planned",
+      "passed": false,
+      "evidence": "readiness=\"\"",
+      "entity": "hybrid-cloud"
+    },
+    {
+      "text": "No outcome verbs in description",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "hybrid-cloud"
+    },
+    {
+      "text": "No parity adjectives in description",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "hybrid-cloud"
+    },
+    {
+      "text": "Feature description word count 20-35 (actual: 20)",
+      "passed": true,
+      "evidence": "\"Strukturiertes Cloud-Migrationsprogramm mit Assessment-Framework, modularer CMF-...\" (20 words)",
+      "entity": "cloud-migration"
+    },
+    {
+      "text": "All required fields present (slug, product_slug, name, description)",
+      "passed": false,
+      "evidence": "Missing: ['product_slug']",
+      "entity": "cloud-migration"
+    },
+    {
+      "text": "taxonomy_mapping present with dimension, category_id, category_name",
+      "passed": false,
+      "evidence": "Missing: ['dimension', 'category_id', 'category_name']",
+      "entity": "cloud-migration"
+    },
+    {
+      "text": "readiness is one of ga, beta, planned",
+      "passed": false,
+      "evidence": "readiness=\"\"",
+      "entity": "cloud-migration"
+    },
+    {
+      "text": "No outcome verbs in description",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "cloud-migration"
+    },
+    {
+      "text": "No parity adjectives in description",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "cloud-migration"
+    },
+    {
+      "text": "Feature description word count 20-35 (actual: 27)",
+      "passed": true,
+      "evidence": "\"Zentralisierte Multi-Cloud-Governance über Multi Cloud Connectivity Platform und...\" (27 words)",
+      "entity": "multi-cloud-finops"
+    },
+    {
+      "text": "All required fields present (slug, product_slug, name, description)",
+      "passed": false,
+      "evidence": "Missing: ['product_slug']",
+      "entity": "multi-cloud-finops"
+    },
+    {
+      "text": "taxonomy_mapping present with dimension, category_id, category_name",
+      "passed": false,
+      "evidence": "Missing: ['dimension', 'category_id', 'category_name']",
+      "entity": "multi-cloud-finops"
+    },
+    {
+      "text": "readiness is one of ga, beta, planned",
+      "passed": false,
+      "evidence": "readiness=\"\"",
+      "entity": "multi-cloud-finops"
+    },
+    {
+      "text": "No outcome verbs in description",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "multi-cloud-finops"
+    },
+    {
+      "text": "No parity adjectives in description",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "multi-cloud-finops"
+    },
+    {
+      "text": "Feature description word count 20-35 (actual: 21)",
+      "passed": true,
+      "evidence": "\"Europäische Datenhoheit über T Cloud Public, Open Sovereign Cloud (OSC), Google-...\" (21 words)",
+      "entity": "sovereign-cloud"
+    },
+    {
+      "text": "All required fields present (slug, product_slug, name, description)",
+      "passed": false,
+      "evidence": "Missing: ['product_slug']",
+      "entity": "sovereign-cloud"
+    },
+    {
+      "text": "taxonomy_mapping present with dimension, category_id, category_name",
+      "passed": false,
+      "evidence": "Missing: ['dimension', 'category_id', 'category_name']",
+      "entity": "sovereign-cloud"
+    },
+    {
+      "text": "readiness is one of ga, beta, planned",
+      "passed": false,
+      "evidence": "readiness=\"\"",
+      "entity": "sovereign-cloud"
+    },
+    {
+      "text": "No outcome verbs in description",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "sovereign-cloud"
+    },
+    {
+      "text": "No parity adjectives in description",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "sovereign-cloud"
+    }
+  ]
+}

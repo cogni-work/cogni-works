@@ -1,0 +1,36 @@
+{
+  "slug": "cloud-migration--mittelstaendische-stadtwerke-de",
+  "feature_slug": "cloud-migration",
+  "market_slug": "mittelstaendische-stadtwerke-de",
+  "is_statement": "Strukturiertes Cloud-Migrationsprogramm mit Assessment-Framework, modularer CMF-Methodik (Assess-Mobilize-Modernize), 6R-Migrationsstrategien und Cloud-Migration-Factory-Teams für standardisierte Migrations-Durchführung.",
+  "does_statement": "Sie migrieren Ihre SAP-IS-U-Landschaft vor dem Wartungsende 2027 auf eine BSI-C5-attestierte Sovereign Cloud, ohne Ihre Abrechnungs- und Messstellenbetriebsprozesse zu unterbrechen — statt monatelanger Eigenregie mit knappen SAP-Ressourcen.",
+  "means_statement": "Billing-Kontinuität ab Tag 1, KRITIS-Konformität ohne Zusatzaudit und 30-40 % niedrigere Betriebskosten gegenüber On-Premises — das schützt Ihre Marge bei regulierten Netzentgelten.",
+  "evidence": [
+    {
+      "statement": "SAP beendet den Mainstream-Support für ECC 6.0 und IS-U Ende 2027; Kompatibilitätspakete für S/4HANA laufen bereits im Mai 2026 aus.",
+      "source_url": "https://erp.today/sap-sets-may-2026-cutoff-for-s-4hana-compatibility-packs-offering-final-transition-window/",
+      "source_title": "SAP Sets May 2026 Cutoff for S/4HANA Compatibility Packs — ERP Today"
+    },
+    {
+      "statement": "T-Systems ist als RISE-with-SAP Premium Supplier zertifiziert und wurde SAP Partner of the Year 2026 (Public Sector) mit über 4.000 SAP-Experten.",
+      "source_url": "https://www.t-systems.com/us/en/application-services/solutions/sap-solutions/rise-with-sap",
+      "source_title": "RISE with SAP Premium Supplier – T-Systems"
+    },
+    {
+      "statement": "Die Open Telekom Cloud ist BSI-C5-attestiert, KRITIS-konform und betreibt ausschließlich deutsche Rechenzentren mit EU-Personal — Alternative zu US-Hyperscalern mit garantierter Datenresidenz.",
+      "source_url": "https://www.open-telekom-cloud.com/en/products-services/core-services/certifications",
+      "source_title": "Certifications and Attestations – Open Telekom Cloud"
+    },
+    {
+      "statement": "T-Systems realisierte für ENSO Energie Sachsen Ost die SAP-IS-U-Entflechtung und Systemkonsolidierung innerhalb eines Jahres bei laufendem Betrieb.",
+      "source_url": "https://www.t-systems.com/de/de/referenzen/uebersicht/referenz/energieversorger-enso-sap-systeme-222828",
+      "source_title": "ENSO – SAP-Systeme parallel trennen und vereinen – T-Systems"
+    },
+    {
+      "statement": "Gartner warnt vor massiv steigenden Berater-Tagessätzen ab 2027, wenn tausende SAP-Kunden gleichzeitig migrieren wollen — frühzeitige Migration sichert Ressourcenverfügbarkeit und Budgetsicherheit.",
+      "source_url": "https://www.zfk.de/digitalisierung/it/umstieg-auf-sap-s-4hana-das-zeitfenster-ist-enger-als-es-auf-den-ersten-blick-wirkt",
+      "source_title": "Umstieg auf SAP S/4HANA: Das Zeitfenster ist enger, als es auf den ersten Blick wirkt – ZfK"
+    }
+  ],
+  "created": "2026-03-18"
+}

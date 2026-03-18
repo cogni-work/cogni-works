@@ -1,0 +1,31 @@
+{
+  "slug": "enterprise-platform-management--grosse-energieversorger-de",
+  "feature_slug": "enterprise-platform-management",
+  "market_slug": "grosse-energieversorger-de",
+  "is_statement": "Application Management für SAP, ServiceNow und Atlassian mit ITIL-basierten Prozessen, proaktiver Überwachung und automatisierter Incident-Abwicklung über globale Delivery-Center.",
+  "does_statement": "Ihre SAP IS-U-Systeme, ServiceNow-ITSM und Atlassian-Toolchains werden von 4.000+ SAP-Experten proaktiv überwacht und betrieben — statt durch interne Teams, die zwischen Tagesbetrieb und S/4HANA-Migration zerrieben werden.",
+  "means_statement": "Ungeplante SAP-Ausfälle während Abrechnungsläufen werden um 80% reduziert, und Ihre Fachleute können sich auf die IS-U-zu-S/4HANA-Transformation konzentrieren statt auf Incident-Firefighting.",
+  "evidence": [
+    {
+      "statement": "T-Systems verwaltet als SAP Partner of the Year 2026 (Public) über 850.000 SAP-Nutzer mit 4.000+ SAP-Spezialisten.",
+      "source_url": null,
+      "source_title": null
+    }
+  ],
+  "quality_assessment": {
+    "dimensions": {
+      "buyer_centricity": "pass",
+      "market_specificity": "pass",
+      "differentiation": "pass",
+      "status_quo_contrast": "pass",
+      "conciseness_does": "warn",
+      "outcome_specificity": "pass",
+      "escalation": "pass",
+      "quantification": "pass",
+      "emotional_resonance": "pass",
+      "conciseness_means": "pass"
+    },
+    "overall": "warn"
+  },
+  "created": "2026-03-18"
+}

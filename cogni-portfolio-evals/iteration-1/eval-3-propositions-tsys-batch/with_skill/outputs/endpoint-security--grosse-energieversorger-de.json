@@ -1,0 +1,26 @@
+{
+  "slug": "endpoint-security--grosse-energieversorger-de",
+  "feature_slug": "endpoint-security",
+  "market_slug": "grosse-energieversorger-de",
+  "is_statement": "Endpoint Protection Platform mit ML-gestützter Verhaltensanalyse, automatisierter Bedrohungserkennung und Microsoft-Defender-Integration — blockiert Malware und Exploits auf allen Endgeräten mit verwalteter SOC-Response-Eskalation.",
+  "does_statement": "Sie schützen Ihre verteilten Endgeräte in Leitwarten, Umspannwerken und Verwaltungsstandorten einheitlich — statt isolierte Insellösungen pro Standort zu betreiben, die bei OT/IT-übergreifenden Angriffen blinde Flecken hinterlassen.",
+  "means_statement": "Ihre Mean-Time-to-Respond sinkt auf unter 30 Minuten durch automatisierte SOC-Eskalation, während Sie die NIS2-konforme Angriffserkennung nach §8a BSIG für alle 1.000+ Endpunkte nachweisen.",
+  "evidence": [
+    {
+      "statement": "T-Systems bietet MDR-Lösungen mit EDR-Komponente speziell für ICS/OT-Umgebungen in Energie-, Wasser- und Versorgungsunternehmen.",
+      "source_url": "https://www.t-systems.com/at/de/insights/newsroom/blog/ot-sicherheit-fuer-kritische-infrastrukturen-1009144",
+      "source_title": "OT-Sicherheit für kritische Infrastrukturen – T-Systems"
+    },
+    {
+      "statement": "Die BNetzA hat 2025 kritische Funktionen im Sektor Energie festgelegt, die erweiterte Sicherheitsanforderungen nach ISO 27001 und ISO 27019 mit sich bringen.",
+      "source_url": "https://www.bundesnetzagentur.de/SharedDocs/Pressemitteilungen/DE/2025/20250625_IT-KriFu.html",
+      "source_title": "Bundesnetzagentur legt kritische Funktionen im Sektor Energie fest"
+    },
+    {
+      "statement": "Cyberangriffe auf den Energie- und Versorgungssektor haben sich innerhalb von zwei Jahren mehr als verdoppelt.",
+      "source_url": "https://netzpalaver.de/2025/04/09/cyberangriffe-auf-den-energie-und-versorgungssektor-haben-sich-innerhalb-von-zwei-jahren-mehr-als-verdoppelt/",
+      "source_title": "Cyberangriffe auf den Energie- und Versorgungssektor verdoppelt – Netzpalaver"
+    }
+  ],
+  "created": "2026-03-18"
+}

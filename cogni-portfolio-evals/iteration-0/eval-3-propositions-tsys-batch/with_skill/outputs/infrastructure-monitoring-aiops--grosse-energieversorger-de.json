@@ -1,0 +1,31 @@
+{
+  "slug": "infrastructure-monitoring-aiops--grosse-energieversorger-de",
+  "feature_slug": "infrastructure-monitoring-aiops",
+  "market_slug": "grosse-energieversorger-de",
+  "is_statement": "Konsolidiertes Monitoring über heterogene IT-Infrastrukturen mit Cloud Eye, 24/7-NOC-Betrieb und ML-basierter Anomalieerkennung für prädiktive Problembehebung.",
+  "does_statement": "IT- und OT-Infrastruktur von Leitsystemen bis SAP werden in einer konsolidierten Monitoring-Ansicht zusammengeführt — mit ML-basierter Anomalieerkennung, die Ausfälle erkennt bevor sie den Netzbetrieb beeinträchtigen.",
+  "means_statement": "Ungeplante IT-bedingte Netzausfälle sinken um 60-70%, was EnWG-Verfügbarkeitspflichten absichert und die SAIDI-Kennzahl Ihres Netzbetreibers unter dem Branchendurchschnitt hält.",
+  "evidence": [
+    {
+      "statement": "Die BNetzA veröffentlicht jährlich SAIDI-Kennzahlen; der deutsche Durchschnitt lag 2023 bei 12,2 Minuten pro Letztverbraucher.",
+      "source_url": null,
+      "source_title": null
+    }
+  ],
+  "quality_assessment": {
+    "dimensions": {
+      "buyer_centricity": "pass",
+      "market_specificity": "pass",
+      "differentiation": "pass",
+      "status_quo_contrast": "pass",
+      "conciseness_does": "warn",
+      "outcome_specificity": "pass",
+      "escalation": "pass",
+      "quantification": "pass",
+      "emotional_resonance": "warn",
+      "conciseness_means": "pass"
+    },
+    "overall": "warn"
+  },
+  "created": "2026-03-18"
+}

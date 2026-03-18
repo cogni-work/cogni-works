@@ -44,30 +44,21 @@ Then analyze the intersection: what problems does this market segment face that 
 
 ## IS/DOES/MEANS Framework
 
-- **IS** (Feature): Restate the feature description at full length (20-35 words). Do not compress or abbreviate — the IS statement should be at least as long as the original feature description. You may lightly adapt for market context but the statement must remain factual and capability-focused. If the feature description is already 20-35 words, reuse it verbatim or expand slightly with technical specifics. A common failure mode is compressing the feature into 10-15 words — this loses mechanism clarity and fails the word count gate.
-- **DOES** (Advantage): What the feature achieves for THIS specific market, framed from the buyer's perspective. The buyer is always the grammatical subject — write "Sie migrieren..." / "Ihre Teams erkennen..." / "You reduce...", never "unsere Lösung bietet..." / "T-Systems ermöglicht..." / "it provides...". Include a status-quo contrast: what changes versus the buyer's current approach? Quantify where possible. Reference pain points specific to this market segment.
-- **MEANS** (Benefit): The business outcome the buyer would put in a business case or Vorstandsvorlage. Every MEANS statement must contain at least one concrete number, percentage, EUR figure, or named KPI — vague outcomes like "improved efficiency" or "optimierte Prozesse" fail the quantification gate. Connect the operational advantage to commercial impact (revenue protection, cost reduction, compliance risk avoidance, headcount avoidance). Where possible, add a personal/career dimension: what does this mean for the decision-maker's reputation, promotion case, or sleep quality?
+- **IS** (Feature): Restate the feature description. Factual, capability-focused. May be slightly adapted for market context but remains a statement of what the product IS.
+- **DOES** (Advantage): What the feature achieves for THIS specific market. Quantify where possible. Use action verbs (reduces, eliminates, accelerates, enables). Reference pain points specific to this market segment.
+- **MEANS** (Benefit): What the advantage means for the buyer in THIS market. Business outcome the buyer cares about. Connect operational advantage to commercial impact. Reference buyer's strategic goals or KPIs.
 
-The same feature produces different DOES and MEANS for different markets. If the messaging could apply to any market, it is too generic — sharpen it until it clearly belongs to this specific segment.
-
-**Differentiation injection:** Read `portfolio.json` for the company's `differentiators` array. Every DOES or MEANS should reference at least one company-specific asset that a competitor cannot credibly claim (e.g., proprietary infrastructure, certified programs, reference customers, network ownership). If the feature is a commodity capability (managed hosting, service desk, print), differentiation must come from the delivery wrapper (SLA guarantees, sovereignty, co-location with other services) rather than the capability itself.
+The same feature produces different DOES and MEANS for different markets. If the messaging could apply to any market, it is too generic -- sharpen it until it clearly belongs to this specific segment.
 
 ## Web Research
 
-Always conduct web research for every proposition — this is not optional. Evidence without source URLs destroys credibility with both internal marketing teams and external buyers. A proposition with `source_url: null` on all evidence entries is a failed proposition.
+When the task requests research-backed messaging, search for:
 
-**Research process (3-5 searches per proposition):**
+- Industry benchmarks relevant to the market segment
+- Competitor claims and positioning for comparison
+- Case studies or analyst reports that support the DOES quantification
 
-1. Search for the company's own marketing page for this capability: `site:{company-domain} {feature keywords}` — this grounds the IS statement in real product documentation
-2. Search for reference customers or case studies: `"{company-name}" {market-vertical} {feature keywords} case study OR reference OR Referenz`
-3. Search for analyst benchmarks: `"Gartner" OR "Forrester" OR "Lünendonk" {capability} {year}` — this grounds DOES quantification
-4. For German markets, also search in German: `"{Firmenname}" {Branche} {Fähigkeit} Fallstudie OR Referenz`
-
-**Evidence quality rules:**
-- Every evidence entry MUST have a `source_url` — if you cannot find a URL, do not fabricate one; instead search harder or use a different claim that you can source
-- Minimum 2 evidence entries per proposition, target 3-5
-- At least one entry should reference a named customer or deployment
-- Each entry is an object with `statement` (required), `source_url` (required, string), and `source_title` (required, string)
+Add findings to the `evidence` array. Each entry is an object with `statement` (required), `source_url` (string or null), and `source_title` (string or null).
 
 ## Proposition JSON Format
 
@@ -115,8 +106,7 @@ Before writing the file, verify each layer against these criteria:
 **IS statement:**
 - Factual and capability-focused — no superlatives or marketing language
 - Describes YOUR SOLUTION/CAPABILITY, never the buyer's problem or current state
-- 20-35 words, max 150 characters (for German, character limit may flex to ~250 due to compound nouns, but word count is firm)
-- **No internal vendor jargon**: Replace internal methodology names, acronyms, and branded process names with plain-language descriptions. "CMF-Methodik" → "strukturierte Migrationsmethodik", "6R-Strategien" → "sechs Migrationsstrategien von Rehost bis Retire", "Factory-Teams" → "spezialisierte Migrationsteams". The IS statement must be understandable to a buyer who has never heard of your internal frameworks.
+- 20-35 words, max 150 characters
 
 **DOES statement:**
 - Written from the buyer's perspective ("you can...", "teams can...") — not "it provides..." or "our solution enables..."
@@ -128,9 +118,8 @@ Before writing the file, verify each layer against these criteria:
 **MEANS statement:**
 - Names a measurable business outcome the buyer would put in a business case (KPI, dollar figure, named metric)
 - Introduces genuinely new information beyond DOES — not a restatement with an outcome verb prepended
-- Includes or implies quantification (numbers, timeframes, named metrics). Every number must be grounded: either cite a reference customer who achieved it, qualify with "bis zu" and back it with an evidence entry, or use an industry benchmark with source. Ungrounded percentages ("30% Kostenreduktion" without a source) undermine credibility with CFOs and procurement
+- Includes or implies quantification (numbers, timeframes, named metrics)
 - Passes the "so what?" test: a CFO would approve budget for this
-- Where possible, add a personal/career dimension alongside the business metric — what does this mean for the decision-maker's board credibility, team retention, or risk exposure?
 - 15-30 words, max 200 characters
 
 **Cross-check:**

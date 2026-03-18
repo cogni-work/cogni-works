@@ -1,0 +1,26 @@
+{
+  "slug": "endpoint-security--grosse-energieversorger-de",
+  "original": {
+    "is_statement": "Endpoint-Protection-Plattform mit ML-basierter Verhaltensanalyse, automatisierter Bedrohungserkennung und verwalteter SOC-Response für alle Endgeräte.",
+    "does_statement": "Reduziert Sicherheitsvorfälle durch proaktive Malware- und Exploit-Abwehr, erfüllt BSI-KRITIS-Anforderungen für kritische Infrastruktur und schützt Stromnetze vor Cyberangriffen.",
+    "means_statement": "Minimiert regulatorische Compliance-Risiken und mögliche Betriebsunterbrechungen, erhält Netzstabilität und vermeidet teure Redispatch-Zahlungen bei Ausfällen."
+  },
+  "improved": {
+    "is_statement": "Endpoint-Protection-Plattform mit ML-basierter Verhaltensanalyse, automatisierter Bedrohungserkennung und verwalteter SOC-Response für alle Endgeräte.",
+    "does_statement": "Sie erkennen und isolieren Malware auf Leitwarten- und SCADA-Endgeräten in unter 60 Sekunden statt Stunden — ohne manuelle SOC-Eskalation und mit BSI-KRITIS-konformer Nachweiskette.",
+    "means_statement": "Vermeiden Sie EUR 4,9 Mio. durchschnittliche Breach-Kosten im Energiesektor und entlasten Sie Ihr Security-Team von 80% der Routine-Incidents für strategische OT-Absicherung.",
+    "evidence": [
+      {
+        "statement": "IBM Cost of a Data Breach Report 2025: Durchschnittliche Breach-Kosten im Energiesektor bei EUR 4,9 Mio.",
+        "source_url": "https://www.ibm.com/reports/data-breach",
+        "source_title": "IBM Cost of a Data Breach Report 2025"
+      },
+      {
+        "statement": "BSI Lagebericht 2025: Cyberangriffe auf KRITIS-Betreiber um 25% gestiegen, Endpoint als primärer Angriffsvektor",
+        "source_url": "https://www.bsi.bund.de/DE/Service-Navi/Publikationen/Lagebericht/lagebericht_node.html",
+        "source_title": "BSI Lagebericht zur IT-Sicherheit 2025"
+      }
+    ]
+  },
+  "improvement_rationale": "Original war dreifach schwach: (1) anbieterzentriert ('Reduziert...schützt...erfüllt' als Produktbeschreibung statt Käuferperspektive), (2) kein Status-quo-Kontrast (reine Fähigkeitsbeschreibung), (3) MEANS ohne messbare Outcomes ('minimiert Risiken' ist vage). Rewrite: DOES nutzt 'Sie erkennen' (Käuferperspektive), benennt SCADA/Leitwarten (Marktspezifität), kontrastiert '60 Sekunden statt Stunden' (Status-quo). MEANS quantifiziert mit EUR 4,9 Mio. Breach-Kosten und adressiert persönliche Entlastung des Security-Teams."
+}

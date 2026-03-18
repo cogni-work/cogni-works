@@ -1,0 +1,31 @@
+{
+  "slug": "custom-app-development--grosse-energieversorger-de",
+  "feature_slug": "custom-app-development",
+  "market_slug": "grosse-energieversorger-de",
+  "is_statement": "Spezialisierte Softwareentwicklung nach T-Systems AMbition-Rahmenwerk mit Cloud-nativer Architektur, Microservices und DevOps für branchenspezifische Anforderungen.",
+  "does_statement": "Ihre Energiehandels-, Bilanzkreis- und Smart-Grid-Anwendungen werden als Cloud-native Microservices neu gebaut — zugeschnitten auf regulatorische Meldepflichten und Marktprozesse der Energiebranche.",
+  "means_statement": "Neue regulatorische Anforderungen wie MaKo 2025 oder Redispatch 2.0 werden in Wochen statt Monaten umgesetzt, was Verzugsstrafen vermeidet und den IT-Vorstand vom Engpass-Manager zum Digitalisierungstreiber macht.",
+  "evidence": [
+    {
+      "statement": "Die BNetzA führt im Rahmen der Marktkommunikation 2025 neue digitale Prozesse ein, die SAP IS-U-Anpassungen bei allen Netzbetreibern erfordern.",
+      "source_url": null,
+      "source_title": null
+    }
+  ],
+  "quality_assessment": {
+    "dimensions": {
+      "buyer_centricity": "pass",
+      "market_specificity": "pass",
+      "differentiation": "warn",
+      "status_quo_contrast": "pass",
+      "conciseness_does": "pass",
+      "outcome_specificity": "pass",
+      "escalation": "pass",
+      "quantification": "warn",
+      "emotional_resonance": "pass",
+      "conciseness_means": "warn"
+    },
+    "overall": "warn"
+  },
+  "created": "2026-03-18"
+}

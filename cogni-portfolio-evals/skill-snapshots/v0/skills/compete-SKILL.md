@@ -69,9 +69,6 @@ Write to `competitors/{feature-slug}--{market-slug}.json` (same slug as the prop
       "differentiation": "40% lower cost, deploys in hours vs. weeks, purpose-built for mid-market."
     }
   ],
-  "trap_questions": [
-    "Question targeting a verifiable competitor gap — max 3-4 questions total"
-  ],
   "created": "2026-01-25"
 }
 ```
@@ -79,16 +76,6 @@ Write to `competitors/{feature-slug}--{market-slug}.json` (same slug as the prop
 ### 5. Review with User
 
 Present competitor analysis per proposition. The user may know competitors the research missed, or may disagree with positioning claims. Iterate until accurate.
-
-## Trap Questions
-
-For each competitor file, include a `trap_questions` array with **3-4 questions** designed to expose competitor weaknesses during an RFP evaluation or vendor comparison. Good trap questions:
-- Target a specific, verifiable gap the competitor cannot close quickly (infrastructure ownership, certifications, reference customers)
-- Are phrased as legitimate evaluation criteria, not gotcha tricks — a procurement team should be comfortable putting these in an RFI
-- Cover different stakeholder concerns (security/compliance for CISO, operational continuity for OT, TCO for CFO)
-- Would change the evaluation outcome if the competitor answers honestly
-
-Do not generate more than 4 trap questions — focus beats volume. Each question should be a single sentence.
 
 ## Differentiation Guidelines
 

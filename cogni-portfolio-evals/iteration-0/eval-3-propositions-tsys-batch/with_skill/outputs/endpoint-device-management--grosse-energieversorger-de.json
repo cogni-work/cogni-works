@@ -1,0 +1,31 @@
+{
+  "slug": "endpoint-device-management--grosse-energieversorger-de",
+  "feature_slug": "endpoint-device-management",
+  "market_slug": "grosse-energieversorger-de",
+  "is_statement": "Workspace-ONE-basiertes Unified Endpoint Management mit zentralisierter Verwaltung aller Endgeräte, Betriebssysteme und Anwendungen über einen Single Pane of Glass.",
+  "does_statement": "Tausende Endgeräte von Leitstellenrechnern über Außendienst-Tablets bis zu OT-Terminals werden zentral verwaltet und gepatcht — statt durch lokale IT-Teams an 50+ Standorten einzeln betreut.",
+  "means_statement": "Patch-Compliance steigt auf über 95% innerhalb von 72 Stunden, was BSI-KRITIS-Anforderungen erfüllt und die lokale IT-Mannschaft für strategische Energiewende-Projekte freisetzt.",
+  "evidence": [
+    {
+      "statement": "Das BSI fordert von KRITIS-Betreibern nachweisbare Patch-Management-Prozesse mit definierten Maximalzeiten für Sicherheitsupdates.",
+      "source_url": null,
+      "source_title": null
+    }
+  ],
+  "quality_assessment": {
+    "dimensions": {
+      "buyer_centricity": "pass",
+      "market_specificity": "pass",
+      "differentiation": "warn",
+      "status_quo_contrast": "pass",
+      "conciseness_does": "pass",
+      "outcome_specificity": "pass",
+      "escalation": "pass",
+      "quantification": "pass",
+      "emotional_resonance": "pass",
+      "conciseness_means": "pass"
+    },
+    "overall": "warn"
+  },
+  "created": "2026-03-18"
+}

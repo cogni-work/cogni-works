@@ -1,0 +1,31 @@
+{
+  "slug": "compliance-data-protection--grosse-energieversorger-de",
+  "feature_slug": "compliance-data-protection",
+  "market_slug": "grosse-energieversorger-de",
+  "is_statement": "GRC-SaaS-Plattform mit integriertem ISMS- und Datenschutz-Management, ISO 27001/27701-zertifiziert und DSGVO-konform mit Confidential Computing und Risk Assessment.",
+  "does_statement": "Ihr ISMS, Datenschutz-Management und KRITIS-Nachweisführung laufen auf einer zentralen Plattform — statt in verteilten Excel-Listen und isolierten Audit-Trails über Dutzende Standorte.",
+  "means_statement": "Der Aufwand für BSI-KRITIS-Audits und BNetzA-Nachweise sinkt um 40-50%, und Ihre Compliance-Verantwortlichen arbeiten mit aktuellen Risikolagen statt mit veralteten Quartalsbewertungen.",
+  "evidence": [
+    {
+      "statement": "KRITIS-Betreiber müssen alle zwei Jahre BSI-Audits bestehen; manuelle Nachweisführung kostet durchschnittlich 3-6 Personenmonate pro Audit-Zyklus.",
+      "source_url": null,
+      "source_title": null
+    }
+  ],
+  "quality_assessment": {
+    "dimensions": {
+      "buyer_centricity": "pass",
+      "market_specificity": "pass",
+      "differentiation": "pass",
+      "status_quo_contrast": "pass",
+      "conciseness_does": "pass",
+      "outcome_specificity": "pass",
+      "escalation": "pass",
+      "quantification": "pass",
+      "emotional_resonance": "pass",
+      "conciseness_means": "pass"
+    },
+    "overall": "pass"
+  },
+  "created": "2026-03-18"
+}

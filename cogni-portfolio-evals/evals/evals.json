@@ -1,0 +1,169 @@
+{
+  "skill_name": "cogni-portfolio-core-messaging",
+  "evals": [
+    {
+      "id": 1,
+      "name": "features-tsys-review",
+      "skill": "features",
+      "target": "t-systems",
+      "prompt": "I have an existing T-Systems portfolio at the project path provided. Review and assess all features for the cloud-services product. Run the feature quality assessor and identify the ones with quality issues. Show me the assessment results.",
+      "expected_output": "Quality assessment of ~15 cloud-services features with pass/warn/fail ratings across 5 dimensions. Issues identified with specific improvement suggestions.",
+      "assertions": [
+        {"id": "F-01", "text": "Feature descriptions are 20-35 words", "type": "structural"},
+        {"id": "F-02", "text": "All required fields present (slug, product_slug, name, description)", "type": "structural"},
+        {"id": "F-06", "text": "No outcome verbs in descriptions (reduces, enables, ensures, damit)", "type": "structural"},
+        {"id": "F-07", "text": "No parity adjectives (robust, innovative, cutting-edge, best-in-class)", "type": "structural"},
+        {"id": "F-10", "text": "Feature quality assessor returns no fail ratings", "type": "agent"}
+      ],
+      "files": []
+    },
+    {
+      "id": 2,
+      "name": "features-mainova-generate",
+      "skill": "features",
+      "target": "mainova",
+      "prompt": "Define features for Mainova AG's digital energy services. Mainova is a Frankfurt-based Stadtwerk and energy supplier (~3000 employees, 1M customers). They operate energy trading, grid operations (Strom, Gas, Fernwaerme), smart metering, and digital customer services. Focus on their core IT/digital service capabilities as a portfolio. Use the b2b-ict taxonomy.",
+      "expected_output": "5-10 features per product area covering Mainova's digital energy services. Each feature with mechanism-clear IS-layer description, taxonomy mapping, and readiness assessment.",
+      "assertions": [
+        {"id": "F-01", "text": "Feature descriptions are 20-35 words", "type": "structural"},
+        {"id": "F-02", "text": "All required fields present (slug, product_slug, name, description)", "type": "structural"},
+        {"id": "F-04", "text": "taxonomy_mapping present with dimension, category_id, category_name", "type": "structural"},
+        {"id": "F-05", "text": "readiness is one of ga, beta, planned", "type": "structural"},
+        {"id": "F-08", "text": "5-10 features per product", "type": "structural"},
+        {"id": "F-10", "text": "Feature quality assessor returns no fail ratings", "type": "agent"}
+      ],
+      "files": []
+    },
+    {
+      "id": 3,
+      "name": "propositions-tsys-batch",
+      "skill": "propositions",
+      "target": "t-systems",
+      "prompt": "Generate propositions for all features in the grosse-energieversorger-de market. Use the existing features and market definition from the T-Systems project. Research where needed for evidence. Run the proposition quality assessor on each.",
+      "expected_output": "IS/DOES/MEANS propositions for each feature x grosse-energieversorger-de pair. Each with evidence array, quality assessment results.",
+      "assertions": [
+        {"id": "P-01", "text": "DOES statements are 15-30 words", "type": "structural"},
+        {"id": "P-02", "text": "MEANS statements are 15-30 words", "type": "structural"},
+        {"id": "P-03", "text": "IS statements are 20-35 words", "type": "structural"},
+        {"id": "P-06", "text": "Slug follows {feature}--{market} convention", "type": "structural"},
+        {"id": "P-07", "text": "DOES is not vendor-centric", "type": "structural"},
+        {"id": "P-08", "text": "MEANS contains quantification signal", "type": "structural"},
+        {"id": "P-09", "text": "Evidence array is non-empty", "type": "structural"},
+        {"id": "P-11", "text": "Proposition quality assessor returns no fail ratings", "type": "agent"}
+      ],
+      "files": []
+    },
+    {
+      "id": 4,
+      "name": "propositions-tsys-review",
+      "skill": "propositions",
+      "target": "t-systems",
+      "prompt": "Review all existing propositions for the grosse-energieversorger-de market in the T-Systems project. Run the proposition quality assessor. Identify the 5 weakest propositions and improve them with research-backed rewrites.",
+      "expected_output": "Quality assessment of all existing propositions with dimension scores. 5 weakest identified and rewritten with improved DOES/MEANS and fresh evidence.",
+      "assertions": [
+        {"id": "P-01", "text": "Improved DOES statements are 15-30 words", "type": "structural"},
+        {"id": "P-02", "text": "Improved MEANS statements are 15-30 words", "type": "structural"},
+        {"id": "P-07", "text": "Improved DOES is not vendor-centric", "type": "structural"},
+        {"id": "P-08", "text": "Improved MEANS contains quantification signal", "type": "structural"},
+        {"id": "P-11", "text": "Rewritten propositions pass quality assessor (no fail)", "type": "agent"}
+      ],
+      "files": []
+    },
+    {
+      "id": 5,
+      "name": "propositions-mainova-single",
+      "skill": "propositions",
+      "target": "mainova",
+      "prompt": "Create an IS/DOES/MEANS proposition for cloud-migration targeting mittelstaendische-stadtwerke-de. The feature is about migrating legacy on-premises infrastructure (including SAP IS-U) to sovereign cloud. The market is German municipal utilities (Stadtwerke, 500-5000 employees). Research T-Systems' cloud migration capabilities and energy sector references for evidence.",
+      "expected_output": "Single proposition JSON with IS/DOES/MEANS statements, evidence array with source URLs, quality assessment.",
+      "assertions": [
+        {"id": "P-01", "text": "DOES statement is 15-30 words", "type": "structural"},
+        {"id": "P-02", "text": "MEANS statement is 15-30 words", "type": "structural"},
+        {"id": "P-07", "text": "DOES is not vendor-centric", "type": "structural"},
+        {"id": "P-08", "text": "MEANS contains quantification signal", "type": "structural"},
+        {"id": "P-09", "text": "Evidence array is non-empty", "type": "structural"},
+        {"id": "P-10", "text": "IS, DOES, MEANS are not circular (distinct messaging layers)", "type": "agent"}
+      ],
+      "files": []
+    },
+    {
+      "id": 6,
+      "name": "customers-tsys-profiles",
+      "skill": "customers",
+      "target": "t-systems",
+      "prompt": "Create buyer personas for the grosse-energieversorger-de market in the T-Systems project. Then research E.ON, RWE, and EnBW as named customers with fit scoring. Include buying committee dynamics and deal stall points.",
+      "expected_output": "Customer JSON with 3-4 buyer profiles (CIO, CISO, OT-Leiter, CFO), buying committee context, and 3 named customers with fit scores and research-backed rationale.",
+      "assertions": [
+        {"id": "C-01", "text": "2-4 buyer profiles present", "type": "structural"},
+        {"id": "C-02", "text": "Each profile has role, pain_points, buying_criteria, decision_role", "type": "structural"},
+        {"id": "C-03", "text": "Pain points max 5 items each", "type": "structural"},
+        {"id": "C-05", "text": "3+ named customers with research", "type": "structural"},
+        {"id": "C-06", "text": "Each named customer has name, domain, fit_score, fit_rationale", "type": "structural"},
+        {"id": "C-08", "text": "Source URLs present for named customers", "type": "structural"}
+      ],
+      "files": []
+    },
+    {
+      "id": 7,
+      "name": "customers-mainova-stadtwerke",
+      "skill": "customers",
+      "target": "mainova",
+      "prompt": "Create customer profiles for a market of German municipal utilities (Stadtwerke, 500-5000 employees). Identify 5 named Stadtwerke as potential customers for T-Systems' cloud and IT modernization services. Research each for fit scoring.",
+      "expected_output": "Customer JSON with buyer profiles for Stadtwerk buying committee, 5 named Stadtwerke with fit scores, tech stack insights, and source URLs.",
+      "assertions": [
+        {"id": "C-01", "text": "2-4 buyer profiles present", "type": "structural"},
+        {"id": "C-02", "text": "Each profile has role, pain_points, buying_criteria, decision_role", "type": "structural"},
+        {"id": "C-05", "text": "5 named customers present", "type": "structural"},
+        {"id": "C-06", "text": "Each named customer has name, domain, fit_score, fit_rationale", "type": "structural"},
+        {"id": "C-08", "text": "Source URLs present for named customers", "type": "structural"}
+      ],
+      "files": []
+    },
+    {
+      "id": 8,
+      "name": "compete-tsys-cloud-migration",
+      "skill": "compete",
+      "target": "t-systems",
+      "prompt": "Analyze competitors for T-Systems' cloud-migration proposition in the grosse-energieversorger-de market. Research Accenture, Capgemini, and IBM specifically. Include trap questions for each competitor.",
+      "expected_output": "Competitor JSON with 3-5 competitors, each with positioning, strengths, weaknesses, differentiation statement, and trap questions.",
+      "assertions": [
+        {"id": "K-01", "text": "3-5 competitors present", "type": "structural"},
+        {"id": "K-02", "text": "Each has positioning, strengths, weaknesses, differentiation", "type": "structural"},
+        {"id": "K-03", "text": "Strengths and weaknesses 2-5 items each", "type": "structural"},
+        {"id": "K-04", "text": "2-4 trap questions per competitor", "type": "structural"},
+        {"id": "K-06", "text": "Source URLs present", "type": "structural"}
+      ],
+      "files": []
+    },
+    {
+      "id": 9,
+      "name": "compete-mainova-context",
+      "skill": "compete",
+      "target": "mainova",
+      "prompt": "Identify and research competitors for a cloud-migration proposition targeting mittelstaendische-stadtwerke-de (German Stadtwerke, 500-5000 employees). Who competes with T-Systems for Stadtwerk IT modernization and cloud migration deals? Include trap questions.",
+      "expected_output": "Competitor JSON with 3-5 competitors relevant to the Stadtwerk segment, with Stadtwerk-specific positioning and trap questions.",
+      "assertions": [
+        {"id": "K-01", "text": "3-5 competitors present", "type": "structural"},
+        {"id": "K-02", "text": "Each has positioning, strengths, weaknesses, differentiation", "type": "structural"},
+        {"id": "K-03", "text": "Strengths and weaknesses 2-5 items each", "type": "structural"},
+        {"id": "K-04", "text": "2-4 trap questions per competitor", "type": "structural"}
+      ],
+      "files": []
+    },
+    {
+      "id": 10,
+      "name": "features-tsys-improve",
+      "skill": "features",
+      "target": "t-systems",
+      "prompt": "The feature quality assessor flagged ai-data-analytics and app-modernization features with conciseness warnings and weak differentiation. Research T-Systems' actual capabilities for these two features and improve their descriptions. Use the quality-enricher agent.",
+      "expected_output": "Improved feature descriptions for ai-data-analytics and app-modernization with enrichment logs showing research sources and quality improvement rationale.",
+      "assertions": [
+        {"id": "F-01", "text": "Improved descriptions are 20-35 words", "type": "structural"},
+        {"id": "F-06", "text": "No outcome verbs in improved descriptions", "type": "structural"},
+        {"id": "F-07", "text": "No parity adjectives in improved descriptions", "type": "structural"},
+        {"id": "F-10", "text": "Improved features pass quality assessor (no fail, preferably no warn)", "type": "agent"}
+      ],
+      "files": []
+    }
+  ]
+}

@@ -115,8 +115,7 @@ Before writing the file, verify each layer against these criteria:
 **IS statement:**
 - Factual and capability-focused — no superlatives or marketing language
 - Describes YOUR SOLUTION/CAPABILITY, never the buyer's problem or current state
-- 20-35 words, max 150 characters (for German, character limit may flex to ~250 due to compound nouns, but word count is firm)
-- **No internal vendor jargon**: Replace internal methodology names, acronyms, and branded process names with plain-language descriptions. "CMF-Methodik" → "strukturierte Migrationsmethodik", "6R-Strategien" → "sechs Migrationsstrategien von Rehost bis Retire", "Factory-Teams" → "spezialisierte Migrationsteams". The IS statement must be understandable to a buyer who has never heard of your internal frameworks.
+- 20-35 words, max 150 characters
 
 **DOES statement:**
 - Written from the buyer's perspective ("you can...", "teams can...") — not "it provides..." or "our solution enables..."
@@ -128,9 +127,8 @@ Before writing the file, verify each layer against these criteria:
 **MEANS statement:**
 - Names a measurable business outcome the buyer would put in a business case (KPI, dollar figure, named metric)
 - Introduces genuinely new information beyond DOES — not a restatement with an outcome verb prepended
-- Includes or implies quantification (numbers, timeframes, named metrics). Every number must be grounded: either cite a reference customer who achieved it, qualify with "bis zu" and back it with an evidence entry, or use an industry benchmark with source. Ungrounded percentages ("30% Kostenreduktion" without a source) undermine credibility with CFOs and procurement
+- Includes or implies quantification (numbers, timeframes, named metrics)
 - Passes the "so what?" test: a CFO would approve budget for this
-- Where possible, add a personal/career dimension alongside the business metric — what does this mean for the decision-maker's board credibility, team retention, or risk exposure?
 - 15-30 words, max 200 characters
 
 **Cross-check:**

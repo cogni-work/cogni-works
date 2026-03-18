@@ -1,0 +1,31 @@
+{
+  "slug": "cloud-migration--mittelstaendische-stadtwerke-de",
+  "feature_slug": "cloud-migration",
+  "market_slug": "mittelstaendische-stadtwerke-de",
+  "is_statement": "Strukturiertes Cloud-Migrationsprogramm mit Assessment-Phase, modularer CMF-Methodik, 6R-Strategien von Rehost bis Retire, dedizierten Factory-Teams und sprint-basierter Implementierung für sichere, KRITIS-konforme Migrations-Durchführung.",
+  "does_statement": "Sie migrieren Ihre SAP-IS-U-Landschaft vor dem 2027-Stichtag in eine BSI-C5-attestierte Sovereign Cloud statt KRITIS-Compliance und S/4HANA-Deadline mit Einzelprojekten zu riskieren.",
+  "means_statement": "Bis zu 30 % niedrigere Betriebskosten durch Cloud-Konsolidierung bei 99,99 % Verfügbarkeit im Zero-Outage-Programm — Grundlage für Ihre Vorstandsvorlage zur IT-Modernisierung.",
+  "evidence": [
+    {
+      "statement": "T-Systems hat über 500 ERP-Systeme erfolgreich in die Cloud migriert und nutzt dabei RISE with SAP in einer sicheren Multi-Cloud-Umgebung.",
+      "source_url": "https://www.t-systems.com/de/de/migration-und-modernisierung/referenzen",
+      "source_title": "T-Systems Referenzen Migration und Modernisierung"
+    },
+    {
+      "statement": "Das Zero-Outage-Programm hat die Anzahl schwerwiegender Ausfälle um 95 % reduziert und erreicht eine Service-Verfügbarkeit von bis zu 99,999 %.",
+      "source_url": "https://www.telekom.com/en/media/media-information/detail/t-systems-zero-outage-principle-to-be-industry-standard-363314",
+      "source_title": "T-Systems: Zero Outage Principle to be Industry Standard — Deutsche Telekom"
+    },
+    {
+      "statement": "Die Open Telekom Cloud wird ausschließlich von T-Systems betrieben, mit Hochsicherheitsrechenzentren in Deutschland und vollständiger EU-Rechtskonformität inklusive KRITIS-Compliance.",
+      "source_url": "https://www.open-telekom-cloud.com/en/benefits/sovereignty",
+      "source_title": "Digital Sovereignty — Open Telekom Cloud"
+    },
+    {
+      "statement": "T-Systems ist SAP Partner des Jahres 2026 (Public Sector) und einziger deutscher RISE with SAP Premium Supplier mit über 4.000 SAP-Experten.",
+      "source_url": "https://www.t-systems.com/us/en/application-services/solutions/sap-solutions/sap-s4-hana-migration",
+      "source_title": "SAP S/4HANA Migration — T-Systems"
+    }
+  ],
+  "created": "2026-03-18"
+}

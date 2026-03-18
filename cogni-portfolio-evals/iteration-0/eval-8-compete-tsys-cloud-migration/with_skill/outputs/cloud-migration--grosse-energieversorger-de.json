@@ -1,0 +1,89 @@
+{
+  "slug": "cloud-migration--grosse-energieversorger-de",
+  "proposition_slug": "cloud-migration--grosse-energieversorger-de",
+  "competitors": [
+    {
+      "name": "Accenture",
+      "positioning": "Globaler Transformationsberater mit Cloud-First-Strategie, der Energieversorger durch umfassende Beratung und Hyperscaler-Partnerschaften (AWS, Azure, GCP) bei der Cloud-Migration begleitet.",
+      "strengths": [
+        "Leader im Gartner Magic Quadrant for Public Cloud IT Transformation Services 2025 mit ca. $23 Mrd. PCITS-Umsatz",
+        "Tiefe SAP-Utilities-Partnerschaft — gemeinsam mit SAP entwickelte Cloud-Lösung für Energieversorger (SAP Cloud for Utilities)",
+        "Größtes globales Delivery-Netzwerk mit industrialisierten Migrationswerkzeugen und vorkonfigurierten Branchenlösungen",
+        "IDC MarketScape Leader für Energy Transition Services 2025 — starke analytische und KI-Kompetenzen für prädiktive Wartung"
+      ],
+      "weaknesses": [
+        "Kein eigenes Netzwerk oder Rechenzentrum in Deutschland — vollständig abhängig von US-Hyperscalern für Infrastruktur und Datenresidenz",
+        "Deutlich höhere Tagessätze als T-Systems bei vergleichbarem Scope — Premiumpreis ohne lokale Betriebsverantwortung",
+        "Keine nachweisbare KRITIS-Erfahrung mit deutschen Energieversorgern — fehlende OT/IT-Sicherheitsintegration für Leit- und Prozesssysteme",
+        "Beratungsfokus ohne eigenen Managed-Services-Betrieb — nach Migration muss der Kunde separaten Betriebspartner finden oder intern aufbauen"
+      ],
+      "differentiation": "T-Systems liefert Cloud-Migration und anschließenden Managed-Betrieb aus einer Hand — mit eigenem BSI-C5-attestiertem Rechenzentrum, OT/IT-SOC und 20 Jahren Energieversorger-Erfahrung (u.a. RWE), während Accenture nach der Migrationsberatung den Betrieb an Dritte übergibt.",
+      "source_urls": [
+        "https://www.accenture.com/at-de/cloud-migration-services",
+        "https://e3mag.com/en/sap-accenture-cloud/",
+        "https://www.hfsresearch.com/research/accenture-energy-and-utilities-services-capabilities-2025/",
+        "https://www.gartner.com/en/documents/6808034"
+      ]
+    },
+    {
+      "name": "Capgemini",
+      "positioning": "Europäischer IT-Dienstleister mit starker Energiebranchenpraxis in Deutschland, der Cloud-Transformation mit SAP-Migrationskompetenz und der 2025 akquirierten Cloud4C-Plattform für Managed Cloud Services verbindet.",
+      "strengths": [
+        "Über 20 Jahre Branchenerfahrung im deutschen Energiesektor mit dediziertem Head of Energy Transition & Utilities Germany",
+        "Standardisierte SAP IS-U zu SAP Utilities Core (S/4HANA) Transformationsmethodik — reduziert Projektlaufzeit und -kosten",
+        "Cloud4C-Akquisition (2025) bringt 1.600 Spezialisten für Managed Sovereign und Hybrid Cloud Services",
+        "Zweitgrößter IT-Berater in Deutschland mit €2,25 Mrd. Umsatz — breite lokale Präsenz"
+      ],
+      "weaknesses": [
+        "Kein eigenes Telekommunikationsnetz — kann keine integrierten Konnektivitätslösungen (SD-WAN, 5G-Campus, MCCP) für OT-Anbindung liefern",
+        "Cloud4C-Integration noch nicht abgeschlossen — Sovereign-Cloud-Angebot ohne BSI-C5-Attestierung und ohne deutsche Rechenzentrumsgarantie",
+        "Im Gartner MQ 2024 nur als Visionary eingestuft, nicht als Leader — geringere Execution-Bewertung bei großen Cloud-Transformationen",
+        "Rückläufiges Wachstum im Manufacturing-Segment 2025 — Ressourcenverschiebungen können Energiebranche-Kapazitäten beeinträchtigen"
+      ],
+      "differentiation": "T-Systems bietet als einziger Anbieter die Kombination aus BSI-C5-attestierter Sovereign Cloud (Open Telekom Cloud), eigenem Netz (Deutsche Telekom) und TÜV-zertifiziertem Zero-Outage-Programm — Capgemini muss für jeden dieser Bausteine Drittanbieter einbinden.",
+      "source_urls": [
+        "https://www.capgemini.com/de-de/branchen/energieversorger/",
+        "https://www.capgemini.com/us-en/news/press-releases/capgemini-announces-the-closing-of-the-acquisition-of-cloud4c/",
+        "https://www.gartner.com/reviews/market/data-center-outsourcing-and-hybrid-infrastructure-managed-services-worldwide/compare/capgemini-vs-t-systems",
+        "https://www.capgemini.com/de-de/solutions/plattformen-optimierung-energieversorger/"
+      ]
+    },
+    {
+      "name": "IBM",
+      "positioning": "Hybrid-Cloud- und KI-Anbieter mit Red Hat OpenShift als Plattformbasis, der über IBM Consulting und das neue Sovereign-Core-Produkt regulierte Branchen wie Energieversorgung adressiert.",
+      "strengths": [
+        "Leader im Gartner Magic Quadrant for Public Cloud IT Transformation Services 2025 — über 160.000 Mitarbeiter in 170+ Ländern",
+        "Red Hat OpenShift als offene Hybrid-Cloud-Plattform — vermeidet Hyperscaler-Lock-in und unterstützt Multi-Cloud-Strategien",
+        "IBM Sovereign Core (GA Mitte 2026) — erste souveräne KI-fähige Software auf Open-Source-Basis mit jurisdiktionsgebundener Schlüsselverwaltung",
+        "IBM Maximo für Asset Management im Energiesektor — prädiktive Wartung und Condition-based Monitoring für Versorgungsinfrastruktur"
+      ],
+      "weaknesses": [
+        "Nur 2% globaler Cloud-Marktanteil — IBM Cloud ist Nischenanbieter mit wiederholten Ausfällen 2025 (vier größere Incidents in vier Monaten)",
+        "Sovereign Core erst Mitte 2026 allgemein verfügbar — heute keine produktionsreife souveräne Cloud-Lösung für KRITIS-Kunden in Deutschland",
+        "Keine eigene Netzinfrastruktur und keine deutschen KRITIS-Referenzkunden im Energiesektor nachweisbar",
+        "Hohe Plattformkomplexität — Red Hat OpenShift erfordert spezialisiertes Personal, das im deutschen Energiemarkt schwer zu finden ist",
+        "Laut HFS Research erzielen nur 25% der IBM-Cloud-Transformationskunden einen soliden ROI"
+      ],
+      "differentiation": "T-Systems betreibt seit über einem Jahrzehnt produktive KRITIS-Umgebungen für Energieversorger mit 99,7% nachgewiesener Verfügbarkeit (E.ON) — IBM Sovereign Core existiert noch nicht produktionsreif und IBM Cloud hatte 2025 vier größere Ausfälle in vier Monaten.",
+      "source_urls": [
+        "https://www.ibm.com/industries/power-utilities",
+        "https://www.computerwoche.de/article/4045348/ibm-hat-ein-zuverlassigkeitsproblem.html",
+        "https://newsroom.ibm.com/2026-01-15-ibm-introduces-new-software-to-address-growing-digital-sovereignty-imperative",
+        "https://www.ibm.com/consulting/cloud-migration",
+        "https://www.hfsresearch.com/research/ibm-energy-and-utilities-services-capabilities-2025/"
+      ]
+    }
+  ],
+  "trap_questions": [
+    "Können Sie nachweisen, dass Ihre Cloud-Plattform eine BSI-C5-Attestierung besitzt und die Daten ausschließlich in deutschen Rechenzentren mit EU-Personal verarbeitet werden?",
+    "Wie stellen Sie die Betriebskontinuität während der Migration unserer OT-Systeme (Leit- und Prozessnetzwerke) sicher — haben Sie ein integriertes OT/IT-SOC mit Erfahrung im Energiesektor?",
+    "Welche deutschen Energieversorger mit KRITIS-Einstufung können Sie als Referenzkunden für vergleichbare Cloud-Migrationen benennen — mit messbaren Verfügbarkeitskennzahlen über mindestens 5 Jahre?",
+    "Übernehmen Sie nach der Migration auch den laufenden Managed-Betrieb der migrierten Umgebung, oder müssen wir dafür einen separaten Betriebspartner einbinden?",
+    "Wie viele größere Plattformausfälle hatte Ihre Cloud-Infrastruktur in den letzten 12 Monaten, und welche SLA-Garantien bieten Sie für kritische Versorgungsinfrastruktur?",
+    "Verfügen Sie über ein eigenes Telekommunikationsnetz für die Anbindung unserer verteilten Standorte (Kraftwerke, Umspannwerke, Netzleitstellen), oder sind wir auf Drittanbieter angewiesen?",
+    "Ist Ihre souveräne Cloud-Lösung heute produktionsreif und BSI-C5-attestiert, oder befindet sie sich noch in einer Preview- oder Pilotphase?",
+    "Wie sieht Ihr Qualitätssicherungsprogramm konkret aus — gibt es eine unabhängige Zertifizierung (z.B. TÜV) oder handelt es sich um ein internes SLA-Versprechen?",
+    "Können Sie die gesamte Migration — von Assessment über Mobilisierung bis Modernisierung — mit einer durchgängigen Methodik und einem einzigen Vertragspartner abdecken, einschließlich SAP IS-U/S4HANA-Migration?"
+  ],
+  "created": "2026-03-18"
+}

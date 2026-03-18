@@ -1,0 +1,31 @@
+{
+  "slug": "backup-disaster-recovery--grosse-energieversorger-de",
+  "feature_slug": "backup-disaster-recovery",
+  "market_slug": "grosse-energieversorger-de",
+  "is_statement": "Verwaltete Cloud-Backup-Services mit Operational-Air-Gap, synchroner Replikation mit Zero-RPO-Garantie und Twin-Core-Failover für Hochverfügbarkeit.",
+  "does_statement": "KRITIS-relevante Leitsysteme und Abrechnungsdaten werden mit Zero-RPO über georedundante deutsche Rechenzentren gesichert — mit Operational-Air-Gap gegen Ransomware-Angriffe auf OT-Netze.",
+  "means_statement": "Im Ernstfall ist der Netzleitstellenbetrieb in unter vier Stunden wiederhergestellt, was BSI-KRITIS-Audit-Anforderungen erfüllt und Versorgungsunterbrechungen für Millionen Haushalte verhindert.",
+  "evidence": [
+    {
+      "statement": "Das BSI IT-Sicherheitsgesetz 2.0 fordert von KRITIS-Betreibern nachweisbare Disaster-Recovery-Fähigkeit mit definierten Wiederherstellungszeiten.",
+      "source_url": null,
+      "source_title": null
+    }
+  ],
+  "quality_assessment": {
+    "dimensions": {
+      "buyer_centricity": "pass",
+      "market_specificity": "pass",
+      "differentiation": "pass",
+      "status_quo_contrast": "pass",
+      "conciseness_does": "warn",
+      "outcome_specificity": "pass",
+      "escalation": "pass",
+      "quantification": "pass",
+      "emotional_resonance": "pass",
+      "conciseness_means": "warn"
+    },
+    "overall": "warn"
+  },
+  "created": "2026-03-18"
+}

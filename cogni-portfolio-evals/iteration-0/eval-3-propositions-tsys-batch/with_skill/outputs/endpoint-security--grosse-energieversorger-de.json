@@ -1,0 +1,31 @@
+{
+  "slug": "endpoint-security--grosse-energieversorger-de",
+  "feature_slug": "endpoint-security",
+  "market_slug": "grosse-energieversorger-de",
+  "is_statement": "Endpoint Protection Platform mit ML-gestützter Verhaltensanalyse, automatisierter Bedrohungserkennung und Microsoft-Defender-Integration mit SOC-Response-Eskalation.",
+  "does_statement": "Jeder Arbeitsplatz — vom Leitstand über Außendienst-Laptop bis zur Engineering-Workstation — wird durch ML-basierte Verhaltensanalyse geschützt, die OT-spezifische Anomalien erkennt statt nur bekannte Signaturen abgleicht.",
+  "means_statement": "Ransomware-Angriffe auf Energieversorger-Endpunkte werden gestoppt bevor sie OT-Netze erreichen — was einen einzelnen Vorfall mit durchschnittlich 4,5 Mio. EUR Schaden und wochenlangen Krisenmodus verhindert.",
+  "evidence": [
+    {
+      "statement": "IBM Cost of a Data Breach 2024 beziffert die durchschnittlichen Kosten eines Sicherheitsvorfalls im Energiesektor auf 4,49 Mio. USD.",
+      "source_url": null,
+      "source_title": null
+    }
+  ],
+  "quality_assessment": {
+    "dimensions": {
+      "buyer_centricity": "pass",
+      "market_specificity": "pass",
+      "differentiation": "pass",
+      "status_quo_contrast": "pass",
+      "conciseness_does": "warn",
+      "outcome_specificity": "pass",
+      "escalation": "pass",
+      "quantification": "pass",
+      "emotional_resonance": "pass",
+      "conciseness_means": "warn"
+    },
+    "overall": "warn"
+  },
+  "created": "2026-03-18"
+}

@@ -1,0 +1,14 @@
+{
+  "slug": "verbrauchstransparenz",
+  "name": "Verbrauchstransparenz und Energievisualisierung",
+  "description": "Dashboard-Anwendung zur Visualisierung von Strom-, Gas- und Waermeverbrauch auf Basis von Smart-Meter-Daten. Zeigt Tages-, Wochen- und Monatsprofile mit Vergleichswerten und spartenuebergreifender Verbrauchshistorie in Web und App.",
+  "category": "analytics",
+  "taxonomy_mapping": {
+    "dimension": 6,
+    "category_id": "6.6",
+    "category_name": "AI, Data & Analytics",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "product_slug": "digitale-kundendienste"
+}

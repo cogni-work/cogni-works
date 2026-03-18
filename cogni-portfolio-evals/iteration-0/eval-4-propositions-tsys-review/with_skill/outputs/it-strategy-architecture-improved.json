@@ -1,0 +1,26 @@
+{
+  "slug": "it-strategy-architecture--grosse-energieversorger-de",
+  "original": {
+    "is_statement": "Ganzheitliche Digitalisierungsstrategie und Enterprise Architecture nach TOGAF-Standard mit strukturiertem Reife-Assessment, Zielarchitekturen, Governance und IT-Resilienz-Konzepten.",
+    "does_statement": "Definiert klare digitale Roadmap für Smart-Grid-Transformation und Dekarbonisierung, integriert Legacy-Systeme mit IoT- und Cloud-Infrastruktur unter Einhaltung KRITIS-Standards.",
+    "means_statement": "Beschleunigt Transformation zur erneuerbaren Energieversorgung, senkt Modernisierungs-Investitionen durch priorisierte Architektur und reduziert Integrations-Risiken in komplexen Netzwerk-Umgebungen."
+  },
+  "improved": {
+    "is_statement": "Ganzheitliche Digitalisierungsstrategie und Enterprise Architecture nach TOGAF-Standard mit strukturiertem Reife-Assessment, Zielarchitekturen, Governance und IT-Resilienz-Konzepten.",
+    "does_statement": "Sie erhalten eine priorisierte IT-Roadmap für Smart-Grid und §14a-Steuerung, die OT/IT-Konvergenz, SAP-S/4HANA-Migration und Cloud-Strategie in einem konsistenten KRITIS-konformen Architekturplan vereint — statt isolierter Einzelprojekte.",
+    "means_statement": "Reduzieren Sie Modernisierungsinvestitionen um 20-30% durch architekturgesteuerte Priorisierung und vermeiden Sie Integrationsrisiken, die Energieversorger durchschnittlich 18 Monate und EUR 5-10M kosten.",
+    "evidence": [
+      {
+        "statement": "McKinsey Digital 2024: Energieversorger ohne konsistente Enterprise Architecture investieren 20-30% mehr in Modernisierung durch redundante Projekte",
+        "source_url": null,
+        "source_title": null
+      },
+      {
+        "statement": "§14a EnWG verpflichtet Netzbetreiber ab 2025 zur steuerbaren Verbrauchseinrichtung — erfordert durchgängige IT-Architektur von Smart Meter bis Netzleitsystem",
+        "source_url": "https://www.bundesnetzagentur.de/DE/Beschlusskammern/1_GZ/BK6-22-300/BK6-22-300_beschluss.html",
+        "source_title": "BNetzA Beschluss §14a EnWG"
+      }
+    ]
+  },
+  "improvement_rationale": "Original war dreifach schwach: (1) anbieterzentriert ('Definiert...integriert...'), (2) keine Differenzierung (jeder Berater bietet TOGAF-Roadmaps), (3) MEANS komplett ohne Zahlen ('senkt Investitionen', 'reduziert Risiken' — wie viel?). Rewrite: DOES wechselt auf 'Sie erhalten' (Käuferperspektive), nennt §14a als regulatorischen Trigger (hochspezifisch für Energieversorger 2025/26), kontrastiert 'statt isolierter Einzelprojekte'. MEANS quantifiziert 20-30% Investitionsersparnis und EUR 5-10M Integrationskosten mit emotionaler Komponente (Vermeidung von Zeitverlust)."
+}

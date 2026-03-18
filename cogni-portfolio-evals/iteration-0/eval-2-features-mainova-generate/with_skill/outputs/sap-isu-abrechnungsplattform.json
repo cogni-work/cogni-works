@@ -1,0 +1,14 @@
+{
+  "slug": "sap-isu-abrechnungsplattform",
+  "name": "SAP IS-U Abrechnungsplattform",
+  "description": "Branchenspezifische SAP-IS-U-Instanz fuer spartenuebergreifende Verbrauchsabrechnung (Strom, Gas, Fernwaerme, Wasser), Tarifverwaltung, Geraeteverwaltung und regulatorische Marktprozesse (GPKE, GeLi Gas, WiM) mit EDIFACT-Nachrichtenverarbeitung.",
+  "category": "enterprise-platforms",
+  "taxonomy_mapping": {
+    "dimension": 6,
+    "category_id": "6.3",
+    "category_name": "Enterprise Platform Services",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "product_slug": "it-plattformdienste"
+}

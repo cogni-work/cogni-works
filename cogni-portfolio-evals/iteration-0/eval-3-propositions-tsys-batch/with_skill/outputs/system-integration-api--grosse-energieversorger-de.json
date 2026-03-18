@@ -1,0 +1,31 @@
+{
+  "slug": "system-integration-api--grosse-energieversorger-de",
+  "feature_slug": "system-integration-api",
+  "market_slug": "grosse-energieversorger-de",
+  "is_statement": "API Gateway mit Policy-gesteuertem Routing und Credential Management zur Integration von SAP, Cloud-Systemen und Drittanbietern auf Basis von 20 Jahren Integrationserfahrung.",
+  "does_statement": "Ihre SAP IS-U-, Leitsystem-, Smart-Meter-Gateway- und Marktpartner-Schnittstellen werden über ein zentrales API-Gateway integriert — statt durch Punkt-zu-Punkt-Verbindungen, die bei jeder Systemänderung Kettenreaktionen auslösen.",
+  "means_statement": "Integrationsaufwand bei regulatorischen Systemänderungen sinkt um 50-60%, und neue Marktpartner oder Datenquellen werden in Tagen statt Monaten angebunden — was die IT vom Integrations-Engpass zum Enabler macht.",
+  "evidence": [
+    {
+      "statement": "MuleSoft-Studien zeigen, dass API-geführte Integration den Integrationsaufwand um 50-65% gegenüber Punkt-zu-Punkt-Integrationen reduziert.",
+      "source_url": null,
+      "source_title": null
+    }
+  ],
+  "quality_assessment": {
+    "dimensions": {
+      "buyer_centricity": "pass",
+      "market_specificity": "pass",
+      "differentiation": "warn",
+      "status_quo_contrast": "pass",
+      "conciseness_does": "warn",
+      "outcome_specificity": "pass",
+      "escalation": "pass",
+      "quantification": "pass",
+      "emotional_resonance": "pass",
+      "conciseness_means": "warn"
+    },
+    "overall": "warn"
+  },
+  "created": "2026-03-18"
+}

@@ -1,0 +1,3608 @@
+{
+  "total_reviewed": 50,
+  "pass": 1,
+  "warn": 40,
+  "fail": 9,
+  "assessments": [
+    {
+      "slug": "5g-iot-connectivity--grosse-energieversorger-de",
+      "dimensions": {
+        "buyer_centricity": "pass",
+        "market_specificity": "warn",
+        "differentiation": "pass",
+        "status_quo_contrast": "pass",
+        "conciseness_does": "pass",
+        "outcome_specificity": "pass",
+        "escalation": "pass",
+        "quantification": "pass",
+        "emotional_resonance": "warn",
+        "conciseness_means": "pass"
+      },
+      "overall": "warn",
+      "issues": [
+        "market_specificity: Teilweise marktspezifisch, aber generische Elemente ueberwiegen",
+        "emotional_resonance: Rein geschaeftsrational — keine persoenliche/emotionale Dimension"
+      ],
+      "does_assessment": {
+        "overall": "warn",
+        "dimensions": {
+          "buyer_centricity": {
+            "score": "pass",
+            "note": ""
+          },
+          "market_specificity": {
+            "score": "warn",
+            "note": "Teilweise marktspezifisch, aber generische Elemente ueberwiegen"
+          },
+          "differentiation": {
+            "score": "pass",
+            "note": ""
+          },
+          "status_quo_contrast": {
+            "score": "pass",
+            "note": ""
+          },
+          "conciseness_does": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      },
+      "means_assessment": {
+        "overall": "warn",
+        "dimensions": {
+          "outcome_specificity": {
+            "score": "pass",
+            "note": ""
+          },
+          "escalation": {
+            "score": "pass",
+            "note": ""
+          },
+          "quantification": {
+            "score": "pass",
+            "note": ""
+          },
+          "emotional_resonance": {
+            "score": "warn",
+            "note": "Rein geschaeftsrational — keine persoenliche/emotionale Dimension"
+          },
+          "conciseness_means": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      }
+    },
+    {
+      "slug": "ai-data-analytics--grosse-energieversorger-de",
+      "dimensions": {
+        "buyer_centricity": "pass",
+        "market_specificity": "pass",
+        "differentiation": "warn",
+        "status_quo_contrast": "warn",
+        "conciseness_does": "pass",
+        "outcome_specificity": "fail",
+        "escalation": "pass",
+        "quantification": "warn",
+        "emotional_resonance": "warn",
+        "conciseness_means": "pass"
+      },
+      "overall": "warn",
+      "issues": [
+        "differentiation: Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten",
+        "status_quo_contrast: Implizite Verbesserung, aber kein konkreter Status-quo-Kontrast",
+        "outcome_specificity: Vage aspirative Sprache ohne messbare Geschaeftsergebnisse",
+        "quantification: Impliziert quantifizierbaren Impact, nennt aber keine konkreten Zahlen",
+        "emotional_resonance: Rein geschaeftsrational — keine persoenliche/emotionale Dimension"
+      ],
+      "does_assessment": {
+        "overall": "warn",
+        "dimensions": {
+          "buyer_centricity": {
+            "score": "pass",
+            "note": ""
+          },
+          "market_specificity": {
+            "score": "pass",
+            "note": ""
+          },
+          "differentiation": {
+            "score": "warn",
+            "note": "Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten"
+          },
+          "status_quo_contrast": {
+            "score": "warn",
+            "note": "Implizite Verbesserung, aber kein konkreter Status-quo-Kontrast"
+          },
+          "conciseness_does": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      },
+      "means_assessment": {
+        "overall": "warn",
+        "dimensions": {
+          "outcome_specificity": {
+            "score": "fail",
+            "note": "Vage aspirative Sprache ohne messbare Geschaeftsergebnisse"
+          },
+          "escalation": {
+            "score": "pass",
+            "note": ""
+          },
+          "quantification": {
+            "score": "warn",
+            "note": "Impliziert quantifizierbaren Impact, nennt aber keine konkreten Zahlen"
+          },
+          "emotional_resonance": {
+            "score": "warn",
+            "note": "Rein geschaeftsrational — keine persoenliche/emotionale Dimension"
+          },
+          "conciseness_means": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      }
+    },
+    {
+      "slug": "app-modernization--grosse-energieversorger-de",
+      "dimensions": {
+        "buyer_centricity": "pass",
+        "market_specificity": "pass",
+        "differentiation": "warn",
+        "status_quo_contrast": "pass",
+        "conciseness_does": "pass",
+        "outcome_specificity": "pass",
+        "escalation": "pass",
+        "quantification": "pass",
+        "emotional_resonance": "warn",
+        "conciseness_means": "pass"
+      },
+      "overall": "warn",
+      "issues": [
+        "differentiation: Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten",
+        "emotional_resonance: Rein geschaeftsrational — keine persoenliche/emotionale Dimension"
+      ],
+      "does_assessment": {
+        "overall": "warn",
+        "dimensions": {
+          "buyer_centricity": {
+            "score": "pass",
+            "note": ""
+          },
+          "market_specificity": {
+            "score": "pass",
+            "note": ""
+          },
+          "differentiation": {
+            "score": "warn",
+            "note": "Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten"
+          },
+          "status_quo_contrast": {
+            "score": "pass",
+            "note": ""
+          },
+          "conciseness_does": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      },
+      "means_assessment": {
+        "overall": "warn",
+        "dimensions": {
+          "outcome_specificity": {
+            "score": "pass",
+            "note": ""
+          },
+          "escalation": {
+            "score": "pass",
+            "note": ""
+          },
+          "quantification": {
+            "score": "pass",
+            "note": ""
+          },
+          "emotional_resonance": {
+            "score": "warn",
+            "note": "Rein geschaeftsrational — keine persoenliche/emotionale Dimension"
+          },
+          "conciseness_means": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      }
+    },
+    {
+      "slug": "backup-disaster-recovery--grosse-energieversorger-de",
+      "dimensions": {
+        "buyer_centricity": "pass",
+        "market_specificity": "pass",
+        "differentiation": "warn",
+        "status_quo_contrast": "pass",
+        "conciseness_does": "pass",
+        "outcome_specificity": "pass",
+        "escalation": "pass",
+        "quantification": "pass",
+        "emotional_resonance": "pass",
+        "conciseness_means": "pass"
+      },
+      "overall": "warn",
+      "issues": [
+        "differentiation: Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten"
+      ],
+      "does_assessment": {
+        "overall": "warn",
+        "dimensions": {
+          "buyer_centricity": {
+            "score": "pass",
+            "note": ""
+          },
+          "market_specificity": {
+            "score": "pass",
+            "note": ""
+          },
+          "differentiation": {
+            "score": "warn",
+            "note": "Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten"
+          },
+          "status_quo_contrast": {
+            "score": "pass",
+            "note": ""
+          },
+          "conciseness_does": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      },
+      "means_assessment": {
+        "overall": "pass",
+        "dimensions": {
+          "outcome_specificity": {
+            "score": "pass",
+            "note": ""
+          },
+          "escalation": {
+            "score": "pass",
+            "note": ""
+          },
+          "quantification": {
+            "score": "pass",
+            "note": ""
+          },
+          "emotional_resonance": {
+            "score": "pass",
+            "note": ""
+          },
+          "conciseness_means": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      }
+    },
+    {
+      "slug": "cloud-connect--grosse-energieversorger-de",
+      "dimensions": {
+        "buyer_centricity": "pass",
+        "market_specificity": "pass",
+        "differentiation": "warn",
+        "status_quo_contrast": "fail",
+        "conciseness_does": "pass",
+        "outcome_specificity": "fail",
+        "escalation": "pass",
+        "quantification": "warn",
+        "emotional_resonance": "warn",
+        "conciseness_means": "pass"
+      },
+      "overall": "warn",
+      "issues": [
+        "differentiation: Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten",
+        "status_quo_contrast: Kein Kontrast zum aktuellen Ansatz — liest sich als Faehigkeitsbeschreibung",
+        "outcome_specificity: Vage aspirative Sprache ohne messbare Geschaeftsergebnisse",
+        "quantification: Keine konkreten Zahlen — quantifizierte MEANS-Statements sind ueberzeugender",
+        "emotional_resonance: Rein geschaeftsrational — keine persoenliche/emotionale Dimension"
+      ],
+      "does_assessment": {
+        "overall": "warn",
+        "dimensions": {
+          "buyer_centricity": {
+            "score": "pass",
+            "note": ""
+          },
+          "market_specificity": {
+            "score": "pass",
+            "note": ""
+          },
+          "differentiation": {
+            "score": "warn",
+            "note": "Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten"
+          },
+          "status_quo_contrast": {
+            "score": "fail",
+            "note": "Kein Kontrast zum aktuellen Ansatz — liest sich als Faehigkeitsbeschreibung"
+          },
+          "conciseness_does": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      },
+      "means_assessment": {
+        "overall": "warn",
+        "dimensions": {
+          "outcome_specificity": {
+            "score": "fail",
+            "note": "Vage aspirative Sprache ohne messbare Geschaeftsergebnisse"
+          },
+          "escalation": {
+            "score": "pass",
+            "note": ""
+          },
+          "quantification": {
+            "score": "warn",
+            "note": "Keine konkreten Zahlen — quantifizierte MEANS-Statements sind ueberzeugender"
+          },
+          "emotional_resonance": {
+            "score": "warn",
+            "note": "Rein geschaeftsrational — keine persoenliche/emotionale Dimension"
+          },
+          "conciseness_means": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      }
+    },
+    {
+      "slug": "cloud-migration--grosse-energieversorger-de",
+      "dimensions": {
+        "buyer_centricity": "pass",
+        "market_specificity": "warn",
+        "differentiation": "pass",
+        "status_quo_contrast": "fail",
+        "conciseness_does": "pass",
+        "outcome_specificity": "warn",
+        "escalation": "pass",
+        "quantification": "pass",
+        "emotional_resonance": "warn",
+        "conciseness_means": "pass"
+      },
+      "overall": "warn",
+      "issues": [
+        "market_specificity: Teilweise marktspezifisch, aber generische Elemente ueberwiegen",
+        "status_quo_contrast: Kein Kontrast zum aktuellen Ansatz — liest sich als Faehigkeitsbeschreibung",
+        "outcome_specificity: Nennt Geschaeftsbereich aber ohne volle Spezifitaet",
+        "emotional_resonance: Rein geschaeftsrational — keine persoenliche/emotionale Dimension"
+      ],
+      "does_assessment": {
+        "overall": "warn",
+        "dimensions": {
+          "buyer_centricity": {
+            "score": "pass",
+            "note": ""
+          },
+          "market_specificity": {
+            "score": "warn",
+            "note": "Teilweise marktspezifisch, aber generische Elemente ueberwiegen"
+          },
+          "differentiation": {
+            "score": "pass",
+            "note": ""
+          },
+          "status_quo_contrast": {
+            "score": "fail",
+            "note": "Kein Kontrast zum aktuellen Ansatz — liest sich als Faehigkeitsbeschreibung"
+          },
+          "conciseness_does": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      },
+      "means_assessment": {
+        "overall": "warn",
+        "dimensions": {
+          "outcome_specificity": {
+            "score": "warn",
+            "note": "Nennt Geschaeftsbereich aber ohne volle Spezifitaet"
+          },
+          "escalation": {
+            "score": "pass",
+            "note": ""
+          },
+          "quantification": {
+            "score": "pass",
+            "note": ""
+          },
+          "emotional_resonance": {
+            "score": "warn",
+            "note": "Rein geschaeftsrational — keine persoenliche/emotionale Dimension"
+          },
+          "conciseness_means": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      }
+    },
+    {
+      "slug": "cloud-native-container--grosse-energieversorger-de",
+      "dimensions": {
+        "buyer_centricity": "pass",
+        "market_specificity": "pass",
+        "differentiation": "warn",
+        "status_quo_contrast": "pass",
+        "conciseness_does": "pass",
+        "outcome_specificity": "pass",
+        "escalation": "pass",
+        "quantification": "pass",
+        "emotional_resonance": "warn",
+        "conciseness_means": "pass"
+      },
+      "overall": "warn",
+      "issues": [
+        "differentiation: Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten",
+        "emotional_resonance: Rein geschaeftsrational — keine persoenliche/emotionale Dimension"
+      ],
+      "does_assessment": {
+        "overall": "warn",
+        "dimensions": {
+          "buyer_centricity": {
+            "score": "pass",
+            "note": ""
+          },
+          "market_specificity": {
+            "score": "pass",
+            "note": ""
+          },
+          "differentiation": {
+            "score": "warn",
+            "note": "Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten"
+          },
+          "status_quo_contrast": {
+            "score": "pass",
+            "note": ""
+          },
+          "conciseness_does": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      },
+      "means_assessment": {
+        "overall": "warn",
+        "dimensions": {
+          "outcome_specificity": {
+            "score": "pass",
+            "note": ""
+          },
+          "escalation": {
+            "score": "pass",
+            "note": ""
+          },
+          "quantification": {
+            "score": "pass",
+            "note": ""
+          },
+          "emotional_resonance": {
+            "score": "warn",
+            "note": "Rein geschaeftsrational — keine persoenliche/emotionale Dimension"
+          },
+          "conciseness_means": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      }
+    },
+    {
+      "slug": "cloud-security--grosse-energieversorger-de",
+      "dimensions": {
+        "buyer_centricity": "pass",
+        "market_specificity": "warn",
+        "differentiation": "warn",
+        "status_quo_contrast": "warn",
+        "conciseness_does": "pass",
+        "outcome_specificity": "warn",
+        "escalation": "pass",
+        "quantification": "pass",
+        "emotional_resonance": "warn",
+        "conciseness_means": "pass"
+      },
+      "overall": "warn",
+      "issues": [
+        "market_specificity: Teilweise marktspezifisch, aber generische Elemente ueberwiegen",
+        "differentiation: Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten",
+        "status_quo_contrast: Implizite Verbesserung, aber kein konkreter Status-quo-Kontrast",
+        "outcome_specificity: Nennt Geschaeftsbereich aber ohne volle Spezifitaet",
+        "emotional_resonance: Rein geschaeftsrational — keine persoenliche/emotionale Dimension"
+      ],
+      "does_assessment": {
+        "overall": "warn",
+        "dimensions": {
+          "buyer_centricity": {
+            "score": "pass",
+            "note": ""
+          },
+          "market_specificity": {
+            "score": "warn",
+            "note": "Teilweise marktspezifisch, aber generische Elemente ueberwiegen"
+          },
+          "differentiation": {
+            "score": "warn",
+            "note": "Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten"
+          },
+          "status_quo_contrast": {
+            "score": "warn",
+            "note": "Implizite Verbesserung, aber kein konkreter Status-quo-Kontrast"
+          },
+          "conciseness_does": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      },
+      "means_assessment": {
+        "overall": "warn",
+        "dimensions": {
+          "outcome_specificity": {
+            "score": "warn",
+            "note": "Nennt Geschaeftsbereich aber ohne volle Spezifitaet"
+          },
+          "escalation": {
+            "score": "pass",
+            "note": ""
+          },
+          "quantification": {
+            "score": "pass",
+            "note": ""
+          },
+          "emotional_resonance": {
+            "score": "warn",
+            "note": "Rein geschaeftsrational — keine persoenliche/emotionale Dimension"
+          },
+          "conciseness_means": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      }
+    },
+    {
+      "slug": "compliance-data-protection--grosse-energieversorger-de",
+      "dimensions": {
+        "buyer_centricity": "warn",
+        "market_specificity": "pass",
+        "differentiation": "warn",
+        "status_quo_contrast": "warn",
+        "conciseness_does": "pass",
+        "outcome_specificity": "pass",
+        "escalation": "pass",
+        "quantification": "pass",
+        "emotional_resonance": "warn",
+        "conciseness_means": "pass"
+      },
+      "overall": "warn",
+      "issues": [
+        "buyer_centricity: Gemischte Perspektive — teilweise kaeufer-, teilweise anbieterzentriert",
+        "differentiation: Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten",
+        "status_quo_contrast: Implizite Verbesserung, aber kein konkreter Status-quo-Kontrast",
+        "emotional_resonance: Rein geschaeftsrational — keine persoenliche/emotionale Dimension"
+      ],
+      "does_assessment": {
+        "overall": "warn",
+        "dimensions": {
+          "buyer_centricity": {
+            "score": "warn",
+            "note": "Gemischte Perspektive — teilweise kaeufer-, teilweise anbieterzentriert"
+          },
+          "market_specificity": {
+            "score": "pass",
+            "note": ""
+          },
+          "differentiation": {
+            "score": "warn",
+            "note": "Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten"
+          },
+          "status_quo_contrast": {
+            "score": "warn",
+            "note": "Implizite Verbesserung, aber kein konkreter Status-quo-Kontrast"
+          },
+          "conciseness_does": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      },
+      "means_assessment": {
+        "overall": "warn",
+        "dimensions": {
+          "outcome_specificity": {
+            "score": "pass",
+            "note": ""
+          },
+          "escalation": {
+            "score": "pass",
+            "note": ""
+          },
+          "quantification": {
+            "score": "pass",
+            "note": ""
+          },
+          "emotional_resonance": {
+            "score": "warn",
+            "note": "Rein geschaeftsrational — keine persoenliche/emotionale Dimension"
+          },
+          "conciseness_means": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      }
+    },
+    {
+      "slug": "custom-app-development--grosse-energieversorger-de",
+      "dimensions": {
+        "buyer_centricity": "pass",
+        "market_specificity": "pass",
+        "differentiation": "warn",
+        "status_quo_contrast": "fail",
+        "conciseness_does": "pass",
+        "outcome_specificity": "pass",
+        "escalation": "pass",
+        "quantification": "pass",
+        "emotional_resonance": "warn",
+        "conciseness_means": "pass"
+      },
+      "overall": "warn",
+      "issues": [
+        "differentiation: Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten",
+        "status_quo_contrast: Kein Kontrast zum aktuellen Ansatz — liest sich als Faehigkeitsbeschreibung",
+        "emotional_resonance: Rein geschaeftsrational — keine persoenliche/emotionale Dimension"
+      ],
+      "does_assessment": {
+        "overall": "warn",
+        "dimensions": {
+          "buyer_centricity": {
+            "score": "pass",
+            "note": ""
+          },
+          "market_specificity": {
+            "score": "pass",
+            "note": ""
+          },
+          "differentiation": {
+            "score": "warn",
+            "note": "Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten"
+          },
+          "status_quo_contrast": {
+            "score": "fail",
+            "note": "Kein Kontrast zum aktuellen Ansatz — liest sich als Faehigkeitsbeschreibung"
+          },
+          "conciseness_does": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      },
+      "means_assessment": {
+        "overall": "warn",
+        "dimensions": {
+          "outcome_specificity": {
+            "score": "pass",
+            "note": ""
+          },
+          "escalation": {
+            "score": "pass",
+            "note": ""
+          },
+          "quantification": {
+            "score": "pass",
+            "note": ""
+          },
+          "emotional_resonance": {
+            "score": "warn",
+            "note": "Rein geschaeftsrational — keine persoenliche/emotionale Dimension"
+          },
+          "conciseness_means": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      }
+    },
+    {
+      "slug": "cx-digital-marketing--grosse-energieversorger-de",
+      "dimensions": {
+        "buyer_centricity": "pass",
+        "market_specificity": "warn",
+        "differentiation": "warn",
+        "status_quo_contrast": "warn",
+        "conciseness_does": "pass",
+        "outcome_specificity": "warn",
+        "escalation": "pass",
+        "quantification": "warn",
+        "emotional_resonance": "pass",
+        "conciseness_means": "pass"
+      },
+      "overall": "warn",
+      "issues": [
+        "market_specificity: Teilweise marktspezifisch, aber generische Elemente ueberwiegen",
+        "differentiation: Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten",
+        "status_quo_contrast: Implizite Verbesserung, aber kein konkreter Status-quo-Kontrast",
+        "outcome_specificity: Nennt Geschaeftsbereich aber ohne volle Spezifitaet",
+        "quantification: Keine konkreten Zahlen — quantifizierte MEANS-Statements sind ueberzeugender"
+      ],
+      "does_assessment": {
+        "overall": "warn",
+        "dimensions": {
+          "buyer_centricity": {
+            "score": "pass",
+            "note": ""
+          },
+          "market_specificity": {
+            "score": "warn",
+            "note": "Teilweise marktspezifisch, aber generische Elemente ueberwiegen"
+          },
+          "differentiation": {
+            "score": "warn",
+            "note": "Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten"
+          },
+          "status_quo_contrast": {
+            "score": "warn",
+            "note": "Implizite Verbesserung, aber kein konkreter Status-quo-Kontrast"
+          },
+          "conciseness_does": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      },
+      "means_assessment": {
+        "overall": "warn",
+        "dimensions": {
+          "outcome_specificity": {
+            "score": "warn",
+            "note": "Nennt Geschaeftsbereich aber ohne volle Spezifitaet"
+          },
+          "escalation": {
+            "score": "pass",
+            "note": ""
+          },
+          "quantification": {
+            "score": "warn",
+            "note": "Keine konkreten Zahlen — quantifizierte MEANS-Statements sind ueberzeugender"
+          },
+          "emotional_resonance": {
+            "score": "pass",
+            "note": ""
+          },
+          "conciseness_means": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      }
+    },
+    {
+      "slug": "datacenter-colocation--grosse-energieversorger-de",
+      "dimensions": {
+        "buyer_centricity": "warn",
+        "market_specificity": "pass",
+        "differentiation": "warn",
+        "status_quo_contrast": "pass",
+        "conciseness_does": "pass",
+        "outcome_specificity": "warn",
+        "escalation": "pass",
+        "quantification": "warn",
+        "emotional_resonance": "warn",
+        "conciseness_means": "pass"
+      },
+      "overall": "warn",
+      "issues": [
+        "buyer_centricity: Gemischte Perspektive — teilweise kaeufer-, teilweise anbieterzentriert",
+        "differentiation: Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten",
+        "outcome_specificity: Nennt Geschaeftsbereich aber ohne volle Spezifitaet",
+        "quantification: Keine konkreten Zahlen — quantifizierte MEANS-Statements sind ueberzeugender",
+        "emotional_resonance: Rein geschaeftsrational — keine persoenliche/emotionale Dimension"
+      ],
+      "does_assessment": {
+        "overall": "warn",
+        "dimensions": {
+          "buyer_centricity": {
+            "score": "warn",
+            "note": "Gemischte Perspektive — teilweise kaeufer-, teilweise anbieterzentriert"
+          },
+          "market_specificity": {
+            "score": "pass",
+            "note": ""
+          },
+          "differentiation": {
+            "score": "warn",
+            "note": "Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten"
+          },
+          "status_quo_contrast": {
+            "score": "pass",
+            "note": ""
+          },
+          "conciseness_does": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      },
+      "means_assessment": {
+        "overall": "warn",
+        "dimensions": {
+          "outcome_specificity": {
+            "score": "warn",
+            "note": "Nennt Geschaeftsbereich aber ohne volle Spezifitaet"
+          },
+          "escalation": {
+            "score": "pass",
+            "note": ""
+          },
+          "quantification": {
+            "score": "warn",
+            "note": "Keine konkreten Zahlen — quantifizierte MEANS-Statements sind ueberzeugender"
+          },
+          "emotional_resonance": {
+            "score": "warn",
+            "note": "Rein geschaeftsrational — keine persoenliche/emotionale Dimension"
+          },
+          "conciseness_means": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      }
+    },
+    {
+      "slug": "devops-platform-engineering--grosse-energieversorger-de",
+      "dimensions": {
+        "buyer_centricity": "pass",
+        "market_specificity": "warn",
+        "differentiation": "warn",
+        "status_quo_contrast": "pass",
+        "conciseness_does": "pass",
+        "outcome_specificity": "pass",
+        "escalation": "pass",
+        "quantification": "pass",
+        "emotional_resonance": "pass",
+        "conciseness_means": "pass"
+      },
+      "overall": "warn",
+      "issues": [
+        "market_specificity: Teilweise marktspezifisch, aber generische Elemente ueberwiegen",
+        "differentiation: Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten"
+      ],
+      "does_assessment": {
+        "overall": "warn",
+        "dimensions": {
+          "buyer_centricity": {
+            "score": "pass",
+            "note": ""
+          },
+          "market_specificity": {
+            "score": "warn",
+            "note": "Teilweise marktspezifisch, aber generische Elemente ueberwiegen"
+          },
+          "differentiation": {
+            "score": "warn",
+            "note": "Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten"
+          },
+          "status_quo_contrast": {
+            "score": "pass",
+            "note": ""
+          },
+          "conciseness_does": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      },
+      "means_assessment": {
+        "overall": "pass",
+        "dimensions": {
+          "outcome_specificity": {
+            "score": "pass",
+            "note": ""
+          },
+          "escalation": {
+            "score": "pass",
+            "note": ""
+          },
+          "quantification": {
+            "score": "pass",
+            "note": ""
+          },
+          "emotional_resonance": {
+            "score": "pass",
+            "note": ""
+          },
+          "conciseness_means": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      }
+    },
+    {
+      "slug": "digital-employee-experience--grosse-energieversorger-de",
+      "dimensions": {
+        "buyer_centricity": "pass",
+        "market_specificity": "warn",
+        "differentiation": "warn",
+        "status_quo_contrast": "pass",
+        "conciseness_does": "pass",
+        "outcome_specificity": "warn",
+        "escalation": "pass",
+        "quantification": "pass",
+        "emotional_resonance": "pass",
+        "conciseness_means": "pass"
+      },
+      "overall": "warn",
+      "issues": [
+        "market_specificity: Teilweise marktspezifisch, aber generische Elemente ueberwiegen",
+        "differentiation: Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten",
+        "outcome_specificity: Nennt Geschaeftsbereich aber ohne volle Spezifitaet"
+      ],
+      "does_assessment": {
+        "overall": "warn",
+        "dimensions": {
+          "buyer_centricity": {
+            "score": "pass",
+            "note": ""
+          },
+          "market_specificity": {
+            "score": "warn",
+            "note": "Teilweise marktspezifisch, aber generische Elemente ueberwiegen"
+          },
+          "differentiation": {
+            "score": "warn",
+            "note": "Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten"
+          },
+          "status_quo_contrast": {
+            "score": "pass",
+            "note": ""
+          },
+          "conciseness_does": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      },
+      "means_assessment": {
+        "overall": "warn",
+        "dimensions": {
+          "outcome_specificity": {
+            "score": "warn",
+            "note": "Nennt Geschaeftsbereich aber ohne volle Spezifitaet"
+          },
+          "escalation": {
+            "score": "pass",
+            "note": ""
+          },
+          "quantification": {
+            "score": "pass",
+            "note": ""
+          },
+          "emotional_resonance": {
+            "score": "pass",
+            "note": ""
+          },
+          "conciseness_means": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      }
+    },
+    {
+      "slug": "digital-transformation-consulting--grosse-energieversorger-de",
+      "dimensions": {
+        "buyer_centricity": "pass",
+        "market_specificity": "warn",
+        "differentiation": "warn",
+        "status_quo_contrast": "fail",
+        "conciseness_does": "pass",
+        "outcome_specificity": "pass",
+        "escalation": "pass",
+        "quantification": "pass",
+        "emotional_resonance": "pass",
+        "conciseness_means": "pass"
+      },
+      "overall": "warn",
+      "issues": [
+        "market_specificity: Teilweise marktspezifisch, aber generische Elemente ueberwiegen",
+        "differentiation: Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten",
+        "status_quo_contrast: Kein Kontrast zum aktuellen Ansatz — liest sich als Faehigkeitsbeschreibung"
+      ],
+      "does_assessment": {
+        "overall": "warn",
+        "dimensions": {
+          "buyer_centricity": {
+            "score": "pass",
+            "note": ""
+          },
+          "market_specificity": {
+            "score": "warn",
+            "note": "Teilweise marktspezifisch, aber generische Elemente ueberwiegen"
+          },
+          "differentiation": {
+            "score": "warn",
+            "note": "Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten"
+          },
+          "status_quo_contrast": {
+            "score": "fail",
+            "note": "Kein Kontrast zum aktuellen Ansatz — liest sich als Faehigkeitsbeschreibung"
+          },
+          "conciseness_does": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      },
+      "means_assessment": {
+        "overall": "pass",
+        "dimensions": {
+          "outcome_specificity": {
+            "score": "pass",
+            "note": ""
+          },
+          "escalation": {
+            "score": "pass",
+            "note": ""
+          },
+          "quantification": {
+            "score": "pass",
+            "note": ""
+          },
+          "emotional_resonance": {
+            "score": "pass",
+            "note": ""
+          },
+          "conciseness_means": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      }
+    },
+    {
+      "slug": "endpoint-device-management--grosse-energieversorger-de",
+      "dimensions": {
+        "buyer_centricity": "pass",
+        "market_specificity": "pass",
+        "differentiation": "warn",
+        "status_quo_contrast": "pass",
+        "conciseness_does": "pass",
+        "outcome_specificity": "pass",
+        "escalation": "pass",
+        "quantification": "pass",
+        "emotional_resonance": "warn",
+        "conciseness_means": "pass"
+      },
+      "overall": "warn",
+      "issues": [
+        "differentiation: Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten",
+        "emotional_resonance: Rein geschaeftsrational — keine persoenliche/emotionale Dimension"
+      ],
+      "does_assessment": {
+        "overall": "warn",
+        "dimensions": {
+          "buyer_centricity": {
+            "score": "pass",
+            "note": ""
+          },
+          "market_specificity": {
+            "score": "pass",
+            "note": ""
+          },
+          "differentiation": {
+            "score": "warn",
+            "note": "Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten"
+          },
+          "status_quo_contrast": {
+            "score": "pass",
+            "note": ""
+          },
+          "conciseness_does": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      },
+      "means_assessment": {
+        "overall": "warn",
+        "dimensions": {
+          "outcome_specificity": {
+            "score": "pass",
+            "note": ""
+          },
+          "escalation": {
+            "score": "pass",
+            "note": ""
+          },
+          "quantification": {
+            "score": "pass",
+            "note": ""
+          },
+          "emotional_resonance": {
+            "score": "warn",
+            "note": "Rein geschaeftsrational — keine persoenliche/emotionale Dimension"
+          },
+          "conciseness_means": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      }
+    },
+    {
+      "slug": "endpoint-security--grosse-energieversorger-de",
+      "dimensions": {
+        "buyer_centricity": "fail",
+        "market_specificity": "pass",
+        "differentiation": "warn",
+        "status_quo_contrast": "fail",
+        "conciseness_does": "pass",
+        "outcome_specificity": "fail",
+        "escalation": "pass",
+        "quantification": "warn",
+        "emotional_resonance": "warn",
+        "conciseness_means": "warn"
+      },
+      "overall": "fail",
+      "issues": [
+        "buyer_centricity: Anbieterzentriert — beschreibt was das Produkt tut, nicht was der Kaeufer damit erreicht",
+        "differentiation: Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten",
+        "status_quo_contrast: Kein Kontrast zum aktuellen Ansatz — liest sich als Faehigkeitsbeschreibung",
+        "outcome_specificity: Vage aspirative Sprache ohne messbare Geschaeftsergebnisse",
+        "quantification: Keine konkreten Zahlen — quantifizierte MEANS-Statements sind ueberzeugender",
+        "emotional_resonance: Rein geschaeftsrational — keine persoenliche/emotionale Dimension",
+        "conciseness_means: 14 Woerter (Ziel: 15-30)"
+      ],
+      "does_assessment": {
+        "overall": "fail",
+        "dimensions": {
+          "buyer_centricity": {
+            "score": "fail",
+            "note": "Anbieterzentriert — beschreibt was das Produkt tut, nicht was der Kaeufer damit erreicht"
+          },
+          "market_specificity": {
+            "score": "pass",
+            "note": ""
+          },
+          "differentiation": {
+            "score": "warn",
+            "note": "Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten"
+          },
+          "status_quo_contrast": {
+            "score": "fail",
+            "note": "Kein Kontrast zum aktuellen Ansatz — liest sich als Faehigkeitsbeschreibung"
+          },
+          "conciseness_does": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      },
+      "means_assessment": {
+        "overall": "warn",
+        "dimensions": {
+          "outcome_specificity": {
+            "score": "fail",
+            "note": "Vage aspirative Sprache ohne messbare Geschaeftsergebnisse"
+          },
+          "escalation": {
+            "score": "pass",
+            "note": ""
+          },
+          "quantification": {
+            "score": "warn",
+            "note": "Keine konkreten Zahlen — quantifizierte MEANS-Statements sind ueberzeugender"
+          },
+          "emotional_resonance": {
+            "score": "warn",
+            "note": "Rein geschaeftsrational — keine persoenliche/emotionale Dimension"
+          },
+          "conciseness_means": {
+            "score": "warn",
+            "note": "14 Woerter (Ziel: 15-30)"
+          }
+        }
+      }
+    },
+    {
+      "slug": "enterprise-platform-management--grosse-energieversorger-de",
+      "dimensions": {
+        "buyer_centricity": "fail",
+        "market_specificity": "pass",
+        "differentiation": "warn",
+        "status_quo_contrast": "fail",
+        "conciseness_does": "warn",
+        "outcome_specificity": "fail",
+        "escalation": "pass",
+        "quantification": "warn",
+        "emotional_resonance": "warn",
+        "conciseness_means": "pass"
+      },
+      "overall": "fail",
+      "issues": [
+        "buyer_centricity: Anbieterzentriert — beschreibt was das Produkt tut, nicht was der Kaeufer damit erreicht",
+        "differentiation: Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten",
+        "status_quo_contrast: Kein Kontrast zum aktuellen Ansatz — liest sich als Faehigkeitsbeschreibung",
+        "conciseness_does: 13 Woerter (Ziel: 15-30)",
+        "outcome_specificity: Vage aspirative Sprache ohne messbare Geschaeftsergebnisse",
+        "quantification: Keine konkreten Zahlen — quantifizierte MEANS-Statements sind ueberzeugender",
+        "emotional_resonance: Rein geschaeftsrational — keine persoenliche/emotionale Dimension"
+      ],
+      "does_assessment": {
+        "overall": "fail",
+        "dimensions": {
+          "buyer_centricity": {
+            "score": "fail",
+            "note": "Anbieterzentriert — beschreibt was das Produkt tut, nicht was der Kaeufer damit erreicht"
+          },
+          "market_specificity": {
+            "score": "pass",
+            "note": ""
+          },
+          "differentiation": {
+            "score": "warn",
+            "note": "Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten"
+          },
+          "status_quo_contrast": {
+            "score": "fail",
+            "note": "Kein Kontrast zum aktuellen Ansatz — liest sich als Faehigkeitsbeschreibung"
+          },
+          "conciseness_does": {
+            "score": "warn",
+            "note": "13 Woerter (Ziel: 15-30)"
+          }
+        }
+      },
+      "means_assessment": {
+        "overall": "warn",
+        "dimensions": {
+          "outcome_specificity": {
+            "score": "fail",
+            "note": "Vage aspirative Sprache ohne messbare Geschaeftsergebnisse"
+          },
+          "escalation": {
+            "score": "pass",
+            "note": ""
+          },
+          "quantification": {
+            "score": "warn",
+            "note": "Keine konkreten Zahlen — quantifizierte MEANS-Statements sind ueberzeugender"
+          },
+          "emotional_resonance": {
+            "score": "warn",
+            "note": "Rein geschaeftsrational — keine persoenliche/emotionale Dimension"
+          },
+          "conciseness_means": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      }
+    },
+    {
+      "slug": "enterprise-voice--grosse-energieversorger-de",
+      "dimensions": {
+        "buyer_centricity": "fail",
+        "market_specificity": "warn",
+        "differentiation": "warn",
+        "status_quo_contrast": "fail",
+        "conciseness_does": "pass",
+        "outcome_specificity": "warn",
+        "escalation": "pass",
+        "quantification": "warn",
+        "emotional_resonance": "warn",
+        "conciseness_means": "warn"
+      },
+      "overall": "fail",
+      "issues": [
+        "buyer_centricity: Anbieterzentriert — beschreibt was das Produkt tut, nicht was der Kaeufer damit erreicht",
+        "market_specificity: Teilweise marktspezifisch, aber generische Elemente ueberwiegen",
+        "differentiation: Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten",
+        "status_quo_contrast: Kein Kontrast zum aktuellen Ansatz — liest sich als Faehigkeitsbeschreibung",
+        "outcome_specificity: Nennt Geschaeftsbereich aber ohne volle Spezifitaet",
+        "quantification: Keine konkreten Zahlen — quantifizierte MEANS-Statements sind ueberzeugender",
+        "emotional_resonance: Rein geschaeftsrational — keine persoenliche/emotionale Dimension",
+        "conciseness_means: 14 Woerter (Ziel: 15-30)"
+      ],
+      "does_assessment": {
+        "overall": "fail",
+        "dimensions": {
+          "buyer_centricity": {
+            "score": "fail",
+            "note": "Anbieterzentriert — beschreibt was das Produkt tut, nicht was der Kaeufer damit erreicht"
+          },
+          "market_specificity": {
+            "score": "warn",
+            "note": "Teilweise marktspezifisch, aber generische Elemente ueberwiegen"
+          },
+          "differentiation": {
+            "score": "warn",
+            "note": "Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten"
+          },
+          "status_quo_contrast": {
+            "score": "fail",
+            "note": "Kein Kontrast zum aktuellen Ansatz — liest sich als Faehigkeitsbeschreibung"
+          },
+          "conciseness_does": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      },
+      "means_assessment": {
+        "overall": "warn",
+        "dimensions": {
+          "outcome_specificity": {
+            "score": "warn",
+            "note": "Nennt Geschaeftsbereich aber ohne volle Spezifitaet"
+          },
+          "escalation": {
+            "score": "pass",
+            "note": ""
+          },
+          "quantification": {
+            "score": "warn",
+            "note": "Keine konkreten Zahlen — quantifizierte MEANS-Statements sind ueberzeugender"
+          },
+          "emotional_resonance": {
+            "score": "warn",
+            "note": "Rein geschaeftsrational — keine persoenliche/emotionale Dimension"
+          },
+          "conciseness_means": {
+            "score": "warn",
+            "note": "14 Woerter (Ziel: 15-30)"
+          }
+        }
+      }
+    },
+    {
+      "slug": "esg-sustainability--grosse-energieversorger-de",
+      "dimensions": {
+        "buyer_centricity": "pass",
+        "market_specificity": "pass",
+        "differentiation": "pass",
+        "status_quo_contrast": "pass",
+        "conciseness_does": "pass",
+        "outcome_specificity": "warn",
+        "escalation": "pass",
+        "quantification": "pass",
+        "emotional_resonance": "warn",
+        "conciseness_means": "pass"
+      },
+      "overall": "warn",
+      "issues": [
+        "outcome_specificity: Nennt Geschaeftsbereich aber ohne volle Spezifitaet",
+        "emotional_resonance: Rein geschaeftsrational — keine persoenliche/emotionale Dimension"
+      ],
+      "does_assessment": {
+        "overall": "pass",
+        "dimensions": {
+          "buyer_centricity": {
+            "score": "pass",
+            "note": ""
+          },
+          "market_specificity": {
+            "score": "pass",
+            "note": ""
+          },
+          "differentiation": {
+            "score": "pass",
+            "note": ""
+          },
+          "status_quo_contrast": {
+            "score": "pass",
+            "note": ""
+          },
+          "conciseness_does": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      },
+      "means_assessment": {
+        "overall": "warn",
+        "dimensions": {
+          "outcome_specificity": {
+            "score": "warn",
+            "note": "Nennt Geschaeftsbereich aber ohne volle Spezifitaet"
+          },
+          "escalation": {
+            "score": "pass",
+            "note": ""
+          },
+          "quantification": {
+            "score": "pass",
+            "note": ""
+          },
+          "emotional_resonance": {
+            "score": "warn",
+            "note": "Rein geschaeftsrational — keine persoenliche/emotionale Dimension"
+          },
+          "conciseness_means": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      }
+    },
+    {
+      "slug": "hybrid-cloud--grosse-energieversorger-de",
+      "dimensions": {
+        "buyer_centricity": "pass",
+        "market_specificity": "warn",
+        "differentiation": "warn",
+        "status_quo_contrast": "pass",
+        "conciseness_does": "pass",
+        "outcome_specificity": "pass",
+        "escalation": "pass",
+        "quantification": "pass",
+        "emotional_resonance": "pass",
+        "conciseness_means": "pass"
+      },
+      "overall": "warn",
+      "issues": [
+        "market_specificity: Teilweise marktspezifisch, aber generische Elemente ueberwiegen",
+        "differentiation: Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten"
+      ],
+      "does_assessment": {
+        "overall": "warn",
+        "dimensions": {
+          "buyer_centricity": {
+            "score": "pass",
+            "note": ""
+          },
+          "market_specificity": {
+            "score": "warn",
+            "note": "Teilweise marktspezifisch, aber generische Elemente ueberwiegen"
+          },
+          "differentiation": {
+            "score": "warn",
+            "note": "Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten"
+          },
+          "status_quo_contrast": {
+            "score": "pass",
+            "note": ""
+          },
+          "conciseness_does": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      },
+      "means_assessment": {
+        "overall": "pass",
+        "dimensions": {
+          "outcome_specificity": {
+            "score": "pass",
+            "note": ""
+          },
+          "escalation": {
+            "score": "pass",
+            "note": ""
+          },
+          "quantification": {
+            "score": "pass",
+            "note": ""
+          },
+          "emotional_resonance": {
+            "score": "pass",
+            "note": ""
+          },
+          "conciseness_means": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      }
+    },
+    {
+      "slug": "identity-access-management--grosse-energieversorger-de",
+      "dimensions": {
+        "buyer_centricity": "warn",
+        "market_specificity": "pass",
+        "differentiation": "warn",
+        "status_quo_contrast": "pass",
+        "conciseness_does": "warn",
+        "outcome_specificity": "warn",
+        "escalation": "pass",
+        "quantification": "warn",
+        "emotional_resonance": "warn",
+        "conciseness_means": "pass"
+      },
+      "overall": "warn",
+      "issues": [
+        "buyer_centricity: Perspektive nicht eindeutig kaeufer-zentriert",
+        "differentiation: Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten",
+        "conciseness_does: 14 Woerter (Ziel: 15-30)",
+        "outcome_specificity: Nennt Geschaeftsbereich aber ohne volle Spezifitaet",
+        "quantification: Keine konkreten Zahlen — quantifizierte MEANS-Statements sind ueberzeugender",
+        "emotional_resonance: Rein geschaeftsrational — keine persoenliche/emotionale Dimension"
+      ],
+      "does_assessment": {
+        "overall": "warn",
+        "dimensions": {
+          "buyer_centricity": {
+            "score": "warn",
+            "note": "Perspektive nicht eindeutig kaeufer-zentriert"
+          },
+          "market_specificity": {
+            "score": "pass",
+            "note": ""
+          },
+          "differentiation": {
+            "score": "warn",
+            "note": "Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten"
+          },
+          "status_quo_contrast": {
+            "score": "pass",
+            "note": ""
+          },
+          "conciseness_does": {
+            "score": "warn",
+            "note": "14 Woerter (Ziel: 15-30)"
+          }
+        }
+      },
+      "means_assessment": {
+        "overall": "warn",
+        "dimensions": {
+          "outcome_specificity": {
+            "score": "warn",
+            "note": "Nennt Geschaeftsbereich aber ohne volle Spezifitaet"
+          },
+          "escalation": {
+            "score": "pass",
+            "note": ""
+          },
+          "quantification": {
+            "score": "warn",
+            "note": "Keine konkreten Zahlen — quantifizierte MEANS-Statements sind ueberzeugender"
+          },
+          "emotional_resonance": {
+            "score": "warn",
+            "note": "Rein geschaeftsrational — keine persoenliche/emotionale Dimension"
+          },
+          "conciseness_means": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      }
+    },
+    {
+      "slug": "industry-sector-consulting--grosse-energieversorger-de",
+      "dimensions": {
+        "buyer_centricity": "pass",
+        "market_specificity": "warn",
+        "differentiation": "pass",
+        "status_quo_contrast": "pass",
+        "conciseness_does": "pass",
+        "outcome_specificity": "warn",
+        "escalation": "pass",
+        "quantification": "pass",
+        "emotional_resonance": "pass",
+        "conciseness_means": "pass"
+      },
+      "overall": "warn",
+      "issues": [
+        "market_specificity: Teilweise marktspezifisch, aber generische Elemente ueberwiegen",
+        "outcome_specificity: Nennt Geschaeftsbereich aber ohne volle Spezifitaet"
+      ],
+      "does_assessment": {
+        "overall": "warn",
+        "dimensions": {
+          "buyer_centricity": {
+            "score": "pass",
+            "note": ""
+          },
+          "market_specificity": {
+            "score": "warn",
+            "note": "Teilweise marktspezifisch, aber generische Elemente ueberwiegen"
+          },
+          "differentiation": {
+            "score": "pass",
+            "note": ""
+          },
+          "status_quo_contrast": {
+            "score": "pass",
+            "note": ""
+          },
+          "conciseness_does": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      },
+      "means_assessment": {
+        "overall": "warn",
+        "dimensions": {
+          "outcome_specificity": {
+            "score": "warn",
+            "note": "Nennt Geschaeftsbereich aber ohne volle Spezifitaet"
+          },
+          "escalation": {
+            "score": "pass",
+            "note": ""
+          },
+          "quantification": {
+            "score": "pass",
+            "note": ""
+          },
+          "emotional_resonance": {
+            "score": "pass",
+            "note": ""
+          },
+          "conciseness_means": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      }
+    },
+    {
+      "slug": "infrastructure-monitoring-aiops--grosse-energieversorger-de",
+      "dimensions": {
+        "buyer_centricity": "pass",
+        "market_specificity": "pass",
+        "differentiation": "warn",
+        "status_quo_contrast": "pass",
+        "conciseness_does": "pass",
+        "outcome_specificity": "pass",
+        "escalation": "pass",
+        "quantification": "pass",
+        "emotional_resonance": "warn",
+        "conciseness_means": "pass"
+      },
+      "overall": "warn",
+      "issues": [
+        "differentiation: Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten",
+        "emotional_resonance: Rein geschaeftsrational — keine persoenliche/emotionale Dimension"
+      ],
+      "does_assessment": {
+        "overall": "warn",
+        "dimensions": {
+          "buyer_centricity": {
+            "score": "pass",
+            "note": ""
+          },
+          "market_specificity": {
+            "score": "pass",
+            "note": ""
+          },
+          "differentiation": {
+            "score": "warn",
+            "note": "Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten"
+          },
+          "status_quo_contrast": {
+            "score": "pass",
+            "note": ""
+          },
+          "conciseness_does": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      },
+      "means_assessment": {
+        "overall": "warn",
+        "dimensions": {
+          "outcome_specificity": {
+            "score": "pass",
+            "note": ""
+          },
+          "escalation": {
+            "score": "pass",
+            "note": ""
+          },
+          "quantification": {
+            "score": "pass",
+            "note": ""
+          },
+          "emotional_resonance": {
+            "score": "warn",
+            "note": "Rein geschaeftsrational — keine persoenliche/emotionale Dimension"
+          },
+          "conciseness_means": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      }
+    },
+    {
+      "slug": "it-outsourcing--grosse-energieversorger-de",
+      "dimensions": {
+        "buyer_centricity": "pass",
+        "market_specificity": "pass",
+        "differentiation": "pass",
+        "status_quo_contrast": "pass",
+        "conciseness_does": "pass",
+        "outcome_specificity": "pass",
+        "escalation": "pass",
+        "quantification": "pass",
+        "emotional_resonance": "pass",
+        "conciseness_means": "pass"
+      },
+      "overall": "pass",
+      "issues": [],
+      "does_assessment": {
+        "overall": "pass",
+        "dimensions": {
+          "buyer_centricity": {
+            "score": "pass",
+            "note": ""
+          },
+          "market_specificity": {
+            "score": "pass",
+            "note": ""
+          },
+          "differentiation": {
+            "score": "pass",
+            "note": ""
+          },
+          "status_quo_contrast": {
+            "score": "pass",
+            "note": ""
+          },
+          "conciseness_does": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      },
+      "means_assessment": {
+        "overall": "pass",
+        "dimensions": {
+          "outcome_specificity": {
+            "score": "pass",
+            "note": ""
+          },
+          "escalation": {
+            "score": "pass",
+            "note": ""
+          },
+          "quantification": {
+            "score": "pass",
+            "note": ""
+          },
+          "emotional_resonance": {
+            "score": "pass",
+            "note": ""
+          },
+          "conciseness_means": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      }
+    },
+    {
+      "slug": "it-service-desk--grosse-energieversorger-de",
+      "dimensions": {
+        "buyer_centricity": "warn",
+        "market_specificity": "warn",
+        "differentiation": "warn",
+        "status_quo_contrast": "pass",
+        "conciseness_does": "pass",
+        "outcome_specificity": "pass",
+        "escalation": "pass",
+        "quantification": "pass",
+        "emotional_resonance": "pass",
+        "conciseness_means": "pass"
+      },
+      "overall": "warn",
+      "issues": [
+        "buyer_centricity: Gemischte Perspektive — teilweise kaeufer-, teilweise anbieterzentriert",
+        "market_specificity: Teilweise marktspezifisch, aber generische Elemente ueberwiegen",
+        "differentiation: Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten"
+      ],
+      "does_assessment": {
+        "overall": "warn",
+        "dimensions": {
+          "buyer_centricity": {
+            "score": "warn",
+            "note": "Gemischte Perspektive — teilweise kaeufer-, teilweise anbieterzentriert"
+          },
+          "market_specificity": {
+            "score": "warn",
+            "note": "Teilweise marktspezifisch, aber generische Elemente ueberwiegen"
+          },
+          "differentiation": {
+            "score": "warn",
+            "note": "Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten"
+          },
+          "status_quo_contrast": {
+            "score": "pass",
+            "note": ""
+          },
+          "conciseness_does": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      },
+      "means_assessment": {
+        "overall": "pass",
+        "dimensions": {
+          "outcome_specificity": {
+            "score": "pass",
+            "note": ""
+          },
+          "escalation": {
+            "score": "pass",
+            "note": ""
+          },
+          "quantification": {
+            "score": "pass",
+            "note": ""
+          },
+          "emotional_resonance": {
+            "score": "pass",
+            "note": ""
+          },
+          "conciseness_means": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      }
+    },
+    {
+      "slug": "it-strategy-architecture--grosse-energieversorger-de",
+      "dimensions": {
+        "buyer_centricity": "fail",
+        "market_specificity": "pass",
+        "differentiation": "warn",
+        "status_quo_contrast": "fail",
+        "conciseness_does": "pass",
+        "outcome_specificity": "fail",
+        "escalation": "pass",
+        "quantification": "warn",
+        "emotional_resonance": "warn",
+        "conciseness_means": "pass"
+      },
+      "overall": "fail",
+      "issues": [
+        "buyer_centricity: Anbieterzentriert — beschreibt was das Produkt tut, nicht was der Kaeufer damit erreicht",
+        "differentiation: Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten",
+        "status_quo_contrast: Kein Kontrast zum aktuellen Ansatz — liest sich als Faehigkeitsbeschreibung",
+        "outcome_specificity: Vage aspirative Sprache ohne messbare Geschaeftsergebnisse",
+        "quantification: Keine konkreten Zahlen — quantifizierte MEANS-Statements sind ueberzeugender",
+        "emotional_resonance: Rein geschaeftsrational — keine persoenliche/emotionale Dimension"
+      ],
+      "does_assessment": {
+        "overall": "fail",
+        "dimensions": {
+          "buyer_centricity": {
+            "score": "fail",
+            "note": "Anbieterzentriert — beschreibt was das Produkt tut, nicht was der Kaeufer damit erreicht"
+          },
+          "market_specificity": {
+            "score": "pass",
+            "note": ""
+          },
+          "differentiation": {
+            "score": "warn",
+            "note": "Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten"
+          },
+          "status_quo_contrast": {
+            "score": "fail",
+            "note": "Kein Kontrast zum aktuellen Ansatz — liest sich als Faehigkeitsbeschreibung"
+          },
+          "conciseness_does": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      },
+      "means_assessment": {
+        "overall": "warn",
+        "dimensions": {
+          "outcome_specificity": {
+            "score": "fail",
+            "note": "Vage aspirative Sprache ohne messbare Geschaeftsergebnisse"
+          },
+          "escalation": {
+            "score": "pass",
+            "note": ""
+          },
+          "quantification": {
+            "score": "warn",
+            "note": "Keine konkreten Zahlen — quantifizierte MEANS-Statements sind ueberzeugender"
+          },
+          "emotional_resonance": {
+            "score": "warn",
+            "note": "Rein geschaeftsrational — keine persoenliche/emotionale Dimension"
+          },
+          "conciseness_means": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      }
+    },
+    {
+      "slug": "low-code-platform--grosse-energieversorger-de",
+      "dimensions": {
+        "buyer_centricity": "fail",
+        "market_specificity": "warn",
+        "differentiation": "warn",
+        "status_quo_contrast": "pass",
+        "conciseness_does": "pass",
+        "outcome_specificity": "warn",
+        "escalation": "pass",
+        "quantification": "pass",
+        "emotional_resonance": "pass",
+        "conciseness_means": "pass"
+      },
+      "overall": "warn",
+      "issues": [
+        "buyer_centricity: Anbieterzentriert — beschreibt was das Produkt tut, nicht was der Kaeufer damit erreicht",
+        "market_specificity: Teilweise marktspezifisch, aber generische Elemente ueberwiegen",
+        "differentiation: Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten",
+        "outcome_specificity: Nennt Geschaeftsbereich aber ohne volle Spezifitaet"
+      ],
+      "does_assessment": {
+        "overall": "warn",
+        "dimensions": {
+          "buyer_centricity": {
+            "score": "fail",
+            "note": "Anbieterzentriert — beschreibt was das Produkt tut, nicht was der Kaeufer damit erreicht"
+          },
+          "market_specificity": {
+            "score": "warn",
+            "note": "Teilweise marktspezifisch, aber generische Elemente ueberwiegen"
+          },
+          "differentiation": {
+            "score": "warn",
+            "note": "Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten"
+          },
+          "status_quo_contrast": {
+            "score": "pass",
+            "note": ""
+          },
+          "conciseness_does": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      },
+      "means_assessment": {
+        "overall": "warn",
+        "dimensions": {
+          "outcome_specificity": {
+            "score": "warn",
+            "note": "Nennt Geschaeftsbereich aber ohne volle Spezifitaet"
+          },
+          "escalation": {
+            "score": "pass",
+            "note": ""
+          },
+          "quantification": {
+            "score": "pass",
+            "note": ""
+          },
+          "emotional_resonance": {
+            "score": "pass",
+            "note": ""
+          },
+          "conciseness_means": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      }
+    },
+    {
+      "slug": "mainframe-automation--grosse-energieversorger-de",
+      "dimensions": {
+        "buyer_centricity": "fail",
+        "market_specificity": "pass",
+        "differentiation": "warn",
+        "status_quo_contrast": "pass",
+        "conciseness_does": "pass",
+        "outcome_specificity": "warn",
+        "escalation": "pass",
+        "quantification": "warn",
+        "emotional_resonance": "pass",
+        "conciseness_means": "pass"
+      },
+      "overall": "warn",
+      "issues": [
+        "buyer_centricity: Anbieterzentriert — beschreibt was das Produkt tut, nicht was der Kaeufer damit erreicht",
+        "differentiation: Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten",
+        "outcome_specificity: Nennt Geschaeftsbereich aber ohne volle Spezifitaet",
+        "quantification: Keine konkreten Zahlen — quantifizierte MEANS-Statements sind ueberzeugender"
+      ],
+      "does_assessment": {
+        "overall": "warn",
+        "dimensions": {
+          "buyer_centricity": {
+            "score": "fail",
+            "note": "Anbieterzentriert — beschreibt was das Produkt tut, nicht was der Kaeufer damit erreicht"
+          },
+          "market_specificity": {
+            "score": "pass",
+            "note": ""
+          },
+          "differentiation": {
+            "score": "warn",
+            "note": "Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten"
+          },
+          "status_quo_contrast": {
+            "score": "pass",
+            "note": ""
+          },
+          "conciseness_does": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      },
+      "means_assessment": {
+        "overall": "warn",
+        "dimensions": {
+          "outcome_specificity": {
+            "score": "warn",
+            "note": "Nennt Geschaeftsbereich aber ohne volle Spezifitaet"
+          },
+          "escalation": {
+            "score": "pass",
+            "note": ""
+          },
+          "quantification": {
+            "score": "warn",
+            "note": "Keine konkreten Zahlen — quantifizierte MEANS-Statements sind ueberzeugender"
+          },
+          "emotional_resonance": {
+            "score": "pass",
+            "note": ""
+          },
+          "conciseness_means": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      }
+    },
+    {
+      "slug": "managed-compute-storage--grosse-energieversorger-de",
+      "dimensions": {
+        "buyer_centricity": "fail",
+        "market_specificity": "pass",
+        "differentiation": "warn",
+        "status_quo_contrast": "fail",
+        "conciseness_does": "pass",
+        "outcome_specificity": "pass",
+        "escalation": "pass",
+        "quantification": "pass",
+        "emotional_resonance": "warn",
+        "conciseness_means": "pass"
+      },
+      "overall": "fail",
+      "issues": [
+        "buyer_centricity: Anbieterzentriert — beschreibt was das Produkt tut, nicht was der Kaeufer damit erreicht",
+        "differentiation: Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten",
+        "status_quo_contrast: Kein Kontrast zum aktuellen Ansatz — liest sich als Faehigkeitsbeschreibung",
+        "emotional_resonance: Rein geschaeftsrational — keine persoenliche/emotionale Dimension"
+      ],
+      "does_assessment": {
+        "overall": "fail",
+        "dimensions": {
+          "buyer_centricity": {
+            "score": "fail",
+            "note": "Anbieterzentriert — beschreibt was das Produkt tut, nicht was der Kaeufer damit erreicht"
+          },
+          "market_specificity": {
+            "score": "pass",
+            "note": ""
+          },
+          "differentiation": {
+            "score": "warn",
+            "note": "Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten"
+          },
+          "status_quo_contrast": {
+            "score": "fail",
+            "note": "Kein Kontrast zum aktuellen Ansatz — liest sich als Faehigkeitsbeschreibung"
+          },
+          "conciseness_does": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      },
+      "means_assessment": {
+        "overall": "warn",
+        "dimensions": {
+          "outcome_specificity": {
+            "score": "pass",
+            "note": ""
+          },
+          "escalation": {
+            "score": "pass",
+            "note": ""
+          },
+          "quantification": {
+            "score": "pass",
+            "note": ""
+          },
+          "emotional_resonance": {
+            "score": "warn",
+            "note": "Rein geschaeftsrational — keine persoenliche/emotionale Dimension"
+          },
+          "conciseness_means": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      }
+    },
+    {
+      "slug": "managed-hyperscaler--grosse-energieversorger-de",
+      "dimensions": {
+        "buyer_centricity": "fail",
+        "market_specificity": "pass",
+        "differentiation": "warn",
+        "status_quo_contrast": "fail",
+        "conciseness_does": "warn",
+        "outcome_specificity": "warn",
+        "escalation": "pass",
+        "quantification": "warn",
+        "emotional_resonance": "warn",
+        "conciseness_means": "pass"
+      },
+      "overall": "fail",
+      "issues": [
+        "buyer_centricity: Anbieterzentriert — beschreibt was das Produkt tut, nicht was der Kaeufer damit erreicht",
+        "differentiation: Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten",
+        "status_quo_contrast: Kein Kontrast zum aktuellen Ansatz — liest sich als Faehigkeitsbeschreibung",
+        "conciseness_does: 14 Woerter (Ziel: 15-30)",
+        "outcome_specificity: Nennt Geschaeftsbereich aber ohne volle Spezifitaet",
+        "quantification: Keine konkreten Zahlen — quantifizierte MEANS-Statements sind ueberzeugender",
+        "emotional_resonance: Rein geschaeftsrational — keine persoenliche/emotionale Dimension"
+      ],
+      "does_assessment": {
+        "overall": "fail",
+        "dimensions": {
+          "buyer_centricity": {
+            "score": "fail",
+            "note": "Anbieterzentriert — beschreibt was das Produkt tut, nicht was der Kaeufer damit erreicht"
+          },
+          "market_specificity": {
+            "score": "pass",
+            "note": ""
+          },
+          "differentiation": {
+            "score": "warn",
+            "note": "Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten"
+          },
+          "status_quo_contrast": {
+            "score": "fail",
+            "note": "Kein Kontrast zum aktuellen Ansatz — liest sich als Faehigkeitsbeschreibung"
+          },
+          "conciseness_does": {
+            "score": "warn",
+            "note": "14 Woerter (Ziel: 15-30)"
+          }
+        }
+      },
+      "means_assessment": {
+        "overall": "warn",
+        "dimensions": {
+          "outcome_specificity": {
+            "score": "warn",
+            "note": "Nennt Geschaeftsbereich aber ohne volle Spezifitaet"
+          },
+          "escalation": {
+            "score": "pass",
+            "note": ""
+          },
+          "quantification": {
+            "score": "warn",
+            "note": "Keine konkreten Zahlen — quantifizierte MEANS-Statements sind ueberzeugender"
+          },
+          "emotional_resonance": {
+            "score": "warn",
+            "note": "Rein geschaeftsrational — keine persoenliche/emotionale Dimension"
+          },
+          "conciseness_means": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      }
+    },
+    {
+      "slug": "managed-lan-wlan--grosse-energieversorger-de",
+      "dimensions": {
+        "buyer_centricity": "fail",
+        "market_specificity": "warn",
+        "differentiation": "warn",
+        "status_quo_contrast": "pass",
+        "conciseness_does": "pass",
+        "outcome_specificity": "pass",
+        "escalation": "pass",
+        "quantification": "pass",
+        "emotional_resonance": "warn",
+        "conciseness_means": "pass"
+      },
+      "overall": "warn",
+      "issues": [
+        "buyer_centricity: Anbieterzentriert — beschreibt was das Produkt tut, nicht was der Kaeufer damit erreicht",
+        "market_specificity: Teilweise marktspezifisch, aber generische Elemente ueberwiegen",
+        "differentiation: Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten",
+        "emotional_resonance: Rein geschaeftsrational — keine persoenliche/emotionale Dimension"
+      ],
+      "does_assessment": {
+        "overall": "warn",
+        "dimensions": {
+          "buyer_centricity": {
+            "score": "fail",
+            "note": "Anbieterzentriert — beschreibt was das Produkt tut, nicht was der Kaeufer damit erreicht"
+          },
+          "market_specificity": {
+            "score": "warn",
+            "note": "Teilweise marktspezifisch, aber generische Elemente ueberwiegen"
+          },
+          "differentiation": {
+            "score": "warn",
+            "note": "Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten"
+          },
+          "status_quo_contrast": {
+            "score": "pass",
+            "note": ""
+          },
+          "conciseness_does": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      },
+      "means_assessment": {
+        "overall": "warn",
+        "dimensions": {
+          "outcome_specificity": {
+            "score": "pass",
+            "note": ""
+          },
+          "escalation": {
+            "score": "pass",
+            "note": ""
+          },
+          "quantification": {
+            "score": "pass",
+            "note": ""
+          },
+          "emotional_resonance": {
+            "score": "warn",
+            "note": "Rein geschaeftsrational — keine persoenliche/emotionale Dimension"
+          },
+          "conciseness_means": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      }
+    },
+    {
+      "slug": "managed-print--grosse-energieversorger-de",
+      "dimensions": {
+        "buyer_centricity": "fail",
+        "market_specificity": "warn",
+        "differentiation": "warn",
+        "status_quo_contrast": "fail",
+        "conciseness_does": "pass",
+        "outcome_specificity": "warn",
+        "escalation": "pass",
+        "quantification": "pass",
+        "emotional_resonance": "warn",
+        "conciseness_means": "pass"
+      },
+      "overall": "fail",
+      "issues": [
+        "buyer_centricity: Anbieterzentriert — beschreibt was das Produkt tut, nicht was der Kaeufer damit erreicht",
+        "market_specificity: Teilweise marktspezifisch, aber generische Elemente ueberwiegen",
+        "differentiation: Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten",
+        "status_quo_contrast: Kein Kontrast zum aktuellen Ansatz — liest sich als Faehigkeitsbeschreibung",
+        "outcome_specificity: Nennt Geschaeftsbereich aber ohne volle Spezifitaet",
+        "emotional_resonance: Rein geschaeftsrational — keine persoenliche/emotionale Dimension"
+      ],
+      "does_assessment": {
+        "overall": "fail",
+        "dimensions": {
+          "buyer_centricity": {
+            "score": "fail",
+            "note": "Anbieterzentriert — beschreibt was das Produkt tut, nicht was der Kaeufer damit erreicht"
+          },
+          "market_specificity": {
+            "score": "warn",
+            "note": "Teilweise marktspezifisch, aber generische Elemente ueberwiegen"
+          },
+          "differentiation": {
+            "score": "warn",
+            "note": "Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten"
+          },
+          "status_quo_contrast": {
+            "score": "fail",
+            "note": "Kein Kontrast zum aktuellen Ansatz — liest sich als Faehigkeitsbeschreibung"
+          },
+          "conciseness_does": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      },
+      "means_assessment": {
+        "overall": "warn",
+        "dimensions": {
+          "outcome_specificity": {
+            "score": "warn",
+            "note": "Nennt Geschaeftsbereich aber ohne volle Spezifitaet"
+          },
+          "escalation": {
+            "score": "pass",
+            "note": ""
+          },
+          "quantification": {
+            "score": "pass",
+            "note": ""
+          },
+          "emotional_resonance": {
+            "score": "warn",
+            "note": "Rein geschaeftsrational — keine persoenliche/emotionale Dimension"
+          },
+          "conciseness_means": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      }
+    },
+    {
+      "slug": "microsoft-365-workplace--grosse-energieversorger-de",
+      "dimensions": {
+        "buyer_centricity": "pass",
+        "market_specificity": "warn",
+        "differentiation": "warn",
+        "status_quo_contrast": "fail",
+        "conciseness_does": "pass",
+        "outcome_specificity": "fail",
+        "escalation": "pass",
+        "quantification": "warn",
+        "emotional_resonance": "pass",
+        "conciseness_means": "pass"
+      },
+      "overall": "warn",
+      "issues": [
+        "market_specificity: Teilweise marktspezifisch, aber generische Elemente ueberwiegen",
+        "differentiation: Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten",
+        "status_quo_contrast: Kein Kontrast zum aktuellen Ansatz — liest sich als Faehigkeitsbeschreibung",
+        "outcome_specificity: Vage aspirative Sprache ohne messbare Geschaeftsergebnisse",
+        "quantification: Keine konkreten Zahlen — quantifizierte MEANS-Statements sind ueberzeugender"
+      ],
+      "does_assessment": {
+        "overall": "warn",
+        "dimensions": {
+          "buyer_centricity": {
+            "score": "pass",
+            "note": ""
+          },
+          "market_specificity": {
+            "score": "warn",
+            "note": "Teilweise marktspezifisch, aber generische Elemente ueberwiegen"
+          },
+          "differentiation": {
+            "score": "warn",
+            "note": "Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten"
+          },
+          "status_quo_contrast": {
+            "score": "fail",
+            "note": "Kein Kontrast zum aktuellen Ansatz — liest sich als Faehigkeitsbeschreibung"
+          },
+          "conciseness_does": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      },
+      "means_assessment": {
+        "overall": "warn",
+        "dimensions": {
+          "outcome_specificity": {
+            "score": "fail",
+            "note": "Vage aspirative Sprache ohne messbare Geschaeftsergebnisse"
+          },
+          "escalation": {
+            "score": "pass",
+            "note": ""
+          },
+          "quantification": {
+            "score": "warn",
+            "note": "Keine konkreten Zahlen — quantifizierte MEANS-Statements sind ueberzeugender"
+          },
+          "emotional_resonance": {
+            "score": "pass",
+            "note": ""
+          },
+          "conciseness_means": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      }
+    },
+    {
+      "slug": "multi-cloud-finops--grosse-energieversorger-de",
+      "dimensions": {
+        "buyer_centricity": "warn",
+        "market_specificity": "warn",
+        "differentiation": "warn",
+        "status_quo_contrast": "fail",
+        "conciseness_does": "pass",
+        "outcome_specificity": "pass",
+        "escalation": "pass",
+        "quantification": "pass",
+        "emotional_resonance": "warn",
+        "conciseness_means": "pass"
+      },
+      "overall": "warn",
+      "issues": [
+        "buyer_centricity: Perspektive nicht eindeutig kaeufer-zentriert",
+        "market_specificity: Teilweise marktspezifisch, aber generische Elemente ueberwiegen",
+        "differentiation: Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten",
+        "status_quo_contrast: Kein Kontrast zum aktuellen Ansatz — liest sich als Faehigkeitsbeschreibung",
+        "emotional_resonance: Rein geschaeftsrational — keine persoenliche/emotionale Dimension"
+      ],
+      "does_assessment": {
+        "overall": "warn",
+        "dimensions": {
+          "buyer_centricity": {
+            "score": "warn",
+            "note": "Perspektive nicht eindeutig kaeufer-zentriert"
+          },
+          "market_specificity": {
+            "score": "warn",
+            "note": "Teilweise marktspezifisch, aber generische Elemente ueberwiegen"
+          },
+          "differentiation": {
+            "score": "warn",
+            "note": "Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten"
+          },
+          "status_quo_contrast": {
+            "score": "fail",
+            "note": "Kein Kontrast zum aktuellen Ansatz — liest sich als Faehigkeitsbeschreibung"
+          },
+          "conciseness_does": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      },
+      "means_assessment": {
+        "overall": "warn",
+        "dimensions": {
+          "outcome_specificity": {
+            "score": "pass",
+            "note": ""
+          },
+          "escalation": {
+            "score": "pass",
+            "note": ""
+          },
+          "quantification": {
+            "score": "pass",
+            "note": ""
+          },
+          "emotional_resonance": {
+            "score": "warn",
+            "note": "Rein geschaeftsrational — keine persoenliche/emotionale Dimension"
+          },
+          "conciseness_means": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      }
+    },
+    {
+      "slug": "network-as-a-service--grosse-energieversorger-de",
+      "dimensions": {
+        "buyer_centricity": "fail",
+        "market_specificity": "pass",
+        "differentiation": "warn",
+        "status_quo_contrast": "pass",
+        "conciseness_does": "pass",
+        "outcome_specificity": "fail",
+        "escalation": "pass",
+        "quantification": "pass",
+        "emotional_resonance": "warn",
+        "conciseness_means": "pass"
+      },
+      "overall": "warn",
+      "issues": [
+        "buyer_centricity: Anbieterzentriert — beschreibt was das Produkt tut, nicht was der Kaeufer damit erreicht",
+        "differentiation: Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten",
+        "outcome_specificity: Vage aspirative Sprache ohne messbare Geschaeftsergebnisse",
+        "emotional_resonance: Rein geschaeftsrational — keine persoenliche/emotionale Dimension"
+      ],
+      "does_assessment": {
+        "overall": "warn",
+        "dimensions": {
+          "buyer_centricity": {
+            "score": "fail",
+            "note": "Anbieterzentriert — beschreibt was das Produkt tut, nicht was der Kaeufer damit erreicht"
+          },
+          "market_specificity": {
+            "score": "pass",
+            "note": ""
+          },
+          "differentiation": {
+            "score": "warn",
+            "note": "Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten"
+          },
+          "status_quo_contrast": {
+            "score": "pass",
+            "note": ""
+          },
+          "conciseness_does": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      },
+      "means_assessment": {
+        "overall": "warn",
+        "dimensions": {
+          "outcome_specificity": {
+            "score": "fail",
+            "note": "Vage aspirative Sprache ohne messbare Geschaeftsergebnisse"
+          },
+          "escalation": {
+            "score": "pass",
+            "note": ""
+          },
+          "quantification": {
+            "score": "pass",
+            "note": ""
+          },
+          "emotional_resonance": {
+            "score": "warn",
+            "note": "Rein geschaeftsrational — keine persoenliche/emotionale Dimension"
+          },
+          "conciseness_means": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      }
+    },
+    {
+      "slug": "network-security--grosse-energieversorger-de",
+      "dimensions": {
+        "buyer_centricity": "fail",
+        "market_specificity": "pass",
+        "differentiation": "warn",
+        "status_quo_contrast": "fail",
+        "conciseness_does": "pass",
+        "outcome_specificity": "warn",
+        "escalation": "pass",
+        "quantification": "warn",
+        "emotional_resonance": "warn",
+        "conciseness_means": "warn"
+      },
+      "overall": "fail",
+      "issues": [
+        "buyer_centricity: Anbieterzentriert — beschreibt was das Produkt tut, nicht was der Kaeufer damit erreicht",
+        "differentiation: Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten",
+        "status_quo_contrast: Kein Kontrast zum aktuellen Ansatz — liest sich als Faehigkeitsbeschreibung",
+        "outcome_specificity: Nennt Geschaeftsbereich aber ohne volle Spezifitaet",
+        "quantification: Keine konkreten Zahlen — quantifizierte MEANS-Statements sind ueberzeugender",
+        "emotional_resonance: Rein geschaeftsrational — keine persoenliche/emotionale Dimension",
+        "conciseness_means: 13 Woerter (Ziel: 15-30)"
+      ],
+      "does_assessment": {
+        "overall": "fail",
+        "dimensions": {
+          "buyer_centricity": {
+            "score": "fail",
+            "note": "Anbieterzentriert — beschreibt was das Produkt tut, nicht was der Kaeufer damit erreicht"
+          },
+          "market_specificity": {
+            "score": "pass",
+            "note": ""
+          },
+          "differentiation": {
+            "score": "warn",
+            "note": "Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten"
+          },
+          "status_quo_contrast": {
+            "score": "fail",
+            "note": "Kein Kontrast zum aktuellen Ansatz — liest sich als Faehigkeitsbeschreibung"
+          },
+          "conciseness_does": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      },
+      "means_assessment": {
+        "overall": "warn",
+        "dimensions": {
+          "outcome_specificity": {
+            "score": "warn",
+            "note": "Nennt Geschaeftsbereich aber ohne volle Spezifitaet"
+          },
+          "escalation": {
+            "score": "pass",
+            "note": ""
+          },
+          "quantification": {
+            "score": "warn",
+            "note": "Keine konkreten Zahlen — quantifizierte MEANS-Statements sind ueberzeugender"
+          },
+          "emotional_resonance": {
+            "score": "warn",
+            "note": "Rein geschaeftsrational — keine persoenliche/emotionale Dimension"
+          },
+          "conciseness_means": {
+            "score": "warn",
+            "note": "13 Woerter (Ziel: 15-30)"
+          }
+        }
+      }
+    },
+    {
+      "slug": "private-cloud--grosse-energieversorger-de",
+      "dimensions": {
+        "buyer_centricity": "fail",
+        "market_specificity": "pass",
+        "differentiation": "warn",
+        "status_quo_contrast": "pass",
+        "conciseness_does": "pass",
+        "outcome_specificity": "fail",
+        "escalation": "pass",
+        "quantification": "warn",
+        "emotional_resonance": "warn",
+        "conciseness_means": "pass"
+      },
+      "overall": "warn",
+      "issues": [
+        "buyer_centricity: Anbieterzentriert — beschreibt was das Produkt tut, nicht was der Kaeufer damit erreicht",
+        "differentiation: Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten",
+        "outcome_specificity: Vage aspirative Sprache ohne messbare Geschaeftsergebnisse",
+        "quantification: Keine konkreten Zahlen — quantifizierte MEANS-Statements sind ueberzeugender",
+        "emotional_resonance: Rein geschaeftsrational — keine persoenliche/emotionale Dimension"
+      ],
+      "does_assessment": {
+        "overall": "warn",
+        "dimensions": {
+          "buyer_centricity": {
+            "score": "fail",
+            "note": "Anbieterzentriert — beschreibt was das Produkt tut, nicht was der Kaeufer damit erreicht"
+          },
+          "market_specificity": {
+            "score": "pass",
+            "note": ""
+          },
+          "differentiation": {
+            "score": "warn",
+            "note": "Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten"
+          },
+          "status_quo_contrast": {
+            "score": "pass",
+            "note": ""
+          },
+          "conciseness_does": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      },
+      "means_assessment": {
+        "overall": "warn",
+        "dimensions": {
+          "outcome_specificity": {
+            "score": "fail",
+            "note": "Vage aspirative Sprache ohne messbare Geschaeftsergebnisse"
+          },
+          "escalation": {
+            "score": "pass",
+            "note": ""
+          },
+          "quantification": {
+            "score": "warn",
+            "note": "Keine konkreten Zahlen — quantifizierte MEANS-Statements sind ueberzeugender"
+          },
+          "emotional_resonance": {
+            "score": "warn",
+            "note": "Rein geschaeftsrational — keine persoenliche/emotionale Dimension"
+          },
+          "conciseness_means": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      }
+    },
+    {
+      "slug": "quality-engineering--grosse-energieversorger-de",
+      "dimensions": {
+        "buyer_centricity": "fail",
+        "market_specificity": "pass",
+        "differentiation": "warn",
+        "status_quo_contrast": "pass",
+        "conciseness_does": "pass",
+        "outcome_specificity": "warn",
+        "escalation": "pass",
+        "quantification": "warn",
+        "emotional_resonance": "warn",
+        "conciseness_means": "pass"
+      },
+      "overall": "warn",
+      "issues": [
+        "buyer_centricity: Anbieterzentriert — beschreibt was das Produkt tut, nicht was der Kaeufer damit erreicht",
+        "differentiation: Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten",
+        "outcome_specificity: Nennt Geschaeftsbereich aber ohne volle Spezifitaet",
+        "quantification: Keine konkreten Zahlen — quantifizierte MEANS-Statements sind ueberzeugender",
+        "emotional_resonance: Rein geschaeftsrational — keine persoenliche/emotionale Dimension"
+      ],
+      "does_assessment": {
+        "overall": "warn",
+        "dimensions": {
+          "buyer_centricity": {
+            "score": "fail",
+            "note": "Anbieterzentriert — beschreibt was das Produkt tut, nicht was der Kaeufer damit erreicht"
+          },
+          "market_specificity": {
+            "score": "pass",
+            "note": ""
+          },
+          "differentiation": {
+            "score": "warn",
+            "note": "Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten"
+          },
+          "status_quo_contrast": {
+            "score": "pass",
+            "note": ""
+          },
+          "conciseness_does": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      },
+      "means_assessment": {
+        "overall": "warn",
+        "dimensions": {
+          "outcome_specificity": {
+            "score": "warn",
+            "note": "Nennt Geschaeftsbereich aber ohne volle Spezifitaet"
+          },
+          "escalation": {
+            "score": "pass",
+            "note": ""
+          },
+          "quantification": {
+            "score": "warn",
+            "note": "Keine konkreten Zahlen — quantifizierte MEANS-Statements sind ueberzeugender"
+          },
+          "emotional_resonance": {
+            "score": "warn",
+            "note": "Rein geschaeftsrational — keine persoenliche/emotionale Dimension"
+          },
+          "conciseness_means": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      }
+    },
+    {
+      "slug": "sap-on-cloud--grosse-energieversorger-de",
+      "dimensions": {
+        "buyer_centricity": "pass",
+        "market_specificity": "warn",
+        "differentiation": "pass",
+        "status_quo_contrast": "pass",
+        "conciseness_does": "pass",
+        "outcome_specificity": "pass",
+        "escalation": "pass",
+        "quantification": "pass",
+        "emotional_resonance": "warn",
+        "conciseness_means": "pass"
+      },
+      "overall": "warn",
+      "issues": [
+        "market_specificity: Teilweise marktspezifisch, aber generische Elemente ueberwiegen",
+        "emotional_resonance: Rein geschaeftsrational — keine persoenliche/emotionale Dimension"
+      ],
+      "does_assessment": {
+        "overall": "warn",
+        "dimensions": {
+          "buyer_centricity": {
+            "score": "pass",
+            "note": ""
+          },
+          "market_specificity": {
+            "score": "warn",
+            "note": "Teilweise marktspezifisch, aber generische Elemente ueberwiegen"
+          },
+          "differentiation": {
+            "score": "pass",
+            "note": ""
+          },
+          "status_quo_contrast": {
+            "score": "pass",
+            "note": ""
+          },
+          "conciseness_does": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      },
+      "means_assessment": {
+        "overall": "warn",
+        "dimensions": {
+          "outcome_specificity": {
+            "score": "pass",
+            "note": ""
+          },
+          "escalation": {
+            "score": "pass",
+            "note": ""
+          },
+          "quantification": {
+            "score": "pass",
+            "note": ""
+          },
+          "emotional_resonance": {
+            "score": "warn",
+            "note": "Rein geschaeftsrational — keine persoenliche/emotionale Dimension"
+          },
+          "conciseness_means": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      }
+    },
+    {
+      "slug": "sase-zero-trust-access--grosse-energieversorger-de",
+      "dimensions": {
+        "buyer_centricity": "pass",
+        "market_specificity": "warn",
+        "differentiation": "warn",
+        "status_quo_contrast": "pass",
+        "conciseness_does": "pass",
+        "outcome_specificity": "warn",
+        "escalation": "pass",
+        "quantification": "pass",
+        "emotional_resonance": "warn",
+        "conciseness_means": "pass"
+      },
+      "overall": "warn",
+      "issues": [
+        "market_specificity: Teilweise marktspezifisch, aber generische Elemente ueberwiegen",
+        "differentiation: Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten",
+        "outcome_specificity: Nennt Geschaeftsbereich aber ohne volle Spezifitaet",
+        "emotional_resonance: Rein geschaeftsrational — keine persoenliche/emotionale Dimension"
+      ],
+      "does_assessment": {
+        "overall": "warn",
+        "dimensions": {
+          "buyer_centricity": {
+            "score": "pass",
+            "note": ""
+          },
+          "market_specificity": {
+            "score": "warn",
+            "note": "Teilweise marktspezifisch, aber generische Elemente ueberwiegen"
+          },
+          "differentiation": {
+            "score": "warn",
+            "note": "Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten"
+          },
+          "status_quo_contrast": {
+            "score": "pass",
+            "note": ""
+          },
+          "conciseness_does": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      },
+      "means_assessment": {
+        "overall": "warn",
+        "dimensions": {
+          "outcome_specificity": {
+            "score": "warn",
+            "note": "Nennt Geschaeftsbereich aber ohne volle Spezifitaet"
+          },
+          "escalation": {
+            "score": "pass",
+            "note": ""
+          },
+          "quantification": {
+            "score": "pass",
+            "note": ""
+          },
+          "emotional_resonance": {
+            "score": "warn",
+            "note": "Rein geschaeftsrational — keine persoenliche/emotionale Dimension"
+          },
+          "conciseness_means": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      }
+    },
+    {
+      "slug": "sd-wan-services--grosse-energieversorger-de",
+      "dimensions": {
+        "buyer_centricity": "fail",
+        "market_specificity": "pass",
+        "differentiation": "warn",
+        "status_quo_contrast": "fail",
+        "conciseness_does": "pass",
+        "outcome_specificity": "pass",
+        "escalation": "pass",
+        "quantification": "pass",
+        "emotional_resonance": "warn",
+        "conciseness_means": "pass"
+      },
+      "overall": "fail",
+      "issues": [
+        "buyer_centricity: Anbieterzentriert — beschreibt was das Produkt tut, nicht was der Kaeufer damit erreicht",
+        "differentiation: Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten",
+        "status_quo_contrast: Kein Kontrast zum aktuellen Ansatz — liest sich als Faehigkeitsbeschreibung",
+        "emotional_resonance: Rein geschaeftsrational — keine persoenliche/emotionale Dimension"
+      ],
+      "does_assessment": {
+        "overall": "fail",
+        "dimensions": {
+          "buyer_centricity": {
+            "score": "fail",
+            "note": "Anbieterzentriert — beschreibt was das Produkt tut, nicht was der Kaeufer damit erreicht"
+          },
+          "market_specificity": {
+            "score": "pass",
+            "note": ""
+          },
+          "differentiation": {
+            "score": "warn",
+            "note": "Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten"
+          },
+          "status_quo_contrast": {
+            "score": "fail",
+            "note": "Kein Kontrast zum aktuellen Ansatz — liest sich als Faehigkeitsbeschreibung"
+          },
+          "conciseness_does": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      },
+      "means_assessment": {
+        "overall": "warn",
+        "dimensions": {
+          "outcome_specificity": {
+            "score": "pass",
+            "note": ""
+          },
+          "escalation": {
+            "score": "pass",
+            "note": ""
+          },
+          "quantification": {
+            "score": "pass",
+            "note": ""
+          },
+          "emotional_resonance": {
+            "score": "warn",
+            "note": "Rein geschaeftsrational — keine persoenliche/emotionale Dimension"
+          },
+          "conciseness_means": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      }
+    },
+    {
+      "slug": "soc-managed-detection--grosse-energieversorger-de",
+      "dimensions": {
+        "buyer_centricity": "pass",
+        "market_specificity": "warn",
+        "differentiation": "pass",
+        "status_quo_contrast": "pass",
+        "conciseness_does": "pass",
+        "outcome_specificity": "pass",
+        "escalation": "pass",
+        "quantification": "pass",
+        "emotional_resonance": "pass",
+        "conciseness_means": "pass"
+      },
+      "overall": "warn",
+      "issues": [
+        "market_specificity: Teilweise marktspezifisch, aber generische Elemente ueberwiegen"
+      ],
+      "does_assessment": {
+        "overall": "warn",
+        "dimensions": {
+          "buyer_centricity": {
+            "score": "pass",
+            "note": ""
+          },
+          "market_specificity": {
+            "score": "warn",
+            "note": "Teilweise marktspezifisch, aber generische Elemente ueberwiegen"
+          },
+          "differentiation": {
+            "score": "pass",
+            "note": ""
+          },
+          "status_quo_contrast": {
+            "score": "pass",
+            "note": ""
+          },
+          "conciseness_does": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      },
+      "means_assessment": {
+        "overall": "pass",
+        "dimensions": {
+          "outcome_specificity": {
+            "score": "pass",
+            "note": ""
+          },
+          "escalation": {
+            "score": "pass",
+            "note": ""
+          },
+          "quantification": {
+            "score": "pass",
+            "note": ""
+          },
+          "emotional_resonance": {
+            "score": "pass",
+            "note": ""
+          },
+          "conciseness_means": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      }
+    },
+    {
+      "slug": "sovereign-cloud--grosse-energieversorger-de",
+      "dimensions": {
+        "buyer_centricity": "pass",
+        "market_specificity": "pass",
+        "differentiation": "warn",
+        "status_quo_contrast": "pass",
+        "conciseness_does": "pass",
+        "outcome_specificity": "fail",
+        "escalation": "pass",
+        "quantification": "pass",
+        "emotional_resonance": "warn",
+        "conciseness_means": "pass"
+      },
+      "overall": "warn",
+      "issues": [
+        "differentiation: Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten",
+        "outcome_specificity: Vage aspirative Sprache ohne messbare Geschaeftsergebnisse",
+        "emotional_resonance: Rein geschaeftsrational — keine persoenliche/emotionale Dimension"
+      ],
+      "does_assessment": {
+        "overall": "warn",
+        "dimensions": {
+          "buyer_centricity": {
+            "score": "pass",
+            "note": ""
+          },
+          "market_specificity": {
+            "score": "pass",
+            "note": ""
+          },
+          "differentiation": {
+            "score": "warn",
+            "note": "Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten"
+          },
+          "status_quo_contrast": {
+            "score": "pass",
+            "note": ""
+          },
+          "conciseness_does": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      },
+      "means_assessment": {
+        "overall": "warn",
+        "dimensions": {
+          "outcome_specificity": {
+            "score": "fail",
+            "note": "Vage aspirative Sprache ohne messbare Geschaeftsergebnisse"
+          },
+          "escalation": {
+            "score": "pass",
+            "note": ""
+          },
+          "quantification": {
+            "score": "pass",
+            "note": ""
+          },
+          "emotional_resonance": {
+            "score": "warn",
+            "note": "Rein geschaeftsrational — keine persoenliche/emotionale Dimension"
+          },
+          "conciseness_means": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      }
+    },
+    {
+      "slug": "system-integration-api--grosse-energieversorger-de",
+      "dimensions": {
+        "buyer_centricity": "fail",
+        "market_specificity": "pass",
+        "differentiation": "warn",
+        "status_quo_contrast": "pass",
+        "conciseness_does": "pass",
+        "outcome_specificity": "pass",
+        "escalation": "pass",
+        "quantification": "pass",
+        "emotional_resonance": "warn",
+        "conciseness_means": "pass"
+      },
+      "overall": "warn",
+      "issues": [
+        "buyer_centricity: Anbieterzentriert — beschreibt was das Produkt tut, nicht was der Kaeufer damit erreicht",
+        "differentiation: Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten",
+        "emotional_resonance: Rein geschaeftsrational — keine persoenliche/emotionale Dimension"
+      ],
+      "does_assessment": {
+        "overall": "warn",
+        "dimensions": {
+          "buyer_centricity": {
+            "score": "fail",
+            "note": "Anbieterzentriert — beschreibt was das Produkt tut, nicht was der Kaeufer damit erreicht"
+          },
+          "market_specificity": {
+            "score": "pass",
+            "note": ""
+          },
+          "differentiation": {
+            "score": "warn",
+            "note": "Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten"
+          },
+          "status_quo_contrast": {
+            "score": "pass",
+            "note": ""
+          },
+          "conciseness_does": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      },
+      "means_assessment": {
+        "overall": "warn",
+        "dimensions": {
+          "outcome_specificity": {
+            "score": "pass",
+            "note": ""
+          },
+          "escalation": {
+            "score": "pass",
+            "note": ""
+          },
+          "quantification": {
+            "score": "pass",
+            "note": ""
+          },
+          "emotional_resonance": {
+            "score": "warn",
+            "note": "Rein geschaeftsrational — keine persoenliche/emotionale Dimension"
+          },
+          "conciseness_means": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      }
+    },
+    {
+      "slug": "unified-communications--grosse-energieversorger-de",
+      "dimensions": {
+        "buyer_centricity": "fail",
+        "market_specificity": "warn",
+        "differentiation": "warn",
+        "status_quo_contrast": "pass",
+        "conciseness_does": "pass",
+        "outcome_specificity": "fail",
+        "escalation": "pass",
+        "quantification": "warn",
+        "emotional_resonance": "warn",
+        "conciseness_means": "warn"
+      },
+      "overall": "warn",
+      "issues": [
+        "buyer_centricity: Anbieterzentriert — beschreibt was das Produkt tut, nicht was der Kaeufer damit erreicht",
+        "market_specificity: Teilweise marktspezifisch, aber generische Elemente ueberwiegen",
+        "differentiation: Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten",
+        "outcome_specificity: Vage aspirative Sprache ohne messbare Geschaeftsergebnisse",
+        "quantification: Keine konkreten Zahlen — quantifizierte MEANS-Statements sind ueberzeugender",
+        "emotional_resonance: Rein geschaeftsrational — keine persoenliche/emotionale Dimension",
+        "conciseness_means: 13 Woerter (Ziel: 15-30)"
+      ],
+      "does_assessment": {
+        "overall": "warn",
+        "dimensions": {
+          "buyer_centricity": {
+            "score": "fail",
+            "note": "Anbieterzentriert — beschreibt was das Produkt tut, nicht was der Kaeufer damit erreicht"
+          },
+          "market_specificity": {
+            "score": "warn",
+            "note": "Teilweise marktspezifisch, aber generische Elemente ueberwiegen"
+          },
+          "differentiation": {
+            "score": "warn",
+            "note": "Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten"
+          },
+          "status_quo_contrast": {
+            "score": "pass",
+            "note": ""
+          },
+          "conciseness_does": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      },
+      "means_assessment": {
+        "overall": "warn",
+        "dimensions": {
+          "outcome_specificity": {
+            "score": "fail",
+            "note": "Vage aspirative Sprache ohne messbare Geschaeftsergebnisse"
+          },
+          "escalation": {
+            "score": "pass",
+            "note": ""
+          },
+          "quantification": {
+            "score": "warn",
+            "note": "Keine konkreten Zahlen — quantifizierte MEANS-Statements sind ueberzeugender"
+          },
+          "emotional_resonance": {
+            "score": "warn",
+            "note": "Rein geschaeftsrational — keine persoenliche/emotionale Dimension"
+          },
+          "conciseness_means": {
+            "score": "warn",
+            "note": "13 Woerter (Ziel: 15-30)"
+          }
+        }
+      }
+    },
+    {
+      "slug": "vendor-contract-management--grosse-energieversorger-de",
+      "dimensions": {
+        "buyer_centricity": "fail",
+        "market_specificity": "warn",
+        "differentiation": "warn",
+        "status_quo_contrast": "warn",
+        "conciseness_does": "pass",
+        "outcome_specificity": "pass",
+        "escalation": "pass",
+        "quantification": "pass",
+        "emotional_resonance": "warn",
+        "conciseness_means": "pass"
+      },
+      "overall": "warn",
+      "issues": [
+        "buyer_centricity: Anbieterzentriert — beschreibt was das Produkt tut, nicht was der Kaeufer damit erreicht",
+        "market_specificity: Teilweise marktspezifisch, aber generische Elemente ueberwiegen",
+        "differentiation: Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten",
+        "status_quo_contrast: Implizite Verbesserung, aber kein konkreter Status-quo-Kontrast",
+        "emotional_resonance: Rein geschaeftsrational — keine persoenliche/emotionale Dimension"
+      ],
+      "does_assessment": {
+        "overall": "warn",
+        "dimensions": {
+          "buyer_centricity": {
+            "score": "fail",
+            "note": "Anbieterzentriert — beschreibt was das Produkt tut, nicht was der Kaeufer damit erreicht"
+          },
+          "market_specificity": {
+            "score": "warn",
+            "note": "Teilweise marktspezifisch, aber generische Elemente ueberwiegen"
+          },
+          "differentiation": {
+            "score": "warn",
+            "note": "Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten"
+          },
+          "status_quo_contrast": {
+            "score": "warn",
+            "note": "Implizite Verbesserung, aber kein konkreter Status-quo-Kontrast"
+          },
+          "conciseness_does": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      },
+      "means_assessment": {
+        "overall": "warn",
+        "dimensions": {
+          "outcome_specificity": {
+            "score": "pass",
+            "note": ""
+          },
+          "escalation": {
+            "score": "pass",
+            "note": ""
+          },
+          "quantification": {
+            "score": "pass",
+            "note": ""
+          },
+          "emotional_resonance": {
+            "score": "warn",
+            "note": "Rein geschaeftsrational — keine persoenliche/emotionale Dimension"
+          },
+          "conciseness_means": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      }
+    },
+    {
+      "slug": "virtual-desktop-daas--grosse-energieversorger-de",
+      "dimensions": {
+        "buyer_centricity": "fail",
+        "market_specificity": "warn",
+        "differentiation": "warn",
+        "status_quo_contrast": "pass",
+        "conciseness_does": "pass",
+        "outcome_specificity": "pass",
+        "escalation": "pass",
+        "quantification": "pass",
+        "emotional_resonance": "pass",
+        "conciseness_means": "pass"
+      },
+      "overall": "warn",
+      "issues": [
+        "buyer_centricity: Anbieterzentriert — beschreibt was das Produkt tut, nicht was der Kaeufer damit erreicht",
+        "market_specificity: Teilweise marktspezifisch, aber generische Elemente ueberwiegen",
+        "differentiation: Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten"
+      ],
+      "does_assessment": {
+        "overall": "warn",
+        "dimensions": {
+          "buyer_centricity": {
+            "score": "fail",
+            "note": "Anbieterzentriert — beschreibt was das Produkt tut, nicht was der Kaeufer damit erreicht"
+          },
+          "market_specificity": {
+            "score": "warn",
+            "note": "Teilweise marktspezifisch, aber generische Elemente ueberwiegen"
+          },
+          "differentiation": {
+            "score": "warn",
+            "note": "Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten"
+          },
+          "status_quo_contrast": {
+            "score": "pass",
+            "note": ""
+          },
+          "conciseness_does": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      },
+      "means_assessment": {
+        "overall": "pass",
+        "dimensions": {
+          "outcome_specificity": {
+            "score": "pass",
+            "note": ""
+          },
+          "escalation": {
+            "score": "pass",
+            "note": ""
+          },
+          "quantification": {
+            "score": "pass",
+            "note": ""
+          },
+          "emotional_resonance": {
+            "score": "pass",
+            "note": ""
+          },
+          "conciseness_means": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      }
+    },
+    {
+      "slug": "vulnerability-pentest--grosse-energieversorger-de",
+      "dimensions": {
+        "buyer_centricity": "warn",
+        "market_specificity": "pass",
+        "differentiation": "warn",
+        "status_quo_contrast": "pass",
+        "conciseness_does": "pass",
+        "outcome_specificity": "warn",
+        "escalation": "pass",
+        "quantification": "pass",
+        "emotional_resonance": "pass",
+        "conciseness_means": "pass"
+      },
+      "overall": "warn",
+      "issues": [
+        "buyer_centricity: Perspektive nicht eindeutig kaeufer-zentriert",
+        "differentiation: Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten",
+        "outcome_specificity: Nennt Geschaeftsbereich aber ohne volle Spezifitaet"
+      ],
+      "does_assessment": {
+        "overall": "warn",
+        "dimensions": {
+          "buyer_centricity": {
+            "score": "warn",
+            "note": "Perspektive nicht eindeutig kaeufer-zentriert"
+          },
+          "market_specificity": {
+            "score": "pass",
+            "note": ""
+          },
+          "differentiation": {
+            "score": "warn",
+            "note": "Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten"
+          },
+          "status_quo_contrast": {
+            "score": "pass",
+            "note": ""
+          },
+          "conciseness_does": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      },
+      "means_assessment": {
+        "overall": "warn",
+        "dimensions": {
+          "outcome_specificity": {
+            "score": "warn",
+            "note": "Nennt Geschaeftsbereich aber ohne volle Spezifitaet"
+          },
+          "escalation": {
+            "score": "pass",
+            "note": ""
+          },
+          "quantification": {
+            "score": "pass",
+            "note": ""
+          },
+          "emotional_resonance": {
+            "score": "pass",
+            "note": ""
+          },
+          "conciseness_means": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      }
+    },
+    {
+      "slug": "zero-trust-architecture--grosse-energieversorger-de",
+      "dimensions": {
+        "buyer_centricity": "pass",
+        "market_specificity": "pass",
+        "differentiation": "warn",
+        "status_quo_contrast": "pass",
+        "conciseness_does": "pass",
+        "outcome_specificity": "pass",
+        "escalation": "pass",
+        "quantification": "pass",
+        "emotional_resonance": "pass",
+        "conciseness_means": "pass"
+      },
+      "overall": "warn",
+      "issues": [
+        "differentiation: Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten"
+      ],
+      "does_assessment": {
+        "overall": "warn",
+        "dimensions": {
+          "buyer_centricity": {
+            "score": "pass",
+            "note": ""
+          },
+          "market_specificity": {
+            "score": "pass",
+            "note": ""
+          },
+          "differentiation": {
+            "score": "warn",
+            "note": "Korrekt aber generisch — jeder Anbieter in der Kategorie koennte aehnliches behaupten"
+          },
+          "status_quo_contrast": {
+            "score": "pass",
+            "note": ""
+          },
+          "conciseness_does": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      },
+      "means_assessment": {
+        "overall": "pass",
+        "dimensions": {
+          "outcome_specificity": {
+            "score": "pass",
+            "note": ""
+          },
+          "escalation": {
+            "score": "pass",
+            "note": ""
+          },
+          "quantification": {
+            "score": "pass",
+            "note": ""
+          },
+          "emotional_resonance": {
+            "score": "pass",
+            "note": ""
+          },
+          "conciseness_means": {
+            "score": "pass",
+            "note": ""
+          }
+        }
+      }
+    }
+  ],
+  "weakest_5": [
+    "endpoint-security--grosse-energieversorger-de",
+    "enterprise-platform-management--grosse-energieversorger-de",
+    "it-strategy-architecture--grosse-energieversorger-de",
+    "enterprise-voice--grosse-energieversorger-de",
+    "managed-hyperscaler--grosse-energieversorger-de"
+  ]
+}

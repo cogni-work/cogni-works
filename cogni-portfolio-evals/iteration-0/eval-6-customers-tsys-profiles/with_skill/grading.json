@@ -1,0 +1,44 @@
+{
+  "total_checks": 6,
+  "passed": 6,
+  "failed": 0,
+  "pass_rate": 1.0,
+  "expectations": [
+    {
+      "text": "2-4 buyer profiles present (actual: 4)",
+      "passed": true,
+      "evidence": "4 profiles: ['CIO / Bereichsleiter IT', 'CISO / Leiter Informationssicherheit', 'Leiter OT / Netzleittechnik', 'CFO / Kaufmännischer Geschäftsführer']",
+      "entity": "grosse-energieversorger-de"
+    },
+    {
+      "text": "Each profile has role, pain_points, buying_criteria, decision_role",
+      "passed": true,
+      "evidence": "All fields present",
+      "entity": "grosse-energieversorger-de"
+    },
+    {
+      "text": "Pain points max 5 items per profile",
+      "passed": true,
+      "evidence": "All within limit",
+      "entity": "grosse-energieversorger-de"
+    },
+    {
+      "text": "3+ named customers present (actual: 3)",
+      "passed": true,
+      "evidence": "['E.ON SE', 'RWE AG', 'EnBW Energie Baden-Württemberg AG']",
+      "entity": "grosse-energieversorger-de"
+    },
+    {
+      "text": "Each named customer has name, fit_score, fit_rationale",
+      "passed": true,
+      "evidence": "All fields present",
+      "entity": "grosse-energieversorger-de"
+    },
+    {
+      "text": "Source URLs present for named customers",
+      "passed": true,
+      "evidence": "All have URLs",
+      "entity": "grosse-energieversorger-de"
+    }
+  ]
+}

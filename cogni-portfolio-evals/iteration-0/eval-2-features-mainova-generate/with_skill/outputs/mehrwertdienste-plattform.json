@@ -1,0 +1,14 @@
+{
+  "slug": "mehrwertdienste-plattform",
+  "name": "Mehrwertdienste-Plattform",
+  "description": "Modulare Cloud-basierte Plattform fuer digitale Zusatzprodukte rund um die Energiewende: Photovoltaik-Konfiguratoren, Waermepumpen-Beratungstools, E-Mobilitaets-Ladekartenmanagement und Mieterstrom-Abrechnung. Bereitstellung als White-Label-Dienste mit offener API-Anbindung.",
+  "category": "digital-services",
+  "taxonomy_mapping": {
+    "dimension": 4,
+    "category_id": "4.6",
+    "category_name": "Cloud-Native Platform",
+    "horizon": "emerging"
+  },
+  "readiness": "beta",
+  "product_slug": "digitale-kundendienste"
+}

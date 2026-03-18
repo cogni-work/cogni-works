@@ -1,0 +1,31 @@
+{
+  "slug": "it-service-desk--grosse-energieversorger-de",
+  "feature_slug": "it-service-desk",
+  "market_slug": "grosse-energieversorger-de",
+  "is_statement": "24/7-Service-Desk mit ITIL-konformem Support und KI-gestützter Incident-Management via ServiceNow mit zweigestuftem Support.",
+  "does_statement": "Ihre 1.000+ Mitarbeiter an verteilten Standorten — Kraftwerke, Netzleitstellen, Verwaltung — erhalten 24/7 KI-gestützten IT-Support, der Routinetickets automatisiert löst statt jeden Vorfall manuell zu eskalieren.",
+  "means_statement": "First-Contact-Resolution steigt auf 70%+, Ausfallzeiten pro Mitarbeiter sinken um 35% — bei einem Energieversorger mit 5.000 Mitarbeitern entspricht das über 25.000 produktiven Arbeitsstunden pro Jahr.",
+  "evidence": [
+    {
+      "statement": "KI-gestützter Service-Desk-Support erreicht laut HDI-Studien First-Contact-Resolution-Raten von 65-75% gegenüber 45-55% bei rein manueller Bearbeitung.",
+      "source_url": null,
+      "source_title": null
+    }
+  ],
+  "quality_assessment": {
+    "dimensions": {
+      "buyer_centricity": "pass",
+      "market_specificity": "pass",
+      "differentiation": "warn",
+      "status_quo_contrast": "pass",
+      "conciseness_does": "warn",
+      "outcome_specificity": "pass",
+      "escalation": "pass",
+      "quantification": "pass",
+      "emotional_resonance": "warn",
+      "conciseness_means": "warn"
+    },
+    "overall": "warn"
+  },
+  "created": "2026-03-18"
+}

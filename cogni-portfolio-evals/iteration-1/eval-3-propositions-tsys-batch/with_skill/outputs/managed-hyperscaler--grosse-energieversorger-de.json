@@ -1,0 +1,26 @@
+{
+  "slug": "managed-hyperscaler--grosse-energieversorger-de",
+  "feature_slug": "managed-hyperscaler",
+  "market_slug": "grosse-energieversorger-de",
+  "is_statement": "Rundum gemanagte AWS-, Azure- und GCP-Umgebungen mit Well-Architected Reviews, Security Assessments, standardisierten Landing-Zone-Modulen und 24/7 Operations — als zertifizierter MSP Partner auf allen Hyperscaler-Plattformen.",
+  "does_statement": "Ihre IT-Teams nutzen AWS, Azure oder GCP für Energiehandel und Smart-Grid-Analytics, ohne eigene Cloud-Architekten für jede Plattform aufbauen zu müssen — mit KRITIS-konformen Landing Zones ab Tag eins.",
+  "means_statement": "Sie vermeiden 3–5 Vollzeit-Cloud-Spezialisten pro Plattform (Einsparung ca. 600.000–1.000.000 EUR/Jahr) und erreichen KRITIS-Audit-Readiness ohne eigene Compliance-Abteilung für jeden Hyperscaler.",
+  "evidence": [
+    {
+      "statement": "T-Systems ist zertifizierter MSP-Partner für AWS, Azure und Google Cloud mit standardisierten Landing-Zone-Modulen und 24/7-Betrieb.",
+      "source_url": "https://www.t-systems.com/us/en/cloud-services/solutions/public-cloud/aws-managed-services",
+      "source_title": "AWS Managed Cloud Services – T-Systems"
+    },
+    {
+      "statement": "Deutsche Telekom erweitert T Cloud Public mit Hyperscaler-Leistung bei europäischer Souveränität — kombiniert Skalierbarkeit mit Datenresidenz.",
+      "source_url": "https://www.telekom.com/en/media/media-information/archive/t-cloud-public-sovereign-power-1101542",
+      "source_title": "Hyperscaler Power with European Sovereignty – Deutsche Telekom"
+    },
+    {
+      "statement": "T-Systems bietet Managed Cloud Services für Azure in jeder erforderlichen Konfiguration: Public, Private oder Hybrid-Cloud-Modell.",
+      "source_url": "https://www.t-systems.com/us/en/cloud-services/solutions/public-cloud/azure-managed-cloud-services",
+      "source_title": "Managed Cloud Services for Azure – T-Systems"
+    }
+  ],
+  "created": "2026-03-18"
+}

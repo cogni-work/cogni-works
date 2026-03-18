@@ -1,0 +1,31 @@
+{
+  "slug": "managed-print--grosse-energieversorger-de",
+  "feature_slug": "managed-print",
+  "market_slug": "grosse-energieversorger-de",
+  "is_statement": "Integriertes Print- und Device-Management für hybride Arbeitsumgebungen mit zentralisierter Administration, Secure Printing und automatisierter Bestandsverwaltung.",
+  "does_statement": "Druckinfrastruktur an Verwaltungsstandorten, Kundenzentren und Kraftwerken wird zentral verwaltet mit Secure Printing — statt durch standortindividuelle Beschaffung und lokale IT-Betreuung.",
+  "means_statement": "Druckkosten sinken um 20-30% durch Konsolidierung und automatisierte Bestandsverwaltung, und sensible Dokumente wie Netzpläne oder Kundendaten werden durch Secure Printing vor unbefugtem Zugriff geschützt.",
+  "evidence": [
+    {
+      "statement": "Managed Print Services reduzieren Druckkosten laut Quocirca um durchschnittlich 25-30% bei gleichzeitiger Verbesserung der Dokumentensicherheit.",
+      "source_url": null,
+      "source_title": null
+    }
+  ],
+  "quality_assessment": {
+    "dimensions": {
+      "buyer_centricity": "pass",
+      "market_specificity": "warn",
+      "differentiation": "warn",
+      "status_quo_contrast": "pass",
+      "conciseness_does": "pass",
+      "outcome_specificity": "pass",
+      "escalation": "warn",
+      "quantification": "pass",
+      "emotional_resonance": "warn",
+      "conciseness_means": "warn"
+    },
+    "overall": "warn"
+  },
+  "created": "2026-03-18"
+}

@@ -1,0 +1,31 @@
+{
+  "slug": "datacenter-colocation--grosse-energieversorger-de",
+  "feature_slug": "datacenter-colocation",
+  "market_slug": "grosse-energieversorger-de",
+  "is_statement": "Twin-Core-Rechenzentren mit redundanter Stromversorgung, 99,999% Verfügbarkeit durch automatische 18-km-Spiegelung und LEED-Gold-Zertifizierung bei PUE 1,3.",
+  "does_statement": "KRITIS-pflichtige Leitsysteme und Handelsplattformen laufen in georedundanten Twin-Core-Rechenzentren mit 99,999% Verfügbarkeit — ohne eigene Rechenzentrumsinfrastruktur betreiben zu müssen.",
+  "means_statement": "Sie vermeiden Investitionen von 50-100 Mio. EUR in eigene RZ-Modernisierung, erfüllen gleichzeitig EnWG-Verfügbarkeitspflichten und senken den CO₂-Fußabdruck Ihrer IT durch PUE 1,3.",
+  "evidence": [
+    {
+      "statement": "Der Neubau eines KRITIS-konformen Rechenzentrums kostet in Deutschland zwischen 50 und 150 Mio. EUR je nach Tier-Klassifizierung.",
+      "source_url": null,
+      "source_title": null
+    }
+  ],
+  "quality_assessment": {
+    "dimensions": {
+      "buyer_centricity": "pass",
+      "market_specificity": "pass",
+      "differentiation": "pass",
+      "status_quo_contrast": "pass",
+      "conciseness_does": "pass",
+      "outcome_specificity": "pass",
+      "escalation": "pass",
+      "quantification": "pass",
+      "emotional_resonance": "warn",
+      "conciseness_means": "warn"
+    },
+    "overall": "warn"
+  },
+  "created": "2026-03-18"
+}

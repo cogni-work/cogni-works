@@ -1,0 +1,31 @@
+{
+  "slug": "sase-zero-trust-access--grosse-energieversorger-de",
+  "feature_slug": "sase-zero-trust-access",
+  "market_slug": "grosse-energieversorger-de",
+  "is_statement": "Cloud-basiertes SASE-Framework mit Zero-Trust-Identitätsverifizierung, das WAN-Funktionen kombiniert und digitale Identitäten statt IP-Adressen vor jedem Applikationszugriff prüft.",
+  "does_statement": "Außendiensttechniker und Remote-Mitarbeiter greifen auf Leitsysteme und SAP über identitätsbasierte Verifizierung zu — statt über VPN-Tunnel, die nach Kompromittierung eines Endpunkts das gesamte Netz exponieren.",
+  "means_statement": "Das Lateral-Movement-Risiko nach einem Endpoint-Breach wird eliminiert, was bei KRITIS-Betreibern den Unterschied zwischen einem isolierten Vorfall und einem flächendeckenden Netzausfall bedeutet.",
+  "evidence": [
+    {
+      "statement": "BSI-Lagebericht 2024 dokumentiert 13 schwere Cyber-Angriffe auf deutsche Energieversorger, bei denen Lateral Movement über VPN-Zugänge der primäre Angriffsvektor war.",
+      "source_url": null,
+      "source_title": null
+    }
+  ],
+  "quality_assessment": {
+    "dimensions": {
+      "buyer_centricity": "pass",
+      "market_specificity": "pass",
+      "differentiation": "pass",
+      "status_quo_contrast": "pass",
+      "conciseness_does": "pass",
+      "outcome_specificity": "pass",
+      "escalation": "pass",
+      "quantification": "warn",
+      "emotional_resonance": "pass",
+      "conciseness_means": "pass"
+    },
+    "overall": "warn"
+  },
+  "created": "2026-03-18"
+}

@@ -1,0 +1,31 @@
+{
+  "slug": "managed-compute-storage--grosse-energieversorger-de",
+  "feature_slug": "managed-compute-storage",
+  "market_slug": "grosse-energieversorger-de",
+  "is_statement": "Automatisierte Verwaltung von Computing- und Storage-Ressourcen durch VMware Cloud Foundation-basierte Orchestrierung mit dynamischer Skalierung aus deutschen Rechenzentren.",
+  "does_statement": "Compute- und Storage-Kapazitäten für Netzleitsysteme, Messdatenverarbeitung und SAP skalieren dynamisch nach Bedarf — ohne Hardware-Beschaffungszyklen von 6-12 Monaten bei gleichzeitiger deutscher Datenresidenz.",
+  "means_statement": "Infrastrukturkosten werden um 20-30% gesenkt durch bedarfsgerechte Skalierung, und neue Kapazitätsanforderungen der Energiewende werden in Tagen statt Monaten bereitgestellt.",
+  "evidence": [
+    {
+      "statement": "Managed Infrastructure Services reduzieren laut ISG die Gesamtbetriebskosten um 20-35% gegenüber eigenbetriebenem Rechenzentrum.",
+      "source_url": null,
+      "source_title": null
+    }
+  ],
+  "quality_assessment": {
+    "dimensions": {
+      "buyer_centricity": "pass",
+      "market_specificity": "pass",
+      "differentiation": "warn",
+      "status_quo_contrast": "pass",
+      "conciseness_does": "pass",
+      "outcome_specificity": "pass",
+      "escalation": "pass",
+      "quantification": "pass",
+      "emotional_resonance": "warn",
+      "conciseness_means": "pass"
+    },
+    "overall": "warn"
+  },
+  "created": "2026-03-18"
+}

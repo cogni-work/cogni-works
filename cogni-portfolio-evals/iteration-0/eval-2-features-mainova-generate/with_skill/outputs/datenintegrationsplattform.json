@@ -1,0 +1,14 @@
+{
+  "slug": "datenintegrationsplattform",
+  "name": "Datenintegrationsplattform",
+  "description": "Zentrale Integrationsschicht mit ESB und API-Gateway fuer den strukturierten Datenaustausch zwischen SAP, Leittechnik, Messdatenmanagement und Kundenportalen. Unterstuetzt EDIFACT, AS4 und REST-basierte Schnittstellen fuer Marktpartner-Kommunikation.",
+  "category": "integration",
+  "taxonomy_mapping": {
+    "dimension": 6,
+    "category_id": "6.4",
+    "category_name": "System Integration & API",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "product_slug": "it-plattformdienste"
+}

@@ -1,0 +1,31 @@
+{
+  "slug": "microsoft-365-workplace--grosse-energieversorger-de",
+  "feature_slug": "microsoft-365-workplace",
+  "market_slug": "grosse-energieversorger-de",
+  "is_statement": "M365-Deployment mit Change Management, Microsoft Copilot-Integration und Cloud Privacy Service mit AES-256-Verschlüsselung in deutschen Rechenzentren für DSGVO-Compliance.",
+  "does_statement": "Ihre M365-Umgebung wird mit Cloud Privacy Service in deutschen Rechenzentren verschlüsselt betrieben — Ihre Mitarbeiter nutzen Copilot-KI, ohne dass Energieverbrauchsdaten oder Kundendaten an Microsoft-Server fließen.",
+  "means_statement": "Produktivitätssteigerungen von 20-30% durch Copilot-Integration werden realisiert, ohne DSGVO- und KRITIS-Compliance zu gefährden — ein Wettbewerbsvorteil bei der Gewinnung digitaler Talente.",
+  "evidence": [
+    {
+      "statement": "Microsoft beziffert den Produktivitätsgewinn durch Copilot auf 22-29% je nach Anwendungsfall in einer internen Studie mit 31.000 Nutzern.",
+      "source_url": null,
+      "source_title": null
+    }
+  ],
+  "quality_assessment": {
+    "dimensions": {
+      "buyer_centricity": "pass",
+      "market_specificity": "pass",
+      "differentiation": "pass",
+      "status_quo_contrast": "pass",
+      "conciseness_does": "pass",
+      "outcome_specificity": "pass",
+      "escalation": "pass",
+      "quantification": "pass",
+      "emotional_resonance": "pass",
+      "conciseness_means": "pass"
+    },
+    "overall": "pass"
+  },
+  "created": "2026-03-18"
+}

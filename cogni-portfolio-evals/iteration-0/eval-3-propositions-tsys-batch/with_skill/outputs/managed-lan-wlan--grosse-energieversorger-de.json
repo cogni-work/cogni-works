@@ -1,0 +1,31 @@
+{
+  "slug": "managed-lan-wlan--grosse-energieversorger-de",
+  "feature_slug": "managed-lan-wlan",
+  "market_slug": "grosse-energieversorger-de",
+  "is_statement": "Cloud-gesteuerte zentrale Verwaltung von LAN/WLAN-Access Points mit Plug-and-Play-Bereitstellung, 24/7-Überwachung und NAC-Integration aus deutschen Rechenzentren.",
+  "does_statement": "Netzwerkinfrastruktur an Kraftwerken, Umspannwerken und Verwaltungsstandorten wird zentral verwaltet und überwacht — mit NAC-gestützter Zugriffskontrolle, die OT- und IT-Netze sauber trennt.",
+  "means_statement": "Netzwerk-Incidents an entlegenen Standorten werden remote in Minuten statt durch Vor-Ort-Einsätze in Stunden gelöst, was bei 50+ Standorten die Netzwerk-Betriebskosten um 25-35% senkt.",
+  "evidence": [
+    {
+      "statement": "Zentral verwaltete LAN/WLAN-Infrastruktur reduziert den Vor-Ort-Supportbedarf um 60-80% laut Gartner-Analysen.",
+      "source_url": null,
+      "source_title": null
+    }
+  ],
+  "quality_assessment": {
+    "dimensions": {
+      "buyer_centricity": "pass",
+      "market_specificity": "pass",
+      "differentiation": "warn",
+      "status_quo_contrast": "pass",
+      "conciseness_does": "pass",
+      "outcome_specificity": "pass",
+      "escalation": "pass",
+      "quantification": "pass",
+      "emotional_resonance": "warn",
+      "conciseness_means": "pass"
+    },
+    "overall": "warn"
+  },
+  "created": "2026-03-18"
+}

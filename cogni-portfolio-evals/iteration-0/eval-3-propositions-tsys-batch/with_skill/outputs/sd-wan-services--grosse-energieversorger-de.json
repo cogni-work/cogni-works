@@ -1,0 +1,31 @@
+{
+  "slug": "sd-wan-services--grosse-energieversorger-de",
+  "feature_slug": "sd-wan-services",
+  "market_slug": "grosse-energieversorger-de",
+  "is_statement": "Software-definierte WAN-Plattform mit universalem CPE, dynamischem Traffic-Routing über MPLS und Internet nach Applikationsanforderungen mit 24/7-NOC-Betrieb.",
+  "does_statement": "Ihre 50+ Standorte — Kraftwerke, Umspannwerke, Verwaltungszentralen — werden über SD-WAN mit applikationsbasiertem Routing verbunden, das SCADA-Traffic priorisiert und Internet-Traffic direkt ausbricht.",
+  "means_statement": "WAN-Kosten sinken um 30-40% gegenüber reinem MPLS, während die Netzqualität für kritische Leitsystem-Kommunikation durch garantierte QoS sogar steigt — was den Netzwerk-Verantwortlichen vom Kostenproblem befreit.",
+  "evidence": [
+    {
+      "statement": "SD-WAN reduziert WAN-Kosten laut Gartner um 30-50% gegenüber reinem MPLS bei gleichzeitiger Verbesserung der Applikationsperformance.",
+      "source_url": null,
+      "source_title": null
+    }
+  ],
+  "quality_assessment": {
+    "dimensions": {
+      "buyer_centricity": "pass",
+      "market_specificity": "pass",
+      "differentiation": "warn",
+      "status_quo_contrast": "pass",
+      "conciseness_does": "pass",
+      "outcome_specificity": "pass",
+      "escalation": "pass",
+      "quantification": "pass",
+      "emotional_resonance": "pass",
+      "conciseness_means": "warn"
+    },
+    "overall": "warn"
+  },
+  "created": "2026-03-18"
+}

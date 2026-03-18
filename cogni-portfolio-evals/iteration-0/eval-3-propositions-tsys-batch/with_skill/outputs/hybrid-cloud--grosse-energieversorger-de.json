@@ -1,0 +1,31 @@
+{
+  "slug": "hybrid-cloud--grosse-energieversorger-de",
+  "feature_slug": "hybrid-cloud",
+  "market_slug": "grosse-energieversorger-de",
+  "is_statement": "T Cloud Hybrid kombiniert Private- und Public-Cloud mit zentralem Governance-Framework, Multi-Cloud-Konnektivitätsplattform und cloudübergreifender Automatisierung.",
+  "does_statement": "KRITIS-regulierte Workloads bleiben in der privaten Cloud, während Analytics und nicht-kritische Anwendungen elastisch auf Public-Cloud skalieren — über ein einheitliches Governance-Framework statt zwei getrennte IT-Welten.",
+  "means_statement": "Sie nutzen Cloud-Elastizität für Energiewende-Innovationen, ohne KRITIS-Compliance zu gefährden — das vermeidet sowohl die Kosten einer reinen On-Premise-Strategie als auch das Regulierungsrisiko einer reinen Public-Cloud.",
+  "evidence": [
+    {
+      "statement": "Laut Gartner nutzen 85% der KRITIS-Unternehmen bis 2026 Hybrid-Cloud-Strategien, um Compliance und Agilität zu balancieren.",
+      "source_url": null,
+      "source_title": null
+    }
+  ],
+  "quality_assessment": {
+    "dimensions": {
+      "buyer_centricity": "pass",
+      "market_specificity": "pass",
+      "differentiation": "warn",
+      "status_quo_contrast": "pass",
+      "conciseness_does": "pass",
+      "outcome_specificity": "pass",
+      "escalation": "pass",
+      "quantification": "warn",
+      "emotional_resonance": "warn",
+      "conciseness_means": "warn"
+    },
+    "overall": "warn"
+  },
+  "created": "2026-03-18"
+}

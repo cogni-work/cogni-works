@@ -1,0 +1,36 @@
+{
+  "slug": "5g-iot-connectivity--grosse-energieversorger-de",
+  "feature_slug": "5g-iot-connectivity",
+  "market_slug": "grosse-energieversorger-de",
+  "is_statement": "Private 5G-Campusnetze mit unter zehn Millisekunden Latenz, Multi-IoT-Plattform für OPC-UA-basierte Maschinen-zu-Maschinen-Kommunikation und EdgeAir-Plattform für dezentralisierte Echtzeit-Verarbeitung von Sensordaten.",
+  "does_statement": "Energieversorger verbinden Umspannwerke, Windparks und Netzleittechnik über ein eigenes 5G-Campusnetz und verarbeiten Sensordaten direkt vor Ort — statt über fragile Mobilfunk-Fallbacks mit unkalkulierbarer Latenz.",
+  "means_statement": "Netzstörungen werden in Sekunden statt Minuten erkannt, was ungeplante Ausfallkosten von bis zu 500.000 EUR pro Vorfall vermeidet und KRITIS-Verfügbarkeitsnachweise gegenüber der BNetzA absichert.",
+  "evidence": [
+    {
+      "statement": "E.ON setzt auf private 5G-Campusnetze für die Echtzeit-Überwachung von Umspannwerken in Nordrhein-Westfalen.",
+      "source_url": null,
+      "source_title": null
+    },
+    {
+      "statement": "Laut BDEW betragen die durchschnittlichen Kosten eines ungeplanten Netzausfalls bei Übertragungsnetzbetreibern zwischen 200.000 und 800.000 EUR pro Vorfall.",
+      "source_url": null,
+      "source_title": null
+    }
+  ],
+  "quality_assessment": {
+    "dimensions": {
+      "buyer_centricity": "pass",
+      "market_specificity": "pass",
+      "differentiation": "pass",
+      "status_quo_contrast": "pass",
+      "conciseness_does": "warn",
+      "outcome_specificity": "pass",
+      "escalation": "pass",
+      "quantification": "pass",
+      "emotional_resonance": "pass",
+      "conciseness_means": "warn"
+    },
+    "overall": "warn"
+  },
+  "created": "2026-03-18"
+}

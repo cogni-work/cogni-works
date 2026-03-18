@@ -1,0 +1,31 @@
+{
+  "slug": "network-as-a-service--grosse-energieversorger-de",
+  "feature_slug": "network-as-a-service",
+  "market_slug": "grosse-energieversorger-de",
+  "is_statement": "Programmierbare SDN/NFV-basierte Multi-Cloud-Konnektivität mit vollautomatisierter Bereitstellung, selbstheilenden Netzwerkfunktionen und Micro-Segmentation.",
+  "does_statement": "Neue Standorte — Windparks, Solarfelder, Ladeparks — werden über programmierbare NaaS-Plattform in Stunden statt Wochen angebunden, mit Micro-Segmentation die OT- von IT-Traffic isoliert.",
+  "means_statement": "Die Netzanbindung neuer Erzeugungsanlagen hält mit dem Ausbautempo der Energiewende Schritt, und die segmentierte Netzarchitektur erfüllt BSI-KRITIS-Anforderungen ohne zusätzliche Firewall-Infrastruktur.",
+  "evidence": [
+    {
+      "statement": "Deutschland plant laut Koalitionsvertrag den Ausbau auf 80% Erneuerbare bis 2030, was tausende neue Netzanschlusspunkte erfordert.",
+      "source_url": null,
+      "source_title": null
+    }
+  ],
+  "quality_assessment": {
+    "dimensions": {
+      "buyer_centricity": "pass",
+      "market_specificity": "pass",
+      "differentiation": "pass",
+      "status_quo_contrast": "pass",
+      "conciseness_does": "pass",
+      "outcome_specificity": "pass",
+      "escalation": "pass",
+      "quantification": "warn",
+      "emotional_resonance": "warn",
+      "conciseness_means": "pass"
+    },
+    "overall": "warn"
+  },
+  "created": "2026-03-18"
+}

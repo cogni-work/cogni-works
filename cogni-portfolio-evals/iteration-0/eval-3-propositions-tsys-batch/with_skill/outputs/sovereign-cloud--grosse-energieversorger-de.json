@@ -1,0 +1,36 @@
+{
+  "slug": "sovereign-cloud--grosse-energieversorger-de",
+  "feature_slug": "sovereign-cloud",
+  "market_slug": "grosse-energieversorger-de",
+  "is_statement": "Europäische Datenhoheit über T Cloud Public, Open Sovereign Cloud, Google-Cloud- und AWS-Sovereign-Varianten — vollständig in der EU betrieben und BaFin-/KRITIS-konform.",
+  "does_statement": "Ihre sensiblen Energieverbrauchs-, Netz- und Kundendaten laufen auf BSI-C5-attestierter Sovereign Cloud mit garantierter deutscher Datenresidenz — ohne Zugriffsmöglichkeit durch US-Behörden unter CLOUD Act.",
+  "means_statement": "Die Cloud-Strategie wird regulierungssicher, was KRITIS-Audits besteht und das Vertrauen von Privatkunden und Regulierern in den Umgang mit ihren Verbrauchsdaten schützt — ein zunehmend wettbewerbsentscheidender Faktor.",
+  "evidence": [
+    {
+      "statement": "Die Open Telekom Cloud ist BSI-C5-attestiert und wird ausschließlich in deutschen Rechenzentren von EU-Personal betrieben.",
+      "source_url": null,
+      "source_title": null
+    },
+    {
+      "statement": "Der US CLOUD Act ermöglicht US-Behörden den Zugriff auf Daten bei US-Cloudanbietern unabhängig vom Speicherort, was KRITIS-Compliance gefährdet.",
+      "source_url": null,
+      "source_title": null
+    }
+  ],
+  "quality_assessment": {
+    "dimensions": {
+      "buyer_centricity": "pass",
+      "market_specificity": "pass",
+      "differentiation": "pass",
+      "status_quo_contrast": "pass",
+      "conciseness_does": "pass",
+      "outcome_specificity": "pass",
+      "escalation": "pass",
+      "quantification": "warn",
+      "emotional_resonance": "pass",
+      "conciseness_means": "warn"
+    },
+    "overall": "warn"
+  },
+  "created": "2026-03-18"
+}

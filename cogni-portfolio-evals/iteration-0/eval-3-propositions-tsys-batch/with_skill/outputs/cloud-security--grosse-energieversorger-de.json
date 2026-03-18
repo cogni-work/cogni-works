@@ -1,0 +1,31 @@
+{
+  "slug": "cloud-security--grosse-energieversorger-de",
+  "feature_slug": "cloud-security",
+  "market_slug": "grosse-energieversorger-de",
+  "is_statement": "Prisma Cloud-basierte Cloud Security Posture Management und Workload Protection mit ML-gestützter Threat Detection und Confidential Computing.",
+  "does_statement": "Ihre Cloud-Workloads für Netzsteuerung und Energiehandel werden kontinuierlich auf Fehlkonfigurationen und Bedrohungen überwacht — mit Confidential Computing für die Verschlüsselung sensibler Verbrauchsdaten im laufenden Betrieb.",
+  "means_statement": "KRITIS-Audits werden mit nachweisbarer Cloud-Security-Posture bestanden, und das Risiko eines meldepflichtigen Sicherheitsvorfalls sinkt drastisch — was Bußgelder bis 20 Mio. EUR nach IT-SiG 2.0 vermeidet.",
+  "evidence": [
+    {
+      "statement": "Das IT-Sicherheitsgesetz 2.0 sieht Bußgelder bis 20 Mio. EUR für KRITIS-Betreiber bei unzureichenden Sicherheitsmaßnahmen vor.",
+      "source_url": null,
+      "source_title": null
+    }
+  ],
+  "quality_assessment": {
+    "dimensions": {
+      "buyer_centricity": "pass",
+      "market_specificity": "pass",
+      "differentiation": "warn",
+      "status_quo_contrast": "pass",
+      "conciseness_does": "warn",
+      "outcome_specificity": "pass",
+      "escalation": "pass",
+      "quantification": "pass",
+      "emotional_resonance": "pass",
+      "conciseness_means": "warn"
+    },
+    "overall": "warn"
+  },
+  "created": "2026-03-18"
+}

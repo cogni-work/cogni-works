@@ -1,0 +1,26 @@
+{
+  "slug": "enterprise-voice--grosse-energieversorger-de",
+  "feature_slug": "enterprise-voice",
+  "market_slug": "grosse-energieversorger-de",
+  "is_statement": "Zentrale SIP-Trunking-Lösung für 18 europäische Länder mit bis zu 50.000 parallelen Sprachkanälen, die verteilte Telefonanlagen über ein geschütztes zentrales SIP-Gateway mit redundanten Session Border Controllern konsolidiert.",
+  "does_statement": "Sie konsolidieren die Sprachinfrastruktur Ihrer verteilten Kraftwerks-, Netz- und Verwaltungsstandorte auf einem zentralen SIP-Trunk — statt pro Standort eigene Telefonleitungen und lokale TK-Anlagen zu betreiben.",
+  "means_statement": "Ihre Telefonie-Kosten sinken um 30–50 % durch Wegfall lokaler Anschlüsse, bei garantierter Ausfallsicherheit über redundante Session Border Controller aus dem Deutsche-Telekom-Backbone.",
+  "evidence": [
+    {
+      "statement": "Corporate SIP International von T-Systems bietet ein zentrales Gateway für 18 europäische Länder mit bis zu 50.000 parallelen externen Sprachkanälen.",
+      "source_url": "https://www.t-systems.com/de/en/connectivity/future-networks-and-sip/voice",
+      "source_title": "Voice Centralization: SIP-Trunking and SIP-Gateway – T-Systems"
+    },
+    {
+      "statement": "Das neue SIP-Gateway von T-Systems ermöglicht IP-Trunking in ganz Europa mit bedarfsgerechter Skalierung der Sprachkanäle.",
+      "source_url": "https://www.telekom.com/en/media/media-information/detail/new-sip-gateway-makes-ip-trunking-possible-in-europe-498968",
+      "source_title": "New SIP gateway makes IP trunking possible in Europe – Deutsche Telekom"
+    },
+    {
+      "statement": "Netzbasierte, redundante Enterprise Session Border Controller schützen die Kundennetze gegen Angriffe zwischen Unternehmens- und öffentlichem Telefonnetz.",
+      "source_url": "https://www.t-systems.com/de/en/connectivity/future-networks-and-sip/voice",
+      "source_title": "Voice Centralization: SIP-Trunking and SIP-Gateway – T-Systems"
+    }
+  ],
+  "created": "2026-03-18"
+}

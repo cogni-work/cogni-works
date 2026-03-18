@@ -1,0 +1,31 @@
+{
+  "slug": "low-code-platform--grosse-energieversorger-de",
+  "feature_slug": "low-code-platform",
+  "market_slug": "grosse-energieversorger-de",
+  "is_statement": "Pega-Infinity-basierte Low-Code-Plattform mit Governance-Framework für visuelle Anwendungsentwicklung auf souveräner Open-Telekom-Cloud-Infrastruktur.",
+  "does_statement": "Fachabteilungen in Netzplanung und Vertrieb erstellen Prozessanwendungen visuell selbst — von Genehmigungsworkflows bis Einspeisemanagement — ohne auf die überlastete zentrale IT-Entwicklung warten zu müssen.",
+  "means_statement": "Die Backlog-Wartezeit für Fachanwendungen sinkt von Monaten auf Wochen, was regulatorische Deadlines wie MaKo-Anpassungen einhaltbar macht und die Fachabteilungen eigenständig handlungsfähig hält.",
+  "evidence": [
+    {
+      "statement": "Gartner schätzt, dass Low-Code-Plattformen die Entwicklungszeit für Geschäftsanwendungen um 50-70% reduzieren gegenüber traditioneller Entwicklung.",
+      "source_url": null,
+      "source_title": null
+    }
+  ],
+  "quality_assessment": {
+    "dimensions": {
+      "buyer_centricity": "pass",
+      "market_specificity": "pass",
+      "differentiation": "warn",
+      "status_quo_contrast": "pass",
+      "conciseness_does": "pass",
+      "outcome_specificity": "pass",
+      "escalation": "pass",
+      "quantification": "pass",
+      "emotional_resonance": "pass",
+      "conciseness_means": "pass"
+    },
+    "overall": "warn"
+  },
+  "created": "2026-03-18"
+}

@@ -1,0 +1,26 @@
+{
+  "slug": "enterprise-voice--grosse-energieversorger-de",
+  "original": {
+    "is_statement": "Zentrale SIP-Trunking-Lösung für 18 europäische Länder mit bis zu 50.000 parallelen Sprachkanälen und redundanten Session Border Controllern.",
+    "does_statement": "Konsolidiert Telefonanlagen an Kraftwerken, Netzleitstellen und Kraftwerken in einer sicheren, hochverfügbaren Infrastruktur mit priorisiertem Notfall-Zugriff bei Netzstörungen.",
+    "means_statement": "Verbessert Notfall-Kommunikation bei Störungen, reduziert Philologie-Komplexität und Betriebskosten durch zentrale Verwaltung und europäische Redundanz."
+  },
+  "improved": {
+    "is_statement": "Zentrale SIP-Trunking-Lösung für 18 europäische Länder mit bis zu 50.000 parallelen Sprachkanälen und redundanten Session Border Controllern.",
+    "does_statement": "Sie konsolidieren Telefonanlagen an Kraftwerken, Leitwarten und Schaltanlagen in einer Telekom-Infrastruktur mit priorisiertem Notfall-Routing — statt fragmentierter Carrier und unsicherer ISDN-Restbestände.",
+    "means_statement": "Senken Sie Telefonie-Betriebskosten um 30-40% durch Carrier-Konsolidierung und sichern Sie Notfallkommunikation bei Netzstörungen — kritisch für Leitwarten-Personal, das unter Zeitdruck Entscheidungen trifft.",
+    "evidence": [
+      {
+        "statement": "ISDN-Abschaltung in Deutschland vollständig abgeschlossen — verbleibende Restbestände erfordern Migration auf SIP-Trunking",
+        "source_url": "https://www.telekom.de/hilfe/festnetz-internet-tv/ip-umstellung",
+        "source_title": "Deutsche Telekom IP-Umstellung"
+      },
+      {
+        "statement": "Große Energieversorger betreiben typisch 50-200 verteilte Standorte mit jeweils eigener TK-Infrastruktur",
+        "source_url": null,
+        "source_title": null
+      }
+    ]
+  },
+  "improvement_rationale": "Original war mehrfach schwach: (1) anbieterzentriert ('Konsolidiert...'), (2) Duplikat-Fehler im Text ('Kraftwerken...und Kraftwerken'), (3) MEANS enthält Tippfehler ('Philologie' statt 'Telefonie' oder 'Topologie'), (4) kein Status-quo-Kontrast, (5) keine Quantifizierung, (6) MEANS nur 14 Wörter. Rewrite: DOES wechselt auf 'Sie konsolidieren' (Käuferperspektive), kontrastiert 'statt fragmentierter Carrier und unsicherer ISDN-Restbestände', nennt Telekom-Infrastruktur als Differenzierer. MEANS quantifiziert 30-40% Kostenersparnis und adressiert persönliche Dimension (Leitwarten-Personal unter Zeitdruck)."
+}

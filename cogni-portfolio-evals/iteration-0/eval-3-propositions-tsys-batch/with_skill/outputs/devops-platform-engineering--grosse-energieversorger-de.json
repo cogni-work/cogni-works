@@ -1,0 +1,31 @@
+{
+  "slug": "devops-platform-engineering--grosse-energieversorger-de",
+  "feature_slug": "devops-platform-engineering",
+  "market_slug": "grosse-energieversorger-de",
+  "is_statement": "Automatisierte CI/CD-Pipelines mit Jenkins und GitLab, Managed Kubernetes-Orchestrierung und Zero-Touch-Deployment mit strukturiertem DevOps-Capability-Building.",
+  "does_statement": "Ihre Entwicklerteams deployen Netz- und Abrechnungssoftware über automatisierte CI/CD-Pipelines mit Zero-Touch-Deployment — statt manueller Release-Zyklen, die bei regulatorischen Deadlines zum Engpass werden.",
+  "means_statement": "Release-Frequenzen steigen von quartalsweise auf wöchentlich, sodass BNetzA-Meldepflichten und Marktprozess-Änderungen termingerecht umgesetzt werden — ohne Überstunden-Eskalationen im IT-Betrieb.",
+  "evidence": [
+    {
+      "statement": "DevOps-Organisationen deployen laut DORA State of DevOps Report 208x häufiger als Low-Performer bei 106x schnellerer Recovery.",
+      "source_url": null,
+      "source_title": null
+    }
+  ],
+  "quality_assessment": {
+    "dimensions": {
+      "buyer_centricity": "pass",
+      "market_specificity": "pass",
+      "differentiation": "warn",
+      "status_quo_contrast": "pass",
+      "conciseness_does": "warn",
+      "outcome_specificity": "pass",
+      "escalation": "pass",
+      "quantification": "pass",
+      "emotional_resonance": "pass",
+      "conciseness_means": "warn"
+    },
+    "overall": "warn"
+  },
+  "created": "2026-03-18"
+}

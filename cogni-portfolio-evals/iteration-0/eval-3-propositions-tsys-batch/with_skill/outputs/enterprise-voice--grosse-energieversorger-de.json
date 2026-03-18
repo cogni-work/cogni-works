@@ -1,0 +1,31 @@
+{
+  "slug": "enterprise-voice--grosse-energieversorger-de",
+  "feature_slug": "enterprise-voice",
+  "market_slug": "grosse-energieversorger-de",
+  "is_statement": "Zentrale SIP-Trunking-Lösung für 18 europäische Länder mit bis zu 50.000 parallelen Sprachkanälen und redundanten Session Border Controllern.",
+  "does_statement": "Verteilte Telefonanlagen an Kraftwerken, Netzleitstellen und Verwaltungsstandorten werden über ein zentrales SIP-Gateway konsolidiert — statt durch standortindividuelle TK-Verträge und fragmentierte Wartung.",
+  "means_statement": "Telekommunikationskosten sinken um 30-40% durch Konsolidierung, und bei Netzstörungen erreichen Krisenkommunikationsketten alle Standorte zuverlässig über redundante Sprachkanäle.",
+  "evidence": [
+    {
+      "statement": "Große Energieversorger betreiben typischerweise 30-80 Standorte mit jeweils eigenen TK-Verträgen und lokaler Infrastruktur.",
+      "source_url": null,
+      "source_title": null
+    }
+  ],
+  "quality_assessment": {
+    "dimensions": {
+      "buyer_centricity": "pass",
+      "market_specificity": "pass",
+      "differentiation": "warn",
+      "status_quo_contrast": "pass",
+      "conciseness_does": "pass",
+      "outcome_specificity": "pass",
+      "escalation": "pass",
+      "quantification": "pass",
+      "emotional_resonance": "pass",
+      "conciseness_means": "pass"
+    },
+    "overall": "warn"
+  },
+  "created": "2026-03-18"
+}

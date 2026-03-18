@@ -1,0 +1,57 @@
+{
+  "slug": "app-modernization",
+  "original_description": "Systematische Legacy-Modernisierung durch intelligente Discovery, Assessment und flexible Rehost-, Replatform- oder Refactor-Strategien, beschleunigt durch AI-gestützte Code-Analyse und nahtlose Migration ohne Downtime.",
+  "improved_description": "AI-gestützte Quellcode-Analyse und Architektur-Discovery bewerten Legacy-Anwendungen und führen Rehost-, Replatform- oder Refactor-Migration auf Cloud-native Zielplattformen durch — operativ abgesichert durch das Zero-Outage-Programm.",
+  "original_assessment": {
+    "mechanism_clarity": {
+      "score": "pass",
+      "note": "Nennt Discovery, Assessment und drei R-Strategien plus AI-Code-Analyse."
+    },
+    "scope_mece": {
+      "score": "warn",
+      "note": "'nahtlose Migration ohne Downtime' driftet in Outcome-Sprache — das ist ein Versprechen an den Käufer, kein Mechanismus."
+    },
+    "differentiation": {
+      "score": "warn",
+      "note": "'Intelligente Discovery, Assessment und flexible Strategien' ist generisch — jeder Modernisierungsanbieter behauptet das. Kein Hinweis auf T-Systems-spezifische Assets wie @Vantage, Zero Outage oder die 15.000+ migrierten Anwendungen."
+    },
+    "language_quality": {
+      "score": "pass",
+      "note": ""
+    },
+    "conciseness": {
+      "score": "warn",
+      "note": "21 Wörter (im Zielbereich), aber die Beschreibung versucht zu viel: Discovery + Assessment + drei Strategien + AI-Analyse + Downtime-Versprechen in einem Satz."
+    }
+  },
+  "improved_assessment": {
+    "mechanism_clarity": {
+      "score": "pass",
+      "note": "Benennt konkreten Mechanismus: AI-gestützte Quellcode-Analyse und Architektur-Discovery als Bewertungs-Engine, drei R-Strategien als Ausführungspfade."
+    },
+    "scope_mece": {
+      "score": "pass",
+      "note": "Kein Outcome-Leak mehr — 'Zero-Outage-Programm' ist ein operativer Mechanismus (TÜV-zertifiziertes Qualitätsprogramm), kein Käufer-Versprechen."
+    },
+    "differentiation": {
+      "score": "pass",
+      "note": "Zero-Outage-Programm ist ein T-Systems-spezifisches, TÜV-zertifiziertes Asset, das kein Wettbewerber replizieren kann. 'Cloud-native Zielplattformen' präzisiert das Migrationsziel."
+    },
+    "language_quality": {
+      "score": "pass",
+      "note": "Technische Begriffe korrekt eingebettet, flüssiger Satz."
+    },
+    "conciseness": {
+      "score": "pass",
+      "note": "22 Wörter, ein klar strukturierter Satz mit Bewertung-Ausführung-Absicherung-Logik."
+    }
+  },
+  "enrichment_sources": [
+    "https://www.t-systems.com/dk/en/migration-and-modernization/solutions/seamless-it-modernization",
+    "https://www.t-systems.com/de/en/insights/newsroom/news/t-systems-advantage-1122022",
+    "https://www.t-systems.com/dk/en/insights/newsroom/expert-blogs/leading-the-next-wave-of-application-modernization-1133970",
+    "https://www.t-systems.com/de/en/insights/newsroom/expert-blogs/business-modernization-beyond-legacy-it-1095074",
+    "https://www.t-systems.com/de/en/insights/newsroom/expert-blogs/application-led-cloud-transformation-998082"
+  ],
+  "improvement_rationale": "Das Original hatte drei Schwachstellen: (1) Outcome-Leak — 'nahtlose Migration ohne Downtime' ist ein Käufer-Versprechen, kein Mechanismus. Die verbesserte Version ersetzt das durch 'operativ abgesichert durch das Zero-Outage-Programm', was den konkreten T-Systems-Mechanismus benennt (TÜV-zertifiziert, 300 Risikoszenarien). (2) Schwache Differenzierung — 'intelligente Discovery' und 'flexible Strategien' sind Parity-Adjektive, die jeder Modernisierungsanbieter verwendet. Die neue Version macht die AI-Analyse zum aktiven Subjekt ('bewerten... und führen durch') statt zum Beschleuniger-Nebensatz. (3) Das Migrationsziel war unklar — 'Migration' wohin? Die neue Version nennt 'Cloud-native Zielplattformen' als konkretes Ziel. Der @Vantage-Markenname wurde bewusst nicht aufgenommen, da Feature-Beschreibungen Mechanismen benennen, nicht Produktnamen."
+}

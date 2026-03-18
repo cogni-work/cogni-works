@@ -50,15 +50,6 @@ Tier assignments are computed by `project-status.sh` based on feature readiness 
 - **Low** — beta feature + expansion market. Generate only if the user explicitly wants them.
 - **Skip** — planned feature or aspirational market. Exclude from generation and explain why.
 
-### Batch Deduplication
-
-When generating multiple propositions for the same market, watch for repetitive talking points. Common traps:
-- The same regulatory deadline (e.g., NIS2, KRITIS-DachG) cited in DOES or MEANS across 3+ propositions — use it in the 1-2 most relevant, vary the angle elsewhere
-- The same cost-saving percentage across propositions — each MEANS should cite a different metric or outcome
-- The same status-quo contrast ("statt manueller Prozesse") — each DOES should reference a different current-state problem specific to that feature
-
-After batch generation, do a quick cross-check: read all generated propositions for the market and flag any talking point that appears 3+ times. Propose rewrites for the duplicates.
-
 ## Strategic Assessment (when the user is exploring or starting fresh)
 
 Before generating propositions, understand the messaging landscape. Have a conversation — but don't just ask questions. State what you observe and flag your assessment explicitly.

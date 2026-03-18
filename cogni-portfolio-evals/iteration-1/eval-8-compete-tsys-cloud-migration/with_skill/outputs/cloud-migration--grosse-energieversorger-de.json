@@ -1,0 +1,75 @@
+{
+  "slug": "cloud-migration--grosse-energieversorger-de",
+  "proposition_slug": "cloud-migration--grosse-energieversorger-de",
+  "competitors": [
+    {
+      "name": "Accenture",
+      "source_url": "https://www.accenture.com/de-de/services/cloud/migration",
+      "positioning": "Globaler Transformationspartner mit breiter Cloud-Migrationskompetenz und starken Hyperscaler-Allianzen für industrieweite Modernisierung.",
+      "strengths": [
+        "Umfangreiche globale Delivery-Kapazitäten mit 700.000+ Mitarbeitern",
+        "Tiefe strategische Allianzen mit AWS, Azure und Google Cloud (jeweils Diamond/Platinum-Status)",
+        "Starke Beratungskompetenz für C-Level-Entscheidungsträger im Energiesektor",
+        "Branchenspezifische Assets wie Accenture myConcerto Plattform für Utilities",
+        "Nachgewiesene Referenzen bei europäischen Energiekonzernen (Enel, Iberdrola)"
+      ],
+      "weaknesses": [
+        "Keine eigene Cloud-Infrastruktur — vollständig abhängig von US-Hyperscalern für Hosting",
+        "Kein eigenes Telekommunikationsnetz für OT-Anbindung und Echtzeit-Konnektivität",
+        "Hohe Tagessätze und Overhead durch globale Matrixorganisation",
+        "Begrenzte OT/SCADA-Migrationserfahrung in deutschen KRITIS-Umgebungen",
+        "Keine BSI-C5-attestierte souveräne Cloud-Plattform im eigenen Portfolio"
+      ],
+      "differentiation": "T-Systems kombiniert Cloud-Migration mit eigener BSI-C5-attestierter Sovereign Cloud und integriertem OT/IT-SOC — Accenture muss für beides auf Drittanbieter zurückgreifen, was bei KRITIS-Betreibern zusätzliche Compliance-Risiken und Schnittstellenprobleme erzeugt."
+    },
+    {
+      "name": "Capgemini",
+      "source_url": "https://www.capgemini.com/de-de/dienstleistungen/cloud-services/",
+      "positioning": "Europäischer IT-Dienstleister mit Cloud-Migrationskompetenz und Fokus auf Industrietransformation durch eigene Methodik und Nearshore-Delivery.",
+      "strengths": [
+        "Starke europäische Präsenz mit kultureller Nähe zu deutschen Energieversorgern",
+        "Eigenes Cloud-Migrations-Framework (Cloud Ascent) mit strukturiertem Vorgehen",
+        "Gute SAP-Migrationskompetenz durch langjährige Partnerschaft",
+        "Wettbewerbsfähige Preisgestaltung durch Nearshore-Zentren in Polen und Indien",
+        "Nachgewiesene Referenzen im Utilities-Sektor (EDF, Engie)"
+      ],
+      "weaknesses": [
+        "Keine eigene Cloud-Infrastruktur oder souveräne Cloud-Plattform",
+        "Keine integrierte Netzwerk-Konnektivität für OT/IT-Konvergenz",
+        "Geringere Erfahrung mit deutschen KRITIS-Anforderungen als T-Systems",
+        "Referenzkunden im Energiesektor primär in Frankreich, nicht in Deutschland",
+        "Kein vergleichbares Zero-Outage-Qualitätsprogramm mit TÜV-Zertifizierung"
+      ],
+      "differentiation": "T-Systems bietet mit dem Zero-Outage-Programm ein TÜV-zertifiziertes Qualitätssystem mit 300 Risikoszenarien, das bei E.ON nachweislich 99,7% Verfügbarkeit über 10+ Jahre lieferte — Capgemini hat kein vergleichbares operatives Qualitätsprogramm für Betriebskontinuität während der Migration."
+    },
+    {
+      "name": "IBM",
+      "source_url": "https://www.ibm.com/de-de/consulting/cloud-migration",
+      "positioning": "Technologiekonzern mit eigenem Hybrid-Cloud-Stack (Red Hat OpenShift) und tiefem Mainframe-Modernisierungswissen für komplexe Enterprise-Migrationen.",
+      "strengths": [
+        "Eigene Hybrid-Cloud-Plattform auf Basis von Red Hat OpenShift",
+        "Tiefe Mainframe-Modernisierungskompetenz (z/OS, AS/400) — relevant für Legacy-Systeme",
+        "IBM Consulting mit branchenspezifischen Frameworks für Utilities",
+        "Langjährige Kundenbeziehungen bei deutschen Energieversorgern (EnBW, Vattenfall)",
+        "Starke KI-Integration (watsonx) für intelligente Migrationsautomatisierung"
+      ],
+      "weaknesses": [
+        "IBM Cloud hat in Europa deutlich geringere Marktanteile als AWS/Azure",
+        "Tendenz zu proprietärem Lock-in durch Red Hat/OpenShift-Stack",
+        "Komplexe Lizenz- und Preismodelle erschweren TCO-Transparenz",
+        "Begrenzte OT/SCADA-Sicherheitskompetenz — Fokus liegt auf klassischer IT",
+        "Kein eigenes Telekommunikationsnetz für Campus- oder WAN-Anbindung"
+      ],
+      "differentiation": "T-Systems migriert auf alle Hyperscaler plus eigene Open Telekom Cloud — IBM drängt Kunden in den eigenen Red Hat/OpenShift-Stack, was bei Energieversorgern mit Multi-Vendor-Strategien und bestehenden Hyperscaler-Verträgen zu unnötigem Lock-in und höherer Komplexität führt."
+    }
+  ],
+  "trap_questions": [
+    "Können Sie eine BSI-C5-attestierte Cloud-Umgebung mit garantierter Datenresidenz in Deutschland bereitstellen, die für KRITIS-Betreiber nach §8a BSIG zugelassen ist — und betreiben Sie diese Infrastruktur selbst?",
+    "Wie stellen Sie die physische Segmentierung und Absicherung von OT/SCADA-Prozessleitsystemen während der Cloud-Migration sicher, und verfügen Sie über ein integriertes SOC, das sowohl IT- als auch OT-Sicherheitsereignisse in Echtzeit korreliert?",
+    "Welches vertraglich zugesicherte Qualitätsprogramm mit unabhängiger Zertifizierung (z.B. TÜV) garantiert Betriebskontinuität während der Migration — und können Sie Referenzkunden im deutschen Energiesektor benennen, bei denen dieses Programm über mindestens 5 Jahre nachweislich funktioniert hat?",
+    "Verfügen Sie über ein eigenes Telekommunikationsnetz, das private 5G-Campusnetze und dedizierte WAN-Anbindung für OT-Systeme bereitstellen kann, oder sind Sie für die Netzwerkkonnektivität vollständig auf Drittanbieter angewiesen?"
+  ],
+  "analysis_mode": "llm-knowledge",
+  "analysis_note": "Wettbewerbsanalyse basiert auf LLM-Trainingswissen (Stand: Mai 2025). Aktuelle Positionierung, Preise und Referenzen sollten vor Verwendung in einem RFP verifiziert werden.",
+  "created": "2026-03-18"
+}

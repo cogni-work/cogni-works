@@ -1,0 +1,31 @@
+{
+  "slug": "multi-cloud-finops--grosse-energieversorger-de",
+  "feature_slug": "multi-cloud-finops",
+  "market_slug": "grosse-energieversorger-de",
+  "is_statement": "Zentralisierte Multi-Cloud-Governance mit FinOps-Maturity-Assessment, kontinuierlichem Cost Management und Compliance-Controls für BSI C5, GDPR und lokale Regulierung.",
+  "does_statement": "Ihre Cloud-Ausgaben über AWS, Azure und Open Telekom Cloud werden in einem zentralen FinOps-Dashboard transparent — mit automatischen Compliance-Checks gegen BSI C5 und KRITIS-Anforderungen statt manueller Prüfungen.",
+  "means_statement": "Cloud-Kosten werden um 20-30% optimiert durch RI-Management und Rightsizing, und jeder Euro Cloud-Ausgabe ist gegenüber der Revision nachvollziehbar — was Budgetfreigaben für weitere Cloud-Migration beschleunigt.",
+  "evidence": [
+    {
+      "statement": "FinOps Foundation berichtet, dass Organisationen mit FinOps-Praktiken durchschnittlich 20-30% Cloud-Kosten einsparen.",
+      "source_url": null,
+      "source_title": null
+    }
+  ],
+  "quality_assessment": {
+    "dimensions": {
+      "buyer_centricity": "pass",
+      "market_specificity": "pass",
+      "differentiation": "warn",
+      "status_quo_contrast": "pass",
+      "conciseness_does": "warn",
+      "outcome_specificity": "pass",
+      "escalation": "pass",
+      "quantification": "pass",
+      "emotional_resonance": "pass",
+      "conciseness_means": "warn"
+    },
+    "overall": "warn"
+  },
+  "created": "2026-03-18"
+}

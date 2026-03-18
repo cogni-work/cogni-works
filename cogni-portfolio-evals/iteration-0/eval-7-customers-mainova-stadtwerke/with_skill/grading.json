@@ -1,0 +1,44 @@
+{
+  "total_checks": 6,
+  "passed": 6,
+  "failed": 0,
+  "pass_rate": 1.0,
+  "expectations": [
+    {
+      "text": "2-4 buyer profiles present (actual: 4)",
+      "passed": true,
+      "evidence": "4 profiles: ['CDO / CIO (Bereichsleiter IT & Digitalisierung)', 'CISO / Informationssicherheitsbeauftragter', 'Netzleiter / Bereichsleiter OT & Netzführung', 'CFO / Kaufmännische Leitung']",
+      "entity": "mittelstaendische-stadtwerke-de"
+    },
+    {
+      "text": "Each profile has role, pain_points, buying_criteria, decision_role",
+      "passed": true,
+      "evidence": "All fields present",
+      "entity": "mittelstaendische-stadtwerke-de"
+    },
+    {
+      "text": "Pain points max 5 items per profile",
+      "passed": true,
+      "evidence": "All within limit",
+      "entity": "mittelstaendische-stadtwerke-de"
+    },
+    {
+      "text": "3+ named customers present (actual: 5)",
+      "passed": true,
+      "evidence": "['Stadtwerke München GmbH (SWM)', 'MVV Energie AG', 'Mainova AG', 'RheinEnergie AG', 'N-ERGIE Aktiengesellschaft']",
+      "entity": "mittelstaendische-stadtwerke-de"
+    },
+    {
+      "text": "Each named customer has name, fit_score, fit_rationale",
+      "passed": true,
+      "evidence": "All fields present",
+      "entity": "mittelstaendische-stadtwerke-de"
+    },
+    {
+      "text": "Source URLs present for named customers",
+      "passed": true,
+      "evidence": "All have URLs",
+      "entity": "mittelstaendische-stadtwerke-de"
+    }
+  ]
+}

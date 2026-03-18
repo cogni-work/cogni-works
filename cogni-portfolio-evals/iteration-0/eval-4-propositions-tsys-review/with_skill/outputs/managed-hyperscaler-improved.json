@@ -1,0 +1,26 @@
+{
+  "slug": "managed-hyperscaler--grosse-energieversorger-de",
+  "original": {
+    "is_statement": "Rundum gemanagte AWS, Azure und GCP Umgebungen mit Well-Architected Reviews, Security Assessments, standardisierten Landing-Zone-Modulen und 24/7 Operations.",
+    "does_statement": "Betreibt Cloud-Infrastruktur für Datenanalytik, KI-gestützte Lastprognosen und Smart-Meter-Datenverarbeitung unter Einhaltung deutscher Souveränität und BSI-Sicherheitsstandards.",
+    "means_statement": "Beschleunigt Dekarbonisierungsziele durch schnellere KI-Modelle für Windprognosen und Lastverlagerung, reduziert Cloud-Kosten durch Optimierung und ermöglicht Echtzeit-Netzwerk-Analysen."
+  },
+  "improved": {
+    "is_statement": "Rundum gemanagte AWS, Azure und GCP Umgebungen mit Well-Architected Reviews, Security Assessments, standardisierten Landing-Zone-Modulen und 24/7 Operations.",
+    "does_statement": "Sie betreiben KI-Lastprognosen und Smart-Meter-Analytics auf Hyperscalern mit BSI-C5-konformen Landing Zones — ohne eigenes Cloud-Engineering-Team und mit Datensouveränität durch deutsche Betriebsführung.",
+    "means_statement": "Senken Sie Cloud-Betriebskosten um 25-35% durch FinOps-Optimierung und beschleunigen Sie KI-gestützte Windprognose-Modelle um 3-6 Monate — entscheidend für Ihre Dekarbonisierungsziele 2030.",
+    "evidence": [
+      {
+        "statement": "T-Systems ist zertifizierter MSP Partner bei AWS, Azure und GCP mit BSI-C5-attestierten Betriebsprozessen",
+        "source_url": "https://www.t-systems.com/de/de/cloud-services/managed-cloud-services",
+        "source_title": "T-Systems Managed Cloud Services"
+      },
+      {
+        "statement": "Gartner: Managed Hyperscaler-Kunden realisieren durchschnittlich 25-35% Kostenersparnis gegenüber Eigenbetrieb durch FinOps-Expertise",
+        "source_url": null,
+        "source_title": null
+      }
+    ]
+  },
+  "improvement_rationale": "Original war mehrfach schwach: (1) anbieterzentriert ('Betreibt...'), (2) DOES zu kurz (14 Wörter), (3) kein Status-quo-Kontrast, (4) MEANS ohne konkrete Zahlen ('reduziert Cloud-Kosten' — wie viel?), (5) keine emotionale Dimension. Rewrite: DOES wechselt auf 'Sie betreiben' (Käuferperspektive), kontrastiert 'ohne eigenes Cloud-Engineering-Team' (typischer Pain für Energieversorger), nennt BSI-C5 und deutsche Betriebsführung als Differenzierer. MEANS quantifiziert 25-35% Kostenersparnis und 3-6 Monate Beschleunigung, verknüpft mit konkretem Dekarbonisierungsziel 2030."
+}

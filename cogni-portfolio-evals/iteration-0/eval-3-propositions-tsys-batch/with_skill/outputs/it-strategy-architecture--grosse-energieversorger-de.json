@@ -1,0 +1,31 @@
+{
+  "slug": "it-strategy-architecture--grosse-energieversorger-de",
+  "feature_slug": "it-strategy-architecture",
+  "market_slug": "grosse-energieversorger-de",
+  "is_statement": "Ganzheitliche Digitalisierungsstrategie und Enterprise Architecture nach TOGAF-Standard mit IT-Reife-Assessments und Technologie-Roadmaps durch Detecon-Experten.",
+  "does_statement": "Ihre IT-Zielarchitektur wird gegen EnWG-Anforderungen, KRITIS-Vorgaben und Energiewende-Szenarien validiert — statt auf Basis veralteter Architekturbilder, die die OT/IT-Konvergenz nicht abbilden.",
+  "means_statement": "Investitionsentscheidungen von 10-50 Mio. EUR in IT-Modernisierung werden auf eine belastbare Architektur-Roadmap gestützt, was Fehlinvestitionen vermeidet und dem CIO Budgetfreigabe beim Vorstand erleichtert.",
+  "evidence": [
+    {
+      "statement": "Laut Gartner scheitern 30% aller IT-Großinvestitionen an fehlender Architektur-Governance und unklaren Zielbildern.",
+      "source_url": null,
+      "source_title": null
+    }
+  ],
+  "quality_assessment": {
+    "dimensions": {
+      "buyer_centricity": "pass",
+      "market_specificity": "pass",
+      "differentiation": "warn",
+      "status_quo_contrast": "pass",
+      "conciseness_does": "pass",
+      "outcome_specificity": "pass",
+      "escalation": "pass",
+      "quantification": "pass",
+      "emotional_resonance": "pass",
+      "conciseness_means": "pass"
+    },
+    "overall": "warn"
+  },
+  "created": "2026-03-18"
+}

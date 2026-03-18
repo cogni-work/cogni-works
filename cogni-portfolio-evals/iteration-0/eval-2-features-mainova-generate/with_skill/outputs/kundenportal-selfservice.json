@@ -1,0 +1,14 @@
+{
+  "slug": "kundenportal-selfservice",
+  "name": "Kundenportal und Self-Service",
+  "description": "Web- und App-basiertes Kundenportal mit Self-Service-Funktionen fuer Vertragsmanagement, Zaehlerstandseingabe, Abschlagsaenderung und Tarifwechsel. Authentifizierung ueber eigenen Identity-Provider mit vollstaendig medienbruchfreier Prozessabwicklung.",
+  "category": "customer-interaction",
+  "taxonomy_mapping": {
+    "dimension": 6,
+    "category_id": "6.1",
+    "category_name": "Custom Application Development",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "product_slug": "digitale-kundendienste"
+}

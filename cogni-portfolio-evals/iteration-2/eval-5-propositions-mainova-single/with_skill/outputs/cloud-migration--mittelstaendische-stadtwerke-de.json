@@ -1,0 +1,36 @@
+{
+  "slug": "cloud-migration--mittelstaendische-stadtwerke-de",
+  "feature_slug": "cloud-migration",
+  "market_slug": "mittelstaendische-stadtwerke-de",
+  "is_statement": "Strukturiertes Cloud-Migrationsprogramm mit dreistufigem Vorgehen (Assess, Mobilize, Modernize), sechs Migrationsstrategien von Rehost bis Retire, spezialisierten Migrationsteams und sprintbasierter Durchfuehrung auf BSI-C5-attestierter souveraener Cloud-Infrastruktur.",
+  "does_statement": "Sie migrieren Ihre SAP-IS-U-Abrechnungslandschaft und KRITIS-relevante Systeme unterbrechungsfrei in die Cloud -- waehrend Ihre Fachkraefte den laufenden Betrieb sichern, statt monatelang in Migrationsprojekten gebunden zu sein.",
+  "means_statement": "Bis zu 30-40% TCO-Reduktion gegenueber On-Premise-Betrieb (Accenture Cloud-Migration-Studie), bei gleichzeitiger KRITIS-Compliance auf BSI-C5-Niveau -- damit wird Ihre Cloud-Strategie zum belastbaren Vorstandsthema statt zum Risikofaktor fuer Ihren CIO-Report.",
+  "evidence": [
+    {
+      "statement": "T-Systems Cloud Migration Framework mit dreistufigem Assess-Mobilize-Modernize-Vorgehen, automatisierten Factory-Sprints und standardisierten Assessments als Grundlage fuer risikoarme Migrationen.",
+      "source_url": "https://www.t-systems.com/de/de/migration-und-modernisierung/loesungen/cloud-migration-framework",
+      "source_title": "Starten Sie jetzt Ihre Migration in die Cloud -- T-Systems"
+    },
+    {
+      "statement": "SachsenEnergie AG hat mit T-Systems eine BW/4HANA-Konsolidierung durchgefuehrt und signifikante Performance-Gewinne bei der Auswertung von Massendaten erzielt -- Referenzprojekt im Energiesektor.",
+      "source_url": "https://www.t-systems.com/de/de/migration-und-modernisierung/referenzen",
+      "source_title": "Unsere Referenzen zum Thema Migration und Modernisierung -- T-Systems"
+    },
+    {
+      "statement": "Accenture-Studie: Migration in die Public Cloud fuehrt zu TCO-Einsparungen von 30-40% gegenueber On-Premise-Betrieb.",
+      "source_url": "https://www.computerweekly.com/de/tipp/Die-wichtigsten-Vorteile-der-Cloud-Migration-im-Ueberblick",
+      "source_title": "Die wichtigsten Vorteile der Cloud-Migration im Ueberblick -- Computer Weekly"
+    },
+    {
+      "statement": "SAP IS-U erreicht End-of-Life bis Ende 2030; Markkommunikations-Support endet bereits 2027 -- Stadtwerke stehen unter Migrationsdruck.",
+      "source_url": "https://www.uniserv.com/en/knowledge/magazine/article/replacement-is-u-migration-sap-s4hana/",
+      "source_title": "Bis Ende 2030: Die Abloesung von SAP IS-U steht bevor -- Uniserv"
+    },
+    {
+      "statement": "T-Systems ist SAP Partner of the Year 2026 (Public Sector) und einziger deutscher RISE with SAP Premium Supplier mit ueber 4.000 SAP-Experten.",
+      "source_url": "https://www.t-systems.com/de/de/migration-und-modernisierung/referenzen",
+      "source_title": "Unsere Referenzen zum Thema Migration und Modernisierung -- T-Systems"
+    }
+  ],
+  "created": "2026-03-18"
+}

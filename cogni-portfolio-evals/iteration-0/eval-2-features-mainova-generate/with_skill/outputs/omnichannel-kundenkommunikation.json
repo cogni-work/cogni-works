@@ -1,0 +1,14 @@
+{
+  "slug": "omnichannel-kundenkommunikation",
+  "name": "Omnichannel-Kundenkommunikation",
+  "description": "Kanaluebergreifendes Kommunikationssystem fuer E-Mail, Chat, Telefon und Brief mit zentraler Vorgangssteuerung und CRM-Integration. Fuehrt alle Kundenkontakte in einer einheitlichen Vorgangsakte mit spartenuebergreifender Kontakthistorie.",
+  "category": "customer-interaction",
+  "taxonomy_mapping": {
+    "dimension": 3,
+    "category_id": "3.1",
+    "category_name": "Unified Communications",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "product_slug": "digitale-kundendienste"
+}

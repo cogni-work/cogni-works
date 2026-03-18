@@ -1,0 +1,455 @@
+{
+  "company": "Mainova AG",
+  "context": "Frankfurt-based Stadtwerk and energy supplier, ~3000 employees, ~1M customers. Operates electricity, gas, district heating (Fernwaerme), water, and digital services in Frankfurt/Rhein-Main region.",
+  "taxonomy": "b2b-ict",
+  "language": "de",
+  "products": [
+    {
+      "slug": "digitale-netzsteuerung",
+      "name": "Digitale Netzsteuerung",
+      "description": "SCADA, Netzleitstelle, grid monitoring and operations for Strom/Gas/Fernwaerme networks",
+      "feature_count": 6
+    },
+    {
+      "slug": "it-plattformdienste",
+      "name": "IT-Plattformdienste",
+      "description": "SAP IS-U, enterprise IT infrastructure, data integration, and corporate IT operations",
+      "feature_count": 6
+    },
+    {
+      "slug": "digitale-kundendienste",
+      "name": "Digitale Kundendienste",
+      "description": "Smart metering, customer portals, digital sales channels, and value-added energy services",
+      "feature_count": 6
+    }
+  ],
+  "features": [
+    {
+      "slug": "scada-netzleittechnik",
+      "product_slug": "digitale-netzsteuerung",
+      "name": "SCADA-Netzleittechnik",
+      "category": "grid-operations",
+      "taxonomy_mapping": { "dimension": 5, "category_id": "5.4", "category_name": "Infrastructure Monitoring", "horizon": "current" },
+      "readiness": "ga",
+      "word_count": 22
+    },
+    {
+      "slug": "geo-netzinformationssystem",
+      "product_slug": "digitale-netzsteuerung",
+      "name": "Geo-Netzinformationssystem",
+      "category": "grid-operations",
+      "taxonomy_mapping": { "dimension": 6, "category_id": "6.6", "category_name": "AI, Data & Analytics", "horizon": "current" },
+      "readiness": "ga",
+      "word_count": 27
+    },
+    {
+      "slug": "stoerungsmanagement",
+      "product_slug": "digitale-netzsteuerung",
+      "name": "Stoerungsmanagement und Entstoerung",
+      "category": "grid-operations",
+      "taxonomy_mapping": { "dimension": 6, "category_id": "6.1", "category_name": "Custom Application Development", "horizon": "current" },
+      "readiness": "ga",
+      "word_count": 25
+    },
+    {
+      "slug": "einspeisemanagement",
+      "product_slug": "digitale-netzsteuerung",
+      "name": "Einspeisemanagement Erneuerbare",
+      "category": "grid-operations",
+      "taxonomy_mapping": { "dimension": 5, "category_id": "5.4", "category_name": "Infrastructure Monitoring", "horizon": "current" },
+      "readiness": "ga",
+      "word_count": 23
+    },
+    {
+      "slug": "netzplanung-simulation",
+      "product_slug": "digitale-netzsteuerung",
+      "name": "Netzplanung und Simulation",
+      "category": "grid-operations",
+      "taxonomy_mapping": { "dimension": 6, "category_id": "6.6", "category_name": "AI, Data & Analytics", "horizon": "current" },
+      "readiness": "ga",
+      "word_count": 24
+    },
+    {
+      "slug": "ot-sicherheit",
+      "product_slug": "digitale-netzsteuerung",
+      "name": "OT-Sicherheit Kritische Infrastruktur",
+      "category": "security",
+      "taxonomy_mapping": { "dimension": 2, "category_id": "2.6", "category_name": "Network Security", "horizon": "current" },
+      "readiness": "ga",
+      "word_count": 27
+    },
+    {
+      "slug": "sap-isu-abrechnungsplattform",
+      "product_slug": "it-plattformdienste",
+      "name": "SAP IS-U Abrechnungsplattform",
+      "category": "enterprise-platforms",
+      "taxonomy_mapping": { "dimension": 6, "category_id": "6.3", "category_name": "Enterprise Platform Services", "horizon": "current" },
+      "readiness": "ga",
+      "word_count": 20
+    },
+    {
+      "slug": "energiehandels-system",
+      "product_slug": "it-plattformdienste",
+      "name": "Energiehandelssystem (ETRM)",
+      "category": "enterprise-platforms",
+      "taxonomy_mapping": { "dimension": 6, "category_id": "6.3", "category_name": "Enterprise Platform Services", "horizon": "current" },
+      "readiness": "ga",
+      "word_count": 21
+    },
+    {
+      "slug": "datenintegrationsplattform",
+      "product_slug": "it-plattformdienste",
+      "name": "Datenintegrationsplattform",
+      "category": "integration",
+      "taxonomy_mapping": { "dimension": 6, "category_id": "6.4", "category_name": "System Integration & API", "horizon": "current" },
+      "readiness": "ga",
+      "word_count": 24
+    },
+    {
+      "slug": "rechenzentrumsbetrieb",
+      "product_slug": "it-plattformdienste",
+      "name": "Rechenzentrumsbetrieb und Hosting",
+      "category": "infrastructure",
+      "taxonomy_mapping": { "dimension": 5, "category_id": "5.1", "category_name": "Data Center Services", "horizon": "current" },
+      "readiness": "ga",
+      "word_count": 20
+    },
+    {
+      "slug": "it-service-management",
+      "product_slug": "it-plattformdienste",
+      "name": "IT-Service-Management",
+      "category": "operations",
+      "taxonomy_mapping": { "dimension": 3, "category_id": "3.5", "category_name": "IT Support Services", "horizon": "current" },
+      "readiness": "ga",
+      "word_count": 20
+    },
+    {
+      "slug": "iam-berechtigungsmanagement",
+      "product_slug": "it-plattformdienste",
+      "name": "IAM und Berechtigungsmanagement",
+      "category": "security",
+      "taxonomy_mapping": { "dimension": 2, "category_id": "2.2", "category_name": "Identity & Access Management", "horizon": "current" },
+      "readiness": "ga",
+      "word_count": 22
+    },
+    {
+      "slug": "smart-metering-infrastruktur",
+      "product_slug": "digitale-kundendienste",
+      "name": "Smart-Metering-Infrastruktur",
+      "category": "metering",
+      "taxonomy_mapping": { "dimension": 1, "category_id": "1.4", "category_name": "5G & IoT Connectivity", "horizon": "current" },
+      "readiness": "ga",
+      "word_count": 20
+    },
+    {
+      "slug": "kundenportal-selfservice",
+      "product_slug": "digitale-kundendienste",
+      "name": "Kundenportal und Self-Service",
+      "category": "customer-interaction",
+      "taxonomy_mapping": { "dimension": 6, "category_id": "6.1", "category_name": "Custom Application Development", "horizon": "current" },
+      "readiness": "ga",
+      "word_count": 20
+    },
+    {
+      "slug": "digitaler-vertragsabschluss",
+      "product_slug": "digitale-kundendienste",
+      "name": "Digitaler Vertragsabschluss",
+      "category": "customer-interaction",
+      "taxonomy_mapping": { "dimension": 6, "category_id": "6.1", "category_name": "Custom Application Development", "horizon": "current" },
+      "readiness": "ga",
+      "word_count": 21
+    },
+    {
+      "slug": "verbrauchstransparenz",
+      "product_slug": "digitale-kundendienste",
+      "name": "Verbrauchstransparenz und Energievisualisierung",
+      "category": "analytics",
+      "taxonomy_mapping": { "dimension": 6, "category_id": "6.6", "category_name": "AI, Data & Analytics", "horizon": "current" },
+      "readiness": "ga",
+      "word_count": 26
+    },
+    {
+      "slug": "omnichannel-kundenkommunikation",
+      "product_slug": "digitale-kundendienste",
+      "name": "Omnichannel-Kundenkommunikation",
+      "category": "customer-interaction",
+      "taxonomy_mapping": { "dimension": 3, "category_id": "3.1", "category_name": "Unified Communications", "horizon": "current" },
+      "readiness": "ga",
+      "word_count": 23
+    },
+    {
+      "slug": "mehrwertdienste-plattform",
+      "product_slug": "digitale-kundendienste",
+      "name": "Mehrwertdienste-Plattform",
+      "category": "digital-services",
+      "taxonomy_mapping": { "dimension": 4, "category_id": "4.6", "category_name": "Cloud-Native Platform", "horizon": "emerging" },
+      "readiness": "beta",
+      "word_count": 21
+    }
+  ],
+  "quality_assessment": {
+    "assessed": 18,
+    "pass": 14,
+    "warn": 4,
+    "fail": 0,
+    "features": [
+      {
+        "slug": "scada-netzleittechnik",
+        "name": "SCADA-Netzleittechnik",
+        "overall": "pass",
+        "dimensions": {
+          "mechanism_clarity": { "score": "pass", "note": "" },
+          "scope_mece": { "score": "pass", "note": "" },
+          "differentiation": { "score": "pass", "note": "" },
+          "language_quality": { "score": "pass", "note": "" },
+          "conciseness": { "score": "pass", "note": "22 words" }
+        },
+        "suggestion": ""
+      },
+      {
+        "slug": "geo-netzinformationssystem",
+        "name": "Geo-Netzinformationssystem",
+        "overall": "pass",
+        "dimensions": {
+          "mechanism_clarity": { "score": "pass", "note": "" },
+          "scope_mece": { "score": "pass", "note": "" },
+          "differentiation": { "score": "pass", "note": "" },
+          "language_quality": { "score": "pass", "note": "" },
+          "conciseness": { "score": "pass", "note": "27 words" }
+        },
+        "suggestion": ""
+      },
+      {
+        "slug": "stoerungsmanagement",
+        "name": "Stoerungsmanagement und Entstoerung",
+        "overall": "pass",
+        "dimensions": {
+          "mechanism_clarity": { "score": "pass", "note": "" },
+          "scope_mece": { "score": "pass", "note": "" },
+          "differentiation": { "score": "pass", "note": "" },
+          "language_quality": { "score": "pass", "note": "" },
+          "conciseness": { "score": "pass", "note": "25 words" }
+        },
+        "suggestion": ""
+      },
+      {
+        "slug": "einspeisemanagement",
+        "name": "Einspeisemanagement Erneuerbare",
+        "overall": "pass",
+        "dimensions": {
+          "mechanism_clarity": { "score": "pass", "note": "" },
+          "scope_mece": { "score": "pass", "note": "" },
+          "differentiation": { "score": "pass", "note": "" },
+          "language_quality": { "score": "pass", "note": "" },
+          "conciseness": { "score": "pass", "note": "23 words" }
+        },
+        "suggestion": ""
+      },
+      {
+        "slug": "netzplanung-simulation",
+        "name": "Netzplanung und Simulation",
+        "overall": "pass",
+        "dimensions": {
+          "mechanism_clarity": { "score": "pass", "note": "" },
+          "scope_mece": { "score": "pass", "note": "" },
+          "differentiation": { "score": "pass", "note": "" },
+          "language_quality": { "score": "pass", "note": "" },
+          "conciseness": { "score": "pass", "note": "24 words" }
+        },
+        "suggestion": ""
+      },
+      {
+        "slug": "ot-sicherheit",
+        "name": "OT-Sicherheit Kritische Infrastruktur",
+        "overall": "pass",
+        "dimensions": {
+          "mechanism_clarity": { "score": "pass", "note": "" },
+          "scope_mece": { "score": "pass", "note": "" },
+          "differentiation": { "score": "pass", "note": "" },
+          "language_quality": { "score": "pass", "note": "" },
+          "conciseness": { "score": "pass", "note": "27 words" }
+        },
+        "suggestion": ""
+      },
+      {
+        "slug": "sap-isu-abrechnungsplattform",
+        "name": "SAP IS-U Abrechnungsplattform",
+        "overall": "pass",
+        "dimensions": {
+          "mechanism_clarity": { "score": "pass", "note": "" },
+          "scope_mece": { "score": "pass", "note": "" },
+          "differentiation": { "score": "pass", "note": "" },
+          "language_quality": { "score": "pass", "note": "" },
+          "conciseness": { "score": "pass", "note": "20 words" }
+        },
+        "suggestion": ""
+      },
+      {
+        "slug": "energiehandels-system",
+        "name": "Energiehandelssystem (ETRM)",
+        "overall": "warn",
+        "dimensions": {
+          "mechanism_clarity": { "score": "pass", "note": "" },
+          "scope_mece": { "score": "pass", "note": "" },
+          "differentiation": { "score": "warn", "note": "ETRM is generic — could specify which trading platform (e.g., vendor or in-house) or which specific risk models are used" },
+          "language_quality": { "score": "pass", "note": "" },
+          "conciseness": { "score": "warn", "note": "19 words — borderline, 1 word below 20-word target" }
+        },
+        "suggestion": "Specify the trading platform vendor or approach (e.g., in-house vs. Endur/OpenLink) to strengthen differentiation."
+      },
+      {
+        "slug": "datenintegrationsplattform",
+        "name": "Datenintegrationsplattform",
+        "overall": "pass",
+        "dimensions": {
+          "mechanism_clarity": { "score": "pass", "note": "" },
+          "scope_mece": { "score": "pass", "note": "" },
+          "differentiation": { "score": "pass", "note": "" },
+          "language_quality": { "score": "pass", "note": "" },
+          "conciseness": { "score": "pass", "note": "24 words" }
+        },
+        "suggestion": ""
+      },
+      {
+        "slug": "rechenzentrumsbetrieb",
+        "name": "Rechenzentrumsbetrieb und Hosting",
+        "overall": "pass",
+        "dimensions": {
+          "mechanism_clarity": { "score": "pass", "note": "" },
+          "scope_mece": { "score": "pass", "note": "" },
+          "differentiation": { "score": "pass", "note": "" },
+          "language_quality": { "score": "pass", "note": "" },
+          "conciseness": { "score": "pass", "note": "20 words" }
+        },
+        "suggestion": ""
+      },
+      {
+        "slug": "it-service-management",
+        "name": "IT-Service-Management",
+        "overall": "warn",
+        "dimensions": {
+          "mechanism_clarity": { "score": "pass", "note": "" },
+          "scope_mece": { "score": "pass", "note": "" },
+          "differentiation": { "score": "warn", "note": "ITIL-based ITSM is standard — the OT-integration angle is the differentiator but could be more specific about how IT/OT ITSM differs" },
+          "language_quality": { "score": "pass", "note": "" },
+          "conciseness": { "score": "pass", "note": "20 words" }
+        },
+        "suggestion": "Emphasize the IT/OT convergence in service management as the differentiator — what makes ITSM for a Stadtwerk different from generic corporate ITSM."
+      },
+      {
+        "slug": "iam-berechtigungsmanagement",
+        "name": "IAM und Berechtigungsmanagement",
+        "overall": "pass",
+        "dimensions": {
+          "mechanism_clarity": { "score": "pass", "note": "" },
+          "scope_mece": { "score": "pass", "note": "" },
+          "differentiation": { "score": "pass", "note": "" },
+          "language_quality": { "score": "pass", "note": "" },
+          "conciseness": { "score": "pass", "note": "22 words" }
+        },
+        "suggestion": ""
+      },
+      {
+        "slug": "smart-metering-infrastruktur",
+        "name": "Smart-Metering-Infrastruktur",
+        "overall": "pass",
+        "dimensions": {
+          "mechanism_clarity": { "score": "pass", "note": "" },
+          "scope_mece": { "score": "pass", "note": "" },
+          "differentiation": { "score": "pass", "note": "" },
+          "language_quality": { "score": "pass", "note": "" },
+          "conciseness": { "score": "pass", "note": "20 words" }
+        },
+        "suggestion": ""
+      },
+      {
+        "slug": "kundenportal-selfservice",
+        "name": "Kundenportal und Self-Service",
+        "overall": "pass",
+        "dimensions": {
+          "mechanism_clarity": { "score": "pass", "note": "" },
+          "scope_mece": { "score": "pass", "note": "" },
+          "differentiation": { "score": "pass", "note": "" },
+          "language_quality": { "score": "pass", "note": "" },
+          "conciseness": { "score": "pass", "note": "20 words" }
+        },
+        "suggestion": ""
+      },
+      {
+        "slug": "digitaler-vertragsabschluss",
+        "name": "Digitaler Vertragsabschluss",
+        "overall": "warn",
+        "dimensions": {
+          "mechanism_clarity": { "score": "pass", "note": "" },
+          "scope_mece": { "score": "warn", "note": "Slight overlap with kundenportal-selfservice — both cover digital customer processes. Boundary: portal is ongoing self-service, Vertragsabschluss is new-customer acquisition flow" },
+          "differentiation": { "score": "pass", "note": "" },
+          "language_quality": { "score": "pass", "note": "" },
+          "conciseness": { "score": "pass", "note": "21 words" }
+        },
+        "suggestion": "Boundary is defensible (acquisition vs. ongoing service) but should be documented — consider noting in descriptions that portal handles existing customers, Vertragsabschluss handles new sign-ups."
+      },
+      {
+        "slug": "verbrauchstransparenz",
+        "name": "Verbrauchstransparenz und Energievisualisierung",
+        "overall": "pass",
+        "dimensions": {
+          "mechanism_clarity": { "score": "pass", "note": "" },
+          "scope_mece": { "score": "pass", "note": "" },
+          "differentiation": { "score": "pass", "note": "" },
+          "language_quality": { "score": "pass", "note": "" },
+          "conciseness": { "score": "pass", "note": "26 words" }
+        },
+        "suggestion": ""
+      },
+      {
+        "slug": "omnichannel-kundenkommunikation",
+        "name": "Omnichannel-Kundenkommunikation",
+        "overall": "pass",
+        "dimensions": {
+          "mechanism_clarity": { "score": "pass", "note": "" },
+          "scope_mece": { "score": "pass", "note": "" },
+          "differentiation": { "score": "pass", "note": "" },
+          "language_quality": { "score": "pass", "note": "" },
+          "conciseness": { "score": "pass", "note": "23 words" }
+        },
+        "suggestion": ""
+      },
+      {
+        "slug": "mehrwertdienste-plattform",
+        "name": "Mehrwertdienste-Plattform",
+        "overall": "warn",
+        "dimensions": {
+          "mechanism_clarity": { "score": "warn", "note": "Lists example products (PV, Waermepumpe, E-Mob) but does not explain the platform mechanism itself — what is the underlying tech (microservices, marketplace engine, configurator framework)?" },
+          "scope_mece": { "score": "pass", "note": "" },
+          "differentiation": { "score": "pass", "note": "" },
+          "language_quality": { "score": "pass", "note": "" },
+          "conciseness": { "score": "pass", "note": "21 words" }
+        },
+        "suggestion": "Replace the product enumeration with a description of the platform architecture — e.g., microservices-based marketplace with configurator engine and White-Label API."
+      }
+    ]
+  },
+  "consulting_assessment": {
+    "product_architecture": "Three products form a clear pipeline: Grid Operations (OT/field), IT Platform (enterprise backbone), Customer Services (market-facing). Clean separation with minimal overlap. The Datenintegrationsplattform in IT-Plattformdienste acts as the natural bridge between all three.",
+    "taxonomy_coverage": {
+      "dimensions_used": [1, 2, 3, 4, 5, 6],
+      "dimensions_not_used": [0, 7],
+      "note": "Dimension 0 (Provider Profile) and 7 (Consulting) are correctly absent — Mainova is an energy company, not an ICT service provider. The taxonomy is applied as an analytical lens for their internal IT capabilities."
+    },
+    "differentiation_signals": [
+      "OT-Sicherheit with BSI-KRITIS and IEC protocol specificity — strong energy-sector differentiator",
+      "Einspeisemanagement with EEG-specific control mechanisms — Stadtwerk-specific, not generic grid ops",
+      "SAP IS-U with GPKE/GeLi/WiM market process coverage — deep energy-regulatory specificity",
+      "Smart-Metering with BSI-certified gateway administration — regulatory compliance as mechanism"
+    ],
+    "potential_gaps": [
+      "No explicit data analytics/BI feature — Mainova likely has cross-domain analytics (grid + consumption + trading) that could be a separate feature",
+      "No workforce/field-service mobility feature beyond Stoerungsmanagement — mobile workforce enablement may warrant its own feature if used beyond outage response"
+    ],
+    "readiness_distribution": {
+      "ga": 17,
+      "beta": 1,
+      "planned": 0
+    }
+  }
+}

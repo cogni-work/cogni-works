@@ -1,0 +1,31 @@
+{
+  "slug": "quality-engineering--grosse-energieversorger-de",
+  "feature_slug": "quality-engineering",
+  "market_slug": "grosse-energieversorger-de",
+  "is_statement": "Open-Source-Test-Framework Testerra mit Selenium 4 für Web- und Mobile-Automatisierung, integriertem Reporting und CI/CD-Pipeline-Integration.",
+  "does_statement": "Ihre Kundenportale, Smart-Meter-Apps und Abrechnungssysteme werden automatisiert getestet, bevor sie in Produktion gehen — statt durch manuelle Tests, die bei regulatorischen Releases zum Flaschenhals werden.",
+  "means_statement": "Produktionsfehler in kundenrelevanten Systemen sinken um 50-60%, was Rückrufaktionen bei fehlerhaften Abrechnungen vermeidet und das Vertrauen der BNetzA in Ihre IT-Prozessqualität stärkt.",
+  "evidence": [
+    {
+      "statement": "Automatisierte Testsuiten reduzieren die Defect-Escape-Rate laut Capgemini World Quality Report um 40-60% gegenüber rein manuellen Testansätzen.",
+      "source_url": null,
+      "source_title": null
+    }
+  ],
+  "quality_assessment": {
+    "dimensions": {
+      "buyer_centricity": "pass",
+      "market_specificity": "pass",
+      "differentiation": "warn",
+      "status_quo_contrast": "pass",
+      "conciseness_does": "pass",
+      "outcome_specificity": "pass",
+      "escalation": "pass",
+      "quantification": "pass",
+      "emotional_resonance": "warn",
+      "conciseness_means": "pass"
+    },
+    "overall": "warn"
+  },
+  "created": "2026-03-18"
+}

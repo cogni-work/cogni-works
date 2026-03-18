@@ -1,0 +1,31 @@
+{
+  "slug": "identity-access-management--grosse-energieversorger-de",
+  "feature_slug": "identity-access-management",
+  "market_slug": "grosse-energieversorger-de",
+  "is_statement": "Federated IAM-Plattform mit SAML und OpenID Connect für automatische Virtual-User-Erstellung, granulare Policy-basierte Zugriffskontrolle und SSO-Integration.",
+  "does_statement": "Zugriffe auf Leitsysteme, Energiehandelsplattformen und SAP IS-U werden über eine zentrale IAM-Plattform mit granularen Rollenmodellen gesteuert — statt durch gewachsene, standortspezifische Berechtigungsstrukturen.",
+  "means_statement": "Privilegierte Zugänge zu KRITIS-Systemen sind lückenlos nachvollziehbar, was BSI-Audit-Befunde im Bereich Zugriffskontrolle eliminiert und das persönliche Haftungsrisiko der IT-Sicherheitsbeauftragten reduziert.",
+  "evidence": [
+    {
+      "statement": "Der BSI-Lagebericht 2024 nennt unzureichendes Zugriffsmanagement als eine der Top-5-Schwachstellen bei KRITIS-Betreibern.",
+      "source_url": null,
+      "source_title": null
+    }
+  ],
+  "quality_assessment": {
+    "dimensions": {
+      "buyer_centricity": "pass",
+      "market_specificity": "pass",
+      "differentiation": "warn",
+      "status_quo_contrast": "pass",
+      "conciseness_does": "warn",
+      "outcome_specificity": "pass",
+      "escalation": "pass",
+      "quantification": "warn",
+      "emotional_resonance": "pass",
+      "conciseness_means": "pass"
+    },
+    "overall": "warn"
+  },
+  "created": "2026-03-18"
+}

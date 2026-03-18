@@ -1,0 +1,31 @@
+{
+  "slug": "cloud-connect--grosse-energieversorger-de",
+  "feature_slug": "cloud-connect",
+  "market_slug": "grosse-energieversorger-de",
+  "is_statement": "Dedizierte Netzwerkanbindungen zu AWS, Azure und Open Telekom Cloud über ExpressRoute, Direct Connect und Privatelink mit Bandbreiten bis 100 Gbit/s.",
+  "does_statement": "Ihre Netzleitstellen und SAP-Systeme erhalten dedizierte, verschlüsselte Cloud-Anbindungen über das Telekom-Backbone — statt über geteilte Internet-Verbindungen mit unvorhersehbarer Latenz.",
+  "means_statement": "SCADA- und Leitsystemdaten bleiben auf deutschem Netz isoliert, was KRITIS-Compliance ohne zusätzliche VPN-Infrastruktur sicherstellt und Netzwerk-Betriebskosten um 20-30% senkt.",
+  "evidence": [
+    {
+      "statement": "Dedizierte Cloud-Verbindungen reduzieren Latenz um 30-50% gegenüber VPN-over-Internet-Lösungen laut Gartner-Analysen.",
+      "source_url": null,
+      "source_title": null
+    }
+  ],
+  "quality_assessment": {
+    "dimensions": {
+      "buyer_centricity": "pass",
+      "market_specificity": "pass",
+      "differentiation": "pass",
+      "status_quo_contrast": "pass",
+      "conciseness_does": "warn",
+      "outcome_specificity": "pass",
+      "escalation": "pass",
+      "quantification": "pass",
+      "emotional_resonance": "warn",
+      "conciseness_means": "warn"
+    },
+    "overall": "warn"
+  },
+  "created": "2026-03-18"
+}

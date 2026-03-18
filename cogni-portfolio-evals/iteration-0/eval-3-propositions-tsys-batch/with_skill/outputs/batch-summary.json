@@ -1,0 +1,106 @@
+{
+  "batch_id": "eval-3-propositions-tsys-batch",
+  "generated_at": "2026-03-18",
+  "market_slug": "grosse-energieversorger-de",
+  "market_name": "Große Energieversorger & Konzern-Stadtwerke (DE)",
+  "portfolio_slug": "t-systems",
+  "total_features": 50,
+  "total_propositions_generated": 50,
+  "quality_summary": {
+    "pass": 5,
+    "warn": 45,
+    "fail": 0
+  },
+  "pass_propositions": [
+    "compliance-data-protection--grosse-energieversorger-de",
+    "mainframe-automation--grosse-energieversorger-de",
+    "microsoft-365-workplace--grosse-energieversorger-de",
+    "network-security--grosse-energieversorger-de",
+    "soc-managed-detection--grosse-energieversorger-de"
+  ],
+  "weakest_propositions": [
+    {
+      "slug": "managed-print--grosse-energieversorger-de",
+      "weak_dimensions": ["market_specificity", "differentiation", "escalation", "emotional_resonance", "conciseness_means"],
+      "reason": "Managed Print ist für Energieversorger kein differenzierender Capability-Bereich. Die Proposition ist zu generisch — Druckmanagement hat minimale branchenspezifische Relevanz im Vergleich zu KRITIS-Security oder Energiehandel."
+    },
+    {
+      "slug": "cloud-migration--grosse-energieversorger-de",
+      "weak_dimensions": ["differentiation", "outcome_specificity", "quantification", "emotional_resonance"],
+      "reason": "Cloud-Migration ist eine Commodity-Capability, bei der T-Systems keine eindeutige Differenzierung gegenüber Accenture, Capgemini oder Atos hat. MEANS-Statement fehlt Quantifizierung."
+    },
+    {
+      "slug": "hybrid-cloud--grosse-energieversorger-de",
+      "weak_dimensions": ["differentiation", "quantification", "emotional_resonance", "conciseness_means"],
+      "reason": "Hybrid-Cloud-Messaging ist zu generisch — jeder IT-Dienstleister bietet Hybrid-Modelle an. Quantifizierung der MEANS fehlt."
+    },
+    {
+      "slug": "it-service-desk--grosse-energieversorger-de",
+      "weak_dimensions": ["differentiation", "conciseness_does", "emotional_resonance", "conciseness_means"],
+      "reason": "IT Service Desk ist ein Commodity-Service mit geringer Differenzierung im Energieversorger-Kontext. Vier Dimensionen auf 'warn'."
+    },
+    {
+      "slug": "esg-sustainability--grosse-energieversorger-de",
+      "weak_dimensions": ["differentiation", "conciseness_does", "quantification", "conciseness_means"],
+      "reason": "ESG-Beratung ist bei Energieversorgern Standard; Differenzierung gegenüber Big-4-Beratungen unklar. Vier Dimensionen auf 'warn'."
+    }
+  ],
+  "strongest_propositions": [
+    {
+      "slug": "soc-managed-detection--grosse-energieversorger-de",
+      "reason": "Starke Differenzierung durch 50+ KRITIS-Kunden, quantifizierte MEANS mit MTTD-Reduktion und persönliche CISO-Haftungsabsicherung. Alle 10 Dimensionen 'pass'."
+    },
+    {
+      "slug": "compliance-data-protection--grosse-energieversorger-de",
+      "reason": "Scharfer Status-quo-Kontrast (Excel vs. Plattform), quantifizierte Einsparung bei Audit-Aufwand, emotionale Resonanz durch aktuelle Risikolagen. Alle 10 Dimensionen 'pass'."
+    },
+    {
+      "slug": "network-security--grosse-energieversorger-de",
+      "reason": "IEC 62443-Referenz macht Differenzierung energiebranchen-spezifisch, quantifizierter OT-Schadensfall, persönliche CISO-Resonanz. Alle 10 Dimensionen 'pass'."
+    },
+    {
+      "slug": "mainframe-automation--grosse-energieversorger-de",
+      "reason": "COBOL-Kompetenzrisiko ist einzigartig relevant für Abrechnungs-Mainframes bei Energieversorgern, starke Quantifizierung beider Schichten. Alle 10 Dimensionen 'pass'."
+    },
+    {
+      "slug": "sovereign-cloud--grosse-energieversorger-de",
+      "reason": "BSI-C5-Attestierung und CLOUD-Act-Schutz sind starke Differenzierungsanker für KRITIS-Betreiber. Nur leichte Quantifizierungs-Warn im MEANS."
+    }
+  ],
+  "dimension_analysis": {
+    "most_common_warnings": [
+      {
+        "dimension": "differentiation",
+        "count": 28,
+        "note": "Viele Features sind Commodity-Capabilities, bei denen T-Systems über Preis oder KRITIS-Erfahrung statt über technische Einzigartigkeit differenziert."
+      },
+      {
+        "dimension": "conciseness_does",
+        "count": 15,
+        "note": "Deutsche Sprache tendiert zu längeren Formulierungen; mehrere DOES-Statements überschreiten 30 Wörter."
+      },
+      {
+        "dimension": "conciseness_means",
+        "count": 16,
+        "note": "MEANS-Statements mit Quantifizierung und emotionaler Komponente werden leicht zu lang."
+      },
+      {
+        "dimension": "emotional_resonance",
+        "count": 14,
+        "note": "Bei technischen Features wie LAN/WLAN oder Compute/Storage fehlt die persönliche Dimension oft."
+      },
+      {
+        "dimension": "quantification",
+        "count": 8,
+        "note": "Einige MEANS-Statements implizieren Quantifizierung statt sie explizit zu nennen."
+      }
+    ]
+  },
+  "recommendations": [
+    "Differenzierung schärfen: Bei Commodity-Features (Managed Hyperscaler, Cloud Migration, IT Service Desk) den T-Systems-spezifischen Winkel stärker herausarbeiten — insbesondere KRITIS-Erfahrung und Zero-Outage-Programm.",
+    "Conciseness optimieren: Deutsche DOES/MEANS-Statements systematisch auf unter 30 Wörter kürzen, ohne Bedeutung zu verlieren.",
+    "Quantifizierung nachrüsten: Für die 8 Propositions mit Quantifizierungs-Warns konkrete Referenzkunden-Daten oder Branchenbenchmarks recherchieren.",
+    "Managed Print überprüfen: Geringe Branchenrelevanz — prüfen ob diese Proposition für den Energieversorger-Markt tatsächlich benötigt wird.",
+    "Evidence validieren: Alle Evidence-Statements sind derzeit ohne verifizierte Quell-URLs — Research-Phase zur Claim-Verifikation einplanen."
+  ]
+}

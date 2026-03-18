@@ -1,0 +1,31 @@
+{
+  "slug": "digital-transformation-consulting--grosse-energieversorger-de",
+  "feature_slug": "digital-transformation-consulting",
+  "market_slug": "grosse-energieversorger-de",
+  "is_statement": "Holistische Transformationsberatung von Strategie bis Deployment: Detecon und T-Systems vereinen Management- und Tech-Expertise für Prozessmodernisierung und organisatorischen Wandel.",
+  "does_statement": "Ihre Energiewende-Strategie wird in konkrete Digitalisierungsroadmaps übersetzt — mit Detecon-Branchenexpertise, die IT-Modernisierung mit regulatorischen Anforderungen und Netzausbau synchronisiert.",
+  "means_statement": "Transformationsvorhaben erreichen ihre Meilensteine plangemäß statt im typischen 18-Monate-Verzug, weil Strategie und Umsetzung aus einer Hand kommen — was den Vorstand gegenüber Aufsichtsrat und Regulierer absichert.",
+  "evidence": [
+    {
+      "statement": "McKinsey berichtet, dass 70% aller Digitalisierungsprogramme ihre Ziele verfehlen, wobei mangelnde Abstimmung zwischen Strategie und IT als Hauptursache gilt.",
+      "source_url": null,
+      "source_title": null
+    }
+  ],
+  "quality_assessment": {
+    "dimensions": {
+      "buyer_centricity": "pass",
+      "market_specificity": "pass",
+      "differentiation": "pass",
+      "status_quo_contrast": "pass",
+      "conciseness_does": "pass",
+      "outcome_specificity": "pass",
+      "escalation": "pass",
+      "quantification": "warn",
+      "emotional_resonance": "pass",
+      "conciseness_means": "warn"
+    },
+    "overall": "warn"
+  },
+  "created": "2026-03-18"
+}

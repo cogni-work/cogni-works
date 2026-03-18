@@ -40,7 +40,7 @@ For each market, build the customer profile from available context:
 
 ### 3. Build Customer Profiles
 
-For each market, define 2-4 buyer profiles (one primary, others secondary). The primary profile should be the person who initiates or champions the purchase decision. Include all stakeholders with veto power or formal gatekeeper roles — in regulated industries (energy, healthcare, public sector), this often means a CISO or compliance officer AND the procurement/Einkauf function. Missing a veto-holder from the profile set means downstream messaging has a blind spot that can stall or kill deals.
+For each market, define 1-3 buyer profiles (one primary, others secondary). The primary profile should be the person who initiates or champions the purchase decision.
 
 For each profile capture:
 

@@ -1,0 +1,31 @@
+{
+  "slug": "managed-hyperscaler--grosse-energieversorger-de",
+  "feature_slug": "managed-hyperscaler",
+  "market_slug": "grosse-energieversorger-de",
+  "is_statement": "Rundum gemanagte AWS, Azure und GCP Umgebungen mit Well-Architected Reviews, Security Assessments, Landing-Zone-Modulen und 24/7 Operations.",
+  "does_statement": "Ihre AWS- und Azure-Umgebungen für Energiehandel, IoT-Datenplattformen und Analytics werden von zertifizierten MSP-Experten betrieben — mit KRITIS-konformen Landing Zones statt ad-hoc konfigurierter Cloud-Accounts.",
+  "means_statement": "Cloud-Fehlkonfigurationen als häufigstes Einfallstor für Sicherheitsvorfälle werden systematisch eliminiert, und die Cloud-Betriebskosten sinken um 15-25% durch kontinuierliche Architektur-Optimierung.",
+  "evidence": [
+    {
+      "statement": "Gartner prognostiziert, dass bis 2025 99% aller Cloud-Sicherheitsvorfälle auf Kundenseite durch Fehlkonfigurationen verursacht werden.",
+      "source_url": null,
+      "source_title": null
+    }
+  ],
+  "quality_assessment": {
+    "dimensions": {
+      "buyer_centricity": "pass",
+      "market_specificity": "pass",
+      "differentiation": "warn",
+      "status_quo_contrast": "pass",
+      "conciseness_does": "warn",
+      "outcome_specificity": "pass",
+      "escalation": "pass",
+      "quantification": "pass",
+      "emotional_resonance": "warn",
+      "conciseness_means": "pass"
+    },
+    "overall": "warn"
+  },
+  "created": "2026-03-18"
+}

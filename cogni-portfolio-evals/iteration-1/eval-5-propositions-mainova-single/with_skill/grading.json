@@ -1,0 +1,50 @@
+{
+  "total_checks": 7,
+  "passed": 7,
+  "failed": 0,
+  "pass_rate": 1.0,
+  "expectations": [
+    {
+      "text": "DOES statement 15-30 words (actual: 20)",
+      "passed": true,
+      "evidence": "\"Sie migrieren Ihre SAP-IS-U-Landschaft vor dem 2027-Stichtag in eine BSI-C5-atte...\"",
+      "entity": "cloud-migration--mittelstaendische-stadtwerke-de"
+    },
+    {
+      "text": "MEANS statement 15-30 words (actual: 21)",
+      "passed": true,
+      "evidence": "\"Bis zu 30 % niedrigere Betriebskosten durch Cloud-Konsolidierung bei 99,99 % Ver...\"",
+      "entity": "cloud-migration--mittelstaendische-stadtwerke-de"
+    },
+    {
+      "text": "IS statement 20-35 words (actual: 20)",
+      "passed": true,
+      "evidence": "\"Strukturiertes Cloud-Migrationsprogramm mit Assessment-Phase, modularer CMF-Meth...\"",
+      "entity": "cloud-migration--mittelstaendische-stadtwerke-de"
+    },
+    {
+      "text": "Slug follows {feature}--{market} convention",
+      "passed": true,
+      "evidence": "slug=\"cloud-migration--mittelstaendische-stadtwerke-de\", expected=\"cloud-migration--mittelstaendische-stadtwerke-de\"",
+      "entity": "cloud-migration--mittelstaendische-stadtwerke-de"
+    },
+    {
+      "text": "DOES is not vendor-centric",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "cloud-migration--mittelstaendische-stadtwerke-de"
+    },
+    {
+      "text": "MEANS contains quantification signal",
+      "passed": true,
+      "evidence": "\"Bis zu 30 % niedrigere Betriebskosten durch Cloud-Konsolidierung bei 99,99 % Ver...\"",
+      "entity": "cloud-migration--mittelstaendische-stadtwerke-de"
+    },
+    {
+      "text": "Evidence array is non-empty",
+      "passed": true,
+      "evidence": "4 evidence entries",
+      "entity": "cloud-migration--mittelstaendische-stadtwerke-de"
+    }
+  ]
+}

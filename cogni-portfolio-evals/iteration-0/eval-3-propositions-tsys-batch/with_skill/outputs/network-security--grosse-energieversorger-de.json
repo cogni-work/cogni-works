@@ -1,0 +1,31 @@
+{
+  "slug": "network-security--grosse-energieversorger-de",
+  "feature_slug": "network-security",
+  "market_slug": "grosse-energieversorger-de",
+  "is_statement": "Managed Next Generation Firewall mit DDoS-Mitigation, IDS/IPS, Web Application Firewall und Zero-Trust-Mikrosegmentierung, 24/7 überwacht.",
+  "does_statement": "Ihre Netzleit-, SCADA- und Energiehandelssysteme werden durch verwaltete Next-Gen-Firewalls mit IDS/IPS geschützt — mit Mikrosegmentierung, die OT- und IT-Zonen gemäß IEC 62443 trennt.",
+  "means_statement": "Ein erfolgreicher Angriff auf OT-Systeme, der bei Energieversorgern durchschnittlich 7-10 Mio. EUR Schaden verursacht, wird durch Defense-in-Depth verhindert — was den CISO nachts ruhig schlafen lässt.",
+  "evidence": [
+    {
+      "statement": "Ponemon Institute beziffert die durchschnittlichen Kosten eines OT-Sicherheitsvorfalls im Energiesektor auf 7,2 Mio. USD.",
+      "source_url": null,
+      "source_title": null
+    }
+  ],
+  "quality_assessment": {
+    "dimensions": {
+      "buyer_centricity": "pass",
+      "market_specificity": "pass",
+      "differentiation": "pass",
+      "status_quo_contrast": "pass",
+      "conciseness_does": "pass",
+      "outcome_specificity": "pass",
+      "escalation": "pass",
+      "quantification": "pass",
+      "emotional_resonance": "pass",
+      "conciseness_means": "pass"
+    },
+    "overall": "pass"
+  },
+  "created": "2026-03-18"
+}

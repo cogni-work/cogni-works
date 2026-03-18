@@ -1,0 +1,26 @@
+{
+  "slug": "enterprise-platform-management--grosse-energieversorger-de",
+  "original": {
+    "is_statement": "Application Management für SAP, ServiceNow und OpenText mit ITIL-basierten Prozessen und automatisierter Incident-Abwicklung über globale Delivery-Center.",
+    "does_statement": "Stabilisiert Business-Critical-Applications für Bilanzierung, Netzwerksteuerung und Redispatch-Abwicklung durch proaktive 24/7-Überwachung und schnelle Fehlerauflösung.",
+    "means_statement": "Reduziert Ausfallzeiten bei kritischen Prozessen, sichert Compliance-Reporting und ermöglicht pünktliche Netzwerk-Steuerung — essenziell für stabile Stromversorgung."
+  },
+  "improved": {
+    "is_statement": "Application Management für SAP, ServiceNow und OpenText mit ITIL-basierten Prozessen und automatisierter Incident-Abwicklung über globale Delivery-Center.",
+    "does_statement": "Ihre SAP-IS-U-Bilanzierung und Redispatch-Abrechnung laufen mit 99,95% Verfügbarkeit statt interner Feuerwehr-IT — proaktive Anomalieerkennung löst Incidents, bevor Abrechnungsläufe betroffen sind.",
+    "means_statement": "Sichern Sie pünktliche Netzentgelt-Abrechnungen (EUR 500M+ Jahresvolumen) und vermeiden Sie BNetzA-Beanstandungen, während Ihr IT-Team von Betriebsroutine auf Energiewende-Projekte wechselt.",
+    "evidence": [
+      {
+        "statement": "Große Energieversorger verarbeiten jährlich über EUR 500 Mio. Netzentgelte über SAP IS-U/S4HANA-Systeme",
+        "source_url": null,
+        "source_title": null
+      },
+      {
+        "statement": "T-Systems SAP Platinum Partner mit 4.000+ SAP-Experten und spezifischer IS-U-Migrationserfahrung",
+        "source_url": "https://www.t-systems.com/de/de/branchen/sap",
+        "source_title": "T-Systems SAP Services"
+      }
+    ]
+  },
+  "improvement_rationale": "Original war dreifach schwach: (1) anbieterzentriert ('Stabilisiert...'), (2) DOES zu kurz (13 Wörter) und ohne Status-quo-Kontrast, (3) MEANS ohne Quantifizierung und circular zu DOES ('Reduziert Ausfallzeiten' wiederholt 'schnelle Fehlerauflösung'). Rewrite: DOES wechselt zu Käuferperspektive ('Ihre SAP-IS-U-Bilanzierung'), benennt konkrete Verfügbarkeit (99,95%), kontrastiert mit 'statt interner Feuerwehr-IT'. MEANS quantifiziert EUR 500M+ Abrechnungsvolumen, nennt BNetzA als konkreten regulatorischen Druck und adressiert Team-Entlastung (emotionale Dimension)."
+}

@@ -230,7 +230,7 @@ The agent will:
 
 **IS/DOES/MEANS semantics (critical):** IS describes YOUR SOLUTION or capability ("Eine integrierte OT/IT-Sicherheitsplattform..."), NOT the customer's problem. The buyer's problem from Phase 1 informs which capability to highlight, but IS must always position the solution. DOES states what the solution does for the buyer (outcomes with numbers, You-Phrasing). MEANS explains why competitors can't replicate it (moat: time, experience, network, certification).
 
-**Quality Gate:** Present Power Positions table with IS/DOES/MEANS. Verify each IS describes the solution, not the problem. Same approve/revise pattern.
+**Quality Gate:** Present Power Positions table with IS/DOES/MEANS. **Before presenting to the user, verify every IS cell yourself.** If any IS cell describes the customer's problem instead of a T-Systems solution, reject and re-invoke the researcher with feedback: "IS cells must describe T-Systems solutions/capabilities, not the customer's problems. Rewrite: [list the problematic IS cells]." Only present to the user once IS semantics are correct. Same approve/revise pattern.
 
 Update pitch-log.json. **-> Proceed to Phase 4.**
 
@@ -330,5 +330,7 @@ If the user wants to continue a pitch that was interrupted:
 ## Error Handling
 
 - If portfolio has no propositions for the matched market: warn user, suggest running cogni-portfolio propositions skill first
+- If portfolio has no solutions for the matched market: warn user, proceed with industry-benchmark pricing in Why Pay. Log `"pricing_source": "industry_benchmark"` in pitch-log.json
+- If portfolio has no competitors for the matched market: warn user, proceed with web-researched competitive landscape. Log `"competitor_source": "web_research"` in pitch-log.json
 - If web research returns thin results: customer mode degrades to industry-level research; segment mode uses broader search terms
 - If cogni-narrative arc files not found: error — cogni-narrative plugin must be installed

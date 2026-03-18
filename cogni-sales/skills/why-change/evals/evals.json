@@ -1,0 +1,73 @@
+{
+  "skill_name": "why-change",
+  "evals": [
+    {
+      "id": 1,
+      "name": "full-segment-pitch-utilities-de",
+      "prompt": "Erstelle einen Segment-Pitch für 'Große Energieversorger & Konzern-Stadtwerke (DE)'. Portfolio: T-Systems. Sprache: Deutsch. Vollständiges Portfolio (kein Lösungsfokus). TIPS-Daten sind im Workspace vorhanden für Utilities/Digitale Transformation.",
+      "expected_output": "Complete sales-presentation.md + sales-proposal.md with all 4 Corporate Visions arc phases (Why Change, Why Now, Why You, Why Pay). IS/DOES/MEANS Power Positions where IS describes T-Systems solutions. 15-25 citations. German throughout including section headers. TIPS trend evidence integrated.",
+      "files": [],
+      "expectations": [
+        "sales-presentation.md exists with valid YAML frontmatter containing pitch_mode: segment",
+        "sales-proposal.md exists with valid YAML frontmatter containing pitch_mode: segment",
+        "All 4 arc sections present: Why Change, Why Now, Why You, Why Pay",
+        "Power Positions table exists with IS/DOES/MEANS columns",
+        "Every IS cell describes a T-Systems solution or capability, never the customer's problem",
+        "Every DOES cell uses You-Phrasing (Sie/Ihr) with quantified outcomes",
+        "Every MEANS cell explains a competitive moat (time, certification, experience barrier)",
+        "15-25 numbered citations in Sources section",
+        "Buyer role tags present: [ECONOMIC-BUYER], [TECH-EVAL], [END-USER], [CHAMPION]",
+        "pitch-log.json shows current_phase done and all 6 phases completed",
+        "claims.json has entries with valid source URLs and source_authority scores",
+        "Section headers are in German, not English (e.g., no 'The Current Reality', 'Unconsidered Needs')",
+        "Why Change section uses PSB structure (Problem, Solution, Benefit)",
+        "Why Now section has 2-3 forcing functions with specific dates (not 'bald' or 'demnächst')",
+        "Why Pay section stacks 3-4 cost dimensions with a 3-year horizon",
+        "TIPS trend evidence appears in Why Change or Why Now findings (signal_origin: tips in research.json)",
+        "No methodology jargon in client-facing prose (no 'PSB', 'Corporate Visions', 'Power Position')",
+        "German text uses proper umlauts (ä, ö, ü, ß), never ASCII substitutes (ae, oe, ue, ss)",
+        "Segment framing uses generic language ('Organisationen in diesem Segment'), not customer-specific"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "focused-ot-security-pitch",
+      "prompt": "Erstelle einen Segment-Pitch für 'Große Energieversorger & Konzern-Stadtwerke (DE)'. Portfolio: T-Systems. Sprache: Deutsch. Fokus auf Security-Features: endpoint-security, network-security, sase-zero-trust-access, identity-access-management. TIPS-Daten verfügbar.",
+      "expected_output": "Focused segment pitch where Power Positions reference only security/compliance capabilities. Executive hook frames NIS2/KRITIS compliance, not broad digitalization. Why Pay pricing is security-scoped.",
+      "files": [],
+      "expectations": [
+        "sales-presentation.md exists with valid YAML frontmatter",
+        "sales-proposal.md exists with valid YAML frontmatter",
+        "All 4 arc sections present",
+        "Power Positions reference only security-related capabilities (not cloud migration, workplace, etc.)",
+        "Every IS cell describes a T-Systems security solution, never the customer's problem",
+        "Executive hook focuses on security/compliance theme, not generic digital transformation",
+        "Why Now forcing functions include NIS2 and KRITIS-DachG deadlines",
+        "Why Pay investment tiers are security-scoped (not full portfolio pricing)",
+        "pitch-log.json solution_focus contains the 4 security feature slugs",
+        "No methodology jargon in client-facing prose",
+        "German section headers and proper umlauts throughout"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "no-tips-graceful-degradation",
+      "prompt": "Erstelle einen Segment-Pitch für 'Große Energieversorger & Konzern-Stadtwerke (DE)'. Portfolio: T-Systems. Sprache: Deutsch. Vollständiges Portfolio. Keine TIPS-Daten verfügbar.",
+      "expected_output": "Complete pitch that works without TIPS enrichment. pitch-log.json has tips_path: null. Why Change/Why Now use web research instead of TIPS trend signals. Missing solutions/competitors directories handled gracefully with warnings.",
+      "files": [],
+      "expectations": [
+        "sales-presentation.md exists with valid YAML frontmatter",
+        "sales-proposal.md exists with valid YAML frontmatter",
+        "All 4 arc sections present",
+        "Every IS cell describes a T-Systems solution, never the customer's problem",
+        "pitch-log.json has tips_path: null",
+        "Pitch is complete despite no TIPS data (all phases done)",
+        "Why Pay section does not hallucinate specific T-Systems pricing tiers if solutions/ directory is empty",
+        "Missing solutions or competitors data is acknowledged (warning in pitch-log or narrative note)",
+        "15+ citations from web research (compensating for missing TIPS evidence)",
+        "No methodology jargon in client-facing prose",
+        "German section headers and proper umlauts throughout"
+      ]
+    }
+  ]
+}

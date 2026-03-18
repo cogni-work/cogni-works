@@ -97,17 +97,51 @@ From `portfolio_path`, read entities relevant to this phase:
 | Phase | Additional Portfolio Data |
 |-------|-------------------------|
 | why-change | features/*.json (IS layer for "work backwards" methodology) |
-| why-now | markets/{market}.json (TAM/SAM/SOM, industry context) |
-| why-you | competitors/{feature}--{market}.json, solutions/{feature}--{market}.json |
-| why-pay | solutions/{feature}--{market}.json (pricing tiers, effort) |
+| why-now | markets/{market}.json (TAM/SAM/SOM, industry context, **revenue range for cost scaling**), propositions/{feature}--{market}.json (**extract regulatory deadlines from DOES/MEANS fields — e.g., SAP IS-U end-of-support 2027**) |
+| why-you | competitors/{feature}--{market}.json, solutions/{feature}--{market}.json, **customers/{market}.json (named reference customers with fit_scores — use in proof points)** |
+| why-pay | solutions/{feature}--{market}.json (pricing tiers, effort), **markets/{market}.json (use `segmentation.arr_min`/`arr_max` to scale cost-of-inaction to segment revenue range)** |
+
+### Revenue-scaled cost-of-inaction (Why Pay)
+
+The market definition contains `segmentation.arr_min` and `segmentation.arr_max` (annual revenue range). Use these to calibrate cost projections:
+- Read `markets/{market}.json` and extract `segmentation.arr_min`
+- Express cost-of-inaction as a percentage of revenue AND absolute figures
+- Reality-check: if projected costs are <0.5% of `arr_min`, they are immaterial to a CFO — scale up or flag
+- Example: for a EUR 1B+ utility, a 3-year cost of EUR 6.9M is only 0.2% of revenue — a CFO will dismiss this. The cost model needs to capture lost revenue opportunity, not just fines and premiums
+
+### Reference customers (Why You)
+
+Read `customers/{market}.json` to find named reference customers for the segment:
+- Include customers with `fit_score >= 7` as proof points in Why You
+- Use **segment-appropriate** references — if the segment is "Konzern-Stadtwerke", prioritize Stadtwerke-tier references (e.g., SWM, MVV) over top-4 Übertragungsnetzbetreiber (E.ON, RWE), which are a different buyer tier
+- Reference format: "{customer} — {brief engagement description}" from the customer profile
+
+### Handling missing portfolio entities
+
+Some portfolio directories may be empty or missing — particularly `solutions/`, `competitors/`, and `customers/`. Handle gracefully:
+
+- **Missing solutions/**: Do NOT hallucinate pricing tiers or implementation phases. Instead, in Why Pay, use web-researched industry benchmarks for typical IT transformation investments in the target segment. Note in research.json: `"pricing_source": "industry_benchmark"` and include the benchmark source URL.
+- **Missing competitors/**: Do NOT invent competitive claims. Instead, research the competitive landscape via web search and note in research.json: `"competitor_source": "web_research"`. Be conservative — only claim differentiators you can verify from the portfolio's own capabilities.
+- **Missing customers/**: Use the buying center from pitch-log.json. If that is also empty, research typical buyer personas for the segment via web search.
+
+Log any missing entity warnings to the return result:
+```json
+{
+  "warnings": ["solutions/ directory empty — using industry benchmarks for pricing"]
+}
+```
 
 ### TIPS data (optional):
 If `tips_path` is set in pitch-log.json:
-- Read `tips-value-model.json` for investment themes and value chains
+- Read `tips-value-model.json` for investment themes, value chains, and solution templates
+- Read `portfolio-context.json` for verified provider differentiators (network backbone, sovereign cloud, certifications) — use these as the authoritative source for MEANS claims, clearly separated from industry research
+- Read `tips-trend-report.md` for narrative context on investment themes
 - Use theme narratives for Why Change (unconsidered needs from trends)
-- Use Act-horizon candidates for Why Now (forcing functions)
+- Use Act-horizon candidates for Why Now (forcing functions) — **extract ALL regulatory deadlines mentioned in the value model, not just the ones web search returns**
 - Use solution templates for Why You (portfolio-backed capabilities)
 - Use gap analysis for Why Pay (capability investment justification)
+
+**TIPS regulatory extraction (Why Now):** Scan `tips-value-model.json` for all regulation/compliance mentions across all investment themes and value chains. Build a comprehensive regulatory timeline. For utilities, this typically includes NIS2, KRITIS-DachG, EU AI Act, EnWG amendments, SAP IS-U end-of-support — all must appear in Why Now if they have specific deadlines.
 
 If `tips_path` is null, proceed in portfolio-only mode — all phases work without TIPS.
 
@@ -251,6 +285,12 @@ Apply the arc patterns from Phase 1:
 - **why-change:** PSB structure (Problem → Solution → Benefit). Use contrast pattern. End with competitive implication.
 - **why-now:** Stack 2-3 forcing functions with specific timelines. Quantified urgency. Before/after contrasts.
 - **why-you:** 2-3 Power Positions with IS-DOES-MEANS. You-Phrasing. Quantified DOES layer. **Critical IS semantics:** IS describes YOUR SOLUTION/CAPABILITY (e.g., "Eine integrierte OT/IT-Sicherheitsplattform..."), NOT the customer's problem or current state. The customer's problem informs which capability to highlight, but IS must position the solution. DOES states what the solution does for the buyer (outcomes with numbers). MEANS explains why competitors can't replicate it (moat/barrier).
+
+**IS validation gate (mandatory before writing):** After constructing the Power Positions, check every IS cell. If an IS cell contains problem language — negative framing ("fragmentiert", "manuell", "ohne", "veraltet", "Vendor-Lock-in", "ungetestet"), pain indicators, or describes what the customer currently suffers — it is wrong. Rewrite it as the corresponding T-Systems solution or capability that addresses the problem. The problem belongs in the Why Change section, not in IS. Example correction:
+  - Wrong IS: "Fragmentierte OT/IT-Silos ohne integrierte Sicherheit"
+  - Correct IS: "Integrierte OT/IT-Sicherheitsplattform mit durchgängigem Monitoring"
+
+Also verify MEANS describes a competitive moat (barrier to replication: time invested, certifications held, network effects, experience depth), not just quantified outcomes. Quantified outcomes belong in DOES.
 - **why-pay:** 3-4 cost dimensions stacked. 3-year horizon. End with simple ratio.
 
 **Framing by pitch mode:**
@@ -259,7 +299,40 @@ Apply the arc patterns from Phase 1:
 
 Write in the configured language. Use proper German characters (ä, ö, ü, ß) — never ASCII substitutes.
 
-Tag content with buyer role relevance: `[ECONOMIC-BUYER]`, `[TECH-EVAL]`, `[END-USER]`, `[CHAMPION]`.
+**Section headers must match the language setting.** When `language` is `de`, all section headers must be German. Never use English methodology names as headers. Map as follows:
+- "Why Change: The Hidden Cost of the Status Quo" → "Warum Veränderung: Die verborgenen Kosten des Status quo"
+- "The Current Reality" → "Die aktuelle Situation"
+- "Unconsidered Needs" → "Unerkannte Handlungsfelder"
+- "Why This Matters" → "Warum das jetzt zählt"
+- "Why Now: The Cost of Waiting" → "Warum jetzt: Die Kosten des Abwartens"
+- "Timing Triggers" → "Zeitfenster und Fristen"
+- "Cost of Inaction" → "Kosten der Untätigkeit"
+- "Why You: Our Unique Position" → "Warum wir: Unsere einzigartige Position"
+- "Power Positions" → "Differenzierungsmerkmale"
+- "Competitive Differentiation" → "Wettbewerbsabgrenzung"
+- "Why Pay: The Business Case" → "Warum investieren: Der Business Case"
+- "Investment Overview" → "Investitionsübersicht"
+- "ROI Analysis" → "Renditeanalyse"
+- "Next Steps" → "Nächste Schritte"
+- "Sources & Claims" → "Quellen und Nachweise"
+
+**No methodology jargon in client-facing text.** Never use "PSB", "Corporate Visions", "Power Position", "Unconsidered Needs", "Proof of Value" or other sales methodology terms in the narrative.md output. These are internal frameworks — the buyer must never see them.
+
+**Buyer role tags are internal annotations.** Write `[ECONOMIC-BUYER]`, `[TECH-EVAL]`, `[END-USER]`, `[CHAMPION]` tags in research.json only, NOT in narrative.md. The synthesizer uses these tags for internal routing but strips them from client-facing output.
+
+**Regulatory accuracy.** Only cite regulations that actually apply to the target industry. For energy utilities: NIS2, KRITIS-DachG, EU AI Act are relevant. DORA (Digital Operational Resilience Act) targets financial entities — do NOT cite it for utilities unless the customer has a financial services subsidiary. Always verify the regulatory scope before including a forcing function.
+
+**Vendor claim attribution.** When citing performance metrics from technology vendors (e.g., Palo Alto CORTEX XSIAM, ServiceNow, Microsoft), always attribute them explicitly: "laut {Vendor}" or "nach Angaben von {Vendor}". Never present vendor marketing claims as if they are T-Systems operational results. If T-Systems has its own operational metrics (e.g., SOC response times, incident reduction rates), prefer those. If only vendor claims are available, frame as: "{Metric} (laut {Vendor}; operative Validierung durch T-Systems SOC im Einsatz bei {N} Kunden)."
+
+**Industry benchmark attribution.** When citing industry averages (e.g., "35% TCO-Reduktion bei S/4HANA-Migration"), label them explicitly as "Branchendurchschnitt laut {Source}" — never imply they are T-Systems-specific delivery outcomes unless backed by a T-Systems case study.
+
+**No competitor pricing.** Never cite specific competitor day rates or pricing ranges (e.g., "Accenture EUR 2.000-2.800/Tag"). This creates contractual risk if the numbers are wrong. Instead use relative language: "wettbewerbsfähige Tagessätze" or "deutlich unter dem Marktdurchschnitt für vergleichbare Beratungshäuser."
+
+**Geographic qualification for uniqueness claims.** When claiming T-Systems is the "only" provider with a capability (e.g., own telecommunications network), always qualify geographically: "einziger IT-Dienstleister in Deutschland mit eigenem Telekommunikationsnetz" — not globally (NTT, Telstra exist internationally).
+
+**Fernwärme/district heating for utilities.** When the target segment includes Stadtwerke or integrated utilities, extend OT/IT convergence to include district heating networks (Fernwärme), water infrastructure, and multi-utility operations — not just electricity/gas. These are major investment areas for Konzern-Stadtwerke. Add relevant search queries:
+- `{customer_industry} Fernwärme Digitalisierung OT-Integration`
+- `{customer_industry} Multi-Utility Plattform Wasser Wärme Strom`
 
 Include numbered citations: `<sup>[N]</sup>` linking to sources in a reference section at the end.
 

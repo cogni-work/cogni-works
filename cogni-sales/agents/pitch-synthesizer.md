@@ -91,15 +91,15 @@ From `portfolio_path` in pitch-log.json, read:
 
 ### Step 5: Assemble sales-presentation.md
 
-Follow the appropriate template from output-specs.md. Weave the four phase narratives into the Corporate Visions arc structure:
+Follow the appropriate template from output-specs.md. Weave the four phase narratives into the arc structure:
 
 1. **Executive Hook** — Extract the most surprising finding from Phase 1 (why-change) research. The single most counterintuitive data point.
 
-2. **Why Change section** — From `01-why-change/narrative.md`. Ensure PSB structure is preserved.
+2. **Why Change section** — From `01-why-change/narrative.md`. Ensure problem-solution-benefit structure is preserved.
 
 3. **Why Now section** — From `02-why-now/narrative.md`. Ensure forcing functions have specific timelines.
 
-4. **Why You section** — From `03-why-you/narrative.md`. Ensure Power Positions table is included with IS/DOES/MEANS. **Separate evidence types**: industry research (analyst reports, market stats) goes in the narrative body. Provider-specific proof points (named customer references, certifications, operational metrics from portfolio-context.json) go in a dedicated "Unsere Referenzen" or "Nachgewiesene Ergebnisse" subsection. Never attribute third-party industry statistics as provider delivery outcomes.
+4. **Why You section** — From `03-why-you/narrative.md`. Ensure differentiators table is included with IS/DOES/MEANS. **Separate evidence types**: industry research (analyst reports, market stats) goes in the narrative body. Provider-specific proof points (named customer references, certifications, operational metrics from portfolio-context.json) go in a dedicated subsection (use German header from `references/section-headers-de.md`). Never attribute third-party industry statistics as provider delivery outcomes.
 
 5. **Why Pay section** — From `04-why-pay/narrative.md`. Ensure cost of inaction ratio is clear.
 
@@ -185,29 +185,6 @@ Before writing each file, verify:
 - [ ] No placeholder text remains (no `{variable}` patterns)
 - [ ] Language matches pitch-log.json setting
 - [ ] Framing matches pitch_mode (customer-specific vs segment-generic language)
-- [ ] **IS/DOES/MEANS validation**: Every IS cell in the Power Positions table describes a solution/capability, never a problem. If any IS cell contains problem language (negative framing: "ohne", "fragmentiert", "manuell", "veraltet", "Lock-in", "ungetestet"), rewrite it as the corresponding solution before outputting.
-- [ ] **No buyer role tags in output**: Strip all `[ECONOMIC-BUYER]`, `[TECH-EVAL]`, `[END-USER]`, `[CHAMPION]` tags from the final sales-presentation.md and sales-proposal.md. These are internal annotations used for routing — they must never appear in client-facing deliverables.
-- [ ] **No methodology jargon**: Remove or rephrase any Corporate Visions terminology ("PSB", "Power Position", "Unconsidered Needs", "Proof of Value", "Corporate Visions") in the output. Use business language instead.
-- [ ] **German section headers when language=de**: All section headers must be in German. Map the template English headers to German equivalents:
-  - "Why Change: The Hidden Cost of the Status Quo" → "Warum Veränderung: Die verborgenen Kosten des Status quo"
-  - "The Current Reality" → "Die aktuelle Situation"
-  - "Unconsidered Needs" → "Unerkannte Handlungsfelder"
-  - "Why This Matters" → "Warum das jetzt zählt"
-  - "Why Now: The Cost of Waiting" → "Warum jetzt: Die Kosten des Abwartens"
-  - "Timing Triggers" → "Zeitfenster und Fristen"
-  - "Cost of Inaction" → "Kosten der Untätigkeit"
-  - "Why You: Our Unique Position" → "Warum wir: Unsere einzigartige Position"
-  - "Power Positions" → "Differenzierungsmerkmale"
-  - "Competitive Differentiation" → "Wettbewerbsabgrenzung"
-  - "Why Pay: The Business Case" → "Warum investieren: Der Business Case"
-  - "Investment Overview" → "Investitionsübersicht"
-  - "ROI Analysis" → "Renditeanalyse"
-  - "Next Steps" → "Nächste Schritte"
-  - "Sources & Claims" → "Quellen und Nachweise"
-- [ ] **Evidence plausibility check**: Verify that cost-of-inaction numbers are plausible for the target segment's revenue range. If the market definition specifies EUR >1B revenue, then projecting EUR 400M+ in customer churn costs needs a reality check. Flag and adjust outliers before outputting.
-- [ ] **Revenue-band cost tiering (segment mode)**: When `pitch_mode` is `segment`, the segment typically spans a wide revenue range (e.g., EUR 1B to EUR 10B+). Instead of a single flat cost projection, present 2-3 revenue-band scenarios in the Why Pay section:
-  - **Tier 1** (EUR 1-2B revenue): smaller Stadtwerke scale
-  - **Tier 2** (EUR 2-5B revenue): Konzern-Stadtwerke scale (Mainova, N-ERGIE)
-  - **Tier 3** (EUR 5B+ revenue): top-4 Versorger scale (E.ON, RWE, EnBW)
-  Use `segmentation.arr_min` and `segmentation.arr_max` from the market definition. Scale NIS2 penalties (2% of revenue), talent costs, and efficiency gains proportionally. This lets each prospect in the segment find their own number.
-- [ ] **Regulatory applicability**: Verify that all cited regulations actually apply to the target industry. Remove any misapplied regulations (e.g., DORA for non-financial entities).
+- [ ] **Section headers when language=de**: Read `references/section-headers-de.md` and verify all headers use the German equivalents
+- [ ] **Cross-phase consistency**: Evidence cited in Why Pay matches findings from Why Change/Why Now (no contradictions in numbers or claims across sections)
+- [ ] **Evidence type separation in Why You**: Industry research (analyst reports, market stats) in narrative body; provider-specific proof points (references, certifications, operational metrics) in dedicated subsection

@@ -26,9 +26,9 @@ This skill applies the Corporate Visions story arc defined in cogni-narrative:
 - `cogni-narrative/skills/narrative/references/story-arc/corporate-visions/arc-definition.md`
 
 The arc has four elements, each with detailed patterns the researcher agent reads and applies:
-1. **Why Change** — Disrupt status quo with unconsidered needs (PSB structure)
+1. **Why Change** — Disrupt status quo with unconsidered needs (problem-solution-benefit structure)
 2. **Why Now** — Create urgency with forcing functions and cost of inaction
-3. **Why You** — Differentiate with Power Positions (IS/DOES/MEANS)
+3. **Why You** — Differentiate with IS/DOES/MEANS (solution → outcomes → moat)
 4. **Why Pay** — Build business case with compound cost calculation
 
 ## Workflow
@@ -223,14 +223,15 @@ Agent tool:
 ```
 
 The agent will:
-- Read `why-you-patterns.md` from cogni-narrative (Power Positions, IS-DOES-MEANS)
+- Read `why-you-patterns.md` from cogni-narrative (differentiators with IS-DOES-MEANS)
 - Load portfolio propositions, solutions, and competitor data
-- Create 2-3 Power Positions mapped to buyer needs from Phase 1
+- Start each IS cell from the portfolio solution entity's capability description, adapted to buyer context
+- Create 2-3 differentiators mapped to buyer needs from Phase 1
 - Write `03-why-you/research.json` and `03-why-you/narrative.md`
 
-**IS/DOES/MEANS semantics (critical):** IS describes YOUR SOLUTION or capability ("Eine integrierte OT/IT-Sicherheitsplattform..."), NOT the customer's problem. The buyer's problem from Phase 1 informs which capability to highlight, but IS must always position the solution. DOES states what the solution does for the buyer (outcomes with numbers, You-Phrasing). MEANS explains why competitors can't replicate it (moat: time, experience, network, certification).
+**IS/DOES/MEANS semantics (critical):** IS describes YOUR SOLUTION or capability ("Eine integrierte OT/IT-Sicherheitsplattform..."), NOT the customer's problem. The researcher generates IS cells by starting from `solutions/{feature}--{market}.json` capability descriptions and adapting them to the buyer's context — this prevents problem-language from leaking into IS cells. DOES states what the solution does for the buyer (outcomes with numbers, You-Phrasing). MEANS explains why competitors can't replicate it (moat: time, experience, network, certification).
 
-**Quality Gate:** Present Power Positions table with IS/DOES/MEANS. **Before presenting to the user, verify every IS cell yourself.** If any IS cell describes the customer's problem instead of a T-Systems solution, reject and re-invoke the researcher with feedback: "IS cells must describe T-Systems solutions/capabilities, not the customer's problems. Rewrite: [list the problematic IS cells]." Only present to the user once IS semantics are correct. Same approve/revise pattern.
+**Quality Gate:** Present the differentiators table with IS/DOES/MEANS. Same approve/revise pattern as other phases.
 
 Update pitch-log.json. **-> Proceed to Phase 4.**
 

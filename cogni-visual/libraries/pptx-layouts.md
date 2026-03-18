@@ -360,7 +360,7 @@ Generators must set the `Label` field per box according to the `language` parame
 - **Slide Title**: Solution or capability name
 - **IS**: What the solution is (positioning statement)
 - **DOES**: How it works (key capabilities)
-- **MEANS**: Why it works (evidence/technology)
+- **MEANS**: HOW it works (technology/methodology proof)
 
 ### Optional Content
 

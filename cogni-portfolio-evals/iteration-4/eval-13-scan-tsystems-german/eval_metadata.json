@@ -1,0 +1,18 @@
+{
+  "eval_id": 13,
+  "eval_name": "scan-tsystems-german",
+  "prompt": "Scan das T-Systems Portfolio. Das Projekt ist auf Deutsch eingerichtet (language: de). Finde alle Tochtergesellschaften und scanne deren Webseiten. Erstelle den Portfolio-Report auf Deutsch mit dem b2b-ict Taxonomie-Template.",
+  "assertions": [
+    {"id": "S-01", "text": "All 8 dimensions present in report"},
+    {"id": "S-02", "text": "All 57 categories present in report"},
+    {"id": "S-03", "text": "Every category has discovery status tag"},
+    {"id": "S-04", "text": "scan-output.json status totals = 57"},
+    {"id": "S-08", "text": "Every confirmed offering has a Link field"},
+    {"id": "S-09", "text": "All Links from discovered domains only"},
+    {"id": "S-10", "text": "At least 3 domains analyzed"},
+    {"id": "S-13", "text": "Features have taxonomy_mapping with category_id"},
+    {"id": "S-14", "text": "category_id matches valid category"},
+    {"id": "S-15", "text": "Feature readiness is ga/beta/planned"},
+    {"id": "S-16", "text": "Feature count >= 20"}
+  ]
+}

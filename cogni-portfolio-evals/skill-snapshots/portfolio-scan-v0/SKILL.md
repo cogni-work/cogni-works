@@ -100,14 +100,6 @@ Extract the parent company, subsidiaries, business units, consulting arms, field
 
 See `${TEMPLATE_PATH}/delivery-unit-rules.md` for inclusion/exclusion criteria. The guiding principle: when in doubt, include — Phase 3 research will naturally return nothing if an entity isn't relevant.
 
-**Subsidiary discovery depth matters.** A scan that only covers the main domain will miss entire product lines that live on subsidiary websites. Run at minimum these searches:
-1. `"{COMPANY_NAME}" subsidiaries` and `"{COMPANY_NAME}" Tochtergesellschaften` (if LANGUAGE=de)
-2. `"{COMPANY_NAME}" brands portfolio companies`
-3. `site:{parent_domain} "powered by" OR "a company of" OR "part of"`
-4. For system houses / VARs / resellers: search for their managed services brand, cloud brand, and security brand separately — these companies often operate service arms under different domains
-
-**Minimum discovery targets:** Aim for at least 3 distinct domains for companies with >5,000 employees, at least 2 for companies with >1,000 employees. If you find only the parent domain, explicitly search for `"{COMPANY_NAME}" managed services brand` and `"{COMPANY_NAME}" cloud services subsidiary` before concluding there are no subsidiaries.
-
 #### Phase 1 Output Schema
 
 Store discovered entities in structured format for downstream phases:
@@ -185,12 +177,11 @@ Use the `portfolio-web-researcher` agent for parallel, domain-scoped web researc
 
 #### Step 3.1: Prepare Domain List
 
-Extract discovered domains from Phase 1 into a list. Include both primary domains AND any docs/help subdomains discovered in Phase 1.5 — these often contain detailed technical product pages that the main marketing site lacks.
+Extract discovered domains from Phase 1 into a list:
 
 ```text
 DOMAINS = [
   {"domain": "{domain}", "provider_unit": "{entity}"},
-  {"domain": "docs.{domain}", "provider_unit": "{entity} (docs)"},
   ...
 ]
 ```
@@ -234,24 +225,9 @@ Read detailed offerings from each agent's log file:
 ${PROJECT_PATH}/research/.logs/portfolio-web-research-{domain-slug}.json
 ```
 
-#### Step 3.5: Verify All Domains Were Researched
+#### Step 3.5: Handle Failures
 
-After all agents complete, verify that **every discovered domain** produced a log file:
-
-```bash
-for domain_slug in {list-of-all-domain-slugs}; do
-  test -f "${PROJECT_PATH}/research/.logs/portfolio-web-research-${domain_slug}.json" && echo "OK: ${domain_slug}" || echo "MISSING: ${domain_slug}"
-done
-```
-
-This is a critical checkpoint — if any domain is missing, the scan will have blind spots for that entire delivery unit. Missing domains typically mean the agent wasn't dispatched (check Step 3.2) or silently failed.
-
-**If any log files are missing:**
-1. Check whether the agent was actually invoked for that domain in Step 3.2
-2. Retry the missing domain(s) individually
-3. Do NOT proceed to Phase 4 until all discovered domains have log files
-
-**If an agent returns `{"ok":false,...}`:** Retry that domain individually. After 2 failures, log the domain as unreachable and proceed — but note the gap in the report.
+If an agent returns `{"ok":false,...}`, retry that domain individually.
 
 ---
 
@@ -259,9 +235,19 @@ This is a critical checkpoint — if any domain is missing, the scan will have b
 
 Aggregate offerings from all agent log files.
 
-#### Step 4.1: Load All Log Files
+#### Step 4.0: Validation Gate
 
-Log file completeness was already verified in Phase 3.5.
+**Before aggregating**, verify all expected log files exist:
+
+```bash
+for domain_slug in {list}; do
+  test -f "${PROJECT_PATH}/research/.logs/portfolio-web-research-${domain_slug}.json" && echo "OK: ${domain_slug}" || echo "MISSING: ${domain_slug}"
+done
+```
+
+**If any are missing:** Report which domains failed, offer to retry those specific domains before proceeding. Do not aggregate partial results without user confirmation.
+
+#### Step 4.1: Load All Log Files
 
 For each domain, read the log file and extract offerings.
 
@@ -306,8 +292,6 @@ See `${TEMPLATE_PATH}/template.md` for category definitions.
 
 #### Update Project Metadata
 
-**After generating the report**, derive the `status_summary` counts by scanning the actual report content — do not estimate or pre-compute them. Count the occurrences of each `[Status: X]` tag in the generated markdown to ensure the metadata matches the report exactly. The four counts must sum to the total number of categories in the taxonomy (e.g., 57 for b2b-ict).
-
 Write portfolio metadata to `research/.metadata/scan-output.json`:
 
 ```json
@@ -349,17 +333,6 @@ For each confirmed offering, generate a feature entity. The template maps:
 
 See [references/scan-entity-schema.md](references/scan-entity-schema.md) for the complete offering-to-feature field mapping.
 
-**Feature description quality (IS-layer):** The `description` field is an IS-layer statement — it describes the mechanism of WHAT the offering is, not what it achieves. Feature descriptions flow directly into downstream proposition generation, so quality here prevents rework later. Each description must:
-- Be **20-35 words** (not shorter — a 10-word description lacks the specificity downstream skills need)
-- Describe the **mechanism** — what the offering technically IS and how it works, not what outcome it delivers
-- Avoid **outcome verbs** (reduces, enables, ensures, improves, optimizes) — those belong in the DOES layer
-- Avoid **parity adjectives** (robust, innovative, cutting-edge, best-in-class, seamless, holistic) — these are empty claims
-- Include the **provider's specific implementation** or differentiator, not a generic category description
-
-**Example — good:** "Multi-tenant Kubernetes platform on Open Telekom Cloud with automated GitOps deployment pipelines, Istio service mesh, and BSI C5-attested container registry for regulated workloads."
-
-**Example — bad:** "Cloud-native platform enabling modern application deployment." (too short, outcome verb, no mechanism)
-
 #### Step 7.2: Map Dimensions to Products
 
 If no products exist in the portfolio, create one product per active dimension using the default product definitions from the template. If products already exist, ask the user to assign each feature to an existing product.
@@ -391,11 +364,9 @@ Allow the user to:
 
 #### Step 7.4: Write Entities and Sync
 
-Before writing, check for pre-existing feature files in `features/`. If any exist from a prior scan or manual creation, skip them unless the user explicitly asks to overwrite. This prevents stale features (which may lack taxonomy_mapping or readiness) from contaminating the output.
-
 For each confirmed entity:
 1. Write product JSON to `products/{slug}.json` (if new products created)
-2. Write feature JSON to `features/{slug}.json` (skip if file already exists)
+2. Write feature JSON to `features/{slug}.json`
 3. Set `created` to today's date
 4. Include `"source_file": "research/{COMPANY_SLUG}-portfolio.md"` for traceability
 
@@ -425,7 +396,7 @@ If not already set, update `portfolio.json` to include the taxonomy reference:
 
 ## Quality Requirements
 
-- **Domain restriction — strict enforcement:** Only search within discovered company domains. The Link column in every offering table row MUST point to a page on one of the `domains_analyzed` domains. Never use Wikipedia, analyst sites (Gartner, ISG, Forrester), news sites, partner vendor sites (aws.amazon.com, cloud.google.com), or any other external domain as a Link value. If you cannot find a direct source page on the company's own domain for an offering, use the closest company page that references the capability and note the limitation — but never substitute an external URL.
+- **Domain restriction:** Only search within discovered company domains
 - **Evidence-based:** Every offering must link to a source page (Domain + Link columns required)
 - **Complete coverage:** Include all dimensions and categories from the taxonomy
 - **Full entity schema:** Capture all 11 fields per offering where available

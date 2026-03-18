@@ -299,6 +299,88 @@
         {"id": "M-12", "text": "Skill flags missing features/products prerequisite", "type": "agent"}
       ],
       "files": []
+    },
+    {
+      "id": 20,
+      "name": "products-tsys-define",
+      "skill": "products",
+      "target": "t-systems",
+      "prompt": "I have a T-Systems portfolio at the project path provided. T-Systems sells cloud services, managed IT operations, security services, and digital consulting to enterprise customers. Help me define the product portfolio. Challenge my thinking — I want your honest strategic assessment.",
+      "expected_output": "3-5 product JSON files with consulting commentary. Skill discovers existing cloud-services product + 8 features and proposes portfolio restructuring with strategic recommendation.",
+      "assertions": [
+        {"id": "PR-01", "text": "All required fields present (slug, name, description)", "type": "structural"},
+        {"id": "PR-02", "text": "2-5 products defined", "type": "structural"},
+        {"id": "PR-03", "text": "Positioning statement present and non-empty", "type": "structural"},
+        {"id": "PR-04", "text": "revenue_model is subscription/project/partnership/hybrid", "type": "structural"},
+        {"id": "PR-05", "text": "maturity is concept/development/launch/growth/mature/decline", "type": "structural"},
+        {"id": "PR-06", "text": "Description is 10-60 words", "type": "structural"},
+        {"id": "PR-07", "text": "No parity adjectives in descriptions", "type": "structural"},
+        {"id": "PR-08", "text": "Strategic recommendation includes what-I-would-change section", "type": "agent"},
+        {"id": "PR-09", "text": "portfolio.json sync executed (products array non-empty)", "type": "agent"},
+        {"id": "PR-10", "text": "Existing features cross-referenced in validation", "type": "agent"}
+      ],
+      "files": []
+    },
+    {
+      "id": 21,
+      "name": "products-bechtle-cold-start",
+      "skill": "products",
+      "target": "bechtle",
+      "prompt": "I'm starting a portfolio for Bechtle AG at the project path provided. Bechtle is Germany's largest IT reseller and system integrator — they sell hardware, software licensing, managed services, and IT consulting. Help me define their product portfolio from scratch.",
+      "expected_output": "3-5 product JSON files for Bechtle covering resell vs. services split. Skill should surface services-vs-resell anti-pattern and propose clear product boundaries.",
+      "assertions": [
+        {"id": "PR-01", "text": "All required fields present (slug, name, description)", "type": "structural"},
+        {"id": "PR-02", "text": "2-5 products defined", "type": "structural"},
+        {"id": "PR-03", "text": "Positioning statement present and non-empty", "type": "structural"},
+        {"id": "PR-04", "text": "revenue_model is subscription/project/partnership/hybrid", "type": "structural"},
+        {"id": "PR-06", "text": "Description is 10-60 words", "type": "structural"},
+        {"id": "PR-07", "text": "No parity adjectives in descriptions", "type": "structural"},
+        {"id": "PR-11", "text": "Products cover Bechtle actual business lines (resell + services split addressed)", "type": "agent"},
+        {"id": "PR-12", "text": "Anti-pattern detection surfaced (services-vs-software or shared-technology)", "type": "agent"}
+      ],
+      "files": []
+    },
+    {
+      "id": 22,
+      "name": "products-tsys-review",
+      "skill": "products",
+      "target": "t-systems",
+      "prompt": "Review the product portfolio in my T-Systems project at the project path provided. We currently have only one product: cloud-services. Is this the right structure? Should we split it? Add new products? Give me your strategic assessment.",
+      "expected_output": "Strategic assessment identifying cloud-services as too broad (8 features spanning multiple buyer conversations). Proposes restructuring with specific merger/split/addition recommendations.",
+      "assertions": [
+        {"id": "PR-08", "text": "Strategic recommendation includes what-I-would-change section", "type": "agent"},
+        {"id": "PR-13", "text": "Identifies cloud-services as potentially too broad", "type": "agent"},
+        {"id": "PR-14", "text": "Recommends specific mergers, splits, or additions with reasoning", "type": "agent"},
+        {"id": "PR-15", "text": "Customer journey analysis present", "type": "agent"},
+        {"id": "PR-16", "text": "Biggest risk identified", "type": "agent"}
+      ],
+      "files": []
+    },
+    {
+      "id": 18,
+      "name": "propositions-tsys-review-loop",
+      "skill": "propositions",
+      "target": "t-systems",
+      "prompt": "Generate propositions for all features in the grosse-energieversorger-de market. Use the existing features and market definition from the T-Systems project. Research where needed for evidence. After generation, run the auto-review loop: CSO (tsystems-cso-reviewer) and CDO (energieversorger-cdo-reviewer) reviewers score each proposition, failing ones get rewritten via quality-enricher with merged feedback, loop continues until all propositions meet threshold (avg >= 4.0, no dimension < 3) or max 3 iterations.",
+      "expected_output": "IS/DOES/MEANS propositions that pass both CSO (sales-readiness) and CDO (buyer-readiness) review with avg >= 4.0 and no dimension below 3. Convergence log showing iteration-over-iteration improvement.",
+      "assertions": [
+        {"id": "P-01", "text": "DOES statements are 15-30 words", "type": "structural"},
+        {"id": "P-02", "text": "MEANS statements are 15-30 words", "type": "structural"},
+        {"id": "P-03", "text": "IS statements are 20-35 words", "type": "structural"},
+        {"id": "P-06", "text": "Slug follows {feature}--{market} convention", "type": "structural"},
+        {"id": "P-07", "text": "DOES is not vendor-centric", "type": "structural"},
+        {"id": "P-08", "text": "MEANS contains quantification signal", "type": "structural"},
+        {"id": "P-09", "text": "Evidence array is non-empty", "type": "structural"},
+        {"id": "P-11", "text": "Proposition quality assessor returns no fail ratings", "type": "agent"},
+        {"id": "RL-01", "text": "CSO combined avg >= 4.0", "type": "review-loop"},
+        {"id": "RL-02", "text": "CDO combined avg >= 4.0", "type": "review-loop"},
+        {"id": "RL-03", "text": "No dimension below 3 from either reviewer", "type": "review-loop"},
+        {"id": "RL-04", "text": "CDO would_take_meeting is true", "type": "review-loop"},
+        {"id": "RL-05", "text": "CSO would_use_in_pitch_deck is true", "type": "review-loop"},
+        {"id": "RL-06", "text": "Loop converged within max_iterations", "type": "review-loop"},
+        {"id": "RL-07", "text": "At least one proposition was rewritten (loop exercised)", "type": "review-loop"}
+      ],
+      "files": []
     }
   ]
 }

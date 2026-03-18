@@ -1,0 +1,15 @@
+{
+  "eval_id": 21,
+  "eval_name": "products-bechtle-cold-start",
+  "prompt": "I'm starting a portfolio for Bechtle AG at the project path provided. Bechtle is Germany's largest IT reseller and system integrator — they sell hardware, software licensing, managed services, and IT consulting. Help me define their product portfolio from scratch.",
+  "assertions": [
+    {"id": "PR-01", "text": "All required fields present (slug, name, description)"},
+    {"id": "PR-02", "text": "2-5 products defined"},
+    {"id": "PR-03", "text": "Positioning statement present and non-empty"},
+    {"id": "PR-04", "text": "revenue_model is subscription/project/partnership/hybrid"},
+    {"id": "PR-06", "text": "Description is 10-60 words"},
+    {"id": "PR-07", "text": "No parity adjectives in descriptions"},
+    {"id": "PR-11", "text": "Products cover Bechtle actual business lines (resell + services split addressed)"},
+    {"id": "PR-12", "text": "Anti-pattern detection surfaced (services-vs-software or shared-technology)"}
+  ]
+}

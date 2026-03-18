@@ -1,0 +1,12 @@
+{
+  "eval_id": 22,
+  "eval_name": "products-tsys-review",
+  "prompt": "Review the product portfolio in my T-Systems project at the project path provided. We currently have only one product: cloud-services. Is this the right structure? Should we split it? Add new products? Give me your strategic assessment.",
+  "assertions": [
+    {"id": "PR-08", "text": "Strategic recommendation includes what-I-would-change section"},
+    {"id": "PR-13", "text": "Identifies cloud-services as potentially too broad"},
+    {"id": "PR-14", "text": "Recommends specific mergers, splits, or additions with reasoning"},
+    {"id": "PR-15", "text": "Customer journey analysis present"},
+    {"id": "PR-16", "text": "Biggest risk identified"}
+  ]
+}

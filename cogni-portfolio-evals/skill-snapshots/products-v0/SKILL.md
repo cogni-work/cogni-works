@@ -64,8 +64,6 @@ Do not ask all of these. Read the room. If the user has a clear portfolio and ju
 
 Based on discovery, propose a product structure. This is where your consulting value is highest — you're not just recording what the user says, you're helping them see their portfolio with fresh eyes.
 
-**Cold-start discipline:** When the user describes N revenue streams or business lines, do not default to N products. Organizational silos are not product boundaries — customers don't buy org charts. First evaluate whether the buyer's journey suggests a different grouping: would two streams merge into one product because the same buyer evaluates both? Would one stream split because it serves two distinct buying decisions? Always propose at least one alternative structure that differs from the user's initial framing, even if you ultimately recommend the user's version. The conversation about why the alternative doesn't work is itself valuable consulting.
-
 ### How to Think About Product Boundaries
 
 A well-scoped product passes these tests:
@@ -81,7 +79,7 @@ Claude naturally catches obvious problems (7 identical products, etc.). These ar
 - **Shared technology, separate products**: Two products built on the same engine but sold to different buyers. This can be valid (self-serve vs. embedded deployment) or it can signal an artificial split that doubles your go-to-market cost. The test: do they share a roadmap? If one product's improvements automatically benefit the other, they might be one product with two deployment models.
 - **Services mixed with software**: A consulting/services offering alongside SaaS products. This is common but creates strategic tension — services scale linearly (more people = more revenue), software scales exponentially. Decide whether services is (a) an independent profit center, (b) a customer acquisition channel for software, or (c) a productization candidate. Each answer leads to different portfolio structure.
 - **Missing entry point**: A portfolio with only Professional/Enterprise products and no starter or self-serve tier. This isn't always wrong (some markets don't support self-serve), but it means every customer requires a sales conversation to get started.
-- **No pipeline product**: Everything in growth/mature, nothing in concept/development. The portfolio is generating revenue today but has no next act. When you detect this gap, propose at least one concept-stage product as a concrete placeholder — name it, describe the opportunity, set maturity to `concept`. Don't just flag the gap; fill it with a starting point the user can react to. Concept-stage descriptions should signal planned status clearly ("planned platform for...", "emerging capability in...") and avoid citing specific metrics or quantified outcomes that haven't been validated yet — aspirational numbers undermine credibility.
+- **No pipeline product**: Everything in growth/mature, nothing in concept/development. The portfolio is generating revenue today but has no next act.
 - **Accidental bundle**: Everything sold as one big thing when unbundling could open new segments, lower the entry barrier, or clarify differentiation.
 
 ### Building Your Strategic Recommendation
@@ -96,7 +94,7 @@ The goal is not to produce a checklist of observations — it's to form a point 
 
 **Pricing architecture:** Do the products serve different buyer budgets and commitment levels? Is there a low-risk entry point? Does the portfolio support both "try before you buy" and "enterprise deal"?
 
-**Differentiation clarity:** Two tests must pass. First, the internal test: could a new employee explain in one sentence how each product differs from its siblings? Second, the competitive substitution test: if you replaced the company name with a competitor's, would the positioning statement still be true? If yes, the positioning lacks competitive bite. Descriptions for commodity categories (consulting, managed services) especially need anchoring in the company's unique structural advantages — proprietary methodology, geographic footprint, ecosystem integrations, or certified partnerships that competitors cannot replicate.
+**Differentiation clarity:** Could a new employee explain in one sentence how each product differs? If not, the boundaries need work.
 
 **Cannibalization risk:** Do any two products compete for the same buyer budget? Intentional (good-better-best) vs. accidental (confused portfolio)?
 
@@ -104,7 +102,7 @@ After analyzing these lenses, synthesize into a strategic recommendation. State 
 
 ## Phase 3: Structure and Capture
 
-Once you and the user agree on the product set, structure each product. If Phase 2 identified issues (revenue model ambiguity, language mismatches, features needing reassignment), resolve them now — do not defer known problems to "next steps." If the skill's own analysis concluded that SAP should be a separate product, propose the structure with SAP separated as the primary recommendation. Present the conservative alternative second, not first.
+Once you and the user agree on the product set, structure each product:
 
 ### Product JSON Schema
 
@@ -125,11 +123,7 @@ Once you and the user agree on the product set, structure each product. If Phase
 
 Required: `slug`, `name`, `description`. Optional: `positioning`, `pricing_tier`, `revenue_model`, `maturity`, `launch_date`, `version`, `created`.
 
-**Description quality:** Descriptions should not just list capabilities — they must include at least one buyer-outcome signal: what problem does this product solve, what does the buyer get? A procurement team reading the description should be able to draft a business case justification without needing a sales meeting. Bad: "End-to-end managed IT operations." Good: "Managed IT operations with guaranteed SLA response times, reducing unplanned downtime and shifting IT spend from capex to predictable monthly opex."
-
-**Positioning vs. description:** The `positioning` field is the memorable, differentiating market statement — it should NOT repeat the description. Description is factual scope (what you buy). Positioning is competitive stance (why you buy it from us, not them). If swapping in a competitor's name would make the positioning equally true, it's not sharp enough. Anchor positioning in structural advantages (certifications, scale, geographic footprint, ecosystem partnerships) rather than naming competitors directly — the positioning should survive in consortium contexts and joint proposals where named competitors may be partners.
-
-Valid maturity values: `concept`, `development`, `launch`, `growth`, `mature`, `decline`. Maturity reflects the **company's** current stage with this product, not the overall market maturity. A company entering a mature market with a new product should set maturity to `launch` or `growth`, not `mature`.
+Valid maturity values: `concept`, `development`, `launch`, `growth`, `mature`, `decline`.
 
 Valid `revenue_model` values: `subscription` (SaaS, recurring), `project` (consulting, implementation), `partnership` (revenue-share, co-investment), `hybrid` (subscription + consulting). Defaults to `project` if absent. This field determines how downstream solutions are structured — subscription products get onboarding + subscription tiers instead of project phases + day-rate pricing.
 
@@ -203,15 +197,13 @@ When the user asks about a specific product, show:
 
 ### Portfolio Review
 
-When the user asks to review or improve their portfolio (or when you notice issues during other operations), follow the same 5-phase structure adapted for review:
+When the user asks to review or improve their portfolio (or when you notice issues during other operations):
 
-1. **Phase 1 (Discovery)**: Read all existing products, features, and portfolio.json. Note data quality issues (missing fields, language mismatches, orphaned features). No questions needed — the existing portfolio is your input.
-2. **Phase 2 (Shaping)**: Apply the anti-pattern checklist and strategic lenses to the existing portfolio. Form a diagnosis: what's working, what's broken, what's missing.
-3. **Phase 3 (Capture)**: If restructuring is needed, write the proposed product JSON files. Present the recommendation as a consulting memo with the full structure (what to keep, what to change, customer journey, competitive angle, biggest risk, next steps).
-4. **Phase 4 (Sync)**: Run `sync-portfolio.sh` after any product file changes.
-5. **Phase 5 (Validate)**: Cross-reference the new/revised products against features. Flag products with zero features, orphaned features, and language mismatches between features and portfolio language setting.
-
-The key difference from define mode: in review mode you have data to audit, so Phase 1 is analysis not interview, and Phase 2 should challenge the existing structure rather than the user's verbal framing.
+1. Read all products, their features, and any competitor/market data available
+2. Analyze through the strategic lenses (maturity, customer journey, competitive positioning, pricing, differentiation, cannibalization)
+3. Form a point of view — what's working, what you'd change, what's the biggest risk
+4. Present your recommendation as a consulting memo: lead with "here's what I'd do" backed by the analysis, not "here are some observations for your consideration"
+5. Discuss with the user and iterate — they may disagree, and the disagreement is where the value is
 
 ## Important Notes
 

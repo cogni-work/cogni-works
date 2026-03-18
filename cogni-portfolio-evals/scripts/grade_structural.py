@@ -2,7 +2,7 @@
 """Grade portfolio eval outputs against structural assertions.
 
 Usage:
-    python grade_structural.py <outputs_dir> [--type features|propositions|customers|compete|markets]
+    python grade_structural.py <outputs_dir> [--type products|features|propositions|customers|compete|markets]
 
 Reads all .json files in <outputs_dir> and checks structural assertions.
 Writes grading.json to the parent of outputs_dir (the run directory).
@@ -95,6 +95,70 @@ REGION_CURRENCIES = {
 
 VALID_REGIONS = set(REGION_CURRENCIES.keys())
 VALID_PRIORITIES = {'beachhead', 'expansion', 'aspirational'}
+VALID_REVENUE_MODELS = {'subscription', 'project', 'partnership', 'hybrid'}
+VALID_MATURITIES = {'concept', 'development', 'launch', 'growth', 'mature', 'decline'}
+
+
+def grade_product(product: dict) -> list[dict]:
+    """Grade a single product against structural assertions."""
+    results = []
+
+    slug = product.get('slug', '')
+    name = product.get('name', '')
+    desc = product.get('description', '')
+    positioning = product.get('positioning', '')
+    revenue_model = product.get('revenue_model', '')
+    maturity = product.get('maturity', '')
+
+    # PR-01: Required fields
+    required = ['slug', 'name', 'description']
+    missing = [f for f in required if not product.get(f)]
+    results.append({
+        'text': 'All required fields present (slug, name, description)',
+        'passed': len(missing) == 0,
+        'evidence': f'Missing: {missing}' if missing else 'All present'
+    })
+
+    # PR-03: Positioning statement present
+    results.append({
+        'text': 'Positioning statement present and non-empty',
+        'passed': bool(positioning and positioning.strip()),
+        'evidence': f'positioning="{positioning[:80]}"' if positioning else 'Missing'
+    })
+
+    # PR-04: Valid revenue_model
+    if revenue_model:
+        results.append({
+            'text': f'revenue_model is subscription/project/partnership/hybrid (actual: {revenue_model})',
+            'passed': revenue_model in VALID_REVENUE_MODELS,
+            'evidence': f'revenue_model="{revenue_model}"'
+        })
+
+    # PR-05: Valid maturity
+    if maturity:
+        results.append({
+            'text': f'maturity is valid (actual: {maturity})',
+            'passed': maturity in VALID_MATURITIES,
+            'evidence': f'maturity="{maturity}"'
+        })
+
+    # PR-06: Description word count 10-60
+    desc_wc = count_words(desc)
+    results.append({
+        'text': f'Description is 10-60 words (actual: {desc_wc})',
+        'passed': 10 <= desc_wc <= 60,
+        'evidence': f'"{desc[:100]}..." ({desc_wc} words)'
+    })
+
+    # PR-07: No parity adjectives
+    parity = check_parity_adjectives(desc)
+    results.append({
+        'text': 'No parity adjectives in description',
+        'passed': len(parity) == 0,
+        'evidence': f'Found: {parity}' if parity else 'Clean'
+    })
+
+    return results
 
 
 def grade_market(market: dict) -> list[dict]:
@@ -463,7 +527,7 @@ def main():
         sys.exit(1)
 
     # Exclude known non-entity files (assessment summaries, metrics, etc.)
-    exclude_names = {'assessment.json', 'metrics.json', 'feature-summary.json'}
+    exclude_names = {'assessment.json', 'metrics.json', 'feature-summary.json', 'portfolio.json'}
     json_files = sorted(f for f in outputs_dir.glob('*.json') if f.name not in exclude_names)
     if not json_files:
         print(f'No JSON files found in {outputs_dir}')
@@ -493,11 +557,15 @@ def main():
                 file_type = 'markets'
             elif 'description' in data and 'product_slug' in data:
                 file_type = 'features'
+            elif 'slug' in data and 'name' in data and 'description' in data and 'product_slug' not in data and 'region' not in data:
+                file_type = 'products'
             else:
                 print(f'Cannot detect type for {jf.name}, skipping')
                 continue
 
-        if file_type == 'markets':
+        if file_type == 'products':
+            checks = grade_product(data)
+        elif file_type == 'markets':
             checks = grade_market(data)
         elif file_type == 'features':
             checks = grade_feature(data)

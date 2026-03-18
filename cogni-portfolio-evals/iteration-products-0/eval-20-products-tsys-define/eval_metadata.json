@@ -1,0 +1,17 @@
+{
+  "eval_id": 20,
+  "eval_name": "products-tsys-define",
+  "prompt": "I have a T-Systems portfolio at the project path provided. T-Systems sells cloud services, managed IT operations, security services, and digital consulting to enterprise customers. Help me define the product portfolio. Challenge my thinking — I want your honest strategic assessment.",
+  "assertions": [
+    {"id": "PR-01", "text": "All required fields present (slug, name, description)"},
+    {"id": "PR-02", "text": "2-5 products defined"},
+    {"id": "PR-03", "text": "Positioning statement present and non-empty"},
+    {"id": "PR-04", "text": "revenue_model is subscription/project/partnership/hybrid"},
+    {"id": "PR-05", "text": "maturity is concept/development/launch/growth/mature/decline"},
+    {"id": "PR-06", "text": "Description is 10-60 words"},
+    {"id": "PR-07", "text": "No parity adjectives in descriptions"},
+    {"id": "PR-08", "text": "Strategic recommendation includes what-I-would-change section"},
+    {"id": "PR-09", "text": "portfolio.json sync executed (products array non-empty)"},
+    {"id": "PR-10", "text": "Existing features cross-referenced in validation"}
+  ]
+}

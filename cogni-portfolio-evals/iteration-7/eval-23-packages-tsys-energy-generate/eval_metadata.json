@@ -1,0 +1,18 @@
+{
+  "eval_id": 23,
+  "eval_name": "packages-tsys-energy-generate",
+  "prompt": "Create a package for the cloud-services product targeting the grosse-energieversorger-de market in the T-Systems project at the project path provided. There are 4 solutions available (cloud-migration, hybrid-cloud, managed-hyperscaler, sovereign-cloud). Design tiered packages that a large German energy utility procurement team would evaluate.",
+  "assertions": [
+    {"id": "PKG-01", "text": "Required fields present: slug, product_slug, market_slug, package_type, name, tiers"},
+    {"id": "PKG-02", "text": "Slug follows {product}--{market} pattern"},
+    {"id": "PKG-03", "text": "package_type matches product revenue_model (project)"},
+    {"id": "PKG-04", "text": "2-4 tiers present"},
+    {"id": "PKG-05", "text": "Each tier has: tier (kebab-case), name, included_solutions, scope, currency"},
+    {"id": "PKG-06", "text": "Tier prices monotonically increasing"},
+    {"id": "PKG-07", "text": "Every included_solution references existing solution file"},
+    {"id": "PKG-08", "text": "No orphan solutions (every solution in at least one tier)"},
+    {"id": "PKG-09", "text": "bundle_savings_pct is 10-50%"},
+    {"id": "PKG-10", "text": "Positioning max 80 characters"},
+    {"id": "PKG-11", "text": "Scope max 1 sentence per tier"}
+  ]
+}

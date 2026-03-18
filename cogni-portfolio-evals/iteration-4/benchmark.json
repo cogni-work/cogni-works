@@ -1,0 +1,214 @@
+{
+  "metadata": {
+    "skill_name": "portfolio-scan",
+    "skill_path": "/Users/stephandehaas/GitHub/dev/cogni-works/cogni-portfolio/skills/portfolio-scan",
+    "executor_model": "claude-opus-4-6",
+    "analyzer_model": "claude-opus-4-6",
+    "timestamp": "2026-03-18T14:00:00Z",
+    "evals_run": [11, 12, 13],
+    "runs_per_configuration": 1
+  },
+  "runs": [
+    {
+      "eval_id": 11,
+      "eval_name": "scan-tsystems-full",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.818,
+        "passed": 9,
+        "failed": 2,
+        "total": 11,
+        "time_seconds": 891.1,
+        "tokens": 126901,
+        "tool_calls": 90,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "All 8 dimensions present in report", "passed": true, "evidence": "All 8 present"},
+        {"text": "All 57 categories present in report", "passed": true, "evidence": "All 57 present"},
+        {"text": "Every category has discovery status tag", "passed": true, "evidence": "57 valid status tags"},
+        {"text": "scan-output.json status totals = 57", "passed": true, "evidence": "51+6+0+0 = 57"},
+        {"text": "Every confirmed offering has Link field", "passed": true, "evidence": "All offerings have links"},
+        {"text": "All Links from discovered domains only", "passed": true, "evidence": "All from company domains — no wikipedia/external"},
+        {"text": "At least 3 domains analyzed", "passed": true, "evidence": "4 domains"},
+        {"text": "Features have taxonomy_mapping with category_id", "passed": false, "evidence": "73/81 — 5 pre-existing fixture files lack taxonomy_mapping"},
+        {"text": "category_id matches valid category", "passed": true, "evidence": "All scan-generated features valid"},
+        {"text": "Feature readiness is ga/beta/planned", "passed": false, "evidence": "73/81 — same 5 fixture files lack readiness"},
+        {"text": "Feature count >= 20", "passed": true, "evidence": "81 features"}
+      ]
+    },
+    {
+      "eval_id": 11,
+      "eval_name": "scan-tsystems-full",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 11,
+        "failed": 0,
+        "total": 11,
+        "time_seconds": 491.3,
+        "tokens": 63328,
+        "tool_calls": 39,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "All 8 dimensions present in report", "passed": true, "evidence": "All 8 present"},
+        {"text": "All 57 categories present in report", "passed": true, "evidence": "All 57 present"},
+        {"text": "Every category has discovery status tag", "passed": true, "evidence": "57 valid status tags"},
+        {"text": "scan-output.json status totals = 57", "passed": true, "evidence": "53+1+3+0 = 57"},
+        {"text": "Every confirmed offering has Link field", "passed": true, "evidence": "All have links"},
+        {"text": "All Links from discovered domains only", "passed": true, "evidence": "All from analyzed domains"},
+        {"text": "At least 3 domains analyzed", "passed": true, "evidence": "16 domains"},
+        {"text": "Features have taxonomy_mapping with category_id", "passed": true, "evidence": "61/61 present"},
+        {"text": "category_id matches valid category", "passed": true, "evidence": "All valid"},
+        {"text": "Feature readiness is ga/beta/planned", "passed": true, "evidence": "All valid"},
+        {"text": "Feature count >= 20", "passed": true, "evidence": "61 features"}
+      ]
+    },
+    {
+      "eval_id": 12,
+      "eval_name": "scan-bechtle-mid",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 11,
+        "failed": 0,
+        "total": 11,
+        "time_seconds": 632.5,
+        "tokens": 102601,
+        "tool_calls": 61,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "All 8 dimensions present in report", "passed": true, "evidence": "All 8 present"},
+        {"text": "All 57 categories present in report", "passed": true, "evidence": "All 57 present"},
+        {"text": "Every category has discovery status tag", "passed": true, "evidence": "57 valid status tags"},
+        {"text": "scan-output.json status totals = 57", "passed": true, "evidence": "52+5+0+0 = 57"},
+        {"text": "Every confirmed offering has Link field", "passed": true, "evidence": "All have links"},
+        {"text": "All Links from discovered domains only", "passed": true, "evidence": "All from bechtle.com or bechtle-clouds.com"},
+        {"text": "At least 1 domain analyzed", "passed": true, "evidence": "2 domains"},
+        {"text": "Features have taxonomy_mapping with category_id", "passed": true, "evidence": "52/52 present"},
+        {"text": "category_id matches valid category", "passed": true, "evidence": "All valid"},
+        {"text": "Feature readiness is ga/beta/planned", "passed": true, "evidence": "All valid"},
+        {"text": "Feature count >= 10", "passed": true, "evidence": "52 features"}
+      ]
+    },
+    {
+      "eval_id": 12,
+      "eval_name": "scan-bechtle-mid",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.909,
+        "passed": 10,
+        "failed": 1,
+        "total": 11,
+        "time_seconds": 427.6,
+        "tokens": 57383,
+        "tool_calls": 32,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "All 8 dimensions present in report", "passed": true, "evidence": "All 8 present"},
+        {"text": "All 57 categories present in report", "passed": true, "evidence": "All 57 present"},
+        {"text": "Every category has discovery status tag", "passed": true, "evidence": "57 valid status tags"},
+        {"text": "scan-output.json status totals = 57", "passed": true, "evidence": "55+0+2+0 = 57"},
+        {"text": "Every confirmed offering has Link field", "passed": true, "evidence": "All have links"},
+        {"text": "All Links from discovered domains only", "passed": false, "evidence": "17 foreign domains"},
+        {"text": "At least 1 domain analyzed", "passed": true, "evidence": "26 domains"},
+        {"text": "Features have taxonomy_mapping with category_id", "passed": true, "evidence": "30/30 present"},
+        {"text": "category_id matches valid category", "passed": true, "evidence": "All valid"},
+        {"text": "Feature readiness is ga/beta/planned", "passed": true, "evidence": "All valid"},
+        {"text": "Feature count >= 10", "passed": true, "evidence": "30 features"}
+      ]
+    },
+    {
+      "eval_id": 13,
+      "eval_name": "scan-tsystems-german",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 11,
+        "failed": 0,
+        "total": 11,
+        "time_seconds": 896.8,
+        "tokens": 116862,
+        "tool_calls": 68,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "All 8 dimensions present in report", "passed": true, "evidence": "All 8 present"},
+        {"text": "All 57 categories present in report", "passed": true, "evidence": "All 57 present"},
+        {"text": "Every category has discovery status tag", "passed": true, "evidence": "57 valid status tags"},
+        {"text": "scan-output.json status totals = 57", "passed": true, "evidence": "54+3+0+0 = 57"},
+        {"text": "Every confirmed offering has Link field", "passed": true, "evidence": "All have links"},
+        {"text": "All Links from discovered domains only", "passed": true, "evidence": "All from company domains"},
+        {"text": "At least 3 domains analyzed", "passed": true, "evidence": "4 domains"},
+        {"text": "Features have taxonomy_mapping with category_id", "passed": true, "evidence": "71/71 present"},
+        {"text": "category_id matches valid category", "passed": true, "evidence": "All valid"},
+        {"text": "Feature readiness is ga/beta/planned", "passed": true, "evidence": "All valid"},
+        {"text": "Feature count >= 20", "passed": true, "evidence": "71 features"}
+      ]
+    },
+    {
+      "eval_id": 13,
+      "eval_name": "scan-tsystems-german",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.909,
+        "passed": 10,
+        "failed": 1,
+        "total": 11,
+        "time_seconds": 509.5,
+        "tokens": 66645,
+        "tool_calls": 45,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "All 8 dimensions present in report", "passed": true, "evidence": "All 8 present"},
+        {"text": "All 57 categories present in report", "passed": true, "evidence": "All 57 present"},
+        {"text": "Every category has discovery status tag", "passed": true, "evidence": "57 valid status tags"},
+        {"text": "scan-output.json status totals = 57", "passed": true, "evidence": "52+5+0+0 = 57"},
+        {"text": "Every confirmed offering has Link field", "passed": true, "evidence": "All have links"},
+        {"text": "All Links from discovered domains only", "passed": false, "evidence": "12 foreign domains"},
+        {"text": "At least 3 domains analyzed", "passed": true, "evidence": "15 domains"},
+        {"text": "Features have taxonomy_mapping with category_id", "passed": true, "evidence": "46/46 present"},
+        {"text": "category_id matches valid category", "passed": true, "evidence": "All valid"},
+        {"text": "Feature readiness is ga/beta/planned", "passed": true, "evidence": "All valid"},
+        {"text": "Feature count >= 20", "passed": true, "evidence": "46 features"}
+      ]
+    }
+  ],
+  "run_summary": {
+    "with_skill": {
+      "pass_rate": {"mean": 0.939, "stddev": 0.105, "min": 0.818, "max": 1.0},
+      "time_seconds": {"mean": 806.8, "stddev": 150.3, "min": 632.5, "max": 896.8},
+      "tokens": {"mean": 115455, "stddev": 12215, "min": 102601, "max": 126901}
+    },
+    "without_skill": {
+      "pass_rate": {"mean": 0.939, "stddev": 0.053, "min": 0.909, "max": 1.0},
+      "time_seconds": {"mean": 476.1, "stddev": 42.7, "min": 427.6, "max": 509.5},
+      "tokens": {"mean": 62452, "stddev": 4662, "min": 57383, "max": 66645}
+    },
+    "delta": {
+      "pass_rate": "+0.000",
+      "time_seconds": "+330.7",
+      "tokens": "+53003"
+    }
+  },
+  "notes": [
+    "FIXED: Domain restriction now 100% clean across all 3 evals (was 1 wikipedia leak in iter-3)",
+    "FIXED: Bechtle now discovers 2 domains (bechtle.com + bechtle-clouds.com) vs 1 in iter-3",
+    "FIXED: Status counts derived from report — no metadata mismatches",
+    "FIXED: Bechtle has 5 Not Offered categories (more realistic than 2 in iter-3)",
+    "REMAINING: Eval-11 has 5 pre-existing fixture features without taxonomy_mapping — not a skill issue, workspace cleanup",
+    "Feature counts: eval-11: 71→81 (+14%), eval-12: 53→52 (stable), eval-13: 87→71 (fewer but IS-layer compliant)",
+    "Token cost increased ~11% (104K→115K avg) due to deeper subsidiary discovery and log verification",
+    "Time increased ~30% (620s→807s avg) from improved subsidiary search depth"
+  ]
+}

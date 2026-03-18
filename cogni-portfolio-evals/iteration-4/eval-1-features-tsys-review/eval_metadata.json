@@ -1,0 +1,11 @@
+{
+  "eval_id": 1,
+  "eval_name": "features-tsys-review",
+  "prompt": "I have an existing T-Systems portfolio at the project path provided. Review and assess all features for the cloud-services product. Run the feature quality assessor and identify the ones with quality issues. Show me the assessment results.",
+  "assertions": [
+    {"id": "F-01", "text": "Feature descriptions are 20-35 words", "type": "structural"},
+    {"id": "F-02", "text": "All required fields present (slug, product_slug, name, description)", "type": "structural"},
+    {"id": "F-06", "text": "No outcome verbs in descriptions", "type": "structural"},
+    {"id": "F-07", "text": "No parity adjectives in descriptions", "type": "structural"}
+  ]
+}

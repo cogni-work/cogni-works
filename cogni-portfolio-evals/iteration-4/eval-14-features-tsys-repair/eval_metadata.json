@@ -1,0 +1,13 @@
+{
+  "eval_id": 14,
+  "eval_name": "features-tsys-repair",
+  "prompt": "Review the features for the cloud-services product in the T-Systems project. Every feature is missing product_slug, taxonomy_mapping, and readiness fields. Ensure every feature has all required fields including product_slug, taxonomy_mapping (with dimension, category_id, category_name from the b2b-ict taxonomy), and readiness. Fix all structural gaps and write the corrected feature files.",
+  "assertions": [
+    {"id": "F-01", "text": "Feature descriptions are 20-35 words", "type": "structural"},
+    {"id": "F-02", "text": "All required fields present (slug, product_slug, name, description)", "type": "structural"},
+    {"id": "F-04", "text": "taxonomy_mapping present with dimension, category_id, category_name", "type": "structural"},
+    {"id": "F-05", "text": "readiness is one of ga, beta, planned", "type": "structural"},
+    {"id": "F-06", "text": "No outcome verbs in descriptions", "type": "structural"},
+    {"id": "F-07", "text": "No parity adjectives in descriptions", "type": "structural"}
+  ]
+}

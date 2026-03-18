@@ -1,0 +1,11 @@
+{
+  "eval_id": 10,
+  "eval_name": "features-tsys-improve",
+  "prompt": "The feature quality assessor flagged ai-data-analytics and app-modernization features with conciseness warnings and weak differentiation. Research T-Systems' actual capabilities for these two features and improve their descriptions. Use the quality-enricher agent.",
+  "assertions": [
+    {"id": "F-01", "text": "Improved descriptions are 20-35 words", "type": "structural"},
+    {"id": "F-06", "text": "No outcome verbs in improved descriptions", "type": "structural"},
+    {"id": "F-07", "text": "No parity adjectives in improved descriptions", "type": "structural"},
+    {"id": "F-10", "text": "Improved features pass quality assessor (no fail, preferably no warn)", "type": "agent"}
+  ]
+}

@@ -1,0 +1,71 @@
+{
+  "reviewer": "packages-procurement-expert",
+  "overall_score": 3.3,
+  "dimension_scores": {
+    "tier_transparency": {
+      "score": 3,
+      "rationale": "The tiers follow a clean additive model — Foundation has 2 solutions, Professional adds hybrid-cloud, Enterprise adds managed-hyperscaler. The included_solutions array makes the composition unambiguous. However, each underlying solution offers four size tiers (proof_of_value, small, medium, large) and the package does not specify which size applies at each tier level. When I see sovereign-cloud in Foundation at EUR 450K, I cannot tell whether I am getting the small (EUR 110K) or medium (EUR 250K) scope of sovereign-cloud. This ambiguity would generate scope disputes during contract execution."
+    },
+    "pricing_plausibility": {
+      "score": 3,
+      "rationale": "The 21% bundle discount is within the credible 10-30% range. Back-calculating: Enterprise at EUR 750K versus the sum of four solutions at medium pricing (250K + 280K + 220K + 195K = 945K) yields a 20.6% discount — mathematically consistent. Implied day rates at EUR 1,400-1,600/day are within T-Systems market range. However, the pricing is not anchored to specific solution sizes, making Preisspiegel comparison impossible. I cannot verify whether Foundation at EUR 450K represents two medium solutions or one medium and one large. The numbers are in the right order of magnitude but lack the traceability I need for a formal price comparison."
+    },
+    "scope_clarity": {
+      "score": 2,
+      "rationale": "Package-level scope descriptions are one-line summaries: 'NIS2-compliant sovereign platform with structured workload migration' for Foundation. This tells me the theme but not: how many workloads are in scope, which systems (SAP IS-U? SCADA? Trading?), what duration, what deliverables, what is explicitly excluded. The underlying solutions have excellent scope detail — cloud-migration specifies 'up to 200 workloads including SAP IS-U, 18-week delivery' at medium tier — but the package does not propagate this specificity. I cannot write a Leistungsverzeichnis from the package JSON alone, which means contract negotiation would require going back to the individual solution definitions and agreeing on which size applies."
+    },
+    "bundle_logic": {
+      "score": 5,
+      "rationale": "This is how a utility CIO would actually buy cloud services. Foundation combines sovereign cloud with migration because you migrate TO the sovereign platform — these are the same project. Professional adds hybrid-cloud for OT/IT integration, which is the natural next step once the sovereign platform is live and you need to connect SCADA and grid control systems. Enterprise adds managed hyperscaler for ongoing multi-cloud operations. The progression mirrors the actual transformation journey: comply first, integrate second, optimize operations third. I would nod at this in a steering committee."
+    },
+    "vendor_lock_in_risk": {
+      "score": 4,
+      "rationale": "Each tier stands on its own as a valid procurement decision. Foundation delivers a complete sovereign platform with migrated workloads — you get full value even if you never buy Professional. Professional adds hybrid integration without invalidating Foundation. The one concern is Enterprise's managed-hyperscaler: once T-Systems runs 24/7 operations across all hyperscalers, exit costs are significant (knowledge transfer, SLA replacement, tooling migration). This is inherent to managed services rather than artificial lock-in, but the package does not address exit terms or transition support, which I would require in any Rahmenvertrag."
+    },
+    "procurement_compatibility": {
+      "score": 3,
+      "rationale": "The additive tier structure maps reasonably to Rahmenvertrag lots — each solution could be tendered as a separate Los. The 21% bundle discount is transparent and could be structured as a Bündelrabatt in the Preisspiegel. However, three issues: (1) scope descriptions are too thin for a formal Leistungsbeschreibung, requiring additional specification; (2) the package does not declare volume commitments, minimum contract duration, or termination terms; (3) there is no separation between one-time project costs and recurring operations costs, which SektVO lot structures typically require. The package is procurable but would need significant elaboration before it could enter a Vergabeverfahren."
+    }
+  },
+  "top_issues": [
+    {
+      "entity_type": "package",
+      "entity_slug": "cloud-services--grosse-energieversorger-de",
+      "issue": "Package tiers reference solutions by slug but do not specify which solution size tier (small/medium/large) is included. Sovereign-cloud alone ranges from EUR 110K to EUR 520K — a 5x spread. Without pinning the size, the package price is unverifiable and scope disputes are inevitable.",
+      "severity": "high",
+      "suggested_fix": "Add a 'solution_size' or 'solution_scope' field per included solution in each tier, referencing the specific pricing tier from the solution definition (e.g., 'sovereign-cloud: medium, cloud-migration: medium')",
+      "root_cause_hint": "packages SKILL.md tier composition logic — needs to propagate solution sizing into package tiers"
+    },
+    {
+      "entity_type": "package",
+      "entity_slug": "cloud-services--grosse-energieversorger-de",
+      "issue": "Scope descriptions are single sentences that describe themes rather than deliverables. 'Full hybrid OT/IT integration with sovereign compliance and migration' does not specify workload counts, system domains, duration, or exclusions. This is marketing copy, not contractual scope.",
+      "severity": "high",
+      "suggested_fix": "Generate scope descriptions that aggregate the specific scope statements from the included solutions at the selected size tier — e.g., 'Up to 200 workloads including SAP IS-U (18-week migration), multi-domain sovereign deployment with BSI C5 readiness (12-week deployment)'",
+      "root_cause_hint": "packages SKILL.md scope generation — should compose scope from constituent solution scope statements rather than generating new summary text"
+    },
+    {
+      "entity_type": "package",
+      "entity_slug": "cloud-services--grosse-energieversorger-de",
+      "issue": "No separation between one-time project costs and recurring operations costs. Managed-hyperscaler in Enterprise tier is inherently a recurring service (24/7 operations) but is bundled into a single EUR 750K figure alongside project-based migration and platform setup.",
+      "severity": "medium",
+      "suggested_fix": "Split package pricing into 'project_price' (one-time) and 'operations_annual' (recurring) components, or at minimum annotate which solutions are project-based versus ongoing services",
+      "root_cause_hint": "packages SKILL.md pricing model — needs to distinguish revenue_model types when composing package pricing"
+    },
+    {
+      "entity_type": "package",
+      "entity_slug": "cloud-services--grosse-energieversorger-de",
+      "issue": "No exit terms, minimum duration, or transition support mentioned. For a package targeting KRITIS-regulated energy utilities under SektVO procurement rules, the absence of exit provisions is a red flag that would be raised in any Vergabestelle review.",
+      "severity": "medium",
+      "suggested_fix": "Add 'exit_terms' or 'contract_terms' section with minimum commitment period, notice period, and transition support commitments",
+      "root_cause_hint": "packages SKILL.md output schema — consider adding contract terms fields for procurement-sensitive markets"
+    }
+  ],
+  "strengths": [
+    "Bundle logic is excellent — the sovereign-cloud + migration Foundation reflects how energy utilities actually procure cloud transformation (comply first, then migrate). A utility CIO would recognize this progression immediately.",
+    "The 21% bundle discount is mathematically consistent across tiers and falls within the credible 10-30% market range. Back-calculation against solution medium pricing confirms internal consistency.",
+    "Additive tier model with no artificial dependencies — Foundation delivers standalone value, and the buyer can stop at any tier without stranding investment. No crippled entry tier.",
+    "Strong underlying solution quality — each solution has well-defined implementation phases with specific durations, and pricing tiers with concrete scope boundaries (workload counts, system domains, delivery timelines)."
+  ],
+  "overall_assessment": "This package demonstrates strong commercial architecture — the bundle logic, tier progression, and discount structure are exactly what I would expect from a mature IT services provider targeting energy utilities. The problem is at the contract interface: the package does not propagate the excellent specificity of its constituent solutions into the tier-level scope descriptions. As written, I could not take this into a Vergabeverfahren without going back to T-Systems to clarify which solution sizes apply at each tier and getting proper Leistungsbeschreibungen. The fix is structural, not creative — the package needs to pin solution sizes per tier and compose scope statements from the underlying solution definitions. Once that is done, this would be a strong, procurement-ready offering that I would advance to commercial negotiation."
+}

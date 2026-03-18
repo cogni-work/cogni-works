@@ -1,0 +1,13 @@
+{
+  "eval_id": 2,
+  "eval_name": "features-mainova-generate",
+  "prompt": "Define features for Mainova AG's digital energy services. Mainova is a Frankfurt-based Stadtwerk and energy supplier (~3000 employees, 1M customers). They operate energy trading, grid operations (Strom, Gas, Fernwaerme), smart metering, and digital customer services. Focus on their core IT/digital service capabilities as a portfolio. Use the b2b-ict taxonomy.",
+  "assertions": [
+    {"id": "F-01", "text": "Feature descriptions are 20-35 words", "type": "structural"},
+    {"id": "F-02", "text": "All required fields present (slug, product_slug, name, description)", "type": "structural"},
+    {"id": "F-04", "text": "taxonomy_mapping present with dimension, category_id, category_name", "type": "structural"},
+    {"id": "F-05", "text": "readiness is one of ga, beta, planned", "type": "structural"},
+    {"id": "F-08", "text": "5-10 features per product", "type": "structural"},
+    {"id": "F-10", "text": "Feature quality assessor returns no fail ratings", "type": "agent"}
+  ]
+}

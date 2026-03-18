@@ -139,11 +139,11 @@ Quantified MEANS statements are dramatically more persuasive: "$1.2M first-year 
 ### 4. Emotional/personal resonance
 Does the statement connect to personal impact alongside business impact?
 
-B2B buying decisions are influenced by personal stakes — career protection, reduced firefighting, team morale, reputation. A MEANS statement that addresses only the business case misses the emotional dimension that tips decisions.
+B2B buying decisions are influenced by personal stakes — career protection, reduced firefighting, team morale, reputation. A MEANS statement that addresses only the business case misses the emotional dimension that tips decisions. Research consistently shows that personal value (career advancement, confidence, reduced stress) has 2x the impact of business value on B2B purchase decisions.
 
-- **Pass**: Includes personal or emotional impact alongside business impact (career, stress, reputation, team morale, strategic time)
-- **Warn**: Purely business-rational but connects to a specific KPI the buyer personally tracks — acceptable for highly analytical buyer personas
-- **Fail**: Generic business language that no buyer would personally identify with
+- **Pass**: Includes personal or emotional impact alongside business impact (career credibility, board reputation, risk exposure, team retention, reduced firefighting, sleep quality, promotion case)
+- **Warn**: Purely business-rational with a specific, measurable KPI — acceptable only for CFO-targeted propositions where emotional framing would undermine credibility. For all other buyer personas (CIO, CISO, CDO, OT-Leiter), a purely rational MEANS should be flagged as warn because it misses the personal stake that tips the decision
+- **Fail**: Generic business language that no buyer would personally identify with ("drives value", "optimizes operations")
 
 ### 5. Conciseness
 Same thresholds as DOES:

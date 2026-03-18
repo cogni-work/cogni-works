@@ -1,12 +1,16 @@
-# Eval iteration outputs — regenerable by re-running evals
-# Key findings are captured in RESULTS.md and skill-snapshots/
-iteration-*/*/with_skill/outputs/
-iteration-*/*/without_skill/outputs/
-iteration-*/*/old_skill/outputs/
+# Eval iteration data — regenerable by re-running evals
+# Key findings are captured in RESULTS.md, skill-snapshots/, and review data
+# committed selectively (e.g. review loop convergence logs, benchmark.json)
+#
+# We gitignore the bulk of iteration output and commit only:
+#   - eval_metadata.json (eval definitions)
+#   - benchmark.json (aggregated results)
+#   - review loop data (convergence logs, reviewer JSONs)
+#   - RESULTS.md (human-written analysis)
 
-# Timing and grading — regenerable from outputs
-iteration-*/*/timing.json
-iteration-*/*/grading.json
-
-# Stakeholder reviews — regenerable from outputs
-iteration-*/*-review.json
+# All iteration variants (iteration-3, iteration-4-improved, iteration-products-0, etc.)
+iteration*/**/outputs/
+iteration*/**/workspace/
+iteration*/**/timing.json
+iteration*/**/grading.json
+iteration*/**/*-review.json

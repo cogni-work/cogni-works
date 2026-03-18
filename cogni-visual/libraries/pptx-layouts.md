@@ -344,6 +344,17 @@ Each box contains:
 - **Content**: 14pt text, 1-2 sentences
 - **Separator**: Subtle divider line
 
+### Label Localization
+
+The Layer Label badge text must match the presentation language:
+
+| Language | IS | DOES | MEANS |
+|----------|-----|------|-------|
+| `en` | IS | DOES | MEANS |
+| `de` | IST | MACHT | BEDEUTET |
+
+Generators must set the `Label` field per box according to the `language` parameter.
+
 ### Required Content
 
 - **Slide Title**: Solution or capability name

@@ -91,6 +91,28 @@ On empty or blank responses, auto-select the best option and move on. When `inte
 
 German presentations go to executives. ASCII-ified umlauts (`ae`/`oe`/`ue`) immediately signal "machine-generated" and undermine credibility. Use real Unicode throughout: ae→ä oe→ö ue→ü ss→ß. German number formatting: 2.661 (dot as thousands separator).
 
+### Client-facing copy hygiene
+
+Presentation briefs are client-facing deliverables. Strip all internal sales methodology vocabulary from slide titles, headlines, and body copy:
+
+- **Never expose:** "Power Position", "Why Change", "Why Now", "Why You", "Why Pay", "Unconsidered Need", "Buying Center" in any client-visible field (Slide-Title, headlines, bullets, Bottom-Banner)
+- **Transform to:** customer-benefit language that asserts a specific capability the customer cares about.
+  - Bad: `"Why You — Power Position 2 & 3: Compliance & Sovereign Cloud"`
+  - Good: `"Warum T-Systems — Compliance-native Architektur eliminiert 90% der Audit-Findings"`
+- **One Power Position = one slide.** Never combine multiple Power Positions into a single slide title or body. Each gets its own slide with its own assertion headline.
+- **Internal-only slides** (Methodology, Buying Center) are exempt — they carry the INTERNAL warning banner.
+
+### IS/DOES/MEANS label localization
+
+The `is-does-means` layout uses layer labels rendered as badges on each box. These labels must match the presentation language:
+
+| Language | IS label | DOES label | MEANS label |
+|----------|----------|------------|-------------|
+| `en` | IS | DOES | MEANS |
+| `de` | IST | MACHT | BEDEUTET |
+
+Apply the localized labels in every `IS-Box.Label`, `DOES-Box.Label`, `MEANS-Box.Label` field. English labels in a German presentation signal "template not adapted" and undermine credibility.
+
 ---
 
 ## Quick Reference: Good vs Bad Output

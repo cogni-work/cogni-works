@@ -99,11 +99,30 @@ REASON through headline construction for each slide:
 | `urgency` | "Every [period], [cost accumulates]" | "Every Month of Delay Costs €230K" |
 | `evidence` | [Data point] + [proves claim] | "3 of 4 Incidents Go Undetected" |
 | `solution` | [Solution] + [achieves result] | "AI Monitoring Detects 97% of Incidents" |
-| `proof` | [Customer/metric] + [validates result] | "Pilot Site Reduced Incidents by 73%" |
+| `proof` | [Specific capability] + [delivers measurable outcome] | "Integrierte OT/IT-Plattform senkt Reaktionszeit um 60%" |
+| `proof` (Power Position) | [Provider] + [strongest differentiator verb] + [specific customer benefit] | "T-Systems betreibt 8 der 10 größten Energieversorger-IT-Umgebungen in DACH" |
 | `options` | [N options] + [comparison frame] | "3 Rollout Strategies: Pilot to National" |
 | `roadmap` | [Timeline] + [achieves milestone] | "6 Months from Pilot to Full Operations" |
 | `investment` | [Investment] + [returns/delivers] + [value] | "€280K Investment Returns 4.3x in Year One" |
 | `call-to-action` | [Action verb] + [specific next step] | "Schedule Discovery Session This Quarter" |
+
+### Power Position Headline Rules
+
+Power Position slides (role: `proof`, layout: `is-does-means`) in why-change arcs require special headline treatment because they are the provider's strongest differentiators — weak headlines undermine the entire "Why You" argument:
+
+1. **Strip methodology jargon.** Never use "Power Position", "Why You", or numbering like "PP1", "PP2" in the Slide-Title. These are internal sales framework labels, not client-facing copy. The audience does not know what a "Power Position" is and should never see the term.
+
+2. **Assert a specific, strong capability claim.** A Power Position headline must make the audience think "only this provider can do this." Test: would this headline work as a billboard for this capability?
+   - Weak: `"20+ Jahre Energieversorger-Erfahrung: Nicht gehandelt, gelebt"` (vague, no specific outcome)
+   - Strong: `"T-Systems betreibt 8 der 10 größten Energieversorger-IT-Umgebungen in DACH"` (specific, verifiable, impressive)
+   - Weak: `"Power Position 2: Compliance-native Architektur + Power Position 3: Sovereign Cloud"` (jargon + combined)
+   - Strong: `"Compliance-native Architektur eliminiert 90% der Audit-Findings"` (measurable outcome)
+
+3. **Include the customer context when language allows.** German Power Position headlines should reference the customer's industry or situation to signal relevance:
+   - Generic: `"Führende Sovereign-Cloud-Lösung"` (could be for anyone)
+   - Targeted: `"Souveräne Cloud für Energieversorger — KRITIS-konform ab Tag 1"` (signals understanding)
+
+4. **One Power Position = one headline.** Never combine multiple Power Positions into a single slide title (e.g., "Power Position 2 & 3: Compliance & Sovereign Cloud"). Each Power Position gets its own slide with its own assertion headline. If consolidation is required to meet `max_slides`, merge at the message architecture level (Step 5c) — not by cramming two PP labels into one title.
 
 ---
 

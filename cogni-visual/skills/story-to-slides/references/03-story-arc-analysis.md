@@ -105,6 +105,22 @@ Title → Problem/Crisis → Urgency → Solution Overview → Power Positions (
 
 The solution overview slide MUST precede the Power Position slides. Without it, audiences experience cognitive dissonance jumping from crisis/urgency directly to detailed technical capabilities. The overview orients the audience to WHAT the solution is before diving into HOW each component delivers specific outcomes.
 
+#### IS/DOES/MEANS Semantic Transformation (Power Positions)
+
+Upstream narratives (cogni-narrative, cogni-sales) often use IS/DOES/MEANS with **narrative semantics** that differ from the **visual layout semantics** defined in `pptx-layouts.md`:
+
+| Layer | Narrative semantics (upstream) | Visual semantics (pptx-layouts.md) | Transformation |
+|-------|-------------------------------|-----------------------------------|----------------|
+| **IS** | Current problem / status quo ("Fragmentierte OT/IT-Silos") | What the solution IS — positioning statement ("Eine integrierte OT/IT-Sicherheitsplattform") | Invert from problem to solution identity |
+| **DOES** | What the provider offers (= what it IS) | What the solution DOES — capabilities with quantified outcomes ("Vereint OT-Monitoring und IT-Security, reduziert Reaktionszeit um 60%") | Add action verbs and measurable outcomes |
+| **MEANS** | Business impact metrics ("€2.3M Einsparung") | HOW it works — technology/methodology proof ("Zero-Trust-Architektur + BSI-C5-zertifizierte Cloud + 24/7 SOC") | Replace outcome metrics with technical proof |
+
+**Rule:** When extracting Power Position content from `03-why-you` sections, do NOT pass IS/DOES/MEANS through verbatim. Apply the transformation above so each layer matches its visual layout function:
+
+1. **IS** must be a solution positioning statement (what it IS), not a problem description. If the upstream IS describes the problem, rewrite it as the solution that addresses that problem.
+2. **DOES** must state capabilities with quantified outcomes (what it DOES), not repeat what the solution is. Add action verbs and measurable results.
+3. **MEANS** must provide technology/methodology proof (HOW it works), not business impact metrics. If the upstream MEANS lists business outcomes, move those to DOES and replace MEANS with the underlying technology or methodology that enables those outcomes.
+
 ---
 
 #### 2. Problem-Solution (`problem-solution`)

@@ -120,6 +120,14 @@ REASON through message quality by reading ONLY the slide headings in sequence:
      → FAIL if: any heading names a topic without asserting
      → FIX: Return to Step 5a output and re-derive the assertion headline
 
+  2b. CHECK for methodology jargon in client-facing copy
+     → Scan ALL slide titles, headlines, bullets, Bottom-Banner for:
+       "Power Position", "Why Change", "Why Now", "Why You", "Why Pay",
+       "Unconsidered Need", "PP1", "PP2", "PP3"
+     → Internal prep slides (with INTERNAL banner) are exempt
+     → FAIL if: any methodology term found in client-facing slide content
+     → FIX: Rewrite using customer-benefit language per SKILL.md "Client-facing copy hygiene"
+
   3. CHECK MECE sequence
      → Mutually Exclusive: are any two slides arguing the SAME point?
        (overlap means one should be cut or merged)
@@ -299,6 +307,24 @@ REASON through content integrity against the source narrative:
      → FAIL if: a Power Position has no slide
      → FIX: Add the missing Power Position slide
 
+  3b. CHECK IS/DOES/MEANS semantic correctness (why-change arc only)
+     → For each is-does-means slide:
+       IS-Box: describes what the SOLUTION is (positioning statement)?
+         FAIL if: IS-Box describes the PROBLEM or current state
+       DOES-Box: states capabilities with measurable outcomes?
+         FAIL if: DOES-Box restates what the solution IS without outcomes
+       MEANS-Box: provides technology/methodology proof?
+         FAIL if: MEANS-Box contains business impact metrics instead of technical proof
+     → FAIL if: any box has wrong semantic content
+     → FIX: Apply transformation table from 03-story-arc-analysis.md
+
+  3c. CHECK IS/DOES/MEANS label localization
+     → For each is-does-means slide:
+       If language=de: Labels must be IST/MACHT/BEDEUTET
+       If language=en: Labels must be IS/DOES/MEANS
+     → FAIL if: English labels in German deck or vice versa
+     → FIX: Replace labels per SKILL.md "IS/DOES/MEANS label localization" table
+
   4. CHECK citation preservation
      → Inline citations present in body text fields as SUPERSCRIPT?
        (Context-Box Bullets, Column Bullets, IS/DOES/MEANS Box Text, Option Features)
@@ -345,6 +371,7 @@ Before marking Step 8 complete, verify ALL items. Mark each ✅ or ❌:
 
 ### Layer 2: Message Quality
 - [ ] Every slide heading is an assertion (not a topic label)
+- [ ] No methodology jargon in client-facing slide titles or body (Power Position, Why You, etc.)
 - [ ] Slide titles alone tell the complete story (title-only test)
 - [ ] No overlapping or missing arguments (MECE)
 - [ ] Hero numbers isolated (one dominant number per stat-card)
@@ -373,6 +400,8 @@ Before marking Step 8 complete, verify ALL items. Mark each ✅ or ❌:
 - [ ] All major narrative sections represented by slides
 - [ ] High-confidence statistics included
 - [ ] Power Positions represented (why-change arc only)
+- [ ] IS/DOES/MEANS semantic correctness: IS=positioning, DOES=capabilities+outcomes, MEANS=technical proof
+- [ ] IS/DOES/MEANS labels localized (de: IST/MACHT/BEDEUTET, en: IS/DOES/MEANS)
 - [ ] Solution overview slide uses content from 03-why-you Executive Summary (why-change arc only)
 - [ ] Inline citations in body text using superscript `<sup>[N](url)</sup>` format (NOT bare `[N](url)`)
 - [ ] Speaker-Notes citations use regular `[N](url)` format (NO superscript in notes)

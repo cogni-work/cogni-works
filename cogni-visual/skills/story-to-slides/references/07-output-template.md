@@ -44,6 +44,30 @@ Source: "[Federal Rail Safety Report 2024](https://eba.bund.de/sicherheitsberich
 
 The slide heading (`## Slide N: ...`) contains the **assertion headline**, not a topic label.
 
+#### IS/DOES/MEANS Label Localization
+
+The `Label` field in IS-Box, DOES-Box, and MEANS-Box must match the presentation language:
+
+```yaml
+# English (language: en)
+IS-Box:
+  Label: IS
+DOES-Box:
+  Label: DOES
+MEANS-Box:
+  Label: MEANS
+
+# German (language: de)
+IS-Box:
+  Label: IST
+DOES-Box:
+  Label: MACHT
+MEANS-Box:
+  Label: BEDEUTET
+```
+
+Never use English labels in a German presentation or vice versa.
+
 ---
 
 ## Brief Output Template
@@ -169,9 +193,27 @@ Speaker-Notes: |
 
 ---
 
-## Slide N+1: {first_power_position_headline}
+## Slide N+1: {power_position_assertion_headline}
 Layout: is-does-means
-[... Power Position slides follow ...]
+
+Slide-Title: {Assertion headline — specific capability claim, NO methodology jargon like "Power Position" or "Why You"}
+
+IS-Box:
+  Label: {localized: "IS" / "IST"}
+  Text: {What the solution IS — positioning statement, NOT the problem it solves}
+
+DOES-Box:
+  Label: {localized: "DOES" / "MACHT"}
+  Text: {What it DOES — capabilities with quantified outcomes, NOT a restatement of what it IS}
+
+MEANS-Box:
+  Label: {localized: "MEANS" / "BEDEUTET"}
+  Text: {HOW it works — technology/methodology proof, NOT business impact metrics}
+
+Bottom-Banner:
+  Text: {Strongest proof point or differentiator}
+
+[... repeat for each Power Position — one slide per Power Position, never combined ...]
 
 ---
 

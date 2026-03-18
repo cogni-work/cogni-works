@@ -1,0 +1,22 @@
+{
+  "eval_id": 18,
+  "eval_name": "propositions-tsys-review-loop",
+  "prompt": "Generate propositions for all features in the grosse-energieversorger-de market. Use the existing features and market definition from the T-Systems project. Research where needed for evidence. After generation, run the auto-review loop: CSO (tsystems-cso-reviewer) and CDO (energieversorger-cdo-reviewer) reviewers score each proposition, failing ones get rewritten via quality-enricher with merged feedback, loop continues until all propositions meet threshold (avg >= 4.0, no dimension < 3) or max 3 iterations.",
+  "assertions": [
+    {"id": "P-01", "text": "DOES statements are 15-30 words", "type": "structural"},
+    {"id": "P-02", "text": "MEANS statements are 15-30 words", "type": "structural"},
+    {"id": "P-03", "text": "IS statements are 20-35 words", "type": "structural"},
+    {"id": "P-06", "text": "Slug follows {feature}--{market} convention", "type": "structural"},
+    {"id": "P-07", "text": "DOES is not vendor-centric", "type": "structural"},
+    {"id": "P-08", "text": "MEANS contains quantification signal", "type": "structural"},
+    {"id": "P-09", "text": "Evidence array is non-empty", "type": "structural"},
+    {"id": "P-11", "text": "Proposition quality assessor returns no fail ratings", "type": "agent"},
+    {"id": "RL-01", "text": "CSO combined avg >= 4.0", "type": "review-loop"},
+    {"id": "RL-02", "text": "CDO combined avg >= 4.0", "type": "review-loop"},
+    {"id": "RL-03", "text": "No dimension below 3 from either reviewer", "type": "review-loop"},
+    {"id": "RL-04", "text": "CDO would_take_meeting is true", "type": "review-loop"},
+    {"id": "RL-05", "text": "CSO would_use_in_pitch_deck is true", "type": "review-loop"},
+    {"id": "RL-06", "text": "Loop converged within max_iterations", "type": "review-loop"},
+    {"id": "RL-07", "text": "At least one proposition was rewritten (loop exercised)", "type": "review-loop"}
+  ]
+}

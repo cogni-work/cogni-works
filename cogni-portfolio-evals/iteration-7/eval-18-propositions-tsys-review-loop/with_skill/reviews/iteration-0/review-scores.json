@@ -1,0 +1,29 @@
+{
+  "scores": {
+    "cso_avg": 3.83,
+    "cdo_avg": 3.8,
+    "combined_avg": 3.82,
+    "min_dim": 3,
+    "cso_scores": {
+      "quota_impact": 4,
+      "pipeline_acceleration": 4,
+      "objection_handling": 3,
+      "competitive_win_ability": 4,
+      "account_team_usability": 4,
+      "deal_qualification_signal": 4
+    },
+    "cdo_scores": {
+      "pain_point_accuracy": 4,
+      "buying_vision": 4,
+      "credibility": 3,
+      "decision_support": 4,
+      "language_fit": 4
+    },
+    "would_take_meeting": true,
+    "would_forward_to_cio": true,
+    "would_use_in_pitch_deck": true
+  },
+  "passes": false,
+  "threshold_avg": 4.0,
+  "threshold_min_dim": 3
+}

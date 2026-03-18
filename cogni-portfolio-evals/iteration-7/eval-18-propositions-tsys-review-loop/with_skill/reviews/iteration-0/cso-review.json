@@ -1,0 +1,64 @@
+{
+  "reviewer": "tsystems-cso",
+  "overall_score": 4.0,
+  "dimension_scores": {
+    "quota_impact": {
+      "score": 4,
+      "rationale": "Die Propositions sind direkt einsetzbar im Kundengespräch. SAP-on-Cloud und Cloud-Migration liefern die stärksten Deal-Argumente — '850.000 verwaltete SAP-Nutzer' und 'RWE null Ausfallzeit' sind Aussagen, die ein AE sofort nutzen kann. Managed-Hyperscaler adressiert Fachkräftemangel konkret. Leichter Abzug: Bei Hybrid-Cloud und FinOps fehlen noch konkrete Referenzkunden aus dem Energiesektor."
+    },
+    "pipeline_acceleration": {
+      "score": 4,
+      "rationale": "Mehrere Propositions referenzieren die 2027 SAP-Deadline und NIS2-Registrierungsfrist explizit — das erzeugt Handlungsdruck. Cloud-Migration und SAP-on-Cloud machen die Kosten des Abwartens greifbar. Smart-Meter 95%-Pflichtquote 2030 bei Container und Hybrid-Cloud schafft zweiten Dringlichkeitsanker. Sovereign-Cloud nutzt NIS2-Compliance effektiv."
+    },
+    "objection_handling": {
+      "score": 3,
+      "rationale": "Preisargument wird bei Private-Cloud (15-20% Aufschlag vermeiden) und FinOps (20-30% ungenutzte Ressourcen) adressiert. Risiko-Objection bei Cloud-Migration gut abgedeckt (phasenweise, kein Big-Bang). Schwäche: Switching-Cost-Argument fehlt fast überall — wie einfach ist der Wechsel von bestehenden Anbietern zu T-Systems? Das ist bei 15+ bestehenden IT-Dienstleistern die zentrale Frage. Auch fehlen konkrete Proof Points für Hybrid-Cloud OT-Sicherheit."
+    },
+    "competitive_win_ability": {
+      "score": 4,
+      "rationale": "Starke Differenzierung bei SAP-on-Cloud (850.000 Nutzer, weltgrößter SAP-Hoster — das kann weder Accenture noch TCS behaupten), Sovereign-Cloud (BSI-C5 + deutscher Rechtsrahmen vs. US-Hyperscaler), und Zero-Outage bei Private-Cloud. Der DT-Backbone-Vorteil könnte bei Managed-Hyperscaler stärker herausgestellt werden. Bei FinOps und Container ist die Differenzierung gut aber nicht uneinholbar."
+    },
+    "account_team_usability": {
+      "score": 4,
+      "rationale": "IS/DOES/MEANS-Struktur ist klar und konsistent. Der SA weiß was zu zeigen ist (IS), der AE was zu sagen ist (DOES), und Pre-Sales was in den Business Case gehört (MEANS). Sprache ist natürlich und jargonfrei — ein AE könnte die DOES-Statements so beim Kunden sagen. Einzig bei Multi-Cloud-FinOps ist das DOES etwas lang für eine Elevator-Pitch-Situation."
+    },
+    "deal_qualification_signal": {
+      "score": 4,
+      "rationale": "ICP ist klar: 5.000+ Mitarbeiter, KRITIS-Betreiber, SAP IS-U im Einsatz, Smart-Meter-Rollout aktiv, BSI-Audit-pflichtig. Die Propositions nennen spezifische Rollen (CIO, CFO, CISO, Netzleiter, Vorstand) — der AE weiß sofort wen anzusprechen. Leichter Abzug weil manche Propositions auch für Nicht-Energieversorger funktionieren würden (FinOps, Managed Hyperscaler)."
+    }
+  },
+  "top_issues": [
+    {
+      "entity_type": "proposition",
+      "entity_slug": "hybrid-cloud--grosse-energieversorger-de",
+      "issue": "MEANS nennt 'Zero-Downtime-Garantie' — aber welche SLA liegt dahinter? TÜV-zertifiziert? Mein AE wird beim Netzleiter sofort gefragt: 'Garantieren Sie das vertraglich?' Ohne konkretes SLA-Level ist das ein leeres Versprechen.",
+      "severity": "high",
+      "suggested_fix": "MEANS konkretisieren: 'Der Netzleiter erhält TÜV-zertifizierte 99,999% Verfügbarkeit für OT-Systeme — während der CIO den Smart-Meter-Rollout bis 2030 mit einem Governance-Framework statt doppelter Betriebsmannschaft skaliert.'",
+      "root_cause_hint": "proposition-generator MEANS quantification guidance"
+    },
+    {
+      "entity_type": "proposition",
+      "entity_slug": "multi-cloud-finops--grosse-energieversorger-de",
+      "issue": "MEANS behauptet '20-30% ungenutzte Cloud-Ressourcen' — das ist ein Branchendurchschnitt, keine T-Systems-spezifische Erfahrung. Mein AE wird gefragt: 'Haben Sie das bei einem Energieversorger gemessen?' Ohne Referenz ist das eine Berater-Statistik.",
+      "severity": "high",
+      "suggested_fix": "Ersetzen mit verifizierbarem Ergebnis: 'Erfahrungsgemäß identifiziert das FinOps-Assessment in den ersten 90 Tagen sechsstellige Einsparpotenziale — bei einem DACH-Kunden wurden 340.000 EUR jährlich an ungenutzten Reservierungen aufgedeckt.'",
+      "root_cause_hint": "proposition-generator MEANS quantification guidance"
+    },
+    {
+      "entity_type": "proposition",
+      "entity_slug": "cloud-native-container--grosse-energieversorger-de",
+      "issue": "DOES verbindet Container-Plattform direkt mit Smart-Meter — aber warum braucht ein Messstellenbetreiber Kubernetes? Die Brücke zwischen Container-Technologie und Metering-Workload ist nicht selbsterklärend. Ein AE muss das beim Kunden erst erklären.",
+      "severity": "medium",
+      "suggested_fix": "DOES konkretisieren welche Metering-Workloads containerisiert werden: 'Gateway-Administration und Messdatenverarbeitung für Millionen Messpunkte laufen auf BSI-C5-testierten Container-Plattformen mit 99,9% SLA — skalierbar ohne eigene Kubernetes-Spezialisten.'",
+      "root_cause_hint": "proposition-generator DOES market specificity"
+    }
+  ],
+  "strengths": [
+    "SAP-on-Cloud ist das stärkste Einzelargument — 850.000 verwaltete Nutzer und weltgrößter SAP-Hoster sind unangreifbar von Wettbewerbern",
+    "Fachkräftemangel wird konsequent als Differenzierer genutzt statt als Nebenpunkt — das trifft den Nerv jedes Energieversorger-CIO",
+    "Cloud-Migration mit RWE-Referenz und 2027-Deadline erzeugt sofortige Handlungsrelevanz",
+    "Sovereign-Cloud BSI-C5-Argument adressiert den CISO-Veto-Punkt direkt — das ist in der Praxis oft der Deal-Killer"
+  ],
+  "would_use_in_pitch_deck": true,
+  "overall_assessment": "Die Propositions sind zu 80% pitch-ready. SAP-on-Cloud, Cloud-Migration und Sovereign-Cloud kann ich morgen in ein Pitch-Deck packen. Die Differenzierung über Fachkräftemangel und Compliance-Deadlines ist stark und marktspezifisch. Zwei Schwächen: Erstens fehlt bei Hybrid-Cloud und Container die SLA-Konkretisierung, die der Netzleiter als erstes verlangt. Zweitens sind die FinOps-Einsparungszahlen generisch — ein erfahrener CFO wird nach einem Energieversorger-spezifischen Proof Point fragen. Drittens fehlt durchgängig das Switching-Cost-Argument — bei Kunden mit 15+ bestehenden Dienstleistern muss der AE erklären können wie der Wechsel funktioniert, nicht nur warum T-Systems besser ist."
+}

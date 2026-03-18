@@ -1,0 +1,83 @@
+{
+  "metadata": {
+    "skill_name": "propositions",
+    "skill_path": "cogni-portfolio/skills/propositions/SKILL.md",
+    "timestamp": "2026-03-18T22:17:43Z",
+    "evals_run": ["eval-18-propositions-tsys-review-loop"],
+    "runs_per_configuration": 1
+  },
+  "configurations": [
+    {
+      "name": "with_skill",
+      "label": "Propositions skill + CSO/CDO review loop",
+      "pass_rate": {
+        "mean": 1.0,
+        "stddev": 0.0,
+        "raw": [1.0]
+      },
+      "time_seconds": {
+        "mean": 558.4,
+        "stddev": 0.0,
+        "raw": [558.4]
+      },
+      "tokens": {
+        "mean": 94918,
+        "stddev": 0,
+        "raw": [94918]
+      },
+      "structural_pass_rate": 1.0,
+      "review_loop_pass_rate": 1.0,
+      "review_loop_scores": {
+        "cso_avg": 4.17,
+        "cdo_avg": 4.2,
+        "combined_avg": 4.18,
+        "min_dim": 4,
+        "would_take_meeting": true,
+        "would_use_in_pitch_deck": true,
+        "would_forward_to_cio": true
+      },
+      "convergence": {
+        "iterations_needed": 2,
+        "iteration_0": {"cso_avg": 3.83, "cdo_avg": 3.80, "combined_avg": 3.82, "passed": false},
+        "iteration_1": {"cso_avg": 4.17, "cdo_avg": 4.20, "combined_avg": 4.18, "passed": true}
+      }
+    },
+    {
+      "name": "without_skill",
+      "label": "Baseline (no skill, no review loop)",
+      "pass_rate": {
+        "mean": 1.0,
+        "stddev": 0.0,
+        "raw": [1.0]
+      },
+      "time_seconds": {
+        "mean": 106.8,
+        "stddev": 0.0,
+        "raw": [106.8]
+      },
+      "tokens": {
+        "mean": 30091,
+        "stddev": 0,
+        "raw": [30091]
+      },
+      "structural_pass_rate": 1.0,
+      "review_loop_pass_rate": null,
+      "review_loop_scores": null
+    }
+  ],
+  "run_summary": {
+    "delta": {
+      "pass_rate": "+0.00 (both 100% structural)",
+      "time_seconds": "+451.6 (review loop overhead)",
+      "tokens": "+64827 (review loop overhead)"
+    },
+    "analysis": "Both configurations achieve 100% structural pass rate. The skill+review-loop adds 451s and 65K tokens for the CSO/CDO review cycle. The key differentiator is qualitative: the with-skill version converged from 3.82 to 4.18 combined stakeholder score after one rewrite iteration, fixing specific issues (unverifiable SLA claims, generic Gartner stats, Anglicisms) that structural checks cannot catch."
+  },
+  "notes": [
+    "Review loop converged in 2 iterations (initial + 1 rewrite)",
+    "4 propositions rewritten: hybrid-cloud (verifiable SLA), multi-cloud-finops (grounded savings), private-cloud (realistic cost framing), cloud-native-container (energy-specific terminology)",
+    "CSO quota_impact scored 5 — highest dimension, driven by deadline-specific messaging (2027 SAP, NIS2 April 2026)",
+    "CDO pain_point_accuracy scored 5 — deep energy utility context (IS-U migration, Netzleitstelle, Messstellenbetrieb)",
+    "Baseline achieves structural compliance but was not evaluated by stakeholder reviewers"
+  ]
+}

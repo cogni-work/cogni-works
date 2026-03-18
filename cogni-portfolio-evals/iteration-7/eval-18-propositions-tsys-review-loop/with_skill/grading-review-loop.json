@@ -1,0 +1,62 @@
+{
+  "total_checks": 6,
+  "passed": 6,
+  "failed": 0,
+  "pass_rate": 1.0,
+  "expectations": [
+    {
+      "text": "CSO combined avg >= 4.0 (actual: 4.17)",
+      "passed": true,
+      "evidence": "CSO avg: 4.17, dims: {'quota_impact': 5, 'pipeline_acceleration': 4, 'objection_handling': 4, 'competitive_win_ability': 4, 'account_team_usability': 4, 'deal_qualification_signal': 4}"
+    },
+    {
+      "text": "CDO combined avg >= 4.0 (actual: 4.2)",
+      "passed": true,
+      "evidence": "CDO avg: 4.2, dims: {'pain_point_accuracy': 5, 'buying_vision': 4, 'credibility': 4, 'decision_support': 4, 'language_fit': 4}"
+    },
+    {
+      "text": "No dimension below 3 from either reviewer",
+      "passed": true,
+      "evidence": "All dimensions >= threshold"
+    },
+    {
+      "text": "CDO would_take_meeting is true",
+      "passed": true,
+      "evidence": "would_take_meeting: True"
+    },
+    {
+      "text": "CSO would_use_in_pitch_deck is true",
+      "passed": true,
+      "evidence": "would_use_in_pitch_deck: True"
+    },
+    {
+      "text": "Loop converged within max_iterations",
+      "passed": true,
+      "evidence": "Reason: passed, iterations: 2"
+    }
+  ],
+  "review_scores": {
+    "cso_avg": 4.17,
+    "cdo_avg": 4.2,
+    "combined_avg": 4.18,
+    "min_dim": 4,
+    "cso_scores": {
+      "quota_impact": 5,
+      "pipeline_acceleration": 4,
+      "objection_handling": 4,
+      "competitive_win_ability": 4,
+      "account_team_usability": 4,
+      "deal_qualification_signal": 4
+    },
+    "cdo_scores": {
+      "pain_point_accuracy": 5,
+      "buying_vision": 4,
+      "credibility": 4,
+      "decision_support": 4,
+      "language_fit": 4
+    },
+    "would_take_meeting": true,
+    "would_forward_to_cio": true,
+    "would_use_in_pitch_deck": true
+  }
+}

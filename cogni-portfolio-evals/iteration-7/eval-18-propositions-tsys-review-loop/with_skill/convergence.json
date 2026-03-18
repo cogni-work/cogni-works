@@ -1,0 +1,23 @@
+{
+  "converged": true,
+  "stalled": false,
+  "reason": "passed",
+  "iterations": [
+    {
+      "iteration": 0,
+      "combined_avg": 3.82,
+      "cso_avg": 3.83,
+      "cdo_avg": 3.8,
+      "min_dim": 3,
+      "passes": false
+    },
+    {
+      "iteration": 1,
+      "combined_avg": 4.18,
+      "cso_avg": 4.17,
+      "cdo_avg": 4.2,
+      "min_dim": 4,
+      "passes": true
+    }
+  ]
+}

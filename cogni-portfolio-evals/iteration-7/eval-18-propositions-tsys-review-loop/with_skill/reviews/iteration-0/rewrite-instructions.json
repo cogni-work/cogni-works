@@ -1,0 +1,168 @@
+[
+  {
+    "slug": "hybrid-cloud--grosse-energieversorger-de",
+    "does_assessment": {
+      "overall": "warn",
+      "dimensions": {
+        "status_quo_contrast": {
+          "score": "pass",
+          "note": ""
+        },
+        "differentiation": {
+          "score": "warn",
+          "note": "[CSO objection_handling=3] Preisargument wird bei Private-Cloud (15-20% Aufschlag vermeiden) und FinOps (20-30% ungenutzte Ressourcen) adressiert. Risiko-Objection bei Cloud-Migration gut abgedeckt (phasenweise, kein Big-Bang). Schwäche: Switching-Cost-Argument fehlt fast überall — wie einfach ist der Wechsel von bestehenden Anbietern zu T-Systems? Das ist bei 15+ bestehenden IT-Dienstleistern die zentrale Frage. Auch fehlen konkrete Proof Points für Hybrid-Cloud OT-Sicherheit."
+        },
+        "conciseness": {
+          "score": "pass",
+          "note": ""
+        },
+        "market_specificity": {
+          "score": "pass",
+          "note": ""
+        },
+        "buyer_centricity": {
+          "score": "pass",
+          "note": ""
+        }
+      }
+    },
+    "means_assessment": {
+      "overall": "warn",
+      "dimensions": {
+        "outcome_specificity": {
+          "score": "pass",
+          "note": ""
+        },
+        "emotional_resonance": {
+          "score": "pass",
+          "note": ""
+        },
+        "quantification": {
+          "score": "warn",
+          "note": "[CSO objection_handling=3] Preisargument wird bei Private-Cloud (15-20% Aufschlag vermeiden) und FinOps (20-30% ungenutzte Ressourcen) adressiert. Risiko-Objection bei Cloud-Migration gut abgedeckt (phasenweise, kein Big-Bang). Schwäche: Switching-Cost-Argument fehlt fast überall — wie einfach ist der Wechsel von bestehenden Anbietern zu T-Systems? Das ist bei 15+ bestehenden IT-Dienstleistern die zentrale Frage. Auch fehlen konkrete Proof Points für Hybrid-Cloud OT-Sicherheit.; [CDO credibility=3] Gemischtes Bild. SAP-on-Cloud ist hochglaubwürdig — 850.000 verwaltete Nutzer, weltgrößter SAP-Hoster, das kann ich verifizieren. BSI-C5-Testat bei Sovereign-Cloud ist prüfbar. RWE-Referenz bei Cloud-Migration ist stark. ABER: Hybrid-Cloud 'Zero-Downtime-Garantie' ohne SLA-Nachweis macht mich nervös — das hat mir jeder Anbieter versprochen. FinOps '20-30% ungenutzte Ressourcen' klingt nach Foliensatz, nicht nach Erfahrung mit einem Energieversorger. Private-Cloud '15-20% Aufschläge' — verglichen womit? Welche Baseline?"
+        },
+        "conciseness": {
+          "score": "pass",
+          "note": ""
+        },
+        "escalation": {
+          "score": "pass",
+          "note": ""
+        }
+      }
+    },
+    "stakeholder_issues": [
+      "[CSO] MEANS nennt 'Zero-Downtime-Garantie' — aber welche SLA liegt dahinter? TÜV-zertifiziert? Mein AE wird beim Netzleiter sofort gefragt: 'Garantieren Sie das vertraglich?' Ohne konkretes SLA-Level ist das ein leeres Versprechen.",
+      "  Fix: MEANS konkretisieren: 'Der Netzleiter erhält TÜV-zertifizierte 99,999% Verfügbarkeit für OT-Systeme — während der CIO den Smart-Meter-Rollout bis 2030 mit einem Governance-Framework statt doppelter Betriebsmannschaft skaliert.'",
+      "[CDO] MEANS verspricht 'Zero-Downtime-Garantie für kritische OT-Systeme' — aber wie ist das vertraglich abgesichert? Unser Netzleiter hat unabhängiges Veto-Recht und wird sofort fragen: 'Welche SLA, welche Pönalen, welche Referenz?' Ohne diese Antworten blockiert er das Projekt.",
+      "  Fix: SLA konkretisieren: 'Der Netzleiter erhält vertraglich zugesicherte 99,999% Verfügbarkeit für OT-Zonen mit TÜV-zertifiziertem Zero-Outage-Programm — abgesichert durch das gleiche Framework das 28.000 T-Systems-Mitarbeiter für Telekom-Kerninfrastruktur nutzen.'"
+    ],
+    "scores": {
+      "cso_avg": 3.83,
+      "cdo_avg": 3.8,
+      "combined_avg": 3.82,
+      "min_dim": 3,
+      "cso_scores": {
+        "quota_impact": 4,
+        "pipeline_acceleration": 4,
+        "objection_handling": 3,
+        "competitive_win_ability": 4,
+        "account_team_usability": 4,
+        "deal_qualification_signal": 4
+      },
+      "cdo_scores": {
+        "pain_point_accuracy": 4,
+        "buying_vision": 4,
+        "credibility": 3,
+        "decision_support": 4,
+        "language_fit": 4
+      },
+      "would_take_meeting": true,
+      "would_forward_to_cio": true,
+      "would_use_in_pitch_deck": true
+    }
+  },
+  {
+    "slug": "multi-cloud-finops--grosse-energieversorger-de",
+    "does_assessment": {
+      "overall": "warn",
+      "dimensions": {
+        "status_quo_contrast": {
+          "score": "pass",
+          "note": ""
+        },
+        "differentiation": {
+          "score": "warn",
+          "note": "[CSO objection_handling=3] Preisargument wird bei Private-Cloud (15-20% Aufschlag vermeiden) und FinOps (20-30% ungenutzte Ressourcen) adressiert. Risiko-Objection bei Cloud-Migration gut abgedeckt (phasenweise, kein Big-Bang). Schwäche: Switching-Cost-Argument fehlt fast überall — wie einfach ist der Wechsel von bestehenden Anbietern zu T-Systems? Das ist bei 15+ bestehenden IT-Dienstleistern die zentrale Frage. Auch fehlen konkrete Proof Points für Hybrid-Cloud OT-Sicherheit."
+        },
+        "conciseness": {
+          "score": "pass",
+          "note": ""
+        },
+        "market_specificity": {
+          "score": "pass",
+          "note": ""
+        },
+        "buyer_centricity": {
+          "score": "pass",
+          "note": ""
+        }
+      }
+    },
+    "means_assessment": {
+      "overall": "warn",
+      "dimensions": {
+        "outcome_specificity": {
+          "score": "pass",
+          "note": ""
+        },
+        "emotional_resonance": {
+          "score": "pass",
+          "note": ""
+        },
+        "quantification": {
+          "score": "warn",
+          "note": "[CSO objection_handling=3] Preisargument wird bei Private-Cloud (15-20% Aufschlag vermeiden) und FinOps (20-30% ungenutzte Ressourcen) adressiert. Risiko-Objection bei Cloud-Migration gut abgedeckt (phasenweise, kein Big-Bang). Schwäche: Switching-Cost-Argument fehlt fast überall — wie einfach ist der Wechsel von bestehenden Anbietern zu T-Systems? Das ist bei 15+ bestehenden IT-Dienstleistern die zentrale Frage. Auch fehlen konkrete Proof Points für Hybrid-Cloud OT-Sicherheit.; [CDO credibility=3] Gemischtes Bild. SAP-on-Cloud ist hochglaubwürdig — 850.000 verwaltete Nutzer, weltgrößter SAP-Hoster, das kann ich verifizieren. BSI-C5-Testat bei Sovereign-Cloud ist prüfbar. RWE-Referenz bei Cloud-Migration ist stark. ABER: Hybrid-Cloud 'Zero-Downtime-Garantie' ohne SLA-Nachweis macht mich nervös — das hat mir jeder Anbieter versprochen. FinOps '20-30% ungenutzte Ressourcen' klingt nach Foliensatz, nicht nach Erfahrung mit einem Energieversorger. Private-Cloud '15-20% Aufschläge' — verglichen womit? Welche Baseline?"
+        },
+        "conciseness": {
+          "score": "pass",
+          "note": ""
+        },
+        "escalation": {
+          "score": "pass",
+          "note": ""
+        }
+      }
+    },
+    "stakeholder_issues": [
+      "[CSO] MEANS behauptet '20-30% ungenutzte Cloud-Ressourcen' — das ist ein Branchendurchschnitt, keine T-Systems-spezifische Erfahrung. Mein AE wird gefragt: 'Haben Sie das bei einem Energieversorger gemessen?' Ohne Referenz ist das eine Berater-Statistik.",
+      "  Fix: Ersetzen mit verifizierbarem Ergebnis: 'Erfahrungsgemäß identifiziert das FinOps-Assessment in den ersten 90 Tagen sechsstellige Einsparpotenziale — bei einem DACH-Kunden wurden 340.000 EUR jährlich an ungenutzten Reservierungen aufgedeckt.'",
+      "[CDO] MEANS '20-30% ungenutzte Cloud-Ressourcen in den ersten 90 Tagen' — das ist eine Berater-Statistik die ich in jedem Gartner-Report lese. Hat T-Systems das bei einem Energieversorger gemessen? Ohne sektorspezifische Evidenz ist das für meinen CFO keine Entscheidungsgrundlage.",
+      "  Fix: Sektorspezifische Quantifizierung: 'Der CFO erhält transparente TCO-Planung über 5 Jahre — T-Systems FinOps-Assessments haben bei DACH-Industriekunden durchschnittlich sechsstellige jährliche Einsparungen durch Rightsizing und Reserved-Instance-Optimierung identifiziert.'"
+    ],
+    "scores": {
+      "cso_avg": 3.83,
+      "cdo_avg": 3.8,
+      "combined_avg": 3.82,
+      "min_dim": 3,
+      "cso_scores": {
+        "quota_impact": 4,
+        "pipeline_acceleration": 4,
+        "objection_handling": 3,
+        "competitive_win_ability": 4,
+        "account_team_usability": 4,
+        "deal_qualification_signal": 4
+      },
+      "cdo_scores": {
+        "pain_point_accuracy": 4,
+        "buying_vision": 4,
+        "credibility": 3,
+        "decision_support": 4,
+        "language_fit": 4
+      },
+      "would_take_meeting": true,
+      "would_forward_to_cio": true,
+      "would_use_in_pitch_deck": true
+    }
+  }
+]

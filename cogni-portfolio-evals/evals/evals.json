@@ -381,6 +381,165 @@
         {"id": "RL-07", "text": "At least one proposition was rewritten (loop exercised)", "type": "review-loop"}
       ],
       "files": []
+    },
+    {
+      "id": 23,
+      "name": "packages-tsys-energy-generate",
+      "skill": "packages",
+      "target": "t-systems",
+      "prompt": "Create a package for the cloud-services product targeting the grosse-energieversorger-de market in the T-Systems project at the project path provided. There are 4 solutions available (cloud-migration, hybrid-cloud, managed-hyperscaler, sovereign-cloud). Design tiered packages that a large German energy utility procurement team would evaluate.",
+      "expected_output": "Package JSON with 2-4 tiers covering all 4 solutions, monotonically increasing project pricing, bundle savings, and clear capability progression narrative.",
+      "assertions": [
+        {"id": "PKG-01", "text": "Required fields present: slug, product_slug, market_slug, package_type, name, tiers", "type": "structural"},
+        {"id": "PKG-02", "text": "Slug follows {product}--{market} pattern", "type": "structural"},
+        {"id": "PKG-03", "text": "package_type matches product revenue_model (project)", "type": "structural"},
+        {"id": "PKG-04", "text": "2-4 tiers present", "type": "structural"},
+        {"id": "PKG-05", "text": "Each tier has: tier (kebab-case), name, included_solutions, scope, currency", "type": "structural"},
+        {"id": "PKG-06", "text": "Tier prices monotonically increasing", "type": "structural"},
+        {"id": "PKG-07", "text": "Every included_solution references existing solution file", "type": "structural"},
+        {"id": "PKG-08", "text": "No orphan solutions (every solution in at least one tier)", "type": "structural"},
+        {"id": "PKG-09", "text": "bundle_savings_pct is 10-50%", "type": "structural"},
+        {"id": "PKG-10", "text": "Positioning max 80 characters", "type": "structural"},
+        {"id": "PKG-11", "text": "Scope max 1 sentence per tier", "type": "structural"},
+        {"id": "PKG-R1", "text": "Quality reviewer overall_score >= 4.0", "type": "persona"},
+        {"id": "PKG-S1", "text": "Sales manager overall_score >= 4.0", "type": "persona"},
+        {"id": "PKG-P1", "text": "Procurement expert overall_score >= 4.0", "type": "persona"}
+      ],
+      "files": []
+    },
+    {
+      "id": 24,
+      "name": "packages-tsys-energy-review",
+      "skill": "packages",
+      "target": "t-systems",
+      "prompt": "Review the existing package at packages/cloud-services--grosse-energieversorger-de.json in the T-Systems project at the project path provided. Evaluate the tier design, pricing coherence, and bundle logic. Suggest specific improvements.",
+      "expected_output": "Structured critique of tier narrative, pricing, solution coverage, and bundle logic with specific rewrite suggestions.",
+      "assertions": [
+        {"id": "PKG-RV-01", "text": "Tier narrative assessed (progression logic evaluated)", "type": "agent"},
+        {"id": "PKG-RV-02", "text": "Pricing coherence assessed (bundle savings, tier jumps)", "type": "agent"},
+        {"id": "PKG-RV-03", "text": "Solution coverage assessed (orphans, grouping logic)", "type": "agent"},
+        {"id": "PKG-RV-04", "text": "Specific improvement suggestions provided (not generic)", "type": "agent"}
+      ],
+      "files": []
+    },
+    {
+      "id": 25,
+      "name": "packages-tsys-batch-explore",
+      "skill": "packages",
+      "target": "t-systems",
+      "prompt": "I have a T-Systems cloud services portfolio at the project path provided. Show me which product x market combinations are ready for packaging and recommend where to start.",
+      "expected_output": "Status report showing cloud-services x grosse-energieversorger-de as packageable (4 solutions). Notes that other product-market pairs lack sufficient solutions.",
+      "assertions": [
+        {"id": "PKG-EX-01", "text": "Identifies cloud-services x grosse-energieversorger-de as packageable", "type": "agent"},
+        {"id": "PKG-EX-02", "text": "Reports solution count per product-market pair", "type": "agent"},
+        {"id": "PKG-EX-03", "text": "Recommends starting point with reasoning", "type": "agent"}
+      ],
+      "files": []
+    },
+    {
+      "id": 26,
+      "name": "compete-tsys-review-loop",
+      "skill": "compete",
+      "target": "t-systems",
+      "prompt": "Analyze competitors for T-Systems' cloud-migration proposition in the grosse-energieversorger-de market. Research Accenture, Capgemini, and IBM specifically. Include trap questions for each competitor. After generation, run the stakeholder review loop: CSO (tsystems-cso-reviewer) and Market Industry Analyst (market-industry-analyst-reviewer) score the competitive analysis, failing dimensions get rewritten via competitor-researcher revision mode with merged feedback, loop continues until thresholds met (avg >= 4.0, no dimension < 3) or max 3 iterations.",
+      "expected_output": "Competitor JSON that passes both CSO (sales-readiness) and Analyst (advisory-accuracy) review with avg >= 4.0 and no dimension below 3. Convergence log showing score progression across iterations.",
+      "assertions": [
+        {"id": "K-01", "text": "3-5 competitors present", "type": "structural"},
+        {"id": "K-02", "text": "Each has positioning, strengths, weaknesses, differentiation", "type": "structural"},
+        {"id": "K-03", "text": "Strengths and weaknesses 2-5 items each", "type": "structural"},
+        {"id": "K-04", "text": "2-4 trap questions per competitor file", "type": "structural"},
+        {"id": "K-06", "text": "Source URLs present for each competitor", "type": "structural"},
+        {"id": "RL-C01", "text": "CSO combined avg >= 4.0", "type": "review-loop"},
+        {"id": "RL-C02", "text": "Analyst combined avg >= 4.0", "type": "review-loop"},
+        {"id": "RL-C03", "text": "No dimension below 3 from either reviewer", "type": "review-loop"},
+        {"id": "RL-C04", "text": "CSO would_use_in_pitch_deck is true", "type": "review-loop"},
+        {"id": "RL-C05", "text": "Analyst would_use_in_advisory_report is true", "type": "review-loop"},
+        {"id": "RL-C06", "text": "Loop converged within max_iterations", "type": "review-loop"},
+        {"id": "RL-C07", "text": "At least one competitor file was rewritten (loop exercised)", "type": "review-loop"}
+      ],
+      "files": []
+    },
+    {
+      "id": 27,
+      "name": "compete-mainova-review-loop",
+      "skill": "compete",
+      "target": "mainova",
+      "prompt": "Identify and research competitors for a cloud-migration proposition targeting mittelstaendische-stadtwerke-de (German Stadtwerke, 500-5000 employees). Who competes with T-Systems for Stadtwerk IT modernization and cloud migration deals? Include trap questions. After generation, run the stakeholder review loop with CSO and Market Industry Analyst reviewers until convergence.",
+      "expected_output": "Competitor JSON with 3-5 Stadtwerk-segment-specific competitors that passes both reviewer thresholds. Analyst specifically validates that competitor set differs from enterprise energy utility segment.",
+      "assertions": [
+        {"id": "K-01", "text": "3-5 competitors present", "type": "structural"},
+        {"id": "K-02", "text": "Each has positioning, strengths, weaknesses, differentiation", "type": "structural"},
+        {"id": "K-03", "text": "Strengths and weaknesses 2-5 items each", "type": "structural"},
+        {"id": "K-04", "text": "2-4 trap questions per competitor file", "type": "structural"},
+        {"id": "RL-C01", "text": "CSO combined avg >= 4.0", "type": "review-loop"},
+        {"id": "RL-C02", "text": "Analyst combined avg >= 4.0", "type": "review-loop"},
+        {"id": "RL-C03", "text": "No dimension below 3 from either reviewer", "type": "review-loop"},
+        {"id": "RL-C04", "text": "CSO would_use_in_pitch_deck is true", "type": "review-loop"},
+        {"id": "RL-C05", "text": "Analyst would_use_in_advisory_report is true", "type": "review-loop"},
+        {"id": "RL-C06", "text": "Loop converged within max_iterations", "type": "review-loop"}
+      ],
+      "files": []
+    },
+    {
+      "id": 28,
+      "name": "customers-tsys-review",
+      "skill": "customers",
+      "target": "t-systems",
+      "prompt": "I have an existing T-Systems portfolio at the project path provided. There are customer profiles for the grosse-energieversorger-de market in customers/grosse-energieversorger-de.json. Run the customer review assessor on the profiles and show me the results from all three perspectives (reviewer, CSO, market expert). If the verdict is revise, make the targeted improvements and re-assess. Maximum 2 revision rounds.",
+      "expected_output": "Structured assessment JSON with 3 perspectives (reviewer, CSO, market_expert), each with 5 scored criteria and notes. Verdict with revision guidance. If verdict=revise, improved profile after targeted revision round.",
+      "assertions": [
+        {"id": "CR-01", "text": "customer-review-assessor invoked", "type": "behavioral"},
+        {"id": "CR-02", "text": "Assessment JSON output present with all three perspectives (reviewer, cso, market_expert)", "type": "structural"},
+        {"id": "CR-03", "text": "Each perspective has 5 scored criteria with pass/warn/fail and weights", "type": "structural"},
+        {"id": "CR-04", "text": "Verdict is accept, revise, or reject", "type": "structural"},
+        {"id": "CR-05", "text": "If verdict is revise, revision round executed (max 2)", "type": "behavioral"},
+        {"id": "CR-06", "text": "Final profile retains all required fields after revision", "type": "structural"},
+        {"id": "CR-07", "text": "Synthesis includes priority-tiered improvements (critical/high/optional)", "type": "structural"},
+        {"id": "CR-08", "text": "revision_guidance is non-empty when verdict is revise", "type": "structural"}
+      ],
+      "files": []
+    },
+    {
+      "id": 29,
+      "name": "customers-tsys-generate",
+      "skill": "customers",
+      "target": "t-systems",
+      "prompt": "I have an existing T-Systems portfolio at the project path provided. Create customer profiles for the grosse-energieversorger-de market. Include named customer research for E.ON, RWE, and EnBW. After generating the profiles, run the stakeholder review loop and iterate until all perspectives score 85+ or maximum 2 revision rounds.",
+      "expected_output": "Customer JSON with 2-4 buyer profiles, buying committee dynamics, 3 named customers with fit scores. Stakeholder review loop executed with accept or 2-round revise outcome.",
+      "assertions": [
+        {"id": "C-01", "text": "2-4 buyer profiles present", "type": "structural"},
+        {"id": "C-02", "text": "Each profile has role, seniority, pain_points (max 5), buying_criteria (max 5), information_sources, decision_role", "type": "structural"},
+        {"id": "C-03", "text": "buying_committee object present with typical_size, decision_model, deal_stall_points", "type": "structural"},
+        {"id": "C-04", "text": "3 named customers present (E.ON, RWE, EnBW) with fit_score and source_urls", "type": "structural"},
+        {"id": "C-05", "text": "customer-review-assessor invoked at least once", "type": "behavioral"},
+        {"id": "C-06", "text": "All three perspective scores >= 70 in final assessment", "type": "qualitative"},
+        {"id": "C-07", "text": "Content language matches portfolio.json language field (de)", "type": "structural"},
+        {"id": "C-08", "text": "At least one veto-holder role present (CISO, Compliance, or Einkauf)", "type": "qualitative"},
+        {"id": "C-09", "text": "Pain points reference specific regulatory deadlines (NIS2, KRITIS, SAP IS-U)", "type": "qualitative"},
+        {"id": "C-10", "text": "Named customers have fit_rationale explaining score", "type": "structural"}
+      ],
+      "files": []
+    },
+    {
+      "id": 30,
+      "name": "customers-tsys-convergence",
+      "skill": "customers",
+      "target": "t-systems",
+      "prompt": "I have an existing T-Systems portfolio at the project path provided. Create customer profiles for the grosse-energieversorger-de market. After generation, run the closed review loop with two eval-layer reviewers: CSO (customers-cso-reviewer) evaluates sales actionability, and Market Expert (customers-market-expert-reviewer) evaluates market accuracy. Loop until both reviewers score avg >= 4.0 with no dimension below 3, or maximum 3 iterations. Track score progression in convergence.json.",
+      "expected_output": "Customer profiles that pass dual-reviewer convergence threshold. convergence.json showing per-iteration score progression. Both reviewers signal approval (would_use_for_account_planning, would_trust_as_market_research).",
+      "assertions": [
+        {"id": "CC-01", "text": "customers-cso-reviewer invoked at least once", "type": "behavioral"},
+        {"id": "CC-02", "text": "customers-market-expert-reviewer invoked at least once", "type": "behavioral"},
+        {"id": "CC-03", "text": "Final CSO reviewer avg score >= 4.0", "type": "review-loop"},
+        {"id": "CC-04", "text": "Final Market Expert reviewer avg score >= 4.0", "type": "review-loop"},
+        {"id": "CC-05", "text": "No dimension below 3 in final round", "type": "review-loop"},
+        {"id": "CC-06", "text": "Maximum 3 iteration rounds", "type": "review-loop"},
+        {"id": "CC-07", "text": "Score improvement between rounds (avg increases or stays >= threshold)", "type": "review-loop"},
+        {"id": "CC-08", "text": "CSO would_use_for_account_planning is true", "type": "review-loop"},
+        {"id": "CC-09", "text": "Market Expert would_trust_as_market_research is true", "type": "review-loop"},
+        {"id": "CC-10", "text": "convergence.json tracks per-iteration scores", "type": "structural"}
+      ],
+      "files": []
     }
   ]
 }

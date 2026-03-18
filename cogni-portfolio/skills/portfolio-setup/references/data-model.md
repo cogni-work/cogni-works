@@ -695,9 +695,13 @@ The `package_type` field mirrors the parent product's `revenue_model` and determ
       "tier": "foundation",
       "name": "Foundation",
       "included_solutions": ["cloud-monitoring--mid-market-saas-dach"],
+      "solution_sizes": {
+        "cloud-monitoring--mid-market-saas-dach": "medium"
+      },
       "price": 45000,
       "currency": "EUR",
-      "scope": "Core monitoring for one environment"
+      "scope": "Up to 200 nodes monitored with basic alerting, 8-week delivery",
+      "exclusions": ["Custom integrations beyond standard API connectors"]
     },
     {
       "tier": "professional",
@@ -706,9 +710,14 @@ The `package_type` field mirrors the parent product's `revenue_model` and determ
         "cloud-monitoring--mid-market-saas-dach",
         "real-time-alerting--mid-market-saas-dach"
       ],
+      "solution_sizes": {
+        "cloud-monitoring--mid-market-saas-dach": "medium",
+        "real-time-alerting--mid-market-saas-dach": "medium"
+      },
       "price": 85000,
       "currency": "EUR",
-      "scope": "Full observability with intelligent alerting"
+      "scope": "Intelligent alert correlation across 200 nodes, 12-week delivery",
+      "exclusions": ["Custom integrations beyond standard API connectors"]
     },
     {
       "tier": "enterprise",
@@ -718,9 +727,15 @@ The `package_type` field mirrors the parent product's `revenue_model` and determ
         "real-time-alerting--mid-market-saas-dach",
         "analytics-dashboard--mid-market-saas-dach"
       ],
+      "solution_sizes": {
+        "cloud-monitoring--mid-market-saas-dach": "large",
+        "real-time-alerting--mid-market-saas-dach": "large",
+        "analytics-dashboard--mid-market-saas-dach": "large"
+      },
       "price": 150000,
       "currency": "EUR",
-      "scope": "Complete platform with executive dashboards"
+      "scope": "Unlimited nodes, full stack with executive dashboards, 16-week delivery",
+      "exclusions": ["Third-party license costs"]
     }
   ],
   "bundle_savings_pct": 15,
@@ -788,8 +803,10 @@ The `package_type` field mirrors the parent product's `revenue_model` and determ
 | Tier: `price_monthly` | — | required (or null) | required (or null) |
 | Tier: `price_annual` | — | required (or null) | required (or null) |
 | Tier: `included_solutions` | required | required | required |
+| Tier: `solution_sizes` | required | required | required |
 | Tier: `scope` | required | required | required |
 | Tier: `currency` | required | required | required |
+| Tier: `exclusions` | recommended | recommended | recommended |
 
 #### Common Fields (all package types)
 

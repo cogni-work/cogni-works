@@ -1,0 +1,16 @@
+{
+  "slug": "managed-hyperscaler--grosse-energieversorger-de",
+  "feature_slug": "managed-hyperscaler",
+  "market_slug": "grosse-energieversorger-de",
+  "is_statement": "Fully managed AWS, Azure and GCP environments with Well-Architected Reviews, security assessments, standardized landing zone modules, and 24/7 operations as certified MSP partner.",
+  "does_statement": "Eliminates the need for in-house hyperscaler expertise by providing certified 24/7 operations with guaranteed 15-minute incident response across all three major cloud platforms.",
+  "means_statement": "Saves EUR 2M annually in cloud operations staffing while achieving 99.95% availability SLAs required for energy trading and grid balancing systems.",
+  "evidence": [
+    {
+      "statement": "T-Systems manages 12,000+ cloud instances for energy sector clients across DACH",
+      "source_url": "https://www.t-systems.com/de/cloud/managed-services",
+      "source_title": "Managed Cloud Services"
+    }
+  ],
+  "created": "2026-01-20"
+}

@@ -76,51 +76,99 @@ The product's `revenue_model` determines the package structure:
 | Field | Target |
 |-------|--------|
 | `positioning` | 1 sentence, max 80 characters |
-| `tiers[].scope` | 1 sentence |
+| `tiers[].scope` | 1-2 sentences, contractually specific |
 
-Package positioning is a headline, not a paragraph. Tier scopes describe what's included in one concise line.
+Package positioning is a headline, not a paragraph. Tier scopes should be concise but contractually meaningful — include workload counts, system domains, and delivery timelines.
 
 ### 4. Design Package Tiers
 
 Propose 2-4 tiers. Each tier should represent a meaningfully different capability level, not just more features.
 
-**Project package tiers:**
+#### Pin Solution Sizes
 
-| Tier | Included Solutions | Price | Scope |
+Each solution offers multiple pricing tiers (proof_of_value, small, medium, large). When including a solution in a package tier, you must specify which size applies. This determines the scope and price of that solution within the package. Read each solution's pricing tiers and select the size that matches the package tier's ambition level.
+
+For each included solution, record the size in the `included_solutions` array using the format `"{solution-slug}"` and add a `"solution_sizes"` object to the tier that maps each solution slug to its selected pricing tier:
+
+```json
+{
+  "tier": "foundation",
+  "included_solutions": ["cloud-monitoring--mid-market-saas-dach"],
+  "solution_sizes": {
+    "cloud-monitoring--mid-market-saas-dach": "medium"
+  },
+  ...
+}
+```
+
+The solution size determines the price contribution and the scope specifics. Without pinning sizes, the package price becomes unverifiable — a procurement team cannot validate a EUR 450K package if the underlying solutions range from EUR 110K to EUR 520K per solution.
+
+#### Compose Scope from Solutions
+
+Tier scope descriptions should be composed from the scope statements of the included solutions at their selected sizes, not invented from scratch. This ensures that the package scope is traceable to deliverable commitments.
+
+Instead of a marketing summary like "Full platform with intelligent alerting", compose scope that propagates solution specifics: "Up to 200 nodes monitored with real-time alerting, 12-week delivery". The scope should answer: how many, which systems, what duration.
+
+Keep scope to 1-2 sentences but make them contractually meaningful — a procurement team should be able to derive a Leistungsverzeichnis from the scope without going back to individual solution files.
+
+When a tier combines PoV scopes from multiple solutions, validate the aggregate delivery timeline — don't just take the longest individual PoV duration. Two 2-week PoVs run sequentially take 4 weeks, not 2. State whether parallel execution is assumed, and if so, ensure the team sizing supports it.
+
+#### Scope Exclusions
+
+Each tier should state what is **not** included, especially where buyers commonly assume inclusion. Add an `"exclusions"` array (list of strings) to each tier — this prevents scope disputes during contract execution. Common exclusions to consider:
+- Application modernization/refactoring (if the tier covers only lift-and-shift migration)
+- Third-party license costs
+- Ongoing compliance monitoring (if the tier covers only initial certification)
+- Custom integrations beyond standard API connectors
+- On-site travel and expenses
+
+#### Tier Design Principles
+
+- **Entry tier** includes the solution that solves the most acute pain point — the one that gets the buyer in the door. Price it low enough that a sales rep can get it signed in a first or second meeting. If the entry tier exceeds the market's typical first-engagement budget, consider whether a lighter "proof-of-value" tier (combining PoV pricing from constituent solutions) would create a better on-ramp.
+- **Mid tier** adds the solution that creates the most operational value — the one that makes the buyer's life measurably easier
+- **Top tier** adds governance, scale, or strategic features — the ones that justify executive sponsorship
+- Each tier should be self-contained: a buyer at any tier should feel they have a complete solution, not a crippled version
+- **Tier-to-tier price jumps should be proportional to value added.** If the top tier adds 24/7 managed operations, the price jump should reflect that ongoing commitment — not be cheaper than the mid-tier jump. Decreasing marginal price increments signal that higher-tier capabilities are undervalued.
+- **Limit price jumps to 2-3x between adjacent tiers.** A 4x jump (e.g., EUR 195K to EUR 750K) creates sticker shock and forces the sales rep into a long whiteboarding session to justify the leap. If the jump exceeds 3x, consider splitting it into two tiers or offering a lighter variant of the higher tier without optional solutions.
+- **Each tier should unlock new capabilities, not just scale existing ones.** If two adjacent tiers include the same solution slugs and differ only in size (medium vs. large), the upgrade pitch becomes "same thing but bigger" rather than "new capability unlocked." Where possible, reserve at least one solution for the top tier that lower tiers don't include, or add a differentiating element (dedicated CSM, ongoing compliance monitoring, SOC integration) that creates qualitative separation.
+- **Watch for mixed contract types within a single tier.** If a tier combines one-time project deliverables (migration, platform deployment) with ongoing managed services (24/7 operations, dedicated CSM), flag this — in regulated markets like German energy (SektVO), these require different contract vehicles (Werkvertrag vs. Dienstleistungsvertrag). When a tier mixes project and managed services, note this in the scope or split the tier's pricing into a `project_price` (one-time) and `managed_annual` (recurring) component so procurement can structure the contract accordingly.
+
+#### Scope Writing
+
+Each tier's scope must foreground what is **new** in that tier, not restate what lower tiers already include. Professional's scope should lead with the capability that Professional adds, not repeat Foundation's scope with "plus more". A buyer scanning tiers should instantly see what each level adds.
+
+**Project package tiers (example):**
+
+| Tier | Solutions (size) | Price | Scope |
 |---|---|---|---|
-| Foundation | monitoring | 45,000 EUR | Core visibility, single environment |
-| Professional | monitoring + alerting | 85,000 EUR | Full observability with intelligent alerting |
-| Enterprise | monitoring + alerting + analytics | 150,000 EUR | Complete platform with executive dashboards |
+| Foundation | monitoring (medium) | 45,000 EUR | Up to 200 nodes, basic alerting, 8-week delivery |
+| Professional | monitoring (medium) + alerting (medium) | 85,000 EUR | Intelligent alert correlation across 200 nodes, 12-week delivery |
+| Enterprise | all (large) | 150,000 EUR | Unlimited nodes, full stack with executive dashboards, 16-week delivery |
 
-**Subscription package tiers:**
+**Subscription package tiers (example):**
 
-| Tier | Included Solutions | Monthly | Annual | Scope |
+| Tier | Solutions (size) | Monthly | Annual | Scope |
 |---|---|---|---|---|
-| Starter | research | 99 EUR | 990 EUR | Core research capability |
-| Professional | research + reporting | 249 EUR | 2,490 EUR | Full research + automated reporting |
-| Enterprise | all features | Custom | Custom | Full platform, SSO, SLA, dedicated CSM |
+| Starter | research (small) | 99 EUR | 990 EUR | Core research, 10 reports/month |
+| Professional | research + reporting (medium) | 249 EUR | 2,490 EUR | Unlimited research, automated reporting |
+| Enterprise | all (large) | Custom | Custom | Full platform, SSO, SLA, dedicated CSM |
 
 **Hybrid package tiers** (subscription base + optional project add-ons):
 
-| Tier | Included Solutions | Monthly | Annual | Project Add-on | Scope |
+| Tier | Solutions (size) | Monthly | Annual | Project Add-on | Scope |
 |---|---|---|---|---|---|
-| Starter | monitoring | 199 EUR | 1,990 EUR | — | Core platform, self-service setup |
-| Professional | monitoring + alerting | 499 EUR | 4,990 EUR | Setup workshop: 5,000 EUR | Full platform, guided onboarding |
-| Enterprise | all features | Custom | Custom | Implementation project: 25,000+ EUR | Full platform, custom integration, SLA |
+| Starter | monitoring (small) | 199 EUR | 1,990 EUR | — | Core platform, self-service setup |
+| Professional | monitoring + alerting (medium) | 499 EUR | 4,990 EUR | Setup workshop: 5,000 EUR | Full platform, guided onboarding |
+| Enterprise | all (large) | Custom | Custom | Implementation: 25,000+ EUR | Full platform, custom integration, SLA |
 
 Hybrid tiers follow subscription structure for recurring revenue, but each tier can include an optional one-time project service (onboarding, implementation, migration). The project add-on is optional — the subscription stands alone.
 
-**Tier design principles:**
-- **Entry tier** includes the feature that solves the most acute pain point — the one that gets the buyer in the door
-- **Mid tier** adds the feature that creates the most operational value — the one that makes the buyer's life measurably easier
-- **Top tier** adds governance, scale, or strategic features — the ones that justify executive sponsorship
-- Each tier should be self-contained: a buyer at any tier should feel they have a complete solution, not a crippled version
-
 Probe with consultative questions:
 - Does this tier progression match how buyers in this market actually evaluate?
-- Would a buyer at the Starter tier feel they have a real product, not a teaser?
-- Is there enough value in Professional vs Starter to justify the price jump?
+- Would a buyer at the entry tier feel they have a real product, not a teaser?
+- Is there enough value in Professional vs entry to justify the price jump?
 - Are there features that should always be together (natural bundles)?
+- Is the entry tier priced within this market's typical first-engagement budget?
 
 ### 5. Set Bundle Pricing
 
@@ -131,21 +179,27 @@ Compare package pricing against the sum of individual solution prices:
 | Foundation | 50,000 EUR | 45,000 EUR | 10% |
 | Professional | 170,000 EUR | 85,000 EUR | 50% |
 
-The `bundle_savings_pct` captures the headline discount. Typical ranges:
+The `bundle_savings_pct` captures the **minimum** savings across all tiers — the floor, not the average. If the entry tier saves 15% and the top tier saves 22%, set `bundle_savings_pct` to 15. This ensures the headline number is always defensible. Higher-tier savings are a selling point ("the more you commit, the more you save") but the stated percentage must hold for every tier.
+
+Typical ranges:
 - **10-15%**: Modest bundling benefit, individual solutions are already well-priced
 - **20-30%**: Standard bundle discount, rewards buying the combination
 - **30-50%**: Aggressive packaging, the bundle is the primary commercial vehicle
+
+Verify the savings percentage for each tier by summing the individual solution prices at their selected sizes and comparing against the tier price. If any tier's actual savings falls below the stated `bundle_savings_pct`, either adjust the tier price or lower the stated percentage.
 
 For subscription packages, the savings calculation uses annual pricing.
 
 ### 6. Quality Gates
 
-1. **Solution coverage test**: Do all `included_solutions` reference existing solution files? Does the product actually own all referenced features?
-2. **Tier progression test**: Remove the names — can you tell the tiers apart by scope alone? Each tier should feel like a step up, not just more.
-3. **Price coherence test**: Is each tier priced above the one below? Does the price-to-value ratio improve at higher tiers (rewarding commitment)?
-4. **Bundle logic test**: Would a buyer understand why these specific features are grouped together? Is there a narrative that connects them?
-5. **Market fit test**: Are the package prices plausible for this market segment? A mid-market SaaS company won't buy a 500K EUR package. An enterprise bank won't consider a 5K EUR offering serious.
-6. **Revenue model match**: Does the package type match the product's `revenue_model`?
+1. **Solution coverage test**: Do all `included_solutions` reference existing solution files? Does the product actually own all referenced features? Are all available solutions included in at least one tier (no orphans)?
+2. **Solution sizing test**: Does every tier have a `solution_sizes` object? Does each solution size reference a valid pricing tier from the solution file (proof_of_value, small, medium, large)? Can you trace the tier price to the sum of constituent solution prices at their selected sizes?
+3. **Tier progression test**: Remove the names — can you tell the tiers apart by scope alone? Each tier should feel like a step up, not just more. Does each tier's scope foreground what is new rather than restating lower tiers?
+4. **Price coherence test**: Is each tier priced above the one below? Does the price-to-value ratio improve at higher tiers (rewarding commitment)? Are tier-to-tier price jumps proportional to the value added — not decreasing at the top?
+5. **Bundle logic test**: Would a buyer understand why these specific features are grouped together? Is there a narrative that connects them?
+6. **Market fit test**: Are the package prices plausible for this market segment? A mid-market SaaS company won't buy a 500K EUR package. An enterprise bank won't consider a 5K EUR offering serious. Is the entry tier within this market's typical first-engagement budget?
+7. **Revenue model match**: Does the package type match the product's `revenue_model`?
+8. **Scope verifiability test**: Could a procurement team write a Leistungsverzeichnis (statement of work) from the tier scope descriptions? Do scopes include workload counts, system domains, durations, or other measurable deliverables — not just marketing themes?
 
 ### 7. Write Package Entity
 
@@ -166,9 +220,13 @@ Write to `packages/{product-slug}--{market-slug}.json`.
       "tier": "foundation",
       "name": "Foundation",
       "included_solutions": ["cloud-monitoring--mid-market-saas-dach"],
+      "solution_sizes": {
+        "cloud-monitoring--mid-market-saas-dach": "medium"
+      },
       "price": 45000,
       "currency": "EUR",
-      "scope": "Core monitoring for one environment"
+      "scope": "Up to 200 nodes monitored with basic alerting, 8-week delivery",
+      "exclusions": ["Custom integrations beyond standard API connectors", "On-site travel"]
     },
     {
       "tier": "professional",
@@ -177,9 +235,14 @@ Write to `packages/{product-slug}--{market-slug}.json`.
         "cloud-monitoring--mid-market-saas-dach",
         "real-time-alerting--mid-market-saas-dach"
       ],
+      "solution_sizes": {
+        "cloud-monitoring--mid-market-saas-dach": "medium",
+        "real-time-alerting--mid-market-saas-dach": "medium"
+      },
       "price": 85000,
       "currency": "EUR",
-      "scope": "Full observability with intelligent alerting"
+      "scope": "Intelligent alert correlation across 200 nodes, 12-week delivery",
+      "exclusions": ["Custom integrations beyond standard API connectors"]
     }
   ],
   "bundle_savings_pct": 15,
@@ -228,7 +291,8 @@ Write to `packages/{product-slug}--{market-slug}.json`.
 Required fields: `slug`, `product_slug`, `market_slug`, `package_type`, `name`, `tiers`
 Optional fields: `positioning`, `bundle_savings_pct`, `created`
 
-Each tier requires: `tier` (kebab-case ID), `name`, `included_solutions` (array of solution slugs), `scope`, `currency`
+Each tier requires: `tier` (kebab-case ID), `name`, `included_solutions` (array of solution slugs), `solution_sizes` (object mapping each solution slug to its pricing tier: proof_of_value/small/medium/large), `scope`, `currency`
+Each tier should include: `exclusions` (array of strings listing what is not in scope)
 Project tiers also require: `price`
 Subscription tiers also require: `price_monthly`, `price_annual` (either can be null for custom pricing)
 

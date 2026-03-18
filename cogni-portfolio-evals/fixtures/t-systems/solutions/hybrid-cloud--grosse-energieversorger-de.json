@@ -1,0 +1,45 @@
+{
+  "slug": "hybrid-cloud--grosse-energieversorger-de",
+  "proposition_slug": "hybrid-cloud--grosse-energieversorger-de",
+  "solution_type": "project",
+  "implementation": [
+    {
+      "phase": "Architecture Design",
+      "duration_weeks": 3,
+      "description": "OT/IT workload classification, network segmentation design, air-gap architecture for SCADA systems, governance framework definition"
+    },
+    {
+      "phase": "Platform Deployment",
+      "duration_weeks": 6,
+      "description": "MCCP deployment, private cloud provisioning, cross-cloud automation pipelines, BSI-certified security controls"
+    },
+    {
+      "phase": "Workload Onboarding & Validation",
+      "duration_weeks": 4,
+      "description": "Progressive workload migration to hybrid platform, OT isolation testing, compliance audit preparation"
+    }
+  ],
+  "pricing": {
+    "proof_of_value": {
+      "price": 20000,
+      "currency": "EUR",
+      "scope": "Architecture blueprint and security assessment for one OT/IT boundary, 3-week delivery"
+    },
+    "small": {
+      "price": 95000,
+      "currency": "EUR",
+      "scope": "Single-site hybrid deployment, up to 30 workloads, 10-week delivery"
+    },
+    "medium": {
+      "price": 220000,
+      "currency": "EUR",
+      "scope": "Multi-site deployment with MCCP, up to 100 workloads, 14-week delivery"
+    },
+    "large": {
+      "price": 450000,
+      "currency": "EUR",
+      "scope": "Enterprise-wide hybrid platform with full OT integration, 20-week delivery"
+    }
+  },
+  "created": "2026-01-25"
+}

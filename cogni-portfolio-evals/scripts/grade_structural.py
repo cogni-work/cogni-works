@@ -2,7 +2,7 @@
 """Grade portfolio eval outputs against structural assertions.
 
 Usage:
-    python grade_structural.py <outputs_dir> [--type products|features|propositions|customers|compete|markets]
+    python grade_structural.py <outputs_dir> [--type products|features|propositions|customers|compete|markets|packages]
 
 Reads all .json files in <outputs_dir> and checks structural assertions.
 Writes grading.json to the parent of outputs_dir (the run directory).
@@ -511,6 +511,177 @@ def grade_competitor(comp: dict) -> list[dict]:
     return results
 
 
+def grade_package(pkg: dict, solutions_dir: Path | None = None) -> list[dict]:
+    """Grade a single package against structural assertions."""
+    results = []
+
+    slug = pkg.get('slug', '')
+    product_slug = pkg.get('product_slug', '')
+    market_slug = pkg.get('market_slug', '')
+    package_type = pkg.get('package_type', '')
+    name = pkg.get('name', '')
+    positioning = pkg.get('positioning', '')
+    tiers = pkg.get('tiers', [])
+    bundle_savings = pkg.get('bundle_savings_pct', None)
+
+    # PKG-01: Required fields
+    required = ['slug', 'product_slug', 'market_slug', 'package_type', 'name', 'tiers']
+    missing = [f for f in required if not pkg.get(f)]
+    results.append({
+        'text': 'All required fields present (slug, product_slug, market_slug, package_type, name, tiers)',
+        'passed': len(missing) == 0,
+        'evidence': f'Missing: {missing}' if missing else 'All present'
+    })
+
+    # PKG-02: Slug follows {product}--{market} pattern
+    expected_slug = f'{product_slug}--{market_slug}'
+    results.append({
+        'text': 'Slug follows {product}--{market} pattern',
+        'passed': slug == expected_slug,
+        'evidence': f'slug="{slug}", expected="{expected_slug}"'
+    })
+
+    # PKG-03: package_type matches valid revenue models
+    valid_pkg_types = {'project', 'subscription', 'hybrid'}
+    results.append({
+        'text': f'package_type is project/subscription/hybrid (actual: {package_type})',
+        'passed': package_type in valid_pkg_types,
+        'evidence': f'package_type="{package_type}"'
+    })
+
+    # PKG-04: 2-4 tiers
+    results.append({
+        'text': f'2-4 tiers present (actual: {len(tiers)})',
+        'passed': 2 <= len(tiers) <= 4,
+        'evidence': f'{len(tiers)} tiers: {[t.get("name", "?") for t in tiers]}'
+    })
+
+    # PKG-05: Each tier has required fields
+    tier_issues = []
+    tier_required = ['tier', 'name', 'included_solutions', 'scope', 'currency']
+    for t in tiers:
+        tmissing = [f for f in tier_required if not t.get(f)]
+        if tmissing:
+            tier_issues.append(f'{t.get("name", "?")}: missing {tmissing}')
+        # Check tier ID is kebab-case
+        tier_id = t.get('tier', '')
+        if tier_id and not re.match(r'^[a-z][a-z0-9-]*$', tier_id):
+            tier_issues.append(f'{t.get("name", "?")}: tier ID "{tier_id}" not kebab-case')
+    results.append({
+        'text': 'Each tier has required fields (tier, name, included_solutions, scope, currency)',
+        'passed': len(tier_issues) == 0,
+        'evidence': '; '.join(tier_issues) if tier_issues else 'All tiers complete'
+    })
+
+    # PKG-12: solution_sizes present and valid
+    sizing_issues = []
+    valid_sizes = {'proof_of_value', 'small', 'medium', 'large'}
+    for t in tiers:
+        sizes = t.get('solution_sizes', {})
+        if not sizes:
+            sizing_issues.append(f'{t.get("name", "?")}: missing solution_sizes')
+        else:
+            for sol_slug in t.get('included_solutions', []):
+                if sol_slug not in sizes:
+                    sizing_issues.append(f'{t.get("name", "?")}: {sol_slug} not in solution_sizes')
+                elif sizes[sol_slug] not in valid_sizes:
+                    sizing_issues.append(f'{t.get("name", "?")}: {sol_slug} has invalid size "{sizes[sol_slug]}"')
+    results.append({
+        'text': 'solution_sizes present with valid sizes for all included solutions',
+        'passed': len(sizing_issues) == 0,
+        'evidence': '; '.join(sizing_issues) if sizing_issues else 'All tiers have valid solution_sizes'
+    })
+
+    # PKG-13: exclusions present
+    tiers_with_exclusions = sum(1 for t in tiers if t.get('exclusions'))
+    results.append({
+        'text': f'Exclusions present on tiers ({tiers_with_exclusions}/{len(tiers)})',
+        'passed': tiers_with_exclusions == len(tiers),
+        'evidence': f'{tiers_with_exclusions} of {len(tiers)} tiers have exclusions'
+    })
+
+    # PKG-06: Prices monotonically increasing
+    if package_type == 'project':
+        prices = [t.get('price', 0) for t in tiers if t.get('price') is not None]
+    elif package_type == 'subscription':
+        prices = [t.get('price_monthly', 0) or t.get('price_annual', 0) for t in tiers]
+    else:
+        prices = [t.get('price', 0) or t.get('price_monthly', 0) or t.get('price_annual', 0) for t in tiers]
+    # Filter out None/Custom values (represented as null/0)
+    numeric_prices = [p for p in prices if p and isinstance(p, (int, float))]
+    monotonic = all(numeric_prices[i] <= numeric_prices[i + 1] for i in range(len(numeric_prices) - 1)) if len(numeric_prices) > 1 else True
+    results.append({
+        'text': 'Tier prices monotonically increasing',
+        'passed': monotonic,
+        'evidence': f'Prices: {numeric_prices}'
+    })
+
+    # PKG-07: Every included_solution references existing solution (if solutions_dir provided)
+    all_solutions = set()
+    for t in tiers:
+        all_solutions.update(t.get('included_solutions', []))
+    if solutions_dir and solutions_dir.exists():
+        existing = {f.stem for f in solutions_dir.glob('*.json')}
+        missing_refs = all_solutions - existing
+        results.append({
+            'text': 'Every included_solution references existing solution file',
+            'passed': len(missing_refs) == 0,
+            'evidence': f'Missing: {sorted(missing_refs)}' if missing_refs else f'All {len(all_solutions)} references valid'
+        })
+    else:
+        # Can't verify without solutions dir — just check non-empty
+        results.append({
+            'text': 'included_solutions arrays are non-empty',
+            'passed': all(len(t.get('included_solutions', [])) > 0 for t in tiers),
+            'evidence': f'{len(all_solutions)} unique solutions referenced'
+        })
+
+    # PKG-08: No orphan solutions (every solution in at least one tier)
+    if solutions_dir and solutions_dir.exists():
+        existing = {f.stem for f in solutions_dir.glob('*.json')}
+        # Only check solutions matching this product-market pair
+        market = pkg.get('market_slug', '')
+        relevant = {s for s in existing if s.endswith(f'--{market}')}
+        orphans = relevant - all_solutions
+        results.append({
+            'text': 'No orphan solutions (every available solution appears in at least one tier)',
+            'passed': len(orphans) == 0,
+            'evidence': f'Orphans: {sorted(orphans)}' if orphans else f'All {len(relevant)} solutions covered'
+        })
+
+    # PKG-09: bundle_savings_pct in 10-50%
+    if bundle_savings is not None:
+        results.append({
+            'text': f'bundle_savings_pct is 10-50% (actual: {bundle_savings}%)',
+            'passed': 10 <= bundle_savings <= 50,
+            'evidence': f'bundle_savings_pct={bundle_savings}'
+        })
+
+    # PKG-10: Positioning max 80 characters
+    if positioning:
+        results.append({
+            'text': f'Positioning max 80 characters (actual: {len(positioning)})',
+            'passed': len(positioning) <= 80,
+            'evidence': f'"{positioning}"'
+        })
+
+    # PKG-11: Scope max 1 sentence per tier
+    scope_issues = []
+    for t in tiers:
+        scope = t.get('scope', '')
+        if scope:
+            sentence_ends = len(re.findall(r'[.!?]', scope))
+            if sentence_ends > 1:
+                scope_issues.append(f'{t.get("name", "?")}: {sentence_ends} sentences in scope')
+    results.append({
+        'text': 'Scope is max 1 sentence per tier',
+        'passed': len(scope_issues) == 0,
+        'evidence': '; '.join(scope_issues) if scope_issues else 'All scopes single-sentence'
+    })
+
+    return results
+
+
 def main():
     if len(sys.argv) < 2:
         print('Usage: python grade_structural.py <outputs_dir> [--type features|propositions|customers|compete]')
@@ -553,6 +724,8 @@ def main():
             elif 'assessments' in data:
                 # This is a features assessment summary, grade individual assessments
                 file_type = 'features-assessment'
+            elif 'tiers' in data and 'product_slug' in data and 'market_slug' in data:
+                file_type = 'packages'
             elif 'region' in data and 'product_slug' not in data and 'is_statement' not in data:
                 file_type = 'markets'
             elif 'description' in data and 'product_slug' in data:
@@ -563,7 +736,16 @@ def main():
                 print(f'Cannot detect type for {jf.name}, skipping')
                 continue
 
-        if file_type == 'products':
+        if file_type == 'packages':
+            # Try to find solutions dir for cross-reference validation
+            solutions_dir = None
+            for candidate in [outputs_dir / 'solutions', outputs_dir.parent / 'solutions',
+                              outputs_dir.parent / 'workspace' / 'solutions']:
+                if candidate.exists():
+                    solutions_dir = candidate
+                    break
+            checks = grade_package(data, solutions_dir)
+        elif file_type == 'products':
             checks = grade_product(data)
         elif file_type == 'markets':
             checks = grade_market(data)

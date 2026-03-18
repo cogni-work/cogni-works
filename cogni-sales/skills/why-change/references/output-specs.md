@@ -65,9 +65,11 @@ portfolio_path: "{portfolio_path}"
 
 [2-3 Power Positions using IS-DOES-MEANS structure from why-you-patterns.md. You-Phrasing throughout DOES layer. Mapped to buyer needs from Phase 1.]
 
-| Position | IS | DOES (for {customer_name}) | MEANS |
-|----------|-----|---------------------------|-------|
-| [Name] | [Capability] | [Quantified outcome with You-Phrasing] | [Competitive moat] |
+| Position | IS (your solution/capability) | DOES (for {customer_name}) | MEANS (competitive moat) |
+|----------|-------------------------------|---------------------------|--------------------------|
+| [Name] | [What the solution IS — positioning statement, NOT the problem] | [Quantified outcome with You-Phrasing] | [Why competitors can't replicate — time/experience/certification barrier] |
+
+**IS semantics:** IS must describe YOUR SOLUTION or capability, never the customer's problem. The customer's problem informs which capability to highlight, but IS always positions the solution.
 
 ### Competitive Differentiation
 
@@ -156,9 +158,9 @@ portfolio_path: "{portfolio_path}"
 
 [2-3 Power Positions using IS-DOES-MEANS structure from why-you-patterns.md. You-Phrasing throughout DOES layer. Mapped to typical buyer needs in this segment.]
 
-| Position | IS | DOES (for {segment_name}) | MEANS |
-|----------|-----|---------------------------|-------|
-| [Name] | [Capability] | [Quantified outcome with You-Phrasing] | [Competitive moat] |
+| Position | IS (your solution/capability) | DOES (for {segment_name}) | MEANS (competitive moat) |
+|----------|-------------------------------|---------------------------|--------------------------|
+| [Name] | [What the solution IS — positioning statement, NOT the problem] | [Quantified outcome with You-Phrasing] | [Why competitors can't replicate] |
 
 ### Competitive Differentiation
 

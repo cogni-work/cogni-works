@@ -250,7 +250,7 @@ Write to `${project_path}/{NN}-{phase}/narrative.md`.
 Apply the arc patterns from Phase 1:
 - **why-change:** PSB structure (Problem → Solution → Benefit). Use contrast pattern. End with competitive implication.
 - **why-now:** Stack 2-3 forcing functions with specific timelines. Quantified urgency. Before/after contrasts.
-- **why-you:** 2-3 Power Positions with IS-DOES-MEANS. You-Phrasing. Quantified DOES layer.
+- **why-you:** 2-3 Power Positions with IS-DOES-MEANS. You-Phrasing. Quantified DOES layer. **Critical IS semantics:** IS describes YOUR SOLUTION/CAPABILITY (e.g., "Eine integrierte OT/IT-Sicherheitsplattform..."), NOT the customer's problem or current state. The customer's problem informs which capability to highlight, but IS must position the solution. DOES states what the solution does for the buyer (outcomes with numbers). MEANS explains why competitors can't replicate it (moat/barrier).
 - **why-pay:** 3-4 cost dimensions stacked. 3-year horizon. End with simple ratio.
 
 **Framing by pitch mode:**

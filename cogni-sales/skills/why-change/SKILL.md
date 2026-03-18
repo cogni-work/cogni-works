@@ -228,7 +228,9 @@ The agent will:
 - Create 2-3 Power Positions mapped to buyer needs from Phase 1
 - Write `03-why-you/research.json` and `03-why-you/narrative.md`
 
-**Quality Gate:** Present Power Positions table with IS/DOES/MEANS. Same approve/revise pattern.
+**IS/DOES/MEANS semantics (critical):** IS describes YOUR SOLUTION or capability ("Eine integrierte OT/IT-Sicherheitsplattform..."), NOT the customer's problem. The buyer's problem from Phase 1 informs which capability to highlight, but IS must always position the solution. DOES states what the solution does for the buyer (outcomes with numbers, You-Phrasing). MEANS explains why competitors can't replicate it (moat: time, experience, network, certification).
+
+**Quality Gate:** Present Power Positions table with IS/DOES/MEANS. Verify each IS describes the solution, not the problem. Same approve/revise pattern.
 
 Update pitch-log.json. **-> Proceed to Phase 4.**
 

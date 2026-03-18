@@ -164,6 +164,141 @@
         {"id": "F-10", "text": "Improved features pass quality assessor (no fail, preferably no warn)", "type": "agent"}
       ],
       "files": []
+    },
+    {
+      "id": 11,
+      "name": "scan-tsystems-full",
+      "skill": "portfolio-scan",
+      "target": "t-systems",
+      "prompt": "Scan the T-Systems portfolio. The project is already set up at the project path provided. Discover all subsidiaries and business units, scan their websites for service offerings, and classify everything against the b2b-ict taxonomy. Generate the portfolio report and import features.",
+      "expected_output": "Portfolio report covering all 8 dimensions (57 categories), 5-8 discovered subsidiaries/domains, 40+ confirmed offerings with source URLs, features imported with taxonomy_mapping.",
+      "assertions": [
+        {"id": "S-01", "text": "All 8 dimensions present in report (## N. headers)", "type": "structural"},
+        {"id": "S-02", "text": "All 57 categories present in report (### X.Y headers)", "type": "structural"},
+        {"id": "S-03", "text": "Every category has a discovery status tag [Status: ...]", "type": "structural"},
+        {"id": "S-04", "text": "scan-output.json status totals = 57", "type": "structural"},
+        {"id": "S-08", "text": "Every confirmed offering has a Link field (non-empty)", "type": "structural"},
+        {"id": "S-09", "text": "All offering Links are from discovered domains only", "type": "structural"},
+        {"id": "S-10", "text": "At least 3 domains analyzed", "type": "structural"},
+        {"id": "S-13", "text": "Features have taxonomy_mapping with category_id", "type": "structural"},
+        {"id": "S-14", "text": "category_id matches a valid category from categories.json", "type": "structural"},
+        {"id": "S-15", "text": "Feature readiness is ga/beta/planned", "type": "structural"},
+        {"id": "S-16", "text": "Feature count >= 20", "type": "structural"}
+      ],
+      "files": []
+    },
+    {
+      "id": 12,
+      "name": "scan-bechtle-mid",
+      "skill": "portfolio-scan",
+      "target": "bechtle",
+      "prompt": "I have a Bechtle AG portfolio project set up. Scan their public website to discover what IT services they offer. Map everything against the b2b-ict taxonomy and create the portfolio report.",
+      "expected_output": "Portfolio report with fewer confirmed categories (25-35 of 57), 1-3 domains, 10-30 confirmed offerings, appropriate Not Offered statuses for categories Bechtle doesn't serve.",
+      "assertions": [
+        {"id": "S-01", "text": "All 8 dimensions present in report (## N. headers)", "type": "structural"},
+        {"id": "S-02", "text": "All 57 categories present in report (### X.Y headers)", "type": "structural"},
+        {"id": "S-03", "text": "Every category has a discovery status tag [Status: ...]", "type": "structural"},
+        {"id": "S-04", "text": "scan-output.json status totals = 57", "type": "structural"},
+        {"id": "S-08", "text": "Every confirmed offering has a Link field (non-empty)", "type": "structural"},
+        {"id": "S-10", "text": "At least 1 domain analyzed", "type": "structural"},
+        {"id": "S-13", "text": "Features have taxonomy_mapping with category_id", "type": "structural"},
+        {"id": "S-14", "text": "category_id matches a valid category from categories.json", "type": "structural"},
+        {"id": "S-15", "text": "Feature readiness is ga/beta/planned", "type": "structural"},
+        {"id": "S-16b", "text": "Feature count >= 10", "type": "structural"}
+      ],
+      "files": []
+    },
+    {
+      "id": 13,
+      "name": "scan-tsystems-german",
+      "skill": "portfolio-scan",
+      "target": "t-systems",
+      "prompt": "Scan das T-Systems Portfolio. Das Projekt ist auf Deutsch eingerichtet (language: de). Finde alle Tochtergesellschaften und scanne deren Webseiten. Erstelle den Portfolio-Report auf Deutsch mit dem b2b-ict Taxonomie-Template.",
+      "expected_output": "Same coverage as eval 11 but with German-language search queries catching DE-specific content. Report should surface offerings that English-only search misses.",
+      "assertions": [
+        {"id": "S-01", "text": "All 8 dimensions present in report (## N. headers)", "type": "structural"},
+        {"id": "S-02", "text": "All 57 categories present in report (### X.Y headers)", "type": "structural"},
+        {"id": "S-03", "text": "Every category has a discovery status tag [Status: ...]", "type": "structural"},
+        {"id": "S-04", "text": "scan-output.json status totals = 57", "type": "structural"},
+        {"id": "S-08", "text": "Every confirmed offering has a Link field (non-empty)", "type": "structural"},
+        {"id": "S-09", "text": "All offering Links are from discovered domains only", "type": "structural"},
+        {"id": "S-10", "text": "At least 3 domains analyzed", "type": "structural"},
+        {"id": "S-13", "text": "Features have taxonomy_mapping with category_id", "type": "structural"},
+        {"id": "S-14", "text": "category_id matches a valid category from categories.json", "type": "structural"},
+        {"id": "S-15", "text": "Feature readiness is ga/beta/planned", "type": "structural"},
+        {"id": "S-16", "text": "Feature count >= 20", "type": "structural"}
+      ],
+      "files": []
+    },
+    {
+      "id": 14,
+      "name": "features-tsys-repair",
+      "skill": "features",
+      "target": "t-systems",
+      "prompt": "Review the features for the cloud-services product in the T-Systems project. Every feature is missing product_slug, taxonomy_mapping, and readiness fields. Ensure every feature has all required fields including product_slug, taxonomy_mapping (with dimension, category_id, category_name from the b2b-ict taxonomy), and readiness. Fix all structural gaps and write the corrected feature files.",
+      "expected_output": "All 8 features updated with product_slug=cloud-services, taxonomy_mapping filled from b2b-ict taxonomy, readiness set to ga/beta/planned. 100% structural pass rate.",
+      "assertions": [
+        {"id": "F-01", "text": "Feature descriptions are 20-35 words", "type": "structural"},
+        {"id": "F-02", "text": "All required fields present (slug, product_slug, name, description)", "type": "structural"},
+        {"id": "F-04", "text": "taxonomy_mapping present with dimension, category_id, category_name", "type": "structural"},
+        {"id": "F-05", "text": "readiness is one of ga, beta, planned", "type": "structural"},
+        {"id": "F-06", "text": "No outcome verbs in descriptions", "type": "structural"},
+        {"id": "F-07", "text": "No parity adjectives in descriptions", "type": "structural"}
+      ],
+      "files": []
+    },
+    {
+      "id": 15,
+      "name": "markets-tsys-discovery",
+      "skill": "markets",
+      "target": "t-systems",
+      "prompt": "I have a T-Systems portfolio at the project path provided. They sell cloud services (migration, hybrid cloud, hyperscaler management, sovereign cloud, etc.) to enterprise customers. Help me define target markets for this portfolio. We're primarily active in Germany and the DACH region but exploring the EU.",
+      "expected_output": "3-5 market JSON files across 2-3 regions (de/dach, possibly eu). Each with full segmentation, TAM/SAM/SOM, priority classification. Strategic commentary about beachhead vs expansion, cross-referencing existing features.",
+      "assertions": [
+        {"id": "M-01", "text": "All required fields present (slug, name, region, description)", "type": "structural"},
+        {"id": "M-02", "text": "Region is a valid code from regions.json", "type": "structural"},
+        {"id": "M-03", "text": "Slug follows {segment}-{region} pattern", "type": "structural"},
+        {"id": "M-04", "text": "Description is 1 sentence, 5-30 words", "type": "structural"},
+        {"id": "M-05", "text": "Priority is beachhead/expansion/aspirational", "type": "structural"},
+        {"id": "M-06", "text": "TAM/SAM/SOM currency matches region default", "type": "structural"},
+        {"id": "M-07", "text": "SAM/TAM ratio < 50%", "type": "structural"},
+        {"id": "M-08", "text": "SOM/SAM ratio < 20%", "type": "structural"},
+        {"id": "M-09", "text": "Segmentation has normalized fields (employees_min/max, vertical_codes)", "type": "structural"}
+      ],
+      "files": []
+    },
+    {
+      "id": 16,
+      "name": "markets-tsys-direct",
+      "skill": "markets",
+      "target": "t-systems",
+      "prompt": "Create the following target markets for the T-Systems cloud services portfolio at the project path provided: 1. Large energy companies in Germany (E.ON, RWE scale, 5000+ employees) 2. Mid-market manufacturing companies in DACH (500-5000 employees) 3. Public sector / government agencies in Germany. Size each market with TAM/SAM/SOM and classify priority.",
+      "expected_output": "3 market JSON files with proper slugs, regions, segmentation, and sizing. Skill should note feature fit (SAP-on-cloud, cloud-migration strong for energy) and may challenge public sector breadth.",
+      "assertions": [
+        {"id": "M-01", "text": "All required fields present (slug, name, region, description)", "type": "structural"},
+        {"id": "M-02", "text": "Region is a valid code from regions.json", "type": "structural"},
+        {"id": "M-03", "text": "Slug follows {segment}-{region} pattern", "type": "structural"},
+        {"id": "M-04", "text": "Description is 1 sentence, 5-30 words", "type": "structural"},
+        {"id": "M-05", "text": "Priority is beachhead/expansion/aspirational", "type": "structural"},
+        {"id": "M-06", "text": "TAM/SAM/SOM currency matches region default", "type": "structural"},
+        {"id": "M-07", "text": "SAM/TAM ratio < 50%", "type": "structural"},
+        {"id": "M-08", "text": "SOM/SAM ratio < 20%", "type": "structural"},
+        {"id": "M-09", "text": "Segmentation has normalized fields (employees_min/max, vertical_codes)", "type": "structural"}
+      ],
+      "files": []
+    },
+    {
+      "id": 17,
+      "name": "markets-bechtle-cold-start",
+      "skill": "markets",
+      "target": "bechtle",
+      "prompt": "I'm setting up a portfolio for Bechtle AG, a German IT services provider. The portfolio is at the project path provided. No features or products are defined yet. What target markets should we consider?",
+      "expected_output": "Skill should flag missing features/products prerequisite. If markets are produced, they should have caveats and still be structurally valid.",
+      "assertions": [
+        {"id": "M-01", "text": "All required fields present (slug, name, region, description)", "type": "structural"},
+        {"id": "M-12", "text": "Skill flags missing features/products prerequisite", "type": "agent"}
+      ],
+      "files": []
     }
   ]
 }

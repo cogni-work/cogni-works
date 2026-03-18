@@ -39,7 +39,7 @@ The workflow adapts to what the user brings. Don't force every interaction throu
 
 - **User is vague** ("it's a BI tool, you know the drill") → Start with discovery, then shape features
 - **User dumps a capability list** → Skip discovery, go straight to shaping and consolidation
-- **User asks to review existing features** → Jump to review mode — first run structural triage (fill missing required fields like `product_slug`, `taxonomy_mapping`, `readiness`), then critique what's there, cross-reference with the product description, propose improvements
+- **User asks to review existing features** → Jump to review mode — critique what's there, cross-reference with the product description, propose improvements
 - **User wants to add/edit a specific feature** → Handle the operation, but assess whether it reveals a broader issue
 
 In all cases, read `portfolio.json` for company context and check `products/` for existing products. If no products exist, tell the user to define them first using the `products` skill. If only one product exists, use it automatically. If multiple exist, ask which product to work on.
@@ -75,11 +75,10 @@ Based on discovery (or the user's capability dump), propose a feature set. This 
 
 **Name for clarity, not for marketing.** Feature names should be immediately understandable to someone who's never seen the product. "Real-time Container Orchestration Monitoring" beats "SmartWatch Pro" every time.
 
-**Write descriptions that pass the demo test and the conciseness test.** Target **20-35 words** — one to two sentences. The IS layer is the base of the Power Position pyramid: a factual anchor, not a feature catalog. Descriptions below 20 words almost always lack the mechanism detail needed for strong propositions downstream — if you're under 20, add specificity about HOW the capability works rather than padding with filler. Count words before finalizing each description. **German descriptions: target 22-35 words.** German compound words (e.g., "Netzleittechnik", "SAP-IS-U-basiert") count as single tokens despite packing multiple concepts, so a 18-word German sentence often has less substance than a 18-word English one. The 2-word buffer compensates for this compression.
+**Write descriptions that pass the demo test and the conciseness test.** Target **20-35 words** — one to two sentences. The IS layer is the base of the Power Position pyramid: a factual anchor, not a feature catalog.
 
 **Checklist for a concise feature description:**
 - Names the core mechanism — what it does technically, not what it delivers
-- Hits at least 20 words (22 for German) — shorter descriptions usually mean the mechanism is underspecified. After writing each description, count the words by splitting on spaces. If under the minimum, expand with mechanism detail before saving.
 - Stays under two sentences and 35 words
 - Uses concrete, specific descriptors — no marketing adjectives
 - Includes only what's necessary to set up the DOES layer — selective, not exhaustive
@@ -122,21 +121,15 @@ Once you and the user agree on the feature set, structure each feature:
   "name": "Cloud Infrastructure Monitoring",
   "description": "Monitors cloud infrastructure — servers, containers, networks — in real time, correlates metrics across layers, and triggers automated alerts on threshold violations.",
   "category": "observability",
-  "taxonomy_mapping": {
-    "dimension": "Managed Infrastructure Services",
-    "category_id": "5.4",
-    "category_name": "Infrastructure Monitoring"
-  },
-  "readiness": "ga",
   "created": "2026-01-15"
 }
 ```
 
-Required: `slug`, `product_slug`, `name`, `description`. Strongly recommended (fill on every feature): `taxonomy_mapping` (with `dimension`, `category_id`, `category_name`), `readiness` (`ga`/`beta`/`planned`). Optional: `category`, `created`, `updated`.
+Required: `slug`, `product_slug`, `name`, `description`. Optional: `category`, `readiness`, `created`, `updated`.
 
 Valid `readiness` values: `ga` (generally available), `beta` (limited availability / pilot), `planned` (roadmap only, not yet built).
 
-Write each feature as a JSON file to `features/{slug}.json`. Only write individual feature files — do not create summary, index, or batch files in the `features/` directory.
+Write each feature as a JSON file to `features/{slug}.json`.
 
 ### Review Presentation
 
@@ -152,7 +145,7 @@ Then deliver your assessment — not as a checklist but as a coherent perspectiv
 
 Quality assessment uses two layers:
 
-### 1. Structural Validation (fast, automated — fix before proceeding)
+### 1. Structural Validation (fast, automated)
 
 Run the validation script to check for structural issues (missing fields, referential integrity, very short descriptions):
 
@@ -162,11 +155,9 @@ $CLAUDE_PLUGIN_ROOT/scripts/validate-entities.sh <project-dir>
 
 This catches descriptions under 15 words and data model errors. It runs fast and works standalone.
 
-**If structural issues are found, fix them immediately** — fill missing `product_slug`, `taxonomy_mapping`, and `readiness` fields before moving to quality assessment. Structural gaps propagate into downstream grading failures that mask the real quality signal. Don't just report structural issues; resolve them.
-
 ### 2. Description Quality Assessment (LLM-powered, multilingual)
 
-Only run this after structural validation passes clean. Spawn the `feature-quality-assessor` agent to assess description quality in depth. This agent uses Haiku and works in any language — German, English, or mixed:
+After structural validation passes, spawn the `feature-quality-assessor` agent to assess description quality in depth. This agent uses Haiku and works in any language — German, English, or mixed:
 
 ```
 Assess feature quality for the project at <project-dir>
@@ -226,7 +217,7 @@ When quality assessment reveals warn or fail dimensions, offer to research the c
    When confidence is low, the agent returns targeted questions instead of a proposed rewrite. Present these questions to the user — their domain knowledge fills gaps that web research can't. After the user answers, you can either rewrite the description yourself using their input or re-delegate to the agent with the additional context.
 
 6. User chooses per feature: **Accept** / **Edit** / **Skip**
-7. Write accepted changes to the feature JSON file, set the `updated` field to today's date. While writing, also fill any missing structural fields (`product_slug`, `taxonomy_mapping`, `readiness`) — improving a description is the natural moment to ensure the feature is structurally complete.
+7. Write accepted changes to the feature JSON file, set the `updated` field to today's date
 8. Warn about downstream cascades: "Feature X was updated → N propositions may need refresh. Run the `propositions` skill to review them."
 9. Optionally re-run the quality assessor on changed features to confirm improvement
 
@@ -249,7 +240,7 @@ These checks catch data model inconsistencies early, before they cascade into do
 
 ### Listing Features
 
-Read all JSON files in the project's `features/` directory. Before presenting, check each feature for missing required fields (`product_slug`, `taxonomy_mapping`, `readiness`) and fill them — same structural triage as in Feature Review. Present grouped by product, with category subgrouping where categories exist. Include your assessment — is the feature set complete? Well-balanced? Any gaps jump out?
+Read all JSON files in the project's `features/` directory. Present grouped by product, with category subgrouping where categories exist. Include your assessment — is the feature set complete? Well-balanced? Any gaps jump out?
 
 ### Editing Features
 
@@ -295,12 +286,7 @@ When the user provides a product description, website content, or document:
 When the user asks to review or improve their feature set (or when you notice issues during other operations), jump straight into the critique — don't start with discovery questions.
 
 1. Read all features for the relevant product(s) and the product description
-2. **Structural triage** (before quality assessment): Scan every feature file for missing required fields. This is the first thing you do — incomplete data propagates errors downstream.
-   - `product_slug`: Infer from the product directory or the product the user is working on. Every feature must have this.
-   - `taxonomy_mapping`: Must contain `dimension`, `category_id`, and `category_name` from the b2b-ict taxonomy. If missing, assign the best-fit category based on the feature's description and the taxonomy template at `$CLAUDE_PLUGIN_ROOT/skills/portfolio-setup/references/data-model.md`.
-   - `readiness`: Must be `ga`, `beta`, or `planned`. Default to `ga` for features describing existing production capabilities.
-   - Present a structural fix table showing what was missing and what you filled, then write the corrected files immediately. Don't wait for user confirmation on structural fields — these are mechanical fixes, not judgment calls.
-3. **Gap analysis**: Cross-reference every capability claim in `products/{slug}.json` against the feature files. Every capability mentioned in the product description that has no corresponding feature is a concrete gap — list them explicitly, don't just note "there might be gaps."
+2. **Gap analysis**: Cross-reference every capability claim in `products/{slug}.json` against the feature files. Every capability mentioned in the product description that has no corresponding feature is a concrete gap — list them explicitly, don't just note "there might be gaps."
 3. **Overlap detection**: Flag features with overlapping descriptions and recommend specific merges
 4. **Description quality**: Test each description against the demo test. Tautologies ("Transforms data") and kitchen-sink descriptions ("alerts and dashboards and logging and...") both need rewriting.
 5. **Proposition readiness**: Assess whether each feature's description is specific enough to power a compelling proposition. A feature described as "Connects to data sources" will produce weak propositions — flag it.

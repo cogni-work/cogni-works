@@ -2,7 +2,7 @@
 """Grade portfolio eval outputs against structural assertions.
 
 Usage:
-    python grade_structural.py <outputs_dir> [--type features|propositions|customers|compete]
+    python grade_structural.py <outputs_dir> [--type features|propositions|customers|compete|markets]
 
 Reads all .json files in <outputs_dir> and checks structural assertions.
 Writes grading.json to the parent of outputs_dir (the run directory).
@@ -83,6 +83,118 @@ def check_quantification(text: str) -> bool:
         if re.search(pat, text, re.IGNORECASE):
             return True
     return False
+
+
+# Region → default currency mapping (from regions.json)
+REGION_CURRENCIES = {
+    'de': 'EUR', 'dach': 'EUR', 'eu': 'EUR', 'uk': 'GBP',
+    'nordics': 'EUR', 'us': 'USD', 'na': 'USD', 'cn': 'CNY',
+    'apac': 'USD', 'jp': 'JPY', 'latam': 'USD', 'mea': 'USD',
+    'global': 'USD',
+}
+
+VALID_REGIONS = set(REGION_CURRENCIES.keys())
+VALID_PRIORITIES = {'beachhead', 'expansion', 'aspirational'}
+
+
+def grade_market(market: dict) -> list[dict]:
+    """Grade a single market against structural assertions."""
+    results = []
+
+    slug = market.get('slug', '')
+    name = market.get('name', '')
+    region = market.get('region', '')
+    desc = market.get('description', '')
+    segmentation = market.get('segmentation', {})
+    priority = market.get('priority', '')
+    tam = market.get('tam', {})
+    sam = market.get('sam', {})
+    som = market.get('som', {})
+
+    # M-01: Required fields
+    required = ['slug', 'name', 'region', 'description']
+    missing = [f for f in required if not market.get(f)]
+    results.append({
+        'text': 'All required fields present (slug, name, region, description)',
+        'passed': len(missing) == 0,
+        'evidence': f'Missing: {missing}' if missing else 'All present'
+    })
+
+    # M-02: Valid region code
+    results.append({
+        'text': f'Valid region code (actual: {region})',
+        'passed': region in VALID_REGIONS,
+        'evidence': f'region="{region}"'
+    })
+
+    # M-03: Slug ends with -{region}
+    slug_ok = slug.endswith(f'-{region}') if region else False
+    results.append({
+        'text': 'Slug ends with -{region}',
+        'passed': slug_ok,
+        'evidence': f'slug="{slug}", region="{region}"'
+    })
+
+    # M-04: Description is 1 sentence (5-30 words)
+    desc_wc = count_words(desc)
+    sentence_ends = len(re.findall(r'[.!?]', desc))
+    results.append({
+        'text': f'Description is 1 sentence, 5-30 words (actual: {desc_wc} words, {sentence_ends} sentence-enders)',
+        'passed': 5 <= desc_wc <= 30 and sentence_ends <= 1,
+        'evidence': f'"{desc[:100]}"'
+    })
+
+    # M-05: Valid priority (skip if absent)
+    if priority:
+        results.append({
+            'text': f'Priority is beachhead/expansion/aspirational (actual: {priority})',
+            'passed': priority in VALID_PRIORITIES,
+            'evidence': f'priority="{priority}"'
+        })
+
+    # M-06: Currency matches region default
+    expected_currency = REGION_CURRENCIES.get(region, '')
+    for label, sizing in [('TAM', tam), ('SAM', sam), ('SOM', som)]:
+        currency = sizing.get('currency', '')
+        if currency:
+            results.append({
+                'text': f'{label} currency matches region default ({expected_currency})',
+                'passed': currency == expected_currency,
+                'evidence': f'{label}.currency="{currency}", expected="{expected_currency}"'
+            })
+
+    # M-07: SAM/TAM ratio < 50%
+    tam_val = tam.get('value', 0)
+    sam_val = sam.get('value', 0)
+    som_val = som.get('value', 0)
+    if tam_val > 0 and sam_val > 0:
+        ratio = sam_val / tam_val
+        results.append({
+            'text': f'SAM/TAM ratio < 50% (actual: {ratio:.1%})',
+            'passed': ratio < 0.5,
+            'evidence': f'SAM={sam_val:,.0f} / TAM={tam_val:,.0f} = {ratio:.1%}'
+        })
+
+    # M-08: SOM/SAM ratio < 20%
+    if sam_val > 0 and som_val > 0:
+        ratio = som_val / sam_val
+        results.append({
+            'text': f'SOM/SAM ratio < 20% (actual: {ratio:.1%})',
+            'passed': ratio < 0.2,
+            'evidence': f'SOM={som_val:,.0f} / SAM={sam_val:,.0f} = {ratio:.1%}'
+        })
+
+    # M-09: Normalized segmentation fields
+    if segmentation:
+        norm_fields = ['employees_min', 'employees_max', 'vertical_codes']
+        norm_missing = [f for f in norm_fields if f not in segmentation]
+        results.append({
+            'text': 'Segmentation has normalized fields (employees_min/max, vertical_codes)',
+            'passed': len(norm_missing) == 0,
+            'evidence': f'Missing: {norm_missing}' if norm_missing else 'All normalized fields present'
+        })
+
+    return results
 
 
 def grade_feature(feature: dict) -> list[dict]:
@@ -350,7 +462,9 @@ def main():
         print(f'Directory not found: {outputs_dir}')
         sys.exit(1)
 
-    json_files = sorted(outputs_dir.glob('*.json'))
+    # Exclude known non-entity files (assessment summaries, metrics, etc.)
+    exclude_names = {'assessment.json', 'metrics.json', 'feature-summary.json'}
+    json_files = sorted(f for f in outputs_dir.glob('*.json') if f.name not in exclude_names)
     if not json_files:
         print(f'No JSON files found in {outputs_dir}')
         sys.exit(1)
@@ -375,13 +489,17 @@ def main():
             elif 'assessments' in data:
                 # This is a features assessment summary, grade individual assessments
                 file_type = 'features-assessment'
+            elif 'region' in data and 'product_slug' not in data and 'is_statement' not in data:
+                file_type = 'markets'
             elif 'description' in data and 'product_slug' in data:
                 file_type = 'features'
             else:
                 print(f'Cannot detect type for {jf.name}, skipping')
                 continue
 
-        if file_type == 'features':
+        if file_type == 'markets':
+            checks = grade_market(data)
+        elif file_type == 'features':
             checks = grade_feature(data)
         elif file_type == 'features-assessment':
             # Grade each feature in the assessment

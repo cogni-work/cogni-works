@@ -105,21 +105,21 @@ Title → Problem/Crisis → Urgency → Solution Overview → Power Positions (
 
 The solution overview slide MUST precede the Power Position slides. Without it, audiences experience cognitive dissonance jumping from crisis/urgency directly to detailed technical capabilities. The overview orients the audience to WHAT the solution is before diving into HOW each component delivers specific outcomes.
 
-#### IS/DOES/MEANS Semantic Transformation (Power Positions)
+#### IS/DOES/MEANS Semantic Verification & Transformation (Power Positions)
 
-Upstream narratives (cogni-narrative, cogni-sales) often use IS/DOES/MEANS with **narrative semantics** that differ from the **visual layout semantics** defined in `pptx-layouts.md`:
+The Corporate Visions narrative framework and the `pptx-layouts.md` visual layout use IS/DOES/MEANS with **different semantics**. The narrative framework emphasizes buyer outcomes (MEANS = business impact), while the visual layout emphasizes proof architecture (MEANS = technology proof). Before generating slides, verify each layer and transform where needed:
 
-| Layer | Narrative semantics (upstream) | Visual semantics (pptx-layouts.md) | Transformation |
-|-------|-------------------------------|-----------------------------------|----------------|
-| **IS** | Current problem / status quo ("Fragmentierte OT/IT-Silos") | What the solution IS — positioning statement ("Eine integrierte OT/IT-Sicherheitsplattform") | Invert from problem to solution identity |
-| **DOES** | What the provider offers (= what it IS) | What the solution DOES — capabilities with quantified outcomes ("Vereint OT-Monitoring und IT-Security, reduziert Reaktionszeit um 60%") | Add action verbs and measurable outcomes |
-| **MEANS** | Business impact metrics ("€2.3M Einsparung") | HOW it works — technology/methodology proof ("Zero-Trust-Architektur + BSI-C5-zertifizierte Cloud + 24/7 SOC") | Replace outcome metrics with technical proof |
+| Layer | Narrative semantics (Corporate Visions) | Visual semantics (pptx-layouts.md) | Action |
+|-------|----------------------------------------|-----------------------------------|--------|
+| **IS** | What the solution IS — capability/positioning | What the solution IS — positioning statement | Verify: IS must describe the solution, not the buyer's problem. If IS describes a problem (legacy content), rewrite as the solution that addresses it. |
+| **DOES** | What the buyer can DO differently (outcomes) | What the solution DOES — capabilities with quantified outcomes | Verify: ensure action verbs and measurable results are present. Add if missing. |
+| **MEANS** | Business/personal impact ("€2.3M Einsparung", "Why competitors can't copy") | HOW it works — technology/methodology proof ("Zero-Trust-Architektur + BSI-C5-zertifizierte Cloud + 24/7 SOC") | **Transform:** Move business outcome metrics to DOES. Replace MEANS with the underlying technology, methodology, or certification that enables those outcomes. |
 
-**Rule:** When extracting Power Position content from `03-why-you` sections, do NOT pass IS/DOES/MEANS through verbatim. Apply the transformation above so each layer matches its visual layout function:
+**Rule:** The MEANS layer requires transformation in most cases because the narrative framework defines MEANS as business impact while the visual layout defines MEANS as technical proof — this is a genuine framework difference, not a bug. For IS and DOES, verify correctness and fix only if the semantics are wrong.
 
 1. **IS** must be a solution positioning statement (what it IS), not a problem description. If the upstream IS describes the problem, rewrite it as the solution that addresses that problem.
-2. **DOES** must state capabilities with quantified outcomes (what it DOES), not repeat what the solution is. Add action verbs and measurable results.
-3. **MEANS** must provide technology/methodology proof (HOW it works), not business impact metrics. If the upstream MEANS lists business outcomes, move those to DOES and replace MEANS with the underlying technology or methodology that enables those outcomes.
+2. **DOES** must state capabilities with quantified outcomes (what it DOES). Ensure action verbs and numbers are present. Business outcomes from the narrative MEANS can strengthen DOES.
+3. **MEANS** must provide technology/methodology proof (HOW it works). Replace business impact metrics with the technical architecture, certifications, or methodology that makes the DOES claims credible.
 
 ---
 

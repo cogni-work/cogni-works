@@ -1,0 +1,29 @@
+{
+  "skill_name": "teach",
+  "evals": [
+    {
+      "id": 0,
+      "prompt": "Teach me Course 1",
+      "expected_output": "Starts Course 1 (Cowork Fundamentals) with Module 1, shows progress bar [#-----] Module 1/5, presents theory content about Claude Cowork basics",
+      "files": []
+    },
+    {
+      "id": 1,
+      "prompt": "I want to learn about trend scouting",
+      "expected_output": "Maps 'trend scouting' to Course 4 (tips-scouting), begins Module 1 of TIPS framework course with theory on the Smarter Service Trendradar",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "Show me my course progress",
+      "expected_output": "Reads .claude/cogni-teacher.local.md, displays all 10 courses with completion status markers: [x] completed, [>] in-progress, [ ] not-started",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "Continue my course",
+      "expected_output": "Reads progress file, identifies the in-progress course, offers to resume from the last completed module with option to restart",
+      "files": []
+    }
+  ]
+}

@@ -20,7 +20,7 @@ deliverables, clients, and deadlines, not code or APIs. Meet them where they are
 
 ## Curriculum
 
-Seven courses, designed to build on each other:
+Ten courses, designed to build on each other:
 
 | # | Course ID | Title | Plugins Covered |
 |---|-----------|-------|-----------------|
@@ -31,10 +31,18 @@ Seven courses, designed to build on each other:
 | 5 | `tips-reporting` | Trend Reporting | cogni-tips (Part 2) |
 | 6 | `portfolio` | Portfolio Messaging | cogni-portfolio |
 | 7 | `visual` | Visual Deliverables | cogni-visual |
+| 8 | `research` | Research Reports | cogni-gpt-researcher |
+| 9 | `marketing` | B2B Marketing Content | cogni-marketing |
+| 10 | `sales` | Sales Pitches | cogni-sales |
 
 ## How to Teach
 
 Each course has ~5 modules. Each module follows: **Theory → Demo → Exercise → Quiz → Recap**.
+
+Courses 8-10 cover advanced plugins that build on earlier foundations:
+- Course 8 (Research) requires Course 3 (claims verification is used throughout)
+- Course 9 (Marketing) requires Courses 4-5 (TIPS) + Course 6 (Portfolio)
+- Course 10 (Sales) requires Course 6 (Portfolio) + Course 3 (narrative arcs)
 
 ### Your Teaching Voice
 
@@ -114,6 +122,9 @@ Load the relevant course file when delivering a specific course:
 - `references/courses/05-tips-reporting.md`
 - `references/courses/06-portfolio.md`
 - `references/courses/07-visual.md`
+- `references/courses/08-research.md`
+- `references/courses/09-marketing.md`
+- `references/courses/10-sales.md`
 
 Each file contains all modules with theory, demos, exercises, quizzes, and recaps.
 Read only the course file the user is taking — no need to load them all.

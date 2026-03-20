@@ -350,23 +350,14 @@ Ask the user to:
 
 ## Course Completion
 
-Congratulations! You've completed the entire cogni-teacher curriculum!
+Congratulations! You've completed the core cogni-works visual skills!
 
-**Your cogni-works toolkit**:
-1. **Claude Cowork** — Your agentic AI platform
-2. **cogni-workspace** — Shared project foundation
-3. **cogni-obsidian** — Knowledge management dashboard
-4. **cogni-copywriting** — Document polishing & stakeholder review
-5. **cogni-narrative** — Executive narrative transformation
-6. **cogni-claims** — Citation verification
-7. **cogni-tips** — Strategic trend research pipeline
-8. **cogni-portfolio** — Product/service messaging
-9. **cogni-visual** — Presentations & visual deliverables
+**What you can now do**:
+- Create presentation briefs and slide decks from polished narratives
+- Build big picture journey maps in Excalidraw for strategy sessions
+- Generate scrollable web narratives and poster storyboards
+- Run the full pipeline from research to visual deliverable
 
-**The consulting workflow**:
-```
-Workspace Setup → Research → Analyze → Write → Verify → Polish → Present
-```
-
-Every step has a cogni-works plugin. Your expertise drives the strategy;
-the tools execute the heavy lifting.
+**Next up**: Courses 8-10 cover the advanced plugins — multi-agent research
+(cogni-gpt-researcher), B2B marketing content (cogni-marketing), and sales
+pitch generation (cogni-sales). These build on everything you've learned so far.

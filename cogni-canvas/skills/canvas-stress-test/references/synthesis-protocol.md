@@ -9,6 +9,23 @@ version: 1.0
 
 Transform multi-persona canvas feedback into a prioritized, actionable improvement plan. Identify cross-cutting themes across personas, resolve conflicts, and route validated assumptions to the appropriate downstream skills.
 
+## Weighted Scoring
+
+Each persona produces PASS/WARN/FAIL verdicts with weighted criteria. Calculate a weighted score per persona to enable cross-canvas comparison:
+
+| Verdict | Score |
+|---------|-------|
+| PASS | 1.0 |
+| WARN | 0.5 |
+| FAIL | 0.0 |
+
+**Formula**: Sum of (criterion weight × verdict score) across all 5 criteria.
+
+Example: If an investor gives PASS (25%), WARN (25%), PASS (20%), PASS (15%), FAIL (15%):
+Score = (0.25×1.0) + (0.25×0.5) + (0.20×1.0) + (0.15×1.0) + (0.15×0.0) = 0.725
+
+Include the per-persona weighted score in the Per-Persona Scores table.
+
 ## Theme Identification Rules
 
 ### Priority Escalation
@@ -21,6 +38,15 @@ Transform multi-persona canvas feedback into a prioritized, actionable improveme
 | Any persona labels FAIL on ≥20% criterion | CRITICAL |
 | Single persona, high-weight criterion (≥25%) | HIGH |
 | Single persona, low-weight criterion (≤15%) | OPTIONAL |
+
+### Theme Caps
+
+Keep the report scannable. Maximum themes per priority level:
+- **CRITICAL**: up to 3 (if more exist, merge the most related ones)
+- **HIGH**: up to 3
+- **OPTIONAL**: up to 3
+
+If a theme doesn't make the cut, it can still appear in the per-persona sections — the synthesis focuses on what matters most.
 
 ### Semantic Matching
 
@@ -72,6 +98,10 @@ When personas disagree and no resolution is obvious:
 4. Track which personas contributed to each recommendation
 5. Distinguish between "fix in canvas" (content improvement) and "validate externally" (needs research/data)
 
+## Assumption Handling
+
+Individual persona sections should list raw assumptions they identified — brief, without routing. The synthesis step is responsible for deduplicating these, merging overlapping assumptions, and routing them to downstream skills in the Validation Roadmap. This prevents the same assumption from appearing 4 times across personas and then again in the roadmap.
+
 ## Assumption Validation Routing
 
 When synthesis identifies assumptions that can't be resolved by improving the canvas text alone, route them to the appropriate downstream skill:
@@ -98,10 +128,10 @@ The synthesis output is a Markdown report (not JSON) structured as follows:
 
 ### Per-Persona Scores
 
-| Persona | Score | Strongest | Weakest |
-|---|---|---|---|
-| Investor | PASS: 2, WARN: 2, FAIL: 1 | Team-Market Fit | Market Sizing |
-| ... | ... | ... | ... |
+| Persona | Verdicts | Weighted Score | Strongest | Weakest |
+|---|---|---|---|---|
+| Investor | PASS: 2, WARN: 2, FAIL: 1 | 0.63 | Team-Market Fit | Market Sizing |
+| ... | ... | ... | ... | ... |
 
 ### Cross-Cutting Themes
 
@@ -114,6 +144,12 @@ The synthesis output is a Markdown report (not JSON) structured as follows:
 
 #### OPTIONAL
 - ...
+
+### Wild-Card Risks
+
+Risks outside persona criteria that the canvas author should consider:
+1. [Risk] — [1-2 sentence explanation and suggestion]
+2. ...
 
 ### Prioritized Questions
 

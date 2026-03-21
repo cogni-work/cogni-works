@@ -50,34 +50,38 @@ Four built-in personas are available:
 
 **Default**: Run all 4 personas. If the user requests a subset (e.g., "just the investor view"), run only those.
 
-Present the persona selection to the user before launching:
+**Single-persona mode**: When the user's phrasing implies a single perspective (e.g., "what would an investor think"), run only that persona. In single-persona mode:
+- Skip the persona selection confirmation — the user's intent is clear
+- In Step 4 (synthesis), omit Cross-Cutting Themes (cross-cutting requires 2+ perspectives)
+- Instead, expand the single persona's output: add a "Deeper Analysis" subsection with 2-3 additional observations that go beyond the 5 standard criteria
+- The Validation Roadmap and Suggested Next Steps still apply — scope them to the single persona's concerns
+
+**Multi-persona mode**: Present the persona selection to the user before launching:
 > "I'll stress-test this canvas from 4 perspectives: Investor, Target Customer, Technical Co-founder, and Operations/Finance. Each will evaluate against 5 criteria. Want all four, or a specific subset?"
 
 ### Step 3: Launch Parallel Persona Analysis
 
-Launch one Task agent per selected persona. Each agent receives the full canvas content and its persona profile.
+Launch one Task agent per selected persona. Each agent reads the canvas file, its persona profile, and the section reference via file paths.
 
 **For each persona, launch a Task with this prompt:**
 
 ```
-You are a {PERSONA_NAME} evaluating a Lean Canvas. Read the canvas and evaluate it strictly from your perspective using the criteria in your persona profile.
+You are a {PERSONA_NAME} evaluating a Lean Canvas. Read the files below, then evaluate the canvas strictly from your perspective.
 
-CANVAS CONTENT:
-{full content of the canvas file}
-
-PERSONA PROFILE:
-{content from references/personas/{persona}.md}
-
-CANVAS SECTION REFERENCE (for quality benchmarks):
-{content from ../../references/lean-canvas-sections.md}
+FILES TO READ (use Read tool):
+1. Canvas: {path to canvas file}
+2. Your persona profile: {absolute path to references/personas/{persona}.md}
+3. Section reference: {absolute path to ../../references/lean-canvas-sections.md}
 
 INSTRUCTIONS:
-1. Read the entire canvas carefully
-2. Evaluate each of your 5 criteria, assigning PASS / WARN / FAIL
-3. For each criterion, provide specific evidence from the canvas (quote or reference the relevant section)
-4. Generate 3-5 questions that a real {PERSONA_NAME} would ask after reading this canvas
-5. Identify the single most important improvement from your perspective
-6. Note any assumptions you'd want validated before proceeding
+1. Read all 3 files
+2. Adopt the tone described in your persona profile — each persona has a distinct voice
+3. Evaluate each of your 5 criteria, assigning PASS / WARN / FAIL
+4. For each criterion, provide specific evidence from the canvas (quote or reference the relevant section)
+5. Calculate your weighted score: PASS=1.0, WARN=0.5, FAIL=0. Multiply each verdict by criterion weight and sum
+6. Generate 3-5 questions that a real {PERSONA_NAME} would ask after reading this canvas
+7. Identify the single most important improvement from your perspective
+8. List 2-3 key assumptions you'd want validated (brief — the synthesis step will deduplicate and route these)
 
 OUTPUT FORMAT (Markdown):
 
@@ -90,7 +94,7 @@ OUTPUT FORMAT (Markdown):
 | {criterion 1} | {weight}% | {PASS/WARN/FAIL} | {specific evidence from canvas} |
 | ... | ... | ... | ... |
 
-**Score summary**: {count PASS} pass, {count WARN} warn, {count FAIL} fail
+**Score**: {weighted score}/1.0 — {count PASS} pass, {count WARN} warn, {count FAIL} fail
 
 ### Top Questions
 1. {Question a real stakeholder would ask}
@@ -99,8 +103,8 @@ OUTPUT FORMAT (Markdown):
 ### Critical Improvement
 {The single most important thing to fix, with specific suggestion}
 
-### Assumptions Needing Validation
-- {Assumption} — why it matters: {brief rationale}
+### Key Assumptions
+- {Assumption} — {one-line rationale}
 - ...
 ```
 
@@ -123,15 +127,29 @@ Once all persona agents return, synthesize their findings using the protocol in 
 6. **Merge recommendations** by section, keeping the highest priority from any contributing persona
 7. **Separate "fix in canvas" from "validate externally"** — some issues are text improvements; others need real-world data
 
+### Step 4b: Wild-Card Risks
+
+After synthesizing persona findings, step back and identify 2-3 risks that fall **outside** the persona criteria but would matter to the canvas author. These are things the structured evaluation might miss because no persona's criteria explicitly cover them.
+
+Examples of wild-card risks:
+- Licensing or regulatory risks (e.g., AGPL deterring enterprise buyers)
+- Adoption barriers from the product's UX or technical interface (e.g., CLI tools for non-developer users)
+- Concentration risks (e.g., breadth vs. depth when resources are limited)
+- Ecosystem or platform dependencies not captured by any single persona
+- Market timing risks (too early, too late, regulatory shifts)
+
+Include these as a brief "Wild-Card Risks" section in the report, after Cross-Cutting Themes. Each risk should be 1-2 sentences with a concrete suggestion.
+
 ### Step 5: Present the Report
 
 Output the stress-test report using the structure defined in `references/synthesis-protocol.md` (Output Structure section).
 
 The report includes:
-- Per-persona score tables (PASS/WARN/FAIL per criterion)
-- Cross-cutting themes ranked by priority (CRITICAL → HIGH → OPTIONAL)
+- Per-persona score tables with weighted scores (PASS/WARN/FAIL per criterion + weighted score out of 1.0)
+- Cross-cutting themes ranked by priority (CRITICAL → HIGH → OPTIONAL, max 3 per level)
+- Wild-card risks (2-3 risks outside persona criteria)
 - Prioritized questions the canvas should be able to answer but can't
-- Validation roadmap mapping assumptions to downstream skills
+- Validation roadmap mapping deduplicated assumptions to downstream skills
 - Suggested next steps based on canvas maturity
 
 **Keep the report actionable.** Every finding should either:

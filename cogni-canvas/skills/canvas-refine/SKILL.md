@@ -136,9 +136,24 @@ Write the updated canvas file. Present a change summary:
 **Key insight**: [What drove this iteration]
 
 Suggest next steps based on current maturity:
+
 - **Draft → Hypothesis**: "N sections still unfilled — fill them next"
-- **Hypothesis → Validated**: "Top assumptions to test: [list from evolution log]. Use `cogni-portfolio:portfolio-canvas` to extract entities, then validate with research-backed skills like `cogni-portfolio:markets` (TAM/SAM/SOM sizing) and `cogni-portfolio:compete` (competitive landscape)"
-- **Validated → Evolved**: "Consider refining based on: [market feedback]"
+- **Hypothesis → Validated**: Present the validation pathway below to help the user test their riskiest assumptions with the right tools
+- **Validated → Evolved**: "Consider refining based on: [market feedback, stress-test findings, competitive shifts]"
+
+#### Validation Pathway (Hypothesis → Validated)
+
+When a canvas reaches Hypothesis maturity (all sections filled, nothing tested), the next step is validating the riskiest assumptions. Route each assumption type to the appropriate downstream skill:
+
+| Assumption Type | Validate With | What It Provides |
+|---|---|---|
+| Market size claims | `cogni-portfolio:markets` | TAM/SAM/SOM sizing with web research |
+| Competitive landscape | `cogni-portfolio:compete` | Competitor mapping, positioning, battle cards |
+| Segment definition | `cogni-portfolio:portfolio-canvas` → `markets` | Extract market entities from canvas, then validate segmentation |
+| Pricing assumptions | `cogni-portfolio:solutions` | Solution pricing with cost modeling |
+| Multi-perspective critique | `cogni-canvas:canvas-stress-test` | 4-persona parallel stress test (investor, customer, technical, operations) |
+
+**Suggested sequence**: Start with `cogni-canvas:canvas-stress-test` to identify which assumptions are weakest across perspectives, then use the targeted portfolio skills to validate the highest-risk ones with real data.
 
 ## Refinement Modes
 

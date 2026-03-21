@@ -8,6 +8,7 @@ Lean Canvas authoring and refinement for Claude Code. Guides users through creat
 |---|---|---|
 | `canvas-create` | `/cogni-canvas:canvas-create` | Guided Q&A to build a new Lean Canvas from scratch |
 | `canvas-refine` | `/cogni-canvas:canvas-refine <path>` | Critique and improve an existing canvas |
+| `canvas-stress-test` | `/cogni-canvas:canvas-stress-test <path>` | Multi-persona stress test (investor, customer, technical, operations) |
 
 ## Canvas Format
 
@@ -22,7 +23,9 @@ Both skills share reference material at the plugin root:
 
 ## Integration
 
-After defining a canvas, use `cogni-portfolio:portfolio-canvas` to extract portfolio entities (products, features, markets) from the canvas for downstream messaging and sales workflows.
+- **Stress-test**: Run `canvas-stress-test` to get multi-perspective feedback from investor, customer, technical, and operations viewpoints before committing resources
+- **Portfolio extraction**: Use `cogni-portfolio:portfolio-canvas` to extract portfolio entities (products, features, markets) from the canvas for downstream messaging and sales workflows
+- **Validation**: Use `cogni-portfolio:markets` (TAM/SAM/SOM) and `cogni-portfolio:compete` (competitive landscape) to validate canvas assumptions with real data
 
 ## License
 

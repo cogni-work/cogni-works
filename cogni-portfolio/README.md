@@ -106,7 +106,14 @@ This plugin works standalone for core messaging workflows. Optional integrations
 cogni-portfolio/
 ├── .claude-plugin/plugin.json    Plugin manifest
 ├── templates/                    Pluggable taxonomy templates
-│   └── b2b-ict/                 B2B ICT taxonomy (8 dims, 57 cats)
+│   ├── b2b-fintech/             B2B Fintech (8 dims, 48 cats)
+│   ├── b2b-healthtech/          B2B HealthTech (8 dims, 46 cats)
+│   ├── b2b-ict/                 B2B ICT (8 dims, 57 cats)
+│   ├── b2b-industrial-tech/     B2B Industrial Tech (8 dims, 48 cats)
+│   ├── b2b-martech/             B2B MarTech (8 dims, 45 cats)
+│   ├── b2b-opensource/          B2B Commercial Open Source (8 dims, 50 cats)
+│   ├── b2b-professional-services/ B2B Prof. Services (8 dims, 44 cats)
+│   └── b2b-saas/                B2B SaaS (8 dims, 47 cats)
 ├── skills/                       17 portfolio skills
 │   ├── portfolio-setup/
 │   ├── products/

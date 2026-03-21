@@ -49,11 +49,11 @@ Each feature has: `name`, `description`, `slug`, `product_slug`, and optionally 
 Assess each feature description on these five dimensions (pass/warn/fail):
 
 ### 1. Mechanism Clarity
-Does the description explain HOW the feature works — not just WHAT it is?
-A good description conveys the mechanism: what the feature actually does technically or operationally.
-- **Pass**: Description explains a clear mechanism ("aggregiert Telemetriedaten aus verteilten Systemen und korreliert Anomalien in Echtzeit")
-- **Warn**: Description names the domain but is vague on mechanism ("hilft bei der Überwachung von Systemen")
-- **Fail**: Description is just a label restating the name ("Cloud Monitoring — Monitoring für die Cloud")
+Does the description follow the **Anchor-How-Differentiator** pattern?
+A good description has three parts: (1) a plain-language capability anchor (what it IS), (2) the specific approach or architecture (HOW it works), and (3) one differentiating detail (what makes THIS implementation unique). Listing process steps or components is not mechanism clarity — it is enumeration disguised as description.
+- **Pass**: Description names a single mechanism with a clear approach and at least one differentiating detail. The capability is graspable within 3 seconds from the opening phrase. Example: "LLM-gestützte Beschreibungsanalyse, die Feature-Texte auf fünf Qualitätsdimensionen bewertet und strukturierte Verbesserungsvorschläge erzeugt."
+- **Warn**: Description names the domain and a generic mechanism but lacks a differentiating detail (any competitor could claim the same sentence), OR lists 3-4 parallel components instead of naming the unifying mechanism. Example: "Dreistufige Qualitätsprüfung aus struktureller Validierung, LLM-Analyse und Stakeholder-Bewertung."
+- **Fail**: Description is just a label restating the name, OR enumerates 5+ activities/components like a spec sheet, OR describes process steps without naming the underlying approach
 
 This works in ANY language. You understand German, English, French, etc. — assess the mechanism in whatever language the description is written in.
 
@@ -64,10 +64,10 @@ Is the feature cleanly scoped — describing what the capability IS without drif
 - **Fail**: Description is dominated by buyer outcomes or value claims that belong in propositions, OR substantially overlaps with another feature
 
 ### 3. Differentiation Potential
-Does the description give enough specificity to differentiate from competitors?
-- **Pass**: Description includes specific approaches, technologies, or constraints that create positioning space
-- **Warn**: Description is accurate but generic — any competitor could claim the same
-- **Fail**: Description is so vague it could describe any product in the category
+Does the description include at least one detail a competitor cannot trivially claim? This is the "differentiator" part of the Anchor-How-Differentiator pattern — a specific architectural choice, algorithm type, data model, or integration approach.
+- **Pass**: Description includes a specific approach, technology, or constraint that creates positioning space (e.g., "semantische Embedding-Analyse gegen den B2B-ICT-Kategoriebaum" — not just "taxonomie-basierte Zuordnung")
+- **Warn**: Description is accurate and mechanism-clear but generic — any competitor in this category could write the same sentence. Apply the swap test: replace the product name with a competitor's — does the description still hold? If yes, it's generic.
+- **Fail**: Description is so vague it could describe any product in the category, OR uses only marketing-automation vocabulary (orchestriert, aggregiert, konsolidiert) without a specific approach
 
 ### 4. Language Quality
 Is the description well-written in its language — regardless of which language that is?
@@ -78,12 +78,14 @@ Is the description well-written in its language — regardless of which language
 **Important**: Technical English terms in German text (API, Cloud, Monitoring, Dashboard) are completely normal in German tech writing. Only flag language mixing when it genuinely hurts readability — e.g., full English clauses inserted into German sentences without reason.
 
 ### 5. Conciseness
-Is the description within the 20-35 word target? Word count uses `.split()` — German compound words count as one word.
-- **Pass**: 20-35 words
-- **Warn**: 15-19 words or 36-50 words
-- **Fail**: <15 words or >50 words
+Is the description within the 15-35 word target? Word count uses `.split()` — German compound words count as one word.
+- **Pass**: 15-35 words
+- **Warn**: 10-14 words or 36-50 words
+- **Fail**: <10 words or >50 words
 
 Also flag number-stuffing as a conciseness anti-pattern — descriptions that list counts of phases, agents, entity types, or integration points ("12-Phasen-Pipeline über 17 Agenten mit 13 Entity-Typen") read like spec sheets and should be rewritten to name the core mechanism instead.
+
+Also flag structural density — descriptions that pass the word count but pack multiple parallel components separated by commas. A 30-word description listing 5 components is concise by count but dense by structure. When this co-occurs with a mechanism_clarity warn/fail for feature-density, escalate conciseness to at least warn.
 
 ## Output Format
 
@@ -121,7 +123,7 @@ Rules for `overall`:
 Only include `note` when the score is warn or fail — leave empty string for pass.
 Only include `suggestion` when overall is warn or fail — leave empty string for pass.
 
-**Important**: When you suggest a rewritten description, it MUST itself be within the 20-35 word target. Count the words in your rewrite before including it. A suggestion that violates the rule it's enforcing undermines the assessment.
+**Important**: When you suggest a rewritten description, it MUST itself be within the 15-35 word target. Count the words in your rewrite before including it. A suggestion that violates the rule it's enforcing undermines the assessment.
 
 ## Process
 

@@ -134,23 +134,24 @@ inspire specific DOES statements and quantifiable MEANS outcomes.
 ### Criteria
 
 #### 1. Mechanism Specificity (30%)
-Does the description explain HOW the feature works with enough technical or operational
-detail to inspire a specific DOES statement? "Monitors cloud infrastructure" gives the
-strategist nothing; "Correlates metrics across infrastructure layers and triggers automated
-alerts on threshold violations" gives them a concrete mechanism to translate into buyer language.
+Does the description follow the **Anchor-How-Differentiator** pattern? The strategist needs
+three things: a plain-language capability anchor (what it IS), the specific approach (HOW
+it works), and one differentiating detail. Enumerating process steps or components is NOT
+mechanism specificity — the strategist cannot build differentiated DOES/MEANS from a list
+of sub-capabilities.
 
-- **Pass**: Description explains a concrete mechanism — what it does and how
-- **Warn**: Description names the domain but is vague on how — the strategist would need to ask one follow-up question
-- **Fail**: Description restates the feature name or is a pure label — the strategist would need a discovery session
+- **Pass**: Description names a single mechanism with a clear approach — the strategist can immediately translate into buyer language. Opening phrase communicates the capability within 3 seconds.
+- **Warn**: Description names the domain and a generic mechanism but the strategist would need one follow-up to understand what makes it different from competitors, OR description enumerates 3-4 components instead of naming the unifying approach
+- **Fail**: Description restates the feature name or enumerates 5+ process steps — the strategist would need a discovery session
 
 #### 2. Differentiation Potential (25%)
-Does the description include specific approaches, technologies, or constraints that
-create positioning space against competitors? A strategist building DOES/MEANS messaging
-needs to know what makes this feature different — otherwise they produce generic
-"improves efficiency" messaging that any competitor could claim.
+Does the description include at least one detail a competitor cannot trivially claim?
+Apply the **swap test**: replace the company/product name with a competitor — does the
+description still hold? If yes, it lacks differentiation. The strategist needs a
+specific approach, architecture, or constraint to build non-generic messaging.
 
-- **Pass**: Description includes specifics that competitors cannot easily claim (unique approach, technology, architecture)
-- **Warn**: Description is accurate but generic — any competitor in this category could say the same
+- **Pass**: Description includes a specific approach competitors cannot easily claim (unique algorithm, data model, architecture choice)
+- **Warn**: Description is accurate but generic — passes the swap test (any competitor could claim the same). Uses only standard vocabulary (orchestriert, aggregiert, konsolidiert) without a specific approach.
 - **Fail**: Description is so vague it could describe any product in the category
 
 #### 3. Proposition Readiness (20%)
@@ -165,20 +166,23 @@ differentiation + clean scoping together determine readiness.
 #### 4. Naming Clarity (15%)
 Does the feature name communicate the capability at a glance? Names that are too abstract
 ("SmartWatch Pro"), too long, or too generic ("Analytics") create friction in proposition
-work and downstream deliverables like pitch decks and battle cards.
+work and downstream deliverables. Slugs should be 1-3 word noun phrases (`{core-noun}` or
+`{qualifier}-{noun}`). Drop qualifiers that restate the product, category, or delivery
+format (e.g., `-studio`, `-pipeline`, `-engine` are acceptable only when they ARE the
+mechanism, not when they decorate it).
 
-- **Pass**: Name is immediately clear and appropriately scoped — a non-expert gets the gist
-- **Warn**: Name is slightly too generic or too long, but the description compensates
-- **Fail**: Name is a marketing label, unexplained acronym, or misleading about the capability
+- **Pass**: Name is immediately clear and slug is 1-3 hyphenated segments — a non-expert gets the gist
+- **Warn**: Name is clear but slug exceeds 3 segments or contains a redundant qualifier (e.g., `portfolio-positioning-studio` → `portfolio-studio`)
+- **Fail**: Name is a marketing label, unexplained acronym, or misleading about the capability; OR slug is 5+ segments
 
 #### 5. Description Conciseness (10%)
-Is the description within the 20-35 word target? Descriptions that are too short lack
+Is the description within the 15-35 word target? Descriptions that are too short lack
 mechanism detail for strong propositions; descriptions that are too long include
 kitchen-sink enumeration or spec-sheet number-stuffing.
 
-- **Pass**: 20-35 words (22-35 for German)
-- **Warn**: 15-19 words or 36-50 words
-- **Fail**: <15 words or >50 words
+- **Pass**: 15-35 words
+- **Warn**: 10-14 words or 36-50 words
+- **Fail**: <10 words or >50 words
 
 Word count uses `.split()` — German compound words count as one word.
 

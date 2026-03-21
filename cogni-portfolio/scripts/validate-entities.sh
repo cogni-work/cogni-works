@@ -152,12 +152,12 @@ for f in glob.glob('$PROJECT_DIR/features/*.json'):
         slug = os.path.basename(f)[:-5]
         desc = d.get('description', '')
         words = desc.split()
-        if len(words) < 15:
-            print(f'{slug}|Description has only {len(words)} words (target is 20-35 words)')
-        elif len(words) < 20:
-            print(f'{slug}|Description has {len(words)} words (target is 20-35 words)')
+        if len(words) < 10:
+            print(f'{slug}|Description has only {len(words)} words (target is 15-35 words)')
+        elif len(words) < 15:
+            print(f'{slug}|Description has {len(words)} words (target is 15-35 words)')
         elif len(words) > 35:
-            print(f'{slug}|Description has {len(words)} words (target is 20-35 words)')
+            print(f'{slug}|Description has {len(words)} words (target is 15-35 words)')
     except Exception:
         pass
 " 2>/dev/null)

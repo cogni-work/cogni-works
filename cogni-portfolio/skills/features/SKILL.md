@@ -75,20 +75,35 @@ Based on discovery (or the user's capability dump), propose a feature set. This 
 
 **Name for clarity, not for marketing.** Feature names should be immediately understandable to someone who's never seen the product. "Real-time Container Orchestration Monitoring" beats "SmartWatch Pro" every time.
 
-**Write descriptions that pass the demo test and the conciseness test.** Target **20-35 words** — one to two sentences. The IS layer is the base of the Power Position pyramid: a factual anchor, not a feature catalog. Descriptions below 20 words almost always lack the mechanism detail needed for strong propositions downstream — if you're under 20, add specificity about HOW the capability works rather than padding with filler. Count words before finalizing each description. **German descriptions: target 22-35 words.** German compound words (e.g., "Netzleittechnik", "SAP-IS-U-basiert") count as single tokens despite packing multiple concepts, so a 18-word German sentence often has less substance than a 18-word English one. The 2-word buffer compensates for this compression.
+**Keep slugs short.** Slugs are 1-3 word noun phrases: `{core-noun}` or `{qualifier}-{noun}`. Maximum 3 hyphenated segments. Drop qualifiers that restate the product or category — `portfolio-positioning-studio` → `portfolio-studio`; `content-marketing-pipeline` → `content-pipeline`. If a slug needs 4+ words, the feature is probably too broad and should split.
 
-**Checklist for a concise feature description:**
-- Names the core mechanism — what it does technically, not what it delivers
-- Hits at least 20 words (22 for German) — shorter descriptions usually mean the mechanism is underspecified. After writing each description, count the words by splitting on spaces. If under the minimum, expand with mechanism detail before saving.
-- Stays under two sentences and 35 words
-- Uses concrete, specific descriptors — no marketing adjectives
-- Includes only what's necessary to set up the DOES layer — selective, not exhaustive
+**Write descriptions that pass the demo test and the conciseness test.** Target **15-35 words** — one to two sentences. The IS layer is the base of the Power Position pyramid: a factual anchor, not a feature catalog. Descriptions below 15 words almost always lack the mechanism detail needed for strong propositions downstream — if you're under 15, add specificity about HOW the capability works rather than padding with filler. Count words before finalizing each description. **German descriptions: target 15-35 words.** German compound words (e.g., "Netzleittechnik", "SAP-IS-U-basiert") count as single tokens despite packing multiple concepts, so a 15-word German sentence often carries the substance of a 22-word English one.
+
+**Structure of a good feature description — the Anchor-How-Differentiator pattern:**
+
+A feature description has three parts in one or two sentences:
+1. **Capability anchor** — what this feature IS in plain language (a noun phrase, not a process)
+2. **How it works** — the specific approach, algorithm, or architecture (not a list of sub-components)
+3. **One differentiating detail** — what makes THIS implementation different from a generic version
+
+Bad (enumerates steps): "Dreistufige Qualitätsprüfung bestehend aus struktureller Validierung, LLM-gestützter Analyse und Stakeholder-Bewertung mit Pass/Warn/Fail-Klassifikation."
+Good (anchor + how + differentiator): "LLM-gestützte Beschreibungsanalyse, die Feature-Texte auf fünf Qualitätsdimensionen bewertet und strukturierte Verbesserungsvorschläge mit Pass/Warn/Fail-Klassifikation erzeugt."
+
+The bad version lists 3 process steps. The good version names the mechanism (LLM-gestützte Analyse), says how it works (bewertet auf fünf Dimensionen), and differentiates (strukturierte Verbesserungsvorschläge). Same capability, no enumeration.
+
+**Self-check before saving each description:**
+- Can you count 3+ parallel nouns separated by commas? → You're enumerating. Rewrite.
+- Could any competitor claim the exact same sentence? → You're missing the differentiator. Add the specific approach.
+- Does the first phrase communicate the capability in 3 seconds? → If not, front-load a plain-language anchor.
+- Is it 15-35 words (15-35 for German)? Count by splitting on spaces. German compound words count as one.
+- Does it use concrete, specific descriptors — no marketing adjectives?
 
 **Anti-patterns to reject:**
 - Number-stuffing: "12-Phasen-Pipeline über 17 Agenten mit 13 Entity-Typen" — reads like a spec sheet
 - Kitchen-sink enumeration: listing every component, phase, or integration point
 - Outcome language: "reduces", "enables", "ensures", "damit Geschäftsführung..." — belongs in propositions
 - Parity language: "robust", "innovative", "cutting-edge", "best-in-class"
+- Feature-density (the "spec-sheet" trap): listing 3+ parallel activities or components instead of naming the ONE core mechanism. Before: "Combines GTM paths, thought leadership, ABM campaigns, brand voice, channel orchestration, and bilingual content production into a unified pipeline." (7 components, reads like a catalog.) After: "Mehrstufige Content-Pipeline, die Thought-Leadership-Assets über zielgruppenspezifische GTM-Kanäle in beiden Sprachen sequenziert." (1 mechanism, concise.) Test: count comma-separated parallel nouns — three or more means you're enumerating. Name the unifying mechanism instead.
 
 **Keep buyer outcomes out of feature descriptions.** Feature descriptions describe the mechanism — what it IS and HOW it works. Language about who benefits or what changes for the buyer ("reduces downtime", "enables teams to...", "damit Geschäftsführung...") belongs exclusively in propositions, where it gets tailored per market. If you catch yourself writing "helps", "reduces", "enables", "ensures", or "damit" followed by a beneficiary — stop. Move that sentence to your proposition notes and keep the feature description purely mechanical. This separation is what makes the IS/DOES/MEANS framework work: features stay factual and reusable; propositions add the buyer lens per market.
 
@@ -177,7 +192,7 @@ The agent evaluates five dimensions per feature:
 2. **Scope & MECE**: Is the feature cleanly scoped — no overlap with siblings, no gaps in the product's capability space? Does it describe what the capability IS without drifting into buyer outcomes (which belong in propositions)?
 3. **Differentiation potential**: Is the description specific enough to stand out from competitors through mechanism detail, not through benefit claims?
 4. **Language quality**: Is the prose clean and professional in its language? (Technical English terms in German text like API, Cloud, Monitoring are normal — only genuine readability issues are flagged.)
-5. **Conciseness**: Is the description 20-35 words? (warn: 36-50 or 15-19; fail: 51+ or <15)
+5. **Conciseness**: Is the description 15-35 words? (warn: 36-50 or 10-14; fail: 51+ or <10)
 
 The agent returns structured JSON with pass/warn/fail per dimension and improvement suggestions. Features with overall "fail" are not ready for proposition generation.
 

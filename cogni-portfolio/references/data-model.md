@@ -79,7 +79,20 @@ Optional fields: `company.domain`, `company.regional_urls`, `language`, `deliver
 
 The `language` field is a lowercase ISO 639-1 code (e.g., `"de"`, `"en"`). If absent, defaults to `"en"`. Controls the language of all generated user-facing content. JSON field names and slugs always remain in English.
 
-The `taxonomy` object adopts an industry-standard classification system. Currently supported: `b2b-ict` (57 categories across 8 dimensions for B2B ICT service providers).
+The `taxonomy` object adopts an industry-standard classification system. Supported taxonomy types:
+
+| Type | Dimensions | Categories | Target Vertical |
+|------|-----------|------------|-----------------|
+| `b2b-ict` | 8 | 57 | Enterprise ICT service providers |
+| `b2b-saas` | 8 | 47 | B2B SaaS platform companies |
+| `b2b-opensource` | 8 | 50 | Commercial open-source (COSS) companies |
+| `b2b-fintech` | 8 | 48 | Financial technology providers |
+| `b2b-professional-services` | 8 | 44 | Professional services & consulting firms |
+| `b2b-industrial-tech` | 8 | 48 | Industrial technology & OT providers |
+| `b2b-healthtech` | 8 | 46 | Healthcare technology providers |
+| `b2b-martech` | 8 | 45 | Marketing technology & AdTech providers |
+
+All taxonomies share Dimension 0 (Provider Profile Metrics, 6 categories). The `portfolio-setup` skill auto-selects a taxonomy by matching company context against `industry_match` patterns in each template's frontmatter. Template definitions live in `templates/{type}/template.md`.
 
 The `delivery_defaults` object provides company-wide defaults for solution cost modeling: roles with day rates, target margin percentage, and shared delivery assumptions.
 

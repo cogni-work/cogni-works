@@ -2,5 +2,15 @@ excalidraw.log
 *.log
 __pycache__/
 
+# Secrets
+.env
+.env.*
+
+# macOS
+.DS_Store
+
+# Node
+node_modules/
+
 # Skill eval workspaces (dev-time artifacts)
 *-workspace/

@@ -11,3 +11,13 @@ If you experience or witness unacceptable behavior, please contact **stephan@cog
 ## Scope
 
 This code of conduct applies to all project spaces — including issues, pull requests, discussions, and any other communication channels associated with cogni-works and its plugins.
+
+## Enforcement
+
+Reports will be reviewed within 5 business days. The project maintainer may take any action deemed appropriate, including:
+
+- A private conversation with the person involved
+- A formal warning
+- Temporary or permanent ban from project spaces
+
+All reports are treated confidentially. The reporter will be informed of the outcome. If the reporter disagrees with the resolution, they may appeal by replying to the outcome notification.

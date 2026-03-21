@@ -90,22 +90,30 @@ The workplace combines Claude Cowork with [Obsidian](https://obsidian.md/) for p
 ```
 cogni-works/
 ├── .claude-plugin/
-│   └── marketplace.json       # Marketplace manifest (12 plugins)
+│   └── marketplace.json                    # Marketplace manifest (12 plugins)
 ├── docs/
-│   └── er-diagram.md          # Cross-plugin data flow diagram
-├── cogni-claims/              # Claim verification
-├── cogni-copywriting/         # Copywriting toolkit
-├── cogni-gpt-researcher/      # Multi-agent research reports
-├── cogni-marketing/           # B2B marketing content engine
-├── cogni-narrative/           # Story arc narrative transformation
-├── cogni-obsidian/            # Obsidian integration
-├── cogni-portfolio/           # Portfolio messaging & planning
-├── cogni-sales/               # B2B sales pitch generation
-├── cogni-teacher/             # Interactive training courses
-├── cogni-tips/                # Trend scouting & reporting
-├── cogni-visual/              # Visual deliverables
-├── cogni-workspace/           # Workspace orchestrator
-├── cogni-portfolio-evals/     # Eval harness (not a marketplace plugin)
+│   └── er-diagram.md                       # Cross-plugin data flow diagram
+├── cogni-claims/                           # Claim verification
+├── cogni-copywriting/                      # Copywriting toolkit
+├── cogni-gpt-researcher/                   # Multi-agent research reports
+├── cogni-marketing/                        # B2B marketing content engine
+├── cogni-narrative/                        # Story arc narrative transformation
+├── cogni-obsidian/                         # Obsidian integration
+├── cogni-portfolio/                        # Portfolio messaging & planning
+├── cogni-sales/                            # B2B sales pitch generation
+├── cogni-teacher/                          # Interactive training courses
+├── cogni-tips/                             # Trend scouting & reporting
+├── cogni-visual/                           # Visual deliverables
+├── cogni-workspace/                        # Workspace orchestrator
+├── cogni-portfolio-evals/                  # Eval harness (not a marketplace plugin)
+├── CLA.md                                  # Contributor License Agreement
+├── CODE_OF_CONDUCT.md                      # Contributor Covenant v2.1
+├── CONTRIBUTING.md                         # Contribution guide & CLA info
+├── LICENSE                                 # AGPL-3.0-only
+├── MARKETPLACE_TERMS.md                    # Third-party plugin terms
+├── ROADMAP.md                              # Patent-based ecosystem roadmap
+├── SECURITY.md                             # Vulnerability disclosure policy
+├── community-plugin-contributing-template.md
 └── README.md
 ```
 

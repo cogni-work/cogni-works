@@ -150,7 +150,103 @@ Draft a one-page executive summary synthesizing:
 
 Save to `deliver/executive-summary.md`. This becomes the anchor document for the deliverable package.
 
-### 9. Log and Transition
+### 9. Stakeholder Review
+
+Before transitioning to Export, stress-test the Deliver outputs against four stakeholder perspectives. A weak recommendation, indefensible numbers, or infeasible roadmap discovered during client presentation — or worse, during board review — wastes the entire engagement's credibility. This review catches those failures while they are still fixable.
+
+#### 9a. Launch Parallel Persona Review
+
+Launch one Task agent per persona. Each reads the Deliver artifacts and evaluates from their perspective.
+
+| Persona | Focus | Reference |
+|---|---|---|
+| Board Sponsor | Board-readiness, recommendation clarity, number defensibility | `references/personas/board-sponsor.md` |
+| CFO / Risk Officer | Business case soundness, claims verification, risk quantification | `references/personas/cfo-risk-officer.md` |
+| Implementation Lead | Roadmap feasibility, resource realism, dependency mapping | `references/personas/implementation-lead.md` |
+| End-User Proxy | User value preservation, adoption feasibility, scoring user dimension | `references/personas/end-user-proxy.md` |
+
+**For each persona, launch a Task with this prompt:**
+
+```
+You are a {PERSONA_NAME} reviewing the Deliver phase outputs of a Double Diamond engagement.
+
+FILES TO READ (use Read tool):
+1. Option scoring: {project-dir}/deliver/option-scoring.md
+2. Claims verification: {project-dir}/deliver/claims-verification.md
+3. Business case: {project-dir}/deliver/business-case.md
+4. Roadmap: {project-dir}/deliver/roadmap.md
+5. Executive summary: {project-dir}/deliver/executive-summary.md
+6. Positioning validation: {project-dir}/deliver/positioning-validation.md (if exists)
+7. Problem statement: {project-dir}/define/problem-statement.md (for traceability)
+8. Diamond project: {project-dir}/diamond-project.json (for engagement context)
+9. Your persona profile: {absolute path to references/personas/{persona}.md}
+
+INSTRUCTIONS:
+1. Read all files
+2. Adopt the tone described in your persona profile
+3. Evaluate each of your 5 criteria, assigning PASS / WARN / FAIL
+4. For each criterion, provide specific evidence from the Deliver artifacts
+5. Calculate your weighted score: PASS=1.0, WARN=0.5, FAIL=0.0
+6. Generate 3-5 questions your stakeholder would ask
+7. Identify the single most important issue from your perspective
+8. List 2-3 concerns that could block successful delivery or Export
+
+OUTPUT FORMAT (Markdown):
+
+## {PERSONA_NAME} Evaluation
+
+### Criteria Assessment
+
+| Criterion | Weight | Verdict | Evidence |
+|---|---|---|---|
+| {criterion 1} | {weight}% | {PASS/WARN/FAIL} | {specific evidence from Deliver artifacts} |
+| ... | ... | ... | ... |
+
+**Score**: {weighted score}/1.0 — {count PASS} pass, {count WARN} warn, {count FAIL} fail
+
+### Top Questions
+1. {Question a real stakeholder would ask}
+2. ...
+
+### Critical Issue
+{The single most important concern, with specific suggestion}
+
+### Export Blockers
+- {Concern that could block deliverable quality or board presentation} — {one-line rationale}
+- ...
+```
+
+**Agent configuration**: Use a fast model (haiku or sonnet), Read tool only. Launch all 4 persona agents in the same turn for parallel execution.
+
+#### 9b. Synthesize and Decide
+
+Read `references/review-protocol.md` and apply it to the persona results:
+
+1. Calculate per-persona weighted scores
+2. Identify cross-cutting themes using semantic matching
+3. Apply priority escalation rules
+4. Route themes to Deliver artifacts
+5. Resolve conflicts using the tiebreaker hierarchy
+
+**Decision logic**:
+- **CRITICAL themes**: Revise affected artifact(s), then re-run only the persona(s) that flagged CRITICAL (max 2 rounds)
+- **HIGH themes**: Present to consultant — they decide whether to revise or accept with noted limitations
+- **OPTIONAL only**: Log findings as observations, proceed to step 10
+
+Save the full review results to `deliver/review-summary.md`.
+
+#### 9c. Iterate (if needed)
+
+If CRITICAL issues triggered revision:
+
+1. Apply specific revisions to the affected artifacts (business-case.md, roadmap.md, executive-summary.md, etc.)
+2. Re-run only the persona(s) that flagged CRITICAL — don't repeat the full review
+3. After round 2, present any remaining issues to the consultant regardless of severity — they get final say
+4. Log iteration history in the review summary (what was flagged, what was revised, what was the re-evaluation result)
+
+This keeps the "warn, not block" principle intact — the review enforces a quality bar but the consultant always has the last word.
+
+### 10. Log and Transition
 
 Update method log and decision log.
 
@@ -161,6 +257,7 @@ Present the Deliver summary:
 > - Claims verified: N/N (N deviations resolved)
 > - Business case: [go/conditional/no-go]
 > - Roadmap: N phases, target completion [date]
+> - Review: [PASSED / PASSED with observations / PASSED after N revision rounds]
 >
 > All four diamond phases are complete. Run `diamond-export` to generate the deliverable package in your chosen formats (PPTX, DOCX, XLSX, Excalidraw).
 

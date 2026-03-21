@@ -84,6 +84,77 @@ If the engagement has a portfolio project (check `plugin_refs.portfolio_project`
 
 If no portfolio exists, offer to set one up or skip.
 
+### 4b. Proposition Quality Gate
+
+If step 4 produced propositions (i.e., `develop/propositions/` has content), run a mandatory quality review before continuing. This gate catches vague messaging, unsupported market claims, and broken IS-DOES-MEANS chains before they contaminate Option Synthesis. If no propositions were generated (portfolio was skipped), skip this step.
+
+#### 4b-i. Launch Parallel Persona Review
+
+Launch 2 Task agents in parallel (same turn). Each agent reads:
+
+- `develop/propositions/` directory
+- `define/problem-statement.md` (for buyer pain point traceability)
+- Discovery competitive baseline (e.g., `discover/competitive/summary.md`)
+- `diamond-project.json`
+- Their persona profile from `$CLAUDE_PLUGIN_ROOT/skills/diamond-develop/references/personas/`
+
+| Persona | Profile | Primary Focus |
+|---|---|---|
+| Proposition Analyst | `personas/proposition-analyst.md` | IS/DOES/MEANS messaging quality, differentiation, buyer relevance |
+| Market Validator | `personas/market-validator.md` | Segment precision, competitive position, evidence grounding |
+
+**Task prompt template**:
+
+> You are a {PERSONA_NAME} reviewing the Feature x Market propositions of a Double Diamond consulting engagement. Read your persona profile at {PERSONA_PATH} for your evaluation criteria, mindset, and tone.
+>
+> Read these artifacts:
+> - Propositions: {PROJECT_DIR}/develop/propositions/ (all files)
+> - Problem statement: {PROJECT_DIR}/define/problem-statement.md
+> - Competitive baseline: {PROJECT_DIR}/discover/competitive/summary.md (if exists)
+> - Engagement config: {PROJECT_DIR}/diamond-project.json
+>
+> Evaluate each proposition against your 5 criteria. For each criterion, assign PASS/WARN/FAIL with specific evidence. When evaluating competitive distinctness or market positioning, you MUST cross-reference the competitive baseline and cite specific competitors by name. Calculate your weighted score per proposition. Then generate 3-5 questions and identify your most critical concern.
+>
+> Respond in {LANGUAGE} (technical terms in English).
+
+**Agent configuration**: Use a fast model (haiku or sonnet), Read tool only.
+
+#### 4b-ii. Evaluate and Decide
+
+After both persona agents complete, read `$CLAUDE_PLUGIN_ROOT/skills/diamond-develop/references/proposition-review-protocol.md` and apply:
+
+1. Calculate per-persona scores for each proposition
+2. Assign per-proposition status:
+   - **APPROVED**: All criteria PASS or WARN — enters Option Synthesis
+   - **CONDITIONAL**: Minor issues noted — enters Option Synthesis with improvements logged
+   - **BLOCKED**: Any FAIL on a criterion weighted >= 25% — excluded from Option Synthesis
+3. Identify cross-proposition themes using semantic matching
+4. Resolve conflicts: Proposition Analyst wins on messaging quality, Market Validator wins on market fit
+
+#### 4b-iii. Iterate (if needed)
+
+If any propositions are BLOCKED:
+
+1. Identify specific revisions needed (e.g., sharpen IS statement, add competitive evidence to DOES, narrow market segment)
+2. Apply revisions to the affected propositions in `develop/propositions/`
+3. Re-run only the persona(s) that flagged FAIL — don't repeat the full review
+4. Maximum 2 iteration rounds
+
+After round 2, any still-BLOCKED propositions are **excluded** from Option Synthesis. Present the exclusion list to the consultant:
+
+> **Proposition quality gate results:**
+> - N propositions APPROVED
+> - N propositions CONDITIONAL (improvements noted)
+> - N propositions BLOCKED and excluded
+>
+> Blocked propositions: [list with one-line reason each]
+>
+> You can reinstate any blocked proposition with an explicit rationale. Otherwise, Option Synthesis will proceed with the approved and conditional propositions only.
+
+If the consultant reinstates a blocked proposition, log the override with their rationale in the decision log.
+
+Save results to `develop/proposition-review.md`.
+
 ### 5. Scenario Planning (Guided)
 
 Read `$CLAUDE_PLUGIN_ROOT/references/methods/scenario-planning.md` and guide the consultant:
@@ -98,9 +169,9 @@ Save to `develop/scenarios/scenario-matrix.md`.
 
 ### 6. Option Synthesis
 
-After all methods complete, synthesize the options:
+After all methods complete, synthesize the options. Use only APPROVED and CONDITIONAL propositions from the quality gate (step 4b) — BLOCKED propositions are excluded unless the consultant reinstated them.
 
-1. Consolidate solutions from TIPS value modeling, portfolio propositions, and scenario analysis
+1. Consolidate solutions from TIPS value modeling, approved portfolio propositions, and scenario analysis
 2. Group into 3-7 distinct strategic options
 3. For each option, capture:
    - **Name**: Short, descriptive label
@@ -108,6 +179,7 @@ After all methods complete, synthesize the options:
    - **Source**: Which method surfaced it (TIPS, portfolio, scenario)
    - **Alignment**: Which HMW question(s) it addresses
    - **Key assumptions**: What must be true for this to work
+   - **Quality gate notes** (if sourced from a CONDITIONAL proposition): List the outstanding improvements flagged in step 4b that have not yet been addressed. These carry forward as known limitations until Deliver resolves them.
 4. Present the option space to the consultant for review
 
 Save to `develop/options/option-synthesis.md`.
@@ -121,7 +193,74 @@ Save to `develop/options/option-synthesis.md`.
 
 Present options as equals — ranking happens in Deliver with structured criteria and consultant judgment.
 
-### 7. Log and Transition
+### 7. Stakeholder Review
+
+Before transitioning to Deliver, stress-test the option space through multi-persona review. This closed-loop quality gate catches issues with feasibility, creative breadth, user grounding, and strategic alignment before the engagement commits to evaluating specific options.
+
+#### 7a. Launch Parallel Persona Review
+
+Launch 4 Task agents in parallel (same turn), one per persona. Each agent reads:
+
+- `develop/options/option-synthesis.md`
+- `develop/options/tips-solutions.md` (if exists)
+- `develop/propositions/` directory (if exists)
+- `develop/scenarios/scenario-matrix.md` (if exists)
+- `define/problem-statement.md` and `define/hmw-questions.md` (for alignment checking)
+- `diamond-project.json`
+- The persona's own profile from `$CLAUDE_PLUGIN_ROOT/skills/diamond-develop/references/personas/`
+
+**Personas and their focus**:
+
+| Persona | Profile | Primary Focus |
+|---|---|---|
+| Engagement Sponsor | `personas/engagement-sponsor.md` | Strategic alignment, fundability, genuine choice |
+| Solution Architect | `personas/solution-architect.md` | Technical feasibility, architectural distinctness, constraint adherence |
+| Innovation Strategist | `personas/innovation-strategist.md` | Creative breadth, assumption challenge, cross-pollination |
+| End-User Advocate | `personas/end-user-advocate.md` | User value, adoption realism, user-facing risk |
+
+Each persona evaluates 5 weighted criteria (weights sum to 100%), assigns PASS/WARN/FAIL verdicts, calculates a weighted score, generates 3-5 stakeholder questions, identifies their most critical improvement, and lists 2-3 key assumptions to test.
+
+**Task prompt template**:
+
+> You are a {PERSONA_NAME} reviewing the Develop phase outputs of a Double Diamond consulting engagement. Read your persona profile at {PERSONA_PATH} for your evaluation criteria, mindset, and tone.
+>
+> Read these artifacts:
+> - Option synthesis: {PROJECT_DIR}/develop/options/option-synthesis.md
+> - TIPS solutions: {PROJECT_DIR}/develop/options/tips-solutions.md (if exists)
+> - Propositions: {PROJECT_DIR}/develop/propositions/ (if exists)
+> - Scenario matrix: {PROJECT_DIR}/develop/scenarios/scenario-matrix.md (if exists)
+> - Problem statement: {PROJECT_DIR}/define/problem-statement.md
+> - HMW questions: {PROJECT_DIR}/define/hmw-questions.md
+> - Engagement config: {PROJECT_DIR}/diamond-project.json
+>
+> Evaluate the option space against your 5 criteria. For each criterion, assign PASS/WARN/FAIL with specific evidence. Calculate your weighted score. Then generate 3-5 questions, identify your most critical improvement, and list 2-3 key assumptions.
+>
+> Respond in {LANGUAGE} (technical terms in English).
+
+#### 7b. Synthesize & Decide
+
+After all 4 persona agents complete, read `$CLAUDE_PLUGIN_ROOT/skills/diamond-develop/references/review-protocol.md` and apply:
+
+1. Calculate per-persona weighted scores
+2. Identify cross-cutting themes using semantic matching rules
+3. Apply priority escalation rules (3+ personas = CRITICAL; specific persona pairs = CRITICAL)
+4. Route themes to specific Develop artifacts
+5. Resolve conflicts using the tiebreaker hierarchy: Sponsor > End-User Advocate > Solution Architect > Innovation Strategist
+6. Merge recommendations by artifact
+
+#### 7c. Iterate (if needed)
+
+If CRITICAL themes are found:
+
+1. Identify specific revisions needed for each affected artifact
+2. Apply revisions (e.g., add a stretch option, improve source traceability, add user value articulation)
+3. Re-run only the persona(s) that flagged CRITICAL issues — don't repeat the full review
+4. Maximum 2 iteration rounds — prevents infinite loops
+5. After round 2, present any remaining issues to the consultant for decision regardless of severity
+
+Save review results to `develop/review-summary.md`.
+
+### 8. Log and Transition
 
 Update method log and decision log.
 
@@ -130,8 +269,10 @@ Present the Develop summary:
 > **Develop phase complete.**
 > - TIPS solutions generated: N (top 3: ...)
 > - Propositions modeled: N Feature × Market pairs
+> - Proposition quality gate: N approved, N conditional, N blocked [N reinstated by consultant]
 > - Scenarios mapped: 4 (2×2 matrix)
 > - Strategic options synthesized: N
+> - Review: [PASSED / PASSED with observations / PASSED after N revision rounds]
 >
 > Ready to move to Deliver? The final phase will evaluate options, verify claims, build the business case, and generate deliverables.
 

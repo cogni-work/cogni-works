@@ -21,7 +21,7 @@ phase-analyst agent       → Phase readiness assessment, method recommendation
 
 - **Orchestrator, not producer** — manages engagement state; content work done by existing plugins
 - **Path references, not data copies** — cross-references via slugs/paths, no shared DB
-- **Warn, not block** — phase gates are advisory; consultant can override
+- **Warn, not block** — phase gates are advisory; consultant can override. Exception: the Develop proposition quality gate (step 4b) blocks by default — propositions that fail on high-weight criteria are excluded from Option Synthesis unless the consultant explicitly reinstates them
 - **Method library, not fixed playbook** — proposes methods per phase; consultant decides
 
 ## Data Model

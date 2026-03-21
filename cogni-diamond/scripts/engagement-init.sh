@@ -29,9 +29,10 @@ mkdir -p "${PROJECT_DIR}/deliver"
 mkdir -p "${PROJECT_DIR}/output"
 
 # Initialize execution log
-cat > "${PROJECT_DIR}/.metadata/execution-log.json" << 'EOFLOG'
+CREATED_AT=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+cat > "${PROJECT_DIR}/.metadata/execution-log.json" << EOFLOG
 {
-  "created": null,
+  "created": "${CREATED_AT}",
   "phases": {
     "discover": { "started": null, "completed": null },
     "define": { "started": null, "completed": null },

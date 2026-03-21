@@ -39,12 +39,12 @@ Each engagement lives in `cogni-diamond/{slug}/` with:
 | Discover | cogni-gpt-researcher | research-report |
 | Discover | cogni-tips | trend-scout |
 | Discover | cogni-portfolio | portfolio-scan, compete |
-| Define | cogni-claims | claims:verify |
+| Define | cogni-claims | claims (verify mode) |
 | Develop | cogni-tips | value-modeler |
 | Develop | cogni-portfolio | propositions, solutions |
-| Deliver | cogni-claims | claims:verify |
-| Deliver | cogni-portfolio | portfolio-verify, portfolio-export |
-| Export | cogni-visual | slides, big-picture |
+| Deliver | cogni-claims | claims (verify mode) |
+| Deliver | cogni-portfolio | portfolio-verify |
+| Export | cogni-visual | story-to-slides, story-to-big-picture |
 
 ## Vision Classes
 

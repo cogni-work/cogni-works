@@ -71,7 +71,7 @@ Present them to the consultant:
 
 After confirmation, dispatch to cogni-claims:
 - Submit assumptions as claims with source references from discovery
-- Run `claims:verify` to check against cited sources
+- Dispatch the `claims` skill in verify mode to check against cited sources
 - Present results: verified, deviated, source unavailable
 
 Save verified/deviated results to `define/assumptions.json`.

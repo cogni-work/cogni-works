@@ -27,7 +27,7 @@ The two-skill split ensures claims verification runs in a fresh context window. 
 
 Five report types: basic, detailed, deep, outline, resource.
 Three source modes: web (default), local (documents only), hybrid (web + documents).
-Configurable: tone, citation format, researcher role (auto or manual), source URLs, domain filtering, sub-question count.
+Configurable: market (search localization), output language, tone, citation format, researcher role (auto or manual), source URLs, domain filtering, sub-question count.
 
 ## Entity Model (4 types)
 
@@ -63,6 +63,9 @@ Project config (`project-config.json`) supports these optional fields:
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
+| `market` | string | "global" | Region code for search localization (dach/de/us/uk/fr/global). Controls local-language query generation, authority source boosts, and geographic modifiers. See `references/market-sources.json` |
+| `output_language` | string | auto from market | ISO 639-1 code for report output language. Defaults to market's `default_output_language`. Can diverge from market (e.g., market=fr, output_language=en) |
+| `language` | string | "en" | **Legacy** — backward compat alias. When set without `market`, "de" maps to market=dach, "en" maps to market=global |
 | `tone` | string | "objective" | Writing tone — see `references/writing-tones.md` |
 | `citation_format` | string | "apa" | Citation style (apa/mla/chicago/harvard/ieee/wikilink) — see `references/citation-formats.md` |
 | `researcher_role` | string | auto-selected | Domain persona — see `references/agent-roles.md` |
@@ -80,7 +83,7 @@ Project config (`project-config.json`) supports these optional fields:
 - All scripts are stdlib-only (bash + python3, no pip dependencies)
 - Wikilinks use workspace-relative paths: `[[dir/data/entity-slug]]`
 - Phase state tracked via `.metadata/execution-log.json`
-- Web research uses WebSearch + WebFetch (no MCP search providers), with optional source URL pre-fetch and domain filtering
+- Web research uses WebSearch + WebFetch (no MCP search providers), with market-localized search (intent-based language routing via `references/market-sources.json`), optional source URL pre-fetch, and domain filtering
 - Local research uses Read + Glob + Grep tools for document analysis (PDF, MD, TXT, CSV, JSON)
 - Hybrid mode runs both web and local researchers in parallel, merging results in context aggregation
 - All agents report `cost_estimate` in output JSON (input/output words + estimated USD). Orchestrator accumulates in Phase 6

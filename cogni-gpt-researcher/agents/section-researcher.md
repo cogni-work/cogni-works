@@ -35,7 +35,7 @@ You research a single sub-question by executing web searches, fetching relevant 
 |-----------|----------|-------------|
 | `SUB_QUESTION_PATH` | Yes | Absolute path to sub-question entity in `00-sub-questions/data/` |
 | `PROJECT_PATH` | Yes | Absolute path to project directory |
-| `LANGUAGE` | No | ISO 639-1 code (default: "en"). When "de", generate bilingual queries for DACH coverage |
+| `MARKET` | No | Region code (default: "global"). Controls search localization: local-language queries, authority source boosts, geographic modifiers. Agents load market config from `${CLAUDE_PLUGIN_ROOT}/references/market-sources.json`; unknown codes fall back to `_default` |
 | `SOURCE_URLS` | No | Comma-separated list of URLs to research first. When provided, fetch these before web search. If the list provides sufficient coverage, web search supplements gaps only |
 | `QUERY_DOMAINS` | No | Comma-separated list of domains to restrict search to (e.g., "arxiv.org,nature.com"). When set, add `site:domain` operators to search queries |
 | `CURRENT_YEAR` | No | Four-digit current year (e.g., "2026"). Used for recency-aware query generation. If not provided, treat the current year as unknown and omit year-specific queries |
@@ -52,6 +52,7 @@ Phase 0 → Phase 1 → Phase 2 → Phase 3 → Phase 4
 2. Extract: `query`, `search_guidance`, `section_index`
 3. Validate `PROJECT_PATH` exists with entity directories
 4. Resolve `CLAUDE_PLUGIN_ROOT` for entity creation scripts
+5. Load market config: read `${CLAUDE_PLUGIN_ROOT}/references/market-sources.json`, extract entry for `MARKET` key. If `MARKET` is not found, use `_default`. Store as `market_config` for use in Phase 1 and Phase 3
 
 ### Phase 0.5: Source URL Processing (when SOURCE_URLS is set)
 
@@ -80,25 +81,36 @@ When `QUERY_DOMAINS` is provided, restrict web searches to the specified domains
 2. Generate 1-2 additional unfiltered queries as fallback — if domain-restricted searches return very few results, these ensure minimum source coverage
 3. Domain filtering applies to WebSearch queries only — WebFetch can still access any URL found in search results
 
-#### Bilingual Search (when LANGUAGE=de)
+#### Market-Localized Search
 
-When the project language is German, generate a bilingual query set to capture both global and DACH-specific sources. The goal is coverage: English catches international perspectives, German catches Mittelstand, regulatory, and association insights that English misses.
+When `MARKET` is set (and is not "global"), apply intent-based language routing to your 5-7 search queries using the loaded `market_config`.
 
-**Query distribution (still 5-7 total queries):**
-- 3-4 English queries (global reach, international sources)
-- 2-3 German-language queries (DACH-specific angles)
+**The principle**: Search in the language where the best information lives. Different types of information are best found in different languages:
 
-**German query construction:**
-- Translate key concepts into German industry terms (e.g., "digital transformation" → "Digitalisierung", "skills shortage" → "Fachkräftemangel")
-- Include geographic modifiers: "Deutschland", "DACH", "Österreich Schweiz"
-- Use compound nouns where natural: "Energiewende", "Digitalisierungsstrategie"
-- Keep English technical terms that are standard in German usage (e.g., "Cloud Computing", "IoT", "AI")
+| Information type | Best language | Why |
+|-----------------|--------------|-----|
+| Regulatory / government | Local | National laws, agency publications, compliance docs are published in the local language first |
+| Industry associations | Local | Association studies, position papers, and chamber reports are in the national language |
+| National statistics | Local | Statistical offices (Destatis, INSEE, ONS, BLS) publish in local language |
+| Academic / scientific | English | International journals, arXiv, IEEE — overwhelmingly English |
+| Global consulting | English | McKinsey, Gartner, BCG global reports are English-first |
+| Local consulting | Local | Regional strategy firms publish country-specific editions in the local language |
+| Business media | Both | One query in the local language (e.g., Handelsblatt, Les Echos) + one in English (e.g., FT) for coverage |
 
-**DACH site-specific searches:** If the sub-question's topic aligns with a German industry association or research institute, include 1 site-specific query. Read `${CLAUDE_PLUGIN_ROOT}/references/dach-sources.md` for the source catalog and search patterns. Priority targets:
-- `site:fraunhofer.de` — applied research (authority 5)
-- `site:bitkom.org` — digital/IT topics (authority 4)
-- `site:vdma.org` — manufacturing/engineering (authority 4)
-- `site:handelsblatt.com` — business context (authority 3)
+For each of your 5-7 queries, decide the language based on what type of information you are seeking for this sub-question. The split is driven by intent — a regulatory-heavy sub-question might produce 4 local-language / 3 English queries, while an academic sub-question might produce 2 local / 5 English. Do not apply a fixed ratio.
+
+**Constructing local-language queries** (when `market_config.local_language` != "en"):
+
+Read `market_config.local_query_tips`:
+- `compound_nouns` — vocabulary hints for translating key concepts into the local language (e.g., "Digitalisierungsstrategie" for German, "transformation numérique" for French). Use these as translation cues, not rigid templates
+- `keep_english` — technical terms that stay in English even in local-language queries ("IoT", "AI", "Cloud Computing")
+- `geographic_modifiers` — regional targeting terms to include in queries ("Deutschland", "France", "United States")
+
+**Authority site-searches:** Review `market_config.authority_sources` and pick the 1-2 sources most relevant to this sub-question's topic. Use their `search_pattern` template (substitute `{TOPIC_LOCAL}` with the topic in the local language and `{YEAR}` with `CURRENT_YEAR`). These are high-authority sources that general web search may miss.
+
+**English-language markets (US, UK):** When `market_config.local_language` is "en", all queries are English. Localization is via geographic modifiers (e.g., "United States", "United Kingdom") and authority source site-searches (e.g., `site:nist.gov`, `site:gov.uk`). No bilingual split is needed.
+
+**Cross-language deduplication:** If the same insight appears in both English and local-language sources, record it once in the context entity's `key_findings` with both source URLs. This prevents inflated findings counts and avoids the writer citing the same fact twice from different languages.
 
 ### Phase 2: Web Search + Fetch
 
@@ -113,7 +125,7 @@ When the project language is German, generate a bilingual query set to capture b
 Before creating entities, evaluate each source for quality. This mirrors GPT-Researcher's source curation step — not all search results deserve equal weight. Rate each source on a 0.0-1.0 scale based on:
 
 - **Relevance**: How directly does this source address the sub-question?
-- **Credibility**: Is this an authoritative source (academic, government, established publication) or user-generated/marketing content? When LANGUAGE=de, recognized DACH sources (Fraunhofer, industry associations, quality business media) receive a credibility boost — see `${CLAUDE_PLUGIN_ROOT}/references/dach-sources.md` for the authority scoring matrix
+- **Credibility**: Is this an authoritative source (academic, government, established publication) or user-generated/marketing content? Check if the source's domain matches any entry in `market_config.authority_sources` — if so, apply the declared `authority` score as a credibility boost (5 = highest authority, 2 = vendor/promotional)
 - **Currency**: Is the information recent enough to be useful? For annual publications (DORA, Gartner, surveys, state-of reports), actively check whether a newer edition exists before accepting an older one. If `CURRENT_YEAR` is 2026, a 2024 edition scores low on currency when a 2025 edition is available — run one additional WebSearch for "{report name} {CURRENT_YEAR}" or "{report name} {CURRENT_YEAR - 1}" to verify
 - **Quantitative value**: Does it contain specific data, statistics, or numbers?
 

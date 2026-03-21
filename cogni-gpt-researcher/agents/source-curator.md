@@ -14,9 +14,9 @@ description: |
 
   <example>
   Context: German-language deep report with 20+ sources from mixed DACH and international publishers.
-  user: "Curate sources for DACH project at /project/ with LANGUAGE=de"
-  assistant: "Invoke source-curator with DACH authority scoring to rank sources."
-  <commentary>DACH authority boosts apply — Fraunhofer, BITKOM, VDMA sources receive higher authority scores.</commentary>
+  user: "Curate sources for DACH project at /project/ with MARKET=dach"
+  assistant: "Invoke source-curator with market-specific authority scoring to rank sources."
+  <commentary>Market authority boosts from market-sources.json apply — Fraunhofer, BITKOM, VDMA sources receive higher authority scores for DACH market.</commentary>
   </example>
 model: sonnet
 color: yellow
@@ -36,7 +36,7 @@ This agent is inspired by GPT-Researcher's `CURATE_SOURCES` feature, which uses 
 | Parameter | Required | Description |
 |-----------|----------|-------------|
 | `PROJECT_PATH` | Yes | Absolute path to project directory |
-| `LANGUAGE` | No | ISO 639-1 code (default: "en"). When "de", apply DACH authority scoring |
+| `MARKET` | No | Region code (default: "global"). Load market config from `${CLAUDE_PLUGIN_ROOT}/references/market-sources.json` to apply market-specific authority scoring |
 
 ## When to Use
 
@@ -59,7 +59,8 @@ Phase 0 → Phase 1 → Phase 2 → Phase 3
 
 1. Read all source entities from `02-sources/data/`
 2. Read all context entities from `01-contexts/data/` to understand how each source was used
-3. Read `project-config.json` for topic and language
+3. Read `project-config.json` for topic and market
+4. Load market config from `${CLAUDE_PLUGIN_ROOT}/references/market-sources.json` using `MARKET` key (fall back to `_default`)
 4. Build a source-to-findings map: which findings cite which sources
 
 ### Phase 1: Source Assessment
@@ -69,7 +70,7 @@ Evaluate each source on 5 dimensions (0.0-1.0):
 | Dimension | Description |
 |-----------|-------------|
 | **Relevance** | How directly does this source address the research topic? A source about a tangentially related topic scores lower |
-| **Authority** | Is this from an authoritative publisher? Academic journals, government agencies, established industry analysts score highest. Blog posts and forums score lowest. When LANGUAGE=de, apply DACH authority boosts from `${CLAUDE_PLUGIN_ROOT}/references/dach-sources.md` |
+| **Authority** | Is this from an authoritative publisher? Academic journals, government agencies, established industry analysts score highest. Blog posts and forums score lowest. Check if the source's domain matches any entry in `market_config.authority_sources` — if so, apply the declared `authority` score as a credibility boost (5 = highest, 2 = vendor/promotional) |
 | **Recency** | How current is the information? Sources from the last 1-2 years score highest for fast-moving topics. For historical analysis, recency matters less |
 | **Specificity** | Does the source provide specific data (numbers, statistics, dates) or only general commentary? Quantitative sources score higher |
 | **Uniqueness** | Does this source provide information not available from other sources in the set? Redundant sources score lower |

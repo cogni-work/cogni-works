@@ -1,0 +1,180 @@
+{
+  "_description": "Market-specific search configuration for research agents. Keys are region codes aligned with cogni-portfolio regions.json. Agents load the entry matching the MARKET parameter; unknown codes fall back to '_default'. Each entry provides local-language vocabulary hints, authority sources with search patterns, and regulatory body lists.",
+
+  "dach": {
+    "default_output_language": "de",
+    "local_language": "de",
+    "region_qualifiers": {
+      "en": "Germany Austria Switzerland",
+      "local": "Deutschland Österreich Schweiz"
+    },
+    "local_query_tips": {
+      "compound_nouns": ["Digitalisierungsstrategie", "Fachkräftemangel", "Energiewende", "Industrie 4.0", "Mittelstand", "Nachhaltigkeit", "Lieferkette", "Rechenzentrum", "Datenschutz", "Künstliche Intelligenz"],
+      "keep_english": ["Cloud Computing", "IoT", "AI", "DevOps", "SaaS", "Open Source", "Machine Learning", "Blockchain", "API", "ERP", "CRM"],
+      "geographic_modifiers": ["Deutschland", "DACH", "Österreich", "Schweiz"]
+    },
+    "authority_sources": [
+      {"domain": "fraunhofer.de", "category": "research", "authority": 5, "search_pattern": "site:fraunhofer.de {TOPIC_LOCAL} Studie {YEAR}"},
+      {"domain": "publica.fraunhofer.de", "category": "research", "authority": 5, "search_pattern": "site:publica.fraunhofer.de {TOPIC_LOCAL}"},
+      {"domain": "mpg.de", "category": "research", "authority": 5, "search_pattern": "site:mpg.de {TOPIC_LOCAL} Forschung"},
+      {"domain": "bitkom.org", "category": "association", "authority": 4, "search_pattern": "site:bitkom.org {TOPIC_LOCAL} Digitalisierung {YEAR}"},
+      {"domain": "vdma.org", "category": "association", "authority": 4, "search_pattern": "site:vdma.org {TOPIC_LOCAL} Trends {YEAR}"},
+      {"domain": "vda.de", "category": "association", "authority": 4, "search_pattern": "site:vda.de {TOPIC_LOCAL} Trends {YEAR}"},
+      {"domain": "zvei.org", "category": "association", "authority": 4, "search_pattern": "site:zvei.org {TOPIC_LOCAL} Innovation {YEAR}"},
+      {"domain": "bdew.de", "category": "association", "authority": 4, "search_pattern": "site:bdew.de {TOPIC_LOCAL} Energiewende {YEAR}"},
+      {"domain": "bdi.eu", "category": "association", "authority": 4, "search_pattern": "site:bdi.eu {TOPIC_LOCAL} Wirtschaft {YEAR}"},
+      {"domain": "dihk.de", "category": "association", "authority": 4, "search_pattern": "site:dihk.de {TOPIC_LOCAL} Konjunktur {YEAR}"},
+      {"domain": "hde.de", "category": "association", "authority": 4, "search_pattern": "site:hde.de Handel Digitalisierung {YEAR}"},
+      {"domain": "gdv.de", "category": "association", "authority": 4, "search_pattern": "site:gdv.de Versicherung Digital {YEAR}"},
+      {"domain": "vci.de", "category": "association", "authority": 4, "search_pattern": "site:vci.de Chemie Innovation {YEAR}"},
+      {"domain": "rolandberger.com", "category": "consulting", "authority": 4, "search_pattern": "site:rolandberger.com {TOPIC_LOCAL} Studie {YEAR}"},
+      {"domain": "zukunftsinstitut.de", "category": "consulting", "authority": 4, "search_pattern": "site:zukunftsinstitut.de Megatrend {TOPIC_LOCAL} {YEAR}"},
+      {"domain": "staufen.ag", "category": "consulting", "authority": 4, "search_pattern": "site:staufen.ag {TOPIC_LOCAL} Studie {YEAR}"},
+      {"domain": "handelsblatt.com", "category": "media", "authority": 3, "search_pattern": "site:handelsblatt.com {TOPIC_LOCAL} {YEAR}"},
+      {"domain": "faz.net", "category": "media", "authority": 3, "search_pattern": "site:faz.net {TOPIC_LOCAL} Wirtschaft {YEAR}"},
+      {"domain": "wiwo.de", "category": "media", "authority": 3, "search_pattern": "site:wiwo.de {TOPIC_LOCAL} {YEAR}"},
+      {"domain": "manager-magazin.de", "category": "media", "authority": 3, "search_pattern": "site:manager-magazin.de {TOPIC_LOCAL} {YEAR}"},
+      {"domain": "t3n.de", "category": "media", "authority": 3, "search_pattern": "site:t3n.de {TOPIC_LOCAL} {YEAR}"},
+      {"domain": "wko.at", "category": "association", "authority": 4, "search_pattern": "site:wko.at {TOPIC_LOCAL} Österreich {YEAR}"},
+      {"domain": "iv.at", "category": "association", "authority": 4, "search_pattern": "site:iv.at {TOPIC_LOCAL} Industrie {YEAR}"},
+      {"domain": "ffg.at", "category": "research", "authority": 4, "search_pattern": "site:ffg.at {TOPIC_LOCAL} Forschung {YEAR}"},
+      {"domain": "swissmem.ch", "category": "association", "authority": 4, "search_pattern": "site:swissmem.ch {TOPIC_LOCAL} Schweiz {YEAR}"},
+      {"domain": "economiesuisse.ch", "category": "association", "authority": 4, "search_pattern": "site:economiesuisse.ch {TOPIC_LOCAL} {YEAR}"},
+      {"domain": "digitalswitzerland.com", "category": "association", "authority": 4, "search_pattern": "site:digitalswitzerland.com {TOPIC_LOCAL} {YEAR}"}
+    ],
+    "regulatory_bodies": ["EUR-Lex (EU)", "BaFin", "Bundesnetzagentur", "BSI", "Bundeswettbewerbsbehörde (AT)", "FINMA (CH)"],
+    "currency": "EUR"
+  },
+
+  "de": {
+    "default_output_language": "de",
+    "local_language": "de",
+    "region_qualifiers": {
+      "en": "Germany",
+      "local": "Deutschland"
+    },
+    "local_query_tips": {
+      "compound_nouns": ["Digitalisierungsstrategie", "Fachkräftemangel", "Energiewende", "Industrie 4.0", "Mittelstand", "Nachhaltigkeit", "Lieferkette", "Rechenzentrum", "Datenschutz", "Künstliche Intelligenz"],
+      "keep_english": ["Cloud Computing", "IoT", "AI", "DevOps", "SaaS", "Open Source", "Machine Learning", "Blockchain", "API", "ERP", "CRM"],
+      "geographic_modifiers": ["Deutschland"]
+    },
+    "authority_sources": [
+      {"domain": "fraunhofer.de", "category": "research", "authority": 5, "search_pattern": "site:fraunhofer.de {TOPIC_LOCAL} Studie {YEAR}"},
+      {"domain": "publica.fraunhofer.de", "category": "research", "authority": 5, "search_pattern": "site:publica.fraunhofer.de {TOPIC_LOCAL}"},
+      {"domain": "bitkom.org", "category": "association", "authority": 4, "search_pattern": "site:bitkom.org {TOPIC_LOCAL} Digitalisierung {YEAR}"},
+      {"domain": "vdma.org", "category": "association", "authority": 4, "search_pattern": "site:vdma.org {TOPIC_LOCAL} Trends {YEAR}"},
+      {"domain": "vda.de", "category": "association", "authority": 4, "search_pattern": "site:vda.de {TOPIC_LOCAL} Trends {YEAR}"},
+      {"domain": "zvei.org", "category": "association", "authority": 4, "search_pattern": "site:zvei.org {TOPIC_LOCAL} Innovation {YEAR}"},
+      {"domain": "bdew.de", "category": "association", "authority": 4, "search_pattern": "site:bdew.de {TOPIC_LOCAL} Energiewende {YEAR}"},
+      {"domain": "bdi.eu", "category": "association", "authority": 4, "search_pattern": "site:bdi.eu {TOPIC_LOCAL} Wirtschaft {YEAR}"},
+      {"domain": "dihk.de", "category": "association", "authority": 4, "search_pattern": "site:dihk.de {TOPIC_LOCAL} Konjunktur {YEAR}"},
+      {"domain": "rolandberger.com", "category": "consulting", "authority": 4, "search_pattern": "site:rolandberger.com {TOPIC_LOCAL} Studie {YEAR}"},
+      {"domain": "handelsblatt.com", "category": "media", "authority": 3, "search_pattern": "site:handelsblatt.com {TOPIC_LOCAL} {YEAR}"},
+      {"domain": "faz.net", "category": "media", "authority": 3, "search_pattern": "site:faz.net {TOPIC_LOCAL} Wirtschaft {YEAR}"},
+      {"domain": "wiwo.de", "category": "media", "authority": 3, "search_pattern": "site:wiwo.de {TOPIC_LOCAL} {YEAR}"},
+      {"domain": "t3n.de", "category": "media", "authority": 3, "search_pattern": "site:t3n.de {TOPIC_LOCAL} {YEAR}"}
+    ],
+    "regulatory_bodies": ["EUR-Lex (EU)", "BaFin", "Bundesnetzagentur", "BSI", "BNetzA"],
+    "currency": "EUR"
+  },
+
+  "us": {
+    "default_output_language": "en",
+    "local_language": "en",
+    "region_qualifiers": {
+      "en": "United States",
+      "local": "United States"
+    },
+    "local_query_tips": {
+      "geographic_modifiers": ["United States", "US", "American"]
+    },
+    "authority_sources": [
+      {"domain": "nist.gov", "category": "government", "authority": 5, "search_pattern": "site:nist.gov {TOPIC_LOCAL} standards {YEAR}"},
+      {"domain": "congress.gov", "category": "government", "authority": 5, "search_pattern": "site:congress.gov {TOPIC_LOCAL} legislation {YEAR}"},
+      {"domain": "federalregister.gov", "category": "government", "authority": 5, "search_pattern": "site:federalregister.gov {TOPIC_LOCAL} regulation {YEAR}"},
+      {"domain": "gao.gov", "category": "government", "authority": 5, "search_pattern": "site:gao.gov {TOPIC_LOCAL} report {YEAR}"},
+      {"domain": "mit.edu", "category": "research", "authority": 5, "search_pattern": "site:mit.edu {TOPIC_LOCAL} research {YEAR}"},
+      {"domain": "stanford.edu", "category": "research", "authority": 5, "search_pattern": "site:stanford.edu {TOPIC_LOCAL} research {YEAR}"},
+      {"domain": "hbr.org", "category": "media", "authority": 4, "search_pattern": "site:hbr.org {TOPIC_LOCAL} strategy {YEAR}"},
+      {"domain": "wsj.com", "category": "media", "authority": 3, "search_pattern": "site:wsj.com {TOPIC_LOCAL} {YEAR}"},
+      {"domain": "forrester.com", "category": "consulting", "authority": 4, "search_pattern": "site:forrester.com {TOPIC_LOCAL} trends {YEAR}"},
+      {"domain": "mckinsey.com", "category": "consulting", "authority": 4, "search_pattern": "site:mckinsey.com {TOPIC_LOCAL} United States {YEAR}"},
+      {"domain": "deloitte.com", "category": "consulting", "authority": 4, "search_pattern": "site:deloitte.com {TOPIC_LOCAL} trends {YEAR}"},
+      {"domain": "bls.gov", "category": "statistics", "authority": 5, "search_pattern": "site:bls.gov {TOPIC_LOCAL} statistics {YEAR}"},
+      {"domain": "census.gov", "category": "statistics", "authority": 5, "search_pattern": "site:census.gov {TOPIC_LOCAL} data {YEAR}"}
+    ],
+    "regulatory_bodies": ["Federal Register", "FTC", "SEC", "NIST", "FCC", "EPA"],
+    "currency": "USD"
+  },
+
+  "uk": {
+    "default_output_language": "en",
+    "local_language": "en",
+    "region_qualifiers": {
+      "en": "United Kingdom",
+      "local": "United Kingdom"
+    },
+    "local_query_tips": {
+      "geographic_modifiers": ["United Kingdom", "UK", "British"]
+    },
+    "authority_sources": [
+      {"domain": "gov.uk", "category": "government", "authority": 5, "search_pattern": "site:gov.uk {TOPIC_LOCAL} policy {YEAR}"},
+      {"domain": "legislation.gov.uk", "category": "government", "authority": 5, "search_pattern": "site:legislation.gov.uk {TOPIC_LOCAL} {YEAR}"},
+      {"domain": "ukri.org", "category": "research", "authority": 5, "search_pattern": "site:ukri.org {TOPIC_LOCAL} research {YEAR}"},
+      {"domain": "ons.gov.uk", "category": "statistics", "authority": 5, "search_pattern": "site:ons.gov.uk {TOPIC_LOCAL} statistics {YEAR}"},
+      {"domain": "ft.com", "category": "media", "authority": 4, "search_pattern": "site:ft.com {TOPIC_LOCAL} UK {YEAR}"},
+      {"domain": "theregister.com", "category": "media", "authority": 3, "search_pattern": "site:theregister.com {TOPIC_LOCAL} UK {YEAR}"},
+      {"domain": "techuk.org", "category": "association", "authority": 4, "search_pattern": "site:techuk.org {TOPIC_LOCAL} digital {YEAR}"},
+      {"domain": "cbi.org.uk", "category": "association", "authority": 4, "search_pattern": "site:cbi.org.uk {TOPIC_LOCAL} industry {YEAR}"},
+      {"domain": "mckinsey.com", "category": "consulting", "authority": 4, "search_pattern": "site:mckinsey.com {TOPIC_LOCAL} United Kingdom {YEAR}"},
+      {"domain": "deloitte.co.uk", "category": "consulting", "authority": 4, "search_pattern": "site:deloitte.co.uk {TOPIC_LOCAL} trends {YEAR}"}
+    ],
+    "regulatory_bodies": ["UK Parliament", "FCA", "Ofcom", "ICO", "CMA"],
+    "currency": "GBP"
+  },
+
+  "fr": {
+    "default_output_language": "fr",
+    "local_language": "fr",
+    "region_qualifiers": {
+      "en": "France",
+      "local": "France"
+    },
+    "local_query_tips": {
+      "compound_nouns": ["transformation numérique", "intelligence artificielle", "transition énergétique", "industrie du futur", "cybersécurité", "souveraineté numérique", "économie circulaire", "données personnelles", "infrastructure cloud", "compétences numériques"],
+      "keep_english": ["Cloud", "IoT", "AI", "SaaS", "DevOps", "Open Source", "Machine Learning", "API", "ERP", "CRM"],
+      "geographic_modifiers": ["France", "français", "française"]
+    },
+    "authority_sources": [
+      {"domain": "inria.fr", "category": "research", "authority": 5, "search_pattern": "site:inria.fr {TOPIC_LOCAL} recherche {YEAR}"},
+      {"domain": "cnrs.fr", "category": "research", "authority": 5, "search_pattern": "site:cnrs.fr {TOPIC_LOCAL} recherche {YEAR}"},
+      {"domain": "cea.fr", "category": "research", "authority": 5, "search_pattern": "site:cea.fr {TOPIC_LOCAL} innovation {YEAR}"},
+      {"domain": "insee.fr", "category": "statistics", "authority": 5, "search_pattern": "site:insee.fr {TOPIC_LOCAL} statistiques {YEAR}"},
+      {"domain": "legifrance.gouv.fr", "category": "government", "authority": 5, "search_pattern": "site:legifrance.gouv.fr {TOPIC_LOCAL} loi {YEAR}"},
+      {"domain": "economie.gouv.fr", "category": "government", "authority": 5, "search_pattern": "site:economie.gouv.fr {TOPIC_LOCAL} numérique {YEAR}"},
+      {"domain": "bpifrance.fr", "category": "government", "authority": 4, "search_pattern": "site:bpifrance.fr {TOPIC_LOCAL} innovation {YEAR}"},
+      {"domain": "medef.com", "category": "association", "authority": 4, "search_pattern": "site:medef.com {TOPIC_LOCAL} industrie {YEAR}"},
+      {"domain": "numeum.fr", "category": "association", "authority": 4, "search_pattern": "site:numeum.fr {TOPIC_LOCAL} numérique {YEAR}"},
+      {"domain": "lesechos.fr", "category": "media", "authority": 3, "search_pattern": "site:lesechos.fr {TOPIC_LOCAL} {YEAR}"},
+      {"domain": "latribune.fr", "category": "media", "authority": 3, "search_pattern": "site:latribune.fr {TOPIC_LOCAL} {YEAR}"},
+      {"domain": "usinenouvelle.com", "category": "media", "authority": 3, "search_pattern": "site:usinenouvelle.com {TOPIC_LOCAL} industrie {YEAR}"},
+      {"domain": "journaldunet.com", "category": "media", "authority": 3, "search_pattern": "site:journaldunet.com {TOPIC_LOCAL} {YEAR}"}
+    ],
+    "regulatory_bodies": ["EUR-Lex (EU)", "CNIL", "AMF", "ANSSI", "ARCEP", "Autorité de la concurrence"],
+    "currency": "EUR"
+  },
+
+  "_default": {
+    "_note": "Fallback for unknown market codes. English-only, no authority boosts, no local-language queries.",
+    "default_output_language": "en",
+    "local_language": "en",
+    "region_qualifiers": {
+      "en": "",
+      "local": ""
+    },
+    "local_query_tips": {},
+    "authority_sources": [],
+    "regulatory_bodies": [],
+    "currency": "USD"
+  }
+}

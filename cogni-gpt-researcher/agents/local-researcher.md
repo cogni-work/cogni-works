@@ -36,7 +36,7 @@ You research a single sub-question by reading and analyzing local documents prov
 | `SUB_QUESTION_PATH` | Yes | Absolute path to sub-question entity in `00-sub-questions/data/` |
 | `PROJECT_PATH` | Yes | Absolute path to project directory |
 | `DOCUMENT_PATHS` | Yes | Comma-separated absolute paths to local documents, or a glob pattern (e.g., `/path/to/docs/*.pdf`) |
-| `LANGUAGE` | No | ISO 639-1 code (default: "en") |
+| `OUTPUT_LANGUAGE` | No | ISO 639-1 code (default: "en"). Controls the language of extracted findings |
 
 ## Supported Document Types
 

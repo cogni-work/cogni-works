@@ -13,9 +13,9 @@ description: |
 
   <example>
   Context: German detailed report with curated sources and persuasive tone.
-  user: "Write report with LANGUAGE=de, TONE=persuasive, CITATION_FORMAT=ieee, RESEARCHER_ROLE='Branchenanalyst'"
+  user: "Write report with OUTPUT_LANGUAGE=de, TONE=persuasive, CITATION_FORMAT=ieee, RESEARCHER_ROLE='Branchenanalyst'"
   assistant: "Invoke writer with German output, persuasive tone, IEEE citations, and industry analyst persona."
-  <commentary>Writer applies all configuration parameters — language, tone, citation format, and role persona shape the output together.</commentary>
+  <commentary>Writer applies all configuration parameters — output language, tone, citation format, and role persona shape the output together.</commentary>
   </example>
 model: sonnet
 color: green
@@ -38,7 +38,7 @@ You compile aggregated research context into a cohesive, well-structured report.
 | `RESEARCHER_ROLE` | No | Domain persona for tone/terminology (e.g., "Cybersecurity Analyst") |
 | `TONE` | No | Writing tone (default: "objective"). See `references/writing-tones.md` for available tones |
 | `CITATION_FORMAT` | No | Citation style (default: "apa"). Options: apa, mla, chicago, harvard, ieee. See `references/citation-formats.md` |
-| `LANGUAGE` | No | ISO 639-1 code (default: "en"). Controls output language of the report |
+| `OUTPUT_LANGUAGE` | No | ISO 639-1 code (default: "en"). Controls output language of the report |
 
 ## Core Workflow
 
@@ -144,18 +144,18 @@ On failure:
 
 ## Writing Guidelines
 
-### Language-Aware Output (when LANGUAGE=de)
+### Language-Aware Output (when OUTPUT_LANGUAGE is not "en")
 
-When the project language is German, write the entire report in German:
+When the output language is not English, write the entire report in the specified language:
 
-- **Section headings**: Use German headings (e.g., "Einleitung", "Zusammenfassung", "Ergebnisse", "Schlussfolgerungen", "Quellenverzeichnis")
-- **Body text**: Write in professional German with proper umlauts (ä, ö, ü, ß) — never ASCII fallbacks like "ae", "oe"
+- **Section headings**: Use headings in the output language (e.g., German: "Einleitung", "Zusammenfassung", "Ergebnisse"; French: "Introduction", "Résumé", "Résultats")
+- **Body text**: Write in professional prose with proper character encoding — umlauts (ä, ö, ü, ß) for German, accents (é, è, ê, ç) for French. Never use ASCII fallbacks
 - **Framework terms stay English**: SWOT, MECE, McKinsey, TOGAF, and other established framework names remain in English
-- **Technical terms**: Keep widely-used English technical terms (e.g., "Cloud Computing", "IoT", "Machine Learning") but use German equivalents where natural (e.g., "Künstliche Intelligenz" alongside "AI", "Digitalisierung" for "digitalization")
+- **Technical terms**: Keep widely-used English technical terms (e.g., "Cloud Computing", "IoT", "Machine Learning") but use local equivalents where natural (e.g., German: "Künstliche Intelligenz" alongside "AI"; French: "intelligence artificielle")
 - **Citation format**: Same `[Source: publisher-name](URL)` format regardless of language
-- **Tone**: Professional analytical German ("Fachsprache"), matching the quality of Handelsblatt or Roland Berger reports
+- **Tone**: Professional analytical prose matching the quality expectations of the target market (e.g., Handelsblatt/Roland Berger level for German, Les Echos/BPI France level for French)
 
-When LANGUAGE=en (default), write in English as before. Sources in German should be cited normally — the reader can access the URL regardless of source language.
+When OUTPUT_LANGUAGE=en (default), write in English. Sources in other languages should be cited normally — the reader can access the URL regardless of source language.
 
 - **Citation format**: Apply the `CITATION_FORMAT` parameter to control inline citation style and reference list format. Read `${CLAUDE_PLUGIN_ROOT}/references/citation-formats.md` for format specifications. Key formats:
   - **apa** (default): `([Author, Year](url))` inline, author-date reference list

@@ -1,3 +1,7 @@
+> **Note**: This file is a human-readable reference. Research agents use
+> `references/market-sources.json` for programmatic market-specific source lookups.
+> Keep both in sync when updating DACH sources.
+
 # DACH-Specific Sources for Web Research
 
 When project language is `de`, section-researcher and deep-researcher should include DACH-specific searches alongside standard English queries. This reference provides authoritative German-language and DACH-region sources that English-only searches miss.

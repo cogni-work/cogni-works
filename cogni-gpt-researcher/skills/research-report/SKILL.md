@@ -40,8 +40,8 @@ When this skill loads:
 >
 > **Tone**: objective *(default)* | analytical | critical | persuasive | formal | informative | explanatory | descriptive | comparative | speculative | narrative | optimistic | simple
 > **Citations**: APA *(default)* | MLA | Chicago | Harvard | IEEE | Wikilink
-> **Language**: en *(default)* | de (German with DACH sources)
-> Advanced: sub-question count, source mode (web/local/hybrid), domain filter, researcher role, image generation — ask about any of these
+> **Market**: global *(default)* | dach | de | us | uk | fr (localizes search queries + authority sources)
+> Advanced: output language, sub-question count, source mode (web/local/hybrid), domain filter, researcher role, image generation — ask about any of these
 >
 > Reply with your choices, or "go" for defaults.
 
@@ -102,7 +102,9 @@ Scan the user's request and extract any options they already specified. These be
 - **Report type**: keywords like "detailed", "deep research", "outline", "sources" → map to basic/detailed/deep/outline/resource (see `references/report-types.md`)
 - **Tone**: style keywords like "analytical", "persuasive", "formal" → map to tone from `references/writing-tones.md`. Default: "objective"
 - **Citation format**: "IEEE", "APA format", "Chicago style", "wikilink", "superscript citations" → capture. Default: "apa". See `references/citation-formats.md`
-- **Language**: "in German", "auf Deutsch" → "de". Default: "en"
+- **Market**: "French market", "DACH", "for Germany", "für Deutschland", "US market", "UK market" → map to region code (fr, dach, de, us, uk). Default: "global"
+- **Output language**: "in German", "auf Deutsch" → "de" (+ market=dach if no explicit market). "in French", "en français" → "fr" (+ market=fr). Default: auto (derived from market)
+- **Language** (legacy): "in German" → market=dach, output_language=de. Default: "en"
 - **Source URLs**: any URLs in the prompt → collect for pre-fetch
 - **Query domains**: "only .gov sources", "restrict to arxiv" → collect domains
 - **Max subtopics**: "use 8 sub-questions", "12 dimensions" → capture count
@@ -124,8 +126,8 @@ Present the user with a configuration menu using `AskUserQuestion` so they can s
    - **Depth** (only if report type not yet detected): list all 5 types with word counts and one-line descriptions
    - **Tone** (only if not detected): list all 13 options, mark default
    - **Citations** (only if not detected): list all 5 formats, mark default
-   - **Language** (only if not detected): en | de
-4. Always include one line for advanced options: "Advanced: sub-question count, source mode (web/local/hybrid), domain filter, researcher role, image generation — ask about any of these"
+   - **Market** (only if not detected): global | dach | de | us | uk | fr
+4. Always include one line for advanced options: "Advanced: output language, sub-question count, source mode (web/local/hybrid), domain filter, researcher role, image generation — ask about any of these"
 5. End with: `Reply with your choices, or "go" for defaults.`
 
 **Conditional skip**: If the user's prompt already specified ALL primary options (type + tone + citations) OR included urgency signals ("just go", "start now", "defaults are fine"), collapse the menu to a compact confirmation:
@@ -168,6 +170,8 @@ Then initialize:
 bash "${CLAUDE_PLUGIN_ROOT}/scripts/initialize-project.sh" \
   --topic "<user topic>" --type <basic|detailed|deep|outline|resource> \
   --workspace "<workspace path>" \
+  [--market "<region-code>"] \
+  [--output-language "<lang>"] \
   [--tone "<tone>"] \
   [--citation-format "<apa|mla|chicago|harvard|ieee>"] \
   [--source-urls "<url1,url2,...>"] \
@@ -199,21 +203,33 @@ Handle the user's choice:
 - **New project**: re-run `initialize-project.sh` with `--suffix 2`. If that also collides, increment the suffix (3, 4, ...) until a fresh directory is created
 - **Different location**: ask the user for a path, then re-run `initialize-project.sh` with the new `--workspace` value
 
-### Phase 0.1: Language Resolution
+### Phase 0.1: Market & Language Resolution
 
-Read `language` from `project-config.json` (stored by `initialize-project.sh --language`). This controls both search behavior and output language across all agents.
+Read `market` and `output_language` from `project-config.json` (stored by `initialize-project.sh`). These control search localization and report output language respectively.
 
 ```bash
-LANGUAGE=$(jq -r '.language // "en"' "${PROJECT_PATH}/project-config.json" 2>/dev/null || echo "en")
+MARKET=$(jq -r '.market // empty' "${PROJECT_PATH}/.metadata/project-config.json" 2>/dev/null)
+if [[ -z "$MARKET" ]]; then
+  # Backward compat: derive market from legacy language field
+  LANG=$(jq -r '.language // "en"' "${PROJECT_PATH}/.metadata/project-config.json")
+  MARKET=$( [[ "$LANG" == "de" ]] && echo "dach" || echo "global" )
+fi
+OUTPUT_LANGUAGE=$(jq -r '.output_language // empty' "${PROJECT_PATH}/.metadata/project-config.json" 2>/dev/null)
+if [[ -z "$OUTPUT_LANGUAGE" ]]; then
+  # Derive from market config default_output_language
+  OUTPUT_LANGUAGE=$(jq -r --arg m "$MARKET" '.[$m].default_output_language // ._default.default_output_language // "en"' "${CLAUDE_PLUGIN_ROOT}/references/market-sources.json" 2>/dev/null || echo "en")
+fi
 ```
 
-When `LANGUAGE=de`:
-- Researcher agents generate bilingual queries (English + German) with DACH site-specific searches
-- Writer agent produces the report in German
-- Reviewer evaluates German prose quality
-- All agents reference `${CLAUDE_PLUGIN_ROOT}/references/dach-sources.md` for DACH source intelligence
+**`MARKET`** controls search localization for researcher agents:
+- Researcher agents load `${CLAUDE_PLUGIN_ROOT}/references/market-sources.json` and use the market entry to generate intent-based bilingual queries, boost authority sources, and apply geographic modifiers
+- Unknown market codes fall back to `_default` (English-only, no authority boosts)
 
-When `LANGUAGE=en` (default): no change to existing behavior.
+**`OUTPUT_LANGUAGE`** controls report output for writer/reviewer/revisor:
+- Writer produces the report in the specified language
+- Reviewer evaluates prose quality in the output language
+
+Available markets: `global` (default), `dach`, `de`, `us`, `uk`, `fr`. The market and output language are usually aligned (e.g., market=dach → output_language=de) but can diverge (e.g., market=fr, output_language=en for an English report about the French market).
 
 ### Phase 0.5: Preliminary Search
 
@@ -292,7 +308,7 @@ For each sub-question entity in 00-sub-questions/data/:
   Task(section-researcher,
     SUB_QUESTION_PATH=<path>,
     PROJECT_PATH=<project_path>,
-    LANGUAGE=<language>,
+    MARKET=<market>,
     CURRENT_YEAR=<current_year>,
     SOURCE_URLS=<from project-config.json, if set>,
     QUERY_DOMAINS=<from project-config.json, if set>,
@@ -305,7 +321,7 @@ For each leaf sub-question in 00-sub-questions/data/:
   Task(deep-researcher,
     SUB_QUESTION_PATH=<path>,
     PROJECT_PATH=<project_path>,
-    LANGUAGE=<language>,
+    MARKET=<market>,
     CURRENT_YEAR=<current_year>,
     SOURCE_URLS=<from project-config.json, if set>,
     QUERY_DOMAINS=<from project-config.json, if set>,
@@ -323,7 +339,7 @@ For each sub-question entity in 00-sub-questions/data/:
     SUB_QUESTION_PATH=<path>,
     PROJECT_PATH=<project_path>,
     DOCUMENT_PATHS=<from project-config.json document_paths>,
-    LANGUAGE=<language>,
+    OUTPUT_LANGUAGE=<output_language>,
     run_in_background=true)
 ```
 
@@ -340,14 +356,14 @@ For each sub-question entity in 00-sub-questions/data/:
     SUB_QUESTION_PATH=<path>,
     PROJECT_PATH=<project_path>,
     DOCUMENT_PATHS=<from project-config.json document_paths>,
-    LANGUAGE=<language>,
+    OUTPUT_LANGUAGE=<output_language>,
     run_in_background=true)
 
   # Web research in parallel
   Task(section-researcher,
     SUB_QUESTION_PATH=<path>,
     PROJECT_PATH=<project_path>,
-    LANGUAGE=<language>,
+    MARKET=<market>,
     CURRENT_YEAR=<current_year>,
     SOURCE_URLS=<from project-config.json, if set>,
     QUERY_DOMAINS=<from project-config.json, if set>,
@@ -377,7 +393,7 @@ When activated:
 ```
 Task(source-curator,
   PROJECT_PATH=<project_path>,
-  LANGUAGE=<language>)
+  MARKET=<market>)
 ```
 
 The source-curator produces `.metadata/curated-sources.json` with quality rankings (primary/secondary/supporting tiers) and diversity analysis. The writer agent reads this in Phase 4 to prioritize citations.
@@ -404,7 +420,7 @@ Task(writer,
   RESEARCHER_ROLE=<role from project-config.json>,
   TONE=<tone from project-config.json, default "objective">,
   CITATION_FORMAT=<citation_format from project-config.json, default "apa">,
-  LANGUAGE=<language>)
+  OUTPUT_LANGUAGE=<output_language>)
 ```
 
 Verify: draft written to `output/draft-v1.md`, reasonable word count.
@@ -442,7 +458,7 @@ Task(reviewer,
   PROJECT_PATH=<project_path>,
   DRAFT_PATH="output/draft-v{N}.md",
   REVIEW_ITERATION=1,
-  LANGUAGE=<language>)
+  OUTPUT_LANGUAGE=<output_language>)
 ```
 
 Note: no `CLAIMS_DASHBOARD` parameter — the reviewer runs structural criteria only (completeness, coherence, source diversity, depth, clarity). The higher accept threshold (0.82) for structural-only review applies automatically.
@@ -454,7 +470,8 @@ Task(revisor,
   DRAFT_PATH="output/draft-v{N}.md",
   VERDICT_PATH=".metadata/review-verdicts/v1.json",
   NEW_DRAFT_VERSION=N+1,
-  LANGUAGE=<language>)
+  OUTPUT_LANGUAGE=<output_language>,
+  MARKET=<market>)
 ```
 
 Maximum 1 structural review iteration. After revision (or if the first review accepts), proceed to Phase 6.

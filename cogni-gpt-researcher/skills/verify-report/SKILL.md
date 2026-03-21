@@ -197,7 +197,7 @@ Task(reviewer,
   CLAIMS_DASHBOARD=<project_path>/cogni-claims/claims.json,
   USER_CLAIMS_REVIEW=<project_path>/.metadata/user-claims-review.json,
   REVIEW_ITERATION=N,
-  LANGUAGE=<language>)
+  OUTPUT_LANGUAGE=<output_language>)
 ```
 
 The reviewer scores the draft on 5 structural dimensions (completeness, coherence, source diversity, depth, clarity) and multiplies by the claims verification rate. It flags high/critical deviations as mandatory fixes and applies user override decisions.
@@ -210,7 +210,8 @@ Task(revisor,
   DRAFT_PATH=<current draft path>,
   VERDICT_PATH=".metadata/review-verdicts/v{N}.json",
   NEW_DRAFT_VERSION=<N+1>,
-  LANGUAGE=<language>)
+  OUTPUT_LANGUAGE=<output_language>,
+  MARKET=<market>)
 ```
 
 After revision:

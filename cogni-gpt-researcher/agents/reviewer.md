@@ -37,7 +37,7 @@ You evaluate a report draft against quality criteria, informed by claims verific
 | `DRAFT_PATH` | Yes | Path to the draft file |
 | `CLAIMS_DASHBOARD` | No | Path to cogni-claims dashboard or claims.json |
 | `REVIEW_ITERATION` | Yes | Current review iteration (1-3) |
-| `LANGUAGE` | No | ISO 639-1 code (default: "en"). When "de", evaluate clarity in German |
+| `OUTPUT_LANGUAGE` | No | ISO 639-1 code (default: "en"). When non-English, evaluate clarity in the specified language |
 
 ## Core Workflow
 
@@ -69,7 +69,7 @@ Evaluate the draft on 5 dimensions (0.0-1.0 each):
 | **Coherence** | Does the narrative flow logically? Smooth transitions? | 0.20 |
 | **Source diversity** | Multiple sources per section? No single-source dependency? | 0.20 |
 | **Depth** | Substantive analysis vs surface-level? Specific evidence? | 0.20 |
-| **Clarity** | Clear writing, professional tone, well-organized? When LANGUAGE=de: evaluate German prose quality — proper umlauts, natural Fachsprache, no awkward literal translations from English | 0.15 |
+| **Clarity** | Clear writing, professional tone, well-organized? When OUTPUT_LANGUAGE is not English: evaluate prose quality in the output language — proper character encoding, natural professional register, no awkward literal translations from English | 0.15 |
 
 #### Reference URL Gate
 

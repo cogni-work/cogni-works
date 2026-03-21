@@ -3,7 +3,7 @@ set -euo pipefail
 # initialize-project.sh - Create project directory structure for a research report
 # Version: 1.0.0
 #
-# Usage: initialize-project.sh --topic <topic> --type <basic|detailed|deep|outline|resource> --workspace <path> [--language <en|de>] [--tone <tone>] [--researcher-role <role>] [--source-urls <url1,url2,...>] [--query-domains <domain1,domain2,...>] [--max-subtopics <N>] [--citation-format <apa|mla|chicago|harvard|ieee>] [--report-source <web|local|hybrid>] [--document-paths <path1,path2,...>] [--suffix <N>]
+# Usage: initialize-project.sh --topic <topic> --type <basic|detailed|deep|outline|resource> --workspace <path> [--market <region-code>] [--output-language <lang>] [--language <en|de>] [--tone <tone>] [--researcher-role <role>] [--source-urls <url1,url2,...>] [--query-domains <domain1,domain2,...>] [--max-subtopics <N>] [--citation-format <apa|mla|chicago|harvard|ieee>] [--report-source <web|local|hybrid>] [--document-paths <path1,path2,...>] [--suffix <N>]
 #
 # Creates:
 #   {workspace}/{slug}-{date}/
@@ -22,6 +22,8 @@ TOPIC=""
 REPORT_TYPE="basic"
 WORKSPACE=""
 LANGUAGE="en"
+MARKET=""
+OUTPUT_LANGUAGE=""
 TONE=""
 RESEARCHER_ROLE=""
 SOURCE_URLS=""
@@ -40,6 +42,8 @@ while [[ $# -gt 0 ]]; do
     --type)     REPORT_TYPE="$2"; shift 2;;
     --workspace) WORKSPACE="$2"; shift 2;;
     --language) LANGUAGE="$2"; shift 2;;
+    --market)   MARKET="$2"; shift 2;;
+    --output-language) OUTPUT_LANGUAGE="$2"; shift 2;;
     --tone)     TONE="$2"; shift 2;;
     --researcher-role) RESEARCHER_ROLE="$2"; shift 2;;
     --source-urls) SOURCE_URLS="$2"; shift 2;;
@@ -89,6 +93,30 @@ if [[ -n "$REPORT_SOURCE" ]] && [[ ! "$REPORT_SOURCE" =~ ^(web|local|hybrid)$ ]]
   exit 2
 fi
 
+# Resolve market and output_language
+# Backward compat: if --language is set but --market is not, derive market from language
+if [[ -z "$MARKET" ]]; then
+  if [[ "$LANGUAGE" == "de" ]]; then
+    MARKET="dach"
+  else
+    MARKET="global"
+  fi
+fi
+
+# Resolve output_language from market config if not explicitly set
+if [[ -z "$OUTPUT_LANGUAGE" ]]; then
+  _SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+  MARKET_SOURCES="$(dirname "$_SCRIPT_DIR")/references/market-sources.json"
+  if [[ -f "$MARKET_SOURCES" ]]; then
+    OUTPUT_LANGUAGE=$(jq -r --arg m "$MARKET" '.[$m].default_output_language // ._default.default_output_language // "en"' "$MARKET_SOURCES" 2>/dev/null || echo "en")
+  else
+    OUTPUT_LANGUAGE="$LANGUAGE"
+  fi
+fi
+
+# Sync language field for backward compat
+LANGUAGE="$OUTPUT_LANGUAGE"
+
 # Generate slug
 SLUG=$(echo "$TOPIC" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9 ]//g' | tr ' ' '-' | sed 's/-\+/-/g' | head -c 40 | sed 's/-$//')
 DATE=$(date -u +%Y-%m-%d)
@@ -127,12 +155,16 @@ PLUGIN_VERSION=$(jq -r '.version // "0.0.0"' "$PLUGIN_ROOT/.claude-plugin/plugin
 CONFIG=$(jq -n \
   --arg topic "$TOPIC" \
   --arg report_type "$REPORT_TYPE" \
+  --arg market "$MARKET" \
+  --arg output_language "$OUTPUT_LANGUAGE" \
   --arg language "$LANGUAGE" \
   --arg created_at "$TIMESTAMP" \
   --arg plugin_version "$PLUGIN_VERSION" \
   '{
     topic: $topic,
     report_type: $report_type,
+    market: $market,
+    output_language: $output_language,
     language: $language,
     created_at: $created_at,
     plugin: "cogni-gpt-researcher",

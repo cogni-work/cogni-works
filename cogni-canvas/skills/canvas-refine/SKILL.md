@@ -6,7 +6,7 @@ description: |
   "review my lean canvas", "canvas feedback", "strengthen my business model",
   "critique my canvas", "canvas is weak", "update the canvas", "evolve the canvas",
   "version my canvas", "pivot my canvas", "iterate on my canvas", "test assumptions",
-  "is my canvas any good", "what's weak in my canvas", "stress-test my canvas",
+  "is my canvas any good", "what's weak in my canvas",
   "challenge my assumptions", "poke holes in my business model", or has an existing
   canvas file they want to make better — even if they don't say "refine" explicitly.
   Also trigger when the user opens or references a lean canvas markdown file and asks
@@ -104,7 +104,9 @@ For each section being refined, apply the quality criteria and guiding questions
 
 ### 4. Track Changes
 
-When refinements are confirmed:
+Every refinement — whether applied to the file or proposed in a report — must include version tracking. This is true even when the user asks for a review without modifying the canvas: propose the version bump and draft the evolution log entry so the user can apply it.
+
+**When writing changes to the canvas file:**
 
 1. Update the section content in the canvas
 2. Bump the `version` number in frontmatter
@@ -121,6 +123,13 @@ When refinements are confirmed:
 
 6. Update Key Assumptions to Validate if new assumptions emerged
 7. Update Next Iterations based on current state
+
+**When producing a report without modifying the file:**
+
+Still include a "Proposed Changes" section with:
+- The version bump (e.g., "v1 → v2")
+- A draft evolution log entry the user can paste in
+- Updated status fields for any sections that would change (e.g., "filled → draft" if a weakness was surfaced)
 
 ### 5. Save and Summarize
 
@@ -157,12 +166,14 @@ When a canvas reaches Hypothesis maturity (all sections filled, nothing tested),
 
 ## Refinement Modes
 
-Support different refinement scopes:
+Detect the mode from the user's request and follow the appropriate structure. The mode determines which workflow steps to use — not every mode needs a full diagnostic.
 
-- **Full review**: Assess all 9 sections, prioritize weakest
-- **Section focus**: User specifies which section(s) to refine (e.g., "refine my UVP")
-- **Coherence pass**: Focus only on cross-section alignment, not individual section quality
-- **Assumption audit**: Extract all implicit assumptions, make them explicit, prioritize by risk
+- **Full review** (default): Run the full workflow — Section Health table, Coherence Check, Maturity Assessment, section-by-section refinement. Use when the user says "review my canvas", "refine my canvas", or gives no specific focus.
+- **Section focus**: Skip the Section Health table. Start with a brief maturity assessment (one sentence establishing canvas stage and what's filled vs. unfilled) for context, then jump straight to the requested section(s), applying the refinement approach from Step 3. Still include a brief coherence check against adjacent sections and flag ripple effects. Use when the user names specific sections ("refine my UVP", "help me fill in Solution and Channels").
+- **Coherence pass**: Skip the Section Health table and section-by-section refinement. Focus exclusively on cross-section alignment using the interdependency table. Output a list of misalignments with severity (CRITICAL/HIGH/MODERATE/LOW), affected sections, and fix recommendations. Use when the user says "check coherence", "are my sections aligned", "consistency check".
+- **Assumption audit**: Skip the Section Health table entirely — do not include it. The primary structure is an assumptions inventory, not a diagnostic. Extract every implicit assumption, tag each with its source section, assign a risk level (CRITICAL/HIGH/MODERATE/LOW), and include a testability assessment with a concrete validation method. Follow with a coherence check (misalignments often reveal hidden assumptions). Use when the user says "assumption audit", "test assumptions", "challenge my assumptions", "what am I assuming".
+
+The key distinction: full review leads with section-by-section quality assessment, while assumption audit and coherence pass lead with cross-cutting analysis. Mixing modes (e.g., putting a Section Health table in an assumption audit) dilutes the focus the user asked for.
 
 **Coherence pass example**: "Your Problem says 'agencies waste time on proposals' but your Channels section lists 'LinkedIn ads targeting enterprise procurement teams.' If your customer is small agencies, LinkedIn ads targeting enterprise buyers won't reach them. Either the channel or the segment needs to change."
 

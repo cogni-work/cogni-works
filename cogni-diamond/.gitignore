@@ -4,5 +4,9 @@
 # Eval workspace (generated outputs, grading, benchmarks)
 *-workspace/
 
+# Eval-generated runtime outputs inside fixture dirs
+**/evals/fixtures/**/define/
+**/evals/fixtures/**/.metadata/
+
 # Plugin settings (user-specific)
 .claude/*.local.md

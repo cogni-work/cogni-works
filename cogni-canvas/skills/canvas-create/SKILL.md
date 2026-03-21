@@ -4,9 +4,13 @@ description: |
   Create a new Lean Canvas from scratch through guided conversation.
   This skill should be used when the user mentions "new canvas", "create a lean canvas",
   "start a business model", "build a canvas", "lean canvas from scratch",
-  "new business hypothesis", or wants to define a business model on a single page —
-  even if they don't say "canvas" explicitly. Also trigger when the user describes
-  a business idea and wants to structure it.
+  "new business hypothesis", "business model canvas", "BMC", "one-pager",
+  "startup idea", "validate my idea", "structure my idea", "plan my business",
+  "map out my business", "business plan on a page", or wants to define a business
+  model on a single page — even if they don't say "canvas" explicitly. Also trigger
+  when the user describes a business idea and wants to structure, validate, or
+  pressure-test it, or when they say something like "I have an idea for..."
+  and want to go from vague concept to structured hypothesis.
 allowed-tools: Read, Write, Edit, Glob, Grep
 argument-hint: "[optional: path to save canvas, or business idea as starting context]"
 ---
@@ -53,6 +57,26 @@ For each section:
 
 Consult `$CLAUDE_PLUGIN_ROOT/references/lean-canvas-sections.md` for section-specific quality criteria, common pitfalls, and guiding questions.
 
+#### Example: Natural Section Guidance
+
+Good conversational flow for the Problem section — notice how it asks one question at a time, builds on the answer, and pushes for specificity without sounding like a survey:
+
+> **Assistant**: Let's start with the problem. Who is struggling, and what's the pain? Don't worry about getting it perfect — we'll sharpen it as we go.
+>
+> **User**: Small agencies waste too much time on proposals.
+>
+> **Assistant**: That's a solid starting point. Let me push on it — do you know roughly how much time? Like, 5 hours per proposal or 2 days? And what part of the process is the bottleneck — the research, the writing, the design?
+>
+> **User**: Mostly the writing. Probably 6-8 hours per proposal, and they do maybe 10 a month.
+>
+> **Assistant**: So that's 60-80 hours a month on proposal writing alone — basically a full-time person. Let me capture this:
+>
+> **Problem**: Small agencies spend 60-80 hours/month writing proposals manually, with writing (not research or design) as the primary bottleneck.
+>
+> Does that feel right? Then we'll figure out who exactly these agencies are.
+
+One question leads to the next. Quantify, reflect back, move forward — not a checklist of 5 questions dumped at once.
+
 ### 3. Review Coherence
 
 After all sections are addressed, review the canvas as a whole:
@@ -93,6 +117,8 @@ Suggest next steps:
 
 - Canvas is a hypothesis document — "wrong" answers are expected, "missing" answers are acceptable
 - Push for specificity but respect the user's current knowledge level
-- Never fill sections without user input or confirmation
+- Don't fill sections without user input or confirmation — the canvas is a *thinking tool*, not a deliverable. If you fill it for them, they skip the hard thinking that makes the canvas valuable. Pre-filling from a provided business description is fine, but always present it for confirmation
 - Keep the conversation flowing — don't turn it into a form-filling exercise
 - A canvas with 5 filled sections and 4 honest "?" is better than 9 sections of vague filler
+- **Form-filling** (avoid): "What is the problem? Who is the customer? What is your UVP?" all at once
+- **Conversational** (preferred): Guide one section, reflect back, let the answer inform the question for the next. It should feel like a conversation about their business, not a questionnaire

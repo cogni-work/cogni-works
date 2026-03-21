@@ -5,9 +5,13 @@ description: |
   This skill should be used when the user mentions "refine my canvas", "improve the canvas",
   "review my lean canvas", "canvas feedback", "strengthen my business model",
   "critique my canvas", "canvas is weak", "update the canvas", "evolve the canvas",
-  "version my canvas", or has an existing canvas file they want to make better —
-  even if they don't say "refine" explicitly. Also trigger when the user opens or
-  references a lean canvas markdown file and asks for feedback or improvements.
+  "version my canvas", "pivot my canvas", "iterate on my canvas", "test assumptions",
+  "is my canvas any good", "what's weak in my canvas", "stress-test my canvas",
+  "challenge my assumptions", "poke holes in my business model", or has an existing
+  canvas file they want to make better — even if they don't say "refine" explicitly.
+  Also trigger when the user opens or references a lean canvas markdown file and asks
+  for feedback, improvements, or simply says "look at this canvas" or "what do you think
+  of my canvas". If the user says "pivot" in the context of a business model, use this skill.
 allowed-tools: Read, Write, Edit, Glob, Grep
 argument-hint: "<path to existing canvas file>"
 ---
@@ -58,6 +62,18 @@ Produce a diagnostic overview:
 - **Validated**: Some assumptions tested with evidence
 - **Evolved**: Multiple versions with data-driven changes
 
+#### Example: Diagnostic Summary
+
+> Your canvas is at **Hypothesis** stage — all 9 sections are filled, but none have been tested yet.
+>
+> **Strongest sections**: Problem (specific, quantified pain) and Customer Segments (clear beachhead market with budget signal).
+>
+> **Weakest section**: UVP — it reads like a feature list ("AI-powered automated proposal tool with templates and analytics") rather than a differentiator. Your segments aren't choosing between AI tools; they're choosing between hiring a proposal writer, using a template, or your product.
+>
+> **Coherence gap**: Your revenue model says "per-seat SaaS" but your customer segment is agencies with 3-5 people — per-seat pricing penalizes small teams, which is your primary segment. Consider per-project or flat-rate pricing.
+>
+> Want to fix the UVP first, or tackle the pricing misalignment?
+
 Present the diagnostic to the user and ask: refine specific sections, or work through all issues systematically?
 
 ### 3. Refine Sections
@@ -70,7 +86,7 @@ For each section being refined, apply the quality criteria and guiding questions
 2. **Identify the gap** — be specific about what's missing or weak
 3. **Suggest concrete improvements** — offer draft text, not just advice
 4. **Ask for input** — the user knows their business better than any model
-5. **Check ripple effects** — when a section changes, flag dependent sections that may need updating
+5. **Check ripple effects** — when a section changes, flag dependent sections that may need updating (e.g., changing Problem from "slow reporting" to "inaccurate reporting" means Solution, UVP, and Key Metrics all need review — consult the interdependency table)
 
 **For unfilled sections** ("?" or empty):
 - Ask focused questions to elicit content (2-3 questions, not a checklist)
@@ -133,11 +149,15 @@ Support different refinement scopes:
 - **Coherence pass**: Focus only on cross-section alignment, not individual section quality
 - **Assumption audit**: Extract all implicit assumptions, make them explicit, prioritize by risk
 
+**Coherence pass example**: "Your Problem says 'agencies waste time on proposals' but your Channels section lists 'LinkedIn ads targeting enterprise procurement teams.' If your customer is small agencies, LinkedIn ads targeting enterprise buyers won't reach them. Either the channel or the segment needs to change."
+
+**Assumption audit example**: "Your canvas contains at least 3 untested assumptions: (1) agencies spend 60-80 hrs/month on proposals — have you validated this? (2) they'd pay €99/month — based on what anchor? (3) 'word of mouth' as primary channel — do agency owners actually recommend tools to each other? I'd prioritize #1 since the entire value prop rests on it."
+
 ## Important Notes
 
-- Always read the existing canvas before suggesting changes — never assume content
+- Read the existing canvas before suggesting changes — skipping this and guessing at content undermines trust immediately, since the user knows what they wrote and will notice if you get it wrong
 - Present suggestions as options, not mandates — the user owns the business model
 - Track every change in the evolution log — canvas history is valuable
 - A section downgraded from "filled" to "draft" is fine if it surfaces a real weakness
-- Never delete evolution log entries — they document the thinking journey
+- Preserve all evolution log entries — the history of *why* the canvas changed is often more valuable than the current version. Teams revisit evolution logs when pivoting to understand which assumptions failed and why
 - When the user disagrees with a critique, respect their judgment and note the reasoning in the evolution log

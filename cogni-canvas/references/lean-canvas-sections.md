@@ -1,5 +1,7 @@
 # Lean Canvas Section Reference
 
+> Sections: [1. Problem](#1-problem-top-1-3-problems) | [2. Customer Segments](#2-customer-segments) | [3. UVP](#3-unique-value-proposition-uvp) | [4. Solution](#4-solution) | [5. Channels](#5-channels) | [6. Revenue Streams](#6-revenue-streams) | [7. Cost Structure](#7-cost-structure) | [8. Key Metrics](#8-key-metrics) | [9. Unfair Advantage](#9-unfair-advantage) | [Interdependencies](#section-interdependencies) | [Maturity](#canvas-maturity-stages)
+
 ## The 9 Sections
 
 A Lean Canvas captures a business hypothesis on a single page. Each section has a specific purpose and common pitfalls.

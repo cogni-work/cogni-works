@@ -334,4 +334,6 @@ Congratulations! You now understand:
 - How to review scored candidates for client context
 - The full pipeline and where your expertise fits
 
+**Something unclear or broken?** Tell Claude what happened — cogni-issues will help you file it.
+
 **Next recommended course**: Course 5 — Trend Reporting

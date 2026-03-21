@@ -358,6 +358,8 @@ Congratulations! You've completed the core cogni-works visual skills!
 - Generate scrollable web narratives and poster storyboards
 - Run the full pipeline from research to visual deliverable
 
+**Something unclear or broken?** Tell Claude what happened — cogni-issues will help you file it.
+
 **Next up**: Courses 8-10 cover the advanced plugins — multi-agent research
 (cogni-gpt-researcher), B2B marketing content (cogni-marketing), and sales
 pitch generation (cogni-sales). These build on everything you've learned so far.

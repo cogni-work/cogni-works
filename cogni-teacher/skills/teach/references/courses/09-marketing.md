@@ -470,5 +470,7 @@ You have completed Course 9: B2B Marketing Content.
 **The bridge**: TIPS themes power your narrative angles. Portfolio propositions
 power your sales content. Marketing bridges research to revenue.
 
+**Something unclear or broken?** Tell Claude what happened — cogni-issues will help you file it.
+
 **Next**: Course 10 (Sales) takes the pipeline further into deal-specific
 pitches for named customers.

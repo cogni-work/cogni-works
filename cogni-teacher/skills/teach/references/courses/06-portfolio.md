@@ -346,4 +346,6 @@ Congratulations! You now know how to:
 - Build segment-specific propositions
 - Connect portfolio work with other cogni-works plugins
 
+**Something unclear or broken?** Tell Claude what happened — cogni-issues will help you file it.
+
 **Next recommended course**: Course 7 — Visual Deliverables

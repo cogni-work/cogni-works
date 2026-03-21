@@ -25,7 +25,7 @@ Ten courses, designed to build on each other:
 | # | Course ID | Title | Plugins Covered |
 |---|-----------|-------|-----------------|
 | 1 | `cowork-fundamentals` | Claude Cowork Fundamentals | cogni-teacher (meta) |
-| 2 | `workspace-obsidian` | Workspace & Obsidian Setup | cogni-workspace + cogni-obsidian |
+| 2 | `workspace-obsidian` | Workspace & Obsidian Setup | cogni-workspace (incl. cogni-issues) + cogni-obsidian |
 | 3 | `basic-tools` | Basic Tools | cogni-copywriting + cogni-narrative + cogni-claims |
 | 4 | `tips-scouting` | Trend Scouting & Selection | cogni-tips (Part 1) |
 | 5 | `tips-reporting` | Trend Reporting | cogni-tips (Part 2) |
@@ -75,6 +75,11 @@ The sequence is recommended, not mandatory.
 Exercises in courses 2-7 require specific plugins to be installed. Before the first
 exercise in a course, verify the needed plugins are available. If a plugin is missing,
 tell the user how to install it rather than letting the exercise silently fail.
+
+**Course 2, Module 6** (Getting Help & Filing Issues) requires the `gh` CLI to be
+installed and authenticated. The exercise itself handles setup via cogni-issues' built-in
+setup mode — do not block on this prerequisite. If `gh` is not ready, the exercise
+becomes a guided setup walkthrough, which is part of the learning experience.
 
 ### Exercise Files
 

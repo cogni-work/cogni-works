@@ -1,7 +1,7 @@
 # Course 2: Workspace & Obsidian Setup
 
-**Duration**: 45 minutes | **Modules**: 5 | **Prerequisites**: Course 1
-**Plugins**: cogni-workspace, cogni-obsidian
+**Duration**: 55 minutes | **Modules**: 6 | **Prerequisites**: Course 1
+**Plugins**: cogni-workspace (incl. cogni-issues), cogni-obsidian
 **Audience**: Consultants setting up their cogni-works environment
 
 ---
@@ -303,11 +303,98 @@ Ask the user to:
 
 ---
 
+## Module 6: Getting Help & Filing Issues
+
+### Theory (3 min)
+
+When something goes wrong — a plugin produces unexpected output, a command fails,
+or you have an idea for improvement — you need a structured way to communicate that.
+Think of it as filing a **structured support request**: you describe what happened,
+and the maintainer gets exactly the context needed to act on it.
+
+cogni-works uses **GitHub issues** for this. The **cogni-issues** skill (part of
+cogni-workspace) handles everything for you — you describe the problem in plain
+language, and Claude drafts and files the issue on your behalf.
+
+**Four issue types**:
+
+| Type | When to use | Example |
+|------|-------------|---------|
+| **Bug** | Something is broken or produces wrong output | "cogni-tips scout crashed mid-run" |
+| **Feature** | You want something new | "Add PDF export to trend reports" |
+| **Change request** | Something works but should work differently | "Change default output language to German" |
+| **Question** | You need clarification | "How do I reset my workspace theme?" |
+
+All issues go to the cogni-works monorepo — you don't need to know which plugin
+lives where. cogni-issues figures that out automatically.
+
+### Demo
+
+Walk through the cogni-issues consultation flow:
+
+1. The user describes a problem: "The trend scout keeps timing out on my project"
+2. Claude asks 1-2 clarifying questions: "Which trend topic? How long did it run?"
+3. Claude drafts the issue with a structured template (title, description, steps to reproduce)
+4. The user reviews and confirms before anything is submitted
+5. Claude creates the GitHub issue and returns the URL
+
+Key point: **nothing is submitted without explicit confirmation**. The learner
+always sees the full draft before it goes to GitHub.
+
+### Exercise
+
+Before starting, check if the GitHub CLI is ready:
+
+Run the readiness check:
+```bash
+bash "$(dirname "$(find "$(pwd)" -path "*/cogni-issues/scripts/setup-gh.sh" 2>/dev/null | head -1)")/setup-gh.sh" check 2>/dev/null
+```
+
+If this returns `"all_ready": false` or fails, guide the user through the setup
+process — this is part of the exercise. Walk them through installing the `gh` CLI
+and authenticating (the setup-gh.sh script detects their platform and package manager).
+
+Once gh is ready, ask the user to file their first issue:
+
+> "Tell Claude: **I have a question about cogni-works — which course should I
+> take after finishing Course 2?**"
+
+This triggers the cogni-issues skill, which will consult, draft a `[Question]`
+issue, and ask for confirmation. The learner experiences the full flow with a
+safe, real interaction.
+
+Create `_teacher-exercises/first-issue.md` with the template from
+`references/exercises/first-issue.md` to record what they filed.
+
+### Quiz
+
+1. **Multiple choice**: Which issue type would you use if a plugin produces wrong output?
+   - a) Feature
+   - b) Question
+   - c) Bug
+   - d) Change request
+   **Answer**: c
+
+2. **Hands-on**: Show me the URL of the issue you just created. What type and label did it get?
+
+### Recap
+
+- Four issue types: Bug, Feature, Change request, Question
+- cogni-issues handles the consultation flow — you describe, Claude drafts, you confirm
+- All issues go to the cogni-works monorepo automatically
+- Nothing is submitted without your explicit approval
+- Whenever something feels wrong or you have an idea, just tell Claude
+
+---
+
 ## Course Completion
 
 Congratulations! You now have a complete project foundation:
 - A cogni-works workspace with shared environment and themes
 - An Obsidian vault (or understanding of one) for project management
 - Standardized note management with frontmatter
+- The ability to report issues and request features via cogni-issues
+
+**Something unclear or broken?** Tell Claude what happened — cogni-issues will help you file it.
 
 **Next recommended course**: Course 3 — Basic Tools (Copywriting, Narratives, Claims)

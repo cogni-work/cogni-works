@@ -378,4 +378,7 @@ Congratulations! You now understand:
 You've also seen cogni-teacher in action — the plugin delivering this course.
 You now know how plugins, slash commands, and structured workflows come together.
 
+In Course 2, you'll learn how to report issues and request features via cogni-issues —
+your direct line to the cogni-works maintainers.
+
 **Next recommended course**: Course 2 — Workspace & Obsidian Setup

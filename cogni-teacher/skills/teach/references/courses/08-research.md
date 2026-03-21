@@ -453,3 +453,5 @@ Workspace Setup → Research → Analyze → Write → Verify → Polish → Pre
 
 Every step has a cogni-works plugin. Your expertise drives the strategy;
 the tools execute the heavy lifting.
+
+**Something unclear or broken?** Tell Claude what happened — cogni-issues will help you file it.

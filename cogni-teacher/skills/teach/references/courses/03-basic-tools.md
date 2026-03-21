@@ -367,4 +367,6 @@ Congratulations! You now command three essential cogni-works tools:
 
 **Cross-plugin workflow**: Research → Narrative → Review → Claims → Polish
 
+**Something unclear or broken?** Tell Claude what happened — cogni-issues will help you file it.
+
 **Next recommended course**: Course 4 — Trend Scouting & Selection

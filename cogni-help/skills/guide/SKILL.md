@@ -20,6 +20,20 @@ Help users navigate the cogni-works ecosystem by matching their task to the righ
 plugin(s). Users often know what they want to accomplish but not which of the 15+
 plugins handles it. Your job is to bridge that gap quickly and accurately.
 
+## Language
+
+Read the workspace language from `.workspace-config.json` in the workspace root
+(`language` field — `"en"` or `"de"`). Present recommendations, descriptions, and
+guidance in that language.
+
+If the file is missing or unreadable, detect the user's language from their message.
+If still unclear, default to English.
+
+Keep in English regardless of language setting:
+- Plugin names (`cogni-tips`, `cogni-narrative`, etc.)
+- Command names (`/cheatsheet`, `/workflow`, etc.)
+- Technical terms, file paths, code snippets
+
 ## How to Guide
 
 1. **Read the catalog** at `references/plugin-catalog.md` — it contains every plugin,

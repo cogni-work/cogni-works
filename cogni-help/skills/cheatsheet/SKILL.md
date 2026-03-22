@@ -19,6 +19,21 @@ allowed-tools:
 Generate concise, one-screen reference cards for any cogni-works plugin. Faster than
 reading docs or taking a course — designed for users who need a quick refresher.
 
+## Language
+
+Read the workspace language from `.workspace-config.json` in the workspace root
+(`language` field — `"en"` or `"de"`). Write cheatsheet descriptions, concept
+explanations, and pattern guidance in that language.
+
+If the file is missing or unreadable, detect the user's language from their message.
+If still unclear, default to English.
+
+Keep in English regardless of language setting:
+- Plugin names (`cogni-tips`, `cogni-narrative`, etc.)
+- Command names (`/cheatsheet`, `/workflow`, etc.)
+- Column headers in the Commands table (`Command`, `What it does`)
+- Technical terms, file paths, code snippets
+
 ## How to Generate a Cheatsheet
 
 1. **Identify the plugin** from the user's request. Accept plugin names with or

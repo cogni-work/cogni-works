@@ -18,6 +18,21 @@ Generate polished PPTX slide decks for cogni-help training programs. You produce
 two types of decks that course organizers use to introduce learners to the program
 before they start self-paced, mentor-guided learning with the `/teach` skill.
 
+## Language
+
+Read the workspace language from `.workspace-config.json` in the workspace root
+(`language` field — `"en"` or `"de"`). Generate all slide content — titles, bullets,
+descriptions, CTAs — in that language. Training decks are most effective when
+presented in the audience's native language.
+
+If the file is missing or unreadable, detect the user's language from their message.
+If still unclear, default to English.
+
+Keep in English regardless of language setting:
+- Plugin names (`cogni-tips`, `cogni-narrative`, etc.)
+- Command names (`/teach`, `/courses`, etc.)
+- Technical terms, code snippets
+
 ## Two Deck Types
 
 ### 1. Curriculum Overview (`curriculum`)

@@ -22,6 +22,22 @@ Diagnose and resolve issues with cogni-works plugins. This complements
 cogni-workspace's `workspace-status` skill, which checks infrastructure (env vars,
 themes, settings). Troubleshoot focuses on plugin-level and cross-plugin problems.
 
+## Language
+
+Read the workspace language from `.workspace-config.json` in the workspace root
+(`language` field — `"en"` or `"de"`). Present diagnostic findings, explanations,
+and fix instructions in that language (Problem → Cause → Fix stays as a pattern,
+but the content within each section uses the workspace language).
+
+If the file is missing or unreadable, detect the user's language from their message.
+If still unclear, default to English.
+
+Keep in English regardless of language setting:
+- Plugin names, command names, file paths
+- Status values (`OK`, `WARN`, `FAIL`)
+- Error messages, stack traces, code snippets
+- Column headers in diagnostic tables
+
 ## Scope Boundary
 
 | This skill owns | cogni-workspace owns |

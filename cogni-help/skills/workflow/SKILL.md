@@ -18,6 +18,21 @@ allowed-tools:
 Provide step-by-step playbooks for common multi-plugin workflows. These are guided
 reference templates — not automated orchestration (that's cogni-consulting's job).
 
+## Language
+
+Read the workspace language from `.workspace-config.json` in the workspace root
+(`language` field — `"en"` or `"de"`). Explain pipeline steps, use cases, and
+guidance in that language.
+
+If the file is missing or unreadable, detect the user's language from their message.
+If still unclear, default to English.
+
+Keep in English regardless of language setting:
+- Plugin names (`cogni-tips`, `cogni-narrative`, etc.)
+- Command names (`/workflow`, `/consult`, etc.)
+- Workflow IDs (`research-to-slides`, `trend-to-marketing`, etc.)
+- Technical terms, file paths, code snippets
+
 ## Available Workflows
 
 Five bundled templates covering the most common plugin chains:

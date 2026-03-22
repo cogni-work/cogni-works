@@ -22,8 +22,17 @@ draft issues from templates, create them via `gh`, and track them locally.
 
 ## Language
 
-Detect the user's language from their message and conduct the entire interaction in that
-language — consultation questions, acknowledgments, draft body, and confirmation prompts.
+Read the workspace language from `.workspace-config.json` in the workspace root
+(`language` field — `"en"` or `"de"`) as the default interaction language. If the
+user's message is in a different language, prefer the user's language (message
+detection overrides the workspace setting — someone writing in German wants a
+German response even if the workspace is set to English).
+
+If `.workspace-config.json` is missing, fall back to detecting the user's language
+from their message. If still unclear, default to English.
+
+Conduct the entire interaction in the chosen language — consultation questions,
+acknowledgments, draft body, and confirmation prompts.
 
 Exceptions where English stays:
 - **Title prefixes**: `[Bug]`, `[Feature]`, `[Change]`, `[Question]` — conventions for

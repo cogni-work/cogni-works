@@ -219,10 +219,4 @@ List generated files with paths. Suggest how to use each deliverable:
 
 ## Session Management
 
-Export is a capstone operation — it produces the final deliverables and typically marks the end of a work phase. After completing exports, first invoke `/portfolio-dashboard` to generate the portfolio dashboard — this gives the user a visual overview of everything accomplished so far. Then recommend starting a fresh session if the user wants to continue with other portfolio work:
-
-> "Exports complete — [list files generated]. I've generated the dashboard so you can see the full picture. If you want to continue with other portfolio work (refining propositions, adding competitors, etc.), I'd recommend starting a fresh session with `/portfolio-resume`. That picks up the current state cleanly and gives you full context for the next phase."
-
-If export runs after other heavy skills in the same session, be especially proactive about this recommendation — output quality benefits from fresh context.
-
-Use the portfolio's communication language (read `portfolio.json` for the `language` field). Frame it as helpful advice, not a limitation.
+After completing this skill's core operation, always delegate to the `session-guardian` agent with `trigger_mode: "capstone"` and a brief `session_summary` of what was accomplished.

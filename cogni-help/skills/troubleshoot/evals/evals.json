@@ -1,0 +1,23 @@
+{
+  "skill_name": "troubleshoot",
+  "evals": [
+    {
+      "id": 0,
+      "prompt": "My course progress disappeared after updating cogni-works",
+      "expected_output": "Detects stale cogni-teacher.local.md file, suggests renaming to cogni-help.local.md",
+      "files": []
+    },
+    {
+      "id": 1,
+      "prompt": "cogni-marketing isn't working, it says it can't find portfolio data",
+      "expected_output": "Checks cross-plugin dependency: cogni-marketing requires cogni-portfolio. Verifies cogni-portfolio is installed and has data",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "Run a full diagnostic on my setup",
+      "expected_output": "Runs all checks (marketplace, plugin integrity, state files, dependencies, environment) and presents summary table",
+      "files": []
+    }
+  ]
+}

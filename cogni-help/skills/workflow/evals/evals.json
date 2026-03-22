@@ -1,0 +1,23 @@
+{
+  "skill_name": "workflow",
+  "evals": [
+    {
+      "id": 0,
+      "prompt": "How do I go from trend research to a marketing campaign?",
+      "expected_output": "Presents the trend-to-marketing workflow: cogni-tips → cogni-portfolio → cogni-marketing, with step-by-step commands and tips",
+      "files": []
+    },
+    {
+      "id": 1,
+      "prompt": "What workflows are available?",
+      "expected_output": "Lists all 5 workflows with pipeline summary and use case for each",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "I already have my portfolio data. How do I create a pitch deck for a customer meeting?",
+      "expected_output": "Presents the portfolio-to-pitch workflow, starting from Step 2 (narrative) since portfolio data exists. Skips Step 1.",
+      "files": []
+    }
+  ]
+}

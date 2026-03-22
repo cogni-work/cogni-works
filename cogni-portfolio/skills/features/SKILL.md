@@ -160,23 +160,38 @@ Once you and the user agree on the feature set, structure each feature:
     "category_name": "Infrastructure Monitoring"
   },
   "readiness": "ga",
+  "sort_order": 10,
   "created": "2026-01-15"
 }
 ```
 
-Required: `slug`, `product_slug`, `name`, `description`. Strongly recommended (fill on every feature): `taxonomy_mapping` (with `dimension`, `category_id`, `category_name`), `readiness` (`ga`/`beta`/`planned`). Optional: `category`, `created`, `updated`.
+Required: `slug`, `product_slug`, `name`, `description`. Strongly recommended (fill on every feature): `taxonomy_mapping` (with `dimension`, `category_id`, `category_name`), `readiness` (`ga`/`beta`/`planned`), `sort_order`. Optional: `category`, `created`, `updated`.
 
 Valid `readiness` values: `ga` (generally available), `beta` (limited availability / pilot), `planned` (roadmap only, not yet built).
 
+`sort_order` (integer): Controls display ordering within a product in the dashboard and reports. Use increments of 10 (10, 20, 30...) to leave room for insertions. Features without `sort_order` sort after all ordered features, then alphabetically by slug.
+
 Write each feature as a JSON file to `features/{slug}.json`. Only write individual feature files — do not create summary, index, or batch files in the `features/` directory.
+
+### Ordering Features: The Value-to-Utility Spectrum
+
+After shaping a feature set, assign `sort_order` to control how features appear in the dashboard and reports. The ordering follows a **customer value to utility** spectrum:
+
+- **Top (low numbers, e.g. 10-30)**: Features that customers buy for — the primary value drivers and differentiators that appear in sales conversations. These are what makes a customer choose this product.
+- **Middle (e.g. 40-60)**: Supporting capabilities that enhance the core value — analytics, integrations, workflow features that customers expect but don't lead purchasing decisions.
+- **Bottom (high numbers, e.g. 70+)**: Infrastructure and utility features — authentication, API access, multi-tenancy, data export. Essential but not what buyers talk about first.
+
+When presenting your feature recommendation, propose sort_order values and explain your reasoning: "I've put Real-time Monitoring at sort_order 10 because it's your primary differentiator, and API Access at 70 because it's table-stakes infrastructure."
+
+`sort_order` is per-product — features from different products are ordered independently.
 
 ### Review Presentation
 
 Present the proposed features as a table with your consulting commentary:
 
-| Slug | Product | Name | Category |
-|---|---|---|---|
-| cloud-monitoring | cloud-platform | Cloud Infrastructure Monitoring | observability |
+| Sort | Slug | Product | Name | Category |
+|---:|---|---|---|---|
+| 10 | cloud-monitoring | cloud-platform | Cloud Infrastructure Monitoring | observability |
 
 Then deliver your assessment — not as a checklist but as a coherent perspective on the feature set's strengths, gaps, and what to prioritize next. End with a clear recommendation: "Build propositions for X and Y first, because they carry your differentiation."
 

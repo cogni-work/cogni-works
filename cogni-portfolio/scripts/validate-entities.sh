@@ -102,8 +102,13 @@ with open('$f') as fh:
     if 'slug' in d and d['slug'] != '$slug': sys.exit(2)
     if 'product_slug' not in d: sys.exit(3)
     if 'readiness' in d and d['readiness'] not in ['ga', 'beta', 'planned']: sys.exit(4)
+    if 'sort_order' in d:
+        so = d['sort_order']
+        if not isinstance(so, int) or isinstance(so, bool): sys.exit(5)
 " 2>/dev/null || exit_code=$?
-    if [ "$exit_code" -eq 4 ]; then
+    if [ "$exit_code" -eq 5 ]; then
+      add_error "feature" "$slug" "sort_order must be an integer"
+    elif [ "$exit_code" -eq 4 ]; then
       add_error "feature" "$slug" "Invalid readiness value -- must be one of: ga, beta, planned"
     elif [ "$exit_code" -ne 0 ]; then
       add_error "feature" "$slug" "Invalid JSON, missing required field (name, description), or missing product_slug"
@@ -135,6 +140,32 @@ for f in glob.glob('$PROJECT_DIR/features/*.json'):
 for cat, slugs in cats.items():
     if len(slugs) == 1:
         print(f'{slugs[0]}|Category {cat} is used by only one feature -- possible typo')
+" 2>/dev/null)
+fi
+
+# Warn on duplicate sort_order values within the same product
+if [ -d "$PROJECT_DIR/features" ]; then
+  while IFS='|' read -r slug msg; do
+    add_warning "feature" "$slug" "$msg"
+  done < <(python3 -c "
+import json, os, glob
+by_product = {}
+for f in glob.glob('$PROJECT_DIR/features/*.json'):
+    try:
+        d = json.load(open(f))
+        ps = d.get('product_slug', '')
+        so = d.get('sort_order')
+        if so is not None and ps:
+            by_product.setdefault(ps, []).append((so, os.path.basename(f)[:-5]))
+    except Exception:
+        pass
+for ps, entries in by_product.items():
+    seen = {}
+    for order, slug in entries:
+        if order in seen:
+            print(f'{slug}|Duplicate sort_order {order} within product {ps} (also used by {seen[order]})')
+        else:
+            seen[order] = slug
 " 2>/dev/null)
 fi
 

@@ -280,6 +280,17 @@ def load_design_variables(path):
 
 
 # ---------------------------------------------------------------------------
+# Feature sort key — sort by sort_order (customer value top, utility bottom)
+# ---------------------------------------------------------------------------
+
+def feature_sort_key(slug, features_data):
+    """Sort key: (sort_order or inf, slug) for stable ordering."""
+    f = features_data.get(slug, {})
+    order = f.get("sort_order")
+    return (order if order is not None else float('inf'), slug)
+
+
+# ---------------------------------------------------------------------------
 # Data loading
 # ---------------------------------------------------------------------------
 
@@ -456,7 +467,7 @@ def generate_html(data, status, project_dir, theme):
     phase_pct = int((phase_idx / (len(phases) - 1)) * 100) if len(phases) > 1 else 0
 
     market_slugs = sorted(data["markets"].keys())
-    feature_slugs = sorted(data["features"].keys())
+    feature_slugs = sorted(data["features"].keys(), key=lambda s: feature_sort_key(s, data["features"]))
 
     tips_data = data.get("tips", {})
     anchored_sts = tips_data.get("anchored_sts", {})
@@ -1946,7 +1957,8 @@ body::after {{
     <div class="product-features">
       {f'<div style="font-size:13px;color:var(--text2);margin-bottom:8px">{positioning}</div>' if positioning else ''}
 """
-            for fs, f in sorted(product_features.items()):
+            for fs in sorted(product_features.keys(), key=lambda s: feature_sort_key(s, product_features)):
+                f = product_features[fs]
                 fname = escape_html(f.get("name", fs))
                 fdesc = escape_html(f.get("description", ""))
                 readiness = f.get("readiness", "")
@@ -2090,7 +2102,7 @@ body::after {{
     {f'<span class="quality-flag">quality investment needed</span>' if has_quality_issues else ''}
   </div>
 """
-        for feat_slug in sorted(anchored_sts.keys()):
+        for feat_slug in sorted(anchored_sts.keys(), key=lambda s: feature_sort_key(s, data["features"])):
             sts = anchored_sts[feat_slug]
             feat = data["features"].get(feat_slug, {})
             feat_name = escape_html(feat.get("name", feat_slug))

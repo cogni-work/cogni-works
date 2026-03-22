@@ -115,14 +115,17 @@ A feature is market-independent. It describes what the product/service IS. Each 
   "name": "Cloud Infrastructure Monitoring",
   "description": "Real-time monitoring of cloud infrastructure including servers, containers, and network components with automated alerting.",
   "category": "observability",
+  "sort_order": 10,
   "created": "2026-01-15"
 }
 ```
 
 Required fields: `slug`, `product_slug`, `name`, `description`
-Optional fields: `category`, `readiness`, `taxonomy_mapping`, `source_file`, `created`, `updated`
+Optional fields: `category`, `readiness`, `taxonomy_mapping`, `sort_order`, `source_file`, `created`, `updated`
 
 Valid `readiness` values: `ga` (generally available), `beta` (limited availability / pilot), `planned` (roadmap only, not yet built)
+
+`sort_order` (integer, optional): Controls display ordering within a product. Lower numbers appear first — customer-facing value at top, infrastructure/utility at bottom. Use increments of 10 (10, 20, 30...) to leave room for insertions. Features without `sort_order` sort after all ordered features, then alphabetically by slug.
 
 The `category` field is a free-form label for grouping features (e.g., `"observability"`, `"integration"`, `"security"`). Categories are not constrained to a fixed vocabulary — validation will warn on categories used by only one feature to catch typos.
 

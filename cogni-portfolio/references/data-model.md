@@ -135,6 +135,7 @@ A feature is market-independent. It describes what the product/service IS. Each 
   "description": "Real-time monitoring of cloud infrastructure with automated alerting.",
   "category": "observability",
   "readiness": "ga",
+  "sort_order": 10,
   "taxonomy_mapping": {
     "dimension": 4,
     "dimension_name": "Cloud Services",
@@ -147,9 +148,11 @@ A feature is market-independent. It describes what the product/service IS. Each 
 ```
 
 Required fields: `slug`, `product_slug`, `name`, `description`
-Optional fields: `category`, `readiness`, `taxonomy_mapping`, `source_file`, `created`, `updated`
+Optional fields: `category`, `readiness`, `taxonomy_mapping`, `sort_order`, `source_file`, `created`, `updated`
 
 Valid `readiness` values: `ga` (generally available), `beta` (limited availability / pilot), `planned` (roadmap only)
+
+`sort_order` (integer, optional): Controls display ordering within a product. Lower numbers appear first — customer-facing value at top, infrastructure/utility at bottom. Use increments of 10 (10, 20, 30...) to leave room for insertions. Features without `sort_order` sort after all ordered features, then alphabetically by slug.
 
 Valid `taxonomy_mapping.horizon` values: `current` (0-1yr, GA), `emerging` (1-3yr, pilot/beta), `future` (3+yr, roadmap)
 

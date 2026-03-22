@@ -303,7 +303,7 @@ for m in glob.glob('$PROJECT_DIR/markets/*.json'):
         pass
 
 matrix = []
-for f_slug, feat in sorted(features.items()):
+for f_slug, feat in sorted(features.items(), key=lambda item: (item[1].get('sort_order') if item[1].get('sort_order') is not None else float('inf'), item[0])):
     readiness = feat.get('readiness', 'ga')
     for m_slug, mkt in sorted(markets.items()):
         priority = mkt.get('priority', 'expansion')

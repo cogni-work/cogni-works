@@ -1,0 +1,23 @@
+{
+  "skill_name": "cheatsheet",
+  "evals": [
+    {
+      "id": 0,
+      "prompt": "Give me a cheatsheet for cogni-tips",
+      "expected_output": "Generates a formatted reference card with commands (/scout, /report, /tips-status), core concepts (TIPS framework, Trendradar, Handlungsfelder), data model, common patterns, and related plugins",
+      "files": []
+    },
+    {
+      "id": 1,
+      "prompt": "What plugins are available for cheatsheets?",
+      "expected_output": "Lists all available cogni-works plugins with one-line descriptions, asks which one the user wants",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "Quick reference for the portfolio plugin",
+      "expected_output": "Generates a cheatsheet for cogni-portfolio covering IS/DOES/MEANS, commands, TAM/SAM/SOM, and related plugins (cogni-canvas, cogni-marketing, cogni-sales)",
+      "files": []
+    }
+  ]
+}

@@ -86,7 +86,7 @@
       "source": "./cogni-help",
       "category": "productivity",
       "license": "AGPL-3.0-only",
-      "keywords": ["teaching", "courses", "training", "cogni-works", "cowork", "curriculum"]
+      "keywords": ["help", "guide", "courses", "training", "workflow", "troubleshoot", "cheatsheet", "issues", "discovery", "onboarding"]
     },
     {
       "name": "cogni-marketing",

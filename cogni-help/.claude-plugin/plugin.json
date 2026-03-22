@@ -1,13 +1,15 @@
 {
   "name": "cogni-help",
-  "version": "0.1.8",
-  "description": "Interactive 45-minute courses teaching Claude Cowork fundamentals and cogni-works marketplace plugins to consultants. 11-course curriculum with hands-on exercises, quizzes, and progress tracking.",
+  "version": "0.2.0",
+  "description": "Central help hub for the cogni-works ecosystem. Interactive courses (11-course curriculum), plugin discovery, cross-plugin workflow guides, troubleshooting, quick-reference cheatsheets, and GitHub issue filing.",
   "author": {
     "name": "Stephan de Haas",
     "email": "stephan@cogni-work.ai"
   },
   "license": "AGPL-3.0-only",
   "keywords": [
+    "help",
+    "guide",
     "teaching",
     "courses",
     "training",
@@ -16,12 +18,11 @@
     "curriculum",
     "onboarding",
     "learning",
-    "tutorial",
-    "exercises",
-    "quizzes",
-    "progress-tracking",
-    "interactive",
-    "hands-on",
-    "slides"
+    "workflow",
+    "troubleshoot",
+    "cheatsheet",
+    "discovery",
+    "issues",
+    "diagnostics"
   ]
 }

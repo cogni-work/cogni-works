@@ -49,7 +49,7 @@ You want AI-native workflows for your sales and marketing teams — either self-
 | [cogni-obsidian](./cogni-obsidian) | Obsidian integration for Claude Cowork workplaces. Scaffolds vaults with Terminal plugin, manages terminal profiles across platforms, and provides note management with frontmatter support. |
 | [cogni-portfolio](./cogni-portfolio) | Portfolio messaging and proposition planning using IS/DOES/MEANS framework. Eight industry taxonomies, TAM/SAM/SOM market sizing, competitive analysis, and export-ready deliverables. |
 | [cogni-sales](./cogni-sales) | B2B sales pitch generation using Corporate Visions Why Change methodology. Research-backed presentations and proposals for named customers or market segments. Bilingual DE/EN. |
-| [cogni-help](./cogni-help) | Interactive 45-minute courses teaching Claude Cowork fundamentals and cogni-works plugins. 11-course curriculum with hands-on exercises and progress tracking. |
+| [cogni-help](./cogni-help) | Central help hub — interactive courses (11-course curriculum), plugin discovery, cross-plugin workflow guides, troubleshooting, cheatsheets, and GitHub issue filing. |
 | [cogni-tips](./cogni-tips) | Strategic trend scouting and reporting pipeline. Combines the Smarter Service Trendradar with the TIPS framework for DACH-focused industry trend analysis. Bilingual EN/DE. |
 | [cogni-visual](./cogni-visual) | Transform polished narratives into visual deliverables — slide decks, big-picture journey maps, Big Block solution architectures, scrollable web narratives, and poster storyboards. |
 | [cogni-workspace](./cogni-workspace) | Lean workspace orchestrator. Manages shared foundation (env vars, settings), theme management, plugin discovery, and workspace health diagnostics. |
@@ -107,7 +107,7 @@ cogni-works/
 ├── cogni-obsidian/                         # Obsidian integration
 ├── cogni-portfolio/                        # Portfolio messaging & planning
 ├── cogni-sales/                            # B2B sales pitch generation
-├── cogni-help/                          # Interactive training courses
+├── cogni-help/                            # Help hub: courses, guide, workflows, troubleshoot
 ├── cogni-tips/                             # Trend scouting & reporting
 ├── cogni-visual/                           # Visual deliverables
 ├── cogni-workspace/                        # Workspace orchestrator

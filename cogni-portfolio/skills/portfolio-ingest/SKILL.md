@@ -196,3 +196,18 @@ Suggest the logical next step based on what was ingested:
 - When re-running ingest on new documents, existing context entries are preserved. The index is rebuilt from all files in `context/`, not just the current batch.
 - **Communication Language**: Read `portfolio.json` in the project root. If a `language` field is present, communicate with the user in that language (status messages, instructions, recommendations, questions). Technical terms, skill names, and CLI commands remain in English. If no `language` field is present, default to English.
 - Refer to `$CLAUDE_PLUGIN_ROOT/references/data-model.md` for complete entity and context schemas
+
+## Session Management
+
+After completing document ingestion with entities created across multiple types (products, features, markets, context), proactively offer the user a visual snapshot. Signs that this is the right moment:
+
+- Ingestion created entities across 2+ entity types (e.g., products + features + markets)
+- Multiple documents were processed in a single session
+- Three or more different portfolio skills were already invoked this session
+- The user asks "how much context do you have left" or similar
+
+When you notice these signals, first invoke `/portfolio-dashboard` to generate the portfolio dashboard — this gives the user a visual overview of everything accomplished so far. Then recommend a fresh session:
+
+> "We got a lot done: [brief summary of accomplishments]. I've generated the dashboard so you can see the full picture. For the next steps like [recommend next skills], I'd suggest starting a fresh session — just use `/portfolio-resume` to pick up where we left off. That loads the current state cleanly without carrying the weight of this session."
+
+Use the portfolio's communication language (read `portfolio.json` for the `language` field). Frame it as helpful advice for better output quality, not as a limitation. The key message: `/portfolio-resume` exists exactly for this — seamless multi-session workflows.

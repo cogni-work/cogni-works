@@ -51,6 +51,8 @@ Read all entity files from the project directory:
 - All `packages/*.json` (if available — product bundles per market)
 - All `competitors/*.json` and `customers/*.json` (if available)
 
+**Internal context (optional):** If `context/context-index.json` exists in the project directory, read it and look up entries in `by_relevance["propositions"]` and `by_relevance["solutions"]`. For each matching slug, read `context/{slug}.json` and note the `summary` and `detail`. Strategic context informs the executive summary and market positioning sections. Competitive context sharpens differentiation claims. Pricing context grounds the solutions overview. Incorporate high-confidence context into the relevant README sections — weave it into the narrative rather than listing context entries separately. When context entries reference specific entities via the `entities` field, apply that intelligence to those entities' sections specifically.
+
 If `cogni-claims/claims.json` exists, build a lookup of claim status by statement text for marking claims in the output:
 - Verified / resolved claims: no marker needed (trusted)
 - Deviated / unverified claims: mark with `[unverified]`

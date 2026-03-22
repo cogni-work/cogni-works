@@ -698,6 +698,16 @@ if isinstance(relevance, list):
         if r not in '$VALID_SKILLS'.split():
             errors_found.append(f'Invalid relevance skill: {r}')
 
+# Validate entity references point to actual portfolio files
+import os
+entities = data.get('entities', {})
+if isinstance(entities, dict):
+    for entity_type in ['products', 'features', 'markets']:
+        for slug in entities.get(entity_type, []):
+            entity_path = os.path.join('$PROJECT_DIR', entity_type, slug + '.json')
+            if not os.path.exists(entity_path):
+                errors_found.append(f'entities.{entity_type} references missing {entity_type[:-1]}: {slug}')
+
 for err in errors_found:
     print(f'E|{err}')
 " 2>/dev/null | while IFS='|' read -r level msg; do

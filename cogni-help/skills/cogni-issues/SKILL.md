@@ -2,7 +2,7 @@
 name: cogni-issues
 description: |
   File and track GitHub issues (bugs, feature requests, change requests, questions) against
-  cogni-works ecosystem plugins. Guides users through a short consultation to capture the
+  insight-wave ecosystem plugins. Guides users through a short consultation to capture the
   right details, resolves the target plugin's repository automatically, drafts issues from
   templates, creates them via `gh` CLI, and tracks them locally.
   Use this skill whenever the user wants to report a bug, request a feature, file a change
@@ -16,7 +16,7 @@ description: |
 
 # Cogni Issues
 
-Manage the lifecycle of GitHub issues for cogni-works ecosystem plugins: consult with the
+Manage the lifecycle of GitHub issues for insight-wave ecosystem plugins: consult with the
 user to understand the problem clearly, resolve which repository the plugin belongs to,
 draft issues from templates, create them via `gh`, and track them locally.
 
@@ -304,7 +304,7 @@ gh issue view <number> --repo "<owner_repo>" --web
 ## Scripts
 
 - **`scripts/setup-gh.sh`** — Checks gh CLI installation and authentication status. Returns JSON with `all_ready` boolean. Run with `check` command.
-- **`scripts/resolve-plugin.sh`** — Resolves a plugin name to its GitHub repo by scanning marketplace.json files. All cogni-works plugins resolve to the monorepo `cogni-work/cogni-works`.
+- **`scripts/resolve-plugin.sh`** — Resolves a plugin name to its GitHub repo by scanning marketplace.json files. All insight-wave plugins resolve to the monorepo `insight-wave/insight-wave`.
 - **`scripts/issue-store.sh`** — Local JSON state management (init, gen-id, add, read, update-status). The `add` command reads JSON from stdin for safety.
 
 ## References

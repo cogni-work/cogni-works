@@ -1,0 +1,9 @@
+{
+  "slug": "consulting-services",
+  "name": "Consulting Services",
+  "description": "Strategy, transformation, and advisory offerings including IT strategy, digital transformation, industry consulting, and program management.",
+  "revenue_model": "project",
+  "maturity": "mature",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

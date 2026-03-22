@@ -1,0 +1,80 @@
+{
+  "expectations": [
+    {
+      "text": "SOL-01: Solution JSON has solution_type: project",
+      "passed": false,
+      "evidence": "Neither the original solution (cloud-migration--grosse-energieversorger-de.json) nor the revised solution (solution-revised.json) contains a solution_type field. The field is entirely absent."
+    },
+    {
+      "text": "SOL-02: Solution has 2-5 implementation phases",
+      "passed": true,
+      "evidence": "Both original and revised solutions contain exactly 5 phases: (1) Discovery & Assessment, (2) Mobilize & Foundation, (3) Sprint-basierte Migration Welle 1, (4) Sprint-basierte Migration Welle 2, (5) Modernize & Optimize."
+    },
+    {
+      "text": "SOL-03: All four pricing tiers present (proof_of_value, small, medium, large)",
+      "passed": false,
+      "evidence": "No tier-based pricing exists. The pricing section uses a per-phase cost structure with a single total_price of 2,420,080 EUR and a price_range (low/high). No proof_of_value, small, medium, or large tiers are defined."
+    },
+    {
+      "text": "SOL-04: cost_model present with effort_by_tier",
+      "passed": false,
+      "evidence": "No cost_model field exists. Pricing is structured as a flat rate_card with per-phase effort_days, not as effort_by_tier across sizing tiers."
+    },
+    {
+      "text": "SOL-05: PoV margin >= 5% and standard tier margins (small, medium, large) >= 25%",
+      "passed": false,
+      "evidence": "No tier-based margins exist. A single target_margin_pct of 30 is stated. Moreover, the arithmetic shows a markup of 30% (cost * 1.3 = price), which corresponds to a margin of ~23.1% ((price - cost) / price), falling below the 25% threshold even if it were applied to a tier."
+    },
+    {
+      "text": "SOL-06: Review assessment JSON produced with all three perspectives",
+      "passed": true,
+      "evidence": "review-assessment.json contains three perspectives: procurement-decision-maker, provider-side-solution-architect, client-side-solution-architect."
+    },
+    {
+      "text": "SOL-07: Each perspective has 5 scored criteria",
+      "passed": true,
+      "evidence": "All three perspectives in review-assessment.json have exactly 5 criteria each, all with score values (pass/warn/fail)."
+    },
+    {
+      "text": "SOL-08: Synthesis section has verdict (accept/revise/reject)",
+      "passed": true,
+      "evidence": "review-assessment.json synthesis contains verdict: 'revision_needed', which maps to the 'revise' category."
+    },
+    {
+      "text": "SOL-09: If verdict was revise, a second assessment exists with improved scores",
+      "passed": true,
+      "evidence": "Verdict was revision_needed. review-assessment-round2.json exists with round: 2. Scores improved from 11 pass / 3 warn / 1 fail to 14 pass / 1 warn / 0 fail. Final verdict: approved."
+    },
+    {
+      "text": "SOL-10: Phase descriptions are in German (portfolio language: de)",
+      "passed": true,
+      "evidence": "All phase descriptions are in German. Example: Phase 1 description starts with 'Umfassende Bestandsaufnahme der bestehenden IT-Landschaft...'"
+    },
+    {
+      "text": "SOL-11: Arithmetic consistency: for each tier, (price - internal_cost) / price matches stated margin_pct within 2 percentage points",
+      "passed": false,
+      "evidence": "No tier-based pricing exists to verify. The single overall pricing uses cost * 1.3 = price (markup model), yielding an effective margin of 23.1%, which is 6.9 percentage points below the stated 30% target_margin_pct. This exceeds the 2pp tolerance."
+    },
+    {
+      "text": "SOL-12: If revision occurred, revised solution differs from original in at least one field flagged by the review",
+      "passed": true,
+      "evidence": "Revision occurred. Round 1 flagged vendor lock-in/exit strategy (fail), contingency budget (warn), competitive TCO (warn), internal capacity (warn). The revised solution adds: exit_strategy section, contingency budget, competitive_tco_comparison, delegation model with 48h acceptance frist. All four flagged areas were addressed."
+    },
+    {
+      "text": "SOL-13: Solution includes exit clause or transition-out plan in assumptions",
+      "passed": true,
+      "evidence": "The revised solution includes a comprehensive exit_strategy section with 5 components: Daten-Souveranitat, Daten-Repatriierung (90 days), IaC Portabilitat, Multi-Cloud-Optionalitat, and Vertragsklauseln (12-month notice, 90-day transition, 5% cost cap)."
+    },
+    {
+      "text": "SOL-14: Solution includes client-side FTE commitment in assumptions",
+      "passed": false,
+      "evidence": "No explicit client-side FTE commitment is stated in constraints or assumptions. The solution mentions training for 8 operations staff and a delegation model with 2 customer contacts, but does not specify a formal FTE commitment requirement (e.g., 'customer provides N dedicated FTEs for the project duration')."
+    }
+  ],
+  "summary": {
+    "passed": 8,
+    "failed": 6,
+    "total": 14,
+    "pass_rate": 0.57
+  }
+}

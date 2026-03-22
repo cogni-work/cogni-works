@@ -1,0 +1,175 @@
+{
+  "slug": "cloud-services--grosse-energieversorger-de",
+  "product_slug": "cloud-services",
+  "market_slug": "grosse-energieversorger-de",
+  "name": "Cloud Services for Large German Energy Utilities",
+  "description": "Tiered cloud transformation packages designed for large German energy utilities with KRITIS obligations, NIS2 compliance requirements, and OT/IT convergence needs. Each tier builds on the previous, enabling procurement teams to right-size investment to organizational readiness and transformation ambition.",
+  "currency": "EUR",
+  "tiers": [
+    {
+      "tier": "foundation",
+      "name": "Cloud Foundation",
+      "tagline": "Compliance-first cloud entry with sovereign infrastructure",
+      "target_buyer": "IT-Leiter / Head of Infrastructure",
+      "description": "Establishes a compliant, sovereign cloud foundation that addresses the most urgent regulatory pressures (NIS2 deadline October 2026) while migrating an initial set of workloads. Ideal for utilities beginning their cloud journey or those needing to secure regulatory compliance before broader transformation.",
+      "solutions_included": [
+        {
+          "solution_slug": "sovereign-cloud--grosse-energieversorger-de",
+          "tier_size": "medium",
+          "rationale": "Multi-domain sovereign deployment provides the regulatory foundation (BSI C5, NIS2) that all subsequent cloud activities depend on."
+        },
+        {
+          "solution_slug": "cloud-migration--grosse-energieversorger-de",
+          "tier_size": "small",
+          "rationale": "Initial migration of up to 50 workloads validates the sovereign cloud platform and builds internal confidence."
+        }
+      ],
+      "pricing": {
+        "total": 370000,
+        "currency": "EUR",
+        "breakdown": {
+          "sovereign-cloud": 250000,
+          "cloud-migration": 120000
+        },
+        "payment_terms": "40% at contract signature, 30% at platform go-live, 30% at migration completion"
+      },
+      "duration_weeks": 24,
+      "outcomes": [
+        "NIS2-compliant sovereign cloud platform operational",
+        "BSI C5 audit-ready compliance documentation",
+        "Up to 50 workloads migrated to sovereign infrastructure",
+        "Data residency guaranteed within EU jurisdiction",
+        "Foundation for KRITIS audit readiness"
+      ],
+      "proof_of_value": {
+        "price": 35000,
+        "scope": "NIS2 compliance gap assessment combined with a 5-workload pilot migration to sovereign cloud, 4-week delivery",
+        "converts_to": "Full Foundation package investment credited against contract"
+      }
+    },
+    {
+      "tier": "professional",
+      "name": "Cloud Professional",
+      "tagline": "Hybrid operations with managed hyperscaler expertise",
+      "target_buyer": "CIO / VP Infrastructure & Operations",
+      "description": "Extends the sovereign foundation with hybrid cloud architecture for OT/IT integration and managed hyperscaler operations. Designed for utilities that need to bridge operational technology (SCADA, grid control) with cloud-native IT workloads while outsourcing day-to-day hyperscaler management to certified experts.",
+      "solutions_included": [
+        {
+          "solution_slug": "sovereign-cloud--grosse-energieversorger-de",
+          "tier_size": "medium",
+          "rationale": "Multi-domain sovereign deployment as the regulated workload backbone."
+        },
+        {
+          "solution_slug": "hybrid-cloud--grosse-energieversorger-de",
+          "tier_size": "medium",
+          "rationale": "Multi-site MCCP deployment bridges on-premises OT systems with cloud IT, maintaining air-gap isolation for SCADA."
+        },
+        {
+          "solution_slug": "cloud-migration--grosse-energieversorger-de",
+          "tier_size": "medium",
+          "rationale": "Migration of up to 200 workloads including SAP IS-U to the hybrid platform."
+        },
+        {
+          "solution_slug": "managed-hyperscaler--grosse-energieversorger-de",
+          "tier_size": "small",
+          "rationale": "Managed operations for the primary hyperscaler environment, providing 24/7 coverage without in-house staffing."
+        }
+      ],
+      "pricing": {
+        "total": 835000,
+        "currency": "EUR",
+        "breakdown": {
+          "sovereign-cloud": 250000,
+          "hybrid-cloud": 220000,
+          "cloud-migration": 280000,
+          "managed-hyperscaler": 85000
+        },
+        "discount": "Bundle discount of 7% applied vs. individual solution pricing",
+        "payment_terms": "30% at contract signature, 25% at platform deployment, 25% at migration midpoint, 20% at completion"
+      },
+      "duration_weeks": 32,
+      "outcomes": [
+        "All Foundation tier outcomes included",
+        "Hybrid cloud platform spanning on-premises and public cloud",
+        "OT/IT workload integration with BSI-certified air-gap isolation",
+        "Up to 200 workloads migrated including SAP IS-U",
+        "24/7 managed operations for primary hyperscaler",
+        "40% faster deployment of grid management applications",
+        "Single governance framework across all cloud environments"
+      ],
+      "proof_of_value": {
+        "price": 55000,
+        "scope": "NIS2 gap assessment, OT/IT boundary architecture blueprint, and Well-Architected Review for one hyperscaler, 5-week delivery",
+        "converts_to": "Full Professional package investment credited against contract"
+      }
+    },
+    {
+      "tier": "enterprise",
+      "name": "Cloud Enterprise",
+      "tagline": "Full-estate cloud transformation with end-to-end managed operations",
+      "target_buyer": "CDO / Vorstand Digitalisierung / Board-level sponsor",
+      "description": "Comprehensive cloud transformation covering the entire IT estate. Combines sovereign infrastructure, enterprise-wide hybrid architecture, full workload migration (500+ workloads), and multi-hyperscaler managed operations. Designed for utilities committing to a strategic cloud-first operating model with T-Systems as the long-term managed services partner.",
+      "solutions_included": [
+        {
+          "solution_slug": "sovereign-cloud--grosse-energieversorger-de",
+          "tier_size": "large",
+          "rationale": "Enterprise-wide sovereign cloud with BaFin audit support and ongoing compliance management."
+        },
+        {
+          "solution_slug": "hybrid-cloud--grosse-energieversorger-de",
+          "tier_size": "large",
+          "rationale": "Enterprise-wide hybrid platform with full OT integration across all sites."
+        },
+        {
+          "solution_slug": "cloud-migration--grosse-energieversorger-de",
+          "tier_size": "large",
+          "rationale": "Full estate migration of 500+ workloads across all application domains."
+        },
+        {
+          "solution_slug": "managed-hyperscaler--grosse-energieversorger-de",
+          "tier_size": "large",
+          "rationale": "All three hyperscalers managed with unlimited instances and a dedicated Customer Success Manager."
+        }
+      ],
+      "pricing": {
+        "total": 1800000,
+        "currency": "EUR",
+        "breakdown": {
+          "sovereign-cloud": 520000,
+          "hybrid-cloud": 450000,
+          "cloud-migration": 650000,
+          "managed-hyperscaler": 380000
+        },
+        "discount": "Bundle discount of 10% applied vs. individual solution pricing; additional volume discounts negotiable for multi-year commitment",
+        "payment_terms": "20% at contract signature, milestone-based payments across 6 delivery milestones, 10% retention until final acceptance"
+      },
+      "duration_weeks": 40,
+      "outcomes": [
+        "All Professional tier outcomes included",
+        "Complete IT estate migrated to cloud (500+ workloads)",
+        "Enterprise-wide sovereign cloud with BaFin audit support",
+        "Full OT integration across all operational sites",
+        "Multi-hyperscaler managed operations (AWS, Azure, GCP)",
+        "35% reduction in IT operations cost",
+        "EUR 2M annual savings in cloud operations staffing",
+        "99.95% availability SLA for energy trading systems",
+        "Dedicated Customer Success Manager",
+        "NIS2 compliance achieved ahead of October 2026 deadline"
+      ],
+      "proof_of_value": {
+        "price": 75000,
+        "scope": "Comprehensive assessment: NIS2 gap analysis, full application portfolio 6R classification, OT/IT architecture blueprint, Well-Architected Reviews across all hyperscaler environments, and executive transformation roadmap, 6-week delivery",
+        "converts_to": "Full Enterprise package investment credited against contract"
+      }
+    }
+  ],
+  "cross_tier_terms": {
+    "contract_currency": "EUR",
+    "sla_framework": "T-Systems Enterprise SLA with energy-sector-specific availability guarantees",
+    "compliance_standards": ["BSI C5 Type 2", "NIS2", "KRITIS", "ISO 27001", "GDPR"],
+    "data_residency": "All data processed and stored within EU; sovereign cloud workloads exclusively in German data centers",
+    "escalation": "Named Service Delivery Manager with direct escalation to T-Systems energy sector vertical lead",
+    "upgrade_path": "Customers may upgrade from any tier to the next; invested amounts are credited toward the higher tier"
+  },
+  "created": "2026-03-18"
+}

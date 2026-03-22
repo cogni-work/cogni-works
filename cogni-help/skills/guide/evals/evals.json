@@ -15,7 +15,7 @@
     },
     {
       "id": 2,
-      "prompt": "What can I do with cogni-works?",
+      "prompt": "What can I do with insight-wave?",
       "expected_output": "Shows the ecosystem map grouped by category (Research, Content, Go-to-Market, Orchestration, Support) with brief descriptions",
       "files": []
     },

@@ -1,0 +1,122 @@
+{
+  "slug": "grosse-energieversorger-de",
+  "market_slug": "grosse-energieversorger-de",
+  "profiles": [
+    {
+      "role": "CIO / Bereichsleiter IT",
+      "seniority": "C-1 / Vorstandsebene-1",
+      "pain_points": [
+        "SAP IS-U Ablösung bis 2027 erzwingt eine Cloud-Migrationsentscheidung unter Zeitdruck bei gleichzeitigem 24/7-Netzbetrieb",
+        "Fachkräftemangel in der IT-Abteilung — aktuell 15-20% offene Stellen für Cloud- und Security-Spezialisten, verschärft durch Konkurrenz mit Hyperscalern um Talente",
+        "OT/IT-Konvergenz erfordert Integration von Netzleitsystemen (SCADA/IEC 61850) mit Cloud-Plattformen ohne Angriffsflächen zu vergrößern",
+        "Multi-Cloud-Governance über AWS, Azure und Sovereign Cloud hinweg fehlt — keine zentrale Sicht auf Kosten, Compliance und Workload-Verteilung",
+        "Steigende IT-Budgetanforderungen durch NIS2, KRITIS-DachG und Smart-Meter-Rollout konkurrieren mit Netzausbau-Investitionen um begrenzte Mittel"
+      ],
+      "buying_criteria": [
+        "BSI-C5-Testat Typ 2 als Mindestanforderung für Cloud-Infrastruktur",
+        "Nachgewiesene Referenzen bei deutschen Energieversorgern mit KRITIS-Pflichten",
+        "Rahmenvertragsfähigkeit über 4-8 Jahre mit flexiblem Abrufmodell",
+        "24/7-Betrieb mit garantierter 15-Minuten-Reaktionszeit für kritische Systeme",
+        "Migrationsmethodik mit Parallelbetrieb-Ansatz zur Vermeidung von Betriebsunterbrechungen"
+      ],
+      "information_sources": [
+        "E-world energy & water (Essen, jährlich Februar)",
+        "Handelsblatt Energietagung",
+        "BDEW-Kongress",
+        "Tagesspiegel Background Energie & Klima",
+        "CIO-Erfahrungsaustausch der Energieversorger"
+      ],
+      "decision_role": "Initiator und Champion — bringt das Cloud-Vorhaben auf die Vorstandsagenda, koordiniert die Evaluation und steuert das Buying Committee. Hat Budget-Verantwortung bis zur Vorstandsfreigabe-Schwelle."
+    },
+    {
+      "role": "CISO / Leiter Informationssicherheit",
+      "seniority": "Bereichsleiter, berichtet direkt an Vorstand (KRITIS-bedingt)",
+      "pain_points": [
+        "NIS2-Registrierungspflicht bis April 2026 erfordert Nachweis eines zertifizierten ISMS und Lieferketten-Sicherheitskonzepts für alle IT-Dienstleister",
+        "KRITIS-DachG-Durchsetzung ab Januar 2026 mit Bußgeldern bis 2% des Jahresumsatzes bei Verstößen gegen physische und IT-Sicherheitsanforderungen",
+        "BSI-Prüfverfahren für neue Cloud-Dienstleister dauern 3-6 Monate und verzögern Migrationsprojekte erheblich",
+        "Zunehmende Cyberangriffe auf Energieinfrastruktur — BSI-Lagebericht 2025 meldet 30% mehr Angriffe auf KRITIS-Betreiber gegenüber Vorjahr",
+        "IT-Sicherheitskatalog gemäß §11 EnWG/BNetzA verlangt Zertifizierung aller betriebsrelevanten Systeme einschließlich Cloud-Dienste"
+      ],
+      "buying_criteria": [
+        "BSI-C5-Testat Typ 2 und ISO 27001 auf Basis IT-Grundschutz als zwingende Voraussetzung",
+        "Datenhaltung ausschließlich in EU-Rechenzentren unter EU-Jurisdiktion (Schrems-II-konform)",
+        "Nachweis eines Lieferketten-Sicherheitskonzepts gemäß NIS2 Art. 21",
+        "Penetrationstest-Berichte und SOC-2-Attestierung auf Anforderung verfügbar",
+        "Dedizierte Security-Incident-Eskalation mit garantierter Erstreaktion unter 15 Minuten"
+      ],
+      "information_sources": [
+        "BSI-Grundschutz-Kompendium und BSI-Veröffentlichungen",
+        "BDEW Whitepaper IT-Sicherheit",
+        "IT-Sicherheitskongress des BSI (Bonn, jährlich)",
+        "Tagesspiegel Background Cybersecurity",
+        "VDE/DKE-Normungsarbeit für Energiesektor-Sicherheit (IEC 62351)"
+      ],
+      "decision_role": "Unabhängiger Vetoinhaber — hat formales Vetorecht bei allen IT-Beschaffungen mit Sicherheitsrelevanz. Prüft und genehmigt Cloud-Dienstleister unabhängig vom CIO. BSI-Vetting durch den CISO ist der häufigste Deal-Verzögerungspunkt (3-6 Monate)."
+    },
+    {
+      "role": "Leiter Beschaffung / Einkauf (Procurement)",
+      "seniority": "Bereichsleiter",
+      "pain_points": [
+        "SektVO-konforme Ausschreibungsverfahren für IT-Dienstleistungen über 431.000 EUR Schwellenwert erfordern 2-4 Monate formale Tendering-Phase",
+        "EU-Vergaberecht verlangt transparente Bewertungskriterien und Dokumentation — Vergaberügen durch unterlegene Bieter binden erhebliche Ressourcen",
+        "Rahmenverträge mit IT-Dienstleistern sind auf 4-8 Jahre ausgelegt, Wechselkosten extrem hoch — Fehlentscheidung bindet das Unternehmen eine Dekade",
+        "Betriebsrat-Mitbestimmung bei IT-Outsourcing-Projekten gemäß §111 BetrVG erfordert frühzeitige Einbindung und verzögert Vergabeentscheidungen"
+      ],
+      "buying_criteria": [
+        "SektVO-konforme Angebots- und Vertragsstruktur mit vollständiger Vergabedokumentation",
+        "Wirtschaftlichkeitsnachweis (TCO-Analyse) über Rahmenvertragslaufzeit von mindestens 5 Jahren",
+        "Referenzliste mit mindestens 3 vergleichbaren KRITIS-Energieversorgern als Bestandskunden",
+        "Nachweisbare finanzielle Stabilität und Konzerneinbindung (Deutsche Telekom als Muttergesellschaft)",
+        "Rahmenvertragsfähig mit flexiblen Abrufmechanismen und Service-Level-Agreements"
+      ],
+      "information_sources": [
+        "Vergaberecht-Fachpublikationen (VergabeR, NZBau)",
+        "Beschaffungskongress der öffentlichen Hand",
+        "BDEW-Einkaufsleiter-Netzwerk",
+        "Lünendonk-Studie: IT-Dienstleister in der Energiewirtschaft"
+      ],
+      "decision_role": "Formaler Gatekeeper — steuert den Vergabeprozess, stellt SektVO-Konformität sicher und hat Vetorecht bei Nicht-Einhaltung der Vergabevorschriften. Kann das Verfahren jederzeit stoppen, wenn Vergaberechtsverstöße drohen."
+    },
+    {
+      "role": "Leiter Netzbetrieb / OT-Verantwortlicher",
+      "seniority": "Bereichsleiter, berichtet an Technischer Vorstand",
+      "pain_points": [
+        "Smart-Meter-Gateway-Rollout skaliert von 15% auf 95% bis 2030 — erfordert massiv skalierbare Dateninfrastruktur für Messdatenverarbeitung",
+        "Netzleitsysteme (SCADA) müssen 24/7 verfügbar sein — jede Minute Ausfall kostet bis zu 500.000 EUR Netzentgelt-Rückforderungen und gefährdet Versorgungssicherheit",
+        "IEC 61850 Substations und IEC 62351 Sicherheitsstandards erfordern spezielle OT-Cloud-Integration ohne Internet-Exposition der Leitwarte",
+        "Fachkräftemangel im OT-Bereich noch gravierender als in der IT — Netzingenieure mit Cloud-Kompetenz praktisch nicht am Markt verfügbar"
+      ],
+      "buying_criteria": [
+        "Air-Gap-fähige Hybrid-Cloud-Architektur mit BSI-zertifizierter Trennung zwischen OT- und IT-Netz",
+        "99,95% Verfügbarkeits-SLA für Systeme im Netzsteuerungsumfeld",
+        "Nachgewiesene OT-Kompetenz mit Referenzen bei Verteilnetzbetreibern",
+        "Kompatibilität mit bestehenden SCADA-Systemen (Siemens Spectrum Power, ABB Ability)"
+      ],
+      "information_sources": [
+        "VDE/ETG Fachtagungen",
+        "E-world energy & water (OT-Track)",
+        "Energiewirtschaftliche Tagesfragen (et)",
+        "VDI Nachrichten",
+        "BDEW-Arbeitskreis Netzdigitalisierung"
+      ],
+      "decision_role": "Technischer Evaluierer mit De-facto-Vetorecht — wenn der Netzleiter sagt, eine Lösung gefährdet die Versorgungssicherheit, wird sie nicht beschafft. Bewertet Cloud-Konzepte aus OT-Perspektive und validiert Air-Gap-Anforderungen."
+    }
+  ],
+  "buying_committee": {
+    "size": "7-12 Personen bei IT-Großprojekten über 5 Mio. EUR",
+    "decision_model": "Konsensbasiert mit verteilten Vetorechten — CIO steuert, CISO und Einkauf haben unabhängige Vetorechte, Betriebsrat bei Outsourcing-Komponenten",
+    "typical_deal_size": "5-8 Mio. EUR ACV für Cloud-Transformationsprogramme",
+    "sales_cycle": "9-18 Monate von Erstgespräch bis Vertragsunterschrift",
+    "champion_sequence": "CIO initiiert → Netzleiter validiert OT-Anforderungen → CISO prüft Sicherheit (3-6 Monate) → Einkauf führt SektVO-Vergabe durch (2-4 Monate) → CFO/Vorstand genehmigt bei >5 Mio. EUR → Betriebsrat bei Outsourcing-Anteil",
+    "stall_points": [
+      "BSI-Sicherheitsprüfung durch den CISO: 3-6 Monate, häufigster Blocker",
+      "SektVO-Ausschreibung durch Einkauf: 2-4 Monate formale Phase, Vergaberüge-Risiko",
+      "Betriebsrat-Anhörung bei IT-Outsourcing gemäß §111 BetrVG: 1-3 Monate",
+      "Vorstandsgenehmigung für Investitionen über 5 Mio. EUR: 1-2 Monate (Aufsichtsrat bei >10 Mio. EUR)",
+      "SAP-IS-U-Abhängigkeit: Migration kann erst starten, wenn S/4HANA-Migrationsplan steht — erzeugt Warteschlange",
+      "Haushaltszyklus: Großinvestitionen müssen im Wirtschaftsplan des Folgejahres eingeplant sein — Verpassen des Planungsfensters (Juni-September) verzögert um 12 Monate"
+    ]
+  },
+  "created": "2026-03-19"
+}

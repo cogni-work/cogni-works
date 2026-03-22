@@ -1,0 +1,13 @@
+{
+  "slug": "sd-wan-platform",
+  "name": "Managed SD-WAN Platform",
+  "description": "Juniper-powered managed SD-WAN with Contrail orchestration and SRX security gateways for enterprise branch connectivity",
+  "product_slug": "t-systems-connectivity",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 1,
+    "category_id": "1.1",
+    "category_name": "WAN Services"
+  },
+  "source_file": "https://www.fierce-network.com/telecom/juniper-networks-powers-t-systems-managed-sd-wan-platform"
+}

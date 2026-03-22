@@ -1,0 +1,67 @@
+{
+  "total_checks": 7,
+  "passed": 7,
+  "failed": 0,
+  "pass_rate": 1.0,
+  "expectations": [
+    {
+      "text": "CSO combined avg >= 4.0 (actual: 4.0)",
+      "passed": true,
+      "evidence": "CSO avg: 4.0, dims: {'quota_impact': 4, 'pipeline_acceleration': 4, 'objection_handling': 4, 'competitive_win_ability': 4, 'account_team_usability': 4, 'deal_qualification_signal': 4}"
+    },
+    {
+      "text": "Analyst combined avg >= 4.0 (actual: 4.17)",
+      "passed": true,
+      "evidence": "Analyst avg: 4.17, dims: {'market_landscape_accuracy': 4, 'positioning_validity': 4, 'strength_weakness_balance': 4, 'differentiation_defensibility': 4, 'trap_question_sophistication': 4, 'segment_relevance': 5}"
+    },
+    {
+      "text": "No dimension below 3 from either reviewer",
+      "passed": true,
+      "evidence": "All dimensions >= threshold"
+    },
+    {
+      "text": "CSO would_use_in_pitch_deck is true",
+      "passed": true,
+      "evidence": "would_use_in_pitch_deck: True"
+    },
+    {
+      "text": "Analyst would_use_in_advisory_report is true",
+      "passed": true,
+      "evidence": "would_use_in_advisory_report: True"
+    },
+    {
+      "text": "Loop converged within max_iterations",
+      "passed": true,
+      "evidence": "Reason: passed, iterations: 2"
+    },
+    {
+      "text": "At least one competitor file was rewritten (loop exercised)",
+      "passed": true,
+      "evidence": "2 rewrite iteration(s) detected"
+    }
+  ],
+  "review_scores": {
+    "cso_avg": 4.0,
+    "analyst_avg": 4.17,
+    "combined_avg": 4.08,
+    "min_dim": 4,
+    "cso_scores": {
+      "quota_impact": 4,
+      "pipeline_acceleration": 4,
+      "objection_handling": 4,
+      "competitive_win_ability": 4,
+      "account_team_usability": 4,
+      "deal_qualification_signal": 4
+    },
+    "analyst_scores": {
+      "market_landscape_accuracy": 4,
+      "positioning_validity": 4,
+      "strength_weakness_balance": 4,
+      "differentiation_defensibility": 4,
+      "trap_question_sophistication": 4,
+      "segment_relevance": 5
+    },
+    "would_use_in_pitch_deck": true,
+    "would_use_in_advisory_report": true
+  }
+}

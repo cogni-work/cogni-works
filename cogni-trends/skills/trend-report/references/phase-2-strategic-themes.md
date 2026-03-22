@@ -101,7 +101,7 @@ Per agent:
 
 The investment-theme-writer agent optionally loads the `theme-thesis` arc from cogni-narrative for Corporate Visions-guided storytelling. To resolve the arc path:
 
-1. Check if `cogni-narrative` plugin is installed by looking for its arc-definition file at the expected plugin cache path (e.g., `~/.claude/plugins/cache/cogni-works/cogni-narrative/*/skills/narrative/references/story-arc/theme-thesis/arc-definition.md`) or the monorepo path (`{MONOREPO_ROOT}/cogni-narrative/skills/narrative/references/story-arc/theme-thesis/arc-definition.md`)
+1. Check if `cogni-narrative` plugin is installed by looking for its arc-definition file at the expected plugin cache path (e.g., `~/.claude/plugins/cache/insight-wave/cogni-narrative/*/skills/narrative/references/story-arc/theme-thesis/arc-definition.md`) or the monorepo path (`{MONOREPO_ROOT}/cogni-narrative/skills/narrative/references/story-arc/theme-thesis/arc-definition.md`)
 2. If the file exists, pass its absolute path as `NARRATIVE_ARC_PATH` and the techniques file as `NARRATIVE_TECHNIQUES_PATH`
 3. If cogni-narrative is not installed, **omit both parameters** — the agent falls back to the flat template structure (backward-compatible)
 

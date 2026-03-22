@@ -1,5 +1,5 @@
 #!/bin/bash
-# Quick health check for cogni-works plugin ecosystem.
+# Quick health check for insight-wave plugin ecosystem.
 # Usage: health-check.sh [project-dir]
 # Outputs JSON with plugin availability, stale state, and dependency status.
 # Exit codes: 0 = success, 1 = error

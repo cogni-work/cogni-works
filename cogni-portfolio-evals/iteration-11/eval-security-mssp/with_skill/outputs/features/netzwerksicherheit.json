@@ -1,0 +1,16 @@
+{
+  "slug": "netzwerksicherheit",
+  "product_slug": "managed-security",
+  "name": "Netzwerksicherheit",
+  "description": "Mehrschichtige Netzwerkabsicherung durch Managed Firewalls, Intrusion-Detection-Systeme und Mikrosegmentierung, wobei Deep-Packet-Inspection den Datenverkehr in Echtzeit auf bekannte und unbekannte Angriffsmuster analysiert.",
+  "category": "prevention",
+  "taxonomy_mapping": {
+    "dimension": 2,
+    "dimension_name": "Security",
+    "category_id": "2.2",
+    "category_name": "Network Security",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "created": "2026-03-21"
+}

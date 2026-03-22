@@ -1,0 +1,166 @@
+{
+  "slug": "sovereign-cloud--grosse-energieversorger-de",
+  "proposition_slug": "sovereign-cloud--grosse-energieversorger-de",
+  "feature_slug": "sovereign-cloud",
+  "market_slug": "grosse-energieversorger-de",
+  "product_slug": "cloud-services",
+  "title": "Sovereign-Cloud-Plattform fuer grosse deutsche Energieversorger",
+  "summary": "Souveraene Cloud-Infrastruktur auf Basis von Open-Source-Technologien mit BSI-C5-Attestierung fuer KRITIS-relevante Anwendungen grosser deutscher Energieversorger. Betrieb in deutschen Rechenzentren mit vollstaendiger Datenhoheit. 40-60% Reduktion des regulatorischen Aufwands fuer IT-Sicherheitsnachweise. Zielgruppe: E.ON, RWE, EnBW, Vattenfall Deutschland, Uniper.",
+  "implementation_plan": {
+    "phases": [
+      {
+        "phase": 1,
+        "name": "Sovereignty Assessment & Architecture",
+        "duration_weeks": 4,
+        "description": "Analyse der bestehenden KRITIS-relevanten Workloads und Compliance-Anforderungen. Definition der Sovereignty-Anforderungen (BSI-C5, NIS2, KRITIS-DachG, DSGVO). Zielarchitektur-Design fuer Sovereign Cloud inkl. Datenklassifizierung und Residency-Regeln.",
+        "deliverables": [
+          "KRITIS-Workload-Inventar mit Datenklassifizierung",
+          "Compliance-Anforderungskatalog (BSI-C5 Typ 2, NIS2, KRITIS-DachG)",
+          "Sovereign-Cloud-Zielarchitektur (T Cloud Public, OSC oder Google Sovereign)",
+          "Datenresidenz-Regeln und Zugriffsmodell",
+          "Gap-Analyse: Ist-Zustand vs. Sovereign-Cloud-Anforderungen",
+          "Business-Case: Compliance-Kostenvergleich (Eigenleistung vs. Plattform-Attestierung)"
+        ],
+        "team": [
+          { "role": "Solution Architect", "count": 2, "utilization_pct": 100 },
+          { "role": "Implementation Engineer", "count": 1, "utilization_pct": 30 },
+          { "role": "Project Manager", "count": 1, "utilization_pct": 60 }
+        ]
+      },
+      {
+        "phase": 2,
+        "name": "Platform Provisioning & Hardening",
+        "duration_weeks": 6,
+        "description": "Bereitstellung der Sovereign-Cloud-Plattform in BSI-C5-attestierten Rechenzentren. Netzwerk-Segmentierung, Identity & Access Management, Verschluesselung und Key-Management. Integration in bestehende SIEM/SOC-Infrastruktur des Kunden.",
+        "deliverables": [
+          "Sovereign-Cloud-Plattform provisioniert (Compute, Storage, Netzwerk)",
+          "BSI-C5-konforme Netzwerk-Segmentierung und Firewalling",
+          "IAM-Integration mit Kunden-Active-Directory/LDAP",
+          "Verschluesselung at-rest und in-transit mit kundenverwaltetem Key-Management",
+          "SIEM/SOC-Integration (Log-Forwarding, Alerting)",
+          "Haertungsdokumentation nach BSI-Grundschutz"
+        ],
+        "team": [
+          { "role": "Solution Architect", "count": 2, "utilization_pct": 80 },
+          { "role": "Implementation Engineer", "count": 3, "utilization_pct": 100 },
+          { "role": "Project Manager", "count": 1, "utilization_pct": 80 }
+        ]
+      },
+      {
+        "phase": 3,
+        "name": "KRITIS Workload Onboarding",
+        "duration_weeks": 10,
+        "description": "Schrittweises Onboarding der KRITIS-relevanten Workloads auf die Sovereign Cloud. Beginn mit weniger kritischen Anwendungen, dann Eskalation zu hochsensiblen Systemen. Jedes Onboarding durchlaeuft Security-Review und Compliance-Validierung.",
+        "deliverables": [
+          "Onboarding von 20-40 KRITIS-relevanten Workloads",
+          "Security-Review-Protokoll je Workload",
+          "BSI-C5-Compliance-Nachweis fuer onboardete Workloads",
+          "Performance- und Verfuegbarkeits-Baseline",
+          "Incident-Response-Playbooks (KRITIS-spezifisch)",
+          "BSI-Audit-Trail-Dokumentation"
+        ],
+        "team": [
+          { "role": "Solution Architect", "count": 1, "utilization_pct": 60 },
+          { "role": "Implementation Engineer", "count": 4, "utilization_pct": 100 },
+          { "role": "Project Manager", "count": 1, "utilization_pct": 80 }
+        ]
+      },
+      {
+        "phase": 4,
+        "name": "Compliance Automation & Steady-State",
+        "duration_weeks": 6,
+        "description": "Automatisierung der Compliance-Nachweisfuehrung (Continuous Compliance Monitoring). Aufbau von Self-Service-Faehigkeiten fuer den Kunden. Uebergabe in den Regelbetrieb mit SLA-basiertem Service-Management.",
+        "deliverables": [
+          "Continuous Compliance Dashboard (BSI-C5, NIS2 Status in Echtzeit)",
+          "Automatisierte Compliance-Reports fuer BSI-Audits",
+          "Self-Service-Portal fuer Workload-Deployment",
+          "SLA-Framework (Verfuegbarkeit 99.95%, RTO/RPO-Garantien)",
+          "Betriebshandbuch und Eskalationsmatrix",
+          "Wissenstransfer an Retained-IT (Security-Operations)"
+        ],
+        "team": [
+          { "role": "Solution Architect", "count": 1, "utilization_pct": 60 },
+          { "role": "Implementation Engineer", "count": 2, "utilization_pct": 80 },
+          { "role": "Project Manager", "count": 1, "utilization_pct": 40 }
+        ]
+      }
+    ],
+    "total_duration_weeks": 26,
+    "constraints": [
+      "Alle Daten muessen in deutschen Rechenzentren verbleiben (keine Datenverarbeitung ausserhalb DE)",
+      "Nur BSI-C5-Typ-2-attestierte Infrastruktur zulaessig",
+      "Keine Abhaengigkeit von aussereuropaeischer Jurisdiktion (CLOUD Act, FISA)",
+      "OT-Systeme (SCADA, Netzleittechnik) bleiben ausserhalb der Cloud-Plattform",
+      "Customer stellt Staging-Umgebung-Zugang innerhalb von 5 Werktagen bereit",
+      "Remote-Delivery als Default; On-Site fuer Security-relevante Phasen"
+    ],
+    "risks": [
+      {
+        "risk": "BSI-C5-Attestierung der Plattform laeuft aus oder wird nicht rechtzeitig erneuert",
+        "impact": "high",
+        "probability": "low",
+        "mitigation": "Vertragliche Zusicherung der Attestierungskontinuitaet; Eskalationsklausel bei Verlust"
+      },
+      {
+        "risk": "Sovereign-Cloud-Kapazitaetsengpaesse bei gleichzeitigem Onboarding mehrerer KRITIS-Kunden",
+        "impact": "medium",
+        "probability": "medium",
+        "mitigation": "Fruehzeitige Kapazitaetsreservierung; SLA mit dedizierten Compute-Pools"
+      },
+      {
+        "risk": "NIS2-Enforcement (April 2026) erfordert zusaetzliche Massnahmen",
+        "impact": "medium",
+        "probability": "high",
+        "mitigation": "NIS2-Gap-Analyse in Phase 1; Compliance-Automatisierung in Phase 4 deckt neue Anforderungen ab"
+      },
+      {
+        "risk": "Key-Management-Integration scheitert an Kunden-HSM-Inkompatibilitaet",
+        "impact": "high",
+        "probability": "low",
+        "mitigation": "HSM-Kompatibilitaetstest in Phase 2; Fallback auf T-Systems-managed HSM"
+      }
+    ]
+  },
+  "pricing": {
+    "currency": "EUR",
+    "rate_card": [
+      { "role": "Solution Architect", "rate_day": 1800 },
+      { "role": "Implementation Engineer", "rate_day": 1200 },
+      { "role": "Project Manager", "rate_day": 1400 }
+    ],
+    "tiers": [
+      {
+        "tier": "Essential",
+        "scope": "Assessment + Platform Build (Phases 1-2), Onboarding durch Kunden",
+        "total_effort_days": 285,
+        "total_cost_before_margin": 396600,
+        "target_margin_pct": 30,
+        "price": 515580
+      },
+      {
+        "tier": "Professional",
+        "scope": "Assessment + Platform + Workload Onboarding (Phases 1-3)",
+        "total_effort_days": 535,
+        "total_cost_before_margin": 719000,
+        "target_margin_pct": 30,
+        "price": 934700
+      },
+      {
+        "tier": "Enterprise",
+        "scope": "Full programme incl. Compliance Automation (Phases 1-4)",
+        "total_effort_days": 635,
+        "total_cost_before_margin": 857000,
+        "target_margin_pct": 30,
+        "price": 1114100
+      }
+    ],
+    "payment_milestones": [
+      { "milestone": "Vertragsunterzeichnung", "pct": 10 },
+      { "milestone": "Phase 1 abgeschlossen (Assessment)", "pct": 15 },
+      { "milestone": "Phase 2 abgeschlossen (Plattform live)", "pct": 25 },
+      { "milestone": "Phase 3 abgeschlossen (Workloads onboarded)", "pct": 30 },
+      { "milestone": "Phase 4 abgeschlossen (Compliance-Automation)", "pct": 20 }
+    ]
+  },
+  "created": "2026-03-18"
+}

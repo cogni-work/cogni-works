@@ -1,0 +1,9 @@
+{
+  "slug": "cloud-services",
+  "name": "Cloud Services",
+  "description": "Cloud infrastructure, migration, and platform offerings including managed hyperscaler, multi-cloud, private, hybrid, and sovereign cloud.",
+  "revenue_model": "subscription",
+  "maturity": "growth",
+  "source_file": "research/bechtle-portfolio.md",
+  "created": "2026-03-18"
+}

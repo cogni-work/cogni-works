@@ -1,0 +1,13 @@
+{
+  "slug": "governance-risk-compliance",
+  "name": "Governance, Risk & Compliance",
+  "description": "Abstimmung von Sicherheit und Risikomanagement mit geschaeftlichen Zielen und regulatorischen Anforderungen inkl. NIS2-Compliance.",
+  "product_slug": "telekom-security",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 2,
+    "category_id": "2.9",
+    "category_name": "Compliance & GRC"
+  },
+  "source_file": "https://www.t-systems.com/de/de/security"
+}

@@ -1,0 +1,49 @@
+{
+  "reviewer": "tsystems-cso",
+  "iteration": 1,
+  "overall_score": 4.0,
+  "dimension_scores": {
+    "quota_impact": {
+      "score": 4,
+      "rationale": "Jetzt kann mein AE das direkt einsetzen. Die Differenzierung ist wettbewerberspezifisch: Gegen DATAGROUP argumentiert er 'ein Vertrag vs. Finger-Pointing', gegen Bechtle 'wer betreibt danach die Applikation?', gegen SWK 'IT-Dienstleister vs. Einkaufsgemeinschaft'. Die ICP-Qualification ist actionable — 'Stadtwerk mit SAP IS-U, auslaufender Hardware, KRITIS-Einstufung' gibt dem AE sofort seine Top-20-Accounts."
+    },
+    "pipeline_acceleration": {
+      "score": 4,
+      "rationale": "Die urgency_drivers sind jetzt explizit: NIS2 April 2026, SAP ECC 2027, Smart Meter 2030. Das sind konkrete Deadlines, die mein AE im Erstgespräch nutzen kann: 'Herr IT-Leiter, in 12 Monaten müssen Sie NIS2-registriert sein und Ihr SAP IS-U läuft in 18 Monaten aus — wie weit sind Sie?'. Der Fachkräftemangel-Punkt ('2-3 IT-Mitarbeiter') ist ein exzellenter Status-quo-Kontrast."
+    },
+    "objection_handling": {
+      "score": 4,
+      "rationale": "Das TCO-Argument '1 Vertrag vs. 3-4 Verträge' adressiert die Preisobjection indirekt aber wirksam. Der '3 IT-Mitarbeiter'-Frame bei Bechtle ist stark: 'Nach der Migration müssen Ihre 2-3 IT-Leute plötzlich Azure administrieren — wer macht das bei Bechtle?'. Für volle 5 Punkte fehlt noch ein konkretes TCO-Rechenbeispiel (z.B. '150 Server-Migration, 5-Jahres-TCO: T-Systems 2.1M vs. Bechtle+SAP-Partner+Carrier 2.4M')."
+    },
+    "competitive_win_ability": {
+      "score": 4,
+      "rationale": "Die SWK-Differenzierung 'IT-Dienstleister vs. Einkaufsgemeinschaft' ist eine Killer-Line — die kann mein AE im Stadtwerke-Aufsichtsrat verwenden. Die DATAGROUP-Differenzierung mit Finger-Pointing ist aus dutzenden verlorenen Deals gut bekannt. Jeder Wettbewerber hat jetzt seine eigene Schwachstelle statt des repetitiven DT-Netz-Mantras."
+    },
+    "account_team_usability": {
+      "score": 4,
+      "rationale": "Klar, konsistent, auf Deutsch. Jeder Wettbewerber hat eine distinkte Story. Der AE kann in 5 Minuten den relevanten Wettbewerber für seinen Deal nachschlagen und hat einen sofort nutzbaren Differenzierungssatz. Der SA versteht die technischen Lücken der Wettbewerber. Gut."
+    },
+    "deal_qualification_signal": {
+      "score": 4,
+      "rationale": "Der icp_qualification-Block ist exzellent: '800-3000 Mitarbeiter, SAP IS-U, eigenes RZ mit >5J Hardware, KRITIS, auslaufender IT-Outsourcing-Vertrag'. Mein AE kann damit seine 200 Stadtwerke-Accounts auf 20-30 priorisieren. Für 5 Punkte würde ich noch 'Budget-Indikator' und 'typischer Auftragsumfang' ergänzen."
+    }
+  },
+  "top_issues": [
+    {
+      "entity_type": "compete",
+      "entity_slug": "cloud-migration--mittelstaendische-stadtwerke-de",
+      "issue": "Noch kein konkretes TCO-Rechenbeispiel, das die '1 Vertrag vs. 3-4 Verträge'-These quantifiziert — mein AE braucht eine Zahl für den CFO.",
+      "severity": "low",
+      "suggested_fix": "Ergänze ein indikatives TCO-Beispiel in der analysis_note: '150-Server-Migration, 5 Jahre Betrieb: Integriertes Modell ca. 15-20% günstiger als Multi-Vendor-Setup durch eliminierte Koordinationskosten und reduziertes Ausfallrisiko.'",
+      "root_cause_hint": "TCO modeling is outside compete skill scope — belongs in solutions/pricing"
+    }
+  ],
+  "strengths": [
+    "Jeder Wettbewerber hat jetzt eine einzigartige, spezifische Differenzierung statt des repetitiven DT-Netz-Mantras",
+    "ICP-Qualification ist actionable — AE kann sofort seine Top-Accounts identifizieren",
+    "Urgency-Drivers mit konkreten Deadlines (NIS2 2026, SAP ECC 2027) ermöglichen sofortige Pipeline-Beschleunigung",
+    "SWK-Kooperationen-Differenzierung ('IT-Dienstleister vs. Einkaufsgemeinschaft') ist eine Killer-Line für Aufsichtsrat-Gespräche"
+  ],
+  "would_use_in_pitch_deck": true,
+  "overall_assessment": "Deutlich verbessert gegenüber Iteration 0. Mein AE bei einer 1.500-Mitarbeiter-Stadtwerk in NRW kann jetzt: (1) mit urgency_drivers das Erstgespräch eröffnen, (2) mit der ICP-Qualification seine Accounts priorisieren, (3) je nach Wettbewerber eine spezifische Differenzierung einsetzen, (4) mit den Trap Questions eine RFI gestalten, die T-Systems bevorzugt. Die einzige verbleibende Lücke ist ein konkretes TCO-Beispiel — aber das gehört eher in die Solutions/Pricing-Skill als in die Wettbewerbsanalyse. Sales-ready."
+}

@@ -2,15 +2,15 @@
 
 **Duration**: 55 minutes | **Modules**: 6 | **Prerequisites**: Course 1
 **Plugins**: cogni-workspace, cogni-obsidian, cogni-help:cogni-issues
-**Audience**: Consultants setting up their cogni-works environment
+**Audience**: Consultants setting up their insight-wave environment
 
 ---
 
-## Module 1: What is a cogni-works Workspace?
+## Module 1: What is a insight-wave Workspace?
 
 ### Theory (3 min)
 
-A cogni-works workspace is a shared foundation that enables all cogni-works plugins
+A insight-wave workspace is a shared foundation that enables all insight-wave plugins
 to collaborate on projects. The **cogni-workspace** plugin orchestrates:
 
 - **Environment variables** — Shared settings across plugins (project name, language, paths)
@@ -18,7 +18,7 @@ to collaborate on projects. The **cogni-workspace** plugin orchestrates:
 - **Plugin discovery** — Health monitoring and status of installed plugins
 - **Workspace settings** — Centralized configuration
 
-Think of it as the "operating system" for your cogni-works plugins. Without a
+Think of it as the "operating system" for your insight-wave plugins. Without a
 workspace, each plugin operates in isolation. With a workspace, they share context
 and produce consistent, branded outputs.
 
@@ -57,7 +57,7 @@ Ask the user to:
 
 ### Recap
 
-- Workspace = shared foundation for cogni-works plugins
+- Workspace = shared foundation for insight-wave plugins
 - Manages env vars, themes, plugin discovery, settings
 - Convention-based: plugins share patterns, not dependencies
 - Required for cross-plugin consistency
@@ -68,7 +68,7 @@ Ask the user to:
 
 ### Theory (3 min)
 
-Initialize a workspace by asking Claude: "Initialize a cogni-works workspace" or
+Initialize a workspace by asking Claude: "Initialize a insight-wave workspace" or
 "Set up my workspace." The cogni-workspace plugin handles the rest.
 
 What gets created:
@@ -88,7 +88,7 @@ which are active, and if any configuration is missing.
 
 Walk through initializing a workspace:
 1. Navigate to the sample project folder
-2. Ask Claude: "Initialize a cogni-works workspace for a consulting project called 'Digital Strategy 2026'"
+2. Ask Claude: "Initialize a insight-wave workspace for a consulting project called 'Digital Strategy 2026'"
 3. Show the created files and directory structure
 4. Run workspace status to verify health
 
@@ -99,7 +99,7 @@ Ask the user to:
 2. Set project name and output language
 3. Run workspace status and review the output
 
-Provide the prompt: "Initialize a cogni-works workspace here. Project name: 'My Training Project'. Language: English."
+Provide the prompt: "Initialize a insight-wave workspace here. Project name: 'My Training Project'. Language: English."
 
 ### Quiz
 
@@ -114,7 +114,7 @@ Provide the prompt: "Initialize a cogni-works workspace here. Project name: 'My 
 
 ### Recap
 
-- Initialize with: "Initialize a cogni-works workspace"
+- Initialize with: "Initialize a insight-wave workspace"
 - Creates `.workplace-env.sh` with shared env vars
 - Check health with workspace status
 - Foundation for all subsequent plugin work
@@ -125,7 +125,7 @@ Provide the prompt: "Initialize a cogni-works workspace here. Project name: 'My 
 
 ### Theory (3 min)
 
-Themes ensure visual consistency across all cogni-works outputs — presentations,
+Themes ensure visual consistency across all insight-wave outputs — presentations,
 documents, reports, posters. The cogni-workspace theme system supports:
 
 **Theme sources**:
@@ -138,7 +138,7 @@ documents, reports, posters. The cogni-workspace theme system supports:
 - Typography (headings, body text, fonts)
 - Layout preferences
 
-**Applying themes**: Once set, all cogni-works plugins that produce visual
+**Applying themes**: Once set, all insight-wave plugins that produce visual
 outputs (cogni-visual, cogni-narrative exports, etc.) use the workspace theme
 automatically.
 
@@ -182,7 +182,7 @@ Ask the user to:
 ### Theory (3 min)
 
 **cogni-obsidian** bridges Obsidian (a popular knowledge management app) with
-Claude Cowork. It creates an Obsidian vault pre-configured for cogni-works.
+Claude Cowork. It creates an Obsidian vault pre-configured for insight-wave.
 
 What it sets up:
 - **Obsidian vault** with Terminal plugin integration
@@ -193,9 +193,9 @@ What it sets up:
 
 Why this matters for consultants:
 - Obsidian becomes your project dashboard
-- All cogni-works outputs (narratives, reports, analyses) land in the vault
+- All insight-wave outputs (narratives, reports, analyses) land in the vault
 - Graph view shows relationships between documents
-- Terminal integration lets you run cogni-works commands without leaving Obsidian
+- Terminal integration lets you run insight-wave commands without leaving Obsidian
 
 **Cross-platform**: Works on macOS, Linux, and Windows (WSL).
 
@@ -222,7 +222,7 @@ Ask the user to:
    - d) A cloud storage system
    **Answer**: b
 
-2. **Multiple choice**: Why integrate Obsidian with cogni-works?
+2. **Multiple choice**: Why integrate Obsidian with insight-wave?
    - a) Obsidian is required for plugins to work
    - b) It creates a project dashboard where all outputs land and are interconnected
    - c) It replaces Claude Desktop
@@ -261,7 +261,7 @@ This frontmatter enables:
 
 **Updating an existing vault**: Use "Update my Obsidian vault" to incrementally
 update terminal configurations without overwriting your customizations. This is
-useful when cogni-works plugins are updated.
+useful when insight-wave plugins are updated.
 
 **Workspace + Obsidian together**:
 1. Initialize workspace (shared env, themes)
@@ -279,7 +279,7 @@ Walk through note creation:
 ### Exercise
 
 Ask the user to:
-1. Create a note: "Create a project note titled 'Training Log' with tags: training, cogni-works"
+1. Create a note: "Create a project note titled 'Training Log' with tags: training, insight-wave"
 2. Review the created file and its frontmatter
 3. Ask: "Check my workspace status" to verify everything is healthy
 
@@ -289,7 +289,7 @@ Ask the user to:
 
 2. **Multiple choice**: When should you use "Update my Obsidian vault"?
    - a) Every time you start Claude
-   - b) When cogni-works plugins are updated and you want new configurations
+   - b) When insight-wave plugins are updated and you want new configurations
    - c) Before every meeting
    - d) Only during initial setup
    **Answer**: b
@@ -299,7 +299,7 @@ Ask the user to:
 - Notes get standardized YAML frontmatter (title, date, tags, source)
 - Updates are incremental — never overwrite customizations
 - Workspace + Obsidian = complete project foundation
-- Ready for all subsequent cogni-works courses
+- Ready for all subsequent insight-wave courses
 
 ---
 
@@ -312,7 +312,7 @@ or you have an idea for improvement — you need a structured way to communicate
 Think of it as filing a **structured support request**: you describe what happened,
 and the maintainer gets exactly the context needed to act on it.
 
-cogni-works uses **GitHub issues** for this. The **cogni-issues** skill (part of
+insight-wave uses **GitHub issues** for this. The **cogni-issues** skill (part of
 cogni-workspace) handles everything for you — you describe the problem in plain
 language, and Claude drafts and files the issue on your behalf.
 
@@ -325,7 +325,7 @@ language, and Claude drafts and files the issue on your behalf.
 | **Change request** | Something works but should work differently | "Change default output language to German" |
 | **Question** | You need clarification | "How do I reset my workspace theme?" |
 
-All issues go to the cogni-works monorepo — you don't need to know which plugin
+All issues go to the insight-wave monorepo — you don't need to know which plugin
 lives where. cogni-issues figures that out automatically.
 
 ### Demo
@@ -356,7 +356,7 @@ and authenticating (the setup-gh.sh script detects their platform and package ma
 
 Once gh is ready, ask the user to file their first issue:
 
-> "Tell Claude: **I have a question about cogni-works — which course should I
+> "Tell Claude: **I have a question about insight-wave — which course should I
 > take after finishing Course 2?**"
 
 This triggers the cogni-issues skill, which will consult, draft a `[Question]`
@@ -381,7 +381,7 @@ Create `_teacher-exercises/first-issue.md` with the template from
 
 - Four issue types: Bug, Feature, Change request, Question
 - cogni-issues handles the consultation flow — you describe, Claude drafts, you confirm
-- All issues go to the cogni-works monorepo automatically
+- All issues go to the insight-wave monorepo automatically
 - Nothing is submitted without your explicit approval
 - Whenever something feels wrong or you have an idea, just tell Claude
 
@@ -390,7 +390,7 @@ Create `_teacher-exercises/first-issue.md` with the template from
 ## Course Completion
 
 Congratulations! You now have a complete project foundation:
-- A cogni-works workspace with shared environment and themes
+- A insight-wave workspace with shared environment and themes
 - An Obsidian vault (or understanding of one) for project management
 - Standardized note management with frontmatter
 - The ability to report issues and request features via cogni-issues

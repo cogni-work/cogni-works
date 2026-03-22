@@ -1,0 +1,110 @@
+{
+  "solution_slug": "cloud-migration--grosse-energieversorger-de",
+  "review_date": "2026-03-18",
+  "round": 1,
+  "perspectives": [
+    {
+      "perspective": "procurement-decision-maker",
+      "role_description": "CFO/Einkauf evaluating commercial viability and budget justification for a 2.4M EUR cloud migration program",
+      "criteria": [
+        {
+          "criterion": "Price-to-value transparency",
+          "score": "pass",
+          "rationale": "Rate card is clearly disclosed with per-phase cost breakdown. Effort days are traceable to team composition and utilization. The 30% margin is stated explicitly, which is standard for T-Systems enterprise engagements."
+        },
+        {
+          "criterion": "Payment milestone alignment",
+          "score": "pass",
+          "rationale": "Milestones are tied to concrete deliverables (Assessment complete, Landing Zone live, Welle 1/2 migrated). 10% upfront is reasonable. No milestone exceeds 25%, limiting exposure."
+        },
+        {
+          "criterion": "Scope boundary clarity",
+          "score": "pass",
+          "rationale": "Clear exclusions: SCADA not migrated, S/4HANA functional migration separate, custom integrations separate. This prevents scope creep disputes. SektVO procurement compatibility is addressed via standard contract structure."
+        },
+        {
+          "criterion": "Risk-adjusted budget adequacy",
+          "score": "warn",
+          "rationale": "The price range (2.2M-2.65M) provides a 10-20% buffer, but no explicit contingency budget is allocated for the identified high-impact risks (KRITIS audit delay, OT/IT custom integrations). A procurement decision-maker would want to see a formal contingency line item or a not-to-exceed clause."
+        },
+        {
+          "criterion": "Competitive benchmark plausibility",
+          "score": "warn",
+          "rationale": "At approximately 1795 EUR blended day rate (before margin), the pricing is in the upper quartile for German IT services but defensible for KRITIS-regulated energy sector work. However, no TCO comparison against alternative approaches (e.g., hyperscaler-led migration, in-house team augmentation) is provided. A procurement team will demand this."
+        }
+      ],
+      "summary": "Commercially sound with clear pricing structure. Two areas need attention: (1) explicit contingency budget for identified risks, (2) competitive TCO comparison to justify premium positioning."
+    },
+    {
+      "perspective": "provider-side-solution-architect",
+      "role_description": "T-Systems delivery architect evaluating whether the solution can be staffed, delivered on time, and within margin",
+      "criteria": [
+        {
+          "criterion": "Staffing feasibility",
+          "score": "warn",
+          "rationale": "Phase 4 requires 5 Implementation Engineers at 100% utilization for 16 weeks. Finding 5 KRITIS-experienced cloud engineers available simultaneously is challenging in the current German market. The peak team size of 8 FTE (Phase 4) should be flagged in resource planning early."
+        },
+        {
+          "criterion": "Phase sequencing and dependencies",
+          "score": "pass",
+          "rationale": "The Assess-Mobilize-Migrate-Optimize sequence follows proven CMF methodology. The Go/No-Go gate between Welle 1 and Welle 2 is correctly placed. NIS2 dependency on Welle 2 start is explicitly called out."
+        },
+        {
+          "criterion": "Technical scope realism",
+          "score": "pass",
+          "rationale": "Workload counts (60-80 non-critical, 80-120 critical) are realistic for 12+16 weeks of sprint-based migration with CMF tooling. SCADA exclusion and SAP-basis-only scope are correctly bounded. The 6R framework prevents over-migration."
+        },
+        {
+          "criterion": "Margin protection",
+          "score": "pass",
+          "rationale": "30% target margin with clear scope exclusions (custom integrations, S/4HANA functional, SCADA). Remote-first delivery reduces travel cost erosion. Change-request process for OT boundary changes protects against scope creep without margin."
+        },
+        {
+          "criterion": "Delivery risk management",
+          "score": "pass",
+          "rationale": "Four risks identified with concrete mitigations. The BSI parallel-assessment strategy during Welle 1 is the right approach. Rollback validation in Welle 1 before touching critical systems is sound engineering practice."
+        }
+      ],
+      "summary": "Deliverable with one staffing concern: the Phase 4 peak demand of 5 KRITIS-experienced engineers needs early resource reservation. Otherwise, the phasing, scope boundaries, and risk mitigations are well-structured."
+    },
+    {
+      "perspective": "client-side-solution-architect",
+      "role_description": "Energy utility CIO/architect evaluating whether this solution is safe to adopt given KRITIS obligations, OT constraints, and internal capacity",
+      "criteria": [
+        {
+          "criterion": "KRITIS compliance safety",
+          "score": "pass",
+          "rationale": "BSI-C5 and NIS2 are explicitly addressed. KRITIS-DachG enforcement is mentioned. The constraint that NIS2 registration must precede Welle 2 shows awareness of regulatory sequencing. Audit trail from day 1 is the right approach."
+        },
+        {
+          "criterion": "OT/IT boundary respect",
+          "score": "pass",
+          "rationale": "Explicit constraint that SCADA and Netzleitsysteme are NOT migrated. Only IT-side interfaces are in scope. OT-Boundary-Definition is fixed in Phase 1. This protects grid stability and avoids Netzleiter veto."
+        },
+        {
+          "criterion": "Internal capacity demand",
+          "score": "warn",
+          "rationale": "The solution correctly identifies Fachkraeftemangel as a risk and includes a training program. However, the 5-business-day staging environment SLA and the assumption of customer-side acceptance testing capacity may still overload thin internal teams. The delegation mechanism for approvals should be more concrete."
+        },
+        {
+          "criterion": "Rollback and business continuity",
+          "score": "pass",
+          "rationale": "Rollback is validated in Welle 1 before critical systems are touched. Parallel operation during Welle 2 is specified. DR/BC documentation is an explicit deliverable. The Go/No-Go gate prevents premature critical migration."
+        },
+        {
+          "criterion": "Vendor lock-in and exit strategy",
+          "score": "fail",
+          "rationale": "No mention of cloud portability, exit strategy, or data sovereignty guarantees beyond BSI-C5. For a KRITIS-regulated energy utility, the solution must address: (1) what happens if the sovereign cloud provider changes terms, (2) data repatriation plan, (3) multi-cloud optionality. The Ubergabedokumentation in Phase 5 is operational handover, not strategic exit planning."
+        }
+      ],
+      "summary": "Strong on regulatory compliance and OT safety. Two concerns: (1) internal capacity demands need more concrete mitigation, (2) critical gap on vendor lock-in and exit strategy — a KRITIS utility will not sign without this."
+    }
+  ],
+  "synthesis": {
+    "pass_count": 11,
+    "warn_count": 3,
+    "fail_count": 1,
+    "verdict": "revision_needed",
+    "rationale": "The solution is commercially and technically sound but has one critical gap (vendor lock-in / exit strategy) that would block procurement at a KRITIS-regulated energy utility. Additionally, the lack of an explicit contingency budget and competitive TCO comparison weakens the commercial case. Revision should address: (1) add exit strategy and data sovereignty guarantees, (2) add contingency line item, (3) add competitive TCO comparison, (4) strengthen internal capacity mitigation."
+  }
+}

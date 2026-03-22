@@ -1,0 +1,16 @@
+{
+  "slug": "netzdaten-analytik",
+  "product_slug": "digitale-energiedienste",
+  "name": "Netzdaten-Analytik",
+  "description": "Datenanalyseplattform fuer Netz- und Verbrauchsdaten mit Lastprognosen, Anomalieerkennung auf Zeitreihen, Einspeise-Monitoring dezentraler Erzeuger und Netzauslastungsberechnung auf Basis historischer und Echtzeit-Messwerte.",
+  "category": "analytics",
+  "taxonomy_mapping": {
+    "dimension": 6,
+    "dimension_name": "Application Services",
+    "category_id": "6.6",
+    "category_name": "AI, Data & Analytics",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "created": "2026-03-18"
+}

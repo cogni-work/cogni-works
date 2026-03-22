@@ -1,0 +1,20 @@
+{
+  "slug": "cloud-native-container--grosse-energieversorger-de",
+  "feature_slug": "cloud-native-container",
+  "market_slug": "grosse-energieversorger-de",
+  "is_statement": "Cloud-Native und Container Platform ist eine verwaltete Kubernetes-Plattform auf EKS, OpenShift und CCE mit Container-Lifecycle-Management, Vulnerability-Scanning, GitOps-Pipelines und Knative Serverless auf AWS und Open Telekom Cloud.",
+  "does_statement": "Energieversorger modernisieren Smart-Meter-Datenverarbeitung und Billing-Systeme auf containerisierten Microservices, die bei Lastspitzen automatisch skalieren und BSI-Haertungsrichtlinien einhalten.",
+  "means_statement": "Time-to-Market fuer neue Smart-Meter-Integrationen sinkt um bis zu 50%, waehrend die Infrastrukturkosten pro verarbeitetem Messdatenpunkt um 35% fallen.",
+  "evidence": [
+    {
+      "statement": "T-Systems bietet Managed Kubernetes auf Open Telekom Cloud mit integriertem Security-Scanning und GitOps-Workflows.",
+      "source_url": "https://www.t-systems.com/de/de/cloud-und-infrastruktur/cloud-native",
+      "source_title": "T-Systems Cloud-Native Services"
+    },
+    {
+      "statement": "Der Smart-Meter-Rollout verpflichtet Energieversorger bis 2030 zu 95% Abdeckung mit intelligenten Messsystemen.",
+      "source_url": "https://www.bmwk.de/Redaktion/DE/Artikel/Energie/smart-meter.html",
+      "source_title": "BMWK Smart Meter Rollout"
+    }
+  ]
+}

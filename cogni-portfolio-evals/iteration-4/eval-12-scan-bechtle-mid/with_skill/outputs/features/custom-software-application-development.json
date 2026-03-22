@@ -1,0 +1,16 @@
+{
+  "slug": "custom-software-application-development",
+  "product_slug": "application-services",
+  "name": "Custom Software & Application Development",
+  "description": "Bespoke software development service covering custom interface programming, data migration tooling and PLM product installations with Siemens Teamcenter integration and agile delivery methodology.",
+  "taxonomy_mapping": {
+    "dimension": 6,
+    "dimension_name": "Application Services",
+    "category_id": "6.1",
+    "category_name": "Custom Application Development",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/bechtle-portfolio.md",
+  "created": "2026-03-18"
+}

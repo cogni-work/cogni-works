@@ -1,0 +1,13 @@
+{
+  "slug": "colocation-services",
+  "name": "Colocation Services",
+  "description": "Co-location in twin-core data centers with physical security, fire protection, power, and cooling",
+  "product_slug": "t-systems-infrastructure",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 5,
+    "category_id": "5.1",
+    "category_name": "Data Center Services"
+  },
+  "source_file": "https://www.t-systems.com/de/en/cloud-services/solutions/co-location-services"
+}

@@ -1,0 +1,7 @@
+{
+  "slug": "cogni-portfolio",
+  "name": "cogni-portfolio",
+  "description": "Plugin für strukturierte Portfolio-Zerlegung nach IS/DOES/MEANS mit Taxonomie-Klassifizierung, Qualitätsbewertung, Web-Research-Enrichment, Proposition-Generierung und Stakeholder-Review.",
+  "pricing_tier": "enterprise",
+  "revenue_model": "subscription"
+}

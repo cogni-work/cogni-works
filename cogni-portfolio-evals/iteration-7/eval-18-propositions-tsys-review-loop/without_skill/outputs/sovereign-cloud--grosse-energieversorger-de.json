@@ -1,0 +1,20 @@
+{
+  "slug": "sovereign-cloud--grosse-energieversorger-de",
+  "feature_slug": "sovereign-cloud",
+  "market_slug": "grosse-energieversorger-de",
+  "is_statement": "Sovereign Cloud ist eine in der EU betriebene Cloud-Infrastruktur auf Basis von Open Sovereign Cloud, T Cloud Public sowie souveraenen AWS- und Google-Cloud-Varianten mit vollstaendiger KRITIS- und BaFin-Konformitaet.",
+  "does_statement": "Energieversorger behalten die volle Datenhoheit ueber kritische Netz- und Kundendaten und erfuellen BSI-C5- sowie NIS2-Anforderungen ohne separate Compliance-Projekte.",
+  "means_statement": "Audit-Vorbereitungszeiten sinken um bis zu 40%, waehrend die NIS2-Registrierung bis April 2026 termingerecht ohne zusaetzliches Compliance-Personal abgeschlossen wird.",
+  "evidence": [
+    {
+      "statement": "T-Systems betreibt die Open Sovereign Cloud mit BSI-C5-Testat fuer regulierte Branchen in Deutschland.",
+      "source_url": "https://www.t-systems.com/de/de/cloud-und-infrastruktur/sovereign-cloud",
+      "source_title": "T-Systems Sovereign Cloud"
+    },
+    {
+      "statement": "Die Sovereign Cloud erfuellt KRITIS-Anforderungen gemaess BSI-Kritisverordnung fuer Energieversorger.",
+      "source_url": "https://www.bsi.bund.de/DE/Themen/KRITIS-und-regulierte-Unternehmen/kritis-und-regulierte-unternehmen_node.html",
+      "source_title": "BSI KRITIS-Regulierung"
+    }
+  ]
+}

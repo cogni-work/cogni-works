@@ -1,0 +1,13 @@
+{
+  "slug": "future-cloud-infrastructure",
+  "name": "Future Cloud Infrastructure (FCI)",
+  "description": "Next-Generation Private Cloud mit deutscher DNA, Souveraenitaet und Multi-Cloud-Strategie. Inkl. VMware Managed Services.",
+  "product_slug": "t-systems-cloud",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 4,
+    "category_id": "4.3",
+    "category_name": "Private Cloud"
+  },
+  "source_file": "https://www.t-systems.com/us/en/cloud-services/solutions/private-cloud/future-cloud-infrastructure"
+}

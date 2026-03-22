@@ -1,0 +1,16 @@
+{
+  "slug": "ai-solution-factory",
+  "product_slug": "application-services",
+  "name": "AI Solution Factory",
+  "description": "KI-Beratung mit Computer Vision, NLP, generative KI",
+  "taxonomy_mapping": {
+    "dimension": 6,
+    "dimension_name": "Application Services",
+    "category_id": "6.6",
+    "category_name": "AI, Data & Analytics",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

@@ -1,8 +1,8 @@
 # Individual Contributor License Agreement
 
-**cogni-works Core Plugins**
+**insight-wave Core Plugins**
 
-Thank you for your interest in contributing to cogni-works core plugins. This Contributor License Agreement ("Agreement") applies to any Contribution you make to the following core plugins maintained by Stephan de Haas ("Project Owner"):
+Thank you for your interest in contributing to insight-wave core plugins. This Contributor License Agreement ("Agreement") applies to any Contribution you make to the following core plugins maintained by Stephan de Haas ("Project Owner"):
 
 - cogni-workspace
 - cogni-trends
@@ -17,7 +17,7 @@ Thank you for your interest in contributing to cogni-works core plugins. This Co
 - cogni-research
 - cogni-sales
 
-This Agreement does **not** apply to third-party community plugins published on the cogni-works marketplace. See [MARKETPLACE_TERMS.md](MARKETPLACE_TERMS.md) for community plugin terms.
+This Agreement does **not** apply to third-party community plugins published on the insight-wave marketplace. See [MARKETPLACE_TERMS.md](MARKETPLACE_TERMS.md) for community plugin terms.
 
 By submitting a Contribution to any of the above repositories, you accept and agree to the following terms.
 
@@ -65,7 +65,7 @@ YOUR CONTRIBUTIONS ARE PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS O
 
 By opening a pull request against any core plugin repository listed above, you agree to the terms of this CLA. The CLA Assistant bot will prompt you to confirm your agreement on your first pull request.
 
-Your signature is recorded and applies to all future Contributions to cogni-works core plugins.
+Your signature is recorded and applies to all future Contributions to insight-wave core plugins.
 
 ---
 

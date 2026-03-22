@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# discover-plugins.sh - Scan for installed cogni-works marketplace plugins
+# discover-plugins.sh - Scan for installed insight-wave marketplace plugins
 # Discovers plugins by finding .claude-plugin/plugin.json markers
 # Output: JSON with discovered plugin list
 

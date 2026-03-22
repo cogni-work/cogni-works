@@ -1,0 +1,16 @@
+{
+  "slug": "virtual-desktop-daas-compute",
+  "product_slug": "workplace-services",
+  "name": "Virtual Desktop & DaaS Compute",
+  "description": "DaaS Compute subscription delivering hosted virtual desktop environments with centralized image management, security policy enforcement and workplace-independent access from any device.",
+  "taxonomy_mapping": {
+    "dimension": 3,
+    "dimension_name": "Digital Workplace Services",
+    "category_id": "3.4",
+    "category_name": "Virtual Desktop & DaaS",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/bechtle-portfolio.md",
+  "created": "2026-03-18"
+}

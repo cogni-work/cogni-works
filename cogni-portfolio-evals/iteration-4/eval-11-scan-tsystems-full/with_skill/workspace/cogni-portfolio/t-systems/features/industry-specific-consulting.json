@@ -1,0 +1,16 @@
+{
+  "slug": "industry-specific-consulting",
+  "product_slug": "consulting-services",
+  "name": "Industry-Specific Consulting",
+  "description": "Detecon sector-focused advisory service for telecommunications, automotive, energy, healthcare, and manufacturing industries with deep vertical domain expertise and 45+ years consulting track record.",
+  "taxonomy_mapping": {
+    "dimension": 7,
+    "dimension_name": "Consulting Services",
+    "category_id": "7.3",
+    "category_name": "Business & Industry Consulting",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

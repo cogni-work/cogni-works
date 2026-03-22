@@ -1,0 +1,108 @@
+{
+  "assessed_file": "grosse-energieversorger-de.json",
+  "assessment_date": "2026-03-19",
+  "revision_rounds": 2,
+  "final_revision": 1,
+  "perspectives": [
+    {
+      "role": "procurement_buyer",
+      "reviewer": "Procurement Buyer (Einkaufsleiter IT)",
+      "round_1": {
+        "score": 6,
+        "findings": [
+          "Fehlende Angaben zu Wettbewerbslandschaft und Incumbent-Providern — Einkauf braucht diese Info fuer Ausschreibungsstrategie",
+          "IT-Spend-Schaetzungen basieren auf generischem Branchendurchschnitt (3%) ohne Quellenvalidierung",
+          "Keine Angaben zu Beschaffungspraeferenzen oder Vertragszyklen",
+          "Decision-Maker-Rollen sind korrekt, aber Buying-Center-Beschreibung zu oberflaechlich"
+        ],
+        "action": "improve"
+      },
+      "round_2": {
+        "score": 8,
+        "findings": [
+          "Wettbewerbslandschaft jetzt vorhanden mit Incumbent-Providern und Competitive Threats — gut fuer Angebotspositionierung",
+          "Procurement Preferences pro Kunde hinzugefuegt — hilfreich fuer Ausschreibungsvorbereitung",
+          "Sales-Opportunity-Abschnitt mit Deal-Groesse und Barriers gibt realistisches Bild",
+          "IT-Spend-Basis bleibt Schaetzung — ideal waere eine Quelle aus Geschaeftsbericht, aber fuer Erstprofil akzeptabel",
+          "Verbesserungsvorschlag: Vertragszyklen und Ausschreibungstermine ergaenzen, sobald Account-Team Zugang hat"
+        ],
+        "action": "accept"
+      }
+    },
+    {
+      "role": "sales_leader",
+      "reviewer": "Sales Leader (Vertriebsleiter Energie)",
+      "round_1": {
+        "score": 7,
+        "findings": [
+          "Proposition-Fit-Bewertungen sind solide, aber fehlende Priorisierung der Accounts",
+          "Keine konkreten Einstiegsstrategien oder Deal-Groessen-Schaetzungen",
+          "RWE-Profil zeigt Risiken (starke AWS-Bindung) nicht deutlich genug",
+          "Fehlende Timeline-Angaben fuer Verkaufszyklen"
+        ],
+        "action": "improve"
+      },
+      "round_2": {
+        "score": 9,
+        "findings": [
+          "Account-Priorisierung mit klarer Begruendung (E.ON > EnBW > RWE) — direkt umsetzbar fuer Territory Planning",
+          "Einstiegsstrategien pro Kunde sind spezifisch und differenziert",
+          "RWE-Barrieren (AWS-Partnerschaft, dezentrale Beschaffung) klar benannt — verhindert Fehlallokation von Vertriebsressourcen",
+          "Timeline-Angaben und Key Triggers sind an regulatorische Deadlines gebunden — gibt natuerlichen Verkaufszyklus vor",
+          "Cloud-Migration-Relevanz bei RWE korrekterweise auf 'low' herabgestuft — realistische Einschaetzung",
+          "Addressable Opportunity von 48M EUR annual ist ambitioniert aber plausibel",
+          "Verbesserungsvorschlag: Cross-Sell-Matrix zwischen den drei Accounts (z.B. gemeinsame Branchenreferenzen)"
+        ],
+        "action": "accept"
+      }
+    },
+    {
+      "role": "market_analyst",
+      "reviewer": "Market Analyst (Marktanalyst Energie & ICT)",
+      "round_1": {
+        "score": 7,
+        "findings": [
+          "Finanzdaten sind korrekt und aktuell (2025-Werte aus oeffentlichen Quellen)",
+          "Fehlende Marktpositionierung (Ranking im Segment)",
+          "EnBW IT-Landscape hat weniger Tiefe als E.ON und RWE — spiegelt allerdings den tatsaechlich geringeren oeffentlichen Informationsstand wider",
+          "TAM/SAM-Verbindung zur Marktdefinition (grosse-energieversorger-de.json) fehlt"
+        ],
+        "action": "improve"
+      },
+      "round_2": {
+        "score": 8,
+        "findings": [
+          "Market-Position mit Ranking und Beschreibung jetzt vorhanden — korrekte Einordnung (E.ON #1, RWE #2, EnBW #3)",
+          "Addressable Opportunity (48M EUR) liegt im Rahmen des SOM (150M EUR) aus der Marktdefinition — konsistent",
+          "Umsatzdaten sind korrekt: E.ON 80,4 Mrd., RWE 25,1 Mrd., EnBW 34,5 Mrd. — alle aus 2025",
+          "Mitarbeiterzahlen stimmen mit oeffentlichen Quellen ueberein",
+          "RWE-IT-Landscape am detailliertesten dank guter oeffentlicher Quellen (AWS/SAP-Pressemitteilungen)",
+          "EnBW-IT-Landscape bleibt duenner — korrekt, da EnBW weniger IT-Partnerschaften oeffentlich kommuniziert",
+          "Verbesserungsvorschlag: Branchenspezifische KPIs (Netzlaenge, Erzeugungskapazitaet, Kundenanzahl) wuerden Vergleichbarkeit erhoehen"
+        ],
+        "action": "accept"
+      }
+    }
+  ],
+  "overall_assessment": {
+    "round_1_average_score": 6.7,
+    "round_2_average_score": 8.3,
+    "improvement": "+1.6 Punkte durch Ergaenzung von Wettbewerbslandschaft, Sales-Opportunity-Details und Marktpositionierung",
+    "verdict": "accepted",
+    "strengths": [
+      "Aktuelle Finanzdaten aus oeffentlichen Quellen (2025)",
+      "Differenzierte Proposition-Fit-Bewertungen mit plausiblen Begruendungen",
+      "Realistische Account-Priorisierung mit klarer Einstiegsstrategie pro Kunde",
+      "Konsistenz mit bestehenden Propositions (Referenz auf E.ON Cloud-Migration, NIS2-Deadlines)",
+      "Wettbewerbslandschaft und Barriers geben ehrliches Bild — besonders bei RWE"
+    ],
+    "remaining_gaps": [
+      "IT-Spend-Schaetzungen basieren auf Branchendurchschnitt, nicht auf validierten Quellen",
+      "EnBW IT-Landscape hat weniger Tiefe mangels oeffentlicher Quellen",
+      "Vertragszyklen und Ausschreibungstermine sind nicht bekannt",
+      "Branchenspezifische KPIs (Netzlaenge, GW-Kapazitaet) koennten Profiltiefer erhoehen",
+      "Cross-Sell-Potenzial zwischen den Accounts nicht ausgearbeitet"
+    ],
+    "recommendation": "Profile sind fuer Territory Planning und erste Account-Strategie einsatzbereit. Vor konkreten Angebotsvorbereitungen sollten IT-Budget-Validierung und Vertragszyklen ueber Account-Team ergaenzt werden."
+  }
+}

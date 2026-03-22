@@ -1,0 +1,108 @@
+{
+  "slug": "cloud-migration--grosse-energieversorger-de",
+  "solution_name": "Cloud Migration Services for German Energy Utilities",
+  "feature_slug": "cloud-migration",
+  "market_slug": "grosse-energieversorger-de",
+  "review_date": "2026-03-18",
+  "perspectives": {
+    "procurement_decision_maker": {
+      "role": "Procurement Decision-Maker",
+      "criteria": [
+        {
+          "criterion": "ROI clarity and payback period",
+          "score": "warn",
+          "rationale": "The means_statement claims elastic scalability replaces multi-year hardware procurement cycles, and the PoV scope includes a TCO comparison. However, no explicit ROI percentage, payback period, or savings projection appears in the solution itself. The TCO-Baseline-Erhebung in Phase 1 and TCO data in the PoV scope suggest ROI is deferred to the engagement rather than stated up-front. A CFO on the buying committee will want indicative savings ranges before committing EUR 180K for a PoV."
+        },
+        {
+          "criterion": "Pricing tier coherence and value scaling",
+          "score": "pass",
+          "rationale": "Four tiers scale logically: PoV EUR 180K (30 workloads assessment), Small EUR 850K (80 workloads, 18w), Medium EUR 1.8M (150+ workloads, 36w), Large EUR 2.8M (300+ workloads, 50w). Price-per-workload decreases at scale (EUR 10.6K at Small to EUR 9.3K at Large). The PoV is well-scoped as a standalone decision gate with clear Go/No-Go after 6 weeks. Tier progression is coherent for SektVO-style phased procurement."
+        },
+        {
+          "criterion": "Margin sustainability across tiers",
+          "score": "pass",
+          "rationale": "Margins range from 31.1% (PoV) to 38.2% (Medium), all above the portfolio target of 30%. The PoV margin is no longer sacrificial — at 31.1% it is commercially sustainable even as a standalone engagement. The cost model is fully transparent with explicit role rates, effort breakdowns, and internal cost calculations. This is auditable by procurement."
+        },
+        {
+          "criterion": "Competitive differentiation for SektVO procurement",
+          "score": "warn",
+          "rationale": "The solution has strong implicit differentiators: KRITIS-konforme Cloud-Landing-Zone, CMF with standardized pipelines, OT/IT network segmentation, IaC portability via Terraform/OpenTofu. However, there is no explicit competitive positioning section comparing T-Systems against hyperscaler-native migration tools (AWS Migration Hub, Azure Migrate) or competing SIs. In a SektVO tender, evaluation criteria will require explicit differentiation statements."
+        },
+        {
+          "criterion": "Risk allocation and contractual safeguards",
+          "score": "pass",
+          "rationale": "Major improvement over previous iteration: the cost_model now includes a comprehensive exit clause (12 months notice, 90 days transition support, data repatriation within 90 days, capped exit cost at max 5% total volume). Data residency is guaranteed in BSI-C5-certified German data centers under German jurisdiction (DSGVO + KRITIS-DachG). The Daten-Repatriierungsplan in Phase 4 and exit-strategy verification with portability test are strong contractual protections."
+        }
+      ],
+      "summary": "Commercially well-structured with coherent tier pricing, sustainable margins above 30% target, and strong contractual protections including exit clause and data residency guarantees. Remaining gaps: no up-front ROI quantification and no explicit competitive positioning for formal tender responses."
+    },
+    "provider_solution_architect": {
+      "role": "Provider Solution Architect",
+      "criteria": [
+        {
+          "criterion": "Phase structure and delivery realism",
+          "score": "pass",
+          "rationale": "Five phases (Discovery 4w, Mobilize/Landing Zone 6w, Wave 1 Non-Critical 8w, Wave 2 Business-Critical 12w, Optimize/Handover 6w = 36 weeks) align with the Medium tier scope. The two-wave approach with ascending criticality (non-critical workloads first, then SAP/Billing/SCADA interfaces) is a proven de-risking pattern. Go/No-Go gate between waves is explicitly stated. Phase durations are the Small baseline with documented scaling factors (1.5-2x Medium, 2-3x Large with parallel workstreams)."
+        },
+        {
+          "criterion": "Effort estimation accuracy",
+          "score": "pass",
+          "rationale": "Small tier: 380 days over 18 weeks for 80 workloads = 4.75 days/workload. This is realistic for non-critical workloads using CMF runbooks. Medium: 800 days for 150+ workloads = 5.3 days/workload including KRITIS workloads. Large: 1300 days for 300+ workloads = 4.3 days/workload, justified by parallel workstreams and CMF maturity. The effort includes Landing Zone setup and FinOps governance, not just raw migration. Effort-to-price ratios yield internal costs that are arithmetically consistent with the role rates."
+        },
+        {
+          "criterion": "Skill mix and resource planning",
+          "score": "warn",
+          "rationale": "Three roles (SA EUR 1800/d, IE EUR 1200/d, PM EUR 1400/d) cover general cloud migration but the solution explicitly scopes KRITIS migration, OT/IT network segmentation, and BSI-Audit-Trail. No dedicated KRITIS compliance specialist, OT integration engineer, or FinOps analyst is in the bill of materials despite these being explicit deliverables. The assumption that 'Custom-OT-Integrationen separat beauftragt' partially mitigates this, but the OT/IT-Netzwerksegmentierung in Phase 2 still requires specialized skills not covered by generic SA/IE roles."
+        },
+        {
+          "criterion": "Dependency management and customer prerequisites",
+          "score": "pass",
+          "rationale": "Customer dependencies are explicit and reasonable: 1.0 FTE Enterprise Architect, 0.5 FTE Test Manager, 2 authorized contacts for sprint acceptance (48h deadline). The OT/IT boundary is clearly defined — SCADA and grid control systems stay on-premises, only IT-side interfaces migrate. Custom OT integrations are explicitly scoped out. These create defensible scope boundaries that protect delivery."
+        },
+        {
+          "criterion": "Tooling and automation maturity",
+          "score": "pass",
+          "rationale": "Cloud Migration Factory Toolchain included in project price, Terraform/OpenTofu (open source, no additional cost), IaC templates for portability. The CMF concept with standardized pipelines and runbooks enables repeatable, sprint-based delivery. The container platform in Phase 5 for modernized services shows a clear modernization path beyond lift-and-shift."
+        }
+      ],
+      "summary": "Mature delivery model with well-structured 5-phase approach, realistic effort estimates, and strong dependency management. The CMF toolchain and two-wave criticality pattern are proven. Main gap: the skill mix lacks specialized roles for KRITIS compliance and OT integration despite these being in-scope deliverables."
+    },
+    "client_solution_architect": {
+      "role": "Client Solution Architect",
+      "criteria": [
+        {
+          "criterion": "Integration with existing landscape",
+          "score": "pass",
+          "rationale": "The solution explicitly addresses IS-U, SCADA interfaces, and ERP workloads. The OT/IT boundary is clearly drawn — SCADA and grid control systems remain on-premises, only IT-side interfaces are migrated. Phase 2 includes OT/IT-Netzwerksegmentierung, which addresses the coexistence concern. The IaC templates (Terraform/OpenTofu) ensure the migrated landscape is portable and well-documented."
+        },
+        {
+          "criterion": "Operational readiness and handover quality",
+          "score": "pass",
+          "rationale": "Phase 5 (Optimize, Handover & Exit-Readiness) is a dedicated 6-week phase covering FinOps governance, container platform for modernized services, knowledge transfer to customer operations, and exit strategy verification with a portability test on alternative infrastructure. This is a comprehensive handover that goes beyond documentation to include operational verification."
+        },
+        {
+          "criterion": "Compliance and audit trail",
+          "score": "warn",
+          "rationale": "KRITIS compliance is embedded throughout: KRITIS-Compliance-Gap-Analyse in Phase 1, KRITIS-konforme Landing Zone in Phase 2, KRITIS-Migrationsverfahren with BSI-Audit-Trail in Phase 4. However, there are no explicit compliance deliverables listed (unlike the sovereign-cloud solution which includes attestation documentation and quarterly reports). For NIS2 registration (April 2026 deadline), the client architect would expect named compliance artifacts in the deliverable list."
+        },
+        {
+          "criterion": "Reversibility and rollback strategy",
+          "score": "pass",
+          "rationale": "Phase 3 explicitly includes a 'validiertem Rollback-Prozess' (validated rollback process) and Go/No-Go decision for Wave 2. Phase 4 includes Parallel-Betrieb (parallel operations) for business-critical systems and a Daten-Repatriierungsplan (data repatriation plan). Phase 5 verifies exit strategy with a portability test on alternative infrastructure. This is a comprehensive reversibility story."
+        },
+        {
+          "criterion": "Vendor lock-in and exit strategy",
+          "score": "pass",
+          "rationale": "Multiple lock-in mitigations: IaC templates via Terraform/OpenTofu for portability, exit clause with 12 months notice and 90 days transition support, data repatriation within 90 days, capped exit cost at 5% total volume, and — critically — an exit strategy verification with portability test on alternative infrastructure in Phase 5. This is the strongest exit story of the three solutions."
+        }
+      ],
+      "summary": "Architecturally mature with strong integration design, validated rollback processes, and the best exit strategy in the portfolio. The two-wave criticality pattern and parallel operations for business-critical systems address KRITIS concerns well. The main gap is the absence of named compliance deliverables — compliance is process-embedded but not document-explicit."
+    }
+  },
+  "overall_score": {
+    "pass": 11,
+    "warn": 3,
+    "fail": 0,
+    "verdict": "Significantly improved from iteration-1. The solution now has sustainable margins, comprehensive exit protections, validated rollback processes, and a mature 5-phase delivery model. Remaining gaps are competitive positioning for formal tenders, named compliance deliverables, and specialized KRITIS/OT roles in the bill of materials."
+  }
+}

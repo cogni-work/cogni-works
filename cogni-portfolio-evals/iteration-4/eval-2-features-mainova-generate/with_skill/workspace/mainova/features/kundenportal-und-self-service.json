@@ -1,0 +1,16 @@
+{
+  "slug": "kundenportal-und-self-service",
+  "product_slug": "digitale-energiedienste",
+  "name": "Kundenportal und Self-Service",
+  "description": "Webbasiertes Kundenportal mit digitaler Vertragsverwaltung, Online-Tarifwechsel, Zaehlerstandserfassung und Abschlagsanpassung, das ueber REST-APIs bidirektional an die SAP-IS-U-Abrechnungssysteme angebunden ist und mobile Zugaenge bereitstellt.",
+  "category": "application-services",
+  "taxonomy_mapping": {
+    "dimension": 6,
+    "dimension_name": "Application Services",
+    "category_id": "6.1",
+    "category_name": "Custom Application Development",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "created": "2026-03-18"
+}

@@ -1,0 +1,13 @@
+{
+  "slug": "devops-platform-engineering",
+  "name": "DevOps & Platform Engineering",
+  "description": "DevOps-orientiertes Cloud-Modell mit Managed Toolchain und Middleware Services. Cloud-Native Development mit Kubernetes.",
+  "product_slug": "t-systems-applications",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 6,
+    "category_id": "6.7",
+    "category_name": "DevOps & Platform Engineering"
+  },
+  "source_file": "https://www.t-systems.com/us/en/application-services"
+}

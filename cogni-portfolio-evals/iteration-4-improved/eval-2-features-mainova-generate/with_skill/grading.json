@@ -1,0 +1,296 @@
+{
+  "total_checks": 48,
+  "passed": 44,
+  "failed": 4,
+  "pass_rate": 0.917,
+  "expectations": [
+    {
+      "text": "Feature description word count 20-35 (actual: 16)",
+      "passed": false,
+      "evidence": "\"SAP-IS-U-basiertes Abrechnungssystem fuer Massenkundenprozesse mit dynamischer T...\" (16 words)",
+      "entity": "abrechnungs-und-tarifsystem"
+    },
+    {
+      "text": "All required fields present (slug, product_slug, name, description)",
+      "passed": true,
+      "evidence": "All present",
+      "entity": "abrechnungs-und-tarifsystem"
+    },
+    {
+      "text": "taxonomy_mapping present with dimension, category_id, category_name",
+      "passed": true,
+      "evidence": "Mapped to Enterprise Platform Services",
+      "entity": "abrechnungs-und-tarifsystem"
+    },
+    {
+      "text": "readiness is one of ga, beta, planned",
+      "passed": true,
+      "evidence": "readiness=\"ga\"",
+      "entity": "abrechnungs-und-tarifsystem"
+    },
+    {
+      "text": "No outcome verbs in description",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "abrechnungs-und-tarifsystem"
+    },
+    {
+      "text": "No parity adjectives in description",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "abrechnungs-und-tarifsystem"
+    },
+    {
+      "text": "Feature description word count 20-35 (actual: 24)",
+      "passed": true,
+      "evidence": "\"Algorithmische Handelsplattform fuer kurzfristigen und langfristigen Energieein-...\" (24 words)",
+      "entity": "energiehandelsplattform"
+    },
+    {
+      "text": "All required fields present (slug, product_slug, name, description)",
+      "passed": true,
+      "evidence": "All present",
+      "entity": "energiehandelsplattform"
+    },
+    {
+      "text": "taxonomy_mapping present with dimension, category_id, category_name",
+      "passed": true,
+      "evidence": "Mapped to AI, Data & Analytics",
+      "entity": "energiehandelsplattform"
+    },
+    {
+      "text": "readiness is one of ga, beta, planned",
+      "passed": true,
+      "evidence": "readiness=\"ga\"",
+      "entity": "energiehandelsplattform"
+    },
+    {
+      "text": "No outcome verbs in description",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "energiehandelsplattform"
+    },
+    {
+      "text": "No parity adjectives in description",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "energiehandelsplattform"
+    },
+    {
+      "text": "Feature description word count 20-35 (actual: 18)",
+      "passed": false,
+      "evidence": "\"Zentrales Device-Management fuer verteilte Netzinfrastruktur-Sensorik, Schaltanl...\" (18 words)",
+      "entity": "iot-geraetemanagement"
+    },
+    {
+      "text": "All required fields present (slug, product_slug, name, description)",
+      "passed": true,
+      "evidence": "All present",
+      "entity": "iot-geraetemanagement"
+    },
+    {
+      "text": "taxonomy_mapping present with dimension, category_id, category_name",
+      "passed": true,
+      "evidence": "Mapped to Infrastructure Automation",
+      "entity": "iot-geraetemanagement"
+    },
+    {
+      "text": "readiness is one of ga, beta, planned",
+      "passed": true,
+      "evidence": "readiness=\"ga\"",
+      "entity": "iot-geraetemanagement"
+    },
+    {
+      "text": "No outcome verbs in description",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "iot-geraetemanagement"
+    },
+    {
+      "text": "No parity adjectives in description",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "iot-geraetemanagement"
+    },
+    {
+      "text": "Feature description word count 20-35 (actual: 18)",
+      "passed": false,
+      "evidence": "\"Webbasiertes Endkundenportal mit Self-Service-Funktionen fuer Vertragsverwaltung...\" (18 words)",
+      "entity": "kundenportal-self-service"
+    },
+    {
+      "text": "All required fields present (slug, product_slug, name, description)",
+      "passed": true,
+      "evidence": "All present",
+      "entity": "kundenportal-self-service"
+    },
+    {
+      "text": "taxonomy_mapping present with dimension, category_id, category_name",
+      "passed": true,
+      "evidence": "Mapped to Custom Application Development",
+      "entity": "kundenportal-self-service"
+    },
+    {
+      "text": "readiness is one of ga, beta, planned",
+      "passed": true,
+      "evidence": "readiness=\"ga\"",
+      "entity": "kundenportal-self-service"
+    },
+    {
+      "text": "No outcome verbs in description",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "kundenportal-self-service"
+    },
+    {
+      "text": "No parity adjectives in description",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "kundenportal-self-service"
+    },
+    {
+      "text": "Feature description word count 20-35 (actual: 20)",
+      "passed": true,
+      "evidence": "\"Datenanalyseplattform fuer Netz- und Verbrauchsdaten mit Lastprognosen, Anomalie...\" (20 words)",
+      "entity": "netzdaten-analytik"
+    },
+    {
+      "text": "All required fields present (slug, product_slug, name, description)",
+      "passed": true,
+      "evidence": "All present",
+      "entity": "netzdaten-analytik"
+    },
+    {
+      "text": "taxonomy_mapping present with dimension, category_id, category_name",
+      "passed": true,
+      "evidence": "Mapped to AI, Data & Analytics",
+      "entity": "netzdaten-analytik"
+    },
+    {
+      "text": "readiness is one of ga, beta, planned",
+      "passed": true,
+      "evidence": "readiness=\"ga\"",
+      "entity": "netzdaten-analytik"
+    },
+    {
+      "text": "No outcome verbs in description",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "netzdaten-analytik"
+    },
+    {
+      "text": "No parity adjectives in description",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "netzdaten-analytik"
+    },
+    {
+      "text": "Feature description word count 20-35 (actual: 18)",
+      "passed": false,
+      "evidence": "\"Zentrale Netzleitstelle mit SCADA-System zur Echtzeit-Ueberwachung und Steuerung...\" (18 words)",
+      "entity": "netzleittechnik"
+    },
+    {
+      "text": "All required fields present (slug, product_slug, name, description)",
+      "passed": true,
+      "evidence": "All present",
+      "entity": "netzleittechnik"
+    },
+    {
+      "text": "taxonomy_mapping present with dimension, category_id, category_name",
+      "passed": true,
+      "evidence": "Mapped to Infrastructure Monitoring",
+      "entity": "netzleittechnik"
+    },
+    {
+      "text": "readiness is one of ga, beta, planned",
+      "passed": true,
+      "evidence": "readiness=\"ga\"",
+      "entity": "netzleittechnik"
+    },
+    {
+      "text": "No outcome verbs in description",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "netzleittechnik"
+    },
+    {
+      "text": "No parity adjectives in description",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "netzleittechnik"
+    },
+    {
+      "text": "Feature description word count 20-35 (actual: 23)",
+      "passed": true,
+      "evidence": "\"Rollout und Betrieb intelligenter Messsysteme (iMSys) mit Smart Meter Gateway, F...\" (23 words)",
+      "entity": "smart-metering-infrastruktur"
+    },
+    {
+      "text": "All required fields present (slug, product_slug, name, description)",
+      "passed": true,
+      "evidence": "All present",
+      "entity": "smart-metering-infrastruktur"
+    },
+    {
+      "text": "taxonomy_mapping present with dimension, category_id, category_name",
+      "passed": true,
+      "evidence": "Mapped to 5G & IoT Connectivity",
+      "entity": "smart-metering-infrastruktur"
+    },
+    {
+      "text": "readiness is one of ga, beta, planned",
+      "passed": true,
+      "evidence": "readiness=\"ga\"",
+      "entity": "smart-metering-infrastruktur"
+    },
+    {
+      "text": "No outcome verbs in description",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "smart-metering-infrastruktur"
+    },
+    {
+      "text": "No parity adjectives in description",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "smart-metering-infrastruktur"
+    },
+    {
+      "text": "Feature description word count 20-35 (actual: 20)",
+      "passed": true,
+      "evidence": "\"Integrationsschicht zwischen energiewirtschaftlichen Kernsystemen (SAP IS-U, Net...\" (20 words)",
+      "entity": "systemintegration-energiewirtschaft"
+    },
+    {
+      "text": "All required fields present (slug, product_slug, name, description)",
+      "passed": true,
+      "evidence": "All present",
+      "entity": "systemintegration-energiewirtschaft"
+    },
+    {
+      "text": "taxonomy_mapping present with dimension, category_id, category_name",
+      "passed": true,
+      "evidence": "Mapped to System Integration & API",
+      "entity": "systemintegration-energiewirtschaft"
+    },
+    {
+      "text": "readiness is one of ga, beta, planned",
+      "passed": true,
+      "evidence": "readiness=\"ga\"",
+      "entity": "systemintegration-energiewirtschaft"
+    },
+    {
+      "text": "No outcome verbs in description",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "systemintegration-energiewirtschaft"
+    },
+    {
+      "text": "No parity adjectives in description",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "systemintegration-energiewirtschaft"
+    }
+  ]
+}

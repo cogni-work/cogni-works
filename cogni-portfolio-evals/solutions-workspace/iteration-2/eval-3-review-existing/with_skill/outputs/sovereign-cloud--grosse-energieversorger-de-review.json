@@ -1,0 +1,207 @@
+{
+  "solution_slug": "sovereign-cloud--grosse-energieversorger-de",
+  "solution_type": "project",
+  "overall": "warn",
+  "overall_score": 78,
+  "stakeholder_reviews": [
+    {
+      "perspective": "reviewer",
+      "score": 80,
+      "overall": "warn",
+      "criteria": {
+        "roi_clarity": {
+          "score": "pass",
+          "weight": 0.30,
+          "note": ""
+        },
+        "budget_fit": {
+          "score": "pass",
+          "weight": 0.25,
+          "note": ""
+        },
+        "risk_reward_transparency": {
+          "score": "pass",
+          "weight": 0.20,
+          "note": ""
+        },
+        "competitive_positioning": {
+          "score": "warn",
+          "weight": 0.15,
+          "note": "Assumptions include competitive positioning text (T-Systems vs. AWS Sovereign vs. Azure Confidential) but no pricing comparison. For a sovereign cloud proposition, the competitive argument is less about price and more about compliance assurance — but procurement will still benchmark."
+        },
+        "decision_pathway": {
+          "score": "warn",
+          "weight": 0.10,
+          "note": "PoV is a compliance assessment with a go/no-go after 4 weeks. This proves the compliance gap analysis capability but doesn't demonstrate the sovereign cloud platform itself. A stronger PoV would include provisioning a small sovereign environment and migrating one workload to prove both compliance and operational viability."
+        }
+      },
+      "strengths": [
+        "Clear MEANS statement: 40-60% reduction in regulatory compliance effort because infrastructure compliance is covered by platform attestation — CISO will champion this",
+        "PoV at 75K EUR for 5 KRITIS applications is well-priced — low enough for CISO discretionary budget, focused enough to deliver clear results",
+        "Compliance deliverables are the most comprehensive of the three solutions: BSI-C5 attestation docs, NIS2 readiness, quarterly reports, audit trails",
+        "Competitive positioning in assumptions explicitly names AWS European Sovereign Cloud and Azure Confidential Computing with differentiation points"
+      ],
+      "concerns": [
+        "PoV is assessment-only — compliance gap analysis and feasibility study. The buyer gets a report but hasn't touched the actual Sovereign Cloud platform. For a 320K+ next step, that's a large commitment based on a paper exercise",
+        "Exit clause has 12-month notice (same as cloud-migration) but the cap is 5% of total volume — consistent with cloud-migration but may be high for smaller tiers"
+      ],
+      "recommendations": [
+        "HIGH: Strengthen PoV to include provisioning a small sovereign environment with 1-2 workloads to demonstrate both compliance posture AND operational viability — not just a paper assessment",
+        "OPTIONAL: Add explicit pricing benchmark note against AWS Sovereign Cloud and Azure Confidential Computing to preempt procurement comparison"
+      ]
+    },
+    {
+      "perspective": "provider_sa",
+      "score": 79,
+      "overall": "warn",
+      "criteria": {
+        "delivery_realism": {
+          "score": "warn",
+          "weight": 0.30,
+          "note": "Phase 1 (Compliance-Assessment & Plattform-Design) at 3 weeks covers KRITIS application analysis, BSI-C5 and NIS2 mapping, AND sovereign cloud architecture design. This is ambitious — BSI-C5 gap analysis alone typically takes 2 weeks for a complex energy utility. Architecture design deserves its own focused phase."
+        },
+        "scope_effort_coherence": {
+          "score": "pass",
+          "weight": 0.25,
+          "note": ""
+        },
+        "phase_architecture": {
+          "score": "warn",
+          "weight": 0.20,
+          "note": "Phase 4 (Betriebsübergabe & Audit-Readiness) at 2 weeks is too compressed for a compliance-heavy engagement. Audit preparation for BSI-C5 requires documentation assembly, evidence collection, and a dry-run audit — 2 weeks barely covers documentation. For an energy utility with KRITIS obligations, this phase should be 3-4 weeks."
+        },
+        "does_traceability": {
+          "score": "pass",
+          "weight": 0.15,
+          "note": ""
+        },
+        "tier_scalability": {
+          "score": "pass",
+          "weight": 0.10,
+          "note": ""
+        }
+      },
+      "strengths": [
+        "Phase architecture is compliance-native: assessment → platform → migration+validation → audit-readiness. Not a generic migration template with compliance bolted on",
+        "Effort scaling is reasonable: 35 days PoV → 155 Small → 330 Medium → 540 Large — the compliance overhead creates a higher baseline but scales sub-linearly",
+        "DOES traceability is strong: BSI-C5-attested platform with no extra-European jurisdiction maps directly to the proposition's promise",
+        "Tier differentiation is qualitative: Small (one application group, compliance proof), Medium (all KRITIS apps, full attestation + monitoring), Large (enterprise-wide with multi-cloud sovereign strategy)"
+      ],
+      "concerns": [
+        "Phase 1 tries to do too much in 3 weeks: KRITIS analysis + BSI-C5/NIS2 mapping + architecture design. These are sequential activities — the architecture depends on the compliance findings",
+        "Phase 4 at 2 weeks is too short for BSI-C5 audit readiness. Energy utilities face BSI audits with serious consequences — insufficient preparation creates compliance risk, which is the exact thing this solution promises to reduce",
+        "No compliance specialist role in cost model — BSI-C5 attestation and NIS2 readiness require regulatory expertise that goes beyond Solution Architect skills"
+      ],
+      "recommendations": [
+        "CRITICAL: Add a Compliance/Security Specialist role to the cost model. BSI-C5 attestation preparation, NIS2 mapping, and audit trail configuration require specialized regulatory expertise. This is the sovereign cloud's core value proposition — delivery credibility depends on having the right expertise",
+        "HIGH: Extend Phase 4 from 2 weeks to 3-4 weeks. BSI-C5 audit preparation for KRITIS infrastructure needs adequate documentation assembly, evidence collection, and at minimum a tabletop audit rehearsal",
+        "HIGH: Split Phase 1 into 'Compliance Assessment' (2w) and 'Sovereign Architecture Design' (2w) — architecture depends on compliance findings"
+      ]
+    },
+    {
+      "perspective": "client_sa",
+      "score": 76,
+      "overall": "warn",
+      "criteria": {
+        "integration_feasibility": {
+          "score": "warn",
+          "weight": 0.30,
+          "note": "Solution covers migration of KRITIS IT applications to sovereign cloud but doesn't address integration with non-KRITIS systems that remain on standard infrastructure. Energy utilities will have hybrid environments where KRITIS apps on sovereign cloud need to communicate with non-KRITIS apps on standard cloud or on-premises — network segmentation and API gateway requirements are not addressed."
+        },
+        "dependency_risk": {
+          "score": "pass",
+          "weight": 0.25,
+          "note": ""
+        },
+        "operational_readiness": {
+          "score": "warn",
+          "weight": 0.20,
+          "note": "Handover at 2 weeks includes BSI audit preparation training and compliance dashboard training, but doesn't address ongoing compliance operations: who maintains the attestation? Who updates NIS2 evidence when regulations evolve? Who handles BSI audit requests? The compliance operational model post-handover is undefined."
+        },
+        "vendor_lockin": {
+          "score": "pass",
+          "weight": 0.15,
+          "note": ""
+        },
+        "security_compliance": {
+          "score": "pass",
+          "weight": 0.10,
+          "note": ""
+        }
+      },
+      "strengths": [
+        "OT/IT boundary explicitly defined: SCADA and Netzleitsysteme are out of scope, only IT-side KRITIS applications (Billing, Messdaten, ERP interfaces) are migrated — consistent with cloud-migration solution",
+        "Data residency is the strongest of all three solutions: exclusively German data centers, BSI-C5 Type 2 attested, no extra-European jurisdiction, contractual DSGVO and KRITIS-DachG compliance",
+        "Exit clause is well-structured: 12-month notice, 90-day transition, data export in standard formats, IaC portability, capped exit costs (5%)",
+        "Client-side effort quantified: 0.5 FTE IT security officer (CISO team) + 0.5 FTE application owner — appropriate for a compliance-focused engagement",
+        "IaC portability explicitly mentioned as exit strategy mechanism"
+      ],
+      "concerns": [
+        "No mention of hybrid connectivity between sovereign cloud (KRITIS apps) and standard infrastructure (non-KRITIS apps). Energy utilities will operate both — API gateways, network segmentation, and data flow policies between environments are critical and unaddressed",
+        "Compliance operational model post-handover is unclear: who maintains BSI-C5 attestation currency? Who responds to regulatory changes? The 2-week handover doesn't establish this",
+        "Compliance dashboard is mentioned as a deliverable but there's no assumption about what it monitors or what tooling underlies it"
+      ],
+      "recommendations": [
+        "HIGH: Add assumption about hybrid connectivity requirements — specify how KRITIS applications on sovereign cloud connect to non-KRITIS systems on standard infrastructure or on-premises",
+        "HIGH: Define post-handover compliance operational model — even if ongoing compliance management is a separate managed service, the boundary must be clear in the solution",
+        "OPTIONAL: Specify compliance dashboard scope (which BSI-C5 controls are monitored, NIS2 evidence tracking, audit schedule tracking) so the buyer knows what they're getting"
+      ]
+    }
+  ],
+  "synthesis": {
+    "conflicts": [
+      {
+        "description": "Provider SA wants to extend Phase 1 and Phase 4 (adding ~3 weeks); Reviewer wants a stronger PoV (adding platform trial). Both increase cost and timeline.",
+        "resolution": "Prioritize Phase 4 extension (audit readiness is the core value proposition — cutting it short is self-defeating). Phase 1 split is the second priority. PoV enhancement can be addressed separately by adjusting PoV price upward."
+      }
+    ],
+    "critical_improvements": [
+      {
+        "description": "Add Compliance/Security Specialist role to cost model — BSI-C5 attestation and NIS2 mapping require specialized regulatory expertise that Solution Architects don't typically have",
+        "stakeholders": ["provider_sa"],
+        "affects": "cost_model.bill_of_materials.roles, cost_model.effort_by_tier"
+      }
+    ],
+    "high_improvements": [
+      {
+        "description": "Extend Phase 4 (Betriebsübergabe & Audit-Readiness) from 2 weeks to 3-4 weeks — BSI-C5 audit preparation for KRITIS infrastructure requires adequate documentation assembly and audit rehearsal",
+        "stakeholders": ["provider_sa", "client_sa"],
+        "affects": "implementation"
+      },
+      {
+        "description": "Split Phase 1 into separate Compliance Assessment (2w) and Sovereign Architecture Design (2w) phases — architecture depends on compliance findings",
+        "stakeholders": ["provider_sa"],
+        "affects": "implementation"
+      },
+      {
+        "description": "Add hybrid connectivity assumptions — how KRITIS apps on sovereign cloud connect to non-KRITIS systems on standard infrastructure",
+        "stakeholders": ["client_sa"],
+        "affects": "cost_model.assumptions"
+      },
+      {
+        "description": "Define post-handover compliance operational model — who maintains attestation, responds to regulatory changes, handles BSI audit requests",
+        "stakeholders": ["client_sa"],
+        "affects": "cost_model.assumptions"
+      },
+      {
+        "description": "Strengthen PoV to include provisioning a small sovereign environment with 1-2 workloads alongside the compliance assessment",
+        "stakeholders": ["reviewer"],
+        "affects": "pricing.proof_of_value, implementation"
+      }
+    ],
+    "optional_improvements": [
+      {
+        "description": "Add competitive pricing benchmarks against AWS European Sovereign Cloud and Azure Confidential Computing",
+        "stakeholders": ["reviewer"],
+        "affects": "cost_model.assumptions"
+      },
+      {
+        "description": "Specify compliance dashboard scope and underlying tooling",
+        "stakeholders": ["client_sa"],
+        "affects": "cost_model.assumptions"
+      }
+    ],
+    "verdict": "revise",
+    "revision_guidance": "Two structural issues: (1) Missing Compliance/Security Specialist role — this is the sovereign cloud's core differentiator and the cost model doesn't reflect the expertise needed. (2) Phase timing compression — Phase 1 tries to do compliance analysis and architecture design in 3 weeks, and Phase 4 gives only 2 weeks for BSI-C5 audit readiness, which is the solution's primary deliverable. Fix the role gap and timeline first, then address hybrid connectivity and compliance ops model."
+  }
+}

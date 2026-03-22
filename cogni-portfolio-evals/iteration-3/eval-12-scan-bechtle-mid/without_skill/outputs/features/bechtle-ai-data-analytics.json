@@ -1,0 +1,13 @@
+{
+  "slug": "bechtle-ai-data-analytics",
+  "name": "Bechtle AI, Data & Analytics",
+  "description": "End-to-end AI services from analysis to deployment, data analytics with Azure ML and OpenAI, BI and data visualization, and data strategy consulting. Includes machine learning model development.",
+  "product_slug": "bechtle-applications",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 6,
+    "category_id": "6.6",
+    "category_name": "AI, Data & Analytics"
+  },
+  "source_file": "https://www.bechtle.com/at-en/it-solutions/ai-solutions"
+}

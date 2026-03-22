@@ -1,0 +1,12 @@
+{
+  "slug": "private-cloud",
+  "product_slug": "cloud-services",
+  "name": "Private Cloud Infrastructure",
+  "description": "VMware Cloud Foundation-based Future Cloud Infrastructure (FCI) with SDDC on Lenovo servers, hosted in carbon-neutral European data centers with legacy IT integration.",
+  "taxonomy_mapping": {
+    "dimension": 4,
+    "category_id": "4.3",
+    "category_name": "Private Cloud"
+  },
+  "readiness": "ga"
+}

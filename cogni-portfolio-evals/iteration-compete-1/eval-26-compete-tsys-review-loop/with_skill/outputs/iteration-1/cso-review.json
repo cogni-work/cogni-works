@@ -1,0 +1,63 @@
+{
+  "reviewer": "tsystems-cso",
+  "overall_score": 3.67,
+  "dimension_scores": {
+    "quota_impact": {
+      "score": 4,
+      "rationale": "Differenzierungsaussagen sind konkret und nutzbar — 'BSI-C5-Typ-2-attestiert', 'DT-Backbone', 'Zero-Outage-Methodik' geben dem AE echte Argumente. Aber es fehlen konkrete Referenzkunden mit benennbaren Ergebnissen (z.B. 'E.ON migrierte X Module in Y Monaten'). Ohne Referenzen wird der AE im Due-Diligence-Gespräch angreifbar."
+    },
+    "pipeline_acceleration": {
+      "score": 3,
+      "rationale": "Die Analyse referenziert keine konkreten Deadlines (NIS2 April 2026, SAP ECC End-of-Life 2027, Smart-Meter 95%-Pflicht 2030), die in den Trap Questions oder Differenzierungen Urgency erzeugen würden. Ein AE kann damit keinen 'cost of inaction'-Case bauen. Die Wettbewerbsintelligenz ist statisch — sie zeigt den Ist-Zustand, aber nicht warum der Kunde JETZT handeln muss."
+    },
+    "objection_handling": {
+      "score": 3,
+      "rationale": "Preis-Objection wird bei Accenture ('30-50% über T-Systems') und TCS ('40-60% unter europäischen SIs') angesprochen, aber ohne verifizierbare Datenbasis. Wenn ein Accenture-AE dagegenhält, hat mein AE nur eine unbelegte Behauptung. Switching-Cost-Argumentation fehlt komplett — wie erklärt der AE den Wechsel von einem Incumbent-SI zu T-Systems bei laufendem KRITIS-Betrieb?"
+    },
+    "competitive_win_ability": {
+      "score": 4,
+      "rationale": "Sovereign-Cloud und DT-Backbone als strukturelle Vorteile sind stark und schwer konterbar. Die Trap Questions 1 und 3 sind echte Deal-Killer für Accenture/TCS. Aber die Differenzierung gegen IBM ist schwächer — 'Zero-Outage-Methodik' ist ein Markenname, kein bewiesener Vorteil. Was genau hat Zero Outage bei einem Energieversorger verhindert?"
+    },
+    "account_team_usability": {
+      "score": 4,
+      "rationale": "Klare Sprache, kein Marketingjargon. SA und AE würden dieselbe Story erzählen. Einzige Schwäche: Die 5 Stärken/Schwächen pro Wettbewerber sind für ein QBR zu detailliert — ein AE braucht die Top-2 je Competitor, nicht 5."
+    },
+    "deal_qualification_signal": {
+      "score": 4,
+      "rationale": "Durch die Fokussierung auf KRITIS, BSI-C5, OT/IT-Konvergenz und SAP IS-U ist klar, welche Deals hier relevant sind. Der AE weiß sofort: >5.000 MA, Energieversorger, KRITIS-reguliert. Gut."
+    }
+  },
+  "top_issues": [
+    {
+      "entity_type": "compete",
+      "entity_slug": "cloud-migration--grosse-energieversorger-de",
+      "issue": "Keine konkreten Referenzkunden oder Case Studies in den Differenzierungsaussagen — 'Zero-Outage-Methodik' und '25 Jahre SAP-IS-U-Betriebserfahrung' klingen gut, aber ohne benennbare Referenz (z.B. 'EnBW migrierte 14 SAP-Module in 12 Monaten ohne Billing-Ausfall') ist das Marketing, nicht Munition.",
+      "severity": "high",
+      "suggested_fix": "Jede Differenzierungsaussage sollte mindestens eine verifizierbare Referenz oder ein quantifiziertes Ergebnis enthalten. Wenn keine echte Referenz verfügbar ist, klar kennzeichnen.",
+      "root_cause_hint": "competitor-researcher differentiation guidance"
+    },
+    {
+      "entity_type": "compete",
+      "entity_slug": "cloud-migration--grosse-energieversorger-de",
+      "issue": "Preisbehauptungen ('30-50% über T-Systems', '40-60% unter europäischen SIs') sind nicht verifizierbar und setzen den AE einem Konterargument aus. Accenture wird in einem Pitch nicht zugeben, teurer zu sein.",
+      "severity": "medium",
+      "suggested_fix": "Preisvergleiche entweder mit Marktdaten belegen (ISG, Gartner-Benchmarks) oder durch TCO-Strukturargumente ersetzen: 'Single-Vendor-Modell reduziert Koordinationsaufwand und Vendor-Management-Overhead vs. Multi-Vendor-Ansatz'.",
+      "root_cause_hint": "competitor-researcher pricing claims"
+    },
+    {
+      "entity_type": "compete",
+      "entity_slug": "cloud-migration--grosse-energieversorger-de",
+      "issue": "Pipeline-Acceleration fehlt: Keine der Differenzierungen oder Trap Questions referenziert regulatorische Deadlines (NIS2 April 2026, SAP ECC 2027, Smart-Meter 2030), die Urgency erzeugen würden.",
+      "severity": "medium",
+      "suggested_fix": "Trap Question 2 sollte die SAP-ECC-End-of-Life-Deadline explizit einbeziehen. Differenzierungen sollten Zeitdruck-Argumente enthalten: 'T-Systems kann Sprint-basierte Migration in 6-Monats-Zyklen liefern, weil...'.",
+      "root_cause_hint": "compete skill urgency integration"
+    }
+  ],
+  "strengths": [
+    "Sovereign-Cloud-Differenzierung ist strukturell stark und für jeden Wettbewerber schwer zu kontern",
+    "Trap Questions 1 und 3 (BSI-C5 + Telco-Backbone) sind echte Deal-Killer in KRITIS-Evaluierungen",
+    "Wettbewerberauswahl deckt die relevanten Segmente ab (Global SI, Indian SI, DACH-Spezialist)"
+  ],
+  "would_use_in_pitch_deck": false,
+  "overall_assessment": "Solide Grundlage mit starker Sovereign-Cloud-Differenzierung, aber noch nicht pitch-ready. Drei Lücken: (1) Keine benennbaren Referenzkunden in den Differenzierungen — das ist das größte Risiko, weil ein CISO oder CIO im Evaluierungsgespräch sofort nach Referenzen fragt. (2) Preisbehauptungen ohne Beleg schaffen Angriffsfläche. (3) Keine Integration regulatorischer Deadlines als Urgency-Trigger. Wenn diese drei Punkte behoben werden, ist das ein starkes Competitive Battle Card für Energieversorger-Deals."
+}

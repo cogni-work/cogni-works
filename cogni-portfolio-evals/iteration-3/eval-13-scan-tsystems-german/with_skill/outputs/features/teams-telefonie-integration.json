@@ -1,0 +1,16 @@
+{
+  "slug": "teams-telefonie-integration",
+  "product_slug": "workplace-services",
+  "name": "Teams-Telefonie-Integration",
+  "description": "Telekom-Telefonie- und Mobilfunk-Integration für Teams",
+  "taxonomy_mapping": {
+    "dimension": 3,
+    "dimension_name": "Digital Workplace Services",
+    "category_id": "3.1",
+    "category_name": "Unified Communications",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

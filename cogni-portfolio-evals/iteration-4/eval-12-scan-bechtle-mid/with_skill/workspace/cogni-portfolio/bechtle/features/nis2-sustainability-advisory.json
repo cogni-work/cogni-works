@@ -1,0 +1,16 @@
+{
+  "slug": "nis2-sustainability-advisory",
+  "product_slug": "consulting-services",
+  "name": "NIS2 & Sustainability Advisory",
+  "description": "NIS2 directive compliance consulting with CEO training program, customized implementation roadmaps and continuous adaptation planning, plus ESG strategy advisory under Sustainability Strategy 2030.",
+  "taxonomy_mapping": {
+    "dimension": 7,
+    "dimension_name": "Consulting Services",
+    "category_id": "7.3",
+    "category_name": "Business & Industry Consulting",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/bechtle-portfolio.md",
+  "created": "2026-03-18"
+}

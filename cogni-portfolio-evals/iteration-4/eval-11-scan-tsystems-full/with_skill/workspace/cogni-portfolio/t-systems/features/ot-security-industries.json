@@ -1,0 +1,16 @@
+{
+  "slug": "ot-security-industries",
+  "product_slug": "security-services",
+  "name": "OT Security for Industries",
+  "description": "360-degree operational technology security service with OT-IT asset inventory, vulnerability assessment, microsegmentation, and infrastructure hardening aligned to NIS2 and KRITIS compliance frameworks.",
+  "taxonomy_mapping": {
+    "dimension": 2,
+    "dimension_name": "Security Services",
+    "category_id": "2.6",
+    "category_name": "Network Security",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

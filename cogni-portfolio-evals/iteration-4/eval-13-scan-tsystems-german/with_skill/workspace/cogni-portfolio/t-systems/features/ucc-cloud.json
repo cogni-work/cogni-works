@@ -1,0 +1,16 @@
+{
+  "slug": "ucc-cloud",
+  "product_slug": "workplace-services",
+  "name": "UCC Cloud & Communications",
+  "description": "Unified communication and collaboration platform delivering VoIP, video conferencing, instant messaging, and presence management from private, public, or hybrid cloud deployment models.",
+  "taxonomy_mapping": {
+    "dimension": 3,
+    "dimension_name": "Digital Workplace Services",
+    "category_id": "3.1",
+    "category_name": "Unified Communications",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

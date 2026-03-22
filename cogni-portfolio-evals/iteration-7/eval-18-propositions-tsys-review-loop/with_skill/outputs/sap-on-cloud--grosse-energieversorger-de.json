@@ -1,0 +1,27 @@
+{
+  "slug": "sap-on-cloud--grosse-energieversorger-de",
+  "feature_slug": "sap-on-cloud",
+  "market_slug": "grosse-energieversorger-de",
+  "is_statement": "SAP Platinum Partner und RISE with SAP Premium Supplier mit SAP-Activate-Zertifizierung, End-to-End-Hosting und Betrieb von S/4HANA auf Private Cloud, AWS und Azure mit 4.000+ SAP-Experten und 850.000 verwalteten Nutzern.",
+  "does_statement": "Energieversorger migrieren SAP IS-U nach S/4HANA Utilities mit einem Partner, der 850.000 SAP-Nutzer betreibt — statt Systemintegratoren, die Energieversorger-spezifisches IS-U-Know-how erst aufbauen müssen.",
+  "means_statement": "Die S/4HANA-Migration wird vor der 2027-Deadline produktiv, weil T-Systems als größter SAP-Hoster die IS-U-Komplexität aus Bestandsprojekten kennt — kein Lernkurven-Risiko auf Kosten des Auftraggebers.",
+  "evidence": [
+    {
+      "statement": "T-Systems ist weltgrößter SAP-Hoster mit über 800 TB HANA-Datenbankvolumen und 850.000 verwalteten SAP-Nutzern",
+      "source_url": "https://sapinsider.org/vendor-showcase/t-systems/",
+      "source_title": "SAPinsider T-Systems Vendor Showcase"
+    },
+    {
+      "statement": "T-Systems hat 4.000+ SAP-Experten und ist RISE with SAP Premium Supplier",
+      "source_url": "https://www.t-systems.com/us/en/application-services/solutions/sap-solutions/rise-with-sap",
+      "source_title": "T-Systems RISE with SAP"
+    },
+    {
+      "statement": "SAP ECC Mainstream-Maintenance endet 2027 — Energieversorger mit IS-U haben die komplexesten Migrationen",
+      "source_url": null,
+      "source_title": null
+    }
+  ],
+  "created": "2026-03-18",
+  "updated": "2026-03-18"
+}

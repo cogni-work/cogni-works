@@ -1,0 +1,86 @@
+{
+  "total_checks": 13,
+  "passed": 13,
+  "failed": 0,
+  "pass_rate": 1.0,
+  "expectations": [
+    {
+      "text": "All required fields present (slug, product_slug, market_slug, package_type, name, tiers)",
+      "passed": true,
+      "evidence": "All present",
+      "entity": "cloud-services--grosse-energieversorger-de"
+    },
+    {
+      "text": "Slug follows {product}--{market} pattern",
+      "passed": true,
+      "evidence": "slug=\"cloud-services--grosse-energieversorger-de\", expected=\"cloud-services--grosse-energieversorger-de\"",
+      "entity": "cloud-services--grosse-energieversorger-de"
+    },
+    {
+      "text": "package_type is project/subscription/hybrid (actual: project)",
+      "passed": true,
+      "evidence": "package_type=\"project\"",
+      "entity": "cloud-services--grosse-energieversorger-de"
+    },
+    {
+      "text": "2-4 tiers present (actual: 3)",
+      "passed": true,
+      "evidence": "3 tiers: ['Foundation', 'Professional', 'Enterprise']",
+      "entity": "cloud-services--grosse-energieversorger-de"
+    },
+    {
+      "text": "Each tier has required fields (tier, name, included_solutions, scope, currency)",
+      "passed": true,
+      "evidence": "All tiers complete",
+      "entity": "cloud-services--grosse-energieversorger-de"
+    },
+    {
+      "text": "solution_sizes present with valid sizes for all included solutions",
+      "passed": true,
+      "evidence": "All tiers have valid solution_sizes",
+      "entity": "cloud-services--grosse-energieversorger-de"
+    },
+    {
+      "text": "Exclusions present on tiers (3/3)",
+      "passed": true,
+      "evidence": "3 of 3 tiers have exclusions",
+      "entity": "cloud-services--grosse-energieversorger-de"
+    },
+    {
+      "text": "Tier prices monotonically increasing",
+      "passed": true,
+      "evidence": "Prices: [195000, 520000, 1295000]",
+      "entity": "cloud-services--grosse-energieversorger-de"
+    },
+    {
+      "text": "Every included_solution references existing solution file",
+      "passed": true,
+      "evidence": "All 4 references valid",
+      "entity": "cloud-services--grosse-energieversorger-de"
+    },
+    {
+      "text": "No orphan solutions (every available solution appears in at least one tier)",
+      "passed": true,
+      "evidence": "All 4 solutions covered",
+      "entity": "cloud-services--grosse-energieversorger-de"
+    },
+    {
+      "text": "bundle_savings_pct is 10-50% (actual: 15%)",
+      "passed": true,
+      "evidence": "bundle_savings_pct=15",
+      "entity": "cloud-services--grosse-energieversorger-de"
+    },
+    {
+      "text": "Positioning max 80 characters (actual: 59)",
+      "passed": true,
+      "evidence": "\"KRITIS-compliant cloud transformation in tiered engagements\"",
+      "entity": "cloud-services--grosse-energieversorger-de"
+    },
+    {
+      "text": "Scope is max 1 sentence per tier",
+      "passed": true,
+      "evidence": "All scopes single-sentence",
+      "entity": "cloud-services--grosse-energieversorger-de"
+    }
+  ]
+}

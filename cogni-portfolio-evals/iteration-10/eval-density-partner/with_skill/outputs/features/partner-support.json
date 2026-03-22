@@ -1,0 +1,14 @@
+{
+  "slug": "partner-support",
+  "product_slug": "partner-portal",
+  "name": "Partner-Support-Zugang",
+  "description": "Dedizierter Support-Kanal mit tierbasiertem Ticket-Routing, der Eskalationen über SLA-gesteuerte Queues nach Partnerklasse priorisiert und eine eigenständige Wissensdatenbank mit partnerspezifischen Troubleshooting-Runbooks und kontextbezogenen Lösungsvorlagen bereitstellt.",
+  "category": "support",
+  "taxonomy_mapping": {
+    "dimension": "Managed Infrastructure Services",
+    "category_id": "5.6",
+    "category_name": "Service Desk & End-User Support"
+  },
+  "readiness": "ga",
+  "created": "2026-03-21"
+}

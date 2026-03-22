@@ -1,0 +1,27 @@
+{
+  "slug": "sovereign-cloud--grosse-energieversorger-de",
+  "feature_slug": "sovereign-cloud",
+  "market_slug": "grosse-energieversorger-de",
+  "is_statement": "Europäische Datenhoheit über T Cloud Public, Open Sovereign Cloud und Google-Cloud-Sovereign-Varianten — vollständig in der EU betrieben, BSI-C5-testiert und KRITIS-konform für regulierte Infrastrukturbetreiber.",
+  "does_statement": "KRITIS-Betreiber betreiben Cloud-Workloads auf BSI-C5-testierten Plattformen mit deutschem Rechtsrahmen — statt US-Cloud-Anbietern, bei denen der CISO jedes NIS2-Audit eskalieren muss.",
+  "means_statement": "Der CISO gibt Cloud-Projekte ohne Sondergenehmigung frei, weil BSI-C5- und ISO-27001-Nachweise bereits vorliegen — das verkürzt die Beschaffungsfreigabe um Monate statt Quartale.",
+  "evidence": [
+    {
+      "statement": "T Cloud Public ist nach BSI C5:2020 testiert und für IT-Grundschutz gelistet",
+      "source_url": "https://public.t-cloud.com/en/blog/cloud-computing/t-cloud-public-applied-for-it-grundschutz",
+      "source_title": "T Cloud Public IT-Grundschutz Listing"
+    },
+    {
+      "statement": "T-Systems Sovereign Cloud mit Google Cloud bietet deutsche Datenresidenz und Schlüsselkontrolle",
+      "source_url": "https://cloud.google.com/t-systems-sovereign-cloud",
+      "source_title": "Google Cloud T-Systems Sovereign Cloud"
+    },
+    {
+      "statement": "NIS2-Registrierungspflicht beim BSI bis 6. März 2026 für alle KRITIS-Betreiber",
+      "source_url": "https://www.heise.de/en/news/The-clock-is-ticking-NIS2-registration-deadline-at-BSI-expires-on-March-6-2026-11182664.html",
+      "source_title": "Heise: NIS2 Registrierungsfrist"
+    }
+  ],
+  "created": "2026-03-18",
+  "updated": "2026-03-18"
+}

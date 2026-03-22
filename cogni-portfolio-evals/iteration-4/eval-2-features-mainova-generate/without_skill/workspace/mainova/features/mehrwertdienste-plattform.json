@@ -1,0 +1,14 @@
+{
+  "slug": "mehrwertdienste-plattform",
+  "product_slug": "digitale-kundendienste",
+  "name": "Mehrwertdienste-Plattform",
+  "description": "Modulare Serviceplattform fuer energienahe Zusatzangebote wie Photovoltaik-Pachtmodelle, Waermepumpen-Contracting und Ladeinfrastruktur-Management mit Konfigurator-Engine, digitaler Bestellstrecke und White-Label-Faehigkeit fuer Kooperationspartner.",
+  "category": "digital-services",
+  "taxonomy_mapping": {
+    "dimension": 4,
+    "category_id": "4.6",
+    "category_name": "Cloud-Native Platform",
+    "horizon": "emerging"
+  },
+  "readiness": "beta"
+}

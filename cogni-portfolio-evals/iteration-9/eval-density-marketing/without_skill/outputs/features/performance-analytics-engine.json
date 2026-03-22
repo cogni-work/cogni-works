@@ -1,0 +1,7 @@
+{
+  "slug": "performance-analytics-engine",
+  "product_slug": "content-platform",
+  "name": "Performance-Analytics-Engine",
+  "description": "Metriken-Pipeline, die Engagement-, Conversion- und Reichweiten-Signale pro Content-Asset aggregiert, in kanaluebergreifende Dashboards normalisiert und Attributionsmodelle auf Kampagnenebene berechnet.",
+  "readiness": "ga"
+}

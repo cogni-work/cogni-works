@@ -1,0 +1,199 @@
+{
+  "portfolio_slug": "t-systems",
+  "market": "grosse-energieversorger-de",
+  "review_date": "2026-03-18",
+  "solutions_reviewed": 3,
+  "summary": {
+    "accepted": 0,
+    "revise": 3,
+    "rejected": 0
+  },
+  "solution_scores": [
+    {
+      "slug": "cloud-migration--grosse-energieversorger-de",
+      "verdict": "revise",
+      "overall_score": 78,
+      "reviewer": 82,
+      "provider_sa": 76,
+      "client_sa": 75
+    },
+    {
+      "slug": "sap-on-cloud--grosse-energieversorger-de",
+      "verdict": "revise",
+      "overall_score": 79,
+      "reviewer": 85,
+      "provider_sa": 80,
+      "client_sa": 73
+    },
+    {
+      "slug": "sovereign-cloud--grosse-energieversorger-de",
+      "verdict": "revise",
+      "overall_score": 74,
+      "reviewer": 78,
+      "provider_sa": 70,
+      "client_sa": 73
+    }
+  ],
+  "perspective_averages": {
+    "reviewer": 81.7,
+    "provider_sa": 75.3,
+    "client_sa": 73.7
+  },
+  "cross_solution_patterns": {
+    "shared_strengths": [
+      {
+        "pattern": "Strong PoV design across all three solutions",
+        "detail": "Each PoV has a clear Go/No-Go deliverable: 6R classification report (migration), TCO comparison report (SAP), BSI-C5 gap report (sovereign). These are concrete procurement artifacts, not vague 'pilot' descriptions.",
+        "solutions": ["cloud-migration", "sap-on-cloud", "sovereign-cloud"]
+      },
+      {
+        "pattern": "Consistent cost model with delivery_defaults alignment",
+        "detail": "All three solutions use identical role rates matching portfolio.json delivery_defaults (SA 1800, IE 1200, PM 1400 EUR/day). Assumptions are specific and auditable. Bill of materials includes tooling and infrastructure.",
+        "solutions": ["cloud-migration", "sap-on-cloud", "sovereign-cloud"]
+      },
+      {
+        "pattern": "Tier pricing progression is commercially coherent",
+        "detail": "No inverted tiers. Price jumps reflect meaningful scope increases (department → enterprise). PoV pricing under 50K EUR allows departmental approval without board escalation at large utilities.",
+        "solutions": ["cloud-migration", "sap-on-cloud", "sovereign-cloud"]
+      },
+      {
+        "pattern": "DOES traceability is strong",
+        "detail": "Implementation phases map clearly to proposition DOES statements. Each phase contributes to delivering the promised outcome.",
+        "solutions": ["cloud-migration", "sap-on-cloud", "sovereign-cloud"]
+      }
+    ],
+    "shared_weaknesses": [
+      {
+        "pattern": "OT/IT integration is the universal blind spot",
+        "severity": "HIGH",
+        "detail": "All three solutions touch SCADA, Netzleitstellen, or OT systems in their scope descriptions but none specify the actual integration approach. For energy utilities, OT/IT convergence is the #1 pain point (listed in market definition). This is the most likely failure mode in procurement evaluation — the CISO and OT-Leiter will reject any solution that doesn't explicitly address OT boundaries.",
+        "solutions": ["cloud-migration", "sap-on-cloud", "sovereign-cloud"],
+        "recommendation": "Add a cross-portfolio OT integration assumption: either define a standard OT/IT boundary approach that all solutions reference, or explicitly scope OT systems out with a separate engagement path."
+      },
+      {
+        "pattern": "No competitive positioning in any solution",
+        "severity": "OPTIONAL",
+        "detail": "All three solutions lack competitor context. This is the same market (large energy utilities) where procurement teams benchmark aggressively. Cloud migration competes with Accenture/Capgemini, SAP with RISE/Atos/IBM, sovereign cloud with Ionos/STACKIT/Delos. The absence is consistent, suggesting no competitor entities exist in the project.",
+        "solutions": ["cloud-migration", "sap-on-cloud", "sovereign-cloud"],
+        "recommendation": "Create competitor entities for this market and run repricing flow. This is portfolio-level work, not per-solution."
+      },
+      {
+        "pattern": "Implementation phase durations are fixed, not per-tier",
+        "severity": "HIGH",
+        "detail": "All three solutions describe implementation phases with durations that map to roughly the Small tier (11-18 weeks), but tier scopes range from 11 to 40 weeks. A Provider SA planning the Large tier delivery would need to re-estimate all phase durations. This is a structural issue with the batch-generated solution format.",
+        "solutions": ["cloud-migration", "sap-on-cloud", "sovereign-cloud"],
+        "recommendation": "Either add per-tier phase duration tables or add an explicit note that implementation phases describe the baseline (Small) tier and scale proportionally."
+      },
+      {
+        "pattern": "Client SA perspective consistently scores lowest (73-75)",
+        "severity": "HIGH",
+        "detail": "Across all three solutions, the client-side SA finds adoption safety gaps. The pattern: integration feasibility is always 'warn' (OT/IT blind spot), and either vendor lock-in or data/compliance handling has gaps. This suggests the solutions were designed from the provider's delivery perspective, not from the buyer's adoption perspective.",
+        "solutions": ["cloud-migration", "sap-on-cloud", "sovereign-cloud"],
+        "recommendation": "Add a standard 'buyer adoption' section to the solution template: integration boundaries, data residency, exit clause, retained team RACI. The SAP solution partially does this (exit clause) but the others don't."
+      },
+      {
+        "pattern": "Small tier margins consistently below or at 30% target",
+        "severity": "OPTIONAL",
+        "detail": "Small tier margins: cloud-migration 29.4%, sap-on-cloud 29.4%, sovereign-cloud 28.8%. All are slightly below the 30% target. This suggests the Small tier is underpriced relative to effort, or effort is slightly overestimated. The pattern is too consistent to be coincidence — likely a systematic pricing calibration issue.",
+        "solutions": ["cloud-migration", "sap-on-cloud", "sovereign-cloud"],
+        "recommendation": "Either increase Small tier prices by 3-5% or trim 2-3 person-days from the effort estimates. The easiest fix: reduce PM days in the Small tier by 2 across all solutions."
+      }
+    ],
+    "inconsistencies": [
+      {
+        "pattern": "Exit clause present in SAP solution but missing from cloud-migration and sovereign-cloud",
+        "detail": "The SAP solution includes a 4-week knowledge transfer exit clause — an excellent practice that the Client SA valued highly. The other two solutions don't include this. For a portfolio selling to the same buyer (large energy utility), this inconsistency is a procurement risk: the buyer will ask 'why does one contract have exit terms and the others don't?'",
+        "recommendation": "Add exit clause to cloud-migration and sovereign-cloud assumptions, aligned with the SAP solution's approach."
+      },
+      {
+        "pattern": "NIS2 addressed inconsistently across solutions",
+        "detail": "Sovereign-cloud references NIS2 as a driver in assumptions. Cloud-migration doesn't mention NIS2. SAP-on-cloud doesn't mention it. For the same market (energy utilities facing April 2026 NIS2 deadline), the regulatory framing should be consistent.",
+        "recommendation": "Either reference NIS2 in all three solutions (it affects all of them) or centralize it as a market-level driver that all solutions inherit."
+      }
+    ]
+  },
+  "margin_health": {
+    "summary": "Margins are healthy overall but Small tier consistently underperforms the 30% target. PoV margins (12.7-14.3%) are deliberately low for land-and-expand — acceptable. Medium and Large tiers exceed target (30.6-40.0%).",
+    "by_tier": {
+      "proof_of_value": {
+        "range": "12.7% - 14.3%",
+        "assessment": "Acceptable — deliberate land-and-expand strategy",
+        "solutions_below_target": ["cloud-migration (14.3%)", "sap-on-cloud (13.2%)", "sovereign-cloud (12.7%)"]
+      },
+      "small": {
+        "range": "28.8% - 29.4%",
+        "assessment": "Below 30% target across all solutions — systematic underpricing",
+        "solutions_below_target": ["cloud-migration (29.4%)", "sap-on-cloud (29.4%)", "sovereign-cloud (28.8%)"]
+      },
+      "medium": {
+        "range": "30.6% - 35.1%",
+        "assessment": "Healthy — meets or exceeds target",
+        "solutions_below_target": []
+      },
+      "large": {
+        "range": "37.7% - 40.0%",
+        "assessment": "Strong — premium margins on enterprise engagements",
+        "solutions_below_target": []
+      }
+    }
+  },
+  "solution_type_audit": {
+    "assessment": "All three solutions use project type. The product (cloud-services) has no revenue_model field, making project the correct default. No misrouting detected.",
+    "issues": []
+  },
+  "upstream_diagnosis": [
+    {
+      "issue": "Product entity (cloud-services) is minimal — no revenue_model, pricing_tier, or maturity fields",
+      "impact": "Cannot validate solution type routing mechanically. Cannot calibrate pricing against product positioning.",
+      "recommendation": "Enrich cloud-services.json with revenue_model: 'project', pricing_tier, and maturity fields."
+    },
+    {
+      "issue": "No competitor entities exist for this market",
+      "impact": "All three solutions lack competitive positioning context. Pricing is internally coherent but externally unvalidated.",
+      "recommendation": "Create competitor entities for the energy utility cloud services market (Accenture, Atos, IBM, RISE with SAP, Ionos, STACKIT)."
+    },
+    {
+      "issue": "Feature entities are minimal — name and description only, no readiness field",
+      "impact": "Cannot validate feature readiness gate (ga/beta/planned). All features are treated as GA by default.",
+      "recommendation": "Add readiness field to all feature JSONs."
+    }
+  ],
+  "priority_actions": [
+    {
+      "priority": 1,
+      "action": "Add OT/IT integration boundaries across all three solutions",
+      "rationale": "Universal blind spot flagged by Client SA on all solutions. Energy utility CISO and OT-Leiter will reject without this.",
+      "effort": "Low — add 1-2 assumptions per solution defining OT scope boundary"
+    },
+    {
+      "priority": 2,
+      "action": "Add exit clauses to cloud-migration and sovereign-cloud (matching SAP solution pattern)",
+      "rationale": "Portfolio consistency for same-buyer procurement. SAP solution already has the right template.",
+      "effort": "Low — copy pattern from SAP solution assumptions"
+    },
+    {
+      "priority": 3,
+      "action": "Fix Small tier margins across all solutions (currently 28.8-29.4% vs. 30% target)",
+      "rationale": "Systematic underpricing. Either increase Small prices by 3-5% or reduce PM effort by 2 days.",
+      "effort": "Low — pricing adjustment"
+    },
+    {
+      "priority": 4,
+      "action": "Add per-tier phase duration notes to implementation plans",
+      "rationale": "Current phase durations only map to Small tier. Provider SAs planning Medium/Large need scaled timelines.",
+      "effort": "Medium — requires rethinking phase duration structure"
+    },
+    {
+      "priority": 5,
+      "action": "Create competitor entities and run competitive pricing calibration",
+      "rationale": "All three solutions lack competitive context. Same market, same procurement team — they will benchmark.",
+      "effort": "High — requires competitive research"
+    },
+    {
+      "priority": 6,
+      "action": "Enrich upstream entities (product fields, feature readiness)",
+      "rationale": "Enables mechanical validation of solution type routing and feature readiness gates.",
+      "effort": "Low — add 3-4 fields to existing JSONs"
+    }
+  ]
+}

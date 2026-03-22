@@ -1,0 +1,76 @@
+{
+  "expectations": [
+    {
+      "text": "customer-review-assessor invoked",
+      "passed": false,
+      "evidence": "No customer-review-assessor agent was used. The baseline agent performed a freeform 3-perspective review without the structured agent protocol."
+    },
+    {
+      "text": "Assessment JSON output present with all three perspectives (reviewer, cso, market_expert)",
+      "passed": false,
+      "evidence": "Assessment uses non-standard perspective names: 'perspective_1_buyer_recognition', 'perspective_2_sales_usability', 'perspective_3_market_accuracy'. Does not match the required schema (reviewer, cso, market_expert)."
+    },
+    {
+      "text": "Each perspective has 5 scored criteria with pass/warn/fail and weights",
+      "passed": false,
+      "evidence": "Assessment uses a single score per perspective (e.g., 8.5/10) without per-criterion breakdown, weights, or pass/warn/fail ratings. No structured criteria at all."
+    },
+    {
+      "text": "Verdict is accept, revise, or reject",
+      "passed": false,
+      "evidence": "No verdict field in the assessment JSON. Contains 'overall_score: 8.3' and a 'summary' string but no accept/revise/reject determination."
+    },
+    {
+      "text": "If verdict is revise, revision round executed (max 2)",
+      "passed": false,
+      "evidence": "No structured verdict. The agent performed 2 revision rounds but without the formal revise/accept protocol — revisions were freeform improvements, not targeted by revision_guidance."
+    },
+    {
+      "text": "Final profile retains all required fields after revision",
+      "passed": false,
+      "evidence": "Output profile uses a non-canonical schema: 'priorities', 'success_metrics', 'objections', 'trigger_events' instead of the required 'pain_points', 'buying_criteria', 'information_sources', 'decision_role'. Also produced 7 profiles instead of the 2-4 range."
+    },
+    {
+      "text": "Synthesis includes priority-tiered improvements (critical/high/optional)",
+      "passed": false,
+      "evidence": "Assessment has per-perspective round_1_improvements and round_2_findings as narrative text, not structured critical/high/optional priority tiers."
+    },
+    {
+      "text": "revision_guidance is non-empty when verdict is revise",
+      "passed": false,
+      "evidence": "No revision_guidance field. No verdict field. Improvements were listed as narrative text without structured guidance."
+    }
+  ],
+  "summary": {
+    "passed": 0,
+    "failed": 8,
+    "total": 8,
+    "pass_rate": 0.0
+  },
+  "timing": {
+    "total_duration_seconds": 287.1,
+    "total_tokens": 45812
+  },
+  "claims": [
+    {
+      "claim": "7 buying committee personas created",
+      "type": "factual",
+      "verified": true,
+      "evidence": "Output JSON contains 7 profiles: CIO, CISO, VP Infrastructure, CFO, Head Portfolio Management & Trading, Head Grid Operations, CDO"
+    },
+    {
+      "claim": "Scores of 8.5, 8.0, 8.5 out of 10 across three perspectives",
+      "type": "quality",
+      "verified": true,
+      "evidence": "Assessment JSON confirms these scores"
+    }
+  ],
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "reason": "The baseline produces a completely different output schema (non-canonical fields, no structured scoring). This strongly validates that the skill adds value — without it, output structure is unconstrained."
+      }
+    ],
+    "overall": "Baseline fails all 8 assertions. The skill's primary value is structural: enforcing the canonical schema, using the formal assessor agent with per-criterion scoring, and producing actionable revision guidance. The baseline output is qualitatively rich but non-standard."
+  }
+}

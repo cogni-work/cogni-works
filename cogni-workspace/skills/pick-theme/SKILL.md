@@ -1,7 +1,7 @@
 ---
 name: pick-theme
 description: >-
-  Standard theme picker for all cogni-works ecosystem plugins. Discovers themes
+  Standard theme picker for all insight-wave ecosystem plugins. Discovers themes
   from the standard cogni-workspace themes directory and the user's workspace
   themes directory, then presents an interactive picker via AskUserQuestion.
   Returns the absolute path to the selected theme.md file. Use this skill
@@ -11,13 +11,13 @@ description: >-
   "select a theme", or when any visual output skill needs theme resolution. Also
   triggers when skills internally need theme selection as a prerequisite step.
   This is the single standard entry point for theme selection across both
-  cogni-works and cogni-works-pro marketplaces.
+  insight-wave and insight-wave-pro marketplaces.
 version: 0.1.0
 ---
 
 # Pick Theme
 
-Standard theme picker for the cogni-works ecosystem. Provides a single, consistent theme selection experience used by all plugins that produce visual output — slides, dashboards, web narratives, big pictures, storyboards, and HTML reports.
+Standard theme picker for the insight-wave ecosystem. Provides a single, consistent theme selection experience used by all plugins that produce visual output — slides, dashboards, web narratives, big pictures, storyboards, and HTML reports.
 
 ## Why This Exists
 

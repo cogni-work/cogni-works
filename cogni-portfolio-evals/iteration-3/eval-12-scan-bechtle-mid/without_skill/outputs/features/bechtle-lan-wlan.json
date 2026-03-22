@@ -1,0 +1,13 @@
+{
+  "slug": "bechtle-lan-wlan",
+  "name": "Bechtle LAN/WLAN Services",
+  "description": "Campus network modernization including LAN, WLAN infrastructure, enterprise networking with routers, switches, firewalls, Wi-Fi controllers, and Bechtle NetFlex managed network service.",
+  "product_slug": "bechtle-networking",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 1,
+    "category_id": "1.6",
+    "category_name": "LAN/WLAN Services"
+  },
+  "source_file": "https://www.bechtle.com/ch-en/it-solutions/networking"
+}

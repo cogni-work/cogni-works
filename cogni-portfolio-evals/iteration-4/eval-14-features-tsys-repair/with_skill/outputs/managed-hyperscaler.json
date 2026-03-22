@@ -1,0 +1,15 @@
+{
+  "slug": "managed-hyperscaler",
+  "product_slug": "cloud-services",
+  "name": "Managed Hyperscaler Services",
+  "description": "Rundum gemanagte AWS, Azure und GCP Umgebungen mit Well-Architected Reviews, Security Assessments, standardisierten Landing-Zone-Modulen und 24/7 Operations — als zertifizierter MSP Partner auf allen hyperscaler Plattformen.",
+  "taxonomy_mapping": {
+    "dimension": 4,
+    "dimension_name": "Cloud Services",
+    "category_id": "4.1",
+    "category_name": "Managed Hyperscaler Services",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "updated": "2026-03-18"
+}

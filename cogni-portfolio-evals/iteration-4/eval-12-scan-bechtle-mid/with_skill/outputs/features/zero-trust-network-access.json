@@ -1,0 +1,16 @@
+{
+  "slug": "zero-trust-network-access",
+  "product_slug": "security-services",
+  "name": "Zero Trust Network Access",
+  "description": "Cloud-based zero trust architecture implementation using Sophos ZTNA with identity-based micro-segmented access controls, continuous device posture verification and granular policy management.",
+  "taxonomy_mapping": {
+    "dimension": 2,
+    "dimension_name": "Security Services",
+    "category_id": "2.3",
+    "category_name": "Zero Trust Architecture",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/bechtle-portfolio.md",
+  "created": "2026-03-18"
+}

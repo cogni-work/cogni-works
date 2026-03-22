@@ -1,0 +1,13 @@
+{
+  "slug": "bechtle-security-academy",
+  "name": "Bechtle Security Academy",
+  "description": "Human-centered security awareness training and Bechtle Security Academy certification programs for enterprise security culture.",
+  "product_slug": "bechtle-security",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 2,
+    "category_id": "2.8",
+    "category_name": "Security Awareness"
+  },
+  "source_file": "https://www.bechtle.com/de-en/it-solutions"
+}

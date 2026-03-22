@@ -1,0 +1,16 @@
+{
+  "slug": "it-procurement",
+  "product_slug": "consulting-services",
+  "name": "IT Procurement and Sourcing",
+  "description": "E-procurement, software licensing, hardware sourcing via Bechtle direct",
+  "taxonomy_mapping": {
+    "dimension": 7,
+    "dimension_name": "Consulting Services",
+    "category_id": "7.5",
+    "category_name": "Vendor & Contract Management",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/bechtle-portfolio.md",
+  "created": "2026-03-18"
+}

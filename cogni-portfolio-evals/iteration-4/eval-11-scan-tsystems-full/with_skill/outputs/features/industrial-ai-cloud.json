@@ -1,0 +1,16 @@
+{
+  "slug": "industrial-ai-cloud",
+  "product_slug": "application-services",
+  "name": "Industrial AI Cloud",
+  "description": "Industry-specific AI stack with consulting services delivering computer vision, NLP, and generative AI solutions tailored to automotive, healthcare, transportation, and retail sector requirements.",
+  "taxonomy_mapping": {
+    "dimension": 6,
+    "dimension_name": "Application Services",
+    "category_id": "6.6",
+    "category_name": "AI, Data & Analytics",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

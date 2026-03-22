@@ -1,0 +1,40 @@
+{
+  "slug": "private-cloud",
+  "name": "Private Cloud Infrastructure",
+  "description": "VMware Cloud Foundation basierte Future Cloud Infrastructure (FCI) mit SDDC auf Lenovo Servern, beheimatet in klimaneutralen europäischen Rechenzentren mit Legacy-IT-Integration.",
+  "review": {
+    "quality_score": 2.5,
+    "issues": [
+      {
+        "check": "language-mismatch",
+        "severity": "high",
+        "detail": "Portfolio language is 'en' but description is written in German."
+      },
+      {
+        "check": "missing-customer-value",
+        "severity": "high",
+        "detail": "Description lists technology components (VMware, SDDC, Lenovo) but never states what business outcome or value this delivers to the customer."
+      },
+      {
+        "check": "vendor-lock-in-risk",
+        "severity": "medium",
+        "detail": "Naming specific vendors (VMware, Lenovo) ties the feature to procurement details rather than capability value. If vendors change, the description becomes stale."
+      },
+      {
+        "check": "missing-schema-fields",
+        "severity": "medium",
+        "detail": "Missing fields: product, created, status, differentiators, use_cases."
+      },
+      {
+        "check": "acronym-overload",
+        "severity": "medium",
+        "detail": "FCI and SDDC are used without explanation. Readers outside T-Systems may not know these abbreviations."
+      }
+    ],
+    "passed_checks": [
+      "slug-format",
+      "description-present",
+      "name-present"
+    ]
+  }
+}

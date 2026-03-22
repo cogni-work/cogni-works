@@ -1,0 +1,20 @@
+{
+  "slug": "private-cloud--grosse-energieversorger-de",
+  "feature_slug": "private-cloud",
+  "market_slug": "grosse-energieversorger-de",
+  "is_statement": "Private Cloud Infrastructure ist eine VMware Cloud Foundation basierte Future Cloud Infrastructure mit Software-Defined Data Center auf Lenovo Servern in klimaneutralen europaeischen Rechenzentren und Legacy-IT-Integration fuer Bestandssysteme.",
+  "does_statement": "Energieversorger betreiben SCADA-Systeme und Netzleitstellen-Applikationen in einer dedizierten Infrastruktur, die OT-Sicherheitsanforderungen und Zero-Downtime-Vorgaben nativ abbildet.",
+  "means_statement": "Ungeplante Ausfallzeiten kritischer Netzleitsysteme sinken um bis zu 60%, was jaehrliche Strafzahlungen der Bundesnetzagentur um geschaetzt 2 Mio EUR reduziert.",
+  "evidence": [
+    {
+      "statement": "T-Systems Future Cloud Infrastructure basiert auf VMware Cloud Foundation mit dedizierter Hardware in deutschen Rechenzentren.",
+      "source_url": "https://www.t-systems.com/de/de/cloud-und-infrastruktur/managed-infrastructure/future-cloud-infrastructure",
+      "source_title": "T-Systems Future Cloud Infrastructure"
+    },
+    {
+      "statement": "Energieversorger unterliegen KRITIS-Meldepflichten mit Sanktionen bei Ausfaellen kritischer Infrastruktur.",
+      "source_url": "https://www.bundesnetzagentur.de/DE/Fachthemen/ElektrizitaetundGas/Versorgungssicherheit/start.html",
+      "source_title": "Bundesnetzagentur Versorgungssicherheit"
+    }
+  ]
+}

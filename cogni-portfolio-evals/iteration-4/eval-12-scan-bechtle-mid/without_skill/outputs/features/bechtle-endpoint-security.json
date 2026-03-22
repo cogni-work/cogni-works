@@ -1,0 +1,13 @@
+{
+  "slug": "bechtle-endpoint-security",
+  "name": "Bechtle Endpoint Security",
+  "description": "Endpoint Detection and Response (EDR), Endpoint Protection Platform (EPP), and Managed Microsoft Defender services with multi-vendor support.",
+  "product_slug": "bechtle-security",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 2,
+    "category_id": "2.5",
+    "category_name": "Endpoint Security"
+  },
+  "source_file": "https://www.bechtle.com/de-en/it-services/managed-services/managed-security-services"
+}

@@ -1,0 +1,14 @@
+{
+  "slug": "taxonomie-klassifizierung",
+  "product_slug": "cogni-portfolio",
+  "name": "Taxonomie-Klassifizierung",
+  "description": "Automatische Einordnung jedes Features in eine B2B-ICT-Taxonomie mit 57 Kategorien über 8 Dimensionen, wobei LLM-Matching anhand von Beschreibungssemantik statt starrer Keyword-Zuordnung klassifiziert.",
+  "category": "classification",
+  "taxonomy_mapping": {
+    "dimension": "Application",
+    "category_id": "6.3",
+    "category_name": "Data & Analytics"
+  },
+  "readiness": "ga",
+  "created": "2026-03-21"
+}

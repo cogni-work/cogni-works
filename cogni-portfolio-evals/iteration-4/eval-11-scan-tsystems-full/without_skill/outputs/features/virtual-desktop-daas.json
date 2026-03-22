@@ -1,0 +1,13 @@
+{
+  "slug": "virtual-desktop-daas",
+  "name": "Virtual Desktop & DaaS",
+  "description": "Cloud-based virtual desktop infrastructure for remote and distributed workforces",
+  "product_slug": "t-systems-workplace",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 3,
+    "category_id": "3.4",
+    "category_name": "Virtual Desktop & DaaS"
+  },
+  "source_file": "https://www.t-systems.com/us/en/cloud-services"
+}

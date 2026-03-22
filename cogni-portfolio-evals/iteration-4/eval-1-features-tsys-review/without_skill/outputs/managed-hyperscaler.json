@@ -1,0 +1,36 @@
+{
+  "slug": "managed-hyperscaler",
+  "name": "Managed Hyperscaler Services",
+  "description": "Rundum gemanagte AWS, Azure und GCP Umgebungen mit Well-Architected Reviews, Security Assessments, standardisierten Landing-Zone-Modulen und 24/7 Operations — als zertifizierter MSP Partner auf allen hyperscaler Plattformen.",
+  "review": {
+    "quality_score": 3.0,
+    "issues": [
+      {
+        "check": "language-mismatch",
+        "severity": "high",
+        "detail": "Portfolio language is 'en' but description is written in German."
+      },
+      {
+        "check": "missing-customer-value",
+        "severity": "high",
+        "detail": "Lists services (reviews, assessments, landing zones, operations) but does not articulate the business outcome — e.g., reduced risk, faster time-to-cloud, cost optimization."
+      },
+      {
+        "check": "missing-schema-fields",
+        "severity": "medium",
+        "detail": "Missing fields: product, created, status, differentiators, use_cases."
+      },
+      {
+        "check": "vague-claim",
+        "severity": "low",
+        "detail": "'zertifizierter MSP Partner auf allen hyperscaler Plattformen' — which certifications? Naming them would strengthen the claim."
+      }
+    ],
+    "passed_checks": [
+      "slug-format",
+      "description-present",
+      "name-present",
+      "specificity-good"
+    ]
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "slug": "it-outsourcing-managed-operations",
+  "product_slug": "infrastructure-services",
+  "name": "IT Outsourcing & Managed IT Operations",
+  "description": "Full IT operations outsourcing service managing over one million IT workplaces and data center systems with 24x7 remote infrastructure management from dedicated Bechtle operations centers across DACH.",
+  "taxonomy_mapping": {
+    "dimension": 5,
+    "dimension_name": "Managed Infrastructure Services",
+    "category_id": "5.5",
+    "category_name": "IT Outsourcing (ITO)",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/bechtle-portfolio.md",
+  "created": "2026-03-18"
+}

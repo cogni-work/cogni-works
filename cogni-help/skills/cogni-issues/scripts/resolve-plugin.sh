@@ -41,8 +41,8 @@ fi
 
 # Source 3: Common dev locations as fallback
 for dev_path in \
-  "$HOME/GitHub/dev/cogni-works/.claude-plugin/marketplace.json" \
-  "$HOME/GitHub/dev/cogni-works-pro/.claude-plugin/marketplace.json"; do
+  "$HOME/GitHub/dev/insight-wave/.claude-plugin/marketplace.json" \
+  "$HOME/GitHub/dev/insight-wave-pro/.claude-plugin/marketplace.json"; do
   if [ -f "$dev_path" ]; then
     already=false
     for existing in "${MARKETPLACE_FILES[@]+"${MARKETPLACE_FILES[@]}"}"; do
@@ -85,7 +85,7 @@ for mp_path in mp_paths:
     marketplace_name = data.get('name', 'unknown')
 
     # Monorepo is the only issue channel — individual plugin repos are archived
-    MARKETPLACE_REPOS = {'cogni-works': 'cogni-work/cogni-works'}
+    MARKETPLACE_REPOS = {'insight-wave': 'insight-wave/insight-wave'}
 
     for plugin in data.get('plugins', []):
         if plugin.get('name') == plugin_name:

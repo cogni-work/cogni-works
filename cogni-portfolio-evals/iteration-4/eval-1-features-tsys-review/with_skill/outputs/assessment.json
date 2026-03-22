@@ -1,0 +1,244 @@
+{
+  "assessed": 8,
+  "pass": 1,
+  "warn": 5,
+  "fail": 2,
+  "structural_issues": {
+    "all_features_missing_product_slug": true,
+    "portfolio_product_list_out_of_sync": true
+  },
+  "features": [
+    {
+      "slug": "cloud-migration",
+      "name": "Cloud Migration Services",
+      "overall": "fail",
+      "word_count": 20,
+      "dimensions": {
+        "mechanism_clarity": {
+          "score": "warn",
+          "note": "Names specific methodology components (CMF, 6R, sprint-based) but reads like an enumeration of service catalog items rather than explaining what the migration engine actually does."
+        },
+        "scope_mece": {
+          "score": "warn",
+          "note": "Overlaps with managed-hyperscaler (both cover migration to hyperscaler environments). Scope is very broad — assessment, migration, modernization, and factory operations bundled into one feature."
+        },
+        "differentiation": {
+          "score": "warn",
+          "note": "CMF methodology and Cloud-Migration-Factory-Teams are specific, but 6R strategies are industry standard (Gartner). Would benefit from naming what makes T-Systems' migration approach unique."
+        },
+        "language_quality": {
+          "score": "fail",
+          "note": "Kitchen-sink enumeration: six comma-separated components chained together. Reads like a spec sheet, not a capability description. The parenthetical (Assess-Mobilize-Modernize) and (Rehost bis Retire) add clutter."
+        },
+        "conciseness": {
+          "score": "fail",
+          "note": "At 20 words by shell count, the German compound words mask the true density. The description packs too many distinct concepts — CMF, 6R, database migration, factory teams, sprint-based delivery — into a single run-on phrase. This is number-stuffing."
+        }
+      },
+      "suggestion": "Strip to core mechanism: what does the migration service do and how? e.g. 'Phased migration framework using assess-mobilize-modernize methodology with dedicated factory teams executing sprint-based workload moves to target cloud platforms.' Remove the laundry list of sub-components."
+    },
+    {
+      "slug": "cloud-native-container",
+      "name": "Cloud-Native & Container Platform",
+      "overall": "warn",
+      "word_count": 23,
+      "dimensions": {
+        "mechanism_clarity": {
+          "score": "pass",
+          "note": ""
+        },
+        "scope_mece": {
+          "score": "pass",
+          "note": ""
+        },
+        "differentiation": {
+          "score": "warn",
+          "note": "Lists platform names (EKS, OpenShift, CCE) which is specific, but the surrounding capabilities (monitoring, logging, registries, GitOps) are table stakes for any managed Kubernetes offering."
+        },
+        "language_quality": {
+          "score": "warn",
+          "note": "Leans toward enumeration — monitoring, logging, registries, GitOps, Knative listed in rapid succession without connecting them into a coherent mechanism description."
+        },
+        "conciseness": {
+          "score": "pass",
+          "note": ""
+        }
+      },
+      "suggestion": "Consolidate the component list into a mechanism statement. e.g. 'Managed Kubernetes platform spanning EKS, OpenShift, and CCE with integrated container lifecycle management — from image scanning through GitOps deployment to runtime observability on AWS and Open Telekom Cloud.'"
+    },
+    {
+      "slug": "hybrid-cloud",
+      "name": "Hybrid Cloud Solutions",
+      "overall": "warn",
+      "word_count": 20,
+      "dimensions": {
+        "mechanism_clarity": {
+          "score": "warn",
+          "note": "Names specific components (T Cloud Hybrid, MCCP, Health Hybrid Cloud) but does not explain how they work together. What does the governance framework govern? How does MCCP connect environments?"
+        },
+        "scope_mece": {
+          "score": "warn",
+          "note": "Overlaps with multi-cloud-finops on governance and cross-cloud management. The boundary between 'hybrid cloud governance' and 'multi-cloud governance' is unclear."
+        },
+        "differentiation": {
+          "score": "pass",
+          "note": ""
+        },
+        "language_quality": {
+          "score": "pass",
+          "note": ""
+        },
+        "conciseness": {
+          "score": "pass",
+          "note": ""
+        }
+      },
+      "suggestion": "Clarify the mechanism: what does T Cloud Hybrid actually do to bridge private and public environments? Sharpen the boundary with multi-cloud-finops — hybrid-cloud should own the connectivity/integration layer, not governance."
+    },
+    {
+      "slug": "managed-hyperscaler",
+      "name": "Managed Hyperscaler Services",
+      "overall": "warn",
+      "word_count": 26,
+      "dimensions": {
+        "mechanism_clarity": {
+          "score": "pass",
+          "note": ""
+        },
+        "scope_mece": {
+          "score": "pass",
+          "note": ""
+        },
+        "differentiation": {
+          "score": "warn",
+          "note": "Well-Architected Reviews and Landing Zones are standard MSP offerings. The MSP certification is a credential, not a mechanism. What does T-Systems do differently in managing these environments?"
+        },
+        "language_quality": {
+          "score": "pass",
+          "note": ""
+        },
+        "conciseness": {
+          "score": "pass",
+          "note": ""
+        }
+      },
+      "suggestion": "Replace generic MSP language with T-Systems' specific operational model — e.g. what their landing zone modules standardize, what their 24/7 operations covers beyond basic monitoring."
+    },
+    {
+      "slug": "multi-cloud-finops",
+      "name": "Multi-Cloud & FinOps Management",
+      "overall": "fail",
+      "word_count": 27,
+      "dimensions": {
+        "mechanism_clarity": {
+          "score": "warn",
+          "note": "Names platforms (MCCP, FCI) and mentions FinOps maturity assessment, but does not explain how the governance or cost management actually works. What does the platform do?"
+        },
+        "scope_mece": {
+          "score": "fail",
+          "note": "Bundles two distinct capabilities: multi-cloud governance and FinOps cost management. These serve different buyer conversations — a CFO cares about FinOps, a CTO cares about multi-cloud governance. Also overlaps with hybrid-cloud on governance (both mention cross-cloud management and MCCP)."
+        },
+        "differentiation": {
+          "score": "warn",
+          "note": "FinOps is a well-known framework (FinOps Foundation). BSI C5 and GDPR compliance are requirements, not differentiators. What makes T-Systems' approach to cost management or governance unique?"
+        },
+        "language_quality": {
+          "score": "pass",
+          "note": ""
+        },
+        "conciseness": {
+          "score": "pass",
+          "note": ""
+        }
+      },
+      "suggestion": "Consider splitting into two features: (1) Multi-Cloud Governance — focused on MCCP connectivity and policy management, (2) FinOps & Cost Management — focused on maturity assessment and continuous optimization. This also resolves the overlap with hybrid-cloud."
+    },
+    {
+      "slug": "private-cloud",
+      "name": "Private Cloud Infrastructure",
+      "overall": "pass",
+      "word_count": 20,
+      "dimensions": {
+        "mechanism_clarity": {
+          "score": "pass",
+          "note": ""
+        },
+        "scope_mece": {
+          "score": "pass",
+          "note": ""
+        },
+        "differentiation": {
+          "score": "pass",
+          "note": ""
+        },
+        "language_quality": {
+          "score": "pass",
+          "note": ""
+        },
+        "conciseness": {
+          "score": "pass",
+          "note": ""
+        }
+      },
+      "suggestion": ""
+    },
+    {
+      "slug": "sap-on-cloud",
+      "name": "SAP on Cloud",
+      "overall": "warn",
+      "word_count": 32,
+      "dimensions": {
+        "mechanism_clarity": {
+          "score": "pass",
+          "note": ""
+        },
+        "scope_mece": {
+          "score": "pass",
+          "note": ""
+        },
+        "differentiation": {
+          "score": "pass",
+          "note": ""
+        },
+        "language_quality": {
+          "score": "warn",
+          "note": "Number-stuffing: '4.000+ SAP-Experten und 850.000 verwalteten SAP-Nutzern' are scale proof points that belong in propositions or competitive comparisons, not in a feature description. The feature should describe the mechanism, not the scale of the operation."
+        },
+        "conciseness": {
+          "score": "warn",
+          "note": "At 32 words, within range but at the upper end. Removing the number-stuffing would tighten it and improve both conciseness and language quality."
+        }
+      },
+      "suggestion": "Remove the scale metrics (4.000+ experts, 850.000 users) — these are proof points for propositions. Keep the mechanism: SAP Platinum Partner with Activate certification providing end-to-end S/4HANA hosting, migration, and operations across private cloud and hyperscalers as RISE with SAP Premium Supplier."
+    },
+    {
+      "slug": "sovereign-cloud",
+      "name": "Sovereign Cloud",
+      "overall": "warn",
+      "word_count": 21,
+      "dimensions": {
+        "mechanism_clarity": {
+          "score": "warn",
+          "note": "Lists sovereign cloud product variants (T Cloud Public, OSC, Google/AWS sovereign) but does not explain the mechanism that ensures sovereignty — what technical controls enforce data residency? How is operational sovereignty maintained?"
+        },
+        "scope_mece": {
+          "score": "pass",
+          "note": ""
+        },
+        "differentiation": {
+          "score": "pass",
+          "note": ""
+        },
+        "language_quality": {
+          "score": "pass",
+          "note": ""
+        },
+        "conciseness": {
+          "score": "pass",
+          "note": ""
+        }
+      },
+      "suggestion": "Add mechanism detail: what technical and operational controls enforce sovereignty? e.g. EU-only data processing with German-operated encryption key management, EU staff access controls, and regulatory pre-certification for BaFin/KRITIS."
+    }
+  ]
+}

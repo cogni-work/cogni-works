@@ -1,0 +1,13 @@
+{
+  "slug": "bechtle-servicenow",
+  "name": "Bechtle ServiceNow (SmartNow)",
+  "description": "ServiceNow Premier Partner via HanseVision with 50+ experts. SmartNow MSP model for ITSM, IntegrationHub for backend integration, custom app development, and no-code solutions.",
+  "product_slug": "bechtle-applications",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 6,
+    "category_id": "6.4",
+    "category_name": "System Integration & API"
+  },
+  "source_file": "https://www.bechtle.com/de-en/it-services/managed-services/managed-application/service-now"
+}

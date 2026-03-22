@@ -1,0 +1,113 @@
+{
+  "slug": "cloud-migration--grosse-energieversorger-de",
+  "proposition_slug": "cloud-migration--grosse-energieversorger-de",
+  "competitors": [
+    {
+      "name": "Accenture",
+      "source_url": "https://www.accenture.com/content/dam/accenture/final/a-com-migration/r3-3/pdf/pdf-167/accenture-sap-cloud-utilities-german.pdf",
+      "positioning": "Globaler Transformationsberater mit GenAI-gestützter Cloud-Migration und enger SAP-Co-Innovation — positioniert sich als strategischer Partner für die gesamte Wertschöpfungskette von Assessment bis Managed Operations, mit zunehmendem Fokus auf KI-beschleunigte Migrationsautomatisierung.",
+      "strengths": [
+        "Größte SAP-Practice weltweit mit über 70.000 SAP-Beratern und exklusiver Co-Innovation mit SAP (z.B. SAP Cloud for Utilities)",
+        "Smart(field)-Methodik für S/4HANA-Konversion mit automatisiertem Custom-Code-Assessment und Modernisierungspfad",
+        "Starke C-Level-Beziehungen bei DAX-Energieversorgern durch jahrzehntelange Management-Consulting-Präsenz",
+        "GenAI-Integrationskompetenz für beschleunigte Code-Analyse und Test-Automatisierung bei Legacy-Migrationen",
+        "Breites Ökosystem-Netzwerk: AWS, Azure, GCP Partnerschaften auf höchster Stufe für Multi-Cloud-Szenarien"
+      ],
+      "weaknesses": [
+        "Keine eigene Cloud-Infrastruktur — muss für Sovereign-Cloud-Anforderungen auf Hyperscaler-Zertifizierungen verweisen, kann keine Datenhoheit auf eigener Infrastruktur garantieren",
+        "Keine BSI-C5-Typ-2-attestierte eigene Plattform — bei KRITIS-Einstufung nach §8a BSIG eine strukturelle Lücke im Ausschreibungsverfahren",
+        "Keine eigene Energiesektor-IP oder branchenspezifische Plattform in DACH — SAP-Utilities-Expertise kommt primär aus der globalen Practice, nicht aus lokaler Branchenverankerung",
+        "Kein eigenes Netzwerk-Backbone — kann netzabhängige OT-Workloads (SCADA, Netzleittechnik) nicht end-to-end mit garantierter Latenz absichern",
+        "Komplexes Multi-Vendor-Delivery-Modell mit Onshore/Nearshore/Offshore-Mix erhöht Koordinationsaufwand bei sicherheitskritischen KRITIS-Projekten"
+      ],
+      "differentiation": "T-Systems besitzt mit BSI-C5-Typ-2-attestierter Sovereign Cloud und DT-Netzinfrastruktur eine strukturelle Souveränitätsgarantie, die Accenture nicht leisten kann. Bei der SAP-IS-U-Migration für Energieversorger mit NIS2-Deadline (April 2026) und SAP-ECC-End-of-Life (2027) ermöglicht T-Systems sprint-basierte Migration im 6-Monats-Zyklus bei parallelem KRITIS-Regelbetrieb."
+    },
+    {
+      "name": "Capgemini",
+      "source_url": "https://www.capgemini.com/news/press-releases/capgemini-deepens-partnership-with-sap-to-bolster-europes-digital-sovereignty-and-accelerate-time-to-value-for-ai-powered-enterprise-innovation-and-transformation/",
+      "positioning": "Europäischer Systemintegrator mit Sovereign-Technology-Ambition — positioniert sich über die SAP Sovereign Technology Partnership und die Bleu-Plattform (JV mit Orange) als europäische Alternative, ergänzt durch Cloud4C-Akquisition für automatisierte Managed-Cloud-Services.",
+      "strengths": [
+        "SAP Sovereign Technology Partnership mit explizitem Fokus auf Deutschland, Frankreich, NL, UK — strategisch stärkste europäische SI-Positionierung neben T-Systems",
+        "Bleu Sovereign Cloud (JV mit Orange) als operative Referenz für regulierte Branchen — zeigt Umsetzungsfähigkeit bei Souveränitätsanforderungen",
+        "Cloud4C-Akquisition (Q4 2025) stärkt automatisierte Cloud-Delivery mit branchenspezifischen Frameworks",
+        "Starke Utilities-Practice in Frankreich (EDF, Engie) mit übertragbarem Wissen für europäische Energiemärkte",
+        "Nearshore-Center in Polen mit guter Kostenstruktur und kultureller Nähe zu DACH-Kunden"
+      ],
+      "weaknesses": [
+        "Bleu-Plattform ist operativ auf Frankreich beschränkt — in Deutschland kein vergleichbares Sovereign-Cloud-Angebot in Betrieb, SAP Sovereign Technology Partnership bisher Absichtserklärung ohne DACH-Referenzkunde",
+        "SAP-IS-U-Expertise deutlich schwächer als bei T-Systems — französische Energieversorger nutzen andere Billing-Systeme (überwiegend Eigenentwicklungen), IS-U-Migrationserfahrung fehlt",
+        "Cloud4C-Integration in DACH-Delivery noch nicht abgeschlossen — Synergien für deutsche Energieversorger-Projekte erst ab 2027 realistisch",
+        "Kein eigenes deutsches Netzwerk-Backbone — OT/IT-Konvergenz-Szenarien mit garantierter Netzanbindung nicht aus einer Hand lieferbar",
+        "Geringere aktive Kundenbasis bei deutschen Top-20-Energieversorgern als T-Systems — Markteintritt erfordert Referenz-Aufbau"
+      ],
+      "differentiation": "T-Systems hat mit dem Open Sovereign Cloud und T Cloud Public eine operative, BSI-C5-attestierte Souveränitätsplattform in Deutschland, während Capgeminis DACH-Sovereign-Angebot 2026 noch im Aufbau ist. Für Energieversorger mit NIS2-Registrierungspflicht ab April 2026 zählt die heute verfügbare Plattform, nicht die angekündigte."
+    },
+    {
+      "name": "IBM",
+      "source_url": "https://www.ibm.com/consulting/cloud-migration",
+      "positioning": "Co-Creation-Partner mit Hybrid-Cloud-Ökosystem (Red Hat OpenShift, IBM Power) und Fokus auf Ecosystem-Partnerschaften — positioniert sich seit der Consulting-Reorganisation 2024 als technologieoffener Transformationsbegleiter mit starker SAP-Integration über RISE with SAP auf IBM Power.",
+      "strengths": [
+        "Red Hat OpenShift als führende Enterprise-Container-Plattform für Hybrid-Cloud-Szenarien — bewährt in regulierten Umgebungen",
+        "RISE with SAP auf IBM Power Virtual Server — einzigartiges Angebot für performancekritische SAP-Workloads mit vertikaler Integration",
+        "IBM Innovation Center für SAP Solutions in Walldorf — direkte Nähe zur SAP-Produktentwicklung für Co-Innovation",
+        "Starke Ecosystem-Partnerschaften (AWS, Azure, SAP) ermöglichen herstellerunabhängige Multi-Cloud-Beratung",
+        "Tiefe Mainframe-zu-Cloud-Migrationskompetenz — relevant für Energieversorger mit Legacy-Abrechnungssystemen auf IBM-Plattformen"
+      ],
+      "weaknesses": [
+        "IBM Cloud hat in Europa keine relevante Marktposition als Hyperscaler — kein eigenes deutsches Sovereign-Cloud-Angebot mit BSI-C5-Attestierung",
+        "Red Hat OpenShift erzeugt technologischen Vendor-Lock-in bei Container-Orchestrierung — Alternative Kubernetes-Distributionen werden in Evaluierungen bevorzugt",
+        "Energiesektor-Referenzen in Deutschland deutlich schwächer als in Nordamerika — KPMG-Partnerschaft (Liberty Utilities) ist US-fokussiert",
+        "Kein eigenes Telekommunikations-Backbone — kann netzabhängige OT-Workloads nicht mit garantierter Konnektivität absichern",
+        "Hybrid-Cloud-Ansatz priorisiert Technologieplattform über Branchen-Delivery — fehlende IS-U/SCADA-Migrationsreferenzen im deutschen Energiesektor"
+      ],
+      "differentiation": "T-Systems kombiniert BSI-C5-attestierte Sovereign Cloud mit 25 Jahren SAP-IS-U-Betriebserfahrung und DT-Netzinfrastruktur für SCADA/OT-Anbindung — eine vertikal integrierte Lösung, die IBMs horizontal angelegter Hybrid-Cloud-Ansatz nicht replizieren kann. Bei der SAP-ECC-to-S/4HANA-Migration unter KRITIS-Bedingungen ist vertikale Branchenintegration entscheidend."
+    },
+    {
+      "name": "TCS (Tata Consultancy Services)",
+      "source_url": "https://www.tcs.com/what-we-do/services/cloud/solution/google-cloud-migration-digital-transformation",
+      "positioning": "Globaler IT-Dienstleister mit industrialisierter Delivery und Branchentiefe — positioniert sich 2026 über IDC-MarketScape-Leadership bei Energy Transition Services und MasterCraft-Automatisierungsplattform als skalierbare Alternative mit wachsender Energiesektor-Spezialisierung.",
+      "strengths": [
+        "IDC MarketScape Leader für Energy Transition Professional Services (Dezember 2025) — extern validierte Branchenkompetenz",
+        "MasterCraft-Automatisierungsplattform für Cloud Data Migration — reduziert Migrationszeitlinien durch automatisierte Extraktion, Transformation und Validierung",
+        "Globale SAP-Practice mit 50.000+ SAP-Beratern und umfangreicher S/4HANA-Migrationserfahrung über Branchen hinweg",
+        "Langfristige Managed-Services-Verträge mit TCO-optimierten Modellen — attraktiv für CFO-getriebene Entscheidungen",
+        "GE Vernova Industrial-Partnership für Energiesektor-Digitalisierung — Zugang zu OT-Referenzarchitekturen"
+      ],
+      "weaknesses": [
+        "Keine BSI-C5-Attestierung und keine eigene KRITIS-relevante Infrastruktur in Deutschland — bei KRITIS-Audits nach §8a BSIG eine formale Hürde",
+        "Minimale Vor-Ort-Präsenz in Deutschland — bei Projekten mit BSI-Sicherheitsfreigabe (Ü2/Ü3) und physischem RZ-Zugang problematisch",
+        "OT/IT-Konvergenz-Expertise (SCADA, Netzleittechnik) auf europäischem Markt weniger erprobt als bei T-Systems oder spezialisierten DACH-Anbietern",
+        "Kein eigenes europäisches Netzwerk-Backbone oder Sovereign-Cloud-Strategie für den deutschen Markt",
+        "Referenzkunden für Cloud-Migration bei deutschen Energieversorgern (Top-20) öffentlich nicht belegbar"
+      ],
+      "differentiation": "T-Systems bietet mit BSI-C5-attestierter Infrastruktur, DT-Backbone und lokaler Energiesektor-Verankerung die KRITIS-Compliance-Grundlage, die TCS trotz starker Automatisierungs-Tools und konkurrenzfähiger TCO-Modelle strukturell nicht aufbauen kann — der Aufbau eigener deutscher Infrastruktur und Zertifizierungen erfordert Jahre, nicht Monate."
+    },
+    {
+      "name": "Arvato Systems",
+      "source_url": "https://www.arvato-systems-energy-portfolio.de/",
+      "positioning": "Bertelsmann-Tochter mit dediziertem Energiesektor-Portfolio — positioniert sich als spezialisierter Multi-Cloud-Partner mit Energy Data Hub, Enterprise Architecture Management und tiefem Branchenverständnis für die deutsche Versorgungswirtschaft.",
+      "strengths": [
+        "Dediziertes Energiesektor-Portfolio mit Energy Data Hub und branchenspezifischen Lösungen — nicht nur Consulting, sondern eigene IP",
+        "Enterprise Architecture Management speziell für Energieversorger entwickelt — unterstützt IT-Strategie-Entwicklung als Vorstufe zur Migration",
+        "Partnerschaften mit SAP, AWS und Microsoft Azure für Multi-Cloud-Szenarien mit Datacenter-on-Cloud-Migrationspfad",
+        "Deutsche Unternehmenskultur, lokale Delivery-Teams und kurze Entscheidungswege — bei Stadtwerken und Regionalversorgern geschätzt",
+        "Cross-Cloud-Migration-Expertise (Delos Cloud) für Szenarien mit bestehenden Multi-Cloud-Landschaften"
+      ],
+      "weaknesses": [
+        "Schwerpunkt auf Stadtwerke und mittelgroße Versorger — öffentliche Referenzen bei Top-20-Energieversorgern mit >5.000 MA sind begrenzt",
+        "Keine eigene Cloud-Infrastruktur — vollständig abhängig von Hyperscaler-Partnern, kann keine Sovereign-Cloud-Garantie auf eigener Plattform geben",
+        "Kein eigenes Netzwerk-Backbone für netznahe OT-Workloads — Differenzierungsmerkmal gegenüber T-Systems fehlt strukturell",
+        "Globale Skalierbarkeit begrenzt — bei Multi-Standort-Migrationen über Ländergrenzen hinweg (z.B. Vattenfall DE+SE) nicht konkurrenzfähig mit globalen SIs",
+        "Sovereign-Cloud-Positionierung nicht vergleichbar mit T-Systems Open Sovereign Cloud oder DT-Ökosystem — kein BSI-C5 auf eigener Plattform"
+      ],
+      "differentiation": "T-Systems ist der einzige Anbieter, der Infrastruktur (Sovereign Cloud, DT-Backbone), SAP-IS-U-Betrieb und KRITIS-konforme Projektdurchführung für Top-20-Energieversorger aus einer Hand liefern kann — Arvato Systems' Stärke liegt im spezialisierten Mittelstandssegment, nicht bei Großmigrationen mit >50 Mio. EUR Projektvolumen."
+    }
+  ],
+  "trap_questions": [
+    "Können Sie nachweisen, dass Ihre Cloud-Plattform BSI-C5-Typ-2-attestiert ist und die Datenverarbeitung ausschließlich in deutschen Rechenzentren unter deutscher Jurisdiktion erfolgt — ohne Subprozessoren mit US-CLOUD-Act-Zugriffsmöglichkeit?",
+    "Welche konkreten Referenzkunden im deutschen Energiesektor haben Sie bei einer SAP-IS-U-zu-S/4HANA-Migration begleitet, bei der parallel der KRITIS-Regelbetrieb (Netzleitstelle, SCADA) aufrechterhalten wurde?",
+    "Verfügt Ihr Unternehmen über ein eigenes Telekommunikations-Backbone in Deutschland, das die Netzanbindung kritischer OT-Systeme (Netzleittechnik, Smart-Meter-Gateway-Administration) mit garantierten Latenzzeiten ohne Abhängigkeit von Drittanbietern sicherstellt?",
+    "Können Sie eine transparente TCO-Aufstellung über 5 Jahre vorlegen, die sämtliche Exit-Kosten bei Vertragsbeendigung, Datenmigration zu einem alternativen Anbieter und die Kosten für den Parallelbetrieb während der Transition-Phase explizit ausweist?"
+  ],
+  "created": "2026-03-18"
+}

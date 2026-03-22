@@ -1,0 +1,10 @@
+{
+  "slug": "multi-cloud-finops",
+  "product_slug": "cloud-services",
+  "name": "Cloud FinOps",
+  "description": "Structured FinOps practice spanning maturity assessment, cost-governance accelerators, and continuous FinOps-as-a-Service across AWS, Azure, and GCP using Flexera and Apptio tooling.",
+  "category": "cloud-management",
+  "readiness": "ga",
+  "created": "2026-01-15",
+  "updated": "2026-03-18"
+}

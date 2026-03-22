@@ -1,0 +1,16 @@
+{
+  "slug": "multi-cloud-for-sap",
+  "product_slug": "cloud-services",
+  "name": "Multi-Cloud for SAP",
+  "description": "SAP auf Azure, AWS, GCP und OTC",
+  "taxonomy_mapping": {
+    "dimension": 4,
+    "dimension_name": "Cloud Services",
+    "category_id": "4.8",
+    "category_name": "Enterprise Platforms on Cloud",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

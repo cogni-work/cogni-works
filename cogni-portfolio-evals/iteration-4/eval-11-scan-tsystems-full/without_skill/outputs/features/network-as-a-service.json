@@ -1,0 +1,13 @@
+{
+  "slug": "network-as-a-service",
+  "name": "Network-as-a-Service",
+  "description": "Campus network delivered as a service with carrier-managed infrastructure and modular connectivity",
+  "product_slug": "t-systems-connectivity",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 1,
+    "category_id": "1.7",
+    "category_name": "Network-as-a-Service"
+  },
+  "source_file": "https://www.t-systems.com/sg/en/connectivity/5g-campus-networks"
+}

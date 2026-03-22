@@ -1,0 +1,16 @@
+{
+  "slug": "secure-cloud-communication",
+  "product_slug": "connectivity-services",
+  "name": "Secure Cloud Communication Services",
+  "description": "Zero-Trust-basierter Cloud-Zugriff ohne VPN über Akamai Edge",
+  "taxonomy_mapping": {
+    "dimension": 1,
+    "dimension_name": "Connectivity Services",
+    "category_id": "1.2",
+    "category_name": "SASE",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

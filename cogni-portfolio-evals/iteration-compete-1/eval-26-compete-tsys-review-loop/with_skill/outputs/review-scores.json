@@ -1,0 +1,39 @@
+{
+  "proposition_slug": "cloud-migration--grosse-energieversorger-de",
+  "converged": true,
+  "converged_at_iteration": 2,
+  "max_iterations": 3,
+  "final_scores": {
+    "cso": {
+      "overall_score": 4.17,
+      "dimension_scores": {
+        "quota_impact": 4,
+        "pipeline_acceleration": 4,
+        "objection_handling": 4,
+        "competitive_win_ability": 5,
+        "account_team_usability": 4,
+        "deal_qualification_signal": 4
+      },
+      "would_use_in_pitch_deck": true
+    },
+    "analyst": {
+      "overall_score": 4.0,
+      "dimension_scores": {
+        "market_landscape_accuracy": 4,
+        "positioning_validity": 4,
+        "strength_weakness_balance": 4,
+        "differentiation_defensibility": 4,
+        "trap_question_sophistication": 4,
+        "segment_relevance": 4
+      },
+      "would_use_in_advisory_report": true
+    }
+  },
+  "thresholds": {
+    "avg_score_min": 4.0,
+    "dimension_score_min": 3,
+    "cso_would_use_in_pitch_deck": true,
+    "analyst_would_use_in_advisory_report": true
+  },
+  "all_thresholds_met": true
+}

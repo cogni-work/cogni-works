@@ -1,0 +1,9 @@
+{
+  "slug": "security-services",
+  "name": "Security Services",
+  "description": "Cybersecurity and compliance offerings including SOC, IAM, zero trust, cloud security, endpoint protection, network security, vulnerability management, awareness training, GRC and data protection.",
+  "revenue_model": "subscription",
+  "maturity": "growth",
+  "source_file": "research/bechtle-portfolio.md",
+  "created": "2026-03-18"
+}

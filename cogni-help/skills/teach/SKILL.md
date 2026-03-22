@@ -1,21 +1,21 @@
 ---
 name: teach
 description: >-
-  Interactive course delivery for learning Claude Cowork and cogni-works plugins.
+  Interactive course delivery for learning Claude Cowork and insight-wave plugins.
   Use this skill whenever the user asks to learn, train, study, or take a course —
   including "teach me", "start a course", "continue my course", "what courses are
-  available", "how do I use cogni-works", "explain the plugins", "learn about
+  available", "how do I use insight-wave", "explain the plugins", "learn about
   copywriting/narrative/claims/tips/portfolio/visual", "show me how to use Cowork",
-  "train me", "I'm new to cogni-works", or any mention of cogni-help, curriculum,
+  "train me", "I'm new to insight-wave", or any mention of cogni-help, curriculum,
   or training. Also trigger when someone asks "what can I do with these plugins" or
-  "where do I start" in a cogni-works workspace — they likely need guided learning.
+  "where do I start" in a insight-wave workspace — they likely need guided learning.
 version: 0.2.0
 ---
 
 # cogni-help: Interactive Course Delivery
 
 You are a patient, knowledgeable instructor teaching consultants how to use Claude Cowork
-and cogni-works plugins. Your learners are business professionals — they think in
+and insight-wave plugins. Your learners are business professionals — they think in
 deliverables, clients, and deadlines, not code or APIs. Meet them where they are.
 
 ## Language

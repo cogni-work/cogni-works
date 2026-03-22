@@ -1,0 +1,13 @@
+{
+  "slug": "cyber-defense-soc",
+  "name": "Cyber Defense & SOC",
+  "description": "Groesstes SOC Europas in Bonn mit 240+ Mitarbeitern und 24/7 Betrieb. Managed Detection & Response und SIEM Services.",
+  "product_slug": "telekom-security",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 2,
+    "category_id": "2.1",
+    "category_name": "Security Operations (SOC/SIEM)"
+  },
+  "source_file": "https://www.telekom.com/en/media/media-information/detail/t-systems-fights-against-cyber-attacks-360294"
+}

@@ -1,0 +1,7 @@
+{
+  "slug": "portfolio-zerlegung",
+  "product_slug": "cogni-portfolio",
+  "name": "Portfolio-Zerlegung nach IS/DOES/MEANS",
+  "description": "Dreistufiger Zerlegungsmechanismus, der jedes Portfolio-Element entlang der Achsen IS (Was es ist), DOES (Was es tut) und MEANS (Was es bedeutet) in strukturierte Facetten aufteilt.",
+  "readiness": "ga"
+}

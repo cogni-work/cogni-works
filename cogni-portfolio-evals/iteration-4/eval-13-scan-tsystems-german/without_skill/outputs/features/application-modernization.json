@@ -1,0 +1,13 @@
+{
+  "slug": "application-modernization",
+  "name": "Application Modernization",
+  "description": "SAP S/4HANA Migration, SAP HCM Transformation, @Vantage KI-gestuetzte Legacy-Modernisierung.",
+  "product_slug": "t-systems-applications",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 6,
+    "category_id": "6.2",
+    "category_name": "Application Modernization"
+  },
+  "source_file": "https://www.t-systems.com/us/en/application-services/solutions/sap-solutions/sap-application-management-and-modernization"
+}

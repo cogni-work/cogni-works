@@ -1,0 +1,16 @@
+{
+  "slug": "energiehandelsplattform",
+  "product_slug": "digitale-energiedienste",
+  "name": "Energiehandelsplattform",
+  "description": "Algorithmische Handelsplattform fuer kurzfristigen Strom- und Gashandel an EPEX SPOT und EEX, mit automatisierter Lastprognose auf Basis historischer Verbrauchsdaten, regelzonenuebergreifendem Fahrplanmanagement und kontinuierlicher Portfoliooptimierung.",
+  "category": "data-analytics",
+  "taxonomy_mapping": {
+    "dimension": 6,
+    "dimension_name": "Application Services",
+    "category_id": "6.6",
+    "category_name": "AI, Data & Analytics",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "created": "2026-03-18"
+}

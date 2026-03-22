@@ -1,0 +1,32 @@
+{
+  "slug": "sovereign-cloud",
+  "name": "Sovereign Cloud",
+  "description": "Europäische Datenhoheit über T Cloud Public, Open Sovereign Cloud (OSC), Google-Cloud- und AWS-Sovereign-Varianten — vollständig in der EU betrieben und BaFin-/KRITIS-konform.",
+  "review": {
+    "quality_score": 3.5,
+    "issues": [
+      {
+        "check": "language-mismatch",
+        "severity": "high",
+        "detail": "Portfolio language is 'en' but description is written in German."
+      },
+      {
+        "check": "missing-customer-value",
+        "severity": "medium",
+        "detail": "Mentions compliance (BaFin, KRITIS) which implies value, but does not explicitly state the business outcome — e.g., enables regulated enterprises to adopt cloud without compliance risk."
+      },
+      {
+        "check": "missing-schema-fields",
+        "severity": "medium",
+        "detail": "Missing fields: product, created, status, differentiators, use_cases."
+      }
+    ],
+    "passed_checks": [
+      "slug-format",
+      "description-present",
+      "name-present",
+      "specificity-good",
+      "differentiator-implicit"
+    ]
+  }
+}

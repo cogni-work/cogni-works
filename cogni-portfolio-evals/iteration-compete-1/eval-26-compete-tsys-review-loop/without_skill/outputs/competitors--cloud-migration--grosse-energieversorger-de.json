@@ -1,0 +1,128 @@
+{
+  "slug": "competitors--cloud-migration--grosse-energieversorger-de",
+  "proposition_slug": "cloud-migration--grosse-energieversorger-de",
+  "feature_slug": "cloud-migration",
+  "market_slug": "grosse-energieversorger-de",
+  "created": "2026-03-18",
+  "competitors": [
+    {
+      "name": "Accenture",
+      "positioning": "Global-scale cloud transformation partner leveraging hyperscaler alliances (AWS, Azure, Google Cloud) and Accenture Cloud First strategy, positioning itself as the end-to-end digital transformation leader for energy utilities.",
+      "strengths": [
+        "Massive global delivery capacity with 70,000+ cloud professionals worldwide — can staff large migration programs quickly",
+        "Deep hyperscaler partnerships (AWS, Azure, GCP) with joint go-to-market programs and migration funding from cloud providers",
+        "Strong SAP practice with S/4HANA migration experience across European utilities",
+        "Broad consulting capability to bundle cloud migration with business process transformation and change management",
+        "Established relationships with German energy majors (E.ON, RWE) from prior consulting engagements"
+      ],
+      "weaknesses": [
+        "Limited sovereign cloud and KRITIS-specific compliance expertise — typically delegates to hyperscaler compliance teams rather than owning it end-to-end",
+        "High day rates (often 2,000-2,800 EUR/day for senior resources) drive up TCO, especially for multi-year migration programs",
+        "Offshore-heavy delivery model conflicts with KRITIS data residency and security clearance requirements for OT/SCADA workloads",
+        "No own data center infrastructure in Germany — fully dependent on hyperscaler availability and pricing",
+        "Tendency to propose large-scale transformational programs rather than pragmatic, sprint-based migration approaches — risk of scope creep",
+        "Weak OT/SCADA domain knowledge — IT-centric consultants often underestimate netzleittechnik and real-time control system constraints"
+      ],
+      "differentiation_vs_tsystems": "T-Systems operates its own BSI-C5-attested sovereign cloud infrastructure in Germany, providing data residency guarantees that Accenture cannot offer natively. T-Systems' direct Telekom backbone and 30+ energy-sector migration references give deeper KRITIS domain expertise, while Accenture must rely on external partners for sovereign hosting and OT security.",
+      "trap_questions": [
+        {
+          "question": "Welche Ihrer Cloud-Infrastrukturen sind BSI-C5-testiert und in welchen deutschen Rechenzentren werden unsere KRITIS-relevanten SCADA- und IS-U-Workloads gehostet?",
+          "rationale": "Accenture besitzt keine eigene Cloud-Infrastruktur in Deutschland. Diese Frage zwingt sie offenzulegen, dass sie auf Hyperscaler angewiesen sind, was Fragen zur Datensouveränität und KRITIS-Compliance aufwirft."
+        },
+        {
+          "question": "Wie hoch ist der Anteil Ihres Delivery-Teams, der über die notwendigen Sicherheitsüberprüfungen für Arbeiten an KRITIS-Infrastruktur verfügt, und wo sind diese Mitarbeiter standortmäßig angesiedelt?",
+          "rationale": "Accentures Offshore-Modell (Indien, Philippinen) kollidiert mit KRITIS-Sicherheitsanforderungen. Diese Frage deckt auf, dass lokale, sicherheitsüberprüfte Ressourcen knapp und teuer sind."
+        },
+        {
+          "question": "Können Sie drei abgeschlossene Cloud-Migrationsprojekte bei deutschen Energieversorgern mit KRITIS-Einstufung benennen, bei denen Sie die OT/IT-Konvergenz verantwortet haben?",
+          "rationale": "Accenture hat starke IT-Transformationsreferenzen, aber wenig nachweisbare OT/SCADA-Migrationserfahrung im deutschen Energiesektor. Die Frage trennt allgemeine Cloud-Kompetenz von branchenspezifischer Erfahrung."
+        },
+        {
+          "question": "Wie stellen Sie sicher, dass bei einem Hyperscaler-Ausfall oder einer Preiserhöhung unsere migrierten Workloads innerhalb definierter SLAs auf eine alternative Plattform portiert werden können?",
+          "rationale": "Accentures enge Hyperscaler-Bindung (oft AWS- oder Azure-exklusiv pro Engagement) schafft Lock-in-Risiken. T-Systems kann mit eigenem Sovereign Cloud und Multi-Cloud-Ansatz Alternativen bieten."
+        }
+      ]
+    },
+    {
+      "name": "Capgemini",
+      "positioning": "European-rooted IT services provider with strong energy sector vertical, positioning cloud migration as part of Intelligent Industry transformation — combining cloud, data, and IoT for utility modernization.",
+      "strengths": [
+        "Strong European presence and cultural fit with German enterprise customers — large German workforce in Frankfurt, München, Stuttgart",
+        "Dedicated energy and utilities vertical practice with references at European grid operators and energy retailers",
+        "SAP-certified partner with deep S/4HANA Utilities migration experience and dedicated CoE",
+        "Sogeti and Capgemini Engineering subsidiaries bring embedded systems and OT-adjacent expertise",
+        "Competitive pricing model compared to Accenture, with nearshore delivery options (Poland, Spain) for non-sensitive workloads"
+      ],
+      "weaknesses": [
+        "No own sovereign cloud infrastructure — depends on hyperscalers and local hosting partners for KRITIS-compliant hosting",
+        "OT/SCADA migration expertise is fragmented across subsidiaries (Capgemini Engineering vs. Capgemini Consulting) with integration gaps",
+        "Cloud Migration Factory approach is less mature than T-Systems' CMF methodology — tends toward waterfall project plans rather than sprint-based delivery",
+        "BSI-C5 and NIS2-specific compliance tooling is limited — relies on manual compliance checks rather than automated governance frameworks",
+        "Smaller cloud-specific headcount in Germany compared to Accenture or T-Systems, leading to longer ramp-up times for large programs"
+      ],
+      "differentiation_vs_tsystems": "T-Systems has a more mature Cloud Migration Factory (CMF) methodology with 6R strategy templates specifically tailored to German utility workloads (IS-U, SCADA, ERP). While Capgemini brings solid SAP expertise, T-Systems combines migration execution with sovereign hosting on its own infrastructure — a critical advantage for KRITIS-regulated energy utilities that Capgemini cannot match without third-party hosting partners.",
+      "trap_questions": [
+        {
+          "question": "Wie integriert Ihr Cloud-Migrationsansatz die OT-seitige SCADA-Systemlandschaft mit der IT-seitigen SAP-Migration — wird dies aus einer Hand gesteuert oder durch separate Teilprojekte mit eigenem Projektmanagement?",
+          "rationale": "Capgeminis OT- und IT-Expertise ist auf verschiedene Organisationseinheiten verteilt. Diese Frage deckt potenzielle Koordinationslücken und geteilte Verantwortung auf, die zu Verzögerungen führen."
+        },
+        {
+          "question": "Können Sie Ihre Cloud-Migration-Factory-Methodik detailliert beschreiben und angeben, wie viele standardisierte Workload-Migrationen Sie pro Sprint typischerweise durchführen?",
+          "rationale": "Capgeminis CMF-Ansatz ist weniger industrialisiert als der von T-Systems. Die Frage zwingt sie, konkrete Durchsatzmetriken zu nennen, die wahrscheinlich niedriger ausfallen."
+        },
+        {
+          "question": "Welche NIS2-spezifischen Compliance-Automatisierungen sind in Ihrer Migrationsplattform integriert, und wie dokumentieren Sie die lückenlose Nachweiskette für BSI-Audits?",
+          "rationale": "Capgemini hat keine eigene Compliance-Automatisierung für NIS2/BSI-C5 — die manuelle Umsetzung ist fehleranfällig und teuer, was der CFO und CISO kritisch hinterfragen werden."
+        }
+      ]
+    },
+    {
+      "name": "IBM",
+      "positioning": "Hybrid cloud leader with IBM Cloud, Red Hat OpenShift, and deep mainframe/legacy modernization expertise — positioning itself as the technology-driven migration partner that can handle the most complex legacy landscapes.",
+      "strengths": [
+        "Unmatched legacy-to-cloud modernization expertise — mainframe, AS/400, and proprietary middleware migration tooling",
+        "Red Hat OpenShift and IBM Cloud Pak ecosystem provides a technology-agnostic containerization platform for hybrid cloud",
+        "IBM Cloud Frankfurt data center with BSI-C5 attestation provides sovereign hosting option",
+        "Strong analytics and AI capabilities (watsonx) to enhance migrated workloads with predictive maintenance and smart grid analytics",
+        "Long-standing relationships with German energy utilities from decades of mainframe and middleware engagements"
+      ],
+      "weaknesses": [
+        "IBM Cloud market share is significantly smaller than AWS, Azure, or GCP — risk of diminishing investment and feature parity gaps",
+        "Tendency to lead with IBM-proprietary technology stack (Cloud Pak, watsonx, OpenShift) creating vendor lock-in into IBM ecosystem",
+        "Consulting business (formerly IBM Global Business Services, now IBM Consulting) has lost significant German energy sector talent to competitors post-Kyndryl spin-off",
+        "Kyndryl separation created gaps in managed services continuity — migrated workloads may require separate Kyndryl contract for ongoing operations",
+        "Higher complexity and longer ramp-up times due to Red Hat/OpenShift layer — overkill for straightforward lift-and-shift migrations",
+        "Pricing model for IBM Cloud + Red Hat licensing can exceed hyperscaler TCO for standard workloads"
+      ],
+      "differentiation_vs_tsystems": "T-Systems offers a more pragmatic, workload-appropriate migration approach using its 6R methodology — not every workload needs containerization on OpenShift. While IBM excels at complex legacy modernization, T-Systems provides a broader spectrum from simple rehost to full refactoring, combined with sovereign cloud hosting, Telekom network backbone, and managed services under one contract — without the IBM/Kyndryl split complication.",
+      "trap_questions": [
+        {
+          "question": "Nach der Kyndryl-Ausgründung: Wer ist unser vertraglicher Ansprechpartner für den laufenden Betrieb der migrierten Workloads — IBM Consulting oder Kyndryl — und wie stellen Sie nahtlose SLAs über beide Organisationen sicher?",
+          "rationale": "Die IBM/Kyndryl-Trennung hat reale Bruchstellen in der Delivery-Kette geschaffen. Diese Frage zwingt IBM, die organisatorische Komplexität offenzulegen, die bei T-Systems aus einer Hand kommt."
+        },
+        {
+          "question": "Welche unserer Workloads sehen Sie als geeignet für einen einfachen Rehost ohne OpenShift/Container-Layer, und wie verhält sich der TCO dieser Variante im Vergleich zu einem Hyperscaler-Rehost?",
+          "rationale": "IBM tendiert dazu, OpenShift und Cloud Pak als Default-Plattform zu empfehlen. Diese Frage deckt auf, ob IBM pragmatische, kosteneffiziente Optionen anbieten kann oder ob der Technologie-Stack überdimensioniert wird."
+        },
+        {
+          "question": "Wie viele Ihrer für dieses Projekt vorgesehenen Cloud-Architekten und Migrationsspezialisten sind aktuell in Deutschland ansässig, und wie haben sich Ihre Teams im Energiesektor seit der Kyndryl-Trennung verändert?",
+          "rationale": "IBM hat nach der Kyndryl-Ausgründung erhebliche Kapazitäten im Infrastructure-Bereich verloren. Die Frage prüft, ob genügend deutsches Fachpersonal mit Energiesektor-Erfahrung verfügbar ist."
+        },
+        {
+          "question": "Wie stellt IBM sicher, dass unsere SCADA-Datenströme und Netzleitsysteme auf IBM Cloud die gleichen Latenz-SLAs einhalten wie in unserer heutigen On-Premise-Umgebung?",
+          "rationale": "IBM Cloud hat eine kleinere Footprint in Deutschland als AWS/Azure und weniger Edge-Standorte. Für latenzempfindliche OT-Workloads wie SCADA ist dies ein realer Nachteil gegenüber T-Systems' eigenem Netz."
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "t_systems_key_advantages": [
+      "Eigene BSI-C5-testierte Sovereign-Cloud-Infrastruktur in deutschen Rechenzentren",
+      "Telekom-Backbone für latenzarme Anbindung von OT/SCADA-Systemen",
+      "Industrialisierte Cloud Migration Factory (CMF) mit 6R-Methodik und 30+ Energiesektor-Referenzen",
+      "Alles aus einer Hand: Migration, Hosting, Managed Services — kein Kyndryl-Split, kein Hyperscaler-Abhängigkeit",
+      "KRITIS-Expertise mit NIS2- und BSI-C5-Compliance als Kernkompetenz, nicht als Add-on"
+    ],
+    "competitive_landscape": "Im deutschen Energieversorger-Markt für Cloud-Migration konkurriert T-Systems primär mit Accenture (Reichweite und Hyperscaler-Allianzen), Capgemini (europäische Präsenz und SAP-Expertise) und IBM (Legacy-Modernisierung und Hybrid-Cloud-Technologie). T-Systems differenziert sich durch die einzigartige Kombination aus souveräner Infrastruktur, KRITIS-Compliance-Expertise und industrialisierter Migrationsmethodik — Vorteile, die im regulierten Energiesektor entscheidend sind."
+  }
+}

@@ -290,7 +290,7 @@ Ask the user to:
 
 ### Theory (3 min)
 
-The full cogni-works pipeline from research to visual delivery:
+The full insight-wave pipeline from research to visual delivery:
 
 ```
 Research (tips) → Select (tips) → Report (tips) →
@@ -323,14 +323,14 @@ Walk through the complete pipeline:
 ### Exercise
 
 Ask the user to:
-1. Map their current consulting workflow to the cogni-works pipeline
+1. Map their current consulting workflow to the insight-wave pipeline
 2. Identify: Where do they spend the most time today?
-3. Which cogni-works tools would save the most time?
+3. Which insight-wave tools would save the most time?
 4. Plan one real project deliverable using the full pipeline
 
 ### Quiz
 
-1. **Hands-on**: Describe your ideal deliverable pipeline for your next client project using cogni-works tools.
+1. **Hands-on**: Describe your ideal deliverable pipeline for your next client project using insight-wave tools.
 
 2. **Multiple choice**: What should you always set up before generating visual deliverables?
    - a) A new Claude account
@@ -350,7 +350,7 @@ Ask the user to:
 
 ## Course Completion
 
-Congratulations! You've completed the core cogni-works visual skills!
+Congratulations! You've completed the core insight-wave visual skills!
 
 **What you can now do**:
 - Create presentation briefs and slide decks from polished narratives

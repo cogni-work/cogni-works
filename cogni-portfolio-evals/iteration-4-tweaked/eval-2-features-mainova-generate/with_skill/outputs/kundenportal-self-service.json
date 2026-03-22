@@ -1,0 +1,16 @@
+{
+  "slug": "kundenportal-self-service",
+  "product_slug": "digitale-energiedienste",
+  "name": "Kundenportal und Self-Service",
+  "description": "Webbasiertes Endkundenportal mit tagesaktueller Verbrauchsvisualisierung auf Basis von Smart-Meter-Daten, Online-Vertragsmanagement fuer Tarifwechsel und Abschlagsanpassung, digitaler Zaehlerstandsmeldung sowie Dokumentenarchiv, angebunden an das SAP-IS-U-Backend ueber REST-API-Schnittstellen.",
+  "category": "customer-interaction",
+  "taxonomy_mapping": {
+    "dimension": 6,
+    "dimension_name": "Application Services",
+    "category_id": "6.1",
+    "category_name": "Custom Application Development",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "created": "2026-03-18"
+}

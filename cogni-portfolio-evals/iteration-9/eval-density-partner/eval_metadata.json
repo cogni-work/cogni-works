@@ -1,0 +1,27 @@
+{
+  "eval_id": 2,
+  "eval_name": "density-partner",
+  "prompt": "Erstelle Features für ein Partner-Portal: Co-Delivery-Projekte, Revenue-Share-Modell, Support-Zugang, Industry-Catalog-Zugriff, Pipeline-Matching.",
+  "assertions": [
+    {
+      "id": "no-long-slugs",
+      "text": "All feature slugs have at most 3 hyphenated segments",
+      "type": "structural"
+    },
+    {
+      "id": "no-outcome-language",
+      "text": "No feature description uses outcome verbs (enables, reduces, ensures, hilft, ermöglicht) or describes benefits",
+      "type": "structural"
+    },
+    {
+      "id": "word-count",
+      "text": "All feature descriptions are 20-35 words",
+      "type": "structural"
+    },
+    {
+      "id": "mechanism-focus",
+      "text": "Descriptions explain what the feature IS (mechanism), not what it DOES for the partner (benefits)",
+      "type": "qualitative"
+    }
+  ]
+}

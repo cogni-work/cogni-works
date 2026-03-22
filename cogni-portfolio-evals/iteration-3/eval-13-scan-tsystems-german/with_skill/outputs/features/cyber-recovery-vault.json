@@ -1,0 +1,16 @@
+{
+  "slug": "cyber-recovery-vault",
+  "product_slug": "infrastructure-services",
+  "name": "Dell Cyber Recovery Vault",
+  "description": "Next-Generation Datensicherung und DR",
+  "taxonomy_mapping": {
+    "dimension": 5,
+    "dimension_name": "Managed Infrastructure Services",
+    "category_id": "5.3",
+    "category_name": "Backup & Disaster Recovery",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

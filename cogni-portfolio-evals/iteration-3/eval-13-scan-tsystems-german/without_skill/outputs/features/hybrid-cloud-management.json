@@ -1,0 +1,13 @@
+{
+  "slug": "hybrid-cloud-management",
+  "name": "Hybrid Cloud Management",
+  "description": "Migration und Betrieb hybrider IT-Umgebungen. Gartner-anerkannt fuer Hybrid Infrastructure Managed Services.",
+  "product_slug": "t-systems-cloud",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 4,
+    "category_id": "4.4",
+    "category_name": "Hybrid Cloud"
+  },
+  "source_file": "https://www.gartner.com/reviews/market/data-center-outsourcing-and-hybrid-infrastructure-managed-services-worldwide/vendor/t-systems"
+}

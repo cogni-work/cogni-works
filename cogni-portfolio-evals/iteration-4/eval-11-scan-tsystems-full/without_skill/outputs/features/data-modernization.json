@@ -1,0 +1,13 @@
+{
+  "slug": "data-modernization",
+  "name": "Data Modernization",
+  "description": "Data foundation modernization enabling AI readiness and regulated data exchange",
+  "product_slug": "t-systems-applications",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 6,
+    "category_id": "6.6",
+    "category_name": "AI, Data & Analytics"
+  },
+  "source_file": "https://www.t-systems.com/us/en/company/about-t-systems/profile"
+}

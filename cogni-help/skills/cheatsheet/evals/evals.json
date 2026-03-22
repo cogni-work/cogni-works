@@ -10,7 +10,7 @@
     {
       "id": 1,
       "prompt": "What plugins are available for cheatsheets?",
-      "expected_output": "Lists all available cogni-works plugins with one-line descriptions, asks which one the user wants",
+      "expected_output": "Lists all available insight-wave plugins with one-line descriptions, asks which one the user wants",
       "files": []
     },
     {

@@ -1,0 +1,135 @@
+{
+  "slug": "sovereign-cloud--grosse-energieversorger-de",
+  "solution_slug": "sovereign-cloud--grosse-energieversorger-de",
+  "reviews": [
+    {
+      "perspective": "procurement",
+      "role": "Einkauf / Beschaffungsleiter",
+      "focus": "SektVO-Beschaffungsregeln, Rahmenvertraege, EU-Vergaberecht, TCO-Transparenz",
+      "scores": [
+        {
+          "criterion": "Pricing transparency",
+          "score": 8,
+          "max_score": 10,
+          "rationale": "Vier Preistiers mit klarem Scope. IaaS-Kosten explizit als kundenseitig separat ausgewiesen -- verhindert versteckte Kosten. Effort-Breakdown ist nachvollziehbar."
+        },
+        {
+          "criterion": "Scope clarity",
+          "score": 9,
+          "max_score": 10,
+          "rationale": "Sehr klare Trennung zwischen Projektleistung (Implementation) und laufenden Plattformkosten. BSI-C5-Attestierung als bestehende Plattform-Eigenschaft vs. projektspezifische Compliance-Dokumentation sauber getrennt."
+        },
+        {
+          "criterion": "Contractual risk",
+          "score": 8,
+          "max_score": 10,
+          "rationale": "Exit-Strategie und Datenportabilitaet sind explizit als Deliverable eingeplant. Open-Source-Basis reduziert Lock-in-Risiko. Netzwerkanbindungs-Timeline (10 Werktage) ist klar kommuniziert."
+        },
+        {
+          "criterion": "Vendor lock-in mitigation",
+          "score": 9,
+          "max_score": 10,
+          "rationale": "Open-Source-basierte Plattform mit standardisierten Export-Schnittstellen ist die staerkste Lock-in-Mitigation im Portfolio. Exit-Strategie als Deliverable."
+        },
+        {
+          "criterion": "Value for money",
+          "score": 7,
+          "max_score": 10,
+          "rationale": "PoV bei 28k ist angemessen. Large-Tier bei 420k fuer unternehmensweite Souveraenitaetstransformation ist marktkonform. Compliance-Kosteneinsparung (40-60% lt. Proposition) rechtfertigt Investment."
+        }
+      ],
+      "overall_score": 41,
+      "overall_max": 50,
+      "recommendation": "Genehmigungsfaehig. Staerkstes Lock-in-Mitigationsprofil der drei Loesungen.",
+      "revision_required": false
+    },
+    {
+      "perspective": "provider_solution_architect",
+      "role": "T-Systems Solution Architect",
+      "focus": "Technische Machbarkeit, Delivery-Risiko, Ressourcenplanung, Wiederverwendbarkeit",
+      "scores": [
+        {
+          "criterion": "Technical feasibility",
+          "score": 8,
+          "max_score": 10,
+          "rationale": "BSI-C5-attestierte Plattform ist verfuegbar. OT/IT-Segmentierung auf Sovereign Cloud ist machbar aber komplex. Customer-Managed Keys erfordern sorgfaeltige Key-Rotation-Planung."
+        },
+        {
+          "criterion": "Effort estimation accuracy",
+          "score": 7,
+          "max_score": 10,
+          "rationale": "Security-Audit-Phase mit 3 Wochen ist realistisch fuer scope-basierte Tests. Risiko: SCADA-Integration im Large-Tier kann Security-Haertung verlaengern."
+        },
+        {
+          "criterion": "Risk mitigation",
+          "score": 9,
+          "max_score": 10,
+          "rationale": "Dedizierte Security-Audit-Phase und Penetrationstests sind stark. BSI-Audit-Vorbereitung als Deliverable reduziert Risiko fuer den Kunden erheblich."
+        },
+        {
+          "criterion": "Margin protection",
+          "score": 7,
+          "max_score": 10,
+          "rationale": "PoV-Marge bei 10% ist bewusst niedrig. Medium/Large-Tiers ueber 31% Marge. Risiko: Compliance-Dokumentation kann aufwaendiger werden als geplant bei regulatorischen Aenderungen."
+        },
+        {
+          "criterion": "Delivery repeatability",
+          "score": 8,
+          "max_score": 10,
+          "rationale": "Compliance-Mapping-Framework und Onboarding-Prozess sind gut wiederverwendbar fuer weitere KRITIS-Sektoren (Wasser, Gesundheit). BSI-Audit-Template ist Asset."
+        }
+      ],
+      "overall_score": 39,
+      "overall_max": 50,
+      "recommendation": "Freigabe empfohlen. Compliance-Dokumentations-Effort im Large-Tier mit Risikopuffer versehen.",
+      "revision_required": false
+    },
+    {
+      "perspective": "client_solution_architect",
+      "role": "Kunden-IT-Architekt / Enterprise Architect",
+      "focus": "Architekturpassung, Integrationsfaehigkeit, Betreibbarkeit, Sicherheit",
+      "scores": [
+        {
+          "criterion": "Architecture alignment",
+          "score": 9,
+          "max_score": 10,
+          "rationale": "Souveraene Cloud mit Open-Source-Basis passt ideal zur regulatorischen Anforderung nach Datenhoheit. BSI-C5-Attestierung deckt KRITIS-Anforderungen nativ ab."
+        },
+        {
+          "criterion": "Integration quality",
+          "score": 7,
+          "max_score": 10,
+          "rationale": "OT/IT-Segmentierung ist adressiert. SCADA-Integration im Large-Scope. Es fehlt ein explizites Konzept fuer hybride Szenarien (On-Premise + Sovereign Cloud)."
+        },
+        {
+          "criterion": "Operational readiness",
+          "score": 8,
+          "max_score": 10,
+          "rationale": "Automatisiertes Compliance-Reporting ist ein starkes Operational Feature. Betriebsmodell mit Eskalationspfaden und SLA-Definition ist praxistauglich."
+        },
+        {
+          "criterion": "Security posture",
+          "score": 10,
+          "max_score": 10,
+          "rationale": "Hoechstes Security-Niveau der drei Loesungen: BSI-C5-Attestierung, Customer-Managed Keys, Penetrationstests, keine aussereuropaeische Jurisdiktion, dedizierte Security-Audit-Phase."
+        },
+        {
+          "criterion": "Data portability",
+          "score": 9,
+          "max_score": 10,
+          "rationale": "Open-Source-Basis, standardisierte Export-Schnittstellen und explizite Exit-Strategie. Beste Datenportabilitaet im Portfolio."
+        }
+      ],
+      "overall_score": 43,
+      "overall_max": 50,
+      "recommendation": "Sehr gut. Empfehlung: Hybrid-Integrationsszenario (On-Premise <> Sovereign Cloud) als optionalen Scope-Baustein anbieten.",
+      "revision_required": false
+    }
+  ],
+  "aggregate_score": 123,
+  "aggregate_max": 150,
+  "aggregate_pct": 82.0,
+  "revisions_applied": [],
+  "final_verdict": "approved",
+  "reviewed": "2026-03-18"
+}

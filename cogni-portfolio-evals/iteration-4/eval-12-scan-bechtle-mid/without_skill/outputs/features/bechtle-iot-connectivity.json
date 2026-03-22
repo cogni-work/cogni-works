@@ -1,0 +1,13 @@
+{
+  "slug": "bechtle-iot-connectivity",
+  "name": "Bechtle IoT Connectivity",
+  "description": "IoT general contractor providing LoRaWAN, Mioty, UWB, and 5G wireless connectivity, including certified hardware deployment and full lifecycle managed services.",
+  "product_slug": "bechtle-iot",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 1,
+    "category_id": "1.4",
+    "category_name": "5G & IoT Connectivity"
+  },
+  "source_file": "https://www.bechtle.com/it-loesungen/iot-loesungen"
+}

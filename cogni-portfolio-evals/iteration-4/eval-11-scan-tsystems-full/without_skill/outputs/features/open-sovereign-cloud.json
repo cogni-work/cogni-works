@@ -1,0 +1,13 @@
+{
+  "slug": "open-sovereign-cloud",
+  "name": "Open Sovereign Cloud",
+  "description": "Vendor-neutral fully sovereign cloud operated within German and EU legal jurisdictions",
+  "product_slug": "t-systems-cloud",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 4,
+    "category_id": "4.7",
+    "category_name": "Sovereign Cloud"
+  },
+  "source_file": "https://www.t-systems.com/de/en/sovereign-cloud"
+}

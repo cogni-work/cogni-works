@@ -1,0 +1,16 @@
+{
+  "slug": "stackit-cloud-services",
+  "product_slug": "cloud-services",
+  "name": "STACKIT Cloud Services",
+  "description": "German sovereign cloud platform from Schwarz Group provisioned through Bechtle Clouds marketplace with guaranteed German data residency, OpenStack foundation and Gaia-X alignment.",
+  "taxonomy_mapping": {
+    "dimension": 4,
+    "dimension_name": "Cloud Services",
+    "category_id": "4.7",
+    "category_name": "Sovereign Cloud",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/bechtle-portfolio.md",
+  "created": "2026-03-18"
+}

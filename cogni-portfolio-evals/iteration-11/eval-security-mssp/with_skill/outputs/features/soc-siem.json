@@ -1,0 +1,16 @@
+{
+  "slug": "soc-siem",
+  "product_slug": "managed-security",
+  "name": "SOC- und SIEM-Betrieb",
+  "description": "Rund-um-die-Uhr betriebenes Security Operations Center mit SIEM-Korrelationsengine, die Log-Daten aus heterogenen Quellen normalisiert und durch regelbasierte sowie verhaltensanalytische Erkennung priorisierte Sicherheitsereignisse erzeugt.",
+  "category": "detection",
+  "taxonomy_mapping": {
+    "dimension": 2,
+    "dimension_name": "Security",
+    "category_id": "2.3",
+    "category_name": "Security Operations",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "created": "2026-03-21"
+}

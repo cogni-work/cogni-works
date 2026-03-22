@@ -1,0 +1,16 @@
+{
+  "slug": "low-code-platform-services",
+  "product_slug": "application-services",
+  "name": "Low-Code Platform Services (Appian)",
+  "description": "Low-code application development on Appian platform with licensing, development, rollout and operations for public sector digital process automation, won through nationwide German tender.",
+  "taxonomy_mapping": {
+    "dimension": 6,
+    "dimension_name": "Application Services",
+    "category_id": "6.5",
+    "category_name": "Low-Code/No-Code Platforms",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/bechtle-portfolio.md",
+  "created": "2026-03-18"
+}

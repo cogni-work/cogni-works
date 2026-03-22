@@ -1,0 +1,10 @@
+{
+  "slug": "sap-on-cloud",
+  "product_slug": "cloud-services",
+  "name": "SAP on Cloud",
+  "description": "Hosts, migrates, and operates S/4HANA on FCI private cloud and hyperscalers using the MAX4SAP preconfigured process template with greenfield, brownfield, and SMARTField migration paths under SAP Activate methodology.",
+  "category": "application-services",
+  "readiness": "ga",
+  "created": "2026-01-15",
+  "updated": "2026-03-18"
+}

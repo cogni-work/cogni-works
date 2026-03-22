@@ -1,0 +1,108 @@
+{
+  "slug": "sap-on-cloud--grosse-energieversorger-de",
+  "solution_name": "SAP on Cloud Managed Services for German Energy Utilities",
+  "feature_slug": "sap-on-cloud",
+  "market_slug": "grosse-energieversorger-de",
+  "review_date": "2026-03-18",
+  "perspectives": {
+    "procurement_decision_maker": {
+      "role": "Procurement Decision-Maker",
+      "criteria": [
+        {
+          "criterion": "ROI clarity and payback period",
+          "score": "pass",
+          "rationale": "The means_statement quantifies a 25-35% reduction in SAP operating costs with a concrete SLA improvement (99.95%). This directly supports a TCO business case. The PoV scope includes a TCO comparison (on-prem vs. managed), which gives the CFO decision-grade data before committing to larger tiers. This is the strongest ROI story of the three solutions."
+        },
+        {
+          "criterion": "Pricing tier coherence and value scaling",
+          "score": "pass",
+          "rationale": "Four tiers (PoV 44K, Small 200K, Medium 480K, Large 1.1M) scale logically from single-system to enterprise-wide. The scope definitions are precise (single S/4HANA -> core landscape -> all SAP systems including sandbox/QA/prod). The Large tier's integration with Smart Metering infrastructure adds market-specific value."
+        },
+        {
+          "criterion": "Margin sustainability across tiers",
+          "score": "pass",
+          "rationale": "Margins range from 13.2% (PoV) to 40.0% (Large). The Large tier at 40% is the highest across all three solutions, justified by the recurring managed-service nature where efficiency gains compound over time. The PoV margin (13.2%) is a deliberate investment in customer acquisition."
+        },
+        {
+          "criterion": "Contractual and exit provisions",
+          "score": "pass",
+          "rationale": "The exit clause is explicitly defined: 4 weeks knowledge transfer and complete documentation upon contract termination. This is the only solution of the three that addresses exit strategy contractually. This significantly reduces procurement risk perception and addresses the Einkauf team's concerns about vendor dependency."
+        },
+        {
+          "criterion": "Competitive positioning against SAP ecosystem",
+          "score": "warn",
+          "rationale": "T-Systems is a SAP Platinum Partner with RISE with SAP Premium Supplier status and 4,000+ SAP experts. This is strong positioning. However, the solution does not explicitly address competition from SAP's own RISE managed cloud offering or from other Platinum Partners (IBM, Accenture, Deloitte). For large energy utilities, the comparison against RISE direct will be inevitable."
+        }
+      ],
+      "summary": "The strongest commercial case of the three solutions. Quantified ROI, explicit exit clauses, and clear tier scaling make this procurement-ready. Only gap is competitive framing against RISE with SAP direct."
+    },
+    "provider_solution_architect": {
+      "role": "Provider Solution Architect",
+      "criteria": [
+        {
+          "criterion": "Phase structure and delivery realism",
+          "score": "pass",
+          "rationale": "Four phases (Analysis 3w, Platform Setup 4w, Parallel Operations 8w, Validation 3w = 18 weeks) are realistic for a managed SAP transition. The requirement for parallel operations over at least one complete billing cycle is a mature delivery pattern that accounts for real-world SAP energy utility operations. The 18-week Small tier duration is appropriate."
+        },
+        {
+          "criterion": "Effort estimation accuracy",
+          "score": "pass",
+          "rationale": "Small tier: 100 days over 18 weeks = ~1.1 FTE average. For a single S/4HANA + IS-U system, this is reasonable given the parallel operations requirement. Medium (240 days/25 weeks) and Large (480 days/35 weeks) scale proportionally. The effort accounts for the extended parallel-run period that SAP transitions demand."
+        },
+        {
+          "criterion": "Skill requirements and assumptions",
+          "score": "warn",
+          "rationale": "The cost model assumes 'SAP Basis know-how at Implementation Engineer level (Senior profile, no blended rate).' This is a strong assumption — senior SAP Basis engineers with IS-U experience are scarce. The solution uses the standard 1,200 EUR/day rate for this role, which may be below market for IS-U-specialized Basis administrators. Resource availability risk is real."
+        },
+        {
+          "criterion": "High-load validation approach",
+          "score": "pass",
+          "rationale": "Phase 4 includes both synthetic and real load tests under annual billing conditions, plus failover testing. This directly addresses the market pain point of IS-U billing cycle peaks. The 3-week duration for this validation phase is adequate for meaningful load testing."
+        },
+        {
+          "criterion": "Dependency on customer readiness",
+          "score": "warn",
+          "rationale": "The customer must provide a complete SAP system inventory and billing calendar within 10 business days. For large energy utilities with fragmented SAP landscapes (often accumulated through M&A), this timeline may be optimistic. Delayed customer input is the most common cause of managed-service transition overruns."
+        }
+      ],
+      "summary": "Most mature delivery model of the three solutions. Parallel operations and billing-cycle-aware validation are industry-appropriate. Key risks are senior SAP Basis resource scarcity and customer readiness timelines."
+    },
+    "client_solution_architect": {
+      "role": "Client Solution Architect",
+      "criteria": [
+        {
+          "criterion": "Integration with existing SAP landscape",
+          "score": "pass",
+          "rationale": "The solution explicitly covers S/4HANA, IS-U, and BW (Business Warehouse) — the core SAP landscape for energy utilities. The Large tier extends to sandbox and QA systems, providing complete lifecycle coverage. Integration with Smart Metering infrastructure is included at the Large tier, addressing a critical market pain point."
+        },
+        {
+          "criterion": "Operational readiness and SLA confidence",
+          "score": "pass",
+          "rationale": "99.95% SLA is explicitly defined. Parallel operations ensure the internal team can validate before full handover. Escalation enablement for the remaining internal team (Restteam) acknowledges that the client retains some operational responsibility. The 24/7 managed service handover is clearly scoped."
+        },
+        {
+          "criterion": "Compliance and regulatory alignment",
+          "score": "warn",
+          "rationale": "The solution does not explicitly address BSI-C5 or NIS2 requirements for the SAP platform. Since SAP IS-U processes critical energy billing data and the market context identifies NIS2 registration (April 2026) as urgent, the compliance story for the SAP platform should be explicit. The sovereign-cloud solution handles compliance well, but this solution assumes it implicitly."
+        },
+        {
+          "criterion": "Data sovereignty and processing location",
+          "score": "warn",
+          "rationale": "The feature description mentions hosting on Private Cloud, AWS, and Azure, but the solution does not specify where the SAP systems will be hosted. For a German energy utility with KRITIS obligations, the data processing location is a fundamental architectural decision. The solution should explicitly state whether it runs on T-Systems' sovereign infrastructure or on hyperscaler regions."
+        },
+        {
+          "criterion": "Migration path from IS-U to S/4HANA Utilities",
+          "score": "warn",
+          "rationale": "The market's #1 pain point is 'SAP IS-U to S/4HANA Utilities Migration with 2027 deadline.' This solution manages existing SAP systems on cloud but does not address the IS-U to S/4HANA conversion itself. A client architect would ask: does this managed service include or prepare for the S/4HANA migration, or is it managing a system that will be replaced in 1-2 years? This creates a strategic ambiguity."
+        }
+      ],
+      "summary": "Strong operational design with proper parallel-run and SLA definition. Key gaps are the missing compliance overlay (BSI-C5/NIS2 for SAP), unclear data sovereignty position, and the unanswered strategic question about IS-U to S/4HANA conversion timing."
+    }
+  },
+  "overall_score": {
+    "pass": 8,
+    "warn": 6,
+    "fail": 0,
+    "verdict": "The most commercially mature and delivery-ready solution. Needs compliance and data sovereignty hardening for the client-architect perspective, and should clarify its role relative to the IS-U -> S/4HANA migration path."
+  }
+}

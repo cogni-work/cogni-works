@@ -1,0 +1,14 @@
+{
+  "slug": "industry-catalog",
+  "product_slug": "partner-portal",
+  "name": "Industry-Catalog-Zugriff",
+  "description": "Kuratierter Branchenkatalog mit vorkonfigurierten Lösungsbausteinen je Vertikale, der über eine hierarchische taxonomiebasierte Navigationsstruktur branchenspezifische Angebotspakete erschließt und die Verfügbarkeit nach regionaler Partnerabdeckung dynamisch filtert.",
+  "category": "catalog",
+  "taxonomy_mapping": {
+    "dimension": "Consulting & Professional Services",
+    "category_id": "7.1",
+    "category_name": "IT Strategy & Architecture Consulting"
+  },
+  "readiness": "ga",
+  "created": "2026-03-21"
+}

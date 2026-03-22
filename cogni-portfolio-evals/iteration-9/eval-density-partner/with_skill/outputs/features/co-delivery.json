@@ -1,0 +1,14 @@
+{
+  "slug": "co-delivery",
+  "product_slug": "partner-portal",
+  "name": "Co-Delivery-Projektmanagement",
+  "description": "Gemeinsame Projektsteuerung zwischen Anbieter und Partner mit geteilten Arbeitspaketen, Meilenstein-Tracking und rollenbasierter Aufgabenverteilung über ein zentrales Dashboard, das Fortschritt und Ressourcenauslastung in Echtzeit konsolidiert.",
+  "category": "collaboration",
+  "taxonomy_mapping": {
+    "dimension": "Consulting & Project Services",
+    "category_id": "7.3",
+    "category_name": "Project Management Services"
+  },
+  "readiness": "ga",
+  "created": "2026-03-21"
+}

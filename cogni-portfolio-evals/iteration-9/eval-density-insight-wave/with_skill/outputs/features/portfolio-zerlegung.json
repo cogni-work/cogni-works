@@ -1,0 +1,16 @@
+{
+  "slug": "portfolio-zerlegung",
+  "product_slug": "cogni-portfolio",
+  "name": "Portfolio-Zerlegung nach IS/DOES/MEANS",
+  "description": "Strukturierte Dekomposition von Produkten und Services in drei Schichten: IS (Fähigkeit/Feature), DOES (Nutzenversprechen/Proposition) und MEANS (Ergebnis/Outcome) mit referenzieller Verknüpfung zwischen den Ebenen.",
+  "category": "core-engine",
+  "taxonomy_mapping": {
+    "dimension": 7,
+    "dimension_name": "Consulting & Professional Services",
+    "category_id": "7.1",
+    "category_name": "IT Strategy Consulting",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "created": "2026-03-21"
+}

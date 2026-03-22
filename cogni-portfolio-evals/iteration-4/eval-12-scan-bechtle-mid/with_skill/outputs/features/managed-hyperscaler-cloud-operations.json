@@ -1,0 +1,16 @@
+{
+  "slug": "managed-hyperscaler-cloud-operations",
+  "product_slug": "cloud-services",
+  "name": "Managed Hyperscaler Cloud Operations",
+  "description": "Unified operations service for AWS, Azure and Google Cloud delivering configuration management, performance monitoring, patch maintenance, cost optimization and governance enforcement under single contract.",
+  "taxonomy_mapping": {
+    "dimension": 4,
+    "dimension_name": "Cloud Services",
+    "category_id": "4.1",
+    "category_name": "Managed Hyperscaler Services",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/bechtle-portfolio.md",
+  "created": "2026-03-18"
+}

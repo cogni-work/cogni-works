@@ -1,0 +1,13 @@
+{
+  "slug": "mpls-wan",
+  "name": "MPLS WAN Services",
+  "description": "Enterprise MPLS networking for global corporate WANs with modular design using MPLS, internet, and ethernet",
+  "product_slug": "t-systems-connectivity",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 1,
+    "category_id": "1.1",
+    "category_name": "WAN Services"
+  },
+  "source_file": "https://www.t-systems.com/za/en/connectivity"
+}

@@ -1,0 +1,16 @@
+{
+  "slug": "citrix-managed-vdi-daas",
+  "product_slug": "workplace-services",
+  "name": "Citrix Managed Services (VDI/DaaS)",
+  "description": "Fully managed Citrix virtual desktop and application delivery service providing DaaS and VDI deployment options with integrated security controls and central administration.",
+  "taxonomy_mapping": {
+    "dimension": 3,
+    "dimension_name": "Digital Workplace Services",
+    "category_id": "3.4",
+    "category_name": "Virtual Desktop & DaaS",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

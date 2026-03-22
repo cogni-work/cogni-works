@@ -1,0 +1,20 @@
+{
+  "slug": "cloud-migration--grosse-energieversorger-de",
+  "feature_slug": "cloud-migration",
+  "market_slug": "grosse-energieversorger-de",
+  "is_statement": "Cloud Migration Services ist ein strukturiertes Migrationsprogramm mit Assessment-Framework, modularer CMF-Methodik nach Assess-Mobilize-Modernize, 6R-Migrationsstrategien und sprint-basierter Cloud-Migration-Factory fuer standardisierte Durchfuehrung.",
+  "does_statement": "Energieversorger migrieren Bestandsanwendungen planbar in die Cloud, wobei vordefinierte 6R-Strategien je Workload das richtige Vorgehen zwischen Rehost und Retire bestimmen.",
+  "means_statement": "Migrationsbudgets werden um bis zu 25% unterschritten, da die Factory-Methodik Durchlaufzeiten pro Workload auf durchschnittlich 3 Wochen standardisiert.",
+  "evidence": [
+    {
+      "statement": "T-Systems Cloud Migration Factory nutzt ein modulares CMF-Framework mit sprint-basierter Umsetzung fuer Enterprise-Migrationen.",
+      "source_url": "https://www.t-systems.com/de/de/cloud-und-infrastruktur/cloud-migration",
+      "source_title": "T-Systems Cloud Migration"
+    },
+    {
+      "statement": "Die 6R-Migrationsstrategie (Rehost, Replatform, Refactor, Repurchase, Retain, Retire) ist Standard fuer strukturierte Cloud-Migrationen.",
+      "source_url": "https://aws.amazon.com/blogs/enterprise-strategy/6-strategies-for-migrating-applications-to-the-cloud/",
+      "source_title": "AWS 6R Migration Strategies"
+    }
+  ]
+}

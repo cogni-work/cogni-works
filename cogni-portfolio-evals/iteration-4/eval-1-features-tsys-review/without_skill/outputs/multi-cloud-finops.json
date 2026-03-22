@@ -1,0 +1,36 @@
+{
+  "slug": "multi-cloud-finops",
+  "name": "Multi-Cloud & FinOps Management",
+  "description": "Zentralisierte Multi-Cloud-Governance über Multi Cloud Connectivity Platform und Future Cloud Infrastructure, mit strukturiertem FinOps-Maturity-Assessment, kontinuierlichem Cost Management und eingebetteten Compliance-Controls für BSI C5, GDPR und lokale Regulierung.",
+  "review": {
+    "quality_score": 3.0,
+    "issues": [
+      {
+        "check": "language-mismatch",
+        "severity": "high",
+        "detail": "Portfolio language is 'en' but description is written in German."
+      },
+      {
+        "check": "feature-overlap",
+        "severity": "high",
+        "detail": "Multi-Cloud Connectivity Platform and governance topics overlap significantly with hybrid-cloud feature. Boundaries between these two features are unclear."
+      },
+      {
+        "check": "missing-customer-value",
+        "severity": "medium",
+        "detail": "Mentions cost management and compliance but does not quantify the value proposition — e.g., typical savings percentages, time-to-compliance."
+      },
+      {
+        "check": "missing-schema-fields",
+        "severity": "medium",
+        "detail": "Missing fields: product, created, status, differentiators, use_cases."
+      }
+    ],
+    "passed_checks": [
+      "slug-format",
+      "description-present",
+      "name-present",
+      "specificity-good"
+    ]
+  }
+}

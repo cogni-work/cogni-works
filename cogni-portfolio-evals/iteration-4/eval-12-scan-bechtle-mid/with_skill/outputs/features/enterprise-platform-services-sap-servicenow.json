@@ -1,0 +1,16 @@
+{
+  "slug": "enterprise-platform-services-sap-servicenow",
+  "product_slug": "application-services",
+  "name": "Enterprise Platform Services (SAP & ServiceNow)",
+  "description": "SAP S/4HANA consulting and implementation combined with ServiceNow ITSM through SmartNow pre-configured out-of-the-box solution hosted by ServiceNow and operated by Bechtle specialists.",
+  "taxonomy_mapping": {
+    "dimension": 6,
+    "dimension_name": "Application Services",
+    "category_id": "6.3",
+    "category_name": "Enterprise Platform Services",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/bechtle-portfolio.md",
+  "created": "2026-03-18"
+}

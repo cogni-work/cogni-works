@@ -1,0 +1,16 @@
+{
+  "slug": "netzleittechnik",
+  "product_slug": "digitale-energiedienste",
+  "name": "Netzleittechnik",
+  "description": "SCADA-basierte Netzleittechnik fuer die zentrale Ueberwachung und Steuerung der Strom-, Gas- und Fernwaermenetze mit automatisierter Stoerungserkennung, Lastflussberechnung und Schalthandlungsprotokollierung ueber alle Spannungsebenen.",
+  "category": "infrastructure-monitoring",
+  "taxonomy_mapping": {
+    "dimension": 5,
+    "dimension_name": "Managed Infrastructure Services",
+    "category_id": "5.4",
+    "category_name": "Infrastructure Monitoring",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "created": "2026-03-18"
+}

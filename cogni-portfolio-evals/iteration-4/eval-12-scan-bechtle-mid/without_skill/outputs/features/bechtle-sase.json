@@ -1,0 +1,13 @@
+{
+  "slug": "bechtle-sase",
+  "name": "Bechtle SASE",
+  "description": "Turnkey Secure Access Service Edge implementation combining SD-WAN with SWG, CASB, ZTNA, and FWaaS for comprehensive network security architecture.",
+  "product_slug": "bechtle-networking",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 1,
+    "category_id": "1.2",
+    "category_name": "SASE"
+  },
+  "source_file": "https://www.bechtle.com/de-en/about-bechtle/newsroom/it-solutions/2021/future-proof-networks-with-sase-and-sd-wan"
+}

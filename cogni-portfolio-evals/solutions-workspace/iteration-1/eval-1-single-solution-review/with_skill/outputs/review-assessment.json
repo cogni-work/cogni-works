@@ -1,0 +1,101 @@
+{
+  "solution_slug": "cloud-migration--grosse-energieversorger-de",
+  "solution_type": "project",
+  "overall": "warn",
+  "overall_score": 90,
+  "stakeholder_reviews": [
+    {
+      "perspective": "reviewer",
+      "score": 86,
+      "overall": "warn",
+      "criteria": {
+        "roi_clarity": { "score": "pass", "weight": 0.30, "note": "" },
+        "budget_fit": { "score": "pass", "weight": 0.25, "note": "" },
+        "risk_reward_transparency": { "score": "warn", "weight": 0.20, "note": "OT-spezifische Scope-Ausschlüsse und Legacy-Decommissioning-Verantwortlichkeiten fehlen in Assumptions" },
+        "competitive_positioning": { "score": "warn", "weight": 0.15, "note": "Keine Competitor-Datei vorhanden — Preispositionierung nicht extern verankert" },
+        "decision_pathway": { "score": "pass", "weight": 0.10, "note": "" }
+      },
+      "strengths": [
+        "Klare PoV-Einstiegshürde bei 25K EUR — innerhalb CIO-Freigabegrenze ohne Vorstandseskalation",
+        "Tier-Progression von 1 Workload bis 50+ ist für Einkauf nachvollziehbar"
+      ],
+      "concerns": [
+        "Fehlende OT-spezifische Scope-Ausschlüsse können zu Nachverhandlungen führen",
+        "Ohne Competitor-Benchmarking kann Einkauf Preise nicht einordnen"
+      ],
+      "recommendations": [
+        "HIGH: OT-Sonderanbindungen und Legacy-Decommissioning explizit als Out-of-Scope in Assumptions aufnehmen",
+        "OPTIONAL: Competitive-Analyse durchführen und Preispositionierung dokumentieren"
+      ]
+    },
+    {
+      "perspective": "provider_sa",
+      "score": 100,
+      "overall": "pass",
+      "criteria": {
+        "delivery_realism": { "score": "pass", "weight": 0.30, "note": "" },
+        "scope_effort_coherence": { "score": "pass", "weight": 0.25, "note": "" },
+        "phase_architecture": { "score": "pass", "weight": 0.20, "note": "" },
+        "does_traceability": { "score": "pass", "weight": 0.15, "note": "" },
+        "tier_scalability": { "score": "pass", "weight": 0.10, "note": "" }
+      },
+      "strengths": [
+        "KRITIS-Staging als eigene Phase statt in Setup vergraben — korrekt für regulierte Energieversorger",
+        "Sprint-basierte Migration mit CMF-Methodik spiegelt realen Delivery-Ansatz wider",
+        "Factory-Effizienz bei Large-Tier (3.6 Tage/Workload) ist realistisch für standardisierte Migrationen"
+      ],
+      "concerns": [],
+      "recommendations": []
+    },
+    {
+      "perspective": "client_sa",
+      "score": 84,
+      "overall": "warn",
+      "criteria": {
+        "integration_feasibility": { "score": "pass", "weight": 0.30, "note": "" },
+        "dependency_risk": { "score": "warn", "weight": 0.25, "note": "OT-Team-Verfügbarkeit und Datenmigrationsverantwortung kundenseitig nicht explizit als Voraussetzung benannt" },
+        "operational_readiness": { "score": "pass", "weight": 0.20, "note": "" },
+        "vendor_lockin": { "score": "warn", "weight": 0.15, "note": "Keine Aussage zu Datenportabilität oder Multi-Cloud-Exit-Strategie — für Energieversorger mit Vendor-Diversifikationspflicht relevant" },
+        "security_compliance": { "score": "pass", "weight": 0.10, "note": "" }
+      },
+      "strengths": [
+        "Dedizierte Integrationstest-Phase für SCADA-Konnektivität und IS-U-Schnittstellen",
+        "Betriebsübergabe mit Runbooks, Monitoring und Schulung — Kunde wird nicht abhängig gelassen",
+        "BSI-C5, NIS2 und KRITIS durchgängig adressiert"
+      ],
+      "concerns": [
+        "OT-Team muss für Integrationsphase verfügbar sein — nicht als Kundenvoraussetzung dokumentiert",
+        "Kein Hinweis auf Datenportabilität oder Exit-Pfad bei Provider-Wechsel"
+      ],
+      "recommendations": [
+        "HIGH: OT-Team-Verfügbarkeit und Datenmigrationsverantwortung als Client-Prerequisites in Assumptions aufnehmen",
+        "HIGH: Datenportabilität oder standardbasierte Export-Möglichkeit in Assumptions oder Scope erwähnen"
+      ]
+    }
+  ],
+  "synthesis": {
+    "conflicts": [],
+    "critical_improvements": [],
+    "high_improvements": [
+      {
+        "description": "OT-Team-Verfügbarkeit, Datenmigrationsverantwortung und Legacy-Decommissioning-Ausschluss in Assumptions ergänzen",
+        "stakeholders": ["reviewer", "client_sa"],
+        "affects": "cost_model.assumptions"
+      },
+      {
+        "description": "Datenportabilität oder Multi-Cloud-Exit-Strategie adressieren — für Energieversorger mit Diversifikationspflicht geschäftskritisch",
+        "stakeholders": ["client_sa"],
+        "affects": "cost_model.assumptions"
+      }
+    ],
+    "optional_improvements": [
+      {
+        "description": "Competitive-Analyse durchführen und Preispositionierung gegen Markt-Benchmarks verankern",
+        "stakeholders": ["reviewer"],
+        "affects": "pricing"
+      }
+    ],
+    "verdict": "revise",
+    "revision_guidance": "Zwei gezielte Verbesserungen nötig: (1) Assumptions um kundenseitige OT-Voraussetzungen erweitern (OT-Team-Verfügbarkeit für Integrationsphase, Datenmigrationsverantwortung, Legacy-Decommissioning explizit Out-of-Scope), (2) Datenportabilitäts-Aussage ergänzen — entweder in Assumptions oder als Scope-Element in der Betriebsübergabe-Phase. Beide Punkte stärken die Client-SA-Bewertung über die 85-Schwelle."
+  }
+}

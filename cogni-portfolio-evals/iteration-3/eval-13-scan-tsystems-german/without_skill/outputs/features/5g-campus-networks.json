@@ -1,0 +1,13 @@
+{
+  "slug": "5g-campus-networks",
+  "name": "5G Campus Netzwerke",
+  "description": "Privates lokales 5G-Netz als Managed Service fuer Industrie 4.0 und Smart Factory mit Edge Computing und minimaler Latenz.",
+  "product_slug": "t-systems-iot-edge",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 1,
+    "category_id": "1.4",
+    "category_name": "5G & IoT Connectivity"
+  },
+  "source_file": "https://www.t-systems.com/de/en/iot-and-edge/solutions/5g-campus-networks"
+}

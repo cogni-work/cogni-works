@@ -1,0 +1,63 @@
+{
+  "total_checks": 11,
+  "passed": 9,
+  "failed": 2,
+  "pass_rate": 0.818,
+  "expectations": [
+    {
+      "text": "All 8 dimensions present in report (found 8)",
+      "passed": true,
+      "evidence": "All 8 present: ['0', '1', '2', '3', '4', '5', '6', '7']"
+    },
+    {
+      "text": "All 57 categories present in report (found 57)",
+      "passed": true,
+      "evidence": "All 57 present"
+    },
+    {
+      "text": "Every category has discovery status tag (57 of 57)",
+      "passed": true,
+      "evidence": "57 valid status tags for 57 categories"
+    },
+    {
+      "text": "scan-output.json status totals = 57 (actual: 57)",
+      "passed": true,
+      "evidence": "{\"confirmed\": 51, \"not_offered\": 6, \"emerging\": 0, \"extended\": 0}"
+    },
+    {
+      "text": "Every confirmed offering has a Link field (1/1)",
+      "passed": true,
+      "evidence": "0 offerings missing links out of 1 total"
+    },
+    {
+      "text": "All offering Links from discovered domains (0 foreign)",
+      "passed": true,
+      "evidence": "All from ['detecon.com', 'open-telekom-cloud.com', 'operational-services.de', 't-systems.com']"
+    },
+    {
+      "text": "At least 3 domain(s) analyzed (actual: 4)",
+      "passed": true,
+      "evidence": "Domains: ['t-systems.com', 'detecon.com', 'open-telekom-cloud.com', 'operational-services.de']"
+    },
+    {
+      "text": "Feature count >= 20 (actual: 81)",
+      "passed": true,
+      "evidence": "81 feature files"
+    },
+    {
+      "text": "Features have taxonomy_mapping with category_id (73/81)",
+      "passed": false,
+      "evidence": "Missing: ['cloud-migration', 'cloud-native-container', 'hybrid-cloud', 'managed-hyperscaler', 'multi-cloud-finops']"
+    },
+    {
+      "text": "category_id matches valid category (81/81)",
+      "passed": true,
+      "evidence": "All valid"
+    },
+    {
+      "text": "Feature readiness is ga/beta/planned (73/81)",
+      "passed": false,
+      "evidence": "Invalid: ['cloud-migration: ', 'cloud-native-container: ', 'hybrid-cloud: ', 'managed-hyperscaler: ', 'multi-cloud-finops: ']"
+    }
+  ]
+}

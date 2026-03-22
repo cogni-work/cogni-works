@@ -1,0 +1,14 @@
+{
+  "slug": "qualitaetsbewertung",
+  "product_slug": "cogni-portfolio",
+  "name": "Qualitätsbewertung",
+  "description": "LLM-gestützte Beschreibungsanalyse, die jede einzelne Feature-Beschreibung auf fünf Qualitätsdimensionen wie Mechanismus-Klarheit und Differenzierungspotenzial bewertet und sprachunabhängig strukturierte Verbesserungsvorschläge mit Pass/Warn/Fail-Klassifikation erzeugt.",
+  "category": "quality",
+  "taxonomy_mapping": {
+    "dimension": "Consulting",
+    "category_id": "7.3",
+    "category_name": "Quality & Process Consulting"
+  },
+  "readiness": "ga",
+  "created": "2026-03-21"
+}

@@ -1,0 +1,16 @@
+{
+  "slug": "incident-response",
+  "product_slug": "managed-security",
+  "name": "Incident Response",
+  "description": "Strukturierter Vorfallreaktionsprozess mit vorab definierten Playbooks und forensischer Analysefaehigkeit, der bei bestaetigten Sicherheitsvorfaellen automatisiert Eindaemmungsmassnahmen einleitet und lueckenlose Beweissicherung durchfuehrt.",
+  "category": "response",
+  "taxonomy_mapping": {
+    "dimension": 2,
+    "dimension_name": "Security",
+    "category_id": "2.7",
+    "category_name": "Incident Response",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "created": "2026-03-21"
+}

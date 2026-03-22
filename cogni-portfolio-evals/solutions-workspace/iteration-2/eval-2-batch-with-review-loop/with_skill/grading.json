@@ -1,0 +1,60 @@
+{
+  "expectations": [
+    {
+      "text": "BATCH-01: 3 solution JSON files created",
+      "passed": true,
+      "evidence": "3 solution files present: cloud-migration--grosse-energieversorger-de.json, sap-on-cloud--grosse-energieversorger-de.json, sovereign-cloud--grosse-energieversorger-de.json"
+    },
+    {
+      "text": "BATCH-02: Each solution has correct solution_type for its product's revenue_model (should be \"project\")",
+      "passed": true,
+      "evidence": "All 3 solutions have solution_type: \"project\" — cloud-migration, sap-on-cloud, sovereign-cloud"
+    },
+    {
+      "text": "BATCH-03: Review assessments produced for all 3 solutions",
+      "passed": true,
+      "evidence": "Review files exist for all 3: cloud-migration review (score 89, pass), sap-on-cloud review (score 79, warn), sovereign-cloud review (score 80, warn)"
+    },
+    {
+      "text": "BATCH-04: Batch summary categorizes solutions by acceptance round",
+      "passed": true,
+      "evidence": "batch-summary.json has accepted_round1: 1 (cloud-migration, round 1) and accepted_round2: 2 (sap-on-cloud and sovereign-cloud, both round 2). Each solution entry includes its round number."
+    },
+    {
+      "text": "BATCH-05: At least one solution triggered a revision round",
+      "passed": true,
+      "evidence": "2 solutions triggered revision: sap-on-cloud (Round 1 verdict: \"revise\", missing TCO deliverables and competitive positioning) and sovereign-cloud (Round 1 verdict: \"revise\", Phase 4 compressed, missing competitive positioning). Both have revised solution files and round-2 review files."
+    },
+    {
+      "text": "BATCH-06: Revised solutions have higher scores than Round 1",
+      "passed": true,
+      "evidence": "sap-on-cloud: Round 1 score 79 -> Round 2 score 88 (+9). sovereign-cloud: Round 1 score 80 -> Round 2 score 89 (+9). Both improved."
+    },
+    {
+      "text": "BATCH-07: No more than 2 revision rounds per solution",
+      "passed": true,
+      "evidence": "cloud-migration accepted in round 1 (0 revisions). sap-on-cloud accepted in round 2 (1 revision). sovereign-cloud accepted in round 2 (1 revision). Maximum revision rounds used: 1, well within the 2-round limit."
+    },
+    {
+      "text": "BATCH-08: All solutions include exit clause in assumptions",
+      "passed": true,
+      "evidence": "cloud-migration: \"Exit-Klausel: 12 Monate Kündigungsfrist, 90 Tage Transitionsunterstützung, Daten-Repatriierung innerhalb 90 Tagen, gedeckelter Exit-Aufwand (max. 5% Gesamtvolumen).\" sap-on-cloud: \"Exit-Klausel: 6 Monate Kündigungsfrist, 120 Tage Transitions-Support, SAP-Datenexport in Standardformaten (SAP-Backup, SQL), gedeckelter Exit-Aufwand (max. 8% Jahresvolumen).\" sovereign-cloud: \"Exit-Klausel: 12 Monate Kündigungsfrist, 90 Tage Transitionsunterstützung, Datenexport in Standardformaten, IaC-Portabilität sichert Provider-Wechsel. Gedeckelter Exit-Aufwand (max. 5% Gesamtvolumen).\""
+    },
+    {
+      "text": "BATCH-09: All standard tier margins (small/medium/large) >= 25%",
+      "passed": true,
+      "evidence": "cloud-migration: small 37.4%, medium 38.2%, large 35.6%. sap-on-cloud: small 33.8%, medium 31.5%, large 32.9%. sovereign-cloud: small 31.6%, medium 31.8%, large 30.9%. All 9 standard tier margins are >= 25%."
+    },
+    {
+      "text": "BATCH-10: Solutions targeting same market have consistent assumptions (same role rates, same delivery model)",
+      "passed": true,
+      "evidence": "All 3 solutions target grosse-energieversorger-de and use identical role rates: Solution Architect 1800 EUR/day, Implementation Engineer 1200 EUR/day, Project Manager 1400 EUR/day. All use Remote-Delivery with On-Site for critical phases. batch-summary.json confirms: assumption_drift: false, exit_clause_consistent: true, compliance_framing_consistent: true."
+    }
+  ],
+  "summary": {
+    "passed": 10,
+    "failed": 0,
+    "total": 10,
+    "pass_rate": 1.0
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "slug": "pipeline-matching",
+  "product_slug": "partner-portal",
+  "name": "Pipeline-Matching",
+  "description": "Algorithmisches Matching von Partner-Kompetenzen und offenen Vertriebspipeline-Opportunitäten auf Basis von Branchenfokus, Lösungsprofil und regionaler Abdeckung, priorisiert durch einen gewichteten Scoring-Algorithmus mit konfigurierbaren Relevanzkriterien.",
+  "category": "sales-enablement",
+  "taxonomy_mapping": {
+    "dimension": "Application Services",
+    "category_id": "6.4",
+    "category_name": "CRM & Sales Applications"
+  },
+  "readiness": "ga",
+  "created": "2026-03-21"
+}

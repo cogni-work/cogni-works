@@ -1,0 +1,16 @@
+{
+  "slug": "device-management",
+  "product_slug": "workplace-services",
+  "name": "Device Management (UEM/MDM)",
+  "description": "UEM with Intune, Workspace ONE, MobileIron across platforms",
+  "taxonomy_mapping": {
+    "dimension": 3,
+    "dimension_name": "Digital Workplace Services",
+    "category_id": "3.3",
+    "category_name": "Device Management",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/bechtle-portfolio.md",
+  "created": "2026-03-18"
+}

@@ -1,0 +1,95 @@
+{
+  "expectations": [
+    {
+      "text": "tips-trend-report.md exists",
+      "passed": true,
+      "evidence": ""
+    },
+    {
+      "text": "tips-trend-report-claims.json exists",
+      "passed": true,
+      "evidence": ""
+    },
+    {
+      "text": "Valid frontmatter with report_mode: strategic-themes",
+      "passed": true,
+      "evidence": ""
+    },
+    {
+      "text": "5 H2 theme sections",
+      "passed": true,
+      "evidence": "5: ['## 1. Intelligent Grid & Asset Optimization', '## 2. AI-Powered Operational Excellence', '## 3. Digital Customer Experience & New Revenue Mo', '## 4. Cybersecurity & Regulatory Data Sovereignty', '## 5. Decarbonization & Sustainable Infrastructure']"
+    },
+    {
+      "text": "Emerging signals section",
+      "passed": true,
+      "evidence": ""
+    },
+    {
+      "text": "Portfolio analysis section",
+      "passed": true,
+      "evidence": ""
+    },
+    {
+      "text": "Claims registry table",
+      "passed": true,
+      "evidence": ""
+    },
+    {
+      "text": "Claims >= 20",
+      "passed": true,
+      "evidence": "74 claims"
+    },
+    {
+      "text": "4 enriched-trends JSON",
+      "passed": true,
+      "evidence": ""
+    },
+    {
+      "text": "4 claims JSON",
+      "passed": true,
+      "evidence": ""
+    },
+    {
+      "text": "4 report-section MD",
+      "passed": true,
+      "evidence": ""
+    },
+    {
+      "text": "trend_report_complete: true",
+      "passed": true,
+      "evidence": ""
+    },
+    {
+      "text": "English headings",
+      "passed": true,
+      "evidence": "4/4"
+    },
+    {
+      "text": "language: en",
+      "passed": true,
+      "evidence": ""
+    },
+    {
+      "text": "No verification JSON",
+      "passed": true,
+      "evidence": ""
+    },
+    {
+      "text": "Title not redundant",
+      "passed": true,
+      "evidence": ""
+    },
+    {
+      "text": "Theses >= 250w + 3 citations",
+      "passed": true,
+      "evidence": "T1:359w/10c\u2713; T2:366w/11c\u2713; T3:293w/6c\u2713; T4:364w/5c\u2713; T5:348w/11c\u2713"
+    }
+  ],
+  "summary": {
+    "passed": 17,
+    "failed": 0,
+    "total": 17,
+    "pass_rate": 1.0
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "slug": "network-as-a-service",
+  "name": "Network-as-a-Service (IntraSelect Managed)",
+  "description": "Vollstaendig verwaltetes Netzwerk mit SD-WAN, MPLS und virtuellen Netzwerkfunktionen (VNF) ueber Universal CPE.",
+  "product_slug": "t-systems-connectivity",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 1,
+    "category_id": "1.7",
+    "category_name": "Network-as-a-Service"
+  },
+  "source_file": "https://www.t-systems.com/at/de/connectivity/future-networks-und-sip/sd-wan/intraselect"
+}

@@ -1,0 +1,16 @@
+{
+  "slug": "data-intelligence-hub",
+  "product_slug": "application-services",
+  "name": "Data Intelligence Hub",
+  "description": "Sovereign data exchange platform providing cross-organization data sharing with integrated analytics, machine data processing pipelines, and data governance controls for multi-party data ecosystems.",
+  "taxonomy_mapping": {
+    "dimension": 6,
+    "dimension_name": "Application Services",
+    "category_id": "6.6",
+    "category_name": "AI, Data & Analytics",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

@@ -1,0 +1,116 @@
+{
+  "slug": "sap-on-cloud--grosse-energieversorger-de",
+  "proposition_slug": "sap-on-cloud--grosse-energieversorger-de",
+  "solution_type": "project",
+  "implementation": [
+    {
+      "phase": "SAP-Landschaftsanalyse & Betriebsmodell-Design",
+      "duration_weeks": 3,
+      "description": "Aufnahme der bestehenden SAP-Landschaft (S/4HANA, IS-U, BW), Analyse der Abrechnungszyklen und Hochlastphasen, Definition des Ziel-Betriebsmodells auf Cloud-Infrastruktur."
+    },
+    {
+      "phase": "Plattform-Setup & IS-U-Konfiguration",
+      "duration_weeks": 4,
+      "description": "Provisionierung der Managed-SAP-Plattform mit IS-U-spezifischer Konfiguration, Auto-Scaling für Jahresabrechnung und Preisanpassungsphasen, Monitoring-Integration."
+    },
+    {
+      "phase": "SAP-Betriebsmigration & Parallelbetrieb",
+      "duration_weeks": 8,
+      "description": "Schrittweise Übernahme der SAP-Betriebsverantwortung mit Parallelbetrieb über mindestens einen vollständigen Abrechnungszyklus, Basis-Administration, Patch-Management und SLA-Validation (99.95%)."
+    },
+    {
+      "phase": "Hochlast-Validierung & Betriebsfreigabe",
+      "duration_weeks": 3,
+      "description": "Synthetische und reale Lasttests unter Jahresabrechnungsbedingungen, Failover-Tests, Eskalations-Enablement des internen Restteams und finale Betriebsfreigabe mit Übergabe an den 24/7-Managed-Service."
+    }
+  ],
+  "pricing": {
+    "proof_of_value": {
+      "price": 44000,
+      "currency": "EUR",
+      "scope": "SAP-Landschaftsanalyse eines IS-U-Systems mit Hochlast-Profiling und Betriebsmodell-Empfehlung — Go/No-Go-Report mit TCO-Vergleich on-prem vs. managed nach 4 Wochen."
+    },
+    "small": {
+      "price": 200000,
+      "currency": "EUR",
+      "scope": "Managed SAP-Betrieb für ein S/4HANA-System inkl. IS-U, Basis-Administration, Monitoring und 99.95% SLA, 18 Wochen Transition."
+    },
+    "medium": {
+      "price": 480000,
+      "currency": "EUR",
+      "scope": "Managed SAP-Betrieb für die gesamte SAP-Kernlandschaft (S/4HANA, IS-U, BW) inkl. Hochlast-Management, Change Management und Betriebsteam-Enablement, 25 Wochen."
+    },
+    "large": {
+      "price": 1100000,
+      "currency": "EUR",
+      "scope": "Unternehmensweiter Managed SAP-Betrieb aller SAP-Systeme inkl. Sandbox-, QA- und Produktionssysteme mit dediziertem Service-Manager und Integration in Smart-Metering-Infrastruktur, 35 Wochen."
+    }
+  },
+  "cost_model": {
+    "assumptions": [
+      "Tagessätze: Solution Architect 1.800 EUR, Impl. Engineer 1.200 EUR, Project Manager 1.400 EUR",
+      "SAP Basis-Know-how beim Implementation Engineer vorausgesetzt (Senior-Profil, kein Blended Rate)",
+      "Kunde stellt vollständiges SAP-Systemverzeichnis und Abrechnungskalender innerhalb 10 Werktagen bereit",
+      "Hochlastphasen (Jahresabrechnung, Preisanpassungen) definieren das Sizing — nicht der Normalbetrieb",
+      "Remote-Delivery; On-site bei Hochlast-Validierung und Betriebsfreigabe",
+      "Zielmarge 30% Standard-Tiers, 13% PoV",
+      "Exit-Klausel: Knowledge-Transfer (4 Wochen) und vollständige Dokumentation bei Vertragskündigung vertraglich gesichert"
+    ],
+    "bill_of_materials": {
+      "roles": [
+        { "role": "Solution Architect", "rate_day": 1800, "currency": "EUR" },
+        { "role": "Implementation Engineer", "rate_day": 1200, "currency": "EUR" },
+        { "role": "Project Manager", "rate_day": 1400, "currency": "EUR" }
+      ],
+      "tooling": [
+        { "item": "SAP EarlyWatch / Solution Manager Lizenz", "cost": 4000, "currency": "EUR", "note": "Analyse-Tooling für Transition" }
+      ],
+      "infrastructure": [
+        { "item": "Managed SAP Cloud-Plattform (Transition)", "cost": 12000, "currency": "EUR", "note": "Monatliche Infrastruktur während Parallelbetrieb" }
+      ]
+    },
+    "effort_by_tier": {
+      "proof_of_value": {
+        "total_days": 25,
+        "breakdown": [
+          { "role": "Solution Architect", "days": 12 },
+          { "role": "Implementation Engineer", "days": 8 },
+          { "role": "Project Manager", "days": 5 }
+        ],
+        "internal_cost": 38200,
+        "margin_pct": 13.2
+      },
+      "small": {
+        "total_days": 100,
+        "breakdown": [
+          { "role": "Solution Architect", "days": 28 },
+          { "role": "Implementation Engineer", "days": 50 },
+          { "role": "Project Manager", "days": 22 }
+        ],
+        "internal_cost": 141200,
+        "margin_pct": 29.4
+      },
+      "medium": {
+        "total_days": 240,
+        "breakdown": [
+          { "role": "Solution Architect", "days": 55 },
+          { "role": "Implementation Engineer", "days": 125 },
+          { "role": "Project Manager", "days": 60 }
+        ],
+        "internal_cost": 333000,
+        "margin_pct": 30.6
+      },
+      "large": {
+        "total_days": 480,
+        "breakdown": [
+          { "role": "Solution Architect", "days": 100 },
+          { "role": "Implementation Engineer", "days": 260 },
+          { "role": "Project Manager", "days": 120 }
+        ],
+        "internal_cost": 660000,
+        "margin_pct": 40.0
+      }
+    }
+  },
+  "created": "2026-03-18"
+}

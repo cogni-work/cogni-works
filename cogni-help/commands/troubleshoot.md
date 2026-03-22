@@ -1,6 +1,6 @@
 ---
 name: troubleshoot
-description: Diagnose and fix issues with cogni-works plugins
+description: Diagnose and fix issues with insight-wave plugins
 argument-hint: "[plugin-name]"
 allowed-tools:
   - Read
@@ -9,7 +9,7 @@ allowed-tools:
   - Grep
 ---
 
-Diagnose issues with cogni-works plugins using the troubleshoot skill.
+Diagnose issues with insight-wave plugins using the troubleshoot skill.
 
 Accept either:
 - A plugin name — run targeted diagnostics for that plugin and its dependencies

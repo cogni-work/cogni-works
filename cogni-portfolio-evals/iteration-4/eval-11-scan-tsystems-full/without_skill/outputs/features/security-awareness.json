@@ -1,0 +1,13 @@
+{
+  "slug": "security-awareness",
+  "name": "Security Culture Programs",
+  "description": "Cyber security culture strengthening and sustainable security mindset embedding across organizations",
+  "product_slug": "telekom-security",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 2,
+    "category_id": "2.8",
+    "category_name": "Security Awareness"
+  },
+  "source_file": "https://www.t-systems.com/us/en/security"
+}

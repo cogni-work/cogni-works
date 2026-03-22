@@ -1,0 +1,16 @@
+{
+  "slug": "device-as-a-service",
+  "product_slug": "workplace-services",
+  "name": "Device as a Service (DaaS Lifecycle)",
+  "description": "IT asset lifecycle with hardware procurement, swap, data wiping at fixed monthly rate",
+  "taxonomy_mapping": {
+    "dimension": 3,
+    "dimension_name": "Digital Workplace Services",
+    "category_id": "3.7",
+    "category_name": "IT Asset Management",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/bechtle-portfolio.md",
+  "created": "2026-03-18"
+}

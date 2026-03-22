@@ -1,0 +1,16 @@
+{
+  "slug": "digital-employee-experience",
+  "product_slug": "workplace-services",
+  "name": "Digital Employee Experience",
+  "description": "DEX platform service delivering productivity analytics, continuous workspace optimization, and AI-augmented workforce engagement measurement for connected digital workplace environments.",
+  "taxonomy_mapping": {
+    "dimension": 3,
+    "dimension_name": "Digital Workplace Services",
+    "category_id": "3.6",
+    "category_name": "Digital Employee Experience",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

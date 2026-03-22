@@ -1,0 +1,27 @@
+{
+  "entity_type": "feature",
+  "slug": "multi-cloud-finops",
+  "original": {
+    "description": "Zentralisierte Multi-Cloud-Governance über Multi Cloud Connectivity Platform und Future Cloud Infrastructure, mit strukturiertem FinOps-Maturity-Assessment, kontinuierlichem Cost Management und eingebetteten Compliance-Controls für BSI C5, GDPR und lokale Regulierung."
+  },
+  "proposed": {
+    "description": "Structured FinOps practice spanning maturity assessment, cost-governance accelerators, and continuous FinOps-as-a-Service across AWS, Azure, and GCP using Flexera and Apptio tooling."
+  },
+  "dimensions_addressed": ["scope_mece", "mechanism_clarity", "differentiation"],
+  "evidence": [
+    {
+      "source_url": "https://www.t-systems.com/us/en/cloud-services/solutions/finops-cloud-services",
+      "excerpt": "FinOps Maturity Assessment in Light and Deep-dive options. FinOps Accelerators enhance cost governance. FinOps as a Service (FaaS) ensures continuous management, cost control, and transparency.",
+      "used_for": "mechanism_clarity"
+    },
+    {
+      "source_url": "https://www.t-systems.com/resource/blob/1028242/b081ecc30dbe98979214c6cbdd1da96f/DL-Flyer-FinOps-Maturity-Assessment-T-Systems-EN-11-2024.pdf",
+      "excerpt": "Assessment structured into four phases: Knowledge and process, Cost optimization, Automation, and Governance. Partnerships with Flexera and Apptio for tooling.",
+      "used_for": "differentiation"
+    }
+  ],
+  "confidence": "high",
+  "word_count": 21,
+  "questions": [],
+  "notes": "Narrowed scope to FinOps only, removing multi-cloud governance (which overlaps with hybrid-cloud feature's MCCP and governance framework). The original bundled two independent capabilities: multi-cloud governance and FinOps cost management. Multi-cloud governance is already covered by hybrid-cloud via MCCP. Renamed from 'Multi-Cloud & FinOps Management' to 'Cloud FinOps' to reflect the narrowed, MECE scope. Switched from German to English per portfolio.json language setting."
+}

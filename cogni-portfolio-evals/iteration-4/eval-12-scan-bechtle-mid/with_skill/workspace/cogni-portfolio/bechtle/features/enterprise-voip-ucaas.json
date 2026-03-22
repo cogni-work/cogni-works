@@ -1,0 +1,16 @@
+{
+  "slug": "enterprise-voip-ucaas",
+  "product_slug": "connectivity-services",
+  "name": "Enterprise VoIP & UCaaS",
+  "description": "Enterprise telephony deployment service with Cisco, Poly and Yealink SIP phone hardware, ISDN-to-IP migration, UCaaS enablement and integration into Microsoft Teams calling infrastructure.",
+  "taxonomy_mapping": {
+    "dimension": 1,
+    "dimension_name": "Connectivity Services",
+    "category_id": "1.5",
+    "category_name": "Voice Services",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/bechtle-portfolio.md",
+  "created": "2026-03-18"
+}

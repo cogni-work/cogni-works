@@ -1,0 +1,84 @@
+{
+  "solution_slug": "cloud-migration--grosse-energieversorger-de",
+  "solution_type": "project",
+  "overall": "pass",
+  "overall_score": 98,
+  "stakeholder_reviews": [
+    {
+      "perspective": "reviewer",
+      "score": 94,
+      "overall": "pass",
+      "criteria": {
+        "roi_clarity": { "score": "pass", "weight": 0.30, "note": "" },
+        "budget_fit": { "score": "pass", "weight": 0.25, "note": "" },
+        "risk_reward_transparency": { "score": "pass", "weight": 0.20, "note": "" },
+        "competitive_positioning": { "score": "warn", "weight": 0.15, "note": "Keine Wettbewerbsdaten vorhanden — Preispositionierung kann nicht gegen Alternativen validiert werden." },
+        "decision_pathway": { "score": "pass", "weight": 0.10, "note": "" }
+      },
+      "strengths": [
+        "Klare Wertschöpfungskette: Pricing → Scope → DOES-Delivery → MEANS-Outcome nachvollziehbar",
+        "PoV bei 20.000 EUR leicht freigebbar ohne Vorstandseskalation bei Großversorgern",
+        "Alle Standard-Tiers über target_margin_pct (30%) — kommerziell solide"
+      ],
+      "concerns": [
+        "Ohne Wettbewerbsanalyse fehlt der Benchmark für Preisverhandlungen"
+      ],
+      "recommendations": [
+        "OPTIONAL: Wettbewerbsanalyse erstellen (compete-Skill) für fundierte Preisargumentation bei Beschaffungsverhandlungen"
+      ]
+    },
+    {
+      "perspective": "provider_sa",
+      "score": 100,
+      "overall": "pass",
+      "criteria": {
+        "delivery_realism": { "score": "pass", "weight": 0.30, "note": "" },
+        "scope_effort_coherence": { "score": "pass", "weight": 0.25, "note": "" },
+        "phase_architecture": { "score": "pass", "weight": 0.20, "note": "" },
+        "does_traceability": { "score": "pass", "weight": 0.15, "note": "" },
+        "tier_scalability": { "score": "pass", "weight": 0.10, "note": "" }
+      },
+      "strengths": [
+        "FTE-Auslastung pro Tier realistisch (Small: 0,56 FTE über 16 Wochen, Large: 0,89 FTE über 36 Wochen)",
+        "Phasenarchitektur migrationsadaptiert mit KRITIS-spezifischer Staging-Phase",
+        "Volle DOES-Rückverfolgbarkeit: Assessment → Staging → Sprint-Migration → Validierung deckt alle Proposition-Elemente ab"
+      ],
+      "concerns": [],
+      "recommendations": []
+    },
+    {
+      "perspective": "client_sa",
+      "score": 100,
+      "overall": "pass",
+      "criteria": {
+        "integration_feasibility": { "score": "pass", "weight": 0.30, "note": "" },
+        "dependency_risk": { "score": "pass", "weight": 0.25, "note": "" },
+        "operational_readiness": { "score": "pass", "weight": 0.20, "note": "" },
+        "vendor_lockin": { "score": "pass", "weight": 0.15, "note": "" },
+        "security_compliance": { "score": "pass", "weight": 0.10, "note": "" }
+      },
+      "strengths": [
+        "Buyer Adoption Checklist vollständig: Exit-Klausel, Client-FTE, OT/IT-Grenze, Datenresidenz, Compliance-Deliverables",
+        "OT/IT-Grenze explizit definiert — SCADA-Kernsysteme ausgeschlossen, IT-nahe OT-Systeme adressiert",
+        "Datenresidenz in deutschen RZ (Frankfurt/Biere) unter deutschem Recht — für KRITIS-Betreiber essenziell",
+        "NIS2-Audit-Ready-Dokumentation als Phasendeliverable, BSI-C5-Audit-Paket im Large-Tier"
+      ],
+      "concerns": [],
+      "recommendations": []
+    }
+  ],
+  "synthesis": {
+    "conflicts": [],
+    "critical_improvements": [],
+    "high_improvements": [],
+    "optional_improvements": [
+      {
+        "description": "Wettbewerbsanalyse erstellen für fundierte Preisargumentation in Beschaffungsverhandlungen",
+        "stakeholders": ["reviewer"],
+        "affects": "competitive_positioning"
+      }
+    ],
+    "verdict": "accept",
+    "revision_guidance": null
+  }
+}

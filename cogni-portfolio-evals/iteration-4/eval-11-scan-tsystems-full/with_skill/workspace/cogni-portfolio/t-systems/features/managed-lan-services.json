@@ -1,0 +1,16 @@
+{
+  "slug": "managed-lan-services",
+  "product_slug": "connectivity-services",
+  "name": "Managed LAN Services",
+  "description": "Standardized managed LAN and WLAN infrastructure service with automated delivery, per-port pricing, binding SLAs at individual port level, and worldwide support for networks exceeding 200 ports.",
+  "taxonomy_mapping": {
+    "dimension": 1,
+    "dimension_name": "Connectivity Services",
+    "category_id": "1.6",
+    "category_name": "LAN/WLAN Services",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

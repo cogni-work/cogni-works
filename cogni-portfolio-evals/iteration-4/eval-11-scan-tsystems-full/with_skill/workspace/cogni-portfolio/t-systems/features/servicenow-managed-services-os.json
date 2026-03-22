@@ -1,0 +1,16 @@
+{
+  "slug": "servicenow-managed-services-os",
+  "product_slug": "application-services",
+  "name": "ServiceNow Managed Services (OS)",
+  "description": "Operational services ServiceNow SaaS deployment from Deutsche Telekom Sovereign Cloud with flexible cloud model choice, lifecycle management, and 24/7 German-operated service desk.",
+  "taxonomy_mapping": {
+    "dimension": 6,
+    "dimension_name": "Application Services",
+    "category_id": "6.3",
+    "category_name": "Enterprise Platform Services",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

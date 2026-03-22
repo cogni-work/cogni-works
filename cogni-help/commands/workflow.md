@@ -7,7 +7,7 @@ allowed-tools:
   - Glob
 ---
 
-Show step-by-step workflow templates for chaining cogni-works plugins.
+Show step-by-step workflow templates for chaining insight-wave plugins.
 
 Accept either:
 - A workflow name (research-to-slides, trend-to-marketing, portfolio-to-pitch,

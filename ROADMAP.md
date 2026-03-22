@@ -1,4 +1,4 @@
-# cogni-works Ecosystem Roadmap
+# insight-wave Ecosystem Roadmap
 
 > Based on patent WO2018046399A1 vision, cogni-trends value-modeler implementation,
 > b2b-ict-portfolio taxonomy from cogni-trends, and cross-plugin integration analysis.
@@ -9,7 +9,7 @@
 
 ## Vision
 
-Complete the patent's closed-loop system across the cogni-works ecosystem:
+Complete the patent's closed-loop system across the insight-wave ecosystem:
 
 ```
 Industry Catalog (generic knowledge) ──inherit──> Pursuit (customer-specific)

@@ -1,0 +1,14 @@
+{
+  "slug": "bilingual-production",
+  "product_slug": "content-platform",
+  "name": "Zweisprachige Content-Produktion",
+  "description": "Parallele DE/EN-Content-Erstellung auf Basis einer gemeinsamen Quellstruktur mit sprachspezifischen Style-Regeln, integriertem Übersetzungsabgleich und automatischer Synchronisierung von Änderungen zwischen beiden Sprachversionen über ein Diff-basiertes Tracking.",
+  "category": "localization",
+  "taxonomy_mapping": {
+    "dimension": "Application",
+    "category_id": "6.5",
+    "category_name": "Content Management"
+  },
+  "readiness": "ga",
+  "created": "2026-03-21"
+}

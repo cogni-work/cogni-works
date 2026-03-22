@@ -1,0 +1,7 @@
+{
+  "slug": "qualitaetsbewertung",
+  "product_slug": "cogni-portfolio",
+  "name": "Qualitaetsbewertung",
+  "description": "Scoring-Mechanismus, der jedes Portfolio-Element anhand von Vollstaendigkeit, Konsistenz und Taxonomie-Abdeckung bewertet und einen numerischen Quality-Score mit Verbesserungshinweisen erzeugt.",
+  "readiness": "ga"
+}

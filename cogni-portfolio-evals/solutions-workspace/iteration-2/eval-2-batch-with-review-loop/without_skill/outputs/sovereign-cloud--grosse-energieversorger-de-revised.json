@@ -1,0 +1,238 @@
+{
+  "slug": "sovereign-cloud--grosse-energieversorger-de",
+  "proposition_slug": "sovereign-cloud--grosse-energieversorger-de",
+  "feature_slug": "sovereign-cloud",
+  "market_slug": "grosse-energieversorger-de",
+  "product_slug": "cloud-services",
+  "title": "Sovereign-Cloud-Plattform fuer grosse deutsche Energieversorger",
+  "summary": "Souveraene Cloud-Infrastruktur mit BSI-C5-Attestierung fuer KRITIS-relevante Anwendungen grosser deutscher Energieversorger. Betrieb in deutschen Rechenzentren mit vollstaendiger Datenhoheit. 40-60% Reduktion des regulatorischen Aufwands. Inkl. Exit-Strategie, Continuous Compliance Monitoring und Betriebsmodell-Optionen. Zielgruppe: E.ON, RWE, EnBW, Vattenfall Deutschland, Uniper.",
+  "revision_notes": "Revision based on round-1 review. Changes: (1) Added exit strategy with data repatriation and continuity guarantee, (2) Added TCO comparison (3 scenarios), (3) Quantified contingency budget (8%), (4) Introduced staggered onboarding (max 5 workloads/week) with security review template, (5) Added hybrid architecture scenario for multi-cloud integration, (6) Added operations model options, (7) Added Security Engineer role.",
+  "implementation_plan": {
+    "phases": [
+      {
+        "phase": 1,
+        "name": "Sovereignty Assessment & Architecture",
+        "duration_weeks": 4,
+        "description": "Analyse der KRITIS-Workloads und Compliance-Anforderungen. Sovereignty-Anforderungen (BSI-C5, NIS2, KRITIS-DachG). Zielarchitektur inkl. Hybrid-Szenario (Sovereign fuer KRITIS + Hyperscaler fuer non-KRITIS). BSI-Grundschutz-Baustein-Mapping.",
+        "deliverables": [
+          "KRITIS-Workload-Inventar mit Datenklassifizierung",
+          "Compliance-Anforderungskatalog (BSI-C5 Typ 2, NIS2, KRITIS-DachG)",
+          "Sovereign-Cloud-Zielarchitektur (empfohlen: Open Sovereign Cloud)",
+          "Hybrid-Architektur-Szenario: Sovereign fuer KRITIS + Hyperscaler fuer non-KRITIS",
+          "Datenresidenz-Regeln und Zugriffsmodell",
+          "Gap-Analyse: Ist vs. Sovereign-Cloud-Anforderungen",
+          "Business-Case: Compliance-Kostenvergleich (Eigenleistung vs. Plattform-Attestierung)",
+          "BSI-Grundschutz-Baustein-Mapping fuer relevante Workloads"
+        ],
+        "team": [
+          { "role": "Solution Architect", "count": 2, "utilization_pct": 100 },
+          { "role": "Security Engineer", "count": 1, "utilization_pct": 60 },
+          { "role": "Implementation Engineer", "count": 1, "utilization_pct": 30 },
+          { "role": "Project Manager", "count": 1, "utilization_pct": 60 }
+        ]
+      },
+      {
+        "phase": 2,
+        "name": "Platform Provisioning & Hardening",
+        "duration_weeks": 6,
+        "description": "Bereitstellung der Sovereign-Cloud-Plattform in BSI-C5-attestierten Rechenzentren. Netzwerk-Segmentierung, IAM, Verschluesselung, Key-Management. SIEM/SOC-Integration. Security-Review-Template fuer Workload-Onboarding.",
+        "deliverables": [
+          "Sovereign-Cloud-Plattform provisioniert (Compute, Storage, Netzwerk)",
+          "BSI-C5-konforme Netzwerk-Segmentierung und Firewalling",
+          "IAM-Integration mit Kunden-Active-Directory/LDAP",
+          "Verschluesselung at-rest und in-transit mit kundenverwaltetem Key-Management (HSM-Kompatibilitaetstest)",
+          "SIEM/SOC-Integration (Log-Forwarding, Alerting)",
+          "Haertungsdokumentation nach BSI-Grundschutz",
+          "Security-Review-Template fuer standardisiertes Workload-Onboarding"
+        ],
+        "team": [
+          { "role": "Solution Architect", "count": 2, "utilization_pct": 80 },
+          { "role": "Security Engineer", "count": 1, "utilization_pct": 100 },
+          { "role": "Implementation Engineer", "count": 3, "utilization_pct": 100 },
+          { "role": "Project Manager", "count": 1, "utilization_pct": 80 }
+        ]
+      },
+      {
+        "phase": 3,
+        "name": "KRITIS Workload Onboarding",
+        "duration_weeks": 10,
+        "description": "Gestaffeltes Onboarding mit max. 5 Workloads/Woche. Jedes Workload durchlaeuft standardisierten Security-Review mittels Template aus Phase 2. Beginn mit weniger kritischen KRITIS-Anwendungen.",
+        "deliverables": [
+          "Onboarding von 20-40 KRITIS-relevanten Workloads (max. 5/Woche)",
+          "Security-Review-Protokoll je Workload (standardisiertes Template)",
+          "BSI-C5-Compliance-Nachweis fuer onboardete Workloads",
+          "Performance- und Verfuegbarkeits-Baseline",
+          "Incident-Response-Playbooks (KRITIS-spezifisch)",
+          "BSI-Audit-Trail-Dokumentation",
+          "Compliance-Entlastungs-Report: X Mannstunden/Audit eingespart"
+        ],
+        "team": [
+          { "role": "Solution Architect", "count": 1, "utilization_pct": 60 },
+          { "role": "Security Engineer", "count": 1, "utilization_pct": 80 },
+          { "role": "Implementation Engineer", "count": 4, "utilization_pct": 100 },
+          { "role": "Project Manager", "count": 1, "utilization_pct": 80 }
+        ]
+      },
+      {
+        "phase": 4,
+        "name": "Compliance Automation, Steady-State & Exit-Readiness",
+        "duration_weeks": 6,
+        "description": "Continuous Compliance Monitoring. Self-Service-Portal. SLA-basierter Regelbetrieb. Exit-Strategie. Betriebsmodell-Optionen vereinbart. Plattform-Roadmap-Commitment.",
+        "deliverables": [
+          "Continuous Compliance Dashboard (BSI-C5, NIS2 in Echtzeit)",
+          "Automatisierte Compliance-Reports fuer BSI-Audits",
+          "Self-Service-Portal fuer Workload-Deployment",
+          "SLA-Framework (Verfuegbarkeit 99.95%, RTO/RPO-Garantien)",
+          "Betriebshandbuch und Eskalationsmatrix",
+          "Exit-Strategie: Daten-Repatriierung, IaC-Portabilitaet, Kontinuitaetsgarantie",
+          "Betriebsmodell-Vereinbarung: (a) Fully Managed, (b) Co-managed, (c) Self-Operated nach Enablement",
+          "Plattform-Roadmap: quartalsweise Feature-Releases, proaktive Regulierungsanpassung"
+        ],
+        "team": [
+          { "role": "Solution Architect", "count": 1, "utilization_pct": 60 },
+          { "role": "Security Engineer", "count": 1, "utilization_pct": 40 },
+          { "role": "Implementation Engineer", "count": 2, "utilization_pct": 80 },
+          { "role": "Project Manager", "count": 1, "utilization_pct": 40 }
+        ]
+      }
+    ],
+    "total_duration_weeks": 26,
+    "exit_strategy": {
+      "description": "Vertraglich verankertes Recht auf Daten-Repatriierung und Workload-Portierung. Open-Source-Basis minimiert Lock-in.",
+      "components": [
+        {
+          "component": "Daten-Repatriierung",
+          "guarantee": "Vollstaendiger Export aller Daten innerhalb 90 Tagen. Standard-Formate. Kosten gedeckelt auf max. 3% Gesamtvolumen."
+        },
+        {
+          "component": "IaC-Portabilitaet",
+          "guarantee": "Alle Konfigurationen in provider-agnostischem IaC (Terraform/OpenTofu). Open-Source-Stack (Kubernetes, OpenStack) sichert Portabilitaet."
+        },
+        {
+          "component": "Kontinuitaetsgarantie",
+          "guarantee": "Bei Einstellung des Sovereign-Cloud-Betriebs durch T-Systems: 24 Monate Uebergangszeitraum mit garantiertem Service-Level."
+        },
+        {
+          "component": "Alternative Provider",
+          "guarantee": "Portabilitaet auf alternative Sovereign-Cloud-Provider (Ionos, StackIT, GAIA-X-kompatibel) dokumentiert und getestet."
+        },
+        {
+          "component": "Vertragsklauseln",
+          "guarantee": "12 Monate Kuendigungsfrist, 90 Tage Transition, Exit-Aufwand max. 5% Gesamtvolumen."
+        }
+      ]
+    },
+    "constraints": [
+      "Alle Daten muessen in deutschen Rechenzentren verbleiben",
+      "Nur BSI-C5-Typ-2-attestierte Infrastruktur zulaessig",
+      "Keine Abhaengigkeit von aussereuropaeischer Jurisdiktion",
+      "OT-Systeme bleiben ausserhalb der Cloud-Plattform",
+      "Customer stellt Staging-Umgebung-Zugang innerhalb von 5 Werktagen bereit",
+      "Gestaffeltes Onboarding: max. 5 Workloads/Woche"
+    ],
+    "risks": [
+      {
+        "risk": "BSI-C5-Attestierung laeuft aus oder wird nicht rechtzeitig erneuert",
+        "impact": "high",
+        "probability": "low",
+        "mitigation": "Vertragliche Attestierungs-Kontinuitaetsgarantie; Eskalationsklausel",
+        "contingency_budget_pct": 1
+      },
+      {
+        "risk": "Kapazitaetsengpaesse bei gleichzeitigem KRITIS-Kunden-Onboarding",
+        "impact": "medium",
+        "probability": "medium",
+        "mitigation": "Fruehzeitige Kapazitaetsreservierung; dedizierte Compute-Pools",
+        "contingency_budget_pct": 2
+      },
+      {
+        "risk": "NIS2-Enforcement erfordert zusaetzliche Massnahmen",
+        "impact": "medium",
+        "probability": "high",
+        "mitigation": "NIS2-Gap-Analyse in Phase 1; Compliance-Automatisierung deckt neue Anforderungen ab",
+        "contingency_budget_pct": 3
+      },
+      {
+        "risk": "Key-Management-Integration scheitert an HSM-Inkompatibilitaet",
+        "impact": "high",
+        "probability": "low",
+        "mitigation": "HSM-Kompatibilitaetstest in Phase 2; Fallback auf T-Systems-managed HSM",
+        "contingency_budget_pct": 2
+      }
+    ]
+  },
+  "pricing": {
+    "currency": "EUR",
+    "rate_card": [
+      { "role": "Solution Architect", "rate_day": 1800 },
+      { "role": "Security Engineer", "rate_day": 1600 },
+      { "role": "Implementation Engineer", "rate_day": 1200 },
+      { "role": "Project Manager", "rate_day": 1400 }
+    ],
+    "tiers": [
+      {
+        "tier": "Essential",
+        "scope": "Assessment + Platform Build (Phases 1-2), Onboarding durch Kunden",
+        "total_effort_days": 315,
+        "total_cost_before_margin": 438600,
+        "target_margin_pct": 30,
+        "price": 570180
+      },
+      {
+        "tier": "Professional",
+        "scope": "Assessment + Platform + Workload Onboarding (Phases 1-3)",
+        "total_effort_days": 585,
+        "total_cost_before_margin": 791400,
+        "target_margin_pct": 30,
+        "price": 1028820
+      },
+      {
+        "tier": "Enterprise",
+        "scope": "Full programme incl. Compliance Automation & Exit-Readiness (Phases 1-4)",
+        "total_effort_days": 695,
+        "total_cost_before_margin": 943400,
+        "target_margin_pct": 30,
+        "price": 1226420
+      }
+    ],
+    "contingency": {
+      "pct": 8,
+      "amount": 98114,
+      "rationale": "Covers: BSI-C5 attestation risk (1%), capacity constraints (2%), NIS2 enforcement (3%), HSM issues (2%). Drawn on Change Request.",
+      "not_to_exceed": 1324534
+    },
+    "competitive_tco_comparison": {
+      "approach_1": {
+        "name": "T-Systems Sovereign Cloud (dieses Angebot)",
+        "total_5yr_tco": 3200000,
+        "breakdown": "Setup 1.23M + Managed Sovereign Cloud Run 1.97M (5yr)",
+        "strengths": "BSI-C5 Typ 2, volle Datenhoheit, KRITIS-erfahren, Google-Partnerschaft",
+        "weaknesses": "Begrenztes Oekosystem vs. Hyperscaler"
+      },
+      "approach_2": {
+        "name": "On-Premises + eigenes BSI-C5-Audit",
+        "total_5yr_tco": 4500000,
+        "breakdown": "Infra 2.0M + Personal 1.8M + BSI-Audit 0.7M (5yr)",
+        "strengths": "Volle Kontrolle, kein Drittanbieter-Risiko",
+        "weaknesses": "Hoechster TCO, Fachkraeftemangel, keine Elastizitaet, BSI-Audit muss selbst bestanden werden"
+      },
+      "approach_3": {
+        "name": "Alternative Sovereign Provider (Ionos/StackIT)",
+        "total_5yr_tco": 3400000,
+        "breakdown": "Setup 1.0M + Managed Run 2.4M (5yr)",
+        "strengths": "Preis-kompetitiv, GAIA-X-kompatibel",
+        "weaknesses": "Weniger KRITIS-Referenzen, kleineres Delivery-Team, keine Google-Partnerschaft"
+      },
+      "recommendation": "T-Systems bietet bestes Preis-Compliance-Verhaeltnis mit etablierter KRITIS-Erfahrung und BSI-C5 Typ 2."
+    },
+    "payment_milestones": [
+      { "milestone": "Vertragsunterzeichnung", "pct": 10 },
+      { "milestone": "Phase 1 abgeschlossen (Assessment)", "pct": 15 },
+      { "milestone": "Phase 2 abgeschlossen (Plattform live)", "pct": 25 },
+      { "milestone": "Phase 3 abgeschlossen (Workloads onboarded)", "pct": 30 },
+      { "milestone": "Phase 4 abgeschlossen (Compliance-Automation)", "pct": 20 }
+    ]
+  },
+  "created": "2026-03-18",
+  "revised": "2026-03-18"
+}

@@ -1,0 +1,80 @@
+{
+  "total_checks": 12,
+  "passed": 10,
+  "failed": 2,
+  "pass_rate": 0.833,
+  "expectations": [
+    {
+      "text": "Feature description word count 20-35 (actual: 21)",
+      "passed": true,
+      "evidence": "\"Structured FinOps practice spanning maturity assessment, cost-governance acceler...\" (21 words)",
+      "entity": "multi-cloud-finops"
+    },
+    {
+      "text": "All required fields present (slug, product_slug, name, description)",
+      "passed": true,
+      "evidence": "All present",
+      "entity": "multi-cloud-finops"
+    },
+    {
+      "text": "taxonomy_mapping present with dimension, category_id, category_name",
+      "passed": false,
+      "evidence": "Missing: ['dimension', 'category_id', 'category_name']",
+      "entity": "multi-cloud-finops"
+    },
+    {
+      "text": "readiness is one of ga, beta, planned",
+      "passed": true,
+      "evidence": "readiness=\"ga\"",
+      "entity": "multi-cloud-finops"
+    },
+    {
+      "text": "No outcome verbs in description",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "multi-cloud-finops"
+    },
+    {
+      "text": "No parity adjectives in description",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "multi-cloud-finops"
+    },
+    {
+      "text": "Feature description word count 20-35 (actual: 28)",
+      "passed": true,
+      "evidence": "\"Hosts, migrates, and operates S/4HANA on FCI private cloud and hyperscalers usin...\" (28 words)",
+      "entity": "sap-on-cloud"
+    },
+    {
+      "text": "All required fields present (slug, product_slug, name, description)",
+      "passed": true,
+      "evidence": "All present",
+      "entity": "sap-on-cloud"
+    },
+    {
+      "text": "taxonomy_mapping present with dimension, category_id, category_name",
+      "passed": false,
+      "evidence": "Missing: ['dimension', 'category_id', 'category_name']",
+      "entity": "sap-on-cloud"
+    },
+    {
+      "text": "readiness is one of ga, beta, planned",
+      "passed": true,
+      "evidence": "readiness=\"ga\"",
+      "entity": "sap-on-cloud"
+    },
+    {
+      "text": "No outcome verbs in description",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "sap-on-cloud"
+    },
+    {
+      "text": "No parity adjectives in description",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "sap-on-cloud"
+    }
+  ]
+}

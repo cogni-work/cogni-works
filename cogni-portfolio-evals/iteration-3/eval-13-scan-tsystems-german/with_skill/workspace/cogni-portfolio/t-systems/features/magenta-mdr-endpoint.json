@@ -1,0 +1,16 @@
+{
+  "slug": "magenta-mdr-endpoint",
+  "product_slug": "security-services",
+  "name": "Magenta MDR Endpoint",
+  "description": "EDR mit Managed Detection and Response",
+  "taxonomy_mapping": {
+    "dimension": 2,
+    "dimension_name": "Security Services",
+    "category_id": "2.5",
+    "category_name": "Endpoint Security",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

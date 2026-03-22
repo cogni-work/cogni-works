@@ -1,0 +1,92 @@
+{
+  "portfolio_slug": "t-systems",
+  "market_slug": "grosse-energieversorger-de",
+  "review_date": "2026-03-18",
+  "solutions_reviewed": [
+    "cloud-migration--grosse-energieversorger-de",
+    "sap-on-cloud--grosse-energieversorger-de",
+    "sovereign-cloud--grosse-energieversorger-de"
+  ],
+  "aggregate_scores": {
+    "cloud-migration--grosse-energieversorger-de": { "pass": 6, "warn": 7, "fail": 1 },
+    "sap-on-cloud--grosse-energieversorger-de": { "pass": 8, "warn": 6, "fail": 0 },
+    "sovereign-cloud--grosse-energieversorger-de": { "pass": 8, "warn": 5, "fail": 1 },
+    "portfolio_total": { "pass": 22, "warn": 18, "fail": 2 }
+  },
+  "cross_solution_patterns": {
+    "strengths": [
+      {
+        "pattern": "Consistent commercial architecture",
+        "detail": "All three solutions share a 4-tier pricing model (PoV, Small, Medium, Large) with intentionally low-margin PoVs (12-15%) that expand into standard-margin tiers (29-40%). This land-and-expand pattern is consistent and commercially disciplined."
+      },
+      {
+        "pattern": "Market-specific pain point alignment",
+        "detail": "Each solution addresses distinct market pain points: cloud-migration targets infrastructure agility, SAP-on-cloud targets SAP operations cost, sovereign-cloud targets KRITIS/NIS2 compliance. Together they cover 4 of 5 identified market pain points (missing: Smart Meter rollout)."
+      },
+      {
+        "pattern": "Transparent cost modeling",
+        "detail": "All solutions provide full bill-of-materials with role rates, effort breakdowns by tier, tooling costs, and infrastructure costs. This transparency supports procurement confidence and enables benchmarking."
+      },
+      {
+        "pattern": "Phase-based de-risking",
+        "detail": "All three solutions use a 4-phase delivery model with clear scope boundaries per phase. The migration solution uses criticality-ordered sprints, the SAP solution requires parallel operations over a billing cycle, and the sovereign solution includes a pre-audit phase. These are mature delivery patterns."
+      }
+    ],
+    "weaknesses": [
+      {
+        "pattern": "Inconsistent contractual protections",
+        "severity": "high",
+        "detail": "Only the SAP solution includes an exit clause (4-week knowledge transfer). The cloud-migration and sovereign-cloud solutions have no exit provisions. This is especially problematic for sovereign-cloud, where the value proposition of 'no vendor lock-in' contradicts the absence of contractual exit guarantees. Recommendation: Add standardized exit clauses to all solutions.",
+        "affected_solutions": ["cloud-migration--grosse-energieversorger-de", "sovereign-cloud--grosse-energieversorger-de"]
+      },
+      {
+        "pattern": "Missing OT/SCADA specialization",
+        "severity": "high",
+        "detail": "The market identifies OT/IT convergence as a top-5 pain point, and the OT-Leiter sits on the buying committee. All three solutions mention OT in passing (OT/IT separation, OT connectivity) but none include OT-specific roles, effort estimates, or delivery phases. The three generic roles (SA, IE, PM) lack OT engineering expertise. Recommendation: Add an OT Integration Specialist role or a dedicated OT phase to at least the cloud-migration and sovereign-cloud solutions.",
+        "affected_solutions": ["cloud-migration--grosse-energieversorger-de", "sovereign-cloud--grosse-energieversorger-de"]
+      },
+      {
+        "pattern": "No cross-solution integration story",
+        "severity": "medium",
+        "detail": "The three solutions are designed independently. A client deploying all three (migrate workloads to cloud, manage SAP on cloud, host KRITIS apps on sovereign cloud) would need to understand how they interconnect. Which migrated workloads go to sovereign vs. standard cloud? Does the SAP managed service run on sovereign infrastructure? How do non-sovereign and sovereign workloads communicate? No cross-solution architecture or sequencing guidance exists.",
+        "affected_solutions": ["cloud-migration--grosse-energieversorger-de", "sap-on-cloud--grosse-energieversorger-de", "sovereign-cloud--grosse-energieversorger-de"]
+      },
+      {
+        "pattern": "Compliance story fragmentation",
+        "severity": "medium",
+        "detail": "Sovereign-cloud has a strong BSI-C5/NIS2 compliance story with explicit audit-readiness deliverables. Cloud-migration mentions KRITIS compliance but provides no compliance deliverables. SAP-on-cloud does not address compliance at all. For a KRITIS-regulated energy utility, compliance is not optional for any workload — it should be a cross-cutting concern across all solutions.",
+        "affected_solutions": ["cloud-migration--grosse-energieversorger-de", "sap-on-cloud--grosse-energieversorger-de"]
+      },
+      {
+        "pattern": "Smart Meter gap",
+        "severity": "medium",
+        "detail": "The market's third pain point is Smart Meter rollout (gateway administration, metering data management, billing integration with 95% obligation by 2030). Only the SAP Large tier mentions Smart Metering integration. None of the solutions address the IoT/edge infrastructure, gateway administration, or metering data pipeline. This is a significant portfolio gap for the energy utility market.",
+        "affected_solutions": []
+      },
+      {
+        "pattern": "Staff shortage assumption gap",
+        "severity": "low",
+        "detail": "The market's fifth pain point explicitly warns: 'Any provider pitch that assumes unlimited internal IT staff will be immediately disqualified.' The solutions assume customer-provided staging access (5-10 days), system inventories, and billing calendars. These are reasonable, but no solution explicitly quantifies the client-side effort required or offers a 'thin client team' delivery variant for understaffed customers.",
+        "affected_solutions": ["cloud-migration--grosse-energieversorger-de", "sap-on-cloud--grosse-energieversorger-de", "sovereign-cloud--grosse-energieversorger-de"]
+      }
+    ]
+  },
+  "recommendations": {
+    "immediate": [
+      "Add standardized exit clauses to cloud-migration and sovereign-cloud solutions (align with SAP solution's 4-week KT pattern)",
+      "Add BSI-C5/NIS2 compliance deliverables as a cross-cutting module available to all solutions, not just sovereign-cloud",
+      "Define explicit rollback/failback procedures in the cloud-migration solution with time-bound recovery targets"
+    ],
+    "short_term": [
+      "Create a cross-solution architecture guide showing how the three solutions compose for a full-portfolio client",
+      "Add OT Integration Specialist role to the bill-of-materials for cloud-migration and sovereign-cloud",
+      "Quantify client-side effort for each tier and offer a 'managed discovery' variant that reduces customer prerequisites"
+    ],
+    "strategic": [
+      "Develop a Smart Meter / IoT Edge solution to close the portfolio gap on the market's third pain point",
+      "Create a unified SAP-to-cloud bundle that combines SAP-on-cloud managed service with sovereign-cloud hosting and cloud-migration for non-SAP workloads",
+      "Add competitive positioning sections to all solutions addressing RISE with SAP (for SAP solution) and hyperscaler-native tools (for migration solution)"
+    ]
+  },
+  "portfolio_verdict": "The T-Systems portfolio for German energy utilities is commercially structured and delivery-realistic, with good market pain-point coverage across three complementary solutions. The portfolio's main weaknesses are: (1) inconsistent contractual protections, (2) missing OT specialization despite OT being a buying-committee concern, (3) fragmented compliance story, and (4) no cross-solution integration guidance. The SAP-on-cloud solution is the most mature (8 pass, 6 warn, 0 fail); the cloud-migration solution needs the most hardening (6 pass, 7 warn, 1 fail). A Smart Meter / IoT Edge solution would close the remaining market coverage gap."
+}

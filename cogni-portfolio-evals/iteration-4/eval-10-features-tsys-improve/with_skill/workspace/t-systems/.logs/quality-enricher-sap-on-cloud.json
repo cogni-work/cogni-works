@@ -1,0 +1,32 @@
+{
+  "entity_type": "feature",
+  "slug": "sap-on-cloud",
+  "original": {
+    "description": "SAP Platinum Partner mit SAP Activate-Zertifizierung: End-to-End-Hosting, Migration und Betrieb von S/4HANA auf Private Cloud, AWS und Azure — als RISE with SAP Premium Supplier mit 4.000+ SAP-Experten und 850.000 verwalteten SAP-Nutzern."
+  },
+  "proposed": {
+    "description": "Hosts, migrates, and operates S/4HANA on FCI private cloud and hyperscalers using the MAX4SAP preconfigured process template with greenfield, brownfield, and SMARTField migration paths under SAP Activate methodology."
+  },
+  "dimensions_addressed": ["mechanism_clarity", "scope_mece", "differentiation", "conciseness"],
+  "evidence": [
+    {
+      "source_url": "https://www.t-systems.com/de/en/application-services/solutions/sap-solutions/sap-s4-hana-migration",
+      "excerpt": "MAX4SAP is a preconfigured template with nearly 40 E2E processes and 150+ modular processes. Customers can choose greenfield, brownfield, or SMARTField approaches.",
+      "used_for": "mechanism_clarity"
+    },
+    {
+      "source_url": "https://www.t-systems.com/us/en/application-services/solutions/sap-solutions/rise-with-sap",
+      "excerpt": "T-Systems will offer RISE with SAP on their private cloud Future Cloud Infrastructure (FCI) as well as select hyperscalers.",
+      "used_for": "mechanism_clarity"
+    },
+    {
+      "source_url": "https://www.t-systems.com/us/en/insights/newsroom/news/how-do-your-processes-look-in-sap-s-4hana-631678",
+      "excerpt": "MAX4SAP enables enterprises to spend up to 30% less time on Explore and Design stages. Modular design allows replicating small process steps or whole series of procedures.",
+      "used_for": "differentiation"
+    }
+  ],
+  "confidence": "high",
+  "word_count": 28,
+  "questions": [],
+  "notes": "Replaced partnership credentials and headcount stats with actual mechanism: MAX4SAP template, FCI+hyperscaler hosting, and named migration approaches (greenfield/brownfield/SMARTField). SAP Activate methodology provides the framework context. Switched from German to English per portfolio.json language setting."
+}

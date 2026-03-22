@@ -1,0 +1,69 @@
+{
+  "skill_name": "solutions",
+  "evals": [
+    {
+      "id": 1,
+      "name": "single-solution-review",
+      "skill": "solutions",
+      "target": "t-systems",
+      "prompt": "Generate a solution for the cloud-migration--grosse-energieversorger-de proposition. The project is at the path provided. This is a project-type solution (cloud-services product has revenue_model: project). After generating, run the stakeholder review assessor to evaluate the solution from three perspectives (procurement reviewer, provider SA, client SA). If the verdict is 'revise', apply the improvements and re-assess.",
+      "expected_output": "Solution JSON with implementation phases, 4 pricing tiers, cost model with buyer adoption defaults (exit clause, client FTE, OT boundary). Review assessment with 3 perspectives, 5 criteria each. If revised, improved scores on Round 2.",
+      "assertions": [
+        {"id": "SOL-01", "text": "Solution JSON has solution_type: project", "type": "structural"},
+        {"id": "SOL-02", "text": "Solution has 2-5 implementation phases", "type": "structural"},
+        {"id": "SOL-03", "text": "All four pricing tiers present (proof_of_value, small, medium, large)", "type": "structural"},
+        {"id": "SOL-04", "text": "cost_model present with effort_by_tier", "type": "structural"},
+        {"id": "SOL-05", "text": "PoV margin >= 5% and standard tier margins (small, medium, large) >= 25%", "type": "structural"},
+        {"id": "SOL-06", "text": "Review assessment JSON produced with all three perspectives", "type": "agent"},
+        {"id": "SOL-07", "text": "Each perspective has 5 scored criteria", "type": "structural"},
+        {"id": "SOL-08", "text": "Synthesis section has verdict (accept/revise/reject)", "type": "structural"},
+        {"id": "SOL-09", "text": "If verdict was revise, a second assessment exists with improved scores. PREREQUISITE: SOL-08 must pass — if SOL-08 fails, SOL-09 automatically fails.", "type": "agent"},
+        {"id": "SOL-10", "text": "Phase descriptions are in German (portfolio language: de)", "type": "structural"},
+        {"id": "SOL-11", "text": "Arithmetic consistency: for each tier, (price - internal_cost) / price matches stated margin_pct within 2 percentage points", "type": "structural"},
+        {"id": "SOL-12", "text": "If revision occurred, revised solution differs from original in at least one field flagged by the review recommendations", "type": "structural"},
+        {"id": "SOL-13", "text": "Solution includes exit clause or transition-out plan in assumptions", "type": "structural"},
+        {"id": "SOL-14", "text": "Solution includes client-side FTE commitment in assumptions", "type": "structural"}
+      ],
+      "files": []
+    },
+    {
+      "id": 2,
+      "name": "batch-with-review-loop",
+      "skill": "solutions",
+      "target": "t-systems",
+      "prompt": "Generate solutions for all 3 propositions in the T-Systems project at the path provided. Use batch generation mode. After generating, run the stakeholder review loop. Apply automatic revisions for any solutions with verdict 'revise'. Present a batch summary.",
+      "expected_output": "3 solution JSONs with buyer adoption defaults, review assessments for each, batch summary categorizing by acceptance round.",
+      "assertions": [
+        {"id": "BATCH-01", "text": "3 solution JSON files created", "type": "structural"},
+        {"id": "BATCH-02", "text": "Each solution has correct solution_type for its product's revenue_model", "type": "structural"},
+        {"id": "BATCH-03", "text": "Review assessments produced for all 3 solutions", "type": "structural"},
+        {"id": "BATCH-04", "text": "Batch summary categorizes solutions by acceptance round", "type": "agent"},
+        {"id": "BATCH-05", "text": "At least one solution triggered a revision round", "type": "agent"},
+        {"id": "BATCH-06", "text": "Revised solutions have higher scores than Round 1", "type": "agent"},
+        {"id": "BATCH-07", "text": "No more than 2 revision rounds per solution", "type": "structural"},
+        {"id": "BATCH-08", "text": "All solutions include exit clause in assumptions", "type": "structural"},
+        {"id": "BATCH-09", "text": "All standard tier margins (small/medium/large) >= 25%", "type": "structural"},
+        {"id": "BATCH-10", "text": "Solutions targeting same market have consistent assumptions (same role rates, same delivery model)", "type": "structural"}
+      ],
+      "files": []
+    },
+    {
+      "id": 3,
+      "name": "review-existing-solutions",
+      "skill": "solutions",
+      "target": "t-systems",
+      "prompt": "Review all existing solutions in the T-Systems project at the path provided. Run the solution review assessor on each. Present a portfolio-level assessment showing which solutions pass, which need improvement, and specific recommendations from each stakeholder perspective. Include cross-solution consistency checks.",
+      "expected_output": "All 3 solutions assessed with three perspective scores, prioritized improvements, cross-solution pattern analysis, and consistency checks.",
+      "assertions": [
+        {"id": "REV-01", "text": "All 3 solutions assessed", "type": "structural"},
+        {"id": "REV-02", "text": "Each assessment has three perspective scores", "type": "structural"},
+        {"id": "REV-03", "text": "Synthesis includes prioritized improvements (CRITICAL/HIGH/OPTIONAL)", "type": "structural"},
+        {"id": "REV-04", "text": "Recommendations are specific and actionable (reference specific fields/values)", "type": "agent"},
+        {"id": "REV-05", "text": "Portfolio-level summary identifies cross-solution patterns", "type": "agent"},
+        {"id": "REV-06", "text": "Portfolio consistency check flags exit clause inconsistency across solutions targeting the same market", "type": "agent"},
+        {"id": "REV-07", "text": "Client SA perspective scores are surfaced and diagnosed if consistently lowest", "type": "agent"}
+      ],
+      "files": []
+    }
+  ]
+}

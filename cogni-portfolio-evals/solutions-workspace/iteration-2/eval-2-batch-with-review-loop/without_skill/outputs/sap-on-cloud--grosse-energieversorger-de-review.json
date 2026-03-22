@@ -1,0 +1,155 @@
+{
+  "slug": "sap-on-cloud--grosse-energieversorger-de",
+  "review_round": 1,
+  "perspectives": [
+    {
+      "role": "procurement",
+      "role_label": "Einkauf / Procurement (SektVO-konform)",
+      "criteria": [
+        {
+          "criterion": "Preistransparenz und Vergleichbarkeit",
+          "score": 7,
+          "max_score": 10,
+          "finding": "Drei Tiers mit klarer Scope-Abgrenzung. Effort-Days und Rate-Card sind transparent. Fehlend: Contingency-Position.",
+          "recommendation": "Contingency-Budget (8-10%) als separate Position mit Abrufregeln ausweisen."
+        },
+        {
+          "criterion": "SektVO-/EU-Vergaberechts-Konformitaet",
+          "score": 6,
+          "max_score": 10,
+          "finding": "Phasen-basierte Loswuerdigkeit gegeben. Keine explizite Vergaberechts-Referenz.",
+          "recommendation": "SektVO-konforme Losbildung und Rahmenvertragsstruktur dokumentieren."
+        },
+        {
+          "criterion": "Exit-Strategie und Vendor-Lock-in-Risiko",
+          "score": 4,
+          "max_score": 10,
+          "finding": "Kein Exit-Plan. SAP-Betrieb auf Sovereign Cloud erzeugt hohe Abhaengigkeit. Kein Daten-Repatriierungsplan.",
+          "recommendation": "Exit-Strategie mit SAP-System-Repatriierung, Datenexport-Verfahren und vertraglichen Exit-Klauseln."
+        },
+        {
+          "criterion": "Milestone-basierte Zahlungsstruktur",
+          "score": 8,
+          "max_score": 10,
+          "finding": "Gute Verteilung ueber 5 Milestones. 30% bei Produktivmigration reflektiert Risiko-Profil korrekt.",
+          "recommendation": "SLA-gebundene Malus-Regelung fuer Managed-Operations-Phase ergaenzen."
+        },
+        {
+          "criterion": "Wettbewerbsfaehigkeit (TCO-Benchmark)",
+          "score": 5,
+          "max_score": 10,
+          "finding": "Kein TCO-Vergleich. Einkauf kann nicht beurteilen, ob T-Systems SAP-Betrieb guenstiger ist als AWS/Azure RISE-Alternativen.",
+          "recommendation": "TCO-Vergleich: T-Systems Managed vs. Hyperscaler RISE vs. On-Prem-Weiterbetrieb (5 Jahre)."
+        }
+      ],
+      "overall_score": 30,
+      "max_overall_score": 50,
+      "verdict": "revision_needed",
+      "summary": "Exit-Strategie und TCO-Benchmark sind fuer Einkauf kritische Luecken. Preisstruktur selbst ist transparent."
+    },
+    {
+      "role": "provider_sa",
+      "role_label": "Provider Solution Architect (T-Systems)",
+      "criteria": [
+        {
+          "criterion": "Technische Umsetzbarkeit",
+          "score": 8,
+          "max_score": 10,
+          "finding": "SAP-Migrationsmethodik (SUM/DMO) ist Standard. Gestaffelte Umgebungsmigration ist best practice. IS-U-Produktivmigration am Wochenende ist realistisch mit Near-Zero-Downtime-Ansatz.",
+          "recommendation": "Generalprobe-Termin explizit in Phase 3 einplanen."
+        },
+        {
+          "criterion": "Team-Dimensionierung",
+          "score": 7,
+          "max_score": 10,
+          "finding": "Phase 3 mit 4 Implementation Engineers fuer parallele System-Migrationen ist knapp. SAP-Basis-Spezialisten sind Engpass-Ressource.",
+          "recommendation": "SAP-Basis-Spezialist als dedizierte Rolle ausweisen (nicht generischer Implementation Engineer)."
+        },
+        {
+          "criterion": "Risikomanagement",
+          "score": 7,
+          "max_score": 10,
+          "finding": "Vier relevante Risiken. IS-U-Downtime-Risiko ist korrekt als hoch/medium eingestuft. Quantifizierter Contingency fehlt.",
+          "recommendation": "Contingency-Budget quantifizieren; IS-U-Rollback-Szenario explizit dokumentieren."
+        },
+        {
+          "criterion": "IS-U-Branchenspezifik",
+          "score": 9,
+          "max_score": 10,
+          "finding": "IS-U-spezifische Lastprofile (Jahresabrechnung, MaKo) korrekt adressiert. Hochlast-Playbooks in Phase 4 sind wichtig. Smart-Meter-Integration fehlt.",
+          "recommendation": "Smart-Meter-Gateway-Administration als optionale Erweiterung benennen."
+        },
+        {
+          "criterion": "Scope-Abgrenzung",
+          "score": 9,
+          "max_score": 10,
+          "finding": "S/4HANA funktionale Transformation klar ausgeschlossen. SAP-Lizenzen beim Kunden. Nur Infrastruktur und Betrieb im Scope.",
+          "recommendation": "Keine Aenderung noetig."
+        }
+      ],
+      "overall_score": 40,
+      "max_overall_score": 50,
+      "verdict": "minor_revision",
+      "summary": "Technisch stark. SAP-Basis-Spezialisierung und Contingency-Quantifizierung sind minor improvements."
+    },
+    {
+      "role": "client_sa",
+      "role_label": "Client Solution Architect (Energieversorger)",
+      "criteria": [
+        {
+          "criterion": "Adressierung der SAP-2027-Deadline",
+          "score": 8,
+          "max_score": 10,
+          "finding": "34 Wochen Gesamtdauer passt in die S/4HANA-Migrationsroadmap. Klare Abgrenzung: nur Infrastruktur, nicht funktionale Transformation.",
+          "recommendation": "Expliziten Verweis auf S/4HANA-2027-Deadline und wie diese Loesung den kritischen Pfad unterstuetzt."
+        },
+        {
+          "criterion": "Belastung der internen SAP-Mannschaft",
+          "score": 6,
+          "max_score": 10,
+          "finding": "Fachbereichs-Abnahme in Phase 3 erfordert interne SAP-Ressourcen waehrend des Tagesgeschaefts. Delegationsmodell fehlt.",
+          "recommendation": "Abnahme-Delegationsmodell mit definierten Kunden-Ansprechpartnern und automatischer Abnahme nach 48h."
+        },
+        {
+          "criterion": "SLA-Garantien fuer Kernprozesse",
+          "score": 7,
+          "max_score": 10,
+          "finding": "99.95% Verfuegbarkeit im Summary erwaehnt, aber nicht im SLA-Framework detailliert. Keine differenzierten SLAs fuer Abrechnungslauf vs. Standard-Betrieb.",
+          "recommendation": "Differenzierte SLAs: (a) Standard-Betrieb 99.95%, (b) Jahresabrechnung 99.99%, (c) MaKo-Fenster 100% (geplante Downtime = 0)."
+        },
+        {
+          "criterion": "Integrationsanforderungen (Billing, MDM, Smart Metering)",
+          "score": 6,
+          "max_score": 10,
+          "finding": "Billing und Messdatenmanagement erwaehnt, aber keine konkreten Schnittstellen-Spezifikationen. Smart-Meter-Integration fehlt.",
+          "recommendation": "Schnittstellenkatalog fuer IS-U-Integrationen (iDoc, RFC, API) in Phase 1 als Deliverable aufnehmen."
+        },
+        {
+          "criterion": "Nachhaltige Betriebsfaehigkeit",
+          "score": 7,
+          "max_score": 10,
+          "finding": "Wissenstransfer und Retained-IT-Dokumentation in Phase 4. Aber kein explizites Modell fuer langfristigen Betrieb nach Projekt.",
+          "recommendation": "Optionen: (a) T-Systems Managed SAP Operations (Vertrag), (b) Retained-IT mit T-Systems 2nd-Level."
+        }
+      ],
+      "overall_score": 34,
+      "max_overall_score": 50,
+      "verdict": "revision_needed",
+      "summary": "Guter SAP-spezifischer Ansatz. Revision bei Exit-Strategie, SLA-Differenzierung und Belastungsreduktion noetig."
+    }
+  ],
+  "aggregate": {
+    "total_score": 104,
+    "max_score": 150,
+    "pct": 69.3,
+    "revision_needed": true,
+    "top_revision_items": [
+      "Exit-Strategie mit SAP-System-Repatriierung und Datenexport ergaenzen",
+      "TCO-Vergleich (T-Systems vs. RISE/Hyperscaler vs. On-Prem, 5 Jahre) ergaenzen",
+      "Differenzierte SLAs fuer Abrechnungslaeufe vs. Standard-Betrieb",
+      "Contingency-Budget quantifizieren und IS-U-Rollback-Szenario dokumentieren",
+      "Abnahme-Delegationsmodell mit 48h-Stillschweigen-Regel einfuehren"
+    ]
+  },
+  "created": "2026-03-18"
+}

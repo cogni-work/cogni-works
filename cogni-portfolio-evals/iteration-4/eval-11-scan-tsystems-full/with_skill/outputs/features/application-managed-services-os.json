@@ -1,0 +1,16 @@
+{
+  "slug": "application-managed-services-os",
+  "product_slug": "infrastructure-services",
+  "name": "Application Managed Services (OS)",
+  "description": "Operational services 24/7 service desk and application managed services for enterprise IT operations in the German mid-market with on-shore delivery and DSGVO-compliant processing.",
+  "taxonomy_mapping": {
+    "dimension": 5,
+    "dimension_name": "Managed Infrastructure Services",
+    "category_id": "5.5",
+    "category_name": "IT Outsourcing (ITO)",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

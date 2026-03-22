@@ -1,0 +1,16 @@
+{
+  "slug": "endpoint-detection",
+  "product_slug": "managed-security",
+  "name": "Endpoint Detection & Response",
+  "description": "Agentenbasierte Endpoint-Sensorik mit kontinuierlicher Prozess-, Datei- und Netzwerktelemetrie auf Endgeraeten, die mittels Threat-Intelligence-Korrelation verdaechtige Aktivitaetsmuster identifiziert und automatisierte Host-Isolation ausloest.",
+  "category": "detection",
+  "taxonomy_mapping": {
+    "dimension": 2,
+    "dimension_name": "Security",
+    "category_id": "2.4",
+    "category_name": "Endpoint Security",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "created": "2026-03-21"
+}

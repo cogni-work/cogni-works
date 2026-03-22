@@ -1,0 +1,13 @@
+{
+  "slug": "managed-hyperscaler-services",
+  "name": "Managed Hyperscaler Services",
+  "description": "Managed Cloud Services fuer AWS, Azure und Google Cloud inkl. Datensouveraenitaet, GenAI und Cloud Acceleration.",
+  "product_slug": "t-systems-cloud",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 4,
+    "category_id": "4.1",
+    "category_name": "Managed Hyperscaler Services"
+  },
+  "source_file": "https://www.t-systems.com/de/de/souveraene-cloud"
+}

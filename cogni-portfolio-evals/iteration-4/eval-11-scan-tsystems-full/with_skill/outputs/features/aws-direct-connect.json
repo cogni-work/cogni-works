@@ -1,0 +1,16 @@
+{
+  "slug": "aws-direct-connect",
+  "product_slug": "connectivity-services",
+  "name": "AWS Direct Connect",
+  "description": "Hosted direct connect virtual interface on Telekom peering infrastructure providing dedicated, low-latency private connectivity from enterprise locations to AWS regions as an AWS Premier Partner service.",
+  "taxonomy_mapping": {
+    "dimension": 1,
+    "dimension_name": "Connectivity Services",
+    "category_id": "1.3",
+    "category_name": "Internet & Cloud Connect",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

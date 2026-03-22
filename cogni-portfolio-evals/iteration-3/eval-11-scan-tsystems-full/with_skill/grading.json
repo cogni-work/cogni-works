@@ -1,0 +1,63 @@
+{
+  "total_checks": 11,
+  "passed": 10,
+  "failed": 1,
+  "pass_rate": 0.909,
+  "expectations": [
+    {
+      "text": "All 8 dimensions present in report (found 8)",
+      "passed": true,
+      "evidence": "All 8 present: ['0', '1', '2', '3', '4', '5', '6', '7']"
+    },
+    {
+      "text": "All 57 categories present in report (found 57)",
+      "passed": true,
+      "evidence": "All 57 present"
+    },
+    {
+      "text": "Every category has discovery status tag (57 of 57)",
+      "passed": true,
+      "evidence": "57 valid status tags for 57 categories"
+    },
+    {
+      "text": "scan-output.json status totals = 57 (actual: 57)",
+      "passed": true,
+      "evidence": "{\"confirmed\": 56, \"not_offered\": 0, \"emerging\": 1, \"extended\": 0}"
+    },
+    {
+      "text": "Every confirmed offering has a Link field (1/1)",
+      "passed": true,
+      "evidence": "0 offerings missing links out of 1 total"
+    },
+    {
+      "text": "All offering Links from discovered domains (1 foreign)",
+      "passed": false,
+      "evidence": "Foreign domains: ['en.wikipedia.org']"
+    },
+    {
+      "text": "At least 3 domain(s) analyzed (actual: 6)",
+      "passed": true,
+      "evidence": "Domains: ['t-systems.com', 'detecon.com', 'open-telekom-cloud.com', 'business.telekom.com', 'docs.otc.t-systems.com', 'public.t-cloud.com']"
+    },
+    {
+      "text": "Feature count >= 20 (actual: 71)",
+      "passed": true,
+      "evidence": "71 feature files"
+    },
+    {
+      "text": "Features have taxonomy_mapping with category_id (71/71)",
+      "passed": true,
+      "evidence": "All present"
+    },
+    {
+      "text": "category_id matches valid category (71/71)",
+      "passed": true,
+      "evidence": "All valid"
+    },
+    {
+      "text": "Feature readiness is ga/beta/planned (71/71)",
+      "passed": true,
+      "evidence": "All valid"
+    }
+  ]
+}

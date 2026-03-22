@@ -1,0 +1,13 @@
+{
+  "slug": "unified-communications-ucc",
+  "name": "Connectivity Plus UCC",
+  "description": "UCC-Services aus der Cloud inkl. Voice und Collaboration, kombiniert mit VPN und SIP-Services.",
+  "product_slug": "t-systems-workplace",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 3,
+    "category_id": "3.1",
+    "category_name": "Unified Communications"
+  },
+  "source_file": "https://www.t-systems.com/de/de/newsroom/news/connectivity-plus-197286"
+}

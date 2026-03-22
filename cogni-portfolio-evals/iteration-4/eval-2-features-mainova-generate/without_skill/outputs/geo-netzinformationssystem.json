@@ -1,0 +1,14 @@
+{
+  "slug": "geo-netzinformationssystem",
+  "product_slug": "digitale-netzsteuerung",
+  "name": "Geo-Netzinformationssystem",
+  "description": "GIS-basierte Dokumentation und Visualisierung saemtlicher Leitungsnetze mit raeumlicher Zuordnung von Betriebsmitteln, Trassenverlauf und Anschlusspunkten. Unterstuetzt Netzplanung, Baustellenkoordination und Auskunftsprozesse fuer Strom, Gas und Fernwaerme.",
+  "category": "grid-operations",
+  "taxonomy_mapping": {
+    "dimension": 6,
+    "category_id": "6.6",
+    "category_name": "AI, Data & Analytics",
+    "horizon": "current"
+  },
+  "readiness": "ga"
+}

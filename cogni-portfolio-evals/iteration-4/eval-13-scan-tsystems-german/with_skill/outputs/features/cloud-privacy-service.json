@@ -1,0 +1,16 @@
+{
+  "slug": "cloud-privacy-service",
+  "product_slug": "security-services",
+  "name": "Cloud Privacy Service",
+  "description": "Data encryption service applying European-standard cryptographic algorithms with managed key lifecycle, key backup operations, and regulatory compliance attestation for cloud-hosted workloads.",
+  "taxonomy_mapping": {
+    "dimension": 2,
+    "dimension_name": "Security Services",
+    "category_id": "2.10",
+    "category_name": "Data Protection & Privacy",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

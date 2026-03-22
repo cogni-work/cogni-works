@@ -1,0 +1,182 @@
+{
+  "solution_slug": "cloud-migration--grosse-energieversorger-de",
+  "solution_type": "project",
+  "overall": "pass",
+  "overall_score": 86,
+  "stakeholder_reviews": [
+    {
+      "perspective": "reviewer",
+      "score": 89,
+      "overall": "pass",
+      "criteria": {
+        "roi_clarity": {
+          "score": "pass",
+          "weight": 0.30,
+          "note": ""
+        },
+        "budget_fit": {
+          "score": "pass",
+          "weight": 0.25,
+          "note": ""
+        },
+        "risk_reward_transparency": {
+          "score": "pass",
+          "weight": 0.20,
+          "note": ""
+        },
+        "competitive_positioning": {
+          "score": "warn",
+          "weight": 0.15,
+          "note": "No competitor file exists. Assumptions mention CMF and KRITIS experience as differentiators but no pricing benchmarks against hyperscaler migration services or Accenture/Capgemini alternatives."
+        },
+        "decision_pathway": {
+          "score": "pass",
+          "weight": 0.10,
+          "note": ""
+        }
+      },
+      "strengths": [
+        "Clear value chain: pricing traces through phases to DOES (sprint-based migration) to MEANS (elastic scalability replacing hardware procurement cycles)",
+        "PoV at 180K EUR is well-calibrated for enterprise energy utilities — low enough for CIO discretionary budget, high enough to be taken seriously",
+        "Tier progression tells a clear story: PoV proves feasibility (30 workloads), Small migrates non-critical (80), Medium adds business-critical (150+), Large transforms enterprise-wide (300+)",
+        "Exit clause explicitly stated with capped transition costs (max 5% of total volume) — CFO-friendly",
+        "Assumptions are specific and auditable: FTE requirements, OT/IT boundary, data residency, KRITIS compliance"
+      ],
+      "concerns": [
+        "No competitor pricing comparison — procurement will benchmark against AWS Migration Acceleration Program, Accenture Cloud First, and Capgemini cloud migration offerings",
+        "PoV margin at 31.1% is higher than typical land-and-expand strategy — could be brought down to 20-25% to reduce buyer entry friction"
+      ],
+      "recommendations": [
+        "OPTIONAL: Add competitive positioning data or at minimum reference competitive analysis in assumptions to preempt procurement benchmarking",
+        "OPTIONAL: Consider reducing PoV margin to 20-25% range as deliberate land-and-expand — the 31.1% margin, while healthy, makes this a standard engagement rather than a strategic entry point"
+      ]
+    },
+    {
+      "perspective": "provider_sa",
+      "score": 85,
+      "overall": "pass",
+      "criteria": {
+        "delivery_realism": {
+          "score": "pass",
+          "weight": 0.30,
+          "note": ""
+        },
+        "scope_effort_coherence": {
+          "score": "pass",
+          "weight": 0.25,
+          "note": ""
+        },
+        "phase_architecture": {
+          "score": "pass",
+          "weight": 0.20,
+          "note": ""
+        },
+        "does_traceability": {
+          "score": "pass",
+          "weight": 0.15,
+          "note": ""
+        },
+        "tier_scalability": {
+          "score": "warn",
+          "weight": 0.10,
+          "note": "Small and Medium differ primarily by workload count (80 vs. 150+) and adding Wave 2 (business-critical). The qualitative shift is present (non-critical vs. critical) but could be sharper — Medium should emphasize the organizational change management dimension, not just more workloads."
+        }
+      },
+      "strengths": [
+        "Phase architecture is well-adapted to cloud migration reality: Discovery, Landing Zone, Wave 1 (non-critical), Wave 2 (business-critical), Optimize/Handover — not a generic template",
+        "Wave 1/Wave 2 split de-risks the migration by proving the factory approach on non-critical workloads first",
+        "Cost model is detailed with role breakdowns per tier — effort scaling is reasonable (380 days Small to 1300 days Large)",
+        "Small tier at 380 days / 18 weeks implies ~4.2 FTE average — feasible with a 5-person team at 85% utilization",
+        "DOES traceability is strong: every phase maps to migrating IS-U/SCADA/ERP workloads in structured sprints with KRITIS compliance"
+      ],
+      "concerns": [
+        "Medium tier at 800 days / 36 weeks implies ~4.4 FTE average — manageable, but includes SAP basis migration which typically needs specialist roles not in the cost model (SAP Basis Administrator)",
+        "The 6R-model is mentioned in Discovery but phases assume primarily Rehost/Replatform — if Refactor/Rearchitect are needed for specific workloads, timeline could expand significantly"
+      ],
+      "recommendations": [
+        "HIGH: Consider adding SAP Basis Administrator or Cloud Architect as a specialist role for Medium and Large tiers where SAP infrastructure is in scope",
+        "OPTIONAL: Add explicit assumption about 6R distribution expected (e.g., '70% rehost, 20% replatform, 10% refactor') to bound timeline risk"
+      ]
+    },
+    {
+      "perspective": "client_sa",
+      "score": 85,
+      "overall": "pass",
+      "criteria": {
+        "integration_feasibility": {
+          "score": "pass",
+          "weight": 0.30,
+          "note": ""
+        },
+        "dependency_risk": {
+          "score": "pass",
+          "weight": 0.25,
+          "note": ""
+        },
+        "operational_readiness": {
+          "score": "pass",
+          "weight": 0.20,
+          "note": ""
+        },
+        "vendor_lockin": {
+          "score": "pass",
+          "weight": 0.15,
+          "note": ""
+        },
+        "security_compliance": {
+          "score": "pass",
+          "weight": 0.10,
+          "note": ""
+        }
+      },
+      "strengths": [
+        "OT/IT boundary explicitly defined: SCADA and Netzleitsysteme stay on-premises, only IT-side interfaces are migrated — OT-Leiter will accept this",
+        "Exit clause with 12-month notice, 90-day transition support, data repatriation, and capped exit costs (5%) — addresses vendor lock-in head-on",
+        "Data residency explicitly addressed: BSI-C5-certified German data centers under German jurisdiction (DSGVO + KRITIS-DachG)",
+        "Client-side effort quantified: 1.0 FTE Enterprise Architect + 0.5 FTE Test Manager, 2 authorized contacts with 48h sprint acceptance window",
+        "IaC templates (Terraform/OpenTofu) ensure infrastructure portability — buyer can re-deploy on alternative infrastructure"
+      ],
+      "concerns": [
+        "Handover phase at 6 weeks is comprehensive but the scope mixes optimization (FinOps, container platform) with handover (knowledge transfer, exit verification) — two different activities that may compete for attention"
+      ],
+      "recommendations": [
+        "OPTIONAL: Consider splitting the final phase into 'FinOps & Modernization' (4w) and 'Handover & Exit Verification' (2w) for clearer delivery accountability"
+      ]
+    }
+  ],
+  "synthesis": {
+    "conflicts": [],
+    "critical_improvements": [],
+    "high_improvements": [
+      {
+        "description": "Add SAP Basis Administrator or Cloud Architect specialist role for Medium and Large tiers to cover SAP infrastructure migration complexity",
+        "stakeholders": ["provider_sa"],
+        "affects": "cost_model.bill_of_materials.roles"
+      }
+    ],
+    "optional_improvements": [
+      {
+        "description": "Add competitive pricing benchmarks to preempt procurement benchmarking against hyperscaler migration programs",
+        "stakeholders": ["reviewer"],
+        "affects": "cost_model.assumptions"
+      },
+      {
+        "description": "Consider reducing PoV margin from 31.1% to 20-25% as deliberate land-and-expand entry strategy",
+        "stakeholders": ["reviewer"],
+        "affects": "pricing.proof_of_value"
+      },
+      {
+        "description": "Add explicit 6R distribution assumption to bound refactoring timeline risk",
+        "stakeholders": ["provider_sa"],
+        "affects": "cost_model.assumptions"
+      },
+      {
+        "description": "Consider splitting final phase into separate FinOps/Modernization and Handover/Exit Verification phases",
+        "stakeholders": ["client_sa"],
+        "affects": "implementation"
+      }
+    ],
+    "verdict": "accept",
+    "revision_guidance": "Solution is strong. The most impactful improvement would be adding specialist SAP roles to the cost model for larger tiers and competitive positioning data. These are refinements, not structural issues."
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "slug": "endpoint-detection-response",
+  "product_slug": "managed-security",
+  "name": "Endpoint Detection & Response",
+  "description": "Agentenbasierte Endpunkt-Ueberwachung mit Echtzeit-Telemetrie, Verhaltensanalyse und automatisierter Eindaemmung kompromittierter Endgeraete.",
+  "readiness": "ga"
+}

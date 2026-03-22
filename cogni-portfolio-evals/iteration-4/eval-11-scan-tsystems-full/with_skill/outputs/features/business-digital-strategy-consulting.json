@@ -1,0 +1,16 @@
+{
+  "slug": "business-digital-strategy-consulting",
+  "product_slug": "consulting-services",
+  "name": "Business and Digital Strategy Consulting",
+  "description": "Detecon strategic business transformation consulting encompassing digital innovation management, organizational transformation, customer excellence advisory, and M&A integration support.",
+  "taxonomy_mapping": {
+    "dimension": 7,
+    "dimension_name": "Consulting Services",
+    "category_id": "7.2",
+    "category_name": "Digital Transformation",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

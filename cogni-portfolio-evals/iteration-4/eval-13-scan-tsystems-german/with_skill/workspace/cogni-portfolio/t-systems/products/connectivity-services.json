@@ -1,0 +1,9 @@
+{
+  "slug": "connectivity-services",
+  "name": "Connectivity Services",
+  "description": "Netzwerk-Infrastruktur und Konnektivitätsangebote inkl. WAN, SASE, Cloud Connect, IoT, Voice und Managed Network Services.",
+  "revenue_model": "subscription",
+  "maturity": "growth",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

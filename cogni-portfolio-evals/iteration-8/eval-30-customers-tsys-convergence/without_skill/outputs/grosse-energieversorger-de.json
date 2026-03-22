@@ -1,0 +1,459 @@
+{
+  "slug": "grosse-energieversorger-de",
+  "market_slug": "grosse-energieversorger-de",
+  "profiles": [
+    {
+      "role": "CIO / Bereichsleiter IT",
+      "seniority": "C-1",
+      "pain_points": [
+        "SAP IS-U End-of-Support 2027 erzwingt parallele S/4HANA-Migration bei laufendem 24/7-Netzbetrieb — Migrationsrisiko und Betriebskontinuität stehen in direktem Konflikt",
+        "KRITIS-konforme Cloud-Infrastruktur in Deutschland ist 60-80% teurer als Standard-Hyperscaler — CIO muss Innovationsdruck des Vorstands mit regulatorischen Realitäten vereinbaren",
+        "Akuter IT-Fachkräftemangel (>130.000 offene IT-Stellen in DE) verzögert Digitalisierungsprojekte um 6-12 Monate und erhöht Abhängigkeit von externen Dienstleistern",
+        "OT/IT-Konvergenz erfordert seltene Dual-Kompetenz (Elektrotechnik + Cloud + Security), die intern kaum aufzubauen ist",
+        "KI-Strategie-Druck vom Vorstand ohne belastbare ROI-Basis — Pilotprojekte scheitern an Datenqualität und fehlender MLOps-Infrastruktur"
+      ],
+      "buying_criteria": [
+        "Ende-zu-Ende-Fähigkeit über Cloud, Security und OT-Integration aus einer Hand mit nachgewiesener Energiesektor-Erfahrung",
+        "BSI-C5-Attestierung und KRITIS-Konformität als Grundvoraussetzung für Shortlisting",
+        "Rahmenvertragsfähigkeit nach SektVO mit Call-Off-Struktur (bis 8 Jahre Laufzeit)",
+        "Referenzen bei vergleichbaren deutschen Energieversorgern (>5.000 MA)",
+        "Managed-Services-Modell mit deutschsprachigem 24/7-Support zur Kompensation des Fachkräftemangels"
+      ],
+      "information_sources": [
+        "Gartner CIO Agenda (Power & Utilities Vertical)",
+        "Lünendonk IT-Services-Ranking und Future-Utility-Studien",
+        "BDEW Kongress (jährlich, Berlin) und E-world Energy & Water (Essen)",
+        "CIO-Peer-Netzwerke (Evanta CIO Inner Circle, CIOnet DACH)",
+        "ISG Provider Lens für Cloud und Managed Services in Deutschland"
+      ],
+      "decision_role": "Initiiert Beschaffungsprozesse, definiert IT-Architekturvorgaben und steuert Vendor-Auswahl. Primärer Deal-Champion und Architektur-Gatekeeper mit Empfehlungsrecht an den Vorstand.",
+      "proposition_triggers": [
+        "cloud-migration: SAP IS-U End-of-Support 2027 als zeitkritischer Auslöser",
+        "sovereign-cloud: KRITIS-Compliance-Druck als regulatorischer Auslöser",
+        "managed-hyperscaler: Fachkräftemangel als operativer Auslöser",
+        "hybrid-cloud: OT/IT-Konvergenz als architektonischer Auslöser"
+      ]
+    },
+    {
+      "role": "CISO / Leiter Informationssicherheit",
+      "seniority": "C-1",
+      "pain_points": [
+        "NIS2-Umsetzungsfrist Oktober 2026 mit erweitertem Scope — Energieversorger als 'Essential Entities' unter verschärfter Aufsicht mit Vorstandshaftung bis 2% des Jahresumsatzes",
+        "KRITIS-DachG (seit Januar 2026) fordert erstmals integriertes Framework für physische, digitale und Resilienz-Kontrollen — bestehende ISO-27001-Zertifizierung reicht nicht mehr aus",
+        "OT-Security unter CISO-Verantwortung bei 70% geplant, aber erst bei 9% umgesetzt — IEC 62443 und ISO 27001 parallel zu managen überfordert bestehende Teams",
+        "Supply-Chain-Risiko durch US-CLOUD-Act: Hyperscaler-Nutzung für regulierte Daten erfordert souveräne Alternativen mit EU-Jurisdiktion",
+        "Biannuelle BSI-Audits mit wachsendem Scope erfordern automatisierte Compliance-Nachweise — manuelle Dokumentation nicht mehr skalierbar"
+      ],
+      "buying_criteria": [
+        "BSI-C5-Typ-2-Attestierung und ISO 27001 / IEC 62443 Konformität als harte Mindestanforderung",
+        "SOC 24/7 mit garantierter Incident-Response unter 15 Minuten (MTTD/MTTR)",
+        "Datenresidenz ausschließlich in deutschen Rechenzentren mit EU-Personal und EU-Jurisdiktion",
+        "Automatisiertes Compliance-Reporting für NIS2-, KRITIS-DachG- und BSI-Audits",
+        "Nachgewiesene OT-Security-Expertise mit Referenzen bei deutschen KRITIS-Betreibern"
+      ],
+      "information_sources": [
+        "BSI-Lageberichte und KRITIS-Handlungsempfehlungen",
+        "UP KRITIS Arbeitsgruppen und OpenKRITIS-Community",
+        "BDEW-Whitepaper IT-Sicherheit in der Energiewirtschaft",
+        "VDE/DKE-Normengremien zu IEC 62443",
+        "it-sa Konferenz (Nürnberg) und SANS-Institute-Trainings"
+      ],
+      "decision_role": "Compliance-Gatekeeper mit unabhängigem Vetorecht. Blockiert jeden Deal ohne KRITIS-konforme Sicherheitsarchitektur. Prüft Vendor-Zertifizierungen vor Shortlisting und validiert Security-Architektur im Pflichtenheft.",
+      "proposition_triggers": [
+        "sovereign-cloud: NIS2-Deadline Oktober 2026 als zeitkritischer Compliance-Auslöser — eliminiert Bußgeldrisiko bis 2% Umsatz",
+        "hybrid-cloud: BSI-zertifizierte Air-Gap-Isolation für OT/IT-Trennung als Sicherheitsanforderung"
+      ]
+    },
+    {
+      "role": "Leiter OT / Netzleittechnik",
+      "seniority": "Director-Level",
+      "pain_points": [
+        "Smart-Meter-Rollout-Rückstand: erst 15% von 4,6 Mio. iMSys installiert bei 95%-Pflicht bis 2030 — massiver Integrationsdruck auf OT-Systeme und Backend-Infrastruktur",
+        "Legacy-SCADA/EMS-Systeme nicht für Cloud-Integration oder moderne Security-Standards ausgelegt — Netzstabilität hat absoluten Vorrang vor Modernisierung",
+        "DER-Komplexität: Tausende dezentrale Erzeugungsanlagen, virtuelle Kraftwerke und Batteriespeicher erfordern Echtzeit-Integration und -Steuerung",
+        "24h-Lieferantenwechsel-Pflicht seit Januar 2025 erzwingt Echtzeit-Datenprozessierung und Billing-System-Umbau",
+        "Überalterung der OT-Belegschaft ohne Nachwuchs für die seltene Kombination Elektrotechnik + IT + Cybersecurity"
+      ],
+      "buying_criteria": [
+        "Nachgewiesene OT-Expertise mit praktischer Erfahrung im Energienetz-Betrieb (ÜNB/VNB-Referenzen)",
+        "Garantierte Netzleitstabilität während jeder Migration oder Integration — Zero-Downtime als harte Anforderung",
+        "IEC 62351/61850-Konformität und Unterstützung gängiger OT-Protokolle (DNP3, IEC 61850, OPC-UA)",
+        "Schrittweise Migrationsfähigkeit ohne Big-Bang-Ansatz — paralleler Betrieb alter und neuer Systeme",
+        "BSI-zertifizierte Air-Gap-Isolation für kritische Leittechnik-Systeme"
+      ],
+      "information_sources": [
+        "VDE-Normen und FNN (Forum Netztechnik/Netzbetrieb)",
+        "Herstellerforen (Siemens Energy, ABB, Schneider Electric, GE Vernova)",
+        "BDEW-Fachausschüsse Netzleittechnik",
+        "E-world Energy & Water (OT-Track) und Hannover Messe Energie",
+        "CIGRE-Konferenzen und VDE-FNN-Fachtagungen"
+      ],
+      "decision_role": "Technischer Evaluator mit Vetorecht für operative Sicherheit. Blockiert Deals, wenn Netzstabilität nicht zweifelsfrei gewährleistet ist. Definiert OT-spezifische Anforderungen im Pflichtenheft und validiert technische Proof-of-Concepts.",
+      "proposition_triggers": [
+        "hybrid-cloud: OT/IT-Integration mit Air-Gap-Isolation als architektonische Grundanforderung",
+        "cloud-migration: Parallellauf-Validation als Sicherheitsnetz für Legacy-SCADA-Migration"
+      ]
+    },
+    {
+      "role": "CFO / Kaufmännischer Geschäftsführer",
+      "seniority": "C-Level",
+      "pain_points": [
+        "Regulatorische Capex-Explosion: Smart-Meter-Rollout, KRITIS-Compliance, NIS2-Umsetzung und S/4HANA-Migration treffen gleichzeitig auf IT-Budgets unter 2% vom Umsatz",
+        "Sovereign-Cloud-Kosten in DE 60-80% über US-Hyperscaler-Niveau — Standard-ROI-Modelle der Cloud-Anbieter gelten nicht bei KRITIS-Anforderungen",
+        "Vendor-Lock-in-Risiko bei langfristigen Rahmenverträgen: Wechselkosten (Datenmigration, Re-Zertifizierung, Personalübergang) übersteigen oft die initiale Ersparnis",
+        "CSRD/ESRS-Nachhaltigkeitsberichterstattung erfordert neue IT-Plattformen für Scope-1-3-Emissionstracking — ungeplanter Zusatzaufwand",
+        "Energiemarkt-Volatilität komprimiert operative Margen und erzwingt IT-Investitionsstopps mitten in laufenden Transformationsprogrammen"
+      ],
+      "buying_criteria": [
+        "TCO-Transparenz mit klarer Capex/Opex-Trennung und Kostenprognose über gesamte Vertragslaufzeit",
+        "Festpreismodelle für definierte Scopes mit kalkulierbarem Kostenrahmen und Penalty-Klauseln",
+        "Exit-Klauseln für Regulierungsänderungen, Vendor-Underperformance und M&A-Szenarien",
+        "Nachweisbare Kosteneinsparung >15% gegenüber Status quo innerhalb von 24 Monaten",
+        "Degressive Preismodelle und Volume-Discounts für Multi-Jahr-Verträge (>3 Jahre)"
+      ],
+      "information_sources": [
+        "Wirtschaftsprüfer-Benchmarks (KPMG, Deloitte, PwC) für IT-Kosten im Energiesektor",
+        "Lünendonk-Preisvergleiche IT-Dienstleister Deutschland",
+        "BDEW Wirtschaftsberichte und Branchenstatistiken",
+        "Board-Netzwerke und CFO-Roundtables (Handelsblatt CFO-Konferenz)",
+        "Bitkom IT-Markt-Studien und Gartner IT-Spend-Benchmarks"
+      ],
+      "decision_role": "Finale Budgetfreigabe bei ACV >5M EUR. Gibt wirtschaftlichen Rahmen vor und genehmigt oder blockiert Investitionen. Entscheidet auf Basis von TCO-Vergleich, Risikobewertung und strategischem Fit — kein technisches Detailwissen.",
+      "proposition_triggers": [
+        "cloud-migration: 35% IT-Ops-Kosteneinsparung als CFO-relevanter ROI-Hebel",
+        "managed-hyperscaler: EUR 2M jährliche Einsparung bei Cloud-Ops-Staffing als quantifizierbarer Business Case"
+      ]
+    }
+  ],
+  "buying_committee": {
+    "typical_size": "7-12",
+    "decision_model": "Konsensbasiert mit verteiltem Vetorecht. CIO initiiert und championed den Prozess. CISO hat unabhängiges Vetorecht bei Compliance- und Sicherheitsfragen. OT-Leiter hat Vetorecht bei Fragen der Betriebssicherheit. CFO gibt finale Budgetfreigabe (>5M EUR ACV). Procurement/Einkauf steuert SektVO-Vergabeprozess und Rahmenvertragsverhandlung. Betriebsrat wird bei Personalübergang/Outsourcing einbezogen. Rechtsabteilung prüft Datenschutz- und Vertragsgestaltung.",
+    "typical_deal_size": "5-8M EUR ACV bei umfassenden Managed Cloud & Infrastructure Services",
+    "sales_cycle": "9-18 Monate (bis 24 Monate bei komplexen OT-Projekten oder erstmaligem Vendor-Onboarding)",
+    "entry_strategy": "Proof-of-Value (EUR 22-25K) als risikominimaler Einstieg: NIS2-Gap-Assessment oder 5-Workload-Pilotmigration. Adressiert CISO (Compliance-Urgency) und CIO (Quick-Win) gleichzeitig. Eskalation zu Medium-Scope (EUR 250-280K) nach erfolgreichem PoV innerhalb von 3 Monaten.",
+    "deal_stall_points": [
+      "BSI-Vetting des Vendors (3-6 Monate): Anbieter muss BSI-C5-Attestierung und KRITIS-Konformität nachweisen bevor Shortlisting möglich ist — T-Systems-Vorteil: bereits attestiert",
+      "Multi-Stakeholder-Deadlock Cloud vs. On-Prem vs. Air-Gapped OT: CIO will Cloud-First, OT-Leiter will Air-Gapped, CISO will Sovereign — T-Systems Hybrid Cloud löst den Deadlock durch alle drei Optionen aus einer Hand",
+      "SLA-Verhandlung für OT-kritische Systeme: OT-Leiter fordert Penalty-Klauseln jenseits üblicher IT-SLAs — 2-4 Monate Vertragsverhandlung einplanen",
+      "Budget-Freezes durch Energiemarkt-Volatilität: Strompreisschocks oder regulatorische Änderungen führen zu sofortigen Investitionsstopps — PoV-Modell als Budget-resiliente Alternative positionieren",
+      "Betriebsratsbeteiligung bei Outsourcing-Deals mit Personalübernahme: BR-Zustimmung kann 3-6 Monate zusätzliche Verhandlung erfordern",
+      "SektVO-Vergabeprozess: EU-weite Ausschreibungspflicht ab Schwellenwerten verursacht 2-4 Monate prozedurale Verzögerung"
+    ]
+  },
+  "named_customers": [
+    {
+      "name": "E.ON SE",
+      "domain": "eon.com",
+      "industry": "Energieversorgung & Distribution",
+      "headquarters": "Essen, Deutschland",
+      "employees": 79000,
+      "revenue": { "value": 89360000000, "currency": "EUR", "year": 2025 },
+      "fit_score": 9,
+      "fit_rationale": "Incumbent-Kunde mit langjährigem ICT-Outsourcing-Vertrag (>220 transferierte Mitarbeiter). Direktes Alignment über Cloud Services (Multi-Cloud-Governance über 10 EU-Länder), Security Services (KRITIS/NIS2 für 10.000+ digitale Umspannwerke), Workplace Services (77.000+ MA) und Consulting (KI-Strategie, Energiewende-Digitalisierung). Höchste Retention-Priorität — Vertragsverlängerung als strategische Referenz für den gesamten Energiesektor.",
+      "estimated_acv": { "value": 8000000, "currency": "EUR", "basis": "Vertragsverlängerung und Scope-Erweiterung auf Basis bestehendem Outsourcing-Vertrag" },
+      "recommended_entry_propositions": [
+        { "slug": "sovereign-cloud", "rationale": "NIS2-Compliance für 10.000+ digitale Umspannwerke — Urgency durch Oktober-2026-Deadline", "target_stakeholder": "CISO + CIO" },
+        { "slug": "managed-hyperscaler", "rationale": "Multi-Cloud-Governance über 10 EU-Länder konsolidieren — Kostentransparenz für CFO", "target_stakeholder": "CIO + CFO" }
+      ],
+      "competitive_landscape": {
+        "primary_competitors": ["Infosys (Digital Workplace, seit Mai 2025)", "Schneider Electric (OT/Smart Grid)"],
+        "t_systems_differentiation": "Einziger Anbieter mit BSI-C5-attestierter Sovereign Cloud + bestehender Incumbent-Beziehung + Deutsche-Telekom-Netzintegration. Infosys kann Cloud/Security nicht abdecken, Schneider hat keinen IT-Services-Scope.",
+        "displacement_risk": "Mittel — Infosys-Expansion in Workplace-Scope bedroht Touchpoints. Gegenmaßnahme: Wert über Cloud+Security statt Workplace demonstrieren."
+      },
+      "pain_points": [
+        "Multi-Cloud-Komplexität über 10+ europäische Länder mit unterschiedlichen Regulierungsregimen und Datenresidenz-Anforderungen",
+        "OT/IT-Konvergenz für Smart-Grid-Digitalisierung — 10.000+ digitale Umspannwerke erfordern integriertes Cloud-basiertes Monitoring",
+        "SAP-S/4HANA-Skalierung über alle Geschäftsbereiche bei laufendem Betrieb — IS-U-Ablösung als kritischer Pfad",
+        "Wachsender Wettbewerb durch Infosys im Digital-Workplace-Segment bedroht bestehende T-Systems-Touchpoints"
+      ],
+      "tech_stack": [
+        "SAP S/4HANA via SAP BTP (Cloud-ERP, IS-U-Nachfolge)",
+        "SAP Datasphere (Analytics / Data Fabric)",
+        "Microsoft 365 mit Copilot (Digital Workplace)",
+        "Infosys (Digital Workplace Partnerschaft, seit Mai 2025)",
+        "Schneider Electric (Smart Grid / OT)",
+        "PSI AG (intelligente Netzleitsysteme)",
+        "T-Systems (ICT-Outsourcing, Festnetz, Mobilfunk, UC, Datennetz)"
+      ],
+      "recent_news": [
+        "Mai 2025: Strategische Infosys-Partnerschaft für KI-gestützten Digital Workplace — potenzielle Scope-Erosion bei T-Systems Workplace",
+        "2025: Cloud-ERP-Transformation abgeschlossen — 5 Rechenzentren geschlossen, 75.000+ Arbeitsplätze migriert",
+        "Juli 2025: 10.000ste digitale Umspannstation (neonpulse) deployed — größtes Smart-Grid-Programm Europas",
+        "2025: Victoria Ossadnik (Vorstand Digitalisierung) treibt KI-Strategie mit Agentic Systems voran"
+      ],
+      "buying_committee_dynamics": {
+        "champion": "Sebastian Weber (CIO) — steuert IT-Architektur und Vendor-Strategie, langjährige T-Systems-Beziehung",
+        "economic_buyer": "CFO / Vorstand Finanzen — Budgetfreigabe für Vertragsverlängerungen >100M EUR",
+        "influencer": "Victoria Ossadnik (Vorstand Digitalisierung) — definiert KI- und Innovationspriorität, kann Scope erweitern",
+        "gatekeeper": "Christopher d'Arcy (Co-Leader E.ON Digital Technology GmbH) — technische Evaluierung und Delivery-Qualität",
+        "blocker_risk": "Infosys-Partnerschaft für Digital Workplace könnte Scope-Erosion verursachen. Schneider Electric als OT-Partner begrenzt Zugang zum Grid-Layer."
+      },
+      "deal_stall_risks": [
+        "Vertragsverlängerung vs. Re-Compete: E.ON könnte formalen SektVO-Wettbewerb fordern — Incumbency-Vorteil schrumpft",
+        "Infosys-Workplace-Expansion reduziert T-Systems' Touchpoints zu 77.000 Endusern",
+        "Multi-Vendor-Diversifikation schwächt Plattform-Argument — T-Systems muss spezifischen Cloud+Security-Mehrwert nachweisen"
+      ],
+      "next_best_actions": [
+        "Executive Briefing mit Sebastian Weber (CIO) zu NIS2-Impact auf Multi-Cloud-Architektur — Sovereign Cloud als Compliance-Enabler positionieren",
+        "PoV anbieten: NIS2-Gap-Assessment für Smart-Grid-OT-Infrastruktur (EUR 22K, 2 Wochen) — CISO als Co-Sponsor gewinnen",
+        "Victoria Ossadnik (Vorstand Digitalisierung) mit KI/Agentic-Systems-Use-Case auf Sovereign Cloud ansprechen — Innovationsthema als Türöffner"
+      ],
+      "source_urls": [
+        "https://www.telekom.com/en/media/media-information/detail/e-on-awards-major-ict-deal-to-t-systems-353386",
+        "https://www.cio.de/a/eon-beruft-sebastian-weber-zum-it-chef,3664518",
+        "https://news.sap.com/2025/08/eon-cloud-erp-journey-transformation-speed-trust-agility/",
+        "https://www.infosys.com/newsroom/press-releases/2025/strategic-partnership-eon.html"
+      ]
+    },
+    {
+      "name": "RWE AG",
+      "domain": "rwe.com",
+      "industry": "Stromerzeugung & Erneuerbare Energien",
+      "headquarters": "Essen, Deutschland",
+      "employees": 20500,
+      "revenue": { "value": 24220000000, "currency": "EUR", "year": 2025 },
+      "fit_score": 8,
+      "fit_rationale": "Bestehender 5-Jahres-Workplace-Management-Vertrag als Upsell-Plattform. Multi-Cloud-Umgebung (Azure für SAP RISE, AWS für KI/Analytics, HPE Private Cloud AI) passt ideal zu T-Systems Managed Hyperscaler und Multi-Cloud-FinOps. Sovereign Cloud für KRITIS-regulierte Workloads als Differenzierungsmerkmal gegenüber AWS/Azure-Direktgeschäft. EUR 35 Mrd. Investitionsplan 2026-2031 signalisiert massives Digitalisierungsbudget.",
+      "estimated_acv": { "value": 5000000, "currency": "EUR", "basis": "Upsell von Workplace auf Cloud+Security über bestehende Vertragsbeziehung" },
+      "recommended_entry_propositions": [
+        { "slug": "managed-hyperscaler", "rationale": "Multi-Cloud-FinOps über Azure+AWS+HPE — Konsolidierung der Governance als Quick-Win", "target_stakeholder": "CIO + CFO" },
+        { "slug": "sovereign-cloud", "rationale": "KRITIS-regulierte Energiehandels-Workloads von Hyperscalern auf souveräne Infrastruktur migrieren", "target_stakeholder": "CISO + CIO" }
+      ],
+      "competitive_landscape": {
+        "primary_competitors": ["AWS (Strategic Collaboration — KI/Analytics)", "Infosys (Workplace Automation)", "SAP (RISE on Azure)"],
+        "t_systems_differentiation": "Managed Hyperscaler als neutraler Multi-Cloud-Governance-Layer über alle drei Plattformen (Azure, AWS, HPE). Sovereign Cloud für KRITIS-Workloads, die AWS/Azure nicht BSI-C5-konform abbilden können.",
+        "displacement_risk": "Hoch bei Workplace (Infosys), Niedrig bei Sovereign Cloud (kein Wettbewerber mit BSI-C5 + Energiesektor-Referenzen)."
+      },
+      "pain_points": [
+        "SAP-IS-U-Ablösung bei laufender RISE-with-SAP-Migration auf Azure — Komplexität durch Multi-Cloud-Architektur (Azure + AWS + HPE Private Cloud AI)",
+        "OT/IT-Konvergenz für verteilte erneuerbare Assets: Offshore-Wind, Solar und Batteriespeicher erfordern integriertes Monitoring über alle Standorte",
+        "Post-Asset-Swap IT-Harmonisierung: Integration der von E.ON übernommenen Erzeugungs-Assets noch nicht abgeschlossen",
+        "High-Volume-Datenstreaming für Grid-Operationen bei exponentiell wachsendem Renewables-Portfolio"
+      ],
+      "tech_stack": [
+        "SAP Cloud ERP Private Edition auf Azure (RISE with SAP, seit 2025)",
+        "AWS (Strategic Collaboration Framework Agreement — KI und Datenanalytik)",
+        "HPE Private Cloud AI (On-Premise AI-Inferenz)",
+        "Microsoft 365 (Digital Workplace)",
+        "ServiceNow (IT Service Management)",
+        "Infosys (Digital Workplace Automation, seit Juli 2025)",
+        "T-Systems (Workplace Management, On-Site-Support, IT-Hotline)"
+      ],
+      "recent_news": [
+        "Juni 2025: AWS Strategic Collaboration Framework Agreement für KI und Datenanalytik",
+        "Juli 2025: Infosys-Partnerschaft für automatisierte Digital-Workplace-Transformation — Überschneidung mit T-Systems Workplace-Vertrag",
+        "März 2026: EUR 35 Mrd. Netto-Investitionsplan 2026-2031 angekündigt — massives Budget für Infrastruktur und Digitalisierung",
+        "2025: SAP RISE Migration auf Azure Private Edition abgeschlossen — IS-U-Ablösung als nächster Schritt"
+      ],
+      "buying_committee_dynamics": {
+        "champion": "CIO (nicht öffentlich identifiziert) — steuert IT-Strategie und Cloud-Architektur",
+        "economic_buyer": "CFO Michael Müller — Budgetfreigabe für Multi-Jahr-IT-Verträge, fokussiert auf Kosteneffizienz",
+        "influencer": "Nikk Gilbert (CISO) — definiert KRITIS/NIS2-Compliance als harte Gate-Kriterien",
+        "gatekeeper": "Procurement / Einkauf — SektVO-konformer Vergabeprozess, achtet auf Multi-Vendor-Diversifikation",
+        "blocker_risk": "AWS (KI/Analytics) und Infosys (Workplace) signalisieren Multi-Vendor-Strategie. T-Systems muss über Sovereign Cloud und Managed Hyperscaler differenzieren."
+      },
+      "deal_stall_risks": [
+        "AWS und Infosys Scope-Erosion reduziert T-Systems-Erweiterungspfade",
+        "CIO-Anonymität erschwert Champion-Building und strategische Alignment-Gespräche",
+        "EUR 35 Mrd. Investitionsplan priorisiert Renewables-Capex — IT-Budgets konkurrieren intern mit Windpark-Investments"
+      ],
+      "next_best_actions": [
+        "Multi-Cloud-FinOps-Workshop anbieten (halbtägig, kostenlos): Azure+AWS+HPE Kostenoptimierungs-Analyse — CFO Michael Müller als wirtschaftlichen Sponsor gewinnen",
+        "Nikk Gilbert (CISO) mit NIS2-Sovereign-Cloud-Briefing ansprechen — KRITIS-Compliance für Energiehandels-Workloads als Urgency-Trigger",
+        "CIO identifizieren und Erstgespräch zu Managed-Hyperscaler-Governance über Account-Team initiieren"
+      ],
+      "source_urls": [
+        "https://www.telekom.com/en/media/media-information/detail/t-systems-wins-big-deal-from-rwe-359994",
+        "https://www.sap.com/asset/dynamic/2025/08/5a2f883a-167f-0010-bca6-c68f7e60039b.html",
+        "https://www.rwe.com/en/press/rwe-ag/2026-03-12-rwe-delivers-strong-financial-performance/",
+        "https://press.aboutamazon.com/2025/6/aws-and-rwe-announce-strategic-collaboration"
+      ]
+    },
+    {
+      "name": "EnBW Energie Baden-Württemberg AG",
+      "domain": "enbw.com",
+      "industry": "Energieversorgung & Utilities (Konzern)",
+      "headquarters": "Karlsruhe, Deutschland",
+      "employees": 29000,
+      "revenue": { "value": 44400000000, "currency": "EUR", "year": 2024 },
+      "fit_score": 8,
+      "fit_rationale": "Greenfield-Opportunity ohne bestehenden T-Systems IT-Services-Vertrag. CIO-Vakanz seit Oktober 2024 bietet strategisches Timing-Fenster für neue Vendor-Beziehung. Sovereign Cloud als Alternative zu internem OpenStack (Cloud&Heat). Security Services für OT/IT-Konvergenz komplementär zu EnBW Cyber Security GmbH. EUR 50 Mrd. Investitionsprogramm bis 2030 signalisiert massiven IT-Skalierungsbedarf. DT-Konzernbeziehung (PASM PPA, Plusnet Open-Access-Glasfaser) als Gesprächsöffner.",
+      "estimated_acv": { "value": 6000000, "currency": "EUR", "basis": "Greenfield Managed Cloud + Security — Neukunden-Rahmenvertrag auf Basis EUR 50 Mrd. Investitionsprogramm" },
+      "recommended_entry_propositions": [
+        { "slug": "sovereign-cloud", "rationale": "OpenStack-kompatible Sovereign Cloud als natürliche Erweiterung zu Cloud&Heat — synergetisch statt konkurrierend positionieren", "target_stakeholder": "Neuer CIO + CISO" },
+        { "slug": "cloud-migration", "rationale": "SAP IS-U Ablösung und EnPower-Nachfolgeprojekte als Migrationskandidaten", "target_stakeholder": "CIO + CFO Thomas Kusterer" }
+      ],
+      "competitive_landscape": {
+        "primary_competitors": ["Cloud&Heat/OpenStack (interne Cloud)", "EnBW Cyber Security GmbH (internes SOC)", "meshStack (Platform Engineering)"],
+        "t_systems_differentiation": "Komplementär-Positionierung: T-Systems Sovereign Cloud (ebenfalls OpenStack-basiert) als Skalierungsschicht über Cloud&Heat. Managed Security als Ergänzung zu EnBW Cyber Security GmbH für Scope-Erweiterung. Integrator-Rolle statt Plattform-Ersatz.",
+        "displacement_risk": "Niedrig (Greenfield) — Risiko liegt eher in Nicht-Engagement als in Verdrängung. Best-of-Breed-Präferenz ist Chance für modularen Einstieg."
+      },
+      "pain_points": [
+        "CIO-Vakanz seit Oktober 2024 — IT-Strategie und Vendor-Landschaft werden neu definiert, Entscheidungsprozesse verzögert",
+        "KRITIS/NIS2-Compliance bei erweitertem Scope — eigene Cyber-Security-Tochter zeigt strategische Priorisierung aber auch interne Komplexität",
+        "Multi-Vendor-Integration: Modulare Architektur (powercloud, enersis, Cloud&Heat, meshStack) erfordert aktive Orchestrierung und erhöht Betriebskomplexität",
+        "IT-Team (~900 MA für 18.000 User) am Kapazitätslimit bei EUR 50 Mrd. Investitionsprogramm"
+      ],
+      "tech_stack": [
+        "powercloud (Sales-IT/CRM-Modernisierung — SaaS-basiert)",
+        "enersis (Digital Twins für Smart Grids — Startup-Beteiligung)",
+        "Cloud&Heat (OpenStack Green Cloud — Open-Source-Infrastruktur)",
+        "meshStack (Platform Engineering / Internal Developer Platform)",
+        "EnBW Cyber Security GmbH (Cyber Defense Center — eigene Tochter seit 2022)",
+        "SAP (ERP-Backbone, IS-U für Energievertrieb)",
+        "Microsoft 365 (Digital Workplace)"
+      ],
+      "recent_news": [
+        "Oktober 2024: CIO Martin Hölz verlässt EnBW — Nachfolgesuche läuft, strategisches Timing-Fenster",
+        "2024: Digitalisierungsprojekt EnPower abgeschlossen — 3,5 Mio. Kunden erfolgreich auf neue IT-Plattform migriert",
+        "2024-2025: EnBW Cyber Security GmbH expandiert Marktpräsenz — potenzieller Partner oder Wettbewerber",
+        "2025: EUR 50 Mrd. Investitionsprogramm bis 2030 bestätigt — Fokus auf Erneuerbare, Netze und Digitalisierung"
+      ],
+      "buying_committee_dynamics": {
+        "champion": "Neuer CIO (noch nicht öffentlich benannt) — wird IT-Strategie und Vendor-Landschaft neu definieren, kritisches Timing für First-Mover-Positionierung",
+        "economic_buyer": "CFO Thomas Kusterer — verantwortet EUR 50 Mrd. Investitionsprogramm, strenge Kostenkontrolle",
+        "influencer": "Georg Stamatelopoulos (CEO) — treibt Energiewende-Strategie, priorisiert Digitalisierung als Enabler",
+        "gatekeeper": "EnBW Cyber Security GmbH (Tochter) — eigene Security-Kompetenz kann T-Systems SOC als komplementär oder redundant bewerten",
+        "blocker_risk": "Eigene Cyber-Security-Tochter könnte externes SOC als Konkurrenz sehen. Best-of-Breed-Präferenz spricht gegen Single-Vendor-Plattform."
+      },
+      "deal_stall_risks": [
+        "CIO-Vakanz: Ohne designierten CIO fehlt Champion für strategische IT-Outsourcing-Entscheidungen",
+        "Eigene Cyber-Security-Tochter kann T-Systems SOC-Angebot als Kannibalisierung eigener Wertschöpfung blockieren",
+        "OpenStack-Commitment (Cloud&Heat) könnte Sovereign Cloud als redundant erscheinen lassen — synergetische Positionierung kritisch",
+        "Best-of-Breed-Präferenz: T-Systems muss als Integrator, nicht als Plattform-Ersatz positioniert werden"
+      ],
+      "next_best_actions": [
+        "DT-Konzernbeziehung (PASM PPA, Plusnet) als Gesprächsöffner nutzen — Intro über Telekom-Account-Team zu neuem CIO",
+        "Sovereign-Cloud-Kompatibilitäts-Workshop mit Cloud&Heat-Team anbieten — OpenStack-Synergie als Differenzierungsmerkmal",
+        "NIS2-Compliance-Briefing für EnBW Cyber Security GmbH — Partnerschaftsmodell statt Konkurrenz positionieren"
+      ],
+      "source_urls": [
+        "https://www.cio.de/article/3700994/enbw-energie-baden-wuerttemberg-ag-it-fakten-und-it-strategie.html",
+        "https://www.enbw.com/cyber-security/gesetzliche-anforderungen/nis2-richtlinie.html",
+        "https://www.enbw.com/press/enbw-annual-general-meeting-2025.html",
+        "https://www.enbw.com/unternehmen/investoren/finanzpublikationen/"
+      ]
+    },
+    {
+      "name": "Vattenfall Europe / Vattenfall Wärme Berlin AG",
+      "domain": "vattenfall.de",
+      "industry": "Energieversorgung, Wärme & Erneuerbare Energien",
+      "headquarters": "Berlin / Hamburg, Deutschland",
+      "employees": 20000,
+      "revenue": { "value": 23900000000, "currency": "EUR", "year": 2024 },
+      "fit_score": 7,
+      "fit_rationale": "Strategischer Neukunde mit komplexer Cloud-Transformation. Vattenfall betreibt Deutschlands größtes Fernwärmenetz (Berlin, 1,3 Mio. Haushalte) und investiert >2 Mrd. EUR in Dekarbonisierung. Sovereign-Cloud-Bedarf durch KRITIS-Einstufung des Wärmenetzes. Schwedischer Mutterkonzern bevorzugt EU-souveräne Lösungen. Hybrid-Cloud-Anforderung durch OT/IT-Integration (Heizkraftwerke, Wärmenetze, Smart Metering).",
+      "estimated_acv": { "value": 3500000, "currency": "EUR", "basis": "Neukunde — Einstieg über Sovereign Cloud für KRITIS-Wärmenetz, Ausbau auf Hybrid Cloud" },
+      "recommended_entry_propositions": [
+        { "slug": "sovereign-cloud", "rationale": "KRITIS-Compliance für Fernwärmenetz — EU-Datenresidenz als Konzernvorgabe aus Schweden", "target_stakeholder": "CISO + Konzern-CIO (Stockholm)" },
+        { "slug": "hybrid-cloud", "rationale": "OT/IT-Integration Heizkraftwerke mit Cloud-Layer — Air-Gap für kritische Leittechnik", "target_stakeholder": "Leiter OT + CIO Deutschland" }
+      ],
+      "competitive_landscape": {
+        "primary_competitors": ["Microsoft Azure (Konzernstandard)", "Accenture (Konzern-Beratung)", "TCS (Konzern-IT-Services)"],
+        "t_systems_differentiation": "Deutsche Datenresidenz und BSI-C5 für KRITIS-Wärmenetz — Azure-Konzernstandard kann BSI-Anforderungen für kritische OT-Workloads nicht vollständig abbilden. Telekom-Netzinfrastruktur als natürlicher Vorteil für OT-Konnektivität.",
+        "displacement_risk": "Mittel — Schwedische Konzernsteuerung kann lokale Entscheidungen übersteuern. Entry-Strategie über KRITIS-spezifische Compliance-Lücke, die Konzern-Vendors nicht abdecken."
+      },
+      "pain_points": [
+        "Berliner Kohleausstieg bis 2030 erfordert vollständige Transformation der Wärme-IT-Systeme — Legacy-Leittechnik für fossile Kraftwerke wird durch erneuerbare Assets ersetzt",
+        "KRITIS-Compliance für Fernwärmenetz Berlin (1,3 Mio. Haushalte) — Ausfallsicherheit ist kritische Daseinsvorsorge",
+        "Dual-Regulierung: Deutsche KRITIS-Anforderungen plus schwedische Konzernvorgaben zur Cybersicherheit (NIS2 SE + DE)",
+        "Smart-Metering-Integration für Fernwärme hinkt dem Strombereich hinterher — eigener Rollout-Rückstand",
+        "IT-Konsolidierung nach Restrukturierung: Separate IT-Landschaften bei Vattenfall Europe, Wärme Berlin und Windkraft"
+      ],
+      "tech_stack": [
+        "SAP (ERP-Backbone für Energiehandel und Abrechnung)",
+        "Microsoft Azure (Cloud-Plattform, Konzernstandard aus Schweden)",
+        "Siemens (Leittechnik für Heizkraftwerke und Wärmenetze)",
+        "ABB (OT-Systeme für Windkraft und Netzsteuerung)",
+        "ServiceNow (ITSM-Plattform)"
+      ],
+      "recent_news": [
+        "2025: Vattenfall beschleunigt Berliner Wärmewende — Investitionsprogramm >2 Mrd. EUR für Dekarbonisierung bis 2030",
+        "2025: Konzernweite Cloud-First-Strategie — EU-Datenresidenz als Kernvorgabe",
+        "2024: Letztes Berliner Kohlekraftwerk (Moabit) geschlossen — IT-Migration der Steuerungssysteme läuft"
+      ],
+      "buying_committee_dynamics": {
+        "champion": "CIO / IT-Leiter Deutschland — Brücke zwischen schwedischer Konzern-IT und deutscher Landesgesellschaft",
+        "economic_buyer": "CFO Deutschland — Budgetfreigabe innerhalb Konzernallokation",
+        "influencer": "Konzern-CIO (Stockholm) — definiert Cloud-Strategie und Vendor-Rahmenverträge konzernweit",
+        "gatekeeper": "CISO / Informationssicherheit — KRITIS- und NIS2-Compliance als harte Vorbedingung",
+        "blocker_risk": "Schwedische Konzernsteuerung kann lokale Vendor-Entscheidungen übersteuern. Azure-Konzernstandard begrenzt Sovereign-Cloud-Spielraum. Berliner Senat als Mitgesellschafter bei Vattenfall Wärme beeinflusst Vergabeentscheidungen."
+      },
+      "deal_stall_risks": [
+        "Konzern-Vendor-Policy: Schwedische Rahmenverträge können lokale T-Systems-Deals blockieren",
+        "Politische Stakeholder: Berliner Senat als Mitgesellschafter — Vergabeprozesse können politisiert werden",
+        "Azure-Lock-in: Microsoft-Konzernstandard begrenzt Spielraum für alternative Cloud-Anbieter"
+      ],
+      "next_best_actions": [
+        "KRITIS-spezifisches Sovereign-Cloud-Briefing für Vattenfall Wärme Berlin — BSI-Compliance-Lücke als Differenzierung zu Azure-Konzernstandard",
+        "Telekom-Account-Team in Berlin aktivieren — bestehende Telekommunikationsbeziehung als Gesprächsöffner",
+        "Hybrid-Cloud-PoV für Heizkraftwerk-OT/IT-Integration anbieten (EUR 25K) — lokaler KRITIS-Use-Case umgeht Konzern-Vendor-Policy"
+      ],
+      "source_urls": [
+        "https://www.vattenfall.de/waerme/waermewende-berlin",
+        "https://www.vattenfall.com/investors/annual-reports/"
+      ]
+    },
+    {
+      "name": "LEAG (Lausitz Energie Bergbau AG / Lausitz Energie Kraftwerke AG)",
+      "domain": "leag.de",
+      "industry": "Stromerzeugung & Energiewende-Transformation",
+      "headquarters": "Cottbus, Deutschland",
+      "employees": 7500,
+      "revenue": { "value": 5200000000, "currency": "EUR", "year": 2024 },
+      "fit_score": 7,
+      "fit_rationale": "Transformations-Opportunity: LEAG wandelt sich vom größten deutschen Braunkohle-Stromerzeuger zum Erneuerbare-Energien- und Rechenzentrumsbetreiber (GigawattFactory). Massive Cloud-Infrastruktur-Investition geplant für Hyperscale-Rechenzentren. Sovereign Cloud und Managed Hyperscaler für KRITIS-regulierte Stromerzeugung plus Rechenzentrumsbetrieb. T-Systems als Managed-Services-Partner für die komplett neue IT-Landschaft positionierbar. Strukturwandelförderung finanziert Digitalisierung.",
+      "estimated_acv": { "value": 3000000, "currency": "EUR", "basis": "Greenfield Managed Services für neue IT-Landschaft — GigawattFactory als Skalierungstreiber" },
+      "recommended_entry_propositions": [
+        { "slug": "managed-hyperscaler", "rationale": "LEAG baut Hyperscale-Rechenzentren — braucht Managed-Services-Expertise für Betrieb", "target_stakeholder": "CIO + CEO Thorsten Kramer" },
+        { "slug": "cloud-migration", "rationale": "Legacy-Braunkohle-IT auf neue Cloud-Infrastruktur migrieren — Dual-Stack-Auflösung", "target_stakeholder": "CIO + CFO" }
+      ],
+      "competitive_landscape": {
+        "primary_competitors": ["Microsoft (Rechenzentrumspartnerschaft)", "Accenture/Deloitte (Transformationsberatung)"],
+        "t_systems_differentiation": "Managed-Services-Expertise für Rechenzentrumsbetrieb + Sovereign Cloud für KRITIS-Stromerzeugung. Microsoft liefert Infrastruktur, T-Systems den Betrieb darauf. Telekom-Netzanbindung für Hyperscale-DC als natürlicher Vorteil.",
+        "displacement_risk": "Niedrig — Microsoft-Partnerschaft ist Infrastruktur, nicht Managed Services. T-Systems als komplementärer Layer positionierbar."
+      },
+      "pain_points": [
+        "Fundamentale Geschäftsmodell-Transformation: Braunkohle-Ausstieg bis 2038 bei gleichzeitigem Aufbau von 7 GW Erneuerbare und Hyperscale-Rechenzentren",
+        "IT-Landschaft für Braunkohle-Betrieb muss parallel zu neuer Renewables/DC-IT aufgebaut werden — Dual-Stack-Komplexität",
+        "Fachkräftemangel in der Lausitz: IT-Personal für Cloud und Cybersecurity in strukturschwacher Region kaum rekrutierbar",
+        "KRITIS-Compliance für Stromerzeugung plus neue Anforderungen als Rechenzentrumsbetreiber (EnWG, TKG, NIS2)",
+        "Finanzielle Unsicherheit: Kohleausstiegskompensation und Strukturwandelförderung decken Transformationskosten nur teilweise"
+      ],
+      "tech_stack": [
+        "SAP (ERP für Bergbau und Energieerzeugung)",
+        "Siemens (Kraftwerksleittechnik und Prozesssteuerung)",
+        "Proprietäre OT-Systeme für Tagebaue und Kraftwerke",
+        "Microsoft (Digital Workplace + Rechenzentrumspartnerschaft)",
+        "Planung: Hyperscale-Rechenzentren mit >1 GW IT-Kapazität (GigawattFactory)"
+      ],
+      "recent_news": [
+        "2025: GigawattFactory-Strategie vorgestellt — 7 GW Erneuerbare und Hyperscale-Rechenzentren auf ehemaligen Tagebauflächen",
+        "2025: Partnerschaft mit Microsoft für Rechenzentrumsprojekt in der Lausitz angekündigt",
+        "2024: Letzte Braunkohle-Kraftwerksblöcke gehen in Sicherheitsbereitschaft — Transformationsdruck steigt"
+      ],
+      "buying_committee_dynamics": {
+        "champion": "CIO / IT-Leiter — verantwortet Aufbau der neuen IT-Landschaft parallel zum Legacy-Betrieb",
+        "economic_buyer": "CFO — verwaltet Kohleausstiegskompensation und Strukturwandelmittel, strenge Kostenkontrolle",
+        "influencer": "Thorsten Kramer (CEO) — treibt GigawattFactory-Vision und strategische Partnerschaften",
+        "gatekeeper": "CISO — KRITIS-Compliance für Stromerzeugung und neuen Rechenzentrumsbetrieb",
+        "blocker_risk": "Microsoft-Partnerschaft für Rechenzentren könnte Cloud-Plattform-Entscheidung präjudizieren. Strukturwandelförderung kann regionale Vergabepräferenzen erzwingen."
+      },
+      "deal_stall_risks": [
+        "Microsoft-Rechenzentrumspartnerschaft: Cloud-Plattform-Entscheidung möglicherweise bereits gefallen — T-Systems als Managed-Services-Layer positionieren",
+        "Strukturwandel-Finanzierung: Fördermittel-Abhängigkeit kann Vergabezeitpläne um Monate verzögern",
+        "Unklare Rechtsform-Entwicklung: LEAG-Transformation kann Rechtsform und IT-Organisation grundlegend verändern"
+      ],
+      "next_best_actions": [
+        "CEO Thorsten Kramer über DT-Vorstandskontakt ansprechen — GigawattFactory braucht Telekom-Netzanbindung als kritische Infrastruktur",
+        "Managed-Hyperscaler-PoV für erste Rechenzentrumsphase anbieten — T-Systems als Betriebspartner für Microsoft-Infrastruktur positionieren",
+        "Strukturwandel-Fördermittel-Expertise einbringen — Beratung zur IT-Komponente der Förderanträge als kostenlosen Gesprächsöffner nutzen"
+      ],
+      "source_urls": [
+        "https://www.leag.de/de/gigawattfactory/",
+        "https://www.leag.de/de/unternehmen/"
+      ]
+    }
+  ],
+  "created": "2026-03-19"
+}

@@ -1,0 +1,16 @@
+{
+  "slug": "service-center-monitoring",
+  "product_slug": "infrastructure-services",
+  "name": "24/7 Service Center",
+  "description": "Round-the-clock infrastructure monitoring service operated from operational services Frankfurt facility with proactive alerting, incident triage, and German-language support desk staffing.",
+  "taxonomy_mapping": {
+    "dimension": 5,
+    "dimension_name": "Managed Infrastructure Services",
+    "category_id": "5.4",
+    "category_name": "Infrastructure Monitoring",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

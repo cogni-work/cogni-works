@@ -1,0 +1,58 @@
+{
+  "version": "1.0.0",
+  "company_name": "T-Systems International GmbH",
+  "company_slug": "t-systems",
+  "created": "2026-03-18T00:00:00Z",
+  "skill": "cogni-portfolio:scan",
+  "template_type": "b2b-ict",
+  "language": "de",
+  "output_file": "research/t-systems-portfolio.md",
+  "domains_analyzed": [
+    "t-systems.com",
+    "detecon.com",
+    "t-systems-onsite.de",
+    "telekom-mms.com",
+    "telekom-healthcare.com",
+    "docs.otc.t-systems.com"
+  ],
+  "delivery_units": [
+    {
+      "name": "T-Systems International GmbH",
+      "domain": "t-systems.com",
+      "type": "ict_delivery"
+    },
+    {
+      "name": "Detecon International GmbH",
+      "domain": "detecon.com",
+      "type": "consulting"
+    },
+    {
+      "name": "T-Systems on site services GmbH",
+      "domain": "t-systems-onsite.de",
+      "type": "field_services"
+    },
+    {
+      "name": "operational services GmbH & Co KG",
+      "domain": "operational-services.de",
+      "type": "ict_delivery"
+    },
+    {
+      "name": "Deutsche Telekom MMS GmbH",
+      "domain": "telekom-mms.com",
+      "type": "digital"
+    },
+    {
+      "name": "Telekom Healthcare Solutions",
+      "domain": "telekom-healthcare.com",
+      "type": "industry_vertical"
+    }
+  ],
+  "dimensions_covered": 8,
+  "categories_total": 57,
+  "status_summary": {
+    "confirmed": 56,
+    "not_offered": 1,
+    "emerging": 0,
+    "extended": 0
+  }
+}

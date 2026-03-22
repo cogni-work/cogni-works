@@ -1,9 +1,9 @@
 ---
 name: guide
 description: >-
-  Help users find the right cogni-works plugin or skill for their task.
+  Help users find the right insight-wave plugin or skill for their task.
   Use this skill whenever the user asks "which plugin should I use", "what can I do
-  with cogni-works", "find me a skill for X", "recommend a plugin", "where do I start",
+  with insight-wave", "find me a skill for X", "recommend a plugin", "where do I start",
   "help me find the right tool", "what plugins are available", "I need to do X — which
   plugin handles that?", or any question about plugin capabilities, ecosystem navigation,
   or tool selection. Also trigger when a user seems lost or unsure which plugin to use
@@ -16,7 +16,7 @@ allowed-tools:
 
 # guide: Plugin & Skill Discovery
 
-Help users navigate the cogni-works ecosystem by matching their task to the right
+Help users navigate the insight-wave ecosystem by matching their task to the right
 plugin(s). Users often know what they want to accomplish but not which of the 15+
 plugins handles it. Your job is to bridge that gap quickly and accurately.
 

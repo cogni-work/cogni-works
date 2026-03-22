@@ -1,0 +1,16 @@
+{
+  "slug": "smart-metering-infrastruktur",
+  "product_slug": "digitale-energiedienste",
+  "name": "Smart Metering Infrastruktur",
+  "description": "Rollout und Betrieb intelligenter Messsysteme (iMSys) mit Smart Meter Gateway, Fernauslesung ueber WAN-Anbindung und automatisierter Messdatenerfassung fuer Strom-, Gas- und Fernwaerme-Zaehler im Versorgungsgebiet.",
+  "category": "metering",
+  "taxonomy_mapping": {
+    "dimension": 1,
+    "dimension_name": "Connectivity Services",
+    "category_id": "1.4",
+    "category_name": "5G & IoT Connectivity",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "created": "2026-03-18"
+}

@@ -1,0 +1,13 @@
+{
+  "slug": "sap-cloud-migration",
+  "name": "SAP Cloud Migration",
+  "description": "SAP S/4HANA cloud migration and transformation with certified packages",
+  "product_slug": "t-systems-cloud",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 4,
+    "category_id": "4.5",
+    "category_name": "Cloud Migration Services"
+  },
+  "source_file": "https://www.t-systems.com/us/en/application-services/solutions/sap-solutions/digital-transformation-with-sap"
+}

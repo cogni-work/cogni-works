@@ -1,0 +1,13 @@
+{
+  "slug": "cloud-connect",
+  "name": "Cloud Connect Services",
+  "description": "Direct enterprise connections to hyperscaler clouds including AWS, Azure, and Google Cloud Platform",
+  "product_slug": "t-systems-connectivity",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 1,
+    "category_id": "1.3",
+    "category_name": "Internet & Cloud Connect"
+  },
+  "source_file": "https://www.t-systems.com/us/en/cloud-services"
+}

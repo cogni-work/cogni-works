@@ -1,0 +1,7 @@
+{
+  "slug": "brand-voice-governor",
+  "product_slug": "content-platform",
+  "name": "Brand-Voice-Governor",
+  "description": "Regelwerk-Engine, die Ton, Terminologie und Stilparameter der Markensprache in konfigurierbaren Profilen speichert und bei der Content-Erstellung als Validierungsschicht durchsetzt.",
+  "readiness": "ga"
+}

@@ -1,22 +1,22 @@
-# cogni-works Marketplace Terms
+# insight-wave Marketplace Terms
 
-These terms govern the submission and listing of third-party plugins on the cogni-works marketplace.
+These terms govern the submission and listing of third-party plugins on the insight-wave marketplace.
 
 ## 1. Author Ownership
 
-**You retain full copyright and all intellectual property rights to your plugin.** Publishing a plugin on the cogni-works marketplace does not transfer any ownership, copyright, or licensing rights to cogni-works or its maintainers.
+**You retain full copyright and all intellectual property rights to your plugin.** Publishing a plugin on the insight-wave marketplace does not transfer any ownership, copyright, or licensing rights to insight-wave or its maintainers.
 
 ## 2. License Requirement
 
-All plugins listed on the cogni-works marketplace must be licensed under the **GNU Affero General Public License v3.0 (AGPL-3.0)**. You must include a copy of the AGPL-3.0 license in your plugin repository.
+All plugins listed on the insight-wave marketplace must be licensed under the **GNU Affero General Public License v3.0 (AGPL-3.0)**. You must include a copy of the AGPL-3.0 license in your plugin repository.
 
 ## 3. Author's Dual-Licensing Rights
 
-You explicitly retain the right to offer your plugin under additional or alternative licenses, including commercial licenses. The AGPL-3.0 requirement applies only to the version listed on the cogni-works marketplace. You are free to sell commercial licenses of your plugin independently.
+You explicitly retain the right to offer your plugin under additional or alternative licenses, including commercial licenses. The AGPL-3.0 requirement applies only to the version listed on the insight-wave marketplace. You are free to sell commercial licenses of your plugin independently.
 
 ## 4. No Exclusivity
 
-You may distribute your plugin through any other channels, marketplaces, or platforms. Listing on the cogni-works marketplace does not create any exclusivity obligation.
+You may distribute your plugin through any other channels, marketplaces, or platforms. Listing on the insight-wave marketplace does not create any exclusivity obligation.
 
 ## 5. Quality Standards
 
@@ -30,7 +30,7 @@ Plugins listed on the marketplace must meet the following minimum standards:
 
 ## 6. Listing and Delisting
 
-cogni-works reserves the right to remove or delist any plugin from the marketplace at its sole discretion, including but not limited to plugins that:
+insight-wave reserves the right to remove or delist any plugin from the marketplace at its sole discretion, including but not limited to plugins that:
 
 - Violate these terms
 - Contain malicious code or security vulnerabilities
@@ -42,15 +42,15 @@ The author will be notified before delisting when practicable and given an oppor
 
 ## 7. Contributions to Community Plugins
 
-Pull requests and contributions to community plugins are **not** governed by the cogni-works CLA. Plugin authors are encouraged to establish their own contribution terms or CLA for their plugin. See [community-plugin-contributing-template.md](community-plugin-contributing-template.md) for a template you can adapt.
+Pull requests and contributions to community plugins are **not** governed by the insight-wave CLA. Plugin authors are encouraged to establish their own contribution terms or CLA for their plugin. See [community-plugin-contributing-template.md](community-plugin-contributing-template.md) for a template you can adapt.
 
 ## 8. Liability
 
-Plugins are provided "as is". cogni-works does not guarantee the quality, safety, or functionality of third-party plugins. Users install community plugins at their own risk.
+Plugins are provided "as is". insight-wave does not guarantee the quality, safety, or functionality of third-party plugins. Users install community plugins at their own risk.
 
 ## 9. Changes to These Terms
 
-cogni-works may update these terms from time to time. Plugin authors will be notified of material changes. Continued listing of your plugin after notification constitutes acceptance of the updated terms.
+insight-wave may update these terms from time to time. Plugin authors will be notified of material changes. Continued listing of your plugin after notification constitutes acceptance of the updated terms.
 
 ---
 

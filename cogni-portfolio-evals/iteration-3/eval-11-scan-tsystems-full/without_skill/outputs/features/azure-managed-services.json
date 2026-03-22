@@ -1,0 +1,13 @@
+{
+  "slug": "azure-managed-services",
+  "name": "Azure Managed Services",
+  "description": "Managed Azure hosting and cloud operations for enterprise workloads",
+  "product_slug": "t-systems-cloud",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 4,
+    "category_id": "4.1",
+    "category_name": "Managed Hyperscaler Services"
+  },
+  "source_file": "https://www.t-systems.com/us/en/cloud-services"
+}

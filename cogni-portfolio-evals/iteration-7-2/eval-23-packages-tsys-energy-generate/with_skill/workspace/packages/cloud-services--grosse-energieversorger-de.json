@@ -1,0 +1,84 @@
+{
+  "slug": "cloud-services--grosse-energieversorger-de",
+  "product_slug": "cloud-services",
+  "market_slug": "grosse-energieversorger-de",
+  "package_type": "project",
+  "name": "Cloud Services for Energy Utilities",
+  "positioning": "KRITIS-compliant cloud transformation in tiered engagements",
+  "tiers": [
+    {
+      "tier": "foundation",
+      "name": "Foundation",
+      "included_solutions": [
+        "sovereign-cloud--grosse-energieversorger-de",
+        "cloud-migration--grosse-energieversorger-de"
+      ],
+      "solution_sizes": {
+        "sovereign-cloud--grosse-energieversorger-de": "small",
+        "cloud-migration--grosse-energieversorger-de": "small"
+      },
+      "price": 195000,
+      "currency": "EUR",
+      "scope": "Single regulated workload domain with BSI C5 readiness plus up to 50 workloads migrated, 14 weeks parallel delivery.",
+      "exclusions": [
+        "Application refactoring or modernization beyond lift-and-shift",
+        "Third-party license costs (SAP, Oracle, etc.)",
+        "Ongoing compliance monitoring after handover",
+        "OT/SCADA system integration",
+        "Hyperscaler managed operations"
+      ]
+    },
+    {
+      "tier": "professional",
+      "name": "Professional",
+      "included_solutions": [
+        "sovereign-cloud--grosse-energieversorger-de",
+        "cloud-migration--grosse-energieversorger-de",
+        "hybrid-cloud--grosse-energieversorger-de"
+      ],
+      "solution_sizes": {
+        "sovereign-cloud--grosse-energieversorger-de": "medium",
+        "cloud-migration--grosse-energieversorger-de": "medium",
+        "hybrid-cloud--grosse-energieversorger-de": "small"
+      },
+      "price": 520000,
+      "currency": "EUR",
+      "scope": "Adds single-site OT/IT hybrid deployment with air-gap SCADA architecture on top of multi-domain sovereign cloud and 200-workload SAP IS-U migration, 20 weeks with parallel execution.",
+      "exclusions": [
+        "Application refactoring beyond lift-and-shift",
+        "Third-party license costs",
+        "Multi-site hybrid replication",
+        "24/7 managed operations",
+        "Hyperscaler landing zone management"
+      ]
+    },
+    {
+      "tier": "enterprise",
+      "name": "Enterprise",
+      "included_solutions": [
+        "sovereign-cloud--grosse-energieversorger-de",
+        "cloud-migration--grosse-energieversorger-de",
+        "hybrid-cloud--grosse-energieversorger-de",
+        "managed-hyperscaler--grosse-energieversorger-de"
+      ],
+      "solution_sizes": {
+        "sovereign-cloud--grosse-energieversorger-de": "large",
+        "cloud-migration--grosse-energieversorger-de": "large",
+        "hybrid-cloud--grosse-energieversorger-de": "medium",
+        "managed-hyperscaler--grosse-energieversorger-de": "medium"
+      },
+      "price": 1295000,
+      "currency": "EUR",
+      "scope": "Adds dual-hyperscaler managed operations (up to 300 instances, 24/7 SLA) and enterprise-wide OT integration on top of full-estate 500+ workload migration with BaFin audit support, 30 weeks with parallel workstreams (project: EUR 1,100,000 one-time; managed operations onboarding: EUR 195,000 recurring-transition).",
+      "exclusions": [
+        "Application modernization or re-platforming",
+        "Third-party license costs",
+        "On-site travel and expenses beyond 10 days",
+        "Custom integrations beyond standard API connectors",
+        "Third hyperscaler onboarding (GCP) beyond AWS and Azure"
+      ]
+    }
+  ],
+  "bundle_savings_pct": 15,
+  "created": "2026-03-18"
+}

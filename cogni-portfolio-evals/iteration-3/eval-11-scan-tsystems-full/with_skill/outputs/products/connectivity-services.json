@@ -1,0 +1,9 @@
+{
+  "slug": "connectivity-services",
+  "name": "Connectivity Services",
+  "description": "Network infrastructure and connectivity offerings including WAN, SASE, cloud connect, 5G campus networks, voice, LAN/WLAN, and managed network services.",
+  "revenue_model": "subscription",
+  "maturity": "growth",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

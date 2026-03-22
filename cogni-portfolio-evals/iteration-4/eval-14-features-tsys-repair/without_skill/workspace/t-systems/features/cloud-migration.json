@@ -1,0 +1,12 @@
+{
+  "slug": "cloud-migration",
+  "product_slug": "cloud-services",
+  "name": "Cloud Migration Services",
+  "description": "Structured cloud migration program with assessment framework, modular CMF methodology (Assess-Mobilize-Modernize), 6R migration strategies, database migration services, and sprint-based implementation.",
+  "taxonomy_mapping": {
+    "dimension": 4,
+    "category_id": "4.5",
+    "category_name": "Cloud Migration Services"
+  },
+  "readiness": "ga"
+}

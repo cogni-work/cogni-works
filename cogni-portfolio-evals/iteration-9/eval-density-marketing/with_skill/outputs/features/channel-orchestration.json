@@ -1,0 +1,14 @@
+{
+  "slug": "channel-orchestration",
+  "product_slug": "content-platform",
+  "name": "Kanalsteuerung",
+  "description": "Kanalübergreifende Distributionslogik, die Content-Assets formatspezifisch für Web, Social, E-Mail und Paid Media aufbereitet, Ausspielzeitpunkte je Kanal über einen gemeinsamen Redaktionskalender koordiniert und Kanalbudgets gegen definierte Obergrenzen steuert.",
+  "category": "distribution",
+  "taxonomy_mapping": {
+    "dimension": "Application",
+    "category_id": "6.3",
+    "category_name": "Marketing Automation"
+  },
+  "readiness": "ga",
+  "created": "2026-03-21"
+}

@@ -1,0 +1,13 @@
+{
+  "slug": "bechtle-low-code",
+  "name": "Bechtle Low-Code Platform Services",
+  "description": "Low-code platform services including EUR 450M public sector framework agreement. Appian partnership for low-code and ServiceNow no-code customization capabilities.",
+  "product_slug": "bechtle-applications",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 6,
+    "category_id": "6.5",
+    "category_name": "Low-Code/No-Code Platforms"
+  },
+  "source_file": "https://appian.com/partners/partner-program/all-partners/bechtle-ag"
+}

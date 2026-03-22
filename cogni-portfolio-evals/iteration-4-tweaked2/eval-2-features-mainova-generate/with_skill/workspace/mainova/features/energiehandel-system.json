@@ -1,0 +1,16 @@
+{
+  "slug": "energiehandel-system",
+  "product_slug": "digitale-energiedienste",
+  "name": "Energiehandel-System",
+  "description": "Integrierte Handelsplattform fuer den Energiegrosshandel, die Spotmarkt- und Termingeschaefte abwickelt, Portfoliopositionen in Echtzeit aggregiert und automatisierte Fahrplanmeldungen an Uebertragungsnetzbetreiber gemaess MaBiS-Vorgaben generiert.",
+  "category": "enterprise-platforms",
+  "taxonomy_mapping": {
+    "dimension": 6,
+    "dimension_name": "Application Services",
+    "category_id": "6.3",
+    "category_name": "Enterprise Platform Services",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "created": "2026-03-18"
+}

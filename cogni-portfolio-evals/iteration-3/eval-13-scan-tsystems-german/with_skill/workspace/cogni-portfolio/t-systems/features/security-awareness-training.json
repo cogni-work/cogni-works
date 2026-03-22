@@ -1,0 +1,16 @@
+{
+  "slug": "security-awareness-training",
+  "product_slug": "security-services",
+  "name": "Security Awareness Training",
+  "description": "Phishing-Simulation und Sicherheitsschulungen",
+  "taxonomy_mapping": {
+    "dimension": 2,
+    "dimension_name": "Security Services",
+    "category_id": "2.8",
+    "category_name": "Security Awareness",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

@@ -1,0 +1,265 @@
+{
+  "portfolio_slug": "t-systems",
+  "market_slug": "grosse-energieversorger-de",
+  "review_date": "2026-03-18",
+  "solutions_reviewed": 3,
+  "solution_slugs": [
+    "cloud-migration--grosse-energieversorger-de",
+    "sap-on-cloud--grosse-energieversorger-de",
+    "sovereign-cloud--grosse-energieversorger-de"
+  ],
+  "aggregate_scores": {
+    "cloud-migration--grosse-energieversorger-de": {
+      "overall_score": 86,
+      "verdict": "accept",
+      "reviewer": 89,
+      "provider_sa": 85,
+      "client_sa": 85
+    },
+    "sap-on-cloud--grosse-energieversorger-de": {
+      "overall_score": 79,
+      "verdict": "revise",
+      "reviewer": 82,
+      "provider_sa": 78,
+      "client_sa": 77
+    },
+    "sovereign-cloud--grosse-energieversorger-de": {
+      "overall_score": 78,
+      "verdict": "revise",
+      "reviewer": 80,
+      "provider_sa": 79,
+      "client_sa": 76
+    }
+  },
+  "portfolio_consistency_checks": {
+    "exit_clause_inconsistency": {
+      "status": "fail",
+      "finding": "All three solutions have exit clauses, but terms are inconsistent across solutions targeting the same procurement team.",
+      "details": [
+        {
+          "dimension": "notice_period",
+          "cloud_migration": "12 Monate",
+          "sap_on_cloud": "6 Monate",
+          "sovereign_cloud": "12 Monate",
+          "assessment": "SAP solution uses 6-month notice while the other two use 12-month. For managed services this may be intentional (shorter lock-in lowers entry barrier), but should be explicitly justified. The same Einkauf team reviewing all three will question the discrepancy."
+        },
+        {
+          "dimension": "transition_support",
+          "cloud_migration": "90 Tage",
+          "sap_on_cloud": "120 Tage",
+          "sovereign_cloud": "90 Tage",
+          "assessment": "SAP solution offers 120 days vs. 90 days for the other two. The longer transition for SAP makes operational sense (SAP migrations are complex), but the inconsistency should be documented as intentional, not accidental."
+        },
+        {
+          "dimension": "exit_cost_cap",
+          "cloud_migration": "max. 5% Gesamtvolumen",
+          "sap_on_cloud": "max. 8% Jahresvolumen",
+          "sovereign_cloud": "max. 5% Gesamtvolumen",
+          "assessment": "CRITICAL: Different cap calculation basis. Cloud-migration and sovereign-cloud cap at 5% of total project volume. SAP caps at 8% of annual volume. These are fundamentally different financial commitments and the procurement team will immediately notice this. For a 1.4M EUR SAP Large engagement over 3 years, 8% annual volume means potentially higher exit costs than 5% of total. Standardize the cap calculation method."
+        },
+        {
+          "dimension": "data_export",
+          "cloud_migration": "Daten-Repatriierung innerhalb 90 Tagen",
+          "sap_on_cloud": "SAP-Datenexport in Standardformaten (SAP-Backup, SQL)",
+          "sovereign_cloud": "Datenexport in Standardformaten, IaC-Portabilität",
+          "assessment": "Cloud-migration specifies a timeline (90 days) but not format. SAP specifies format but not timeline. Sovereign-cloud specifies format + IaC portability but not timeline. Each is incomplete in different ways. Standardize to include both format and timeline for all three."
+        }
+      ],
+      "recommendation": "Create a standard exit clause template for the grosse-energieversorger-de market with consistent notice period, transition support duration, cost cap calculation method, and data export terms. Allow solution-specific variations (e.g., longer SAP transition) only when explicitly justified in assumptions."
+    },
+    "compliance_framing_inconsistency": {
+      "status": "warn",
+      "finding": "Compliance framing is present in all three solutions but at different depths. For KRITIS-regulated energy utilities, this inconsistency creates a fragmented regulatory story.",
+      "details": [
+        {
+          "dimension": "bsi_c5",
+          "cloud_migration": "Mentioned in phases (KRITIS-konforme Landing Zone, BSI-Audit-Trail) and assumptions (BSI-C5-zertifizierte Rechenzentren). No explicit compliance deliverables listed.",
+          "sap_on_cloud": "Strong: explicit compliance deliverables (BSI-C5-Compliance-Nachweis, NIS2-Readiness-Assessment, quarterly audit report). Best of the three.",
+          "sovereign_cloud": "Strongest: full compliance deliverables (BSI-C5-Attestierungsdokumentation, NIS2-Readiness-Assessment, quarterly compliance report, audit trail). Compliance is the core value proposition.",
+          "assessment": "Cloud-migration references BSI-C5 but doesn't list explicit compliance deliverables. For a KRITIS migration, the BSI auditor will ask what the migration produced in terms of compliance evidence. Add BSI-C5 compliance deliverables to cloud-migration."
+        },
+        {
+          "dimension": "nis2",
+          "cloud_migration": "NIS2 mentioned in Phase 1 gap analysis only — no NIS2 deliverable in output.",
+          "sap_on_cloud": "NIS2-Readiness-Assessment listed as compliance deliverable.",
+          "sovereign_cloud": "NIS2-Readiness-Assessment listed as compliance deliverable.",
+          "assessment": "Cloud-migration assesses NIS2 gaps in discovery but doesn't produce a NIS2 deliverable. Given NIS2 registration deadline of April 2026, every solution for this market should produce NIS2-relevant artifacts."
+        },
+        {
+          "dimension": "kritis_dachg",
+          "cloud_migration": "Referenced in data residency assumption (DSGVO + KRITIS-DachG).",
+          "sap_on_cloud": "Not explicitly mentioned.",
+          "sovereign_cloud": "Referenced in data residency assumption (DSGVO + KRITIS-DachG).",
+          "assessment": "SAP solution doesn't mention KRITIS-DachG despite SAP IS-U being a KRITIS-relevant system. Add KRITIS-DachG reference to SAP solution's data residency assumption."
+        }
+      ],
+      "recommendation": "Establish a compliance baseline for all solutions targeting grosse-energieversorger-de: (1) BSI-C5 compliance deliverables in every solution, (2) NIS2 readiness artifact in every solution, (3) KRITIS-DachG reference in every data residency assumption. The sovereign-cloud solution sets the standard — bring cloud-migration and SAP up to match."
+    },
+    "assumption_drift": {
+      "status": "warn",
+      "finding": "Role rates are consistent (1,800/1,200/1,400 EUR) across all three solutions. Delivery model (remote with on-site for critical phases) is consistent. However, role coverage differs without justification.",
+      "details": [
+        {
+          "dimension": "role_rates",
+          "status": "pass",
+          "assessment": "All three solutions use identical rates: SA 1,800, IE 1,200, PM 1,400 EUR/day. Consistent with portfolio.json delivery_defaults."
+        },
+        {
+          "dimension": "delivery_model",
+          "status": "pass",
+          "assessment": "All three specify remote delivery with on-site for critical phases (KRITIS phases for cloud-migration, cutover for SAP, BSI-audit phases for sovereign-cloud). Consistent and appropriate."
+        },
+        {
+          "dimension": "role_coverage",
+          "status": "fail",
+          "assessment": "All three solutions use only three generic roles (SA, IE, PM). Cloud-migration needs a Cloud Architect for Landing Zone design. SAP needs a SAP Basis Administrator for system migration and lifecycle management. Sovereign-cloud needs a Compliance/Security Specialist for BSI-C5 attestation work. The identical role roster across three fundamentally different engagements signals template-based cost modeling rather than engagement-specific staffing."
+        },
+        {
+          "dimension": "client_side_effort",
+          "status": "warn",
+          "assessment": "Cloud-migration: 1.0 FTE EA + 0.5 FTE Test Manager. SAP: 0.5 FTE SAP Basis + 1.0 FTE business contact. Sovereign: 0.5 FTE CISO team + 0.5 FTE app owner. Client effort is differentiated per solution, which is good. But none of them aggregate the total client commitment across all three solutions if bought together — a buyer running all three simultaneously needs 1.0+0.5+0.5+1.0+0.5+0.5 = 4.0 FTEs of internal capacity. Given the market's pain point about Fachkräftemangel, this aggregate should be flagged."
+        }
+      ],
+      "recommendation": "Add specialist roles to each solution's cost model that reflect the actual expertise needed: Cloud Architect for cloud-migration, SAP Basis Administrator for SAP, Compliance Specialist for sovereign-cloud. Also add a portfolio-level note about aggregate client-side effort if a buyer purchases multiple solutions simultaneously."
+    },
+    "ot_boundary_inconsistency": {
+      "status": "warn",
+      "finding": "OT/IT boundary is defined in two of three solutions but with slightly different framing. SAP solution omits it entirely despite IS-U having SCADA interface dependencies.",
+      "details": [
+        {
+          "dimension": "ot_boundary_definition",
+          "cloud_migration": "Explicit: 'SCADA- und Netzleitsysteme bleiben on-premises — nur IT-seitige Schnittstellen werden migriert. Custom-OT-Integrationen separat beauftragt.'",
+          "sap_on_cloud": "MISSING. No OT/IT boundary defined despite IS-U having interfaces to SCADA systems (metering data, grid operations). The proposition mentions IS-U and SCADA-Schnittstellen in the cloud-migration context but the SAP solution doesn't address where OT integration stops.",
+          "sovereign_cloud": "Explicit: 'SCADA- und Netzleitsysteme sind nicht in-scope; nur IT-seitige KRITIS-Anwendungen (Billing, Messdaten, ERP-Schnittstellen) werden auf Sovereign Cloud migriert.'",
+          "assessment": "Cloud-migration and sovereign-cloud have consistent OT boundary definitions (SCADA stays on-premises, only IT-side interfaces in scope). SAP solution is silent on this. The OT-Leiter (who has veto power per the buying committee) will flag this gap immediately."
+        },
+        {
+          "dimension": "ot_scope_language",
+          "cloud_migration": "Uses 'IT-seitige Schnittstellen' — generic but clear.",
+          "sovereign_cloud": "More specific: 'IT-seitige KRITIS-Anwendungen (Billing, Messdaten, ERP-Schnittstellen)' — lists specific systems.",
+          "assessment": "Sovereign-cloud is more specific about which IT-side systems are in scope. Cloud-migration should match this specificity. Both are acceptable but the sovereign-cloud phrasing is stronger."
+        }
+      ],
+      "recommendation": "Add OT/IT boundary assumption to SAP solution matching the cloud-migration and sovereign-cloud pattern. Use sovereign-cloud's more specific phrasing as the template: list the specific IT-side systems in scope (IS-U, S/4HANA, BW) and explicitly exclude SCADA/Netzleitsysteme. This is critical for the OT-Leiter stakeholder."
+    }
+  },
+  "margin_health": {
+    "summary": "All solutions meet the 30% target margin on standard tiers. PoV margins vary: cloud-migration runs high (31.1%), SAP is below target (28.4%), sovereign is below target (27.7%).",
+    "by_solution": {
+      "cloud-migration--grosse-energieversorger-de": {
+        "pov_margin": 31.1,
+        "small_margin": 37.4,
+        "medium_margin": 38.2,
+        "large_margin": 35.6,
+        "assessment": "Healthy margins across all tiers. PoV at 31.1% is higher than typical land-and-expand — could be reduced to 20-25% to lower buyer entry barrier."
+      },
+      "sap-on-cloud--grosse-energieversorger-de": {
+        "pov_margin": 28.4,
+        "small_margin": 33.8,
+        "medium_margin": 31.5,
+        "large_margin": 32.9,
+        "assessment": "Standard tiers meet target margin (30%). PoV at 28.4% is acceptable for land-and-expand. Adding SAP Basis Administrator role will compress margins — prices may need upward adjustment."
+      },
+      "sovereign-cloud--grosse-energieversorger-de": {
+        "pov_margin": 27.7,
+        "small_margin": 31.6,
+        "medium_margin": 31.8,
+        "large_margin": 30.9,
+        "assessment": "Standard tiers barely meet target margin (30.9-31.8%). Adding Compliance Specialist role will compress margins below target — prices need upward adjustment or effort reallocation."
+      }
+    },
+    "portfolio_risk": "Sovereign-cloud and SAP solutions operate close to the margin floor. Adding the recommended specialist roles (which are critical for delivery credibility) will push margins below the 30% target unless prices are adjusted. This is a deliberate trade-off: pay for the right expertise and charge accordingly, or keep generic roles and risk delivery failure."
+  },
+  "template_detection": {
+    "status": "warn",
+    "finding": "The three solutions share the same three-role cost model structure (SA/IE/PM at identical rates) despite covering fundamentally different delivery domains (infrastructure migration, SAP managed services, compliance/sovereign cloud). Phase structures are well-differentiated — each solution has domain-specific phases. But the staffing model is templated.",
+    "details": [
+      "Phase architecture: PASS — each solution has domain-adapted phases (CMF sprints for migration, IS-U validation for SAP, BSI-C5 audit for sovereign)",
+      "Pricing differentiation: PASS — price ranges reflect different engagement complexities (migration 180K-2.8M, SAP 95K-1.4M, sovereign 75K-1.1M)",
+      "Staffing model: FAIL — identical three roles across all solutions. Real cloud migration teams include Cloud Architects. Real SAP transitions need SAP Basis Admins. Real sovereign cloud deployments need Compliance Specialists. The generic role model undermines the domain-specific phase design."
+    ],
+    "recommendation": "Add specialist roles per solution. This is the single most impactful improvement across the portfolio — it simultaneously fixes delivery credibility (Provider SA), operational detail (Client SA), and cost model accuracy (margin calculations). Phase architecture is strong; let the staffing model match the phase specificity."
+  },
+  "pov_quality_sweep": {
+    "status": "warn",
+    "finding": "All three PoVs are assessment-focused — they produce reports and go/no-go decisions but don't demonstrate operational capability. For a buyer evaluating a platform vendor, this is a significant gap.",
+    "details": {
+      "cloud_migration": {
+        "pov_type": "Assessment (30 workloads, Cloud-Readiness-Matrix, KRITIS-Gap, TCO comparison)",
+        "proves": "T-Systems can analyze and plan a migration",
+        "doesnt_prove": "T-Systems can execute a migration reliably",
+        "go_nogo": "Clear: Go/No-Go after 6 weeks based on assessment results",
+        "assessment": "Acceptable for migration — the assessment itself is a valuable deliverable and the CMF approach can be validated on paper. But adding a small pilot migration (5-10 workloads) would strengthen the prove-value proposition."
+      },
+      "sap_on_cloud": {
+        "pov_type": "Assessment (one IS-U system, SLA-Gap, Hochlast-Profiling, TCO projection)",
+        "proves": "T-Systems understands the SAP landscape and can project costs",
+        "doesnt_prove": "T-Systems can actually run SAP at the required SLA (99.95%)",
+        "go_nogo": "Clear: Go/No-Go after 4 weeks based on analysis",
+        "assessment": "Weakest PoV. For a managed services transition, the buyer needs proof of operational capability, not analytical capability. A 2-week managed operations trial on a non-production IS-U system would close this gap."
+      },
+      "sovereign_cloud": {
+        "pov_type": "Assessment (5 KRITIS apps, BSI-C5-Gap, NIS2-Readiness, feasibility proof)",
+        "proves": "T-Systems can assess compliance gaps and design a sovereign architecture",
+        "doesnt_prove": "The sovereign cloud platform actually delivers the compliance posture claimed",
+        "go_nogo": "Clear: Go/No-Go after 4 weeks based on compliance assessment",
+        "assessment": "Compliance assessment is valuable but a PoV that includes provisioning a small sovereign environment with 1-2 workloads would demonstrate both compliance AND operational capability."
+      }
+    },
+    "recommendation": "Differentiate PoV approaches by engagement type. Cloud-migration PoV (assessment) is acceptable. SAP PoV should include a managed operations trial to prove SLA capability. Sovereign PoV should include a small environment provisioning to prove compliance posture in practice, not just on paper."
+  },
+  "upstream_diagnosis": {
+    "propositions": "All three propositions are strong — clear IS/DOES/MEANS with energy-sector-specific language, SCADA references, IS-U specifics, and KRITIS compliance framing. No upstream weakness in proposition quality.",
+    "features": "Features are descriptive but lack revenue_model and readiness fields. The product (cloud-services) is also minimal — no pricing_tier, maturity, or revenue_model. This forces the solution designer to infer commercial parameters rather than derive them from structured data.",
+    "market": "Market definition is excellent — detailed segmentation, pain points (including Fachkräftemangel), buying committee with specific focus areas, TAM/SAM/SOM. This is the strongest upstream entity.",
+    "gap": "Product and feature entities need enrichment with revenue_model, pricing_tier, and maturity fields to properly ground solution type routing and pricing calibration."
+  },
+  "portfolio_level_recommendations": {
+    "priority_1_specialist_roles": {
+      "description": "Add domain-specific specialist roles to each solution's cost model. This is the single highest-impact improvement across the portfolio.",
+      "actions": [
+        "cloud-migration: Add Cloud Architect role (1,600-2,000 EUR/day) for Landing Zone design and container modernization phases",
+        "sap-on-cloud: Add SAP Basis Administrator role (1,500-1,800 EUR/day) for system migration, lifecycle management, and kernel patching",
+        "sovereign-cloud: Add Compliance/Security Specialist role (1,600-2,000 EUR/day) for BSI-C5 attestation, NIS2 mapping, and audit preparation"
+      ],
+      "impact": "Fixes delivery credibility (Provider SA), operational detail (Client SA), and cost model accuracy. Will compress margins — prices should be adjusted upward to maintain 30% target."
+    },
+    "priority_2_exit_clause_standardization": {
+      "description": "Standardize exit clause terms across all solutions for this market. The same procurement team (Einkauf) will review all three.",
+      "actions": [
+        "Create exit clause template: standard notice period, transition support duration, cost cap calculation method, data export format + timeline",
+        "Allow solution-specific variations only when explicitly justified (e.g., longer SAP transition for operational complexity)",
+        "Ensure cap calculation uses the same basis (total volume vs. annual volume) across all solutions"
+      ],
+      "impact": "Eliminates the most visible inconsistency a procurement team would catch. The different cap bases (5% total vs. 8% annual) are a red flag."
+    },
+    "priority_3_compliance_baseline": {
+      "description": "Establish compliance deliverable baseline for all solutions targeting KRITIS-regulated energy utilities.",
+      "actions": [
+        "Every solution produces BSI-C5 compliance artifacts (at minimum a compliance mapping document)",
+        "Every solution includes a NIS2 readiness component (at minimum a NIS2 impact assessment)",
+        "Every solution references KRITIS-DachG in data residency assumptions",
+        "Sovereign-cloud solution sets the standard — bring cloud-migration and SAP up to match"
+      ],
+      "impact": "Creates a coherent regulatory story across the portfolio. The CISO (who has independent veto power) sees consistent compliance rigor regardless of which solution they're evaluating."
+    },
+    "priority_4_ot_boundary_standardization": {
+      "description": "Add OT/IT boundary definition to SAP solution and standardize language across all three solutions.",
+      "actions": [
+        "Add OT/IT boundary assumption to SAP solution: 'SCADA- und Netzleitsysteme sind nicht in-scope; nur IT-seitige SAP-Systeme (IS-U, S/4HANA, BW) und deren Standard-API-Schnittstellen werden migriert.'",
+        "Use sovereign-cloud's more specific phrasing as the template for all solutions",
+        "Ensure OT-Leiter stakeholder can see a consistent boundary definition across all three solutions"
+      ],
+      "impact": "Addresses the OT-Leiter's primary concern (Netzstabilität, SCADA-Sicherheit, Zero-Downtime). Missing OT boundary in the SAP solution is a veto risk."
+    },
+    "priority_5_pov_differentiation": {
+      "description": "Differentiate PoV approaches by engagement type instead of using assessment-only for all three.",
+      "actions": [
+        "cloud-migration: Keep assessment PoV (acceptable for migration planning) or optionally add a small pilot migration (5-10 workloads)",
+        "sap-on-cloud: Extend PoV to include 2-week managed operations trial on non-production IS-U system — proves operational capability, not just diagnostic skill",
+        "sovereign-cloud: Extend PoV to include provisioning a small sovereign environment with 1-2 workloads — proves compliance posture in practice"
+      ],
+      "impact": "Strengthens the PoV-to-Small conversion path. Assessment-only PoVs create a trust gap between 'they analyzed well' and 'they can deliver' — operational proof closes that gap."
+    }
+  }
+}

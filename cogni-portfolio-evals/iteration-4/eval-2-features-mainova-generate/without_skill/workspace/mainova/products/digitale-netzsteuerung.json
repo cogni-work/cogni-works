@@ -1,0 +1,13 @@
+{
+  "slug": "digitale-netzsteuerung",
+  "name": "Digitale Netzsteuerung",
+  "description": "IT-gestuetzte Betriebsfuehrung und Ueberwachung der Strom-, Gas- und Fernwaermenetze. Umfasst SCADA-Leittechnik, Netzinformationssysteme, Stoerungsmanagement und regulatorisches Einspeisemanagement fuer kritische Infrastruktur.",
+  "features": [
+    "scada-netzleittechnik",
+    "geo-netzinformationssystem",
+    "stoerungsmanagement",
+    "einspeisemanagement",
+    "netzplanung-simulation",
+    "ot-sicherheit"
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "slug": "multi-cloud-finops",
+  "product_slug": "cloud-services",
+  "name": "Multi-Cloud & FinOps Management",
+  "description": "Centralized multi-cloud governance via Multi Cloud Connectivity Platform and Future Cloud Infrastructure, with FinOps maturity assessment, cost management, and compliance controls for BSI C5 and GDPR.",
+  "taxonomy_mapping": {
+    "dimension": 4,
+    "category_id": "4.2",
+    "category_name": "Multi-Cloud Management"
+  },
+  "readiness": "ga"
+}

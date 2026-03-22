@@ -1,0 +1,186 @@
+{
+  "solution_slug": "cloud-migration--grosse-energieversorger-de",
+  "solution_type": "project",
+  "overall": "warn",
+  "overall_score": 78,
+  "stakeholder_reviews": [
+    {
+      "perspective": "reviewer",
+      "score": 82,
+      "overall": "warn",
+      "criteria": {
+        "roi_clarity": {
+          "score": "pass",
+          "weight": 0.30,
+          "note": ""
+        },
+        "budget_fit": {
+          "score": "pass",
+          "weight": 0.25,
+          "note": ""
+        },
+        "risk_reward_transparency": {
+          "score": "warn",
+          "weight": 0.20,
+          "note": "OT/IT network segmentation assumption ('bereits vorhanden oder parallel umsetzbar') is a significant risk for energy utilities — this should be a hard prerequisite, not a hopeful assumption. If segmentation is not in place, the migration timeline and cost model break."
+        },
+        "competitive_positioning": {
+          "score": "warn",
+          "weight": 0.15,
+          "note": "No competitor data available. Pricing is plausible for the segment but a procurement team at E.ON or RWE will benchmark against Accenture, Capgemini, and hyperscaler PSOs. Without competitive context, the pricing story relies purely on T-Systems brand trust."
+        },
+        "decision_pathway": {
+          "score": "pass",
+          "weight": 0.10,
+          "note": ""
+        }
+      },
+      "strengths": [
+        "Strong PoV design with clear Go/No-Go output (6R classification + risk/effort estimate for 5 workloads)",
+        "Tier progression tells a coherent story: 5 workloads → 15 (one department) → 40 (multi-department) → 60-80 (enterprise-wide)",
+        "MEANS statement is compelling for CFO: elastic scalability vs. multi-year hardware procurement cycles",
+        "Price range (49K-950K) fits large utility procurement budgets — PoV under 50K likely approved without board escalation"
+      ],
+      "concerns": [
+        "OT/IT segmentation assumption is too soft for KRITIS-regulated buyers — procurement will flag this as hidden risk",
+        "No competitive positioning data — buyer will ask 'how does this compare to Accenture/Capgemini rates?'"
+      ],
+      "recommendations": [
+        "HIGH: Harden OT/IT segmentation assumption — make it a prerequisite with a clear scope-out statement if not in place",
+        "OPTIONAL: Add competitive context or at minimum a value-based justification for the pricing level"
+      ]
+    },
+    {
+      "perspective": "provider_sa",
+      "score": 76,
+      "overall": "warn",
+      "criteria": {
+        "delivery_realism": {
+          "score": "warn",
+          "weight": 0.30,
+          "note": "Large tier: 420 person-days in 40 weeks = 2.1 FTE average, which is feasible. However, the 8-week sprint-based migration phase for 60-80 KRITIS workloads in the implementation plan is described as the same duration regardless of tier. The Large tier scope (60-80 workloads incl. IS-U, SCADA, ERP with 24/7 support) likely needs 12-16 weeks of migration sprints, not 8."
+        },
+        "scope_effort_coherence": {
+          "score": "pass",
+          "weight": 0.25,
+          "note": ""
+        },
+        "phase_architecture": {
+          "score": "warn",
+          "weight": 0.20,
+          "note": "Phases are well-adapted to cloud migration (not generic Discovery/Build/Handover). However, the implementation plan describes a single 16-week timeline but tier scopes range from 16 to 40 weeks. The phase durations in the implementation array (3+3+8+2=16w) only map to the Small tier. Medium and Large need phase durations that reflect their extended timelines."
+        },
+        "does_traceability": {
+          "score": "pass",
+          "weight": 0.15,
+          "note": ""
+        },
+        "tier_scalability": {
+          "score": "pass",
+          "weight": 0.10,
+          "note": ""
+        }
+      },
+      "strengths": [
+        "6R classification in Phase 1 is industry-standard and gives the team clear migration strategies per workload",
+        "KRITIS-compliant staging environment as a dedicated phase shows understanding of regulated delivery",
+        "Sprint-based approach (2-week sprints, low-to-high criticality) is a proven de-risking pattern",
+        "Cost model is well-structured with realistic role mix (more engineers than architects for migration work)"
+      ],
+      "concerns": [
+        "Implementation phase durations only describe a single timeline (~16 weeks) but tiers span 16-40 weeks — the phase plan needs to scale with the tier",
+        "8-week migration sprint phase is realistic for 15 workloads but not for 60-80 KRITIS workloads"
+      ],
+      "recommendations": [
+        "HIGH: Add per-tier phase duration scaling or note that phase durations shown are for the Small tier baseline",
+        "HIGH: For Large tier, the migration sprint phase should be 16-20 weeks to account for KRITIS workload complexity and mandatory parallel running"
+      ]
+    },
+    {
+      "perspective": "client_sa",
+      "score": 75,
+      "overall": "warn",
+      "criteria": {
+        "integration_feasibility": {
+          "score": "warn",
+          "weight": 0.30,
+          "note": "Solution mentions OT/IT separation and SCADA but doesn't specify integration approach for operational technology systems. Energy utilities' SCADA/Netzleittechnik integration with cloud infrastructure is the hardest technical challenge — the solution should explicitly address how the OT/IT boundary is maintained during and after migration."
+        },
+        "dependency_risk": {
+          "score": "pass",
+          "weight": 0.25,
+          "note": ""
+        },
+        "operational_readiness": {
+          "score": "pass",
+          "weight": 0.20,
+          "note": ""
+        },
+        "vendor_lockin": {
+          "score": "pass",
+          "weight": 0.15,
+          "note": ""
+        },
+        "security_compliance": {
+          "score": "warn",
+          "weight": 0.10,
+          "note": "BSI-C5 compliance is addressed for the staging environment, but NIS2 registration (deadline April 2026 per market data) is not mentioned. For KRITIS operators, NIS2 readiness is a board-level concern that should be explicitly addressed in migration scope or explicitly scoped out."
+        }
+      },
+      "strengths": [
+        "Explicit vendor lock-in mitigation: 'Migration auf containerisierte/IaC-basierte Workloads wo moeglich' in assumptions",
+        "Enablement of internal operations team is explicit in Phase 4",
+        "Sprint-based approach allows client SA to validate each migration wave before proceeding",
+        "Staging environment with failback mechanisms protects production operations"
+      ],
+      "concerns": [
+        "OT/IT integration approach for SCADA systems is not specified — this is the highest-risk technical area for energy utilities",
+        "NIS2 compliance not addressed despite April 2026 deadline being an urgent driver for this market"
+      ],
+      "recommendations": [
+        "HIGH: Add explicit OT/IT integration approach or scope boundary — 'SCADA systems remain on-premise with defined API boundary' or 'SCADA migration requires separate OT security assessment'",
+        "OPTIONAL: Reference NIS2 readiness as either in-scope or explicitly out-of-scope"
+      ]
+    }
+  ],
+  "synthesis": {
+    "conflicts": [
+      {
+        "tension": "Provider SA wants longer migration sprint phases for Large tier; Reviewer wants pricing to remain competitive",
+        "resolution": "Extend Large tier timeline to 48-52 weeks and adjust price to 1.05M-1.1M EUR — the market expects large transformation programs to take 12+ months, so a longer timeline actually increases credibility with procurement"
+      }
+    ],
+    "critical_improvements": [],
+    "high_improvements": [
+      {
+        "description": "Harden OT/IT segmentation from soft assumption to hard prerequisite with explicit scope boundary",
+        "stakeholders": ["reviewer", "client_sa"],
+        "affects": "cost_model.assumptions"
+      },
+      {
+        "description": "Add per-tier phase duration scaling — current implementation plan only maps to Small tier timeline",
+        "stakeholders": ["provider_sa"],
+        "affects": "implementation"
+      },
+      {
+        "description": "Specify OT/IT integration approach for SCADA systems or explicitly scope out",
+        "stakeholders": ["client_sa"],
+        "affects": "implementation, cost_model.assumptions"
+      }
+    ],
+    "optional_improvements": [
+      {
+        "description": "Add NIS2 compliance positioning (in-scope or out-of-scope)",
+        "stakeholders": ["client_sa"],
+        "affects": "cost_model.assumptions"
+      },
+      {
+        "description": "Add competitive context for pricing justification",
+        "stakeholders": ["reviewer"],
+        "affects": "pricing rationale"
+      }
+    ],
+    "verdict": "revise",
+    "revision_guidance": "Focus on three areas: (1) OT/IT segmentation and SCADA integration need explicit boundaries — both Reviewer and Client SA flag this as hidden risk. (2) Implementation phase durations need per-tier scaling — the current 16-week plan only fits the Small tier. (3) Large tier migration sprint phase needs extension from 8 to 16-20 weeks for 60-80 workloads."
+  }
+}

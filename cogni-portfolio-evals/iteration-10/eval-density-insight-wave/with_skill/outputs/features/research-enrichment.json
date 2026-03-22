@@ -1,0 +1,14 @@
+{
+  "slug": "research-enrichment",
+  "product_slug": "cogni-portfolio",
+  "name": "Web-Research-Enrichment",
+  "description": "Agentenbasierte Web-Recherche, die qualitätsschwache Feature-Beschreibungen gezielt mit unternehmensspezifischen Informationen von der Firmenwebsite anreichert — gesteuert durch die konkreten Qualitätslücken aus der Bewertung.",
+  "category": "enrichment",
+  "taxonomy_mapping": {
+    "dimension": "Application",
+    "category_id": "6.5",
+    "category_name": "AI & Automation"
+  },
+  "readiness": "ga",
+  "created": "2026-03-21"
+}

@@ -1,7 +1,7 @@
 {
   "metadata": {
     "skill_name": "portfolio-scan",
-    "skill_path": "/Users/stephandehaas/GitHub/dev/cogni-works/cogni-portfolio/skills/portfolio-scan",
+    "skill_path": "/Users/stephandehaas/GitHub/dev/insight-wave/cogni-portfolio/skills/portfolio-scan",
     "executor_model": "claude-opus-4-6",
     "analyzer_model": "claude-opus-4-6",
     "timestamp": "2026-03-18T12:00:00Z",

@@ -1,0 +1,97 @@
+{
+  "batch_id": "eval-2-batch-with-review-loop",
+  "iteration": 1,
+  "mode": "without_skill",
+  "portfolio_slug": "t-systems",
+  "market_slug": "grosse-energieversorger-de",
+  "generated": "2026-03-18",
+  "propositions_processed": 3,
+  "solutions": [
+    {
+      "slug": "cloud-migration--grosse-energieversorger-de",
+      "solution_type": "project",
+      "total_phases": 5,
+      "total_duration_weeks": 16,
+      "pricing_range": {
+        "proof_of_value": 25000,
+        "small": 110000,
+        "medium": 220000,
+        "large": 380000,
+        "currency": "EUR"
+      },
+      "review_score": {
+        "aggregate": 118,
+        "max": 150,
+        "pct": 78.7
+      },
+      "verdict": "approved",
+      "revisions_applied": 0
+    },
+    {
+      "slug": "sovereign-cloud--grosse-energieversorger-de",
+      "solution_type": "project",
+      "total_phases": 5,
+      "total_duration_weeks": 15,
+      "pricing_range": {
+        "proof_of_value": 28000,
+        "small": 125000,
+        "medium": 250000,
+        "large": 420000,
+        "currency": "EUR"
+      },
+      "review_score": {
+        "aggregate": 123,
+        "max": 150,
+        "pct": 82.0
+      },
+      "verdict": "approved",
+      "revisions_applied": 0
+    },
+    {
+      "slug": "sap-on-cloud--grosse-energieversorger-de",
+      "solution_type": "managed_service",
+      "total_phases": 5,
+      "total_duration_weeks": 18,
+      "pricing_range": {
+        "proof_of_value": 30000,
+        "small": 145000,
+        "medium": 290000,
+        "large": 480000,
+        "currency": "EUR"
+      },
+      "review_score": {
+        "pre_revision_aggregate": 106,
+        "post_revision_aggregate": 121,
+        "max": 150,
+        "pre_revision_pct": 70.7,
+        "post_revision_pct": 80.7
+      },
+      "verdict": "approved_with_revisions",
+      "revisions_applied": 1
+    }
+  ],
+  "review_perspectives": [
+    "procurement",
+    "provider_solution_architect",
+    "client_solution_architect"
+  ],
+  "review_criteria_per_perspective": 5,
+  "scoring_scale": "1-10 per criterion, 50 max per perspective, 150 max total",
+  "summary_statistics": {
+    "avg_aggregate_score_pct": 80.5,
+    "solutions_approved_clean": 2,
+    "solutions_approved_with_revisions": 1,
+    "solutions_rejected": 0,
+    "total_revisions_applied": 1,
+    "avg_large_tier_margin_pct": 34.6,
+    "total_portfolio_value_large_tier": 1280000,
+    "currency": "EUR"
+  },
+  "key_findings": [
+    "Sovereign Cloud scored highest (82.0%) -- strongest security posture and lock-in mitigation among all three solutions",
+    "SAP on Cloud required revision (70.7% -> 80.7%) -- procurement and provider SA flagged missing managed-service pricing transparency, SLA penalty clauses, and IS-U migration timeline risk",
+    "Cloud Migration scored solidly (78.7%) with no revisions -- CMF methodology and sprint-based delivery are proven and repeatable",
+    "All solutions maintain target margin of 30%+ at Medium/Large tiers; PoV tiers intentionally priced at ~10% margin for market entry",
+    "Common theme across reviews: data portability and exit strategy are well-addressed; API/integration strategy could be strengthened across all three"
+  ]
+}

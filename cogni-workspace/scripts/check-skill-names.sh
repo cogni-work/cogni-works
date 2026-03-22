@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# check-skill-names.sh — Validate skill names across the cogni-works monorepo.
+# check-skill-names.sh — Validate skill names across the insight-wave monorepo.
 # Reports duplicate bare names and generic words without a domain prefix.
 # Exit non-zero if violations found.
 

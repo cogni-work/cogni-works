@@ -1,0 +1,330 @@
+{
+  "slug": "grosse-energieversorger-de",
+  "market_slug": "grosse-energieversorger-de",
+  "profiles": [
+    {
+      "role": "CIO",
+      "title": "Chief Information Officer / Leiter IT",
+      "buying_role": "economic_buyer",
+      "seniority": "c-level",
+      "reports_to": "CEO / Vorstandsvorsitzender",
+      "budget_authority": true,
+      "priorities": [
+        "Consolidate fragmented IT landscape inherited from regional utility mergers",
+        "Reduce IT cost-to-serve ratio from 4.5% to under 3% of revenue",
+        "Meet NIS2 and KRITIS compliance deadlines without disrupting grid operations",
+        "Enable digital products (smart metering, dynamic tariffs) on modern cloud platforms"
+      ],
+      "pain_points": [
+        "Legacy mainframe and SAP ECC systems approaching end-of-life with no clear migration path",
+        "Chronic shortage of cloud-skilled staff -- competing with hyperscalers and consulting firms for talent",
+        "Board pressure to cut IT spend while simultaneously accelerating digitalization",
+        "Fear of vendor lock-in with a single hyperscaler, but multi-cloud complexity is unmanageable internally"
+      ],
+      "success_metrics": [
+        "IT cost as percentage of revenue",
+        "Application availability (99.95%+ for grid-critical systems)",
+        "NIS2 / KRITIS audit pass rate",
+        "Time-to-market for new digital energy services"
+      ],
+      "objections": [
+        "We already have framework agreements with Accenture and Capgemini for cloud",
+        "T-Systems historically delivered on-prem hosting -- can you really do hyperscaler?",
+        "Our SAP S/4HANA migration is already planned with SAP directly"
+      ],
+      "information_sources": [
+        "Gartner Magic Quadrant for Managed Cloud Services",
+        "ISG Provider Lens for Cloud Transformation",
+        "BDEW (Bundesverband der Energie- und Wasserwirtschaft) IT working groups",
+        "Peer exchanges at E-world and Handelsblatt Energiegipfel"
+      ],
+      "trigger_events": [
+        "NIS2 transposition into German law with enforcement deadline",
+        "SAP ECC end-of-maintenance announcement",
+        "Board mandate to reduce IT costs by 20% within 2 years",
+        "Major outage or security incident at a peer utility"
+      ]
+    },
+    {
+      "role": "CISO",
+      "title": "Chief Information Security Officer / IT-Sicherheitsbeauftragter",
+      "buying_role": "technical_gatekeeper",
+      "seniority": "vp",
+      "reports_to": "CIO or directly to Vorstand",
+      "budget_authority": false,
+      "priorities": [
+        "Achieve BSI KRITIS compliance and pass annual BSI audits without findings",
+        "Implement NIS2 requirements before October 2026 enforcement deadline",
+        "Protect OT/SCADA networks from increasing nation-state cyber threats",
+        "Establish sovereign data processing for energy trading and customer data"
+      ],
+      "pain_points": [
+        "OT security is fundamentally different from IT security, but leadership treats them as one",
+        "Cloud adoption outpaces the security team's ability to assess and certify new environments",
+        "Hyperscaler shared-responsibility models leave gaps that auditors flag every cycle",
+        "Skilled security analysts leave for better-paying positions at pure-play cyber firms"
+      ],
+      "success_metrics": [
+        "Number of open BSI audit findings (target: zero critical)",
+        "Mean time to detect and respond to incidents (MTTD/MTTR)",
+        "Percentage of workloads running in BSI C5-attested environments",
+        "NIS2 compliance readiness score"
+      ],
+      "objections": [
+        "How does T-Systems handle encryption key custody -- do we retain full control?",
+        "Your sovereign cloud still runs on shared infrastructure -- prove tenant isolation",
+        "We need BSI C5 Type 2 attestation, not just Type 1"
+      ],
+      "information_sources": [
+        "BSI IT-Grundschutz catalogs and KRITIS sector-specific guidance",
+        "UP KRITIS (government-industry cooperation for critical infrastructure)",
+        "Allianz fuer Cybersicherheit publications",
+        "ENISA threat landscape reports for energy sector"
+      ],
+      "trigger_events": [
+        "BSI audit with critical findings requiring remediation within 90 days",
+        "Ransomware attack on a German utility peer (e.g., Enercity 2022 pattern)",
+        "New BSI KRITIS-Verordnung amendments",
+        "Insurance carrier demanding higher security posture for cyber policy renewal"
+      ]
+    },
+    {
+      "role": "VP Infrastructure & Operations",
+      "title": "Bereichsleiter IT-Infrastruktur und Betrieb",
+      "buying_role": "technical_evaluator",
+      "seniority": "vp",
+      "reports_to": "CIO",
+      "budget_authority": false,
+      "priorities": [
+        "Migrate 500+ workloads off aging data centers (owned or leased) before hardware end-of-life or lease expiry",
+        "Maintain 99.95% availability for grid management and energy trading platforms during and after migration",
+        "Build internal cloud operations competence while retaining existing staff -- upskill, not replace",
+        "Standardize infrastructure across business units acquired through mergers, eliminating duplicate platforms"
+      ],
+      "pain_points": [
+        "Data center infrastructure reaching end-of-life -- whether owned facilities need costly refresh or leases expire, the timeline is fixed",
+        "Team knows VMware and mainframes but has minimal Kubernetes or cloud-native skills, and retraining takes 12+ months",
+        "Every business unit has its own shadow IT stack from pre-merger days, making consolidation politically and technically painful",
+        "Broadcom VMware licensing changes are forcing urgent re-evaluation of virtualization strategy and driving up costs 200-300%"
+      ],
+      "success_metrics": [
+        "Number of workloads migrated per quarter",
+        "System availability (SLA achievement rate)",
+        "Infrastructure cost per workload",
+        "Incidents per change (change failure rate)"
+      ],
+      "objections": [
+        "Your migration methodology sounds great in slides -- show me a reference with our exact SAP landscape",
+        "We need guaranteed parallel-run support, not just a best-effort commitment",
+        "What happens to our operations team -- does T-Systems replace them or upskill them?"
+      ],
+      "information_sources": [
+        "Vendor RFI/RFP responses and reference calls",
+        "Gartner Peer Insights for managed infrastructure services",
+        "Internal POC results and benchmarks",
+        "IT operations team feedback from workshops"
+      ],
+      "trigger_events": [
+        "Data center lease expiry notification",
+        "VMware licensing cost increase (Broadcom acquisition impact)",
+        "Major production outage traced to aging infrastructure",
+        "Board approval of cloud-first strategy mandate"
+      ]
+    },
+    {
+      "role": "CFO",
+      "title": "Chief Financial Officer / Finanzvorstand",
+      "buying_role": "financial_approver",
+      "seniority": "c-level",
+      "reports_to": "Aufsichtsrat / Supervisory Board",
+      "budget_authority": true,
+      "priorities": [
+        "Shift IT from CapEx-heavy data center investments to predictable OpEx cloud model",
+        "Free capital for core energy transition investments (renewables, grid expansion, storage)",
+        "Ensure IT investments show measurable ROI within 18 months",
+        "Reduce financial exposure from regulatory non-compliance penalties"
+      ],
+      "pain_points": [
+        "IT budget requests are opaque -- hard to tell transformation spend from keep-the-lights-on",
+        "Cloud promises cost savings but initial projects often overrun by 30-40%",
+        "NIS2 non-compliance fines (up to EUR 10M or 2% revenue) create material financial risk",
+        "Energy transition investments compete directly with IT modernization for board funding"
+      ],
+      "success_metrics": [
+        "Total cost of ownership reduction (3-year view)",
+        "CapEx-to-OpEx ratio improvement",
+        "IT spend as percentage of revenue",
+        "Regulatory compliance cost avoidance"
+      ],
+      "objections": [
+        "Show me a binding TCO comparison, not vendor marketing projections",
+        "What is the exit cost if we want to switch providers in 3 years?",
+        "Your pricing needs to fit our Energiewirtschaftsgesetz cost pass-through model"
+      ],
+      "information_sources": [
+        "Analyst TCO benchmarks (Gartner, ISG)",
+        "Peer CFO roundtables at energy industry events",
+        "Internal controlling and IT finance team analysis",
+        "Big Four advisory reports on cloud economics"
+      ],
+      "trigger_events": [
+        "Annual budget planning cycle (typically Q3 for following year)",
+        "Regulatory penalty risk assessment flagged by compliance team",
+        "Board directive to reduce IT costs as part of efficiency program",
+        "Failed audit that requires immediate remediation investment"
+      ]
+    },
+    {
+      "role": "Head of Portfolio Management & Trading",
+      "title": "Leiter Portfoliomanagement und Energiehandel",
+      "buying_role": "business_champion",
+      "seniority": "director",
+      "reports_to": "COO or Vorstand Vertrieb/Handel",
+      "budget_authority": false,
+      "note": "Present at all large utilities; trading desk size varies -- RWE/E.ON have large proprietary trading, EnBW/LEAG focus more on portfolio optimization",
+      "priorities": [
+        "Low-latency compute for energy portfolio optimization and intraday trading",
+        "Real-time integration of renewable generation forecasts into dispatch and trading models",
+        "Regulatory compliance for REMIT, MiFID II (where applicable), and energy market transparency",
+        "Scale compute dynamically for intraday market volatility peaks and new balancing products"
+      ],
+      "pain_points": [
+        "On-premises portfolio and trading systems cannot scale for volatile intraday markets driven by renewables",
+        "Data sovereignty requirements prevent using US hyperscaler regions for trading and customer data",
+        "Legacy systems require manual intervention for cross-border trading reconciliation and Redispatch 2.0",
+        "Competing priorities with grid operations for shared IT infrastructure resources and budget"
+      ],
+      "success_metrics": [
+        "Trading platform uptime during market hours (target: 99.99%)",
+        "Latency for price signal processing",
+        "Time to deploy new trading algorithms to production",
+        "REMIT compliance audit results"
+      ],
+      "objections": [
+        "Can your sovereign cloud deliver the same latency as Frankfurt hyperscaler regions?",
+        "We need bare-metal performance for our quant models, not shared virtual machines",
+        "Our trading platform vendor only certifies on AWS -- how does your managed service work?"
+      ],
+      "information_sources": [
+        "European Energy Exchange (EEX) technology partnerships",
+        "Trading platform vendor roadmaps (e.g., Brady, Openlink/ION)",
+        "Bundesnetzagentur REMIT guidelines",
+        "Energy Trading Technology Conference"
+      ],
+      "trigger_events": [
+        "Extreme price volatility event exposing system limitations",
+        "New REMIT reporting requirement from Bundesnetzagentur",
+        "Trading platform vendor announcing cloud-first roadmap",
+        "Competitor gaining trading advantage through cloud-based analytics"
+      ]
+    },
+    {
+      "role": "Head of Grid Operations / Bereichsleiter Netzbetrieb",
+      "title": "Leiter Netzbetrieb / OT-Verantwortlicher",
+      "buying_role": "business_champion",
+      "seniority": "director",
+      "reports_to": "COO / Technischer Vorstand",
+      "budget_authority": false,
+      "priorities": [
+        "Digitalize grid monitoring and predictive maintenance without compromising OT safety",
+        "Integrate distributed energy resources (solar, wind, storage) into grid management",
+        "Meet Bundesnetzagentur smart meter rollout mandates and Redispatch 2.0 process automation",
+        "Ensure air-gap isolation between IT cloud and OT SCADA networks while enabling edge analytics"
+      ],
+      "pain_points": [
+        "SCADA and grid control systems are 15-20 years old with no vendor upgrade path",
+        "IT cloud initiatives threaten OT network isolation that protects physical infrastructure",
+        "Smart grid data volumes are exploding but analytics capability is stuck in Excel",
+        "Regulatory mandates (Messstellenbetriebsgesetz) impose tight timelines with heavy penalties"
+      ],
+      "success_metrics": [
+        "Grid availability (SAIDI/SAIFI reliability indices)",
+        "Predictive maintenance accuracy (% of failures predicted)",
+        "Smart meter rollout progress vs. regulatory timeline",
+        "OT security incident count (target: zero)"
+      ],
+      "objections": [
+        "Cloud has no place near our OT systems -- convince me your hybrid approach is safe",
+        "How do you ensure that a cloud platform update never impacts grid control?",
+        "Our OT vendors (Siemens, ABB) have their own cloud platforms -- why add T-Systems?"
+      ],
+      "information_sources": [
+        "VDE/FNN (Forum Netztechnik/Netzbetrieb) technical standards",
+        "Bundesnetzagentur regulatory publications",
+        "OT vendor (Siemens, ABB, GE) technology roadmaps",
+        "BDEW Netzbetrieb working groups"
+      ],
+      "trigger_events": [
+        "Bundesnetzagentur deadline for smart meter gateway rollout",
+        "Grid stability incident caused by renewable intermittency",
+        "OT vendor announcing end-of-life for legacy SCADA platform",
+        "Successful pilot of cloud-based grid analytics at a peer DSO"
+      ]
+    },
+    {
+      "role": "CDO",
+      "title": "Chief Digital Officer / Leiter Digitalisierung",
+      "buying_role": "champion",
+      "seniority": "c-level",
+      "reports_to": "CEO / Vorstandsvorsitzender",
+      "budget_authority": true,
+      "note": "Increasingly common at large utilities since 2022; sometimes combined with CIO role",
+      "priorities": [
+        "Deliver customer-facing digital products (apps, dynamic tariffs, energy management portals)",
+        "Industrialize IoT and data analytics for asset management and grid optimization",
+        "Build a data platform that enables AI/ML use cases across the enterprise",
+        "Drive culture change from project-based IT to product-based digital teams"
+      ],
+      "pain_points": [
+        "Digital initiatives stall because underlying infrastructure is not cloud-ready",
+        "Data is trapped in silos across SAP, GIS, SCADA, and CRM systems with no integration layer",
+        "Competing with energy startups and tech companies for digital talent",
+        "Business units resist platform standardization, preferring their own best-of-breed tools"
+      ],
+      "success_metrics": [
+        "Number of digital products in production",
+        "Customer digital adoption rate (app usage, self-service quota)",
+        "Data platform coverage (% of enterprise data sources integrated)",
+        "Time from idea to minimum viable product"
+      ],
+      "objections": [
+        "We need a technology partner, not another outsourcer -- can T-Systems co-innovate?",
+        "Your cloud platform must support our data mesh architecture, not force a monolithic approach",
+        "How do you integrate with our existing Salesforce/SAP CX and IoT platforms?"
+      ],
+      "information_sources": [
+        "McKinsey/BCG energy digital transformation reports",
+        "Bitkom Digital Energy working group",
+        "AWS/Azure/GCP energy industry solution pages",
+        "Digital utility peer benchmarks (Accenture Utility Digital Maturity Index)"
+      ],
+      "trigger_events": [
+        "CEO setting public digital revenue targets at investor day",
+        "Competitor launching a successful consumer energy app",
+        "Data platform RFP triggered by failed analytics pilot",
+        "Paragraph 14a EnWG mandate requiring dynamic grid tariff infrastructure"
+      ]
+    }
+  ],
+  "proposition_alignment": {
+    "sovereign-cloud": ["CISO", "CIO", "CFO", "Head of Portfolio Management & Trading"],
+    "cloud-migration": ["CIO", "VP Infrastructure & Operations", "CFO"],
+    "hybrid-cloud": ["VP Infrastructure & Operations", "Head of Grid Operations", "CISO"],
+    "managed-hyperscaler": ["CIO", "VP Infrastructure & Operations", "CDO", "CFO"]
+  },
+  "buying_process": {
+    "typical_cycle_months": 9,
+    "stages": [
+      "Internal needs assessment and business case development",
+      "RFI to 5-8 vendors, shortlist to 3",
+      "RFP with detailed technical and commercial evaluation",
+      "Proof of value / pilot phase (4-8 weeks)",
+      "Contract negotiation including EVB-IT and framework terms",
+      "Vorstand / board approval for investments above EUR 500K"
+    ],
+    "procurement_framework": "EVB-IT (Ergaenzende Vertragsbedingungen fuer IT)",
+    "decision_unit": "IT steering committee (CIO chair, CFO, CISO, business unit heads)",
+    "procurement_notes": "Utilities with municipal or state ownership (e.g., EnBW, MVV) may be subject to Vergaberecht (public procurement law) requiring formal EU-wide tenders above EUR 215K threshold. Privately held utilities (E.ON, RWE) follow internal procurement policies but still use EVB-IT as standard contract framework."
+  },
+  "created": "2026-03-18"
+}

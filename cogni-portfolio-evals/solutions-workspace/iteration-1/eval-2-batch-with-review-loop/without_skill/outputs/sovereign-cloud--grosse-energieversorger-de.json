@@ -1,0 +1,151 @@
+{
+  "slug": "sovereign-cloud--grosse-energieversorger-de",
+  "proposition_slug": "sovereign-cloud--grosse-energieversorger-de",
+  "solution_type": "project",
+  "implementation": [
+    {
+      "phase": "Anforderungsanalyse & Compliance-Mapping",
+      "duration_weeks": 2,
+      "description": "Erfassung aller KRITIS-relevanten Anwendungen und Datenklassifikationen, Mapping der BSI-C5-, NIS2- und KRITIS-DachG-Anforderungen auf die Sovereign-Cloud-Architektur, Gap-Analyse gegenueber aktuellem Betriebsmodell.",
+      "deliverables": [
+        "KRITIS-Anwendungsinventar mit Datenklassifikation",
+        "Compliance-Mapping-Matrix (BSI-C5, NIS2, KRITIS-DachG)",
+        "Gap-Analyse-Bericht mit Handlungsempfehlungen"
+      ],
+      "roles": ["Solution Architect", "Project Manager"]
+    },
+    {
+      "phase": "Sovereign-Cloud-Plattform-Provisionierung",
+      "duration_weeks": 3,
+      "description": "Bereitstellung der souveraenen Cloud-Umgebung in deutschen Rechenzentren mit BSI-C5-Attestierung, Konfiguration der Mandantentrennung, Identity & Access Management und Verschluesselungskonzept mit kundeneigenen Schluesseln.",
+      "deliverables": [
+        "Provisionierte Sovereign-Cloud-Umgebung mit BSI-C5-Attestierung",
+        "IAM-Konzept und Mandantentrennung dokumentiert",
+        "Verschluesselungskonzept mit Customer-Managed Keys"
+      ],
+      "roles": ["Implementation Engineer", "Solution Architect"]
+    },
+    {
+      "phase": "KRITIS-Workload-Onboarding",
+      "duration_weeks": 5,
+      "description": "Schrittweise Migration der KRITIS-relevanten Applikationen auf die souveraene Plattform mit OT/IT-Segmentierung, Validierung der Datenresidenz und Compliance-Nachweisfuehrung je Workload.",
+      "deliverables": [
+        "Migrierte KRITIS-Workloads mit Compliance-Nachweis",
+        "OT/IT-Segmentierungsnachweis je Workload",
+        "Datenresidenz-Validierungsprotokoll"
+      ],
+      "roles": ["Implementation Engineer", "Solution Architect", "Project Manager"]
+    },
+    {
+      "phase": "Security-Audit & Haertung",
+      "duration_weeks": 3,
+      "description": "Durchfuehrung eines umfassenden Security-Audits der migrierten Umgebung, Penetrationstests, Haertung der Konfiguration und Vorbereitung der Dokumentation fuer den naechsten BSI-Audit-Zyklus.",
+      "deliverables": [
+        "Security-Audit-Bericht mit Findings und Massnahmen",
+        "Penetrationstest-Ergebnisse",
+        "BSI-Audit-Vorbereitungsdokumentation"
+      ],
+      "roles": ["Solution Architect", "Implementation Engineer"]
+    },
+    {
+      "phase": "Betriebsmodell & Governance-Uebergabe",
+      "duration_weeks": 2,
+      "description": "Definition des souveraenen Betriebsmodells mit Eskalationspfaden, Compliance-Reporting-Automatisierung, Schulung des internen Teams zu Sovereign-Cloud-Governance und Datenportabilitaetsprozessen.",
+      "deliverables": [
+        "Betriebsmodell-Dokumentation mit SLA-Definition",
+        "Automatisiertes Compliance-Reporting konfiguriert",
+        "Schulungsdokumentation Sovereign-Cloud-Governance",
+        "Datenportabilitaets- und Exit-Strategie-Dokument"
+      ],
+      "roles": ["Solution Architect", "Project Manager"]
+    }
+  ],
+  "pricing": {
+    "proof_of_value": {
+      "price": 28000,
+      "currency": "EUR",
+      "scope": "Compliance-Mapping fuer 2-3 KRITIS-relevante Anwendungen, Provisionierung einer Sovereign-Cloud-Testumgebung und Migration eines Pilot-Workloads mit vollstaendigem BSI-C5-Compliance-Nachweis."
+    },
+    "small": {
+      "price": 125000,
+      "currency": "EUR",
+      "scope": "Sovereign-Cloud-Onboarding fuer 3-5 KRITIS-Anwendungen eines Fachbereichs mit BSI-C5-Compliance-Dokumentation und Security-Haertung."
+    },
+    "medium": {
+      "price": 250000,
+      "currency": "EUR",
+      "scope": "Bereichsuebergreifendes Onboarding von 10-15 KRITIS- und datensensiblen Anwendungen inkl. OT-naher Workloads mit vollstaendigem Security-Audit."
+    },
+    "large": {
+      "price": 420000,
+      "currency": "EUR",
+      "scope": "Unternehmensweite Sovereign-Cloud-Transformation fuer 30+ Anwendungen inkl. SCADA-Integration, SAP-Systeme und vollstaendiger BSI-Audit-Vorbereitung."
+    }
+  },
+  "cost_model": {
+    "assumptions": [
+      "Tagessaetze gemaess Delivery Defaults: SA 1.800 EUR, Engineer 1.200 EUR, PM 1.400 EUR",
+      "Kunde stellt KRITIS-Ansprechpartner und CISO-Team fuer Compliance-Abstimmung bereit",
+      "BSI-C5-Attestierung der Plattform bereits vorhanden -- projektspezifische Compliance-Dokumentation wird erstellt",
+      "Kundenseitige Netzwerkanbindung an deutsche Rechenzentren wird innerhalb von 10 Werktagen bereitgestellt",
+      "Sovereign-Cloud-Laufzeitkosten (IaaS) sind nicht im Projektpreis enthalten -- separate Vereinbarung",
+      "Datenportabilitaet gewaehrleistet: Open-Source-basierte Plattform mit standardisierten Export-Schnittstellen"
+    ],
+    "bill_of_materials": {
+      "roles": [
+        { "role": "Solution Architect", "rate_day": 1800, "currency": "EUR" },
+        { "role": "Implementation Engineer", "rate_day": 1200, "currency": "EUR" },
+        { "role": "Project Manager", "rate_day": 1400, "currency": "EUR" }
+      ],
+      "tooling": [
+        { "item": "Sovereign Cloud Management Console", "cost": 0, "currency": "EUR", "note": "Im Plattform-Lizenzpreis enthalten" }
+      ],
+      "infrastructure": [
+        { "item": "Sovereign Cloud IaaS (deutsche RZ)", "cost_per_month": 4500, "currency": "EUR", "note": "Kundenseitig -- variiert nach Workload-Umfang und Datenvolumen" }
+      ]
+    },
+    "effort_by_tier": {
+      "proof_of_value": {
+        "total_days": 17,
+        "breakdown": [
+          { "role": "Solution Architect", "days": 7 },
+          { "role": "Implementation Engineer", "days": 7 },
+          { "role": "Project Manager", "days": 3 }
+        ],
+        "internal_cost": 25200,
+        "margin_pct": 10.0
+      },
+      "small": {
+        "total_days": 62,
+        "breakdown": [
+          { "role": "Solution Architect", "days": 15 },
+          { "role": "Implementation Engineer", "days": 34 },
+          { "role": "Project Manager", "days": 13 }
+        ],
+        "internal_cost": 86000,
+        "margin_pct": 31.2
+      },
+      "medium": {
+        "total_days": 125,
+        "breakdown": [
+          { "role": "Solution Architect", "days": 28 },
+          { "role": "Implementation Engineer", "days": 70 },
+          { "role": "Project Manager", "days": 27 }
+        ],
+        "internal_cost": 172200,
+        "margin_pct": 31.1
+      },
+      "large": {
+        "total_days": 200,
+        "breakdown": [
+          { "role": "Solution Architect", "days": 38 },
+          { "role": "Implementation Engineer", "days": 120 },
+          { "role": "Project Manager", "days": 42 }
+        ],
+        "internal_cost": 271200,
+        "margin_pct": 35.4
+      }
+    }
+  },
+  "created": "2026-03-18"
+}

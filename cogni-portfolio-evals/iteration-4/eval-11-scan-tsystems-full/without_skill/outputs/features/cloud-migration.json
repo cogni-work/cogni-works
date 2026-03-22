@@ -1,0 +1,13 @@
+{
+  "slug": "cloud-migration",
+  "name": "Cloud Migration Services",
+  "description": "End-to-end cloud migration with AI-assisted planning, execution, and optimization",
+  "product_slug": "t-systems-cloud",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 4,
+    "category_id": "4.5",
+    "category_name": "Cloud Migration Services"
+  },
+  "source_file": "https://www.t-systems.com/us/en/cloud-services"
+}

@@ -1,0 +1,13 @@
+{
+  "slug": "zero-outage-monitoring",
+  "name": "Zero Outage Infrastructure Monitoring",
+  "description": "Proaktives Monitoring als Teil des Zero Outage Qualitaetsprogramms mit Echtzeit-Dashboard und Reporting.",
+  "product_slug": "t-systems-infrastructure",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 5,
+    "category_id": "5.4",
+    "category_name": "Infrastructure Monitoring"
+  },
+  "source_file": "https://www.t-systems.com/de/de"
+}

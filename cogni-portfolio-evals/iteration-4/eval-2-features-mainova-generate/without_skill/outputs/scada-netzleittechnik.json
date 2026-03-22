@@ -1,0 +1,14 @@
+{
+  "slug": "scada-netzleittechnik",
+  "product_slug": "digitale-netzsteuerung",
+  "name": "SCADA-Netzleittechnik",
+  "description": "Zentrale Leitstellensoftware fuer die Echtzeitsteuerung und Ueberwachung der Strom-, Gas- und Fernwaermenetze mit Schalthandlungsmanagement, Topologieerkennung und automatisierter Stoerungslokalisierung ueber IEC-61850- und IEC-60870-Protokolle.",
+  "category": "grid-operations",
+  "taxonomy_mapping": {
+    "dimension": 5,
+    "category_id": "5.4",
+    "category_name": "Infrastructure Monitoring",
+    "horizon": "current"
+  },
+  "readiness": "ga"
+}

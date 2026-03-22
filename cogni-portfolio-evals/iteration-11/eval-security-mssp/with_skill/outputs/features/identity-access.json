@@ -1,0 +1,16 @@
+{
+  "slug": "identity-access",
+  "product_slug": "managed-security",
+  "name": "Identity & Access Management",
+  "description": "Zentralisierte Identitaetsplattform mit Multi-Faktor-Authentifizierung und rollenbasierter Zugriffskontrolle, die Benutzerlebenszyklen ueber ein Policy-Framework steuert und privilegierte Zugriffe durch Session-Recording absichert.",
+  "category": "governance",
+  "taxonomy_mapping": {
+    "dimension": 2,
+    "dimension_name": "Security",
+    "category_id": "2.6",
+    "category_name": "Identity & Access Management",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "created": "2026-03-21"
+}

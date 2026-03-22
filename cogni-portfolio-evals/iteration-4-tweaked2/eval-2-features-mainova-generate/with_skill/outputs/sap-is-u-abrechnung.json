@@ -1,0 +1,16 @@
+{
+  "slug": "sap-is-u-abrechnung",
+  "product_slug": "digitale-energiedienste",
+  "name": "SAP-IS-U-Abrechnung",
+  "description": "SAP-IS-U-basiertes Abrechnungssystem fuer Strom, Gas und Fernwaerme, das spartenuebergreifende Tarifstrukturen verwaltet, Messstellenbetrieb koordiniert, GPKE/GeLi-Wechselprozesse automatisiert und die Marktkommunikation gemaess Bundesnetzagentur-Vorgaben vollstaendig abbildet.",
+  "category": "enterprise-platforms",
+  "taxonomy_mapping": {
+    "dimension": 6,
+    "dimension_name": "Application Services",
+    "category_id": "6.3",
+    "category_name": "Enterprise Platform Services",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "created": "2026-03-18"
+}

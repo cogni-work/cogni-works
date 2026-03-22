@@ -1,0 +1,104 @@
+{
+  "expectations": [
+    {
+      "text": "SOL-01: Solution JSON has solution_type: project",
+      "passed": true,
+      "evidence": "cloud-migration--grosse-energieversorger-de.json line 4: \"solution_type\": \"project\""
+    },
+    {
+      "text": "SOL-02: Solution has 2-5 implementation phases",
+      "passed": true,
+      "evidence": "cloud-migration--grosse-energieversorger-de.json has 5 phases: Assessment & 6R-Klassifikation, KRITIS-konforme Staging-Umgebung, Sprint-basierte Workload-Migration, Integration & Validierung, Betriebsübergabe & Enablement"
+    },
+    {
+      "text": "SOL-03: All four pricing tiers present (proof_of_value, small, medium, large)",
+      "passed": true,
+      "evidence": "pricing object contains all four keys: proof_of_value (25000 EUR), small (110000 EUR), medium (220000 EUR), large (380000 EUR)"
+    },
+    {
+      "text": "SOL-04: cost_model present with effort_by_tier",
+      "passed": true,
+      "evidence": "cost_model object present with effort_by_tier containing all four tiers, each with total_days, breakdown by role, internal_cost, and margin_pct"
+    },
+    {
+      "text": "SOL-05: All margins positive",
+      "passed": true,
+      "evidence": "All margin_pct values positive: proof_of_value 11.2%, small 31.5%, medium 31.8%, large 36.1%. Verified math: e.g. large = (380000 - 242800) / 380000 = 36.1%"
+    },
+    {
+      "text": "SOL-06: Review assessment JSON produced with all three perspectives",
+      "passed": true,
+      "evidence": "review-assessment.json contains stakeholder_reviews array with three perspectives: reviewer (score 86), provider_sa (score 100), client_sa (score 84)"
+    },
+    {
+      "text": "SOL-07: Each perspective has 5 scored criteria",
+      "passed": true,
+      "evidence": "reviewer: roi_clarity, budget_fit, risk_reward_transparency, competitive_positioning, decision_pathway (5). provider_sa: delivery_realism, scope_effort_coherence, phase_architecture, does_traceability, tier_scalability (5). client_sa: integration_feasibility, dependency_risk, operational_readiness, vendor_lockin, security_compliance (5). Each criterion has a score field (pass/warn)."
+    },
+    {
+      "text": "SOL-08: Synthesis section has verdict (accept/revise/reject)",
+      "passed": true,
+      "evidence": "review-assessment.json synthesis.verdict = \"revise\""
+    },
+    {
+      "text": "SOL-09: If verdict was revise, a second assessment exists with improved scores",
+      "passed": true,
+      "evidence": "Round 1 verdict was 'revise'. solution-revised.json exists with revisions (added OT-Team, data portability, legacy decommissioning assumptions). review-assessment-round2.json exists with improved scores: reviewer 86->94, provider_sa 100->100, client_sa 84->100, overall 90->98. Round 2 verdict: 'accept'."
+    },
+    {
+      "text": "SOL-10: Phase descriptions are in German (portfolio language: de)",
+      "passed": true,
+      "evidence": "All phase names and descriptions are in German, e.g. \"Workload-Inventarisierung aller IS-U-, SCADA- und ERP-Systeme mit 6R-Migrationsstrategie-Zuordnung\", \"Aufbau der BSI-C5-konformen Cloud-Staging-Umgebung\", \"Übergabe an den Kundenbetrieb mit Runbooks\""
+    }
+  ],
+  "summary": {
+    "passed": 10,
+    "failed": 0,
+    "total": 10,
+    "pass_rate": 1.0
+  },
+  "timing": {
+    "total_duration_seconds": 304.5
+  },
+  "claims": [
+    {
+      "claim": "PoV margin is intentionally below target as land-and-expand strategy",
+      "type": "quality",
+      "verified": true,
+      "evidence": "Assumption states 'PoV-Marge bewusst unter Ziel-Marge als Land-and-Expand-Strategie'. PoV margin at 11.2% vs 31-36% for other tiers confirms deliberate discounting."
+    },
+    {
+      "claim": "Internal cost calculations are arithmetically correct",
+      "type": "factual",
+      "verified": true,
+      "evidence": "Spot-checked: PoV = 6*1800 + 6*1200 + 3*1400 = 10800+7200+4200 = 22200 EUR. Matches stated internal_cost. Large = 32*1800 + 110*1200 + 38*1400 = 57600+132000+53200 = 242800 EUR. Matches."
+    },
+    {
+      "claim": "Round 2 revision addressed all HIGH recommendations from Round 1",
+      "type": "quality",
+      "verified": true,
+      "evidence": "Round 1 had 3 HIGH recommendations: (1) OT-Team-Verfügbarkeit -> added as assumption in revised solution, (2) Legacy-Decommissioning out-of-scope -> added as assumption, (3) Datenportabilität -> added in assumptions and phase 5 description. All reflected in solution-revised.json."
+    },
+    {
+      "claim": "Factory efficiency at large tier is 3.6 days/workload",
+      "type": "factual",
+      "verified": true,
+      "evidence": "Large tier: 180 total_days for 50+ workloads. 180/50 = 3.6 days/workload. Claim in provider_sa review is correct."
+    }
+  ],
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "SOL-05: All margins positive",
+        "reason": "Checking positivity is necessary but weak. A margin of 0.1% would pass. Consider asserting PoV margin >= 5% and standard tiers >= 25% to catch under-priced solutions."
+      },
+      {
+        "reason": "No assertion checks that the revised solution actually differs from the original. A skill could produce identical files and pass SOL-09 if the round 2 assessment simply reports higher scores. Consider diffing original vs revised solution to verify substantive changes were made."
+      },
+      {
+        "reason": "No assertion checks arithmetic consistency between pricing, internal_cost, and margin_pct. A solution with price 100K, cost 90K, but margin_pct: 50% would pass all current assertions. Consider verifying (price - internal_cost) / price matches stated margin_pct within tolerance."
+      }
+    ],
+    "overall": "Assertions cover the structural skeleton well but could be strengthened on numerical correctness and revision substance. The arithmetic consistency gap is the most important — a hallucinated margin percentage would go undetected."
+  }
+}

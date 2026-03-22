@@ -1,0 +1,7 @@
+{
+  "slug": "proposition-generierung",
+  "product_slug": "cogni-portfolio",
+  "name": "Proposition-Generierung",
+  "description": "Synthese-Mechanismus, der aus den IS/DOES/MEANS-Facetten eines Portfolio-Elements eine kompakte, zielgruppengerechte Value Proposition ableitet und als strukturierten Text ausgibt.",
+  "readiness": "ga"
+}

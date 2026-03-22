@@ -1,0 +1,16 @@
+{
+  "slug": "managed-data-warehouse",
+  "product_slug": "infrastructure-services",
+  "name": "Managed Data Warehouse Service",
+  "description": "Verwalteter Data-Warehouse-Service auf AWS",
+  "taxonomy_mapping": {
+    "dimension": 5,
+    "dimension_name": "Managed Infrastructure Services",
+    "category_id": "5.6",
+    "category_name": "Database Administration",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

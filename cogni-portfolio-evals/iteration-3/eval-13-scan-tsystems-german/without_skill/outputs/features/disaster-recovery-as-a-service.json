@@ -1,0 +1,13 @@
+{
+  "slug": "disaster-recovery-as-a-service",
+  "name": "Disaster Recovery as a Service (DRaaS)",
+  "description": "Automatisierte Failover und Datensynchronisierung mit Veritas und Dell Cyber Recovery Vault. Definierbare RTO/RPO.",
+  "product_slug": "t-systems-infrastructure",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 5,
+    "category_id": "5.3",
+    "category_name": "Backup & Disaster Recovery"
+  },
+  "source_file": "https://www.veritas.com/de/de/news-releases/2017-08-08-t-systems-offers-global-disaster-recovery-at-the-touch-of-a-button-with-automated-cloud-resiliency-powered-by-veritas"
+}

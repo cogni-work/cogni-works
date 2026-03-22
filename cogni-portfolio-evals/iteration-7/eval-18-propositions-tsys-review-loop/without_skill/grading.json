@@ -1,0 +1,344 @@
+{
+  "total_checks": 56,
+  "passed": 56,
+  "failed": 0,
+  "pass_rate": 1.0,
+  "expectations": [
+    {
+      "text": "DOES statement 15-30 words (actual: 20)",
+      "passed": true,
+      "evidence": "\"Energieversorger migrieren Bestandsanwendungen planbar in die Cloud, wobei vorde...\"",
+      "entity": "cloud-migration--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS statement 15-30 words (actual: 18)",
+      "passed": true,
+      "evidence": "\"Migrationsbudgets werden um bis zu 25% unterschritten, da die Factory-Methodik D...\"",
+      "entity": "cloud-migration--grosse-energieversorger-de"
+    },
+    {
+      "text": "IS statement 20-35 words (actual: 20)",
+      "passed": true,
+      "evidence": "\"Cloud Migration Services ist ein strukturiertes Migrationsprogramm mit Assessmen...\"",
+      "entity": "cloud-migration--grosse-energieversorger-de"
+    },
+    {
+      "text": "Slug follows {feature}--{market} convention",
+      "passed": true,
+      "evidence": "slug=\"cloud-migration--grosse-energieversorger-de\", expected=\"cloud-migration--grosse-energieversorger-de\"",
+      "entity": "cloud-migration--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES is not vendor-centric",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "cloud-migration--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS contains quantification signal",
+      "passed": true,
+      "evidence": "\"Migrationsbudgets werden um bis zu 25% unterschritten, da die Factory-Methodik D...\"",
+      "entity": "cloud-migration--grosse-energieversorger-de"
+    },
+    {
+      "text": "Evidence array is non-empty",
+      "passed": true,
+      "evidence": "2 evidence entries",
+      "entity": "cloud-migration--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES statement 15-30 words (actual: 16)",
+      "passed": true,
+      "evidence": "\"Energieversorger modernisieren Smart-Meter-Datenverarbeitung und Billing-Systeme...\"",
+      "entity": "cloud-native-container--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS statement 15-30 words (actual: 18)",
+      "passed": true,
+      "evidence": "\"Time-to-Market fuer neue Smart-Meter-Integrationen sinkt um bis zu 50%, waehrend...\"",
+      "entity": "cloud-native-container--grosse-energieversorger-de"
+    },
+    {
+      "text": "IS statement 20-35 words (actual: 26)",
+      "passed": true,
+      "evidence": "\"Cloud-Native und Container Platform ist eine verwaltete Kubernetes-Plattform auf...\"",
+      "entity": "cloud-native-container--grosse-energieversorger-de"
+    },
+    {
+      "text": "Slug follows {feature}--{market} convention",
+      "passed": true,
+      "evidence": "slug=\"cloud-native-container--grosse-energieversorger-de\", expected=\"cloud-native-container--grosse-energieversorger-de\"",
+      "entity": "cloud-native-container--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES is not vendor-centric",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "cloud-native-container--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS contains quantification signal",
+      "passed": true,
+      "evidence": "\"Time-to-Market fuer neue Smart-Meter-Integrationen sinkt um bis zu 50%, waehrend...\"",
+      "entity": "cloud-native-container--grosse-energieversorger-de"
+    },
+    {
+      "text": "Evidence array is non-empty",
+      "passed": true,
+      "evidence": "2 evidence entries",
+      "entity": "cloud-native-container--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES statement 15-30 words (actual: 16)",
+      "passed": true,
+      "evidence": "\"Energieversorger verbinden OT-Netzleitstellen in der Private Cloud mit Public-Cl...\"",
+      "entity": "hybrid-cloud--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS statement 15-30 words (actual: 20)",
+      "passed": true,
+      "evidence": "\"IT/OT-Integrationsprojekte verkuerzen sich um bis zu 45%, da ein vorkonfiguriert...\"",
+      "entity": "hybrid-cloud--grosse-energieversorger-de"
+    },
+    {
+      "text": "IS statement 20-35 words (actual: 23)",
+      "passed": true,
+      "evidence": "\"Hybrid Cloud Solutions kombiniert T Cloud Hybrid mit Private- und Public-Cloud-R...\"",
+      "entity": "hybrid-cloud--grosse-energieversorger-de"
+    },
+    {
+      "text": "Slug follows {feature}--{market} convention",
+      "passed": true,
+      "evidence": "slug=\"hybrid-cloud--grosse-energieversorger-de\", expected=\"hybrid-cloud--grosse-energieversorger-de\"",
+      "entity": "hybrid-cloud--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES is not vendor-centric",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "hybrid-cloud--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS contains quantification signal",
+      "passed": true,
+      "evidence": "\"IT/OT-Integrationsprojekte verkuerzen sich um bis zu 45%, da ein vorkonfiguriert...\"",
+      "entity": "hybrid-cloud--grosse-energieversorger-de"
+    },
+    {
+      "text": "Evidence array is non-empty",
+      "passed": true,
+      "evidence": "2 evidence entries",
+      "entity": "hybrid-cloud--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES statement 15-30 words (actual: 17)",
+      "passed": true,
+      "evidence": "\"Energieversorger nutzen Hyperscaler-Dienste fuer KI-gestuetzte Netzprognosen und...\"",
+      "entity": "managed-hyperscaler--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS statement 15-30 words (actual: 21)",
+      "passed": true,
+      "evidence": "\"Der interne Cloud-Operations-Bedarf sinkt um 8 bis 12 Vollzeitstellen, was bei a...\"",
+      "entity": "managed-hyperscaler--grosse-energieversorger-de"
+    },
+    {
+      "text": "IS statement 20-35 words (actual: 25)",
+      "passed": true,
+      "evidence": "\"Managed Hyperscaler Services umfasst den vollstaendig verwalteten Betrieb von AW...\"",
+      "entity": "managed-hyperscaler--grosse-energieversorger-de"
+    },
+    {
+      "text": "Slug follows {feature}--{market} convention",
+      "passed": true,
+      "evidence": "slug=\"managed-hyperscaler--grosse-energieversorger-de\", expected=\"managed-hyperscaler--grosse-energieversorger-de\"",
+      "entity": "managed-hyperscaler--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES is not vendor-centric",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "managed-hyperscaler--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS contains quantification signal",
+      "passed": true,
+      "evidence": "\"Der interne Cloud-Operations-Bedarf sinkt um 8 bis 12 Vollzeitstellen, was bei a...\"",
+      "entity": "managed-hyperscaler--grosse-energieversorger-de"
+    },
+    {
+      "text": "Evidence array is non-empty",
+      "passed": true,
+      "evidence": "2 evidence entries",
+      "entity": "managed-hyperscaler--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES statement 15-30 words (actual: 19)",
+      "passed": true,
+      "evidence": "\"Energieversorger steuern Cloud-Ausgaben ueber alle Anbieter hinweg transparent u...\"",
+      "entity": "multi-cloud-finops--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS statement 15-30 words (actual: 19)",
+      "passed": true,
+      "evidence": "\"Cloud-Kosten sinken erfahrungsgemaess um 20 bis 30% im ersten Jahr, waehrend man...\"",
+      "entity": "multi-cloud-finops--grosse-energieversorger-de"
+    },
+    {
+      "text": "IS statement 20-35 words (actual: 29)",
+      "passed": true,
+      "evidence": "\"Multi-Cloud und FinOps Management ist eine zentralisierte Governance-Loesung ueb...\"",
+      "entity": "multi-cloud-finops--grosse-energieversorger-de"
+    },
+    {
+      "text": "Slug follows {feature}--{market} convention",
+      "passed": true,
+      "evidence": "slug=\"multi-cloud-finops--grosse-energieversorger-de\", expected=\"multi-cloud-finops--grosse-energieversorger-de\"",
+      "entity": "multi-cloud-finops--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES is not vendor-centric",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "multi-cloud-finops--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS contains quantification signal",
+      "passed": true,
+      "evidence": "\"Cloud-Kosten sinken erfahrungsgemaess um 20 bis 30% im ersten Jahr, waehrend man...\"",
+      "entity": "multi-cloud-finops--grosse-energieversorger-de"
+    },
+    {
+      "text": "Evidence array is non-empty",
+      "passed": true,
+      "evidence": "2 evidence entries",
+      "entity": "multi-cloud-finops--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES statement 15-30 words (actual: 15)",
+      "passed": true,
+      "evidence": "\"Energieversorger betreiben SCADA-Systeme und Netzleitstellen-Applikationen in ei...\"",
+      "entity": "private-cloud--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS statement 15-30 words (actual: 20)",
+      "passed": true,
+      "evidence": "\"Ungeplante Ausfallzeiten kritischer Netzleitsysteme sinken um bis zu 60%, was ja...\"",
+      "entity": "private-cloud--grosse-energieversorger-de"
+    },
+    {
+      "text": "IS statement 20-35 words (actual: 27)",
+      "passed": true,
+      "evidence": "\"Private Cloud Infrastructure ist eine VMware Cloud Foundation basierte Future Cl...\"",
+      "entity": "private-cloud--grosse-energieversorger-de"
+    },
+    {
+      "text": "Slug follows {feature}--{market} convention",
+      "passed": true,
+      "evidence": "slug=\"private-cloud--grosse-energieversorger-de\", expected=\"private-cloud--grosse-energieversorger-de\"",
+      "entity": "private-cloud--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES is not vendor-centric",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "private-cloud--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS contains quantification signal",
+      "passed": true,
+      "evidence": "\"Ungeplante Ausfallzeiten kritischer Netzleitsysteme sinken um bis zu 60%, was ja...\"",
+      "entity": "private-cloud--grosse-energieversorger-de"
+    },
+    {
+      "text": "Evidence array is non-empty",
+      "passed": true,
+      "evidence": "2 evidence entries",
+      "entity": "private-cloud--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES statement 15-30 words (actual: 17)",
+      "passed": true,
+      "evidence": "\"Energieversorger migrieren SAP IS-U auf S/4HANA Utilities termingerecht vor der ...\"",
+      "entity": "sap-on-cloud--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS statement 15-30 words (actual: 19)",
+      "passed": true,
+      "evidence": "\"Migrationsrisiken sinken messbar, da 850.000 bereits verwaltete SAP-Nutzer als R...\"",
+      "entity": "sap-on-cloud--grosse-energieversorger-de"
+    },
+    {
+      "text": "IS statement 20-35 words (actual: 29)",
+      "passed": true,
+      "evidence": "\"SAP on Cloud ist ein End-to-End-Service fuer Hosting, Migration und Betrieb von ...\"",
+      "entity": "sap-on-cloud--grosse-energieversorger-de"
+    },
+    {
+      "text": "Slug follows {feature}--{market} convention",
+      "passed": true,
+      "evidence": "slug=\"sap-on-cloud--grosse-energieversorger-de\", expected=\"sap-on-cloud--grosse-energieversorger-de\"",
+      "entity": "sap-on-cloud--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES is not vendor-centric",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "sap-on-cloud--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS contains quantification signal",
+      "passed": true,
+      "evidence": "\"Migrationsrisiken sinken messbar, da 850.000 bereits verwaltete SAP-Nutzer als R...\"",
+      "entity": "sap-on-cloud--grosse-energieversorger-de"
+    },
+    {
+      "text": "Evidence array is non-empty",
+      "passed": true,
+      "evidence": "2 evidence entries",
+      "entity": "sap-on-cloud--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES statement 15-30 words (actual: 18)",
+      "passed": true,
+      "evidence": "\"Energieversorger behalten die volle Datenhoheit ueber kritische Netz- und Kunden...\"",
+      "entity": "sovereign-cloud--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS statement 15-30 words (actual: 18)",
+      "passed": true,
+      "evidence": "\"Audit-Vorbereitungszeiten sinken um bis zu 40%, waehrend die NIS2-Registrierung ...\"",
+      "entity": "sovereign-cloud--grosse-energieversorger-de"
+    },
+    {
+      "text": "IS statement 20-35 words (actual: 28)",
+      "passed": true,
+      "evidence": "\"Sovereign Cloud ist eine in der EU betriebene Cloud-Infrastruktur auf Basis von ...\"",
+      "entity": "sovereign-cloud--grosse-energieversorger-de"
+    },
+    {
+      "text": "Slug follows {feature}--{market} convention",
+      "passed": true,
+      "evidence": "slug=\"sovereign-cloud--grosse-energieversorger-de\", expected=\"sovereign-cloud--grosse-energieversorger-de\"",
+      "entity": "sovereign-cloud--grosse-energieversorger-de"
+    },
+    {
+      "text": "DOES is not vendor-centric",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "sovereign-cloud--grosse-energieversorger-de"
+    },
+    {
+      "text": "MEANS contains quantification signal",
+      "passed": true,
+      "evidence": "\"Audit-Vorbereitungszeiten sinken um bis zu 40%, waehrend die NIS2-Registrierung ...\"",
+      "entity": "sovereign-cloud--grosse-energieversorger-de"
+    },
+    {
+      "text": "Evidence array is non-empty",
+      "passed": true,
+      "evidence": "2 evidence entries",
+      "entity": "sovereign-cloud--grosse-energieversorger-de"
+    }
+  ]
+}

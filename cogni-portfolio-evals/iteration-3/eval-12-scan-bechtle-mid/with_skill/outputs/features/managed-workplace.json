@@ -1,0 +1,16 @@
+{
+  "slug": "managed-workplace",
+  "product_slug": "workplace-services",
+  "name": "Managed Workplace Services",
+  "description": "Comprehensive endpoint lifecycle and digital employee experience",
+  "taxonomy_mapping": {
+    "dimension": 3,
+    "dimension_name": "Digital Workplace Services",
+    "category_id": "3.6",
+    "category_name": "Digital Employee Experience",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/bechtle-portfolio.md",
+  "created": "2026-03-18"
+}

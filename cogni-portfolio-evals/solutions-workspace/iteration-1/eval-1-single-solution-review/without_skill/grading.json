@@ -1,0 +1,105 @@
+{
+  "expectations": [
+    {
+      "text": "SOL-01: Solution JSON has solution_type: project",
+      "passed": false,
+      "evidence": "The solution.json has no 'solution_type' field at all. The top-level keys are: slug, proposition_slug, feature_slug, market_slug, product_slug, generated, title, summary, implementation_plan, pricing, compliance_coverage, buying_committee_alignment."
+    },
+    {
+      "text": "SOL-02: Solution has 2-5 implementation phases",
+      "passed": true,
+      "evidence": "implementation_plan.phases contains 4 phases: P1 Assessment & Discovery, P2 Mobilize & Landing Zone, P3 Migration Waves, P4 Optimize & Transition."
+    },
+    {
+      "text": "SOL-03: All four pricing tiers present (proof_of_value, small, medium, large)",
+      "passed": false,
+      "evidence": "No pricing tiers exist. The pricing section contains a single flat rate card and effort summary totaling EUR 2.67M. There are no proof_of_value, small, medium, or large tier structures."
+    },
+    {
+      "text": "SOL-04: cost_model present with effort_by_tier",
+      "passed": false,
+      "evidence": "No 'cost_model' field exists in the solution JSON. Pricing data is under a 'pricing' key with effort_summary broken by phase (not by tier). No 'effort_by_tier' structure is present."
+    },
+    {
+      "text": "SOL-05: All margins positive",
+      "passed": true,
+      "evidence": "target_margin_pct: 30, margin_amount: 800571 (EUR). Total delivery cost 1,868,000 vs total price 2,670,000. Margin is positive."
+    },
+    {
+      "text": "SOL-06: Review assessment JSON produced with all three perspectives",
+      "passed": true,
+      "evidence": "review-assessment.json contains three perspectives: 'Procurement Decision-Maker', 'Provider-Side Solution Architect', and 'Client-Side Solution Architect'."
+    },
+    {
+      "text": "SOL-07: Each perspective has 5 scored criteria",
+      "passed": true,
+      "evidence": "Procurement: 5 criteria (3 pass, 2 warn). Provider SA: 5 criteria (4 pass, 1 warn). Client SA: 5 criteria (3 pass, 2 warn). All 15 criteria have score values."
+    },
+    {
+      "text": "SOL-08: Synthesis section has verdict (accept/revise/reject)",
+      "passed": false,
+      "evidence": "The verdict section has overall_score: 'pass_with_conditions', which is not one of the required values (accept, revise, reject). The expected enum was not followed."
+    },
+    {
+      "text": "SOL-09: If verdict was revise, a second assessment exists with improved scores",
+      "passed": true,
+      "evidence": "The verdict was 'pass_with_conditions' (not 'revise'), so this conditional assertion is satisfied vacuously. No second assessment was required."
+    },
+    {
+      "text": "SOL-10: Phase descriptions are in German (portfolio language: de)",
+      "passed": true,
+      "evidence": "All four phase descriptions are in German. Example from P1: 'Vollstaendige Inventarisierung der Workload-Landschaft, Abhaengigkeitsanalyse, KRITIS-Relevanz-Klassifizierung und 6R-Strategiezuordnung...'"
+    }
+  ],
+  "summary": {
+    "passed": 6,
+    "failed": 4,
+    "total": 10,
+    "pass_rate": 0.60
+  },
+  "timing": {
+    "total_duration_seconds": 139.7
+  },
+  "claims": [
+    {
+      "claim": "Solution addresses KRITIS-Compliance, OT/IT convergence, and skills shortage",
+      "type": "quality",
+      "verified": true,
+      "evidence": "BSI-C5, NIS2, KRITIS-DachG are covered in compliance_coverage. OT/IT segmentation addressed in P2. Fachkräftemangel mentioned in P3 risks and buying committee alignment."
+    },
+    {
+      "claim": "30% target margin on EUR 2.67M price",
+      "type": "factual",
+      "verified": true,
+      "evidence": "Delivery cost 1,868,000 + margin 800,571 = 2,668,571 rounded to 2,670,000. Margin percentage: 800,571/2,668,571 = 30.0%."
+    },
+    {
+      "claim": "Review has no fail scores",
+      "type": "factual",
+      "verified": true,
+      "evidence": "All 15 criteria scored either 'pass' (11) or 'warn' (4). fail_count: 0 in verdict."
+    },
+    {
+      "claim": "Total duration 44 weeks across 4 phases",
+      "type": "factual",
+      "verified": true,
+      "evidence": "P1: 6 weeks + P2: 8 weeks + P3: 24 weeks + P4: 6 weeks = 44 weeks. Matches total_duration_weeks: 44."
+    }
+  ],
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "SOL-09: If verdict was revise, a second assessment exists with improved scores",
+        "reason": "This assertion is vacuously true whenever the verdict is not 'revise'. Combined with SOL-08 failing (verdict used wrong enum), this means the revise-and-improve loop is never actually tested. Consider making SOL-08 a prerequisite for SOL-09, or auto-failing SOL-09 when SOL-08 fails."
+      },
+      {
+        "assertion": "SOL-05: All margins positive",
+        "reason": "This only checks a single global margin. The assertion was designed for tiered pricing (proof_of_value, small, medium, large) where each tier should have a positive margin. With flat pricing, a single positive number satisfies it trivially. Consider coupling this with SOL-03 so margin validation is per-tier."
+      },
+      {
+        "reason": "No assertion checks whether the solution references the correct proposition inputs (market pain points, product capabilities). The baseline produced high-quality German content that happens to match the domain, but there is no structural check that it actually consumed the proposition data rather than hallucinating plausible content."
+      }
+    ],
+    "overall": "The baseline (no skill) produced a well-structured solution and review but missed key schema requirements: no solution_type field, no pricing tiers, no cost_model/effort_by_tier, and used a non-standard verdict enum. These are exactly the structural gaps a skill should enforce."
+  }
+}

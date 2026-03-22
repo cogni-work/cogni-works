@@ -1,0 +1,13 @@
+{
+  "slug": "application-development",
+  "name": "Application Development & Management",
+  "description": "Individuelle Anwendungsentwicklung, Enterprise Application Services und kontinuierliches Application Management.",
+  "product_slug": "t-systems-applications",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 6,
+    "category_id": "6.1",
+    "category_name": "Custom Application Development"
+  },
+  "source_file": "https://www.t-systems.com/us/en/application-services"
+}

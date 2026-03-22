@@ -1,0 +1,40 @@
+{
+  "slug": "hybrid-cloud",
+  "name": "Hybrid Cloud Solutions",
+  "description": "T Cloud Hybrid kombiniert Private- und Public-Cloud mit zentralem Governance-Framework, Multi-Cloud-Konnektivitätsplattform (MCCP), branchenspezifischen Varianten (Health Hybrid Cloud) und cloudübergreifender Automatisierung.",
+  "review": {
+    "quality_score": 2.5,
+    "issues": [
+      {
+        "check": "language-mismatch",
+        "severity": "high",
+        "detail": "Portfolio language is 'en' but description is written in German."
+      },
+      {
+        "check": "feature-overlap",
+        "severity": "high",
+        "detail": "Governance framework and MCCP overlap with multi-cloud-finops. Private Cloud component overlaps with private-cloud feature. Feature boundaries are not well-defined."
+      },
+      {
+        "check": "missing-customer-value",
+        "severity": "high",
+        "detail": "Describes architectural composition but not why a customer would choose this — what pain does it solve? What outcome does it enable?"
+      },
+      {
+        "check": "missing-schema-fields",
+        "severity": "medium",
+        "detail": "Missing fields: product, created, status, differentiators, use_cases."
+      },
+      {
+        "check": "vague-claim",
+        "severity": "medium",
+        "detail": "'branchenspezifischen Varianten' only names one example (Health). If there are more, list them; if not, clarify scope."
+      }
+    ],
+    "passed_checks": [
+      "slug-format",
+      "description-present",
+      "name-present"
+    ]
+  }
+}

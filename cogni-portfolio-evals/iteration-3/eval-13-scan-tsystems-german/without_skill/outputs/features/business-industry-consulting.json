@@ -1,0 +1,13 @@
+{
+  "slug": "business-industry-consulting",
+  "name": "Business & Industry Consulting",
+  "description": "Branchenspezifische Beratung fuer Automotive, Gesundheitswesen, Oeffentlicher Sektor, Fertigung, Financial Services, Handel & Logistik.",
+  "product_slug": "detecon-consulting",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 7,
+    "category_id": "7.3",
+    "category_name": "Business & Industry Consulting"
+  },
+  "source_file": "https://www.telekom.com/en/media/media-information/archive/leader-business-consulting-und-sustainability-1024336"
+}

@@ -1,0 +1,16 @@
+{
+  "slug": "connectivity-plus-naas",
+  "product_slug": "connectivity-services",
+  "name": "Connectivity Plus NaaS",
+  "description": "Network-as-a-Service platform composed of selectable building blocks for network, telephony, and collaboration services, consumed as modular subscription components on Deutsche Telekom infrastructure.",
+  "taxonomy_mapping": {
+    "dimension": 1,
+    "dimension_name": "Connectivity Services",
+    "category_id": "1.7",
+    "category_name": "Network-as-a-Service",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

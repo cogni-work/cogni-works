@@ -1,0 +1,13 @@
+{
+  "slug": "bechtle-cyber-defence-centre",
+  "name": "Bechtle Cyber Defence Centre",
+  "description": "24/7 Security Operations Centre with SIEM, Managed XDR (SMART Security), automated incident detection, and response capabilities.",
+  "product_slug": "bechtle-security",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 2,
+    "category_id": "2.1",
+    "category_name": "Security Operations (SOC/SIEM)"
+  },
+  "source_file": "https://www.bechtle.com/at-en/it-solutions/security-solutions/cyber-defence-centre"
+}

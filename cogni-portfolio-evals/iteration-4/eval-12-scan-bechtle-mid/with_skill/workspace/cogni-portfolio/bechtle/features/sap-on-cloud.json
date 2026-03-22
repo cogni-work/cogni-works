@@ -1,0 +1,16 @@
+{
+  "slug": "sap-on-cloud",
+  "product_slug": "cloud-services",
+  "name": "SAP on Cloud (RISE with SAP)",
+  "description": "SAP S/4HANA hosting and managed operations across Bechtle private cloud, AWS, Azure and Google Cloud with 50+ certified SAP specialists performing HANA and OS/DB migration as SAP Gold Partner.",
+  "taxonomy_mapping": {
+    "dimension": 4,
+    "dimension_name": "Cloud Services",
+    "category_id": "4.8",
+    "category_name": "Enterprise Platforms on Cloud",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/bechtle-portfolio.md",
+  "created": "2026-03-18"
+}

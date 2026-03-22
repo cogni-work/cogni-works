@@ -1,0 +1,16 @@
+{
+  "slug": "pluscloud-open",
+  "product_slug": "cloud-services",
+  "name": "pluscloud open",
+  "description": "Open-source sovereign cloud platform from plusserver built on Sovereign Cloud Stack specification with SCS compliance certification, German hosting and open API standardization.",
+  "taxonomy_mapping": {
+    "dimension": 4,
+    "dimension_name": "Cloud Services",
+    "category_id": "4.7",
+    "category_name": "Sovereign Cloud",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/bechtle-portfolio.md",
+  "created": "2026-03-18"
+}

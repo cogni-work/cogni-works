@@ -1,0 +1,165 @@
+{
+  "slug": "sap-on-cloud--grosse-energieversorger-de",
+  "proposition_slug": "sap-on-cloud--grosse-energieversorger-de",
+  "feature_slug": "sap-on-cloud",
+  "market_slug": "grosse-energieversorger-de",
+  "product_slug": "cloud-services",
+  "title": "SAP-on-Cloud-Betriebsplattform fuer grosse deutsche Energieversorger",
+  "summary": "Managed SAP-Betriebsplattform mit automatisiertem Lifecycle-Management fuer S/4HANA und IS-U auf Cloud-Infrastruktur. Abdeckung von IS-U-spezifischen Abrechnungszyklen und branchenueblichen Hochlastphasen (Jahresabrechnung, Preisanpassungen). 25-35% Betriebskostensenkung bei 99.95% SLA. Zielgruppe: E.ON, RWE, EnBW, Vattenfall Deutschland, Uniper.",
+  "implementation_plan": {
+    "phases": [
+      {
+        "phase": 1,
+        "name": "SAP Landscape Assessment",
+        "duration_weeks": 4,
+        "description": "Analyse der bestehenden SAP-Landschaft inkl. IS-U, S/4HANA-Module, Schnittstellen zu Billing, Messdatenmanagement und Smart-Metering. Bewertung der Cloud-Readiness, Identifikation von Custom-Code und Datenbank-Groessen. TCO-Baseline-Erhebung On-Premises.",
+        "deliverables": [
+          "SAP System Landscape Assessment (alle produktiven und nicht-produktiven Systeme)",
+          "Custom-Code-Analyse und Bereinigungsempfehlung",
+          "IS-U-spezifische Last- und Performance-Profile (Jahresabrechnung, MaKo-Prozesse)",
+          "Cloud-Target-Architektur (Private Cloud, Hyperscaler oder Sovereign Cloud)",
+          "TCO-Vergleich: On-Prem vs. Managed Cloud (5 Jahre)",
+          "Risikobewertung inkl. KRITIS-Compliance-Anforderungen"
+        ],
+        "team": [
+          { "role": "Solution Architect", "count": 2, "utilization_pct": 100 },
+          { "role": "Implementation Engineer", "count": 1, "utilization_pct": 40 },
+          { "role": "Project Manager", "count": 1, "utilization_pct": 60 }
+        ]
+      },
+      {
+        "phase": 2,
+        "name": "Platform Build & Migration Prep",
+        "duration_weeks": 8,
+        "description": "Aufbau der SAP-Zielplattform auf Sovereign Cloud oder Private Cloud. Einrichtung von Basis-Administration, Monitoring, Backup/Restore, Patch-Management. Vorbereitung der System-Kopie und Migrationstools (SUM, DMO, SWPM).",
+        "deliverables": [
+          "SAP-Cloud-Plattform (Compute, Storage, Netzwerk) provisioniert",
+          "Basis-Administrations-Framework (automatisiertes Monitoring, Alerting)",
+          "Backup/Restore-Konzept mit RPO/RTO-Garantien",
+          "Patch-Management-Kalender abgestimmt auf IS-U-Abrechnungszyklen",
+          "Migrationstool-Setup (SUM/DMO fuer S/4HANA, R3load fuer IS-U-Daten)",
+          "Netzwerk-Anbindung (VPN/MPLS) zur OT-Umgebung"
+        ],
+        "team": [
+          { "role": "Solution Architect", "count": 2, "utilization_pct": 80 },
+          { "role": "Implementation Engineer", "count": 3, "utilization_pct": 100 },
+          { "role": "Project Manager", "count": 1, "utilization_pct": 80 }
+        ]
+      },
+      {
+        "phase": 3,
+        "name": "System Migration & Validation",
+        "duration_weeks": 10,
+        "description": "Migration der SAP-Systeme in gestaffelter Reihenfolge: Sandbox, Entwicklung, QA, Pre-Prod, Produktion. IS-U-Produktivmigration wird in einem Wartungsfenster durchgefuehrt (Wochenende). Parallel-Betrieb fuer 2 Wochen zur Validierung.",
+        "deliverables": [
+          "Sandbox- und Dev-Systeme migriert und validiert",
+          "QA-System migriert mit vollstaendigem Regressionstest",
+          "Produktivmigration IS-U und S/4HANA (geplantes Wochenend-Wartungsfenster)",
+          "Performance-Validierung gegen Baseline (Antwortzeiten, Batch-Jobs, Abrechnungslaeufe)",
+          "Parallel-Betrieb-Bericht (2 Wochen)",
+          "Abnahme-Protokoll durch Fachbereich"
+        ],
+        "team": [
+          { "role": "Solution Architect", "count": 2, "utilization_pct": 80 },
+          { "role": "Implementation Engineer", "count": 4, "utilization_pct": 100 },
+          { "role": "Project Manager", "count": 1, "utilization_pct": 100 }
+        ]
+      },
+      {
+        "phase": 4,
+        "name": "Managed Operations & Optimization",
+        "duration_weeks": 12,
+        "description": "Uebergang in den Managed-Operations-Betrieb mit SLA-basiertem Service-Management. Optimierung der Plattform-Performance, FinOps-Governance, und Kapazitaetsplanung fuer saisonale Hochlastphasen. Wissenstransfer an Retained-IT-Organisation.",
+        "deliverables": [
+          "SLA-Dashboard (Verfuegbarkeit, Performance, Incident-Metriken)",
+          "FinOps-Report mit Optimierungsempfehlungen",
+          "Hochlast-Playbooks (Jahresabrechnung, Preisanpassungen, Smart-Meter-Rollout)",
+          "Kapazitaetsplanung fuer naechste 12 Monate",
+          "Wissenstransfer-Dokumentation fuer Retained-IT",
+          "Betriebshandbuch und Eskalationsmatrix"
+        ],
+        "team": [
+          { "role": "Solution Architect", "count": 1, "utilization_pct": 40 },
+          { "role": "Implementation Engineer", "count": 2, "utilization_pct": 60 },
+          { "role": "Project Manager", "count": 1, "utilization_pct": 40 }
+        ]
+      }
+    ],
+    "total_duration_weeks": 34,
+    "constraints": [
+      "IS-U-Produktivmigration nur in abgestimmtem Wartungsfenster (Wochenende, ausserhalb Jahresabrechnung)",
+      "S/4HANA funktionale Transformation (Customizing, Prozess-Redesign) ist nicht im Scope",
+      "Customer stellt SAP-Lizenzen bereit; nur Infrastruktur und Betrieb im Angebot",
+      "KRITIS-relevante Abrechnungsdaten muessen in deutschen Rechenzentren verbleiben",
+      "Remote-Delivery als Default; On-Site fuer Produktivmigration vorgesehen"
+    ],
+    "risks": [
+      {
+        "risk": "IS-U-Migrationsdowntime ueberschreitet Wartungsfenster",
+        "impact": "high",
+        "probability": "medium",
+        "mitigation": "Generalprobe auf Pre-Prod-System; Near-Zero-Downtime-Migration mit DMO"
+      },
+      {
+        "risk": "Performance-Degradation bei Jahresabrechnungslauf",
+        "impact": "high",
+        "probability": "medium",
+        "mitigation": "Last-Tests mit realistischen Abrechnungsvolumina in QA; Auto-Scaling vorbereitet"
+      },
+      {
+        "risk": "Custom-Code-Inkompatibilitaet nach Migration",
+        "impact": "medium",
+        "probability": "medium",
+        "mitigation": "Custom-Code-Analyse in Phase 1; Regressionstest-Suite in Phase 3"
+      },
+      {
+        "risk": "Netzwerk-Latenz zu OT-Systemen (SCADA-Schnittstellen)",
+        "impact": "medium",
+        "probability": "low",
+        "mitigation": "Latenz-Messung in Phase 2; dedizierte Netzwerkverbindung falls erforderlich"
+      }
+    ]
+  },
+  "pricing": {
+    "currency": "EUR",
+    "rate_card": [
+      { "role": "Solution Architect", "rate_day": 1800 },
+      { "role": "Implementation Engineer", "rate_day": 1200 },
+      { "role": "Project Manager", "rate_day": 1400 }
+    ],
+    "tiers": [
+      {
+        "tier": "Essential",
+        "scope": "Assessment + Migration only (Phases 1-3), Betrieb durch Kunden",
+        "total_effort_days": 530,
+        "total_cost_before_margin": 738800,
+        "target_margin_pct": 30,
+        "price": 960440
+      },
+      {
+        "tier": "Professional",
+        "scope": "Assessment + Migration + 3 Monate Managed Operations (Phases 1-4)",
+        "total_effort_days": 642,
+        "total_cost_before_margin": 882800,
+        "target_margin_pct": 30,
+        "price": 1147640
+      },
+      {
+        "tier": "Enterprise",
+        "scope": "Full programme + 12 Monate Managed Operations mit SLA",
+        "total_effort_days": 858,
+        "total_cost_before_margin": 1170800,
+        "target_margin_pct": 30,
+        "price": 1522040
+      }
+    ],
+    "payment_milestones": [
+      { "milestone": "Vertragsunterzeichnung", "pct": 10 },
+      { "milestone": "Phase 1 abgeschlossen (Assessment)", "pct": 15 },
+      { "milestone": "Phase 2 abgeschlossen (Plattform ready)", "pct": 25 },
+      { "milestone": "Phase 3 abgeschlossen (Migration validiert)", "pct": 30 },
+      { "milestone": "Phase 4 abgeschlossen (Managed Ops stabil)", "pct": 20 }
+    ]
+  },
+  "created": "2026-03-18"
+}

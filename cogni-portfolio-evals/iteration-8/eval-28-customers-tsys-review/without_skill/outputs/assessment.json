@@ -1,0 +1,54 @@
+{
+  "eval": "eval-28-customers-tsys-review",
+  "variant": "without_skill",
+  "market_slug": "grosse-energieversorger-de",
+  "date": "2026-03-18",
+  "revision_rounds": 2,
+  "initial_state": "No customer profiles existed -- customers/ directory was absent from the t-systems fixture. Profiles were generated from scratch using market data, propositions, solutions, and general knowledge of large German energy utilities.",
+  "perspectives": {
+    "perspective_1_buyer_recognition": {
+      "question": "Would a buying committee member recognize themselves?",
+      "score": 8.5,
+      "max_score": 10,
+      "assessment": "Strong recognition likely across all 7 profiles. The CIO tension between cost cutting and digitalization, the CISO struggle with OT/IT convergence, the VP Infra pain from Broadcom VMware licensing, and the CFO competition for Energiewende capital are all authentic and specific to this market. The Grid Operations persona accurately captures the OT protectionism mindset. Two areas of partial weakness: (1) the CDO role varies significantly across utilities -- some have it, some merge it with CIO -- this is flagged in the profile with a note field; (2) the Trading persona was broadened from pure trading to portfolio management to reflect the range from RWE-scale trading desks to EnBW-scale optimization teams.",
+      "round_1_improvements": [
+        "Broadened 'Head of Energy Trading' to 'Head of Portfolio Management & Trading' to reflect that not all large utilities have major proprietary trading desks",
+        "Added CDO profile as a 7th persona -- increasingly common at large utilities since 2022",
+        "Fixed VP Infra data center pain point: replaced overly specific 'lease expiry' with 'owned or leased' to cover both utility patterns",
+        "Added Broadcom VMware licensing as a specific, timely pain point for VP Infra",
+        "Added Redispatch 2.0 and paragraph 14a EnWG as concrete regulatory drivers for Grid Operations"
+      ],
+      "round_2_findings": "No further changes needed. All personas have differentiated, market-specific language that avoids generic IT consulting phrasing."
+    },
+    "perspective_2_sales_usability": {
+      "question": "Can a sales team use these profiles to sell T-Systems cloud services?",
+      "score": 8.0,
+      "max_score": 10,
+      "assessment": "Highly usable. Each profile includes actionable objections (a sales rep can prepare rebuttals), specific trigger events (enabling timing-based outreach), and information sources (identifying where to build thought leadership). The proposition_alignment section maps each T-Systems offering (sovereign-cloud, cloud-migration, hybrid-cloud, managed-hyperscaler) to the relevant personas, giving account teams a clear engagement plan. The buying_process section includes realistic cycle timing (9 months), procurement framework details (EVB-IT), and critically, the Vergaberecht note for publicly-owned utilities which changes the entire sales approach. Two gaps: (1) no explicit 'how to engage' coaching per persona (e.g., CIO prefers strategic business case, VP Infra wants technical proof); (2) no competitor mapping per persona (e.g., who else is pitching to the CISO -- Zscaler, Palo Alto, etc.).",
+      "round_1_improvements": [
+        "Added proposition_alignment mapping linking each T-Systems proposition to relevant buying committee roles",
+        "Added procurement_notes distinguishing publicly-owned (EnBW, MVV) from private (E.ON, RWE) procurement rules",
+        "Added 'note' fields on Trading and CDO profiles to flag segment variation"
+      ],
+      "round_2_findings": "Profiles are sales-ready as-is. Competitor mapping and engagement coaching would improve further but are out of scope for customer profiles."
+    },
+    "perspective_3_market_accuracy": {
+      "question": "Are the profiles accurate for the Grosse Energieversorger DE market segment?",
+      "score": 8.5,
+      "max_score": 10,
+      "assessment": "Accurate for the segment (German energy utilities, 5000+ employees, EUR 1B+ revenue). The segment covers E.ON, RWE, EnBW, Vattenfall DE, Uniper, LEAG, and borderline MVV/Mainova. Regulatory references are correct and current: NIS2 (October 2026 deadline), KRITIS, BSI C5, Messstellenbetriebsgesetz, REMIT, Redispatch 2.0, paragraph 14a EnWG, Energiewirtschaftsgesetz. Industry body references are accurate: BDEW, UP KRITIS, VDE/FNN, Bundesnetzagentur. The Broadcom/VMware pain point is timely and industry-validated. One accuracy note: TAM/SAM/SOM values in the market file differ from the grading file (market file shows TAM EUR 8B, grading checked against EUR 4.2B) -- this is a fixture inconsistency, not a customer profile issue.",
+      "round_1_improvements": [
+        "Added market-segment variation notes (trading desk size varies by utility)",
+        "Updated regulatory references to include Redispatch 2.0 and paragraph 14a EnWG",
+        "Ensured all German regulatory bodies and industry organizations are correctly named"
+      ],
+      "round_2_findings": "No inaccuracies detected. Profile structure covers the complete buying committee for enterprise cloud deals in this segment."
+    }
+  },
+  "overall_score": 8.3,
+  "overall_max_score": 10,
+  "summary": "Customer profiles were created from scratch for the Grosse Energieversorger DE market segment (no prior profiles existed). The final output contains 7 buying committee personas (CIO, CISO, VP Infrastructure & Operations, CFO, Head of Portfolio Management & Trading, Head of Grid Operations, CDO), each with role-specific priorities, pain points, success metrics, objections, information sources, and trigger events. A proposition_alignment section maps T-Systems cloud offerings to relevant personas. The buying_process section includes cycle timing, procurement framework, and public vs. private utility procurement nuances. Two revision rounds were performed. The profiles are suitable for sales enablement and account planning.",
+  "output_files": {
+    "customer_profiles": "grosse-energieversorger-de.json"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "slug": "industry-consulting",
+  "name": "Business & Industry Consulting",
+  "description": "Vertical consulting for automotive, healthcare, public sector, and transport via Detecon",
+  "product_slug": "detecon-consulting",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 7,
+    "category_id": "7.3",
+    "category_name": "Business & Industry Consulting"
+  },
+  "source_file": "https://www.t-systems.com/us/en/company/about-t-systems/profile"
+}

@@ -1,0 +1,16 @@
+{
+  "slug": "multi-cloud-management-finops",
+  "product_slug": "cloud-services",
+  "name": "Multi-Cloud Management & FinOps",
+  "description": "Cross-cloud orchestration platform using IBM Turbonomic for application resource management combined with FinOps practices bringing IT, finance and business units into collaborative cost governance.",
+  "taxonomy_mapping": {
+    "dimension": 4,
+    "dimension_name": "Cloud Services",
+    "category_id": "4.2",
+    "category_name": "Multi-Cloud Management",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/bechtle-portfolio.md",
+  "created": "2026-03-18"
+}

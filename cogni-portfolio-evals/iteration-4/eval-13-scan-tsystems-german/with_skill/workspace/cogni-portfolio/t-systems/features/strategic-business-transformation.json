@@ -1,0 +1,16 @@
+{
+  "slug": "strategic-business-transformation",
+  "product_slug": "consulting-services",
+  "name": "Strategic Business Transformation (Detecon)",
+  "description": "End-to-end digital transformation consulting covering digital innovation management, organizational transformation design, and customer excellence programs with measurable business impact tracking.",
+  "taxonomy_mapping": {
+    "dimension": 7,
+    "dimension_name": "Consulting Services",
+    "category_id": "7.2",
+    "category_name": "Digital Transformation",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

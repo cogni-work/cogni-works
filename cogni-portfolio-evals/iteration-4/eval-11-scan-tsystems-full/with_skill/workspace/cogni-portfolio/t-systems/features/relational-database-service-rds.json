@@ -1,0 +1,16 @@
+{
+  "slug": "relational-database-service-rds",
+  "product_slug": "infrastructure-services",
+  "name": "Relational Database Service (RDS)",
+  "description": "Managed database service on Open Telekom Cloud offering 12 database engine flavors with performance analytics dashboards, demand-oriented scaling, and sovereign EU-only data center operation.",
+  "taxonomy_mapping": {
+    "dimension": 5,
+    "dimension_name": "Managed Infrastructure Services",
+    "category_id": "5.6",
+    "category_name": "Database Administration",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

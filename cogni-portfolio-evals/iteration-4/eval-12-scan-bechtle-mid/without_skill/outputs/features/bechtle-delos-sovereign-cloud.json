@@ -1,0 +1,13 @@
+{
+  "slug": "bechtle-delos-sovereign-cloud",
+  "name": "Bechtle Delos Sovereign Cloud",
+  "description": "Sovereign cloud platform for German government (federal, state, local) with GDPR compliance, classified information handling, and vendor-neutral hyperscaler foundation. Also offers IONOS, STACKIT, OVH, and Nextcloud WorkSuite as sovereign alternatives.",
+  "product_slug": "bechtle-cloud",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 4,
+    "category_id": "4.7",
+    "category_name": "Sovereign Cloud"
+  },
+  "source_file": "https://www.bechtle.com/de-en/public-sector/solutions/delos"
+}

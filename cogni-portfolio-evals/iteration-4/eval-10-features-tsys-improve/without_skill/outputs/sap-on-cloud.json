@@ -1,0 +1,12 @@
+{
+  "slug": "sap-on-cloud",
+  "product_slug": "cloud-services",
+  "name": "SAP on Cloud",
+  "description": "S/4HANA-Hosting auf Future Cloud Infrastructure (FCI) mit VMware-basierter Landing Zone im Frankfurter Rechenzentrum, standardisierten Referenzarchitekturen für RISE with SAP Private Edition und automatisierter Migration über Azure, AWS und Open Telekom Cloud.",
+  "taxonomy_mapping": {
+    "layer": "Manage",
+    "category": "Application Management",
+    "subcategory": "SAP Hosting & Operations"
+  },
+  "readiness": "ga"
+}

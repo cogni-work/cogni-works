@@ -1,0 +1,18 @@
+{
+  "version": "1.0.0",
+  "company_name": "T-Systems International GmbH",
+  "company_slug": "t-systems",
+  "created": "2026-03-18T12:30:00Z",
+  "skill": "cogni-portfolio:scan",
+  "template_type": "b2b-ict",
+  "output_file": "research/t-systems-portfolio.md",
+  "domains_analyzed": ["t-systems.com", "detecon.com", "open-telekom-cloud.com", "operational-services.de"],
+  "dimensions_covered": 8,
+  "categories_total": 57,
+  "status_summary": {
+    "confirmed": 51,
+    "not_offered": 6,
+    "emerging": 0,
+    "extended": 0
+  }
+}

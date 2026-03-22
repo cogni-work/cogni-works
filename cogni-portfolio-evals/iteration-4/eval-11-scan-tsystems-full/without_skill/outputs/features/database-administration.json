@@ -1,0 +1,13 @@
+{
+  "slug": "database-administration",
+  "name": "Database Administration",
+  "description": "Managed database administration and database security services",
+  "product_slug": "t-systems-infrastructure",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 5,
+    "category_id": "5.6",
+    "category_name": "Database Administration"
+  },
+  "source_file": "https://www.linkedin.com/company/t-systems-ict-india-pvt.-ltd."
+}

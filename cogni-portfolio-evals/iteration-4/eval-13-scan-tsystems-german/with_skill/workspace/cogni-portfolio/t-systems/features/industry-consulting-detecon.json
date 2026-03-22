@@ -1,0 +1,16 @@
+{
+  "slug": "industry-consulting-detecon",
+  "product_slug": "consulting-services",
+  "name": "Industry Consulting (Detecon)",
+  "description": "Multi-vertical industry consulting spanning telecommunications, automotive, manufacturing, healthcare, public sector, and energy with sector-specific digitalization strategies from Detecon heritage.",
+  "taxonomy_mapping": {
+    "dimension": 7,
+    "dimension_name": "Consulting Services",
+    "category_id": "7.3",
+    "category_name": "Business & Industry Consulting",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

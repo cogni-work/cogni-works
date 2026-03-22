@@ -1,0 +1,112 @@
+{
+  "assessed": 8,
+  "pass": 1,
+  "warn": 6,
+  "fail": 1,
+  "features": [
+    {
+      "slug": "private-cloud",
+      "name": "Private Cloud Infrastructure",
+      "overall": "pass",
+      "dimensions": {
+        "mechanism_clarity": {"score": "pass", "note": ""},
+        "scope_mece": {"score": "pass", "note": ""},
+        "differentiation": {"score": "pass", "note": ""},
+        "language_quality": {"score": "pass", "note": ""},
+        "conciseness": {"score": "pass", "note": "20 words — at the lower boundary but acceptable"}
+      },
+      "suggestion": ""
+    },
+    {
+      "slug": "managed-hyperscaler",
+      "name": "Managed Hyperscaler Services",
+      "overall": "warn",
+      "dimensions": {
+        "mechanism_clarity": {"score": "pass", "note": ""},
+        "scope_mece": {"score": "pass", "note": ""},
+        "differentiation": {"score": "warn", "note": "Certified MSP on all hyperscalers is a common claim among large SIs — what makes T-Systems' managed approach uniquely different?"},
+        "language_quality": {"score": "warn", "note": "'Rundum gemanagte' is slightly awkward phrasing; 'hyperscaler' lowercase inconsistent with proper noun usage elsewhere"},
+        "conciseness": {"score": "pass", "note": ""}
+      },
+      "suggestion": "Sharpen the differentiator — replace generic MSP claim with what T-Systems does differently in its managed operations (e.g., specific automation, SLA guarantees, or operational model). Fix 'Rundum gemanagte' phrasing."
+    },
+    {
+      "slug": "sovereign-cloud",
+      "name": "Sovereign Cloud",
+      "overall": "warn",
+      "dimensions": {
+        "mechanism_clarity": {"score": "warn", "note": "Lists product variants (T Cloud Public, OSC, Google/AWS sovereign) but doesn't explain HOW sovereignty is technically enforced — what mechanism ensures data residency?"},
+        "scope_mece": {"score": "pass", "note": ""},
+        "differentiation": {"score": "pass", "note": ""},
+        "language_quality": {"score": "pass", "note": ""},
+        "conciseness": {"score": "pass", "note": ""}
+      },
+      "suggestion": "Replace product-name enumeration with the technical mechanism of sovereignty enforcement — e.g., EU-only data processing, key management, access controls — that distinguishes this from simply hosting in EU data centers."
+    },
+    {
+      "slug": "cloud-native-container",
+      "name": "Cloud-Native & Container Platform",
+      "overall": "warn",
+      "dimensions": {
+        "mechanism_clarity": {"score": "warn", "note": "Kitchen-sink enumeration: lists EKS, OpenShift, CCE, monitoring, logging, registries, vulnerability scanning, GitOps, Knative without explaining the core mechanism that ties them together"},
+        "scope_mece": {"score": "warn", "note": "Monitoring and logging inclusions overlap with potential observability capabilities; scope is very broad for a single feature"},
+        "differentiation": {"score": "warn", "note": "Listing multiple Kubernetes distributions is what many managed container providers do — what makes this platform uniquely valuable?"},
+        "language_quality": {"score": "pass", "note": ""},
+        "conciseness": {"score": "pass", "note": "23 words — within range but reads as a compressed keyword list"}
+      },
+      "suggestion": "Name the core mechanism (managed Kubernetes lifecycle) and one or two genuine differentiators instead of enumerating every component. Drop the technology laundry list."
+    },
+    {
+      "slug": "multi-cloud-finops",
+      "name": "Multi-Cloud & FinOps Management",
+      "overall": "warn",
+      "dimensions": {
+        "mechanism_clarity": {"score": "warn", "note": "Names platforms (MCCP, FCI) and processes (FinOps assessment, cost management, compliance) but packs three distinct concerns without explaining how any one of them works"},
+        "scope_mece": {"score": "warn", "note": "Combines multi-cloud governance, FinOps, and compliance controls — these are three potentially independent capabilities. FinOps and compliance could appear in propositions without multi-cloud governance."},
+        "differentiation": {"score": "pass", "note": ""},
+        "language_quality": {"score": "pass", "note": ""},
+        "conciseness": {"score": "pass", "note": ""}
+      },
+      "suggestion": "Consider splitting into separate features for multi-cloud governance and FinOps. If kept as one, pick the dominant mechanism and describe how it works rather than listing three parallel capabilities."
+    },
+    {
+      "slug": "hybrid-cloud",
+      "name": "Hybrid Cloud Solutions",
+      "overall": "warn",
+      "dimensions": {
+        "mechanism_clarity": {"score": "warn", "note": "'Cloudübergreifender Automatisierung' is vague — what does the automation do? The mechanism of bridging private and public cloud is not explained."},
+        "scope_mece": {"score": "warn", "note": "MCCP and governance framework overlap with multi-cloud-finops — both features claim multi-cloud connectivity and governance as their territory"},
+        "differentiation": {"score": "warn", "note": "Apart from 'Health Hybrid Cloud' variant, the description uses generic hybrid cloud language any provider could claim"},
+        "language_quality": {"score": "pass", "note": ""},
+        "conciseness": {"score": "pass", "note": ""}
+      },
+      "suggestion": "Resolve overlap with multi-cloud-finops — clarify whether MCCP belongs here or there. Replace 'cloudübergreifende Automatisierung' with the specific automation mechanism. The Health Hybrid Cloud angle is interesting — lean into industry-specific variants as the differentiator."
+    },
+    {
+      "slug": "sap-on-cloud",
+      "name": "SAP on Cloud",
+      "overall": "warn",
+      "dimensions": {
+        "mechanism_clarity": {"score": "pass", "note": ""},
+        "scope_mece": {"score": "warn", "note": "'Migration' in scope overlaps with the dedicated cloud-migration feature"},
+        "differentiation": {"score": "warn", "note": "Number-stuffing anti-pattern: '4.000+ SAP-Experten und 850.000 verwalteten SAP-Nutzern' reads like a spec sheet. Numbers alone don't differentiate — what do those experts do differently?"},
+        "language_quality": {"score": "pass", "note": ""},
+        "conciseness": {"score": "pass", "note": ""}
+      },
+      "suggestion": "Remove the number-stuffing (4.000+ experts, 850.000 users) and replace with a mechanism-level differentiator. Clarify the migration scope boundary with cloud-migration."
+    },
+    {
+      "slug": "cloud-migration",
+      "name": "Cloud Migration Services",
+      "overall": "fail",
+      "dimensions": {
+        "mechanism_clarity": {"score": "warn", "note": "Kitchen-sink enumeration: lists assessment framework, CMF methodology, 6R strategies, database migration, factory teams, and sprint-based implementation without explaining how the methodology actually works"},
+        "scope_mece": {"score": "pass", "note": ""},
+        "differentiation": {"score": "fail", "note": "6R migration strategies are AWS-standard industry terminology, not a T-Systems differentiator. CMF methodology is unexplained — is it proprietary? The description could belong to any large SI."},
+        "language_quality": {"score": "pass", "note": ""},
+        "conciseness": {"score": "fail", "note": "Number-stuffing and kitchen-sink enumeration: '6R-Migrationsstrategien (Rehost bis Retire)' combined with listing every component makes this a spec-sheet description despite technically being 20 words"}
+      },
+      "suggestion": "Rewrite around the core differentiator: is it the CMF methodology, the factory model, or something else? Name ONE unique mechanism and explain HOW it works. Drop the 6R reference (industry standard, not differentiating) and the component enumeration."
+    }
+  ]
+}

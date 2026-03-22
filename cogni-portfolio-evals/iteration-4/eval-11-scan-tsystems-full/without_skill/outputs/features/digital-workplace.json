@@ -1,0 +1,13 @@
+{
+  "slug": "digital-workplace",
+  "name": "Outsourced Digital Workplace",
+  "description": "End-to-end digital workspace management with collaboration tools, software deployment, and hybrid work enablement",
+  "product_slug": "t-systems-workplace",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 3,
+    "category_id": "3.2",
+    "category_name": "Modern Workplace / M365"
+  },
+  "source_file": "https://www.gartner.com/reviews/market/it-infrastructure-and-operations-management-others/vendor/t-systems/product/t-systems-outsourced-digital-workplace-services"
+}

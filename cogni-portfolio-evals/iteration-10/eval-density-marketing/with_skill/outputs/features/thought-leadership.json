@@ -1,0 +1,14 @@
+{
+  "slug": "thought-leadership",
+  "product_slug": "content-platform",
+  "name": "Thought-Leadership-Engine",
+  "description": "Redaktionelle Content-Pipeline, die Fachexpertise über ein Thesen-Validierungs-Verfahren in positionierende Langform-Assets überführt und durch quellengestützte Argumentation generische Meinungsbeiträge vermeidet.",
+  "category": "content-production",
+  "taxonomy_mapping": {
+    "dimension": "Application",
+    "category_id": "6.5",
+    "category_name": "Marketing Automation"
+  },
+  "readiness": "ga",
+  "created": "2026-03-21"
+}

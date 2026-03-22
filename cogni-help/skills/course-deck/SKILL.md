@@ -37,17 +37,17 @@ Keep in English regardless of language setting:
 
 ### 1. Curriculum Overview (`curriculum`)
 
-A program-level deck introducing the full cogni-works training program. Use this
+A program-level deck introducing the full insight-wave training program. Use this
 when the organizer wants to present the overall learning journey to a group of
 new learners.
 
 **Slides to generate (~8-10 slides):**
 
-1. **Title slide** — "cogni-works Training Program" with subtitle "Master AI-Powered
+1. **Title slide** — "insight-wave Training Program" with subtitle "Master AI-Powered
    Consulting with Claude Cowork". Dark background (`111111`) with chartreuse accent line.
 
 2. **Why this program** — The value proposition: what consultants gain by learning
-   cogni-works (faster deliverables, consistent quality, AI-augmented research).
+   insight-wave (faster deliverables, consistent quality, AI-augmented research).
    Use 3 key benefit statements with icons.
 
 3. **How it works** — Explain the learning format: 45-minute self-paced courses,
@@ -182,7 +182,7 @@ and icon+text combinations. A deck where every slide looks the same is boring.
 ## Output
 
 Save the generated PPTX to the user's working directory with a descriptive filename:
-- Curriculum: `cogni-works-training-program.pptx`
+- Curriculum: `insight-wave-training-program.pptx`
 - Course intro: `course-<N>-<name>-intro.pptx` (e.g., `course-3-basic-tools-intro.pptx`)
 
 After generating, tell the user where the file is saved and suggest they review it.

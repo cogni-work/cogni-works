@@ -1,0 +1,16 @@
+{
+  "slug": "testing-app-services-mms",
+  "product_slug": "application-services",
+  "name": "Testing & Application Services (MMS)",
+  "description": "Accredited software testing center at Deutsche Telekom MMS delivering test automation, accessibility verification per WCAG/BITV standards, and IT security validation for enterprise applications.",
+  "taxonomy_mapping": {
+    "dimension": 6,
+    "dimension_name": "Application Services",
+    "category_id": "6.7",
+    "category_name": "DevOps & Platform Engineering",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

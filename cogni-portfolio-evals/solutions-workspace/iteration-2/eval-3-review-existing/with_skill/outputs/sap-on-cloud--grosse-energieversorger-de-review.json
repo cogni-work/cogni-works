@@ -1,0 +1,205 @@
+{
+  "solution_slug": "sap-on-cloud--grosse-energieversorger-de",
+  "solution_type": "project",
+  "overall": "warn",
+  "overall_score": 79,
+  "stakeholder_reviews": [
+    {
+      "perspective": "reviewer",
+      "score": 82,
+      "overall": "warn",
+      "criteria": {
+        "roi_clarity": {
+          "score": "pass",
+          "weight": 0.30,
+          "note": ""
+        },
+        "budget_fit": {
+          "score": "pass",
+          "weight": 0.25,
+          "note": ""
+        },
+        "risk_reward_transparency": {
+          "score": "pass",
+          "weight": 0.20,
+          "note": ""
+        },
+        "competitive_positioning": {
+          "score": "warn",
+          "weight": 0.15,
+          "note": "Assumptions mention competitive positioning (T-Systems vs. Hyperscaler vs. Inhouse) but no pricing benchmarks. For SAP managed services, procurement teams will compare TCO projections against AWS/Azure SAP managed offerings and incumbent Basis team costs."
+        },
+        "decision_pathway": {
+          "score": "warn",
+          "weight": 0.10,
+          "note": "PoV scope ('SAP-Betriebsanalyse für ein IS-U-System') is assessment-only — buyer gets a report, not a proven managed service. The Go/No-Go after 4 weeks proves analysis quality, not operational capability. Consider a PoV that includes a 2-week managed operations trial on a non-production system."
+        }
+      },
+      "strengths": [
+        "Clear ROI story: 25-35% cost reduction + 99.95% SLA + freed CIO budget for innovation projects (Smart Metering, Sektorenkopplung)",
+        "TCO baseline in Phase 1 and TCO comparison in Phase 4 creates auditable before/after proof — CFO will appreciate this",
+        "Exit clause with 6-month notice and 120-day transition is reasonable for managed services — slightly more generous than cloud-migration's 90 days, which makes sense given operational dependency",
+        "Compliance deliverables explicitly listed: BSI-C5 compliance proof, NIS2 readiness, quarterly audit reports"
+      ],
+      "concerns": [
+        "PoV is assessment-only — it proves T-Systems can analyze the SAP landscape, not that they can run it. For a managed services transition, the buyer needs confidence in operational capability, not just diagnostic skill",
+        "Exit clause uses max 8% annual volume cap — inconsistent with cloud-migration's 5% total volume cap. Same procurement team will notice this difference"
+      ],
+      "recommendations": [
+        "HIGH: Strengthen PoV to include a 2-week managed operations trial on a non-production IS-U system alongside the analysis. This proves operational capability, not just consulting skill. Adjust PoV price and effort accordingly",
+        "HIGH: Harmonize exit clause structure with cloud-migration solution — use consistent notice period, transition days, and cap calculation method across all solutions for the same market"
+      ]
+    },
+    {
+      "perspective": "provider_sa",
+      "score": 78,
+      "overall": "warn",
+      "criteria": {
+        "delivery_realism": {
+          "score": "warn",
+          "weight": 0.30,
+          "note": "Phase 1 (SAP-Betriebsanalyse) at 3 weeks for a full IS-U landscape analysis including SLA gap analysis, high-load profiling, and TCO projection is tight. IS-U billing cycle analysis alone can take 2 weeks if the system has complex tariff structures. Feasible only if the customer provides data access within the first week."
+        },
+        "scope_effort_coherence": {
+          "score": "pass",
+          "weight": 0.25,
+          "note": ""
+        },
+        "phase_architecture": {
+          "score": "pass",
+          "weight": 0.20,
+          "note": ""
+        },
+        "does_traceability": {
+          "score": "pass",
+          "weight": 0.15,
+          "note": ""
+        },
+        "tier_scalability": {
+          "score": "warn",
+          "weight": 0.10,
+          "note": "Small (1 SAP system) to Medium (IS-U + S/4HANA + BW) is a qualitative jump. But Medium to Large (5+ systems) is primarily quantitative — more systems, same approach. Large should add organizational change management or multi-entity governance to differentiate."
+        }
+      },
+      "strengths": [
+        "IS-U-specific validation phase (Phase 3) is excellent — testing billing cycles and price adjustment waves on the new platform catches the #1 go-live risk for energy utilities",
+        "Cost model role breakdown is credible: PoV at 45 days, Small at 200 days, Medium at 420 days, Large at 680 days — effort scales proportionally with system complexity",
+        "DOES traceability is strong: managed platform with IS-U billing cycle support maps directly to the proposition's promise",
+        "Cutover phase includes parallel operation and TCO comparison — industry best practice for managed service transitions"
+      ],
+      "concerns": [
+        "No SAP Basis Administrator role in the cost model — this is an SAP managed services transition. Implementation Engineers can't do SAP Basis work (kernel patches, transport management, system copies) without specialized skills",
+        "Phase 1 at 3 weeks is ambitious for IS-U environments with complex tariff structures and seasonal billing patterns"
+      ],
+      "recommendations": [
+        "CRITICAL: Add SAP Basis Administrator role to cost model. This is an SAP-specific engagement — generic Implementation Engineers cannot deliver SAP Basis administration, transport management, or kernel patching. Missing this role undermines delivery credibility",
+        "HIGH: Extend Phase 1 from 3 weeks to 4 weeks or add explicit assumption that customer provides full SAP system documentation and monitoring data within 5 business days"
+      ]
+    },
+    {
+      "perspective": "client_sa",
+      "score": 77,
+      "overall": "warn",
+      "criteria": {
+        "integration_feasibility": {
+          "score": "warn",
+          "weight": 0.30,
+          "note": "Solution focuses on SAP system migration but doesn't address integration with surrounding systems: Smart Metering infrastructure (gateway administration), SCADA interfaces, or third-party billing integrations. For energy utilities, SAP IS-U is deeply integrated with operational systems — migration impacts are not contained to SAP alone."
+        },
+        "dependency_risk": {
+          "score": "pass",
+          "weight": 0.25,
+          "note": ""
+        },
+        "operational_readiness": {
+          "score": "pass",
+          "weight": 0.20,
+          "note": ""
+        },
+        "vendor_lockin": {
+          "score": "warn",
+          "weight": 0.15,
+          "note": "Exit clause exists (6 months notice, 120 days transition, SAP data export in standard formats) but doesn't address the managed services lock-in specifically: what happens to the automated lifecycle management, monitoring, and patch management tooling? Does the customer get operational runbooks and automation scripts, or are these proprietary to T-Systems?"
+        },
+        "security_compliance": {
+          "score": "pass",
+          "weight": 0.10,
+          "note": ""
+        }
+      },
+      "strengths": [
+        "Client-side effort quantified: 0.5 FTE SAP Basis Admin + 1.0 FTE IS-U business contact for billing validation — realistic for a managed services transition",
+        "Data residency explicitly addressed: BSI-C5-attested German infrastructure, no extra-European jurisdiction",
+        "Compliance deliverables are comprehensive: BSI-C5 proof, NIS2 readiness, quarterly audit reports",
+        "Cutover includes parallel operation — no big-bang risk",
+        "Enablement included in Phase 4: customer operations team trained on the managed platform"
+      ],
+      "concerns": [
+        "No mention of IS-U integration landscape: Smart Metering (iMSys), Marktkommunikation interfaces, EDM (Energiedatenmanagement), or SCADA data feeds. A Client SA evaluating this would immediately ask 'what happens to our IS-U interfaces when the platform moves?'",
+        "Exit clause doesn't specify whether operational tooling (monitoring configs, automation scripts, lifecycle management rules) transfers to the customer or remains T-Systems proprietary",
+        "OT/IT boundary not addressed — cloud-migration solution explicitly defines this, but SAP solution doesn't, despite IS-U having SCADA interface dependencies"
+      ],
+      "recommendations": [
+        "HIGH: Add assumption addressing IS-U integration landscape — at minimum state which interfaces are in-scope (standard SAP APIs) vs. out-of-scope (custom SCADA feeds, Smart Metering gateway integration)",
+        "HIGH: Add operational tooling portability to exit clause — specify that monitoring configurations, automation scripts, and lifecycle management rules are documented and transferable",
+        "HIGH: Add OT/IT boundary statement consistent with cloud-migration solution — if SCADA interfaces are out of scope, state it explicitly"
+      ]
+    }
+  ],
+  "synthesis": {
+    "conflicts": [
+      {
+        "description": "Reviewer wants stronger PoV (add operational trial); Provider SA flags Phase 1 is already tight at 3 weeks. Adding PoV scope without extending timeline creates delivery risk.",
+        "resolution": "Extend PoV from 4 to 6 weeks: 3 weeks analysis + 2 weeks managed operations trial on non-production IS-U + 1 week evaluation report. Adjust PoV price from 95K to 130K EUR to cover additional effort."
+      }
+    ],
+    "critical_improvements": [
+      {
+        "description": "Add SAP Basis Administrator role to cost model — generic Implementation Engineers cannot deliver SAP-specific Basis administration, transport management, or kernel patching",
+        "stakeholders": ["provider_sa"],
+        "affects": "cost_model.bill_of_materials.roles, cost_model.effort_by_tier"
+      }
+    ],
+    "high_improvements": [
+      {
+        "description": "Strengthen PoV to include a managed operations trial (not just assessment) to prove operational capability, not just diagnostic skill",
+        "stakeholders": ["reviewer", "provider_sa"],
+        "affects": "pricing.proof_of_value, implementation"
+      },
+      {
+        "description": "Add IS-U integration landscape assumptions — specify which interfaces are in-scope vs. out-of-scope (Smart Metering, Marktkommunikation, EDM, SCADA)",
+        "stakeholders": ["client_sa"],
+        "affects": "cost_model.assumptions"
+      },
+      {
+        "description": "Add OT/IT boundary statement consistent with cloud-migration solution",
+        "stakeholders": ["client_sa"],
+        "affects": "cost_model.assumptions"
+      },
+      {
+        "description": "Add operational tooling portability to exit clause — monitoring configs, automation scripts, lifecycle management rules must be documented and transferable",
+        "stakeholders": ["client_sa"],
+        "affects": "cost_model.assumptions"
+      },
+      {
+        "description": "Harmonize exit clause structure with cloud-migration solution (notice period, transition days, cap calculation method)",
+        "stakeholders": ["reviewer", "client_sa"],
+        "affects": "cost_model.assumptions"
+      }
+    ],
+    "optional_improvements": [
+      {
+        "description": "Differentiate Large tier from Medium beyond system count — add organizational change management or multi-entity governance",
+        "stakeholders": ["provider_sa"],
+        "affects": "pricing.large.scope"
+      },
+      {
+        "description": "Add competitive pricing benchmarks for SAP managed services (AWS/Azure managed SAP, incumbent Basis team TCO)",
+        "stakeholders": ["reviewer"],
+        "affects": "cost_model.assumptions"
+      }
+    ],
+    "verdict": "revise",
+    "revision_guidance": "Three priority areas: (1) Add SAP Basis Administrator to the cost model — this is the most critical gap, as it affects delivery credibility. (2) Strengthen the PoV to prove operational capability, not just analysis. (3) Add IS-U integration landscape and OT/IT boundary assumptions to match the rigor of the cloud-migration solution. Also harmonize exit clause terms across the portfolio."
+  }
+}

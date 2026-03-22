@@ -1,0 +1,16 @@
+{
+  "slug": "cloud-security-services",
+  "product_slug": "security-services",
+  "name": "Cloud Security Services",
+  "description": "Cloud security posture management service with sovereign encryption key management and BSI C5-attested controls spanning AWS, Azure, Google Cloud, and T Cloud Public environments.",
+  "taxonomy_mapping": {
+    "dimension": 2,
+    "dimension_name": "Security Services",
+    "category_id": "2.4",
+    "category_name": "Cloud Security",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

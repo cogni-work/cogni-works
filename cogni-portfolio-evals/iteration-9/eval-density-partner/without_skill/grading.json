@@ -1,0 +1,30 @@
+{
+  "expectations": [
+    {
+      "text": "All feature slugs have at most 3 hyphenated segments",
+      "passed": true,
+      "evidence": "All 5 slugs ≤3 segments"
+    },
+    {
+      "text": "No feature description lists 3+ comma-separated parallel components",
+      "passed": true,
+      "evidence": "No dense descriptions"
+    },
+    {
+      "text": "All descriptions hit 22-35 word target (German)",
+      "passed": false,
+      "evidence": "Out of range: support-access (15w), industry-catalog-access (17w), co-delivery-projects (20w), pipeline-matching (19w), revenue-share-model (17w)"
+    },
+    {
+      "text": "No outcome language in descriptions",
+      "passed": true,
+      "evidence": "Clean"
+    }
+  ],
+  "summary": {
+    "passed": 3,
+    "failed": 1,
+    "total": 4,
+    "pass_rate": 0.75
+  }
+}

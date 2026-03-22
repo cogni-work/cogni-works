@@ -1,0 +1,16 @@
+{
+  "slug": "servicenow-professional-services",
+  "product_slug": "application-services",
+  "name": "ServiceNow Professional Services",
+  "description": "ServiceNow Elite Partner service with 380+ certified experts delivering end-to-end digital transformation through consulting, implementation, custom app development, and managed operations.",
+  "taxonomy_mapping": {
+    "dimension": 6,
+    "dimension_name": "Application Services",
+    "category_id": "6.3",
+    "category_name": "Enterprise Platform Services",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

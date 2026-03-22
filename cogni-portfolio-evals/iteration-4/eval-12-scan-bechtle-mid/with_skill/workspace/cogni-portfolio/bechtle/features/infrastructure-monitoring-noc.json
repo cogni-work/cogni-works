@@ -1,0 +1,16 @@
+{
+  "slug": "infrastructure-monitoring-noc",
+  "product_slug": "infrastructure-services",
+  "name": "Infrastructure Monitoring & NOC",
+  "description": "24/7 network operations center providing granular monitoring from hardware through operating system to application layer with proactive alerting, performance dashboards and maintenance scheduling.",
+  "taxonomy_mapping": {
+    "dimension": 5,
+    "dimension_name": "Managed Infrastructure Services",
+    "category_id": "5.4",
+    "category_name": "Infrastructure Monitoring",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/bechtle-portfolio.md",
+  "created": "2026-03-18"
+}

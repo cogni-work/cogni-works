@@ -1,0 +1,16 @@
+{
+  "slug": "mainova",
+  "company": {
+    "name": "Mainova AG",
+    "domain": "mainova.de",
+    "industry": "Energy Utility",
+    "country": "DE",
+    "employees": 3000
+  },
+  "taxonomy": {
+    "type": "b2b-ict"
+  },
+  "language": "de",
+  "products": [],
+  "features": []
+}

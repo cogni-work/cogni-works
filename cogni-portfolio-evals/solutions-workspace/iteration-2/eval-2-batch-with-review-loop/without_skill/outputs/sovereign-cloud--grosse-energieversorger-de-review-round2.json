@@ -1,0 +1,154 @@
+{
+  "slug": "sovereign-cloud--grosse-energieversorger-de",
+  "review_round": 2,
+  "perspectives": [
+    {
+      "role": "procurement",
+      "role_label": "Einkauf / Procurement (SektVO-konform)",
+      "criteria": [
+        {
+          "criterion": "Preistransparenz und Vergleichbarkeit",
+          "score": 9,
+          "max_score": 10,
+          "finding": "Contingency (8%) als separate Position. Security Engineer als eigene Rolle. Abrufmechanismus klar.",
+          "recommendation": "Keine Aenderung noetig."
+        },
+        {
+          "criterion": "SektVO-/EU-Vergaberechts-Konformitaet",
+          "score": 8,
+          "max_score": 10,
+          "finding": "Sovereign-Cloud-Positionierung ist inherent SektVO-relevant (EU-Datenhoheit). Phasen-Losbildung gegeben.",
+          "recommendation": "Keine Aenderung noetig."
+        },
+        {
+          "criterion": "Exit-Strategie und Vendor-Lock-in-Risiko",
+          "score": 9,
+          "max_score": 10,
+          "finding": "Umfassende Exit-Strategie: Repatriierung, IaC-Portabilitaet, Kontinuitaetsgarantie (24 Monate), alternative Provider dokumentiert. Open-Source-Basis minimiert Lock-in.",
+          "recommendation": "Keine Aenderung noetig."
+        },
+        {
+          "criterion": "Milestone-basierte Zahlungsstruktur",
+          "score": 8,
+          "max_score": 10,
+          "finding": "Compliance-Nachweis als implizites Abnahme-Kriterium fuer Phase 3. Gut strukturiert.",
+          "recommendation": "Keine Aenderung noetig."
+        },
+        {
+          "criterion": "Wettbewerbsfaehigkeit (TCO-Benchmark)",
+          "score": 9,
+          "max_score": 10,
+          "finding": "3-Szenarien-Vergleich inkl. alternative Sovereign-Provider. On-Prem+eigenes-Audit als teuerste Option klar dargestellt.",
+          "recommendation": "Keine Aenderung noetig."
+        }
+      ],
+      "overall_score": 43,
+      "max_overall_score": 50,
+      "verdict": "approved",
+      "summary": "Exzellente Verbesserung. Exit-Strategie mit Kontinuitaetsgarantie und Open-Source-Stack adressiert Sovereign-Lock-in-Bedenken vollstaendig."
+    },
+    {
+      "role": "provider_sa",
+      "role_label": "Provider Solution Architect (T-Systems)",
+      "criteria": [
+        {
+          "criterion": "Technische Umsetzbarkeit",
+          "score": 9,
+          "max_score": 10,
+          "finding": "OSC als empfohlene Plattform-Variante klaert Ambiguitaet. HSM-Kompatibilitaetstest in Phase 2. Realistisch.",
+          "recommendation": "Keine Aenderung noetig."
+        },
+        {
+          "criterion": "Team-Dimensionierung",
+          "score": 9,
+          "max_score": 10,
+          "finding": "Security Engineer als dedizierte Rolle in Phases 1-4. Adressiert den kritischen Punkt aus Round 1.",
+          "recommendation": "Keine Aenderung noetig."
+        },
+        {
+          "criterion": "Risikomanagement",
+          "score": 9,
+          "max_score": 10,
+          "finding": "Contingency quantifiziert (8%), aufgeschluesselt. NIS2-Enforcement mit hoechster Wahrscheinlichkeit korrekt priorisiert.",
+          "recommendation": "Keine Aenderung noetig."
+        },
+        {
+          "criterion": "Compliance-Tiefe",
+          "score": 10,
+          "max_score": 10,
+          "finding": "BSI-Grundschutz-Baustein-Mapping als Deliverable. Continuous Compliance Dashboard. Automatisierte Reports. Compliance-Entlastungs-Report mit Mannstunden. Best-in-class.",
+          "recommendation": "Keine Aenderung noetig."
+        },
+        {
+          "criterion": "Scope-Abgrenzung",
+          "score": 9,
+          "max_score": 10,
+          "finding": "Gestaffeltes Onboarding (5/Woche) mit Security-Review-Template. Hybrid-Architektur fuer Multi-Cloud. Klar und umsetzbar.",
+          "recommendation": "Keine Aenderung noetig."
+        }
+      ],
+      "overall_score": 46,
+      "max_overall_score": 50,
+      "verdict": "approved",
+      "summary": "Technisch exzellent. Compliance-Tiefe und Security-Rolle heben die Loesung auf Premium-Niveau."
+    },
+    {
+      "role": "client_sa",
+      "role_label": "Client Solution Architect (Energieversorger)",
+      "criteria": [
+        {
+          "criterion": "KRITIS-Compliance-Entlastung",
+          "score": 10,
+          "max_score": 10,
+          "finding": "Compliance-Entlastungs-Report mit konkreten Mannstunden. Continuous Dashboard. Automatisierte BSI-Audit-Reports. Exzellent.",
+          "recommendation": "Keine Aenderung noetig."
+        },
+        {
+          "criterion": "Belastung der internen IT-/Security-Mannschaft",
+          "score": 9,
+          "max_score": 10,
+          "finding": "Max. 5 Workloads/Woche mit standardisiertem Security-Review-Template. CISO-Team-Belastung ist jetzt planbar und begrenzt.",
+          "recommendation": "Keine Aenderung noetig."
+        },
+        {
+          "criterion": "Integration mit Multi-Cloud-Strategie",
+          "score": 9,
+          "max_score": 10,
+          "finding": "Hybrid-Architektur-Szenario (Sovereign fuer KRITIS + Hyperscaler fuer non-KRITIS) direkt adressiert. Einheitliche Governance als Ziel.",
+          "recommendation": "Keine Aenderung noetig."
+        },
+        {
+          "criterion": "Langfristige Plattform-Roadmap",
+          "score": 8,
+          "max_score": 10,
+          "finding": "Quartalsweise Feature-Releases und proaktive Regulierungsanpassung zugesagt. Konkreter Roadmap-Inhalt bleibt naturgemaess offen.",
+          "recommendation": "Minor: Ersten Roadmap-Review nach 6 Monaten vereinbaren."
+        },
+        {
+          "criterion": "Nachhaltige Betriebsfaehigkeit",
+          "score": 9,
+          "max_score": 10,
+          "finding": "Drei Betriebsmodell-Optionen (Fully Managed, Co-managed, Self-Operated). Exit-Strategie mit Kontinuitaetsgarantie. Hervorragend.",
+          "recommendation": "Keine Aenderung noetig."
+        }
+      ],
+      "overall_score": 45,
+      "max_overall_score": 50,
+      "verdict": "approved",
+      "summary": "Alle Revision-Items adressiert. Compliance-Entlastung und Multi-Cloud-Integration sind differenzierende Staerken. Hoechste Bewertung der drei Loesungen."
+    }
+  ],
+  "aggregate": {
+    "total_score": 134,
+    "max_score": 150,
+    "pct": 89.3,
+    "revision_needed": false,
+    "improvement_from_round1": {
+      "round1_score": 109,
+      "round2_score": 134,
+      "delta": 25,
+      "delta_pct": 16.7
+    }
+  },
+  "created": "2026-03-18"
+}

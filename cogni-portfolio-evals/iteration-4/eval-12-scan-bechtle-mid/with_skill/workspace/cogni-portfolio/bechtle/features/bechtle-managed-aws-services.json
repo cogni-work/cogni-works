@@ -1,0 +1,16 @@
+{
+  "slug": "bechtle-managed-aws-services",
+  "product_slug": "cloud-services",
+  "name": "Bechtle Managed AWS Services",
+  "description": "AWS cloud operations service with managed infrastructure provisioning, CloudWatch monitoring integration and cost optimization delivered through Bechtle Clouds marketplace and AWS partner tooling.",
+  "taxonomy_mapping": {
+    "dimension": 4,
+    "dimension_name": "Cloud Services",
+    "category_id": "4.1",
+    "category_name": "Managed Hyperscaler Services",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/bechtle-portfolio.md",
+  "created": "2026-03-18"
+}

@@ -1,0 +1,14 @@
+{
+  "slug": "it-service-management",
+  "product_slug": "it-plattformdienste",
+  "name": "IT-Service-Management",
+  "description": "ITIL-basiertes Service-Management mit integriertem IT/OT-Servicedesk fuer Incident-, Change- und Problem-Management ueber alle Sparten. Umfasst 24/7-Bereitschaft fuer versorgungskritische Systeme und SLA-Reporting.",
+  "category": "operations",
+  "taxonomy_mapping": {
+    "dimension": 3,
+    "category_id": "3.5",
+    "category_name": "IT Support Services",
+    "horizon": "current"
+  },
+  "readiness": "ga"
+}

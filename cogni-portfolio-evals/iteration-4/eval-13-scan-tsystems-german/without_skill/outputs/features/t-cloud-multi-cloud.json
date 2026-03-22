@@ -1,0 +1,13 @@
+{
+  "slug": "t-cloud-multi-cloud",
+  "name": "T Cloud Multi-Cloud Management",
+  "description": "Alle Cloud-Angebote unter einem Dach mit FinOps Cloud Services fuer Kostenoptimierung ueber mehrere Plattformen.",
+  "product_slug": "t-systems-cloud",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 4,
+    "category_id": "4.2",
+    "category_name": "Multi-Cloud Management"
+  },
+  "source_file": "https://www.t-systems.com/us/en/insights/newsroom/news/t-cloud-all-cloud-solutions-under-one-roof-1076894"
+}

@@ -1,0 +1,16 @@
+{
+  "slug": "digital-workplace-experience",
+  "product_slug": "workplace-services",
+  "name": "Digital Workplace Experience",
+  "description": "Managed Services für digitales Arbeitsplatzerlebnis",
+  "taxonomy_mapping": {
+    "dimension": 3,
+    "dimension_name": "Digital Workplace Services",
+    "category_id": "3.6",
+    "category_name": "Digital Employee Experience",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

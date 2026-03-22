@@ -1,0 +1,13 @@
+{
+  "slug": "managed-container-services",
+  "name": "Managed Cloud Container Services",
+  "description": "Managed EKS and ROSA on AWS with KMS, IAM, CloudWatch, and Prometheus integration",
+  "product_slug": "t-systems-cloud",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 4,
+    "category_id": "4.6",
+    "category_name": "Cloud-Native Platform"
+  },
+  "source_file": "https://www.t-systems.com/us/en/application-value-management/solutions/managed-container-stack/managed-cloud-container-services-on-aws"
+}

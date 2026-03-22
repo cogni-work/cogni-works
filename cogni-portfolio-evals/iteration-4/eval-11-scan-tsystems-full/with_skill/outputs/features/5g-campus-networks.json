@@ -1,0 +1,16 @@
+{
+  "slug": "5g-campus-networks",
+  "product_slug": "connectivity-services",
+  "name": "5G Campus Networks",
+  "description": "Private local 5G network on dedicated spectrum fully isolated from public mobile infrastructure, designed for smart factory intralogistics, Industry 4.0 robotics, and real-time sensor communication.",
+  "taxonomy_mapping": {
+    "dimension": 1,
+    "dimension_name": "Connectivity Services",
+    "category_id": "1.4",
+    "category_name": "5G & IoT Connectivity",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

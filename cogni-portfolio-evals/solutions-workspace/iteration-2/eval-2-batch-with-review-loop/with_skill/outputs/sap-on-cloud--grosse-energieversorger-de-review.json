@@ -1,0 +1,95 @@
+{
+  "solution_slug": "sap-on-cloud--grosse-energieversorger-de",
+  "solution_type": "project",
+  "overall": "warn",
+  "overall_score": 79,
+  "stakeholder_reviews": [
+    {
+      "perspective": "reviewer",
+      "score": 82,
+      "overall": "warn",
+      "criteria": {
+        "roi_clarity": { "score": "pass", "weight": 0.30, "note": "" },
+        "budget_fit": { "score": "pass", "weight": 0.25, "note": "" },
+        "risk_reward_transparency": { "score": "warn", "weight": 0.20, "note": "MEANS verspricht 25-35% Kostensenkung, aber kein Phase-Deliverable verankert eine TCO-Baseline oder Nachher-Messung" },
+        "competitive_positioning": { "score": "warn", "weight": 0.15, "note": "Kein Wettbewerbskontext — Procurement wird fragen wie sich das vs. AWS/Azure Managed SAP oder interne Basis-Admin verhält" },
+        "decision_pathway": { "score": "pass", "weight": 0.10, "note": "" }
+      },
+      "strengths": [
+        "Klare Tier-Differenzierung: PoV (1 System), Small (1 Prod), Medium (Kernlandschaft), Large (5+ Systeme)",
+        "IS-U-spezifische Hochlast-Validierung als eigene Phase zeigt Branchenkenntnis"
+      ],
+      "concerns": [
+        "MEANS-Statement (25-35% Kostensenkung) wird nirgends durch ein TCO-Vergleichs-Deliverable abgesichert",
+        "Kein Wettbewerbsvergleich — bei einem Managed-Service-Übergang wird Procurement Alternativen benchmarken"
+      ],
+      "recommendations": [
+        "HIGH: TCO-Baseline-Deliverable in Phase 1 und TCO-Nachher-Vergleich in Phase 4 verankern",
+        "HIGH: Wettbewerbspositionierung in Assumptions oder separatem Feld ergänzen (T-Systems vs. Hyperscaler Managed SAP vs. Inhouse)"
+      ]
+    },
+    {
+      "perspective": "provider_sa",
+      "score": 78,
+      "overall": "warn",
+      "criteria": {
+        "delivery_realism": { "score": "pass", "weight": 0.30, "note": "" },
+        "scope_effort_coherence": { "score": "pass", "weight": 0.25, "note": "" },
+        "phase_architecture": { "score": "warn", "weight": 0.20, "note": "Phase 1 (Betriebsanalyse) beschreibt keine Deliverables für den TCO-Baseline-Vergleich, obwohl MEANS 25-35% Einsparung verspricht" },
+        "does_traceability": { "score": "warn", "weight": 0.15, "note": "DOES spricht von IS-U-Abrechnungszyklen und Hochlastphasen — Phase 3 validiert das, aber Phase-1-Scoping fehlt die explizite Hochlast-Profiling-Methodik" },
+        "tier_scalability": { "score": "pass", "weight": 0.10, "note": "" }
+      },
+      "strengths": [
+        "4-Phasen-Architektur spiegelt realen SAP-Transitions-Prozess wider",
+        "IS-U-Validierung als eigene Phase ist branchenspezifisch und nicht generisch"
+      ],
+      "concerns": [
+        "TCO-Vergleich fehlt als Deliverable — dies untergräbt die MEANS-Zusage",
+        "Phase 1 sollte explizit die Hochlast-Profiling-Methodik beschreiben"
+      ],
+      "recommendations": [
+        "HIGH: Phase 1 um TCO-Baseline-Erhebung und Hochlast-Profiling erweitern",
+        "HIGH: Phase 4 um TCO-Nachher-Vergleich (Ist vs. Soll) erweitern"
+      ]
+    },
+    {
+      "perspective": "client_sa",
+      "score": 88,
+      "overall": "pass",
+      "criteria": {
+        "integration_feasibility": { "score": "pass", "weight": 0.30, "note": "" },
+        "dependency_risk": { "score": "pass", "weight": 0.25, "note": "" },
+        "operational_readiness": { "score": "pass", "weight": 0.20, "note": "" },
+        "vendor_lockin": { "score": "pass", "weight": 0.15, "note": "" },
+        "security_compliance": { "score": "pass", "weight": 0.10, "note": "" }
+      },
+      "strengths": [
+        "Client FTE quantifiziert (0,5 FTE SAP-Basis, 1,0 FTE Fachbereich)",
+        "Exit-Klausel mit 120-Tage-Support und SAP-Datenexport in Standardformaten",
+        "BSI-C5 und NIS2 Compliance-Deliverables explizit genannt",
+        "Datenresidenz in deutschen Rechenzentren zugesichert"
+      ],
+      "concerns": [],
+      "recommendations": []
+    }
+  ],
+  "synthesis": {
+    "conflicts": [],
+    "critical_improvements": [],
+    "high_improvements": [
+      {
+        "description": "TCO-Baseline-Erhebung in Phase 1 und TCO-Nachher-Vergleich in Phase 4 verankern — MEANS verspricht 25-35% Kostensenkung, dies muss messbar sein",
+        "stakeholders": ["reviewer", "provider_sa"],
+        "affects": "implementation[0].description, implementation[3].description"
+      },
+      {
+        "description": "Wettbewerbspositionierung ergänzen (T-Systems Managed SAP vs. Hyperscaler vs. Inhouse) — Procurement wird benchmarken",
+        "stakeholders": ["reviewer"],
+        "affects": "cost_model.assumptions"
+      }
+    ],
+    "optional_improvements": [],
+    "verdict": "revise",
+    "revision_guidance": "Focus on two areas: (1) Add TCO baseline deliverable to Phase 1 and TCO comparison deliverable to Phase 4 to anchor the MEANS promise of 25-35% cost reduction. (2) Add competitive positioning context to assumptions."
+  }
+}

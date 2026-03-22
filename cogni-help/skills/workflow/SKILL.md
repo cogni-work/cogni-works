@@ -5,7 +5,7 @@ description: >-
   whenever the user asks about workflows, pipelines, end-to-end processes, "how do I
   go from X to Y", "what's the process for", "show me the steps", "workflow for",
   "pipeline from research to slides", "how do these plugins work together", or wants
-  guidance on chaining multiple cogni-works plugins. Also trigger when a user describes
+  guidance on chaining multiple insight-wave plugins. Also trigger when a user describes
   a multi-step task that spans plugins — even if they don't say "workflow" explicitly.
 version: 0.1.0
 allowed-tools:

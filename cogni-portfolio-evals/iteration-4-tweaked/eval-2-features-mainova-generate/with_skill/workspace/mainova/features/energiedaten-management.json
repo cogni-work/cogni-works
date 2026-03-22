@@ -1,0 +1,16 @@
+{
+  "slug": "energiedaten-management",
+  "product_slug": "digitale-energiedienste",
+  "name": "Energiedaten-Management",
+  "description": "Zentrales Meter-Data-Management-System zur Validierung, Ersatzwertbildung und Plausibilisierung von Messdaten aus Smart Metering und konventionellen Zaehlern mit automatisierter Aggregation fuer Bilanzierung und Abrechnung.",
+  "category": "data-management",
+  "taxonomy_mapping": {
+    "dimension": 6,
+    "dimension_name": "Application Services",
+    "category_id": "6.6",
+    "category_name": "AI, Data & Analytics",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "created": "2026-03-18"
+}

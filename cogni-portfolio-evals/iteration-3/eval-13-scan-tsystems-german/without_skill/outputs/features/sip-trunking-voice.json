@@ -1,0 +1,13 @@
+{
+  "slug": "sip-trunking-voice",
+  "name": "SIP-Trunking & Voice Centralization",
+  "description": "Zentraler SIP-Gateway eliminiert lokale Telefonie-Infrastruktur. Interne Anrufe ueber WAN/LAN, externe Anrufe gebuendelt ins oeffentliche Netz.",
+  "product_slug": "t-systems-connectivity",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 1,
+    "category_id": "1.5",
+    "category_name": "Voice Services"
+  },
+  "source_file": "https://t-systems.com/de/de/loesungen/networks/wan-loesungen/sip-anschluss/zentraler-sip-trunk-576376"
+}

@@ -1,0 +1,13 @@
+{
+  "slug": "multi-cloud-management",
+  "name": "Multi-Cloud Management Platform",
+  "description": "Centrally managed hybrid multi-cloud infrastructure integrating AWS, Azure, GCP, and private cloud",
+  "product_slug": "t-systems-cloud",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 4,
+    "category_id": "4.2",
+    "category_name": "Multi-Cloud Management"
+  },
+  "source_file": "https://www.t-systems.com/us/en/cloud-and-infrastructure/manage-it-efficiently/multi-cloud"
+}

@@ -1,0 +1,16 @@
+{
+  "slug": "predictive-infrastructure-monitoring",
+  "product_slug": "infrastructure-services",
+  "name": "Predictive Infrastructure Monitoring",
+  "description": "Proactive 24/7 infrastructure monitoring service using AI-driven predictive analytics to detect potential disruptions before impact, with SLA-bound fault elimination timeframes and automated alerting.",
+  "taxonomy_mapping": {
+    "dimension": 5,
+    "dimension_name": "Managed Infrastructure Services",
+    "category_id": "5.4",
+    "category_name": "Infrastructure Monitoring",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

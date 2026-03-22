@@ -1,0 +1,16 @@
+{
+  "slug": "web-application-firewall",
+  "product_slug": "security-services",
+  "name": "Web Application Firewall",
+  "description": "Schutz vor Bot-Netzwerken und Layer-7-DDoS",
+  "taxonomy_mapping": {
+    "dimension": 2,
+    "dimension_name": "Security Services",
+    "category_id": "2.6",
+    "category_name": "Network Security",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

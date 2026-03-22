@@ -1,0 +1,13 @@
+{
+  "slug": "ai-solution-factory",
+  "name": "AI Solution Factory",
+  "description": "Standardized vendor-agnostic AI delivery framework for intelligent automation in core processes",
+  "product_slug": "t-systems-applications",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 6,
+    "category_id": "6.6",
+    "category_name": "AI, Data & Analytics"
+  },
+  "source_file": "https://www.t-systems.com/us/en/company/about-t-systems/profile"
+}

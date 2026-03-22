@@ -1,0 +1,14 @@
+{
+  "slug": "netzplanung-simulation",
+  "product_slug": "digitale-netzsteuerung",
+  "name": "Netzplanung und Simulation",
+  "description": "Lastflussberechnung und Netzsimulation fuer Ausbauplanung unter Beruecksichtigung von Elektromobilitaet, Waermepumpen und dezentraler Erzeugung. Szenariomodellierung fuer Investitionsentscheidungen im Verteilnetz.",
+  "category": "grid-operations",
+  "taxonomy_mapping": {
+    "dimension": 6,
+    "category_id": "6.6",
+    "category_name": "AI, Data & Analytics",
+    "horizon": "current"
+  },
+  "readiness": "ga"
+}

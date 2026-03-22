@@ -1,0 +1,13 @@
+{
+  "slug": "intraselect-sd-wan",
+  "name": "IntraSelect SD-WAN",
+  "description": "Software-defined Wide Area Network inkl. MPLS und Internet als Transportnetzwerk mit Bandbreiten bis 100 Gbit/s und smartem Migrationsansatz.",
+  "product_slug": "t-systems-connectivity",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 1,
+    "category_id": "1.1",
+    "category_name": "WAN Services"
+  },
+  "source_file": "https://www.t-systems.com/at/de/connectivity/future-networks-und-sip/sd-wan/intraselect"
+}

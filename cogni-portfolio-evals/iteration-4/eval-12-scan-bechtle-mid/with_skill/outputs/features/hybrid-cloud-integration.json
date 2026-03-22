@@ -1,0 +1,16 @@
+{
+  "slug": "hybrid-cloud-integration",
+  "product_slug": "cloud-services",
+  "name": "Hybrid Cloud Integration",
+  "description": "Unified hybrid cloud architecture bridging Bechtle Private Cloud with public hyperscaler environments through MPLS backbone and direct connect links with consistent governance and workload portability.",
+  "taxonomy_mapping": {
+    "dimension": 4,
+    "dimension_name": "Cloud Services",
+    "category_id": "4.4",
+    "category_name": "Hybrid Cloud",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/bechtle-portfolio.md",
+  "created": "2026-03-18"
+}

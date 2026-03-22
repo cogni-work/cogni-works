@@ -1,0 +1,16 @@
+{
+  "slug": "data-center-services",
+  "product_slug": "infrastructure-services",
+  "name": "Data Center Services",
+  "description": "Managed data center with colocation in Frankfurt via e-shelter",
+  "taxonomy_mapping": {
+    "dimension": 5,
+    "dimension_name": "Managed Infrastructure Services",
+    "category_id": "5.1",
+    "category_name": "Data Center Services",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/bechtle-portfolio.md",
+  "created": "2026-03-18"
+}

@@ -1,0 +1,17 @@
+{
+  "slug": "cloud-native-container",
+  "product_slug": "cloud-services",
+  "name": "Cloud-Native & Container Platform",
+  "description": "Verwaltete Kubernetes-Plattform (EKS, OpenShift, CCE) mit integriertem Container-Lifecycle-Management, Monitoring, Logging, Registries mit Vulnerability-Scanning, GitOps und Knative Serverless auf AWS und Open Telekom Cloud.",
+  "category": "cloud-native",
+  "taxonomy_mapping": {
+    "dimension": 4,
+    "dimension_name": "Cloud Services",
+    "category_id": "4.6",
+    "category_name": "Cloud-Native Platform",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "created": "2026-01-15",
+  "updated": "2026-03-18"
+}

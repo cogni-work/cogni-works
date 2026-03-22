@@ -1,0 +1,45 @@
+{
+  "slug": "sovereign-cloud--grosse-energieversorger-de",
+  "proposition_slug": "sovereign-cloud--grosse-energieversorger-de",
+  "solution_type": "project",
+  "implementation": [
+    {
+      "phase": "Compliance Assessment",
+      "duration_weeks": 2,
+      "description": "NIS2 gap analysis, BaFin/BSI requirement mapping, data residency classification, sovereign cloud architecture recommendation"
+    },
+    {
+      "phase": "Sovereign Platform Setup",
+      "duration_weeks": 5,
+      "description": "T Cloud Public or OSC provisioning, encryption key management under customer control, network isolation, BSI C5 control implementation"
+    },
+    {
+      "phase": "Data Migration & Certification",
+      "duration_weeks": 4,
+      "description": "Regulated workload migration, audit trail setup, BSI C5 audit preparation support, compliance documentation package"
+    }
+  ],
+  "pricing": {
+    "proof_of_value": {
+      "price": 22000,
+      "currency": "EUR",
+      "scope": "NIS2 compliance gap assessment and sovereign cloud architecture blueprint, 2-week delivery"
+    },
+    "small": {
+      "price": 110000,
+      "currency": "EUR",
+      "scope": "Single regulated workload domain, BSI C5 readiness, 8-week delivery"
+    },
+    "medium": {
+      "price": 250000,
+      "currency": "EUR",
+      "scope": "Multi-domain sovereign deployment with full compliance package, 12-week delivery"
+    },
+    "large": {
+      "price": 520000,
+      "currency": "EUR",
+      "scope": "Enterprise-wide sovereign cloud with BaFin audit support and ongoing compliance management, 18-week delivery"
+    }
+  },
+  "created": "2026-01-25"
+}

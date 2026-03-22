@@ -360,7 +360,7 @@ Ask the user to:
 
 ## Course Completion
 
-Congratulations! You now command three essential cogni-works tools:
+Congratulations! You now command three essential insight-wave tools:
 - **cogni-copywriting**: Polish documents with messaging frameworks and stakeholder review
 - **cogni-narrative**: Transform research into executive narratives with story arcs
 - **cogni-claims**: Verify sourced claims to ensure accuracy

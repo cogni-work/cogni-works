@@ -1,0 +1,13 @@
+{
+  "slug": "bechtle-outsourcing",
+  "name": "Bechtle Managed Services (ITO)",
+  "description": "360-degree managed IT with full and partial outsourcing via Bechtle Managed Services GmbH (est. 2005). 24/7 operations for workplace, data centre, and application environments.",
+  "product_slug": "bechtle-infrastructure",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 5,
+    "category_id": "5.5",
+    "category_name": "IT Outsourcing (ITO)"
+  },
+  "source_file": "https://www.bechtle.com/de-en/about-bechtle/company/locations/bechtle-managed-services"
+}

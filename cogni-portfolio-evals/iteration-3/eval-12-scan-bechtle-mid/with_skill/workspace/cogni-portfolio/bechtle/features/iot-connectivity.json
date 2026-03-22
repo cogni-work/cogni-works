@@ -1,0 +1,16 @@
+{
+  "slug": "iot-connectivity",
+  "product_slug": "connectivity-services",
+  "name": "IoT Services and Connectivity",
+  "description": "Intelligent networking with IoT services including sensor connectivity and edge computing",
+  "taxonomy_mapping": {
+    "dimension": 1,
+    "dimension_name": "Connectivity Services",
+    "category_id": "1.4",
+    "category_name": "5G & IoT Connectivity",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/bechtle-portfolio.md",
+  "created": "2026-03-18"
+}

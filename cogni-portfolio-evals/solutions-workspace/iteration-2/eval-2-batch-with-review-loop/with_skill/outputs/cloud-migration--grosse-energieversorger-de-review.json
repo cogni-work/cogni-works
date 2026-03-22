@@ -1,0 +1,85 @@
+{
+  "solution_slug": "cloud-migration--grosse-energieversorger-de",
+  "solution_type": "project",
+  "overall": "pass",
+  "overall_score": 89,
+  "stakeholder_reviews": [
+    {
+      "perspective": "reviewer",
+      "score": 92,
+      "overall": "pass",
+      "criteria": {
+        "roi_clarity": { "score": "pass", "weight": 0.30, "note": "" },
+        "budget_fit": { "score": "pass", "weight": 0.25, "note": "" },
+        "risk_reward_transparency": { "score": "pass", "weight": 0.20, "note": "" },
+        "competitive_positioning": { "score": "pass", "weight": 0.15, "note": "" },
+        "decision_pathway": { "score": "pass", "weight": 0.10, "note": "" }
+      },
+      "strengths": [
+        "Klare Wertekette: Pricing -> Migrationsumfang -> DOES (strukturierte Sprint-Migration) -> MEANS (elastische Skalierbarkeit)",
+        "PoV mit konkretem Go/No-Go (30 Workloads, 6 Wochen, KRITIS-Gap-Analyse)",
+        "Exit-Klausel und Datenresidenz explizit in Assumptions — reduziert Beschaffungsrisiko"
+      ],
+      "concerns": [],
+      "recommendations": []
+    },
+    {
+      "perspective": "provider_sa",
+      "score": 85,
+      "overall": "pass",
+      "criteria": {
+        "delivery_realism": { "score": "pass", "weight": 0.30, "note": "" },
+        "scope_effort_coherence": { "score": "pass", "weight": 0.25, "note": "" },
+        "phase_architecture": { "score": "pass", "weight": 0.20, "note": "" },
+        "does_traceability": { "score": "pass", "weight": 0.15, "note": "" },
+        "tier_scalability": { "score": "pass", "weight": 0.10, "note": "" }
+      },
+      "strengths": [
+        "5-Phasen-Architektur mit klarer Progression von Assessment über zwei Migrationswellen bis Modernisierung",
+        "Welle-1/Welle-2-Trennung spiegelt reales KRITIS-Delivery wider",
+        "Effort-Skalierung über Tiers ist qualitativ differenziert (PoV=Assessment, Small=Welle 1, Medium=Welle 1+2, Large=Vollprogramm)"
+      ],
+      "concerns": [
+        "PoV mit 80 Personentagen und 180K EUR liegt am oberen Rand für ein Assessment — könnte Eintrittsbarriere sein"
+      ],
+      "recommendations": [
+        "OPTIONAL: PoV-Scope auf 20 Workloads reduzieren und Preis auf 120-140K EUR senken für niedrigere Einstiegshürde"
+      ]
+    },
+    {
+      "perspective": "client_sa",
+      "score": 90,
+      "overall": "pass",
+      "criteria": {
+        "integration_feasibility": { "score": "pass", "weight": 0.30, "note": "" },
+        "dependency_risk": { "score": "pass", "weight": 0.25, "note": "" },
+        "operational_readiness": { "score": "pass", "weight": 0.20, "note": "" },
+        "vendor_lockin": { "score": "pass", "weight": 0.15, "note": "" },
+        "security_compliance": { "score": "pass", "weight": 0.10, "note": "" }
+      },
+      "strengths": [
+        "OT/IT-Grenze explizit definiert (SCADA bleibt on-premises)",
+        "Exit-Klausel mit 90-Tage-Repatriierung und 5%-Deckelung",
+        "IaC-Portabilität (Terraform/OpenTofu) minimiert Lock-in",
+        "BSI-C5 und NIS2 in Assumptions adressiert",
+        "Client FTE quantifiziert (1,0 FTE EA + 0,5 FTE Testmanager)"
+      ],
+      "concerns": [],
+      "recommendations": []
+    }
+  ],
+  "synthesis": {
+    "conflicts": [],
+    "critical_improvements": [],
+    "high_improvements": [],
+    "optional_improvements": [
+      {
+        "description": "PoV-Scope und Pricing reduzieren für niedrigere Einstiegshürde (80 PT / 180K EUR ist Premium-PoV)",
+        "stakeholders": ["provider_sa"],
+        "affects": "pricing.proof_of_value, cost_model.effort_by_tier.proof_of_value"
+      }
+    ],
+    "verdict": "accept",
+    "revision_guidance": "Solution passes all three perspectives with scores 85+. Optional: consider reducing PoV scope for lower entry barrier."
+  }
+}

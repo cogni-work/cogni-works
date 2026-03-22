@@ -1,0 +1,16 @@
+{
+  "slug": "jivs-data-migration",
+  "product_slug": "application-services",
+  "name": "JiVS Data Migration",
+  "description": "Datenmigration mit ETL und automatisierten Testdaten",
+  "taxonomy_mapping": {
+    "dimension": 6,
+    "dimension_name": "Application Services",
+    "category_id": "6.2",
+    "category_name": "Application Modernization",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

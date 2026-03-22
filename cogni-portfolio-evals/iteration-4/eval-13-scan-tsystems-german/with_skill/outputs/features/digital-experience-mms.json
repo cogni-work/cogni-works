@@ -1,0 +1,16 @@
+{
+  "slug": "digital-experience-mms",
+  "product_slug": "consulting-services",
+  "name": "Digital Experience Consulting (MMS)",
+  "description": "Digital experience consulting service from Deutsche Telekom MMS combining UX strategy, design competence, and technology implementation for customer-facing digital touchpoint transformation.",
+  "taxonomy_mapping": {
+    "dimension": 7,
+    "dimension_name": "Consulting Services",
+    "category_id": "7.2",
+    "category_name": "Digital Transformation",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

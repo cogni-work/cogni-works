@@ -1,0 +1,14 @@
+{
+  "slug": "stoerungsmanagement",
+  "product_slug": "digitale-netzsteuerung",
+  "name": "Stoerungsmanagement und Entstoerung",
+  "description": "Digitaler Workflow fuer Erfassung, Priorisierung und Disposition von Netzstoerungen mit mobiler Monteursanbindung, automatischer Kundenbenachrichtigung und KRITIS-konformer Eskalation gemaess EnWG-Meldepflichten.",
+  "category": "grid-operations",
+  "taxonomy_mapping": {
+    "dimension": 6,
+    "category_id": "6.1",
+    "category_name": "Custom Application Development",
+    "horizon": "current"
+  },
+  "readiness": "ga"
+}

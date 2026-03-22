@@ -1,0 +1,16 @@
+{
+  "slug": "kundenportal",
+  "product_slug": "digitale-energiedienste",
+  "name": "Digitales Kundenportal",
+  "description": "Web- und App-basiertes Self-Service-Portal, ueber das Endkunden Verbrauchsdaten einsehen, Tarifwechsel durchfuehren, Abschlaege anpassen und Zaehlerstaende digital uebermitteln koennen — angebunden an SAP IS-U im Backend.",
+  "category": "application-development",
+  "taxonomy_mapping": {
+    "dimension": 6,
+    "dimension_name": "Application Services",
+    "category_id": "6.1",
+    "category_name": "Custom Application Development",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "created": "2026-03-18"
+}

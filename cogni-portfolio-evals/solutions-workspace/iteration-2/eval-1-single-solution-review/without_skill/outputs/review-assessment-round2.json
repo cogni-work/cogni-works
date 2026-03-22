@@ -1,0 +1,120 @@
+{
+  "solution_slug": "cloud-migration--grosse-energieversorger-de",
+  "review_date": "2026-03-18",
+  "round": 2,
+  "revision_summary": "Round 1 identified 1 fail (vendor lock-in/exit strategy) and 3 warns (contingency budget, competitive TCO, internal capacity). Revision added: (1) exit_strategy section with 5 components (data sovereignty, repatriation, IaC portability, multi-cloud option, contract clauses), (2) 10% contingency budget with per-risk allocation, (3) competitive TCO comparison across 3 approaches, (4) concrete delegation model with 48h acceptance frist.",
+  "perspectives": [
+    {
+      "perspective": "procurement-decision-maker",
+      "role_description": "CFO/Einkauf evaluating commercial viability and budget justification for a 2.4M EUR cloud migration program",
+      "criteria": [
+        {
+          "criterion": "Price-to-value transparency",
+          "score": "pass",
+          "rationale": "Rate card is clearly disclosed with per-phase cost breakdown. Effort days are traceable to team composition and utilization. The 30% margin is stated explicitly. The competitive TCO comparison now provides the missing benchmark context."
+        },
+        {
+          "criterion": "Payment milestone alignment",
+          "score": "pass",
+          "rationale": "Milestones are tied to concrete deliverables. 10% upfront is reasonable. No milestone exceeds 25%. Unchanged from round 1 — already strong."
+        },
+        {
+          "criterion": "Scope boundary clarity",
+          "score": "pass",
+          "rationale": "Clear exclusions maintained. Exit strategy now adds contractual clarity on termination rights, transition support, and cost caps. SektVO-compatible procurement structure."
+        },
+        {
+          "criterion": "Risk-adjusted budget adequacy",
+          "score": "pass",
+          "rationale": "Previously warned. Now addressed: 10% contingency budget (242K EUR) is allocated with per-risk breakdown (KRITIS 3%, OT/IT 4%, capacity 2%, latency 1%). Not-to-exceed clause at 2.66M EUR. Contingency is drawn only via documented Change Request, protecting both parties."
+        },
+        {
+          "criterion": "Competitive benchmark plausibility",
+          "score": "pass",
+          "rationale": "Previously warned. Now addressed: TCO comparison across 3 approaches (Managed Migration, Hyperscaler-led, Inhouse) shows T-Systems at lowest 5yr TCO (4.9M vs 5.2M vs 5.8M). The comparison is plausible and defensible in a procurement board presentation."
+        }
+      ],
+      "summary": "All round-1 concerns resolved. The solution now provides a procurement-ready commercial package with contingency management and competitive justification."
+    },
+    {
+      "perspective": "provider-side-solution-architect",
+      "role_description": "T-Systems delivery architect evaluating whether the solution can be staffed, delivered on time, and within margin",
+      "criteria": [
+        {
+          "criterion": "Staffing feasibility",
+          "score": "warn",
+          "rationale": "Unchanged from round 1. Phase 4 still requires 5 KRITIS-experienced cloud engineers at 100% for 16 weeks. This remains a realistic concern in the German market. Mitigation: early resource reservation and potential use of T-Systems nearshore KRITIS-trained teams. This is an operational risk to manage, not a solution design flaw."
+        },
+        {
+          "criterion": "Phase sequencing and dependencies",
+          "score": "pass",
+          "rationale": "Unchanged. Correct CMF sequencing with Go/No-Go gate. NIS2 dependency properly placed."
+        },
+        {
+          "criterion": "Technical scope realism",
+          "score": "pass",
+          "rationale": "Unchanged. Workload counts are realistic. SCADA exclusion and SAP-basis-only scope are correctly bounded. Addition of IaC portability and exit-readiness deliverables in Phase 5 is feasible within the existing team allocation."
+        },
+        {
+          "criterion": "Margin protection",
+          "score": "pass",
+          "rationale": "Improved. The 10% contingency is customer-facing budget, not margin erosion. Contingency draw requires Change Request documentation, so margin is protected even when contingency is used. Exit strategy costs are capped at 5% of total volume."
+        },
+        {
+          "criterion": "Delivery risk management",
+          "score": "pass",
+          "rationale": "Improved. Per-risk contingency allocation makes risk management more actionable. The 48h acceptance mechanism prevents the most common delivery delay (customer approval bottleneck)."
+        }
+      ],
+      "summary": "Staffing concern persists as expected (operational, not structural). All other criteria pass. The contingency structure and acceptance delegation model strengthen delivery confidence."
+    },
+    {
+      "perspective": "client-side-solution-architect",
+      "role_description": "Energy utility CIO/architect evaluating whether this solution is safe to adopt given KRITIS obligations, OT constraints, and internal capacity",
+      "criteria": [
+        {
+          "criterion": "KRITIS compliance safety",
+          "score": "pass",
+          "rationale": "Unchanged. BSI-C5, NIS2, KRITIS-DachG properly addressed. Data sovereignty now explicitly guaranteed (German RZ only, DSGVO+KRITIS-DachG contractual commitment)."
+        },
+        {
+          "criterion": "OT/IT boundary respect",
+          "score": "pass",
+          "rationale": "Unchanged. SCADA/Netzleitsysteme excluded. OT-Boundary fixed in Phase 1."
+        },
+        {
+          "criterion": "Internal capacity demand",
+          "score": "pass",
+          "rationale": "Previously warned. Now addressed: Concrete delegation model with 2 empowered customer contacts for sprint acceptance. 48h acceptance window with tacit-approval fallback. Training program scoped to 8 operations staff. This is realistic for a 5000+ employee utility."
+        },
+        {
+          "criterion": "Rollback and business continuity",
+          "score": "pass",
+          "rationale": "Unchanged and still strong. Rollback validated in Welle 1. Parallel operation in Welle 2. DR/BC documentation as deliverable."
+        },
+        {
+          "criterion": "Vendor lock-in and exit strategy",
+          "score": "pass",
+          "rationale": "Previously failed. Now comprehensively addressed with 5-component exit strategy: (1) Data sovereignty guarantee (German RZ, DSGVO/KRITIS-DachG), (2) 90-day data repatriation with standard formats, (3) IaC portability via Terraform/OpenTofu, (4) Kubernetes-based container portability with documented portability test, (5) Contractual exit clause (12mo notice, 90d transition, 5% cost cap). The Phase 5 portability test provides tangible proof, not just a paper guarantee."
+        }
+      ],
+      "summary": "All round-1 concerns resolved. The exit strategy is now comprehensive and verifiable. Internal capacity demand is addressed with a pragmatic delegation model. A KRITIS utility CIO can approve this solution."
+    }
+  ],
+  "synthesis": {
+    "pass_count": 14,
+    "warn_count": 1,
+    "fail_count": 0,
+    "verdict": "approved",
+    "rationale": "The revised solution resolves all critical and warning issues from round 1. The remaining warn (staffing feasibility for Phase 4) is an operational resource-planning concern, not a structural solution flaw — it requires early resource reservation during sales-to-delivery handoff but does not block commercial approval. The solution is ready for customer presentation.",
+    "improvements_applied": [
+      "Added exit_strategy section with 5 components covering data sovereignty, repatriation, IaC portability, multi-cloud optionality, and contractual clauses",
+      "Added 10% contingency budget (242K EUR) with per-risk allocation and not-to-exceed clause at 2.66M EUR",
+      "Added competitive TCO comparison across 3 approaches showing T-Systems at lowest 5yr TCO",
+      "Added concrete acceptance delegation model (2 empowered contacts, 48h frist, tacit-approval fallback)",
+      "Added TCO baseline capture and competitive approach analysis as Phase 1 deliverables",
+      "Added data repatriation plan as Phase 4 deliverable",
+      "Added exit strategy document and portability test as Phase 5 deliverables"
+    ]
+  }
+}

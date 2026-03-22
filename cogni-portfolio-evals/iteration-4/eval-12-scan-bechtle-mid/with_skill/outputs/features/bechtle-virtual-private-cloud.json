@@ -1,0 +1,16 @@
+{
+  "slug": "bechtle-virtual-private-cloud",
+  "product_slug": "cloud-services",
+  "name": "Bechtle Virtual Private Cloud",
+  "description": "Dedicated private cloud infrastructure hosted in ISO 27001-certified German e-shelter Frankfurt data center with Tier 3+ physical security, VMware foundation and GDPR-compliant operations.",
+  "taxonomy_mapping": {
+    "dimension": 4,
+    "dimension_name": "Cloud Services",
+    "category_id": "4.3",
+    "category_name": "Private Cloud",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/bechtle-portfolio.md",
+  "created": "2026-03-18"
+}

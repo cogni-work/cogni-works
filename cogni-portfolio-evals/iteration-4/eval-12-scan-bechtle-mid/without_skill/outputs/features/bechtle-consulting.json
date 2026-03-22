@@ -1,0 +1,13 @@
+{
+  "slug": "bechtle-consulting",
+  "name": "Bechtle Consulting Services",
+  "description": "IT strategy and architecture consulting with three-pronged approach (technology, business, people). Covers IT strategy, cloud strategy, security architecture, and digital transformation advisory.",
+  "product_slug": "bechtle-consulting",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 7,
+    "category_id": "7.1",
+    "category_name": "IT Strategy & Architecture"
+  },
+  "source_file": "https://www.bechtle.com/de-en/it-services/consulting-services"
+}

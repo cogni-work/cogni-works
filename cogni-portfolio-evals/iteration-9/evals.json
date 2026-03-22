@@ -1,0 +1,92 @@
+{
+  "skill_name": "features",
+  "evals": [
+    {
+      "id": 0,
+      "name": "density-insight-wave",
+      "prompt": "Erstelle Features für das Produkt cogni-portfolio mit diesen Capabilities: Portfolio-Zerlegung nach IS/DOES/MEANS, Taxonomie-Klassifizierung, Qualitätsbewertung, Web-Research-Enrichment, Proposition-Generierung, Stakeholder-Review.",
+      "expected_output": "5-7 features with short slugs (max 3 segments), descriptions naming ONE mechanism each, no enumeration of all 6 capabilities in a single description",
+      "files": [],
+      "assertions": [
+        {
+          "id": "no-long-slugs",
+          "text": "All feature slugs have at most 3 hyphenated segments",
+          "type": "structural"
+        },
+        {
+          "id": "no-density",
+          "text": "No feature description lists 3+ comma-separated parallel components/activities",
+          "type": "structural"
+        },
+        {
+          "id": "word-count",
+          "text": "All feature descriptions are 20-35 words",
+          "type": "structural"
+        },
+        {
+          "id": "mechanism-not-catalog",
+          "text": "Each description names a core mechanism, not a catalog of sub-capabilities",
+          "type": "qualitative"
+        }
+      ]
+    },
+    {
+      "id": 1,
+      "name": "density-marketing",
+      "prompt": "Erstelle Features für eine Content-Marketing-Plattform: GTM-Pfade, Thought Leadership, ABM-Kampagnen, Brand Voice, Kanalsteuerung, zweisprachig DE/EN, Performance-Analytics.",
+      "expected_output": "Features with short slugs, each describing ONE mechanism. Should NOT produce a single feature that enumerates all 7 components.",
+      "files": [],
+      "assertions": [
+        {
+          "id": "no-long-slugs",
+          "text": "All feature slugs have at most 3 hyphenated segments",
+          "type": "structural"
+        },
+        {
+          "id": "no-density",
+          "text": "No feature description lists 3+ comma-separated parallel components/activities",
+          "type": "structural"
+        },
+        {
+          "id": "word-count",
+          "text": "All feature descriptions are 20-35 words",
+          "type": "structural"
+        },
+        {
+          "id": "consolidation",
+          "text": "The 7 input capabilities are consolidated into fewer features (not 1:1 mapping)",
+          "type": "qualitative"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "density-partner",
+      "prompt": "Erstelle Features für ein Partner-Portal: Co-Delivery-Projekte, Revenue-Share-Modell, Support-Zugang, Industry-Catalog-Zugriff, Pipeline-Matching.",
+      "expected_output": "Features describing mechanisms (what the portal IS), not benefits. Short slugs like partner-matching, not partner-network-access-portal.",
+      "files": [],
+      "assertions": [
+        {
+          "id": "no-long-slugs",
+          "text": "All feature slugs have at most 3 hyphenated segments",
+          "type": "structural"
+        },
+        {
+          "id": "no-outcome-language",
+          "text": "No feature description uses outcome verbs (enables, reduces, ensures, hilft, ermöglicht) or describes benefits",
+          "type": "structural"
+        },
+        {
+          "id": "word-count",
+          "text": "All feature descriptions are 20-35 words",
+          "type": "structural"
+        },
+        {
+          "id": "mechanism-focus",
+          "text": "Descriptions explain what the feature IS (mechanism), not what it DOES for the partner (benefits)",
+          "type": "qualitative"
+        }
+      ]
+    }
+  ]
+}

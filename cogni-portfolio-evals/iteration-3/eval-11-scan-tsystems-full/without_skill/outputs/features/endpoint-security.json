@@ -1,0 +1,13 @@
+{
+  "slug": "endpoint-security",
+  "name": "Endpoint Security",
+  "description": "Managed endpoint protection with Zero Trust device validation and MDR for endpoints",
+  "product_slug": "telekom-security",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 2,
+    "category_id": "2.5",
+    "category_name": "Endpoint Security"
+  },
+  "source_file": "https://www.t-systems.com/us/en/security"
+}

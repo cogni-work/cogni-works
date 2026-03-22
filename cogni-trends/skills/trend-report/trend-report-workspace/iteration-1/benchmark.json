@@ -1,7 +1,7 @@
 {
   "metadata": {
     "skill_name": "trend-report",
-    "skill_path": "/Users/stephandehaas/GitHub/dev/cogni-works/cogni-trends/skills/trend-report",
+    "skill_path": "/Users/stephandehaas/GitHub/dev/insight-wave/cogni-trends/skills/trend-report",
     "executor_model": "claude-opus-4-6",
     "analyzer_model": "claude-opus-4-6",
     "timestamp": "2026-03-14T19:50:00Z",

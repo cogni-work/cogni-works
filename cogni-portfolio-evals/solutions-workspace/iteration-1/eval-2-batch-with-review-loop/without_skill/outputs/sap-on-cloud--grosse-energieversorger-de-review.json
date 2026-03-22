@@ -1,0 +1,151 @@
+{
+  "slug": "sap-on-cloud--grosse-energieversorger-de",
+  "solution_slug": "sap-on-cloud--grosse-energieversorger-de",
+  "reviews": [
+    {
+      "perspective": "procurement",
+      "role": "Einkauf / Beschaffungsleiter",
+      "focus": "SektVO-Beschaffungsregeln, Rahmenvertraege, EU-Vergaberecht, TCO-Transparenz",
+      "scores": [
+        {
+          "criterion": "Pricing transparency",
+          "score": 7,
+          "max_score": 10,
+          "rationale": "Vier Preistiers vorhanden. Large-Tier beinhaltet 36-Monats-Managed-Service, was die Vergleichbarkeit mit reinen Projektangeboten erschwert. Laufende Managed-Service-Kosten fuer Small/Medium nicht transparent."
+        },
+        {
+          "criterion": "Scope clarity",
+          "score": 7,
+          "max_score": 10,
+          "rationale": "Abgrenzung zwischen Migration (einmalig) und Managed Service (laufend) ist im Large-Tier klar, aber bei Small/Medium unklar -- laufender Betrieb wird als 'separat' erwaehnt ohne Preisindikation."
+        },
+        {
+          "criterion": "Contractual risk",
+          "score": 6,
+          "max_score": 10,
+          "rationale": "Near-Zero-Downtime-Zusage bei 4h-Wartungsfenster birgt Vertragsrisiko. SLA von 99.95% erfordert Poenale-Regelung die nicht spezifiziert ist. Exit-Klausel erwaehnt aber nicht detailliert."
+        },
+        {
+          "criterion": "Vendor lock-in mitigation",
+          "score": 6,
+          "max_score": 10,
+          "rationale": "SAP-Standard-Exportverfahren sind genannt. Jedoch: Managed-Service-Abhaengigkeit erzeugt operatives Lock-in. Keine explizite Transition-Out-Planung mit Aufwandsschaetzung."
+        },
+        {
+          "criterion": "Value for money",
+          "score": 7,
+          "max_score": 10,
+          "rationale": "Large-Tier bei 480k fuer 36 Monate Managed Service ist attraktiv. 25-35% Betriebskostensenkung (lt. Proposition) muss in Business Case validiert werden. PoV bei 30k ist angemessen."
+        }
+      ],
+      "overall_score": 33,
+      "overall_max": 50,
+      "recommendation": "Bedingt genehmigungsfaehig. Revision erforderlich: (1) Managed-Service-Kosten fuer Small/Medium explizit angeben, (2) Poenale-Regelung fuer SLA-Verletzung definieren, (3) Transition-Out-Plan mit Aufwandsschaetzung ergaenzen.",
+      "revision_required": true
+    },
+    {
+      "perspective": "provider_solution_architect",
+      "role": "T-Systems Solution Architect",
+      "focus": "Technische Machbarkeit, Delivery-Risiko, Ressourcenplanung, Wiederverwendbarkeit",
+      "scores": [
+        {
+          "criterion": "Technical feasibility",
+          "score": 8,
+          "max_score": 10,
+          "rationale": "SAP-on-Cloud ist bewiesene T-Systems-Kompetenz (4000+ SAP-Experten). Near-Zero-Downtime-Migration ist anspruchsvoll aber machbar mit SAP-DMO-Verfahren."
+        },
+        {
+          "criterion": "Effort estimation accuracy",
+          "score": 6,
+          "max_score": 10,
+          "rationale": "IS-U-Migration mit 6 Wochen ist ambitioniert -- Branchenerfahrung zeigt 8-12 Wochen fuer vollstaendige IS-U-Abrechnungslauf-Validierung. Hochlast-Simulation mit 2 Wochen ist realistisch."
+        },
+        {
+          "criterion": "Risk mitigation",
+          "score": 7,
+          "max_score": 10,
+          "rationale": "Hochlast-Simulation und Performance-Tuning sind gute Risikominimierung. Es fehlt ein expliziter Rollback-Plan fuer gescheiterte Migration."
+        },
+        {
+          "criterion": "Margin protection",
+          "score": 7,
+          "max_score": 10,
+          "rationale": "Margen ueber 31% ab Small-Tier. Risiko: IS-U-spezifische Customizations koennen Effort sprengen. Managed-Service-Marge im Large-Tier muss separat kalkuliert werden."
+        },
+        {
+          "criterion": "Delivery repeatability",
+          "score": 8,
+          "max_score": 10,
+          "rationale": "SAP-Migration-Playbook ist stark wiederverwendbar. Hochlast-Simulationsszenarien koennen als Template fuer weitere Energiekunden dienen."
+        }
+      ],
+      "overall_score": 36,
+      "overall_max": 50,
+      "recommendation": "Bedingt freigegeben. Revision erforderlich: (1) IS-U-Migrationsphase auf 8 Wochen verlaengern, (2) Rollback-Plan als Deliverable ergaenzen.",
+      "revision_required": true
+    },
+    {
+      "perspective": "client_solution_architect",
+      "role": "Kunden-IT-Architekt / Enterprise Architect",
+      "focus": "Architekturpassung, Integrationsfaehigkeit, Betreibbarkeit, Sicherheit",
+      "scores": [
+        {
+          "criterion": "Architecture alignment",
+          "score": 8,
+          "max_score": 10,
+          "rationale": "SAP-on-Cloud passt zur S/4HANA-2027-Deadline-Strategie. HA-Setup und Auto-Scaling adressieren Hochlastanforderungen. KRITIS-Konformitaet ist adressiert."
+        },
+        {
+          "criterion": "Integration quality",
+          "score": 7,
+          "max_score": 10,
+          "rationale": "IDOC-Schnittstellen und IS-U-Abrechnungslaeufe werden validiert. Es fehlt eine explizite Aussage zur Integration mit bestehenden OT-Systemen und Smart-Meter-Gateway-Administration."
+        },
+        {
+          "criterion": "Operational readiness",
+          "score": 8,
+          "max_score": 10,
+          "rationale": "Managed-Service mit SLAs, Incident-Management und quartalsweisem Service-Review ist ein reifes Betriebsmodell. Auto-Scaling fuer saisonale Spitzen ist eingeplant."
+        },
+        {
+          "criterion": "Security posture",
+          "score": 7,
+          "max_score": 10,
+          "rationale": "KRITIS-konforme Netzwerksegmentierung und BSI-C5-Compliance sind adressiert. Es fehlt ein explizites Verschluesselungskonzept fuer SAP-HANA-Daten at-rest und in-transit."
+        },
+        {
+          "criterion": "Data portability",
+          "score": 7,
+          "max_score": 10,
+          "rationale": "SAP-Standard-Exportverfahren und offene Backup-Formate sind zugesagt. Exit-Klausel erwaehnt. Konkrete Transition-Out-Dauer fehlt."
+        }
+      ],
+      "overall_score": 37,
+      "overall_max": 50,
+      "recommendation": "Bedingt akzeptabel. Empfehlungen: (1) Smart-Meter/OT-Integration adressieren, (2) HANA-Verschluesselungskonzept ergaenzen, (3) Transition-Out-Dauer quantifizieren.",
+      "revision_required": true
+    }
+  ],
+  "aggregate_score": 106,
+  "aggregate_max": 150,
+  "aggregate_pct": 70.7,
+  "revisions_applied": [
+    {
+      "revision_id": 1,
+      "trigger": "All three reviewers flagged revision_required",
+      "changes": [
+        "IS-U-Migrationsphase von 6 auf 8 Wochen verlaengert, Effort im Medium/Large-Tier angepasst",
+        "Rollback-Plan als explizites Deliverable in Phase 3 ergaenzt",
+        "Managed-Service-Preisindikation fuer Small (4.500 EUR/Monat) und Medium (7.500 EUR/Monat) ergaenzt",
+        "SLA-Poenale-Klausel: 2% Gutschrift je angefangene 0.01% unter 99.95% Verfuegbarkeit definiert",
+        "Transition-Out-Plan mit geschaetzter Dauer (4-8 Wochen je nach Komplexitaet) ergaenzt",
+        "HANA-Verschluesselungskonzept (at-rest AES-256, in-transit TLS 1.3) als Deliverable in Phase 2 ergaenzt",
+        "Smart-Meter-Gateway-Integration als optionaler Scope-Baustein referenziert"
+      ],
+      "post_revision_aggregate_score": 121,
+      "post_revision_aggregate_pct": 80.7
+    }
+  ],
+  "final_verdict": "approved_with_revisions",
+  "reviewed": "2026-03-18"
+}

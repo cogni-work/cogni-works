@@ -1,0 +1,16 @@
+{
+  "slug": "it-support",
+  "product_slug": "workplace-services",
+  "name": "IT Support Services",
+  "description": "Multi-tier IT support service combining remote service desk operations with on-site technician dispatch through T-Systems on site services subsidiary for German enterprise locations.",
+  "taxonomy_mapping": {
+    "dimension": 3,
+    "dimension_name": "Digital Workplace Services",
+    "category_id": "3.5",
+    "category_name": "IT Support Services",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

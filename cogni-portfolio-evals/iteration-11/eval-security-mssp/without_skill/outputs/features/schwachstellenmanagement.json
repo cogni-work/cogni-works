@@ -1,0 +1,7 @@
+{
+  "slug": "schwachstellenmanagement",
+  "product_slug": "managed-security",
+  "name": "Schwachstellenmanagement",
+  "description": "Kontinuierliches Scanning von Infrastruktur und Applikationen auf bekannte Schwachstellen mit risikobasierter Priorisierung und Patch-Tracking.",
+  "readiness": "ga"
+}

@@ -1,6 +1,6 @@
 ---
 name: guide
-description: Find the right cogni-works plugin or skill for your task
+description: Find the right insight-wave plugin or skill for your task
 argument-hint: "[task description]"
 allowed-tools:
   - Read

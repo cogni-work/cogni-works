@@ -1,0 +1,16 @@
+{
+  "slug": "compliance-grc",
+  "product_slug": "security-services",
+  "name": "Compliance and GRC Services",
+  "description": "NIS2 compliance, ISO 27001/BSI security concepts, audit support",
+  "taxonomy_mapping": {
+    "dimension": 2,
+    "dimension_name": "Security Services",
+    "category_id": "2.9",
+    "category_name": "Compliance & GRC",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/bechtle-portfolio.md",
+  "created": "2026-03-18"
+}

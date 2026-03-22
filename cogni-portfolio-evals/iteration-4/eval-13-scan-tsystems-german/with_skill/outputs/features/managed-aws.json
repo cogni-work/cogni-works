@@ -1,0 +1,16 @@
+{
+  "slug": "managed-aws",
+  "product_slug": "cloud-services",
+  "name": "Managed Cloud Services for AWS",
+  "description": "AWS Premier Consulting Partner managed service providing 24/7 proactive monitoring, incident response, cost optimization, and architecture governance for large-scale AWS deployments.",
+  "taxonomy_mapping": {
+    "dimension": 4,
+    "dimension_name": "Cloud Services",
+    "category_id": "4.1",
+    "category_name": "Managed Hyperscaler Services",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

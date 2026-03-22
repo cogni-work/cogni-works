@@ -1,0 +1,16 @@
+{
+  "slug": "bechtle-sase-implementation",
+  "product_slug": "connectivity-services",
+  "name": "Bechtle SASE Implementation",
+  "description": "Secure Access Service Edge architecture combining HPE Aruba EdgeConnect SD-WAN with cloud-native security stack including secure web gateway, CASB, ZTNA and Firewall-as-a-Service in unified platform.",
+  "taxonomy_mapping": {
+    "dimension": 1,
+    "dimension_name": "Connectivity Services",
+    "category_id": "1.2",
+    "category_name": "SASE",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/bechtle-portfolio.md",
+  "created": "2026-03-18"
+}

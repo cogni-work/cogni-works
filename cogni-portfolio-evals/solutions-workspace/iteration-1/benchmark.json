@@ -1,0 +1,190 @@
+{
+  "metadata": {
+    "skill_name": "solutions",
+    "skill_path": "/Users/stephandehaas/GitHub/dev/insight-wave/cogni-portfolio/skills/solutions/SKILL.md",
+    "executor_model": "claude-opus-4-6",
+    "timestamp": "2026-03-18T12:00:00Z",
+    "evals_run": [1, 2, 3],
+    "runs_per_configuration": 1
+  },
+  "runs": [
+    {
+      "eval_id": 1,
+      "eval_name": "Single Solution + Review",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 10,
+        "failed": 0,
+        "total": 10,
+        "time_seconds": 304.5,
+        "tokens": 68300,
+        "tool_calls": 29,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "Solution JSON has solution_type: project", "passed": true, "evidence": "solution_type: project present"},
+        {"text": "Solution has 2-5 implementation phases", "passed": true, "evidence": "5 phases"},
+        {"text": "All four pricing tiers present", "passed": true, "evidence": "PoV 25K, Small 110K, Medium 220K, Large 380K EUR"},
+        {"text": "cost_model present with effort_by_tier", "passed": true, "evidence": "Full cost model with 4 tiers"},
+        {"text": "All margins positive", "passed": true, "evidence": "11.2% to 36.1%"},
+        {"text": "Review assessment with all three perspectives", "passed": true, "evidence": "reviewer 86, provider_sa 100, client_sa 84"},
+        {"text": "Each perspective has 5 scored criteria", "passed": true, "evidence": "15 criteria total, all scored"},
+        {"text": "Synthesis has verdict (accept/revise/reject)", "passed": true, "evidence": "Round 1: revise, Round 2: accept"},
+        {"text": "Revision improves scores", "passed": true, "evidence": "Overall 90 -> 98"},
+        {"text": "Phase descriptions in German", "passed": true, "evidence": "All German content"}
+      ]
+    },
+    {
+      "eval_id": 1,
+      "eval_name": "Single Solution + Review",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.6,
+        "passed": 6,
+        "failed": 4,
+        "total": 10,
+        "time_seconds": 139.7,
+        "tokens": 20530,
+        "tool_calls": 10,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "Solution JSON has solution_type: project", "passed": false, "evidence": "No solution_type field"},
+        {"text": "Solution has 2-5 implementation phases", "passed": true, "evidence": "4 phases"},
+        {"text": "All four pricing tiers present", "passed": false, "evidence": "Single flat price, no tiers"},
+        {"text": "cost_model present with effort_by_tier", "passed": false, "evidence": "Effort by phase, not by tier"},
+        {"text": "All margins positive", "passed": true, "evidence": "30% margin on EUR 2.67M"},
+        {"text": "Review assessment with all three perspectives", "passed": true, "evidence": "3 perspectives present"},
+        {"text": "Each perspective has 5 scored criteria", "passed": true, "evidence": "15 criteria total"},
+        {"text": "Synthesis has verdict (accept/revise/reject)", "passed": false, "evidence": "Used pass_with_conditions instead"},
+        {"text": "Revision improves scores", "passed": true, "evidence": "Vacuously true (no revise verdict)"},
+        {"text": "Phase descriptions in German", "passed": true, "evidence": "All German content"}
+      ]
+    },
+    {
+      "eval_id": 2,
+      "eval_name": "Batch Generation + Review Loop",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 7,
+        "failed": 0,
+        "total": 7,
+        "time_seconds": 384.5,
+        "tokens": 78390,
+        "tool_calls": 52,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "3 solution JSON files created", "passed": true, "evidence": "cloud-migration, sovereign-cloud, sap-on-cloud"},
+        {"text": "Correct solution_type per revenue_model", "passed": true, "evidence": "All 3 are project type"},
+        {"text": "Review assessments for all 3 solutions", "passed": true, "evidence": "3 reviews with 3 perspectives each"},
+        {"text": "Batch summary categorizes by acceptance round", "passed": true, "evidence": "1 accepted Round 1, 2 accepted Round 2"},
+        {"text": "At least one revision triggered", "passed": true, "evidence": "2 solutions revised (cloud-migration, sap-on-cloud)"},
+        {"text": "Revised solutions have higher scores", "passed": true, "evidence": "82->87, 80->87"},
+        {"text": "No more than 2 revision rounds", "passed": true, "evidence": "Max 1 round per solution"}
+      ]
+    },
+    {
+      "eval_id": 2,
+      "eval_name": "Batch Generation + Review Loop",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.86,
+        "passed": 6,
+        "failed": 1,
+        "total": 7,
+        "time_seconds": 310.6,
+        "tokens": 43140,
+        "tool_calls": 33,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "3 solution JSON files created", "passed": true, "evidence": "3 files present"},
+        {"text": "Correct solution_type per revenue_model", "passed": false, "evidence": "SAP used managed_service instead of project"},
+        {"text": "Review assessments for all 3 solutions", "passed": true, "evidence": "3 reviews present"},
+        {"text": "Batch summary categorizes by acceptance round", "passed": true, "evidence": "2 clean, 1 with revisions"},
+        {"text": "At least one revision triggered", "passed": true, "evidence": "SAP revised"},
+        {"text": "Revised solutions have higher scores", "passed": true, "evidence": "70.7% -> 80.7%"},
+        {"text": "No more than 2 revision rounds", "passed": true, "evidence": "Max 1 round"}
+      ]
+    },
+    {
+      "eval_id": 3,
+      "eval_name": "Review Existing Solutions",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 5,
+        "failed": 0,
+        "total": 5,
+        "time_seconds": 249.6,
+        "tokens": 51192,
+        "tool_calls": 20,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "All 3 solutions assessed", "passed": true, "evidence": "3 individual reviews + portfolio summary"},
+        {"text": "Each assessment has three perspective scores", "passed": true, "evidence": "reviewer, provider_sa, client_sa in each"},
+        {"text": "Synthesis includes prioritized improvements", "passed": true, "evidence": "CRITICAL/HIGH/OPTIONAL arrays present"},
+        {"text": "Recommendations are specific and actionable", "passed": true, "evidence": "References cost_model.assumptions, implementation[2].duration_weeks, specific values"},
+        {"text": "Portfolio summary identifies cross-solution patterns", "passed": true, "evidence": "4 shared strengths, 5 shared weaknesses, 2 inconsistencies"}
+      ]
+    },
+    {
+      "eval_id": 3,
+      "eval_name": "Review Existing Solutions",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 5,
+        "failed": 0,
+        "total": 5,
+        "time_seconds": 213.7,
+        "tokens": 33275,
+        "tool_calls": 29,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "All 3 solutions assessed", "passed": true, "evidence": "3 reviews + portfolio summary"},
+        {"text": "Each assessment has three perspective scores", "passed": true, "evidence": "3 perspectives per review"},
+        {"text": "Synthesis includes prioritized improvements", "passed": true, "evidence": "high/medium/low severity used instead of CRITICAL/HIGH/OPTIONAL"},
+        {"text": "Recommendations are specific and actionable", "passed": true, "evidence": "References specific fields and values"},
+        {"text": "Portfolio summary identifies cross-solution patterns", "passed": true, "evidence": "4 strengths, 6 weaknesses with affected-solutions mapping"}
+      ]
+    }
+  ],
+  "run_summary": {
+    "with_skill": {
+      "pass_rate": {"mean": 1.0, "stddev": 0.0, "min": 1.0, "max": 1.0},
+      "time_seconds": {"mean": 312.9, "stddev": 55.6, "min": 249.6, "max": 384.5},
+      "tokens": {"mean": 65961, "stddev": 11188, "min": 51192, "max": 78390}
+    },
+    "without_skill": {
+      "pass_rate": {"mean": 0.82, "stddev": 0.17, "min": 0.6, "max": 1.0},
+      "time_seconds": {"mean": 221.3, "stddev": 70.3, "min": 139.7, "max": 310.6},
+      "tokens": {"mean": 32315, "stddev": 9333, "min": 20530, "max": 43140}
+    },
+    "delta": {
+      "pass_rate": "+0.18",
+      "time_seconds": "+91.6",
+      "tokens": "+33646"
+    }
+  },
+  "notes": [
+    "Skill achieves 100% pass rate across all 22 assertions vs 77% baseline — a +23% improvement",
+    "All 5 baseline failures are schema conformance issues (solution_type, pricing tiers, cost_model structure, verdict enum) — exactly what the skill enforces",
+    "The closed review loop works: 3 of 4 solutions in evals 1+2 triggered revision, all improved scores (82->87, 80->87, 90->98)",
+    "Eval-3 (review only) shows equal pass rates — both with_skill and baseline can review solutions effectively. The skill's value is in generation + schema enforcement, not review quality alone",
+    "Skill costs ~2x more tokens and ~1.4x more time, but the token overhead pays for the review loop that catches and fixes issues automatically",
+    "SOL-09 is vacuously true for baseline (verdict was not 'revise') — consider making SOL-08 a prerequisite for SOL-09 in future iterations",
+    "Grader suggested stronger assertions: margin thresholds (not just positive), arithmetic consistency checks, and revision diff verification"
+  ]
+}

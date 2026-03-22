@@ -1,0 +1,118 @@
+{
+  "slug": "cloud-migration--mittelstaendische-stadtwerke-de",
+  "proposition_slug": "cloud-migration--mittelstaendische-stadtwerke-de",
+  "segment_context": {
+    "name": "Mittelständische Stadtwerke Deutschland",
+    "employees_range": "500-5000",
+    "characteristics": "Kommunale Versorgungsunternehmen mit begrenzten IT-Budgets (1-5 Mio EUR/Jahr IT-Gesamtbudget), überschaubarer IT-Komplexität (50-200 Server, 1-3 Rechenzentren), starker Regionalbindung und Präferenz für mittelstandsorientierte Dienstleister. Kaufen anders als Top-20 Versorger: kürzere Entscheidungszyklen (3-9 Monate), kleinere Buying-Center (2-3 Personen: GF/Werkleiter, IT-Leiter, Einkauf), Fokus auf Betriebssicherheit und Wirtschaftlichkeit statt Transformationsvision.",
+    "urgency_drivers": [
+      "NIS2-Registrierungspflicht ab April 2026 — auch für Stadtwerke als KRITIS-Betreiber",
+      "SAP ECC End-of-Life 2027 — viele Stadtwerke nutzen IS-U für Abrechnung",
+      "Smart-Meter-Rollout: 95%-Pflicht bis 2030 erfordert Cloud-fähige MDM-Systeme",
+      "Fachkräftemangel: 2-3 IT-Mitarbeiter können kein eigenes Rechenzentrum plus Cloud-Transformation stemmen"
+    ],
+    "icp_qualification": "Idealkunde: Stadtwerk mit 800-3000 Mitarbeitern, bestehendem SAP IS-U, eigenem Rechenzentrum mit auslaufender Hardware (>5 Jahre), KRITIS-Einstufung, und IT-Outsourcing-Vertrag in den nächsten 18 Monaten zur Verlängerung."
+  },
+  "competitors": [
+    {
+      "name": "DATAGROUP",
+      "source_url": "https://www.datagroup.de/branchen/energie-versorgung/",
+      "positioning": "Full-IT-Outsourcing-Partner für den Mittelstand mit CORBOX-Serviceportfolio — standardisiertes All-inclusive-Modell (Arbeitsplatz, Rechenzentrum, Cloud) zu transparenten Festpreisen, spezialisiert auf kommunale Versorger und Stadtwerke.",
+      "strengths": [
+        "Marktführer für IT-Outsourcing im deutschen Mittelstand mit über 70 Stadtwerke-Referenzen",
+        "CORBOX-Modell bietet kalkulierbare Festpreise — eliminiert Budget-Unsicherheit für Stadtwerkekämmerer",
+        "Lokale Präsenz mit 20+ Standorten und deutschsprachigem Service Desk",
+        "BSI-C5-zertifizierte Rechenzentren mit klarer Datensouveränität",
+        "Seit 2025 eigene Azure-MSP-Praxis aufgebaut — schließt Hyperscaler-Lücke zunehmend"
+      ],
+      "weaknesses": [
+        "Kein eigenes Telekommunikationsnetz — WAN/LAN-Integration erfordert separaten Carrier-Vertrag mit eigenem SLA",
+        "SAP-IS-U-Migration nicht aus eigener Kraft — muss Partner (z.B. itelligence) einbinden, was Finger-Pointing-Risiko schafft",
+        "Cloud-Migration de facto oft Rehosting ins DATAGROUP-RZ statt echter Hyperscaler-Transformation",
+        "Kein integriertes SLA über Netzwerk + Cloud + Applikation — Kunde managt Schnittstellen selbst"
+      ],
+      "differentiation": "DATAGROUP nutzt oft das DT-Netz als Vorleistung — aber T-Systems bietet ein integriertes SLA über Netzanbindung, Cloud-Infrastruktur und Applikationsbetrieb aus einer Hand. Bei einem Stadtwerk mit 3 IT-Mitarbeitern ist der Unterschied zwischen 'ein Vertrag, ein Ansprechpartner' und 'drei Verträge mit Finger-Pointing-Risiko' dealentscheidend."
+    },
+    {
+      "name": "Bechtle",
+      "source_url": "https://www.bechtle.com/de/loesungen/cloud",
+      "positioning": "Größtes deutsches IT-Systemhaus mit regionaler Vertriebsstruktur — begleitet Stadtwerke bei der schrittweisen Azure-Migration mit Fokus auf Infrastruktur (Workplace, Server, Netzwerk) und verknüpft Cloud-Services mit Hardware-Beschaffung.",
+      "strengths": [
+        "Regionale Vertriebsstruktur mit persönlichem Ansprechpartner vor Ort — bei Stadtwerken vertrauensbildend",
+        "Azure Expert MSP-Status mit nachgewiesener Multi-Cloud-Kompetenz",
+        "Wettbewerbsfähige Preise durch Skaleneffekte im Hardware- und Lizenzgeschäft",
+        "Etablierte Rahmenverträge mit kommunalen Einkaufsgemeinschaften (Dataport, BITBW, IT.NRW)",
+        "Flexibles Modell: vom Einzelprojekt bis zum Managed Service"
+      ],
+      "weaknesses": [
+        "Primär Infrastruktur-fokussiert — keine Applikationsmigration für SAP IS-U oder Branchensoftware (Schleupen, SIV, Wilken)",
+        "Kein eigenes Rechenzentrum mit BSI-C5 oder Sovereign-Cloud-Angebot für KRITIS-Workloads",
+        "Kein Transformationsberatungsangebot — 'Lift-and-Shift' ja, 'Modernize' oder 'Refactor' nein",
+        "Nach der Migration muss der Stadtwerk-IT-Leiter den laufenden Applikationsbetrieb selbst organisieren"
+      ],
+      "differentiation": "Bechtle migriert Infrastruktur exzellent — aber bei einem Stadtwerk ist die eigentliche Herausforderung die Applikationsschicht (SAP IS-U, Branchensoftware, Abrechnungssysteme). T-Systems liefert die Applikationsmodernisierung gleich mit und übernimmt den Betrieb nach der Migration, sodass die 2-3 IT-Mitarbeiter nicht plötzlich Azure-Administratoren werden müssen."
+    },
+    {
+      "name": "Computacenter",
+      "source_url": "https://www.computacenter.com/de/branchen/energy-utilities",
+      "positioning": "Positioniert sich zunehmend als Managed-Services-Alternative zu DXC/Unisys für Bestandskunden — bei Stadtwerken primär über Arbeitsplatz-Services, Infrastrukturbetrieb und Multi-Cloud-Integration, weniger über Cloud-Transformation.",
+      "strengths": [
+        "Starke Multi-Cloud-Integrationskompetenz mit Zertifizierungen bei AWS, Azure und GCP",
+        "Europäische Präsenz mit deutscher Geschäftsführung und über 6.000 Mitarbeitern in DACH",
+        "Neutrale Hyperscaler-Beratung ohne eigene Cloud-Plattform-Interessen",
+        "Wachsendes Managed-Services-Portfolio als Alternative für Kunden, die DXC oder Unisys ablösen wollen"
+      ],
+      "weaknesses": [
+        "Bei kommunalen Versorgern in Deutschland deutlich weniger bekannt als Bechtle oder DATAGROUP — weniger Stadtwerke-Referenzen",
+        "Kein eigenes Rechenzentrum mit BSI-C5-Zertifizierung — Sovereign-Cloud-Anforderungen nur über Hyperscaler-Partnermodelle",
+        "Keine SAP-Energieversorger-Praxis — muss für IS-U-Migration auf Systemintegratoren verweisen",
+        "Schwächere Rahmenvertragsbasis bei kommunalen Einkaufsgemeinschaften als Bechtle und DATAGROUP"
+      ],
+      "differentiation": "Computacenter berät zwar hyperscaler-neutral, aber bei einem Stadtwerk mit 1.500 Mitarbeitern zählt nicht die Neutralität, sondern die Frage 'Wer betreibt das danach?'. T-Systems liefert Migration UND Betrieb mit integriertem SLA — Computacenter übergbt nach der Migration an den Kunden oder einen separaten Betreiber."
+    },
+    {
+      "name": "Arvato Systems (Bertelsmann)",
+      "source_url": "https://www.arvato-systems.de/branchen/energy",
+      "positioning": "Bertelsmann-Tochter mit dedizierter Energievertikale — positioniert sich bei Stadtwerken als Digitalisierungspartner für Kundenprozesse (Abrechnung, Kundenportale, E-Mobility-Plattformen) mit Azure-Cloud als Technologiebasis.",
+      "strengths": [
+        "Dezidiertes Energieversorger-Team mit Stadtwerke-spezifischen Referenzen in Abrechnungs- und Kundenportallösungen",
+        "Starke Azure-Kompetenz als Microsoft-Gold-Partner",
+        "Bertelsmann-Rückhalt gibt finanzielle Stabilität für langfristige Verträge",
+        "Erfahrung mit regulierten Branchen und Compliance-Anforderungen"
+      ],
+      "weaknesses": [
+        "Fokus auf kaufmännische IT und Kundenprozesse — keine Kompetenz für OT/IT-Konvergenz, Netzleittechnik oder SCADA",
+        "Kein eigenes Netzwerk oder eigene Cloud-Infrastruktur — vollständig auf Microsoft Azure angewiesen",
+        "Keine TÜV-zertifizierte Zero-Outage-Garantie — bei Ausfall der Abrechnungssysteme haftet der Stadtwerke-GF persönlich",
+        "Begrenzte Skalierbarkeit: Bei einem großen Migrationsprogramm (>50 Workloads) stößt Arvato an Kapazitätsgrenzen"
+      ],
+      "differentiation": "Arvato Systems ist stark bei Kundenportalen und Abrechnungsdigitalisierung — aber Cloud-Migration ist Infrastruktur- und Applikationsarbeit, nicht Prozessdigitalisierung. Bei einem Stadtwerk, das 150 Server, SAP IS-U und Branchensoftware in die Cloud bringen muss, fehlt Arvato die Migrationsfabrik-Kapazität und das integrierte Betriebsmodell, das T-Systems mit der Cloud Migration Factory standardisiert liefert."
+    },
+    {
+      "name": "SWK (Stadtwerke-Kooperationen: Trianel, items, GISA)",
+      "source_url": "https://www.trianel.com/digitalisierung",
+      "positioning": "Stadtwerke-eigene IT-Dienstleister und Kooperationsmodelle — Cloud-Migration als gemeinsame Branchenlösung mit genossenschaftlicher Preisstruktur und dem Versprechen 'von Stadtwerken für Stadtwerke'.",
+      "strengths": [
+        "Maximale Branchennähe — entwickelt von Stadtwerke-Praktikern, spricht die Sprache der Geschäftsführer",
+        "Genossenschaftliche Preismodelle senken Einstiegskosten und teilen Investitionsrisiko",
+        "Tiefes Verständnis für kommunale Beschaffungsprozesse und Gremienbeschlüsse",
+        "Referenzen aus dem Gesellschafterkreis: 'Die Nachbar-Stadtwerke machen das auch' ist bei kommunalen GFs das stärkste Argument"
+      ],
+      "weaknesses": [
+        "Cloud bedeutet hier meist 'gehostetes Rechenzentrum' — kein Hyperscaler, kein Cloud-Native, keine Modernisierung",
+        "Konservatives Innovationstempo: Jede Änderung erfordert Gremienabstimmung aller Gesellschafter",
+        "Keine End-to-End-Verantwortung: Netzwerk, Security, Applikationsbetrieb bleiben beim Stadtwerk",
+        "SLA-Verbindlichkeit auf Genossenschafts-Niveau — keine vertragliche Haftung für Systemverfügbarkeit auf Enterprise-Standard"
+      ],
+      "differentiation": "Stadtwerke-Kooperationen bieten Gemeinschaft, aber keine Transformation. Wenn das Stadtwerk in 18 Monaten SAP ECC ablösen, NIS2-konform werden und das Rechenzentrum schließen muss, reicht 'Genossenschafts-Hosting' nicht — dann braucht es eine strukturierte 6R-Migrationsmethodik, zertifizierte Security und verbindliche Migrationsfahrpläne. Genau das unterscheidet einen IT-Dienstleister von einer Einkaufsgemeinschaft."
+    }
+  ],
+  "trap_questions": [
+    "Können Sie für Ihre Cloud-Migrationslösung eine BSI-C5-Testat-Typ-2-Bestätigung vorlegen, die den Betrieb von KRITIS-relevanten Workloads auf Ihrer eigenen Infrastruktur — nicht nur auf Hyperscaler-Seite — abdeckt?",
+    "Wie viele abgeschlossene Cloud-Migrationen bei deutschen Stadtwerken (500-5000 Mitarbeiter) können Sie mit konkretem Ansprechpartner als Referenz benennen — speziell Migrationen, die SAP IS-U und mindestens eine weitere Branchensoftware umfassten?",
+    "Bieten Sie nach Abschluss der Migration den laufenden Betrieb aus Cloud-Infrastruktur, Netzanbindung und Applikation unter einem integrierten SLA-Vertrag an, oder benötigen wir separate Betriebsverträge mit verschiedenen Anbietern?",
+    "Wie viele Ihrer für das Projekt vorgesehenen Cloud-Architekten haben nachweisbare Erfahrung sowohl mit SAP-IS-U-Landschaften als auch mit Hyperscaler-Plattformen (Azure/AWS) — bitte mit Zertifizierungsnachweisen?"
+  ],
+  "analysis_note": "Diese Wettbewerbsanalyse basiert auf LLM-Trainingswissen und ist kalibriert auf das Stadtwerke-Segment (500-5000 Mitarbeiter). Die Wettbewerbslandschaft unterscheidet sich wesentlich von der für Großversorger (E.ON, RWE): Regionale Systemhäuser (DATAGROUP, Bechtle) und Stadtwerke-Kooperationen sind die primären Wettbewerber. Globale SIs (Accenture, IBM, Capgemini) sind für dieses Segment typischerweise zu groß, zu teuer und zu wenig auf kommunale Beschaffungsprozesse eingestellt. Die Analyse adressiert bewusst die Stadtwerke-typische Preisobjection gegen T-Systems durch TCO-Argumente (1 Vertrag vs. 3-4 Verträge) statt durch Preissenkung.",
+  "created": "2026-03-19"
+}

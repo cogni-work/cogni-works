@@ -1,0 +1,190 @@
+{
+  "solution_slug": "sap-on-cloud--grosse-energieversorger-de",
+  "solution_type": "project",
+  "overall": "warn",
+  "overall_score": 79,
+  "stakeholder_reviews": [
+    {
+      "perspective": "reviewer",
+      "score": 85,
+      "overall": "warn",
+      "criteria": {
+        "roi_clarity": {
+          "score": "pass",
+          "weight": 0.30,
+          "note": ""
+        },
+        "budget_fit": {
+          "score": "pass",
+          "weight": 0.25,
+          "note": ""
+        },
+        "risk_reward_transparency": {
+          "score": "pass",
+          "weight": 0.20,
+          "note": ""
+        },
+        "competitive_positioning": {
+          "score": "warn",
+          "weight": 0.15,
+          "note": "No competitor data available. SAP managed services is a well-benchmarked market — buyers will compare against Atos, IBM, and SAP itself (RISE with SAP). Without positioning data, the pricing stands on its own but procurement will benchmark."
+        },
+        "decision_pathway": {
+          "score": "pass",
+          "weight": 0.10,
+          "note": ""
+        }
+      },
+      "strengths": [
+        "Excellent ROI story: MEANS statement quantifies 25-35% cost reduction with 99.95% SLA improvement — directly fundable",
+        "PoV is exceptionally well-designed: landscape analysis with TCO comparison (on-prem vs. managed) gives CFO a concrete decision artifact",
+        "Tier progression is logical: one S/4HANA system → full SAP core landscape → all SAP systems including sandbox/QA",
+        "Exit clause in assumptions ('Knowledge-Transfer 4 Wochen bei Vertragskuendigung') proactively addresses procurement's lock-in concern"
+      ],
+      "concerns": [
+        "No competitive positioning against RISE with SAP, Atos, or IBM — this is a heavily benchmarked market"
+      ],
+      "recommendations": [
+        "OPTIONAL: Add competitive positioning rationale, especially vs. RISE with SAP which is the default alternative for S/4HANA customers"
+      ]
+    },
+    {
+      "perspective": "provider_sa",
+      "score": 80,
+      "overall": "warn",
+      "criteria": {
+        "delivery_realism": {
+          "score": "pass",
+          "weight": 0.30,
+          "note": ""
+        },
+        "scope_effort_coherence": {
+          "score": "pass",
+          "weight": 0.25,
+          "note": ""
+        },
+        "phase_architecture": {
+          "score": "warn",
+          "weight": 0.20,
+          "note": "Phase 3 (SAP-Betriebsmigration & Parallelbetrieb, 8 weeks) requires running parallel operations through a full billing cycle. For energy utilities, billing cycles can be monthly (gas) or annual (Jahresabrechnung). If the parallel run must cover the annual billing cycle, 8 weeks may not be sufficient — this is calendar-dependent, not effort-dependent."
+        },
+        "does_traceability": {
+          "score": "pass",
+          "weight": 0.15,
+          "note": ""
+        },
+        "tier_scalability": {
+          "score": "warn",
+          "weight": 0.10,
+          "note": "Small and Medium tiers both describe 'Managed SAP-Betrieb' — the qualitative difference is system count (one vs. three), not a fundamentally different engagement model. The approach is the same; only scope scales."
+        }
+      },
+      "strengths": [
+        "Parallel operations phase with minimum one full billing cycle is the right approach for SAP managed services — this is how real SAP transitions work",
+        "IS-U-specific configuration and auto-scaling for billing peaks shows deep domain understanding",
+        "Effort scaling is reasonable: PoV 25d → Small 100d → Medium 240d → Large 480d follows realistic complexity growth",
+        "Senior SAP Basis profile assumption (not blended rate) correctly reflects the skill requirement"
+      ],
+      "concerns": [
+        "Parallel operations phase may need to be calendar-aligned to Jahresabrechnung cycle rather than fixed at 8 weeks",
+        "Small-to-Medium tier jump is quantitative (more systems) rather than qualitative (different approach)"
+      ],
+      "recommendations": [
+        "HIGH: Add assumption that parallel operations phase is calendar-aligned — 'Parallelbetrieb umfasst mindestens eine Jahresabrechnung' rather than fixed 8-week duration",
+        "OPTIONAL: Differentiate Medium tier approach — e.g., Medium includes cross-system integration testing and change management, not just more systems"
+      ]
+    },
+    {
+      "perspective": "client_sa",
+      "score": 73,
+      "overall": "warn",
+      "criteria": {
+        "integration_feasibility": {
+          "score": "warn",
+          "weight": 0.30,
+          "note": "SAP landscape integration with Smart Metering infrastructure is mentioned in the Large tier scope but not addressed in the implementation phases. For energy utilities, the IS-U → Smart Metering Gateway Administration interface is critical — if this integration breaks during transition, billing data is affected."
+        },
+        "dependency_risk": {
+          "score": "pass",
+          "weight": 0.25,
+          "note": ""
+        },
+        "operational_readiness": {
+          "score": "warn",
+          "weight": 0.20,
+          "note": "Phase 4 mentions 'Eskalations-Enablement des internen Restteams' — the word 'Restteam' implies the internal team shrinks during transition. The solution should explicitly address what operational capabilities the retained team needs and what is fully delegated to T-Systems managed service."
+        },
+        "vendor_lockin": {
+          "score": "pass",
+          "weight": 0.15,
+          "note": ""
+        },
+        "security_compliance": {
+          "score": "warn",
+          "weight": 0.10,
+          "note": "SAP systems in energy utilities process billing data for millions of customers — GDPR and Bundesdatenschutzgesetz implications of moving this to a managed service are not addressed. The client SA will want to know: where does the data reside, who has access, and what happens during the transition?"
+        }
+      },
+      "strengths": [
+        "Exit clause with 4-week knowledge transfer explicitly addresses vendor lock-in concern",
+        "Parallel operations approach gives client SA confidence that the cutover is validated before commitment",
+        "Client prerequisite (SAP system directory and billing calendar within 10 days) is specific and realistic"
+      ],
+      "concerns": [
+        "Smart Metering integration mentioned in Large tier scope but not in implementation phases",
+        "Data residency and GDPR implications of managed SAP services not addressed",
+        "'Restteam' enablement needs clarity — what does the retained team own vs. what does T-Systems own?"
+      ],
+      "recommendations": [
+        "HIGH: Add explicit RACI or responsibility boundary between T-Systems managed service and client retained team",
+        "HIGH: Address data residency and GDPR compliance for billing data in managed service assumptions",
+        "OPTIONAL: If Smart Metering integration is Large-tier scope, add it as an implementation phase or sub-phase"
+      ]
+    }
+  ],
+  "synthesis": {
+    "conflicts": [
+      {
+        "tension": "Provider SA notes parallel operations should be calendar-aligned; Client SA wants clear responsibility boundaries during parallel run",
+        "resolution": "Both are complementary — extend parallel operations to cover Jahresabrechnung AND define explicit RACI for the parallel period showing who owns what"
+      }
+    ],
+    "critical_improvements": [],
+    "high_improvements": [
+      {
+        "description": "Align parallel operations phase to billing calendar (Jahresabrechnung) rather than fixed 8-week duration",
+        "stakeholders": ["provider_sa"],
+        "affects": "implementation[2].duration_weeks, cost_model.assumptions"
+      },
+      {
+        "description": "Define explicit RACI between T-Systems managed service and client retained team",
+        "stakeholders": ["client_sa"],
+        "affects": "implementation[3], cost_model.assumptions"
+      },
+      {
+        "description": "Address data residency and GDPR compliance for billing data migration to managed service",
+        "stakeholders": ["client_sa"],
+        "affects": "cost_model.assumptions"
+      }
+    ],
+    "optional_improvements": [
+      {
+        "description": "Add competitive positioning vs. RISE with SAP",
+        "stakeholders": ["reviewer"],
+        "affects": "pricing rationale"
+      },
+      {
+        "description": "Differentiate Medium tier qualitatively from Small (not just more systems)",
+        "stakeholders": ["provider_sa"],
+        "affects": "pricing.medium.scope"
+      },
+      {
+        "description": "Add Smart Metering integration as explicit phase for Large tier",
+        "stakeholders": ["client_sa"],
+        "affects": "implementation"
+      }
+    ],
+    "verdict": "revise",
+    "revision_guidance": "Strongest of the three solutions commercially but weakest on adoption safety. Focus on: (1) Calendar-align the parallel operations phase to Jahresabrechnung — fixed 8 weeks may miss it. (2) Define clear responsibility boundaries (RACI) between managed service and retained team. (3) Add data residency and GDPR assumptions for billing data. The Reviewer perspective nearly passes at 85 — minor competitive positioning would push it over."
+  }
+}

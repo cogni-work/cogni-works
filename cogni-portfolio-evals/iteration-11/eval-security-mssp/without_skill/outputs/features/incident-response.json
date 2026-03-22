@@ -1,0 +1,7 @@
+{
+  "slug": "incident-response",
+  "product_slug": "managed-security",
+  "name": "Incident Response",
+  "description": "Strukturierter Incident-Response-Prozess mit Triage, forensischer Analyse, Eindaemmung und Wiederherstellung sowie vordefinierte Playbooks und Eskalationsketten.",
+  "readiness": "ga"
+}

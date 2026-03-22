@@ -1,0 +1,13 @@
+{
+  "slug": "sase-security-service-edge",
+  "name": "Secure Access Service Edge (SASE)",
+  "description": "Cloud-basiertes Framework das WAN und Security kombiniert fuer eine zukunftssichere Architektur mit optimaler Konnektivitaet und Schutz.",
+  "product_slug": "t-systems-security",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 1,
+    "category_id": "1.2",
+    "category_name": "SASE"
+  },
+  "source_file": "https://www.t-systems.com/de/de/security/loesungen/secure-access-service-edge"
+}

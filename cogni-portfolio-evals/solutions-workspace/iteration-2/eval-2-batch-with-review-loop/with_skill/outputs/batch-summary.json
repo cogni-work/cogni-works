@@ -1,0 +1,96 @@
+{
+  "batch_id": "eval-2-batch-with-review-loop",
+  "project": "t-systems-solutions",
+  "market": "grosse-energieversorger-de",
+  "solution_type": "project",
+  "language": "de",
+  "total_propositions": 3,
+  "generated": 3,
+  "accepted_round1": 1,
+  "accepted_round2": 2,
+  "needs_attention": 0,
+  "solutions": [
+    {
+      "slug": "cloud-migration--grosse-energieversorger-de",
+      "verdict": "accept",
+      "round": 1,
+      "overall_score": 89,
+      "scores": { "reviewer": 92, "provider_sa": 85, "client_sa": 90 },
+      "pricing": {
+        "proof_of_value": 180000,
+        "small": 850000,
+        "medium": 1800000,
+        "large": 2800000,
+        "currency": "EUR"
+      },
+      "phases": 5,
+      "total_timeline_weeks": 36,
+      "margins": { "pov": 31.1, "small": 37.4, "medium": 38.2, "large": 35.6 },
+      "buyer_adoption_checklist": {
+        "exit_clause": true,
+        "client_fte": true,
+        "ot_boundary": true,
+        "data_residency": true,
+        "compliance_deliverables": true
+      },
+      "revision_notes": null
+    },
+    {
+      "slug": "sap-on-cloud--grosse-energieversorger-de",
+      "verdict": "accept",
+      "round": 2,
+      "overall_score": 88,
+      "scores": { "reviewer": 90, "provider_sa": 86, "client_sa": 88 },
+      "pricing": {
+        "proof_of_value": 95000,
+        "small": 420000,
+        "medium": 850000,
+        "large": 1400000,
+        "currency": "EUR"
+      },
+      "phases": 4,
+      "total_timeline_weeks": 16,
+      "margins": { "pov": 28.4, "small": 33.8, "medium": 31.5, "large": 32.9 },
+      "buyer_adoption_checklist": {
+        "exit_clause": true,
+        "client_fte": true,
+        "ot_boundary": false,
+        "data_residency": true,
+        "compliance_deliverables": true
+      },
+      "revision_notes": "Round 1 flagged: missing TCO baseline/comparison deliverables in phases, missing competitive positioning. Revision added TCO-Baseline to Phase 1, TCO comparison to Phase 4, and competitive positioning to assumptions."
+    },
+    {
+      "slug": "sovereign-cloud--grosse-energieversorger-de",
+      "verdict": "accept",
+      "round": 2,
+      "overall_score": 89,
+      "scores": { "reviewer": 90, "provider_sa": 87, "client_sa": 90 },
+      "pricing": {
+        "proof_of_value": 75000,
+        "small": 320000,
+        "medium": 680000,
+        "large": 1100000,
+        "currency": "EUR"
+      },
+      "phases": 4,
+      "total_timeline_weeks": 16,
+      "margins": { "pov": 27.7, "small": 31.6, "medium": 31.8, "large": 30.9 },
+      "buyer_adoption_checklist": {
+        "exit_clause": true,
+        "client_fte": true,
+        "ot_boundary": true,
+        "data_residency": true,
+        "compliance_deliverables": true
+      },
+      "revision_notes": "Round 1 flagged: Phase 4 too compressed (2w for 3 deliverables), missing competitive positioning, Medium tier quantitative-only differentiation. Revision moved dashboard setup to Phase 3, added competitive positioning, sharpened Medium scope with continuous compliance monitoring."
+    }
+  ],
+  "portfolio_consistency": {
+    "exit_clause_consistent": true,
+    "compliance_framing_consistent": true,
+    "assumption_drift": false,
+    "ot_boundary_consistent": true,
+    "notes": "All solutions use consistent delivery rates (SA 1800, IE 1200, PM 1400 EUR/day), consistent exit clause patterns, and consistent BSI-C5/NIS2 compliance framing. OT/IT boundary defined in cloud-migration and sovereign-cloud (both touch OT-adjacent systems); SAP-on-cloud is IT-only, so OT boundary is not applicable."
+  }
+}

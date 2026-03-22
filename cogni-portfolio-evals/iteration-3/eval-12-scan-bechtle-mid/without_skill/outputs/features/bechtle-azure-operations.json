@@ -1,0 +1,13 @@
+{
+  "slug": "bechtle-azure-operations",
+  "name": "Bechtle Azure Operations",
+  "description": "Managed hyperscaler operations for Azure, AWS, Google Cloud, and IONOS including monitoring, compliance, backup, and cost optimization.",
+  "product_slug": "bechtle-cloud",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 4,
+    "category_id": "4.1",
+    "category_name": "Managed Hyperscaler Services"
+  },
+  "source_file": "https://www.bechtle.com/de-en/it-services/managed-services/managed-cloud/azure-operations"
+}

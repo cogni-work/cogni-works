@@ -1,0 +1,217 @@
+{
+  "slug": "cloud-migration--grosse-energieversorger-de",
+  "proposition_slug": "cloud-migration--grosse-energieversorger-de",
+  "feature_slug": "cloud-migration",
+  "market_slug": "grosse-energieversorger-de",
+  "product_slug": "cloud-services",
+  "title": "Cloud-Migrationsprogramm für große deutsche Energieversorger",
+  "summary": "Strukturiertes Cloud-Migrationsprogramm für IS-U-, SCADA- und ERP-Workloads großer deutscher Energieversorger. Modulare CMF-Methodik (Assess-Mobilize-Modernize) mit KRITIS-konformer Staging-Umgebung, 6R-Migrationsstrategien und sprint-basierter Implementierung. Zielgruppe: E.ON, RWE, EnBW, Vattenfall Deutschland, Uniper.",
+  "implementation_plan": {
+    "phases": [
+      {
+        "phase": 1,
+        "name": "Discovery & Assessment",
+        "duration_weeks": 6,
+        "description": "Umfassende Bestandsaufnahme der bestehenden IT-Landschaft inkl. IS-U, SCADA, ERP-Systeme. Erstellung einer Cloud-Readiness-Bewertung je Workload nach 6R-Modell (Rehost, Replatform, Refactor, Repurchase, Retain, Retire). KRITIS-Compliance-Gap-Analyse gegen BSI-C5 und NIS2-Anforderungen.",
+        "deliverables": [
+          "Application Portfolio Assessment (300+ Workloads)",
+          "Cloud-Readiness-Matrix mit 6R-Zuordnung je Workload",
+          "KRITIS-Compliance-Gap-Analyse (BSI-C5, NIS2, KRITIS-DachG)",
+          "Migrationspriorisierungs-Roadmap",
+          "Risiko- und Abhängigkeitsanalyse (OT/IT-Konvergenz)"
+        ],
+        "team": [
+          { "role": "Solution Architect", "count": 2, "utilization_pct": 80 },
+          { "role": "Implementation Engineer", "count": 1, "utilization_pct": 50 },
+          { "role": "Project Manager", "count": 1, "utilization_pct": 60 }
+        ]
+      },
+      {
+        "phase": 2,
+        "name": "Mobilize & Foundation",
+        "duration_weeks": 8,
+        "description": "Aufbau der Cloud-Landing-Zone mit KRITIS-konformer Staging-Umgebung. Einrichtung der Cloud Migration Factory (CMF) mit standardisierten Migrationspipelines, Monitoring und Rollback-Mechanismen. Schulung des Kundenpersonals für Day-2-Operations.",
+        "deliverables": [
+          "KRITIS-konforme Cloud-Landing-Zone (Sovereign Cloud / OTC)",
+          "Cloud Migration Factory Setup (CMF-Toolchain, CI/CD-Pipelines)",
+          "Netzwerk-Architektur mit OT/IT-Segmentierung",
+          "IAM-Konzept und Zero-Trust-Baseline",
+          "Runbook-Templates für Migrationssprints",
+          "Schulungsprogramm für Operations-Team (8 Personen)"
+        ],
+        "team": [
+          { "role": "Solution Architect", "count": 2, "utilization_pct": 100 },
+          { "role": "Implementation Engineer", "count": 3, "utilization_pct": 80 },
+          { "role": "Project Manager", "count": 1, "utilization_pct": 80 }
+        ]
+      },
+      {
+        "phase": 3,
+        "name": "Sprint-basierte Migration (Welle 1 — Non-Critical)",
+        "duration_weeks": 12,
+        "description": "Migration der ersten Workload-Welle: nicht-kritische Business-Applikationen (CRM, HR, Intranet, Reporting). Sprint-Zyklen von je 2 Wochen mit standardisierten CMF-Runbooks. Validierung der Migrationspipeline vor Übergang zu kritischen Systemen.",
+        "deliverables": [
+          "Migration von 60-80 Non-Critical Workloads",
+          "Sprint-Berichte mit KPIs (Downtime, Fehlerrate, Performance)",
+          "Validierter Rollback-Prozess (getestet in Prod-near-Umgebung)",
+          "Optimierte CMF-Runbooks basierend auf Welle-1-Erkenntnissen",
+          "Go/No-Go-Entscheidung für Welle 2 (kritische Systeme)"
+        ],
+        "team": [
+          { "role": "Solution Architect", "count": 1, "utilization_pct": 60 },
+          { "role": "Implementation Engineer", "count": 4, "utilization_pct": 100 },
+          { "role": "Project Manager", "count": 1, "utilization_pct": 80 }
+        ]
+      },
+      {
+        "phase": 4,
+        "name": "Sprint-basierte Migration (Welle 2 — Business-Critical)",
+        "duration_weeks": 16,
+        "description": "Migration kritischer Systeme inkl. ERP (SAP IS-U-Basisinfrastruktur), Billing, Messdatenmanagement. KRITIS-spezifische Migrationsverfahren mit erweitertem Rollback, Parallel-Betrieb und BSI-Audit-Trail. SCADA-angrenzende Systeme bleiben on-premises; nur IT-seitige Schnittstellen werden migriert.",
+        "deliverables": [
+          "Migration von 80-120 Business-Critical Workloads",
+          "SAP-Basis-Infrastruktur auf Cloud (nicht funktionale S/4HANA-Migration)",
+          "KRITIS-Audit-Trail und BSI-C5-Compliance-Nachweis",
+          "Performance-Baseline-Vergleich (On-Prem vs. Cloud)",
+          "Aktualisierte DR/BC-Dokumentation"
+        ],
+        "team": [
+          { "role": "Solution Architect", "count": 2, "utilization_pct": 80 },
+          { "role": "Implementation Engineer", "count": 5, "utilization_pct": 100 },
+          { "role": "Project Manager", "count": 1, "utilization_pct": 100 }
+        ]
+      },
+      {
+        "phase": 5,
+        "name": "Modernize & Optimize",
+        "duration_weeks": 8,
+        "description": "Cloud-native Optimierung migrierter Workloads: Auto-Scaling, Container-Plattform für geeignete Services, FinOps-Governance und Cost-Optimization. Wissenstransfer und Übergabe an internen Betrieb oder Managed Services.",
+        "deliverables": [
+          "FinOps-Dashboard und Cost-Governance-Framework",
+          "Container-Plattform (Kubernetes) für 15-20 modernisierte Services",
+          "Auto-Scaling-Policies für variable Lastprofile (Energiewende-Peaks)",
+          "Abschlussbericht mit TCO-Vergleich (Ist vs. Soll)",
+          "Übergabedokumentation und Betriebshandbuch"
+        ],
+        "team": [
+          { "role": "Solution Architect", "count": 2, "utilization_pct": 60 },
+          { "role": "Implementation Engineer", "count": 2, "utilization_pct": 80 },
+          { "role": "Project Manager", "count": 1, "utilization_pct": 40 }
+        ]
+      }
+    ],
+    "total_duration_weeks": 50,
+    "constraints": [
+      "SCADA- und Netzleitsysteme werden NICHT migriert — nur IT-seitige Schnittstellensysteme",
+      "SAP S/4HANA funktionale Migration ist ein separates Projekt; hier nur Basis-Infrastruktur",
+      "NIS2-Registrierung (April 2026) muss vor Welle-2-Start abgeschlossen sein",
+      "Customer stellt Staging-Umgebung-Zugang innerhalb von 5 Werktagen bereit",
+      "Remote-Delivery als Default; On-Site für KRITIS-relevante Phasen nach Bedarf",
+      "Nur Standard-API-Konnektoren — Custom-Integrationen werden separat beauftragt"
+    ],
+    "risks": [
+      {
+        "risk": "KRITIS-Audit verzögert Welle-2-Freigabe",
+        "impact": "high",
+        "probability": "medium",
+        "mitigation": "Parallel zur Welle 1 BSI-Vorab-Assessment durchführen; Audit-Trail ab Tag 1 mitführen"
+      },
+      {
+        "risk": "OT/IT-Schnittstellen erfordern ungeplante Custom-Integrationen",
+        "impact": "high",
+        "probability": "medium",
+        "mitigation": "OT-Boundary-Definition in Phase 1 fixieren; Change-Request-Prozess für Scope-Erweiterung"
+      },
+      {
+        "risk": "Fachkräfte-Engpass beim Kunden verzögert Abnahmen",
+        "impact": "medium",
+        "probability": "high",
+        "mitigation": "Schulungsprogramm in Phase 2; Delegationsmechanismus für Abnahmen definieren"
+      },
+      {
+        "risk": "Latenz-Anforderungen bei Echtzeit-Systemen werden in Cloud nicht erreicht",
+        "impact": "high",
+        "probability": "low",
+        "mitigation": "Performance-Testing in Phase 1; Retain-Strategie für latenz-kritische Workloads"
+      }
+    ]
+  },
+  "pricing": {
+    "currency": "EUR",
+    "rate_card": [
+      { "role": "Solution Architect", "rate_day": 1800 },
+      { "role": "Implementation Engineer", "rate_day": 1200 },
+      { "role": "Project Manager", "rate_day": 1400 }
+    ],
+    "phases": [
+      {
+        "phase": 1,
+        "name": "Discovery & Assessment",
+        "effort_days": {
+          "Solution Architect": 48,
+          "Implementation Engineer": 15,
+          "Project Manager": 18
+        },
+        "cost": 129600
+      },
+      {
+        "phase": 2,
+        "name": "Mobilize & Foundation",
+        "effort_days": {
+          "Solution Architect": 80,
+          "Implementation Engineer": 96,
+          "Project Manager": 32
+        },
+        "cost": 304000
+      },
+      {
+        "phase": 3,
+        "name": "Sprint-basierte Migration (Welle 1)",
+        "effort_days": {
+          "Solution Architect": 36,
+          "Implementation Engineer": 240,
+          "Project Manager": 48
+        },
+        "cost": 420000
+      },
+      {
+        "phase": 4,
+        "name": "Sprint-basierte Migration (Welle 2)",
+        "effort_days": {
+          "Solution Architect": 128,
+          "Implementation Engineer": 400,
+          "Project Manager": 80
+        },
+        "cost": 822400
+      },
+      {
+        "phase": 5,
+        "name": "Modernize & Optimize",
+        "effort_days": {
+          "Solution Architect": 48,
+          "Implementation Engineer": 64,
+          "Project Manager": 16
+        },
+        "cost": 185600
+      }
+    ],
+    "total_effort_days": 1349,
+    "total_cost_before_margin": 1861600,
+    "target_margin_pct": 30,
+    "total_price": 2420080,
+    "price_range": {
+      "low": 2200000,
+      "high": 2650000,
+      "note": "Range reflects scope variability in Workload-Anzahl und KRITIS-Compliance-Aufwand"
+    },
+    "payment_milestones": [
+      { "milestone": "Vertragsunterzeichnung", "pct": 10, "amount": 242008 },
+      { "milestone": "Phase 1 abgeschlossen (Assessment)", "pct": 10, "amount": 242008 },
+      { "milestone": "Phase 2 abgeschlossen (Landing Zone live)", "pct": 20, "amount": 484016 },
+      { "milestone": "Phase 3 abgeschlossen (Welle 1 migriert)", "pct": 25, "amount": 605020 },
+      { "milestone": "Phase 4 abgeschlossen (Welle 2 migriert)", "pct": 25, "amount": 605020 },
+      { "milestone": "Phase 5 abgeschlossen (Übergabe)", "pct": 10, "amount": 242008 }
+    ]
+  },
+  "created": "2026-03-18"
+}

@@ -1,0 +1,45 @@
+{
+  "expectations": [
+    {
+      "text": "3 solution JSON files created",
+      "passed": true,
+      "evidence": "Found 3 solution files: cloud-migration--grosse-energieversorger-de.json, sovereign-cloud--grosse-energieversorger-de.json, sap-on-cloud--grosse-energieversorger-de.json"
+    },
+    {
+      "text": "Each solution has correct solution_type for its product's revenue_model (should be 'project' since cloud-services has no explicit revenue_model)",
+      "passed": false,
+      "evidence": "cloud-migration has solution_type 'project' (correct), sovereign-cloud has 'project' (correct), but sap-on-cloud has 'managed_service' instead of 'project'. The assertion expects 'project' for all three since cloud-services has no explicit revenue_model."
+    },
+    {
+      "text": "Review assessments produced for all 3 solutions",
+      "passed": true,
+      "evidence": "Found 3 review files: cloud-migration--grosse-energieversorger-de-review.json (3 perspectives, aggregate 118/150), sovereign-cloud--grosse-energieversorger-de-review.json (3 perspectives, aggregate 123/150), sap-on-cloud--grosse-energieversorger-de-review.json (3 perspectives, aggregate 106/150 pre-revision)"
+    },
+    {
+      "text": "Batch summary categorizes solutions by acceptance round",
+      "passed": true,
+      "evidence": "batch-summary.json contains summary_statistics with solutions_approved_clean=2 (Round 1: cloud-migration, sovereign-cloud) and solutions_approved_with_revisions=1 (sap-on-cloud). Each solution entry has verdict and revisions_applied fields."
+    },
+    {
+      "text": "At least one solution triggered a revision round",
+      "passed": true,
+      "evidence": "sap-on-cloud triggered 1 revision round. All 3 review perspectives (procurement, provider SA, client SA) flagged revision_required=true. Review score improved from 70.7% to 80.7% after revision."
+    },
+    {
+      "text": "Revised solutions have higher scores than Round 1",
+      "passed": true,
+      "evidence": "sap-on-cloud pre-revision aggregate: 106/150 (70.7%), post-revision aggregate: 121/150 (80.7%). Increase of 15 points / 10 percentage points."
+    },
+    {
+      "text": "No more than 2 revision rounds per solution",
+      "passed": true,
+      "evidence": "Maximum revisions on any solution is 1 (sap-on-cloud). cloud-migration and sovereign-cloud had 0 revisions each."
+    }
+  ],
+  "summary": {
+    "passed": 6,
+    "failed": 1,
+    "total": 7,
+    "pass_rate": 0.86
+  }
+}

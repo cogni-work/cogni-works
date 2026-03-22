@@ -1,0 +1,16 @@
+{
+  "slug": "bechtle-managed-azure-landing-zone",
+  "product_slug": "cloud-services",
+  "name": "Bechtle Managed Azure Landing Zone",
+  "description": "Pre-configured Azure Landing Zone environment with governance baseline, identity federation, security policies and FinOps cost management deployed through Bechtle Clouds self-service portal.",
+  "taxonomy_mapping": {
+    "dimension": 4,
+    "dimension_name": "Cloud Services",
+    "category_id": "4.1",
+    "category_name": "Managed Hyperscaler Services",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/bechtle-portfolio.md",
+  "created": "2026-03-18"
+}

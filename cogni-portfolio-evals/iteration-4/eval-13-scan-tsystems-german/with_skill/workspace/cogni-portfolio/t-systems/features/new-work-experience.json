@@ -1,0 +1,16 @@
+{
+  "slug": "new-work-experience",
+  "product_slug": "workplace-services",
+  "name": "New Work Experience",
+  "description": "Digital employee experience consulting and implementation service combining change management methodology, intranet modernization, and workplace productivity analytics for workforce transformation.",
+  "taxonomy_mapping": {
+    "dimension": 3,
+    "dimension_name": "Digital Workplace Services",
+    "category_id": "3.6",
+    "category_name": "Digital Employee Experience",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

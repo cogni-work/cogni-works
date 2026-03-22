@@ -1,7 +1,7 @@
 ---
 name: troubleshoot
 description: >-
-  Diagnose and fix common issues with cogni-works plugins. Use this skill whenever
+  Diagnose and fix common issues with insight-wave plugins. Use this skill whenever
   the user reports something broken, a skill not working, an error from a plugin,
   needs debugging help, or says things like "something is wrong", "plugin error",
   "skill not responding", "it doesn't work", "fix my setup", "diagnose this issue",
@@ -18,7 +18,7 @@ allowed-tools:
 
 # troubleshoot: Plugin Diagnostics
 
-Diagnose and resolve issues with cogni-works plugins. This complements
+Diagnose and resolve issues with insight-wave plugins. This complements
 cogni-workspace's `workspace-status` skill, which checks infrastructure (env vars,
 themes, settings). Troubleshoot focuses on plugin-level and cross-plugin problems.
 

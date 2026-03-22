@@ -1,0 +1,16 @@
+{
+  "slug": "future-cloud-infrastructure",
+  "product_slug": "cloud-services",
+  "name": "Future Cloud Infrastructure",
+  "description": "Next-generation private cloud platform hosted in DIN/ISO 27001-certified German twin-core data centers with BSI compliance, RISE with SAP support, and full German data protection adherence.",
+  "taxonomy_mapping": {
+    "dimension": 4,
+    "dimension_name": "Cloud Services",
+    "category_id": "4.3",
+    "category_name": "Private Cloud",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

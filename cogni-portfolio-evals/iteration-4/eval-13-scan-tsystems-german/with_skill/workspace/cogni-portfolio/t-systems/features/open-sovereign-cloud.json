@@ -1,0 +1,16 @@
+{
+  "slug": "open-sovereign-cloud",
+  "product_slug": "cloud-services",
+  "name": "Open Sovereign Cloud (OSC)",
+  "description": "Open-source sovereign cloud platform developed and operated entirely within the EU on OpenStack foundation, delivering complete data, operational, and technology sovereignty guarantees.",
+  "taxonomy_mapping": {
+    "dimension": 4,
+    "dimension_name": "Cloud Services",
+    "category_id": "4.7",
+    "category_name": "Sovereign Cloud",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

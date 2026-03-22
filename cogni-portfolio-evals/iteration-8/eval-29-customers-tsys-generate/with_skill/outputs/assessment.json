@@ -1,0 +1,86 @@
+{
+  "customer_slug": "grosse-energieversorger-de",
+  "market_slug": "grosse-energieversorger-de",
+  "overall": "pass",
+  "overall_score": 96,
+  "stakeholder_reviews": [
+    {
+      "perspective": "reviewer",
+      "score": 97,
+      "overall": "pass",
+      "criteria": {
+        "role_completeness": { "score": "pass", "weight": 0.30, "note": "" },
+        "pain_point_specificity": { "score": "pass", "weight": 0.25, "note": "" },
+        "buying_criteria_realism": { "score": "pass", "weight": 0.20, "note": "" },
+        "decision_dynamics_accuracy": { "score": "pass", "weight": 0.15, "note": "" },
+        "deal_cycle_coherence": { "score": "pass", "weight": 0.10, "note": "" }
+      },
+      "strengths": [
+        "Complete veto-holder coverage: CIO, CISO, Einkauf, and technical evaluator all present with distinct decision roles",
+        "Betriebsrat correctly identified as consultation requirement for managed service contracts affecting headcount",
+        "Pain points include concrete regulatory deadlines (NIS2 October 2026, SAP ECC EOL 2027) and specific thresholds (SektVO EUR 431K)",
+        "Buying criteria read like actual RFP requirements — BSI-C5 Type 2, Rahmenvertrag, SektVO compliance, EVB-IT templates"
+      ],
+      "concerns": [],
+      "recommendations": []
+    },
+    {
+      "perspective": "cso",
+      "score": 94,
+      "overall": "pass",
+      "criteria": {
+        "account_targeting_clarity": { "score": "pass", "weight": 0.30, "note": "" },
+        "pain_to_proposition_mapping": { "score": "pass", "weight": 0.25, "note": "" },
+        "objection_anticipation": { "score": "pass", "weight": 0.20, "note": "" },
+        "multi_threading_guidance": { "score": "pass", "weight": 0.15, "note": "" },
+        "named_customer_actionability": { "score": "pass", "weight": 0.10, "note": "" }
+      },
+      "strengths": [
+        "Every pain point maps to at least one proposition: SAP migration → cloud-migration, sovereignty → sovereign-cloud, multi-cloud → managed-hyperscaler, OT/IT convergence → hybrid-cloud",
+        "Four distinct profiles with non-overlapping pain points enable genuine multi-threaded account engagement",
+        "Named customers include specific tech stack data (RWE: RISE with SAP on Azure, E.ON: existing T-Systems reference) enabling immediate account planning",
+        "Six specific deal stall points with timelines allow AE to build realistic close plans"
+      ],
+      "concerns": [
+        "Named customer fit scores are all 'high' — some differentiation in fit levels would help AEs prioritize account sequencing"
+      ],
+      "recommendations": [
+        "OPTIONAL: Consider varying fit scores across named customers to signal priority order for account pursuit"
+      ]
+    },
+    {
+      "perspective": "market_expert",
+      "score": 97,
+      "overall": "pass",
+      "criteria": {
+        "segment_calibration": { "score": "pass", "weight": 0.30, "note": "" },
+        "vertical_authenticity": { "score": "pass", "weight": 0.25, "note": "" },
+        "temporal_accuracy": { "score": "pass", "weight": 0.20, "note": "" },
+        "information_source_validity": { "score": "pass", "weight": 0.15, "note": "" },
+        "regional_accuracy": { "score": "pass", "weight": 0.10, "note": "" }
+      },
+      "strengths": [
+        "Native energy sector terminology throughout: KRITIS, NIS2, BSI-C5, IS-U, Messstellenbetrieb, Netzleitstelle, SektVO, SCADA, Rahmenvertrag",
+        "All information sources verified as real and currently active: E-world energy & water, Handelsblatt Energietagung, BDEW Kongress, it-sa, BSI IT-Grundschutz-Kompendium, BME",
+        "Temporal references are current: NIS2 October 2026 deadline, SAP ECC EOL 2027, correct SektVO thresholds",
+        "Regulatory framework correctly maps to German energy utility context: SektVO (not VOL/A), BSIG §8a, BSI-C5 Type 2"
+      ],
+      "concerns": [],
+      "recommendations": []
+    }
+  ],
+  "synthesis": {
+    "conflicts": [],
+    "critical_improvements": [],
+    "high_improvements": [],
+    "optional_improvements": [
+      {
+        "description": "Differentiate named customer fit scores (not all 'high') to help sales team prioritize account pursuit order",
+        "stakeholders": ["cso"],
+        "affects": "named_customers[].fit_score"
+      }
+    ],
+    "verdict": "accept",
+    "revision_guidance": "Profile is ready for downstream use. All three perspectives score 85+. The only optional improvement is differentiating named customer fit scores for account prioritization, but this does not affect profile quality. No revision required."
+  }
+}

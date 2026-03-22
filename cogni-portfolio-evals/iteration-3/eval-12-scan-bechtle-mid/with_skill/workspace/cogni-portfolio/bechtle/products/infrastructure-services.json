@@ -1,0 +1,9 @@
+{
+  "slug": "infrastructure-services",
+  "name": "Managed Infrastructure Services",
+  "description": "Data center, compute, and operations offerings including hosting, backup, monitoring, and outsourcing.",
+  "revenue_model": "subscription",
+  "maturity": "growth",
+  "source_file": "research/bechtle-portfolio.md",
+  "created": "2026-03-18"
+}

@@ -1,0 +1,16 @@
+{
+  "slug": "enterprise-telephony",
+  "product_slug": "connectivity-services",
+  "name": "Enterprise Telephony (LANCOM VoIP)",
+  "description": "SIP trunking and VoIP solutions via LANCOM product portfolio",
+  "taxonomy_mapping": {
+    "dimension": 1,
+    "dimension_name": "Connectivity Services",
+    "category_id": "1.5",
+    "category_name": "Voice Services",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/bechtle-portfolio.md",
+  "created": "2026-03-18"
+}

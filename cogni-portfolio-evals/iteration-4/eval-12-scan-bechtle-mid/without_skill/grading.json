@@ -1,0 +1,63 @@
+{
+  "total_checks": 11,
+  "passed": 10,
+  "failed": 1,
+  "pass_rate": 0.909,
+  "expectations": [
+    {
+      "text": "All 8 dimensions present in report (found 8)",
+      "passed": true,
+      "evidence": "All 8 present: ['0', '1', '2', '3', '4', '5', '6', '7']"
+    },
+    {
+      "text": "All 57 categories present in report (found 57)",
+      "passed": true,
+      "evidence": "All 57 present"
+    },
+    {
+      "text": "Every category has discovery status tag (57 of 57)",
+      "passed": true,
+      "evidence": "57 valid status tags for 57 categories"
+    },
+    {
+      "text": "scan-output.json status totals = 57 (actual: 57)",
+      "passed": true,
+      "evidence": "{\"confirmed\": 55, \"not_offered\": 0, \"emerging\": 2, \"extended\": 0}"
+    },
+    {
+      "text": "Every confirmed offering has a Link field (1/1)",
+      "passed": true,
+      "evidence": "0 offerings missing links out of 1 total"
+    },
+    {
+      "text": "All offering Links from discovered domains (17 foreign)",
+      "passed": false,
+      "evidence": "Foreign domains: ['appian.com', 'aws.amazon.com', 'cpl.thalesgroup.com', 'en.wikipedia.org', 'expert.broadcom.com', 'lora-alliance.org', 'nextcloud.com', 'pitchbook.com', 'sourceforge.net', 'stockanalysis.com']"
+    },
+    {
+      "text": "At least 1 domain(s) analyzed (actual: 26)",
+      "passed": true,
+      "evidence": "Domains: ['bechtle.com', 'bechtle.com/de-en', 'bechtle.com/de-en/it-services', 'bechtle.com/de-en/it-services/managed-services', 'bechtle.com/de-en/it-services/managed-services/managed-security-services', 'bechtle.com/de-en/it-services/managed-services/managed-cloud', 'bechtle.com/de-en/it-services/managed-services/managed-application/service-now', 'bechtle.com/de-en/it-services/managed-services/managed-application/sap-bechtle-competence-center', 'bechtle.com/de-en/it-services/managed-services/lifecycle-services', 'bechtle.com/de-en/it-services/managed-services/onsite-services', 'bechtle.com/de-en/it-services/consulting-services', 'bechtle.com/de-en/it-solutions', 'bechtle.com/de-en/it-solutions/modern-workplace', 'bechtle.com/de-en/clouds/cloud-services', 'bechtle.com/de-en/public-sector/european-digital-sovereignty', 'bechtle.com/de-en/public-sector/solutions/delos', 'bechtle.com/at-en/it-solutions/modern-workplace', 'bechtle.com/at-en/it-solutions/networking/enterprise-networking', 'bechtle.com/at-en/it-solutions/security-solutions/cyber-defence-centre', 'bechtle.com/at-en/it-solutions/ai-solutions', 'bechtle.com/ch-en/it-solutions/networking', 'bechtle.com/ch-en/it-solutions/it-security/iam-identity-and-access-management', 'bechtle.com/ch-en/it-services/consulting/cloud-consulting/cloud-digital-transformation', 'bechtle.com/nl-en/it-solutions/workspace/device-as-a-service', 'bechtle-network.com/de-en', 'en.wikipedia.org/wiki/Bechtle']"
+    },
+    {
+      "text": "Feature count >= 10 (actual: 30)",
+      "passed": true,
+      "evidence": "30 feature files"
+    },
+    {
+      "text": "Features have taxonomy_mapping with category_id (30/30)",
+      "passed": true,
+      "evidence": "All present"
+    },
+    {
+      "text": "category_id matches valid category (30/30)",
+      "passed": true,
+      "evidence": "All valid"
+    },
+    {
+      "text": "Feature readiness is ga/beta/planned (30/30)",
+      "passed": true,
+      "evidence": "All valid"
+    }
+  ]
+}

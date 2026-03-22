@@ -1,0 +1,16 @@
+{
+  "slug": "collaboration-365",
+  "product_slug": "workplace-services",
+  "name": "Collaboration 365",
+  "description": "Microsoft 365 deployment and management service with Citrix Cloud integration providing secure multi-tenant collaboration for internal teams and external partner organizations.",
+  "taxonomy_mapping": {
+    "dimension": 3,
+    "dimension_name": "Digital Workplace Services",
+    "category_id": "3.2",
+    "category_name": "Modern Workplace / M365",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

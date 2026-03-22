@@ -1,0 +1,16 @@
+{
+  "slug": "multi-cloud-sap",
+  "product_slug": "cloud-services",
+  "name": "Multi-Cloud for SAP",
+  "description": "SAP workload hosting across AWS, Azure, GCP, and private FCI cloud with BSI-certified SAP platform, managed S/4HANA operations, and cross-cloud SAP landscape orchestration.",
+  "taxonomy_mapping": {
+    "dimension": 4,
+    "dimension_name": "Cloud Services",
+    "category_id": "4.8",
+    "category_name": "Enterprise Platforms on Cloud",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

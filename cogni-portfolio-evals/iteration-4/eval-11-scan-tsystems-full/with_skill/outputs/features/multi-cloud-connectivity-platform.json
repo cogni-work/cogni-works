@@ -1,0 +1,16 @@
+{
+  "slug": "multi-cloud-connectivity-platform",
+  "product_slug": "cloud-services",
+  "name": "Multi-Cloud Connectivity Platform",
+  "description": "Hybrid management platform providing unified governance, connectivity, and orchestration across AWS, Azure, and GCP hyperscaler services within a centrally managed multi-cloud architecture.",
+  "taxonomy_mapping": {
+    "dimension": 4,
+    "dimension_name": "Cloud Services",
+    "category_id": "4.2",
+    "category_name": "Multi-Cloud Management",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

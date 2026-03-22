@@ -1,0 +1,13 @@
+{
+  "slug": "ng-firewall",
+  "name": "Next-Gen Firewall Services",
+  "description": "NG Firewall with IDS, Deep Packet Inspection, URL filtering, managed firewall with VPN and authentication",
+  "product_slug": "telekom-security",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 2,
+    "category_id": "2.6",
+    "category_name": "Network Security"
+  },
+  "source_file": "https://www.t-systems.com/de/en/security/network-security"
+}

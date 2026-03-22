@@ -1,0 +1,16 @@
+{
+  "slug": "kundenportal-self-service",
+  "product_slug": "digitale-energiedienste",
+  "name": "Kundenportal und Self-Service",
+  "description": "Webbasiertes Endkundenportal mit Self-Service-Funktionen fuer Vertragsverwaltung, Zaehlerstandsmeldung, Tarifwechsel, Abschlagsanpassung und Umzugsservice. Integriert ueber REST-APIs mit den CRM- und Abrechnungs-Backends und stellt eine responsive Oberflaeche fuer Web und Mobile bereit.",
+  "category": "customer-services",
+  "taxonomy_mapping": {
+    "dimension": 6,
+    "dimension_name": "Application Services",
+    "category_id": "6.1",
+    "category_name": "Custom Application Development",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "created": "2026-03-18"
+}

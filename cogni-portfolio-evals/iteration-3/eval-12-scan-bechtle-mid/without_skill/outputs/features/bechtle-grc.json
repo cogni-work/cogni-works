@@ -1,0 +1,13 @@
+{
+  "slug": "bechtle-grc",
+  "name": "Bechtle GRC Services",
+  "description": "Governance, Risk & Compliance consulting and implementation, including cloud compliance management and regulatory compliance for GDPR and public sector requirements.",
+  "product_slug": "bechtle-security",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 2,
+    "category_id": "2.9",
+    "category_name": "Compliance & GRC"
+  },
+  "source_file": "https://www.bechtle.com/de-en/it-solutions"
+}

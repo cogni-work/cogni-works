@@ -1,0 +1,252 @@
+{
+  "slug": "cloud-migration--grosse-energieversorger-de",
+  "proposition_slug": "cloud-migration--grosse-energieversorger-de",
+  "feature_slug": "cloud-migration",
+  "market_slug": "grosse-energieversorger-de",
+  "product_slug": "cloud-services",
+  "title": "Cloud-Migrationsprogramm fuer grosse deutsche Energieversorger",
+  "summary": "Strukturiertes Cloud-Migrationsprogramm fuer IS-U-, SCADA- und ERP-Workloads grosser deutscher Energieversorger. Modulare CMF-Methodik (Assess-Mobilize-Modernize) mit KRITIS-konformer Staging-Umgebung, 6R-Migrationsstrategien und sprint-basierter Implementierung. Inkl. Exit-Strategie, Daten-Repatriierungsplan und Multi-Cloud-Portabilitaet. Zielgruppe: E.ON, RWE, EnBW, Vattenfall Deutschland, Uniper.",
+  "revision_notes": "Revision based on round-1 review. Changes: (1) Added exit strategy with data repatriation and IaC portability, (2) Added contingency budget quantified per risk (10% total), (3) Added competitive TCO comparison (3 scenarios, 5yr), (4) Introduced acceptance delegation model with 48h silence rule, (5) Added post-project operations model options.",
+  "implementation_plan": {
+    "phases": [
+      {
+        "phase": 1,
+        "name": "Discovery & Assessment",
+        "duration_weeks": 6,
+        "description": "Bestandsaufnahme der IT-Landschaft inkl. IS-U, SCADA, ERP. Cloud-Readiness-Bewertung je Workload nach 6R-Modell. KRITIS-Compliance-Gap-Analyse gegen BSI-C5 und NIS2. TCO-Baseline-Erhebung. BSI-Vorab-Assessment parallel initiiert.",
+        "deliverables": [
+          "Application Portfolio Assessment (300+ Workloads)",
+          "Cloud-Readiness-Matrix mit 6R-Zuordnung",
+          "KRITIS-Compliance-Gap-Analyse (BSI-C5, NIS2, KRITIS-DachG)",
+          "Migrationspriorisierungs-Roadmap",
+          "Risiko- und Abhaengigkeitsanalyse (OT/IT-Konvergenz)",
+          "TCO-Baseline fuer 5-Jahres-Vergleich",
+          "Competitive-Approach-Vergleich: Managed Migration vs. Hyperscaler-led vs. Inhouse",
+          "BSI-Vorab-Assessment-Termin fixiert"
+        ],
+        "team": [
+          { "role": "Solution Architect", "count": 2, "utilization_pct": 80 },
+          { "role": "Implementation Engineer", "count": 1, "utilization_pct": 50 },
+          { "role": "Project Manager", "count": 1, "utilization_pct": 60 }
+        ]
+      },
+      {
+        "phase": 2,
+        "name": "Mobilize & Foundation",
+        "duration_weeks": 8,
+        "description": "Aufbau der Cloud-Landing-Zone mit KRITIS-konformer Staging-Umgebung. Einrichtung der Cloud Migration Factory. Schulung des Kundenpersonals. Aufbau der Multi-Cloud-Abstraktionsschicht (IaC-Portabilitaet). Etablierung des Abnahme-Delegationsmodells.",
+        "deliverables": [
+          "KRITIS-konforme Cloud-Landing-Zone (Sovereign Cloud / OTC)",
+          "Cloud Migration Factory Setup (CMF-Toolchain, CI/CD-Pipelines)",
+          "Netzwerk-Architektur mit OT/IT-Segmentierung",
+          "IAM-Konzept und Zero-Trust-Baseline",
+          "Runbook-Templates fuer Migrationssprints",
+          "Schulungsprogramm fuer Operations-Team (8 Personen)",
+          "Infrastructure-as-Code Templates (Terraform/OpenTofu) fuer Cloud-Portabilitaet",
+          "Abnahme-Delegationsmodell: max. 2 Kunden-Ansprechpartner mit Vollmacht, 48h-Abnahmefrist, Stillschweigen = Abnahme"
+        ],
+        "team": [
+          { "role": "Solution Architect", "count": 2, "utilization_pct": 100 },
+          { "role": "Implementation Engineer", "count": 3, "utilization_pct": 80 },
+          { "role": "Project Manager", "count": 1, "utilization_pct": 80 }
+        ]
+      },
+      {
+        "phase": 3,
+        "name": "Sprint-basierte Migration (Welle 1 - Non-Critical)",
+        "duration_weeks": 12,
+        "description": "Migration der ersten Workload-Welle: nicht-kritische Business-Applikationen. Sprint-Zyklen von je 2 Wochen. Sprint-Abnahmen durch delegierte Ansprechpartner mit 48h-Frist.",
+        "deliverables": [
+          "Migration von 60-80 Non-Critical Workloads",
+          "Sprint-Berichte mit KPIs (Downtime, Fehlerrate, Performance)",
+          "Validierter Rollback-Prozess (getestet in Prod-near-Umgebung)",
+          "Optimierte CMF-Runbooks basierend auf Welle-1-Erkenntnissen",
+          "Go/No-Go-Entscheidung fuer Welle 2"
+        ],
+        "team": [
+          { "role": "Solution Architect", "count": 1, "utilization_pct": 60 },
+          { "role": "Implementation Engineer", "count": 4, "utilization_pct": 100 },
+          { "role": "Project Manager", "count": 1, "utilization_pct": 80 }
+        ]
+      },
+      {
+        "phase": 4,
+        "name": "Sprint-basierte Migration (Welle 2 - Business-Critical)",
+        "duration_weeks": 16,
+        "description": "Migration kritischer Systeme inkl. ERP-Basisinfrastruktur, Billing, Messdatenmanagement. KRITIS-spezifische Migrationsverfahren. SCADA-angrenzende Systeme bleiben on-premises. Daten-Repatriierungsplan wird erstellt und getestet.",
+        "deliverables": [
+          "Migration von 80-120 Business-Critical Workloads",
+          "SAP-Basis-Infrastruktur auf Cloud",
+          "KRITIS-Audit-Trail und BSI-C5-Compliance-Nachweis",
+          "Performance-Baseline-Vergleich (On-Prem vs. Cloud)",
+          "Aktualisierte DR/BC-Dokumentation",
+          "Daten-Repatriierungsplan: dokumentiertes Verfahren zur vollstaendigen Rueckfuehrung"
+        ],
+        "team": [
+          { "role": "Solution Architect", "count": 2, "utilization_pct": 80 },
+          { "role": "Implementation Engineer", "count": 5, "utilization_pct": 100 },
+          { "role": "Project Manager", "count": 1, "utilization_pct": 100 }
+        ]
+      },
+      {
+        "phase": 5,
+        "name": "Modernize, Optimize & Exit-Readiness",
+        "duration_weeks": 8,
+        "description": "Cloud-native Optimierung. FinOps-Governance. Wissenstransfer. Exit-Strategie-Erstellung und Portabilitaetstest. Betriebsmodell-Optionen werden vereinbart.",
+        "deliverables": [
+          "FinOps-Dashboard und Cost-Governance-Framework",
+          "Container-Plattform (Kubernetes) fuer 15-20 modernisierte Services",
+          "Auto-Scaling-Policies fuer variable Lastprofile",
+          "Abschlussbericht mit TCO-Vergleich (5-Jahres-Projektion)",
+          "Uebergabedokumentation und Betriebshandbuch",
+          "Exit-Strategie-Dokument: Daten-Repatriierung, IaC-Portierung, Vertragsklauseln",
+          "Portabilitaetstest: Nachweis der Wiederherstellung von 3 Workloads auf alternativer Infrastruktur",
+          "Betriebsmodell-Vereinbarung: (a) T-Systems Managed Services, (b) Retained-IT mit 2nd-Level-Support"
+        ],
+        "team": [
+          { "role": "Solution Architect", "count": 2, "utilization_pct": 60 },
+          { "role": "Implementation Engineer", "count": 2, "utilization_pct": 80 },
+          { "role": "Project Manager", "count": 1, "utilization_pct": 40 }
+        ]
+      }
+    ],
+    "total_duration_weeks": 50,
+    "exit_strategy": {
+      "description": "Vertraglich verankertes Recht auf vollstaendige Daten-Repatriierung und Workload-Portierung bei Provider-Wechsel oder Vertragsende.",
+      "components": [
+        {
+          "component": "Daten-Souveraenitaet",
+          "guarantee": "Alle Daten verbleiben in BSI-C5-zertifizierten Rechenzentren in Deutschland. Kein Datenexport ohne explizite Kundenfreigabe."
+        },
+        {
+          "component": "Daten-Repatriierung",
+          "guarantee": "Vollstaendiger Datenexport innerhalb von 90 Tagen nach Kuendigung. Standardisierte Export-Formate. Kosten gedeckelt."
+        },
+        {
+          "component": "IaC-Portabilitaet",
+          "guarantee": "Alle Konfigurationen in provider-agnostischem IaC (Terraform/OpenTofu). Keine proprietaeren Lock-in-Abhaengigkeiten."
+        },
+        {
+          "component": "Multi-Cloud-Optionalitaet",
+          "guarantee": "Container-Workloads auf Standard-Kubernetes portierbar. Portabilitaetstest in Phase 5."
+        },
+        {
+          "component": "Vertragsklauseln",
+          "guarantee": "12 Monate Kuendigungsfrist, 90 Tage Transitionsunterstuetzung, Exit-Aufwand max. 5% Gesamtvolumen."
+        }
+      ]
+    },
+    "constraints": [
+      "SCADA- und Netzleitsysteme werden NICHT migriert - nur IT-seitige Schnittstellensysteme",
+      "SAP S/4HANA funktionale Migration ist ein separates Projekt",
+      "NIS2-Registrierung (April 2026) muss vor Welle-2-Start abgeschlossen sein",
+      "Customer stellt Staging-Umgebung-Zugang innerhalb von 5 Werktagen bereit",
+      "Remote-Delivery als Default; On-Site fuer KRITIS-relevante Phasen nach Bedarf",
+      "Sprint-Abnahmen: Delegierte Ansprechpartner entscheiden innerhalb 48h; Stillschweigen = Abnahme"
+    ],
+    "risks": [
+      {
+        "risk": "KRITIS-Audit verzoegert Welle-2-Freigabe",
+        "impact": "high",
+        "probability": "medium",
+        "mitigation": "Parallel zur Welle 1 BSI-Vorab-Assessment; Audit-Trail ab Tag 1",
+        "contingency_budget_pct": 3
+      },
+      {
+        "risk": "OT/IT-Schnittstellen erfordern ungeplante Custom-Integrationen",
+        "impact": "high",
+        "probability": "medium",
+        "mitigation": "OT-Boundary-Definition in Phase 1; Change-Request-Prozess",
+        "contingency_budget_pct": 4
+      },
+      {
+        "risk": "Fachkraefte-Engpass beim Kunden verzoegert Abnahmen",
+        "impact": "medium",
+        "probability": "high",
+        "mitigation": "Abnahme-Delegationsmodell mit 2 Ansprechpartnern und 48h-Frist. Stillschweigen = Abnahme.",
+        "contingency_budget_pct": 2
+      },
+      {
+        "risk": "Latenz-Anforderungen bei Echtzeit-Systemen nicht erreicht",
+        "impact": "high",
+        "probability": "low",
+        "mitigation": "Performance-Testing in Phase 1; Retain-Strategie fuer latenz-kritische Workloads",
+        "contingency_budget_pct": 1
+      }
+    ]
+  },
+  "pricing": {
+    "currency": "EUR",
+    "rate_card": [
+      { "role": "Solution Architect", "rate_day": 1800 },
+      { "role": "Implementation Engineer", "rate_day": 1200 },
+      { "role": "Project Manager", "rate_day": 1400 }
+    ],
+    "tiers": [
+      {
+        "tier": "Essential",
+        "scope": "Welle 1 only (60-80 Non-Critical Workloads), Phases 1-3",
+        "total_effort_days": 555,
+        "total_cost_before_margin": 765600,
+        "target_margin_pct": 30,
+        "price": 995280
+      },
+      {
+        "tier": "Professional",
+        "scope": "Welle 1 + Welle 2 (140-200 Workloads), Phases 1-4",
+        "total_effort_days": 1163,
+        "total_cost_before_margin": 1588000,
+        "target_margin_pct": 30,
+        "price": 2064400
+      },
+      {
+        "tier": "Enterprise",
+        "scope": "Full programme incl. Modernize, Optimize & Exit-Readiness, Phases 1-5",
+        "total_effort_days": 1349,
+        "total_cost_before_margin": 1861600,
+        "target_margin_pct": 30,
+        "price": 2420080
+      }
+    ],
+    "contingency": {
+      "pct": 10,
+      "amount": 242008,
+      "rationale": "Covers identified risks: KRITIS audit delay (3%), OT/IT custom integrations (4%), customer capacity (2%), latency issues (1%). Drawn only upon documented risk materialization via Change Request.",
+      "not_to_exceed": 2662088
+    },
+    "competitive_tco_comparison": {
+      "approach_1": {
+        "name": "T-Systems Managed Migration (dieses Angebot)",
+        "total_5yr_tco": 4900000,
+        "breakdown": "Migration 2.42M + Managed Cloud Run 2.48M (5yr)",
+        "strengths": "Single vendor, KRITIS-erfahren, BSI-C5-zertifiziert, Sovereign Cloud",
+        "weaknesses": "Premium-Pricing, Abhaengigkeit von T-Systems Delivery-Kapazitaet"
+      },
+      "approach_2": {
+        "name": "Hyperscaler-led Migration (AWS/Azure Professional Services)",
+        "total_5yr_tco": 5200000,
+        "breakdown": "Migration 1.8M + Cloud Run 3.4M (5yr, hoehere Compute-Kosten)",
+        "strengths": "Breites Oekosystem, schnelle Innovation",
+        "weaknesses": "Keine Sovereign-Cloud-Garantie, KRITIS-Compliance erfordert Zusatzberatung"
+      },
+      "approach_3": {
+        "name": "Inhouse + Freelancer-Augmentation",
+        "total_5yr_tco": 5800000,
+        "breakdown": "Internal Team 3.2M + External Consultants 1.6M + Tooling 1.0M (5yr)",
+        "strengths": "Maximale Kontrolle, internes Know-how",
+        "weaknesses": "Fachkraeftemangel macht Staffing unrealistisch, Projektrisiko beim Kunden"
+      },
+      "recommendation": "T-Systems bietet niedrigsten 5-Jahres-TCO bei hoechster KRITIS-Compliance-Sicherheit."
+    },
+    "payment_milestones": [
+      { "milestone": "Vertragsunterzeichnung", "pct": 10, "amount": 242008 },
+      { "milestone": "Phase 1 abgeschlossen", "pct": 10, "amount": 242008 },
+      { "milestone": "Phase 2 abgeschlossen", "pct": 20, "amount": 484016 },
+      { "milestone": "Phase 3 abgeschlossen", "pct": 25, "amount": 605020 },
+      { "milestone": "Phase 4 abgeschlossen", "pct": 25, "amount": 605020 },
+      { "milestone": "Phase 5 abgeschlossen", "pct": 10, "amount": 242008 }
+    ]
+  },
+  "created": "2026-03-18",
+  "revised": "2026-03-18"
+}

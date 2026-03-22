@@ -1,0 +1,13 @@
+{
+  "slug": "data-protection-privacy",
+  "name": "Data Protection as a Managed Service",
+  "description": "DSGVO-konformer Datenschutz als Managed Service. Daten in zertifizierten europaeischen Rechenzentren, vollstaendig DSGVO-konform.",
+  "product_slug": "telekom-security",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 2,
+    "category_id": "2.10",
+    "category_name": "Data Protection & Privacy"
+  },
+  "source_file": "https://www.telekom.com/en/company/details/t-systems-data-protection-for-the-aws-cloud-649324"
+}

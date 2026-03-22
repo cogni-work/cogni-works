@@ -1,0 +1,13 @@
+{
+  "slug": "cloud-migration-vantage",
+  "name": "Cloud Migration (@Vantage & Cloudifier)",
+  "description": "KI-gestuetzte Cloud-Migration mit @Vantage und IT-Outsourcing-zu-Cloud-Migration mit Cloudifier.",
+  "product_slug": "t-systems-cloud",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 4,
+    "category_id": "4.5",
+    "category_name": "Cloud Migration Services"
+  },
+  "source_file": "https://www.t-systems.com/de/de/loesungen/systemintegration/loesungen/digitale-transformation/it-services/it-outsourcing-377560"
+}

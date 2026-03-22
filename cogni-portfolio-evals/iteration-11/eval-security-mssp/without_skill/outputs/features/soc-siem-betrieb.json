@@ -1,0 +1,7 @@
+{
+  "slug": "soc-siem-betrieb",
+  "product_slug": "managed-security",
+  "name": "SOC/SIEM-Betrieb",
+  "description": "24/7-Security-Operations-Center mit zentraler SIEM-Plattform zur Erfassung, Korrelation und Analyse sicherheitsrelevanter Ereignisse aus allen angebundenen Datenquellen.",
+  "readiness": "ga"
+}

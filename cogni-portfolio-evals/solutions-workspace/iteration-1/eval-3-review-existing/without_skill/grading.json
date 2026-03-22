@@ -1,0 +1,35 @@
+{
+  "expectations": [
+    {
+      "text": "REV-01: All 3 solutions assessed",
+      "passed": true,
+      "evidence": "Three individual review files produced: cloud-migration--grosse-energieversorger-de-review.json, sap-on-cloud--grosse-energieversorger-de-review.json, sovereign-cloud--grosse-energieversorger-de-review.json. Each contains a full multi-criteria assessment with overall_score."
+    },
+    {
+      "text": "REV-02: Each assessment has three perspective scores",
+      "passed": true,
+      "evidence": "All three reviews contain perspectives for procurement_decision_maker (5 criteria), provider_solution_architect (5 criteria), and client_solution_architect (5 criteria), each with pass/warn/fail scores and rationale."
+    },
+    {
+      "text": "REV-03: Synthesis includes prioritized improvements (CRITICAL/HIGH/OPTIONAL)",
+      "passed": true,
+      "evidence": "Portfolio summary cross_solution_patterns.weaknesses uses severity labels (high/medium/low) and recommendations are split into immediate/short_term/strategic tiers. Labels differ from CRITICAL/HIGH/OPTIONAL but the prioritization structure is functionally equivalent with 6 weaknesses ranked by severity."
+    },
+    {
+      "text": "REV-04: Recommendations are specific and actionable (reference specific fields/values)",
+      "passed": true,
+      "evidence": "Recommendations reference specific solutions by slug (e.g. cloud-migration--grosse-energieversorger-de), specific contract elements (exit clause, 4-week KT pattern), specific roles (OT Integration Specialist), specific compliance frameworks (BSI-C5, NIS2), and specific pricing/margin figures (e.g. 12-15% PoV margins, 99.95% SLA). Individual reviews cite specific fields like means_statement, PoV scope, tier prices, and phase durations."
+    },
+    {
+      "text": "REV-05: Portfolio-level summary identifies cross-solution patterns",
+      "passed": true,
+      "evidence": "portfolio-review-summary.json contains cross_solution_patterns with 4 strengths (consistent commercial architecture, pain point alignment, transparent cost modeling, phase-based de-risking) and 6 weaknesses (inconsistent contractual protections, missing OT specialization, no cross-solution integration, compliance fragmentation, Smart Meter gap, staff shortage assumption gap), each with affected_solutions arrays."
+    }
+  ],
+  "summary": {
+    "passed": 5,
+    "failed": 0,
+    "total": 5,
+    "pass_rate": 1.0
+  }
+}

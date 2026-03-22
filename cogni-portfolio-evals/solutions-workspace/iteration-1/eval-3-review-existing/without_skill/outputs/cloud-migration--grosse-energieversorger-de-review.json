@@ -1,0 +1,108 @@
+{
+  "slug": "cloud-migration--grosse-energieversorger-de",
+  "solution_name": "Cloud Migration Services for German Energy Utilities",
+  "feature_slug": "cloud-migration",
+  "market_slug": "grosse-energieversorger-de",
+  "review_date": "2026-03-18",
+  "perspectives": {
+    "procurement_decision_maker": {
+      "role": "Procurement Decision-Maker",
+      "criteria": [
+        {
+          "criterion": "ROI clarity and payback period",
+          "score": "warn",
+          "rationale": "The means_statement claims elastic scalability replaces multi-year hardware procurement cycles, which is a strong narrative. However, no explicit ROI figures, payback period, or TCO comparison is provided in the solution or proposition. The PoV scope mentions a Go/No-Go report with effort and risk estimates but no ROI projection. A CFO on the buying committee will demand quantified savings before approving 180K-950K EUR."
+        },
+        {
+          "criterion": "Pricing tier coherence and value scaling",
+          "score": "pass",
+          "rationale": "Four tiers (PoV 49K, Small 180K, Medium 450K, Large 950K) scale logically with workload count (5 -> 15 -> 40 -> 80). The PoV is well-designed as a land-and-expand entry at reduced margin (14.3%). Price-per-workload decreases at scale, which aligns with procurement expectations for volume discounts."
+        },
+        {
+          "criterion": "Margin sustainability across tiers",
+          "score": "pass",
+          "rationale": "Margins range from 14.3% (PoV) to 39.2% (Large). The PoV margin is intentionally thin for land-and-expand, and standard tiers achieve 29-39% against a 30% target. The cost model is transparent with explicit role rates and effort breakdowns. Sustainable for a services business."
+        },
+        {
+          "criterion": "Competitive differentiation for SektVO procurement",
+          "score": "warn",
+          "rationale": "The market context identifies SektVO procurement rules and EU tender requirements. The solution does not explicitly address how it positions against hyperscaler-native migration tools (AWS Migration Hub, Azure Migrate) or competing SIs (Accenture, Capgemini). In a formal tender, the KRITIS-specific staging and OT/IT separation are differentiators but are not framed as competitive advantages."
+        },
+        {
+          "criterion": "Risk allocation and contractual safeguards",
+          "score": "fail",
+          "rationale": "No exit clause, liability cap, penalty structure for delays, or SLA for migration success rate. The SAP solution includes an exit clause with knowledge transfer, but this migration solution does not. For a KRITIS environment where migration failures can impact grid operations, procurement will require contractual risk allocation before signing."
+        }
+      ],
+      "summary": "Commercially structured with good tier logic and honest margins. Weaknesses in quantified ROI and contractual risk allocation would be exposed in a formal SektVO tender process."
+    },
+    "provider_solution_architect": {
+      "role": "Provider Solution Architect",
+      "criteria": [
+        {
+          "criterion": "Phase structure and delivery realism",
+          "score": "pass",
+          "rationale": "Four phases (Assessment 3w, Staging 3w, Migration 8w, Validation 2w = 16 weeks) align well with the Small tier scope. The sprint-based approach with ascending criticality (non-critical first, KRITIS last) is a proven de-risking pattern. Duration scaling to 24w (Medium) and 40w (Large) is realistic for the workload volumes."
+        },
+        {
+          "criterion": "Effort estimation accuracy",
+          "score": "warn",
+          "rationale": "Small tier: 90 days over 16 weeks = ~1.1 FTE average. For 15 workloads, that is 6 days per workload including assessment, staging, migration, and validation. This is aggressive for KRITIS-regulated environments where each workload may require individual compliance documentation. Medium tier (210 days for 40 workloads = 5.25 days/workload) is even tighter. Risk of scope creep on complex legacy workloads (IS-U, SCADA)."
+        },
+        {
+          "criterion": "Skill mix and resource availability",
+          "score": "warn",
+          "rationale": "Three generic roles (SA, IE, PM) may not cover the specialized skills needed: OT/IT network segmentation expertise, KRITIS compliance knowledge, SCADA migration experience. The cost model assumes standard API connectors only, but energy sector workloads often have proprietary interfaces (e.g., IEC 60870-5-104 for SCADA). No provision for specialized OT engineers."
+        },
+        {
+          "criterion": "Dependency management and assumptions",
+          "score": "pass",
+          "rationale": "Assumptions are explicit: customer provides staging access in 5 days, OT/IT segmentation is pre-existing or parallel, standard API connectors only. These create clear scope boundaries. The 'custom integrations scoped separately' clause protects against uncontrolled scope expansion."
+        },
+        {
+          "criterion": "Tooling and automation readiness",
+          "score": "pass",
+          "rationale": "Cloud Migration Factory Tooling (5K EUR) is budgeted. The IaC/container-first approach for migrated workloads reduces provider lock-in and enables repeatable delivery. Assessment tools for 6R classification are standard in the migration factory model."
+        }
+      ],
+      "summary": "Well-structured delivery model with proven migration factory patterns. Effort estimates are tight for KRITIS-regulated workloads, and the skill mix lacks OT-specific specialization that the market context demands."
+    },
+    "client_solution_architect": {
+      "role": "Client Solution Architect",
+      "criteria": [
+        {
+          "criterion": "Integration with existing landscape",
+          "score": "warn",
+          "rationale": "The solution targets IS-U, SCADA, and ERP workloads but does not specify integration patterns for the post-migration state. How do migrated cloud workloads communicate with remaining on-premise systems? What about the Smart Meter gateway infrastructure (a key pain point)? The OT/IT separation assumption may not hold for older SCADA installations that lack modern network segmentation."
+        },
+        {
+          "criterion": "Operational readiness and handover quality",
+          "score": "pass",
+          "rationale": "Phase 4 explicitly includes end-to-end load testing, operations documentation, and internal team enablement. The 2-week validation phase is adequate for a small scope but may be compressed for medium/large tiers relative to the number of migrated workloads."
+        },
+        {
+          "criterion": "Compliance and audit trail",
+          "score": "warn",
+          "rationale": "KRITIS compliance is mentioned throughout (BSI-C5 staging, KRITIS-compliant approach) but there is no explicit deliverable for compliance documentation. Unlike the sovereign-cloud solution which includes audit-readiness as a phase, this solution treats compliance as implicit in the migration process. For NIS2 registration (April 2026 deadline), explicit compliance artifacts would be expected."
+        },
+        {
+          "criterion": "Reversibility and rollback strategy",
+          "score": "warn",
+          "rationale": "Failback mechanisms are mentioned in the staging phase description, but no explicit rollback strategy or data-back guarantee is defined. For KRITIS operators, the ability to revert a failed migration within defined time windows is non-negotiable. The zero-downtime requirement from the OT-Leiter on the buying committee needs an explicit answer."
+        },
+        {
+          "criterion": "Vendor lock-in and exit strategy",
+          "score": "pass",
+          "rationale": "The IaC/container-first migration approach explicitly aims to reduce provider lock-in. This is a genuine architectural benefit. However, no contractual exit clause exists (unlike the SAP solution), so the lock-in mitigation is technical but not commercial."
+        }
+      ],
+      "summary": "Architecturally sound migration approach with good de-risking through sprint-based criticality ordering. Gaps in post-migration integration patterns, explicit compliance deliverables, and rollback guarantees would concern a client architect in a KRITIS environment."
+    }
+  },
+  "overall_score": {
+    "pass": 6,
+    "warn": 7,
+    "fail": 1,
+    "verdict": "Commercially viable but needs hardening on risk allocation, compliance deliverables, and OT-specific integration details before it can win a formal energy sector tender."
+  }
+}

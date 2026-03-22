@@ -1,0 +1,13 @@
+{
+  "slug": "identity-access-management",
+  "name": "Identity & Access Management",
+  "description": "End-to-End IAM-Services von Beratung ueber Design bis Betrieb. Schutz digitaler Identitaeten fuer 35+ Enterprise-Kunden.",
+  "product_slug": "telekom-security",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 2,
+    "category_id": "2.2",
+    "category_name": "Identity & Access Management"
+  },
+  "source_file": "https://www.t-systems.com/us/en/security"
+}

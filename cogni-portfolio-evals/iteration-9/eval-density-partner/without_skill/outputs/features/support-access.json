@@ -1,0 +1,7 @@
+{
+  "slug": "support-access",
+  "product_slug": "partner-portal",
+  "name": "Support-Zugang",
+  "description": "Rollenbasierter Zugriff auf das Ticket-System, die Wissensdatenbank und die Eskalationspfade, gesteuert durch Partner-Tier und SLA-Vereinbarung.",
+  "readiness": "ga"
+}

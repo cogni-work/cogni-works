@@ -1,0 +1,48 @@
+{
+  "slug": "cloud-services--grosse-energieversorger-de",
+  "product_slug": "cloud-services",
+  "market_slug": "grosse-energieversorger-de",
+  "package_type": "project",
+  "name": "Cloud Services for Energy Utilities",
+  "positioning": "Compliant cloud modernization for regulated energy infrastructure",
+  "tiers": [
+    {
+      "tier": "foundation",
+      "name": "Foundation",
+      "included_solutions": [
+        "sovereign-cloud--grosse-energieversorger-de",
+        "cloud-migration--grosse-energieversorger-de"
+      ],
+      "price": 450000,
+      "currency": "EUR",
+      "scope": "NIS2-compliant sovereign platform with structured workload migration"
+    },
+    {
+      "tier": "professional",
+      "name": "Professional",
+      "included_solutions": [
+        "sovereign-cloud--grosse-energieversorger-de",
+        "cloud-migration--grosse-energieversorger-de",
+        "hybrid-cloud--grosse-energieversorger-de"
+      ],
+      "price": 620000,
+      "currency": "EUR",
+      "scope": "Full hybrid OT/IT integration with sovereign compliance and migration"
+    },
+    {
+      "tier": "enterprise",
+      "name": "Enterprise",
+      "included_solutions": [
+        "sovereign-cloud--grosse-energieversorger-de",
+        "cloud-migration--grosse-energieversorger-de",
+        "hybrid-cloud--grosse-energieversorger-de",
+        "managed-hyperscaler--grosse-energieversorger-de"
+      ],
+      "price": 750000,
+      "currency": "EUR",
+      "scope": "End-to-end cloud transformation with 24/7 managed operations across all platforms"
+    }
+  ],
+  "bundle_savings_pct": 21,
+  "created": "2026-03-18"
+}

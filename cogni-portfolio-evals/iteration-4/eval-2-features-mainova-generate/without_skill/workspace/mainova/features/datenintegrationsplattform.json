@@ -1,0 +1,14 @@
+{
+  "slug": "datenintegrationsplattform",
+  "product_slug": "it-plattformdienste",
+  "name": "Datenintegrationsplattform",
+  "description": "Zentrale Middleware fuer die Vernetzung von SAP IS-U, SCADA, Messdatenmanagement und CRM-Systemen ueber standardisierte Schnittstellen. Orchestriert Marktkommunikationsprozesse und spartenuebergreifenden Datenaustausch in Echtzeit.",
+  "category": "integration",
+  "taxonomy_mapping": {
+    "dimension": 6,
+    "category_id": "6.4",
+    "category_name": "System Integration & API",
+    "horizon": "current"
+  },
+  "readiness": "ga"
+}

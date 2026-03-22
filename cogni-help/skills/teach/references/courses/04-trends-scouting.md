@@ -293,7 +293,7 @@ Claims Extraction → Verification → Final Report
 Walk through the pipeline visually:
 1. Draw the end-to-end flow
 2. Map each stage to the cogni-trends skill that handles it
-3. Show integration points with other cogni-works plugins
+3. Show integration points with other insight-wave plugins
 4. Discuss time estimates for each phase
 
 ### Exercise

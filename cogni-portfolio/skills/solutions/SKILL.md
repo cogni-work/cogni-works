@@ -414,7 +414,7 @@ Batch mode skips the interactive co-development steps -- use it when the user wa
 1. Run status to identify pending propositions
 2. Read the product for each pending proposition to determine `revenue_model` — group the batch by solution type
 3. Assess which propositions are strong enough to build on -- flag any with generic DOES statements that will produce weak implementation plans
-4. Present the batch plan grouped by type (e.g., "18 subscription solutions for cogni-works, 2 project solutions for cogni-services") and get confirmation
+4. Present the batch plan grouped by type (e.g., "18 subscription solutions for insight-wave, 2 project solutions for cogni-services") and get confirmation
 5. Launch `solution-planner` agents in parallel for each proposition
 6. After each solution is written, launch `solution-review-assessor` agents in parallel to evaluate them
 7. For solutions with verdict "revise": re-launch `solution-planner` with the review feedback (revision mode), then re-assess. Maximum 2 revision rounds per solution

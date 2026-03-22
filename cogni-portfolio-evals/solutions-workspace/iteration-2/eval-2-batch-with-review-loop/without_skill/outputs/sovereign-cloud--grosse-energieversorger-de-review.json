@@ -1,0 +1,155 @@
+{
+  "slug": "sovereign-cloud--grosse-energieversorger-de",
+  "review_round": 1,
+  "perspectives": [
+    {
+      "role": "procurement",
+      "role_label": "Einkauf / Procurement (SektVO-konform)",
+      "criteria": [
+        {
+          "criterion": "Preistransparenz und Vergleichbarkeit",
+          "score": 7,
+          "max_score": 10,
+          "finding": "Drei Tiers mit klarer Scope-Progression. Rate-Card ist transparent. Contingency-Budget fehlt als separate Position.",
+          "recommendation": "Contingency-Budget (8%) als separate Position mit dokumentiertem Abrufmechanismus."
+        },
+        {
+          "criterion": "SektVO-/EU-Vergaberechts-Konformitaet",
+          "score": 7,
+          "max_score": 10,
+          "finding": "Sovereign-Cloud-Loesungen sind fuer SektVO-pflichtige Energieversorger besonders relevant. Phasen-basierte Losbildung ist gegeben.",
+          "recommendation": "Expliziten Verweis auf SektVO-Konformitaet und EU-Datenhoheits-Garantie ergaenzen."
+        },
+        {
+          "criterion": "Exit-Strategie und Vendor-Lock-in-Risiko",
+          "score": 5,
+          "max_score": 10,
+          "finding": "Open-Source-Basis reduziert Lock-in. Aber kein expliziter Exit-Plan: Was passiert, wenn T-Systems den Sovereign-Cloud-Betrieb einstellt?",
+          "recommendation": "Exit-Strategie: Daten-Repatriierung, IaC-Portabilitaet auf alternative Sovereign-Provider, vertragliche Kontinuitaetsgarantie."
+        },
+        {
+          "criterion": "Milestone-basierte Zahlungsstruktur",
+          "score": 8,
+          "max_score": 10,
+          "finding": "Gute Verteilung. 30% bei Workload-Onboarding reflektiert den groessten Wertbeitrag korrekt.",
+          "recommendation": "Compliance-Nachweis als Abnahme-Kriterium fuer Phase 3 Milestone formalisieren."
+        },
+        {
+          "criterion": "Wettbewerbsfaehigkeit (TCO-Benchmark)",
+          "score": 5,
+          "max_score": 10,
+          "finding": "Kein Vergleich mit Alternativen (eigenes BSI-C5-Audit, andere Sovereign-Cloud-Anbieter wie Ionos/StackIT).",
+          "recommendation": "TCO-Vergleich: T-Systems Sovereign vs. On-Prem + eigenes BSI-C5-Audit vs. alternative Sovereign-Provider."
+        }
+      ],
+      "overall_score": 32,
+      "max_overall_score": 50,
+      "verdict": "revision_needed",
+      "summary": "Sovereign-Positionierung ist stark. Exit-Strategie und TCO-Benchmark muessen ergaenzt werden."
+    },
+    {
+      "role": "provider_sa",
+      "role_label": "Provider Solution Architect (T-Systems)",
+      "criteria": [
+        {
+          "criterion": "Technische Umsetzbarkeit",
+          "score": 8,
+          "max_score": 10,
+          "finding": "Sovereign-Cloud-Provisioning in 6 Wochen ist realistisch auf bestehender Plattform. BSI-C5-Attestierung ist bereits vorhanden, kein Neuaufbau noetig.",
+          "recommendation": "Klaeren, ob T Cloud Public, OSC oder Google Sovereign als Default vorgeschlagen wird."
+        },
+        {
+          "criterion": "Team-Dimensionierung",
+          "score": 8,
+          "max_score": 10,
+          "finding": "Phase 3 mit 4 Engineers fuer 20-40 KRITIS-Workloads ist angemessen. Security-Spezialist fehlt als dedizierte Rolle.",
+          "recommendation": "Security Engineer als dedizierte Rolle fuer Phases 2-3 ergaenzen (oder als Spezialisierung eines SA)."
+        },
+        {
+          "criterion": "Risikomanagement",
+          "score": 7,
+          "max_score": 10,
+          "finding": "Vier Risiken identifiziert. BSI-C5-Attestierungs-Kontinuitaet und NIS2-Enforcement sind korrekt. Contingency nicht quantifiziert.",
+          "recommendation": "Contingency-Budget quantifizieren (8% Puffer, aufgeschluesselt)."
+        },
+        {
+          "criterion": "Compliance-Tiefe",
+          "score": 9,
+          "max_score": 10,
+          "finding": "BSI-C5 Typ 2, NIS2, KRITIS-DachG und DSGVO werden adressiert. Continuous Compliance Monitoring in Phase 4 ist differenzierend.",
+          "recommendation": "BSI-Grundschutz-Baustein-Mapping als Deliverable in Phase 1 ergaenzen."
+        },
+        {
+          "criterion": "Scope-Abgrenzung",
+          "score": 9,
+          "max_score": 10,
+          "finding": "OT-Systeme klar ausgeschlossen. Fokus auf IT-Workloads mit KRITIS-Relevanz. Datenklassifizierung als Basis fuer Onboarding-Entscheidungen.",
+          "recommendation": "Keine Aenderung noetig."
+        }
+      ],
+      "overall_score": 41,
+      "max_overall_score": 50,
+      "verdict": "minor_revision",
+      "summary": "Technisch sehr solide. Minor improvements bei Security-Rolle und Contingency-Quantifizierung."
+    },
+    {
+      "role": "client_sa",
+      "role_label": "Client Solution Architect (Energieversorger)",
+      "criteria": [
+        {
+          "criterion": "KRITIS-Compliance-Entlastung",
+          "score": 9,
+          "max_score": 10,
+          "finding": "40-60% Reduktion des regulatorischen Aufwands ist ein starkes Werteversprechen. Automatisierte Compliance-Reports in Phase 4 sind differenzierend gegenueber On-Prem.",
+          "recommendation": "Konkretes Beispiel: Wie viele Mannstunden pro BSI-Audit eingespart werden."
+        },
+        {
+          "criterion": "Belastung der internen IT-/Security-Mannschaft",
+          "score": 6,
+          "max_score": 10,
+          "finding": "Security-Review pro Workload in Phase 3 erfordert CISO-Team-Beteiligung. Bei 20-40 Workloads kann das interne Security-Team ueberfordert sein.",
+          "recommendation": "Gestaffeltes Onboarding mit max. 5 Workloads/Woche und vordefiniertem Security-Review-Template."
+        },
+        {
+          "criterion": "Integration mit Multi-Cloud-Strategie",
+          "score": 7,
+          "max_score": 10,
+          "finding": "Sovereign Cloud als dedizierte Plattform fuer KRITIS-Workloads. Aber keine Aussage zur Integration mit nicht-KRITIS-Workloads auf Hyperscaler.",
+          "recommendation": "Hybrid-Architektur-Szenario: Sovereign Cloud fuer KRITIS + Hyperscaler fuer non-KRITIS, verbunden ueber einheitliche Governance."
+        },
+        {
+          "criterion": "Langfristige Plattform-Roadmap",
+          "score": 7,
+          "max_score": 10,
+          "finding": "Phase 4 bringt Steady-State. Aber keine Aussage zur Plattform-Weiterentwicklung (neue Services, Kapazitaetserweiterung, neue Compliance-Standards).",
+          "recommendation": "Plattform-Roadmap-Commitment: Quartalsweise Feature-Releases, proaktive Anpassung an neue Regulierung."
+        },
+        {
+          "criterion": "Nachhaltige Betriebsfaehigkeit",
+          "score": 7,
+          "max_score": 10,
+          "finding": "Wissenstransfer und Self-Service-Portal sind gut. Retained-IT-Modell nicht explizit.",
+          "recommendation": "Betriebsmodell-Optionen: (a) Fully Managed by T-Systems, (b) Co-managed mit Retained-IT, (c) Self-Operated nach Enablement."
+        }
+      ],
+      "overall_score": 36,
+      "max_overall_score": 50,
+      "verdict": "revision_needed",
+      "summary": "Starke Compliance-Positionierung. Revision bei interner Belastung, Multi-Cloud-Integration und Betriebsmodell-Optionen."
+    }
+  ],
+  "aggregate": {
+    "total_score": 109,
+    "max_score": 150,
+    "pct": 72.7,
+    "revision_needed": true,
+    "top_revision_items": [
+      "Exit-Strategie mit Daten-Repatriierung und Kontinuitaetsgarantie ergaenzen",
+      "TCO-Vergleich (T-Systems Sovereign vs. On-Prem+Audit vs. alternative Provider)",
+      "Contingency-Budget quantifizieren (8% Puffer)",
+      "Gestaffeltes Onboarding mit max. 5 Workloads/Woche und Security-Review-Template",
+      "Betriebsmodell-Optionen (Fully Managed / Co-managed / Self-Operated) benennen"
+    ]
+  },
+  "created": "2026-03-18"
+}

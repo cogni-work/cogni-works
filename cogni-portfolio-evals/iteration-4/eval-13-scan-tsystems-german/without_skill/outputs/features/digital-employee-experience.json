@@ -1,0 +1,13 @@
+{
+  "slug": "digital-employee-experience",
+  "name": "Digital Employee Experience",
+  "description": "Nutzerzentrierte Workplace-Transformation mit Hyperautomation und hoher Kundenzufriedenheit (4.82/5).",
+  "product_slug": "t-systems-workplace",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 3,
+    "category_id": "3.6",
+    "category_name": "Digital Employee Experience"
+  },
+  "source_file": "https://www.gartner.com/reviews/market/it-infrastructure-and-operations-management-others/vendor/t-systems/product/t-systems-outsourced-digital-workplace-services"
+}

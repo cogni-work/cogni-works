@@ -1,0 +1,7 @@
+{
+  "slug": "gtm-path-engine",
+  "product_slug": "content-platform",
+  "name": "GTM-Pfad-Engine",
+  "description": "Regelbasierte Routing-Engine, die Content-Stuecke entlang konfigurierbarer Go-to-Market-Pfade (Awareness, Consideration, Decision) sequenziert und an die jeweilige Buyer-Journey-Phase bindet.",
+  "readiness": "ga"
+}

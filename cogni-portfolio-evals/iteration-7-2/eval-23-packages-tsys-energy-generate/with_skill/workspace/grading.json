@@ -1,0 +1,74 @@
+{
+  "total_checks": 11,
+  "passed": 11,
+  "failed": 0,
+  "pass_rate": 1.0,
+  "expectations": [
+    {
+      "text": "All required fields present (slug, name, region, description)",
+      "passed": true,
+      "evidence": "All present",
+      "entity": "grosse-energieversorger-de"
+    },
+    {
+      "text": "Valid region code (actual: de)",
+      "passed": true,
+      "evidence": "region=\"de\"",
+      "entity": "grosse-energieversorger-de"
+    },
+    {
+      "text": "Slug ends with -{region}",
+      "passed": true,
+      "evidence": "slug=\"grosse-energieversorger-de\", region=\"de\"",
+      "entity": "grosse-energieversorger-de"
+    },
+    {
+      "text": "Description is 1 sentence, 5-30 words (actual: 13 words, 0 sentence-enders)",
+      "passed": true,
+      "evidence": "\"German energy utilities with 5000+ employees operating grid, generation, and retail energy businesse\"",
+      "entity": "grosse-energieversorger-de"
+    },
+    {
+      "text": "Priority is beachhead/expansion/aspirational (actual: beachhead)",
+      "passed": true,
+      "evidence": "priority=\"beachhead\"",
+      "entity": "grosse-energieversorger-de"
+    },
+    {
+      "text": "TAM currency matches region default (EUR)",
+      "passed": true,
+      "evidence": "TAM.currency=\"EUR\", expected=\"EUR\"",
+      "entity": "grosse-energieversorger-de"
+    },
+    {
+      "text": "SAM currency matches region default (EUR)",
+      "passed": true,
+      "evidence": "SAM.currency=\"EUR\", expected=\"EUR\"",
+      "entity": "grosse-energieversorger-de"
+    },
+    {
+      "text": "SOM currency matches region default (EUR)",
+      "passed": true,
+      "evidence": "SOM.currency=\"EUR\", expected=\"EUR\"",
+      "entity": "grosse-energieversorger-de"
+    },
+    {
+      "text": "SAM/TAM ratio < 50% (actual: 42.9%)",
+      "passed": true,
+      "evidence": "SAM=1,800,000,000 / TAM=4,200,000,000 = 42.9%",
+      "entity": "grosse-energieversorger-de"
+    },
+    {
+      "text": "SOM/SAM ratio < 20% (actual: 15.6%)",
+      "passed": true,
+      "evidence": "SOM=280,000,000 / SAM=1,800,000,000 = 15.6%",
+      "entity": "grosse-energieversorger-de"
+    },
+    {
+      "text": "Segmentation has normalized fields (employees_min/max, vertical_codes)",
+      "passed": true,
+      "evidence": "All normalized fields present",
+      "entity": "grosse-energieversorger-de"
+    }
+  ]
+}

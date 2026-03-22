@@ -1,0 +1,48 @@
+{
+  "reviewer": "tsystems-cso",
+  "overall_score": 4.17,
+  "dimension_scores": {
+    "quota_impact": {
+      "score": 4,
+      "rationale": "Differenzierungsaussagen sind jetzt konkreter mit BSI-C5-Typ-2, DT-Backbone und sprint-basierter 6-Monats-Zyklus-Referenz. Noch immer fehlen benennbare Kundenreferenzen mit quantifizierten Ergebnissen — aber die strukturellen Argumente sind stark genug, dass ein AE damit in ein Erstgespräch gehen kann. Die NIS2- und SAP-ECC-Deadlines in den Differenzierungen schaffen jetzt konkrete Gesprächsanker."
+    },
+    "pipeline_acceleration": {
+      "score": 4,
+      "rationale": "Deutliche Verbesserung: NIS2-Deadline (April 2026), SAP-ECC-End-of-Life (2027) und die '6-Monats-Zyklus'-Aussage sind jetzt in den Differenzierungen verankert. Der AE kann jetzt sagen: 'Sie haben 12 Monate bis ECC-End-of-Support — wer hat die Infrastruktur und IS-U-Expertise, das in dieser Timeline zu schaffen?' Das schafft Urgency."
+    },
+    "objection_handling": {
+      "score": 4,
+      "rationale": "Die neue Trap Question 4 (TCO über 5 Jahre mit Exit-Kosten) adressiert das Preis-Argument strukturell — statt unbelegter Preisvergleiche wird der Wettbewerber gezwungen, versteckte Kosten offenzulegen. Die Preisbehauptungen ('30-50% teurer') sind raus — gut. Switching-Cost-Argument ist implizit in der Differenzierung ('Parallelbetrieb bei KRITIS-Regelbetrieb'), könnte aber noch expliziter sein."
+    },
+    "competitive_win_ability": {
+      "score": 5,
+      "rationale": "Jetzt exzellent. Die Differenzierungen sind durchgehend auf strukturelle Vorteile fokussiert, die der Wettbewerber nicht mit einer besseren Präsentation kontern kann: eigene Infrastruktur, eigenes Netzwerk, eigene KRITIS-Zertifizierung, IS-U-Betriebserfahrung. Die Trap Questions sind echte Deal-Winner — Q1 (BSI-C5 auf eigener Plattform), Q2 (IS-U-Referenz mit KRITIS-Parallelbetrieb) und Q3 (eigenes Backbone) disqualifizieren die meisten Wettbewerber strukturell."
+    },
+    "account_team_usability": {
+      "score": 4,
+      "rationale": "Klare, konsistente Sprache. Die Differenzierungen sind als 1-2-Satz-Statements formuliert, die ein AE in einem Pitch direkt verwenden kann. Verbesserung gegenüber Iteration 1: TCS wird nicht mehr stereotyp dargestellt, sondern über fehlende Infrastruktur und Zertifizierungen differenziert — das ist professioneller und vertretbar."
+    },
+    "deal_qualification_signal": {
+      "score": 4,
+      "rationale": "Unverändert gut: >5.000 MA, KRITIS-reguliert, SAP IS-U, OT/IT-Konvergenz als klare Qualifikationssignale. Die Deadline-Integration (NIS2, ECC) hilft zusätzlich bei der Priorisierung im Pipeline-Review."
+    }
+  },
+  "top_issues": [
+    {
+      "entity_type": "compete",
+      "entity_slug": "cloud-migration--grosse-energieversorger-de",
+      "issue": "Immer noch keine benennbaren T-Systems-Referenzkunden in den Differenzierungsaussagen. '25 Jahre SAP-IS-U-Betriebserfahrung' ist besser als vorher, aber ein konkreter Kundenname mit Ergebnis würde die Glaubwürdigkeit massiv stärken.",
+      "severity": "medium",
+      "suggested_fix": "Wenn Referenzkunden nicht öffentlich benennbar sind, die Differenzierung um einen quantifizierten Erfahrungswert ergänzen: z.B. 'Über 30 SAP-IS-U-Migrationen im Energiesektor durchgeführt' (wenn verifizierbar).",
+      "root_cause_hint": "competitor-researcher reference data access"
+    }
+  ],
+  "strengths": [
+    "Structural differentiation is now consistently anchored in infrastructure ownership, certifications, and vertical depth — not marketing claims",
+    "Trap Questions are deal-winners: Q1, Q2, Q3 structurally disqualify most competitors",
+    "Regulatory deadlines (NIS2, ECC EOL) are now integrated into differentiation statements — creates urgency",
+    "Bias issues from iteration 1 are resolved — TCS and Arvato weaknesses are now professional and verifiable"
+  ],
+  "would_use_in_pitch_deck": true,
+  "overall_assessment": "Deutliche Verbesserung gegenüber Iteration 1. Die Analyse ist jetzt pitch-ready: strukturelle Differenzierungen statt Marketing-Claims, regulatorische Deadlines als Urgency-Trigger, professionelle Wettbewerber-Darstellung ohne Bias. Einzige verbleibende Lücke: fehlende benennbare Referenzkunden — das ist ein Datenbank-Problem, kein Analyse-Problem. Meine AEs können mit diesem Battle Card in ein Evaluierungsgespräch bei E.ON oder EnBW gehen und die richtigen Fragen stellen."
+}

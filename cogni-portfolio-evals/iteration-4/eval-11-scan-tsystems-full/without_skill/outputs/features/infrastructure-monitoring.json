@@ -1,0 +1,13 @@
+{
+  "slug": "infrastructure-monitoring",
+  "name": "Infrastructure Monitoring",
+  "description": "Hybrid IT infrastructure monitoring with CloudWatch and Prometheus for container workloads",
+  "product_slug": "t-systems-infrastructure",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 5,
+    "category_id": "5.4",
+    "category_name": "Infrastructure Monitoring"
+  },
+  "source_file": "https://www.gartner.com/reviews/market/data-center-outsourcing-and-hybrid-infrastructure-managed-services-worldwide/vendor/t-systems"
+}

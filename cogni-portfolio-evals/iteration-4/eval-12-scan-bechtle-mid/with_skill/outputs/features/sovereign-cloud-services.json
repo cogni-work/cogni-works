@@ -1,0 +1,16 @@
+{
+  "slug": "sovereign-cloud-services",
+  "product_slug": "cloud-services",
+  "name": "Sovereign Cloud Services",
+  "description": "European sovereign cloud portfolio offering GDPR-compliant services through German-hosted IONOS, STACKIT from Schwarz Group and plusserver alongside hyperscaler alternatives with data residency guarantees.",
+  "taxonomy_mapping": {
+    "dimension": 4,
+    "dimension_name": "Cloud Services",
+    "category_id": "4.7",
+    "category_name": "Sovereign Cloud",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/bechtle-portfolio.md",
+  "created": "2026-03-18"
+}

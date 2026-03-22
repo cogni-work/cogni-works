@@ -1,0 +1,50 @@
+{
+  "proposition_slug": "cloud-migration--grosse-energieversorger-de",
+  "skill": "compete",
+  "iterations": [
+    {
+      "iteration": 1,
+      "cso_score": 3.67,
+      "analyst_score": 3.5,
+      "converged": false,
+      "failing_dimensions": {
+        "cso": ["pipeline_acceleration (3)", "objection_handling (3)"],
+        "analyst": ["positioning_validity (3)", "strength_weakness_balance (3)", "trap_question_sophistication (3)"]
+      },
+      "cso_would_use_in_pitch_deck": false,
+      "analyst_would_use_in_advisory_report": false,
+      "rewrite_actions": [
+        "Replaced biased/stereotypical competitor weaknesses (Accenture fluktuation, TCS cultural barriers, Arvato capacity limits) with verifiable structural disadvantages",
+        "Updated IBM positioning from outdated Consulting spin-off narrative to 2026 Co-Creation/Ecosystem focus",
+        "Updated TCS positioning from price-only to IDC MarketScape Leadership + MasterCraft automation",
+        "Integrated regulatory deadlines (NIS2 April 2026, SAP ECC EOL 2027) into differentiation statements for pipeline acceleration",
+        "Replaced unverified pricing claims (30-50% teurer) with structural TCO arguments",
+        "Added CFO-focused trap question (5-year TCO with exit costs) replacing overly narrow security clearance question",
+        "Simplified trap question 2 from compound question to focused reference-customer question"
+      ]
+    },
+    {
+      "iteration": 2,
+      "cso_score": 4.17,
+      "analyst_score": 4.0,
+      "converged": true,
+      "failing_dimensions": {},
+      "cso_would_use_in_pitch_deck": true,
+      "analyst_would_use_in_advisory_report": true,
+      "remaining_improvements": [
+        "Named reference customers still missing in differentiation statements (data access limitation, not analysis quality)",
+        "T-Systems own positioning risks not transparently disclosed (acceptable for Battle Card, would need addition for Advisory Report usage)",
+        "Energiewende as business-case accelerator could be more explicitly woven into differentiations"
+      ]
+    }
+  ],
+  "convergence_path": "Initial score CSO 3.67 / Analyst 3.5 → Iteration 2: CSO 4.17 / Analyst 4.0 (converged)",
+  "total_iterations_used": 2,
+  "key_improvements": [
+    "Bias elimination: Removed stereotypical and speculative competitor weaknesses, replaced with verifiable structural gaps",
+    "Positioning currency: Updated all competitor positionings to reflect 2026 market reality",
+    "Urgency integration: Regulatory deadlines (NIS2, ECC EOL) now embedded in differentiation statements",
+    "Stakeholder coverage: Trap questions now cover CISO, CIO, OT-Leiter, and CFO perspectives",
+    "Pricing rigor: Unverified price comparisons replaced with structural TCO arguments"
+  ]
+}

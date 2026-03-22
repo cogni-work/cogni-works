@@ -1,0 +1,7 @@
+{
+  "slug": "managed-security",
+  "name": "CyberShield Managed Security",
+  "description": "Managed Security Service mit SOC/SIEM-Betrieb, Endpoint Detection & Response, Schwachstellenmanagement, Identity & Access Management, Netzwerksicherheit, Incident Response, Compliance-Monitoring und Security Awareness Training.",
+  "pricing_tier": "enterprise",
+  "revenue_model": "subscription"
+}

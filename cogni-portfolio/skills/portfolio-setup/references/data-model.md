@@ -747,11 +747,11 @@ The `package_type` field mirrors the parent product's `revenue_model` and determ
 
 ```json
 {
-  "slug": "cogni-works--beratung-kmu-dach",
-  "product_slug": "cogni-works",
+  "slug": "insight-wave--beratung-kmu-dach",
+  "product_slug": "insight-wave",
   "market_slug": "beratung-kmu-dach",
   "package_type": "subscription",
-  "name": "cogni-works Beratungsplattform",
+  "name": "insight-wave Beratungsplattform",
   "positioning": "AI-powered consulting toolkit in one subscription",
   "tiers": [
     {

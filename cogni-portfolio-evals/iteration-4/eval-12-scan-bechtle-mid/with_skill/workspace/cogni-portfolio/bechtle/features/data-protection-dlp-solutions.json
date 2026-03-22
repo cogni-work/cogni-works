@@ -1,0 +1,16 @@
+{
+  "slug": "data-protection-dlp-solutions",
+  "product_slug": "security-services",
+  "name": "Data Protection & DLP Solutions",
+  "description": "Proofpoint-based data loss prevention platform performing real-time monitoring of email, endpoint and cloud data flows with advanced detection methods, encryption enforcement and GDPR compliance.",
+  "taxonomy_mapping": {
+    "dimension": 2,
+    "dimension_name": "Security Services",
+    "category_id": "2.10",
+    "category_name": "Data Protection & Privacy",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/bechtle-portfolio.md",
+  "created": "2026-03-18"
+}

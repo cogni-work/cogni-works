@@ -1,0 +1,16 @@
+{
+  "slug": "security-consulting-advisory",
+  "product_slug": "security-services",
+  "name": "Security Consulting and Advisory",
+  "description": "Security advisory service covering IT, OT, and SASE architecture assessments with on-demand CISO-as-a-Service engagement and compliance roadmap development for regulatory frameworks.",
+  "taxonomy_mapping": {
+    "dimension": 2,
+    "dimension_name": "Security Services",
+    "category_id": "2.9",
+    "category_name": "Compliance & GRC",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

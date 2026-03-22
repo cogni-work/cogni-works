@@ -1,0 +1,13 @@
+{
+  "slug": "technology-consulting",
+  "name": "Technology Consulting",
+  "description": "Intelligent technology solutions consulting and architecture advisory",
+  "product_slug": "detecon-consulting",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 7,
+    "category_id": "7.1",
+    "category_name": "IT Strategy & Architecture"
+  },
+  "source_file": "https://www.t-systems.com/de/en/strategy-and-consulting/solutions/technology-consulting"
+}

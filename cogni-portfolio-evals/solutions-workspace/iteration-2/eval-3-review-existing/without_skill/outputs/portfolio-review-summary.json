@@ -1,0 +1,135 @@
+{
+  "portfolio_slug": "t-systems",
+  "market_slug": "grosse-energieversorger-de",
+  "review_date": "2026-03-18",
+  "solutions_reviewed": [
+    "cloud-migration--grosse-energieversorger-de",
+    "sap-on-cloud--grosse-energieversorger-de",
+    "sovereign-cloud--grosse-energieversorger-de"
+  ],
+  "aggregate_scores": {
+    "cloud-migration--grosse-energieversorger-de": { "pass": 11, "warn": 3, "fail": 0 },
+    "sap-on-cloud--grosse-energieversorger-de": { "pass": 12, "warn": 3, "fail": 0 },
+    "sovereign-cloud--grosse-energieversorger-de": { "pass": 11, "warn": 4, "fail": 0 },
+    "portfolio_total": { "pass": 34, "warn": 10, "fail": 0 }
+  },
+  "iteration_comparison": {
+    "iteration_1_total": { "pass": 22, "warn": 18, "fail": 2 },
+    "iteration_2_total": { "pass": 34, "warn": 10, "fail": 0 },
+    "improvement": "Pass rate improved from 52% to 77%. All 2 fails eliminated. Warn count reduced from 18 to 10. Zero fails across all solutions."
+  },
+  "cross_solution_patterns": {
+    "strengths": [
+      {
+        "pattern": "Consistent commercial architecture with sustainable margins",
+        "detail": "All three solutions share a 4-tier pricing model (PoV, Small, Medium, Large) with margins above or near the 30% target across all tiers. The PoV entry points range from EUR 75K (sovereign) to EUR 180K (migration), providing accessible land-and-expand paths. Tier progression is coherent with documented scaling factors."
+      },
+      {
+        "pattern": "Comprehensive exit clauses across all solutions",
+        "detail": "All three solutions now include explicit exit clauses with notice periods (6-12 months), transition support (90-120 days), data export in specified formats, and capped exit costs (5-8% of total/annual volume). This was a critical gap in iteration-1 where only the SAP solution had exit protections. The cloud-migration solution additionally includes exit-strategy verification with a portability test on alternative infrastructure."
+      },
+      {
+        "pattern": "Market pain point coverage — 4 of 5",
+        "detail": "Pain point 1 (SAP IS-U to S/4HANA migration): addressed by SAP-on-cloud with IS-U-specific validation. Pain point 2 (KRITIS compliance): addressed by sovereign-cloud with BSI-C5 attestation and NIS2 readiness. Pain point 3 (Smart Meter rollout): NOT addressed — portfolio gap. Pain point 4 (OT/IT convergence): partially addressed by cloud-migration's OT/IT network segmentation. Pain point 5 (skills shortage): addressed by SAP-on-cloud's lean 0.5 FTE customer prerequisite and all solutions' managed service models."
+      },
+      {
+        "pattern": "Transparent cost modeling with auditable effort breakdowns",
+        "detail": "All solutions provide full bill-of-materials with role rates, effort breakdowns by tier (total days, per-role breakdown), internal cost calculations, and margin percentages. This transparency supports procurement benchmarking and audit requirements."
+      },
+      {
+        "pattern": "Data sovereignty as a cross-cutting guarantee",
+        "detail": "All three solutions guarantee data residency in BSI-C5-certified German data centers under German jurisdiction (DSGVO + KRITIS-DachG). This is consistent across the portfolio, not limited to the sovereign-cloud solution. The IaC portability approach (Terraform/OpenTofu) provides technical sovereignty beyond contractual guarantees."
+      },
+      {
+        "pattern": "Competitive positioning (new in iteration-2)",
+        "detail": "SAP-on-cloud and sovereign-cloud now include explicit competitive positioning in their cost model assumptions. SAP-on-cloud contrasts T-Systems Managed SAP vs. Hyperscaler Managed SAP vs. Inhouse-Basis. Sovereign-cloud contrasts T-Systems Sovereign Cloud vs. AWS European Sovereign Cloud vs. Azure Confidential Computing. Cloud-migration still lacks explicit competitive positioning."
+      }
+    ],
+    "weaknesses": [
+      {
+        "pattern": "Generic role definitions across all solutions",
+        "severity": "medium",
+        "detail": "All three solutions use the same three roles (Solution Architect EUR 1800/d, Implementation Engineer EUR 1200/d, Project Manager EUR 1400/d) regardless of domain specialization. Cloud-migration needs OT/KRITIS specialists, SAP-on-cloud needs SAP Basis/IS-U specialists, sovereign-cloud needs compliance/security architects. The BoM does not reflect the specialized competencies that the phase descriptions and deliverables require.",
+        "affected_solutions": ["cloud-migration--grosse-energieversorger-de", "sap-on-cloud--grosse-energieversorger-de", "sovereign-cloud--grosse-energieversorger-de"]
+      },
+      {
+        "pattern": "No cross-solution integration architecture",
+        "severity": "medium",
+        "detail": "A client deploying all three solutions (migrate non-critical workloads to cloud, manage SAP on cloud, host KRITIS apps on sovereign cloud) has no guidance on how they compose. Key unanswered questions: Which migrated workloads go to sovereign vs. standard cloud? Does SAP-on-cloud run on sovereign infrastructure? How do sovereign and non-sovereign workloads communicate? What is the recommended sequencing (sovereign first, then migration, or parallel)? No cross-solution architecture or bundling guidance exists.",
+        "affected_solutions": ["cloud-migration--grosse-energieversorger-de", "sap-on-cloud--grosse-energieversorger-de", "sovereign-cloud--grosse-energieversorger-de"]
+      },
+      {
+        "pattern": "Smart Meter / IoT Edge portfolio gap",
+        "severity": "medium",
+        "detail": "The market's third pain point (Smart Meter rollout with 95% obligation by 2030, gateway administration, metering data management, billing integration) is not addressed by any solution. The SAP-on-cloud Large tier mentions metering data but does not scope the IoT/edge infrastructure or gateway administration. This remains the single largest gap in market pain point coverage.",
+        "affected_solutions": []
+      },
+      {
+        "pattern": "Inconsistent compliance deliverable naming",
+        "severity": "low",
+        "detail": "Sovereign-cloud has the most explicit compliance deliverables (BSI-C5 attestation documentation, NIS2 readiness assessment, quarterly compliance reports, audit trail). SAP-on-cloud includes BSI-C5 compliance documentation and quarterly audit reports. Cloud-migration embeds compliance in process (KRITIS-Compliance-Gap-Analyse, BSI-Audit-Trail) but does not name deliverable documents. For a portfolio pitch to a KRITIS-regulated client, compliance deliverables should be standardized across all solutions.",
+        "affected_solutions": ["cloud-migration--grosse-energieversorger-de"]
+      },
+      {
+        "pattern": "Cloud-migration lacks competitive positioning",
+        "severity": "low",
+        "detail": "SAP-on-cloud and sovereign-cloud include explicit competitive positioning in their assumptions. Cloud-migration does not compare T-Systems CMF against hyperscaler-native migration tools (AWS Migration Hub, Azure Migrate) or competing SIs (Accenture, Capgemini, Atos). In a formal SektVO tender, this gap would be noticed.",
+        "affected_solutions": ["cloud-migration--grosse-energieversorger-de"]
+      },
+      {
+        "pattern": "Margin compression in sovereign-cloud and SAP-on-cloud PoVs",
+        "severity": "low",
+        "detail": "Sovereign-cloud PoV margin is 27.7% and SAP-on-cloud PoV is 28.4% — both below the portfolio target of 30%. While this is defensible as land-and-expand pricing, it means the PoV engagements have no margin buffer for overruns. Cloud-migration's PoV at 31.1% is the only one above target. For a portfolio that uses PoVs as the primary entry mechanism, sub-target margins on 2 of 3 PoVs is a commercial concern.",
+        "affected_solutions": ["sap-on-cloud--grosse-energieversorger-de", "sovereign-cloud--grosse-energieversorger-de"]
+      }
+    ]
+  },
+  "consistency_checks": {
+    "rate_card_consistency": {
+      "status": "pass",
+      "detail": "All three solutions use identical role rates: SA EUR 1800/d, IE EUR 1200/d, PM EUR 1400/d. These match the portfolio.json delivery_defaults. No rate inconsistencies."
+    },
+    "exit_clause_consistency": {
+      "status": "pass",
+      "detail": "All solutions now include exit clauses (iteration-1 gap resolved). Notice periods: cloud-migration 12 months, SAP-on-cloud 6 months, sovereign-cloud 12 months. Transition support: 90-120 days. Exit cost caps: 5-8%. The SAP-on-cloud shorter notice period is appropriate for a managed service. Exit cost cap variance (5% vs 8%) reflects different engagement models (project vs managed service)."
+    },
+    "data_residency_consistency": {
+      "status": "pass",
+      "detail": "All solutions guarantee German data center residency with BSI-C5 certification and DSGVO/KRITIS-DachG compliance. Sovereign-cloud specifies BSI-C5 Typ-2 explicitly; others reference BSI-C5 without specifying the attestation type."
+    },
+    "pricing_overlap_check": {
+      "status": "pass",
+      "detail": "No pricing conflicts. Solutions target different scopes: cloud-migration (general workloads EUR 850K-2.8M), SAP-on-cloud (SAP systems EUR 420K-1.4M), sovereign-cloud (KRITIS workloads EUR 320K-1.1M). A client could purchase all three without scope overlap, as each addresses different workload categories."
+    },
+    "effort_arithmetic_check": {
+      "status": "warn",
+      "detail": "Spot-checked internal_cost calculations against role days and rates. Cloud-migration PoV: SA 40d x 1800 + IE 20d x 1200 + PM 20d x 1400 = 72000+24000+28000 = EUR 124,000. Matches stated internal_cost. SAP-on-cloud PoV: SA 20d x 1800 + IE 15d x 1200 + PM 10d x 1400 = 36000+18000+14000 = EUR 68,000. Matches. Sovereign-cloud PoV: SA 18d x 1800 + IE 10d x 1200 + PM 7d x 1400 = 32400+12000+9800 = EUR 54,200. Matches. All spot-checked tiers are arithmetically correct."
+    },
+    "market_assumption_consistency": {
+      "status": "pass",
+      "detail": "All solutions reference the same market context: KRITIS compliance (BSI-C5, NIS2), OT/IT boundary (SCADA stays on-premises), German data residency requirement, SektVO procurement rules. No contradictions between solutions in their market assumptions."
+    },
+    "ot_boundary_consistency": {
+      "status": "pass",
+      "detail": "All solutions consistently define the OT/IT boundary: SCADA and grid control systems remain on-premises; only IT-side interfaces/applications are in scope. Cloud-migration explicitly scopes out custom OT integrations. Sovereign-cloud limits scope to IT-side KRITIS applications (Billing, Messdaten, ERP interfaces). No contradictions."
+    }
+  },
+  "recommendations": {
+    "immediate": [
+      "Add competitive positioning to the cloud-migration solution (T-Systems CMF vs. hyperscaler-native tools vs. competing SIs) to match the other two solutions",
+      "Name explicit compliance deliverables in the cloud-migration solution (BSI-C5 migration compliance report, NIS2 readiness documentation) to match sovereign-cloud's standard",
+      "Review sovereign-cloud PoV margin (27.7%) and SAP-on-cloud PoV margin (28.4%) — consider whether a EUR 5-10K price increase would bring margins above the 30% target without losing competitive entry pricing"
+    ],
+    "short_term": [
+      "Add domain-specific roles to each solution's BoM: OT Integration Specialist for cloud-migration, SAP Basis/IS-U Specialist for SAP-on-cloud, Compliance/Security Architect for sovereign-cloud",
+      "Create a cross-solution architecture guide showing how the three solutions compose for a full-portfolio client: recommended sequencing, workload routing (sovereign vs. standard), SAP hosting location, cross-environment connectivity",
+      "Extend the sovereign-cloud handover phase from 2 to 3-4 weeks to provide adequate KRITIS operational handover"
+    ],
+    "strategic": [
+      "Develop a Smart Meter / IoT Edge solution to close the portfolio's only remaining market pain point gap (95% rollout obligation by 2030)",
+      "Create a bundled portfolio offering that combines all three solutions with cross-solution pricing incentives, unified governance, and a single engagement manager",
+      "Standardize BSI-C5 attestation type references across all solutions (Typ-1 vs Typ-2) for regulatory precision"
+    ]
+  },
+  "portfolio_verdict": "The T-Systems portfolio for German energy utilities has materially improved from iteration-1 (22 pass / 18 warn / 2 fail) to iteration-2 (34 pass / 10 warn / 0 fail). All fails have been eliminated. The three solutions are now commercially robust with comprehensive exit clauses, sustainable margins, transparent cost models, and consistent data sovereignty guarantees. The SAP-on-cloud solution is the most mature (12 pass, 3 warn) with quantified ROI and explicit competitive positioning. The portfolio's remaining gaps are: (1) generic role definitions that do not reflect domain specialization, (2) no cross-solution integration architecture, (3) Smart Meter/IoT Edge gap, (4) inconsistent compliance deliverable naming, and (5) two sub-target PoV margins. None of these are blockers — they are hardening opportunities for iteration-3."
+}

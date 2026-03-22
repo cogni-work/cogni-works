@@ -1,0 +1,72 @@
+{
+  "assessment": {
+    "product": "cloud-services",
+    "portfolio": "t-systems",
+    "features_reviewed": 8,
+    "features_with_issues": 8,
+    "average_quality_score": 2.94,
+    "summary": "All 8 features have quality issues. The most pervasive problem is a language mismatch: the portfolio is configured as English but every feature description is written in German. Beyond that, most features lack explicit customer value statements — they describe technology components and methodologies without articulating the business outcome. Schema completeness is uniformly poor, with no feature carrying product linkage, status, creation date, differentiators, or use-case fields. Two features (hybrid-cloud and multi-cloud-finops) have significant overlap in scope."
+  },
+  "quality_checks_applied": [
+    "language-mismatch: Does feature language match portfolio.language?",
+    "missing-customer-value: Does description state a business outcome, not just technology?",
+    "missing-schema-fields: Are product, created, status, differentiators, use_cases present?",
+    "feature-overlap: Are feature boundaries clear and non-overlapping?",
+    "acronym-overload: Are descriptions accessible without insider knowledge?",
+    "vague-claim: Are claims backed by specific evidence?",
+    "description-too-long: Is the description concise and scannable?",
+    "vendor-lock-in-risk: Does the description rely on vendor names that may become stale?"
+  ],
+  "scores_by_feature": {
+    "private-cloud": 2.5,
+    "managed-hyperscaler": 3.0,
+    "sovereign-cloud": 3.5,
+    "cloud-native-container": 2.5,
+    "multi-cloud-finops": 3.0,
+    "hybrid-cloud": 2.5,
+    "sap-on-cloud": 3.5,
+    "cloud-migration": 3.0
+  },
+  "top_issues_by_frequency": [
+    {
+      "check": "language-mismatch",
+      "count": 8,
+      "severity": "high",
+      "recommendation": "Translate all descriptions to English to match portfolio.language, or change portfolio.language to 'de'."
+    },
+    {
+      "check": "missing-customer-value",
+      "count": 8,
+      "severity": "high",
+      "recommendation": "Each feature description should follow an IS/DOES/MEANS pattern: what it is, what it does, and what measurable value it delivers to the customer."
+    },
+    {
+      "check": "missing-schema-fields",
+      "count": 8,
+      "severity": "medium",
+      "recommendation": "Add product, created, status, differentiators, and use_cases fields to all features for portfolio completeness."
+    },
+    {
+      "check": "feature-overlap",
+      "count": 2,
+      "severity": "high",
+      "recommendation": "Clarify boundaries between hybrid-cloud and multi-cloud-finops. Consider merging or explicitly scoping: hybrid-cloud owns architecture/connectivity, multi-cloud-finops owns cost governance and compliance."
+    },
+    {
+      "check": "acronym-overload",
+      "count": 3,
+      "severity": "medium",
+      "recommendation": "Reduce acronyms in descriptions or expand them on first use. Descriptions should be accessible to business stakeholders, not only engineers."
+    }
+  ],
+  "features_ranked_by_quality": [
+    { "slug": "sap-on-cloud", "score": 3.5, "verdict": "Best — concrete evidence and clear differentiators, but still needs language fix and explicit value statement." },
+    { "slug": "sovereign-cloud", "score": 3.5, "verdict": "Good — compliance framing implies value, but needs explicit business outcome." },
+    { "slug": "managed-hyperscaler", "score": 3.0, "verdict": "Adequate — good service scope, needs value statement and certification specifics." },
+    { "slug": "multi-cloud-finops", "score": 3.0, "verdict": "Adequate — relevant topics but overlaps with hybrid-cloud." },
+    { "slug": "cloud-migration", "score": 3.0, "verdict": "Adequate — methodology-heavy, needs outcome focus and shorter description." },
+    { "slug": "private-cloud", "score": 2.5, "verdict": "Weak — vendor-heavy technology list with no customer value." },
+    { "slug": "cloud-native-container", "score": 2.5, "verdict": "Weak — acronym-heavy technology laundry list." },
+    { "slug": "hybrid-cloud", "score": 2.5, "verdict": "Weak — unclear boundaries, overlaps with other features, no value statement." }
+  ]
+}

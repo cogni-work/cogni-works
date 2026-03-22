@@ -1,0 +1,13 @@
+{
+  "slug": "it-strategy-advisory",
+  "name": "IT Strategy & Architecture Advisory",
+  "description": "IT strategy, security, and compliance advisory with digital strategy framework",
+  "product_slug": "detecon-consulting",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 7,
+    "category_id": "7.1",
+    "category_name": "IT Strategy & Architecture"
+  },
+  "source_file": "https://www.t-systems.com/us/en/strategy-and-consulting"
+}

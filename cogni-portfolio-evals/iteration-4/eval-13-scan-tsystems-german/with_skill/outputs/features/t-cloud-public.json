@@ -1,0 +1,16 @@
+{
+  "slug": "t-cloud-public",
+  "product_slug": "cloud-services",
+  "name": "T Cloud Public",
+  "description": "European hyperscaler public cloud delivering IaaS from German data centers on OpenStack platform with BSI C5 Type II attestation, TISAX3, and ISO 27017/27018 certifications.",
+  "taxonomy_mapping": {
+    "dimension": 4,
+    "dimension_name": "Cloud Services",
+    "category_id": "4.7",
+    "category_name": "Sovereign Cloud",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

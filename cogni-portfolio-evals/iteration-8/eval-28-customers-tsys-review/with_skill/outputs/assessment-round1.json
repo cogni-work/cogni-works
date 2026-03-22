@@ -1,0 +1,156 @@
+{
+  "customer_slug": "grosse-energieversorger-de",
+  "market_slug": "grosse-energieversorger-de",
+  "round": 1,
+  "overall": "pass",
+  "overall_score": 95,
+  "stakeholder_reviews": [
+    {
+      "perspective": "reviewer",
+      "score": 100,
+      "overall": "pass",
+      "criteria": {
+        "role_completeness": {
+          "score": "pass",
+          "weight": 0.30,
+          "note": ""
+        },
+        "pain_point_specificity": {
+          "score": "pass",
+          "weight": 0.25,
+          "note": ""
+        },
+        "buying_criteria_realism": {
+          "score": "pass",
+          "weight": 0.20,
+          "note": ""
+        },
+        "decision_dynamics_accuracy": {
+          "score": "pass",
+          "weight": 0.15,
+          "note": ""
+        },
+        "deal_cycle_coherence": {
+          "score": "pass",
+          "weight": 0.10,
+          "note": ""
+        }
+      },
+      "strengths": [
+        "Complete veto-holder coverage: CIO (economic buyer), CISO (security veto), Einkauf (procurement gatekeeper), Netzbetrieb (operational evaluator) — all four critical roles for a regulated energy utility",
+        "Pain points include specific deadlines (NIS2 October 2026, SAP IS-U EOL 2027, BNetzA 2028), regulatory references (KRITIS, SektVO, EU-Vergaberecht), and quantified thresholds (60% run-the-business, 30% cost reduction, 99.95% SLA)",
+        "Buying criteria read like RFP extracts — BSI C5 Type 2, Rahmenvertrag, SektVO compliance, 15-minute incident response SLAs",
+        "Deal stall points are specific and time-bounded: BSI audit 3-6 months, SektVO tender 3-6 months, Betriebsrat consultation, quarterly Vorstand cycle",
+        "12-18 month sales cycle with EUR 5-15M ACV is coherent for this segment — matches the 6 stall points and committee size of 6-10"
+      ],
+      "concerns": [],
+      "recommendations": []
+    },
+    {
+      "perspective": "cso",
+      "score": 86,
+      "overall": "warn",
+      "criteria": {
+        "account_targeting_clarity": {
+          "score": "pass",
+          "weight": 0.30,
+          "note": ""
+        },
+        "pain_to_proposition_mapping": {
+          "score": "warn",
+          "weight": 0.25,
+          "note": "CISO pain point on ransomware/zero-trust only partially maps to hybrid-cloud air-gap capability — no proposition directly addresses zero-trust architecture. Einkauf pain points are process-oriented (expected for gatekeeper) but AEs may surface procurement frustrations without a direct solution to offer."
+        },
+        "objection_anticipation": {
+          "score": "pass",
+          "weight": 0.20,
+          "note": ""
+        },
+        "multi_threading_guidance": {
+          "score": "pass",
+          "weight": 0.15,
+          "note": ""
+        },
+        "named_customer_actionability": {
+          "score": "warn",
+          "weight": 0.10,
+          "note": "No named customers present — profiles are useful for ICP-based targeting but less immediately actionable for account planning."
+        }
+      },
+      "strengths": [
+        "Excellent multi-threading guidance — four distinct profiles with clearly differentiated pain points and buying criteria enable role-specific conversations",
+        "Strong objection anticipation: BSI certification gaps, SektVO compliance, vendor lock-in concerns, Betriebsrat involvement are all surfaced with specific timing",
+        "Account targeting is clear — 5000+ employee German energy utilities with KRITIS obligations, EUR 1B+ revenue. AE knows exactly which 15-20 accounts to target",
+        "Each profile maps to distinct propositions: CIO to cloud-migration, CISO to sovereign-cloud, Netzbetrieb to hybrid-cloud — AE knows which capability to lead with per stakeholder"
+      ],
+      "concerns": [
+        "CISO ransomware/zero-trust pain point partially orphaned — hybrid-cloud air-gap is adjacent but not a direct zero-trust proposition",
+        "No named customers reduces immediate actionability for account planning"
+      ],
+      "recommendations": [
+        "OPTIONAL: Refine CISO ransomware pain point to align more directly with sovereign-cloud and hybrid-cloud capabilities (air-gap isolation, BSI-certified SOC) rather than generic zero-trust framing",
+        "OPTIONAL: Add named customers in a follow-up step to increase account planning actionability"
+      ]
+    },
+    {
+      "perspective": "market_expert",
+      "score": 100,
+      "overall": "pass",
+      "criteria": {
+        "segment_calibration": {
+          "score": "pass",
+          "weight": 0.30,
+          "note": ""
+        },
+        "vertical_authenticity": {
+          "score": "pass",
+          "weight": 0.25,
+          "note": ""
+        },
+        "temporal_accuracy": {
+          "score": "pass",
+          "weight": 0.20,
+          "note": ""
+        },
+        "information_source_validity": {
+          "score": "pass",
+          "weight": 0.15,
+          "note": ""
+        },
+        "regional_accuracy": {
+          "score": "pass",
+          "weight": 0.10,
+          "note": ""
+        }
+      },
+      "strengths": [
+        "Native energy sector terminology throughout: KRITIS, NIS2, SAP IS-U, Messstellenbetrieb, Netzleitstelle, SektVO, BSI C5, SCADA, OMS — a domain expert would not flag this as generated",
+        "Temporal references are current and correct: NIS2 October 2026, SAP IS-U EOL 2027, BNetzA 2028 digitalization mandate",
+        "Information sources are all verifiable and real: E-world (Essen), Handelsblatt Energietagung, BDEW Kongress, it-sa (Nuernberg), Energiewirtschaftliche Tagesfragen, VDE Kongress, FNN working groups, BME, ISA/IEC 62443",
+        "Segment calibration is precise: 5000+ employee utilities with EUR 5-15M ACV deals, 6-10 person committees, 12-18 month cycles — matches real procurement patterns for this tier",
+        "Regional accuracy is strong: SektVO, EU-Vergaberecht, Betriebsrat, BNetzA, Rahmenvertrag — correct German regulatory and procurement framework"
+      ],
+      "concerns": [],
+      "recommendations": []
+    }
+  ],
+  "synthesis": {
+    "conflicts": [],
+    "critical_improvements": [],
+    "high_improvements": [],
+    "optional_improvements": [
+      {
+        "description": "Refine CISO ransomware/zero-trust pain point to map more directly to portfolio capabilities (air-gap isolation, BSI-certified SOC monitoring) rather than generic zero-trust framing",
+        "stakeholders": ["cso"],
+        "affects": "profiles[1].pain_points[3]"
+      },
+      {
+        "description": "Add named customers in a follow-up step to increase account planning actionability for AEs",
+        "stakeholders": ["cso"],
+        "affects": "named_customers"
+      }
+    ],
+    "verdict": "accept",
+    "revision_guidance": "Profile is strong across all three perspectives. The only optional improvements are: (1) tighten the CISO ransomware pain point to reference specific portfolio capabilities rather than generic zero-trust, and (2) add named customers for immediate account planning value. Neither is required for profile readiness."
+  }
+}

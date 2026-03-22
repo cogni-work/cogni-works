@@ -1,0 +1,16 @@
+{
+  "slug": "sap-isu-abrechnung",
+  "product_slug": "digitale-energiedienste",
+  "name": "SAP-IS-U-Abrechnungsplattform",
+  "description": "SAP-IS-U-basierte Abrechnungsplattform fuer Massenabrechnungen von Strom, Gas, Wasser und Fernwaerme mit integriertem Geraetemanagement, Vertragskontokorrent, automatisierter Tarifkalkulation und EDIFACT-basierter Marktkommunikation nach aktuellen MaKo-Formatvorgaben der Bundesnetzagentur.",
+  "category": "billing",
+  "taxonomy_mapping": {
+    "dimension": 6,
+    "dimension_name": "Application Services",
+    "category_id": "6.3",
+    "category_name": "Enterprise Platform Services",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "created": "2026-03-18"
+}

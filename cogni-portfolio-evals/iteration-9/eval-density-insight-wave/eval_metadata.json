@@ -1,0 +1,27 @@
+{
+  "eval_id": 0,
+  "eval_name": "density-insight-wave",
+  "prompt": "Erstelle Features für das Produkt cogni-portfolio mit diesen Capabilities: Portfolio-Zerlegung nach IS/DOES/MEANS, Taxonomie-Klassifizierung, Qualitätsbewertung, Web-Research-Enrichment, Proposition-Generierung, Stakeholder-Review.",
+  "assertions": [
+    {
+      "id": "no-long-slugs",
+      "text": "All feature slugs have at most 3 hyphenated segments",
+      "type": "structural"
+    },
+    {
+      "id": "no-density",
+      "text": "No feature description lists 3+ comma-separated parallel components/activities",
+      "type": "structural"
+    },
+    {
+      "id": "word-count",
+      "text": "All feature descriptions are 20-35 words",
+      "type": "structural"
+    },
+    {
+      "id": "mechanism-not-catalog",
+      "text": "Each description names a core mechanism, not a catalog of sub-capabilities",
+      "type": "qualitative"
+    }
+  ]
+}

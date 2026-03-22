@@ -1,16 +1,16 @@
-# cogni-works
+# insight-wave
 
 Open-source plugin ecosystem for [Claude Cowork](https://claude.ai/cowork) — the Integrated Workplace Agent Environment for consulting, B2B sales, and marketing.
 
 Scale your delivery capacity with virtual co-workers that handle research, analysis, messaging, and visual production while you focus on strategic judgment and client relationships.
 
-Built and battle-tested at [cogni-work](https://github.com/cogni-work), then extracted for the community.
+Built and battle-tested at [insight-wave](https://github.com/insight-wave), then extracted for the community.
 
 ## Who this is for
 
 ### Consulting Boutiques
 
-You compete with Big 5 firms on complexity — but not on headcount. cogni-works gives your team 10x delivery capacity through AI-native workflows that handle the research-heavy, repetitive knowledge work:
+You compete with Big 5 firms on complexity — but not on headcount. insight-wave gives your team 10x delivery capacity through AI-native workflows that handle the research-heavy, repetitive knowledge work:
 
 - **Trend scouting** — scan industries bilingually (EN/DE), score trends against strategic frameworks, and generate evidence-backed reports in hours, not weeks
 - **Research reports** — parallel multi-agent web research with claims verification and three depth levels
@@ -20,7 +20,7 @@ You compete with Big 5 firms on complexity — but not on headcount. cogni-works
 
 ### Consulting Partners
 
-You see the AI consulting opportunity but need a platform and methodology to deliver it. cogni-works provides the production-ready plugin ecosystem:
+You see the AI consulting opportunity but need a platform and methodology to deliver it. insight-wave provides the production-ready plugin ecosystem:
 
 - **Open-source core** — 14 plugins covering the full consulting pipeline from research through delivery
 - **Extensible architecture** — build domain-specific plugins on the same framework
@@ -42,7 +42,7 @@ You want AI-native workflows for your sales and marketing teams — either self-
 | [cogni-canvas](./cogni-canvas) | Lean Canvas authoring and refinement — guided Q&A, section-by-section critique, multi-persona stress testing, and version tracking. |
 | [cogni-claims](./cogni-claims) | Verify sourced claims against cited URLs. Catches citation errors, misquotations, and unsupported conclusions before content ships. |
 | [cogni-copywriting](./cogni-copywriting) | Professional copywriting toolkit with messaging frameworks (BLUF, Pyramid, SCQA, STAR, PSB, FAB), multi-stakeholder review, and readability optimization. Bilingual EN/DE. |
-| [cogni-consulting](./cogni-consulting) | Double Diamond consulting orchestrator. Guides engagements through Discover, Define, Develop, Deliver by dispatching to cogni-works plugins at the right phase. Vision-first, method-aware, phase-gated. |
+| [cogni-consulting](./cogni-consulting) | Double Diamond consulting orchestrator. Guides engagements through Discover, Define, Develop, Deliver by dispatching to insight-wave plugins at the right phase. Vision-first, method-aware, phase-gated. |
 | [cogni-research](./cogni-research) | Multi-agent research report generator. STORM-inspired editorial workflow with parallel web research, claims-verified review loops, and three depth levels (basic, detailed, deep). |
 | [cogni-marketing](./cogni-marketing) | B2B marketing content engine. Bridges TIPS themes and portfolio propositions into channel-ready content across 16 formats — thought leadership, demand gen, lead gen, sales enablement, ABM. Bilingual DE/EN. |
 | [cogni-narrative](./cogni-narrative) | Story arc-driven narrative transformation. Transforms structured content into executive narratives using 6 story arc frameworks and 8 narrative techniques. Bilingual EN/DE. |
@@ -61,38 +61,38 @@ See [Cross-Plugin Data Flow](docs/er-diagram.md) for how data flows between plug
 ### Add the marketplace
 
 ```shell
-/plugin marketplace add cogni-work/cogni-works
+/plugin marketplace add insight-wave/insight-wave
 ```
 
 ### Install a plugin
 
 ```shell
-/plugin install cogni-canvas@cogni-works
-/plugin install cogni-claims@cogni-works
-/plugin install cogni-copywriting@cogni-works
-/plugin install cogni-consulting@cogni-works
-/plugin install cogni-research@cogni-works
-/plugin install cogni-marketing@cogni-works
-/plugin install cogni-narrative@cogni-works
-/plugin install cogni-obsidian@cogni-works
-/plugin install cogni-portfolio@cogni-works
-/plugin install cogni-sales@cogni-works
-/plugin install cogni-help@cogni-works
-/plugin install cogni-trends@cogni-works
-/plugin install cogni-visual@cogni-works
-/plugin install cogni-workspace@cogni-works
+/plugin install cogni-canvas@insight-wave
+/plugin install cogni-claims@insight-wave
+/plugin install cogni-copywriting@insight-wave
+/plugin install cogni-consulting@insight-wave
+/plugin install cogni-research@insight-wave
+/plugin install cogni-marketing@insight-wave
+/plugin install cogni-narrative@insight-wave
+/plugin install cogni-obsidian@insight-wave
+/plugin install cogni-portfolio@insight-wave
+/plugin install cogni-sales@insight-wave
+/plugin install cogni-help@insight-wave
+/plugin install cogni-trends@insight-wave
+/plugin install cogni-visual@insight-wave
+/plugin install cogni-workspace@insight-wave
 ```
 
 Or browse interactively with `/plugin` and go to the **Discover** tab.
 
 ## How it works
 
-cogni-works runs on [Claude Cowork](https://claude.ai/cowork), Anthropic's agentic desktop application. Plugins are installed from this marketplace and loaded on demand — skills, agents, and slash commands activate when relevant to your task.
+insight-wave runs on [Claude Cowork](https://claude.ai/cowork), Anthropic's agentic desktop application. Plugins are installed from this marketplace and loaded on demand — skills, agents, and slash commands activate when relevant to your task.
 
 The workplace combines Claude Cowork with [Obsidian](https://obsidian.md/) for persistent, browsable knowledge management. Everything runs on your laptop — no cloud infrastructure required, GDPR-compliant by design.
 
 ```
-cogni-works/
+insight-wave/
 ├── .claude-plugin/
 │   └── marketplace.json                    # Marketplace manifest (14 plugins)
 ├── docs/
@@ -135,7 +135,7 @@ Contact [stephan@cogni-work.ai](mailto:stephan@cogni-work.ai) to discuss your re
 
 We welcome contributions. See [CONTRIBUTING.md](CONTRIBUTING.md) for workflow, CLA requirements, and marketplace plugin guidelines. By participating you agree to abide by our [Code of Conduct](CODE_OF_CONDUCT.md).
 
-All plugins are developed directly in this monorepo. To report issues or suggest improvements, open an issue on [cogni-works](https://github.com/cogni-work/cogni-works/issues).
+All plugins are developed directly in this monorepo. To report issues or suggest improvements, open an issue on [insight-wave](https://github.com/insight-wave/insight-wave/issues).
 
 ## License
 

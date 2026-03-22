@@ -1,0 +1,16 @@
+{
+  "slug": "systemintegration-energiewirtschaft",
+  "product_slug": "digitale-energiedienste",
+  "name": "Systemintegration Energiewirtschaft",
+  "description": "Integrationsschicht zwischen energiewirtschaftlichen Kernsystemen (SAP IS-U, Netzleitsystem, Handelssystem, MDM) ueber ESB-Middleware und API-Gateway mit standardisierten Schnittstellen fuer Marktkommunikation und Messdatenaustausch.",
+  "category": "integration",
+  "taxonomy_mapping": {
+    "dimension": 6,
+    "dimension_name": "Application Services",
+    "category_id": "6.4",
+    "category_name": "System Integration & API",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "created": "2026-03-18"
+}

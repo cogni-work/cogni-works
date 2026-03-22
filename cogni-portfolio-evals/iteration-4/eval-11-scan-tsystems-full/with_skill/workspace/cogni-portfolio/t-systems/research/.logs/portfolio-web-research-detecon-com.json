@@ -1,0 +1,37 @@
+{
+  "domain": "detecon.com",
+  "provider_unit": "Detecon",
+  "company_name": "T-Systems International GmbH",
+  "template_type": "b2b-ict",
+  "timestamp": "2026-03-18T12:10:00Z",
+  "searches": {
+    "executed": 51,
+    "successful": 20,
+    "failed": 31,
+    "failed_categories": []
+  },
+  "offerings": [
+    {"category_id":"7.1","name":"IT Strategy & Transformation Consulting","description":"Technology strategy, IT transformation, and enterprise architecture management consulting for digital transformation planning and execution.","domain":"detecon.com","link":"https://www.detecon.com/en/consulting-areas","usp":"45+ years management consulting combined with deep technology expertise","provider_unit":"Detecon","pricing_model":"project-based","delivery_model":"hybrid","partners":"","verticals":"Telco, Automotive, Energy, Healthcare","horizon":"Current"},
+    {"category_id":"7.2","name":"Business & Digital Strategy Consulting","description":"Strategic business transformation consulting including digital innovation management, organizational transformation, and customer excellence advisory.","domain":"detecon.com","link":"https://www.detecon.com/en/strategic-business-transformation-consulting/business-digital-strategy-consulting","usp":"Integrated strategy-to-implementation with DigiTainability framework","provider_unit":"Detecon","pricing_model":"project-based","delivery_model":"hybrid","partners":"","verticals":"","horizon":"Current"},
+    {"category_id":"7.3","name":"Sustainability Management Consulting","description":"ESG strategy design, scaling, and implementation with data-driven approach combining digital transformation and sustainability for efficiency and compliance.","domain":"detecon.com","link":"https://www.detecon.com/en/process-application-modernization-consulting/sustainability-management-consulting","usp":"DigiTainability framework merging digital transformation with ESG strategy","provider_unit":"Detecon","pricing_model":"project-based","delivery_model":"hybrid","partners":"","verticals":"Automotive, Energy, Manufacturing","horizon":"Current"},
+    {"category_id":"7.3","name":"Industry-Specific Consulting","description":"Sector-focused advisory for telecommunications, automotive, energy, healthcare, and manufacturing industries with domain expertise.","domain":"detecon.com","link":"https://www.detecon.com/en/industries","usp":"Deep industry domain expertise across 6+ verticals with 45+ years track record","provider_unit":"Detecon","pricing_model":"project-based","delivery_model":"hybrid","partners":"","verticals":"Telco, Automotive, Energy, Healthcare, Manufacturing","horizon":"Current"},
+    {"category_id":"2.9","name":"Cybersecurity, Governance & Resilience Consulting","description":"End-to-end cybersecurity and privacy advisory from CISO/DPO-as-a-Service to AI-driven threat detection, governance, audits, and awareness training.","domain":"detecon.com","link":"https://www.detecon.com/en/cybersecurity-governance-resilience-consulting","usp":"On-demand CISO/DPO leadership with AI-driven threat detection advisory","provider_unit":"Detecon","pricing_model":"project-based","delivery_model":"hybrid","partners":"","verticals":"","horizon":"Current"},
+    {"category_id":"6.2","name":"Process & Application Modernization Consulting","description":"Consulting for systems modernization, workflow automation, and IT-business alignment to reduce costs and drive sustainable digital transformation.","domain":"detecon.com","link":"https://www.detecon.com/en/process-application-modernization-consulting","usp":"Business-IT alignment consulting with process automation integration","provider_unit":"Detecon","pricing_model":"project-based","delivery_model":"hybrid","partners":"","verticals":"","horizon":"Current"},
+    {"category_id":"4.5","name":"Cloud Transformation Consulting","description":"Cloud readiness assessments, operating model design, governance frameworks, and cloud sovereignty advisory for compliant cloud strategies.","domain":"detecon.com","link":"https://www.detecon.com/en/technology-infrastructure-transformation-consulting/cloud-transformation-consulting","usp":"Cloud sovereignty advisory with governance framework design","provider_unit":"Detecon","pricing_model":"project-based","delivery_model":"hybrid","partners":"","verticals":"","horizon":"Current"},
+    {"category_id":"6.6","name":"Applied AI & GenAI Consulting","description":"Emerging technologies consulting helping organizations adopt AI, GenAI, data management, IoT, quantum technology, and software-defined infrastructure.","domain":"detecon.com","link":"https://www.detecon.com/en/consulting-areas","usp":"Cross-technology emerging tech advisory covering AI to quantum","provider_unit":"Detecon","pricing_model":"project-based","delivery_model":"hybrid","partners":"","verticals":"","horizon":"Current"}
+  ],
+  "by_dimension": {
+    "1_connectivity": 0,
+    "2_security": 1,
+    "3_workplace": 0,
+    "4_cloud": 1,
+    "5_infrastructure": 0,
+    "6_application": 2,
+    "7_consulting": 5
+  },
+  "by_horizon": {
+    "current": 8,
+    "emerging": 0,
+    "future": 0
+  }
+}

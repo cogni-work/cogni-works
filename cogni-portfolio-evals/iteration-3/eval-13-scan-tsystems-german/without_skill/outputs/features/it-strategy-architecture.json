@@ -1,0 +1,13 @@
+{
+  "slug": "it-strategy-architecture",
+  "name": "IT-Strategie & Architekturberatung",
+  "description": "IT-Strategie und Architekturberatung ueber Detecon mit ganzheitlichem Ansatz fuer Strategy und Business Technology.",
+  "product_slug": "detecon-consulting",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 7,
+    "category_id": "7.1",
+    "category_name": "IT Strategy & Architecture"
+  },
+  "source_file": "https://www.t-systems.com/de/en/strategy-and-consulting"
+}

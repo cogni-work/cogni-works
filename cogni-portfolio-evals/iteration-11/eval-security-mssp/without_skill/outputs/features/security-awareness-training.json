@@ -1,0 +1,7 @@
+{
+  "slug": "security-awareness-training",
+  "product_slug": "managed-security",
+  "name": "Security Awareness Training",
+  "description": "Lernplattform mit Phishing-Simulationen, interaktiven Schulungsmodulen und rollenspezifischen Kampagnen zur Messung und Steigerung des Sicherheitsbewusstseins der Mitarbeitenden.",
+  "readiness": "ga"
+}

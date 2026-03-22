@@ -1,0 +1,7 @@
+{
+  "slug": "compliance-monitoring",
+  "product_slug": "managed-security",
+  "name": "Compliance-Monitoring",
+  "description": "Automatisierte Pruefung der IT-Umgebung gegen regulatorische Frameworks wie ISO 27001, BSI-Grundschutz und DSGVO mit kontinuierlicher Kontrollauswertung und Abweichungsprotokollierung.",
+  "readiness": "ga"
+}

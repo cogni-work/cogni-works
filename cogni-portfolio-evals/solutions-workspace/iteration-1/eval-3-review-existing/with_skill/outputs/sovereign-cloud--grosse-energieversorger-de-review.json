@@ -1,0 +1,194 @@
+{
+  "solution_slug": "sovereign-cloud--grosse-energieversorger-de",
+  "solution_type": "project",
+  "overall": "warn",
+  "overall_score": 74,
+  "stakeholder_reviews": [
+    {
+      "perspective": "reviewer",
+      "score": 78,
+      "overall": "warn",
+      "criteria": {
+        "roi_clarity": {
+          "score": "pass",
+          "weight": 0.30,
+          "note": ""
+        },
+        "budget_fit": {
+          "score": "pass",
+          "weight": 0.25,
+          "note": ""
+        },
+        "risk_reward_transparency": {
+          "score": "warn",
+          "weight": 0.20,
+          "note": "Assumption 'BSI-C5-Attestierung der Plattform ist gegeben' is critical but unverified from the buyer's perspective. The buyer's procurement team will want to see the attestation certificate and its validity period. Also, the 6 assumptions are the minimum — missing scope exclusions for non-KRITIS applications."
+        },
+        "competitive_positioning": {
+          "score": "warn",
+          "weight": 0.15,
+          "note": "No competitor data. Sovereign cloud is a differentiator for T-Systems (vs. pure hyperscaler offerings), but buyers will compare against Ionos, STACKIT (Schwarz Gruppe), and potentially Delos Cloud. The unique selling point (BSI-C5 + no non-EU jurisdiction) should be explicitly positioned against these alternatives."
+        },
+        "decision_pathway": {
+          "score": "pass",
+          "weight": 0.10,
+          "note": ""
+        }
+      },
+      "strengths": [
+        "MEANS statement is powerful for CFO: 40-60% reduction in compliance evidence effort — directly quantifiable cost savings",
+        "NIS2 April 2026 deadline creates genuine urgency — the solution leverages a real market trigger",
+        "PoV scope (3 KRITIS applications with gap report) gives CISO a concrete deliverable for compliance planning",
+        "Price range (38.5K-780K) is appropriate for large utility compliance programs"
+      ],
+      "concerns": [
+        "BSI-C5 attestation validity period not specified — buyer needs to know the recertification cadence",
+        "No competitive positioning against other sovereign/compliant cloud providers (Ionos, STACKIT, Delos)"
+      ],
+      "recommendations": [
+        "HIGH: Specify BSI-C5 attestation type (Typ 1 vs. Typ 2) and validity/recertification cadence in assumptions",
+        "OPTIONAL: Add competitive differentiation vs. Ionos, STACKIT, and Delos Cloud"
+      ]
+    },
+    {
+      "perspective": "provider_sa",
+      "score": 70,
+      "overall": "warn",
+      "criteria": {
+        "delivery_realism": {
+          "score": "warn",
+          "weight": 0.30,
+          "note": "Phase 1 (Compliance-Assessment, 2 weeks) with 22 person-days across the PoV is tight for assessing KRITIS applications against BSI-C5. The assessment requires not just technical evaluation but also reviewing existing security documentation and regulatory filings. For 3 applications (PoV scope), 2 weeks is feasible. For 30 applications (Medium), this phase would need 4-6 weeks."
+        },
+        "scope_effort_coherence": {
+          "score": "warn",
+          "weight": 0.25,
+          "note": "Small tier margin at 28.8% is below the 30% target. Given the compliance-heavy nature of sovereign cloud (more architect days per application due to security documentation), the effort estimate may undercount Solution Architect involvement in the Small tier — 22 days of SA for 10 applications with full BSI-C5 documentation is lean."
+        },
+        "phase_architecture": {
+          "score": "pass",
+          "weight": 0.20,
+          "note": ""
+        },
+        "does_traceability": {
+          "score": "pass",
+          "weight": 0.15,
+          "note": ""
+        },
+        "tier_scalability": {
+          "score": "warn",
+          "weight": 0.10,
+          "note": "Small and Medium tiers follow the same approach — deploy to sovereign cloud with compliance documentation. The qualitative difference (NIS2 registration support and Identity Federation in Medium) is present but thin. Medium should more clearly represent a different engagement model, not just more applications."
+        }
+      },
+      "strengths": [
+        "Phase architecture is well-adapted to compliance work — not generic cloud deployment phases",
+        "Pre-audit in Phase 4 is the right approach — catches compliance gaps before the real BSI audit",
+        "Compliance documentation running in parallel with workload onboarding is efficient",
+        "NIS2 deadline as external driver in assumptions is smart — it's a real constraint that shapes the timeline"
+      ],
+      "concerns": [
+        "Small tier margin (28.8%) below 30% target — SA effort for compliance documentation may be underestimated",
+        "Phase 1 duration doesn't scale with tier — assessing 30 applications (Medium) needs more than 2 weeks",
+        "Small-to-Medium tier differentiation is thin"
+      ],
+      "recommendations": [
+        "HIGH: Increase Small tier SA days from 22 to 26-28 to account for compliance documentation effort, or adjust pricing to restore 30% margin",
+        "HIGH: Note that phase durations shown are baseline (Small tier) — Medium and Large need proportionally longer Phase 1 and Phase 3",
+        "OPTIONAL: Strengthen Medium tier differentiation — e.g., Medium includes identity federation architecture and cross-department compliance governance"
+      ]
+    },
+    {
+      "perspective": "client_sa",
+      "score": 73,
+      "overall": "warn",
+      "criteria": {
+        "integration_feasibility": {
+          "score": "warn",
+          "weight": 0.30,
+          "note": "Large tier mentions OT-Anbindung but the implementation phases don't address how OT systems connect to the sovereign cloud platform. For energy utilities, connecting SCADA/Netzleitstellen to cloud infrastructure requires specific security zones and protocols (IEC 62351, OPC-UA) — this is not a standard cloud deployment pattern."
+        },
+        "dependency_risk": {
+          "score": "pass",
+          "weight": 0.25,
+          "note": ""
+        },
+        "operational_readiness": {
+          "score": "pass",
+          "weight": 0.20,
+          "note": ""
+        },
+        "vendor_lockin": {
+          "score": "warn",
+          "weight": 0.15,
+          "note": "Solution mentions Open-Source-based sovereign cloud, which is good for lock-in mitigation. However, no explicit data portability or exit clause is mentioned (unlike the SAP solution which has a 4-week knowledge transfer exit clause). For a compliance-critical platform, the buyer needs to know they can migrate off."
+        },
+        "security_compliance": {
+          "score": "pass",
+          "weight": 0.10,
+          "note": ""
+        }
+      },
+      "strengths": [
+        "Security and compliance is the core value — BSI-C5, KRITIS, and non-EU jurisdiction are explicitly addressed",
+        "Customer enablement in Phase 4 ensures the internal team can maintain compliance posture",
+        "Client prerequisites (KRITIS application inventory, existing security documentation) are specific and reasonable",
+        "Open-Source foundation reduces technical lock-in risk"
+      ],
+      "concerns": [
+        "OT-Anbindung mentioned in Large tier scope but no implementation approach for SCADA/OT integration",
+        "No exit clause or data portability statement — critical for a compliance platform where switching costs are high"
+      ],
+      "recommendations": [
+        "HIGH: Add exit clause similar to SAP solution — knowledge transfer period and data export guarantee for compliance documentation",
+        "HIGH: Either add OT integration approach to implementation phases or explicitly scope it out of the sovereign cloud solution",
+        "OPTIONAL: Reference specific compliance standards for OT connectivity (IEC 62351, OPC-UA) if OT integration is in scope"
+      ]
+    }
+  ],
+  "synthesis": {
+    "conflicts": [
+      {
+        "tension": "Reviewer values NIS2 urgency as a sales accelerator; Provider SA warns that compressed timelines risk compliance quality",
+        "resolution": "Use NIS2 urgency for PoV conversion (fast compliance assessment) but maintain realistic timelines for full deployment — compliance shortcuts create audit failures downstream"
+      }
+    ],
+    "critical_improvements": [],
+    "high_improvements": [
+      {
+        "description": "Add exit clause with knowledge transfer and compliance documentation portability guarantee",
+        "stakeholders": ["client_sa"],
+        "affects": "cost_model.assumptions"
+      },
+      {
+        "description": "Specify BSI-C5 attestation type and recertification cadence",
+        "stakeholders": ["reviewer"],
+        "affects": "cost_model.assumptions"
+      },
+      {
+        "description": "Increase Small tier SA effort or price to meet 30% target margin",
+        "stakeholders": ["provider_sa"],
+        "affects": "cost_model.effort_by_tier.small"
+      },
+      {
+        "description": "Address OT integration approach or explicitly scope out SCADA connectivity",
+        "stakeholders": ["client_sa", "provider_sa"],
+        "affects": "implementation, cost_model.assumptions"
+      }
+    ],
+    "optional_improvements": [
+      {
+        "description": "Add competitive differentiation vs. Ionos, STACKIT, Delos Cloud",
+        "stakeholders": ["reviewer"],
+        "affects": "pricing rationale"
+      },
+      {
+        "description": "Strengthen Medium tier qualitative differentiation from Small",
+        "stakeholders": ["provider_sa"],
+        "affects": "pricing.medium.scope"
+      }
+    ],
+    "verdict": "revise",
+    "revision_guidance": "Weakest of the three solutions on delivery realism and lock-in mitigation. Focus on: (1) Add exit clause — the SAP solution has one but the sovereign cloud solution doesn't, which is a glaring gap for a compliance platform. (2) Clarify BSI-C5 attestation specifics. (3) Fix Small tier margin below target. (4) Address OT integration or scope it out — it appears in Large tier scope but has no delivery approach."
+  }
+}

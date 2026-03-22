@@ -1,0 +1,7 @@
+{
+  "slug": "pipeline-matching",
+  "product_slug": "partner-portal",
+  "name": "Pipeline-Matching",
+  "description": "Abgleich-Engine, die offene Verkaufschancen des Anbieters mit den Kompetenzprofilen und regionalen Abdeckungen registrierter Partner abgleicht und priorisierte Zuordnungen vorschlägt.",
+  "readiness": "ga"
+}

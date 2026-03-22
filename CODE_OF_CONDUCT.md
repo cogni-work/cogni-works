@@ -10,7 +10,7 @@ If you experience or witness unacceptable behavior, please contact **stephan@cog
 
 ## Scope
 
-This code of conduct applies to all project spaces — including issues, pull requests, discussions, and any other communication channels associated with cogni-works and its plugins.
+This code of conduct applies to all project spaces — including issues, pull requests, discussions, and any other communication channels associated with insight-wave and its plugins.
 
 ## Enforcement
 

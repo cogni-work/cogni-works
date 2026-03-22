@@ -1,0 +1,13 @@
+{
+  "slug": "bechtle-iam",
+  "name": "Bechtle Identity & Access Management",
+  "description": "IAM solutions with SailPoint AI-automated identity governance and BeyondTrust privileged access management for enterprise identity security.",
+  "product_slug": "bechtle-security",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 2,
+    "category_id": "2.2",
+    "category_name": "Identity & Access Management"
+  },
+  "source_file": "https://www.bechtle.com/ch-en/it-solutions/it-security/iam-identity-and-access-management"
+}

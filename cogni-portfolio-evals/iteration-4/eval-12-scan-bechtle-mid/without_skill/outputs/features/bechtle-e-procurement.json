@@ -1,0 +1,13 @@
+{
+  "slug": "bechtle-e-procurement",
+  "name": "Bechtle E-Procurement & Vendor Management",
+  "description": "Multi-vendor IT procurement with contract pricing, framework agreements, ERP integration (SAP Ariba, Coupa), license optimization, and IT financing consultation.",
+  "product_slug": "bechtle-consulting",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 7,
+    "category_id": "7.5",
+    "category_name": "Vendor & Contract Management"
+  },
+  "source_file": "https://www.bechtle.com/pl-en/about-bechtle/e-procurement-services/erp-connection"
+}

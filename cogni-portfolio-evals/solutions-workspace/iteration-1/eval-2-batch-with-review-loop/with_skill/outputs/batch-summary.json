@@ -1,0 +1,79 @@
+{
+  "batch_id": "eval-2-batch-with-review-loop",
+  "project": "t-systems-solutions",
+  "market": "grosse-energieversorger-de",
+  "solution_type": "project",
+  "language": "de",
+  "generated": "2026-03-18",
+  "total_solutions": 3,
+  "results": {
+    "accepted_round_1": [
+      {
+        "slug": "sovereign-cloud--grosse-energieversorger-de",
+        "round_1_score": 87,
+        "round_1_verdict": "accept",
+        "highlights": "Alle drei Perspektiven 85+. BSI-C5-Compliance durchgängig adressiert, NIS2-Deadline als externer Budgettreiber, Pre-Audit als eigene Phase.",
+        "optional_improvements": [
+          "Wettbewerbsdifferenzierung gegenüber anderen BSI-C5-Anbietern",
+          "Exit-Strategie und Datenportabilität via Open-Source-Basis (OSC)"
+        ]
+      }
+    ],
+    "accepted_round_2": [
+      {
+        "slug": "cloud-migration--grosse-energieversorger-de",
+        "round_1_score": 82,
+        "round_1_verdict": "revise",
+        "round_1_issues": [
+          "Large-Tier: 420 Tage in 36 Wochen = 2.3 FTE bei 80+ Workloads — Timeline unrealistisch",
+          "Keine Aussage zu Cloud-Provider-Portabilität"
+        ],
+        "revisions_applied": [
+          "Large-Tier Scope von '80+' auf '60-80 Workloads' begrenzt, Timeline 36→40 Wochen",
+          "IaC/Container-Portabilitäts-Annahme ergänzt"
+        ],
+        "round_2_score": 87,
+        "round_2_verdict": "accept"
+      },
+      {
+        "slug": "sap-on-cloud--grosse-energieversorger-de",
+        "round_1_score": 80,
+        "round_1_verdict": "revise",
+        "round_1_issues": [
+          "Parallelbetrieb 6 Wochen zu knapp für IS-U-Abrechnungszyklen",
+          "Hochlast-Validierung 2 Wochen reicht nicht für Jahresabrechnungs-Lasttest",
+          "Kein Eskalations-Enablement für internes Restteam",
+          "Exit-Strategie und Knowledge-Transfer nicht adressiert"
+        ],
+        "revisions_applied": [
+          "Parallelbetrieb 6→8 Wochen (vollständiger Abrechnungszyklus)",
+          "Hochlast-Validierung 2→3 Wochen (synthetische + reale Tests)",
+          "Eskalations-Enablement in Betriebsfreigabe-Phase aufgenommen",
+          "Exit-Klausel mit 4-Wochen Knowledge-Transfer in Annahmen",
+          "Pricing-Scopes mit aktualisierten Timelines"
+        ],
+        "round_2_score": 87,
+        "round_2_verdict": "accept"
+      }
+    ],
+    "needs_attention": []
+  },
+  "portfolio_summary": {
+    "pricing_range": {
+      "proof_of_value": { "min": 38500, "max": 49000, "currency": "EUR" },
+      "small": { "min": 150000, "max": 200000, "currency": "EUR" },
+      "medium": { "min": 380000, "max": 480000, "currency": "EUR" },
+      "large": { "min": 780000, "max": 1100000, "currency": "EUR" }
+    },
+    "total_timeline_range": "11-40 Wochen",
+    "margin_profile": {
+      "pov_range": "12.7-14.3%",
+      "standard_range": "28.8-40.0%",
+      "target_met": "Standard-Tiers nahe oder über 30% Zielmarge"
+    },
+    "common_optional_improvements": [
+      "Wettbewerbsdaten für alle drei Lösungen fehlen — empfohlen für Einkaufsprozess",
+      "Cloud-Provider-Lock-in / Exit-Strategie nur bei SAP explizit adressiert"
+    ]
+  }
+}

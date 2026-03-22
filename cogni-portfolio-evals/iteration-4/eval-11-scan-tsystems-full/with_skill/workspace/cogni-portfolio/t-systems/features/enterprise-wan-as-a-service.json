@@ -1,0 +1,16 @@
+{
+  "slug": "enterprise-wan-as-a-service",
+  "product_slug": "connectivity-services",
+  "name": "Enterprise WAN-as-a-Service",
+  "description": "Managed WAN built on a global MPLS core backbone integrating site-to-site networking, cloud connectivity endpoints, mobile user access, and extranet partner connections under a single service contract.",
+  "taxonomy_mapping": {
+    "dimension": 1,
+    "dimension_name": "Connectivity Services",
+    "category_id": "1.1",
+    "category_name": "WAN Services",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

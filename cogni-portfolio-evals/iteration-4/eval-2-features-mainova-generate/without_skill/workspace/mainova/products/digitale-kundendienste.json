@@ -1,0 +1,13 @@
+{
+  "slug": "digitale-kundendienste",
+  "name": "Digitale Kundendienste",
+  "description": "Digitale Endkunden-Services fuer rund eine Million Kunden im Raum Frankfurt/Rhein-Main. Umfasst Smart-Metering-Infrastruktur, Kundenportale, digitale Vertriebskanaele, Verbrauchstransparenz und Mehrwertdienste rund um Energie.",
+  "features": [
+    "smart-metering-infrastruktur",
+    "kundenportal-selfservice",
+    "digitaler-vertragsabschluss",
+    "verbrauchstransparenz",
+    "omnichannel-kundenkommunikation",
+    "mehrwertdienste-plattform"
+  ]
+}

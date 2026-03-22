@@ -1,0 +1,16 @@
+{
+  "slug": "corporate-sip-international",
+  "product_slug": "connectivity-services",
+  "name": "Corporate SIP International",
+  "description": "Central SIP gateway service bundling enterprise external voice traffic across 18 European countries via a single managed gateway with 50,000 voice channel capacity and full number portability.",
+  "taxonomy_mapping": {
+    "dimension": 1,
+    "dimension_name": "Connectivity Services",
+    "category_id": "1.5",
+    "category_name": "Voice Services",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

@@ -1,0 +1,14 @@
+{
+  "slug": "revenue-share",
+  "product_slug": "partner-portal",
+  "name": "Revenue-Share-Abrechnung",
+  "description": "Automatisierte Umsatzbeteiligung auf Basis vertraglich hinterlegter Margenmodelle, die individuelle Deal-Beiträge beider Seiten über ein transparentes Provisionsledger aufschlüsselt und Abrechnungszyklen mit konfigurierbaren Schwellenwerten pro Partnerklasse steuert.",
+  "category": "monetization",
+  "taxonomy_mapping": {
+    "dimension": "Application Services",
+    "category_id": "6.5",
+    "category_name": "Business Process Management"
+  },
+  "readiness": "ga",
+  "created": "2026-03-21"
+}

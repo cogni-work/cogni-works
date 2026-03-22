@@ -1,0 +1,16 @@
+{
+  "slug": "it-strategy-transformation-consulting",
+  "product_slug": "consulting-services",
+  "name": "IT Strategy and Transformation Consulting",
+  "description": "Detecon management consulting for technology strategy, IT transformation, and enterprise architecture management with 45+ years advisory track record across telecommunications, automotive, energy, and healthcare.",
+  "taxonomy_mapping": {
+    "dimension": 7,
+    "dimension_name": "Consulting Services",
+    "category_id": "7.1",
+    "category_name": "IT Strategy & Architecture",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

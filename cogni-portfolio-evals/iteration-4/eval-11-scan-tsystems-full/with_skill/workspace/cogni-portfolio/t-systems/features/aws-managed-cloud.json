@@ -1,0 +1,16 @@
+{
+  "slug": "aws-managed-cloud",
+  "product_slug": "cloud-services",
+  "name": "AWS Managed Cloud Services",
+  "description": "End-to-end AWS managed services covering migration, daily operations, optimization, and FinOps cost management as AWS Premier Consulting Partner with ISG Leader positioning in three categories.",
+  "taxonomy_mapping": {
+    "dimension": 4,
+    "dimension_name": "Cloud Services",
+    "category_id": "4.1",
+    "category_name": "Managed Hyperscaler Services",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

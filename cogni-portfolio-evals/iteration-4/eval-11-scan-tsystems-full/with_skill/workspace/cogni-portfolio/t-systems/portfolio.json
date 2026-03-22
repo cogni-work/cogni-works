@@ -1,0 +1,38 @@
+{
+  "slug": "t-systems",
+  "company": {
+    "name": "T-Systems International GmbH",
+    "domain": "t-systems.com",
+    "industry": "ICT Services",
+    "country": "DE",
+    "employees": 28000,
+    "products": [
+      "application-services",
+      "cloud-services",
+      "connectivity-services",
+      "consulting-services",
+      "infrastructure-services",
+      "security-services",
+      "workplace-services"
+    ]
+  },
+  "taxonomy": {
+    "type": "b2b-ict",
+    "version": "3.7",
+    "dimensions": 8,
+    "categories": 57,
+    "source": "cogni-portfolio/templates/b2b-ict/template.md"
+  },
+  "language": "en",
+  "products": [
+    "connectivity-services",
+    "security-services",
+    "workplace-services",
+    "cloud-services",
+    "infrastructure-services",
+    "application-services",
+    "consulting-services"
+  ],
+  "features": [],
+  "updated": "2026-03-18"
+}

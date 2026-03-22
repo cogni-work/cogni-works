@@ -1,0 +1,155 @@
+{
+  "slug": "cloud-migration--grosse-energieversorger-de",
+  "review_round": 1,
+  "perspectives": [
+    {
+      "role": "procurement",
+      "role_label": "Einkauf / Procurement (SektVO-konform)",
+      "criteria": [
+        {
+          "criterion": "Preistransparenz und Vergleichbarkeit",
+          "score": 7,
+          "max_score": 10,
+          "finding": "Drei Pricing-Tiers bieten gute Vergleichbarkeit. Allerdings fehlt eine explizite Contingency-Budget-Position; der Kunde weiss nicht, wie Scope-Aenderungen bepreist werden.",
+          "recommendation": "Contingency-Budget als separate Position mit Abrufmechanismus (Change-Request-basiert) ausweisen."
+        },
+        {
+          "criterion": "SektVO-/EU-Vergaberechts-Konformitaet",
+          "score": 6,
+          "max_score": 10,
+          "finding": "Loswuerdig strukturiert (Phasen als Lose). Aber keine explizite Aussage zur Vergaberechts-Konformitaet der Rahmenvertragsstruktur.",
+          "recommendation": "Hinweis auf SektVO-konforme Losbildung und EU-Vergabe-kompatible Vertragsstruktur ergaenzen."
+        },
+        {
+          "criterion": "Exit-Strategie und Vendor-Lock-in-Risiko",
+          "score": 5,
+          "max_score": 10,
+          "finding": "Keine Exit-Strategie dokumentiert. Kein Hinweis auf Daten-Repatriierung, IaC-Portabilitaet oder vertragliche Exit-Klauseln.",
+          "recommendation": "Exit-Strategie mit Daten-Repatriierungsplan, IaC-Portabilitaet und vertraglichen Exit-Klauseln ergaenzen."
+        },
+        {
+          "criterion": "Milestone-basierte Zahlungsstruktur",
+          "score": 8,
+          "max_score": 10,
+          "finding": "Phasenweise Milestones sind gut. 10% bei Vertragsunterzeichnung ist branchenueblich. Keine Leistungs-Malus-Klausel bei SLA-Verletzung.",
+          "recommendation": "SLA-gebundene Malus-/Bonus-Regelung fuer Phase 4+ ergaenzen."
+        },
+        {
+          "criterion": "Wettbewerbsfaehigkeit (TCO-Benchmark)",
+          "score": 5,
+          "max_score": 10,
+          "finding": "Kein TCO-Vergleich mit alternativen Ansaetzen (Hyperscaler-led, Inhouse). Einkauf kann Preisangemessenheit nicht bewerten.",
+          "recommendation": "Competitive TCO-Vergleich (3 Szenarien) mit 5-Jahres-Projektion ergaenzen."
+        }
+      ],
+      "overall_score": 31,
+      "max_overall_score": 50,
+      "verdict": "revision_needed",
+      "summary": "Solide Grundstruktur, aber Einkauf wird Exit-Strategie, Contingency-Transparenz und TCO-Benchmark fordern."
+    },
+    {
+      "role": "provider_sa",
+      "role_label": "Provider Solution Architect (T-Systems)",
+      "criteria": [
+        {
+          "criterion": "Technische Umsetzbarkeit der Phasen",
+          "score": 9,
+          "max_score": 10,
+          "finding": "Phasenmodell ist realistisch und folgt bewaehrter CMF-Methodik. 6R-Zuordnung und gestaffeltes Wellenmodell sind Standard. Timing ist ambitioniert aber machbar.",
+          "recommendation": "Keine Aenderung noetig."
+        },
+        {
+          "criterion": "Team-Dimensionierung und Skill-Mix",
+          "score": 8,
+          "max_score": 10,
+          "finding": "Team-Groessen sind angemessen. In Phase 4 koennten 5 Implementation Engineers fuer 80-120 kritische Workloads knapp sein, wenn Custom-Integrationen anfallen.",
+          "recommendation": "Buffer-Kapazitaet fuer Phase 4 einplanen (6. Engineer on-call)."
+        },
+        {
+          "criterion": "Risikomanagement und Mitigationsplaene",
+          "score": 7,
+          "max_score": 10,
+          "finding": "Vier Risiken identifiziert, alle relevant. Es fehlt ein quantifiziertes Contingency-Budget pro Risiko.",
+          "recommendation": "Contingency-Budget je Risiko (%) ausweisen; Gesamtpuffer von 10% vorsehen."
+        },
+        {
+          "criterion": "KRITIS-Compliance-Abdeckung",
+          "score": 8,
+          "max_score": 10,
+          "finding": "BSI-C5, NIS2 und KRITIS-DachG werden adressiert. Audit-Trail ab Phase 1 ist wichtig. NIS2-Timeline-Abhaengigkeit ist korrekt erkannt.",
+          "recommendation": "Expliziten BSI-Vorab-Assessment-Termin in Phase 1 fixieren."
+        },
+        {
+          "criterion": "Scope-Abgrenzung (OT/IT-Boundary)",
+          "score": 9,
+          "max_score": 10,
+          "finding": "Klare Abgrenzung: SCADA bleibt on-prem, nur IT-Schnittstellen werden migriert. SAP-funktionale Migration explizit ausgeschlossen.",
+          "recommendation": "Keine Aenderung noetig."
+        }
+      ],
+      "overall_score": 41,
+      "max_overall_score": 50,
+      "verdict": "minor_revision",
+      "summary": "Technisch solide. Contingency-Quantifizierung und Phase-4-Buffer wuerden Delivery-Risiko weiter reduzieren."
+    },
+    {
+      "role": "client_sa",
+      "role_label": "Client Solution Architect (Energieversorger)",
+      "criteria": [
+        {
+          "criterion": "Adressierung der Kern-Pain-Points",
+          "score": 8,
+          "max_score": 10,
+          "finding": "KRITIS-Compliance, Energiewende-Skalierung und Fachkraeftemangel werden adressiert. Smart-Meter-Rollout-Abhaengigkeit koennte staerker herausgearbeitet werden.",
+          "recommendation": "Smart-Meter-Gateway-Integration als optionalen Scope-Baustein benennen."
+        },
+        {
+          "criterion": "Belastung der internen IT-Mannschaft",
+          "score": 6,
+          "max_score": 10,
+          "finding": "Schulungsprogramm in Phase 2 ist gut. Aber Abnahme-Prozess in 5 Phasen kann interne Kapazitaet ueberlasten (CIO-Pain-Point: Fachkraeftemangel).",
+          "recommendation": "Abnahme-Delegationsmodell mit max. 2 Kunden-Ansprechpartnern und automatischer Abnahme nach 48h Stillschweigen."
+        },
+        {
+          "criterion": "Integration in bestehende IT-Strategie",
+          "score": 7,
+          "max_score": 10,
+          "finding": "Multi-Cloud-Strategie wird implizit unterstuetzt. Keine explizite Aussage zur Integration mit bestehenden Hyperscaler-Vertraegen oder IT-Governance-Frameworks.",
+          "recommendation": "Explizite Integrationspunkte zu bestehender IT-Governance und Hyperscaler-Vertraegen benennen."
+        },
+        {
+          "criterion": "Realistischer Zeithorizont",
+          "score": 7,
+          "max_score": 10,
+          "finding": "50 Wochen fuer 140-200 Workloads ist ambitioniert aber machbar. Abhaengigkeit von NIS2-Registrierung (April 2026) als Blocker korrekt identifiziert.",
+          "recommendation": "Puffer zwischen Phase 3 und 4 (2 Wochen) fuer NIS2-Abhaengigkeit einplanen."
+        },
+        {
+          "criterion": "Nachhaltige Betriebsfaehigkeit nach Projektende",
+          "score": 6,
+          "max_score": 10,
+          "finding": "Wissenstransfer und Betriebshandbuch in Phase 5. Aber kein expliziter Uebergangsplan in Managed Services oder Retained-IT-Modell.",
+          "recommendation": "Explizite Optionen: (a) Uebergang in T-Systems Managed Services, (b) Retained-IT mit T-Systems 2nd-Level-Support."
+        }
+      ],
+      "overall_score": 34,
+      "max_overall_score": 50,
+      "verdict": "revision_needed",
+      "summary": "Gute technische Grundlage. Revision noetig bei Exit-Strategie, interner Belastungsreduktion und Betriebsmodell-Optionen."
+    }
+  ],
+  "aggregate": {
+    "total_score": 106,
+    "max_score": 150,
+    "pct": 70.7,
+    "revision_needed": true,
+    "top_revision_items": [
+      "Exit-Strategie mit Daten-Repatriierung und IaC-Portabilitaet ergaenzen",
+      "Contingency-Budget quantifizieren (10% Gesamtpuffer, aufgeschluesselt nach Risiko)",
+      "Competitive TCO-Vergleich (3 Szenarien, 5 Jahre) ergaenzen",
+      "Abnahme-Delegationsmodell mit 48h-Stillschweigen-Regel einfuehren",
+      "Betriebsmodell-Optionen (Managed Services vs. Retained-IT) benennen"
+    ]
+  },
+  "created": "2026-03-18"
+}

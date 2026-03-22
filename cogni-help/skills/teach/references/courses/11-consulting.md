@@ -2,7 +2,7 @@
 
 **Duration**: 45 minutes | **Modules**: 5 | **Prerequisites**: Courses 1-10 (capstone)
 **Plugin**: cogni-consulting (v0.1.0, 7 skills, 1 agent, 1 hook)
-**Audience**: Consultants running structured engagements across the cogni-works ecosystem
+**Audience**: Consultants running structured engagements across the insight-wave ecosystem
 
 ---
 
@@ -10,7 +10,7 @@
 
 ### Theory (3 min)
 
-**cogni-consulting** is the orchestrator that ties the entire cogni-works ecosystem together.
+**cogni-consulting** is the orchestrator that ties the entire insight-wave ecosystem together.
 Instead of producing content itself, it manages engagement state and dispatches to the
 right plugin at the right moment.
 
@@ -133,7 +133,7 @@ Walk through Diamond 1:
 
 Ask the user to:
 1. For their engagement from Module 1, list 3 things they'd want to discover
-2. Which cogni-works plugin would handle each? (researcher, tips, or portfolio?)
+2. Which insight-wave plugin would handle each? (researcher, tips, or portfolio?)
 3. What are the top 2 assumptions that must be true for this engagement to succeed?
 4. Frame one "How Might We" question from their engagement context
 
@@ -283,7 +283,7 @@ Ask the user to:
    - a) Only the final deliverables
    - b) Phase state, plugin dispatches, methods used, decisions logged, and recommended next action
    - c) Only the engagement name
-   - d) A list of all cogni-works plugins
+   - d) A list of all insight-wave plugins
    **Answer**: b
 
 2. **Multiple choice**: Why are phase gates advisory rather than blocking?
@@ -376,7 +376,7 @@ Ask the user to:
 - `consulting-export` generates deliverables by dispatching to cogni-visual and document-skills
 - The deliverable map links vision classes to recommended output formats
 - The full pipeline: setup → discover → define → develop → deliver → export
-- Every cogni-works plugin has a role; cogni-consulting sequences their work
+- Every insight-wave plugin has a role; cogni-consulting sequences their work
 
 ---
 
@@ -384,7 +384,7 @@ Ask the user to:
 
 Congratulations — you have completed all 11 courses in the cogni-help curriculum!
 
-**Your complete cogni-works toolkit (14 plugins)**:
+**Your complete insight-wave toolkit (14 plugins)**:
 1. **Claude Cowork** — Your agentic AI platform (Course 1)
 2. **cogni-workspace** — Shared project foundation (Course 2)
 3. **cogni-obsidian** — Knowledge management dashboard (Course 2)
@@ -406,7 +406,7 @@ Canvas (hypothesis) → Portfolio (messaging) → Research → Analyze → Write
                                               └─── cogni-consulting orchestrates all of this ───┘
 ```
 
-Every step has a cogni-works plugin. cogni-consulting ties them together into structured
+Every step has a insight-wave plugin. cogni-consulting ties them together into structured
 engagements with phase-gated delivery and multi-session state management.
 Your expertise drives the strategy; the tools execute the heavy lifting.
 

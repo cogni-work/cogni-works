@@ -1,0 +1,16 @@
+{
+  "slug": "sase",
+  "product_slug": "connectivity-services",
+  "name": "Secure Access Service Edge",
+  "description": "Cloud-delivered converged WAN and security framework replacing on-premises appliances with a unified platform providing ZTNA, CASB, and SWG functions with zero-hardware maintenance.",
+  "taxonomy_mapping": {
+    "dimension": 1,
+    "dimension_name": "Connectivity Services",
+    "category_id": "1.2",
+    "category_name": "SASE",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

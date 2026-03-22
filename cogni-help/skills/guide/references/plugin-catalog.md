@@ -1,4 +1,4 @@
-# cogni-works Plugin Catalog
+# insight-wave Plugin Catalog
 
 Curated reference for the guide skill. Each entry covers what the plugin does, its key
 skills/commands, and when to recommend it.
@@ -35,7 +35,7 @@ to verify research output before publishing.
 ## cogni-consulting
 
 **Purpose**: Double Diamond consulting orchestrator. Guides engagements through Discover,
-Define, Develop, Deliver phases by dispatching to other cogni-works plugins.
+Define, Develop, Deliver phases by dispatching to other insight-wave plugins.
 
 **Key commands**: `/consulting-setup`, `/consulting-discover`, `/consulting-define`,
 `/consulting-develop`, `/consulting-deliver`
@@ -105,12 +105,12 @@ into a compelling executive narrative or story.
 ## cogni-obsidian
 
 **Purpose**: Obsidian vault integration. Scaffolds vaults with Terminal plugin, manages
-frontmatter, provides note management for cogni-works workplaces.
+frontmatter, provides note management for insight-wave workplaces.
 
 **Key commands**: `/init-vault`
 
 **Use when**: User wants to set up an Obsidian-based workplace for persistent, browsable
-knowledge management alongside cogni-works plugins.
+knowledge management alongside insight-wave plugins.
 
 **Works with**: cogni-workspace (workspace → vault)
 
@@ -194,7 +194,7 @@ theme management, plugin discovery, and workspace health diagnostics.
 
 **Key commands**: `/init-workspace`, `/workspace-status`, `/pick-theme`, `/manage-themes`
 
-**Use when**: User needs to initialize or maintain their cogni-works workspace, manage
+**Use when**: User needs to initialize or maintain their insight-wave workspace, manage
 themes, or diagnose workspace configuration issues.
 
 **Foundation for**: All other plugins (provides shared env vars and settings)

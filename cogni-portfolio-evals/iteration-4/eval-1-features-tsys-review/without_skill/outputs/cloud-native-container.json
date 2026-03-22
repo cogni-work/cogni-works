@@ -1,0 +1,35 @@
+{
+  "slug": "cloud-native-container",
+  "name": "Cloud-Native & Container Platform",
+  "description": "Verwaltete Kubernetes-Plattform (EKS, OpenShift, CCE) mit integriertem Container-Lifecycle-Management, Monitoring, Logging, Registries mit Vulnerability-Scanning, GitOps und Knative Serverless auf AWS und Open Telekom Cloud.",
+  "review": {
+    "quality_score": 2.5,
+    "issues": [
+      {
+        "check": "language-mismatch",
+        "severity": "high",
+        "detail": "Portfolio language is 'en' but description is written in German."
+      },
+      {
+        "check": "missing-customer-value",
+        "severity": "high",
+        "detail": "Pure technology laundry list (EKS, OpenShift, CCE, GitOps, Knative). No indication of what business problem this solves or what outcome it delivers."
+      },
+      {
+        "check": "acronym-overload",
+        "severity": "high",
+        "detail": "Six acronyms/product names packed into one sentence: EKS, CCE, GitOps, Knative, AWS, OTC. Inaccessible to non-technical stakeholders."
+      },
+      {
+        "check": "missing-schema-fields",
+        "severity": "medium",
+        "detail": "Missing fields: product, created, status, differentiators, use_cases."
+      }
+    ],
+    "passed_checks": [
+      "slug-format",
+      "description-present",
+      "name-present"
+    ]
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "slug": "process-app-modernization-consulting",
+  "product_slug": "application-services",
+  "name": "Process and Application Modernization Consulting",
+  "description": "Detecon consulting service for systems modernization, workflow automation design, and IT-business alignment assessment to reduce technical debt and accelerate sustainable digital transformation.",
+  "taxonomy_mapping": {
+    "dimension": 6,
+    "dimension_name": "Application Services",
+    "category_id": "6.2",
+    "category_name": "Application Modernization",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

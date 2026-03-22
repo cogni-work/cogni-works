@@ -1,0 +1,13 @@
+{
+  "slug": "it-plattformdienste",
+  "name": "IT-Plattformdienste",
+  "description": "Zentrale IT-Infrastruktur und Unternehmensplattformen fuer den Betrieb eines Stadtwerks. Umfasst SAP IS-U Abrechnungssystem, Energiehandelsplattform, Datenintegration, Rechenzentrum, IT-Service-Management und Identitaetsverwaltung.",
+  "features": [
+    "sap-isu-abrechnungsplattform",
+    "energiehandels-system",
+    "datenintegrationsplattform",
+    "rechenzentrumsbetrieb",
+    "it-service-management",
+    "iam-berechtigungsmanagement"
+  ]
+}

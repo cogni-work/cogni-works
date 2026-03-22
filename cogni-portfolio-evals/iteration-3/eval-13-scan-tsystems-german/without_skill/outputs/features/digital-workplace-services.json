@@ -1,0 +1,13 @@
+{
+  "slug": "digital-workplace-services",
+  "name": "Digital Workplace Services",
+  "description": "Nutzerzentrierte Digital Workplace Transformation mit Microsoft Azure und M365 Integration.",
+  "product_slug": "t-systems-workplace",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 3,
+    "category_id": "3.2",
+    "category_name": "Modern Workplace / M365"
+  },
+  "source_file": "https://www.gartner.com/reviews/market/it-infrastructure-and-operations-management-others/vendor/t-systems/product/t-systems-outsourced-digital-workplace-services"
+}

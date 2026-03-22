@@ -1,0 +1,13 @@
+{
+  "slug": "sap-enterprise-services",
+  "name": "SAP & Enterprise Platform Services",
+  "description": "End-to-End SAP Services (2.500+ Experten, 7 Zertifizierungen), RISE with SAP, ServiceNow Integration, Ambition 4.0 Framework.",
+  "product_slug": "t-systems-applications",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 6,
+    "category_id": "6.3",
+    "category_name": "Enterprise Platform Services"
+  },
+  "source_file": "https://www.t-systems.com/us/en/application-services/solutions/sap-solutions"
+}

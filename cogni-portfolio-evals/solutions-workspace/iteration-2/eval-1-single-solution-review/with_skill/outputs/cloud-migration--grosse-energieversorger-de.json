@@ -1,0 +1,115 @@
+{
+  "slug": "cloud-migration--grosse-energieversorger-de",
+  "proposition_slug": "cloud-migration--grosse-energieversorger-de",
+  "solution_type": "project",
+  "implementation": [
+    {
+      "phase": "Assessment & Migrationsplanung",
+      "duration_weeks": 3,
+      "description": "Workload-Inventarisierung (IS-U, SCADA, ERP), 6R-Klassifizierung, KRITIS-Anforderungsanalyse und Migrations-Roadmap mit priorisiertem Sprint-Backlog."
+    },
+    {
+      "phase": "Staging & Sicherheitsarchitektur",
+      "duration_weeks": 3,
+      "description": "KRITIS-konforme Staging-Umgebung mit BSI-C5-konformer Netzwerk-Segmentierung, OT/IT-Trennungskonzept und automatisierter Compliance-Validierung."
+    },
+    {
+      "phase": "Sprint-basierte Migration",
+      "duration_weeks": 8,
+      "description": "Iterative Workload-Migration in 2-Wochen-Sprints mit Rollback-Fähigkeit, parallelem Regelbetrieb und Zero-Downtime-Cutover pro Migrationswelle."
+    },
+    {
+      "phase": "Validierung & Betriebsübergabe",
+      "duration_weeks": 2,
+      "description": "Last- und Compliance-Tests, Betriebshandbuch-Übergabe, Team-Enablement und NIS2-Audit-Ready-Dokumentation."
+    }
+  ],
+  "pricing": {
+    "proof_of_value": {
+      "price": 20000,
+      "currency": "EUR",
+      "scope": "Assessment einer Workload-Kategorie (z.B. IS-U-Testsystem) mit 6R-Klassifizierung, KRITIS-Gap-Analyse und Go/No-Go-Empfehlung innerhalb von 5 Wochen."
+    },
+    "small": {
+      "price": 95000,
+      "currency": "EUR",
+      "scope": "Migration von bis zu 15 Workloads einer Kategorie (z.B. ERP-Testumgebungen) inkl. Staging, Sprint-Migration und Betriebsübergabe in 16 Wochen."
+    },
+    "medium": {
+      "price": 185000,
+      "currency": "EUR",
+      "scope": "Migration von bis zu 50 Workloads über 2-3 Kategorien (IS-U + ERP) mit KRITIS-konformer Staging-Umgebung und NIS2-Dokumentation in 24 Wochen."
+    },
+    "large": {
+      "price": 320000,
+      "currency": "EUR",
+      "scope": "Unternehmensweite Migration inkl. SCADA-angrenzender Systeme, dediziertes Programm-Management, parallele Migrationswellen und BSI-C5-Audit-Paket in 36 Wochen."
+    }
+  },
+  "cost_model": {
+    "assumptions": [
+      "Tagessätze: Solution Architect 1.800 EUR, Implementation Engineer 1.200 EUR, Project Manager 1.400 EUR — gemäß delivery_defaults.",
+      "Phasendauern beschreiben den Small-Tier-Baseline; Medium skaliert 1,5-2x, Large 2-3x mit parallelen Workstreams — siehe effort_by_tier.",
+      "Kunde stellt 0,5 FTE Enterprise Architect und 1,0 FTE Testmanager für Integrations- und Abnahmephasen bereit.",
+      "OT/IT-Grenze: SCADA-Kernsysteme (Netzleittechnik, RTUs) bleiben außerhalb des Migrationsscopes; nur IT-nahe OT-Systeme (Historian, MES-Schnittstellen) werden adressiert.",
+      "Datenresidenz: Alle migrierten Workloads verbleiben in deutschen Rechenzentren (T-Systems Sovereign Cloud, Frankfurt/Biere) unter deutschem Recht.",
+      "Exit-Klausel: Bei Vertragsbeendigung 4 Wochen Knowledge-Transfer, Betriebsdokumentation und Datenexport in Standardformaten innerhalb von 10 Werktagen."
+    ],
+    "bill_of_materials": {
+      "roles": [
+        { "role": "Solution Architect", "rate_day": 1800, "currency": "EUR" },
+        { "role": "Implementation Engineer", "rate_day": 1200, "currency": "EUR" },
+        { "role": "Project Manager", "rate_day": 1400, "currency": "EUR" }
+      ],
+      "tooling": [
+        { "item": "Cloud Migration Factory Tooling (Assessment + Sprint-Management)", "cost": 0, "note": "Im Projektpreis enthalten" }
+      ],
+      "infrastructure": [
+        { "item": "KRITIS-konforme Staging-Umgebung (Sovereign Cloud)", "cost_monthly": 2500, "currency": "EUR" }
+      ]
+    },
+    "effort_by_tier": {
+      "proof_of_value": {
+        "total_days": 12,
+        "breakdown": [
+          { "role": "Solution Architect", "days": 3 },
+          { "role": "Implementation Engineer", "days": 6 },
+          { "role": "Project Manager", "days": 3 }
+        ],
+        "internal_cost": 16800,
+        "margin_pct": 16.0
+      },
+      "small": {
+        "total_days": 45,
+        "breakdown": [
+          { "role": "Solution Architect", "days": 10 },
+          { "role": "Implementation Engineer", "days": 25 },
+          { "role": "Project Manager", "days": 10 }
+        ],
+        "internal_cost": 62000,
+        "margin_pct": 34.7
+      },
+      "medium": {
+        "total_days": 90,
+        "breakdown": [
+          { "role": "Solution Architect", "days": 18 },
+          { "role": "Implementation Engineer", "days": 50 },
+          { "role": "Project Manager", "days": 22 }
+        ],
+        "internal_cost": 123200,
+        "margin_pct": 33.4
+      },
+      "large": {
+        "total_days": 160,
+        "breakdown": [
+          { "role": "Solution Architect", "days": 30 },
+          { "role": "Implementation Engineer", "days": 90 },
+          { "role": "Project Manager", "days": 40 }
+        ],
+        "internal_cost": 218000,
+        "margin_pct": 31.9
+      }
+    }
+  },
+  "created": "2026-03-18"
+}

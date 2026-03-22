@@ -1,0 +1,13 @@
+{
+  "slug": "s4hana-transformation",
+  "name": "S/4HANA Transformation",
+  "description": "End-to-end SAP S/4HANA migration and modernization with certified transformation packages",
+  "product_slug": "t-systems-applications",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 6,
+    "category_id": "6.2",
+    "category_name": "Application Modernization"
+  },
+  "source_file": "https://www.t-systems.com/us/en/application-services/solutions/sap-solutions/digital-transformation-with-sap"
+}

@@ -1,0 +1,13 @@
+{
+  "slug": "bechtle-sap-platform",
+  "name": "Bechtle SAP Competence Center",
+  "description": "SAP Gold Partner with 50+ specialists. Services span SAP S/4HANA operations, HANA migration, custom development, monitoring, user management, and application support across DACH.",
+  "product_slug": "bechtle-applications",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 6,
+    "category_id": "6.3",
+    "category_name": "Enterprise Platform Services"
+  },
+  "source_file": "https://www.bechtle.com/it-services/managed-services/managed-application/sap-bechtle-competence-center"
+}

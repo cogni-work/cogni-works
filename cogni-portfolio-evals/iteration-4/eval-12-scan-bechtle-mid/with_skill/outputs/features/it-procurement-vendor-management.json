@@ -1,0 +1,16 @@
+{
+  "slug": "it-procurement-vendor-management",
+  "product_slug": "consulting-services",
+  "name": "IT Procurement & Vendor Management",
+  "description": "Customizable e-procurement platform serving 40,000+ products from 300+ vendors with ERP integration, strategic sourcing support and international procurement coordination via Global IT Alliance and ISD.",
+  "taxonomy_mapping": {
+    "dimension": 7,
+    "dimension_name": "Consulting Services",
+    "category_id": "7.5",
+    "category_name": "Vendor & Contract Management",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/bechtle-portfolio.md",
+  "created": "2026-03-18"
+}

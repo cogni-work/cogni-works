@@ -1,0 +1,16 @@
+{
+  "slug": "security-awareness-training",
+  "product_slug": "security-services",
+  "name": "Security Awareness Training",
+  "description": "Multi-format security awareness program delivering classroom sessions, live online training, e-learning modules and realistic phishing simulation campaigns with measurable employee readiness scoring.",
+  "taxonomy_mapping": {
+    "dimension": 2,
+    "dimension_name": "Security Services",
+    "category_id": "2.8",
+    "category_name": "Security Awareness",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/bechtle-portfolio.md",
+  "created": "2026-03-18"
+}

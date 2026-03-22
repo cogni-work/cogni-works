@@ -1,0 +1,9 @@
+{
+  "slug": "consulting-services",
+  "name": "Consulting Services",
+  "description": "Strategie-, Transformations- und Beratungsangebote inkl. IT-Strategie, Digital Transformation und Branchen-Consulting.",
+  "revenue_model": "subscription",
+  "maturity": "growth",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

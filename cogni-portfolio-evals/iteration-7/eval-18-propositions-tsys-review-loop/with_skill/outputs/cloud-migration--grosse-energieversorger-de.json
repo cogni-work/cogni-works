@@ -1,0 +1,27 @@
+{
+  "slug": "cloud-migration--grosse-energieversorger-de",
+  "feature_slug": "cloud-migration",
+  "market_slug": "grosse-energieversorger-de",
+  "is_statement": "Strukturiertes Cloud-Migrationsprogramm mit Assessment-Framework, modularer CMF-Methodik, 6R-Migrationsstrategien und dedizierten Cloud-Migration-Factory-Teams für sprint-basierte, standardisierte Migrations-Durchführung in regulierten Branchen mit komplexen Legacy-SAP-Landschaften.",
+  "does_statement": "Energieversorger migrieren SAP-IS-U-Landschaften phasenweise in die Cloud, während Billing und Abrechnung unterbrechungsfrei weiterlaufen — statt riskanter Big-Bang-Umstellungen mit Umsatzausfallrisiko.",
+  "means_statement": "Der Vorstand genehmigt die S/4HANA-Migration vor der 2027-Deadline ohne Umsatzrisiko — RWE erreichte bei vergleichbarer Migration null Ausfallzeit für 4.500 Nutzer.",
+  "evidence": [
+    {
+      "statement": "RWE migrierte SAP-Systeme in die Cloud mit null Ausfallzeit für 4.500 Nutzer",
+      "source_url": "https://www.sap.com/asset/dynamic/2025/08/5a2f883a-167f-0010-bca6-c68f7e60039b.html",
+      "source_title": "RWE Cloud Migration Case Study"
+    },
+    {
+      "statement": "Nur 33% der Energieversorger haben S/4HANA-Migration gestartet vs. 47% Branchendurchschnitt",
+      "source_url": "https://www.prometheusgroup.com/resources/posts/asug-prometheus-group-sap-s4hana-research",
+      "source_title": "ASUG & Prometheus Group Research"
+    },
+    {
+      "statement": "SAP ECC End-of-Maintenance 2027 betrifft alle großen deutschen Energieversorger mit IS-U",
+      "source_url": null,
+      "source_title": null
+    }
+  ],
+  "created": "2026-03-18",
+  "updated": "2026-03-18"
+}

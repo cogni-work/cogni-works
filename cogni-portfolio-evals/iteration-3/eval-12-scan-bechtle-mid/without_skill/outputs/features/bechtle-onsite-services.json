@@ -1,0 +1,13 @@
+{
+  "slug": "bechtle-onsite-services",
+  "name": "Bechtle Onsite Services",
+  "description": "On-site IT support, field engineering, hardware maintenance and repair, and next-business-day device swap across 120+ European locations.",
+  "product_slug": "bechtle-workplace",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 3,
+    "category_id": "3.5",
+    "category_name": "IT Support Services"
+  },
+  "source_file": "https://www.bechtle.com/de-en/it-services/managed-services/onsite-services"
+}

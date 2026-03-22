@@ -1,0 +1,41 @@
+{
+  "slug": "cloud-migration",
+  "name": "Cloud Migration Services",
+  "description": "Strukturiertes Cloud-Migrationsprogramm mit Assessment-Framework, modularer CMF-Methodik (Assess-Mobilize-Modernize), 6R-Migrationsstrategien (Rehost bis Retire), Datenbank-Migrations-Services, Cloud-Migration-Factory-Teams und sprint-basierte Implementierung für sichere, standardisierte Migrations-Durchführung.",
+  "review": {
+    "quality_score": 3.0,
+    "issues": [
+      {
+        "check": "language-mismatch",
+        "severity": "high",
+        "detail": "Portfolio language is 'en' but description is written in German."
+      },
+      {
+        "check": "description-too-long",
+        "severity": "medium",
+        "detail": "Description is an overly long single sentence packing in 7+ concepts. Should be broken into a concise summary with supporting detail fields."
+      },
+      {
+        "check": "missing-customer-value",
+        "severity": "medium",
+        "detail": "Lists methodology components (6R, CMF, sprints) but does not state the value — e.g., predictable migration timelines, reduced downtime risk."
+      },
+      {
+        "check": "missing-schema-fields",
+        "severity": "medium",
+        "detail": "Missing fields: product, created, status, differentiators, use_cases."
+      },
+      {
+        "check": "acronym-overload",
+        "severity": "low",
+        "detail": "CMF and 6R are domain-specific terms that may not be universally understood."
+      }
+    ],
+    "passed_checks": [
+      "slug-format",
+      "description-present",
+      "name-present",
+      "specificity-good"
+    ]
+  }
+}

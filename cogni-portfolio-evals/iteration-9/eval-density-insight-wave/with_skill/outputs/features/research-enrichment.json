@@ -1,0 +1,16 @@
+{
+  "slug": "research-enrichment",
+  "product_slug": "cogni-portfolio",
+  "name": "Web-Research-Enrichment",
+  "description": "Gezielte Web-Recherche gegen Unternehmenswebsite und regionalisierte Quellen, gesteuert durch die Qualitätslücken aus der Bewertung, mit Extraktion konkreter Mechanismus-Details zur Anreicherung schwacher Feature-Beschreibungen.",
+  "category": "enrichment",
+  "taxonomy_mapping": {
+    "dimension": 7,
+    "dimension_name": "Consulting & Professional Services",
+    "category_id": "7.3",
+    "category_name": "Business Process Consulting",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "created": "2026-03-21"
+}

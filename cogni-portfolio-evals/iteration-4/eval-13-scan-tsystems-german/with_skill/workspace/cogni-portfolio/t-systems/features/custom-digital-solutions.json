@@ -1,0 +1,16 @@
+{
+  "slug": "custom-digital-solutions",
+  "product_slug": "application-services",
+  "name": "Custom Digital Solutions (MMS)",
+  "description": "Custom software development service delivered by 2,200 digital specialists at Deutsche Telekom MMS covering strategy, UX design, technical implementation, and ongoing operational support.",
+  "taxonomy_mapping": {
+    "dimension": 6,
+    "dimension_name": "Application Services",
+    "category_id": "6.1",
+    "category_name": "Custom Application Development",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

@@ -1,7 +1,7 @@
 ---
 name: cheatsheet
 description: >-
-  Generate quick-reference cards for any cogni-works plugin. Use this skill whenever
+  Generate quick-reference cards for any insight-wave plugin. Use this skill whenever
   the user asks for a cheatsheet, cheat sheet, quick reference, summary of a plugin,
   "commands for cogni-X", "tldr cogni-X", "what does cogni-X do", "remind me how to
   use cogni-X", or wants a compact overview of a plugin's capabilities without taking
@@ -16,7 +16,7 @@ allowed-tools:
 
 # cheatsheet: Quick Reference Cards
 
-Generate concise, one-screen reference cards for any cogni-works plugin. Faster than
+Generate concise, one-screen reference cards for any insight-wave plugin. Faster than
 reading docs or taking a course — designed for users who need a quick refresher.
 
 ## Language

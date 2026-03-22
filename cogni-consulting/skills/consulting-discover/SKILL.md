@@ -47,7 +47,7 @@ Read `$CLAUDE_PLUGIN_ROOT/references/vision-classes.md` for the vision class's r
 
 Present the proposed discovery plan, typically 3-5 activities:
 
-**Plugin-powered methods** (automated via cogni-work ecosystem):
+**Plugin-powered methods** (automated via insight-wave ecosystem):
 
 | Method | Plugin | What It Produces |
 |---|---|---|

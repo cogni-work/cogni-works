@@ -1,0 +1,16 @@
+{
+  "slug": "cloud-connect-azure",
+  "product_slug": "connectivity-services",
+  "name": "Cloud Connect for Azure",
+  "description": "Managed Azure ExpressRoute Direct service providing dedicated 10+ Gbit/s private routing from customer edge locations to the Microsoft Azure backbone with SLA-backed resilient dual-path connectivity.",
+  "taxonomy_mapping": {
+    "dimension": 1,
+    "dimension_name": "Connectivity Services",
+    "category_id": "1.3",
+    "category_name": "Internet & Cloud Connect",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

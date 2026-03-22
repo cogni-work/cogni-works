@@ -1,0 +1,60 @@
+{
+  "expectations": [
+    {
+      "text": "BATCH-01: 3 solution JSON files created",
+      "passed": true,
+      "evidence": "3 solution files present: cloud-migration--grosse-energieversorger-de.json, sap-on-cloud--grosse-energieversorger-de.json, sovereign-cloud--grosse-energieversorger-de.json"
+    },
+    {
+      "text": "BATCH-02: Each solution has correct solution_type for its product's revenue_model (should be \"project\")",
+      "passed": false,
+      "evidence": "None of the 3 solution JSON files contain a 'solution_type' field. The field is entirely absent from all initial and revised solution files."
+    },
+    {
+      "text": "BATCH-03: Review assessments produced for all 3 solutions",
+      "passed": true,
+      "evidence": "All 3 solutions have round-1 review files (*-review.json) with 3 perspectives each (procurement, provider_sa, client_sa) and 5 criteria per perspective. Round-2 reviews (*-review-round2.json) also present for all 3."
+    },
+    {
+      "text": "BATCH-04: Batch summary categorizes solutions by acceptance round",
+      "passed": true,
+      "evidence": "batch-summary.json contains per-solution round1_verdict and round2_verdict fields, plus aggregate flags: round1_all_needed_revision=true, round2_all_approved=true. All 3 solutions were revision_needed in round 1 and approved in round 2."
+    },
+    {
+      "text": "BATCH-05: At least one solution triggered a revision round",
+      "passed": true,
+      "evidence": "All 3 solutions triggered revision. Round-1 reviews all had revision_needed=true (aggregate scores: cloud-migration 70.7%, sap-on-cloud 69.3%, sovereign-cloud 72.7%). All 3 have corresponding *-revised.json files."
+    },
+    {
+      "text": "BATCH-06: Revised solutions have higher scores than Round 1",
+      "passed": true,
+      "evidence": "All 3 improved: cloud-migration 106->129 (+23, +15.3%), sap-on-cloud 104->130 (+26, +17.3%), sovereign-cloud 109->134 (+25, +16.7%). Average improvement: +24.7 points (+16.4%)."
+    },
+    {
+      "text": "BATCH-07: No more than 2 revision rounds per solution",
+      "passed": true,
+      "evidence": "Each solution went through exactly 1 revision round: initial -> review (round 1) -> revised -> review (round 2, approved). No solution required a 3rd round. Max review_round value is 2."
+    },
+    {
+      "text": "BATCH-08: All solutions include exit clause in assumptions",
+      "passed": true,
+      "evidence": "All 3 revised solutions contain comprehensive exit_strategy sections with contractual components: cloud-migration has 5 exit components (data sovereignty, repatriation within 90 days, IaC portability, multi-cloud, contract clauses with 12-month notice); sap-on-cloud has 4 components (SAP repatriation within 120 days, data export, knowledge transfer, contract clauses); sovereign-cloud has 5 components (repatriation, IaC portability, 24-month continuity guarantee, alternative providers, contract clauses). All include exit-related constraints in their constraints arrays."
+    },
+    {
+      "text": "BATCH-09: All standard tier margins (small/medium/large) >= 25%",
+      "passed": true,
+      "evidence": "All tiers across all 3 solutions (Essential, Professional, Enterprise) have target_margin_pct=30, which is >= 25%. This holds for both initial and revised versions. 9 tier definitions checked, all at 30%."
+    },
+    {
+      "text": "BATCH-10: Solutions targeting same market have consistent assumptions (same role rates, same delivery model)",
+      "passed": true,
+      "evidence": "All 3 solutions target grosse-energieversorger-de. Common role rates are consistent: Solution Architect 1800 EUR/day, Implementation Engineer 1200 EUR/day, Project Manager 1400 EUR/day across all solutions. Specialized roles (SAP Basis Specialist 1600, Security Engineer 1600) are additive, not contradictory. All use 'Remote-Delivery als Default' with on-site for critical phases. All assume customer provides staging access within 5 business days."
+    }
+  ],
+  "summary": {
+    "passed": 9,
+    "failed": 1,
+    "total": 10,
+    "pass_rate": 0.90
+  }
+}

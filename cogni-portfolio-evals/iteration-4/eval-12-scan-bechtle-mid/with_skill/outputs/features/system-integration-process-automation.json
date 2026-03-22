@@ -1,0 +1,16 @@
+{
+  "slug": "system-integration-process-automation",
+  "product_slug": "application-services",
+  "name": "System Integration & Process Automation",
+  "description": "Enterprise system integration combining PLM connectivity with ERP coupling and ServiceNow IntegrationHub for automated cross-system workflows linking ITSM, HR, CRM and custom applications.",
+  "taxonomy_mapping": {
+    "dimension": 6,
+    "dimension_name": "Application Services",
+    "category_id": "6.4",
+    "category_name": "System Integration & API",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/bechtle-portfolio.md",
+  "created": "2026-03-18"
+}

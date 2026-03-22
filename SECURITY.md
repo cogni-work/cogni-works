@@ -6,7 +6,7 @@ Only the latest version of each plugin on the `main` branch is supported with se
 
 ## Reporting a Vulnerability
 
-If you discover a security vulnerability in any cogni-works plugin, please report it responsibly.
+If you discover a security vulnerability in any insight-wave plugin, please report it responsibly.
 
 **Email:** [stephan@cogni-work.ai](mailto:stephan@cogni-work.ai)
 
@@ -27,7 +27,7 @@ If you discover a security vulnerability in any cogni-works plugin, please repor
 
 ### Scope
 
-Security issues in cogni-works plugins include:
+Security issues in insight-wave plugins include:
 
 - Code that could execute unintended commands on the user's system
 - Data exfiltration or unauthorized file access
@@ -37,7 +37,7 @@ Security issues in cogni-works plugins include:
 Out of scope:
 
 - Issues in upstream tools (Claude Code, Obsidian, Excalidraw) — report these to their respective maintainers
-- Feature requests or non-security bugs — use [GitHub Issues](https://github.com/cogni-work/cogni-works/issues)
+- Feature requests or non-security bugs — use [GitHub Issues](https://github.com/insight-wave/insight-wave/issues)
 
 ## Disclosure
 

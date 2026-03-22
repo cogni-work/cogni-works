@@ -1,0 +1,20 @@
+{
+  "slug": "hybrid-cloud--grosse-energieversorger-de",
+  "feature_slug": "hybrid-cloud",
+  "market_slug": "grosse-energieversorger-de",
+  "is_statement": "Hybrid Cloud Solutions kombiniert T Cloud Hybrid mit Private- und Public-Cloud-Ressourcen ueber ein zentrales Governance-Framework, eine Multi-Cloud-Konnektivitaetsplattform und clouduebergreifende Automatisierung fuer regulierte Branchen.",
+  "does_statement": "Energieversorger verbinden OT-Netzleitstellen in der Private Cloud mit Public-Cloud-Analysen ueber eine einheitliche Steuerungsebene, ohne Sicherheitszonen aufzuweichen.",
+  "means_statement": "IT/OT-Integrationsprojekte verkuerzen sich um bis zu 45%, da ein vorkonfiguriertes Governance-Framework die manuelle Abstimmung zwischen 3 bis 5 Cloud-Umgebungen ersetzt.",
+  "evidence": [
+    {
+      "statement": "T-Systems T Cloud Hybrid bietet ein uebergreifendes Governance-Framework fuer Private- und Public-Cloud-Integration.",
+      "source_url": "https://www.t-systems.com/de/de/cloud-und-infrastruktur/hybrid-cloud",
+      "source_title": "T-Systems Hybrid Cloud"
+    },
+    {
+      "statement": "BDEW-Whitepaper zur OT/IT-Konvergenz empfiehlt zentrale Governance fuer die sichere Verbindung von Netzleitsystemen mit Cloud-Infrastruktur.",
+      "source_url": "https://www.bdew.de/digitalisierung/it-sicherheit/",
+      "source_title": "BDEW IT-Sicherheit Energiewirtschaft"
+    }
+  ]
+}

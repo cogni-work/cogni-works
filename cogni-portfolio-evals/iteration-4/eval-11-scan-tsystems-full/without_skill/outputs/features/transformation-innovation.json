@@ -1,0 +1,13 @@
+{
+  "slug": "transformation-innovation",
+  "name": "Transformation & Innovation Consulting",
+  "description": "Ideation, prototyping, and smart solution deployment with innovative business models",
+  "product_slug": "detecon-consulting",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 7,
+    "category_id": "7.2",
+    "category_name": "Digital Transformation"
+  },
+  "source_file": "https://www.t-systems.com/us/en/strategy-and-consulting/solutions/transformation-and-innovation-consulting"
+}

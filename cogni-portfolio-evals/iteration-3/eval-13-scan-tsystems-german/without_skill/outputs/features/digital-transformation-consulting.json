@@ -1,0 +1,13 @@
+{
+  "slug": "digital-transformation-consulting",
+  "name": "Digitale Transformation Consulting",
+  "description": "End-to-End Partner fuer digitale Transformation von Konzept bis Implementierung. Detecon Innovation und ServiceNow Transformation.",
+  "product_slug": "detecon-consulting",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 7,
+    "category_id": "7.2",
+    "category_name": "Digital Transformation"
+  },
+  "source_file": "https://www.t-systems.com/gb/en/company/about-t-systems"
+}

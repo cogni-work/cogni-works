@@ -1,0 +1,9 @@
+{
+  "slug": "cloud-services",
+  "name": "Cloud Services",
+  "description": "Cloud infrastructure, migration, and platform offerings",
+  "revenue_model": "subscription",
+  "maturity": "growth",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

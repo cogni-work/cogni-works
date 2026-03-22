@@ -1,0 +1,9 @@
+{
+  "slug": "workplace-services",
+  "name": "Digital Workplace Services",
+  "description": "End-user computing and collaboration offerings including UC, M365, device management, VDI, and IT support.",
+  "revenue_model": "subscription",
+  "maturity": "growth",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

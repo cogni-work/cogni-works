@@ -1,0 +1,9 @@
+{
+  "slug": "connectivity-services",
+  "name": "Connectivity Services",
+  "description": "Network infrastructure and connectivity offerings including WAN, SD-WAN, SASE, cloud connect, IoT, voice, LAN/WLAN and managed network services.",
+  "revenue_model": "subscription",
+  "maturity": "growth",
+  "source_file": "research/bechtle-portfolio.md",
+  "created": "2026-03-18"
+}

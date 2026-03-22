@@ -1,0 +1,16 @@
+{
+  "slug": "modern-workplace-m365",
+  "product_slug": "workplace-services",
+  "name": "Modern Workplace / Microsoft 365",
+  "description": "M365 deployment with Copilot, SharePoint Online, readiness packages",
+  "taxonomy_mapping": {
+    "dimension": 3,
+    "dimension_name": "Digital Workplace Services",
+    "category_id": "3.2",
+    "category_name": "Modern Workplace / M365",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/bechtle-portfolio.md",
+  "created": "2026-03-18"
+}

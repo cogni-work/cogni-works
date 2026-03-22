@@ -1,0 +1,16 @@
+{
+  "slug": "digital-transformation",
+  "product_slug": "consulting-services",
+  "name": "Digital Transformation Consulting",
+  "description": "Business digitization and change management with three-pillar approach",
+  "taxonomy_mapping": {
+    "dimension": 7,
+    "dimension_name": "Consulting Services",
+    "category_id": "7.2",
+    "category_name": "Digital Transformation",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/bechtle-portfolio.md",
+  "created": "2026-03-18"
+}

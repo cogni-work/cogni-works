@@ -1,0 +1,16 @@
+{
+  "slug": "esg-sustainability",
+  "product_slug": "consulting-services",
+  "name": "ESG & Sustainability Consulting (Detecon)",
+  "description": "Sustainability management consulting service with ESG strategy development, sustainable business process redesign, and environmental impact measurement frameworks recognized by ISG as market-leading.",
+  "taxonomy_mapping": {
+    "dimension": 7,
+    "dimension_name": "Consulting Services",
+    "category_id": "7.3",
+    "category_name": "Business & Industry Consulting",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

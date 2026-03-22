@@ -1,10 +1,10 @@
 # cogni-workspace
 
-Lean workspace orchestrator for cogni-works [Claude Cowork](https://claude.ai/cowork) marketplace plugins. Manages shared foundation (environment variables, settings), theme management, plugin discovery, and workspace health — so all cogni-x plugins operate from a consistent, well-configured base.
+Lean workspace orchestrator for insight-wave [Claude Cowork](https://claude.ai/cowork) marketplace plugins. Manages shared foundation (environment variables, settings), theme management, plugin discovery, and workspace health — so all cogni-x plugins operate from a consistent, well-configured base.
 
 ## Why this exists
 
-Each cogni-works plugin needs environment variables, themes, and discovery of sibling plugins. Without a shared orchestrator, every plugin reinvents configuration:
+Each insight-wave plugin needs environment variables, themes, and discovery of sibling plugins. Without a shared orchestrator, every plugin reinvents configuration:
 
 | Problem | What happens | Impact |
 |---------|-------------|--------|
@@ -33,7 +33,7 @@ This plugin provides the infrastructure layer — workspace initialization, them
 
 ## Installation
 
-This plugin is part of the [cogni-works monorepo](https://github.com/cogni-work/cogni-works) and is installed automatically with the marketplace.
+This plugin is part of the [insight-wave monorepo](https://github.com/insight-wave/insight-wave) and is installed automatically with the marketplace.
 
 **Prerequisites:**
 - `jq` (required — JSON processing)
@@ -55,7 +55,7 @@ This plugin is part of the [cogni-works monorepo](https://github.com/cogni-work/
 
 Or describe what you want:
 
-- "Initialize a cogni-works workspace here"
+- "Initialize a insight-wave workspace here"
 - "What's the status of my workspace?"
 - "Extract a theme from this website"
 - "Update my workspace after installing new plugins"
@@ -64,7 +64,7 @@ Or describe what you want:
 
 After installing, type one prompt:
 
-> Initialize a cogni-works workspace
+> Initialize a insight-wave workspace
 
 Claude checks dependencies, discovers installed plugins, asks for your language preference and tool integrations, then generates `.claude/settings.local.json`, `.workspace-env.sh`, `.workspace-config.json`, output style templates, and the default theme. Your workspace is ready for all cogni-x plugins.
 

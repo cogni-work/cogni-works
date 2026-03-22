@@ -1,0 +1,9 @@
+{
+  "slug": "consulting-services",
+  "name": "Consulting Services",
+  "description": "Strategy, transformation and advisory offerings including IT strategy, digital transformation, business consulting, project management and vendor management.",
+  "revenue_model": "subscription",
+  "maturity": "growth",
+  "source_file": "research/bechtle-portfolio.md",
+  "created": "2026-03-18"
+}

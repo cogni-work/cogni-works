@@ -1,0 +1,13 @@
+{
+  "slug": "bechtle-backup-dr",
+  "name": "Bechtle Backup & Disaster Recovery",
+  "description": "Backup-as-a-Service and DR-as-a-Service with geographic redundancy, supporting Veeam, Veritas, ARCServe, Acronis. Includes AvePoint M365 backup and AWS marketplace DR solutions.",
+  "product_slug": "bechtle-infrastructure",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 5,
+    "category_id": "5.3",
+    "category_name": "Backup & Disaster Recovery"
+  },
+  "source_file": "https://www.bechtle.com/de-en/shop/software/storage-backup-recovery/backup-recovery-archiving--20005001--c"
+}

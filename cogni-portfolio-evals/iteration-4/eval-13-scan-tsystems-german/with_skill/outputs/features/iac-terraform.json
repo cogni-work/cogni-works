@@ -1,0 +1,16 @@
+{
+  "slug": "iac-terraform",
+  "product_slug": "infrastructure-services",
+  "name": "Infrastructure as Code (IaC)",
+  "description": "Terraform-based infrastructure automation for T Cloud Public with published Terraform provider, OpenStack API integration, and declarative resource provisioning across compute, network, and storage.",
+  "taxonomy_mapping": {
+    "dimension": 5,
+    "dimension_name": "Managed Infrastructure Services",
+    "category_id": "5.7",
+    "category_name": "Infrastructure Automation",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

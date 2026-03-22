@@ -1,0 +1,13 @@
+{
+  "slug": "virtual-desktop-vdi",
+  "name": "Virtual Desktop Infrastructure",
+  "description": "Virtualisierte Desktop-Umgebungen als Teil der Outsourced Digital Workplace Services.",
+  "product_slug": "t-systems-workplace",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 3,
+    "category_id": "3.4",
+    "category_name": "Virtual Desktop & DaaS"
+  },
+  "source_file": "https://www.gartner.com/reviews/market/it-infrastructure-and-operations-management-others/vendor/t-systems/product/t-systems-outsourced-digital-workplace-services"
+}

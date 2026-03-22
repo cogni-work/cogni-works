@@ -1,0 +1,108 @@
+{
+  "slug": "sovereign-cloud--grosse-energieversorger-de",
+  "solution_name": "Sovereign Cloud for German Energy Utilities",
+  "feature_slug": "sovereign-cloud",
+  "market_slug": "grosse-energieversorger-de",
+  "review_date": "2026-03-18",
+  "perspectives": {
+    "procurement_decision_maker": {
+      "role": "Procurement Decision-Maker",
+      "criteria": [
+        {
+          "criterion": "ROI clarity and payback period",
+          "score": "pass",
+          "rationale": "The means_statement quantifies value: 40-60% reduction in regulatory compliance effort because infrastructure compliance is covered by the platform attestation. For KRITIS-regulated energy utilities spending significant annual budget on BSI audit preparation and NIS2 readiness, this is a concrete, measurable savings claim. The PoV at EUR 75K delivers a BSI-C5 gap analysis with NIS2 readiness score — directly quantifiable compliance value."
+        },
+        {
+          "criterion": "Pricing tier coherence and value scaling",
+          "score": "pass",
+          "rationale": "Four tiers: PoV EUR 75K (5 KRITIS apps assessment, 4w), Small EUR 320K (10 workloads, 16w), Medium EUR 680K (40 workloads with full attestation, 24w), Large EUR 1.1M (60+ workloads with dedicated compliance manager, 36w). Price-per-workload: Small EUR 32K, Medium EUR 17K, Large EUR 18.3K — significant volume discount from Small to Medium. The PoV is the most affordable entry point in the portfolio at EUR 75K, lowering the barrier to engagement."
+        },
+        {
+          "criterion": "Margin sustainability across tiers",
+          "score": "warn",
+          "rationale": "Margins range from 27.7% (PoV) to 31.8% (Medium). The PoV at 27.7% and Large at 30.9% are at or below the portfolio target of 30%. This is the tightest margin profile in the portfolio. The sovereign cloud proposition involves infrastructure costs (BSI-C5 Typ-2 certified infrastructure) that are separately contracted, so the project margins are on professional services only — but the low PoV margin leaves no room for scope creep in the assessment phase."
+        },
+        {
+          "criterion": "Competitive differentiation",
+          "score": "pass",
+          "rationale": "Explicit competitive positioning: T-Systems Sovereign Cloud (BSI-C5 Typ-2, German DCs, open-source basis) vs. AWS European Sovereign Cloud (broader ecosystem, US jurisdiction) vs. Azure Confidential Computing (encryption, no full data sovereignty). This is the sharpest competitive framing in the portfolio, directly addressing the CISO's veto-power concern about jurisdictional risk."
+        },
+        {
+          "criterion": "Risk allocation and contractual safeguards",
+          "score": "pass",
+          "rationale": "Comprehensive exit clause: 12 months notice, 90 days transition support, data export in standard formats, IaC portability ensures provider switch capability, capped exit cost at max 5% total volume. Data residency exclusively in German data centers, BSI-C5 Typ-2 attested, no non-European jurisdiction access, contractual DSGVO and KRITIS-DachG conformity. This is the strongest data sovereignty guarantee in the portfolio."
+        }
+      ],
+      "summary": "Strong procurement story with the lowest entry point (EUR 75K PoV), quantified compliance savings (40-60%), and the sharpest competitive positioning in the portfolio. The margin profile is the tightest of the three solutions, with PoV below the 30% target. Contractual protections and data sovereignty guarantees are comprehensive."
+    },
+    "provider_solution_architect": {
+      "role": "Provider Solution Architect",
+      "criteria": [
+        {
+          "criterion": "Phase structure and delivery realism",
+          "score": "pass",
+          "rationale": "Four phases (Compliance Assessment & Design 3w, Sovereign Platform Deployment 5w, Workload Migration & Compliance Validation 6w, Handover & Audit Readiness 2w = 16 weeks) align with the Small tier scope. The compliance-first approach (assess before deploy) is the correct sequence for a regulated environment. The 2-week handover with BSI audit preparation training is tight but appropriate for a small scope."
+        },
+        {
+          "criterion": "Effort estimation accuracy",
+          "score": "pass",
+          "rationale": "Small tier: 155 days over 16 weeks for 10 workloads = 15.5 days/workload. This is appropriate for sovereign cloud migration which requires per-workload compliance mapping, not just technical migration. Medium: 330 days for 40 workloads = 8.25 days/workload (efficiency gains from platform reuse). Large: 540 days for 60+ workloads = 9 days/workload. The decreasing per-workload effort at scale reflects platform maturity — the sovereign platform is built once and workloads are onboarded."
+        },
+        {
+          "criterion": "Skill mix and compliance expertise",
+          "score": "warn",
+          "rationale": "Three generic roles (SA, IE, PM) are used. For a sovereign cloud solution centered on BSI-C5 attestation and NIS2 readiness, the absence of a dedicated Compliance/Security Architect role is a gap. The solution delivers BSI-C5 attestation documentation, NIS2 readiness assessment, quarterly compliance reports, and audit-trail validation — these require specialized regulatory knowledge beyond a generic Solution Architect's scope. The Large tier includes a dedicated Compliance Manager, but this is not reflected in the BoM."
+        },
+        {
+          "criterion": "Platform dependency and infrastructure coupling",
+          "score": "pass",
+          "rationale": "The solution cleanly separates professional services (scoped and priced) from infrastructure (separate platform contract). The BoM lists Compliance-Monitoring-Suite and BSI-C5 Audit-Trail-Tooling as included, with Sovereign Cloud Infrastructure as separate. This gives pricing transparency and avoids mixing project and operational costs. The IaC portability and open-source basis reduce infrastructure lock-in."
+        },
+        {
+          "criterion": "Scope boundary clarity",
+          "score": "pass",
+          "rationale": "OT/IT boundary is explicitly drawn: SCADA and grid control systems are out of scope; only IT-side KRITIS applications (Billing, Messdaten, ERP interfaces) migrate to Sovereign Cloud. Customer prerequisites are lean: 0.5 FTE IT Security Officer (CISO team) and 0.5 FTE Application Owner for migration validation. The scope explicitly excludes non-KRITIS workloads, which would go through the cloud-migration solution."
+        }
+      ],
+      "summary": "Well-structured compliance-first delivery model with realistic effort estimates and clean infrastructure separation. The scope boundaries are the clearest in the portfolio. Main gap: no dedicated compliance/security architect role despite compliance being the core value proposition."
+    },
+    "client_solution_architect": {
+      "role": "Client Solution Architect",
+      "criteria": [
+        {
+          "criterion": "Compliance deliverable quality",
+          "score": "pass",
+          "rationale": "The strongest compliance story in the portfolio: BSI-C5 attestation documentation, NIS2 readiness assessment, quarterly compliance reports, audit trail for BSI audits. Phase 3 includes BSI-C5 Audit-Trail validation and NIS2 readiness proof. Phase 4 delivers audit-readiness training and documentation of all attestation evidence. This directly addresses the CISO's veto power on the buying committee."
+        },
+        {
+          "criterion": "Integration with non-sovereign workloads",
+          "score": "warn",
+          "rationale": "The solution focuses exclusively on KRITIS-relevant applications on sovereign infrastructure. For a client deploying both sovereign and non-sovereign workloads, the integration pattern between sovereign and standard cloud environments is not defined. How do non-KRITIS workloads (migrated via the cloud-migration solution) communicate with KRITIS workloads on sovereign cloud? Network segmentation is in Phase 2, but cross-cloud connectivity is not addressed."
+        },
+        {
+          "criterion": "Operational readiness post-deployment",
+          "score": "warn",
+          "rationale": "Phase 4 (Handover & Audit Readiness) is only 2 weeks — the shortest handover in the portfolio. It covers BSI audit preparation training and compliance dashboard training. However, for a sovereign cloud platform hosting KRITIS applications, operational procedures (incident response, change management, compliance monitoring escalation) need more than 2 weeks of handover. The compliance monitoring setup in Phase 2 partially mitigates this, but the operational handover is compressed."
+        },
+        {
+          "criterion": "Data sovereignty verification",
+          "score": "pass",
+          "rationale": "Exclusively German data centers, BSI-C5 Typ-2 attested, no non-European jurisdiction access, contractual DSGVO and KRITIS-DachG conformity. The open-source basis and IaC portability provide technical data sovereignty (not just contractual). The competitive positioning explicitly contrasts this with AWS (US jurisdiction) and Azure (no full data sovereignty), giving the client architect clear decision criteria."
+        },
+        {
+          "criterion": "Vendor lock-in and exit strategy",
+          "score": "pass",
+          "rationale": "Exit clause with 12 months notice, 90 days transition, standard format data export, and IaC portability for provider switch. The open-source platform basis (vs. proprietary hyperscaler services) is a genuine architectural lock-in mitigation. The 5% capped exit cost is reasonable. The IaC portability claim is verifiable — Terraform/OpenTofu templates are standard and can be tested against alternative providers."
+        }
+      ],
+      "summary": "The strongest compliance story in the portfolio with named deliverables and audit-readiness training. Data sovereignty verification is comprehensive with both contractual and technical guarantees. Gaps: cross-cloud integration with non-sovereign workloads is undefined, and the 2-week handover phase is compressed for a KRITIS platform."
+    }
+  },
+  "overall_score": {
+    "pass": 11,
+    "warn": 4,
+    "fail": 0,
+    "verdict": "Strong compliance-focused solution with the sharpest competitive positioning and lowest entry barrier in the portfolio. Margins are tighter than the other solutions. Remaining gaps: no dedicated compliance/security architect role, undefined cross-cloud integration with non-sovereign workloads, and a compressed handover phase for a KRITIS-grade platform."
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "slug": "infrastructure-services",
+  "name": "Managed Infrastructure Services",
+  "description": "Data center, compute, and operations offerings including colocation, hosting, backup, monitoring, and mainframe services.",
+  "revenue_model": "subscription",
+  "maturity": "growth",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

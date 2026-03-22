@@ -1,0 +1,16 @@
+{
+  "slug": "fci-private-cloud",
+  "product_slug": "cloud-services",
+  "name": "Future Cloud Infrastructure (FCI)",
+  "description": "Next-generation private cloud platform built on VMware Cloud Foundation enabling multi-hybrid cloud strategy with SAP RISE certification and T-Systems twin-core data center hosting.",
+  "taxonomy_mapping": {
+    "dimension": 4,
+    "dimension_name": "Cloud Services",
+    "category_id": "4.3",
+    "category_name": "Private Cloud",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

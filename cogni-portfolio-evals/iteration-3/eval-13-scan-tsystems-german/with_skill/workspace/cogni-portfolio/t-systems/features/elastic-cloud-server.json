@@ -1,0 +1,16 @@
+{
+  "slug": "elastic-cloud-server",
+  "product_slug": "infrastructure-services",
+  "name": "Elastic Cloud Server",
+  "description": "Skalierbare virtuelle Server auf OTC",
+  "taxonomy_mapping": {
+    "dimension": 5,
+    "dimension_name": "Managed Infrastructure Services",
+    "category_id": "5.2",
+    "category_name": "Managed Compute & Storage",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

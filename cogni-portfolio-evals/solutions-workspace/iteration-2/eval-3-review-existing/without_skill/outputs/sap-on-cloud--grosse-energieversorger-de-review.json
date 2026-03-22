@@ -1,0 +1,108 @@
+{
+  "slug": "sap-on-cloud--grosse-energieversorger-de",
+  "solution_name": "SAP on Cloud Managed Services for German Energy Utilities",
+  "feature_slug": "sap-on-cloud",
+  "market_slug": "grosse-energieversorger-de",
+  "review_date": "2026-03-18",
+  "perspectives": {
+    "procurement_decision_maker": {
+      "role": "Procurement Decision-Maker",
+      "criteria": [
+        {
+          "criterion": "ROI clarity and payback period",
+          "score": "pass",
+          "rationale": "The means_statement quantifies value: 25-35% SAP operations cost reduction with 99.95% SLA, freeing CIO budget for innovation (Smart Metering, Sektorenkopplung). The PoV scope includes a TCO projection, and Phase 4 delivers a TCO before/after comparison with 5-year projection. This gives procurement a quantified business case, not just a qualitative promise."
+        },
+        {
+          "criterion": "Pricing tier coherence and value scaling",
+          "score": "pass",
+          "rationale": "Four tiers scale logically: PoV EUR 95K (one IS-U system analysis, 4w), Small EUR 420K (one SAP production system, 16w), Medium EUR 850K (full SAP core landscape IS-U+S/4+BW, 24w), Large EUR 1.4M (5+ systems with dedicated CSM and 99.95% SLA, 36w). The PoV is lightweight and low-commitment — a 4-week analysis that delivers a Go/No-Go with TCO projection. This is the most accessible entry point in the portfolio."
+        },
+        {
+          "criterion": "Margin sustainability across tiers",
+          "score": "warn",
+          "rationale": "Margins range from 28.4% (PoV) to 33.8% (Small). The PoV at 28.4% is below the portfolio target of 30%. While this is defensible as a land-and-expand entry, the margin compression across all tiers (28.4%-33.8%) is tighter than the other two solutions (31-38%). The internal cost calculations are arithmetically consistent: PoV 45 days at blended rate = EUR 68K cost vs EUR 95K price = 28.4% margin. Sustainable but less margin headroom for scope creep."
+        },
+        {
+          "criterion": "Competitive differentiation",
+          "score": "pass",
+          "rationale": "The cost_model includes an explicit competitive positioning statement: T-Systems Managed SAP (KRITIS-experienced, BSI-C5, Sovereign) vs. Hyperscaler Managed SAP (broader ecosystem, no sovereign guarantee) vs. Inhouse-Basis (full control, skills shortage risk). This directly addresses the SektVO evaluation criteria. The 'Fachkraeftemangel-Risiko' framing of inhouse operations is particularly sharp for this market where skills shortage is pain point #5."
+        },
+        {
+          "criterion": "Risk allocation and contractual safeguards",
+          "score": "pass",
+          "rationale": "Comprehensive exit clause: 6 months notice (shorter than the 12 months in other solutions, which is pragmatic for a managed service), 120 days transition support, SAP data export in standard formats (SAP-Backup, SQL), capped exit cost at max 8% annual volume. BSI-C5 compliance documentation, NIS2 readiness assessment, and quarterly audit reports are named compliance deliverables. The 99.95% SLA guarantee in the Large tier is a contractual commitment, not just a target."
+        }
+      ],
+      "summary": "The most procurement-ready solution in the portfolio. Quantified ROI (25-35% cost reduction), explicit competitive positioning, comprehensive exit clause with standard data export formats, and the most accessible PoV entry point. The only concern is PoV margin slightly below the 30% target."
+    },
+    "provider_solution_architect": {
+      "role": "Provider Solution Architect",
+      "criteria": [
+        {
+          "criterion": "Phase structure and delivery realism",
+          "score": "pass",
+          "rationale": "Four phases (Analysis 3w, Platform Build & Migration 6w, IS-U Validation & Load Testing 4w, Cutover & Handover 3w = 16 weeks) align with the Small tier scope. The IS-U-specific validation phase with load testing for annual billing and price adjustment waves shows deep domain understanding. The 3-week cutover with parallel operations is realistic for a managed service transition. Scaling factors (1.5x Medium, 2x Large with parallel system transitions) are documented."
+        },
+        {
+          "criterion": "Effort estimation accuracy",
+          "score": "pass",
+          "rationale": "Small tier: 200 days over 16 weeks for one SAP production system = ~2.5 FTE average. This is appropriate for a SAP platform transition that includes monitoring setup, lifecycle management, and validation. Medium: 420 days for full SAP core (IS-U + S/4 + BW) over 24 weeks = ~3.5 FTE. Large: 680 days for 5+ systems over 36 weeks = ~3.8 FTE with parallel transitions. The effort includes platform provisioning, migration, validation, and handover — not just technical migration."
+        },
+        {
+          "criterion": "Skill mix and domain expertise",
+          "score": "warn",
+          "rationale": "Three generic roles (SA, IE, PM) are used. For SAP managed services, the absence of a dedicated SAP Basis Administrator role is notable — this is the core competency being delivered. The description mentions 4000+ SAP experts and 850K managed SAP users in the feature definition, but the solution's BoM does not reflect SAP-specific roles. An IS-U specialist role would strengthen credibility given that IS-U validation with billing cycle testing is a dedicated phase."
+        },
+        {
+          "criterion": "Dependency management and customer prerequisites",
+          "score": "pass",
+          "rationale": "Customer dependencies are lean: 0.5 FTE SAP Basis Administrator and 1.0 FTE business contact for IS-U billing validation and acceptance testing. This is the lightest customer commitment in the portfolio, directly addressing the market's 'Fachkraeftemangel' pain point. The managed service model inherently reduces client-side operational burden."
+        },
+        {
+          "criterion": "Transition risk management",
+          "score": "pass",
+          "rationale": "Phase 3 includes IS-U-specific billing cycle validation and load testing for annual billing and price adjustment waves — these are the exact scenarios that would fail in a poorly planned SAP transition for an energy utility. Phase 4 includes Produktiv-Cutover with parallel operations and a performance baseline comparison. The TCO before/after comparison in Phase 4 validates the value promise, not just the technical success."
+        }
+      ],
+      "summary": "Well-structured delivery model with strong domain awareness (IS-U billing cycles, Hochlast-Profiling). Effort estimates are realistic and customer prerequisites are the leanest in the portfolio. The main gap is the absence of SAP-specific roles (Basis Admin, IS-U specialist) in the BoM despite these being core to the delivered service."
+    },
+    "client_solution_architect": {
+      "role": "Client Solution Architect",
+      "criteria": [
+        {
+          "criterion": "Integration with existing SAP landscape",
+          "score": "pass",
+          "rationale": "The solution explicitly targets the SAP core landscape (IS-U, S/4HANA, BW) and includes lifecycle management, monitoring, and patch management. The IS-U-specific validation with billing cycle testing demonstrates understanding of the energy utility SAP landscape. The platform build phase includes automated lifecycle management which addresses the ongoing operational integration."
+        },
+        {
+          "criterion": "Operational readiness and SLA credibility",
+          "score": "pass",
+          "rationale": "The Large tier includes a 99.95% SLA guarantee and dedicated Customer Success Manager. The managed service model includes monitoring (Prometheus/Grafana), patch management, and automated lifecycle management — these are operational necessities, not optional add-ons. Phase 4 includes training for the customer operations team, ensuring the client can effectively interface with the managed service."
+        },
+        {
+          "criterion": "Compliance and regulatory alignment",
+          "score": "pass",
+          "rationale": "BSI-C5-attestierte Infrastruktur in German data centers with no access from non-European jurisdictions. Named compliance deliverables: BSI-C5 compliance documentation for the SAP operations platform, NIS2 readiness assessment, quarterly audit reports. This is the only solution that includes recurring compliance reporting as a standard deliverable."
+        },
+        {
+          "criterion": "Data sovereignty and portability",
+          "score": "pass",
+          "rationale": "Data residency is guaranteed in BSI-C5-attested infrastructure in German data centers. Exit clause includes SAP data export in standard formats (SAP-Backup, SQL) — this is specific and actionable, unlike generic 'data export' promises. The 120-day transition support and 8% capped exit cost provide a realistic migration path away from the service."
+        },
+        {
+          "criterion": "Business continuity during transition",
+          "score": "warn",
+          "rationale": "Phase 4 includes Produktiv-Cutover with parallel operations, which is the correct approach. However, the parallel operations duration is not specified — for an energy utility running IS-U, the parallel period should span at least one billing cycle (monthly) to validate billing accuracy. The 3-week Phase 4 may not accommodate a full billing cycle parallel run for IS-U, depending on the billing schedule."
+        }
+      ],
+      "summary": "The most mature solution in the portfolio from a client architecture perspective. Strong SAP domain awareness, named compliance deliverables, specific data export formats in the exit clause, and the lightest customer prerequisites. The only concern is whether the cutover phase accommodates a full IS-U billing cycle parallel run."
+    }
+  },
+  "overall_score": {
+    "pass": 12,
+    "warn": 3,
+    "fail": 0,
+    "verdict": "The strongest solution in the portfolio. Quantified ROI, explicit competitive positioning, named compliance deliverables, SAP-specific data export formats, and the leanest customer prerequisites. Minor gaps: PoV margin slightly below target, SAP-specific roles missing from BoM, and cutover phase duration may be tight for IS-U billing cycle validation."
+  }
+}

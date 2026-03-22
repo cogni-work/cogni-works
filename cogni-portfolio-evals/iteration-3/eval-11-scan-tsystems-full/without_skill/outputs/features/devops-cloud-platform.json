@@ -1,0 +1,13 @@
+{
+  "slug": "devops-cloud-platform",
+  "name": "DevOps Cloud Platform",
+  "description": "DevOps-oriented model for cloud applications with managed toolchain and middleware services",
+  "product_slug": "t-systems-applications",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 6,
+    "category_id": "6.7",
+    "category_name": "DevOps & Platform Engineering"
+  },
+  "source_file": "https://www.t-systems.com/us/en/application-services"
+}

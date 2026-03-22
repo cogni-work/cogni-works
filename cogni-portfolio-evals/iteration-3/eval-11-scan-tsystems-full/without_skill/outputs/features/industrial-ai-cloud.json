@@ -1,0 +1,13 @@
+{
+  "slug": "industrial-ai-cloud",
+  "name": "Industrial AI Cloud",
+  "description": "European industrial AI cloud with 10,000 NVIDIA AI processors for sovereign AI workloads (2026)",
+  "product_slug": "t-systems-cloud",
+  "readiness": "planned",
+  "taxonomy_mapping": {
+    "dimension": 4,
+    "category_id": "4.7",
+    "category_name": "Sovereign Cloud"
+  },
+  "source_file": "https://www.t-systems.com/us/en/company/about-t-systems/profile"
+}

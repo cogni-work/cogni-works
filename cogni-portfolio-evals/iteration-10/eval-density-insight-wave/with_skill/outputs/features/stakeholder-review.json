@@ -1,0 +1,14 @@
+{
+  "slug": "stakeholder-review",
+  "product_slug": "cogni-portfolio",
+  "name": "Stakeholder-Review",
+  "description": "Persona-simulierte Feature-Set-Bewertung, die das gesamte Feature-Set aus drei komplementären Stakeholder-Blickwinkeln auf Coverage-Lücken und Überlappungen prüft — als obligatorisches Quality-Gate vor jeder nachfolgenden Proposition-Generierung.",
+  "category": "quality",
+  "taxonomy_mapping": {
+    "dimension": "Consulting",
+    "category_id": "7.3",
+    "category_name": "Quality & Process Consulting"
+  },
+  "readiness": "ga",
+  "created": "2026-03-21"
+}

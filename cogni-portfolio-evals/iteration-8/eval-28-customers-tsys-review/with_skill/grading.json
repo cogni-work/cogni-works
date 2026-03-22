@@ -1,0 +1,66 @@
+{
+  "expectations": [
+    {
+      "text": "customer-review-assessor invoked",
+      "passed": true,
+      "evidence": "Assessment JSON at outputs/assessment.json follows the exact customer-review-assessor schema with all 3 perspectives, 5 criteria each, weights, and synthesis."
+    },
+    {
+      "text": "Assessment JSON output present with all three perspectives (reviewer, cso, market_expert)",
+      "passed": true,
+      "evidence": "assessment.json contains stakeholder_reviews array with perspective: 'reviewer' (score 100), 'cso' (score 86), 'market_expert' (score 100)."
+    },
+    {
+      "text": "Each perspective has 5 scored criteria with pass/warn/fail and weights",
+      "passed": true,
+      "evidence": "Reviewer: role_completeness(0.30), pain_point_specificity(0.25), buying_criteria_realism(0.20), decision_dynamics_accuracy(0.15), deal_cycle_coherence(0.10). CSO: account_targeting_clarity(0.30), pain_to_proposition_mapping(0.25), objection_anticipation(0.20), multi_threading_guidance(0.15), named_customer_actionability(0.10). Market Expert: segment_calibration(0.30), vertical_authenticity(0.25), temporal_accuracy(0.20), information_source_validity(0.15), regional_accuracy(0.10). All have pass/warn scores."
+    },
+    {
+      "text": "Verdict is accept, revise, or reject",
+      "passed": true,
+      "evidence": "synthesis.verdict = 'accept'"
+    },
+    {
+      "text": "If verdict is revise, revision round executed (max 2)",
+      "passed": true,
+      "evidence": "Verdict was 'accept' on round 1, so no revision needed. Assertion is satisfied (conditional not triggered)."
+    },
+    {
+      "text": "Final profile retains all required fields after revision",
+      "passed": true,
+      "evidence": "No revision was needed (accept verdict). Original profile preserved intact in outputs/grosse-energieversorger-de.json."
+    },
+    {
+      "text": "Synthesis includes priority-tiered improvements (critical/high/optional)",
+      "passed": true,
+      "evidence": "synthesis contains critical_improvements: [], high_improvements: [], optional_improvements: [2 items — CISO pain point refinement and named customer addition]."
+    },
+    {
+      "text": "revision_guidance is non-empty when verdict is revise",
+      "passed": true,
+      "evidence": "Verdict was 'accept', not 'revise'. Conditional not triggered. revision_guidance is present and non-empty regardless ('Profile is strong across all three perspectives...')."
+    }
+  ],
+  "summary": {
+    "passed": 8,
+    "failed": 0,
+    "total": 8,
+    "pass_rate": 1.0
+  },
+  "timing": {
+    "total_duration_seconds": 216.1,
+    "total_tokens": 38060
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "If verdict is revise, revision round executed (max 2)",
+        "reason": "This assertion is vacuously true when verdict is 'accept'. Need a separate eval where the input profile is deliberately weak to exercise the revision loop. Eval-29 (generate from scratch) is more likely to trigger revisions."
+      },
+      {
+        "reason": "No assertion checks whether the scoring math is correct (e.g., CSO score of 86 = 100*0.30 + 60*0.25 + 100*0.20 + 100*0.15 + 60*0.10 = 30+15+20+15+6 = 86). Would catch scoring bugs."
+      }
+    ],
+    "overall": "All assertions pass. The existing profile is strong enough that the revision loop isn't exercised. Eval-29 (generate) will provide better coverage of the revise path."
+  }
+}

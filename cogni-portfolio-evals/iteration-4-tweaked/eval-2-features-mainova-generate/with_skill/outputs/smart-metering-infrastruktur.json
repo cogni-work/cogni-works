@@ -1,0 +1,16 @@
+{
+  "slug": "smart-metering-infrastruktur",
+  "product_slug": "digitale-energiedienste",
+  "name": "Smart-Metering-Infrastruktur",
+  "description": "Verwaltung und Betrieb intelligenter Messsysteme (iMSys) mit zertifizierter Smart-Meter-Gateway-Administration, Fernauslesung ueber HAN- und CLS-Schnittstelle, automatisierter Zaehlerstandserfassung sowie Tarifumschaltung fuer Strom-, Gas- und Fernwaermezaehler im gesamten Versorgungsgebiet.",
+  "category": "metering",
+  "taxonomy_mapping": {
+    "dimension": 1,
+    "dimension_name": "Connectivity Services",
+    "category_id": "1.4",
+    "category_name": "5G & IoT Connectivity",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "created": "2026-03-18"
+}

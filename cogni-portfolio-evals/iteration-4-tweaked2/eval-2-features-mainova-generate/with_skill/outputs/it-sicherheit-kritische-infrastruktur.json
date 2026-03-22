@@ -1,0 +1,16 @@
+{
+  "slug": "it-sicherheit-kritische-infrastruktur",
+  "product_slug": "digitale-energiedienste",
+  "name": "IT-Sicherheit Kritische Infrastruktur",
+  "description": "KRITIS-konformes Security-Operations-Center mit SIEM-basierter Anomalie-Erkennung auf segmentierten IT- und OT-Netzwerken, Incident-Response-Prozessen gemaess BSI-Grundschutz und kontinuierlichem Schwachstellenmanagement nach den Anforderungen des IT-Sicherheitsgesetzes 2.0.",
+  "category": "security-operations",
+  "taxonomy_mapping": {
+    "dimension": 2,
+    "dimension_name": "Security Services",
+    "category_id": "2.1",
+    "category_name": "Security Operations (SOC/SIEM)",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "created": "2026-03-18"
+}

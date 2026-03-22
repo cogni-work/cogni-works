@@ -1,0 +1,14 @@
+{
+  "slug": "performance-analytics",
+  "product_slug": "content-platform",
+  "name": "Performance-Analytics",
+  "description": "Kanalübergreifendes Analyse-Dashboard, das Engagement-, Reichweiten- und Konversionsmetriken je Content-Asset aus allen Distributionskanälen aggregiert, Trendverläufe über konfigurierbare Zeiträume visualisiert und Attributionsgewichte pro Touchpoint berechnet.",
+  "category": "analytics",
+  "taxonomy_mapping": {
+    "dimension": "Application",
+    "category_id": "6.4",
+    "category_name": "Business Intelligence"
+  },
+  "readiness": "ga",
+  "created": "2026-03-21"
+}

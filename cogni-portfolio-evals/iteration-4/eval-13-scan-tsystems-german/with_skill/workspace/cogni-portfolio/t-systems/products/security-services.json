@@ -1,0 +1,9 @@
+{
+  "slug": "security-services",
+  "name": "Security Services",
+  "description": "Cybersecurity- und Compliance-Angebote inkl. SOC/SIEM, IAM, Zero Trust, Cloud Security, Endpoint Protection und GRC.",
+  "revenue_model": "subscription",
+  "maturity": "growth",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

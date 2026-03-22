@@ -1,0 +1,13 @@
+{
+  "slug": "managed-lan-wlan",
+  "name": "Managed LAN/WLAN Services",
+  "description": "Homogenisierung und Betrieb von LAN-Infrastrukturen mit Cloud-basiertem WLAN fuer flexible Anpassung drahtloser Netzwerke.",
+  "product_slug": "t-systems-connectivity",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 1,
+    "category_id": "1.6",
+    "category_name": "LAN/WLAN Services"
+  },
+  "source_file": "https://www.t-systems.com/de/de/connectivity/future-networks-und-sip"
+}

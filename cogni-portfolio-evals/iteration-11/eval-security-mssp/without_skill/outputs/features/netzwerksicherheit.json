@@ -1,0 +1,7 @@
+{
+  "slug": "netzwerksicherheit",
+  "product_slug": "managed-security",
+  "name": "Netzwerksicherheit",
+  "description": "Managed Firewall, Intrusion Detection/Prevention und Netzwerksegmentierung mit kontinuierlicher Traffic-Analyse und regelbasierter Anomalie-Erkennung.",
+  "readiness": "ga"
+}

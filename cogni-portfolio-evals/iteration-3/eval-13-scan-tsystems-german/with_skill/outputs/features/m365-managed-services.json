@@ -1,0 +1,16 @@
+{
+  "slug": "m365-managed-services",
+  "product_slug": "workplace-services",
+  "name": "M365 Managed Services",
+  "description": "Microsoft 365 Deployment inkl. Managed Copilot",
+  "taxonomy_mapping": {
+    "dimension": 3,
+    "dimension_name": "Digital Workplace Services",
+    "category_id": "3.2",
+    "category_name": "Modern Workplace / M365",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

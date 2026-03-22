@@ -9,8 +9,8 @@
     },
     {
       "id": 1,
-      "prompt": "Show me all open issues for the cogni-works ecosystem",
-      "expected_output": "Lists open issues across cogni-works plugins, grouped by plugin or label, with status and assignee",
+      "prompt": "Show me all open issues for the insight-wave ecosystem",
+      "expected_output": "Lists open issues across insight-wave plugins, grouped by plugin or label, with status and assignee",
       "files": []
     },
     {

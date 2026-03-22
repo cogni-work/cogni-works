@@ -1,0 +1,13 @@
+{
+  "slug": "system-integration-api",
+  "name": "System Integration & API",
+  "description": "Integration komplexer IT-Systeme, Managed EDI Services und Partnerintegration (Dassault Systemes u.a.).",
+  "product_slug": "t-systems-applications",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 6,
+    "category_id": "6.4",
+    "category_name": "System Integration & API"
+  },
+  "source_file": "https://www.t-systems.com/us/en/application-services"
+}

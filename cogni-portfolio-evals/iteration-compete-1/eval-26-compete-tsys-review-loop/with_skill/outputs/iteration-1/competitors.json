@@ -1,0 +1,113 @@
+{
+  "slug": "cloud-migration--grosse-energieversorger-de",
+  "proposition_slug": "cloud-migration--grosse-energieversorger-de",
+  "competitors": [
+    {
+      "name": "Accenture",
+      "source_url": "https://www.accenture.com/content/dam/accenture/final/a-com-migration/r3-3/pdf/pdf-167/accenture-sap-cloud-utilities-german.pdf",
+      "positioning": "Globaler Technologiepartner für End-to-End-Cloud-Transformation mit SAP Cloud for Utilities als Kernplattform — positioniert sich als strategischer Transformationsberater, nicht nur als Migrator.",
+      "strengths": [
+        "Größte SAP-Practice weltweit mit über 70.000 SAP-Beratern und enger Co-Innovation mit SAP",
+        "Smart(field)-Methodik für S/4HANA-Konversion mit automatisiertem Code-Assessment",
+        "Globale Delivery-Kapazität mit Nearshore-Centern in Osteuropa für Skalierung",
+        "Starke C-Level-Beziehungen bei DAX-Energieversorgern durch Management-Consulting-Heritage",
+        "Eigene CO2-Reduktions-Narrative für Cloud-Migration (60 Mio. Tonnen/Jahr Studie)"
+      ],
+      "weaknesses": [
+        "Keine eigene Cloud-Infrastruktur — abhängig von AWS/Azure/GCP ohne Souveränitätsgarantie auf deutschem Boden",
+        "Kein BSI-C5-zertifiziertes eigenes Rechenzentrum — muss auf Hyperscaler-Zertifizierungen verweisen",
+        "Tagessätze 30-50% über T-Systems für vergleichbare Delivery-Rollen",
+        "Kein eigenes Netzwerk-Backbone — kann Network-dependent Workloads (SCADA, Netzleittechnik) nicht end-to-end absichern",
+        "Hohe Fluktuation bei Projektteams — bei 18-Monats-Migrationsprojekten kritisch für Wissensverlust"
+      ],
+      "differentiation": "T-Systems besitzt mit der DT-Netzinfrastruktur und dem BSI-C5-zertifizierten Sovereign Cloud eine strukturelle Souveränitätsgarantie, die Accenture nicht leisten kann — bei KRITIS-regulierten Energieversorgern ein Ausschlusskriterium."
+    },
+    {
+      "name": "Capgemini",
+      "source_url": "https://www.capgemini.com/news/press-releases/capgemini-deepens-partnership-with-sap-to-bolster-europes-digital-sovereignty-and-accelerate-time-to-value-for-ai-powered-enterprise-innovation-and-transformation/",
+      "positioning": "Europäischer Systemintegrator mit Fokus auf digitale Souveränität — positioniert sich über die Bleu-Sovereign-Cloud-Plattform (JV mit Orange) und die SAP-Sovereign-Technology-Partnership als europäische Alternative zu US-Anbietern.",
+      "strengths": [
+        "Bleu Sovereign Cloud (JV mit Orange) für regulierte Branchen in Frankreich — europäische Souveränitäts-Narrative",
+        "Cloud4C-Akquisition (Q4 2025) stärkt Managed-Cloud-Delivery mit Automatisierungsplattform",
+        "SAP Sovereign Technology Partnership mit Fokus auf Deutschland, Frankreich, NL, UK",
+        "Starke Utilities-Practice in Frankreich (EDF, Engie) mit übertragbarem Branchenwissen",
+        "Nearshore-Center in Polen und Indien mit günstigerer Kostenbasis als Accenture"
+      ],
+      "weaknesses": [
+        "Bleu-Plattform ist France-first — in Deutschland kein vergleichbares Sovereign-Cloud-Angebot operativ verfügbar",
+        "Geringere Marktpräsenz bei deutschen Energieversorgern als T-Systems oder Accenture",
+        "SAP IS-U-Expertise deutlich schwächer als bei T-Systems — französische Utilities nutzen andere Billing-Systeme",
+        "Cloud4C-Integration noch nicht abgeschlossen — Synergien für DACH-Kunden erst ab 2027 realistisch",
+        "Kein eigenes deutsches Netzwerk-Backbone für OT/IT-Konvergenz-Szenarien"
+      ],
+      "differentiation": "T-Systems hat mit dem Open Sovereign Cloud und T Cloud Public eine operative Souveränitätsplattform in Deutschland, während Capgeminis Bleu auf Frankreich beschränkt ist und in der DACH-Region kein vergleichbares Angebot existiert."
+    },
+    {
+      "name": "IBM",
+      "source_url": "https://www.ibm.com/consulting/cloud-migration",
+      "positioning": "Hybrid-Cloud-Stratege mit Red Hat OpenShift als Multi-Cloud-Abstraktionsschicht und IBM Power als Legacy-Modernisierungsplattform — positioniert sich als Brücke zwischen Mainframe-Welt und Cloud-native.",
+      "strengths": [
+        "Red Hat OpenShift als führende Container-Plattform für Hybrid-Cloud-Szenarien",
+        "RISE with SAP auf IBM Power Virtual Server — einzigartiges Angebot für SAP-Workloads auf proprietärer Hardware",
+        "IBM Innovation Center für SAP Solutions in Walldorf — räumliche Nähe zur SAP-Entwicklung",
+        "Starke Mainframe-zu-Cloud-Migrationskompetenz für Legacy-Systeme (z.B. alte Abrechnungssysteme)",
+        "IBM Consulting mit 160.000 Beratern weltweit und starker DACH-Präsenz"
+      ],
+      "weaknesses": [
+        "IBM Cloud hat in Europa Marktanteile verloren — kein ernsthafter Hyperscaler-Wettbewerber mehr",
+        "Kein eigenes deutsches Sovereign-Cloud-Angebot mit BSI-C5-Zertifizierung",
+        "Red Hat OpenShift erzeugt Vendor-Lock-in bei Container-Orchestrierung",
+        "Consulting-Spin-off (2024) hat zu Unsicherheit bei Bestandskunden geführt — Delivery-Kontinuität unklar",
+        "Energiesektor-Referenzen in Deutschland schwächer als in Nordamerika"
+      ],
+      "differentiation": "T-Systems bietet mit der Zero-Outage-Methodik und 25 Jahren SAP-IS-U-Betriebserfahrung eine nachweisbare Betriebssicherheit, die IBMs primär technologiegetriebener Hybrid-Cloud-Ansatz nicht substituieren kann."
+    },
+    {
+      "name": "TCS (Tata Consultancy Services)",
+      "source_url": "https://www.tcs.com/what-we-do/services/cloud/solution/google-cloud-migration-digital-transformation",
+      "positioning": "Globaler IT-Dienstleister mit industrialisierter Cloud Migration Factory und kostenoptimiertem Offshore-Delivery-Modell — positioniert sich als skalierbare, preisgünstige Alternative zu europäischen SIs.",
+      "strengths": [
+        "IDC MarketScape Leader für Energy Transition Professional Services (Dezember 2025)",
+        "Industrialisierte Cloud Migration Factory mit MasterCraft-Automatisierungsplattform",
+        "Tagessätze 40-60% unter europäischen SIs bei vergleichbarer technischer Kompetenz",
+        "Globale SAP-Practice mit 50.000+ SAP-Beratern und starker S/4HANA-Migrationserfahrung",
+        "Langfristige Managed-Services-Verträge mit attraktiven TCO-Modellen"
+      ],
+      "weaknesses": [
+        "Minimale Vor-Ort-Präsenz in Deutschland — bei KRITIS-Projekten mit Sicherheitsfreigabe-Anforderungen problematisch",
+        "Keine eigene europäische Cloud-Infrastruktur oder Sovereign-Cloud-Strategie",
+        "OT/IT-Konvergenz-Expertise (SCADA, Netzleittechnik) deutlich schwächer als bei europäischen Spezialisten",
+        "Kulturelle und sprachliche Barrieren bei Buying-Committee-Gesprächen mit OT-Leitern und CISOs",
+        "BSI-C5 und KRITIS-DachG-Compliance schwer darstellbar ohne eigene deutsche Infrastruktur"
+      ],
+      "differentiation": "T-Systems kombiniert deutsche Infrastruktur-Souveränität (DT-Backbone, BSI-C5-zertifizierte RZ) mit lokalem Energiesektor-Know-how, das TCS trotz günstigerer Tagessätze nicht kompensieren kann — insbesondere bei KRITIS-relevanten OT/IT-Migrationen."
+    },
+    {
+      "name": "Arvato Systems",
+      "source_url": "https://www.arvato-systems-energy-portfolio.de/",
+      "positioning": "Bertelsmann-Tochter mit dediziertem Energiesektor-Portfolio und Multi-Cloud-Migrationsdiensten — positioniert sich als spezialisierter Mittelstandspartner mit tiefem Branchenverständnis für Versorgungsunternehmen.",
+      "strengths": [
+        "Dediziertes Energiesektor-Portfolio mit Energy Data Hub und branchenspezifischen Lösungen",
+        "Enterprise Architecture Management speziell für Energieversorger entwickelt",
+        "Partnerschaften mit SAP, AWS und Microsoft Azure für Multi-Cloud-Szenarien",
+        "Deutsche Unternehmenskultur und Sprache — kurze Kommunikationswege bei DACH-Projekten",
+        "Starke Referenzen bei Stadtwerken und mittelgroßen Versorgern"
+      ],
+      "weaknesses": [
+        "Kapazitätsgrenzen bei Großprojekten (>50 Mio. EUR) — Personaldecke reicht nicht für parallele Groß-Migrationen",
+        "Keine eigene Cloud-Infrastruktur — vollständig abhängig von Hyperscaler-Partnern",
+        "Kein eigenes Netzwerk-Backbone für netznahe OT-Workloads",
+        "Geringere globale Skalierbarkeit als T-Systems, Accenture oder IBM",
+        "Sovereign-Cloud-Positionierung nicht vergleichbar mit T-Systems oder DT-Ökosystem"
+      ],
+      "differentiation": "T-Systems kann Großmigrationen bei Top-20-Energieversorgern mit >5.000 Mitarbeitern end-to-end stemmen — Infrastruktur, Netzwerk, SAP-Betrieb und Sovereign Cloud aus einer Hand — während Arvato Systems bei dieser Projektgröße an Kapazitätsgrenzen stößt."
+    }
+  ],
+  "trap_questions": [
+    "Können Sie nachweisen, dass Ihre Cloud-Plattform BSI-C5-Typ-2-attestiert ist und die Datenverarbeitung ausschließlich in deutschen Rechenzentren unter deutscher Jurisdiktion erfolgt — ohne Subprozessoren mit US-CLOUD-Act-Zugriffsmöglichkeit?",
+    "Wie stellen Sie die unterbrechungsfreie Migration von SAP IS-U-Abrechnungssystemen sicher, wenn parallel der KRITIS-Regelbetrieb (Netzleitstelle, SCADA) aufrechterhalten werden muss — können Sie eine Referenz aus dem deutschen Energiesektor mit vergleichbarer Komplexität benennen?",
+    "Verfügt Ihr Unternehmen über ein eigenes Telekommunikations-Backbone in Deutschland, das die Netzanbindung kritischer OT-Systeme (Netzleittechnik, Smart-Meter-Gateway-Administration) ohne Abhängigkeit von Drittanbietern sicherstellt?",
+    "Wie viele Ihrer für dieses Projekt vorgesehenen Berater verfügen über eine BSI-Sicherheitsüberprüfung (Ü2/Ü3) und sind innerhalb von 4 Wochen für einen Projektstart in Deutschland verfügbar?"
+  ],
+  "created": "2026-03-18"
+}

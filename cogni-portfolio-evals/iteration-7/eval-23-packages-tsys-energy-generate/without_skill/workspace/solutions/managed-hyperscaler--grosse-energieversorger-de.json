@@ -1,0 +1,45 @@
+{
+  "slug": "managed-hyperscaler--grosse-energieversorger-de",
+  "proposition_slug": "managed-hyperscaler--grosse-energieversorger-de",
+  "solution_type": "project",
+  "implementation": [
+    {
+      "phase": "Well-Architected Review",
+      "duration_weeks": 2,
+      "description": "Current-state assessment across AWS/Azure/GCP, security posture evaluation, cost optimization analysis, landing zone readiness"
+    },
+    {
+      "phase": "Landing Zone & Guardrails",
+      "duration_weeks": 4,
+      "description": "Standardized landing zone deployment, IAM and network security guardrails, monitoring and alerting setup, compliance policy-as-code"
+    },
+    {
+      "phase": "Operations Transition",
+      "duration_weeks": 3,
+      "description": "24/7 operations handover, incident response integration, SLA establishment, first-month stabilization with dedicated transition manager"
+    }
+  ],
+  "pricing": {
+    "proof_of_value": {
+      "price": 18000,
+      "currency": "EUR",
+      "scope": "Well-Architected Review for one hyperscaler environment, 2-week delivery"
+    },
+    "small": {
+      "price": 85000,
+      "currency": "EUR",
+      "scope": "Single hyperscaler, up to 100 instances, 8-week onboarding"
+    },
+    "medium": {
+      "price": 195000,
+      "currency": "EUR",
+      "scope": "Two hyperscalers, up to 300 instances, 12-week onboarding"
+    },
+    "large": {
+      "price": 380000,
+      "currency": "EUR",
+      "scope": "All three hyperscalers, unlimited instances, 16-week onboarding with dedicated CSM"
+    }
+  },
+  "created": "2026-01-25"
+}

@@ -1,0 +1,17 @@
+{
+  "slug": "cloud-finops",
+  "product_slug": "cloud-services",
+  "name": "Cloud FinOps",
+  "description": "Structured FinOps practice spanning maturity assessment (Light/Deep-dive), cost-governance accelerators, and continuous FinOps-as-a-Service using Flexera and Apptio tooling across AWS, Azure, and GCP environments.",
+  "category": "cloud-management",
+  "taxonomy_mapping": {
+    "dimension": 4,
+    "dimension_name": "Cloud Services",
+    "category_id": "4.2",
+    "category_name": "Multi-Cloud Management"
+  },
+  "readiness": "ga",
+  "created": "2026-01-15",
+  "updated": "2026-03-18",
+  "_migration_note": "Renamed from multi-cloud-finops. Multi-cloud governance scope removed (already covered by hybrid-cloud feature). FinOps scope retained and sharpened."
+}

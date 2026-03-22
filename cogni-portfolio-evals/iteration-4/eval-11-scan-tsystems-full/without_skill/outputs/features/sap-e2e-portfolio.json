@@ -1,0 +1,13 @@
+{
+  "slug": "sap-e2e-portfolio",
+  "name": "SAP End-to-End Portfolio",
+  "description": "Full SAP lifecycle: consulting, migration, hosting, application management services",
+  "product_slug": "t-systems-applications",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 6,
+    "category_id": "6.3",
+    "category_name": "Enterprise Platform Services"
+  },
+  "source_file": "https://www.t-systems.com/us/en/application-services/solutions/sap-solutions"
+}

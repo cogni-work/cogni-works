@@ -1,0 +1,16 @@
+{
+  "slug": "microsoft-365-readiness-management",
+  "product_slug": "workplace-services",
+  "name": "Microsoft 365 Readiness & Management",
+  "description": "Standardized Bechtle M365 Readiness Package providing tenant readiness assessment, configuration baseline, user migration execution, ongoing licence optimization and Copilot AI enablement.",
+  "taxonomy_mapping": {
+    "dimension": 3,
+    "dimension_name": "Digital Workplace Services",
+    "category_id": "3.2",
+    "category_name": "Modern Workplace / M365",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/bechtle-portfolio.md",
+  "created": "2026-03-18"
+}

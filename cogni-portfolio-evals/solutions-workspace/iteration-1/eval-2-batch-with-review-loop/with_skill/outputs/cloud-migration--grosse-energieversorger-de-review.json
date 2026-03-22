@@ -1,0 +1,102 @@
+{
+  "solution_slug": "cloud-migration--grosse-energieversorger-de",
+  "solution_type": "project",
+  "overall": "warn",
+  "overall_score": 82,
+  "stakeholder_reviews": [
+    {
+      "perspective": "reviewer",
+      "score": 86,
+      "overall": "pass",
+      "criteria": {
+        "roi_clarity": { "score": "pass", "weight": 0.30, "note": "" },
+        "budget_fit": { "score": "pass", "weight": 0.25, "note": "" },
+        "risk_reward_transparency": { "score": "pass", "weight": 0.20, "note": "" },
+        "competitive_positioning": { "score": "warn", "weight": 0.15, "note": "Keine Wettbewerbsdaten vorhanden — Einkauf wird nach Marktvergleich fragen" },
+        "decision_pathway": { "score": "pass", "weight": 0.10, "note": "" }
+      },
+      "strengths": [
+        "Klare PoV-Definition mit Go/No-Go-Report und 6R-Klassifizierung als konkretes Ergebnis",
+        "Preisgestaltung plausibel für große Energieversorger (49K-950K EUR Bandbreite)",
+        "Annahmen spezifisch und auditierbar — OT/IT-Segmentierung, API-Scope, On-site-Anteil"
+      ],
+      "concerns": [
+        "Keine Wettbewerbsreferenz — CFO wird nach Marktvergleich fragen"
+      ],
+      "recommendations": [
+        "OPTIONAL: Wettbewerbsdaten ergänzen für Pricing-Validierung im Einkaufsprozess"
+      ]
+    },
+    {
+      "perspective": "provider_sa",
+      "score": 78,
+      "overall": "warn",
+      "criteria": {
+        "delivery_realism": { "score": "warn", "weight": 0.30, "note": "Large-Tier: 420 Tage in 36 Wochen = 2.3 FTE — machbar aber ambitioniert bei 80+ Workloads und KRITIS-Anforderungen" },
+        "scope_effort_coherence": { "score": "pass", "weight": 0.25, "note": "" },
+        "phase_architecture": { "score": "pass", "weight": 0.20, "note": "" },
+        "does_traceability": { "score": "pass", "weight": 0.15, "note": "" },
+        "tier_scalability": { "score": "pass", "weight": 0.10, "note": "" }
+      },
+      "strengths": [
+        "Phasen sind migrationstyp-spezifisch — KRITIS-Staging als eigene Phase zeigt Domänenverständnis",
+        "Sprint-basierter Ansatz ermöglicht inkrementelle Risikoreduktion",
+        "DOES-Statement vollständig nachvollziehbar: IS-U/SCADA/ERP → Sprint-Migration → KRITIS-Staging"
+      ],
+      "concerns": [
+        "Large-Tier Timeline ist ambitioniert für 80+ Workloads mit KRITIS-Regulatorik"
+      ],
+      "recommendations": [
+        "HIGH: Large-Tier Timeline auf 40-44 Wochen erweitern oder Scope auf 60-80 Workloads begrenzen"
+      ]
+    },
+    {
+      "perspective": "client_sa",
+      "score": 82,
+      "overall": "warn",
+      "criteria": {
+        "integration_feasibility": { "score": "pass", "weight": 0.30, "note": "" },
+        "dependency_risk": { "score": "pass", "weight": 0.25, "note": "" },
+        "operational_readiness": { "score": "pass", "weight": 0.20, "note": "" },
+        "vendor_lockin": { "score": "warn", "weight": 0.15, "note": "Keine Aussage zu Portabilität oder Cloud-Provider-Abhängigkeit nach Migration" },
+        "security_compliance": { "score": "pass", "weight": 0.10, "note": "" }
+      },
+      "strengths": [
+        "OT/IT-Trennung und KRITIS-Compliance explizit adressiert",
+        "Betriebsübergabe mit Enablement des internen Teams vorgesehen",
+        "Client-Voraussetzungen klar benannt (Staging-Zugang, Netzwerksegmentierung)"
+      ],
+      "concerns": [
+        "Keine Aussage zu Datenportabilität oder Cloud-Provider-Lock-in nach Migration"
+      ],
+      "recommendations": [
+        "OPTIONAL: Portabilitäts-Statement ergänzen — welche Standards werden verwendet, wie aufwändig wäre ein Provider-Wechsel"
+      ]
+    }
+  ],
+  "synthesis": {
+    "conflicts": [],
+    "critical_improvements": [],
+    "high_improvements": [
+      {
+        "description": "Large-Tier Timeline realistischer gestalten: 40-44 Wochen oder Workload-Scope auf 60-80 begrenzen",
+        "stakeholders": ["provider_sa"],
+        "affects": "implementation[2].duration_weeks, pricing.large.scope"
+      }
+    ],
+    "optional_improvements": [
+      {
+        "description": "Wettbewerbskontext für Pricing-Validierung im Einkaufsprozess ergänzen",
+        "stakeholders": ["reviewer"],
+        "affects": "cost_model.assumptions"
+      },
+      {
+        "description": "Cloud-Provider-Portabilität und Lock-in-Risiko adressieren",
+        "stakeholders": ["client_sa"],
+        "affects": "cost_model.assumptions"
+      }
+    ],
+    "verdict": "revise",
+    "revision_guidance": "Fokus auf Large-Tier Delivery-Realism: Timeline auf 40 Wochen verlängern oder Workload-Scope enger fassen. Optional: Portabilitäts-Statement und Wettbewerbskontext in Annahmen aufnehmen."
+  }
+}

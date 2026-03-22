@@ -1,0 +1,13 @@
+{
+  "slug": "cloud-security",
+  "name": "Cloud Security Services",
+  "description": "SaaS protection, IaaS security, container security, shadow IT discovery, and web application firewall",
+  "product_slug": "telekom-security",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 2,
+    "category_id": "2.4",
+    "category_name": "Cloud Security"
+  },
+  "source_file": "https://www.t-systems.com/de/en/security/cloud-security"
+}

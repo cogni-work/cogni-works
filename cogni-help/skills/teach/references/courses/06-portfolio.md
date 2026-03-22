@@ -418,7 +418,7 @@ Congratulations! You now know how to:
 - Define markets with TAM/SAM/SOM
 - Conduct competitor and customer analysis for messaging
 - Build segment-specific propositions
-- Connect portfolio work with other cogni-works plugins
+- Connect portfolio work with other insight-wave plugins
 
 **Something unclear or broken?** Tell Claude what happened — cogni-issues will help you file it.
 

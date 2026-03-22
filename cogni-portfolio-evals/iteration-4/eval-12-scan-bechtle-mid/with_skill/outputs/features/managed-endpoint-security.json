@@ -1,0 +1,16 @@
+{
+  "slug": "managed-endpoint-security",
+  "product_slug": "security-services",
+  "name": "Managed Endpoint Security",
+  "description": "Centrally managed endpoint protection using single-agent architecture combining Trellix EDR, Microsoft Defender XDR and CrowdStrike with threat defense, firewall and web control capabilities.",
+  "taxonomy_mapping": {
+    "dimension": 2,
+    "dimension_name": "Security Services",
+    "category_id": "2.5",
+    "category_name": "Endpoint Security",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/bechtle-portfolio.md",
+  "created": "2026-03-18"
+}

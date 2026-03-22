@@ -1,0 +1,34 @@
+{
+  "slug": "grosse-energieversorger-de",
+  "name": "Große Energieversorger Deutschland",
+  "region": "de",
+  "description": "Large German energy utilities with 5000+ employees and critical infrastructure obligations.",
+  "segmentation": {
+    "company_size": "5000+ employees",
+    "revenue_range": "EUR 1B+",
+    "vertical": "Energy & Utilities",
+    "employees_min": 5000,
+    "employees_max": 100000,
+    "vertical_codes": ["energy", "utilities"]
+  },
+  "priority": "beachhead",
+  "tam": {
+    "value": 8000000000,
+    "currency": "EUR",
+    "description": "IT services for European energy utilities",
+    "source": "Gartner 2025"
+  },
+  "sam": {
+    "value": 2500000000,
+    "currency": "EUR",
+    "description": "Cloud and IT modernization for large German energy utilities",
+    "source": "ISG 2025"
+  },
+  "som": {
+    "value": 150000000,
+    "currency": "EUR",
+    "description": "T-Systems addressable share based on existing energy references",
+    "source": "Internal estimate"
+  },
+  "created": "2026-01-15"
+}

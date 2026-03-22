@@ -1,0 +1,16 @@
+{
+  "slug": "it-strategy",
+  "product_slug": "consulting-services",
+  "name": "IT Strategy and Architecture Consulting",
+  "description": "IT roadmaps, enterprise architecture with TOGAF/ITIL/PRINCE2",
+  "taxonomy_mapping": {
+    "dimension": 7,
+    "dimension_name": "Consulting Services",
+    "category_id": "7.1",
+    "category_name": "IT Strategy & Architecture",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/bechtle-portfolio.md",
+  "created": "2026-03-18"
+}

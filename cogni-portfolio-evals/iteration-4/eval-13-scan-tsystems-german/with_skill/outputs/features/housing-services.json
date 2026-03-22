@@ -1,0 +1,16 @@
+{
+  "slug": "housing-services",
+  "product_slug": "infrastructure-services",
+  "name": "Housing Services",
+  "description": "Data center colocation and housing at Biere twin-core facility spanning 11,000 square meters with 100,000 server capacity, 970 petabytes storage, and geographic redundancy at 18km distance.",
+  "taxonomy_mapping": {
+    "dimension": 5,
+    "dimension_name": "Managed Infrastructure Services",
+    "category_id": "5.1",
+    "category_name": "Data Center Services",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

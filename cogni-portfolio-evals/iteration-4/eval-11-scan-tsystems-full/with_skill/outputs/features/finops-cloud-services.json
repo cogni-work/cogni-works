@@ -1,0 +1,16 @@
+{
+  "slug": "finops-cloud-services",
+  "product_slug": "cloud-services",
+  "name": "FinOps Cloud Services",
+  "description": "Dedicated cloud financial management practice designing governance models, implementing cost transparency tooling, and establishing FinOps processes for long-term multi-cloud cost optimization.",
+  "taxonomy_mapping": {
+    "dimension": 4,
+    "dimension_name": "Cloud Services",
+    "category_id": "4.2",
+    "category_name": "Multi-Cloud Management",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

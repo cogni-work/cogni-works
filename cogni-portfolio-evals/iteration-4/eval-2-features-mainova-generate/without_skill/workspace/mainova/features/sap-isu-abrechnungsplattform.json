@@ -1,0 +1,14 @@
+{
+  "slug": "sap-isu-abrechnungsplattform",
+  "product_slug": "it-plattformdienste",
+  "name": "SAP IS-U Abrechnungsplattform",
+  "description": "SAP-IS-U-basierte Verbrauchsabrechnung fuer Strom, Gas, Fernwaerme und Wasser mit vollstaendiger Marktkommunikation (GPKE, GeLi, WiM), Geraeteverwaltung, Tarifkalkulation und regulatorischer Meldepflichterfuellung.",
+  "category": "enterprise-platforms",
+  "taxonomy_mapping": {
+    "dimension": 6,
+    "category_id": "6.3",
+    "category_name": "Enterprise Platform Services",
+    "horizon": "current"
+  },
+  "readiness": "ga"
+}

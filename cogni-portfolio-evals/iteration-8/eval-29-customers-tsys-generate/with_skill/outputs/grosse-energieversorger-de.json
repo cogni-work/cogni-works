@@ -1,0 +1,193 @@
+{
+  "slug": "grosse-energieversorger-de",
+  "market_slug": "grosse-energieversorger-de",
+  "profiles": [
+    {
+      "role": "CIO / VP IT",
+      "seniority": "C-level / C-1",
+      "pain_points": [
+        "SAP IS-U end-of-life (ECC support ends 2027) forces a cloud migration decision under time pressure while maintaining 24/7 grid operations.",
+        "NIS2 transposition into German law (effective October 2026) requires demonstrable supply-chain security for all IT service providers — current contracts lack BSI-C5 clauses.",
+        "Fachkräftemangel: unable to recruit enough cloud and security engineers domestically, creating dependency on external managed service providers.",
+        "Multi-cloud sprawl across AWS, Azure, and private infrastructure has no unified governance layer, leading to uncontrolled shadow-IT spending estimated at 15-20% of total cloud budget.",
+        "OT/IT convergence for smart grid and Netzleitstelle systems requires air-gapped hybrid architectures that most hyperscalers cannot natively support."
+      ],
+      "buying_criteria": [
+        "BSI-C5 Type 2 attestation and KRITIS audit readiness for all cloud services",
+        "Proven SAP IS-U migration references in the German energy sector",
+        "24/7 managed operations with guaranteed 15-minute incident response SLA",
+        "Data residency within EU/Germany — sovereign cloud capability mandatory",
+        "Rahmenvertrag-compatible commercial model with SektVO-compliant procurement"
+      ],
+      "information_sources": [
+        "E-world energy & water (Essen)",
+        "Handelsblatt Energietagung",
+        "BDEW Kongress",
+        "Energiewirtschaftliche Tagesfragen (et)",
+        "Gartner IT Symposium EMEA"
+      ],
+      "decision_role": "Economic buyer — owns IT budget and signs strategic IT service contracts. Chairs the internal steering committee for cloud transformation programs."
+    },
+    {
+      "role": "CISO / Head of IT Security",
+      "seniority": "C-1 / Director",
+      "pain_points": [
+        "NIS2 Article 21 mandates supply-chain risk management for all ICT providers — requires re-assessment of every cloud and managed service contract by October 2026.",
+        "BSI KRITIS audits (§8a BSIG) demand continuous evidence of security controls across hybrid environments, but current tooling covers only on-premises infrastructure.",
+        "SCADA/OT systems in Netzleitstelle and Messstellenbetrieb require air-gapped isolation from public cloud, but business demands real-time data exchange with IT analytics layers.",
+        "Security operations center capacity is insufficient to monitor multi-cloud estates — alert volumes doubled after hyperscaler adoption without additional SOC headcount.",
+        "Third-party risk from hyperscaler dependencies (US CLOUD Act exposure) creates board-level concern about data sovereignty for energy trading and grid control data."
+      ],
+      "buying_criteria": [
+        "BSI-C5 Type 2 plus ISO 27001 certification for all service components",
+        "EU data sovereignty — no data transfer outside EU jurisdiction, no US CLOUD Act exposure",
+        "Dedicated security incident response with German-speaking SOC team",
+        "OT/IT network segmentation capability with certified air-gap isolation",
+        "NIS2-compliant supply-chain documentation and audit-trail access"
+      ],
+      "information_sources": [
+        "BSI IT-Grundschutz-Kompendium",
+        "BDEW Whitepaper IT-Sicherheit",
+        "it-sa Security Expo (Nürnberg)",
+        "VDE/DKE Normenreihe IEC 62351",
+        "Cyber Security Cluster Bonn"
+      ],
+      "decision_role": "Veto-holder — must approve all IT service providers from a security and compliance perspective. Can block procurement if BSI-C5 or KRITIS requirements are not met. Reports directly to Vorstand."
+    },
+    {
+      "role": "Head of Procurement / Einkauf IT-Dienstleistungen",
+      "seniority": "Director",
+      "pain_points": [
+        "SektVO (Sektorenverordnung) procurement requirements for energy utilities mandate formal tendering processes for IT contracts above EUR 431K threshold — adds 3-6 months to deal cycles.",
+        "Consolidating fragmented IT service provider landscape: 15-25 active cloud/IT vendors per utility creates contract management overhead and dilutes volume discounts.",
+        "Price benchmarking for managed cloud services lacks transparency — hyperscaler pricing models change quarterly, making TCO comparisons unreliable.",
+        "Rahmenvertrag negotiations require standardized service catalogs and SLA frameworks, but most cloud providers deliver bespoke proposals that resist standardization."
+      ],
+      "buying_criteria": [
+        "SektVO-compliant procurement process documentation",
+        "Rahmenvertrag capability with standardized service catalog and SLA matrix",
+        "Volume discount structures for multi-year commitments (3-5 year terms preferred)",
+        "Reference customers in German KRITIS-regulated industries",
+        "EVB-IT-compatible contract templates"
+      ],
+      "information_sources": [
+        "BME (Bundesverband Materialwirtschaft, Einkauf und Logistik)",
+        "Beschaffung aktuell",
+        "BDEW procurement guidelines",
+        "VKU Einkaufstag",
+        "Peer networks within KRITIS operator community"
+      ],
+      "decision_role": "Gatekeeper — controls the formal procurement process. Must validate that all vendors meet SektVO requirements before contracts can be signed. Has veto power over non-compliant suppliers."
+    },
+    {
+      "role": "Head of Cloud Platform / Enterprise Architect",
+      "seniority": "Senior Manager / Director",
+      "pain_points": [
+        "No unified landing zone across AWS, Azure, and sovereign cloud — each environment has its own IAM, networking, and monitoring stack, doubling operational effort.",
+        "Container platform standardization (Kubernetes) stalled because OT teams require certified hardened distributions while IT teams prefer vanilla cloud-native offerings.",
+        "Migration backlog of 500+ legacy workloads (including SAP IS-U, billing, meter data management) with no standardized 6R assessment methodology in place.",
+        "Hybrid connectivity between on-premises data centers, edge locations (substations), and public cloud lacks a managed MPLS/SD-WAN backbone with deterministic latency."
+      ],
+      "buying_criteria": [
+        "Multi-cloud governance platform with single-pane management across AWS, Azure, and sovereign cloud",
+        "Proven cloud migration framework with 6R assessment and sprint-based execution",
+        "Managed Kubernetes with BSI-certified hardened images for OT workloads",
+        "Well-Architected Review capability across all three major hyperscalers",
+        "Certified MSP status for AWS, Azure, and Google Cloud"
+      ],
+      "information_sources": [
+        "AWS re:Invent / Azure Envision / Google Cloud Next",
+        "Gartner Magic Quadrant for Cloud and Platform Services",
+        "ISG Provider Lens Cloud Transformation Services",
+        "KubeCon Europe",
+        "VDI Nachrichten"
+      ],
+      "decision_role": "Technical evaluator and champion — initiates cloud platform vendor selection, runs PoC/PoV evaluations, and recommends the preferred provider to CIO. Influences scope and architecture decisions."
+    }
+  ],
+  "buying_committee": {
+    "size": "5-8 stakeholders (core 4 roles above plus divisional IT leads and Betriebsrat for outsourcing decisions)",
+    "decision_model": "Consensus-driven with CIO as final economic buyer. CISO and Einkauf hold formal veto rights. Betriebsrat must be consulted for managed service contracts that could affect internal IT headcount.",
+    "typical_deal_cycle": "12-18 months from first engagement to Rahmenvertrag signature. PoV/pilot phase adds 2-3 months. SektVO formal tendering adds 3-6 months for contracts above EUR 431K.",
+    "deal_size": "EUR 3-8M annual contract value for managed cloud services; EUR 1-3M for migration projects",
+    "stall_points": [
+      "BSI-C5 vetting: CISO requires full attestation review before shortlisting (3-6 months if attestation is not current)",
+      "SektVO formal tender: Einkauf must run compliant procurement process for contracts above threshold (3-6 months)",
+      "Betriebsrat consultation: Required for managed service contracts that could reduce internal IT headcount (1-3 months)",
+      "NIS2 supply-chain assessment: New requirement from October 2026 — adds vendor security due diligence step",
+      "Budget cycle alignment: Large IT investments require Vorstand approval during annual planning (October-December)",
+      "OT stakeholder sign-off: Netzleitstelle and grid operations teams must validate that cloud architecture does not compromise operational safety"
+    ]
+  },
+  "named_customers": [
+    {
+      "name": "E.ON SE",
+      "domain": "eon.com",
+      "industry": "Energy & Utilities",
+      "headquarters": "Essen, Germany",
+      "employees": 79000,
+      "revenue": { "value": 83000000000, "currency": "EUR", "year": 2025 },
+      "fit_score": "high",
+      "fit_rationale": "E.ON is Germany's largest energy utility by revenue with 79,000 employees, well above the 5,000+ market threshold. Existing T-Systems reference for SAP workload migration (2,500 SAP workloads migrated to sovereign cloud). KRITIS operator with imminent NIS2 compliance deadline. Massive hybrid IT estate spanning energy networks, smart metering, and customer platforms creates strong demand for managed multi-cloud governance, sovereign cloud, and migration services.",
+      "pain_points": [
+        "Migrating remaining legacy SAP IS-U and billing systems to cloud while maintaining 24/7 grid operations across European networks",
+        "NIS2 supply-chain compliance for 100+ IT service providers across multiple European subsidiaries by October 2026",
+        "Consolidating multi-cloud estate (AWS, Azure, private) across decentralized country organizations into a unified governance model",
+        "Scaling smart grid and IoT analytics infrastructure for 50M+ connected devices while meeting KRITIS data residency requirements"
+      ],
+      "current_stack": ["SAP IS-U", "SAP S/4HANA (partial migration)", "T-Systems Sovereign Cloud (existing)", "AWS", "Azure", "ServiceNow"],
+      "source_urls": [
+        "https://www.eon.com/en/investor-relations/financial-publications/annual-report.html",
+        "https://www.macrotrends.net/stocks/charts/EONGY/eon-se/number-of-employees"
+      ],
+      "researched_at": "2026-03-19"
+    },
+    {
+      "name": "RWE AG",
+      "domain": "rwe.com",
+      "industry": "Energy & Utilities",
+      "headquarters": "Essen, Germany",
+      "employees": 20500,
+      "revenue": { "value": 24200000000, "currency": "EUR", "year": 2024 },
+      "fit_score": "high",
+      "fit_rationale": "RWE is actively executing a major SAP cloud transformation via RISE with SAP on Microsoft Azure, with a clean core strategy to consolidate its SAP landscape. EUR 35B planned investment (2025-2030) in energy transition creates substantial IT modernization demand. Energy trading and renewable operations require sovereign cloud and hybrid architectures. Current multi-cloud adoption (AWS for AI/ML, Azure for SAP) creates managed hyperscaler demand.",
+      "pain_points": [
+        "RISE with SAP migration to Azure requires parallel managed operations during transition — internal IT team focused on clean core, not infrastructure operations",
+        "Energy trading platform migration to AWS requires sovereign data handling and low-latency connectivity between trading floors and cloud",
+        "IT/OT convergence for wind farm and solar plant monitoring systems needs hybrid cloud with edge computing capability",
+        "NIS2 compliance across rapidly growing international renewable energy portfolio with fragmented IT landscapes per country"
+      ],
+      "current_stack": ["SAP S/4HANA (RISE with SAP)", "Microsoft Azure", "AWS", "SAP BTP", "SAP LeanIX", "SailPoint", "HPE Private Cloud AI"],
+      "source_urls": [
+        "https://www.sap.com/asset/dynamic/2025/08/5a2f883a-167f-0010-bca6-c68f7e60039b.html",
+        "https://news.sap.com/germany/2025/09/cloud-transformation-rwe-energie/",
+        "https://www.rwe.com/en/research-and-development/digitalisation-at-rwe/"
+      ],
+      "researched_at": "2026-03-19"
+    },
+    {
+      "name": "EnBW Energie Baden-Württemberg AG",
+      "domain": "enbw.com",
+      "industry": "Energy & Utilities",
+      "headquarters": "Karlsruhe, Germany",
+      "employees": 31000,
+      "revenue": { "value": 37000000000, "currency": "EUR", "year": 2024 },
+      "fit_score": "high",
+      "fit_rationale": "EnBW is Germany's third-largest energy utility with 31,000 employees and 5.5M customers. Recently completed a major IT transformation replacing SAP IS-U with powercloud — demonstrating willingness to modernize core systems. EUR 50B planned investment over the current decade for energy system transformation. KRITIS operator with cybersecurity expertise (EnBW offers NIS2 consulting to others, signaling high internal maturity and demanding requirements for IT service providers). Strong hybrid cloud needs across generation, grid, and retail divisions.",
+      "pain_points": [
+        "Post-SAP IS-U migration to powercloud requires hybrid integration between cloud-native billing and remaining legacy SAP systems",
+        "Scaling cloud infrastructure for renewable energy expansion (offshore wind, solar) across multiple European markets",
+        "Cybersecurity maturity gap between IT and OT domains — EnBW operates both generation assets (KRITIS) and retail platforms with different security postures",
+        "Multi-cloud governance across Microsoft Azure (BI/analytics), cloud-native platforms (powercloud), and on-premises SCADA infrastructure"
+      ],
+      "current_stack": ["powercloud (billing)", "SAP (partial, BI context)", "Microsoft Azure", "inovex (IT partner)", "On-premises SCADA/OT systems"],
+      "source_urls": [
+        "https://www.enbw.com/presse/neue-it-landschaft-der-enbw.html",
+        "https://www.enbw.com/landingpages/eworld-2025/cyber-security.html",
+        "https://www.enbw.com/media/downloadcenter-konzern/factbook/enbw-factbook-2025.pdf"
+      ],
+      "researched_at": "2026-03-19"
+    }
+  ],
+  "created": "2026-03-19"
+}

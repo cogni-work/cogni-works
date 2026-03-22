@@ -1,0 +1,14 @@
+{
+  "slug": "thought-leadership",
+  "product_slug": "content-platform",
+  "name": "Thought-Leadership-Produktion",
+  "description": "Mehrstufige Redaktions-Pipeline, die Fachthemen über Recherche, Entwurf, Peer-Review und Lektorat zu publizierfähigen Thought-Leadership-Assets in Langform verarbeitet. Jede Stufe hat definierte Qualitätsgates und Freigaberegeln.",
+  "category": "content-production",
+  "taxonomy_mapping": {
+    "dimension": "Application",
+    "category_id": "6.3",
+    "category_name": "Marketing Automation"
+  },
+  "readiness": "ga",
+  "created": "2026-03-21"
+}

@@ -1,0 +1,16 @@
+{
+  "slug": "schwachstellen-management",
+  "product_slug": "managed-security",
+  "name": "Schwachstellenmanagement",
+  "description": "Zyklisches Vulnerability-Scanning ueber Netzwerk-, Applikations- und Cloud-Schichten mit risikobasierter Priorisierung, das erkannte Schwachstellen gegen aktuelle Exploit-Datenbanken abgleicht und nach CVSS-Score gewichtete Behebungsplaene generiert.",
+  "category": "prevention",
+  "taxonomy_mapping": {
+    "dimension": 2,
+    "dimension_name": "Security",
+    "category_id": "2.5",
+    "category_name": "Vulnerability Management",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "created": "2026-03-21"
+}

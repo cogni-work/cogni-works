@@ -1,0 +1,16 @@
+{
+  "slug": "anti-ddos-otc",
+  "product_slug": "security-services",
+  "name": "Anti-DDoS Service (OTC)",
+  "description": "Cloud-native DDoS defense service on Open Telekom Cloud providing automated network-layer and application-layer attack mitigation with EU-only traffic processing on sovereign infrastructure.",
+  "taxonomy_mapping": {
+    "dimension": 2,
+    "dimension_name": "Security Services",
+    "category_id": "2.6",
+    "category_name": "Network Security",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

@@ -1,0 +1,154 @@
+{
+  "slug": "sap-on-cloud--grosse-energieversorger-de",
+  "review_round": 2,
+  "perspectives": [
+    {
+      "role": "procurement",
+      "role_label": "Einkauf / Procurement (SektVO-konform)",
+      "criteria": [
+        {
+          "criterion": "Preistransparenz und Vergleichbarkeit",
+          "score": 9,
+          "max_score": 10,
+          "finding": "Contingency-Budget (8%) als separate Position mit Abrufregeln. SAP-Basis-Spezialist als eigene Rolle mit eigenem Rate. Sehr transparent.",
+          "recommendation": "Keine Aenderung noetig."
+        },
+        {
+          "criterion": "SektVO-/EU-Vergaberechts-Konformitaet",
+          "score": 7,
+          "max_score": 10,
+          "finding": "Phasen-basierte Losbildung. SektVO-Referenz fehlt weiterhin auf Solution-Ebene, aber Vertragswerk kann dies regeln.",
+          "recommendation": "Minor: Im Vertragsrahmen SektVO-Konformitaet bestaetigen."
+        },
+        {
+          "criterion": "Exit-Strategie und Vendor-Lock-in-Risiko",
+          "score": 8,
+          "max_score": 10,
+          "finding": "SAP-System-Repatriierung dokumentiert mit 120-Tage-Frist und Standardtools. Wissenstransfer als Komponente. Solide.",
+          "recommendation": "Keine Aenderung noetig."
+        },
+        {
+          "criterion": "Milestone-basierte Zahlungsstruktur",
+          "score": 8,
+          "max_score": 10,
+          "finding": "30% bei Produktivmigration reflektiert Wertbeitrag. SLA-Malus fuer Managed Ops im Vertragswerk zu regeln.",
+          "recommendation": "Keine Aenderung noetig."
+        },
+        {
+          "criterion": "Wettbewerbsfaehigkeit (TCO-Benchmark)",
+          "score": 9,
+          "max_score": 10,
+          "finding": "3-Szenarien-Vergleich inkl. RISE with SAP. T-Systems als guenstigste Option positioniert. IS-U-Spezialisierung als Differenzierungsmerkmal.",
+          "recommendation": "Keine Aenderung noetig."
+        }
+      ],
+      "overall_score": 41,
+      "max_overall_score": 50,
+      "verdict": "approved",
+      "summary": "Kritische Luecken geschlossen. Exit-Strategie und TCO-Benchmark erfuellen Procurement-Anforderungen."
+    },
+    {
+      "role": "provider_sa",
+      "role_label": "Provider Solution Architect (T-Systems)",
+      "criteria": [
+        {
+          "criterion": "Technische Umsetzbarkeit",
+          "score": 9,
+          "max_score": 10,
+          "finding": "Generalprobe auf Pre-Prod explizit. IS-U-Rollback-Szenario dokumentiert. Near-Zero-Downtime-Ansatz mit DMO.",
+          "recommendation": "Keine Aenderung noetig."
+        },
+        {
+          "criterion": "Team-Dimensionierung",
+          "score": 9,
+          "max_score": 10,
+          "finding": "SAP-Basis-Spezialist als dedizierte Rolle in allen Phasen. Adressiert den Engpass-Ressourcen-Punkt aus Round 1.",
+          "recommendation": "Keine Aenderung noetig."
+        },
+        {
+          "criterion": "Risikomanagement",
+          "score": 9,
+          "max_score": 10,
+          "finding": "Contingency quantifiziert (8%), aufgeschluesselt nach 4 Risiken. IS-U-Rollback als explizites Deliverable. Professionell.",
+          "recommendation": "Keine Aenderung noetig."
+        },
+        {
+          "criterion": "IS-U-Branchenspezifik",
+          "score": 9,
+          "max_score": 10,
+          "finding": "Differenzierte SLAs (99.95% Standard, 99.99% Jahresabrechnung). Schnittstellenkatalog als Deliverable. IS-U-Lastprofile adressiert.",
+          "recommendation": "Keine Aenderung noetig."
+        },
+        {
+          "criterion": "Scope-Abgrenzung",
+          "score": 9,
+          "max_score": 10,
+          "finding": "Unveraendert klar. S/4HANA-2027-Deadline-Verweis staerkt Kontextualisierung.",
+          "recommendation": "Keine Aenderung noetig."
+        }
+      ],
+      "overall_score": 45,
+      "max_overall_score": 50,
+      "verdict": "approved",
+      "summary": "Technisch exzellent. SAP-Basis-Spezialisierung und differenzierte SLAs sind starke Verbesserungen."
+    },
+    {
+      "role": "client_sa",
+      "role_label": "Client Solution Architect (Energieversorger)",
+      "criteria": [
+        {
+          "criterion": "Adressierung der SAP-2027-Deadline",
+          "score": 9,
+          "max_score": 10,
+          "finding": "Expliziter Verweis auf 2027-Deadline. 34 Wochen Gesamtdauer laesst genuegend Puffer. Kritischer Pfad dokumentiert.",
+          "recommendation": "Keine Aenderung noetig."
+        },
+        {
+          "criterion": "Belastung der internen SAP-Mannschaft",
+          "score": 9,
+          "max_score": 10,
+          "finding": "48h-Delegationsmodell. Stillschweigen = Abnahme. Adressiert Fachkraeftemangel-Pain-Point direkt.",
+          "recommendation": "Keine Aenderung noetig."
+        },
+        {
+          "criterion": "SLA-Garantien fuer Kernprozesse",
+          "score": 9,
+          "max_score": 10,
+          "finding": "Differenzierte SLAs: 99.95% Standard, 99.99% Jahresabrechnung. Hochlast-Playbooks. Kapazitaetsplanung. Exzellent.",
+          "recommendation": "Keine Aenderung noetig."
+        },
+        {
+          "criterion": "Integrationsanforderungen",
+          "score": 8,
+          "max_score": 10,
+          "finding": "Schnittstellenkatalog (iDoc, RFC, API) als Deliverable in Phase 1. Smart-Meter-Integration nicht im Scope, aber erkennbar abgegrenzt.",
+          "recommendation": "Minor: Smart-Meter-Gateway-Administration als optionale Erweiterung benennen."
+        },
+        {
+          "criterion": "Nachhaltige Betriebsfaehigkeit",
+          "score": 9,
+          "max_score": 10,
+          "finding": "Betriebsmodell-Optionen (Managed SAP Ops vs. Retained-IT mit 2nd-Level). Exit-Strategie mit SAP-Repatriierung. Sehr gut.",
+          "recommendation": "Keine Aenderung noetig."
+        }
+      ],
+      "overall_score": 44,
+      "max_overall_score": 50,
+      "verdict": "approved",
+      "summary": "Alle Revision-Items adressiert. Differenzierte SLAs und SAP-Basis-Spezialisierung sind starke Differenzierungsmerkmale."
+    }
+  ],
+  "aggregate": {
+    "total_score": 130,
+    "max_score": 150,
+    "pct": 86.7,
+    "revision_needed": false,
+    "improvement_from_round1": {
+      "round1_score": 104,
+      "round2_score": 130,
+      "delta": 26,
+      "delta_pct": 17.3
+    }
+  },
+  "created": "2026-03-18"
+}

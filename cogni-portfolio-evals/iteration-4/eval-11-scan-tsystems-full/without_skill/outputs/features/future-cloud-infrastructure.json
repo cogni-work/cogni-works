@@ -1,0 +1,13 @@
+{
+  "slug": "future-cloud-infrastructure",
+  "name": "Future Cloud Infrastructure",
+  "description": "Next-gen private cloud with public-cloud-like automation, full stack in under 3 hours, 80x scaling",
+  "product_slug": "t-systems-cloud",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 4,
+    "category_id": "4.3",
+    "category_name": "Private Cloud"
+  },
+  "source_file": "https://www.t-systems.com/us/en/cloud-services/solutions/private-cloud"
+}

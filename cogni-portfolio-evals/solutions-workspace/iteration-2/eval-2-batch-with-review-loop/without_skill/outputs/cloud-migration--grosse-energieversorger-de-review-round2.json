@@ -1,0 +1,154 @@
+{
+  "slug": "cloud-migration--grosse-energieversorger-de",
+  "review_round": 2,
+  "perspectives": [
+    {
+      "role": "procurement",
+      "role_label": "Einkauf / Procurement (SektVO-konform)",
+      "criteria": [
+        {
+          "criterion": "Preistransparenz und Vergleichbarkeit",
+          "score": 9,
+          "max_score": 10,
+          "finding": "Drei Tiers mit Contingency-Budget als separate Position. Abrufmechanismus via Change Request dokumentiert. Sehr transparent.",
+          "recommendation": "Keine Aenderung noetig."
+        },
+        {
+          "criterion": "SektVO-/EU-Vergaberechts-Konformitaet",
+          "score": 7,
+          "max_score": 10,
+          "finding": "Phasen-basierte Losbildung gegeben. Explizite SektVO-Referenz fehlt weiterhin, aber Struktur ist kompatibel.",
+          "recommendation": "Minor: SektVO-Referenz im Vertragsrahmen ergaenzen (nicht im Solution-Dokument)."
+        },
+        {
+          "criterion": "Exit-Strategie und Vendor-Lock-in-Risiko",
+          "score": 9,
+          "max_score": 10,
+          "finding": "Umfassende Exit-Strategie mit 5 Komponenten: Daten-Souveraenitaet, Repatriierung, IaC, Multi-Cloud, Vertragsklauseln. Portabilitaetstest in Phase 5.",
+          "recommendation": "Keine Aenderung noetig."
+        },
+        {
+          "criterion": "Milestone-basierte Zahlungsstruktur",
+          "score": 8,
+          "max_score": 10,
+          "finding": "Betraege je Milestone ausgewiesen. Malus-Regelung weiterhin nicht explizit, aber akzeptabel fuer Solution-Level.",
+          "recommendation": "Malus-Klausel im Vertragswerk regeln."
+        },
+        {
+          "criterion": "Wettbewerbsfaehigkeit (TCO-Benchmark)",
+          "score": 9,
+          "max_score": 10,
+          "finding": "3-Szenarien-Vergleich mit 5-Jahres-TCO. T-Systems positioniert sich als guenstigste Option bei hoechster Compliance. Ueberzeugend.",
+          "recommendation": "Keine Aenderung noetig."
+        }
+      ],
+      "overall_score": 42,
+      "max_overall_score": 50,
+      "verdict": "approved",
+      "summary": "Alle kritischen Luecken geschlossen. Exit-Strategie und TCO-Benchmark sind ueberzeugend. Ready fuer Angebotsvorlage."
+    },
+    {
+      "role": "provider_sa",
+      "role_label": "Provider Solution Architect (T-Systems)",
+      "criteria": [
+        {
+          "criterion": "Technische Umsetzbarkeit der Phasen",
+          "score": 9,
+          "max_score": 10,
+          "finding": "BSI-Vorab-Assessment-Termin in Phase 1. IaC-Portabilitaet in Phase 2. Portabilitaetstest in Phase 5. Alle Ergaenzungen sind umsetzbar.",
+          "recommendation": "Keine Aenderung noetig."
+        },
+        {
+          "criterion": "Team-Dimensionierung und Skill-Mix",
+          "score": 8,
+          "max_score": 10,
+          "finding": "Phase-4-Buffer nicht explizit (6. Engineer on-call), aber Contingency-Budget deckt Aufstockung ab. Akzeptabel.",
+          "recommendation": "Keine Aenderung noetig."
+        },
+        {
+          "criterion": "Risikomanagement und Mitigationsplaene",
+          "score": 9,
+          "max_score": 10,
+          "finding": "Contingency quantifiziert: 10% gesamt, aufgeschluesselt nach 4 Risiken. Abruf via Change Request. Professionell.",
+          "recommendation": "Keine Aenderung noetig."
+        },
+        {
+          "criterion": "KRITIS-Compliance-Abdeckung",
+          "score": 9,
+          "max_score": 10,
+          "finding": "BSI-Vorab-Assessment fixiert. Audit-Trail ab Tag 1. Daten-Repatriierungsplan in Phase 4. Vollstaendig.",
+          "recommendation": "Keine Aenderung noetig."
+        },
+        {
+          "criterion": "Scope-Abgrenzung (OT/IT-Boundary)",
+          "score": 9,
+          "max_score": 10,
+          "finding": "Unveraendert stark. Delegationsmodell und Stillschweigen-Regel reduzieren Delivery-Risiko erheblich.",
+          "recommendation": "Keine Aenderung noetig."
+        }
+      ],
+      "overall_score": 44,
+      "max_overall_score": 50,
+      "verdict": "approved",
+      "summary": "Technisch ausgereift. Contingency-Quantifizierung und Exit-Strategie staerken das Delivery-Vertrauen."
+    },
+    {
+      "role": "client_sa",
+      "role_label": "Client Solution Architect (Energieversorger)",
+      "criteria": [
+        {
+          "criterion": "Adressierung der Kern-Pain-Points",
+          "score": 9,
+          "max_score": 10,
+          "finding": "KRITIS, Energiewende, Fachkraeftemangel vollstaendig adressiert. Delegationsmodell loest Kapazitaetsproblem. TCO-Vergleich staerkt CIO-Entscheidungsvorlage.",
+          "recommendation": "Keine Aenderung noetig."
+        },
+        {
+          "criterion": "Belastung der internen IT-Mannschaft",
+          "score": 9,
+          "max_score": 10,
+          "finding": "48h-Delegationsmodell mit Stillschweigen-Regel. Max. 2 Ansprechpartner. Schulungsprogramm. Exzellent geloest.",
+          "recommendation": "Keine Aenderung noetig."
+        },
+        {
+          "criterion": "Integration in bestehende IT-Strategie",
+          "score": 8,
+          "max_score": 10,
+          "finding": "Multi-Cloud-Abstraktionsschicht und IaC-Portabilitaet adressieren Integration. Hyperscaler-Vertragsintegration bleibt im Vertragswerk zu klaeren.",
+          "recommendation": "Minor: Im Kickoff bestehende Hyperscaler-Vertraege erfragen."
+        },
+        {
+          "criterion": "Realistischer Zeithorizont",
+          "score": 8,
+          "max_score": 10,
+          "finding": "50 Wochen bleibt ambitioniert. NIS2-Abhaengigkeit korrekt als Constraint. 2-Wochen-Puffer nicht explizit aber im Contingency abgedeckt.",
+          "recommendation": "Keine Aenderung noetig."
+        },
+        {
+          "criterion": "Nachhaltige Betriebsfaehigkeit nach Projektende",
+          "score": 9,
+          "max_score": 10,
+          "finding": "Betriebsmodell-Optionen (Managed Services vs. Retained-IT) explizit. Exit-Strategie mit Portabilitaetstest. Sehr gut.",
+          "recommendation": "Keine Aenderung noetig."
+        }
+      ],
+      "overall_score": 43,
+      "max_overall_score": 50,
+      "verdict": "approved",
+      "summary": "Alle Revision-Items adressiert. Delegationsmodell und Exit-Strategie sind differenzierende Staerken."
+    }
+  ],
+  "aggregate": {
+    "total_score": 129,
+    "max_score": 150,
+    "pct": 86.0,
+    "revision_needed": false,
+    "improvement_from_round1": {
+      "round1_score": 106,
+      "round2_score": 129,
+      "delta": 23,
+      "delta_pct": 15.3
+    }
+  },
+  "created": "2026-03-18"
+}

@@ -1,0 +1,23 @@
+{
+  "converged": true,
+  "reason": "passed",
+  "iterations": [
+    {
+      "iteration": 0,
+      "cso_avg": 3.33,
+      "analyst_avg": 3.50,
+      "combined_avg": 3.42,
+      "passes": false
+    },
+    {
+      "iteration": 1,
+      "cso_avg": 4.0,
+      "analyst_avg": 4.17,
+      "combined_avg": 4.08,
+      "passes": true
+    }
+  ],
+  "rewrite_actions": [
+    "Iteration 0→1: (1) Diversified differentiation — each competitor now has a unique differentiation targeting their specific weakness instead of repeating DT-Netz+BSI-C5+Zero Outage. (2) Added urgency_drivers with concrete deadlines (NIS2 April 2026, SAP ECC 2027, Smart Meter 2030) and icp_qualification block for deal prioritization. (3) Updated Computacenter positioning from generic 'European IT infrastructure provider' to specific 'DXC-alternative in managed services'. (4) Updated Arvato positioning to focus on Kundenprozesse (billing, portals) rather than generic cloud migration. (5) Diversified trap questions across 4 dimensions (infrastructure, references, operating model, personnel) instead of all targeting infrastructure ownership. (6) Added DATAGROUP Azure-MSP capability to strengths for better balance. (7) Reduced weaknesses from 5 to 4 per competitor for sharper focus. (8) Added TCO framing ('1 Vertrag vs. 3-4 Verträge') to address Stadtwerke price objection."
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "slug": "classic-legacy-hosting",
+  "product_slug": "infrastructure-services",
+  "name": "Classic Legacy-IT Hosting",
+  "description": "Managed server, storage, and backup services for x86 Linux/Windows and Unix IBM AIX workloads in ISO 27001-certified twin-core data centers with demand-based capacity scaling.",
+  "taxonomy_mapping": {
+    "dimension": 5,
+    "dimension_name": "Managed Infrastructure Services",
+    "category_id": "5.2",
+    "category_name": "Managed Compute & Storage",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

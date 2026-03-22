@@ -1,0 +1,16 @@
+{
+  "slug": "otc-myworkplace",
+  "product_slug": "workplace-services",
+  "name": "OTC MyWorkplace",
+  "description": "Virtuelle Desktop-Lösung auf Open Telekom Cloud",
+  "taxonomy_mapping": {
+    "dimension": 3,
+    "dimension_name": "Digital Workplace Services",
+    "category_id": "3.4",
+    "category_name": "Virtual Desktop & DaaS",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

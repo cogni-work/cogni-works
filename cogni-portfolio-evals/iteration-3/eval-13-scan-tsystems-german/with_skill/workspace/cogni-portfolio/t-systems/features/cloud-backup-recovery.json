@@ -1,0 +1,16 @@
+{
+  "slug": "cloud-backup-recovery",
+  "product_slug": "infrastructure-services",
+  "name": "Cloud Backup and Recovery",
+  "description": "Cloud-basierte Sicherung auf OTC",
+  "taxonomy_mapping": {
+    "dimension": 5,
+    "dimension_name": "Managed Infrastructure Services",
+    "category_id": "5.3",
+    "category_name": "Backup & Disaster Recovery",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

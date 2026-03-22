@@ -1,0 +1,16 @@
+{
+  "slug": "app-modernization",
+  "product_slug": "application-services",
+  "name": "Application Modernization",
+  "description": "Legacy migration and re-platforming to hybrid cloud with containers",
+  "taxonomy_mapping": {
+    "dimension": 6,
+    "dimension_name": "Application Services",
+    "category_id": "6.2",
+    "category_name": "Application Modernization",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/bechtle-portfolio.md",
+  "created": "2026-03-18"
+}

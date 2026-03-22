@@ -1,0 +1,16 @@
+{
+  "slug": "managed-compute-hci",
+  "product_slug": "infrastructure-services",
+  "name": "Managed Compute and Storage (HCI)",
+  "description": "Hyper-converged infrastructure with HPE SimpliVity, Dell, Nutanix",
+  "taxonomy_mapping": {
+    "dimension": 5,
+    "dimension_name": "Managed Infrastructure Services",
+    "category_id": "5.2",
+    "category_name": "Managed Compute & Storage",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/bechtle-portfolio.md",
+  "created": "2026-03-18"
+}

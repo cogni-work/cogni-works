@@ -1,0 +1,13 @@
+{
+  "slug": "program-project-management",
+  "name": "Programm- & Projektmanagement",
+  "description": "20+ Jahre Erfahrung in Transformation und Management komplexer IT-Systeme mit bewaehrten Methoden.",
+  "product_slug": "detecon-consulting",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 7,
+    "category_id": "7.4",
+    "category_name": "Program & Project Management"
+  },
+  "source_file": "https://www.decidalo.com/en/success-story-t-systems/"
+}

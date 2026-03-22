@@ -1,0 +1,13 @@
+{
+  "slug": "bechtle-plm-industry",
+  "name": "Bechtle PLM & Industry Consulting",
+  "description": "Product lifecycle management for manufacturing, industrial IoT consulting, smart building solutions, and dedicated public sector advisory. Bechtle PLM Austria (formerly planetsoftware) for DACH manufacturing.",
+  "product_slug": "bechtle-consulting",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 7,
+    "category_id": "7.3",
+    "category_name": "Business & Industry Consulting"
+  },
+  "source_file": "https://www.bechtle.com/de-en/it-solutions"
+}

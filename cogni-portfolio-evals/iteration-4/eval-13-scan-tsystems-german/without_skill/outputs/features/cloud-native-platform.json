@@ -1,0 +1,13 @@
+{
+  "slug": "cloud-native-platform",
+  "name": "Cloud-Native Platform & DevOps",
+  "description": "Kubernetes-basierte Modernisierung, Container-Plattformen und DevOps-orientiertes Cloud-Modell mit Managed Toolchain.",
+  "product_slug": "t-systems-cloud",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 4,
+    "category_id": "4.6",
+    "category_name": "Cloud-Native Platform"
+  },
+  "source_file": "https://www.t-systems.com/us/en/cloud-services"
+}

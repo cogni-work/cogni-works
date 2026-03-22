@@ -1,0 +1,14 @@
+{
+  "slug": "omnichannel-kundenkommunikation",
+  "product_slug": "digitale-kundendienste",
+  "name": "Omnichannel-Kundenkommunikation",
+  "description": "Integrierte Kundenkommunikation ueber Telefon, E-Mail, Chat und Social Media mit zentralem CRM-System, Vorgangshistorie und KI-gestuetzter Anfrageverteilung. Unterstuetzt medienbruchfreien Kanalwechsel fuer eine Million Endkunden.",
+  "category": "customer-interaction",
+  "taxonomy_mapping": {
+    "dimension": 3,
+    "category_id": "3.1",
+    "category_name": "Unified Communications",
+    "horizon": "current"
+  },
+  "readiness": "ga"
+}

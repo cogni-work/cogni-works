@@ -1,0 +1,16 @@
+{
+  "slug": "compliance-monitoring",
+  "product_slug": "managed-security",
+  "name": "Compliance-Monitoring",
+  "description": "Kontinuierliche Konformitaetsueberwachung gegen regulatorische Rahmenwerke wie ISO 27001, BSI-Grundschutz und DSGVO durch automatisierten Soll-Ist-Abgleich der Sicherheitskonfigurationen mit auditierbarer Nachweisdokumentation.",
+  "category": "governance",
+  "taxonomy_mapping": {
+    "dimension": 2,
+    "dimension_name": "Security",
+    "category_id": "2.8",
+    "category_name": "Compliance & Governance",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "created": "2026-03-21"
+}

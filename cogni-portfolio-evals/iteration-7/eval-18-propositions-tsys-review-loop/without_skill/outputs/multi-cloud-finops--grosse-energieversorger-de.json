@@ -1,0 +1,20 @@
+{
+  "slug": "multi-cloud-finops--grosse-energieversorger-de",
+  "feature_slug": "multi-cloud-finops",
+  "market_slug": "grosse-energieversorger-de",
+  "is_statement": "Multi-Cloud und FinOps Management ist eine zentralisierte Governance-Loesung ueber Multi Cloud Connectivity Platform und Future Cloud Infrastructure mit FinOps-Maturity-Assessment, kontinuierlichem Cost Management und Compliance-Controls fuer BSI C5 und GDPR.",
+  "does_statement": "Energieversorger steuern Cloud-Ausgaben ueber alle Anbieter hinweg transparent und halten BSI-C5- sowie NIS2-Compliance-Anforderungen automatisiert ein, statt manuell zu pruefen.",
+  "means_statement": "Cloud-Kosten sinken erfahrungsgemaess um 20 bis 30% im ersten Jahr, waehrend manuelle Compliance-Pruefungen um bis zu 70% reduziert werden.",
+  "evidence": [
+    {
+      "statement": "T-Systems bietet FinOps-Services mit strukturiertem Maturity-Assessment und kontinuierlicher Kostenoptimierung fuer Multi-Cloud-Umgebungen.",
+      "source_url": "https://www.t-systems.com/de/de/cloud-und-infrastruktur/multi-cloud-management",
+      "source_title": "T-Systems Multi-Cloud Management"
+    },
+    {
+      "statement": "Die FinOps Foundation berichtet, dass Unternehmen mit FinOps-Praxis durchschnittlich 20-30% Cloud-Kosten einsparen.",
+      "source_url": "https://www.finops.org/introduction/what-is-finops/",
+      "source_title": "FinOps Foundation"
+    }
+  ]
+}

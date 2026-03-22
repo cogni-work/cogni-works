@@ -1,0 +1,13 @@
+{
+  "slug": "bechtle-multi-cloud",
+  "name": "Bechtle Multi-Cloud Management",
+  "description": "Simultaneous management of Azure, AWS, GCP, and private clouds with cross-cloud monitoring, FinOps cost optimization, and compliance management.",
+  "product_slug": "bechtle-cloud",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 4,
+    "category_id": "4.2",
+    "category_name": "Multi-Cloud Management"
+  },
+  "source_file": "https://www.bechtle.com/it-services/managed-services/managed-cloud"
+}

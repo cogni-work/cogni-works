@@ -1,0 +1,27 @@
+{
+  "slug": "private-cloud--grosse-energieversorger-de",
+  "feature_slug": "private-cloud",
+  "market_slug": "grosse-energieversorger-de",
+  "is_statement": "VMware Cloud Foundation basierte Future Cloud Infrastructure mit SDDC auf dedizierten Servern, betrieben in klimaneutralen europäischen Rechenzentren mit Legacy-IT-Integration für regulierte Workloads.",
+  "does_statement": "Energieversorger betreiben SAP IS-U und Abrechnungssysteme auf dedizierter Infrastruktur mit deutschem Rechtsrahmen — statt Shared-Cloud-Umgebungen, die bei jedem BSI-Audit Rückfragen auslösen.",
+  "means_statement": "Der CFO erhält kalkulierbare Infrastrukturkosten ohne nachträgliche Compliance-Aufschläge — die Gesamtkosten stehen vor Vertragsschluss fest, und das Rechenzentrum Biere verbraucht nachweislich 30% weniger Energie als vergleichbare Standorte.",
+  "evidence": [
+    {
+      "statement": "T-Systems Rechenzentrum Biere hat PUE von 1,3 und verbraucht 30% weniger Energie als vergleichbare Standorte",
+      "source_url": "https://www.open-telekom-cloud.com/en/blog/cloud-computing/data-center-biere",
+      "source_title": "Open Telekom Cloud Biere Data Center"
+    },
+    {
+      "statement": "T-Systems bietet VMware-basierte Private Cloud mit BSI-C5-Testat auf dedizierter Hardware",
+      "source_url": "https://www.t-systems.com/us/en/cloud-services/solutions/private-cloud/vmware-managed-services",
+      "source_title": "T-Systems VMware Managed Services"
+    },
+    {
+      "statement": "KRITIS-Betreiber in der Energiebranche unterliegen verschärften BSI-Auditpflichten seit NIS2-Umsetzung",
+      "source_url": "https://www.kertos.io/en/blog/nis2-kritis-complete-implementation-guide-2026",
+      "source_title": "NIS2 KRITIS Compliance Guide"
+    }
+  ],
+  "created": "2026-03-18",
+  "updated": "2026-03-18"
+}

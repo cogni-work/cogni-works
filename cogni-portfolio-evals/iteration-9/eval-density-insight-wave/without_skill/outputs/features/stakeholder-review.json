@@ -1,0 +1,7 @@
+{
+  "slug": "stakeholder-review",
+  "product_slug": "cogni-portfolio",
+  "name": "Stakeholder-Review",
+  "description": "Persona-basierter Review-Mechanismus, der jedes Feature aus der Perspektive definierter Stakeholder-Personas prueft und strukturiertes Feedback zu Relevanz, Verstaendlichkeit und Vollstaendigkeit liefert.",
+  "readiness": "ga"
+}

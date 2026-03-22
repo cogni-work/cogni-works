@@ -93,7 +93,7 @@ This is reported to the user in the Phase 6 summary alongside word count and sou
 
 ## Design Divergences from GPT-Researcher
 
-### Claims-Verified Review Loop (cogni-works Original)
+### Claims-Verified Review Loop (insight-wave Original)
 
 GPT-Researcher uses a human-in-the-loop LangGraph workflow where a human reviews the research plan and can request revisions. This plugin replaces that with an automated claims-verified review loop:
 

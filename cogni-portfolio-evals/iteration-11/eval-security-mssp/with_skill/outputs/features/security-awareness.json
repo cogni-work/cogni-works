@@ -1,0 +1,16 @@
+{
+  "slug": "security-awareness",
+  "product_slug": "managed-security",
+  "name": "Security Awareness Training",
+  "description": "Rollenspezifisches Schulungsprogramm mit simulierten Phishing-Kampagnen und interaktiven Lernmodulen, das Mitarbeiterverhaltens-Metriken erfasst und ueber adaptive Wiederholungszyklen den Trainingsinhalt an individuelle Wissensluecken anpasst.",
+  "category": "people",
+  "taxonomy_mapping": {
+    "dimension": 2,
+    "dimension_name": "Security",
+    "category_id": "2.9",
+    "category_name": "Security Awareness",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "created": "2026-03-21"
+}

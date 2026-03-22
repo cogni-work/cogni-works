@@ -1,0 +1,13 @@
+{
+  "slug": "bechtle-netflex-naas",
+  "name": "Bechtle NetFlex Network-as-a-Service",
+  "description": "Network-as-a-Service offering including Bechtle NetFlex and Cisco Meraki-as-a-Service for cloud-managed network operations.",
+  "product_slug": "bechtle-networking",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 1,
+    "category_id": "1.7",
+    "category_name": "Network-as-a-Service"
+  },
+  "source_file": "https://www.bechtle.com/ch-en/it-solutions/networking"
+}

@@ -1,0 +1,31 @@
+{
+  "proposition_slug": "cloud-migration--mittelstaendische-stadtwerke-de",
+  "final_iteration": 1,
+  "cso": {
+    "overall_score": 4.0,
+    "dimensions": {
+      "quota_impact": 4,
+      "pipeline_acceleration": 4,
+      "objection_handling": 4,
+      "competitive_win_ability": 4,
+      "account_team_usability": 4,
+      "deal_qualification_signal": 4
+    },
+    "would_use_in_pitch_deck": true
+  },
+  "analyst": {
+    "overall_score": 4.17,
+    "dimensions": {
+      "market_landscape_accuracy": 4,
+      "positioning_validity": 4,
+      "strength_weakness_balance": 4,
+      "differentiation_defensibility": 4,
+      "trap_question_sophistication": 4,
+      "segment_relevance": 5
+    },
+    "would_use_in_advisory_report": true
+  },
+  "combined_avg": 4.08,
+  "passes": true,
+  "convergence_path": "Iteration 0: 3.42 (fail) → Iteration 1: 4.08 (pass)"
+}

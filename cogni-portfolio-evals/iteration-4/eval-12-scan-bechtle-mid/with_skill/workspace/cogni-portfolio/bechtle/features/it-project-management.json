@@ -1,0 +1,16 @@
+{
+  "slug": "it-project-management",
+  "product_slug": "consulting-services",
+  "name": "IT Project Management",
+  "description": "Professional Services team delivering large-scale IT project management with PMO capability for multi-site transformation programs, infrastructure rollouts and international deployment coordination.",
+  "taxonomy_mapping": {
+    "dimension": 7,
+    "dimension_name": "Consulting Services",
+    "category_id": "7.4",
+    "category_name": "Program & Project Management",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/bechtle-portfolio.md",
+  "created": "2026-03-18"
+}

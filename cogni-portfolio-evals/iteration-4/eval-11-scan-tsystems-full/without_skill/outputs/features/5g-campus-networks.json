@@ -1,0 +1,13 @@
+{
+  "slug": "5g-campus-networks",
+  "name": "5G Campus Networks",
+  "description": "Private 5G/LTE campus networks for industrial IoT with edge computing and network slicing for mission-critical applications",
+  "product_slug": "t-systems-connectivity",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 1,
+    "category_id": "1.4",
+    "category_name": "5G & IoT Connectivity"
+  },
+  "source_file": "https://www.t-systems.com/sg/en/connectivity/5g-campus-networks"
+}

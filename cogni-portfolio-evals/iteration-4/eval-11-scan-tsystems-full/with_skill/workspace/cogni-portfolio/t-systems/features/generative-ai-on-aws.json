@@ -1,0 +1,16 @@
+{
+  "slug": "generative-ai-on-aws",
+  "product_slug": "application-services",
+  "name": "Generative AI on AWS",
+  "description": "GenAI and ML service on AWS infrastructure providing managed access to foundation models with enterprise security controls, model fine-tuning capabilities, and sovereign data processing options.",
+  "taxonomy_mapping": {
+    "dimension": 6,
+    "dimension_name": "Application Services",
+    "category_id": "6.6",
+    "category_name": "AI, Data & Analytics",
+    "horizon": "emerging"
+  },
+  "readiness": "beta",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

@@ -1,0 +1,86 @@
+{
+  "expectations": [
+    {
+      "text": "2-4 buyer profiles present",
+      "passed": false,
+      "evidence": "Output uses 'customers' array (3 entries: E.ON, RWE, EnBW) instead of 'profiles' array. These are company profiles, not buyer persona profiles. No role-based buyer personas (CIO, CISO, etc.) as primary structure."
+    },
+    {
+      "text": "Each profile has role, seniority, pain_points (max 5), buying_criteria (max 5), information_sources, decision_role",
+      "passed": false,
+      "evidence": "Company entries have pain_points but lack role, seniority, buying_criteria, information_sources, decision_role. Uses non-canonical fields: branche, market_position, it_landscape, competitive_landscape, strategic_priorities, proposition_fit, sales_approach."
+    },
+    {
+      "text": "buying_committee object present with typical_size, decision_model, deal_stall_points",
+      "passed": false,
+      "evidence": "No buying_committee object at top level. Each company has a buying_committee sub-object but structure differs from canonical (uses 'estimated_size', 'key_stakeholders' as nested objects, 'procurement_framework' instead of deal_stall_points)."
+    },
+    {
+      "text": "3 named customers present (E.ON, RWE, EnBW) with fit_score and source_urls",
+      "passed": false,
+      "evidence": "3 companies present (E.ON, RWE, EnBW) but as primary 'customers' entries, not in a 'named_customers' array. Have 'fit_assessment' with 'overall_score' (not 'fit_score') and 'source_urls'. Non-canonical structure."
+    },
+    {
+      "text": "customer-review-assessor invoked at least once",
+      "passed": false,
+      "evidence": "No customer-review-assessor agent used. Assessment was freeform with 3 perspectives scored on /10 scale, not the structured agent protocol."
+    },
+    {
+      "text": "All three perspective scores >= 70 in final assessment",
+      "passed": false,
+      "evidence": "Assessment uses /10 scale (8.3 avg) not /100. Cannot compare directly to 70 threshold. No per-criterion breakdown."
+    },
+    {
+      "text": "Content language matches portfolio.json language field (de)",
+      "passed": true,
+      "evidence": "Content is predominantly in German: 'Komplexe SAP-Legacy-Landschaft mit tausenden Workloads erschwert Cloud-Migration', 'KRITIS-Anforderungen erfordern souveraene Cloud-Infrastruktur'. Uses German consistently throughout pain_points and descriptions."
+    },
+    {
+      "text": "At least one veto-holder role present (CISO, Compliance, or Einkauf)",
+      "passed": false,
+      "evidence": "Per-company buying_committee.key_stakeholders mentions CISO and Einkauf but these are nested within company objects, not as top-level buyer profiles with distinct pain points and buying criteria."
+    },
+    {
+      "text": "Pain points reference specific regulatory deadlines (NIS2, KRITIS, SAP IS-U)",
+      "passed": true,
+      "evidence": "E.ON: 'NIS2- und KRITIS-Compliance bis Oktober 2026'. RWE: 'RISE with SAP-Transformation auf Microsoft Azure'. EnBW: 'NIS2-Compliance fuer 500+ Zulieferer'. Regulatory deadlines and frameworks referenced."
+    },
+    {
+      "text": "Named customers have fit_rationale explaining score",
+      "passed": false,
+      "evidence": "Each company has fit_assessment.rationale but not 'fit_rationale'. Structure is non-canonical: uses 'overall_score' (numeric 8-9) and nested 'by_proposition' mapping instead of 'fit_score' (high/medium/low) and 'fit_rationale' (string)."
+    }
+  ],
+  "summary": {
+    "passed": 2,
+    "failed": 8,
+    "total": 10,
+    "pass_rate": 0.2
+  },
+  "timing": {
+    "total_duration_seconds": 265.4,
+    "total_tokens": 39708
+  },
+  "claims": [
+    {
+      "claim": "Baseline produced company-centric profiles rather than role-centric buyer personas",
+      "type": "quality",
+      "verified": true,
+      "evidence": "Output has 3 company entries (E.ON, RWE, EnBW) as primary structure. The canonical skill produces 2-4 buyer role profiles (CIO, CISO, etc.) with named companies as a supplementary section."
+    },
+    {
+      "claim": "German language quality is better in baseline than with_skill",
+      "type": "quality",
+      "verified": true,
+      "evidence": "Baseline uses natural German throughout ('Komplexe SAP-Legacy-Landschaft'). With_skill mixes English sentence structure with German domain terms ('SAP IS-U end-of-life forces a cloud migration decision')."
+    }
+  ],
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "reason": "The baseline's German language quality is notably better than with_skill. The skill should be hardened to produce fully German content when portfolio.json language is 'de', not English sentences with German buzzwords."
+      }
+    ],
+    "overall": "Baseline passes 2/10 assertions (language and regulatory references). Fails on all structural assertions — produces company-centric profiles instead of buyer personas, uses non-canonical schema throughout. However, the German language quality is superior to the with_skill run."
+  }
+}

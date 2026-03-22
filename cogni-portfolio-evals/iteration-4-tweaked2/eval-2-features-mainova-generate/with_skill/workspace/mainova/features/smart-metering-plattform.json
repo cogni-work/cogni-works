@@ -1,0 +1,16 @@
+{
+  "slug": "smart-metering-plattform",
+  "product_slug": "digitale-energiedienste",
+  "name": "Smart-Metering-Plattform",
+  "description": "Zentrales Gateway-Management-System fuer intelligente Messsysteme (iMSys), das Zaehlerdaten ueber standardisierte CLS-Schnittstellen erfasst, per SMGW-Infrastruktur verschluesselt uebertraegt und in Echtzeit an nachgelagerte Abrechnungs- und Netzsteuerungssysteme weiterleitet.",
+  "category": "iot-connectivity",
+  "taxonomy_mapping": {
+    "dimension": 1,
+    "dimension_name": "Connectivity Services",
+    "category_id": "1.4",
+    "category_name": "5G & IoT Connectivity",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "created": "2026-03-18"
+}

@@ -1,0 +1,16 @@
+{
+  "slug": "rds-database",
+  "product_slug": "infrastructure-services",
+  "name": "Relational Database Service (RDS)",
+  "description": "Managed relational database service on T Cloud Public supporting PostgreSQL, MySQL, and SQL Server with automated backup scheduling, point-in-time recovery, and elastic storage scaling.",
+  "taxonomy_mapping": {
+    "dimension": 5,
+    "dimension_name": "Managed Infrastructure Services",
+    "category_id": "5.6",
+    "category_name": "Database Administration",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

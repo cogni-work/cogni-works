@@ -19,7 +19,7 @@ version: 0.2.0
 
 # Manage Themes
 
-Manage visual design themes for the cogni-works workspace. Themes are compact markdown files containing color palettes, typography, and design principles consumed by all plugins that produce visual output (slides, documents, diagrams, reports).
+Manage visual design themes for the insight-wave workspace. Themes are compact markdown files containing color palettes, typography, and design principles consumed by all plugins that produce visual output (slides, documents, diagrams, reports).
 
 ## Prerequisites
 

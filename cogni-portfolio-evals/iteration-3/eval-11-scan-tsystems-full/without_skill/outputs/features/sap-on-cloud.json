@@ -1,0 +1,13 @@
+{
+  "slug": "sap-on-cloud",
+  "name": "SAP on Multi-Cloud",
+  "description": "Multi-cloud hosting for SAP workloads across AWS, Azure, and sovereign cloud",
+  "product_slug": "t-systems-cloud",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 4,
+    "category_id": "4.8",
+    "category_name": "Enterprise Platforms on Cloud"
+  },
+  "source_file": "https://www.t-systems.com/us/en/application-services/solutions/sap-solutions/multi-cloud-for-sap"
+}

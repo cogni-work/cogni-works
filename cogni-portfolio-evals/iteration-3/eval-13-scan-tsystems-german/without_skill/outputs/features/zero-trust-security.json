@@ -1,0 +1,13 @@
+{
+  "slug": "zero-trust-security",
+  "name": "Zero Trust Security",
+  "description": "Schutz kritischer Assets nach dem Prinzip never trust, always verify. Security-Experten beraten zu optimalen Schutzstrategien.",
+  "product_slug": "telekom-security",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 2,
+    "category_id": "2.3",
+    "category_name": "Zero Trust Architecture"
+  },
+  "source_file": "https://www.t-systems.com/us/en/security/topics/zero-trust"
+}

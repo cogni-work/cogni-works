@@ -1,0 +1,219 @@
+{
+  "slug": "solution--cloud-migration--grosse-energieversorger-de",
+  "proposition_slug": "cloud-migration--grosse-energieversorger-de",
+  "feature_slug": "cloud-migration",
+  "market_slug": "grosse-energieversorger-de",
+  "product_slug": "cloud-services",
+  "generated": "2026-03-18",
+  "title": "Cloud-Migrationsprogramm für große deutsche Energieversorger",
+  "summary": "Strukturiertes Cloud-Migrationsprogramm für die Migration von IS-U, SCADA-nahen IT-Workloads und ERP-Systemen großer deutscher Energieversorger auf souveräne Cloud-Infrastruktur. Die Lösung adressiert KRITIS-Compliance, OT/IT-Konvergenz und Fachkräftemangel durch eine industrialisierte Migration Factory mit sprint-basierter Durchführung.",
+  "implementation_plan": {
+    "phases": [
+      {
+        "id": "P1",
+        "name": "Assessment & Discovery",
+        "duration_weeks": 6,
+        "description": "Vollständige Inventarisierung der Workload-Landschaft, Abhängigkeitsanalyse, KRITIS-Relevanz-Klassifizierung und 6R-Strategiezuordnung (Rehost, Replatform, Refactor, Repurchase, Retain, Retire) für alle in-scope Systeme.",
+        "deliverables": [
+          "Workload-Inventar mit Abhängigkeitsmatrix",
+          "6R-Strategiezuordnung pro Workload",
+          "KRITIS-Relevanz-Klassifizierung und BSI-C5-Gap-Analyse",
+          "Migrationspriorisierung und Wellen-Planung",
+          "Business-Case-Validierung mit TCO-Vergleich (On-Prem vs. Cloud)"
+        ],
+        "team": [
+          { "role": "Solution Architect", "fte": 2.0 },
+          { "role": "Implementation Engineer", "fte": 1.0 },
+          { "role": "Project Manager", "fte": 0.5 }
+        ],
+        "risks": [
+          "Unvollständige CMDB-Daten verzögern Discovery um 2-4 Wochen",
+          "OT-Systeme ohne Dokumentation erfordern zusätzliche Reverse-Engineering-Aufwände"
+        ]
+      },
+      {
+        "id": "P2",
+        "name": "Mobilize & Landing Zone",
+        "duration_weeks": 8,
+        "description": "Aufbau der KRITIS-konformen Cloud Landing Zone mit Netzwerk-Segmentierung, IAM-Policies, Compliance-Guardrails und Staging-Umgebung. Etablierung der Cloud Migration Factory (CMF) mit standardisierten Runbooks und Toolchain.",
+        "deliverables": [
+          "Sovereign Cloud Landing Zone (BSI-C5-konform)",
+          "Netzwerk-Architektur mit OT/IT-Segmentierung",
+          "IAM- und Compliance-Policies (NIS2, KRITIS-DachG)",
+          "CMF-Toolchain (Terraform, Ansible, CI/CD-Pipelines)",
+          "Migrations-Runbooks für Top-5-Workload-Typen",
+          "KRITIS-konforme Staging-Umgebung"
+        ],
+        "team": [
+          { "role": "Solution Architect", "fte": 2.0 },
+          { "role": "Implementation Engineer", "fte": 3.0 },
+          { "role": "Project Manager", "fte": 1.0 }
+        ],
+        "risks": [
+          "BSI-C5-Zertifizierung der Landing Zone verzögert Produktivstart",
+          "Kundenseitige Netzwerk-Freigaben für OT-Zonen benötigen CISO-Genehmigung (SLA: 10 Werktage)"
+        ]
+      },
+      {
+        "id": "P3",
+        "name": "Migration Waves (Sprints)",
+        "duration_weeks": 24,
+        "description": "Sprint-basierte Migration in 6 Wellen, beginnend mit nicht-kritischen Workloads (Dev/Test, Webportale) über SAP-nahe Systeme bis hin zu regulierten KRITIS-Workloads. Jede Welle umfasst 3-4 Sprints mit standardisierter Validate-Migrate-Cutover-Kadenz.",
+        "deliverables": [
+          "Welle 1: Dev/Test-Umgebungen, Interne Webportale (4 Wochen)",
+          "Welle 2: Billing- und CRM-Systeme (4 Wochen)",
+          "Welle 3: SAP ERP / IS-U-nahe Schnittstellen (4 Wochen)",
+          "Welle 4: Messdatenmanagement und Smart-Meter-Backend (4 Wochen)",
+          "Welle 5: SCADA-nahe IT-Systeme und Netzleit-Dashboards (4 Wochen)",
+          "Welle 6: Verbleibende Workloads und Bereinigung (4 Wochen)",
+          "Pro Welle: Cutover-Runbook, Rollback-Plan, Abnahmeprotokoll"
+        ],
+        "team": [
+          { "role": "Solution Architect", "fte": 1.5 },
+          { "role": "Implementation Engineer", "fte": 5.0 },
+          { "role": "Project Manager", "fte": 1.0 }
+        ],
+        "risks": [
+          "SCADA-nahe Migrationen (Welle 5) erfordern Wartungsfenster — Koordination mit Netzbetrieb",
+          "Datenmigration bei IS-U-Schnittstellen kann Billing-Zyklen stören",
+          "Fachkräftemangel beim Kunden verzögert Abnahmen und Testing"
+        ]
+      },
+      {
+        "id": "P4",
+        "name": "Optimize & Transition",
+        "duration_weeks": 6,
+        "description": "Post-Migrations-Optimierung (Right-Sizing, Reserved Instances, FinOps-Dashboards), Wissenstransfer an interne Teams und Übergabe an den Managed-Services-Betrieb.",
+        "deliverables": [
+          "FinOps-Dashboard mit Kostenoptimierungs-Empfehlungen",
+          "Right-Sizing-Report und Reserved-Instance-Plan",
+          "Wissenstransfer-Dokumentation und Runbook-Übergabe",
+          "Betriebsübergabe-Protokoll an Managed Services",
+          "Abschluss-Audit und KRITIS-Compliance-Nachweis"
+        ],
+        "team": [
+          { "role": "Solution Architect", "fte": 1.0 },
+          { "role": "Implementation Engineer", "fte": 2.0 },
+          { "role": "Project Manager", "fte": 0.5 }
+        ],
+        "risks": [
+          "Kunde hat keine FinOps-Kompetenz — Übergabe erfordert zusätzliches Coaching",
+          "Managed-Services-Vertrag noch nicht abgeschlossen bei Projektende"
+        ]
+      }
+    ],
+    "total_duration_weeks": 44,
+    "assumptions": [
+      "Remote delivery unless on-site required by customer",
+      "Customer provides staging environment access within 5 business days",
+      "Standard API connectors only — custom integrations scoped separately",
+      "Scope umfasst 80-120 Workloads über alle Wellen",
+      "Sovereign Cloud (Open Telekom Cloud oder vergleichbar BSI-C5-zertifiziert)",
+      "SAP-Kernsystem (IS-U/S4HANA) selbst ist nicht in-scope — nur angrenzende Schnittstellen",
+      "Wartungsfenster für SCADA-nahe Migrationen werden 8 Wochen im Voraus geplant"
+    ]
+  },
+  "pricing": {
+    "currency": "EUR",
+    "rate_card": [
+      { "role": "Solution Architect", "rate_day": 1800, "source": "portfolio.delivery_defaults" },
+      { "role": "Implementation Engineer", "rate_day": 1200, "source": "portfolio.delivery_defaults" },
+      { "role": "Project Manager", "rate_day": 1400, "source": "portfolio.delivery_defaults" }
+    ],
+    "effort_summary": [
+      {
+        "phase": "P1 — Assessment & Discovery",
+        "duration_weeks": 6,
+        "effort_days": {
+          "Solution Architect": 60,
+          "Implementation Engineer": 30,
+          "Project Manager": 15
+        },
+        "phase_cost": 165000
+      },
+      {
+        "phase": "P2 — Mobilize & Landing Zone",
+        "duration_weeks": 8,
+        "effort_days": {
+          "Solution Architect": 80,
+          "Implementation Engineer": 120,
+          "Project Manager": 40
+        },
+        "phase_cost": 344000
+      },
+      {
+        "phase": "P3 — Migration Waves",
+        "duration_weeks": 24,
+        "effort_days": {
+          "Solution Architect": 180,
+          "Implementation Engineer": 600,
+          "Project Manager": 120
+        },
+        "phase_cost": 1212000
+      },
+      {
+        "phase": "P4 — Optimize & Transition",
+        "duration_weeks": 6,
+        "effort_days": {
+          "Solution Architect": 30,
+          "Implementation Engineer": 60,
+          "Project Manager": 15
+        },
+        "phase_cost": 147000
+      }
+    ],
+    "total_effort_days": {
+      "Solution Architect": 350,
+      "Implementation Engineer": 810,
+      "Project Manager": 190
+    },
+    "total_effort_days_all": 1350,
+    "cost_breakdown": {
+      "Solution Architect": 630000,
+      "Implementation Engineer": 972000,
+      "Project Manager": 266000
+    },
+    "total_delivery_cost": 1868000,
+    "target_margin_pct": 30,
+    "margin_amount": 800571,
+    "total_price": 2668571,
+    "total_price_rounded": 2670000,
+    "price_per_workload_estimate": {
+      "assumed_workloads": 100,
+      "price_per_workload": 26700
+    },
+    "optional_items": [
+      {
+        "item": "Extended FinOps Coaching (3 Monate)",
+        "estimate_eur": 120000,
+        "rationale": "Falls der Kunde keine interne FinOps-Kompetenz hat"
+      },
+      {
+        "item": "KRITIS-Audit-Begleitung (BSI-C5 Re-Zertifizierung)",
+        "estimate_eur": 85000,
+        "rationale": "Unterstützung beim ersten BSI-C5-Audit nach Migration"
+      },
+      {
+        "item": "Custom Integration Development (pro Schnittstelle)",
+        "estimate_eur": 45000,
+        "rationale": "Nicht-Standard-Schnittstellen zu Legacy-OT-Systemen"
+      }
+    ]
+  },
+  "compliance_coverage": {
+    "frameworks": [
+      { "name": "BSI-C5", "coverage": "Landing Zone und Betriebsprozesse BSI-C5-konform designed" },
+      { "name": "NIS2", "coverage": "NIS2-Registrierung und Incident-Response-Prozesse in Phase 2 implementiert" },
+      { "name": "KRITIS-DachG", "coverage": "KRITIS-Klassifizierung in Phase 1, physische Sicherheitsanforderungen in Landing Zone berücksichtigt" },
+      { "name": "ISO 27001", "coverage": "ISMS-Integration als Teil der Landing-Zone-Governance" },
+      { "name": "EU-Vergaberecht / SektVO", "coverage": "Preisstruktur kompatibel mit Rahmenvertragsvergabe nach SektVO" }
+    ]
+  },
+  "buying_committee_alignment": [
+    { "role": "CIO", "value_message": "Plattformstrategie mit souveräner Cloud, Vendor-Konsolidierung durch Single-Provider-Ansatz für Migration + Betrieb" },
+    { "role": "CISO", "value_message": "BSI-C5-konforme Landing Zone, NIS2-ready, KRITIS-Klassifizierung ab Tag 1 im Assessment" },
+    { "role": "OT-Leiter", "value_message": "OT/IT-Segmentierung in der Landing Zone, SCADA-Migrationen nur in geplanten Wartungsfenstern, Zero-Downtime-Cutover-Strategie" },
+    { "role": "CFO", "value_message": "TCO-transparenter Business Case in Phase 1, Festpreis pro Phase möglich, FinOps-Optimierung senkt Run-Kosten ab Monat 12" },
+    { "role": "Einkauf", "value_message": "SektVO-konforme Preisstruktur, Rahmenvertragsfähig, modulare Beauftragung pro Phase" }
+  ]
+}

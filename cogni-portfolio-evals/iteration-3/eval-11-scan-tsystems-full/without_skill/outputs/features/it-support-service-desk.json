@@ -1,0 +1,13 @@
+{
+  "slug": "it-support-service-desk",
+  "name": "IT Support & Service Desk",
+  "description": "German-speaking L1/L2 service desk with fast issue resolution across multiple locations",
+  "product_slug": "t-systems-workplace",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 3,
+    "category_id": "3.5",
+    "category_name": "IT Support Services"
+  },
+  "source_file": "https://www.servicenow.com/partners/partner-finder/t-systems-international-gmbh.html"
+}

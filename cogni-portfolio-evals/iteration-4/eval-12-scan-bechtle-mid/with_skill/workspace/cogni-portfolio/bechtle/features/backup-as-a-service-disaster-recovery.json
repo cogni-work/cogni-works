@@ -1,0 +1,16 @@
+{
+  "slug": "backup-as-a-service-disaster-recovery",
+  "product_slug": "infrastructure-services",
+  "name": "Backup as a Service & Disaster Recovery",
+  "description": "Cloud-based BaaS with pay-as-you-go daily billing from EUR 0.049 per GB/month using Veeam and NetApp technology in German data centers, complemented by DRaaS for rapid failover recovery.",
+  "taxonomy_mapping": {
+    "dimension": 5,
+    "dimension_name": "Managed Infrastructure Services",
+    "category_id": "5.3",
+    "category_name": "Backup & Disaster Recovery",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/bechtle-portfolio.md",
+  "created": "2026-03-18"
+}

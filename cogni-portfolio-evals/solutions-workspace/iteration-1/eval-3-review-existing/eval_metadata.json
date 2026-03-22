@@ -1,0 +1,12 @@
+{
+  "eval_id": 3,
+  "eval_name": "review-existing-solutions",
+  "prompt": "Review all existing solutions in the T-Systems project at the path provided. Run the solution review assessor on each. Present a portfolio-level assessment showing which solutions pass, which need improvement, and specific recommendations from each stakeholder perspective.",
+  "assertions": [
+    {"id": "REV-01", "text": "All 3 solutions assessed", "type": "structural"},
+    {"id": "REV-02", "text": "Each assessment has three perspective scores", "type": "structural"},
+    {"id": "REV-03", "text": "Synthesis includes prioritized improvements (CRITICAL/HIGH/OPTIONAL)", "type": "structural"},
+    {"id": "REV-04", "text": "Recommendations are specific and actionable (reference specific fields/values)", "type": "agent"},
+    {"id": "REV-05", "text": "Portfolio-level summary identifies cross-solution patterns", "type": "agent"}
+  ]
+}

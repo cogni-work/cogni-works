@@ -1,0 +1,15 @@
+{
+  "slug": "hybrid-cloud",
+  "product_slug": "cloud-services",
+  "name": "Hybrid Cloud Solutions",
+  "description": "T Cloud Hybrid kombiniert Private- und Public-Cloud mit zentralem Governance-Framework, Multi-Cloud-Konnektivitätsplattform (MCCP), branchenspezifischen Varianten (Health Hybrid Cloud) und cloudübergreifender Automatisierung.",
+  "taxonomy_mapping": {
+    "dimension": 4,
+    "dimension_name": "Cloud Services",
+    "category_id": "4.4",
+    "category_name": "Hybrid Cloud",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "updated": "2026-03-18"
+}

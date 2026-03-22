@@ -1,0 +1,13 @@
+{
+  "ok": true,
+  "domain": "telekom-mms.com",
+  "provider_unit": "Deutsche Telekom MMS",
+  "searches_executed": 20,
+  "searches_with_results": 16,
+  "offerings": [
+    {"category_id": "6.1", "name": "Custom Digital Solutions", "description": "End-to-end custom software development from strategy through technical implementation to operations with 2,200 digital experts", "domain": "telekom-mms.com", "link": "https://www.telekom-mms.com/expertise/leistungen", "usp": "2,200 digital experts with full lifecycle development capability", "provider_unit": "Deutsche Telekom MMS", "pricing_model": "project-based", "delivery_model": "onshore", "partners": "", "verticals": "All", "horizon": "Current"},
+    {"category_id": "6.6", "name": "Data-Driven Solutions & KI-Beratung", "description": "AI consulting and data-driven solutions with analytics, artificial intelligence, automation, and machine learning implementation", "domain": "telekom-mms.com", "link": "https://www.telekom-mms.com/expertise/leistungen/data-ai-automation/data-driven-solutions", "usp": "Specialized AI consulting with hands-on implementation", "provider_unit": "Deutsche Telekom MMS", "pricing_model": "project-based", "delivery_model": "onshore", "partners": "", "verticals": "All", "horizon": "Current"},
+    {"category_id": "6.7", "name": "Testing & Application Services", "description": "Accredited test center with software quality assurance, test automation, accessibility testing, and IT security verification", "domain": "telekom-mms.com", "link": "https://www.telekom-mms.com/expertise/leistungen/application-services", "usp": "Accredited test center for verified software quality and accessibility", "provider_unit": "Deutsche Telekom MMS", "pricing_model": "project-based", "delivery_model": "onshore", "partners": "", "verticals": "All", "horizon": "Current"},
+    {"category_id": "7.2", "name": "Digital Experience Consulting", "description": "Digital experience service provider consulting with design competence, UX strategy, and digital transformation guidance", "domain": "telekom-mms.com", "link": "https://www.telekom-mms.com/", "usp": "Leading Digital Experience Service Provider in Germany", "provider_unit": "Deutsche Telekom MMS", "pricing_model": "project-based", "delivery_model": "onshore", "partners": "Salesforce, SAP, Microsoft", "verticals": "All", "horizon": "Current"}
+  ]
+}

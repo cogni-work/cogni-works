@@ -1,0 +1,14 @@
+{
+  "slug": "digitaler-vertragsabschluss",
+  "product_slug": "digitale-kundendienste",
+  "name": "Digitaler Vertragsabschluss",
+  "description": "Online-Abschlussstrecke fuer Neukunden mit Tarifrechner, Bonitaetspruefung, elektronischer Signatur und automatisierter Netzanmeldung. Umfasst Lieferantenwechselprozess (GPKE) und digitale Vertragsbestaetigung in Echtzeit.",
+  "category": "customer-interaction",
+  "taxonomy_mapping": {
+    "dimension": 6,
+    "category_id": "6.1",
+    "category_name": "Custom Application Development",
+    "horizon": "current"
+  },
+  "readiness": "ga"
+}

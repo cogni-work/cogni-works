@@ -1,0 +1,9 @@
+{
+  "slug": "security-services",
+  "name": "Security Services",
+  "description": "Cybersecurity and compliance offerings including SOC, IAM, zero trust, cloud security, network security, and vulnerability management.",
+  "revenue_model": "subscription",
+  "maturity": "growth",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

@@ -1,0 +1,13 @@
+{
+  "slug": "it-support-service-desk",
+  "name": "IT Support & Service Desk",
+  "description": "IT-Support-Services inkl. on-site Services an Standorten Berlin, Hamburg, Nuernberg, Wolfsburg u.a.",
+  "product_slug": "t-systems-workplace",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 3,
+    "category_id": "3.5",
+    "category_name": "IT Support Services"
+  },
+  "source_file": "https://dewiki.de/Lexikon/T-Systems"
+}

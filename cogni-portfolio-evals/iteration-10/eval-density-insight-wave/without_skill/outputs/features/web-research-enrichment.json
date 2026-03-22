@@ -1,0 +1,7 @@
+{
+  "slug": "web-research-enrichment",
+  "product_slug": "cogni-portfolio",
+  "name": "Web-Research-Enrichment",
+  "description": "Recherche-Mechanismus, der zu jedem Portfolio-Element automatisiert oeffentlich verfuegbare Quellen durchsucht und fehlende Facetten-Daten aus Web-Ergebnissen extrahiert und einpflegt.",
+  "readiness": "ga"
+}

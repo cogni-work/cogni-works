@@ -1,0 +1,27 @@
+{
+  "slug": "cloud-native-container--grosse-energieversorger-de",
+  "feature_slug": "cloud-native-container",
+  "market_slug": "grosse-energieversorger-de",
+  "is_statement": "Verwaltete Kubernetes-Plattform auf Basis von OpenShift, EKS und CCE mit integriertem Container-Lifecycle-Management, Monitoring, Container-Registry mit Vulnerability-Scanning, GitOps-Pipelines und Knative Serverless für produktive Unternehmens-Workloads in regulierten Umgebungen.",
+  "does_statement": "Gateway-Administration und Messdatenverarbeitung für den Smart-Meter-Rollout laufen auf BSI-C5-testierten Container-Plattformen mit 99,9% SLA — statt selbst betriebener Kubernetes-Cluster, die knappes Spezialwissen binden.",
+  "means_statement": "Der Messstellenbetrieb skaliert von Pilot auf Massenrollout ohne zusätzliche Container-Spezialisten — die 95%-Pflichtquote bis 2030 wird mit bestehendem Personal erreichbar.",
+  "evidence": [
+    {
+      "statement": "T-Systems Managed Container Stack ist BSI-C5- und SOC-2-auditiert mit 99,9% Verfügbarkeits-SLA",
+      "source_url": "https://geschaeftskunden.telekom.de/digitale-loesungen/infrastructure-as-a-service/developer-services/managed-container-stack-en",
+      "source_title": "T-Systems Managed Container Stack"
+    },
+    {
+      "statement": "Plattform unterstützt Red Hat OpenShift und SUSE Rancher mit integriertem Logging, Monitoring und Vulnerability-Scanning",
+      "source_url": "https://www.t-systems.com/de/en/application-value-management/solutions/managed-container-stack",
+      "source_title": "T-Systems Cloud-Managed Container Stack"
+    },
+    {
+      "statement": "Smart-Meter-Rollout erfordert skalierbare Gateway-Administration für Millionen von Messpunkten",
+      "source_url": null,
+      "source_title": null
+    }
+  ],
+  "created": "2026-03-18",
+  "updated": "2026-03-18"
+}

@@ -1,0 +1,13 @@
+{
+  "slug": "zero-trust-architecture",
+  "name": "Zero Trust Architecture",
+  "description": "Holistic Zero Trust implementation with microsegmentation, phased rollout advisory, and continuous verification",
+  "product_slug": "telekom-security",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 2,
+    "category_id": "2.3",
+    "category_name": "Zero Trust Architecture"
+  },
+  "source_file": "https://www.t-systems.com/us/en/security/topics/zero-trust"
+}

@@ -1,0 +1,16 @@
+{
+  "slug": "intraselect-sd-wan",
+  "product_slug": "connectivity-services",
+  "name": "IntraSelect SD-WAN",
+  "description": "Fully managed SD-WAN overlay combining MPLS and internet transport networks into a single integrated service with 24/7 T-Systems NOC operations and automated failover across both transport layers.",
+  "taxonomy_mapping": {
+    "dimension": 1,
+    "dimension_name": "Connectivity Services",
+    "category_id": "1.1",
+    "category_name": "WAN Services",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

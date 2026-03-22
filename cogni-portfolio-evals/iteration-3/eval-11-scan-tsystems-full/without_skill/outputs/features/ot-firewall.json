@@ -1,0 +1,13 @@
+{
+  "slug": "ot-firewall",
+  "name": "OT Firewall",
+  "description": "Specialized firewall service for industrial control systems and operational technology environments",
+  "product_slug": "telekom-security",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 2,
+    "category_id": "2.6",
+    "category_name": "Network Security"
+  },
+  "source_file": "https://www.t-systems.com/us/en/security/solutions/ot-security"
+}

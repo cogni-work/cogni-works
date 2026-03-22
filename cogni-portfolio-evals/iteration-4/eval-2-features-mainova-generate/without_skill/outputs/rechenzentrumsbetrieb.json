@@ -1,0 +1,14 @@
+{
+  "slug": "rechenzentrumsbetrieb",
+  "product_slug": "it-plattformdienste",
+  "name": "Rechenzentrumsbetrieb und Hosting",
+  "description": "Betrieb redundanter Rechenzentren im Raum Frankfurt fuer KRITIS-relevante Energieversorgungs-IT mit physischer Sicherheit, USV-Versorgung, Klimatisierung und BSI-konformem Betrieb aller Kern- und Netzleitsysteme.",
+  "category": "infrastructure",
+  "taxonomy_mapping": {
+    "dimension": 5,
+    "category_id": "5.1",
+    "category_name": "Data Center Services",
+    "horizon": "current"
+  },
+  "readiness": "ga"
+}

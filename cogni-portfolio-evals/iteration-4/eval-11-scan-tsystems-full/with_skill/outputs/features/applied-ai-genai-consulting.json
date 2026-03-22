@@ -1,0 +1,16 @@
+{
+  "slug": "applied-ai-genai-consulting",
+  "product_slug": "application-services",
+  "name": "Applied AI and GenAI Consulting",
+  "description": "Detecon emerging technologies advisory covering AI strategy, GenAI adoption roadmaps, data management architecture, IoT integration, quantum technology readiness, and software-defined infrastructure planning.",
+  "taxonomy_mapping": {
+    "dimension": 6,
+    "dimension_name": "Application Services",
+    "category_id": "6.6",
+    "category_name": "AI, Data & Analytics",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

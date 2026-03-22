@@ -201,7 +201,7 @@ If no report available:
 ### Theory (3 min)
 
 After verification, the trend report goes through final polishing using
-other cogni-works plugins:
+other insight-wave plugins:
 
 **Cross-plugin finishing pipeline**:
 

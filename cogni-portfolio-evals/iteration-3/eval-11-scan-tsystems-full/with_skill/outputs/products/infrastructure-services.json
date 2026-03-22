@@ -1,0 +1,9 @@
+{
+  "slug": "infrastructure-services",
+  "name": "Managed Infrastructure Services",
+  "description": "Data center, compute, storage, backup/DR, monitoring, IT outsourcing, database administration, and mainframe services.",
+  "revenue_model": "subscription",
+  "maturity": "mature",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

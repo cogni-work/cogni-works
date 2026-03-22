@@ -1,0 +1,9 @@
+{
+  "slug": "infrastructure-services",
+  "name": "Managed Infrastructure Services",
+  "description": "Rechenzentrum-, Compute- und Operations-Angebote inkl. Housing, Backup/DR, Monitoring und Mainframe Services.",
+  "revenue_model": "subscription",
+  "maturity": "growth",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

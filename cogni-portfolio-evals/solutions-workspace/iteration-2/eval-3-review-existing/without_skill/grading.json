@@ -1,0 +1,45 @@
+{
+  "expectations": [
+    {
+      "text": "REV-01: All 3 solutions assessed",
+      "passed": true,
+      "evidence": "Three individual review files exist: cloud-migration, sap-on-cloud, sovereign-cloud. The portfolio-review-summary.json lists all three in solutions_reviewed and provides aggregate_scores for each."
+    },
+    {
+      "text": "REV-02: Each assessment has three perspective scores",
+      "passed": true,
+      "evidence": "All three review files contain perspectives with exactly three keys: procurement_decision_maker, provider_solution_architect, client_solution_architect. Each perspective contains 5 scored criteria with pass/warn/fail ratings and rationales."
+    },
+    {
+      "text": "REV-03: Synthesis includes prioritized improvements (CRITICAL/HIGH/OPTIONAL)",
+      "passed": false,
+      "evidence": "The portfolio-review-summary.json recommendations section uses 'immediate', 'short_term', and 'strategic' priority labels instead of the required CRITICAL/HIGH/OPTIONAL taxonomy. Weaknesses use 'medium' and 'low' severity. Neither mapping matches the required CRITICAL/HIGH/OPTIONAL scheme."
+    },
+    {
+      "text": "REV-04: Recommendations are specific and actionable (reference specific fields/values)",
+      "passed": true,
+      "evidence": "Recommendations reference specific fields and values: 'sovereign-cloud PoV margin (27.7%)', 'SAP-on-cloud PoV margin (28.4%)', 'EUR 5-10K price increase', 'OT Integration Specialist for cloud-migration', 'SAP Basis/IS-U Specialist for SAP-on-cloud', 'extend sovereign-cloud handover phase from 2 to 3-4 weeks'. Individual reviews reference specific criteria scores and specific solution elements (e.g., 'KRITIS-Compliance-Gap-Analyse in Phase 1', 'IS-U billing cycle validation')."
+    },
+    {
+      "text": "REV-05: Portfolio-level summary identifies cross-solution patterns",
+      "passed": true,
+      "evidence": "The portfolio-review-summary.json cross_solution_patterns section identifies 6 strengths (e.g., consistent commercial architecture, comprehensive exit clauses, market pain point coverage 4/5, data sovereignty as cross-cutting guarantee) and 6 weaknesses (e.g., generic role definitions, no cross-solution integration architecture, Smart Meter gap, inconsistent compliance deliverable naming). Each pattern includes affected_solutions references."
+    },
+    {
+      "text": "REV-06: Portfolio consistency check flags exit clause inconsistency across solutions targeting the same market",
+      "passed": false,
+      "evidence": "The exit_clause_consistency check has status 'pass' and notes variance in notice periods (6 vs 12 months) and exit cost caps (5% vs 8%) but explicitly rationalizes these differences rather than flagging them as inconsistencies. The assertion requires flagging inconsistency; the output instead justifies the variance as appropriate ('SAP-on-cloud shorter notice period is appropriate for a managed service')."
+    },
+    {
+      "text": "REV-07: Client SA perspective scores are surfaced and diagnosed if consistently lowest",
+      "passed": false,
+      "evidence": "The client_solution_architect perspectives are present in each review, but the portfolio summary does not surface or diagnose whether client SA scores are consistently lowest. Aggregate scores (cloud-migration 4pass/1warn, sap-on-cloud 4pass/1warn, sovereign-cloud 3pass/2warn for client SA) are not broken out by perspective in the summary. No per-perspective aggregation or comparative diagnosis exists in the portfolio-review-summary.json."
+    }
+  ],
+  "summary": {
+    "passed": 4,
+    "failed": 3,
+    "total": 7,
+    "pass_rate": 0.57
+  }
+}

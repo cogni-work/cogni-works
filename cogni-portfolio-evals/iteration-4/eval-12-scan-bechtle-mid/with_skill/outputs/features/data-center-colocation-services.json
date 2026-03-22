@@ -1,0 +1,16 @@
+{
+  "slug": "data-center-colocation-services",
+  "product_slug": "infrastructure-services",
+  "name": "Data Center & Colocation Services",
+  "description": "Colocation-as-a-Service in Frankfurt e-shelter campus and Swiss data center with Tier 3+ physical security, redundant power and cooling, GDPR compliance and ISO 27001-certified operations.",
+  "taxonomy_mapping": {
+    "dimension": 5,
+    "dimension_name": "Managed Infrastructure Services",
+    "category_id": "5.1",
+    "category_name": "Data Center Services",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/bechtle-portfolio.md",
+  "created": "2026-03-18"
+}

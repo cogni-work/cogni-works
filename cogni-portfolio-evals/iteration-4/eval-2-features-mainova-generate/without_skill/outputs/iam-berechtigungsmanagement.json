@@ -1,0 +1,14 @@
+{
+  "slug": "iam-berechtigungsmanagement",
+  "product_slug": "it-plattformdienste",
+  "name": "IAM und Berechtigungsmanagement",
+  "description": "Zentrales Identity-and-Access-Management mit rollenbasierter Zugriffskontrolle fuer SAP, OT-Systeme und Kundenportale. Umfasst Privileged-Access-Management fuer Leittechnik, Multi-Faktor-Authentifizierung und revisionssichere Berechtigungsnachweise.",
+  "category": "security",
+  "taxonomy_mapping": {
+    "dimension": 2,
+    "category_id": "2.2",
+    "category_name": "Identity & Access Management",
+    "horizon": "current"
+  },
+  "readiness": "ga"
+}

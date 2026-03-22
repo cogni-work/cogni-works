@@ -1,0 +1,20 @@
+{
+  "slug": "sap-on-cloud--grosse-energieversorger-de",
+  "feature_slug": "sap-on-cloud",
+  "market_slug": "grosse-energieversorger-de",
+  "is_statement": "SAP on Cloud ist ein End-to-End-Service fuer Hosting, Migration und Betrieb von S/4HANA auf Private Cloud, AWS und Azure, bereitgestellt als RISE with SAP Premium Supplier mit 4.000 SAP-Experten.",
+  "does_statement": "Energieversorger migrieren SAP IS-U auf S/4HANA Utilities termingerecht vor der 2027-Deadline, ohne internes SAP-Basis-Personal aufbauen zu muessen.",
+  "means_statement": "Migrationsrisiken sinken messbar, da 850.000 bereits verwaltete SAP-Nutzer als Referenzbasis dienen und Projektlaufzeiten um bis zu 30% verkuerzt werden.",
+  "evidence": [
+    {
+      "statement": "T-Systems ist SAP Platinum Partner und RISE with SAP Premium Supplier mit ueber 4.000 SAP-Spezialisten.",
+      "source_url": "https://www.t-systems.com/de/de/branchen/sap",
+      "source_title": "T-Systems SAP Services"
+    },
+    {
+      "statement": "SAP hat das Wartungsende fuer ECC 6.0 auf 2027 festgelegt, was Energieversorger zur S/4HANA-Migration zwingt.",
+      "source_url": "https://www.sap.com/products/erp/s4hana/migration.html",
+      "source_title": "SAP S/4HANA Migration"
+    }
+  ]
+}

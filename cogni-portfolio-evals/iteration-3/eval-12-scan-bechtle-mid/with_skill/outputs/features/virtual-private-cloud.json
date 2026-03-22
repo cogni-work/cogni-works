@@ -1,0 +1,16 @@
+{
+  "slug": "virtual-private-cloud",
+  "product_slug": "cloud-services",
+  "name": "Bechtle Virtual Private Cloud",
+  "description": "Dedicated private cloud in German DSGVO-compliant data centers",
+  "taxonomy_mapping": {
+    "dimension": 4,
+    "dimension_name": "Cloud Services",
+    "category_id": "4.3",
+    "category_name": "Private Cloud",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/bechtle-portfolio.md",
+  "created": "2026-03-18"
+}

@@ -1,0 +1,187 @@
+{
+  "meta": {
+    "proposition": "cloud-migration",
+    "segment": "mittelstaendische-stadtwerke-de",
+    "segment_label": "Mittelständische Stadtwerke (500–5.000 Mitarbeiter)",
+    "incumbent": "T-Systems International GmbH",
+    "generated": "2026-03-19",
+    "method": "baseline-no-skill"
+  },
+  "segment_context": {
+    "description": "German municipal utilities (Stadtwerke) in the 500–5,000 employee range. Typically multi-utility (electricity, gas, water, district heating) with regulated and deregulated business lines. IT landscapes are heterogeneous: legacy SAP IS-U/CCS, Schleupen, Wilken, or kVASy ERP cores alongside SCADA/OT networks for grid operations.",
+    "buying_drivers": [
+      "Regulatory pressure (BNetzA IT-Sicherheitskatalog, KRITIS compliance)",
+      "SAP ECC end-of-life driving S/4HANA migration decisions",
+      "Cost pressure from Energiewende investment cycles",
+      "Need for new digital customer portals and smart-metering backends",
+      "Municipal ownership structures requiring German/EU data residency"
+    ],
+    "decision_dynamics": "Procurement often involves Werkleitung, IT-Leiter, and Aufsichtsrat. Strong preference for references from peer Stadtwerke. Price sensitivity is high but secondary to regulatory compliance and operational reliability. Contracts frequently run 5–7 years."
+  },
+  "competitors": [
+    {
+      "name": "Atos / Eviden",
+      "slug": "atos-eviden",
+      "hq": "DE (Essen) / FR (Paris)",
+      "positioning": "European digital sovereignty champion. Markets itself as the KRITIS-compliant alternative to US hyperscalers, leveraging its OneCloud platform and BullSequana infrastructure. Rebranded digital division Eviden focuses on cloud, cybersecurity, and decarbonization.",
+      "strengths": [
+        "Strong KRITIS and BSI certification portfolio",
+        "Own sovereign cloud infrastructure in German data centers",
+        "Deep energy-sector references (multiple Stadtwerke, Übertragungsnetzbetreiber)",
+        "Integrated cybersecurity practice (Evidian IAM, MDR services)",
+        "Competitive pricing through near-/offshore delivery from Southern/Eastern Europe"
+      ],
+      "weaknesses": [
+        "Financial instability and restructuring (Chapter 11-equivalent proceedings) erodes customer trust",
+        "Talent attrition during ongoing corporate transformation",
+        "Fragmented brand: Atos vs. Eviden vs. Tech Foundations confuses procurement",
+        "Weaker SAP practice compared to T-Systems (no Platinum Partner status)"
+      ],
+      "differentiation_vs_tsystems": "Atos/Eviden competes primarily on sovereignty narrative and price. However, T-Systems counters with stronger financial backing (Deutsche Telekom parent), deeper SAP expertise (4,000+ SAP consultants), and a broader Stadtwerke reference base. Atos's restructuring introduces contract-continuity risk that T-Systems can exploit in risk-averse municipal procurement."
+    },
+    {
+      "name": "Arvato Systems (Bertelsmann)",
+      "slug": "arvato-systems",
+      "hq": "DE (Gütersloh)",
+      "positioning": "Mid-market cloud specialist with strong German Mittelstand focus. Positions as agile alternative to large SIs, offering managed cloud services on Azure, AWS, and private cloud with sector-specific solutions for energy and utilities.",
+      "strengths": [
+        "Strong Mittelstand DNA — understood as peer rather than 'big IT'",
+        "Azure Expert MSP with deep Microsoft competencies",
+        "Proven energy-sector references including Stadtwerke and Netzbetreiber",
+        "Competitive managed-services pricing for mid-market budgets",
+        "German-owned (Bertelsmann) — no foreign-ownership sovereignty concerns"
+      ],
+      "weaknesses": [
+        "Limited scale for large transformation programs (< 4,000 employees)",
+        "No sovereign cloud of their own — dependent on hyperscaler infrastructure",
+        "Weaker SAP practice; no RISE with SAP partnership",
+        "Limited 24/7 operations capability compared to T-Systems global NOC",
+        "Narrower geographic reach for multi-site Stadtwerke groups"
+      ],
+      "differentiation_vs_tsystems": "Arvato competes on cultural fit and agility for the Mittelstand. T-Systems counters with end-to-end capability (migration + sovereign cloud + SAP + managed ops), stronger 24/7 SLAs, and the ability to scale for Stadtwerke-Verbünde that span multiple municipalities. Arvato wins when the customer values a 'right-sized' partner over breadth."
+    },
+    {
+      "name": "Accenture",
+      "slug": "accenture",
+      "hq": "IE (Dublin) / DE (Kronberg)",
+      "positioning": "Global transformation partner. Leads with business-case-driven cloud migration tied to operational transformation, not just infrastructure lift-and-shift. Strong consulting brand with C-level access.",
+      "strengths": [
+        "Unmatched consulting and advisory bench for business-case justification",
+        "Deep hyperscaler partnerships (AWS, Azure, GCP) with dedicated migration factories",
+        "Strong change-management and organizational-transformation capabilities",
+        "Extensive energy/utilities industry practice with global best practices",
+        "Ability to bundle cloud migration with broader digital transformation (CX, analytics)"
+      ],
+      "weaknesses": [
+        "Perceived as expensive — day rates 30–50% above T-Systems",
+        "Less operational depth: strong on 'plan and build,' weaker on 'run'",
+        "No own data-center infrastructure — fully dependent on hyperscalers for hosting",
+        "Cultural mismatch: global consulting culture vs. municipal pragmatism",
+        "Limited KRITIS operations experience compared to German-origin providers",
+        "Often sub-contracts managed services to third parties post-migration"
+      ],
+      "differentiation_vs_tsystems": "Accenture wins on strategic advisory and C-level storytelling but is vulnerable on run-phase credibility and cost. T-Systems differentiates with integrated plan-build-run, own sovereign infrastructure, KRITIS operational track record, and more palatable pricing for municipal budgets. Accenture is most dangerous when the Werkleitung wants 'transformation' rather than 'migration.'"
+    },
+    {
+      "name": "SIT (Südwestdeutsche IT)",
+      "slug": "sit-gmbh",
+      "hq": "DE (Leinfelden-Echterdingen)",
+      "positioning": "Specialist IT service provider for Stadtwerke and municipal enterprises. Part of the kommunale IT ecosystem. Positions as the sector-native alternative that understands Stadtwerke processes from inside.",
+      "strengths": [
+        "Deep domain expertise: billing (IS-U), grid operations, metering, regulatory reporting",
+        "Existing relationships and trust within the Stadtwerke community",
+        "Solutions pre-configured for Stadtwerke processes (SAP IS-U, Schleupen, Wilken)",
+        "Municipal ownership alignment — understood procurement and Aufsichtsrat dynamics",
+        "Competitive pricing for standardized Stadtwerke IT services"
+      ],
+      "weaknesses": [
+        "Limited cloud-native and hyperscaler competence",
+        "Small scale — cannot deliver large-scale migration programs alone",
+        "Technology stack often legacy-oriented (hosting, not cloud transformation)",
+        "No sovereign cloud or private cloud infrastructure of their own at scale",
+        "Innovation gap: slower to adopt containerization, DevOps, cloud-native patterns"
+      ],
+      "differentiation_vs_tsystems": "SIT is dangerous as a trusted insider but limited as a cloud transformation partner. T-Systems should position as the partner that combines Stadtwerke understanding (via energy-sector references) with genuine cloud-migration capability. SIT often becomes a sub-contractor or co-delivery partner rather than a direct competitor for the cloud-migration prime contract."
+    },
+    {
+      "name": "Capgemini",
+      "slug": "capgemini",
+      "hq": "FR (Paris) / DE (Berlin)",
+      "positioning": "European IT services leader with strong cloud and SAP practices. Competes on breadth of capability and European heritage. Markets 'Intelligent Industry' framework for utilities transformation.",
+      "strengths": [
+        "Large German workforce (> 10,000) with energy/utilities vertical",
+        "Strong SAP partnership (Global Strategic Supplier for RISE with SAP)",
+        "Own cloud migration methodology and migration factory approach",
+        "European data-sovereignty positioning without US-parent concerns",
+        "Integrated application management + infrastructure services"
+      ],
+      "weaknesses": [
+        "No own cloud/data-center infrastructure — dependent on hyperscalers",
+        "Perceived as less 'German' than T-Systems despite large local presence",
+        "Complex delivery model mixing on-/near-/offshore can frustrate municipal customers",
+        "Higher overhead costs than mid-market specialists like Arvato",
+        "KRITIS operational references thinner than T-Systems"
+      ],
+      "differentiation_vs_tsystems": "Capgemini is the closest full-spectrum competitor. T-Systems differentiates with sovereign cloud infrastructure (T Cloud, OSC), Deutsche Telekom network integration, and deeper KRITIS operations heritage. Capgemini counters with a stronger global SAP migration factory and broader consulting bench. In Stadtwerke deals, T-Systems's German identity and Telekom brand trust often tip the balance."
+    },
+    {
+      "name": "Ionos (United Internet / 1&1)",
+      "slug": "ionos",
+      "hq": "DE (Montabaur)",
+      "positioning": "German-sovereign cloud infrastructure provider. Competes on data-residency guarantees, GDPR-native infrastructure, and aggressive IaaS pricing. Targets mid-market customers who want 'German cloud without the hyperscaler.'"  ,
+      "strengths": [
+        "100% German-owned cloud infrastructure with BSI C5 attestation",
+        "Aggressive pricing undercutting hyperscalers for IaaS workloads",
+        "Simple, transparent pricing model appealing to cost-sensitive Stadtwerke",
+        "Strong brand recognition in German Mittelstand",
+        "Growing Kubernetes/cloud-native platform capabilities"
+      ],
+      "weaknesses": [
+        "Limited professional services — primarily infrastructure, not migration consulting",
+        "No SAP hosting or migration capability",
+        "No managed-services or 24/7 operations for enterprise workloads",
+        "Ecosystem of ISV integrations and enterprise tooling is immature",
+        "Perceived as SMB/consumer provider, not enterprise-grade"
+      ],
+      "differentiation_vs_tsystems": "Ionos competes on sovereignty and price at the infrastructure layer but lacks the professional services, SAP expertise, and managed operations that a Stadtwerke cloud migration requires. T-Systems positions its full-stack capability (assess-migrate-operate) against Ionos's infrastructure-only model. Ionos is most dangerous when a Stadtwerke has strong internal IT and only needs IaaS."
+    }
+  ],
+  "competitive_summary": {
+    "t_systems_key_differentiators": [
+      "Integrated plan-build-run: Cloud Migration Services (CMF methodology) + Sovereign Cloud + Managed Hyperscaler + 24/7 Operations in one contract",
+      "SAP Platinum Partner with 4,000+ experts and RISE with SAP Premium Supplier status — critical for SAP IS-U to S/4HANA migrations",
+      "Own sovereign cloud infrastructure (T Cloud, Open Sovereign Cloud) meeting BaFin/KRITIS requirements without hyperscaler lock-in",
+      "Deutsche Telekom backing: financial stability, network integration, brand trust in public-sector Germany",
+      "Extensive Stadtwerke and energy-sector reference base across Germany"
+    ],
+    "key_battlegrounds": [
+      "Sovereignty vs. hyperscaler innovation: customers torn between German data residency and AWS/Azure feature velocity",
+      "Total cost of ownership: T-Systems day rates (1,200–1,800 EUR) vs. Arvato/SIT mid-market pricing",
+      "SAP migration ownership: who leads the IS-U to S/4HANA journey — the cloud partner or the SAP partner?",
+      "Operational continuity: 5–7 year managed-services contracts require trust in provider stability",
+      "Cultural fit: municipal pragmatism vs. global-SI transformation ambition"
+    ]
+  },
+  "trap_questions": [
+    {
+      "question": "Warum sollten wir nicht einfach direkt zu AWS oder Azure gehen und den Mittelsmann T-Systems überspringen? Die Hyperscaler haben doch eigene Migrationsprogramme.",
+      "intent": "Tests whether the seller can articulate the value of a managed-services layer (governance, KRITIS compliance, SAP integration, single-throat-to-choke) without badmouthing the hyperscalers that T-Systems itself resells.",
+      "suggested_reframe": "Position T-Systems as the hyperscaler amplifier, not middleman: 'Wir bringen AWS/Azure-Innovation mit deutscher Betriebsverantwortung zusammen — inklusive KRITIS-konformer Landing Zones, die der Hyperscaler allein nicht liefert.'"
+    },
+    {
+      "question": "Atos bietet uns die gleiche Sovereign-Cloud-Story für 20% weniger. Warum sollten wir mehr bezahlen?",
+      "intent": "Probes whether the seller can shift the conversation from unit price to risk-adjusted TCO, leveraging Atos's financial instability and restructuring as a legitimate operational risk for a 5–7 year KRITIS contract.",
+      "suggested_reframe": "Acknowledge competitive pricing, then pivot to contract continuity: 'Bei einem 7-Jahres-Betriebsvertrag für kritische Infrastruktur zählt die Stabilität des Partners. Unsere Muttergesellschaft Deutsche Telekom sichert Investitionen und Kontinuität, die kein Restrukturierungskandidat garantieren kann.'"
+    },
+    {
+      "question": "Unser IT-Leiter sagt, ein Stadtwerke-Spezialist wie SIT versteht unsere Prozesse besser als ein Großkonzern wie T-Systems. Hat er recht?",
+      "intent": "Forces the seller to respect the incumbent specialist without dismissing internal IT leadership, while demonstrating that cloud migration requires capabilities beyond Stadtwerke domain knowledge.",
+      "suggested_reframe": "Validate the domain expertise, then widen the frame: 'SIT kennt Ihre Abrechnungsprozesse hervorragend. Aber Cloud-Migration ist kein Fachprozess-Projekt — es ist ein Infrastruktur-Transformationsprogramm. Wir bringen die Migrationsfabrik, die SIT als Fachpartner einbinden kann.'"
+    },
+    {
+      "question": "Capgemini hat uns eine Migration Factory mit indischen Teams angeboten, die in 12 Wochen liefert. Können Sie das auch?",
+      "intent": "Tests whether the seller falls into a speed/offshore price war or can reframe around quality, KRITIS compliance, and the reality that Stadtwerke migrations involve regulated OT/IT boundaries that offshore teams cannot navigate without on-site access.",
+      "suggested_reframe": "Reframe speed vs. safety: 'Unsere CMF-Methodik liefert ebenfalls sprint-basiert und skalierbar. Der Unterschied: Ihre KRITIS-relevanten Systeme erfordern Mitarbeiter mit deutschen Sicherheitsüberprüfungen und Zugang zu Ihren OT-Netzen — das kann keine Offshore-Factory leisten.'"
+    }
+  ]
+}

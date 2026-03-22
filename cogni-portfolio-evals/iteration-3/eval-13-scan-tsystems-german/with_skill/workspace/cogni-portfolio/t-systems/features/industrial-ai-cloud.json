@@ -1,0 +1,16 @@
+{
+  "slug": "industrial-ai-cloud",
+  "product_slug": "application-services",
+  "name": "Industrial AI Cloud",
+  "description": "Europäische industrielle KI-Cloud mit NVIDIA",
+  "taxonomy_mapping": {
+    "dimension": 6,
+    "dimension_name": "Application Services",
+    "category_id": "6.6",
+    "category_name": "AI, Data & Analytics",
+    "horizon": "emerging"
+  },
+  "readiness": "beta",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

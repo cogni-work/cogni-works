@@ -1,0 +1,16 @@
+{
+  "slug": "managed-infrastructure",
+  "product_slug": "infrastructure-services",
+  "name": "Managed Infrastructure Services",
+  "description": "Proactive monitoring, patching, backup/recovery across hybrid infrastructure",
+  "taxonomy_mapping": {
+    "dimension": 5,
+    "dimension_name": "Managed Infrastructure Services",
+    "category_id": "5.7",
+    "category_name": "Infrastructure Automation",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/bechtle-portfolio.md",
+  "created": "2026-03-18"
+}

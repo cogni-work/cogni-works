@@ -1,0 +1,16 @@
+{
+  "slug": "data-protection",
+  "product_slug": "security-services",
+  "name": "Data Protection and Privacy (DLP/GDPR)",
+  "description": "DLP via Proofpoint, email encryption, GDPR compliance consulting",
+  "taxonomy_mapping": {
+    "dimension": 2,
+    "dimension_name": "Security Services",
+    "category_id": "2.10",
+    "category_name": "Data Protection & Privacy",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/bechtle-portfolio.md",
+  "created": "2026-03-18"
+}

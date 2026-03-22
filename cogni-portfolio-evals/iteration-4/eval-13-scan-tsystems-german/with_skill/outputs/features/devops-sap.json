@@ -1,0 +1,16 @@
+{
+  "slug": "devops-sap",
+  "product_slug": "application-services",
+  "name": "DevOps for SAP",
+  "description": "DevOps methodology and CI/CD pipeline automation specifically tailored for SAP landscape transformation with continuous integration testing, automated transport management, and SAP release orchestration.",
+  "taxonomy_mapping": {
+    "dimension": 6,
+    "dimension_name": "Application Services",
+    "category_id": "6.7",
+    "category_name": "DevOps & Platform Engineering",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

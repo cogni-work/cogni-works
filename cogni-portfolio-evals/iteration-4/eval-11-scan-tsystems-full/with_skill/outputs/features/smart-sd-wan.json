@@ -1,0 +1,16 @@
+{
+  "slug": "smart-sd-wan",
+  "product_slug": "connectivity-services",
+  "name": "Smart SD-WAN",
+  "description": "Multi-carrier compatible managed overlay SD-WAN solution operating independently of transport providers, scalable for large enterprise networks with hundreds of sites and complex multi-carrier strategies.",
+  "taxonomy_mapping": {
+    "dimension": 1,
+    "dimension_name": "Connectivity Services",
+    "category_id": "1.1",
+    "category_name": "WAN Services",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

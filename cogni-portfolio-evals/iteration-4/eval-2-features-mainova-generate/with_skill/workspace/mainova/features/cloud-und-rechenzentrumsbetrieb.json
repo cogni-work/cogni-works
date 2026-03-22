@@ -1,0 +1,16 @@
+{
+  "slug": "cloud-und-rechenzentrumsbetrieb",
+  "product_slug": "digitale-energiedienste",
+  "name": "Cloud- und Rechenzentrumsbetrieb",
+  "description": "Hybrid-Cloud-Betriebsmodell mit eigenem georedundanten Rechenzentrum fuer KRITIS-relevante Workloads und Hyperscaler-Anbindung fuer elastisch skalierbare Dienste, inklusive automatisiertem Backup und Disaster-Recovery-Konzept mit definierten RTO/RPO-Vorgaben.",
+  "category": "cloud-infrastructure",
+  "taxonomy_mapping": {
+    "dimension": 4,
+    "dimension_name": "Cloud Services",
+    "category_id": "4.4",
+    "category_name": "Hybrid Cloud",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "created": "2026-03-18"
+}

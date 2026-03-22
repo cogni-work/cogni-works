@@ -1,0 +1,9 @@
+{
+  "slug": "application-services",
+  "name": "Application Services",
+  "description": "Software-Entwicklungs-, Integrations- und Plattform-Angebote inkl. Custom Development, SAP, AI/Data und DevOps.",
+  "revenue_model": "subscription",
+  "maturity": "growth",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

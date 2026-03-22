@@ -1,0 +1,16 @@
+{
+  "slug": "sovereign-cloud--grosse-energieversorger-de",
+  "feature_slug": "sovereign-cloud",
+  "market_slug": "grosse-energieversorger-de",
+  "is_statement": "European data sovereignty via T Cloud Public, Open Sovereign Cloud (OSC), Google Cloud and AWS sovereign variants — fully operated within the EU and BaFin/KRITIS compliant.",
+  "does_statement": "Provides cloud infrastructure that passes BaFin and BSI audits without exception requests, keeping energy trading data and grid control systems under EU jurisdiction.",
+  "means_statement": "Eliminates regulatory risk for NIS2 compliance by October 2026 deadline, avoiding potential fines of up to EUR 10M or 2% of global revenue.",
+  "evidence": [
+    {
+      "statement": "T-Systems Sovereign Cloud achieved BSI C5 Type 2 attestation in Q3 2024",
+      "source_url": "https://www.t-systems.com/de/cloud/sovereign",
+      "source_title": "Sovereign Cloud Compliance"
+    }
+  ],
+  "created": "2026-01-20"
+}

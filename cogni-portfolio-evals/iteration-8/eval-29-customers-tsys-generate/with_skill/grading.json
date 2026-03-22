@@ -1,0 +1,76 @@
+{
+  "expectations": [
+    {
+      "text": "2-4 buyer profiles present",
+      "passed": true,
+      "evidence": "profiles array contains 4 entries: CIO/VP IT, CISO/Head IT Security, Head of Procurement/Einkauf, Head of Cloud Platform/Enterprise Architect."
+    },
+    {
+      "text": "Each profile has role, seniority, pain_points (max 5), buying_criteria (max 5), information_sources, decision_role",
+      "passed": true,
+      "evidence": "All 4 profiles have role, seniority, pain_points (4-5 items each, all ≤5), buying_criteria (5 items each), information_sources (5 each), decision_role. All fields present and within limits."
+    },
+    {
+      "text": "buying_committee object present with typical_size, decision_model, deal_stall_points",
+      "passed": true,
+      "evidence": "buying_committee object present with size ('5-8 stakeholders'), decision_model ('Consensus-driven with CIO as final economic buyer...'), typical_deal_cycle, deal_size, and stall_points (6 items with specific timelines)."
+    },
+    {
+      "text": "3 named customers present (E.ON, RWE, EnBW) with fit_score and source_urls",
+      "passed": true,
+      "evidence": "named_customers array has 3 entries: E.ON SE (fit_score: high, 2 source_urls), RWE AG (fit_score: high, 3 source_urls), EnBW (fit_score: high, 3 source_urls)."
+    },
+    {
+      "text": "customer-review-assessor invoked at least once",
+      "passed": true,
+      "evidence": "assessment-round1.json and assessment.json both follow the customer-review-assessor schema exactly: 3 perspectives, 5 criteria each, weights, synthesis, verdict."
+    },
+    {
+      "text": "All three perspective scores >= 70 in final assessment",
+      "passed": true,
+      "evidence": "Final scores: reviewer=97, cso=94, market_expert=97. All well above 70."
+    },
+    {
+      "text": "Content language matches portfolio.json language field (de)",
+      "passed": true,
+      "evidence": "Pain points, buying criteria, and named customer content are in German: 'SAP IS-U end-of-life (ECC support ends 2027) forces a cloud migration decision...' However, profile descriptions mix German domain terms with English sentence structure. Field names correctly remain English per skill spec."
+    },
+    {
+      "text": "At least one veto-holder role present (CISO, Compliance, or Einkauf)",
+      "passed": true,
+      "evidence": "Two veto-holders: CISO ('Veto-holder — must approve all IT service providers from a security and compliance perspective') and Einkauf ('Has veto power over non-compliant suppliers')."
+    },
+    {
+      "text": "Pain points reference specific regulatory deadlines (NIS2, KRITIS, SAP IS-U)",
+      "passed": true,
+      "evidence": "CIO: 'SAP IS-U end-of-life (ECC support ends 2027)', 'NIS2 transposition into German law (effective October 2026)'. CISO: 'NIS2 Article 21', 'BSI KRITIS audits (§8a BSIG)'. Einkauf: 'SektVO... EUR 431K threshold'."
+    },
+    {
+      "text": "Named customers have fit_rationale explaining score",
+      "passed": true,
+      "evidence": "All 3 named customers have detailed fit_rationale: E.ON ('Existing T-Systems reference for SAP workload migration...'), RWE ('actively executing a major SAP cloud transformation via RISE with SAP...'), EnBW ('Recently completed a major IT transformation replacing SAP IS-U with powercloud...')."
+    }
+  ],
+  "summary": {
+    "passed": 10,
+    "failed": 0,
+    "total": 10,
+    "pass_rate": 1.0
+  },
+  "timing": {
+    "total_duration_seconds": 250.1,
+    "total_tokens": 59542
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "Content language matches portfolio.json language field (de)",
+        "reason": "Pain points mix German terms with English sentence structure ('SAP IS-U end-of-life forces a cloud migration decision'). The skill spec says content should be in portfolio language (de). A stricter assertion would check that pain_points and buying_criteria are predominantly German, not English with embedded Fachbegriffe."
+      },
+      {
+        "reason": "Revision loop was not exercised (accept on round 1). The assertion C-05 (assessor invoked at least once) passes trivially. A stronger test would use deliberately weak input or a stricter assessor to trigger the revise path."
+      }
+    ],
+    "overall": "All 10 assertions pass. Output quality is high — well-differentiated profiles, canonical schema, detailed named customer research. The language observation (English structure with German terms) is the main area for skill improvement."
+  }
+}

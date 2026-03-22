@@ -1,0 +1,16 @@
+{
+  "slug": "managed-network-services",
+  "product_slug": "connectivity-services",
+  "name": "Managed Network Services",
+  "description": "Vollständig verwaltete Netzwerkinfrastruktur",
+  "taxonomy_mapping": {
+    "dimension": 1,
+    "dimension_name": "Connectivity Services",
+    "category_id": "1.7",
+    "category_name": "Network-as-a-Service",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

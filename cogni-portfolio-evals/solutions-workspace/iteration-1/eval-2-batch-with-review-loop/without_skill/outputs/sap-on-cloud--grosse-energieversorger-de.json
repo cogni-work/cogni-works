@@ -1,0 +1,181 @@
+{
+  "slug": "sap-on-cloud--grosse-energieversorger-de",
+  "proposition_slug": "sap-on-cloud--grosse-energieversorger-de",
+  "solution_type": "managed_service",
+  "implementation": [
+    {
+      "phase": "SAP-Landscape-Assessment & Sizing",
+      "duration_weeks": 2,
+      "description": "Analyse der bestehenden SAP-Landschaft (S/4HANA, IS-U, BW, Solution Manager), Sizing der Cloud-Zielplattform, Identifikation branchenspezifischer Anforderungen (Abrechnungszyklen, Hochlastphasen) und Definition der SLA-Parameter.",
+      "deliverables": [
+        "SAP-Landscape-Dokumentation mit Systemabhaengigkeiten",
+        "Cloud-Sizing-Report mit Kapazitaetsplanung fuer Hochlastphasen",
+        "SLA-Framework mit IS-U-spezifischen Verfuegbarkeitsanforderungen"
+      ],
+      "roles": ["Solution Architect", "Project Manager"]
+    },
+    {
+      "phase": "Cloud-Plattform-Aufbau & SAP-Basis-Konfiguration",
+      "duration_weeks": 4,
+      "description": "Provisionierung der SAP-Zielplattform auf Cloud-Infrastruktur mit Hochverfuegbarkeits-Setup, SAP-Basis-Konfiguration, automatisiertem Patch-Management und Monitoring-Integration. KRITIS-konforme Netzwerksegmentierung und BSI-C5-Compliance.",
+      "deliverables": [
+        "SAP-Cloud-Plattform betriebsbereit mit HA-Konfiguration",
+        "HANA-Verschluesselungskonzept (AES-256 at-rest, TLS 1.3 in-transit)",
+        "Automatisiertes Patch-Management konfiguriert",
+        "SAP-Monitoring in Kundenseitige Dashboards integriert"
+      ],
+      "roles": ["Implementation Engineer", "Solution Architect"]
+    },
+    {
+      "phase": "SAP-Systemmigration & IS-U-Validierung",
+      "duration_weeks": 8,
+      "description": "Migration der SAP-Systeme (S/4HANA, IS-U) auf die Cloud-Plattform mit Near-Zero-Downtime-Verfahren (SAP DMO), Validierung der IS-U-Abrechnungslaeufe ueber mindestens zwei vollstaendige Zyklen, IDOC-Schnittstellen und branchenspezifischen Erweiterungen.",
+      "deliverables": [
+        "Migrierte SAP-Systeme mit Funktionsnachweis",
+        "IS-U-Abrechnungslauf-Validierungsprotokoll (min. 2 Zyklen)",
+        "IDOC- und Schnittstellen-Testprotokoll",
+        "Rollback-Plan mit dokumentiertem Rueckfallszenario je System"
+      ],
+      "roles": ["Implementation Engineer", "Solution Architect", "Project Manager"]
+    },
+    {
+      "phase": "Hochlast-Simulation & Performance-Tuning",
+      "duration_weeks": 2,
+      "description": "Simulation der Jahresabrechnungslast und Preisanpassungszyklen, Performance-Tuning der Datenbank- und Applikationsschicht, Validierung der Auto-Scaling-Mechanismen fuer saisonale Spitzen.",
+      "deliverables": [
+        "Hochlast-Simulationsergebnisse mit Performance-Metriken",
+        "Performance-Tuning-Bericht und umgesetzte Optimierungen",
+        "Auto-Scaling-Validierungsprotokoll"
+      ],
+      "roles": ["Implementation Engineer", "Solution Architect"]
+    },
+    {
+      "phase": "Managed-Service-Uebergabe & Transition",
+      "duration_weeks": 2,
+      "description": "Uebergabe in den Managed-Service-Betrieb mit definierten SLAs (99.95% Verfuegbarkeit), Incident-Management-Prozessen, Change-Management-Verfahren, quartalsweisem Service-Review und Schulung des Kundenteams.",
+      "deliverables": [
+        "Managed-Service-Vertrag mit SLA-Definitionen",
+        "Incident- und Change-Management-Prozessdokumentation",
+        "Kundenteam-Schulung zu SAP-Cloud-Operations",
+        "Datenportabilitaets- und Exit-Klausel dokumentiert"
+      ],
+      "roles": ["Solution Architect", "Project Manager"]
+    }
+  ],
+  "pricing": {
+    "proof_of_value": {
+      "price": 30000,
+      "currency": "EUR",
+      "scope": "SAP-Landscape-Assessment mit Sizing und Migration eines nicht-produktiven SAP-Systems (z.B. Sandbox oder Entwicklungssystem) auf die Cloud-Plattform -- Erfolgskriterium: System laeuft stabil mit dokumentierten Performance-Benchmarks."
+    },
+    "small": {
+      "price": 145000,
+      "currency": "EUR",
+      "scope": "Migration und Managed Service fuer ein SAP-Produktivsystem (z.B. S/4HANA ohne IS-U) mit HA-Setup, Monitoring und 12-Monats-Betriebsvertrag.",
+      "managed_service_monthly": 4500,
+      "managed_service_currency": "EUR"
+    },
+    "medium": {
+      "price": 290000,
+      "currency": "EUR",
+      "scope": "Migration von S/4HANA und IS-U mit vollstaendiger Abrechnungslauf-Validierung, Hochlast-Simulation und Managed Service inkl. SAP-Basis-Administration.",
+      "managed_service_monthly": 7500,
+      "managed_service_currency": "EUR"
+    },
+    "large": {
+      "price": 480000,
+      "currency": "EUR",
+      "scope": "Komplette SAP-Landschaft (S/4HANA, IS-U, BW, Solution Manager, Fiori) mit Near-Zero-Downtime-Migration, dediziertem SAP-Operations-Team und 36-Monats-Managed-Service-Vertrag."
+    }
+  },
+  "cost_model": {
+    "assumptions": [
+      "Tagessaetze gemaess Delivery Defaults: SA 1.800 EUR, Engineer 1.200 EUR, PM 1.400 EUR",
+      "Kunde stellt SAP-Lizenzen und S-User bereit -- T-Systems liefert Infrastruktur und Basis-Betrieb",
+      "Kunde stellt SAP-Funktionsteam fuer IS-U-Abrechnungslauf-Validierung zur Verfuegung",
+      "Near-Zero-Downtime-Migration erfordert SAP-Wartungsfenster von max. 4 Stunden -- Terminierung durch Kunden",
+      "Managed-Service-Gebuehren (laufender Betrieb) sind im Large-Tier fuer 36 Monate eingepreist; Small: 4.500 EUR/Monat, Medium: 7.500 EUR/Monat",
+      "SLA-Poenale: 2% Gutschrift je angefangene 0.01% unter 99.95% Verfuegbarkeit (max. 20% der Monatsgebuehr)",
+      "Transition-Out-Planung: 4-8 Wochen je nach Systemkomplexitaet, Aufwand wird im Exit-Plan quantifiziert",
+      "HANA-Verschluesselung: AES-256 at-rest, TLS 1.3 in-transit -- Customer-Managed Keys optional",
+      "Smart-Meter-Gateway-Integration als optionaler Scope-Baustein verfuegbar (separat zu beauftragen)",
+      "Datenportabilitaet gewaehrleistet: SAP-Standard-Exportverfahren und offene Backup-Formate"
+    ],
+    "bill_of_materials": {
+      "roles": [
+        { "role": "Solution Architect", "rate_day": 1800, "currency": "EUR" },
+        { "role": "Implementation Engineer", "rate_day": 1200, "currency": "EUR" },
+        { "role": "Project Manager", "rate_day": 1400, "currency": "EUR" }
+      ],
+      "tooling": [
+        { "item": "SAP-Lifecycle-Management-Tooling", "cost": 0, "currency": "EUR", "note": "Im Managed-Service-Preis enthalten" },
+        { "item": "SAP-Monitoring & Alerting Suite", "cost": 0, "currency": "EUR", "note": "Im Managed-Service-Preis enthalten" }
+      ],
+      "infrastructure": [
+        { "item": "SAP HANA Cloud-Infrastruktur", "cost_per_month": 8500, "currency": "EUR", "note": "Kundenseitig -- variiert nach HANA-Groesse und HA-Konfiguration" },
+        { "item": "Backup & Disaster Recovery Storage", "cost_per_month": 1500, "currency": "EUR", "note": "Kundenseitig" }
+      ]
+    },
+    "effort_by_tier": {
+      "proof_of_value": {
+        "total_days": 18,
+        "breakdown": [
+          { "role": "Solution Architect", "days": 7 },
+          { "role": "Implementation Engineer", "days": 7 },
+          { "role": "Project Manager", "days": 4 }
+        ],
+        "internal_cost": 26600,
+        "margin_pct": 11.3
+      },
+      "small": {
+        "total_days": 72,
+        "breakdown": [
+          { "role": "Solution Architect", "days": 16 },
+          { "role": "Implementation Engineer", "days": 40 },
+          { "role": "Project Manager", "days": 16 }
+        ],
+        "internal_cost": 99200,
+        "margin_pct": 31.6
+      },
+      "medium": {
+        "total_days": 150,
+        "breakdown": [
+          { "role": "Solution Architect", "days": 32 },
+          { "role": "Implementation Engineer", "days": 84 },
+          { "role": "Project Manager", "days": 34 }
+        ],
+        "internal_cost": 205400,
+        "margin_pct": 29.2,
+        "note": "Revised: +10 days for extended IS-U validation phase (6->8 weeks)"
+      },
+      "large": {
+        "total_days": 240,
+        "breakdown": [
+          { "role": "Solution Architect", "days": 44 },
+          { "role": "Implementation Engineer", "days": 144 },
+          { "role": "Project Manager", "days": 52 }
+        ],
+        "internal_cost": 324800,
+        "margin_pct": 32.3,
+        "note": "Revised: +10 days for extended IS-U validation phase (6->8 weeks)"
+      }
+    }
+  },
+  "revision_history": [
+    {
+      "revision": 1,
+      "date": "2026-03-18",
+      "trigger": "Three-perspective review flagged revision_required across all reviewers",
+      "changes": [
+        "IS-U migration phase extended from 6 to 8 weeks",
+        "Rollback plan added as deliverable in migration phase",
+        "Managed-service monthly pricing added for Small (4,500 EUR) and Medium (7,500 EUR)",
+        "SLA penalty clause defined (2% credit per 0.01% below 99.95%)",
+        "Transition-out plan with duration estimate (4-8 weeks) added to assumptions",
+        "HANA encryption concept (AES-256 at-rest, TLS 1.3 in-transit) added as deliverable",
+        "Smart-Meter-Gateway integration referenced as optional scope extension"
+      ]
+    }
+  ],
+  "created": "2026-03-18"
+}

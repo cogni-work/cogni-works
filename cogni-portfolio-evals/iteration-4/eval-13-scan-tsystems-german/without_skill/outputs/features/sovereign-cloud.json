@@ -1,0 +1,13 @@
+{
+  "slug": "sovereign-cloud",
+  "name": "Sovereign Cloud Portfolio",
+  "description": "Sovereign Cloud powered by Google Cloud, T Cloud Public (europaeischer Hyperscaler), Open Sovereign Cloud und Sovereign Controls.",
+  "product_slug": "t-systems-cloud",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 4,
+    "category_id": "4.7",
+    "category_name": "Sovereign Cloud"
+  },
+  "source_file": "https://www.t-systems.com/de/de/souveraene-cloud"
+}

@@ -1,0 +1,14 @@
+{
+  "slug": "proposition-generierung",
+  "product_slug": "cogni-portfolio",
+  "name": "Proposition-Generierung",
+  "description": "Marktspezifische Nutzenversprechen-Synthese, die validierte IS-Layer-Features über strukturierte Feature-Markt-Kreuzreferenzen mit definierten Zielgruppen-Kontexten zu konkreten DOES/MEANS-Aussagen verknüpft — qualitätsgebunden an das Feature-Gate statt freier Textgenerierung.",
+  "category": "proposition",
+  "taxonomy_mapping": {
+    "dimension": "Consulting",
+    "category_id": "7.2",
+    "category_name": "Marketing & Sales Consulting"
+  },
+  "readiness": "ga",
+  "created": "2026-03-21"
+}

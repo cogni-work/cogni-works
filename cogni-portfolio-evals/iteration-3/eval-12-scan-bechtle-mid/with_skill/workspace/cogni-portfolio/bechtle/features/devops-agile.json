@@ -1,0 +1,16 @@
+{
+  "slug": "devops-agile",
+  "product_slug": "application-services",
+  "name": "DevOps and Agile Delivery",
+  "description": "DevOps, Scrum, Kanban with CI/CD pipeline automation",
+  "taxonomy_mapping": {
+    "dimension": 6,
+    "dimension_name": "Application Services",
+    "category_id": "6.7",
+    "category_name": "DevOps & Platform Engineering",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/bechtle-portfolio.md",
+  "created": "2026-03-18"
+}

@@ -1,0 +1,32 @@
+{
+  "domain": "operational-services.de",
+  "provider_unit": "operational services",
+  "company_name": "T-Systems International GmbH",
+  "template_type": "b2b-ict",
+  "timestamp": "2026-03-18T12:20:00Z",
+  "searches": {
+    "executed": 51,
+    "successful": 12,
+    "failed": 39,
+    "failed_categories": []
+  },
+  "offerings": [
+    {"category_id":"6.3","name":"ServiceNow Managed Services (OS)","description":"ServiceNow Elite Partner delivering SaaS deployment from Deutsche Telekom Sovereign Cloud with consulting, implementation, and lifecycle management.","domain":"operational-services.de","link":"https://www.operational-services.de/de/portfolio/digitization-data/servicenow","usp":"ServiceNow SaaS from sovereign German cloud with flexible cloud model choice","provider_unit":"operational services","pricing_model":"subscription","delivery_model":"onshore","partners":"ServiceNow","verticals":"Public Sector","horizon":"Current"},
+    {"category_id":"4.3","name":"Managed Private Cloud (OS)","description":"Managed private cloud services operated in Germany to DSGVO standards with on-shore consulting and delivery for mid-market enterprises.","domain":"operational-services.de","link":"https://www.operational-services.de/de/portfolio/infrastructure-cloud/managed-private-cloud","usp":"German-operated private cloud with DSGVO compliance for mid-market","provider_unit":"operational services","pricing_model":"subscription","delivery_model":"onshore","partners":"","verticals":"","horizon":"Current"},
+    {"category_id":"5.5","name":"Application Managed Services (OS)","description":"24/7 service desk and application managed services for enterprise IT operations in the German mid-market.","domain":"operational-services.de","link":"https://www.operational-services.de/de/kompetenzen/services/application-managed-services/","usp":"German mid-market focus with 24/7 service desk","provider_unit":"operational services","pricing_model":"subscription","delivery_model":"onshore","partners":"","verticals":"","horizon":"Current"}
+  ],
+  "by_dimension": {
+    "1_connectivity": 0,
+    "2_security": 0,
+    "3_workplace": 0,
+    "4_cloud": 1,
+    "5_infrastructure": 1,
+    "6_application": 1,
+    "7_consulting": 0
+  },
+  "by_horizon": {
+    "current": 3,
+    "emerging": 0,
+    "future": 0
+  }
+}

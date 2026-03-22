@@ -1,0 +1,16 @@
+{
+  "slug": "abrechnungs-und-tarifsystem",
+  "product_slug": "digitale-energiedienste",
+  "name": "Abrechnungs- und Tarifsystem",
+  "description": "SAP-IS-U-basiertes Abrechnungssystem fuer Massenkundenprozesse mit dynamischer Tarifmodellierung, Abschlagsberechnung und automatisierter Rechnungserstellung ueber alle Sparten. Wickelt EDIFACT-Marktkommunikation nach GPKE- und GeLi-Prozessen ab und unterstuetzt spartenuebergreifende Sammelrechnungen.",
+  "category": "billing",
+  "taxonomy_mapping": {
+    "dimension": 6,
+    "dimension_name": "Application Services",
+    "category_id": "6.3",
+    "category_name": "Enterprise Platform Services",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "created": "2026-03-18"
+}

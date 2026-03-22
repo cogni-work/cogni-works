@@ -1,6 +1,6 @@
 ---
 name: issues
-description: File, list, or check status of GitHub issues against cogni-works plugins
+description: File, list, or check status of GitHub issues against insight-wave plugins
 argument-hint: "[create | list | status <number> | browse <number>]"
 allowed-tools:
   - Read
@@ -10,7 +10,7 @@ allowed-tools:
   - Grep
 ---
 
-Manage GitHub issues for cogni-works plugins via the cogni-issues skill.
+Manage GitHub issues for insight-wave plugins via the cogni-issues skill.
 
 Accept a mode argument:
 - `create` or no argument with a complaint/request — file a new issue

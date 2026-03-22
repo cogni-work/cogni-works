@@ -1,10 +1,10 @@
 # cogni-help
 
-Central help hub for the [cogni-works](https://github.com/cogni-work/cogni-works) ecosystem. Interactive courses, plugin discovery, cross-plugin workflow guides, troubleshooting, quick-reference cheatsheets, and GitHub issue filing.
+Central help hub for the [insight-wave](https://github.com/insight-wave/insight-wave) ecosystem. Interactive courses, plugin discovery, cross-plugin workflow guides, troubleshooting, quick-reference cheatsheets, and GitHub issue filing.
 
 ## Why this exists
 
-The cogni-works ecosystem has 15 plugins with 60+ skills, dozens of agents, and interconnected workflows. Users need a single place to learn, navigate, diagnose, and get help:
+The insight-wave ecosystem has 15 plugins with 60+ skills, dozens of agents, and interconnected workflows. Users need a single place to learn, navigate, diagnose, and get help:
 
 | Need | Solution |
 |------|----------|
@@ -13,7 +13,7 @@ The cogni-works ecosystem has 15 plugins with 60+ skills, dozens of agents, and 
 | Multi-plugin pipelines | Workflow templates with step-by-step playbooks |
 | Something broken? | Diagnostic tool with known-issues reference |
 | Quick refresher | One-screen cheatsheets for any plugin |
-| Bug or feature request | Guided issue filing against cogni-works |
+| Bug or feature request | Guided issue filing against insight-wave |
 
 ## Quick start
 
@@ -30,7 +30,7 @@ The cogni-works ecosystem has 15 plugins with 60+ skills, dozens of agents, and 
 Or describe what you want:
 
 - "Which plugin should I use to verify claims?"
-- "Teach me how to use cogni-works"
+- "Teach me how to use insight-wave"
 - "How do I go from research to a slide deck?"
 - "Something is broken with cogni-portfolio"
 

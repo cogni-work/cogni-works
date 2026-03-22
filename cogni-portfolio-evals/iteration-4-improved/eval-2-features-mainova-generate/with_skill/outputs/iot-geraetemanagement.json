@@ -1,0 +1,16 @@
+{
+  "slug": "iot-geraetemanagement",
+  "product_slug": "digitale-energiedienste",
+  "name": "IoT-Geraetemanagement",
+  "description": "Zentrales Device-Management fuer verteilte Netzinfrastruktur-Sensorik, Schaltanlagen-Aktorik und Smart Meter Gateways. Steuert Firmware-Updates, Konfigurationsverteilung und Zustandsueberwachung ueber standardisierte IoT-Protokolle wie MQTT und DLMS/COSEM im gesamten Versorgungsnetz.",
+  "category": "infrastructure",
+  "taxonomy_mapping": {
+    "dimension": 5,
+    "dimension_name": "Managed Infrastructure Services",
+    "category_id": "5.7",
+    "category_name": "Infrastructure Automation",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "created": "2026-03-18"
+}

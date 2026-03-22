@@ -1,0 +1,16 @@
+{
+  "slug": "unified-endpoint-management",
+  "product_slug": "workplace-services",
+  "name": "Unified Endpoint Management",
+  "description": "VMware Workspace ONE-based UEM platform managing all endpoint device types, operating systems, and applications with extensible virus protection, lifecycle management, and support analytics.",
+  "taxonomy_mapping": {
+    "dimension": 3,
+    "dimension_name": "Digital Workplace Services",
+    "category_id": "3.3",
+    "category_name": "Device Management",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

@@ -1,0 +1,123 @@
+{
+  "slug": "grosse-energieversorger-de",
+  "market_slug": "grosse-energieversorger-de",
+  "profiles": [
+    {
+      "role": "CIO / Bereichsleiter IT",
+      "seniority": "C-level / Vorstand-1",
+      "pain_points": [
+        "SAP IS-U end-of-maintenance 2027 forces a platform decision while day-to-day IT operations cannot be disrupted",
+        "NIS2 transposition deadline (October 2026) requires demonstrable cloud security posture across all KRITIS-classified systems",
+        "Fachkraeftemangel in cloud-native skills makes it impossible to staff hyperscaler operations teams internally",
+        "Legacy on-premises infrastructure drives 60%+ of IT budget to run-the-business, leaving insufficient capital for grid digitalization",
+        "Board pressure to reduce IT cost-per-customer-served by 30% within 2 years while maintaining 99.95% availability SLAs"
+      ],
+      "buying_criteria": [
+        "BSI C5 Type 2 attestation mandatory for all cloud infrastructure",
+        "Proven SAP IS-U migration references in German energy sector",
+        "Rahmenvertrag-compatible commercial model with transparent unit pricing",
+        "24/7 managed operations with guaranteed 15-minute incident response SLA",
+        "Data residency within EU with contractual sovereignty guarantees"
+      ],
+      "information_sources": [
+        "E-world energy & water (Essen)",
+        "Handelsblatt Energietagung",
+        "BDEW Kongress",
+        "Gartner Magic Quadrant for Cloud Infrastructure",
+        "Peer exchange within BDEW Arbeitskreis Digitalisierung"
+      ],
+      "decision_role": "Economic buyer — owns the IT budget and signs off on strategic vendor decisions above EUR 1M. Champions the cloud transformation business case to the Vorstand."
+    },
+    {
+      "role": "CISO / Leiter IT-Sicherheit",
+      "seniority": "Director-level / Bereichsleiter",
+      "pain_points": [
+        "BSI KRITIS audits require evidence of cloud security controls that legacy on-premises environments cannot produce efficiently",
+        "NIS2 Article 21 mandates supply chain security assessments for all critical infrastructure IT service providers by October 2026",
+        "OT/IT convergence exposes SCADA and Netzleitstelle systems to attack surfaces that were previously air-gapped",
+        "Increasing ransomware attacks targeting German energy utilities demand zero-trust architectures but existing perimeter security cannot be dismantled overnight"
+      ],
+      "buying_criteria": [
+        "BSI C5 Type 2 attestation plus ISO 27001 certification for all environments",
+        "Air-gap isolation capability for OT workloads with auditable evidence",
+        "NIS2-compliant supply chain security documentation and incident reporting SLAs",
+        "Penetration testing and vulnerability management included in managed services scope",
+        "German-speaking security operations center with BSI-certified analysts"
+      ],
+      "information_sources": [
+        "BSI Lageberichte and BSI IT-Grundschutz-Kompendium",
+        "BDEW Whitepaper IT-Sicherheit",
+        "it-sa (Nuernberg) security conference",
+        "VDE Fachkreis Cybersecurity in der Energiewirtschaft",
+        "ISA/IEC 62443 working groups"
+      ],
+      "decision_role": "Veto-holder — must approve all cloud infrastructure from a security and compliance perspective. Can block or delay any vendor selection that fails BSI or NIS2 requirements. Reports directly to Vorstand."
+    },
+    {
+      "role": "Leiter Einkauf / Head of Procurement",
+      "seniority": "Director-level / Bereichsleiter",
+      "pain_points": [
+        "SektVO procurement regulations require formal tendering processes for IT contracts above EUR 431K, adding 3-6 months to vendor selection",
+        "Existing IT vendor lock-in with long-term contracts makes competitive rebidding complex and politically sensitive",
+        "Board demands cost transparency but cloud consumption models are difficult to benchmark against legacy fixed-cost contracts",
+        "Compliance with EU-Vergaberecht for public-adjacent utilities requires extensive documentation that slows procurement cycles"
+      ],
+      "buying_criteria": [
+        "SektVO-compliant procurement documentation and tender-ready pricing structures",
+        "Rahmenvertrag model with fixed unit prices and volume-based discount tiers",
+        "Minimum 3 comparable reference customers in German energy sector with verifiable outcomes",
+        "Exit clause and data portability guarantees to prevent vendor lock-in",
+        "Subcontractor transparency — full disclosure of fourth-party providers and data processing locations"
+      ],
+      "information_sources": [
+        "Bundesverband Materialwirtschaft, Einkauf und Logistik (BME)",
+        "Vergaberecht.de newsletter",
+        "BME eLösungstage",
+        "Peer networks within BDEW procurement roundtables",
+        "ISG Provider Lens reports"
+      ],
+      "decision_role": "Gatekeeper — controls the formal procurement process and vendor qualification. Can delay or restart selection if procurement compliance is not met. Must validate commercial terms before contract signature."
+    },
+    {
+      "role": "Bereichsleiter Netzbetrieb / Head of Grid Operations",
+      "seniority": "Director-level / Bereichsleiter",
+      "pain_points": [
+        "Grid digitalization (Smart Meter Rollout, Messstellenbetrieb) requires cloud-native platforms but OT teams lack cloud expertise",
+        "Real-time grid balancing systems demand sub-second latency that public cloud alone cannot guarantee without hybrid architecture",
+        "Increasing distributed energy resources (solar, wind, storage) multiply data volumes that legacy Netzleitstelle systems cannot process",
+        "Regulierungsbehörde (BNetzA) mandates digitalized grid monitoring by 2028, creating a hard deadline for infrastructure modernization"
+      ],
+      "buying_criteria": [
+        "Proven hybrid cloud architecture for OT/IT integration with energy sector references",
+        "Sub-100ms latency guarantees for grid control system workloads",
+        "Integration capability with existing SCADA, OMS, and Netzleitstelle systems",
+        "German-language operational support team familiar with energy grid terminology",
+        "Scalable platform for ingesting 10x current IoT data volumes from smart grid devices"
+      ],
+      "information_sources": [
+        "E-world energy & water (Essen)",
+        "VDE Kongress",
+        "BDEW-Fachkongress Treffpunkt Netze",
+        "Energiewirtschaftliche Tagesfragen (et) journal",
+        "FNN (Forum Netztechnik/Netzbetrieb) working groups"
+      ],
+      "decision_role": "Technical evaluator and internal champion for grid-specific use cases. Drives requirements for OT/IT convergence workloads. Influences CIO on infrastructure choices that affect grid operations. Does not control IT budget but has effective veto on technology decisions affecting grid reliability."
+    }
+  ],
+  "buying_committee": {
+    "size": "6-10 stakeholders across IT, security, procurement, and operations",
+    "decision_model": "Consensus with Vorstand final approval — CIO sponsors, CISO validates security, Einkauf ensures procurement compliance, Netzbetrieb confirms operational requirements. All four must align before Vorstand presentation.",
+    "typical_champion": "CIO / Bereichsleiter IT initiates the cloud transformation agenda and builds the business case",
+    "deal_stall_points": [
+      "BSI C5 audit verification — 3-6 months if attestation gaps are found",
+      "SektVO tender process — formal procurement adds 3-6 months minimum",
+      "Betriebsrat consultation required if outsourcing affects IT staff positions",
+      "Vorstand budget approval cycle — major IT investments reviewed quarterly",
+      "NIS2 supply chain assessment — new requirement may delay vendor onboarding by 2-4 months",
+      "Proof of concept phase — large utilities typically require 3-month PoC before commitment"
+    ],
+    "typical_deal_size": "EUR 5-15M ACV for comprehensive cloud transformation programs",
+    "typical_sales_cycle": "12-18 months from first meeting to contract signature"
+  },
+  "created": "2026-03-18"
+}

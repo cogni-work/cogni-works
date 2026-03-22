@@ -1,0 +1,13 @@
+{
+  "slug": "automated-penetration-testing",
+  "name": "Automated Penetration Testing",
+  "description": "Automatisierte Penetrationstests (Black/White/Gray Box) mit Scanning, Reports und Empfehlungen zur Schwachstellenbehebung.",
+  "product_slug": "telekom-security",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 2,
+    "category_id": "2.7",
+    "category_name": "Vulnerability Management"
+  },
+  "source_file": "https://www.t-systems.com/us/en/security/solutions/automated-penetration-testing-services"
+}

@@ -1,0 +1,16 @@
+{
+  "slug": "digital-strategy-transformation",
+  "product_slug": "consulting-services",
+  "name": "Digital Strategy & Transformation",
+  "description": "End-to-End-Strategien für digitale Transformation",
+  "taxonomy_mapping": {
+    "dimension": 7,
+    "dimension_name": "Consulting Services",
+    "category_id": "7.2",
+    "category_name": "Digital Transformation",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

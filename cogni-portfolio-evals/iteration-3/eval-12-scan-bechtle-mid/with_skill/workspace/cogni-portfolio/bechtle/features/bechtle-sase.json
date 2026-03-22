@@ -1,0 +1,16 @@
+{
+  "slug": "bechtle-sase",
+  "product_slug": "connectivity-services",
+  "name": "Bechtle SASE Solutions",
+  "description": "SASE combining SD-WAN with SWG, CASB, ZTNA and FWaaS",
+  "taxonomy_mapping": {
+    "dimension": 1,
+    "dimension_name": "Connectivity Services",
+    "category_id": "1.2",
+    "category_name": "SASE",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/bechtle-portfolio.md",
+  "created": "2026-03-18"
+}

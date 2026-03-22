@@ -1,0 +1,74 @@
+{
+  "total_checks": 11,
+  "passed": 5,
+  "failed": 6,
+  "pass_rate": 0.455,
+  "expectations": [
+    {
+      "text": "All required fields present (slug, product_slug, market_slug, package_type, name, tiers)",
+      "passed": false,
+      "evidence": "Missing: ['package_type']",
+      "entity": "cloud-services--grosse-energieversorger-de"
+    },
+    {
+      "text": "Slug follows {product}--{market} pattern",
+      "passed": true,
+      "evidence": "slug=\"cloud-services--grosse-energieversorger-de\", expected=\"cloud-services--grosse-energieversorger-de\"",
+      "entity": "cloud-services--grosse-energieversorger-de"
+    },
+    {
+      "text": "package_type is project/subscription/hybrid (actual: )",
+      "passed": false,
+      "evidence": "package_type=\"\"",
+      "entity": "cloud-services--grosse-energieversorger-de"
+    },
+    {
+      "text": "2-4 tiers present (actual: 3)",
+      "passed": true,
+      "evidence": "3 tiers: ['Cloud Foundation', 'Cloud Professional', 'Cloud Enterprise']",
+      "entity": "cloud-services--grosse-energieversorger-de"
+    },
+    {
+      "text": "Each tier has required fields (tier, name, included_solutions, scope, currency)",
+      "passed": false,
+      "evidence": "Cloud Foundation: missing ['included_solutions', 'scope', 'currency']; Cloud Professional: missing ['included_solutions', 'scope', 'currency']; Cloud Enterprise: missing ['included_solutions', 'scope', 'currency']",
+      "entity": "cloud-services--grosse-energieversorger-de"
+    },
+    {
+      "text": "solution_sizes present with valid sizes for all included solutions",
+      "passed": false,
+      "evidence": "Cloud Foundation: missing solution_sizes; Cloud Professional: missing solution_sizes; Cloud Enterprise: missing solution_sizes",
+      "entity": "cloud-services--grosse-energieversorger-de"
+    },
+    {
+      "text": "Exclusions present on tiers (0/3)",
+      "passed": false,
+      "evidence": "0 of 3 tiers have exclusions",
+      "entity": "cloud-services--grosse-energieversorger-de"
+    },
+    {
+      "text": "Tier prices monotonically increasing",
+      "passed": true,
+      "evidence": "Prices: []",
+      "entity": "cloud-services--grosse-energieversorger-de"
+    },
+    {
+      "text": "Every included_solution references existing solution file",
+      "passed": true,
+      "evidence": "All 0 references valid",
+      "entity": "cloud-services--grosse-energieversorger-de"
+    },
+    {
+      "text": "No orphan solutions (every available solution appears in at least one tier)",
+      "passed": false,
+      "evidence": "Orphans: ['cloud-migration--grosse-energieversorger-de', 'hybrid-cloud--grosse-energieversorger-de', 'managed-hyperscaler--grosse-energieversorger-de', 'sovereign-cloud--grosse-energieversorger-de']",
+      "entity": "cloud-services--grosse-energieversorger-de"
+    },
+    {
+      "text": "Scope is max 1 sentence per tier",
+      "passed": true,
+      "evidence": "All scopes single-sentence",
+      "entity": "cloud-services--grosse-energieversorger-de"
+    }
+  ]
+}

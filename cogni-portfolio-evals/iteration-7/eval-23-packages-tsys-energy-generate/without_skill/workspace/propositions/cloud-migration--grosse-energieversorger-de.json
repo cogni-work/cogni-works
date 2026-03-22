@@ -1,0 +1,16 @@
+{
+  "slug": "cloud-migration--grosse-energieversorger-de",
+  "feature_slug": "cloud-migration",
+  "market_slug": "grosse-energieversorger-de",
+  "is_statement": "Structured cloud migration program with assessment framework, modular CMF methodology (Assess-Mobilize-Modernize), 6R migration strategies, database migration services, and sprint-based implementation.",
+  "does_statement": "Migrates legacy on-premises infrastructure including SAP IS-U to sovereign cloud within 6 months, eliminating unplanned downtime during transition through parallel-run validation.",
+  "means_statement": "Reduces IT operations cost by 35% while meeting KRITIS compliance deadlines, freeing capital for grid digitalization investments.",
+  "evidence": [
+    {
+      "statement": "E.ON migrated 2,500 SAP workloads to T-Systems sovereign cloud in 2024",
+      "source_url": "https://www.t-systems.com/de/referenzen/eon-cloud-migration",
+      "source_title": "E.ON Cloud Migration Reference"
+    }
+  ],
+  "created": "2026-01-20"
+}

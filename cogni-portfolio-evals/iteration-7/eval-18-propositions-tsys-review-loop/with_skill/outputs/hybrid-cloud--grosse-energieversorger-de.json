@@ -1,0 +1,32 @@
+{
+  "slug": "hybrid-cloud--grosse-energieversorger-de",
+  "feature_slug": "hybrid-cloud",
+  "market_slug": "grosse-energieversorger-de",
+  "is_statement": "T Cloud Hybrid kombiniert Private- und Public-Cloud mit zentralem Governance-Framework und Multi-Cloud-Konnektivitätsplattform für branchenspezifische Varianten und cloudübergreifende Automatisierung in OT-nahen Umgebungen.",
+  "does_statement": "Netzleitstellen und SCADA-Systeme bleiben in der Private Cloud geschützt, während neue Smart-Meter-Workloads elastisch in der Public Cloud skalieren — ohne zwei getrennte IT-Welten zu betreiben.",
+  "means_statement": "Der Netzleiter erhält TÜV-zertifizierte 99,999% Verfügbarkeit für OT-Zonen durch das Zero-Outage-Programm — der CIO skaliert den Smart-Meter-Rollout bis 2030 mit einem Governance-Framework statt doppelter Betriebsmannschaft.",
+  "evidence": [
+    {
+      "statement": "95% Smart-Meter-Pflichtquote bis 2030 erfordert massive Skalierung der Gateway-Administration",
+      "source_url": null,
+      "source_title": null
+    },
+    {
+      "statement": "OT/IT-Konvergenz ist Top-Herausforderung für Energieversorger — Netzleitstellen dulden keine Ausfallzeiten",
+      "source_url": null,
+      "source_title": null
+    },
+    {
+      "statement": "T-Systems Zero-Outage-Programm erreicht 99,999% Verfügbarkeit, TÜV Rheinland zertifiziert seit 2011",
+      "source_url": "https://www.t-systems.com/tr/en/solutions/quality/quality-by-t-systems/maximum-availability/zero-outage-594522",
+      "source_title": "T-Systems Zero Outage Program"
+    },
+    {
+      "statement": "T-Systems betreibt Twin-Core-Rechenzentren in München und Frankfurt mit Sicherheitszertifizierung",
+      "source_url": "https://baxtel.com/data-centers/t-systems-international-gmbh",
+      "source_title": "T-Systems Data Centers"
+    }
+  ],
+  "created": "2026-03-18",
+  "updated": "2026-03-18"
+}

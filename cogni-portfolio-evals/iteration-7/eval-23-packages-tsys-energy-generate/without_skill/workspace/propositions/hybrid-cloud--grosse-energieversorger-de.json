@@ -1,0 +1,16 @@
+{
+  "slug": "hybrid-cloud--grosse-energieversorger-de",
+  "feature_slug": "hybrid-cloud",
+  "market_slug": "grosse-energieversorger-de",
+  "is_statement": "T Cloud Hybrid combines private and public cloud with a central governance framework, multi-cloud connectivity platform (MCCP), industry-specific variants, and cross-cloud automation.",
+  "does_statement": "Integrates OT and IT workloads across on-premises SCADA systems and public cloud without exposing operational technology to internet-facing attack surfaces.",
+  "means_statement": "Enables 40% faster deployment of grid management applications while maintaining BSI-certified air-gap isolation for critical control systems.",
+  "evidence": [
+    {
+      "statement": "Hybrid cloud architecture deployed at 3 German transmission system operators in 2024",
+      "source_url": "https://www.t-systems.com/de/cloud/hybrid",
+      "source_title": "T-Systems Hybrid Cloud for Energy"
+    }
+  ],
+  "created": "2026-01-20"
+}

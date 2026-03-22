@@ -1,0 +1,32 @@
+{
+  "iterations": [
+    {
+      "round": 1,
+      "cso_avg": 4.67,
+      "market_expert_avg": 4.5,
+      "cso_min_dimension": 4,
+      "market_expert_min_dimension": 4,
+      "cso_dimension_scores": {
+        "account_targeting_signal": 5,
+        "pain_to_pitch_mapping": 5,
+        "committee_navigation": 5,
+        "objection_readiness": 4,
+        "named_customer_quality": 4,
+        "sales_cycle_realism": 5
+      },
+      "market_expert_dimension_scores": {
+        "role_accuracy": 5,
+        "pain_point_currency": 5,
+        "regulatory_precision": 4,
+        "information_source_authenticity": 5,
+        "buying_committee_realism": 4,
+        "segment_boundary_respect": 4
+      },
+      "converged": true,
+      "convergence_reason": "Both reviewers avg >= 4.0 (CSO: 4.67, Market Expert: 4.5) and no dimension below 3 (CSO min: 4, Market Expert min: 4)"
+    }
+  ],
+  "final_status": "converged",
+  "total_rounds": 1,
+  "notes": "Converged on first iteration. Both reviewers flagged minor improvement opportunities (Betriebsrat stall point timing, competitive displacement guidance, smart meter scope) but scored all dimensions at 4 or 5. No revisions required."
+}

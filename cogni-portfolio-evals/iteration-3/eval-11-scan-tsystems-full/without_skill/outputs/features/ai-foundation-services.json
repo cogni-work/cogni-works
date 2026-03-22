@@ -1,0 +1,13 @@
+{
+  "slug": "ai-foundation-services",
+  "name": "AI Foundation Services",
+  "description": "15+ LLMs with RAG, fine-tuning, MLOps, and multiple deployment options on sovereign infrastructure",
+  "product_slug": "t-systems-applications",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 6,
+    "category_id": "6.6",
+    "category_name": "AI, Data & Analytics"
+  },
+  "source_file": "https://www.t-systems.com/us/en/artificial-intelligence/solutions/ai-foundation-services"
+}

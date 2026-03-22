@@ -1,0 +1,80 @@
+{
+  "expectations": [
+    {
+      "text": "SOL-01: Solution JSON has solution_type: project",
+      "passed": true,
+      "evidence": "solution_type is \"project\" in cloud-migration--grosse-energieversorger-de.json line 4."
+    },
+    {
+      "text": "SOL-02: Solution has 2-5 implementation phases",
+      "passed": true,
+      "evidence": "implementation array contains 4 phases: Assessment & Migrationsplanung, Staging & Sicherheitsarchitektur, Sprint-basierte Migration, Validierung & Betriebsübergabe."
+    },
+    {
+      "text": "SOL-03: All four pricing tiers present (proof_of_value, small, medium, large)",
+      "passed": true,
+      "evidence": "pricing object contains all four keys: proof_of_value (20000 EUR), small (95000 EUR), medium (185000 EUR), large (320000 EUR)."
+    },
+    {
+      "text": "SOL-04: cost_model present with effort_by_tier",
+      "passed": true,
+      "evidence": "cost_model object exists with effort_by_tier containing breakdowns for all four tiers."
+    },
+    {
+      "text": "SOL-05: PoV margin >= 5% and standard tier margins (small, medium, large) >= 25%",
+      "passed": true,
+      "evidence": "PoV margin 16.0% >= 5%. Small 34.7% >= 25%. Medium 33.4% >= 25%. Large 31.9% >= 25%."
+    },
+    {
+      "text": "SOL-06: Review assessment JSON produced with all three perspectives",
+      "passed": true,
+      "evidence": "review-assessment.json contains stakeholder_reviews with perspectives: reviewer, provider_sa, client_sa."
+    },
+    {
+      "text": "SOL-07: Each perspective has 5 scored criteria",
+      "passed": true,
+      "evidence": "reviewer: roi_clarity, budget_fit, risk_reward_transparency, competitive_positioning, decision_pathway (5). provider_sa: delivery_realism, scope_effort_coherence, phase_architecture, does_traceability, tier_scalability (5). client_sa: integration_feasibility, dependency_risk, operational_readiness, vendor_lockin, security_compliance (5)."
+    },
+    {
+      "text": "SOL-08: Synthesis section has verdict (accept/revise/reject)",
+      "passed": true,
+      "evidence": "synthesis.verdict is \"accept\"."
+    },
+    {
+      "text": "SOL-09: If verdict was revise, a second assessment exists with improved scores. PREREQUISITE: SOL-08 must pass.",
+      "passed": true,
+      "evidence": "Verdict is \"accept\", not \"revise\". No second assessment required."
+    },
+    {
+      "text": "SOL-10: Phase descriptions are in German (portfolio language: de)",
+      "passed": true,
+      "evidence": "All phase names and descriptions are in German, e.g. \"Workload-Inventarisierung (IS-U, SCADA, ERP), 6R-Klassifizierung, KRITIS-Anforderungsanalyse und Migrations-Roadmap mit priorisiertem Sprint-Backlog.\""
+    },
+    {
+      "text": "SOL-11: Arithmetic consistency: for each tier, (price - internal_cost) / price matches stated margin_pct within 2 pp",
+      "passed": true,
+      "evidence": "PoV: (20000-16800)/20000=16.0% vs stated 16.0% (delta 0.0pp). Small: (95000-62000)/95000=34.74% vs 34.7% (delta 0.04pp). Medium: (185000-123200)/185000=33.41% vs 33.4% (delta 0.01pp). Large: (320000-218000)/320000=31.88% vs 31.9% (delta 0.02pp). All within 2pp tolerance."
+    },
+    {
+      "text": "SOL-12: If revision occurred, revised solution differs from original in at least one field flagged by the review. If no revision occurred (verdict was accept), this passes automatically.",
+      "passed": true,
+      "evidence": "Verdict was \"accept\"; no revision occurred. Automatic pass."
+    },
+    {
+      "text": "SOL-13: Solution includes exit clause or transition-out plan in assumptions",
+      "passed": true,
+      "evidence": "cost_model.assumptions[5]: \"Exit-Klausel: Bei Vertragsbeendigung 4 Wochen Knowledge-Transfer, Betriebsdokumentation und Datenexport in Standardformaten innerhalb von 10 Werktagen.\""
+    },
+    {
+      "text": "SOL-14: Solution includes client-side FTE commitment in assumptions",
+      "passed": true,
+      "evidence": "cost_model.assumptions[2]: \"Kunde stellt 0,5 FTE Enterprise Architect und 1,0 FTE Testmanager für Integrations- und Abnahmephasen bereit.\""
+    }
+  ],
+  "summary": {
+    "passed": 14,
+    "failed": 0,
+    "total": 14,
+    "pass_rate": 1.0
+  }
+}

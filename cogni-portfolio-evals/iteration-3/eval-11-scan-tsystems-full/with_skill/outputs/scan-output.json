@@ -1,0 +1,71 @@
+{
+  "version": "1.0.0",
+  "company_name": "T-Systems International GmbH",
+  "company_slug": "t-systems",
+  "created": "2026-03-18T00:00:00Z",
+  "skill": "cogni-portfolio:scan",
+  "template_type": "b2b-ict",
+  "output_file": "research/t-systems-portfolio.md",
+  "domains_analyzed": [
+    "t-systems.com",
+    "detecon.com",
+    "open-telekom-cloud.com",
+    "business.telekom.com",
+    "docs.otc.t-systems.com",
+    "public.t-cloud.com"
+  ],
+  "delivery_units": [
+    {
+      "name": "T-Systems International GmbH",
+      "domain": "t-systems.com",
+      "type": "ict_delivery"
+    },
+    {
+      "name": "Detecon International GmbH",
+      "domain": "detecon.com",
+      "type": "consulting"
+    },
+    {
+      "name": "Deutsche Telekom MMS GmbH",
+      "domain": "telekom-mms.com",
+      "type": "digital"
+    },
+    {
+      "name": "operational services GmbH & Co KG",
+      "domain": "operational-services.de",
+      "type": "ict_delivery"
+    },
+    {
+      "name": "Deutsche Telekom Business",
+      "domain": "business.telekom.com",
+      "type": "ict_delivery"
+    },
+    {
+      "name": "Open Telekom Cloud",
+      "domain": "open-telekom-cloud.com",
+      "type": "ict_delivery"
+    }
+  ],
+  "dimensions_covered": 8,
+  "categories_total": 57,
+  "status_summary": {
+    "confirmed": 56,
+    "not_offered": 0,
+    "emerging": 1,
+    "extended": 0
+  },
+  "offerings_discovered": 76,
+  "provider_profile": {
+    "revenue_eur": "4.0 billion (2024)",
+    "employees": "26,000+",
+    "countries": 26,
+    "certifications": ["ISO 27001", "ISO 20000-1", "ISO 22301", "ISO 14001", "TCDP 1.0", "BSI C5"],
+    "partnerships": {
+      "aws": "Premier Consulting Partner",
+      "microsoft": "Expert MSP / Gold Partner",
+      "google_cloud": "Premier Partner",
+      "sap": "Premium Supplier (RISE with SAP)",
+      "servicenow": "Elite Partner"
+    }
+  }
+}

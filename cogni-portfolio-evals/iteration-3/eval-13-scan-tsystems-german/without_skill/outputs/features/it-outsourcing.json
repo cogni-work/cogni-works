@@ -1,0 +1,13 @@
+{
+  "slug": "it-outsourcing",
+  "name": "IT-Outsourcing (ITO)",
+  "description": "Komplettes IT-Outsourcing mit Cloudifier fuer Cloud-Migration. Outsourced Digital Workplace und DC Outsourcing.",
+  "product_slug": "t-systems-infrastructure",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 5,
+    "category_id": "5.5",
+    "category_name": "IT Outsourcing (ITO)"
+  },
+  "source_file": "https://www.t-systems.com/de/de/loesungen/systemintegration/loesungen/digitale-transformation/it-services/it-outsourcing-377560"
+}

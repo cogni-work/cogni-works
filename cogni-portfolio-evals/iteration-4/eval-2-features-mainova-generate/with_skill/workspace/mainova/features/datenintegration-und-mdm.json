@@ -1,0 +1,16 @@
+{
+  "slug": "datenintegration-und-mdm",
+  "product_slug": "digitale-energiedienste",
+  "name": "Datenintegration und Master Data Management",
+  "description": "Zentrale Integrationsschicht mit Enterprise Service Bus und API-Gateway, die Stamm- und Bewegungsdaten zwischen SAP, Netzleitsystem, Metering-Plattform und Kundenportal bidirektional synchronisiert und eine einheitliche Datenbasis ueber alle Sparten sicherstellt.",
+  "category": "system-integration",
+  "taxonomy_mapping": {
+    "dimension": 6,
+    "dimension_name": "Application Services",
+    "category_id": "6.4",
+    "category_name": "System Integration & API",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "created": "2026-03-18"
+}

@@ -1,0 +1,16 @@
+{
+  "slug": "operational-services-mittelstand",
+  "product_slug": "infrastructure-services",
+  "name": "Operational Services (Mittelstand)",
+  "description": "Onshore-Beratung und ServiceNow-SaaS für Mittelstand",
+  "taxonomy_mapping": {
+    "dimension": 5,
+    "dimension_name": "Managed Infrastructure Services",
+    "category_id": "5.5",
+    "category_name": "IT Outsourcing (ITO)",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

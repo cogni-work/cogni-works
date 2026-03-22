@@ -1,0 +1,16 @@
+{
+  "slug": "it-asset-management-lifecycle",
+  "product_slug": "workplace-services",
+  "name": "IT Asset Management & Lifecycle",
+  "description": "Hardware procurement and lifecycle tracking through customizable e-procurement platform with ERP integration, leasing management, vendor coordination and certified sustainable device recycling.",
+  "taxonomy_mapping": {
+    "dimension": 3,
+    "dimension_name": "Digital Workplace Services",
+    "category_id": "3.7",
+    "category_name": "IT Asset Management",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/bechtle-portfolio.md",
+  "created": "2026-03-18"
+}

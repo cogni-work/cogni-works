@@ -1,0 +1,13 @@
+{
+  "slug": "bechtle-modern-workplace",
+  "name": "Bechtle Modern Workplace",
+  "description": "Holistic modern workplace concept combining Microsoft 365, collaboration, AI, user adoption and change management in a per-user per-month model.",
+  "product_slug": "bechtle-workplace",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 3,
+    "category_id": "3.2",
+    "category_name": "Modern Workplace / M365"
+  },
+  "source_file": "https://www.bechtle.com/at-en/it-solutions/modern-workplace"
+}

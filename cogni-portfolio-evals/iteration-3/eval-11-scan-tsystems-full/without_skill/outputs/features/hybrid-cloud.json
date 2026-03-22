@@ -1,0 +1,13 @@
+{
+  "slug": "hybrid-cloud",
+  "name": "Hybrid Cloud Integration",
+  "description": "Combining public and private clouds via unified platform with workload orchestration",
+  "product_slug": "t-systems-cloud",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 4,
+    "category_id": "4.4",
+    "category_name": "Hybrid Cloud"
+  },
+  "source_file": "https://www.t-systems.com/de/en/cloud-services/topics/managing-the-cloud-environment"
+}

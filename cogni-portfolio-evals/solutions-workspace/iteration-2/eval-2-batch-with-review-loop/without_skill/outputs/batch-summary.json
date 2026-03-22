@@ -1,0 +1,136 @@
+{
+  "batch": "eval-2-batch-with-review-loop",
+  "variant": "without_skill",
+  "iteration": 2,
+  "generated": "2026-03-18",
+  "input": {
+    "portfolio": "t-systems",
+    "market": "grosse-energieversorger-de",
+    "propositions_count": 3,
+    "propositions": [
+      "cloud-migration--grosse-energieversorger-de",
+      "sap-on-cloud--grosse-energieversorger-de",
+      "sovereign-cloud--grosse-energieversorger-de"
+    ]
+  },
+  "review_process": {
+    "perspectives": ["procurement", "provider_sa", "client_sa"],
+    "criteria_per_perspective": 5,
+    "max_score_per_solution": 150,
+    "rounds": 2,
+    "round1_all_needed_revision": true,
+    "round2_all_approved": true
+  },
+  "solutions": [
+    {
+      "slug": "cloud-migration--grosse-energieversorger-de",
+      "title": "Cloud-Migrationsprogramm fuer grosse deutsche Energieversorger",
+      "duration_weeks": 50,
+      "pricing_tiers": {
+        "essential": 995280,
+        "professional": 2064400,
+        "enterprise": 2420080
+      },
+      "currency": "EUR",
+      "round1_score": 106,
+      "round1_pct": 70.7,
+      "round1_verdict": "revision_needed",
+      "round2_score": 129,
+      "round2_pct": 86.0,
+      "round2_verdict": "approved",
+      "improvement_delta": 23,
+      "key_revisions": [
+        "Exit strategy with data repatriation and IaC portability",
+        "Contingency budget (10%) quantified per risk",
+        "Competitive TCO comparison (3 scenarios, 5yr)",
+        "Acceptance delegation model with 48h silence rule",
+        "Post-project operations model options"
+      ]
+    },
+    {
+      "slug": "sap-on-cloud--grosse-energieversorger-de",
+      "title": "SAP-on-Cloud-Betriebsplattform fuer grosse deutsche Energieversorger",
+      "duration_weeks": 34,
+      "pricing_tiers": {
+        "essential": 1031160,
+        "professional": 1233960,
+        "enterprise": 1623960
+      },
+      "currency": "EUR",
+      "round1_score": 104,
+      "round1_pct": 69.3,
+      "round1_verdict": "revision_needed",
+      "round2_score": 130,
+      "round2_pct": 86.7,
+      "round2_verdict": "approved",
+      "improvement_delta": 26,
+      "key_revisions": [
+        "Exit strategy with SAP system repatriation (120 days)",
+        "TCO comparison (T-Systems vs. RISE vs. On-Prem)",
+        "Differentiated SLAs (99.95% standard, 99.99% billing)",
+        "SAP Basis Specialist as dedicated role",
+        "IS-U rollback scenario documented",
+        "Acceptance delegation model"
+      ]
+    },
+    {
+      "slug": "sovereign-cloud--grosse-energieversorger-de",
+      "title": "Sovereign-Cloud-Plattform fuer grosse deutsche Energieversorger",
+      "duration_weeks": 26,
+      "pricing_tiers": {
+        "essential": 570180,
+        "professional": 1028820,
+        "enterprise": 1226420
+      },
+      "currency": "EUR",
+      "round1_score": 109,
+      "round1_pct": 72.7,
+      "round1_verdict": "revision_needed",
+      "round2_score": 134,
+      "round2_pct": 89.3,
+      "round2_verdict": "approved",
+      "improvement_delta": 25,
+      "key_revisions": [
+        "Exit strategy with continuity guarantee (24 months)",
+        "TCO comparison (T-Systems vs. On-Prem+audit vs. alt providers)",
+        "Security Engineer as dedicated role",
+        "Staggered onboarding (max 5 workloads/week)",
+        "Hybrid architecture scenario (Sovereign + Hyperscaler)",
+        "Operations model options (Fully Managed / Co-managed / Self-Operated)"
+      ]
+    }
+  ],
+  "aggregate": {
+    "round1_avg_score": 106.3,
+    "round1_avg_pct": 70.9,
+    "round2_avg_score": 131.0,
+    "round2_avg_pct": 87.3,
+    "avg_improvement_delta": 24.7,
+    "avg_improvement_pct": 16.4,
+    "all_approved_round2": true,
+    "total_enterprise_portfolio_value": 5270460,
+    "currency": "EUR"
+  },
+  "common_revision_themes": [
+    "Exit strategy (data repatriation, IaC portability, contractual clauses) - missing in all 3 initial solutions",
+    "Competitive TCO comparison (3 scenarios, 5-year projection) - missing in all 3",
+    "Contingency budget quantification per risk - missing in all 3",
+    "Acceptance delegation model to reduce client staff burden - missing in all 3",
+    "Post-project operations model options - missing in all 3"
+  ],
+  "files_generated": [
+    "cloud-migration--grosse-energieversorger-de.json",
+    "cloud-migration--grosse-energieversorger-de-review.json",
+    "cloud-migration--grosse-energieversorger-de-revised.json",
+    "cloud-migration--grosse-energieversorger-de-review-round2.json",
+    "sap-on-cloud--grosse-energieversorger-de.json",
+    "sap-on-cloud--grosse-energieversorger-de-review.json",
+    "sap-on-cloud--grosse-energieversorger-de-revised.json",
+    "sap-on-cloud--grosse-energieversorger-de-review-round2.json",
+    "sovereign-cloud--grosse-energieversorger-de.json",
+    "sovereign-cloud--grosse-energieversorger-de-review.json",
+    "sovereign-cloud--grosse-energieversorger-de-revised.json",
+    "sovereign-cloud--grosse-energieversorger-de-review-round2.json",
+    "batch-summary.json"
+  ]
+}

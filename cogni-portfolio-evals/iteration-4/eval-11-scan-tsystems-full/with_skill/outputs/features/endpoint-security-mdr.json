@@ -1,0 +1,16 @@
+{
+  "slug": "endpoint-security-mdr",
+  "product_slug": "security-services",
+  "name": "Endpoint Security (MDR)",
+  "description": "Managed endpoint protection service covering desktops, laptops, tablets, and IoT devices with cloud-based detection, automated response playbooks, and continuous security expert oversight.",
+  "taxonomy_mapping": {
+    "dimension": 2,
+    "dimension_name": "Security Services",
+    "category_id": "2.5",
+    "category_name": "Endpoint Security",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

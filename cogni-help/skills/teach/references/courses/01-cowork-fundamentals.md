@@ -156,22 +156,22 @@ Plugins turn Claude into a specialist for your role. Each plugin bundles:
 Claude walks you through adjusting skills, connectors, and commands to match
 your workflow.
 
-**cogni-works marketplace**: A set of open-source plugins specifically for
+**insight-wave marketplace**: A set of open-source plugins specifically for
 consulting, B2B sales, and marketing work. These are the plugins you will learn
 in subsequent courses.
 
-**cogni-help is itself a cogni-works plugin**. You're using it right now —
+**cogni-help is itself a insight-wave plugin**. You're using it right now —
 it bundles skills (`teach`, `course-deck`), slash commands (`/teach`, `/courses`),
 and course reference files. It's a concrete example of how plugins package
 knowledge and workflows into reusable tools.
 
 ### Demo
 
-Walk through plugin installation and the cogni-works marketplace deployment:
+Walk through plugin installation and the insight-wave marketplace deployment:
 1. Open Customize menu in sidebar
 2. Browse plugins by category
 3. Show a plugin card — its description, components, install button
-4. Install the cogni-works marketplace — walk through each plugin:
+4. Install the insight-wave marketplace — walk through each plugin:
 
 | Plugin | What it does |
 |--------|-------------|
@@ -192,10 +192,10 @@ Walk through plugin installation and the cogni-works marketplace deployment:
 
 Ask the user to:
 1. Open the Customize menu
-2. Install the full cogni-works marketplace — all plugins listed above
+2. Install the full insight-wave marketplace — all plugins listed above
 3. After installation, run `/courses` to confirm the curriculum is available
 4. Pick any installed plugin and list the slash commands it provides
-5. Confirm: how many cogni-works plugins are now installed?
+5. Confirm: how many insight-wave plugins are now installed?
 
 If any plugin fails to install, troubleshoot before continuing — every
 subsequent course depends on having the marketplace deployed.
@@ -223,8 +223,8 @@ subsequent course depends on having the marketplace deployed.
 
 - Plugins bundle skills, connectors, commands, and sub-agents
 - Install from Customize menu or upload custom plugins
-- cogni-works = open-source plugins for consulting work
-- You deployed the full cogni-works marketplace — all plugins are ready
+- insight-wave = open-source plugins for consulting work
+- You deployed the full insight-wave marketplace — all plugins are ready
 - `/courses` confirms your training program is active
 - Customize any plugin after installation
 
@@ -275,12 +275,12 @@ Walk through connectors:
 
 Ask the user to:
 1. Type `/` in a Cowork task to see available commands
-2. List 3 slash commands they find from cogni-works plugins
+2. List 3 slash commands they find from insight-wave plugins
 3. Describe what each command does based on its description
 
 ### Quiz
 
-1. **Hands-on**: Type `/` and tell me how many cogni-works commands you see.
+1. **Hands-on**: Type `/` and tell me how many insight-wave commands you see.
 
 2. **Multiple choice**: What do connectors do?
    - a) Connect plugins to each other
@@ -324,7 +324,7 @@ Common uses for consultants:
 3. Batch related work into single sessions to save tokens
 4. Use scheduled tasks for routine work, Cowork tasks for creative work
 5. Review outputs before sharing — Cowork is a draft producer, not a publisher
-6. Start with the cogni-works course sequence to build skills progressively
+6. Start with the insight-wave course sequence to build skills progressively
 7. Use `/courses` to track your learning progress across sessions
 8. Use `course-deck` to generate presentation materials for team onboarding
 
@@ -379,6 +379,6 @@ You've also seen cogni-help in action — the plugin delivering this course.
 You now know how plugins, slash commands, and structured workflows come together.
 
 In Course 2, you'll learn how to report issues and request features via cogni-issues —
-your direct line to the cogni-works maintainers.
+your direct line to the insight-wave maintainers.
 
 **Next recommended course**: Course 2 — Workspace & Obsidian Setup

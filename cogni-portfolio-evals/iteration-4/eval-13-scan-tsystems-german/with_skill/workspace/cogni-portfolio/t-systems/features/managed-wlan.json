@@ -1,0 +1,16 @@
+{
+  "slug": "managed-wlan",
+  "product_slug": "connectivity-services",
+  "name": "Managed WLAN Services",
+  "description": "Enterprise-class WLAN infrastructure service with centralized controller management, plug-and-play access point provisioning, and RF spectrum optimization for campus-scale deployments.",
+  "taxonomy_mapping": {
+    "dimension": 1,
+    "dimension_name": "Connectivity Services",
+    "category_id": "1.6",
+    "category_name": "LAN/WLAN Services",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

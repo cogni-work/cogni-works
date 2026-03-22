@@ -1,0 +1,14 @@
+{
+  "slug": "co-delivery",
+  "product_slug": "partner-portal",
+  "name": "Co-Delivery-Projektsteuerung",
+  "description": "Gemeinsame Projektabwicklung über ein rollenbasiertes Delivery-Board, das Arbeitspakete und Meilensteine in einer partnerspezifischen Sichtbarkeitsmatrix orchestriert und Kapazitätsengpässe durch übergreifendes Ressourcen-Pooling zwischen internen und externen Teams auflöst.",
+  "category": "collaboration",
+  "taxonomy_mapping": {
+    "dimension": "Consulting & Professional Services",
+    "category_id": "7.3",
+    "category_name": "Project & Program Management"
+  },
+  "readiness": "ga",
+  "created": "2026-03-21"
+}

@@ -1,0 +1,14 @@
+{
+  "slug": "energiehandels-system",
+  "product_slug": "it-plattformdienste",
+  "name": "Energiehandelssystem (ETRM)",
+  "description": "Energy-Trading-and-Risk-Management-Plattform fuer Beschaffungsoptimierung, Portfoliomanagement und Risikosteuerung im Strom- und Gashandel mit Anbindung an EPEX SPOT, EEX und OTC-Maerkte sowie Bilanzkreismanagement.",
+  "category": "enterprise-platforms",
+  "taxonomy_mapping": {
+    "dimension": 6,
+    "category_id": "6.3",
+    "category_name": "Enterprise Platform Services",
+    "horizon": "current"
+  },
+  "readiness": "ga"
+}

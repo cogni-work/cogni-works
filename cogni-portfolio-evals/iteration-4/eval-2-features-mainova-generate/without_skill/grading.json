@@ -1,0 +1,656 @@
+{
+  "total_checks": 108,
+  "passed": 100,
+  "failed": 8,
+  "pass_rate": 0.926,
+  "expectations": [
+    {
+      "text": "Feature description word count 20-35 (actual: 22)",
+      "passed": true,
+      "evidence": "\"Zentrale Middleware fuer die Vernetzung von SAP IS-U, SCADA, Messdatenmanagement...\" (22 words)",
+      "entity": "datenintegrationsplattform"
+    },
+    {
+      "text": "All required fields present (slug, product_slug, name, description)",
+      "passed": true,
+      "evidence": "All present",
+      "entity": "datenintegrationsplattform"
+    },
+    {
+      "text": "taxonomy_mapping present with dimension, category_id, category_name",
+      "passed": true,
+      "evidence": "Mapped to System Integration & API",
+      "entity": "datenintegrationsplattform"
+    },
+    {
+      "text": "readiness is one of ga, beta, planned",
+      "passed": true,
+      "evidence": "readiness=\"ga\"",
+      "entity": "datenintegrationsplattform"
+    },
+    {
+      "text": "No outcome verbs in description",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "datenintegrationsplattform"
+    },
+    {
+      "text": "No parity adjectives in description",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "datenintegrationsplattform"
+    },
+    {
+      "text": "Feature description word count 20-35 (actual: 19)",
+      "passed": false,
+      "evidence": "\"Online-Abschlussstrecke fuer Neukunden mit Tarifrechner, Bonitaetspruefung, elek...\" (19 words)",
+      "entity": "digitaler-vertragsabschluss"
+    },
+    {
+      "text": "All required fields present (slug, product_slug, name, description)",
+      "passed": true,
+      "evidence": "All present",
+      "entity": "digitaler-vertragsabschluss"
+    },
+    {
+      "text": "taxonomy_mapping present with dimension, category_id, category_name",
+      "passed": true,
+      "evidence": "Mapped to Custom Application Development",
+      "entity": "digitaler-vertragsabschluss"
+    },
+    {
+      "text": "readiness is one of ga, beta, planned",
+      "passed": true,
+      "evidence": "readiness=\"ga\"",
+      "entity": "digitaler-vertragsabschluss"
+    },
+    {
+      "text": "No outcome verbs in description",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "digitaler-vertragsabschluss"
+    },
+    {
+      "text": "No parity adjectives in description",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "digitaler-vertragsabschluss"
+    },
+    {
+      "text": "Feature description word count 20-35 (actual: 19)",
+      "passed": false,
+      "evidence": "\"Steuerung und Abregelung dezentraler Erzeugungsanlagen (PV, Wind, BHKW) gemaess ...\" (19 words)",
+      "entity": "einspeisemanagement"
+    },
+    {
+      "text": "All required fields present (slug, product_slug, name, description)",
+      "passed": true,
+      "evidence": "All present",
+      "entity": "einspeisemanagement"
+    },
+    {
+      "text": "taxonomy_mapping present with dimension, category_id, category_name",
+      "passed": true,
+      "evidence": "Mapped to Infrastructure Monitoring",
+      "entity": "einspeisemanagement"
+    },
+    {
+      "text": "readiness is one of ga, beta, planned",
+      "passed": true,
+      "evidence": "readiness=\"ga\"",
+      "entity": "einspeisemanagement"
+    },
+    {
+      "text": "No outcome verbs in description",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "einspeisemanagement"
+    },
+    {
+      "text": "No parity adjectives in description",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "einspeisemanagement"
+    },
+    {
+      "text": "Feature description word count 20-35 (actual: 20)",
+      "passed": true,
+      "evidence": "\"Energy-Trading-and-Risk-Management-Plattform fuer Beschaffungsoptimierung, Portf...\" (20 words)",
+      "entity": "energiehandels-system"
+    },
+    {
+      "text": "All required fields present (slug, product_slug, name, description)",
+      "passed": true,
+      "evidence": "All present",
+      "entity": "energiehandels-system"
+    },
+    {
+      "text": "taxonomy_mapping present with dimension, category_id, category_name",
+      "passed": true,
+      "evidence": "Mapped to Enterprise Platform Services",
+      "entity": "energiehandels-system"
+    },
+    {
+      "text": "readiness is one of ga, beta, planned",
+      "passed": true,
+      "evidence": "readiness=\"ga\"",
+      "entity": "energiehandels-system"
+    },
+    {
+      "text": "No outcome verbs in description",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "energiehandels-system"
+    },
+    {
+      "text": "No parity adjectives in description",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "energiehandels-system"
+    },
+    {
+      "text": "Feature description word count 20-35 (actual: 24)",
+      "passed": true,
+      "evidence": "\"GIS-basierte Dokumentation und Visualisierung saemtlicher Leitungsnetze mit raeu...\" (24 words)",
+      "entity": "geo-netzinformationssystem"
+    },
+    {
+      "text": "All required fields present (slug, product_slug, name, description)",
+      "passed": true,
+      "evidence": "All present",
+      "entity": "geo-netzinformationssystem"
+    },
+    {
+      "text": "taxonomy_mapping present with dimension, category_id, category_name",
+      "passed": true,
+      "evidence": "Mapped to AI, Data & Analytics",
+      "entity": "geo-netzinformationssystem"
+    },
+    {
+      "text": "readiness is one of ga, beta, planned",
+      "passed": true,
+      "evidence": "readiness=\"ga\"",
+      "entity": "geo-netzinformationssystem"
+    },
+    {
+      "text": "No outcome verbs in description",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "geo-netzinformationssystem"
+    },
+    {
+      "text": "No parity adjectives in description",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "geo-netzinformationssystem"
+    },
+    {
+      "text": "Feature description word count 20-35 (actual: 18)",
+      "passed": false,
+      "evidence": "\"Zentrales Identity-and-Access-Management mit rollenbasierter Zugriffskontrolle f...\" (18 words)",
+      "entity": "iam-berechtigungsmanagement"
+    },
+    {
+      "text": "All required fields present (slug, product_slug, name, description)",
+      "passed": true,
+      "evidence": "All present",
+      "entity": "iam-berechtigungsmanagement"
+    },
+    {
+      "text": "taxonomy_mapping present with dimension, category_id, category_name",
+      "passed": true,
+      "evidence": "Mapped to Identity & Access Management",
+      "entity": "iam-berechtigungsmanagement"
+    },
+    {
+      "text": "readiness is one of ga, beta, planned",
+      "passed": true,
+      "evidence": "readiness=\"ga\"",
+      "entity": "iam-berechtigungsmanagement"
+    },
+    {
+      "text": "No outcome verbs in description",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "iam-berechtigungsmanagement"
+    },
+    {
+      "text": "No parity adjectives in description",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "iam-berechtigungsmanagement"
+    },
+    {
+      "text": "Feature description word count 20-35 (actual: 20)",
+      "passed": true,
+      "evidence": "\"ITIL-basiertes Service-Management mit integriertem IT/OT-Servicedesk fuer Incide...\" (20 words)",
+      "entity": "it-service-management"
+    },
+    {
+      "text": "All required fields present (slug, product_slug, name, description)",
+      "passed": true,
+      "evidence": "All present",
+      "entity": "it-service-management"
+    },
+    {
+      "text": "taxonomy_mapping present with dimension, category_id, category_name",
+      "passed": true,
+      "evidence": "Mapped to IT Support Services",
+      "entity": "it-service-management"
+    },
+    {
+      "text": "readiness is one of ga, beta, planned",
+      "passed": true,
+      "evidence": "readiness=\"ga\"",
+      "entity": "it-service-management"
+    },
+    {
+      "text": "No outcome verbs in description",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "it-service-management"
+    },
+    {
+      "text": "No parity adjectives in description",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "it-service-management"
+    },
+    {
+      "text": "Feature description word count 20-35 (actual: 19)",
+      "passed": false,
+      "evidence": "\"Web- und App-basiertes Kundenportal mit Self-Service-Funktionen fuer Vertragsman...\" (19 words)",
+      "entity": "kundenportal-selfservice"
+    },
+    {
+      "text": "All required fields present (slug, product_slug, name, description)",
+      "passed": true,
+      "evidence": "All present",
+      "entity": "kundenportal-selfservice"
+    },
+    {
+      "text": "taxonomy_mapping present with dimension, category_id, category_name",
+      "passed": true,
+      "evidence": "Mapped to Custom Application Development",
+      "entity": "kundenportal-selfservice"
+    },
+    {
+      "text": "readiness is one of ga, beta, planned",
+      "passed": true,
+      "evidence": "readiness=\"ga\"",
+      "entity": "kundenportal-selfservice"
+    },
+    {
+      "text": "No outcome verbs in description",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "kundenportal-selfservice"
+    },
+    {
+      "text": "No parity adjectives in description",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "kundenportal-selfservice"
+    },
+    {
+      "text": "Feature description word count 20-35 (actual: 18)",
+      "passed": false,
+      "evidence": "\"Modulare Serviceplattform fuer energienahe Zusatzangebote wie Photovoltaik-Pacht...\" (18 words)",
+      "entity": "mehrwertdienste-plattform"
+    },
+    {
+      "text": "All required fields present (slug, product_slug, name, description)",
+      "passed": true,
+      "evidence": "All present",
+      "entity": "mehrwertdienste-plattform"
+    },
+    {
+      "text": "taxonomy_mapping present with dimension, category_id, category_name",
+      "passed": true,
+      "evidence": "Mapped to Cloud-Native Platform",
+      "entity": "mehrwertdienste-plattform"
+    },
+    {
+      "text": "readiness is one of ga, beta, planned",
+      "passed": true,
+      "evidence": "readiness=\"beta\"",
+      "entity": "mehrwertdienste-plattform"
+    },
+    {
+      "text": "No outcome verbs in description",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "mehrwertdienste-plattform"
+    },
+    {
+      "text": "No parity adjectives in description",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "mehrwertdienste-plattform"
+    },
+    {
+      "text": "Feature description word count 20-35 (actual: 18)",
+      "passed": false,
+      "evidence": "\"Lastflussberechnung und Netzsimulation fuer Ausbauplanung unter Beruecksichtigun...\" (18 words)",
+      "entity": "netzplanung-simulation"
+    },
+    {
+      "text": "All required fields present (slug, product_slug, name, description)",
+      "passed": true,
+      "evidence": "All present",
+      "entity": "netzplanung-simulation"
+    },
+    {
+      "text": "taxonomy_mapping present with dimension, category_id, category_name",
+      "passed": true,
+      "evidence": "Mapped to AI, Data & Analytics",
+      "entity": "netzplanung-simulation"
+    },
+    {
+      "text": "readiness is one of ga, beta, planned",
+      "passed": true,
+      "evidence": "readiness=\"ga\"",
+      "entity": "netzplanung-simulation"
+    },
+    {
+      "text": "No outcome verbs in description",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "netzplanung-simulation"
+    },
+    {
+      "text": "No parity adjectives in description",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "netzplanung-simulation"
+    },
+    {
+      "text": "Feature description word count 20-35 (actual: 23)",
+      "passed": true,
+      "evidence": "\"Integrierte Kundenkommunikation ueber Telefon, E-Mail, Chat und Social Media mit...\" (23 words)",
+      "entity": "omnichannel-kundenkommunikation"
+    },
+    {
+      "text": "All required fields present (slug, product_slug, name, description)",
+      "passed": true,
+      "evidence": "All present",
+      "entity": "omnichannel-kundenkommunikation"
+    },
+    {
+      "text": "taxonomy_mapping present with dimension, category_id, category_name",
+      "passed": true,
+      "evidence": "Mapped to Unified Communications",
+      "entity": "omnichannel-kundenkommunikation"
+    },
+    {
+      "text": "readiness is one of ga, beta, planned",
+      "passed": true,
+      "evidence": "readiness=\"ga\"",
+      "entity": "omnichannel-kundenkommunikation"
+    },
+    {
+      "text": "No outcome verbs in description",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "omnichannel-kundenkommunikation"
+    },
+    {
+      "text": "No parity adjectives in description",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "omnichannel-kundenkommunikation"
+    },
+    {
+      "text": "Feature description word count 20-35 (actual: 21)",
+      "passed": true,
+      "evidence": "\"Absicherung der Betriebstechnologie (OT) in Strom-, Gas- und Fernwaermenetzen ge...\" (21 words)",
+      "entity": "ot-sicherheit"
+    },
+    {
+      "text": "All required fields present (slug, product_slug, name, description)",
+      "passed": true,
+      "evidence": "All present",
+      "entity": "ot-sicherheit"
+    },
+    {
+      "text": "taxonomy_mapping present with dimension, category_id, category_name",
+      "passed": true,
+      "evidence": "Mapped to Network Security",
+      "entity": "ot-sicherheit"
+    },
+    {
+      "text": "readiness is one of ga, beta, planned",
+      "passed": true,
+      "evidence": "readiness=\"ga\"",
+      "entity": "ot-sicherheit"
+    },
+    {
+      "text": "No outcome verbs in description",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "ot-sicherheit"
+    },
+    {
+      "text": "No parity adjectives in description",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "ot-sicherheit"
+    },
+    {
+      "text": "Feature description word count 20-35 (actual: 21)",
+      "passed": true,
+      "evidence": "\"Betrieb redundanter Rechenzentren im Raum Frankfurt fuer KRITIS-relevante Energi...\" (21 words)",
+      "entity": "rechenzentrumsbetrieb"
+    },
+    {
+      "text": "All required fields present (slug, product_slug, name, description)",
+      "passed": true,
+      "evidence": "All present",
+      "entity": "rechenzentrumsbetrieb"
+    },
+    {
+      "text": "taxonomy_mapping present with dimension, category_id, category_name",
+      "passed": true,
+      "evidence": "Mapped to Data Center Services",
+      "entity": "rechenzentrumsbetrieb"
+    },
+    {
+      "text": "readiness is one of ga, beta, planned",
+      "passed": true,
+      "evidence": "readiness=\"ga\"",
+      "entity": "rechenzentrumsbetrieb"
+    },
+    {
+      "text": "No outcome verbs in description",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "rechenzentrumsbetrieb"
+    },
+    {
+      "text": "No parity adjectives in description",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "rechenzentrumsbetrieb"
+    },
+    {
+      "text": "Feature description word count 20-35 (actual: 19)",
+      "passed": false,
+      "evidence": "\"SAP-IS-U-basierte Verbrauchsabrechnung fuer Strom, Gas, Fernwaerme und Wasser mi...\" (19 words)",
+      "entity": "sap-isu-abrechnungsplattform"
+    },
+    {
+      "text": "All required fields present (slug, product_slug, name, description)",
+      "passed": true,
+      "evidence": "All present",
+      "entity": "sap-isu-abrechnungsplattform"
+    },
+    {
+      "text": "taxonomy_mapping present with dimension, category_id, category_name",
+      "passed": true,
+      "evidence": "Mapped to Enterprise Platform Services",
+      "entity": "sap-isu-abrechnungsplattform"
+    },
+    {
+      "text": "readiness is one of ga, beta, planned",
+      "passed": true,
+      "evidence": "readiness=\"ga\"",
+      "entity": "sap-isu-abrechnungsplattform"
+    },
+    {
+      "text": "No outcome verbs in description",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "sap-isu-abrechnungsplattform"
+    },
+    {
+      "text": "No parity adjectives in description",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "sap-isu-abrechnungsplattform"
+    },
+    {
+      "text": "Feature description word count 20-35 (actual: 22)",
+      "passed": true,
+      "evidence": "\"Zentrale Leitstellensoftware fuer die Echtzeitsteuerung und Ueberwachung der Str...\" (22 words)",
+      "entity": "scada-netzleittechnik"
+    },
+    {
+      "text": "All required fields present (slug, product_slug, name, description)",
+      "passed": true,
+      "evidence": "All present",
+      "entity": "scada-netzleittechnik"
+    },
+    {
+      "text": "taxonomy_mapping present with dimension, category_id, category_name",
+      "passed": true,
+      "evidence": "Mapped to Infrastructure Monitoring",
+      "entity": "scada-netzleittechnik"
+    },
+    {
+      "text": "readiness is one of ga, beta, planned",
+      "passed": true,
+      "evidence": "readiness=\"ga\"",
+      "entity": "scada-netzleittechnik"
+    },
+    {
+      "text": "No outcome verbs in description",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "scada-netzleittechnik"
+    },
+    {
+      "text": "No parity adjectives in description",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "scada-netzleittechnik"
+    },
+    {
+      "text": "Feature description word count 20-35 (actual: 20)",
+      "passed": true,
+      "evidence": "\"Gateway-Administration und Messdatenmanagement fuer intelligente Messsysteme mit...\" (20 words)",
+      "entity": "smart-metering-infrastruktur"
+    },
+    {
+      "text": "All required fields present (slug, product_slug, name, description)",
+      "passed": true,
+      "evidence": "All present",
+      "entity": "smart-metering-infrastruktur"
+    },
+    {
+      "text": "taxonomy_mapping present with dimension, category_id, category_name",
+      "passed": true,
+      "evidence": "Mapped to 5G & IoT Connectivity",
+      "entity": "smart-metering-infrastruktur"
+    },
+    {
+      "text": "readiness is one of ga, beta, planned",
+      "passed": true,
+      "evidence": "readiness=\"ga\"",
+      "entity": "smart-metering-infrastruktur"
+    },
+    {
+      "text": "No outcome verbs in description",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "smart-metering-infrastruktur"
+    },
+    {
+      "text": "No parity adjectives in description",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "smart-metering-infrastruktur"
+    },
+    {
+      "text": "Feature description word count 20-35 (actual: 19)",
+      "passed": false,
+      "evidence": "\"Digitaler Workflow fuer Erfassung, Priorisierung und Disposition von Netzstoerun...\" (19 words)",
+      "entity": "stoerungsmanagement"
+    },
+    {
+      "text": "All required fields present (slug, product_slug, name, description)",
+      "passed": true,
+      "evidence": "All present",
+      "entity": "stoerungsmanagement"
+    },
+    {
+      "text": "taxonomy_mapping present with dimension, category_id, category_name",
+      "passed": true,
+      "evidence": "Mapped to Custom Application Development",
+      "entity": "stoerungsmanagement"
+    },
+    {
+      "text": "readiness is one of ga, beta, planned",
+      "passed": true,
+      "evidence": "readiness=\"ga\"",
+      "entity": "stoerungsmanagement"
+    },
+    {
+      "text": "No outcome verbs in description",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "stoerungsmanagement"
+    },
+    {
+      "text": "No parity adjectives in description",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "stoerungsmanagement"
+    },
+    {
+      "text": "Feature description word count 20-35 (actual: 23)",
+      "passed": true,
+      "evidence": "\"Visualisierung von Strom-, Gas- und Waermeverbrauch in Echtzeit ueber App und We...\" (23 words)",
+      "entity": "verbrauchstransparenz"
+    },
+    {
+      "text": "All required fields present (slug, product_slug, name, description)",
+      "passed": true,
+      "evidence": "All present",
+      "entity": "verbrauchstransparenz"
+    },
+    {
+      "text": "taxonomy_mapping present with dimension, category_id, category_name",
+      "passed": true,
+      "evidence": "Mapped to AI, Data & Analytics",
+      "entity": "verbrauchstransparenz"
+    },
+    {
+      "text": "readiness is one of ga, beta, planned",
+      "passed": true,
+      "evidence": "readiness=\"ga\"",
+      "entity": "verbrauchstransparenz"
+    },
+    {
+      "text": "No outcome verbs in description",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "verbrauchstransparenz"
+    },
+    {
+      "text": "No parity adjectives in description",
+      "passed": true,
+      "evidence": "Clean",
+      "entity": "verbrauchstransparenz"
+    }
+  ]
+}

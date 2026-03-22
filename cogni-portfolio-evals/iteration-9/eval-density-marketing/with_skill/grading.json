@@ -1,0 +1,30 @@
+{
+  "expectations": [
+    {
+      "text": "All feature slugs have at most 3 hyphenated segments",
+      "passed": true,
+      "evidence": "All 7 slugs ≤3 segments"
+    },
+    {
+      "text": "No feature description lists 3+ comma-separated parallel components",
+      "passed": false,
+      "evidence": "Dense: thought-leadership, channel-orchestration"
+    },
+    {
+      "text": "All descriptions hit 22-35 word target (German)",
+      "passed": true,
+      "evidence": "All in range"
+    },
+    {
+      "text": "No outcome language in descriptions",
+      "passed": true,
+      "evidence": "Clean"
+    }
+  ],
+  "summary": {
+    "passed": 3,
+    "failed": 1,
+    "total": 4,
+    "pass_rate": 0.75
+  }
+}

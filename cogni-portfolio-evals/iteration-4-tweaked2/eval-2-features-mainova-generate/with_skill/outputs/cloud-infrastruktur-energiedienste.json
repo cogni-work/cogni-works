@@ -1,0 +1,16 @@
+{
+  "slug": "cloud-infrastruktur-energiedienste",
+  "product_slug": "digitale-energiedienste",
+  "name": "Cloud-Infrastruktur Energiedienste",
+  "description": "Hybride Cloud-Infrastruktur mit Private-Cloud-Kernsystemen im eigenen Rechenzentrum und Public-Cloud-Erweiterungen fuer skalierbare Workloads, verbunden ueber dedizierte Netzanbindungen mit georedundantem Failover und zentralem Identity-Management.",
+  "category": "hybrid-cloud",
+  "taxonomy_mapping": {
+    "dimension": 4,
+    "dimension_name": "Cloud Services",
+    "category_id": "4.4",
+    "category_name": "Hybrid Cloud",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "created": "2026-03-18"
+}

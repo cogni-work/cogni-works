@@ -1,0 +1,16 @@
+{
+  "slug": "managed-detection-response",
+  "product_slug": "security-services",
+  "name": "Managed Detection and Response",
+  "description": "Full-scale Security Operations Center service combining continuous threat analysis, automated response triggers, weekly expert consultation, and proactive threat hunting across endpoint and network telemetry.",
+  "taxonomy_mapping": {
+    "dimension": 2,
+    "dimension_name": "Security Services",
+    "category_id": "2.1",
+    "category_name": "Security Operations (SOC/SIEM)",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

@@ -1,0 +1,16 @@
+{
+  "slug": "green-it-sustainability",
+  "product_slug": "consulting-services",
+  "name": "Green IT and Sustainability Services",
+  "description": "IT sustainability advisory using digital solutions for CO2 reduction analysis, green cloud services adoption, and energy efficiency optimization backed by Climate Neutral Data Center Pact membership.",
+  "taxonomy_mapping": {
+    "dimension": 7,
+    "dimension_name": "Consulting Services",
+    "category_id": "7.3",
+    "category_name": "Business & Industry Consulting",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

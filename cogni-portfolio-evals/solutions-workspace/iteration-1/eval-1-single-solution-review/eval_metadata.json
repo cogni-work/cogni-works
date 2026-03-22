@@ -1,0 +1,17 @@
+{
+  "eval_id": 1,
+  "eval_name": "single-solution-review",
+  "prompt": "Generate a solution for the cloud-migration--grosse-energieversorger-de proposition. The project is at the path provided. This is a project-type solution (cloud-services product has revenue_model: project). After generating, run the stakeholder review assessor to evaluate the solution from three perspectives (procurement reviewer, provider SA, client SA). If the verdict is 'revise', apply the improvements and re-assess.",
+  "assertions": [
+    {"id": "SOL-01", "text": "Solution JSON has solution_type: project", "type": "structural"},
+    {"id": "SOL-02", "text": "Solution has 2-5 implementation phases", "type": "structural"},
+    {"id": "SOL-03", "text": "All four pricing tiers present (proof_of_value, small, medium, large)", "type": "structural"},
+    {"id": "SOL-04", "text": "cost_model present with effort_by_tier", "type": "structural"},
+    {"id": "SOL-05", "text": "All margins positive", "type": "structural"},
+    {"id": "SOL-06", "text": "Review assessment JSON produced with all three perspectives", "type": "agent"},
+    {"id": "SOL-07", "text": "Each perspective has 5 scored criteria", "type": "structural"},
+    {"id": "SOL-08", "text": "Synthesis section has verdict (accept/revise/reject)", "type": "structural"},
+    {"id": "SOL-09", "text": "If verdict was revise, a second assessment exists with improved scores", "type": "agent"},
+    {"id": "SOL-10", "text": "Phase descriptions are in German (portfolio language: de)", "type": "structural"}
+  ]
+}

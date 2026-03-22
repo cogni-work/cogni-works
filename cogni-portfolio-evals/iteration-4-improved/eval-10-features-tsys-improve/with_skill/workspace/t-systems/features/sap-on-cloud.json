@@ -1,0 +1,16 @@
+{
+  "slug": "sap-on-cloud",
+  "product_slug": "cloud-services",
+  "name": "SAP on Cloud",
+  "description": "Hosts, migrates, and operates S/4HANA on private cloud (FCI) or hyperscalers (AWS, Azure) using MAX4SAP preconfigured industry templates and SAP Activate methodology, with RISE with SAP integration on sovereign-compliant infrastructure.",
+  "category": "enterprise-platforms",
+  "taxonomy_mapping": {
+    "dimension": 4,
+    "dimension_name": "Cloud Services",
+    "category_id": "4.8",
+    "category_name": "Enterprise Platforms on Cloud"
+  },
+  "readiness": "ga",
+  "created": "2026-01-15",
+  "updated": "2026-03-18"
+}

@@ -1,0 +1,13 @@
+{
+  "slug": "servicenow-sovereign",
+  "name": "ServiceNow on Sovereign Cloud",
+  "description": "ServiceNow SaaS deployment from Deutsche Telekom Sovereign Cloud with German support",
+  "product_slug": "t-systems-cloud",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 4,
+    "category_id": "4.8",
+    "category_name": "Enterprise Platforms on Cloud"
+  },
+  "source_file": "https://www.servicenow.com/partners/partner-finder/t-systems-international-gmbh.html"
+}

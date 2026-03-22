@@ -1,0 +1,16 @@
+{
+  "slug": "servicenow-solutions",
+  "product_slug": "application-services",
+  "name": "ServiceNow Solutions",
+  "description": "Enterprise Service Management und Automatisierung",
+  "taxonomy_mapping": {
+    "dimension": 6,
+    "dimension_name": "Application Services",
+    "category_id": "6.3",
+    "category_name": "Enterprise Platform Services",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

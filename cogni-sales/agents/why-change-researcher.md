@@ -151,7 +151,7 @@ Research approach depends on pitch_mode. Before running web searches, check for 
 
 ### Source Authority Matrix
 
-Score every source you use. This matrix is consistent across the cogni-works marketplace:
+Score every source you use. This matrix is consistent across the insight-wave marketplace:
 
 | Authority | Source Types | Weight |
 |-----------|-------------|--------|

@@ -1,0 +1,14 @@
+{
+  "eval_id": 2,
+  "eval_name": "batch-with-review-loop",
+  "prompt": "Generate solutions for all 3 propositions in the T-Systems project at the path provided. Use batch generation mode. After generating, run the stakeholder review loop. Apply automatic revisions for any solutions with verdict 'revise'. Present a batch summary showing which solutions were accepted on Round 1, which needed revision, and any that need manual attention.",
+  "assertions": [
+    {"id": "BATCH-01", "text": "3 solution JSON files created", "type": "structural"},
+    {"id": "BATCH-02", "text": "Each solution has correct solution_type for its product's revenue_model", "type": "structural"},
+    {"id": "BATCH-03", "text": "Review assessments produced for all 3 solutions", "type": "structural"},
+    {"id": "BATCH-04", "text": "Batch summary categorizes solutions by acceptance round", "type": "agent"},
+    {"id": "BATCH-05", "text": "At least one solution triggered a revision round", "type": "agent"},
+    {"id": "BATCH-06", "text": "Revised solutions have higher scores than Round 1", "type": "agent"},
+    {"id": "BATCH-07", "text": "No more than 2 revision rounds per solution", "type": "structural"}
+  ]
+}

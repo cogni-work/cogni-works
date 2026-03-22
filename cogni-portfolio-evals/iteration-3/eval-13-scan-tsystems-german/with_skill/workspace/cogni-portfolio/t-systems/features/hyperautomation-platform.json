@@ -1,0 +1,16 @@
+{
+  "slug": "hyperautomation-platform",
+  "product_slug": "application-services",
+  "name": "Hyperautomation Platform",
+  "description": "KI und Hyperautomation für komplexe Geschäftsprozesse",
+  "taxonomy_mapping": {
+    "dimension": 6,
+    "dimension_name": "Application Services",
+    "category_id": "6.5",
+    "category_name": "Low-Code/No-Code Platforms",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

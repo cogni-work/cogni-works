@@ -1,0 +1,13 @@
+{
+  "slug": "sovereign-controls-google",
+  "name": "Sovereign Controls (Google Cloud)",
+  "description": "Sovereign cloud co-developed with Google Cloud combining hyperscaler scalability with EU sovereignty",
+  "product_slug": "t-systems-cloud",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 4,
+    "category_id": "4.7",
+    "category_name": "Sovereign Cloud"
+  },
+  "source_file": "https://www.t-systems.com/de/en/sovereign-cloud/solutions/sovereign-cloud-powered-by-google-cloud"
+}

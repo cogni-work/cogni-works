@@ -1,0 +1,7 @@
+{
+  "slug": "identity-access-management",
+  "product_slug": "managed-security",
+  "name": "Identity & Access Management",
+  "description": "Zentrale Verwaltung von Benutzeridentitaeten, Rollen und Zugriffsrechten mit Multi-Faktor-Authentifizierung, Privileged-Access-Kontrolle und automatisiertem Lifecycle-Management.",
+  "readiness": "ga"
+}

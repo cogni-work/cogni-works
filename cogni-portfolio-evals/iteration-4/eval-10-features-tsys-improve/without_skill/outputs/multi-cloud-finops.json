@@ -1,0 +1,12 @@
+{
+  "slug": "multi-cloud-finops",
+  "product_slug": "cloud-services",
+  "name": "Cloud FinOps Management",
+  "description": "FinOps-as-a-Service mit zentralem Cost-Orchestration-Dashboard, strukturiertem Maturity-Assessment (Light/Deep-Dive), Flexera- und Apptio-gestützter Verbrauchsanalyse, automatisiertem Rightsizing und Reservierungsoptimierung über AWS-, Azure- und GCP-Konten nach FinOps-Foundation-Standards.",
+  "taxonomy_mapping": {
+    "layer": "Manage",
+    "category": "Cloud Management",
+    "subcategory": "FinOps & Cost Governance"
+  },
+  "readiness": "ga"
+}

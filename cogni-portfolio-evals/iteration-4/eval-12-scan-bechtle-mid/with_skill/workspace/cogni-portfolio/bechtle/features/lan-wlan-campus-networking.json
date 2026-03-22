@@ -1,0 +1,16 @@
+{
+  "slug": "lan-wlan-campus-networking",
+  "product_slug": "connectivity-services",
+  "name": "LAN/WLAN Campus Networking",
+  "description": "Campus network design and WiFi management using HPE Aruba and Cisco Meraki with centralized cloud-based dashboard for multi-site policy enforcement and global connectivity monitoring.",
+  "taxonomy_mapping": {
+    "dimension": 1,
+    "dimension_name": "Connectivity Services",
+    "category_id": "1.6",
+    "category_name": "LAN/WLAN Services",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/bechtle-portfolio.md",
+  "created": "2026-03-18"
+}

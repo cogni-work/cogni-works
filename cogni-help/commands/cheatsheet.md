@@ -1,6 +1,6 @@
 ---
 name: cheatsheet
-description: Generate a quick-reference card for any cogni-works plugin
+description: Generate a quick-reference card for any insight-wave plugin
 argument-hint: "[plugin-name]"
 allowed-tools:
   - Read
@@ -8,7 +8,7 @@ allowed-tools:
   - Grep
 ---
 
-Generate a one-screen reference card for a cogni-works plugin using the cheatsheet skill.
+Generate a one-screen reference card for a insight-wave plugin using the cheatsheet skill.
 
 Accept either:
 - A plugin name (with or without "cogni-" prefix) — generate its cheatsheet

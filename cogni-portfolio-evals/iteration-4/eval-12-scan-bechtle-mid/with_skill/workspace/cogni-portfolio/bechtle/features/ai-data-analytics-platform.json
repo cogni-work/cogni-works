@@ -1,0 +1,16 @@
+{
+  "slug": "ai-data-analytics-platform",
+  "product_slug": "application-services",
+  "name": "AI, Data & Analytics Platform",
+  "description": "AI solution development using Azure Machine Learning and OpenAI for predictive models and LLMs, backed by Planet AI deep learning subsidiary and Ipai Innovation Park partnership in Heilbronn.",
+  "taxonomy_mapping": {
+    "dimension": 6,
+    "dimension_name": "Application Services",
+    "category_id": "6.6",
+    "category_name": "AI, Data & Analytics",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/bechtle-portfolio.md",
+  "created": "2026-03-18"
+}

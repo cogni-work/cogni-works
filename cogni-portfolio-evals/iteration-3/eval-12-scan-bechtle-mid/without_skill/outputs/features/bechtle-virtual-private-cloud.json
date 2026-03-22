@@ -1,0 +1,13 @@
+{
+  "slug": "bechtle-virtual-private-cloud",
+  "name": "Bechtle Virtual Private Cloud",
+  "description": "Three-variant Virtual Private Cloud (on-premise and off-premise), pluscloud infrastructure, and dedicated Bechtle Clouds Services environments.",
+  "product_slug": "bechtle-cloud",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 4,
+    "category_id": "4.3",
+    "category_name": "Private Cloud"
+  },
+  "source_file": "https://www.bechtle.com/de-en/clouds/cloud-services"
+}

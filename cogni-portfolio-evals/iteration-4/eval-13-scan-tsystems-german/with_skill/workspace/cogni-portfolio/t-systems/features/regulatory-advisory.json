@@ -1,0 +1,16 @@
+{
+  "slug": "regulatory-advisory",
+  "product_slug": "consulting-services",
+  "name": "Regulatory Advisory & M&A (Detecon)",
+  "description": "Regulatory compliance advisory and M&A transaction consulting for technology-driven organizational transformations combining legal framework analysis with technical due diligence assessment.",
+  "taxonomy_mapping": {
+    "dimension": 7,
+    "dimension_name": "Consulting Services",
+    "category_id": "7.4",
+    "category_name": "Program & Project Management",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

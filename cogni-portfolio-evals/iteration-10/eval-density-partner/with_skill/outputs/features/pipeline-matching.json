@@ -1,0 +1,14 @@
+{
+  "slug": "pipeline-matching",
+  "product_slug": "partner-portal",
+  "name": "Pipeline-Matching",
+  "description": "Algorithmisches Opportunity-Matching, das offene Pipeline-Deals anhand von Partnerkompetenzprofilen und regionaler Abdeckung einem gewichteten Scoring unterzieht und auf Basis historischer Win-Rates passende Co-Selling-Kandidaten vorschlägt.",
+  "category": "sales",
+  "taxonomy_mapping": {
+    "dimension": "Application Services",
+    "category_id": "6.3",
+    "category_name": "CRM & Customer Experience"
+  },
+  "readiness": "ga",
+  "created": "2026-03-21"
+}

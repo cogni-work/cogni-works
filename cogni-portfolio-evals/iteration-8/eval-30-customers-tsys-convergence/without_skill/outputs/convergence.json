@@ -1,0 +1,87 @@
+{
+  "eval": "eval-30-customers-tsys-convergence",
+  "variant": "without_skill",
+  "market_slug": "grosse-energieversorger-de",
+  "rounds": [
+    {
+      "round": 1,
+      "cso_review": {
+        "perspective": "Chief Sales Officer",
+        "scores": {
+          "deal_qualification_clarity": { "score": 4, "max": 5, "rationale": "Named customers with fit scores and buying committee dynamics. Missing per-customer deal sizing and specific entry points." },
+          "buying_committee_completeness": { "score": 4, "max": 5, "rationale": "Good role mapping with named stakeholders where publicly known. Some roles anonymous (RWE CIO) which is reality-accurate." },
+          "competitive_positioning": { "score": 3, "max": 5, "rationale": "T-Systems differentiators mentioned generically (Sovereign Cloud, KRITIS) but not systematically mapped per customer against specific competitors." },
+          "next_best_action_clarity": { "score": 3, "max": 5, "rationale": "Deal stall risks identified but no explicit recommended entry points, PoV offers, or per-customer next steps for AEs." },
+          "revenue_potential_quantification": { "score": 3, "max": 5, "rationale": "Generic 5-8M ACV for market but no per-customer revenue estimates or pipeline staging." },
+          "proposition_mapping": { "score": 3, "max": 5, "rationale": "Propositions referenced in buying criteria but not explicitly mapped to specific customers or stakeholder triggers." }
+        },
+        "average_score": 3.3,
+        "threshold": 4.0,
+        "passed": false,
+        "improvement_actions": [
+          "Add estimated_acv per named customer with basis for sizing",
+          "Add recommended_entry_propositions per customer with target stakeholder",
+          "Add competitive_landscape per customer with differentiation strategy",
+          "Add next_best_actions per customer with concrete steps for AEs",
+          "Add proposition_triggers per buyer persona linking pain points to propositions"
+        ]
+      },
+      "market_analyst_review": {
+        "perspective": "Market Analyst",
+        "scores": {
+          "market_segmentation_accuracy": { "score": 5, "max": 5, "rationale": "All named companies are genuine large German energy utilities matching 5000+ employee, EUR 1B+ criteria." },
+          "pain_point_realism": { "score": 4, "max": 5, "rationale": "Pain points reference real regulations (NIS2, KRITIS-DachG, SektVO), real deadlines, real market dynamics. Some Vattenfall/LEAG points based on assumptions." },
+          "tech_stack_accuracy": { "score": 4, "max": 5, "rationale": "E.ON and RWE well-researched with verifiable sources. Vattenfall and LEAG based partly on public info plus informed assumptions." },
+          "regulatory_context": { "score": 5, "max": 5, "rationale": "NIS2, KRITIS-DachG, BSI-C5, SektVO, CSRD all correctly positioned with specific deadlines and implications." },
+          "competitive_landscape_realism": { "score": 4, "max": 5, "rationale": "Real competitor partnerships cited (Infosys/E.ON, AWS/RWE). Vattenfall and LEAG competitor assumptions reasonable but less verified." }
+        },
+        "average_score": 4.4,
+        "threshold": 4.0,
+        "passed": true,
+        "improvement_actions": []
+      }
+    },
+    {
+      "round": 2,
+      "cso_review": {
+        "perspective": "Chief Sales Officer",
+        "scores": {
+          "deal_qualification_clarity": { "score": 5, "max": 5, "rationale": "Each customer now has estimated_acv with explicit basis, fit_score with detailed rationale, and clear qualification criteria." },
+          "buying_committee_completeness": { "score": 4, "max": 5, "rationale": "Named stakeholders where publicly known (Sebastian Weber/E.ON, Michael Müller/RWE, Thomas Kusterer/EnBW, Thorsten Kramer/LEAG). Anonymous roles (RWE CIO, Vattenfall CIO) flagged as action items." },
+          "competitive_positioning": { "score": 5, "max": 5, "rationale": "Each customer has competitive_landscape with primary_competitors, t_systems_differentiation, and displacement_risk. Actionable positioning guidance per account." },
+          "next_best_action_clarity": { "score": 5, "max": 5, "rationale": "3 specific next_best_actions per customer with named stakeholders, concrete PoV offers with EUR pricing, and clear rationale." },
+          "revenue_potential_quantification": { "score": 4, "max": 5, "rationale": "Per-customer estimated_acv (EUR 3-8M) with explicit basis. Total addressable pipeline ~EUR 25.5M across 5 accounts." },
+          "proposition_mapping": { "score": 5, "max": 5, "rationale": "recommended_entry_propositions per customer with slug, rationale, and target_stakeholder. Profile-level proposition_triggers link pain points to specific propositions." }
+        },
+        "average_score": 4.7,
+        "threshold": 4.0,
+        "passed": true,
+        "improvement_actions": []
+      },
+      "market_analyst_review": {
+        "perspective": "Market Analyst",
+        "scores": {
+          "market_segmentation_accuracy": { "score": 5, "max": 5, "rationale": "5 named customers spanning distribution (E.ON), generation/renewables (RWE), integrated utility (EnBW), heat/renewables (Vattenfall), and transformation (LEAG). Comprehensive market coverage." },
+          "pain_point_realism": { "score": 5, "max": 5, "rationale": "Customer-specific pain points tied to verifiable events (Infosys/E.ON partnership May 2025, AWS/RWE June 2025, EnBW CIO departure Oct 2024, LEAG GigawattFactory). Regulatory deadlines accurate." },
+          "tech_stack_accuracy": { "score": 4, "max": 5, "rationale": "E.ON and RWE tech stacks well-sourced. EnBW stack includes verified tools (powercloud, enersis, Cloud&Heat, meshStack). Vattenfall and LEAG partly assumption-based but reasonable." },
+          "regulatory_context": { "score": 5, "max": 5, "rationale": "All regulatory references accurate: NIS2 October 2026, KRITIS-DachG January 2026, BSI-C5 Type 2, SektVO thresholds, CSRD/ESRS. Correctly applied per-customer implications." },
+          "competitive_landscape_realism": { "score": 5, "max": 5, "rationale": "Verified competitor partnerships per account. Displacement risks realistically assessed — no overly optimistic T-Systems positioning." }
+        },
+        "average_score": 4.8,
+        "threshold": 4.0,
+        "passed": true,
+        "improvement_actions": []
+      }
+    }
+  ],
+  "final_result": {
+    "converged": true,
+    "rounds_needed": 2,
+    "max_rounds": 3,
+    "final_cso_score": 4.7,
+    "final_market_analyst_score": 4.8,
+    "combined_average": 4.75,
+    "summary": "Customer profiles converged in 2 rounds. Round 1 failed CSO review (3.3/5) due to missing per-customer sales actionability (deal sizing, entry propositions, competitive positioning, next-best-actions). Round 2 addressed all gaps and passed both perspectives. Market analyst review passed in both rounds (4.4 and 4.8) with strong regulatory accuracy and realistic competitive landscape."
+  },
+  "created": "2026-03-19"
+}

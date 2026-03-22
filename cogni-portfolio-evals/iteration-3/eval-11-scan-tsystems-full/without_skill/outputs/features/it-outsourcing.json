@@ -1,0 +1,13 @@
+{
+  "slug": "it-outsourcing",
+  "name": "IT Outsourcing (ITO)",
+  "description": "End-to-end IT outsourcing covering infrastructure, applications, and workplace services",
+  "product_slug": "t-systems-infrastructure",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 5,
+    "category_id": "5.5",
+    "category_name": "IT Outsourcing (ITO)"
+  },
+  "source_file": "https://www.gartner.com/reviews/market/data-center-outsourcing-and-hybrid-infrastructure-managed-services-worldwide/vendor/t-systems"
+}

@@ -1,0 +1,16 @@
+{
+  "slug": "proposition-generierung",
+  "product_slug": "cogni-portfolio",
+  "name": "Proposition-Generierung",
+  "description": "Systematische Ableitung marktspezifischer DOES/MEANS-Aussagen aus den IS-Feature-Beschreibungen durch Kreuzung der Feature-Mechanik mit Marktprofil, Buyer-Persona und Status-quo-Kontrast, strukturiert als einzelne JSON-Dateien pro Feature-Markt-Kombination.",
+  "category": "proposition",
+  "taxonomy_mapping": {
+    "dimension": 7,
+    "dimension_name": "Consulting & Professional Services",
+    "category_id": "7.1",
+    "category_name": "IT Strategy Consulting",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "created": "2026-03-21"
+}

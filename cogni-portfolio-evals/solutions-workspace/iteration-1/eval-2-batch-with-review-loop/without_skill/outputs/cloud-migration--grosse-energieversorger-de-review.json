@@ -1,0 +1,135 @@
+{
+  "slug": "cloud-migration--grosse-energieversorger-de",
+  "solution_slug": "cloud-migration--grosse-energieversorger-de",
+  "reviews": [
+    {
+      "perspective": "procurement",
+      "role": "Einkauf / Beschaffungsleiter",
+      "focus": "SektVO-Beschaffungsregeln, Rahmenvertraege, EU-Vergaberecht, TCO-Transparenz",
+      "scores": [
+        {
+          "criterion": "Pricing transparency",
+          "score": 8,
+          "max_score": 10,
+          "rationale": "Vier klar abgestufte Preistiers mit definiertem Scope. Tagessaetze und Effort-Breakdown sind transparent. Leicht nachvollziehbar fuer Vergabedokumentation."
+        },
+        {
+          "criterion": "Scope clarity",
+          "score": 8,
+          "max_score": 10,
+          "rationale": "Klare Abgrenzung was in-scope und out-of-scope ist (Legacy-Decommissioning explizit ausgenommen). Assumptions sind praxisnah formuliert."
+        },
+        {
+          "criterion": "Contractual risk",
+          "score": 7,
+          "max_score": 10,
+          "rationale": "Rollback-Dokumentation und Datenportabilitaet adressieren Exit-Risiken. Es fehlt eine explizite Vertragsstrafe bei Terminueberschreitung und ein formales Change-Request-Verfahren."
+        },
+        {
+          "criterion": "Vendor lock-in mitigation",
+          "score": 8,
+          "max_score": 10,
+          "rationale": "Datenportabilitaet und offene Standards sind explizit zugesichert. CMF-Methodik ist herstellerunabhaengig. Staging-Umgebung nutzt standardisierte Cloud-APIs."
+        },
+        {
+          "criterion": "Value for money",
+          "score": 7,
+          "max_score": 10,
+          "rationale": "Proof-of-Value bei 25k EUR ist ein niedriger Einstieg. Margen steigen mit Tier-Groesse, was marktkonform ist. Medium-Tier bei 220k fuer 10-20 Workloads ist wettbewerbsfaehig."
+        }
+      ],
+      "overall_score": 38,
+      "overall_max": 50,
+      "recommendation": "Genehmigungsfaehig mit Auflage: Change-Request-Verfahren und Vertragsstrafen-Klausel in Vertragsverhandlung ergaenzen.",
+      "revision_required": false
+    },
+    {
+      "perspective": "provider_solution_architect",
+      "role": "T-Systems Solution Architect",
+      "focus": "Technische Machbarkeit, Delivery-Risiko, Ressourcenplanung, Wiederverwendbarkeit",
+      "scores": [
+        {
+          "criterion": "Technical feasibility",
+          "score": 9,
+          "max_score": 10,
+          "rationale": "CMF-Methodik und 6R-Framework sind bewaehrt. Sprint-basierter Ansatz reduziert Delivery-Risiko. KRITIS-Staging-Phase ist realistisch dimensioniert."
+        },
+        {
+          "criterion": "Effort estimation accuracy",
+          "score": 7,
+          "max_score": 10,
+          "rationale": "Proof-of-Value mit 15 Tagen ist knapp -- insbesondere wenn SCADA-Validierung im Pilot enthalten ist. Small-Tier mit 55 Tagen fuer 3-5 Workloads ist realistisch."
+        },
+        {
+          "criterion": "Risk mitigation",
+          "score": 8,
+          "max_score": 10,
+          "rationale": "Rollback-Dokumentation je Workload und Validierung vor Produktivschaltung sind starke Risikominimierungsmassnahmen. OT-Team-Anforderung (1 FTE) vom Kunden ist korrekt adressiert."
+        },
+        {
+          "criterion": "Margin protection",
+          "score": 7,
+          "max_score": 10,
+          "rationale": "PoV-Marge bei 11.2% ist bewusst niedrig als Einstieg. Medium/Large-Tiers erreichen Zielmarge von 30%+. Risiko: SCADA-Integration kann Aufwaende sprengen."
+        },
+        {
+          "criterion": "Delivery repeatability",
+          "score": 9,
+          "max_score": 10,
+          "rationale": "CMF-Methodik und Sprint-Templates sind stark wiederverwendbar. Phasenmodell kann als Standard-Delivery-Blueprint fuer alle Energie-Kunden dienen."
+        }
+      ],
+      "overall_score": 40,
+      "overall_max": 50,
+      "recommendation": "Freigabe empfohlen. PoV-Effort um 2-3 Tage SA aufstocken falls SCADA-Pilot enthalten.",
+      "revision_required": false
+    },
+    {
+      "perspective": "client_solution_architect",
+      "role": "Kunden-IT-Architekt / Enterprise Architect",
+      "focus": "Architekturpassung, Integrationsfaehigkeit, Betreibbarkeit, Sicherheit",
+      "scores": [
+        {
+          "criterion": "Architecture alignment",
+          "score": 8,
+          "max_score": 10,
+          "rationale": "6R-Klassifikation erlaubt differenzierte Behandlung je Workload. OT/IT-Trennung ist explizit adressiert. Passt zu typischen Enterprise-Architektur-Prinzipien."
+        },
+        {
+          "criterion": "Integration quality",
+          "score": 7,
+          "max_score": 10,
+          "rationale": "SCADA-Konnektivitaet und IS-U-Schnittstellen werden validiert. Es fehlt eine explizite Aussage zu API-Gateway- oder ESB-Integration fuer die bestehende Integrationslandschaft."
+        },
+        {
+          "criterion": "Operational readiness",
+          "score": 8,
+          "max_score": 10,
+          "rationale": "Runbooks, Monitoring-Dashboards und Incident-Prozesse sind als Deliverables definiert. Knowledge-Transfer an internes Team ist eingeplant."
+        },
+        {
+          "criterion": "Security posture",
+          "score": 9,
+          "max_score": 10,
+          "rationale": "BSI-C5-Konformitaet, NIS2-Anforderungsanalyse und KRITIS-Auditbedingungen sind durchgehend adressiert. Netzwerksegmentierung ist explizit eingeplant."
+        },
+        {
+          "criterion": "Data portability",
+          "score": 8,
+          "max_score": 10,
+          "rationale": "Offene Standards und exportierbare Formate explizit zugesichert. Datenportabilitaetsdokumentation ist ein Deliverable der Uebergabephase."
+        }
+      ],
+      "overall_score": 40,
+      "overall_max": 50,
+      "recommendation": "Akzeptabel. Empfehlung: API-Gateway-/ESB-Integrationsstrategie als optionalen Scope-Baustein ergaenzen.",
+      "revision_required": false
+    }
+  ],
+  "aggregate_score": 118,
+  "aggregate_max": 150,
+  "aggregate_pct": 78.7,
+  "revisions_applied": [],
+  "final_verdict": "approved",
+  "reviewed": "2026-03-18"
+}

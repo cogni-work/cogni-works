@@ -1,0 +1,56 @@
+{
+  "reviewer": "tsystems-cso",
+  "iteration": 0,
+  "overall_score": 3.33,
+  "dimension_scores": {
+    "quota_impact": {
+      "score": 3,
+      "rationale": "Wettbewerber sind korrekt identifiziert, aber die Differenzierungsaussagen sind T-Systems-zentriert statt Buyer-Pain-zentriert. Mein AE bei Mainova braucht nicht 'DT-Backbone-Ownership' — er braucht 'Ihr Stadtwerke-ERP läuft ab 2027 ohne Support, und wir haben 12 Stadtwerke-Migrationen in 9 Monaten durchgezogen'. Keine konkreten Stadtwerke-Referenzen genannt."
+    },
+    "pipeline_acceleration": {
+      "score": 3,
+      "rationale": "Kein einziger konkreter Dringlichkeitstreiber für Stadtwerke: NIS2-Registrierung April 2026, KRITIS-DachG-Enforcement, SAP-ECC-End-of-Life 2027, Smart-Meter-95%-Pflicht 2030. Die analysis_note erwähnt das Segment, aber die Competitor-Entries selbst enthalten keine Urgency-Trigger, die mein AE im Erstgespräch nutzen könnte."
+    },
+    "objection_handling": {
+      "score": 3,
+      "rationale": "Die Schwächen der Wettbewerber sind gut herausgearbeitet, aber die #1-Objection bei Stadtwerken fehlt komplett: 'T-Systems ist zu teuer und zu groß für uns.' Kein TCO-Vergleich, kein Argument für Stadtwerke-spezifische Paketpreise, kein Hinweis auf flexible Engagement-Modelle für 500-Mitarbeiter-Stadtwerke. Mein AE wird bei jedem Stadtwerk als erstes hören: 'Ihr seid doch für E.ON, nicht für uns.'"
+    },
+    "competitive_win_ability": {
+      "score": 4,
+      "rationale": "Starke strukturelle Differenzierung (DT-Netz, Zero Outage TÜV, BSI-C5). Der SWK-Kooperationen-Eintrag ist Gold wert — genau das ist der häufigste 'Wettbewerber' bei Stadtwerken, und die Schwächen (kein echter Cloud-Transform, Gremien-Tempo) treffen. Aber die Differenzierung wiederholt sich bei allen 5 Wettbewerbern fast wortgleich."
+    },
+    "account_team_usability": {
+      "score": 4,
+      "rationale": "Klare, deutsche Sprache. Die Struktur ist konsistent. Ein AE kann das in 10 Minuten lesen und versteht die Wettbewerbslandschaft. Aber: Die Differenzierungsaussagen klingen alle gleich — mein AE braucht pro Wettbewerber EINE spezifische Killer-Aussage, nicht fünf Mal 'DT-Netz + BSI-C5 + Zero Outage'."
+    },
+    "deal_qualification_signal": {
+      "score": 3,
+      "rationale": "Die segment_context sagt '500-5000 Mitarbeiter', aber es fehlt ein explizites ICP: Welche Stadtwerke sind ideal? (Bestehendes SAP IS-U, auslaufender IT-Outsourcing-Vertrag, KRITIS-Einstufung). Ein AE mit 200 Stadtwerken in seiner Region braucht Priorisierungskriterien."
+    }
+  },
+  "top_issues": [
+    {
+      "entity_type": "compete",
+      "entity_slug": "cloud-migration--mittelstaendische-stadtwerke-de",
+      "issue": "Differenzierungsaussagen sind repetitiv — jeder Eintrag endet mit 'DT-Netz + BSI-C5 + Zero Outage'. Bei 5 Wettbewerbern muss jede Differenzierung den SPEZIFISCHEN Schwachpunkt des jeweiligen Wettbewerbers adressieren.",
+      "severity": "high",
+      "suggested_fix": "Pro Wettbewerber eine einzigartige Differenzierung: DATAGROUP → SAP-Lücke, Bechtle → keine Applikationsschicht, Computacenter → fehlende lokale Stadtwerke-Referenzen, Arvato → Skalierungslimit, SWK → keine echte Cloud-Transformation.",
+      "root_cause_hint": "competitor differentiation generation defaults to repeating strongest company-level USPs"
+    },
+    {
+      "entity_type": "compete",
+      "entity_slug": "cloud-migration--mittelstaendische-stadtwerke-de",
+      "issue": "Fehlende Stadtwerke-Preisargumentation. T-Systems wird bei jedem Stadtwerk als 'zu teuer' wahrgenommen — die Analyse ignoriert diese zentrale Objection.",
+      "severity": "high",
+      "suggested_fix": "Ergänze bei jedem Wettbewerber einen Preiskontext: Was kostet deren Ansatz wirklich, wenn man Subunternehmer für Netzwerk, SAP und Security einkalkuliert? TCO-Argument: 1 Partner vs. 4 Partner bei DATAGROUP/Bechtle.",
+      "root_cause_hint": "compete skill doesn't prompt for pricing/TCO comparison"
+    }
+  ],
+  "strengths": [
+    "Wettbewerbsauswahl ist exzellent für das Stadtwerke-Segment — keine globalen SIs, dafür regionale Systemhäuser und Stadtwerke-Kooperationen",
+    "SWK-Kooperationen als Wettbewerber zu identifizieren zeigt echtes Marktverständnis — das ist der häufigste 'Wettbewerber' bei Stadtwerken",
+    "Schwächen der Wettbewerber sind spezifisch und verifizierbar, nicht generisch"
+  ],
+  "would_use_in_pitch_deck": false,
+  "overall_assessment": "Solide Wettbewerbslandschaft mit der richtigen Auswahl für Stadtwerke, aber noch nicht sales-ready. Die drei kritischen Lücken: (1) Repetitive Differenzierung — jeder Eintrag klingt gleich, (2) Keine Preis/TCO-Argumentation gegen die 'T-Systems ist zu teuer'-Objection, (3) Keine konkreten Stadtwerke-Referenzen oder Urgency-Trigger. Mein AE bei einer 800-Mitarbeiter-Stadtwerk in Norddeutschland kann damit die Wettbewerbslandschaft verstehen, aber er kann es nicht im Kundengespräch einsetzen."
+}

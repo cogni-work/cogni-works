@@ -1,0 +1,16 @@
+{
+  "slug": "network-security-firewall-services",
+  "product_slug": "security-services",
+  "name": "Network Security & Firewall Services",
+  "description": "Managed network security service delivering next-gen firewall deployment, DDoS mitigation, network segmentation and KRITIS-compliant perimeter defense using Palo Alto, Fortinet and Sophos.",
+  "taxonomy_mapping": {
+    "dimension": 2,
+    "dimension_name": "Security Services",
+    "category_id": "2.6",
+    "category_name": "Network Security",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/bechtle-portfolio.md",
+  "created": "2026-03-18"
+}

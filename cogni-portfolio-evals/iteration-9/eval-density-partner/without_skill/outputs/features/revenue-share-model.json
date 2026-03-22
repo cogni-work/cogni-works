@@ -1,0 +1,7 @@
+{
+  "slug": "revenue-share-model",
+  "product_slug": "partner-portal",
+  "name": "Revenue-Share-Modell",
+  "description": "Regelwerk zur automatischen Aufteilung von Umsatzanteilen zwischen Anbieter und Partner auf Basis hinterlegter Provisionsstufen, Schwellenwerte und Abrechnungszyklen.",
+  "readiness": "ga"
+}

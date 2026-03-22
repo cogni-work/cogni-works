@@ -1,0 +1,13 @@
+{
+  "slug": "bechtle-daas",
+  "name": "Bechtle Device as a Service",
+  "description": "Full device lifecycle management including DaaS Compute, DaaS Mobile, HP TechPulse proactive monitoring, next-business-day swap service, and predictive lifecycle tracking.",
+  "product_slug": "bechtle-workplace",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 3,
+    "category_id": "3.3",
+    "category_name": "Device Management"
+  },
+  "source_file": "https://www.bechtle.com/ch-en/it-solutions/modern-workplace/device-as-a-service"
+}

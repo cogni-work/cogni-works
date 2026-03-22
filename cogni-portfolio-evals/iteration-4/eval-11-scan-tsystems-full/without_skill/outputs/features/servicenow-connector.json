@@ -1,0 +1,13 @@
+{
+  "slug": "servicenow-connector",
+  "name": "ServiceNow Connector",
+  "description": "ServiceNow CMDB CI synchronization connector for incident and request management",
+  "product_slug": "t-systems-applications",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 6,
+    "category_id": "6.3",
+    "category_name": "Enterprise Platform Services"
+  },
+  "source_file": "https://store.servicenow.com/store/app/75f82f2e1be06a50a85b16db234bcba9"
+}

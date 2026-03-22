@@ -1,0 +1,14 @@
+{
+  "slug": "catalog-zugriff",
+  "product_slug": "partner-portal",
+  "name": "Industry-Catalog-Zugriff",
+  "description": "Partnerspezifischer Zugriff auf den branchenklassifizierten Lösungskatalog mit filterbasierter Navigation nach Vertikale, Technologiefeld und Zielkundensegment, ergänzt durch rollenbasierte Sichtbarkeitsregeln je nach zugewiesener Partnerschaftsstufe.",
+  "category": "catalog",
+  "taxonomy_mapping": {
+    "dimension": "Consulting & Project Services",
+    "category_id": "7.1",
+    "category_name": "IT Strategy & Architecture Consulting"
+  },
+  "readiness": "ga",
+  "created": "2026-03-21"
+}

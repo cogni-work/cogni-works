@@ -1,0 +1,12 @@
+{
+  "slug": "sap-on-cloud",
+  "product_slug": "cloud-services",
+  "name": "SAP on Cloud",
+  "description": "SAP Platinum Partner with SAP Activate certification: end-to-end hosting, migration, and operation of S/4HANA on Private Cloud, AWS, and Azure as a RISE with SAP Premium Supplier.",
+  "taxonomy_mapping": {
+    "dimension": 4,
+    "category_id": "4.8",
+    "category_name": "Enterprise Platforms on Cloud"
+  },
+  "readiness": "ga"
+}

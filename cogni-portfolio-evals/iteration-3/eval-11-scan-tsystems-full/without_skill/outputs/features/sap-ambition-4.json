@@ -1,0 +1,13 @@
+{
+  "slug": "sap-ambition-4",
+  "name": "SAP Ambition 4.0",
+  "description": "ITIL-based SAP Application Management and Modernization framework with DevOps automation",
+  "product_slug": "t-systems-applications",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 6,
+    "category_id": "6.2",
+    "category_name": "Application Modernization"
+  },
+  "source_file": "https://www.t-systems.com/us/en/application-services/solutions/sap-solutions/sap-application-management-and-modernization"
+}

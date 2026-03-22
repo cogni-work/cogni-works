@@ -1,0 +1,16 @@
+{
+  "slug": "bechtle-sd-wan-as-a-service",
+  "product_slug": "connectivity-services",
+  "name": "Bechtle SD-WAN as a Service",
+  "description": "Fully managed software-defined WAN service with ngena partnership delivering automated intelligent routing across multiple parallel WAN links, global SLAs and multi-link failover replacing legacy MPLS connections.",
+  "taxonomy_mapping": {
+    "dimension": 1,
+    "dimension_name": "Connectivity Services",
+    "category_id": "1.1",
+    "category_name": "WAN Services",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/bechtle-portfolio.md",
+  "created": "2026-03-18"
+}

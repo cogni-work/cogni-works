@@ -1,0 +1,13 @@
+{
+  "slug": "sap-on-cloud",
+  "name": "SAP on Cloud & RISE with SAP",
+  "description": "SAP-Workloads auf AWS, Azure und Google Cloud. RISE with SAP Premium Supplier. Industrial AI Cloud.",
+  "product_slug": "t-systems-cloud",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 4,
+    "category_id": "4.8",
+    "category_name": "Enterprise Platforms on Cloud"
+  },
+  "source_file": "https://www.t-systems.com/de/de/digital/sap-solutions/sap-on-aws"
+}

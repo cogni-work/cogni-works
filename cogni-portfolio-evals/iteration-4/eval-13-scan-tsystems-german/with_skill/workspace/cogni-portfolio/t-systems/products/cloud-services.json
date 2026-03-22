@@ -1,0 +1,9 @@
+{
+  "slug": "cloud-services",
+  "name": "Cloud Services",
+  "description": "Cloud-Infrastruktur-, Migrations- und Plattform-Angebote inkl. Managed Hyperscaler, Multi-Cloud, Private/Hybrid Cloud und Sovereign Cloud.",
+  "revenue_model": "subscription",
+  "maturity": "growth",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

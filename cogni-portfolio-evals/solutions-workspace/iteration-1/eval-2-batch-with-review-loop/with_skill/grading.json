@@ -1,0 +1,45 @@
+{
+  "expectations": [
+    {
+      "text": "BATCH-01: 3 solution JSON files created",
+      "passed": true,
+      "evidence": "Found 3 solution JSON files: cloud-migration--grosse-energieversorger-de.json, sap-on-cloud--grosse-energieversorger-de.json, sovereign-cloud--grosse-energieversorger-de.json. Each contains slug, solution_type, implementation, pricing, and cost_model."
+    },
+    {
+      "text": "BATCH-02: Each solution has correct solution_type for its product's revenue_model (should be 'project' since cloud-services has no explicit revenue_model)",
+      "passed": true,
+      "evidence": "All 3 solutions have solution_type: 'project'. cloud-migration: 'project', sap-on-cloud: 'project', sovereign-cloud: 'project'. The batch-summary also confirms solution_type: 'project'."
+    },
+    {
+      "text": "BATCH-03: Review assessments produced for all 3 solutions",
+      "passed": true,
+      "evidence": "Found review files for all 3 solutions: cloud-migration--grosse-energieversorger-de-review.json (score 82, verdict 'revise'), sap-on-cloud--grosse-energieversorger-de-review.json (score 80, verdict 'revise'), sovereign-cloud--grosse-energieversorger-de-review.json (score 87, verdict 'accept'). Each contains 3 stakeholder perspectives (reviewer, provider_sa, client_sa) with scored criteria."
+    },
+    {
+      "text": "BATCH-04: Batch summary categorizes solutions by acceptance round",
+      "passed": true,
+      "evidence": "batch-summary.json contains results.accepted_round_1 (sovereign-cloud, score 87) and results.accepted_round_2 (cloud-migration and sap-on-cloud, both revised to score 87). Also includes results.needs_attention (empty array). Clear categorization by round."
+    },
+    {
+      "text": "BATCH-05: At least one solution triggered a revision round",
+      "passed": true,
+      "evidence": "Two solutions triggered revisions: cloud-migration (round 1 score 82, verdict 'revise' — issues with Large-Tier timeline and missing portability statement) and sap-on-cloud (round 1 score 80, verdict 'revise' — issues with parallel operation duration, load testing, escalation enablement, and exit strategy). Both have -revised.json and -review-round2.json files."
+    },
+    {
+      "text": "BATCH-06: Revised solutions have higher scores than Round 1",
+      "passed": true,
+      "evidence": "cloud-migration: Round 1 score 82 -> Round 2 score 87 (+5). sap-on-cloud: Round 1 score 80 -> Round 2 score 87 (+7). Both revised solutions improved their scores and achieved 'accept' verdicts in Round 2."
+    },
+    {
+      "text": "BATCH-07: No more than 2 revision rounds per solution",
+      "passed": true,
+      "evidence": "Maximum revision rounds observed is 1 (Round 1 -> revision -> Round 2 accept). cloud-migration had 1 revision round (review + review-round2). sap-on-cloud had 1 revision round (review + review-round2). sovereign-cloud had 0 revision rounds (accepted on Round 1). No solution exceeded 2 rounds."
+    }
+  ],
+  "summary": {
+    "passed": 7,
+    "failed": 0,
+    "total": 7,
+    "pass_rate": 1.00
+  }
+}

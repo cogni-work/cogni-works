@@ -1,0 +1,16 @@
+{
+  "slug": "sap-solutions-end-to-end",
+  "product_slug": "application-services",
+  "name": "SAP Solutions End-to-End",
+  "description": "Certified SAP end-to-end services covering S/4HANA migration planning, application management, system integration, and performance optimization on sovereign private cloud or hyperscaler platforms.",
+  "taxonomy_mapping": {
+    "dimension": 6,
+    "dimension_name": "Application Services",
+    "category_id": "6.3",
+    "category_name": "Enterprise Platform Services",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

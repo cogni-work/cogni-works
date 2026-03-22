@@ -1,0 +1,13 @@
+{
+  "slug": "system-integration",
+  "name": "System Integration & API",
+  "description": "Enterprise system integration across SAP, ServiceNow, and multi-cloud platforms",
+  "product_slug": "t-systems-applications",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 6,
+    "category_id": "6.4",
+    "category_name": "System Integration & API"
+  },
+  "source_file": "https://www.linkedin.com/company/t-systems-ict-india-pvt.-ltd."
+}

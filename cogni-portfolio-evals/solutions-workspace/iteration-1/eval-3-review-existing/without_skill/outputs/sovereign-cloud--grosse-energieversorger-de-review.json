@@ -1,0 +1,108 @@
+{
+  "slug": "sovereign-cloud--grosse-energieversorger-de",
+  "solution_name": "Sovereign Cloud for German Energy Utilities",
+  "feature_slug": "sovereign-cloud",
+  "market_slug": "grosse-energieversorger-de",
+  "review_date": "2026-03-18",
+  "perspectives": {
+    "procurement_decision_maker": {
+      "role": "Procurement Decision-Maker",
+      "criteria": [
+        {
+          "criterion": "ROI clarity and payback period",
+          "score": "warn",
+          "rationale": "The means_statement claims 40-60% reduction in regulatory effort for IT security compliance. This is a meaningful value proposition, but it is framed as effort reduction rather than cost reduction. Procurement needs this translated into EUR savings (e.g., reduced audit preparation FTE, avoided fines for NIS2 non-compliance). The PoV includes a Gap Report but no TCO or ROI projection."
+        },
+        {
+          "criterion": "Pricing tier coherence and value scaling",
+          "score": "pass",
+          "rationale": "Four tiers (PoV 38.5K, Small 150K, Medium 380K, Large 780K) are the most affordable of the three solutions, reflecting that sovereign cloud is primarily a platform play rather than a transformation program. Scaling from 3 apps (PoV) to 10 to 30 to all KRITIS apps is clear and logical."
+        },
+        {
+          "criterion": "Margin sustainability across tiers",
+          "score": "pass",
+          "rationale": "Margins range from 12.7% (PoV) to 37.7% (Large). The PoV margin is the thinnest of all three solutions but still positive. Standard tiers achieve 29-38% against the 30% target. The lower absolute prices mean lower absolute margins, but the percentage structure is sustainable."
+        },
+        {
+          "criterion": "Urgency and budget trigger alignment",
+          "score": "pass",
+          "rationale": "NIS2 registration deadline of April 2026 is explicitly referenced as an external driver. This is a genuine procurement accelerator — the compliance deadline creates urgency that bypasses normal budget cycles. Well-positioned for immediate pipeline conversion."
+        },
+        {
+          "criterion": "Contractual safeguards and vendor dependency",
+          "score": "fail",
+          "rationale": "No exit clause, no data portability guarantee, no defined process for migrating off the sovereign cloud platform. Given that the entire value proposition is about sovereignty and vendor independence, the absence of contractual protections against T-Systems lock-in is a critical inconsistency. The CISO on the buying committee (with independent veto power) will flag this."
+        }
+      ],
+      "summary": "Well-priced with a genuine compliance urgency driver. The critical gap is the contradiction between the sovereignty value proposition and the absence of exit/portability guarantees. This must be resolved before the CISO will approve."
+    },
+    "provider_solution_architect": {
+      "role": "Provider Solution Architect",
+      "criteria": [
+        {
+          "criterion": "Phase structure and delivery realism",
+          "score": "pass",
+          "rationale": "Four phases (Assessment 2w, Provisioning 3w, Onboarding 4w, Audit-Readiness 2w = 11 weeks) are the shortest of the three solutions. For a platform-onboarding play (vs. a transformation program), 11 weeks for the Small tier is realistic. The compliance-documentation-parallel approach in Phase 3 is efficient."
+        },
+        {
+          "criterion": "Effort estimation accuracy",
+          "score": "pass",
+          "rationale": "Small tier: 75 days over 11 weeks = ~1.4 FTE average. For 10 applications with compliance documentation, this is 7.5 days per application including assessment, onboarding, and audit-readiness. Reasonable for a platform migration where the infrastructure is pre-attested."
+        },
+        {
+          "criterion": "Compliance expertise requirements",
+          "score": "warn",
+          "rationale": "BSI-C5 compliance documentation and NIS2 registration support require specialized compliance expertise that goes beyond the three generic roles (SA, IE, PM). The solution does not budget for a dedicated compliance/security consultant. At the Large tier, a 'dedicated Compliance Manager' is mentioned in the scope but not reflected in the role-based cost model."
+        },
+        {
+          "criterion": "Platform dependency and pre-requisites",
+          "score": "pass",
+          "rationale": "The assumption that BSI-C5 platform attestation is pre-existing (not project scope) is clearly stated. This correctly separates platform compliance from application compliance, reducing delivery risk. T-Systems' Sovereign Cloud does hold BSI-C5 Type 2 attestation per the evidence."
+        },
+        {
+          "criterion": "Scalability of the delivery model",
+          "score": "warn",
+          "rationale": "Large tier (350 days for all KRITIS applications including OT integration) is ambitious. OT-Anbindung (OT connectivity) is mentioned in the Large scope but the delivery model has no OT-specific phases, skills, or effort allocation. OT integration in KRITIS environments is a specialized discipline that could double the effort for affected workloads."
+        }
+      ],
+      "summary": "Efficient delivery model leveraging pre-attested platform infrastructure. Gaps in compliance specialist resourcing and OT integration planning would surface at Medium/Large tiers."
+    },
+    "client_solution_architect": {
+      "role": "Client Solution Architect",
+      "criteria": [
+        {
+          "criterion": "Compliance deliverables and audit readiness",
+          "score": "pass",
+          "rationale": "This is the strongest compliance story of the three solutions. Phase 4 includes internal pre-audit, complete compliance documentation, and explicit audit-readiness handover. The BSI-C5 attestation chain (platform-level pre-attested, application-level documented in project) is architecturally clean."
+        },
+        {
+          "criterion": "Integration with non-sovereign workloads",
+          "score": "warn",
+          "rationale": "Not all client workloads will run on sovereign cloud. The solution does not address how sovereign-cloud-hosted KRITIS applications communicate with workloads on other platforms (hyperscaler, on-premise, hybrid). Network connectivity, identity federation, and data-flow controls between sovereign and non-sovereign environments need architectural definition."
+        },
+        {
+          "criterion": "Identity and access management",
+          "score": "pass",
+          "rationale": "Identity management is explicitly mentioned in Phase 2 (platform provisioning). The Medium tier includes Identity Federation, which is critical for enterprise-scale deployments where users authenticate against existing corporate directories. This is architecturally sound."
+        },
+        {
+          "criterion": "Data residency and jurisdictional guarantees",
+          "score": "pass",
+          "rationale": "The feature description explicitly states 'no non-European jurisdiction applies' and 'operated in German data centers.' The evidence confirms BSI-C5 Type 2 attestation. This directly addresses the CISO's requirements and the OT-Leiter's data sovereignty concerns."
+        },
+        {
+          "criterion": "Operational model post-handover",
+          "score": "warn",
+          "rationale": "Phase 4 mentions 'handover of operational responsibility with customer team enablement' but does not define the ongoing operational model. Who operates the sovereign platform day-to-day? Is there a managed-service component post-project, or is the client expected to self-operate? For a KRITIS operator with acknowledged staff shortages (market pain point #5), this ambiguity is problematic."
+        }
+      ],
+      "summary": "Strongest compliance and data sovereignty story. Gaps in cross-platform integration patterns and post-project operational model definition would concern a client architect planning for long-term operations."
+    }
+  },
+  "overall_score": {
+    "pass": 8,
+    "warn": 5,
+    "fail": 1,
+    "verdict": "Strong compliance-driven platform play with genuine NIS2 urgency. Critical gap is the sovereignty-vs-lock-in contradiction (no exit clause). Needs cross-platform integration and post-project ops model definition."
+  }
+}

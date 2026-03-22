@@ -1,0 +1,16 @@
+{
+  "slug": "managed-cyber-defense",
+  "product_slug": "security-services",
+  "name": "Managed Cyber Defense",
+  "description": "SOC/SIEM service operated from Europe's largest cyber defense center in Bonn staffed by 240 security analysts, using Palo Alto XSIAM platform for real-time threat correlation and automated response.",
+  "taxonomy_mapping": {
+    "dimension": 2,
+    "dimension_name": "Security Services",
+    "category_id": "2.1",
+    "category_name": "Security Operations (SOC/SIEM)",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

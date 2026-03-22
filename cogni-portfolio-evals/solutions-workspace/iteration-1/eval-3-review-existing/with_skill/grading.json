@@ -1,0 +1,35 @@
+{
+  "expectations": [
+    {
+      "text": "REV-01: All 3 solutions assessed",
+      "passed": true,
+      "evidence": "Three individual review files produced (cloud-migration, sap-on-cloud, sovereign-cloud) plus portfolio-review-summary.json with solutions_reviewed: 3."
+    },
+    {
+      "text": "REV-02: Each assessment has three perspective scores",
+      "passed": true,
+      "evidence": "Each review file contains stakeholder_reviews with exactly 3 entries: reviewer (scores 82/85/78), provider_sa (scores 76/80/70), client_sa (scores 75/73/73). All include numeric scores and per-criteria breakdowns."
+    },
+    {
+      "text": "REV-03: Synthesis includes prioritized improvements (CRITICAL/HIGH/OPTIONAL)",
+      "passed": true,
+      "evidence": "Each review's synthesis section contains critical_improvements (empty arrays — none needed), high_improvements (3-4 items per solution), and optional_improvements (2-3 items per solution). Priority levels are structurally present and correctly categorized."
+    },
+    {
+      "text": "REV-04: Recommendations are specific and actionable (reference specific fields/values)",
+      "passed": true,
+      "evidence": "Recommendations reference specific fields (cost_model.assumptions, implementation[2].duration_weeks, pricing.medium.scope), specific values (28.8% margin, 22 SA days, 8-week migration phase, 4-week exit clause), and specific standards (BSI-C5 Typ 1 vs Typ 2, IEC 62351, OPC-UA, NIS2 April 2026 deadline)."
+    },
+    {
+      "text": "REV-05: Portfolio-level summary identifies cross-solution patterns",
+      "passed": true,
+      "evidence": "portfolio-review-summary.json contains cross_solution_patterns with 4 shared_strengths, 5 shared_weaknesses (OT/IT blind spot, no competitive positioning, fixed phase durations, client SA lowest scores, Small tier margins), and 2 inconsistencies (exit clause presence, NIS2 coverage). Each pattern names affected solutions and includes a recommendation."
+    }
+  ],
+  "summary": {
+    "passed": 5,
+    "failed": 0,
+    "total": 5,
+    "pass_rate": 1.00
+  }
+}

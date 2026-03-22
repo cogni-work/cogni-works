@@ -1,0 +1,13 @@
+{
+  "slug": "sip-trunking",
+  "name": "SIP Trunking & Voice",
+  "description": "Central SIP gateway with All-IP connections eliminating local telephony infrastructure",
+  "product_slug": "t-systems-connectivity",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 1,
+    "category_id": "1.5",
+    "category_name": "Voice Services"
+  },
+  "source_file": "https://www.t-systems.com/de/en/connectivity/future-networks-and-sip"
+}

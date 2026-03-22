@@ -1,0 +1,16 @@
+{
+  "slug": "taxonomie-klassifizierung",
+  "product_slug": "cogni-portfolio",
+  "name": "Taxonomie-Klassifizierung",
+  "description": "Automatische Zuordnung jedes Features zu einer Dimension und Kategorie der B2B-ICT-Taxonomie mit 8 Dimensionen und 57 Kategorien anhand semantischer Analyse der Feature-Beschreibung gegen den vollständigen Kategoriebaum.",
+  "category": "classification",
+  "taxonomy_mapping": {
+    "dimension": 7,
+    "dimension_name": "Consulting & Professional Services",
+    "category_id": "7.2",
+    "category_name": "IT Architecture Consulting",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "created": "2026-03-21"
+}

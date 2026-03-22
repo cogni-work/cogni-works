@@ -1,0 +1,16 @@
+{
+  "slug": "managed-azure",
+  "product_slug": "cloud-services",
+  "name": "Managed Cloud Services for Azure",
+  "description": "Azure Expert MSP managed service with native Telekom ExpressRoute integration, complete application lifecycle management, and Azure resource governance across enterprise tenants.",
+  "taxonomy_mapping": {
+    "dimension": 4,
+    "dimension_name": "Cloud Services",
+    "category_id": "4.1",
+    "category_name": "Managed Hyperscaler Services",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

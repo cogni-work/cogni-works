@@ -1,0 +1,7 @@
+{
+  "slug": "bilingual-content-renderer",
+  "product_slug": "content-platform",
+  "name": "Zweisprachiger Content-Renderer",
+  "description": "Sprachvarianten-Engine, die Content-Objekte in parallelen DE/EN-Fassungen verwaltet, Uebersetzungs-Workflows ausloest und locale-abhaengig die passende Sprachversion ausliefert.",
+  "readiness": "ga"
+}

@@ -1,0 +1,13 @@
+{
+  "slug": "bechtle-datacenter",
+  "name": "Bechtle Data Center Services",
+  "description": "Next-generation data centre transformation, modular data centre competence, hyper-converged infrastructure, and high-availability architectures.",
+  "product_slug": "bechtle-infrastructure",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 5,
+    "category_id": "5.1",
+    "category_name": "Data Center Services"
+  },
+  "source_file": "https://www.bechtle.com/de-en/it-solutions"
+}

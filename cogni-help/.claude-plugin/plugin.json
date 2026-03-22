@@ -1,7 +1,7 @@
 {
   "name": "cogni-help",
   "version": "0.2.3",
-  "description": "Central help hub for the cogni-works ecosystem. Interactive courses (11-course curriculum), plugin discovery, cross-plugin workflow guides, troubleshooting, quick-reference cheatsheets, and GitHub issue filing.",
+  "description": "Central help hub for the insight-wave ecosystem. Interactive courses (11-course curriculum), plugin discovery, cross-plugin workflow guides, troubleshooting, quick-reference cheatsheets, and GitHub issue filing.",
   "author": {
     "name": "Stephan de Haas",
     "email": "stephan@cogni-work.ai"
@@ -13,7 +13,7 @@
     "teaching",
     "courses",
     "training",
-    "cogni-works",
+    "insight-wave",
     "cowork",
     "curriculum",
     "onboarding",

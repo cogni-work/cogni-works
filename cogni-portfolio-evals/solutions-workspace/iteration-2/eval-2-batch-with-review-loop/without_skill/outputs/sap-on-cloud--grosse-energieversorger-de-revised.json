@@ -1,0 +1,235 @@
+{
+  "slug": "sap-on-cloud--grosse-energieversorger-de",
+  "proposition_slug": "sap-on-cloud--grosse-energieversorger-de",
+  "feature_slug": "sap-on-cloud",
+  "market_slug": "grosse-energieversorger-de",
+  "product_slug": "cloud-services",
+  "title": "SAP-on-Cloud-Betriebsplattform fuer grosse deutsche Energieversorger",
+  "summary": "Managed SAP-Betriebsplattform mit automatisiertem Lifecycle-Management fuer S/4HANA und IS-U auf Cloud-Infrastruktur. Abdeckung von IS-U-spezifischen Abrechnungszyklen und branchenueblichen Hochlastphasen. 25-35% Betriebskostensenkung bei differenzierten SLAs (99.95% Standard, 99.99% Jahresabrechnung). Inkl. Exit-Strategie, TCO-Benchmark und Abnahme-Delegationsmodell. Zielgruppe: E.ON, RWE, EnBW, Vattenfall Deutschland, Uniper.",
+  "revision_notes": "Revision based on round-1 review. Changes: (1) Added exit strategy with SAP system repatriation plan, (2) Added TCO comparison (T-Systems vs. RISE/Hyperscaler vs. On-Prem), (3) Introduced differentiated SLAs for billing runs, (4) Quantified contingency budget (8%), (5) Added acceptance delegation model, (6) Added SAP-Basis-Spezialist as dedicated role, (7) IS-U rollback scenario documented.",
+  "implementation_plan": {
+    "phases": [
+      {
+        "phase": 1,
+        "name": "SAP Landscape Assessment",
+        "duration_weeks": 4,
+        "description": "Analyse der bestehenden SAP-Landschaft inkl. IS-U, S/4HANA-Module, Schnittstellen. Cloud-Readiness-Bewertung, Custom-Code-Analyse. TCO-Baseline. Schnittstellenkatalog fuer IS-U-Integrationen.",
+        "deliverables": [
+          "SAP System Landscape Assessment (alle Systeme)",
+          "Custom-Code-Analyse und Bereinigungsempfehlung",
+          "IS-U-spezifische Last- und Performance-Profile (Jahresabrechnung, MaKo)",
+          "Cloud-Target-Architektur (Private Cloud, Hyperscaler oder Sovereign Cloud)",
+          "TCO-Vergleich: On-Prem vs. Managed Cloud vs. RISE (5 Jahre)",
+          "Risikobewertung inkl. KRITIS-Compliance-Anforderungen",
+          "Schnittstellenkatalog fuer IS-U-Integrationen (iDoc, RFC, API)",
+          "Verweis auf S/4HANA-2027-Deadline und kritischer Pfad"
+        ],
+        "team": [
+          { "role": "Solution Architect", "count": 2, "utilization_pct": 100 },
+          { "role": "SAP Basis Specialist", "count": 1, "utilization_pct": 60 },
+          { "role": "Implementation Engineer", "count": 1, "utilization_pct": 40 },
+          { "role": "Project Manager", "count": 1, "utilization_pct": 60 }
+        ]
+      },
+      {
+        "phase": 2,
+        "name": "Platform Build & Migration Prep",
+        "duration_weeks": 8,
+        "description": "Aufbau der SAP-Zielplattform. Basis-Administration, Monitoring, Backup/Restore, Patch-Management. Migrationstool-Setup. Netzwerk-Anbindung. Abnahme-Delegationsmodell etabliert.",
+        "deliverables": [
+          "SAP-Cloud-Plattform provisioniert",
+          "Basis-Administrations-Framework (automatisiertes Monitoring, Alerting)",
+          "Backup/Restore-Konzept mit RPO/RTO-Garantien",
+          "Patch-Management-Kalender abgestimmt auf IS-U-Zyklen",
+          "Migrationstool-Setup (SUM/DMO, R3load)",
+          "Netzwerk-Anbindung zur OT-Umgebung",
+          "Abnahme-Delegationsmodell: 2 Kunden-Ansprechpartner, 48h-Frist, Stillschweigen = Abnahme",
+          "IS-U-Rollback-Szenario dokumentiert und getestet"
+        ],
+        "team": [
+          { "role": "Solution Architect", "count": 2, "utilization_pct": 80 },
+          { "role": "SAP Basis Specialist", "count": 1, "utilization_pct": 100 },
+          { "role": "Implementation Engineer", "count": 3, "utilization_pct": 100 },
+          { "role": "Project Manager", "count": 1, "utilization_pct": 80 }
+        ]
+      },
+      {
+        "phase": 3,
+        "name": "System Migration & Validation",
+        "duration_weeks": 10,
+        "description": "Migration der SAP-Systeme gestaffelt: Sandbox, Dev, QA, Pre-Prod, Produktion. IS-U-Produktivmigration im Wochenend-Wartungsfenster. Generalprobe auf Pre-Prod. Parallel-Betrieb 2 Wochen.",
+        "deliverables": [
+          "Sandbox- und Dev-Systeme migriert und validiert",
+          "QA-System migriert mit Regressionstest",
+          "Generalprobe auf Pre-Prod (Wochenend-Simulation)",
+          "Produktivmigration IS-U und S/4HANA",
+          "Performance-Validierung gegen Baseline",
+          "Parallel-Betrieb-Bericht (2 Wochen)",
+          "Abnahme-Protokoll durch delegierte Ansprechpartner"
+        ],
+        "team": [
+          { "role": "Solution Architect", "count": 2, "utilization_pct": 80 },
+          { "role": "SAP Basis Specialist", "count": 1, "utilization_pct": 100 },
+          { "role": "Implementation Engineer", "count": 4, "utilization_pct": 100 },
+          { "role": "Project Manager", "count": 1, "utilization_pct": 100 }
+        ]
+      },
+      {
+        "phase": 4,
+        "name": "Managed Operations, Optimization & Exit-Readiness",
+        "duration_weeks": 12,
+        "description": "Managed-Operations-Betrieb mit differenzierten SLAs. FinOps-Governance. Kapazitaetsplanung. Wissenstransfer. Exit-Strategie-Erstellung.",
+        "deliverables": [
+          "Differenzierte SLA-Dashboard: Standard 99.95%, Jahresabrechnung 99.99%",
+          "FinOps-Report mit Optimierungsempfehlungen",
+          "Hochlast-Playbooks (Jahresabrechnung, Preisanpassungen, Smart-Meter)",
+          "Kapazitaetsplanung naechste 12 Monate",
+          "Wissenstransfer-Dokumentation fuer Retained-IT",
+          "Betriebshandbuch und Eskalationsmatrix",
+          "Exit-Strategie: SAP-System-Repatriierung, Datenexport, Vertragsklauseln",
+          "Betriebsmodell-Vereinbarung: (a) T-Systems Managed SAP Ops, (b) Retained-IT mit 2nd-Level"
+        ],
+        "team": [
+          { "role": "Solution Architect", "count": 1, "utilization_pct": 40 },
+          { "role": "SAP Basis Specialist", "count": 1, "utilization_pct": 60 },
+          { "role": "Implementation Engineer", "count": 2, "utilization_pct": 60 },
+          { "role": "Project Manager", "count": 1, "utilization_pct": 40 }
+        ]
+      }
+    ],
+    "total_duration_weeks": 34,
+    "exit_strategy": {
+      "description": "Vertraglich verankertes Recht auf vollstaendige SAP-System-Repatriierung bei Provider-Wechsel oder Vertragsende.",
+      "components": [
+        {
+          "component": "SAP-System-Repatriierung",
+          "guarantee": "Vollstaendige Rueckfuehrung aller SAP-Systeme (Prod, QA, Dev) innerhalb von 120 Tagen. Migration mittels Standardtools (SUM/DMO, R3load)."
+        },
+        {
+          "component": "Datenexport",
+          "guarantee": "Vollstaendiger Datenexport in Standard-Formaten. IS-U-Abrechnungsdaten in auditfaehigem Format."
+        },
+        {
+          "component": "Wissenstransfer",
+          "guarantee": "Dokumentierte Betriebsprozesse, Monitoring-Konfigurationen und Automatisierungen werden vollstaendig uebergeben."
+        },
+        {
+          "component": "Vertragsklauseln",
+          "guarantee": "12 Monate Kuendigungsfrist, 120 Tage Transitionsunterstuetzung, Exit-Aufwand max. 5% Gesamtvolumen."
+        }
+      ]
+    },
+    "constraints": [
+      "IS-U-Produktivmigration nur in abgestimmtem Wartungsfenster (ausserhalb Jahresabrechnung)",
+      "S/4HANA funktionale Transformation nicht im Scope",
+      "Customer stellt SAP-Lizenzen bereit",
+      "KRITIS-relevante Daten muessen in deutschen Rechenzentren verbleiben",
+      "Remote-Delivery als Default; On-Site fuer Produktivmigration",
+      "Sprint-Abnahmen: 48h-Frist, Stillschweigen = Abnahme"
+    ],
+    "risks": [
+      {
+        "risk": "IS-U-Migrationsdowntime ueberschreitet Wartungsfenster",
+        "impact": "high",
+        "probability": "medium",
+        "mitigation": "Generalprobe auf Pre-Prod; Near-Zero-Downtime-Migration mit DMO; IS-U-Rollback-Szenario dokumentiert",
+        "contingency_budget_pct": 3
+      },
+      {
+        "risk": "Performance-Degradation bei Jahresabrechnungslauf",
+        "impact": "high",
+        "probability": "medium",
+        "mitigation": "Last-Tests mit realistischen Volumina; Auto-Scaling; differenziertes 99.99% SLA",
+        "contingency_budget_pct": 2
+      },
+      {
+        "risk": "Custom-Code-Inkompatibilitaet nach Migration",
+        "impact": "medium",
+        "probability": "medium",
+        "mitigation": "Custom-Code-Analyse in Phase 1; Regressionstest-Suite in Phase 3",
+        "contingency_budget_pct": 2
+      },
+      {
+        "risk": "Netzwerk-Latenz zu OT-Systemen",
+        "impact": "medium",
+        "probability": "low",
+        "mitigation": "Latenz-Messung in Phase 2; dedizierte Netzwerkverbindung falls erforderlich",
+        "contingency_budget_pct": 1
+      }
+    ]
+  },
+  "pricing": {
+    "currency": "EUR",
+    "rate_card": [
+      { "role": "Solution Architect", "rate_day": 1800 },
+      { "role": "SAP Basis Specialist", "rate_day": 1600 },
+      { "role": "Implementation Engineer", "rate_day": 1200 },
+      { "role": "Project Manager", "rate_day": 1400 }
+    ],
+    "tiers": [
+      {
+        "tier": "Essential",
+        "scope": "Assessment + Migration only (Phases 1-3), Betrieb durch Kunden",
+        "total_effort_days": 570,
+        "total_cost_before_margin": 793200,
+        "target_margin_pct": 30,
+        "price": 1031160
+      },
+      {
+        "tier": "Professional",
+        "scope": "Assessment + Migration + 3 Monate Managed Operations (Phases 1-4)",
+        "total_effort_days": 690,
+        "total_cost_before_margin": 949200,
+        "target_margin_pct": 30,
+        "price": 1233960
+      },
+      {
+        "tier": "Enterprise",
+        "scope": "Full programme + 12 Monate Managed Operations mit differenzierten SLAs",
+        "total_effort_days": 910,
+        "total_cost_before_margin": 1249200,
+        "target_margin_pct": 30,
+        "price": 1623960
+      }
+    ],
+    "contingency": {
+      "pct": 8,
+      "amount": 129917,
+      "rationale": "Covers: IS-U downtime overrun (3%), performance degradation (2%), custom code issues (2%), network latency (1%). Drawn on Change Request.",
+      "not_to_exceed": 1753877
+    },
+    "competitive_tco_comparison": {
+      "approach_1": {
+        "name": "T-Systems Managed SAP (dieses Angebot)",
+        "total_5yr_tco": 3800000,
+        "breakdown": "Migration 1.03M + Managed SAP Operations 2.77M (5yr)",
+        "strengths": "SAP Platinum Partner, 4000+ SAP-Experten, IS-U-Erfahrung, BSI-C5",
+        "weaknesses": "Premium-Pricing vs. Hyperscaler"
+      },
+      "approach_2": {
+        "name": "RISE with SAP on Hyperscaler (AWS/Azure)",
+        "total_5yr_tco": 4200000,
+        "breakdown": "RISE Lizenz+Infra 3.5M (5yr) + Migration 0.7M",
+        "strengths": "SAP-eigenes Angebot, vereinfachte Lizenzierung",
+        "weaknesses": "Kein Sovereign-Cloud, KRITIS-Zusatzaufwand, weniger IS-U-Expertise"
+      },
+      "approach_3": {
+        "name": "On-Premises Weiterbetrieb + Eigenmigration S/4HANA",
+        "total_5yr_tco": 5100000,
+        "breakdown": "HW-Refresh 1.2M + Internal Ops 3.2M + Migration 0.7M (5yr)",
+        "strengths": "Volle Kontrolle, kein Cloud-Risiko",
+        "weaknesses": "Hoechster TCO, Fachkraeftemangel, keine Elastizitaet"
+      },
+      "recommendation": "T-Systems Managed SAP bietet niedrigsten 5-Jahres-TCO mit IS-U-Spezialisierung und KRITIS-Compliance."
+    },
+    "payment_milestones": [
+      { "milestone": "Vertragsunterzeichnung", "pct": 10 },
+      { "milestone": "Phase 1 abgeschlossen (Assessment)", "pct": 15 },
+      { "milestone": "Phase 2 abgeschlossen (Plattform ready)", "pct": 25 },
+      { "milestone": "Phase 3 abgeschlossen (Migration validiert)", "pct": 30 },
+      { "milestone": "Phase 4 abgeschlossen (Managed Ops stabil)", "pct": 20 }
+    ]
+  },
+  "created": "2026-03-18",
+  "revised": "2026-03-18"
+}

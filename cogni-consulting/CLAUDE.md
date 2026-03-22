@@ -2,7 +2,7 @@
 
 ## Identity
 
-cogni-consulting is a Double Diamond consulting orchestrator for the cogni-works ecosystem. It manages engagement state and steers the consulting process through four phases (Discover, Define, Develop, Deliver), dispatching to existing plugins rather than producing content itself.
+cogni-consulting is a Double Diamond consulting orchestrator for the insight-wave ecosystem. It manages engagement state and steers the consulting process through four phases (Discover, Define, Develop, Deliver), dispatching to existing plugins rather than producing content itself.
 
 ## Architecture
 

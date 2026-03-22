@@ -1,0 +1,13 @@
+{
+  "slug": "bechtle-lifecycle-services",
+  "name": "Bechtle Lifecycle & Circular IT",
+  "description": "Full IT asset lifecycle management including procurement, deployment, monitoring, sustainable disposition and recycling through Bechtle Circular IT.",
+  "product_slug": "bechtle-workplace",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 3,
+    "category_id": "3.7",
+    "category_name": "IT Asset Management"
+  },
+  "source_file": "https://www.bechtle.com/de-en/it-services/managed-services/lifecycle-services"
+}

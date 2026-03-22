@@ -1,0 +1,13 @@
+{
+  "slug": "identity-access-management",
+  "name": "Identity & Access Management",
+  "description": "End-to-end IAM with human and non-human identity governance, least-privilege access, and CyberArk PAM",
+  "product_slug": "telekom-security",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 2,
+    "category_id": "2.2",
+    "category_name": "Identity & Access Management"
+  },
+  "source_file": "https://www.t-systems.com/de/en/security/solutions/identity-and-access-management"
+}

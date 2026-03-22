@@ -1,0 +1,18 @@
+{
+  "version": "1.0.0",
+  "company_name": "Bechtle AG",
+  "company_slug": "bechtle",
+  "created": "2026-03-18T10:00:00Z",
+  "skill": "cogni-portfolio:scan",
+  "template_type": "b2b-ict",
+  "output_file": "research/bechtle-portfolio.md",
+  "domains_analyzed": ["bechtle.com"],
+  "dimensions_covered": 8,
+  "categories_total": 57,
+  "status_summary": {
+    "confirmed": 49,
+    "not_offered": 4,
+    "emerging": 2,
+    "extended": 2
+  }
+}

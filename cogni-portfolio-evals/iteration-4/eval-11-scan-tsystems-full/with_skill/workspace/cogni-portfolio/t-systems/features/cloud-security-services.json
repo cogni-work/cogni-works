@@ -1,0 +1,16 @@
+{
+  "slug": "cloud-security-services",
+  "product_slug": "security-services",
+  "name": "Cloud Security Services",
+  "description": "Multi-layered cloud environment protection combining zero trust network segmentation, microsegmentation policies, and managed detection and response across hybrid and multi-cloud deployments.",
+  "taxonomy_mapping": {
+    "dimension": 2,
+    "dimension_name": "Security Services",
+    "category_id": "2.4",
+    "category_name": "Cloud Security",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

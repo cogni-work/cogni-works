@@ -1,0 +1,16 @@
+{
+  "slug": "grc-information-security",
+  "product_slug": "security-services",
+  "name": "GRC & Information Security Management",
+  "description": "Governance-, Risiko- und Compliance-Services",
+  "taxonomy_mapping": {
+    "dimension": 2,
+    "dimension_name": "Security Services",
+    "category_id": "2.9",
+    "category_name": "Compliance & GRC",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

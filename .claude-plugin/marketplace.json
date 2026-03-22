@@ -1,6 +1,6 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
-  "name": "cogni-works",
+  "name": "insight-wave",
   "description": "Open-source Claude Code plugins for knowledge work — consulting, B2B sales, and marketing.",
   "owner": {
     "name": "Stephan de Haas",
@@ -45,12 +45,12 @@
     },
     {
       "name": "cogni-workspace",
-      "description": "Lean workspace orchestrator for cogni-works marketplace plugins. Manages shared foundation (env vars, settings), theme management, theme picker, plugin discovery, and workspace health.",
+      "description": "Lean workspace orchestrator for insight-wave marketplace plugins. Manages shared foundation (env vars, settings), theme management, theme picker, plugin discovery, and workspace health.",
       "author": { "name": "Stephan de Haas", "email": "stephan@cogni-work.ai" },
       "source": "./cogni-workspace",
       "category": "productivity",
       "license": "AGPL-3.0-only",
-      "keywords": ["workspace", "themes", "orchestrator", "cogni-works"]
+      "keywords": ["workspace", "themes", "orchestrator", "insight-wave"]
     },
     {
       "name": "cogni-trends",
@@ -81,7 +81,7 @@
     },
     {
       "name": "cogni-help",
-      "description": "Central help hub for the cogni-works ecosystem. Interactive courses (11-course curriculum), plugin discovery, cross-plugin workflow guides, troubleshooting, quick-reference cheatsheets, and GitHub issue filing.",
+      "description": "Central help hub for the insight-wave ecosystem. Interactive courses (11-course curriculum), plugin discovery, cross-plugin workflow guides, troubleshooting, quick-reference cheatsheets, and GitHub issue filing.",
       "author": { "name": "Stephan de Haas", "email": "stephan@cogni-work.ai" },
       "source": "./cogni-help",
       "category": "productivity",
@@ -126,7 +126,7 @@
     },
     {
       "name": "cogni-consulting",
-      "description": "Double Diamond consulting orchestrator. Guides engagements through Discover, Define, Develop, Deliver phases by dispatching to cogni-work plugins (research, trends, portfolio, claims) at the right moment. Vision-first, method-aware, phase-gated.",
+      "description": "Double Diamond consulting orchestrator. Guides engagements through Discover, Define, Develop, Deliver phases by dispatching to insight-wave plugins (research, trends, portfolio, claims) at the right moment. Vision-first, method-aware, phase-gated.",
       "author": { "name": "Stephan de Haas", "email": "stephan@cogni-work.ai" },
       "source": "./cogni-consulting",
       "category": "productivity",

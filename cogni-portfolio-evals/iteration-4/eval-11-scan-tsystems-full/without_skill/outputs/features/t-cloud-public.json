@@ -1,0 +1,13 @@
+{
+  "slug": "t-cloud-public",
+  "name": "T Cloud Public",
+  "description": "European sovereign public cloud platform with full EU data protection and security compliance",
+  "product_slug": "t-systems-cloud",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 4,
+    "category_id": "4.7",
+    "category_name": "Sovereign Cloud"
+  },
+  "source_file": "https://www.t-systems.com/us/en/cloud-services/solutions/public-cloud/t-cloud-public"
+}

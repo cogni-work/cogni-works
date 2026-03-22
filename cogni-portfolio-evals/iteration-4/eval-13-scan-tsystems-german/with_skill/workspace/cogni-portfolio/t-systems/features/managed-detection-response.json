@@ -1,0 +1,16 @@
+{
+  "slug": "managed-detection-response",
+  "product_slug": "security-services",
+  "name": "Managed Detection & Response",
+  "description": "EDR-based endpoint protection service with SOC-integrated alert triage, severity-ranked incident queuing, and real-time containment actions including MFA enforcement and device isolation.",
+  "taxonomy_mapping": {
+    "dimension": 2,
+    "dimension_name": "Security Services",
+    "category_id": "2.5",
+    "category_name": "Endpoint Security",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

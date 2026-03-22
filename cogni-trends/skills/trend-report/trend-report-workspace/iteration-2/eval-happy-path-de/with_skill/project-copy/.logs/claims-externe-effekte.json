@@ -1,0 +1,127 @@
+{
+  "dimension": "externe-effekte",
+  "tips_role": "T",
+  "claims_count": 12,
+  "claims": [
+    {
+      "id": "claim_ee_1",
+      "text": "Die globale Stromnachfrage durch Rechenzentren steigt von 600 TWh in 2025 auf prognostizierte 1.600 TWh bis 2030.",
+      "value": "1600",
+      "unit": "TWh",
+      "type": "count",
+      "context": "Globale Stromnachfrage durch Rechenzentren bis 2030",
+      "qualifiers": ["global", "2030", "forecast"],
+      "citations": [{"url": "https://ecomento.de/2025/08/11/studie-globale-stromnachfrage-waechst-trotz-gegenwinds-bis-2026-weiter-kraeftig/", "proximity_confidence": 0.9}]
+    },
+    {
+      "id": "claim_ee_2",
+      "text": "McKinsey beziffert den Bedarf deutscher Rechenzentren auf 37 TWh bei einer Kapazität von 5 GW.",
+      "value": "37",
+      "unit": "TWh",
+      "type": "count",
+      "context": "Prognostizierter Stromverbrauch deutscher Rechenzentren",
+      "qualifiers": ["Deutschland", "forecast"],
+      "citations": [{"url": "https://www.mckinsey.com/de/news/presse/2026-02-24-strommarktreport", "proximity_confidence": 0.9}]
+    },
+    {
+      "id": "claim_ee_3",
+      "text": "Die jährlichen KI-Compliance-Kosten pro Land liegen je nach Szenario zwischen unter einer Million und fast 200 Millionen Euro.",
+      "value": "200000000",
+      "unit": "EUR",
+      "type": "currency",
+      "context": "Maximale jährliche Compliance-Kosten des EU AI Act pro Land",
+      "qualifiers": ["pro Land", "Maximum", "jährlich"],
+      "citations": [{"url": "https://www.sciencedirect.com/science/article/pii/S2352484723015494", "proximity_confidence": 0.9}]
+    },
+    {
+      "id": "claim_ee_4",
+      "text": "Der globale Markt für Smart-Grid-Cybersecurity erreichte 2024 einen Wert von 7,5 Milliarden USD.",
+      "value": "7500000000",
+      "unit": "USD",
+      "type": "currency",
+      "context": "Marktgröße Smart-Grid-Cybersecurity 2024",
+      "qualifiers": ["global", "2024"],
+      "citations": [{"url": "https://www.transpireinsight.com/press-details/smart-grid-cybersecurity-market", "proximity_confidence": 0.9}]
+    },
+    {
+      "id": "claim_ee_5",
+      "text": "Der Markt für Smart-Grid-Cybersecurity wird bis 2034 auf 22,7 Milliarden USD wachsen (CAGR 11,7%).",
+      "value": "22700000000",
+      "unit": "USD",
+      "type": "currency",
+      "context": "Marktprognose Smart-Grid-Cybersecurity 2034",
+      "qualifiers": ["global", "2034", "forecast"],
+      "citations": [{"url": "https://www.transpireinsight.com/press-details/smart-grid-cybersecurity-market", "proximity_confidence": 0.9}]
+    },
+    {
+      "id": "claim_ee_6",
+      "text": "Solar-Abregelung in Deutschland stieg 2024 um 97% auf 1.389 GWh.",
+      "value": "1389",
+      "unit": "GWh",
+      "type": "count",
+      "context": "Solar-Abregelung Deutschland 2024",
+      "qualifiers": ["Deutschland", "2024"],
+      "citations": [{"url": "https://strategicenergy.eu/solar-curtailment-germany/", "proximity_confidence": 0.9}]
+    },
+    {
+      "id": "claim_ee_7",
+      "text": "Die Abregelungskosten betrugen 554 Millionen Euro in 2024.",
+      "value": "554000000",
+      "unit": "EUR",
+      "type": "currency",
+      "context": "Abregelungskosten erneuerbare Energien Deutschland 2024",
+      "qualifiers": ["Deutschland", "2024"],
+      "citations": [{"url": "https://strategicenergy.eu/solar-curtailment-germany/", "proximity_confidence": 0.9}]
+    },
+    {
+      "id": "claim_ee_8",
+      "text": "2023 beliefen sich die Netzengpasskosten auf 3,13 Milliarden Euro bei rekordhohen 10 TWh abgeregelter erneuerbarer Energie.",
+      "value": "3130000000",
+      "unit": "EUR",
+      "type": "currency",
+      "context": "Netzengpasskosten Deutschland 2023",
+      "qualifiers": ["Deutschland", "2023"],
+      "citations": [{"url": "https://www.cleanenergywire.org/news/curtailing-renewable-power-increases-germany-2023-re-dispatch-costs-recede", "proximity_confidence": 0.9}]
+    },
+    {
+      "id": "claim_ee_9",
+      "text": "Deutschland startet die nächste €6-Milliarden-CCfD-Auktionsrunde in 2026.",
+      "value": "6000000000",
+      "unit": "EUR",
+      "type": "currency",
+      "context": "Budget CCfD-Auktionsrunde 2026",
+      "qualifiers": ["Deutschland", "2026"],
+      "citations": [{"url": "https://www.jonesday.com/en/insights/2025/10/germany-to-expand-industrial-decarbonization-support-eur-6-billion-initiative-adds-ccs", "proximity_confidence": 0.9}]
+    },
+    {
+      "id": "claim_ee_10",
+      "text": "Die Regierung plant einen Industriestrompreis von 5 Cent/kWh ab Januar 2026.",
+      "value": "5",
+      "unit": "ct/kWh",
+      "type": "currency",
+      "context": "Geplanter Industriestrompreis Deutschland",
+      "qualifiers": ["Deutschland", "2026"],
+      "citations": [{"url": "https://pexapark.com/blog/germany-seals-2026-industrial-power-price-subsidy-can-it-help-boost-the-ppa-market/", "proximity_confidence": 0.9}]
+    },
+    {
+      "id": "claim_ee_11",
+      "text": "Deutschlands €500-Milliarden-Infrastruktur-Fonds stellt ca. €50B für Energieinfrastruktur bereit.",
+      "value": "500000000000",
+      "unit": "EUR",
+      "type": "currency",
+      "context": "Gesamtvolumen Infrastruktur-Fonds Deutschland",
+      "qualifiers": ["Deutschland", "2027-2035"],
+      "citations": [{"url": "https://www.cleanenergywire.org/factsheets/qa-germanys-eu500-bln-infrastructure-fund-whats-it-climate-and-energy", "proximity_confidence": 0.9}]
+    },
+    {
+      "id": "claim_ee_12",
+      "text": "104 GW Kohle- und Gaskraftwerke werden bis 2030 abgeschaltet, wobei 209 GW neuer Kapazität nur 10% fester Grundlast enthält.",
+      "value": "104",
+      "unit": "GW",
+      "type": "count",
+      "context": "Geplante Abschaltung fossiler Kraftwerkskapazität",
+      "qualifiers": ["global", "bis 2030"],
+      "citations": [{"url": "https://www.utilitydive.com/news/utility-power-sector-trends-2026/808782/", "proximity_confidence": 0.9}]
+    }
+  ]
+}

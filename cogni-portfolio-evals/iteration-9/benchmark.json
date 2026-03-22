@@ -1,0 +1,292 @@
+{
+  "metadata": {
+    "skill_name": "features",
+    "skill_path": "/Users/stephandehaas/GitHub/dev/insight-wave/cogni-portfolio/skills/features",
+    "executor_model": "claude-opus-4-6",
+    "timestamp": "2026-03-21T22:42:19.904556",
+    "evals_run": [
+      "density-insight-wave",
+      "density-marketing",
+      "density-partner"
+    ],
+    "runs_per_configuration": 1
+  },
+  "runs": [
+    {
+      "eval_id": 0,
+      "eval_name": "density-insight-wave",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 4,
+        "failed": 0,
+        "total": 4,
+        "time_seconds": 0,
+        "tokens": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "All feature slugs have at most 3 hyphenated segments",
+          "passed": true,
+          "evidence": "All 6 slugs ≤3 segments"
+        },
+        {
+          "text": "No feature description lists 3+ comma-separated parallel components",
+          "passed": true,
+          "evidence": "No dense descriptions"
+        },
+        {
+          "text": "All descriptions hit 22-35 word target (German)",
+          "passed": true,
+          "evidence": "All in range"
+        },
+        {
+          "text": "No outcome language in descriptions",
+          "passed": true,
+          "evidence": "Clean"
+        }
+      ]
+    },
+    {
+      "eval_id": 0,
+      "eval_name": "density-insight-wave",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.75,
+        "passed": 3,
+        "failed": 1,
+        "total": 4,
+        "time_seconds": 0,
+        "tokens": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "All feature slugs have at most 3 hyphenated segments",
+          "passed": true,
+          "evidence": "All 6 slugs ≤3 segments"
+        },
+        {
+          "text": "No feature description lists 3+ comma-separated parallel components",
+          "passed": true,
+          "evidence": "No dense descriptions"
+        },
+        {
+          "text": "All descriptions hit 22-35 word target (German)",
+          "passed": false,
+          "evidence": "Out of range: proposition-generierung (18w), qualitaetsbewertung (18w), stakeholder-review (20w), web-research-enrichment (18w), taxonomie-klassifizierung (17w)"
+        },
+        {
+          "text": "No outcome language in descriptions",
+          "passed": true,
+          "evidence": "Clean"
+        }
+      ]
+    },
+    {
+      "eval_id": 1,
+      "eval_name": "density-marketing",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.75,
+        "passed": 3,
+        "failed": 1,
+        "total": 4,
+        "time_seconds": 0,
+        "tokens": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "All feature slugs have at most 3 hyphenated segments",
+          "passed": true,
+          "evidence": "All 7 slugs ≤3 segments"
+        },
+        {
+          "text": "No feature description lists 3+ comma-separated parallel components",
+          "passed": false,
+          "evidence": "Dense: thought-leadership, channel-orchestration"
+        },
+        {
+          "text": "All descriptions hit 22-35 word target (German)",
+          "passed": true,
+          "evidence": "All in range"
+        },
+        {
+          "text": "No outcome language in descriptions",
+          "passed": true,
+          "evidence": "Clean"
+        }
+      ]
+    },
+    {
+      "eval_id": 1,
+      "eval_name": "density-marketing",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.5,
+        "passed": 2,
+        "failed": 2,
+        "total": 4,
+        "time_seconds": 0,
+        "tokens": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "All feature slugs have at most 3 hyphenated segments",
+          "passed": true,
+          "evidence": "All 7 slugs ≤3 segments"
+        },
+        {
+          "text": "No feature description lists 3+ comma-separated parallel components",
+          "passed": false,
+          "evidence": "Dense: channel-distribution-controller, performance-analytics-engine, gtm-path-engine"
+        },
+        {
+          "text": "All descriptions hit 22-35 word target (German)",
+          "passed": false,
+          "evidence": "Out of range: channel-distribution-controller (15w), performance-analytics-engine (18w), gtm-path-engine (17w), bilingual-content-renderer (15w), brand-voice-governor (19w), abm-campaign-orchestrator (14w), thought-leadership-framework (13w)"
+        },
+        {
+          "text": "No outcome language in descriptions",
+          "passed": true,
+          "evidence": "Clean"
+        }
+      ]
+    },
+    {
+      "eval_id": 2,
+      "eval_name": "density-partner",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 4,
+        "failed": 0,
+        "total": 4,
+        "time_seconds": 0,
+        "tokens": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "All feature slugs have at most 3 hyphenated segments",
+          "passed": true,
+          "evidence": "All 5 slugs ≤3 segments"
+        },
+        {
+          "text": "No feature description lists 3+ comma-separated parallel components",
+          "passed": true,
+          "evidence": "No dense descriptions"
+        },
+        {
+          "text": "All descriptions hit 22-35 word target (German)",
+          "passed": true,
+          "evidence": "All in range"
+        },
+        {
+          "text": "No outcome language in descriptions",
+          "passed": true,
+          "evidence": "Clean"
+        }
+      ]
+    },
+    {
+      "eval_id": 2,
+      "eval_name": "density-partner",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.75,
+        "passed": 3,
+        "failed": 1,
+        "total": 4,
+        "time_seconds": 0,
+        "tokens": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "All feature slugs have at most 3 hyphenated segments",
+          "passed": true,
+          "evidence": "All 5 slugs ≤3 segments"
+        },
+        {
+          "text": "No feature description lists 3+ comma-separated parallel components",
+          "passed": true,
+          "evidence": "No dense descriptions"
+        },
+        {
+          "text": "All descriptions hit 22-35 word target (German)",
+          "passed": false,
+          "evidence": "Out of range: support-access (15w), industry-catalog-access (17w), co-delivery-projects (20w), pipeline-matching (19w), revenue-share-model (17w)"
+        },
+        {
+          "text": "No outcome language in descriptions",
+          "passed": true,
+          "evidence": "Clean"
+        }
+      ]
+    }
+  ],
+  "run_summary": {
+    "with_skill": {
+      "pass_rate": {
+        "mean": 0.92,
+        "stddev": 0,
+        "min": 0.75,
+        "max": 1.0
+      },
+      "time_seconds": {
+        "mean": 0,
+        "stddev": 0,
+        "min": 0,
+        "max": 0
+      },
+      "tokens": {
+        "mean": 0,
+        "stddev": 0,
+        "min": 0,
+        "max": 0
+      }
+    },
+    "without_skill": {
+      "pass_rate": {
+        "mean": 0.67,
+        "stddev": 0,
+        "min": 0.5,
+        "max": 0.75
+      },
+      "time_seconds": {
+        "mean": 0,
+        "stddev": 0,
+        "min": 0,
+        "max": 0
+      },
+      "tokens": {
+        "mean": 0,
+        "stddev": 0,
+        "min": 0,
+        "max": 0
+      }
+    },
+    "delta": {
+      "pass_rate": "+0.25",
+      "time_seconds": "+0",
+      "tokens": "+0"
+    }
+  },
+  "notes": [
+    "Slug naming: with-skill produces consistently shorter slugs (2 segments) vs without-skill (3 segments)",
+    "German compound words deflate word counts — 17 German words often packs the content of 25 English words",
+    "Density detection heuristic refined: counts comma-separated short noun phrases, not clause-level commas",
+    "Both configurations avoid outcome language — this is NOT what differentiates with/without skill",
+    "The key qualitative difference is mechanism clarity vs enumeration — needs human review"
+  ]
+}

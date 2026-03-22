@@ -1,0 +1,16 @@
+{
+  "slug": "project-management",
+  "product_slug": "consulting-services",
+  "name": "Project Management (Bechtle Fair Project)",
+  "description": "Standardized PM methodology with PMO and PRINCE2/SAFe",
+  "taxonomy_mapping": {
+    "dimension": 7,
+    "dimension_name": "Consulting Services",
+    "category_id": "7.4",
+    "category_name": "Program & Project Management",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/bechtle-portfolio.md",
+  "created": "2026-03-18"
+}

@@ -1,10 +1,10 @@
-# Contributing to cogni-works
+# Contributing to insight-wave
 
-cogni-works has two types of contributions with different terms. Please read the section that applies to you.
+insight-wave has two types of contributions with different terms. Please read the section that applies to you.
 
 ## Contributing to Core Plugins
 
-Core plugins are maintained by cogni-works and licensed under AGPL-3.0:
+Core plugins are maintained by insight-wave and licensed under AGPL-3.0:
 
 - cogni-workspace
 - cogni-trends
@@ -62,7 +62,7 @@ Run `cogni-workspace/scripts/check-skill-names.sh` to validate naming before sub
 
 ## Publishing a Marketplace Plugin
 
-Anyone can publish a plugin to the cogni-works marketplace. You retain full copyright and all rights to your plugin.
+Anyone can publish a plugin to the insight-wave marketplace. You retain full copyright and all rights to your plugin.
 
 ### Requirements
 
@@ -99,4 +99,4 @@ This project follows the [Contributor Covenant v2.1](CODE_OF_CONDUCT.md). Please
 
 ## Questions?
 
-Open an issue on the [cogni-works repository](https://github.com/cogni-work/cogni-works/issues) if you have questions about contributing.
+Open an issue on the [insight-wave repository](https://github.com/insight-wave/insight-wave/issues) if you have questions about contributing.

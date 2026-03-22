@@ -1,0 +1,31 @@
+{
+  "reviewer": "tsystems-cso",
+  "iteration": 1,
+  "overall_score": 4.0,
+  "dimension_scores": {
+    "quota_impact": { "score": 4, "rationale": "Wettbewerberspezifische Differenzierungen und ICP-Qualification ermöglichen sofortigen Einsatz im Kundengespräch. AE kann Accounts priorisieren und pro Wettbewerber eine spezifische Killer-Aussage einsetzen." },
+    "pipeline_acceleration": { "score": 4, "rationale": "Konkrete Deadlines (NIS2 April 2026, SAP ECC 2027, Smart Meter 2030) und Fachkräftemangel-Frame ermöglichen Urgency im Erstgespräch." },
+    "objection_handling": { "score": 4, "rationale": "TCO-Argument '1 Vertrag vs. 3-4 Verträge' und '3 IT-Mitarbeiter'-Frame adressieren die Stadtwerke-typische Preis- und Kapazitäts-Objection." },
+    "competitive_win_ability": { "score": 4, "rationale": "Jeder Wettbewerber hat eine einzigartige Schwachstelle. SWK-Killer-Line 'IT-Dienstleister vs. Einkaufsgemeinschaft' ist aufsichtsratstauglich." },
+    "account_team_usability": { "score": 4, "rationale": "Klar, konsistent, auf Deutsch. Jeder Wettbewerber hat eine distinkte Story. AE, SA und Pre-Sales lesen dasselbe." },
+    "deal_qualification_signal": { "score": 4, "rationale": "ICP-Block ist actionable: '800-3000 MA, SAP IS-U, eigenes RZ >5J, KRITIS, auslaufender IT-Outsourcing-Vertrag'." }
+  },
+  "top_issues": [
+    {
+      "entity_type": "compete",
+      "entity_slug": "cloud-migration--mittelstaendische-stadtwerke-de",
+      "issue": "Konkretes TCO-Rechenbeispiel fehlt noch — gehört aber eher in Solutions/Pricing als in Compete.",
+      "severity": "low",
+      "suggested_fix": "Ergänze indikatives TCO-Beispiel in analysis_note oder verweise auf Solutions-Skill.",
+      "root_cause_hint": "TCO modeling outside compete skill scope"
+    }
+  ],
+  "strengths": [
+    "Einzigartige Differenzierung pro Wettbewerber statt repetitivem DT-Netz-Mantra",
+    "ICP-Qualification ermöglicht sofortige Account-Priorisierung",
+    "Urgency-Drivers mit konkreten Deadlines",
+    "SWK-Differenzierung als Killer-Line für Aufsichtsrat-Gespräche"
+  ],
+  "would_use_in_pitch_deck": true,
+  "overall_assessment": "Sales-ready. Mein AE kann mit dieser Analyse sofort in Stadtwerke-Deals einsteigen: Accounts priorisieren, Urgency triggern, wettbewerberspezifisch differenzieren und RFI-Fragen vorbereiten."
+}

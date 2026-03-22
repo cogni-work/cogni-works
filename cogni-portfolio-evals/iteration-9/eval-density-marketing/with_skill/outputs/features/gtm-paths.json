@@ -1,0 +1,14 @@
+{
+  "slug": "gtm-paths",
+  "product_slug": "content-platform",
+  "name": "GTM-Pfad-Engine",
+  "description": "Regelbasierte Engine, die Content-Assets entlang konfigurierbarer Go-to-Market-Pfade sequenziert, nach Zielgruppensegment und Buyerphase priorisiert und je Pfad eine kanalspezifische Ausspielreihenfolge mit definierten Timing-Intervallen erzeugt.",
+  "category": "orchestration",
+  "taxonomy_mapping": {
+    "dimension": "Application",
+    "category_id": "6.3",
+    "category_name": "Marketing Automation"
+  },
+  "readiness": "ga",
+  "created": "2026-03-21"
+}

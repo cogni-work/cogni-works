@@ -1,0 +1,16 @@
+{
+  "slug": "bechtle-managed-ionos-nextcloud",
+  "product_slug": "cloud-services",
+  "name": "Bechtle Managed IONOS Nextcloud",
+  "description": "Managed Nextcloud collaboration platform deployed on IONOS sovereign infrastructure with European data residency, self-service onboarding and Bechtle-operated maintenance and patching.",
+  "taxonomy_mapping": {
+    "dimension": 4,
+    "dimension_name": "Cloud Services",
+    "category_id": "4.3",
+    "category_name": "Private Cloud",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/bechtle-portfolio.md",
+  "created": "2026-03-18"
+}

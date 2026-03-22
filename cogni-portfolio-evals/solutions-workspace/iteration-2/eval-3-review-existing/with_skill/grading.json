@@ -1,0 +1,45 @@
+{
+  "expectations": [
+    {
+      "text": "REV-01: All 3 solutions assessed",
+      "passed": true,
+      "evidence": "Three individual review files produced: cloud-migration--grosse-energieversorger-de-review.json (score 86, accept), sap-on-cloud--grosse-energieversorger-de-review.json (score 79, revise), sovereign-cloud--grosse-energieversorger-de-review.json (score 78, revise). Portfolio summary confirms solutions_reviewed: 3."
+    },
+    {
+      "text": "REV-02: Each assessment has three perspective scores",
+      "passed": true,
+      "evidence": "All three review files contain stakeholder_reviews with exactly three perspectives: reviewer, provider_sa, client_sa. Each perspective has a numeric score and per-criteria breakdown. Cloud-migration: 89/85/85. SAP: 82/78/77. Sovereign: 80/79/76."
+    },
+    {
+      "text": "REV-03: Synthesis includes prioritized improvements (CRITICAL/HIGH/OPTIONAL)",
+      "passed": true,
+      "evidence": "Each review file's synthesis section contains critical_improvements, high_improvements, and optional_improvements arrays. SAP review has 1 CRITICAL (SAP Basis Administrator role), 5 HIGH, 2 OPTIONAL. Sovereign review has 1 CRITICAL (Compliance/Security Specialist role), 5 HIGH, 2 OPTIONAL. Cloud-migration has 0 CRITICAL, 1 HIGH, 4 OPTIONAL. Individual recommendations within stakeholder reviews also use CRITICAL/HIGH/OPTIONAL labels."
+    },
+    {
+      "text": "REV-04: Recommendations are specific and actionable (reference specific fields/values)",
+      "passed": true,
+      "evidence": "Recommendations reference specific values: 'PoV margin at 31.1%', 'reduce to 20-25%', 'extend Phase 1 from 3 weeks to 4 weeks', 'SAP Basis Administrator role', 'max 8% annual volume vs 5% total volume', 'adjust PoV price from 95K to 130K EUR'. Synthesis improvements reference specific fields: 'cost_model.bill_of_materials.roles', 'pricing.proof_of_value', 'cost_model.assumptions'. Not vague or generic."
+    },
+    {
+      "text": "REV-05: Portfolio-level summary identifies cross-solution patterns",
+      "passed": true,
+      "evidence": "portfolio-review-summary.json contains extensive cross-solution analysis: exit_clause_inconsistency (4 dimensions compared across 3 solutions), compliance_framing_inconsistency (3 dimensions), assumption_drift (4 dimensions), ot_boundary_inconsistency (2 dimensions), template_detection (staffing model FAIL), pov_quality_sweep (all 3 PoVs assessed for operational proof gaps), and 5 prioritized portfolio_level_recommendations."
+    },
+    {
+      "text": "REV-06: Portfolio consistency check flags exit clause inconsistency across solutions targeting the same market",
+      "passed": true,
+      "evidence": "portfolio_consistency_checks.exit_clause_inconsistency has status 'fail' and compares 4 dimensions across all 3 solutions: notice_period (6 vs 12 months), transition_support (90 vs 120 days), exit_cost_cap (5% total vs 8% annual -- flagged as CRITICAL with different calculation bases), and data_export (each incomplete in different ways). Includes actionable recommendation to create standard exit clause template."
+    },
+    {
+      "text": "REV-07: Client SA perspective scores are surfaced and diagnosed if consistently lowest",
+      "passed": false,
+      "evidence": "Client SA scores are surfaced in aggregate_scores (85, 77, 76) and are indeed the lowest or tied-lowest perspective across all three solutions. However, the portfolio summary does not explicitly identify or diagnose this pattern. There is no cross-solution statement like 'client_sa is consistently the lowest-scoring perspective' with a root-cause analysis. The individual concerns (integration feasibility gaps, missing OT boundary, unclear compliance ops model) explain why client_sa scores low per-solution, but the portfolio summary never synthesizes these into a diagnosed pattern about the client SA perspective being systematically weakest."
+    }
+  ],
+  "summary": {
+    "passed": 6,
+    "failed": 1,
+    "total": 7,
+    "pass_rate": 0.86
+  }
+}

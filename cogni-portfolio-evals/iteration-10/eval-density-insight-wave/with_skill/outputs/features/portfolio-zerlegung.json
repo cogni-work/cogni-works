@@ -1,0 +1,14 @@
+{
+  "slug": "portfolio-zerlegung",
+  "product_slug": "cogni-portfolio",
+  "name": "Portfolio-Zerlegung nach IS/DOES/MEANS",
+  "description": "Dreischichtige Capability-Dekomposition, die jedes Produkt entlang der IS/DOES/MEANS-Achsen in voneinander abhängige Portfolio-Entitäten zerlegt, wobei marktunabhängige Fakten strikt von zielgruppenspezifischer Argumentation getrennt bleiben.",
+  "category": "core-engine",
+  "taxonomy_mapping": {
+    "dimension": "Consulting",
+    "category_id": "7.1",
+    "category_name": "Strategy & Portfolio Consulting"
+  },
+  "readiness": "ga",
+  "created": "2026-03-21"
+}

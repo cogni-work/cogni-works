@@ -1,0 +1,16 @@
+{
+  "slug": "technology-consulting",
+  "product_slug": "consulting-services",
+  "name": "Technology Consulting",
+  "description": "IT strategy and enterprise architecture consulting covering technology roadmap development, architecture assessment, cloud transformation planning, and digital maturity evaluation with deep technology expertise.",
+  "taxonomy_mapping": {
+    "dimension": 7,
+    "dimension_name": "Consulting Services",
+    "category_id": "7.1",
+    "category_name": "IT Strategy & Architecture",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

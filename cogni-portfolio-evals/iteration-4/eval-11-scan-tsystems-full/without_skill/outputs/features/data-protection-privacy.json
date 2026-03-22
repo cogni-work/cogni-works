@@ -1,0 +1,13 @@
+{
+  "slug": "data-protection-privacy",
+  "name": "Data Protection & Privacy",
+  "description": "TCDP-certified data protection, GDPR-compliant sovereign cloud services, and data sovereignty",
+  "product_slug": "telekom-security",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 2,
+    "category_id": "2.10",
+    "category_name": "Data Protection & Privacy"
+  },
+  "source_file": "https://www.t-systems.com/de/en/sovereign-cloud"
+}

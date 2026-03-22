@@ -1,0 +1,16 @@
+{
+  "slug": "operations-performance-consulting",
+  "product_slug": "consulting-services",
+  "name": "Operations and Performance Consulting",
+  "description": "Operating model redesign consulting covering corporate governance structures, financial management optimization, and operational procedure transformation for higher efficiency and organizational agility.",
+  "taxonomy_mapping": {
+    "dimension": 7,
+    "dimension_name": "Consulting Services",
+    "category_id": "7.3",
+    "category_name": "Business & Industry Consulting",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

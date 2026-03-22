@@ -1,0 +1,34 @@
+{
+  "domain": "open-telekom-cloud.com",
+  "provider_unit": "T-Systems (Open Telekom Cloud)",
+  "company_name": "T-Systems International GmbH",
+  "template_type": "b2b-ict",
+  "timestamp": "2026-03-18T12:15:00Z",
+  "searches": {
+    "executed": 51,
+    "successful": 15,
+    "failed": 36,
+    "failed_categories": []
+  },
+  "offerings": [
+    {"category_id":"4.7","name":"T Cloud Public (Open Telekom Cloud)","description":"OpenStack-based sovereign public cloud with EU-only data centers, BSI C5, ISO 27001, and TISAX certifications, providing compute, storage, AI, and managed services.","domain":"open-telekom-cloud.com","link":"https://www.open-telekom-cloud.com/en/benefits/sovereignty","usp":"Sovereignty by Design with EU-only operations and no third-country access","provider_unit":"T-Systems (Open Telekom Cloud)","pricing_model":"usage-based","delivery_model":"onshore","partners":"","verticals":"Public Sector, Healthcare, Financial Services","horizon":"Current"},
+    {"category_id":"4.6","name":"Cloud Container Engine (CCE)","description":"Enterprise-class managed Kubernetes service on Open Telekom Cloud with high-performance container orchestration and integrated storage/networking.","domain":"open-telekom-cloud.com","link":"https://docs.otc.t-systems.com/cloud-container-engine/index.html","usp":"Sovereign Kubernetes with BSI C5 attestation and OpenStack integration","provider_unit":"T-Systems (Open Telekom Cloud)","pricing_model":"usage-based","delivery_model":"onshore","partners":"","verticals":"","horizon":"Current"},
+    {"category_id":"5.6","name":"Relational Database Service (RDS)","description":"Managed database service on Open Telekom Cloud with 12 database flavors, performance analytics, and demand-oriented scaling.","domain":"open-telekom-cloud.com","link":"https://docs.otc.t-systems.com/relational-database-service/umn/introduction/basic_concepts.html","usp":"12 database flavors with sovereign operation in EU data centers","provider_unit":"T-Systems (Open Telekom Cloud)","pricing_model":"usage-based","delivery_model":"onshore","partners":"","verticals":"","horizon":"Current"},
+    {"category_id":"2.6","name":"Anti-DDoS Service","description":"Cloud-native DDoS defense service on Open Telekom Cloud protecting against network-layer and application-layer attacks.","domain":"open-telekom-cloud.com","link":"https://docs.otc.t-systems.com/anti-ddos/umn/introduction/application_scenarios.html","usp":"Integrated sovereign cloud DDoS protection with EU-only traffic processing","provider_unit":"T-Systems (Open Telekom Cloud)","pricing_model":"usage-based","delivery_model":"onshore","partners":"","verticals":"","horizon":"Current"},
+    {"category_id":"1.3","name":"Direct Connect (OTC)","description":"High-speed, low-latency dedicated network connection linking on-premises data centers to Open Telekom Cloud infrastructure.","domain":"open-telekom-cloud.com","link":"https://docs.otc.t-systems.com/direct-connect/umn/service_overview/direct_connect.html","usp":"Dedicated sovereign cloud interconnect with guaranteed latency","provider_unit":"T-Systems (Open Telekom Cloud)","pricing_model":"usage-based","delivery_model":"onshore","partners":"","verticals":"","horizon":"Current"}
+  ],
+  "by_dimension": {
+    "1_connectivity": 1,
+    "2_security": 1,
+    "3_workplace": 0,
+    "4_cloud": 2,
+    "5_infrastructure": 1,
+    "6_application": 0,
+    "7_consulting": 0
+  },
+  "by_horizon": {
+    "current": 5,
+    "emerging": 0,
+    "future": 0
+  }
+}

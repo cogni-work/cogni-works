@@ -1,0 +1,143 @@
+{
+  "metadata": {
+    "skill_name": "solutions",
+    "skill_path": "/Users/stephandehaas/GitHub/dev/insight-wave/cogni-portfolio/skills/solutions/SKILL.md",
+    "executor_model": "claude-opus-4-6",
+    "timestamp": "2026-03-18T14:00:00Z",
+    "evals_run": [1, 2, 3],
+    "runs_per_configuration": 1,
+    "iteration": 2
+  },
+  "runs": [
+    {
+      "eval_id": 1, "eval_name": "Single Solution + Review", "configuration": "with_skill", "run_number": 1,
+      "result": { "pass_rate": 1.0, "passed": 14, "failed": 0, "total": 14, "time_seconds": 155.9, "tokens": 62112, "tool_calls": 22, "errors": 0 },
+      "expectations": [
+        {"text": "solution_type: project", "passed": true, "evidence": "Present"},
+        {"text": "2-5 implementation phases", "passed": true, "evidence": "4 phases"},
+        {"text": "4 pricing tiers", "passed": true, "evidence": "PoV 20K, Small 95K, Medium 185K, Large 320K EUR"},
+        {"text": "cost_model with effort_by_tier", "passed": true, "evidence": "Full cost model"},
+        {"text": "PoV margin >= 5%, standard >= 25%", "passed": true, "evidence": "16%, 34.7%, 33.4%, 31.9%"},
+        {"text": "3 review perspectives", "passed": true, "evidence": "reviewer 94, provider_sa 100, client_sa 100"},
+        {"text": "5 criteria each", "passed": true, "evidence": "15 criteria total"},
+        {"text": "verdict accept/revise/reject", "passed": true, "evidence": "accept"},
+        {"text": "revision improves scores (prereq: SOL-08)", "passed": true, "evidence": "No revision needed (accept)"},
+        {"text": "German language", "passed": true, "evidence": "All German"},
+        {"text": "Arithmetic consistency", "passed": true, "evidence": "All deltas < 0.1pp"},
+        {"text": "Revision diff verification", "passed": true, "evidence": "No revision needed"},
+        {"text": "Exit clause in assumptions", "passed": true, "evidence": "4-week KT, 10-day data export"},
+        {"text": "Client FTE in assumptions", "passed": true, "evidence": "0.5 FTE EA + 1.0 FTE Test Manager"}
+      ]
+    },
+    {
+      "eval_id": 1, "eval_name": "Single Solution + Review", "configuration": "without_skill", "run_number": 1,
+      "result": { "pass_rate": 0.57, "passed": 8, "failed": 6, "total": 14, "time_seconds": 307.7, "tokens": 40153, "tool_calls": 21, "errors": 0 },
+      "expectations": [
+        {"text": "solution_type: project", "passed": false, "evidence": "Missing field"},
+        {"text": "2-5 implementation phases", "passed": true, "evidence": "5 phases"},
+        {"text": "4 pricing tiers", "passed": false, "evidence": "Flat pricing, no tiers"},
+        {"text": "cost_model with effort_by_tier", "passed": false, "evidence": "Per-phase, not per-tier"},
+        {"text": "PoV margin >= 5%, standard >= 25%", "passed": false, "evidence": "Markup/margin confusion, ~23% effective"},
+        {"text": "3 review perspectives", "passed": true, "evidence": "3 perspectives"},
+        {"text": "5 criteria each", "passed": true, "evidence": "15 criteria"},
+        {"text": "verdict accept/revise/reject", "passed": true, "evidence": "revision_needed then approved"},
+        {"text": "revision improves scores (prereq: SOL-08)", "passed": true, "evidence": "Improved after revision"},
+        {"text": "German language", "passed": true, "evidence": "German content"},
+        {"text": "Arithmetic consistency", "passed": false, "evidence": "6.9pp discrepancy (markup vs margin)"},
+        {"text": "Revision diff verification", "passed": true, "evidence": "7 changes applied"},
+        {"text": "Exit clause in assumptions", "passed": true, "evidence": "Added in revision"},
+        {"text": "Client FTE in assumptions", "passed": false, "evidence": "Mentioned but not formal FTE"}
+      ]
+    },
+    {
+      "eval_id": 2, "eval_name": "Batch + Review Loop", "configuration": "with_skill", "run_number": 1,
+      "result": { "pass_rate": 1.0, "passed": 10, "failed": 0, "total": 10, "time_seconds": 392.6, "tokens": 75332, "tool_calls": 43, "errors": 0 },
+      "expectations": [
+        {"text": "3 solutions created", "passed": true, "evidence": "cloud-migration, sap-on-cloud, sovereign-cloud"},
+        {"text": "Correct solution_type", "passed": true, "evidence": "All project"},
+        {"text": "Reviews for all 3", "passed": true, "evidence": "3 reviews"},
+        {"text": "Batch summary by round", "passed": true, "evidence": "1 Round 1, 2 Round 2"},
+        {"text": "Revision triggered", "passed": true, "evidence": "2 revised"},
+        {"text": "Scores improved", "passed": true, "evidence": "79->88, 80->89"},
+        {"text": "Max 2 rounds", "passed": true, "evidence": "Max 1"},
+        {"text": "All exit clauses", "passed": true, "evidence": "All 3 have exit clauses"},
+        {"text": "Standard margins >= 25%", "passed": true, "evidence": "Lowest 30.9%"},
+        {"text": "Consistent assumptions", "passed": true, "evidence": "Same rates, same model"}
+      ]
+    },
+    {
+      "eval_id": 2, "eval_name": "Batch + Review Loop", "configuration": "without_skill", "run_number": 1,
+      "result": { "pass_rate": 0.9, "passed": 9, "failed": 1, "total": 10, "time_seconds": 644.2, "tokens": 64921, "tool_calls": 33, "errors": 0 },
+      "expectations": [
+        {"text": "3 solutions created", "passed": true, "evidence": "3 files"},
+        {"text": "Correct solution_type", "passed": false, "evidence": "No solution_type field"},
+        {"text": "Reviews for all 3", "passed": true, "evidence": "3 reviews"},
+        {"text": "Batch summary by round", "passed": true, "evidence": "Categorized"},
+        {"text": "Revision triggered", "passed": true, "evidence": "All 3 revised"},
+        {"text": "Scores improved", "passed": true, "evidence": "+15-17pp each"},
+        {"text": "Max 2 rounds", "passed": true, "evidence": "Max 1"},
+        {"text": "All exit clauses", "passed": true, "evidence": "Added in revision"},
+        {"text": "Standard margins >= 25%", "passed": true, "evidence": "All 30%"},
+        {"text": "Consistent assumptions", "passed": true, "evidence": "Same rates"}
+      ]
+    },
+    {
+      "eval_id": 3, "eval_name": "Review Existing", "configuration": "with_skill", "run_number": 1,
+      "result": { "pass_rate": 0.86, "passed": 6, "failed": 1, "total": 7, "time_seconds": 341.5, "tokens": 57184, "tool_calls": 28, "errors": 0 },
+      "expectations": [
+        {"text": "All 3 assessed", "passed": true, "evidence": "3 reviews + portfolio summary"},
+        {"text": "3 perspective scores each", "passed": true, "evidence": "reviewer, provider_sa, client_sa"},
+        {"text": "CRITICAL/HIGH/OPTIONAL priorities", "passed": true, "evidence": "Correct taxonomy"},
+        {"text": "Specific/actionable recommendations", "passed": true, "evidence": "References margins, EUR values, roles, fields"},
+        {"text": "Cross-solution patterns", "passed": true, "evidence": "Exit clause, compliance, roles, OT boundary"},
+        {"text": "Exit clause inconsistency flagged", "passed": true, "evidence": "4-dimension comparison: notice, transition, cap basis, format"},
+        {"text": "Client SA diagnosed if lowest", "passed": false, "evidence": "Client SA is lowest (85/77/76) but not explicitly diagnosed in portfolio summary"}
+      ]
+    },
+    {
+      "eval_id": 3, "eval_name": "Review Existing", "configuration": "without_skill", "run_number": 1,
+      "result": { "pass_rate": 0.57, "passed": 4, "failed": 3, "total": 7, "time_seconds": 329.8, "tokens": 44449, "tool_calls": 31, "errors": 0 },
+      "expectations": [
+        {"text": "All 3 assessed", "passed": true, "evidence": "3 reviews"},
+        {"text": "3 perspective scores each", "passed": true, "evidence": "3 perspectives"},
+        {"text": "CRITICAL/HIGH/OPTIONAL priorities", "passed": false, "evidence": "Used immediate/short_term/strategic"},
+        {"text": "Specific/actionable recommendations", "passed": true, "evidence": "Specific"},
+        {"text": "Cross-solution patterns", "passed": true, "evidence": "Identified gaps"},
+        {"text": "Exit clause inconsistency flagged", "passed": false, "evidence": "Rationalized away instead of flagged"},
+        {"text": "Client SA diagnosed if lowest", "passed": false, "evidence": "No per-perspective aggregation"}
+      ]
+    }
+  ],
+  "run_summary": {
+    "with_skill": {
+      "pass_rate": {"mean": 0.97, "stddev": 0.07, "min": 0.86, "max": 1.0},
+      "time_seconds": {"mean": 296.7, "stddev": 99.3, "min": 155.9, "max": 392.6},
+      "tokens": {"mean": 64876, "stddev": 7908, "min": 57184, "max": 75332}
+    },
+    "without_skill": {
+      "pass_rate": {"mean": 0.68, "stddev": 0.15, "min": 0.57, "max": 0.9},
+      "time_seconds": {"mean": 427.2, "stddev": 147.7, "min": 307.7, "max": 644.2},
+      "tokens": {"mean": 49841, "stddev": 10840, "min": 40153, "max": 64921}
+    },
+    "delta": {
+      "pass_rate": "+0.29",
+      "time_seconds": "-130.5",
+      "tokens": "+15035"
+    }
+  },
+  "iteration_comparison": {
+    "iteration_1": {"with_skill": 1.0, "without_skill": 0.77, "delta": 0.23, "assertions": 22},
+    "iteration_2": {"with_skill": 0.97, "without_skill": 0.68, "delta": 0.29, "assertions": 31}
+  },
+  "notes": [
+    "Iteration 2 uses 31 assertions (up from 22) with stricter criteria — arithmetic checks, margin thresholds, exit clause, client FTE, portfolio consistency",
+    "With-skill pass rate: 97% (30/31) — one failure: REV-07 (Client SA diagnosis in portfolio summary not explicit enough)",
+    "Without-skill pass rate: 68% (21/31) — down from 77% with harder assertions, showing the skill delta is real",
+    "Key improvement from iteration 1: Client SA scores jumped from 73-75 to 85-100 thanks to buyer adoption defaults in solution-planner",
+    "Eval-1 with_skill accepted on Round 1 (was Round 2 in iter 1) — buyer adoption defaults eliminated the revision round, halving time (305s -> 156s)",
+    "With-skill is now FASTER than without-skill (297s avg vs 427s avg) because it gets solutions right on first attempt instead of needing revision",
+    "New arithmetic consistency assertion (SOL-11) caught a real bug in baseline: markup vs margin confusion yielding 6.9pp discrepancy",
+    "Portfolio consistency check (step 12) caught exit clause cap inconsistency across solutions — baseline rationalized it away",
+    "REV-07 failure: the review-assessor produces per-solution Client SA scores but the portfolio summary doesn't explicitly aggregate and diagnose the pattern. Fix: add perspective-level aggregation to the review workflow"
+  ]
+}

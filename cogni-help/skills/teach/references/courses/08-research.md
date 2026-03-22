@@ -434,7 +434,7 @@ topic framing, report depth, tone, and which claims to accept or revise.
 - **Visual export** (Course 7) — cogni-visual can transform report content
   into presentations, journey maps, or web narratives
 
-**Your updated cogni-works toolkit** (10 plugins):
+**Your updated insight-wave toolkit** (10 plugins):
 1. **Claude Cowork** — Your agentic AI platform
 2. **cogni-workspace** — Shared project foundation
 3. **cogni-obsidian** — Knowledge management dashboard
@@ -451,7 +451,7 @@ topic framing, report depth, tone, and which claims to accept or revise.
 Workspace Setup → Research → Analyze → Write → Verify → Polish → Present
 ```
 
-Every step has a cogni-works plugin. Your expertise drives the strategy;
+Every step has a insight-wave plugin. Your expertise drives the strategy;
 the tools execute the heavy lifting.
 
 **Something unclear or broken?** Tell Claude what happened — cogni-issues will help you file it.

@@ -1,0 +1,58 @@
+{
+  "slug": "bechtle",
+  "company": "Bechtle AG",
+  "domain": "bechtle.com",
+  "scan_date": "2026-03-18",
+  "taxonomy": "b2b-ict",
+  "domains_analyzed": [
+    "bechtle.com",
+    "bechtle.com/de-en",
+    "bechtle.com/de-en/it-services",
+    "bechtle.com/de-en/it-services/managed-services",
+    "bechtle.com/de-en/it-services/managed-services/managed-security-services",
+    "bechtle.com/de-en/it-services/managed-services/managed-cloud",
+    "bechtle.com/de-en/it-services/managed-services/managed-application/service-now",
+    "bechtle.com/de-en/it-services/managed-services/managed-application/sap-bechtle-competence-center",
+    "bechtle.com/de-en/it-services/managed-services/lifecycle-services",
+    "bechtle.com/de-en/it-services/managed-services/onsite-services",
+    "bechtle.com/de-en/it-services/consulting-services",
+    "bechtle.com/de-en/it-solutions",
+    "bechtle.com/de-en/it-solutions/modern-workplace",
+    "bechtle.com/de-en/clouds/cloud-services",
+    "bechtle.com/de-en/public-sector/european-digital-sovereignty",
+    "bechtle.com/de-en/public-sector/solutions/delos",
+    "bechtle.com/at-en/it-solutions/modern-workplace",
+    "bechtle.com/at-en/it-solutions/networking/enterprise-networking",
+    "bechtle.com/at-en/it-solutions/security-solutions/cyber-defence-centre",
+    "bechtle.com/at-en/it-solutions/ai-solutions",
+    "bechtle.com/ch-en/it-solutions/networking",
+    "bechtle.com/ch-en/it-solutions/it-security/iam-identity-and-access-management",
+    "bechtle.com/ch-en/it-services/consulting/cloud-consulting/cloud-digital-transformation",
+    "bechtle.com/nl-en/it-solutions/workspace/device-as-a-service",
+    "bechtle-network.com/de-en",
+    "en.wikipedia.org/wiki/Bechtle"
+  ],
+  "dimensions_covered": 8,
+  "categories_total": 57,
+  "status_summary": {
+    "confirmed": 55,
+    "not_offered": 0,
+    "emerging": 2,
+    "extended": 0
+  },
+  "emerging_categories": [
+    {
+      "id": "4.6",
+      "name": "Cloud-Native Platform",
+      "reason": "Container orchestration and DevOps mentioned in context of app modernization, but no dedicated cloud-native platform service product found"
+    },
+    {
+      "id": "6.7",
+      "name": "DevOps & Platform Engineering",
+      "reason": "DevOps referenced in application modernization context and secure SDLC in cybersecurity, but no standalone DevOps/platform engineering practice identified"
+    }
+  ],
+  "confirmed_features_count": 55,
+  "scan_method": "web_search_and_fetch",
+  "sources_count": 26
+}

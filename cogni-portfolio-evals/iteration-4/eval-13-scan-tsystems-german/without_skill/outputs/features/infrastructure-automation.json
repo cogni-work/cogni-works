@@ -1,0 +1,13 @@
+{
+  "slug": "infrastructure-automation",
+  "name": "Intelligent Automation / Hyperautomation",
+  "description": "Automatisierung von IT-Infrastruktur und Geschaeftsprozessen mit Infrastructure as Code ueber Cloud-Plattformen.",
+  "product_slug": "t-systems-infrastructure",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 5,
+    "category_id": "5.7",
+    "category_name": "Infrastructure Automation"
+  },
+  "source_file": "https://www.t-systems.com/de/de/digital"
+}

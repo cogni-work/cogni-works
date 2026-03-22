@@ -1,0 +1,7 @@
+{
+  "slug": "channel-distribution-controller",
+  "product_slug": "content-platform",
+  "name": "Kanalsteuerungs-Controller",
+  "description": "Verteilungsschicht, die Content-Assets kanalspezifisch formatiert und ueber konfigurierbare Adapter (Website, Social, E-Mail, Paid) termingesteuert ausspielt.",
+  "readiness": "ga"
+}

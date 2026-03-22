@@ -1,6 +1,6 @@
 # Cross-Plugin Data Flow
 
-How data flows between cogni-works plugins. No shared database — all cross-references are resolved at runtime via slug-based lookups, bridge files, and YAML frontmatter contracts.
+How data flows between insight-wave plugins. No shared database — all cross-references are resolved at runtime via slug-based lookups, bridge files, and YAML frontmatter contracts.
 
 ## Architecture Layers
 

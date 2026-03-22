@@ -14,7 +14,7 @@ Consulting engagements often stall in either analysis paralysis (endless researc
 
 ## What it is
 
-A process orchestrator for the cogni-works ecosystem. cogni-consulting doesn't produce content itself — it manages engagement state and dispatches to existing plugins (cogni-research, cogni-trends, cogni-portfolio, cogni-claims, cogni-visual) at the right phase. Think of it as the senior partner who runs the engagement while specialists do the analysis.
+A process orchestrator for the insight-wave ecosystem. cogni-consulting doesn't produce content itself — it manages engagement state and dispatches to existing plugins (cogni-research, cogni-trends, cogni-portfolio, cogni-claims, cogni-visual) at the right phase. Think of it as the senior partner who runs the engagement while specialists do the analysis.
 
 ## What it does
 
@@ -33,7 +33,7 @@ A process orchestrator for the cogni-works ecosystem. cogni-consulting doesn't p
 
 ## Installation
 
-This plugin is part of the [cogni-works monorepo](https://github.com/cogni-work/cogni-works) and is installed automatically with the marketplace.
+This plugin is part of the [insight-wave monorepo](https://github.com/insight-wave/insight-wave) and is installed automatically with the marketplace.
 
 ## Quick start
 

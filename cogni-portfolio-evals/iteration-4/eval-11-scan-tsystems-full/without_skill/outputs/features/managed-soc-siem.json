@@ -1,0 +1,13 @@
+{
+  "slug": "managed-soc-siem",
+  "name": "Managed SOC/SIEM",
+  "description": "8 global Security Operations Centers with SIEM monitoring and Managed Detection and Response services",
+  "product_slug": "telekom-security",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 2,
+    "category_id": "2.1",
+    "category_name": "Security Operations (SOC/SIEM)"
+  },
+  "source_file": "https://www.t-systems.com/us/en/security"
+}

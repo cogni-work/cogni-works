@@ -1,0 +1,13 @@
+{
+  "slug": "endpoint-security-mdr",
+  "name": "Managed Detection & Response (Endpoint)",
+  "description": "Absicherung von Endpunkten gegen Cyber-Bedrohungen mit KI-gestuetzter Bedrohungserkennung.",
+  "product_slug": "telekom-security",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 2,
+    "category_id": "2.5",
+    "category_name": "Endpoint Security"
+  },
+  "source_file": "https://www.t-systems.com/us/en/security"
+}

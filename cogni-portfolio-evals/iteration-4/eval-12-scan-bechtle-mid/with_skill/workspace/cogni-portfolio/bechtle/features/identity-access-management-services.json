@@ -1,0 +1,16 @@
+{
+  "slug": "identity-access-management-services",
+  "product_slug": "security-services",
+  "name": "Identity & Access Management Services",
+  "description": "End-to-end IAM consulting and implementation built on One Identity product suite delivering privileged access management, single sign-on, multi-factor authentication and identity governance workflows.",
+  "taxonomy_mapping": {
+    "dimension": 2,
+    "dimension_name": "Security Services",
+    "category_id": "2.2",
+    "category_name": "Identity & Access Management",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/bechtle-portfolio.md",
+  "created": "2026-03-18"
+}

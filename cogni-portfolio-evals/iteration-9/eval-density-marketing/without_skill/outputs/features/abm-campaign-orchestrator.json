@@ -1,0 +1,7 @@
+{
+  "slug": "abm-campaign-orchestrator",
+  "product_slug": "content-platform",
+  "name": "ABM-Kampagnen-Orchestrator",
+  "description": "Orchestrierungsmodul fuer Account-Based-Marketing-Kampagnen, das Zielkonto-Listen mit personalisierten Content-Bausteinen verknuepft und Multi-Touch-Sequenzen pro Account steuert.",
+  "readiness": "ga"
+}

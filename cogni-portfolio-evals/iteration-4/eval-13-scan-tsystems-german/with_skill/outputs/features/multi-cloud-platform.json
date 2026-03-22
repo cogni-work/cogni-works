@@ -1,0 +1,16 @@
+{
+  "slug": "multi-cloud-platform",
+  "product_slug": "cloud-services",
+  "name": "Multi Cloud Connectivity Platform",
+  "description": "Hybrid cloud connectivity platform integrating private cloud, AWS, Azure, and GCP environments through centralized governance portal with unified policy management and workload placement.",
+  "taxonomy_mapping": {
+    "dimension": 4,
+    "dimension_name": "Cloud Services",
+    "category_id": "4.4",
+    "category_name": "Hybrid Cloud",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

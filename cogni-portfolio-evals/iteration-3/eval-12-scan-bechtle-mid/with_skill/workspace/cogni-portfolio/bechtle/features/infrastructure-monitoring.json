@@ -1,0 +1,16 @@
+{
+  "slug": "infrastructure-monitoring",
+  "product_slug": "infrastructure-services",
+  "name": "Infrastructure Monitoring (24/7)",
+  "description": "24/7 monitoring from component to full infrastructure with alerting",
+  "taxonomy_mapping": {
+    "dimension": 5,
+    "dimension_name": "Managed Infrastructure Services",
+    "category_id": "5.4",
+    "category_name": "Infrastructure Monitoring",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/bechtle-portfolio.md",
+  "created": "2026-03-18"
+}

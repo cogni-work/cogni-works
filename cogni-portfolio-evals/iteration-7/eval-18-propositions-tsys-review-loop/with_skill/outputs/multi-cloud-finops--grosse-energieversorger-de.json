@@ -1,0 +1,27 @@
+{
+  "slug": "multi-cloud-finops--grosse-energieversorger-de",
+  "feature_slug": "multi-cloud-finops",
+  "market_slug": "grosse-energieversorger-de",
+  "is_statement": "Zentralisierte Multi-Cloud-Governance über Multi Cloud Connectivity Platform mit strukturiertem FinOps-Maturity-Assessment, kontinuierlichem Cost Management und eingebetteten Compliance-Controls für BSI C5 und DSGVO.",
+  "does_statement": "Energieversorger steuern Cloud-Kosten über alle Hyperscaler und Private-Cloud-Umgebungen mit einem Dashboard — statt monatlicher Rechnungsüberraschungen, die der CFO bei der Budgetfreigabe als Risiko wertet.",
+  "means_statement": "Der CFO erhält eine prüfbare 5-Jahres-TCO-Planung für die Vorstandsvorlage — FinOps-Assessments identifizieren typisch sechsstellige jährliche Einsparungen durch Rightsizing und Reserved-Instance-Optimierung in den ersten 90 Tagen.",
+  "evidence": [
+    {
+      "statement": "T-Systems bietet FinOps-Maturity-Assessment in Light- und Deep-Dive-Varianten mit konkreten Optimierungsempfehlungen",
+      "source_url": "https://www.t-systems.com/us/en/cloud-services/solutions/finops-cloud-services",
+      "source_title": "T-Systems FinOps Cloud Services"
+    },
+    {
+      "statement": "FinOps-Methodik entwickelt in Zusammenarbeit mit Detecon International nach FinOps-Foundation-Standards",
+      "source_url": "https://www.t-systems.com/resource/blob/1028240/223906d5a52363a1452866c90502799c/DL-Flyer-Cloud-FinOps-T-Systems-EN-11-2024.pdf",
+      "source_title": "T-Systems Cloud FinOps Flyer"
+    },
+    {
+      "statement": "Budgetfreigabe >3M EUR erfordert TCO-Analyse — fehlt diese, blockiert der CFO Cloud-Projekte",
+      "source_url": null,
+      "source_title": null
+    }
+  ],
+  "created": "2026-03-18",
+  "updated": "2026-03-18"
+}

@@ -1,0 +1,13 @@
+{
+  "slug": "bechtle-sd-wan",
+  "name": "Bechtle SD-WAN",
+  "description": "Software-Defined WAN service for secure, high-performance connections between locations, cloud services and mobile employees. Partnered with ngena and Cisco for turnkey SD-WAN solutions.",
+  "product_slug": "bechtle-networking",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 1,
+    "category_id": "1.1",
+    "category_name": "WAN Services"
+  },
+  "source_file": "https://www.bechtle.com/de-en/campaign/bechtle-ngena-sd-wan-network-connectivity/bechtle-ngena-sd-wan-network-connectivity-why"
+}

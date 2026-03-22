@@ -1,0 +1,15 @@
+{
+  "slug": "sovereign-cloud",
+  "product_slug": "cloud-services",
+  "name": "Sovereign Cloud",
+  "description": "Europäische Datenhoheit über T Cloud Public, Open Sovereign Cloud (OSC), Google-Cloud- und AWS-Sovereign-Varianten — vollständig in der EU betrieben und BaFin-/KRITIS-konform.",
+  "taxonomy_mapping": {
+    "dimension": 4,
+    "dimension_name": "Cloud Services",
+    "category_id": "4.7",
+    "category_name": "Sovereign Cloud",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "updated": "2026-03-18"
+}

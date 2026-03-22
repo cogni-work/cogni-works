@@ -1,0 +1,14 @@
+{
+  "slug": "abm-campaigns",
+  "product_slug": "content-platform",
+  "name": "ABM-Kampagnensteuerung",
+  "description": "Account-basiertes Kampagnen-Framework, das Content-Cluster pro Zielaccount aus vorhandenen Assets zusammenstellt, Touchpoint-Sequenzen über definierte Kanäle orchestriert und Engagement-Signale je Account auf einer zentralen Account-Scorecard aggregiert.",
+  "category": "campaign-management",
+  "taxonomy_mapping": {
+    "dimension": "Application",
+    "category_id": "6.3",
+    "category_name": "Marketing Automation"
+  },
+  "readiness": "ga",
+  "created": "2026-03-21"
+}

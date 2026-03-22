@@ -1,0 +1,16 @@
+{
+  "slug": "cloud-migration-framework",
+  "product_slug": "cloud-services",
+  "name": "Cloud Migration Framework",
+  "description": "Structured migration methodology based on best practices delivering punctual, reliable workload transitions from on-premises to cloud with zero-outage standards across 15,000+ application migrations.",
+  "taxonomy_mapping": {
+    "dimension": 4,
+    "dimension_name": "Cloud Services",
+    "category_id": "4.5",
+    "category_name": "Cloud Migration Services",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

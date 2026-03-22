@@ -1,0 +1,50 @@
+{
+  "slug": "cloud-migration--grosse-energieversorger-de",
+  "proposition_slug": "cloud-migration--grosse-energieversorger-de",
+  "solution_type": "project",
+  "implementation": [
+    {
+      "phase": "Assessment & Readiness",
+      "duration_weeks": 3,
+      "description": "Application portfolio assessment, 6R classification of all workloads, dependency mapping, compliance gap analysis for KRITIS requirements"
+    },
+    {
+      "phase": "Migration Factory Setup",
+      "duration_weeks": 4,
+      "description": "Landing zone provisioning, network connectivity to sovereign cloud, CI/CD pipeline for automated migration waves, parallel-run validation framework"
+    },
+    {
+      "phase": "Wave Execution & Cutover",
+      "duration_weeks": 12,
+      "description": "Sprint-based migration waves (20-50 workloads per wave), SAP IS-U migration with near-zero-downtime cutover, progressive traffic shifting"
+    },
+    {
+      "phase": "Optimization & Handover",
+      "duration_weeks": 3,
+      "description": "Cost optimization review, performance tuning, operations team enablement, runbook handover, 30-day hypercare support"
+    }
+  ],
+  "pricing": {
+    "proof_of_value": {
+      "price": 25000,
+      "currency": "EUR",
+      "scope": "5-workload pilot migration with parallel-run validation, 3-week delivery"
+    },
+    "small": {
+      "price": 120000,
+      "currency": "EUR",
+      "scope": "Up to 50 workloads, single application domain, 12-week delivery"
+    },
+    "medium": {
+      "price": 280000,
+      "currency": "EUR",
+      "scope": "Up to 200 workloads including SAP IS-U, multi-domain, 18-week delivery"
+    },
+    "large": {
+      "price": 650000,
+      "currency": "EUR",
+      "scope": "Full estate migration 500+ workloads, all application domains, 26-week delivery"
+    }
+  },
+  "created": "2026-01-25"
+}

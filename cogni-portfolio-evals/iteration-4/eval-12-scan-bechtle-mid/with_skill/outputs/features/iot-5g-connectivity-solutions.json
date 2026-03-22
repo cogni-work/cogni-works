@@ -1,0 +1,16 @@
+{
+  "slug": "iot-5g-connectivity-solutions",
+  "product_slug": "connectivity-services",
+  "name": "IoT & 5G Connectivity Solutions",
+  "description": "End-to-end IoT connectivity stack spanning LoRaWAN sensor networks, cloud-managed LTE and 5G Cradlepoint routers, IoT cloud platforms and edge computing nodes for industrial environments.",
+  "taxonomy_mapping": {
+    "dimension": 1,
+    "dimension_name": "Connectivity Services",
+    "category_id": "1.4",
+    "category_name": "5G & IoT Connectivity",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/bechtle-portfolio.md",
+  "created": "2026-03-18"
+}

@@ -1,0 +1,16 @@
+{
+  "slug": "housing-services",
+  "product_slug": "infrastructure-services",
+  "name": "Housing Services",
+  "description": "Colocation und Housing in BSI-konformen Rechenzentren",
+  "taxonomy_mapping": {
+    "dimension": 5,
+    "dimension_name": "Managed Infrastructure Services",
+    "category_id": "5.1",
+    "category_name": "Data Center Services",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

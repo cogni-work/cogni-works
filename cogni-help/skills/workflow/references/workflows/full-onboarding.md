@@ -2,7 +2,7 @@
 
 **Pipeline**: cogni-workspace → cogni-help courses 1-11
 **Duration**: ~8-10 hours total (spread across sessions)
-**Use case**: New user learning the complete cogni-works ecosystem
+**Use case**: New user learning the complete insight-wave ecosystem
 
 ```mermaid
 graph LR

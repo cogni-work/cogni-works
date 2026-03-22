@@ -1,0 +1,16 @@
+{
+  "slug": "service-desk",
+  "product_slug": "workplace-services",
+  "name": "IT Support and Service Desk",
+  "description": "Service desk with on-site support, field services and device rollout",
+  "taxonomy_mapping": {
+    "dimension": 3,
+    "dimension_name": "Digital Workplace Services",
+    "category_id": "3.5",
+    "category_name": "IT Support Services",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/bechtle-portfolio.md",
+  "created": "2026-03-18"
+}

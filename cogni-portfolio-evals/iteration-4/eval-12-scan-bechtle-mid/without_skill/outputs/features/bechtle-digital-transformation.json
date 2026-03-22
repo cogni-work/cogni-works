@@ -1,0 +1,13 @@
+{
+  "slug": "bechtle-digital-transformation",
+  "name": "Bechtle Digital Transformation",
+  "description": "Strategy development, organizational change management, and user adoption programs for enterprise digital transformation. Covers cloud digital transformation and workplace modernization.",
+  "product_slug": "bechtle-consulting",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 7,
+    "category_id": "7.2",
+    "category_name": "Digital Transformation"
+  },
+  "source_file": "https://www.bechtle.com/ch-en/it-services/consulting/cloud-consulting/cloud-digital-transformation"
+}

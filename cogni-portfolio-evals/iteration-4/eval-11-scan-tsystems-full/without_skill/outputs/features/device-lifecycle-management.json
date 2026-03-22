@@ -1,0 +1,13 @@
+{
+  "slug": "device-lifecycle-management",
+  "name": "Device Lifecycle Management",
+  "description": "Provisioning, management, and maintenance of end-user devices across multiple locations",
+  "product_slug": "t-systems-workplace",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 3,
+    "category_id": "3.3",
+    "category_name": "Device Management"
+  },
+  "source_file": "https://www.gartner.com/reviews/market/it-infrastructure-and-operations-management-others/vendor/t-systems/product/t-systems-outsourced-digital-workplace-services"
+}

@@ -1,0 +1,13 @@
+{
+  "slug": "compliance-grc",
+  "name": "Compliance & GRC Services",
+  "description": "NIS2 and KRITIS compliance advisory, IT security compliance, and OT compliance assessment",
+  "product_slug": "telekom-security",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 2,
+    "category_id": "2.9",
+    "category_name": "Compliance & GRC"
+  },
+  "source_file": "https://www.t-systems.com/us/en/security/solutions/ot-security"
+}

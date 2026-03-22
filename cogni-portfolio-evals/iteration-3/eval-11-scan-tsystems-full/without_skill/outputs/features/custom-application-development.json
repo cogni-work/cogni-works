@@ -1,0 +1,13 @@
+{
+  "slug": "custom-application-development",
+  "name": "Custom Application Development",
+  "description": "Bespoke vertical software for automotive (Catena-X), healthcare, public sector, and transport",
+  "product_slug": "t-systems-applications",
+  "readiness": "ga",
+  "taxonomy_mapping": {
+    "dimension": 6,
+    "category_id": "6.1",
+    "category_name": "Custom Application Development"
+  },
+  "source_file": "https://www.t-systems.com/us/en/company/about-t-systems/profile"
+}

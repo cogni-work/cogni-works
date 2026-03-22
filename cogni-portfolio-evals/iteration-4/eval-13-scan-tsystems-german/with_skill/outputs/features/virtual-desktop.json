@@ -1,0 +1,16 @@
+{
+  "slug": "virtual-desktop",
+  "product_slug": "workplace-services",
+  "name": "Virtual Desktop Services",
+  "description": "VDI and Desktop-as-a-Service delivery from T-Systems private cloud with Citrix session management, persistent and non-persistent desktop profiles, and sovereign data residency.",
+  "taxonomy_mapping": {
+    "dimension": 3,
+    "dimension_name": "Digital Workplace Services",
+    "category_id": "3.4",
+    "category_name": "Virtual Desktop & DaaS",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

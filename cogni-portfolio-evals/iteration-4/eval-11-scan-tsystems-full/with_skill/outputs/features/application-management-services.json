@@ -1,0 +1,16 @@
+{
+  "slug": "application-management-services",
+  "product_slug": "application-services",
+  "name": "Application Management Services",
+  "description": "Enterprise application integration and lifecycle management service with automated IT support workflows, end-to-end SaaS platform management, and cross-cloud application operations coordination.",
+  "taxonomy_mapping": {
+    "dimension": 6,
+    "dimension_name": "Application Services",
+    "category_id": "6.4",
+    "category_name": "System Integration & API",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

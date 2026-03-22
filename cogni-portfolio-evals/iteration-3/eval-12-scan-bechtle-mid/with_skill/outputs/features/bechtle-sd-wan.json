@@ -1,0 +1,16 @@
+{
+  "slug": "bechtle-sd-wan",
+  "product_slug": "connectivity-services",
+  "name": "Bechtle SD-WAN",
+  "description": "End-to-end SD-WAN solutions with multi-vendor flexibility via ngena partnership",
+  "taxonomy_mapping": {
+    "dimension": 1,
+    "dimension_name": "Connectivity Services",
+    "category_id": "1.1",
+    "category_name": "WAN Services",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/bechtle-portfolio.md",
+  "created": "2026-03-18"
+}

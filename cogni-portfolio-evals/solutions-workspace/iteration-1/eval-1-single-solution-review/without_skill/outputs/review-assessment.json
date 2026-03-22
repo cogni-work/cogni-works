@@ -1,0 +1,127 @@
+{
+  "solution_slug": "solution--cloud-migration--grosse-energieversorger-de",
+  "reviewed": "2026-03-18",
+  "perspectives": [
+    {
+      "perspective": "Procurement Decision-Maker",
+      "description": "Evaluating commercial viability from the perspective of a CFO or Einkaufsleiter at a large German energy utility, applying SektVO procurement rules and internal investment governance.",
+      "criteria": [
+        {
+          "criterion": "Price-to-Value Transparency",
+          "score": "pass",
+          "rationale": "The solution provides a clear rate card sourced from portfolio defaults, effort breakdowns per phase, and a per-workload cost estimate (EUR 26,700/workload). The TCO comparison is promised as a Phase 1 deliverable, which is standard for this engagement size. The 30% margin is within market norms for managed migration services in regulated industries."
+        },
+        {
+          "criterion": "Budget Predictability",
+          "score": "pass",
+          "rationale": "Phased pricing with discrete cost per phase enables incremental budget approval. The option for Festpreis pro Phase is explicitly mentioned. Total price of EUR 2.67M is within the CFO-relevant threshold (>3M requires board-level Budgetfreigabe per market data), keeping approval at divisional level."
+        },
+        {
+          "criterion": "Procurement Compliance (SektVO/EU)",
+          "score": "pass",
+          "rationale": "The solution explicitly addresses SektVO compatibility, Rahmenvertragsfähigkeit, and modular phase-based commissioning. This aligns with the buying committee's Einkauf focus on EU-Vergaberecht."
+        },
+        {
+          "criterion": "Vendor Lock-in Risk",
+          "score": "warn",
+          "rationale": "The solution references 'Sovereign Cloud (Open Telekom Cloud oder vergleichbar)' but does not explicitly define exit criteria, data portability clauses, or multi-cloud optionality. A procurement decision-maker would want contractual reversibility guarantees, especially given KRITIS dependencies."
+        },
+        {
+          "criterion": "Competitive Benchmarkability",
+          "score": "warn",
+          "rationale": "While the per-workload price (EUR 26,700) enables comparison, the solution does not reference market benchmarks or competitive positioning. Procurement teams at this scale will benchmark against Atos, Capgemini, and Accenture — the absence of differentiation arguments weakens negotiation positioning."
+        }
+      ],
+      "perspective_summary": "Commercially sound with strong budget governance alignment. Two areas need strengthening: explicit vendor lock-in mitigation clauses and competitive benchmark data to survive Einkauf due diligence."
+    },
+    {
+      "perspective": "Provider-Side Solution Architect",
+      "description": "Evaluating delivery feasibility from the perspective of a T-Systems solution architect responsible for staffing, technical execution, and margin protection.",
+      "criteria": [
+        {
+          "criterion": "Staffing Feasibility",
+          "score": "warn",
+          "rationale": "Phase 3 requires 5.0 FTE Implementation Engineers for 24 weeks — that is 600 person-days of cloud migration engineering. Given T-Systems' 28,000 employees, this is achievable but requires early resource reservation. The solution does not address bench availability or subcontractor strategy for peak phases."
+        },
+        {
+          "criterion": "Technical Scope Clarity",
+          "score": "pass",
+          "rationale": "The 6-wave migration structure with clear workload categorization (Dev/Test through SCADA-adjacent) is well-defined. The explicit exclusion of SAP IS-U core migration prevents scope creep into the customer's largest IT program. Assumptions are realistic and boundary-setting."
+        },
+        {
+          "criterion": "Risk Management Adequacy",
+          "score": "pass",
+          "rationale": "Risks are identified per phase with realistic triggers (CMDB gaps, OT documentation gaps, CISO approval timelines, billing cycle disruption). The Wartungsfenster coordination for SCADA migrations (8 weeks advance) shows operational maturity."
+        },
+        {
+          "criterion": "Margin Protection",
+          "score": "pass",
+          "rationale": "Target margin of 30% with EUR 800K margin buffer. Remote-first delivery reduces travel overhead. Standard API connector assumption prevents unbounded custom integration work. Optional items (FinOps coaching, KRITIS audit, custom integrations) create upsell paths without diluting base margin."
+        },
+        {
+          "criterion": "Reusability / Factory Efficiency",
+          "score": "pass",
+          "rationale": "The CMF (Cloud Migration Factory) approach with standardized runbooks, Terraform/Ansible toolchain, and sprint cadence enables replication across energy sector customers. The 5 runbooks for top workload types created in P2 amortize across all waves and future engagements."
+        }
+      ],
+      "perspective_summary": "Delivery-feasible with strong margin protection and factory-scale reusability. The staffing plan for peak Phase 3 needs a resource reservation or subcontractor fallback strategy to de-risk."
+    },
+    {
+      "perspective": "Client-Side Solution Architect",
+      "description": "Evaluating adoption safety from the perspective of a client CIO or enterprise architect at a large German energy utility, focusing on operational risk, compliance, and organizational readiness.",
+      "criteria": [
+        {
+          "criterion": "Operational Continuity",
+          "score": "pass",
+          "rationale": "The wave-based approach starting with non-critical workloads (Dev/Test) and escalating to SCADA-adjacent systems is a proven de-risking pattern. Per-wave rollback plans and cutover runbooks provide safety nets. The explicit commitment to not endanger Regelbetrieb aligns with OT-Leiter requirements."
+        },
+        {
+          "criterion": "Compliance Coverage",
+          "score": "pass",
+          "rationale": "All five relevant frameworks are addressed (BSI-C5, NIS2, KRITIS-DachG, ISO 27001, SektVO). KRITIS classification starts in Phase 1 (not as an afterthought), and NIS2 readiness is built into the Landing Zone. This preempts CISO veto risk."
+        },
+        {
+          "criterion": "Internal Resource Demand",
+          "score": "warn",
+          "rationale": "The solution assumes customer-provided staging environment access within 5 business days and relies on customer staff for acceptance testing per wave. Given the market's explicit pain point about Fachkräftemangel, the solution should quantify the expected client-side effort (FTE commitment per phase) to avoid resource contention with the parallel SAP S/4HANA migration."
+        },
+        {
+          "criterion": "Knowledge Transfer Sufficiency",
+          "score": "warn",
+          "rationale": "Phase 4 allocates only 6 weeks for optimization and transition, including FinOps, right-sizing, documentation, and handover. For 80-120 migrated workloads, this may be insufficient — especially if the client lacks cloud operations experience. The optional FinOps coaching extension suggests awareness of this gap but makes it an upsell rather than a baseline safeguard."
+        },
+        {
+          "criterion": "Architecture Futureproofing",
+          "score": "pass",
+          "rationale": "The 6R strategy framework ensures each workload gets an appropriate migration strategy rather than a blanket lift-and-shift. The inclusion of container platforms and hybrid multi-cloud governance (from the Cloud Services product) positions the architecture for future modernization beyond initial migration."
+        }
+      ],
+      "perspective_summary": "Adoption-safe with strong operational continuity and compliance design. Two gaps require attention: the client-side FTE commitment should be explicitly quantified (Fachkräftemangel is a disqualifier), and the knowledge transfer phase may need expansion for organizations with limited cloud operations maturity."
+    }
+  ],
+  "verdict": {
+    "overall_score": "pass_with_conditions",
+    "pass_count": 11,
+    "warn_count": 4,
+    "fail_count": 0,
+    "summary": "The solution is commercially viable, technically feasible, and adoption-safe. It correctly addresses the core market pain points (KRITIS compliance, OT/IT convergence, sprint-based delivery) and aligns pricing with procurement governance thresholds. No criteria received a fail score.",
+    "conditions_for_unconditional_pass": [
+      "Add explicit vendor lock-in mitigation: data portability clause, exit assistance commitment, multi-cloud option for non-KRITIS workloads",
+      "Quantify client-side FTE commitment per phase (e.g., 0.5 FTE enterprise architect, 1.0 FTE test manager) to preempt Fachkräftemangel-driven disqualification",
+      "Define a staffing contingency for Phase 3 peak (subcontractor pool or cross-team resource sharing agreement)",
+      "Consider expanding Phase 4 from 6 to 8 weeks or making the FinOps coaching a baseline inclusion for customers without existing cloud operations teams"
+    ],
+    "strengths": [
+      "KRITIS-first compliance approach (classification in Phase 1, not Phase 4)",
+      "Wave-based risk escalation pattern (Dev/Test first, SCADA-adjacent last)",
+      "Buying committee alignment with role-specific value messages",
+      "Factory-scale delivery model with reusable runbooks and toolchain",
+      "Price point below CFO board-approval threshold (EUR 2.67M < 3M)"
+    ],
+    "risks_to_monitor": [
+      "Parallel SAP S/4HANA migration may compete for the same client-side resources",
+      "BSI-C5 certification timelines for the Landing Zone are externally dependent",
+      "OT-Leiter approval for SCADA-adjacent migrations may introduce schedule variability"
+    ]
+  }
+}

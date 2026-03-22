@@ -1,0 +1,16 @@
+{
+  "slug": "cloud-container-engine-cce",
+  "product_slug": "cloud-services",
+  "name": "Cloud Container Engine (CCE)",
+  "description": "Enterprise-class managed Kubernetes service on Open Telekom Cloud providing high-performance container orchestration with integrated storage, networking, and BSI C5-attested sovereign operation.",
+  "taxonomy_mapping": {
+    "dimension": 4,
+    "dimension_name": "Cloud Services",
+    "category_id": "4.6",
+    "category_name": "Cloud-Native Platform",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

@@ -1,0 +1,321 @@
+{
+  "slug": "grosse-energieversorger-de",
+  "market_slug": "grosse-energieversorger-de",
+  "portfolio_slug": "t-systems",
+  "generated": "2026-03-19",
+  "revision": 1,
+  "customers": [
+    {
+      "slug": "eon",
+      "name": "E.ON SE",
+      "domain": "eon.com",
+      "headquarters": "Essen, Deutschland",
+      "branche": "Energieversorgung & Netzbetrieb",
+      "employees": 78500,
+      "revenue": {
+        "value": 80440000000,
+        "currency": "EUR",
+        "year": 2025
+      },
+      "market_position": {
+        "rank_in_segment": 1,
+        "description": "Groesster Energieversorger Deutschlands nach Umsatz und Kundenzahl, fuehrender Netzbetreiber in Europa"
+      },
+      "description": "E.ON SE ist einer der groessten Energieversorger Europas mit Fokus auf Energienetze, Kundenloesungen und erneuerbare Energien. Das Unternehmen betreibt Strom- und Gasnetze fuer rund 50 Millionen Kunden in Europa.",
+      "segments": ["Energienetze", "Kundenloesungen", "Erneuerbare Energien"],
+      "it_landscape": {
+        "summary": "E.ON betreibt eine umfangreiche SAP-Landschaft und hat mit E.ON Digital Technology (EDT) eine eigene Digitaleinheit aufgebaut. Die Cloud-ERP-Transformation laeuft ueber SAP Datasphere und SAP Analytics Cloud als zentrale Datenplattform.",
+        "key_systems": ["SAP IS-U", "SAP S/4HANA", "SAP Datasphere", "SAP Analytics Cloud", "SAP PaPM"],
+        "cloud_maturity": "advanced",
+        "cloud_providers": ["Microsoft Azure", "AWS"],
+        "digitalization_unit": "E.ON Digital Technology GmbH"
+      },
+      "competitive_landscape": {
+        "incumbent_providers": ["T-Systems (Cloud-Migration)", "SAP (ERP)", "Cognigy (KI-Agenten)"],
+        "competitive_threats": ["Accenture", "Capgemini", "AWS Professional Services"],
+        "t_systems_position": "Incumbent mit bewiesener Referenz (2.500 SAP-Workloads migriert). Verteidigung und Ausbau der bestehenden Position."
+      },
+      "strategic_priorities": [
+        "Netzausbau und Digitalisierung der Energienetze",
+        "NIS2- und KRITIS-Compliance bis Oktober 2026",
+        "Cloud-Migration der SAP-Kernlandschaft",
+        "KI-gestuetzte Kundenservices und Prozessautomatisierung",
+        "Energiewende-Infrastruktur und Smart Grids"
+      ],
+      "pain_points": [
+        "Komplexe SAP-Legacy-Landschaft mit tausenden Workloads erschwert Cloud-Migration",
+        "KRITIS-Anforderungen erfordern souveraene Cloud-Infrastruktur unter EU-Jurisdiktion",
+        "Fachkraeftemangel im Bereich Cloud-Betrieb und Cybersecurity",
+        "Integration von OT- und IT-Systemen fuer Netzsteuerung unter hohen Sicherheitsanforderungen"
+      ],
+      "proposition_fit": {
+        "sovereign-cloud": {
+          "relevance": "high",
+          "rationale": "E.ON betreibt kritische Infrastruktur und muss NIS2/KRITIS-Anforderungen erfuellen. Souveraene Cloud mit BSI-C5-Attestierung ist Voraussetzung fuer Netz- und Handelssysteme."
+        },
+        "cloud-migration": {
+          "relevance": "high",
+          "rationale": "E.ON hat bereits 2.500 SAP-Workloads zu T-Systems migriert. Weitere Legacy-Systeme stehen zur Migration an, insbesondere SAP IS-U fuer Netzabrechnung."
+        },
+        "managed-hyperscaler": {
+          "relevance": "medium",
+          "rationale": "E.ON nutzt Azure und AWS, benoetigt aber verwalteten Betrieb mit garantierter Reaktionszeit fuer energiehandelskritische Systeme."
+        },
+        "hybrid-cloud": {
+          "relevance": "high",
+          "rationale": "Die Integration von SCADA/OT-Systemen mit Public-Cloud-Workloads erfordert hybride Architektur mit Air-Gap-Isolation fuer Netzsteuerung."
+        }
+      },
+      "sales_opportunity": {
+        "relationship_status": "existing_customer",
+        "entry_strategy": "Ausbau der bestehenden Cloud-Migration auf weitere SAP-Module und OT/IT-Integration. Upsell von Hybrid-Cloud-Governance und Managed Hyperscaler.",
+        "estimated_deal_size": {
+          "value": 25000000,
+          "currency": "EUR",
+          "period": "annual",
+          "basis": "Erweiterung bestehender Rahmenvertrag um Hybrid-Cloud und Managed Services"
+        },
+        "win_probability": "high",
+        "timeline": "Q2 2026 — NIS2-Deadline Oktober 2026 erzeugt Handlungsdruck",
+        "key_triggers": [
+          "NIS2-Compliance-Deadline Oktober 2026",
+          "Naechste Welle SAP-Workload-Migrationen",
+          "Smart-Grid-Digitalisierungsprogramm"
+        ]
+      },
+      "estimated_it_spend": {
+        "value": 2500000000,
+        "currency": "EUR",
+        "basis": "Branchendurchschnitt 3% vom Umsatz fuer Energieversorger"
+      },
+      "decision_makers": {
+        "roles": ["CIO", "CISO", "VP Infrastructure", "Head of E.ON Digital Technology"],
+        "buying_center": "Zentraler IT-Einkauf mit Rahmenvertraegen, starke Rolle der Digitaleinheit EDT",
+        "procurement_preferences": "Rahmenvertraege mit Volumenrabatten, starke Compliance-Anforderungen an Lieferanten, Nachweis BSI-C5 und ISO 27001 Pflicht"
+      }
+    },
+    {
+      "slug": "rwe",
+      "name": "RWE AG",
+      "domain": "rwe.com",
+      "headquarters": "Essen, Deutschland",
+      "branche": "Energieerzeugung & Energiehandel",
+      "employees": 20505,
+      "revenue": {
+        "value": 25100000000,
+        "currency": "EUR",
+        "year": 2025
+      },
+      "market_position": {
+        "rank_in_segment": 2,
+        "description": "Fuehrender europaeischer Energieerzeuger, groesster Betreiber erneuerbarer Energien in Deutschland, bedeutender Energiehaendler"
+      },
+      "description": "RWE AG ist ein fuehrender europaeischer Energieerzeuger mit Fokus auf erneuerbare Energien, Energiehandel und flexible Erzeugung. Das Unternehmen treibt den Kohleausstieg bis 2030 und Klimaneutralitaet bis 2040 voran.",
+      "segments": ["Offshore Wind", "Onshore Wind/Solar", "Flexible Erzeugung", "Energiehandel", "Auslauftechnologien"],
+      "it_landscape": {
+        "summary": "RWE hat eine strategische Cloud-Transformation mit RISE with SAP auf Microsoft Azure durchgefuehrt und eine umfassende AWS-Partnerschaft fuer KI und Datenanalyse geschlossen. HPE Private Cloud AI wird fuer Wetterdatenmodellierung eingesetzt.",
+        "key_systems": ["SAP S/4HANA Cloud Private", "SAP BTP", "AWS ETRM-Plattform", "HPE Private Cloud AI"],
+        "cloud_maturity": "advanced",
+        "cloud_providers": ["Microsoft Azure", "AWS", "HPE Private Cloud"],
+        "strategic_partners": ["SAP (RISE with SAP)", "AWS (Strategic Framework Agreement)", "HPE (Private Cloud AI)", "Infosys (Digital Workplace)"]
+      },
+      "competitive_landscape": {
+        "incumbent_providers": ["AWS (strategische Partnerschaft)", "SAP (RISE with SAP)", "HPE (Private Cloud AI)", "Infosys (Digital Workplace)"],
+        "competitive_threats": ["AWS hat direkten strategischen Rahmenvertrag — schwer zu verdraengen", "Infosys hat Workplace-Mandat"],
+        "t_systems_position": "Challenger. Kein bestehender Vertrag. Einstieg ueber Sovereign Cloud fuer regulierte Handelsdaten oder Cross-Cloud-Governance als Differenzierung gegenueber einzelnen Hyperscalern."
+      },
+      "strategic_priorities": [
+        "Kohleausstieg bis 2030, Klimaneutralitaet bis 2040",
+        "Ausbau erneuerbarer Energien (11,2 GW Pipeline)",
+        "KI-gestuetzte Wetterprognosen und Handelsoptimierung",
+        "Digitale Arbeitsplatz-Transformation mit Infosys",
+        "NIS2-Compliance fuer Energiehandel und Erzeugungsanlagen"
+      ],
+      "pain_points": [
+        "Hochverfuegbarkeit fuer Energiehandelsplattformen (ETRM) mit Millisekundenlatenz",
+        "Multi-Cloud-Governance ueber Azure, AWS und HPE hinweg ohne einheitliche Steuerung",
+        "Souveraenitaetsanforderungen fuer Handelsdaten bei gleichzeitiger Hyperscaler-Nutzung",
+        "Skalierung der KI-Infrastruktur fuer Wettermodellierung und Anlagenoptimierung"
+      ],
+      "proposition_fit": {
+        "sovereign-cloud": {
+          "relevance": "high",
+          "rationale": "Energiehandelsdaten unterliegen BaFin- und NIS2-Regulierung. RWE benoetigt EU-souveraene Infrastruktur fuer handelskritische Systeme, die nicht bei US-Hyperscalern liegen duerfen."
+        },
+        "cloud-migration": {
+          "relevance": "low",
+          "rationale": "RISE with SAP Migration ist weitgehend abgeschlossen. Geringer Restbedarf bei Auslauftechnologien."
+        },
+        "managed-hyperscaler": {
+          "relevance": "medium",
+          "rationale": "RWE hat AWS-Partnerschaft direkt geschlossen. T-Systems kann als ergaenzender MSP fuer Azure-Workloads und Cross-Cloud-Governance positioniert werden, aber Entry-Barrier ist hoch."
+        },
+        "hybrid-cloud": {
+          "relevance": "high",
+          "rationale": "Die Kombination aus HPE Private Cloud AI, Azure SAP und AWS Handelsplattform erfordert zentrale Hybrid-Cloud-Governance — hier hat kein einzelner Hyperscaler die neutrale Position."
+        }
+      },
+      "sales_opportunity": {
+        "relationship_status": "prospect",
+        "entry_strategy": "Einstieg ueber Sovereign Cloud fuer BaFin-regulierte Handelsdaten. Zweiter Vektor: Multi-Cloud-Governance-Plattform als neutraler Orchestrator ueber AWS, Azure und HPE hinweg.",
+        "estimated_deal_size": {
+          "value": 8000000,
+          "currency": "EUR",
+          "period": "annual",
+          "basis": "Initial-Engagement Sovereign Cloud fuer Handelsdaten-Compliance"
+        },
+        "win_probability": "medium",
+        "timeline": "Q3 2026 — NIS2-Deadline und BaFin-Anforderungen als Treiber",
+        "key_triggers": [
+          "NIS2-Compliance-Deadline fuer Energiehandel",
+          "BaFin-Audit-Anforderungen an Handelsdaten-Souveraenitaet",
+          "Wachsende Multi-Cloud-Komplexitaet ohne einheitliche Governance"
+        ],
+        "barriers": [
+          "Starke bestehende AWS- und Infosys-Partnerschaften",
+          "Dezentrale IT-Beschaffung erschwert zentralen Zugang"
+        ]
+      },
+      "estimated_it_spend": {
+        "value": 750000000,
+        "currency": "EUR",
+        "basis": "Branchendurchschnitt 3% vom Umsatz fuer Energieversorger"
+      },
+      "decision_makers": {
+        "roles": ["CIO", "CISO", "VP Cloud & Infrastructure", "Head of Supply & Trading IT"],
+        "buying_center": "Dezentrale IT-Beschaffung je Geschaeftsbereich, zentrale Rahmenvertraege fuer Infrastruktur",
+        "procurement_preferences": "Bevorzugt strategische Partnerschaften mit Hyperscalern direkt, offen fuer spezialisierte Managed Services bei Compliance-Anforderungen"
+      }
+    },
+    {
+      "slug": "enbw",
+      "name": "EnBW Energie Baden-Wuerttemberg AG",
+      "domain": "enbw.com",
+      "headquarters": "Karlsruhe, Deutschland",
+      "branche": "Integrierter Energieversorger",
+      "employees": 30952,
+      "revenue": {
+        "value": 34520000000,
+        "currency": "EUR",
+        "year": 2025
+      },
+      "market_position": {
+        "rank_in_segment": 3,
+        "description": "Drittgroesster Energieversorger Deutschlands, fuehrend bei E-Mobilitaet (EnBW mobility+), starke regionale Verankerung in Baden-Wuerttemberg"
+      },
+      "description": "EnBW ist der drittgroesste Energieversorger Deutschlands mit rund 5,5 Millionen Kunden. Das Unternehmen betreibt ein integriertes Geschaeftsmodell entlang der gesamten Energiewertschoepfungskette von Erzeugung ueber Netze bis zum Vertrieb.",
+      "segments": ["Smart Infrastructure fuer Kunden", "Systemkritische Infrastruktur", "Nachhaltige Erzeugungsinfrastruktur"],
+      "it_landscape": {
+        "summary": "EnBW befindet sich in einer Phase hoher Investitionen (bis zu 50 Mrd. EUR bis 2030) mit Fokus auf Netzausbau und Digitalisierung. Die IT-Landschaft umfasst SAP-Kernsysteme, OT-Steuerungssysteme fuer Netze und zunehmend Cloud-basierte Plattformen fuer Kundenservices und Ladeinfrastruktur.",
+        "key_systems": ["SAP ERP", "OT/SCADA-Systeme", "Ladeinfrastruktur-Management", "Breitband-Plattform"],
+        "cloud_maturity": "intermediate",
+        "cloud_providers": ["Microsoft Azure"],
+        "digitalization_focus": "Netzdigitalisierung, E-Mobilitaet, Breitbandausbau"
+      },
+      "competitive_landscape": {
+        "incumbent_providers": ["Regionale IT-Dienstleister", "SAP (ERP)"],
+        "competitive_threats": ["Accenture", "Capgemini", "IBM"],
+        "t_systems_position": "Greenfield-Opportunity. Keine starken Hyperscaler-Partnerschaften bekannt. T-Systems kann als strategischer Partner fuer die gesamte Cloud-Transformation positioniert werden — aehnlich wie bei E.ON."
+      },
+      "strategic_priorities": [
+        "Investitionsprogramm von bis zu 50 Mrd. EUR bis 2030",
+        "Offshore-Windausbau und Fuel-Switch-Projekte",
+        "Ausbau der Schnellladeinfrastruktur (EnBW mobility+)",
+        "Breitbandausbau und Smart-Grid-Digitalisierung",
+        "NIS2-Compliance fuer Netz- und Erzeugungsinfrastruktur"
+      ],
+      "pain_points": [
+        "Massiver Investitionsbedarf erhoehen Druck auf IT-Kosteneffizienz",
+        "SAP-Transformation noch nicht so weit fortgeschritten wie bei E.ON oder RWE",
+        "OT/IT-Konvergenz fuer Smart Grids und Ladeinfrastruktur ist komplex",
+        "Regulatorische Anforderungen (NIS2, KRITIS) bei gleichzeitigem Wachstum der digitalen Services"
+      ],
+      "proposition_fit": {
+        "sovereign-cloud": {
+          "relevance": "high",
+          "rationale": "EnBW betreibt systemkritische Infrastruktur (Uebertragungs- und Verteilnetze) und muss NIS2/KRITIS-konform arbeiten. BSI-C5-attestierte Cloud ist Pflicht."
+        },
+        "cloud-migration": {
+          "relevance": "high",
+          "rationale": "EnBW steht am Anfang der SAP-Cloud-Transformation. T-Systems kann die bewaehrte CMF-Methodik fuer SAP IS-U Migration anbieten und die E.ON-Referenz als Proof-of-Concept nutzen."
+        },
+        "managed-hyperscaler": {
+          "relevance": "medium",
+          "rationale": "Mit wachsender Cloud-Nutzung fuer Kundenservices und E-Mobilitaet steigt der Bedarf an verwaltetem Hyperscaler-Betrieb."
+        },
+        "hybrid-cloud": {
+          "relevance": "high",
+          "rationale": "Die Integration von OT-Systemen (Netzsteuerung) mit Cloud-basierten Smart-Grid-Applikationen erfordert hybride Architektur mit BSI-zertifizierter Isolation."
+        }
+      },
+      "sales_opportunity": {
+        "relationship_status": "prospect",
+        "entry_strategy": "Lead mit SAP-Cloud-Migration (CMF-Methodik) unter Verweis auf E.ON-Referenz. Paketangebot: Sovereign Cloud + Cloud Migration + Hybrid Cloud als integrierte Transformationspartnerschaft.",
+        "estimated_deal_size": {
+          "value": 15000000,
+          "currency": "EUR",
+          "period": "annual",
+          "basis": "SAP-Cloud-Migration plus Sovereign-Cloud-Betrieb als Gesamtpaket"
+        },
+        "win_probability": "high",
+        "timeline": "Q2 2026 — SAP-Modernisierung und NIS2-Deadline als parallele Treiber",
+        "key_triggers": [
+          "SAP-ERP-Modernisierung (End-of-Life SAP ECC)",
+          "NIS2-Compliance-Deadline Oktober 2026",
+          "50-Mrd-EUR-Investitionsprogramm erhoht Digitalisierungsdruck"
+        ],
+        "barriers": [
+          "Regionale Praeferenz fuer baden-wuerttembergische IT-Dienstleister",
+          "Hohe interne Investitionspriorisierung kann IT-Projekte verzoegern"
+        ]
+      },
+      "estimated_it_spend": {
+        "value": 1000000000,
+        "currency": "EUR",
+        "basis": "Branchendurchschnitt 3% vom Umsatz, erhoehter Anteil durch Digitalisierungsoffensive"
+      },
+      "decision_makers": {
+        "roles": ["CIO", "CISO", "VP Smart Infrastructure", "Leiter Netzdigitalisierung"],
+        "buying_center": "Zentraler IT-Einkauf mit starker Einbindung der Fachbereiche Netze und Vertrieb",
+        "procurement_preferences": "Wertorientierte Beschaffung mit Fokus auf Gesamtbetriebskosten (TCO), starke regionale Bindung, Compliance-Nachweise erforderlich"
+      }
+    }
+  ],
+  "market_summary": {
+    "total_estimated_it_spend": {
+      "value": 4250000000,
+      "currency": "EUR"
+    },
+    "addressable_opportunity": {
+      "value": 48000000,
+      "currency": "EUR",
+      "period": "annual",
+      "description": "Summe der geschaetzten Deal-Groessen fuer E.ON (25M), RWE (8M) und EnBW (15M)"
+    },
+    "common_themes": [
+      "NIS2- und KRITIS-Compliance als regulatorischer Treiber mit Deadline Oktober 2026",
+      "SAP-Cloud-Transformation (RISE with SAP / S/4HANA) in unterschiedlichen Reifegraden",
+      "OT/IT-Konvergenz fuer Smart Grids und Netzsteuerung",
+      "Multi-Cloud-Governance als wachsende Herausforderung",
+      "Fachkraeftemangel treibt Managed-Services-Nachfrage"
+    ],
+    "prioritized_accounts": [
+      {
+        "slug": "eon",
+        "priority": 1,
+        "rationale": "Bestehender Kunde mit bewiesener Referenz, hoechstes Upsell-Potenzial, hoechste Abschlusswahrscheinlichkeit"
+      },
+      {
+        "slug": "enbw",
+        "priority": 2,
+        "rationale": "Greenfield-Opportunity ohne starke Hyperscaler-Bindung, groesstes Transformationspotenzial, E.ON-Referenz als Tueroeffner"
+      },
+      {
+        "slug": "rwe",
+        "priority": 3,
+        "rationale": "Hohe Eintrittsbarrieren durch bestehende AWS/Infosys-Partnerschaften, aber Sovereign-Cloud-Nische fuer regulierte Handelsdaten"
+      }
+    ],
+    "t_systems_positioning": "T-Systems ist durch bestehende E.ON-Referenz und BSI-C5-attestierte Sovereign Cloud ideal positioniert. Die Kombination aus Souveraenitaet, SAP-Migrationskompetenz und Hybrid-Cloud-Governance adressiert die Kernbeduerfnisse aller drei Kunden. Prioritaet: E.ON verteidigen und ausbauen, EnBW als Neugewinn angreifen, RWE ueber Compliance-Nische erschliessen."
+  }
+}

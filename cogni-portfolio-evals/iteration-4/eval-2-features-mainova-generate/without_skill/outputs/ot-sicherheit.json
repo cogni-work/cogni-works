@@ -1,0 +1,14 @@
+{
+  "slug": "ot-sicherheit",
+  "product_slug": "digitale-netzsteuerung",
+  "name": "OT-Sicherheit Kritische Infrastruktur",
+  "description": "Absicherung der Betriebstechnologie (OT) in Strom-, Gas- und Fernwaermenetzen gemaess BSI-KRITIS-Anforderungen mit Netzwerksegmentierung, industriellen Firewalls, Anomalieerkennung auf IEC-Protokollebene und regelmaessigen BSI-Audits.",
+  "category": "security",
+  "taxonomy_mapping": {
+    "dimension": 2,
+    "category_id": "2.6",
+    "category_name": "Network Security",
+    "horizon": "current"
+  },
+  "readiness": "ga"
+}

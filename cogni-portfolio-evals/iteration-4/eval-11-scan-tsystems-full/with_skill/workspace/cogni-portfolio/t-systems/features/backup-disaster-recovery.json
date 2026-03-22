@@ -1,0 +1,16 @@
+{
+  "slug": "backup-disaster-recovery",
+  "product_slug": "infrastructure-services",
+  "name": "Backup and Disaster Recovery",
+  "description": "Managed backup and disaster recovery services leveraging twin-core data center architecture with geographic separation, automated failover orchestration, and business continuity planning integration.",
+  "taxonomy_mapping": {
+    "dimension": 5,
+    "dimension_name": "Managed Infrastructure Services",
+    "category_id": "5.3",
+    "category_name": "Backup & Disaster Recovery",
+    "horizon": "current"
+  },
+  "readiness": "ga",
+  "source_file": "research/t-systems-portfolio.md",
+  "created": "2026-03-18"
+}

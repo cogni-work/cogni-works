@@ -75,13 +75,13 @@ Write `output/README.md` as the main messaging repository. The structure is desi
 [For each product:]
 ### [Product Name]
 #### Features
-[Table of features belonging to this product with IS descriptions]
+[Table of features belonging to this product, ordered by sort_order ascending — features without sort_order last, then alphabetically by slug. Include IS descriptions.]
 
 ## Target Markets
 [For each market: description, segmentation, TAM/SAM/SOM summary]
 
 ## Proposition Messaging Matrix
-[Table: Feature x Market with IS/DOES/MEANS for each cell, grouped by product]
+[Table: Feature x Market with IS/DOES/MEANS for each cell, grouped by product. Within each product, order features by sort_order ascending.]
 
 ## Packages
 [If packages/ exists: show each package grouped by product.
@@ -115,7 +115,7 @@ project → phases + pricing tiers, subscription → onboarding + tiers, partner
 [Competitor analysis for each proposition in this market]
 
 ## Feature Deep Dives
-[For each feature:]
+[For each feature, ordered by sort_order ascending (unset last, then alphabetically):]
 ### [Feature Name] (Product: [Product Name])
 #### Cross-Market Messaging
 [How this feature's messaging varies across markets]

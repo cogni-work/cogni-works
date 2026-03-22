@@ -126,9 +126,9 @@ Structured spreadsheet with all portfolio data for analysis and sharing.
 
 **Sheets**:
 - **Products**: All products with positioning, pricing tier, and maturity
-- **Features**: All features with descriptions, categories, and parent product
+- **Features**: All features with descriptions, categories, and parent product — ordered by sort_order ascending within each product (features without sort_order last, then alphabetically by slug)
 - **Markets**: All markets with segmentation and TAM/SAM/SOM
-- **Proposition Matrix**: Feature x Market grid with IS/DOES/MEANS, grouped by product
+- **Proposition Matrix**: Feature x Market grid with IS/DOES/MEANS, grouped by product — within each product, order features by sort_order ascending
 - **Packages**: All packages with product, market, tier names, included solutions per tier, pricing, and bundle savings
 - **Solutions**: Grouped by solution type. Project solutions show implementation phases and pricing tiers (PoV/S/M/L). Subscription solutions show onboarding, subscription tiers (Free/Pro/Enterprise), and professional services. Partnership solutions show program stages and revenue-share terms.
 - **Cost Analysis** (internal): For solutions with `cost_model` — project solutions show effort days per tier, internal cost, price, margin %, and role breakdown. Subscription solutions show unit economics (CAC, LTV, LTV/CAC ratio, gross margin, churn). This sheet is for internal use only and should be flagged as confidential. Include assumptions as a notes section at the bottom.

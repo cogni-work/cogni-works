@@ -151,6 +151,7 @@ For each confirmed entity, write JSON following the schemas in `$CLAUDE_PLUGIN_R
 - Set `readiness: "planned"` (not yet built) unless the canvas indicates otherwise
 - Set `product_slug` to the parent product
 - Write market-independent IS-layer descriptions (what it IS, not what it does for a specific segment)
+- Assign `sort_order` following the value-to-utility spectrum: customer-facing value features get low numbers (10, 20, 30...), infrastructure/utility features get high numbers (70+). Use increments of 10.
 
 **Markets** — write to `markets/{slug}.json`:
 - Set `priority` based on segment tier (primary/secondary/tertiary)

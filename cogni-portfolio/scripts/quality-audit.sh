@@ -42,11 +42,18 @@ propositions_flagged = []
 propositions_checked = 0
 
 # --- Feature checks ---
-for f in sorted(glob.glob(os.path.join(proj, 'features', '*.json'))):
+# Load features and sort by sort_order (value-to-utility), then slug
+_feature_files = glob.glob(os.path.join(proj, 'features', '*.json'))
+_feature_data = []
+for _ff in _feature_files:
     try:
-        d = json.load(open(f))
+        _fd = json.load(open(_ff))
+        _feature_data.append((_ff, _fd))
     except Exception:
-        continue
+        pass
+_feature_data.sort(key=lambda x: (x[1].get('sort_order') if x[1].get('sort_order') is not None else float('inf'), os.path.basename(x[0])))
+
+for f, d in _feature_data:
     features_checked += 1
     slug = os.path.basename(f)[:-5]
     issues = []

@@ -398,6 +398,7 @@ For each confirmed entity:
 2. Write feature JSON to `features/{slug}.json` (skip if file already exists)
 3. Set `created` to today's date
 4. Include `"source_file": "research/{COMPANY_SLUG}-portfolio.md"` for traceability
+5. Assign `sort_order` to each feature following the value-to-utility spectrum: customer-facing value features get low numbers (10, 20, 30...), infrastructure/utility features get high numbers (70+). Use increments of 10 to leave room for insertions. This controls display ordering in the dashboard and reports.
 
 After writing, sync the portfolio:
 

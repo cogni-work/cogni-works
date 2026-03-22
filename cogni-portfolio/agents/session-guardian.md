@@ -68,26 +68,27 @@ If any one condition is false, proceed with dashboard generation. When in doubt,
 
 ### 3. Generate Dashboard
 
-Follow the portfolio-dashboard pipeline:
+The dashboard skill owns the full pipeline (theme selection, design-variables generation, HTML generation). This agent reuses the generator script directly, choosing the simplest invocation path.
 
-**a. Pick theme**
+**a. Choose invocation mode**
 
-Check `<project_dir>/output/design-variables.json` — if it already exists from a previous dashboard run, reuse it (skip theme selection and generation). This is the common case in active projects.
+- If `<project_dir>/output/design-variables.json` exists (common case in active projects), use `--design-variables`:
+  ```bash
+  python3 $CLAUDE_PLUGIN_ROOT/skills/portfolio-dashboard/scripts/generate-dashboard.py "<project_dir>" --design-variables "<project_dir>/output/design-variables.json"
+  ```
+- If no `design-variables.json` exists, find the most recently modified `theme.md` in the workspace and use the `--theme` fallback (the script's built-in parser handles theme-to-variables conversion):
+  ```bash
+  python3 $CLAUDE_PLUGIN_ROOT/skills/portfolio-dashboard/scripts/generate-dashboard.py "<project_dir>" --theme "<path-to-theme.md>"
+  ```
+- If neither `design-variables.json` nor any theme file exists, skip dashboard generation entirely. Proceed to step 4 and note in your recommendation that the user can run `/portfolio-dashboard` to set up a theme and generate the dashboard manually.
 
-If no design-variables.json exists, check for themes in the workspace:
-- If exactly one theme exists, auto-select it
-- If multiple themes exist, pick the most recently modified one (the agent shouldn't prompt the user for theme selection — that's the dashboard skill's job when invoked directly)
+**b. Handle errors**
 
-Read the theme file and generate `design-variables.json` following the schema at `$CLAUDE_PLUGIN_ROOT/skills/portfolio-dashboard/schemas/design-variables.schema.json`. See the example at `$CLAUDE_PLUGIN_ROOT/skills/portfolio-dashboard/examples/design-variables-cogni-work.json`.
-
-**b. Run the generator**
-
-```bash
-python3 $CLAUDE_PLUGIN_ROOT/skills/portfolio-dashboard/scripts/generate-dashboard.py "<project_dir>" --design-variables "<project_dir>/output/design-variables.json"
-```
+If the generator script fails (non-zero exit code), do not retry. Include the error output in your recommendation message so the user can diagnose. Still proceed to step 4 — the recommendation with next steps is valuable even without a dashboard.
 
 **c. Open in browser**
 
+On success:
 ```bash
 open "<project_dir>/output/dashboard.html"
 ```

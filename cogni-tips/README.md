@@ -43,10 +43,12 @@ This plugin automates the research-heavy parts while keeping strategic judgment 
 
 ## What it does
 
-A two-stage pipeline for DACH-focused trend intelligence: scout trends across an industry using the Trendradar dimensions with multi-framework scoring, and generate a TIPS-structured narrative report with web-sourced quantitative evidence and inline citations. Bilingual research (EN/DE) with curated German institutional sources.
+Connects industry trends to portfolio solutions for DACH markets. A four-stage pipeline that scouts trends, bridges them to investment themes and solution blueprints via T→I→P→S value paths, generates CxO-level reports, and curates reusable industry catalogs. Bilingual research (EN/DE) with curated German institutional sources.
 
 1. **Scout** trends across 4 Trendradar dimensions with bilingual web research (32 searches + academic, patent, and regulatory API queries), scored using multi-framework analysis (Ansoff signal intensity, Rogers diffusion stages, CRAAP source quality)
-2. **Report** with 4 parallel agents enriching each dimension with quantitative evidence, producing a narrative report with inline citations and a verifiable claims registry
+2. **Model** investment themes (Handlungsfelder) by consolidating trends into T→I→P→S value chains, generating solution blueprints with portfolio composition and readiness scoring — optionally anchored to real products via cogni-portfolio
+3. **Report** CxO-level narratives structured by investment theme using the Corporate Visions arc (Why Change → Why Now → Why You → Why Pay), enriched with web-sourced quantitative evidence, inline citations, and a verifiable claims registry
+4. **Catalog** curated solutions, SPIs, metrics, and collaterals into persistent industry catalogs for cross-pursuit reuse — each engagement improves the base catalog
 
 ## What it means for you
 
@@ -54,7 +56,10 @@ If you need to stay ahead of industry trends for strategy, advisory, or portfoli
 
 - **Broad coverage, fast.** 32+ bilingual web searches plus academic and patent sources, executed in minutes.
 - **Framework-scored, not gut-feel.** Every candidate scored on impact, probability, strategic fit, source quality, and signal strength.
+- **From trends to solutions.** T→I→P→S value paths bridge scouted trends to investment themes and portfolio-grounded solution blueprints — not just trend narratives.
 - **Evidence-backed output.** Every quantitative claim in the report has an inline citation you can verify.
+- **Cross-pursuit learning.** Industry catalogs accumulate curated solutions, SPIs, and metrics — each engagement improves the next.
+- **Multi-session workflow.** Resume any project mid-stream with full state recovery via `/tips-resume`.
 - **DACH-native.** German and English research queries, curated DACH institutional sources (industry associations, Fraunhofer, EUR-Lex), output in your chosen language.
 
 ## Installation
@@ -71,21 +76,32 @@ This plugin is part of the [cogni-works monorepo](https://github.com/cogni-work/
 Describe what you want in natural language:
 
 - "scout trends for the automotive industry"
-- "select trend candidates for manufacturing"
+- "model investment themes from the scouted trends"
+- "generate solution blueprints"
 - "generate a trend report"
+- "export curated solutions to the industry catalog"
+- "where was I?" or "resume my TIPS project"
 
 Or invoke skills directly:
 
 ```
 trend-scout    → interactive industry selection + trend scouting
-trend-report   → narrative report from agreed candidates
+value-modeler  → investment themes, solution blueprints, portfolio anchoring
+trend-report   → CxO-level narrative report from modeled themes
+tips-catalog   → curate and export solutions for cross-pursuit reuse
+tips-dashboard → interactive HTML visualization of the full pipeline
+tips-resume    → resume a project mid-stream with status and next actions
 ```
 
 ## How it works
 
-**trend-scout** initializes a research project, dispatches a **trend-web-researcher** agent for bilingual web research (32 queries + API sources), then a **trend-generator** agent to produce 60 scored candidates using extended thinking. All candidates are finalized automatically for downstream reporting.
+**trend-scout** initializes a research project, dispatches a **trend-web-researcher** agent for bilingual web research (32 queries + API sources), then a **trend-generator** agent to produce 60 scored candidates using extended thinking. All candidates are finalized automatically for downstream modeling.
 
-**trend-report** reads agreed candidates and dispatches 4 parallel **trend-report-writer** agents (one per Trendradar dimension). Each agent enriches trends with web-sourced quantitative evidence, writes a TIPS-structured narrative section, and extracts verifiable claims. The skill assembles the final report with executive summary, portfolio analysis, and claims registry.
+**value-modeler** reads scouted candidates and builds T→I→P→S relationship networks, consolidates them into 3-7 MECE investment themes (Handlungsfelder), and generates solution templates with portfolio blueprints. When cogni-portfolio is available, solutions are anchored to real products and features. Includes interactive Business Relevance scoring and multi-framework solution ranking.
+
+**trend-report** reads modeled investment themes and dispatches 3-7 parallel **trend-report-investment-theme-writer** agents (one per theme). Each agent writes a narrative section using the Corporate Visions arc (Why Change → Why Now → Why You → Why Pay), enriched with web-sourced quantitative evidence and verifiable claims. The skill assembles the final report with executive summary, portfolio analysis, and claims registry.
+
+**tips-catalog** curates solutions, SPIs, metrics, and collaterals from completed projects into persistent industry catalogs. Each engagement improves the base catalog for future pursuits in the same industry.
 
 ## Components
 

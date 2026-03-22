@@ -146,14 +146,14 @@ After research configuration is confirmed, **always** ask where to store the pro
 Use `AskUserQuestion` to present:
 
 > **Where should I store this project?**
-> - `standard` *(recommended)* — `cogni-gpt-researcher/{project-slug}` (organized under plugin namespace)
+> - `standard` *(recommended)* — `cogni-research/{project-slug}` (organized under plugin namespace)
 > - `here` — current directory (`{cwd}/{project-slug}`)
 > - Or provide a custom path
 
 The reason this is a separate, explicit question: reports that land in the wrong directory are hard to find later and break the user's workspace organization. Asking once upfront avoids that.
 
 **Handling location responses:**
-- "standard" / "recommended" → `cogni-gpt-researcher/` relative to current working directory
+- "standard" / "recommended" → `cogni-research/` relative to current working directory
 - "here" → current working directory
 - Any path → use as-is
 
@@ -161,7 +161,7 @@ The reason this is a separate, explicit question: reports that land in the wrong
 
 Once configuration is confirmed and the user has answered the location question (Step 2b), resolve the workspace path:
 - "here" → current working directory
-- "standard" → `cogni-gpt-researcher/` relative to current working directory
+- "standard" → `cogni-research/` relative to current working directory
 - custom path → use as-is
 
 Then initialize:

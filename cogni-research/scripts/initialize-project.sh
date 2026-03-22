@@ -167,7 +167,7 @@ CONFIG=$(jq -n \
     output_language: $output_language,
     language: $language,
     created_at: $created_at,
-    plugin: "cogni-gpt-researcher",
+    plugin: "cogni-research",
     plugin_version: $plugin_version,
     phases_completed: []
   }')

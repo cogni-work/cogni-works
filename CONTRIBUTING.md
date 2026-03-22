@@ -18,7 +18,7 @@ Core plugins are maintained by cogni-works and licensed under AGPL-3.0:
 - cogni-visual
 - cogni-teacher
 - cogni-marketing
-- cogni-gpt-researcher
+- cogni-research
 - cogni-sales
 
 ### CLA Requirement

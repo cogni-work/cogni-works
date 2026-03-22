@@ -8,7 +8,7 @@ cogni-consulting is a Double Diamond consulting orchestrator for the cogni-works
 
 ```
 consulting-setup skill       → Vision framing, engagement scaffolding
-consulting-discover skill    → D1 diverge: cogni-gpt-researcher, cogni-tips, cogni-portfolio
+consulting-discover skill    → D1 diverge: cogni-research, cogni-tips, cogni-portfolio
 consulting-define skill      → D1 converge: cogni-claims, guided synthesis
 consulting-develop skill     → D2 diverge: cogni-tips value-modeler, cogni-portfolio propositions
 consulting-deliver skill     → D2 converge: cogni-claims, business case, roadmap
@@ -36,7 +36,7 @@ Each engagement lives in `cogni-consulting/{slug}/` with:
 
 | Phase | Plugin | Skill Invoked |
 |-------|--------|---------------|
-| Discover | cogni-gpt-researcher | research-report |
+| Discover | cogni-research | research-report |
 | Discover | cogni-tips | trend-scout |
 | Discover | cogni-portfolio | portfolio-scan, compete |
 | Define | cogni-claims | claims (verify mode) |

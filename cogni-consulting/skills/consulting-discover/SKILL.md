@@ -2,7 +2,7 @@
 name: consulting-discover
 description: |
   Execute the Discover phase of a Double Diamond engagement — diverge to build a rich understanding
-  of the problem landscape. Dispatches to cogni-gpt-researcher, cogni-tips, and cogni-portfolio.
+  of the problem landscape. Dispatches to cogni-research, cogni-tips, and cogni-portfolio.
   Use whenever the user wants to research, explore, or investigate a topic within a diamond engagement.
   Trigger on: "start discovery", "research the landscape", "let's explore", "what do we know about",
   "gather evidence", "run the research", "investigate the market", "scan for trends",
@@ -51,7 +51,7 @@ Present the proposed discovery plan, typically 3-5 activities:
 
 | Method | Plugin | What It Produces |
 |---|---|---|
-| Desk research | cogni-gpt-researcher | Research report with cited sources |
+| Desk research | cogni-research | Research report with cited sources |
 | Industry trend scan | cogni-tips | 60 trend candidates across 4 dimensions × 3 horizons |
 | Competitive baseline | cogni-portfolio | Competitor landscape and market segmentation |
 
@@ -71,7 +71,7 @@ Ask: "Which methods do you want to use for Discovery? I recommend all plugin-pow
 
 For each confirmed plugin method, dispatch to the appropriate plugin:
 
-**Desk Research (cogni-gpt-researcher)**:
+**Desk Research (cogni-research)**:
 - Frame the research topic from the engagement's desired outcome and scope
 - Suggest report type: `detailed` for most vision classes, `deep` for digital-transformation or innovation-portfolio
 - Recommend market setting matching the engagement scope

@@ -138,7 +138,7 @@ Read `$CLAUDE_PLUGIN_ROOT/references/vision-classes.md` for the selected vision 
 > **Your Diamond engagement plan:**
 >
 > **Discover** (diverge) — Build understanding of the problem landscape
-> - Desk research via cogni-gpt-researcher
+> - Desk research via cogni-research
 > - Industry trend scan via cogni-tips
 > - Competitive baseline via cogni-portfolio
 >

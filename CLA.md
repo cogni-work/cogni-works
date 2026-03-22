@@ -14,7 +14,7 @@ Thank you for your interest in contributing to cogni-works core plugins. This Co
 - cogni-visual
 - cogni-teacher
 - cogni-marketing
-- cogni-gpt-researcher
+- cogni-research
 - cogni-sales
 
 This Agreement does **not** apply to third-party community plugins published on the cogni-works marketplace. See [MARKETPLACE_TERMS.md](MARKETPLACE_TERMS.md) for community plugin terms.

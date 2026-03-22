@@ -14,7 +14,7 @@ Each vision class represents a type of consulting engagement outcome. The class 
 
 | Phase | Recommended Methods | Plugin Dispatch |
 |---|---|---|
-| Discover | Desk research (detailed), trend scan, competitive baseline, stakeholder mapping | cogni-gpt-researcher, cogni-tips, cogni-portfolio |
+| Discover | Desk research (detailed), trend scan, competitive baseline, stakeholder mapping | cogni-research, cogni-tips, cogni-portfolio |
 | Define | Assumption verification, affinity clustering, HMW synthesis | cogni-claims |
 | Develop | Value modeling, proposition modeling, scenario planning | cogni-tips, cogni-portfolio |
 | Deliver | Opportunity scoring, claims verification, executive summary | cogni-claims, cogni-portfolio |
@@ -26,7 +26,7 @@ Each vision class represents a type of consulting engagement outcome. The class 
 
 | Phase | Recommended Methods | Plugin Dispatch |
 |---|---|---|
-| Discover | Desk research (detailed), data audit, competitive baseline | cogni-gpt-researcher, cogni-portfolio |
+| Discover | Desk research (detailed), data audit, competitive baseline | cogni-research, cogni-portfolio |
 | Define | Assumption verification, assumption mapping | cogni-claims |
 | Develop | Proposition modeling, scenario planning | cogni-portfolio |
 | Deliver | Business case canvas, claims verification, opportunity scoring | cogni-claims, cogni-portfolio |
@@ -38,7 +38,7 @@ Each vision class represents a type of consulting engagement outcome. The class 
 
 | Phase | Recommended Methods | Plugin Dispatch |
 |---|---|---|
-| Discover | Desk research (market-specific), competitive baseline, customer journey analysis | cogni-gpt-researcher, cogni-portfolio |
+| Discover | Desk research (market-specific), competitive baseline, customer journey analysis | cogni-research, cogni-portfolio |
 | Define | Assumption verification, affinity clustering, HMW synthesis | cogni-claims |
 | Develop | Proposition modeling, opportunity scoring | cogni-portfolio |
 | Deliver | Opportunity scoring, claims verification, roadmap construction | cogni-claims, cogni-portfolio |
@@ -50,7 +50,7 @@ Each vision class represents a type of consulting engagement outcome. The class 
 
 | Phase | Recommended Methods | Plugin Dispatch |
 |---|---|---|
-| Discover | Data audit, stakeholder mapping, desk research (focused) | cogni-gpt-researcher |
+| Discover | Data audit, stakeholder mapping, desk research (focused) | cogni-research |
 | Define | Assumption mapping, affinity clustering | cogni-claims |
 | Develop | Opportunity scoring, scenario planning | — |
 | Deliver | Business case canvas, claims verification | cogni-claims |
@@ -62,7 +62,7 @@ Each vision class represents a type of consulting engagement outcome. The class 
 
 | Phase | Recommended Methods | Plugin Dispatch |
 |---|---|---|
-| Discover | Desk research (deep), trend scan, data audit, stakeholder mapping, customer journey analysis | cogni-gpt-researcher, cogni-tips |
+| Discover | Desk research (deep), trend scan, data audit, stakeholder mapping, customer journey analysis | cogni-research, cogni-tips |
 | Define | Assumption verification, affinity clustering, HMW synthesis | cogni-claims |
 | Develop | Value modeling, proposition modeling, scenario planning | cogni-tips, cogni-portfolio |
 | Deliver | Opportunity scoring, business case canvas, claims verification | cogni-claims, cogni-portfolio |
@@ -74,7 +74,7 @@ Each vision class represents a type of consulting engagement outcome. The class 
 
 | Phase | Recommended Methods | Plugin Dispatch |
 |---|---|---|
-| Discover | Trend scan (deep), desk research, stakeholder mapping | cogni-gpt-researcher, cogni-tips |
+| Discover | Trend scan (deep), desk research, stakeholder mapping | cogni-research, cogni-tips |
 | Define | Assumption verification, HMW synthesis | cogni-claims |
 | Develop | Value modeling (emphasis), scenario planning | cogni-tips |
 | Deliver | Opportunity scoring, claims verification | cogni-claims |
@@ -86,7 +86,7 @@ Each vision class represents a type of consulting engagement outcome. The class 
 
 | Phase | Recommended Methods | Plugin Dispatch |
 |---|---|---|
-| Discover | Desk research (market-focused), competitive baseline, customer journey analysis | cogni-gpt-researcher, cogni-portfolio |
+| Discover | Desk research (market-focused), competitive baseline, customer journey analysis | cogni-research, cogni-portfolio |
 | Define | Assumption verification, assumption mapping | cogni-claims |
 | Develop | Proposition modeling, scenario planning | cogni-portfolio |
 | Deliver | Opportunity scoring, business case canvas, claims verification | cogni-claims, cogni-portfolio |

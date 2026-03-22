@@ -1,6 +1,6 @@
 # Standalone Mode Reference
 
-When verify-report operates on a markdown file outside a cogni-gpt-researcher project, it creates a lightweight workspace and adapts its behavior for the absence of source entities.
+When verify-report operates on a markdown file outside a cogni-research project, it creates a lightweight workspace and adapts its behavior for the absence of source entities.
 
 ## Citation Detection
 

@@ -297,7 +297,7 @@ def main() -> None:
     frontmatter.setdefault("schema_version", "1.0")
     frontmatter.setdefault("entity_type", entity_type)
     frontmatter.setdefault("dc:created", timestamp)
-    frontmatter.setdefault("dc:creator", "Claude (cogni-gpt-researcher)")
+    frontmatter.setdefault("dc:creator", "Claude (cogni-research)")
 
     # Generate entity ID
     custom_id = args.entity_id or data.get("id", "")

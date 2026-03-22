@@ -1,4 +1,4 @@
-# cogni-gpt-researcher
+# cogni-research
 
 Multi-agent research report generator for [Claude Cowork](https://claude.ai/cowork). Native re-implementation of GPT-Researcher's STORM-inspired editorial workflow using Claude Code plugin primitives.
 
@@ -65,7 +65,7 @@ Claude decomposes the topic, dispatches parallel web researchers, compiles a sou
 Results land in your project directory:
 
 ```
-cogni-gpt-researcher-<slug>/
+cogni-research-<slug>/
 ├── 00-sub-questions/data/       Decomposed research questions
 ├── 01-contexts/data/            Per-question research findings
 ├── 02-sources/data/             Deduplicated source registry
@@ -130,7 +130,7 @@ The pipeline uses two skills that split the work across separate context windows
 ## Architecture
 
 ```
-cogni-gpt-researcher/
+cogni-research/
 ├── .claude-plugin/plugin.json    Plugin manifest
 ├── skills/                       4 orchestration skills
 │   ├── research-report/

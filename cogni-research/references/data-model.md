@@ -1,9 +1,9 @@
-# cogni-gpt-researcher Data Model Reference
+# cogni-research Data Model Reference
 
 ## Project Structure
 
 ```
-cogni-gpt-researcher/{project-slug}/
+cogni-research/{project-slug}/
 ├── project-config.json                    # Research configuration
 ├── 00-sub-questions/
 │   └── data/

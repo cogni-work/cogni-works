@@ -132,7 +132,7 @@ cogni-copywriting/
 |--------|----------|---------|
 | cogni-narrative | No | Arc-aware polishing — detects `arc_id` frontmatter and applies element-specific techniques |
 
-cogni-copywriting is standalone. It's consumed by cogni-sales, cogni-marketing, and cogni-gpt-researcher as an optional polish step.
+cogni-copywriting is standalone. It's consumed by cogni-sales, cogni-marketing, and cogni-research as an optional polish step.
 
 ## Custom development
 

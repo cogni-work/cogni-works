@@ -87,8 +87,8 @@ case "$WORKSPACE" in
     *)  WORKSPACE="$(cd "$WORKSPACE" 2>/dev/null && pwd)" ;;
 esac
 
-# Project path: nest under cogni-gpt-researcher/{customer-or-market-slug}/{project-slug}
-RESEARCHER_ROOT="${WORKSPACE}/cogni-gpt-researcher"
+# Project path: nest under cogni-research/{customer-or-market-slug}/{project-slug}
+RESEARCHER_ROOT="${WORKSPACE}/cogni-research"
 if [ "$PITCH_MODE" = "segment" ]; then
     PROJECT_PATH="${RESEARCHER_ROOT}/${SLUG}/segment-pitch"
 else

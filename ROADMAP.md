@@ -134,7 +134,7 @@ dispatching to plugins at phase-appropriate moments:
 
 | Phase | Plugins Dispatched |
 |-------|-------------------|
-| Discover | cogni-gpt-researcher, cogni-tips, cogni-portfolio |
+| Discover | cogni-research, cogni-tips, cogni-portfolio |
 | Define | cogni-claims |
 | Develop | cogni-tips, cogni-portfolio |
 | Deliver | cogni-claims, cogni-portfolio |

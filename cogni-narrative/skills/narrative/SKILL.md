@@ -113,7 +113,7 @@ The quality of each phase depends on the previous one. In particular, Phases 3 a
 
 ### Phase 0.5: Citation Bridge (conditional)
 
-Source content from upstream research tools (e.g., cogni-gpt-researcher) may use `[Source: Publisher](URL)` inline citations. These need to be converted into per-source markdown files before Phase 1 can load them as citable references.
+Source content from upstream research tools (e.g., cogni-research) may use `[Source: Publisher](URL)` inline citations. These need to be converted into per-source markdown files before Phase 1 can load them as citable references.
 
 **Detection:** Scan the first 500 lines of the source content for the pattern `[Source: ...](...)`. If present, run the bridge. If not, skip to Phase 1.
 

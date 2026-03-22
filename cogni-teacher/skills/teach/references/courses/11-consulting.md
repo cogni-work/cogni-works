@@ -101,7 +101,7 @@ Ask the user to:
 
 | Plugin | What It Does in Discover | Skill Invoked |
 |--------|--------------------------|---------------|
-| cogni-gpt-researcher | Web research on the client's domain, competitive landscape | research-report |
+| cogni-research | Web research on the client's domain, competitive landscape | research-report |
 | cogni-tips | Industry trend analysis, strategic foresight | trend-scout |
 | cogni-portfolio | Existing portfolio scan, competitive positioning | portfolio-scan, compete |
 
@@ -141,7 +141,7 @@ Ask the user to:
 
 1. **Multiple choice**: Which plugin handles competitive landscape research in the Discover phase?
    - a) cogni-claims
-   - b) cogni-gpt-researcher
+   - b) cogni-research
    - c) cogni-visual
    - d) cogni-narrative
    **Answer**: b
@@ -155,7 +155,7 @@ Ask the user to:
 
 ### Recap
 
-- Discover dispatches to cogni-gpt-researcher, cogni-tips, and cogni-portfolio
+- Discover dispatches to cogni-research, cogni-tips, and cogni-portfolio
 - The vision class determines which methods are recommended
 - Define synthesizes: cluster → verify assumptions → HMW questions → problem statement
 - Key output: a crisp problem statement that focuses Diamond 2
@@ -213,7 +213,7 @@ Ask the user to:
    - a) cogni-portfolio
    - b) cogni-claims
    - c) cogni-tips
-   - d) cogni-gpt-researcher
+   - d) cogni-research
    **Answer**: c
 
 2. **Multiple choice**: What distinguishes Deliver from Develop?
@@ -324,7 +324,7 @@ The **deliverable map** links each vision class to its recommended deliverable p
 ```
 consulting-setup (vision framing)
     │
-    ├── Discover: cogni-gpt-researcher + cogni-tips + cogni-portfolio
+    ├── Discover: cogni-research + cogni-tips + cogni-portfolio
     │
     ├── Define: cogni-claims (verify assumptions)
     │
@@ -351,7 +351,7 @@ Walk through export and the full pipeline:
 
 Ask the user to:
 1. Map their engagement end-to-end through all four phases:
-   - **Discover**: What would cogni-gpt-researcher research? What trends would cogni-tips scout?
+   - **Discover**: What would cogni-research research? What trends would cogni-tips scout?
    - **Define**: What assumptions need verification via cogni-claims?
    - **Develop**: What value models (cogni-tips) and propositions (cogni-portfolio) would emerge?
    - **Deliver**: What claims need final verification? What does the business case include?
@@ -395,7 +395,7 @@ Congratulations — you have completed all 11 courses in the cogni-teacher curri
 8. **cogni-canvas** — Lean Canvas business hypotheses (Course 6)
 9. **cogni-portfolio** — Product/service messaging (Course 6)
 10. **cogni-visual** — Presentations & visual deliverables (Course 7)
-11. **cogni-gpt-researcher** — Multi-agent research reports (Course 8)
+11. **cogni-research** — Multi-agent research reports (Course 8)
 12. **cogni-marketing** — B2B content engine (Course 9)
 13. **cogni-sales** — Sales pitch generation (Course 10)
 14. **cogni-consulting** — Double Diamond consulting orchestrator (Course 11)

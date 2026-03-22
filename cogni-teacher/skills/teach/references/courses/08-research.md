@@ -1,7 +1,7 @@
 # Course 8: Research Reports
 
 **Duration**: 45 minutes | **Modules**: 5 | **Prerequisites**: Course 3
-**Plugin**: cogni-gpt-researcher (v0.5.1, 4 skills, 8 agents)
+**Plugin**: cogni-research (v0.5.1, 4 skills, 8 agents)
 **Audience**: Consultants generating research-backed reports and intelligence
 
 ---
@@ -10,7 +10,7 @@
 
 ### Theory (3 min)
 
-**cogni-gpt-researcher** is a STORM-inspired multi-agent editorial workflow
+**cogni-research** is a STORM-inspired multi-agent editorial workflow
 that turns a research question into a fully sourced, reviewed report. Instead
 of a single prompt, it orchestrates specialized agents across distinct phases
 — each handling decomposition, research, writing, or review.
@@ -69,7 +69,7 @@ Ask the user to:
 
 ### Recap
 
-- cogni-gpt-researcher orchestrates 8 agents across a multi-phase pipeline
+- cogni-research orchestrates 8 agents across a multi-phase pipeline
 - 5 report types: basic, detailed, deep, outline, resource
 - 3 source modes: web, local, hybrid
 - Configure tone, citation format, and language before starting
@@ -243,7 +243,7 @@ Ask the user to:
 
 ### Theory (3 min)
 
-A research report is only as trustworthy as its citations. cogni-gpt-researcher
+A research report is only as trustworthy as its citations. cogni-research
 includes a dedicated verification skill that checks whether the report's claims
 are actually supported by its sources.
 
@@ -256,7 +256,7 @@ Why separate? The writer agent has seen all sources and may develop
 context. A fresh context window forces genuine re-verification.
 
 **Two verification modes**:
-- **Mode A**: Verify a cogni-gpt-researcher project (auto-detects draft + sources)
+- **Mode A**: Verify a cogni-research project (auto-detects draft + sources)
 - **Mode B**: Verify a standalone markdown file (any .md report)
 
 **Claim extraction**:
@@ -387,7 +387,7 @@ Walk through exporting a report:
 ### Exercise
 
 Ask the user to:
-1. Map their current research workflow to the cogni-gpt-researcher pipeline
+1. Map their current research workflow to the cogni-research pipeline
 2. Identify: Where do they spend the most time today? (source finding? writing? formatting?)
 3. Which phases of the pipeline would save them the most effort?
 4. Which export format would they use for their most common deliverable?
@@ -415,7 +415,7 @@ Ask the user to:
 
 ## Course Completion
 
-You now have a complete understanding of the cogni-gpt-researcher pipeline —
+You now have a complete understanding of the cogni-research pipeline —
 from configuring a research question to delivering a verified, branded report.
 
 **The full research pipeline**:
@@ -444,7 +444,7 @@ topic framing, report depth, tone, and which claims to accept or revise.
 7. **cogni-tips** — Strategic trend research pipeline
 8. **cogni-portfolio** — Product and service messaging
 9. **cogni-visual** — Presentations and visual deliverables
-10. **cogni-gpt-researcher** — Research reports and intelligence
+10. **cogni-research** — Research reports and intelligence
 
 **The consulting workflow**:
 ```

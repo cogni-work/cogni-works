@@ -5,12 +5,12 @@ type: divergent
 inputs: [engagement-vision, scope]
 outputs: [research-topic, research-config]
 duration_estimate: "10-15 min with consultant"
-requires_plugins: [cogni-gpt-researcher]
+requires_plugins: [cogni-research]
 ---
 
 # Desk Research Framing
 
-Translate the engagement vision into a well-scoped research topic for cogni-gpt-researcher.
+Translate the engagement vision into a well-scoped research topic for cogni-research.
 
 ## When to Use
 
@@ -41,14 +41,14 @@ This is especially critical for: market-entry (regulatory barriers differ by cou
 The goal is to ensure the discovery evidence is equally specific across all jurisdictions in scope — a synthesis that is detailed for the US but vague for DACH (or vice versa) will be caught by domain experts and undermines credibility.
 
 ### Step 3: Research Configuration
-Recommend settings for cogni-gpt-researcher:
+Recommend settings for cogni-research:
 - **Report type**: `detailed` (default), `deep` for digital-transformation/innovation
 - **Market**: Match engagement scope (dach, de, us, uk, fr, global)
 - **Tone**: `analytical` for business engagements
 - **Source mode**: `web` (default), `hybrid` if client has internal documents
 
 ### Step 4: Dispatch
-Invoke cogni-gpt-researcher:research-report with the configured topic and settings.
+Invoke cogni-research:research-report with the configured topic and settings.
 
 ## Output
 The research report and its sources become inputs for the Define phase.

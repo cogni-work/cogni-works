@@ -20,7 +20,7 @@ Collect report-claim entities and format for cogni-claims:
       "source_title": "NIST Releases First 3 Finalized Post-Quantum Encryption Standards"
     }
   ],
-  "submitted_by": "cogni-gpt-researcher"
+  "submitted_by": "cogni-research"
 }
 ```
 
@@ -31,7 +31,7 @@ Skill(cogni-claims:claims,
   mode=submit,
   working_dir=<project_path>,
   claims=<batch JSON>,
-  submitted_by="cogni-gpt-researcher")
+  submitted_by="cogni-research")
 ```
 
 This creates `cogni-claims/claims.json` in the project directory with ClaimRecord entries.

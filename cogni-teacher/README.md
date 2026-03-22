@@ -69,7 +69,7 @@ Or describe what you want:
 | 5 | Trend Reporting | Trend reports, value modeling, portfolio integration | cogni-tips (Part 2) |
 | 6 | Portfolio Messaging | Lean Canvas, IS/DOES/MEANS framework, propositions, markets, competitors, solutions | cogni-canvas, cogni-portfolio |
 | 7 | Visual Deliverables | Slides, big-picture maps, web narratives, storyboards | cogni-visual |
-| 8 | Research Reports | Multi-agent research, parallel web search, claims verification, export | cogni-gpt-researcher |
+| 8 | Research Reports | Multi-agent research, parallel web search, claims verification, export | cogni-research |
 | 9 | B2B Marketing Content | GTM paths, 3D content matrix, campaigns, editorial calendar, dashboard | cogni-marketing |
 | 10 | Sales Pitches | Why Change methodology, unconsidered needs, business case, proposals | cogni-sales |
 | 11 | Consulting Orchestration | Double Diamond framework, vision framing, phase-gated delivery, cross-plugin dispatch | cogni-consulting |
@@ -153,7 +153,7 @@ cogni-teacher/
 | cogni-portfolio | Yes | Course 6: portfolio messaging and propositions |
 | cogni-canvas | Yes | Course 6: Lean Canvas authoring as portfolio precursor |
 | cogni-visual | Yes | Course 7: slide decks and visual deliverables |
-| cogni-gpt-researcher | Yes | Course 8: multi-agent research reports |
+| cogni-research | Yes | Course 8: multi-agent research reports |
 | cogni-marketing | Yes | Course 9: B2B marketing content engine |
 | cogni-sales | Yes | Course 10: sales pitch generation |
 | cogni-consulting | Yes | Course 11: Double Diamond consulting orchestration |

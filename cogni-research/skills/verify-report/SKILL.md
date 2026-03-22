@@ -2,7 +2,7 @@
 name: verify-report
 description: |
   Verify claims in a research report against cited sources using cogni-claims.
-  Works on cogni-gpt-researcher project directories (auto-detects draft, sources,
+  Works on cogni-research project directories (auto-detects draft, sources,
   and existing claims) or on any standalone markdown report with inline citations.
   Use when the user asks to "verify report", "verify claims", "check sources",
   "fact-check the report", "verify the research", "run claims verification",
@@ -16,21 +16,21 @@ description: |
 Claims verification is the quality gate that separates evidence-backed research from plausible-sounding prose. This skill runs in a **fresh context window** — separate from the research pipeline — so that claims extraction, source verification, and the review loop get the full attention they deserve without competing for context with research data.
 
 When this skill loads:
-1. If a cogni-gpt-researcher project exists in the working directory → auto-detect and proceed (Mode A)
+1. If a cogni-research project exists in the working directory → auto-detect and proceed (Mode A)
 2. If the user provides a path to a markdown file → standalone verification (Mode B)
 3. If neither → ask: "Which report should I verify? Provide a project path or markdown file."
 
 ## Prerequisites
 
 - **cogni-claims** plugin installed (required — this skill has no fallback)
-- For Mode A: a cogni-gpt-researcher project with at least `output/draft-v1.md` or `output/report.md`
+- For Mode A: a cogni-research project with at least `output/draft-v1.md` or `output/report.md`
 - For Mode B: a markdown file with inline citations containing source URLs
 
 ## Workflow
 
 ### Phase 0: Locate and Load Report
 
-#### Mode A — cogni-gpt-researcher project
+#### Mode A — cogni-research project
 
 A project directory contains entity directories (`00-sub-questions/`, `01-contexts/`, etc.) and `.metadata/project-config.json`. This skill loads only the draft and source entities — not sub-questions or contexts — keeping the context window lean for verification work.
 
@@ -49,7 +49,7 @@ A project directory contains entity directories (`00-sub-questions/`, `01-contex
 
 #### Mode B — standalone markdown file
 
-When the user provides a path to a markdown file outside a cogni-gpt-researcher project:
+When the user provides a path to a markdown file outside a cogni-research project:
 
 1. Create a lightweight verification workspace: `.verify-report/{slug}/` as a sibling to the markdown file
 2. Within the workspace, create: `03-report-claims/data/`, `.metadata/`, `cogni-claims/`
@@ -115,7 +115,7 @@ Collect report-claim entities from `03-report-claims/data/` and submit as a batc
 Skill(cogni-claims:claims, mode=submit,
   working_dir=<project_path>,
   claims=[...extracted claims from report-claim entities...],
-  submitted_by="cogni-gpt-researcher/verify-report")
+  submitted_by="cogni-research/verify-report")
 ```
 
 #### 2b: Verify claims against sources

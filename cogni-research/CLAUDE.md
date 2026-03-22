@@ -1,8 +1,8 @@
-# cogni-gpt-researcher Development Guide
+# cogni-research Development Guide
 
 ## Identity
 
-cogni-gpt-researcher is a multi-agent research report generator inspired by GPT-Researcher's STORM architecture. It translates GPT-Researcher's multi-agent editorial workflow into Claude Code plugin primitives, using WebSearch + WebFetch for web research and cogni-claims for evidence-based review loops.
+cogni-research is a multi-agent research report generator inspired by GPT-Researcher's STORM architecture. It translates GPT-Researcher's multi-agent editorial workflow into Claude Code plugin primitives, using WebSearch + WebFetch for web research and cogni-claims for evidence-based review loops.
 
 ## Architecture
 

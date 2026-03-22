@@ -1,7 +1,7 @@
 # Course 2: Workspace & Obsidian Setup
 
 **Duration**: 55 minutes | **Modules**: 6 | **Prerequisites**: Course 1
-**Plugins**: cogni-workspace (incl. cogni-issues), cogni-obsidian
+**Plugins**: cogni-workspace, cogni-obsidian, cogni-help:cogni-issues
 **Audience**: Consultants setting up their cogni-works environment
 
 ---

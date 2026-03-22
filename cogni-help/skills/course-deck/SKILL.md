@@ -2,7 +2,7 @@
 name: course-deck
 description: >-
   Generate professional PPTX slide decks for cogni-help courses. Two modes:
-  (1) curriculum overview deck showing all 7 courses at a glance, or (2) per-course
+  (1) curriculum overview deck showing all 11 courses at a glance, or (2) per-course
   intro deck with learning objectives, module breakdown, and prerequisites.
   Use this skill whenever the user asks to "create course slides", "generate a
   curriculum deck", "make an intro presentation", "course overview pptx",
@@ -39,12 +39,12 @@ new learners.
    mentor-guided by Claude, theory + hands-on exercises + quizzes. Visual showing
    the module cycle: Theory > Demo > Exercise > Quiz > Recap.
 
-4. **Learning journey** — Visual roadmap of all 7 courses as a numbered path or
+4. **Learning journey** — Visual roadmap of all 11 courses as a numbered path or
    timeline. Show course progression from fundamentals to advanced.
 
 5-6. **Course spotlight slides** — Two slides, each covering 3-4 courses with:
    course number, title, what you'll learn (2-3 bullets), plugins covered.
-   Courses 1-3 on one slide, 4-7 on the next.
+   Courses 1-5 on one slide, 6-11 on the next.
 
 7. **What you'll build** — Showcase the deliverables learners create during
    exercises (memos, narratives, trend reports, portfolios, presentations).

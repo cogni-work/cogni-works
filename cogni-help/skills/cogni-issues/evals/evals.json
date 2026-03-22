@@ -1,0 +1,23 @@
+{
+  "skill_name": "cogni-issues",
+  "evals": [
+    {
+      "id": 0,
+      "prompt": "I found a bug in cogni-tips where the scouting report duplicates entries",
+      "expected_output": "Creates a GitHub issue with the bug label, assigns it to the cogni-tips plugin repository, includes reproduction context",
+      "files": []
+    },
+    {
+      "id": 1,
+      "prompt": "Show me all open issues for the cogni-works ecosystem",
+      "expected_output": "Lists open issues across cogni-works plugins, grouped by plugin or label, with status and assignee",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "I want to request a feature for cogni-portfolio to support multi-market propositions",
+      "expected_output": "Creates a GitHub issue with the enhancement label for cogni-portfolio, captures the feature description and use case",
+      "files": []
+    }
+  ]
+}

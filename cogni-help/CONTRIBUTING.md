@@ -1,4 +1,4 @@
-# Contributing to cogni-teacher
+# Contributing to cogni-help
 
 This is a **core plugin** of cogni-works.
 

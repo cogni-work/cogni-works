@@ -6,13 +6,13 @@ description: >-
   including "teach me", "start a course", "continue my course", "what courses are
   available", "how do I use cogni-works", "explain the plugins", "learn about
   copywriting/narrative/claims/tips/portfolio/visual", "show me how to use Cowork",
-  "train me", "I'm new to cogni-works", or any mention of cogni-teacher, curriculum,
+  "train me", "I'm new to cogni-works", or any mention of cogni-help, curriculum,
   or training. Also trigger when someone asks "what can I do with these plugins" or
   "where do I start" in a cogni-works workspace — they likely need guided learning.
 version: 0.2.0
 ---
 
-# cogni-teacher: Interactive Course Delivery
+# cogni-help: Interactive Course Delivery
 
 You are a patient, knowledgeable instructor teaching consultants how to use Claude Cowork
 and cogni-works plugins. Your learners are business professionals — they think in
@@ -24,7 +24,7 @@ Eleven courses, designed to build on each other:
 
 | # | Course ID | Title | Plugins Covered |
 |---|-----------|-------|-----------------|
-| 1 | `cowork-fundamentals` | Claude Cowork Fundamentals | cogni-teacher (meta) |
+| 1 | `cowork-fundamentals` | Claude Cowork Fundamentals | cogni-help (meta) |
 | 2 | `workspace-obsidian` | Workspace & Obsidian Setup | cogni-workspace (incl. cogni-issues) + cogni-obsidian |
 | 3 | `basic-tools` | Basic Tools | cogni-copywriting + cogni-narrative + cogni-claims |
 | 4 | `tips-scouting` | Trend Scouting & Selection | cogni-tips (Part 1) |
@@ -98,8 +98,11 @@ explain the answer rather than just revealing it.
 
 ### Progress Tracking
 
-After each completed module, update `.claude/cogni-teacher.local.md` so the user can
+After each completed module, update `.claude/cogni-help.local.md` so the user can
 resume later. Create this file on first use if it doesn't exist.
+
+**Migration**: If `.claude/cogni-help.local.md` doesn't exist but `.claude/cogni-teacher.local.md`
+does (from before the rename), read progress from the old file and suggest the user rename it.
 
 ```yaml
 ---

@@ -1,7 +1,7 @@
 #!/bin/bash
-# Show cogni-teacher course progress for a project directory.
+# Show cogni-help course progress for a project directory.
 # Usage: course-status.sh [project-dir]
-# Reads .claude/cogni-teacher.local.md and outputs JSON with per-course status.
+# Reads .claude/cogni-help.local.md and outputs JSON with per-course status.
 # Exit codes: 0 = success, 1 = error
 set -euo pipefail
 
@@ -12,7 +12,7 @@ if [ ! -d "$PROJECT_DIR" ]; then
   exit 1
 fi
 
-PROGRESS_FILE="$PROJECT_DIR/.claude/cogni-teacher.local.md"
+PROGRESS_FILE="$PROJECT_DIR/.claude/cogni-help.local.md"
 
 ALL_COURSES='["cowork-fundamentals","workspace-obsidian","basic-tools","tips-scouting","tips-reporting","portfolio","visual","research","marketing","sales"]'
 

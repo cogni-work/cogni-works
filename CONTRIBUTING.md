@@ -16,7 +16,7 @@ Core plugins are maintained by cogni-works and licensed under AGPL-3.0:
 - cogni-obsidian
 - cogni-portfolio
 - cogni-visual
-- cogni-teacher
+- cogni-help
 - cogni-marketing
 - cogni-research
 - cogni-sales

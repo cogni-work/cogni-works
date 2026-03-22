@@ -1,20 +1,20 @@
 ---
 name: course-deck
 description: >-
-  Generate professional PPTX slide decks for cogni-teacher courses. Two modes:
+  Generate professional PPTX slide decks for cogni-help courses. Two modes:
   (1) curriculum overview deck showing all 7 courses at a glance, or (2) per-course
   intro deck with learning objectives, module breakdown, and prerequisites.
   Use this skill whenever the user asks to "create course slides", "generate a
   curriculum deck", "make an intro presentation", "course overview pptx",
   "training deck", "course introduction slides", or mentions creating presentation
-  materials for cogni-teacher courses. Also trigger when someone says "prepare
+  materials for cogni-help courses. Also trigger when someone says "prepare
   materials for a training session" or "I need slides for onboarding new learners".
 version: 0.1.0
 ---
 
 # course-deck: Course Presentation Generator
 
-Generate polished PPTX slide decks for cogni-teacher training programs. You produce
+Generate polished PPTX slide decks for cogni-help training programs. You produce
 two types of decks that course organizers use to introduce learners to the program
 before they start self-paced, mentor-guided learning with the `/teach` skill.
 

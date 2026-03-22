@@ -1,7 +1,7 @@
 # Course 1: Claude Cowork Fundamentals
 
 **Duration**: 45 minutes | **Modules**: 5 | **Prerequisites**: None
-**Plugins**: cogni-teacher (this course is delivered by it)
+**Plugins**: cogni-help (this course is delivered by it)
 **Audience**: Consultants using Claude Cowork for knowledge work
 
 ---
@@ -30,7 +30,7 @@ and network access. You explicitly grant permissions before Claude accesses file
 or internet resources.
 
 **Meta-moment**: You're experiencing Cowork right now. This course is delivered by
-**cogni-teacher** — a Cowork plugin that guides you through structured lessons with
+**cogni-help** — a Cowork plugin that guides you through structured lessons with
 theory, demos, exercises, and quizzes. The fact that an AI can teach you how to use
 itself is a good example of what makes Cowork powerful.
 
@@ -160,7 +160,7 @@ your workflow.
 consulting, B2B sales, and marketing work. These are the plugins you will learn
 in subsequent courses.
 
-**cogni-teacher is itself a cogni-works plugin**. You're using it right now —
+**cogni-help is itself a cogni-works plugin**. You're using it right now —
 it bundles skills (`teach`, `course-deck`), slash commands (`/teach`, `/courses`),
 and course reference files. It's a concrete example of how plugins package
 knowledge and workflows into reusable tools.
@@ -183,7 +183,7 @@ Walk through plugin installation and the cogni-works marketplace deployment:
 | cogni-tips | Trend scouting and reporting (TIPS framework) |
 | cogni-portfolio | Portfolio messaging and positioning |
 | cogni-visual | Presentations, posters, visual deliverables |
-| cogni-teacher | This training program (you're using it now) |
+| cogni-help | This training program (you're using it now) |
 
 5. After installation, verify with `/courses` — all 7 courses should appear
 6. Show the customization flow on one plugin
@@ -375,7 +375,7 @@ Congratulations! You now understand:
 - How to use slash commands and connectors
 - How to schedule recurring tasks and follow best practices
 
-You've also seen cogni-teacher in action — the plugin delivering this course.
+You've also seen cogni-help in action — the plugin delivering this course.
 You now know how plugins, slash commands, and structured workflows come together.
 
 In Course 2, you'll learn how to report issues and request features via cogni-issues —

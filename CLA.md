@@ -12,7 +12,7 @@ Thank you for your interest in contributing to cogni-works core plugins. This Co
 - cogni-obsidian
 - cogni-portfolio
 - cogni-visual
-- cogni-teacher
+- cogni-help
 - cogni-marketing
 - cogni-research
 - cogni-sales

@@ -382,7 +382,7 @@ Ask the user to:
 
 ## Course Completion
 
-Congratulations — you have completed all 11 courses in the cogni-teacher curriculum!
+Congratulations — you have completed all 11 courses in the cogni-help curriculum!
 
 **Your complete cogni-works toolkit (14 plugins)**:
 1. **Claude Cowork** — Your agentic AI platform (Course 1)

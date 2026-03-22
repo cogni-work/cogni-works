@@ -49,7 +49,7 @@ You want AI-native workflows for your sales and marketing teams — either self-
 | [cogni-obsidian](./cogni-obsidian) | Obsidian integration for Claude Cowork workplaces. Scaffolds vaults with Terminal plugin, manages terminal profiles across platforms, and provides note management with frontmatter support. |
 | [cogni-portfolio](./cogni-portfolio) | Portfolio messaging and proposition planning using IS/DOES/MEANS framework. Eight industry taxonomies, TAM/SAM/SOM market sizing, competitive analysis, and export-ready deliverables. |
 | [cogni-sales](./cogni-sales) | B2B sales pitch generation using Corporate Visions Why Change methodology. Research-backed presentations and proposals for named customers or market segments. Bilingual DE/EN. |
-| [cogni-teacher](./cogni-teacher) | Interactive 45-minute courses teaching Claude Cowork fundamentals and cogni-works plugins. 11-course curriculum with hands-on exercises and progress tracking. |
+| [cogni-help](./cogni-help) | Interactive 45-minute courses teaching Claude Cowork fundamentals and cogni-works plugins. 11-course curriculum with hands-on exercises and progress tracking. |
 | [cogni-tips](./cogni-tips) | Strategic trend scouting and reporting pipeline. Combines the Smarter Service Trendradar with the TIPS framework for DACH-focused industry trend analysis. Bilingual EN/DE. |
 | [cogni-visual](./cogni-visual) | Transform polished narratives into visual deliverables — slide decks, big-picture journey maps, Big Block solution architectures, scrollable web narratives, and poster storyboards. |
 | [cogni-workspace](./cogni-workspace) | Lean workspace orchestrator. Manages shared foundation (env vars, settings), theme management, plugin discovery, and workspace health diagnostics. |
@@ -77,7 +77,7 @@ See [Cross-Plugin Data Flow](docs/er-diagram.md) for how data flows between plug
 /plugin install cogni-obsidian@cogni-works
 /plugin install cogni-portfolio@cogni-works
 /plugin install cogni-sales@cogni-works
-/plugin install cogni-teacher@cogni-works
+/plugin install cogni-help@cogni-works
 /plugin install cogni-tips@cogni-works
 /plugin install cogni-visual@cogni-works
 /plugin install cogni-workspace@cogni-works
@@ -107,7 +107,7 @@ cogni-works/
 ├── cogni-obsidian/                         # Obsidian integration
 ├── cogni-portfolio/                        # Portfolio messaging & planning
 ├── cogni-sales/                            # B2B sales pitch generation
-├── cogni-teacher/                          # Interactive training courses
+├── cogni-help/                          # Interactive training courses
 ├── cogni-tips/                             # Trend scouting & reporting
 ├── cogni-visual/                           # Visual deliverables
 ├── cogni-workspace/                        # Workspace orchestrator

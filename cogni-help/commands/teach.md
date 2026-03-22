@@ -1,6 +1,6 @@
 ---
 name: teach
-description: Start or resume an interactive cogni-teacher course
+description: Start or resume an interactive cogni-help course
 argument-hint: "<course number or name>"
 allowed-tools:
   - Read
@@ -13,7 +13,7 @@ allowed-tools:
   - WebFetch
 ---
 
-Start or resume an interactive 45-minute course from the cogni-teacher curriculum.
+Start or resume an interactive 45-minute course from the cogni-help curriculum.
 
 Accept course by number (1-11) or by name/keyword (e.g., "cowork", "basic tools", "tips", "diamond").
 
@@ -32,7 +32,7 @@ Map input to course IDs:
 
 Steps:
 1. Load the teach skill to get curriculum context and delivery rules
-2. Read progress from `.claude/cogni-teacher.local.md`
+2. Read progress from `.claude/cogni-help.local.md`
 3. If course is in-progress, ask: "Continue from Module X, or start over?"
 4. Load the course content from the matching reference file in `references/courses/`
 5. Deliver modules one at a time following the teach skill format

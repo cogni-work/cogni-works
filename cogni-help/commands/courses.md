@@ -1,14 +1,14 @@
 ---
 name: courses
-description: List all available cogni-teacher courses with completion status
+description: List all available cogni-help courses with completion status
 allowed-tools:
   - Read
   - Glob
 ---
 
-Show the cogni-teacher curriculum with progress status for each course.
+Show the cogni-help curriculum with progress status for each course.
 
-Read the progress file at `.claude/cogni-teacher.local.md` in the current project directory.
+Read the progress file at `.claude/cogni-help.local.md` in the current project directory.
 If it does not exist, show all courses as not started.
 
 Display the course list using the format defined in the teach skill:

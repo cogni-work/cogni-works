@@ -80,10 +80,10 @@
       "keywords": ["presentations", "slides", "pptx", "visual", "narrative", "big-picture", "journey-map", "excalidraw", "web", "storyboard"]
     },
     {
-      "name": "cogni-teacher",
-      "description": "Interactive 45-minute courses teaching Claude Cowork fundamentals and cogni-works marketplace plugins to consultants. 11-course curriculum with hands-on exercises, quizzes, and progress tracking.",
+      "name": "cogni-help",
+      "description": "Central help hub for the cogni-works ecosystem. Interactive courses (11-course curriculum), plugin discovery, cross-plugin workflow guides, troubleshooting, quick-reference cheatsheets, and GitHub issue filing.",
       "author": { "name": "Stephan de Haas", "email": "stephan@cogni-work.ai" },
-      "source": "./cogni-teacher",
+      "source": "./cogni-help",
       "category": "productivity",
       "license": "AGPL-3.0-only",
       "keywords": ["teaching", "courses", "training", "cogni-works", "cowork", "curriculum"]

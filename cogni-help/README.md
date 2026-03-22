@@ -1,4 +1,4 @@
-# cogni-teacher
+# cogni-help
 
 Interactive 45-minute courses for [Claude Cowork](https://claude.ai/cowork) teaching fundamentals and cogni-works marketplace plugins to consultants. 11-course curriculum with hands-on exercises, quizzes, and progress tracking.
 
@@ -62,7 +62,7 @@ Or describe what you want:
 
 | # | Course | What you learn | Plugins covered |
 |---|--------|---------------|-----------------|
-| 1 | Cowork Fundamentals | Claude Cowork basics, plugin ecosystem, workplace setup | cogni-teacher (meta) |
+| 1 | Cowork Fundamentals | Claude Cowork basics, plugin ecosystem, workplace setup | cogni-help (meta) |
 | 2 | Workspace & Obsidian | Workspace initialization, Obsidian vault setup, theme management | cogni-workspace, cogni-obsidian |
 | 3 | Basic Tools | Document polishing, stakeholder review, claim verification, narrative transformation | cogni-copywriting, cogni-narrative, cogni-claims |
 | 4 | Trend Scouting | TIPS framework, Trendradar dimensions, trend candidate selection | cogni-tips (Part 1) |
@@ -99,7 +99,7 @@ Claude starts an interactive lesson on Cowork Fundamentals — explaining concep
 
 ## Data model
 
-Progress is stored in `.claude/cogni-teacher.local.md` using YAML frontmatter:
+Progress is stored in `.claude/cogni-help.local.md` using YAML frontmatter:
 
 | Field | Type | Description |
 |-------|------|-------------|
@@ -117,7 +117,7 @@ Exercise artifacts are written to `_teacher-exercises/` in the working directory
 ## Architecture
 
 ```
-cogni-teacher/
+cogni-help/
 ├── .claude-plugin/plugin.json    Plugin manifest (v0.1.6)
 ├── agents/                       1 delegation agent
 │   └── course-deck-generator.md

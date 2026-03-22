@@ -1,5 +1,5 @@
 #!/bin/bash
-# Reset cogni-teacher course progress.
+# Reset cogni-help course progress.
 # Usage: reset-progress.sh [project-dir] [course-id|--all]
 # With course-id: resets that course to not-started.
 # With --all: removes the entire progress file.
@@ -14,7 +14,7 @@ if [ ! -d "$PROJECT_DIR" ]; then
   exit 1
 fi
 
-PROGRESS_FILE="$PROJECT_DIR/.claude/cogni-teacher.local.md"
+PROGRESS_FILE="$PROJECT_DIR/.claude/cogni-help.local.md"
 
 ALL_COURSES="cowork-fundamentals workspace-obsidian basic-tools tips-scouting tips-reporting portfolio visual research marketing sales"
 

@@ -50,7 +50,7 @@ You want AI-native workflows for your sales and marketing teams — either self-
 | [cogni-portfolio](./cogni-portfolio) | Portfolio messaging and proposition planning using IS/DOES/MEANS framework. Eight industry taxonomies, TAM/SAM/SOM market sizing, competitive analysis, and export-ready deliverables. |
 | [cogni-sales](./cogni-sales) | B2B sales pitch generation using Corporate Visions Why Change methodology. Research-backed presentations and proposals for named customers or market segments. Bilingual DE/EN. |
 | [cogni-help](./cogni-help) | Central help hub — interactive courses (11-course curriculum), plugin discovery, cross-plugin workflow guides, troubleshooting, cheatsheets, and GitHub issue filing. |
-| [cogni-tips](./cogni-tips) | Bridges industry trends to portfolio solutions via value paths using patented TIPS methodology. Bilingual trend scouting, investment theme modeling, evidence-backed CxO reports, and reusable industry catalogs. DACH-focused, EN/DE. |
+| [cogni-trends](./cogni-trends) | Bridges industry trends to portfolio solutions via value paths using patented TIPS methodology. Bilingual trend scouting, investment theme modeling, evidence-backed CxO reports, and reusable industry catalogs. DACH-focused, EN/DE. |
 | [cogni-visual](./cogni-visual) | Transform polished narratives into visual deliverables — slide decks, big-picture journey maps, Big Block solution architectures, scrollable web narratives, and poster storyboards. |
 | [cogni-workspace](./cogni-workspace) | Lean workspace orchestrator. Manages shared foundation (env vars, settings), theme management, plugin discovery, and workspace health diagnostics. |
 
@@ -78,7 +78,7 @@ See [Cross-Plugin Data Flow](docs/er-diagram.md) for how data flows between plug
 /plugin install cogni-portfolio@cogni-works
 /plugin install cogni-sales@cogni-works
 /plugin install cogni-help@cogni-works
-/plugin install cogni-tips@cogni-works
+/plugin install cogni-trends@cogni-works
 /plugin install cogni-visual@cogni-works
 /plugin install cogni-workspace@cogni-works
 ```
@@ -108,7 +108,7 @@ cogni-works/
 ├── cogni-portfolio/                        # Portfolio messaging & planning
 ├── cogni-sales/                            # B2B sales pitch generation
 ├── cogni-help/                            # Help hub: courses, guide, workflows, troubleshoot
-├── cogni-tips/                             # Trend scouting & reporting
+├── cogni-trends/                             # Trend scouting & reporting
 ├── cogni-visual/                           # Visual deliverables
 ├── cogni-workspace/                        # Workspace orchestrator
 ├── cogni-portfolio-evals/                  # Eval harness (not a marketplace plugin)

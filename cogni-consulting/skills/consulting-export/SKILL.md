@@ -45,7 +45,7 @@ For each deliverable, identify the source content and rendering plugin:
 | Decision Board | `develop/options/option-synthesis.md` + `deliver/option-scoring.md` | Excalidraw (via cogni-visual story-to-big-picture) |
 | Executive Summary | `deliver/executive-summary.md` | document-skills:pptx (one-pager) |
 | Action Roadmap | `deliver/roadmap.md` | document-skills:pptx or document-skills:xlsx |
-| TIPS Landscape | plugin_refs.tips_project output | cogni-tips tips-dashboard or Excalidraw (via cogni-visual story-to-big-picture) |
+| TIPS Landscape | plugin_refs.tips_project output | cogni-trends trends-dashboard or Excalidraw (via cogni-visual story-to-big-picture) |
 | Portfolio Snapshot | plugin_refs.portfolio_project output | cogni-portfolio portfolio-dashboard |
 | Claim Verification Log | `deliver/claims-verification.md` | document-skills:xlsx or markdown |
 

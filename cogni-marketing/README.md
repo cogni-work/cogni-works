@@ -1,6 +1,6 @@
 # cogni-marketing
 
-B2B marketing content engine for [Claude Cowork](https://claude.ai/cowork). Bridges cogni-tips strategic themes and cogni-portfolio propositions into channel-ready content. Supports thought leadership, demand generation, lead generation, sales enablement, and ABM across markets with configurable brand voice. Bilingual DE/EN.
+B2B marketing content engine for [Claude Cowork](https://claude.ai/cowork). Bridges cogni-trends strategic themes and cogni-portfolio propositions into channel-ready content. Supports thought leadership, demand generation, lead generation, sales enablement, and ABM across markets with configurable brand voice. Bilingual DE/EN.
 
 ## Why this exists
 
@@ -17,7 +17,7 @@ This plugin automates the bridge: it reads your portfolio propositions and TIPS 
 
 ## What it does
 
-1. **Setup** a marketing project linked to your cogni-portfolio and cogni-tips data — configure brand voice, select markets, map strategic themes to GTM paths
+1. **Setup** a marketing project linked to your cogni-portfolio and cogni-trends data — configure brand voice, select markets, map strategic themes to GTM paths
 2. **Strategize** by building a 3D content matrix (market × GTM path × content type) with auto-recommended formats and priority sequencing
 3. **Generate** content per type — thought leadership, demand generation, lead generation, sales enablement, or ABM — using parallel content-writer agents
 4. **Campaign** by orchestrating content into multi-channel campaigns with day-based timelines and phased funnel progression (attract → engage → convert)
@@ -38,7 +38,7 @@ This plugin is part of the [cogni-works monorepo](https://github.com/cogni-work/
 
 **Prerequisites:**
 - **cogni-portfolio** (required — provides propositions, markets, competitors)
-- **cogni-tips** (required — provides strategic themes and trend data)
+- **cogni-trends** (required — provides strategic themes and trend data)
 - Optional: **cogni-copywriting** (polish generated content), **cogni-narrative** (long-form arc transformation), **cogni-visual** (slides and visual assets), **cogni-claims** (evidence verification)
 
 ## Quick start
@@ -145,7 +145,7 @@ cogni-marketing/
 | Plugin | Required | Purpose |
 |--------|----------|---------|
 | cogni-portfolio | Yes | Products, propositions, markets, competitors, solutions |
-| cogni-tips | Yes | Strategic themes (Handlungsfelder), trend data, claims |
+| cogni-trends | Yes | Strategic themes (Handlungsfelder), trend data, claims |
 | cogni-copywriting | No | Polish generated content with messaging frameworks |
 | cogni-narrative | No | Arc-driven transformation for long-form thought leadership |
 | cogni-visual | No | Slide decks and visual assets from content briefs |

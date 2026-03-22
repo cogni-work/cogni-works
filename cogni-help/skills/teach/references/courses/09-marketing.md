@@ -11,7 +11,7 @@
 ### Theory (3 min)
 
 **cogni-marketing** is a B2B content engine that bridges two upstream plugins:
-cogni-tips strategic themes (your GTM paths) and cogni-portfolio propositions
+cogni-trends strategic themes (your GTM paths) and cogni-portfolio propositions
 (your solutions) into channel-ready content across the full marketing funnel.
 
 **GTM Path concept**: A GTM path takes a strategic theme from the TIPS value

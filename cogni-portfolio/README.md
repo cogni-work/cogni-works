@@ -114,7 +114,7 @@ Each portfolio project lives in `cogni-portfolio/{slug}/` with typed JSON files 
 | `portfolio-export` | skill | Produce proposals, briefs, and workbooks |
 | `portfolio-dashboard` | skill | Interactive HTML dashboard |
 | `portfolio-scan` | skill | Discover offerings via web research and classify against taxonomy |
-| `tips-bridge` | skill | Bidirectional integration with cogni-tips TIPS analysis |
+| `trends-bridge` | skill | Bidirectional integration with cogni-trends TIPS analysis |
 | `portfolio-resume` | skill | Detect workflow phase and recommend next actions |
 | `market-researcher` | agent | Web research for TAM/SAM/SOM with claim submission |
 | `competitor-researcher` | agent | Web research for competitive intelligence |
@@ -155,7 +155,7 @@ cogni-portfolio/
 |--------|----------|---------|
 | cogni-claims | No | Claim verification for research-backed assertions via portfolio-verify |
 | document-skills | No | Document ingestion (docx, pptx, xlsx, pdf) and XLSX export |
-| cogni-tips | No | Bidirectional TIPS integration via tips-bridge |
+| cogni-trends | No | Bidirectional TIPS integration via trends-bridge |
 | cogni-canvas | No | Lean Canvas extraction via portfolio-canvas |
 
 cogni-portfolio is standalone for core messaging workflows. Verification and XLSX export require their respective plugins.

@@ -490,7 +490,7 @@ Valid `fit_score` values: `high`, `medium`, `low`
 
 ### portfolio-context.json (Export to TIPS)
 
-Written by the tips-bridge `portfolio-to-tips` operation into the TIPS project directory. Provides portfolio context for TIPS value-modeler Phase 2.
+Written by the trends-bridge `portfolio-to-tips` operation into the TIPS project directory. Provides portfolio context for TIPS value-modeler Phase 2.
 
 ```json
 {
@@ -581,7 +581,7 @@ Valid `market_relevance` values: `direct` (vertical_codes match), `industry` (su
 
 ### portfolio-opportunities.json (Import from TIPS)
 
-Written by the tips-bridge `tips-to-portfolio` operation into the TIPS project directory. Captures unmatched Solution Templates as structured innovation opportunities.
+Written by the trends-bridge `tips-to-portfolio` operation into the TIPS project directory. Captures unmatched Solution Templates as structured innovation opportunities.
 
 ```json
 {
@@ -674,7 +674,7 @@ Scan offerings are intermediate research artifacts stored in `research/.logs/`, 
 | Verify | portfolio-verify | Verify web-sourced claims against cited sources |
 | Synthesize | synthesize | Aggregate all entities into README.md messaging repository |
 | Export | portfolio-export | Generate proposals, market briefs, XLSX workbooks |
-| Bridge | tips-bridge | Bidirectional TIPS integration (matching, enrichment, opportunities) |
+| Bridge | trends-bridge | Bidirectional TIPS integration (matching, enrichment, opportunities) |
 
 Recommended pipeline order: setup -> [products -> features -> markets -> propositions] -> solutions -> packages -> [compete, customers] -> verify -> synthesize -> export
 
@@ -798,7 +798,7 @@ portfolio.json (root manifest)
 │   │   ├── propositions/{feat}--{mkt}.json (feature_slug + market_slug)
 │   │   │   ├── solutions/{feat}--{mkt}.json (proposition_slug FK)
 │   │   │   ├── competitors/{feat}--{mkt}.json (proposition_slug FK)
-│   │   │   └── [TIPS variants & evidence via tips-bridge]
+│   │   │   └── [TIPS variants & evidence via trends-bridge]
 │   │   └── [Quality assessment via proposition-quality-assessor]
 │   └── packages/{prod}--{mkt}.json (product_slug + market_slug, references solution slugs)
 ├── markets/{slug}.json (region code FK -> regions.json)

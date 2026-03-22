@@ -622,7 +622,7 @@ if [ -d "$PROJECT_DIR/features" ]; then
   WORKSPACE_PARENT="$(dirname "$WORKSPACE_ROOT")"
   for search_dir in "$WORKSPACE_ROOT" "$WORKSPACE_PARENT"; do
     if [ -d "$search_dir" ]; then
-      for vm in "$search_dir"/cogni-tips/*/tips-value-model.json "$search_dir"/*/tips-value-model.json; do
+      for vm in "$search_dir"/cogni-trends/*/tips-value-model.json "$search_dir"/*/tips-value-model.json; do
         [ -f "$vm" ] 2>/dev/null || continue
         while IFS='|' read -r etype slug msg; do
           if [ "$etype" = "E" ]; then

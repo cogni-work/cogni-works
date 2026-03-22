@@ -29,7 +29,7 @@ If the file is missing or unreadable, detect the user's language from their mess
 If still unclear, default to English.
 
 Keep in English regardless of language setting:
-- Plugin names (`cogni-tips`, `cogni-narrative`, etc.)
+- Plugin names (`cogni-trends`, `cogni-narrative`, etc.)
 - Command names (`/cheatsheet`, `/workflow`, etc.)
 - Column headers in the Commands table (`Command`, `What it does`)
 - Technical terms, file paths, code snippets
@@ -37,7 +37,7 @@ Keep in English regardless of language setting:
 ## How to Generate a Cheatsheet
 
 1. **Identify the plugin** from the user's request. Accept plugin names with or
-   without the `cogni-` prefix ("tips" = "cogni-tips").
+   without the `cogni-` prefix ("tips" = "cogni-trends").
 
 2. **Read the plugin's key files**:
    - `<plugin>/README.md` — overview, components, data model

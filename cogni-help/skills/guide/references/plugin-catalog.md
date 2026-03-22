@@ -84,7 +84,7 @@ into channel-ready content (thought leadership, demand gen, lead gen, sales enab
 **Use when**: User needs marketing materials that connect strategic trends to portfolio
 propositions. Supports 16 content formats. Bilingual DE/EN.
 
-**Requires**: cogni-tips (themes), cogni-portfolio (propositions)
+**Requires**: cogni-trends (themes), cogni-portfolio (propositions)
 
 ---
 
@@ -155,11 +155,11 @@ Named-customer pitches or reusable segment pitches. Bilingual DE/EN.
 **Use when**: User needs a sales presentation or proposal for a specific customer or
 market segment, built on portfolio data with optional trend enrichment.
 
-**Requires**: cogni-portfolio (propositions), optionally cogni-tips (strategic trends)
+**Requires**: cogni-portfolio (propositions), optionally cogni-trends (strategic trends)
 
 ---
 
-## cogni-tips
+## cogni-trends
 
 **Purpose**: Strategic trend scouting and reporting. Combines Smarter Service Trendradar
 (4 dimensions) with TIPS framework (Trends, Implications, Possibilities, Solutions).

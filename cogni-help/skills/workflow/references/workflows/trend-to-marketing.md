@@ -1,17 +1,17 @@
 # Workflow: Trend to Marketing
 
-**Pipeline**: cogni-tips → cogni-portfolio → cogni-marketing
+**Pipeline**: cogni-trends → cogni-portfolio → cogni-marketing
 **Duration**: 3-6 hours for a full campaign
 **Use case**: GTM team turning strategic trends into marketing campaigns
 
 ```mermaid
 graph LR
-    A[cogni-tips] -->|themes + trends| B[cogni-portfolio]
+    A[cogni-trends] -->|themes + trends| B[cogni-portfolio]
     B -->|propositions| C[cogni-marketing]
     C -->|content| D[Campaign Materials]
 ```
 
-## Step 1: Trend Scouting (cogni-tips)
+## Step 1: Trend Scouting (cogni-trends)
 
 **Command**: `/scout`
 

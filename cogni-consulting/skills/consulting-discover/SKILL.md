@@ -2,7 +2,7 @@
 name: consulting-discover
 description: |
   Execute the Discover phase of a Double Diamond engagement — diverge to build a rich understanding
-  of the problem landscape. Dispatches to cogni-research, cogni-tips, and cogni-portfolio.
+  of the problem landscape. Dispatches to cogni-research, cogni-trends, and cogni-portfolio.
   Use whenever the user wants to research, explore, or investigate a topic within a diamond engagement.
   Trigger on: "start discovery", "research the landscape", "let's explore", "what do we know about",
   "gather evidence", "run the research", "investigate the market", "scan for trends",
@@ -52,7 +52,7 @@ Present the proposed discovery plan, typically 3-5 activities:
 | Method | Plugin | What It Produces |
 |---|---|---|
 | Desk research | cogni-research | Research report with cited sources |
-| Industry trend scan | cogni-tips | 60 trend candidates across 4 dimensions × 3 horizons |
+| Industry trend scan | cogni-trends | 60 trend candidates across 4 dimensions × 3 horizons |
 | Competitive baseline | cogni-portfolio | Competitor landscape and market segmentation |
 
 **Guided methods** (interactive prompts with consultant):
@@ -78,7 +78,7 @@ For each confirmed plugin method, dispatch to the appropriate plugin:
 - After research completes, store the project path in `plugin_refs.research_project`
 - Copy or symlink the research output summary to `discover/research/`
 
-**Industry Trend Scan (cogni-tips)**:
+**Industry Trend Scan (cogni-trends)**:
 - Frame the industry from the engagement context
 - Dispatch `trend-scout` with the industry and language settings
 - After scouting completes, store the project path in `plugin_refs.tips_project`

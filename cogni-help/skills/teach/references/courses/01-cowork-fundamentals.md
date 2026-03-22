@@ -180,7 +180,7 @@ Walk through plugin installation and the cogni-works marketplace deployment:
 | cogni-copywriting | Document polishing with messaging frameworks |
 | cogni-narrative | Executive narratives using story arcs |
 | cogni-claims | Fact-checking and source verification |
-| cogni-tips | Trend scouting and reporting (TIPS framework) |
+| cogni-trends | Trend scouting and reporting (TIPS framework) |
 | cogni-portfolio | Portfolio messaging and positioning |
 | cogni-visual | Presentations, posters, visual deliverables |
 | cogni-help | This training program (you're using it now) |

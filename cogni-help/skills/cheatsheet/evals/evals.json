@@ -3,7 +3,7 @@
   "evals": [
     {
       "id": 0,
-      "prompt": "Give me a cheatsheet for cogni-tips",
+      "prompt": "Give me a cheatsheet for cogni-trends",
       "expected_output": "Generates a formatted reference card with commands (/scout, /report, /tips-status), core concepts (TIPS framework, Trendradar, Handlungsfelder), data model, common patterns, and related plugins",
       "files": []
     },

@@ -1,6 +1,6 @@
 ---
 name: marketing-setup
-description: "Initialize a cogni-marketing project by discovering cogni-tips and cogni-portfolio sources, configuring brand voice, and selecting markets with GTM paths. Use this skill when the user asks to 'set up marketing', 'create a marketing project', 'initialize marketing', 'start marketing content', 'configure brand', 'marketing setup', or wants to begin creating marketing content for a portfolio — even if they don't say 'setup' explicitly."
+description: "Initialize a cogni-marketing project by discovering cogni-trends and cogni-portfolio sources, configuring brand voice, and selecting markets with GTM paths. Use this skill when the user asks to 'set up marketing', 'create a marketing project', 'initialize marketing', 'start marketing content', 'configure brand', 'marketing setup', or wants to begin creating marketing content for a portfolio — even if they don't say 'setup' explicitly."
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep, Agent, WebSearch, WebFetch
 ---
 
@@ -9,7 +9,7 @@ allowed-tools: Read, Write, Edit, Bash, Glob, Grep, Agent, WebSearch, WebFetch
 ## Purpose
 
 Initialize a cogni-marketing project by:
-1. Discovering available cogni-tips and cogni-portfolio projects
+1. Discovering available cogni-trends and cogni-portfolio projects
 2. Configuring brand identity and voice
 3. Selecting target markets from portfolio
 4. Mapping TIPS strategic themes to GTM paths per market
@@ -18,7 +18,7 @@ Initialize a cogni-marketing project by:
 ## Prerequisites
 
 - At least one cogni-portfolio project with products, features, and markets defined
-- At least one cogni-tips project with value-modeler completed (strategic themes + ranked solution templates)
+- At least one cogni-trends project with value-modeler completed (strategic themes + ranked solution templates)
 
 ## Workflow
 
@@ -27,7 +27,7 @@ Initialize a cogni-marketing project by:
 Scan the working directory for existing sources:
 
 1. **Find cogni-portfolio projects**: Glob for `**/portfolio.json` files. For each, read to confirm it has `products` and `markets` populated.
-2. **Find cogni-tips projects**: Glob for `**/tips-project.json` files. For each, check that `tips-value-model.json` exists alongside it (value-modeler completed).
+2. **Find cogni-trends projects**: Glob for `**/tips-project.json` files. For each, check that `tips-value-model.json` exists alongside it (value-modeler completed).
 3. **Find existing marketing projects**: Glob for `**/marketing-project.json` to avoid duplicates.
 
 Present discovered sources to user:

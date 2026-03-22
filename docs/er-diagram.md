@@ -18,7 +18,7 @@ graph LR
     subgraph Data["Data Layer"]
         CV[cogni-canvas<br/>lean canvases]
         PF[cogni-portfolio<br/>products, features, markets<br/>propositions, solutions]
-        TI[cogni-tips<br/>trends, investment themes<br/>value models, catalogs]
+        TI[cogni-trends<br/>trends, investment themes<br/>value models, catalogs]
         GR[cogni-research<br/>sub-questions, contexts<br/>sources, report-claims]
         CL[cogni-claims<br/>claims, deviations<br/>resolutions]
     end
@@ -78,7 +78,7 @@ graph LR
 | Plugin | Key Entities | Storage Format | Cross-Plugin Contract |
 |--------|-------------|---------------|----------------------|
 | **cogni-portfolio** | Product, Feature, Market, Proposition, Solution, Package, Competitor, Customer, Scan | JSON files in project directory | Exports `portfolio-context.json` (schema v3.1) to TIPS. Imports `portfolio-opportunities.json` from TIPS |
-| **cogni-tips** | TipsProject, TrendCandidate, TrendReport, InvestmentTheme, SolutionTemplate, Catalog | JSON + YAML in project directory | Exports themes + value-model to Marketing, Sales. Bidirectional bridge with Portfolio |
+| **cogni-trends** | TipsProject, TrendCandidate, TrendReport, InvestmentTheme, SolutionTemplate, Catalog | JSON + YAML in project directory | Exports themes + value-model to Marketing, Sales. Bidirectional bridge with Portfolio |
 | **cogni-research** | SubQuestion, Context, Source, ReportClaim | Markdown + YAML frontmatter (Obsidian-browsable) | Submits claims to cogni-claims via claim-entity contract |
 | **cogni-claims** | ClaimRecord, DeviationRecord, ResolutionRecord | JSON in `cogni-claims/` directory | Receives claims from all data-layer plugins. Status: unverified → verified/deviated → resolved |
 | **cogni-sales** | PitchLog, BuyingCenter, PhaseDeliverable (research.json + narrative.md) | JSON + Markdown per phase | Consumes portfolio propositions + narrative arc patterns. Registers claims |
@@ -88,16 +88,16 @@ graph LR
 | **cogni-visual** | Brief (YAML frontmatter + Markdown body) | Per-deliverable brief files | Reads theme from cogni-workspace. Reads narrative via `arc_id` |
 | **cogni-workspace** | Theme, WorkspaceConfig | Markdown (theme.md) + JSON (settings) | Theme files consumed by all visual plugins. Env vars consumed by all plugins |
 | **cogni-obsidian** | VaultConfig, TerminalProfile | JSON config files in `.obsidian/` | Provides Obsidian browsing layer for all plugin outputs |
-| **cogni-consulting** | Engagement (consulting-project.json), PhaseState, ExecutionLog, MethodLog, DecisionLog | JSON files in engagement directory | Dispatches to cogni-research, cogni-tips, cogni-portfolio, cogni-claims, cogni-visual. No data exports — orchestration only |
+| **cogni-consulting** | Engagement (consulting-project.json), PhaseState, ExecutionLog, MethodLog, DecisionLog | JSON files in engagement directory | Dispatches to cogni-research, cogni-trends, cogni-portfolio, cogni-claims, cogni-visual. No data exports — orchestration only |
 | **cogni-canvas** | LeanCanvas (9 sections, version history, per-section status) | Markdown with YAML frontmatter | Consumed by cogni-portfolio:portfolio-canvas for entity extraction |
 
 ## Cross-Plugin Bridge Files
 
 | Bridge File | From | To | Purpose |
 |------------|------|-----|---------|
-| `portfolio-context.json` | cogni-portfolio | cogni-tips | Portfolio products, features, markets for trend-to-portfolio mapping |
-| `portfolio-opportunities.json` | cogni-tips | cogni-portfolio | Growth opportunities scored by ranking, TAM alignment, competitive whitespace |
-| `tips-value-model.json` | cogni-tips | cogni-visual | Solution templates, investment themes, TIPS paths for Big Block rendering |
+| `portfolio-context.json` | cogni-portfolio | cogni-trends | Portfolio products, features, markets for trend-to-portfolio mapping |
+| `portfolio-opportunities.json` | cogni-trends | cogni-portfolio | Growth opportunities scored by ranking, TAM alignment, competitive whitespace |
+| `tips-value-model.json` | cogni-trends | cogni-visual | Solution templates, investment themes, TIPS paths for Big Block rendering |
 | `pitch-log.json` | cogni-sales | (internal) | Workflow state, buying center config, phase tracking |
 | `marketing-project.json` | cogni-marketing | (internal) | Brand voice, source paths, market-GTM path configuration |
 | `claims.json` | various | cogni-claims | Claim records with source URLs, status, and deviation evidence |
@@ -109,7 +109,7 @@ graph LR
 | Plugin | Slug Pattern | Example |
 |--------|-------------|---------|
 | cogni-portfolio | `{entity}--{context}` (double-dash) | `cloud-monitoring--mid-market-saas-dach` |
-| cogni-tips | `{subsector}-{topic}-{hash8}` | `automotive-ai-predictive-maintenance-abc12345` |
+| cogni-trends | `{subsector}-{topic}-{hash8}` | `automotive-ai-predictive-maintenance-abc12345` |
 | cogni-sales | `{customer-or-segment}-pitch` | `siemens-manufacturing-pitch` |
 | cogni-marketing | `{market}--{gtm-path}--{format}` | `dach-enterprise--ai-automation--whitepaper` |
 | cogni-research | `{entity-type}-[slug]-[hash8]` | `src-acme-cloud-2a1f3e8b` |

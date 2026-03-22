@@ -28,7 +28,7 @@ If the file is missing or unreadable, detect the user's language from their mess
 If still unclear, default to English.
 
 Keep in English regardless of language setting:
-- Plugin names (`cogni-tips`, `cogni-narrative`, etc.)
+- Plugin names (`cogni-trends`, `cogni-narrative`, etc.)
 - Command names (`/workflow`, `/consult`, etc.)
 - Workflow IDs (`research-to-slides`, `trend-to-marketing`, etc.)
 - Technical terms, file paths, code snippets

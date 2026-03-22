@@ -1,7 +1,7 @@
 # cogni-works Ecosystem Roadmap
 
-> Based on patent WO2018046399A1 vision, cogni-tips value-modeler implementation,
-> b2b-ict-portfolio taxonomy from cogni-tips, and cross-plugin integration analysis.
+> Based on patent WO2018046399A1 vision, cogni-trends value-modeler implementation,
+> b2b-ict-portfolio taxonomy from cogni-trends, and cross-plugin integration analysis.
 >
 > Created: 2026-03-11 | Last updated: 2026-03-21
 
@@ -36,15 +36,15 @@ Three structural pillars fill the gaps between what's built and the full patent 
 
 ## P1: Core Patent Completion
 
-### 1. Industry Catalog Skill (cogni-tips)
+### 1. Industry Catalog Skill (cogni-trends)
 
 **Goal:** Persistent industry catalogs that accumulate knowledge across pursuits.
 The patent's central value proposition — reuse and consistency.
 
-**Plugin:** cogni-tips | **Effort:** Medium | **Depends on:** value-modeler (complete)
+**Plugin:** cogni-trends | **Effort:** Medium | **Depends on:** value-modeler (complete)
 
 ```
-cogni-tips/catalogs/{industry}/{subsector}/
+cogni-trends/catalogs/{industry}/{subsector}/
 ├── catalog.json              # Root manifest
 ├── tips-entities.json        # Curated TIPs
 ├── solution-templates.json   # Proven STs with portfolio mappings
@@ -55,15 +55,15 @@ cogni-tips/catalogs/{industry}/{subsector}/
 ```
 
 - [x] Design catalog schema (entities, versioning, cross-pursuit refs)
-- [x] Create `tips-catalog` skill SKILL.md with init/import/export/analytics
+- [x] Create `trends-catalog` skill SKILL.md with init/import/export/analytics
 - [x] Modify Phase 0 to discover and load relevant industry catalog
 - [x] Modify Phase 5 to write-back with user approval (not just advisory)
-- [x] Add catalog discovery to `tips-resume` status dashboard
+- [x] Add catalog discovery to `trends-resume` status dashboard
 - [x] Initialize first catalog from b2b-ict-portfolio taxonomy template
 
 ### 2. TIPS <> Portfolio Bridge (cogni-portfolio or cogni-workspace)
 
-**Goal:** Bidirectional entity flow between cogni-tips value-modeler and cogni-portfolio.
+**Goal:** Bidirectional entity flow between cogni-trends value-modeler and cogni-portfolio.
 Connects the "Sales/Value" side to the "Services/Best Practices" side (patent Fig. 1).
 
 **Plugin:** cogni-portfolio | **Effort:** Medium | **Depends on:** value-modeler (complete), catalog (P1.1)
@@ -134,9 +134,9 @@ dispatching to plugins at phase-appropriate moments:
 
 | Phase | Plugins Dispatched |
 |-------|-------------------|
-| Discover | cogni-research, cogni-tips, cogni-portfolio |
+| Discover | cogni-research, cogni-trends, cogni-portfolio |
 | Define | cogni-claims |
-| Develop | cogni-tips, cogni-portfolio |
+| Develop | cogni-trends, cogni-portfolio |
 | Deliver | cogni-claims, cogni-portfolio |
 | Export | cogni-visual, document-skills |
 
@@ -151,11 +151,11 @@ to recommended methods and deliverable formats.
 No monolithic shared repository. Each plugin owns its data. Cross-references use slugs/paths:
 
 ```
-cogni-tips/catalogs/manufacturing/automotive/solution-templates.json
+cogni-trends/catalogs/manufacturing/automotive/solution-templates.json
   └── portfolio_ref: "cogni-portfolio/{project}/features/predictive-analytics"
 
 cogni-portfolio/{project}/features/predictive-analytics.json
-  └── tips_ref: "cogni-tips/{pursuit}/tips-value-model.json#st-001"
+  └── tips_ref: "cogni-trends/{pursuit}/tips-value-model.json#st-001"
 ```
 
 The bridge skill resolves references at runtime. Loose coupling, independent evolution.
@@ -178,7 +178,7 @@ The bridge skill resolves references at runtime. Loose coupling, independent evo
 | Machine learning update | 4 | — | Future |
 | Industry catalog inheritance | Fig.4 | catalog skill + b2b-ict/general | Complete |
 | Product portfolio mapping | Fig.1 | full proposition enrichment (variants, quality, opportunities) | Complete |
-| Bidirectional portfolio flow | Fig.1 | tips-bridge (tips-to-portfolio, portfolio-to-tips, sync) + v3.0 quality feedback | Complete |
+| Bidirectional portfolio flow | Fig.1 | trends-bridge (tips-to-portfolio, portfolio-to-tips, sync) + v3.0 quality feedback | Complete |
 | Big Block diagram (visual) | Fig.3 | story-to-big-block + render-big-block (Excalidraw) | Complete |
 | Solution Process Improvements | Fig.3 | value-modeler Phase 2 SPIs | Complete |
 | Metrics | Fig.3 | value-modeler Phase 2 | Complete |
@@ -192,12 +192,12 @@ The bridge skill resolves references at runtime. Loose coupling, independent evo
 | Date | Change |
 |------|--------|
 | 2026-03-11 | Initial roadmap created from patent analysis + ecosystem review |
-| 2026-03-11 | P1.1: Created catalog skill (SKILL.md, schemas, taxonomy ref), updated Phase 0/5, tips-resume, data-model, plugin.json v0.3.0 |
+| 2026-03-11 | P1.1: Created catalog skill (SKILL.md, schemas, taxonomy ref), updated Phase 0/5, trends-resume, data-model, plugin.json v0.3.0 |
 | 2026-03-11 | P1.2: Created bridge skill in cogni-portfolio (tips-to-portfolio, portfolio-to-tips, sync), plugin.json v0.8.0 |
 | 2026-03-11 | P2.3: Added taxonomy support to data-model.md (portfolio.json taxonomy, feature taxonomy_mapping, horizon), imported b2b-ict-portfolio taxonomy |
 | 2026-03-11 | P1.1: Initialized first catalog (b2b-ict/general) with taxonomy_template from b2b-ict-portfolio v3.7 |
 | 2026-03-11 | P2.3: Added taxonomy coverage heatmap + gap analysis to portfolio-dashboard, taxonomy validation to validate-entities.sh |
 | 2026-03-11 | P2.4: Created story-to-big-block skill + agent, big-block-brief.md format v1.0, big-block-layouts.md, EXAMPLE_BIG_BLOCK_BRIEF.md, cogni-visual v1.3.0 |
 | 2026-03-11 | P2.4: Created render-big-block skill + big-block agent + /render-big-block command, completes Excalidraw rendering pipeline, cogni-visual v1.4.0 |
-| 2026-03-13 | P1.2: Full TIPS↔Portfolio bridge overhaul — multi-variant DOES/MEANS propositions, portfolio-first ST generation (Phase 2.0), structured opportunity pipeline (portfolio-opportunities.json), path narrative evidence with T→I→P traceability, cross-bridge quality feedback (portfolio-context v3.0). cogni-tips v0.3.5, cogni-portfolio v0.8.11 |
+| 2026-03-13 | P1.2: Full TIPS↔Portfolio bridge overhaul — multi-variant DOES/MEANS propositions, portfolio-first ST generation (Phase 2.0), structured opportunity pipeline (portfolio-opportunities.json), path narrative evidence with T→I→P traceability, cross-bridge quality feedback (portfolio-context v3.0). cogni-trends v0.3.5, cogni-portfolio v0.8.11 |
 | 2026-03-21 | Orchestration Layer: cogni-consulting v0.1.0 documented — Double Diamond consulting orchestrator dispatching to 6 plugins across 4 phases, 7 vision classes, 10 methods. Added to roadmap, ER diagram, teacher curriculum (Course 11), README, CONTRIBUTING |

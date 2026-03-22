@@ -121,7 +121,7 @@ cogni-claims/
 | Plugin | Required | Purpose |
 |--------|----------|---------|
 | cogni-research | No | Research reports submit claims for verification via claim-entity contract |
-| cogni-tips | No | Trend reports submit claims for verification |
+| cogni-trends | No | Trend reports submit claims for verification |
 | cogni-portfolio | No | Portfolio propositions submit claims for verification |
 | cogni-sales | No | Sales pitches submit claims for verification |
 

@@ -18,7 +18,7 @@ Both modes produce two deliverables: `sales-presentation.md` (narrative arc) and
 - At least one cogni-portfolio project with products, features, propositions, and solutions
 - Customer mode: a named customer to pitch to (company name + industry)
 - Segment mode: a market segment from the portfolio (e.g., "Enterprise Manufacturing DACH")
-- Optional: cogni-tips project with value-modeler completed (enriches with trend evidence)
+- Optional: cogni-trends project with value-modeler completed (enriches with trend evidence)
 
 ## Arc Methodology
 

@@ -29,7 +29,7 @@ If the file is missing or unreadable, detect the user's language from their mess
 If still unclear, default to English.
 
 Keep in English regardless of language setting:
-- Plugin names (`cogni-tips`, `cogni-narrative`, etc.)
+- Plugin names (`cogni-trends`, `cogni-narrative`, etc.)
 - Command names (`/teach`, `/courses`, etc.)
 - Code snippets, file paths, CLI commands
 - Technical terms that don't have natural translations
@@ -46,8 +46,8 @@ Eleven courses, designed to build on each other:
 | 1 | `cowork-fundamentals` | Claude Cowork Fundamentals | cogni-help (meta) |
 | 2 | `workspace-obsidian` | Workspace & Obsidian Setup | cogni-workspace + cogni-obsidian + cogni-help:cogni-issues |
 | 3 | `basic-tools` | Basic Tools | cogni-copywriting + cogni-narrative + cogni-claims |
-| 4 | `tips-scouting` | Trend Scouting & Selection | cogni-tips (Part 1) |
-| 5 | `tips-reporting` | Trend Reporting | cogni-tips (Part 2) |
+| 4 | `tips-scouting` | Trend Scouting & Selection | cogni-trends (Part 1) |
+| 5 | `tips-reporting` | Trend Reporting | cogni-trends (Part 2) |
 | 6 | `portfolio` | Portfolio Messaging | cogni-canvas + cogni-portfolio |
 | 7 | `visual` | Visual Deliverables | cogni-visual |
 | 8 | `research` | Research Reports | cogni-research |
@@ -147,8 +147,8 @@ Load the relevant course file when delivering a specific course:
 - `references/courses/01-cowork-fundamentals.md`
 - `references/courses/02-workspace-obsidian.md`
 - `references/courses/03-basic-tools.md`
-- `references/courses/04-tips-scouting.md`
-- `references/courses/05-tips-reporting.md`
+- `references/courses/04-trends-scouting.md`
+- `references/courses/05-trends-reporting.md`
 - `references/courses/06-portfolio.md`
 - `references/courses/07-visual.md`
 - `references/courses/08-research.md`

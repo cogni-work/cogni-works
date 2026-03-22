@@ -3,8 +3,8 @@
   "evals": [
     {
       "id": 0,
-      "prompt": "I found a bug in cogni-tips where the scouting report duplicates entries",
-      "expected_output": "Creates a GitHub issue with the bug label, assigns it to the cogni-tips plugin repository, includes reproduction context",
+      "prompt": "I found a bug in cogni-trends where the scouting report duplicates entries",
+      "expected_output": "Creates a GitHub issue with the bug label, assigns it to the cogni-trends plugin repository, includes reproduction context",
       "files": []
     },
     {

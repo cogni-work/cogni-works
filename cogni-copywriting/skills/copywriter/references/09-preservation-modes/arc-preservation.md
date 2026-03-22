@@ -287,4 +287,4 @@ When you see this pattern, activate arc-aware mode immediately. Do not re-run th
 
 - Arc technique map: `references/09-preservation-modes/arc-technique-map.md`
 - cogni-narrative: Creates the story arc narratives that this mode polishes
-- cogni-tips: May invoke copywriter with arc preservation constraints via trend-report
+- cogni-trends: May invoke copywriter with arc preservation constraints via trend-report

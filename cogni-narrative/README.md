@@ -132,7 +132,7 @@ cogni-narrative/
 
 | Plugin | Required | Purpose |
 |--------|----------|---------|
-| cogni-tips | No | Provides trend-scout output for the `trend-panorama` arc |
+| cogni-trends | No | Provides trend-scout output for the `trend-panorama` arc |
 | cogni-research | No | Provides research reports as narrative input |
 | cogni-copywriting | No | Arc-aware executive polish (downstream) |
 | cogni-visual | No | Slide decks and visual assets from narrative output (downstream) |

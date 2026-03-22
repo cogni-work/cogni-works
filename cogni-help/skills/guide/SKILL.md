@@ -30,7 +30,7 @@ If the file is missing or unreadable, detect the user's language from their mess
 If still unclear, default to English.
 
 Keep in English regardless of language setting:
-- Plugin names (`cogni-tips`, `cogni-narrative`, etc.)
+- Plugin names (`cogni-trends`, `cogni-narrative`, etc.)
 - Command names (`/cheatsheet`, `/workflow`, etc.)
 - Technical terms, file paths, code snippets
 
@@ -64,7 +64,7 @@ or consider building one.
 
 When the user asks for an overview (no specific task), present the ecosystem map:
 
-**Research & Intelligence**: cogni-research, cogni-tips, cogni-claims, cogni-portfolio
+**Research & Intelligence**: cogni-research, cogni-trends, cogni-claims, cogni-portfolio
 **Content & Transformation**: cogni-narrative, cogni-copywriting, cogni-visual
 **Go-to-Market**: cogni-marketing, cogni-sales
 **Orchestration**: cogni-consulting, cogni-workspace

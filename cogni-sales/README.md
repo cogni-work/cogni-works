@@ -40,7 +40,7 @@ This plugin is part of the [cogni-works monorepo](https://github.com/cogni-work/
 - Web access enabled (for customer and industry research)
 - **cogni-portfolio** (required — provides products, propositions, markets, competitors)
 - **cogni-narrative** (required — provides Corporate Visions story arc patterns)
-- Optional: **cogni-tips** (TIPS strategic theme enrichment), **cogni-claims** (source verification), **cogni-copywriting** (executive polish), **cogni-visual** (PPTX generation)
+- Optional: **cogni-trends** (TIPS strategic theme enrichment), **cogni-claims** (source verification), **cogni-copywriting** (executive polish), **cogni-visual** (PPTX generation)
 
 ## Quick start
 
@@ -130,7 +130,7 @@ cogni-sales/
 |--------|----------|---------|
 | cogni-portfolio | Yes | Products, features, propositions, solutions, markets, competitors, customers |
 | cogni-narrative | Yes | Corporate Visions story arc patterns (why-change, why-now, why-you, why-pay) |
-| cogni-tips | No | TIPS strategic theme enrichment — value-modeler themes, regulatory timelines, gap analysis |
+| cogni-trends | No | TIPS strategic theme enrichment — value-modeler themes, regulatory timelines, gap analysis |
 | cogni-claims | No | Source verification for web-sourced claims |
 | cogni-copywriting | No | Executive polish on final deliverables |
 | cogni-visual | No | PPTX generation from sales presentation |

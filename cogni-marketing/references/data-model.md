@@ -40,7 +40,7 @@ cogni-marketing/{project-slug}/
   "updated": "ISO-8601",
 
   "sources": {
-    "tips_project": "relative path to cogni-tips project",
+    "tips_project": "relative path to cogni-trends project",
     "portfolio_project": "relative path to cogni-portfolio project"
   },
 
@@ -173,7 +173,7 @@ created: ISO-8601
 
 ## Cross-Plugin References
 
-- **cogni-tips**: `sources.tips_project` → reads `tips-value-model.json` for strategic themes, `trend-scout-output.json` for trend data, `tips-trend-report-claims.json` for evidence
+- **cogni-trends**: `sources.tips_project` → reads `tips-value-model.json` for strategic themes, `trend-scout-output.json` for trend data, `tips-trend-report-claims.json` for evidence
 - **cogni-portfolio**: `sources.portfolio_project` → reads `propositions/`, `competitors/`, `customers/`, `solutions/`, `packages/`, `portfolio.json`
 - **cogni-copywriting**: Generated content can be piped to `copywriter` skill for polishing
 - **cogni-narrative**: Long-form thought leadership can be piped to `narrative` skill for arc-driven transformation

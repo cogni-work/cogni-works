@@ -80,7 +80,7 @@ Master state file for a pitch project. Lives at `{project}/.metadata/pitch-log.j
 | `customer_industry` | Yes | Industry sector — matched to portfolio markets |
 | `market_slug` | No | Matched portfolio market slug (set during setup) |
 | `portfolio_path` | Yes | Absolute path to cogni-portfolio project |
-| `tips_path` | No | Absolute path to cogni-tips project (null = portfolio-only mode) |
+| `tips_path` | No | Absolute path to cogni-trends project (null = portfolio-only mode) |
 | `company_name` | Yes | Our company name (from portfolio.json) |
 | `language` | Yes | `en` or `de` |
 | `solution_focus` | No | Feature slugs to focus on (empty = full portfolio) |

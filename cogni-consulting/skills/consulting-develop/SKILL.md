@@ -2,7 +2,7 @@
 name: consulting-develop
 description: |
   Execute the Develop phase of a Double Diamond engagement — diverge to generate and explore solution
-  options. Dispatches to cogni-tips value-modeler and cogni-portfolio for proposition modeling.
+  options. Dispatches to cogni-trends value-modeler and cogni-portfolio for proposition modeling.
   Use whenever the user wants to brainstorm solutions, generate options, or explore alternatives
   within a diamond engagement. Trigger on: "generate options", "what could we do", "solution ideas",
   "brainstorm solutions", "develop phase", "explore alternatives", "scenario planning",
@@ -48,7 +48,7 @@ Read `$CLAUDE_PLUGIN_ROOT/references/vision-classes.md` for the vision class's r
 
 | Method | Plugin | What It Produces |
 |---|---|---|
-| Value modeling | cogni-tips | TIPS paths from trends to solutions, ranked by business relevance |
+| Value modeling | cogni-trends | TIPS paths from trends to solutions, ranked by business relevance |
 | Proposition modeling | cogni-portfolio | IS/DOES/MEANS messaging for Feature × Market pairs |
 | Solution design | cogni-portfolio | Implementation phases and pricing tiers |
 
@@ -61,11 +61,11 @@ Read `$CLAUDE_PLUGIN_ROOT/references/vision-classes.md` for the vision class's r
 
 Ask: "Which methods do you want for option generation? I recommend [2-3 based on vision class]. You can adjust."
 
-### 3. Value Modeling (cogni-tips)
+### 3. Value Modeling (cogni-trends)
 
 If the engagement has a tips project from Discovery (check `plugin_refs.tips_project`):
 
-1. Dispatch `cogni-tips:value-modeler` on the existing trend candidates
+1. Dispatch `cogni-trends:value-modeler` on the existing trend candidates
 2. The value modeler translates trend candidates into TIPS paths (Trend → Implication → Possibility → Solution)
 3. Solutions are ranked by business relevance score
 4. Store value model outputs in `develop/options/tips-solutions.md`

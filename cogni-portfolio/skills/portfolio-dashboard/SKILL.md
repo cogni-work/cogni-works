@@ -59,7 +59,7 @@ python3 $CLAUDE_PLUGIN_ROOT/skills/portfolio-dashboard/scripts/generate-dashboar
 The script:
 - Reads `portfolio.json` and all entity directories (products, features, markets, propositions, solutions, competitors, customers)
 - Reads `cogni-claims/claims.json` if present
-- Discovers linked TIPS projects (via `tips_enrichment.pursuit_slug` on propositions or `cogni-tips/*/tips-project.json` with matching `portfolio_source`) and loads portfolio-anchored Solution Templates and `portfolio-opportunities.json`
+- Discovers linked TIPS projects (via `tips_enrichment.pursuit_slug` on propositions or `cogni-trends/*/tips-project.json` with matching `portfolio_source`) and loads portfolio-anchored Solution Templates and `portfolio-opportunities.json`
 - Runs `project-status.sh` for counts and completion data
 - Loads the design-variables JSON for colors, typography, shadows, and radius
 - Generates a self-contained HTML file at `<project-dir>/output/dashboard.html`
@@ -99,7 +99,7 @@ The generated HTML includes these sections, all in a single-page app with drill-
 
 ## Shared Pattern
 
-This dashboard is the **reference implementation** of the design-variables pattern documented at `cogni-workspace/references/design-variables-pattern.md`. Other plugins building themed HTML dashboards (cogni-tips trend-report, scoring-ui, catalog) should follow the same 3-stage flow: pick-theme → LLM derives design-variables.json → generator consumes JSON.
+This dashboard is the **reference implementation** of the design-variables pattern documented at `cogni-workspace/references/design-variables-pattern.md`. Other plugins building themed HTML dashboards (cogni-trends trend-report, scoring-ui, catalog) should follow the same 3-stage flow: pick-theme → LLM derives design-variables.json → generator consumes JSON.
 
 ## Important Notes
 

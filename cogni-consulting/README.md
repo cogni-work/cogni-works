@@ -14,14 +14,14 @@ Consulting engagements often stall in either analysis paralysis (endless researc
 
 ## What it is
 
-A process orchestrator for the cogni-works ecosystem. cogni-consulting doesn't produce content itself — it manages engagement state and dispatches to existing plugins (cogni-research, cogni-tips, cogni-portfolio, cogni-claims, cogni-visual) at the right phase. Think of it as the senior partner who runs the engagement while specialists do the analysis.
+A process orchestrator for the cogni-works ecosystem. cogni-consulting doesn't produce content itself — it manages engagement state and dispatches to existing plugins (cogni-research, cogni-trends, cogni-portfolio, cogni-claims, cogni-visual) at the right phase. Think of it as the senior partner who runs the engagement while specialists do the analysis.
 
 ## What it does
 
 1. **Frame the vision** — define the desired outcome class (strategic options, business case, GTM roadmap, etc.) and engagement scope
-2. **Discover** (D1 diverge) — launch desk research, trend scouting, and competitive baseline via cogni-research, cogni-tips, and cogni-portfolio
+2. **Discover** (D1 diverge) — launch desk research, trend scouting, and competitive baseline via cogni-research, cogni-trends, and cogni-portfolio
 3. **Define** (D1 converge) — verify assumptions via cogni-claims, cluster findings, synthesize the core problem statement
-4. **Develop** (D2 diverge) — generate solution options via cogni-tips value-modeler and cogni-portfolio proposition modeling
+4. **Develop** (D2 diverge) — generate solution options via cogni-trends value-modeler and cogni-portfolio proposition modeling
 5. **Deliver** (D2 converge) — score opportunities, verify final claims, construct business case and roadmap
 6. **Export** — generate the deliverable package (slides, diagrams, documents) via cogni-visual and document-skills
 
@@ -126,7 +126,7 @@ cogni-consulting/
 | Plugin | Required | Purpose |
 |--------|----------|---------|
 | cogni-research | No | Desk research during Discover phase |
-| cogni-tips | No | Trend scouting (Discover) and value modeling (Develop) |
+| cogni-trends | No | Trend scouting (Discover) and value modeling (Develop) |
 | cogni-portfolio | No | Competitive baseline (Discover), proposition modeling (Develop), verification (Deliver) |
 | cogni-claims | No | Assumption verification (Define) and final quality gate (Deliver) |
 | cogni-visual | No | Slide decks and diagrams during Export |

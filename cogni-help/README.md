@@ -21,7 +21,7 @@ The cogni-works ecosystem has 15 plugins with 60+ skills, dozens of agents, and 
 /guide "I need to create a sales pitch"   # find the right plugin
 /teach 1                                   # start Course 1: Cowork Fundamentals
 /workflow research-to-slides               # see a cross-plugin pipeline
-/cheatsheet cogni-tips                     # quick reference for a plugin
+/cheatsheet cogni-trends                     # quick reference for a plugin
 /troubleshoot                              # run diagnostics
 /issues                                    # file a bug or feature request
 /courses                                   # see course progress
@@ -65,8 +65,8 @@ Or describe what you want:
 | 1 | Cowork Fundamentals | cogni-help (meta) |
 | 2 | Workspace & Obsidian | cogni-workspace, cogni-obsidian, cogni-help:cogni-issues |
 | 3 | Basic Tools | cogni-copywriting, cogni-narrative, cogni-claims |
-| 4 | Trend Scouting | cogni-tips (Part 1) |
-| 5 | Trend Reporting | cogni-tips (Part 2) |
+| 4 | Trend Scouting | cogni-trends (Part 1) |
+| 5 | Trend Reporting | cogni-trends (Part 2) |
 | 6 | Portfolio Messaging | cogni-canvas, cogni-portfolio |
 | 7 | Visual Deliverables | cogni-visual |
 | 8 | Research Reports | cogni-research |
@@ -81,7 +81,7 @@ Each course is ~45 minutes with ~5 modules: Theory → Demo → Exercise → Qui
 | Workflow | Pipeline |
 |----------|----------|
 | `research-to-slides` | cogni-research → cogni-narrative → cogni-visual |
-| `trend-to-marketing` | cogni-tips → cogni-portfolio → cogni-marketing |
+| `trend-to-marketing` | cogni-trends → cogni-portfolio → cogni-marketing |
 | `portfolio-to-pitch` | cogni-portfolio → cogni-narrative → cogni-sales → cogni-visual |
 | `new-engagement` | cogni-consulting phases (Discover → Define → Develop → Deliver) |
 | `full-onboarding` | cogni-workspace → cogni-help courses 1-11 |

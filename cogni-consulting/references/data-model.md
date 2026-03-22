@@ -11,7 +11,7 @@ cogni-consulting/{engagement-slug}/
 │   └── decision-log.json                  # Key decisions with rationale
 ├── discover/                              # D1 diverge outputs
 │   ├── research/                          # → cogni-research project
-│   ├── trends/                            # → cogni-tips project
+│   ├── trends/                            # → cogni-trends project
 │   └── competitive/                       # → cogni-portfolio scan
 ├── define/                                # D1 converge outputs
 │   ├── claims/                            # → cogni-claims verification
@@ -50,7 +50,7 @@ Central state file for the engagement. Tracks vision, phase progression, and cro
   },
   "plugin_refs": {
     "research": "cogni-research/dach-cloud-expansion",
-    "trends": "cogni-tips/dach-cloud-expansion",
+    "trends": "cogni-trends/dach-cloud-expansion",
     "portfolio": "cogni-portfolio/acme-cloud-services",
     "claims": "cogni-claims/"
   },
@@ -160,7 +160,7 @@ Phase gates are advisory: the phase-analyst agent assesses readiness and warns i
 | Plugin | Direction | Phase | Contract |
 |--------|-----------|-------|----------|
 | cogni-research | Orchestrates | Discover | Creates research project, invokes research-report skill |
-| cogni-tips | Orchestrates | Discover, Develop | Invokes trend-scout (Discover) and value-modeler (Develop) |
+| cogni-trends | Orchestrates | Discover, Develop | Invokes trend-scout (Discover) and value-modeler (Develop) |
 | cogni-portfolio | Orchestrates | Discover, Develop, Deliver | Invokes portfolio-scan, compete, propositions, solutions, portfolio-verify |
 | cogni-claims | Orchestrates | Define, Deliver | Invokes claims verification for assumption and deliverable quality gates |
 | cogni-visual | Orchestrates | Export | Invokes story-to-slides, story-to-big-picture for final deliverables |

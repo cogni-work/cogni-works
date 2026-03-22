@@ -441,7 +441,7 @@ topic framing, report depth, tone, and which claims to accept or revise.
 4. **cogni-copywriting** — Document polishing and stakeholder review
 5. **cogni-narrative** — Executive narrative transformation
 6. **cogni-claims** — Citation verification
-7. **cogni-tips** — Strategic trend research pipeline
+7. **cogni-trends** — Strategic trend research pipeline
 8. **cogni-portfolio** — Product and service messaging
 9. **cogni-visual** — Presentations and visual deliverables
 10. **cogni-research** — Research reports and intelligence

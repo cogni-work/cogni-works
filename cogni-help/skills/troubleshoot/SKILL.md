@@ -113,7 +113,7 @@ Many plugins require others to function. Check that dependencies are installed:
 
 | Plugin | Requires |
 |--------|----------|
-| cogni-marketing | cogni-tips, cogni-portfolio |
+| cogni-marketing | cogni-trends, cogni-portfolio |
 | cogni-sales | cogni-portfolio, cogni-narrative |
 | cogni-consulting | most other plugins |
 | cogni-help:teach | all plugins (for exercises) |

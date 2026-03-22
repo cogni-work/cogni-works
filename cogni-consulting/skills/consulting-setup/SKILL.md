@@ -36,7 +36,7 @@ Collect these fields:
 - **Desired outcome**: One-sentence description of what success looks like
 - **Scope**: Market, geography, product line, or segment boundaries
 - **Constraints**: Timeline, budget, exclusions, or non-negotiables
-- **Industry**: Primary industry sector (used for cogni-tips trend scouting)
+- **Industry**: Primary industry sector (used for cogni-trends trend scouting)
 
 If the user has provided some context already, extract what is available and ask only for missing fields.
 
@@ -139,7 +139,7 @@ Read `$CLAUDE_PLUGIN_ROOT/references/vision-classes.md` for the selected vision 
 >
 > **Discover** (diverge) — Build understanding of the problem landscape
 > - Desk research via cogni-research
-> - Industry trend scan via cogni-tips
+> - Industry trend scan via cogni-trends
 > - Competitive baseline via cogni-portfolio
 >
 > **Define** (converge) — Frame the core challenge
@@ -147,7 +147,7 @@ Read `$CLAUDE_PLUGIN_ROOT/references/vision-classes.md` for the selected vision 
 > - Affinity clustering + HMW synthesis (guided)
 >
 > **Develop** (diverge) — Generate and explore options
-> - Value modeling via cogni-tips
+> - Value modeling via cogni-trends
 > - Proposition framing via cogni-portfolio
 > - Scenario planning (guided)
 >

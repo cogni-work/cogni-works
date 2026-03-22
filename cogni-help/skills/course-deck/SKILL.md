@@ -29,7 +29,7 @@ If the file is missing or unreadable, detect the user's language from their mess
 If still unclear, default to English.
 
 Keep in English regardless of language setting:
-- Plugin names (`cogni-tips`, `cogni-narrative`, etc.)
+- Plugin names (`cogni-trends`, `cogni-narrative`, etc.)
 - Command names (`/teach`, `/courses`, etc.)
 - Technical terms, code snippets
 
@@ -102,8 +102,8 @@ Pull all course content from the reference files in this plugin:
 - `references/courses/01-cowork-fundamentals.md`
 - `references/courses/02-workspace-obsidian.md`
 - `references/courses/03-basic-tools.md`
-- `references/courses/04-tips-scouting.md`
-- `references/courses/05-tips-reporting.md`
+- `references/courses/04-trends-scouting.md`
+- `references/courses/05-trends-reporting.md`
 - `references/courses/06-portfolio.md`
 - `references/courses/07-visual.md`
 
@@ -119,8 +119,8 @@ Map user input to course files:
 | 1, cowork, fundamentals | 01-cowork-fundamentals |
 | 2, workspace, obsidian | 02-workspace-obsidian |
 | 3, basic, tools, copywriting | 03-basic-tools |
-| 4, scouting, tips-scouting | 04-tips-scouting |
-| 5, reporting, tips-reporting | 05-tips-reporting |
+| 4, scouting, tips-scouting | 04-trends-scouting |
+| 5, reporting, tips-reporting | 05-trends-reporting |
 | 6, portfolio | 06-portfolio |
 | 7, visual | 07-visual |
 

@@ -5,7 +5,7 @@
 Thank you for your interest in contributing to cogni-works core plugins. This Contributor License Agreement ("Agreement") applies to any Contribution you make to the following core plugins maintained by Stephan de Haas ("Project Owner"):
 
 - cogni-workspace
-- cogni-tips
+- cogni-trends
 - cogni-narrative
 - cogni-claims
 - cogni-copywriting

@@ -14,9 +14,9 @@ Each vision class represents a type of consulting engagement outcome. The class 
 
 | Phase | Recommended Methods | Plugin Dispatch |
 |---|---|---|
-| Discover | Desk research (detailed), trend scan, competitive baseline, stakeholder mapping | cogni-research, cogni-tips, cogni-portfolio |
+| Discover | Desk research (detailed), trend scan, competitive baseline, stakeholder mapping | cogni-research, cogni-trends, cogni-portfolio |
 | Define | Assumption verification, affinity clustering, HMW synthesis | cogni-claims |
-| Develop | Value modeling, proposition modeling, scenario planning | cogni-tips, cogni-portfolio |
+| Develop | Value modeling, proposition modeling, scenario planning | cogni-trends, cogni-portfolio |
 | Deliver | Opportunity scoring, claims verification, executive summary | cogni-claims, cogni-portfolio |
 
 ## business-case
@@ -62,9 +62,9 @@ Each vision class represents a type of consulting engagement outcome. The class 
 
 | Phase | Recommended Methods | Plugin Dispatch |
 |---|---|---|
-| Discover | Desk research (deep), trend scan, data audit, stakeholder mapping, customer journey analysis | cogni-research, cogni-tips |
+| Discover | Desk research (deep), trend scan, data audit, stakeholder mapping, customer journey analysis | cogni-research, cogni-trends |
 | Define | Assumption verification, affinity clustering, HMW synthesis | cogni-claims |
-| Develop | Value modeling, proposition modeling, scenario planning | cogni-tips, cogni-portfolio |
+| Develop | Value modeling, proposition modeling, scenario planning | cogni-trends, cogni-portfolio |
 | Deliver | Opportunity scoring, business case canvas, claims verification | cogni-claims, cogni-portfolio |
 
 ## innovation-portfolio
@@ -74,9 +74,9 @@ Each vision class represents a type of consulting engagement outcome. The class 
 
 | Phase | Recommended Methods | Plugin Dispatch |
 |---|---|---|
-| Discover | Trend scan (deep), desk research, stakeholder mapping | cogni-research, cogni-tips |
+| Discover | Trend scan (deep), desk research, stakeholder mapping | cogni-research, cogni-trends |
 | Define | Assumption verification, HMW synthesis | cogni-claims |
-| Develop | Value modeling (emphasis), scenario planning | cogni-tips |
+| Develop | Value modeling (emphasis), scenario planning | cogni-trends |
 | Deliver | Opportunity scoring, claims verification | cogni-claims |
 
 ## market-entry

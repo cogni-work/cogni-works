@@ -28,14 +28,14 @@ graph LR
 
 **Command**: `/consulting-discover`
 
-**Dispatches to**: cogni-research (market/domain research), cogni-tips (trend landscape)
+**Dispatches to**: cogni-research (market/domain research), cogni-trends (trend landscape)
 
 **Output**: Research findings, trend analysis, landscape map
 
 **Tips**:
 - Cast a wide net — Discover is about breadth, not depth
 - Use cogni-research for targeted deep-dives on specific questions
-- Use cogni-tips to map the strategic trend landscape
+- Use cogni-trends to map the strategic trend landscape
 - Document key findings as they emerge — they feed into Define
 
 ## Phase 2: Define

@@ -7,7 +7,7 @@ cogni-works has two types of contributions with different terms. Please read the
 Core plugins are maintained by cogni-works and licensed under AGPL-3.0:
 
 - cogni-workspace
-- cogni-tips
+- cogni-trends
 - cogni-narrative
 - cogni-canvas
 - cogni-claims
@@ -49,8 +49,8 @@ All contributions to core plugins require signing the [Contributor License Agree
 | Tier | When | Pattern | Examples |
 |------|------|---------|----------|
 | A — Domain-unique | Only one plugin would ever own this word | Bare name | `propositions`, `synthesize`, `compete` |
-| B — Generic verb/noun | Multiple plugins could have this skill | `{domain}-{verb}` | `portfolio-scan`, `tips-catalog`, `copy-reader` |
-| C — Cross-plugin | Skill spans two domains | Descriptive compound | `tips-bridge` |
+| B — Generic verb/noun | Multiple plugins could have this skill | `{domain}-{verb}` | `portfolio-scan`, `trends-catalog`, `copy-reader` |
+| C — Cross-plugin | Skill spans two domains | Descriptive compound | `trends-bridge` |
 
 **Order:** always `domain-verb` (not `verb-domain`). This groups skills alphabetically by plugin domain.
 

@@ -118,7 +118,7 @@ cogni-visual/
 | cogni-narrative | Yes | Produces narratives (upstream — compose step) |
 | cogni-copywriting | Yes | Polishes narratives (upstream — polish step) |
 | cogni-workspace | Yes | Provides brand themes for all visual output |
-| cogni-tips | No | TIPS value-modeler data for Big Block diagrams |
+| cogni-trends | No | TIPS value-modeler data for Big Block diagrams |
 | document-skills | No | PPTX rendering for slide briefs |
 | Excalidraw MCP | No | Canvas rendering for big-picture and Big Block (github.com/yctimlin/mcp_excalidraw) |
 | Pencil MCP | No | Canvas rendering for web narratives and poster storyboards (pencil.li) |

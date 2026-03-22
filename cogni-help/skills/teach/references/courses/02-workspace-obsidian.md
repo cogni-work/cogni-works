@@ -320,7 +320,7 @@ language, and Claude drafts and files the issue on your behalf.
 
 | Type | When to use | Example |
 |------|-------------|---------|
-| **Bug** | Something is broken or produces wrong output | "cogni-tips scout crashed mid-run" |
+| **Bug** | Something is broken or produces wrong output | "cogni-trends scout crashed mid-run" |
 | **Feature** | You want something new | "Add PDF export to trend reports" |
 | **Change request** | Something works but should work differently | "Change default output language to German" |
 | **Question** | You need clarification | "How do I reset my workspace theme?" |

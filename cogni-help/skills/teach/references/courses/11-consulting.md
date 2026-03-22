@@ -102,7 +102,7 @@ Ask the user to:
 | Plugin | What It Does in Discover | Skill Invoked |
 |--------|--------------------------|---------------|
 | cogni-research | Web research on the client's domain, competitive landscape | research-report |
-| cogni-tips | Industry trend analysis, strategic foresight | trend-scout |
+| cogni-trends | Industry trend analysis, strategic foresight | trend-scout |
 | cogni-portfolio | Existing portfolio scan, competitive positioning | portfolio-scan, compete |
 
 The vision class determines which research methods are recommended. For example,
@@ -155,7 +155,7 @@ Ask the user to:
 
 ### Recap
 
-- Discover dispatches to cogni-research, cogni-tips, and cogni-portfolio
+- Discover dispatches to cogni-research, cogni-trends, and cogni-portfolio
 - The vision class determines which methods are recommended
 - Define synthesizes: cluster → verify assumptions → HMW questions → problem statement
 - Key output: a crisp problem statement that focuses Diamond 2
@@ -172,7 +172,7 @@ Ask the user to:
 
 | Plugin | What It Does in Develop | Skill Invoked |
 |--------|-------------------------|---------------|
-| cogni-tips | Value modeling — solution templates, TIPS paths, investment themes | value-modeler |
+| cogni-trends | Value modeling — solution templates, TIPS paths, investment themes | value-modeler |
 | cogni-portfolio | Proposition design, market-specific messaging, packaging | propositions, solutions |
 
 Methods commonly used in Develop:
@@ -212,7 +212,7 @@ Ask the user to:
 1. **Multiple choice**: Which plugin handles value modeling in the Develop phase?
    - a) cogni-portfolio
    - b) cogni-claims
-   - c) cogni-tips
+   - c) cogni-trends
    - d) cogni-research
    **Answer**: c
 
@@ -225,7 +225,7 @@ Ask the user to:
 
 ### Recap
 
-- Develop dispatches to cogni-tips (value-modeler) and cogni-portfolio (propositions)
+- Develop dispatches to cogni-trends (value-modeler) and cogni-portfolio (propositions)
 - Methods: scenario planning, opportunity scoring, business-case-canvas
 - Deliver converges: evaluate → verify → build business case → roadmap
 - Output: an evidence-backed recommendation, not just an opinion
@@ -324,11 +324,11 @@ The **deliverable map** links each vision class to its recommended deliverable p
 ```
 consulting-setup (vision framing)
     │
-    ├── Discover: cogni-research + cogni-tips + cogni-portfolio
+    ├── Discover: cogni-research + cogni-trends + cogni-portfolio
     │
     ├── Define: cogni-claims (verify assumptions)
     │
-    ├── Develop: cogni-tips (value-modeler) + cogni-portfolio (propositions)
+    ├── Develop: cogni-trends (value-modeler) + cogni-portfolio (propositions)
     │
     ├── Deliver: cogni-claims (verify claims) + cogni-portfolio (validate)
     │
@@ -351,9 +351,9 @@ Walk through export and the full pipeline:
 
 Ask the user to:
 1. Map their engagement end-to-end through all four phases:
-   - **Discover**: What would cogni-research research? What trends would cogni-tips scout?
+   - **Discover**: What would cogni-research research? What trends would cogni-trends scout?
    - **Define**: What assumptions need verification via cogni-claims?
-   - **Develop**: What value models (cogni-tips) and propositions (cogni-portfolio) would emerge?
+   - **Develop**: What value models (cogni-trends) and propositions (cogni-portfolio) would emerge?
    - **Deliver**: What claims need final verification? What does the business case include?
    - **Export**: What deliverables does their vision class require?
 2. Which phase would take the longest for their engagement? Why?
@@ -391,7 +391,7 @@ Congratulations — you have completed all 11 courses in the cogni-help curricul
 4. **cogni-copywriting** — Document polishing & stakeholder review (Course 3)
 5. **cogni-narrative** — Executive narrative transformation (Course 3)
 6. **cogni-claims** — Citation verification (Course 3)
-7. **cogni-tips** — Strategic trend research pipeline (Courses 4-5)
+7. **cogni-trends** — Strategic trend research pipeline (Courses 4-5)
 8. **cogni-canvas** — Lean Canvas business hypotheses (Course 6)
 9. **cogni-portfolio** — Product/service messaging (Course 6)
 10. **cogni-visual** — Presentations & visual deliverables (Course 7)

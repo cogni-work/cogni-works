@@ -23,4 +23,4 @@
 
 ---
 
-> **Note:** The CLA requirement applies to contributions to core plugins (cogni-workspace, cogni-tips, cogni-narrative, cogni-claims, cogni-copywriting, cogni-obsidian, cogni-portfolio, cogni-visual, cogni-help). Community plugin contributions are governed by the plugin author's own terms.
+> **Note:** The CLA requirement applies to contributions to core plugins (cogni-workspace, cogni-trends, cogni-narrative, cogni-claims, cogni-copywriting, cogni-obsidian, cogni-portfolio, cogni-visual, cogni-help). Community plugin contributions are governed by the plugin author's own terms.

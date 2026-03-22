@@ -327,7 +327,7 @@ def discover_tips_project(project_dir, data):
 
     Discovery chain:
     1. Scan propositions for tips_enrichment.pursuit_slug
-    2. Scan workspace for cogni-tips/*/tips-project.json with matching portfolio_source
+    2. Scan workspace for cogni-trends/*/tips-project.json with matching portfolio_source
     """
     portfolio_slug = data.get("portfolio", {}).get("slug", "")
 
@@ -336,20 +336,20 @@ def discover_tips_project(project_dir, data):
         te = prop.get("tips_enrichment", {})
         pursuit_slug = te.get("pursuit_slug", "") if isinstance(te, dict) else ""
         if pursuit_slug:
-            # Walk up from project_dir to find cogni-tips/{pursuit_slug}
+            # Walk up from project_dir to find cogni-trends/{pursuit_slug}
             workspace = os.path.dirname(project_dir)
-            tips_dir = os.path.join(workspace, "cogni-tips", pursuit_slug)
+            tips_dir = os.path.join(workspace, "cogni-trends", pursuit_slug)
             if os.path.isdir(tips_dir):
                 return tips_dir
             # Also check the portfolio's own parent (portfolio may be nested)
             for parent in [os.path.dirname(workspace), workspace]:
-                tips_dir = os.path.join(parent, "cogni-tips", pursuit_slug)
+                tips_dir = os.path.join(parent, "cogni-trends", pursuit_slug)
                 if os.path.isdir(tips_dir):
                     return tips_dir
 
-    # Secondary: scan workspace for cogni-tips/*/tips-project.json
+    # Secondary: scan workspace for cogni-trends/*/tips-project.json
     workspace = os.path.dirname(project_dir)
-    tips_base = os.path.join(workspace, "cogni-tips")
+    tips_base = os.path.join(workspace, "cogni-trends")
     if os.path.isdir(tips_base):
         for entry in os.listdir(tips_base):
             tp_path = os.path.join(tips_base, entry, "tips-project.json")

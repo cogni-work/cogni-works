@@ -53,10 +53,10 @@
       "keywords": ["workspace", "themes", "orchestrator", "cogni-works"]
     },
     {
-      "name": "cogni-tips",
+      "name": "cogni-trends",
       "description": "Strategic trend scouting and reporting pipeline. Combines the Smarter Service Trendradar (4-dimension structure) with the TIPS content framework (Trends, Implications, Possibilities, Solutions) for industry trend analysis. Bilingual support (EN/DE).",
       "author": { "name": "Stephan de Haas", "email": "stephan@cogni-work.ai" },
-      "source": "./cogni-tips",
+      "source": "./cogni-trends",
       "category": "productivity",
       "license": "AGPL-3.0-only",
       "keywords": ["tips", "trend-scout", "trends", "strategic-trends", "bilingual", "trend-report"]
@@ -90,7 +90,7 @@
     },
     {
       "name": "cogni-marketing",
-      "description": "B2B marketing content engine bridging cogni-tips investment themes (Handlungsfelder) and cogni-portfolio propositions into channel-ready content. Supports thought leadership, demand generation, lead generation, sales enablement, and ABM across markets with configurable brand voice. Bilingual DE/EN.",
+      "description": "B2B marketing content engine bridging cogni-trends investment themes (Handlungsfelder) and cogni-portfolio propositions into channel-ready content. Supports thought leadership, demand generation, lead generation, sales enablement, and ABM across markets with configurable brand voice. Bilingual DE/EN.",
       "author": { "name": "Stephan de Haas", "email": "stephan@cogni-work.ai" },
       "source": "./cogni-marketing",
       "category": "productivity",

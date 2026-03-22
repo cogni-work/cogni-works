@@ -371,7 +371,7 @@ Ask the user to:
 2. Portfolio strategy → **cogni-narrative** (executive narrative with corporate-visions arc)
 3. Claims in analysis → **cogni-claims** (verify market data)
 4. Portfolio overview → **cogni-visual** (presentation, one-pager)
-5. Market trends → **cogni-tips** (validate with trend data)
+5. Market trends → **cogni-trends** (validate with trend data)
 
 ### Demo
 

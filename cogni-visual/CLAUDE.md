@@ -152,7 +152,7 @@ cogni-narrative -> cogni-copywriting -> cogni-visual
 ```
 
 - **Upstream (narrative skills):** Narratives from cogni-narrative, polished by cogni-copywriting
-- **Upstream (big-block):** TIPS value-modeler Phase 4 output from cogni-tips
+- **Upstream (big-block):** TIPS value-modeler Phase 4 output from cogni-trends
 - **External:** Themes from cogni-workspace (`/cogni-workspace/themes/{id}/theme.md`)
 - **Downstream:** `document-skills:pptx` renders slide briefs; Excalidraw MCP renders big-picture briefs; Pencil MCP renders web and storyboard briefs
 - **Web HTML export:** Web agent reads rendered .pen design tree to generate self-contained HTML + integration manifest for `export-html-report` landing page overlay

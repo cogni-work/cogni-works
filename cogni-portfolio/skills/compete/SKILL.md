@@ -30,7 +30,9 @@ Present options to the user:
 
 ### 2. Research Competitors
 
-For each selected proposition, identify 3-5 relevant competitors. Two modes:
+For each selected proposition, identify 3-5 relevant competitors. Three sources:
+
+**Internal context (pre-research):** Before web research, check for `context/context-index.json`. Read entries in `by_relevance["compete"]` or `by_category["competitive"]`. Internal battlecards, win/loss reports, and RFP analyses provide ground truth that web research cannot find. Pass any matching context to the `competitor-researcher` agent as additional input alongside the proposition.
 
 **Web research (default)**: Use the Agent tool to delegate to the `competitor-researcher` agent, which searches for:
 - Companies offering similar capabilities in this market

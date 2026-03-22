@@ -75,6 +75,8 @@ Before generating propositions, understand the messaging landscape. Have a conve
 
 **Ask only what you can't infer.** If the market definition includes pain points and buyer personas, use those directly. Don't repeat questions the user already answered during market definition.
 
+**Internal context (optional):** If `context/context-index.json` exists in the project directory, read it and look up entries in `by_relevance["propositions"]`. For each matching slug, read `context/{slug}.json` and incorporate the `summary` and `detail` into your assessment. Strategic context informs positioning angles for DOES/MEANS statements. Competitive context reveals differentiation opportunities. Customer context provides buyer language and pain point framing. When context entries reference specific feature or market slugs via the `entities` field, apply that intelligence to those propositions specifically. Context supplements but does not override user input or portfolio entity data.
+
 **Web research (optional):** When the user requests research-backed messaging, delegate to a subagent (Agent tool) to search for industry benchmarks, competitor claims, and supporting evidence relevant to each market segment. Add findings to the `evidence` array. This is especially useful for quantifying DOES statements with real market data.
 
 ## Proposition Shaping

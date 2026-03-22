@@ -663,6 +663,78 @@ for st in sts:
   done
 fi
 
+# Validate context entries
+if [ -d "$PROJECT_DIR/context" ]; then
+  VALID_CATEGORIES="competitive market pricing customer technical strategic"
+  VALID_SKILLS="propositions solutions markets compete customers features packages"
+
+  for ctx_file in "$PROJECT_DIR/context"/*.json; do
+    [ -f "$ctx_file" ] || continue
+    ctx_base=$(basename "$ctx_file")
+    # Skip the index file
+    [ "$ctx_base" = "context-index.json" ] && continue
+
+    python3 -c "
+import json, sys
+with open('$ctx_file') as f:
+    data = json.load(f)
+
+errors_found = []
+for field in ['slug', 'source_file', 'category', 'relevance', 'summary', 'detail', 'confidence', 'created']:
+    if field not in data or not data[field]:
+        errors_found.append(f'Missing required field: {field}')
+
+cat = data.get('category', '')
+if cat and cat not in '$VALID_CATEGORIES'.split():
+    errors_found.append(f'Invalid category: {cat}')
+
+conf = data.get('confidence', '')
+if conf and conf not in ['high', 'medium', 'low']:
+    errors_found.append(f'Invalid confidence: {conf}')
+
+relevance = data.get('relevance', [])
+if isinstance(relevance, list):
+    for r in relevance:
+        if r not in '$VALID_SKILLS'.split():
+            errors_found.append(f'Invalid relevance skill: {r}')
+
+for err in errors_found:
+    print(f'E|{err}')
+" 2>/dev/null | while IFS='|' read -r level msg; do
+      add_error "context" "$ctx_base" "$msg"
+    done
+  done
+
+  # Validate context-index.json consistency
+  if [ -f "$PROJECT_DIR/context/context-index.json" ]; then
+    python3 -c "
+import json, os, glob, sys
+with open('$PROJECT_DIR/context/context-index.json') as f:
+    idx = json.load(f)
+
+actual_files = set()
+for f in glob.glob('$PROJECT_DIR/context/*.json'):
+    b = os.path.basename(f)
+    if b != 'context-index.json':
+        actual_files.add(b[:-5])  # slug without .json
+
+indexed_slugs = set()
+for cat_slugs in idx.get('by_category', {}).values():
+    indexed_slugs.update(cat_slugs)
+
+missing_in_index = actual_files - indexed_slugs
+extra_in_index = indexed_slugs - actual_files
+
+if missing_in_index:
+    print(f'W|Context files not in index: {sorted(missing_in_index)}')
+if extra_in_index:
+    print(f'W|Index references missing files: {sorted(extra_in_index)}')
+" 2>/dev/null | while IFS='|' read -r level msg; do
+      add_warning "context-index" "context-index.json" "$msg"
+    done
+  fi
+fi
+
 errors="$errors]"
 warnings="$warnings]"
 

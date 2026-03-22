@@ -59,6 +59,8 @@ Before listing features, understand the product. Have a conversation — but don
 
 Do not ask all of these. If the user has a clear picture and just wants to capture it, move quickly. If they're vague about what their product does ("it's a platform"), spend more time here.
 
+**Internal context (optional):** If `context/context-index.json` exists in the project directory, read entries in `by_relevance["features"]` or `by_category["technical"]`. Product roadmaps, architecture docs, and technical specs inform capability decomposition and help identify features the user may not have mentioned. When context entries link to specific product slugs via `entities`, apply that context to features of those products specifically.
+
 **Web research (optional):** When the user provides a product URL or asks for research-backed features, delegate to a subagent (Agent tool) to extract capabilities from the product's website, documentation, or marketing pages. For improving existing features with quality issues, see the Research & Improve section — the `quality-enricher` agent does targeted company-scoped web research based on specific quality gaps.
 
 ## Feature Shaping

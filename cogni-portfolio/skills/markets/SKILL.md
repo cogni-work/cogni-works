@@ -60,6 +60,8 @@ The workflow adapts to what the user brings. Don't force every interaction throu
 
 In all cases, read `portfolio.json` for company context, check `products/` and `features/` for existing capabilities. Markets without features to sell into are academic exercises — make sure there's substance behind every market you propose.
 
+**Internal context (optional):** If `context/context-index.json` exists in the project directory, read entries in `by_relevance["markets"]` or `by_category["market"]`. Internal TAM analyses, customer segmentation studies, and market research provide proprietary sizing data and segment definitions that should take precedence over web research estimates when available. When context entries link to specific market slugs via `entities`, apply that context to those markets specifically.
+
 ## Strategic Discovery (when the user is starting fresh or vague)
 
 Before proposing markets, understand the business and its fit. Have a conversation — but don't pose questions you'll answer yourself. State what you can infer from existing data and flag assumptions explicitly.

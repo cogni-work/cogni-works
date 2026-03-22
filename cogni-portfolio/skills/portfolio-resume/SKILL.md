@@ -56,6 +56,7 @@ Show a concise, scannable dashboard. Lead with the company name and project slug
 | Competitors | N / propositions | pct% |
 | Customers | N / markets | pct% |
 | Claims | N total | V verified, D deviated, U unverified |
+| Context | N entries | breakdown by category (e.g., 3 pricing, 2 competitive, 1 strategic) |
 | Uploads | N | pending ingestion (if > 0) |
 
 If `margin_health` is present in the status output and has `solutions_with_cost_model > 0`, add a margin health line after the table:
@@ -74,6 +75,7 @@ After the table:
   - Offer deep assessment: "For thorough quality assessment including mechanism and customer-relevance checks, ask for a full quality audit."
   - If no entities are flagged, skip this section entirely (don't show "0 flagged")
 - **Stale entities** — if `stale_entities` is non-empty, show them as priority actions before the regular next steps. Group by reason type: "N propositions need refresh because their upstream features were updated" is more useful than listing each one. If a stale entity also has quality warnings, lead with the quality issue (fix the root cause first, then refresh the proposition).
+- **Context notice** — if `counts.context_entries > 0`, mention available context entries with a category breakdown. Read `context/context-index.json` for the `by_category` map to show counts per category. This helps the user understand what intelligence is available for downstream skills. If context exists but downstream skills haven't been run yet, highlight this: "N context entries from ingested documents are ready — these will automatically inform propositions, solutions, and other skills."
 - **Uploads notice** — if `counts.uploads > 0`, always mention pending files regardless of phase
 - **Gaps** — if `missing_propositions` is non-empty, list the first few missing pairs; note incomplete solutions/competitors/customers
 

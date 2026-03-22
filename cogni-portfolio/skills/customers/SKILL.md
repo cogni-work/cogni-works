@@ -34,6 +34,7 @@ For each market, build the customer profile from available context:
 - **Company context** (`portfolio.json`): Industry knowledge informs buyer types
 - **Market definition** (`markets/{slug}.json`): Segmentation criteria constrain the buyer
 - **Proposition messaging** (`propositions/`): DOES/MEANS statements reveal which pain points are being addressed
+- **Internal context** (`context/context-index.json`, if it exists) -- read entries in `by_relevance["customers"]`. Interview transcripts, CRM summaries, and buyer persona research provide first-hand buyer intelligence. When context entries link to specific market slugs via `entities`, apply that context to those market profiles specifically.
 - **User input**: The user may know their buyers well — ask directly
 
 **Web research (optional)**: When the user requests research-backed profiles, delegate to a subagent (Agent tool) to search for industry buyer surveys, role descriptions, and purchasing behavior data for this market segment. This is especially useful when the user lacks first-hand buyer knowledge.

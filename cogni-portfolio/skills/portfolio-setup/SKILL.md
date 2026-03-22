@@ -77,6 +77,7 @@ cogni-portfolio/<project-slug>/
   solutions/
   competitors/
   customers/
+  context/
   uploads/
   output/
 ```

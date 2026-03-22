@@ -61,6 +61,7 @@ For the selected product×market pair, read:
 - **All propositions** for those solutions — IS/DOES/MEANS informs tier descriptions
 - **Customer JSON** (`customers/{market-slug}.json`, if exists) — buyer personas inform which capabilities matter most at entry level
 - **Competitor data** (if exists) — how competitors package influences tier design
+- **Internal context** (`context/context-index.json`, if it exists) — read entries in `by_relevance["packages"]`. Pricing strategies, bundle configurations, and discount structures from internal documents inform tier design, bundle savings, and pricing calibration.
 
 ### 3. Determine Package Type
 

@@ -22,6 +22,9 @@ cogni-portfolio/{project-slug}/
 │   └── {market-slug}.json                  # Ideal customer profiles + named accounts per market
 ├── packages/
 │   └── {product}--{market}.json            # Bundled solution tiers per Product x Market
+├── context/                                # Extracted intelligence from uploaded documents
+│   ├── context-index.json                  # Lookup manifest (by category, relevance, entity)
+│   └── {source-slug}--{seq}.json           # Individual context entries
 ├── uploads/                                # Source documents for ingestion
 ├── output/                                 # Generated exports (proposals, briefs, XLSX)
 └── research/                               # Portfolio scan artifacts (when scan is used)
@@ -486,6 +489,74 @@ Optional fields: `named_customers`, `created`
 
 Valid `fit_score` values: `high`, `medium`, `low`
 
+### context/{source-slug}--{seq}.json
+
+Structured intelligence extracted from uploaded documents. Unlike entities (products, features, markets), context entries capture institutional knowledge — competitive intelligence, pricing benchmarks, strategic positioning, customer insights — that downstream skills use to generate sharper, company-specific output. Each entry is a self-contained insight linked to the source document and optionally to specific portfolio entities.
+
+```json
+{
+  "slug": "pricing-strategy-2025--001",
+  "source_file": "pricing-strategy-2025.pdf",
+  "category": "pricing",
+  "relevance": ["solutions", "packages"],
+  "summary": "Internal pricing model uses 35% target margin with blended day rate of 1,400 EUR for DACH mid-market engagements.",
+  "detail": "The 2025 pricing framework establishes a blended day rate of 1,400 EUR across all delivery roles for DACH mid-market engagements. Target gross margin is 35%, with flexibility to go as low as 25% for strategic accounts. Proof-of-value engagements are capped at 15,000 EUR with a maximum 2-week scope to minimize sales cycle friction.",
+  "entities": {
+    "products": ["cloud-platform"],
+    "features": [],
+    "markets": ["mid-market-saas-dach"]
+  },
+  "confidence": "high",
+  "created": "2026-03-22"
+}
+```
+
+Required fields: `slug`, `source_file`, `category`, `relevance`, `summary`, `detail`, `confidence`, `created`
+Optional fields: `entities`
+
+Valid `category` values:
+
+| Category | What It Captures | Primary Downstream Skills |
+|---|---|---|
+| `competitive` | Win/loss reports, competitor mentions, battlecards, RFP responses | compete, propositions |
+| `market` | Market research, TAM analyses, customer segmentation, industry reports | markets, propositions |
+| `pricing` | Pricing models, rate cards, discount structures, margin targets | solutions, packages |
+| `customer` | Interview transcripts, CRM summaries, buyer persona research, NPS data | customers, propositions |
+| `technical` | Architecture docs, technical specs, product roadmaps, integration guides | features |
+| `strategic` | Strategy decks, positioning documents, differentiation analyses | propositions, solutions |
+
+Valid `confidence` values: `high` (verbatim from document), `medium` (inferred from document content), `low` (requires validation)
+
+The `relevance` array lists downstream skill names that should consume this context: `propositions`, `solutions`, `markets`, `compete`, `customers`, `features`, `packages`.
+
+The `entities` object optionally links context to specific portfolio entities by slug. When present, downstream skills apply this context to those entities specifically rather than broadly.
+
+### context/context-index.json
+
+Lookup manifest rebuilt whenever context entries are added or removed. Provides three index paths so downstream skills can quickly find relevant context without scanning every file.
+
+```json
+{
+  "version": "1.0",
+  "entry_count": 12,
+  "updated": "2026-03-22",
+  "by_category": {
+    "competitive": ["competitive-landscape--001"],
+    "pricing": ["pricing-strategy-2025--001", "pricing-strategy-2025--002"],
+    "strategic": ["board-deck-2025--001"]
+  },
+  "by_relevance": {
+    "propositions": ["competitive-landscape--001", "board-deck-2025--001"],
+    "solutions": ["pricing-strategy-2025--001", "pricing-strategy-2025--002"],
+    "packages": ["pricing-strategy-2025--001"]
+  },
+  "by_entity": {
+    "products/cloud-platform": ["pricing-strategy-2025--001"],
+    "markets/mid-market-saas-dach": ["pricing-strategy-2025--001"]
+  }
+}
+```
+
 ## Cross-Plugin Schemas
 
 ### portfolio-context.json (Export to TIPS)
@@ -669,7 +740,7 @@ Scan offerings are intermediate research artifacts stored in `research/.logs/`, 
 | Packages | packages | Bundle solutions into Product x Market tiers |
 | Compete | compete | Competitive landscape per proposition |
 | Customers | customers | Ideal customer profiles + named accounts per market |
-| Ingest | portfolio-ingest | Extract entities from uploaded documents |
+| Ingest | portfolio-ingest | Extract entities and context from uploaded documents |
 | Scan | portfolio-scan | Discover services by scanning company websites |
 | Verify | portfolio-verify | Verify web-sourced claims against cited sources |
 | Synthesize | synthesize | Aggregate all entities into README.md messaging repository |
@@ -803,6 +874,7 @@ portfolio.json (root manifest)
 │   └── packages/{prod}--{mkt}.json (product_slug + market_slug, references solution slugs)
 ├── markets/{slug}.json (region code FK -> regions.json)
 │   └── customers/{slug}.json (market_slug FK)
+├── context/{source-slug}--{seq}.json (intelligence from uploaded documents, linked to entities)
 └── [Cross-plugin: portfolio-context.json -> TIPS, portfolio-opportunities.json <- TIPS]
 ```
 
@@ -830,6 +902,7 @@ portfolio.json (root manifest)
 | Package slug | `{product}--{market}` | `cloud-platform--mid-market-saas-dach` |
 | Competitor slug | Same as proposition slug | `cloud-monitoring--mid-market-saas-dach` |
 | Customer slug | Same as market slug | `mid-market-saas-dach` |
+| Context slug | `{source-slug}--{seq}` | `pricing-strategy-2025--001` |
 | Opportunity ID | `opp-{SEQ}` | `opp-001` |
 | Variant ID | `v-{SEQ}` within proposition | `v-001` |
 

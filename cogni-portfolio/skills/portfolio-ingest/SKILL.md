@@ -1,21 +1,25 @@
 ---
 name: portfolio-ingest
 description: |
-  Extract portfolio entities from uploaded documents (uploads/ folder).
-  Use whenever the user mentions uploading files, importing documents, ingesting
-  data, "I have some files", "parse these docs", processing uploads, or wants to
+  Extract portfolio entities and structured context from uploaded documents (uploads/ folder).
+  Use whenever the user mentions uploading files, importing documents, ingesting data,
+  "I have some files", "parse these docs", "use these docs as input", "internal documents",
+  "background material", "here's our strategy deck", processing uploads, or wants to
   populate their portfolio from existing material — even if they don't say "ingest".
 ---
 
 # Upload Ingestion
 
-Extract portfolio entities from user-provided documents in the project's `uploads/` folder. Supported file types: `.md`, `.docx`, `.pptx`, `.xlsx`, `.pdf`.
+Extract portfolio entities and institutional context from user-provided documents in the project's `uploads/` folder. Supported file types: `.md`, `.docx`, `.pptx`, `.xlsx`, `.pdf`.
 
 ## Core Concept
 
-Most users already have product information scattered across decks, spreadsheets, and documents. Ingestion bridges the gap between existing material and a structured portfolio — it turns unstructured documents into typed entities (products, features, markets) that the rest of the pipeline builds on.
+Most users already have product information scattered across decks, spreadsheets, and documents. Ingestion bridges the gap between existing material and a structured portfolio in two ways:
 
-This matters because manual entity creation is tedious when the information already exists somewhere. A good ingestion pass gives the user a head start, and the confirmation step ensures nothing gets created that doesn't belong.
+1. **Entity extraction** — turns unstructured documents into typed entities (products, features, markets) that the rest of the pipeline builds on.
+2. **Context extraction** — captures institutional knowledge (competitive intelligence, pricing benchmarks, strategic positioning, customer insights) as structured context entries that downstream skills use to generate sharper, company-specific output.
+
+Entity extraction gives the user a head start on portfolio structure. Context extraction ensures the intelligence buried in strategy decks, pricing models, and win/loss reports doesn't get lost — it flows into propositions, solutions, competitor analysis, and every other downstream skill automatically.
 
 ## Prerequisites
 
@@ -49,7 +53,11 @@ For large documents (PDFs over 20 pages, Excel with many sheets), process in seg
 
 ### 4. Analyze and Classify Content
 
-Read `portfolio.json` to understand the company context. Then analyze extracted content to identify potential entities:
+Read `portfolio.json` to understand the company context. Then analyze extracted content for both entities and context.
+
+#### Entity Classification
+
+Identify potential entities:
 
 | Entity Type | What to Look For |
 |---|---|
@@ -61,27 +69,57 @@ Competitive intelligence or buyer persona data found in documents is worth notin
 
 Cross-reference with existing entities in `products/`, `features/`, and `markets/` directories to avoid duplicates.
 
-### 5. Present Extracted Entities for Confirmation
+#### Context Classification
 
-Group entities by source file and present them in tables:
+In the same pass, identify intelligence snippets — self-contained insights that provide institutional knowledge for downstream skills. Classify each snippet into one of six categories:
+
+| Category | What to Look For | Primary Downstream Skills |
+|---|---|---|
+| `competitive` | Win/loss reports, competitor mentions, battlecards, RFP outcomes | compete, propositions |
+| `market` | Market research, TAM analyses, customer segmentation, industry reports | markets, propositions |
+| `pricing` | Pricing models, rate cards, discount structures, margin targets, cost benchmarks | solutions, packages |
+| `customer` | Interview transcripts, CRM summaries, buyer persona research, NPS data | customers, propositions |
+| `technical` | Architecture docs, technical specs, product roadmaps, integration guides | features |
+| `strategic` | Strategy decks, positioning documents, differentiation analyses, board presentations | propositions, solutions |
+
+Each snippet should be a self-contained insight (one fact, one benchmark, one positioning statement) with enough surrounding context to be useful. Aim for 3-10 context entries per document, depending on richness. Do not extract trivially obvious information — focus on intelligence that would be hard to re-derive from scratch (specific numbers, internal decisions, competitive observations, customer quotes).
+
+When a snippet relates to specific portfolio entities (a pricing benchmark for a particular product, a competitive insight about a specific market), note those entity slugs for linking.
+
+### 5. Present Extracted Items for Confirmation
+
+Group by source file. Present entities first, then context entries.
 
 **From: `product-overview.pdf`**
+
+**Entities:**
 
 | Type | Slug | Name | Key Fields |
 |---|---|---|---|
 | Product | cloud-platform | Cloud Platform | description, positioning |
 | Feature | auto-scaling | Auto-Scaling | product: cloud-platform, category: infrastructure |
 
+**Context:**
+
+| # | Category | Summary | Linked Entities | Confidence |
+|---|---|---|---|---|
+| 1 | strategic | Company positions as "sovereign cloud" differentiator in DACH region | products/cloud-platform | high |
+| 2 | competitive | Main competitor Datadog weak in mid-market due to per-host pricing | compete | medium |
+| 3 | pricing | Target margin 35% with blended rate 1,400 EUR/day for DACH | solutions, packages | high |
+
 Show enough detail for the user to judge accuracy. Mark entities that may overlap with existing ones.
 
 Allow the user to:
-- **Approve all** -- create all proposed entities
-- **Select individually** -- approve, edit, or skip each entity
+- **Approve all** -- create all proposed entities and context
+- **Select individually** -- approve, edit, or skip each item
 - **Edit before creating** -- modify fields before writing JSON
+- **Re-categorize context** -- change category or relevance mapping
+
+Not every document will produce both entities and context. A strategy deck might yield mostly context with no new entities. A product spec might yield mostly entities with little context. Present only what was found.
 
 ### 6. Write Entity JSON Files
 
-For each confirmed entity, write a JSON file following the schemas in `$CLAUDE_PLUGIN_ROOT/skills/portfolio-setup/references/data-model.md`:
+For each confirmed entity, write a JSON file following the schemas in `$CLAUDE_PLUGIN_ROOT/references/data-model.md`:
 
 - Products to `products/{slug}.json`
 - Features to `features/{slug}.json`
@@ -91,11 +129,32 @@ Set `created` to today's date. Include `"source_file": "<filename>"` in each ent
 
 For features, ensure `product_slug` references a valid product. If a referenced product doesn't exist yet, propose creating it first or ask the user to assign a different product.
 
-### 7. Move Processed Files
+### 7. Write Context Entry Files
 
-After all confirmed entities are written, move processed files to `uploads/processed/`. Create the directory if it doesn't exist. Only move files that were successfully processed. If a file yielded no usable entities (user skipped everything), still move it to avoid re-processing on the next run.
+For each confirmed context entry, write a JSON file to `context/{source-slug}--{seq}.json` following the context entry schema in `$CLAUDE_PLUGIN_ROOT/references/data-model.md`.
 
-### 8. Sync portfolio.json
+The slug is derived from the source filename (kebab-case, without extension) plus a zero-padded sequence number: e.g., `pricing-strategy-2025--001`, `pricing-strategy-2025--002`.
+
+Set `created` to today's date. Set `confidence` based on how directly the insight comes from the document:
+- `high` — verbatim fact or number from the document
+- `medium` — reasonable inference from document content
+- `low` — interpretation that would benefit from user validation
+
+Create `context/` directory if it doesn't exist.
+
+After writing all context entries, rebuild `context/context-index.json` by scanning all `.json` files in `context/` (excluding `context-index.json` itself). The index has three lookup maps:
+
+- `by_category` — category string -> array of context slugs
+- `by_relevance` — skill name -> array of context slugs
+- `by_entity` — entity path (e.g., `products/cloud-platform`) -> array of context slugs
+
+Include `version`, `entry_count`, and `updated` fields. See `$CLAUDE_PLUGIN_ROOT/references/data-model.md` for the full index schema.
+
+### 8. Move Processed Files
+
+After all confirmed items are written, move processed files to `uploads/processed/`. Create the directory if it doesn't exist. Only move files that were successfully processed. If a file yielded no usable entities or context (user skipped everything), still move it to avoid re-processing on the next run.
+
+### 9. Sync portfolio.json
 
 If any products were created during ingestion, run the centralized sync script:
 
@@ -105,7 +164,7 @@ $CLAUDE_PLUGIN_ROOT/scripts/sync-portfolio.sh <project-dir>
 
 Skip this step if no products were created.
 
-### 9. Present Summary and Next Steps
+### 10. Present Summary and Next Steps
 
 Show a summary of what was created:
 
@@ -114,22 +173,26 @@ Show a summary of what was created:
 | Products | 2 | 0 |
 | Features | 5 | 1 |
 | Markets | 3 | 0 |
+| Context | 8 | 2 |
 
 Suggest the logical next step based on what was ingested:
 - Products and features created -> suggest the `markets` skill
 - Markets created -> suggest the `propositions` skill
 - Partial data -> suggest completing the entity type manually
-- Competitive or buyer persona data observed -> mention it and suggest `compete` or `customers` after prerequisite entities are in place
+- Competitive or buyer persona data observed but not yet entityable -> mention it and suggest `compete` or `customers` after prerequisite entities are in place
 - Markets created without TAM/SAM/SOM -> list them explicitly and suggest the `markets` skill to add sizing estimates
+- Context entries created -> mention which downstream skills will benefit. For example: "8 context entries extracted (3 pricing, 2 competitive, 2 strategic, 1 customer). These will automatically inform the `solutions`, `compete`, `propositions`, and `customers` skills when you run them."
 
 ## Important Notes
 
-- Always confirm entities with the user before writing -- never auto-create
+- Always confirm entities and context with the user before writing -- never auto-create
 - Respect existing entities; do not overwrite unless the user explicitly requests it
-- One document may contain data for multiple entity types
+- One document may contain data for multiple entity types and context categories
 - If a document is ambiguous, ask the user which entity types to extract
 - Feature extraction should produce market-independent statements (IS layer only)
 - Market data from documents may lack TAM/SAM/SOM; create with available fields and note sizing can be added later
 - The `uploads/processed/` subdirectory is not scanned by project-status.sh
+- Context entries supplement entity data — they don't replace it. A pricing benchmark in context doesn't remove the need for the `solutions` skill to design pricing tiers; it gives that skill better inputs to work from.
+- When re-running ingest on new documents, existing context entries are preserved. The index is rebuilt from all files in `context/`, not just the current batch.
 - **Communication Language**: Read `portfolio.json` in the project root. If a `language` field is present, communicate with the user in that language (status messages, instructions, recommendations, questions). Technical terms, skill names, and CLI commands remain in English. If no `language` field is present, default to English.
-- Refer to `$CLAUDE_PLUGIN_ROOT/skills/portfolio-setup/references/data-model.md` for complete entity schemas
+- Refer to `$CLAUDE_PLUGIN_ROOT/references/data-model.md` for complete entity and context schemas

@@ -75,6 +75,7 @@ For the selected proposition, read (in parallel where possible):
 - **Market JSON** (`markets/{market-slug}.json`) -- region (for currency), segmentation (for scope assumptions), buyer context
 - **Competitor JSON** (`competitors/{slug}.json`, if it exists) -- competitor pricing and positioning inform calibration
 - **Customer JSON** (`customers/{market-slug}.json`, if it exists) -- buyer personas, pain points, and buying criteria inform how to frame phases and tiers
+- **Internal context** (`context/context-index.json`, if it exists) -- read entries in `by_relevance["solutions"]`. Pricing context (internal rate cards, margin targets, past project benchmarks) informs cost model assumptions. Delivery context (playbooks, effort estimates from similar engagements) informs phase design and duration estimates. When context entries link to specific entities via `entities`, apply that context to those solutions specifically.
 
 **Route by revenue model.** Read the product's `revenue_model` field:
 - `"subscription"` → Skip to **Step 3s** (Subscription Solutions)

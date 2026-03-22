@@ -43,6 +43,12 @@ SOLUTIONS=$(count_json "solutions")
 PACKAGES=$(count_json "packages")
 COMPETITORS=$(count_json "competitors")
 CUSTOMERS=$(count_json "customers")
+# Count context entries (subtract 1 for context-index.json if present)
+CONTEXT_ENTRIES=$(count_json "context")
+if [ -f "$PROJECT_DIR/context/context-index.json" ]; then
+  CONTEXT_ENTRIES=$((CONTEXT_ENTRIES - 1))
+  if [ "$CONTEXT_ENTRIES" -lt 0 ]; then CONTEXT_ENTRIES=0; fi
+fi
 EXPECTED_PROPOSITIONS=$((FEATURES * MARKETS))
 
 # Collect product slugs as JSON array
@@ -438,6 +444,11 @@ if [ "$UPLOADS" -gt 0 ]; then
   add_action "ingest" "$UPLOADS file(s) in uploads/ awaiting ingestion"
 fi
 
+# Note available context entries (informational, phase-independent)
+if [ "$CONTEXT_ENTRIES" -gt 0 ]; then
+  : # Context available — downstream skills will discover it via context-index.json
+fi
+
 case "$PHASE" in
   products)
     add_action "products" "No products defined yet"
@@ -698,6 +709,7 @@ cat << EOF
     "competitors": $COMPETITORS,
     "customers": $CUSTOMERS,
     "uploads": $UPLOADS,
+    "context_entries": $CONTEXT_ENTRIES,
     "features_without_readiness": $features_without_readiness,
     "markets_without_priority": $markets_without_priority,
     "feature_quality_warnings": $feature_quality_warnings

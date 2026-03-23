@@ -101,6 +101,26 @@ The generated HTML includes these sections, all in a single-page app with drill-
 
 This dashboard is the **reference implementation** of the design-variables pattern documented at `cogni-workspace/references/design-variables-pattern.md`. Other plugins building themed HTML dashboards (cogni-trends trend-report, scoring-ui, catalog) should follow the same 3-stage flow: pick-theme → LLM derives design-variables.json → generator consumes JSON.
 
+## Milestone Dashboard
+
+The dashboard is not only a capstone deliverable — it is also a review tool at major workflow milestones. Other portfolio skills (features, propositions, solutions) have review checkpoints where they offer the user the option to "open the dashboard for a visual overview." When the user accepts that offer, the calling skill should generate a fresh dashboard snapshot so the user can see the current state before proceeding.
+
+### When to offer a milestone dashboard
+
+Skills should offer a dashboard at these checkpoints:
+- **Features skill**: After quality assessment passes and before stakeholder review runs — the user can verify the feature set visually
+- **Propositions skill**: Before batch generation starts (to review the Feature x Market matrix and feature readiness) and after batch generation completes (to see the newly populated proposition matrix with quality dots and variant badges)
+- **Solutions skill**: After solution generation completes — the user can verify pricing tiers and margin health
+
+### How it works at a checkpoint
+
+When a skill offers "open the dashboard" at a review checkpoint:
+1. Delegate to the `session-guardian` agent with `trigger_mode: "conditional"` to generate and open the dashboard
+2. After the dashboard opens, the calling skill resumes and asks the user if they're ready to proceed
+3. The dashboard generation is a snapshot — it reflects the portfolio state at that moment, which is exactly what the user needs to review before the next phase changes things
+
+This is lightweight — the generator script runs in seconds and the HTML is self-contained. The cost of generating an intermediate dashboard is negligible compared to the cost of the user discovering problems after the next phase has already run.
+
 ## Important Notes
 
 - The dashboard is read-only — it shows portfolio state, it does not modify entities

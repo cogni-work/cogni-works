@@ -239,9 +239,31 @@ Do NOT trigger after single-feature edits or minor metadata changes — those ru
 
 5. **After fixes, re-run the assessor** on changed features to confirm improvement. If any features still have flag status after one fix round, surface them to the user with a clear explanation: "This feature still has [issue]. Here is my best suggestion — would you like to apply it, rewrite it yourself, or accept the current quality level?"
 
-6. **Run stakeholder review** (Layer 3) only after all features pass Layer 2 at pass or warn level. Follow the existing closed-loop protocol in the Quality Assessment Layers section below.
+6. **Review checkpoint — present material before stakeholder review.** Before launching the stakeholder review, pause and give the user the opportunity to read what was produced. This is a mandatory interaction point — do not auto-continue into the stakeholder review.
 
-7. **Signal completion.** Once the stakeholder review reaches "accept" (or the user explicitly decides to proceed despite "revise" after 2 rounds), confirm that the feature set is ready and recommend the next step (markets or propositions).
+   Present a concise milestone summary:
+   - How many features were created/updated, how many passed quality assessment
+   - A table of all features with their quality status (pass/warn/deferred)
+   - Offer: "Would you like to review the updated features before I run the stakeholder review? You can: (a) open the dashboard for a visual overview, (b) I list the full descriptions here, or (c) proceed directly to the stakeholder review."
+
+   Wait for the user's explicit response. If they choose (a), delegate to the `session-guardian` agent with `trigger_mode: "conditional"` to generate a dashboard snapshot, then ask again if they're ready to proceed. If they choose (b), present each feature's name, description, word count, and quality status. Only proceed to step 7 after the user confirms.
+
+   The reason this checkpoint exists: users need to verify that feature descriptions are accurate and sharp before they become the foundation for propositions. Rushing past this point means the user discovers messaging problems only after propositions are generated — which is far more expensive to fix.
+
+7. **Run stakeholder review** (Layer 3) only after all features pass Layer 2 at pass or warn level and the user has confirmed readiness at the review checkpoint. Follow the existing closed-loop protocol in the Quality Assessment Layers section below.
+
+8. **Review checkpoint — present stakeholder findings.** After the stakeholder review completes, present the full results before signaling completion. This is another mandatory interaction point.
+
+   Present:
+   - The verdict (accept/revise/reject) with the overall score
+   - Per-perspective scores and their top concern
+   - Set-level issues (coverage gaps, overlap clusters)
+   - The specific revision guidance if verdict is "revise"
+   - Offer: "Would you like to review the detailed findings, or shall I proceed with the recommended improvements?"
+
+   If the verdict is "accept", still present the score and any optional improvements before moving on. The user should see what the assessors found — a silent "accept" that immediately jumps to "ready for propositions" robs the user of insight into their feature set's strengths and remaining edges.
+
+9. **Signal completion.** Once the stakeholder review reaches "accept" (or the user explicitly decides to proceed despite "revise" after 2 rounds), confirm that the feature set is ready and recommend the next step (markets or propositions).
 
 ### Deferred Warnings
 

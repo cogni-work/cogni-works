@@ -147,6 +147,16 @@ $CLAUDE_PLUGIN_ROOT/scripts/validate-entities.sh <project-dir>
 
 3. **Stakeholder persona review** — verify the `feature-review-assessor` has been run and returned a verdict of "accept". If no stakeholder review exists for this feature set, spawn the agent before proceeding. If the verdict is "revise" or "reject", refuse to generate propositions and direct the user back to the `features` skill to address the review findings.
 
+4. **Review checkpoint — present pre-generation summary.** After all three checks pass, pause and present the full picture to the user before generating anything. This is a mandatory interaction point — do not auto-start batch generation.
+
+   Present:
+   - Stakeholder review verdict and score
+   - The relevance matrix from `project-status.sh` — which pairs are High/Medium/Low/Skip
+   - Feature readiness summary (how many GA/Beta/Planned, any deferred warnings from the features phase)
+   - Offer: "Before I start generating, would you like to: (a) open the dashboard to review the current portfolio state, (b) see the full feature descriptions that will become the IS layer, or (c) proceed with generation?"
+
+   Wait for the user's explicit response. This checkpoint exists because once propositions are generated, the user needs to understand what they're built on. Reviewing features after proposition generation means reviewing backwards — it's much harder to spot a weak IS statement when you're already reading DOES/MEANS messaging built on top of it.
+
 If a feature has structural errors, an overall "fail" from the quality assessor, or the feature set has not passed stakeholder review (verdict != "accept"), **refuse to generate its proposition**. Instead:
 
 1. Show the specific issues (structural warnings, quality assessment results, and/or stakeholder review findings)
@@ -177,6 +187,30 @@ Propositions with "warn" can proceed but flag the warnings — they represent im
 This post-check applies to both single-proposition and batch generation paths. In batch mode, present a summary table of pass/warn/fail counts alongside the proposition review table.
 
 **Variant quality**: When a proposition has variants, assess each variant's DOES/MEANS alongside the primary using the same 10 dimensions. Report variant quality in the summary table with the variant's angle label. Variants with "fail" should be flagged for rewrite or deletion — weak variants dilute the proposition rather than strengthen it.
+
+## Post-Generation Review Checkpoint
+
+After batch generation completes and the post-check runs, pause and present the full results to the user. This is a mandatory interaction point — do not auto-continue to next steps or medium-tier generation.
+
+Present a comprehensive milestone summary:
+- Total propositions generated, grouped by tier (High/Medium/Skip)
+- Summary table: Feature | Market | IS word count | DOES word count | MEANS word count | Evidence count | Quality assessment
+- Deduplication findings (any talking points appearing 3+ times)
+- Propositions flagged for rewrite (overall "fail" from quality assessor)
+- Propositions without evidence (if any)
+
+Then offer the user review options:
+- "Would you like to: (a) open the dashboard to see the full Feature x Market matrix with the new propositions, (b) read through the generated propositions in detail — I'll present them grouped by feature or market, (c) focus on the flagged propositions that need attention, or (d) proceed to the next tier / next steps?"
+
+Wait for the user's explicit response. Do not suggest generating the next tier or moving to solutions until the user has had the chance to review what was just created.
+
+The reason this matters: propositions are the messaging foundation for everything downstream — competitor battlecards, customer profiles, pitch decks, proposals. If the user discovers a weak DOES or a missing evidence gap only after solutions and competitors are built on top, the rework cascades. Five minutes of review here saves hours of rework later.
+
+When the user chooses to read propositions in detail (option b), present them with full IS/DOES/MEANS text and your consulting commentary — not just the summary table. Group by feature or market based on what reveals the most insight (or ask the user's preference). For each proposition, include:
+- The full IS/DOES/MEANS statements
+- Evidence entries with sources
+- Your quality assessment (which tests it passes/fails)
+- Specific improvement suggestions where relevant
 
 ## From Consulting to Capture
 

@@ -62,6 +62,17 @@ Read:
 - `portfolio.json` — company context, language, domain
 - Features from sibling products (for boundary/overlap checks)
 
+## Product Type Classification
+
+After reading `products/{product_slug}.json`, classify the product based on `revenue_model`:
+
+- **Software product**: `revenue_model` is `subscription` or `hybrid` — features are software capabilities (screens, APIs, automations, integrations). Evaluate with a software demo lens.
+- **Service product**: `revenue_model` is `project`, `project-fee`, or `partnership` — features are distinct service offerings (methodologies, delivery frameworks, managed processes, certification programs, training curricula). Evaluate with a service delivery lens.
+
+When `revenue_model` is absent, default to `project` (service product), per the data model convention.
+
+This classification affects how Scope Precision (Perspective 1) and Demonstrability (Perspective 3) are evaluated. All other criteria apply equally to both product types.
+
 ## Perspective 1: Product Manager (Owns the Product Roadmap)
 
 This is the person who owns the product and its capability inventory. They evaluate
@@ -81,10 +92,14 @@ the product description (`products/{slug}.json`) should map to at least one feat
 Cross-reference the product description text against each feature. List specific gaps found.
 
 #### 2. Scope Precision (25%)
-Is each feature scoped to a single, demonstrable capability? Features that are too broad
-(platform-level) or too narrow (sub-component-level) produce weak propositions downstream.
+Is each feature scoped to a single, distinct capability? Features that are too broad
+(platform-level or service-program-level) or too narrow (sub-component or single-task-level)
+produce weak propositions downstream.
 
-- **Pass**: All features pass the proposition test ("would these two features ever appear independently in a proposition?") and the demo test ("could you show this in a demo?")
+For **software products**, apply the demo test: "could you show this working in a demo?"
+For **service products**, apply the deliverable test: "is this a distinct, separately engageable service offering with its own delivery outcome?"
+
+- **Pass**: All features pass the proposition test ("would these two features ever appear independently in a proposition?") and the appropriate scope test (demo test for software, deliverable test for services)
 - **Warn**: 1-2 features are too broad (should split) or too narrow (should merge)
 - **Fail**: 3+ scoping issues, or a feature that is clearly a product, not a capability
 
@@ -197,14 +212,14 @@ like CIOs and line-of-business buyers.
 ### Criteria
 
 #### 1. Demonstrability (30%)
-Could this feature be shown working in a product demo? A good feature description makes
-it obvious what the demo would look like. If the consultant reads the description and
-can't picture a demo, the feature is either too abstract or describes a backend
-capability that needs a different framing.
+Could this feature be convincingly presented to a buyer?
 
-- **Pass**: Demo scenario is obvious from the description — the consultant knows exactly what to show
-- **Warn**: Demo is possible but the consultant would need to design it — the description doesn't make it self-evident
-- **Fail**: No clear demo — the feature is too abstract, purely architectural, or describes an invisible backend process
+For **software products**: Can the consultant show it working in a product demo? The description should make the demo scenario obvious.
+For **service products**: Can the consultant present the delivery model — through a methodology walkthrough, process diagram, case study reference, or sample deliverable? The description should make the presentation approach obvious.
+
+- **Pass**: Presentation scenario is obvious from the description — the consultant knows exactly what to show (software: live demo; service: methodology, case study, or sample deliverable)
+- **Warn**: Presentation is possible but the consultant would need to design it — the description doesn't make it self-evident
+- **Fail**: No clear presentation approach — the feature is too abstract, purely architectural, or describes an invisible process with no buyer-facing manifestation
 
 #### 2. Buyer Explainability (25%)
 Can the consultant explain this feature to a CIO or line-of-business buyer in one sentence
@@ -273,7 +288,7 @@ Set-level issues are always CRITICAL or HIGH priority because they affect the en
 | Conflict | Resolution |
 |----------|------------|
 | PM wants more features for completeness; Strategist wants fewer, sharper features | Strategist wins on quality — enrich existing features to cover gaps rather than adding new features, unless the gap is genuinely distinct |
-| Pre-Sales flags a feature as not demonstrable; PM says it's a real capability | Both valid — keep the feature but rewrite the description to foreground the demonstrable aspect. If purely architectural, note how it manifests to the buyer |
+| Pre-Sales flags a feature as not presentable; PM says it's a real capability | Both valid — keep the feature but rewrite the description to foreground the presentable aspect. For service products, ensure the delivery model or methodology is visible in the description. If purely architectural, note how it manifests to the buyer |
 | Strategist wants more technical detail; Pre-Sales wants simpler language | Strategist wins on description content (mechanism detail stays); Pre-Sales wins on naming (keep names accessible). Descriptions serve the strategist; names serve the consultant |
 | PM flags product boundary overlap; Strategist says the overlap is an intentional cross-product bridge | PM arbitrates — if it's a genuine bridge, annotate explicitly. If not, reassign the feature |
 
@@ -414,12 +429,13 @@ Only include `note` when the score is warn or fail — empty string for pass.
 1. Glob `features/*.json` in the provided project directory
 2. Read each feature file and filter by `product_slug` if specified
 3. Read the product description from `products/{product_slug}.json`
-4. Read `portfolio.json` for company context and language
-5. Read sibling product features for boundary/overlap checks
-6. Evaluate all three perspectives in sequence
-7. Identify set-level issues (coverage gaps, overlap clusters, narrative gaps)
-8. Synthesize: identify conflicts, prioritize improvements, determine verdict
-9. Return the JSON output
+4. Classify product type from `revenue_model` (software vs. service — see Product Type Classification)
+5. Read `portfolio.json` for company context and language
+6. Read sibling product features for boundary/overlap checks
+7. Evaluate all three perspectives in sequence
+8. Identify set-level issues (coverage gaps, overlap clusters, narrative gaps)
+9. Synthesize: identify conflicts, prioritize improvements, determine verdict
+10. Return the JSON output
 
 Be commercially sharp but constructive. The goal is to catch feature sets that would
 produce weak propositions downstream — incomplete coverage, vague mechanisms, unclear

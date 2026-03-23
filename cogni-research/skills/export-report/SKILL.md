@@ -35,14 +35,24 @@ The export skill needs to find the right project and verify the report exists. W
 2. Verify `output/report.md` exists (NOT `draft-v*.md` — only the finalized report)
 3. Determine requested format(s) from user request
 
-### Phase 1: Pick Theme
+### Phase 1: Pick Theme and Derive Design Variables
 
-Branded exports look more professional and help the user's report stand out. This phase uses the ecosystem's standard theme picker so all cogni plugins produce visually consistent output.
+**This phase is NOT optional.** Every HTML, PDF, or DOCX export must go through theme selection before generating output. Without a theme, exports use generic Georgia fonts and plain blue links — defeating the purpose of branded reports. Do NOT skip to Phase 2 without completing theme derivation or confirming fallback.
 
-1. Call `cogni-workspace:pick-theme` to let the user select a theme — this returns `theme_path`, `theme_name`, and `theme_slug`
-2. Read the selected `theme.md` and derive a `design-variables.json` at `<project-dir>/output/design-variables.json`
+**Step 1 — Select theme:**
+- If caller already provided a `theme_path`, use it directly
+- If only one theme exists, auto-select and confirm: "Applying theme: {theme_name}"
+- Otherwise, call `cogni-workspace:pick-theme` to let the user select — this returns `theme_path`, `theme_name`, and `theme_slug`
 
-**Required tokens** (following `cogni-workspace/references/design-variables-pattern.md`):
+**Step 2 — Derive design-variables.json:**
+1. Read the selected `theme.md` at the returned `theme_path`
+2. Read `cogni-workspace/references/design-variables-pattern.md` for the derivation convention
+3. Read `cogni-workspace/schemas/examples/design-variables-cogni-work.json` as a structural reference
+4. Extract the token groups below into a JSON structure
+5. Compute the report-specific derived tokens (link colors, toc background, etc.)
+6. Write the result to `<project-dir>/output/design-variables.json`
+
+**Required core tokens** (from `design-variables-pattern.md`):
 
 | Group | Tokens | Notes |
 |-------|--------|-------|
@@ -50,6 +60,7 @@ Branded exports look more professional and help the user's report stand out. Thi
 | `colors` | `text_muted`, `text_light`, `surface_dark` | Derived variants |
 | `fonts` | `headers`, `body`, `mono` | Font stacks with system fallbacks |
 | `google_fonts_import` | Full `@import url(...)` string | Empty string if using system fonts |
+| `radius` | Corner radius value | From theme or default `4px` |
 
 **Report-specific derived tokens** (extend the standard design-variables):
 
@@ -61,12 +72,9 @@ Branded exports look more professional and help the user's report stand out. Thi
 | `colors.blockquote_border` | `border` | Blockquote left border |
 | `colors.source_ref` | `text_muted` | Source reference annotations |
 
-**Always pick a theme** — even for markdown-only exports, since `design-variables.json` feeds downstream skills (cogni-narrative, cogni-visual):
-- If caller already provided a `theme_path`, use it directly
-- If only one theme exists, auto-select and confirm: "Applying theme: {theme_name}"
-- Otherwise, call `cogni-workspace:pick-theme` and prompt the user to choose
+**Step 3 — Verify** before proceeding: confirm `output/design-variables.json` exists and contains `colors`, `fonts`, and `google_fonts_import` keys.
 
-**Fallback**: If no themes are found at all (empty themes directory), proceed with hardcoded defaults and inform the user: "No themes found — using default styling. Add a theme via cogni-workspace for branded exports." The export must never fail because of missing themes.
+**Fallback**: If no themes are found at all (empty themes directory), proceed with hardcoded defaults and inform the user: "No themes found — using default styling. Add a theme via cogni-workspace for branded exports." The export must never fail because of missing themes — but the fallback path should be the exception, not the norm.
 
 ### Phase 2: Export
 

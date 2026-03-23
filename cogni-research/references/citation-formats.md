@@ -57,6 +57,10 @@ Author, A.A. Year. Title of article. *Publisher*. Available at: url [Accessed Da
 
 Number sources sequentially by order of first appearance in the report. Each reference entry starts with an `<a id="ref-N"></a>` HTML anchor so the inline superscript links directly to it. Every reference entry must end with the full clickable URL.
 
+**Variant — Wikilink with URL**: The writer agent may produce `[[N]](url)` — a hybrid where the number uses double-bracket wikilink notation but links directly to the source URL instead of an anchor. This is functionally equivalent to the anchored form above but embeds the URL inline. The export skill normalizes both variants identically.
+
+Example: `AI adoption reached 65% [[3]](https://example.com/report)` — the export skill converts this to a superscript `[3]` linking to the URL.
+
 **Full paragraph example**:
 
 > Cloud adoption grew 25% year-over-year in 2025<sup>[[1]](#ref-1)</sup>, driven primarily by AI workload

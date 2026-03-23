@@ -229,17 +229,47 @@ def parse_references_section(md_text: str) -> dict:
         return ref_map
 
     for line in ref_match.group(1).strip().split('\n'):
-        # Match: [N] Title text. Retrieved from URL
-        # or:   [N] Title text. URL
+        line = line.strip()
+        if not line:
+            continue
+
+        # Format A: [N] Title. Retrieved from|Available at: URL
+        # or:       [N] Title. URL
         m = re.match(
-            r'\[(\d+)\]\s+(.+?)\.?\s+(?:Retrieved from\s+)?(https?://\S+)',
-            line.strip()
+            r'\[(\d+)\]\s+(.+?)\.?\s+(?:(?:Retrieved from|Available at:?)\s+)?(https?://\S+)',
+            line
         )
         if m:
             ref_map[int(m.group(1))] = {
                 'title': m.group(2).strip(),
                 'url': m.group(3).strip()
             }
+            continue
+
+        # Format B: N. Title. [URL](URL)  — numbered list with markdown link
+        m = re.match(
+            r'(\d+)\.\s+(.+?)\s+\[https?://[^\]]*\]\((https?://[^\)]+)\)',
+            line
+        )
+        if m:
+            ref_map[int(m.group(1))] = {
+                'title': m.group(2).strip().rstrip('.'),
+                'url': m.group(3).strip()
+            }
+            continue
+
+        # Format C: N. Title. https://URL  — numbered list with bare URL
+        m = re.match(
+            r'(\d+)\.\s+(.+?)\s+(https?://\S+)\s*$',
+            line
+        )
+        if m:
+            ref_map[int(m.group(1))] = {
+                'title': m.group(2).strip().rstrip('.'),
+                'url': m.group(3).strip()
+            }
+            continue
+
     return ref_map
 ```
 
@@ -274,7 +304,20 @@ def normalize_inline_citations(md_text: str, ref_map: dict) -> tuple:
         r'<sup>\[\[(\d+)\]\]\(#ref-\d+\)</sup>', repl_wikilink_anchor, md_text
     )
 
-    # Pattern 2: Chicago — <sup>[N](url)</sup>
+    # Pattern 2: Wikilink with URL — [[N]](url)
+    # Common hybrid format: double-bracket number with standard markdown URL
+    def repl_wikilink_url(m):
+        num = int(m.group(1))
+        url = m.group(2)
+        ref = ref_map.get(num, {})
+        title = ref.get('title', f'Reference {num}')
+        n = get_or_assign(url, title)
+        return f'<sup>[{n}]({url})</sup>'
+    md_text = re.sub(
+        r'\[\[(\d+)\]\]\((https?://[^\)]+)\)', repl_wikilink_url, md_text
+    )
+
+    # Pattern 3: Chicago — <sup>[N](url)</sup>
     def repl_chicago(m):
         url = m.group(2)
         n = get_or_assign(url, f'Reference {m.group(1)}')
@@ -283,7 +326,7 @@ def normalize_inline_citations(md_text: str, ref_map: dict) -> tuple:
         r'<sup>\[(\d+)\]\((https?://[^\)]+)\)</sup>', repl_chicago, md_text
     )
 
-    # Pattern 3: IEEE — [[N](url)]
+    # Pattern 4: IEEE — [[N](url)]
     def repl_ieee(m):
         url = m.group(2)
         n = get_or_assign(url, f'Reference {m.group(1)}')
@@ -292,7 +335,7 @@ def normalize_inline_citations(md_text: str, ref_map: dict) -> tuple:
         r'\[\[(\d+)\]\((https?://[^\)]+)\)\]', repl_ieee, md_text
     )
 
-    # Pattern 4: APA/MLA/Harvard — ([Author, Year](url)) or ([Author](url))
+    # Pattern 5: APA/MLA/Harvard — ([Author, Year](url)) or ([Author](url))
     def repl_apa(m):
         title = m.group(1)
         url = m.group(2)
@@ -302,7 +345,7 @@ def normalize_inline_citations(md_text: str, ref_map: dict) -> tuple:
         r'\(\[([^\]]+)\]\((https?://[^\)]+)\)\)', repl_apa, md_text
     )
 
-    # Pattern 5: Bare source ref — [Source: Publisher](url)
+    # Pattern 6: Bare source ref — [Source: Publisher](url)
     def repl_source(m):
         title = m.group(1)
         url = m.group(2)
@@ -312,7 +355,7 @@ def normalize_inline_citations(md_text: str, ref_map: dict) -> tuple:
         r'\[Source:\s*([^\]]+)\]\((https?://[^\)]+)\)', repl_source, md_text
     )
 
-    # Pattern 6: Bare wikilink group — [[1], [2], [3]] or [[4]]
+    # Pattern 7: Bare wikilink group — [[1], [2], [3]] or [[4]]
     # This is the most common malformed pattern — numbers without URLs
     def repl_bare_wikilink(m):
         full = m.group(0)

@@ -114,16 +114,49 @@ This is the key algorithm transferred from GPT-Researcher's deep research. After
 
 ### Phase 3: Source + Context Entity Creation
 
-1. Create source entities for all unique URLs (via `scripts/create-entity.sh`), including `quality_score` in frontmatter
-2. Create a single comprehensive context entity that covers all sub-aspects and recursion depths
-3. Structure key findings hierarchically: top-level sub-aspects → follow-up findings → deeper explorations
-4. Include `depth_reached` in the context entity frontmatter
-5. **Persist follow-up questions** in the context entity's `follow_up_questions` frontmatter array. For each follow-up question generated during Phase 2b, record:
-   - `question`: the follow-up question text
-   - `pursued`: whether it was actually explored in a deeper pass (true/false)
-   - `depth_level`: the recursion depth at which it was generated (0 = initial, 1 = first follow-up, etc.)
+#### 3a. Create source entities
 
-   This makes the research tree visible in the Obsidian workspace and enables the writer to use follow-up questions as cross-section transition hints (e.g., "This raises the question of..." style connectors)
+For each unique URL discovered during research, create a source entity. **URL requirement**: Every source entity MUST have a non-empty `url` field containing a real, fetchable URL from your WebSearch/WebFetch results. Never fabricate or guess URLs. If a finding cannot be attributed to a specific URL you actually fetched, mark it as `unsourced: true` in the context entity's `key_findings`.
+
+```bash
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/create-entity.sh" \
+  --project-path "${PROJECT_PATH}" \
+  --entity-type source \
+  --data '{"frontmatter": {"url": "https://...", "title": "...", "publisher": "...", "fetch_method": "WebFetch", "fetched_at": "2026-...", "quality_score": 0.85}, "content": ""}' \
+  --json
+```
+
+Record each returned `entity_id` for use in the context entity's `source_refs`. If a source was reused (URL dedup), note the existing ID.
+
+#### 3b. Create the context entity
+
+Create a **single comprehensive context entity** that covers all sub-aspects and recursion depths. The `content` field MUST contain the full synthesized markdown — never leave it empty.
+
+**CRITICAL**: The `sub_question_ref` frontmatter field is REQUIRED and must be a wikilink to the sub-question entity. This field drives the entity's filename slug. Omitting it produces an "untitled" entity.
+
+Structure key findings hierarchically: top-level sub-aspects → follow-up findings → deeper explorations.
+
+```bash
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/create-entity.sh" \
+  --project-path "${PROJECT_PATH}" \
+  --entity-type context \
+  --data '{"frontmatter": {"sub_question_ref": "[[00-sub-questions/data/sq-...]]", "parent_sq": "sq-...", "report_type": "deep", "tree_path": "N", "depth_reached": N, "research_status": "complete", "word_count": N, "source_count": N, "finding_count": N, "source_refs": ["[[02-sources/data/src-...]]"], "key_findings": [{"finding": "...", "source_ref": "[[02-sources/data/src-...]]", "confidence": 0.9}], "search_queries_used": ["..."], "follow_up_questions": [{"question": "...", "pursued": true, "depth_level": 0}]}, "content": "# Title\n\n## Executive Summary\n\n...full synthesized findings markdown..."}' \
+  --json
+```
+
+**Required frontmatter fields**:
+- `sub_question_ref`: wikilink to parent sub-question (e.g., `[[00-sub-questions/data/sq-lattice-crypto-a1b2c3d4]]`)
+- `parent_sq`: bare sub-question ID (e.g., `sq-lattice-crypto-a1b2c3d4`)
+- `report_type`: `"deep"`
+- `tree_path`: branch number from sub-question entity
+- `depth_reached`: actual recursion depth achieved
+- `research_status`: `"complete"` or `"partial"`
+- `word_count`: word count of the content body
+- `source_count`: number of source entities created
+- `finding_count`: number of key findings
+- `source_refs`: array of wikilinks to source entities
+- `key_findings`: array of `{finding, source_ref, confidence}` objects
+- `follow_up_questions`: array of `{question, pursued, depth_level}` objects — persists the research tree for Obsidian visibility and enables the writer to use follow-up questions as cross-section transition hints
 
 ### Phase 4: Return Results
 

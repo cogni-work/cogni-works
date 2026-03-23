@@ -125,7 +125,9 @@ def generate_entity_id(entity_type: str, frontmatter: Dict[str, Any],
     if entity_type == "sub-question":
         slug_source = frontmatter.get("query", "")
     elif entity_type == "context":
-        slug_source = frontmatter.get("sub_question_ref", "")
+        slug_source = (frontmatter.get("sub_question_ref", "")
+                       or frontmatter.get("parent_sq", "")
+                       or frontmatter.get("sub_question", ""))
     elif entity_type == "source":
         slug_source = frontmatter.get("title", frontmatter.get("url", ""))
     elif entity_type == "report-claim":

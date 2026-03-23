@@ -179,7 +179,9 @@ def main() -> None:
     for fm, body in contexts:
         ctx_entry = {
             "id": fm.get("dc:identifier", ""),
-            "sub_question_ref": fm.get("sub_question_ref", ""),
+            "sub_question_ref": (fm.get("sub_question_ref", "")
+                                  or fm.get("parent_sq", "")
+                                  or fm.get("sub_question", "")),
             "source_refs": fm.get("source_refs", []),
             "key_findings": fm.get("key_findings", []),
             "word_count": fm.get("word_count", len(body.split())),

@@ -21,8 +21,12 @@ Manage the lifecycle of GitHub issues for insight-wave ecosystem plugins: consul
 user to understand the problem clearly, resolve which repository the plugin belongs to,
 draft issues from templates, create them via GitHub MCP tools, and track them locally.
 
-All GitHub operations go through the **GitHub connector** — the built-in Cowork integration
-that provides `mcp__github__*` tools. Never shell out to the `gh` CLI for issue operations.
+All GitHub operations go through the **GitHub MCP server** — added as a Custom Connector
+in Claude Desktop, which makes it available in both Chat and Cowork. The built-in GitHub
+connector on claude.ai only reads repos as context — it does not provide MCP tools for
+creating issues, managing PRs, etc. For full GitHub MCP tools, users must add the official
+GitHub Remote MCP Server (`https://api.githubcopilot.com/mcp/`) as a Custom Connector
+with a Personal Access Token. Never shell out to the `gh` CLI for issue operations.
 
 ## Language
 
@@ -84,42 +88,96 @@ Before any GitHub MCP operation, verify the connector is enabled:
 
 ## Setup mode
 
-The GitHub connector is a built-in Cowork integration — no CLI tools, tokens, or
-Docker containers to install. The user just needs to toggle it on.
+The built-in GitHub connector on claude.ai only reads repos as context — it does **not**
+provide MCP tools for creating issues. To get full GitHub MCP tools in Cowork, the user
+needs to add the official GitHub Remote MCP Server as a **Custom Connector** in Claude
+Desktop with a Personal Access Token (PAT).
 
 ### 1. Check connector status
 
 Use `ToolSearch` with query `mcp__github__create_issue`. If it returns a tool
-definition, the connector is already enabled — tell the user they're all set and
-offer to file an issue.
+definition, the GitHub MCP server is already configured — tell the user they're all
+set and offer to file an issue.
 
-### 2. If the connector is not enabled
+### 2. If MCP tools are not available
 
-Walk the user through enabling it in the Cowork UI, in their language:
+Walk the user through setup in their language. There are two parts: creating a PAT
+and adding the Custom Connector.
 
 **English:**
-> To file GitHub issues, you need to enable the GitHub connector:
-> 1. Click the **+** button in the lower left of the chat
-> 2. Hover over **Connectors**
-> 3. Find **GitHub** and toggle it **on**
-> 4. Follow the OAuth prompt to authorize access to your GitHub account
+
+> To file GitHub issues, I need the GitHub MCP server connected. Here's how to set it up:
 >
-> Once that's done, tell me and I'll verify the connection.
+> **Step 1 — Create a GitHub Personal Access Token:**
+> 1. Go to https://github.com/settings/tokens
+> 2. Click **"Generate new token"** → **"Generate new token (classic)"**
+> 3. Name it something like "Claude Cowork"
+> 4. Set expiration to 90 days (you can always create a new one)
+> 5. Select these scopes: **repo**, **read:packages**, **read:org**
+> 6. Click **"Generate token"** and **copy it immediately** — GitHub won't show it again
+>
+> **Step 2 — Add as Custom Connector in Claude Desktop:**
+> 1. Open **Claude Desktop** → **Settings** (or **Customize**) → **Connectors**
+> 2. Click **"Add Custom Connector"**
+> 3. Name: `GitHub MCP`
+> 4. URL: `https://api.githubcopilot.com/mcp/`
+> 5. Add header: `Authorization: Bearer <paste your token here>`
+> 6. Save, then **restart Claude Desktop**
+>
+> Once restarted, come back to Cowork and tell me — I'll verify the connection.
 
 **German:**
-> Um GitHub Issues erstellen zu können, musst du den GitHub Connector aktivieren:
-> 1. Klicke auf das **+** unten links im Chat
-> 2. Fahre mit der Maus über **Connectors**
-> 3. Finde **GitHub** und schalte es **ein**
-> 4. Folge der OAuth-Aufforderung, um den Zugriff auf dein GitHub-Konto zu autorisieren
+
+> Um GitHub Issues erstellen zu können, brauche ich den GitHub MCP Server. So richtest du ihn ein:
 >
-> Sag mir Bescheid, wenn du fertig bist — ich prüfe dann die Verbindung.
+> **Schritt 1 — GitHub Personal Access Token erstellen:**
+> 1. Gehe zu https://github.com/settings/tokens
+> 2. Klicke auf **"Generate new token"** → **"Generate new token (classic)"**
+> 3. Gib einen Namen ein, z.B. "Claude Cowork"
+> 4. Setze die Gültigkeit auf 90 Tage
+> 5. Wähle diese Berechtigungen: **repo**, **read:packages**, **read:org**
+> 6. Klicke **"Generate token"** und **kopiere ihn sofort** — GitHub zeigt ihn nur einmal
+>
+> **Schritt 2 — Als Custom Connector in Claude Desktop hinzufügen:**
+> 1. Öffne **Claude Desktop** → **Einstellungen** (oder **Customize**) → **Connectors**
+> 2. Klicke auf **"Add Custom Connector"**
+> 3. Name: `GitHub MCP`
+> 4. URL: `https://api.githubcopilot.com/mcp/`
+> 5. Header hinzufügen: `Authorization: Bearer <dein Token hier einfügen>`
+> 6. Speichern, dann **Claude Desktop neu starten**
+>
+> Wenn Claude Desktop neu gestartet ist, komm zurück zu Cowork und sag Bescheid — ich prüfe dann die Verbindung.
+
+**Alternative: Config file (for advanced users)**
+
+If the user prefers editing the config file directly, the JSON block goes in:
+- **macOS:** `~/Library/Application Support/Claude/claude_desktop_config.json`
+- **Windows:** `%APPDATA%\Claude\claude_desktop_config.json`
+
+```json
+{
+  "mcpServers": {
+    "github": {
+      "type": "http",
+      "url": "https://api.githubcopilot.com/mcp/",
+      "headers": {
+        "Authorization": "Bearer <GITHUB_PAT>"
+      }
+    }
+  }
+}
+```
+
+If the file already has other `mcpServers` entries, merge the `"github"` key into the
+existing object — do not overwrite the whole file.
 
 ### 3. After the user confirms
 
 Re-check with `ToolSearch`. If the tools are now available, confirm success. If
-still missing, suggest the user refresh Cowork or check if OAuth completed
-successfully.
+still missing, suggest:
+- Did Claude Desktop restart fully?
+- Is the PAT valid? (test with `curl -H "Authorization: Bearer <token>" https://api.github.com/user`)
+- Check Claude Desktop logs: `~/Library/Logs/Claude/` (macOS)
 
 ### 4. Setup complete
 

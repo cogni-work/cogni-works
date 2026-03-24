@@ -41,8 +41,8 @@ The export skill needs to find the right project and verify the report exists. W
 
 **Step 1 — Select theme:**
 - If caller already provided a `theme_path`, use it directly
-- If only one theme exists, auto-select and confirm: "Applying theme: {theme_name}"
-- Otherwise, call `cogni-workspace:pick-theme` to let the user select — this returns `theme_path`, `theme_name`, and `theme_slug`
+- Otherwise, call `cogni-workspace:pick-theme` — it discovers all available themes (both standard and workspace), handles auto-selection when only one theme exists, and returns `theme_path`, `theme_name`, and `theme_slug`
+- Do NOT search the filesystem for themes manually — pick-theme is the single source of truth for theme discovery
 
 **Step 2 — Derive design-variables.json:**
 1. Read the selected `theme.md` at the returned `theme_path`

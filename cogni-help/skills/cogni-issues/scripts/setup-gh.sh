@@ -1,10 +1,10 @@
 #!/bin/bash
-# setup-gh.sh — Check GitHub MCP connector availability in Cowork
+# setup-gh.sh — Platform info for cogni-issues
 # Usage: bash setup-gh.sh check
 #
-# Checks whether the GitHub connector is enabled by testing if
-# GitHub MCP tools are discoverable. Returns JSON to stdout.
-# Exit 0 always so callers can inspect the JSON.
+# Returns platform information as JSON. The primary readiness check
+# (browser availability + GitHub login) is done by the skill itself
+# using claude-in-chrome browser tools, not this script.
 #
 # Compatible with bash 3.2 (macOS default).
 
@@ -24,15 +24,10 @@ case "$(uname -s)" in
   Linux)  PLATFORM="linux" ;;
 esac
 
-# The GitHub connector in Cowork is a built-in integration.
-# We can't directly test MCP tool availability from a shell script,
-# so we report the platform and let the skill do the MCP tool check.
-# The skill should attempt ToolSearch for mcp__github__* tools to verify.
-
 cat <<EOF
 {
   "platform": "$PLATFORM",
-  "check": "mcp_tools",
-  "instruction": "Use ToolSearch to check if mcp__github__ tools are available. If they are, the GitHub connector is enabled."
+  "check": "browser",
+  "instruction": "Use ToolSearch for mcp__claude-in-chrome__tabs_context_mcp to verify browser availability, then navigate to github.com and check login state."
 }
 EOF

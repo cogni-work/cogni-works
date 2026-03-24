@@ -2,10 +2,10 @@
 name: cogni-issues
 description: |
   File and track GitHub issues (bugs, feature requests, change requests, questions) against
-  insight-wave ecosystem plugins using the GitHub MCP connector in Cowork. Guides users
+  insight-wave ecosystem plugins using browser automation (claude-in-chrome). Guides users
   through a short consultation to capture the right details, resolves the target plugin's
-  repository automatically, drafts issues from templates, creates them via GitHub MCP tools,
-  and tracks them locally.
+  repository automatically, drafts issues from templates, creates them via cobrowsing on
+  github.com, and tracks them locally.
   Use this skill whenever the user wants to report a bug, request a feature, file a change
   request, ask a question about a plugin, list filed issues, or check issue status.
   Also trigger when the user says things like "this plugin is broken", "I found a problem
@@ -19,14 +19,13 @@ description: |
 
 Manage the lifecycle of GitHub issues for insight-wave ecosystem plugins: consult with the
 user to understand the problem clearly, resolve which repository the plugin belongs to,
-draft issues from templates, create them via GitHub MCP tools, and track them locally.
+draft issues from templates, create them via browser cobrowsing on github.com, and track
+them locally.
 
-All GitHub operations go through the **GitHub MCP server** — added as a Custom Connector
-in Claude Desktop, which makes it available in both Chat and Cowork. The built-in GitHub
-connector on claude.ai only reads repos as context — it does not provide MCP tools for
-creating issues, managing PRs, etc. For full GitHub MCP tools, users must add the official
-GitHub Remote MCP Server (`https://api.githubcopilot.com/mcp/`) as a Custom Connector
-with a Personal Access Token. Never shell out to the `gh` CLI for issue operations.
+All GitHub operations use **browser automation via claude-in-chrome** — navigating to
+github.com, reading pages, and filling forms directly. This works in any environment
+with a browser, including Cowork. No MCP connector setup, Personal Access Tokens, or
+`gh` CLI needed — the user just needs to be logged into GitHub in their browser.
 
 ## Language
 
@@ -53,133 +52,93 @@ The skill scripts live at `${CLAUDE_PLUGIN_ROOT}/skills/cogni-issues/scripts/`.
 `CLAUDE_PLUGIN_ROOT` points to the cogni-help plugin directory. If you can't
 find the scripts, tell the user — don't guess paths.
 
-## GitHub MCP Tools
+## Browser Tools for GitHub
 
-All GitHub operations use MCP tools from the built-in GitHub connector. The key tools:
+All GitHub operations use claude-in-chrome browser automation tools:
 
-| Operation | MCP Tool | Purpose |
-|-----------|----------|---------|
-| Create issue | `mcp__github__create_issue` | Create a new issue on a repository |
-| List issues | `mcp__github__list_issues` | List issues for a repository |
-| Get issue | `mcp__github__get_issue` | Get details of a specific issue |
-| Search issues | `mcp__github__search_issues` | Search across issues |
+| Operation | Tools | URL Pattern |
+|-----------|-------|-------------|
+| Create issue | `navigate`, `form_input`, `computer` | `github.com/{owner}/{repo}/issues/new` |
+| List issues | `navigate`, `get_page_text` | `github.com/{owner}/{repo}/issues` |
+| Search issues | `navigate`, `get_page_text` | `github.com/{owner}/{repo}/issues?q={keywords}` |
+| Get issue | `navigate`, `get_page_text` | `github.com/{owner}/{repo}/issues/{number}` |
 
-Before using any MCP tool, load it via `ToolSearch` first (e.g., `select:mcp__github__create_issue`).
+Before using any claude-in-chrome tool, load it via `ToolSearch` first
+(e.g., `select:mcp__claude-in-chrome__navigate`).
 
 ## Modes
 
 | Mode | Triggers | Action |
 |------|----------|--------|
-| **setup** | First-time detection (MCP tools not available), "set up issues", "ich kann kein Issue erstellen" | Guide user to enable GitHub connector |
+| **setup** | Browser not available or user not logged into GitHub, "set up issues", "ich kann kein Issue erstellen" | Guide user to log into GitHub in browser |
 | **create** | reporting bugs, requesting features, filing change requests, asking plugin questions | Consult, resolve, draft, confirm, create, log |
 | **list** | "my issues", "show issues", "what have I filed" | Read local state, display grouped by plugin |
-| **status** | "check issue #N", "any updates on my issue" | Fetch from GitHub via MCP, update local record |
-| **browse** | "open issue", "show in browser" | Provide the GitHub issue URL |
+| **status** | "check issue #N", "any updates on my issue" | Fetch from GitHub via browser, update local record |
+| **browse** | "open issue", "show in browser" | Navigate to the GitHub issue in the browser |
 
 Default to **list** when intent is unclear.
 
 ## Prerequisites
 
-Before any GitHub MCP operation, verify the connector is enabled:
+Before any GitHub operation, verify browser access and login:
 
-1. Use `ToolSearch` to look for `mcp__github__create_issue`
-2. If the tool is found, the GitHub connector is active — proceed
-3. If the tool is not found, switch to **setup mode**
+1. Use `ToolSearch` to look for `mcp__claude-in-chrome__tabs_context_mcp`
+2. If the tool is not found, tell the user: "This skill requires the claude-in-chrome
+   browser extension. Please ensure it is installed and active."
+3. Call `tabs_context_mcp` to verify the browser is connected
+4. Navigate to `https://github.com` and check login with `javascript_tool`:
+   ```javascript
+   document.querySelector('meta[name="user-login"]')?.content || 'not-logged-in'
+   ```
+5. If the result is `'not-logged-in'`, switch to **setup mode**
+6. If the result returns a username, the user is logged in — proceed
 
 ## Setup mode
 
-The built-in GitHub connector on claude.ai only reads repos as context — it does **not**
-provide MCP tools for creating issues. To get full GitHub MCP tools in Cowork, the user
-needs to add the official GitHub Remote MCP Server as a **Custom Connector** in Claude
-Desktop with a Personal Access Token (PAT).
+Browser-based setup is straightforward — the user just needs to be logged into
+GitHub in Chrome.
 
-### 1. Check connector status
+### 1. Check browser availability
 
-Use `ToolSearch` with query `mcp__github__create_issue`. If it returns a tool
-definition, the GitHub MCP server is already configured — tell the user they're all
-set and offer to file an issue.
+Use `ToolSearch` with query `mcp__claude-in-chrome__tabs_context_mcp`. If the tool
+is found, the browser extension is active. If not, inform the user that browser
+automation is required and they need to ensure claude-in-chrome is installed.
 
-### 2. If MCP tools are not available
+### 2. Check GitHub login
 
-Walk the user through setup in their language. There are two parts: creating a PAT
-and adding the Custom Connector.
+Navigate to `https://github.com` and run:
+
+```javascript
+document.querySelector('meta[name="user-login"]')?.content || 'not-logged-in'
+```
+
+If the result returns a username, the user is already logged in — tell them they're
+all set and offer to file an issue.
+
+### 3. If not logged in
+
+Navigate to `https://github.com/login` and guide the user to sign in.
 
 **English:**
 
-> To file GitHub issues, I need the GitHub MCP server connected. Here's how to set it up:
->
-> **Step 1 — Create a GitHub Personal Access Token:**
-> 1. Go to https://github.com/settings/tokens
-> 2. Click **"Generate new token"** → **"Generate new token (classic)"**
-> 3. Name it something like "Claude Cowork"
-> 4. Set expiration to 90 days (you can always create a new one)
-> 5. Select these scopes: **repo**, **read:packages**, **read:org**
-> 6. Click **"Generate token"** and **copy it immediately** — GitHub won't show it again
->
-> **Step 2 — Add as Custom Connector in Claude Desktop:**
-> 1. Open **Claude Desktop** → **Settings** (or **Customize**) → **Connectors**
-> 2. Click **"Add Custom Connector"**
-> 3. Name: `GitHub MCP`
-> 4. URL: `https://api.githubcopilot.com/mcp/`
-> 5. Add header: `Authorization: Bearer <paste your token here>`
-> 6. Save, then **restart Claude Desktop**
->
-> Once restarted, come back to Cowork and tell me — I'll verify the connection.
+> I need you to be logged into GitHub in the browser. I've opened the GitHub login
+> page — please sign in with your GitHub account, then tell me when you're ready.
 
 **German:**
 
-> Um GitHub Issues erstellen zu können, brauche ich den GitHub MCP Server. So richtest du ihn ein:
->
-> **Schritt 1 — GitHub Personal Access Token erstellen:**
-> 1. Gehe zu https://github.com/settings/tokens
-> 2. Klicke auf **"Generate new token"** → **"Generate new token (classic)"**
-> 3. Gib einen Namen ein, z.B. "Claude Cowork"
-> 4. Setze die Gültigkeit auf 90 Tage
-> 5. Wähle diese Berechtigungen: **repo**, **read:packages**, **read:org**
-> 6. Klicke **"Generate token"** und **kopiere ihn sofort** — GitHub zeigt ihn nur einmal
->
-> **Schritt 2 — Als Custom Connector in Claude Desktop hinzufügen:**
-> 1. Öffne **Claude Desktop** → **Einstellungen** (oder **Customize**) → **Connectors**
-> 2. Klicke auf **"Add Custom Connector"**
-> 3. Name: `GitHub MCP`
-> 4. URL: `https://api.githubcopilot.com/mcp/`
-> 5. Header hinzufügen: `Authorization: Bearer <dein Token hier einfügen>`
-> 6. Speichern, dann **Claude Desktop neu starten**
->
-> Wenn Claude Desktop neu gestartet ist, komm zurück zu Cowork und sag Bescheid — ich prüfe dann die Verbindung.
+> Ich brauche dich bei GitHub im Browser angemeldet. Ich habe die GitHub-Anmeldeseite
+> geoeffnet — bitte melde dich mit deinem GitHub-Konto an und sag mir Bescheid,
+> wenn du fertig bist.
 
-**Alternative: Config file (for advanced users)**
+### 4. After the user confirms
 
-If the user prefers editing the config file directly, the JSON block goes in:
-- **macOS:** `~/Library/Application Support/Claude/claude_desktop_config.json`
-- **Windows:** `%APPDATA%\Claude\claude_desktop_config.json`
+Re-check the login with the `javascript_tool` meta tag check. If the user is now
+logged in, confirm success. If still not logged in, suggest:
+- Clear the browser cache and try again
+- Check if a corporate SSO or 2FA prompt needs to be completed first
+- Try signing in manually in a new Chrome tab
 
-```json
-{
-  "mcpServers": {
-    "github": {
-      "type": "http",
-      "url": "https://api.githubcopilot.com/mcp/",
-      "headers": {
-        "Authorization": "Bearer <GITHUB_PAT>"
-      }
-    }
-  }
-}
-```
-
-If the file already has other `mcpServers` entries, merge the `"github"` key into the
-existing object — do not overwrite the whole file.
-
-### 3. After the user confirms
-
-Re-check with `ToolSearch`. If the tools are now available, confirm success. If
-still missing, suggest:
-- Did Claude Desktop restart fully?
-- Is the PAT valid? (test with `curl -H "Authorization: Bearer <token>" https://api.github.com/user`)
-- Check Claude Desktop logs: `~/Library/Logs/Claude/` (macOS)
-
-### 4. Setup complete
+### 5. Setup complete
 
 If the user came here because they were trying to file an issue, continue with
 the **create** flow.
@@ -198,8 +157,8 @@ bash "${SKILL_DIR}/scripts/issue-store.sh" init "${working_dir}"
 
 ### 1. Check readiness and resolve the plugin
 
-First, verify GitHub MCP tools are available (see Prerequisites). If not, enter
-**setup mode** and return here once the connector is enabled.
+First, verify browser access and GitHub login (see Prerequisites). If not ready,
+enter **setup mode** and return here once the user is logged in.
 
 If the user hasn't named a specific plugin, ask which plugin this is about. Then resolve it:
 
@@ -207,17 +166,30 @@ If the user hasn't named a specific plugin, ask which plugin this is about. Then
 bash "${SKILL_DIR}/scripts/resolve-plugin.sh" "<plugin_name>"
 ```
 
-Handle: `"ambiguous": true` → present matches and ask; `"error"` → list available plugins
-and ask; success → extract `owner_repo`, `version`, `marketplace`.
+Handle: `"ambiguous": true` -> present matches and ask; `"error"` -> list available plugins
+and ask; success -> extract `owner_repo`, `version`, `marketplace`.
 
 ### 2. Check for duplicates
 
-Before investing in consultation and drafting, search for existing issues using MCP:
+Before investing in consultation and drafting, search for existing issues via the browser:
 
-Use `mcp__github__search_issues` with a query like `repo:<owner_repo> is:open <keywords>`
-using 2-3 keywords from the user's complaint. If you find a likely match, show it to the
-user and ask: "This looks similar — is it the same problem, or something different?" If
-it's the same, link them to the existing issue instead of creating a duplicate.
+1. Navigate to `https://github.com/{owner}/{repo}/issues?q=is%3Aopen+{url_encoded_keywords}`
+   using 2-3 keywords from the user's complaint
+2. Use `get_page_text` to read the search results page
+3. Look for issue titles and links in the page text
+
+If you find a likely match, show it to the user and ask: "This looks similar — is it
+the same problem, or something different?" If it's the same, link them to the existing
+issue instead of creating a duplicate.
+
+If `get_page_text` returns too much noise, use `javascript_tool` to extract structured data:
+
+```javascript
+[...document.querySelectorAll('[data-hovercard-type="issue"]')].slice(0, 10).map(a => ({
+  title: a.textContent.trim(),
+  url: a.href
+}))
+```
 
 ### 3. Determine the issue type
 
@@ -291,14 +263,30 @@ Show the complete draft (title + body) and ask for approval in the user's langua
 Never create without explicit confirmation. If the user wants changes, apply them and
 show the updated draft.
 
-### 7. Create on GitHub via MCP
+### 7. Create on GitHub via browser
 
-Use the `mcp__github__create_issue` tool with the owner, repo, title, body, and labels.
+Navigate to `https://github.com/{owner}/{repo}/issues/new` and fill the form:
 
-Label mapping is in `references/issue-templates.md`. If creation fails due to a
-non-existent label, retry without labels and mention this to the user.
+1. Use `get_page_text` to verify the "New Issue" form has loaded
+2. Use `form_input` to fill the **title** field
+3. Use `form_input` to fill the **body** textarea (paste the full drafted body)
+4. **Labels** (optional): Use `computer` to click the "Labels" gear icon in the sidebar,
+   then `form_input` to type the label name in the filter, then `computer` to click the
+   matching label. Label mapping is in `references/issue-templates.md`. If the label
+   doesn't appear or the interaction fails, skip it — the issue can be created without labels.
+5. Use `computer` to click the **"Submit new issue"** button
+6. After submission, the browser redirects to the new issue page. Read the page URL
+   to extract `github_number` (the number in `/issues/{number}`) and `github_url`
 
-If creation fails, show the error and suggest next steps — don't retry blindly.
+**If form interaction fails:** Use `javascript_tool` as a fallback to fill and submit:
+
+```javascript
+document.querySelector('#issue_title').value = '<title>';
+document.querySelector('#issue_body').value = '<body>';
+document.querySelector('button[type="submit"][data-disable-with]').click();
+```
+
+If creation fails entirely, show the error and suggest next steps — don't retry blindly.
 
 ### 8. Log locally
 
@@ -315,7 +303,7 @@ echo '<json_record>' | bash "${SKILL_DIR}/scripts/issue-store.sh" add "${working
 The record includes: `id`, `plugin`, `marketplace`, `repository`, `github_number`,
 `github_url`, `type`, `title`, `status` ("open"), `created_at`, `updated_at`.
 
-Parse `github_number` and `github_url` from the MCP tool response.
+Parse `github_number` and `github_url` from the browser redirect URL after submission.
 
 ### 9. Confirm
 
@@ -333,18 +321,47 @@ If empty, suggest the create flow.
 ## Status mode
 
 1. Look up the issue in local state to get `owner`, `repo`, and `github_number`
-2. Fetch from GitHub using `mcp__github__get_issue` with the owner, repo, and issue number
-3. Update local record via `update-status`
-4. Show: state, latest comments summary, labels, last update
+2. Navigate to `https://github.com/{owner}/{repo}/issues/{github_number}` in the browser
+3. Use `get_page_text` to read the issue page — extract state (open/closed), labels,
+   latest comments, and last update timestamp
+4. Update local record via `update-status`
+5. Show: state, latest comments summary, labels, last update
+
+If the page text is too noisy, use `javascript_tool` to extract structured data:
+
+```javascript
+({
+  state: document.querySelector('.State')?.textContent?.trim(),
+  title: document.querySelector('.js-issue-title')?.textContent?.trim(),
+  labels: [...document.querySelectorAll('.IssueLabel')].map(l => l.textContent.trim()),
+  comments: document.querySelectorAll('.timeline-comment').length
+})
+```
 
 ## Browse mode
 
-Provide the GitHub issue URL from local state. The URL follows the pattern:
-`https://github.com/<owner>/<repo>/issues/<number>`
+Navigate to the GitHub issue URL in the browser using `navigate`. The URL follows
+the pattern: `https://github.com/<owner>/<repo>/issues/<number>`
+
+If browser tools are unavailable, provide the URL as text instead.
+
+## Edge cases
+
+- **2FA / SSO prompts**: If navigating to github.com triggers additional authentication,
+  the page will not contain normal GitHub content. Detect this and tell the user:
+  "GitHub is asking for additional authentication. Please complete it in the browser,
+  then tell me when you're ready."
+- **Private repos**: Browser access inherits the user's session permissions, so private
+  repos work as long as the user has access — no extra token scopes needed.
+- **GitHub HTML changes**: If expected form fields or selectors stop working, use
+  `read_page` to inspect the current page structure and adapt. The `javascript_tool`
+  fallback is more resilient to selector changes.
+- **Rate limiting**: If GitHub returns a rate-limit page, inform the user to wait a few
+  minutes before retrying.
 
 ## Scripts
 
-- **`scripts/setup-gh.sh`** — Legacy check script. The primary readiness check is now done via `ToolSearch` for GitHub MCP tools. This script provides platform info only.
+- **`scripts/setup-gh.sh`** — Platform info script. Returns JSON with OS detection. The primary readiness check is done via browser tools (ToolSearch + login check).
 - **`scripts/resolve-plugin.sh`** — Resolves a plugin name to its GitHub repo by scanning marketplace.json files. All insight-wave plugins resolve to the monorepo `cogni-work/insight-wave`.
 - **`scripts/issue-store.sh`** — Local JSON state management (init, gen-id, add, read, update-status). The `add` command reads JSON from stdin for safety.
 

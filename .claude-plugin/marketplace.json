@@ -23,8 +23,7 @@
         "claim-verification",
         "fact-checking",
         "source-validation"
-      ],
-      "version": "1.0.5"
+      ]
     },
     {
       "name": "cogni-obsidian",
@@ -43,8 +42,7 @@
         "integration",
         "workplace",
         "claude-code"
-      ],
-      "version": "1.0.5"
+      ]
     },
     {
       "name": "cogni-narrative",
@@ -64,8 +62,7 @@
         "trend-panorama",
         "review",
         "adapt"
-      ],
-      "version": "1.8.3"
+      ]
     },
     {
       "name": "cogni-copywriting",
@@ -84,8 +81,7 @@
         "readability",
         "sales-copy",
         "power-positions"
-      ],
-      "version": "0.2.15"
+      ]
     },
     {
       "name": "cogni-workspace",
@@ -102,8 +98,7 @@
         "themes",
         "orchestrator",
         "insight-wave"
-      ],
-      "version": "0.1.20"
+      ]
     },
     {
       "name": "cogni-trends",
@@ -122,8 +117,7 @@
         "strategic-trends",
         "bilingual",
         "trend-report"
-      ],
-      "version": "0.3.45"
+      ]
     },
     {
       "name": "cogni-portfolio",
@@ -143,8 +137,7 @@
         "sme",
         "propositions",
         "packages"
-      ],
-      "version": "0.9.13"
+      ]
     },
     {
       "name": "cogni-visual",
@@ -167,8 +160,7 @@
         "excalidraw",
         "web",
         "storyboard"
-      ],
-      "version": "1.4.5"
+      ]
     },
     {
       "name": "cogni-help",
@@ -191,8 +183,7 @@
         "issues",
         "discovery",
         "onboarding"
-      ],
-      "version": "0.2.10"
+      ]
     },
     {
       "name": "cogni-marketing",
@@ -215,8 +206,7 @@
         "abm",
         "campaign",
         "gtm"
-      ],
-      "version": "0.1.2"
+      ]
     },
     {
       "name": "cogni-research",
@@ -237,8 +227,7 @@
         "review-loop",
         "deep-research",
         "claims-verification"
-      ],
-      "version": "0.6.6"
+      ]
     },
     {
       "name": "cogni-sales",
@@ -260,8 +249,7 @@
         "corporate-visions",
         "acquisition",
         "segment-pitch"
-      ],
-      "version": "0.3.4"
+      ]
     },
     {
       "name": "cogni-canvas",
@@ -279,8 +267,7 @@
         "hypothesis",
         "startup",
         "refinement"
-      ],
-      "version": "0.2.4"
+      ]
     },
     {
       "name": "cogni-consulting",
@@ -301,8 +288,7 @@
         "solution-design",
         "phase-gated",
         "cross-plugin"
-      ],
-      "version": "0.1.4"
+      ]
     }
   ]
 }

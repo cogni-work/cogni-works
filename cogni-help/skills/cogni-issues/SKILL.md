@@ -1,5 +1,6 @@
 ---
 name: cogni-issues
+version: 0.2.0
 description: |
   File and track GitHub issues (bugs, feature requests, change requests, questions) against
   insight-wave ecosystem plugins using browser automation (claude-in-chrome). Guides users

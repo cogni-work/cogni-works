@@ -14,23 +14,27 @@ fi
 
 PROGRESS_FILE="$PROJECT_DIR/.claude/cogni-help.local.md"
 
-ALL_COURSES='["cowork-fundamentals","workspace-obsidian","basic-tools","trends-scouting","trends-reporting","portfolio","visual","research","marketing","sales"]'
-
 if [ ! -f "$PROGRESS_FILE" ]; then
   # No progress file — all courses not started
   python3 -c "
-import json
-courses = json.loads('$ALL_COURSES')
+import json, sys
+
+progress_file = sys.argv[1]
+all_courses = [
+    'cowork-fundamentals', 'workspace-obsidian', 'basic-tools',
+    'trends-scouting', 'trends-reporting', 'portfolio', 'visual',
+    'research', 'marketing', 'sales', 'consulting'
+]
 result = {
     'student': None,
-    'courses': {c: {'status': 'not-started'} for c in courses},
+    'courses': {c: {'status': 'not-started'} for c in all_courses},
     'completed': 0,
     'in_progress': 0,
-    'total': len(courses),
+    'total': len(all_courses),
     'pct': 0
 }
 print(json.dumps(result, indent=2))
-"
+" "$PROGRESS_FILE"
   exit 0
 fi
 
@@ -38,10 +42,15 @@ fi
 python3 -c "
 import json, re, sys
 
-all_courses = json.loads('$ALL_COURSES')
+progress_file = sys.argv[1]
+all_courses = [
+    'cowork-fundamentals', 'workspace-obsidian', 'basic-tools',
+    'trends-scouting', 'trends-reporting', 'portfolio', 'visual',
+    'research', 'marketing', 'sales', 'consulting'
+]
 
 # Read the progress file
-with open('$PROGRESS_FILE') as f:
+with open(progress_file) as f:
     content = f.read()
 
 # Extract YAML frontmatter between --- markers
@@ -121,4 +130,4 @@ result = {
     'pct': pct
 }
 print(json.dumps(result, indent=2))
-"
+" "$PROGRESS_FILE"

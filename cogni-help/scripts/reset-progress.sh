@@ -16,7 +16,7 @@ fi
 
 PROGRESS_FILE="$PROJECT_DIR/.claude/cogni-help.local.md"
 
-ALL_COURSES="cowork-fundamentals workspace-obsidian basic-tools trends-scouting trends-reporting portfolio visual research marketing sales"
+ALL_COURSES="cowork-fundamentals workspace-obsidian basic-tools trends-scouting trends-reporting portfolio visual research marketing sales consulting"
 
 if [ "$TARGET" = "--all" ]; then
   if [ -f "$PROGRESS_FILE" ]; then
@@ -47,11 +47,12 @@ fi
 
 # Reset specific course in the YAML frontmatter
 python3 -c "
-import re, sys
+import json, re, sys, datetime
 
-course = '$TARGET'
+course = sys.argv[1]
+progress_file = sys.argv[2]
 
-with open('$PROGRESS_FILE') as f:
+with open(progress_file) as f:
     content = f.read()
 
 # Find the course block and replace its status
@@ -64,13 +65,11 @@ if match:
     content = content[:match.start()] + replacement + content[match.end():]
 
     # Update last_session
-    import datetime
     today = datetime.date.today().isoformat()
     content = re.sub(r'last_session:.*', f'last_session: {today}', content)
 
-    with open('$PROGRESS_FILE', 'w') as f:
+    with open(progress_file, 'w') as f:
         f.write(content)
 
-import json
 print(json.dumps({'status': 'reset', 'course': course}))
-"
+" "$TARGET" "$PROGRESS_FILE"

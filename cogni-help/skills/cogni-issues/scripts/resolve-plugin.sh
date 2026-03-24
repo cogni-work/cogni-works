@@ -39,18 +39,15 @@ if [ -n "${COGNI_WORKSPACE_ROOT:-}" ]; then
   done
 fi
 
-# Source 3: Common dev locations as fallback
-for dev_path in \
-  "$HOME/GitHub/dev/insight-wave/.claude-plugin/marketplace.json" \
-  "$HOME/GitHub/dev/insight-wave-pro/.claude-plugin/marketplace.json"; do
-  if [ -f "$dev_path" ]; then
-    already=false
-    for existing in "${MARKETPLACE_FILES[@]+"${MARKETPLACE_FILES[@]}"}"; do
-      [ "$existing" = "$dev_path" ] && already=true && break
-    done
-    $already || MARKETPLACE_FILES+=("$dev_path")
-  fi
-done
+# Source 3: Current working directory (if it has a marketplace)
+CWD_MP="$(pwd)/.claude-plugin/marketplace.json"
+if [ -f "$CWD_MP" ]; then
+  already=false
+  for existing in "${MARKETPLACE_FILES[@]+"${MARKETPLACE_FILES[@]}"}"; do
+    [ "$existing" = "$CWD_MP" ] && already=true && break
+  done
+  $already || MARKETPLACE_FILES+=("$CWD_MP")
+fi
 
 if [ ${#MARKETPLACE_FILES[@]} -eq 0 ]; then
   echo '{"error":"no marketplace files found","plugin":"'"$(echo "$PLUGIN_NAME" | tr -dc 'a-zA-Z0-9_-')"'"}' >&2

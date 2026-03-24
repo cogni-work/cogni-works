@@ -97,10 +97,10 @@ Exercises in courses 2-7 require specific plugins to be installed. Before the fi
 exercise in a course, verify the needed plugins are available. If a plugin is missing,
 tell the user how to install it rather than letting the exercise silently fail.
 
-**Course 2, Module 6** (Getting Help & Filing Issues) requires the `gh` CLI to be
-installed and authenticated. The exercise itself handles setup via cogni-issues' built-in
-setup mode — do not block on this prerequisite. If `gh` is not ready, the exercise
-becomes a guided setup walkthrough, which is part of the learning experience.
+**Course 2, Module 6** (Getting Help & Filing Issues) requires the user to be logged
+into GitHub in their browser. The exercise itself handles setup via cogni-issues'
+built-in setup mode — do not block on this prerequisite. If the user is not logged in,
+the exercise becomes a guided setup walkthrough, which is part of the learning experience.
 
 ### Exercise Files
 

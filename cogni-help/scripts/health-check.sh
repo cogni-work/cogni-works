@@ -76,7 +76,7 @@ for var in ['COGNI_WORKSPACE_ROOT']:
 
 # Check tools
 import shutil
-for tool in ['gh', 'node', 'npm']:
+for tool in ['node', 'npm']:
     results['environment'][tool] = 'installed' if shutil.which(tool) else 'missing'
 
 print(json.dumps(results, indent=2))

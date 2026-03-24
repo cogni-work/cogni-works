@@ -142,7 +142,7 @@ for issue in data['issues']:
         break
 
 if not found:
-    print(json.dumps({'error': 'issue not found', 'id': issue_id}))
+    print(json.dumps({'error': 'issue not found', 'id': issue_id}), file=sys.stderr)
     sys.exit(1)
 
 with open(issues_path, 'w') as f:

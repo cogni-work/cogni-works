@@ -3,21 +3,60 @@
   "evals": [
     {
       "id": 0,
-      "prompt": "I found a bug in cogni-trends where the scouting report duplicates entries",
-      "expected_output": "Creates a GitHub issue with the bug label, assigns it to the cogni-trends plugin repository, includes reproduction context",
-      "files": []
+      "prompt": "What issues have I filed for the insight-wave plugins?",
+      "expected_output": "Triggers list mode, attempts to read the local issue store via issue-store.sh, handles empty state gracefully by informing the user and suggesting the create flow",
+      "files": [],
+      "assertions": [
+        {"text": "uses-local-store", "description": "Attempts to run issue-store.sh read or equivalent local state lookup"},
+        {"text": "handles-empty-gracefully", "description": "Informs user no issues found and suggests creating one"},
+        {"text": "no-hallucinated-issues", "description": "Does not fabricate issue data when store is empty or unavailable"}
+      ]
     },
     {
       "id": 1,
-      "prompt": "Show me all open issues for the insight-wave ecosystem",
-      "expected_output": "Lists open issues across insight-wave plugins, grouped by plugin or label, with status and assignee",
-      "files": []
+      "prompt": "I want to request a feature for cogni-visual — when rendering a big picture, it would be great if I could specify a custom color palette instead of being locked into the default dark/light modes. Right now I have to manually edit the .excalidraw file after rendering to change colors, which is tedious and error-prone. I'd like a --palette flag or a palette section in the brief.",
+      "expected_output": "Skips consultation (user provided sufficient detail), resolves cogni-visual plugin, drafts a feature request using the template with Use case, Proposed solution, and Alternatives sections",
+      "files": [],
+      "assertions": [
+        {"text": "skips-consultation", "description": "Does not ask clarifying questions when user already provided sufficient detail about the feature"},
+        {"text": "draft-uses-template", "description": "Draft follows feature request template structure (Use case, Proposed solution, Alternatives)"},
+        {"text": "resolves-plugin-correctly", "description": "Attempts to resolve cogni-visual to its repository via resolve-plugin.sh"},
+        {"text": "confirms-before-creating", "description": "Shows draft to user and asks for confirmation before creating the issue on GitHub"}
+      ]
     },
     {
       "id": 2,
-      "prompt": "I want to request a feature for cogni-portfolio to support multi-market propositions",
-      "expected_output": "Creates a GitHub issue with the enhancement label for cogni-portfolio, captures the feature description and use case",
-      "files": []
+      "prompt": "Das cogni-narrative Skill stuerzt ab wenn ich eine Story generieren will. Seit dem letzten Update geht gar nichts mehr.",
+      "expected_output": "Responds in German throughout, uses [Bug] title prefix in English, preserves technical terms, asks targeted follow-up questions in German",
+      "files": [],
+      "assertions": [
+        {"text": "responds-in-german", "description": "Consultation questions and issue draft body are written in German"},
+        {"text": "title-prefix-english", "description": "Issue title uses [Bug] prefix in English per convention"},
+        {"text": "uses-browser-not-gh", "description": "References browser automation tools (navigate, form_input) rather than gh CLI commands"}
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Can you check if there are any updates on issue #12 for cogni-portfolio?",
+      "expected_output": "Triggers status mode, attempts to read local issue store for issue #12, attempts to navigate to GitHub issue page via browser to check current state",
+      "files": [],
+      "assertions": [
+        {"text": "reads-local-state", "description": "Attempts to read from the local issue store to find issue #12"},
+        {"text": "navigates-to-github", "description": "Attempts to use browser tools to navigate to the GitHub issue URL"},
+        {"text": "reports-status", "description": "Provides issue state information or a clear error if issue not found locally"}
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "cogni-portfolio keeps showing the old company logo in the generated propositions even though I updated it in the config last week. This is really annoying.",
+      "expected_output": "Recognizes ambiguity between bug (config not applied) and change request (config mechanism insufficient), asks targeted questions to disambiguate, references user's specific details",
+      "files": [],
+      "assertions": [
+        {"text": "premise-check", "description": "Checks the plugin's data model or config schema to verify whether the user's assumption (logo in config) is correct before classifying"},
+        {"text": "type-disambiguation", "description": "Asks whether the config change should have worked (bug) or whether this is about missing functionality (change request)"},
+        {"text": "targeted-questions", "description": "Asks 1-3 specific questions rather than a generic list of 5+"},
+        {"text": "acknowledges-specifics", "description": "References the user's concrete details (old logo, config update, last week) rather than asking generic questions"}
+      ]
     }
   ]
 }

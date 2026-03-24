@@ -27,6 +27,9 @@ github.com, reading pages, and filling forms directly. This works in any environ
 with a browser, including Cowork. No MCP connector setup, Personal Access Tokens, or
 `gh` CLI needed — the user just needs to be logged into GitHub in their browser.
 
+**Important:** Do NOT use `gh` CLI commands — all GitHub operations go through
+browser automation. The `gh` CLI is not required and should not be invoked.
+
 ## Language
 
 Read the workspace language from `.workspace-config.json` in the workspace root
@@ -204,6 +207,15 @@ Infer the type from context (match intent across languages, not specific keyword
 
 If genuinely ambiguous, ask. Otherwise trust your judgment.
 
+**When the complaint involves config changes or unexpected output**, do a quick sanity
+check before classifying: scan the plugin's data model or config schema to verify the
+user's premise. For example, if a user says "I updated the logo in the config but it
+still shows the old one," check whether the config actually has a logo field. The user's
+mental model of how the plugin works may not match reality — what looks like a bug might
+be a feature gap, a wrong-config-file situation, or a misunderstanding of which component
+owns that functionality. A 30-second `Grep` or `Read` of the relevant schema can save
+everyone from filing a misleading issue.
+
 ### 4. Consult the user
 
 Help the user articulate what they need. Many users know something is wrong but haven't
@@ -213,6 +225,12 @@ organized their thoughts. Your job is to be a helpful interviewer, not a form.
 error messages, stack traces, or failed commands. Look at what the user was working on —
 the conversation often contains the exact workflow that triggered the problem. If you see
 a traceback from earlier, use it — don't ask "did you see an error?"
+
+**If you did a premise check (above) and found a mismatch**, incorporate that finding
+into your consultation. Instead of generic "what happened?" questions, tell the user
+what you found and ask targeted questions to resolve the gap — e.g., "I checked the
+portfolio config schema and it doesn't have a logo field. Where exactly are you seeing
+the logo, and which file did you edit?"
 
 **Then ask only what's missing** — 2-3 questions max, batched in one turn:
 

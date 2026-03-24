@@ -14,7 +14,7 @@ description: |
 
 **User**: "Export the report as HTML"
 
-**Result**: Self-contained HTML file at `output/report.html` with:
+**Result**: Self-contained HTML file alongside `report.md` (e.g., `output/report.html`) with:
 - Theme-branded typography and colors (or professional defaults if no theme selected)
 - Auto-generated table of contents
 - Clickable source links (visually distinct in both screen and print)
@@ -22,7 +22,7 @@ description: |
 
 ## Prerequisites
 
-- Completed research project with `output/report.md`
+- Completed research project with a finalized `report.md`
 - For PDF: `weasyprint` Python package (optional, falls back to browser print-to-PDF)
 
 ## Workflow
@@ -32,8 +32,9 @@ description: |
 The export skill needs to find the right project and verify the report exists. Without a completed report, there is nothing to export — and exporting a draft mid-review would publish unverified content.
 
 1. Find the project directory (ask user if ambiguous)
-2. Verify `output/report.md` exists (NOT `draft-v*.md` — only the finalized report)
-3. Determine requested format(s) from user request
+2. Locate `report.md` within the project (typically `output/report.md`, but may reside elsewhere). Verify it exists (NOT `draft-v*.md` — only the finalized report)
+3. Derive `REPORT_DIR` — the parent directory of the located `report.md`. All exported files will be written to `REPORT_DIR` alongside the source report
+4. Determine requested format(s) from user request
 
 ### Phase 1: Pick Theme and Derive Design Variables
 
@@ -50,7 +51,7 @@ The export skill needs to find the right project and verify the report exists. W
 3. Read `cogni-workspace/schemas/examples/design-variables-cogni-work.json` as a structural reference
 4. Extract the token groups below into a JSON structure
 5. Compute the report-specific derived tokens (link colors, toc background, etc.)
-6. Write the result to `<project-dir>/output/design-variables.json`
+6. Write the result to `{REPORT_DIR}/design-variables.json`
 
 **Required core tokens** (from `design-variables-pattern.md`):
 
@@ -72,7 +73,7 @@ The export skill needs to find the right project and verify the report exists. W
 | `colors.blockquote_border` | `border` | Blockquote left border |
 | `colors.source_ref` | `text_muted` | Source reference annotations |
 
-**Step 3 — Verify** before proceeding: confirm `output/design-variables.json` exists and contains `colors`, `fonts`, and `google_fonts_import` keys.
+**Step 3 — Verify** before proceeding: confirm `{REPORT_DIR}/design-variables.json` exists and contains `colors`, `fonts`, and `google_fonts_import` keys.
 
 **Fallback**: If no themes are found at all (empty themes directory), proceed with hardcoded defaults and inform the user: "No themes found — using default styling. Add a theme via cogni-workspace for branded exports." The export must never fail because of missing themes — but the fallback path should be the exception, not the norm.
 
@@ -90,29 +91,29 @@ Each format builds on the previous — HTML is generated from markdown, PDF from
 For wikilink `[[N]]` citations without embedded URLs: resolve reference numbers against the `## References` section at the bottom of the markdown, extract the URL from each reference entry, and link the superscript directly to that source URL.
 
 **Markdown** (always available):
-- `output/report.md` is already the markdown output
+- `{REPORT_DIR}/report.md` is already the markdown output
 - Optionally copy to a user-specified location
 
 **HTML**:
 1. Read `references/export-formats.md` for the HTML template
-2. Read `output/report.md`
-3. If `output/design-variables.json` exists, inject theme tokens into the HTML template's CSS custom properties. If no design variables, use the hardcoded fallback values in the template.
+2. Read `{REPORT_DIR}/report.md`
+3. If `{REPORT_DIR}/design-variables.json` exists, inject theme tokens into the HTML template's CSS custom properties. If no design variables, use the hardcoded fallback values in the template.
 4. If `google_fonts_import` is non-empty, insert it as a `<style>` tag in `<head>`
 5. Generate self-contained HTML with: table of contents from headings, clickable source links (underlined, colored), clean typography
-6. Write to `output/report.html`
+6. Write to `{REPORT_DIR}/report.html`
 
 **PDF**:
 1. First generate HTML (as above) — the HTML already carries theme styling
-2. **Preferred**: Invoke `Skill(document-skills:pdf)` to create the PDF from HTML with full formatting control (reportlab-based, no external dependency). Pass `output/design-variables.json` if it exists so the skill can apply theme tokens to PDF-native elements.
-3. **Fallback**: If the pdf skill is unavailable and `weasyprint` is installed: `python3 -c "import weasyprint; weasyprint.HTML('output/report.html').write_pdf('output/report.pdf')"` — weasyprint preserves `<a href>` hyperlinks automatically.
+2. **Preferred**: Invoke `Skill(document-skills:pdf)` to create the PDF from HTML with full formatting control (reportlab-based, no external dependency). Pass `{REPORT_DIR}/design-variables.json` if it exists so the skill can apply theme tokens to PDF-native elements.
+3. **Fallback**: If the pdf skill is unavailable and `weasyprint` is installed: `python3 -c "import weasyprint; weasyprint.HTML('{REPORT_DIR}/report.html').write_pdf('{REPORT_DIR}/report.pdf')"` — weasyprint preserves `<a href>` hyperlinks automatically.
 4. **Last resort**: Inform user HTML is available, suggest browser print-to-PDF
-5. Write to `output/report.pdf`
+5. Write to `{REPORT_DIR}/report.pdf`
 
 **DOCX** (Word):
 1. **Preferred**: Invoke `Skill(document-skills:docx)` to create the DOCX from the markdown report with professional formatting (headings, ToC, hyperlinked citations). Pass theme tokens if available: `heading_font` (fonts.headers), `body_font` (fonts.body), `accent_color` (colors.accent), `link_color` (colors.link). The docx skill preserves markdown links as Word hyperlinks.
-2. **Fallback**: If the docx skill is unavailable, check if `pandoc` is available: `which pandoc`. If so: `pandoc output/report.md -o output/report.docx --from markdown --to docx`. Pandoc preserves `[text](url)` as clickable Word hyperlinks.
+2. **Fallback**: If the docx skill is unavailable, check if `pandoc` is available: `which pandoc`. If so: `pandoc {REPORT_DIR}/report.md -o {REPORT_DIR}/report.docx --from markdown --to docx`. Pandoc preserves `[text](url)` as clickable Word hyperlinks.
 3. **Last resort**: Inform user and suggest `brew install pandoc` or `apt install pandoc`
-4. Write to `output/report.docx`
+4. Write to `{REPORT_DIR}/report.docx`
 
 **Presentation** (optional):
 - If cogni-visual is available, delegate: `Skill(cogni-visual:presentation-brief)`
@@ -129,17 +130,17 @@ For wikilink `[[N]]` citations without embedded URLs: resolve reference numbers 
 
 | Format | Output Path | Requirements | Quality |
 |--------|-------------|-------------|---------|
-| Markdown | `output/report.md` | None (always available) | Source format |
-| HTML | `output/report.html` | None (generated inline) | Best for sharing |
-| PDF | `output/report.pdf` | `document-skills:pdf` (preferred) or weasyprint | Best for printing |
-| DOCX | `output/report.docx` | `document-skills:docx` (preferred) or pandoc | Best for editing/collaboration |
+| Markdown | `{REPORT_DIR}/report.md` | None (always available) | Source format |
+| HTML | `{REPORT_DIR}/report.html` | None (generated inline) | Best for sharing |
+| PDF | `{REPORT_DIR}/report.pdf` | `document-skills:pdf` (preferred) or weasyprint | Best for printing |
+| DOCX | `{REPORT_DIR}/report.docx` | `document-skills:docx` (preferred) or pandoc | Best for editing/collaboration |
 
 ## Error Recovery
 
 | Scenario | Recovery |
 |----------|----------|
-| `output/report.md` not found | Check if drafts exist — suggest completing review loop first |
-| `output/report.md` is empty | Report error, suggest re-running Phase 4 (writer) |
+| `report.md` not found | Check if drafts exist — suggest completing review loop first |
+| `report.md` is empty | Report error, suggest re-running Phase 4 (writer) |
 | No themes found | Proceed with hardcoded defaults, inform user |
 | pdf skill unavailable + weasyprint not installed | Generate HTML, suggest `pip install weasyprint` or browser print-to-PDF |
 | docx skill unavailable + pandoc not installed | Inform user, suggest `brew install pandoc` or `apt install pandoc` |

@@ -8,6 +8,7 @@ description: >-
   their configuration up to date, or when they mention broken terminal profiles or path issues
   in Obsidian.
 version: 1.1.0
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 ---
 
 ## Purpose

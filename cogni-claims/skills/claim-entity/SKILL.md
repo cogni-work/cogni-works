@@ -7,6 +7,7 @@ description: |
   create or validate claim records, check what fields a ClaimRecord has, understand deviation
   types or severity levels, or work with the cogni-claims directory layout. Any plugin that submits
   or consumes claims should consult this skill for the contract.
+allowed-tools: Read, Write, Edit, Glob, Grep
 ---
 
 # ClaimEntity Contract

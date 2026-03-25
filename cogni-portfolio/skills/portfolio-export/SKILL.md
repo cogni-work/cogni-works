@@ -5,6 +5,7 @@ description: |
   Use whenever the user mentions export, proposal, brief, collateral, spreadsheet,
   "send to Excel", "create a deck", deliverable, "download portfolio", or wants
   to turn portfolio data into something shareable — even without saying "export".
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Skill
 ---
 
 # Portfolio Export

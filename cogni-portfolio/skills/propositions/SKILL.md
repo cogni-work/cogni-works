@@ -6,6 +6,7 @@ description: |
   feature advantage benefit, FAB, "map features to markets", "why should they buy",
   differentiation, or wants to articulate market-specific value — even if they don't
   say "proposition" explicitly.
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Agent
 ---
 
 # Proposition Consulting

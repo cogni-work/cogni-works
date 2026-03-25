@@ -12,6 +12,7 @@ description: |
   of continuing work, or ANY session start that references an existing diamond project.
   This skill should be the default when the user mentions an existing client/engagement name
   without specifying a particular phase — it orients first, then routes to the right phase skill.
+allowed-tools: Read, Write, Edit, Bash, Glob, Grep, Skill
 ---
 
 # Diamond Resume

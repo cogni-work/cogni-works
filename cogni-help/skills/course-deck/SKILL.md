@@ -10,6 +10,7 @@ description: >-
   materials for cogni-help courses. Also trigger when someone says "prepare
   materials for a training session" or "I need slides for onboarding new learners".
 version: 0.1.0
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 ---
 
 # course-deck: Course Presentation Generator

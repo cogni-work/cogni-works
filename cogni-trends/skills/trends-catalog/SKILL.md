@@ -9,6 +9,7 @@ description: >
   repository of TIPs, Solution Templates, SPIs, Metrics, and Collaterals that new
   pursuits inherit from. Also trigger when the user has completed value-modeler
   curation (Phase 5) and wants to actually persist the recommendations.
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion
 ---
 
 # Industry Catalog

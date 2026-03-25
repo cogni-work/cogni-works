@@ -7,6 +7,7 @@ description: >-
   Handles plugin re-discovery, environment variable refresh, and
   configuration updates without losing user data.
 version: 0.1.0
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 ---
 
 # Update Workspace

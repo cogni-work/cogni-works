@@ -20,26 +20,7 @@ description: >-
   path connections → SPI/Foundation cards → roadmap timeline → footer → export.
   Dark/light color mode auto-detected. ~150-250 Excalidraw elements.
 version: 1.1.0
-allowed-tools:
-  - Read
-  - Write
-  - Bash
-  - Glob
-  - Grep
-  - mcp__excalidraw__clear_canvas
-  - mcp__excalidraw__create_element
-  - mcp__excalidraw__batch_create_elements
-  - mcp__excalidraw__group_elements
-  - mcp__excalidraw__describe_scene
-  - mcp__excalidraw__get_canvas_screenshot
-  - mcp__excalidraw__snapshot_scene
-  - mcp__excalidraw__restore_snapshot
-  - mcp__excalidraw__export_scene
-  - mcp__excalidraw__export_to_excalidraw_url
-  - mcp__excalidraw__read_diagram_guide
-  - mcp__excalidraw__query_elements
-  - mcp__excalidraw__update_element
-  - mcp__excalidraw__delete_element
+allowed-tools: Read, Write, Bash, Glob, Grep, mcp__excalidraw__clear_canvas, mcp__excalidraw__create_element, mcp__excalidraw__batch_create_elements, mcp__excalidraw__group_elements, mcp__excalidraw__describe_scene, mcp__excalidraw__get_canvas_screenshot, mcp__excalidraw__snapshot_scene, mcp__excalidraw__restore_snapshot, mcp__excalidraw__export_scene, mcp__excalidraw__export_to_excalidraw_url, mcp__excalidraw__read_diagram_guide, mcp__excalidraw__query_elements, mcp__excalidraw__update_element, mcp__excalidraw__delete_element
 ---
 
 # Render Big Block — Solution Architecture Diagram (v1.0)

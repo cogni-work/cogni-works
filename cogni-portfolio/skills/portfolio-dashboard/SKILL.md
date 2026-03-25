@@ -5,6 +5,7 @@ description: |
   Use whenever the user mentions dashboard, portfolio dashboard, portfolio view,
   "show me the portfolio", "visualize portfolio", status overview, or wants to
   see all portfolio data in a browser — even if they don't say "dashboard".
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Skill
 ---
 
 # Portfolio Dashboard

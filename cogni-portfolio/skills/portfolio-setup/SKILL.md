@@ -5,6 +5,7 @@ description: |
   Use whenever the user mentions creating a portfolio, new portfolio project, setting up
   portfolio, "start portfolio planning", "new company", "new project", or wants to begin
   structuring their product/market messaging — even if they don't say "setup" explicitly.
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Agent, Skill
 ---
 
 # Portfolio Project Setup

@@ -6,6 +6,7 @@ description: |
   "why pay", investment ballpark, proof of value, PoV, implementation complexity, project scope,
   reprice, adjust pricing, competitive pricing, or wants to attach commercial terms to a
   proposition — even without saying "solution".
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Agent
 ---
 
 # Solution Consulting

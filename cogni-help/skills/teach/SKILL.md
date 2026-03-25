@@ -10,6 +10,7 @@ description: >-
   or training. Also trigger when someone asks "what can I do with these plugins" or
   "where do I start" in a insight-wave workspace — they likely need guided learning.
 version: 0.2.0
+allowed-tools: Read, Write, Edit, Glob, Grep, AskUserQuestion
 ---
 
 # cogni-help: Interactive Course Delivery

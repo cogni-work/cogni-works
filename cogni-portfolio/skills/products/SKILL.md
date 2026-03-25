@@ -6,6 +6,7 @@ description: |
   "what do we sell", product portfolio, product definition, pricing tiers,
   lifecycle stages, or wants to organize capabilities into named offerings
   — even if they don't say "product" explicitly.
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Agent
 ---
 
 # Product Portfolio Consulting

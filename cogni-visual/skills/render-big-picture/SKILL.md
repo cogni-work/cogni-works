@@ -20,32 +20,7 @@ description: >-
   4 zone-reviewers. Dark/light color mode auto-detected. Optional composition sketch via
   Excalidraw MCP.
 version: 4.2.0
-allowed-tools:
-  - Read
-  - Write
-  - Bash
-  - Glob
-  - Grep
-  - Agent
-  - TodoWrite
-  - mcp__excalidraw__clear_canvas
-  - mcp__excalidraw__create_element
-  - mcp__excalidraw__batch_create_elements
-  - mcp__excalidraw__group_elements
-  - mcp__excalidraw__describe_scene
-  - mcp__excalidraw__get_canvas_screenshot
-  - mcp__excalidraw__snapshot_scene
-  - mcp__excalidraw__restore_snapshot
-  - mcp__excalidraw__export_scene
-  - mcp__excalidraw__export_to_excalidraw_url
-  - mcp__excalidraw__read_diagram_guide
-  - mcp__excalidraw__query_elements
-  - mcp__excalidraw__update_element
-  - mcp__excalidraw__delete_element
-  - mcp__excalidraw__get_element
-  - mcp__excalidraw__import_scene
-  - mcp__excalidraw_sketch__read_me
-  - mcp__excalidraw_sketch__create_view
+allowed-tools: Read, Write, Bash, Glob, Grep, Agent, TodoWrite, mcp__excalidraw__clear_canvas, mcp__excalidraw__create_element, mcp__excalidraw__batch_create_elements, mcp__excalidraw__group_elements, mcp__excalidraw__describe_scene, mcp__excalidraw__get_canvas_screenshot, mcp__excalidraw__snapshot_scene, mcp__excalidraw__restore_snapshot, mcp__excalidraw__export_scene, mcp__excalidraw__export_to_excalidraw_url, mcp__excalidraw__read_diagram_guide, mcp__excalidraw__query_elements, mcp__excalidraw__update_element, mcp__excalidraw__delete_element, mcp__excalidraw__get_element, mcp__excalidraw__import_scene, mcp__excalidraw_sketch__read_me, mcp__excalidraw_sketch__create_view
 ---
 
 # Render Big Picture — Orchestrator Skill (v4.2)

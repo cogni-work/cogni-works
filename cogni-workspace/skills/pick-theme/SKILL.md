@@ -13,6 +13,7 @@ description: >-
   This is the single standard entry point for theme selection across both
   insight-wave and insight-wave-pro marketplaces.
 version: 0.1.0
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion
 ---
 
 # Pick Theme

@@ -8,6 +8,7 @@ description: >-
   workspace initialization. Also trigger when someone runs a fresh plugin
   install and needs the shared foundation that plugins depend on.
 version: 0.2.0
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion
 ---
 
 # Init Workspace

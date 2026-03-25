@@ -10,6 +10,7 @@ description: |
   Also trigger when the user wants to populate a portfolio project from public web data
   rather than from uploaded documents (that's the ingest skill). Requires an existing
   cogni-portfolio project (run setup first).
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Agent, AskUserQuestion, Task
 ---
 
 # Portfolio Scan

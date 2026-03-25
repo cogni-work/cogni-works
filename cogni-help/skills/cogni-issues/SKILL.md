@@ -14,6 +14,7 @@ description: |
   "something is wrong with {plugin}", "das Plugin funktioniert nicht", "Fehler in {plugin}",
   "set up GitHub issues", "configure issue filing", "ich kann kein Issue erstellen",
   or any complaint/suggestion about a specific plugin — even if they don't use the word "issue".
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion
 ---
 
 # Cogni Issues

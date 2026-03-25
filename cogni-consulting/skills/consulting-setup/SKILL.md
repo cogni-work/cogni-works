@@ -10,6 +10,7 @@ description: |
   "scope a new piece of work", "new consulting project", or any mention of starting structured
   problem-to-solution work for a client. Also trigger when the user describes a client situation
   that implies a new engagement is needed (e.g., "Telekom wants us to look at their cloud strategy").
+allowed-tools: Read, Write, Edit, Bash, Glob, Grep, Skill
 ---
 
 # Diamond Engagement Setup

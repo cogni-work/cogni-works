@@ -12,6 +12,7 @@ description: |
   "let's pick the winner", "finalize options", "validate and deliver",
   or any request to move from options to decisions. Also trigger when the user says
   "I need to present this to the board" or similar — Deliver produces the executive-ready artifacts.
+allowed-tools: Read, Write, Edit, Bash, Glob, Grep, Skill, Task
 ---
 
 # Diamond Deliver — Converge on Outcomes

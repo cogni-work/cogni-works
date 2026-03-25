@@ -6,6 +6,7 @@ description: |
   competitors, competitive analysis, "who else does this", SWOT, win/loss,
   how a proposition stacks up, or wants to understand competitive positioning
   in a market — even if they don't say "compete" explicitly.
+allowed-tools: Read, Write, Edit, Glob, Grep, Agent
 ---
 
 # Competitive Analysis

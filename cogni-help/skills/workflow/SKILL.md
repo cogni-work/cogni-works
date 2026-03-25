@@ -8,9 +8,7 @@ description: >-
   guidance on chaining multiple insight-wave plugins. Also trigger when a user describes
   a multi-step task that spans plugins — even if they don't say "workflow" explicitly.
 version: 0.1.0
-allowed-tools:
-  - Read
-  - Glob
+allowed-tools: Read, Glob
 ---
 
 # workflow: Cross-Plugin Pipeline Templates

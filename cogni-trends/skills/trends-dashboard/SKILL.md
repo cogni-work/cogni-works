@@ -7,6 +7,7 @@ description: |
   or wants to see all trend scouting data in a browser — even if they don't say "dashboard".
   Also trigger at the end of heavy TIPS sessions (after trend-report, value-modeler, or
   catalog import) as a capstone visualization.
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion, Skill
 ---
 
 # TIPS Dashboard

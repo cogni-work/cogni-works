@@ -6,6 +6,7 @@ description: |
   "pick up where I left off", "portfolio status", "what's next", "show progress",
   "where was I", "how far along", or opens a session that involves an existing
   cogni-portfolio project — even if they don't say "resume" explicitly.
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 ---
 
 # Portfolio Resume

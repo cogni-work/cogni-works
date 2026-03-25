@@ -2,6 +2,7 @@
 name: trend-scout
 description: |
   Interactive trend scouting workflow with industry selection, bilingual support (DE/EN), and deeper-research integration. Scouts trends across 4 dimensions (each trend gets full TIPS expansion). Creates research projects with 60 industry-contextualized trend candidates that are directly finalized for deeper-research-0. Use when: (1) Starting smarter-service research with industry context, (2) User wants to scout trends for a specific industry and subsector, (3) User mentions "trend scouting", "industry trends", "trend scout", (4) Preparing input configuration for deeper-research-0.
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash, WebSearch, Task, AskUserQuestion, TodoWrite
 ---
 
 # Trend Scout

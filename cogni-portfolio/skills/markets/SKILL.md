@@ -6,6 +6,7 @@ description: |
   market sizing, "which markets to enter", market selection, addressable market,
   segmentation, or wants to define who they're selling to — even if they don't
   say "market" explicitly.
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Agent
 ---
 
 # Market Strategy Consulting

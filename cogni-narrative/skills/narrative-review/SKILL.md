@@ -1,6 +1,7 @@
 ---
 name: narrative-review
 description: "Score and review existing narrative files against story arc quality gates. This skill should be used when the user asks to 'review a narrative', 'score a narrative', 'check narrative quality', 'validate narrative', 'audit narrative', 'grade a narrative', 'evaluate narrative quality', 'narrative scorecard', 'rate my narrative', 'run quality gates on a narrative', or when the narrative-reviewer agent evaluates a generated narrative."
+allowed-tools: Read, Write, Edit, Glob, Grep
 ---
 
 # Narrative Review

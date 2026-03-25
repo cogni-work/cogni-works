@@ -12,6 +12,7 @@ description: |
   or any request for broad research within an active engagement. Also trigger when the user asks
   about a specific research method (desk research, stakeholder mapping, data audit, customer journey)
   in the context of an ongoing engagement.
+allowed-tools: Read, Write, Edit, Bash, Glob, Grep, Skill
 ---
 
 # Diamond Discover — Diverge to Understand

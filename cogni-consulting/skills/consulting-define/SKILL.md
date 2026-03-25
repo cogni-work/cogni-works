@@ -11,6 +11,7 @@ description: |
   "define phase", "D1 converge", "assumption check", or any request to move from broad research
   to focused problem framing. Also trigger when the user says something like "I think the real
   problem is..." — they're already doing Define work and this skill should scaffold it.
+allowed-tools: Read, Write, Edit, Bash, Glob, Grep, Skill, Task
 ---
 
 # Diamond Define — Converge on the Challenge

@@ -11,6 +11,7 @@ description: |
   or any request to render engagement content into a specific format.
   Also trigger when the user asks for a single deliverable (e.g., "just the executive summary
   as a PPTX") — this skill handles both full packages and individual deliverable generation.
+allowed-tools: Read, Write, Edit, Glob, Grep, Skill
 ---
 
 # Diamond Export — Generate Deliverables

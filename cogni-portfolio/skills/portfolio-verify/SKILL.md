@@ -6,6 +6,7 @@ description: |
   review deviations, source check, "are these numbers right", "check my sources",
   or wants to validate portfolio data before synthesis — even if they don't say
   "verify" explicitly.
+allowed-tools: Read, Write, Edit, Glob, Grep, Skill
 ---
 
 # Portfolio Claim Verification

@@ -6,6 +6,7 @@ description: |
   combined offering, product bundle, tier design, package pricing, "assemble solutions",
   or wants to group feature-level solutions into market-ready offerings —
   even without saying "package".
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 ---
 
 # Package Design

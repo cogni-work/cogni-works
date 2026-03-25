@@ -1,6 +1,7 @@
 ---
 name: workspace-status
 description: "Diagnose and report on the health of a insight-wave workspace. Use this skill whenever the user mentions workspace status, health, diagnostics, or troubleshooting — including check workspace, is my workspace ok, something broke, why isn't my plugin working, diagnose workspace, verify workspace, or any situation where understanding the workspace state would help resolve a problem. Even if the user doesn't explicitly say status, trigger this skill when they describe symptoms that suggest a misconfigured workspace (missing env vars, plugins not found, themes not loading). This is the first skill to reach for when debugging workspace issues."
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 ---
 
 # Workspace Status

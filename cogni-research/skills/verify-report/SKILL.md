@@ -9,6 +9,7 @@ description: |
   "check the citations", or wants to re-verify a report after editing.
   Also use when the user says "verify" after a research-report run completes,
   or when research-report's Phase 6 summary recommends running verify-report.
+allowed-tools: Read, Write, Edit, Glob, Grep, Task, Skill, AskUserQuestion
 ---
 
 # Verify Report Skill

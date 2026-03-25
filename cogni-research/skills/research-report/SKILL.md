@@ -12,6 +12,7 @@ description: |
   or requests comprehensive topic analysis with citations.
   Also use when the user wants to "resume research", "continue research report", "pick up the research",
   "finish the report", "what happened to my report", or resume an interrupted research run.
+allowed-tools: Read, Write, Edit, Bash, Glob, Grep, WebSearch, Task, Skill, AskUserQuestion
 ---
 
 # Research Report Skill

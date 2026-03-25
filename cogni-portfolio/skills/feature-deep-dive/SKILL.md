@@ -13,6 +13,7 @@ description: |
   "explore documents about feature X", "read this document and improve feature X",
   "Differenzierung schärfen für X", "Wettbewerbsanalyse für Feature X" —
   even if they don't say "deep dive" explicitly.
+allowed-tools: Read, Write, Edit, Glob, Grep, Agent
 ---
 
 # Feature Deep Dive

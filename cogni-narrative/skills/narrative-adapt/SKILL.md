@@ -1,6 +1,7 @@
 ---
 name: narrative-adapt
 description: "Transform existing narratives into derivative formats: executive briefs, talking points, and one-pagers. This skill should be used when the user asks to 'adapt a narrative', 'create executive brief', 'generate talking points', 'make a one-pager', 'shorten narrative', 'condense narrative', 'summarize the narrative', 'narrative to bullets', 'convert narrative to brief', 'prepare briefing notes', or when other plugins need derivative formats from a full narrative. Also trigger when the user wants to 'email this narrative', 'prepare for a meeting', 'print-friendly version', 'quick version', or any request to make an existing narrative shorter or more digestible for a specific audience -- even if they don't use the word 'adapt'."
+allowed-tools: Read, Write, Edit, Glob, Grep
 ---
 
 # Narrative Adapt

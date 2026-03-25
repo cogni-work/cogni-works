@@ -8,6 +8,7 @@ description: >-
   asks about integrating a terminal into Obsidian or launching Claude Code from within Obsidian,
   even if they don't explicitly say "setup".
 version: 1.1.0
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 ---
 
 ## Purpose

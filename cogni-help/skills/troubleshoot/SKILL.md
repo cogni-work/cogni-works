@@ -9,11 +9,7 @@ description: >-
   user encounters unclear errors during plugin use — even if they don't explicitly
   ask for troubleshooting.
 version: 0.1.0
-allowed-tools:
-  - Read
-  - Bash
-  - Glob
-  - Grep
+allowed-tools: Read, Bash, Glob, Grep
 ---
 
 # troubleshoot: Plugin Diagnostics

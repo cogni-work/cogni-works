@@ -7,6 +7,7 @@ description: >-
   needs to produce output files that should be discoverable in Obsidian — the frontmatter standard
   ensures consistent metadata across all plugin outputs.
 version: 1.1.0
+allowed-tools: Read, Write, Edit, Glob, Grep
 ---
 
 ## Purpose

@@ -10,6 +10,7 @@ description: |
   against sources, checking citations, finding outdated or mismatched data in cited references,
   reviewing what's been flagged, checking for stale sources, outdated data in references,
   or asking "which claims need attention" or "what did verification find", this skill handles it.
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Agent, AskUserQuestion
 ---
 
 # Claims Verification Orchestrator

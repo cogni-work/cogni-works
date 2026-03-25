@@ -15,6 +15,7 @@ description: >-
   "make it match our brand", "use our company colors", or "grab the style from
   that site", this skill applies.
 version: 0.2.0
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash, WebSearch, Skill
 ---
 
 # Manage Themes

@@ -9,9 +9,7 @@ description: >-
   or tool selection. Also trigger when a user seems lost or unsure which plugin to use
   for a specific task — even if they don't explicitly ask for guidance.
 version: 0.1.0
-allowed-tools:
-  - Read
-  - Glob
+allowed-tools: Read, Glob
 ---
 
 # guide: Plugin & Skill Discovery

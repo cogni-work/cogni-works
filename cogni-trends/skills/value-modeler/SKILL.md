@@ -8,6 +8,7 @@ description: >
   "re-anchor solutions", "remap blueprints", "rebuild portfolio mapping", "re-anchor STs",
   or wants to go from trend insights to actionable, ranked solution recommendations.
   Also trigger when the user has completed a trend-scout project and asks "what's next" or "now what".
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Task, AskUserQuestion
 ---
 
 # Value Modeler

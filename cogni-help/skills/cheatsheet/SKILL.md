@@ -8,10 +8,7 @@ description: >-
   a full course. Also trigger when a user needs a refresher on a plugin they've used
   before but can't remember the exact commands or concepts.
 version: 0.1.0
-allowed-tools:
-  - Read
-  - Glob
-  - Grep
+allowed-tools: Read, Glob, Grep
 ---
 
 # cheatsheet: Quick Reference Cards

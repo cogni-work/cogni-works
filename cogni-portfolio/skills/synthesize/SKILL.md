@@ -6,6 +6,7 @@ description: |
   aggregate portfolio, portfolio summary, "put it all together", "compile portfolio",
   or wants a single document covering all products, markets, and propositions —
   even if they don't say "synthesize" explicitly.
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 ---
 
 # Portfolio Synthesis

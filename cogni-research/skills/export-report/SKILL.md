@@ -6,6 +6,7 @@ description: |
   Use when the user asks to "export report", "save as HTML", "export to PDF", "export to Word",
   "export to DOCX", "publish report", "convert report", "download report", "share the report",
   "make it pretty", or wants the research output in a specific format for sharing or presentation.
+allowed-tools: Read, Write, Edit, Bash, Glob, Grep, Skill
 ---
 
 # Export Report Skill

@@ -6,6 +6,7 @@ description: |
   "I have some files", "parse these docs", "use these docs as input", "internal documents",
   "background material", "here's our strategy deck", processing uploads, or wants to
   populate their portfolio from existing material — even if they don't say "ingest".
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Skill
 ---
 
 # Upload Ingestion

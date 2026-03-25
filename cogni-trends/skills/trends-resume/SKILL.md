@@ -7,6 +7,7 @@ description: |
   "resume trend project", "check scan progress", "trend status",
   or opens a session that involves an existing cogni-trends project —
   even if they don't say "resume" explicitly.
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion
 ---
 
 # TIPS Resume

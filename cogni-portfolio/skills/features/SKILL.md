@@ -6,6 +6,7 @@ description: |
   "what does it do", feature extraction, feature inventory, or wants to
   break a product into its component capabilities — even if they don't
   say "feature" explicitly.
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Agent
 ---
 
 # Feature Consulting

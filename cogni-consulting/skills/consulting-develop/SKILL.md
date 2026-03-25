@@ -11,6 +11,7 @@ description: |
   "let's get creative", "value modeling", "solution space", or any request to generate solution
   options after a problem has been defined. Also trigger when the user proposes a specific solution —
   this skill ensures it's evaluated alongside alternatives rather than adopted uncritically.
+allowed-tools: Read, Write, Edit, Bash, Glob, Grep, Skill, Task
 ---
 
 # Diamond Develop — Diverge to Create Options

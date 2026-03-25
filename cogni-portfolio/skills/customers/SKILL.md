@@ -6,6 +6,7 @@ description: |
   buying center, target customer, "who buys this", decision-makers,
   buying committee, purchase journey, or wants to understand the people
   behind a market — even if they don't say "customer" explicitly.
+allowed-tools: Read, Write, Edit, Glob, Grep, Agent
 ---
 
 # Customer Profiling

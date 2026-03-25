@@ -9,6 +9,7 @@ description: >
   user has completed value-modeler ranking and asks "how does this connect to my portfolio" or
   "what features should I add based on the trends". Trigger on "bridge status", "is my portfolio
   ready for tips", "check bridge readiness", or "can I bridge yet" for the pre-flight check.
+allowed-tools: Read, Write, Edit, Glob, Grep, Agent
 ---
 
 # TIPS-Portfolio Bridge

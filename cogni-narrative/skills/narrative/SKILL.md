@@ -1,6 +1,7 @@
 ---
 name: narrative
 description: "Transform structured content into compelling executive narratives using story arc frameworks. Use this skill whenever the user asks to create a narrative, write a narrative, transform content into a story arc, apply a specific arc framework (corporate visions, technology futures, competitive intelligence, strategic foresight, industry transformation, trend panorama), generate an insight summary, or summarize research findings as a narrative. Also trigger when other plugins need arc-driven narrative generation, when the user mentions TIPS trend narratives, or when they have research output they want turned into an executive-readable story. Even if the user just says 'make this readable for executives' or 'turn these findings into something presentable,' this skill is the right choice."
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion
 ---
 
 # Narrative Transformation

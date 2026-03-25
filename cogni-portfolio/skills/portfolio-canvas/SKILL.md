@@ -7,6 +7,7 @@ description: |
   or wants to populate their portfolio from a structured business hypothesis document —
   even if they don't say "canvas" explicitly. Also trigger when the user has a markdown
   file with numbered sections like Problem, Customer Segments, Solution, Revenue Streams.
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 ---
 
 # Canvas-to-Portfolio Bootstrap

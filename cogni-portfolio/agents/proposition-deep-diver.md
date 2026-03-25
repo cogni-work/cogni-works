@@ -58,7 +58,7 @@ You will receive via the task prompt:
 - **Company context**: company name, domain/website URL, regional_url, language, industry
 - **Product context**: product name, product description, pricing_tier
 - **Existing competitor intelligence**: summary of competitor data for this proposition (if any)
-- **Existing customer intelligence**: summary of buyer personas for this market (if any)
+- **Existing customer intelligence**: summary of buyer personas for this market (if any) — includes pain points, buying criteria, and the buyer's relationship to this capability (practitioner/consumer/enabler)
 - **Feature deep-dive findings**: summary from prior feature deep-dive (differentiation vectors, buyer perception) — if available
 - **User context**: what the user said about weaknesses, buyer objections, internal evidence, status-quo accuracy
 - **Project directory path**: where to write the research report
@@ -322,6 +322,7 @@ Write the full research report to `research/deep-dive-{feature-slug}--{market-sl
   "does_assessment": {
     "current_statement": "Current DOES text",
     "buyer_centricity": "high|medium|low",
+    "buyer_perspective": "high|medium|low",
     "market_specificity": "high|medium|low",
     "differentiation": "high|medium|low",
     "status_quo_contrast": "high|medium|low",

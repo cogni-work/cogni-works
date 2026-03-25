@@ -128,6 +128,12 @@ Note: the agent receives both `language` (portfolio-level) and the market JSON (
 - `"{company}" {product-name} case study {market-keywords}`
 - `"{company}" {product-name} customer testimonial`
 
+**buyer_perspective** (wrong buyer relationship — e.g., treating a self-service buyer as a professional practitioner):
+- `"{company}" {product-name} {market-vertical} use case` — how the company positions this for the specific buyer type
+- `"{company}" {product-name} {market-vertical} customer story` — real examples showing how THIS buyer type uses the capability
+- `{market-vertical} {feature-keywords} self-service OR professional OR reseller` — clarify buyer archetype
+- Also read `customers/{market-slug}.json` (if it exists) for buyer personas and their relationship to this capability. If customer profiles describe the buyer as a consumer (needs the outcome but doesn't have internal capability), the DOES must frame self-service empowerment, not professional acceleration. If profiles describe a practitioner, frame acceleration/amplification.
+
 **market_specificity** (generic, passes market-swap test):
 - `"{company}" {product-name} {market-vertical} use case`
 - `"{company}" {market-vertical} pain points solved`
@@ -260,7 +266,7 @@ Return ONLY valid JSON (no markdown fencing, no explanation before or after):
 
 1. Read the entity JSON and quality assessment from the task prompt
 2. Read `portfolio.json` for company context (name, domain, language)
-3. For propositions, also read `features/{feature_slug}.json` and `markets/{market_slug}.json`
+3. For propositions, also read `features/{feature_slug}.json`, `markets/{market_slug}.json`, and `customers/{market_slug}.json` (if exists — buyer personas with pain points and buying criteria)
 4. Construct search queries in the output language (primary pass, regional domain) and English (backup pass, main domain) based on failing dimensions
 5. Execute WebSearch queries in parallel (batch 5-10)
 6. Synthesize findings and draft improved text (or formulate questions if low confidence)
@@ -300,7 +306,7 @@ Your rewrites must pass the same quality gates that flagged the original. Before
 
 - Feature descriptions: 20-35 words (count with `.split()`), mechanism-focused, no outcome verbs
   (reduces, enables, ensures), no parity adjectives (robust, innovative, cutting-edge)
-- Proposition DOES: 15-30 words, buyer-centric framing, market-specific, differentiated
-- Proposition MEANS: 15-30 words, measurable outcome, escalates beyond DOES, quantified if evidence exists
+- Proposition DOES: 15-30 words, buyer-centric framing, perspective-correct (practitioner/consumer/enabler), market-specific, differentiated
+- Proposition MEANS: 15-30 words, measurable outcome, escalates beyond DOES, quantified if evidence exists, aligned with buyer's buying criteria when customer profiles exist
 
 A rewrite that introduces new quality issues is worse than no rewrite at all.

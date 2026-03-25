@@ -859,6 +859,15 @@ body::after {{
 }}
 .matrix tbody tr {{ transition: background 0.2s; }}
 .matrix tbody tr:hover .feature-label {{ color: var(--accent-dark); }}
+.matrix .product-row td {{
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--text);
+  background: color-mix(in srgb, var(--accent-dark) 8%, var(--surface));
+  border-bottom: 2px solid var(--border);
+  padding: 8px 12px;
+  letter-spacing: 0.02em;
+}}
 
 /* Market cards */
 .market-cards {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }}
@@ -1865,24 +1874,47 @@ body::after {{
             html += f'        <th title="{escape_html(m.get("name", ms))}">{escape_html(ms)}</th>\n'
         html += "      </tr></thead>\n      <tbody>\n"
 
+        # Group features by product
+        num_cols = len(market_slugs) + 1
+        product_groups = {}  # product_slug -> [feature_slugs]
+        orphan_features = []
         for fs in feature_slugs:
-            f = data["features"][fs]
-            html += f'      <tr><td class="feature-label" title="{escape_html(f.get("description", ""))}">{escape_html(f.get("name", fs))}</td>\n'
-            for ms in market_slugs:
-                pair = f"{fs}--{ms}"
-                has_prop = pair in data["propositions"]
-                has_sol = pair in data["solutions"]
-                if has_prop and has_sol:
-                    cls = "full"
-                    icon = "&#10003;"
-                elif has_prop:
-                    cls = "partial"
-                    icon = "&#9679;"
-                else:
-                    cls = "missing"
-                    icon = "&#10005;"
-                html += f'        <td><button class="cell {cls}" onclick="openProposition(\'{escape_js_string(pair)}\')" title="{escape_html(pair)}">{icon}</button></td>\n'
-            html += "      </tr>\n"
+            ps = data["features"][fs].get("product_slug", "")
+            if ps and ps in data["products"]:
+                product_groups.setdefault(ps, []).append(fs)
+            else:
+                orphan_features.append(fs)
+
+        def _emit_feature_rows(feat_slugs):
+            nonlocal html
+            for fs in feat_slugs:
+                f = data["features"][fs]
+                html += f'      <tr><td class="feature-label" title="{escape_html(f.get("description", ""))}">{escape_html(f.get("name", fs))}</td>\n'
+                for ms in market_slugs:
+                    pair = f"{fs}--{ms}"
+                    has_prop = pair in data["propositions"]
+                    has_sol = pair in data["solutions"]
+                    if has_prop and has_sol:
+                        cls = "full"
+                        icon = "&#10003;"
+                    elif has_prop:
+                        cls = "partial"
+                        icon = "&#9679;"
+                    else:
+                        cls = "missing"
+                        icon = "&#10005;"
+                    html += f'        <td><button class="cell {cls}" onclick="openProposition(\'{escape_js_string(pair)}\')" title="{escape_html(pair)}">{icon}</button></td>\n'
+                html += "      </tr>\n"
+
+        for ps in sorted(product_groups.keys()):
+            pname = escape_html(data["products"][ps].get("name", ps))
+            html += f'      <tr class="product-row"><td colspan="{num_cols}">{pname}</td></tr>\n'
+            _emit_feature_rows(product_groups[ps])
+
+        if orphan_features:
+            if product_groups:
+                html += f'      <tr class="product-row"><td colspan="{num_cols}">Other</td></tr>\n'
+            _emit_feature_rows(orphan_features)
         html += "      </tbody>\n    </table>\n  </div>\n"
         html += '  <div class="matrix-legend">'
         html += '<span><span class="legend-dot" style="background:var(--green)"></span> Proposition + Solution</span>'

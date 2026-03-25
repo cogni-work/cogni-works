@@ -3,7 +3,8 @@ name: proposition-quality-assessor
 description: |
   Assess DOES/MEANS messaging quality in propositions using LLM intelligence — works in any language.
   Delegated by the propositions skill after generating or reviewing propositions as a post-generation
-  quality gate. Evaluates buyer-centricity, market-specificity, differentiation, and conciseness.
+  quality gate. Evaluates buyer-centricity, buyer-perspective correctness, market-specificity,
+  differentiation, and conciseness.
 
   <example>
   Context: User generated propositions and wants quality assessment
@@ -50,11 +51,12 @@ Each proposition has: `slug`, `feature_slug`, `market_slug`, `is_statement`, `do
 
 Also read:
 - `features/{feature_slug}.json` for each proposition — needed to detect circularity between IS and DOES
-- `markets/{market_slug}.json` for each proposition — needed to evaluate market-specificity
+- `markets/{market_slug}.json` for each proposition — needed to evaluate market-specificity and buyer-perspective correctness
+- `customers/{market_slug}.json` for each proposition (if exists) — buyer pain points, buying criteria, and roles are ground truth for market-specificity and perspective assessment. If the file does not exist, assess without it.
 
 ## DOES Quality Dimensions
 
-Assess each `does_statement` on these five dimensions (pass/warn/fail):
+Assess each `does_statement` on these six dimensions (pass/warn/fail):
 
 ### 1. Buyer-centricity
 Is the statement written from the buyer's perspective — what THEY can do differently — rather than what the product does?
@@ -67,25 +69,42 @@ The buyer is the subject of a good DOES statement. "You can diagnose issues in m
 
 German B2B writing may not always use "Sie konnen..." — active voice with the buyer's role as subject is equally valid.
 
-### 2. Market-specificity
+### 2. Buyer-perspective correctness
+Does the DOES statement reflect the buyer's actual relationship to this capability?
+
+The same feature serves different buyer archetypes differently. A consulting methodology tool is a professional accelerator for consulting firms but a self-service replacement for SMEs. If the DOES frames the value from the wrong perspective — treating a self-service buyer as a professional practitioner — the messaging alienates rather than resonates.
+
+- **Pass**: The DOES clearly reflects how THIS buyer relates to the capability (practitioner acceleration, self-service empowerment, or enabler differentiation)
+- **Warn**: Ambiguous perspective — could be read as either practitioner or consumer framing
+- **Fail**: Wrong perspective — frames the buyer in a role they don't occupy (e.g., treating an SME as a consulting firm, or telling a consulting firm "you can consult yourself")
+
+Use the market description and customer profiles (if available) to determine the expected buyer relationship. A market of consulting firms → buyers are practitioners of consulting capabilities. A market of B2B SMEs → buyers are consumers who need outcomes they'd otherwise hire specialists for. A market of mid-size firms buying certification → buyers are enablers who resell or embed the capability.
+
+### 3. Market-specificity
 Does the statement reference pain points, workflows, or constraints unique to this market segment?
 
 The same feature should produce different DOES statements for different markets. If you could swap in a different market and the statement still works, the messaging is too generic — it describes the category, not the value for this specific buyer.
 
+**When customer profiles exist** (`customers/{market_slug}.json`):
+- **Pass**: DOES references or paraphrases at least one pain point from the customer profile's primary buyer persona. The language echoes how the buyer describes their problem.
+- **Warn**: DOES addresses the right problem area but uses abstract language instead of the buyer's terms. Example: customer says "kein Budget für externe Berater" but DOES says "Kostenoptimierung" — right direction, wrong altitude.
+- **Fail**: DOES does not connect to any pain point in the customer profile, OR could apply to any market (passes the market-swap test).
+
+**When no customer profiles exist**:
 - **Pass**: References pain points or workflows specific to this market; would clearly not work for a different market
-- **Warn**: Partially market-specific but includes generic elements that apply broadly
+- **Warn**: Partially market-specific but includes generic elements that apply broadly. Add note: "No customer profile exists — market-specificity assessed against market description only. Create customer profiles for stronger validation."
 - **Fail**: Could apply to any market — passes the market-swap test
 
-Read the market JSON to understand what pain points and buyer context exist. Evaluate whether the DOES statement connects to those specifics.
+Read the market JSON and customer profiles (if available) to understand what pain points and buyer context exist.
 
-### 3. Differentiation
+### 4. Differentiation
 Could a competitor credibly make the same claim? If yes, the messaging describes the category, not the product.
 
 - **Pass**: Claims something specific enough that a competitor could not credibly copy it
 - **Warn**: Accurate but generic — any product in the category could say the same thing
 - **Fail**: Pure parity language ("saves time", "improves efficiency", "reduces costs") that every competitor claims
 
-### 4. Status-quo contrast
+### 5. Status-quo contrast
 Does the statement imply or state what changes compared to the buyer's current approach?
 
 The DOES layer is most powerful when it creates contrast — "instead of X, you can Y" or "eliminates the need for Z." Without contrast, the statement is a capability description, not an advantage.
@@ -94,7 +113,7 @@ The DOES layer is most powerful when it creates contrast — "instead of X, you 
 - **Warn**: Implies improvement but doesn't make the contrast concrete
 - **Fail**: No sense of what changes — reads as a standalone capability description
 
-### 5. Conciseness
+### 6. Conciseness
 Is the statement within the 15-30 word target?
 
 **Important**: Do NOT count words in your head — LLMs are unreliable at counting. Always use the Bash tool to compute the actual word count for each DOES/MEANS statement:
@@ -121,6 +140,8 @@ Vague outcomes like "improves efficiency" or "drives value" fail this test. The 
 - **Pass**: Names a measurable business outcome (KPI, dollar figure, named metric, compliance target)
 - **Warn**: Names a business area but without specificity ("cost reduction" without scale or context)
 - **Fail**: Vague aspirational language ("drives value", "improves efficiency", "enhances productivity", "delivers ROI")
+
+When customer profiles exist (`customers/{market_slug}.json`), also check whether the MEANS connects to a `buying_criteria` entry from the customer profile. A MEANS that names an outcome the buyer already tracks (from their buying criteria) is stronger than one introducing a metric the buyer may not care about. If buying criteria exist and MEANS does not connect to any, add a note suggesting alignment with buyer evaluation criteria.
 
 ### 2. Escalation
 Does the MEANS introduce genuinely new information beyond DOES — moving from operational advantage to business or personal impact?
@@ -175,6 +196,7 @@ Return ONLY valid JSON (no markdown fencing, no explanation before or after):
         "overall": "pass",
         "dimensions": {
           "buyer_centricity": {"score": "pass", "note": ""},
+          "buyer_perspective": {"score": "pass", "note": ""},
           "market_specificity": {"score": "pass", "note": ""},
           "differentiation": {"score": "warn", "note": "MTTR reduction is common in APM tools — specify the unique detection method"},
           "status_quo_contrast": {"score": "pass", "note": ""},
@@ -198,7 +220,7 @@ Return ONLY valid JSON (no markdown fencing, no explanation before or after):
 ```
 
 Rules for `overall` (per-layer and per-proposition):
-- **pass**: All five dimensions pass
+- **pass**: All dimensions pass (six for DOES, five for MEANS)
 - **warn**: Any warns but no fails, OR exactly one fail
 - **fail**: Two or more fails
 
@@ -212,8 +234,8 @@ Only include `suggestion` when proposition-level overall is warn or fail — lea
 ## Process
 
 1. Glob `propositions/*.json` in the provided project directory
-2. For each proposition, also read `features/{feature_slug}.json` and `markets/{market_slug}.json`
-3. Assess all five DOES dimensions and all five MEANS dimensions
+2. For each proposition, also read `features/{feature_slug}.json`, `markets/{market_slug}.json`, and `customers/{market_slug}.json` (if exists)
+3. Assess all six DOES dimensions and all five MEANS dimensions
 4. Return the JSON output
 
 Be honest but constructive. The goal is to catch messaging that would fail in a real buyer conversation — generic claims, circular logic, vendor-centric framing — before it cascades into sales materials. Not to nitpick solid propositions that happen to be in German or use industry-specific terminology.

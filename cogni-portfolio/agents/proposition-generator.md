@@ -37,16 +37,28 @@ Read these files to build a complete picture before drafting:
 2. **Parent product JSON** at `products/{product_slug}.json` (using `product_slug` from the feature) -- positioning and pricing tier inform tone
 3. **Market JSON** at the path provided in the task -- segmentation and pain points drive DOES/MEANS
 4. **portfolio.json** -- company context and strategic direction
+5. **Customer profiles** at `customers/{market-slug}.json` (using `market_slug` from the task) -- buyer personas with pain points, buying criteria, and decision roles. If this file exists, the primary profile (first in the `profiles` array) provides the buyer language that grounds DOES and MEANS. If the file does not exist, proceed without it -- you will infer buyer perspective from the market description.
 
-5. Check `portfolio.json` for a `language` field. If present, generate all user-facing text content (IS/DOES/MEANS statements, evidence descriptions) in that language. JSON field names and slugs remain in English. If no `language` field is present, default to English.
+6. Check `portfolio.json` for a `language` field. If present, generate all user-facing text content (IS/DOES/MEANS statements, evidence descriptions) in that language. JSON field names and slugs remain in English. If no `language` field is present, default to English.
 
-Then analyze the intersection: what problems does this market segment face that this feature addresses?
+Then determine the buyer's relationship to this feature before drafting:
+
+1. **Who is the buyer?** Use customer profiles (if available) or infer from market description. A CTO at a consulting firm and a Geschäftsführer at a Mittelstand manufacturer have fundamentally different relationships to the same capability.
+
+2. **Is the buyer a practitioner or a consumer of this capability?**
+   - **Practitioner**: The buyer already does this professionally -- the feature makes them faster, better, more consistent. Frame DOES as acceleration/amplification. Example: A consulting firm buying a consulting methodology tool → "Your engagements close 40% faster because AI handles evidence synthesis."
+   - **Consumer**: The buyer needs this outcome but doesn't have the capability internally -- the feature gives them self-service access. Frame DOES as empowerment/independence. Example: An SME buying a consulting methodology tool → "You run structured strategy processes in-house -- from problem diagnosis to validated solution -- without hiring external consultants."
+   - **Enabler**: The buyer resells or embeds this capability for their own clients -- the feature becomes part of their offering. Frame DOES as revenue/differentiation for their business. Example: A mid-size consulting firm buying a certification program → "Your certified consultants deliver AI-augmented engagements that command premium rates."
+
+3. **What language does this buyer use?** Customer profile pain points are phrased in the buyer's own words. Use them. A consultant says "Rework-Schleifen" and "Utilization"; an SME says "wir brauchen eine Strategie aber kein Budget für McKinsey."
+
+This perspective analysis is the single most important step. A proposition that gets the buyer's relationship wrong -- framing a self-service tool as a professional accelerator, or vice versa -- fails regardless of how polished the language is.
 
 ## IS/DOES/MEANS Framework
 
 - **IS** (Feature): Restate the feature description at full length (20-35 words). Do not compress or abbreviate — the IS statement should be at least as long as the original feature description. You may lightly adapt for market context but the statement must remain factual and capability-focused. If the feature description is already 20-35 words, reuse it verbatim or expand slightly with technical specifics. A common failure mode is compressing the feature into 10-15 words — this loses mechanism clarity and fails the word count gate.
-- **DOES** (Advantage): What the feature achieves for THIS specific market, framed from the buyer's perspective. The buyer is always the grammatical subject — write "Sie migrieren..." / "Ihre Teams erkennen..." / "You reduce...", never "unsere Lösung bietet..." / "T-Systems ermöglicht..." / "it provides...". Include a status-quo contrast: what changes versus the buyer's current approach? Quantify where possible. Reference pain points specific to this market segment.
-- **MEANS** (Benefit): The business outcome the buyer would put in a business case or Vorstandsvorlage. Every MEANS statement must contain at least one concrete number, percentage, EUR figure, or named KPI — vague outcomes like "improved efficiency" or "optimierte Prozesse" fail the quantification gate. Connect the operational advantage to commercial impact (revenue protection, cost reduction, compliance risk avoidance, headcount avoidance). Where possible, add a personal/career dimension: what does this mean for the decision-maker's reputation, promotion case, or sleep quality?
+- **DOES** (Advantage): What the feature achieves for THIS specific market, framed from the buyer's perspective. The buyer is always the grammatical subject — write "Sie migrieren..." / "Ihre Teams erkennen..." / "You reduce...", never "unsere Lösung bietet..." / "T-Systems ermöglicht..." / "it provides...". Include a status-quo contrast: what changes versus the buyer's current approach? Quantify where possible. Reference pain points specific to this market segment. The DOES statement must reflect the buyer's relationship to the capability (practitioner vs. consumer vs. enabler). A consulting firm buying Double Diamond tooling gets "Your engagements deliver validated solutions on first pass -- no rework loops." An SME buying the same tooling gets "You run your own structured strategy process -- from problem diagnosis to validated solution -- without hiring external consultants." Same feature, completely different DOES, because the buyer's relationship is different. When customer profiles exist, use the buyer's actual pain-point language -- quote or paraphrase their terms, not your abstractions.
+- **MEANS** (Benefit): The business outcome the buyer would put in a business case or Vorstandsvorlage. Every MEANS statement must contain at least one concrete number, percentage, EUR figure, or named KPI — vague outcomes like "improved efficiency" or "optimierte Prozesse" fail the quantification gate. Connect the operational advantage to commercial impact (revenue protection, cost reduction, compliance risk avoidance, headcount avoidance). Where possible, add a personal/career dimension: what does this mean for the decision-maker's reputation, promotion case, or sleep quality? When customer profiles exist, frame the outcome around the buyer's `buying_criteria` — these are the metrics and thresholds the buyer uses to evaluate purchases. A MEANS that addresses a buying criterion directly is more persuasive than a generic business outcome.
 
 The same feature produces different DOES and MEANS for different markets. If the messaging could apply to any market, it is too generic — sharpen it until it clearly belongs to this specific segment.
 
@@ -120,7 +132,9 @@ Before writing the file, verify each layer against these criteria:
 
 **DOES statement:**
 - Written from the buyer's perspective ("you can...", "teams can...") — not "it provides..." or "our solution enables..."
+- **Perspective-correct**: The DOES reflects the buyer's actual relationship to this capability. A self-service user should not see messaging written for a professional practitioner, and vice versa. An SME buying consulting methodology should read "You consult yourself", not "Your external consultant works faster."
 - References a pain point specific to THIS market segment — would not work if you swapped in a different market
+- **Customer-grounded**: When customer profiles exist, DOES references or paraphrases at least one pain point from the primary buyer profile
 - Includes implicit or explicit contrast with the buyer's current approach (what changes?)
 - Could not be credibly claimed by a competitor — if it could, sharpen around what's unique
 - 15-30 words
@@ -130,11 +144,14 @@ Before writing the file, verify each layer against these criteria:
 - Introduces genuinely new information beyond DOES — not a restatement with an outcome verb prepended
 - Includes or implies quantification (numbers, timeframes, named metrics). Every number must be grounded: either cite a reference customer who achieved it, qualify with "bis zu" and back it with an evidence entry, or use an industry benchmark with source. Ungrounded percentages ("30% Kostenreduktion" without a source) undermine credibility with CFOs and procurement
 - Passes the "so what?" test: a CFO would approve budget for this
+- **Buying-criteria aligned**: When customer profiles exist, MEANS connects to at least one buying criterion from the customer profile
 - Where possible, add a personal/career dimension alongside the business metric — what does this mean for the decision-maker's board credibility, team retention, or risk exposure?
 - 15-30 words
 
 **Cross-check:**
 - DOES and MEANS are clearly different from what you'd write for a different market
+- The buyer perspective (practitioner/consumer/enabler) is consistent between DOES and MEANS
+- If customer profiles exist, DOES uses buyer pain-point language and MEANS addresses buying criteria
 - IS → DOES → MEANS reads as a logical escalation, not circular repetition
 - Evidence array is populated when web research was used
 

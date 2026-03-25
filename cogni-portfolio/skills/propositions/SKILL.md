@@ -154,6 +154,7 @@ $CLAUDE_PLUGIN_ROOT/scripts/validate-entities.sh <project-dir>
    - Stakeholder review verdict and score
    - The relevance matrix from `project-status.sh` — which pairs are High/Medium/Low/Skip
    - Feature readiness summary (how many GA/Beta/Planned, any deferred warnings from the features phase)
+   - Customer profile coverage: which markets have `customers/{market-slug}.json` files (these produce perspective-correct, buyer-grounded propositions) vs. which markets don't (these will use inferred buyer perspective from market descriptions — weaker messaging). For markets without profiles, recommend: "Consider running the `customers` skill first for sharper messaging."
    - Offer: "Before I start generating, would you like to: (a) open the dashboard to review the current portfolio state, (b) see the full feature descriptions that will become the IS layer, or (c) proceed with generation?"
 
    Wait for the user's explicit response. This checkpoint exists because once propositions are generated, the user needs to understand what they're built on. Reviewing features after proposition generation means reviewing backwards — it's much harder to spot a weak IS statement when you're already reading DOES/MEANS messaging built on top of it.
@@ -177,8 +178,8 @@ After generating propositions (single or batch), assess messaging quality:
 
 1. **Structural validation** — `$CLAUDE_PLUGIN_ROOT/scripts/validate-entities.sh <project-dir>` checks DOES/MEANS word counts against the 15-30 word target. Fast, catches obvious bloat or terseness.
 
-2. **Messaging quality assessment** — spawn the `proposition-quality-assessor` agent to evaluate DOES and MEANS across 10 dimensions:
-   - DOES: Buyer-centricity, Market-specificity, Differentiation, Status-quo contrast, Conciseness
+2. **Messaging quality assessment** — spawn the `proposition-quality-assessor` agent to evaluate DOES and MEANS across 11 dimensions:
+   - DOES: Buyer-centricity, Buyer-perspective correctness, Market-specificity, Differentiation, Status-quo contrast, Conciseness
    - MEANS: Outcome specificity, Escalation, Quantification, Emotional resonance, Conciseness
 
 If a proposition has an overall "fail" from the assessor (two or more dimension failures), **flag it for rewrite** before it flows into downstream deliverables. Show the specific dimension failures and suggested rewrites to the user.
@@ -313,7 +314,7 @@ Each evidence entry is an object with `statement` (required), `source_url` (stri
 
 **Single proposition**: Craft one proposition interactively. Read the feature, its parent product, and the market JSON files. Draft IS/DOES/MEANS statements and present them with your reasoning for each choice. Invite the user to push back — "I used 'MTTR reduction' as the DOES anchor because SRE teams in this market track it obsessively. If your buyers are more CIO-level, we might reframe around 'service availability guarantees' instead."
 
-**Batch generation**: For multiple propositions, delegate each to the `proposition-generator` agent. Launch agents in parallel for independent Feature x Market pairs. But first, confirm the priority list with the user — don't generate everything blindly.
+**Batch generation**: For multiple propositions, delegate each to the `proposition-generator` agent. Launch agents in parallel for independent Feature x Market pairs. When delegating, include the customer file path if `customers/{market-slug}.json` exists — the agent reads it for buyer perspective and pain-point language. If no customer file exists for a market, note this in the task so the agent knows to infer buyer perspective from the market description. But first, confirm the priority list with the user — don't generate everything blindly.
 
 **Variant-aware batch generation**: During batch generation, scan existing propositions for `tips_enrichment` metadata. When a proposition has `tips_enrichment` with `st_refs`, offer to generate variants for each referenced ST's value chain. Present these as a separate tier after primary generation:
 
@@ -435,11 +436,12 @@ When the user asks about a specific proposition, show:
 When the user asks to review or improve their propositions (or when you notice issues during other operations), jump straight into the critique:
 
 1. Read all propositions and their source features and markets
-2. **Differentiation audit**: For each proposition, could a competitor credibly make the same claim? Flag any that fail this test.
-3. **Market specificity check**: Swap markets mentally. If the DOES/MEANS work for a different market, the messaging is too generic.
-4. **Evidence gaps**: Propositions making quantitative claims without evidence are vulnerable. Flag them and suggest what evidence to gather.
-5. **Coherence by market**: Read all propositions for a single market together. Do they tell a story? Would a buyer in this market, reading all your propositions, understand your full value? Or do they sound like disconnected bullet points?
-6. **Upstream diagnosis**: Trace weak propositions back to their source. Is the feature description too vague? Is the market definition missing pain points? Flag upstream fixes.
+2. **Buyer-perspective audit**: For each market, check whether all propositions frame the feature from the correct buyer perspective. Is the buyer a practitioner (already does this professionally — feature accelerates them), a consumer (needs this outcome but doesn't have the capability — feature provides self-service access), or an enabler (resells or embeds the capability)? A consulting firm should see practitioner-acceleration messaging; an SME should see self-service-empowerment messaging. Mixed perspectives within a single market signal confused positioning.
+3. **Differentiation audit**: For each proposition, could a competitor credibly make the same claim? Flag any that fail this test.
+4. **Market specificity check**: Swap markets mentally. If the DOES/MEANS work for a different market, the messaging is too generic.
+5. **Evidence gaps**: Propositions making quantitative claims without evidence are vulnerable. Flag them and suggest what evidence to gather.
+6. **Coherence by market**: Read all propositions for a single market together. Do they tell a story? Would a buyer in this market, reading all your propositions, understand your full value? Or do they sound like disconnected bullet points?
+7. **Upstream diagnosis**: Trace weak propositions back to their source. Is the feature description too vague? Is the market definition missing pain points? Are customer profiles missing for this market? Flag upstream fixes.
 
 Present your assessment as a consulting memo — lead with "here's what I'd change and why" backed by specific analysis. Don't list observations and ask "what do you think?" — state your recommended changes and let the user push back.
 

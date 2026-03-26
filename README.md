@@ -22,7 +22,7 @@ You compete with Big 5 firms on complexity — but not on headcount. insight-wav
 
 You see the AI consulting opportunity but need a platform and methodology to deliver it. insight-wave provides the production-ready plugin ecosystem:
 
-- **Open-source core** — 14 plugins covering the full consulting pipeline from research through delivery
+- **Open-source core** — 12 plugins covering the full consulting pipeline from research through delivery
 - **Extensible architecture** — build domain-specific plugins on the same framework
 - **Training built in** — 11-course interactive curriculum to onboard your team and clients
 - **Bilingual** — full DE/EN support across the stack, purpose-built for DACH markets
@@ -45,13 +45,12 @@ You want AI-native workflows for your sales and marketing teams — either self-
 | [cogni-research](./cogni-research) | Multi-agent research report generator. STORM-inspired editorial workflow with parallel web research, claims-verified review loops, and three depth levels (basic, detailed, deep). |
 | [cogni-marketing](./cogni-marketing) | B2B marketing content engine. Bridges TIPS themes and portfolio propositions into channel-ready content across 16 formats — thought leadership, demand gen, lead gen, sales enablement, ABM. Bilingual DE/EN. |
 | [cogni-narrative](./cogni-narrative) | Story arc-driven narrative transformation. Transforms structured content into executive narratives using 6 story arc frameworks and 8 narrative techniques. Bilingual EN/DE. |
-| [cogni-obsidian](./cogni-obsidian) | Obsidian integration for Claude Cowork workplaces. Scaffolds vaults with Terminal plugin, manages terminal profiles across platforms, and provides note management with frontmatter support. |
 | [cogni-portfolio](./cogni-portfolio) | Portfolio messaging and proposition planning using IS/DOES/MEANS framework. Eight industry taxonomies, TAM/SAM/SOM market sizing, competitive analysis, and export-ready deliverables. |
 | [cogni-sales](./cogni-sales) | B2B sales pitch generation using Corporate Visions Why Change methodology. Research-backed presentations and proposals for named customers or market segments. Bilingual DE/EN. |
 | [cogni-help](./cogni-help) | Central help hub — interactive courses (11-course curriculum), plugin discovery, cross-plugin workflow guides, troubleshooting, cheatsheets, and GitHub issue filing. |
 | [cogni-trends](./cogni-trends) | Bridges industry trends to portfolio solutions via value paths using patented TIPS methodology. Bilingual trend scouting, investment theme modeling, evidence-backed CxO reports, and reusable industry catalogs. DACH-focused, EN/DE. |
 | [cogni-visual](./cogni-visual) | Transform polished narratives into visual deliverables — slide decks, big-picture journey maps, Big Block solution architectures, scrollable web narratives, and poster storyboards. |
-| [cogni-workspace](./cogni-workspace) | Lean workspace orchestrator. Manages shared foundation (env vars, settings), theme management, plugin discovery, and workspace health diagnostics. |
+| [cogni-workspace](./cogni-workspace) | Lean workspace orchestrator. Manages shared foundation (env vars, settings), theme management, plugin discovery, workspace health, and Obsidian vault integration. |
 
 See [Cross-Plugin Data Flow](docs/er-diagram.md) for how data flows between plugins.
 
@@ -72,7 +71,6 @@ See [Cross-Plugin Data Flow](docs/er-diagram.md) for how data flows between plug
 /plugin install cogni-research@insight-wave
 /plugin install cogni-marketing@insight-wave
 /plugin install cogni-narrative@insight-wave
-/plugin install cogni-obsidian@insight-wave
 /plugin install cogni-portfolio@insight-wave
 /plugin install cogni-sales@insight-wave
 /plugin install cogni-help@insight-wave
@@ -92,7 +90,7 @@ The workplace combines Claude Cowork with [Obsidian](https://obsidian.md/) for p
 ```
 insight-wave/
 ├── .claude-plugin/
-│   └── marketplace.json                    # Marketplace manifest (14 plugins)
+│   └── marketplace.json                    # Marketplace manifest (12 plugins)
 ├── docs/
 │   └── er-diagram.md                       # Cross-plugin data flow diagram
 ├── cogni-claims/                           # Claim verification
@@ -101,7 +99,6 @@ insight-wave/
 ├── cogni-research/                   # Multi-agent research reports
 ├── cogni-marketing/                        # B2B marketing content engine
 ├── cogni-narrative/                        # Story arc narrative transformation
-├── cogni-obsidian/                         # Obsidian integration
 ├── cogni-portfolio/                        # Portfolio messaging & planning
 ├── cogni-sales/                            # B2B sales pitch generation
 ├── cogni-help/                            # Help hub: courses, guide, workflows, troubleshoot

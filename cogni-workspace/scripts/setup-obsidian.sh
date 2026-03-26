@@ -2,7 +2,7 @@
 set -euo pipefail
 # setup-obsidian.sh
 # Version: 3.0.0
-# Plugin: cogni-obsidian
+# Plugin: cogni-workspace
 # Purpose: Configure portable Obsidian integration in user workspace with WSL support
 #
 # Usage:
@@ -136,9 +136,9 @@ validate_inputs() {
 
     TARGET_DIR="$(cd "$TARGET_DIR" && pwd)"
 
-    # Locate template relative to this script (cogni-obsidian plugin)
+    # Locate template relative to this script (cogni-workspace plugin)
     PLUGIN_ROOT="$(dirname "$SCRIPT_DIR")"
-    TEMPLATE_SOURCE="${PLUGIN_ROOT}/skills/obsidian-setup/templates/obsidian"
+    TEMPLATE_SOURCE="${PLUGIN_ROOT}/skills/setup-obsidian/templates/obsidian"
 
     if [[ ! -d "$TEMPLATE_SOURCE" ]]; then
         error_json "Obsidian template not found at: $TEMPLATE_SOURCE" 3

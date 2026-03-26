@@ -384,10 +384,9 @@ Ask the user to:
 
 Congratulations — you have completed all 11 courses in the cogni-help curriculum!
 
-**Your complete insight-wave toolkit (13 plugins)**:
+**Your complete insight-wave toolkit (12 plugins)**:
 1. **Claude Cowork** — Your agentic AI platform (Course 1)
-2. **cogni-workspace** — Shared project foundation (Course 2)
-3. **cogni-obsidian** — Knowledge management dashboard (Course 2)
+2. **cogni-workspace** — Shared project foundation + Obsidian integration (Course 2)
 4. **cogni-copywriting** — Document polishing & stakeholder review (Course 3)
 5. **cogni-narrative** — Executive narrative transformation (Course 3)
 6. **cogni-claims** — Citation verification (Course 3)

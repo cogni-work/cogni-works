@@ -11,8 +11,7 @@ graph LR
     end
 
     subgraph Foundation["Foundation Layer"]
-        WS[cogni-workspace<br/>themes, env vars, discovery]
-        OB[cogni-obsidian<br/>vault, terminal, notes]
+        WS[cogni-workspace<br/>themes, env vars, discovery<br/>obsidian, terminal, notes]
     end
 
     subgraph Data["Data Layer"]
@@ -82,8 +81,7 @@ graph LR
 | **cogni-narrative** | Narrative (arc_id, sections, techniques) | Markdown with YAML frontmatter | Consumed by Visual, Copywriting, Sales via `arc_id` frontmatter |
 | **cogni-copywriting** | (no persistent entities) | In-place document modification | Detects `arc_id` frontmatter for arc-aware polishing |
 | **cogni-visual** | Brief (YAML frontmatter + Markdown body) | Per-deliverable brief files | Reads theme from cogni-workspace. Reads narrative via `arc_id` |
-| **cogni-workspace** | Theme, WorkspaceConfig | Markdown (theme.md) + JSON (settings) | Theme files consumed by all visual plugins. Env vars consumed by all plugins |
-| **cogni-obsidian** | VaultConfig, TerminalProfile | JSON config files in `.obsidian/` | Provides Obsidian browsing layer for all plugin outputs |
+| **cogni-workspace** | Theme, WorkspaceConfig, VaultConfig, TerminalProfile | Markdown (theme.md) + JSON (settings, `.obsidian/` configs) | Theme files consumed by all visual plugins. Env vars consumed by all plugins. Obsidian browsing layer for all plugin outputs |
 | **cogni-consulting** | Engagement (consulting-project.json), PhaseState, ExecutionLog, MethodLog, DecisionLog, LeanCanvas (9 sections, version history, per-section status) | JSON files in engagement directory; Lean Canvas as Markdown with YAML frontmatter | Dispatches to cogni-research, cogni-trends, cogni-portfolio, cogni-claims, cogni-visual. Lean Canvas files produced by business-model-hypothesis vision class, consumed by cogni-portfolio:portfolio-canvas for entity extraction |
 
 ## Cross-Plugin Bridge Files

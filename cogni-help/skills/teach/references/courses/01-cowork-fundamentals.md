@@ -175,8 +175,7 @@ Walk through plugin installation and the insight-wave marketplace deployment:
 
 | Plugin | What it does |
 |--------|-------------|
-| cogni-workspace | Shared environment, themes, plugin discovery |
-| cogni-obsidian | Obsidian vault setup with terminal integration |
+| cogni-workspace | Shared environment, themes, plugin discovery, Obsidian vault integration |
 | cogni-copywriting | Document polishing with messaging frameworks |
 | cogni-narrative | Executive narratives using story arcs |
 | cogni-claims | Fact-checking and source verification |

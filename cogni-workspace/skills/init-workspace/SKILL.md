@@ -89,9 +89,21 @@ cp -r "${CLAUDE_PLUGIN_ROOT}/themes/_template/" \
 
 The template gives users a starting point for creating custom themes that visual plugins consume.
 
-### 6. Mention Tool-Specific Setup
+### 6. Obsidian Integration (Optional)
 
-If the user indicated they use Obsidian or VS Code and relevant plugins are installed (cogni-obsidian, etc.), let them know those plugins have their own setup steps they can run separately. Don't call other plugins' scripts — each plugin manages its own setup.
+If the user indicated they use Obsidian in step 3, offer to set up Obsidian integration now:
+
+> "You mentioned you use Obsidian. Would you like me to set up the vault integration now? This adds a Terminal plugin with a Claude Code launcher so you can work in Obsidian and launch Claude Code from the built-in terminal."
+
+If yes, run the setup script:
+
+```bash
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/setup-obsidian.sh" "${TARGET_DIR}"
+```
+
+If `.obsidian/` already exists, skip and mention that `update-obsidian` can refresh the terminal config.
+
+If the user declines, let them know they can run `/setup-obsidian` later.
 
 ### 7. Summarize
 

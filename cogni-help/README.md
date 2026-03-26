@@ -63,7 +63,7 @@ Or describe what you want:
 | # | Course | Plugins covered |
 |---|--------|-----------------|
 | 1 | Cowork Fundamentals | cogni-help (meta) |
-| 2 | Workspace & Obsidian | cogni-workspace, cogni-obsidian, cogni-help:cogni-issues |
+| 2 | Workspace & Obsidian | cogni-workspace, cogni-help:cogni-issues |
 | 3 | Basic Tools | cogni-copywriting, cogni-narrative, cogni-claims |
 | 4 | Trend Scouting | cogni-trends (Part 1) |
 | 5 | Trend Reporting | cogni-trends (Part 2) |

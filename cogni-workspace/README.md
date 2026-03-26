@@ -1,6 +1,6 @@
 # cogni-workspace
 
-Lean workspace orchestrator for insight-wave [Claude Cowork](https://claude.ai/cowork) marketplace plugins. Manages shared foundation (environment variables, settings), theme management, plugin discovery, and workspace health — so all cogni-x plugins operate from a consistent, well-configured base.
+Lean workspace orchestrator for insight-wave [Claude Cowork](https://claude.ai/cowork) marketplace plugins. Manages shared foundation (environment variables, settings), theme management, plugin discovery, workspace health, and Obsidian vault integration — so all cogni-x plugins operate from a consistent, well-configured base.
 
 ## Why this exists
 
@@ -23,6 +23,8 @@ This plugin provides the infrastructure layer — workspace initialization, them
 4. **Discover plugins** — scan installed cogni-x plugins, detect versions, compute env var names
 5. **Diagnose** workspace health — five-tier report (foundation, env vars, plugin registry, themes, dependencies)
 6. **Update** workspace — re-scan plugins, refresh env vars, regenerate settings with backup and rollback
+7. **Set up Obsidian** — scaffold `.obsidian/` vault with Terminal plugin and Claude Code launcher
+8. **Update Obsidian** — incrementally refresh terminal profiles without overwriting customizations
 
 ## What it means for you
 
@@ -49,6 +51,8 @@ This plugin is part of the [insight-wave monorepo](https://github.com/cogni-work
 /update-workspace  # refresh after plugin changes
 /pick-theme        # select a theme interactively
 /manage-themes     # extract, create, audit, or apply themes
+/setup-obsidian    # scaffold Obsidian vault with terminal integration
+/update-obsidian   # refresh terminal profiles in existing vault
 ```
 
 > **Note:** Issue filing (`/issues`) has moved to [cogni-help](../cogni-help).
@@ -77,20 +81,28 @@ Claude checks dependencies, discovers installed plugins, asks for your language 
 | `pick-theme` | skill | Centralized theme picker — discovers themes, presents interactive selection, returns path |
 | `update-workspace` | skill | Re-scan plugins, refresh env vars, update output styles, backup and rollback support |
 | `workspace-status` | skill | Five-tier diagnostic: foundation, env vars, plugin registry, themes, dependencies |
+| `setup-obsidian` | skill | Scaffold Obsidian vault with Terminal plugin, Tokyonight theme, and Claude Code launcher |
+| `update-obsidian` | skill | Incrementally update terminal profiles and launcher scripts without overwriting customizations |
 | `on-session-start.sh` | hook (SessionStart) | Sources workspace environment and validates plugin availability at session start |
 | `check-dependencies.sh` | script | Returns JSON with availability/version of required and optional dependencies |
 | `discover-plugins.sh` | script | Scans marketplace cache for installed cogni-x plugins, returns JSON inventory |
 | `generate-settings.sh` | script | Generates settings files; supports `--update` to preserve custom env vars |
+| `setup-obsidian.sh` | script | Copies vault templates, downloads Terminal plugin, substitutes path placeholders |
+| `update-obsidian.sh` | script | Merges profiles, fixes WSL paths, removes deprecated profiles, copies scripts |
+| `portability-utils.sh` | script | Cross-platform utilities (macOS, Linux, WSL, Git Bash) |
 
 ## Architecture
 
 ```
 cogni-workspace/
 ├── .claude-plugin/plugin.json    Plugin manifest
-├── skills/                       5 workspace management skills
+├── skills/                       7 workspace management skills
 │   ├── init-workspace/
 │   ├── manage-themes/
 │   ├── pick-theme/
+│   ├── setup-obsidian/           Obsidian vault scaffolding
+│   │   └── templates/obsidian/   Vault config templates
+│   ├── update-obsidian/          Obsidian config updater
 │   ├── update-workspace/
 │   └── workspace-status/
 ├── hooks/                        Session lifecycle hooks
@@ -99,10 +111,18 @@ cogni-workspace/
 ├── scripts/                      Utility scripts
 │   ├── check-dependencies.sh
 │   ├── discover-plugins.sh
-│   └── generate-settings.sh
+│   ├── generate-settings.sh
+│   ├── setup-obsidian.sh
+│   └── update-obsidian.sh
+├── bash/                         Cross-platform utilities
+│   └── portability-utils.sh
+├── contracts/                    Script interface definitions
+│   ├── setup-obsidian.yml
+│   └── update-obsidian.yml
 ├── themes/                       Brand theme storage
 │   ├── _template/                Canonical theme template
 │   └── cogni-work/               Bundled brand theme + showcase
+├── references/                   Reference documentation
 └── assets/
     └── output-styles/            Language-specific behavioral anchors (EN/DE)
 ```

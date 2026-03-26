@@ -1,7 +1,7 @@
 # Course 2: Workspace & Obsidian Setup
 
 **Duration**: 55 minutes | **Modules**: 6 | **Prerequisites**: Course 1
-**Plugins**: cogni-workspace, cogni-obsidian, cogni-help:cogni-issues
+**Plugins**: cogni-workspace, cogni-help:cogni-issues
 **Audience**: Consultants setting up their insight-wave environment
 
 ---
@@ -181,7 +181,7 @@ Ask the user to:
 
 ### Theory (3 min)
 
-**cogni-obsidian** bridges Obsidian (a popular knowledge management app) with
+**cogni-workspace's Obsidian integration** bridges Obsidian (a popular knowledge management app) with
 Claude Cowork. It creates an Obsidian vault pre-configured for insight-wave.
 
 What it sets up:
@@ -215,7 +215,7 @@ Ask the user to:
 
 ### Quiz
 
-1. **Multiple choice**: What does cogni-obsidian set up?
+1. **Multiple choice**: What does cogni-workspace's Obsidian integration set up?
    - a) A new email client
    - b) An Obsidian vault with Terminal plugin integration for Claude
    - c) A database for project data
@@ -231,7 +231,7 @@ Ask the user to:
 
 ### Recap
 
-- cogni-obsidian creates pre-configured Obsidian vaults
+- cogni-workspace's Obsidian integration creates pre-configured Obsidian vaults
 - Terminal integration for running Claude from Obsidian
 - All plugin outputs land in the vault
 - Graph view shows document relationships
@@ -242,7 +242,7 @@ Ask the user to:
 
 ### Theory (3 min)
 
-**Note management**: cogni-obsidian provides a standardized way to create notes
+**Note management**: cogni-workspace's Obsidian integration provides a standardized way to create notes
 with YAML frontmatter (metadata). Every note gets:
 
 ```yaml

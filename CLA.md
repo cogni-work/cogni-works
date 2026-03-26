@@ -9,7 +9,6 @@ Thank you for your interest in contributing to insight-wave core plugins. This C
 - cogni-narrative
 - cogni-claims
 - cogni-copywriting
-- cogni-obsidian
 - cogni-portfolio
 - cogni-visual
 - cogni-help

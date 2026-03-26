@@ -87,7 +87,17 @@ Update `.workspace-config.json`:
 - Update `updated_at` timestamp
 - Bump version if schema changed
 
-### Step 8: Verify and Report
+### Step 8: Update Obsidian Integration (Optional)
+
+If `.obsidian/` exists in the workspace, offer to refresh the terminal configuration:
+
+```bash
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/update-obsidian.sh" "${WORKSPACE_DIR}"
+```
+
+This merges new terminal profiles and fixes common issues without touching user customizations. Skip this step if no `.obsidian/` directory is found.
+
+### Step 9: Verify and Report
 
 Check all expected files exist. Present a summary:
 - Plugins added/removed

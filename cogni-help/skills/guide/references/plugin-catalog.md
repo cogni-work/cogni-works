@@ -90,20 +90,6 @@ into a compelling executive narrative or story.
 
 ---
 
-## cogni-obsidian
-
-**Purpose**: Obsidian vault integration. Scaffolds vaults with Terminal plugin, manages
-frontmatter, provides note management for insight-wave workplaces.
-
-**Key commands**: `/init-vault`
-
-**Use when**: User wants to set up an Obsidian-based workplace for persistent, browsable
-knowledge management alongside insight-wave plugins.
-
-**Works with**: cogni-workspace (workspace → vault)
-
----
-
 ## cogni-portfolio
 
 **Purpose**: Portfolio messaging using IS/DOES/MEANS framework. Market-independent features

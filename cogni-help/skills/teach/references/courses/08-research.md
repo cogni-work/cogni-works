@@ -434,10 +434,9 @@ topic framing, report depth, tone, and which claims to accept or revise.
 - **Visual export** (Course 7) — cogni-visual can transform report content
   into presentations, journey maps, or web narratives
 
-**Your updated insight-wave toolkit** (10 plugins):
+**Your updated insight-wave toolkit** (9 plugins):
 1. **Claude Cowork** — Your agentic AI platform
-2. **cogni-workspace** — Shared project foundation
-3. **cogni-obsidian** — Knowledge management dashboard
+2. **cogni-workspace** — Shared project foundation + Obsidian integration
 4. **cogni-copywriting** — Document polishing and stakeholder review
 5. **cogni-narrative** — Executive narrative transformation
 6. **cogni-claims** — Citation verification

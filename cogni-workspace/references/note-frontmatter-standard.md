@@ -1,18 +1,6 @@
----
-name: note-manager
-description: >-
-  Create properly formatted markdown notes with YAML frontmatter in an Obsidian vault. Use this
-  skill whenever the user asks to create a note, write a markdown file with metadata, add
-  frontmatter to a document, or save content to their vault. Also trigger when any cogni-x plugin
-  needs to produce output files that should be discoverable in Obsidian — the frontmatter standard
-  ensures consistent metadata across all plugin outputs.
-version: 1.1.0
-allowed-tools: Read, Write, Edit, Glob, Grep
----
+# Note Frontmatter Standard
 
-## Purpose
-
-Provide a consistent way to create markdown notes that work well in Obsidian. Every note gets YAML frontmatter with at least a title and date, which makes it searchable, taggable, and visible in Obsidian's graph view. The approach is deliberately minimal — Obsidian handles linking, rendering, and indexing, so the notes just need to be well-structured standard markdown.
+A consistent way to create markdown notes that work well in Obsidian. Every note gets YAML frontmatter with at least a title and date, which makes it searchable, taggable, and visible in Obsidian's graph view. The approach is deliberately minimal — Obsidian handles linking, rendering, and indexing, so the notes just need to be well-structured standard markdown.
 
 ## Frontmatter Standard
 
@@ -36,7 +24,7 @@ source: plugin-name
 
 ## Creating Notes
 
-Use the Write tool. Always include frontmatter, even for simple notes.
+Always include frontmatter, even for simple notes.
 
 **Example — user note:**
 ```markdown

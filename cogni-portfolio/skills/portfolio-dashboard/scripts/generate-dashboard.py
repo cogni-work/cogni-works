@@ -309,13 +309,13 @@ def load_all_entities(project_dir):
         "features": {},
         "markets": {},
         "propositions": {},
+        "customers": {},
         "solutions": {},
         "packages": {},
         "competitors": {},
-        "customers": {},
         "claims": None,
     }
-    for entity_type in ["products", "features", "markets", "propositions", "solutions", "packages", "competitors", "customers"]:
+    for entity_type in ["products", "features", "markets", "propositions", "customers", "solutions", "packages", "competitors"]:
         entity_dir = os.path.join(project_dir, entity_type)
         if os.path.isdir(entity_dir):
             for fp in sorted(glob.glob(os.path.join(entity_dir, "*.json"))):
@@ -479,10 +479,10 @@ def generate_html(data, status, project_dir, theme):
         "features": data["features"],
         "markets": data["markets"],
         "propositions": data["propositions"],
+        "customers": data["customers"],
         "solutions": data["solutions"],
         "packages": data["packages"],
         "competitors": data["competitors"],
-        "customers": data["customers"],
         "anchored_sts": anchored_sts,
     }, default=str)
 
@@ -1788,10 +1788,10 @@ body::after {{
   <a href="#" data-section="Products">Products</a>
   {'<a href="#" data-section="Anchor">Anchors</a>' if anchored_sts else ''}
   <a href="#" data-section="Taxonomy">Taxonomy</a>
+  <a href="#" data-section="Customers">Customers</a>
   <a href="#" data-section="Solutions">Solutions</a>
   <a href="#" data-section="Packages">Packages</a>
   <a href="#" data-section="Margin">Margins</a>
-  <a href="#" data-section="Customers">Customers</a>
   {'<a href="#" data-section="Innovation">Pipeline</a>' if opportunities_data else ''}
   <a href="#" data-section="Claims">Claims</a>
   <a href="#" data-section="Next">Actions</a>
@@ -1835,10 +1835,10 @@ body::after {{
         ("Features", counts.get("features", 0), None, None),
         ("Markets", counts.get("markets", 0), None, None),
         ("Propositions", counts.get("propositions", 0), counts.get("expected_propositions", 0), completion.get("propositions_pct", 0)),
+        ("Customers", counts.get("customers", 0), counts.get("markets", 0), completion.get("customers_pct", 0)),
         ("Solutions", counts.get("solutions", 0), counts.get("propositions", 0), completion.get("solutions_pct", 0)),
         ("Packages", counts.get("packages", 0), len(status.get("packageable_pairs", [])) or None if status else None, completion.get("packages_pct", 0) if status and status.get("packageable_pairs") else None),
         ("Competitors", counts.get("competitors", 0), counts.get("propositions", 0), completion.get("competitors_pct", 0)),
-        ("Customers", counts.get("customers", 0), counts.get("markets", 0), completion.get("customers_pct", 0)),
     ]
 
     for label, val, expected, pct in entity_cards:
@@ -2283,6 +2283,64 @@ body::after {{
 """
         html += "  </div>\n</div>\n"
 
+    # --- Target Customers ---
+    has_named_customers = False
+    for cslug, cdata in data.get("customers", {}).items():
+        if cdata.get("named_customers"):
+            has_named_customers = True
+            break
+
+    if has_named_customers:
+        html += """
+<!-- Target Customers -->
+<div class="section reveal">
+  <div class="section-title">Target Customers</div>
+"""
+        for cslug in sorted(data["customers"].keys()):
+            cdata = data["customers"][cslug]
+            nc_list = cdata.get("named_customers", [])
+            if not nc_list:
+                continue
+            mkt = data.get("markets", {}).get(cdata.get("market_slug", cslug), {})
+            mkt_name = mkt.get("name", cslug)
+            html += f'  <div class="customer-market-group">\n    <h4>{escape_html(mkt_name)}</h4>\n'
+            for idx, nc in enumerate(nc_list):
+                name = escape_html(nc.get("name", "Unknown"))
+                industry = escape_html(nc.get("industry", ""))
+                hq = escape_html(nc.get("headquarters", ""))
+                emps = nc.get("employees")
+                emp_str = f"{emps:,}" if emps else ""
+                rev = nc.get("revenue", {})
+                rev_val = rev.get("value") if isinstance(rev, dict) else None
+                rev_cur = rev.get("currency", "EUR") if isinstance(rev, dict) else "EUR"
+                if rev_val and rev_val >= 1e9:
+                    rev_str = f"{rev_cur} {rev_val/1e9:.1f}B"
+                elif rev_val and rev_val >= 1e6:
+                    rev_str = f"{rev_cur} {rev_val/1e6:.0f}M"
+                elif rev_val:
+                    rev_str = f"{rev_cur} {rev_val:,.0f}"
+                else:
+                    rev_str = ""
+                fit = nc.get("fit_score", "")
+                fit_cls = f"fit-{fit}" if fit in ("high", "medium", "low") else ""
+                pain_pts = nc.get("pain_points", [])
+                pain_html = ", ".join(escape_html(p) for p in pain_pts[:3])
+
+                meta_parts = [x for x in [industry, hq, emp_str + (" employees" if emp_str else ""), rev_str] if x]
+                meta_str = " &bull; ".join(meta_parts)
+
+                html += f"""    <div class="customer-target-card" onclick="openNamedCustomer('{escape_html(cslug)}', {idx})">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <h5>{name}</h5>
+        {f'<span class="fit-badge {fit_cls}">{escape_html(fit)}</span>' if fit else ''}
+      </div>
+      <div class="ct-meta">{meta_str}</div>
+      {f'<div style="font-size:12px;color:var(--text2)">{pain_html}</div>' if pain_html else ''}
+    </div>
+"""
+            html += "  </div>\n"
+        html += "</div>\n"
+
     # --- Solutions & Pricing ---
     if data["solutions"]:
         # Separate solutions by type
@@ -2596,64 +2654,6 @@ body::after {{
         html += f"""  <div style="font-size:12px;color:var(--text2);margin-top:10px">Project target margin: {target_margin}% (PoV: 10-20% acceptable). Subscription targets: gross margin &gt;70%, LTV/CAC &gt;3, churn &lt;5%/mo. <span class="margin-ok">Green</span> = on target, <span class="margin-warn">Yellow</span> = below target, <span class="margin-bad">Red</span> = negative/failing.</div>
 </div>
 """
-
-    # --- Target Customers ---
-    has_named_customers = False
-    for cslug, cdata in data.get("customers", {}).items():
-        if cdata.get("named_customers"):
-            has_named_customers = True
-            break
-
-    if has_named_customers:
-        html += """
-<!-- Target Customers -->
-<div class="section reveal">
-  <div class="section-title">Target Customers</div>
-"""
-        for cslug in sorted(data["customers"].keys()):
-            cdata = data["customers"][cslug]
-            nc_list = cdata.get("named_customers", [])
-            if not nc_list:
-                continue
-            mkt = data.get("markets", {}).get(cdata.get("market_slug", cslug), {})
-            mkt_name = mkt.get("name", cslug)
-            html += f'  <div class="customer-market-group">\n    <h4>{escape_html(mkt_name)}</h4>\n'
-            for idx, nc in enumerate(nc_list):
-                name = escape_html(nc.get("name", "Unknown"))
-                industry = escape_html(nc.get("industry", ""))
-                hq = escape_html(nc.get("headquarters", ""))
-                emps = nc.get("employees")
-                emp_str = f"{emps:,}" if emps else ""
-                rev = nc.get("revenue", {})
-                rev_val = rev.get("value") if isinstance(rev, dict) else None
-                rev_cur = rev.get("currency", "EUR") if isinstance(rev, dict) else "EUR"
-                if rev_val and rev_val >= 1e9:
-                    rev_str = f"{rev_cur} {rev_val/1e9:.1f}B"
-                elif rev_val and rev_val >= 1e6:
-                    rev_str = f"{rev_cur} {rev_val/1e6:.0f}M"
-                elif rev_val:
-                    rev_str = f"{rev_cur} {rev_val:,.0f}"
-                else:
-                    rev_str = ""
-                fit = nc.get("fit_score", "")
-                fit_cls = f"fit-{fit}" if fit in ("high", "medium", "low") else ""
-                pain_pts = nc.get("pain_points", [])
-                pain_html = ", ".join(escape_html(p) for p in pain_pts[:3])
-
-                meta_parts = [x for x in [industry, hq, emp_str + (" employees" if emp_str else ""), rev_str] if x]
-                meta_str = " &bull; ".join(meta_parts)
-
-                html += f"""    <div class="customer-target-card" onclick="openNamedCustomer('{escape_html(cslug)}', {idx})">
-      <div style="display:flex;justify-content:space-between;align-items:center">
-        <h5>{name}</h5>
-        {f'<span class="fit-badge {fit_cls}">{escape_html(fit)}</span>' if fit else ''}
-      </div>
-      <div class="ct-meta">{meta_str}</div>
-      {f'<div style="font-size:12px;color:var(--text2)">{pain_html}</div>' if pain_html else ''}
-    </div>
-"""
-            html += "  </div>\n"
-        html += "</div>\n"
 
     # --- Claims Status ---
     claims_total = claims_status.get("total", 0)

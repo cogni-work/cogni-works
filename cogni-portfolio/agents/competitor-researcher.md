@@ -40,9 +40,10 @@ The task prompt that spawned you includes a `plugin_root` path. Wherever these i
 
 **Research Process:**
 1. Read the proposition file, feature file, market file, and portfolio.json from the paths provided in the task. Check `portfolio.json` for a `language` field — if present, generate all user-facing text content (positioning, strengths/weaknesses, differentiation statements) in that language. JSON field names and slugs remain in English. If no `language` field is present, default to English.
-2. Read the region taxonomy from `$CLAUDE_PLUGIN_ROOT/skills/portfolio-setup/references/regions.json`. Look up the market's `region` to get the `locale` (e.g., `dach` → `de-DE`).
-3. Extract the capability category (from feature) and market segment (from market)
-4. Conduct 6-10 web searches using a **two-pass approach** when the region locale is not English:
+2. Read `customers/{market-slug}.json` if it exists (using `market_slug` from the proposition). When available, buyer `buying_criteria` tell you how this market's buyer actually evaluates vendors — use these to structure competitor strengths/weaknesses from the buyer's evaluation framework rather than generic capability comparison. Buyer `pain_points` reveal what problems matter most — differentiation statements should connect competitor weaknesses to these specific pains. If no customer file exists, proceed without it.
+3. Read the region taxonomy from `$CLAUDE_PLUGIN_ROOT/skills/portfolio-setup/references/regions.json`. Look up the market's `region` to get the `locale` (e.g., `dach` → `de-DE`).
+4. Extract the capability category (from feature) and market segment (from market)
+5. Conduct 6-10 web searches using a **two-pass approach** when the region locale is not English:
 
    **Primary pass — region language:**
    Translate search keywords into the region's locale language. Local-language queries surface regional competitors, local reseller positioning, and market-specific reviews that English queries miss entirely.
@@ -66,9 +67,9 @@ The task prompt that spawned you includes a `plugin_root` path. Wherever these i
 
    When the region locale is `en-*` or absent, skip the two-pass logic — single-pass English search using the backup templates above.
 
-5. For each identified competitor, structure: positioning, strengths, weaknesses
-6. Craft differentiation statements that connect to the proposition's DOES/MEANS
-7. Write the competitor JSON file
+6. For each identified competitor, structure: positioning, strengths, weaknesses
+7. Craft differentiation statements that connect to the proposition's DOES/MEANS. When customer profiles are available, connect competitor weaknesses to specific buyer `pain_points` and frame strengths/weaknesses against buyer `buying_criteria`
+8. Write the competitor JSON file
 
 **Competitor Selection Criteria:**
 - Direct competitors (same capability, same market segment)

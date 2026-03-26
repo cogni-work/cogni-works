@@ -56,6 +56,7 @@ Read `solutions/{slug}.json` for each solution. Also read:
 - `markets/{market_slug}.json` — region, segmentation, buyer context for market fit evaluation
 - `portfolio.json` — delivery_defaults (roles, rates, target_margin_pct), language
 - `competitors/{slug}.json` (if exists) — competitive pricing context
+- `customers/{market_slug}.json` (if exists) — buyer personas with pain points, buying criteria, decision roles, and buying committee context (deal_size, typical_deal_cycle, stall_points). When this file exists, use it to ground the Reviewer and Client SA perspectives in actual buyer data rather than segment inference.
 
 ## Perspective 1: Reviewer (Procurement / Business Decision-Maker)
 
@@ -80,7 +81,7 @@ low-risk enough to approve without board escalation?
 - **Warn**: Pricing slightly off for the segment (e.g., enterprise pricing for mid-market, or PoV that's too expensive for easy approval)
 - **Fail**: Pricing disconnected from market reality — would be immediately rejected in procurement
 
-Read market segmentation (employees, vertical) and product pricing_tier to calibrate expectations.
+Read market segmentation (employees, vertical) and product pricing_tier to calibrate expectations. When customer profiles exist, use `buying_committee.deal_size` as the primary budget anchor — this is the actual deal size range for this segment. Check whether PoV pricing falls within easy-approval thresholds and whether large tier pricing is plausible relative to typical deal sizes.
 
 #### 3. Risk-Reward Transparency (20%)
 Are assumptions, scope boundaries, and prerequisites explicit? Can the buyer assess
@@ -108,6 +109,8 @@ Can the buyer self-select into the right tier?
 - **Pass**: Clear tier progression with distinct buyer signals. A buyer can point to their situation and land on the right tier
 - **Warn**: Tiers exist but scope jumps are unclear — buyer needs vendor help to choose
 - **Fail**: Tiers feel like arbitrary price points without meaningful scope differentiation
+
+When customer profiles exist, validate tier progression against `buying_committee.typical_deal_cycle` and `stall_points`. A solution with 16-week implementation phases targeting a market with 6-month deal cycles and 3-month stall points at compliance gates needs to account for those procurement realities in its tier structure and assumptions.
 
 ### Subscription Adaptation
 For subscription solutions, adapt:
@@ -208,6 +211,8 @@ handover or enablement phase?
 - **Pass**: Explicit handover/enablement phase or documentation deliverable. Buyer's team gains operational capability
 - **Warn**: Handover is mentioned but thin — "documentation provided" without specifics
 - **Fail**: No handover — implementation ends and the buyer is left without operational capability. Implies ongoing vendor dependency
+
+When customer profiles exist, assess handover against the buyer's actual team structure from `profiles[].role` and `seniority`. A solution handing over to a CIO/VP IT expects different enablement than one targeting an Enterprise Architect or a Head of OT Networks. Client-side effort assumptions should be realistic for the roles and seniority levels in the buying committee.
 
 #### 4. Vendor Lock-in Assessment (15%)
 How dependent does the buyer become on the vendor post-implementation? Are there

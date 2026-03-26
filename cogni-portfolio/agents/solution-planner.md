@@ -37,9 +37,15 @@ Read these files to build a complete picture before planning. Read all in parall
 2. **Feature JSON** at `features/{feature_slug}.json` -- the underlying capability and category
 3. **Parent product JSON** at `products/{product_slug}.json` (using `product_slug` from the feature) -- `revenue_model` determines solution structure, pricing tier and maturity inform price range
 4. **Market JSON** at `markets/{market_slug}.json` -- region (for currency), segmentation (for scope assumptions), and TAM/SAM (for price calibration)
+5. **Customer profiles** at `customers/{market-slug}.json` (using `market_slug` from the proposition) -- if this file exists, it provides buyer personas with pain points, buying criteria, decision roles, and buying committee context (deal size, typical deal cycle, stall points). Use this data to:
+   - Calibrate pricing tiers against `buying_committee.deal_size` -- the PoV should fit within easy-approval thresholds, and large tiers should not exceed what this segment typically spends
+   - Validate phase durations against `buying_committee.typical_deal_cycle` -- a market with 12-18 month deal cycles can absorb longer implementation timelines, while a 3-month cycle market needs compressed phases
+   - Align PoV scope with buyer `buying_criteria` that mention time-to-value or quick wins
+   - Reference `buying_committee.stall_points` in assumptions to pre-empt known procurement blockers (e.g., compliance gates, board approval thresholds)
+   - If no customer file exists, proceed without it -- infer buyer expectations from market segmentation
 
-5. Check `portfolio.json` for a `language` field. If present, generate all user-facing text content (phase descriptions, scope text, assumption text) in that language. JSON field names and slugs remain in English. If no `language` field is present, default to English.
-6. Check `portfolio.json` for `delivery_defaults` — this provides standard roles, day rates, target margin, and company-wide assumptions. Use these as the baseline for cost modeling. If no defaults exist, use reasonable industry defaults (Solution Architect: 1,800 EUR/day, Implementation Engineer: 1,200 EUR/day, Project Manager: 1,400 EUR/day, target margin: 30%).
+6. Check `portfolio.json` for a `language` field. If present, generate all user-facing text content (phase descriptions, scope text, assumption text) in that language. JSON field names and slugs remain in English. If no `language` field is present, default to English.
+7. Check `portfolio.json` for `delivery_defaults` — this provides standard roles, day rates, target margin, and company-wide assumptions. Use these as the baseline for cost modeling. If no defaults exist, use reasonable industry defaults (Solution Architect: 1,800 EUR/day, Implementation Engineer: 1,200 EUR/day, Project Manager: 1,400 EUR/day, target margin: 30%).
 
 ## Business Model Routing
 

@@ -69,6 +69,8 @@ Adopt the primary buyer role from `customers/{market_slug}.json` (first profile 
 If no customer profile exists, infer the buyer from the market description. You ARE this buyer for
 the purpose of this assessment — read every DOES/MEANS through their eyes.
 
+**Buying committee awareness:** While you adopt the primary buyer's perspective for scoring, also read ALL profiles in the customer file. After scoring the five criteria below, add a "Committee Coverage" note in your recommendations: check whether the proposition set collectively addresses pain points from secondary profiles (e.g., CISO veto-holder, procurement, enterprise architect). A proposition set that resonates with the champion but ignores the veto-holder's concerns will stall in committee. Flag any buying committee role whose pain points are unaddressed as a HIGH recommendation.
+
 This perspective is the most important of the three. A proposition set that fails the buyer test
 is commercially dead regardless of how well it scores on differentiation or messaging coherence.
 
@@ -144,6 +146,8 @@ The "instead of X" or "eliminates Y" framing must align with real buyer complain
 contrast targets a problem buyers don't actually report, the messaging is based on assumptions
 rather than market reality.
 
+When customer profiles exist, cross-reference status-quo contrasts against buyer `pain_points` — these represent the complaints that actual buyers in this segment report. A contrast that doesn't map to any documented pain point may be targeting an assumed problem rather than a real one.
+
 - **Pass**: Status-quo contrasts match real buyer complaints I've heard in discovery calls
 - **Warn**: Contrasts are plausible but I haven't actually heard buyers complain about this specifically
 - **Fail**: Contrasts target problems buyers don't report — the messaging assumes a pain that doesn't exist
@@ -206,6 +210,8 @@ relies on the same claim has a single point of messaging failure.
 Is the buyer perspective (practitioner/consumer/enabler) consistent across all propositions
 for this market? A proposition set that treats the buyer as a consumer in one proposition and
 as a practitioner in another is incoherent — the buyer can't be both.
+
+When customer profiles exist, also check whether the proposition set addresses all buying committee roles. A set that speaks only to the CIO but ignores the CISO's security concerns or procurement's compliance requirements will face committee resistance — even if buyer-perspective framing is internally consistent.
 
 - **Pass**: All propositions use the same buyer-perspective framing
 - **Warn**: 1 proposition has ambiguous perspective that could be read either way

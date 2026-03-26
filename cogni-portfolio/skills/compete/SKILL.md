@@ -40,7 +40,7 @@ For each selected proposition, identify 3-5 relevant competitors. Three sources:
 - Recent competitive moves, pricing changes, product launches
 - Market analyst reports and comparisons
 
-Always include `plugin_root: $CLAUDE_PLUGIN_ROOT` in the agent task prompt. Multiple agents can be launched in parallel for different propositions.
+Always include `plugin_root: $CLAUDE_PLUGIN_ROOT` in the agent task prompt. Also pass the customer profile path (`customers/{market-slug}.json`) if it exists — the researcher uses buyer `buying_criteria` and `pain_points` to ground differentiation statements and trap questions in how this market's buyer actually evaluates vendors. Multiple agents can be launched in parallel for different propositions.
 
 **LLM knowledge (fallback)**: When web search is unavailable, identify known competitors based on the feature category and market segment. Clearly note that competitor data is based on training knowledge and may not reflect latest positioning.
 
@@ -158,6 +158,7 @@ For each competitor file, include a `trap_questions` array with **3-4 questions*
 - Are phrased as legitimate evaluation criteria, not gotcha tricks — a procurement team should be comfortable putting these in an RFI
 - Cover different stakeholder concerns (security/compliance for CISO, operational continuity for OT, TCO for CFO)
 - Would change the evaluation outcome if the competitor answers honestly
+- When customer profiles exist, align questions with the buyer's actual `buying_criteria` — these are the evaluation dimensions the buyer already uses, making trap questions feel like natural procurement due diligence rather than vendor-planted gotchas
 
 Do not generate more than 4 trap questions — focus beats volume. Each question should be a single sentence.
 

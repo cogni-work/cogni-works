@@ -480,6 +480,10 @@ def generate_html(data, status, project_dir, theme):
     anchored_sts = tips_data.get("anchored_sts", {})
     opportunities_data = tips_data.get("opportunities")
     has_tips = bool(anchored_sts) or bool(opportunities_data)
+    _tax = portfolio.get("taxonomy") or {}
+    has_taxonomy = _tax.get("type") == "b2b-ict" and any(
+        f.get("taxonomy_mapping", {}).get("category_id") for f in data["features"].values()
+    )
 
     entities_json = json.dumps({
         "products": data["products"],
@@ -1790,11 +1794,11 @@ body::after {{
 <nav class="topnav" id="topnav">
   <span class="nav-brand">{company_name}</span>
   <a href="#" data-section="Entity">Overview</a>
-  <a href="#" data-section="Matrix">Matrix</a>
-  <a href="#" data-section="Markets">Markets</a>
   <a href="#" data-section="Products">Products</a>
+  <a href="#" data-section="Markets">Markets</a>
+  <a href="#" data-section="Matrix">Matrix</a>
+  {'<a href="#" data-section="Taxonomy">Taxonomy</a>' if has_taxonomy else ''}
   {'<a href="#" data-section="Anchor">Anchors</a>' if anchored_sts else ''}
-  <a href="#" data-section="Taxonomy">Taxonomy</a>
   <a href="#" data-section="Customers">Customers</a>
   <a href="#" data-section="Solutions">Solutions</a>
   <a href="#" data-section="Packages">Packages</a>
@@ -1866,6 +1870,86 @@ body::after {{
 </div>
 """
 
+    # --- Products & Features ---
+    if data["products"]:
+        html += """
+<!-- Products & Features -->
+<div class="section reveal">
+  <div class="section-title">Products & Features</div>
+"""
+        for ps, p in sorted(data["products"].items()):
+            pname = escape_html(p.get("name", ps))
+            maturity = escape_html(p.get("maturity", ""))
+            revenue_model = escape_html(p.get("revenue_model", ""))
+            positioning = escape_html(p.get("positioning", ""))
+            product_features = {fs: f for fs, f in data["features"].items() if f.get("product_slug") == ps}
+            fcount = len(product_features)
+            rev_badge = f'<span class="revenue-chip" style="margin-left:8px">{revenue_model}</span>' if revenue_model else ''
+
+            html += f"""  <div class="product-group">
+    <div class="product-header" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'">
+      <h4>{pname} {f'<span style="font-size:12px;color:var(--text2);font-weight:400;margin-left:8px">{maturity}</span>' if maturity else ''}{rev_badge}</h4>
+      <span class="badge">{fcount} feature{"s" if fcount != 1 else ""}</span>
+    </div>
+    <div class="product-features">
+      {f'<div style="font-size:13px;color:var(--text2);margin-bottom:8px">{positioning}</div>' if positioning else ''}
+"""
+            for fs in sorted(product_features.keys(), key=lambda s: feature_sort_key(s, product_features)):
+                f = product_features[fs]
+                fname = escape_html(f.get("name", fs))
+                fdesc = escape_html(f.get("description", ""))
+                readiness = f.get("readiness", "")
+                readiness_html = f'<span class="readiness readiness-{escape_html(readiness)}">{escape_html(readiness)}</span>' if readiness else ''
+                # Anchor badge if this feature has portfolio-anchored STs
+                feat_sts = anchored_sts.get(fs, [])
+                anchor_html = f'<span class="anchor-badge" title="{len(feat_sts)} anchored Solution Template{"s" if len(feat_sts) != 1 else ""}">\u2693 {len(feat_sts)} ST{"s" if len(feat_sts) != 1 else ""}</span>' if feat_sts else ''
+                html += f'      <div class="feature-item"><span class="fname">{fname}{readiness_html}{anchor_html}</span><br><span class="fdesc">{fdesc}</span></div>\n'
+            html += "    </div>\n  </div>\n"
+        html += "</div>\n"
+
+    # --- Markets Overview ---
+    if data["markets"]:
+        html += """
+<!-- Markets Overview -->
+<div class="section reveal">
+  <div class="section-title">Markets</div>
+  <div class="market-cards stagger">
+"""
+        max_tam = max(
+            (m.get("tam", {}).get("value", 0) or 0 for m in data["markets"].values()),
+            default=1
+        ) or 1
+
+        for ms, m in sorted(data["markets"].items(), key=lambda item: market_sort_key(item[0], data["markets"])):
+            region = escape_html(m.get("region", "?"))
+            name = escape_html(m.get("name", ms))
+            desc = escape_html(m.get("description", ""))
+            priority = m.get("priority", "")
+            priority_cls = f"priority-{priority}" if priority else ""
+            tam = m.get("tam", {})
+            sam = m.get("sam", {})
+            som = m.get("som", {})
+            tam_val = tam.get("value") or 0
+            sam_val = sam.get("value") or 0
+            som_val = som.get("value") or 0
+            currency = tam.get("currency") or sam.get("currency") or som.get("currency") or "EUR"
+            tam_pct = (tam_val / max_tam * 100) if max_tam else 0
+            sam_pct = (sam_val / max_tam * 100) if max_tam else 0
+            som_pct = (som_val / max_tam * 100) if max_tam else 0
+
+            html += f"""    <div class="market-card" onclick="openMarket('{escape_js_string(ms)}')">
+      <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:10px"><span class="region-badge" style="margin-bottom:0">{region}</span>{f'<span class="priority-badge {priority_cls}">{escape_html(priority)}</span>' if priority else ''}</div>
+      <h4>{name}</h4>
+      <div class="desc">{desc}</div>
+      <div class="sizing-bars">
+        <div class="sizing-row"><span class="sizing-label">TAM</span><div class="sizing-bar"><div class="fill" style="width:{tam_pct:.0f}%;background:var(--blue)"></div></div><span class="sizing-val">{format_currency(tam_val, currency)}</span></div>
+        <div class="sizing-row"><span class="sizing-label">SAM</span><div class="sizing-bar"><div class="fill" style="width:{sam_pct:.0f}%;background:var(--accent-dark)"></div></div><span class="sizing-val">{format_currency(sam_val, currency)}</span></div>
+        <div class="sizing-row"><span class="sizing-label">SOM</span><div class="sizing-bar"><div class="fill" style="width:{som_pct:.0f}%;background:var(--green)"></div></div><span class="sizing-val">{format_currency(som_val, currency)}</span></div>
+      </div>
+    </div>
+"""
+        html += "  </div>\n</div>\n"
+
     # --- Feature x Market Matrix ---
     if feature_slugs and market_slugs:
         html += """
@@ -1929,89 +2013,9 @@ body::after {{
         html += '<span><span class="legend-dot" style="background:var(--red);opacity:0.4"></span> Missing</span>'
         html += '</div>\n</div>\n'
 
-    # --- Markets Overview ---
-    if data["markets"]:
-        html += """
-<!-- Markets Overview -->
-<div class="section reveal">
-  <div class="section-title">Markets</div>
-  <div class="market-cards stagger">
-"""
-        max_tam = max(
-            (m.get("tam", {}).get("value", 0) or 0 for m in data["markets"].values()),
-            default=1
-        ) or 1
-
-        for ms, m in sorted(data["markets"].items(), key=lambda item: market_sort_key(item[0], data["markets"])):
-            region = escape_html(m.get("region", "?"))
-            name = escape_html(m.get("name", ms))
-            desc = escape_html(m.get("description", ""))
-            priority = m.get("priority", "")
-            priority_cls = f"priority-{priority}" if priority else ""
-            tam = m.get("tam", {})
-            sam = m.get("sam", {})
-            som = m.get("som", {})
-            tam_val = tam.get("value") or 0
-            sam_val = sam.get("value") or 0
-            som_val = som.get("value") or 0
-            currency = tam.get("currency") or sam.get("currency") or som.get("currency") or "EUR"
-            tam_pct = (tam_val / max_tam * 100) if max_tam else 0
-            sam_pct = (sam_val / max_tam * 100) if max_tam else 0
-            som_pct = (som_val / max_tam * 100) if max_tam else 0
-
-            html += f"""    <div class="market-card" onclick="openMarket('{escape_js_string(ms)}')">
-      <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:10px"><span class="region-badge" style="margin-bottom:0">{region}</span>{f'<span class="priority-badge {priority_cls}">{escape_html(priority)}</span>' if priority else ''}</div>
-      <h4>{name}</h4>
-      <div class="desc">{desc}</div>
-      <div class="sizing-bars">
-        <div class="sizing-row"><span class="sizing-label">TAM</span><div class="sizing-bar"><div class="fill" style="width:{tam_pct:.0f}%;background:var(--blue)"></div></div><span class="sizing-val">{format_currency(tam_val, currency)}</span></div>
-        <div class="sizing-row"><span class="sizing-label">SAM</span><div class="sizing-bar"><div class="fill" style="width:{sam_pct:.0f}%;background:var(--accent-dark)"></div></div><span class="sizing-val">{format_currency(sam_val, currency)}</span></div>
-        <div class="sizing-row"><span class="sizing-label">SOM</span><div class="sizing-bar"><div class="fill" style="width:{som_pct:.0f}%;background:var(--green)"></div></div><span class="sizing-val">{format_currency(som_val, currency)}</span></div>
-      </div>
-    </div>
-"""
-        html += "  </div>\n</div>\n"
-
-    # --- Products & Features ---
-    if data["products"]:
-        html += """
-<!-- Products & Features -->
-<div class="section reveal">
-  <div class="section-title">Products & Features</div>
-"""
-        for ps, p in sorted(data["products"].items()):
-            pname = escape_html(p.get("name", ps))
-            maturity = escape_html(p.get("maturity", ""))
-            revenue_model = escape_html(p.get("revenue_model", ""))
-            positioning = escape_html(p.get("positioning", ""))
-            product_features = {fs: f for fs, f in data["features"].items() if f.get("product_slug") == ps}
-            fcount = len(product_features)
-            rev_badge = f'<span class="revenue-chip" style="margin-left:8px">{revenue_model}</span>' if revenue_model else ''
-
-            html += f"""  <div class="product-group">
-    <div class="product-header" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'">
-      <h4>{pname} {f'<span style="font-size:12px;color:var(--text2);font-weight:400;margin-left:8px">{maturity}</span>' if maturity else ''}{rev_badge}</h4>
-      <span class="badge">{fcount} feature{"s" if fcount != 1 else ""}</span>
-    </div>
-    <div class="product-features">
-      {f'<div style="font-size:13px;color:var(--text2);margin-bottom:8px">{positioning}</div>' if positioning else ''}
-"""
-            for fs in sorted(product_features.keys(), key=lambda s: feature_sort_key(s, product_features)):
-                f = product_features[fs]
-                fname = escape_html(f.get("name", fs))
-                fdesc = escape_html(f.get("description", ""))
-                readiness = f.get("readiness", "")
-                readiness_html = f'<span class="readiness readiness-{escape_html(readiness)}">{escape_html(readiness)}</span>' if readiness else ''
-                # Anchor badge if this feature has portfolio-anchored STs
-                feat_sts = anchored_sts.get(fs, [])
-                anchor_html = f'<span class="anchor-badge" title="{len(feat_sts)} anchored Solution Template{"s" if len(feat_sts) != 1 else ""}">\u2693 {len(feat_sts)} ST{"s" if len(feat_sts) != 1 else ""}</span>' if feat_sts else ''
-                html += f'      <div class="feature-item"><span class="fname">{fname}{readiness_html}{anchor_html}</span><br><span class="fdesc">{fdesc}</span></div>\n'
-            html += "    </div>\n  </div>\n"
-        html += "</div>\n"
-
     # --- Taxonomy Coverage Heatmap & Gap Analysis ---
     taxonomy = portfolio.get("taxonomy")
-    if taxonomy and taxonomy.get("type") == "b2b-ict":
+    if has_taxonomy and taxonomy.get("type") == "b2b-ict":
         # Build the full taxonomy structure
         tax_dims = {
             0: ("Provider Profile Metrics", [
@@ -2207,88 +2211,6 @@ body::after {{
             html += '    </div>\n  </div>\n'
 
         html += "</div>\n"
-
-    # --- Innovation Pipeline ---
-    if opportunities_data:
-        opps = opportunities_data.get("opportunities", [])
-        opp_summary = opportunities_data.get("summary", {})
-        total_opps = opp_summary.get("total_opportunities", len(opps))
-        total_rev = opp_summary.get("total_estimated_revenue", 0)
-        opp_currency = opp_summary.get("currency", "EUR")
-        by_class = opp_summary.get("by_classification", {})
-        by_priority = opp_summary.get("by_priority", {})
-
-        html += f"""
-<!-- Innovation Pipeline -->
-<div class="section reveal">
-  <div class="section-title">Innovation Pipeline</div>
-  <div class="pipeline-summary">
-    <div class="pipeline-stat">
-      <span class="stat-value">{total_opps}</span>
-      <span class="stat-label">Opportunities</span>
-    </div>
-    <div class="pipeline-stat">
-      <span class="stat-value">{format_currency(total_rev, opp_currency)}</span>
-      <span class="stat-label">Est. Revenue</span>
-    </div>
-    <div class="pipeline-stat">
-      <span class="stat-value" style="font-size:16px">{by_class.get('build',0)}B / {by_class.get('buy',0)}U / {by_class.get('partner',0)}P</span>
-      <span class="stat-label">Build / Buy / Partner</span>
-    </div>
-  </div>
-  <div class="opp-cards">
-"""
-        for opp in sorted(opps, key=lambda x: x.get("opportunity_score", 0), reverse=True):
-            opp_name = escape_html(opp.get("st_name", opp.get("opportunity_id", "Unknown")))
-            opp_id = escape_html(opp.get("opportunity_id", ""))
-            score = opp.get("opportunity_score", 0)
-            score_pct = min(score * 10, 100)
-            # Color gradient: green > 7, yellow 4-7, red < 4
-            if score >= 7:
-                score_color = "var(--green)"
-            elif score >= 4:
-                score_color = "var(--yellow)"
-            else:
-                score_color = "var(--red)"
-
-            classification = opp.get("classification", "")
-            classify_cls = f"opp-classify-{classification}" if classification in ("build", "buy", "partner") else ""
-
-            priority = opp.get("priority", "")
-            priority_cls = f"opp-priority-{priority}" if priority in ("high", "medium", "low") else ""
-
-            rev_est = opp.get("revenue_estimate", {})
-            rev_val = rev_est.get("annual_value")
-            rev_cur = rev_est.get("currency", opp_currency)
-            rev_str = format_currency(rev_val, rev_cur) if rev_val else "TBD"
-            rev_conf = escape_html(rev_est.get("confidence", ""))
-
-            feat_spec = opp.get("feature_spec", {})
-            feat_desc = escape_html(feat_spec.get("description", ""))
-            unmet = feat_spec.get("unmet_needs", [])
-            unmet_pills = "".join(f'<span class="need-pill need-undelivered">{escape_html(n)}</span>' for n in unmet)
-
-            tips_ref = escape_html(opp.get("st_id", ""))
-
-            html += f"""    <div class="opp-card">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
-        <h4>{opp_name}</h4>
-        <div class="opp-score-gauge">
-          <div class="opp-score-bar"><div class="opp-score-fill" style="width:{score_pct}%;background:{score_color}"></div></div>
-          <span style="color:{score_color}">{score:.1f}</span>
-        </div>
-      </div>
-      <div class="opp-meta">
-        {f'<span class="opp-classify {classify_cls}">{escape_html(classification)}</span>' if classification else ''}
-        {f'<span class="opp-classify {priority_cls}">{escape_html(priority)}</span>' if priority else ''}
-        <span style="font-size:12px;color:var(--text2)">{rev_str}{f" ({rev_conf})" if rev_conf else ""}</span>
-      </div>
-      {f'<div style="font-size:13px;color:var(--text2);margin-bottom:8px">{feat_desc}</div>' if feat_desc else ''}
-      {f'<div class="anchor-needs">{unmet_pills}</div>' if unmet_pills else ''}
-      {f'<div style="font-size:11px;color:var(--text2);margin-top:8px;font-family:var(--font-mono)">ST: {tips_ref}</div>' if tips_ref else ''}
-    </div>
-"""
-        html += "  </div>\n</div>\n"
 
     # --- Target Customers ---
     has_named_customers = False
@@ -2661,6 +2583,88 @@ body::after {{
         html += f"""  <div style="font-size:12px;color:var(--text2);margin-top:10px">Project target margin: {target_margin}% (PoV: 10-20% acceptable). Subscription targets: gross margin &gt;70%, LTV/CAC &gt;3, churn &lt;5%/mo. <span class="margin-ok">Green</span> = on target, <span class="margin-warn">Yellow</span> = below target, <span class="margin-bad">Red</span> = negative/failing.</div>
 </div>
 """
+
+    # --- Innovation Pipeline ---
+    if opportunities_data:
+        opps = opportunities_data.get("opportunities", [])
+        opp_summary = opportunities_data.get("summary", {})
+        total_opps = opp_summary.get("total_opportunities", len(opps))
+        total_rev = opp_summary.get("total_estimated_revenue", 0)
+        opp_currency = opp_summary.get("currency", "EUR")
+        by_class = opp_summary.get("by_classification", {})
+        by_priority = opp_summary.get("by_priority", {})
+
+        html += f"""
+<!-- Innovation Pipeline -->
+<div class="section reveal">
+  <div class="section-title">Innovation Pipeline</div>
+  <div class="pipeline-summary">
+    <div class="pipeline-stat">
+      <span class="stat-value">{total_opps}</span>
+      <span class="stat-label">Opportunities</span>
+    </div>
+    <div class="pipeline-stat">
+      <span class="stat-value">{format_currency(total_rev, opp_currency)}</span>
+      <span class="stat-label">Est. Revenue</span>
+    </div>
+    <div class="pipeline-stat">
+      <span class="stat-value" style="font-size:16px">{by_class.get('build',0)}B / {by_class.get('buy',0)}U / {by_class.get('partner',0)}P</span>
+      <span class="stat-label">Build / Buy / Partner</span>
+    </div>
+  </div>
+  <div class="opp-cards">
+"""
+        for opp in sorted(opps, key=lambda x: x.get("opportunity_score", 0), reverse=True):
+            opp_name = escape_html(opp.get("st_name", opp.get("opportunity_id", "Unknown")))
+            opp_id = escape_html(opp.get("opportunity_id", ""))
+            score = opp.get("opportunity_score", 0)
+            score_pct = min(score * 10, 100)
+            # Color gradient: green > 7, yellow 4-7, red < 4
+            if score >= 7:
+                score_color = "var(--green)"
+            elif score >= 4:
+                score_color = "var(--yellow)"
+            else:
+                score_color = "var(--red)"
+
+            classification = opp.get("classification", "")
+            classify_cls = f"opp-classify-{classification}" if classification in ("build", "buy", "partner") else ""
+
+            priority = opp.get("priority", "")
+            priority_cls = f"opp-priority-{priority}" if priority in ("high", "medium", "low") else ""
+
+            rev_est = opp.get("revenue_estimate", {})
+            rev_val = rev_est.get("annual_value")
+            rev_cur = rev_est.get("currency", opp_currency)
+            rev_str = format_currency(rev_val, rev_cur) if rev_val else "TBD"
+            rev_conf = escape_html(rev_est.get("confidence", ""))
+
+            feat_spec = opp.get("feature_spec", {})
+            feat_desc = escape_html(feat_spec.get("description", ""))
+            unmet = feat_spec.get("unmet_needs", [])
+            unmet_pills = "".join(f'<span class="need-pill need-undelivered">{escape_html(n)}</span>' for n in unmet)
+
+            tips_ref = escape_html(opp.get("st_id", ""))
+
+            html += f"""    <div class="opp-card">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
+        <h4>{opp_name}</h4>
+        <div class="opp-score-gauge">
+          <div class="opp-score-bar"><div class="opp-score-fill" style="width:{score_pct}%;background:{score_color}"></div></div>
+          <span style="color:{score_color}">{score:.1f}</span>
+        </div>
+      </div>
+      <div class="opp-meta">
+        {f'<span class="opp-classify {classify_cls}">{escape_html(classification)}</span>' if classification else ''}
+        {f'<span class="opp-classify {priority_cls}">{escape_html(priority)}</span>' if priority else ''}
+        <span style="font-size:12px;color:var(--text2)">{rev_str}{f" ({rev_conf})" if rev_conf else ""}</span>
+      </div>
+      {f'<div style="font-size:13px;color:var(--text2);margin-bottom:8px">{feat_desc}</div>' if feat_desc else ''}
+      {f'<div class="anchor-needs">{unmet_pills}</div>' if unmet_pills else ''}
+      {f'<div style="font-size:11px;color:var(--text2);margin-top:8px;font-family:var(--font-mono)">ST: {tips_ref}</div>' if tips_ref else ''}
+    </div>
+"""
+        html += "  </div>\n</div>\n"
 
     # --- Claims Status ---
     claims_total = claims_status.get("total", 0)

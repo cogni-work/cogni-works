@@ -180,14 +180,17 @@ A target market defined by region, segmentation criteria, and sized by TAM/SAM/S
   "sam": { "value": 500000000, "currency": "EUR", "description": "...", "source": "..." },
   "som": { "value": 15000000, "currency": "EUR", "description": "...", "source": "..." },
   "priority": "beachhead",
+  "sort_order": 10,
   "created": "2026-01-15"
 }
 ```
 
 Required fields: `slug`, `name`, `region`, `description`
-Optional fields: `segmentation`, `tam`, `sam`, `som`, `priority`, `source_file`, `created`, `updated`
+Optional fields: `segmentation`, `tam`, `sam`, `som`, `priority`, `sort_order`, `source_file`, `created`, `updated`
 
 Valid `priority` values: `beachhead` (primary go-to-market), `expansion` (secondary growth), `aspirational` (long-term)
+
+`sort_order` (integer, optional): Controls display ordering across all markets. Lower numbers appear first — beachhead markets should use the lowest values to appear first in dashboards and matrices. Use increments of 10 (10, 20, 30...) to leave room for insertions. Convention: beachhead markets 10-30, expansion 40-60, aspirational 70+. Markets without `sort_order` sort after all ordered markets, then alphabetically by slug.
 
 Valid `region` codes: `de`, `dach`, `eu`, `uk`, `nordics`, `us`, `na`, `cn`, `apac`, `jp`, `latam`, `mea`, `global`
 

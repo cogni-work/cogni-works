@@ -290,6 +290,13 @@ def feature_sort_key(slug, features_data):
     return (order if order is not None else float('inf'), slug)
 
 
+def market_sort_key(slug, markets_data):
+    """Sort key: (sort_order or inf, slug) for stable ordering."""
+    m = markets_data.get(slug, {})
+    order = m.get("sort_order")
+    return (order if order is not None else float('inf'), slug)
+
+
 # ---------------------------------------------------------------------------
 # Data loading
 # ---------------------------------------------------------------------------
@@ -466,7 +473,7 @@ def generate_html(data, status, project_dir, theme):
     phase_idx = phases.index(phase) if phase in phases else 0
     phase_pct = int((phase_idx / (len(phases) - 1)) * 100) if len(phases) > 1 else 0
 
-    market_slugs = sorted(data["markets"].keys())
+    market_slugs = sorted(data["markets"].keys(), key=lambda s: market_sort_key(s, data["markets"]))
     feature_slugs = sorted(data["features"].keys(), key=lambda s: feature_sort_key(s, data["features"]))
 
     tips_data = data.get("tips", {})
@@ -1935,7 +1942,7 @@ body::after {{
             default=1
         ) or 1
 
-        for ms, m in sorted(data["markets"].items()):
+        for ms, m in sorted(data["markets"].items(), key=lambda item: market_sort_key(item[0], data["markets"])):
             region = escape_html(m.get("region", "?"))
             name = escape_html(m.get("name", ms))
             desc = escape_html(m.get("description", ""))

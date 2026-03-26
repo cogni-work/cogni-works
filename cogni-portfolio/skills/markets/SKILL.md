@@ -173,6 +173,7 @@ TAM/SAM/SOM descriptions are labels, not explanations — the `source` field car
     "vertical_codes": ["saas"]
   },
   "priority": "beachhead",
+  "sort_order": 10,
   "tam": {
     "value": 5000000000,
     "currency": "EUR",
@@ -195,11 +196,13 @@ TAM/SAM/SOM descriptions are labels, not explanations — the `source` field car
 }
 ```
 
-Required: `slug`, `name`, `region`, `description`. Optional: `segmentation`, `tam`, `sam`, `som`, `priority`, `created`, `updated`.
+Required: `slug`, `name`, `region`, `description`. Optional: `segmentation`, `tam`, `sam`, `som`, `priority`, `sort_order`, `created`, `updated`.
 
 Always set `created` to today's date (ISO format `YYYY-MM-DD`) when generating a new market. This enables downstream staleness tracking.
 
 Valid `priority` values: `beachhead` (primary go-to-market target), `expansion` (secondary growth), `aspirational` (long-term opportunity).
+
+`sort_order` (integer, optional): Controls display ordering across all markets — determines column order in the Feature x Market matrix and card order in dashboards. Lower numbers appear first. Convention: assign beachhead markets 10-30, expansion markets 40-60, aspirational markets 70+ to reflect strategic priority in the default ordering. Use increments of 10 to leave room for insertions. Markets without `sort_order` sort after all ordered markets, then alphabetically by slug. When creating multiple markets, auto-assign `sort_order` values following this convention based on each market's priority tier and creation order within that tier.
 
 **Normalized segmentation fields** (required for overlap detection): Always populate `employees_min`, `employees_max`, `arr_min`, `arr_max`, and `vertical_codes` alongside the free-text fields. These enable automated overlap detection between markets sharing the same region. Use lowercase identifiers for `vertical_codes` (e.g., `["saas", "fintech"]`). If there is no practical upper bound for `employees_max`, use the realistic ceiling for the segment (e.g., 5000 for mid-market, 50000 for large enterprise) — do not use an arbitrary large number like 500000, as inflated ceilings create false overlap signals in the validator.
 

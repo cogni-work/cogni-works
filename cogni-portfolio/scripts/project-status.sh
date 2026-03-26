@@ -305,7 +305,7 @@ for m in glob.glob('$PROJECT_DIR/markets/*.json'):
 matrix = []
 for f_slug, feat in sorted(features.items(), key=lambda item: (item[1].get('sort_order') if item[1].get('sort_order') is not None else float('inf'), item[0])):
     readiness = feat.get('readiness', 'ga')
-    for m_slug, mkt in sorted(markets.items()):
+    for m_slug, mkt in sorted(markets.items(), key=lambda item: (item[1].get('sort_order') if item[1].get('sort_order') is not None else float('inf'), item[0])):
         priority = mkt.get('priority', 'expansion')
         pair = f'{f_slug}--{m_slug}'
         has_proposition = os.path.exists(os.path.join('$PROJECT_DIR', 'propositions', pair + '.json'))

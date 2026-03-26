@@ -212,8 +212,13 @@ with open('$m') as fh:
     if 'slug' in d and d['slug'] != '$slug': sys.exit(2)
     if 'region' not in d: sys.exit(3)
     if 'priority' in d and d['priority'] not in ['beachhead', 'expansion', 'aspirational']: sys.exit(4)
+    if 'sort_order' in d:
+        so = d['sort_order']
+        if not isinstance(so, int) or isinstance(so, bool): sys.exit(5)
 " 2>/dev/null || exit_code=$?
-    if [ "$exit_code" -eq 4 ]; then
+    if [ "$exit_code" -eq 5 ]; then
+      add_error "market" "$slug" "sort_order must be an integer"
+    elif [ "$exit_code" -eq 4 ]; then
       add_error "market" "$slug" "Invalid priority value -- must be one of: beachhead, expansion, aspirational"
     elif [ "$exit_code" -ne 0 ]; then
       add_error "market" "$slug" "Invalid JSON or missing required field (name, description, region)"
@@ -282,6 +287,17 @@ for i, a in enumerate(markets):
         if emp_overlap and vert_overlap:
             print(f'{a[\"_slug\"]}|Potential overlap with {b[\"_slug\"]} in region {a.get(\"region\")} (shared employee range and verticals)')
             print(f'{b[\"_slug\"]}|Potential overlap with {a[\"_slug\"]} in region {a.get(\"region\")} (shared employee range and verticals)')
+
+# Duplicate sort_order warnings
+seen = {}
+for m in markets:
+    so = m.get('sort_order')
+    slug = m['_slug']
+    if so is not None:
+        if so in seen:
+            print(f'{slug}|Duplicate sort_order {so} (also used by {seen[so]})')
+        else:
+            seen[so] = slug
 " 2>/dev/null)
 fi
 

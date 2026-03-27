@@ -126,7 +126,7 @@ This is the patent's "specific diagram of industry solutions" — the key custom
 
 ## Orchestration Layer
 
-### cogni-consulting (v0.1.0) — Complete
+### cogni-consulting (v0.1.6) — Complete
 
 Double Diamond consulting orchestrator. Introduces an Orchestration Layer above
 Foundation → Data → Output. Manages engagement state through four phases,
@@ -140,9 +140,9 @@ dispatching to plugins at phase-appropriate moments:
 | Deliver | cogni-claims, cogni-portfolio |
 | Export | cogni-visual, document-skills |
 
-7 vision classes (strategic-options, business-case, gtm-roadmap, cost-optimization,
-digital-transformation, innovation-portfolio, market-entry) map engagement types
-to recommended methods and deliverable formats.
+8 vision classes (strategic-options, business-case, gtm-roadmap, cost-optimization,
+digital-transformation, innovation-portfolio, market-entry, business-model-hypothesis)
+map engagement types to recommended methods and deliverable formats.
 
 ---
 

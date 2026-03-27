@@ -27,6 +27,8 @@ A structured portfolio messaging workflow for Claude Cowork. Eight pluggable tax
 6. **Profile** ideal customers and buyer personas per target market
 7. **Verify** research-backed claims against cited sources via cogni-claims
 8. **Synthesize** a structured messaging repository and export proposals, briefs, and workbooks
+9. **Bootstrap** from a Lean Canvas or Business Model Canvas — extract products, features, and markets from a founding-stage hypothesis document
+10. **Deep-dive** into individual features or propositions with competitive landscape research, buyer language validation, and interactive co-creation
 
 ## What it means for you
 
@@ -34,6 +36,8 @@ A structured portfolio messaging workflow for Claude Cowork. Eight pluggable tax
 - **Market-specific by design.** Every proposition is scoped to a Feature x Market pair. The same feature gets different DOES/MEANS messaging for enterprise vs. mid-market.
 - **Eight industry taxonomies built in.** B2B ICT (57 categories), SaaS, FinTech, HealthTech, MarTech, Industrial Tech, Professional Services, Commercial Open Source — auto-selected by company context.
 - **Export-ready.** Proposals, market briefs, portfolio workbooks (markdown and XLSX), and an interactive HTML dashboard — ready for sales, investors, or internal strategy.
+- **Canvas-ready.** Bootstrap a full portfolio from a Lean Canvas — extract products, features, and markets from a founding-stage hypothesis in one step.
+- **Deep-dive capable.** Research how individual features or propositions compete in the market, validate buyer language, and co-create sharper messaging through dialogue.
 
 ## Installation
 
@@ -64,6 +68,9 @@ Or just describe what you want in natural language:
 - "Generate propositions for all features in the enterprise segment"
 - "Who are our top 3 competitors for managed security in mid-market?"
 - "Export a market brief for the DACH healthcare vertical"
+- "Bootstrap my portfolio from this lean canvas"
+- "Deep dive into the managed-security feature"
+- "Sharpen messaging for managed-security in mid-market"
 
 ## Try it
 
@@ -116,6 +123,9 @@ Each portfolio project lives in `cogni-portfolio/{slug}/` with typed JSON files 
 | `portfolio-scan` | skill | Discover offerings via web research and classify against taxonomy |
 | `trends-bridge` | skill | Bidirectional integration with cogni-trends TIPS analysis |
 | `portfolio-resume` | skill | Detect workflow phase and recommend next actions |
+| `portfolio-canvas` | skill | Bootstrap portfolio from a Lean Canvas or Business Model Canvas |
+| `feature-deep-dive` | skill | Deep research for a single feature — competitive landscape, differentiation, market positioning |
+| `proposition-deep-dive` | skill | Deep research for a single proposition — buyer language, competitive messaging, evidence enrichment |
 | `market-researcher` | agent | Web research for TAM/SAM/SOM with claim submission |
 | `competitor-researcher` | agent | Web research for competitive intelligence |
 | `customer-researcher` | agent | Web research for named customer profiling |
@@ -126,6 +136,11 @@ Each portfolio project lives in `cogni-portfolio/{slug}/` with typed JSON files 
 | `solution-review-assessor` | agent | Reviews solutions for pricing viability |
 | `feature-quality-assessor` | agent | Assesses feature description quality |
 | `quality-enricher` | agent | General-purpose iterative improvement |
+| `dashboard-refresher` | agent | Regenerate the portfolio dashboard HTML from current entity data |
+| `feature-review-assessor` | agent | Assess feature set quality from 3 stakeholder perspectives (product manager, strategist, pre-sales) |
+| `feature-deep-diver` | agent | Web research agent for feature competitive landscape |
+| `proposition-deep-diver` | agent | Web research agent for proposition messaging analysis |
+| `proposition-review-assessor` | agent | Assess proposition set quality from 3 stakeholder perspectives (buyer, sales, marketing) |
 | `portfolio-web-researcher` | agent | Parallel web research across taxonomy dimensions |
 
 ## Architecture
@@ -142,8 +157,8 @@ cogni-portfolio/
 │   ├── b2b-industrial-tech/      Industrial Tech (8 dims, 48 cats)
 │   ├── b2b-professional-services/ Prof. Services (8 dims, 44 cats)
 │   └── b2b-opensource/           Commercial OSS (8 dims, 50 cats)
-├── skills/                       17 portfolio skills
-├── agents/                       11 delegation agents
+├── skills/                       20 portfolio skills
+├── agents/                       16 delegation agents
 ├── references/
 │   └── data-model.md             Full entity schema
 └── scripts/                      7 utility scripts

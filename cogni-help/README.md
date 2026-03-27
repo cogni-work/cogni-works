@@ -4,7 +4,7 @@ Central help hub for the [insight-wave](https://github.com/cogni-work/insight-wa
 
 ## Why this exists
 
-The insight-wave ecosystem has 15 plugins with 60+ skills, dozens of agents, and interconnected workflows. Users need a single place to learn, navigate, diagnose, and get help:
+The insight-wave ecosystem has 12 plugins with 70+ skills, dozens of agents, and interconnected workflows. Users need a single place to learn, navigate, diagnose, and get help:
 
 | Need | Solution |
 |------|----------|

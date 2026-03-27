@@ -21,6 +21,8 @@ This plugin applies structured messaging frameworks (BLUF, Pyramid, SCQA, STAR, 
 2. **Review** with 5 parallel stakeholder personas (executive, technical, legal, marketing, end-user) — synthesize feedback, detect blind spots, auto-apply improvements
 3. **Scope** to a single dimension — tone only, structure only, or formatting only
 4. **Preserve arcs** — when paired with cogni-narrative, detects story arc frontmatter and applies element-specific techniques without breaking arc structure
+5. **Polish JSON** — extract and polish text fields inside structured JSON files (plugin descriptions, propositions, category names) via the copy-json adapter
+6. **Audit** arc-preservation references against upstream cogni-narrative definitions — detect missing arcs, heading mismatches, technique inconsistencies
 
 ## What it means for you
 
@@ -104,7 +106,9 @@ Detects German language automatically, loads Wolf Schneider style rules — brea
 | Component | Type | What it does |
 |-----------|------|--------------|
 | `copywriter` | skill | Executive document polishing — 7 messaging frameworks, 9 deliverable types, readability scoring, arc-aware mode, sales enhancement |
-| `reader` | skill | Multi-stakeholder review — 5 parallel personas with cross-persona synthesis, blind spot detection, and auto-improvement |
+| `copy-reader` | skill | Multi-stakeholder review — 5 parallel personas with cross-persona synthesis, blind spot detection, and auto-improvement |
+| `copy-json` | skill | Adapter that polishes text fields inside JSON files by delegating to copywriter |
+| `audit-copywriter` | skill | Audit arc-preservation references against cogni-narrative upstream definitions |
 | `copywriter` | agent (sonnet) | Delegation agent for parallel document polishing tasks |
 | `reader` | agent (sonnet) | Delegation agent for parallel stakeholder review tasks |
 | `/copywrite` | command | Polish a document with messaging frameworks and readability optimization |
@@ -115,9 +119,11 @@ Detects German language automatically, loads Wolf Schneider style rules — brea
 ```
 cogni-copywriting/
 ├── .claude-plugin/plugin.json    Plugin manifest
-├── skills/                       2 copywriting skills
+├── skills/                       4 copywriting skills
 │   ├── copywriter/
-│   └── reader/
+│   ├── copy-reader/
+│   ├── copy-json/
+│   └── audit-copywriter/
 ├── agents/                       2 delegation agents
 │   ├── copywriter.md
 │   └── reader.md

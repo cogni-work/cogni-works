@@ -406,6 +406,56 @@ print(f'COMMUNICATE_REJECTED={rejected}')
   fi
 fi
 
+# Detect stale communicate files (upstream changed after last generation)
+COMMUNICATE_STALE="false"
+COMMUNICATE_STALE_REASON=""
+if [ "$HAS_COMMUNICATE" = "true" ]; then
+  eval "$(python3 -c "
+import os, glob
+
+proj = '$PROJECT_DIR'
+
+# Find oldest communicate .md file (excluding review files)
+comm_files = [f for f in glob.glob(os.path.join(proj, 'output', 'communicate', '**', '*.md'), recursive=True)
+              if '.review.' not in os.path.basename(f)]
+if not comm_files:
+    print('COMMUNICATE_STALE=false')
+else:
+    oldest_comm = min(os.path.getmtime(f) for f in comm_files)
+
+    # Find newest upstream file across relevant directories
+    upstream_dirs = {
+        'propositions': os.path.join(proj, 'propositions', '*.json'),
+        'solutions': os.path.join(proj, 'solutions', '*.json'),
+        'features': os.path.join(proj, 'features', '*.json'),
+        'markets': os.path.join(proj, 'markets', '*.json'),
+        'customers': os.path.join(proj, 'customers', '*.json'),
+        'packages': os.path.join(proj, 'packages', '*.json'),
+    }
+    newest_upstream = 0
+    newest_source = ''
+    readme = os.path.join(proj, 'output', 'README.md')
+    if os.path.exists(readme):
+        mt = os.path.getmtime(readme)
+        if mt > newest_upstream:
+            newest_upstream = mt
+            newest_source = 'output/README.md'
+
+    for label, pattern in upstream_dirs.items():
+        for f in glob.glob(pattern):
+            mt = os.path.getmtime(f)
+            if mt > newest_upstream:
+                newest_upstream = mt
+                newest_source = label + '/' + os.path.basename(f)
+
+    if newest_upstream > oldest_comm:
+        print('COMMUNICATE_STALE=true')
+        print('COMMUNICATE_STALE_REASON=' + repr(newest_source + ' modified after communicate files were generated'))
+    else:
+        print('COMMUNICATE_STALE=false')
+" 2>/dev/null || echo 'COMMUNICATE_STALE=false')"
+fi
+
 # Count unprocessed uploads (exclude processed/ subdirectory)
 UPLOADS=0
 if [ -d "$PROJECT_DIR/uploads" ]; then
@@ -480,6 +530,11 @@ add_action() {
 # Recommend ingest when uploads exist (phase-independent)
 if [ "$UPLOADS" -gt 0 ]; then
   add_action "ingest" "$UPLOADS file(s) in uploads/ awaiting ingestion"
+fi
+
+# Recommend communicate refresh when stale (phase-independent)
+if [ "$COMMUNICATE_STALE" = "true" ]; then
+  add_action "communicate" "Communicate files may be stale — $COMMUNICATE_STALE_REASON"
 fi
 
 # Note available context entries (informational, phase-independent)
@@ -792,7 +847,9 @@ cat << EOF
     "total": $COMMUNICATE_TOTAL,
     "accepted": $COMMUNICATE_ACCEPTED,
     "revise": $COMMUNICATE_REVISE,
-    "rejected": $COMMUNICATE_REJECTED
+    "rejected": $COMMUNICATE_REJECTED,
+    "stale": $COMMUNICATE_STALE,
+    "stale_reason": "$COMMUNICATE_STALE_REASON"
   }
 }
 EOF

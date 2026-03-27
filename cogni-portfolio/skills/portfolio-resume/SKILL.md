@@ -57,7 +57,7 @@ Show a concise, scannable dashboard. Lead with the company name and project slug
 | Competitors | N / propositions | pct% |
 | Customers | N / markets | pct% |
 | Claims | N total | V verified, D deviated, U unverified |
-| Communicate | N files | A accepted, R revise, J rejected (if > 0) |
+| Communicate | N files | A accepted, R revise, J rejected (if > 0), STALE if upstream changed |
 | Context | N entries | breakdown by category (e.g., 3 pricing, 2 competitive, 1 strategic) |
 | Uploads | N | pending ingestion (if > 0) |
 
@@ -78,6 +78,7 @@ After the table:
   - Offer deep assessment: "For thorough quality assessment including mechanism and customer-relevance checks, ask for a full quality audit."
   - If no entities are flagged, skip this section entirely (don't show "0 flagged")
 - **Stale entities** — if `stale_entities` is non-empty, show them as priority actions before the regular next steps. Group by reason type: "N propositions need refresh because their upstream features were updated" is more useful than listing each one. If a stale entity also has quality warnings, lead with the quality issue (fix the root cause first, then refresh the proposition).
+- **Stale communicate files** — if `communicate.stale` is `true`, highlight this prominently: "Communicate files may need refresh — upstream data changed since they were generated." Present the reason from `communicate.stale_reason`. Recommend running `portfolio-communicate` to regenerate. This appears alongside stale entity warnings since it represents the same class of problem (downstream output invalidated by upstream changes).
 - **Context notice** — if `counts.context_entries > 0`, mention available context entries with a category breakdown. Read `context/context-index.json` for the `by_category` map to show counts per category. This helps the user understand what intelligence is available for downstream skills. If context exists but downstream skills haven't been run yet, highlight this: "N context entries from ingested documents are ready — these will automatically inform propositions, solutions, and other skills."
 - **Uploads notice** — if `counts.uploads > 0`, always mention pending files regardless of phase
 - **Gaps** — if `missing_propositions` is non-empty, list the first few missing pairs; note incomplete solutions/competitors/customers
@@ -88,7 +89,7 @@ Keep the tone warm and oriented toward action — this is a welcome-back moment,
 
 Present each entry from `next_actions` with the skill name and reason. Offer to proceed with the top recommendation immediately.
 
-If the phase is `complete`, congratulate the user and suggest reviewing outputs or running `export` for additional deliverables.
+If the phase is `complete`, congratulate the user and suggest reviewing outputs or running `export` for additional deliverables. If communicate files are stale (indicated by a communicate action in `next_actions`), mention that `portfolio-communicate` should be re-run to refresh customer-facing documentation.
 
 ## Phase Reference
 
@@ -103,7 +104,7 @@ If the phase is `complete`, congratulate the user and suggest reviewing outputs 
 | `synthesis` | All entities complete, claims clean | Run `synthesize` skill |
 | `export` | Overview generated, deliverables pending | Run `export` skill |
 | `communicate` | Deliverables generated, customer-facing docs pending | Run `communicate` skill |
-| `complete` | All workflow stages finished | Review outputs or re-export |
+| `complete` | All workflow stages finished | Review outputs, re-export, or refresh `communicate` if upstream data changed |
 
 ## Multi-Session Design
 

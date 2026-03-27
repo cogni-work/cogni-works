@@ -178,11 +178,12 @@ Run `$CLAUDE_PLUGIN_ROOT/scripts/project-status.sh <project-dir>` to get the `re
 - **Medium** — other viable combinations (generate after high-tier)
 - **Low** — beta feature + expansion market (generate only if user explicitly requests)
 - **Skip** — planned feature or aspirational market (exclude unless user overrides)
+- **Excluded** — Feature x Market pair explicitly marked as not relevant (via the feature's `excluded_markets`). Never generate proposals for these. Show "N/A — {reason}" in the workbook matrix.
 
 **Use relevance tiers to order deliverables:**
-- **Proposals**: Generate high-tier propositions first, then medium. Skip low-tier and skip-tier unless the user explicitly requests them. Within a tier, order by market (beachhead markets first).
+- **Proposals**: Generate high-tier propositions first, then medium. Skip low-tier and skip-tier unless the user explicitly requests them. Never generate for excluded pairs. Within a tier, order by market (beachhead markets first).
 - **Briefs**: Order markets by priority — beachhead first, then expansion, then aspirational.
-- **Workbook**: In the Proposition Matrix sheet, sort rows by relevance tier (high → medium → low → skip) so leadership sees the highest-impact pairs first. Add a "Tier" column showing the relevance tier for each pair.
+- **Workbook**: In the Proposition Matrix sheet, sort rows by relevance tier (high → medium → low → skip) so leadership sees the highest-impact pairs first. Add a "Tier" column showing the relevance tier for each pair. For excluded pairs, show "N/A — {reason}" in the cell rather than leaving it blank — this makes the exclusion visible and intentional.
 - **Full export**: Generate high-tier proposals first. When listing generated files, group by tier so the user sees what matters most.
 
 ### 3b. Read Source Data

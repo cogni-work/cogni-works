@@ -114,13 +114,89 @@ Before generating any output, read `references/output-templates.md` for the comp
 
 **Packages over features**: When packages exist for a product x market, present the bundled offering rather than listing individual features. Buyers think in solutions, not feature lists.
 
-### 4. Present Results and Suggest Next Steps
+**Proposition filtering for customer-tailored views**: At Level 3 (customer-tailored), do NOT include all propositions from the market. Read the persona's `buying_criteria` from the customer profile and select only the propositions whose DOES/MEANS directly address those criteria. A Managing Partner cares about different capabilities than a Head of Delivery. Aim for 5-7 propositions maximum — a busy executive will not read 10+ capability sections. Each section must earn its place by connecting to this specific persona's priorities. When in doubt, cut — fewer targeted sections beat comprehensive coverage at this level.
 
-List generated files with paths. Then suggest the downstream pipeline:
+**Proper character encoding**: Always use proper Unicode characters in generated output — German umlauts (ä, ö, ü, ß), em dashes (—), curly quotes where appropriate. Never substitute ae/oe/ue for ä/ö/ü, and never use ss where ß belongs (e.g., "Maßgeschneidert" not "Massgeschneidert", "Straße" not "Strasse"). The output is customer-facing prose, not ASCII-safe code.
 
+### 4. Stakeholder Review (Closed Loop)
+
+After generating markdown output, delegate to the `communicate-review-assessor` agent for a
+three-perspective quality assessment. This catches buyer disengagement, internal leakage,
+phantom claims, and generic positioning before the document reaches customers.
+
+**Spawn the agent** with:
+- Project directory path
+- The generated output file path
+- The output level (`overview`, `market`, or `customer`)
+- The market slug (for market and customer levels)
+- The persona identifier (for customer level)
+
+**Processing the verdict:**
+
+**accept** (all perspectives score 85+): The document is ready for customer-facing use.
+Store the review JSON and proceed to step 5. Even on accept, surface any `optional_improvements`
+from the synthesis to the user — they may want to apply these refinements before downstream
+pipeline steps.
+
+**revise** (all perspectives score 70+ but not all 85+):
+1. Parse `revision_guidance` and `critical_improvements` from the review JSON
+2. Re-read the generated markdown
+3. Apply CRITICAL improvements first, then HIGH. For each improvement:
+   - Cross-reference the source entities (propositions, customer profiles) to ensure accuracy
+   - Preserve: YAML frontmatter structure, evidence citations, German characters, narrative arc
+4. Write the revised markdown (overwrite the same output file)
+5. Re-run the assessor (round 2)
+6. Maximum 2 revision rounds. After round 2, present any remaining issues to the user
+   for decision — regardless of severity
+
+**reject** (any perspective below 50): Surface the full assessment to the user. Do not
+auto-retry. The output likely has fundamental issues (internal leakage, wrong buyer perspective,
+claims disconnected from portfolio data). Ask the user whether to regenerate from scratch
+or address specific issues manually.
+
+**Interactive vs batch mode:**
+- **Single file**: Present the assessment summary to the user after round 1. Let them
+  decide whether to auto-revise or adjust manually before round 2.
+- **Batch ("All" scope)**: Run the loop automatically. Files that accept after round 1
+  skip round 2. Files that fail after round 2 are flagged in the batch summary for
+  manual attention.
+
+**Store review results** alongside each generated file:
+- `output/communicate/portfolio-overview.review.json`
+- `output/communicate/market/{market-slug}.review.json`
+- `output/communicate/customer/{market-slug}--{persona}.review.json`
+
+The review JSON contains all rounds with timestamps and final verdict:
+```json
+{
+  "skill": "portfolio-communicate",
+  "assessor": "communicate-review-assessor",
+  "rounds": [
+    { "round": 1, "verdict": "revise", "overall_score": 74, "timestamp": "...", "full_assessment": { "..." } },
+    { "round": 2, "verdict": "accept", "overall_score": 87, "timestamp": "...", "full_assessment": { "..." } }
+  ],
+  "final_verdict": "accept",
+  "final_score": 87
+}
+```
+
+### 5. Present Results and Suggest Next Steps
+
+List generated files with paths AND their review status.
+
+**If all files accepted:**
+Show per-file review scores, then suggest the downstream pipeline:
 - **Polish prose**: "Run `/copywrite` on any generated file to polish for executive readability"
 - **Arc narrative**: "Run `/narrative --source-path output/communicate/portfolio-overview.md` to transform into an arc-driven executive narrative"
 - **Visual formats** (after narrative): `/story-to-web` for landing pages, `/story-to-slides` for presentations, `/story-to-big-picture` for visual journey maps
+
+**If any files in revise after max rounds:**
+Show remaining issues per file. Suggest targeted manual edits before downstream pipeline.
+Offer to re-run review after user edits.
+
+**If any files rejected:**
+Block downstream suggestions for those files. Show the diagnosis with specific failure
+points. Suggest regeneration or manual intervention before attempting downstream pipeline.
 
 ## Important Notes
 
@@ -136,3 +212,7 @@ List generated files with paths. Then suggest the downstream pipeline:
 
 For detailed output templates including heading structure, section guidance, data source mapping, and tone examples:
 - **`references/output-templates.md`** — Complete markdown templates for all three output levels
+
+### Agents
+
+- **`communicate-review-assessor`** — Three-perspective stakeholder review for customer-facing output quality (Target Buyer, Marketing Director, Sales Director). Spawned automatically after generation in step 4.

@@ -83,6 +83,8 @@ Construct the full HTML document:
 </html>
 ```
 
+**Mobile menu script**: Replace `{mobile_menu_script}` with the inline JavaScript from `${plugin_root}/libraries/navigation-patterns.md` (section: Mobile Menu > JavaScript). Include it as a `<script>` tag before `</body>`. This enables the hamburger menu toggle on mobile viewports.
+
 ### 4. Content Transformation Rules
 
 When transforming source content to HTML:

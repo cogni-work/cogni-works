@@ -25,26 +25,23 @@ def generate_css(dv: dict) -> str:
     radius = dv.get("radius", 8)
     shadows = dv.get("shadows", {})
 
-    # Build CSS custom properties
+    # Pass through all theme colors as CSS custom properties.
+    # Rename "primary" to "brand-primary" to avoid collision with the
+    # website alias --primary (which maps to the accent/action color).
+    renames = {"primary": "brand-primary"}
     css_vars = []
-    color_map = {
-        "primary": colors.get("accent", "#2563EB"),
-        "primary-dark": colors.get("accent_dark", "#1E40AF"),
-        "background": colors.get("background", "#FFFFFF"),
-        "background-alt": colors.get("surface", "#F9FAFB"),
-        "surface-dark": colors.get("surface_dark", "#111827"),
-        "text": colors.get("text", "#1A1A1A"),
-        "text-muted": colors.get("text_muted", "#6B7280"),
-        "text-light": colors.get("text_light", "#D1D5DB"),
-        "accent": colors.get("accent", "#F59E0B"),
-        "accent-muted": colors.get("accent_muted", colors.get("accent", "#F59E0B") + "80"),
-        "border": colors.get("border", "#E5E7EB"),
-        "surface-dark-text": "#FFFFFF",
-        "surface-dark-muted": colors.get("text_light", "#D1D5DB"),
-    }
+    for key, value in colors.items():
+        css_name = renames.get(key, key).replace("_", "-")
+        css_vars.append(f"  --{css_name}: {value};")
 
-    for name, value in color_map.items():
-        css_vars.append(f"  --{name}: {value};")
+    # Website-specific aliases (semantic names used by CSS classes)
+    css_vars.append("")
+    css_vars.append("  /* Website aliases */")
+    css_vars.append(f"  --primary: {colors.get('accent', '#2563EB')};")
+    css_vars.append(f"  --primary-dark: {colors.get('accent_dark', '#1E40AF')};")
+    css_vars.append(f"  --background-alt: {colors.get('surface', '#F9FAFB')};")
+    css_vars.append(f"  --surface-dark-text: #FFFFFF;")
+    css_vars.append(f"  --surface-dark-muted: {colors.get('text_light', '#D1D5DB')};")
 
     css_vars.append("")
     css_vars.append(f"  --font-primary: {fonts.get('headers', 'Inter, system-ui, sans-serif')};")
@@ -550,6 +547,237 @@ h3 {{ font-size: 1.25rem; }}
   .container {{ padding: 0 1rem; }}
   .hero__headline {{ font-size: 1.75rem; }}
   .btn--lg {{ padding: 0.75rem 1.5rem; font-size: 1rem; }}
+}}
+
+/* === Header Navigation === */
+.site-header {{
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--background);
+  border-bottom: 1px solid var(--border);
+  padding: 0 1.5rem;
+  height: 72px;
+}}
+
+.site-header__inner {{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+}}
+
+.site-header__logo-text {{
+  font-family: var(--font-primary);
+  font-weight: bold;
+  font-size: 1.25rem;
+  color: var(--text);
+  text-decoration: none;
+}}
+
+.site-nav__list {{
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}}
+
+.site-nav__link {{
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color 0.2s;
+}}
+
+.site-nav__link:hover,
+.site-nav__link--active {{
+  color: var(--accent);
+}}
+
+.site-nav__item--has-children {{
+  position: relative;
+}}
+
+.site-nav__dropdown {{
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: var(--background);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.5rem 0;
+  min-width: 200px;
+  box-shadow: var(--shadow-md);
+}}
+
+.site-nav__item--has-children:hover .site-nav__dropdown {{
+  display: block;
+}}
+
+.site-nav__dropdown-link {{
+  display: block;
+  padding: 0.5rem 1rem;
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.875rem;
+}}
+
+.site-nav__dropdown-link:hover {{
+  color: var(--accent);
+  background: var(--background-alt);
+}}
+
+.site-header__mobile-toggle {{
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+}}
+
+.hamburger {{
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: var(--text);
+  position: relative;
+}}
+
+.hamburger::before,
+.hamburger::after {{
+  content: "";
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: var(--text);
+  position: absolute;
+  left: 0;
+}}
+
+.hamburger::before {{ top: -7px; }}
+.hamburger::after {{ top: 7px; }}
+
+@media (max-width: 768px) {{
+  .site-nav, .site-header__cta {{ display: none; }}
+  .site-header__mobile-toggle {{ display: block; }}
+  .site-nav--open {{
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 72px;
+    left: 0;
+    right: 0;
+    background: var(--background);
+    border-bottom: 1px solid var(--border);
+    padding: 1rem;
+  }}
+  .site-nav--open .site-nav__list {{
+    flex-direction: column;
+    gap: 0.5rem;
+  }}
+}}
+
+/* === Footer === */
+.site-footer {{
+  background: var(--surface-dark);
+  color: var(--surface-dark-text, #fff);
+  padding: 4rem 0 2rem;
+}}
+
+.site-footer__grid {{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+}}
+
+.site-footer__heading {{
+  font-family: var(--font-primary);
+  font-size: 1rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}}
+
+.site-footer__links {{
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}}
+
+.site-footer__links a {{
+  color: var(--surface-dark-muted, #ccc);
+  text-decoration: none;
+  font-size: 0.875rem;
+  line-height: 2;
+}}
+
+.site-footer__links a:hover {{
+  color: #fff;
+}}
+
+.site-footer__logo {{
+  font-family: var(--font-primary);
+  font-weight: bold;
+  font-size: 1.125rem;
+  display: block;
+  margin-bottom: 0.5rem;
+}}
+
+.site-footer__tagline {{
+  font-size: 0.875rem;
+  color: var(--surface-dark-muted, #ccc);
+}}
+
+.site-footer__bottom {{
+  border-top: 1px solid rgba(255,255,255,0.1);
+  padding-top: 1.5rem;
+  text-align: center;
+}}
+
+.site-footer__copyright {{
+  font-size: 0.8125rem;
+  color: var(--surface-dark-muted, #999);
+}}
+
+/* === Breadcrumbs === */
+.breadcrumb__list {{
+  display: flex;
+  gap: 0.5rem;
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1rem;
+  font-size: 0.875rem;
+}}
+
+.breadcrumb__item + .breadcrumb__item::before {{
+  content: "\203A";
+  margin-right: 0.5rem;
+  color: var(--text-muted);
+}}
+
+.breadcrumb__item a {{
+  color: var(--text-muted);
+  text-decoration: none;
+}}
+
+.breadcrumb__item a:hover {{
+  color: var(--accent);
+}}
+
+.breadcrumb__item--current {{
+  color: var(--text);
+}}
+
+.breadcrumb--light .breadcrumb__item a,
+.breadcrumb--light .breadcrumb__item::before {{
+  color: var(--surface-dark-muted, #ccc);
+}}
+
+.breadcrumb--light .breadcrumb__item--current {{
+  color: #fff;
 }}
 """
     return css

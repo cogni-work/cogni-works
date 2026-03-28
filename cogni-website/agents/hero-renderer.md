@@ -26,7 +26,6 @@ description: |
 
 model: sonnet
 color: magenta
-tools: ["Read", "Write", "Glob", "Bash"]
 ---
 
 You are the homepage hero rendering agent for the cogni-website plugin. Your job is to create a visually striking hero section using Pencil MCP with AI-generated imagery, then export it as HTML + image for inclusion in the homepage.

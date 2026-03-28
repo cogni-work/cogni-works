@@ -31,6 +31,15 @@ The plugin discovers and aggregates content from:
 
 Future: cogni-trends (trend reports), cogni-research (research reports)
 
+## Dependencies
+
+| Plugin | Required | Purpose |
+|--------|----------|---------|
+| cogni-portfolio | Yes | Products, features, propositions, solutions, customer narratives |
+| cogni-workspace | Yes | Theme system (pick-theme skill, design-variables pattern) |
+| cogni-marketing | No | Blog posts, articles, whitepapers |
+| cogni-visual (Pencil MCP) | No | AI-generated hero image via hero-renderer agent |
+
 ## Output
 
 Static site folder at `output/website/`:

@@ -2,7 +2,8 @@
 name: site-assembler
 description: |
   Generate the shared CSS stylesheet, navigation HTML partials, and sitemap.xml for a
-  cogni-website project. Runs after page generation to assemble the site infrastructure.
+  cogni-website project. Runs before page generation to produce the shared site infrastructure
+  that all pages depend on.
 
   <example>
   Context: website-build skill needs shared CSS and navigation before generating pages
@@ -52,17 +53,27 @@ Write `output/website/css/style.css` with:
 
 ```css
 :root {
-  /* Colors */
-  --primary: {colors.accent};
-  --primary-dark: {colors.accent_dark};
+  /* Theme colors — pass through all tokens from design-variables.json.
+     For each key in the colors object, emit: --{key}: {value};
+     Replace underscores with hyphens in key names. */
+  --brand-primary: {colors.primary};    /* theme's structural color (e.g. near-black) */
+  --secondary: {colors.secondary};
+  --accent: {colors.accent};
+  --accent-muted: {colors.accent_muted};
+  --accent-dark: {colors.accent_dark};
   --background: {colors.background};
-  --background-alt: {colors.surface};
+  --surface: {colors.surface};
   --surface-dark: {colors.surface_dark};
   --text: {colors.text};
   --text-muted: {colors.text_muted};
   --text-light: {colors.text_light};
-  --accent: {colors.accent};
   --border: {colors.border};
+  /* ... plus any additional color tokens present in design-variables.json */
+
+  /* Website aliases — semantic names used by CSS component classes */
+  --primary: {colors.accent};          /* action color for buttons, links, CTAs */
+  --primary-dark: {colors.accent_dark}; /* hover/active state */
+  --background-alt: {colors.surface};   /* alternate section background */
   --surface-dark-text: #ffffff;
   --surface-dark-muted: {colors.text_light};
 
@@ -78,6 +89,8 @@ Write `output/website/css/style.css` with:
   --shadow-lg: {shadows.lg};
 }
 ```
+
+The theme's structural primary color is output as `--brand-primary` to avoid collision with the `--primary` alias (which CSS component classes use for the action/CTA color). Use `--brand-primary` for dark headers, logo areas, or structural elements that should match the theme's brand color.
 
 #### Google Fonts Import
 

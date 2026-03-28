@@ -19,7 +19,6 @@ Every page follows this outer shell:
   <meta name="description" content="{meta_description}">
   <title>{page_title} — {site_title}</title>
   <link rel="stylesheet" href="{css_path}">
-  {google_fonts_import}
 </head>
 <body>
   {navigation_header}

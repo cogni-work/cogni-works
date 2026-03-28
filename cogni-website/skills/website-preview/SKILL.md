@@ -7,7 +7,7 @@ description: |
   "check the website", "validate links", "website preview", or wants to see the
   generated site in a browser — even without saying "preview" explicitly.
   Requires a built website in output/website/.
-allowed-tools: Read, Glob, Bash, Agent
+allowed-tools: Read, Write, Glob, Bash, Agent, AskUserQuestion
 ---
 
 # Website Preview

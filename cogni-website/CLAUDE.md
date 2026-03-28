@@ -14,7 +14,7 @@ skills/              Website generation workflow skills
 
 agents/              Parallel generation agents
   page-generator.md    Generate a single HTML page from source content + template
-  site-assembler.md    Generate shared CSS, nav partials, sitemap, validate links
+  site-assembler.md    Generate shared CSS, nav partials, sitemap
   hero-renderer.md     Pencil MCP rendering for homepage hero (AI images)
 
 libraries/           Shared reference material
@@ -26,10 +26,10 @@ libraries/           Shared reference material
 ## Content Sources
 
 The plugin discovers and aggregates content from:
-- **cogni-portfolio** — Products, features, propositions, solutions, customer narratives
+- **cogni-portfolio** — Products, features, propositions, solutions, customer narratives, portfolio-communicate enrichments
 - **cogni-marketing** — Blog posts, articles, whitepapers, landing pages
-
-Future: cogni-trends (trend reports), cogni-research (research reports)
+- **cogni-trends** — Trend reports with investment themes for an insights page
+- **cogni-research** — Research reports for a resources/whitepapers page
 
 ## Dependencies
 
@@ -38,6 +38,8 @@ Future: cogni-trends (trend reports), cogni-research (research reports)
 | cogni-portfolio | Yes | Products, features, propositions, solutions, customer narratives |
 | cogni-workspace | Yes | Theme system (pick-theme skill, design-variables pattern) |
 | cogni-marketing | No | Blog posts, articles, whitepapers |
+| cogni-trends | No | Trend reports, investment themes for insights page |
+| cogni-research | No | Research reports for resources page |
 | cogni-visual (Pencil MCP) | No | AI-generated hero image via hero-renderer agent |
 
 ## Output
@@ -55,6 +57,8 @@ output/website/
 │   ├── blog.html
 │   ├── blog/{slug}.html
 │   ├── case-studies.html
+│   ├── insights.html
+│   ├── ressourcen.html
 │   └── contact.html
 ├── images/             Generated and referenced images
 └── sitemap.xml

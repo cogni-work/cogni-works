@@ -2,12 +2,13 @@
 name: website-setup
 description: |
   This skill initializes a cogni-website project by discovering content sources from
-  cogni-portfolio and cogni-marketing, selecting a theme, and scaffolding the project
-  directory. It should be triggered when the user mentions creating a website, starting
-  a new website project, setting up a website, "build me a website", "company website",
-  "customer website", "generate a website", "website setup", "Website erstellen",
-  or wants to turn portfolio content into a web presence — even without saying "setup"
-  explicitly.
+  cogni-portfolio, cogni-marketing, cogni-trends, and cogni-research, selecting a theme,
+  and scaffolding the project directory. It should be triggered when the user mentions
+  creating a website, starting a new website project, setting up a website, "build me a
+  website", "company website", "customer website", "generate a website", "website setup",
+  "Website erstellen", "Homepage erstellen", "Internetauftritt", "Webseite generieren",
+  "online presence", "web presence", or wants to turn portfolio content into a web
+  presence — even without saying "setup" explicitly.
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Agent, Skill, AskUserQuestion
 ---
 
@@ -17,7 +18,13 @@ Initialize a cogni-website project by discovering content from existing insight-
 
 ## Core Concept
 
-A website project aggregates content from cogni-portfolio (products, features, propositions, customer narratives) and cogni-marketing (blog posts, articles, whitepapers) into a multi-page static website. Setup discovers what content is available, captures company details, selects a visual theme, and creates `website-project.json` — the configuration that all downstream skills depend on.
+A website project aggregates content from multiple insight-wave plugins into a multi-page static website:
+- **cogni-portfolio** (required) — products, features, propositions, solutions, customer narratives
+- **cogni-marketing** (optional) — blog posts, articles, whitepapers
+- **cogni-trends** (optional) — trend reports with investment themes for an insights page
+- **cogni-research** (optional) — research reports for a resources/whitepapers page
+
+Setup discovers what content is available across these plugins, validates minimum requirements, captures company details, selects a visual theme, and creates `website-project.json` — the configuration that all downstream skills depend on.
 
 If a `website-project.json` already exists in the working directory, redirect to the `website-resume` skill.
 
@@ -29,37 +36,71 @@ Scan the current directory and immediate children for `website-project.json`. If
 
 ### 2. Discover Content Sources
 
-Search for insight-wave plugin projects in nearby directories (parent, siblings, children):
+Scan the workspace for insight-wave plugin projects using recursive globs. This mirrors the discovery pattern used by cogni-marketing:marketing-setup — recursive globs ensure discovery works regardless of workspace layout.
 
-#### Portfolio Discovery
-- Look for `cogni-portfolio/*/portfolio.json` or `*/portfolio.json`
-- Read `portfolio.json` to extract: company name, description, industry, language
+#### Portfolio Discovery (required)
+- Glob for `**/portfolio.json` (recursive — do not use narrow single-level globs)
+- Read each `portfolio.json` to extract: company name, description, industry, language
 - Check for synthesized output: `output/README.md`
-- Check for customer narratives: `output/communicate/customer-narrative/*.md`
+- Check for enriched customer narratives at `output/communicate/customer-narrative/`:
+  - Overview narrative (`portfolio-overview.md`)
+  - Market-level narratives (`market/*.md`)
+  - Persona-level narratives (`customer/*.md`)
+  - These are audience-tailored prose — richer than raw entity JSON. Store their paths for downstream page generation.
 - Count entities: products, features, markets, propositions, solutions, packages
 
-#### Marketing Discovery
-- Look for `cogni-marketing/*/marketing-project.json` or `*/marketing-project.json`
+#### Marketing Discovery (optional)
+- Glob for `**/marketing-project.json`
 - Read `marketing-project.json` for brand voice and content strategy
 - Count content pieces by type: `content/thought-leadership/*.md`, `content/demand-generation/*.md`, `content/lead-generation/*.md`
 
-Present findings:
+#### Trends Discovery (optional)
+- Glob for `**/tips-project.json`
+- For each found, check if `tips-trend-report.md` exists alongside it (trend report completed)
+- If present, also check for `tips-value-model.json` to count investment themes
+- Trend reports contain executive-ready narrative content with inline citations — ideal for an Insights page
+
+#### Research Discovery (optional)
+- Glob for directories containing `**/output/draft-v*.md` or `**/output/report.md` (cogni-research output)
+- Count available research reports
+- Research reports serve as whitepapers/resources — high-value content for establishing authority
+
+#### Present Findings
 
 ```
 Gefundene Inhaltsquellen:
 
-Portfolio: ../cogni-portfolio/acme-cloud/
+Portfolio: ../acme-cloud/
   ✓ 3 Produkte, 8 Features, 2 Märkte, 12 Propositions
-  ✓ Kundendarstellungen vorhanden (3 Narrative)
+  ✓ Kundendarstellungen: 1 Übersicht, 2 Markt-Narrative, 3 Persona-Narrative
   ✓ Synthese erstellt
 
-Marketing: ../cogni-marketing/acme-cloud/
+Marketing: ../acme-marketing/
   ✓ 4 Thought-Leadership-Artikel
   ✓ 6 Demand-Generation-Beiträge
   ✓ 2 Landing Pages
+
+Trends: ../b2b-ict-trends/
+  ✓ Trend-Report mit 5 Investitionsthemen
+
+Research: ../cloud-security-report/
+  ✓ 1 Forschungsbericht
 ```
 
-If no portfolio project is found, warn the user that a portfolio project is the minimum requirement. Offer to help set one up via `cogni-portfolio:portfolio-setup`.
+If multiple projects of the same type are found, present all and ask the user to select one. If only one exists, confirm automatically.
+
+#### Validation Gates
+
+**Hard gate** — if no portfolio project is found, warn the user that a portfolio is the minimum requirement. Offer to help set one up via `cogni-portfolio:portfolio-setup`. Do not proceed without a portfolio.
+
+**Hard gate** — the discovered portfolio must have at least 1 product AND a company name/description. Without these, the website has no meaningful content to render.
+
+**Soft warnings** (inform but allow proceeding):
+- No propositions → product pages will lack benefit messaging
+- No customer narratives → case studies page not available
+- No marketing content → no blog section
+- No trend report → no insights page
+- No research reports → no resources page
 
 ### 3. Gather Company Details
 
@@ -80,11 +121,13 @@ After theme selection, derive design variables by reading the theme.md file and 
 
 ### 5. Configure Build Options
 
-Ask the user about build preferences using AskUserQuestion:
+Ask the user about build preferences using AskUserQuestion. Only show options for content sources that were actually discovered:
 
 - **Homepage Hero**: "Pencil MCP" (AI-generated hero image, ~3-5 Min.) or "CSS-only" (schneller, Farbverlauf-Hintergrund)
 - **Blog einbinden**: Ja/Nein (only if marketing content exists)
 - **Fallstudien einbinden**: Ja/Nein (only if customer narratives exist)
+- **Insights-Seite einbinden**: Ja/Nein (only if trend report exists)
+- **Ressourcen-Seite einbinden**: Ja/Nein (only if research reports exist)
 
 ### 6. Create Project Structure
 
@@ -94,9 +137,20 @@ Create the website project directory and write configuration:
 mkdir -p cogni-website/{output/website/{css,pages,images},output}
 ```
 
-Write `website-project.json` following the schema documented in `${CLAUDE_PLUGIN_ROOT}/libraries/EXAMPLE_WEBSITE_PLAN.md` (see the project config section). Key fields: `slug`, `name`, `language`, `theme_path`, `sources` (portfolio + marketing paths), `company` (name, tagline, description, contact details), `build_options` (hero_renderer, include_blog, include_case_studies), and `content_discovery` (entity counts per source).
+Write `website-project.json` following the schema documented in `${CLAUDE_PLUGIN_ROOT}/libraries/EXAMPLE_WEBSITE_PLAN.md` (see the project config section). Key fields:
 
-All boolean fields default to `true`. Set `hero_renderer` to `"pencil"` or `"html"` based on user choice. Set `marketing_project` to `null` if no marketing project was found.
+- `slug`, `name`, `language`, `theme_path`
+- `company` — name, tagline, description, contact details
+- `sources`:
+  - `portfolio_project` — path to portfolio directory (required)
+  - `marketing_project` — path to marketing directory (null if not found)
+  - `trends_project` — path to trends directory (null if not found)
+  - `research_projects` — array of paths to research report directories (empty array if none)
+  - `enriched_portfolio_narratives` — object with `overview`, `markets` (map: slug → path), `personas` (map: slug → path). null if no portfolio-communicate output exists.
+- `build_options` — hero_renderer, include_blog, include_case_studies, include_insights, include_resources
+- `content_discovery` — entity counts per source for change detection by website-resume
+
+All boolean build options default to `true` when the corresponding content source exists, `false` when it does not. Set `hero_renderer` to `"pencil"` or `"html"` based on user choice.
 
 ### 7. Present Summary and Next Steps
 
@@ -108,8 +162,12 @@ Konfiguration:
   Sprache: {language}
   Theme: {theme_name}
   Hero: {pencil|html}
-  Blog: {ja|nein}
-  Fallstudien: {ja|nein}
+
+Inhaltsquellen:
+  Portfolio: ✓ ({N} Produkte, {M} Features, {K} Propositions)
+  Marketing: {✓ N Artikel | ✗ nicht gefunden}
+  Trends:    {✓ Trend-Report | ✗ nicht gefunden}
+  Research:  {✓ N Berichte | ✗ nicht gefunden}
 
 Nächster Schritt: /website-plan — Seitenstruktur planen und Inhalte zuordnen
 ```

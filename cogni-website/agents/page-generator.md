@@ -137,6 +137,17 @@ Return a compact JSON summary:
 }
 ```
 
+## Handling Missing Sources
+
+Source files may not exist if content was deleted or moved since the plan was created. Handle this gracefully:
+
+- If a `source_files` path does not exist, skip it and note it in the return JSON under `"warnings"`
+- If a `source_entities` glob resolves to zero files, skip that content section
+- If a section has no source data at all, omit the section from the output (do not generate empty HTML blocks)
+- If ALL sources for the page are missing, generate a minimal page with the page header and a "Content coming soon" message, and set `"ok": false` in the return JSON
+
+Include a `"missing_sources"` array in the return JSON listing any paths that could not be read.
+
 ## Quality Standards
 
 - Semantic HTML: proper heading hierarchy (h1 → h2 → h3), landmark elements, alt text placeholders

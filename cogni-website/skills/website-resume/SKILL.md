@@ -5,8 +5,8 @@ description: |
   primary re-entry point for returning to website work across sessions. It should be
   triggered when the user mentions "continue website", "resume website", "website status",
   "where was I", "Website fortsetzen", "Website-Status", "weiter mit der Website",
-  "pick up where I left off", or opens a session involving an existing website project
-  — even without saying "resume" explicitly.
+  "was fehlt noch", "pick up where I left off", "website status check", or opens a
+  session involving an existing website project — even without saying "resume" explicitly.
 allowed-tools: Read, Glob, Grep, Bash, Skill
 ---
 
@@ -73,6 +73,36 @@ Based on the state:
 ### 5. Detect Content Changes
 
 If the site is already built, check if source content has changed since the last build:
-- Compare modification times of source files vs. output HTML files
-- Flag pages that need regeneration
-- Offer partial or full rebuild
+- Compare modification times of source files (from `website-plan.json` source_files) vs. output HTML files
+- Flag pages where sources are newer than the built HTML
+- Offer partial rebuild (only changed pages) or full rebuild
+
+### 6. Detect Upstream Changes
+
+Re-run content discovery using the same globs as website-setup and compare against the `content_discovery` counts stored in `website-project.json`:
+
+- **New entities**: e.g., a new product was added to portfolio, or new marketing articles published → suggest re-planning to include them
+- **Removed entities**: source files referenced in the plan no longer exist → warn about stale plan
+- **New upstream plugins**: glob for `**/tips-project.json` and `**/output/report.md` that were not present when the project was created (i.e., `sources.trends_project` or `sources.research_projects` is null/empty but projects now exist) → suggest re-running setup to discover new content sources
+
+Present changes:
+
+```
+Änderungen seit letztem Build:
+
+  Neue Inhalte:
+    ✚ 2 neue Marketing-Artikel
+    ✚ 1 neues Produkt im Portfolio
+
+  Neue Inhaltsquellen verfügbar:
+    ✚ Trend-Report gefunden (vorher nicht eingebunden)
+
+  Empfehlung: /website-setup erneut ausführen, um neue Quellen einzubinden
+```
+
+Add to recommendation table:
+
+| State | Recommendation |
+|-------|---------------|
+| New content sources discovered | → `/website-setup` — Neue Quellen einbinden, dann erneut planen |
+| New entities in existing sources | → `/website-plan` — Seitenstruktur aktualisieren |

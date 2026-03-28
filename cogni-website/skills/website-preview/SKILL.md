@@ -4,7 +4,8 @@ description: |
   This skill previews the generated website in a browser, validates links, and reports
   structural issues. It should be triggered when the user mentions "preview website",
   "open website", "Website anzeigen", "Website öffnen", "show me the website",
-  "check the website", "validate links", "website preview", or wants to see the
+  "check the website", "validate links", "website preview", "how does it look",
+  "wie sieht es aus", "test the website", "Website testen", or wants to see the
   generated site in a browser — even without saying "preview" explicitly.
   Requires a built website in output/website/.
 allowed-tools: Read, Write, Glob, Bash, Agent, AskUserQuestion

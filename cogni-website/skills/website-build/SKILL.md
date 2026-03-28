@@ -5,9 +5,9 @@ description: |
   generation, hero rendering, and site assembly. It produces a deployable output/website/
   folder from the website-plan.json blueprint. This skill should be used when the user
   mentions "build the website", "generate website", "website build", "Website erstellen",
-  "Website generieren", "Seiten erzeugen", "assemble the site", "create all pages",
-  or wants to execute the website plan — even if they don't say "build" explicitly.
-  Requires website-plan.json.
+  "Website generieren", "Seiten erzeugen", "HTML erzeugen", "render the website",
+  "assemble the site", "create all pages", or wants to execute the website plan — even
+  if they don't say "build" explicitly. Requires website-plan.json.
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Agent, Skill
 ---
 
@@ -29,6 +29,19 @@ Read `website-project.json` and `website-plan.json`. Extract:
 - Navigation structure
 - Build options (hero_renderer, language)
 - Company details
+
+### 1.5. Validate Source Files
+
+Before generating anything, verify that the source files referenced in the plan still exist. Content may have changed since planning — a deleted product or moved narrative would cause a page-generator agent to fail.
+
+For each page in `website-plan.json`:
+- Check all paths in `source_files` exist
+- Check all glob patterns in `source_entities` resolve to at least one file
+- Track pages with missing sources
+
+**If sources are missing**: present a summary of affected pages and missing files. Ask whether to proceed (skipping those pages) or abort. Do not silently launch agents with broken source references.
+
+**If all sources exist**: proceed without interruption.
 
 ### 2. Prepare Output Directory
 

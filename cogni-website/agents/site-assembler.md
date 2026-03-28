@@ -167,14 +167,12 @@ Write `output/website/sitemap.xml`:
 Priority rules:
 - Home: 1.0
 - Products, Solutions: 0.8
-- Product detail, Blog index, Case studies: 0.7
-- Blog posts, About, Contact: 0.5
+- Product detail, Blog index, Case studies, Insights, Resources: 0.7
+- Blog posts, About, Contact, Custom pages: 0.5
 
-### 5. Validate Links
+### 5. Return Result
 
-Scan all generated HTML files in `output/website/` and check that every `href` pointing to a local file (not starting with `http`) resolves to an existing file. Report broken links.
-
-### 6. Return Result
+Note: link validation is deferred to post-build. At this point only CSS, nav partials, and sitemap exist — pages have not been generated yet. The `website-preview` skill handles link validation after all pages are built.
 
 ```json
 {
@@ -182,7 +180,6 @@ Scan all generated HTML files in `output/website/` and check that every `href` p
   "css_path": "output/website/css/style.css",
   "css_size_kb": 12,
   "sitemap_pages": 14,
-  "broken_links": [],
   "header_nav_items": 5,
   "footer_columns": 2
 }

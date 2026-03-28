@@ -5,8 +5,9 @@ description: |
   available content, proposing pages, mapping content to page sections, and generating
   website-plan.json. It should be triggered when the user mentions "plan the website",
   "site structure", "which pages", "website plan", "plan pages", "Seitenstruktur",
-  "Website planen", "map content to pages", or wants to decide what pages their website
-  should have — even without saying "plan" explicitly. Requires website-project.json.
+  "Website planen", "Seiten festlegen", "map content to pages", "which pages do I need",
+  "welche Seiten brauche ich", or wants to decide what pages their website should have
+  — even without saying "plan" explicitly. Requires website-project.json.
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion
 ---
 
@@ -47,6 +48,18 @@ Go beyond the counts from setup — read actual content to understand what's ava
 - Read all `content/demand-generation/*.md` — extract titles, dates, formats
 - Read all `content/lead-generation/*.md` — extract titles, formats
 
+#### Trends Scan
+If `sources.trends_project` is set in website-project.json:
+- Read `tips-trend-report.md` — extract investment theme titles and executive summary
+- Read `tips-value-model.json` — extract solution template names and rankings
+- These feed the `insights` page type
+
+#### Research Scan
+If `sources.research_projects` is non-empty in website-project.json:
+- For each research project, read the report output (`output/report.md` or latest `output/draft-v*.md`)
+- Extract title, abstract/executive summary, date, topic
+- These feed the `resources` page type
+
 ### 3. Propose Site Structure
 
 Based on discovered content, propose a page list. Apply these rules:
@@ -61,6 +74,9 @@ Based on discovered content, propose a page list. Apply these rules:
 | `blog-index` | Marketing content exists AND `include_blog: true` | Conditional |
 | `blog-post` | Per marketing article | One per article |
 | `case-studies` | Customer narratives exist AND `include_case_studies: true` | Conditional |
+| `insights` | Trend report exists AND `include_insights: true` | Conditional |
+| `resources` | Research reports exist AND `include_resources: true` | Conditional |
+| `custom` | User requests ad-hoc pages | Per user request |
 | `contact` | Always | Always |
 
 Present the proposed structure as a table:
@@ -76,6 +92,8 @@ Vorgeschlagene Seitenstruktur:
 | Cloud Platform | product-detail | cloud-platform.json | Features + Benefits + Preise |
 | ... | ... | ... | ... |
 | Blog | blog-index | marketing/ | 10 Artikel |
+| Insights | insights | tips-trend-report.md | Investitionsthemen + Trends |
+| Ressourcen | resources | research reports | Forschungsberichte |
 | Kontakt | contact | Konfiguration | Formular + Kontaktdaten |
 
 Gesamt: 14 Seiten

@@ -473,7 +473,156 @@ The homepage is the only page that may use Pencil MCP for its hero section. All 
 
 ---
 
-## 9. Contact Page (`contact`)
+## 9. Insights Page (`insights`)
+
+Showcases trend analysis from cogni-trends. The trend report is executive-ready content with investment themes — each theme tells a strategic story about why a capability matters.
+
+### Sections
+
+1. **Page Header** — title, subtitle explaining the trends context
+2. **Trend Highlights** (dark background) — 3-4 stat cards with key numbers from the trend report (market sizes, growth rates, adoption percentages)
+3. **Investment Themes** (light background) — card grid with one card per investment theme from the value model
+4. **CTA** — contact or download
+
+### HTML Pattern
+
+```html
+<section class="page-header">
+  <div class="container">
+    <nav class="breadcrumb">{breadcrumb}</nav>
+    <h1>{page_title}</h1>
+    <p class="page-header__subtitle">{subtitle}</p>
+  </div>
+</section>
+
+<section class="section section--dark">
+  <div class="container">
+    <div class="card-grid card-grid--4">
+      <div class="stat">
+        <span class="stat__number">{number}</span>
+        <span class="stat__label">{label}</span>
+        <span class="stat__context">{context}</span>
+      </div>
+      <!-- repeat per highlight stat -->
+    </div>
+  </div>
+</section>
+
+<section class="section section--light">
+  <div class="container">
+    <h2 class="section__headline">{themes_headline}</h2>
+    <div class="card-grid card-grid--2">
+      <article class="card theme-card">
+        <span class="theme-card__dimension">{tips_dimension}</span>
+        <h3 class="theme-card__title">{theme_title}</h3>
+        <p class="theme-card__summary">{theme_summary}</p>
+        <ul class="theme-card__solutions">
+          <li>{related_solution_1}</li>
+          <li>{related_solution_2}</li>
+        </ul>
+      </article>
+      <!-- repeat per investment theme -->
+    </div>
+  </div>
+</section>
+
+<section class="section section--accent">
+  <div class="container" style="text-align:center;">
+    <h2>{cta_headline}</h2>
+    <p>{cta_text}</p>
+    <a href="{contact_href}" class="btn btn--white btn--lg">{cta_label}</a>
+  </div>
+</section>
+```
+
+---
+
+## 10. Resources Page (`resources`)
+
+A library of research reports and whitepapers from cogni-research. Each report gets a card with title, abstract, date, and a link to the full report or download.
+
+### Sections
+
+1. **Page Header** — title, subtitle
+2. **Report Cards** (light background) — card grid with report summaries
+3. **CTA** — contact for custom research
+
+### HTML Pattern
+
+```html
+<section class="page-header">
+  <div class="container">
+    <nav class="breadcrumb">{breadcrumb}</nav>
+    <h1>{page_title}</h1>
+    <p class="page-header__subtitle">{subtitle}</p>
+  </div>
+</section>
+
+<section class="section section--light">
+  <div class="container">
+    <div class="card-grid card-grid--2">
+      <article class="card resource-card">
+        <span class="resource-card__type">{report_type}</span>
+        <h2 class="resource-card__title">{report_title}</h2>
+        <time class="resource-card__date" datetime="{iso_date}">{display_date}</time>
+        <p class="resource-card__abstract">{abstract}</p>
+        <a href="{report_href}" class="btn btn--outline">{download_label}</a>
+      </article>
+      <!-- repeat per research report -->
+    </div>
+  </div>
+</section>
+
+<section class="section section--accent">
+  <div class="container" style="text-align:center;">
+    <h2>{cta_headline}</h2>
+    <p>{cta_text}</p>
+    <a href="{contact_href}" class="btn btn--white btn--lg">{cta_label}</a>
+  </div>
+</section>
+```
+
+---
+
+## 11. Custom Page (`custom`)
+
+A freeform page for user-provided markdown content (careers, partners, downloads, legal). Uses the standard prose layout with minimal structure.
+
+### Sections
+
+1. **Page Header** — title from user
+2. **Prose** — rendered markdown body
+3. **CTA** (optional) — contact or relevant link
+
+### HTML Pattern
+
+```html
+<section class="page-header">
+  <div class="container">
+    <nav class="breadcrumb">{breadcrumb}</nav>
+    <h1>{page_title}</h1>
+    <p class="page-header__subtitle">{subtitle}</p>
+  </div>
+</section>
+
+<section class="section section--light">
+  <div class="container content-narrow prose">
+    {rendered_markdown_body}
+  </div>
+</section>
+
+<section class="section section--accent">
+  <div class="container" style="text-align:center;">
+    <h2>{cta_headline}</h2>
+    <p>{cta_text}</p>
+    <a href="{contact_href}" class="btn btn--white btn--lg">{cta_label}</a>
+  </div>
+</section>
+```
+
+---
+
+## 12. Contact Page (`contact`)
 
 ### Sections
 
@@ -563,5 +712,12 @@ All page templates use a shared set of CSS classes defined in `css/style.css`:
 - `.hero` — full-width hero with content overlay
 - `.card` — generic content card
 - `.stat` — metric display (number + label)
+- `.stat__context` — optional context line below stat label
 - `.breadcrumb` — navigation breadcrumb
 - `.timeline` — ordered milestone list
+- `.theme-card` — investment theme card (insights page)
+- `.theme-card__dimension` — TIPS dimension badge (T/I/P/S)
+- `.theme-card__solutions` — related solutions list
+- `.resource-card` — research report card (resources page)
+- `.resource-card__type` — report type badge
+- `.resource-card__abstract` — report abstract excerpt

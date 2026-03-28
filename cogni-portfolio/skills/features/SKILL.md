@@ -209,6 +209,8 @@ Present the proposed features as a table with your consulting commentary:
 
 Then deliver your assessment — not as a checklist but as a coherent perspective on the feature set's strengths, gaps, and what to prioritize next. End with a clear recommendation: "Build propositions for X and Y first, because they carry your differentiation."
 
+Offer the user: "Would you like to see the architecture diagram showing how these features map to products? Use the `portfolio-architecture` skill for a visual overview."
+
 After presenting the feature set, run the Quality Completion Gate below before signaling that features are ready. Do not suggest moving to propositions or markets until the completion gate passes — fixing quality issues now, while the feature context is fresh, is far cheaper than revisiting them later.
 
 ## Quality Completion Gate
@@ -247,7 +249,9 @@ Do NOT trigger after single-feature edits or minor metadata changes — those ru
    Present a concise milestone summary:
    - How many features were created/updated, how many passed quality assessment
    - A table of all features with their quality status (pass/warn/deferred)
-   - Offer: "Would you like to review the updated features before I run the stakeholder review? You can: (a) open the dashboard for a visual overview, (b) I list the full descriptions here, or (c) proceed directly to the stakeholder review."
+   - Offer: "Would you like to review the updated features before I run the stakeholder review? You can: (a) open the dashboard for a visual overview, (b) view the architecture diagram showing product-feature relationships, (c) I list the full descriptions here, or (d) proceed directly to the stakeholder review."
+
+   If they choose (b), delegate to the `portfolio-architecture` skill to generate and present the mermaid diagram, then ask again if they're ready to proceed.
 
    Wait for the user's explicit response. If they choose (a), delegate to the `dashboard-refresher` agent with `project_dir` and `plugin_root: $CLAUDE_PLUGIN_ROOT` to generate a dashboard snapshot, then ask again if they're ready to proceed. If they choose (b), present each feature's name, description, word count, and quality status. Only proceed to step 7 after the user confirms.
 

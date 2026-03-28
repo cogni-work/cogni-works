@@ -60,6 +60,7 @@ This plugin is part of the [insight-wave monorepo](https://github.com/cogni-work
 /synthesize                                # generate messaging repository
 /portfolio-export                          # produce proposals, briefs, workbooks
 /portfolio-dashboard                       # interactive HTML status dashboard
+/portfolio-architecture                    # product-feature architecture diagram
 ```
 
 Or just describe what you want in natural language:
@@ -71,6 +72,7 @@ Or just describe what you want in natural language:
 - "Bootstrap my portfolio from this lean canvas"
 - "Deep dive into the managed-security feature"
 - "Sharpen messaging for managed-security in mid-market"
+- "Show me the architecture diagram for our portfolio"
 
 ## Try it
 
@@ -119,7 +121,9 @@ Each portfolio project lives in `cogni-portfolio/{slug}/` with typed JSON files 
 | `portfolio-verify` | skill | Orchestrate claim verification via cogni-claims |
 | `synthesize` | skill | Generate structured messaging repository |
 | `portfolio-export` | skill | Produce proposals, briefs, and workbooks |
+| `portfolio-communicate` | skill | Generate portfolio documentation for any audience (customer narratives, repo docs, custom) |
 | `portfolio-dashboard` | skill | Interactive HTML dashboard |
+| `portfolio-architecture` | skill | Layered mermaid diagram of products, features, readiness states, and cross-product bridges |
 | `portfolio-scan` | skill | Discover offerings via web research and classify against taxonomy |
 | `trends-bridge` | skill | Bidirectional integration with cogni-trends TIPS analysis |
 | `portfolio-resume` | skill | Detect workflow phase and recommend next actions |
@@ -136,6 +140,7 @@ Each portfolio project lives in `cogni-portfolio/{slug}/` with typed JSON files 
 | `solution-review-assessor` | agent | Reviews solutions for pricing viability |
 | `feature-quality-assessor` | agent | Assesses feature description quality |
 | `quality-enricher` | agent | General-purpose iterative improvement |
+| `communicate-review-assessor` | agent | Assess portfolio communication quality from stakeholder perspectives |
 | `dashboard-refresher` | agent | Regenerate the portfolio dashboard HTML from current entity data |
 | `feature-review-assessor` | agent | Assess feature set quality from 3 stakeholder perspectives (product manager, strategist, pre-sales) |
 | `feature-deep-diver` | agent | Web research agent for feature competitive landscape |
@@ -157,11 +162,11 @@ cogni-portfolio/
 │   ├── b2b-industrial-tech/      Industrial Tech (8 dims, 48 cats)
 │   ├── b2b-professional-services/ Prof. Services (8 dims, 44 cats)
 │   └── b2b-opensource/           Commercial OSS (8 dims, 50 cats)
-├── skills/                       20 portfolio skills
-├── agents/                       16 delegation agents
+├── skills/                       22 portfolio skills
+├── agents/                       17 delegation agents
 ├── references/
 │   └── data-model.md             Full entity schema
-└── scripts/                      7 utility scripts
+└── scripts/                      9 utility scripts
 ```
 
 ## Dependencies

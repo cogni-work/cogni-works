@@ -212,12 +212,13 @@ Present a summary:
 
 The founding-stage portfolio is now seeded. Suggest the natural next steps, calibrated to the company's stage:
 
-1. **Refine products** with the `products` skill — challenge positioning, check boundaries between layers
-2. **Refine features** with the `features` skill — ensure IS-layer descriptions are market-independent
-3. **Size markets** with the `markets` skill — even rough TAM/SAM/SOM estimates help prioritize
-4. **Generate propositions** with the `propositions` skill — this is where canvas pain points become DOES/MEANS messaging
-5. **Define solutions** with the `solutions` skill — canvas pricing assumptions become seed values
-6. **Validate assumptions** — the assumptions from the canvas are preserved in `portfolio.json`; revisit them as the business evolves
+1. **Visualize the structure** with the `portfolio-architecture` skill — see the product-feature hierarchy at a glance, spot empty products or unbalanced feature distribution before diving into refinements
+2. **Refine products** with the `products` skill — challenge positioning, check boundaries between layers
+3. **Refine features** with the `features` skill — ensure IS-layer descriptions are market-independent
+4. **Size markets** with the `markets` skill — even rough TAM/SAM/SOM estimates help prioritize
+5. **Generate propositions** with the `propositions` skill — this is where canvas pain points become DOES/MEANS messaging
+6. **Define solutions** with the `solutions` skill — canvas pricing assumptions become seed values
+7. **Validate assumptions** — the assumptions from the canvas are preserved in `portfolio.json`; revisit them as the business evolves
 
 If sections were unfilled (Key Metrics, Unfair Advantage), note that these can inform the portfolio later as the business matures.
 

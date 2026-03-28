@@ -31,6 +31,7 @@ graph LR
 **Output**: Propositions mapped to markets using IS/DOES/MEANS framework
 
 **Tips**:
+- Use `portfolio-architecture` to visualize the product-feature hierarchy after defining features — confirms structure is sound before generating propositions
 - Features (IS) are market-independent — define them once
 - Advantages (DOES) and Benefits (MEANS) vary by market — define per-market
 - TAM/SAM/SOM sizing helps prioritize which markets to target first

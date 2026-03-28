@@ -21,6 +21,7 @@ graph LR
 
 **Tips**:
 - If you already have portfolio data, skip to Step 2
+- Use `portfolio-architecture` to visualize your product-feature structure — it helps catch gaps or misalignment before building the pitch narrative
 - Focus on the propositions relevant to this specific customer or segment
 - Competitor analysis strengthens the "why us" part of the pitch
 

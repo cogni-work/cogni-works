@@ -564,7 +564,7 @@ for f in glob.glob('$PROJECT_DIR/features/*.json'):
         pass
 print(f'PURPOSE_TOTAL={total}')
 print(f'PURPOSE_WITH={with_purpose}')
-" 2>/dev/null || echo 'PURPOSE_TOTAL=0'; echo 'PURPOSE_WITH=0')"
+" 2>/dev/null || { echo 'PURPOSE_TOTAL=0'; echo 'PURPOSE_WITH=0'; })"
 fi
 
 # Count unprocessed uploads (exclude processed/ subdirectory)

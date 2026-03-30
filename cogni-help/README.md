@@ -1,19 +1,26 @@
 # cogni-help
 
-Central help hub for the [insight-wave](https://github.com/cogni-work/insight-wave) ecosystem. Interactive courses, plugin discovery, cross-plugin workflow guides, troubleshooting, quick-reference cheatsheets, and GitHub issue filing.
+The onboarding and navigation layer for the [insight-wave](https://github.com/cogni-work/insight-wave) ecosystem. Teaches users through an 11-course curriculum, routes tasks to the right plugin, chains multi-plugin workflows, and diagnoses problems — so 12 plugins with 70+ skills feel like one coherent system.
 
 ## Why this exists
 
-The insight-wave ecosystem has 12 plugins with 70+ skills, dozens of agents, and interconnected workflows. Users need a single place to learn, navigate, diagnose, and get help:
+| Problem | What happens | Impact |
+|---------|-------------|--------|
+| 12 plugins, no map | New users don't know which plugin handles their task | Trial-and-error onboarding — first productive use takes hours |
+| Disconnected workflows | Research, narrative, visual, and sales plugins work together but no guide shows how | Users run one plugin well, miss the multi-plugin pipelines that deliver 10x value |
+| Silent failures | A missing dependency or stale workspace breaks skills at runtime | Cryptic errors with no diagnostic path — users blame the plugin, not the config |
+| No structured learning | Users learn by stumbling into slash commands | Shallow usage — power features go undiscovered |
 
-| Need | Solution |
-|------|----------|
-| Structured onboarding | 11-course curriculum with hands-on exercises |
-| "Which plugin do I use?" | Plugin discovery guide with recommendations |
-| Multi-plugin pipelines | Workflow templates with step-by-step playbooks |
-| Something broken? | Diagnostic tool with known-issues reference |
-| Quick refresher | One-screen cheatsheets for any plugin |
-| Bug or feature request | Guided issue filing against insight-wave |
+## What it is
+
+A meta-plugin for the insight-wave ecosystem. While other plugins produce content — research, narratives, portfolios, visuals — cogni-help teaches you how to use them together. An 11-course curriculum covers every plugin from fundamentals through advanced workflows. Five cross-plugin workflow templates chain plugins into end-to-end pipelines. Diagnostics catch configuration issues before they surface as skill failures.
+
+## What it means for you
+
+- **Productive in minutes, not hours.** The guide skill matches your task to the right plugin — no need to memorize 70+ skills across 12 plugins.
+- **Learn by doing.** 11 courses with hands-on exercises, adaptive pacing, and progress tracking — each ~45 minutes from theory to working output.
+- **Chain plugins into pipelines.** Five workflow templates show how to go from research to slides, trends to marketing, or portfolio to pitch — step by step.
+- **Diagnose before you escalate.** The troubleshoot skill checks plugin integrity, dependencies, and workspace health — catching misconfigurations that cause cryptic failures.
 
 ## Quick start
 
@@ -53,7 +60,6 @@ Or describe what you want:
 | `/troubleshoot` | command | Run diagnostics |
 | `/workflow` | command | View pipeline templates |
 | `/cheatsheet` | command | Generate quick reference |
-| `/issues` | command | File or track GitHub issues |
 | `course-status.sh` | script | JSON progress check |
 | `reset-progress.sh` | script | Reset course progress |
 | `health-check.sh` | script | JSON diagnostic output |
@@ -107,15 +113,14 @@ cogni-help/
 │   ├── workflow/                 Pipeline templates
 │   ├── cheatsheet/               Quick reference cards
 │   └── cogni-issues/             GitHub issue management
-├── commands/                     8 slash commands
+├── commands/                     7 slash commands
 │   ├── teach.md
 │   ├── courses.md
 │   ├── course-deck.md
 │   ├── guide.md
 │   ├── troubleshoot.md
 │   ├── workflow.md
-│   ├── cheatsheet.md
-│   └── issues.md
+│   └── cheatsheet.md
 └── scripts/                      3 utility scripts
     ├── course-status.sh
     ├── reset-progress.sh

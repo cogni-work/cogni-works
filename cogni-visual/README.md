@@ -76,9 +76,12 @@ The pipeline follows a compose-polish-visualize flow: narratives from cogni-narr
 | `story-to-slides` | agent | Orchestrates the story-to-slides skill |
 | `pptx` | agent | Renders briefs into .pptx via document-skills |
 | `story-to-big-picture` | agent | Orchestrates the story-to-big-picture skill |
+| `big-picture` | agent | Wrapper agent — delegates to render-big-picture skill |
 | `station-structure-artist` | agent | Composes station structure (130-160 elements per station) |
 | `station-enrichment-artist` | agent | Adds fine detail to stations (100-130 elements per station) |
 | `zone-reviewer` | agent | Reviews 1/4 zone of canvas for quality and contrast |
+| `story-to-big-block` | agent | Orchestrates the story-to-big-block skill |
+| `big-block` | agent | Wrapper agent — delegates to render-big-block skill |
 | `story-to-web` | agent | Orchestrates the story-to-web skill |
 | `web` | agent | Renders briefs into .pen via Pencil MCP |
 | `story-to-storyboard` | agent | Orchestrates the story-to-storyboard skill |

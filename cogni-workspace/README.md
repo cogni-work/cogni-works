@@ -15,6 +15,10 @@ Each insight-wave plugin needs environment variables, themes, and discovery of s
 
 This plugin provides the infrastructure layer — workspace initialization, theme management, plugin discovery, and health diagnostics — so domain plugins can focus on their actual work.
 
+## What it is
+
+The shared foundation layer for the insight-wave ecosystem. Every cogni-x plugin depends on workspace for environment variables, plugin discovery, and theme resolution. A single initialization sets up the entire workspace; health diagnostics catch drift before downstream skills break. Theme management ensures all visual plugins — slides, journey maps, web narratives — render with consistent brand identity.
+
 ## What it does
 
 1. **Initialize** a workspace — dependency checks, plugin discovery, preference gathering (language, tool integrations), settings generation

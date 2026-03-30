@@ -15,6 +15,10 @@ Portfolio data and trend insights sit in structured JSON — but marketing teams
 
 This plugin automates the bridge: it reads your portfolio propositions and TIPS trend themes, generates content across 16 formats and 5 content types, orchestrates campaigns, and tracks coverage via a dashboard.
 
+## What it is
+
+A content generation bridge between strategy and execution in the insight-wave ecosystem. cogni-trends produces strategic themes (GTM paths); cogni-portfolio produces propositions and competitive intelligence. cogni-marketing consumes both and generates channel-ready content across five funnel stages — from thought leadership that builds awareness to battle cards that close deals. A 3D content matrix (market x GTM path x content type) ensures coverage visibility across the entire portfolio.
+
 ## What it does
 
 1. **Setup** a marketing project linked to your cogni-portfolio and cogni-trends data — configure brand voice, select markets, map strategic themes to GTM paths

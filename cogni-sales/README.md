@@ -15,6 +15,10 @@ Generic pitch decks don't win deals. Buyers expect sellers to understand their s
 
 This plugin automates the research-heavy parts of the Corporate Visions Why Change framework — web research, evidence gathering, narrative framing — while keeping strategic judgment with you.
 
+## What it is
+
+A pitch generation pipeline built on the Corporate Visions Why Change methodology. Four research phases — Why Change, Why Now, Why You, Why Pay — each backed by dedicated web research agents that gather company-specific or industry-level evidence. cogni-portfolio provides the product data (propositions, solutions, competitors); cogni-trends optionally enriches with strategic themes. The output is a sales-presentation.md and sales-proposal.md with sequential citations — ready for cogni-visual to render into slides.
+
 ## What it does
 
 1. **Setup** — select a portfolio, market, and customer (or segment). Configure language, solution focus, and buying center roles

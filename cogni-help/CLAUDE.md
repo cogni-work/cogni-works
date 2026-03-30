@@ -1,0 +1,97 @@
+# cogni-help
+
+Onboarding and navigation layer for the insight-wave ecosystem — teaches users through courses, routes tasks to plugins, chains multi-plugin workflows, and diagnoses problems.
+
+## Plugin Architecture
+
+```
+skills/                         7 help skills
+  teach/                          Interactive course delivery — 11 courses, adaptive pacing, progress tracking
+    references/
+      courses/                    11 course definitions (01-cowork-fundamentals through 11-consulting)
+      exercises/                  Hands-on exercise templates per course
+  course-deck/                    Generate PPTX slide decks for curriculum or course intros
+  guide/                          Plugin discovery — match tasks to plugins, ecosystem map
+    references/
+      plugin-catalog.md           Plugin capability index for matching
+  troubleshoot/                   Diagnostics — plugin integrity, dependencies, stale state
+    references/
+      known-issues.md             Known issues and resolution patterns
+  workflow/                       Pipeline templates — 5 cross-plugin workflow playbooks
+    references/
+      workflows/                  6 workflow definitions (research-to-slides, trend-to-marketing, etc.)
+  cheatsheet/                     Quick reference — one-screen cards for any plugin
+  cogni-issues/                   Issue lifecycle — create, list, status via GitHub browser automation
+
+agents/
+  course-deck-generator.md        PPTX generation as delegated subprocess (sonnet)
+
+commands/                       7 slash commands
+  teach.md, courses.md, course-deck.md, guide.md,
+  troubleshoot.md, workflow.md, cheatsheet.md
+
+scripts/                        3 utility scripts
+  course-status.sh                Show course progress for a project directory
+  health-check.sh                 Quick health check for plugin ecosystem
+  reset-progress.sh               Reset course progress (per-course or all)
+```
+
+## Component Inventory
+
+| Type | Count | Items |
+|------|-------|-------|
+| Skills | 7 | teach, course-deck, guide, troubleshoot, workflow, cheatsheet, cogni-issues |
+| Agents | 1 | course-deck-generator (sonnet) |
+| Commands | 7 | teach, courses, course-deck, guide, troubleshoot, workflow, cheatsheet |
+
+## 11-Course Curriculum
+
+| # | Course | Plugins Covered |
+|---|--------|-----------------|
+| 1 | Cowork Fundamentals | cogni-help (meta) |
+| 2 | Workspace & Obsidian | cogni-workspace, cogni-help:cogni-issues |
+| 3 | Basic Tools | cogni-copywriting, cogni-narrative, cogni-claims |
+| 4 | Trend Scouting | cogni-trends (Part 1) |
+| 5 | Trend Reporting | cogni-trends (Part 2) |
+| 6 | Portfolio Messaging | cogni-consulting, cogni-portfolio |
+| 7 | Visual Deliverables | cogni-visual |
+| 8 | Research Reports | cogni-research |
+| 9 | B2B Marketing | cogni-marketing |
+| 10 | Sales Pitches | cogni-sales |
+| 11 | Consulting Orchestration | cogni-consulting |
+
+Each course ~45 minutes with ~5 modules: Theory → Demo → Exercise → Quiz → Recap.
+
+## Workflow Templates
+
+| Workflow | Pipeline |
+|----------|----------|
+| research-to-slides | cogni-research → cogni-narrative → cogni-visual |
+| trend-to-marketing | cogni-trends → cogni-portfolio → cogni-marketing |
+| portfolio-to-pitch | cogni-portfolio → cogni-narrative → cogni-sales → cogni-visual |
+| new-engagement | cogni-consulting phases (Discover → Define → Develop → Deliver) |
+| full-onboarding | cogni-workspace → cogni-help courses 1-11 |
+
+## Data Model
+
+- Course progress stored in `.claude/cogni-help.local.md` (YAML frontmatter)
+- Issue state stored in `cogni-issues/issues.json` in the working directory
+- Exercise artifacts written to `_teacher-exercises/`
+
+## Cross-Plugin Integration
+
+cogni-help references all ecosystem plugins — it is the meta-layer:
+- **teach** skill maps each course to 1-3 plugins
+- **workflow** skill chains 3-5 plugins per pipeline template
+- **guide** skill indexes all plugin capabilities for task matching
+- **troubleshoot** skill checks plugin dependencies and workspace health
+- **cheatsheet** skill reads any plugin's metadata to generate quick reference
+
+All dependencies are soft — cogni-help functions without any specific plugin installed, but courses and workflows require the relevant plugins.
+
+## Key Conventions
+
+- Course progress is per-user (stored in user's `.claude/` directory)
+- Exercises create temporary artifacts in `_teacher-exercises/` (gitignored)
+- Plugin catalog in guide/references/plugin-catalog.md must be updated when plugins are added
+- Workflow definitions are standalone markdown files in workflow/references/workflows/

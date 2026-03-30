@@ -1,6 +1,6 @@
 # cogni-narrative
 
-Story arc-driven narrative transformation plugin for [Claude Cowork](https://claude.ai/cowork). Transforms research syntheses, analyses, and structured content into compelling executive narratives using 6 story arc frameworks and 8 narrative techniques. Bilingual EN/DE.
+Story arc-driven narrative transformation plugin for [Claude Cowork](https://claude.ai/cowork). Transforms research syntheses, analyses, and structured content into compelling executive narratives using 7 story arc frameworks and 8 narrative techniques. Bilingual EN/DE.
 
 ## Why this exists
 
@@ -17,6 +17,10 @@ This plugin applies structured story arc frameworks — each with defined sectio
 
 > **Important**: This plugin generates executive narratives from structured input. All outputs should be reviewed for accuracy and tone before use in executive presentations, board materials, or external communications.
 
+## What it is
+
+A story arc engine for the insight-wave ecosystem. Seven arc frameworks — Corporate Visions for sales, Technology Futures for innovation, Competitive Intelligence for threats, Strategic Foresight for planning, Industry Transformation for change, Trend Panorama for TIPS output, and Theme-Thesis for investment theme narratives — impose narrative discipline on structured content. Other plugins produce research and data; cogni-narrative shapes it into executive-grade stories that drive decisions.
+
 ## What it does
 
 1. **Transform** structured content into executive narratives using a story arc framework — auto-detected or manually selected
@@ -25,10 +29,10 @@ This plugin applies structured story arc frameworks — each with defined sectio
 
 ## What it means for you
 
-- **Arc-disciplined.** Every narrative follows a proven story arc structure — no improvised flow.
-- **Six frameworks.** Corporate Visions for sales, Technology Futures for innovation, Competitive Intelligence for threats, Strategic Foresight for planning, Industry Transformation for change, Trend Panorama for TIPS output.
-- **Quality-gated.** Automated scoring on structural compliance, critical accuracy, evidence density, and language — with A-F grades and improvement suggestions.
-- **Format-flexible.** One narrative, three derivative formats — without rewriting.
+- **Arc-disciplined, not improvised.** Every narrative follows a proven story arc structure — consistent quality across documents and authors.
+- **Seven frameworks for seven contexts.** Corporate Visions for sales, Technology Futures for innovation, Competitive Intelligence for threats, Strategic Foresight for planning, Industry Transformation for change, Trend Panorama for TIPS output, Theme-Thesis for investment themes.
+- **Quality-gated.** Automated scoring (0-100, A-F grades) on structural compliance, critical accuracy, evidence density, and language — with improvement suggestions per dimension.
+- **One narrative, three derivative formats.** Executive briefs, talking points, and one-pagers — adapted from the source narrative without rewriting.
 - **Bilingual.** Full EN/DE support with localized section headers and proper Unicode handling.
 
 ## Installation

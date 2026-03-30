@@ -15,6 +15,10 @@ AI-generated content reads like AI-generated content — competent but generic, 
 
 This plugin applies structured messaging frameworks (BLUF, Pyramid, SCQA, STAR, PSB, FAB) and runs parallel stakeholder personas to catch blind spots — so documents are clear, actionable, and audience-tested before they ship.
 
+## What it is
+
+A professional editing toolkit for the insight-wave ecosystem. Seven messaging frameworks (BLUF, Pyramid, SCQA, STAR, PSB, FAB, Power Positions) handle structure and tone. Five stakeholder personas (executive, technical, legal, marketing, end-user) simulate reader reactions in parallel. When paired with cogni-narrative, it detects story arc frontmatter and applies element-specific techniques — polishing without breaking narrative structure.
+
 ## What it does
 
 1. **Polish** documents with messaging frameworks — structure (Pyramid Principle), tone (executive active voice), visual hierarchy, and readability scoring

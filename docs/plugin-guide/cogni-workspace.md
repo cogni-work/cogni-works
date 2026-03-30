@@ -1,0 +1,282 @@
+# cogni-workspace
+
+**Plugin guide** — for canonical positioning see the [cogni-workspace README](../../cogni-workspace/README.md).
+
+---
+
+## Overview
+
+cogni-workspace is the foundation layer for the insight-wave ecosystem. Before any other cogni-x plugin can run reliably, it needs: a place to find the workspace root, environment variables pointing to shared resources, a theme directory, and knowledge of which other plugins are installed. cogni-workspace provides all of this through a single initialization command and a set of management skills.
+
+In practice, most users interact with cogni-workspace twice: once when setting up a new workspace (`init-workspace`), and occasionally when something drifts out of sync (`workspace-status`, `update-workspace`). Theme management and Obsidian integration are optional — use them if you want visual consistency across plugin outputs or a terminal-integrated note-taking environment.
+
+The plugin imposes no data model on the workspace. It writes four files during initialization — `.workspace-config.json`, `.workspace-env.sh`, `.claude/settings.local.json`, and output style templates — and then stays out of the way.
+
+---
+
+## Key Concepts
+
+| Term | What it means |
+|------|--------------|
+| **Workspace** | A project directory initialized with cogni-workspace — has `.workspace-config.json` and the shared env file |
+| **Plugin discovery** | The process of scanning the marketplace cache for installed cogni-x plugins and registering them in the workspace config |
+| **Theme** | A markdown file containing color palettes, typography, and design principles, stored in `cogni-workspace/themes/` |
+| **Theme picker** | The `pick-theme` skill — the single entry point for theme selection used by all visual plugins |
+| **Output style** | A language-specific behavioral anchor file (EN/DE) that shapes how plugin outputs are formatted |
+| **Session hook** | `on-session-start.sh` — sources the workspace environment and validates plugin availability each time a session opens |
+| **Five-tier diagnostic** | The structure of `workspace-status` output: foundation → env vars → plugin registry → themes → dependencies |
+| **Obsidian vault** | A `.obsidian/` configuration directory that `setup-obsidian` scaffolds inside the workspace |
+
+### Prerequisites
+
+Before running `init-workspace`, ensure these tools are installed:
+
+| Dependency | Required | Purpose |
+|-----------|----------|---------|
+| `jq` | Yes | JSON processing in scripts |
+| `python3` | Yes | Standard library only — no pip required |
+| `bash 3.2+` | Yes | Script runtime |
+| `curl` | Optional | Source fetching in some skills |
+| `git` | Optional | Version tracking |
+| `bc` | Optional | Arithmetic in diagnostic scripts |
+
+---
+
+## Getting Started
+
+Initialize a new workspace:
+
+```
+Initialize a insight-wave workspace here
+```
+
+or:
+
+```
+/init-workspace
+```
+
+What the initialization does:
+
+1. Runs `check-dependencies.sh` and reports any missing required tools
+2. Asks for your language preference (English or German) and which tool integrations to enable
+3. Discovers installed cogni-x plugins via `discover-plugins.sh`
+4. Generates `.workspace-config.json` with plugin registry and metadata
+5. Generates `.workspace-env.sh` with environment variables for each plugin
+6. Generates `.claude/settings.local.json` with workspace-appropriate settings
+7. Writes output style templates for EN and DE
+8. Creates the `cogni-workspace/themes/` directory and installs the bundled `cogni-work` theme
+
+After initialization, your workspace root contains:
+
+```
+.workspace-config.json     workspace metadata, plugin registry, language
+.workspace-env.sh          environment variables sourced at session start
+.claude/settings.local.json  Claude Code settings
+cogni-workspace/themes/    shared theme storage
+```
+
+---
+
+## Capabilities
+
+### `init-workspace` — Full workspace initialization
+
+Initializes a workspace from scratch. Interactive: asks about language, integrations, and output preferences before writing any files. Safe to run on an empty directory or one that has not been initialized before.
+
+If a workspace already exists at the path, use `update-workspace` instead to avoid overwriting settings.
+
+```
+/init-workspace
+```
+
+---
+
+### `workspace-status` — Five-tier health diagnostic
+
+Checks the workspace in five layers and reports findings with actionable fixes:
+
+1. **Foundation** — are the required files present and well-formed?
+2. **Environment variables** — does `.workspace-env.sh` define the variables plugins expect?
+3. **Plugin registry** — are registered plugins still installed at their expected paths?
+4. **Themes** — is at least one theme available for visual plugins?
+5. **Dependencies** — are `jq`, `python3`, and bash at the required versions?
+
+Run when something is not working and you are not sure whether it is a plugin issue or a workspace issue:
+
+```
+/workspace-status
+```
+
+```
+What's the status of my workspace?
+```
+
+If the diagnostic finds issues, each finding comes with a specific fix. Infrastructure-level problems (env vars, settings) are workspace concerns; plugin-level problems (broken skills, missing references) are handled by cogni-help's `troubleshoot` skill.
+
+---
+
+### `update-workspace` — Refresh after plugin changes
+
+Re-scans installed plugins, refreshes environment variables, and updates output style templates. Does not overwrite user-customized values. Creates a backup before modifying any existing file.
+
+Use after installing new plugins or after the workspace has been moved to a different path:
+
+```
+/update-workspace
+```
+
+```
+Update my workspace after installing new plugins
+```
+
+If the update produces unexpected results, the backup allows rollback.
+
+---
+
+### `manage-themes` — Theme extraction and management
+
+Themes are markdown files that describe a visual identity — colors, typography, and design principles. All visual plugins (cogni-visual, document-skills) read from the same theme directory, so setting a theme here propagates to every plugin output.
+
+Eight operations are available:
+
+| Operation | What it does |
+|-----------|-------------|
+| `recommend` | Suggests themes based on your industry or audience description |
+| `list` | Shows all available themes in the workspace |
+| `grab from website` | Extracts colors and typography from a live URL using Chrome |
+| `grab from PPTX` | Extracts a theme from an existing PowerPoint template |
+| `create from preset` | Builds a theme from a named preset (e.g., corporate, minimal, vibrant) |
+| `audit` | Checks a theme for contrast ratios, color harmony, and completeness |
+| `generate showcase` | Renders a visual sample of how a theme looks applied to real content |
+| `apply` | Registers a theme as the workspace default |
+
+```
+/manage-themes
+```
+
+```
+Extract a theme from our company website and apply it to the workspace
+```
+
+The `grab from website` operation uses Chrome browser automation to read the live site — it captures computed styles, not just source HTML.
+
+---
+
+### `pick-theme` — Centralized theme picker
+
+A thin coordination skill used internally by all visual plugins before generating output. When a skill needs a theme, it calls `pick-theme` rather than implementing its own discovery logic.
+
+You can also call it directly when you want to choose a theme before starting a visual workflow:
+
+```
+/pick-theme
+```
+
+The skill scans both the plugin's bundled theme directory and your workspace themes directory, presents the available options, and returns the path to your selection.
+
+---
+
+### `setup-obsidian` — Scaffold an Obsidian vault
+
+Creates a `.obsidian/` configuration directory inside your workspace so you can open it as an Obsidian vault. The vault comes preconfigured with:
+
+- Terminal plugin with a Tokyonight-themed terminal profile
+- A launcher script that opens Claude Code from within Obsidian
+- Language selection and permission mode handling in the launcher
+- Sensible vault defaults: live preview, line numbers, file explorer, search, backlinks
+
+```
+/setup-obsidian
+```
+
+Prerequisites: Obsidian must be installed. The skill handles Terminal plugin installation automatically via a download step.
+
+---
+
+### `update-obsidian` — Refresh an existing Obsidian vault
+
+Merges updated terminal profiles and launcher scripts into an existing `.obsidian/` vault without overwriting profiles or scripts you have customized. Fixes common issues — doubled paths on WSL, stale arguments, deprecated profile names.
+
+Use when you have moved your workspace, upgraded the plugin, or when terminal profiles stop working:
+
+```
+/update-obsidian
+```
+
+---
+
+## Integration Points
+
+### Upstream — cogni-workspace depends on nothing
+
+cogni-workspace is the foundation layer. It has no plugin dependencies. Every other plugin depends on it, not the other way around.
+
+### Downstream — every visual and content plugin uses the workspace
+
+| Plugin / skill | What it reads from the workspace |
+|---------------|----------------------------------|
+| All cogni-x plugins | `.workspace-env.sh` — sourced at session start via the hook |
+| cogni-visual | Themes via `pick-theme` |
+| document-skills | Themes via `pick-theme`; output style templates |
+| cogni-consulting | `discover-plugins.sh` results — to know which plugins are available for dispatch |
+| cogni-help | `workspace-status` results — used by the troubleshoot skill for infrastructure checks |
+
+---
+
+## Common Workflows
+
+### Workflow 1: Set up a brand-new workspace
+
+1. Install insight-wave plugins from the marketplace
+2. Run `/init-workspace` in your project directory — answer the language and integration questions
+3. Run `/workspace-status` to confirm all five tiers are green
+4. Run `/manage-themes` to extract your brand theme from your website or a PPTX template
+5. Run `/setup-obsidian` if you want Obsidian integration
+
+Total time: 10–15 minutes. After this, all installed plugins can resolve themes, env vars, and plugin paths without additional configuration.
+
+This workflow is detailed in [../workflows/full-onboarding.md](../workflows/full-onboarding.md).
+
+### Workflow 2: Diagnose why a plugin cannot find its theme
+
+1. Run `/workspace-status` — check the themes tier specifically
+2. If themes tier fails: run `/manage-themes list` to see what themes are registered
+3. If the theme directory is empty: run `/manage-themes` and create or install a theme
+4. If the theme directory exists but the plugin still cannot find it: check that the plugin is reading `$COGNI_WORKSPACE_ROOT/themes/` (the env var should be set by `.workspace-env.sh`)
+5. If the env var is missing: run `/update-workspace` to refresh environment variables
+
+### Workflow 3: Update the workspace after moving the project directory
+
+When you move a workspace to a different path, absolute paths stored in `.workspace-env.sh` and `.claude/settings.local.json` become stale:
+
+1. Run `/update-workspace` from the new path — it re-scans for installed plugins and regenerates env vars
+2. Run `/workspace-status` to confirm the workspace resolves correctly at the new path
+3. If you use Obsidian, run `/update-obsidian` to fix terminal launcher paths (especially important on WSL)
+
+---
+
+## Troubleshooting
+
+| Symptom | Likely cause | Fix |
+|---------|-------------|-----|
+| A plugin cannot find `.workspace-env.sh` | The session hook did not run, or the workspace was not initialized | Run `/workspace-status`; if the foundation tier fails, re-run `/init-workspace` |
+| `jq: command not found` in script output | `jq` is not installed | Install via your package manager: `brew install jq` (macOS), `apt install jq` (Debian/Ubuntu) |
+| Themes directory exists but visual plugin uses wrong colors | Plugin is reading a stale theme path | Run `/pick-theme` to re-select the theme; the selection updates the workspace default |
+| `workspace-status` passes but a plugin skill still fails | The failure is at plugin level, not workspace level | Run cogni-help's `/troubleshoot` for plugin-level diagnostics |
+| Obsidian terminal profile shows a doubled path (WSL) | WSL path duplication in the profile arguments | Run `/update-obsidian` — it specifically fixes doubled paths and stale args |
+| `/init-workspace` succeeds but a newly installed plugin is not discovered | The plugin was installed after initialization | Run `/update-workspace` to re-scan and register the new plugin |
+| German umlaut characters break workspace initialization | Shell locale not set for UTF-8 | Set `LANG=de_DE.UTF-8` before running init; the script includes umlaut support from v0.2+ |
+
+---
+
+## Extending This Plugin
+
+cogni-workspace is a contribution-friendly surface for infrastructure improvements:
+
+- **New theme templates** — the `themes/_template/` directory defines the canonical theme format; new presets or industry templates are additive and safe
+- **Platform support** — `bash/portability-utils.sh` handles macOS, Linux, WSL, and Git Bash; if you have a platform that behaves differently, extending portability-utils is the right place
+- **New diagnostic checks** — the five-tier structure in `workspace-status` can be extended with additional checks; a check should return a clear finding and a specific fix action
+- **New output style languages** — the `assets/output-styles/` directory currently has EN and DE; other languages follow the same format
+
+See [CONTRIBUTING.md](../../cogni-workspace/CONTRIBUTING.md) for guidelines.

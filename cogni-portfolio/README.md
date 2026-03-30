@@ -113,7 +113,7 @@ Each portfolio project lives in `cogni-portfolio/{slug}/` with typed JSON files 
 | `features` | skill | Add market-independent capabilities (IS layer) per product |
 | `portfolio-ingest` | skill | Extract entities from uploaded documents (md, docx, pptx, xlsx, pdf) |
 | `markets` | skill | Discover and size target markets with TAM/SAM/SOM |
-| `propositions` | skill | Generate IS/DOES/MEANS messaging per Feature x Market |
+| `propositions` | skill | Generate IS/DOES/MEANS messaging per Feature x Market (includes deep dive mode) |
 | `solutions` | skill | Define implementation plans and tiered pricing |
 | `packages` | skill | Bundle solutions into sellable packages per Product x Market |
 | `compete` | skill | Analyze 3-5 competitors per proposition |
@@ -129,7 +129,6 @@ Each portfolio project lives in `cogni-portfolio/{slug}/` with typed JSON files 
 | `portfolio-resume` | skill | Detect workflow phase and recommend next actions |
 | `portfolio-canvas` | skill | Bootstrap portfolio from a Lean Canvas or Business Model Canvas |
 | `feature-deep-dive` | skill | Deep research for a single feature — competitive landscape, differentiation, market positioning |
-| `proposition-deep-dive` | skill | Deep research for a single proposition — buyer language, competitive messaging, evidence enrichment |
 | `market-researcher` | agent | Web research for TAM/SAM/SOM with claim submission |
 | `competitor-researcher` | agent | Web research for competitive intelligence |
 | `customer-researcher` | agent | Web research for named customer profiling |
@@ -162,7 +161,7 @@ cogni-portfolio/
 │   ├── b2b-industrial-tech/      Industrial Tech (8 dims, 48 cats)
 │   ├── b2b-professional-services/ Prof. Services (8 dims, 44 cats)
 │   └── b2b-opensource/           Commercial OSS (8 dims, 50 cats)
-├── skills/                       22 portfolio skills
+├── skills/                       21 portfolio skills
 ├── agents/                       17 delegation agents
 ├── references/
 │   └── data-model.md             Full entity schema

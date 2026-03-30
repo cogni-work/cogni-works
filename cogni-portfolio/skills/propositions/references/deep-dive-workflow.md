@@ -1,47 +1,25 @@
----
-name: proposition-deep-dive
-description: |
-  Deep research and co-creation for a single proposition — buyer language validation,
-  competitive messaging analysis, evidence enrichment, DOES/MEANS sharpening.
-  Use when the user wants to strengthen a specific proposition's messaging,
-  validate buyer language, research competitive positioning for a Feature x Market pair,
-  enrich evidence for DOES/MEANS claims, or co-create sharper messaging through dialogue
-  rather than reactive quality repair.
+# Deep Dive Workflow Reference
 
-  Use for: "deep dive on proposition X--Y", "sharpen messaging for X in market Y",
-  "validate buyer language for X", "competitive messaging for X--Y",
-  "research evidence for proposition X", "strengthen DOES for X--Y",
-  "improve MEANS for X in market Y", "how do competitors message X for Y",
-  "Messaging schärfen für X--Y", "Buyer-Sprache validieren für X",
-  "Wettbewerbs-Messaging für X--Y", "Evidenz recherchieren für Proposition X" —
-  even if they don't say "deep dive" explicitly.
-allowed-tools: Read, Write, Edit, Glob, Grep, Agent
----
+This reference defines the Deep Dive workflow for the propositions skill. The deep dive is a 5-phase process that validates buyer language against real market usage, analyzes competitive messaging, enriches evidence, and co-creates improved DOES/MEANS through strategic dialogue with the user.
 
-# Proposition Deep Dive
+Unlike the Quick Fix path (quality-enricher, which reactively patches specific quality gaps), the deep dive is proactive and comprehensive — it produces messaging intelligence that informs not just this proposition but also downstream competitor positioning, solution design, and sales enablement materials.
 
-You are a value messaging strategist conducting a focused deep dive on a single proposition. Unlike the propositions skill's Research & Improve flow (which reactively fixes quality gaps identified by the assessor), a deep dive is proactive and comprehensive: you validate buyer language against real market usage, analyze competitive messaging, enrich evidence for DOES/MEANS claims, validate pain-point assumptions, and then co-create improved messaging through dialogue with the user.
+## Integration with Quality Assessment
 
-The deep dive produces messaging intelligence that informs not just this proposition but also downstream competitor positioning, solution design, and sales enablement materials.
+When entering the deep dive after a quality assessment has already been run (proposition-quality-assessor), pass the assessment results to the `proposition-deep-diver` agent. This avoids redoing the assessment from scratch. The deep-diver refines the assessment based on research findings — it may upgrade or downgrade dimension scores based on evidence.
 
-## When to Use (vs. Propositions Skill)
+**Score mapping** (quality-assessor -> deep-diver baseline):
+- pass -> high
+- warn -> medium
+- fail -> low
 
-| Situation | Use |
-|---|---|
-| Fix DOES/MEANS that scored warn/fail on quality | Propositions skill -> quality-enricher |
-| Batch generate missing propositions | Propositions skill |
-| Validate buyer language against real market usage | **This skill** |
-| Analyze how competitors message the same capability for this market | **This skill** |
-| Enrich evidence with customer refs, benchmarks, analyst quotes | **This skill** |
-| Co-create DOES/MEANS through strategic dialogue | **This skill** |
-| Validate whether the status-quo contrast targets the right pain | **This skill** |
-| Strengthen MEANS quantification with industry benchmarks | **This skill** |
+Include the quality assessment in the agent's task prompt under "Quality assessment results (prior)".
 
 ## Prerequisites
 
 - The target proposition must exist in `propositions/{feature-slug}--{market-slug}.json`
-- If the proposition doesn't exist yet, create it first using the propositions skill, then come back here
-- For best results, run `feature-deep-dive` on the parent feature first — its differentiation vectors and buyer perception data directly feed proposition messaging. This is recommended but not required.
+- If the proposition doesn't exist yet, create it first using batch generation or single-pair crafting, then return here
+- For best results, run `feature-deep-dive` on the parent feature first — its differentiation vectors and buyer perception data directly feed proposition messaging. Recommended but not required.
 
 ## Phase 1: Context Load
 
@@ -73,6 +51,8 @@ After reading context, present:
 - "I found [existing competitive data / customer profiles / prior deep-dives / relevant context documents]."
 - If a feature deep-dive exists: "The feature deep dive from [date] identified these differentiation vectors: [list]. Buyer perception findings: [summary]."
 
+If prior quality-assessor output was provided, reference it: "The quality assessment scored DOES [overall] (weakest: [dimensions]) and MEANS [overall] (weakest: [dimensions]). The deep dive will focus research on these gaps."
+
 If the IS layer (feature description) is vague or weak, flag it immediately:
 "The feature description is too vague for sharp proposition messaging — [specific issue]. Consider running `feature-deep-dive` to strengthen the IS layer first. We can proceed with what we have, but the DOES/MEANS will be limited by the IS quality."
 
@@ -90,10 +70,10 @@ Do NOT jump straight to research. First, ask targeted questions to focus the res
 
 **Adaptive questioning based on context:**
 
-- Customer profiles exist for this market → Skip #2 and #5 (buyer language and KPIs are already captured). Focus on #1 and #3.
-- Competitor data exists → Skip competitive questions. Focus on #1 (what's weak) and #4 (status-quo accuracy).
-- Feature deep-dive was run recently → Leverage its buyer perception findings. Focus on #3 (internal evidence) and #5 (outcome metrics).
-- User says "everything is wrong" / is vague → Ask #1 and #4 as minimum, let research fill the rest.
+- Customer profiles exist for this market -> Skip #2 and #5 (buyer language and KPIs are already captured). Focus on #1 and #3.
+- Competitor data exists -> Skip competitive questions. Focus on #1 (what's weak) and #4 (status-quo accuracy).
+- Feature deep-dive was run recently -> Leverage its buyer perception findings. Focus on #3 (internal evidence) and #5 (outcome metrics).
+- User says "everything is wrong" / is vague -> Ask #1 and #4 as minimum, let research fill the rest.
 
 **Do not ask all 5 questions.** Pick the 2-3 that the context doesn't already answer. Wait for the user's answers before delegating to research.
 
@@ -111,6 +91,7 @@ Delegate broad research to the `proposition-deep-diver` agent via the Agent tool
 - Existing competitor data for this proposition (summarized — names, positioning, strengths/weaknesses)
 - Existing customer profiles for this market (summarized — roles, pain points, buying criteria)
 - Feature deep-dive findings if `research/deep-dive-{feature-slug}.json` exists (summarized — differentiation vectors, buyer perception, evidence)
+- **Quality assessment results** (if available from prior quality-assessor run — dimension scores, notes)
 - **User context from Phase 1** — what the user said about weaknesses, buyer objections, internal evidence, status-quo accuracy, and outcome priorities
 - Project directory path
 - `plugin_root: $CLAUDE_PLUGIN_ROOT`
@@ -128,6 +109,7 @@ Product context: {product name, product description, pricing_tier}
 Existing competitor intelligence: {summary or "none"}
 Existing customer intelligence: {summary or "none"}
 Feature deep-dive findings: {summary or "none — consider running feature-deep-dive first"}
+Quality assessment results: {dimension scores and notes, or "none — first deep dive"}
 User context: {weaknesses identified, buyer objections, internal evidence, status-quo assessment, outcome priorities}
 Project directory: {path}
 plugin_root: {$CLAUDE_PLUGIN_ROOT}
@@ -198,7 +180,7 @@ Current MEANS assessment against 5 quality dimensions:
 | Emotional resonance | [pass/warn/fail] | [specific finding] |
 | Conciseness | [pass/warn/fail] | [word count] |
 
-"The biggest improvement opportunity is in **[dimension]** because [specific finding from research]."
+If prior quality-assessor output was provided: "Compared to the quality assessment: [dimensions that research confirmed / upgraded / downgraded, with reasons]."
 
 "The biggest improvement opportunity is in **[dimension]** because [specific finding from research]."
 
@@ -384,5 +366,4 @@ Assign the next sequential `variant_id` (check existing variants). Set `tips_ref
 - **Communication Language**: If `portfolio.json` has a `language` field, communicate with the user in that language.
 - **One proposition at a time.** Deep dives are intensive — if the user wants to deep-dive multiple propositions, sequence them. Don't parallelize the co-creation dialogue.
 - **Prior deep dives.** If `research/deep-dive-{feature-slug}--{market-slug}.json` exists from a previous session, offer: "A proposition deep dive was run on [date]. Want to refresh the research or continue from the existing findings?"
-- **Integration with propositions skill.** The propositions skill may direct users here when they want more than reactive quality-gap repair. The deep dive produces DOES/MEANS that meet all the same quality standards (15-30 words, buyer-centric, market-specific, differentiated, quantified).
-- **IS layer is read-only in this skill.** The deep dive does not modify the feature description. If the IS layer needs work, signal upstream to `feature-deep-dive`.
+- **IS layer is read-only.** The deep dive does not modify the feature description. If the IS layer needs work, signal upstream to `feature-deep-dive`.

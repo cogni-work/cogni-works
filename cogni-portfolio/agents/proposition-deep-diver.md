@@ -3,14 +3,14 @@ name: proposition-deep-diver
 description: |
   Deep research agent for a single proposition — buyer language validation, competitive
   messaging analysis, evidence enrichment, pain-point validation, MEANS escalation research.
-  DO NOT USE DIRECTLY — invoked by the proposition-deep-dive skill.
+  DO NOT USE DIRECTLY — invoked by the propositions skill's Deep Dive workflow.
 
   <example>
   Context: User wants to sharpen messaging for a specific proposition
   user: "Deep dive on the cloud-migration proposition for large energy utilities"
   assistant: "I'll launch the proposition-deep-diver agent to research buyer language, competitive messaging, and evidence."
   <commentary>
-  The proposition-deep-dive skill delegates broad web research to this agent, then uses
+  The propositions skill's Deep Dive workflow delegates broad web research to this agent, then uses
   the structured report to drive a co-creation dialogue with the user.
   </commentary>
   </example>
@@ -64,6 +64,7 @@ You will receive via the task prompt:
 - **Existing competitor intelligence**: summary of competitor data for this proposition (if any)
 - **Existing customer intelligence**: summary of buyer personas for this market (if any) — includes pain points, buying criteria, and the buyer's relationship to this capability (practitioner/consumer/enabler)
 - **Feature deep-dive findings**: summary from prior feature deep-dive (differentiation vectors, buyer perception) — if available
+- **Quality assessment results** (optional): prior proposition-quality-assessor output for this proposition, if available. Use as baseline for the `does_assessment` and `means_assessment` sections — validate and refine based on research findings rather than assessing from scratch. Score mapping: pass=high, warn=medium, fail=low.
 - **User context**: what the user said about weaknesses, buyer objections, internal evidence, status-quo accuracy
 - **Project directory path**: where to write the research report
 
@@ -231,7 +232,9 @@ Identify opportunities to strengthen the MEANS:
 
 ### 6. Assessment and Directions
 
-Assess the current DOES and MEANS against the research findings, then propose 2 directions each:
+Assess the current DOES and MEANS against the research findings, then propose 2 directions each.
+
+If quality assessment results were provided in the input, use the dimension scores as starting points. Upgrade or downgrade based on research findings. Note any changes in the overall_assessment: e.g., "Quality assessor scored buyer_centricity as warn; research confirms — buyers use different terminology" or "Quality assessor scored differentiation as fail; research found a competitor gap that upgrades this to medium."
 
 - **DOES directions**: Two positioning options with seeds (one pain-led, one competitive-gap-led) grounded in evidence
 - **MEANS directions**: Two escalation options with seeds (one KPI-focused, one personal-impact-focused) grounded in evidence

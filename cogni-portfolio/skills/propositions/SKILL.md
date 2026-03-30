@@ -6,6 +6,14 @@ description: |
   feature advantage benefit, FAB, "map features to markets", "why should they buy",
   differentiation, or wants to articulate market-specific value — even if they don't
   say "proposition" explicitly.
+
+  Also handles deep dive for single propositions: "deep dive on proposition X--Y",
+  "sharpen messaging for X in market Y", "validate buyer language for X",
+  "competitive messaging for X--Y", "research evidence for proposition X",
+  "strengthen DOES for X--Y", "improve MEANS for X in market Y",
+  "how do competitors message X for Y", "Messaging schärfen für X--Y",
+  "Buyer-Sprache validieren für X", "Wettbewerbs-Messaging für X--Y",
+  "Evidenz recherchieren für Proposition X" — even if they don't say "deep dive" explicitly.
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Agent
 ---
 
@@ -225,7 +233,7 @@ This post-check applies to both single-proposition and batch generation paths. I
    Verdicts:
    - **accept**: Propositions are ready for downstream use (solutions, competitors, sales materials)
    - **revise**: Present findings grouped by perspective. Offer to rewrite the flagged propositions. Re-run the stakeholder review after fixes.
-   - **reject**: Block downstream flow. Fundamental rework needed — the proposition set doesn't resonate with the buyer persona, isn't credible for sales, or is incoherent as a set. Direct the user to rewrite using the `proposition-deep-dive` skill for the worst offenders.
+   - **reject**: Block downstream flow. Fundamental rework needed — the proposition set doesn't resonate with the buyer persona, isn't credible for sales, or is incoherent as a set. Direct the user to use the Deep Dive workflow (below) on the worst offenders.
 
    The stakeholder review is especially important for consumer markets (B2B-SME, self-service buyers) where the provider-lens trap is most common. If the buyer persona perspective flags need-correctness issues, these are CRITICAL priority — they indicate the messaging team is thinking inside-out.
 
@@ -492,18 +500,18 @@ For propositions with quality issues that need company-specific information to f
 
 When proposition quality assessment reveals weak DOES or MEANS messaging, offer to research the company and draft improved statements. The quality assessor identifies WHAT is weak; web research provides the company-specific information to fix it — customer success stories, case studies, market-specific use cases, and concrete metrics.
 
-### Reactive vs. Proactive Improvement
+### Quick Fix vs. Deep Dive
 
 | Situation | Use |
 |---|---|
-| Fix DOES/MEANS that scored warn/fail on specific quality dimensions | **This flow** (quality-enricher — reactive, targeted gap repair) |
-| Validate buyer language against real market usage | `proposition-deep-dive` skill |
-| Analyze how competitors message the same capability for this market | `proposition-deep-dive` skill |
-| Co-create DOES/MEANS through strategic dialogue with evidence | `proposition-deep-dive` skill |
-| Enrich evidence with customer refs, benchmarks, analyst quotes | `proposition-deep-dive` skill |
-| Validate whether the status-quo contrast targets the right pain | `proposition-deep-dive` skill |
+| Fix DOES/MEANS that scored warn/fail on 1-2 dimensions (overall pass/warn) | **Quick Fix** (quality-enricher — reactive, targeted gap repair) |
+| 2+ dimension fails, or buyer-perspective/need-correctness fail | **Deep Dive** (below) — these dimensions require buyer language research |
+| Validate buyer language against real market usage | **Deep Dive** (below) |
+| Analyze how competitors message the same capability for this market | **Deep Dive** (below) |
+| Co-create DOES/MEANS through strategic dialogue with evidence | **Deep Dive** (below) |
+| Stakeholder review verdict is "reject" for specific propositions | **Deep Dive** on worst offenders |
 
-For propositions that need more than reactive quality repair — where you want to validate buyer language, research competitive messaging, or co-create sharper DOES/MEANS through evidence-backed dialogue — recommend the `proposition-deep-dive` skill instead.
+For propositions that need more than reactive quality repair — where you want to validate buyer language, research competitive messaging, or co-create sharper DOES/MEANS through evidence-backed dialogue — use the Deep Dive workflow below instead of the Quick Fix.
 
 ### When to Offer
 
@@ -548,6 +556,36 @@ For propositions that need more than reactive quality repair — where you want 
 ### Not All Dimensions Need Research
 
 Conciseness issues (word count) and escalation problems (MEANS repeats DOES) can be fixed by rewriting from existing content. Reserve web research for dimensions where company-specific information is the missing ingredient: buyer centricity, market specificity, quantification, and differentiation.
+
+## Deep Dive (Single-Proposition Intensive)
+
+For propositions needing more than reactive quality repair — buyer language validation, competitive messaging analysis, evidence enrichment, or co-creation dialogue. One proposition at a time. The deep dive produces messaging intelligence that informs not just this proposition but also downstream competitor positioning, solution design, and sales enablement materials.
+
+### When to Enter
+
+- User explicitly says "deep dive", "sharpen messaging", "validate buyer language", "competitive messaging", or similar
+- Quality assessor scored `need_correctness` or `buyer_perspective` as fail (these dimensions require buyer language research, not company research)
+- 3+ dimensions scored fail on a single proposition
+- Stakeholder review verdict is "reject" — deep-dive the worst offenders
+
+### Auto-recommend Logic
+
+After running the proposition-quality-assessor, check each proposition's results:
+- If `need_correctness` or `buyer_perspective` scored fail -> auto-recommend deep dive (explain why: "These gaps need real buyer language research, not just company information")
+- If 3+ dimensions scored fail -> auto-recommend deep dive
+- Otherwise -> offer Quick Fix first, mention deep dive as an option
+
+### Workflow
+
+The deep dive is a 5-phase process: Context Load -> Research Delegation -> Findings Briefing -> Co-Creation Dialogue -> Output Artifacts.
+
+**Full workflow details:** Read `$CLAUDE_PLUGIN_ROOT/skills/propositions/references/deep-dive-workflow.md`
+
+When entering the deep dive:
+1. If quality-assessor output exists for this proposition, pass it to the `proposition-deep-diver` agent (avoids redoing quality assessment from scratch — the agent refines rather than re-assesses)
+2. Delegate research to the `proposition-deep-diver` agent via the Agent tool (not quality-enricher)
+3. After research completes, conduct the co-creation dialogue with the user per the reference
+4. Write the improved proposition, run structural validation, and warn about downstream cascade
 
 ## Important Notes
 

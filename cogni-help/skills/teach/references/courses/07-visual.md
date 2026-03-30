@@ -358,6 +358,8 @@ Congratulations! You've completed the core insight-wave visual skills!
 - Generate scrollable web narratives and poster storyboards
 - Run the full pipeline from research to visual deliverable
 
+**Reference documentation**: `docs/plugin-guide/cogni-visual.md` — full capabilities, rendering pipelines, and integration points.
+
 **Something unclear or broken?** Tell Claude what happened — cogni-issues will help you file it.
 
 **Next up**: Courses 8-10 cover the advanced plugins — multi-agent research

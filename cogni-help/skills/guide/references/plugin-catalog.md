@@ -3,6 +3,24 @@
 Curated reference for the guide skill. Each entry covers what the plugin does, its key
 skills/commands, and when to recommend it.
 
+## User Documentation (docs/ directory)
+
+The `docs/` directory in the workspace root contains user-facing documentation generated
+by cogni-docs. When a user asks "how does X work?" or "how do I get started?", point them
+to the relevant doc alongside the plugin recommendation:
+
+| Resource | Path | When to recommend |
+|----------|------|-------------------|
+| Getting started | `docs/getting-started.md` | New users, first-time setup |
+| Ecosystem overview | `docs/ecosystem-overview.md` | "What plugins are available?", "How do they connect?" |
+| Plugin guides | `docs/plugin-guide/<plugin>.md` | "How does cogni-X work?", "Show me the full capabilities" |
+| Workflow guides | `docs/workflows/` | "How do I go from X to Y?", "Show me the pipeline" |
+| Architecture | `docs/architecture/` | "How are plugins structured?", "What are the design principles?" |
+| Contributing | `docs/contributing/plugin-development.md` | "How do I build a plugin?" |
+
+These docs use tutorial voice (practical, step-by-step) and complement the interactive
+courses delivered by the teach skill.
+
 ---
 
 ## cogni-claims

@@ -40,7 +40,7 @@ material but deliver the teaching in the workspace language.
 
 ## Curriculum
 
-Eleven courses, designed to build on each other:
+Twelve courses, designed to build on each other:
 
 | # | Course ID | Title | Plugins Covered |
 |---|-----------|-------|-----------------|
@@ -55,6 +55,7 @@ Eleven courses, designed to build on each other:
 | 9 | `marketing` | B2B Marketing Content | cogni-marketing |
 | 10 | `sales` | Sales Pitches | cogni-sales |
 | 11 | `consulting` | Consulting Orchestration | cogni-consulting |
+| 12 | `documentation` | Documentation Pipeline | cogni-docs |
 
 ## How to Teach
 
@@ -65,6 +66,7 @@ Courses 8-10 cover advanced plugins that build on earlier foundations:
 - Course 9 (Marketing) requires Courses 4-5 (TIPS) + Course 6 (Portfolio)
 - Course 10 (Sales) requires Course 6 (Portfolio) + Course 3 (narrative arcs)
 - Course 11 (Diamond) requires all earlier courses (capstone — dispatches to most plugins)
+- Course 12 (Documentation) requires Course 2 (workspace basics)
 
 ### Your Teaching Voice
 
@@ -156,6 +158,21 @@ Load the relevant course file when delivering a specific course:
 - `references/courses/09-marketing.md`
 - `references/courses/10-sales.md`
 - `references/courses/11-consulting.md`
+- `references/courses/12-documentation.md`
 
 Each file contains all modules with theory, demos, exercises, quizzes, and recaps.
 Read only the course file the user is taking — no need to load them all.
+
+## Documentation References
+
+The `docs/` directory in the workspace root contains user-facing documentation generated
+by cogni-docs. When teaching plugin-specific courses, point learners to the corresponding
+plugin guide as supplementary reading material:
+
+- Course 1: Recommend `docs/getting-started.md` and `docs/ecosystem-overview.md`
+- Courses 3-11: Recommend `docs/plugin-guide/<plugin>.md` for the plugin being taught
+- For workflow context: Recommend `docs/workflows/` guides alongside `/workflow` templates
+
+These docs use tutorial voice (practical, step-by-step) vs. the courses' interactive
+teaching voice — they complement each other. The guide is the reference; the course
+builds the mental model.

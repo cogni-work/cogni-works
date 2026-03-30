@@ -47,10 +47,16 @@ Keep in English regardless of language setting:
    - The specific command or skill to invoke
    - Prerequisites (other plugins, data, or setup needed)
    - Why this is the right fit for their task
+   - A pointer to `docs/plugin-guide/<plugin>.md` for detailed guidance (if the docs/ directory exists)
 
 4. **For multi-plugin tasks**, suggest a sequence: "Start with cogni-research for the
    report, then cogni-narrative to shape the story, then cogni-visual for slides."
    Mention the `/workflow` command if a matching workflow template exists.
+
+5. **For learning-oriented queries** ("how does X work?", "explain X", "I want to
+   understand X"), also recommend the docs/ resources listed in the plugin catalog's
+   "User Documentation" section. Point to `docs/getting-started.md` for new users and
+   `docs/ecosystem-overview.md` for ecosystem questions.
 
 ## When No Plugin Fits
 

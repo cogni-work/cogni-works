@@ -453,4 +453,6 @@ Workspace Setup → Research → Analyze → Write → Verify → Polish → Pre
 Every step has a insight-wave plugin. Your expertise drives the strategy;
 the tools execute the heavy lifting.
 
+**Reference documentation**: `docs/plugin-guide/cogni-research.md` — full capabilities, research modes, and integration points.
+
 **Something unclear or broken?** Tell Claude what happened — cogni-issues will help you file it.

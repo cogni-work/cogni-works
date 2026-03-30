@@ -367,6 +367,11 @@ Congratulations! You now command three essential insight-wave tools:
 
 **Cross-plugin workflow**: Research → Narrative → Review → Claims → Polish
 
+**Reference documentation**: For detailed guides on the plugins covered in this course, see:
+- `docs/plugin-guide/cogni-copywriting.md`
+- `docs/plugin-guide/cogni-narrative.md`
+- `docs/plugin-guide/cogni-claims.md`
+
 **Something unclear or broken?** Tell Claude what happened — cogni-issues will help you file it.
 
 **Next recommended course**: Course 4 — Trend Scouting & Selection

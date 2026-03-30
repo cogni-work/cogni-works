@@ -382,7 +382,7 @@ Ask the user to:
 
 ## Course Completion
 
-Congratulations — you have completed all 11 courses in the cogni-help curriculum!
+Congratulations — you have completed the core 11 courses in the cogni-help curriculum!
 
 **Your complete insight-wave toolkit (12 plugins)**:
 1. **Claude Cowork** — Your agentic AI platform (Course 1)
@@ -407,5 +407,9 @@ Lean Canvas (hypothesis, via cogni-consulting) → Portfolio (messaging) → Res
 Every step has a insight-wave plugin. cogni-consulting ties them together into structured
 engagements with phase-gated delivery and multi-session state management.
 Your expertise drives the strategy; the tools execute the heavy lifting.
+
+**Reference documentation**: `docs/plugin-guide/cogni-consulting.md` — full capabilities, vision classes, and integration points.
+
+**Optional next course**: Course 12 — Documentation Pipeline (cogni-docs)
 
 **Something unclear or broken?** Tell Claude what happened — cogni-issues will help you file it.

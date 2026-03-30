@@ -344,6 +344,8 @@ Congratulations! You've mastered the complete cogni-trends pipeline:
 - Claims verification and quality pipeline (Course 5)
 - Cross-plugin finishing and delivery (Course 5)
 
+**Reference documentation**: `docs/plugin-guide/cogni-trends.md` — full capabilities, data model, and integration points.
+
 **Something unclear or broken?** Tell Claude what happened — cogni-issues will help you file it.
 
 **Next recommended course**: Course 6 — Portfolio Messaging

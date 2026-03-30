@@ -421,6 +421,10 @@ Congratulations! You now know how to:
 - Build segment-specific propositions
 - Connect portfolio work with other insight-wave plugins
 
+**Reference documentation**: For detailed guides on the plugins covered in this course, see:
+- `docs/plugin-guide/cogni-consulting.md`
+- `docs/plugin-guide/cogni-portfolio.md`
+
 **Something unclear or broken?** Tell Claude what happened — cogni-issues will help you file it.
 
 **Next recommended course**: Course 7 — Visual Deliverables

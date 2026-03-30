@@ -70,6 +70,9 @@ Keep in English regardless of language setting:
 ## Related Plugins
 - **cogni-X**: How it connects (feeds into / requires / complements)
 - **cogni-Y**: How it connects
+
+## Learn More
+Full guide: docs/plugin-guide/<plugin-name>.md | Course: /teach <course-number>
 ```
 
 ## Guidelines
@@ -83,6 +86,9 @@ Keep in English regardless of language setting:
   what X does abstractly.
 - **Always include related plugins.** The ecosystem is interconnected — showing
   how plugins connect helps users plan their workflow.
+- **Include a Learn More footer.** If `docs/plugin-guide/<plugin>.md` exists, link to
+  it. Also include the corresponding `/teach` course number from the curriculum
+  (e.g., cogni-trends = Course 4, cogni-portfolio = Course 6).
 
 ## Listing Plugins
 

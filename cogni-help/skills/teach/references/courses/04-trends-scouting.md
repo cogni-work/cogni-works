@@ -334,6 +334,8 @@ Congratulations! You now understand:
 - How to review scored candidates for client context
 - The full pipeline and where your expertise fits
 
+**Reference documentation**: `docs/plugin-guide/cogni-trends.md` — full capabilities, data model, and integration points.
+
 **Something unclear or broken?** Tell Claude what happened — cogni-issues will help you file it.
 
 **Next recommended course**: Course 5 — Trend Reporting

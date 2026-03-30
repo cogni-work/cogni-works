@@ -380,4 +380,10 @@ You now know how plugins, slash commands, and structured workflows come together
 In Course 2, you'll learn how to report issues and request features via cogni-issues —
 your direct line to the insight-wave maintainers.
 
+**Reference documentation**: For a broader overview of the ecosystem at your own pace, check:
+- `docs/getting-started.md` — Installation, first project, and next steps
+- `docs/ecosystem-overview.md` — Plugin landscape, data flows, and conventions
+
+These docs complement the courses — they're reference material you can return to anytime.
+
 **Next recommended course**: Course 2 — Workspace & Obsidian Setup

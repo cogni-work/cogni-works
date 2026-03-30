@@ -417,6 +417,8 @@ Congratulations! You now know how to:
 - Synthesize four phases into client-ready presentations and proposals
 - Integrate TIPS data and manage multi-phase pitch workflows
 
+**Reference documentation**: `docs/plugin-guide/cogni-sales.md` — full capabilities, pitch modes, and integration points.
+
 **Something unclear or broken?** Tell Claude what happened — cogni-issues will help you file it.
 
 **Next recommended course**: Course 11 — Consulting Orchestration (Double Diamond)

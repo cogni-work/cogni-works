@@ -84,6 +84,33 @@ Do NOT create intermediate files, research notes, persona files, or any other fi
 - **SAM**: Apply segmentation filters (geography, size, vertical) to TAM. Estimate the reduction ratio.
 - **SOM**: Use bottom-up estimation: realistic customer count x average contract value. Typically 1-5% of SAM for a new entrant.
 
+**Grounding & Anti-Hallucination Rules:**
+
+These rules implement [Anthropic's recommended hallucination reduction techniques](https://github.com/arturseo-geo/grounded-research-skill/blob/main/SKILL.md). See also: `shared/references/grounding-principles.md`.
+
+*Admit Uncertainty:* You have explicit permission — and a strict obligation — to say "I don't know", "no analyst data found for this segment", or "TAM estimate unavailable". Never fill a gap with plausible-sounding numbers. If a sizing dimension has no source, mark it explicitly as "no data found" rather than fabricating an estimate.
+
+*Anti-Fabrication:*
+- Never fabricate URLs, report titles, or market figures
+- Never invent statistics — if no analyst data exists, say so
+- Never round or adjust numbers to seem more impressive — use the exact figure from the source
+- Use hedged language for uncertain estimates ("reports suggest", "estimated at")
+
+*Self-Audit Before Claims Submission:* Before writing to the market JSON and registering claims, review each TAM/SAM/SOM value:
+1. Does it have a supporting source URL from actual search results?
+2. Does the number match exactly what the source reported?
+3. Is the inference reasonable, or are you filling a gap?
+4. **Remove unsourced values** rather than submitting them as claims — catching them here is cheaper than downstream cogni-claims verification
+
+*Confidence Assessment:*
+
+| Level | Criteria | Action |
+|-------|----------|--------|
+| **High** | Named analyst report with specific figure | Include and register claim |
+| **Medium** | Single source or derived estimate | Include with "estimated" qualifier, register claim |
+| **Low** | Back-of-envelope or extrapolation | Flag explicitly in description, skip claim registration |
+| **Unknown** | No data found | State "no data found" in description field — never fabricate |
+
 **Quality Standards:**
 - Every value must have a source cited
 - Clearly distinguish analyst data from estimates

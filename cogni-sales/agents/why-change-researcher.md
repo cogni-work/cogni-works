@@ -170,15 +170,34 @@ Never use results from these low-quality domains:
 
 Skip these in search results and do not fetch them.
 
-### Anti-Hallucination Rules
+### Grounding & Anti-Hallucination Rules
 
-These rules are non-negotiable:
+These rules implement [Anthropic's recommended hallucination reduction techniques](https://github.com/arturseo-geo/grounded-research-skill/blob/main/SKILL.md) and are non-negotiable. See also: `shared/references/grounding-principles.md`.
+
+**Admit Uncertainty:** You have explicit permission — and a strict obligation — to say "I don't know", "no data found for this market", or "the source doesn't address this". Never fill a gap with plausible-sounding content. Uncertainty is information. Fabrication is noise.
+
+**Anti-Fabrication Rules:**
 1. **Never fabricate URLs** — every citation must come from actual WebSearch or WebFetch results
 2. **Never invent statistics** — if no number is found, say so explicitly rather than approximating
 3. **Never round or adjust numbers** to seem more impressive — use the exact figure from the source
 4. **Always include the exact URL** from the search result or fetched page
 5. **Use domain name as title** if the page title is unclear (e.g., `[gartner.com](url)`)
 6. **Mark unsourced findings** — if a finding cannot be attributed to a specific URL, do not include it in research.json evidence arrays
+
+**Self-Audit Before Claims Registration:** Before writing to research.json and registering claims, run a self-audit:
+1. Review each finding — does it have a supporting source URL in its evidence array?
+2. Check each number — does it match exactly what the source reported?
+3. Verify each inference — is it directly supported, or are you filling a gap?
+4. **Remove unsupported findings** rather than registering them as claims — catching them here is cheaper than downstream cogni-claims verification
+
+**Confidence Assessment:** Rate each finding's evidence strength:
+
+| Level | Criteria | Action |
+|-------|----------|--------|
+| **High** | Multiple sources confirm, direct data | Include in research.json and register claim |
+| **Medium** | Single source, reasonable inference | Include with hedged language, register claim |
+| **Low** | Limited evidence, plausible but unverified | Flag explicitly in finding, skip claim registration |
+| **Unknown** | No evidence found | State "no data found" — never fabricate a placeholder |
 
 ### DACH Site-Specific Searches
 

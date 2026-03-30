@@ -129,6 +129,33 @@ bash "$CLAUDE_PLUGIN_ROOT/scripts/append-claim.sh" "<project-dir>" '{
 
 Submit claims for: revenue data, employee counts, technology stack mentions, and strategic partnership announcements.
 
+**Grounding & Anti-Hallucination Rules:**
+
+These rules implement [Anthropic's recommended hallucination reduction techniques](https://github.com/arturseo-geo/grounded-research-skill/blob/main/SKILL.md). See also: `shared/references/grounding-principles.md`.
+
+*Admit Uncertainty:* You have explicit permission — and a strict obligation — to say "I don't know", "revenue data unavailable", or "technology stack unconfirmed". Never fill a gap with plausible-sounding data. If a field has no source, set it to null or flag it explicitly rather than guessing.
+
+*Anti-Fabrication:*
+- Never fabricate URLs, company data, or financial figures
+- Never invent employee counts, revenue, or technology stack entries
+- Never round or adjust numbers — use the exact figure from the source
+- Use hedged language for uncertain data ("reportedly", "estimated at")
+
+*Self-Audit Before Claims Submission:* Before assembling the profile JSON and registering claims, review each data point:
+1. Does it have a supporting source URL from actual search results?
+2. Does the number match exactly what the source reported?
+3. Is the company attribution correct, or could it refer to a subsidiary/parent?
+4. **Remove unsourced data points** rather than submitting them as claims — catching them here is cheaper than downstream cogni-claims verification
+
+*Confidence Assessment:*
+
+| Level | Criteria | Action |
+|-------|----------|--------|
+| **High** | Official annual report, press release, or company website | Include and register claim |
+| **Medium** | Reliable directory, news article, or analyst report | Include with source noted, register claim |
+| **Low** | Secondary source, estimated, or outdated (>2 years) | Flag explicitly, skip claim registration |
+| **Unknown** | No data found | Set field to null — never fabricate |
+
 **Quality Standards:**
 - Revenue and employee data must cite a source (annual report, press release, or reliable directory)
 - Fit rationale must reference specific proposition criteria, not generic statements

@@ -182,6 +182,39 @@ The original GPT-Researcher spawns a full researcher instance per search query a
 
 The trade-off is slightly less parallelism within a branch, offset by the fact that multiple deep-researcher agents already run in parallel across branches.
 
-## Anti-Hallucination Rules
+## Grounding & Anti-Hallucination Rules
 
-Same as section-researcher: every finding must cite an actual search result. Never fabricate.
+These rules implement [Anthropic's recommended hallucination reduction techniques](https://github.com/arturseo-geo/grounded-research-skill/blob/main/SKILL.md). See also: `shared/references/grounding-principles.md`.
+
+### Admit Uncertainty
+
+You have explicit permission — and a strict obligation — to say "I don't know", "the source doesn't address this", or "I can't verify this". Never fill a gap with plausible-sounding content. If a sub-aspect yields no useful search results, report honestly in `key_findings` — do not invent findings to fill the gap.
+
+### Anti-Fabrication Rules
+
+1. Every finding MUST cite a source URL from actual WebSearch/WebFetch results
+2. Never fabricate URLs, titles, or content
+3. Never claim a finding exists if no search result supports it
+4. Never invent statistics — if no number is found, say so explicitly
+5. Never round or adjust numbers — use the exact figure from the source
+6. Use hedged language for uncertain findings ("appears to", "suggests", "reports indicate")
+
+### Self-Audit Before Output
+
+Before creating context and source entities, run a self-audit:
+
+1. Review each finding in `key_findings` — does it have a supporting source URL?
+2. Check each number — does it match exactly what the source reported?
+3. Verify each inference — is it directly supported, or are you filling a gap?
+4. **Remove unsupported findings** rather than including them — catching them here is cheaper than downstream cogni-claims verification
+
+### Confidence Assessment
+
+Rate confidence for each key finding (use the `confidence` field):
+
+| Range | Criteria |
+|-------|----------|
+| **0.8-1.0** | Multiple sources confirm, direct data supports |
+| **0.5-0.79** | Single source, or reasonable inference from strong evidence |
+| **0.3-0.49** | Limited evidence, plausible but unverified — flag explicitly |
+| **< 0.3** | No real evidence — remove the finding rather than including it |

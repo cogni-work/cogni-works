@@ -83,6 +83,33 @@ The task prompt that spawned you includes a `plugin_root` path. Wherever these i
 - Be specific and verifiable (avoid generic "better/faster/cheaper")
 - Frame from the buyer's perspective, not the seller's
 
+**Grounding & Anti-Hallucination Rules:**
+
+These rules implement [Anthropic's recommended hallucination reduction techniques](https://github.com/arturseo-geo/grounded-research-skill/blob/main/SKILL.md). See also: `shared/references/grounding-principles.md`.
+
+*Admit Uncertainty:* You have explicit permission — and a strict obligation — to say "I don't know", "pricing data unavailable", or "market share unconfirmed". Never fill a gap with plausible-sounding competitive data. If a competitor's pricing or positioning is unknown, flag it explicitly rather than guessing.
+
+*Anti-Fabrication:*
+- Never fabricate URLs, competitor data, or market share figures
+- Never invent pricing, feature comparisons, or analyst rankings
+- Never round or adjust numbers — use the exact figure from the source
+- Use hedged language for uncertain positioning ("reportedly", "appears to focus on")
+
+*Self-Audit Before Claims Submission:* Before writing the competitor JSON and registering claims, review each competitive data point:
+1. Does it have a supporting source URL from actual search results?
+2. Does the number/positioning match exactly what the source reported?
+3. Is the competitor attribution correct (not a subsidiary or deprecated product)?
+4. **Remove unsourced claims** rather than submitting them — catching them here is cheaper than downstream cogni-claims verification
+
+*Confidence Assessment:*
+
+| Level | Criteria | Action |
+|-------|----------|--------|
+| **High** | Competitor's own website, analyst report, or verified review | Include and register claim |
+| **Medium** | News article, single review source, or indirect comparison | Include with hedged language, register claim |
+| **Low** | Forum post, outdated source (>2 years), or speculation | Flag explicitly, skip claim registration |
+| **Unknown** | No data found | State limitation in differentiation — never fabricate |
+
 **Quality Standards:**
 - At least 3 competitors per proposition
 - Strengths and weaknesses must be balanced and honest

@@ -184,7 +184,7 @@ title: "{REPORT_TITLE}"
 industry: {INDUSTRY_EN}
 subsector: {SUBSECTOR_EN}
 language: {LANGUAGE}
-report_arc: {REPORT_ARC_ID}
+arc_id: {REPORT_ARC_ID}
 generated_by: trend-report
 source_skills:
   - trend-scout

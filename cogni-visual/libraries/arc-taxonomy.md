@@ -31,6 +31,7 @@ When the source narrative carries an `arc_id` from cogni-narrative (in YAML fron
 | `strategic-foresight` | `argument` | Strategic Foresight | Elements (Signals/Scenarios/Strategies/Decisions) build an analytical case |
 | `competitive-intelligence` | `argument` | Competitive Intelligence | Elements (Landscape/Shifts/Positioning/Implications) build an analytical case |
 | `trend-panorama` | `journey` | Trend Panorama | Elements (Forces/Impact/Horizons/Foundations) describe a progression from external pressures to capability requirements |
+| `theme-thesis` | `why-change` | Theme Thesis | Elements (Why Change/Why Now/Why You/Why Pay) follow the same tension-to-action pattern as Corporate Visions, purpose-built for investment theme narratives |
 
 **Fallback:** If `arc_id` is not in this table, fall back to auto-detection from narrative content (same behavior as when no `arc_id` is present).
 
@@ -93,6 +94,15 @@ Each arc has 4 ordered elements that represent the phases of the narrative struc
 | 2 | Impact | Wirkung | Value chain disruption and digital value drivers (TIPS I-dimension) |
 | 3 | Horizons | Horizonte | Strategic possibilities and new opportunities (TIPS P-dimension) |
 | 4 | Foundations | Fundamente | Capability requirements and digital foundations (TIPS S-dimension) |
+
+### theme-thesis
+
+| # | Element (EN) | Element (DE) | Narrative Function |
+|---|-------------|-------------|-------------------|
+| 1 | Why Change | Warum Veränderung | Investment context and market forces |
+| 2 | Why Now | Warum Jetzt | Urgency and window of opportunity |
+| 3 | Why You | Warum Wir | Strategic capabilities and differentiation |
+| 4 | Why Pay | Warum Investieren | Business case and expected returns |
 
 ---
 
@@ -169,6 +179,7 @@ Reusable across all four visual skills. Execute in Step 1 after parameter parsin
 ARC_ID RESOLUTION:
   1. IF `arc_id` parameter provided by caller → use it directly
   2. ELSE IF source narrative frontmatter contains `arc_id` field → extract it
+     (also check `report_arc` as legacy alias — trend reports generated before this fix used that field name)
   3. ELSE → arc_id remains unset (downstream step detects arc from content)
 
 IF arc_id is set:

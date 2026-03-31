@@ -406,7 +406,7 @@ Verification: {verdict or "skipped"}
 Polish:       {copywriter_applied ? "tone (cogni-copywriting)" : "skipped"}
 
 Recommended next steps:
-  1. export-html-report — Generate interactive HTML report
+  1. cogni-visual:enrich-report — Generate themed HTML with charts and diagrams
   2. export-pdf-report — Generate formal PDF report
   3. cogni-claims:claim-work — Verify claims (if skipped)
 
@@ -446,9 +446,9 @@ Use /trends-resume in your next session to pick up where you left off.
 
 **Pipeline:** `trend-scout → value-modeler → trend-report`
 
-**Optional cross-plugin:** `cogni-narrative` theme-thesis arc (Phase 2 investment theme writer guidance), `cogni-claims:claim-work` (Phase 3), `cogni-copywriting:copywriter` (Phase 3.5)
+**Optional cross-plugin:** `cogni-narrative` theme-thesis arc (Phase 2 investment theme writer guidance), `cogni-claims:claim-work` (Phase 3), `cogni-copywriting:copywriter` (Phase 3.5), `cogni-visual:enrich-report` (post-completion visual HTML)
 
-**Downstream:** `export-html-report`, `export-pdf-report`
+**Downstream:** `cogni-visual:enrich-report`, `export-pdf-report`
 
 ## Debugging
 

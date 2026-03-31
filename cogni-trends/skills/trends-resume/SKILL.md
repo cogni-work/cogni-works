@@ -97,6 +97,7 @@ Language: {language}
 | Insight Summary | Done / Skipped | |
 | Claim Verification | Done / Pending / Skipped | {verdict}: {passed} passed, {failed} failed |
 | Executive Polish | Done / Skipped | tone (cogni-copywriting) |
+| Visual Report | Done / Skipped | themed HTML with charts (cogni-visual:enrich-report) |
 | Dashboard | Done / Skipped | interactive HTML visualization |
 
 **Solution Blueprints row** — derived from `counts.blueprints`, `counts.anchored_solutions`, `counts.avg_readiness`:
@@ -170,7 +171,7 @@ If the phase is `complete`, congratulate the user and suggest exporting or visua
 | `modeling-complete` | Value model complete with ranked solutions | Run `trend-report`, or `/trends-catalog import` |
 | `reporting` | Value model complete, report not yet generated | Run `trend-report` |
 | `verification` | Report done, claims pending verification | Run `cogni-claims:claim-work` |
-| `complete` | All stages finished | Export, visualize with `/trends-dashboard`, or run `/trends-catalog import` |
+| `complete` | All stages finished | Run `/enrich-report` for themed HTML, visualize with `/trends-dashboard`, or run `/trends-catalog import` |
 
 **Stale Blueprints:** When `stale_warnings` contains a `stale_blueprints` entry (portfolio context
 was updated after blueprints were generated), prepend a re-anchor recommendation to the next actions

@@ -156,6 +156,7 @@ HAS_REPORT="false"
 HAS_CLAIMS="false"
 HAS_INSIGHT="false"
 HAS_VERIFICATION="false"
+HAS_ENRICHED_REPORT="false"
 HAS_COPYWRITER="false"
 COPYWRITER_SCOPE=""
 HAS_VALUE_MODEL="false"
@@ -181,6 +182,7 @@ CLAIMS_TOTAL=0
 [ -f "$PROJECT_DIR/tips-trend-report-claims.json" ] && HAS_CLAIMS="true"
 [ -f "$PROJECT_DIR/tips-insight-summary.md" ] && HAS_INSIGHT="true"
 [ -f "$PROJECT_DIR/.metadata/trend-report-verification.json" ] && HAS_VERIFICATION="true"
+[ -f "$PROJECT_DIR/output/tips-trend-report-enriched.html" ] && HAS_ENRICHED_REPORT="true"
 
 if [ "$HAS_CLAIMS" = "true" ]; then
   CLAIMS_TOTAL=$(python3 -c "
@@ -448,6 +450,9 @@ case "$PHASE" in
     add_action "cogni-claims:claim-work" "$CLAIMS_TOTAL claims extracted — ready for verification"
     ;;
   complete)
+    if [ "$HAS_REPORT" = "true" ] && [ "$HAS_ENRICHED_REPORT" = "false" ]; then
+      add_action "cogni-visual:enrich-report" "Trend report ready — generate themed HTML with charts and diagrams"
+    fi
     ;;
 esac
 next_actions="$next_actions]"
@@ -626,7 +631,8 @@ cat << EOF
     "insight_summary": $HAS_INSIGHT,
     "verification": $HAS_VERIFICATION,
     "copywriter_applied": $HAS_COPYWRITER,
-    "copywriter_scope": "$COPYWRITER_SCOPE"
+    "copywriter_scope": "$COPYWRITER_SCOPE",
+    "enriched_report": $HAS_ENRICHED_REPORT
   },
   "web_research_status": "$WEB_RESEARCH_STATUS",
   "workflow_state": "$WORKFLOW_STATE",

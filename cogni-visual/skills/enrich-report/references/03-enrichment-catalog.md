@@ -2,6 +2,19 @@
 
 Complete catalog of enrichment types available for report visualization. Each type specifies its trigger conditions, scoring weights, and how to extract data from the source section.
 
+## Contents
+
+- [Enrichment Types](#enrichment-types) — Full catalog organized by track
+  - [Data Track (Chart.js)](#data-track-chartjs) — kpi-dashboard, horizon-chart, theme-radar, coverage-heatmap, distribution-doughnut, timeline-chart, comparison-bar, stat-chart
+  - [Concept Track (Excalidraw → SVG)](#concept-track-excalidraw--svg) — tips-flow, relationship-map, process-flow, concept-sketch
+  - [HTML Track](#html-track) — summary-card
+- [Theme Consistency Rule (trend-report)](#theme-consistency-rule-trend-report) — Cross-section theme coherence
+- [Content-Pattern Structural Rules (research-report)](#content-pattern-structural-rules-research-report) — Data tag extraction from research sections
+- [Section Consistency Rule (research-report)](#section-consistency-rule-research-report) — Minimum enrichment per section
+- [Scoring Reference](#scoring-reference) — How enrichment scores are calculated
+- [Type Diversity Scoring](#type-diversity-scoring) — Rewarding variety across enrichment types
+- [Spacing Rules](#spacing-rules) — Minimum distance between enrichments
+
 ## Enrichment Types
 
 ### Data Track (Chart.js)

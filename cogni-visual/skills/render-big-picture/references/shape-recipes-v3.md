@@ -1,5 +1,19 @@
 # Shape Recipes v3 — High-Density Illustration Library
 
+## Contents
+
+- [Purpose](#purpose) — Recipe format and element count targets
+- [Dark Mode Grey-Scale Inversion](#dark-mode-grey-scale-inversion) — Color mapping rules for dark mode
+- [Recipe 1: Control Tower](#recipe-1-control-tower-260-elements) — Structure (140) + Enrichment (120)
+- [Recipe 2: Biometric Terminal Gate](#recipe-2-biometric-terminal-gate-250-elements) — Structure (135) + Enrichment (115)
+- [Recipe 3: Smart Factory / Production Hall](#recipe-3-smart-factory--production-hall-260-elements) — Structure (145) + Enrichment (120)
+- [Recipe 4: Digital Infrastructure Hub](#recipe-4-digital-infrastructure-hub-250-elements) — Structure (140) + Enrichment (115)
+- [Recipe 5: Dashboard / Command Center](#recipe-5-dashboard--command-center-250-elements) — Structure (135) + Enrichment (120)
+- [Recipe 6: Warehouse / Logistics Hall](#recipe-6-warehouse--logistics-hall-260-elements) — Structure (145) + Enrichment (120)
+- [Recipe 7: Generic Industrial Object](#recipe-7-generic-industrial-object-250-elements--fallback) — Fallback, Structure (130) + Enrichment (120)
+- [Recipe 8: Generic Tech Object](#recipe-8-generic-tech-object-250-elements--fallback) — Fallback, Structure (130) + Enrichment (120)
+- [Composition Adaptation Rules](#composition-adaptation-rules) — How to adapt recipes to brief content
+
 ## Purpose
 
 Each recipe provides element-by-element specifications for station-structure-artist (Pass 1, 120-150 elements) and station-enrichment-artist (Pass 2, 100-130 elements). Together they produce **250+ element** stations.

@@ -2,6 +2,21 @@
 
 Themed Chart.js templates for each data-track enrichment type. All color values reference CSS custom properties — the generator script resolves them from design-variables.json at HTML build time.
 
+## Contents
+
+- [Global Defaults](#global-defaults) — Base chart options inherited by all templates
+- [Color Palette](#color-palette) — CSS custom property references for themed colors
+- [Chart Templates](#chart-templates) — Per-type config templates
+  - [kpi-dashboard](#kpi-dashboard) — Multi-stat grid with sparklines
+  - [horizon-chart](#horizon-chart) — Timeline with horizon bands
+  - [theme-radar](#theme-radar) — Multi-axis radar chart
+  - [coverage-heatmap](#coverage-heatmap) — Matrix heatmap
+  - [distribution-doughnut](#distribution-doughnut) — Proportional segments
+  - [timeline-chart](#timeline-chart) — Event timeline
+  - [comparison-bar](#comparison-bar) — Horizontal bar comparison
+  - [stat-chart](#stat-chart) — Single-stat with sparkline
+- [Responsive Behavior](#responsive-behavior) — Breakpoint rules for chart sizing
+
 ## Global Defaults
 
 Every chart config inherits these base options:

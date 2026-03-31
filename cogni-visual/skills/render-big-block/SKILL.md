@@ -76,6 +76,8 @@ Save snapshots at every phase boundary for recovery. Use `snapshot_scene` after 
 
 ## Phase 1: Parse & Setup
 
+> **Why:** This phase converts the brief's structured data into computed positions and a color palette that all subsequent phases depend on. Getting tier heights and block grid positions right here prevents cascading layout errors in later phases.
+
 ### Step 1.1: Read and Parse Brief
 
 1. Read `brief_path` via Read tool
@@ -142,10 +144,10 @@ Record the (x, y, width, height) of every block — this is needed for connectio
 
 ### Step 1.6: Initialize Canvas
 
-**IMPORTANT:** The canvas at localhost:3000 is shared. Always start with `clear_canvas` to ensure a clean slate — never assume the canvas is empty.
+> **Why:** The Excalidraw canvas is a shared resource — if a previous rendering left elements behind, they would corrupt the new diagram. Starting with `clear_canvas` guarantees a clean slate.
 
 1. Run via Bash: `mkdir -p "{output_dir}"`
-2. Call `clear_canvas` — this is the FIRST Excalidraw MCP call, always
+2. Call `clear_canvas` first, before any other Excalidraw MCP call, because it ensures no stale elements contaminate the new diagram
 3. Call `read_diagram_guide` — load Excalidraw best practices
 4. Create canvas frame rectangle:
    ```
@@ -162,6 +164,8 @@ Record the (x, y, width, height) of every block — this is needed for connectio
 ---
 
 ## Phase 2: Title Banner
+
+> **Why:** The banner is the first element viewers see and establishes the color mode and branding context that all subsequent elements inherit.
 
 The title banner is a dark bar across the top with white text, followed by an accent-colored separator.
 
@@ -181,6 +185,8 @@ Save snapshot: "phase2-banner"
 
 ## Phase 3: Tier Bands
 
+> **Why:** Tier bands create the visual hierarchy that communicates Business Relevance at a glance — Tier 1 at the top draws the eye first, reinforcing the prioritization from the value-modeler ranking.
+
 Create the horizontal tier bands within the Tier Zone. Each band gets a tinted background and a tier label.
 
 ### For each tier (1-4):
@@ -199,6 +205,8 @@ Save snapshot: "phase3-tiers"
 ---
 
 ## Phase 4: Solution Blocks
+
+> **Why:** Each block is the atomic information unit of the diagram. Positioning it in the correct tier band is what makes the Big Block useful as a decision tool — stakeholders can scan from top to bottom in order of business relevance.
 
 This is the core visual content. Each solution block is a rounded rectangle with structured internal text.
 
@@ -235,6 +243,8 @@ Save snapshot: "phase4-blocks"
 
 ## Phase 5: Path Connections
 
+> **Why:** Connection lines reveal shared TIPS paths between solutions, exposing synergies that are invisible in the flat ranking list. A stakeholder seeing two Tier 1 solutions linked by the same path can prioritize them as a package.
+
 Draw dashed bezier lines between blocks that share a TIPS path. Connections are rendered BEHIND blocks (lower z-order — they were created before blocks, but since we created blocks after tier bands, we need to ensure connections sit between tier bands and blocks visually).
 
 ### Connection routing strategy:
@@ -267,6 +277,8 @@ Save snapshot: "phase5-connections"
 ---
 
 ## Phase 6: SPI + Foundation Cards
+
+> **Why:** SPIs and foundations are the enablers that make solutions viable. Placing them below the tier grid creates a visual dependency stack — stakeholders see what organizational changes and infrastructure prerequisites must be in place before solutions can deliver value.
 
 ### SPIs (left half of SPI/Foundation Zone)
 
@@ -302,6 +314,8 @@ Save snapshot: "phase6-cards"
 
 ## Phase 7: Roadmap Timeline
 
+> **Why:** The timeline converts abstract wave assignments into a temporal sequence that stakeholders can commit to. Without it, the tier grid shows what matters but not when to act.
+
 The roadmap is a horizontal timeline at the bottom showing implementation waves.
 
 ### Elements:
@@ -323,6 +337,8 @@ Save snapshot: "phase7-roadmap"
 
 ## Phase 7.5: Visual Validation
 
+> **Why:** A screenshot checkpoint catches layout issues (overlapping blocks, misaligned tier bands, invisible connections) before export, avoiding the cost of re-running the full pipeline.
+
 After rendering all content (Phases 2-7), take a screenshot to verify the diagram looks correct before exporting.
 
 1. Call `get_canvas_screenshot` — this returns a visual snapshot of the current canvas
@@ -340,6 +356,8 @@ This phase adds no elements — it's a quality gate. Skip only if `get_canvas_sc
 ---
 
 ## Phase 8: Footer + Export
+
+> **Why:** The footer closes the canvas with attribution and methodology provenance — a diagram without metadata looks unfinished and loses traceability to the TIPS analysis that produced it.
 
 ### Step 8.1: Footer
 
@@ -390,11 +408,11 @@ Call `export_to_excalidraw_url`. If unavailable, set share_url to "n/a" in the r
 
 ## Constraints
 
-- **Render via Excalidraw MCP tools** — always use `batch_create_elements`, `group_elements`, `snapshot_scene`, `export_scene` etc. Do NOT write .excalidraw JSON files manually unless MCP export fails (see Step 8.2 fallback).
-- **Preserve brief content verbatim** (solution names, scores, path names) — the data IS the content, altering it breaks integrity.
+- **Render via Excalidraw MCP tools** — use `batch_create_elements`, `group_elements`, `snapshot_scene`, `export_scene` etc. MCP maintains element IDs, grouping, and z-order that manual JSON writing cannot guarantee. Only fall back to manual JSON if MCP export fails (see Step 8.2 fallback).
+- **Preserve brief content verbatim** (solution names, scores, path names) — the data IS the content. Altering solution names or scores would break the diagram's integrity as a faithful representation of the value-modeler output.
 - **Follow z-order** from big-block-layouts.md: canvas frame → banner → tier bands → tier labels → connections → blocks → SPI cards → foundation cards → roadmap → footer. Create elements in this order so earlier elements are behind later ones.
-- **Use `roughness: 0`** for ALL elements — the Big Block is a precise diagram, not a hand-drawn illustration.
-- **Use `fontFamily: 2`** (Helvetica/sans-serif) for all text — clean, professional typography.
+- **Use `roughness: 0`** for all elements — the Big Block is a precise data-driven diagram, not a hand-drawn illustration. Roughness would undermine the structured grid aesthetic.
+- **Use `fontFamily: 2`** (Helvetica/sans-serif) for all text — clean, professional typography that matches the precision of the grid layout.
 - **Group elements** after each phase using `group_elements` — groups make the diagram editable (users can select and move entire blocks/sections). Group IDs: "title-banner", "tier-{N}", "block-{block_id}", "spi-section", "foundation-section", "roadmap", "footer".
 - **Batch create** elements (up to 50 per call) for efficiency.
 - **Save snapshots** at every phase boundary via `snapshot_scene` — enables `restore_snapshot` recovery without re-rendering completed phases.

@@ -15,6 +15,7 @@ description: >
   single-canvas poster (use story-to-big-picture), does NOT create a web page
   (use story-to-web), and does NOT enhance prose (use Copywriter skill).
 allowed-tools: Read, Write, Edit, Bash, Grep, Glob, AskUserQuestion
+version: 1.0.0
 ---
 
 # Story-to-Slides Skill

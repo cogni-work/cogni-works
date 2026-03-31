@@ -2,6 +2,21 @@
 
 Extracted templates, data tables, and contracts used by the render-big-picture orchestrator skill. Referenced inline by phase number.
 
+## Contents
+
+- [Phase 0: Composition Sketch Workflow](#phase-0-composition-sketch-workflow) — Sketch steps, loading guide, preview
+- [Font Size & Family Tables](#font-size--family-tables) — Per-canvas-size font sizing and family mapping
+- [Phase 2: Title Banner Template](#phase-2-title-banner-template) — Banner element specs and positioning
+- [Phase 3: Station Prompt Contract](#phase-3-station-prompt-contract) — Structure artist prompt template and data format
+- [Phase 3.5: Enrichment Prompt Contract](#phase-35-enrichment-prompt-contract) — Enrichment artist prompt template
+- [Phase 4: Footer Template](#phase-4-footer-template) — Footer element specs
+- [Review Zone Computation](#review-zone-computation) — How to divide canvas into 4 review zones
+- [Rendering Z-Order](#rendering-z-order) — Element stacking order
+- [Batch Size Strategy](#batch-size-strategy) — Batch sizing with fallback
+- [Snapshot Checkpoints](#snapshot-checkpoints) — Recovery points per phase
+- [Error Recovery](#error-recovery) — Failure handling procedures
+- [Example: Station Prompt](#example-station-prompt-german-b2b-smart-factory-a1) — German B2B worked example
+
 ---
 
 ## Phase 0: Composition Sketch Workflow

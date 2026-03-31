@@ -1,5 +1,17 @@
 # Excalidraw Illustration Techniques
 
+## Contents
+
+- [Purpose](#purpose) — Density targets, element count goals
+- [Core Principle: Shape Stacking](#core-principle-shape-stacking) — Building complexity from primitives
+- [Technique Catalog](#technique-catalog) — 7 techniques: layered depth, structural composition, detail elements, glow/emphasis, environmental, color depth, scale/proportion
+- [Anti-Patterns](#anti-patterns) — Common mistakes to avoid
+- [Composition Workflow for Station Artists](#composition-workflow-for-station-artists) — Step-by-step process
+- [High-Density Composition (250+ Elements)](#high-density-composition-250-elements-per-object) — Planning, multi-batch execution, structure vs enrichment split
+- [Micro-Detail Catalog](#micro-detail-catalog) — Hardware, structural lines, surface patterns, equipment, weathering
+- [Texture Patterns from Repeated Elements](#texture-patterns-from-repeated-elements) — Rivet rows, window grids, brick panels, ventilation, cables
+- [Batch Strategy for 250+ Elements](#batch-strategy-for-250-elements) — Sub-region planning, batch sizing, element counting, coordinate overlap avoidance
+
 ## Purpose
 
 Guide artist agents in composing rich, recognizable illustrations from Excalidraw primitives. Station objects require 250+ elements each (structure + enrichment combined). The goal: photographic density where every surface has texture, every structure has detail, every space has atmosphere.

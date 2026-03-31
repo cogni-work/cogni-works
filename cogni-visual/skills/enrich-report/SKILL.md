@@ -28,6 +28,7 @@ description: >
   NOT create TIPS dashboards (use trends-dashboard), and does NOT polish prose
   (use cogni-copywriting).
 allowed-tools: Read, Write, Edit, Bash, Grep, Glob, AskUserQuestion, Agent, Skill
+version: 1.0.0
 ---
 
 # Enrich Report
@@ -251,7 +252,7 @@ After scoring, verify that data-rich H2 sections (600+ words AND at least one co
 
 If a qualifying section has fewer enrichments than baseline, force-add. Score force-added `summary-card` at 40, data charts at 35. Sections without any content-pattern data tags are pure analytical prose — do NOT force enrichments. See `references/03-enrichment-catalog.md` "Section Consistency Rule" for full details.
 
-**Data extraction completeness:** Every enrichment MUST have a non-empty `data` field containing the extracted values that Phase 4 will use to generate the visualization. An enrichment with `"data": {}` forces the Python generator to re-parse the markdown during HTML assembly, which is brittle and error-prone. Extract the data NOW during Phase 2 while the section content is being analyzed:
+**Data extraction completeness:** Every enrichment needs a non-empty `data` field containing the extracted values that Phase 4 will use to generate the visualization. An enrichment with `"data": {}` forces the Python generator to re-parse the markdown during HTML assembly, which is brittle and error-prone — extract the data during Phase 2 while the section content is being analyzed:
 - `kpi-dashboard`: `stats[]` with value, label, source_url
 - `comparison-bar`: `items[]` with label and value (from table rows or comparison pairs)
 - `stat-chart`: `claims[]` with value, label, unit
@@ -263,7 +264,7 @@ If a qualifying section has fewer enrichments than baseline, force-add. Score fo
 
 If you cannot extract meaningful data for an enrichment, demote it (lower its score by 20) rather than leaving `data` empty.
 
-**Injection line precision:** Every enrichment MUST have an `injection_after_line` value pointing to the specific source line after which it should appear. When multiple enrichments target the same section, spread them across different paragraphs — do NOT give them all the same line number. The Python generator uses these lines to interleave enrichments within the section content. If all enrichments share one line, they stack together at one position instead of being distributed through the prose.
+**Injection line precision:** Every enrichment needs an `injection_after_line` value pointing to the specific source line after which it should appear. When multiple enrichments target the same section, spread them across different paragraphs — do NOT give them all the same line number. The Python generator uses these lines to interleave enrichments within the section content. If all enrichments share one line, they stack together at one position instead of being distributed through the prose.
 
 **Output:** `enrichment-plan.json` (written to `{source_dir}/cogni-visual/enrichment-plan.json`):
 

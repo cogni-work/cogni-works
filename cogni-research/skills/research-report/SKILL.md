@@ -528,6 +528,10 @@ Maximum 1 structural review iteration. After revision (or if the first review ac
 
 > **Next step**: Run `/verify-report` to verify claims against cited sources. This runs in a clean context window for thorough fact-checking — extracting claims, verifying each against its source URL, and revising any deviations found.
 
+5. **Recommend visual enrichment** (for detailed and deep reports):
+
+> **Visual upgrade**: Run `/enrich-report` to generate a themed HTML version with interactive Chart.js charts and Excalidraw concept diagrams. The skill analyzes your report's data tables, statistical clusters, process descriptions, and comparison structures to place visualizations where they add the most value — without modifying the original markdown.
+
 ## Resumption
 
 If a project directory already exists at init:

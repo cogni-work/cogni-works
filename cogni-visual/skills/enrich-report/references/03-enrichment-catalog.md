@@ -232,6 +232,32 @@ Complete catalog of enrichment types available for report visualization. Each ty
 
 ---
 
+#### `process-flow`
+
+**What it shows:** Horizontal or vertical flow diagram showing a process, workflow, or causal chain described in the research text. Generic process visualization — not TIPS-specific.
+
+**Excalidraw pattern:** Linear flow with color-coded step boxes connected by arrows. See `05-excalidraw-patterns.md` "process-flow" pattern.
+
+**Trigger conditions:**
+- Section tagged `has-process` (content-pattern tag from section analysis)
+- OR section with 3+ sequential steps in an ordered list or causal chain language
+- AND section word count > 300
+
+**Data extraction:**
+1. Extract step labels from ordered list items, numbered sub-headings, or noun phrases after causal connectors.
+2. Extract connections between steps (sequential or branching).
+3. Max 8 steps — simplify if more (merge minor steps, keep key transitions).
+
+**Scoring:**
+- Base: 25 (content-pattern detected)
+- +5 if section is tagged `methodology` (process diagrams are especially useful here)
+- +10 if 5+ steps
+- Max 3 `process-flow` enrichments per report
+
+**Density threshold:** Included at `balanced` and above.
+
+---
+
 #### `concept-sketch`
 
 **What it shows:** Simple conceptual diagram for an abstract idea — convergence, transformation phases, strategic positioning, capability layers.
@@ -301,6 +327,47 @@ At `minimal` density: each theme gets only 1 enrichment (the best-scoring one). 
 
 ---
 
+## Content-Pattern Structural Rules (research-report)
+
+Research reports use content-pattern tags (detected by analyzing section body text) rather than heading keywords to drive structural enrichment. These rules fire based on what the content **contains**, not what the heading **says** — making them work for any research topic.
+
+| Content pattern | Enrichment | Track | Base Score |
+|----------------|------------|-------|------------|
+| `executive-summary` + 3+ numeric claims | `kpi-dashboard` | data | 40 |
+| `has-data-table` (numeric table with 4+ rows) | `comparison-bar` | data | 30 |
+| `has-comparison` (table or prose comparing entities) | `comparison-bar` | data | 30 |
+| `has-timeline` (3+ chronological dates) | `timeline-chart` | data | 28 |
+| `has-distribution` (proportional data ~100%) | `distribution-doughnut` | data | 25 |
+| `stat-dense` (5+ numeric claims clustered) | `stat-chart` | data | 25 |
+| `has-process` (sequential steps / causal chain) | `process-flow` | concept | 25 |
+| `has-synthesis` (cross-section aggregation) | `relationship-map` | concept | 30 |
+| `has-thesis` + section >800 words | `summary-card` | html | 20 |
+| `methodology` + `has-process` | `process-flow` | concept | 30 |
+| Pre-planned (`diagram-plan.json`) | per-plan type | concept | 40 |
+
+**Deduplication:** When a section has multiple content-pattern tags that map to the same enrichment type (e.g., `has-data-table` and `has-comparison` both → `comparison-bar`), create only one enrichment for that type. Use the higher score.
+
+**Overlap with Layer 2 (content detection):** Content-pattern structural rules and Layer 2 content detection may identify the same visualization opportunity. When they overlap, the structural rule score takes precedence (it's typically higher). Do not create duplicate enrichments for the same data.
+
+---
+
+## Section Consistency Rule (research-report)
+
+In a research report, body sections vary in data richness — some contain dense numeric tables and statistics, others are purely analytical prose. The consistency rule ensures data-rich sections receive proportional visual treatment without forcing charts on prose-only sections.
+
+**Baseline per H2 section (at `balanced` density, for sections with 600+ words):**
+
+1. **`summary-card`** — if `has-thesis` is detected (section >800 words with identifiable thesis sentence in first 2 sentences)
+2. **One data chart** — if ANY content-pattern data tag is present (`has-data-table`, `stat-dense`, `has-comparison`, `has-timeline`, `has-distribution`). Pick the highest-scoring match from the content-pattern structural rules table above.
+3. **Fallback: skip** — if no content-pattern data tags are detected, the section is pure analytical prose. Do NOT force a chart where no data exists. This is the critical difference from trend-reports, where every investment theme has a predictable internal structure with chartable cost comparisons. Research body sections may legitimately contain only qualitative analysis.
+
+**How to apply:** After the content-detection scoring pass (Layer 2), check each H2 section. For data-rich sections (those with at least one content-pattern data tag) with fewer enrichments than the baseline, force-add the missing baseline enrichment. Score force-added `summary-card` items at 40, force-added data charts at 35.
+
+At `minimal` density: only `executive-summary` KPI dashboard + pre-planned diagrams (from `diagram-plan.json`). No per-section baseline.
+At `rich`: baseline + all qualifying content-pattern enrichments + `process-flow` diagrams for procedural sections.
+
+---
+
 ## Scoring Reference
 
 | Score Range | Meaning | Density Required |
@@ -310,6 +377,21 @@ At `minimal` density: each theme gets only 1 enrichment (the best-scoring one). 
 | 25-49 | Moderate — useful but not critical | `balanced` (near cap) |
 | 10-24 | Optional — adds variety, lower confidence | `rich` |
 | 0-9 | Skip — insufficient data or poor fit | never |
+
+## Type Diversity Scoring
+
+Applied after base scoring to prevent any single enrichment type from dominating the plan:
+
+| Condition | Score Modifier |
+|-----------|---------------|
+| First use of this type in the plan | +15 |
+| Type not used in last 3 enrichments | +10 |
+| Same type as immediately preceding enrichment | -15 |
+| This type already accounts for 40%+ of all planned enrichments | -10 |
+
+These modifiers stack. A `stat-chart` that is the first stat-chart in the plan AND hasn't been used in the last 3 enrichments gets +25. A `comparison-bar` that is the 6th comparison-bar in a 13-enrichment plan (46%) AND follows another comparison-bar gets -25.
+
+The purpose is to ensure visual variety — a report with 6 comparison-bars and no stat-charts, distribution-doughnuts, or timeline-charts is visually monotonous even if each individual comparison-bar is data-justified. When multiple chart types could fit the same data (e.g., a numeric table could be comparison-bar OR stat-chart), diversity scoring tips the balance toward the underrepresented type.
 
 ## Spacing Rules
 

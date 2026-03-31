@@ -184,10 +184,19 @@ For trend-report:
 | `evidence-coverage` | `coverage-heatmap` | data |
 | `strategic-themes-table` | `theme-radar` | data |
 
-For research-report:
-| Section tag | Enrichment | Track |
-|------------|------------|-------|
-| `introduction` (if 3+ stats) | `kpi-dashboard` | data |
+For research-report (content-pattern-driven — fires based on section content, not heading text):
+| Content pattern | Enrichment | Track |
+|----------------|------------|-------|
+| `executive-summary` + 3+ numeric claims | `kpi-dashboard` | data |
+| `has-data-table` (numeric table with 4+ rows) | `comparison-bar` | data |
+| `has-comparison` (table or prose comparing entities) | `comparison-bar` | data |
+| `has-timeline` (3+ chronological dates) | `timeline-chart` | data |
+| `has-distribution` (proportional data ~100%) | `distribution-doughnut` | data |
+| `stat-dense` (5+ numeric claims clustered) | `stat-chart` | data |
+| `has-process` (sequential steps / causal chain) | `process-flow` | concept |
+| `has-synthesis` (cross-section aggregation) | `relationship-map` | concept |
+| `has-thesis` + section >800 words | `summary-card` | html |
+| `methodology` + `has-process` | `process-flow` | concept |
 | Pre-planned (diagram-plan.json) | per-plan type | concept |
 
 **Layer 2 — Content pattern detection (generic, scored):**
@@ -195,7 +204,7 @@ For research-report:
 Scan each section's text for patterns:
 - 3+ numeric claims in close proximity → `stat-chart` candidate (data)
 - Table with 4+ rows of numeric data → `comparison-bar` or `distribution-doughnut` candidate (data)
-- Process/sequence language ("leads to", "triggers", "results in") → `flow-diagram` candidate (concept)
+- Process/sequence language ("leads to", "triggers", "results in") → `process-flow` candidate (concept)
 - Comparison language ("vs", "compared to", "while X, Y") → `comparison-bar` candidate (data)
 - Temporal references (dates, quarters, deadlines, milestones) → `timeline-chart` candidate (data)
 - Section >800 words with identifiable thesis sentence → `summary-card` candidate (html)
@@ -207,7 +216,7 @@ Each candidate gets a score (0-100) based on:
 - Data density: more numbers/rows = higher (max 40 points)
 - Content relevance: how well the data fits the visualization type (max 30 points)
 - Section importance: H2 > H3 > H4 (max 15 points)
-- Variety bonus: +10 if this type hasn't been used in last 3 enrichments, -10 if same type as previous
+- Variety bonus: +15 if this type hasn't been used anywhere in the plan yet (first use of a type), +10 if not used in last 3 enrichments, -15 if same type as previous enrichment, -10 if this type already accounts for 40%+ of all planned enrichments (prevents any single type from dominating)
 
 Apply filters:
 - Minimum distance: no two enrichments within 300 words of each other
@@ -223,6 +232,26 @@ After scoring, verify that every investment theme H2 section has at least 2 enri
 2. One data chart (best fit: `comparison-bar` for cost comparisons, `timeline-chart` for deadline-heavy themes, `stat-chart` for evidence clusters)
 
 If a theme has fewer than 2, force-add from this baseline. Score force-added items at 50. This prevents the visual rhythm from breaking — all themes share the same internal structure, so they must share a consistent visual baseline. See `references/03-enrichment-catalog.md` "Theme Consistency Rule" for full details.
+
+**Section consistency check (research-report):**
+
+After scoring, verify that data-rich H2 sections (600+ words AND at least one content-pattern data tag: `has-data-table`, `stat-dense`, `has-comparison`, `has-timeline`, `has-distribution`) have at least 1 enrichment at `balanced` density:
+1. A `summary-card` (if `has-thesis` detected — section >800 words with thesis sentence)
+2. One data chart (highest-scoring match from content-pattern structural rules)
+
+If a qualifying section has fewer enrichments than baseline, force-add. Score force-added `summary-card` at 40, data charts at 35. Sections without any content-pattern data tags are pure analytical prose — do NOT force enrichments. See `references/03-enrichment-catalog.md` "Section Consistency Rule" for full details.
+
+**Data extraction completeness:** Every enrichment MUST have a non-empty `data` field containing the extracted values that Phase 4 will use to generate the visualization. An enrichment with `"data": {}` forces the Python generator to re-parse the markdown during HTML assembly, which is brittle and error-prone. Extract the data NOW during Phase 2 while the section content is being analyzed:
+- `kpi-dashboard`: `stats[]` with value, label, source_url
+- `comparison-bar`: `items[]` with label and value (from table rows or comparison pairs)
+- `stat-chart`: `claims[]` with value, label, unit
+- `timeline-chart`: `events[]` with date, label, category
+- `distribution-doughnut`: `segments[]` with label, value, percentage
+- `process-flow`: `steps[]` with label, sublabel, and `connections[]`
+- `relationship-map`: `nodes[]` and `connections[]` with labels
+- `summary-card`: `summary` text and `word_count`
+
+If you cannot extract meaningful data for an enrichment, demote it (lower its score by 20) rather than leaving `data` empty.
 
 **Injection line precision:** Every enrichment MUST have an `injection_after_line` value pointing to the specific source line after which it should appear. When multiple enrichments target the same section, spread them across different paragraphs — do NOT give them all the same line number. The Python generator uses these lines to interleave enrichments within the section content. If all enrichments share one line, they stack together at one position instead of being distributed through the prose.
 

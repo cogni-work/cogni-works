@@ -31,7 +31,7 @@
             "enum": [
               "kpi-dashboard", "horizon-chart", "theme-radar", "coverage-heatmap",
               "distribution-doughnut", "timeline-chart", "comparison-bar", "stat-chart",
-              "tips-flow", "relationship-map", "concept-sketch", "summary-card"
+              "tips-flow", "relationship-map", "concept-sketch", "process-flow", "summary-card"
             ]
           },
           "track": {

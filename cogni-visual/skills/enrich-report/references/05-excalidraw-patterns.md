@@ -102,6 +102,52 @@ Element recipes for generating concept diagrams via Excalidraw MCP, themed with 
 
 ---
 
+### `process-flow` — Research Process / Workflow
+
+**Layout:** Horizontal linear flow (default) or vertical for 6+ steps. Generic process visualization — works for any sequential process described in research text.
+
+```
+[Step 1] → [Step 2] → [Step 3] → [Step 4] → [Step 5]
+ Label 1     Label 2    Label 3    Label 4    Label 5
+```
+
+**Element recipe:**
+
+| Element | Style |
+|---------|-------|
+| Step boxes (3-8) | 180x70px, `colors.surface` fill, `colors.primary` 2px stroke, rounded corners (8px) |
+| Active/key step (optional — first or last) | `colors.accent` fill, `colors.text_light` text |
+| Arrows | 2px, `colors.accent_muted`, right-pointing (or down for vertical) |
+| Step labels | 16px body font, `colors.text`, centered in box |
+| Step numbers | 12px bold, `colors.text_muted`, top-left corner of each box (4px inset) |
+| Sub-labels (optional) | 12px, `colors.text_muted`, below each box |
+
+**Horizontal layout (default, 3-5 steps):**
+- Steps spaced 40px apart horizontally
+- All boxes on same Y baseline
+- Max width: 720px
+- Arrows: straight horizontal, centered on box edges
+
+**Vertical layout (6-8 steps):**
+- Steps spaced 30px apart vertically
+- All boxes on same X center
+- Max height: 600px
+- Arrows: straight vertical, centered on box edges
+
+**Branching (if detected):**
+- Place branching arrows at 45° angles from the decision point
+- Branch labels on the arrows (12px, `colors.text_muted`)
+
+**Total elements:** 10-25 depending on step count.
+
+**Excalidraw MCP calls:**
+1. `clear_canvas`
+2. `batch_create_elements` — all rectangles + text labels + number labels
+3. `batch_create_elements` — all arrows
+4. `export_to_image` — format: svg, width: 720
+
+---
+
 ### `concept-sketch` — Abstract Concept Patterns
 
 Select the sub-pattern based on the conceptual structure detected in the text:

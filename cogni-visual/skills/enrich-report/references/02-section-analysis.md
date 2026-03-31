@@ -88,12 +88,59 @@ Map headings to semantic tags for enrichment planning:
 
 ## Research-Report Section Tags
 
+Research reports vary widely in topic and heading conventions. Section intelligence uses a two-layer system: a small set of universal heading-based tags for structurally stable sections, plus content-pattern tags detected by analyzing the section body text. Content-pattern tags are the primary driver for enrichment decisions — they work regardless of domain or heading language.
+
+### Layer A — Universal Heading Tags
+
 | Heading Pattern | Tag |
 |----------------|-----|
-| H2 "Introduction" (within first 3 sections) | `introduction` |
-| H2 between Introduction and Conclusion | `body-section` |
-| H2 "Conclusion" or "Recommendations" | `conclusion` |
-| H2 "References" or "Bibliography" (last section) | `references` |
+| First H2, or H2 containing "Executive Summary" / "Zusammenfassung" / "Key Findings" / "Abstract" | `executive-summary` |
+| H2 "Introduction" or "Einleitung" (within first 3 sections) | `introduction` |
+| H2 containing "Methodology" / "Methods" / "Approach" / "Methodik" | `methodology` |
+| H2 "Conclusion" / "Fazit" / "Schlussfolgerung" | `conclusion` |
+| H2 containing "Recommendations" / "Empfehlungen" (when standalone, not combined "Conclusion and Recommendations" — if combined, tag as `conclusion`) | `recommendations` |
+| H2 "References" / "Bibliography" / "Literaturverzeichnis" / "Quellen" (last section) | `references` |
+| All other H2 sections | `body-section` |
+
+### Layer B — Content-Pattern Tags
+
+Applied to ANY section (including those already tagged in Layer A) by analyzing the section body text. A section can accumulate multiple content-pattern tags — e.g., `body-section` + `has-data-table` + `has-comparison`.
+
+| Content Pattern | Tag | Detection Rules |
+|----------------|-----|-----------------|
+| Markdown table with 3+ data rows containing numeric values | `has-data-table` | Lines matching `\|.*\|` with separator row `\|---`; >50% of non-header cells contain numbers (currency, percentages, integers) |
+| 5+ numeric claims within 500 words | `stat-dense` | Cluster of currency amounts, percentages, multipliers, large numbers (see Numeric Claim Extraction patterns above) within a 500-word window |
+| Sequential steps or causal chains | `has-process` | Ordered list (`1.`, `2.`, `3.`+) describing stages; OR causal connectors ("leads to", "results in", "enables", "triggers", "followed by", "step N", "phase N"); OR numbered sub-headings (H3/H4) describing sequential stages |
+| 3+ date/year references in temporal order | `has-timeline` | Three or more matches of year/quarter/month patterns (`20\d{2}`, `Q[1-4] 20\d{2}`, `by 20\d{2}`, month-year) appearing in chronological sequence within the section |
+| Comparison of 2+ named entities across shared dimensions | `has-comparison` | Table with entity names as row labels and evaluation criteria as columns; OR prose with comparison language ("vs", "compared to", "while X has... Y has...", "outperforms", "in contrast") referencing 2+ named entities |
+| Proportional data summing to ~100% | `has-distribution` | Percentage values in table cells or inline text that sum to 95-105%; OR explicit share/proportion language ("accounts for N%", "represents N% of") |
+| Synthesis across 3+ other report sections | `has-synthesis` | Section references 3+ other topics from the report by name or keyword (not necessarily exact heading text — inline mentions like "Requirements", "Design", "Testing" count if they refer to report sections); OR aggregating language ("across all phases", "across all sections", "common pattern", "recurring theme", "cutting across", "interconnected"); OR section has a structured breakdown mapping items to multiple other report topics (e.g., "Impact Across Phases: Requirements — ..., Design — ..., Coding — ...") |
+| Clear thesis + supporting evidence (>800 words) | `has-thesis` | Section word count >800; AND first 2 sentences contain an assertion (verb + quantitative claim or strong evaluative statement) |
+
+### Content Structure Detection (Research-Report)
+
+When a content-pattern tag is detected, extract structured data for visualization planning:
+
+**Comparison structures** (`has-comparison`):
+1. If table: extract entity names (row labels), dimension names (column headers), cell values
+2. If prose: extract entity names from comparison language, dimension names from shared attributes being compared
+3. Output: `entities[]`, `dimensions[]`, `values[][]` (matrix)
+
+**Process/workflow structures** (`has-process`):
+1. Extract step labels from ordered list items, numbered sub-headings, or noun phrases after causal connectors
+2. Extract connections: sequential (A → B → C) or branching (A → B, A → C)
+3. Cap at 8 steps (merge or simplify if more)
+4. Output: `steps[]`, `connections[{from, to, label?}]`
+
+**Statistical clusters** (`stat-dense`):
+1. Group numeric claims by topic similarity (shared keywords within 50 words)
+2. Normalize to common unit where possible (e.g., all percentages, all currency amounts)
+3. Output: `clusters[{topic, claims[{value, label, source_url?}]}]`
+
+**Chronological structures** (`has-timeline`):
+1. Extract date-event pairs: date (normalized to YYYY or YYYY-QN), label (event/milestone, max 10 words), category (regulatory/market/technical/organizational — inferred from context)
+2. Sort chronologically
+3. Output: `events[{date, label, category}]`, `span{earliest, latest}`
 
 If `.metadata/diagram-plan.json` exists, map its `target_section` fields to section IDs.
 

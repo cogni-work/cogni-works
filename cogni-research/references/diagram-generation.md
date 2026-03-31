@@ -142,6 +142,20 @@ Mermaid must be pre-rendered to SVG or PNG before conversion:
 2. **Excalidraw MCP**: `mcp__excalidraw__create_from_mermaid` + `mcp__excalidraw__export_to_image` — produces hand-drawn style
 3. **Fallback**: Leave as styled code blocks with a note recommending `npm install -g @mermaid-js/mermaid-cli`
 
+## Visual Upgrade Path
+
+Mermaid diagrams provide basic inline visualization during report writing. For richer visual treatment after the report is complete:
+
+**`cogni-visual:enrich-report`** — Post-processes the finished `output/report.md` into themed HTML with:
+- Interactive Chart.js charts (bar, doughnut, radar, line, scatter) extracted from the report's numeric data, comparison tables, and statistical clusters
+- Excalidraw SVG concept diagrams for process flows, relationship maps, and abstract concepts
+- Themed design with CSS custom properties from cogni-workspace themes
+- Navigation sidebar and responsive layout
+
+This is complementary to Mermaid: enrich-report analyzes the entire report structure using content-pattern detection to identify data-rich sections that warrant interactive visualization, going beyond the planned diagrams from Phase 3.5. It works regardless of research topic — the enrichment intelligence is driven by content patterns (data tables, comparison structures, statistical clusters, process descriptions), not domain-specific keywords.
+
+To trigger: Run `/enrich-report` after the report is finalized at `output/report.md`.
+
 ## Limitations
 
 - Mermaid diagrams are text-based — they cannot represent photographs, artistic illustrations, or complex data visualizations

@@ -46,7 +46,7 @@ Entities are ONLY created via `scripts/create-entity.sh` (bash wrapper that dele
 - **cogni-claims** — verify-report skill submits claims for source URL verification (primary integration)
 - **cogni-narrative** — story arc transformation of research output. User invokes `/narrative --source-path <report-output-dir>` after research completes. cogni-narrative auto-bridges `[Source: Publisher](URL)` citations into per-source files via its built-in citation bridge (Phase 0.5).
 - **cogni-copywriting** — arc-aware executive polish. User invokes copywriter on narrative output. Auto-activated by `arc_id` frontmatter in narrative output.
-- **cogni-visual** — optional presentation generation
+- **cogni-visual** — enrich-report themed HTML with interactive charts and concept diagrams from research reports; optional presentation generation via story-to-slides
 
 ## Model Strategy
 

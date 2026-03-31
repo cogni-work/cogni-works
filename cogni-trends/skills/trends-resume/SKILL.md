@@ -170,7 +170,7 @@ If the phase is `complete`, congratulate the user and present the downstream opt
 | `modeling-curating` | Ranked solutions complete, curation pending | Continue `value-modeler` for optional catalog curation |
 | `modeling-complete` | Value model complete with ranked solutions | Run `trend-report`, or `/trends-catalog import` |
 | `reporting` | Value model complete, report not yet generated | Run `trend-report` |
-| `verification` | Report done, claims pending verification | Run `cogni-claims:claim-work` |
+| `verification` | Report done, claims pending verification | Run `cogni-claims:claims` |
 | `complete` | All stages finished | Report complete — choose from downstream options below |
 
 **Stale Blueprints:** When `stale_warnings` contains a `stale_blueprints` entry (portfolio context

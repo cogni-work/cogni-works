@@ -1,7 +1,7 @@
 ---
 name: trend-report
 description: |
-  Generate a strategic TIPS trend report organized around investment themes (Handlungsfelder) with inline citations and verifiable claims. The user selects a report-level narrative arc from cogni-narrative's 7 story arcs (corporate-visions, technology-futures, competitive-intelligence, strategic-foresight, industry-transformation, trend-panorama, theme-thesis) — the arc frames the executive summary, bridge paragraphs between themes, and a synthesis closing section that bind investment themes into one cohesive narrative. Each investment theme internally uses the theme-thesis arc (Why Change → Why Now → Why You → Why Pay) backed by T→I→P→S value chain evidence. Reads agreed trend candidates, enriches each with web-sourced quantitative evidence via parallel agents, assembles the report with arc-framed executive summary, bridge paragraphs, theme sections, synthesis section, and claims registry. Invokes cogni-claims:claim-work for optional verification. Downstream polish, visualization, and export are steered via `/trends-resume`. Required pipeline: trend-scout → value-modeler → trend-report. Use when: (1) trend-scout and value-modeler have completed, (2) user wants a written trend report, (3) user mentions "trend report", "TIPS report", "write up trends", "summarize trends", "trend analysis document", "strategic stories", (4) preparing a deliverable from scouted trends, (5) user asks to "generate report from trends" or "create trend deliverable". Always use this skill when trend-scout output exists and the user wants any kind of written trend analysis — even if they don't use the exact phrase "trend report".
+  Generate a strategic TIPS trend report organized around investment themes (Handlungsfelder) with inline citations and verifiable claims. The user selects a report-level narrative arc from cogni-narrative's 7 story arcs (corporate-visions, technology-futures, competitive-intelligence, strategic-foresight, industry-transformation, trend-panorama, theme-thesis) — the arc frames the executive summary, bridge paragraphs between themes, and a synthesis closing section that bind investment themes into one cohesive narrative. Each investment theme internally uses the theme-thesis arc (Why Change → Why Now → Why You → Why Pay) backed by T→I→P→S value chain evidence. Reads agreed trend candidates, enriches each with web-sourced quantitative evidence via parallel agents, assembles the report with arc-framed executive summary, bridge paragraphs, theme sections, synthesis section, and claims registry. Invokes cogni-claims:claims for optional verification. Downstream polish, visualization, and export are steered via `/trends-resume`. Required pipeline: trend-scout → value-modeler → trend-report. Use when: (1) trend-scout and value-modeler have completed, (2) user wants a written trend report, (3) user mentions "trend report", "TIPS report", "write up trends", "summarize trends", "trend analysis document", "strategic stories", (4) preparing a deliverable from scouted trends, (5) user asks to "generate report from trends" or "create trend deliverable". Always use this skill when trend-scout output exists and the user wants any kind of written trend analysis — even if they don't use the exact phrase "trend report".
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Task, AskUserQuestion, Skill
 ---
 
@@ -19,8 +19,8 @@ Transform agreed trend-scout candidates into a strategic, evidence-backed report
 4. Assemble investment theme narratives using theme-thesis arc (Why Change → Why Now → Why You → Why Pay) with embedded evidence
 5. Generate arc-framed executive summary, bridge paragraphs between themes, and synthesis closing section
 6. Generate inline citations for every quantitative claim
-7. Produce a claims registry compatible with `cogni-claims:claim-work`
-8. Optionally verify claims via cogni-claims:claim-work
+7. Produce a claims registry compatible with `cogni-claims:claims`
+8. Optionally verify claims via cogni-claims:claims
 9. Recommend downstream polish, visualization, and export options via `/trends-resume`
 
 ## Language Support
@@ -93,7 +93,7 @@ Track progress through these phases as you go:
 Phase 0 → Phase 1 → Phase 2 → Phase 3 → Phase 4
    │          │          │         │          │
    │          │          │         │          └─ Update metadata, display summary, recommend /trends-resume
-   │          │          │         └─ Optional claim-work verification
+   │          │          │         └─ Optional claims verification
    │          │          └─ Theme narratives + arc-framed exec summary + bridges + synthesis
    │          └─ 4 parallel agents: enrich trends, write sections + enriched JSONs, extract claims
    └─ Project discovery, arc selection, load trend-scout + value-modeler output, validate gate
@@ -355,7 +355,7 @@ If any `report-section-{dimension}.md` file is missing, log a WARNING. Phase 2 c
 
 ### Phase 3: Claim Verification (Optional)
 
-Read [references/phase-3-claim-verification.md](references/phase-3-claim-verification.md) for the full workflow. Asks the user whether to verify extracted claims via `cogni-claims:claim-work`. If the plugin is not installed, skip with a warning.
+Read [references/phase-3-claim-verification.md](references/phase-3-claim-verification.md) for the full workflow. Asks the user whether to verify extracted claims via `cogni-claims:claims`. If the plugin is not installed, skip with a warning.
 
 ---
 
@@ -416,7 +416,7 @@ Run /trends-resume to see your full options — polish, visualize, present, expo
 | Investment theme references unknown candidate_ref | WARNING: agent skips that candidate in investment theme narrative |
 | `cogni-narrative` not installed | WARNING: investment-theme-writer uses flat structure (no arc guidance) |
 | `cogni-claims` not installed | WARNING: skip verification |
-| claim-work returns FAIL | Present failed claims. Do not auto-correct. |
+| claims verification returns FAIL | Present failed claims. Do not auto-correct. |
 
 ## Integration
 
@@ -426,7 +426,7 @@ Run /trends-resume to see your full options — polish, visualize, present, expo
 
 **Pipeline:** `trend-scout → value-modeler → trend-report`
 
-**Optional cross-plugin:** `cogni-narrative` theme-thesis arc (Phase 2 investment theme writer guidance), `cogni-claims:claim-work` (Phase 3)
+**Optional cross-plugin:** `cogni-narrative` theme-thesis arc (Phase 2 investment theme writer guidance), `cogni-claims:claims` (Phase 3)
 
 **Downstream (via `/trends-resume`):** `cogni-copywriting:copywrite` (prose polish), `cogni-visual:enrich-report` (themed HTML), `cogni-visual:story-to-slides` (presentation), `cogni-visual:story-to-web` (landing page), `cogni-visual:story-to-big-picture` (journey map), `cogni-visual:story-to-storyboard` (print posters), `trends-catalog import`, `trends-dashboard`
 

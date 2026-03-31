@@ -182,6 +182,31 @@ CLAIMS_TOTAL=0
 [ -f "$PROJECT_DIR/tips-trend-report-claims.json" ] && HAS_CLAIMS="true"
 [ -f "$PROJECT_DIR/tips-insight-summary.md" ] && HAS_INSIGHT="true"
 [ -f "$PROJECT_DIR/.metadata/trend-report-verification.json" ] && HAS_VERIFICATION="true"
+# Fallback: detect verification from cogni-claims registry (created by /claims skill)
+CLAIMS_STORE_SCRIPT="$(cd "$(dirname "$0")/../.." && pwd)/cogni-claims/skills/claims/scripts/claims-store.sh"
+if [ "$HAS_VERIFICATION" = "false" ] && [ -f "$PROJECT_DIR/cogni-claims/claims.json" ] && [ -f "$CLAIMS_STORE_SCRIPT" ]; then
+  CLAIMS_STATUS=$(bash "$CLAIMS_STORE_SCRIPT" count-by-status "$PROJECT_DIR" 2>/dev/null || echo "")
+  if [ -n "$CLAIMS_STATUS" ]; then
+    eval "$(python3 -c "
+import json, sys
+try:
+    d = json.loads('$CLAIMS_STATUS')
+    total = d.get('total', 0)
+    unverified = d.get('unverified', 0)
+    if total > 0 and unverified == 0:
+        verified = d.get('verified', 0) + d.get('resolved', 0) + d.get('source_unavailable', 0)
+        deviated = d.get('deviated', 0)
+        verdict = 'PASS' if deviated == 0 else 'REVIEW'
+        print(f'HAS_VERIFICATION=true')
+        print(f'VERIFICATION_VERDICT={chr(39)}{verdict}{chr(39)}')
+        print(f'VERIFICATION_PASSED={verified}')
+        print(f'VERIFICATION_FAILED=0')
+        print(f'VERIFICATION_REVIEW={deviated}')
+except Exception:
+    pass
+" 2>/dev/null)"
+  fi
+fi
 [ -f "$PROJECT_DIR/output/tips-trend-report-enriched.html" ] && HAS_ENRICHED_REPORT="true"
 HAS_DASHBOARD="false"
 [ -f "$PROJECT_DIR/output/trends-dashboard.html" ] && HAS_DASHBOARD="true"
@@ -197,13 +222,14 @@ except Exception:
 " 2>/dev/null || echo "0")
 fi
 
-# Verification status
-VERIFICATION_VERDICT=""
-VERIFICATION_PASSED=0
-VERIFICATION_FAILED=0
-VERIFICATION_REVIEW=0
-if [ "$HAS_VERIFICATION" = "true" ]; then
-  eval "$(python3 -c "
+# Verification status — only set defaults if not already populated by cogni-claims fallback
+if [ -z "${VERIFICATION_VERDICT:-}" ]; then
+  VERIFICATION_VERDICT=""
+  VERIFICATION_PASSED=0
+  VERIFICATION_FAILED=0
+  VERIFICATION_REVIEW=0
+  if [ -f "$PROJECT_DIR/.metadata/trend-report-verification.json" ]; then
+    eval "$(python3 -c "
 import json
 try:
     d = json.load(open('$PROJECT_DIR/.metadata/trend-report-verification.json'))
@@ -214,6 +240,7 @@ try:
 except Exception:
     pass
 " 2>/dev/null)"
+  fi
 fi
 
 # Check for copywriter metadata in trend-scout-output.json
@@ -449,7 +476,7 @@ case "$PHASE" in
     add_action "trend-report" "Value model complete — ready to generate trend report"
     ;;
   verification)
-    add_action "cogni-claims:claim-work" "$CLAIMS_TOTAL claims extracted — ready for verification"
+    add_action "cogni-claims:claims" "$CLAIMS_TOTAL claims extracted — ready for verification"
     ;;
   complete)
     # Polish

@@ -1,6 +1,6 @@
 # Phase 3: Claim Verification
 
-Optional phase — asks the user whether to verify extracted claims via `cogni-claims:claim-work`.
+Optional phase — asks the user whether to verify extracted claims via `cogni-claims:claims`.
 
 ---
 
@@ -21,7 +21,7 @@ AskUserQuestion:
 
 ```yaml
 Skill:
-  skill: "cogni-claims:claim-work"
+  skill: "cogni-claims:claims"
   args: "--file-path {PROJECT_PATH}/tips-trend-report.md --claims-file {PROJECT_PATH}/tips-trend-report-claims.json --verdict-mode --language {LANGUAGE}"
 ```
 

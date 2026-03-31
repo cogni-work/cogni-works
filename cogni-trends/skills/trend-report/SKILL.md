@@ -1,7 +1,7 @@
 ---
 name: trend-report
 description: |
-  Generate a strategic TIPS trend report organized around investment themes (Handlungsfelder) with inline citations and verifiable claims. The user selects a report-level narrative arc from cogni-narrative's 7 story arcs (corporate-visions, technology-futures, competitive-intelligence, strategic-foresight, industry-transformation, trend-panorama, theme-thesis) — the arc frames the executive summary, bridge paragraphs between themes, and a synthesis closing section that bind investment themes into one cohesive narrative. Each investment theme internally uses the theme-thesis arc (Why Change → Why Now → Why You → Why Pay) backed by T→I→P→S value chain evidence. Reads agreed trend candidates, enriches each with web-sourced quantitative evidence via parallel agents, assembles the report with arc-framed executive summary, bridge paragraphs, theme sections, synthesis section, and claims registry. Invokes cogni-claims:claim-work for automated verification and polishes the final prose via cogni-copywriting. Required pipeline: trend-scout → value-modeler → trend-report. Use when: (1) trend-scout and value-modeler have completed, (2) user wants a written trend report, (3) user mentions "trend report", "TIPS report", "write up trends", "summarize trends", "trend analysis document", "strategic stories", (4) preparing a deliverable from scouted trends, (5) user asks to "generate report from trends" or "create trend deliverable". Always use this skill when trend-scout output exists and the user wants any kind of written trend analysis — even if they don't use the exact phrase "trend report".
+  Generate a strategic TIPS trend report organized around investment themes (Handlungsfelder) with inline citations and verifiable claims. The user selects a report-level narrative arc from cogni-narrative's 7 story arcs (corporate-visions, technology-futures, competitive-intelligence, strategic-foresight, industry-transformation, trend-panorama, theme-thesis) — the arc frames the executive summary, bridge paragraphs between themes, and a synthesis closing section that bind investment themes into one cohesive narrative. Each investment theme internally uses the theme-thesis arc (Why Change → Why Now → Why You → Why Pay) backed by T→I→P→S value chain evidence. Reads agreed trend candidates, enriches each with web-sourced quantitative evidence via parallel agents, assembles the report with arc-framed executive summary, bridge paragraphs, theme sections, synthesis section, and claims registry. Invokes cogni-claims:claim-work for optional verification. Downstream polish, visualization, and export are steered via `/trends-resume`. Required pipeline: trend-scout → value-modeler → trend-report. Use when: (1) trend-scout and value-modeler have completed, (2) user wants a written trend report, (3) user mentions "trend report", "TIPS report", "write up trends", "summarize trends", "trend analysis document", "strategic stories", (4) preparing a deliverable from scouted trends, (5) user asks to "generate report from trends" or "create trend deliverable". Always use this skill when trend-scout output exists and the user wants any kind of written trend analysis — even if they don't use the exact phrase "trend report".
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Task, AskUserQuestion, Skill
 ---
 
@@ -21,8 +21,7 @@ Transform agreed trend-scout candidates into a strategic, evidence-backed report
 6. Generate inline citations for every quantitative claim
 7. Produce a claims registry compatible with `cogni-claims:claim-work`
 8. Optionally verify claims via cogni-claims:claim-work
-9. Polish report prose for executive readability via cogni-copywriting
-10. Optionally generate themed HTML with interactive charts and diagrams via cogni-visual:enrich-report
+9. Recommend downstream polish, visualization, and export options via `/trends-resume`
 
 ## Language Support
 
@@ -42,7 +41,6 @@ Report prose, section headers, and TIPS labels all adapt to the chosen output la
 - Web access enabled for evidence enrichment
 - Optional: `cogni-narrative` plugin for theme-thesis arc guidance (graceful fallback if absent — investment themes use flat structure)
 - Optional: `cogni-claims` plugin for claim verification
-- Optional: `cogni-copywriting` plugin for executive polish (graceful fallback if absent)
 
 ## Context Independence
 
@@ -86,17 +84,15 @@ Read references **only when needed** for the specific phase:
 | [references/i18n/labels-en.md](references/i18n/labels-en.md) | English report headings and labels |
 | [references/i18n/labels-de.md](references/i18n/labels-de.md) | German report headings and labels |
 | [references/phase-3-claim-verification.md](references/phase-3-claim-verification.md) | Running claim verification (Phase 3) |
-| [references/phase-3.5-executive-polish.md](references/phase-3.5-executive-polish.md) | Polishing report prose (Phase 3.5) |
 
 ## Workflow Overview
 
 Track progress through these phases as you go:
 
 ```text
-Phase 0 → Phase 1 → Phase 2 → Phase 3 → Phase 3.5 → Phase 4
-   │          │          │         │          │           │
-   │          │          │         │          │           └─ Update metadata, display summary
-   │          │          │         │          └─ Executive polish via cogni-copywriting
+Phase 0 → Phase 1 → Phase 2 → Phase 3 → Phase 4
+   │          │          │         │          │
+   │          │          │         │          └─ Update metadata, display summary, recommend /trends-resume
    │          │          │         └─ Optional claim-work verification
    │          │          └─ Theme narratives + arc-framed exec summary + bridges + synthesis
    │          └─ 4 parallel agents: enrich trends, write sections + enriched JSONs, extract claims
@@ -363,24 +359,6 @@ Read [references/phase-3-claim-verification.md](references/phase-3-claim-verific
 
 ---
 
-### Phase 3.5: Executive Polish via cogni-copywriting (Optional)
-
-Read [references/phase-3.5-executive-polish.md](references/phase-3.5-executive-polish.md) for the full workflow. Polishes report prose via `cogni-copywriting:copywriter` with `SCOPE=tone`. Validates citations and structure are preserved; reverts on failure.
-
----
-
-### Phase 3.7: Visual Enrichment via cogni-visual (Optional)
-
-Ask the user whether to generate a themed HTML version of the report with interactive charts and diagrams. This transforms the markdown report into a polished, presentation-ready HTML deliverable.
-
-1. Check whether `cogni-visual:enrich-report` is available. If not installed, display a warning and skip to Phase 4.
-2. Ask the user: `"Generate themed HTML with interactive charts and diagrams? (cogni-visual:enrich-report)"`
-3. If the user declines, skip to Phase 4.
-4. If yes, invoke the `cogni-visual:enrich-report` skill with `source_path` pointing to `{PROJECT_PATH}/tips-trend-report.md`. The enrich-report skill handles theme selection, enrichment planning, and interactive review — do not duplicate that logic here.
-5. Record the result for the Phase 4 summary.
-
----
-
 ### Phase 4: Finalization
 
 #### Step 4.1: Update Metadata
@@ -399,11 +377,7 @@ Add to `{PROJECT_PATH}/.metadata/trend-scout-output.json`:
   "trend_report_claims_path": "tips-trend-report-claims.json",
   "trend_report_mode": "strategic-themes",
   "trend_report_investment_theme_count": N,
-  "trend_report_generated_at": "ISO-8601",
-  "copywriter_applied": true,
-  "copywriter_scope": "tone or null",
-  "enrich_report_applied": true,
-  "enrich_report_path": "output/tips-trend-report-enriched.html or null"
+  "trend_report_generated_at": "ISO-8601"
 }
 ```
 
@@ -413,19 +387,13 @@ Add to `{PROJECT_PATH}/.metadata/trend-scout-output.json`:
 Trend Report Complete (Investment Themes)
 ─────────────────────────────────────────
 Report:       {PROJECT_PATH}/tips-trend-report.md
-Themes:       {N} investment themes (Corporate Visions arc)
+Themes:       {N} investment themes ({REPORT_ARC_ID} arc)
 Claims:       {PROJECT_PATH}/tips-trend-report-claims.json
 Trends:       60 across {N} investment themes
 Claims:       {total_claims} quantitative claims extracted
 Verification: {verdict or "skipped"}
-Polish:       {copywriter_applied ? "tone (cogni-copywriting)" : "skipped"}
-Enrichment:   {enrich_report_applied ? "themed HTML (cogni-visual)" : "skipped"}
 
-Recommended next steps:
-  1. export-pdf-report — Generate formal PDF report
-  2. cogni-claims:claim-work — Verify claims (if skipped)
-
-Use /trends-resume in your next session to pick up where you left off.
+Run /trends-resume to see your full options — polish, visualize, present, export, or accumulate.
 ```
 
 ---
@@ -449,9 +417,6 @@ Use /trends-resume in your next session to pick up where you left off.
 | `cogni-narrative` not installed | WARNING: investment-theme-writer uses flat structure (no arc guidance) |
 | `cogni-claims` not installed | WARNING: skip verification |
 | claim-work returns FAIL | Present failed claims. Do not auto-correct. |
-| `cogni-copywriting` not installed | WARNING: skip executive polish |
-| Copywriter drops citations | REVERT to backup, log failure, continue to Phase 4 |
-| Copywriter alters headings/structure | REVERT to backup, log failure, continue to Phase 4 |
 
 ## Integration
 
@@ -461,9 +426,9 @@ Use /trends-resume in your next session to pick up where you left off.
 
 **Pipeline:** `trend-scout → value-modeler → trend-report`
 
-**Optional cross-plugin:** `cogni-narrative` theme-thesis arc (Phase 2 investment theme writer guidance), `cogni-claims:claim-work` (Phase 3), `cogni-copywriting:copywriter` (Phase 3.5), `cogni-visual:enrich-report` (Phase 3.7 themed HTML with charts and diagrams)
+**Optional cross-plugin:** `cogni-narrative` theme-thesis arc (Phase 2 investment theme writer guidance), `cogni-claims:claim-work` (Phase 3)
 
-**Downstream:** `export-pdf-report`
+**Downstream (via `/trends-resume`):** `cogni-copywriting:copywrite` (prose polish), `cogni-visual:enrich-report` (themed HTML), `cogni-visual:story-to-slides` (presentation), `cogni-visual:story-to-web` (landing page), `cogni-visual:story-to-big-picture` (journey map), `cogni-visual:story-to-storyboard` (print posters), `trends-catalog import`, `trends-dashboard`
 
 ## Debugging
 

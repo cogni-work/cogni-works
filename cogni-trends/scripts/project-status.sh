@@ -183,6 +183,8 @@ CLAIMS_TOTAL=0
 [ -f "$PROJECT_DIR/tips-insight-summary.md" ] && HAS_INSIGHT="true"
 [ -f "$PROJECT_DIR/.metadata/trend-report-verification.json" ] && HAS_VERIFICATION="true"
 [ -f "$PROJECT_DIR/output/tips-trend-report-enriched.html" ] && HAS_ENRICHED_REPORT="true"
+HAS_DASHBOARD="false"
+[ -f "$PROJECT_DIR/output/trends-dashboard.html" ] && HAS_DASHBOARD="true"
 
 if [ "$HAS_CLAIMS" = "true" ]; then
   CLAIMS_TOTAL=$(python3 -c "
@@ -450,8 +452,23 @@ case "$PHASE" in
     add_action "cogni-claims:claim-work" "$CLAIMS_TOTAL claims extracted — ready for verification"
     ;;
   complete)
-    if [ "$HAS_REPORT" = "true" ] && [ "$HAS_ENRICHED_REPORT" = "false" ]; then
-      add_action "cogni-visual:enrich-report" "Trend report ready — generate themed HTML with charts and diagrams"
+    # Polish
+    if [ "$HAS_COPYWRITER" = "false" ]; then
+      add_action "cogni-copywriting:copywrite" "Polish report prose for executive readability"
+    fi
+    # Visualize
+    if [ "$HAS_ENRICHED_REPORT" = "false" ]; then
+      add_action "cogni-visual:enrich-report" "Generate themed HTML with charts and diagrams"
+    fi
+    add_action "cogni-visual:story-to-slides" "Create a PowerPoint presentation from the report"
+    add_action "cogni-visual:story-to-web" "Create a scrollable landing page from the report"
+    add_action "cogni-visual:story-to-big-picture" "Create a visual journey map poster"
+    add_action "cogni-visual:story-to-storyboard" "Create a multi-poster print storyboard"
+    # Accumulate
+    add_action "cogni-trends:trends-catalog" "Import to industry catalog for cross-pursuit reuse"
+    # Dashboard
+    if [ "$HAS_DASHBOARD" = "false" ]; then
+      add_action "cogni-trends:trends-dashboard" "Generate interactive TIPS project dashboard"
     fi
     ;;
 esac
@@ -632,7 +649,8 @@ cat << EOF
     "verification": $HAS_VERIFICATION,
     "copywriter_applied": $HAS_COPYWRITER,
     "copywriter_scope": "$COPYWRITER_SCOPE",
-    "enriched_report": $HAS_ENRICHED_REPORT
+    "enriched_report": $HAS_ENRICHED_REPORT,
+    "dashboard": $HAS_DASHBOARD
   },
   "web_research_status": "$WEB_RESEARCH_STATUS",
   "workflow_state": "$WORKFLOW_STATE",

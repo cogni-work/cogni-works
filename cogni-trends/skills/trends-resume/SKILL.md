@@ -154,7 +154,7 @@ Keep the tone warm and oriented toward action — this is a welcome-back moment,
 
 Present each entry from `next_actions` with the skill name and reason. Offer to proceed with the top recommendation immediately.
 
-If the phase is `complete`, congratulate the user and suggest exporting or visualizing the report.
+If the phase is `complete`, congratulate the user and present the downstream options grouped by purpose (see "Downstream Options for Completed Reports" below). Highlight the top 2-3 most impactful actions based on what hasn't been done yet. Offer to proceed with the user's choice.
 
 ## Phase Reference
 
@@ -171,7 +171,7 @@ If the phase is `complete`, congratulate the user and suggest exporting or visua
 | `modeling-complete` | Value model complete with ranked solutions | Run `trend-report`, or `/trends-catalog import` |
 | `reporting` | Value model complete, report not yet generated | Run `trend-report` |
 | `verification` | Report done, claims pending verification | Run `cogni-claims:claim-work` |
-| `complete` | All stages finished | Run `/enrich-report` for themed HTML, visualize with `/trends-dashboard`, or run `/trends-catalog import` |
+| `complete` | All stages finished | Report complete — choose from downstream options below |
 
 **Stale Blueprints:** When `stale_warnings` contains a `stale_blueprints` entry (portfolio context
 was updated after blueprints were generated), prepend a re-anchor recommendation to the next actions
@@ -181,6 +181,31 @@ for phases `modeling-scoring`, `modeling-curating`, `modeling-complete`, `report
 
 This is automatically handled by `project-status.sh --health-check`, which prepends the re-anchor
 action to `next_actions` when the condition is detected.
+
+### Downstream Options for Completed Reports
+
+When `phase` is `complete`, the `next_actions` array from `project-status.sh` contains the full set of downstream options. Present them grouped by purpose:
+
+**Polish & Verify**
+- `cogni-copywriting:copywrite` — Polish report prose for executive readability (tone scope)
+- `cogni-claims:claims` — Verify extracted claims against cited sources
+
+**Visualize**
+- `cogni-visual:enrich-report` — Themed HTML with Chart.js visualizations and Excalidraw diagrams
+- `cogni-visual:story-to-slides` — PowerPoint presentation brief
+- `cogni-visual:story-to-web` — Scrollable web landing page
+- `cogni-visual:story-to-big-picture` — Single-canvas visual journey map
+- `cogni-visual:story-to-storyboard` — Multi-poster print storyboard
+
+**Accumulate**
+- `cogni-trends:trends-catalog` — Import to industry catalog for cross-pursuit reuse
+
+**Dashboard**
+- `cogni-trends:trends-dashboard` — Interactive HTML dashboard of full project lifecycle
+
+Only show actions that appear in `next_actions` (e.g., skip copywriting if already applied, skip enrich-report if already done, skip dashboard if already generated). Present the top 2-3 as recommended and the rest as "also available". Offer to proceed with the user's choice immediately.
+
+All visualization skills (`story-to-*`) consume `tips-trend-report.md` directly — no intermediary step (like cogni-narrative) is needed. Pass the report path as `source_path` when invoking.
 
 ## Multi-Session Design
 

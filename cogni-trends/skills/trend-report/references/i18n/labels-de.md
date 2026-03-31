@@ -5,13 +5,24 @@ Language: `de`
 ## Berichtstitel
 
 ```text
-REPORT_TITLE: "TIPS Trendbericht: {TOPIC}"
+REPORT_TITLE: "{TITLE}"
+REPORT_SUBTITLE: "{SUBTITLE}"
 ```
 
-> **Titel-Logik:** Nur `{TOPIC}` verwenden. NICHT `in {SUBSECTOR}` anhängen — das
-> Forschungsthema (z.B. "Digitale Transformation großer Energieversorger") enthält
-> bereits den Branchen- und Geografiekontext. Anhängen erzeugt redundante Titel
-> wie "...in Versorgungsunternehmen".
+> **Titel:** Ein prägnanter Titel (max. 8 Wörter), abgeleitet aus dem Thema, Erzählbogen
+> und den Handlungsfeldern. NICHT die Forschungsfrage — die wird zum Untertitel.
+> **Untertitel:** Die Forschungsfrage (`{TOPIC}`), ggf. gekürzt für bessere Lesbarkeit.
+> NICHT `in {SUBSECTOR}` anhängen — das Forschungsthema enthält bereits den
+> Branchen- und Geografiekontext.
+
+## Titelvorschlag
+
+```text
+PHASE_0_TITLE_QUESTION: "Vorgeschlagener Berichtstitel — übernehmen oder anpassen:"
+PHASE_0_TITLE_HEADER: "Berichtstitel"
+PHASE_0_TITLE_ACCEPT: "Übernehmen"
+PHASE_0_TITLE_EDIT: "Anpassen"
+```
 
 ## Abschnittsüberschriften
 

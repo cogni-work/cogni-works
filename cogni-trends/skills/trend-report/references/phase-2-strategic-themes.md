@@ -180,7 +180,8 @@ The executive summary is written AFTER all investment theme agents complete. The
 
 ```yaml
 ---
-title: "{REPORT_TITLE}"
+title: "{TITLE}"
+subtitle: "{SUBTITLE}"
 industry: {INDUSTRY_EN}
 subsector: {SUBSECTOR_EN}
 language: {LANGUAGE}
@@ -204,7 +205,9 @@ The Zusammenfassung is ONE flat section — no subsections (`###`), no tables. A
 **The opener and closer adopt the report-level arc's rhetorical frame.** Read the selected arc's templates from [references/report-arc-frames.md](references/report-arc-frames.md) and use the "Exec Summary Opener" and "Exec Summary Closer" patterns. The middle section (bridge sentence + numbered list) stays the same for all arcs.
 
 ```markdown
-# {REPORT_TITLE}
+# {TITLE}
+
+*{SUBTITLE}*
 
 ## {EXEC_SUMMARY_LABEL}
 

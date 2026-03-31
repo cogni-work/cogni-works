@@ -248,6 +248,39 @@ AskUserQuestion:
 
 Set `REPORT_ARC_ID` to the user's choice (e.g., `corporate-visions`, `technology-futures`). This variable is passed to Phase 2 for arc-aware assembly.
 
+#### Step 0.4c: Propose Report Title
+
+The research question (`{TOPIC}`) becomes the **subtitle**. Generate a punchy **title** (max 8 words) from `{TOPIC}`, `REPORT_ARC_ID`, `INDUSTRY`, and investment theme names (already loaded in Step 0.2). The title should:
+- Be CxO-level — sharp, memorable, forward-looking
+- Reflect the arc's rhetorical stance (e.g., corporate-visions → urgency/challenge; technology-futures → capability/convergence; industry-transformation → structural shift)
+- NOT repeat the research question or be a generic label like "Trend Report"
+
+The subtitle is `{TOPIC}`, optionally shortened for readability (drop redundant geographic/industry qualifiers if obvious from context).
+
+Present via AskUserQuestion:
+
+**If INTERACTION_LANGUAGE == "de":**
+```yaml
+AskUserQuestion:
+  question: "{PHASE_0_TITLE_QUESTION}\n\n**Titel:** {proposed_title}\n**Untertitel:** {proposed_subtitle}"
+  header: "{PHASE_0_TITLE_HEADER}"
+  options:
+    - label: "{PHASE_0_TITLE_ACCEPT}"
+    - label: "{PHASE_0_TITLE_EDIT}"
+```
+
+**If INTERACTION_LANGUAGE == "en":**
+```yaml
+AskUserQuestion:
+  question: "{PHASE_0_TITLE_QUESTION}\n\n**Title:** {proposed_title}\n**Subtitle:** {proposed_subtitle}"
+  header: "{PHASE_0_TITLE_HEADER}"
+  options:
+    - label: "{PHASE_0_TITLE_ACCEPT}"
+    - label: "{PHASE_0_TITLE_EDIT}"
+```
+
+If the user selects **Edit**, ask them to provide their preferred title and/or subtitle as free text. Store the final values as `{TITLE}` and `{SUBTITLE}`.
+
 #### Step 0.5: Load i18n Labels
 
 Read the labels file matching the chosen language:

@@ -5,13 +5,24 @@ Language: `en`
 ## Report Title
 
 ```text
-REPORT_TITLE: "TIPS Trend Report: {TOPIC}"
+REPORT_TITLE: "{TITLE}"
+REPORT_SUBTITLE: "{SUBTITLE}"
 ```
 
-> **Title logic:** Use `{TOPIC}` only. Do NOT append `in {SUBSECTOR}` — the topic
-> (e.g., "Digital Transformation of Large Energy Utilities in Germany") already
-> contains the industry and geographic context. Appending the subsector creates
-> redundant titles like "...in Utilities".
+> **Title:** A punchy, max-8-word title synthesized from the topic, arc, and
+> investment themes. NOT the research question — that becomes the subtitle.
+> **Subtitle:** The research question (`{TOPIC}`), optionally shortened for
+> readability. Do NOT append `in {SUBSECTOR}` — the topic already contains
+> the industry and geographic context.
+
+## Title Proposal
+
+```text
+PHASE_0_TITLE_QUESTION: "Proposed report title — accept or edit:"
+PHASE_0_TITLE_HEADER: "Report Title"
+PHASE_0_TITLE_ACCEPT: "Accept"
+PHASE_0_TITLE_EDIT: "Edit"
+```
 
 ## Section Headers
 

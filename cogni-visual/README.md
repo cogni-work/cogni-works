@@ -93,6 +93,7 @@ The pipeline follows a compose-polish-visualize flow: narratives from cogni-narr
 | `/render-big-picture` | command | Invoke the big-picture rendering pipeline |
 | `/render-big-block` | command | Invoke the Big Block rendering pipeline |
 | `/enrich-report` | command | Enrich a markdown report with themed visualizations and concept diagrams |
+| `ensure-excalidraw-canvas` | hook (PreToolUse) | Auto-starts Excalidraw canvas frontend before any Excalidraw MCP tool call |
 
 ## Architecture
 
@@ -110,6 +111,9 @@ cogni-visual/
 │   └── enrich-report/
 ├── agents/                       14 agents (orchestration + rendering + workers)
 ├── commands/                     3 slash commands
+├── hooks/                        1 PreToolUse hook (Excalidraw canvas auto-start)
+│   ├── hooks.json
+│   └── ensure-excalidraw-canvas.sh
 └── libraries/                    12 shared reference files
     ├── arc-taxonomy.md           Arc ID → visual arc type mapping
     ├── cta-taxonomy.md           CTA types and urgency levels

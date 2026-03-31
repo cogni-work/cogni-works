@@ -6,9 +6,9 @@ Onboarding and navigation layer for the insight-wave ecosystem — teaches users
 
 ```
 skills/                         7 help skills
-  teach/                          Interactive course delivery — 11 courses, adaptive pacing, progress tracking
+  teach/                          Interactive course delivery — 12 courses, adaptive pacing, progress tracking
     references/
-      courses/                    11 course definitions (01-cowork-fundamentals through 11-consulting)
+      courses/                    12 course definitions (01-cowork-fundamentals through 12-documentation)
       exercises/                  Hands-on exercise templates per course
   course-deck/                    Generate PPTX slide decks for curriculum or course intros
   guide/                          Plugin discovery — match tasks to plugins, ecosystem map

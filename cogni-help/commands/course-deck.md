@@ -13,8 +13,8 @@ allowed-tools:
 Generate a professional PPTX slide deck using the course-deck skill.
 
 Accept either:
-- `curriculum` — generate a program overview deck covering all 11 courses
-- A course number (1-11) or name (e.g., "basic tools", "tips scouting", "research", "marketing", "sales", "consulting") — generate an intro deck for that course
+- `curriculum` — generate a program overview deck covering all 12 courses
+- A course number (1-12) or name (e.g., "basic tools", "tips scouting", "research", "marketing", "sales", "consulting", "documentation") — generate an intro deck for that course
 
 Steps:
 1. Load the course-deck skill to get deck structure, theme, and generation rules

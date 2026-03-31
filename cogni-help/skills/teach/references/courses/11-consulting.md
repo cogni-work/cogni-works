@@ -382,7 +382,7 @@ Ask the user to:
 
 ## Course Completion
 
-Congratulations — you have completed the core 11 courses in the cogni-help curriculum!
+Congratulations — you have completed Course 11 of 12 in the cogni-help curriculum! One more to go: Course 12 (Documentation Pipeline).
 
 **Your complete insight-wave toolkit (12 plugins)**:
 1. **Claude Cowork** — Your agentic AI platform (Course 1)

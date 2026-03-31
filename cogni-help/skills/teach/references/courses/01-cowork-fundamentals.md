@@ -184,7 +184,7 @@ Walk through plugin installation and the insight-wave marketplace deployment:
 | cogni-visual | Presentations, posters, visual deliverables |
 | cogni-help | This training program (you're using it now) |
 
-5. After installation, verify with `/courses` — all 11 courses should appear
+5. After installation, verify with `/courses` — all 12 courses should appear
 6. Show the customization flow on one plugin
 
 ### Exercise

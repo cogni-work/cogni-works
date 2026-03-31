@@ -2,7 +2,7 @@
 name: course-deck
 description: >-
   Generate professional PPTX slide decks for cogni-help courses. Two modes:
-  (1) curriculum overview deck showing all 11 courses at a glance, or (2) per-course
+  (1) curriculum overview deck showing all 12 courses at a glance, or (2) per-course
   intro deck with learning objectives, module breakdown, and prerequisites.
   Use this skill whenever the user asks to "create course slides", "generate a
   curriculum deck", "make an intro presentation", "course overview pptx",
@@ -55,12 +55,12 @@ new learners.
    mentor-guided by Claude, theory + hands-on exercises + quizzes. Visual showing
    the module cycle: Theory > Demo > Exercise > Quiz > Recap.
 
-4. **Learning journey** — Visual roadmap of all 11 courses as a numbered path or
+4. **Learning journey** — Visual roadmap of all 12 courses as a numbered path or
    timeline. Show course progression from fundamentals to advanced.
 
 5-6. **Course spotlight slides** — Two slides, each covering 3-4 courses with:
    course number, title, what you'll learn (2-3 bullets), plugins covered.
-   Courses 1-5 on one slide, 6-11 on the next.
+   Courses 1-6 on one slide, 7-12 on the next.
 
 7. **What you'll build** — Showcase the deliverables learners create during
    exercises (memos, narratives, trend reports, portfolios, presentations).
@@ -107,9 +107,14 @@ Pull all course content from the reference files in this plugin:
 - `references/courses/05-trends-reporting.md`
 - `references/courses/06-portfolio.md`
 - `references/courses/07-visual.md`
+- `references/courses/08-research.md`
+- `references/courses/09-marketing.md`
+- `references/courses/10-sales.md`
+- `references/courses/11-consulting.md`
+- `references/courses/12-documentation.md`
 
 Read only the course file(s) needed for the requested deck. For curriculum overview,
-skim all 7 files for titles, objectives, and module names — don't load full content.
+skim all 12 files for titles, objectives, and module names — don't load full content.
 
 ## Course Mapping
 
@@ -124,6 +129,11 @@ Map user input to course files:
 | 5, reporting, trends-reporting | 05-trends-reporting |
 | 6, portfolio | 06-portfolio |
 | 7, visual | 07-visual |
+| 8, research | 08-research |
+| 9, marketing | 09-marketing |
+| 10, sales | 10-sales |
+| 11, consulting, diamond | 11-consulting |
+| 12, documentation, docs, pipeline | 12-documentation |
 
 ## Visual Design: cogni-work Theme
 

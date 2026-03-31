@@ -85,21 +85,24 @@ Each engagement lives in `cogni-consulting/{slug}/` with phase output directorie
 | `consulting-setup` | skill | Vision framing and engagement scaffolding |
 | `consulting-discover` | skill | D1 diverge: dispatches research, trends, competitive baseline |
 | `consulting-define` | skill | D1 converge: assumption verification, problem statement synthesis |
+| `consulting-define-workspace` | skill | Workspace-aware Define phase execution for integrated project environments |
 | `consulting-develop` | skill | D2 diverge: option generation, proposition modeling |
 | `consulting-deliver` | skill | D2 converge: opportunity scoring, business case, roadmap |
 | `consulting-resume` | skill | Multi-session re-entry and status dashboard |
 | `consulting-export` | skill | Final deliverable package generation |
 | `phase-analyst` | agent | Phase readiness assessment and method recommendation |
+| `phase-gate-guard` | hook (PreToolUse) | Warns if consulting phase prerequisites are incomplete before allowing phase skills to execute |
 
 ## Architecture
 
 ```
 cogni-consulting/
 ├── .claude-plugin/plugin.json    Plugin manifest
-├── skills/                       7 engagement skills
+├── skills/                       8 engagement skills
 │   ├── consulting-setup/
 │   ├── consulting-discover/
 │   ├── consulting-define/
+│   ├── consulting-define-workspace/
 │   ├── consulting-develop/
 │   ├── consulting-deliver/
 │   ├── consulting-resume/
@@ -114,7 +117,9 @@ cogni-consulting/
 │   ├── vision-classes.md
 │   ├── vision-class-summary.md
 │   ├── deliverable-map.md
-│   └── methods/                  10 consulting methods
+│   ├── methods/                  14 consulting methods
+│   └── personas/                 Stress-test persona library
+│       └── canvas/               Lean Canvas stress-test personas
 └── scripts/                      3 engagement management scripts
     ├── engagement-init.sh
     ├── engagement-status.sh
@@ -130,6 +135,7 @@ cogni-consulting/
 | cogni-portfolio | No | Competitive baseline (Discover), proposition modeling (Develop), verification (Deliver) |
 | cogni-claims | No | Assumption verification (Define) and final quality gate (Deliver) |
 | cogni-visual | No | Slide decks and diagrams during Export |
+| cogni-workspace | No | Branded theming in `consulting-export` — applies active theme to all deliverable outputs |
 | document-skills | No | PPTX, DOCX, XLSX formatting during Export |
 
 cogni-consulting is standalone as an orchestrator — it provides value even without other plugins by structuring the engagement methodology. Each plugin integration adds depth to the corresponding phase.

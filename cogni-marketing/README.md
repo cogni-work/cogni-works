@@ -141,7 +141,8 @@ cogni-marketing/
 │   └── seo-researcher.md
 ├── commands/                     11 slash commands
 └── references/                   Data model + marketing frameworks
-    └── data-model.md
+    ├── data-model.md
+    └── content-formats.md
 ```
 
 ## Dependencies

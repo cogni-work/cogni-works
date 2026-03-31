@@ -131,9 +131,13 @@ cogni-copywriting/
 ├── agents/                       2 delegation agents
 │   ├── copywriter.md
 │   └── reader.md
-└── commands/                     2 slash commands
-    ├── copywrite.md
-    └── review-doc.md
+├── commands/                     2 slash commands
+│   ├── copywrite.md
+│   └── review-doc.md
+└── copywriter-workspace/         Evaluation and iteration workspace
+    ├── evals/
+    ├── iteration-1/
+    └── test-docs/
 ```
 
 ## Dependencies

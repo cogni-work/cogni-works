@@ -157,10 +157,20 @@ cogni-research/
 │   ├── hooks.json
 │   ├── block-entity-writes.sh
 │   └── review-loop-guard.sh
+├── evals/                        Evaluation test cases
+│   ├── evals.json
+│   └── evals-diagrams.json
 ├── schemas/                      4 entity JSON schemas
 ├── scripts/                      Entity + project utilities
 └── references/                   Model strategy documentation
 ```
+
+## Dependencies
+
+| Plugin | Required | Purpose |
+|--------|----------|---------|
+| cogni-claims | No | Claims verification loop in `verify-report` — extracts and checks claims against source URLs |
+| cogni-workspace | No | Branded theming in `export-report` — applies theme colors and fonts to HTML/PDF exports |
 
 ## Attribution
 

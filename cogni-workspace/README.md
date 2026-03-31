@@ -30,10 +30,10 @@ The shared foundation layer for the insight-wave ecosystem. Every cogni-x plugin
 
 ## What it means for you
 
-- **One command to set up or update.** `manage-workspace` auto-detects whether to initialize or update, handles dependencies, discovery, env vars, settings, themes, and output styles.
-- **Consistent theming.** All visual plugins use the same theme picker and theme format — no per-plugin configuration.
-- **Health monitoring.** `workspace-status` catches drift, missing dependencies, and stale configurations before they cause failures.
-- **Safe updates.** `manage-workspace` backs up before modifying and supports rollback.
+- **One command to set up or update.** `manage-workspace` auto-detects mode, discovers installed plugins, generates env vars, settings, themes, and output styles — replacing 20+ minutes of manual scaffolding per project.
+- **Consistent theming across all visual output.** Slides, journey maps, web narratives, and dashboards inherit colors and fonts from a single theme definition — no per-plugin configuration.
+- **Catch workspace drift before skills break.** Five-tier health diagnostics (foundation, env vars, plugin registry, themes, dependencies) surface mismatches and missing deps before they cause cryptic runtime failures.
+- **Safe updates with rollback.** `manage-workspace` backs up before modifying — if an update breaks something, restore the previous state in one step.
 
 ## Installation
 

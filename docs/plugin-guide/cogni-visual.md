@@ -8,7 +8,7 @@ For the canonical IS/DOES/MEANS positioning of this plugin, see the [cogni-visua
 
 ## Overview
 
-cogni-visual sits at the end of the insight-wave delivery pipeline, after content has been composed (cogni-narrative) and polished (cogni-copywriting). It takes two kinds of inputs — narratives in prose and structured data from cogni-trends — and produces five kinds of visual output through a two-stage process: brief generation followed by rendering.
+cogni-visual sits at the end of the insight-wave delivery pipeline, after content has been composed (cogni-narrative) and polished (cogni-copywriting). It takes three kinds of inputs — narratives in prose, structured data from cogni-trends, and completed markdown reports — and produces six kinds of visual output through a two-stage process: brief generation followed by rendering, plus a report enrichment pipeline.
 
 **Stage 1 (brief):** A skill reads the source material, models the audience, selects the format, maps content to layout units, and writes a structured brief as YAML frontmatter + Markdown body. The brief describes *what* to visualize — objects, messages, flow — without prescribing drawing operations.
 
@@ -154,6 +154,16 @@ Invoke via `/render-big-block` or by running the skill directly.
 
 ---
 
+### enrich-report
+
+Post-process any completed markdown report — from cogni-research, cogni-trends, or standalone — into a themed, self-contained HTML file with interactive Chart.js data visualizations and Excalidraw concept diagrams embedded as inline SVG. Supports optional PDF and DOCX export via the `formats` parameter. The `density` parameter controls enrichment volume: `none` for themed prose only, `minimal`/`balanced`/`rich` for progressively more data visualizations.
+
+This skill supersedes the deprecated `cogni-research:export-report` and is the single output skill for all report formats across the ecosystem.
+
+**Example prompt:** "Enrich my trend report with charts and diagrams" or `/enrich-report path/to/report.md`
+
+---
+
 ## Integration Points
 
 ### Upstream (what cogni-visual consumes)
@@ -162,7 +172,8 @@ Invoke via `/render-big-block` or by running the skill directly.
 |--------|-----------------|
 | cogni-narrative | Polished narratives with `arc_id` frontmatter as source for all five brief-generating skills |
 | cogni-copywriting | Executive-polished prose (narratives should be copywriting-complete before visual transformation) |
-| cogni-trends | `tips-value-model.json` and `tips-big-block.md` for story-to-big-block |
+| cogni-trends | `tips-value-model.json` and `tips-big-block.md` for story-to-big-block; trend reports for enrich-report |
+| cogni-research | Completed research reports for enrich-report (themed HTML with visualizations) |
 | cogni-workspace | Theme files (`themes/{id}/theme.md`) for brand-driven colors and fonts in all renderers |
 
 ### Downstream (what cogni-visual produces for others)

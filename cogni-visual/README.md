@@ -21,7 +21,8 @@ A brief-based visual production pipeline. Five skills generate structured briefs
 1. **Analyze** a narrative — detect story arc, model the audience, extract key assertions and data points
 2. **Brief** the visual — select format (slides, journey map, solution architecture, web page, poster), map content to layout units, generate image prompts
 3. **Render** the output — produce .pptx, .excalidraw, .pen, or .html via the appropriate downstream tool
-4. **Review** the result — zone-based quality checks for big-picture scenes (4 parallel reviewers, 9 quality gates)
+4. **Enrich** a markdown report — post-process into themed HTML with Chart.js data visualizations and Excalidraw concept diagrams embedded as inline SVG
+5. **Review** the result — zone-based quality checks for big-picture scenes (4 parallel reviewers, 9 quality gates)
 
 ## What it means for you
 
@@ -41,6 +42,7 @@ story-to-big-picture <narrative.md>        # journey map brief → render-big-pi
 story-to-big-block                         # solution architecture brief → render-big-block → Excalidraw
 story-to-web <narrative.md>                # web narrative brief → Pencil MCP
 story-to-storyboard <narrative.md>         # poster storyboard brief → Pencil MCP
+/enrich-report <report.md>                 # markdown report → themed HTML with charts + diagrams
 ```
 
 Or just describe what you want in natural language:
@@ -73,6 +75,7 @@ The pipeline follows a compose-polish-visualize flow: narratives from cogni-narr
 | `story-to-storyboard` | skill | Multi-poster print brief — 5-zone anatomy, A0-A3 sizes, CMYK-safe colors |
 | `render-big-picture` | skill | Render journey map brief into Excalidraw scene (1100-1500 elements, dark/light mode) |
 | `render-big-block` | skill | Render solution architecture brief into Excalidraw diagram (150-250 elements) |
+| `enrich-report` | skill | Post-process markdown reports into themed HTML with Chart.js visualizations and Excalidraw concept diagrams |
 | `story-to-slides` | agent | Orchestrates the story-to-slides skill |
 | `pptx` | agent | Renders briefs into .pptx via document-skills |
 | `story-to-big-picture` | agent | Orchestrates the story-to-big-picture skill |
@@ -86,24 +89,27 @@ The pipeline follows a compose-polish-visualize flow: narratives from cogni-narr
 | `web` | agent | Renders briefs into .pen via Pencil MCP |
 | `story-to-storyboard` | agent | Orchestrates the story-to-storyboard skill |
 | `storyboard` | agent | Renders briefs into multi-poster .pen via Pencil MCP |
+| `enrich-report` | agent | Orchestrates the enrich-report skill (markdown report → themed HTML) |
 | `/render-big-picture` | command | Invoke the big-picture rendering pipeline |
 | `/render-big-block` | command | Invoke the Big Block rendering pipeline |
+| `/enrich-report` | command | Enrich a markdown report with themed visualizations and concept diagrams |
 
 ## Architecture
 
 ```
 cogni-visual/
 ├── .claude-plugin/plugin.json    Plugin manifest
-├── skills/                       7 skills (5 brief generators + 2 renderers)
+├── skills/                       8 skills (5 brief generators + 2 renderers + 1 enricher)
 │   ├── story-to-slides/
 │   ├── story-to-big-picture/
 │   ├── story-to-big-block/
 │   ├── story-to-web/
 │   ├── story-to-storyboard/
 │   ├── render-big-picture/
-│   └── render-big-block/
-├── agents/                       13 agents (orchestration + rendering + workers)
-├── commands/                     2 slash commands
+│   ├── render-big-block/
+│   └── enrich-report/
+├── agents/                       14 agents (orchestration + rendering + workers)
+├── commands/                     3 slash commands
 └── libraries/                    12 shared reference files
     ├── arc-taxonomy.md           Arc ID → visual arc type mapping
     ├── cta-taxonomy.md           CTA types and urgency levels

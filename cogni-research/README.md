@@ -1,6 +1,6 @@
 # cogni-research
 
-Multi-agent research report generator for [Claude Cowork](https://claude.ai/cowork). Native re-implementation of GPT-Researcher's STORM-inspired editorial workflow using Claude Code plugin primitives.
+Multi-agent research report generator for [Claude Cowork](https://claude.ai/cowork). Decomposes topics, dispatches parallel web researchers, compiles cited reports, and runs claims-verified review loops — from quick overviews to deep recursive explorations.
 
 ## Why this exists
 
@@ -15,6 +15,10 @@ LLMs can research and write — but the reports they produce have real problems 
 | No quality gates | Reports go from draft to final with no systematic review | Errors, gaps, and unsupported conclusions slip through |
 
 This plugin automates the research-heavy parts — parallel web search, source aggregation, claims verification, iterative review — while keeping strategic judgment where it belongs: with you.
+
+## What it is
+
+A STORM-inspired editorial research pipeline for the insight-wave ecosystem. Parallel web research agents decompose topics and gather evidence; a source curator ranks quality and diversity; a writer compiles the draft with inline citations; a structural reviewer gates quality before acceptance. Three depth levels — basic, detailed, and deep — match research intensity to the question. Upstream of cogni-narrative (narrative composition) and cogni-visual (visual enrichment); downstream of cogni-claims for source-level verification of every factual assertion.
 
 ## What it does
 
@@ -114,7 +118,6 @@ The pipeline uses two skills that split the work across separate context windows
 |-----------|------|--------------|
 | `research-report` | skill | Main orchestrator — six-phase pipeline from topic to structurally reviewed report |
 | `verify-report` | skill | Claims verification — extracts claims, verifies against sources via cogni-claims, revises deviations |
-| `export-report` | skill | **Deprecated** — use cogni-visual:enrich-report instead (supports HTML, PDF, DOCX) |
 | `research-report-workspace` | skill | Workspace-aware research orchestration for integrated project environments |
 | `section-researcher` | agent (sonnet) | Parallel web researcher for a single sub-question |
 | `local-researcher` | agent (sonnet) | Parallel document analyst for local/hybrid research mode |
@@ -132,16 +135,13 @@ The pipeline uses two skills that split the work across separate context windows
 ```
 cogni-research/
 ├── .claude-plugin/plugin.json    Plugin manifest
-├── skills/                       4 orchestration skills
+├── skills/                       3 orchestration skills
 │   ├── research-report/
 │   │   ├── SKILL.md
 │   │   └── references/           4 reference guides
 │   ├── verify-report/
 │   │   ├── SKILL.md
 │   │   └── references/           3 reference guides (incl. claims-integration)
-│   ├── export-report/
-│   │   ├── SKILL.md
-│   │   └── references/
 │   └── research-report-workspace/
 │       └── SKILL.md
 ├── agents/                       8 research agents

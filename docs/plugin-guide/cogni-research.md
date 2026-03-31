@@ -1,6 +1,6 @@
 # cogni-research
 
-Multi-agent research report generator with parallel web research, structural review, and claims verification against cited source URLs.
+A STORM-inspired editorial research pipeline that decomposes topics, dispatches parallel web researchers, compiles cited reports, and runs claims-verified review loops — from quick overviews to deep recursive explorations.
 
 For the canonical IS/DOES/MEANS positioning of this plugin, see the [cogni-research README](../../cogni-research/README.md).
 
@@ -132,9 +132,11 @@ Claims verification in a fresh context window. Extracts verifiable factual claim
 
 ---
 
-### export-report (deprecated)
+### research-report-workspace
 
-> **Superseded by cogni-visual:enrich-report**, which produces superior themed HTML with interactive charts and now supports PDF/DOCX export via the `formats` parameter. Use `/enrich-report` instead.
+Workspace-aware variant of `research-report` for integrated project environments. Use this when research is part of a larger consulting engagement or portfolio workflow where the project directory needs to align with workspace conventions.
+
+**Example prompt:** Typically invoked by cogni-consulting during the Discover phase, not directly by the user.
 
 ---
 
@@ -145,7 +147,7 @@ Claims verification in a fresh context window. Extracts verifiable factual claim
 | Plugin | What is consumed |
 |--------|-----------------|
 | cogni-claims | Source URL verification in verify-report (primary dependency) |
-| cogni-visual | enrich-report for themed HTML/PDF/DOCX output (replaces export-report) |
+| cogni-visual | `enrich-report` for themed HTML with Chart.js visualizations and Excalidraw diagrams, plus optional PDF/DOCX export |
 | cogni-workspace | Theme selection for visual exports |
 
 cogni-claims is a soft dependency — research-report runs without it, but verify-report requires it for claims checking.

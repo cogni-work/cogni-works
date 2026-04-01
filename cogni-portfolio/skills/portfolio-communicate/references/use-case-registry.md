@@ -76,7 +76,7 @@ Available communication use cases for portfolio content. Each use case defines a
 | `overview` | `pitch/portfolio-overview.md` | Portfolio-wide narrative for investors, board, or keynotes |
 | `all` | All of the above | Overview + one narrative per market (ordered by priority) |
 
-**Key differentiator**: Pitch output includes `arc_id` in frontmatter — this makes it directly consumable by story-to-slides, story-to-web, story-to-big-picture, and story-to-storyboard without an intermediate `/narrative` step. Default arc: `corporate-visions`.
+**Key differentiator**: Pitch output includes `arc_id` in frontmatter — this makes it directly consumable by story-to-slides, story-to-web, story-to-big-picture, and story-to-storyboard without an intermediate `/narrative` step. Default arc: `jtbd-portfolio`.
 
 **Downstream pipeline:** `/narrative-review` → `/copywrite` → `/story-to-slides`, `/story-to-web`, `/story-to-big-picture`, `/story-to-storyboard`
 

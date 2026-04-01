@@ -14,7 +14,7 @@ Output templates for the `pitch` use case. Transforms portfolio entities into ar
 
 ## Arc Selection
 
-**Default**: `corporate-visions` — the portfolio's IS/DOES/MEANS framework maps directly to the Why You element's Power Positions, making this the most natural fit for B2B portfolio presentations.
+**Default**: `jtbd-portfolio` — portfolio pitches present capabilities to buyers who think in outcomes, not features. The JTBD arc's 1:1 job-to-solution mapping mirrors the portfolio's Feature x Market structure, and its verb-phrase jobs surface the buyer language that IS/DOES/MEANS already encodes.
 
 **Override**: Accept `--arc-id` parameter for alternative arcs. When a non-default arc is selected, read the arc definition from `cogni-narrative/skills/narrative/references/story-arc/{arc-id}/arc-definition.md` to get element names, proportions, and quality gates. Adapt the evidence mapping accordingly.
 
@@ -22,10 +22,10 @@ Output templates for the `pitch` use case. Transforms portfolio entities into ar
 
 | Arc | When to use | Primary portfolio data |
 |-----|------------|----------------------|
-| `corporate-visions` (default) | B2B sales, market pitch, executive briefing | Customers → Why Change, Markets → Why Now, Propositions → Why You, Solutions → Why Pay |
+| `jtbd-portfolio` (default) | Portfolio introduction, capability overview, pre-sales positioning | Customers → Job Landscape, Customers+Competitors → Friction Map, Propositions → Portfolio Map, Solutions → Invitation |
+| `corporate-visions` | B2B sales, market pitch, executive briefing | Customers → Why Change, Markets → Why Now, Propositions → Why You, Solutions → Why Pay |
 | `competitive-intelligence` | Competitive positioning presentation | Competitors → Landscape/Shifts, Propositions → Positioning, Markets → Implications |
 | `industry-transformation` | Industry conference, thought leadership | Markets → Forces, Competitors → Friction, Features → Evolution, Products → Leadership |
-| `jtbd-portfolio` | Portfolio introduction, capability overview, pre-sales positioning | Customers → Job Landscape, Customers+Competitors → Friction Map, Propositions → Portfolio Map, Solutions → Invitation |
 
 Other arcs (`technology-futures`, `strategic-foresight`, `trend-panorama`, `theme-thesis`) are better served by cogni-trends or cogni-research input — portfolio data alone is usually insufficient for these arcs.
 
@@ -39,8 +39,8 @@ The frontmatter must match cogni-narrative's output format exactly so downstream
 ---
 title: "{Compelling market-specific title — assertion, not label}"
 subtitle: "{Company Name} — {Market descriptor in buyer language}"
-arc_id: corporate-visions
-arc_display_name: Corporate Visions
+arc_id: jtbd-portfolio
+arc_display_name: JTBD Portfolio
 target_length: 1675
 word_count: {actual word count after generation}
 language: "{en|de from portfolio.json}"
@@ -164,7 +164,7 @@ For each Power Position, select a high-tier proposition (use relevance tiers fro
 
 ### Evidence Mapping: Portfolio Entities → JTBD Portfolio Elements
 
-When `--arc-id jtbd-portfolio` is selected, the evidence mapping shifts from the corporate-visions pattern to a Jobs-to-be-Done structure. Read the arc definition from `cogni-narrative/skills/narrative/references/story-arc/jtbd-portfolio/arc-definition.md` for element names, proportions, and quality gates.
+The default evidence mapping follows a Jobs-to-be-Done structure. Read the arc definition from `cogni-narrative/skills/narrative/references/story-arc/jtbd-portfolio/arc-definition.md` for element names, proportions, and quality gates.
 
 #### Hook / Context Setter (10% of target length)
 
@@ -283,14 +283,14 @@ When `--arc-id jtbd-portfolio` is selected, the evidence mapping shifts from the
 
 **Data sources**: `portfolio.json`, all `products/*.json`, all `features/*.json`, all `markets/*.json` (for breadth), top propositions across markets (high-tier only), packages (for commercial maturity signal)
 
-**Adaptation**: The same corporate-visions arc applies, but the evidence mapping shifts:
+**Adaptation**: The same default arc applies, but the evidence mapping shifts:
 
 | Element | Market scope | Overview scope |
 |---------|-------------|----------------|
-| **Why Change** | Single market's buyer pain points | Cross-market pattern — the industry-wide unconsidered need |
-| **Why Now** | Market-specific forcing functions | Macro forces affecting all target markets |
-| **Why You** | 2-3 propositions for one market | 2-3 products with cross-market differentiation |
-| **Why Pay** | Market-specific pricing/ROI | Portfolio-level investment thesis — total addressable value |
+| **Job Landscape** | Single market's buyer jobs | Cross-market jobs — the functional outcomes buyers share across segments |
+| **Friction Map** | Market-specific obstacles and cost of inaction | Systemic friction patterns affecting all target markets |
+| **Portfolio Map** | 1:1 job-to-solution mapping for one market | 2-3 products with cross-market job coverage |
+| **Invitation** | Market-specific entry point | Portfolio-level engagement path — total addressable value |
 
 **Title**: Portfolio-wide, not market-specific. "How {Company} Addresses the {Cross-Market Theme}" or "{Company}: {Portfolio-Level Value Statement}"
 

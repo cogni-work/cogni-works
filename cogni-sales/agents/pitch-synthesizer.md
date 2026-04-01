@@ -137,14 +137,15 @@ Add YAML frontmatter with metadata (using customer or segment template).
 
 Write to: `${project_path}/output/sales-proposal.md`
 
-### Step 7: Citation Renumbering
+### Step 7: Citation Renumbering & Deduplication
 
 Both documents must have consistent, sequential citation numbering. When merging narratives from multiple phases:
 
-1. Collect all unique source URLs across all phases
-2. Assign sequential numbers [1], [2], [3]...
-3. Replace phase-local citation numbers with global numbers
-4. Build a unified sources section at the end
+1. Collect all source URLs across all phases
+2. **Deduplicate by URL** — if the same URL appears in multiple phases, merge into a single citation number. This prevents inflated citation counts from repeated sources.
+3. Assign sequential numbers [1], [2], [3]... to the deduplicated list
+4. Replace phase-local citation numbers with global numbers (updating all in-text references)
+5. Build a unified sources section at the end — each URL appears exactly once
 
 ### Step 8: Return Result
 
@@ -178,13 +179,23 @@ German output rules:
 ## Quality Checks
 
 Before writing each file, verify:
-- [ ] YAML frontmatter is complete (includes pitch_mode and appropriate target field)
+- [ ] YAML frontmatter is complete (includes pitch_mode, appropriate target field, market slug, provider, language, methodology, generated date, and portfolio_path — see output-specs.md templates for the full field list per mode)
 - [ ] All 4 arc elements are present in presentation
 - [ ] All proposal sections are populated
-- [ ] Citations are sequentially numbered
+- [ ] Citations are sequentially numbered (each URL appears exactly once)
 - [ ] No placeholder text remains (no `{variable}` patterns)
 - [ ] Language matches pitch-log.json setting
 - [ ] Framing matches pitch_mode (customer-specific vs segment-generic language)
 - [ ] **Section headers when language=de**: Read `references/section-headers-de.md` and verify all headers use the German equivalents
 - [ ] **Cross-phase consistency**: Evidence cited in Why Pay matches findings from Why Change/Why Now (no contradictions in numbers or claims across sections)
 - [ ] **Evidence type separation in Why You**: Industry research (analyst reports, market stats) in narrative body; provider-specific proof points (references, certifications, operational metrics) in dedicated subsection
+- [ ] **Investment figure cross-check**: The investment amount in the Executive Summary, the Why Pay section, and the proposal pricing table must all match exactly. If the Executive Summary says "unter EUR 15.000", the pricing table must show a tier at or below EUR 15.000 as the recommended entry. Resolve any mismatch before writing.
+- [ ] **No methodology jargon in client-facing prose**: Scan both documents for internal framework terms that a buyer would not understand. These must NEVER appear in the final output:
+  - "IS/DOES/MEANS" → replace with natural column headers: "Lösung" / "Ihr Nutzen" / "Warum einzigartig" (DE) or "Solution" / "Your Benefit" / "Why Unique" (EN)
+  - "Corporate Visions" → remove entirely or replace with generic reference ("nach bewährter Vertriebsmethodik")
+  - "PSB" or "PSB-Struktur" → remove (this is an internal structuring label, not client language)
+  - "Power Position" → remove or replace with the actual differentiator name
+  - "FAB" or "Feature-Advantage-Benefit" → remove (internal framework)
+  - "DOES-Statement" / "MEANS-Statement" / "IS-Statement" → replace with natural language
+  - "Unconsidered Need" → use the actual need description instead of the label
+  - The Key Differentiators table header row should use: `| Position | Lösung | Ihr Nutzen | Warum einzigartig |` (DE) or `| Position | Solution | Your Benefit | Why Unique |` (EN) — never "IS" / "DOES" / "MEANS"

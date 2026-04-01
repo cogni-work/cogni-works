@@ -286,7 +286,117 @@ The agent will:
 - Assemble `output/sales-presentation.md` and `output/sales-proposal.md`
 - Renumber citations sequentially
 
-Update pitch-log.json (`phases_completed += ["synthesize"]`, `current_phase = "done"`).
+Update pitch-log.json (`phases_completed += ["synthesize"]`, `current_phase = "review"`).
+
+**-> Proceed immediately to Phase 5.5.**
+
+---
+
+### Phase 5.5: Stakeholder Review (Closed Loop)
+
+After the pitch-synthesizer produces deliverables, run a closed assess-revise-reassess loop
+using the pitch-review-assessor and pitch-revisor agents. This catches failures that per-phase
+quality gates miss — wrong buyer needs, incredible claims, thin differentiation, weak business
+case — before the pitch reaches the customer.
+
+**Skip condition:** If the user explicitly said "skip review" during setup, skip this phase
+and proceed directly to Completion.
+
+#### Step 5.5.1: First Assessment
+
+Delegate to the pitch-review-assessor agent:
+
+```
+Agent tool:
+  agent: pitch-review-assessor
+  prompt: |
+    project_path: {project_path}
+```
+
+The agent reads both deliverables, pitch-log.json, claims.json, and portfolio data. It evaluates
+from three perspectives (target buyer, sales director, marketing director) and writes the
+assessment to `output/pitch-review.json`.
+
+**Present results to the user:**
+
+```
+Phase 5.5: Stakeholder Review — {target}
+
+| Perspective | Score | Verdict |
+|-------------|-------|---------|
+| Target Buyer ({buyer_role}) | {score}/100 | {pass/warn/fail} |
+| Sales Director | {score}/100 | {pass/warn/fail} |
+| Marketing Director | {score}/100 | {pass/warn/fail} |
+
+Overall: {accept/revise/reject} ({overall_score}/100)
+
+{If critical_improvements exist: "Critical issues: ..." }
+{If high_improvements exist: "Improvements identified: N high-priority" }
+```
+
+**Verdict handling:**
+
+- **accept** (all perspectives 85+): Proceed directly to Completion. The pitch is ready.
+- **revise** (all 70+ but not all 85+): Proceed to Step 5.5.2 (Revision).
+- **reject** (any perspective below 50): Present the assessment to the user with full details.
+  Recommend re-running the content phase that corresponds to the lowest-scoring section
+  (e.g., if Why Change scored lowest on Need Recognition, suggest re-running Phase 1).
+  Use AskUserQuestion: "The pitch has fundamental issues. Would you like to re-run [phase]
+  with revised guidance, or proceed as-is?"
+
+#### Step 5.5.2: Revision (if verdict = "revise")
+
+1. Archive the assessment: copy `output/pitch-review.json` to `output/pitch-review-v1.json`
+
+2. Delegate to the pitch-revisor agent:
+
+```
+Agent tool:
+  agent: pitch-revisor
+  prompt: |
+    project_path: {project_path}
+    assessment_path: {project_path}/output/pitch-review-v1.json
+```
+
+The revisor applies surgical fixes to both deliverables, prioritized by severity (CRITICAL → HIGH).
+It writes `output/revision-log.json` with details of what was changed and preserved.
+
+3. After revision completes, re-run the assessor:
+
+```
+Agent tool:
+  agent: pitch-review-assessor
+  prompt: |
+    project_path: {project_path}
+```
+
+4. Archive the second assessment as `output/pitch-review-v2.json`
+
+5. Present comparison to the user:
+
+```
+Revision Results (Pass 2):
+
+| Perspective | Before | After | Delta |
+|-------------|--------|-------|-------|
+| Target Buyer ({buyer_role}) | {v1_score} | {v2_score} | {delta} |
+| Sales Director | {v1_score} | {v2_score} | {delta} |
+| Marketing Director | {v1_score} | {v2_score} | {delta} |
+
+Overall: {v2_verdict} ({v2_overall_score}/100, was {v1_overall_score}/100)
+
+Fixes applied: {N} | Sections modified: {list}
+```
+
+**Maximum 2 revision passes.** If the second assessment is still "revise", present the scores
+and proceed to Completion. Do not loop further — diminishing returns and oscillation risk
+increase with each pass. The user can run `/copywrite` for additional polish.
+
+Update pitch-log.json (`phases_completed += ["review"]`, `current_phase = "done"`).
+
+**-> Proceed to Completion.**
+
+---
 
 ### Completion
 
@@ -299,7 +409,9 @@ Pitch complete for {customer_name}!
 Deliverables:
   - {project_path}/output/sales-presentation.md (Why Change narrative)
   - {project_path}/output/sales-proposal.md (formal proposal with pricing)
+  - {project_path}/output/pitch-review.json (stakeholder assessment)
 
+Stakeholder Scores: Buyer {N}/100 | Sales {N}/100 | Marketing {N}/100
 Claims registered: {N} — run `/claims verify` to validate sources.
 
 Optional next steps:
@@ -314,7 +426,9 @@ Segment pitch complete for {segment_name}!
 Deliverables:
   - {project_path}/output/sales-presentation.md (Why Change narrative — reusable)
   - {project_path}/output/sales-proposal.md (segment proposal template — reusable)
+  - {project_path}/output/pitch-review.json (stakeholder assessment)
 
+Stakeholder Scores: Buyer {N}/100 | Sales {N}/100 | Marketing {N}/100
 Claims registered: {N} — run `/claims verify` to validate sources.
 
 These deliverables serve as reusable templates for any customer in the {segment_name} segment.

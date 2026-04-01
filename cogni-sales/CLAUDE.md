@@ -15,9 +15,11 @@ skills/                         1 pitch skill (why-stay, why-evolve planned)
       evals.json                  Eval definitions for segment and security pitches
     why-change-workspace/         Iteration workspace with eval baselines (iteration-0 through iteration-3)
 
-agents/                         2 pitch agents
+agents/                         4 pitch agents
   why-change-researcher.md        All 4 content phases: web research, evidence, narrative, claims (opus)
   pitch-synthesizer.md            Assemble final deliverables from phase bridge files (sonnet)
+  pitch-review-assessor.md        Three-perspective stakeholder review: buyer, sales, marketing (haiku)
+  pitch-revisor.md                Surgical revision based on assessor feedback (sonnet)
 
 commands/                       1 slash command
   why-change.md                   Entry point — /why-change (aliases: /pitch, /sales-pitch, /segment-pitch)
@@ -35,16 +37,16 @@ references/
 
 | Type | Count | Items |
 |------|-------|-------|
-| Skills | 1 | why-change (6-phase pipeline) |
-| Agents | 2 | why-change-researcher (opus), pitch-synthesizer (sonnet) |
+| Skills | 1 | why-change (7-phase pipeline incl. review loop) |
+| Agents | 4 | why-change-researcher (opus), pitch-synthesizer (sonnet), pitch-review-assessor (haiku), pitch-revisor (sonnet) |
 | Commands | 1 | /why-change (aliases: /pitch, /sales-pitch, /segment-pitch) |
 | Scripts | 3 | discover-portfolio, init-pitch-project, pitch-status |
 
 ## Workflow Pipeline
 
 ```
-setup → why-change → why-now → why-you → why-pay → synthesize
- (0)       (1)         (2)       (3)       (4)        (5)
+setup → why-change → why-now → why-you → why-pay → synthesize → review
+ (0)       (1)         (2)       (3)       (4)        (5)       (5.5)
 ```
 
 **Phase 0 — Setup:** Portfolio discovery, pitch mode selection (customer vs segment), market matching, optional TIPS discovery, solution focus, buyer roles, language, project initialization.
@@ -58,6 +60,8 @@ setup → why-change → why-now → why-you → why-pay → synthesize
 **Phase 4 — Why Pay:** Research business impact. Revenue-scaled cost-of-inaction using market `segmentation.arr_min`/`arr_max`. 3-year compound cost stacking. Investment vs inaction ratio.
 
 **Phase 5 — Synthesize:** Assemble all phases into `sales-presentation.md` and `sales-proposal.md` with sequentially renumbered citations and YAML frontmatter.
+
+**Phase 5.5 — Review:** Closed stakeholder review loop. The pitch-review-assessor evaluates from three perspectives (target buyer, sales director, marketing director) with five weighted criteria each, producing a structured verdict. If "revise," the pitch-revisor applies surgical fixes and the assessor re-evaluates (max 2 passes). Scores are included in the completion message.
 
 Each phase has a **quality gate** — the orchestrator presents key findings to the user for approval or revision before proceeding. Interrupted pitches resume from the last completed phase via `pitch-status.sh`.
 
@@ -96,6 +100,9 @@ Each pitch project lives at `cogni-sales/{slug}/pitch/` (customer) or `cogni-sal
 - `04-why-pay/` — `research.json` + `narrative.md`
 - `output/sales-presentation.md` — Why Change narrative arc with YAML frontmatter
 - `output/sales-proposal.md` — Formal proposal with implementation and pricing
+- `output/pitch-review.json` — Stakeholder assessment: per-perspective scores, verdict, revision guidance
+- `output/pitch-review-v{N}.json` — Archived assessment versions (one per revision pass)
+- `output/revision-log.json` — Revision metadata: fixes applied/skipped, word counts, oscillation log
 
 Bridge files (`research.json`) carry structured findings with evidence arrays, buyer role relevance tags, portfolio entity references, and signal origin (`tips` or `web`). Narrative files (`narrative.md`) carry prose only — no buyer role tags.
 
@@ -113,4 +120,4 @@ Bridge files (`research.json`) carry structured findings with evidence arrays, b
 - Geographic qualification for uniqueness claims — never claim global uniqueness when only regional applies
 - Vendor claim attribution — always prefix with "laut {Vendor}"; never present vendor marketing as provider operational results
 - Revenue-scaled cost-of-inaction — if projected costs are <0.5% of `arr_min`, they are immaterial to a CFO
-- Plugin version lives at `.claude-plugin/plugin.json` (currently v0.3.5)
+- Plugin version lives at `.claude-plugin/plugin.json` (currently v0.4.0)

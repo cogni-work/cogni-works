@@ -3,3 +3,7 @@
 
 # Runtime pitch projects (created per-use, not part of plugin)
 *-workspace/
+
+# Pitch project outputs (created during eval runs and user pitches)
+b2b-*/
+mindsquare-*/

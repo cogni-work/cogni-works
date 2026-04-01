@@ -67,6 +67,83 @@
         "No methodology jargon in client-facing prose",
         "German section headers and proper umlauts throughout"
       ]
+    },
+    {
+      "id": 4,
+      "name": "cogni-works-segment-b2b-sales-dach",
+      "prompt": "Erstelle einen Segment-Pitch für 'B2B-Vertriebsorganisationen (DACH)'. Portfolio-Pfad: /Users/stephandehaas/GitHub/dev/business-model/cogni-portfolio/cogni-works. Sprache: Deutsch. Vollständiges Portfolio (kein Lösungsfokus). Keine TIPS-Daten verfügbar.",
+      "expected_output": "Complete sales-presentation.md + sales-proposal.md with all 4 Corporate Visions arc phases. IS/DOES/MEANS Key Differentiators where IS describes cogni-works solutions. 15+ citations. German throughout. Stakeholder review scores in pitch-review.json. No TIPS graceful degradation.",
+      "files": [],
+      "expectations": [
+        "sales-presentation.md exists with valid YAML frontmatter containing pitch_mode: segment",
+        "sales-proposal.md exists with valid YAML frontmatter containing pitch_mode: segment",
+        "All 4 arc sections present: Why Change, Why Now, Why You, Why Pay (German headers)",
+        "Key Differentiators table exists with IS/DOES/MEANS columns",
+        "Every IS cell describes a cogni-works solution or capability, never the customer's problem",
+        "Every DOES cell uses You-Phrasing (Sie/Ihr) with quantified outcomes",
+        "Every MEANS cell explains a competitive moat (methodology depth, open-source barrier, DACH expertise)",
+        "15+ numbered citations in Sources section",
+        "pitch-log.json shows current_phase done and all phases completed including review",
+        "pitch-log.json has tips_path: null",
+        "claims.json has entries with valid source URLs and source_authority scores",
+        "Section headers are in German (e.g., 'Warum jetzt handeln', not 'Why Now')",
+        "Why Change section uses PSB structure (Problem, Solution, Benefit)",
+        "Why Now section has 2-3 forcing functions with specific dates (not 'bald' or 'demnächst')",
+        "Why Pay section stacks 3-4 cost dimensions with a 3-year horizon",
+        "No methodology jargon in client-facing prose (no 'PSB', 'Corporate Visions', 'Power Position')",
+        "German text uses proper umlauts (ä, ö, ü, ß), never ASCII substitutes",
+        "Segment framing uses generic language ('Organisationen in diesem Segment'), not customer-specific",
+        "pitch-review.json exists with stakeholder scores from three perspectives",
+        "pitch-review.json overall_score is 70 or higher after revision passes"
+      ]
+    },
+    {
+      "id": 5,
+      "name": "cogni-works-customer-mindsquare-ag",
+      "prompt": "Erstelle einen Customer-Pitch für mindsquare AG (Domain: mindsquare.de, Branche: IT-Beratung SAP & Salesforce, ca. 500 Mitarbeiter). Portfolio-Pfad: /Users/stephandehaas/GitHub/dev/business-model/cogni-portfolio/cogni-works. Sprache: Deutsch. Vollständiges Portfolio. Keine TIPS-Daten.",
+      "expected_output": "Deal-specific presentation + proposal for mindsquare AG. Company-specific research about mindsquare's SAP/Salesforce consulting business. IS/DOES/MEANS adapted to mindsquare's context. Customer-specific framing throughout. Stakeholder review scores.",
+      "files": [],
+      "expectations": [
+        "sales-presentation.md exists with valid YAML frontmatter containing pitch_mode: customer and customer: mindsquare AG",
+        "sales-proposal.md exists with valid YAML frontmatter containing pitch_mode: customer",
+        "All 4 arc sections present with German headers",
+        "Customer-specific framing: 'mindsquare' referenced in Executive Hook and Why Change sections",
+        "Every IS cell describes a cogni-works solution, never the customer's problem",
+        "Why Change references mindsquare-specific context (SAP-Ökosystem, Salesforce, Beratungsgeschäft)",
+        "Why Now includes timing triggers relevant to IT consulting sector (AI adoption, SAP S/4HANA migration deadlines)",
+        "Why Pay scales cost-of-inaction to mindsquare's approximate revenue range",
+        "pitch-log.json has pitch_mode: customer and tips_path: null",
+        "pitch-log.json has customer_domain: mindsquare.de",
+        "15+ citations including mindsquare-specific or SAP/Salesforce ecosystem sources",
+        "No methodology jargon in client-facing prose",
+        "German section headers and proper umlauts throughout",
+        "sales-proposal.md has 'Understanding Your Situation' section (German equivalent) with mindsquare-specific context",
+        "pitch-review.json exists with stakeholder scores",
+        "Buyer perspective in pitch-review.json adopts VP Sales / Vertriebsleitung role appropriate for IT consulting"
+      ]
+    },
+    {
+      "id": 6,
+      "name": "cogni-works-focused-sales-portfolio-features",
+      "prompt": "Erstelle einen Segment-Pitch für 'B2B-Vertriebsorganisationen (DACH)'. Portfolio-Pfad: /Users/stephandehaas/GitHub/dev/business-model/cogni-portfolio/cogni-works. Sprache: Deutsch. Fokus auf Features: cogni-sales, cogni-portfolio. Keine TIPS-Daten.",
+      "expected_output": "Focused segment pitch where Key Differentiators reference only cogni-sales and cogni-portfolio capabilities. Executive hook frames sales methodology and portfolio intelligence, not broad AI consulting. Why Pay pricing scoped to these 2 features.",
+      "files": [],
+      "expectations": [
+        "sales-presentation.md exists with valid YAML frontmatter containing pitch_mode: segment",
+        "sales-proposal.md exists with valid YAML frontmatter",
+        "All 4 arc sections present with German headers",
+        "Key Differentiators reference only cogni-sales and cogni-portfolio capabilities (not cogni-trends, cogni-marketing, etc.)",
+        "Every IS cell describes a cogni-sales or cogni-portfolio solution, never the customer's problem",
+        "Executive hook focuses on sales methodology + portfolio intelligence theme, not generic AI consulting",
+        "pitch-log.json solution_focus contains cogni-sales and cogni-portfolio",
+        "Why Pay investment tiers are scoped to cogni-sales and cogni-portfolio (not full 12-feature portfolio pricing)",
+        "Why Now forcing functions relate to sales/portfolio challenges specifically",
+        "15+ citations from web research",
+        "No methodology jargon in client-facing prose",
+        "German section headers and proper umlauts throughout",
+        "pitch-review.json exists with stakeholder scores",
+        "pitch-review.json overall_score is 70 or higher after revision passes"
+      ]
     }
   ]
 }

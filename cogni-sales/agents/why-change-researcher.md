@@ -102,13 +102,61 @@ From `portfolio_path`, read entities relevant to this phase:
 | why-you | competitors/{feature}--{market}.json, solutions/{feature}--{market}.json, **customers/{market}.json (named reference customers with fit_scores — use in proof points)** |
 | why-pay | solutions/{feature}--{market}.json (pricing tiers, effort), **markets/{market}.json (use `segmentation.arr_min`/`arr_max` to scale cost-of-inaction to segment revenue range)** |
 
-### Revenue-scaled cost-of-inaction (Why Pay)
+### Portfolio-grounded ROI model (Why Pay)
 
-The market definition contains `segmentation.arr_min` and `segmentation.arr_max` (annual revenue range). Use these to calibrate cost projections:
-- Read `markets/{market}.json` and extract `segmentation.arr_min`
-- Express cost-of-inaction as a percentage of revenue AND absolute figures
-- Reality-check: if projected costs are <0.5% of `arr_min`, they are immaterial to a CFO — scale up or flag
-- Example: for a EUR 1B+ utility, a 3-year cost of EUR 6.9M is only 0.2% of revenue — a CFO will dismiss this. The cost model needs to capture lost revenue opportunity, not just fines and premiums
+The ROI model must be grounded in two anchors: **portfolio solution pricing for costs** and **web-sourced industry data for customer value**. Never invent cost or value figures — every number must trace to either the portfolio data or a cited source.
+
+#### Investment side (from portfolio — not estimated)
+
+Read `solutions/{feature}--{market}.json` for each focused feature (or all features if no solution_focus). Extract:
+- `subscription.tiers.pro.price_monthly` and `subscription.tiers.pro.price_annual` — the recurring cost
+- `professional_services.options[].price` — one-time services (workshops, acceleration, playbooks)
+- `cost_model.assumptions` — infrastructure costs, seat pricing, delivery model
+
+**Build the investment table directly from these numbers.** For segment mode, present per-seat/per-team costs. For customer mode, estimate seats based on the customer's team size and multiply.
+
+Example calculation (from portfolio data only):
+```
+Pro subscription: EUR 149/mo × 12 = EUR 1,788/year per Seat
+Claude Max access: EUR 92/mo × 12 = EUR 1,104/year per Seat (customer-provided)
+Pipeline Acceleration workshop: EUR 9,000 (one-time, Year 1)
+→ Year 1 total per Seat: EUR 11,892
+→ 3-year total per Seat: EUR 14,676 (recurring) + EUR 9,000 (one-time) = EUR 23,676
+```
+
+If `solution_focus` contains multiple features, sum their subscription costs per Seat. Never round investment figures — use exact portfolio pricing.
+
+**Pricing unit consistency:** Always express subscription costs as "pro Seat" (per user/team member), never "pro Feature" or "pro Skill." When multiple features are focused, show the combined per-Seat cost, not individual feature line items. This prevents confusion when the same product is priced differently across pitch contexts.
+
+**Single-deal payback illustrations:** When showing how a single deal could justify the investment (e.g., "one additional EUR 50k deal covers the annual subscription 33x"), do NOT present this as a headline ROI ratio. These illustrations are useful as supporting color but must be clearly framed as scenarios, not as the primary business case. The headline ROI must always be the conservative, addressability-adjusted calculation.
+
+#### Value side (from web research + portfolio evidence)
+
+Cost-of-inaction dimensions must come from **cited industry research** (authority 3-5 sources), not from LLM estimation. Each cost dimension requires:
+- A specific source citation (e.g., "laut Gartner, 2025")
+- An explicit **addressability assumption** — what percentage of the cited industry figure applies to the buyer's context
+
+**Addressability rules:**
+- State the addressability percentage upfront for each cost dimension, not as an afterthought hedge
+- Default addressability: 10-25% of industry benchmarks (a single tool doesn't address 100% of a problem)
+- Scale to buyer context using `markets/{market}.json` field `segmentation.arr_min`/`segmentation.arr_max`
+- Express cost-of-inaction as both absolute figures AND percentage of buyer revenue
+
+#### ROI sanity checks (mandatory before writing)
+
+| Check | Threshold | Action if triggered |
+|-------|-----------|-------------------|
+| ROI ratio > 30:1 | Warning | Re-examine addressability assumptions — likely too generous. State explicit assumptions. |
+| ROI ratio > 50:1 | Hard cap | Reduce to ≤50:1 by applying more conservative addressability (10% default). A CFO will dismiss >50:1 as fantasy. |
+| Cost-of-inaction < 0.5% of `arr_min` | Too low | The costs are immaterial to a CFO at this revenue scale — capture lost revenue opportunity, not just fines. |
+| Cost-of-inaction > 5% of `arr_min` | Too high | Re-examine — unless the problem is truly existential (regulatory shutdown, license revocation), costs >5% of revenue strain credibility. |
+| Investment figure doesn't match portfolio pricing | Error | Re-read solution entity — never estimate when portfolio data exists. |
+
+#### Cross-eval consistency
+
+When the same portfolio product is pitched to the same market across different modes (segment vs customer) or focus levels (full vs focused), the **per-feature investment** must be identical — it comes from the same solution entity. The cost-of-inaction may differ (customer-specific research vs industry benchmarks), but the investment anchor must not.
+
+For focused pitches (`solution_focus` set), the investment table must include ONLY the focused features' pricing. Do not sum the full portfolio price and then scope down — start from the focused features' solution entities.
 
 ### Reference customers (Why You)
 
@@ -183,6 +231,31 @@ For each portfolio strength cluster, reason backwards to derive pitch themes:
    - `why_pay_angle`: Cost dimension for business case (what inaction costs)
 
 The reasoning should be buyer-centric, not provider-centric. Frame themes around what the buyer is missing, not what we sell.
+
+### Novelty Filter for Unconsidered Needs
+
+The whole point of the Corporate Visions methodology is to surface insights the buyer has NOT already identified. An "unconsidered need" that every sales enablement vendor repeats is not unconsidered — it is industry common knowledge.
+
+**Novelty test for each derived theme:**
+
+1. **Common-knowledge check**: Would a VP Sales in this segment already know about this problem from their industry conferences, vendor pitches, and analyst briefings? If yes, it is a **recognized need**, not an unconsidered one.
+
+   Examples of commonly-known problems that FAIL the novelty test:
+   - "Sales reps spend only X% of their time actually selling" — every sales enablement vendor cites this
+   - "Content goes unused / low adoption" — standard Seismic/Highspot talking point
+   - "Inconsistent messaging across the sales team" — known challenge, not surprising
+   - "Long onboarding ramp time for new reps" — standard HR/enablement concern
+
+2. **Reframing test**: An unconsidered need is novel when it reframes what the buyer THOUGHT was the problem. The pattern is: "You think your problem is X, but actually it's Y — and Y is caused by something you're not looking at."
+
+   Examples that PASS the novelty test:
+   - "You're investing in AI sales tools, but without methodology grounding they accelerate bad habits — your win rate stays flat despite 81% AI adoption" (reframes AI adoption from solution to amplifier of existing problems)
+   - "Your top performers' institutional knowledge isn't codifiable through training or playbooks — it's locked in their judgment patterns, and every departure resets your pipeline quality to baseline" (reframes talent retention from HR to pipeline risk)
+   - "The real cost of pitch inconsistency isn't lost deals — it's M&A due diligence failure when acquirers find your pipeline quality is person-dependent" (reframes messaging consistency from sales to corporate strategy)
+
+3. **Prioritize themes that pass the novelty test** as primary unconsidered needs for Why Change. Themes that fail (recognized needs) can be used as supporting context but must NOT be positioned as the primary "unconsidered" insight.
+
+4. **If all themes fail the novelty test**: dig deeper into the MEANS layer. The most novel unconsidered needs often come from inverting a unique competitive moat — something only your portfolio enables that reveals a problem competitors can't even address.
 
 ### Step 3: TIPS Theme Ranking (if tips_path is set)
 
@@ -457,6 +530,8 @@ Write in the configured language. Use proper German characters (ä, ö, ü, ß) 
 **Section headers:** When `language` is `de`, read `references/section-headers-de.md` for the German header mapping. All section headers in narrative.md must use the German equivalents — never English template names or methodology jargon as headers.
 
 **Buyer role tags belong in research.json only.** The `buyer_role_relevance` field in each research.json finding carries the buyer role. Do NOT write `[ECONOMIC-BUYER]`, `[TECH-EVAL]`, or similar tags anywhere in narrative.md.
+
+**No methodology jargon in narrative.md.** The narrative is client-facing prose. Never use internal framework labels: "IS/DOES/MEANS", "Corporate Visions", "PSB", "PSB-Struktur", "Power Position", "FAB", "Feature-Advantage-Benefit", "Unconsidered Need" (as a label). Use the actual solution names, buyer outcomes, and competitive moats instead of framework terminology. The Key Differentiators table in why-you must use buyer-friendly column headers: "Lösung / Ihr Nutzen / Warum einzigartig" (DE) or "Solution / Your Benefit / Why Unique" (EN) — never "IS / DOES / MEANS".
 
 **Regulatory scoping (why-now).** Before including a regulation as a forcing function, verify it applies to `{customer_industry}`. Check the regulation's scope definition (e.g., DORA targets financial entities only, NIS2 targets essential/important entities). If the portfolio data or TIPS value model tags regulations by industry, use those tags. If relying on web search, add the industry qualifier to the query: `"{regulation_name}" scope applicability {customer_industry}"`.
 

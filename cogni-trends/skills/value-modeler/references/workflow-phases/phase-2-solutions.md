@@ -47,16 +47,27 @@ Before generating any Solution Templates, check the Phase 0 output metadata for 
 
 5. **No portfolio discovered**: Proceed silently to Step 1 (abstract generation).
 
+6. **Generic portfolio context** (`portfolio_generic` is `true` in Phase 0 metadata):
+   The context file has `is_generic_template: true`. Proceed to Step 0.5 — the generic
+   portfolio has features with IS/DOES/MEANS propositions that enable feature-to-theme
+   matching and ST grounding. See Step 0.5.4b for generic-specific handling.
+
 ## Phase 2 Decision Flow
 
 The steps in this phase depend on whether portfolio context is available:
 
 ```
-Portfolio context v2.0+ exists:
+Portfolio context v2.0+ exists (company-specific):
   Step 0.5 (anchored STs from portfolio features)
   → Step 1 (abstract STs for investment themes not fully covered by Step 0.5)
   → Step 1.5 (blueprint composition for abstract STs, coverage assessed against portfolio)
   → Step 2 (enrich all blueprints with real portfolio data)
+
+Generic portfolio context (is_generic_template: true):
+  Step 0.5 (anchored STs from generic taxonomy features — see Step 0.5.4b)
+  → Step 1 (abstract STs for investment themes not fully covered by Step 0.5)
+  → Step 1.5 (blueprint composition for abstract STs, coverage assessed against generic features)
+  → Skip Step 2 (no company-specific data to enrich from)
 
 Portfolio context v1.0 or absent:
   Skip Step 0.5
@@ -241,6 +252,43 @@ When the portfolio context has `quality_assessment` data (v3.0):
   for variant generation later — this creates a feedback loop where TIPS insights improve
   portfolio quality
 - If all propositions for a feature pass quality checks, omit the `quality_flag` (no flag = healthy)
+
+### 0.5.4b: Generic Portfolio Handling
+
+When the portfolio context has `is_generic_template: true` (set by Phase 0 when using the
+generic B2B ICT portfolio):
+
+**What works normally:**
+- Step 0.5.1 (Read Portfolio Context) — features have descriptions and taxonomy mappings
+- Step 0.5.2 (Match Features to Investment Themes) — DOES/MEANS proposition language is
+  available for semantic matching between features and investment themes
+- Step 0.5.3 (Generate Portfolio-Anchored STs) — blueprint composition works as normal;
+  building blocks map to generic taxonomy features with `coverage: "covered"` or `"partial"`
+
+**What changes:**
+- **Skip Step 0.5.4** (Quality-Aware Generation) — generic propositions have no
+  `quality_assessment` data, so quality flags cannot be computed
+- **Skip `portfolio_grounding`** entries that reference specific company DOES claims —
+  generic DOES statements are useful for matching but should not be echoed as if they
+  describe the user's company
+- **Set `generation_mode: "generic-portfolio-anchored"`** on each ST (instead of
+  `"portfolio-anchored"`) — this distinguishes STs grounded in generic taxonomy features
+  from STs grounded in real company products
+- **Add `generic_portfolio_note`** to each ST:
+  ```json
+  {
+    "generic_portfolio_note": "Grounded in generic B2B ICT taxonomy features, not company-specific capabilities. Replace with your own portfolio via /portfolio-setup + /bridge portfolio-to-tips, then run /value-model re-anchor."
+  }
+  ```
+- **Set `portfolio_mapping.is_generic: true`** on each building block that maps to a
+  generic feature — this tells the trends-bridge to treat all mappings as "Create" actions
+  (not "Enrich") when later running `/bridge tips-to-portfolio`
+
+**Coverage interpretation:** Since the generic portfolio has one feature per taxonomy category
+(51 features across 57 categories, excluding dimension 0), most building blocks will show
+`coverage: "covered"`. This is expected and clearly labeled — it means the *taxonomy category*
+exists, not that a specific company can deliver it. The `generation_mode` and
+`generic_portfolio_note` fields make this distinction explicit in all downstream outputs.
 
 ### 0.5.5: Reduce Abstract Targets
 

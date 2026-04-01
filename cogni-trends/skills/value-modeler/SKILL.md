@@ -47,6 +47,11 @@ investment portfolio — not a flat list of 18 solutions, but 5 distinct areas t
   generates Solution Templates grounded in your actual products. Without it, solutions will be abstract
   and require manual portfolio mapping later. If trend-scout was linked to a portfolio market, this skill
   automatically picks up that connection — no need to re-discover.
+- **No portfolio?** If no cogni-portfolio project exists, the value-modeler offers a **generic B2B ICT
+  portfolio** (7 products, 51 features with IS/DOES/MEANS propositions) derived from the B2B ICT taxonomy.
+  This provides taxonomy-grounded solution blueprints with coverage data instead of abstract solutions,
+  giving users a tangible view of which ICT capability dimensions each solution requires. The generic
+  portfolio can be replaced with a company-specific one at any time.
 
 ## Context Independence
 

@@ -78,7 +78,20 @@ Search the workspace for a cogni-portfolio project:
 ### Step 4b: Check Portfolio Context & Recommend Bridge
 
 After discovering the portfolio project (by either method), check for `portfolio-context.json`
-in the TIPS project directory (written by `/bridge portfolio-to-tips`):
+in the TIPS project directory (written by `/bridge portfolio-to-tips` or copied from generic template):
+
+**0. If found with `is_generic_template` = `true`:**
+   - This is a generic portfolio context from the taxonomy template, not a real company portfolio.
+   - Skip staleness check (`extracted_at` is null — this is static template data)
+   - Skip bridge refresh recommendation
+   - Count products, features, and propositions for the summary
+   - Report: "Using generic B2B ICT portfolio context (template-based, {N} products,
+     {M} features with IS/DOES/MEANS propositions for large-enterprise-dach).
+     Portfolio-anchored ST generation is available — Phase 2 will match features to
+     investment themes using proposition language. Quality-aware generation is not
+     available (no quality assessments on generic propositions)."
+   - Set `portfolio_generic: true` in output metadata
+   - Proceed to Step 5
 
 1. If found with `schema_version` = `"3.1"`:
    - Count products, features, propositions, and markets
@@ -125,8 +138,62 @@ in the TIPS project directory (written by `/bridge portfolio-to-tips`):
      - "Continue without portfolio grounding" — proceed with abstract ST generation
 
 4. **If no portfolio was discovered at all:**
-   - "No portfolio found. Solution Templates will be standalone — you can connect them
-     to a portfolio later using `/bridge tips-to-portfolio`."
+
+   Before reporting, check if a generic portfolio context is available:
+
+   1. Read `industry.primary` from `tips-project.json`
+   2. Map industry to taxonomy type using these keywords:
+      - ICT, IT Services, IT-Services, Managed Services, Cloud Infrastructure, Systems Integration,
+        IT Consulting, Telecommunications, Digital Services → `b2b-ict`
+      - (Future taxonomy types can be added here)
+   3. Look for `$COGNI_PORTFOLIO_ROOT/templates/{taxonomy-type}/generic-portfolio-context.json`
+      (where `$COGNI_PORTFOLIO_ROOT` is the cogni-portfolio plugin directory)
+   4. If a generic portfolio context is found, present this choice:
+
+      "No company portfolio found in your workspace. However, a **generic B2B ICT portfolio**
+      is available based on the B2B ICT taxonomy (7 products, 51 features with IS/DOES/MEANS
+      propositions for large-enterprise-dach).
+
+      Choose how to proceed:
+
+      1. **Use generic B2B ICT portfolio** — Solution Templates will be grounded in typical
+         ICT service capabilities (connectivity, security, cloud, workplace, infrastructure,
+         applications, consulting). Building blocks will show coverage against generic features.
+         You can replace this with your own portfolio later.
+
+      2. **Continue without portfolio** — Solution Templates will be standalone with
+         `coverage: "unknown"` on all building blocks. Connect a portfolio later with
+         `/bridge tips-to-portfolio`.
+
+      3. **Set up your own portfolio first** — Pause value-modeling to create a company-specific
+         portfolio with `/portfolio-setup`, then return with `/value-model`."
+
+   5. If the user picks **option 1** (generic portfolio):
+      - Copy the generic portfolio context file into the TIPS project directory as
+        `portfolio-context.json`
+      - The file has `is_generic_template: true` — this flag controls behavior in Step 4b
+        and Phase 2
+      - Set in output metadata: `portfolio_discovered: true`, `portfolio_generic: true`,
+        `portfolio_source_slug: "generic-b2b-ict"`
+      - Report: "Using generic B2B ICT portfolio (7 products, 51 features, 3 markets).
+        Solution Templates will be grounded in generic ICT capabilities — clearly marked
+        as template-based. You can replace this with your own portfolio later via
+        `/portfolio-setup` + `/bridge portfolio-to-tips`."
+      - Proceed to Step 4b to validate the context
+
+   6. If the user picks **option 2** (no portfolio):
+      - "No portfolio. Solution Templates will be standalone — you can connect them
+        to a portfolio later using `/bridge tips-to-portfolio`."
+
+   7. If the user picks **option 3** (set up portfolio):
+      - "Run `/portfolio-setup` to create your company portfolio, then come back with
+        `/value-model` when you're ready."
+      - Exit gracefully
+
+   8. If no generic portfolio context was found for the industry type:
+      - Fall back to the original message: "No portfolio found. Solution Templates will
+        be standalone — you can connect them to a portfolio later using
+        `/bridge tips-to-portfolio`."
 
 Add to the output metadata:
 
@@ -160,7 +227,7 @@ Industry: {industry/subsector}
 Language: {language}
 Candidates: {total} across {dimensions} dimensions
 Catalog: {found with N entities / not found}
-Portfolio: {found/not found}
+Portfolio: {found / generic B2B ICT (template-based, N products, M features) / not found}
 ```
 
 Ask: "Ready to build the value model? I'll start by mapping relationship networks across your {total} trend candidates."
@@ -177,10 +244,11 @@ Create `.metadata/value-modeler-output.json`:
   "catalog_discovered": true|false,
   "catalog_path": "cogni-trends/catalogs/manufacturing/automotive" | null,
   "portfolio_discovered": true|false,
+  "portfolio_generic": false|true,
   "portfolio_path": "path/to/portfolio.json" | null,
-  "portfolio_source_slug": "acme-corp" | null,
+  "portfolio_source_slug": "acme-corp" | "generic-b2b-ict" | null,
   "portfolio_source_market": "mid-market-saas-dach" | null,
-  "portfolio_context_version": "2.0" | null,
+  "portfolio_context_version": "3.1" | null,
   "portfolio_context_propositions": 12 | null,
   "portfolio_context_markets_relevant": 2 | null,
   "candidate_count": 60,

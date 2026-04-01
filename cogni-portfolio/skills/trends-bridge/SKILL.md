@@ -218,7 +218,12 @@ or no ranked STs — stop and report the fix suggestion. If soft warnings exist
 For each Solution Template in the value model:
 
 1. Check `portfolio_mapping` — if already mapped during value-modeler Phase 2, use it
-2. If not mapped, attempt semantic matching:
+   - **Generic portfolio check:** If `portfolio_mapping.is_generic` is `true`, the ST was
+     mapped to generic taxonomy features during value-modeler (not real portfolio features).
+     Treat all such STs as **"Create"** actions — the generic features are taxonomy
+     placeholders, not real company capabilities to enrich. Clear the `portfolio_mapping`
+     before proceeding so the ST gets fresh matching against the real portfolio.
+2. If not mapped (or generic mapping cleared), attempt semantic matching:
    - Compare ST name + description against all feature names + descriptions
    - Consider product category alignment
    - Assign match confidence: `high` (clear semantic overlap), `medium` (partial),

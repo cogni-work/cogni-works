@@ -89,7 +89,8 @@ Identify 3-5 themes that recur across multiple propositions — these are the co
 genuine differentiators, not proposition-specific claims.
 
 Present as narrative paragraphs, not a comparison table. Weave in evidence
-from proposition evidence arrays where available. No competitor names.}
+from proposition evidence arrays where available, citing external sources
+(see [Citations](#citations) below). No competitor names.}
 
 ## Working Together
 
@@ -157,7 +158,7 @@ Order products by the number of propositions they have in this market (most firs
 1. The buyer's need (derived from DOES statement, reframed as buyer language)
 2. What the capability delivers (DOES statement)
 3. Why it matters (MEANS statement)
-4. Evidence (from proposition evidence array — specific outcomes, metrics, case references)
+4. Evidence (from proposition evidence array — specific outcomes, metrics, case references, linked to external sources via `evidence[].source_url`)
 
 If a package exists for this product x market, present capabilities as a bundled
 offering with tier differentiation rather than individual feature listings.
@@ -286,6 +287,33 @@ entry point] — a [duration] engagement focused on [persona's top priority]."}
 - Filter ruthlessly — only propositions that match this persona's buying criteria
 - Investment framing should match the persona's budget authority level
 - If the customer profile has specific named companies or accounts, do NOT include them — this is persona-level, not account-level (ABM is handled by cogni-marketing)
+
+---
+
+## Citations
+
+Customer-facing documents must cite **external source URLs** so readers can verify evidence claims. Never link to internal JSON entity file paths (`propositions/x.json`, `markets/y.json`) — these are meaningless to buyers.
+
+**Inline format**: `<sup>[N]</sup>` in the body text — the number references the Sources footer.
+
+**Source priority** (use the first available for each cited claim):
+1. `evidence[].source_url` from the proposition — the original external source
+2. `evidence[].source_url` from competitor or customer entities
+3. No citation — use descriptive inline text instead (e.g., "(internal estimate)")
+
+**Claims without external sources**: Market sizing, internal calculations, or LLM-derived estimates get no superscript citation. State the figure with a parenthetical qualifier.
+
+**References footer**: End the document with a numbered sources section:
+
+```markdown
+---
+## Sources
+
+[1] [Source Title](https://source-url) — brief context
+[2] [Source Title](https://source-url) — brief context
+```
+
+Customer narratives are self-paced reading — keep citations unobtrusive. A Sources footer at the end is cleaner than heavy inline linking.
 
 ---
 

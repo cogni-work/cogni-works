@@ -62,7 +62,7 @@ for deeper persona research."}
 For each proposition:
 - One-line elevator pitch derived from the MEANS statement
 - IS/DOES/MEANS breakdown
-- Key evidence points (from evidence array)
+- Key evidence points (from evidence array — link to `evidence[].source_url` where available, never to internal JSON file paths)
 - Relevance tier (high/medium/low)
 
 Order: high-tier propositions first within each product group.

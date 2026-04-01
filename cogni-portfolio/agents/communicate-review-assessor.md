@@ -201,9 +201,15 @@ Cross-reference claims in the document against proposition `evidence` arrays and
 Claims that appear in the narrative but have no backing in source entities are "phantom claims" —
 the most dangerous kind, because they may be undeliverable promises.
 
-- **Pass**: Claims feel authentic. Evidence is woven naturally (industry data, outcome specifics, methodology references). No phantom claims — everything traceable to source propositions.
-- **Warn**: Claims are plausible but unsourced. Round numbers feel fabricated ("50% faster"). Or evidence exists in propositions but wasn't woven into the narrative.
-- **Fail**: Reads like marketing hype. Multiple phantom claims. Or suspiciously precise numbers without any grounding. I would stop reading and move to the next vendor.
+**Citation quality check**: Citations must link to external source URLs (from `evidence[].source_url`), not to internal JSON file paths. A citation like `<sup>[1](propositions/x.json)</sup>` is broken for every reader and signals sloppy generation. Check for:
+- No `<sup>[N](*.json)</sup>` patterns in the document
+- Evidence claims with `source_url` available are cited with external links
+- A Sources/References footer is present when citations exist
+- Claims without external sources use parenthetical qualifiers ("internal estimate") instead of fake citations
+
+- **Pass**: Claims feel authentic. Evidence is woven naturally (industry data, outcome specifics, methodology references). No phantom claims — everything traceable to source propositions. All citations link to external URLs; no JSON file path references. Sources footer present.
+- **Warn**: Claims are plausible but unsourced. Round numbers feel fabricated ("50% faster"). Or evidence exists in propositions but wasn't woven into the narrative. OR citations exist but some link to internal JSON files instead of external URLs.
+- **Fail**: Reads like marketing hype. Multiple phantom claims. Or suspiciously precise numbers without any grounding. OR citations systematically link to internal JSON entity paths rather than real external sources. I would stop reading and move to the next vendor.
 
 #### 4. Decision Readiness
 

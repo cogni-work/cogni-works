@@ -158,6 +158,8 @@ For custom use cases, generate section structure based on the use case's `voice`
 
 For ad-hoc use cases, use the parameters collected during the ad-hoc flow.
 
+**Citation rule**: All templates require citations to link to **external source URLs** from entity `evidence[].source_url` fields. Never generate citations that link to internal JSON file paths (e.g., `propositions/x.json`). When an evidence claim has no external URL, present it as an inline estimate without a citation. See each template's Citations section for format details.
+
 **Output path:** Write to `output/communicate/{use-case-id}/` followed by the scope-specific filename from the template.
 
 **Backward compatibility:** If old-format files exist at `output/communicate/portfolio-overview.md` (without use-case subdirectory), mention that the output structure has changed and that new files will be in `output/communicate/customer-narrative/`. Do not automatically migrate or delete old files.

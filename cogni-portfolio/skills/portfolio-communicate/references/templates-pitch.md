@@ -85,7 +85,7 @@ Before writing, assemble evidence by mapping portfolio data to arc elements:
 
 **Pattern**: `[Quantified surprise] + [Challenge to conventional wisdom]`
 
-**Example**: "Organizations investing 40% more in cloud monitoring achieve 60% fewer actionable alerts — spending more on visibility while seeing less.<sup>[1](propositions/cloud-monitoring--mid-market-saas-dach.json)</sup>"
+**Example**: "Organizations investing 40% more in cloud monitoring achieve 60% fewer actionable alerts — spending more on visibility while seeing less.<sup>[1]</sup>"
 
 #### Why Change: The Unconsidered Need (27% of target length)
 
@@ -172,7 +172,7 @@ The default evidence mapping follows a Jobs-to-be-Done structure. Read the arc d
 
 **Pattern**: One sharp industry observation that creates inevitability — the buyer's world is changing in a way that makes the jobs in this portfolio urgent.
 
-**Example**: "European utilities manage 4,200 discrete operational processes. They buy solutions for 12 of them.<sup>[1](markets/grosse-energieversorger-de.json)</sup>"
+**Example**: "European utilities manage 4,200 discrete operational processes. They buy solutions for 12 of them.<sup>[1]</sup>"
 
 #### Job Landscape: Functional Jobs (24% of target length)
 
@@ -256,20 +256,34 @@ The default evidence mapping follows a Jobs-to-be-Done structure. Read the arc d
 
 ## Citations
 
-**Format**: `<sup>[N](entity-file-path)</sup>` — sequential numbering from 1
+Citations link to **external source URLs** so readers can verify claims. Never link to internal JSON entity file paths (`propositions/x.json`, `markets/y.json`) — these are meaningless to readers and break outside the project directory.
 
-**Source**: Citations point to portfolio entity files (the internal source of truth), not external URLs. This keeps the narrative self-contained and verifiable against the portfolio.
+**Inline format**: `<sup>[N]</sup>` in the body text — the number references the Sources footer.
 
-**Examples**:
-- `<sup>[1](propositions/cloud-monitoring--mid-market-saas-dach.json)</sup>` — citing a proposition's evidence
-- `<sup>[2](customers/mid-market-saas-dach.json)</sup>` — citing a customer pain point
-- `<sup>[3](markets/mid-market-saas-dach.json)</sup>` — citing market sizing data
+**Source priority** (use the first available for each cited claim):
+1. `evidence[].source_url` from the proposition — the original external source
+2. `evidence[].source_url` from competitor or customer entities
+3. No citation — use descriptive inline text instead (e.g., "~EUR 25B segment revenue (internal estimate)")
+
+**Claims without external sources**: Market sizing derived from LLM estimates, internal calculations, or portfolio entity fields (TAM/SAM/SOM `source` strings) get no superscript citation. State the figure with a parenthetical qualifier like "(internal estimate)" or "(bottom-up calculation)".
+
+**References footer**: End the document with a numbered sources section:
+
+```markdown
+---
+## Sources
+
+[1] [Source Title](https://source-url) — brief context of what the source establishes
+[2] [Source Title](https://source-url) — brief context
+```
 
 **Density target**: 15-25 total citations across the narrative:
 - Why Change (data-heavy): 5-8 citations
 - Why Now (forcing functions): 4-6 citations
 - Why You (strategic): 4-6 citations
 - Why Pay (cost calculations): 3-5 citations
+
+Only count citations that have external URLs. Internal estimates don't count toward the density target.
 
 **Claim verification**: If `cogni-claims/claims.json` exists, cross-reference evidence statements. Mark unverified or deviated claims with `[unverified]`. Include a brief "Data Quality" note in the frontmatter when unverified claims are present.
 

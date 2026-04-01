@@ -69,11 +69,19 @@ differentiation.}
 
 ## Evidence
 
-{From the proposition's evidence array. Present as brief case studies
-or data points. Mark any [unverified] claims clearly.
+{From the proposition's evidence array. Present each evidence item as a
+brief case study or data point, linked to its external source:
+
+Format: "[Statement derived from evidence] — [source_title](source_url)"
+
+Use `evidence[].source_url` and `evidence[].source_title` from the proposition.
+If an evidence item has no source_url, present the statement without a link
+and mark it "(unverified)".
 
 If cogni-claims/claims.json exists, cross-reference evidence statements
-and mark unverified or deviated claims with [unverified].}
+and mark unverified or deviated claims with [unverified].
+
+Never link to internal JSON entity file paths — always use external URLs.}
 
 ## Implementation Approach
 

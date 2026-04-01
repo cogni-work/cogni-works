@@ -2270,13 +2270,13 @@ body::after {{
         html += "</div>\n"
 
     # --- Target Customers ---
-    has_named_customers = False
+    has_customer_data = False
     for cslug, cdata in data.get("customers", {}).items():
-        if cdata.get("named_customers"):
-            has_named_customers = True
+        if cdata.get("named_customers") or cdata.get("profiles"):
+            has_customer_data = True
             break
 
-    if has_named_customers:
+    if has_customer_data:
         html += """
 <!-- Target Customers -->
 <div class="section reveal">
@@ -2284,38 +2284,72 @@ body::after {{
 """
         for cslug in sorted(data["customers"].keys()):
             cdata = data["customers"][cslug]
+            profiles = cdata.get("profiles", [])
             nc_list = cdata.get("named_customers", [])
-            if not nc_list:
+            if not profiles and not nc_list:
                 continue
             mkt = data.get("markets", {}).get(cdata.get("market_slug", cslug), {})
             mkt_name = mkt.get("name", cslug)
             html += f'  <div class="customer-market-group">\n    <h4>{escape_html(mkt_name)}</h4>\n'
-            for idx, nc in enumerate(nc_list):
-                name = escape_html(nc.get("name", "Unknown"))
-                industry = escape_html(nc.get("industry", ""))
-                hq = escape_html(nc.get("headquarters", ""))
-                emps = nc.get("employees")
-                emp_str = f"{emps:,}" if emps else ""
-                rev = nc.get("revenue", {})
-                rev_val = rev.get("value") if isinstance(rev, dict) else None
-                rev_cur = rev.get("currency", "EUR") if isinstance(rev, dict) else "EUR"
-                if rev_val and rev_val >= 1e9:
-                    rev_str = f"{rev_cur} {rev_val/1e9:.1f}B"
-                elif rev_val and rev_val >= 1e6:
-                    rev_str = f"{rev_cur} {rev_val/1e6:.0f}M"
-                elif rev_val:
-                    rev_str = f"{rev_cur} {rev_val:,.0f}"
-                else:
-                    rev_str = ""
-                fit = nc.get("fit_score", "")
-                fit_cls = f"fit-{fit}" if fit in ("high", "medium", "low") else ""
-                pain_pts = nc.get("pain_points", [])
-                pain_html = ", ".join(escape_html(p) for p in pain_pts[:3])
 
-                meta_parts = [x for x in [industry, hq, emp_str + (" employees" if emp_str else ""), rev_str] if x]
-                meta_str = " &bull; ".join(meta_parts)
+            # Buyer profiles (personas)
+            if profiles:
+                html += '    <div class="section-label" style="margin-top:4px">Buyer Profiles</div>\n'
+                for prof in profiles:
+                    role = escape_html(prof.get("role", ""))
+                    seniority = escape_html(prof.get("seniority", ""))
+                    decision_role = escape_html(prof.get("decision_role", ""))
+                    meta_parts = [x for x in [seniority, decision_role] if x]
+                    meta_str = " &bull; ".join(meta_parts)
+                    html += f'    <div class="profile-card">\n'
+                    html += f'      <h5>{role}</h5>\n'
+                    if meta_str:
+                        html += f'      <div class="profile-meta">{meta_str}</div>\n'
+                    pain_pts = prof.get("pain_points", [])
+                    if pain_pts:
+                        html += '      <div style="font-size:12px;color:var(--text2);margin-bottom:2px">Pain Points</div>\n'
+                        html += '      <ul class="profile-list">\n'
+                        for pp in pain_pts:
+                            html += f'        <li>{escape_html(pp)}</li>\n'
+                        html += '      </ul>\n'
+                    buying_criteria = prof.get("buying_criteria", [])
+                    if buying_criteria:
+                        html += '      <div style="font-size:12px;color:var(--text2);margin-top:6px;margin-bottom:2px">Buying Criteria</div>\n'
+                        html += '      <ul class="profile-list">\n'
+                        for bc in buying_criteria:
+                            html += f'        <li>{escape_html(bc)}</li>\n'
+                        html += '      </ul>\n'
+                    html += '    </div>\n'
 
-                html += f"""    <div class="customer-target-card" onclick="openNamedCustomer('{escape_html(cslug)}', {idx})">
+            # Named customers (researched companies)
+            if nc_list:
+                html += '    <div class="section-label" style="margin-top:12px">Target Companies</div>\n'
+                for idx, nc in enumerate(nc_list):
+                    name = escape_html(nc.get("name", "Unknown"))
+                    industry = escape_html(nc.get("industry", ""))
+                    hq = escape_html(nc.get("headquarters", ""))
+                    emps = nc.get("employees")
+                    emp_str = f"{emps:,}" if emps else ""
+                    rev = nc.get("revenue", {})
+                    rev_val = rev.get("value") if isinstance(rev, dict) else None
+                    rev_cur = rev.get("currency", "EUR") if isinstance(rev, dict) else "EUR"
+                    if rev_val and rev_val >= 1e9:
+                        rev_str = f"{rev_cur} {rev_val/1e9:.1f}B"
+                    elif rev_val and rev_val >= 1e6:
+                        rev_str = f"{rev_cur} {rev_val/1e6:.0f}M"
+                    elif rev_val:
+                        rev_str = f"{rev_cur} {rev_val:,.0f}"
+                    else:
+                        rev_str = ""
+                    fit = nc.get("fit_score", "")
+                    fit_cls = f"fit-{fit}" if fit in ("high", "medium", "low") else ""
+                    pain_pts = nc.get("pain_points", [])
+                    pain_html = ", ".join(escape_html(p) for p in pain_pts[:3])
+
+                    meta_parts = [x for x in [industry, hq, emp_str + (" employees" if emp_str else ""), rev_str] if x]
+                    meta_str = " &bull; ".join(meta_parts)
+
+                    html += f"""    <div class="customer-target-card" onclick="openNamedCustomer('{escape_html(cslug)}', {idx})">
       <div style="display:flex;justify-content:space-between;align-items:center">
         <h5>{name}</h5>
         {f'<span class="fit-badge {fit_cls}">{escape_html(fit)}</span>' if fit else ''}

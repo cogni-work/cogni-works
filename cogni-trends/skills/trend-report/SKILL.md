@@ -41,6 +41,7 @@ Report prose, section headers, and TIPS labels all adapt to the chosen output la
 - `value-modeler` completed with `tips-value-model.json` containing investment themes
 - Web access enabled for evidence enrichment
 - Optional: `cogni-narrative` plugin for theme-thesis arc guidance (graceful fallback if absent — investment themes use flat structure)
+- Optional: `cogni-copywriting` plugin for executive polish (graceful fallback if absent)
 - Optional: `cogni-claims` plugin for claim verification
 
 ## Context Independence
@@ -85,6 +86,7 @@ Read references **only when needed** for the specific phase:
 | [references/i18n/labels-en.md](references/i18n/labels-en.md) | English report headings and labels |
 | [references/i18n/labels-de.md](references/i18n/labels-de.md) | German report headings and labels |
 | [references/phase-3-claim-verification.md](references/phase-3-claim-verification.md) | Running claim verification (Phase 3) |
+| [references/phase-3.5-executive-polish.md](references/phase-3.5-executive-polish.md) | Polishing report prose (Phase 3.5) |
 | [references/phase-5-revision.md](references/phase-5-revision.md) | Post-verification report revision (Phase 5) |
 
 ## Workflow Overview
@@ -92,10 +94,11 @@ Read references **only when needed** for the specific phase:
 Track progress through these phases as you go:
 
 ```text
-Phase 0 → Phase 0.5 → Phase 1 → Phase 2 → Phase 2.5 → Phase 3 → Phase 4 → Phase 5
-   │          │           │          │          │           │          │          │
-   │          │           │          │          │           │          │          └─ Post-verification revision
-   │          │           │          │          │           │          └─ Update metadata, recommend /trends-resume
+Phase 0 → Phase 0.5 → Phase 1 → Phase 2 → Phase 2.5 → Phase 3 → Phase 3.5 → Phase 4 → Phase 5
+   │          │           │          │          │           │          │            │          │
+   │          │           │          │          │           │          │            │          └─ Post-verification revision
+   │          │           │          │          │           │          │            └─ Update metadata, recommend /trends-resume
+   │          │           │          │          │           │          └─ Optional executive polish
    │          │           │          │          │           └─ Optional claims verification
    │          │           │          │          └─ Structural review (cross-theme quality gate)
    │          │           │          └─ Theme narratives + exec summary + bridges + synthesis
@@ -493,6 +496,12 @@ Read [references/phase-3-claim-verification.md](references/phase-3-claim-verific
 
 ---
 
+### Phase 3.5: Executive Polish (Optional)
+
+Read [references/phase-3.5-executive-polish.md](references/phase-3.5-executive-polish.md) for the full workflow. Polishes report prose via `cogni-copywriting:copywriter` with `SCOPE=tone`. Validates citations and structure are preserved; reverts on failure.
+
+---
+
 ### Phase 4: Finalization
 
 #### Step 4.1: Update Metadata
@@ -564,6 +573,7 @@ This phase also handles the **deferred flow**: when the user verified and resolv
 | Investment theme agent quality gate fails | WARNING: continue (section written but may be thin) |
 | Investment theme references unknown candidate_ref | WARNING: agent skips that candidate in investment theme narrative |
 | `cogni-narrative` not installed | WARNING: investment-theme-writer uses flat structure (no arc guidance) |
+| `cogni-copywriting` not installed | WARNING: skip executive polish |
 | `cogni-claims` not installed | WARNING: skip verification |
 | claims verification returns FAIL | Present failed claims. Do not auto-correct. |
 

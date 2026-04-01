@@ -49,7 +49,7 @@ Repo: /Users/stephandehaas/GitHub/dev/insight-wave
 - OK (cogni-work.ai link in Custom development and footer only)
 
 ### Documentation Logic Drift
-- Pipeline suffix: `claims` registered in pipeline-registry.json but "What it does" items lack artifact trail (`→ cogni-claims/claims.json → consulting-deliver, synthesize`)
+- Pipeline suffix: `claims` registered in pipeline-registry.json but "What it does" items lack artifact trail (`→ cogni-claims/claims.json → consulting-deliver, portfolio-verify`)
 - Verdict: DRIFT
 
 ---
@@ -229,13 +229,11 @@ Repo: /Users/stephandehaas/GitHub/dev/insight-wave
 - Pipeline suffix: `portfolio-setup` registered but "What it does" item 1 lacks artifact trail (`→ portfolio.json → features, markets, products, portfolio-scan`)
 - Pipeline suffix: `features` registered but "What it does" item 2 lacks artifact trail (`→ features/*.json → propositions, solutions, packages`)
 - Pipeline suffix: `markets` registered but "What it does" item 2 lacks artifact trail (`→ markets/*.json → propositions, solutions, customers`)
-- Pipeline suffix: `propositions` registered but "What it does" item 3 lacks artifact trail (`→ propositions/{f}--{m}.json → solutions, packages, synthesize, compete`)
-- Pipeline suffix: `solutions` registered but "What it does" item 4 lacks artifact trail (`→ solutions/{f}--{m}.json → packages, why-change, synthesize`)
+- Pipeline suffix: `propositions` registered but "What it does" item 3 lacks artifact trail (`→ propositions/{f}--{m}.json → solutions, packages, compete`)
+- Pipeline suffix: `solutions` registered but "What it does" item 4 lacks artifact trail (`→ solutions/{f}--{m}.json → packages, why-change`)
 - Pipeline suffix: `compete` registered but "What it does" item 5 lacks artifact trail
 - Pipeline suffix: `customers` registered but "What it does" item 6 lacks artifact trail
-- Pipeline suffix: `synthesize` registered but "What it does" item 8 lacks artifact trail
 - Pipeline suffix: `portfolio-dashboard` registered but no dedicated "What it does" item with artifact trail
-- Pipeline suffix: `portfolio-export` registered but item 8 lacks artifact trail
 - Pipeline suffix: `portfolio-communicate`, `portfolio-architecture`, `portfolio-scan`, `products`, `packages` — all registered but lack artifact trails
 - Verdict: DRIFT (15 registered skills without pipeline suffixes)
 

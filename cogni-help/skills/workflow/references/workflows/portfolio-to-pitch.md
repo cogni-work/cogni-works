@@ -14,7 +14,7 @@ graph LR
 
 ## Step 1: Portfolio Data (cogni-portfolio)
 
-**Command**: `/portfolio-export` (if already set up) or `/portfolio-setup` → `/portfolio-draft`
+**Command**: `/portfolio-resume` (if already set up) or `/portfolio-setup` → entity skills → `/portfolio-communicate`
 
 **Input**: Your product/service catalog and target market
 **Output**: Propositions with IS/DOES/MEANS, competitor analysis, market sizing

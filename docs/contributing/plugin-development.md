@@ -123,7 +123,7 @@ Check the naming convention before you choose a name:
 
 | Tier | When | Pattern | Examples |
 |------|------|---------|----------|
-| A — Domain-unique | Your word is unambiguous in the ecosystem | bare name | `propositions`, `synthesize` |
+| A — Domain-unique | Your word is unambiguous in the ecosystem | bare name | `propositions`, `customers` |
 | B — Generic verb/noun | The word could belong to multiple plugins | `{domain}-{verb}` | `portfolio-scan`, `trends-catalog` |
 | C — Cross-plugin | The skill spans two domains explicitly | descriptive compound | `trends-bridge` |
 

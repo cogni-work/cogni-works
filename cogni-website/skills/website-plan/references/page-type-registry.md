@@ -43,7 +43,7 @@ Quick reference for the `website-plan` skill — which page types exist, when to
 
 When multiple source files could feed a page, prefer:
 1. Portfolio-communicate narratives (richest, already audience-tailored)
-2. Portfolio synthesize output (structured, complete)
+2. Portfolio entity data (structured, complete)
 3. Trend reports (executive-ready narrative with inline citations)
 4. Research reports (comprehensive, well-cited analysis)
 5. Raw entity JSON files (most granular, needs more transformation)

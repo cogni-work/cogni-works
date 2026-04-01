@@ -131,7 +131,7 @@ into a compelling executive narrative or story.
 **Purpose**: Portfolio messaging using IS/DOES/MEANS framework. Market-independent features
 (IS), market-specific advantages (DOES) and benefits (MEANS). TAM/SAM/SOM, competitors.
 
-**Key commands**: `/portfolio-setup`, `/portfolio-draft`, `/portfolio-export`
+**Key commands**: `/portfolio-setup`, `/portfolio-resume`, `/portfolio-communicate`
 
 **Use when**: User needs to define product/service propositions, map them to markets,
 size the opportunity, or analyze competitors.

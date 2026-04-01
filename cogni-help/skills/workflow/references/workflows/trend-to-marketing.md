@@ -25,7 +25,7 @@ graph LR
 
 ## Step 2: Portfolio Propositions (cogni-portfolio)
 
-**Command**: `/portfolio-setup` → `/portfolio-draft`
+**Command**: `/portfolio-setup` → entity skills → `/portfolio-communicate`
 
 **Input**: Investment themes from Step 1, plus your product/service catalog
 **Output**: Propositions mapped to markets using IS/DOES/MEANS framework

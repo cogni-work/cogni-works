@@ -5,7 +5,7 @@
 ```
 cogni-portfolio/{project-slug}/
 ├── portfolio.json                          # Root manifest (company context + config)
-├── README.md                               # Synthesized messaging repository
+├── README.md                               # Portfolio overview
 ├── products/
 │   └── {product-slug}.json                 # Product definitions
 ├── features/
@@ -29,7 +29,7 @@ cogni-portfolio/{project-slug}/
 ├── output/                                 # Generated exports (proposals, briefs, XLSX)
 │   ├── architecture.excalidraw            # Product-feature architecture diagram (Excalidraw)
 │   ├── dashboard.html                     # Interactive portfolio dashboard (HTML)
-│   └── README.md                          # Synthesized messaging repository
+│   └── README.md                          # Portfolio overview
 └── research/                               # Portfolio scan artifacts (when scan is used)
     ├── research-report.md                  # Scan findings per taxonomy dimension
     └── .logs/                              # Raw scan data (offerings, sources)

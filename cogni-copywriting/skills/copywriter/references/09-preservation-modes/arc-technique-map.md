@@ -542,6 +542,118 @@ Position for the new structure, not defense of the old. Apply You-Phrasing.
 
 ---
 
+## Arc: jtbd-portfolio
+
+**Elements:** Hook, Job Landscape, Friction Map, Portfolio Map, Invitation
+
+| Element | Heading | Primary Technique | Number Play Variant | Word Target |
+|---------|---------|-------------------|---------------------|-------------|
+| Hook | (opening paragraphs) | Pyramid Principle (answer-first) | Hero number isolation | 150-200 |
+| Job Landscape | Job Landscape | Contrast Structure + verb-phrase discipline | Specific quantification, ratio framing | 350-450 |
+| Friction Map | Friction Map | Forcing Functions + Compound Impact (per-job) | Before/after contrast | 300-400 |
+| Portfolio Map | Portfolio Map | IS-DOES-MEANS + You-Phrasing | Comparative anchoring | 400-500 |
+| Invitation | Invitation | You-Phrasing + single-option entry point | Ratio framing | 250-350 |
+
+### Job Landscape -- Element Rules
+
+**Primary technique: Contrast Structure with verb-phrase discipline**
+
+The Job Landscape reframes the portfolio from product categories to buyer jobs. Strengthen the contrast between seller-centric product names and buyer-centric verb phrases.
+
+<before_after>
+BEFORE (product categories):
+"Our portfolio includes Predictive Maintenance, Network Monitoring, and Compliance Management solutions."
+
+AFTER (buyer jobs as verb phrases):
+"Your buyers have three jobs: reduce unplanned downtime below 2%, monitor network health across 340 endpoints in real-time, and ensure regulatory compliance across 12 jurisdictions before Q1 audit."
+</before_after>
+
+**Strengthen:**
+- Contrast openers: "Your portfolio has N products. Your buyer has N jobs."
+- Every job starts with a verb (reduce, monitor, ensure, detect, know).
+- Quantify job scope where data exists (number of endpoints, jurisdictions, processes).
+- Buyer-language validation: would the buyer actually say this sentence?
+
+**Do NOT:**
+- Replace verb phrases with product category names.
+- Add more than 4 jobs (dilutes focus).
+- Use seller/internal terminology.
+
+---
+
+### Friction Map -- Element Rules
+
+**Primary technique: Forcing Functions with per-job Compound Impact**
+
+Each friction entry maps to a specific job from the Job Landscape. Strengthen cost quantification and obstacle specificity.
+
+<before_after>
+BEFORE (generic friction):
+"Organizations face challenges with digital transformation and legacy systems."
+
+AFTER (per-job friction with cost):
+"Reducing unplanned downtime below 2% is blocked by fragmented sensor data: 47 incompatible formats, 340 false positives per week, and 12 hours of manual correlation. Cost: EUR 4.3M annually in unplanned downtime at current failure rates."
+</before_after>
+
+**Strengthen:**
+- Per-job structure: each friction starts with the job verb phrase.
+- Cost of inaction quantified with specific EUR/USD figures and citations.
+- Forcing functions with deadlines where external pressures apply.
+- Obstacle stacking: multiple friction sources per job compound the case.
+
+**Do NOT:**
+- Merge per-job frictions into a single global friction narrative.
+- Remove cost quantification or replace with vague language.
+- Blame the buyer for existing friction.
+
+---
+
+### Portfolio Map -- Element Rules
+
+**Primary technique: IS-DOES-MEANS with You-Phrasing**
+
+Each solution maps 1:1 to a job from the Job Landscape. Strengthen IS/DOES/MEANS structure and ensure zero feature lists.
+
+<before_after>
+BEFORE (feature list):
+"Our platform includes real-time monitoring, predictive analytics, automated alerting, customizable dashboards, and API integrations."
+
+AFTER (IS/DOES/MEANS):
+"IS: A sensor-fusion platform that ingests 47 data formats into a unified asset health model. DOES: You detect failure patterns 72 hours before breakdown, reducing unplanned downtime by 63%. MEANS: The 47-format ingestion layer took 18 months of protocol engineering -- competitors read 8-12 formats."
+</before_after>
+
+**Strengthen:**
+- Job-first framing: each entry opens with "For the job of [verb phrase]."
+- You-Phrasing throughout DOES: "You detect...", "Your teams gain..."
+- Quantified outcomes in DOES (at least 2 per solution).
+- Specific moat in MEANS (time, knowledge, embedded, network, cost barriers).
+
+**Do NOT:**
+- Introduce feature lists or bullet-point capabilities.
+- Break the 1:1 job-to-solution mapping.
+- Use third-person framing in the DOES layer.
+
+---
+
+### Invitation -- Element Rules
+
+**Primary technique: You-Phrasing with single-option entry point**
+
+The Invitation provides one clear next step and signals cogni-sales handoff. Strengthen single-option discipline.
+
+**Strengthen:**
+- Single entry point: one named option with scope, duration, investment, deliverable.
+- You-Phrasing: "Start with your highest-friction job."
+- Cogni-sales handoff: explicit `/why-change` reference for deal-specific tailoring.
+- Outcome-focused deliverable: "Measured friction reduction on one job."
+
+**Do NOT:**
+- Introduce multiple options or pricing tiers (this is not a pricing page).
+- Remove or weaken the cogni-sales handoff signal.
+- Add feature lists or capability descriptions.
+
+---
+
 ## Cross-Arc Techniques
 
 These techniques apply to ALL arcs, every element. Strengthen them regardless of arc_id.

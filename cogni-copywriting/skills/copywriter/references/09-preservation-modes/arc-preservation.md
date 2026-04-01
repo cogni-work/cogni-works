@@ -59,8 +59,9 @@ subtitle: "..."
 | competitive-intelligence | Landscape | Shifts | Positioning | Implications |
 | strategic-foresight | Signals | Scenarios | Strategies | Decisions |
 | industry-transformation | Forces | Friction | Evolution | Leadership |
+| jtbd-portfolio | Job Landscape | Friction Map | Portfolio Map | Invitation |
 
-Match rule: Compare the document's H2 headings against the element columns above. A partial match on the first word is sufficient (e.g., "Why" matches "Why Change"). If 3 or more of the 4 elements match a single arc row, activate arc-aware mode with that arc_id.
+Match rule: Compare the document's H2 headings against the element columns above. A partial match on the first word is sufficient (e.g., "Why" matches "Why Change", "Job" matches "Job Landscape"). If 3 or more of the 4 elements match a single arc row, activate arc-aware mode with that arc_id.
 
 **Localized headings are also valid.** Arc element headings may appear in German:
 
@@ -70,6 +71,10 @@ Match rule: Compare the document's H2 headings against the element columns above
 | corporate-visions | Why Now | Warum Jetzt |
 | corporate-visions | Why You | Warum Wir |
 | corporate-visions | Why Pay | Warum Investieren |
+| jtbd-portfolio | Job Landscape | Job-Landschaft |
+| jtbd-portfolio | Friction Map | Reibungskarte |
+| jtbd-portfolio | Portfolio Map | Portfolio-Zuordnung |
+| jtbd-portfolio | Invitation | Einladung |
 
 Bridge section heading by language:
 - EN: "Further Reading"

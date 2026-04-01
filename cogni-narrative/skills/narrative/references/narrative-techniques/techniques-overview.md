@@ -158,13 +158,13 @@ Total Cost of Inaction =
 
 ## Application by Arc Element
 
-| Technique | Corporate Visions | Tech Futures | Competitive Intel | Strategic Foresight | Industry Transform | Trend Panorama | Theme Thesis |
-|-----------|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
-| Pyramid Principle | All | All | All | All | All | All | All |
-| PSB | Why Change | - | Landscape | - | Forces | Forces | Why Change |
-| IS-DOES-MEANS | Why You | What's Required | Positioning | Strategies | Leadership | Horizons, Foundations | Why You |
-| Number Plays | All | All | All | All | All | All | All |
-| Forcing Functions | Why Now | What's Required | Shifts | Signals | Friction | Forces, Foundations | Why Now |
-| Contrast Structure | Why Change | What's Emerging | Shifts | Scenarios | Forces | Forces, Impact | Why Change |
-| You-Phrasing | Why You | What's Possible | Positioning | Strategies | Leadership | Horizons, Foundations | Why You |
-| Compound Impact | Why Pay | What's Required | Implications | Decisions | Leadership | Impact, Foundations | Why Pay |
+| Technique | Corporate Visions | Tech Futures | Competitive Intel | Strategic Foresight | Industry Transform | Trend Panorama | Theme Thesis | JTBD Portfolio |
+|-----------|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
+| Pyramid Principle | All | All | All | All | All | All | All | All |
+| PSB | Why Change | - | Landscape | - | Forces | Forces | Why Change | Job Landscape |
+| IS-DOES-MEANS | Why You | What's Required | Positioning | Strategies | Leadership | Horizons, Foundations | Why You | Portfolio Map |
+| Number Plays | All | All | All | All | All | All | All | All |
+| Forcing Functions | Why Now | What's Required | Shifts | Signals | Friction | Forces, Foundations | Why Now | Friction Map |
+| Contrast Structure | Why Change | What's Emerging | Shifts | Scenarios | Forces | Forces, Impact | Why Change | Job Landscape |
+| You-Phrasing | Why You | What's Possible | Positioning | Strategies | Leadership | Horizons, Foundations | Why You | Portfolio Map, Invitation |
+| Compound Impact | Why Pay | What's Required | Implications | Decisions | Leadership | Impact, Foundations | Why Pay | Friction Map |

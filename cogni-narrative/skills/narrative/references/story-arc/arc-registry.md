@@ -15,6 +15,7 @@ This registry indexes all available story arcs for the cogni-narrative plugin. E
 | 5 | `industry-transformation` | Forces → Friction → Evolution → Leadership | - | Industry analysis, regulation | `content_type: "industry"` |
 | 6 | `trend-panorama` | Forces → Impact → Horizons → Foundations | T→I→P→S | Trend-scout output, TIPS reports | Structural + `"smarter-service"` |
 | 7 | `theme-thesis` | Change → Now → You → Pay | T→I→P→S | Theme-level investment narratives | `content_type: "theme"` |
+| 8 | `jtbd-portfolio` | Jobs → Friction → Portfolio → Invitation | - | Portfolio introductions, capability overviews, pre-sales | `content_type: "jtbd"` |
 
 ## Arc Selection Logic
 
@@ -240,6 +241,43 @@ This registry indexes all available story arcs for the cogni-narrative plugin. E
 
 ---
 
+### 8. JTBD Portfolio
+
+**Arc ID:** `jtbd-portfolio`
+**Display Name:** JTBD Portfolio
+**Elements:** Job Landscape → Friction Map → Portfolio Map → Invitation
+
+**Best For:**
+- Portfolio introductions (presenting a solution portfolio to new prospects)
+- Capability overviews (executive briefings on what the company solves)
+- Pre-sales positioning (framing the portfolio before deal-specific tailoring)
+- B2B portfolio narratives organized by buyer jobs, not product features
+
+**Description:**
+A 5-stage B2B portfolio narrative structured around Jobs-to-be-Done. Organises a solution portfolio by the functional jobs the buyer hires solutions for, rather than by product features. Suitable for portfolio introductions, capability overviews, and pre-sales positioning.
+
+**Detection Signals:**
+- `content_type: "jtbd"`
+- Keywords (>=12% density): "jobs-to-be-done", "functional job", "jtbd", "job landscape", "hire", "portfolio map", "capability overview", "pre-sales positioning"
+
+**JTBD-Specific Constraints:**
+- Jobs must be verb phrases, not product category names
+- Strict 1:1 job-to-solution mapping; orphaned solutions flagged
+- No feature lists -- IS/DOES/MEANS only per solution
+- Invitation stage explicitly signals cogni-sales handoff
+
+**Section Proportions:**
+- Hook (Context Setter): 10%
+- Job Landscape: 24%
+- Friction Map: 21%
+- Portfolio Map: 27%
+- Invitation: 18%
+- **Default total:** 1,675 words (customizable via `--target-length`)
+
+**Definition File:** `story-arc/jtbd-portfolio/arc-definition.md`
+
+---
+
 ## Arc Detection Algorithm
 
 ### Step 1: Explicit Selection
@@ -277,6 +315,7 @@ const arcMap = {
   "foresight": "strategic-foresight",
   "scenarios": "strategic-foresight",
   "industry": "industry-transformation",
+  "jtbd": "jtbd-portfolio",
   "market": "corporate-visions",
   "generic": "corporate-visions"
 }
@@ -304,7 +343,8 @@ keyword_sets = {
   "technology-futures": ["emerging", "innovation", "capability", "technology", "R&D", "breakthrough"],
   "competitive-intelligence": ["competitor", "market share", "positioning", "differentiation", "threat", "rivalry"],
   "strategic-foresight": ["scenario", "future", "signal", "uncertainty", "planning", "foresight"],
-  "industry-transformation": ["regulatory", "sector", "structural", "industry", "transformation", "policy"]
+  "industry-transformation": ["regulatory", "sector", "structural", "industry", "transformation", "policy"],
+  "jtbd-portfolio": ["jobs-to-be-done", "functional job", "jtbd", "job landscape", "hire", "portfolio map", "capability overview", "pre-sales positioning"]
 }
 
 thresholds = {
@@ -313,7 +353,8 @@ thresholds = {
   "technology-futures": 0.15,
   "competitive-intelligence": 0.12,
   "strategic-foresight": 0.10,
-  "industry-transformation": 0.12
+  "industry-transformation": 0.12,
+  "jtbd-portfolio": 0.12
 }
 ```
 

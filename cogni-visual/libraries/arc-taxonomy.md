@@ -32,6 +32,7 @@ When the source narrative carries an `arc_id` from cogni-narrative (in YAML fron
 | `competitive-intelligence` | `argument` | Competitive Intelligence | Elements (Landscape/Shifts/Positioning/Implications) build an analytical case |
 | `trend-panorama` | `journey` | Trend Panorama | Elements (Forces/Impact/Horizons/Foundations) describe a progression from external pressures to capability requirements |
 | `theme-thesis` | `why-change` | Theme Thesis | Elements (Why Change/Why Now/Why You/Why Pay) follow the same tension-to-action pattern as Corporate Visions, purpose-built for investment theme narratives |
+| `jtbd-portfolio` | `argument` | JTBD Portfolio | Elements (Job Landscape/Friction Map/Portfolio Map/Invitation) build an analytical case from buyer jobs through friction to solutions |
 
 **Fallback:** If `arc_id` is not in this table, fall back to auto-detection from narrative content (same behavior as when no `arc_id` is present).
 
@@ -103,6 +104,15 @@ Each arc has 4 ordered elements that represent the phases of the narrative struc
 | 2 | Why Now | Warum Jetzt | Urgency and window of opportunity |
 | 3 | Why You | Warum Wir | Strategic capabilities and differentiation |
 | 4 | Why Pay | Warum Investieren | Business case and expected returns |
+
+### jtbd-portfolio
+
+| # | Element (EN) | Element (DE) | Narrative Function |
+|---|-------------|-------------|-------------------|
+| 1 | Job Landscape | Job-Landschaft | Functional jobs the buyer hires solutions for |
+| 2 | Friction Map | Reibungskarte | Per-job obstacles and cost of inaction |
+| 3 | Portfolio Map | Portfolio-Zuordnung | Solutions mapped 1:1 to jobs via IS/DOES/MEANS |
+| 4 | Invitation | Einladung | Low-commitment entry point with cogni-sales handoff |
 
 ---
 

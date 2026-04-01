@@ -25,6 +25,7 @@ Output templates for the `pitch` use case. Transforms portfolio entities into ar
 | `corporate-visions` (default) | B2B sales, market pitch, executive briefing | Customers → Why Change, Markets → Why Now, Propositions → Why You, Solutions → Why Pay |
 | `competitive-intelligence` | Competitive positioning presentation | Competitors → Landscape/Shifts, Propositions → Positioning, Markets → Implications |
 | `industry-transformation` | Industry conference, thought leadership | Markets → Forces, Competitors → Friction, Features → Evolution, Products → Leadership |
+| `jtbd-portfolio` | Portfolio introduction, capability overview, pre-sales positioning | Customers → Job Landscape, Customers+Competitors → Friction Map, Propositions → Portfolio Map, Solutions → Invitation |
 
 Other arcs (`technology-futures`, `strategic-foresight`, `trend-panorama`, `theme-thesis`) are better served by cogni-trends or cogni-research input — portfolio data alone is usually insufficient for these arcs.
 
@@ -160,6 +161,96 @@ For each Power Position, select a high-tier proposition (use relevance tiers fro
 - `packages/*.json` → bundled tier pricing (preferred over individual solutions)
 - `customers/*.json` → pain point business impact for cost of inaction
 - `propositions/*.json` → evidence with financial/operational metrics
+
+### Evidence Mapping: Portfolio Entities → JTBD Portfolio Elements
+
+When `--arc-id jtbd-portfolio` is selected, the evidence mapping shifts from the corporate-visions pattern to a Jobs-to-be-Done structure. Read the arc definition from `cogni-narrative/skills/narrative/references/story-arc/jtbd-portfolio/arc-definition.md` for element names, proportions, and quality gates.
+
+#### Hook / Context Setter (10% of target length)
+
+**Source**: `markets/{market}.json` description + `portfolio.json` industry context
+
+**Pattern**: One sharp industry observation that creates inevitability — the buyer's world is changing in a way that makes the jobs in this portfolio urgent.
+
+**Example**: "European utilities manage 4,200 discrete operational processes. They buy solutions for 12 of them.<sup>[1](markets/grosse-energieversorger-de.json)</sup>"
+
+#### Job Landscape: Functional Jobs (24% of target length)
+
+**Source**: `customers/{market}.json` pain_points + `propositions/{feature}--{market}.json` DOES statements
+
+**Structure**: 3-4 functional jobs as verb phrases in buyer language
+- Extract jobs from customer pain points (each pain point implies a job)
+- Cross-reference with proposition DOES statements (each DOES reveals the underlying job)
+- Phrase as verb phrases: "Reduce unplanned downtime below 2%", not "Predictive Maintenance"
+
+**Constraints**:
+- Jobs MUST be verb phrases (start with a verb, describe a measurable outcome)
+- Jobs MUST NOT be product category names or internal feature labels
+- 3-4 jobs total
+
+**Data mapping**:
+- `customers/{market}.json` → `profiles[].pain_points` reversed to job verb phrases
+- `propositions/*.json` → `does_statement` abstracted to underlying buyer job
+- `markets/{market}.json` → industry vocabulary for buyer-language validation
+
+#### Friction Map: Obstacles and Cost of Inaction (21% of target length)
+
+**Source**: `customers/{market}.json` pain_points (detail) + `competitors/{feature}--{market}.json` + `propositions/{feature}--{market}.json` evidence
+
+**Structure**: Per-job friction with quantified cost of inaction
+- For each job from Job Landscape: identify primary obstacle + cost of not solving it
+- Use Forcing Functions where external pressures apply
+- Apply Compound Impact to stack costs across all jobs
+
+**Data mapping**:
+- `customers/{market}.json` → pain point details for per-job obstacles
+- `competitors/*.json` → current approach weaknesses showing why existing solutions fail
+- `propositions/*.json` → `evidence[]` for cost quantification per job
+
+#### Portfolio Map: Solutions by Job (27% of target length)
+
+**Source**: `propositions/{feature}--{market}.json` IS/DOES/MEANS + `features/{feature}.json`
+
+**Structure**: 1:1 job-to-solution using IS/DOES/MEANS per entry
+- For each job from Job Landscape: present the matching solution
+- IS from proposition `is_statement` + feature description
+- DOES from `does_statement` with You-Phrasing and quantified outcomes
+- MEANS from `means_statement` + competitive differentiation
+
+**Constraints**:
+- STRICT 1:1 mapping: each job gets exactly one solution
+- If a proposition has no matching job, flag as orphaned
+- NO feature lists — IS/DOES/MEANS only per solution
+- Count(jobs) == Count(solutions mapped)
+
+**Data mapping**:
+- `propositions/*.json` → `is_statement`, `does_statement`, `means_statement` for IS/DOES/MEANS
+- `features/*.json` → `description` for the IS layer
+- `propositions/*.json` → `evidence[]` for DOES quantification
+- `competitors/*.json` → differentiation for MEANS moat
+
+#### Invitation: Next Step (18% of target length)
+
+**Source**: `solutions/{feature}--{market}.json` entry tiers + `packages/{product}--{market}.json` starter tier
+
+**Structure**: One low-commitment entry point + cogni-sales handoff
+- Identify the lowest-commitment entry option (PoV, pilot, starter, assessment)
+- Present as a single next step with investment and deliverable
+- Explicitly signal cogni-sales `/why-change` for deal-specific tailoring
+
+**Constraints**:
+- ONE entry point only — not a pricing menu
+- Must include explicit cogni-sales handoff: reference `/why-change`
+- Frame as invitation, not hard sell
+
+**Data mapping**:
+- `solutions/*.json` → entry-level implementation phase or pricing tier
+- `packages/*.json` → starter/entry-level bundle tier
+- Portfolio context → company engagement model
+
+**Localized headers** (jtbd-portfolio):
+- EN: `Job Landscape: Functional Jobs` / `Friction Map: Obstacles and Cost of Inaction` / `Portfolio Map: Solutions by Job` / `Invitation: Next Step`
+- DE: `Job-Landschaft: Funktionale Aufgaben` / `Reibungskarte: Hindernisse und Handlungsdruck` / `Portfolio-Zuordnung: Lösungen je Aufgabe` / `Einladung: Nächster Schritt`
 
 ---
 

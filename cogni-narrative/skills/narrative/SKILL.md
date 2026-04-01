@@ -276,6 +276,7 @@ If any gate fails, fix the specific issue and re-validate all gates (fixes can b
 | `strategic-foresight` | Signals -> Scenarios -> Strategies -> Decisions | Long-range planning, scenario analysis |
 | `industry-transformation` | Forces -> Friction -> Evolution -> Leadership | Industry analysis, regulatory impact |
 | `trend-panorama` | Forces -> Impact -> Horizons -> Foundations (TIPS) | Trend-scout output, TIPS trend reports |
+| `jtbd-portfolio` | Jobs -> Friction -> Portfolio -> Invitation | Portfolio introductions, capability overviews, pre-sales |
 
 See [references/story-arc/arc-registry.md](references/story-arc/arc-registry.md) for detection signals, word targets, and extension guidelines.
 

@@ -417,6 +417,15 @@ Exact `##` section headers for insight-summary.md output, per arc and language. 
 | 3 | Why You: The Portfolio Response | Warum Sie: Die Portfolio-Antwort | P + S + STs |
 | 4 | Why Pay: The Business Case | Geschäftliche Auswirkungen: Der Business Case | I + S |
 
+**jtbd-portfolio:**
+
+| Element | English (en) | German (de) |
+|---------|--------------|-------------|
+| 1 | Job Landscape: Functional Jobs | Job-Landschaft: Funktionale Aufgaben |
+| 2 | Friction Map: Obstacles and Cost of Inaction | Reibungskarte: Hindernisse und Handlungsdruck |
+| 3 | Portfolio Map: Solutions by Job | Portfolio-Zuordnung: Lösungen je Aufgabe |
+| 4 | Invitation: Next Step | Einladung: Nächster Schritt |
+
 ## German Text Formatting
 
 When generating content in German (`language: "de"`):

@@ -5,7 +5,7 @@ Portfolio messaging and proposition planning — from product definition through
 ## Plugin Architecture
 
 ```
-skills/                         19 portfolio skills
+skills/                         18 portfolio skills
   portfolio-setup/                Initialize project with company context and taxonomy
   portfolio-canvas/               Bootstrap from Lean Canvas or Business Model Canvas
   portfolio-scan/                 Discover offerings via web scanning + taxonomy classification
@@ -23,7 +23,6 @@ skills/                         19 portfolio skills
   compete/                        Competitive landscape analysis per proposition
   customers/                      Ideal customer profiles and buyer personas per market
   portfolio-verify/               Orchestrate claim verification via cogni-claims
-  synthesize/                     Aggregate all entities into structured messaging repository
   portfolio-communicate/          All portfolio output: pitches, proposals, briefs, workbooks, docs
     references/
       templates-customer-narrative.md   Customer-facing documentation
@@ -84,7 +83,7 @@ references/
 
 | Type | Count | Items |
 |------|-------|-------|
-| Skills | 19 | portfolio-setup, portfolio-canvas, portfolio-scan, portfolio-ingest, products, features, markets, propositions, solutions, packages, compete, customers, portfolio-verify, synthesize, portfolio-communicate, portfolio-dashboard, portfolio-architecture, trends-bridge, portfolio-resume |
+| Skills | 18 | portfolio-setup, portfolio-canvas, portfolio-scan, portfolio-ingest, products, features, markets, propositions, solutions, packages, compete, customers, portfolio-verify, portfolio-communicate, portfolio-dashboard, portfolio-architecture, trends-bridge, portfolio-resume |
 | Agents | 17 | market-researcher, competitor-researcher, customer-researcher, customer-review-assessor, proposition-generator, proposition-quality-assessor, proposition-review-assessor, proposition-deep-diver, solution-planner, solution-review-assessor, feature-quality-assessor, feature-review-assessor, feature-deep-diver, quality-enricher, communicate-review-assessor, dashboard-refresher, portfolio-web-researcher |
 
 ## Typical Workflow
@@ -96,7 +95,7 @@ portfolio-setup → products → features → markets → customers → proposit
                                                                     ↓
                                                           portfolio-verify (claims)
                                                                     ↓
-                                                     synthesize → portfolio-communicate
+                                                            portfolio-communicate
                                                                      ├── pitch → story-to-slides
                                                                      ├── proposal
                                                                      ├── market-brief

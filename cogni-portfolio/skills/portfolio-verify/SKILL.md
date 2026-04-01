@@ -4,14 +4,14 @@ description: |
   Verify web-sourced claims in portfolio entities against their cited sources.
   Use whenever the user mentions verify, fact-check, check claims, claim status,
   review deviations, source check, "are these numbers right", "check my sources",
-  or wants to validate portfolio data before synthesis — even if they don't say
-  "verify" explicitly.
+  or wants to validate portfolio data before generating deliverables — even if they
+  don't say "verify" explicitly.
 allowed-tools: Read, Write, Edit, Glob, Grep, Skill
 ---
 
 # Portfolio Claim Verification
 
-Verify web-sourced claims submitted by portfolio research agents against their cited sources. This is the quality gate between enrichment and synthesis.
+Verify web-sourced claims submitted by portfolio research agents against their cited sources. This is the quality gate between enrichment and communicate.
 
 ## Core Concept
 
@@ -85,13 +85,13 @@ If deviated claims exist, offer resolution options:
 
 1. **Review and resolve individually** — invoke `cogni-claims:claims` with mode `resolve` for each
 2. **Show dashboard** — invoke `cogni-claims:claims` with mode `dashboard` for full overview
-3. **Proceed to synthesis anyway** — warn that unresolved deviations will be flagged in output
+3. **Proceed to communicate anyway** — warn that unresolved deviations will be flagged in output
 
 Never auto-resolve deviations. The user must decide whether to correct the data, accept the deviation with justification, or flag it for later review. They know their domain best.
 
-### 6. Synthesis Gate
+### 6. Communicate Gate
 
-Present the verification status as a gate before synthesis:
+Present the verification status as a gate before generating deliverables:
 
 ```
 Verification Gate:
@@ -100,10 +100,10 @@ Verification Gate:
 - Deviated (unresolved): N claims (will be flagged in output)
 - Unverified: N claims (will be flagged in output)
 
-Recommendation: [Resolve remaining deviations / Ready for synthesis]
+Recommendation: [Resolve remaining deviations / Ready for communicate]
 ```
 
-If all claims are verified or resolved, confirm the portfolio is ready for synthesis. If deviations remain, the user may still proceed — the synthesize and export skills will mark unverified content so readers know which data points haven't been checked.
+If all claims are verified or resolved, confirm the portfolio is ready for communicate. If deviations remain, the user may still proceed — the communicate skill will mark unverified content so readers know which data points haven't been checked.
 
 ## Important Notes
 

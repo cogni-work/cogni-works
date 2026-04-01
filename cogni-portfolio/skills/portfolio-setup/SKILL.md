@@ -148,8 +148,7 @@ Present the created project structure and suggest next steps.
 5. Define implementation plans and pricing with the `solutions` skill
 6. Enrich with `compete` and `customers`
 7. Verify web-sourced claims with the `verify` skill
-8. Aggregate with the `synthesize` skill
-9. Generate deliverables with the `export` skill
+8. Generate deliverables with the `communicate` skill
 
 **If scan did not run:** Two paths to populate the portfolio:
 

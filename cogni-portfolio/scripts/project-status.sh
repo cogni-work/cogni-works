@@ -424,11 +424,6 @@ else
   CUSTOMERS_PCT=0
 fi
 
-HAS_README="false"
-if [ -f "$PROJECT_DIR/output/README.md" ]; then HAS_README="true"; fi
-HAS_XLSX="false"
-if [ -f "$PROJECT_DIR/output/portfolio.xlsx" ]; then HAS_XLSX="true"; fi
-
 # Count communicate output files and review verdicts
 COMMUNICATE_TOTAL=0
 COMMUNICATE_ACCEPTED=0
@@ -622,10 +617,6 @@ elif [ "$SOLUTIONS_PCT" -lt 100 ] || [ "$COMPETITORS_PCT" -lt 100 ] || [ "$CUSTO
   PHASE="enrichment"
 elif [ "$HAS_CLAIMS" = "true" ] && [ "$CLAIMS_PENDING" -gt 0 ]; then
   PHASE="verification"
-elif [ "$HAS_README" = "false" ]; then
-  PHASE="synthesis"
-elif [ "$HAS_XLSX" = "false" ]; then
-  PHASE="export"
 elif [ "$HAS_COMMUNICATE" = "false" ]; then
   PHASE="communicate"
 else
@@ -711,14 +702,8 @@ case "$PHASE" in
   verification)
     add_action "verify" "$CLAIMS_PENDING claim(s) pending verification ($CLAIMS_UNVERIFIED unverified, $CLAIMS_DEVIATED deviated)"
     ;;
-  synthesis)
-    add_action "synthesize" "All entities complete -- ready to generate portfolio overview"
-    ;;
-  export)
-    add_action "export" "Synthesis done -- ready to generate deliverables"
-    ;;
   communicate)
-    add_action "communicate" "Export done -- ready to generate portfolio communication (customer narratives, repo docs, or custom)"
+    add_action "communicate" "All entities complete -- ready to generate portfolio deliverables (pitches, proposals, briefs, workbooks, docs)"
     ;;
   complete)
     ;;

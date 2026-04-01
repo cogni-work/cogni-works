@@ -189,7 +189,7 @@ Valid `taxonomy_mapping.horizon` values: `current` (0-1yr, GA), `emerging` (1-3y
 - `market_slug` (string, required): Must match an existing `markets/{slug}.json` file
 - `reason` (string, required): Explains why this feature is not relevant for that market
 
-Excluded pairs are subtracted from expected proposition counts and omitted from missing-proposition lists. Downstream quality assessors, the dashboard, and synthesize treat them as intentionally absent — not as gaps. The propositions skill can persist exclusion decisions from its consultation workflow directly into this field.
+Excluded pairs are subtracted from expected proposition counts and omitted from missing-proposition lists. Downstream quality assessors, the dashboard, and communicate treat them as intentionally absent — not as gaps. The propositions skill can persist exclusion decisions from its consultation workflow directly into this field.
 
 ### markets/{slug}.json
 
@@ -786,11 +786,10 @@ Scan offerings are intermediate research artifacts stored in `research/.logs/`, 
 | Ingest | portfolio-ingest | Extract entities and context from uploaded documents |
 | Scan | portfolio-scan | Discover services by scanning company websites |
 | Verify | portfolio-verify | Verify web-sourced claims against cited sources |
-| Synthesize | synthesize | Aggregate all entities into README.md messaging repository |
-| Export | portfolio-export | Generate proposals, market briefs, XLSX workbooks |
+| Communicate | portfolio-communicate | Generate pitches, proposals, briefs, workbooks, docs for any audience |
 | Bridge | trends-bridge | Bidirectional TIPS integration (matching, enrichment, opportunities) |
 
-Recommended pipeline order: setup -> [products -> features -> markets -> propositions] -> customers -> solutions -> packages -> compete -> verify -> synthesize -> export
+Recommended pipeline order: setup -> [products -> features -> markets -> propositions] -> customers -> solutions -> packages -> compete -> verify -> communicate
 
 ## Entity Relationships
 

@@ -99,7 +99,7 @@ What specific products/features do they use? What does the result look like?}
 structure and feature relationships to explain how the pieces fit together.
 
 If the project has a clear workflow (e.g., setup -> define features ->
-generate propositions -> synthesize -> export), describe it as numbered steps.
+generate propositions -> communicate), describe it as numbered steps.
 
 If the project is more modular (pick the plugins you need), describe
 the module structure and how modules interact.

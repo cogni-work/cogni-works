@@ -17,15 +17,14 @@ description: |
   "spreadsheet", "XLSX", "workbook", "portfolio workbook", "send to Excel",
   "download portfolio", "collateral", "deliverable", or wants to turn internal
   portfolio data into something any audience can read, present, or analyze — even
-  if they don't say "communicate" explicitly. Also trigger when the user has
-  completed synthesize and asks "how do I present this", "how do I document this",
-  or "how do I export this".
+  if they don't say "communicate" explicitly. Also trigger when the user asks
+  "how do I present this", "how do I document this", or "how do I export this".
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion, Skill
 ---
 
 # Portfolio Communicate
 
-The single output skill for the portfolio pipeline. Where `synthesize` produces an internal messaging repository, this skill transforms portfolio entities into **anything an external audience needs** — documentation, pitch narratives, proposals, marketing briefs, or data workbooks. It routes through a use-case registry that matches the audience and purpose to the right voice, templates, and review perspectives.
+The single output skill for the portfolio pipeline. Transforms portfolio entities into **anything an audience needs** — documentation, pitch narratives, proposals, marketing briefs, or data workbooks. It routes through a use-case registry that matches the audience and purpose to the right voice, templates, and review perspectives.
 
 ## Core Concept
 
@@ -55,8 +54,6 @@ bash $CLAUDE_PLUGIN_ROOT/scripts/project-status.sh "<project-dir>"
 Minimum requirements:
 - At least 1 product, 1 feature (with valid product_slug), 1 market, and 1 proposition
 - `portfolio.json` has company context filled in
-
-Running `synthesize` first is recommended as a quality gate — if the internal messaging repository reads well, output will be strong. Not strictly required.
 
 If `cogni-claims/claims.json` exists, check claim verification status. Warn about unverified claims and recommend running the `verify` skill first. Allow the user to proceed — handle unverified claims according to the use case (customer-narrative: omit silently; repo-documentation: include with `[unverified]` marker; ad-hoc: ask the user).
 
@@ -299,7 +296,7 @@ When the user selects "something else" or describes a purpose that doesn't match
 
 ## Important Notes
 
-- Output goes to `output/communicate/{use-case-id}/` — separate from synthesize (`output/README.md`)
+- Output goes to `output/communicate/{use-case-id}/`
 - Re-running overwrites previous output for that scope within the use case
 - Each generated file includes YAML frontmatter with `use_case` field
 - **Content Language**: Read `portfolio.json` `language` field. Generate content in that language if present, default to English

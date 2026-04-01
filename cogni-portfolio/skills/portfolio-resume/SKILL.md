@@ -95,7 +95,7 @@ Keep the tone warm and oriented toward action — this is a welcome-back moment,
 
 Present each entry from `next_actions` with the skill name and reason. Offer to proceed with the top recommendation immediately.
 
-If the phase is `complete`, congratulate the user and suggest reviewing outputs or running `export` for additional deliverables. If communicate files are stale (indicated by a communicate action in `next_actions`), mention that `portfolio-communicate` should be re-run to refresh customer-facing documentation.
+If the phase is `complete`, congratulate the user and suggest reviewing outputs or running `portfolio-communicate` for additional deliverables. If communicate files are stale (indicated by a communicate action in `next_actions`), mention that `portfolio-communicate` should be re-run to refresh customer-facing documentation.
 
 ## Phase Reference
 
@@ -108,14 +108,12 @@ If the phase is `complete`, congratulate the user and suggest reviewing outputs 
 | `propositions` | Feature x Market pairs need messaging | Run `propositions` skill |
 | `enrichment` | Propositions exist, solution/competitor gaps remain | Run `solutions`, `compete`, and/or `customers` for remaining markets |
 | `verification` | Unverified or deviated claims pending | Run `verify` skill |
-| `synthesis` | All entities complete, claims clean | Run `synthesize` skill |
-| `export` | Overview generated, deliverables pending | Run `export` skill |
-| `communicate` | Deliverables generated, customer-facing docs pending | Run `communicate` skill |
-| `complete` | All workflow stages finished | Review outputs, re-export, or refresh `communicate` if upstream data changed |
+| `communicate` | All entities complete, claims clean | Run `communicate` skill |
+| `complete` | All workflow stages finished | Review outputs or refresh `communicate` if upstream data changed |
 
 ## Multi-Session Design
 
-This skill is the recommended re-entry point after heavy sessions. Portfolio work naturally spans multiple sessions — batch proposition generation, competitive analysis, solution design, and dashboard generation each consume significant context. Other portfolio skills proactively recommend `/portfolio-resume` when they detect a heavy session (multiple batch operations, 3+ skills invoked, or capstone operations like portfolio-dashboard/synthesize/export completed).
+This skill is the recommended re-entry point after heavy sessions. Portfolio work naturally spans multiple sessions — batch proposition generation, competitive analysis, solution design, and dashboard generation each consume significant context. Other portfolio skills proactively recommend `/portfolio-resume` when they detect a heavy session (multiple batch operations, 3+ skills invoked, or capstone operations like portfolio-dashboard/portfolio-communicate completed).
 
 When presenting the status summary, acknowledge what the user accomplished in previous sessions if recent entity timestamps suggest a productive recent session. This continuity helps users feel their work persists and builds confidence in the multi-session workflow.
 

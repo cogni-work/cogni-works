@@ -62,7 +62,7 @@ Tier assignments are computed by `project-status.sh` based on feature readiness 
 
 ### Persisting Exclusion Decisions
 
-When you recommend skipping a Feature x Market pair and the user confirms, persist the decision by adding the market to `excluded_markets` in `features/{feature-slug}.json`. This ensures the decision survives across sessions and is respected by all downstream consumers (dashboard, resume, quality assessors, synthesize). Always include a reason — use the rationale discussed during consultation.
+When you recommend skipping a Feature x Market pair and the user confirms, persist the decision by adding the market to `excluded_markets` in `features/{feature-slug}.json`. This ensures the decision survives across sessions and is respected by all downstream consumers (dashboard, resume, quality assessors, communicate). Always include a reason — use the rationale discussed during consultation.
 
 ```json
 {

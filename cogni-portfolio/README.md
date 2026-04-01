@@ -21,12 +21,12 @@ A structured portfolio messaging workflow for Claude Cowork. Eight pluggable tax
 
 1. **Setup** a portfolio project — capture company context, select industry taxonomy, initialize directory structure → `portfolio.json` → features, markets, products, portfolio-scan
 2. **Define** products, features (IS layer), and target markets with TAM/SAM/SOM sizing → `features/*.json` → propositions, solutions, packages
-3. **Generate** IS/DOES/MEANS propositions for each Feature x Market pair — individually or in batch → `propositions/{feature}--{market}.json` → solutions, packages, synthesize, compete
-4. **Plan** solutions with implementation phases and tiered pricing (PoV/S/M/L) → `solutions/{feature}--{market}.json` → packages, why-change, synthesize
-5. **Analyze** 3-5 competitors per proposition with positioning, strengths, weaknesses, and differentiation → `competitors/*.json` → propositions, synthesize
-6. **Profile** ideal customers and buyer personas per target market → `customers/*.json` → synthesize, portfolio-communicate
+3. **Generate** IS/DOES/MEANS propositions for each Feature x Market pair — individually or in batch → `propositions/{feature}--{market}.json` → solutions, packages, compete
+4. **Plan** solutions with implementation phases and tiered pricing (PoV/S/M/L) → `solutions/{feature}--{market}.json` → packages, why-change
+5. **Analyze** 3-5 competitors per proposition with positioning, strengths, weaknesses, and differentiation → `competitors/*.json` → propositions
+6. **Profile** ideal customers and buyer personas per target market → `customers/*.json` → portfolio-communicate
 7. **Verify** research-backed claims against cited sources via cogni-claims
-8. **Synthesize** a structured messaging repository and export proposals, briefs, and workbooks → `output/README.md` → portfolio-communicate, portfolio-dashboard, portfolio-export
+8. **Communicate** — generate pitches, proposals, briefs, workbooks, and documentation for any audience → `output/communicate/`
 9. **Bootstrap** from a Lean Canvas or Business Model Canvas — extract products, features, and markets from a founding-stage hypothesis document
 10. **Deep-dive** into individual features or propositions with competitive landscape research, buyer language validation, and interactive co-creation
 
@@ -57,8 +57,7 @@ This plugin is part of the [insight-wave monorepo](https://github.com/cogni-work
 /solutions                                 # define implementation plans and pricing
 /compete                                   # analyze competitors per proposition
 /portfolio-verify                          # verify claims against sources
-/synthesize                                # generate messaging repository
-/portfolio-export                          # produce proposals, briefs, workbooks
+/portfolio-communicate                     # produce pitches, proposals, briefs, workbooks
 /portfolio-dashboard                       # interactive HTML status dashboard
 /portfolio-architecture                    # product-feature architecture diagram
 ```
@@ -102,7 +101,7 @@ See [references/data-model.md](references/data-model.md) for the full schema wit
 
 ## How it works
 
-Each portfolio project lives in `cogni-portfolio/{slug}/` with typed JSON files organized by entity. The workflow follows a logical progression: setup → products → features → markets → propositions → customers → solutions → compete → verify → synthesize → export. Research-intensive steps (market sizing, competitive analysis, customer profiling) dispatch parallel web-research agents. Propositions are scored by quality assessors against DOES/MEANS criteria, with a quality gate for downstream consumption.
+Each portfolio project lives in `cogni-portfolio/{slug}/` with typed JSON files organized by entity. The workflow follows a logical progression: setup → products → features → markets → propositions → customers → solutions → compete → verify → communicate. Research-intensive steps (market sizing, competitive analysis, customer profiling) dispatch parallel web-research agents. Propositions are scored by quality assessors against DOES/MEANS criteria, with a quality gate for downstream consumption.
 
 ## Components
 
@@ -119,9 +118,7 @@ Each portfolio project lives in `cogni-portfolio/{slug}/` with typed JSON files 
 | `compete` | skill | Analyze 3-5 competitors per proposition |
 | `customers` | skill | Create ideal customer profiles and buyer personas |
 | `portfolio-verify` | skill | Orchestrate claim verification via cogni-claims |
-| `synthesize` | skill | Generate structured messaging repository |
-| `portfolio-export` | skill | Produce proposals, briefs, and workbooks |
-| `portfolio-communicate` | skill | Generate portfolio documentation for any audience (customer narratives, repo docs, custom) |
+| `portfolio-communicate` | skill | Generate portfolio deliverables for any audience (pitches, proposals, briefs, workbooks, docs) |
 | `portfolio-dashboard` | skill | Interactive HTML dashboard |
 | `portfolio-architecture` | skill | Interactive Excalidraw architecture diagram of products, features, and cross-product bridges |
 | `portfolio-scan` | skill | Discover offerings via web research and classify against taxonomy |
@@ -160,7 +157,7 @@ cogni-portfolio/
 │   ├── b2b-industrial-tech/      Industrial Tech (8 dims, 48 cats)
 │   ├── b2b-professional-services/ Prof. Services (8 dims, 44 cats)
 │   └── b2b-opensource/           Commercial OSS (8 dims, 50 cats)
-├── skills/                       20 portfolio skills
+├── skills/                       18 portfolio skills
 ├── agents/                       17 delegation agents
 ├── references/
 │   └── data-model.md             Full entity schema

@@ -209,23 +209,9 @@ Analyze 3–5 competitors per proposition. Competitive analysis is proposition-s
 
 ### portfolio-verify
 
-Verify web-sourced claims in portfolio entities against their cited source URLs via cogni-claims. Research agents auto-log every web-sourced fact to `cogni-claims/claims.json`. This skill checks each claim before synthesis.
+Verify web-sourced claims in portfolio entities against their cited source URLs via cogni-claims. Research agents auto-log every web-sourced fact to `cogni-claims/claims.json`. This skill checks each claim before generating deliverables.
 
-**Example prompt:** "Verify all claims before I synthesize the portfolio"
-
----
-
-### synthesize
-
-Aggregate all entities into a structured messaging repository (`output/README.md`). The centrepiece is the Proposition Messaging Matrix — Feature x Market coverage at a glance, with gaps and quality signals visible.
-
-**Example prompt:** "Synthesize the full portfolio into a messaging repository"
-
----
-
-### portfolio-export
-
-Generate proposals, market briefs, and XLSX workbooks from portfolio entities. Each export type serves a different audience: proposals for deal teams, briefs for marketing, workbooks for stakeholder analysis.
+**Example prompt:** "Verify all claims before I generate the portfolio deliverables"
 
 **Example prompt:** "Export a market brief for the healthcare vertical in DACH, and a proposal for Acme Corp"
 
@@ -312,8 +298,8 @@ Detect the current workflow phase, show entity counts and coverage gaps, and rec
 |--------|-------|-----------------|
 | cogni-claims | portfolio-verify | Claims submitted for source URL verification |
 | cogni-trends | trends-bridge | Portfolio anchors that enrich TIPS solution relevance scoring |
-| document-skills | portfolio-export | XLSX workbook generation for deliverables |
-| cogni-narrative | (manual) | Synthesized messaging repository as narrative input |
+| document-skills | portfolio-communicate | XLSX workbook generation for deliverables |
+| cogni-narrative | portfolio-communicate | Pitch narratives with arc_id for story-to-slides |
 
 ---
 
@@ -331,8 +317,7 @@ Use this when launching a new product or entering a new market segment.
 6. `/customers` — profile the buyers per market
 7. `/compete` — map competitors per proposition
 8. `/portfolio-verify` — verify web-sourced claims
-9. `/synthesize` — compile the messaging repository
-10. `/portfolio-export` — produce proposals and market briefs
+9. `/portfolio-communicate` — produce pitches, proposals, briefs, and workbooks
 
 For multi-plugin flows that extend this into trend-informed positioning, see [../workflows/portfolio-trends-positioning.md](../workflows/portfolio-trends-positioning.md).
 
@@ -347,7 +332,7 @@ Use this when you have product decks, strategy briefs, or competitive intelligen
 3. `/features` — review and enrich extracted features (quality assessment)
 4. `/markets` — validate and size extracted markets
 5. `/propositions` — generate messaging for Feature x Market pairs not covered by ingested content
-6. `/synthesize` + `/portfolio-export`
+6. `/portfolio-communicate` — generate deliverables
 
 ---
 
@@ -360,7 +345,7 @@ Use this when a specific proposition feels generic or loses to a competitor.
    - Co-creates sharper DOES/MEANS through interactive dialogue
 2. `/compete` — refresh competitor analysis for that proposition
 3. `/portfolio-verify` — re-verify updated claims
-4. `/synthesize` — regenerate the messaging repository with updated content
+4. `/portfolio-communicate` — regenerate deliverables with updated content
 
 ---
 
@@ -371,7 +356,7 @@ Use this when a specific proposition feels generic or loses to a competitor.
 | "No portfolio project found" | Running a skill before setup | Run `/portfolio-setup` first |
 | Propositions blocked by quality gate | Features failed quality assessment | Run `/features` again and address the feedback from the quality assessor |
 | Market sizing feels wrong | Research agent used low-quality sources | Run `/portfolio-verify` to check TAM/SAM/SOM claims against their source URLs |
-| Export has thin competitor sections | `/compete` not run for those propositions | Run `/compete` for missing Feature x Market pairs, then re-export |
+| Deliverables have thin competitor sections | `/compete` not run for those propositions | Run `/compete` for missing Feature x Market pairs, then re-run `/portfolio-communicate` |
 | Dashboard not updating | Entity files changed outside the workflow | Refresh via the dashboard-refresher agent, or re-run `/portfolio-dashboard` |
 | Canvas bootstrap misses features | Canvas document uses non-standard section headings | Describe your canvas structure when running `/portfolio-canvas` |
 | Claims verification times out | Large number of claims + slow source URLs | Run `/portfolio-verify` in batches, filtering by entity type |

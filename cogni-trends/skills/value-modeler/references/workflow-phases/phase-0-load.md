@@ -86,10 +86,10 @@ in the TIPS project directory (written by `/bridge portfolio-to-tips` or copied 
    - Skip bridge refresh recommendation
    - Count products, features, and propositions for the summary
    - Report: "Using generic B2B ICT portfolio context (template-based, {N} products,
-     {M} features with IS/DOES/MEANS propositions for large-enterprise-dach).
-     Portfolio-anchored ST generation is available — Phase 2 will match features to
-     investment themes using proposition language. Quality-aware generation is not
-     available (no quality assessments on generic propositions)."
+     {M} features with taxonomy mappings). Portfolio-anchored ST generation is available —
+     Phase 2 will match features to investment themes using IS descriptions and generate
+     DOES/MEANS propositions dynamically for your research context. Quality-aware generation
+     is not available (no quality assessments on generic propositions)."
    - Set `portfolio_generic: true` in output metadata
    - Proceed to Step 5
 
@@ -151,8 +151,8 @@ in the TIPS project directory (written by `/bridge portfolio-to-tips` or copied 
    4. If a generic portfolio context is found, present this choice:
 
       "No company portfolio found in your workspace. However, a **generic B2B ICT portfolio**
-      is available based on the B2B ICT taxonomy (7 products, 51 features with IS/DOES/MEANS
-      propositions for large-enterprise-dach).
+      is available based on the B2B ICT taxonomy (7 products, 51 features with IS-layer
+      descriptions and taxonomy mappings).
 
       Choose how to proceed:
 
@@ -175,10 +175,10 @@ in the TIPS project directory (written by `/bridge portfolio-to-tips` or copied 
         and Phase 2
       - Set in output metadata: `portfolio_discovered: true`, `portfolio_generic: true`,
         `portfolio_source_slug: "generic-b2b-ict"`
-      - Report: "Using generic B2B ICT portfolio (7 products, 51 features, 3 markets).
-        Solution Templates will be grounded in generic ICT capabilities — clearly marked
-        as template-based. You can replace this with your own portfolio later via
-        `/portfolio-setup` + `/bridge portfolio-to-tips`."
+      - Report: "Using generic B2B ICT portfolio (7 products, 51 features, propositions
+        generated dynamically for your target context). Solution Templates will be grounded
+        in generic ICT capabilities — clearly marked as template-based. You can replace this
+        with your own portfolio later via `/portfolio-setup` + `/bridge portfolio-to-tips`."
       - Proceed to Step 4b to validate the context
 
    6. If the user picks **option 2** (no portfolio):

@@ -255,22 +255,38 @@ When the portfolio context has `quality_assessment` data (v3.0):
 
 ### 0.5.4b: Generic Portfolio Handling
 
-When the portfolio context has `is_generic_template: true` (set by Phase 0 when using the
-generic B2B ICT portfolio):
+When the portfolio context has `is_generic_template: true` and `proposition_mode: "dynamic"`
+(set by Phase 0 when using the generic B2B ICT portfolio):
+
+The generic portfolio contains only IS-layer feature descriptions and taxonomy mappings — no
+pre-baked DOES/MEANS propositions. The target market context comes from the trend-scout project
+(`industry.primary`, `industry.subsector`, `research_topic` in `tips-project.json`), not from
+the portfolio template. This means DOES/MEANS must be generated dynamically during ST creation.
 
 **What works normally:**
-- Step 0.5.1 (Read Portfolio Context) — features have descriptions and taxonomy mappings
-- Step 0.5.2 (Match Features to Investment Themes) — DOES/MEANS proposition language is
-  available for semantic matching between features and investment themes
+- Step 0.5.1 (Read Portfolio Context) — features have `description` (IS statement) and `taxonomy_mapping`
+- Step 0.5.2 (Match Features to Investment Themes) — use feature `description` and `taxonomy_mapping`
+  for semantic matching between features and investment themes. IS-layer descriptions are
+  market-independent and sufficient for mapping features to themes without DOES/MEANS language
 - Step 0.5.3 (Generate Portfolio-Anchored STs) — blueprint composition works as normal;
   building blocks map to generic taxonomy features with `coverage: "covered"` or `"partial"`
 
 **What changes:**
-- **Skip Step 0.5.4** (Quality-Aware Generation) — generic propositions have no
+- **Generate DOES/MEANS dynamically** — after matching features to themes, generate
+  market-adapted propositions for each matched feature based on:
+  - The project's research context: `industry.primary`, `industry.subsector`, and
+    `research_topic` from `tips-project.json`
+  - The investment theme's strategic question and value chain narrative
+  - The feature's IS description and taxonomy category
+  - The generated DOES frames the advantage (what measurable improvement the capability
+    delivers in the project's target context)
+  - The generated MEANS anchors the business outcome (why a buyer in this industry/subsector
+    cares about the advantage)
+  - Store on each ST building block as `generated_proposition: { does: "...", means: "..." }`
+    so downstream phases can reference the language
+- **Skip Step 0.5.4** (Quality-Aware Generation) — dynamically generated propositions have no
   `quality_assessment` data, so quality flags cannot be computed
-- **Skip `portfolio_grounding`** entries that reference specific company DOES claims —
-  generic DOES statements are useful for matching but should not be echoed as if they
-  describe the user's company
+- **Skip `portfolio_grounding`** entries — there are no company-specific DOES claims to echo
 - **Set `generation_mode: "generic-portfolio-anchored"`** on each ST (instead of
   `"portfolio-anchored"`) — this distinguishes STs grounded in generic taxonomy features
   from STs grounded in real company products

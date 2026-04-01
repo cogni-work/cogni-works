@@ -44,6 +44,15 @@ quality checks — promoting them to the catalog would propagate weak messaging.
 separate "Quality Investment Needed" section in the curation summary listing these STs with
 a recommendation to improve the underlying proposition first via `/propositions` quality tools.
 
+### Generic-Anchored STs
+
+STs with `generation_mode: "generic-portfolio-anchored"` have no quality flags (propositions
+were generated dynamically from taxonomy features without quality assessment history). These
+STs are eligible for promotion but should be evaluated for generalizability rather than
+proposition quality — since they are already generic by construction, the question is whether
+the customer-specific scoring and value chain context adds reusable industry patterns worth
+cataloging. Note in `generalization_notes` that the ST originated from generic taxonomy features.
+
 ## Step 2: Generate Curation Recommendations
 
 For each promotion candidate, generate a recommendation:

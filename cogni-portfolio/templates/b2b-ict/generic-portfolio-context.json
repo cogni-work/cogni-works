@@ -23,16 +23,7 @@
             "dimension": 1,
             "category_id": "1.1",
             "category_name": "WAN Services"
-          },
-          "propositions": [
-            {
-              "market_slug": "large-enterprise-dach",
-              "is_statement": "Managed wide-area network service combining MPLS private backbone and SD-WAN overlay with centralized policy orchestration and application-aware traffic steering across distributed enterprise sites",
-              "does_statement": "Connects all enterprise locations with guaranteed bandwidth and sub-50ms latency, enabling real-time ERP and collaboration traffic to flow without congestion or packet loss",
-              "means_statement": "Large enterprises consolidate fragmented WAN contracts into a single managed service, cutting network operations overhead while gaining the agility to spin up new sites in days instead of months",
-              "variant_count": 0
-            }
-          ]
+          }
         },
         {
           "slug": "sase",
@@ -44,16 +35,7 @@
             "dimension": 1,
             "category_id": "1.2",
             "category_name": "SASE"
-          },
-          "propositions": [
-            {
-              "market_slug": "large-enterprise-dach",
-              "is_statement": "Cloud-delivered SASE platform integrating SD-WAN, secure web gateway, CASB, and zero-trust network access into a single policy-driven service edge with global PoP coverage",
-              "does_statement": "Enforces consistent security policies for all users regardless of location, replacing multiple point products with a single architecture that reduces policy conflicts and security blind spots",
-              "means_statement": "Enterprises enable secure hybrid work at scale without maintaining separate VPN, firewall, and proxy stacks, reducing complexity and accelerating security incident response",
-              "variant_count": 0
-            }
-          ]
+          }
         },
         {
           "slug": "internet-cloud-connect",
@@ -65,16 +47,7 @@
             "dimension": 1,
             "category_id": "1.3",
             "category_name": "Internet & Cloud Connect"
-          },
-          "propositions": [
-            {
-              "market_slug": "large-enterprise-dach",
-              "is_statement": "Dedicated internet access and direct-connect links to AWS, Azure, and GCP with private peering, redundant paths, and burstable bandwidth for cloud-first enterprise architectures",
-              "does_statement": "Delivers consistent sub-10ms latency to hyperscaler regions with private routing that bypasses public internet, eliminating jitter and packet loss for latency-sensitive cloud workloads",
-              "means_statement": "Enterprises run mission-critical SAP, analytics, and AI workloads in the cloud with the same reliability they expect from on-premises infrastructure, removing the last barrier to cloud migration",
-              "variant_count": 0
-            }
-          ]
+          }
         },
         {
           "slug": "5g-iot-connectivity",
@@ -86,16 +59,7 @@
             "dimension": 1,
             "category_id": "1.4",
             "category_name": "5G & IoT Connectivity"
-          },
-          "propositions": [
-            {
-              "market_slug": "large-enterprise-dach",
-              "is_statement": "Private 5G campus network and managed IoT connectivity platform with device onboarding, edge processing, and sensor-to-cloud data pipelines for industrial environments",
-              "does_statement": "Connects thousands of sensors and machines on the factory floor with ultra-low latency and guaranteed bandwidth, enabling real-time quality inspection and autonomous material handling",
-              "means_statement": "Manufacturers and logistics operators digitize shop-floor operations without relying on shared public spectrum, gaining a dedicated network that scales with production demands",
-              "variant_count": 0
-            }
-          ]
+          }
         },
         {
           "slug": "voice-services",
@@ -107,16 +71,7 @@
             "dimension": 1,
             "category_id": "1.5",
             "category_name": "Voice Services"
-          },
-          "propositions": [
-            {
-              "market_slug": "large-enterprise-dach",
-              "is_statement": "Managed enterprise voice service with SIP trunking, cloud PBX, and Teams/Zoom PSTN integration providing carrier-grade telephony with number portability and call routing",
-              "does_statement": "Replaces legacy PBX infrastructure with cloud-native voice that integrates into existing collaboration platforms, maintaining call quality while eliminating hardware refresh cycles",
-              "means_statement": "Enterprises reduce telephony costs by consolidating voice onto their collaboration platform, while preserving regulatory call recording and emergency service compliance requirements",
-              "variant_count": 0
-            }
-          ]
+          }
         },
         {
           "slug": "lan-wlan-services",
@@ -128,16 +83,7 @@
             "dimension": 1,
             "category_id": "1.6",
             "category_name": "LAN/WLAN Services"
-          },
-          "propositions": [
-            {
-              "market_slug": "large-enterprise-dach",
-              "is_statement": "Managed campus LAN and enterprise WiFi service with network access control, automated switch provisioning, and AI-driven wireless optimization across multi-site deployments",
-              "does_statement": "Delivers seamless wired and wireless connectivity across all campus locations with automated device profiling and policy enforcement, eliminating manual VLAN configuration",
-              "means_statement": "Enterprises support growing device density from IoT and BYOD without hiring additional network engineers, keeping campus connectivity reliable as workplace demands evolve",
-              "variant_count": 0
-            }
-          ]
+          }
         },
         {
           "slug": "network-as-a-service",
@@ -149,16 +95,7 @@
             "dimension": 1,
             "category_id": "1.7",
             "category_name": "Network-as-a-Service"
-          },
-          "propositions": [
-            {
-              "market_slug": "large-enterprise-dach",
-              "is_statement": "Network-as-a-Service offering that delivers complete enterprise networking — WAN, LAN, WiFi, and security — as a subscription with consumption-based billing and hardware lifecycle included",
-              "does_statement": "Shifts network infrastructure from capital expense to operating expense with predictable monthly costs, on-demand bandwidth scaling, and provider-managed hardware refresh cycles",
-              "means_statement": "Enterprises free up IT teams from network operations to focus on business innovation, while converting unpredictable infrastructure spend into a budgetable service line",
-              "variant_count": 0
-            }
-          ]
+          }
         }
       ]
     },
@@ -177,16 +114,7 @@
             "dimension": 2,
             "category_id": "2.1",
             "category_name": "Security Operations (SOC/SIEM)"
-          },
-          "propositions": [
-            {
-              "market_slug": "large-enterprise-dach",
-              "is_statement": "Managed security operations center with 24/7 SIEM monitoring, threat intelligence feeds, automated incident response playbooks, and tiered analyst escalation for enterprise environments",
-              "does_statement": "Detects and contains security incidents within minutes instead of days, reducing breach impact by correlating alerts across the full attack surface including cloud, endpoint, and network",
-              "means_statement": "Large enterprises maintain regulatory compliance and protect brand reputation without building costly in-house SOC teams that require scarce security talent in the DACH market",
-              "variant_count": 0
-            }
-          ]
+          }
         },
         {
           "slug": "identity-access-management",
@@ -198,16 +126,7 @@
             "dimension": 2,
             "category_id": "2.2",
             "category_name": "Identity & Access Management"
-          },
-          "propositions": [
-            {
-              "market_slug": "large-enterprise-dach",
-              "is_statement": "Enterprise identity and access management platform with SSO, MFA, privileged access management, and automated identity lifecycle governance across on-premises and cloud directories",
-              "does_statement": "Enforces least-privilege access across all applications and infrastructure, automating joiner-mover-leaver processes that otherwise create orphaned accounts and access creep",
-              "means_statement": "Enterprises pass audit requirements with demonstrable access controls while reducing help desk ticket volume from password resets and access requests by up to 60%",
-              "variant_count": 0
-            }
-          ]
+          }
         },
         {
           "slug": "zero-trust-architecture",
@@ -219,16 +138,7 @@
             "dimension": 2,
             "category_id": "2.3",
             "category_name": "Zero Trust Architecture"
-          },
-          "propositions": [
-            {
-              "market_slug": "large-enterprise-dach",
-              "is_statement": "Zero trust architecture implementation service with microsegmentation design, continuous device posture verification, and identity-centric access policies for hybrid enterprise networks",
-              "does_statement": "Replaces implicit network trust with verified, context-aware access decisions at every resource boundary, containing lateral movement even after initial perimeter compromise",
-              "means_statement": "Enterprises meet NIS2 and DORA regulatory requirements for network segmentation while enabling secure access for remote workers and third-party contractors without VPN complexity",
-              "variant_count": 0
-            }
-          ]
+          }
         },
         {
           "slug": "cloud-security",
@@ -240,16 +150,7 @@
             "dimension": 2,
             "category_id": "2.4",
             "category_name": "Cloud Security"
-          },
-          "propositions": [
-            {
-              "market_slug": "large-enterprise-dach",
-              "is_statement": "Cloud security posture management and workload protection platform with automated misconfiguration detection, container runtime security, and compliance policy enforcement across AWS, Azure, and GCP",
-              "does_statement": "Continuously scans cloud environments for security misconfigurations and compliance drift, auto-remediating critical findings before they become exploitable attack vectors",
-              "means_statement": "Enterprises adopt multi-cloud strategies with confidence that security policies are consistently enforced, preventing the configuration sprawl that causes most cloud breaches",
-              "variant_count": 0
-            }
-          ]
+          }
         },
         {
           "slug": "endpoint-security",
@@ -261,16 +162,7 @@
             "dimension": 2,
             "category_id": "2.5",
             "category_name": "Endpoint Security"
-          },
-          "propositions": [
-            {
-              "market_slug": "large-enterprise-dach",
-              "is_statement": "Managed endpoint detection and response service with behavioral analysis, email gateway protection, and automated threat containment across the full enterprise device fleet",
-              "does_statement": "Isolates compromised endpoints within seconds of detection and provides forensic investigation data, stopping ransomware propagation before it reaches file shares and backup systems",
-              "means_statement": "Enterprises protect distributed workforces across office and remote devices without building a dedicated endpoint security team, reducing ransomware exposure across the organization",
-              "variant_count": 0
-            }
-          ]
+          }
         },
         {
           "slug": "network-security",
@@ -282,16 +174,7 @@
             "dimension": 2,
             "category_id": "2.6",
             "category_name": "Network Security"
-          },
-          "propositions": [
-            {
-              "market_slug": "large-enterprise-dach",
-              "is_statement": "Managed network security service with next-generation firewall management, DDoS mitigation, intrusion prevention, and network segmentation across enterprise WAN and data center environments",
-              "does_statement": "Blocks malicious traffic at the network perimeter and enforces segmentation policies between zones, preventing lateral movement and reducing the blast radius of any breach",
-              "means_statement": "Enterprises maintain defense-in-depth without the operational burden of managing firewall rule sets across hundreds of locations, keeping security posture consistent as the network evolves",
-              "variant_count": 0
-            }
-          ]
+          }
         },
         {
           "slug": "vulnerability-management",
@@ -303,16 +186,7 @@
             "dimension": 2,
             "category_id": "2.7",
             "category_name": "Vulnerability Management"
-          },
-          "propositions": [
-            {
-              "market_slug": "large-enterprise-dach",
-              "is_statement": "Continuous vulnerability scanning and managed patch service with risk-based prioritization, penetration testing, and remediation tracking across infrastructure, applications, and cloud workloads",
-              "does_statement": "Identifies and prioritizes vulnerabilities by exploitability and business impact, reducing mean-time-to-patch for critical CVEs from weeks to days through automated deployment workflows",
-              "means_statement": "Enterprises maintain a defensible security posture against known exploits without diverting application teams to emergency patching cycles, keeping development velocity intact",
-              "variant_count": 0
-            }
-          ]
+          }
         },
         {
           "slug": "security-awareness",
@@ -324,16 +198,7 @@
             "dimension": 2,
             "category_id": "2.8",
             "category_name": "Security Awareness"
-          },
-          "propositions": [
-            {
-              "market_slug": "large-enterprise-dach",
-              "is_statement": "Security awareness platform with automated phishing simulations, role-based training modules, and behavioral analytics that adapt campaign intensity to individual risk profiles",
-              "does_statement": "Reduces successful phishing click rates by training employees with realistic simulations and measuring improvement over time, turning the workforce from attack vector into detection layer",
-              "means_statement": "Enterprises address the human factor in cybersecurity systematically, meeting insurance and compliance requirements for security training while measurably reducing social engineering risk",
-              "variant_count": 0
-            }
-          ]
+          }
         },
         {
           "slug": "compliance-grc",
@@ -345,16 +210,7 @@
             "dimension": 2,
             "category_id": "2.9",
             "category_name": "Compliance & GRC"
-          },
-          "propositions": [
-            {
-              "market_slug": "large-enterprise-dach",
-              "is_statement": "Governance, risk, and compliance service with automated control monitoring, regulatory mapping for NIS2/DORA/GDPR, audit evidence collection, and risk assessment frameworks",
-              "does_statement": "Maps regulatory requirements to technical controls and continuously monitors compliance status, generating audit-ready evidence packages without manual spreadsheet collection",
-              "means_statement": "Enterprises navigate the growing European regulatory landscape with demonstrable compliance, reducing audit preparation effort and avoiding the penalties that come with non-compliance",
-              "variant_count": 0
-            }
-          ]
+          }
         },
         {
           "slug": "data-protection-privacy",
@@ -366,16 +222,7 @@
             "dimension": 2,
             "category_id": "2.10",
             "category_name": "Data Protection & Privacy"
-          },
-          "propositions": [
-            {
-              "market_slug": "large-enterprise-dach",
-              "is_statement": "Data protection service with automated data classification, DLP policy enforcement, encryption key management, and privacy impact assessment tooling for GDPR-governed enterprise data",
-              "does_statement": "Classifies sensitive data across structured and unstructured repositories, enforcing protection policies that prevent unauthorized exfiltration while enabling legitimate cross-border data flows",
-              "means_statement": "Enterprises demonstrate GDPR accountability with automated data governance instead of manual register maintenance, protecting against fines while enabling data-driven business models",
-              "variant_count": 0
-            }
-          ]
+          }
         }
       ]
     },
@@ -394,16 +241,7 @@
             "dimension": 3,
             "category_id": "3.1",
             "category_name": "Unified Communications"
-          },
-          "propositions": [
-            {
-              "market_slug": "large-enterprise-dach",
-              "is_statement": "Managed unified communications service integrating Teams or Zoom with enterprise telephony, meeting room systems, and knowledge-sharing platforms under a single operational umbrella",
-              "does_statement": "Unifies voice, video, messaging, and document collaboration into one managed experience, eliminating tool sprawl and ensuring consistent quality across office and remote workspaces",
-              "means_statement": "Enterprises enable seamless hybrid collaboration without maintaining separate telephony and video systems, reducing communication friction that slows decision-making across distributed teams",
-              "variant_count": 0
-            }
-          ]
+          }
         },
         {
           "slug": "modern-workplace-m365",
@@ -415,16 +253,7 @@
             "dimension": 3,
             "category_id": "3.2",
             "category_name": "Modern Workplace / M365"
-          },
-          "propositions": [
-            {
-              "market_slug": "large-enterprise-dach",
-              "is_statement": "Managed Microsoft 365 service covering tenant administration, security baseline enforcement, license optimization, and adoption enablement for enterprise-scale M365 deployments",
-              "does_statement": "Maximizes M365 value by configuring security baselines, optimizing license allocation, and driving user adoption beyond basic email toward full collaboration and automation capabilities",
-              "means_statement": "Enterprises extract full ROI from their Microsoft investment instead of paying for capabilities nobody uses, while ensuring security configurations meet enterprise and regulatory standards",
-              "variant_count": 0
-            }
-          ]
+          }
         },
         {
           "slug": "device-management",
@@ -436,16 +265,7 @@
             "dimension": 3,
             "category_id": "3.3",
             "category_name": "Device Management"
-          },
-          "propositions": [
-            {
-              "market_slug": "large-enterprise-dach",
-              "is_statement": "Unified endpoint management service with zero-touch device provisioning, BYOD container policies, and automated compliance enforcement across Windows, macOS, iOS, and Android fleets",
-              "does_statement": "Provisions new devices ready-to-work within hours of shipping, enforcing security policies and deploying applications automatically without IT technician hands-on setup",
-              "means_statement": "Enterprises onboard employees faster and support flexible device policies without compromising security, reducing device-related support tickets and new-hire productivity ramp-up time",
-              "variant_count": 0
-            }
-          ]
+          }
         },
         {
           "slug": "virtual-desktop-daas",
@@ -457,16 +277,7 @@
             "dimension": 3,
             "category_id": "3.4",
             "category_name": "Virtual Desktop & DaaS"
-          },
-          "propositions": [
-            {
-              "market_slug": "large-enterprise-dach",
-              "is_statement": "Desktop-as-a-Service platform delivering persistent and non-persistent virtual desktops with GPU acceleration, session management, and data sovereignty on European infrastructure",
-              "does_statement": "Provides secure, performant desktop workspaces accessible from any device and location, scaling capacity up or down based on workforce demand without hardware procurement cycles",
-              "means_statement": "Enterprises enable contractor and seasonal workforce access without shipping hardware, keeping sensitive data in the data center while supporting flexible work arrangements",
-              "variant_count": 0
-            }
-          ]
+          }
         },
         {
           "slug": "it-support-services",
@@ -478,16 +289,7 @@
             "dimension": 3,
             "category_id": "3.5",
             "category_name": "IT Support Services"
-          },
-          "propositions": [
-            {
-              "market_slug": "large-enterprise-dach",
-              "is_statement": "Multi-tier IT service desk with L1-L3 support, field service dispatch, and ITSM-integrated ticketing providing SLA-backed resolution across all enterprise IT domains",
-              "does_statement": "Resolves user issues through a single point of contact with defined escalation paths and SLA tracking, reducing mean-time-to-resolution and eliminating ticket ping-pong between teams",
-              "means_statement": "Enterprises maintain workforce productivity without building large internal support teams, ensuring consistent IT service quality across all locations and business units",
-              "variant_count": 0
-            }
-          ]
+          }
         },
         {
           "slug": "digital-employee-experience",
@@ -499,16 +301,7 @@
             "dimension": 3,
             "category_id": "3.6",
             "category_name": "Digital Employee Experience"
-          },
-          "propositions": [
-            {
-              "market_slug": "large-enterprise-dach",
-              "is_statement": "Digital employee experience platform collecting real-time endpoint telemetry, application performance metrics, and user sentiment data to proactively identify and resolve IT friction",
-              "does_statement": "Detects degraded user experiences before employees report them, triggering automated remediation for common issues like slow boot times, application crashes, and network latency",
-              "means_statement": "Enterprises shift IT support from reactive ticket-handling to proactive experience management, improving employee satisfaction and reducing productivity loss from undetected IT issues",
-              "variant_count": 0
-            }
-          ]
+          }
         },
         {
           "slug": "it-asset-management",
@@ -520,16 +313,7 @@
             "dimension": 3,
             "category_id": "3.7",
             "category_name": "IT Asset Management"
-          },
-          "propositions": [
-            {
-              "market_slug": "large-enterprise-dach",
-              "is_statement": "IT asset management service with automated inventory discovery, hardware lifecycle tracking, software license compliance monitoring, and certified disposal for enterprise IT estates",
-              "does_statement": "Maintains a real-time inventory of all hardware and software assets with lifecycle status, flagging upcoming refresh cycles and license compliance gaps before they become audit findings",
-              "means_statement": "Enterprises avoid over-licensing costs and audit penalties while planning hardware refresh budgets accurately, turning reactive asset scrambles into predictable lifecycle management",
-              "variant_count": 0
-            }
-          ]
+          }
         }
       ]
     },
@@ -548,16 +332,7 @@
             "dimension": 4,
             "category_id": "4.1",
             "category_name": "Managed Hyperscaler Services"
-          },
-          "propositions": [
-            {
-              "market_slug": "large-enterprise-dach",
-              "is_statement": "Managed cloud operations for AWS, Azure, and GCP with architecture governance, cost optimization, security baseline enforcement, and 24/7 incident management by certified cloud engineers",
-              "does_statement": "Operates enterprise cloud environments with defined SLAs, catching misconfigurations and cost anomalies early while ensuring infrastructure follows well-architected framework best practices",
-              "means_statement": "Enterprises run production workloads on hyperscaler platforms with enterprise-grade operations without hiring scarce cloud specialists, keeping cloud spend under control as usage grows",
-              "variant_count": 0
-            }
-          ]
+          }
         },
         {
           "slug": "multi-cloud-management",
@@ -569,16 +344,7 @@
             "dimension": 4,
             "category_id": "4.2",
             "category_name": "Multi-Cloud Management"
-          },
-          "propositions": [
-            {
-              "market_slug": "large-enterprise-dach",
-              "is_statement": "Multi-cloud management platform with unified cost visibility, cross-cloud governance policies, workload placement optimization, and FinOps practices across AWS, Azure, and GCP estates",
-              "does_statement": "Provides a single pane of glass for cost, compliance, and operations across all cloud providers, enabling data-driven placement decisions that optimize for cost, latency, or sovereignty",
-              "means_statement": "Enterprises avoid vendor lock-in and leverage best-of-breed cloud services while maintaining operational consistency, preventing the cloud sprawl that drives uncontrolled spending",
-              "variant_count": 0
-            }
-          ]
+          }
         },
         {
           "slug": "private-cloud",
@@ -590,16 +356,7 @@
             "dimension": 4,
             "category_id": "4.3",
             "category_name": "Private Cloud"
-          },
-          "propositions": [
-            {
-              "market_slug": "large-enterprise-dach",
-              "is_statement": "Managed private cloud platform on dedicated infrastructure with self-service provisioning portal, automated scaling, and enterprise-grade network isolation in European data centers",
-              "does_statement": "Delivers cloud agility and self-service capabilities on infrastructure that is physically and logically isolated, meeting data residency requirements that public cloud alone cannot satisfy",
-              "means_statement": "Enterprises modernize IT delivery with cloud operating models while keeping regulated workloads on dedicated infrastructure, satisfying compliance teams without sacrificing developer velocity",
-              "variant_count": 0
-            }
-          ]
+          }
         },
         {
           "slug": "hybrid-cloud",
@@ -611,16 +368,7 @@
             "dimension": 4,
             "category_id": "4.4",
             "category_name": "Hybrid Cloud"
-          },
-          "propositions": [
-            {
-              "market_slug": "large-enterprise-dach",
-              "is_statement": "Hybrid cloud architecture service integrating on-premises, private cloud, and hyperscaler environments with consistent networking, identity, and workload portability across all tiers",
-              "does_statement": "Enables workloads to run in the optimal location based on data sensitivity, performance, and cost requirements, with consistent management regardless of where the workload resides",
-              "means_statement": "Enterprises pursue cloud-first strategies without a forced all-or-nothing migration, moving workloads at their own pace while maintaining unified operations and security governance",
-              "variant_count": 0
-            }
-          ]
+          }
         },
         {
           "slug": "cloud-migration-services",
@@ -632,16 +380,7 @@
             "dimension": 4,
             "category_id": "4.5",
             "category_name": "Cloud Migration Services"
-          },
-          "propositions": [
-            {
-              "market_slug": "large-enterprise-dach",
-              "is_statement": "End-to-end cloud migration service with automated discovery, dependency mapping, wave planning, and factory-model migration execution for large-scale enterprise workload transitions",
-              "does_statement": "Migrates hundreds of workloads to cloud in structured waves with automated testing and rollback capabilities, reducing migration risk and compressing project timelines from years to months",
-              "means_statement": "Enterprises exit aging data centers on schedule without business disruption, realizing cloud cost savings and agility benefits faster than in-house migration teams can typically deliver",
-              "variant_count": 0
-            }
-          ]
+          }
         },
         {
           "slug": "cloud-native-platform",
@@ -653,16 +392,7 @@
             "dimension": 4,
             "category_id": "4.6",
             "category_name": "Cloud-Native Platform"
-          },
-          "propositions": [
-            {
-              "market_slug": "large-enterprise-dach",
-              "is_statement": "Managed cloud-native platform with Kubernetes orchestration, service mesh, serverless compute, and managed databases providing a production-ready foundation for microservices architectures",
-              "does_statement": "Abstracts infrastructure complexity so development teams deploy containerized applications with built-in observability, auto-scaling, and security policies without managing cluster operations",
-              "means_statement": "Enterprises accelerate software delivery cycles by giving developers a self-service platform that enforces guardrails, reducing time-to-production while maintaining operational standards",
-              "variant_count": 0
-            }
-          ]
+          }
         },
         {
           "slug": "sovereign-cloud",
@@ -674,16 +404,7 @@
             "dimension": 4,
             "category_id": "4.7",
             "category_name": "Sovereign Cloud"
-          },
-          "propositions": [
-            {
-              "market_slug": "large-enterprise-dach",
-              "is_statement": "Sovereign cloud platform with guaranteed data residency in European jurisdictions, operated by EU-based personnel with no foreign government access, meeting BSI C5 and GDPR requirements",
-              "does_statement": "Provides hyperscaler-equivalent cloud capabilities with verifiable data sovereignty, ensuring that workloads subject to European regulations remain under European jurisdictional control",
-              "means_statement": "Enterprises adopt cloud for regulated workloads like patient data, financial records, and government information without sovereign risk, closing the last compliance gap in cloud strategies",
-              "variant_count": 0
-            }
-          ]
+          }
         },
         {
           "slug": "enterprise-platforms-on-cloud",
@@ -695,16 +416,7 @@
             "dimension": 4,
             "category_id": "4.8",
             "category_name": "Enterprise Platforms on Cloud"
-          },
-          "propositions": [
-            {
-              "market_slug": "large-enterprise-dach",
-              "is_statement": "Managed hosting and operations for SAP S/4HANA, Oracle, and enterprise ERP workloads on hyperscaler or private cloud with performance tuning, patching, and high-availability management",
-              "does_statement": "Runs mission-critical SAP and ERP systems on cloud infrastructure with enterprise SLAs, handling performance optimization, kernel patching, and disaster recovery without in-house basis teams",
-              "means_statement": "Enterprises accelerate their SAP S/4HANA transformation by offloading infrastructure operations to specialists, focusing internal teams on business process innovation instead of system administration",
-              "variant_count": 0
-            }
-          ]
+          }
         }
       ]
     },
@@ -723,16 +435,7 @@
             "dimension": 5,
             "category_id": "5.1",
             "category_name": "Data Center Services"
-          },
-          "propositions": [
-            {
-              "market_slug": "large-enterprise-dach",
-              "is_statement": "Data center colocation and housing service with Tier III+ facilities, redundant power and cooling, physical security, and multi-carrier connectivity in European locations",
-              "does_statement": "Provides enterprise-grade data center capacity with guaranteed uptime SLAs and physical security, eliminating the capital investment and operational complexity of running owned facilities",
-              "means_statement": "Enterprises maintain physical infrastructure presence for latency-sensitive or regulatory workloads without the burden of facility management, freeing capital for digital transformation",
-              "variant_count": 0
-            }
-          ]
+          }
         },
         {
           "slug": "managed-compute-storage",
@@ -744,16 +447,7 @@
             "dimension": 5,
             "category_id": "5.2",
             "category_name": "Managed Compute & Storage"
-          },
-          "propositions": [
-            {
-              "market_slug": "large-enterprise-dach",
-              "is_statement": "Managed compute and storage service with server fleet management, SAN/NAS operations, virtualization platform administration, and capacity planning for on-premises and hosted environments",
-              "does_statement": "Keeps enterprise compute and storage infrastructure running at optimal performance with proactive capacity management, eliminating unplanned outages from resource exhaustion or hardware failure",
-              "means_statement": "Enterprises maintain reliable infrastructure operations without staffing 24/7 server and storage administration teams, converting infrastructure management from a staffing challenge into a service",
-              "variant_count": 0
-            }
-          ]
+          }
         },
         {
           "slug": "backup-disaster-recovery",
@@ -765,16 +459,7 @@
             "dimension": 5,
             "category_id": "5.3",
             "category_name": "Backup & Disaster Recovery"
-          },
-          "propositions": [
-            {
-              "market_slug": "large-enterprise-dach",
-              "is_statement": "Managed backup and disaster recovery service with automated backup orchestration, geo-redundant replication, DR runbook testing, and guaranteed RPO/RTO targets for enterprise-critical systems",
-              "does_statement": "Ensures data recoverability with tested failover procedures and verified backup integrity, reducing recovery time from days to hours for critical systems during major incidents",
-              "means_statement": "Enterprises meet business continuity requirements with proven disaster recovery instead of untested backup assumptions, protecting against the existential risk of prolonged system outages",
-              "variant_count": 0
-            }
-          ]
+          }
         },
         {
           "slug": "infrastructure-monitoring",
@@ -786,16 +471,7 @@
             "dimension": 5,
             "category_id": "5.4",
             "category_name": "Infrastructure Monitoring"
-          },
-          "propositions": [
-            {
-              "market_slug": "large-enterprise-dach",
-              "is_statement": "24/7 infrastructure monitoring service with NOC-operated alerting, automated incident creation, performance trending dashboards, and defined escalation procedures across all IT layers",
-              "does_statement": "Detects infrastructure degradation before it impacts business services, correlating alerts across network, compute, and storage layers to identify root cause instead of flooding teams with symptoms",
-              "means_statement": "Enterprises prevent service outages through early detection rather than relying on user complaints, maintaining business service availability while reducing alert fatigue for operations teams",
-              "variant_count": 0
-            }
-          ]
+          }
         },
         {
           "slug": "it-outsourcing",
@@ -807,16 +483,7 @@
             "dimension": 5,
             "category_id": "5.5",
             "category_name": "IT Outsourcing (ITO)"
-          },
-          "propositions": [
-            {
-              "market_slug": "large-enterprise-dach",
-              "is_statement": "Full IT outsourcing service with structured transition methodology, retained organization design, governance framework, and continuous service improvement for enterprise IT operations",
-              "does_statement": "Assumes operational responsibility for defined IT domains with SLA-backed delivery, transforming IT from a cost center with unpredictable staffing needs into a managed service with predictable outcomes",
-              "means_statement": "Enterprises refocus internal IT leadership on strategic initiatives by delegating operational delivery, achieving consistent service quality regardless of labor market fluctuations",
-              "variant_count": 0
-            }
-          ]
+          }
         },
         {
           "slug": "database-administration",
@@ -828,16 +495,7 @@
             "dimension": 5,
             "category_id": "5.6",
             "category_name": "Database Administration"
-          },
-          "propositions": [
-            {
-              "market_slug": "large-enterprise-dach",
-              "is_statement": "Managed database administration for Oracle, SQL Server, PostgreSQL, and SAP HANA with performance tuning, high-availability configuration, patching, and capacity management",
-              "does_statement": "Maintains database performance and availability through proactive tuning and patching, preventing the slow degradation that leads to application timeouts and data processing backlogs",
-              "means_statement": "Enterprises keep business-critical databases performant without retaining expensive DBA specialists, ensuring that database platforms do not become the bottleneck in application delivery",
-              "variant_count": 0
-            }
-          ]
+          }
         },
         {
           "slug": "infrastructure-automation",
@@ -849,16 +507,7 @@
             "dimension": 5,
             "category_id": "5.7",
             "category_name": "Infrastructure Automation"
-          },
-          "propositions": [
-            {
-              "market_slug": "large-enterprise-dach",
-              "is_statement": "Infrastructure automation service with Infrastructure-as-Code implementation, self-service provisioning portals, configuration management, and mainframe integration for hybrid IT estates",
-              "does_statement": "Replaces manual provisioning and configuration with repeatable, version-controlled automation that reduces deployment errors and cuts provisioning time from weeks to minutes",
-              "means_statement": "Enterprises achieve cloud-like operational speed in on-premises environments, eliminating the manual bottlenecks that make legacy infrastructure slow and error-prone to change",
-              "variant_count": 0
-            }
-          ]
+          }
         }
       ]
     },
@@ -877,16 +526,7 @@
             "dimension": 6,
             "category_id": "6.1",
             "category_name": "Custom Application Development"
-          },
-          "propositions": [
-            {
-              "market_slug": "large-enterprise-dach",
-              "is_statement": "Custom application development service with agile delivery squads, UX research, full-stack engineering, and cloud-native architecture for business-specific software that off-the-shelf products cannot address",
-              "does_statement": "Builds tailored enterprise applications that precisely fit business processes, delivering working software in iterative sprints with continuous stakeholder feedback and quality assurance",
-              "means_statement": "Enterprises gain competitive advantage through differentiated software that automates unique business processes, instead of compromising workflows to fit generic product limitations",
-              "variant_count": 0
-            }
-          ]
+          }
         },
         {
           "slug": "application-modernization",
@@ -898,16 +538,7 @@
             "dimension": 6,
             "category_id": "6.2",
             "category_name": "Application Modernization"
-          },
-          "propositions": [
-            {
-              "market_slug": "large-enterprise-dach",
-              "is_statement": "Application modernization service with assessment, re-platforming, and re-architecture capabilities that transform legacy monoliths into cloud-native, API-first architectures",
-              "does_statement": "Transforms aging applications into maintainable, scalable systems using strangler-fig and domain-driven decomposition patterns, preserving business logic while eliminating technical debt",
-              "means_statement": "Enterprises escape the innovation trap of legacy systems that cannot change fast enough for market demands, unlocking the ability to iterate on business capabilities at modern speed",
-              "variant_count": 0
-            }
-          ]
+          }
         },
         {
           "slug": "enterprise-platform-services",
@@ -919,16 +550,7 @@
             "dimension": 6,
             "category_id": "6.3",
             "category_name": "Enterprise Platform Services"
-          },
-          "propositions": [
-            {
-              "market_slug": "large-enterprise-dach",
-              "is_statement": "Enterprise platform services for SAP, Salesforce, and ServiceNow with implementation, configuration, custom development, and ongoing managed application support",
-              "does_statement": "Implements and optimizes enterprise platforms aligned to business processes, maintaining platform health through proactive monitoring, release management, and continuous improvement cycles",
-              "means_statement": "Enterprises maximize the return on their platform investments by keeping systems current and well-configured, avoiding the platform degradation that turns strategic assets into maintenance burdens",
-              "variant_count": 0
-            }
-          ]
+          }
         },
         {
           "slug": "system-integration-api",
@@ -940,16 +562,7 @@
             "dimension": 6,
             "category_id": "6.4",
             "category_name": "System Integration & API"
-          },
-          "propositions": [
-            {
-              "market_slug": "large-enterprise-dach",
-              "is_statement": "System integration and API management service with middleware implementation, event-driven architecture design, and API lifecycle management for connecting enterprise application landscapes",
-              "does_statement": "Connects siloed business systems through managed APIs and integration patterns, enabling real-time data flow between ERP, CRM, and operational systems without point-to-point spaghetti",
-              "means_statement": "Enterprises create a composable application landscape where new capabilities can be assembled from existing services, dramatically reducing the time and cost of launching new digital initiatives",
-              "variant_count": 0
-            }
-          ]
+          }
         },
         {
           "slug": "low-code-no-code-platforms",
@@ -961,16 +574,7 @@
             "dimension": 6,
             "category_id": "6.5",
             "category_name": "Low-Code/No-Code Platforms"
-          },
-          "propositions": [
-            {
-              "market_slug": "large-enterprise-dach",
-              "is_statement": "Low-code/no-code enablement service with Power Platform or Mendix governance, citizen developer training, center of excellence setup, and security guardrails for enterprise-scale adoption",
-              "does_statement": "Empowers business teams to build departmental applications and automations themselves within governed guardrails, reducing the IT backlog for simple workflow and data capture applications",
-              "means_statement": "Enterprises democratize application development without creating shadow IT risk, accelerating business process automation where the demand for digital solutions exceeds IT development capacity",
-              "variant_count": 0
-            }
-          ]
+          }
         },
         {
           "slug": "ai-data-analytics",
@@ -982,16 +586,7 @@
             "dimension": 6,
             "category_id": "6.6",
             "category_name": "AI, Data & Analytics"
-          },
-          "propositions": [
-            {
-              "market_slug": "large-enterprise-dach",
-              "is_statement": "AI and data analytics service with MLOps platform setup, data warehouse/lakehouse architecture, BI modernization, and responsible AI governance for enterprise-scale data capabilities",
-              "does_statement": "Transforms scattered enterprise data into governed, analytics-ready assets and deploys ML models into production with monitoring, retraining pipelines, and bias detection built in",
-              "means_statement": "Enterprises make data-driven decisions at every level by turning their data assets into operational intelligence, creating competitive advantage from information that currently sits unused in silos",
-              "variant_count": 0
-            }
-          ]
+          }
         },
         {
           "slug": "devops-platform-engineering",
@@ -1003,16 +598,7 @@
             "dimension": 6,
             "category_id": "6.7",
             "category_name": "DevOps & Platform Engineering"
-          },
-          "propositions": [
-            {
-              "market_slug": "large-enterprise-dach",
-              "is_statement": "DevOps and platform engineering service with CI/CD pipeline implementation, GitOps workflows, internal developer portal setup, and test automation for enterprise software delivery acceleration",
-              "does_statement": "Builds golden-path developer workflows with automated testing, security scanning, and deployment pipelines, reducing release cycles from monthly to daily with higher quality and traceability",
-              "means_statement": "Enterprises ship software faster without sacrificing governance, giving development teams self-service infrastructure and deployment capabilities within enterprise compliance boundaries",
-              "variant_count": 0
-            }
-          ]
+          }
         }
       ]
     },
@@ -1031,16 +617,7 @@
             "dimension": 7,
             "category_id": "7.1",
             "category_name": "IT Strategy & Architecture"
-          },
-          "propositions": [
-            {
-              "market_slug": "large-enterprise-dach",
-              "is_statement": "IT strategy and enterprise architecture advisory with technology roadmap development, architecture maturity assessments, and investment prioritization frameworks aligned to business strategy",
-              "does_statement": "Creates a clear technology roadmap that connects IT investments to business outcomes, identifying which initiatives to fund, defer, or retire based on strategic value and technical feasibility",
-              "means_statement": "Enterprises make informed technology investment decisions instead of reacting to vendor pitches, ensuring that IT spending drives measurable business value and competitive positioning",
-              "variant_count": 0
-            }
-          ]
+          }
         },
         {
           "slug": "digital-transformation",
@@ -1052,16 +629,7 @@
             "dimension": 7,
             "category_id": "7.2",
             "category_name": "Digital Transformation"
-          },
-          "propositions": [
-            {
-              "market_slug": "large-enterprise-dach",
-              "is_statement": "Digital transformation consulting with business process analysis, digitization roadmap design, change management, and transformation program governance for enterprise-wide initiatives",
-              "does_statement": "Translates digital strategy into executable programs with clear milestones, stakeholder alignment, and change management that ensures adoption rather than just technology deployment",
-              "means_statement": "Enterprises realize the business benefits of digitization instead of accumulating technology debt, by treating transformation as an organizational change program rather than an IT project",
-              "variant_count": 0
-            }
-          ]
+          }
         },
         {
           "slug": "business-industry-consulting",
@@ -1073,16 +641,7 @@
             "dimension": 7,
             "category_id": "7.3",
             "category_name": "Business & Industry Consulting"
-          },
-          "propositions": [
-            {
-              "market_slug": "large-enterprise-dach",
-              "is_statement": "Industry-specific consulting with vertical expertise in manufacturing, healthcare, public sector, and financial services, plus ESG/sustainability advisory and business process optimization",
-              "does_statement": "Brings deep industry knowledge to IT decisions, ensuring that technology solutions fit sector-specific regulations, workflows, and competitive dynamics rather than applying generic templates",
-              "means_statement": "Enterprises benefit from advisory that understands their industry context, avoiding costly misalignment between technology solutions and the regulatory and operational realities of their sector",
-              "variant_count": 0
-            }
-          ]
+          }
         },
         {
           "slug": "program-project-management",
@@ -1094,16 +653,7 @@
             "dimension": 7,
             "category_id": "7.4",
             "category_name": "Program & Project Management"
-          },
-          "propositions": [
-            {
-              "market_slug": "large-enterprise-dach",
-              "is_statement": "Program and project management service with PMO setup, multi-workstream coordination, risk management, agile coaching, and governance frameworks for large-scale enterprise IT programs",
-              "does_statement": "Delivers complex, multi-vendor IT programs on time and within budget through structured governance, dependency management, and early risk identification across parallel workstreams",
-              "means_statement": "Enterprises execute ambitious transformation programs with professional delivery management, avoiding the overruns and scope creep that derail large IT initiatives without dedicated program leadership",
-              "variant_count": 0
-            }
-          ]
+          }
         },
         {
           "slug": "vendor-contract-management",
@@ -1115,56 +665,11 @@
             "dimension": 7,
             "category_id": "7.5",
             "category_name": "Vendor & Contract Management"
-          },
-          "propositions": [
-            {
-              "market_slug": "large-enterprise-dach",
-              "is_statement": "Vendor and contract management advisory with IT procurement strategy, vendor evaluation frameworks, contract negotiation support, SLA governance, and multi-vendor coordination for enterprise IT",
-              "does_statement": "Optimizes the enterprise vendor portfolio through structured evaluation, benchmark-informed negotiation, and ongoing SLA monitoring that holds suppliers accountable to contracted commitments",
-              "means_statement": "Enterprises reduce IT procurement costs and vendor risk through professional sourcing management, ensuring that contract terms protect business interests as technology and requirements evolve",
-              "variant_count": 0
-            }
-          ]
+          }
         }
       ]
     }
   ],
-  "markets": [
-    {
-      "slug": "large-enterprise-dach",
-      "name": "Large Enterprise DACH",
-      "region": "DACH",
-      "description": "Large enterprises (1000+ employees) in the DACH region requiring comprehensive managed ICT services with European data sovereignty",
-      "vertical_codes": ["enterprise"],
-      "segmentation": {
-        "employees_min": 1000,
-        "employees_max": null
-      },
-      "market_relevance": "direct"
-    },
-    {
-      "slug": "mid-market-global",
-      "name": "Mid-Market Global",
-      "region": "Global",
-      "description": "Mid-market companies (100-1000 employees) globally requiring scalable ICT services with flexible delivery models",
-      "vertical_codes": ["enterprise"],
-      "segmentation": {
-        "employees_min": 100,
-        "employees_max": 1000
-      },
-      "market_relevance": "industry"
-    },
-    {
-      "slug": "public-sector-dach",
-      "name": "Public Sector DACH",
-      "region": "DACH",
-      "description": "Government agencies and public institutions in the DACH region requiring sovereign, compliant ICT services with strict data governance",
-      "vertical_codes": ["public-sector"],
-      "segmentation": {
-        "employees_min": null,
-        "employees_max": null
-      },
-      "market_relevance": "industry"
-    }
-  ]
+  "markets": [],
+  "proposition_mode": "dynamic"
 }

@@ -67,6 +67,13 @@ This surfaces two distinct risk dimensions as mild penalties without dominating 
 A solution with BR 4.0, moderate foundation dependencies, and partial portfolio coverage scores
 4.0 × 0.95 × 0.95 = 3.61 — still high-priority, but both risks are visible.
 
+**Generic portfolio context:** When `generation_mode` is `"generic-portfolio-anchored"`,
+`readiness_score` reflects how well the generic B2B ICT taxonomy covers the solution's building
+blocks — not whether a specific company can deliver it. The BlueprintFactor still applies (high
+taxonomy coverage means the solution fits standard ICT service categories; low coverage means it
+requires niche capabilities). In readiness annotations (Step 1e), append "(generic taxonomy)" to
+distinguish from company readiness — e.g., `Readiness: 0.82 (generic taxonomy)`.
+
 ### Step 1d: Store results
 
 On each ST, store:
@@ -104,6 +111,12 @@ summary. For full category-level detail, the Solution Blueprint Panel in the das
 the gap heatmap.
 
 For STs without blueprints, omit the readiness annotation.
+
+**Generic-anchored STs:** For STs with `generation_mode: "generic-portfolio-anchored"`, omit
+the `quality_flag` check (they have none — propositions were generated dynamically without
+quality assessment history). Instead, add a `[GENERIC]` marker in the ranked output next to
+these STs. This signals that portfolio anchoring is taxonomy-based and the user should consider
+re-anchoring after setting up a company portfolio.
 
 ## Step 2: Generate Ranked Solution List
 
@@ -167,7 +180,21 @@ For cross-investment-theme budget allocation, all STs ranked globally:
 - Solutions ranked: {n}
 - Average BR: {avg}
 - Tier 1 (mission critical): {n} solutions across {n} investment themes
-- Portfolio gaps identified: {n}
+- Portfolio gaps identified: {n} (or "Generic taxonomy gaps: {n}" when `portfolio_generic: true`)
+
+## Generic Portfolio Context
+
+> Include this section only when `portfolio_generic: true` in value-modeler metadata.
+
+This value model uses a generic B2B ICT portfolio (not company-specific).
+{n} of {total} Solution Templates are generic-portfolio-anchored.
+
+Readiness scores reflect taxonomy coverage, not company delivery capability.
+Portfolio gaps against generic features indicate the solution needs capabilities
+outside standard B2B ICT service categories.
+
+**Recommended next step:** Set up a company-specific portfolio with `/portfolio-setup`
+and re-anchor with `/value-model re-anchor` to get company-specific readiness data.
 
 ## Methodology
 
@@ -301,7 +328,7 @@ Summarize the complete value model to the user:
 - **{n} Metrics** — KPIs to measure success
 - **Top investment theme:** {IT-1} (avg BR: {x}) — {strategic question}
 - **Top 3 solutions:** {ST-1}, {ST-2}, {ST-3}
-- **Portfolio gaps found:** {n} solutions not covered by existing products
+- **Portfolio gaps found:** {n} solutions not covered by existing products (when `portfolio_generic: true`, show: "**Generic taxonomy gaps:** {n} solutions outside standard B2B ICT taxonomy")
 - **Implementation:** {n} quick wins, {n} strategic builds, {n} future bets
 
 Files created:

@@ -60,6 +60,14 @@ in both the HTML template and inline views so the user knows the underlying prop
 improvement — their BR score still applies, but customer-facing materials should wait until
 the proposition is refined.
 
+### Generic Portfolio Context
+
+When using generic portfolio context (`generation_mode: "generic-portfolio-anchored"`), quality
+flags are absent on all STs — propositions were generated dynamically from taxonomy features
+without quality assessment history. Scoring remains fully valid: Business Relevance captures
+customer-specific relevance regardless of portfolio source. Omit the quality warning icon for
+generic-anchored STs in both HTML and inline views.
+
 ## Step 2: Present to User
 
 Open the scoring HTML in the browser and tell the user:

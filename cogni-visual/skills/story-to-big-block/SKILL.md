@@ -45,6 +45,7 @@ The brief describes WHAT to show (blocks, tiers, connections), not HOW to draw i
 | `output_path` | `{source_dir}/cogni-visual/big-block-brief.md` | Brief output location |
 | `canvas_size` | `A1` | DIN format: A0, A1, A2, A3 (always landscape) |
 | `interactive` | `true` | When `true`, present choices via AskUserQuestion |
+| `stakeholder_review` | `interactive` | When `true`, run brief-review-assessor after validation. Defaults to value of `interactive`. |
 | `max_solutions` | from canvas | Maximum solutions to include (capped by canvas size) |
 
 Canvas size details: See `$CLAUDE_PLUGIN_ROOT/libraries/big-block-layouts.md` for dimensions and block limits.
@@ -236,7 +237,7 @@ If non-interactive: skip this checkpoint.
 
 ---
 
-### Step 7: Validate & Write Brief
+### Step 7a: Validate Brief
 
 > **WHY:** Validation catches structural issues before rendering. A brief with mismatched block IDs or orphaned connections will produce a broken diagram.
 
@@ -250,6 +251,38 @@ If non-interactive: skip this checkpoint.
 6. **Wave coverage:** Every block has a wave assignment
 7. **Canvas fit:** Total blocks <= canvas maximum from big-block-layouts.md
 8. **Umlaut scan (German only):** Check all text fields for ASCII umlaut substitutions
+
+---
+
+### Step 7b: Stakeholder Review (when `stakeholder_review=true`)
+
+> Structural validation catches data integrity issues, but cannot tell whether the solution architecture diagram will work for investment decisions — whether tier logic is defensible, whether the diagram is accessible to non-technical executives, or whether a sales engineer can walk a customer through it. The brief-review-assessor evaluates from solution architect, investment decision maker, and sales engineer perspectives.
+
+**Skip this step** if `stakeholder_review=false`.
+
+Launch the `brief-review-assessor` agent with:
+- `brief_type`: `big-block`
+- Brief content (write to a `.draft` temp file if the brief hasn't been written yet)
+- `source_narrative`: the source value-modeler output paths from Step 0
+- `audience_context`: if provided
+- `round`: 1
+
+**On accept (all perspectives ≥85):** Proceed to Step 7c.
+
+**On revise:**
+1. Apply CRITICAL improvements first, then HIGH improvements — edit tier assignments, solution labels, connection descriptions, wave sequencing as recommended
+2. Re-run Step 7a validation to ensure data integrity after edits
+3. Re-launch the assessor (round 2)
+4. If round 2 accepts or scores 70+ with no CRITICAL issues: proceed to Step 7c
+5. If round 2 still has issues: present remaining issues to user, proceed to Step 7c
+
+**On reject:** Surface the verdict to the user via AskUserQuestion and let them decide whether to proceed, edit manually, or abandon.
+
+Write the review verdict to `{output_dir}/big-block-brief.review.json`.
+
+---
+
+### Step 7c: Write Brief
 
 **Output path resolution:**
 - If `output_path` explicitly provided: `mkdir -p "$(dirname "${output_path}")"`

@@ -53,6 +53,7 @@ The brief describes WHAT each section says and which section type to use. The Pe
 | `arc_id` | from frontmatter | Narrative arc ID from cogni-narrative. Mapped to visual `arc_type` in Step 1. |
 | `arc_definition_path` | none | Path to arc definition file — element names become `section_label` values. |
 | `interactive` | `true` | When `true`, present choices via AskUserQuestion. When `false`, auto-select. |
+| `stakeholder_review` | `interactive` | When `true`, run brief-review-assessor after validation. Defaults to value of `interactive`. |
 | `audience_context` | none | Structured audience/buyer data for targeted section ordering and CTA calibration. |
 
 ### Caller-supplied overrides
@@ -360,6 +361,34 @@ Four layers — stop on first failure, fix, re-check:
 2. **Message quality** — assertion headlines, number plays, parallel bullets
 3. **Visual coherence** — section theme alternation, feature position alternation, image consistency
 4. **Content integrity** — all narrative sections represented, language consistency
+
+---
+
+### Step 9b: Stakeholder Review (when `stakeholder_review=true`)
+
+> Structural validation catches schema and formatting issues, but cannot tell whether the web brief will create an effective scroll experience — whether the opening hooks visitors, whether CTAs are placed at motivation peaks, or whether the content converts. The brief-review-assessor evaluates from UX designer, audience, and content strategist perspectives.
+
+**Skip this step** if `stakeholder_review=false`.
+
+Launch the `brief-review-assessor` agent with:
+- `brief_type`: `web`
+- Brief content (write to a `.draft` temp file if the brief hasn't been written yet)
+- `source_narrative`: the narrative path from Step 0
+- `audience_context`: if provided
+- `round`: 1
+
+**On accept (all perspectives ≥85):** Proceed to Step 10.
+
+**On revise:**
+1. Apply CRITICAL improvements first, then HIGH improvements — edit section headlines, types, CTAs, image prompts, and section sequence as recommended
+2. Re-run Step 9 validation to ensure structural integrity after edits
+3. Re-launch the assessor (round 2)
+4. If round 2 accepts or scores 70+ with no CRITICAL issues: proceed to Step 10
+5. If round 2 still has issues: present remaining issues to user, proceed to Step 10
+
+**On reject:** Surface the verdict to the user via AskUserQuestion and let them decide whether to proceed, edit manually, or abandon.
+
+Write the review verdict to `{output_dir}/web-brief.review.json`.
 
 ---
 

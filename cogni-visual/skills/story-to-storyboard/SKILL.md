@@ -47,6 +47,7 @@ The brief describes WHAT each poster contains and which section types to use. Al
 | `arc_id` | from frontmatter | Narrative arc ID from cogni-narrative. Mapped to visual `arc_type` in Step 1. |
 | `arc_definition_path` | none | Path to arc definition file — element names become poster labels. |
 | `interactive` | `true` | When `true`, present choices via AskUserQuestion. When `false`, auto-select. |
+| `stakeholder_review` | `interactive` | When `true`, run brief-review-assessor after validation. Defaults to value of `interactive`. |
 | `governing_thought` | auto-extracted | Pre-computed governing thought from caller |
 
 **Poster sizes:** See `$CLAUDE_PLUGIN_ROOT/libraries/storyboard-layouts.md` for dimensions, section stacking, and portrait layout adaptations. See `$CLAUDE_PLUGIN_ROOT/libraries/web-layouts.md` for section type schemas.
@@ -298,6 +299,34 @@ Four layers — stop on first failure, fix, re-check:
 4. **Content integrity** — all narrative sections represented, language consistency
 
 **Print-specific checks:** poster count 3-5, section minimum heights, font size minimums, contiguous sequence numbers, hero first, CTA last, max 2 images per poster.
+
+---
+
+### Step 8b: Stakeholder Review (when `stakeholder_review=true`)
+
+> Structural validation catches schema and formatting issues, but cannot tell whether the storyboard will work as a physical walkthrough — whether posters are readable at distance, whether the sequence builds a narrative arc, or whether a presenter can lead a group through them. The brief-review-assessor evaluates from print designer, audience, and exhibition presenter perspectives.
+
+**Skip this step** if `stakeholder_review=false`.
+
+Launch the `brief-review-assessor` agent with:
+- `brief_type`: `storyboard`
+- Brief content (write to a `.draft` temp file if the brief hasn't been written yet)
+- `source_narrative`: the narrative path from Step 0
+- `audience_context`: if provided
+- `round`: 1
+
+**On accept (all perspectives ≥85):** Proceed to Step 9.
+
+**On revise:**
+1. Apply CRITICAL improvements first, then HIGH improvements — edit poster headlines, section types, density distribution, and CTA as recommended
+2. Re-run Step 8 validation to ensure structural integrity after edits
+3. Re-launch the assessor (round 2)
+4. If round 2 accepts or scores 70+ with no CRITICAL issues: proceed to Step 9
+5. If round 2 still has issues: present remaining issues to user, proceed to Step 9
+
+**On reject:** Surface the verdict to the user via AskUserQuestion and let them decide whether to proceed, edit manually, or abandon.
+
+Write the review verdict to `{output_dir}/storyboard-brief.review.json`.
 
 ---
 

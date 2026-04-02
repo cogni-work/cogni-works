@@ -49,6 +49,7 @@ The brief describes WHAT each slide says and which layout to use. The PPTX rende
 | `arc_id` | from frontmatter | Narrative arc ID from cogni-narrative (e.g., `industry-transformation`). Mapped to visual `arc_type` in Step 1. |
 | `arc_definition_path` | none | Path to arc definition file — element names become methodology slide phase labels. |
 | `interactive` | `true` | When `true`, present choices via AskUserQuestion. When `false`, auto-select. |
+| `stakeholder_review` | `interactive` | When `true`, run brief-review-assessor after validation. Defaults to value of `interactive`. |
 | `audience_context` | none | Structured audience/buyer data for targeted evidence selection and Q&A prep (Rich mode). |
 
 ### Caller-supplied overrides
@@ -349,6 +350,34 @@ Five layers — stop on first failure, fix, re-check:
 3. **Copywriting** — number plays applied, bullets consolidated, no hedging
 4. **Presentation logic** — bookend slides enforced, within max_slides, layout variety
 5. **Content integrity** — all sections represented, citations preserved, German characters correct
+
+---
+
+### Step 9b: Stakeholder Review (when `stakeholder_review=true`)
+
+> Structural validation (Step 9) catches schema and formatting issues, but cannot tell whether the brief will actually work for the audience, the presenter, or as a visual communication. The brief-review-assessor evaluates from three stakeholder perspectives — catching weak headlines that pass schema checks, layout monotony that passes variety rules, and CTA gaps that pass structural validation. Reviewing at the brief stage is efficient because changes are text edits, not re-renders.
+
+**Skip this step** if `stakeholder_review=false`.
+
+Launch the `brief-review-assessor` agent with:
+- `brief_type`: `slides`
+- Brief content (write to a `.draft` temp file if the brief hasn't been written yet)
+- `source_narrative`: the narrative path from Step 0
+- `audience_context`: if provided
+- `round`: 1
+
+**On accept (all perspectives ≥85):** Proceed to Step 10.
+
+**On revise:**
+1. Apply CRITICAL improvements first, then HIGH improvements — edit the brief content surgically (change specific headlines, layout types, speaker notes, CTAs as recommended)
+2. Re-run Step 9 validation to ensure structural integrity after edits
+3. Re-launch the assessor (round 2)
+4. If round 2 accepts or scores 70+ with no CRITICAL issues: proceed to Step 10
+5. If round 2 still has issues: present remaining issues to user, proceed to Step 10
+
+**On reject:** Surface the verdict to the user via AskUserQuestion and let them decide whether to proceed, edit manually, or abandon.
+
+Write the review verdict to `{output_dir}/presentation-brief.review.json`.
 
 ---
 

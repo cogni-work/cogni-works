@@ -52,6 +52,7 @@ The brief describes WHAT to show, not HOW to draw it. Rendering agents own visua
 | `arc_id` | from frontmatter | Narrative arc ID from cogni-narrative (e.g., `industry-transformation`). Mapped to visual `arc_type` in Step 1. |
 | `arc_definition_path` | none | Path to arc definition file — element names become `station_label` values. |
 | `interactive` | `true` | When `true`, present choices via AskUserQuestion. When `false`, auto-select. |
+| `stakeholder_review` | `interactive` | When `true`, run brief-review-assessor after validation. Defaults to value of `interactive`. |
 | `audience_context` | none | Structured audience/buyer data for station prioritization |
 | `governing_thought` | auto-extracted | Pre-computed governing thought from caller |
 
@@ -301,7 +302,7 @@ Define the spatial arrangement:
 
 ---
 
-### Step 7: Validate & Write Brief
+### Step 7a: Validate Brief
 
 > **WHY:** Validation exists because self-assessment is unreliable without explicit measurement. In early tests, models reported "pass" while producing 43-word bodies and ASCII umlauts. The four-layer gate with recorded counts forces honest evaluation — you can't claim the brief passes if the numbers say otherwise.
 
@@ -327,6 +328,38 @@ Run these checks as active verification steps, not a passive checklist. Each lay
 - **Governing thought:** Verify it is exactly ONE sentence (one period at the end). If multi-sentence, rewrite per Step 2 rules.
 - **Synthesis label:** If any station has arc_role `call-to-action` or spans multiple dimensions, verify it has station_label `"Synthese"` (de) or `"Synthesis"` (en).
 - All major narrative sections represented, numbers formatted per language.
+
+---
+
+### Step 7b: Stakeholder Review (when `stakeholder_review=true`)
+
+> Structural validation catches schema and formatting issues, but cannot tell whether the brief will create an effective visual experience — whether the Story World resonates, whether station messages land for the audience, or whether a facilitator can walk a group through the canvas. The brief-review-assessor evaluates from visual storyteller, audience, and workshop facilitator perspectives.
+
+**Skip this step** if `stakeholder_review=false`.
+
+Launch the `brief-review-assessor` agent with:
+- `brief_type`: `big-picture`
+- Brief content (write to a `.draft` temp file if the brief hasn't been written yet)
+- `source_narrative`: the narrative path from Step 0
+- `audience_context`: if provided
+- `round`: 1
+
+**On accept (all perspectives ≥85):** Proceed to Step 7c.
+
+**On revise:**
+1. Apply CRITICAL improvements first, then HIGH improvements — edit station descriptions, headlines, narrative connections, Story World elements as recommended
+2. Re-run Step 7a validation to ensure structural integrity after edits
+3. Re-launch the assessor (round 2)
+4. If round 2 accepts or scores 70+ with no CRITICAL issues: proceed to Step 7c
+5. If round 2 still has issues: present remaining issues to user, proceed to Step 7c
+
+**On reject:** Surface the verdict to the user via AskUserQuestion and let them decide whether to proceed, edit manually, or abandon.
+
+Write the review verdict to `{output_dir}/big-picture-brief.review.json`.
+
+---
+
+### Step 7c: Write Brief
 
 **Output path resolution** (run via Bash before writing):
 - If `output_path` explicitly provided: `mkdir -p "$(dirname "${output_path}")"`

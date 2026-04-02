@@ -13,6 +13,7 @@ skills/              Intelligent transformation & rendering skills
   story-to-big-block/  Big Block solution architecture brief from TIPS value-modeler output
   render-big-picture/  Orchestrator skill — station-first pipeline (v4.2, 1100-1500 elements, dark/light mode)
   render-big-block/    Orchestrator skill — sequential pipeline (v1.0, 150-250 elements, dark/light mode)
+  review-brief/        Standalone stakeholder review of any visual brief (3 perspectives, accept/revise verdict)
   enrich-report/       Post-processing: markdown report → themed HTML (+ optional PDF/DOCX) with Chart.js + Excalidraw SVG
     scripts/
       generate-enriched-report.py  Python HTML generator (markdown→HTML, theme injection, chart mounting)
@@ -38,6 +39,7 @@ commands/            User-facing slash commands
   render-big-picture.md  /render-big-picture — invoke the rendering pipeline
   render-big-block.md    /render-big-block — invoke the Big Block rendering pipeline
   enrich-report.md       /enrich-report — enrich a report with themed visualizations
+  review-brief.md        /review-brief — stakeholder review of any visual brief
 
 agents/              Autonomous rendering agents (brief -> output)
   story-to-slides.md   Orchestrates the story-to-slides skill
@@ -55,6 +57,7 @@ agents/              Autonomous rendering agents (brief -> output)
   story-to-storyboard.md  Orchestrates the story-to-storyboard skill
   storyboard.md        Renders storyboard briefs into multi-poster .pen via Pencil MCP
   enrich-report.md     Orchestrates the enrich-report skill (report → themed HTML)
+  brief-review-assessor.md  Stakeholder review of visual briefs (3 perspectives per brief type, haiku)
 
 libraries/           Shared reference material loaded at Step 1
   arc-taxonomy.md          Shared arc_id → arc_type mapping + element names (all skills)
@@ -69,16 +72,17 @@ libraries/           Shared reference material loaded at Step 1
   big-block-layouts.md     Block sizing, tier bands, connection routing, SPI/foundation sections
   EXAMPLE_BIG_BLOCK_BRIEF.md   Reference Big Block brief (9 solutions, 4 tiers, manufacturing)
   cta-taxonomy.md          CTA types, urgency levels, arc-to-CTA heuristics (all skills)
+  brief-review-perspectives.md  5 perspective sets for stakeholder review (slides, big-picture, web, storyboard, big-block)
 ```
 
 ## Component Inventory
 
 | Type | Count | Items |
 |------|-------|-------|
-| Skills | 8 | story-to-slides, story-to-big-picture, story-to-big-block, story-to-web, story-to-storyboard, render-big-picture, render-big-block, enrich-report |
-| Agents | 14 | story-to-slides, pptx, story-to-big-picture, big-picture (wrapper), story-to-big-block, big-block (wrapper), station-structure-artist (worker ×N), station-enrichment-artist (worker ×N), zone-reviewer (worker ×4), story-to-web, web, story-to-storyboard, storyboard, enrich-report |
-| Commands | 3 | render-big-picture, render-big-block, enrich-report |
-| Libraries | 12 | arc-taxonomy, cta-taxonomy, pptx-layouts, EXAMPLE_BRIEF, big-picture-layouts, EXAMPLE_BIG_PICTURE_BRIEF, big-block-layouts, EXAMPLE_BIG_BLOCK_BRIEF, web-layouts, EXAMPLE_WEB_BRIEF, storyboard-layouts, EXAMPLE_STORYBOARD_BRIEF |
+| Skills | 9 | story-to-slides, story-to-big-picture, story-to-big-block, story-to-web, story-to-storyboard, render-big-picture, render-big-block, enrich-report, review-brief |
+| Agents | 15 | story-to-slides, pptx, story-to-big-picture, big-picture (wrapper), story-to-big-block, big-block (wrapper), station-structure-artist (worker ×N), station-enrichment-artist (worker ×N), zone-reviewer (worker ×4), story-to-web, web, story-to-storyboard, storyboard, enrich-report, brief-review-assessor |
+| Commands | 4 | render-big-picture, render-big-block, enrich-report, review-brief |
+| Libraries | 13 | arc-taxonomy, cta-taxonomy, pptx-layouts, EXAMPLE_BRIEF, big-picture-layouts, EXAMPLE_BIG_PICTURE_BRIEF, big-block-layouts, EXAMPLE_BIG_BLOCK_BRIEF, web-layouts, EXAMPLE_WEB_BRIEF, storyboard-layouts, EXAMPLE_STORYBOARD_BRIEF, brief-review-perspectives |
 
 ## Big Picture Rendering Pipeline (v4.2 — Contrast, Inline Numbers, Bigger Title)
 
@@ -188,6 +192,7 @@ cogni-trends/cogni-research → enrich-report → browser / PDF / DOCX
 - **Theme-driven visuals.** Briefs contain no color/font fields; the renderer reads theme.md directly (or maps to design tokens for web and storyboard briefs). Big-picture briefs v3.0 are fully clean — no drawing data.
 - **CTA proposals.** All four skills extract and generate CTAs via shared `libraries/cta-taxonomy.md`. Each content unit gets a per-section `cta:` field (text, type, urgency). A `CTA Summary` block aggregates 3-5 prioritized proposals with a `primary_cta`. Interactive CTA checkpoint lets users review/edit before finalization.
 - **Big picture = station-first, no connectors, no arrows, no circles.** Station-structure-artists compose 130-160 element structures. Station-enrichment-artists add 100-130 fine details. Inline accent-colored number text (not circles) positioned LEFT of headline indicates reading flow. Dark mode min fill #888888, opacity-aware contrast checks. Title spans ~50% banner width (A1: 110px). Station body text 100-120 words. 4 zone-reviewers evaluate station density + contrast visibility + dark mode compliance in parallel. Batch size 50 with fallback to 25/10.
+- **Stakeholder review for briefs.** All story-to-X skills support a `stakeholder_review` parameter (defaults to `interactive`). When enabled, the `brief-review-assessor` agent evaluates the brief from 3 type-adapted perspectives (design, audience, usability) with 5 weighted criteria each. Verdict is accept/revise/reject with max 2 revision rounds. Perspectives are defined in `libraries/brief-review-perspectives.md`. The standalone `review-brief` skill and `/review-brief` command enable reviewing existing briefs outside the generation flow.
 
 ## Skill Differences
 
@@ -199,3 +204,4 @@ cogni-trends/cogni-research → enrich-report → browser / PDF / DOCX
 | Layout unit | Slide with layout type | Station as landscape object | Solution block in tier band | Station as 250+ element two-pass illustration | Solution block in tier grid | Section with auto-layout | Poster with 1-3 stacked sections | Report section with injected chart/SVG |
 | Element count | N/A | N/A | N/A | 1100-1500 total (stations only) | 150-250 total | N/A | N/A | 10-22 enrichments (Chart.js + SVG) |
 | Quality review | N/A | 4-layer validation | 8-point schema validation | 9-gate zone-based (4 parallel reviewers, 2 passes) | Snapshot checkpoints | 4-layer validation | N/A | 5-gate validation (citations, charts, SVG, theme, content) |
+| Stakeholder review | Designer + Audience + Presenter | Storyteller + Audience + Facilitator | Architect + Decision Maker + Sales Engineer | N/A (rendering) | N/A (rendering) | UX Designer + Audience + Strategist | Print Designer + Audience + Presenter | N/A (post-processing) |

@@ -101,7 +101,7 @@ All slides use valid layouts, have all required fields, contain no unknown or co
 
 ## Layer 2: Message Quality
 
-Verify slide messages follow pyramid communication principles.
+Verify slide messages follow pyramid communication principles. The audience spends 3 seconds scanning each slide before the presenter speaks — if the titles don't carry the argument, the body text arrives too late.
 
 ### Reasoning Approach
 
@@ -112,6 +112,8 @@ REASON through message quality by reading ONLY the slide headings in sequence:
      → Read all slide headings (## Slide N: ...) in order, ignoring body content
      → ASK: "Do I understand the full argument from titles alone?"
      → If the titles don't tell the story, message architecture failed
+     → WHY: The audience reads titles first and decides whether to engage.
+       A title that requires the body to make its point has already lost.
 
   2. CHECK each heading is an assertion
      → Assertions make a CLAIM: "688 Lives Lost Annually" ✅
@@ -120,7 +122,17 @@ REASON through message quality by reading ONLY the slide headings in sequence:
      → FAIL if: any heading names a topic without asserting
      → FIX: Return to Step 5a output and re-derive the assertion headline
 
-  2b. CHECK for methodology jargon in client-facing copy
+  2b. CHECK headline completeness (title-banner test)
+     → Apply the title-banner mental method from 05a step 5: cover the slide
+       body AND the Bottom-Banner. Does the headline alone tell the audience
+       WHAT is happening AND WHY it matters?
+     → This check exists because models consistently produce weak headlines
+       and patch them with banners. The anti-pattern is subtle — output looks
+       plausible until you apply this test.
+     → FAIL if: the Banner contains the "so what" that the title is missing
+     → FIX: Fold the banner's consequence into the title per 05a step 5
+
+  2c. CHECK for methodology jargon in client-facing copy
      → Scan ALL slide titles, headlines, bullets, Bottom-Banner for:
        "Power Position", "Why Change", "Why Now", "Why You", "Why Pay",
        "Unconsidered Need", "PP1", "PP2", "PP3"
@@ -133,13 +145,18 @@ REASON through message quality by reading ONLY the slide headings in sequence:
        (overlap means one should be cut or merged)
      → Collectively Exhaustive: is any major argument from the governing
        thought MISSING? (gap means a slide needs to be added)
+     → WHY: Overlapping slides dilute focus — the audience hears the same
+       point twice and wonders if the presenter ran out of material.
+       Missing arguments leave gaps that a skeptical audience will probe in Q&A.
      → FAIL if: overlapping or missing arguments
      → FIX: Merge overlapping slides, add slides for gaps
 
   4. CHECK hero number isolation
      → For stat-card-with-context slides: is there exactly ONE hero number?
      → Hero-Stat-Box.Number should contain a single dominant number
-     → If two competing numbers share visual weight, they fight for attention
+     → WHY: A stat-card with two competing hero numbers creates split attention —
+       neither lands. The 36pt treatment works because it anchors the eye to a
+       single figure. Supporting numbers belong in sublabel or context box.
      → FAIL if: multiple hero-weight numbers on one slide
      → FIX: Move secondary numbers to Sublabel, Context-Box, or a new slide
 
@@ -174,16 +191,21 @@ REASON through copywriting quality for each slide:
      → FIX: Apply techniques from 05a-slide-copywriting.md
 
   2. CHECK bullet consolidation
-     → Maximum 5 bullets per bullet field
-     → Maximum 10 words per bullet (scan-optimized, not sentences)
-     → FAIL if: bullets >5 per field or >10 words each
+     → Maximum 5 bullets per bullet field, ~8-10 words per bullet
+     → WHY: At presentation distance (3-5m), the audience scans bullets in ~3 seconds.
+       Beyond 8-10 words, scanning breaks down — they start reading and stop listening.
+       More than 5 bullets overwhelm the visual hierarchy.
+     → FAIL if: bullets >5 per field or clearly too long to scan in one glance
      → FIX: Merge similar bullets, cut weakest, tighten wording
 
   2b. CHECK IS/DOES/MEANS box text density (is-does-means slides only)
-     → IS-Box Text: ≤ 15 words? Single positioning noun phrase (not a full sentence)?
-     → DOES-Box Text: ≤ 20 words? Action phrase or `+` notation with at least one metric?
-     → MEANS-Box Text: ≤ 15 words? Tech/credential stack notation (no explanatory sentences)?
-     → FAIL if: any box exceeds word count or contains paragraph-length sentences
+     → Each box renders at 0.9 inches tall at 12pt font — room for roughly one line
+       of text (~15-20 words). Paragraph-length sentences will overflow or force the
+       renderer to shrink the font to illegibility.
+     → IS-Box Text: ~15 words? Single positioning noun phrase (not a full sentence)?
+     → DOES-Box Text: ~20 words? Action phrase or `+` notation with at least one metric?
+     → MEANS-Box Text: ~15 words? Tech/credential stack notation (no explanatory sentences)?
+     → FAIL if: any box contains paragraph-length sentences that would overflow the 0.9" box
      → FIX: Apply IS/DOES/MEANS Box Copywriting rules from 05a-slide-copywriting.md —
        compress to phrase notation, move explanatory context to speaker notes,
        move the single strongest cut metric to Bottom-Banner
@@ -196,16 +218,22 @@ REASON through copywriting quality for each slide:
      → FIX: Replace with direct, assertive language
 
   4. CHECK headline length
-     → Maximum 60 characters per slide title
-     → Headlines must be scannable in 3 seconds
-     → FAIL if: headline exceeds 60 characters
-     → FIX: Remove filler words, lead with number or verb
+     → A complete action title (claim + quantified consequence) naturally runs longer
+       than a topic label — up to ~100 characters is acceptable when the headline
+       delivers both the claim and the "so what." IS-DOES-MEANS slides may reach ~130
+       characters. Only cut if the headline wraps to 3+ lines on-screen.
+     → FAIL if: headline exceeds ~100 characters (~130 for IS-DOES-MEANS) without
+       delivering proportionally more specificity
+     → FIX: Cut redundant modifiers, replace clauses with numbers, use symbols (€ not EUR)
 
   5. CHECK speaker notes completeness (generated in Step 7c)
      → Every content slide needs Speaker-Notes with BOTH sections:
        EN: ">> WHAT YOU SAY" + ">> WHAT YOU NEED TO KNOW"
        DE: ">> WAS SIE SAGEN" + ">> WAS SIE WISSEN MÜSSEN"
-     → Target: 200-400 words per slide (hard bounds: 150-450)
+     → Target: 200-400 words per slide.
+       WHY: Notes under ~150 words lack the depth needed for confident delivery and
+       Q&A handling. Above ~450, they become a teleprompter the presenter reads rather
+       than internalizes. The goal is coaching, not a script.
      → CHECK [Energy] tag present as first element in "WHAT YOU SAY" on every content slide
      → CHECK Q&A depth: all relevant stakeholder objections covered per slide (Rich mode: 3-5 items)
      → FAIL if: speaker notes missing or only one section present
@@ -216,7 +244,7 @@ REASON through copywriting quality for each slide:
 
 ### Pass Criteria
 
-Number plays applied. Bullets ≤5 per field, ≤10 words each. IS/DOES/MEANS Text ≤15/20/15 words (phrase notation, not sentences). No hedging. Headlines ≤60 chars. Speaker notes with both sections on all content slides, 200-400 words each, with [Energy] arc-position coaching and comprehensive Q&A prep.
+Number plays applied. Bullets ≤5 per field, ~8-10 words each. IS/DOES/MEANS text fits in 0.9" boxes (~15/20/15 words, phrase notation). No hedging. Headlines ≤~100 chars (~130 for IS-DOES-MEANS), with complete action titles that pass the title-banner test. Speaker notes with both sections on all content slides, 200-400 words each, with [Energy] arc-position coaching and comprehensive Q&A prep.
 
 ---
 
@@ -244,6 +272,9 @@ REASON through presentation logic for the entire deck:
 
   3. CHECK layout variety
      → ASK: "Are all content slides the same layout?"
+     → WHY: Layout repetition signals "same type of information" to the audience's
+       visual system. After three identical layouts, they habituate and stop scanning.
+       Varying layouts re-activates attention by signaling "this is different."
      → A good deck uses ≥3 different layout types
      → FAIL if: all content slides use two-columns-equal (common fallback overuse)
      → FIX: Re-evaluate — stat-heavy → stat-card, process → timeline-steps,
@@ -380,6 +411,7 @@ Before marking Step 8 complete, verify ALL items. Mark each ✅ or ❌:
 
 ### Layer 2: Message Quality
 - [ ] Every slide heading is an assertion (not a topic label)
+- [ ] Title-banner test passed: every headline is complete without the banner (banner adds proof, not "so what")
 - [ ] No methodology jargon in client-facing slide titles or body (Power Position, Why You, etc.)
 - [ ] Slide titles alone tell the complete story (title-only test)
 - [ ] No overlapping or missing arguments (MECE)
@@ -388,9 +420,9 @@ Before marking Step 8 complete, verify ALL items. Mark each ✅ or ❌:
 
 ### Layer 3: Copywriting Quality
 - [ ] Number plays applied to statistics
-- [ ] Bullets ≤5 per field, ≤10 words each
+- [ ] Bullets ≤5 per field, ~8-10 words each (scannable in one glance)
 - [ ] No hedging language in headlines or bullets
-- [ ] All headlines ≤60 characters
+- [ ] All headlines ≤~100 chars (~130 for IS-DOES-MEANS) — specific + complete action titles
 - [ ] Speaker notes present with both sections on all content slides (200-400 words each)
 - [ ] [Energy] tag present as first element in "WHAT YOU SAY" on every content slide
 - [ ] Q&A covers all relevant stakeholder objections per slide (Rich mode: 3-5 items)

@@ -349,6 +349,8 @@ REASONING:
 
 Consolidation is needed when message extraction produces more slides than `max_slides`. This is common — a 20-page narrative easily produces 18-25 potential slide messages, but a deck should rarely exceed 12-15 slides.
 
+**Why the default limit is 15:** Audience attention declines measurably after 15-20 minutes of continuous presentation. At roughly 90-120 seconds per slide, 15 slides fills a 20-25 minute slot. Longer decks either rush through slides (undermining comprehension) or run over time (losing the audience). The `max_slides` parameter reflects this attention window — it is a presentation design constraint, not an arbitrary formatting rule.
+
 ### Reasoning Approach
 
 Consolidation is NOT random cutting — it is strategic compression. The goal is to reduce slide count while preserving argument strength and emotional arc.

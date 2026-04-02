@@ -729,6 +729,9 @@ Per-slide targets (replacing 05b's 100-200 word guidance):
 | Closing slide | 200-300 words | CTA delivery coaching + follow-up actions |
 
 **Overall target:** 200-400 words per slide
+
+Speaker notes serve two audiences: the presenter rehearsing alone (needs enough depth to internalize the argument and anticipate questions) and the presenter mid-presentation (needs quick-reference talking points they can scan under pressure). Notes under ~150 words lack rehearsal depth — the presenter walks into the room underprepared. Above ~450, the notes become a teleprompter script that the presenter reads rather than internalizes, losing eye contact and audience connection.
+
 **Hard minimum:** 150 words (below this, the presenter is unsupported)
 **Hard maximum:** 450 words (above this, the presenter cannot scan under pressure)
 

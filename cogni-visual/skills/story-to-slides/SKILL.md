@@ -128,7 +128,7 @@ Apply the localized labels in every `IS-Box.Label`, `DOES-Box.Label`, `MEANS-Box
 
 **Bullets** — scan-optimized, not sentences:
 - Bad: "The security staff are unable to adequately cover all areas of the rail network on a 24/7 basis" (19 words)
-- Good: "Staff cannot cover all areas 24/7" (6 words, max 10 words per bullet)
+- Good: "Staff cannot cover all areas 24/7" (6 words — scannable in ~3 seconds at presentation distance, ~8-10 words max)
 
 ---
 
@@ -266,7 +266,7 @@ When caller provides `governing_thought`/`section_roles`: validate against narra
 
 **Read reference:** `references/05a-slide-copywriting.md`
 
-- **6a. Headline optimization** — every title is an assertion (max 60 chars, contains verb)
+- **6a. Headline optimization** — every title is a complete action assertion (up to ~100 chars, contains verb + quantified consequence)
 - **6b. Number plays** — ratio framing, hero number isolation, before/after contrast
 - **6c. Bullet consolidation** — 8-12 points → 3-5 scannable bullets (max 10 words each)
 - **6d. Evidence selection** — top 3-5 per slide, audience-weighted, inline citations preserved
@@ -333,7 +333,7 @@ Generate from citation renumber map (Step 2). Position after closing-slide as la
 
 Both get `Bottom-Banner` with localized INTERNAL warning.
 
-**Sub-step 2: Speaker-Notes for all slides** — two-section format ("WHAT YOU SAY" + "WHAT YOU NEED TO KNOW"), 200-400 words per slide, arc-position coaching, layout-aware openings, comprehensive Q&A.
+**Sub-step 2: Speaker-Notes for all slides** — two-section format ("WHAT YOU SAY" + "WHAT YOU NEED TO KNOW"), 200-400 words per slide (enough for rehearsal depth without becoming a teleprompter), arc-position coaching, layout-aware openings, comprehensive Q&A.
 
 ---
 

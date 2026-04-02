@@ -643,19 +643,20 @@ REASON through conflicts:
 
 ---
 
-## Visual Variety Rules
+## Visual Variety Guidelines
 
-Different layouts signal "new type of information" and re-engage attention. After all layouts selected, scan for monotony:
+Layout repetition signals "same type of information" to the audience's visual system. After three identical layouts, they habituate and disengage — expecting more of the same. Varying layouts re-activates attention by signaling "this is different, re-engage." After all layouts are selected, scan for monotony:
 
 ```text
-RULE 1: No 3+ consecutive slides with same layout
+Guideline 1: Avoid 3+ consecutive slides with the same layout
   → Swap the one with LOWEST confidence to its best alternative
   → EXCEPTION: IS-DOES-MEANS runs of N products/capabilities (see below)
 
-RULE 2: stat-card max 4× in a 12-slide deck
-  → Merge related stat-cards into a four-quadrants slide
+Guideline 2: stat-card max ~4× in a 12-slide deck
+  → When stat-cards dominate, the deck feels like a data dump rather than an argument.
+    Merge related stat-cards into a four-quadrants slide to vary the visual rhythm.
 
-RULE 3: At least 3 different layout types per deck
+Guideline 3: At least 3 different layout types per deck
   → Find most-used layout's lowest-confidence slide, switch to new type
 ```
 
@@ -725,9 +726,9 @@ Slide 12: MANDATORY closing-slide (1.0)
 
 VISUAL VARIETY CHECK:
   Sequence: title → stat-card → four-quad → two-col → two-col → IDM×3 → stat-card → three-opt → timeline → closing
-  Rule 1: IDM×3 accepted (Power Position exception). All others OK ✓
-  Rule 2: stat-card count = 2 (max 4) ✓
-  Rule 3: 8 unique layout types ✓
+  Guideline 1: IDM×3 accepted (Power Position exception). All others OK ✓
+  Guideline 2: stat-card count = 2 (max ~4) ✓
+  Guideline 3: 8 unique layout types ✓
 
 FINAL ASSIGNMENTS:
  # | Layout                  | Conf

@@ -76,12 +76,26 @@ REASON through headline construction for each slide:
        × "€280K investment, 4.3x return" (noun phrase — no verb)
        ✓ "€280K Investment Returns 4.3x in Year One" (verb: returns)
 
-  5. ADD the quantified consequence — every headline should answer "so what in numbers"
+  5. ADD the quantified consequence — the headline must be COMPLETE without the body or banner
+
+     WHY THIS STEP EXISTS: The natural tendency is to write a claim-only headline
+     ("EAT besetzt Führungsrollen in 2 Wochen") and then put the financial consequence
+     or the "so what" into the Bottom-Banner. This produces slides where covering the
+     banner reveals an incomplete headline. The audience scans the title FIRST and decides
+     whether to engage — if the "so what" is hidden in the banner, it arrives too late.
+
+     THE TITLE-BANNER MENTAL METHOD: To produce a complete action title, mentally draft
+     BOTH the title AND the Bottom-Banner together first. Then inspect: does the banner
+     contain the consequence, the "so what," the financial impact? If yes — that content
+     belongs in the title. Fold it in. Only THEN finalize the title as a self-contained
+     assertion. The banner's role is to add an independent proof metric (e.g., a customer
+     reference or benchmark), never to complete what the title left unsaid.
+
      → After writing the claim, ask: "What does this COST or SAVE or PREVENT in measurable terms?"
      → Append the consequence as a second clause using "und vermeidet / und erzielt / und spart / und verhindert":
-       × "EAT besetzt Führungsrollen in 2 Wochen" (claim only)
+       × "EAT besetzt Führungsrollen in 2 Wochen" (claim only — consequence missing)
        ✓ "EAT besetzt Führungsrollen in 2 Wochen und vermeidet EUR 150–300K Spezialistenersatz" (claim + consequence)
-       × "Vier Jobs zeigen den strukturellen Bedarf" (claim only)
+       × "Vier Jobs zeigen den strukturellen Bedarf" (claim only — no financial weight)
        ✓ "Vier Jobs kosten DT täglich EUR 300K–2M in Governance-Stillstand" (claim + financial consequence)
        × "AI Reduces Costs" (claim only)
        ✓ "AI Reduces Costs by 40% — EUR 280K Saved in Year One" (claim + specific number)
@@ -89,17 +103,19 @@ REASON through headline construction for each slide:
        ✓ "Succession Gaps Unaddressed for >90 Days Triple Board-Level Escalation Risk"
      → This applies to ALL content slides — not just IS-DOES-MEANS slides.
 
-  5b. LENGTH: prioritize specificity over brevity — up to ~100 characters acceptable
-     → The 60-character limit is a SECONDARY constraint. Specificity wins.
+  5b. LENGTH: a specific headline that delivers both claim and consequence will naturally
+     run longer than a topic label — that is correct, not a problem.
+     → Up to ~100 characters is acceptable. Specificity wins over brevity.
      → Only cut if the headline wraps to 3 lines on-screen:
        - Cut redundant modifiers ("advanced", "innovative", "comprehensive")
        - Replace clauses with numbers ("which leads to a 40% reduction" → "40% reduction")
        - Use symbols where natural ("€" not "EUR", "%" not "percent")
      → A rich, specific 90-char headline beats a vague 50-char one every time.
 
-  6. VERIFY the headline tells the story without the body
-     → Cover the slide body. Read ONLY the headline.
-     → Does the audience understand the claim? (YES → proceed)
+  6. VERIFY with the title-banner test
+     → Cover the slide body AND the Bottom-Banner. Read ONLY the headline.
+     → Does the audience understand both the claim AND why it matters? (YES → proceed)
+     → If the banner contains the "so what" that the title is missing → fold it into the title.
      → Read ALL headlines in sequence. Does the argument flow?
        (YES → proceed | NO → adjust the headline that breaks the chain)
 ```
@@ -138,7 +154,7 @@ Power Position slides (role: `proof`, layout: `is-does-means`) in why-change arc
 
 4. **One Power Position = one headline.** Never combine multiple Power Positions into a single slide title (e.g., "Power Position 2 & 3: Compliance & Sovereign Cloud"). Each Power Position gets its own slide with its own assertion headline. If consolidation is required to meet `max_slides`, merge at the message architecture level (Step 5c) — not by cramming two PP labels into one title.
 
-5. **IS-DOES-MEANS slides require DOES + MEANS consequence as a combined assertion headline.** This rule applies to any IS-DOES-MEANS slide in any arc. The formula is:
+5. **IS-DOES-MEANS slides require DOES + MEANS consequence as a combined assertion headline.** Use the title-banner mental method from step 5 above: draft the title and banner together, then fold any consequence from the banner into the title. The formula is:
 
    `[Product] + [DOES verb + outcome] + "und vermeidet/erzielt/spart" + [MEANS financial/risk/time consequence]`
 
@@ -149,9 +165,9 @@ Power Position slides (role: `proof`, layout: `is-does-means`) in why-change arc
 
    The test: read only the Slide-Title. Does the buyer immediately see WHAT it does AND WHY that matters financially or operationally? If the consequence is missing, the headline is incomplete.
 
-6. **Every title must be a self-contained assertion — it must answer its own "so what".** A title that names only the problem forces the Bottom-Banner to do compensatory work (e.g. "Die Lücke, die EAT schließt"). That wastes the banner and signals an incomplete headline. The consequence — financial cost, risk, time loss, strategic implication — belongs INSIDE the title.
+6. **Every title must be a self-contained assertion — it must answer its own "so what".** This is the same principle as the title-banner mental method in step 5: draft title and banner together, inspect whether the banner is doing compensatory work (e.g. "Die Lücke, die EAT schließt"), and if so, fold that content into the title. The consequence — financial cost, risk, time loss, strategic implication — belongs INSIDE the title.
 
-   Test: cover the slide body AND the bottom-banner. Read ONLY the headline. Does the audience understand WHAT is happening AND WHY it matters? If the banner contains the "so what" that the title is missing, the title is incomplete.
+   Test (same as step 6 above): cover the slide body AND the bottom-banner. Read ONLY the headline. Does the audience understand WHAT is happening AND WHY it matters? If the banner contains the "so what" that the title is missing, fold it into the title.
 
    - ✗ `"Führungsvakua entstehen strukturell"` — problem only, no consequence
    - ✗ `"Führungsvakua entstehen strukturell — die Lücke, die EAT schließt"` — consequence is in the banner, not the title
@@ -163,15 +179,15 @@ Power Position slides (role: `proof`, layout: `is-does-means`) in why-change arc
 
 ### Bottom-Banner Discipline
 
-The Bottom-Banner is a proof strip, not a copywriting rescue line.
+The Bottom-Banner is a proof strip — an independent metric that adds credibility to an already-complete title. It is not a rescue line for weak headlines. This distinction is the practical outcome of the title-banner mental method from step 5: when you draft title and banner together and find the banner completing the title, fold the completion into the title and give the banner an independent proof point instead.
 
 | Situation | Correct Bottom-Banner use | Incorrect use |
 |-----------|--------------------------|---------------|
-| Problem/urgency slide | Hard metric not in the title: `"Typische Vakanzkosten: EUR 150–300K pro Abgang"` | Solution bridge: `"Die Lücke, die EAT schließt"` ← this belongs in the title |
+| Problem/urgency slide | Hard metric not in the title: `"Typische Vakanzkosten: EUR 150–300K pro Abgang"` | Solution bridge: `"Die Lücke, die EAT schließt"` ← fold this into the title |
 | IS-DOES-MEANS slide | Customer evidence or benchmark: `"DT-Erfahrung: 3 Engagements in 18 Monaten"` | Restating the DOES claim from the title |
 | Hook/opening slide | Omit or use the governing thought | Any marketing slogan |
 
-If writing the Bottom-Banner text feels like it is completing or explaining the Slide-Title, that is a signal the Slide-Title is incomplete. Fix the title instead of patching it with the banner.
+The diagnostic: if writing the Bottom-Banner text feels like it is completing or explaining the Slide-Title, the title is incomplete. Apply the title-banner method — fold the banner's content into the title and find independent proof for the banner.
 
 ---
 
@@ -207,7 +223,11 @@ REASON through number play selection for each slide:
      → EXCEPTION: when the euro amount IS the story:
        "€2.8M wasted annually" (cost is the pain point)
 
-  3. SELECT the hero number (ONE per slide — this is non-negotiable)
+  3. SELECT the hero number — ONE per slide
+     → A stat-card with two competing hero numbers creates split attention — neither
+       lands. The 36pt treatment works because it anchors the eye to a single figure.
+       Supporting numbers belong in the sublabel or context box where they reinforce
+       rather than compete.
      → Ask: "Which number would I put on a billboard?"
      → The hero number gets 36pt bold treatment on the slide
      → All other numbers become supporting evidence (sublabel, bullets, notes)
@@ -406,7 +426,10 @@ REASON through bullet consolidation for each slide:
        × "Reduces costs" / "24/7 monitoring" / "Integration is available"
        ✓ "Reduces costs by 60%" / "Monitors 24/7 without staff scaling" / "Integrates via standard APIs"
 
-  6. TRIM each bullet to 8-10 words maximum
+  6. TRIM each bullet to ~8-10 words
+     → At presentation distance (3-5m), the audience scans bullets in roughly 3 seconds.
+       Beyond 8-10 words, scanning breaks down — they start reading and stop listening
+       to the presenter. This is the same principle as the 3-second headline scan window.
      → Read each bullet at SCANNING speed (3-second test)
      → If you must re-read → it's too long or too complex
      → Cut: articles ("the", "a"), hedging ("can", "may", "potentially"),
@@ -497,13 +520,15 @@ Each IS/DOES/MEANS box is 0.9 inches tall in the PPTX layout. At 12pt font, that
 
 The goal is ultra-concise **phrase notation**, not full sentences. Think of each box as a billboard line, not a paragraph.
 
-### Box-Level Rules
+### Box-Level Limits
 
-| Box | Max Words | Format | Function |
-|-----|-----------|--------|----------|
-| IS | 15 words | Noun phrase: "A [solution type] for [what it targets]" | Positioning statement — what it IS |
-| DOES | 20 words | Action phrase or `+` notation: "Outcome + Outcome" | Capabilities with key metric |
-| MEANS | 15 words | Stack notation: "Technology + Technology + Credential" | How it works, why credible |
+These word counts are physical consequences of the 0.9-inch box height: at 12pt font, each box accommodates roughly one line of text. Exceeding these limits causes text overflow or forces the renderer to shrink the font to illegibility.
+
+| Box | ~Words (one line at 12pt in 0.9" box) | Format | Function |
+|-----|---------------------------------------|--------|----------|
+| IS | ~15 words | Noun phrase: "A [solution type] for [what it targets]" | Positioning statement — what it IS |
+| DOES | ~20 words | Action phrase or `+` notation: "Outcome + Outcome" | Capabilities with key metric |
+| MEANS | ~15 words | Stack notation: "Technology + Technology + Credential" | How it works, why credible |
 
 ### Transformation Approach
 

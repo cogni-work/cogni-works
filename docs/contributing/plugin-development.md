@@ -284,8 +284,8 @@ To list your plugin, submit a PR to the insight-wave repository that adds your p
 ```json
 {
   "name": "my-plugin",
+  "source": "./my-plugin",
   "version": "0.1.0",
-  "repository": "https://github.com/you/my-plugin",
   "description": "One sentence description matching plugin.json",
   "keywords": ["relevant-keyword"]
 }

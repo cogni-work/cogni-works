@@ -413,36 +413,59 @@ def render_timeline_steps(slide, dv):
       </div>"""
 
 
+def _extract_phase_labels(diagram_text):
+    """Extract node labels from a Mermaid graph LR definition."""
+    if not diagram_text:
+        return []
+    labels = []
+    # Match patterns like P1["Job Landscape"] or A["Step 1"]
+    for match in re.finditer(r'\w+\["([^"]+)"\]', diagram_text):
+        labels.append(match.group(1))
+    return labels
+
+
 def render_process_flow(slide, dv):
-    """Layout: process-flow — Mermaid diagram + optional Detail-Grid below."""
+    """Layout: process-flow — Unified pipeline with phase headers + detail bullets."""
     f = slide["fields"]
     diagram = f.get("Diagram", "")
     detail_grid = f.get("Detail-Grid", {})
 
+    # When Detail-Grid exists, render as unified pipeline columns
+    if detail_grid:
+        phase_labels = _extract_phase_labels(diagram)
+        columns = []
+        for i, (key, bullets) in enumerate(detail_grid.items()):
+            if not isinstance(bullets, list):
+                continue
+            # Use Mermaid label if available, otherwise use the key
+            label = phase_labels[i] if i < len(phase_labels) else key
+            items = "\n".join(f"<li>{convert_inline(b)}</li>" for b in bullets)
+            arrow = '<div class="phase-arrow">&#8594;</div>' if i < len(detail_grid) - 1 else ""
+            columns.append(f"""
+              <div class="phase-column">
+                <div class="phase-header">{escape_html(label)}</div>
+                <div class="phase-body">
+                  <ul>{items}</ul>
+                </div>
+              </div>{arrow}""")
+
+        return f"""
+      <div class="slide-inner layout-process-flow">
+        <div class="phase-pipeline">
+          {"".join(columns)}
+        </div>
+      </div>"""
+
+    # Fallback: Mermaid-only (no Detail-Grid)
     diagram_html = ""
     if diagram:
         diagram_html = f'<pre class="mermaid">{escape_html(diagram.strip())}</pre>'
-
-    grid_html = ""
-    if detail_grid:
-        cards = []
-        for key, bullets in detail_grid.items():
-            if isinstance(bullets, list):
-                items = "\n".join(f"<li>{convert_inline(b)}</li>" for b in bullets)
-                cards.append(f"""
-              <div class="detail-card">
-                <h4>{escape_html(key)}</h4>
-                <ul>{items}</ul>
-              </div>""")
-        if cards:
-            grid_html = f'<div class="detail-grid">{"".join(cards)}</div>'
 
     return f"""
       <div class="slide-inner layout-process-flow">
         <div class="diagram-container">
           {diagram_html}
         </div>
-        {grid_html}
       </div>"""
 
 
@@ -1033,6 +1056,58 @@ def generate_css(dv, transition="fade", aspect_ratio="16:9"):
     width: 100%;
     justify-content: center;
   }}
+
+  /* Unified pipeline: phase headers + detail bullets as connected columns */
+  .phase-pipeline {{
+    display: flex;
+    align-items: stretch;
+    width: 100%;
+    gap: 0;
+  }}
+  .phase-column {{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }}
+  .phase-header {{
+    font-family: var(--font-headers);
+    font-size: clamp(0.9rem, 1.3vw, 1.15rem);
+    font-weight: 700;
+    color: var(--text-light);
+    background: var(--surface-dark);
+    padding: 1.8vh 1.5vw;
+    text-align: center;
+    border-radius: var(--radius) var(--radius) 0 0;
+  }}
+  .phase-body {{
+    flex: 1;
+    background: var(--surface);
+    padding: 2vh 1.5vw;
+    border-radius: 0 0 var(--radius) var(--radius);
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--accent);
+  }}
+  .phase-body ul {{ list-style: none; }}
+  .phase-body li {{
+    font-size: clamp(0.8rem, 1.1vw, 0.95rem);
+    color: var(--text);
+    padding: 0.5vh 0;
+    line-height: 1.45;
+  }}
+  .phase-arrow {{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: clamp(1.2rem, 2vw, 1.8rem);
+    color: var(--accent);
+    padding: 0 0.8vw;
+    flex-shrink: 0;
+    align-self: flex-start;
+    margin-top: 2.2vh;
+  }}
+
+  /* Mermaid-only fallback (no Detail-Grid) */
   .diagram-container {{
     width: 100%;
     display: flex;
@@ -1048,32 +1123,6 @@ def generate_css(dv, transition="fade", aspect_ratio="16:9"):
     max-width: 100%;
     height: auto;
     min-height: 60px;
-  }}
-  .detail-grid {{
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1.5vw;
-    width: 100%;
-  }}
-  .detail-card {{
-    background: var(--surface);
-    border-radius: var(--radius);
-    padding: 2vh 2vw;
-    border-top: 3px solid var(--accent);
-  }}
-  .detail-card h4 {{
-    font-family: var(--font-headers);
-    font-size: clamp(0.85rem, 1.2vw, 1rem);
-    font-weight: 700;
-    color: var(--accent-dark);
-    margin-bottom: 1vh;
-  }}
-  .detail-card ul {{ list-style: none; }}
-  .detail-card li {{
-    font-size: clamp(0.8rem, 1.1vw, 0.95rem);
-    color: var(--text);
-    padding: 0.3vh 0;
-    line-height: 1.45;
   }}
 
   /* ======== LAYOUT: Closing Slide ======== */

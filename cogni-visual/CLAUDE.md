@@ -14,6 +14,13 @@ skills/              Intelligent transformation & rendering skills
   render-big-picture/  Orchestrator skill — station-first pipeline (v4.2, 1100-1500 elements, dark/light mode)
   render-big-block/    Orchestrator skill — sequential pipeline (v1.0, 150-250 elements, dark/light mode)
   review-brief/        Standalone stakeholder review of any visual brief (3 perspectives, accept/revise verdict)
+  render-html-slides/  Render presentation-brief.md → self-contained HTML slide deck with speaker notes, navigation, transitions
+    scripts/
+      generate-html-slides.py  Python HTML generator (brief→HTML, theme injection, layout rendering, Mermaid)
+    references/
+      01-layout-renderers.md   Brief YAML → HTML mapping for all 11 layout types
+      02-slide-navigation.md   Keyboard, mouse, touch navigation + transitions
+      03-speaker-notes.md      Speaker notes panel, toggle, print mode
   enrich-report/       Post-processing: markdown report → themed HTML (+ optional PDF/DOCX) with Chart.js + Excalidraw SVG
     scripts/
       generate-enriched-report.py  Python HTML generator (markdown→HTML, theme injection, chart mounting)
@@ -38,12 +45,14 @@ skills/              Intelligent transformation & rendering skills
 commands/            User-facing slash commands
   render-big-picture.md  /render-big-picture — invoke the rendering pipeline
   render-big-block.md    /render-big-block — invoke the Big Block rendering pipeline
+  render-html-slides.md  /render-html-slides — render presentation brief as HTML slide deck
   enrich-report.md       /enrich-report — enrich a report with themed visualizations
   review-brief.md        /review-brief — stakeholder review of any visual brief
 
 agents/              Autonomous rendering agents (brief -> output)
   story-to-slides.md   Orchestrates the story-to-slides skill
   pptx.md              Renders presentation briefs into .pptx via document-skills:pptx
+  html-slides.md       Renders presentation briefs into self-contained HTML slide decks
   story-to-big-picture.md  Orchestrates the story-to-big-picture skill
   big-picture.md       Wrapper agent — delegates to render-big-picture skill
   station-structure-artist.md  Worker agent — composes station structure (130-160 elements, Pass 1)
@@ -80,9 +89,9 @@ libraries/           Shared reference material loaded at Step 1
 
 | Type | Count | Items |
 |------|-------|-------|
-| Skills | 9 | story-to-slides, story-to-big-picture, story-to-big-block, story-to-web, story-to-storyboard, render-big-picture, render-big-block, enrich-report, review-brief |
-| Agents | 16 | story-to-slides, pptx, story-to-big-picture, big-picture (wrapper), story-to-big-block, big-block (wrapper), station-structure-artist (worker ×N), station-enrichment-artist (worker ×N), slides-enrichment-artist (worker), zone-reviewer (worker ×4), story-to-web, web, story-to-storyboard, storyboard, enrich-report, brief-review-assessor |
-| Commands | 4 | render-big-picture, render-big-block, enrich-report, review-brief |
+| Skills | 10 | story-to-slides, story-to-big-picture, story-to-big-block, story-to-web, story-to-storyboard, render-big-picture, render-big-block, render-html-slides, enrich-report, review-brief |
+| Agents | 17 | story-to-slides, pptx, html-slides, story-to-big-picture, big-picture (wrapper), story-to-big-block, big-block (wrapper), station-structure-artist (worker ×N), station-enrichment-artist (worker ×N), slides-enrichment-artist (worker), zone-reviewer (worker ×4), story-to-web, web, story-to-storyboard, storyboard, enrich-report, brief-review-assessor |
+| Commands | 5 | render-big-picture, render-big-block, render-html-slides, enrich-report, review-brief |
 | Libraries | 13 | arc-taxonomy, cta-taxonomy, pptx-layouts, EXAMPLE_BRIEF, big-picture-layouts, EXAMPLE_BIG_PICTURE_BRIEF, big-block-layouts, EXAMPLE_BIG_BLOCK_BRIEF, web-layouts, EXAMPLE_WEB_BRIEF, storyboard-layouts, EXAMPLE_STORYBOARD_BRIEF, brief-review-perspectives |
 
 ## Big Picture Rendering Pipeline (v4.2 — Contrast, Inline Numbers, Bigger Title)
@@ -177,7 +186,7 @@ cogni-trends/cogni-research → enrich-report → browser / PDF / DOCX
 - **Upstream (narrative skills):** Narratives from cogni-narrative, polished by cogni-copywriting
 - **Upstream (big-block):** TIPS value-modeler Phase 4 output from cogni-trends
 - **External:** Themes from cogni-workspace (`/cogni-workspace/themes/{id}/theme.md`)
-- **Downstream:** `document-skills:pptx` renders slide briefs; Excalidraw MCP renders big-picture briefs; Pencil MCP renders web and storyboard briefs; `document-skills:pdf` and `document-skills:docx` handle format export from enrich-report
+- **Downstream:** `document-skills:pptx` renders slide briefs into PowerPoint; `render-html-slides` renders slide briefs into self-contained HTML; Excalidraw MCP renders big-picture briefs; Pencil MCP renders web and storyboard briefs; `document-skills:pdf` and `document-skills:docx` handle format export from enrich-report
 - **Web HTML export:** Web agent reads rendered .pen design tree to generate self-contained HTML + integration manifest for `export-html-report` landing page overlay
 - **Report output consolidation:** enrich-report is the single output skill for all report formats (HTML, PDF, DOCX). It supersedes the deprecated cogni-research:export-report. The `formats` parameter controls output: `["html"]` (default), `["html", "pdf"]`, `["html", "docx"]`, or all three. The `density` parameter controls enrichment volume: `none` for themed prose only, `minimal`/`balanced`/`rich` for data visualizations.
 
@@ -197,12 +206,12 @@ cogni-trends/cogni-research → enrich-report → browser / PDF / DOCX
 
 ## Skill Differences
 
-| Aspect | story-to-slides | story-to-big-picture | story-to-big-block | render-big-picture | render-big-block | story-to-web | story-to-storyboard | enrich-report |
-|--------|----------------|---------------------|-------------------|-------------------|-----------------|-------------|---------------------|---------------|
-| Input | Narrative (prose) | Narrative (prose) | Value-modeler (JSON) | Brief (v3.0) | Brief (v1.0) | Narrative (prose) | Narrative (prose) | Markdown report (any) |
-| Output | Multi-slide YAML brief | Single-canvas scene brief (v3.0) | Solution architecture brief (v1.0) | .excalidraw illustrated scene | .excalidraw structured diagram | Scrollable section brief | Multi-poster print brief | Self-contained themed HTML + optional PDF/DOCX |
-| Renderer | PPTX skill | N/A (produces brief) | render-big-block | Excalidraw MCP (station-first, N+N+4 agents) | Excalidraw MCP (sequential, 8 phases) | Pencil MCP (web agent) | Pencil MCP (storyboard agent) | Python script + Chart.js CDN + Excalidraw MCP (SVG export) |
-| Layout unit | Slide with layout type | Station as landscape object | Solution block in tier band | Station as 250+ element two-pass illustration | Solution block in tier grid | Section with auto-layout | Poster with 1-3 stacked sections | Report section with injected chart/SVG |
-| Element count | N/A | N/A | N/A | 1100-1500 total (stations only) | 150-250 total | N/A | N/A | 10-22 enrichments (Chart.js + SVG) |
-| Quality review | N/A | 4-layer validation | 8-point schema validation | 9-gate zone-based (4 parallel reviewers, 2 passes) | Snapshot checkpoints | 4-layer validation | N/A | 5-gate validation (citations, charts, SVG, theme, content) |
-| Stakeholder review | Designer + Audience + Presenter | Storyteller + Audience + Facilitator | Architect + Decision Maker + Sales Engineer | N/A (rendering) | N/A (rendering) | UX Designer + Audience + Strategist | Print Designer + Audience + Presenter | N/A (post-processing) |
+| Aspect | story-to-slides | render-html-slides | story-to-big-picture | story-to-big-block | render-big-picture | render-big-block | story-to-web | story-to-storyboard | enrich-report |
+|--------|----------------|-------------------|---------------------|-------------------|-------------------|-----------------|-------------|---------------------|---------------|
+| Input | Narrative (prose) | Presentation brief (v4.0) | Narrative (prose) | Value-modeler (JSON) | Brief (v3.0) | Brief (v1.0) | Narrative (prose) | Narrative (prose) | Markdown report (any) |
+| Output | Multi-slide YAML brief | Self-contained HTML slide deck | Single-canvas scene brief (v3.0) | Solution architecture brief (v1.0) | .excalidraw illustrated scene | .excalidraw structured diagram | Scrollable section brief | Multi-poster print brief | Self-contained themed HTML + optional PDF/DOCX |
+| Renderer | PPTX skill | Python script + Mermaid CDN | N/A (produces brief) | render-big-block | Excalidraw MCP (station-first, N+N+4 agents) | Excalidraw MCP (sequential, 8 phases) | Pencil MCP (web agent) | Pencil MCP (storyboard agent) | Python script + Chart.js CDN + Excalidraw MCP (SVG export) |
+| Layout unit | Slide with layout type | Slide with HTML/CSS layout | Station as landscape object | Solution block in tier band | Station as 250+ element two-pass illustration | Solution block in tier grid | Section with auto-layout | Poster with 1-3 stacked sections | Report section with injected chart/SVG |
+| Element count | N/A | N/A | N/A | N/A | 1100-1500 total (stations only) | 150-250 total | N/A | N/A | 10-22 enrichments (Chart.js + SVG) |
+| Quality review | N/A | 5-point validation (count, notes, citations, mermaid, theme) | 4-layer validation | 8-point schema validation | 9-gate zone-based (4 parallel reviewers, 2 passes) | Snapshot checkpoints | 4-layer validation | N/A | 5-gate validation (citations, charts, SVG, theme, content) |
+| Stakeholder review | Designer + Audience + Presenter | N/A (rendering) | Storyteller + Audience + Facilitator | Architect + Decision Maker + Sales Engineer | N/A (rendering) | N/A (rendering) | UX Designer + Audience + Strategist | Print Designer + Audience + Presenter | N/A (post-processing) |

@@ -1,0 +1,230 @@
+---
+name: render-html-slides
+description: >
+  Render a presentation-brief.md (v4.0) into a self-contained HTML slide presentation
+  with speaker notes toggle, keyboard navigation, themed styling, and Mermaid diagram
+  support. Use this skill whenever the user mentions "HTML slides", "HTML presentation",
+  "browser presentation", "render slides as HTML", "self-contained slides", "slide deck
+  in browser", "web slides", "present in browser", or wants a presentation without
+  PowerPoint. Also use when the user asks to "open slides in browser", "export slides
+  as HTML", or says "no PowerPoint". Works with any presentation-brief.md generated
+  by story-to-slides.
+allowed-tools: Read, Write, Edit, Bash, Grep, Glob, AskUserQuestion, Skill
+version: 1.0.0
+---
+
+# Render HTML Slides
+
+Transform a presentation-brief.md (v4.0) into a stunning, self-contained HTML slide deck
+that runs in any browser. Themed styling, keyboard navigation, smooth transitions,
+speaker notes panel, Mermaid diagram rendering, touch swipe support, and print mode —
+all in a single `.html` file.
+
+## Parameters
+
+| Parameter | Default | Description |
+|-----------|---------|-------------|
+| `brief_path` | auto-discovered | Path to presentation-brief.md |
+| `theme` | from brief frontmatter | Path to theme.md (or omit for pick-theme) |
+| `design_variables` | derived from theme | Pre-computed design-variables.json path |
+| `output_path` | `{brief_dir}/{slug}-slides.html` | HTML output path |
+| `transition` | `fade` | Slide transition: `fade`, `slide`, `none` |
+| `aspect_ratio` | `16:9` | Slide aspect ratio: `16:9`, `4:3` |
+| `language` | from brief frontmatter | `en` or `de` |
+
+## Execution Protocol
+
+### Phase 0: Brief Discovery & Setup
+
+1. If `brief_path` provided, use it directly
+2. Otherwise, glob for `**/presentation-brief.md` (max 3 levels deep)
+3. If multiple found, present options via AskUserQuestion
+4. Read the brief, validate frontmatter:
+   - `type: presentation-brief` (must match)
+   - `version: "4.0"` (content-only schema)
+5. Extract metadata: `theme`, `theme_path`, `language`, `customer`, `provider`, `arc_type`, `governing_thought`
+
+**Theme resolution** (3-stage, same as enrich-report):
+1. If `design_variables` parameter provided → use directly, skip to Phase 1
+2. If `theme` parameter provided → read that theme.md
+3. Otherwise read `theme_path` from brief frontmatter
+4. If no theme found → invoke `cogni-workspace:pick-theme` via Skill tool
+
+### Phase 1: Brief Parsing
+
+Parse the presentation-brief.md body into structured slide data. The brief uses `## Slide N: {headline}` sections with fenced YAML blocks.
+
+For each slide section, extract:
+- `number` — slide number
+- `headline` — the assertion headline from the H2 heading
+- `layout` — the Layout field value
+- `fields` — all layout-specific fields as a nested object (preserving structure)
+- `speaker_notes` — the Speaker-Notes field (multi-line string, preserve verbatim)
+- `bottom_banner` — Bottom-Banner field if present
+- `diagram_mermaid` — the Diagram field content if it contains Mermaid syntax
+- `citations` — extracted `<sup>[N](url)</sup>` patterns
+
+Write the parsed data to `{brief_dir}/cogni-visual/slide-data.json`:
+
+```json
+{
+  "metadata": {
+    "title": "...",
+    "subtitle": "...",
+    "customer": "...",
+    "provider": "...",
+    "language": "de",
+    "arc_type": "why-change",
+    "generated": "2026-02-09",
+    "governing_thought": "..."
+  },
+  "slides": [
+    {
+      "number": 1,
+      "headline": "Assertion headline",
+      "layout": "title-slide",
+      "fields": {
+        "Title": "...",
+        "Subtitle": "...",
+        "Metadata": "..."
+      },
+      "speaker_notes": null,
+      "bottom_banner": null,
+      "diagram_mermaid": null,
+      "citations": []
+    }
+  ]
+}
+```
+
+**Parsing rules:**
+- Each slide is separated by `---` (horizontal rule) in the brief
+- The YAML block is inside ``` fences — parse the YAML content
+- Nested structures (Hero-Stat-Box, Context-Box, Detail-Grid) must be preserved as nested objects
+- Speaker-Notes is a multi-line YAML string (after `|`) — preserve the full text
+- Mermaid diagrams appear in the `Diagram:` field as multi-line strings
+- IS/DOES/MEANS labels come from the `Label:` field inside each box — but the Python script handles localization, so just pass the text content
+- Bottom-Banner can be a dict with `Text:` key or a plain string
+
+### Phase 2: Theme → Design Variables
+
+If `design_variables` path was not provided:
+
+1. Read the theme.md file
+2. Derive a `design-variables.json` with this structure:
+
+```json
+{
+  "theme_name": "smarter-service",
+  "colors": {
+    "primary": "#111111",
+    "secondary": "#333333",
+    "accent": "#C8E62E",
+    "accent_muted": "#A8C424",
+    "accent_dark": "#8BA31E",
+    "background": "#FAFAF8",
+    "surface": "#F2F2EE",
+    "surface2": "#E8E8E4",
+    "surface_dark": "#111111",
+    "border": "#E0E0DC",
+    "text": "#111111",
+    "text_light": "#FFFFFF",
+    "text_muted": "#6B7280"
+  },
+  "status": {
+    "success": "#2E7D32",
+    "warning": "#E5A100",
+    "danger": "#D32F2F",
+    "info": "#1565C0"
+  },
+  "fonts": {
+    "headers": "'Bricolage Grotesque', -apple-system, sans-serif",
+    "body": "'Outfit', -apple-system, sans-serif",
+    "mono": "'JetBrains Mono', monospace"
+  },
+  "google_fonts_import": "@import url('https://fonts.googleapis.com/css2?family=...');",
+  "radius": "12px",
+  "shadows": {
+    "sm": "0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.06)",
+    "md": "0 4px 16px rgba(0,0,0,0.06), 0 1px 4px rgba(0,0,0,0.04)",
+    "lg": "0 12px 40px rgba(0,0,0,0.1), 0 4px 12px rgba(0,0,0,0.05)",
+    "xl": "0 24px 64px rgba(0,0,0,0.14), 0 8px 20px rgba(0,0,0,0.06)"
+  }
+}
+```
+
+Extract all values from the theme.md. For any color not explicitly stated in the theme, derive sensible defaults:
+- `accent_muted` — accent color darkened ~15%
+- `accent_dark` — accent color darkened ~30%
+- `surface2` — slightly darker than surface
+- `surface_dark` — use primary or darkest color
+- `border` — light gray matching surface tone
+
+The schema matches `${CLAUDE_PLUGIN_ROOT}/../enrich-report/schemas/design-variables.schema.json`.
+
+Write to `{brief_dir}/cogni-visual/design-variables.json`.
+
+### Phase 3: HTML Generation
+
+Run the Python generator script:
+
+```bash
+python3 "${CLAUDE_PLUGIN_ROOT}/skills/render-html-slides/scripts/generate-html-slides.py" \
+  --slide-data "{brief_dir}/cogni-visual/slide-data.json" \
+  --design-variables "{brief_dir}/cogni-visual/design-variables.json" \
+  --output "{output_path}" \
+  --transition "{transition}" \
+  --aspect-ratio "{aspect_ratio}" \
+  --language "{language}"
+```
+
+The script outputs JSON: `{"status": "ok", "path": "...", "slides": N, "size_kb": N.N}` or `{"error": "..."}`.
+
+If error, read the error message and attempt to fix the input data. Common issues:
+- Missing required fields in slide-data.json → re-parse the brief
+- Invalid JSON in slide-data.json → fix and retry
+
+### Phase 4: Validation
+
+After successful generation, verify:
+
+1. **Slide count**: The number of `<section class="slide">` elements in the HTML matches the slide count in the brief
+2. **Speaker notes**: Every slide that had Speaker-Notes in the brief has a non-empty `<template class="slide-notes-data">` block
+3. **Citations**: All `<sup>[N](url)</sup>` patterns from the brief appear as `<a class="citation">` elements in the HTML
+4. **Mermaid**: If the brief contained Diagram fields with Mermaid syntax, the HTML includes the Mermaid CDN script tag and `<pre class="mermaid">` blocks
+5. **Theme tokens**: The HTML contains `:root` CSS with design variable tokens
+
+Read the generated HTML and spot-check these. If any fail, diagnose and fix.
+
+### Phase 5: Output
+
+1. Report the output path, slide count, file size, and theme name
+2. If running in an environment with browser access, open the HTML file:
+   ```bash
+   open "{output_path}"
+   ```
+3. Tell the user about keyboard navigation:
+   - Arrow keys / Space: navigate slides
+   - **S**: toggle speaker notes panel
+   - **F**: fullscreen mode
+   - **?**: keyboard shortcuts help
+   - Click right half to advance, left half to go back
+   - Print with Ctrl+P for handout mode (slides + notes)
+
+## Features
+
+**Navigation:** Arrow keys, Space, Page Up/Down, Home/End. Click right = next, left = prev. Touch swipe on mobile.
+
+**Speaker Notes:** Press `S` to toggle the notes panel at the bottom. Notes show "WHAT YOU SAY" coaching tags and "WHAT YOU NEED TO KNOW" context, fully parsed from the brief's speaker notes format.
+
+**Transitions:** Smooth fade (default), slide, or instant. Configurable via `transition` parameter.
+
+**Theming:** Full design token injection from theme.md via CSS custom properties. Every color, font, shadow, and radius is theme-driven.
+
+**Mermaid Diagrams:** Automatically detected and rendered via Mermaid.js CDN for process-flow, layered-architecture, and gantt-chart layouts.
+
+**Print Mode:** `Ctrl+P` renders all slides sequentially with speaker notes visible and navigation controls hidden. Each slide gets its own page.
+
+**Responsive:** Aspect ratio is preserved via CSS `aspect-ratio` + `min()` constraints. Graceful degradation on mobile with stacked layouts.
+
+**Self-contained:** Single HTML file. All CSS inline. All JS inline. Only external dependency is Mermaid.js CDN (conditional, only included when diagrams are present).

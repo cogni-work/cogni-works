@@ -440,6 +440,108 @@ Step 6: START with action verbs or impact words
 
 ---
 
+## IS/DOES/MEANS Box Copywriting
+
+### Why Brevity is Non-Negotiable
+
+Each IS/DOES/MEANS box is 0.9 inches tall in the PPTX layout. At 12pt font, that's room for roughly ONE line — 15-20 words. The presenter reads the boxes aloud while the audience scans them. Long sentences create a read-along competition: the audience starts reading and stops listening.
+
+The goal is ultra-concise **phrase notation**, not full sentences. Think of each box as a billboard line, not a paragraph.
+
+### Box-Level Rules
+
+| Box | Max Words | Format | Function |
+|-----|-----------|--------|----------|
+| IS | 15 words | Noun phrase: "A [solution type] for [what it targets]" | Positioning statement — what it IS |
+| DOES | 20 words | Action phrase or `+` notation: "Outcome + Outcome" | Capabilities with key metric |
+| MEANS | 15 words | Stack notation: "Technology + Technology + Credential" | How it works, why credible |
+
+### Transformation Approach
+
+Compress narrative IS/DOES/MEANS content the same way you write a headline — distill to the single most important claim per box:
+
+```text
+REASON through each box:
+
+  IS: What IS this solution in 4-8 words?
+    → Strip context qualifiers ("within the Group", "for clients", "in our platform")
+    → Strip accountability/commitment language — that belongs in DOES
+    → Leave: solution type + what it targets
+    × "Temporary assumption of a specific management role within Deutsche Telekom Group,
+       with full operational accountability from day one — team leadership, stakeholder
+       management, and succession preparation included." (36 words, sentence)
+    ✓ "Temporary operational management of any DT function — immediate accountability" (10 words, phrase)
+
+  DOES: What are the 1-2 STRONGEST quantified outcomes?
+    → Select the metric with highest emotional impact (attrition %, time saved, cost avoided)
+    → Use `+` notation to join two outcomes on one line
+    → Move additional outcomes and explanatory context to speaker notes
+    × "You get an experienced DT executive running your function at full capacity within
+       two weeks, while permanent staffing resolves. Critical talent attrition stays below
+       5% versus the 15–20% typical in leadership vacuums. Incoming permanent leader
+       inherits a structured brief that compresses ramp from 90 days to 30." (55 words, 3 sentences)
+    ✓ "Full capacity in 2 weeks + attrition below 5% (vs. 15–20% in vacuums)" (14 words, metric-first)
+
+  MEANS: What is the credential/tech proof in stack notation?
+    → Replace explanatory sentences ("this works because...") with stack notation
+    → For human capability (not software): credential notation (tenure, titles, relationships)
+    → Use `+` separator for multiple proof elements — no conjunctions, no verbs
+    × "EAT advisors already carry the institutional knowledge, the personal relationships
+       with segment counterparts, and the informal authority that comes from having operated
+       at this level inside DT. When the interim period ends, your incoming permanent leader
+       inherits a structured operational briefing..." (47 words, 2 sentences)
+    ✓ "VP-level DT tenure + active segment relationships + structured handover brief" (11 words, credential stack)
+```
+
+### Before/After Example
+
+**Source narrative:**
+```
+IS: Temporary assumption of a specific management role within the Deutsche Telekom Group,
+    with full operational accountability from day one — including team leadership,
+    stakeholder management, and succession preparation.
+
+DOES: You get an experienced executive in the chair within two weeks, running your function
+      at full capacity while permanent staffing is resolved — instead of watching your team
+      operate in a leadership vacuum. During transitions at T-Systems, deploying a known DT
+      executive has kept critical talent attrition below 5% versus the typical 15–20%.
+
+MEANS: This works because EAT advisors are not generalists learning the organization on your
+       time. They already carry the institutional knowledge, the personal relationships, and
+       the informal authority from having operated at this level inside DT.
+```
+
+**Slide brief (after copywriting):**
+```yaml
+IS-Box:
+  Label: IS
+  Text: Temporary operational management of any DT function — immediate full accountability
+
+DOES-Box:
+  Label: DOES
+  Text: Full capacity in 2 weeks + talent attrition below 5% vs. 15–20% in leadership vacuums
+
+MEANS-Box:
+  Label: MEANS
+  Text: VP-level DT tenure + active segment relationships + structured handover brief
+```
+
+What happened:
+- IS: 36 words → 11 words (stripped context qualifiers, kept solution type)
+- DOES: 55 words → 14 words (kept 2 strongest metrics, moved context to speaker notes)
+- MEANS: 39 words → 11 words (converted explanation to credential stack notation)
+
+### Bottom-Banner Usage
+
+The Bottom-Banner below IS/DOES/MEANS is the natural place for the single strongest proof metric cut from DOES or MEANS. Keep it to one assertion line (≤12 words):
+
+```yaml
+Bottom-Banner:
+  Text: "EUR 150–300K in specialist replacement costs avoided per transition"
+```
+
+---
+
 ## Evidence Selection
 
 ### Reasoning Approach

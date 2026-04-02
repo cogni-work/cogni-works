@@ -179,6 +179,15 @@ REASON through copywriting quality for each slide:
      → FAIL if: bullets >5 per field or >10 words each
      → FIX: Merge similar bullets, cut weakest, tighten wording
 
+  2b. CHECK IS/DOES/MEANS box text density (is-does-means slides only)
+     → IS-Box Text: ≤ 15 words? Single positioning noun phrase (not a full sentence)?
+     → DOES-Box Text: ≤ 20 words? Action phrase or `+` notation with at least one metric?
+     → MEANS-Box Text: ≤ 15 words? Tech/credential stack notation (no explanatory sentences)?
+     → FAIL if: any box exceeds word count or contains paragraph-length sentences
+     → FIX: Apply IS/DOES/MEANS Box Copywriting rules from 05a-slide-copywriting.md —
+       compress to phrase notation, move explanatory context to speaker notes,
+       move the single strongest cut metric to Bottom-Banner
+
   3. CHECK for hedging language
      → Scan for: "might", "could", "potentially", "somewhat", "relatively",
        "it seems", "possibly"
@@ -207,7 +216,7 @@ REASON through copywriting quality for each slide:
 
 ### Pass Criteria
 
-Number plays applied. Bullets ≤5 per field, ≤10 words each. No hedging. Headlines ≤60 chars. Speaker notes with both sections on all content slides, 200-400 words each, with [Energy] arc-position coaching and comprehensive Q&A prep.
+Number plays applied. Bullets ≤5 per field, ≤10 words each. IS/DOES/MEANS Text ≤15/20/15 words (phrase notation, not sentences). No hedging. Headlines ≤60 chars. Speaker notes with both sections on all content slides, 200-400 words each, with [Energy] arc-position coaching and comprehensive Q&A prep.
 
 ---
 

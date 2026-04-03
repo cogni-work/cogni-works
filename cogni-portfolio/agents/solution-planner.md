@@ -69,6 +69,24 @@ After reading the product JSON (step 3), check for a `delivery_blueprint` object
 
 **When no blueprint exists:** Proceed exactly as before — design phases, pricing, and effort from context alone. Do not write `blueprint_ref` or `blueprint_version` fields.
 
+## Blueprint Guidance (from batch mode)
+
+When the task includes a `blueprint_guidance` object, the user has reviewed the delivery blueprints during batch planning and may have requested adjustments. Apply these during blueprint adaptation — they represent explicit user decisions about how the blueprint should be used.
+
+1. **`global_overrides`** (array of strings): Hard constraints across all blueprint parameters. These take precedence over market-context-based adaptation. Example: if global_overrides says "Cap all phase durations at 6 weeks maximum", clamp any duration selection to 6 weeks even if market context would suggest longer.
+
+2. **`market_overrides`** (object keyed by market-slug): Per-market instructions for the specific market this solution targets. Check `market_overrides[{market-slug}]` for instructions. These take precedence over default adaptation logic but are subordinate to `global_overrides`.
+
+3. **`pricing_overrides`** (object): Override specific price multipliers from the blueprint. Use these values instead of the blueprint's `price_multipliers` for the affected tiers.
+
+4. **`phase_additions`** (array): Add the specified phases at the indicated positions. Treat them as blueprint phases with the given duration ranges — adapt to market context as usual.
+
+5. **`phase_removals`** (array): Remove the specified phases from the blueprint skeleton before adapting.
+
+When `blueprint_guidance` is `null` or absent, follow the default blueprint adaptation logic unchanged.
+
+**Stamp guidance traceability**: When `blueprint_guidance` was provided and non-null, write `"blueprint_guidance_applied": true` to the solution JSON output alongside the existing `blueprint_ref` and `blueprint_version` fields.
+
 ## Business Model Routing
 
 **This is the first decision.** Read the product's `revenue_model` field and route to the appropriate solution structure:

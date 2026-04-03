@@ -431,14 +431,76 @@ Batch mode skips the interactive co-development steps -- use it when the user wa
 2. Read the product for each pending proposition to determine `revenue_model` — group the batch by solution type
 3. Assess which propositions are strong enough to build on -- flag any with generic DOES statements that will produce weak implementation plans
 4. Present the batch plan grouped by type (e.g., "18 subscription solutions for insight-wave, 2 project solutions for cogni-services") and get confirmation
-5. Launch `solution-planner` agents in parallel for each proposition
-6. After each solution is written, launch `solution-review-assessor` agents in parallel to evaluate them
-7. For solutions with verdict "revise": re-launch `solution-planner` with the review feedback (revision mode), then re-assess. Maximum 2 revision rounds per solution
-8. Present a batch summary:
+5. **Discuss delivery blueprints** before launching agents. This is the consultant presenting the methodology before deploying teams -- the user should understand and approve how blueprints will shape the generated solutions.
+
+   For each product in the batch that has a `delivery_blueprint`:
+
+   a. Present the blueprint in a readable summary:
+
+      **Product: {product-name} (Blueprint v{blueprint_version})**
+
+      | Phase | Duration Range | Role Mix |
+      |-------|---------------|----------|
+      | Discovery & Scoping | 1-2 weeks | SA 25%, IE 55%, PM 20% |
+      | Core Implementation | 4-8 weeks | ... |
+
+      **Pricing strategy**: PoV base ×1.0, Small ×{multiplier}, Medium ×{multiplier}, Large ×{multiplier}
+      **Standard assumptions**: {list from blueprint}
+      **Quality gates**: {list from blueprint}
+
+   b. Propose market-specific adaptations grouped by pattern rather than listing every market individually:
+      - "For **regulated markets** ({market-a}, {market-b}): I'll pull durations toward the high end, add compliance deliverables to assumptions, and consider a regulatory alignment phase."
+      - "For **fast-cycle markets** ({market-c}, {market-d}): I'll pull durations toward the low end and compress onboarding to emphasize time-to-value."
+      - "For **enterprise markets** ({market-e}): I'll scale effort toward the top of the effort_scaling range and set the PoV base price higher to match enterprise budget expectations."
+
+   c. For products **without** blueprints, note them explicitly: "Products without blueprints ({product-x}, {product-y}) will have solutions designed from scratch based on proposition context and market data."
+
+   d. Invite adjustments. The user can:
+      - Override duration ranges ("Cap all phases at 6 weeks for DACH markets")
+      - Adjust pricing multipliers ("Medium multiplier is too high -- use 6× instead of 8×")
+      - Add or remove standard assumptions ("Add 'All data must remain in EU data centers' for all DACH solutions")
+      - Add or remove phases ("Add a Compliance Audit phase for regulated markets")
+      - Override adaptation strategy for specific markets ("For energy-de, use high end of ranges -- they have long procurement cycles")
+
+   e. Confirm: "Does this delivery approach work, or would you like to adjust any blueprint parameters before I generate?"
+
+   Wait for explicit user confirmation. If the user says "looks fine" or "just use defaults", proceed immediately with `blueprint_guidance: null`.
+
+   **If no products in the batch have blueprints**, skip this step entirely -- all solutions will be designed from scratch.
+
+   **Capture adjustments as `blueprint_guidance`**: Record user adjustments as a structured object passed to each `solution-planner` agent in its task prompt:
+
+   ```
+   blueprint_guidance:
+     global_overrides:
+       - "Cap all phase durations at 6 weeks maximum"
+       - "Add assumption: All data must remain in EU data centers"
+     market_overrides:
+       energy-de:
+         - "Add Compliance Audit phase after Integration & Testing (2-3 weeks)"
+         - "Use high end of all duration ranges"
+       mid-market-saas-dach:
+         - "Use low end of duration ranges"
+     pricing_overrides:
+       medium_multiplier: 6.0
+     phase_additions:
+       - market_pattern: "regulated"
+         phase: "Regulatory Alignment"
+         after: "Integration & Testing"
+         duration_weeks_range: [2, 3]
+     phase_removals: []
+   ```
+
+   When the user approves without changes, pass `blueprint_guidance: null`. When revision rounds (step 9) re-launch `solution-planner`, re-pass the same `blueprint_guidance` so revisions respect the user's original adjustments.
+
+6. Launch `solution-planner` agents in parallel for each proposition. Include the `blueprint_guidance` object (or null) in each agent's task prompt.
+7. After each solution is written, launch `solution-review-assessor` agents in parallel to evaluate them
+8. For solutions with verdict "revise": re-launch `solution-planner` with the review feedback (revision mode) and the original `blueprint_guidance`, then re-assess. Maximum 2 revision rounds per solution
+9. Present a batch summary:
    - **Accepted** (Round 1): solutions that passed stakeholder review on first attempt
    - **Accepted** (Round 2): solutions that needed one revision round
    - **Needs attention**: solutions that still have issues after 2 rounds — flag for manual review
-9. Offer to run the portfolio-wide review flow (steps 1-11) across all new solutions
+10. Offer to run the portfolio-wide review flow (steps 1-11) across all new solutions
 
 Then offer the user review options:
 - "Would you like to: (a) open the dashboard to see the solutions with pricing tiers and margin health, (b) review individual solutions in detail, or (c) proceed to the next steps?"

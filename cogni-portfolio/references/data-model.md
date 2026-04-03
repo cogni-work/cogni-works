@@ -512,6 +512,8 @@ Common optional fields: `solution_type`, `cost_model`, `blueprint_ref`, `bluepri
 
 `blueprint_version` (integer, optional): The `blueprint_version` value from the product's `delivery_blueprint` at the time this solution was generated. Used for drift detection — when the product's current `blueprint_version` exceeds this value, the solution is flagged as drifted and eligible for regeneration. Must be present when `blueprint_ref` is present.
 
+`blueprint_guidance_applied` (boolean, optional): Indicates that user-provided blueprint adjustments were applied during batch generation. Present only on solutions generated in batch mode where the user provided non-null adjustments to the blueprint approach in the blueprint discussion step. When `true`, the solution may deviate from the standard blueprint in ways the user explicitly requested.
+
 ### packages/{product-slug}--{market-slug}.json
 
 Bundles solutions from one product into sellable tiers for a specific market.

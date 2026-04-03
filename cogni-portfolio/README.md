@@ -32,6 +32,7 @@ A structured portfolio messaging workflow for Claude Cowork. Eight pluggable tax
 11. **Communicate** — generate pitches, proposals, briefs, workbooks, and documentation for any audience → `output/communicate/{use-case}/*.md` → copywriter, story-to-web, doc-readme-root
 12. **Dashboard** — generate an interactive HTML status view of the full portfolio → `output/dashboard.html`
 13. **Architecture diagram** — generate an Excalidraw product-feature hierarchy diagram → `output/architecture.excalidraw` → doc-readme-root
+14. **Track source lineage** — register ingested documents and evidence URLs, detect changes, cascade refresh through dependent entities → `source-registry.json` → features, propositions, solutions
 
 ## What it means for you
 
@@ -63,6 +64,7 @@ This plugin is part of the [insight-wave monorepo](https://github.com/cogni-work
 /portfolio-communicate                     # produce pitches, proposals, briefs, workbooks
 /portfolio-dashboard                       # interactive HTML status dashboard
 /portfolio-architecture                    # product-feature architecture diagram
+/portfolio-lineage                         # track sources, detect drift, cascade refresh
 ```
 
 Or just describe what you want in natural language:
@@ -99,6 +101,7 @@ All entities are stored as JSON files in the project directory:
 | Competitor | `competitors/{feature}--{market}.json` | name, positioning, strengths, weaknesses |
 | Customer | `customers/{market}.json` | role, pain points, buying criteria |
 | Package | `packages/{product}--{market}.json` | bundled solution tiers |
+| Source Registry | `source-registry.json` | document/URL fingerprints, entity links, staleness |
 
 See [references/data-model.md](references/data-model.md) for the full schema with JSON examples and entity relationships.
 
@@ -126,6 +129,7 @@ Each portfolio project lives in `cogni-portfolio/{slug}/` with typed JSON files 
 | `portfolio-communicate` | skill | Generate portfolio deliverables for any audience (pitches, proposals, briefs, workbooks, docs) |
 | `portfolio-dashboard` | skill | Generate an interactive HTML dashboard showing the full portfolio status |
 | `portfolio-architecture` | skill | Generate an interactive Excalidraw architecture diagram of products and features |
+| `portfolio-lineage` | skill | Track source documents and URLs, detect changes, cascade refresh through features → propositions → solutions |
 | `trends-bridge` | skill | Bidirectional integration between cogni-trends TIPS analysis and the portfolio |
 | `portfolio-resume` | skill | Resume, continue, or check status of a portfolio project |
 | `market-researcher` | agent | Web research for TAM/SAM/SOM with claim submission |
@@ -150,7 +154,7 @@ Each portfolio project lives in `cogni-portfolio/{slug}/` with typed JSON files 
 
 ```
 cogni-portfolio/
-├── .claude-plugin/               Plugin manifest (v0.9.54)
+├── .claude-plugin/               Plugin manifest (v0.9.55)
 ├── templates/                    8 pluggable industry taxonomy templates
 │   ├── b2b-ict/                  Enterprise ICT (8 dims, 57 cats)
 │   ├── b2b-saas/                 B2B SaaS (8 dims, 47 cats)
@@ -160,11 +164,11 @@ cogni-portfolio/
 │   ├── b2b-industrial-tech/      Industrial Tech (8 dims, 48 cats)
 │   ├── b2b-professional-services/ Professional Services (8 dims, 44 cats)
 │   └── b2b-opensource/           Commercial Open Source (8 dims, 50 cats)
-├── skills/                       18 portfolio skills
+├── skills/                       19 portfolio skills
 ├── agents/                       17 delegation agents
 ├── references/
 │   └── data-model.md             Full entity schema and project structure reference
-└── scripts/                      8 utility scripts
+└── scripts/                      9 utility scripts
 ```
 
 ## Dependencies

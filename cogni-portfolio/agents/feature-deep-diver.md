@@ -291,7 +291,7 @@ use `buyer_perception`, not `buyer_language` or `buyer_evaluation_criteria`).
 9. Run 2-4 adaptive follow-up searches if any section has thin coverage
 10. Synthesize findings into the structured report
 11. Write the report to `research/deep-dive-{slug}.json`
-12. Submit verifiable claims (quantified evidence) via append-claim.sh:
+12. Submit verifiable claims (quantified evidence) via append-claim.sh. Include `entity_ref` pointing to the feature being researched so corrections can propagate back automatically:
     ```bash
     UUID=$(python3 -c "import uuid; print(uuid.uuid4())")
     bash "$CLAUDE_PLUGIN_ROOT/scripts/append-claim.sh" "<project-dir>" '{
@@ -306,9 +306,16 @@ use `buyer_perception`, not `buyer_language` or `buyer_evaluation_criteria`).
       "deviations": [],
       "resolution": null,
       "source_excerpt": null,
-      "verification_notes": null
+      "verification_notes": null,
+      "entity_ref": {
+        "type": "feature",
+        "file": "features/<slug>.json",
+        "field_path": "description"
+      },
+      "propagated_at": null
     }'
     ```
+    Choose the `field_path` based on what the claim asserts: `description` for claims about the feature's mechanism or capability, `differentiation` for competitive differentiation claims, `evidence[0].statement` for specific evidence items.
 13. Return a compact summary of: competitors found, differentiation vectors, buyer perception highlights, and proposed positioning directions
 
 ## Content Language

@@ -81,9 +81,11 @@ Three core entity types with defined status transitions:
 
 | Entity | Key fields | Description |
 |--------|-----------|-------------|
-| `ClaimRecord` | claim_id, claim_text, source_url, status | A factual assertion with its cited source. Status: `unverified` → `verified` / `deviated` / `source_unavailable` |
+| `ClaimRecord` | claim_id, claim_text, source_url, status, entity_ref, propagated_at | A factual assertion with its cited source and optional provenance link to the entity file it describes. Status: `unverified` → `verified` / `deviated` / `source_unavailable` |
 | `DeviationRecord` | deviation_type, severity, evidence | A discrepancy found during verification. Types: misquotation, unsupported_conclusion, selective_omission, data_staleness, source_contradiction |
 | `ResolutionRecord` | resolution_type, new_claim_text | How a deviation was resolved. Types: corrected, disputed, alternative_source, discarded, accepted_as_is |
+
+When claims are submitted with an `entity_ref` (pointing to the source entity file and field), resolved corrections can propagate back to update the original data. The `propagated_at` timestamp tracks whether a correction has been applied. See cogni-portfolio's `portfolio-verify` skill for the propagation workflow.
 
 See [skills/claim-entity/references/schema.md](skills/claim-entity/references/schema.md) for the full schema.
 

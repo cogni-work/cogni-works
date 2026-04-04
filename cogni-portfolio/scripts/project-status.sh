@@ -576,6 +576,7 @@ CLAIMS_VERIFIED=0
 CLAIMS_DEVIATED=0
 CLAIMS_RESOLVED=0
 CLAIMS_UNAVAILABLE=0
+CLAIMS_PENDING_PROPAGATION=0
 HAS_CLAIMS="false"
 if [ -f "$PROJECT_DIR/cogni-claims/claims.json" ]; then
   HAS_CLAIMS="true"
@@ -586,15 +587,21 @@ try:
         data = json.load(f)
     claims = data.get('claims', [])
     counts = {}
+    pending_prop = 0
     for c in claims:
         s = c.get('status', 'unverified')
         counts[s] = counts.get(s, 0) + 1
+        if s == 'resolved' and c.get('propagated_at') is None:
+            res = c.get('resolution', {}) or {}
+            if res.get('action') in ('corrected', 'discarded', 'alternative_source'):
+                pending_prop += 1
     print(f'CLAIMS_TOTAL={len(claims)}')
     print(f'CLAIMS_UNVERIFIED={counts.get(\"unverified\", 0)}')
     print(f'CLAIMS_VERIFIED={counts.get(\"verified\", 0)}')
     print(f'CLAIMS_DEVIATED={counts.get(\"deviated\", 0)}')
     print(f'CLAIMS_RESOLVED={counts.get(\"resolved\", 0)}')
     print(f'CLAIMS_UNAVAILABLE={counts.get(\"source_unavailable\", 0)}')
+    print(f'CLAIMS_PENDING_PROPAGATION={pending_prop}')
 except Exception:
     print('CLAIMS_TOTAL=0')
 " 2>/dev/null)"
@@ -617,6 +624,8 @@ elif [ "$SOLUTIONS_PCT" -lt 100 ] || [ "$COMPETITORS_PCT" -lt 100 ] || [ "$CUSTO
   PHASE="enrichment"
 elif [ "$HAS_CLAIMS" = "true" ] && [ "$CLAIMS_PENDING" -gt 0 ]; then
   PHASE="verification"
+elif [ "$HAS_CLAIMS" = "true" ] && [ "$CLAIMS_PENDING_PROPAGATION" -gt 0 ]; then
+  PHASE="propagation"
 elif [ "$HAS_COMMUNICATE" = "false" ]; then
   PHASE="communicate"
 else
@@ -705,6 +714,9 @@ case "$PHASE" in
     ;;
   verification)
     add_action "verify" "$CLAIMS_PENDING claim(s) pending verification ($CLAIMS_UNVERIFIED unverified, $CLAIMS_DEVIATED deviated)" 9
+    ;;
+  propagation)
+    add_action "verify" "$CLAIMS_PENDING_PROPAGATION resolved correction(s) pending propagation to entity files -- run verify skill (Step 8)" 9
     ;;
   communicate)
     add_action "communicate" "All entities complete -- ready to generate portfolio deliverables (pitches, proposals, briefs, workbooks, docs)" 10
@@ -1160,7 +1172,8 @@ cat << EOF
     "verified": $CLAIMS_VERIFIED,
     "deviated": $CLAIMS_DEVIATED,
     "resolved": $CLAIMS_RESOLVED,
-    "source_unavailable": $CLAIMS_UNAVAILABLE
+    "source_unavailable": $CLAIMS_UNAVAILABLE,
+    "pending_propagation": $CLAIMS_PENDING_PROPAGATION
   },
   "products": $product_arr,
   "features": $feature_arr,

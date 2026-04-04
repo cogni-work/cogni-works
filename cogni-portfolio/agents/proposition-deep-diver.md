@@ -425,7 +425,7 @@ Write the full research report to `research/deep-dive-{feature-slug}--{market-sl
 9. Run 2-4 adaptive follow-up searches if any section has thin coverage
 10. Synthesize findings into the structured report
 11. Write the report to `research/deep-dive-{feature-slug}--{market-slug}.json`
-12. Submit verifiable claims (quantified evidence) via append-claim.sh:
+12. Submit verifiable claims (quantified evidence) via append-claim.sh. Include `entity_ref` pointing to the proposition being researched so corrections can propagate back automatically:
     ```bash
     UUID=$(python3 -c "import uuid; print(uuid.uuid4())")
     bash "$CLAUDE_PLUGIN_ROOT/scripts/append-claim.sh" "<project-dir>" '{
@@ -440,9 +440,16 @@ Write the full research report to `research/deep-dive-{feature-slug}--{market-sl
       "deviations": [],
       "resolution": null,
       "source_excerpt": null,
-      "verification_notes": null
+      "verification_notes": null,
+      "entity_ref": {
+        "type": "proposition",
+        "file": "propositions/<feature-slug>--<market-slug>.json",
+        "field_path": "evidence[0].statement"
+      },
+      "propagated_at": null
     }'
     ```
+    Choose the `field_path` based on what the claim asserts: `evidence[0].statement` for evidence items, `does_statement` for DOES messaging claims, `means_statement` for MEANS messaging claims.
 13. Return a compact summary of: buyer language findings, competitive messaging gaps, evidence found, pain validation result, MEANS escalation opportunities, and proposed directions
 
 ## Content Language

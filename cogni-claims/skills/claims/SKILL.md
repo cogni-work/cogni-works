@@ -142,7 +142,7 @@ Walk the user through resolving a deviated claim. If the source isn't already op
    - **Alternative source** — the claim is right but needs a different source (prompt for URL)
    - **Discard** — remove the claim entirely (prompt for rationale)
    - **Accept as-is** — acknowledge the deviation but keep the claim (prompt for rationale)
-5. Record the ResolutionRecord, update status to `resolved`, write to history
+5. Record the ResolutionRecord, update status to `resolved`, write to history. Preserve the `entity_ref` field on the claim — downstream systems (cogni-portfolio's portfolio-verify Step 8) use it to propagate corrections back to the entity files that originally contained the wrong data. Do not set `propagated_at` here — that's set by the propagating system after it applies the correction.
 6. If the user chose "alternative source", offer to re-verify against the new URL
 
 ## Guiding principles

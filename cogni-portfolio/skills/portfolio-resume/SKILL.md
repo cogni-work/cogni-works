@@ -56,7 +56,7 @@ Show a concise, scannable dashboard. Lead with the company name and project slug
 | Packages | N / packageable | pct% |
 | Competitors | N / propositions | pct% |
 | Customers | N / markets | pct% |
-| Claims | N total | V verified, D deviated, U unverified |
+| Claims | N total | V verified, D deviated, U unverified, P pending propagation |
 | Communicate | N files | A accepted, R revise, J rejected (if > 0), STALE if upstream changed |
 | Architecture | exists/missing | STALE if products/features changed since last generation |
 | Purpose | N / total features | coverage percentage — low coverage limits architecture and customer narrative quality |
@@ -130,7 +130,8 @@ If the phase is `complete`, congratulate the user and suggest reviewing outputs 
 | `propositions` | Feature x Market pairs need messaging | Run `propositions` skill |
 | `enrichment` | Propositions exist, solution/competitor gaps remain | Run `solutions`, `compete`, and/or `customers` for remaining markets |
 | `verification` | Unverified or deviated claims pending | Run `verify` skill |
-| `communicate` | All entities complete, claims clean | Run `communicate` skill |
+| `propagation` | Resolved claims with corrections not yet applied to entity files | Run `verify` skill (Step 8 propagates corrections) |
+| `communicate` | All entities complete, claims clean, corrections propagated | Run `communicate` skill |
 | `complete` | All workflow stages finished | Review outputs or refresh `communicate` if upstream data changed |
 
 ## Multi-Session Design

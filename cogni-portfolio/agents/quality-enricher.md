@@ -285,7 +285,7 @@ Return ONLY valid JSON (no markdown fencing, no explanation before or after):
 5. Execute WebSearch queries in parallel (batch 5-10)
 6. Synthesize findings and draft improved text (or formulate questions if low confidence)
 7. Write research log to `.logs/quality-enricher-{slug}.json` in the project directory
-8. Submit verifiable claims (quantified evidence) via append-claim.sh:
+8. Submit verifiable claims (quantified evidence) via append-claim.sh. Include `entity_ref` pointing to the entity being enriched so corrections can propagate back automatically. Set `entity_ref.type` based on what you're enriching — `feature` for feature descriptions, `proposition` for proposition messaging:
    ```bash
    UUID=$(python3 -c "import uuid; print(uuid.uuid4())")
    bash "$CLAUDE_PLUGIN_ROOT/scripts/append-claim.sh" "<project-dir>" '{
@@ -300,9 +300,16 @@ Return ONLY valid JSON (no markdown fencing, no explanation before or after):
      "deviations": [],
      "resolution": null,
      "source_excerpt": null,
-     "verification_notes": null
+     "verification_notes": null,
+     "entity_ref": {
+       "type": "feature",
+       "file": "features/<slug>.json",
+       "field_path": "description"
+     },
+     "propagated_at": null
    }'
    ```
+   Choose the `field_path` based on what the claim asserts: `description` for feature mechanism claims, `does_statement` or `means_statement` for proposition messaging, `evidence[0].statement` for evidence items.
 9. Return the structured JSON output
 
 **Grounding & Anti-Hallucination Rules:**

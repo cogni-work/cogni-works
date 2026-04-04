@@ -151,6 +151,8 @@ cogni-visual/                              # 10 skills · 17 agents · 5 command
 | cogni-copywriting | Yes | Polishes narratives before visual briefing (upstream polish step) |
 | cogni-workspace | Yes | Provides brand themes for all visual output |
 | cogni-trends | No | TIPS value-modeler data for Big Block solution architecture diagrams |
+| cogni-research | No | enrich-report detects research project configs for report-type-specific enrichment |
+| cogni-portfolio | No | enrich-report references portfolio-dashboard patterns for dashboard-style enrichment |
 | document-skills | No | PPTX rendering for slide briefs |
 | Excalidraw MCP | No | Canvas rendering for big-picture and Big Block diagrams (github.com/yctimlin/mcp_excalidraw) |
 | Pencil MCP | No | Canvas rendering for web narratives and poster storyboards (pencil.li) |

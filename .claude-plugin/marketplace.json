@@ -18,7 +18,7 @@
     {
       "name": "cogni-narrative",
       "source": "./cogni-narrative",
-      "version": "1.8.5",
+      "version": "1.8.6",
       "description": "Story arc-driven narrative transformation. Transforms research syntheses and structured content into compelling executive narratives using 8 story arc frameworks including TIPS-native trend panorama, theme-thesis for investment theme narratives, and JTBD portfolio for buyer-job-centric portfolio narratives. Includes narrative review scoring and derivative format adaptation.",
       "keywords": [
         "narrative",
@@ -47,7 +47,7 @@
     {
       "name": "cogni-workspace",
       "source": "./cogni-workspace",
-      "version": "0.4.2",
+      "version": "0.4.3",
       "description": "Lean workspace orchestrator for insight-wave marketplace plugins. Manages shared foundation (env vars, settings), theme management, theme picker, plugin discovery, workspace health, and Obsidian vault integration.",
       "keywords": [
         "workspace",
@@ -73,7 +73,7 @@
     {
       "name": "cogni-portfolio",
       "source": "./cogni-portfolio",
-      "version": "0.9.61",
+      "version": "0.9.62",
       "description": "Portfolio messaging and proposition planning for SMEs using IS/DOES/MEANS framework. Features are market-independent (IS). Advantages (DOES) and benefits (MEANS) are market-specific. Includes TAM/SAM/SOM targeting, competitor and customer analysis, deep-dive research for features and propositions, Lean Canvas bootstrapping, presentation-ready pitch narratives, and eight pluggable industry taxonomies.",
       "keywords": [
         "portfolio",
@@ -88,7 +88,7 @@
     {
       "name": "cogni-visual",
       "source": "./cogni-visual",
-      "version": "1.7.1",
+      "version": "1.7.2",
       "description": "Transform polished narratives and structured data into visual deliverables — presentation briefs, slide decks, big picture journey maps, Big Block solution architecture diagrams, scrollable web narratives, poster storyboards, and visual assets. Supports Excalidraw, Pencil MCP, and PPTX rendering.",
       "keywords": [
         "presentations",
@@ -143,7 +143,7 @@
     {
       "name": "cogni-research",
       "source": "./cogni-research",
-      "version": "0.6.12",
+      "version": "0.6.13",
       "description": "Multi-agent research report generator. STORM-inspired editorial workflow with parallel section research, claims-verified review loops, and five report types (basic, detailed, deep, outline, resource). Supports web, local, and hybrid source modes. Integrates with cogni-claims for source verification.",
       "keywords": [
         "research",
@@ -176,7 +176,7 @@
     {
       "name": "cogni-consulting",
       "source": "./cogni-consulting",
-      "version": "0.1.7",
+      "version": "0.1.8",
       "description": "Double Diamond consulting orchestrator. Guides engagements through Discover, Define, Develop, Deliver phases by dispatching to insight-wave plugins (research, trends, portfolio, claims) at the right moment. Vision-first, method-aware, phase-gated. Includes Lean Canvas authoring and multi-persona stress testing via the business-model-hypothesis vision class.",
       "keywords": [
         "double-diamond",

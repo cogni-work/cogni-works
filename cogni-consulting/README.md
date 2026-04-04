@@ -76,7 +76,7 @@ See [references/data-model.md](references/data-model.md) for the full schema.
 
 ## How it works
 
-Each engagement lives in `cogni-consulting/{slug}/` with phase output directories (discover/, define/, develop/, deliver/) and a final output/ package. The **phase-analyst** agent assesses readiness at each gate and recommends methods from a 10-method library. Plugin refs in `consulting-project.json` store paths to projects created by other plugins — no data is copied, only referenced.
+Each engagement lives in `cogni-consulting/{slug}/` with phase output directories (discover/, define/, develop/, deliver/) and a final output/ package. The **phase-analyst** agent assesses readiness at each gate and recommends methods from a 14-method library. Plugin refs in `consulting-project.json` store paths to projects created by other plugins — no data is copied, only referenced.
 
 ## Components
 

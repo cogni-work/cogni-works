@@ -19,7 +19,7 @@ This plugin applies structured story arc frameworks — each with defined sectio
 
 ## What it is
 
-A story arc engine for the insight-wave ecosystem. Seven arc frameworks — Corporate Visions for sales, Technology Futures for innovation, Competitive Intelligence for threats, Strategic Foresight for planning, Industry Transformation for change, Trend Panorama for TIPS output, and Theme-Thesis for investment theme narratives — impose narrative discipline on structured content. Other plugins produce research and data; cogni-narrative shapes it into executive-grade stories that drive decisions.
+A story arc engine for the insight-wave ecosystem. Eight arc frameworks — Corporate Visions for sales, Technology Futures for innovation, Competitive Intelligence for threats, Strategic Foresight for planning, Industry Transformation for change, Trend Panorama for TIPS output, Theme-Thesis for investment theme narratives, and JTBD Portfolio for buyer-job-centric portfolio narratives — impose narrative discipline on structured content. Other plugins produce research and data; cogni-narrative shapes it into executive-grade stories that drive decisions.
 
 ## What it does
 
@@ -30,7 +30,7 @@ A story arc engine for the insight-wave ecosystem. Seven arc frameworks — Corp
 ## What it means for you
 
 - **Arc-disciplined, not improvised.** Every narrative follows a proven story arc structure — consistent quality across documents and authors.
-- **Seven frameworks for seven contexts.** Corporate Visions for sales, Technology Futures for innovation, Competitive Intelligence for threats, Strategic Foresight for planning, Industry Transformation for change, Trend Panorama for TIPS output, Theme-Thesis for investment themes.
+- **Eight frameworks for eight contexts.** Corporate Visions for sales, Technology Futures for innovation, Competitive Intelligence for threats, Strategic Foresight for planning, Industry Transformation for change, Trend Panorama for TIPS output, Theme-Thesis for investment themes, JTBD Portfolio for buyer-job-centric portfolio narratives.
 - **Quality-gated.** Automated scoring (0-100, A-F grades) on structural compliance, critical accuracy, evidence density, and language — with improvement suggestions per dimension.
 - **One narrative, three derivative formats.** Executive briefs, talking points, and one-pagers — adapted from the source narrative without rewriting.
 - **Bilingual.** Full EN/DE support with localized section headers and proper Unicode handling.
@@ -74,6 +74,8 @@ Claude reads your research output, auto-detects the best story arc, asks you to 
 | `strategic-foresight` | Signals → Scenarios → Strategies → Decisions | Long-range planning, scenario analysis, strategic options |
 | `industry-transformation` | Forces → Friction → Evolution → Leadership | Industry analysis, regulatory impact, transformation roadmaps |
 | `trend-panorama` | Forces → Impact → Horizons → Foundations | Trend-scout output, TIPS trend reports, multi-horizon landscapes |
+| `theme-thesis` | Why Change → Why Now → Why You → Why Pay | Investment theme narratives within TIPS reports |
+| `jtbd-portfolio` | Jobs → Friction → Portfolio → Invitation | Portfolio introductions, capability overviews, pre-sales |
 
 ## Example workflows
 

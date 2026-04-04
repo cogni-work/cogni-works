@@ -155,7 +155,7 @@ Each portfolio project lives in `cogni-portfolio/{slug}/` with typed JSON files 
 
 ```
 cogni-portfolio/
-├── .claude-plugin/               Plugin manifest (v0.9.56)
+├── .claude-plugin/               Plugin manifest (v0.9.61)
 ├── templates/                    8 pluggable industry taxonomy templates
 │   ├── b2b-ict/                  Enterprise ICT (8 dims, 57 cats)
 │   ├── b2b-saas/                 B2B SaaS (8 dims, 47 cats)
@@ -183,6 +183,7 @@ cogni-portfolio/
 | cogni-trends | No | Bidirectional TIPS integration via trends-bridge |
 | cogni-workspace | No | Theme selection for portfolio-dashboard via pick-theme |
 | cogni-consulting | No | Lean Canvas extraction via portfolio-canvas (canvases from business-model-hypothesis vision class) |
+| cogni-sales | No | Downstream consumer — why-change pitch builds on portfolio features and propositions |
 | document-skills | No | Document ingestion (docx, pptx, xlsx, pdf) via portfolio-ingest; XLSX export via portfolio-communicate |
 
 cogni-portfolio is standalone for core messaging workflows. All integrations are optional and activate when the respective plugin is installed.

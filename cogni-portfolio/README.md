@@ -140,6 +140,7 @@ Each portfolio project lives in `cogni-portfolio/{slug}/` with typed JSON files 
 | `proposition-quality-assessor` | agent | Assess DOES/MEANS messaging quality in propositions (any language) |
 | `proposition-review-assessor` | agent | Assess proposition set from buyer, sales, and product manager perspectives |
 | `proposition-deep-diver` | agent | Deep research — buyer language validation, competitive messaging, evidence enrichment |
+| `solution-architect` | agent | Propose delivery blueprints and shared solution eligibility per product |
 | `solution-planner` | agent | Plan implementation phases and pricing tiers for a single proposition |
 | `solution-review-assessor` | agent | Assess solution quality from procurement, provider SA, and client SA perspectives |
 | `feature-quality-assessor` | agent | Assess feature description quality using LLM intelligence (any language) |
@@ -165,7 +166,7 @@ cogni-portfolio/
 │   ├── b2b-professional-services/ Professional Services (8 dims, 44 cats)
 │   └── b2b-opensource/           Commercial Open Source (8 dims, 50 cats)
 ├── skills/                       19 portfolio skills
-├── agents/                       17 delegation agents
+├── agents/                       18 delegation agents
 ├── references/
 │   └── data-model.md             Full entity schema and project structure reference
 └── scripts/                      9 utility scripts

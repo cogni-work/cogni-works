@@ -40,7 +40,7 @@ Solutions are where the portfolio becomes commercial -- transforming marketing m
 The workflow adapts to what the user brings. Each path has a distinct feel:
 
 - **User wants to explore** ("let's work on solutions") → Conversational and concise. Lead with a brief portfolio snapshot (coverage stats + one-line quality note per existing solution), grouped by solution type (subscription vs. project vs. partnership). Then recommend where to start and ask what they want to focus on. Keep the response SHORT -- under 15 lines of prose plus one summary table. Do NOT run quality gates, propose phase rewrites, or do tier analysis. That depth belongs in the review and single-proposition paths. The explore response should feel like a 2-minute status update that ends with a question, not a consulting memo.
-- **User asks for batch generation** ("generate all missing solutions") → Action-oriented with a gate. Run status, present what's pending with a brief assessment of which propositions are strong enough to build solutions on, confirm, then delegate to `solution-planner` agents in parallel.
+- **User asks for batch generation** ("generate all missing solutions") → Action-oriented with a gate. Run status, present what's pending, confirm, then bootstrap delivery blueprints and shared solution eligibility for products that lack them (via `solution-architect` agents, with user approval), then delegate to `solution-planner` agents in parallel.
 - **User brings a specific proposition** ("build a solution for X") → Full consultative co-development. Read context, assess, propose phases, iterate, then pricing, iterate, then write.
 - **User asks to review existing solutions** → Jump straight to critique. Lead with your sharpest diagnosis across the portfolio -- are timelines realistic? Is pricing coherent? Do PoV tiers actually prove value? Present concrete rewrites, not just observations.
 - **User wants to reprice** ("adjust pricing based on competitor data") → Focused repricing flow. Only touch pricing, ground every adjustment in competitive or market data.
@@ -86,7 +86,7 @@ For the selected proposition, read (in parallel where possible):
 
 **State inferences before proposing.** Summarize key context as testable assumptions: "This is a subscription product (revenue_model: subscription) targeting mid-market buyers, so I'll design onboarding + subscription tiers, not a consulting engagement. Your competitor charges EUR 50K-200K range based on competitor data. Your customer profile shows CTO-level buyers who prioritize time-to-value under 2 weeks — I'll scope the PoV tier accordingly. Correct me if any of this is off."
 
-**Blueprint awareness.** When the product has a `delivery_blueprint`, mention it: "This product has a delivery blueprint (v{N}) with {N} standard phases. I'll use it as the starting point and adapt for this market." In batch generation, note which solutions used a blueprint vs. generated from scratch.
+**Blueprint awareness.** When the product has a `delivery_blueprint`, mention it: "This product has a delivery blueprint (v{N}) with {N} standard phases. I'll use it as the starting point and adapt for this market." In batch generation, products without blueprints will have one proposed by the `solution-architect` agent in step 5 before solution generation begins.
 
 If cost model data, delivery_defaults, or rate cards exist in context, present the rates you found rather than asking for them. Ask only about pricing inputs that no data source could answer.
 
@@ -440,7 +440,59 @@ Batch mode skips the interactive co-development steps -- use it when the user wa
 2. Read the product for each pending proposition to determine `revenue_model` — group the batch by solution type
 3. Assess which propositions are strong enough to build on -- flag any with generic DOES statements that will produce weak implementation plans
 4. Present the batch plan grouped by type (e.g., "18 subscription solutions for insight-wave, 2 project solutions for cogni-services") and get confirmation
-5. **Discuss delivery blueprints** before launching agents. This is the consultant presenting the methodology before deploying teams -- the user should understand and approve how blueprints will shape the generated solutions.
+5. **Bootstrap delivery blueprints and shared solution eligibility.** Before discussing blueprint adaptation, ensure every product in the batch actually has a delivery blueprint. Products without blueprints get solutions designed from scratch with no structural consistency — different phases, pricing ratios, and assumptions across markets for the same product. This step fixes that by proposing blueprints proactively.
+
+   a. **Identify products without blueprints.** For each product in the batch, check whether `delivery_blueprint` exists on the product JSON. Separate into "has blueprint" and "needs blueprint" lists. If all products already have blueprints, skip to step 5c.
+
+   b. **Launch `solution-architect` agents in parallel** — one per product that needs a blueprint. Each agent receives:
+      - `project_dir`: the project directory path
+      - `product_slug`: the product to analyze
+      - `market_slugs`: the markets in this batch for this product
+      - `language`: from portfolio.json (or "en")
+
+      The agent reads all features, markets, delivery_defaults, and existing solutions to propose a delivery blueprint and assess shared solution eligibility. It returns structured JSON — it does not write files.
+
+   c. **Present blueprint proposals.** For each product, present the agent's proposed blueprint in the standard readable format:
+
+      **Product: {product-name} — proposed delivery blueprint (v1)**
+
+      | Phase | Duration Range | Role Mix |
+      |-------|---------------|----------|
+      | {phase} | {min}-{max} weeks | {roles with ratios} |
+
+      **Pricing strategy**: PoV base ×1.0, Small ×{multiplier}, Medium ×{multiplier}, Large ×{multiplier}
+      **Standard assumptions**: {list}
+      **Quality gates**: {list}
+      **Rationale**: {blueprint_rationale from agent}
+
+      When multiple products need blueprints, batch all proposals into one presentation with clear headers per product. Include the agent's rationale so the user understands the design decisions.
+
+   d. **Present shared solution recommendations.** For each product where the agent returned `shared_solution_recommended: true`, present the efficiency case alongside the blueprint:
+
+      > "**{product-name}** is a strong candidate for shared solutions: {feature_count} features × {market_count} markets = {N} solutions. With shared mode: **{M} reference solutions + {N} lightweight overlays** instead of {N} full generations. {shared_solution_rationale}"
+
+      Show the feature compatibility list. Flag any features marked `compatible: false` — these will be generated as independent solutions.
+
+      For products where the agent returned `shared_solution_recommended: false`, state why briefly: "**{product-name}**: not recommended for shared solutions — {rationale}."
+
+      When only one product is involved, combine the blueprint proposal and shared solution recommendation into a single presentation to avoid two separate confirmation rounds.
+
+   e. **Invite adjustments and confirm.** The user can:
+      - Modify any proposed blueprint (phases, duration ranges, multipliers, roles, assumptions, quality gates)
+      - Accept or reject shared solution recommendations per product
+      - Accept all defaults ("looks good, proceed")
+
+   f. **Write to product JSON.** On confirmation:
+      - Write `delivery_blueprint` to each approved product's JSON file
+      - Write `"shared_solution": true` to each product where the user approved shared solutions
+      - If the user declined a blueprint for a product, note it — that product's solutions will be generated from scratch
+      - If the user declined shared solutions for a product, proceed with independent generation for it
+
+   g. **If no products needed bootstrapping** (all had blueprints and shared_solution flags already set), skip this entire step.
+
+6. **Discuss delivery blueprint adaptation** for the batch. This is the consultant presenting the methodology before deploying teams -- the user should understand and approve how blueprints will shape the generated solutions. Products that just received blueprints in step 5 are included here — the blueprints are now on the product JSON and this step handles market-specific adaptation.
+
+   Note: if step 5 already covered blueprint discussion and the user approved with adjustments, you may streamline this step — don't re-present blueprints the user just reviewed. Focus on market-specific adaptations that weren't covered in step 5e.
 
    For each product in the batch that has a `delivery_blueprint`:
 
@@ -475,7 +527,7 @@ Batch mode skips the interactive co-development steps -- use it when the user wa
 
    Wait for explicit user confirmation. If the user says "looks fine" or "just use defaults", proceed immediately with `blueprint_guidance: null`.
 
-   **If no products in the batch have blueprints**, skip this step entirely -- all solutions will be designed from scratch.
+   **If no products in the batch have blueprints after step 5**, skip this step entirely -- all solutions will be designed from scratch.
 
    **Capture adjustments as `blueprint_guidance`**: Record user adjustments as a structured object passed to each `solution-planner` agent in its task prompt:
 
@@ -500,9 +552,9 @@ Batch mode skips the interactive co-development steps -- use it when the user wa
      phase_removals: []
    ```
 
-   When the user approves without changes, pass `blueprint_guidance: null`. When revision rounds (step 9) re-launch `solution-planner`, re-pass the same `blueprint_guidance` so revisions respect the user's original adjustments.
+   When the user approves without changes, pass `blueprint_guidance: null`. When revision rounds (step 10) re-launch `solution-planner`, re-pass the same `blueprint_guidance` so revisions respect the user's original adjustments.
 
-6. **Detect shared solution products.** For each product in the batch, check the product JSON for `"shared_solution": true`. When found, this product's features share one commercial structure per market — switch to the shared solution workflow instead of launching independent agents per feature.
+7. **Detect shared solution products.** For each product in the batch, check the product JSON for `"shared_solution": true` (this flag may have been set during step 5). When found, this product's features share one commercial structure per market — switch to the shared solution workflow instead of launching independent agents per feature.
 
    For products with `shared_solution: true`:
 
@@ -527,14 +579,15 @@ Batch mode skips the interactive co-development steps -- use it when the user wa
 
    For products **without** `shared_solution: true`: proceed with the standard per-proposition agent launch as before.
 
-7. For non-shared products: launch `solution-planner` agents in parallel for each proposition. Include the `blueprint_guidance` object (or null) in each agent's task prompt.
-8. After each solution is written, launch `solution-review-assessor` agents in parallel to evaluate them (full review for non-shared solutions, lightweight for overlays)
-9. For solutions with verdict "revise": re-launch `solution-planner` with the review feedback (revision mode) and the original `blueprint_guidance`, then re-assess. Maximum 2 revision rounds per solution
-10. Present a batch summary:
+8. For non-shared products: launch `solution-planner` agents in parallel for each proposition. Include the `blueprint_guidance` object (or null) in each agent's task prompt.
+9. After each solution is written, launch `solution-review-assessor` agents in parallel to evaluate them (full review for non-shared solutions, lightweight for overlays)
+10. For solutions with verdict "revise": re-launch `solution-planner` with the review feedback (revision mode) and the original `blueprint_guidance`, then re-assess. Maximum 2 revision rounds per solution
+11. Present a batch summary:
+    - **Blueprints bootstrapped**: {N} products received new delivery blueprints, {M} products marked for shared solutions
     - **Shared solutions**: {M} reference solutions accepted, {N×M} overlays generated ({X} passed, {Y} incompatible → generated independently)
     - **Independent solutions**: accepted Round 1 / accepted Round 2 / needs attention
     - **Needs attention**: solutions that still have issues after 2 rounds — flag for manual review
-11. Offer to run the portfolio-wide review flow (steps 1-11) across all new solutions
+12. Offer to run the portfolio-wide review flow across all new solutions
 
 Then offer the user review options:
 - "Would you like to: (a) open the dashboard to see the solutions with pricing tiers and margin health, (b) review individual solutions in detail, or (c) proceed to the next steps?"

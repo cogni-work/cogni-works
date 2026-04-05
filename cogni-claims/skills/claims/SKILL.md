@@ -10,7 +10,7 @@ description: |
   against sources, checking citations, finding outdated or mismatched data in cited references,
   reviewing what's been flagged, checking for stale sources, outdated data in references,
   or asking "which claims need attention" or "what did verification find", this skill handles it.
-allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Agent, AskUserQuestion
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Agent, AskUserQuestion, mcp__browsermcp__browser_navigate, mcp__browsermcp__browser_snapshot
 ---
 
 # Claims Verification Orchestrator
@@ -78,6 +78,19 @@ This is where the real work happens — fetching sources and comparing claims ag
 
 Multiple claims often cite the same source. Group them by `source_url` so each URL is fetched exactly once. Tell the user: "Verifying {N} claims against {K} unique sources."
 
+### Step 2.5: Pre-flight environment check
+
+Before dispatching agents, verify that browsermcp (Playwright headless) is available — claim-verifier agents rely on it as fallback for paywalled/JS-rendered sources, and source-inspector requires it entirely for the inspect workflow.
+
+1. Attempt `mcp__browsermcp__browser_navigate` to `about:blank`
+2. If the call **succeeds** → browsermcp is available, proceed silently to Step 3
+3. If the call **errors out** (tool not found, connection refused, MCP server not running) → this is a hard gate. Tell the user:
+   - browsermcp is not available in the current environment
+   - **Impact**: verification agents cannot fall back to headless browser when WebFetch fails (paywalled, JS-rendered, or anti-bot-protected sources will be marked `source_unavailable`), and `/claims inspect` will not work at all
+   - **Recommendation**: start browsermcp before continuing
+4. Use AskUserQuestion to ask: "Would you like to proceed with WebFetch-only verification (browser fallback disabled), or stop so you can enable browsermcp first?"
+5. If the user chooses to proceed, set an internal flag `browsermcp_available = false` and continue to Step 3. This flag is used in Step 5 to contextualize the summary.
+
 ### Step 3: Dispatch verification agents
 
 For each unique URL group, launch a `cogni-claims:claim-verifier` agent:
@@ -111,6 +124,14 @@ Verification complete:
 ```
 
 The "recovered via browser fallback" line shows how many sources were initially unreachable via WebFetch but succeeded when the claim-verifier fell back to headless browser (browsermcp). This helps the user understand the value of the browser fallback and which sources required it.
+
+If verification ran with `browsermcp_available = false` (user chose to proceed after the pre-flight check failed), append to the summary:
+```
+Note: browsermcp was not available during this verification run. Browser fallback
+was disabled — sources that require headless browser access were marked unavailable.
+To re-verify these claims with full browser support, enable browsermcp and run
+/claims verify again.
+```
 
 If there are deviated claims with severity `medium` or higher, briefly show each one (claim statement, deviation type, source excerpt) and proactively offer source inspection (see Source inspection section below). The goal is a seamless flow: verify → see the problem → decide what to do.
 

@@ -1,29 +1,6 @@
 ---
 name: feature-quality-assessor
-description: |
-  Assess feature description quality using LLM intelligence — works in any language.
-  Delegated by the features skill after creating/editing features, and by the
-  propositions skill as a pre-check before generation.
-
-  <example>
-  Context: User created features and needs quality assessment before generating propositions
-  user: "Check the quality of my features"
-  assistant: "I'll launch the feature-quality-assessor agent to evaluate description quality."
-  <commentary>
-  The features skill delegates quality assessment to this agent, which can handle
-  German, English, or mixed-language descriptions without false positives.
-  </commentary>
-  </example>
-
-  <example>
-  Context: Propositions skill needs to verify feature quality before batch generation
-  user: "Generate propositions for all features"
-  assistant: "I'll first assess feature quality, then generate propositions for passing features."
-  <commentary>
-  The propositions skill uses this agent as a pre-check to catch weak features
-  before they produce weak propositions downstream.
-  </commentary>
-  </example>
+description: Assess feature description quality using LLM intelligence — works in any language.
 
 model: haiku
 color: yellow

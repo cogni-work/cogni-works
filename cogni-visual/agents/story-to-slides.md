@@ -1,16 +1,6 @@
 ---
 name: story-to-slides
-description: |
-  Transform any narrative with a story arc into an optimized presentation brief for the PPTX skill.
-
-  Uses story arc analysis, pyramid communication, number plays, and message-driven layout selection
-  to produce briefs that create perfect slides. Works with any narrative format — not just Why Change.
-
-  WORKFLOW POSITION: Phase 5 Step 4 (Synthesis) when invoked by why-change-work orchestrator.
-  ALSO USABLE DIRECTLY: Can be invoked standalone for any narrative-to-presentation task.
-
-  Delegates to story-to-slides skill for all intelligence layers.
-  Returns compact JSON response for context-efficient orchestration.
+description: Transform any narrative with a story arc into an optimized presentation brief.
 model: opus
 color: green
 ---

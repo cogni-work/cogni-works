@@ -1,42 +1,6 @@
 ---
 name: communicate-review-assessor
-description: |
-  Assess portfolio communication quality from three stakeholder perspectives adapted to the
-  use case. For customer narratives: target buyer, marketing director, sales director.
-  For repo documentation: developer evaluator, open source maintainer, technical writer.
-  For custom/ad-hoc use cases: derives perspectives from the audience definition.
-  Returns structured JSON with per-perspective scores, synthesis, and revision guidance.
-
-  Delegated by the portfolio-communicate skill after generating markdown output. Adapts its
-  evaluation perspectives based on the use case — catching quality failures specific to the
-  target audience before the document reaches them.
-
-  <example>
-  Context: Portfolio-communicate skill generated a customer-facing market view
-  user: "Generate customer-facing documentation for mid-consulting-dach"
-  assistant: "I'll launch the communicate-review-assessor to evaluate the output from buyer, marketing, and sales perspectives."
-  <commentary>
-  Use case is customer-narrative, so assessor uses buyer/marketing/sales perspectives.
-  </commentary>
-  </example>
-
-  <example>
-  Context: Portfolio-communicate skill generated repo documentation
-  user: "Enrich the README with portfolio content"
-  assistant: "I'll launch the communicate-review-assessor to evaluate from developer, maintainer, and technical writer perspectives."
-  <commentary>
-  Use case is repo-documentation, so assessor uses developer/maintainer/writer perspectives.
-  </commentary>
-  </example>
-
-  <example>
-  Context: User wants to review existing communicate output after manual edits
-  user: "Review my portfolio overview — I edited the differentiation section"
-  assistant: "I'll launch the communicate-review-assessor to re-evaluate the edited output."
-  <commentary>
-  Can be re-run after manual edits to verify the changes improved quality.
-  </commentary>
-  </example>
+description: Assess portfolio communication quality from three stakeholder perspectives adapted to the use case.
 
 model: haiku
 color: yellow

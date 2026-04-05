@@ -1,21 +1,6 @@
 ---
 name: pitch-synthesizer
-description: |
-  Assemble final sales-presentation.md and sales-proposal.md from phase research.
-  Reads all bridge files, narratives, and output templates to produce
-  Obsidian-friendly deliverables with YAML frontmatter.
-  Supports both customer mode (named customer) and segment mode (reusable market pitch).
-  Internal component — invoke via the why-change skill, not directly.
-
-  <example>
-  Context: All 4 content phases are complete for a customer pitch
-  prompt: "project_path: /path/to/pitch"
-  </example>
-
-  <example>
-  Context: All 4 content phases are complete for a segment pitch
-  prompt: "project_path: /path/to/pitch"
-  </example>
+description: Assemble final sales-presentation.md and sales-proposal.md from phase research.
 model: sonnet
 color: green
 tools: ["Read", "Write", "Glob"]

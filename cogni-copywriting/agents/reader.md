@@ -2,26 +2,7 @@
 name: reader
 model: sonnet
 color: cyan
-description: |
-  Review documents through parallel stakeholder persona Q&A simulation with synthesized feedback and automatic improvement.
-
-  <example>
-  Context: User wants stakeholder feedback on a document
-  user: "Review this proposal from different stakeholder perspectives"
-  assistant: "I'll use the reader agent to run parallel persona analysis."
-  <commentary>
-  Multi-stakeholder review request triggers the reader agent.
-  </commentary>
-  </example>
-
-  <example>
-  Context: User wants to check if document works for an audience
-  user: "What would an executive think of this report?"
-  assistant: "I'll use the reader agent to simulate the executive perspective."
-  <commentary>
-  Single-persona review request triggers the reader agent.
-  </commentary>
-  </example>
+description: Review documents through parallel stakeholder persona Q&A simulation with synthesized feedback.
 ---
 
 # Reader Agent (Orchestrator)

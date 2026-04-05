@@ -1,10 +1,6 @@
 ---
 name: trend-report-reviewer
-description: |
-  Evaluate a trend report against structural quality criteria across investment themes.
-  Produces a verdict (accept/revise) with specific issues and scores. Runs between
-  Phase 2 (Theme Narratives) and Phase 3 (Claims Verification) of trend-report.
-  DO NOT USE DIRECTLY — invoked by trend-report Phase 2.5.
+description: Evaluate a trend report against structural quality criteria across investment themes.
 model: sonnet
 color: yellow
 tools: ["Read", "Write", "Glob"]

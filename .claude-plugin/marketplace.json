@@ -7,7 +7,7 @@
     {
       "name": "cogni-claims",
       "source": "./cogni-claims",
-      "version": "1.0.10",
+      "version": "1.0.11",
       "description": "Claim verification and management system. Verifies sourced claims against cited URLs, detects deviations, and guides users through resolution.",
       "keywords": [
         "claim-verification",
@@ -33,7 +33,7 @@
     {
       "name": "cogni-copywriting",
       "source": "./cogni-copywriting",
-      "version": "0.2.18",
+      "version": "0.2.19",
       "description": "Professional copywriting toolkit providing document polishing with messaging frameworks (BLUF, Pyramid, SCQA, STAR, PSB, FAB, Inverted Pyramid), stakeholder review via parallel persona Q&A, readability optimization, sales enhancement (Power Positions), multi-language support, JSON field polishing via the copy-json adapter, and arc contract audit against cogni-narrative.",
       "keywords": [
         "copywriting",
@@ -59,7 +59,7 @@
     {
       "name": "cogni-trends",
       "source": "./cogni-trends",
-      "version": "0.4.4",
+      "version": "0.4.5",
       "description": "Strategic trend scouting and reporting pipeline. Combines the Smarter Service Trendradar (4-dimension structure) with the TIPS content framework (Trends, Implications, Possibilities, Solutions). Bilingual trend scouting, investment theme modeling, evidence-backed CxO reports, and reusable industry catalogs. DACH-focused, EN/DE.",
       "keywords": [
         "tips",
@@ -73,7 +73,7 @@
     {
       "name": "cogni-portfolio",
       "source": "./cogni-portfolio",
-      "version": "0.9.67",
+      "version": "0.9.68",
       "description": "Portfolio messaging and proposition planning for SMEs using IS/DOES/MEANS framework. Features are market-independent (IS). Advantages (DOES) and benefits (MEANS) are market-specific. Includes TAM/SAM/SOM targeting, competitor and customer analysis, deep-dive research for features and propositions, Lean Canvas bootstrapping, presentation-ready pitch narratives, and eight pluggable industry taxonomies.",
       "keywords": [
         "portfolio",
@@ -88,7 +88,7 @@
     {
       "name": "cogni-visual",
       "source": "./cogni-visual",
-      "version": "1.7.2",
+      "version": "1.7.3",
       "description": "Transform polished narratives and structured data into visual deliverables — presentation briefs, slide decks, big picture journey maps, Big Block solution architecture diagrams, scrollable web narratives, poster storyboards, and visual assets. Supports Excalidraw, Pencil MCP, and PPTX rendering.",
       "keywords": [
         "presentations",
@@ -143,7 +143,7 @@
     {
       "name": "cogni-research",
       "source": "./cogni-research",
-      "version": "0.6.13",
+      "version": "0.6.14",
       "description": "Multi-agent research report generator. STORM-inspired editorial workflow with parallel section research, claims-verified review loops, and five report types (basic, detailed, deep, outline, resource). Supports web, local, and hybrid source modes. Integrates with cogni-claims for source verification.",
       "keywords": [
         "research",
@@ -159,7 +159,7 @@
     {
       "name": "cogni-sales",
       "source": "./cogni-sales",
-      "version": "0.4.0",
+      "version": "0.4.1",
       "description": "B2B sales pitch generation using Corporate Visions Why Change methodology. Creates sales presentations and proposals for named customers (deal-specific) or market segments (reusable). Builds on cogni-portfolio data with optional TIPS strategic enrichment. Bilingual DE/EN.",
       "keywords": [
         "sales",
@@ -176,7 +176,7 @@
     {
       "name": "cogni-website",
       "source": "./cogni-website",
-      "version": "0.1.3",
+      "version": "0.1.4",
       "description": "Generate multi-page customer websites from portfolio, marketing, trend, and research content produced by other insight-wave plugins. Assembles a deployable static site with shared navigation, theming, and responsive HTML.",
       "keywords": [
         "website",
@@ -193,7 +193,7 @@
     {
       "name": "cogni-consulting",
       "source": "./cogni-consulting",
-      "version": "0.1.8",
+      "version": "0.1.9",
       "description": "Double Diamond consulting orchestrator. Guides engagements through Discover, Define, Develop, Deliver phases by dispatching to insight-wave plugins (research, trends, portfolio, claims) at the right moment. Vision-first, method-aware, phase-gated. Includes Lean Canvas authoring and multi-persona stress testing via the business-model-hypothesis vision class.",
       "keywords": [
         "double-diamond",

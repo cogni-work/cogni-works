@@ -1,10 +1,6 @@
 ---
 name: trend-signal-curator
-description: |
-  Evaluate and rank web research signals by quality, relevance, and diversity before
-  candidate generation. Runs between Phase 1 (web research) and Phase 2 (generation)
-  to produce a tiered signal ranking that informs the generator's candidate grounding.
-  DO NOT USE DIRECTLY — invoked by trend-scout Phase 1.5.
+description: Evaluate and rank web research signals by quality, relevance, and diversity before candidate generation.
 model: haiku
 color: yellow
 tools: ["Read", "Write"]

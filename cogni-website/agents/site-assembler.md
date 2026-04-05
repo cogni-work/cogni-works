@@ -1,27 +1,6 @@
 ---
 name: site-assembler
-description: |
-  Generate the shared CSS stylesheet, navigation HTML partials, and sitemap.xml for a
-  cogni-website project. Runs before page generation to produce the shared site infrastructure
-  that all pages depend on.
-
-  <example>
-  Context: website-build skill needs shared CSS and navigation before generating pages
-  user: "Build the website"
-  assistant: "I'll first assemble the shared CSS and navigation partials before generating pages."
-  <commentary>
-  The website-build skill delegates site assembly first — CSS and nav partials must exist before page-generator agents can reference them.
-  </commentary>
-  </example>
-
-  <example>
-  Context: User changed the theme and wants to rebuild just the CSS
-  user: "Update the website CSS with the new theme"
-  assistant: "I'll use the site-assembler agent to regenerate the stylesheet from the new theme."
-  <commentary>
-  CSS regeneration without rebuilding pages — just the shared infrastructure.
-  </commentary>
-  </example>
+description: Generate shared CSS stylesheet, navigation partials, and sitemap.xml for a website project.
 
 model: sonnet
 color: green

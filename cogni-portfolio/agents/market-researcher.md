@@ -1,25 +1,6 @@
 ---
 name: market-researcher
-description: |
-  Research and size a target market using web search — produces TAM/SAM/SOM data. DO NOT USE DIRECTLY — invoked by the markets skill.
-
-  <example>
-  Context: User wants research-backed market sizing for a target market
-  user: "Research the market size for mid-market SaaS monitoring in DACH"
-  assistant: "I'll use the market-researcher agent to find TAM/SAM/SOM data for this market."
-  <commentary>
-  The markets skill delegates web research for market sizing to this agent.
-  </commentary>
-  </example>
-
-  <example>
-  Context: User wants to validate LLM-estimated market sizes with real data
-  user: "Can you verify these market size numbers with actual research?"
-  assistant: "I'll launch the market-researcher agent to find supporting data."
-  <commentary>
-  Validation of existing estimates through web research.
-  </commentary>
-  </example>
+description: Research and size a target market using web search — produces TAM/SAM/SOM data.
 
 model: inherit
 color: cyan

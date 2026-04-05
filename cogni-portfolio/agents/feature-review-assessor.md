@@ -1,33 +1,6 @@
 ---
 name: feature-review-assessor
-description: |
-  Assess feature set quality from three stakeholder perspectives: product manager,
-  proposition strategist, and pre-sales consultant. Returns structured JSON with
-  per-perspective scores, set-level issues, synthesis, and revision guidance.
-
-  Delegated by the features skill after Layer 2 (description quality) passes clean,
-  and by the propositions skill as a mandatory pre-check before generation. Evaluates
-  whether the feature set is complete, well-scoped, and ready to power propositions.
-
-  <example>
-  Context: Features skill completed description quality assessment, all features pass or warn
-  user: "Review my features before I generate propositions"
-  assistant: "I'll launch the feature-review-assessor to evaluate the feature set from three stakeholder perspectives."
-  <commentary>
-  The features skill delegates stakeholder review after structural and description quality
-  checks pass. This agent evaluates the feature set as a whole, not just individual descriptions.
-  </commentary>
-  </example>
-
-  <example>
-  Context: Propositions skill needs to verify feature set readiness before batch generation
-  user: "Generate propositions for all features"
-  assistant: "I'll first verify the feature set has passed stakeholder review, then generate propositions for accepted features."
-  <commentary>
-  The propositions skill checks for the stakeholder review verdict before allowing generation.
-  If no review exists or the verdict is not 'accept', it blocks and directs the user to the features skill.
-  </commentary>
-  </example>
+description: Assess feature set quality from three stakeholder perspectives (PM, strategist, pre-sales).
 
 model: haiku
 color: yellow

@@ -1,30 +1,6 @@
 ---
 name: proposition-deep-diver
-description: |
-  Deep research agent for a single proposition — buyer language validation, competitive
-  messaging analysis, evidence enrichment, pain-point validation, MEANS escalation research.
-  DO NOT USE DIRECTLY — invoked by the propositions skill's Deep Dive workflow.
-
-  <example>
-  Context: User wants to sharpen messaging for a specific proposition
-  user: "Deep dive on the cloud-migration proposition for large energy utilities"
-  assistant: "I'll launch the proposition-deep-diver agent to research buyer language, competitive messaging, and evidence."
-  <commentary>
-  The propositions skill's Deep Dive workflow delegates broad web research to this agent, then uses
-  the structured report to drive a co-creation dialogue with the user.
-  </commentary>
-  </example>
-
-  <example>
-  Context: User wants to validate buyer language for a proposition
-  user: "Are we using the right terms in our DOES statement for the mid-market SaaS market?"
-  assistant: "I'll launch the proposition-deep-diver agent to validate buyer language against real market usage."
-  <commentary>
-  The agent researches how buyers actually describe capabilities, evaluates competitive
-  messaging, and enriches evidence — broader scope than quality-enricher, which only
-  fixes specific quality gaps.
-  </commentary>
-  </example>
+description: Deep research for a single proposition — buyer language, competitive messaging, evidence enrichment.
 
 model: sonnet
 color: blue

@@ -1,28 +1,6 @@
 ---
 name: page-generator
-description: |
-  Generate a single HTML page for a cogni-website project from source content and a page
-  template specification. Reads source markdown/JSON, transforms content into semantic HTML
-  using page-templates.md patterns, and writes the output file.
-
-  <example>
-  Context: website-build skill dispatches parallel page generation for all planned pages
-  user: "Build the website"
-  assistant: "I'll launch page-generator agents in parallel for each page in the plan."
-  <commentary>
-  The website-build skill delegates individual page generation to this agent for parallel processing.
-  Each agent receives one page spec and produces one HTML file.
-  </commentary>
-  </example>
-
-  <example>
-  Context: User wants to regenerate a single page after editing content
-  user: "Regenerate the products page"
-  assistant: "I'll use the page-generator agent to rebuild the products page from current content."
-  <commentary>
-  Single page regeneration delegated to keep main context clean.
-  </commentary>
-  </example>
+description: Generate a single HTML page from source content and a page template specification.
 
 model: sonnet
 color: cyan

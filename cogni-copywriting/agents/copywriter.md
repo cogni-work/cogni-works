@@ -2,26 +2,7 @@
 name: copywriter
 model: opus
 color: blue
-description: |
-  Polish markdown documents for executive readability using McKinsey Pyramid Principle and messaging frameworks.
-
-  <example>
-  Context: User wants to polish a document
-  user: "Polish this report for executive readability"
-  assistant: "I'll use the copywriter agent to polish the document."
-  <commentary>
-  Document polishing request triggers the copywriter agent.
-  </commentary>
-  </example>
-
-  <example>
-  Context: User wants to apply messaging framework
-  user: "Apply BLUF framework to this memo"
-  assistant: "I'll use the copywriter agent to restructure the memo using BLUF."
-  <commentary>
-  Messaging framework request triggers the copywriter agent.
-  </commentary>
-  </example>
+description: Polish markdown documents for executive readability using McKinsey Pyramid Principle and messaging frameworks.
 ---
 
 # Copywriter Agent (Orchestrator)

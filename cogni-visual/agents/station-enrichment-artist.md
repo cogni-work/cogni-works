@@ -1,24 +1,6 @@
 ---
 name: station-enrichment-artist
-description: |
-  Add 100-130 fine detail elements to an existing station created by station-structure-artist.
-  Uses the structure_map from Pass 1 to place surface textures, micro-details, equipment
-  accessories, and environmental integration elements within known bounding regions.
-  Supports dark/light color modes via CANVAS_CONTEXT.color_mode.
-
-  Worker agent invoked by the render-big-picture skill during Phase 3.5 (Pass 2) —
-  N instances run in parallel, one per station.
-
-  DO NOT USE DIRECTLY: Internal component — invoked by render-big-picture skill.
-
-  <example>
-  Context: Render-big-picture skill launches parallel enrichment workers after structure pass
-  user: "Enrich station 1: Storm Warning Tower with 100+ micro-details using structure_map regions"
-  </example>
-  <example>
-  Context: Adding fine detail to completed station structure
-  user: "Add surface textures and micro-details to station 3: Smart Factory"
-  </example>
+description: Add 100-130 fine detail elements to an existing station structure (Pass 2 worker).
 model: sonnet
 color: red
 ---

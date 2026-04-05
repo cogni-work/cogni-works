@@ -1,28 +1,6 @@
 ---
 name: solution-architect
-description: |
-  Analyze a product's features and markets to propose a delivery blueprint and assess
-  shared solution eligibility. Delegated by the solutions skill during batch generation
-  for products that lack a delivery_blueprint.
-
-  <example>
-  Context: Batch generation for a product with 8 features and no delivery blueprint
-  user: "Generate all missing solutions"
-  assistant: "I'll launch solution-architect agents to propose delivery blueprints before generating solutions."
-  <commentary>
-  The solutions skill delegates one agent per product without a blueprint.
-  The agent returns a blueprint proposal and shared solution recommendation — it does not write files.
-  </commentary>
-  </example>
-
-  <example>
-  Context: Product with 3 features across 3 markets, all project-based consulting
-  user: "Create solutions for all propositions"
-  assistant: "I'll analyze the product's features to propose a delivery blueprint and check if shared solutions apply."
-  <commentary>
-  Even project-based products benefit from blueprints — consistent phases, pricing ratios, and cost model across markets.
-  </commentary>
-  </example>
+description: Propose delivery blueprints and assess shared solution eligibility for a product.
 
 model: inherit
 color: blue

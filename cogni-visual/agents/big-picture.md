@@ -1,31 +1,6 @@
 ---
 name: big-picture
-description: |
-  Render a big-picture-brief.md (v3.0 or v2.0) into an integrated illustrated scene using
-  Excalidraw MCP with a station-first parallel agent architecture.
-
-  This agent reads a big-picture-brief produced by the story-to-big-picture skill
-  and creates an .excalidraw file via Excalidraw MCP tools. It delegates to the
-  render-big-picture skill which orchestrates N station-structure-artists, N station-enrichment-artists,
-  and 4 zone-reviewers to produce a 1100-1500 element scene. Supports dark/light color modes.
-
-  The result is a cohesive illustrated scene — NOT cards on a background.
-
-  Use this agent when the user has a big-picture-brief.md and wants to render it
-  into a visual .excalidraw file for editing or export.
-
-  <example>
-  Context: User has a brief and wants to render it
-  user: "Render the big picture brief into an Excalidraw file"
-  </example>
-  <example>
-  Context: User wants to create the visual from a brief
-  user: "Design the journey map from big-picture-brief.md"
-  </example>
-  <example>
-  Context: User wants the Excalidraw rendering
-  user: "Create the .excalidraw file from the big picture brief"
-  </example>
+description: Render a big-picture-brief.md into an illustrated Excalidraw scene via parallel station agents.
 model: opus
 color: magenta
 ---

@@ -1,44 +1,6 @@
 ---
 name: brief-review-assessor
-description: |
-  Assess visual brief quality from three stakeholder perspectives adapted to the brief type.
-  For slides: communication designer, target audience, presenter.
-  For big picture: visual storyteller, target audience, workshop facilitator.
-  For web: UX designer, target audience, content strategist.
-  For storyboard: print designer, target audience, exhibition presenter.
-  For big block: solution architect, investment decision maker, sales engineer.
-  Returns structured JSON with per-perspective scores, synthesis, and revision guidance.
-
-  Delegated by story-to-X skills after structural validation, or invoked standalone via
-  the review-brief skill. Adapts evaluation perspectives based on brief_type — catching
-  quality failures specific to the target audience before the brief is rendered.
-
-  <example>
-  Context: story-to-slides completed structural validation on a presentation brief
-  user: "Review the presentation brief before rendering"
-  assistant: "I'll launch the brief-review-assessor to evaluate from communication designer, audience, and presenter perspectives."
-  <commentary>
-  brief_type is slides, so assessor uses designer/audience/presenter perspectives.
-  </commentary>
-  </example>
-
-  <example>
-  Context: story-to-big-picture produced a big picture brief for a workshop poster
-  user: "Review the big picture brief"
-  assistant: "I'll launch the brief-review-assessor to evaluate from visual storyteller, audience, and workshop facilitator perspectives."
-  <commentary>
-  brief_type is big-picture, so assessor uses storyteller/audience/facilitator perspectives.
-  </commentary>
-  </example>
-
-  <example>
-  Context: User wants to review an existing web brief after manual edits
-  user: "Review my web narrative brief — I rewrote the opening section"
-  assistant: "I'll launch the brief-review-assessor to re-evaluate from UX designer, audience, and content strategist perspectives."
-  <commentary>
-  Can be re-run after manual edits to verify improvements.
-  </commentary>
-  </example>
+description: Assess visual brief quality from three stakeholder perspectives adapted to the brief type.
 
 model: haiku
 color: yellow

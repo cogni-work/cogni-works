@@ -1,27 +1,6 @@
 ---
 name: slides-enrichment-artist
-description: |
-  Generate internal prep slides (Methodology, Buying Center) and per-slide speaker notes
-  for a completed slide deck, then write the complete presentation-brief.md with all
-  enrichments integrated. Takes slide specs, audience model, arc analysis, and brief
-  metadata as input; writes the final file directly and returns a lightweight status JSON.
-
-  Loads its own references (08c-presenter-prep.md + 05b-speaker-notes.md + 07-output-template.md)
-  so the orchestrator skill's context stays lean for validation in Step 9.
-
-  Worker agent invoked by the story-to-slides skill during Step 8.2 —
-  one instance per deck.
-
-  DO NOT USE DIRECTLY: Internal component — invoked by story-to-slides skill.
-
-  <example>
-  Context: story-to-slides completed Steps 1-8.1 and delegates brief assembly + enrichment
-  user: "Write presentation-brief.md with prep slides and speaker notes for 12-slide Why Change deck"
-  </example>
-  <example>
-  Context: Assembling brief with speaker notes for a report-style deck with Lean audience model
-  user: "Write presentation-brief.md with speaker notes for 10-slide report deck, Lean mode, English"
-  </example>
+description: Generate prep slides and speaker notes, then write the complete presentation-brief.md.
 model: sonnet
 color: green
 ---

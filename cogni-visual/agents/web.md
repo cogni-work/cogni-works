@@ -1,33 +1,6 @@
 ---
 name: web
-description: |
-  Render a web-brief.md into a scrollable landing-page-style .pen file and
-  self-contained HTML page using Pencil MCP.
-
-  This agent reads a web-brief produced by the story-to-web skill,
-  creates a .pen file via Pencil MCP tools, then reads the rendered .pen
-  design tree to generate a standalone HTML page, and writes an integration
-  manifest for downstream consumers like export-html-report. The .pen file
-  is the single source of truth — HTML is generated from the rendered design,
-  not from the brief.
-
-  Output files use the narration title as filename slug:
-  - {narration-slug}.pen — visual design canvas
-  - {narration-slug}.html — self-contained landing page
-  - web-render-manifest.json — integration metadata
-
-  <example>
-  Context: User has a brief and wants to render it
-  user: "Render the web narrative brief into a .pen file"
-  </example>
-  <example>
-  Context: User wants the full pipeline (pen + html)
-  user: "Design the web page from web-brief.md and export HTML"
-  </example>
-  <example>
-  Context: Orchestrator invokes for web narrative rendering
-  user: "Create the .pen file and HTML from the web narrative brief"
-  </example>
+description: Render a web-brief.md into a .pen file and self-contained HTML page using Pencil MCP.
 model: opus
 color: cyan
 ---

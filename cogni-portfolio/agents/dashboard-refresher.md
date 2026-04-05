@@ -1,28 +1,6 @@
 ---
 name: dashboard-refresher
-description: |
-  Regenerate the portfolio dashboard HTML from current entity data, reusing existing design
-  variables. Lightweight — no theme picking, no user interaction. Use this agent whenever a
-  skill needs to refresh the dashboard after modifying portfolio data (features, propositions,
-  solutions, etc.) without running the full interactive dashboard workflow.
-
-  <example>
-  Context: Features skill offers "open dashboard" at a review checkpoint
-  user: "Yes, show me the dashboard"
-  assistant: "I'll delegate to the dashboard-refresher agent to regenerate and open the dashboard."
-  <commentary>
-  The features skill delegates to dashboard-refresher for a quick visual snapshot mid-workflow.
-  </commentary>
-  </example>
-
-  <example>
-  Context: Propositions skill just finished batch generation
-  user: "Let me see how the matrix looks now"
-  assistant: "I'll refresh the dashboard so you can see the updated proposition matrix."
-  <commentary>
-  Any skill can delegate here after data changes — no session management overhead.
-  </commentary>
-  </example>
+description: Regenerate the portfolio dashboard HTML from current entity data without user interaction.
 
 model: haiku
 color: green

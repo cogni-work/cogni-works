@@ -1,24 +1,6 @@
 ---
 name: station-structure-artist
-description: |
-  Compose the main structure of ONE station: 130-160 elements including the primary
-  silhouette, internal structure, detail elements, accents, environmental touches,
-  station number (accent text, inline with headline), text glow, and text.
-  Returns a structure_map for the enrichment pass. Supports dark/light color modes.
-
-  Worker agent invoked by the render-big-picture skill during Phase 3 (Pass 1) —
-  N instances run in parallel, one per station.
-
-  DO NOT USE DIRECTLY: Internal component — invoked by render-big-picture skill.
-
-  <example>
-  Context: Render-big-picture skill launches parallel station structure workers in Phase 3
-  user: "Compose station 1 structure: Storm Warning Tower at position (200, 2200), scale standard"
-  </example>
-  <example>
-  Context: Single station structure illustration
-  user: "Create station 3 structure: Smart Factory — 130+ elements, return structure_map for enrichment"
-  </example>
+description: Compose the main structure of ONE station (130-160 elements, Pass 1 worker).
 model: sonnet
 color: orange
 ---

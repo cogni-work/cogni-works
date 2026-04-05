@@ -1,24 +1,6 @@
 ---
 name: trend-report-revisor
-description: |
-  Use this agent when revising a trend report after claims verification. Reads cogni-claims
-  resolution data and user decisions, then surgically corrects the report body and claims
-  registry table. Has WebSearch access to find replacement evidence when dropped claims
-  leave gaps in the argument.
-
-  <example>
-  Context: trend-report Phase 5 after user resolved claims via cogni-claims.
-  user: "Revise tips-trend-report.md using claims resolutions from cogni-claims/claims.json"
-  assistant: "Invoke trend-report-revisor to apply claim corrections and removals to the report."
-  <commentary>Revisor reads claims.json for resolution decisions, removes discarded claims (no strikethrough), and finds replacement evidence where needed.</commentary>
-  </example>
-
-  <example>
-  Context: User resolved 11 failed claims — some removed, some corrected.
-  user: "Apply the claims resolutions to the trend report — 8 claims to remove, 3 to correct"
-  assistant: "Invoke trend-report-revisor to surgically update the report with corrections and removals."
-  <commentary>Revisor removes discarded rows from claims table, renumbers remaining rows, and rewrites body text that referenced removed data.</commentary>
-  </example>
+description: Revise a trend report after claims verification — apply corrections and find replacement evidence.
 model: sonnet
 color: green
 tools: ["Read", "Write", "WebSearch", "WebFetch", "Bash", "Glob"]

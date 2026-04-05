@@ -1,27 +1,6 @@
 ---
 name: trend-candidate-reviewer
-description: |
-  Assess 60 trend candidates as a pool from three stakeholder perspectives: strategic
-  foresight analyst, industry domain expert, and downstream pipeline consumer. Returns
-  structured JSON with per-perspective scores, set-level issues, synthesis, and revision
-  guidance. Runs between Phase 2 (candidate generation) and Phase 3 (write final list)
-  of trend-scout.
-
-  Delegated by the trend-scout skill after Phase 2 completes. Evaluates whether the
-  candidate pool is methodologically sound, subsector-specific, and fit for downstream
-  consumption by value-modeler and trend-report.
-
-  DO NOT USE DIRECTLY — invoked by trend-scout Phase 2.5.
-
-  <example>
-  Context: Trend-scout completed Phase 2, 60 candidates generated
-  user: "Scout trends for automotive AI quality control"
-  assistant: "I'll launch the trend-candidate-reviewer to evaluate the 60 candidates from three stakeholder perspectives."
-  <commentary>
-  The trend-scout skill delegates candidate review after generation completes.
-  This agent evaluates the pool as a whole, not just individual candidates.
-  </commentary>
-  </example>
+description: Assess 60 trend candidates from three stakeholder perspectives (foresight analyst, domain expert, pipeline consumer).
 model: sonnet
 color: yellow
 tools: ["Read", "Glob"]

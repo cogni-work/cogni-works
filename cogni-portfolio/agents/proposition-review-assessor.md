@@ -1,33 +1,6 @@
 ---
 name: proposition-review-assessor
-description: |
-  Assess proposition set quality from three stakeholder perspectives: simulated buyer persona,
-  sales person, and product marketer. Returns structured JSON with per-perspective scores,
-  set-level issues, synthesis, and revision guidance.
-
-  Delegated by the propositions skill after the proposition-quality-assessor passes (individual
-  dimension checks). Evaluates whether propositions for a market tell a coherent, buyer-correct,
-  commercially credible story as a set — catching failures that per-proposition assessment misses.
-
-  <example>
-  Context: Propositions skill completed quality assessment, no fail propositions remaining
-  user: "Review my propositions before I generate solutions"
-  assistant: "I'll launch the proposition-review-assessor to evaluate propositions from three stakeholder perspectives."
-  <commentary>
-  The propositions skill delegates stakeholder review after quality assessment passes clean.
-  This agent evaluates the set as a whole, not just individual dimensions.
-  </commentary>
-  </example>
-
-  <example>
-  Context: User wants to validate propositions for a specific market
-  user: "Do my B2B SME propositions actually speak to the buyer?"
-  assistant: "I'll launch the proposition-review-assessor for b2b-sme-dach to evaluate from buyer, sales, and marketing perspectives."
-  <commentary>
-  Can be launched per market. The buyer persona perspective specifically checks need correctness —
-  whether propositions address the buyer's actual need or frame value through the provider's lens.
-  </commentary>
-  </example>
+description: Assess proposition set quality from three stakeholder perspectives (buyer, sales, marketer).
 
 model: haiku
 color: yellow

@@ -1,26 +1,6 @@
 ---
 name: proposition-generator
-description: |
-  Generate IS/DOES/MEANS messaging for a single Feature x Market combination.
-  Delegated by the propositions skill for batch or single-pair generation.
-
-  <example>
-  Context: User has defined features and markets, and wants to generate propositions for all pending Feature x Market pairs
-  user: "Generate propositions for all pending feature-market combinations"
-  assistant: "I'll launch proposition-generator agents in parallel for each pending pair."
-  <commentary>
-  The propositions skill delegates individual Feature x Market pairs to this agent for parallel processing.
-  </commentary>
-  </example>
-
-  <example>
-  Context: User wants to generate a proposition for a specific feature in a specific market
-  user: "Create IS/DOES/MEANS messaging for cloud-monitoring in mid-market-saas"
-  assistant: "I'll use the proposition-generator agent to create the messaging for this combination."
-  <commentary>
-  Single proposition generation delegated to keep main context clean.
-  </commentary>
-  </example>
+description: Generate IS/DOES/MEANS messaging for a single Feature x Market combination.
 
 model: inherit
 color: green

@@ -1,26 +1,6 @@
 ---
 name: pitch-revisor
-description: |
-  Revise sales pitch deliverables based on pitch-review-assessor feedback. Applies surgical
-  fixes to sales-presentation.md and sales-proposal.md, prioritized by severity. Reads all
-  previous assessment verdicts to prevent oscillation across revision passes.
-
-  Delegated by the why-change skill during Phase 5.5 when the pitch-review-assessor returns
-  a "revise" verdict. Maximum 2 revision passes per pitch.
-
-  <example>
-  Context: Why-change skill Phase 5.5 after assessor returns "revise" verdict.
-  user: "Revise the pitch using assessment at output/pitch-review-v1.json"
-  assistant: "Invoke pitch-revisor to address review issues and improve pitch quality."
-  <commentary>Revisor reads all previous verdicts to avoid oscillation. Applies surgical fixes to both deliverables.</commentary>
-  </example>
-
-  <example>
-  Context: Second revision pass where prior fix reintroduced an earlier issue.
-  user: "Revise pitch using assessment v2 — oscillation detected on differentiation angle"
-  assistant: "Invoke pitch-revisor with full verdict history to find a third formulation."
-  <commentary>Revisor detects oscillation by comparing v1 and v2 verdicts, then applies a different fix strategy instead of reverting.</commentary>
-  </example>
+description: Revise sales pitch deliverables based on pitch-review-assessor feedback.
 
 model: sonnet
 color: green

@@ -1,25 +1,6 @@
 ---
 name: customer-researcher
-description: |
-  Research named companies for a target market using web search — produces structured customer intelligence. DO NOT USE DIRECTLY — invoked by the customers skill.
-
-  <example>
-  Context: User wants to research specific companies in a market segment
-  user: "Research Siemens AG as a potential customer for our mid-market SaaS offering"
-  assistant: "I'll use the customer-researcher agent to gather company intelligence for Siemens AG."
-  <commentary>
-  The customers skill delegates web research for named customer intelligence to this agent.
-  </commentary>
-  </example>
-
-  <example>
-  Context: User wants to research multiple companies in parallel
-  user: "Research these 5 companies as potential customers for our enterprise DACH market"
-  assistant: "I'll launch customer-researcher agents for each company in parallel."
-  <commentary>
-  Multiple agents can be launched in parallel for different companies in the same market.
-  </commentary>
-  </example>
+description: Research named companies for a target market using web search.
 
 model: inherit
 color: orange

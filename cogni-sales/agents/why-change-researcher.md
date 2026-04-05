@@ -1,22 +1,6 @@
 ---
 name: why-change-researcher
-description: |
-  Research and generate content for a specific phase of the Why Change pitch workflow.
-  Handles all four content phases: why-change, why-now, why-you, why-pay.
-  Reads arc patterns from cogni-narrative, portfolio data from cogni-portfolio,
-  and performs web research — company-specific for named customers or industry-level
-  for segment pitches.
-  Internal component — invoke via the why-change skill, not directly.
-
-  <example>
-  Context: Orchestrator delegates Phase 1 research for a named customer
-  prompt: "project_path: /path/to/pitch, phase: why-change"
-  </example>
-
-  <example>
-  Context: Orchestrator delegates Phase 3 for a segment pitch
-  prompt: "project_path: /path/to/pitch, phase: why-you"
-  </example>
+description: Research and generate content for a specific phase of the Why Change pitch workflow.
 model: opus
 color: blue
 tools: ["Read", "Write", "WebSearch", "WebFetch", "Bash", "Glob"]

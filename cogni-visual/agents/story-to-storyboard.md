@@ -1,31 +1,6 @@
 ---
 name: story-to-storyboard
-description: |
-  Transform any narrative with a story arc into an optimized storyboard brief for printed poster
-  presentations.
-
-  Uses story arc analysis, poster decomposition, density assignment, and print-optimized
-  copywriting to produce briefs that create multi-poster storyboards. Works with any
-  narrative format.
-
-  WORKFLOW POSITION: Visualization phase when creating printed poster storyboards from narratives.
-  ALSO USABLE DIRECTLY: Can be invoked standalone for any narrative-to-storyboard task.
-
-  Delegates to story-to-storyboard skill for all intelligence layers.
-  Returns compact JSON response for context-efficient orchestration.
-
-  <example>
-  Context: User wants a poster storyboard from a narrative
-  user: "Create a storyboard from this narrative"
-  </example>
-  <example>
-  Context: User wants printed posters for an executive walkthrough
-  user: "Generate poster storyboards from my strategy doc"
-  </example>
-  <example>
-  Context: Orchestrator invokes for storyboard generation
-  user: "Transform the narrative at /path/to/narrative.md into a poster storyboard"
-  </example>
+description: Transform any narrative with a story arc into a storyboard brief for printed posters.
 model: opus
 color: green
 ---

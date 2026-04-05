@@ -1,24 +1,6 @@
 ---
 name: zone-reviewer
-description: |
-  Review and correct ONE spatial zone (1/4 of canvas) of a rendered big picture.
-  Evaluates 9 quality gates with thresholds for station density (200+),
-  color/contrast visibility, dark mode compliance, and reading flow clarity.
-  Makes up to 30 correction elements per zone.
-
-  Worker agent invoked by the render-big-picture skill during Phase 5 —
-  four instances run in parallel, one per review zone.
-
-  DO NOT USE DIRECTLY: Internal component — invoked by render-big-picture skill.
-
-  <example>
-  Context: Render-big-picture skill launches 4 parallel zone reviewers
-  user: "Review zone A (left quarter) of the big picture, stations 1-2"
-  </example>
-  <example>
-  Context: Second review pass for a failing zone
-  user: "Re-review zone C after corrections, pass 2 of 2"
-  </example>
+description: Review and correct ONE spatial zone (1/4 of canvas) of a rendered big picture.
 model: sonnet
 color: yellow
 ---

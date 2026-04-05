@@ -1,26 +1,6 @@
 ---
 name: solution-planner
-description: |
-  Plan implementation phases and pricing tiers for a single proposition.
-  Delegated by the solutions skill for batch or single solution generation.
-
-  <example>
-  Context: User has propositions and wants to generate solutions for all pending ones
-  user: "Create solutions for all propositions that don't have one yet"
-  assistant: "I'll launch solution-planner agents in parallel for each pending proposition."
-  <commentary>
-  The solutions skill delegates individual propositions to this agent for parallel processing.
-  </commentary>
-  </example>
-
-  <example>
-  Context: User wants a solution for a specific proposition
-  user: "Create an implementation plan and pricing for cloud-monitoring--mid-market-saas-dach"
-  assistant: "I'll use the solution-planner agent to build the solution for this proposition."
-  <commentary>
-  Single solution generation delegated to keep main context clean.
-  </commentary>
-  </example>
+description: Plan implementation phases and pricing tiers for a single proposition.
 
 model: inherit
 color: blue

@@ -1,22 +1,6 @@
 ---
 name: writer
-description: |
-  Use this agent when compiling aggregated research context and source entities into
-  a cohesive, well-structured report with inline citations.
-
-  <example>
-  Context: research-report skill Phase 4 after context aggregation.
-  user: "Write report from aggregated context at /project/.metadata/aggregated-context.json"
-  assistant: "Invoke writer to compile the research report with citations."
-  <commentary>Writer reads all context entities and produces a draft in output/draft-v{N}.md.</commentary>
-  </example>
-
-  <example>
-  Context: German detailed report with curated sources and persuasive tone.
-  user: "Write report with OUTPUT_LANGUAGE=de, TONE=persuasive, CITATION_FORMAT=ieee, RESEARCHER_ROLE='Branchenanalyst'"
-  assistant: "Invoke writer with German output, persuasive tone, IEEE citations, and industry analyst persona."
-  <commentary>Writer applies all configuration parameters — output language, tone, citation format, and role persona shape the output together.</commentary>
-  </example>
+description: Compile aggregated research context and source entities into a report with inline citations.
 model: sonnet
 color: green
 tools: ["Read", "Write", "Glob", "Grep"]

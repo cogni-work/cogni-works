@@ -1,30 +1,6 @@
 ---
 name: story-to-big-picture
-description: |
-  Transform any narrative with a story arc into a visual journey map (big picture) brief.
-
-  Uses story arc analysis, Story World brainstorming, station-as-landscape-object decomposition,
-  and narrative connection descriptions to produce v3.0 briefs that create integrated illustrated scenes.
-  Works with any narrative format.
-
-  WORKFLOW POSITION: Visualization phase when creating big pictures from narratives.
-  ALSO USABLE DIRECTLY: Can be invoked standalone for any narrative-to-big-picture task.
-
-  Delegates to story-to-big-picture skill for all intelligence layers.
-  Returns compact JSON response for context-efficient orchestration.
-
-  <example>
-  Context: User wants a visual journey map from a narrative
-  user: "Create a big picture from this narrative"
-  </example>
-  <example>
-  Context: User wants to transform a strategy document into a poster
-  user: "Generate a visual journey map from my strategy doc"
-  </example>
-  <example>
-  Context: Orchestrator invokes for big picture generation
-  user: "Transform the narrative at /path/to/narrative.md into a big picture"
-  </example>
+description: Transform any narrative with a story arc into a visual journey map (big picture) brief.
 model: opus
 color: green
 ---

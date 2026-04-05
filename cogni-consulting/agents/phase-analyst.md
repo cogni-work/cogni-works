@@ -1,9 +1,6 @@
 ---
 name: phase-analyst
-description: |
-  Analyze diamond engagement state and assess phase readiness.
-  Use proactively when the consulting-resume skill needs a thorough assessment
-  of engagement progress, or when phase transition decisions need supporting analysis.
+description: Analyze diamond engagement state and assess phase readiness.
 model: sonnet
 color: cyan
 tools:

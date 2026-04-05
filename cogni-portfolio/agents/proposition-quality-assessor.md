@@ -1,30 +1,6 @@
 ---
 name: proposition-quality-assessor
-description: |
-  Assess DOES/MEANS messaging quality in propositions using LLM intelligence — works in any language.
-  Delegated by the propositions skill after generating or reviewing propositions as a post-generation
-  quality gate. Evaluates buyer-centricity, buyer-perspective correctness, need correctness,
-  market-specificity, differentiation, and conciseness.
-
-  <example>
-  Context: User generated propositions and wants quality assessment
-  user: "Check the quality of my propositions"
-  assistant: "I'll launch the proposition-quality-assessor agent to evaluate DOES/MEANS messaging quality."
-  <commentary>
-  The propositions skill delegates quality assessment to this agent after generation or during review.
-  Works with German, English, or mixed-language propositions.
-  </commentary>
-  </example>
-
-  <example>
-  Context: Propositions skill needs to verify messaging quality after batch generation
-  user: "Review all my propositions for messaging issues"
-  assistant: "I'll assess DOES/MEANS quality across all propositions."
-  <commentary>
-  The agent reads propositions plus their referenced features and markets
-  to evaluate market-specificity and circularity.
-  </commentary>
-  </example>
+description: Assess DOES/MEANS messaging quality in propositions — works in any language.
 
 model: haiku
 color: yellow

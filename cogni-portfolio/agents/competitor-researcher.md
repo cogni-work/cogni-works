@@ -1,25 +1,6 @@
 ---
 name: competitor-researcher
-description: |
-  Research competitors for a specific proposition using web search — produces competitive intelligence. DO NOT USE DIRECTLY — invoked by the compete skill.
-
-  <example>
-  Context: User wants to research competitors for a specific proposition
-  user: "Research competitors for our cloud monitoring proposition in the mid-market SaaS segment"
-  assistant: "I'll use the competitor-researcher agent to find and analyze competitors for this proposition."
-  <commentary>
-  The compete skill delegates web research for competitive intelligence to this agent.
-  </commentary>
-  </example>
-
-  <example>
-  Context: User wants competitive analysis for all propositions in a market
-  user: "Find competitors for all our propositions targeting enterprise fintech"
-  assistant: "I'll launch competitor-researcher agents for each proposition in the enterprise fintech market."
-  <commentary>
-  Multiple agents can be launched in parallel for different propositions in the same market.
-  </commentary>
-  </example>
+description: Research competitors for a specific proposition using web search.
 
 model: inherit
 color: yellow

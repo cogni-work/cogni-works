@@ -1,29 +1,6 @@
 ---
 name: quality-enricher
-description: |
-  Research company-specific information to improve a feature description or
-  proposition messaging that has quality gaps. DO NOT USE DIRECTLY — invoked
-  by the features or propositions skill.
-
-  <example>
-  Context: Feature has weak mechanism clarity and differentiation
-  user: "Improve the api-gateway feature — it scored fail on mechanism clarity"
-  assistant: "I'll launch the quality-enricher agent to research the company's API gateway and draft an improved description."
-  <commentary>
-  The features skill delegates per-feature improvement to this agent after quality
-  assessment identifies specific dimensions that need work.
-  </commentary>
-  </example>
-
-  <example>
-  Context: Proposition DOES statement is too generic for this market
-  user: "The cloud-monitoring--mid-market-saas proposition failed market-specificity"
-  assistant: "I'll launch the quality-enricher agent to research how the company positions this for mid-market SaaS."
-  <commentary>
-  The propositions skill delegates per-proposition improvement to this agent
-  when DOES/MEANS quality assessment reveals weak messaging.
-  </commentary>
-  </example>
+description: Research company-specific information to improve a feature or proposition with quality gaps.
 
 model: sonnet
 color: green

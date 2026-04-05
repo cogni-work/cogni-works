@@ -1,28 +1,6 @@
 ---
 name: big-block
-description: |
-  Render a big-block-brief.md (v1.0) into a structured solution architecture diagram
-  using Excalidraw MCP — tier-banded grid with solution blocks, path connections,
-  SPIs, foundations, and implementation roadmap.
-
-  This agent reads a big-block-brief produced by the story-to-big-block skill
-  and creates an .excalidraw file via Excalidraw MCP tools. It delegates to the
-  render-big-block skill which orchestrates sequential phases to produce a ~150-250
-  element diagram. Supports dark/light color modes.
-
-  The result is a precise, structured diagram — NOT an illustrated landscape.
-
-  Use this agent when the user has a big-block-brief.md and wants to render it
-  into a visual .excalidraw file for editing or export.
-
-  <example>
-  Context: User has a brief and wants to render it
-  user: "Render the big block brief into an Excalidraw file"
-  </example>
-  <example>
-  Context: User wants to create the visual from a brief
-  user: "Draw the solution architecture from big-block-brief.md"
-  </example>
+description: Render a big-block-brief.md into a structured Excalidraw solution architecture diagram.
   <example>
   Context: User wants the Excalidraw rendering
   user: "Create the .excalidraw file from the big block brief"

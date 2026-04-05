@@ -1,33 +1,6 @@
 ---
 name: story-to-big-block
-description: |
-  Transform TIPS value-modeler output into a Big Block solution architecture brief.
-
-  Uses data extraction, tier classification, path connection mapping, and wave assignment
-  to produce v1.0 briefs that create structured solution architecture diagrams.
-  Works with any value-modeler Phase 4 output.
-
-  WORKFLOW POSITION: Visualization phase when creating Big Block diagrams from value-modeler data.
-  ALSO USABLE DIRECTLY: Can be invoked standalone for any value-modeler-to-big-block task.
-
-  Delegates to story-to-big-block skill for all intelligence layers.
-  Returns compact JSON response for context-efficient orchestration.
-
-  <example>
-  Context: User wants a Big Block diagram from TIPS value-modeler output
-  user: "Create a Big Block from the value model"
-  </example>
-  <example>
-  Context: User completed a TIPS pursuit and wants to visualize results
-  user: "Visualize the solution architecture as a Big Block"
-  </example>
-  <example>
-  Context: User wants to render the solution ranking as a diagram
-  user: "Generate the Big Block solution diagram"
-  </example>
-  <example>
-  Context: User mentions Big Block in German
-  user: "Erstelle den Big Block für die Lösungsarchitektur"
+description: Transform TIPS value-modeler output into a Big Block solution architecture brief.
   </example>
 model: sonnet
 color: blue

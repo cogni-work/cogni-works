@@ -1,10 +1,6 @@
 ---
 name: trend-deep-researcher
-description: |
-  Perform recursive deep research on a single high-value trend candidate to enrich
-  evidence before report writing. Decomposes the trend into TIPS sub-aspects and
-  pursues follow-up questions through recursive search. Single-agent execution,
-  no sub-spawning. DO NOT USE DIRECTLY — invoked by trend-report Phase 0.5.
+description: Recursive deep research on a single high-value trend candidate to enrich evidence before report writing.
 model: sonnet
 color: blue
 tools: ["WebSearch", "WebFetch", "Read", "Write"]

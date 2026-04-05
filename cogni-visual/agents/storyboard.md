@@ -1,28 +1,6 @@
 ---
 name: storyboard
-description: |
-  Render a storyboard-brief.md into a multi-poster .pen file using Pencil MCP.
-
-  This agent reads a storyboard-brief produced by the story-to-storyboard skill
-  and creates a .pen file via the Pencil MCP tools. Each poster contains 1-3
-  stacked web section types rendered with portrait layout adaptations.
-  Posters are arranged side-by-side on the canvas for print output.
-
-  Use this agent when the user has a storyboard-brief.md and wants to render it
-  into a visual .pen file for editing or print export.
-
-  <example>
-  Context: User has a brief and wants to render it
-  user: "Render the storyboard brief into a .pen file"
-  </example>
-  <example>
-  Context: User wants to create the posters from a brief
-  user: "Design the poster storyboard from storyboard-brief.md"
-  </example>
-  <example>
-  Context: User wants the Pencil MCP rendering
-  user: "Create the .pen file from the storyboard brief"
-  </example>
+description: Render a storyboard-brief.md into a multi-poster .pen file using Pencil MCP.
 model: opus
 color: blue
 ---

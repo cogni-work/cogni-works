@@ -1,28 +1,6 @@
 ---
 name: hero-renderer
-description: |
-  Render the homepage hero section using Pencil MCP for AI-generated imagery and
-  high-fidelity visual design. Produces a hero HTML fragment and background image
-  that the page-generator splices into the homepage.
-
-  <example>
-  Context: website-build skill detects hero_renderer=pencil in the plan
-  user: "Build the website"
-  assistant: "I'll use the hero-renderer agent to create the homepage hero via Pencil MCP."
-  <commentary>
-  The website-build skill delegates hero rendering to this agent when Pencil MCP is requested.
-  Runs before page-generator for the homepage so the hero HTML is ready for inclusion.
-  </commentary>
-  </example>
-
-  <example>
-  Context: User wants to regenerate just the hero with a different image
-  user: "Regenerate the homepage hero with a new image"
-  assistant: "I'll launch the hero-renderer agent to create a fresh hero design via Pencil MCP."
-  <commentary>
-  Hero can be regenerated independently without rebuilding the entire site.
-  </commentary>
-  </example>
+description: Render the homepage hero section using Pencil MCP for AI-generated imagery.
 
 model: sonnet
 color: magenta

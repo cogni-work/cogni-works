@@ -1,35 +1,6 @@
 ---
 name: pitch-review-assessor
-description: |
-  Assess completed sales pitch quality from three stakeholder perspectives: target buyer,
-  sales director, and marketing director. Returns structured JSON with per-perspective scores,
-  synthesis, and revision guidance.
-
-  Delegated by the why-change skill after the pitch-synthesizer completes Phase 5.
-  Evaluates whether the final deliverables would succeed in a real buyer conversation,
-  be deliverable by the sales team, and maintain brand/messaging consistency.
-
-  <example>
-  Context: Why-change skill completed Phase 5 synthesis, deliverables ready for review
-  user: "Review the pitch before finalizing"
-  assistant: "I'll launch the pitch-review-assessor to evaluate the pitch from buyer, sales, and marketing perspectives."
-  <commentary>
-  The why-change skill delegates stakeholder review after pitch-synthesizer produces
-  sales-presentation.md and sales-proposal.md. This agent evaluates the complete pitch
-  as a whole — catching failures that per-phase quality gates miss.
-  </commentary>
-  </example>
-
-  <example>
-  Context: User wants to validate a completed pitch before sending to customer
-  user: "Does this pitch actually work for a VP Sales audience?"
-  assistant: "I'll launch the pitch-review-assessor to evaluate from buyer, sales director, and marketing director perspectives."
-  <commentary>
-  Can be launched on any completed pitch project. The buyer perspective specifically checks
-  whether unconsidered needs match real buyer pain and whether the business case enables
-  internal advocacy.
-  </commentary>
-  </example>
+description: Assess sales pitch quality from three stakeholder perspectives (buyer, sales, marketing).
 
 model: haiku
 color: yellow

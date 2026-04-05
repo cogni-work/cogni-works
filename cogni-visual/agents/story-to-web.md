@@ -1,30 +1,6 @@
 ---
 name: story-to-web
-description: |
-  Transform any narrative with a story arc into a scrollable web narrative brief.
-
-  Uses story arc analysis, style guide selection, section decomposition, and web
-  copywriting to produce briefs that create landing-page-style .pen files. Works
-  with any narrative format.
-
-  WORKFLOW POSITION: Visualization phase when creating web narratives from narratives.
-  ALSO USABLE DIRECTLY: Can be invoked standalone for any narrative-to-web-page task.
-
-  Delegates to story-to-web skill for all intelligence layers.
-  Returns compact JSON response for context-efficient orchestration.
-
-  <example>
-  Context: User wants a scrollable web page from a narrative
-  user: "Create a web narrative from this narrative"
-  </example>
-  <example>
-  Context: User wants to transform a research report into a landing page
-  user: "Generate a landing page from my research summary"
-  </example>
-  <example>
-  Context: Orchestrator invokes for web narrative generation
-  user: "Transform the narrative at /path/to/narrative.md into a web page"
-  </example>
+description: Transform any narrative with a story arc into a scrollable web narrative brief.
 model: opus
 color: blue
 ---

@@ -1,32 +1,6 @@
 ---
 name: customer-review-assessor
-description: |
-  Assess customer profile quality from three stakeholder perspectives: procurement reviewer,
-  chief sales officer (provider), and market expert. Returns structured JSON with per-perspective
-  scores, synthesis, and revision guidance.
-
-  Delegated by the customers skill after generating or reviewing customer profiles as a
-  post-generation quality gate. Evaluates whether profiles are recognizable to buyers,
-  actionable for sales teams, and accurate for the market segment.
-
-  <example>
-  Context: Customers skill generated profiles for a market and needs qualitative review
-  user: "Create customer profiles for grosse-energieversorger-de"
-  assistant: "I'll launch the customer-review-assessor to evaluate the profiles from three stakeholder perspectives."
-  <commentary>
-  The customers skill delegates to this agent after writing the customer JSON.
-  The agent reads the customer file plus market, proposition, and portfolio context.
-  </commentary>
-  </example>
-
-  <example>
-  Context: User wants to review existing customer profiles for quality
-  user: "Review my customer profiles"
-  assistant: "I'll assess each market's profiles from procurement, CSO, and market expert perspectives."
-  <commentary>
-  Can be launched in parallel for multiple markets during batch review.
-  </commentary>
-  </example>
+description: Assess customer profile quality from three stakeholder perspectives (procurement, CSO, market expert).
 
 model: haiku
 color: yellow

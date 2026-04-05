@@ -1,28 +1,6 @@
 ---
 name: feature-deep-diver
-description: |
-  Deep research agent for a single feature — competitive landscape, technical differentiation,
-  market positioning, buyer perception. DO NOT USE DIRECTLY — invoked by the features skill's Deep Dive workflow.
-
-  <example>
-  Context: User wants to deeply understand a feature's competitive context
-  user: "Deep dive on our cloud-monitoring feature"
-  assistant: "I'll launch the feature-deep-diver agent to research the competitive landscape and differentiation vectors."
-  <commentary>
-  The features skill's Deep Dive workflow delegates broad web research to this agent, then uses
-  the structured report to drive a co-creation dialogue with the user.
-  </commentary>
-  </example>
-
-  <example>
-  Context: User wants to strengthen differentiation for a specific feature
-  user: "Research how competitors position their API gateway vs ours"
-  assistant: "I'll launch the feature-deep-diver agent to map the competitive landscape for your API gateway feature."
-  <commentary>
-  The agent researches competitors, analyst coverage, and buyer perception — broader
-  scope than quality-enricher, which only fixes specific quality gaps.
-  </commentary>
-  </example>
+description: Deep research for a single feature — competitive landscape, differentiation, buyer perception.
 
 model: sonnet
 color: blue

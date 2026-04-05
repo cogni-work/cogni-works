@@ -1,32 +1,6 @@
 ---
 name: solution-review-assessor
-description: |
-  Assess solution quality from three stakeholder perspectives: procurement reviewer,
-  provider solution architect, and client solution architect. Returns structured JSON
-  with per-perspective scores, synthesis, and revision guidance.
-
-  Delegated by the solutions skill after generating or reviewing solutions as a
-  post-generation quality gate. Evaluates commercial viability, delivery realism,
-  and buyer-side technical feasibility.
-
-  <example>
-  Context: Solutions skill generated a new solution and needs qualitative review
-  user: "Generate a solution for cloud-migration--grosse-energieversorger-de"
-  assistant: "I'll launch the solution-review-assessor to evaluate the solution from three stakeholder perspectives."
-  <commentary>
-  The solutions skill delegates to this agent after writing the solution JSON.
-  The agent reads the solution plus its proposition, feature, product, and market context.
-  </commentary>
-  </example>
-
-  <example>
-  Context: User wants to review existing solutions for quality
-  user: "Review all my solutions"
-  assistant: "I'll assess each solution from procurement, provider SA, and client SA perspectives."
-  <commentary>
-  Can be launched in parallel for multiple solutions during batch review.
-  </commentary>
-  </example>
+description: Assess solution quality from three stakeholder perspectives (procurement, provider SA, client SA).
 
 model: haiku
 color: yellow

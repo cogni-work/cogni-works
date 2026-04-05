@@ -185,7 +185,11 @@ These aren't arbitrary rules — they reflect the fundamental nature of LLM-base
 
 ## Source inspection
 
-When the user needs to see a source in context — whether from verify, inspect, or resolve mode — launch the `cogni-claims:source-inspector` agent with the source URL, the verbatim excerpt, the claim statement, and the deviation explanation. The source-inspector uses headless browser (browsermcp) to navigate to the page, extract the text, locate the relevant passage, and capture a screenshot as visual evidence.
+**Pre-dispatch guard:** Before dispatching source-inspector, check whether browsermcp was available during the pre-flight check (Step 2.5). If `browsermcp_available = false`, do NOT dispatch the agent — tell the user directly:
+- Source inspection requires browsermcp (headless browser), which was not available during the pre-flight check
+- Recommendation: start browsermcp and retry, or skip inspection and proceed to resolve using the deviation data already available from verification
+
+When browsermcp is available and the user needs to see a source in context — whether from verify, inspect, or resolve mode — launch the `cogni-claims:source-inspector` agent with the source URL, the verbatim excerpt, the claim statement, and the deviation explanation. The source-inspector uses headless browser (browsermcp) to navigate to the page, extract the text, locate the relevant passage, and capture a screenshot as visual evidence.
 
 Source inspection is valuable because LLM-based deviation findings are assessments, not verdicts. Seeing the source content helps the user make informed decisions. Don't make the user request it explicitly — if they're looking at a deviation, they almost certainly want to see the source.
 

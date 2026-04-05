@@ -26,8 +26,20 @@ You will receive in your task prompt:
 ### Step 1: Open Source in Headless Browser
 
 1. Navigate to the source URL: `mcp__browsermcp__browser_navigate`
-2. Wait for the page to render (JS content): `mcp__browsermcp__browser_wait` for 2-3 seconds
-3. If navigation fails (timeout, error), report the failure and stop
+2. If `browser_navigate` fails with a tool error (tool not found, connection refused, MCP server not running), this means browsermcp is unavailable — immediately return the failure output and stop:
+   ```json
+   {
+     "source_url": "<the URL>",
+     "passage_found": false,
+     "matched_text": null,
+     "surrounding_context": null,
+     "screenshot_taken": false,
+     "notes": "browsermcp is not available in this environment — browser inspection cannot proceed. Start browsermcp and retry."
+   }
+   ```
+   Do NOT proceed to Steps 2-4.
+3. If navigation succeeds, wait for the page to render (JS content): `mcp__browsermcp__browser_wait` for 2-3 seconds
+4. If navigation fails with a page-level error (timeout, HTTP error), report the failure and stop
 
 ### Step 2: Extract Page Text and Locate Passage
 
@@ -58,7 +70,6 @@ If the passage was not found at all, say so explicitly — the source may have b
 - **Passage not found on page**: The source may have been updated since verification. Report this clearly.
 - **Dynamic content**: The 2-3 second wait handles most JS rendering. If the snapshot looks empty, try waiting longer (up to 5 seconds).
 - **PDF or non-HTML**: browsermcp may not extract PDF text well. Report the limitation.
-- **browsermcp unavailable**: If the tool call fails, report that browser inspection is not available in this environment.
 
 **Output:**
 

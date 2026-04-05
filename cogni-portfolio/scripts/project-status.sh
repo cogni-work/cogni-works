@@ -713,7 +713,13 @@ case "$PHASE" in
     fi
     ;;
   verification)
-    add_action "verify" "$CLAIMS_PENDING claim(s) pending verification ($CLAIMS_UNVERIFIED unverified, $CLAIMS_DEVIATED deviated)" 9
+    if [ "$CLAIMS_PENDING_STALE" -gt 0 ] && [ "$CLAIMS_PENDING_STABLE" -gt 0 ]; then
+      add_action "verify" "$CLAIMS_PENDING_STABLE claim(s) on stable entities pending verification — verify before generating deliverables ($CLAIMS_PENDING_STALE claims on stale entities deferred until after refresh)" 9
+    elif [ "$CLAIMS_PENDING_STABLE" -gt 0 ]; then
+      add_action "verify" "$CLAIMS_PENDING_STABLE claim(s) pending verification ($CLAIMS_UNVERIFIED unverified, $CLAIMS_DEVIATED deviated)" 9
+    elif [ "$CLAIMS_PENDING_STALE" -gt 0 ]; then
+      add_action "verify" "All $CLAIMS_PENDING_STALE pending claim(s) are on stale entities — refresh upstream entities first, then verify new claims" 9
+    fi
     ;;
   propagation)
     add_action "verify" "$CLAIMS_PENDING_PROPAGATION resolved correction(s) pending propagation to entity files -- run verify skill (Step 8)" 9
@@ -1144,6 +1150,44 @@ print(json.dumps(existing))
   fi
 fi
 
+# Split pending claims by entity staleness (stable vs stale)
+# Claims on stale entities will be replaced after refresh — verifying them is wasted work
+CLAIMS_PENDING_STABLE=$CLAIMS_PENDING
+CLAIMS_PENDING_STALE=0
+if [ "$HAS_CLAIMS" = "true" ] && [ "$CLAIMS_PENDING" -gt 0 ] && [ "$stale_entities" != "[]" ]; then
+  eval "$(python3 -c "
+import json
+
+claims_path = '$PROJECT_DIR/cogni-claims/claims.json'
+stale = json.loads('$stale_entities')
+
+# Build set of stale entity file paths (e.g., 'propositions/slug.json')
+stale_files = set()
+for s in stale:
+    entity_type = s['entity'] + 's'  # proposition -> propositions
+    stale_files.add(entity_type + '/' + s['slug'] + '.json')
+
+with open(claims_path) as f:
+    data = json.load(f)
+
+pending_stale = 0
+pending_stable = 0
+for c in data.get('claims', []):
+    status = c.get('status', 'unverified')
+    if status not in ('unverified', 'deviated'):
+        continue
+    ref = c.get('entity_ref', {}) or {}
+    ref_file = ref.get('file', '')
+    if ref_file in stale_files:
+        pending_stale += 1
+    else:
+        pending_stable += 1
+
+print(f'CLAIMS_PENDING_STABLE={pending_stable}')
+print(f'CLAIMS_PENDING_STALE={pending_stale}')
+" 2>/dev/null || { echo "CLAIMS_PENDING_STABLE=$CLAIMS_PENDING"; echo 'CLAIMS_PENDING_STALE=0'; })"
+fi
+
 cat << EOF
 {
   "counts": {
@@ -1173,7 +1217,9 @@ cat << EOF
     "deviated": $CLAIMS_DEVIATED,
     "resolved": $CLAIMS_RESOLVED,
     "source_unavailable": $CLAIMS_UNAVAILABLE,
-    "pending_propagation": $CLAIMS_PENDING_PROPAGATION
+    "pending_propagation": $CLAIMS_PENDING_PROPAGATION,
+    "pending_stable": $CLAIMS_PENDING_STABLE,
+    "pending_stale": $CLAIMS_PENDING_STALE
   },
   "products": $product_arr,
   "features": $feature_arr,

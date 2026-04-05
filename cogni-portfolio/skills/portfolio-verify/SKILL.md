@@ -55,7 +55,13 @@ Also show breakdown by submitter (market-researcher, competitor-researcher, prop
 
 ### 2. Review with User
 
-Before running verification, present the summary and ask:
+Before running verification, check for stale entities that would make some claims redundant. Read `stale_entities` from `project-status.sh` output (or check feature/proposition modification dates against each other). Cross-reference each pending claim's `entity_ref.file` against stale entity slugs. If any pending claims reference stale entities, present the split:
+
+> "N claims are on entities that need refreshing (stale propositions, etc.). Verifying those now would be wasted work — the refresh will discard old content and generate new claims. Recommend verifying the M claims on stable entities instead."
+
+Offer to filter: verify only stable-entity claims now, defer the rest.
+
+Then present the summary and ask:
 
 - How many unverified claims exist and from which agents?
 - Want to verify all at once, or focus on a specific submitter or entity?

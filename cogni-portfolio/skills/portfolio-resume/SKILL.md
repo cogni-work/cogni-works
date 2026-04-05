@@ -56,7 +56,7 @@ Show a concise, scannable dashboard. Lead with the company name and project slug
 | Packages | N / packageable | pct% |
 | Competitors | N / propositions | pct% |
 | Customers | N / markets | pct% |
-| Claims | N total | V verified, D deviated, U unverified, P pending propagation |
+| Claims | N total | V verified, D deviated, U unverified, P pending propagation. If `claims.pending_stale > 0`, append: "(S on stale entities — deferred)" |
 | Communicate | N files | A accepted, R revise, J rejected (if > 0), STALE if upstream changed |
 | Architecture | exists/missing | STALE if products/features changed since last generation |
 | Purpose | N / total features | coverage percentage — low coverage limits architecture and customer narrative quality |
@@ -90,7 +90,7 @@ After the table:
   - If `source_lineage.new_uploads` is non-empty: "N new files in uploads/ have not been ingested yet." Distinguish from changed re-uploads.
   - If `source_lineage.stale_sources` > 0 and no changed_uploads: "N source entries are marked as stale in the registry." Recommend running `portfolio-lineage check` to investigate.
   - If `source_lineage.untracked_entities` > 0: "N entities have no source lineage tracking." This is informational, not urgent — mention it after other drift warnings. Recommend running `portfolio-lineage` to backfill.
-- **Stale entities** — if `stale_entities` is non-empty, show them as priority actions before the regular next steps. Group by reason type: "N propositions need refresh because their upstream features were updated" is more useful than listing each one. If a stale entity also has quality warnings, lead with the quality issue (fix the root cause first, then refresh the proposition).
+- **Stale entities** — if `stale_entities` is non-empty, show them as priority actions before the regular next steps. Group by reason type: "N propositions need refresh because their upstream features were updated" is more useful than listing each one. If a stale entity also has quality warnings, lead with the quality issue (fix the root cause first, then refresh the proposition). When stale entities AND unverified claims coexist, note the interaction: if `claims.pending_stale > 0`, explain that those claims sit on entities about to be refreshed — verifying them now would be wasted work since the refresh will generate new claims. This helps the user understand why verify isn't the first recommended step despite having hundreds of pending claims.
 - **Stale communicate files** — if `communicate.stale` is `true`, highlight this prominently: "Communicate files may need refresh — upstream data changed since they were generated." Present the reason from `communicate.stale_reason`. Recommend running `portfolio-communicate` to regenerate. This appears alongside stale entity warnings since it represents the same class of problem (downstream output invalidated by upstream changes).
 - **Stale architecture diagram** — if `architecture.stale` is `true`, mention that the architecture diagram may be outdated because products or features changed since it was generated. Recommend running `portfolio-architecture` to refresh. If `architecture.exists` is `false` and features exist, suggest generating the architecture diagram as a visual checkpoint.
 - **Purpose coverage** — if `purpose_coverage.total_features > 0` and `purpose_coverage.with_purpose` is less than half of `total_features`, note low purpose coverage: "N of M features have purpose statements. Adding purpose improves architecture diagrams and customer-facing materials." Recommend running the `features` skill to add purpose statements.
@@ -115,6 +115,7 @@ Present entries from `next_actions` **sorted by `priority` (ascending)**. Lower 
 - solutions (7) before packages (8) — packages bundle solutions into tiers; missing solutions mean incomplete bundles
 - propositions (6) before solutions (7) — solutions implement proposition DOES/MEANS; no propositions means nothing to implement
 - features (3) before propositions (6) — propositions map features to markets; feature changes invalidate downstream propositions
+- propositions (6) before verify (9) when propositions are stale — refreshing generates new claims, making verification of old claims on those entities wasted work. The `claims.pending_stale` count tells you how many claims fall into this category.
 - ingest (1) before everything — new document data may change features, markets, or other entities
 
 If the phase is `complete`, congratulate the user and suggest reviewing outputs or running `portfolio-communicate` for additional deliverables. If communicate files are stale (indicated by a communicate action in `next_actions`), mention that `portfolio-communicate` should be re-run to refresh customer-facing documentation.

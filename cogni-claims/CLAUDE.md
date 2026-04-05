@@ -6,7 +6,7 @@ Cross-plugin claim verification system — fetches cited sources, detects deviat
 
 ```
 skills/                           2 claims skills
-  claims/                           Verification orchestrator (submit, verify, dashboard, inspect, resolve)
+  claims/                           Verification orchestrator (submit, verify, dashboard, inspect, resolve, cobrowse)
     scripts/
       claims-store.sh               Workspace init, ID generation, registry I/O
     references/
@@ -24,7 +24,7 @@ agents/                           2 verification agents
   source-inspector.md               Open source in browser (browsermcp → claude-in-chrome fallback), locate passage, capture screenshot (sonnet)
 
 commands/                         1 slash command
-  claims.md                         /claims — submit, verify, dashboard, inspect, resolve
+  claims.md                         /claims — submit, verify, dashboard, inspect, resolve, cobrowse
 ```
 
 ## Component Inventory
@@ -33,7 +33,7 @@ commands/                         1 slash command
 |------|-------|-------|
 | Skills | 2 | claims, claim-entity |
 | Agents | 2 | claim-verifier (sonnet, WebFetch → browsermcp → claude-in-chrome), source-inspector (sonnet, browsermcp → claude-in-chrome) |
-| Commands | 1 | /claims (aliases: /claim, /verify-claims) |
+| Commands | 1 | /claims (aliases: /claim, /verify-claims) — 6 modes: submit, verify, dashboard, inspect, resolve, cobrowse |
 
 ## Data Model
 
@@ -95,6 +95,7 @@ Claims are submitted via `cogni-claims:claims` skill in submit mode. The `claim-
 {submitting plugin} ──> cogni-claims:claims (submit) ──> claim-verifier agents (verify)
                                                       ──> source-inspector agent (inspect)
                                                       ──> user resolution (resolve)
+                                                      ──> interactive cobrowse (cobrowse)
 ```
 
 ## Source Fetching Strategy
@@ -109,7 +110,11 @@ All three methods run within each claim-verifier agent instance, falling through
 
 The source-inspector agent uses browsermcp for page navigation, text extraction via accessibility snapshots, and screenshot capture. If browsermcp is unavailable, it falls back to claude-in-chrome for navigation and text extraction (the user sees the page directly in their browser instead of via screenshot).
 
-Source cache files record which method succeeded via `fetch_method`: `"webfetch"`, `"browser"`, or `"cobrowse"`.
+Source cache files record which method succeeded via `fetch_method`: `"webfetch"`, `"browser"`, `"cobrowse"`, or `"cobrowse_interactive"`.
+
+### Interactive cobrowse recovery
+
+When all automated methods fail and claims are marked `source_unavailable`, the `/claims cobrowse` mode provides a fourth recovery path: interactive cobrowsing. Unlike the automated cobrowse fallback (which opens a tab, reads silently, and moves on), cobrowse mode is a user-assisted session — the user dismisses cookie banners, logs in, scrolls to load dynamic content, while Claude reads and verifies in real-time. This recovers sources that need human interaction no automated tool can provide.
 
 ## Key Conventions
 
@@ -117,4 +122,4 @@ Source cache files record which method succeeded via `fetch_method`: `"webfetch"
 - One claim-verifier agent per unique source URL — multiple claims grouped by URL for single fetch
 - Source content cached in `sources/{url-hash}.json` — re-verification re-fetches
 - Resolution actions: `corrected`, `disputed`, `alternative_source`, `discarded`, `accepted_override`
-- Plugin version lives at `.claude-plugin/plugin.json` (currently v1.0.16)
+- Plugin version lives at `.claude-plugin/plugin.json` (currently v1.0.17)

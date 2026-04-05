@@ -1,15 +1,18 @@
 ---
 name: claims
 description: |
-  Manage claim verification lifecycle — submit, verify, review dashboard, inspect, and resolve claims.
-  Use this skill whenever the user mentions claims, fact-checking, source verification, checking
-  whether statements match their cited sources, reviewing deviations, or anything related to
-  tracking the accuracy of sourced statements. Also use it when another plugin submits claims
-  for verification (e.g., after a research or portfolio workflow produces sourced assertions).
-  Even if the user doesn't say "claims" explicitly — if they're asking about verifying facts
-  against sources, checking citations, finding outdated or mismatched data in cited references,
-  reviewing what's been flagged, checking for stale sources, outdated data in references,
-  or asking "which claims need attention" or "what did verification find", this skill handles it.
+  Manage claim verification lifecycle — submit, verify, review dashboard, inspect, resolve, and
+  cobrowse claims. Use this skill whenever the user mentions claims, fact-checking, source
+  verification, checking whether statements match their cited sources, reviewing deviations, or
+  anything related to tracking the accuracy of sourced statements. Also use it when another plugin
+  submits claims for verification (e.g., after a research or portfolio workflow produces sourced
+  assertions). Even if the user doesn't say "claims" explicitly — if they're asking about verifying
+  facts against sources, checking citations, finding outdated or mismatched data in cited references,
+  reviewing what's been flagged, checking for stale sources, outdated data in references, or asking
+  "which claims need attention" or "what did verification find", this skill handles it. Also trigger
+  when the user wants to cobrowse unreachable sources together, recover unavailable claims
+  interactively, open sources in their browser to help check them, or says things like "let's look
+  at those sources together", "help me check these links", or "browse the unavailable sources".
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Agent, AskUserQuestion, mcp__browsermcp__browser_navigate, mcp__browsermcp__browser_snapshot, mcp__browsermcp__browser_wait, mcp__browsermcp__browser_screenshot, mcp__browsermcp__browser_click, mcp__browsermcp__browser_type, mcp__browsermcp__browser_press_key, mcp__browsermcp__browser_hover, mcp__browsermcp__browser_select_option, mcp__browsermcp__browser_go_back, mcp__browsermcp__browser_go_forward, mcp__browsermcp__browser_get_console_logs, mcp__claude-in-chrome__navigate, mcp__claude-in-chrome__get_page_text, mcp__claude-in-chrome__read_page, mcp__claude-in-chrome__find, mcp__claude-in-chrome__tabs_create_mcp, mcp__claude-in-chrome__tabs_context_mcp
 ---
 
@@ -36,6 +39,7 @@ Determine the operating mode from the user's intent. People rarely say "mode: ve
 | `dashboard` | "show", "status", "overview", "what claims", "dashboard", "what did you find", "which claims need attention", "what's the status" | Display all claims grouped by status |
 | `inspect` | "inspect", "show me", "details on", "what's wrong with", "explain this deviation" + a claim ID | Deep-dive into one claim's evidence |
 | `resolve` | "resolve", "fix", "handle", "deal with", "correct" + a claim ID | Walk the user through resolving a deviation |
+| `cobrowse` | "cobrowse", "let's look together", "help me check", "recover sources", "open sources", "browse together", "interactive check", "recover unavailable" | Interactive cobrowsing to recover source_unavailable claims |
 
 When in doubt, `dashboard` is a safe default — it gives the user an overview and they can drill down from there.
 
@@ -160,6 +164,13 @@ was used as the sole browser fallback.
 - If only `cobrowse_available = false` (browsermcp was available):
   No note needed — the two-method chain (WebFetch + browsermcp) covers most cases.
 
+If there are `source_unavailable` claims, add a recovery suggestion:
+```
+{n} source(s) could not be reached automatically. Run `/claims cobrowse` to open them
+in your browser for interactive recovery — you can help navigate logins, cookie banners,
+and dynamic content while I read and verify.
+```
+
 If there are deviated claims with severity `medium` or higher, briefly show each one (claim statement, deviation type, source excerpt) and proactively offer source inspection (see Source inspection section below). The goal is a seamless flow: verify → see the problem → decide what to do.
 
 ## Dashboard mode
@@ -195,6 +206,187 @@ Walk the user through resolving a deviated claim. If source inspection hasn't be
    - **Accept as-is** — acknowledge the deviation but keep the claim (prompt for rationale)
 5. Record the ResolutionRecord, update status to `resolved`, write to history. Preserve the `entity_ref` field on the claim — downstream systems (cogni-portfolio's portfolio-verify Step 8) use it to propagate corrections back to the entity files that originally contained the wrong data. Do not set `propagated_at` here — that's set by the propagating system after it applies the correction.
 6. If the user chose "alternative source", offer to re-verify against the new URL
+
+## Cobrowse mode
+
+Interactive recovery for claims stuck at `source_unavailable`. The automated verification pipeline (WebFetch → browsermcp → claude-in-chrome) already tried and failed for these sources — cobrowse mode is different because the **user actively helps**. They can dismiss cookie banners, log in to paywalled sites, accept terms, scroll to load dynamic content, or navigate to the right page section while you watch and verify.
+
+This mode matters because many "unavailable" sources aren't truly gone — they just need human interaction that automated fetching can't provide. A pricing page behind a cookie wall, a report behind a corporate login, a dynamically-loaded table that needs a scroll — these are recoverable with the user's help.
+
+### Pre-requisite: claude-in-chrome
+
+Cobrowse mode requires the user's real Chrome browser via claude-in-chrome. Before starting:
+1. Call `mcp__claude-in-chrome__tabs_context_mcp` to verify availability
+2. If unavailable, tell the user: "Interactive cobrowsing requires claude-in-chrome (your Chrome browser). Please ensure the Claude-in-Chrome extension is active, then try again. In the meantime, you can use `/claims resolve <id>` to handle unavailable claims manually."
+3. Stop — there is no fallback for this mode (browsermcp alone isn't sufficient because the whole point is user-assisted navigation)
+
+### Step 1: Identify recovery candidates
+
+Read `claims.json` and filter to `status === "source_unavailable"`. If the user specified `--id <claim-id>`, filter to just that claim. If `--url <url>`, filter to all claims citing that URL.
+
+If no candidates found, tell the user: "No source_unavailable claims to recover. All claims are either verified, deviated, or resolved."
+
+Group candidates by `source_url` (same grouping pattern as verify mode) — each URL is opened once, all claims citing it are verified together.
+
+### Step 2: Session overview
+
+Present what's ahead so the user knows what to expect:
+
+```
+Cobrowse Recovery Session
+
+{N} claims across {K} sources are marked source_unavailable.
+
+I'll open each source in your browser. You can help by:
+- Dismissing cookie banners or popups
+- Logging in if the source requires authentication
+- Navigating to the right section or page
+- Scrolling to load dynamic content (pricing tables, expandable sections)
+
+Tell me "ready" when the page content is visible, and I'll read and verify.
+
+Sources to recover:
+1. [{Source Title}]({url}) — {n} claim(s)
+2. [{Source Title}]({url}) — {n} claim(s)
+...
+```
+
+Use AskUserQuestion: "How would you like to proceed?" with options:
+- **Start all** — go through every source in order
+- **Select specific** — let user pick which sources to recover (show numbered list)
+- **Cancel** — exit cobrowse mode
+
+### Step 3: Per-URL recovery loop
+
+For each source URL in the session:
+
+**3a. Open in browser**
+
+Always open a new tab — never navigate the user's active tab:
+```
+mcp__claude-in-chrome__tabs_create_mcp  → get new tab ID
+mcp__claude-in-chrome__navigate         → go to source URL
+```
+
+Tell the user which source is now open: "Opened [{Source Title}]({url}) — {n} claim(s) depend on this source."
+
+**3b. Initial page assessment**
+
+Attempt a first read via `mcp__claude-in-chrome__get_page_text`. Based on what comes back, classify the page state and guide the user:
+
+- **Content visible** (substantial text returned, relevant keywords found): "The page content appears loaded. I can see text that may contain the information we need. Shall I verify now, or do you need to interact with the page first?"
+- **Login/paywall detected** (login form indicators, "sign in", "subscribe", thin content with auth prompts): "This page appears to require authentication. Please log in, and tell me when you're ready."
+- **Cookie/popup barrier** (cookie consent indicators, overlay text, very thin content): "There may be a cookie banner or popup blocking content. Please dismiss it, then tell me when ready."
+- **404 or error page** (error indicators, "page not found", HTTP error text): "This page returns an error — the source may have been removed or moved. You can provide an alternative URL or skip this source."
+- **Empty/minimal** (very little text, possibly JS-rendered content not yet loaded): "The page content appears empty — it may need scrolling or interaction to load. Please interact with the page and tell me when the content is visible."
+
+**3c. User interaction checkpoint**
+
+Use AskUserQuestion with options:
+- **Ready** — page content is visible, proceed to verify
+- **Re-read** — try extracting content again (user may have scrolled, dismissed popups, etc.)
+- **Alternative URL** — provide a different URL for this source
+- **Skip** — move to next source URL
+- **End session** — stop cobrowsing entirely, save results so far
+
+If the user chooses "Alternative URL", ask for the new URL, navigate to it, and return to step 3b.
+
+If the user chooses "Re-read", extract content again and re-assess. Allow multiple re-reads — the user may need several interactions before the page is fully loaded.
+
+**3d. Content extraction**
+
+Extract the page content:
+1. Primary: `mcp__claude-in-chrome__get_page_text`
+2. If thin or empty, try `mcp__claude-in-chrome__read_page` as alternative
+3. If both return insufficient content, tell the user what you got and ask if they can see more on the page. Sometimes the content is in an iframe or dynamically loaded section that text extraction misses — the user can confirm whether the information is actually visible on their screen.
+
+**3e. Inline verification**
+
+For each claim in the URL group, verify against the extracted content. Apply the same 5-dimension comparison used by the claim-verifier agent:
+
+1. **Accuracy** — does the claim faithfully represent the source's words and numbers?
+2. **Inference** — does the claim draw conclusions the source supports?
+3. **Completeness** — does the claim include relevant context, or does omission change meaning?
+4. **Currency** — is the source data still current relative to the claim's timeframe?
+5. **Agreement** — does the source support, contradict, or stay silent on the claim?
+
+For each claim, determine:
+- **Verified** — claim matches source, no deviations. Include the supporting excerpt.
+- **Deviated** — discrepancy found. Create DeviationRecord(s) with type, severity, source_excerpt, and explanation using the same hedged language as automated verification ("the source appears to say..." not "the claim is wrong").
+- **Still unavailable** — relevant passage not found in the extracted content despite the page being loaded. Note this with verification_notes explaining what was searched for and what the page actually contained.
+
+**3f. Present results per URL**
+
+Show the verification results for all claims against this source:
+
+```
+Source: [{Title}]({url})
+
+claim-abc123: VERIFIED
+  "Cloud spending grew 29%..." — matches source excerpt.
+
+claim-def456: DEVIATED (misquotation, medium)
+  Claim says "45% growth", source says "30-35% growth in Q3".
+
+claim-ghi789: STILL UNAVAILABLE
+  Relevant passage not found on page. The page contains product descriptions
+  but no pricing data matching the claim.
+```
+
+Use AskUserQuestion: "How do you want to handle these results?" with options:
+- **Accept all** — save all results and move to next source
+- **Re-read page** — extract content again (user may have navigated to a different section)
+- **Adjust** — override a specific claim's result (prompt for claim ID and what to change)
+- **Skip without saving** — don't update these claims, move to next source
+
+**3g. Save results**
+
+On "Accept all" or after adjustments:
+1. Update `claims.json` — change status from `source_unavailable` to `verified`, `deviated`, or keep as `source_unavailable` based on results. Attach DeviationRecords for deviated claims.
+2. Write source cache to `sources/{url-hash}.json` with `fetch_method: "cobrowse_interactive"` — this distinguishes interactive recovery from the automated cobrowse fallback
+3. Write history event for each claim:
+   ```json
+   {
+     "event": "cobrowse_recovery",
+     "timestamp": "...",
+     "data": {
+       "previous_status": "source_unavailable",
+       "new_status": "verified",
+       "fetch_method": "cobrowse_interactive",
+       "user_assisted": true
+     }
+   }
+   ```
+
+### Step 4: Session summary
+
+After all URLs are processed (or the user ends the session):
+
+```
+Cobrowse Recovery Complete
+
+Recovered: {n} of {total} unavailable claims
+- {n} now verified (no deviations)
+- {n} now deviated ({n} high, {n} medium, {n} low)
+- {n} still unavailable (source gone or content not found)
+- {n} skipped by user
+```
+
+If any claims remain `source_unavailable`, suggest: "Remaining unavailable claims can be resolved manually via `/claims resolve <id>` — you can provide alternative sources, accept as-is, or discard."
+
+If deviated claims were found during recovery, suggest: "Use `/claims inspect <id>` to review the newly detected deviations, or `/claims resolve <id>` to handle them."
+
+### Edge cases
+
+- **User can't access the page either** (genuinely 404, domain expired, content removed): Note as `confirmed_unavailable` in the claim's `verification_notes` field. The claim stays `source_unavailable` but the history records that a human also confirmed the source is gone. Offer `/claims resolve <id>` to provide an alternative source or discard.
+
+- **Page loads but relevant content is missing** (the page exists but the specific data point — e.g., a pricing table — is no longer there): The claim stays `source_unavailable` with a verification note like "Page accessible but pricing section no longer present — content may have been restructured." This is different from a 404 and gives the user better context for resolution.
+
+- **User provides an alternative URL mid-session**: Navigate to the new URL, extract and verify. If verification succeeds, update the claim's `source_url` and `source_title` to the new source. This is a proper re-verification, not a resolution — the claim gets a fresh status based on the new source.
+
+- **Session interrupted** (user says "End session" midway): Save all results collected so far. Report what was processed and what remains. Unprocessed claims stay `source_unavailable` — the user can resume with `/claims cobrowse` later.
+
+- **Mixed results within a URL group** (some claims verify, others deviate or remain unavailable): Handle each claim independently. The user confirms the batch per URL, but individual claims can have different outcomes.
 
 ## Guiding principles
 

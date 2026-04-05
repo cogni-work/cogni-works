@@ -70,7 +70,7 @@ Claims with `status: source_unavailable`.
 |----|-------------------|--------|--------|
 | `claim-mno5` | "According to internal data..." | [Internal](url) | 403 Forbidden |
 
-> Consider providing alternative sources with `/claims resolve <id>`.
+> Run `/claims cobrowse` to open these sources in your browser for interactive recovery, or `/claims resolve <id>` to handle individually.
 ```
 
 #### 5. Unverified

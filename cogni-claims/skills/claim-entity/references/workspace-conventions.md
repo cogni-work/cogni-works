@@ -78,7 +78,20 @@ For cobrowse-fetched sources (when WebFetch and browsermcp fail but claude-in-ch
 }
 ```
 
-For failed fetches (all three methods failed):
+For interactive cobrowse recovery (user-assisted session via `/claims cobrowse`):
+```json
+{
+  "url": "https://example.com/cookie-walled-pricing",
+  "fetched_at": "2026-04-05T10:15:00Z",
+  "fetch_method": "cobrowse_interactive",
+  "status": "success",
+  "content": "Full text content extracted during interactive cobrowsing session (user dismissed cookie banner, scrolled to pricing table)...",
+  "content_length": 3891,
+  "error": null
+}
+```
+
+For failed fetches (all three automated methods failed):
 ```json
 {
   "url": "https://example.com/paywalled-report",
@@ -121,6 +134,11 @@ Complete lifecycle history for a single claim, recording every state transition.
       "event": "resolved",
       "timestamp": "2026-02-23T15:00:00Z",
       "data": { "action": "corrected", "rationale": "..." }
+    },
+    {
+      "event": "cobrowse_recovery",
+      "timestamp": "2026-04-05T10:15:00Z",
+      "data": { "previous_status": "source_unavailable", "new_status": "verified", "fetch_method": "cobrowse_interactive", "user_assisted": true }
     },
     {
       "event": "propagated",

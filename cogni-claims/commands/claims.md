@@ -1,7 +1,7 @@
 ---
 name: claims
-description: Manage claim verification lifecycle — submit, verify, review dashboard, inspect, and resolve claims
-usage: /claims <mode> [options] — modes: submit, verify, dashboard, inspect, resolve
+description: Manage claim verification lifecycle — submit, verify, review dashboard, inspect, resolve, and cobrowse claims
+usage: /claims <mode> [options] — modes: submit, verify, dashboard, inspect, resolve, cobrowse
 argument-hint: "<mode> [options]"
 aliases: [claim, verify-claims]
 category: verification
@@ -10,7 +10,7 @@ allowed-tools: ["Read", "Write", "Bash", "Task", "AskUserQuestion", "WebFetch", 
 
 # Claims Command
 
-Manage the full lifecycle of sourced claims: submission, verification against cited sources, dashboard review, source inspection, and user-guided resolution.
+Manage the full lifecycle of sourced claims: submission, verification against cited sources, dashboard review, source inspection, user-guided resolution, and interactive cobrowsing recovery.
 
 ## Usage
 
@@ -110,6 +110,30 @@ Present resolution options for a claim with detected deviations.
 3. Show resolution options via AskUserQuestion
 4. Record the user's decision
 
+### cobrowse — Interactive source recovery
+
+```
+/claims cobrowse
+/claims cobrowse --id claim-abc123
+/claims cobrowse --url "https://specific-source.com"
+```
+
+Open source URLs in the user's browser for interactive recovery of `source_unavailable` claims. The user helps navigate authentication, cookie banners, and dynamic content while Claude reads and verifies.
+
+**Options:**
+- No options: recover all `source_unavailable` claims
+- `--id <claim-id>`: recover a specific claim
+- `--url <url>`: recover all claims citing a specific source URL
+
+**Requires:** claude-in-chrome (user's Chrome browser with the extension active)
+
+**Processing:**
+1. Invoke the `cogni-claims:claims` skill with mode `cobrowse`
+2. The skill opens each source URL in a new Chrome tab
+3. User assists with navigation (login, cookie dismissal, scrolling)
+4. Claude extracts content and verifies claims inline
+5. User confirms results per source before they're saved
+
 ## Examples
 
 ### Example 1: Submit a single claim
@@ -135,6 +159,16 @@ Present resolution options for a claim with detected deviations.
 ### Example 5: Resolve a deviation
 ```
 /claims resolve claim-abc123
+```
+
+### Example 6: Recover all unavailable sources interactively
+```
+/claims cobrowse
+```
+
+### Example 7: Recover a specific source URL
+```
+/claims cobrowse --url "https://jasper.ai/pricing"
 ```
 
 ## Working Directory

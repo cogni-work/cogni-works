@@ -21,7 +21,7 @@ skills/                           2 claims skills
 
 agents/                           2 verification agents
   claim-verifier.md                 Fetch one source URL (WebFetch → browsermcp fallback), verify all claims (sonnet)
-  source-inspector.md               Open source in headless browser (browsermcp), locate passage, capture screenshot (sonnet)
+  source-inspector.md               Open source in browser (browsermcp), locate passage, capture screenshot (sonnet)
 
 commands/                         1 slash command
   claims.md                         /claims — submit, verify, dashboard, inspect, resolve
@@ -102,11 +102,11 @@ Claims are submitted via `cogni-claims:claims` skill in submit mode. The `claim-
 Each claim-verifier agent uses a two-method approach for retrieving source content:
 
 1. **Primary: WebFetch** — fast programmatic fetch, works for most open sources
-2. **Fallback: browsermcp** (Playwright headless) — handles anti-bot protection, JS-rendered content, and sources that block programmatic access
+2. **Fallback: browsermcp** (Chrome extension) — handles anti-bot protection, JS-rendered content, and sources that block programmatic access. Requires the BrowserMCP Chrome extension to be installed and connected to an active browser tab. This is a best-effort fallback — if browsermcp is unavailable, the claim is marked `source_unavailable`.
 
-Both methods run within each claim-verifier agent instance. Since browsermcp (Playwright) supports parallel browser contexts, multiple claim-verifier agents can use it simultaneously without contention.
+Both methods run within each claim-verifier agent instance. The browsermcp fallback gracefully degrades: if the MCP server is not connected, agents skip browser fetch and rely on WebFetch alone.
 
-The source-inspector agent also uses browsermcp for page navigation, text extraction via accessibility snapshots, and screenshot capture. This works in headless environments (Cowork) where claude-in-chrome is not available.
+The source-inspector agent uses browsermcp exclusively for page navigation, text extraction via accessibility snapshots, and screenshot capture. It requires an active browsermcp connection — if unavailable, it returns a failure result immediately.
 
 Source cache files record which method succeeded via `fetch_method`: `"webfetch"` or `"browser"`.
 
@@ -116,4 +116,4 @@ Source cache files record which method succeeded via `fetch_method`: `"webfetch"
 - One claim-verifier agent per unique source URL — multiple claims grouped by URL for single fetch
 - Source content cached in `sources/{url-hash}.json` — re-verification re-fetches
 - Resolution actions: `corrected`, `disputed`, `alternative_source`, `discarded`, `accepted_override`
-- Plugin version lives at `.claude-plugin/plugin.json` (currently v1.0.13)
+- Plugin version lives at `.claude-plugin/plugin.json` (currently v1.0.15)

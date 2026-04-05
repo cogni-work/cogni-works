@@ -37,13 +37,14 @@ host machine. No manual configuration needed.
 
 - **Provided by:** cogni-claims, cogni-help, cogni-website, cogni-workspace
 - **Type:** npx (auto-downloads at runtime)
-- **npx package:** `@anthropic-ai/browsermcp@latest`
+- **npx package:** `@browsermcp/mcp@latest`
+- **Requires:** BrowserMCP Chrome extension installed and connected to an active browser tab
 - **Probe tool:** `mcp__browsermcp__browser_navigate`
 - **Skills:** claims (verification fallback), cogni-issues (GitHub automation), manage-themes (website extraction), website-preview (browser screenshots)
 - **Troubleshooting:**
   - If not available: check that at least one provider plugin is installed
-  - Runs headless (Playwright) — no visible browser window
-  - Works in Cowork VMs (no display needed)
+  - Requires Chrome browser with BrowserMCP extension connected — not headless
+  - Known issue: if both Claude Desktop and Claude Code are installed, the Chrome extension may connect to the wrong host (see anthropics/claude-code#20887)
 
 ## Manual Install
 

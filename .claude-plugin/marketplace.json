@@ -7,7 +7,7 @@
     {
       "name": "cogni-claims",
       "source": "./cogni-claims",
-      "version": "1.0.14",
+      "version": "1.0.15",
       "description": "Claim verification and management system. Verifies sourced claims against cited URLs, detects deviations, and guides users through resolution.",
       "keywords": [
         "claim-verification",
@@ -47,7 +47,7 @@
     {
       "name": "cogni-workspace",
       "source": "./cogni-workspace",
-      "version": "0.4.3",
+      "version": "0.4.4",
       "description": "Lean workspace orchestrator for insight-wave marketplace plugins. Manages shared foundation (env vars, settings), theme management, theme picker, plugin discovery, workspace health, and Obsidian vault integration.",
       "keywords": [
         "workspace",

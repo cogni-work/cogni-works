@@ -52,14 +52,14 @@ Cached content from fetched source URLs. The filename is a deterministic hash of
 }
 ```
 
-For browser-fetched sources (when WebFetch fails but headless browser succeeds):
+For browser-fetched sources (when WebFetch fails but browsermcp succeeds):
 ```json
 {
   "url": "https://example.com/js-rendered-report",
   "fetched_at": "2026-02-23T14:32:00Z",
   "fetch_method": "browser",
   "status": "success",
-  "content": "Full text content extracted via headless browser (browsermcp)...",
+  "content": "Full text content extracted via browser automation (browsermcp)...",
   "content_length": 4523,
   "error": null
 }

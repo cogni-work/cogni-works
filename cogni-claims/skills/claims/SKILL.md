@@ -80,13 +80,13 @@ Multiple claims often cite the same source. Group them by `source_url` so each U
 
 ### Step 2.5: Pre-flight environment check
 
-Before dispatching agents, verify that browsermcp (Playwright headless) is available — claim-verifier agents rely on it as fallback for paywalled/JS-rendered sources, and source-inspector requires it entirely for the inspect workflow.
+Before dispatching agents, verify that browsermcp is available — claim-verifier agents rely on it as fallback for paywalled/JS-rendered sources, and source-inspector requires it entirely for the inspect workflow. Note: browsermcp requires the BrowserMCP Chrome extension to be connected to an active browser tab.
 
 1. Attempt `mcp__browsermcp__browser_navigate` to `https://example.com`
 2. If the call **succeeds** → browsermcp is available, proceed silently to Step 3
 3. If the call **errors out** (tool not found, connection refused, MCP server not running) → this is a hard gate. Tell the user:
    - browsermcp is not available in the current environment
-   - **Impact**: verification agents cannot fall back to headless browser when WebFetch fails (paywalled, JS-rendered, or anti-bot-protected sources will be marked `source_unavailable`), and `/claims inspect` will not work at all
+   - **Impact**: verification agents cannot fall back to browser automation when WebFetch fails (paywalled, JS-rendered, or anti-bot-protected sources will be marked `source_unavailable`), and `/claims inspect` will not work at all
    - **Recommendation**: start browsermcp before continuing
 4. Use AskUserQuestion to ask: "Would you like to proceed with WebFetch-only verification (browser fallback disabled), or stop so you can enable browsermcp first?"
 5. If the user chooses to proceed, set an internal flag `browsermcp_available = false` and continue to Step 3. This flag is used in Step 5 to contextualize the summary.
@@ -123,12 +123,12 @@ Verification complete:
 - {n} recovered via browser fallback (included in verified/deviated counts above)
 ```
 
-The "recovered via browser fallback" line shows how many sources were initially unreachable via WebFetch but succeeded when the claim-verifier fell back to headless browser (browsermcp). This helps the user understand the value of the browser fallback and which sources required it.
+The "recovered via browser fallback" line shows how many sources were initially unreachable via WebFetch but succeeded when the claim-verifier fell back to browsermcp. This helps the user understand the value of the browser fallback and which sources required it.
 
 If verification ran with `browsermcp_available = false` (user chose to proceed after the pre-flight check failed), append to the summary:
 ```
 Note: browsermcp was not available during this verification run. Browser fallback
-was disabled — sources that require headless browser access were marked unavailable.
+was disabled — sources that require browser access were marked unavailable.
 To re-verify these claims with full browser support, enable browsermcp and run
 /claims verify again.
 ```
@@ -141,7 +141,7 @@ Show the user where things stand. Read `claims.json`, group by status, and rende
 
 The dashboard should give the user a clear picture at a glance and make it obvious what needs attention (deviated claims with high severity) vs. what's fine (verified claims). Show at most 20 claims per status section — see `references/dashboard-format.md` for overflow handling and full layout spec.
 
-For each deviated claim in the "Deviations Requiring Attention" section, include a one-line summary of what the deviation is (not just the type label) so the user can quickly decide which claims to inspect. When presenting action hints, emphasize that `/claims inspect <id>` will fetch the source via headless browser, locate the relevant passage, and capture a screenshot for review — this is the primary workflow for handling deviations.
+For each deviated claim in the "Deviations Requiring Attention" section, include a one-line summary of what the deviation is (not just the type label) so the user can quickly decide which claims to inspect. When presenting action hints, emphasize that `/claims inspect <id>` will fetch the source via browsermcp, locate the relevant passage, and capture a screenshot for review — this is the primary workflow for handling deviations.
 
 ## Inspect mode
 
@@ -186,10 +186,10 @@ These aren't arbitrary rules — they reflect the fundamental nature of LLM-base
 ## Source inspection
 
 **Pre-dispatch guard:** Before dispatching source-inspector, check whether browsermcp was available during the pre-flight check (Step 2.5). If `browsermcp_available = false`, do NOT dispatch the agent — tell the user directly:
-- Source inspection requires browsermcp (headless browser), which was not available during the pre-flight check
+- Source inspection requires browsermcp (Chrome extension), which was not available during the pre-flight check
 - Recommendation: start browsermcp and retry, or skip inspection and proceed to resolve using the deviation data already available from verification
 
-When browsermcp is available and the user needs to see a source in context — whether from verify, inspect, or resolve mode — launch the `cogni-claims:source-inspector` agent with the source URL, the verbatim excerpt, the claim statement, and the deviation explanation. The source-inspector uses headless browser (browsermcp) to navigate to the page, extract the text, locate the relevant passage, and capture a screenshot as visual evidence.
+When browsermcp is available and the user needs to see a source in context — whether from verify, inspect, or resolve mode — launch the `cogni-claims:source-inspector` agent with the source URL, the verbatim excerpt, the claim statement, and the deviation explanation. The source-inspector uses browsermcp to navigate to the page, extract the text, locate the relevant passage, and capture a screenshot as visual evidence.
 
 Source inspection is valuable because LLM-based deviation findings are assessments, not verdicts. Seeing the source content helps the user make informed decisions. Don't make the user request it explicitly — if they're looking at a deviation, they almost certainly want to see the source.
 

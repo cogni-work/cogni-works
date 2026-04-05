@@ -143,7 +143,7 @@ Present a summary of MCP servers that will be auto-loaded:
 MCP Servers (auto-configured by plugins):
   excalidraw       npx excalidraw-mcp           <- cogni-visual, cogni-portfolio
   excalidraw_sketch https://mcp.excalidraw.com  <- cogni-visual
-  browsermcp       npx @anthropic-ai/browsermcp <- cogni-claims, cogni-help, cogni-website, cogni-workspace
+  browsermcp       npx @browsermcp/mcp          <- cogni-claims, cogni-help, cogni-website, cogni-workspace
 
 Manual install needed:
   pencil           Open Pencil desktop app      <- cogni-visual (web/storyboard rendering)

@@ -10,7 +10,7 @@ description: |
   against sources, checking citations, finding outdated or mismatched data in cited references,
   reviewing what's been flagged, checking for stale sources, outdated data in references,
   or asking "which claims need attention" or "what did verification find", this skill handles it.
-allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Agent, AskUserQuestion, mcp__browsermcp__browser_navigate, mcp__browsermcp__browser_snapshot, mcp__browsermcp__browser_wait, mcp__browsermcp__browser_screenshot, mcp__browsermcp__browser_click, mcp__browsermcp__browser_type, mcp__browsermcp__browser_press_key, mcp__browsermcp__browser_hover, mcp__browsermcp__browser_select_option, mcp__browsermcp__browser_go_back, mcp__browsermcp__browser_go_forward, mcp__browsermcp__browser_get_console_logs
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Agent, AskUserQuestion, mcp__browsermcp__browser_navigate, mcp__browsermcp__browser_snapshot, mcp__browsermcp__browser_wait, mcp__browsermcp__browser_screenshot, mcp__browsermcp__browser_click, mcp__browsermcp__browser_type, mcp__browsermcp__browser_press_key, mcp__browsermcp__browser_hover, mcp__browsermcp__browser_select_option, mcp__browsermcp__browser_go_back, mcp__browsermcp__browser_go_forward, mcp__browsermcp__browser_get_console_logs, mcp__claude-in-chrome__navigate, mcp__claude-in-chrome__get_page_text, mcp__claude-in-chrome__read_page, mcp__claude-in-chrome__find, mcp__claude-in-chrome__tabs_create_mcp, mcp__claude-in-chrome__tabs_context_mcp
 ---
 
 # Claims Verification Orchestrator
@@ -80,16 +80,28 @@ Multiple claims often cite the same source. Group them by `source_url` so each U
 
 ### Step 2.5: Pre-flight environment check
 
-Before dispatching agents, verify that browsermcp is available — claim-verifier agents rely on it as fallback for paywalled/JS-rendered sources, and source-inspector requires it entirely for the inspect workflow. Note: browsermcp requires the BrowserMCP Chrome extension to be connected to an active browser tab.
+Before dispatching agents, check which browser tools are available. The verification pipeline uses up to three fetch methods (WebFetch → browsermcp → claude-in-chrome cobrowsing), and the source-inspector needs at least one browser tool for the inspect workflow.
 
+**Check browsermcp:**
 1. Attempt `mcp__browsermcp__browser_navigate` to `https://example.com`
-2. If the call **succeeds** → browsermcp is available, proceed silently to Step 3
-3. If the call **errors out** (tool not found, connection refused, MCP server not running) → this is a hard gate. Tell the user:
-   - browsermcp is not available in the current environment
-   - **Impact**: verification agents cannot fall back to browser automation when WebFetch fails (paywalled, JS-rendered, or anti-bot-protected sources will be marked `source_unavailable`), and `/claims inspect` will not work at all
-   - **Recommendation**: start browsermcp before continuing
-4. Use AskUserQuestion to ask: "Would you like to proceed with WebFetch-only verification (browser fallback disabled), or stop so you can enable browsermcp first?"
-5. If the user chooses to proceed, set an internal flag `browsermcp_available = false` and continue to Step 3. This flag is used in Step 5 to contextualize the summary.
+2. If succeeds → set `browsermcp_available = true`
+3. If errors out (tool not found, connection refused, MCP server not running) → set `browsermcp_available = false`
+
+**Check claude-in-chrome (cobrowsing):**
+4. Attempt `mcp__claude-in-chrome__navigate` to `https://example.com`
+5. If succeeds → set `cobrowse_available = true`
+6. If errors out → set `cobrowse_available = false`
+
+**Decision matrix:**
+- **Both available** → proceed silently to Step 3 (full three-method fallback chain active)
+- **Only browsermcp** → proceed silently (two-method chain still works well for most sources)
+- **Only cobrowse** → inform user: "browsermcp is not available but cobrowsing (claude-in-chrome) is. Verification will use WebFetch with cobrowsing fallback for unreachable sources." Proceed to Step 3.
+- **Neither available** → this is a hard gate. Tell the user:
+  - Neither browsermcp nor claude-in-chrome is available
+  - **Impact**: verification agents cannot fall back to browser automation when WebFetch fails (paywalled, JS-rendered, authenticated, or anti-bot-protected sources will be marked `source_unavailable`), and `/claims inspect` will not work at all
+  - **Recommendation**: start browsermcp or ensure claude-in-chrome is available before continuing
+  - Use AskUserQuestion: "Would you like to proceed with WebFetch-only verification (all browser fallbacks disabled), or stop to enable browser tools first?"
+  - If the user chooses to proceed, continue to Step 3 with both flags set to `false`
 
 ### Step 3: Dispatch verification agents
 
@@ -120,18 +132,33 @@ Verification complete:
 - {n} verified (no deviations)
 - {n} deviations detected ({n} critical, {n} high, {n} medium, {n} low)
 - {n} sources unavailable
-- {n} recovered via browser fallback (included in verified/deviated counts above)
+- {n} recovered via browser fallback (browsermcp)
+- {n} recovered via cobrowsing (claude-in-chrome)
 ```
 
-The "recovered via browser fallback" line shows how many sources were initially unreachable via WebFetch but succeeded when the claim-verifier fell back to browsermcp. This helps the user understand the value of the browser fallback and which sources required it.
+The recovery lines show how many sources were initially unreachable via WebFetch but succeeded through browser fallback or cobrowsing. These counts are included in the verified/deviated totals above. They help the user understand which sources required browser access and which specifically needed their authenticated Chrome session.
 
-If verification ran with `browsermcp_available = false` (user chose to proceed after the pre-flight check failed), append to the summary:
+If cobrowsing recovered any sources, add a contextual note:
 ```
-Note: browsermcp was not available during this verification run. Browser fallback
-was disabled — sources that require browser access were marked unavailable.
-To re-verify these claims with full browser support, enable browsermcp and run
-/claims verify again.
+Note: {n} source(s) were only reachable via cobrowsing (your Chrome session).
+These sources may require authentication or cookies that only your browser has.
 ```
+
+If verification ran with browser tools unavailable, append the relevant context:
+- If `browsermcp_available = false` and `cobrowse_available = false`:
+```
+Note: Neither browsermcp nor cobrowsing was available during this verification run.
+All browser fallbacks were disabled — sources requiring browser access were marked
+unavailable. To re-verify with full browser support, enable browsermcp or
+claude-in-chrome and run /claims verify again.
+```
+- If only `browsermcp_available = false` (cobrowse was available):
+```
+Note: browsermcp was not available during this run. Cobrowsing (claude-in-chrome)
+was used as the sole browser fallback.
+```
+- If only `cobrowse_available = false` (browsermcp was available):
+  No note needed — the two-method chain (WebFetch + browsermcp) covers most cases.
 
 If there are deviated claims with severity `medium` or higher, briefly show each one (claim statement, deviation type, source excerpt) and proactively offer source inspection (see Source inspection section below). The goal is a seamless flow: verify → see the problem → decide what to do.
 
@@ -185,9 +212,9 @@ These aren't arbitrary rules — they reflect the fundamental nature of LLM-base
 
 ## Source inspection
 
-**Pre-dispatch guard:** Before dispatching source-inspector, check whether browsermcp was available during the pre-flight check (Step 2.5). If `browsermcp_available = false`, do NOT dispatch the agent — tell the user directly:
-- Source inspection requires browsermcp (Chrome extension), which was not available during the pre-flight check
-- Recommendation: start browsermcp and retry, or skip inspection and proceed to resolve using the deviation data already available from verification
+**Pre-dispatch guard:** Before dispatching source-inspector, check whether at least one browser tool was available during the pre-flight check (Step 2.5). If **both** `browsermcp_available = false` AND `cobrowse_available = false`, do NOT dispatch the agent — tell the user directly:
+- Source inspection requires either browsermcp or claude-in-chrome, neither of which was available during the pre-flight check
+- Recommendation: enable browsermcp or claude-in-chrome and retry, or skip inspection and proceed to resolve using the deviation data already available from verification
 
 When browsermcp is available and the user needs to see a source in context — whether from verify, inspect, or resolve mode — launch the `cogni-claims:source-inspector` agent with the source URL, the verbatim excerpt, the claim statement, and the deviation explanation. The source-inspector uses browsermcp to navigate to the page, extract the text, locate the relevant passage, and capture a screenshot as visual evidence.
 

@@ -20,8 +20,8 @@ skills/                           2 claims skills
       claim-lifecycle.json          End-to-end claim lifecycle example
 
 agents/                           2 verification agents
-  claim-verifier.md                 Fetch one source URL (WebFetch → browsermcp fallback), verify all claims (sonnet)
-  source-inspector.md               Open source in browser (browsermcp), locate passage, capture screenshot (sonnet)
+  claim-verifier.md                 Fetch one source URL (WebFetch → browsermcp → claude-in-chrome), verify all claims (sonnet)
+  source-inspector.md               Open source in browser (browsermcp → claude-in-chrome fallback), locate passage, capture screenshot (sonnet)
 
 commands/                         1 slash command
   claims.md                         /claims — submit, verify, dashboard, inspect, resolve
@@ -32,7 +32,7 @@ commands/                         1 slash command
 | Type | Count | Items |
 |------|-------|-------|
 | Skills | 2 | claims, claim-entity |
-| Agents | 2 | claim-verifier (sonnet, WebFetch → browsermcp), source-inspector (sonnet, browsermcp) |
+| Agents | 2 | claim-verifier (sonnet, WebFetch → browsermcp → claude-in-chrome), source-inspector (sonnet, browsermcp → claude-in-chrome) |
 | Commands | 1 | /claims (aliases: /claim, /verify-claims) |
 
 ## Data Model
@@ -99,16 +99,17 @@ Claims are submitted via `cogni-claims:claims` skill in submit mode. The `claim-
 
 ## Source Fetching Strategy
 
-Each claim-verifier agent uses a two-method approach for retrieving source content:
+Each claim-verifier agent uses a three-method approach for retrieving source content:
 
 1. **Primary: WebFetch** — fast programmatic fetch, works for most open sources
-2. **Fallback: browsermcp** (Chrome extension) — handles anti-bot protection, JS-rendered content, and sources that block programmatic access. Requires the BrowserMCP Chrome extension to be installed and connected to an active browser tab. This is a best-effort fallback — if browsermcp is unavailable, the claim is marked `source_unavailable`.
+2. **Fallback 1: browsermcp** (Chrome extension) — handles anti-bot protection, JS-rendered content, and sources that block programmatic access. Requires the BrowserMCP Chrome extension to be installed and connected to an active browser tab.
+3. **Fallback 2: claude-in-chrome** (cobrowsing) — uses the user's actual Chrome browser session with their cookies, logins, and authenticated sessions. Handles paywalled and authenticated content that even browsermcp cannot reach. This is the last resort because it touches the user's real browser.
 
-Both methods run within each claim-verifier agent instance. The browsermcp fallback gracefully degrades: if the MCP server is not connected, agents skip browser fetch and rely on WebFetch alone.
+All three methods run within each claim-verifier agent instance, falling through sequentially. Each fallback gracefully degrades: if the tool is unavailable, the agent tries the next method. Only after all three fail is a claim marked `source_unavailable`.
 
-The source-inspector agent uses browsermcp exclusively for page navigation, text extraction via accessibility snapshots, and screenshot capture. It requires an active browsermcp connection — if unavailable, it returns a failure result immediately.
+The source-inspector agent uses browsermcp for page navigation, text extraction via accessibility snapshots, and screenshot capture. If browsermcp is unavailable, it falls back to claude-in-chrome for navigation and text extraction (the user sees the page directly in their browser instead of via screenshot).
 
-Source cache files record which method succeeded via `fetch_method`: `"webfetch"` or `"browser"`.
+Source cache files record which method succeeded via `fetch_method`: `"webfetch"`, `"browser"`, or `"cobrowse"`.
 
 ## Key Conventions
 
@@ -116,4 +117,4 @@ Source cache files record which method succeeded via `fetch_method`: `"webfetch"
 - One claim-verifier agent per unique source URL — multiple claims grouped by URL for single fetch
 - Source content cached in `sources/{url-hash}.json` — re-verification re-fetches
 - Resolution actions: `corrected`, `disputed`, `alternative_source`, `discarded`, `accepted_override`
-- Plugin version lives at `.claude-plugin/plugin.json` (currently v1.0.15)
+- Plugin version lives at `.claude-plugin/plugin.json` (currently v1.0.16)

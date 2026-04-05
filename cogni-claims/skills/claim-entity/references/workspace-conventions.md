@@ -52,32 +52,6 @@ Cached content from fetched source URLs. The filename is a deterministic hash of
 }
 ```
 
-For browser-fetched sources (when WebFetch fails but browsermcp succeeds):
-```json
-{
-  "url": "https://example.com/js-rendered-report",
-  "fetched_at": "2026-02-23T14:32:00Z",
-  "fetch_method": "browser",
-  "status": "success",
-  "content": "Full text content extracted via browser automation (browsermcp)...",
-  "content_length": 4523,
-  "error": null
-}
-```
-
-For cobrowse-fetched sources (when WebFetch and browsermcp fail but claude-in-chrome succeeds — typically authenticated/paywalled sources reachable through the user's Chrome session):
-```json
-{
-  "url": "https://example.com/authenticated-report",
-  "fetched_at": "2026-02-23T14:32:00Z",
-  "fetch_method": "cobrowse",
-  "status": "success",
-  "content": "Full text content extracted via cobrowsing (claude-in-chrome, user's Chrome session)...",
-  "content_length": 4523,
-  "error": null
-}
-```
-
 For interactive cobrowse recovery (user-assisted session via `/claims cobrowse`):
 ```json
 {
@@ -91,16 +65,16 @@ For interactive cobrowse recovery (user-assisted session via `/claims cobrowse`)
 }
 ```
 
-For failed fetches (all three automated methods failed):
+For failed fetches (WebFetch failed):
 ```json
 {
   "url": "https://example.com/paywalled-report",
   "fetched_at": "2026-02-23T14:32:00Z",
-  "fetch_method": "cobrowse",
+  "fetch_method": "webfetch",
   "status": "failed",
   "content": null,
   "content_length": 0,
-  "error": "403 Forbidden — source requires authentication (webfetch, browser, and cobrowse all attempted)"
+  "error": "403 Forbidden — source requires authentication. Use /claims cobrowse for interactive recovery."
 }
 ```
 

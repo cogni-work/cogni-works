@@ -20,8 +20,8 @@ skills/                           2 claims skills
       claim-lifecycle.json          End-to-end claim lifecycle example
 
 agents/                           2 verification agents
-  claim-verifier.md                 Fetch one source URL (WebFetch → browsermcp → claude-in-chrome), verify all claims (sonnet)
-  source-inspector.md               Open source in browser (browsermcp → claude-in-chrome fallback), locate passage, capture screenshot (sonnet)
+  claim-verifier.md                 Fetch one source URL (WebFetch), verify all claims (sonnet)
+  source-inspector.md               Open source in browser (claude-in-chrome), locate passage, present evidence (sonnet)
 
 commands/                         1 slash command
   claims.md                         /claims — submit, verify, dashboard, inspect, resolve, cobrowse
@@ -32,7 +32,7 @@ commands/                         1 slash command
 | Type | Count | Items |
 |------|-------|-------|
 | Skills | 2 | claims, claim-entity |
-| Agents | 2 | claim-verifier (sonnet, WebFetch → browsermcp → claude-in-chrome), source-inspector (sonnet, browsermcp → claude-in-chrome) |
+| Agents | 2 | claim-verifier (sonnet, WebFetch), source-inspector (sonnet, claude-in-chrome) |
 | Commands | 1 | /claims (aliases: /claim, /verify-claims) — 6 modes: submit, verify, dashboard, inspect, resolve, cobrowse |
 
 ## Data Model
@@ -100,21 +100,17 @@ Claims are submitted via `cogni-claims:claims` skill in submit mode. The `claim-
 
 ## Source Fetching Strategy
 
-Each claim-verifier agent uses a three-method approach for retrieving source content:
+The claim-verifier agent uses **WebFetch** as the sole automated fetch method. If WebFetch fails (403, timeout, anti-bot, paywall), the claim is marked `source_unavailable` — there is no automatic browser fallback.
 
-1. **Primary: WebFetch** — fast programmatic fetch, works for most open sources
-2. **Fallback 1: browsermcp** (Chrome extension) — handles anti-bot protection, JS-rendered content, and sources that block programmatic access. Requires the BrowserMCP Chrome extension to be installed and connected to an active browser tab.
-3. **Fallback 2: claude-in-chrome** (cobrowsing) — uses the user's actual Chrome browser session with their cookies, logins, and authenticated sessions. Handles paywalled and authenticated content that even browsermcp cannot reach. This is the last resort because it touches the user's real browser.
+Sources that WebFetch cannot reach can be recovered interactively via `/claims cobrowse`, where the user assists with authentication, cookie dismissal, and navigation while Claude reads and verifies in real-time using claude-in-chrome.
 
-All three methods run within each claim-verifier agent instance, falling through sequentially. Each fallback gracefully degrades: if the tool is unavailable, the agent tries the next method. Only after all three fail is a claim marked `source_unavailable`.
+The source-inspector agent (used in inspect mode) opens sources in the user's browser via claude-in-chrome for visual evidence review.
 
-The source-inspector agent uses browsermcp for page navigation, text extraction via accessibility snapshots, and screenshot capture. If browsermcp is unavailable, it falls back to claude-in-chrome for navigation and text extraction (the user sees the page directly in their browser instead of via screenshot).
-
-Source cache files record which method succeeded via `fetch_method`: `"webfetch"`, `"browser"`, `"cobrowse"`, or `"cobrowse_interactive"`.
+Source cache files record which method succeeded via `fetch_method`: `"webfetch"` or `"cobrowse_interactive"`.
 
 ### Interactive cobrowse recovery
 
-When all automated methods fail and claims are marked `source_unavailable`, the `/claims cobrowse` mode provides a fourth recovery path: interactive cobrowsing. Unlike the automated cobrowse fallback (which opens a tab, reads silently, and moves on), cobrowse mode is a user-assisted session — the user dismisses cookie banners, logs in, scrolls to load dynamic content, while Claude reads and verifies in real-time. This recovers sources that need human interaction no automated tool can provide.
+When WebFetch fails and claims are marked `source_unavailable`, the `/claims cobrowse` mode provides an interactive recovery path. The user dismisses cookie banners, logs in, scrolls to load dynamic content, while Claude reads and verifies in real-time using claude-in-chrome. This recovers sources that need human interaction no automated tool can provide.
 
 ## Key Conventions
 

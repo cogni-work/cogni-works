@@ -21,29 +21,18 @@ You will receive these in your task prompt:
 - `source_url` — the URL to fetch
 - `claims` — array of `{id, statement}` objects to verify against this source
 
+**Note:** This agent uses WebFetch only. If WebFetch fails, the claim is marked `source_unavailable`. Interactive recovery for unavailable sources is handled separately via `/claims cobrowse` (claude-in-chrome).
+
 **Verification Process:**
 
 ### Step 1: Fetch Source Content
 
 1. Use WebFetch to retrieve the source URL content
-2. If WebFetch fails (403, timeout, empty content) or returns paywall-like content (very short body with login/subscribe keywords), use browsermcp as fallback (requires active Chrome + BrowserMCP extension) — many sources block programmatic access but render fine in a real browser:
-   a. `mcp__browsermcp__browser_navigate` — navigate to the source URL
-   b. `mcp__browsermcp__browser_wait` — wait 3 seconds for JavaScript rendering
-   c. `mcp__browsermcp__browser_snapshot` — capture the page text via accessibility tree
-   d. Extract the readable text content from the snapshot result
-   If browsermcp tools are not available (tool call errors out), try cobrowsing (step 2b) before giving up.
-2b. If browsermcp also fails or is unavailable, try cobrowsing via claude-in-chrome — this uses the user's actual Chrome browser session, which has their cookies, logins, and authenticated sessions. This is the last resort because it touches the user's real browser:
-   a. `mcp__claude-in-chrome__tabs_create_mcp` — open a **new tab** (never navigate the user's active tab)
-   b. `mcp__claude-in-chrome__navigate` — go to the source URL in the new tab
-   c. `mcp__claude-in-chrome__get_page_text` — extract the page content
-   d. If the extracted text is thin or contains paywall indicators, try `mcp__claude-in-chrome__read_page` as an alternative extraction method
-   e. If claude-in-chrome tools are not available (tool call errors out), skip to step 3
-   **Important**: cobrowsing is read-only — extract content and move on. Do not click, submit forms, or interact with the page beyond reading. The user's session must not be disturbed.
-3. Only mark `source_unavailable` after **all three** methods fail — WebFetch failures alone are not sufficient because many legitimate sources use anti-bot measures that a browser bypasses, and authenticated sources may only be reachable through the user's browser session
+2. If WebFetch fails (403, timeout, empty content) or returns paywall-like content (very short body with login/subscribe keywords), mark the claim as `source_unavailable`. There is no automatic browser fallback — sources that require browser access can be recovered interactively via `/claims cobrowse`.
 
 Cache the result to `cogni-claims/sources/{url-hash}.json`:
 - Generate the hash: `echo -n "<url>" | shasum -a 256 | cut -c1-16`
-- Write JSON with: url, fetched_at, fetch_method (`webfetch`, `browser`, or `cobrowse`), status, content, error
+- Write JSON with: url, fetched_at, fetch_method (`webfetch`), status, content, error
 
 ### Step 2: Verify Each Claim
 

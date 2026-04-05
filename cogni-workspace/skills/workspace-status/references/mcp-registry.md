@@ -35,11 +35,11 @@ host machine. No manual configuration needed.
 
 ### browsermcp
 
-- **Provided by:** cogni-claims, cogni-help, cogni-workspace
+- **Provided by:** cogni-claims, cogni-help, cogni-website, cogni-workspace
 - **Type:** npx (auto-downloads at runtime)
 - **npx package:** `@anthropic-ai/browsermcp@latest`
 - **Probe tool:** `mcp__browsermcp__browser_navigate`
-- **Skills:** claims (verification fallback), cogni-issues (GitHub automation), manage-themes (website extraction)
+- **Skills:** claims (verification fallback), cogni-issues (GitHub automation), manage-themes (website extraction), website-preview (browser screenshots)
 - **Troubleshooting:**
   - If not available: check that at least one provider plugin is installed
   - Runs headless (Playwright) — no visible browser window

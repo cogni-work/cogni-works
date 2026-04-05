@@ -8,7 +8,7 @@ description: |
   "wie sieht es aus", "test the website", "Website testen", or wants to see the
   generated site in a browser — even without saying "preview" explicitly.
   Requires a built website in output/website/.
-allowed-tools: Read, Write, Glob, Bash, Agent, AskUserQuestion
+allowed-tools: Read, Write, Glob, Bash, Agent, AskUserQuestion, mcp__browsermcp__browser_navigate, mcp__browsermcp__browser_screenshot, mcp__browsermcp__browser_snapshot
 ---
 
 # Website Preview
@@ -74,4 +74,4 @@ Website-Vorschau:
 
 ## Optional: Browser Screenshots
 
-If `claude-in-chrome` MCP is available, offer to take screenshots of each page for review. Use `mcp__claude-in-chrome__navigate` to visit each page and `mcp__claude-in-chrome__get_page_text` to validate rendered content.
+If `browsermcp` MCP is available, offer to take screenshots of each page for review. Use `mcp__browsermcp__browser_navigate` to visit each page, `mcp__browsermcp__browser_screenshot` to capture screenshots, and `mcp__browsermcp__browser_snapshot` to validate rendered content.

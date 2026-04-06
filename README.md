@@ -1,6 +1,6 @@
 # insight-wave
 
-Open-source plugins for consulting, sales, and marketing on [Claude Code](https://claude.ai/code). 12 AGPL-3.0 plugins that automate the research-heavy, methodology-driven work behind B2B deliverables — trend scouting, portfolio positioning, sales pitches, content creation, visual production, and source verification.
+Open-source plugins for consulting, sales, and marketing on [Claude Code](https://claude.ai/code). 13 AGPL-3.0 plugins that automate the research-heavy, methodology-driven work behind B2B deliverables — trend scouting, portfolio positioning, sales pitches, content creation, visual production, website generation, and source verification.
 
 Each plugin implements an established framework (Corporate Visions, Double Diamond, TIPS, IS/DOES/MEANS) rather than general-purpose text generation. Outputs include inline citations, structured data models, and quality gates. Every deliverable follows a reproducible methodology you can inspect and override.
 
@@ -9,7 +9,7 @@ Each plugin implements an established framework (Corporate Visions, Double Diamo
 
 ## What the plugins do
 
-12 plugins organized around eight capability areas. Each area handles a distinct part of the consulting-to-delivery workflow; plugins within an area share data formats and can be used independently or together.
+13 plugins organized around nine capability areas. Each area handles a distinct part of the consulting-to-delivery workflow; plugins within an area share data formats and can be used independently or together.
 
 ### Research
 
@@ -29,7 +29,7 @@ Each plugin implements an established framework (Corporate Visions, Double Diamo
 
 ### Portfolio Messaging
 
-[cogni-portfolio](cogni-portfolio/README.md) structures products, features, and target markets into market-specific value propositions using IS/DOES/MEANS messaging. 18 skills handle the full positioning lifecycle — from TAM/SAM/SOM market sizing and competitive analysis through three-layer quality assessment to export-ready proposals and workbooks. Eight industry taxonomies (ICT, SaaS, FinTech, HealthTech, MarTech, Industrial Tech, Professional Services, Open Source) classify your portfolio automatically. 18 skills and 17 agents.
+[cogni-portfolio](cogni-portfolio/README.md) structures products, features, and target markets into market-specific value propositions using IS/DOES/MEANS messaging. 19 skills handle the full positioning lifecycle — from TAM/SAM/SOM market sizing and competitive analysis through three-layer quality assessment to export-ready proposals and workbooks. Eight industry taxonomies (ICT, SaaS, FinTech, HealthTech, MarTech, Industrial Tech, Professional Services, Open Source) classify your portfolio automatically. 19 skills and 18 agents.
 
 > "Set up a portfolio for our cloud monitoring product targeting mid-market SaaS companies in DACH"
 
@@ -67,6 +67,14 @@ Each plugin implements an established framework (Corporate Visions, Double Diamo
 
 → [Plugin guide](docs/plugin-guide/cogni-visual.md)
 
+### Website Generation
+
+[cogni-website](cogni-website/README.md) assembles multi-page customer websites from portfolio, marketing, trend, and research content produced by other plugins — outputting a deployable static site with shared navigation, theming, and responsive HTML. Service pages update in minutes as your portfolio model changes, staying consistent with your messaging and SEO-optimized. 5 skills and 3 agents.
+
+> "Build a customer website from our portfolio and marketing content with a Pencil-rendered hero"
+
+→ [Plugin guide](docs/plugin-guide/cogni-website.md)
+
 ### Platform & Quality
 
 [cogni-claims](cogni-claims/README.md) verifies whether sourced claims match what their cited sources actually say — catching misquotations, unsupported conclusions, selective omissions, and stale data. Other plugins register claims during generation; cogni-claims fetches each source and flags deviations for your review. [cogni-workspace](cogni-workspace/README.md) manages the shared foundation — environment variables, theme management, plugin discovery, and workspace health. [cogni-help](cogni-help/README.md) provides a 12-course interactive curriculum, 6 cross-plugin workflow templates, and troubleshooting diagnostics. Together: 13 skills and 3 agents.
@@ -88,6 +96,7 @@ You compete on methodology depth, not headcount — but quality assurance depend
 - **60 scored trend candidates per scouting run** — [cogni-trends](cogni-trends/README.md) identifies industry trends across four TIPS dimensions with bilingual DE/EN research → [Trends to Solutions](docs/workflows/trends-to-solutions.md)
 - **Double Diamond with quality gates** — [cogni-consulting](cogni-consulting/README.md) orchestrates engagements with automated phase readiness assessment → [Consulting Engagement](docs/workflows/consulting-engagement.md)
 - **Consistent portfolio messaging** — [cogni-portfolio](cogni-portfolio/README.md) structures IS/DOES/MEANS propositions across Feature x Market pairs with three-layer quality assessment
+- **Service pages that track your portfolio** — [cogni-website](cogni-website/README.md) generates responsive websites from your portfolio model, updated in minutes as offerings evolve
 
 **Start here:** [cogni-sales](cogni-sales/README.md), [cogni-research](cogni-research/README.md), [cogni-portfolio](cogni-portfolio/README.md)
 
@@ -101,6 +110,7 @@ Your reps spend 2-3 days per opportunity on research and deck creation. The stan
 - **Verified account briefings** — [cogni-research](cogni-research/README.md) delivers DACH market data you can stand behind in front of a customer → [Research to Report](docs/workflows/research-to-report.md)
 - **Consistent messaging from one foundation** — [cogni-portfolio](cogni-portfolio/README.md) produces buyer-role-specific value propositions for each opportunity
 - **Proposals and one-pagers without the marketing queue** — [cogni-marketing](cogni-marketing/README.md) generates sales enablement content (battle cards, demo scripts, objection handlers) from portfolio data
+- **Always-current solution pages** — [cogni-website](cogni-website/README.md) publishes product and solution pages directly from the portfolio model, conversion-optimized and consistent with your messaging
 
 **Start here:** [cogni-sales](cogni-sales/README.md), [cogni-portfolio](cogni-portfolio/README.md), [cogni-research](cogni-research/README.md)
 
@@ -114,6 +124,7 @@ Your pipeline needs more content, but the budget doesn't cover additional headco
 - **Source-verified thought leadership** — [cogni-research](cogni-research/README.md) produces DACH market data with inline citations — no invented statistics → [Research to Report](docs/workflows/research-to-report.md)
 - **Consistent messaging foundation** — [cogni-portfolio](cogni-portfolio/README.md) translates your positioning into market-specific value propositions across all channels
 - **Trend-driven content relevance** — [cogni-trends](cogni-trends/README.md) identifies industry trends for thought leadership content, structured by TIPS dimensions → [Trends to Solutions](docs/workflows/trends-to-solutions.md)
+- **Website pages from your content engine** — [cogni-website](cogni-website/README.md) assembles SEO-optimized service pages from portfolio and marketing outputs, keeping your web presence in sync with your content calendar
 
 **Start here:** [cogni-marketing](cogni-marketing/README.md), [cogni-portfolio](cogni-portfolio/README.md), [cogni-research](cogni-research/README.md)
 
@@ -121,41 +132,75 @@ For CMS integration and managed content operations: [cogni-work.ai](https://cogn
 
 ## Prerequisites
 
-### Standard path — Claude Desktop or Cowork
+### Getting started
 
-Install plugins through the built-in plugin browser. No terminal required.
+Choose the path that fits your role:
 
-- [Claude Desktop](https://claude.ai/download) or [Claude Cowork](https://claude.ai/cowork) with plugin support
-- Browse the **Discover** tab and install from the insight-wave marketplace
+#### Standard path: Claude Desktop / Cowork
 
-### Specialist path — Claude Code CLI
+For consultants, sales teams, and marketing teams who want to use plugins through a visual interface:
 
-For developers and power users who prefer the command line.
+- [Download Claude Desktop](https://claude.ai/download) (macOS, Windows)
+- [Get started with Cowork](https://support.claude.com/en/articles/13345190-get-started-with-cowork) — collaborative working sessions with local file access
+- [Set up MCP servers in Desktop](https://support.claude.com/en/articles/10949351-getting-started-with-local-mcp-servers-on-claude-desktop) — connect plugins to external tools
+- Course: [Introduction to Claude Cowork](https://anthropic.skilljar.com/introduction-to-claude-cowork)
 
-- [Claude Code](https://claude.ai/code) (CLI or IDE extension)
-- Terminal access (macOS, Linux, or WSL)
+#### Specialist path: Claude Code
+
+For developers and power users who want CLI access, IDE integration, and full plugin control:
+
+- [Claude Code setup](https://docs.anthropic.com/en/docs/claude-code/setup) (CLI, VS Code, JetBrains)
+- [MCP in Claude Code](https://docs.anthropic.com/en/docs/claude-code/mcp) — configure MCP servers for extended capabilities
+- [Discover and install plugins](https://code.claude.com/docs/en/discover-plugins) — browse and install marketplace plugins
+- Course: [Introduction to Agent Skills](https://anthropic.skilljar.com/introduction-to-agent-skills)
+- Course: [Introduction to Subagents](https://anthropic.skilljar.com/introduction-to-subagents)
+
+### Quick install
+
+The insight-wave marketplace lives at [`cogni-work/insight-wave`](https://github.com/cogni-work/insight-wave):
+
+```
+/plugin marketplace add cogni-work/insight-wave
+```
+
+For the full walkthrough, see [Getting Started](docs/getting-started.md).
 
 ### Core requirements
 
+Both paths require:
+
+- Terminal access (macOS, Linux, or WSL)
 - `bash` 3.2+, `python3` (stdlib only), `jq`
 - Optional: [Obsidian](https://obsidian.md/) for browsable knowledge management
 
 ### MCP servers
 
-Plugins declare their MCP dependencies in `.mcp.json` files. When you install a plugin from the marketplace, Desktop/Cowork auto-discovers and starts the required MCP servers — no manual configuration needed for auto-installed MCPs.
+Some plugins extend their capabilities through external [MCP servers](https://docs.anthropic.com/en/docs/build-with-claude/mcp). Plugins declare their MCP dependencies in `.mcp.json` files — Desktop/Cowork auto-discovers and starts required servers on install.
 
-| MCP Server | Used by | Purpose | Install |
-|------------|---------|---------|---------|
-| excalidraw | [cogni-visual](cogni-visual/README.md), [cogni-portfolio](cogni-portfolio/README.md) | Diagram and journey map rendering | Auto-installed via plugin `.mcp.json` (npx) |
-| excalidraw_sketch | [cogni-visual](cogni-visual/README.md) | Optional sketch composition | Auto-installed via plugin `.mcp.json` (remote URL) |
-| claude-in-chrome | [cogni-claims](cogni-claims/README.md), [cogni-help](cogni-help/README.md), [cogni-website](cogni-website/README.md), [cogni-workspace](cogni-workspace/README.md) | Browser automation, claim verification, issue filing, website preview, theme extraction | Manual — install Claude-in-Chrome extension in Chrome |
-| pencil | [cogni-visual](cogni-visual/README.md) | Web narrative and storyboard rendering | Manual — open [Pencil](https://pencil.dev) desktop app |
+| MCP Server | Used by | What it enables | Install |
+|------------|---------|-----------------|---------|
+| excalidraw | [cogni-visual](cogni-visual/README.md), [cogni-portfolio](cogni-portfolio/README.md) | Diagram and journey map rendering (big pictures, big blocks, solution architecture, report enrichment) | Auto-installed via plugin `.mcp.json` (npx). Official: [excalidraw-mcp](https://github.com/excalidraw/excalidraw-mcp) |
+| claude-in-chrome | [cogni-claims](cogni-claims/README.md), [cogni-help](cogni-help/README.md), [cogni-website](cogni-website/README.md), [cogni-workspace](cogni-workspace/README.md) | Browser automation — claim verification, issue filing, website preview, theme extraction | Manual — install [Chrome extension](https://code.claude.com/docs/en/chrome) |
+| pencil | [cogni-visual](cogni-visual/README.md), [cogni-website](cogni-website/README.md) | Web narrative, storyboard, and poster rendering; homepage hero generation | Manual — open [Pencil](https://docs.pencil.dev/getting-started/installation) desktop app |
+
+Plugins that don't use MCP servers work without them — only install what you need.
+
+### Security & compliance
+
+- **API keys**: Created exclusively through the Claude Console, scoped to Organizations with workspace-level isolation. Rotate regularly and audit via the Admin API.
+- **Data residency**: The direct Anthropic API offers global and US inference geographies. For guaranteed EU data residency, use AWS Bedrock (Frankfurt) or Google Vertex AI (Frankfurt, Zurich).
+- **Enterprise SSO**: Enterprise plan includes SSO with domain capture and SCIM provisioning, one Identity Provider per parent organization.
+
+For the full deployment guide including GDPR compliance, data handling policies, and operations best practices, see [Deployment Guide](docs/deployment-guide.md).
 
 ### Learn more
 
 - [Getting started guide](docs/getting-started.md) — full installation walkthrough
 - [Ecosystem overview](docs/ecosystem-overview.md) — plugin landscape and data flow
 - [Plugin anatomy](docs/architecture/plugin-anatomy.md) — how plugins are structured
+- [MCP overview](https://docs.anthropic.com/en/docs/build-with-claude/mcp) — what Model Context Protocol is and how it works
+- [MCP course](https://anthropic.skilljar.com/introduction-to-model-context-protocol) — hands-on introduction to building and using MCP servers
+- [Build an MCP server](https://modelcontextprotocol.io/docs/develop/build-server) — official MCP development docs
 
 ## Quick start
 
@@ -179,6 +224,7 @@ Plugins declare their MCP dependencies in `.mcp.json` files. When you install a 
 /plugin install cogni-visual@insight-wave
 /plugin install cogni-claims@insight-wave
 /plugin install cogni-consulting@insight-wave
+/plugin install cogni-website@insight-wave
 /plugin install cogni-help@insight-wave
 ```
 
@@ -201,25 +247,26 @@ The workplace combines Claude Code with [Obsidian](https://obsidian.md/) for per
 ```
 insight-wave/
 ├── .claude-plugin/
-│   └── marketplace.json                    # Marketplace manifest (12 plugins)
+│   └── marketplace.json                    # Marketplace manifest (13 plugins)
 ├── docs/                                   # User documentation
 │   ├── getting-started.md                  # Installation and first steps
 │   ├── ecosystem-overview.md               # Plugin landscape and data flow
-│   ├── plugin-guide/                       # Per-plugin deep dives (12 guides)
+│   ├── plugin-guide/                       # Per-plugin deep dives (13 guides)
 │   ├── workflows/                          # Cross-plugin pipeline guides (5 workflows)
 │   ├── architecture/                       # Design philosophy, plugin anatomy, ER diagram
 │   └── contributing/                       # Plugin development guide
 ├── cogni-claims/                           # Claim verification
-├── cogni-copywriting/                      # Copywriting toolkit
 ├── cogni-consulting/                       # Double Diamond orchestrator
-├── cogni-research/                         # Multi-agent research reports
+├── cogni-copywriting/                      # Copywriting toolkit
+├── cogni-help/                             # Help hub: courses, guide, workflows, troubleshoot
 ├── cogni-marketing/                        # B2B marketing content engine
 ├── cogni-narrative/                        # Story arc narrative transformation
 ├── cogni-portfolio/                        # Portfolio messaging & planning
+├── cogni-research/                         # Multi-agent research reports
 ├── cogni-sales/                            # B2B sales pitch generation
-├── cogni-help/                             # Help hub: courses, guide, workflows, troubleshoot
 ├── cogni-trends/                           # Trend scouting & reporting
 ├── cogni-visual/                           # Visual deliverables
+├── cogni-website/                          # Multi-page customer websites
 ├── cogni-workspace/                        # Workspace orchestrator
 ├── cogni-portfolio-evals/                  # Eval harness (not a marketplace plugin)
 ├── CLA.md                                  # Contributor License Agreement
@@ -241,18 +288,19 @@ Plugins follow the [Claude Code plugin standard](https://code.claude.com/docs/en
 |--------|-----------|--------|--------|--------------|
 | [cogni-research](cogni-research/README.md) | Research | 3 | 8 | Multi-agent web research with parallel section researchers, five report types, and claims-verified review loops |
 | [cogni-trends](cogni-trends/README.md) | Trend Intelligence | 6 | 9 | TIPS trend scouting with bilingual DE/EN research, investment theme modeling, and reusable industry catalogs |
-| [cogni-portfolio](cogni-portfolio/README.md) | Portfolio | 18 | 17 | IS/DOES/MEANS portfolio positioning with eight industry taxonomies, competitive analysis, and market sizing |
+| [cogni-portfolio](cogni-portfolio/README.md) | Portfolio | 19 | 18 | IS/DOES/MEANS portfolio positioning with eight industry taxonomies, competitive analysis, and market sizing |
 | [cogni-marketing](cogni-marketing/README.md) | Content | 11 | 3 | B2B marketing content engine — 16 formats across thought leadership, demand gen, lead gen, sales enablement, ABM |
 | [cogni-copywriting](cogni-copywriting/README.md) | Content | 4 | 2 | Professional copywriting with 7 messaging frameworks, 5 stakeholder personas, and arc-aware polishing |
 | [cogni-narrative](cogni-narrative/README.md) | Content | 3 | 3 | Story arc narrative transformation using 8 frameworks with quality scoring and derivative format adaptation |
 | [cogni-sales](cogni-sales/README.md) | Sales | 1 | 4 | Corporate Visions Why Change pitch generation for named customers or market segments |
 | [cogni-consulting](cogni-consulting/README.md) | Consulting | 7 | 1 | Double Diamond consulting orchestrator with 8 vision classes and Lean Canvas authoring |
 | [cogni-visual](cogni-visual/README.md) | Visual | 11 | 17 | Slide decks, journey maps, solution architectures, web narratives, and poster storyboards from narratives |
+| [cogni-website](cogni-website/README.md) | Website | 5 | 3 | Multi-page customer websites from portfolio, marketing, and research content with shared navigation and theming |
 | [cogni-claims](cogni-claims/README.md) | Quality | 2 | 2 | Source verification — catches misquotations, unsupported conclusions, and stale data in sourced claims |
 | [cogni-help](cogni-help/README.md) | Platform | 7 | 1 | 12-course curriculum, plugin discovery, workflow templates, troubleshooting, and cheatsheets |
 | [cogni-workspace](cogni-workspace/README.md) | Platform | 4 | 0 | Shared foundation — env vars, theme management, plugin discovery, workspace health, Obsidian integration |
 
-**77 skills, 67 agents** across the ecosystem.
+**83 skills, 71 agents** across the ecosystem.
 
 See [Cross-Plugin Data Flow](docs/er-diagram.md) for how data flows between plugins, or browse the [full documentation](docs/getting-started.md).
 

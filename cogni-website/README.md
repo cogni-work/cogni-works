@@ -153,7 +153,11 @@ cogni-website/
 | cogni-marketing | No | Blog posts, demand-generation articles, lead-generation landing pages |
 | cogni-trends | No | Trend report with investment themes for an Insights page |
 | cogni-research | No | Research reports as whitepapers for a Resources page |
-| cogni-visual | No | Pencil MCP access for AI-generated hero imagery (via hero-renderer agent) |
+| cogni-visual | No | Pencil MCP access for AI-generated hero imagery (indirect — via hero-renderer agent) |
+
+## Contributing
+
+Contributions welcome — page templates, navigation patterns, theme integration, and documentation. See the [insight-wave contribution guide](https://github.com/cogni-work/insight-wave/blob/main/CONTRIBUTING.md) for guidelines.
 
 ## Custom development
 
@@ -161,8 +165,8 @@ Need a custom page type, CMS integration, or a domain-specific website template?
 
 ## License
 
-[AGPL-3.0](LICENSE)
+[AGPL-3.0](LICENSE) — see [CONTRIBUTING.md](CONTRIBUTING.md) for contribution terms.
 
 ---
 
-Built by [cogni-work](https://cogni-work.ai) — AI-powered consulting
+Built by [cogni-work](https://cogni-work.ai) — open-source tools for consulting intelligence.

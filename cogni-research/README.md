@@ -171,7 +171,7 @@ cogni-research/
 |--------|----------|---------|
 | cogni-claims | No | Claims verification loop in `verify-report` — extracts and checks claims against source URLs |
 | cogni-visual | No | Visual enrichment and format export via `enrich-report` — themed HTML with charts, optional PDF/DOCX |
-| cogni-workspace | No | Theme selection for visual exports (consumed via cogni-visual:enrich-report) |
+| cogni-workspace | No | Theme selection for visual exports (indirect — consumed via cogni-visual:enrich-report) |
 | cogni-narrative | No | Downstream — user invokes `/narrative` on research output for arc-driven executive summary |
 | cogni-copywriting | No | Downstream — user invokes copywriter on narrative output for arc-aware executive polish |
 

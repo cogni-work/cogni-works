@@ -155,7 +155,7 @@ Each portfolio project lives in `cogni-portfolio/{slug}/` with typed JSON files 
 
 ```
 cogni-portfolio/
-├── .claude-plugin/               Plugin manifest (v0.9.61)
+├── .claude-plugin/               Plugin manifest (v0.9.68)
 ├── templates/                    8 pluggable industry taxonomy templates
 │   ├── b2b-ict/                  Enterprise ICT (8 dims, 57 cats)
 │   ├── b2b-saas/                 B2B SaaS (8 dims, 47 cats)
@@ -169,7 +169,7 @@ cogni-portfolio/
 ├── agents/                       18 delegation agents
 ├── references/
 │   └── data-model.md             Full entity schema and project structure reference
-└── scripts/                      9 utility scripts
+└── scripts/                      10 utility scripts
 ```
 
 ## Dependencies

@@ -119,7 +119,7 @@ cogni-claims/
 │   └── source-inspector.md       Browser-based passage highlighter
 ├── commands/                     1 slash command
 │   └── claims.md                 Entry point for all six modes
-└── claims-workspace/             Local runtime state (claims.json, sources, history)
+└── claims-workspace/             Dev workspace (evals, skill snapshots)
 ```
 
 ## Dependencies
@@ -130,6 +130,7 @@ cogni-claims is standalone — it provides a verification service that other plu
 |--------|----------|---------|
 | cogni-trends | No | Trend reports submit claims for verification via the claim-entity contract |
 | cogni-portfolio | No | Portfolio propositions submit claims for verification |
+| cogni-research | No | Research reports submit claims extracted from drafts via verify-report |
 | cogni-consulting | No | Consulting deliverables submit claims for pre-publish verification |
 
 ## Contributing

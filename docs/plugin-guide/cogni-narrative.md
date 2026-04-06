@@ -10,7 +10,7 @@ Story arc-driven narrative transformation for the insight-wave ecosystem.
 
 cogni-narrative sits in the composition layer of the insight-wave pipeline: after research is collected and before content is polished or visualised. Its job is to impose narrative structure on unstructured input — research syntheses, analyses, TIPS trend reports, competitive landscapes — so the output reads as a deliberate argument rather than an information dump.
 
-The plugin provides seven story arc frameworks. Each framework is a sequence of named elements (for example: Why Change → Why Now → Why You → Why Pay) with defined rhetorical intent, evidence requirements, and transition patterns between elements. When you run `/narrative`, the skill reads your source files, proposes the best-fit arc, and writes a ~1,675-word insight summary structured around it. The output file (`insight-summary.md`) carries YAML frontmatter with an `arc_id` field that downstream plugins (cogni-copywriting, cogni-visual) use to apply arc-aware processing.
+The plugin provides eight story arc frameworks. Each framework is a sequence of named elements (for example: Why Change → Why Now → Why You → Why Pay) with defined rhetorical intent, evidence requirements, and transition patterns between elements. When you run `/narrative`, the skill reads your source files, proposes the best-fit arc, and writes a ~1,675-word insight summary structured around it. The output file (`insight-summary.md`) carries YAML frontmatter with an `arc_id` field that downstream plugins (cogni-copywriting, cogni-visual) use to apply arc-aware processing.
 
 ### When to reach for this plugin
 

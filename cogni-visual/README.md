@@ -141,7 +141,12 @@ cogni-visual/                              # 10 skills · 17 agents · 5 command
     ├── big-block-layouts.md              # block sizing, tier bands, connection routing
     ├── web-layouts.md                    # section types and design tokens
     ├── storyboard-layouts.md             # poster dimensions and zone anatomy
-    └── brief-review-perspectives.md      # 5 perspective sets for stakeholder review
+    ├── brief-review-perspectives.md      # 5 perspective sets for stakeholder review
+    ├── EXAMPLE_BRIEF.md                  # annotated presentation brief example
+    ├── EXAMPLE_BIG_PICTURE_BRIEF.md      # annotated big-picture brief example
+    ├── EXAMPLE_BIG_BLOCK_BRIEF.md        # annotated big-block brief example
+    ├── EXAMPLE_STORYBOARD_BRIEF.md       # annotated storyboard brief example
+    └── EXAMPLE_WEB_BRIEF.md              # annotated web narrative brief example
 ```
 
 ## Dependencies

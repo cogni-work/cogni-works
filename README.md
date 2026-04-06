@@ -148,7 +148,7 @@ Plugins declare their MCP dependencies in `.mcp.json` files. When you install a 
 |------------|---------|---------|---------|
 | excalidraw | [cogni-visual](cogni-visual/README.md), [cogni-portfolio](cogni-portfolio/README.md) | Diagram and journey map rendering | Auto-installed via plugin `.mcp.json` (npx) |
 | excalidraw_sketch | [cogni-visual](cogni-visual/README.md) | Optional sketch composition | Auto-installed via plugin `.mcp.json` (remote URL) |
-| browsermcp | [cogni-claims](cogni-claims/README.md), [cogni-help](cogni-help/README.md), [cogni-website](cogni-website/README.md), [cogni-workspace](cogni-workspace/README.md) | Browser automation, claim verification, issue filing, website preview | Auto-installed via plugin `.mcp.json` (npx) |
+| claude-in-chrome | [cogni-claims](cogni-claims/README.md), [cogni-help](cogni-help/README.md), [cogni-website](cogni-website/README.md), [cogni-workspace](cogni-workspace/README.md) | Browser automation, claim verification, issue filing, website preview, theme extraction | Manual — install Claude-in-Chrome extension in Chrome |
 | pencil | [cogni-visual](cogni-visual/README.md) | Web narrative and storyboard rendering | Manual — open [Pencil](https://pencil.dev) desktop app |
 
 ### Learn more

@@ -2,7 +2,7 @@
 name: manage-themes
 description: >-
   Manage visual design themes for the workspace — extract themes from live
-  websites (via browsermcp), PowerPoint templates, or presets, then store and apply
+  websites (via claude-in-chrome), PowerPoint templates, or presets, then store and apply
   them to all visual outputs (slides, documents, diagrams, reports). Also audits
   and improves existing themes: contrast/accessibility checks, palette harmony,
   typography pairing, and completeness review. Use this skill whenever the user
@@ -16,7 +16,7 @@ description: >-
   that site", this skill applies. Also triggers on "brand guidelines", "design
   system", "brand identity", or "visual standards".
 version: 0.3.0
-allowed-tools: Read, Write, Edit, Glob, Grep, Bash, WebSearch, Skill, mcp__browsermcp__browser_navigate, mcp__browsermcp__browser_snapshot, mcp__browsermcp__browser_screenshot, mcp__browsermcp__browser_click
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash, WebSearch, Skill, mcp__claude-in-chrome__navigate, mcp__claude-in-chrome__read_page, mcp__claude-in-chrome__computer, mcp__claude-in-chrome__tabs_create_mcp, mcp__claude-in-chrome__tabs_context_mcp, mcp__claude-in-chrome__get_page_text
 ---
 
 # Manage Themes
@@ -33,7 +33,7 @@ Before any operation, resolve the workspace themes directory:
 2. Otherwise fall back to `{workspace}/cogni-workspace/themes/`
 3. If the themes directory does not exist, create it (and `_template/` inside it) before proceeding
 
-If browsermcp tools are unavailable, inform the user upfront and suggest PPTX extraction or theme-factory presets as alternatives.
+If claude-in-chrome tools are unavailable, inform the user upfront and suggest PPTX extraction or theme-factory presets as alternatives.
 
 ## Theme Storage
 
@@ -87,17 +87,17 @@ Present each theme with its name (directory name) and first line description fro
 
 ### 3. Grab Theme from Website
 
-Extract a visual theme from a live website using browsermcp (Playwright headless). This produces a brand-accurate theme.md from visual inspection and page analysis.
+Extract a visual theme from a live website using claude-in-chrome (the user's Chrome browser). This produces a brand-accurate theme.md from visual inspection and page analysis.
 
-**Requirements**: browsermcp tools (`mcp__browsermcp__*`). Before attempting website extraction, try `mcp__browsermcp__browser_navigate` to `about:blank`. If unavailable, inform the user that browsermcp is required and suggest using theme-factory presets or PPTX extraction instead.
+**Requirements**: claude-in-chrome tools (`mcp__claude-in-chrome__*`). Before attempting website extraction, try `mcp__claude-in-chrome__tabs_context_mcp` to verify availability. If unavailable, inform the user that the Claude-in-Chrome extension is required and suggest using theme-factory presets or PPTX extraction instead.
 
 **Workflow**:
 
-1. Navigate to the target URL using `browser_navigate`
-2. Take a screenshot using `browser_screenshot` for visual reference
-3. Use `browser_snapshot` to read the page's accessibility tree — extract visible
-   text styles, color descriptions, and structural patterns
-4. Analyze the screenshot visually to identify:
+1. Open a new tab using `tabs_create_mcp` — never hijack the user's active tab
+2. Navigate to the target URL using `navigate`
+3. Use `read_page` to get the page's visual structure and content
+4. Use `get_page_text` to extract text styles and structural patterns
+5. Analyze the page to identify:
    - Primary/secondary/accent colors from headers, buttons, CTAs
    - Font families from headings and body text
    - Background colors and surface patterns

@@ -343,15 +343,15 @@ always sees the full draft before it goes to GitHub.
 
 ### Exercise
 
-Before starting, check if browsermcp is available and the user is logged into GitHub:
+Before starting, check if claude-in-chrome is available and the user is logged into GitHub:
 
-1. Try `mcp__browsermcp__browser_navigate` to `https://github.com` — if the tool
-   is not available, the cogni-help plugin's `.mcp.json` may not have loaded.
-   Guide the user to verify the plugin is installed.
-2. Use `mcp__browsermcp__browser_snapshot` to check login state — look for a
-   logged-in indicator (profile menu, avatar) vs a "Sign in" link.
-3. If not logged in, walk the user through signing into GitHub via browsermcp
-   or suggest using a Personal Access Token for headless environments.
+1. Try `mcp__claude-in-chrome__tabs_context_mcp` — if the tool is not available,
+   the Claude-in-Chrome extension may not be installed or active.
+   Guide the user to install the extension in Chrome.
+2. Open a new tab with `mcp__claude-in-chrome__tabs_create_mcp`, navigate to
+   `https://github.com`, and use `mcp__claude-in-chrome__read_page` to check
+   login state — look for a logged-in indicator (profile menu, avatar) vs a "Sign in" link.
+3. If not logged in, ask the user to sign into GitHub in their Chrome browser.
 
 Once the browser is connected and logged in, ask the user to file their first issue:
 

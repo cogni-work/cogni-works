@@ -48,7 +48,7 @@
     {
       "name": "cogni-workspace",
       "source": "./cogni-workspace",
-      "version": "0.4.4",
+      "version": "0.4.5",
       "description": "Lean workspace orchestrator for insight-wave marketplace plugins. Manages shared foundation (env vars, settings), theme management, theme picker, plugin discovery, workspace health, and Obsidian vault integration.",
       "keywords": [
         "workspace",
@@ -108,7 +108,7 @@
     {
       "name": "cogni-help",
       "source": "./cogni-help",
-      "version": "0.2.17",
+      "version": "0.2.18",
       "description": "Central help hub for the insight-wave ecosystem. Interactive courses (12-course curriculum), plugin discovery, cross-plugin workflow guides, troubleshooting, quick-reference cheatsheets, and GitHub issue filing.",
       "keywords": [
         "help",
@@ -177,7 +177,7 @@
     {
       "name": "cogni-website",
       "source": "./cogni-website",
-      "version": "0.1.5",
+      "version": "0.1.6",
       "description": "Generate multi-page customer websites from portfolio, marketing, trend, and research content produced by other insight-wave plugins. Assembles a deployable static site with shared navigation, theming, and responsive HTML.",
       "keywords": [
         "website",

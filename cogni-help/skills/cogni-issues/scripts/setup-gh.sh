@@ -4,7 +4,7 @@
 #
 # Returns platform information as JSON. The primary readiness check
 # (browser availability + GitHub login) is done by the skill itself
-# using browsermcp tools, not this script.
+# using claude-in-chrome tools, not this script.
 #
 # Compatible with bash 3.2 (macOS default).
 
@@ -28,6 +28,6 @@ cat <<EOF
 {
   "platform": "$PLATFORM",
   "check": "browser",
-  "instruction": "Use mcp__browsermcp__browser_navigate to github.com, then browser_snapshot to check login state."
+  "instruction": "Use mcp__claude-in-chrome__tabs_context_mcp to check browser availability, then tabs_create_mcp and navigate to github.com, then read_page to check login state."
 }
 EOF

@@ -3,7 +3,7 @@ name: cogni-issues
 version: 0.3.0
 description: |
   File and track GitHub issues (bugs, feature requests, change requests, questions) against
-  insight-wave ecosystem plugins using browser automation (browsermcp). Guides users
+  insight-wave ecosystem plugins using browser automation (claude-in-chrome). Guides users
   through a short consultation to capture the right details, resolves the target plugin's
   repository automatically, drafts issues from templates, creates them via browser automation on
   github.com, and tracks them locally.
@@ -14,7 +14,7 @@ description: |
   "something is wrong with {plugin}", "das Plugin funktioniert nicht", "Fehler in {plugin}",
   "set up GitHub issues", "configure issue filing", "ich kann kein Issue erstellen",
   or any complaint/suggestion about a specific plugin — even if they don't use the word "issue".
-allowed-tools: Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion, mcp__browsermcp__browser_navigate, mcp__browsermcp__browser_snapshot, mcp__browsermcp__browser_click, mcp__browsermcp__browser_type, mcp__browsermcp__browser_press_key, mcp__browsermcp__browser_wait, mcp__browsermcp__browser_screenshot
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion, mcp__claude-in-chrome__navigate, mcp__claude-in-chrome__read_page, mcp__claude-in-chrome__computer, mcp__claude-in-chrome__form_input, mcp__claude-in-chrome__tabs_create_mcp, mcp__claude-in-chrome__tabs_context_mcp, mcp__claude-in-chrome__get_page_text
 ---
 
 # Cogni Issues
@@ -24,10 +24,10 @@ user to understand the problem clearly, resolve which repository the plugin belo
 draft issues from templates, create them via browser cobrowsing on github.com, and track
 them locally.
 
-All GitHub operations use **browser automation via browsermcp** (Playwright headless) —
-navigating to github.com, reading pages, and filling forms directly. This works in any
-environment, including Cowork VMs. No Personal Access Tokens or `gh` CLI needed —
-browsermcp auto-installs via the plugin's `.mcp.json` when the plugin is loaded.
+All GitHub operations use **browser automation via claude-in-chrome** — navigating to
+github.com, reading pages, and filling forms directly in the user's Chrome browser.
+The user must have the Claude-in-Chrome extension installed and be logged into GitHub
+in Chrome. No Personal Access Tokens or `gh` CLI needed.
 
 **Important:** Do NOT use `gh` CLI commands — all GitHub operations go through
 browser automation. The `gh` CLI is not required and should not be invoked.
@@ -59,23 +59,23 @@ find the scripts, tell the user — don't guess paths.
 
 ## Browser Tools for GitHub
 
-All GitHub operations use browsermcp (Playwright headless) tools:
+All GitHub operations use claude-in-chrome tools:
 
 | Operation | Tools | URL Pattern |
 |-----------|-------|-------------|
-| Create issue | `browser_navigate`, `browser_snapshot`, `browser_click`, `browser_type` | `github.com/{owner}/{repo}/issues/new` |
-| List issues | `browser_navigate`, `browser_snapshot` | `github.com/{owner}/{repo}/issues` |
-| Search issues | `browser_navigate`, `browser_snapshot` | `github.com/{owner}/{repo}/issues?q={keywords}` |
-| Get issue | `browser_navigate`, `browser_snapshot` | `github.com/{owner}/{repo}/issues/{number}` |
+| Create issue | `tabs_create_mcp`, `navigate`, `read_page`, `computer`, `form_input` | `github.com/{owner}/{repo}/issues/new` |
+| List issues | `tabs_create_mcp`, `navigate`, `read_page` | `github.com/{owner}/{repo}/issues` |
+| Search issues | `tabs_create_mcp`, `navigate`, `read_page` | `github.com/{owner}/{repo}/issues?q={keywords}` |
+| Get issue | `tabs_create_mcp`, `navigate`, `read_page` | `github.com/{owner}/{repo}/issues/{number}` |
 
-The browsermcp tools are declared in the skill's `allowed-tools` and auto-loaded from
-the plugin's `.mcp.json`. No ToolSearch needed.
+The claude-in-chrome tools are declared in the skill's `allowed-tools`. Always open a
+new tab via `tabs_create_mcp` before navigating — never hijack the user's active tab.
 
 ## Modes
 
 | Mode | Triggers | Action |
 |------|----------|--------|
-| **setup** | browsermcp not available or user not logged into GitHub, "set up issues", "ich kann kein Issue erstellen" | Verify browsermcp, guide user to log into GitHub |
+| **setup** | claude-in-chrome not available or user not logged into GitHub, "set up issues", "ich kann kein Issue erstellen" | Verify claude-in-chrome, guide user to log into GitHub in Chrome |
 | **create** | reporting bugs, requesting features, filing change requests, asking plugin questions | Consult, resolve, draft, confirm, create, log |
 | **list** | "my issues", "show issues", "what have I filed" | Read local state, display grouped by plugin |
 | **status** | "check issue #N", "any updates on my issue" | Fetch from GitHub via browser, update local record |
@@ -85,57 +85,54 @@ Default to **list** when intent is unclear.
 
 ## Prerequisites
 
-Before any GitHub operation, verify browsermcp availability and GitHub login:
+Before any GitHub operation, verify claude-in-chrome availability and GitHub login:
 
-1. Try `mcp__browsermcp__browser_navigate` to `https://github.com`
-2. If the tool fails or is not found, tell the user: "This skill requires browsermcp.
-   Please ensure the cogni-help plugin is properly installed (it bundles browsermcp
-   via .mcp.json)."
-3. Use `mcp__browsermcp__browser_snapshot` to read the page
-4. Check the snapshot for a logged-in indicator (profile menu, avatar, or username).
+1. Try `mcp__claude-in-chrome__tabs_context_mcp` to check browser availability
+2. If the tool fails or is not found, tell the user: "This skill requires the
+   Claude-in-Chrome extension. Please install it in Chrome and ensure it's active."
+3. Open a new tab with `mcp__claude-in-chrome__tabs_create_mcp`
+4. Navigate to `https://github.com` with `mcp__claude-in-chrome__navigate`
+5. Use `mcp__claude-in-chrome__read_page` to check the page
+6. Check for a logged-in indicator (profile menu, avatar, or username).
    If the page shows a "Sign in" link instead, switch to **setup mode**
-5. If the user is logged in — proceed
+7. If the user is logged in — proceed
 
 ## Setup mode
 
-browsermcp runs headless (Playwright) — no visible browser window. The user needs
-to have GitHub credentials available for headless login.
+claude-in-chrome uses the user's Chrome browser directly — the user can see all
+actions and is already authenticated via their Chrome session.
 
-### 1. Check browsermcp availability
+### 1. Check claude-in-chrome availability
 
-Try `mcp__browsermcp__browser_navigate` to `about:blank`. If the tool is not
-available, inform the user that browsermcp is required and should auto-install
-when the cogni-help plugin is loaded via `.mcp.json`.
+Try `mcp__claude-in-chrome__tabs_context_mcp`. If the tool is not available,
+inform the user that the Claude-in-Chrome extension is required:
+
+> This skill requires the Claude-in-Chrome browser extension. Please install it
+> in Chrome and make sure it's active, then try again.
 
 ### 2. Check GitHub login
 
-Navigate to `https://github.com` and use `mcp__browsermcp__browser_snapshot` to
-read the page. Look for signs of a logged-in session (profile avatar, user menu)
-vs "Sign in" link.
+Open a new tab with `tabs_create_mcp`, navigate to `https://github.com`, and use
+`read_page` to check the page. Look for signs of a logged-in session (profile
+avatar, user menu) vs "Sign in" link.
 
-If the snapshot shows the user is already logged in, tell them they're all set
+If the page shows the user is already logged in, tell them they're all set
 and offer to file an issue.
 
 ### 3. If not logged in
 
-Navigate to `https://github.com/login` and guide the user through headless login:
+Ask the user to log into GitHub in their Chrome browser:
 
-1. Use `browser_snapshot` to find the username/email field
-2. Use `browser_click` on the username field, then `browser_type` to enter credentials
-3. Ask the user for their GitHub username/email (via AskUserQuestion)
-4. Click the password field, ask for password input
-5. Click "Sign in" and wait for redirect
+> You're not logged into GitHub in Chrome. Please sign in at github.com in your
+> browser, then let me know when you're ready.
 
-**Alternative:** If headless login is complex (2FA, SSO), suggest the user set up
-a GitHub Personal Access Token and use the `gh` CLI as a fallback:
-
-> Headless GitHub login requires credentials. If you have 2FA enabled, it may be
-> easier to use a Personal Access Token. Would you like me to guide you through that?
+Since claude-in-chrome uses the user's actual Chrome session, they handle
+authentication directly — including 2FA and SSO. No credential handling needed.
 
 ### 4. After login
 
-Re-check with `browser_snapshot` on `https://github.com`. If the page shows a
-logged-in state, confirm success. If still not logged in, suggest the PAT fallback.
+Re-check with `read_page` on `https://github.com`. If the page shows a
+logged-in state, confirm success.
 
 ### 5. Setup complete
 
@@ -174,8 +171,8 @@ Before investing in consultation and drafting, search for existing issues via th
 
 1. Navigate to `https://github.com/{owner}/{repo}/issues?q=is%3Aopen+{url_encoded_keywords}`
    using 2-3 keywords from the user's complaint
-2. Use `browser_snapshot` to read the search results page
-3. Look for issue titles and links in the accessibility snapshot
+2. Use `read_page` to read the search results page
+3. Look for issue titles and links in the page content
 
 If you find a likely match, show it to the user and ask: "This looks similar — is it
 the same problem, or something different?" If it's the same, link them to the existing
@@ -270,21 +267,19 @@ show the updated draft.
 
 ### 7. Create on GitHub via browser
 
-Navigate to `https://github.com/{owner}/{repo}/issues/new` and fill the form:
+Open a new tab with `tabs_create_mcp` and navigate to `https://github.com/{owner}/{repo}/issues/new`:
 
-1. Use `browser_snapshot` to verify the "New Issue" form has loaded — look for the
-   title input field and body textarea in the snapshot
-2. Use `browser_click` on the title field (by ref from snapshot), then `browser_type`
-   to enter the title
-3. Use `browser_click` on the body textarea, then `browser_type` to enter the full
-   drafted body
-4. **Labels** (optional): Use `browser_click` on the "Labels" gear icon in the sidebar,
-   wait for the label filter to appear, then `browser_type` the label name and
-   `browser_click` the matching label. Label mapping is in `references/issue-templates.md`.
+1. Use `read_page` to verify the "New Issue" form has loaded — look for the
+   title input field and body textarea
+2. Use `form_input` to enter the title in the title field
+3. Use `form_input` to enter the full drafted body in the body textarea
+4. **Labels** (optional): Use `computer` to click the "Labels" gear icon in the sidebar,
+   then use `form_input` to type the label name and `computer` to click the matching
+   label. Label mapping is in `references/issue-templates.md`.
    If the interaction fails, skip it — the issue can be created without labels.
-5. Use `browser_click` on the **"Submit new issue"** button
-6. Use `browser_wait` for navigation, then `browser_snapshot` to read the new issue
-   page. Extract `github_number` (from the URL or heading) and `github_url`
+5. Use `computer` to click the **"Submit new issue"** button
+6. Use `read_page` to read the new issue page. Extract `github_number` (from the
+   URL or heading) and `github_url`
 
 If creation fails entirely, show the error and suggest next steps — don't retry blindly.
 
@@ -321,38 +316,34 @@ If empty, suggest the create flow.
 ## Status mode
 
 1. Look up the issue in local state to get `owner`, `repo`, and `github_number`
-2. Navigate to `https://github.com/{owner}/{repo}/issues/{github_number}`
-3. Use `browser_snapshot` to read the issue page — extract state (open/closed), labels,
-   latest comments, and last update timestamp from the accessibility tree
+2. Open a new tab with `tabs_create_mcp` and navigate to `https://github.com/{owner}/{repo}/issues/{github_number}`
+3. Use `read_page` to read the issue page — extract state (open/closed), labels,
+   latest comments, and last update timestamp
 4. Update local record via `update-status`
 5. Show: state, latest comments summary, labels, last update
 
 ## Browse mode
 
-Navigate to the GitHub issue URL using `browser_navigate`. The URL follows
-the pattern: `https://github.com/<owner>/<repo>/issues/<number>`
+Open a new tab with `tabs_create_mcp` and navigate to the GitHub issue URL using
+`navigate`. The URL follows the pattern: `https://github.com/<owner>/<repo>/issues/<number>`
 
-If browsermcp is unavailable, provide the URL as text instead.
+If claude-in-chrome is unavailable, provide the URL as text instead.
 
 ## Edge cases
 
 - **2FA / SSO prompts**: If navigating to github.com triggers additional authentication,
-  the snapshot will show auth prompts instead of normal GitHub content. Detect this and
-  tell the user: "GitHub is asking for additional authentication. If you have 2FA
-  enabled, consider using a Personal Access Token with the `gh` CLI instead."
-- **Private repos**: browsermcp session cookies persist within the session, so private
-  repos work as long as the user has logged in during this session.
-- **GitHub HTML changes**: If expected form fields don't appear in the snapshot, use
-  `browser_screenshot` to visually inspect the page and adapt element references.
+  the user will see the prompts directly in their Chrome browser. Ask them to complete
+  authentication, then retry.
+- **Private repos**: claude-in-chrome uses the user's Chrome session, so private repos
+  work as long as the user is logged into GitHub with appropriate access.
+- **GitHub HTML changes**: If expected form fields don't appear in the page, use
+  `read_page` to inspect the current structure and adapt element references.
 - **Rate limiting**: If GitHub returns a rate-limit page, inform the user to wait a few
   minutes before retrying.
-- **Headless limitations**: browsermcp runs headless (no visible browser window). The user
-  cannot see what the browser is doing. Use `browser_screenshot` to share visual state
-  when the user needs to verify something.
 
 ## Scripts
 
-- **`scripts/setup-gh.sh`** — Platform info script. Returns JSON with OS detection. The primary readiness check is done via browsermcp tools (navigate + snapshot).
+- **`scripts/setup-gh.sh`** — Platform info script. Returns JSON with OS detection. The primary readiness check is done via claude-in-chrome tools (tabs_context_mcp + read_page).
 - **`scripts/resolve-plugin.sh`** — Resolves a plugin name to its GitHub repo by scanning marketplace.json files. All insight-wave plugins resolve to the monorepo `cogni-work/insight-wave`.
 - **`scripts/issue-store.sh`** — Local JSON state management (init, gen-id, add, read, update-status). The `add` command reads JSON from stdin for safety.
 

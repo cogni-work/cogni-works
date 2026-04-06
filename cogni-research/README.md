@@ -142,6 +142,7 @@ cogni-research/
 │   ├── research-report/
 │   │   ├── SKILL.md
 │   │   └── references/           Report types, sub-questions, review criteria, agent roles
+│   ├── research-report-workspace/ Dev workspace (evals, iterations — not a skill)
 │   └── verify-report/
 │       ├── SKILL.md
 │       └── references/           Claims integration, standalone mode, review criteria

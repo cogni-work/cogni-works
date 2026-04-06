@@ -164,6 +164,16 @@ Invoke via `/render-big-block` or by running the skill directly.
 
 ---
 
+### review-brief
+
+Evaluate a visual brief from three stakeholder perspectives — design quality, audience experience, and usability — before committing to the rendering step. Supports all five brief types: presentation-brief, big-picture-brief, web-brief, storyboard-brief, and big-block-brief. The skill dispatches the `brief-review-assessor` agent, which returns a structured verdict (accept/revise/reject) with a score and prioritized improvements. If set to auto-improve, it applies critical and high-priority fixes and re-runs the assessment (max 2 rounds).
+
+Reviewing at the brief stage is efficient: editing text is cheap, re-rendering an entire 1,100-element Excalidraw scene is not.
+
+**Example prompt:** "Review my presentation brief before rendering" or `/review-brief`
+
+---
+
 ### enrich-report
 
 Post-process any completed markdown report — from cogni-research, cogni-trends, or standalone — into a themed, self-contained HTML file with interactive Chart.js data visualizations and Excalidraw concept diagrams embedded as inline SVG. Supports optional PDF and DOCX export via the `formats` parameter. The `density` parameter controls enrichment volume: `none` for themed prose only, `minimal`/`balanced`/`rich` for progressively more data visualizations.
@@ -247,6 +257,14 @@ Use this to create a physical walkthrough asset for a client workshop or strateg
 | Web brief renders without images | Pencil MCP not connected | Verify Pencil MCP is running and accessible; the web agent requires it for `.pen` file rendering |
 | Slides are too long | Narrative too long for available slide count | Set a target slide count in your story-to-slides prompt, e.g., "max 10 slides" |
 | Station objects in Big Picture are generic | Brief uses vague object names | Edit `big-picture-brief.md` to give stations specific, concrete object names (e.g., "stamping press with conveyor belt" not "manufacturing equipment") |
+
+---
+
+## Known Issues
+
+**Chrome native messaging host conflict (KI-001):** When both Claude Desktop (Cowork) and Claude Code are installed, the `zone-reviewer` skill — which uses browser automation to visually inspect rendered big-picture canvases — may fail silently when browser tools are missing. The Chrome extension connects to one native host and ignores the other.
+
+**Workaround:** Toggle native messaging host configs by renaming the `.json` file for the unused product in `~/Library/Application Support/Google/Chrome/NativeMessagingHosts/` and restarting Chrome. Zone review can still proceed via Excalidraw MCP tool inspection without browser preview. See the [Known Issues Registry](../../cogni-docs/references/known-issues.md) for detailed steps.
 
 ---
 

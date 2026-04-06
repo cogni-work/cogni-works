@@ -30,10 +30,10 @@ A professional editing toolkit for the insight-wave ecosystem. Seven messaging f
 
 ## What it means for you
 
-- **Ship** executive-ready documents in one pass — BLUF framing, Pyramid structure, active voice, visual hierarchy applied together, not piecemeal.
-- **Stress-test** with 5 parallel personas to catch what a single reviewer misses — legal risks, technical gaps, marketing opportunities.
-- **Preserve** story arc structure — detects `arc_id` frontmatter and applies techniques tuned to each arc element (ratio framing for Why Change, forcing functions for Why Now).
-- **Write** in English or German — English uses Flesch scoring; German uses Wolf Schneider rules with Amstad scoring.
+- **Ship executive-ready documents in one pass** instead of 3-4 editing rounds — BLUF framing, Pyramid structure, active voice, and visual hierarchy applied together, not piecemeal.
+- **Stress-test with 5 parallel personas** to catch what a single reviewer misses — legal risks, technical gaps, marketing opportunities surfaced before the document leaves your desk.
+- **Protect your narrative investment.** Arc-aware polishing detects story arc structure and applies element-specific techniques — so a document that took cogni-narrative 30 minutes to compose doesn't lose its persuasive spine during editing.
+- **Publish in both markets.** English uses Flesch scoring; German uses Wolf Schneider rules with Amstad scoring — one polishing pass produces publication-ready text in either language.
 
 ## Installation
 

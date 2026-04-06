@@ -289,6 +289,14 @@ For automated pipeline orchestration, see [cogni-consulting](../plugin-guide/cog
 
 ---
 
+## Known Issues
+
+**Chrome native messaging host conflict (KI-001):** When both Claude Desktop (Cowork) and Claude Code are installed, the `cogni-issues` skill — which files GitHub issues via browser automation — may not have access to browser tools. The Chrome extension connects to one native host and ignores the other, so 16 of 19 browser automation tools can silently vanish.
+
+**Workaround:** Toggle native messaging host configs by renaming the `.json` file for the unused product in `~/Library/Application Support/Google/Chrome/NativeMessagingHosts/` and restarting Chrome. Alternatively, file issues using the `gh` CLI or manually on github.com. See the [Known Issues Registry](../../cogni-docs/references/known-issues.md) for detailed steps.
+
+---
+
 ## Extending This Plugin
 
 The highest-value contributions to cogni-help are:

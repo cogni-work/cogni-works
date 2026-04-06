@@ -198,6 +198,14 @@ See [../workflows/new-engagement.md](../workflows/new-engagement.md) for the ful
 
 ---
 
+## Known Issues
+
+**Chrome native messaging host conflict (KI-001):** When both Claude Desktop (Cowork) and Claude Code are installed, they register competing native messaging host configurations for the Chrome extension. The cobrowse feature — which opens a source URL in your browser and highlights the relevant passage — relies on these browser automation tools. If Claude Code's native host is active, cobrowse will be unavailable and claim verification falls back to web fetch only (no visual source inspection).
+
+**Workaround:** Toggle native messaging host configs by renaming the `.json` file for the unused product in `~/Library/Application Support/Google/Chrome/NativeMessagingHosts/` and restarting Chrome. See the [Known Issues Registry](../../cogni-docs/references/known-issues.md) for detailed steps.
+
+---
+
 ## Extending This Plugin
 
 cogni-claims is open-source under AGPL-3.0. The most useful contribution areas are:

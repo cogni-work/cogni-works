@@ -77,6 +77,10 @@ If you use Obsidian, the skill offers to scaffold the vault with a Terminal plug
 
 After initialization, run `/workspace-status` any time to check that environment variables are set correctly and all registered plugins are reachable.
 
+### Enterprise Deployment
+
+For enterprise environments with security and compliance requirements — API key management, SSO, GDPR data residency (EU via AWS Bedrock or Vertex AI), audit logging, and managed settings — see the [Deployment Guide](deployment-guide.md).
+
 ---
 
 ## Step 3: Your First Report with cogni-research

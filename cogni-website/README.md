@@ -69,12 +69,10 @@ Or describe what you want in natural language:
 
 ## What it means for you
 
-- **From content to website in one session.** Setup, plan, and build run sequentially with interactive checkpoints — the full pipeline completes in a single working session.
-- **Every page reflects current content.** Resume detects when source files have changed since the last build and flags exactly which pages need regeneration — no manual diff required.
-- **Theme-consistent across all pages.** One design-variables.json drives every color, font, and shadow token — reskinning the site means updating the theme, not editing individual pages.
-- **No dead links.** Preview validates all internal `href` attributes before you share the site — broken references are caught before deployment.
-- **Deployable anywhere.** The output is a self-contained static folder: open locally, serve with Python, or drop onto Netlify, Vercel, or S3 without build tooling.
-- **Grows with your content.** New products, articles, or trend reports are detected at resume time — add content to upstream plugins and rebuild only the affected pages.
+- **From portfolio data to live website in one session.** Setup, plan, and build run sequentially with interactive checkpoints — what would take a web team 2-3 days of content migration completes in a single working session.
+- **Always current, never stale.** Resume detects when source files have changed since the last build and regenerates only the affected pages — content updates in cogni-portfolio or cogni-marketing propagate to the website without starting from scratch.
+- **One theme, every page.** A single design-variables.json drives all color, font, and shadow tokens across the entire site — reskinning means updating one file, not editing 10+ HTML pages.
+- **Deploy anywhere without build tooling.** The output is a self-contained static folder with validated internal links — drop onto Netlify, Vercel, or S3 with zero configuration.
 
 ## Components
 

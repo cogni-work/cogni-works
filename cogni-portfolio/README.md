@@ -166,6 +166,7 @@ cogni-portfolio/
 │   ├── b2b-professional-services/ Professional Services (8 dims, 44 cats)
 │   └── b2b-opensource/           Commercial Open Source (8 dims, 50 cats)
 ├── skills/                       19 portfolio skills
+│   └── portfolio-canvas-workspace/ Dev workspace (evals, iterations — not a skill)
 ├── agents/                       18 delegation agents
 ├── references/
 │   └── data-model.md             Full entity schema and project structure reference

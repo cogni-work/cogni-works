@@ -265,6 +265,16 @@ Discover a company's service offerings by scanning public websites, classify aga
 
 ---
 
+### portfolio-lineage
+
+Track the relationship between input sources (uploaded documents, web research URLs, TIPS enrichment) and the portfolio entities derived from them. When a document is re-uploaded with updated content or a web source changes, this skill detects the drift, maps which entities are affected, and guides you through a layered refresh — features first, then propositions, then solutions — so nothing regenerates from stale inputs.
+
+Five operating modes: **status** (show source registry health), **check** (detect changed documents and URLs), **trace** (follow one entity back to its sources and forward to its dependents), **impact** (blast radius if a source changes), and **refresh** (guided cascade through the dependency chain).
+
+**Example prompt:** "What sources feed the cloud-monitoring feature, and what would be affected if I re-upload the pricing doc?"
+
+---
+
 ### trends-bridge
 
 Bidirectional integration with cogni-trends: import solution templates from a TIPS value model as portfolio features, or export portfolio context to enrich TIPS solution relevance scoring.

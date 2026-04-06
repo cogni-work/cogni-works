@@ -232,6 +232,14 @@ When you move a workspace to a different path, absolute paths stored in `.worksp
 
 ---
 
+## Known Issues
+
+**Chrome native messaging host conflict (KI-001):** When both Claude Desktop (Cowork) and Claude Code are installed, the `manage-themes` skill's live website theme extraction feature — which uses Chrome browser automation to capture computed styles from a URL — may not work. The Chrome extension connects to one native host and ignores the other, causing browser automation tools to silently vanish.
+
+**Workaround:** Toggle native messaging host configs by renaming the `.json` file for the unused product in `~/Library/Application Support/Google/Chrome/NativeMessagingHosts/` and restarting Chrome. Alternatively, extract themes from a PPTX template or create one from a preset — these paths do not require browser automation. See the [Known Issues Registry](../../cogni-docs/references/known-issues.md) for detailed steps.
+
+---
+
 ## Extending This Plugin
 
 cogni-workspace is a contribution-friendly surface for infrastructure improvements:

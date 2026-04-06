@@ -27,9 +27,9 @@ A process orchestrator for the insight-wave ecosystem. cogni-consulting doesn't 
 
 ## What it means for you
 
-- **Compete on Big-5 complexity with a boutique team.** A structured engagement methodology that coordinates 6 plugins means you can run a full strategic options analysis — from research through deliverables — without the headcount.
-- **Never lose context between sessions.** Engagement state, decisions, and method selections persist in `consulting-project.json`. Resume any engagement weeks later with full continuity.
-- **Stay in control.** Phase gates are advisory — the plugin recommends when a phase is ready to close, but you decide. Your consulting judgment drives the process, not a rigid checklist.
+- **Run Big-5 engagements with a boutique team.** A structured methodology coordinating 6 plugins means a full strategic options analysis — research, trend synthesis, portfolio modeling, verified deliverables — that would take a 4-person team 3-4 weeks completes in days.
+- **Resume any engagement with full context.** Engagement state, 40+ decisions, and method selections persist in `consulting-project.json`. Pick up an engagement weeks later without re-reading notes — the plugin knows what phase you're in, what's been decided, and what's next.
+- **Phase gates protect quality without blocking progress.** Each diamond transition checks 5-8 readiness criteria and warns about gaps — but you decide when to proceed. Zero rigid gatekeeping, full transparency on what's been covered and what hasn't.
 
 ## Installation
 
@@ -102,6 +102,7 @@ cogni-consulting/
 │   ├── consulting-setup/
 │   ├── consulting-discover/
 │   ├── consulting-define/
+│   ├── consulting-define-workspace/ Dev workspace (evals, iterations — not a skill)
 │   ├── consulting-develop/
 │   ├── consulting-deliver/
 │   ├── consulting-resume/

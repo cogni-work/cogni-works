@@ -31,9 +31,10 @@ A brief-based visual production pipeline. Five skills generate structured briefs
 
 ## What it means for you
 
-- **Narrative to slides in minutes.** Assertion headlines, number plays, speaker notes, and 11 slide layout types — generated from your polished narrative, not typed from scratch.
-- **Five visual formats from one pipeline.** Slides for the boardroom, journey maps for workshops, solution architectures from TIPS data, web pages for digital follow-up, poster storyboards for print.
-- **Brand-driven, not template-driven.** Visuals inherit colors, fonts, and identity from your cogni-workspace theme — every output looks like yours.
+- **Narrative to slides in under 10 minutes.** Assertion headlines, number plays, speaker notes, and 11 slide layout types — generated from your polished narrative, not typed from scratch. What used to take 1-2 days of formatting now takes one prompt.
+- **Five visual formats from one narrative.** Slides for the boardroom, journey maps for workshops, solution architectures from TIPS data, web pages for digital follow-up, poster storyboards for print — all from the same source document, no re-authoring.
+- **Brand-driven, not template-driven.** Visuals inherit colors, fonts, and identity from your cogni-workspace theme — reskinning 1,100+ elements means changing one theme file, not editing each object.
+- **Review before you render.** Three-stakeholder brief review catches weak headlines, missing CTAs, and layout mismatches before committing to a 20-minute rendering pipeline — cheaper to fix a line of text than re-render an Excalidraw scene.
 
 ## Installation
 

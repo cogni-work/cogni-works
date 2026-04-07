@@ -9,6 +9,7 @@ __pycache__/
 # Claude Code local settings
 .claude/settings.local.json
 .claude/worktrees/
+.claude/cogni-docs-state.json
 
 # macOS
 .DS_Store

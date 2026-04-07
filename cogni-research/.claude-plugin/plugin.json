@@ -24,6 +24,7 @@
     "market-localization",
     "multilingual",
     "dach",
-    "intent-based-search"
+    "intent-based-search",
+    "agent"
   ]
 }

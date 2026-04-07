@@ -23,18 +23,18 @@ A content generation bridge between strategy and execution in the insight-wave e
 
 1. **Setup** a marketing project linked to your cogni-portfolio and cogni-trends data — configure brand voice, select markets, map strategic themes to GTM paths → `marketing-project.json` → content-strategy, campaign-builder
 2. **Strategize** by building a 3D content matrix (market × GTM path × content type) with auto-recommended formats and priority sequencing → `content-matrix.json` → campaign-builder, content-calendar
-3. **Generate** content per type — thought leadership, demand generation, lead generation, sales enablement, or ABM — using parallel content-writer agents → `content-matrix.json` → campaign-builder, content-calendar
+3. **Generate** content per type — thought leadership, demand generation, lead generation, sales enablement, or ABM — using parallel content-writer agents → `content/{type}/*.md` → campaign-builder, content-calendar
 4. **Campaign** by orchestrating content into multi-channel campaigns with day-based timelines and phased funnel progression (attract → engage → convert) → `campaigns/*.json` → content-calendar, marketing-dashboard
-5. **Schedule** via a content calendar with publication dates, channel assignments, and cadence tracking → `campaigns/*.json` → content-calendar, marketing-dashboard
+5. **Schedule** via a content calendar with publication dates, channel assignments, and cadence tracking → `calendar/*.yaml` → marketing-dashboard
 6. **Track** coverage and progress through an interactive HTML dashboard → `output/dashboard.html` (interactive dashboard)
 
 ## What it means for you
 
-- **Strategy-connected content.** Every piece traces back to a TIPS theme and portfolio proposition — no generic filler.
-- **16 formats from one brief.** Blog posts, LinkedIn articles, whitepapers, battle cards, email nurtures, video scripts, carousels, and more — each adapted to channel conventions.
-- **Parallel generation.** Content-writer agents run concurrently, producing a full content batch in minutes rather than days.
-- **Coverage visibility.** The dashboard shows exactly where you have content and where you don't, across markets, themes, and funnel stages.
-- **Bilingual.** Full DE/EN support with language-specific brand voice configuration.
+- **Connect every piece to strategy.** 100% of generated content traces back to a TIPS theme and portfolio proposition — zero generic filler, no orphan posts.
+- **Generate 16 formats from one brief.** Blog posts, LinkedIn articles, whitepapers, battle cards, email nurtures, video scripts, carousels, and more — each adapted to channel conventions in a single content run.
+- **Run content batches in parallel.** Content-writer agents run concurrently, producing a full content batch in minutes instead of the days a sequential workflow takes.
+- **See coverage gaps at a glance.** The 3D dashboard (market × GTM path × content type) shows exactly which combinations have content and which don't — across all markets, themes, and funnel stages on one screen.
+- **Publish bilingual without re-authoring.** Full DE/EN support with language-specific brand voice configuration — one strategy, two languages, no manual translation pass.
 
 ## Installation
 

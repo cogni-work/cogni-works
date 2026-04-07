@@ -114,3 +114,11 @@ Three specialist agents handle the work that `website-build` orchestrates:
 | Resume routes to setup instead of the expected phase | `website-project.json` is missing or corrupt | Re-run `/website-setup`; existing plan and built pages are preserved and detected in the next plan/build run |
 | New products not appearing after content update | Pages built before the portfolio was updated | Run `/website-resume` — it compares source modification times and flags stale pages; confirm the targeted rebuild |
 | Blog or Insights page not proposed in the plan | cogni-marketing / cogni-trends not installed | Install the relevant plugins and re-run `/website-setup` to register the new sources before re-planning |
+
+---
+
+## Related guides
+
+- [Portfolio to Website workflow](../workflows/portfolio-to-website.md) — end-to-end pipeline from portfolio model to deployable site
+- [cogni-portfolio guide](cogni-portfolio.md) — building the portfolio model the website draws from
+- [cogni-workspace guide](cogni-workspace.md) — theme management that the site inherits

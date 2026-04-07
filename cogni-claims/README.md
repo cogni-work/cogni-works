@@ -33,7 +33,7 @@ A systematic claim-verification workflow for Claude Cowork. Other plugins genera
 If you ship research, reports, or any content that leans on sourced claims, this is your safety net before publish.
 
 - **Catch errors before they reach your audience.** Each claim is fetched against its cited source and checked for 5 deviation types — misquotation, unsupported conclusions, selective omission, data staleness, and source contradiction.
-- **Stay in control.** Deviation detection is LLM-based. Findings are assessments for you to review, not verdicts — you decide whether to correct, dispute, or accept each one.
+- **Stay in control.** Deviation detection is LLM-based, but every finding routes through one of three explicit decisions — correct, dispute, or accept. 100% of claims pass through human review before publish; the tool flags, you decide.
 - **Keep a paper trail.** Every claim, verification result, and resolution decision is stored as structured JSON — a complete audit trail from assertion to source to decision.
 
 ## Installation

@@ -175,7 +175,7 @@ The standard sequence for a sourced, verified report.
 4. Review verification results — accept, revise, or flag for manual review
 5. `output/report.md` is updated with verified content
 
-For extending this into a narrative and slides, see [../workflows/research-to-deliverables.md](../workflows/research-to-deliverables.md).
+For the full pipeline from research through claim verification to a polished report, see [../workflows/research-to-report.md](../workflows/research-to-report.md).
 
 ---
 

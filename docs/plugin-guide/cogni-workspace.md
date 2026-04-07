@@ -198,7 +198,7 @@ cogni-workspace is the foundation layer. It has no plugin dependencies. Every ot
 
 Total time: 10–15 minutes. After this, all installed plugins can resolve themes, env vars, and plugin paths without additional configuration.
 
-This workflow is detailed in [../workflows/full-onboarding.md](../workflows/full-onboarding.md).
+For an end-to-end onboarding example that wires workspace into a full project, see [../workflows/portfolio-to-website.md](../workflows/portfolio-to-website.md) or [../workflows/consulting-engagement.md](../workflows/consulting-engagement.md).
 
 ### Workflow 2: Diagnose why a plugin cannot find its theme
 

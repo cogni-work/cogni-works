@@ -31,9 +31,9 @@ Orchestrates the shared foundation that all insight-wave plugins depend on — e
 ## What it means for you
 
 - **One command to set up or update.** `manage-workspace` auto-detects mode, discovers installed plugins, generates env vars, settings, themes, and output styles — replacing 20+ minutes of manual scaffolding per project.
-- **Consistent theming across all visual output.** Slides, journey maps, web narratives, and dashboards inherit colors and fonts from a single theme definition — no per-plugin configuration.
+- **Consistent theming across all visual output.** Slides, journey maps, web narratives, and dashboards across 5+ visual plugins inherit colors and fonts from one theme file — reskinning the entire ecosystem is a single-file edit, not 5+ separate ones.
 - **Catch workspace drift before skills break.** Five-tier health diagnostics (foundation, env vars, plugin registry, themes, dependencies) surface mismatches and missing deps before they cause cryptic runtime failures.
-- **Safe updates with rollback.** `manage-workspace` backs up before modifying — if an update breaks something, restore the previous state in one step.
+- **Safe updates with rollback in seconds.** `manage-workspace` backs up before modifying — if an update breaks something, restore the previous state in one command, no manual file recovery.
 
 ## Installation
 

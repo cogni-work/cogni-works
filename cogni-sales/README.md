@@ -32,9 +32,9 @@ A pitch generation pipeline built on the Corporate Visions Why Change methodolog
 ## What it means for you
 
 - **Deal-specific in hours, not days.** The researcher agent handles web research, company analysis, and evidence gathering — you review and steer.
-- **Methodology-disciplined.** Every pitch follows the four Why Change phases with proper evidence structure. No phase gets skipped or diluted.
-- **Two modes.** Customer mode for named accounts (company-specific research). Segment mode for reusable pitches across a market vertical.
-- **Claims-verified.** Every factual claim is registered with source URLs. Optional cogni-claims integration verifies them before you present.
+- **Methodology-disciplined across 100% of pitches.** Every deck follows all four Why Change phases (Why Change → Why Now → Why You → Why Pay) with proper evidence structure — no phase skipped, no message diluted.
+- **Two modes, one engine.** Customer mode for named accounts (company-specific research). Segment mode for reusable pitches across a market vertical — one plugin covers both 1:1 and 1:many sales motions.
+- **Claims-verified before you present.** Every factual claim in the deck is registered with a source URL; optional cogni-claims integration verifies all of them in one pass — zero unsourced statistics in front of the customer.
 - **Resumable.** Interrupted pitches resume from the last completed phase. No lost work.
 
 ## Installation

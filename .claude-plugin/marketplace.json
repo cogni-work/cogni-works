@@ -13,7 +13,10 @@
         "claim-verification",
         "fact-checking",
         "source-validation",
-        "cobrowsing"
+        "deviation-detection",
+        "cross-plugin-contract",
+        "cobrowsing",
+        "agent"
       ]
     },
     {
@@ -28,7 +31,8 @@
         "strategic-foresight",
         "trend-panorama",
         "review",
-        "adapt"
+        "adapt",
+        "agent"
       ]
     },
     {
@@ -42,7 +46,8 @@
         "messaging-frameworks",
         "readability",
         "sales-copy",
-        "power-positions"
+        "power-positions",
+        "agent"
       ]
     },
     {
@@ -68,7 +73,8 @@
         "trends",
         "strategic-trends",
         "bilingual",
-        "trend-report"
+        "trend-report",
+        "agent"
       ]
     },
     {
@@ -83,14 +89,15 @@
         "fab",
         "sme",
         "propositions",
-        "packages"
+        "packages",
+        "agent"
       ]
     },
     {
       "name": "cogni-visual",
       "source": "./cogni-visual",
       "version": "1.7.3",
-      "description": "Transform polished narratives and structured data into visual deliverables — presentation briefs, slide decks, big picture journey maps, Big Block solution architecture diagrams, scrollable web narratives, poster storyboards, and visual assets. Supports Excalidraw, Pencil MCP, and PPTX rendering.",
+      "description": "Transform polished narratives and structured data into visual deliverables \u2014 presentation briefs, slide decks, big picture journey maps, Big Block solution architecture diagrams, scrollable web narratives, poster storyboards, and visual assets. Supports Excalidraw, Pencil MCP, and PPTX rendering.",
       "keywords": [
         "presentations",
         "slides",
@@ -102,7 +109,8 @@
         "excalidraw",
         "web",
         "storyboard",
-        "big-block"
+        "big-block",
+        "agent"
       ]
     },
     {
@@ -120,7 +128,8 @@
         "cheatsheet",
         "issues",
         "discovery",
-        "onboarding"
+        "onboarding",
+        "agent"
       ]
     },
     {
@@ -138,7 +147,8 @@
         "sales-enablement",
         "abm",
         "campaign",
-        "gtm"
+        "gtm",
+        "agent"
       ]
     },
     {
@@ -154,7 +164,8 @@
         "parallel-search",
         "review-loop",
         "deep-research",
-        "claims-verification"
+        "claims-verification",
+        "agent"
       ]
     },
     {
@@ -171,14 +182,15 @@
         "b2b",
         "corporate-visions",
         "acquisition",
-        "segment-pitch"
+        "segment-pitch",
+        "agent"
       ]
     },
     {
       "name": "cogni-website",
       "source": "./cogni-website",
       "version": "0.1.6",
-      "description": "Assembles multi-page customer websites from portfolio, marketing, trend, and research content produced by other insight-wave plugins — outputting a deployable static site with shared navigation, theming, and responsive HTML.",
+      "description": "Assembles multi-page customer websites from portfolio, marketing, trend, and research content produced by other insight-wave plugins \u2014 outputting a deployable static site with shared navigation, theming, and responsive HTML.",
       "keywords": [
         "website",
         "static-site",
@@ -188,7 +200,8 @@
         "html",
         "landing-page",
         "responsive",
-        "multi-page"
+        "multi-page",
+        "agent"
       ]
     },
     {
@@ -204,7 +217,8 @@
         "problem-framing",
         "solution-design",
         "phase-gated",
-        "cross-plugin"
+        "cross-plugin",
+        "agent"
       ]
     }
   ]

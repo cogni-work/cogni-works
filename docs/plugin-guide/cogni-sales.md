@@ -222,7 +222,7 @@ When a session ends before synthesis is complete:
 2. Confirm the resume summary: "Phases 1 and 2 complete. Resuming from Why You."
 3. The remaining phases run as normal
 
-See [../workflows/pitch-to-presentation.md](../workflows/pitch-to-presentation.md) for the full pitch-to-polished-deliverable pipeline.
+See [../workflows/portfolio-to-pitch.md](../workflows/portfolio-to-pitch.md) for the full portfolio-to-pitch-to-deck pipeline including cogni-visual rendering.
 
 ---
 

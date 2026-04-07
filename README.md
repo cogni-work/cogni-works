@@ -73,7 +73,7 @@ Each plugin implements an established framework (Corporate Visions, Double Diamo
 
 > "Build a customer website from our portfolio and marketing content with a Pencil-rendered hero"
 
-→ [Plugin guide](docs/plugin-guide/cogni-website.md)
+→ [Plugin guide](docs/plugin-guide/cogni-website.md) · [Portfolio to Website workflow](docs/workflows/portfolio-to-website.md)
 
 ### Platform & Quality
 
@@ -304,7 +304,7 @@ Plugins follow the [Claude Code plugin standard](https://code.claude.com/docs/en
 
 See [Cross-Plugin Data Flow](docs/er-diagram.md) for how data flows between plugins, or browse the [full documentation](docs/getting-started.md).
 
-Workflow guides: [Research to Report](docs/workflows/research-to-report.md) | [Portfolio to Pitch](docs/workflows/portfolio-to-pitch.md) | [Trends to Solutions](docs/workflows/trends-to-solutions.md) | [Consulting Engagement](docs/workflows/consulting-engagement.md) | [Content Pipeline](docs/workflows/content-pipeline.md)
+Workflow guides: [Research to Report](docs/workflows/research-to-report.md) | [Portfolio to Pitch](docs/workflows/portfolio-to-pitch.md) | [Portfolio to Website](docs/workflows/portfolio-to-website.md) | [Trends to Solutions](docs/workflows/trends-to-solutions.md) | [Consulting Engagement](docs/workflows/consulting-engagement.md) | [Content Pipeline](docs/workflows/content-pipeline.md)
 
 ## Contributing
 

@@ -1,6 +1,6 @@
 # cogni-visual
 
-A [Claude Cowork](https://claude.ai/cowork) plugin that transforms polished narratives into visual deliverables — slide decks, big-picture journey maps, Big Block solution architectures, scrollable web narratives, and printed poster storyboards.
+A [Claude Cowork](https://claude.ai/cowork) plugin that transforms polished narratives and structured data into visual deliverables — presentation briefs, slide decks, big-picture journey maps, Big Block solution architecture diagrams, scrollable web narratives, poster storyboards, and visual assets. Supports Excalidraw, Pencil MCP, and PPTX rendering.
 
 ## Why this exists
 
@@ -160,6 +160,7 @@ cogni-visual/                              # 10 skills · 17 agents · 5 command
 | cogni-trends | No | TIPS value-modeler data for Big Block solution architecture diagrams |
 | cogni-research | No | enrich-report detects research project configs for report-type-specific enrichment |
 | cogni-portfolio | No | enrich-report references portfolio-dashboard patterns for dashboard-style enrichment |
+| cogni-sales | No | story-to-slides integrates with why-change Phase 5 for sales-presentation slide rendering |
 | document-skills | No | PPTX rendering for slide briefs |
 | Excalidraw MCP | No | Canvas rendering for big-picture and Big Block diagrams (github.com/yctimlin/mcp_excalidraw) |
 | Pencil MCP | No | Canvas rendering for web narratives and poster storyboards (pencil.li) |

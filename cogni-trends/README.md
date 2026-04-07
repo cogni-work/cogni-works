@@ -61,12 +61,12 @@ If you need to stay ahead of industry trends for strategy, advisory, or portfoli
 
 - **Cover more ground, faster.** Persona-shaped bilingual web searches with preliminary grounding, adaptive budgets, and source quality tiering — executed in minutes.
 - **Score every candidate, not gut-feel.** Every candidate scored on impact, probability, strategic fit, source quality (CRAAP), and signal strength using Ansoff and Rogers frameworks.
-- **From trends to solutions.** T→I→P→S value paths bridge scouted trends to investment themes and portfolio-grounded solution blueprints — not just trend narratives.
+- **From trends to solutions.** T→I→P→S value paths bridge scouted trends into 3-7 investment themes per run, each with portfolio-grounded solution blueprints — not just trend narratives.
 - **Evidence-backed output.** Optional deep research (STORM-inspired) for high-value trends, structural review with cross-theme quality gates, and every quantitative claim has an inline citation you can verify.
-- **Polished visual output.** Reports finish as themed, interactive HTML with Chart.js dashboards and concept diagrams — ready to share, not just a markdown file.
-- **Cross-pursuit learning.** Industry catalogs accumulate curated solutions, SPIs, and metrics — each engagement improves the next.
-- **Multi-session workflow.** Resume any project mid-stream with full state recovery via `/trends-resume`.
-- **Research DACH natively.** German and English research queries, curated DACH institutional sources (industry associations, Fraunhofer, EUR-Lex), output in your chosen language.
+- **Polished visual output in one step.** Reports finish as themed, interactive HTML with 5+ Chart.js visualizations and concept diagrams — share-ready, not a raw markdown file you have to format yourself.
+- **Cross-pursuit learning.** Industry catalogs accumulate curated solutions, SPIs, and metrics across engagements — each pursuit gets +20-40% richer context from prior work.
+- **Multi-session workflow.** Resume any project mid-stream with full state recovery via `/trends-resume` — zero context loss between sessions.
+- **Research DACH natively.** Bilingual (DE/EN) queries against curated German institutional sources (VDMA, BITKOM, Fraunhofer, EUR-Lex) — 0 reliance on US-centric datasets, output in your chosen language.
 
 ## Installation
 

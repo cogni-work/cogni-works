@@ -268,7 +268,7 @@ cogni-consulting provides value even without any of the above plugins installed.
 6. Review the options; run `consulting-deliver` to score, build the business case, and produce the roadmap
 7. Run `consulting-export` to generate the client-ready deliverable package
 
-This is the `new-engagement` workflow described in [../workflows/new-engagement.md](../workflows/new-engagement.md).
+This is the full Double Diamond workflow described in [../workflows/consulting-engagement.md](../workflows/consulting-engagement.md).
 
 ### Workflow 2: Resume an engagement in a new session
 

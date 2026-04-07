@@ -1,6 +1,6 @@
 # cogni-narrative
 
-Story arc-driven narrative transformation plugin for [Claude Cowork](https://claude.ai/cowork). Transforms research syntheses, analyses, and structured content into compelling executive narratives using 8 story arc frameworks and 8 narrative techniques. Bilingual EN/DE.
+Story arc-driven narrative transformation plugin for [Claude Cowork](https://claude.ai/cowork). Transforms research syntheses, analyses, and structured content into compelling executive narratives using 8 story arc frameworks and 8 narrative techniques. Includes TIPS-native trend panorama, theme-thesis for investment theme narratives, and JTBD portfolio arcs for buyer-job-centric portfolio narratives. Narrative review scoring and derivative format adaptation (executive briefs, talking points, one-pagers). Bilingual EN/DE.
 
 ## Why this exists
 

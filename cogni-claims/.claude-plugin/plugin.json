@@ -12,6 +12,8 @@
     "fact-checking",
     "source-validation",
     "deviation-detection",
-    "cross-plugin-contract"
+    "cross-plugin-contract",
+    "cobrowsing",
+    "agent"
   ]
 }

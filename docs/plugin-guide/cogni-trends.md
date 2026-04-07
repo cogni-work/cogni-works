@@ -202,7 +202,7 @@ The standard four-stage sequence for a new industry engagement.
 4. `/trend-report` — CxO narrative with parallel theme writers, evidence enrichment, claims registry
 5. `/trends-catalog` — promote curated solutions to the industry catalog
 
-For the extended flow that connects trend output to portfolio messaging, see [../workflows/portfolio-trends-positioning.md](../workflows/portfolio-trends-positioning.md).
+For the extended flow that connects trend output to portfolio messaging and solution blueprints, see [../workflows/trends-to-solutions.md](../workflows/trends-to-solutions.md).
 
 ---
 

@@ -1,6 +1,6 @@
 # Ecosystem Overview
 
-insight-wave is a monorepo of 12 Claude Code plugins that cover the full consulting and B2B content pipeline: from raw research through strategy, content production, and visual delivery. This document describes how the plugins are organized, how data moves between them, and what infrastructure they share.
+insight-wave is a monorepo of 13 Claude Code plugins that cover the full consulting and B2B content pipeline: from raw research through strategy, content production, visual delivery, and website generation. This document describes how the plugins are organized, how data moves between them, and what infrastructure they share.
 
 For the canonical plugin descriptions, see the individual README files. For step-by-step workflows, see [docs/workflows/](workflows/).
 
@@ -8,7 +8,7 @@ For the canonical plugin descriptions, see the individual README files. For step
 
 ## Plugin Landscape
 
-The 12 plugins are grouped by the role they play in a typical engagement.
+The 13 plugins are grouped by the role they play in a typical engagement.
 
 ### Foundation
 
@@ -25,7 +25,7 @@ Run `/manage-workspace` once per project directory before using any other plugin
 | [cogni-research](../cogni-research/README.md) | Runs a parallel multi-agent web research pipeline (STORM-inspired). Decomposes a topic into sub-questions, dispatches one agent per question, aggregates sources, writes a structured report with inline citations, and verifies claims. |
 | [cogni-trends](../cogni-trends/README.md) | Scouts industry trends using the Smarter Service Trendradar framework and bridges them to portfolio solutions via the TIPS content framework (Trends, Implications, Possibilities, Solutions). Produces CxO-ready trend reports with investment theme modeling. Bilingual EN/DE, DACH-focused. |
 
-See [Research to Narrative workflow](workflows/research-to-narrative.md) for how research output moves downstream.
+See [Research to Report workflow](workflows/research-to-report.md) for how research output moves downstream.
 
 ### Strategy and Portfolio
 
@@ -40,8 +40,8 @@ See the [Double Diamond Engagement workflow](workflows/consulting-engagement.md)
 
 | Plugin | What it does |
 |--------|-------------|
-| [cogni-narrative](../cogni-narrative/README.md) | Transforms research reports and structured content into executive narratives using 6 story arc frameworks and 8 narrative techniques. Includes a TIPS-native arc for trend panoramas and a theme-thesis arc for investment narratives. |
-| [cogni-copywriting](../cogni-copywriting/README.md) | Polishes documents using messaging frameworks (BLUF, Pyramid, SCQA, STAR, PSB, FAB). Runs parallel stakeholder persona reviews, readability optimization, JSON field polishing, and arc contract audit against cogni-narrative output. Bilingual EN/DE. |
+| [cogni-narrative](../cogni-narrative/README.md) | Transforms research reports and structured content into executive narratives using 8 story arc frameworks and 8 narrative techniques. Includes a TIPS-native arc for trend panoramas, a theme-thesis arc for investment narratives, and a JTBD portfolio arc for buyer-job-centric portfolio narratives. |
+| [cogni-copywriting](../cogni-copywriting/README.md) | Polishes documents using messaging frameworks (BLUF, Pyramid, SCQA, STAR, PSB, FAB, Inverted Pyramid). Runs parallel stakeholder persona reviews, readability optimization, JSON field polishing, and arc contract audit against cogni-narrative output. Bilingual EN/DE. |
 | [cogni-marketing](../cogni-marketing/README.md) | Bridges cogni-trends strategic themes and cogni-portfolio propositions into channel-ready content across 16 formats — thought leadership, demand generation, lead generation, sales enablement, and ABM. Bilingual DE/EN. |
 | [cogni-sales](../cogni-sales/README.md) | Generates B2B sales pitches using the Corporate Visions Why Change methodology. Supports named customer deals (deal-specific) and reusable segment pitches. Builds on cogni-portfolio data with optional TIPS strategic enrichment. Bilingual DE/EN. |
 
@@ -50,6 +50,14 @@ See the [Double Diamond Engagement workflow](workflows/consulting-engagement.md)
 | Plugin | What it does |
 |--------|-------------|
 | [cogni-visual](../cogni-visual/README.md) | Converts polished narratives and structured data into presentation briefs, slide decks, big-picture journey maps, Big Block solution architecture diagrams, scrollable web narratives, and poster storyboards. Supports Excalidraw, Pencil MCP, and PPTX rendering. |
+
+### Website Generation
+
+| Plugin | What it does |
+|--------|-------------|
+| [cogni-website](../cogni-website/README.md) | Assembles multi-page customer websites from portfolio, marketing, trend, and research content produced by other plugins — outputting a deployable static site with shared navigation, theming, and responsive HTML. |
+
+See [Portfolio to Website workflow](workflows/portfolio-to-website.md) for how portfolio and theme data combine into a deployable site.
 
 ### Verification
 
@@ -61,7 +69,7 @@ See the [Double Diamond Engagement workflow](workflows/consulting-engagement.md)
 
 | Plugin | What it does |
 |--------|-------------|
-| [cogni-help](../cogni-help/README.md) | Central help hub: 11-course interactive curriculum, plugin discovery, cross-plugin workflow guides, troubleshooting, quick-reference cheatsheets, and GitHub issue filing. |
+| [cogni-help](../cogni-help/README.md) | Central help hub: 12-course interactive curriculum, plugin discovery, cross-plugin workflow guides, troubleshooting, quick-reference cheatsheets, and GitHub issue filing. |
 
 ---
 
@@ -107,6 +115,21 @@ cogni-sales
   → produces: Why Change sales pitch per customer or segment
 ```
 
+For website generation, portfolio and workspace data drive page assembly:
+
+```
+cogni-portfolio
+  → produces: propositions, features, customer profiles
+
+cogni-workspace
+  → provides: brand theme, workspace environment variables
+
+cogni-website
+  → consumes: portfolio entities + theme
+  → produces: deployable static site (service pages, homepage, themed assets)
+  → optional enrichment: cogni-marketing (blog/lead-gen pages), cogni-trends (insights pages)
+```
+
 For consulting engagements, cogni-consulting acts as the orchestrator:
 
 ```
@@ -127,7 +150,7 @@ All plugins depend on cogni-workspace for three shared concerns:
 
 **Environment variables.** `manage-workspace` generates `.claude/settings.local.json`, which Claude Code auto-injects at session start. Plugins resolve sibling plugin paths via these variables rather than hardcoding paths.
 
-**Theme management.** Visual plugins (cogni-visual, cogni-narrative, cogni-marketing) call the `pick-theme` skill from cogni-workspace to resolve a brand theme. Themes live in `{workspace}/cogni-workspace/themes/` and are shared across all plugins that produce HTML or visual output.
+**Theme management.** Visual plugins (cogni-visual, cogni-narrative, cogni-marketing, cogni-website) call the `pick-theme` skill from cogni-workspace to resolve a brand theme. Themes live in `{workspace}/cogni-workspace/themes/` and are shared across all plugins that produce HTML or visual output.
 
 **Session hooks.** cogni-workspace installs an `on-session-start.sh` hook that sources workspace environment variables and validates plugin availability each time a Claude Code session opens.
 
@@ -174,13 +197,22 @@ Each plugin that runs a multi-step workflow stores its work under a project dire
     implications/
     report.md
 
-  cogni-portfolio/data/{slug}/
+  cogni-portfolio/{slug}/
     products/
     markets/
     propositions/
+    features/
+    solutions/
+    competitors/
+    customers/
+    portfolio.json
+
+  cogni-website/{slug}/
+    website-plan.json
+    website/
 ```
 
-Downstream plugins reference upstream output by path. For example, cogni-narrative accepts `--source-path` pointing at a cogni-research output directory.
+Downstream plugins reference upstream output by path. For example, cogni-narrative accepts `--source-path` pointing at a cogni-research output directory. cogni-website reads proposition, feature, and customer files directly from the cogni-portfolio project directory.
 
 ### Wikilinks
 
@@ -190,25 +222,107 @@ All cross-references within plugin output use workspace-relative wikilinks (`[[c
 
 ## Plugin Interface Summary
 
-A conformant insight-wave plugin requires these components:
+This section documents the conventions a new plugin must follow to be compatible with the insight-wave ecosystem. The conventions below are grounded in existing plugins (cogni-portfolio, cogni-workspace, and others) — not aspirational guidelines.
 
-| Component | Path | Purpose |
-|-----------|------|---------|
-| Plugin manifest | `.claude-plugin/plugin.json` | Declares name, version, skills, agents, and hooks |
-| Skills | `skills/{name}/SKILL.md` | Markdown instructions that Claude Code loads as callable skills |
-| Agents | `agents/{name}/AGENT.md` | Markdown instructions for sub-agents dispatched by skills |
-| Marketplace entry | Root `.claude-plugin/marketplace.json` | Registers the plugin for `/plugin install` discovery |
+### Required directory structure
+
+A conformant plugin must place files at these paths relative to its plugin root:
+
+```
+{plugin-name}/
+  .claude-plugin/
+    plugin.json           # required: plugin manifest
+  skills/
+    {skill-name}/
+      SKILL.md            # required: skill instructions loaded by Claude Code
+  README.md               # required: canonical plugin description
+```
 
 Optional but standard:
 
-| Component | Path | Purpose |
-|-----------|------|---------|
-| Hooks | `hooks/hooks.json` + shell scripts | Session lifecycle integration (SessionStart, PreToolCall) |
-| Scripts | `scripts/*.sh` or `scripts/*.py` | Bash/Python utilities; must be stdlib-only |
-| References | `references/*.md` or `references/*.json` | Reference data loaded by skills and agents |
-| CLAUDE.md | `CLAUDE.md` | Development guide loaded into Claude's context when working inside the plugin directory |
+```
+{plugin-name}/
+  agents/
+    {agent-name}/
+      AGENT.md            # sub-agent instructions dispatched by skills
+  hooks/
+    hooks.json            # session lifecycle hook declarations
+    *.sh                  # hook scripts referenced by hooks.json
+  scripts/
+    *.sh / *.py           # utility scripts (stdlib-only, no external dependencies)
+  references/             # static reference data loaded by skills and agents
+    *.md / *.json
+  templates/              # reusable templates (e.g., taxonomy templates, entity schemas)
+    */template.md
+  CLAUDE.md               # development guide loaded when working inside the plugin directory
+```
+
+### Plugin manifest (`plugin.json`)
+
+The manifest at `.claude-plugin/plugin.json` declares the plugin to Claude Code. The root `marketplace.json` at the repo root registers the plugin for `/plugin install` discovery — each entry maps `name` to a relative `source` path:
+
+```json
+{
+  "name": "cogni-example",
+  "source": "./cogni-example",
+  "version": "1.0.0",
+  "description": "One-sentence description of what this plugin does.",
+  "keywords": ["relevant", "keywords", "agent"]
+}
+```
+
+### Slug convention
+
+Plugins generate slugs from user-provided names by converting to lowercase kebab-case: `"Acme Cloud Services"` → `acme-cloud`. Slugs serve as directory names under the plugin's project directory and as unique identifiers in entity filenames. Keep slugs short, human-readable, and stable — downstream plugins reference upstream project directories by slug.
+
+### Data contracts between plugins
+
+Plugins share data through the filesystem, not through direct calls. The pattern:
+
+1. **Upstream plugin** writes structured output into its project directory: `{workspace}/{plugin-name}/{slug}/`
+2. **Downstream plugin** reads that directory by path, either passed explicitly (e.g., `--source-path`) or resolved via environment variables set by cogni-workspace.
+3. **Environment variables** (generated by `manage-workspace` into `.claude/settings.local.json`) give each plugin a `_ROOT` and `_PLUGIN` variable so paths resolve correctly regardless of workspace location.
+
+For example, cogni-website reads from `$COGNI_PORTFOLIO_ROOT/{slug}/propositions/` and `$COGNI_WORKSPACE_ROOT/themes/`. cogni-narrative accepts `--source-path` pointing at a cogni-research output directory.
+
+### Skill instructions (`SKILL.md`)
+
+Each skill is a markdown file at `skills/{name}/SKILL.md`. The YAML frontmatter declares the skill's name, description, and allowed tools:
+
+```yaml
+---
+name: skill-name
+description: |
+  When to activate this skill. Written for Claude Code's trigger matching —
+  include synonyms and natural-language phrasings the user might say.
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Agent, Skill
+---
+```
+
+The body contains the skill's instructions in plain markdown. Skills reference sibling resources via `$CLAUDE_PLUGIN_ROOT` (the environment variable pointing to the plugin root, set by cogni-workspace). Scripts are called via `bash $CLAUDE_PLUGIN_ROOT/scripts/...`.
+
+### Plugin discovery via marketplace.json
+
+The root `.claude-plugin/marketplace.json` is the single discovery manifest for the entire monorepo. When a user runs `/plugin marketplace add cogni-work/insight-wave`, Claude Code reads this file to enumerate available plugins. Each plugin entry points to its `source` directory, from which Claude Code reads the individual `plugin.json` manifest.
+
+To register a new plugin, add an entry to `marketplace.json` and ensure the plugin directory contains a valid `plugin.json`.
 
 For a detailed walkthrough of plugin structure, see [plugin-anatomy](architecture/plugin-anatomy.md). For how to build a new plugin, see [plugin-development](contributing/plugin-development.md).
+
+---
+
+## Workflow Guides
+
+Six end-to-end workflow guides document the cross-plugin pipelines:
+
+| Workflow | Pipeline | End deliverable |
+|----------|----------|-----------------|
+| [Research to Report](workflows/research-to-report.md) | cogni-research → cogni-claims → cogni-copywriting | Verified, polished research report |
+| [Portfolio to Pitch](workflows/portfolio-to-pitch.md) | cogni-portfolio → cogni-sales → cogni-visual | Sales presentation with slides |
+| [Portfolio to Website](workflows/portfolio-to-website.md) | cogni-portfolio → cogni-workspace → cogni-website | Deployable multi-page customer website |
+| [Trends to Solutions](workflows/trends-to-solutions.md) | cogni-trends → cogni-portfolio (bridge) → cogni-visual | Ranked solutions with Big Block diagram |
+| [Consulting Engagement](workflows/consulting-engagement.md) | cogni-consulting → (orchestrates all others) | Full consulting deliverable package |
+| [Content Pipeline](workflows/content-pipeline.md) | cogni-marketing → cogni-narrative → cogni-visual | Multi-channel marketing content |
 
 ---
 

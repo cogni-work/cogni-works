@@ -1,6 +1,6 @@
 # cogni-research
 
-Multi-agent research report generator for [Claude Cowork](https://claude.ai/cowork). Decomposes topics, dispatches parallel web researchers, compiles cited reports, and runs claims-verified review loops — from quick overviews to deep recursive explorations.
+Multi-agent research report generator for [Claude Cowork](https://claude.ai/cowork). STORM-inspired editorial workflow with parallel section research and claims-verified review loops. Five report types (basic, detailed, deep, outline, resource) and three source modes (web, local documents, hybrid) — from quick overviews to deep recursive explorations.
 
 ## Why this exists
 

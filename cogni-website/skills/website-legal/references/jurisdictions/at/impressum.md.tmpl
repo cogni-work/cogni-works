@@ -1,0 +1,93 @@
+---
+title: Impressum
+slug: impressum
+language: de
+template_version: 1.0.0
+jurisdiction: at
+---
+
+# Impressum
+
+## Offenlegung gemäß § 5 ECG und § 25 MedienG
+
+{{legal_entity.legal_name}}
+{{legal_entity.address.street}}
+{{legal_entity.address.postal_code}} {{legal_entity.address.city}}
+{{legal_entity.address.country}}
+
+## Unternehmensgegenstand
+
+{{company.description}}
+
+## Vertretungsbefugte
+
+{{responsible_person.name}}, {{responsible_person.role}}
+
+## Kontakt
+
+Telefon: {{contact.phone}}
+E-Mail: {{contact.email}}
+
+## Firmenbuch
+
+Firmenbuchnummer: {{legal_entity.register_number}}
+Firmenbuchgericht: {{legal_entity.register_court}}
+
+{{#if legal_entity.vat_id}}
+## Umsatzsteuer-Identifikationsnummer
+
+UID-Nummer: {{legal_entity.vat_id}}
+{{/if}}
+
+## Mitgliedschaften
+
+Wirtschaftskammer Österreich (WKÖ), Fachgruppe gemäß Tätigkeit.
+
+{{#if supervisory_authority.name}}
+## Aufsichtsbehörde / Gewerbebehörde
+
+{{supervisory_authority.name}}
+{{supervisory_authority.address}}
+{{supervisory_authority.url}}
+{{/if}}
+
+## Anwendbare Rechtsvorschriften
+
+Gewerbeordnung: [www.ris.bka.gv.at](https://www.ris.bka.gv.at)
+
+{{#if professional_regulations.title}}
+## Berufsbezeichnung und berufsrechtliche Regelungen
+
+Berufsbezeichnung: {{professional_regulations.title}}
+Verliehen in: {{professional_regulations.awarded_in}}
+Berufsrechtliche Regelungen: {{professional_regulations.rules_url}}
+{{/if}}
+
+## Verantwortlich für den Inhalt nach § 24 MedienG
+
+{{responsible_person.name}}
+{{responsible_person.address.full}}
+
+## Blattlinie / Grundlegende Richtung gemäß § 25 MedienG
+
+Information über das Unternehmen, seine Produkte und Dienstleistungen sowie Inhalte zu fachlichen Themen im Tätigkeitsbereich des Unternehmens.
+
+## Online-Streitbeilegung (OS-Plattform)
+
+Die Europäische Kommission stellt unter [{{dispute_resolution.os_platform_link}}]({{dispute_resolution.os_platform_link}}) eine Plattform zur Online-Streitbeilegung bereit, an die sich Verbraucher wenden können.
+
+## Verbraucherstreitbeilegung
+
+Wir sind nicht verpflichtet und nicht bereit, an einem Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.
+
+## Haftungsausschluss
+
+Trotz sorgfältiger inhaltlicher Kontrolle übernehmen wir keine Haftung für die Inhalte externer Links. Für den Inhalt der verlinkten Seiten sind ausschließlich deren Betreiber verantwortlich.
+
+## Urheberrecht
+
+Die Inhalte dieser Website sind, soweit nicht anders angegeben, urheberrechtlich geschützt. Eine Verwertung außerhalb der engen Grenzen des Urheberrechtsgesetzes bedarf der vorherigen Zustimmung des jeweiligen Rechteinhabers.
+
+---
+
+*Stand: {{generated_at_human}}*

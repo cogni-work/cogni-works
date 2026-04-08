@@ -1,0 +1,81 @@
+---
+title: Datenschutzerklärung
+slug: datenschutz
+language: de
+template_version: 1.0.0
+jurisdiction: ch
+---
+
+# Datenschutzerklärung
+
+Gestützt auf das revidierte Schweizer Bundesgesetz über den Datenschutz (revDSG) und – soweit anwendbar – die EU-Datenschutz-Grundverordnung (DSGVO) informieren wir Sie über die Bearbeitung Ihrer Personendaten.
+
+## 1. Verantwortlicher
+
+Verantwortlicher im Sinne des revDSG (und ggf. Art. 4 Nr. 7 DSGVO) ist:
+
+{{data_protection.controller_name}}
+{{legal_entity.address.street}}
+{{legal_entity.address.postal_code}} {{legal_entity.address.city}}
+{{legal_entity.address.country}}
+
+E-Mail: {{data_protection.controller_contact}}
+Telefon: {{contact.phone}}
+
+{{#if data_protection.dpo_required}}
+## 2. Datenschutzberater
+
+{{data_protection.dpo_name}}
+E-Mail: {{data_protection.dpo_contact}}
+{{/if}}
+
+## 3. Bearbeitung von Personendaten
+
+Wir bearbeiten Personendaten ausschliesslich im Rahmen der gesetzlichen Bestimmungen und nur soweit, wie dies für die Erbringung unserer Leistungen, die Sicherheit unserer Website oder zur Erfüllung gesetzlicher Pflichten erforderlich ist. Wir bearbeiten Personendaten in der Regel mit der Einwilligung der betroffenen Personen, zur Erfüllung eines Vertrages mit ihnen oder gestützt auf überwiegende berechtigte Interessen.
+
+## 4. Server-Logdaten
+
+Beim Aufruf unserer Website werden automatisch folgende Daten in Logdateien gespeichert:
+
+- IP-Adresse
+- Datum und Uhrzeit der Anfrage
+- Aufgerufene Seite
+- Browser und Betriebssystem
+- Referrer
+
+Die Speicherung dient dem Betrieb und der Sicherheit der Website.
+
+## 5. Cookies
+
+Diese Website verwendet ausschliesslich technisch notwendige Cookies. Details siehe [Cookie-Hinweis](/pages/cookies.html).
+
+{{#if data_protection.uses_analytics}}
+## 6. Web-Analyse
+
+Wir setzen Werkzeuge zur statistischen Auswertung der Besucheraktivität ein, ausschliesslich nach Ihrer Einwilligung.
+{{/if}}
+
+{{#if data_protection.uses_external_fonts}}
+## 7. Externe Schriften
+
+Diese Website lädt Schriftarten lokal vom eigenen Server. Es findet keine Verbindung zu Servern externer Anbieter statt.
+{{/if}}
+
+{{#if data_protection.uses_external_embeds}}
+## 8. Externe Inhalte
+
+Wir betten Inhalte externer Anbieter ein. Beim Aufruf werden Daten an den jeweiligen Anbieter übermittelt. Details finden Sie im Cookie-Hinweis.
+{{/if}}
+
+## Ihre Rechte
+
+Sie haben das Recht auf Auskunft über die von uns bearbeiteten Personendaten, das Recht auf Berichtigung, Löschung oder Einschränkung der Bearbeitung, das Recht auf Datenübertragbarkeit sowie das Recht, der Bearbeitung zu widersprechen.
+
+Sie können jederzeit eine Beschwerde beim Eidgenössischen Datenschutz- und Öffentlichkeitsbeauftragten (EDÖB) einreichen:
+[www.edoeb.admin.ch](https://www.edoeb.admin.ch)
+
+Kontakt zur Ausübung Ihrer Rechte: {{data_protection.controller_contact}}
+
+---
+
+*Stand: {{generated_at_human}}*

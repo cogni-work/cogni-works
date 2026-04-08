@@ -113,6 +113,32 @@ Typical structure for a company website:
 | Lösungen | Solutions page, key market pages |
 | Unternehmen | Über uns, Kontakt, Karriere |
 | Ressourcen | Blog, Fallstudien, Downloads |
+| Rechtliches | Impressum, Datenschutz, Cookies (only when `legal_links` is set in `website-plan.json`) |
+
+### Footer Legal Column
+
+When `website-plan.json` contains a non-empty top-level `legal_links` array, the `site-assembler` renders an additional footer column titled **Rechtliches** (DE/AT/CH/`de`) or **Legal** (EU/`en`). The column appears after all content columns, just before the brand column. Markup reuses the standard `site-footer__column` pattern:
+
+```html
+<div class="site-footer__column site-footer__column--legal">
+  <h3 class="site-footer__heading">Rechtliches</h3>
+  <ul class="site-footer__links">
+    <li><a href="/pages/impressum.html">Impressum</a></li>
+    <li><a href="/pages/datenschutz.html">Datenschutz</a></li>
+    <li><a href="/pages/cookies.html">Cookies</a></li>
+  </ul>
+</div>
+```
+
+Legal pages are linked **only** from this column. They never appear in the header navigation — `website-plan` enforces this by marking each `legal-*` page with `footer_only: true`.
+
+---
+
+## Cookie Notice
+
+A static, non-interactive bottom bar shown on every page when at least one legal page exists in the plan. Pure HTML+CSS, no JavaScript, no dismiss button. This notice is correct only for sites that set strictly necessary cookies — sites with analytics or marketing cookies need a real consent manager (out of scope).
+
+The full HTML, language variants, and CSS for the cookie notice live in `${CLAUDE_PLUGIN_ROOT}/libraries/legal-pages.md` (Cookie notice partial section). The `site-assembler` writes the rendered partial to `output/website/.partials/cookie-notice.html`, and the `page-generator` injects it before the closing `</body>` tag of every generated page.
 
 ---
 

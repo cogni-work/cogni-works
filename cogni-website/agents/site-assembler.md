@@ -77,7 +77,7 @@ If `google_fonts_import` is present in design variables, include it at the top o
 
 #### Base Styles
 
-Include reset, typography scale, container, grid system, button styles, section themes, component styles. Use the CSS patterns from `${plugin_root}/libraries/navigation-patterns.md` for header, footer, and breadcrumb styles. Use the class reference from `${plugin_root}/libraries/page-templates.md` for section and component styles.
+Include reset, typography scale, container, grid system, button styles, section themes, component styles. Use the CSS patterns from `${plugin_root}/libraries/navigation-patterns.md` for header, footer, and breadcrumb styles. Use the class reference from `${plugin_root}/libraries/page-templates.md` for section and component styles. If the plan contains any `legal-*` page entries, also include the legal-page CSS classes (`.legal-page`, `.legal-header`, `.legal-body`, `.legal-table`, `.legal-todo`, `.container--narrow`, `.cookie-notice`) from `${plugin_root}/libraries/legal-pages.md`.
 
 Key CSS components to generate:
 - Reset and box-sizing
@@ -119,10 +119,14 @@ Read the `navigation` section from website-plan.json. Generate two HTML strings:
 - Column links
 - Brand column with tagline
 - Copyright line with current year
+- **Legal column** (only if `website_plan.legal_links` exists and is non-empty): a dedicated `site-footer__column` with the heading "Rechtliches" (DE/AT/CH/`de`) or "Legal" (EU/`en`) and one `<li><a>` per entry in `legal_links`. The legal column always renders **after** the company-info columns. Do not include legal pages in any other footer column.
 
-Write these as reference files for the page-generator to include:
+**Cookie notice partial** — if `website_plan.legal_links` is non-empty (i.e. the user ran `website-legal`), also write the static cookie-notice partial to `output/website/.partials/cookie-notice.html` using the HTML and language rules from `${plugin_root}/libraries/legal-pages.md` (Cookie notice partial section). The notice is non-interactive: pure HTML+CSS, no JavaScript, no dismiss button. The `page-generator` agent injects this partial into every rendered page right before the closing `</body>` tag. If `legal_links` is missing or empty, do not write the partial — pages will simply omit the cookie notice.
+
+Write the partials as reference files for the page-generator to include:
 - `output/website/.partials/header.html`
 - `output/website/.partials/footer.html`
+- `output/website/.partials/cookie-notice.html` (only if legal pages exist)
 
 ### 4. Generate Sitemap
 
@@ -160,6 +164,10 @@ Note: link validation is deferred to post-build. At this point only CSS, nav par
   "css_size_kb": 12,
   "sitemap_pages": 14,
   "header_nav_items": 5,
-  "footer_columns": 2
+  "footer_columns": 3,
+  "legal_links": 3,
+  "cookie_notice_partial": true
 }
 ```
+
+`footer_columns` includes the legal column when present. `legal_links` is the count of links in the footer legal column (0 if none). `cookie_notice_partial` is `true` when `output/website/.partials/cookie-notice.html` was written.

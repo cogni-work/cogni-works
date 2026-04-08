@@ -11,6 +11,7 @@ Good content doesn't automatically become a good website. Turning portfolio prop
 | Content scattered across plugins | Portfolio, marketing, trends, and research outputs live in separate project directories with no shared structure | No clear path from "we have content" to "we have a website" |
 | Theme inconsistency | Without shared CSS variables, each page accumulates its own inline styles | Inconsistent brand identity, hard to reskin |
 | Manual page assembly | Turning product JSON and proposition markdown into valid, responsive HTML requires per-page decisions | Hours of layout work per update, pages drift out of sync |
+| Missing legal pages | Sites published in DE/AT/CH/EU need Impressum, Datenschutzerklärung, and Cookie-Hinweis with statutory disclosures | Without them, fines under TMG §5, ECG §5, and DSGVO Art. 83 — and a takedown notice as the first warning |
 | No resumability | Partially built sites have no status tracking | Rebuilds start from scratch; incremental updates are error-prone |
 
 This plugin automates the mechanical parts — CSS generation, navigation scaffolding, parallel page rendering, and hero imagery — while keeping content and structure decisions with you.
@@ -26,9 +27,10 @@ A static-site generation pipeline purpose-built for the insight-wave ecosystem. 
 3. **Plan site structure** — deep-scan source content; propose pages (home, about, products, solutions, blog, case studies, insights, resources, contact); present a page table for interactive approval; build navigation with dropdown support
 4. **Generate shared infrastructure** — produce a complete `style.css` from design variables; render `header.html`, `footer.html`, and `sitemap.xml` shared across all pages
 5. **Render homepage hero** — optionally use Pencil MCP to generate an AI-illustrated hero background image matched to the company's industry and theme palette; falls back to CSS gradient if unavailable
-6. **Build all pages in parallel** — launch page-generator agents concurrently for each page in the plan; each agent reads source files, applies page-type HTML templates, injects shared navigation, and writes output HTML
-7. **Validate and preview** — verify completeness and link integrity; open the site in the default browser; suggest a local HTTP server for full navigation testing
-8. **Resume across sessions** — detect project phase from existing files; compare source modification times against built HTML; flag new entities or newly discovered upstream plugins; recommend targeted partial rebuilds
+6. **Generate jurisdiction-specific legal pages** — capture the legal entity, responsible person, register entry, VAT ID, and data-protection contact; render Impressum, Datenschutzerklärung, and Cookie-Hinweis from reviewable boilerplate templates for DE, AT, CH, or EU; wire them into the footer legal column
+7. **Build all pages in parallel** — launch page-generator agents concurrently for each page in the plan; each agent reads source files, applies page-type HTML templates, injects shared navigation, and writes output HTML
+8. **Validate and preview** — verify completeness and link integrity; open the site in the default browser; suggest a local HTTP server for full navigation testing
+9. **Resume across sessions** — detect project phase from existing files; compare source modification times against built HTML; flag new entities or newly discovered upstream plugins; recommend targeted partial rebuilds
 
 ## Installation
 
@@ -42,8 +44,9 @@ This plugin is part of the [insight-wave monorepo](https://github.com/cogni-work
 ## Quick start
 
 ```
-/website-setup     # Discover sources, select theme, configure the project
+/website-setup     # Discover sources, select theme, configure the project, capture legal foundation
 /website-plan      # Plan site structure and map content to pages
+/website-legal     # Generate Impressum, Datenschutz, Cookie-Hinweis for DE/AT/CH/EU
 /website-build     # Generate all pages and assemble the site
 /website-preview   # Validate links and open in browser
 ```
@@ -80,6 +83,7 @@ Or describe what you want in natural language:
 |-----------|------|--------------|
 | `website-setup` | skill | Discover content sources, validate requirements, select theme, scaffold project, write `website-project.json` |
 | `website-plan` | skill | Deep-scan content, propose page structure, map content to page sections, write `website-plan.json` |
+| `website-legal` | skill | Generate Impressum/Datenschutz/Cookies from jurisdiction-specific templates (DE/AT/CH/EU), patch `website-plan.json` with footer-only legal entries and `legal_links` |
 | `website-build` | skill | Orchestrate CSS generation, hero rendering, and parallel page generation from the plan |
 | `website-preview` | skill | Validate built site file completeness and internal links; open in browser |
 | `website-resume` | skill | Detect project phase, check for source changes and new upstream plugins, route to the correct next skill |
@@ -93,11 +97,21 @@ Or describe what you want in natural language:
 cogni-website/
 ├── .claude-plugin/               Plugin manifest (v0.1.6)
 │   └── plugin.json
-├── skills/                       5 workflow skills
+├── skills/                       6 workflow skills
 │   ├── website-setup/
-│   │   └── SKILL.md              Source discovery, theme selection, project scaffolding
+│   │   └── SKILL.md              Source discovery, theme selection, project scaffolding, legal foundation
 │   ├── website-plan/
 │   │   └── SKILL.md              Deep content scan, page proposal, navigation design
+│   ├── website-legal/
+│   │   ├── SKILL.md              Jurisdiction-driven legal page generation
+│   │   └── references/
+│   │       ├── legal-config-schema.md    Field definitions and per-jurisdiction requirement matrix
+│   │       ├── placeholder-schema.md     Supported {{placeholders}} and conditional blocks
+│   │       └── jurisdictions/
+│   │           ├── de/           Impressum, Datenschutz, Cookies (TMG/DSGVO)
+│   │           ├── at/           Impressum, Datenschutz, Cookies (ECG/MedienG/DSGVO)
+│   │           ├── ch/           Impressum, Datenschutz, Cookies (revDSG)
+│   │           └── eu/           Legal Notice, Privacy Policy, Cookies (GDPR/ePrivacy)
 │   ├── website-build/
 │   │   └── SKILL.md              Build orchestration, parallel page generation
 │   ├── website-preview/
@@ -110,16 +124,22 @@ cogni-website/
 │   └── site-assembler.md         Shared CSS, navigation partials, sitemap
 └── libraries/                    Shared reference files
     ├── page-templates.md         HTML patterns and CSS class reference per page type
-    ├── navigation-patterns.md    Header, footer, breadcrumb, mobile menu patterns
-    └── EXAMPLE_WEBSITE_PLAN.md   Annotated website-plan.json example
+    ├── legal-pages.md            HTML pattern for legal-* pages and the static cookie notice
+    ├── navigation-patterns.md    Header, footer, breadcrumb, mobile menu, footer legal column
+    └── EXAMPLE_WEBSITE_PLAN.md   Annotated website-plan.json example (incl. legal_config + legal_links)
 ```
 
 **Runtime output** (written to the website project directory, not inside the plugin):
 
 ```
 {company}-website/
-├── website-project.json          Configuration: sources, theme, build options
-├── website-plan.json             Page blueprint: specs, slugs, source mappings
+├── website-project.json          Configuration: sources, theme, build options, legal_config
+├── website-plan.json             Page blueprint: specs, slugs, source mappings, legal_links
+├── content/
+│   └── legal/
+│       ├── impressum.md          Rendered from website-legal templates
+│       ├── datenschutz.md        Rendered from website-legal templates
+│       └── cookies.md            Rendered from website-legal templates
 └── output/
     ├── design-variables.json     Color/font tokens derived from selected theme
     └── website/
@@ -132,13 +152,17 @@ cogni-website/
         │   │   └── {slug}.html   Product detail pages
         │   ├── blog/
         │   │   └── {slug}.html   Blog post pages
-        │   └── kontakt.html
+        │   ├── kontakt.html
+        │   ├── impressum.html    Legal: imprint
+        │   ├── datenschutz.html  Legal: privacy policy
+        │   └── cookies.html      Legal: cookie notice
         ├── images/
         │   └── hero-bg.png       AI-generated hero background (Pencil MCP)
         ├── .partials/
         │   ├── header.html
         │   ├── footer.html
-        │   └── hero.html
+        │   ├── hero.html
+        │   └── cookie-notice.html  Static cookie notice injected on every page
         └── sitemap.xml
 ```
 

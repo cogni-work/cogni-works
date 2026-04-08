@@ -78,6 +78,7 @@ Based on discovered content, propose a page list. Apply these rules:
 | `resources` | Research reports exist AND `include_resources: true` | Conditional |
 | `custom` | User requests ad-hoc pages | Per user request |
 | `contact` | Always | Always |
+| `legal-imprint` / `legal-privacy` / `legal-cookies` | Managed by `website-legal` skill | Footer-only — never proposed by `website-plan` directly |
 
 Present the proposed structure as a table:
 
@@ -142,9 +143,22 @@ For each page, determine:
 
 Use the page type definitions from `${CLAUDE_PLUGIN_ROOT}/libraries/page-templates.md` as reference for section lists.
 
+### 6a. Merge Legal Pages (if any)
+
+Check the project directory for `legal-pages.json` — this is the queue file written by `website-legal` when it runs before `website-plan`. If it exists:
+
+1. Read it. The structure mirrors a partial `website-plan.json`: a `pages[]` array with `legal-*` entries and a `legal_links[]` array.
+2. Append the `legal-*` page entries to the plan's `pages[]`.
+3. Copy the `legal_links` array onto the plan as a top-level field.
+4. Delete `legal-pages.json` after a successful merge — it has served its purpose.
+
+If `legal-pages.json` does **not** exist but `legal_config.jurisdiction` is set in `website-project.json`, print a reminder at the end of step 8: "Hinweis: Rechtliche Seiten fehlen — bitte /website-legal ausführen, bevor /website-build läuft."
+
 ### 7. Generate website-plan.json
 
 Write the complete plan following the format in `${CLAUDE_PLUGIN_ROOT}/libraries/EXAMPLE_WEBSITE_PLAN.md`.
+
+**Footer-only pages**: any page with `footer_only: true` (legal pages, optionally also custom legal-adjacent pages) must be excluded from the auto-generated header navigation in step 5. They are linked exclusively from the footer legal column built from the `legal_links` array.
 
 Key fields per page:
 ```json

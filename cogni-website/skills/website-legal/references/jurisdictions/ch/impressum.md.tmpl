@@ -1,0 +1,75 @@
+---
+title: Impressum
+slug: impressum
+language: de
+template_version: 1.0.0
+jurisdiction: ch
+---
+
+# Impressum
+
+In der Schweiz besteht keine generelle Impressumspflicht. Aus Transparenzgründen und zur Erfüllung der Anbieterkennzeichnung nach Art. 322 StGB (für periodisch erscheinende Druck­erzeugnisse, sinngemäss auch online) sowie zur Information unserer Kundinnen und Kunden machen wir folgende Angaben:
+
+## Anbieter
+
+{{legal_entity.legal_name}}
+{{legal_entity.address.street}}
+{{legal_entity.address.postal_code}} {{legal_entity.address.city}}
+{{legal_entity.address.country}}
+
+## Vertretungsberechtigte Person
+
+{{responsible_person.name}}, {{responsible_person.role}}
+
+## Kontakt
+
+Telefon: {{contact.phone}}
+E-Mail: {{contact.email}}
+
+{{#if legal_entity.register_number}}
+## Handelsregister
+
+Eingetragen im Handelsregister.
+Handelsregisteramt: {{legal_entity.register_court}}
+UID/CHE-Nummer: {{legal_entity.register_number}}
+{{/if}}
+
+{{#if legal_entity.vat_id}}
+## Mehrwertsteuer
+
+MWST-Nummer: {{legal_entity.vat_id}}
+{{/if}}
+
+{{#if supervisory_authority.name}}
+## Aufsichtsbehörde
+
+{{supervisory_authority.name}}
+{{supervisory_authority.address}}
+{{supervisory_authority.url}}
+{{/if}}
+
+{{#if professional_regulations.title}}
+## Berufsbezeichnung und berufsrechtliche Regelungen
+
+Berufsbezeichnung: {{professional_regulations.title}}
+Verliehen in: {{professional_regulations.awarded_in}}
+Berufsrechtliche Regelungen: {{professional_regulations.rules_url}}
+{{/if}}
+
+## Haftungsausschluss
+
+Der Autor übernimmt keinerlei Gewähr hinsichtlich der inhaltlichen Richtigkeit, Genauigkeit, Aktualität, Zuverlässigkeit und Vollständigkeit der Informationen.
+
+Haftungsansprüche gegen den Autor wegen Schäden materieller oder immaterieller Art, welche aus dem Zugriff oder der Nutzung bzw. Nichtnutzung der veröffentlichten Informationen, durch Missbrauch der Verbindung oder durch technische Störungen entstanden sind, werden ausgeschlossen.
+
+## Haftungsausschluss für Links
+
+Verweise und Links auf Webseiten Dritter liegen ausserhalb unseres Verantwortungsbereichs. Es wird jegliche Verantwortung für solche Webseiten abgelehnt. Der Zugriff und die Nutzung solcher Webseiten erfolgen auf eigene Gefahr des Nutzers.
+
+## Urheberrechte
+
+Die Urheber- und alle anderen Rechte an Inhalten, Bildern, Fotos oder anderen Dateien auf dieser Website gehören ausschliesslich {{legal_entity.legal_name}} oder den speziell genannten Rechtsinhabern. Für die Reproduktion jeglicher Elemente ist die schriftliche Zustimmung des Urheberrechtsträgers im Voraus einzuholen.
+
+---
+
+*Stand: {{generated_at_human}}*

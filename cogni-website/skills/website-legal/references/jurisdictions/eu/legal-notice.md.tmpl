@@ -1,0 +1,79 @@
+---
+title: Legal Notice
+slug: legal-notice
+language: en
+template_version: 1.0.0
+jurisdiction: eu
+---
+
+# Legal Notice
+
+## Operator of this website
+
+{{legal_entity.legal_name}}
+{{legal_entity.address.street}}
+{{legal_entity.address.postal_code}} {{legal_entity.address.city}}
+{{legal_entity.address.country}}
+
+## Represented by
+
+{{responsible_person.name}}, {{responsible_person.role}}
+
+## Contact
+
+Phone: {{contact.phone}}
+Email: {{contact.email}}
+
+{{#if legal_entity.register_number}}
+## Commercial register
+
+Registered with: {{legal_entity.register_court}}
+Registration number: {{legal_entity.register_number}}
+{{/if}}
+
+{{#if legal_entity.vat_id}}
+## VAT identification number
+
+{{legal_entity.vat_id}}
+{{/if}}
+
+{{#if supervisory_authority.name}}
+## Supervisory authority
+
+{{supervisory_authority.name}}
+{{supervisory_authority.address}}
+{{supervisory_authority.url}}
+{{/if}}
+
+{{#if professional_regulations.title}}
+## Professional title and regulations
+
+Professional title: {{professional_regulations.title}}
+Granted in: {{professional_regulations.awarded_in}}
+Applicable rules: {{professional_regulations.rules_url}}
+{{/if}}
+
+## Online dispute resolution
+
+The European Commission provides a platform for online dispute resolution (ODR) at:
+[{{dispute_resolution.os_platform_link}}]({{dispute_resolution.os_platform_link}})
+
+We are not obliged or willing to participate in dispute resolution proceedings before a consumer arbitration board.
+
+## Liability for content
+
+As a service provider, we are responsible for our own content on these pages in accordance with the general laws. However, we are not obligated to monitor transmitted or stored third-party information or to investigate circumstances that indicate illegal activity.
+
+Obligations to remove or block the use of information under general laws remain unaffected. However, liability in this regard is only possible from the point in time at which a concrete legal violation becomes known. Upon becoming aware of corresponding legal violations, we will remove this content immediately.
+
+## Liability for links
+
+Our offer contains links to external websites of third parties, on whose contents we have no influence. Therefore, we cannot assume any liability for these external contents. The respective provider or operator of the linked pages is always responsible for their content.
+
+## Copyright
+
+The content and works created by the site operators on these pages are subject to applicable copyright law. Duplication, processing, distribution, and any form of commercialization of such material beyond the scope of the copyright law shall require the prior written consent of its respective author or creator.
+
+---
+
+*Last updated: {{generated_at_human}}*

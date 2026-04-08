@@ -36,6 +36,8 @@ Extract:
 
 Read `${plugin_root}/libraries/page-templates.md` and find the section for this page's `type`. Use the HTML patterns and CSS classes defined there.
 
+**Legal page types** (`legal-imprint`, `legal-privacy`, `legal-cookies`): instead of `page-templates.md`, read `${plugin_root}/libraries/legal-pages.md`. These pages use a single-column "legal text" layout with a `legal-header` and `legal-body` section, no hero, no CTA. The source is a markdown file in `content/legal/` — convert it to HTML using the rules in `legal-pages.md` (omit the H1 and frontmatter, render headings as `<h2>`/`<h3>`, wrap any leftover `«TODO: ...»` markers in `<mark class="legal-todo">`).
+
 ### 3. Generate Page HTML
 
 Construct the full HTML document:
@@ -56,12 +58,15 @@ Construct the full HTML document:
     {generated_sections}
   </main>
   {navigation_footer}
+  {cookie_notice_partial}
   {mobile_menu_script}
 </body>
 </html>
 ```
 
 **Mobile menu script**: Replace `{mobile_menu_script}` with the inline JavaScript from `${plugin_root}/libraries/navigation-patterns.md` (section: Mobile Menu > JavaScript). Include it as a `<script>` tag before `</body>`. This enables the hamburger menu toggle on mobile viewports.
+
+**Cookie notice partial**: If `output/website/.partials/cookie-notice.html` exists in the project, read it and splice it in before the mobile menu script. It must appear on **every** generated page, not just legal pages, so users see the notice from anywhere on the site. If the partial does not exist (no legal pages configured), omit it.
 
 ### 4. Content Transformation Rules
 
@@ -82,6 +87,15 @@ When transforming source content to HTML:
 **Marketing Content to HTML:**
 - Blog posts → article layout with title, date, body, category
 - For blog-index: extract title, date, first paragraph as excerpt, category from each post
+
+**Legal markdown to HTML:**
+- Strip the YAML frontmatter (used only for metadata: title, slug, language, jurisdiction)
+- Strip the top-level `# Title` heading — it is rendered separately from `page_spec.title` inside the `legal-header` section
+- Strip the trailing `---` and the `*Stand: ...*` italic line — the date is shown in the `legal-header__updated` element
+- Convert `## …` → `<h2>`, `### …` → `<h3>`
+- Convert tables to `<table class="legal-table">` with `<thead>`/`<tbody>`
+- Wrap any literal `«TODO: ...»` substring in `<mark class="legal-todo">«TODO: ...»</mark>`
+- Preserve `mailto:` and absolute https links unchanged
 
 ### 5. Section Generation
 

@@ -30,6 +30,16 @@ Read `website-project.json` and `website-plan.json`. Extract:
 - Build options (hero_renderer, language)
 - Company details
 
+### 1.4. Legal Compliance Gate
+
+Before validating sources, check the legal-pages state:
+
+1. Read `legal_config.jurisdiction` from `website-project.json`.
+2. If `jurisdiction` is `null`: warn the user — "Keine Rechtsordnung konfiguriert. Die Website hat kein Impressum, keine Datenschutzerklärung und keinen Cookie-Hinweis. Vor Veröffentlichung in DE/AT/CH/EU rechtliche Pflicht. Bitte /website-legal ausführen oder explizit bestätigen, dass diese Seiten extern bereitgestellt werden." Do not abort — let the user proceed if they confirm.
+3. If `jurisdiction` is set, scan `website-plan.json` for `legal-*` page entries (ids starting with `legal-`).
+4. If none are present, **stop** and tell the user: "Rechtsordnung ist auf {jurisdiction} gesetzt, aber es sind keine rechtlichen Seiten im Plan. Bitte /website-legal ausführen, dann erneut /website-build." Offer to invoke `website-legal` immediately via the `Skill` tool.
+5. If legal pages exist, scan their rendered markdown sources (`content/legal/*.md`) for unfilled `«TODO: ...»` markers and warn the user about each one before continuing — these will appear as visible markers in the published HTML.
+
 ### 1.5. Validate Source Files
 
 Before generating anything, verify that the source files referenced in the plan still exist. Content may have changed since planning — a deleted product or moved narrative would cause a page-generator agent to fail.
@@ -161,6 +171,9 @@ Nächste Schritte:
   • /website-preview — Website im Browser öffnen und prüfen
   • python3 -m http.server -d output/website 8080 — Lokaler Testserver
   • Output-Ordner auf Netlify/Vercel/S3 deployen
+
+⚠ Rechtliche Inhalte (Impressum, Datenschutz, Cookies) sind Vorlagen.
+   Bitte vor der Veröffentlichung durch eine Anwältin oder einen Anwalt prüfen lassen.
 ```
 
 ## Error Handling
@@ -184,6 +197,7 @@ Detect the mode from the user's request and skip unnecessary steps.
 ## Reference Files
 
 - `${CLAUDE_PLUGIN_ROOT}/libraries/page-templates.md` — HTML patterns for page types
+- `${CLAUDE_PLUGIN_ROOT}/libraries/legal-pages.md` — HTML pattern for `legal-*` page types and the cookie-notice partial
 - `${CLAUDE_PLUGIN_ROOT}/libraries/navigation-patterns.md` — Header, footer, breadcrumb CSS
 - `${CLAUDE_PLUGIN_ROOT}/libraries/EXAMPLE_WEBSITE_PLAN.md` — Plan format reference
 - `${CLAUDE_PLUGIN_ROOT}/skills/website-build/scripts/generate-css.py` — Standalone CSS generator from design-variables.json (alternative to site-assembler agent for CSS-only updates)

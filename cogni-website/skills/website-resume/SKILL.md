@@ -55,8 +55,15 @@ Website-Projekt: {slug}
   Erstellte Seiten: {M} / {N}
   Fehlende Seiten: {list if any}
 
+  Rechtliches:
+    Rechtsordnung:    {jurisdiction or "noch nicht festgelegt"}
+    Legal Pages:      {3/3 generiert | 0/3 fehlen | ⚠ legal_config fehlt}
+    Offene TODOs:     {n unfilled «TODO: ...» markers}
+
   Letzte Änderung: {date}
 ```
+
+When assessing legal state, read `legal_config.jurisdiction` from `website-project.json`, scan `website-plan.json` for `legal-*` page entries, and grep `content/legal/*.md` for any `«TODO: ` markers.
 
 ### 4. Recommend Next Action
 
@@ -106,3 +113,6 @@ Add to recommendation table:
 |-------|---------------|
 | New content sources discovered | → `/website-setup` — Neue Quellen einbinden, dann erneut planen |
 | New entities in existing sources | → `/website-plan` — Seitenstruktur aktualisieren |
+| `legal_config.jurisdiction` set but no `legal-*` pages in plan | → `/website-legal` — Pflichtseiten erzeugen |
+| `legal_config.jurisdiction` is `null` | → `/website-legal` — Rechtsordnung festlegen und Pflichtseiten erzeugen |
+| Unfilled `«TODO: ...»` markers in `content/legal/*.md` | → `/website-legal` — fehlende Felder ergänzen |

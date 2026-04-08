@@ -145,7 +145,46 @@ A complete `website-plan.json` for a German B2B technology company with 3 produc
       "meta_description": "Nehmen Sie Kontakt mit uns auf — wir beraten Sie gerne.",
       "source_files": [],
       "sections": ["page-header", "contact-form", "map"]
+    },
+
+    {
+      "id": "legal-imprint",
+      "type": "legal-imprint",
+      "slug": "pages/impressum",
+      "title": "Impressum — SmartFactory Solutions",
+      "meta_description": "Impressum gemäß § 5 TMG.",
+      "source_files": ["content/legal/impressum.md"],
+      "sections": ["legal-header", "legal-body"],
+      "footer_only": true
+    },
+
+    {
+      "id": "legal-privacy",
+      "type": "legal-privacy",
+      "slug": "pages/datenschutz",
+      "title": "Datenschutzerklärung — SmartFactory Solutions",
+      "meta_description": "Informationen zur Verarbeitung personenbezogener Daten gemäß DSGVO.",
+      "source_files": ["content/legal/datenschutz.md"],
+      "sections": ["legal-header", "legal-body"],
+      "footer_only": true
+    },
+
+    {
+      "id": "legal-cookies",
+      "type": "legal-cookies",
+      "slug": "pages/cookies",
+      "title": "Cookie-Hinweis — SmartFactory Solutions",
+      "meta_description": "Welche Cookies diese Website verwendet.",
+      "source_files": ["content/legal/cookies.md"],
+      "sections": ["legal-header", "legal-body"],
+      "footer_only": true
     }
+  ],
+
+  "legal_links": [
+    { "label": "Impressum",   "href": "/pages/impressum.html" },
+    { "label": "Datenschutz", "href": "/pages/datenschutz.html" },
+    { "label": "Cookies",     "href": "/pages/cookies.html" }
   ],
 
   "navigation": {
@@ -234,6 +273,75 @@ The `website-plan` skill builds the navigation structure from the page list:
 - Blog and case-studies are single links (no children)
 - CTA always points to the contact page
 - Footer columns group pages by category
+
+### Legal Pages
+
+The three `legal-*` pages are managed by the `website-legal` skill, not by the `website-plan` skill. They share these properties:
+
+- `footer_only: true` — excluded from the auto-generated header navigation
+- `source_files` points to `content/legal/{slug}.md` — markdown files rendered from jurisdiction-specific templates by `website-legal`
+- `sections: ["legal-header", "legal-body"]` — the simple two-section layout defined in `libraries/legal-pages.md`
+- The slug pattern depends on jurisdiction (DE/AT/CH use `impressum`/`datenschutz`/`cookies`, EU uses `legal-notice`/`privacy-policy`/`cookies`)
+
+The top-level `legal_links` array (parallel to `pages` and `navigation`) tells the `site-assembler` to render a dedicated **Rechtliches** column in the footer linking to these pages. Without `legal_links`, no legal column appears.
+
+### Example legal_config in website-project.json
+
+The `legal_config` block lives in `website-project.json`, **not** in `website-plan.json`. It is captured by `website-setup` (step 3a) and refined by `website-legal`. Example for a German GmbH:
+
+```json
+{
+  "legal_config": {
+    "jurisdiction": "de",
+    "site_audience": "b2b",
+    "legal_entity": {
+      "legal_name": "SmartFactory Solutions GmbH",
+      "legal_form": "GmbH",
+      "address": {
+        "street": "Beispielstraße 12",
+        "postal_code": "80331",
+        "city": "München",
+        "country": "Deutschland"
+      },
+      "register_court": "Amtsgericht München",
+      "register_number": "HRB 123456",
+      "vat_id": "DE123456789",
+      "tax_id": null
+    },
+    "responsible_person": {
+      "name": "Maria Mustermann",
+      "role": "Geschäftsführerin",
+      "address_same_as_entity": true,
+      "address": null
+    },
+    "supervisory_authority": { "name": null, "address": null, "url": null },
+    "professional_regulations": { "title": null, "awarded_in": null, "rules_url": null },
+    "contact": {
+      "email": "kontakt@smartfactory.example",
+      "phone": "+49 89 12345678"
+    },
+    "data_protection": {
+      "controller_name": "SmartFactory Solutions GmbH",
+      "controller_contact": "datenschutz@smartfactory.example",
+      "dpo_required": false,
+      "dpo_name": null,
+      "dpo_contact": null,
+      "uses_analytics": false,
+      "uses_marketing_cookies": false,
+      "uses_external_fonts": false,
+      "uses_external_embeds": false
+    },
+    "dispute_resolution": {
+      "os_platform_link": "https://ec.europa.eu/consumers/odr",
+      "willing_to_participate": false
+    },
+    "generated_at": "2026-04-08",
+    "template_version": "1.0.0"
+  }
+}
+```
+
+The full schema and per-jurisdiction requirement matrix lives in `cogni-website/skills/website-legal/references/legal-config-schema.md`.
 
 ### Slug Convention
 

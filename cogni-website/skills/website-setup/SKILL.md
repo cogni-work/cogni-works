@@ -113,6 +113,37 @@ Ask only for what's missing. Adapt all user-facing text to the portfolio languag
 
 > "Aus dem Portfolio übernehme ich: **Acme Cloud Services** — Cloud-Infrastruktur für den Mittelstand. Fehlen noch: **Kontakt-E-Mail** und **Adresse** für die Kontaktseite. Können Sie die ergänzen?"
 
+### 3a. Capture Legal Foundation
+
+Websites published in the EU and DACH must carry mandatory legal pages (Impressum, Datenschutzerklärung, Cookie-Hinweis). Capture the foundation now so the downstream `website-legal` skill can render those pages without re-asking everything.
+
+Ask via `AskUserQuestion`:
+
+> "In welcher Rechtsordnung wird die Website veröffentlicht?"
+
+Options:
+
+- **Deutschland (DE)** — Impressum nach § 5 TMG, Datenschutzerklärung nach DSGVO
+- **Österreich (AT)** — Offenlegung nach § 5 ECG / § 25 MedienG, DSGVO
+- **Schweiz (CH)** — Anbieterkennzeichnung, revDSG
+- **EU (übrige Mitgliedstaaten)** — Legal Notice, GDPR Privacy Policy
+- **Noch unklar / später festlegen**
+
+If the user picks a jurisdiction, immediately ask the minimum facts via a second `AskUserQuestion` round (one question per topic, batched in a single tool call):
+
+1. Vollständiger Firmenname inkl. Rechtsform (z. B. "Acme Cloud Services GmbH")
+2. Eingetragene Anschrift (Straße, PLZ, Ort, Land)
+3. Vertretungsberechtigte Person (Name + Rolle, z. B. "Maria Mustermann, Geschäftsführerin")
+4. Handelsregistereintrag (HRB/FN/CHE-Nummer + Registergericht — leer lassen falls nicht eingetragen)
+5. USt-IdNr. (leer lassen für Kleinunternehmer)
+6. Gibt es einen bestellten Datenschutzbeauftragten? (Ja/Nein)
+
+Only ask for additional fields (supervisory authority, professional regulations) if the user indicates a regulated industry. The full schema is in `${CLAUDE_PLUGIN_ROOT}/skills/website-legal/references/legal-config-schema.md` — do not block setup on it; the `website-legal` skill will fill the gaps later.
+
+If the user picks "noch unklar", write `legal_config: { jurisdiction: null }` and tell them they must run `/website-legal` before publishing.
+
+Persist all captured fields into the `legal_config` block (see step 6 for the schema).
+
 ### 4. Select Theme
 
 Invoke `cogni-workspace:pick-theme` to let the user select a visual theme. The theme drives all colors, fonts, and styling across the website.
@@ -149,6 +180,7 @@ Write `website-project.json` following the schema documented in `${CLAUDE_PLUGIN
   - `enriched_portfolio_narratives` — object with `overview`, `markets` (map: slug → path), `personas` (map: slug → path). null if no portfolio-communicate output exists.
 - `build_options` — hero_renderer, include_blog, include_case_studies, include_insights, include_resources
 - `content_discovery` — entity counts per source for change detection by website-resume
+- `legal_config` — jurisdiction (`de`/`at`/`ch`/`eu`/`null`), `legal_entity` (legal_name, legal_form, address, register_court, register_number, vat_id), `responsible_person` (name, role, address_same_as_entity), `contact` (email, phone), `data_protection` (controller_name, controller_contact, dpo_required, dpo_name, dpo_contact). Schema: `${CLAUDE_PLUGIN_ROOT}/skills/website-legal/references/legal-config-schema.md`. Fields not captured in step 3a are written as `null` and filled later by `website-legal`.
 
 All boolean build options default to `true` when the corresponding content source exists, `false` when it does not. Set `hero_renderer` to `"pencil"` or `"html"` based on user choice.
 
@@ -168,6 +200,10 @@ Inhaltsquellen:
   Marketing: {✓ N Artikel | ✗ nicht gefunden}
   Trends:    {✓ Trend-Report | ✗ nicht gefunden}
   Research:  {✓ N Berichte | ✗ nicht gefunden}
+
+Rechtliches:
+  {✓ DE-Konfiguration erfasst — Impressum, Datenschutz, Cookies werden erzeugt
+   | ⚠ ausstehend — bitte vor Veröffentlichung /website-legal ausführen}
 
 Nächster Schritt: /website-plan — Seitenstruktur planen und Inhalte zuordnen
 ```

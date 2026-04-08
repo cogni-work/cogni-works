@@ -1,0 +1,95 @@
+---
+title: Datenschutzerklärung
+slug: datenschutz
+language: de
+template_version: 1.0.0
+jurisdiction: at
+---
+
+# Datenschutzerklärung
+
+## 1. Verantwortlicher
+
+Verantwortlicher im Sinne der Datenschutz-Grundverordnung (DSGVO) und des österreichischen Datenschutzgesetzes (DSG) ist:
+
+{{data_protection.controller_name}}
+{{legal_entity.address.street}}
+{{legal_entity.address.postal_code}} {{legal_entity.address.city}}
+{{legal_entity.address.country}}
+
+E-Mail: {{data_protection.controller_contact}}
+Telefon: {{contact.phone}}
+
+{{#if data_protection.dpo_required}}
+## 2. Datenschutzbeauftragter
+
+{{data_protection.dpo_name}}
+E-Mail: {{data_protection.dpo_contact}}
+{{/if}}
+
+## 3. Erhebung und Verarbeitung personenbezogener Daten
+
+Wir verarbeiten personenbezogene Daten ausschließlich auf Grundlage der DSGVO und des österreichischen DSG. Eine Verarbeitung erfolgt nur, soweit dies zur Bereitstellung einer funktionsfähigen Website sowie unserer Inhalte und Leistungen erforderlich ist oder eine andere gesetzliche Grundlage vorliegt.
+
+### Rechtsgrundlagen
+
+- Art. 6 Abs. 1 lit. a DSGVO – Einwilligung
+- Art. 6 Abs. 1 lit. b DSGVO – Vertrag oder vorvertragliche Maßnahmen
+- Art. 6 Abs. 1 lit. c DSGVO – rechtliche Verpflichtung
+- Art. 6 Abs. 1 lit. f DSGVO – berechtigtes Interesse
+
+## 4. Server-Logdaten
+
+Beim Aufruf unserer Website werden automatisch folgende Daten in Logdateien gespeichert:
+
+- IP-Adresse
+- Datum und Uhrzeit der Anfrage
+- Aufgerufene Seite
+- Verwendeter Browser und Betriebssystem
+- Referrer
+
+Die Speicherung erfolgt auf Grundlage von Art. 6 Abs. 1 lit. f DSGVO zur Sicherstellung des Betriebs und der Sicherheit der Website.
+
+## 5. Cookies
+
+Diese Website verwendet ausschließlich technisch notwendige Cookies. Eine Einwilligung ist hierfür nach § 96 Abs. 3 TKG 2003 nicht erforderlich. Details siehe [Cookie-Hinweis](/pages/cookies.html).
+
+{{#if data_protection.uses_analytics}}
+## 6. Web-Analyse
+
+Diese Website nutzt Werkzeuge zur statistischen Auswertung der Besucheraktivität, ausschließlich nach Ihrer Einwilligung gemäß Art. 6 Abs. 1 lit. a DSGVO. Sie können Ihre Einwilligung jederzeit widerrufen.
+{{/if}}
+
+{{#if data_protection.uses_external_fonts}}
+## 7. Externe Schriften
+
+Diese Website lädt Schriftarten lokal vom eigenen Server. Es findet keine Verbindung zu Servern externer Schriften-Anbieter statt.
+{{/if}}
+
+{{#if data_protection.uses_external_embeds}}
+## 8. Externe Inhalte
+
+Wir betten Inhalte externer Anbieter ein. Beim Aufruf werden Daten an den jeweiligen Anbieter übermittelt. Details finden Sie im Cookie-Hinweis.
+{{/if}}
+
+## Ihre Rechte als betroffene Person
+
+- **Auskunft** (Art. 15 DSGVO)
+- **Berichtigung** (Art. 16 DSGVO)
+- **Löschung** (Art. 17 DSGVO)
+- **Einschränkung der Verarbeitung** (Art. 18 DSGVO)
+- **Datenübertragbarkeit** (Art. 20 DSGVO)
+- **Widerspruch** (Art. 21 DSGVO)
+- **Widerruf einer Einwilligung** (Art. 7 Abs. 3 DSGVO)
+- **Beschwerde bei der Aufsichtsbehörde** (§ 24 DSG)
+
+Aufsichtsbehörde in Österreich:
+Österreichische Datenschutzbehörde
+Barichgasse 40-42, 1030 Wien
+[www.dsb.gv.at](https://www.dsb.gv.at)
+
+Kontakt zur Ausübung Ihrer Rechte: {{data_protection.controller_contact}}
+
+---
+
+*Stand: {{generated_at_human}}*

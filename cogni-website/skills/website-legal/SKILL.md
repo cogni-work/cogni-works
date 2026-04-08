@@ -1,15 +1,15 @@
 ---
 name: website-legal
 description: |
-  This skill generates legally required pages (Impressum, Datenschutzerklärung, Cookie-Hinweis)
-  for a cogni-website project based on the publishing jurisdiction (DE, AT, CH, EU). It captures
-  the legal entity facts, fills jurisdiction-specific boilerplate templates, writes the markdown
-  source files, and patches website-plan.json so the existing build pipeline renders them.
-  Trigger when the user mentions "Impressum", "Datenschutz", "Datenschutzerklärung", "Cookie-Hinweis",
-  "DSGVO", "GDPR", "Pflichtangaben", "rechtliche Seiten", "legal pages", "legal notice",
-  "privacy policy", "compliance pages", "TMG", "ECG", "revDSG", "Rechtstexte erzeugen", or wants
-  to add legally required content for Germany, Austria, Switzerland, or the EU. Requires
-  website-project.json (created by website-setup).
+  Generate legally required pages (Impressum, Datenschutzerklärung, Cookie-Hinweis, or the EU
+  equivalents) for a cogni-website project based on the publishing jurisdiction (DE, AT, CH, EU).
+  Captures the legal entity facts, fills jurisdiction-specific boilerplate templates, writes the
+  markdown source files, and patches website-plan.json so the existing build pipeline renders them.
+  Use this skill whenever the user mentions "Impressum", "Datenschutz", "Datenschutzerklärung",
+  "Cookie-Hinweis", "DSGVO", "GDPR", "Pflichtangaben", "rechtliche Seiten", "legal pages", "legal
+  notice", "privacy policy", "compliance pages", "TMG", "ECG", "revDSG", "Rechtstexte erzeugen",
+  or wants to add legally required content for Germany, Austria, Switzerland, or the EU — even if
+  they don't say "skill" or name a specific page. Requires website-project.json (from website-setup).
 allowed-tools: Read, Write, Edit, Glob, Bash, AskUserQuestion
 ---
 
@@ -124,7 +124,7 @@ If `website-plan.json` exists in the project directory:
    - `source_files`: `["content/legal/{slug}.md"]`
    - `sections`: `["legal-header", "legal-body"]`
    - `footer_only`: `true` — exclude from primary nav, include in footer legal column
-4. Add or replace the top-level `legal_links` array with:
+4. Add or replace the top-level `legal_links` array. Labels and slugs come from the jurisdiction bundle and the project `language` — never hardcode German. The DE example below is illustrative only; for `eu` the slugs become `legal-notice` / `privacy-policy` and the labels are English:
    ```json
    [
      { "label": "Impressum",   "href": "/pages/impressum.html" },
@@ -132,12 +132,13 @@ If `website-plan.json` exists in the project directory:
      { "label": "Cookies",     "href": "/pages/cookies.html" }
    ]
    ```
-   Labels and slugs adapt to language and jurisdiction.
 5. Write the updated plan back atomically.
 
 If `website-plan.json` does **not** yet exist, write the entries and the `legal_links` array to `legal-pages.json` in the project directory. The `website-plan` skill will merge `legal-pages.json` into the plan it generates (see the page-type-registry for details).
 
 ### 8. Print Summary
+
+Render the summary in the project `language`. The German example below is the shape, not a literal template — translate the labels when `language` differs.
 
 ```
 Rechtliche Seiten erstellt für Rechtsordnung: {jurisdiction_name}

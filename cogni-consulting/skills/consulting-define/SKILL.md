@@ -50,6 +50,10 @@ Define is about making choices. Discovery surfaced many themes, tensions, and op
 
 The outputs — a problem statement and HMW questions — become the brief for Diamond 2. Getting the problem framing wrong means solving the wrong problem, no matter how elegant the solution.
 
+## Research Routing Rule
+
+When Define reveals evidence gaps — many deviated assumptions, a thin discovery area the consultant wants to strengthen, or a new angle that needs grounding — **always dispatch cogni-research:research-report** rather than using raw WebSearch. Frame the research as a targeted sprint (mode `basic`) scoped to the specific gap. Store in `define/research/` so the findings feed into the problem statement and assumptions register. The only exception is a single-query fact-check during conversation.
+
 ## Workflow
 
 ### 1. Load Context
@@ -293,7 +297,7 @@ Save outputs to the standard paths (`define/problem-statement.md`, `define/hmw-q
 
 ## When Things Go Thin
 
-- **Many deviations** (>50% of assumptions): This signals the discovery evidence base was weaker than expected. Rather than patching assumptions one by one, consider whether a targeted research sprint (back to Discover) would be more efficient than proceeding with low-confidence framing.
+- **Many deviations** (>50% of assumptions): This signals the discovery evidence base was weaker than expected. Rather than patching assumptions one by one, dispatch `cogni-research:research-report` (mode `basic`, scoped to the weak area) — a structured research sprint with citable sources is more efficient than ad-hoc web searches or returning to full Discover.
 - **Consultant disengages from clustering or HMW**: These methods require active judgment. If input is minimal, capture the consultant's top 2-3 priorities directly and build from there rather than forcing the full method sequence.
 - **Discovery was thin in some areas**: Note this as a known limitation in the problem statement's constraints section rather than blocking progress. A well-framed problem with acknowledged gaps is more useful than a perfectly evidenced problem that never gets framed.
 

@@ -27,7 +27,7 @@ Read `$CLAUDE_PLUGIN_ROOT/references/diamond-coach.md` and adopt the Diamond Coa
 
 **Prerequisite gate**: Verify `consulting-project.json` exists and contains `vision_class`, `client`, and `desired_outcome`. If missing, redirect to `consulting-setup`: "We need an engagement set up before we can start discovering. Let's do that first."
 
-**Iteration check**: If `phase_state.discover.status` is `complete`, this is a re-entry. Read existing `discover/synthesis.md` and other artifacts. Say: "The Discover phase was completed previously. Let's build on what we have — what would you like to revisit or deepen?" Focus on the specific area rather than re-running the full workflow.
+**Iteration check**: If `phase_state.discover.status` is `complete`, this is a re-entry. Read existing `discover/synthesis.md` and other artifacts. Say: "The Discover phase was completed previously. Let's build on what we have — what would you like to revisit or deepen?" Focus on the specific area rather than re-running the full workflow. When the consultant wants to deepen a topic, dispatch `cogni-research:research-report` with a tightly framed research question — do not use raw WebSearch. Frame the report type as `basic` for a focused deep dive or `detailed` if the topic is broad.
 
 **Task list**: After loading context, create a task list scaled to engagement weight:
 
@@ -44,6 +44,17 @@ Lightweight HMW (collapsed Discover+Define):
 2. Identify stakeholders and constraints
 3. Sharpen HMW question
 4. Write synthesis and problem statement
+
+## Research Routing Rule
+
+When research is needed — whether as a planned discovery method, a consultant request to "look into X", or to deepen a specific topic during iteration — **always dispatch cogni-research:research-report**. Never use raw WebSearch for research within an engagement. cogni-research produces structured, citable reports with source traceability that downstream phases (Define's assumption verification, Deliver's claims check) depend on. Ad-hoc web searches produce throwaway results that can't be verified or cited.
+
+Store the research project in the engagement's phase directory:
+- Standard desk research → `discover/research/` + `plugin_refs.research_project`
+- Topic-specific deep dives (e.g., "research the Drama Triangle framework") → `discover/research/` with a descriptive slug
+- Research requested during iteration re-entry → same `discover/research/` path, new research project alongside existing ones
+
+The only exception is a quick fact-check during conversation (e.g., confirming a date or name) — that's fine as a single WebSearch. Anything requiring multiple queries or producing content that feeds into engagement artifacts must go through cogni-research.
 
 ## Core Concept
 
@@ -202,7 +213,7 @@ For simple, bounded challenges (workshop design, team exercise, meeting redesign
 1. **Context mapping with domain engagement** — Ask the consultant about the situation, but reference the actual subject matter. For a Drama Triangle workshop: "What patterns are the consultants seeing — rescuer dynamics with clients, persecutor escalations in steering committees? How familiar are they with Transactional Analysis?" This shows domain understanding and surfaces better design inputs than generic questions.
 2. **Stakeholder + constraints** — Quick: who's involved, what are the boundaries? Keep it to a few questions, not a formal mapping exercise.
 3. **HMW sharpening** (Define, inline) — Based on the context, propose 2-3 refined versions of the HMW question. Let the consultant pick. Write a brief problem statement.
-4. **Skip desk research** unless the consultant asks for it.
+4. **Skip desk research** unless the consultant asks for it. When the consultant does ask for research (e.g., "research the framework", "look into best practices for X", "I need evidence on Y"), dispatch `cogni-research:research-report` with mode `basic` and a tightly scoped topic derived from their request. Store the research project in `discover/research/` and reference it in `plugin_refs.research_project`. Do not use raw WebSearch — the research routing rule applies to all engagement weights.
 
 Save a combined `discover/synthesis.md` and `define/problem-statement.md` and `define/hmw-questions.md`. Then mark **both** Discover and Define as complete — this is critical for tracking:
 

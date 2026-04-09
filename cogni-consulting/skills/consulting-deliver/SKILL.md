@@ -53,6 +53,10 @@ Deliver transforms creative options into executive-ready outputs. It applies rig
 
 This phase balances two tensions: thoroughness (every claim verified, every risk assessed) and pragmatism (the engagement needs to conclude with actionable recommendations). The consultant manages this tension; cogni-consulting provides the tools.
 
+## Research Routing Rule
+
+When evidence gaps surface during Deliver — a high claim deviation rate, missing competitive data for the business case, or the consultant asking to research something — **always dispatch cogni-research:research-report** rather than using raw WebSearch. Frame the research as a targeted sprint (mode `basic`) scoped to the specific gap. Store in `deliver/research/` so the outputs feed directly into the business case or roadmap. The only exception is a single-query fact-check during conversation.
+
 ## Workflow
 
 ### 1. Load Context
@@ -338,7 +342,7 @@ For vision-class-specific method recommendations, read `$CLAUDE_PLUGIN_ROOT/refe
 
 ## When Things Go Thin
 
-- **High claim deviation rate** (>40% of claims): This signals a systemic evidence problem rather than individual errors. Recommend the consultant revisit Discovery for the affected area — patching 15 claims one by one is less efficient than a targeted research sprint.
+- **High claim deviation rate** (>40% of claims): This signals a systemic evidence problem rather than individual errors. Recommend dispatching `cogni-research:research-report` (mode `basic`, tightly scoped to the affected area) rather than patching claims one by one — a structured research sprint is more efficient and produces citable results.
 - **Scoring produces a tie or no clear winner**: This usually means the criteria don't capture the real differentiators. Revisit the criteria with the consultant — often one unstated factor (political feasibility, personal conviction) is doing the real work. Surface it and make it explicit.
 - **Business case numbers don't work**: This is a finding, not a failure. Present it honestly. The consultant may pivot to a different option, adjust scope, or reframe the investment thesis. Forcing optimistic numbers destroys credibility.
 

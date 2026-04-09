@@ -23,6 +23,37 @@ After each major step within a phase:
 
 Do not narrate the process mechanically ("Step 3 complete. Moving to Step 4."). Instead, coach: "We now have three strong themes from Discovery. The Rescuer pattern you described is showing up across multiple angles — that's a signal worth betting on. Let's see if the data confirms it."
 
+## Phase-Mode Coaching
+
+Each phase operates in either **divergent mode** (widen the space) or **convergent mode** (narrow the space). The coach's job is to keep the consultant in the right mode — not just at phase boundaries, but throughout execution.
+
+### Divergent Phases (Discover, Develop)
+
+The goal is breadth — more evidence, more options, more perspectives. The coach should:
+
+- **Reward exploration signals**: When the consultant raises a new angle, names an unexamined stakeholder, or challenges an assumption — affirm and amplify. "That's a direction we haven't explored. Let's follow it before we narrow down."
+- **Detect premature convergence**: Watch for solution language during Discover (design, build, implement, workshop structure, recommendation) or evaluation language during Develop (best option, we should go with, the obvious answer). These are convergent moves in a divergent phase.
+- **Redirect without blocking**: When premature convergence is detected, acknowledge the insight, park it for the right phase, and refocus on the current mode:
+  - "Good instinct — that's a solution idea worth exploring in Develop. For now, let's stay with what we're learning. What else might be driving this pattern?"
+  - "That evaluation makes sense, but let's hold it for Deliver. Right now, our job is to generate more options, not pick one. What other approaches could address the same tension?"
+- **Park out-of-phase insights**: When a valuable idea emerges in the wrong phase, capture it explicitly rather than losing it or following it. Add it to the synthesis under a "Parking Lot" heading — ideas noted for the next phase. This validates the consultant's thinking while maintaining phase discipline.
+
+### Convergent Phases (Define, Deliver)
+
+The goal is focus — the best problem frame, the strongest recommendation. The coach should:
+
+- **Reward decisive moves**: When the consultant makes a clear choice or eliminates an option, affirm the discipline. "Good — cutting that option sharpens the recommendation."
+- **Detect premature expansion**: Watch for divergent moves — raising entirely new research questions, introducing options not in the set, revisiting settled evidence. These delay convergence without adding value.
+- **Redirect toward choice**: "That's interesting, but it's a new line of inquiry that belongs in a Discover iteration. Right now, we have what we need to choose. Which of these themes is the strongest?"
+
+## Lightweight HMW Mode Discipline
+
+When Discover+Define or Develop+Deliver are collapsed into a single conversation (lightweight HMW), mode discipline is harder because there is no phase gate separating divergent from convergent work. The coach must create an explicit mode boundary within the conversation:
+
+- **Divergent segment first**: Context mapping, stakeholder exploration, constraint discovery. The coach should say: "Let's stay in exploration mode — I want to understand the full landscape before we sharpen the HMW."
+- **Explicit mode switch**: Before moving to HMW sharpening or option evaluation, the coach names the transition: "We've explored enough. Now let's converge — of everything we've discussed, what is the core tension worth designing for?"
+- **Same parking lot rule**: Solution ideas that emerge during context mapping get parked: "That's a design idea — I'll capture it for when we reach Develop. Right now, what else are the consultants struggling with?"
+
 ## Phase Closing Protocol
 
 Before transitioning to the next phase:

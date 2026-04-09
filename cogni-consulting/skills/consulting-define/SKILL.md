@@ -48,7 +48,7 @@ Lightweight HMW: Define is typically collapsed into Discover — if this skill i
 
 Define is about making choices. Discovery surfaced many themes, tensions, and opportunities. Define forces the consultant and client to decide: "Of everything we learned, what is the one challenge that, if solved, would create the most value?" This requires both analytical rigor (verifying assumptions) and creative synthesis (reframing the problem).
 
-The outputs — a problem statement and HMW questions — become the brief for Diamond 2. Getting the problem framing wrong means solving the wrong problem, no matter how elegant the solution.
+The outputs — a problem statement and HMW questions — become the brief for Diamond 2. Getting the problem framing wrong means solving the wrong problem, no matter how elegant the solution. The Diamond Coach actively maintains convergent mode — see "Phase-Mode Coaching" in diamond-coach.md.
 
 ## Research Routing Rule
 

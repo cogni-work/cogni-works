@@ -51,7 +51,7 @@ Lightweight HMW: Deliver is typically collapsed into Develop — if this skill i
 
 Deliver transforms creative options into executive-ready outputs. It applies rigor — feasibility scoring, risk assessment, claims verification — to the options generated in Develop, then packages the survivors into the deliverables promised in the engagement vision.
 
-This phase balances two tensions: thoroughness (every claim verified, every risk assessed) and pragmatism (the engagement needs to conclude with actionable recommendations). The consultant manages this tension; cogni-consulting provides the tools.
+This phase balances two tensions: thoroughness (every claim verified, every risk assessed) and pragmatism (the engagement needs to conclude with actionable recommendations). The consultant manages this tension; cogni-consulting provides the tools. The Diamond Coach actively maintains convergent mode — see "Phase-Mode Coaching" in diamond-coach.md.
 
 ## Research Routing Rule
 

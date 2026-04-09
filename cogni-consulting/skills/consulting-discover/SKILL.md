@@ -62,6 +62,8 @@ Discover is about breadth, not depth. The consultant and client often arrive wit
 
 The key principle: **diverge before converging**. Premature closure is the enemy of good consulting. Discover builds the evidence base that Define will synthesize.
 
+The Diamond Coach actively maintains divergent mode throughout Discover — see "Phase-Mode Coaching" in diamond-coach.md. When solution ideas emerge (design choices, workshop structures, implementation plans), the coach parks them for Develop and redirects to evidence gathering. Discovery outputs are evidence artifacts (themes, tensions, assumptions), never solution artifacts (designs, recommendations, plans).
+
 ## Workflow
 
 ### 1. Load Engagement Context
@@ -210,6 +212,8 @@ For `how-might-we` engagements, the discovery approach adapts to the HMW's compl
 
 For simple, bounded challenges (workshop design, team exercise, meeting redesign), Discover and Define run as a single conversation. Engage with the domain immediately — don't stay abstract.
 
+**Mode discipline**: Even in collapsed Discover+Define, divergent exploration comes before convergent framing. Follow the "Lightweight HMW Mode Discipline" section in diamond-coach.md — explicitly name the mode switch when transitioning from context mapping to HMW sharpening. Solution ideas that emerge during steps 1-2 go to a parking lot, not into the synthesis.
+
 1. **Context mapping with domain engagement** — Ask the consultant about the situation, but reference the actual subject matter. For a Drama Triangle workshop: "What patterns are the consultants seeing — rescuer dynamics with clients, persecutor escalations in steering committees? How familiar are they with Transactional Analysis?" This shows domain understanding and surfaces better design inputs than generic questions.
 2. **Stakeholder + constraints** — Quick: who's involved, what are the boundaries? Keep it to a few questions, not a formal mapping exercise.
 3. **HMW sharpening** (Define, inline) — Based on the context, propose 2-3 refined versions of the HMW question. Let the consultant pick. Write a brief problem statement.
@@ -253,6 +257,7 @@ For vision-class-specific method recommendations, read `$CLAUDE_PLUGIN_ROOT/refe
 
 - **Plugin returns thin results** (fewer than 3 substantive findings): Note the gap explicitly in the synthesis and flag it for the consultant. Thin evidence in one area can be compensated by strength in another, but the consultant should know. Offer to retry with adjusted parameters (broader scope, different market framing) or substitute a guided method.
 - **Consultant disengages from a guided method**: Some methods (stakeholder mapping, data audit) need active input. If the consultant gives minimal responses, capture what's available and move on — a partial output is better than a blocked engagement.
+- **Consultant starts solving during Discover**: If the consultant shifts into solution mode (proposing workshop designs, suggesting implementations, evaluating options), acknowledge the idea, note it in a "Parking Lot" section of the synthesis, and redirect: "Good idea — I've captured it for Develop. Let's keep exploring the problem space. What else might be going on?"
 - **Prior phase was skipped**: Setup should be complete, but if the consultant jumped straight to Discovery, gather the minimum context needed (client, vision class, scope) and create consulting-project.json inline.
 
 ## Important Notes

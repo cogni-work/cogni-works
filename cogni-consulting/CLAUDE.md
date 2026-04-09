@@ -19,7 +19,7 @@ phase-analyst agent       → Phase readiness assessment, method recommendation
 
 ## Design Principles
 
-- **Diamond Coach** — every phase opens with a coaching introduction (intent + what good looks like), checks prerequisites, creates a task list, and closes with an accomplishment summary. The coach is defined in `references/diamond-coach.md` and calibrated to engagement weight (brief for lightweight HMW, structured for full engagements)
+- **Diamond Coach** — every phase opens with a coaching introduction (intent + what good looks like), checks prerequisites, creates a task list, and closes with an accomplishment summary. The coach also maintains phase-mode discipline — actively detecting and redirecting premature convergence in divergent phases and premature expansion in convergent phases. Defined in `references/diamond-coach.md`, calibrated to engagement weight
 - **Orchestrator, not producer** — manages engagement state; content work done by existing plugins
 - **Path references, not data copies** — cross-references via slugs/paths, no shared DB
 - **Gate, then guide** — phase gates block by default when required inputs are missing or inadequate (not just file existence, but content quality). Consultant can override explicitly. Exception: the Develop proposition quality gate additionally blocks individual propositions

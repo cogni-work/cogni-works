@@ -63,6 +63,8 @@ Develop is the creative engine of the engagement. With a clear problem statement
 
 The key principle: **generate before evaluating**. Evaluating during generation kills options prematurely — an idea that sounds weak in isolation may become the strongest when combined with another. Develop creates the option space; Deliver evaluates it.
 
+The Diamond Coach actively maintains divergent mode throughout Develop — see "Phase-Mode Coaching" in diamond-coach.md. When evaluation language appears (best option, obvious choice, we should go with), the coach parks the judgment for Deliver and redirects to option generation.
+
 ## Workflow
 
 ### 1. Load Context

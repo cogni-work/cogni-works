@@ -28,8 +28,8 @@ A process orchestrator for the insight-wave ecosystem. cogni-consulting doesn't 
 ## What it means for you
 
 - **Run Big-5 engagements with a boutique team.** A structured methodology coordinating 6 plugins means a full strategic options analysis — research, trend synthesis, portfolio modeling, verified deliverables — that would take a 4-person team 3-4 weeks completes in days.
-- **Resume any engagement with full context.** Engagement state, 40+ decisions, and method selections persist in `consulting-project.json`. Pick up an engagement weeks later without re-reading notes — the plugin knows what phase you're in, what's been decided, and what's next.
-- **Phase gates protect quality without blocking progress.** Each diamond transition checks 5-8 readiness criteria and warns about gaps — but you decide when to proceed. Zero rigid gatekeeping, full transparency on what's been covered and what hasn't.
+- **Resume — or refine — any engagement with full context.** Engagement state, 40+ decisions, and method selections persist in `consulting-project.json`. Pick up weeks later without re-reading notes, or re-enter a completed phase to refine it — the Diamond Coach reads your existing artifacts and focuses the iteration on what you want to improve.
+- **Phase gates protect quality, Diamond Coach explains why.** Each diamond transition blocks by default when required inputs are missing or inadequate — checking content quality, not just file existence. The Diamond Coach opens every phase with its intent and what good looks like, guides you through a task list, and closes with an accomplishment summary. You can override any gate explicitly when you're ready to proceed.
 
 ## Installation
 
@@ -67,7 +67,7 @@ Engagement state with phase tracking, method selection, and decision audit trail
 
 | Entity | Key fields | Description |
 |--------|-----------|-------------|
-| `consulting-project.json` | slug, vision_class, phase_state, plugin_refs | Engagement config and phase state machine: `pending` → `in-progress` → `complete` |
+| `consulting-project.json` | slug, vision_class, phase_state, engagement_weight, plugin_refs | Engagement config and phase state machine: `pending` → `in-progress` → `complete` (→ `in-progress` for iteration re-entry). Each phase tracks `iteration_count`. |
 | `execution-log.json` | transitions[] | Phase transition timestamps and triggers |
 | `method-log.json` | phases.{phase}.proposed/selected | Methods proposed by phase-analyst and selected by consultant |
 | `decision-log.json` | decisions[] | Key decisions with rationale and evidence references |
@@ -114,6 +114,7 @@ cogni-consulting/
 │   └── phase-gate-guard.sh       Phase gate enforcement
 ├── references/                   Method library, vision classes, and data model
 │   ├── data-model.md
+│   ├── diamond-coach.md
 │   ├── vision-classes.md
 │   ├── vision-class-summary.md
 │   ├── deliverable-map.md

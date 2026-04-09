@@ -7,20 +7,26 @@ provides the MCP, how it's installed, and which skills depend on it.
 
 These MCPs are declared in plugin `.mcp.json` files. When a user installs the plugin
 from the marketplace, Desktop/Cowork auto-discovers and starts the MCP server on the
-host machine. No manual configuration needed.
+host machine.
 
-### excalidraw
+### excalidraw (yctimlin/mcp_excalidraw)
 
 - **Provided by:** cogni-visual, cogni-portfolio
-- **Type:** npx (auto-downloads at runtime)
-- **npx package:** `excalidraw-mcp`
-- **Requires:** Canvas frontend on localhost:3000 (auto-started by cogni-visual's PreToolUse hook)
+- **Type:** git-installed (cloned and built by `cogni-workspace/scripts/install-mcp.sh`)
+- **Install path:** `~/.claude/mcp-servers/mcp_excalidraw/`
+- **Entry point:** `~/.claude/mcp-servers/mcp_excalidraw/start.sh` (wrapper that starts canvas + MCP)
+- **Source repo:** https://github.com/yctimlin/mcp_excalidraw.git
+- **Canvas frontend:** React + Excalidraw on localhost:3000 (auto-started by wrapper)
 - **Probe tool:** `mcp__excalidraw__describe_scene`
 - **Skills:** render-big-picture, render-big-block, enrich-report, portfolio-architecture
+- **Features:** WebSocket canvas sync, snapshots, mermaid-to-excalidraw, image export
 - **Troubleshooting:**
-  - If tools not available: check that cogni-visual or cogni-portfolio is installed
-  - If tools available but operations fail: verify canvas frontend is running (`http://localhost:3000`)
-  - Canvas auto-start hook: `cogni-visual/hooks/ensure-excalidraw-canvas.sh`
+  - If tools not available: run `manage-workspace` init/update to install, or manually run:
+    `bash cogni-workspace/scripts/install-mcp.sh --name mcp_excalidraw --repo https://github.com/yctimlin/mcp_excalidraw.git --wrapper cogni-workspace/templates/mcp-wrappers/excalidraw-canvas.sh`
+  - If tools available but canvas not visible: check `http://localhost:3000`
+  - To update: run `install-mcp.sh` with `--force` to pull latest and rebuild
+  - **Claude Desktop users:** add to `claude_desktop_config.json` manually:
+    `{"command": "bash", "args": ["~/.claude/mcp-servers/mcp_excalidraw/start.sh"], "env": {"EXPRESS_SERVER_URL": "http://localhost:3000", "ENABLE_CANVAS_SYNC": "true"}}`
 
 ### excalidraw_sketch
 

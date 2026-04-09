@@ -99,7 +99,8 @@ cogni-workspace/
 │   ├── pick-theme/
 │   └── workspace-status/
 ├── templates/                    Shared templates
-│   └── obsidian/                 Obsidian vault config templates
+│   ├── obsidian/                 Obsidian vault config templates
+│   └── mcp-wrappers/             Wrapper scripts for git-based MCP servers
 ├── hooks/                        Session lifecycle hooks
 │   ├── hooks.json
 │   └── on-session-start.sh
@@ -108,6 +109,7 @@ cogni-workspace/
 │   ├── check-skill-names.sh
 │   ├── discover-plugins.sh
 │   ├── generate-settings.sh
+│   ├── install-mcp.sh            Clone, build, and wrap git-based MCP servers
 │   ├── setup-obsidian.sh
 │   └── update-obsidian.sh
 ├── bash/                         Cross-platform utilities

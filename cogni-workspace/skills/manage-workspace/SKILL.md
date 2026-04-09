@@ -121,11 +121,41 @@ cp -r "${CLAUDE_PLUGIN_ROOT}/themes/_template/" \
 
 The template gives users a starting point for creating custom themes that visual plugins consume.
 
-### 5. MCP Server Summary
+### 5. MCP Server Summary and Git-Based Installation
 
 Plugins declare their MCP server dependencies in `.mcp.json` files. When users install
 plugins via the marketplace, Desktop/Cowork auto-discovers and starts these MCPs on the
 host machine — no manual configuration needed for npx-based and URL-based MCPs.
+
+**5a. Install git-based MCP servers**
+
+Some MCP servers are not available via npx and must be cloned and built from git.
+Read the git registry at `${CLAUDE_PLUGIN_ROOT}/references/mcp-git-registry.json` and
+install each server that is required by confirmed plugins:
+
+```bash
+# Read the registry
+REGISTRY="${CLAUDE_PLUGIN_ROOT}/references/mcp-git-registry.json"
+
+# For each server in the registry, check if any confirmed plugin needs it
+# Install using the install-mcp.sh script
+for server_name in $(python3 -c "import json; r=json.load(open('${REGISTRY}')); print(' '.join(r['servers'].keys()))"); do
+  WRAPPER_REL=$(python3 -c "import json; print(json.load(open('${REGISTRY}'))['servers']['${server_name}'].get('wrapper',''))")
+  WRAPPER_ARG=""
+  if [ -n "$WRAPPER_REL" ]; then
+    WRAPPER_ARG="--wrapper ${CLAUDE_PLUGIN_ROOT}/${WRAPPER_REL}"
+  fi
+  bash "${CLAUDE_PLUGIN_ROOT}/scripts/install-mcp.sh" \
+    --name "$server_name" \
+    --repo "$(python3 -c "import json; print(json.load(open('${REGISTRY}'))['servers']['${server_name}']['repo'])")" \
+    --build "$(python3 -c "import json; print(json.load(open('${REGISTRY}'))['servers']['${server_name}']['build'])")" \
+    $WRAPPER_ARG
+done
+```
+
+Report the outcome to the user (installed / skipped / failed).
+
+**5b. Scan plugin .mcp.json files**
 
 After plugin discovery, scan each confirmed plugin's directory for a `.mcp.json` file:
 
@@ -137,21 +167,20 @@ for plugin_path in ${confirmed_plugin_paths}; do
 done
 ```
 
-Present a summary of MCP servers that will be auto-loaded:
+Present a summary of MCP servers:
 
 ```
 MCP Servers (auto-configured by plugins):
-  excalidraw       npx excalidraw-mcp           <- cogni-visual, cogni-portfolio
-  excalidraw_sketch https://mcp.excalidraw.com  <- cogni-visual
+  excalidraw       ~/.claude/mcp-servers/mcp_excalidraw/start.sh  <- cogni-visual, cogni-portfolio (git-installed)
+  excalidraw_sketch https://mcp.excalidraw.com                    <- cogni-visual
 
 Manual install needed:
   claude-in-chrome Chrome extension             <- cogni-claims, cogni-help, cogni-website, cogni-workspace
   pencil           Open Pencil desktop app      <- cogni-visual (web/storyboard rendering)
 ```
 
-This step is informational only — no files are written. The plugin `.mcp.json` files
-handle everything. The summary helps users understand what's happening behind the scenes
-and what (if anything) requires manual action.
+**Claude Desktop users:** Tell them to add the git-installed server to their
+`claude_desktop_config.json` manually, using the `start.sh` wrapper path shown above.
 
 ### 6. Obsidian Integration (Optional)
 
@@ -230,14 +259,13 @@ Copy latest output-style files from `${CLAUDE_PLUGIN_ROOT}/assets/output-styles/
 
 Refresh `_template/theme.md` from `${CLAUDE_PLUGIN_ROOT}/themes/_template/`. Preserve all user-created themes.
 
-### 5. MCP Server Summary
+### 5. MCP Server Summary and Git-Based Installation
 
-Same as Init Mode step 5 — scan confirmed plugins for `.mcp.json` files and present
-the MCP summary. In update mode, also note any changes:
-- **New MCPs**: from newly added plugins
-- **Removed MCPs**: from removed plugins (note: the MCP may still be loaded until session restart)
-
-This is informational only — no files written.
+Same as Init Mode step 5 — install git-based MCP servers and scan plugin `.mcp.json` files.
+In update mode, also:
+- **Update git-installed MCPs**: run `install-mcp.sh --force` to pull latest and rebuild
+- **New MCPs**: install from newly added plugins
+- **Removed MCPs**: note from removed plugins (the MCP may still be loaded until session restart)
 
 ### 6. Update Obsidian Integration (Optional)
 

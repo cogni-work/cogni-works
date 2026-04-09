@@ -1,0 +1,20 @@
+{
+  "version": "1.0.0",
+  "description": "Git-based MCP servers that require clone + build (not available via npx)",
+  "servers": {
+    "mcp_excalidraw": {
+      "name": "mcp_excalidraw",
+      "repo": "https://github.com/yctimlin/mcp_excalidraw.git",
+      "build": "npm install && npm run build",
+      "wrapper": "templates/mcp-wrappers/excalidraw-canvas.sh",
+      "env": {
+        "EXPRESS_SERVER_URL": "http://localhost:3000",
+        "ENABLE_CANVAS_SYNC": "true"
+      },
+      "provides_tools": ["create_element", "batch_create_elements", "update_element", "delete_element", "describe_scene", "export_scene", "export_to_image", "import_scene", "create_from_mermaid", "get_canvas_screenshot"],
+      "required_by": ["cogni-visual", "cogni-portfolio"],
+      "replaces_npx": "excalidraw-mcp",
+      "notes": "Feature-rich Excalidraw MCP with React canvas (localhost:3000), WebSocket sync, snapshots, and mermaid support. The wrapper starts both the canvas server and the MCP stdio server."
+    }
+  }
+}

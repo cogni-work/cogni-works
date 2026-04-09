@@ -1,8 +1,12 @@
 {
   "mcpServers": {
     "excalidraw": {
-      "command": "npx",
-      "args": ["-y", "excalidraw-mcp"]
+      "command": "bash",
+      "args": ["-c", "$HOME/.claude/mcp-servers/mcp_excalidraw/start.sh"],
+      "env": {
+        "EXPRESS_SERVER_URL": "http://localhost:3000",
+        "ENABLE_CANVAS_SYNC": "true"
+      }
     }
   }
 }

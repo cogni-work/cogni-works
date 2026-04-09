@@ -10,7 +10,9 @@ description: |
   "developer documentation", "update README with portfolio", "document the project",
   "open-source documentation", "GitHub README", "project overview for developers",
   "technical documentation from portfolio", "what do we offer", "external portfolio",
-  "portfolio narrative", "make this customer-ready", "pitch", "portfolio pitch",
+  "portfolio narrative", "make this customer-ready", "portfolio website",
+  "website content", "landing page", "home page", "about us page", "how we work page",
+  "capability page", "for [persona] page", "web content from portfolio", "pitch", "portfolio pitch",
   "presentation narrative", "pitch deck from portfolio", "slides from portfolio",
   "portfolio story", "pitch for [market]", "proposal", "create a proposal",
   "sales proposal", "marketing brief", "market brief", "export to Excel",
@@ -32,7 +34,7 @@ Internal portfolio data (slugs, TAM/SAM/SOM, relevance tiers, quality scores) is
 
 | Use Case | Audience | Output | Format |
 |----------|----------|--------|--------|
-| `customer-narrative` | Buyers, executives | Value-led documentation for self-paced reading | Markdown |
+| `customer-narrative` | Buyers navigating a portfolio-driven website | Home / About / Capability / Persona / Approach pages, each arc-structured | Markdown with `arc_id` (per-scope) |
 | `repo-documentation` | Developers, OSS community | Technical clarity: what, how, getting started | Markdown |
 | `pitch` | Executives, conference, board | Arc-structured presentation narrative (cogni-narrative compatible) | Markdown with `arc_id` |
 | `proposal` | Sales teams, prospects | Per-proposition sales proposal | Markdown |
@@ -40,7 +42,7 @@ Internal portfolio data (slugs, TAM/SAM/SOM, relevance tiers, quality scores) is
 | `workbook` | Leadership, analysts | Structured spreadsheet with all portfolio data | XLSX |
 | Custom/ad-hoc | Any audience | User-defined voice, sections, review | Markdown |
 
-Each use case defines its own voice, output templates, and review criteria. The `pitch` use case is unique: its output includes `arc_id` in frontmatter, making it directly consumable by story-to-slides, story-to-web, story-to-big-picture, and story-to-storyboard — no intermediate `/narrative` step needed.
+Each use case defines its own voice, output templates, and review criteria. Both the `pitch` and `customer-narrative` use cases emit output with `arc_id` in frontmatter, making them directly consumable by story-to-slides, story-to-web, story-to-big-picture, and story-to-storyboard — **no intermediate `/narrative` step needed.** `customer-narrative` is unique in that its arc varies per scope: `home` and `persona` use `jtbd-portfolio`, `about` uses `company-credo`, `capability` uses `corporate-visions`, `approach` uses `engagement-model`. See `references/templates-customer-narrative.md` for the full scope → arc mapping.
 
 ## Prerequisites
 
@@ -74,7 +76,7 @@ If the request is ambiguous, present options:
 
 > "What do you want to use the portfolio content for?"
 > - **Pitch narrative** — arc-structured presentation narrative, ready for story-to-slides (company presents to audience)
-> - **Customer narratives** — website content, sales materials, executive briefings (company speaks to buyer)
+> - **Customer narratives (portfolio-driven website)** — Home, About, Capability, Persona, How-We-Work pages, each arc-structured and ready for `/story-to-web` (company speaks to buyer via web)
 > - **Proposals** — per-proposition sales proposals for specific Feature × Market pairs
 > - **Marketing briefs** — market content packages with sizing, buyer profile, messaging themes
 > - **Portfolio workbook** — XLSX spreadsheet with all portfolio data for analysis
@@ -88,7 +90,7 @@ If the request is ambiguous, present options:
 
 Load the scope options from the selected use case (see registry). Only ask for clarification if genuinely ambiguous.
 
-For **`customer-narrative`**: overview, market (which one?), customer (which market and persona?), or all.
+For **`customer-narrative`**: `home`, `about`, `capability` (which feature, or all customer-facing features?), `persona` (which market and persona?), `approach`, or `all`. **The legacy `overview` / `market` / `customer` scopes from v1 are deprecated** — map old requests forward: `overview` → `home`, `customer` → `persona`, and `market` is dropped (its content lives in `home.md`'s Who-We-Serve section and in persona pages).
 For **`pitch`**: market (which one?), overview (portfolio-wide), or all.
 For **`proposal`**: single (which proposition?), market (all propositions in a market), or all.
 For **`market-brief`**: single (which market?), or all.
@@ -98,7 +100,26 @@ For **custom/ad-hoc use cases**: use the scopes defined in the use case configur
 
 If the request is vague, present the scope options from the selected use case.
 
-### Step 1b: Arc Selection (pitch use case only)
+### Step 1b: Arc Selection (pitch and customer-narrative use cases)
+
+#### Customer-narrative: arcs are hardcoded per scope (no picker)
+
+For `customer-narrative`, the arc is **an implementation detail of the scope** — it is not a user-facing choice. Do not present a picker. The mapping is:
+
+| Scope | Arc | Rationale |
+|---|---|---|
+| `home` | `jtbd-portfolio` | Jobs → Friction → Portfolio → Invitation mirrors how buyers enter a website |
+| `about` | `company-credo` | Mission → Conviction → Credibility → Promise answers "why should I trust this company" |
+| `capability` | `corporate-visions` | Why Change → Why Now → Why You → Why Pay is the canonical capability-page arc |
+| `persona` | `jtbd-portfolio` | Same shape as home, narrowed to one persona's jobs and friction |
+| `approach` | `engagement-model` | Principles → Process → Partnership → Outcomes answers "how does this land in my organization" |
+
+Load each scope's arc definition in Step 2 so the templates render with the correct element headers, word proportions, and phase-4b synthesis guidance. If the user tries to override with `--arc-id` for a customer-narrative scope, reject the override and explain the scope → arc mapping — these arcs are load-bearing for the website information architecture and the deduplication discipline that keeps pages from overlapping. (The `capability` scope is the one exception: `--arc-id corporate-visions` is the only valid override and is also the default, so effectively a no-op.)
+
+#### Pitch: user picker
+
+For the `pitch` use case (below) the arc is genuinely a user choice — present the picker.
+### Step 1b (pitch use case only)
 
 For the `pitch` use case, the output's `arc_id` controls which story structure cogni-narrative downstream tools render. The `templates-pitch.md` reference defines `jtbd-portfolio` as the standard default — its 1:1 job-to-solution mapping mirrors the portfolio's Feature × Market structure, and its verb-phrase jobs surface the buyer language that IS/DOES/MEANS already encodes. The user can still override.
 
@@ -115,7 +136,7 @@ If the user explicitly passed `--arc-id` on invocation, skip the picker and use 
 
 Pass the chosen `arc_id` into Step 2 so `cogni-narrative/skills/narrative/references/story-arc/{arc-id}/arc-definition.md` is read for the right arc, and into Step 3 so the frontmatter and evidence mapping use the right arc elements.
 
-Skip this step entirely for non-pitch use cases (`customer-narrative`, `proposal`, `market-brief`, `workbook`, `repo-documentation`, and ad-hoc/custom use cases) — they do not carry `arc_id`.
+Skip the pitch picker for non-pitch use cases (`proposal`, `market-brief`, `workbook`, `repo-documentation`, and ad-hoc/custom use cases) — they do not carry `arc_id`. `customer-narrative` is now arc-driven per scope as described above; its arcs are hardcoded and do not need a picker.
 
 ### Step 2: Load Entities
 
@@ -126,10 +147,13 @@ Read entity files from the project directory. Which entities to load depends on 
 - All `products/*.json`, `features/*.json`
 
 **Customer-narrative (all scopes):**
-- All `propositions/*.json` (filter by market for tailored views)
+- All `propositions/*.json` (filter by market or persona as the scope requires)
 - All `solutions/*.json` and `packages/*.json` (if available)
-- `markets/*.json` and `customers/*.json` (for tailored views)
-- `competitors/*.json` (for differentiation, woven into narrative)
+- `markets/*.json` and `customers/*.json`
+- `competitors/*.json` (for differentiation, reverse-engineered into convictions on `about.md`)
+- `cogni-claims/claims.json` — verified facts for the `about.md` Credibility element
+- Read the arc definition for the target scope from `cogni-narrative/skills/narrative/references/story-arc/{arc-id}/arc-definition.md` (use the scope → arc mapping from Step 1b)
+- Read the matching phase-4b synthesis file from `cogni-narrative/skills/narrative/references/phase-workflows/phase-4b-synthesis-{arc-id}.md` for element-specific writing rules
 
 **Pitch:**
 - `markets/{market-slug}.json` (or all markets for overview/all scopes)
@@ -190,6 +214,8 @@ Collapse the raw `maturity` × `readiness` signal into **five messaging modes**.
 **Why a derived mode and not raw maturity.** Templates need a small number of voice choices. Six maturity values times three readiness values times five templates would drift in five different directions. One mode, defined in one place, keeps voice rules consistent across customer narratives, pitches, proposals, briefs and repo documentation.
 
 **Why keep early-stage products visible.** Hiding concept products defeats the reason portfolio-communicate exists — to tell the full story of what the company is doing. The announce mode is specifically designed so that concept material can appear in the output *as an announcement* rather than as an offering. The one exception is the `proposal` use case: generating a sales proposal for something that does not exist yet is the exact failure mode this section exists to prevent, and `templates-proposal.md` blocks it explicitly.
+
+**Customer-narrative: roadmap is exclusive to `home.md`.** Under the v2 customer-narrative model, the "On the roadmap" subsection appears in exactly one file — `home.md`. Persona pages, capability pages, the About page, and the Approach page do not emit roadmap content; instead they link to the Home page's roadmap section where relevant. This is deliberate: repeating the roadmap across 7+ files was the single biggest redundancy in the v1 output and the reason market-level pages read as redundant with persona pages. The templates-customer-narrative.md file enforces this discipline. Additionally, commitments in `home.md`'s Invitation and `about.md`'s Promise must not depend on `announce`-mode products — if they would, the commitment belongs on the Roadmap, not the invitation.
 
 **Carrying the mode into the review loop.** Step 4 passes the mode (or the effective mode per section) to `communicate-review-assessor` so it can flag overclaims — present-tense language describing a concept-stage offering, or proposals generated against announce-mode propositions — as review failures instead of letting them slip through.
 
@@ -279,10 +305,13 @@ List generated files with paths AND their review status.
 **If all files accepted**, show per-file review scores, then suggest the downstream pipeline appropriate for the use case:
 
 For **customer-narrative**:
-- **Polish prose**: "Run `/copywrite` on any generated file to polish for executive readability"
-- **Arc narrative**: "Run `/narrative --source-path output/communicate/customer-narrative/...` to transform into an arc-driven executive narrative"
-- **Visual formats** (after narrative): `/story-to-web` for landing pages, `/story-to-slides` for presentations, `/story-to-big-picture` for visual journey maps
-- **Marketing content** (if cogni-marketing installed): "These customer narratives are automatically discovered by `/marketing-setup` and used as voice/messaging enrichment when generating marketing content — ensuring consistency between how you present your portfolio and how your marketing speaks to the same audience"
+- **Score quality**: "Run `/narrative-review` on any generated file to score against its arc's quality gates (each file already carries `arc_id` in frontmatter)"
+- **Polish prose**: "Run `/copywrite` on any generated file to polish for executive readability while preserving arc structure"
+- **Visual formats** (direct — no intermediate `/narrative` step needed, because each file already carries `arc_id`):
+  - `/story-to-web` → scrollable web page (one per file, or an indexed multi-page site)
+  - `/story-to-slides` → PowerPoint version of any page
+  - `/story-to-big-picture` → illustrated visual journey map of the home or about page
+- **Marketing content** (if cogni-marketing installed): "These customer narratives are automatically discovered by `/marketing-setup` and used as voice/messaging enrichment when generating marketing content — ensuring consistency between how the website speaks to buyers and how your marketing speaks to the same audience"
 
 For **pitch**:
 - **Score quality**: "Run `/narrative-review` to score against the arc's quality gates"
@@ -364,7 +393,7 @@ When the user selects "something else" or describes a purpose that doesn't match
 ### Reference Files
 
 - **`references/use-case-registry.md`** — Registry of available use cases with trigger phrases, voice profiles, scope options, and review configuration
-- **`references/templates-customer-narrative.md`** — Templates for customer-facing narratives (overview, market, customer)
+- **`references/templates-customer-narrative.md`** — Templates for portfolio-driven website components (home, about, capability, persona, approach) — each with arc mapping and deduplication discipline
 - **`references/templates-pitch.md`** — Templates for arc-structured pitch narratives (cogni-narrative compatible)
 - **`references/templates-proposal.md`** — Templates for per-proposition sales proposals
 - **`references/templates-market-brief.md`** — Templates for per-market marketing briefs

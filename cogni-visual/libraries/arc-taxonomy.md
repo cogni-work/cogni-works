@@ -33,6 +33,8 @@ When the source narrative carries an `arc_id` from cogni-narrative (in YAML fron
 | `trend-panorama` | `journey` | Trend Panorama | Elements (Forces/Impact/Horizons/Foundations) describe a progression from external pressures to capability requirements |
 | `theme-thesis` | `why-change` | Theme Thesis | Elements (Why Change/Why Now/Why You/Why Pay) follow the same tension-to-action pattern as Corporate Visions, purpose-built for investment theme narratives |
 | `jtbd-portfolio` | `argument` | JTBD Portfolio | Elements (Job Landscape/Friction Map/Portfolio Map/Invitation) build an analytical case from buyer jobs through friction to solutions |
+| `company-credo` | `argument` | Company Credo | Elements (Mission/Conviction/Credibility/Promise) build a belief-driven argument: the company states what it believes, backs it with receipts, and closes with a forward commitment |
+| `engagement-model` | `journey` | Engagement Model | Elements (Principles/Process/Partnership/Outcomes) describe a chronological progression through an engagement — Process is the longest element and reads as a phase sequence with artifacts and time bands |
 
 **Fallback:** If `arc_id` is not in this table, fall back to auto-detection from narrative content (same behavior as when no `arc_id` is present).
 
@@ -113,6 +115,24 @@ Each arc has 4 ordered elements that represent the phases of the narrative struc
 | 2 | Friction Map | Reibungskarte | Per-job obstacles and cost of inaction |
 | 3 | Portfolio Map | Portfolio-Zuordnung | Solutions mapped 1:1 to jobs via IS/DOES/MEANS |
 | 4 | Invitation | Einladung | Low-commitment entry point with cogni-sales handoff |
+
+### company-credo
+
+| # | Element (EN) | Element (DE) | Narrative Function |
+|---|-------------|-------------|-------------------|
+| 1 | Mission | Mission | Why the company exists — the belief-with-a-verb |
+| 2 | Conviction | Überzeugung | 3–4 non-negotiable judgment calls the Mission implies |
+| 3 | Credibility | Glaubwürdigkeit | Receipts: track record, external validation, outcomes, expertise |
+| 4 | Promise | Versprechen | Forward commitment in You-voice, closing the arc |
+
+### engagement-model
+
+| # | Element (EN) | Element (DE) | Narrative Function |
+|---|-------------|-------------|-------------------|
+| 1 | Principles | Prinzipien | Operating principles — what the company always/never does |
+| 2 | Process | Prozess | Canonical 4–6 phases with artifacts and time bands |
+| 3 | Partnership | Partnerschaft | Reciprocal — what the buyer must bring for the engagement to work |
+| 4 | Outcomes | Ergebnisse | Cross-cutting results the buyer can observe |
 
 ---
 

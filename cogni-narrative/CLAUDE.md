@@ -1,6 +1,6 @@
 # cogni-narrative
 
-Story arc engine for the insight-wave ecosystem — transforms structured content into executive narratives using 8 arc frameworks and 8 narrative techniques.
+Story arc engine for the insight-wave ecosystem — transforms structured content into executive narratives using 10 arc frameworks and 8 narrative techniques.
 
 ## Plugin Architecture
 
@@ -12,7 +12,7 @@ skills/                         3 narrative skills
     references/
       language-templates.md       Language and arc element templates (EN/DE)
       narrative-techniques/       8 narrative techniques for story construction
-      phase-workflows/            Phase-based workflow guidance (10 workflow files)
+      phase-workflows/            Phase-based workflow guidance (12 workflow files)
         phase-4b-synthesis-corporate-visions.md
         phase-4b-synthesis-technology-futures.md
         phase-4b-synthesis-competitive-intelligence.md
@@ -21,7 +21,9 @@ skills/                         3 narrative skills
         phase-4b-synthesis-trend-panorama.md
         phase-4b-synthesis-theme-thesis.md
         phase-4b-synthesis-jtbd-portfolio.md
-      story-arc/                  8 arc framework definitions
+        phase-4b-synthesis-company-credo.md
+        phase-4b-synthesis-engagement-model.md
+      story-arc/                  10 arc framework definitions
         arc-registry.md           Index of all available story arcs
         corporate-visions/        Why Change → Why Now → Why You → Why Pay
         technology-futures/       Emerging → Converging → Possible → Required
@@ -31,6 +33,8 @@ skills/                         3 narrative skills
         trend-panorama/           Forces → Impact → Horizons → Foundations (TIPS-native)
         theme-thesis/             Investment theme narratives (Corporate Visions arc for themes)
         jtbd-portfolio/           Jobs-to-be-Done portfolio narrative (buyer jobs → solutions)
+        company-credo/            Mission → Conviction → Credibility → Promise (About-Us pages)
+        engagement-model/         Principles → Process → Partnership → Outcomes (How-We-Work pages)
   narrative-review/               Score narratives against quality gates (0-100, A-F)
     references/
       scoring-rubric.md           Quality gate definitions and thresholds
@@ -57,7 +61,7 @@ commands/                       3 slash commands
 | Agents | 3 | narrative-writer (sonnet), narrative-reviewer (sonnet), narrative-adapter (sonnet) |
 | Commands | 3 | narrative, narrative-review, narrative-adapt |
 
-## 8 Story Arc Frameworks
+## 10 Story Arc Frameworks
 
 | Arc ID | Element Flow | Best For |
 |--------|-------------|----------|
@@ -69,6 +73,8 @@ commands/                       3 slash commands
 | trend-panorama | Forces → Impact → Horizons → Foundations | TIPS trend-scout output (Trendradar-native) |
 | theme-thesis | Why Change → Why Now → Why You → Why Pay | Investment theme narratives within TIPS reports |
 | jtbd-portfolio | Jobs → Friction → Portfolio → Invitation | Portfolio introductions, capability overviews, pre-sales |
+| company-credo | Mission → Conviction → Credibility → Promise | Website About-Us pages, company introductions |
+| engagement-model | Principles → Process → Partnership → Outcomes | Website How-We-Work pages, engagement sections of proposals |
 
 Arc auto-detection: the narrative skill analyzes input content structure and proposes the best-fit arc. User can override with `--arc {arc-id}`.
 

@@ -16,6 +16,8 @@ This registry indexes all available story arcs for the cogni-narrative plugin. E
 | 6 | `trend-panorama` | Forces → Impact → Horizons → Foundations | T→I→P→S | Trend-scout output, TIPS reports | Structural + `"smarter-service"` |
 | 7 | `theme-thesis` | Change → Now → You → Pay | T→I→P→S | Theme-level investment narratives | `content_type: "theme"` |
 | 8 | `jtbd-portfolio` | Jobs → Friction → Portfolio → Invitation | - | Portfolio introductions, capability overviews, pre-sales | `content_type: "jtbd"` |
+| 9 | `company-credo` | Mission → Conviction → Credibility → Promise | - | About-Us pages, company introductions, brand identity narratives | `content_type: "company-credo"` or `"about-us"` |
+| 10 | `engagement-model` | Principles → Process → Partnership → Outcomes | - | How-We-Work pages, engagement sections of proposals, partner onboarding | `content_type: "engagement-model"` or `"how-we-work"` |
 
 ## Arc Selection Logic
 
@@ -278,6 +280,88 @@ A 5-stage B2B portfolio narrative structured around Jobs-to-be-Done. Organises a
 
 ---
 
+### 9. Company Credo
+
+**Arc ID:** `company-credo`
+**Display Name:** Company Credo
+**Elements:** Mission → Conviction → Credibility → Promise
+
+**Best For:**
+- Website "About Us" pages (primary use)
+- Company introductions at the start of proposals and sales decks
+- Investor and partner relationship pages where the buyer is choosing the company before any specific offering
+- Brand identity documents that need to read as a narrative, not a brochure
+
+**Description:**
+A 4-element B2B narrative that answers the buyer's first unasked question: "Why does this company exist, and why should I believe it?" Mission states the belief that drives the company; Conviction names 3–4 non-negotiable judgment calls; Credibility provides the receipts; Promise closes with a forward commitment in You-voice.
+
+**Detection Signals:**
+- `content_type: "company-credo"` or `"about-us"`
+- Keywords (>=12% density): "about us", "our mission", "why we exist", "what we believe", "our story", "company values", "our credo", "who we are", "why us"
+
+**Company-Credo-Specific Constraints:**
+- Mission must be first-person plural ("we")
+- Each Conviction must pass the disagreement test (a named competitor could plausibly disagree)
+- Each Conviction must pair belief with buyer-visible consequence
+- Every quantitative Credibility claim must be cited
+- Named customers in Credibility only with explicit `disclosure_permission: true`
+- Promise MUST NOT commit to anything in `announce`-mode products
+- Every Promise item must use You-Phrasing
+- Final invitation is a single link, not a menu
+
+**Section Proportions:**
+- Hook (Founding lens): 10%
+- Mission: 24%
+- Conviction: 22%
+- Credibility: 26%
+- Promise: 18%
+- **Default total:** 1,400 words (customizable via `--target-length`)
+
+**Definition File:** `story-arc/company-credo/arc-definition.md`
+
+---
+
+### 10. Engagement Model
+
+**Arc ID:** `engagement-model`
+**Display Name:** Engagement Model
+**Elements:** Principles → Process → Partnership → Outcomes
+
+**Best For:**
+- Website "How We Work" / "Our Approach" pages (primary use)
+- The engagement-model section of proposals (explaining how the work will land, not what will be delivered)
+- Partner onboarding pages
+- Internal documentation for new hires explaining company defaults
+
+**Description:**
+A 4-element B2B narrative that answers "how will this work land in my organization?" Principles name 3–4 operating disciplines; Process walks the canonical 4–6 phases with artifacts and time bands; Partnership names what the buyer must bring; Outcomes summarizes cross-cutting results the buyer can observe.
+
+**Detection Signals:**
+- `content_type: "engagement-model"` or `"how-we-work"`
+- Keywords (>=12% density): "how we work", "engagement model", "working with us", "our process", "delivery model", "partnership", "our approach", "principles", "ways of working"
+
+**Engagement-Model-Specific Constraints:**
+- Every Principle must be operational (observable in week 1), not a value
+- Every Process phase must name at least one artifact and one time band
+- No Process phase may be specific to one solution (solution-specific phases belong on capability pages)
+- Every Partnership expectation must name a concrete thing (a person, data source, approval, or timebox)
+- Every Partnership expectation must state a consequence if missing
+- Every Outcome must describe buyer-visible change, not company activity
+- Every Outcome must be cross-cutting (true across most of the portfolio)
+- Pricing, ROI numbers, and per-capability metrics are FORBIDDEN in this arc (they belong on capability pages or proposals)
+
+**Section Proportions:**
+- Hook (Working with us): 8%
+- Principles: 22%
+- Process: 28%
+- Partnership: 20%
+- Outcomes: 22%
+- **Default total:** 1,400 words (customizable via `--target-length`)
+
+**Definition File:** `story-arc/engagement-model/arc-definition.md`
+
+---
+
 ## Arc Detection Algorithm
 
 ### Step 1: Explicit Selection
@@ -316,6 +400,10 @@ const arcMap = {
   "scenarios": "strategic-foresight",
   "industry": "industry-transformation",
   "jtbd": "jtbd-portfolio",
+  "company-credo": "company-credo",
+  "about-us": "company-credo",
+  "engagement-model": "engagement-model",
+  "how-we-work": "engagement-model",
   "market": "corporate-visions",
   "generic": "corporate-visions"
 }
@@ -344,7 +432,9 @@ keyword_sets = {
   "competitive-intelligence": ["competitor", "market share", "positioning", "differentiation", "threat", "rivalry"],
   "strategic-foresight": ["scenario", "future", "signal", "uncertainty", "planning", "foresight"],
   "industry-transformation": ["regulatory", "sector", "structural", "industry", "transformation", "policy"],
-  "jtbd-portfolio": ["jobs-to-be-done", "functional job", "jtbd", "job landscape", "hire", "portfolio map", "capability overview", "pre-sales positioning"]
+  "jtbd-portfolio": ["jobs-to-be-done", "functional job", "jtbd", "job landscape", "hire", "portfolio map", "capability overview", "pre-sales positioning"],
+  "company-credo": ["about us", "our mission", "why we exist", "what we believe", "our story", "company values", "our credo", "who we are", "why us"],
+  "engagement-model": ["how we work", "engagement model", "working with us", "our process", "delivery model", "partnership", "our approach", "principles", "ways of working"]
 }
 
 thresholds = {
@@ -354,7 +444,9 @@ thresholds = {
   "competitive-intelligence": 0.12,
   "strategic-foresight": 0.10,
   "industry-transformation": 0.12,
-  "jtbd-portfolio": 0.12
+  "jtbd-portfolio": 0.12,
+  "company-credo": 0.12,
+  "engagement-model": 0.12
 }
 ```
 

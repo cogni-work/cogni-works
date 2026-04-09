@@ -25,7 +25,7 @@ skills/                         19 portfolio skills
   portfolio-verify/               Orchestrate claim verification via cogni-claims
   portfolio-communicate/          All portfolio output: pitches, proposals, briefs, workbooks, docs
     references/
-      templates-customer-narrative.md   Customer-facing documentation
+      templates-customer-narrative.md   Portfolio-driven website components (home/about/capability/persona/approach), each arc-structured
       templates-pitch.md                Arc-structured presentation narratives (cogni-narrative compatible)
       templates-proposal.md             Per-proposition sales proposals
       templates-market-brief.md         Per-market marketing briefs
@@ -100,11 +100,16 @@ portfolio-setup → products → features → markets → customers → proposit
                                                           portfolio-verify (claims)
                                                                     ↓
                                                             portfolio-communicate
-                                                                     ├── pitch → story-to-slides
+                                                                     ├── pitch → story-to-slides / story-to-web
                                                                      ├── proposal
                                                                      ├── market-brief
                                                                      ├── workbook (XLSX)
-                                                                     ├── customer-narrative
+                                                                     ├── customer-narrative (5 scopes, each arc-structured)
+                                                                     │     home        → jtbd-portfolio   ─┐
+                                                                     │     about       → company-credo    │→ story-to-web
+                                                                     │     capability  → corporate-visions│  (no /narrative step)
+                                                                     │     persona     → jtbd-portfolio   │
+                                                                     │     approach    → engagement-model ─┘
                                                                      └── repo-documentation
                                                                 → portfolio-dashboard
 ```

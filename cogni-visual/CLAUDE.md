@@ -194,7 +194,7 @@ cogni-trends/cogni-research → enrich-report → browser / PDF / DOCX
 
 - **Briefs are YAML frontmatter + Markdown.** Frontmatter holds metadata (type, version, theme, arc_type, arc_id, confidence_score). Body holds the content specification.
 - **Big Block = data-driven grid, not narrative landscape.** story-to-big-block reads structured JSON from the TIPS value-modeler (not narratives). Solution blocks are organized by BR tier in horizontal bands. TIPS path connections link blocks that share trend-implication-possibility paths. SPIs and Foundations appear below the tier grid. No arc taxonomy, no story worlds, no copywriting — the data IS the content.
-- **Unified arc taxonomy.** All four narrative skills read `arc_id` from narrative frontmatter, map to visual `arc_type` via `libraries/arc-taxonomy.md` (6 narrative arcs → 5 visual arc types), and optionally load arc element names for labeling (station labels, section labels, arc labels, methodology phases).
+- **Unified arc taxonomy.** All four narrative skills read `arc_id` from narrative frontmatter, map to visual `arc_type` via `libraries/arc-taxonomy.md` (10 narrative arcs → 5 visual arc types), and optionally load arc element names for labeling (station labels, section labels, arc labels, methodology phases).
 - **Agent responses are JSON-only.** Agents return structured JSON; no prose.
 - **Assertion headlines.** Every slide title, station headline, section headline, and poster headline must be an assertion (contains a verb), not a topic label.
 - **Number plays.** Statistics are reframed for visual impact (ratio framing, hero number isolation, before/after contrast).

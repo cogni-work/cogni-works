@@ -426,6 +426,24 @@ Exact `##` section headers for insight-summary.md output, per arc and language. 
 | 3 | Portfolio Map: Solutions by Job | Portfolio-Zuordnung: Lösungen je Aufgabe |
 | 4 | Invitation: Next Step | Einladung: Nächster Schritt |
 
+**company-credo:**
+
+| Element | English (en) | German (de) |
+|---------|--------------|-------------|
+| 1 | Mission: Why We Exist | Mission: Warum es uns gibt |
+| 2 | Conviction: What We Believe | Überzeugung: Woran wir glauben |
+| 3 | Credibility: How You Can Trust Us | Glaubwürdigkeit: Warum Sie uns vertrauen können |
+| 4 | Promise: What You Can Expect | Versprechen: Was Sie erwarten können |
+
+**engagement-model:**
+
+| Element | English (en) | German (de) |
+|---------|--------------|-------------|
+| 1 | Principles: Principles We Work By | Prinzipien: Unsere Arbeitsprinzipien |
+| 2 | Process: How an Engagement Unfolds | Prozess: Wie eine Zusammenarbeit verläuft |
+| 3 | Partnership: What We Expect From You | Partnerschaft: Was wir von Ihnen erwarten |
+| 4 | Outcomes: What Success Looks Like | Ergebnisse: Wie Erfolg aussieht |
+
 ## German Text Formatting
 
 When generating content in German (`language: "de"`):

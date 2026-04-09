@@ -277,6 +277,8 @@ If any gate fails, fix the specific issue and re-validate all gates (fixes can b
 | `industry-transformation` | Forces -> Friction -> Evolution -> Leadership | Industry analysis, regulatory impact |
 | `trend-panorama` | Forces -> Impact -> Horizons -> Foundations (TIPS) | Trend-scout output, TIPS trend reports |
 | `jtbd-portfolio` | Jobs -> Friction -> Portfolio -> Invitation | Portfolio introductions, capability overviews, pre-sales |
+| `company-credo` | Mission -> Conviction -> Credibility -> Promise | About-Us pages, company introductions, brand identity narratives |
+| `engagement-model` | Principles -> Process -> Partnership -> Outcomes | How-We-Work pages, engagement sections of proposals, partner onboarding |
 
 See [references/story-arc/arc-registry.md](references/story-arc/arc-registry.md) for detection signals, word targets, and extension guidelines.
 

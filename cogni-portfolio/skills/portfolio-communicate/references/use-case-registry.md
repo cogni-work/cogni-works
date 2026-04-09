@@ -10,25 +10,37 @@ Available communication use cases for portfolio content. Each use case defines a
 
 | Field | Value |
 |-------|-------|
-| **Name** | Customer Narrative |
-| **Audience** | Buyers, executives, decision-makers evaluating the company's offerings |
-| **Voice** | Company speaks to buyer ("we"/"you"). Professional but conversational — not a brochure, not a contract |
-| **Trigger phrases** | "customer-facing", "sales materials", "present to buyers", "what do we offer", "capability overview", "service catalog", "external portfolio", "portfolio for customers", "customer documentation", "make this customer-ready" |
+| **Name** | Customer Narrative (Portfolio-Driven Website) |
+| **Audience** | Buyers, executives, decision-makers navigating a portfolio-driven website |
+| **Voice** | Company speaks to buyer ("we"/"you"). Professional but conversational — each page feels authored, not generated. |
+| **Trigger phrases** | "customer-facing", "sales materials", "present to buyers", "what do we offer", "capability overview", "service catalog", "external portfolio", "portfolio for customers", "customer documentation", "make this customer-ready", "portfolio website", "website content", "landing page", "home page", "about us page", "how we work page", "capability page", "for {persona} page", "web content from portfolio" |
 | **Template** | `references/templates-customer-narrative.md` |
 | **Review** | Full 3-perspective: Target Buyer, Marketing Director, Sales Director |
 | **Output path** | `output/communicate/customer-narrative/` |
-| **Maturity handling** | All modes allowed. `announce`/`preview` routed to a "On the roadmap" subsection in future/beta-qualified voice; `sunset` omitted from `overview` by default. See SKILL.md → Maturity-Aware Messaging. |
+| **Maturity handling** | All modes allowed. `announce`/`preview` routed to an "On the roadmap" subsection in `home.md` **only** (other files do not carry roadmap content — they link to home). `sunset` omitted from `home.md` and `capabilities/*.md` by default. Promise/Invitation commitments must not depend on `announce`-mode products. See SKILL.md → Maturity-Aware Messaging. |
 
 **Scopes:**
 
-| Scope | Output file | Description |
-|-------|------------|-------------|
-| `overview` | `portfolio-overview.md` | General entry point — all products, key capabilities, no market tailoring |
-| `market` | `market/{market-slug}.md` | Filtered for a specific target market's buyers |
-| `customer` | `customer/{market-slug}--{persona}.md` | Personalized for a specific buyer persona |
-| `all` | All of the above | Overview + all markets + all customer personas |
+Each scope produces a main component of a portfolio-driven website, driven by a specific story arc from `cogni-narrative`. Each output file includes `arc_id` in frontmatter so it is directly consumable by `/story-to-web` without an intermediate `/narrative` pass.
 
-**Downstream pipeline:** `/copywrite` -> `/narrative` -> `/story-to-web`, `/story-to-slides`, `/story-to-big-picture`
+| Scope | Output file | Component | Arc |
+|-------|------------|-----------|-----|
+| `home` | `home.md` | Home page — what we do, for whom, why it matters | `jtbd-portfolio` |
+| `about` | `about.md` | About Us — who we are, why we exist, what we believe | `company-credo` |
+| `capability` | `capabilities/{feature-slug}.md` | One page per customer-facing feature | `corporate-visions` |
+| `persona` | `for/{market-slug}--{persona}.md` | Persona landing page ("For CROs", "For Plant Managers") | `jtbd-portfolio` |
+| `approach` | `approach.md` | How We Work / Our Approach | `engagement-model` |
+| `all` | All of the above | Full website regeneration from current portfolio state | — |
+
+**Deduplication discipline:**
+- The Roadmap subsection appears in `home.md` only; other files link to it.
+- "Why us" differentiators appear in `about.md` only; other files refer to them.
+- Persona pages ROUTE to capability pages; they do not restate the capability story.
+- Capability pages are the single source of truth for a feature's Why Change → Why Pay.
+
+**Deprecated scopes (v1):** The `overview` / `market` / `customer` scopes from the previous version are replaced by `home` / (dropped) / `persona`. The old `market/*.md` files are no longer generated — their content was redundant with persona pages and had no role in a standard website IA. Existing market files from past runs are left on disk and not automatically migrated; regenerating with scope=`all` simply stops producing them.
+
+**Downstream pipeline:** Each output file carries `arc_id` in frontmatter so it is directly consumable by downstream cogni-visual skills — `/story-to-web` for pages, `/story-to-slides` for deck versions, `/story-to-big-picture` for visual journey maps — **with no intermediate `/narrative` pass**. Optionally run `/copywrite` on any file before rendering for extra prose polish.
 
 ---
 

@@ -8,13 +8,15 @@ Workspace-level infrastructure for the cogni plugin ecosystem: theme management,
 - Themes live in `themes/` as markdown files describing visual identity
 - See `references/design-variables-pattern.md` for the shared convention on producing themed HTML dashboards — any skill generating visual HTML output should follow this pattern
 
-## Git-Based MCP Server Installation
+## MCP Server Installation
 
-- Some MCP servers (e.g. yctimlin/mcp_excalidraw) are not on npm and must be cloned + built from git
+- The `install-mcp` skill is the primary entry point for end-to-end MCP setup
+- It handles git-based servers (clone + build), native app detection, and Claude Desktop config patching
 - `scripts/install-mcp.sh` handles clone, build, and wrapper creation into `~/.claude/mcp-servers/<name>/`
-- `references/mcp-git-registry.json` declares which git-based MCPs plugins need (repo, build cmd, wrapper template)
+- `scripts/patch-desktop-config.py` merges MCP entries into `claude_desktop_config.json` (with backup)
+- `references/mcp-git-registry.json` (v2.0) declares both git-based and native app MCPs with platform-specific paths
 - `templates/mcp-wrappers/` contains wrapper scripts for MCP servers that need companion processes (e.g. canvas server)
-- `manage-workspace` runs the install automatically during init/update (step 5a)
+- `manage-workspace` delegates to `install-mcp` during init/update (step 5)
 - Plugin `.mcp.json` files reference installed servers via `$HOME/.claude/mcp-servers/<name>/start.sh`
 
 ## Obsidian Integration

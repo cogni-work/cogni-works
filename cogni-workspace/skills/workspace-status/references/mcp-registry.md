@@ -25,8 +25,7 @@ host machine.
     `bash cogni-workspace/scripts/install-mcp.sh --name mcp_excalidraw --repo https://github.com/yctimlin/mcp_excalidraw.git --wrapper cogni-workspace/templates/mcp-wrappers/excalidraw-canvas.sh`
   - If tools available but canvas not visible: check `http://localhost:3000`
   - To update: run `install-mcp.sh` with `--force` to pull latest and rebuild
-  - **Claude Desktop users:** add to `claude_desktop_config.json` manually:
-    `{"command": "bash", "args": ["~/.claude/mcp-servers/mcp_excalidraw/start.sh"], "env": {"EXPRESS_SERVER_URL": "http://localhost:3000", "ENABLE_CANVAS_SYNC": "true"}}`
+  - **Claude Desktop users:** run the `install-mcp` skill to auto-patch `claude_desktop_config.json`
 
 ### excalidraw_sketch
 

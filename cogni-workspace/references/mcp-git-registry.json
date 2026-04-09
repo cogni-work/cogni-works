@@ -1,12 +1,14 @@
 {
-  "version": "1.0.0",
-  "description": "Git-based MCP servers that require clone + build (not available via npx)",
+  "version": "2.0.0",
+  "description": "MCP server registry — git-based servers that need clone+build and native app servers with platform-specific paths",
   "servers": {
     "mcp_excalidraw": {
       "name": "mcp_excalidraw",
+      "type": "git",
       "repo": "https://github.com/yctimlin/mcp_excalidraw.git",
       "build": "npm install && npm run build",
       "wrapper": "templates/mcp-wrappers/excalidraw-canvas.sh",
+      "desktop_config_key": "excalidraw",
       "env": {
         "EXPRESS_SERVER_URL": "http://localhost:3000",
         "ENABLE_CANVAS_SYNC": "true"
@@ -15,6 +17,29 @@
       "required_by": ["cogni-visual", "cogni-portfolio"],
       "replaces_npx": "excalidraw-mcp",
       "notes": "Feature-rich Excalidraw MCP with React canvas (localhost:3000), WebSocket sync, snapshots, and mermaid support. The wrapper starts both the canvas server and the MCP stdio server."
+    },
+    "pencil": {
+      "name": "pencil",
+      "type": "native",
+      "desktop_config_key": "pencil",
+      "platforms": {
+        "darwin": {
+          "command": "/Applications/Pencil.app/Contents/Resources/app.asar.unpacked/out/mcp-server-darwin-arm64",
+          "args": ["--app", "desktop"]
+        },
+        "linux": {
+          "command": "pencil-mcp-server",
+          "args": ["--app", "desktop"]
+        },
+        "win32": {
+          "command": "pencil-mcp-server.exe",
+          "args": ["--app", "desktop"]
+        }
+      },
+      "env": {},
+      "provides_tools": ["get_editor_state", "batch_design", "batch_get", "get_guidelines", "open_document", "get_screenshot"],
+      "required_by": ["cogni-visual"],
+      "notes": "Pencil desktop app with bundled MCP server. Must have Pencil.app installed. The MCP binary path is platform-specific."
     }
   }
 }

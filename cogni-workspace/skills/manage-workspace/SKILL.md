@@ -121,66 +121,27 @@ cp -r "${CLAUDE_PLUGIN_ROOT}/themes/_template/" \
 
 The template gives users a starting point for creating custom themes that visual plugins consume.
 
-### 5. MCP Server Summary and Git-Based Installation
+### 5. MCP Server Installation
 
-Plugins declare their MCP server dependencies in `.mcp.json` files. When users install
-plugins via the marketplace, Desktop/Cowork auto-discovers and starts these MCPs on the
-host machine — no manual configuration needed for npx-based and URL-based MCPs.
+Delegate to the `install-mcp` skill, which handles the full lifecycle: git-based server
+installation, native app detection, Claude Desktop config patching, and verification.
 
-**5a. Install git-based MCP servers**
+Since manage-workspace already has the confirmed plugin list from step 1, pass it to
+install-mcp so it skips redundant plugin discovery. The skill runs non-interactively
+when called from here (no extra user confirmations needed).
 
-Some MCP servers are not available via npx and must be cloned and built from git.
-Read the git registry at `${CLAUDE_PLUGIN_ROOT}/references/mcp-git-registry.json` and
-install each server that is required by confirmed plugins:
-
-```bash
-# Read the registry
-REGISTRY="${CLAUDE_PLUGIN_ROOT}/references/mcp-git-registry.json"
-
-# For each server in the registry, check if any confirmed plugin needs it
-# Install using the install-mcp.sh script
-for server_name in $(python3 -c "import json; r=json.load(open('${REGISTRY}')); print(' '.join(r['servers'].keys()))"); do
-  WRAPPER_REL=$(python3 -c "import json; print(json.load(open('${REGISTRY}'))['servers']['${server_name}'].get('wrapper',''))")
-  WRAPPER_ARG=""
-  if [ -n "$WRAPPER_REL" ]; then
-    WRAPPER_ARG="--wrapper ${CLAUDE_PLUGIN_ROOT}/${WRAPPER_REL}"
-  fi
-  bash "${CLAUDE_PLUGIN_ROOT}/scripts/install-mcp.sh" \
-    --name "$server_name" \
-    --repo "$(python3 -c "import json; print(json.load(open('${REGISTRY}'))['servers']['${server_name}']['repo'])")" \
-    --build "$(python3 -c "import json; print(json.load(open('${REGISTRY}'))['servers']['${server_name}']['build'])")" \
-    $WRAPPER_ARG
-done
-```
-
-Report the outcome to the user (installed / skipped / failed).
-
-**5b. Scan plugin .mcp.json files**
-
-After plugin discovery, scan each confirmed plugin's directory for a `.mcp.json` file:
-
-```bash
-for plugin_path in ${confirmed_plugin_paths}; do
-  if [ -f "${plugin_path}/.mcp.json" ]; then
-    echo "${plugin_path}/.mcp.json"
-  fi
-done
-```
-
-Present a summary of MCP servers:
+After install-mcp completes, also scan for npx/URL-based MCPs in plugin `.mcp.json` files
+and present a combined summary:
 
 ```
 MCP Servers (auto-configured by plugins):
-  excalidraw       ~/.claude/mcp-servers/mcp_excalidraw/start.sh  <- cogni-visual, cogni-portfolio (git-installed)
-  excalidraw_sketch https://mcp.excalidraw.com                    <- cogni-visual
+  excalidraw       git-installed + Desktop patched   <- cogni-visual, cogni-portfolio
+  pencil           native app + Desktop patched      <- cogni-visual
+  excalidraw_sketch https://mcp.excalidraw.com       <- cogni-visual (URL-based, no install needed)
 
 Manual install needed:
-  claude-in-chrome Chrome extension             <- cogni-claims, cogni-help, cogni-website, cogni-workspace
-  pencil           Open Pencil desktop app      <- cogni-visual (web/storyboard rendering)
+  claude-in-chrome Chrome extension                  <- cogni-claims, cogni-help, cogni-website, cogni-workspace
 ```
-
-**Claude Desktop users:** Tell them to add the git-installed server to their
-`claude_desktop_config.json` manually, using the `start.sh` wrapper path shown above.
 
 ### 6. Obsidian Integration (Optional)
 
@@ -259,13 +220,11 @@ Copy latest output-style files from `${CLAUDE_PLUGIN_ROOT}/assets/output-styles/
 
 Refresh `_template/theme.md` from `${CLAUDE_PLUGIN_ROOT}/themes/_template/`. Preserve all user-created themes.
 
-### 5. MCP Server Summary and Git-Based Installation
+### 5. MCP Server Installation
 
-Same as Init Mode step 5 — install git-based MCP servers and scan plugin `.mcp.json` files.
-In update mode, also:
-- **Update git-installed MCPs**: run `install-mcp.sh --force` to pull latest and rebuild
-- **New MCPs**: install from newly added plugins
-- **Removed MCPs**: note from removed plugins (the MCP may still be loaded until session restart)
+Same as Init Mode step 5 — delegate to the `install-mcp` skill. In update mode, also
+tell install-mcp to use `--force` for git-based MCPs (pulls latest and rebuilds).
+Note any MCPs from removed plugins that may still be loaded until session restart.
 
 ### 6. Update Obsidian Integration (Optional)
 

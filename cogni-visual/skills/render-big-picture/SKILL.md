@@ -118,6 +118,14 @@ Read `$CLAUDE_PLUGIN_ROOT/skills/render-big-picture/references/element-templates
 
 Map each station to its containing review zone based on x-position.
 
+### Step 1.3a: Verify Canvas Readiness
+
+> **Why:** The Excalidraw MCP tools need a running canvas server AND a browser tab connected via WebSocket. The PreToolUse hook handles startup automatically, but this step gives the user clear feedback before the drawing begins.
+
+1. Call `describe_scene` — this triggers the PreToolUse hook which starts the canvas and opens the browser
+2. If the call succeeds, proceed — the user should now see the Excalidraw canvas in their browser
+3. If it fails, tell the user: "The Excalidraw canvas needs a browser tab at http://localhost:3000. Please open it and confirm."
+
 ### Step 1.3b: Import Composition Sketch
 
 > Skip this step if Phase 0 was skipped AND no `sketch_path` was provided.

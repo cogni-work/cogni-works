@@ -142,6 +142,14 @@ For each tier, lay out blocks in a grid:
 
 Record the (x, y, width, height) of every block — this is needed for connection routing in Phase 5.
 
+### Step 1.5a: Verify Canvas Readiness
+
+> **Why:** The Excalidraw MCP tools need a running canvas server AND a browser tab connected via WebSocket. The PreToolUse hook handles startup automatically, but this step gives the user clear feedback before the drawing begins.
+
+1. Call `describe_scene` — this triggers the PreToolUse hook which starts the canvas and opens the browser
+2. If the call succeeds, proceed — the user should now see the Excalidraw canvas in their browser
+3. If it fails, tell the user: "The Excalidraw canvas needs a browser tab at http://localhost:3000. Please open it and confirm."
+
 ### Step 1.6: Initialize Canvas
 
 > **Why:** The Excalidraw canvas is a shared resource — if a previous rendering left elements behind, they would corrupt the new diagram. Starting with `clear_canvas` guarantees a clean slate.

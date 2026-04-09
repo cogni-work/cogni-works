@@ -37,7 +37,7 @@ skills/                         19 portfolio skills
   trends-bridge/                  Bidirectional integration with cogni-trends TIPS analysis
   portfolio-resume/               Detect workflow phase and recommend next actions
 
-agents/                         18 delegation agents
+agents/                         19 delegation agents
   market-researcher.md            Web research for TAM/SAM/SOM with claim submission
   competitor-researcher.md        Web research for competitive intelligence
   customer-researcher.md          Web research for named customer profiling
@@ -53,6 +53,7 @@ agents/                         18 delegation agents
   feature-review-assessor.md      Review feature set from PM, strategist, pre-sales perspectives
   feature-deep-diver.md           Deep research — competitive landscape, differentiation, positioning
   quality-enricher.md             Research to improve feature/proposition quality gaps
+  customer-narrative-writer.md    Parallel per-scope customer-narrative generation (sonnet)
   communicate-review-assessor.md  Review communication quality from stakeholder perspectives
   dashboard-refresher.md          Regenerate dashboard HTML from current entity data
   portfolio-web-researcher.md     Domain-scoped web research for taxonomy-driven scanning
@@ -88,7 +89,7 @@ references/
 | Type | Count | Items |
 |------|-------|-------|
 | Skills | 19 | portfolio-setup, portfolio-canvas, portfolio-scan, portfolio-ingest, products, features, markets, propositions, solutions, packages, compete, customers, portfolio-verify, portfolio-communicate, portfolio-dashboard, portfolio-architecture, portfolio-lineage, trends-bridge, portfolio-resume |
-| Agents | 18 | market-researcher, competitor-researcher, customer-researcher, customer-review-assessor, proposition-generator, proposition-quality-assessor, proposition-review-assessor, proposition-deep-diver, solution-architect, solution-planner, solution-review-assessor, feature-quality-assessor, feature-review-assessor, feature-deep-diver, quality-enricher, communicate-review-assessor, dashboard-refresher, portfolio-web-researcher |
+| Agents | 19 | market-researcher, competitor-researcher, customer-researcher, customer-review-assessor, proposition-generator, proposition-quality-assessor, proposition-review-assessor, proposition-deep-diver, solution-architect, solution-planner, solution-review-assessor, feature-quality-assessor, feature-review-assessor, feature-deep-diver, quality-enricher, customer-narrative-writer, communicate-review-assessor, dashboard-refresher, portfolio-web-researcher |
 
 ## Typical Workflow
 
@@ -151,6 +152,7 @@ Quality gates block downstream generation when upstream entities fail. Features 
 | Tier | Model | Agents |
 |------|-------|--------|
 | Research | inherit (caller's model) | market-researcher, competitor-researcher, customer-researcher, proposition-generator, solution-architect, solution-planner |
+| Content Generation | sonnet | customer-narrative-writer |
 | Deep Research | sonnet | feature-deep-diver, proposition-deep-diver, quality-enricher |
 | Quality Assessment | haiku | feature-quality-assessor, proposition-quality-assessor, feature-review-assessor, proposition-review-assessor, solution-review-assessor, customer-review-assessor, communicate-review-assessor, dashboard-refresher |
 | Web Research | haiku | portfolio-web-researcher |

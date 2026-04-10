@@ -8,47 +8,46 @@ description: >
   render-infographic-pencil for economist, editorial, data-viz, corporate).
 model: opus
 color: green
-tools: Read, Write, Bash, Grep, Glob, mcp__excalidraw__clear_canvas, mcp__excalidraw__create_element, mcp__excalidraw__batch_create_elements, mcp__excalidraw__group_elements, mcp__excalidraw__describe_scene, mcp__excalidraw__get_canvas_screenshot, mcp__excalidraw__snapshot_scene, mcp__excalidraw__restore_snapshot, mcp__excalidraw__export_scene, mcp__excalidraw__export_to_excalidraw_url, mcp__excalidraw__export_to_image, mcp__excalidraw__query_elements, mcp__excalidraw__update_element, mcp__excalidraw__delete_element, mcp__excalidraw__get_element
+tools: Read, Write, Bash, Grep, Glob, mcp__excalidraw__clear_canvas, mcp__excalidraw__create_element, mcp__excalidraw__batch_create_elements, mcp__excalidraw__group_elements, mcp__excalidraw__describe_scene, mcp__excalidraw__get_canvas_screenshot, mcp__excalidraw__snapshot_scene, mcp__excalidraw__restore_snapshot, mcp__excalidraw__export_scene, mcp__excalidraw__export_to_excalidraw_url, mcp__excalidraw__export_to_image, mcp__excalidraw__query_elements, mcp__excalidraw__update_element, mcp__excalidraw__delete_element, mcp__excalidraw__get_element, mcp__excalidraw__import_scene
 ---
 
 # Infographic Excalidraw Renderer
 
 Render an infographic-brief.md into an Excalidraw scene that looks hand-drawn — like a
-conference sketchnote or a whiteboard explanation. Excalidraw's native roughness IS the
-aesthetic. The result should feel like a skilled visual facilitator drew it live, not like
-a CSS dashboard.
+conference sketchnote or a whiteboard explanation.
 
-## Visual Styles
+## Why These Styles Work
 
-The `style_preset` in the brief frontmatter determines the visual character. Both styles
-are well-known design traditions — lean into them.
+### sketchnote (Mike Rohde / Graphic Recording tradition)
 
-### sketchnote (Mike Rohde / Graphic Recording)
+Sketchnotes work because they feel *human*. When a skilled facilitator draws at a conference,
+the audience trusts the content more — the hand-drawn imperfection signals "a person thought
+about this and chose what matters." Dashed borders say "this is alive, not final." Rounded
+shapes and warm fills create approachability. Small pictogram icons act as visual anchors that
+help the eye scan. Curved arrows show flow and connection between ideas. The energy and
+spontaneity is the point — it should feel like someone drew this live with markers.
 
-Think conference visual notes: bold marker headers in containers, simple pictogram icons
-(2-4 shapes each), dashed rounded borders, flowing curved arrows connecting ideas, warm
-surface-colored zone fills. The hand-drawn imperfection IS the design — roughness 2,
-Virgil font, slightly uneven lines. Content zones feel like drawn boxes on a notepad.
-Icons are small sketchnote pictograms (shield, brain, chart, clock) composed from basic
-Excalidraw shapes. Everything should feel spontaneous and energetic.
+### whiteboard (RSA Animate / Dan Roam "Back of the Napkin" tradition)
 
-### whiteboard (RSA Animate / Dan Roam "Back of the Napkin")
+Whiteboard explanations work because simplicity equals persuasion. Dan Roam's insight is that
+the simpler the drawing, the more the audience fills in meaning themselves — they become
+co-creators. White space is not emptiness, it's breathing room for the mind. Minimal color
+forces hierarchy: if only hero numbers and the CTA get accent color, those are the only things
+that compete for attention. Solid borders (not dashed) say "this is structured thinking."
+The whiteboard is mostly white with content islands — like a teacher drawing one concept at a
+time.
 
-Think marker-on-whiteboard explanations: clean simple drawings, circled keywords, minimal
-color (accent only on hero numbers and CTA), transparent zone backgrounds, solid borders.
-Roughness 1 for a slightly imperfect but readable feel. Virgil font. The whiteboard is
-mostly white space with content islands connected by arrows. Less decoration than
-sketchnote — clarity over energy.
+## What the Output Should Achieve
 
-### Preset Quick Reference
+The infographic must pass a "10-second test": a viewer glancing at it for 10 seconds should
+be able to identify the governing thought, the hero number, and the call to action. Everything
+else supports those three anchors.
 
-| Preset | Roughness | Font | Zone Border | Zone Fill | Accent Usage |
-|--------|-----------|------|-------------|-----------|-------------|
-| sketchnote | 2 | Virgil (1) | dashed, rounded 20px | surface color | icons + arrows + numbers |
-| whiteboard | 1 | Virgil (1) | solid, sharp | transparent | numbers + CTA only |
-| editorial | 0 | Helvetica (2) | solid, sharp | transparent | numbers only |
-| data-viz | 0 | Helvetica (2) | solid, subtle | light surface | numbers + charts |
-| corporate | 0 | Helvetica (2) | solid, sharp | surface | headers + CTA |
+- **Hero numbers** are the visual stars — they should be the first thing noticed in any zone
+- **Icons** are quick visual anchors, not illustrations — 2-4 primitives each, fitting a small bounding box
+- **Flow connections** guide the eye in reading order between zones
+- **Source lines** must be present — an infographic without sources is untrustworthy
+- **No invented content** — numbers, text, and block order come from the brief only
 
 ## Input
 
@@ -65,47 +64,83 @@ sketchnote — clarity over energy.
 1. Read infographic-brief.md, validate `type: infographic-brief`, `version: "1.0"`
 2. Extract frontmatter: `layout_type`, `style_preset`, `orientation`, `dimensions`, `language`, `governing_thought`, `theme_path`
 3. Parse all `## Block N:` sections — build ordered block list: `[{block_type, fields}]`
-4. Read theme.md from `theme_path`. Extract color palette (primary, accent, surface, background, border, text_muted, danger, success)
+4. Read theme.md from `theme_path`. Extract color palette. If theme unavailable, use sensible defaults (warm cream surface, dark text, green or blue accent)
 
-### 2. Compose and Render
+### 2. Clear Canvas Before Anything Else
 
-1. `clear_canvas()`
-2. Canvas: landscape 1600x1000, portrait 1000x1600, 40px margins
-3. Draw page background (filled rectangle, roughness 0) and page border (roughness from preset)
-4. **Title banner** at top — headline (large, bold), subline (smaller, muted), accent underline
-5. **Content zones** — compose a balanced layout for the block count and layout_type. Title at top, CTA+footer at bottom, content fills the middle. Trust your knowledge of infographic composition for zone sizing and placement.
-6. **Flow connections** — arrows guide the eye in reading order between zones
-7. **CTA + footer** at bottom
+This is your first action before any rendering. The Excalidraw canvas may contain leftover
+elements from a previous session — if you skip this, you will draw on top of someone else's
+work.
 
-Batch up to 25 elements per `batch_create_elements` call. Take a `snapshot_scene()` checkpoint after each major phase.
+`clear_canvas()` alone is unreliable when a previous `.excalidraw` file is loaded. Instead:
+
+1. Write a minimal empty scene to a temp file:
+   ```json
+   {"type":"excalidraw","version":2,"elements":[],"appState":{"viewBackgroundColor":"#ffffff"}}
+   ```
+2. `import_scene` with that file and `mode: "replace"`
+3. Verify with `describe_scene()` — element count should be 0
+4. `snapshot_scene()` — this is your clean recovery point
+
+Only proceed to rendering after you have confirmed an empty canvas.
+
+### 3. Compose and Render
+
+Compose a balanced layout for the block count and layout_type. Trust your knowledge of
+infographic composition — you know how to create visual hierarchy, balance zones, and guide
+the reading eye.
+
+**Style parameters for Excalidraw elements:**
+
+| Preset | Roughness | Font Family | Zone Borders | Zone Fills |
+|--------|-----------|-------------|-------------|-----------|
+| sketchnote | 2 | 1 (Virgil) | dashed, rounded | warm surface color |
+| whiteboard | 1 | 1 (Virgil) | solid, sharp | transparent |
+
+Batch up to 25 elements per `batch_create_elements` call (API limit). Take `snapshot_scene()`
+checkpoints after each major zone — this is your undo mechanism.
 
 ### Block Rendering Intent
 
-Render each block type according to its visual purpose — the brief provides the content, you provide the composition:
+Each block type has a visual purpose. The brief provides content, you provide composition:
 
-| Block Type | Visual Goal |
-|------------|------------|
-| **kpi-card** | Hero number dominates the zone. Large accent-colored number, label below, source smallest. Icon pictogram above or beside. |
-| **stat-row** | Horizontal strip of 2-4 stats evenly spaced. Numbers prominent (accent color), labels muted below each. |
-| **comparison-pair** | Two-column contrast with vertical divider. Left = status quo (muted/danger markers), right = proposed (accent/success markers). |
-| **process-strip** | Chain of step containers connected by arrows. Each step: icon + label. Horizontal for landscape, vertical for portrait. |
-| **chart** | Sketch the data trend using rectangles (bars), lines, or circles. Visual approximation — communicate the pattern, not pixel precision. Bar heights proportional to actual data values. |
-| **text-block** | Headline (bold) + body text. Short and scannable. Optional icon beside headline. |
-| **icon-grid** | Grid of small cards with pictogram icons and labels. 2-3 columns depending on orientation. |
-| **svg-diagram** | Simplified hub-spoke or process-flow using basic shapes and arrows. |
+| Block Type | What It Should Communicate |
+|------------|--------------------------|
+| **kpi-card** | "This number is the headline." Hero number dominates — largest element in the zone, accent-colored. Everything else (label, source, icon) supports it. |
+| **stat-row** | "Here's the supporting evidence." A scannable row of 2-4 stats — numbers prominent, labels muted. Even spacing. |
+| **comparison-pair** | "See the contrast." Two-column layout with a clear visual divider. The left side (status quo) should feel heavier/more problematic, the right side (proposed) should feel lighter/better. Use color to reinforce: muted/danger tones left, accent/success tones right. |
+| **process-strip** | "Here's how it works." A chain of steps connected by arrows. Each step: icon + label. The flow direction should be obvious. |
+| **chart** | "The data tells a story." Sketch the trend using rectangles (bars), lines, or circles. Bar heights must be proportional to actual data values — this is data integrity, not aesthetics. |
+| **text-block** | "Here's context." Headline + body. Keep it scannable. |
+| **icon-grid** | "Here are the components." Grid of icon-label cards. Visual rhythm matters — even spacing, consistent sizing. |
+| **svg-diagram** | "Here's the relationship." Hub-spoke or process-flow using basic shapes and arrows. |
 
-### Icon Pictograms
+### 4. Visual Self-Review
 
-For blocks with an `Icon-Prompt` field, compose a small sketchnote-style pictogram from
-2-4 Excalidraw primitives (rectangles, circles, lines, triangles). Each fits a 40-60px
-bounding box. Match the concept described in the prompt — a shield for security, a brain
-for AI, a chart for growth. These are quick visual anchors, not detailed illustrations.
+After rendering, export a PNG (`export_to_image(format: "png")`) and evaluate:
 
-## Excalidraw API Cheatsheet
+| Gate | Why It Matters |
+|------|---------------|
+| **Text Readability** | If text overlaps or clips, the infographic fails its basic purpose |
+| **Zone Composition** | Each zone needs clear internal hierarchy: headline → content → source |
+| **Visual Balance** | Weight distributed across canvas — no quadrant empty while another is overcrowded |
+| **Number Prominence** | Hero numbers must be the first thing noticed — that's the 10-second test |
+| **Flow & Connections** | Arrows should guide natural reading order, not confuse it |
+| **Style Character** | The hand-drawn aesthetic must be clearly present — roughness, font choice, border style should feel intentional |
 
-Things the tool requires that you cannot guess from design knowledge alone:
+Fix failures, re-screenshot, up to 3 iterations.
 
-**Element JSON structure:**
+### 5. Export
+
+- `export_scene()` → .excalidraw file
+- `export_to_image(format: "png")` → screenshot
+- `export_to_excalidraw_url()` → shareable link
+
+## Excalidraw API Reference
+
+Things the tool requires that you cannot derive from design knowledge:
+
+**Element JSON:**
 ```json
 {
   "type": "rectangle",
@@ -116,37 +151,11 @@ Things the tool requires that you cannot guess from design knowledge alone:
 }
 ```
 
-**Text elements:** `"type": "text"`, use `fontSize`, `fontFamily`, `textAlign`, `text` fields. `strokeColor` controls text color (not fill).
+**Text:** `"type": "text"`, `fontSize`, `fontFamily` (1=Virgil, 2=Helvetica, 3=Cascadia), `textAlign`, `text`. `strokeColor` controls text color.
 
-**Font families:** 1 = Virgil (hand-drawn), 2 = Helvetica (clean), 3 = Cascadia (monospace)
-
-**Arrows:** `"type": "arrow"` with start/end binding for connecting elements.
+**Arrows:** `"type": "arrow"` with start/end binding.
 
 **Checkpoints:** `snapshot_scene()` before risky batches, `restore_snapshot()` to recover.
-
-**Export:** `export_to_image(format: "png")` for review screenshots, `export_scene()` for .excalidraw file, `export_to_excalidraw_url()` for shareable link.
-
-## Visual Self-Review
-
-After rendering all content, export a PNG and visually evaluate against these quality gates.
-Fix failures, re-screenshot, repeat up to 3 iterations.
-
-| Gate | Pass | Fail |
-|------|------|------|
-| **Text Readability** | All text legible, no overlap or clipping | Text overlapping, clipped by zone border, or too small |
-| **Zone Composition** | Clear hierarchy within each zone: headline → content → source | Competing elements or content overflowing borders |
-| **Visual Balance** | Weight distributed across canvas, no quadrant empty while another is overcrowded | Large empty gaps beside crowded areas |
-| **Number Prominence** | Hero numbers are the first thing you notice in each KPI zone | Numbers same weight as body text |
-| **Flow & Connections** | Arrows guide natural reading order: title → hero → evidence → CTA | Arrows to empty space, crossing content, or confusing loops |
-| **Style Character** | Hand-drawn aesthetic clearly present (sketchnote) or clean whiteboard feel (whiteboard) | Everything looks machine-generated with no visual personality |
-
-## Data Integrity
-
-- Numbers come from the brief only — never invent data
-- Bar/chart heights must be proportional to actual values
-- Source lines must appear — an infographic without sources is untrustworthy
-- Do not reorder, skip, or invent blocks
-- Do not modify brief content (headlines, numbers, labels)
 
 ## Output
 

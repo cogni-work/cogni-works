@@ -17,20 +17,114 @@ tools: Read, Write, Edit, Bash, Grep, Glob, mcp__pencil__batch_design, mcp__penc
 # Infographic Pencil Renderer
 
 Render an infographic-brief.md into a pixel-precise `.pen` file using Pencil MCP. The result
-looks like it came from The Economist's data pages or a McKinsey editorial report.
+must look like a real Economist data page — not a dashboard, not a slide deck, not a poster.
 
 ## The Economist Visual DNA
 
-The economist preset is the flagship style. Produce a page that looks like The Economist's
-data editorial pages: cream background, deep Economist red as the single accent, amber for
-secondary icons. Bold stat callouts with tabular figure alignment. Clean bar charts with red
-fills. Thin red rule lines separating sections. Dense editorial layout — content fills the
-page like a newspaper, not a sparse dashboard. DIN A4 portrait. Sharp edges (cornerRadius: 0
-everywhere), no shadows, no gradients, no decorative elements. Every element earns its place.
+Study any Economist data page and you'll see these non-negotiable traits. They are what
+separate "clean infographic" from "this belongs in The Economist":
 
-For **editorial**, **data-viz**, and **corporate** presets: apply the same clean editorial
-discipline using the theme's own colors instead of The Economist overrides. The visual
-principles are identical — dense, clean, hierarchy-driven.
+### It's a Newspaper Page, Not a Dashboard
+
+The Economist data page is a **multi-column newspaper layout**. Content flows in 2-3 columns
+with blocks sitting *beside* each other, not stacked in a single column. Data visualizations,
+text paragraphs, and icons coexist side by side in a complex but readable grid. Every square
+centimeter is used — the page is FULL. If your output has large empty areas between blocks,
+it's wrong.
+
+Think of how a magazine editor lays out a feature page: text wraps, charts sit inline, stats
+anchor columns, pull-quotes break up prose. That's the density target.
+
+### No Cards, No Boxes
+
+Data lives directly on the cream background. There are NO bordered cards, NO box shadows, NO
+container frames around individual stats. Structure comes from:
+- **Red rule lines** (thin horizontal lines, `height: 2, fill: $--rule-color`) between major
+  sections — this is The Economist's most recognizable visual signature
+- **Spatial grouping** — related elements sit close together, unrelated ones have breathing
+  room between them
+- **Alternating background bands** — optional `$--background-alt` zones for visual rhythm
+
+### Numbers at Poster Scale
+
+Hero numbers are ENORMOUS — think 64-80pt font. They are the visual anchors that a reader's
+eye lands on first from across the room. Supporting stat numbers are 36-48pt. Labels are tiny
+(10-12pt) beneath them. The size contrast between number and label should be dramatic — at
+least 4:1 ratio.
+
+### Icons as Visual Landmarks
+
+Icons are bold, sized 36-48px, in red or amber fill. They serve as visual landmarks that help
+the eye navigate the dense layout — like section markers in a newspaper. A tiny 16px icon is
+useless; it disappears in the density. Map Icon-Prompt descriptions to Lucide icon names
+(see layouts library).
+
+### The Color Discipline
+
+Only three colors carry meaning:
+- **Economist red** (#C00000) — hero numbers, bar chart fills, rule lines, primary icons
+- **Amber** (#D4A017) — secondary icons, tertiary highlights
+- **Near-black** (#1A1A1A) — body text, labels
+
+Everything else is cream (#FBF9F3) or darker cream (#F0EDE4). If you find yourself reaching
+for a fourth color, stop — restraint is the style.
+
+### Illustrations and Visual Storytelling
+
+Real Economist data pages include small illustrations, diagrams, and visual metaphors
+alongside the data — a map showing geographic context, a simple diagram explaining a
+process, a visual metaphor (scales, gears, arrows) reinforcing the narrative. These are
+NOT decorative — they are editorial illustrations that help the reader understand the story.
+
+For each infographic, generate 1-2 small editorial illustrations:
+- **Process diagrams** — if the brief has a process-strip, render it as a visual diagram
+  with connected shapes, not just a text chain
+- **Contextual icons at scale** — a large (80-120px) illustration-style icon that anchors
+  the page visually (e.g., a camera + shield composite for security, a building for
+  infrastructure)
+- **Comparison visuals** — if before/after, show a visual transformation (arrow from old to new)
+- **Data callout annotations** — short 1-2 sentence prose annotations beside charts
+  explaining what the data means ("Seit Q3 2024 sinken die Vorfälle rapide — der Pilotstart
+  markiert den Wendepunkt")
+
+### Content Amplification
+
+A real Economist data page feels dense because it contains MORE content than just the raw
+data blocks. The brief provides the core data — you should amplify it:
+
+- **Add prose annotations** (2-3 sentences) beside major data blocks explaining context
+- **Add data callouts** — "↓ 73% seit Pilotstart" as an annotation on the chart
+- **Add section subheadings** — "DAS PROBLEM", "DIE LÖSUNG", "DER BEWEIS" in red uppercase
+- **Add pull-quote style callouts** from the governing thought
+- **Reference the source** inline beside data, not just in the footer
+
+Do NOT invent new numbers or statistics. Annotations must derive from the brief's content
+and governing thought. You are adding editorial context, not fabricating data.
+
+### Sharp Edges, Zero Decoration
+
+- `cornerRadius: 0` on everything — rounded corners would undermine authority
+- No shadows, no gradients, no purely decorative elements
+- No borders on content blocks (only red rule lines between sections)
+- Illustrations must be editorial (communicating meaning), not ornamental
+
+### Other Presets (editorial, data-viz, corporate)
+
+These follow the same density and layout discipline but use the theme's own palette:
+- **editorial**: Theme accent instead of red. Same sharp edges, same density.
+- **data-viz**: Monospace numbers, accent-tinted backgrounds for stat zones, uppercase labels.
+- **corporate**: Dark header banner, primary color for numbers, strong footer branding.
+
+## What the Output Must Achieve
+
+A viewer should perceive "credible data journalism." The 10-second test: from a glance, they
+should see the governing thought (headline), the hero number, and the call to action. The
+density tells them "this is thoroughly researched."
+
+- **Bar chart heights must be proportional** to actual data values — compute heights, never eyeball
+- **Sources must appear** — unsourced data is untrustworthy
+- **Do not invent, skip, or reorder blocks** from the brief
+- **All text and numbers verbatim** from the brief — no rounding, no rephrasing
 
 ## Input
 
@@ -39,8 +133,7 @@ principles are identical — dense, clean, hierarchy-driven.
 | BRIEF_PATH | Yes | Path to infographic-brief.md |
 | OUTPUT_PATH | No | Path for .pen file (default: `{brief_dir}/infographic.pen`) |
 
-Output MUST go into the same directory as the brief. Run `mkdir -p "{output_dir}"` before
-any Pencil operations.
+Output goes into the same directory as the brief.
 
 ## Workflow
 
@@ -48,137 +141,185 @@ any Pencil operations.
 
 1. Read infographic-brief.md, validate `type: infographic-brief`, `version: "1.0"`
 2. Extract frontmatter: `layout_type`, `style_preset`, `orientation`, `dimensions`, `theme_path`, `language`
-3. Parse `## Block N:` sections — build ordered block list: `[{block_type, fields, sequence}]`
-4. Read theme.md from `theme_path`. Extract colors, `header_font`, `header_weight`, `body_font`
-5. Read `$CLAUDE_PLUGIN_ROOT/libraries/infographic-pencil-layouts.md` for Economist token overrides and Lucide icon mapping
+3. Parse `## Block N:` sections — build ordered block list
+4. Read theme.md from `theme_path`. If unavailable, use Economist defaults
+5. Read `$CLAUDE_PLUGIN_ROOT/libraries/infographic-pencil-layouts.md` for Pencil-specific patterns (Economist token overrides, Lucide icon mapping)
 
 ### 2. Design Token Setup
 
-Map theme.md to Pencil variables. **Critical:** define names WITHOUT `$` in `set_variables`, reference WITH `$--` prefix in fills/colors.
+Map theme to Pencil variables. Define names WITHOUT `$` in `set_variables`, reference WITH `$--` prefix in fills/colors.
 
-| Theme Field | Variable Name | Reference |
-|-------------|--------------|-----------|
-| Primary color | `--primary` | `$--primary` |
-| Dark primary | `--primary-dark` | `$--primary-dark` |
-| Body text | `--foreground` | `$--foreground` |
-| Muted text | `--foreground-muted` | `$--foreground-muted` |
-| Background | `--background` | `$--background` |
-| Alt background | `--background-alt` | `$--background-alt` |
-| Accent | `--accent` | `$--accent` |
-| Dark surface | `--surface-dark` | `$--surface-dark` |
-| White text | `--surface-dark-text` | `$--surface-dark-text` |
-| Muted on dark | `--surface-dark-muted` | `$--surface-dark-muted` |
-| Header font | `--font-primary` | `$--font-primary` |
-| Header weight | `--font-primary-weight` | `$--font-primary-weight` |
-| Body font | `--font-body` | `$--font-body` |
-| Body weight | `--font-body-weight` | `$--font-body-weight` |
+**Economist overrides** — layer on top of theme variables:
 
-**Economist overrides** — call `set_variables` a second time to layer these on top:
+| Token | Value | Purpose |
+|-------|-------|---------|
+| `--primary` | `#C00000` | Economist red — hero numbers, bars, rules |
+| `--background` | `#FBF9F3` | Cream — the paper feel |
+| `--background-alt` | `#F0EDE4` | Darker cream for alternating bands |
+| `--foreground` | `#1A1A1A` | Near-black text |
+| `--foreground-muted` | `#666666` | Labels, source lines |
+| `--chart-fill` | `#C00000` | Bar fills |
+| `--chart-fill-2` | `#E8A0A0` | Secondary bar series |
+| `--rule-color` | `#C00000` | Section divider lines |
+| `--accent-amber` | `#D4A017` | Secondary icons, tertiary highlights |
+
+For non-economist presets: `--chart-fill` = theme primary, `--rule-color` = theme foreground-muted.
+
+### 3. Open Document and Compose
+
+1. `get_guidelines("design-system")` — load Pencil design system
+2. `open_document("{output_path}")` — file-backed
+3. Create root page frame (portrait 1080x1528 for economist, landscape 1528x1080 otherwise)
+4. Set page margins: 48px left/right, 32px top/bottom. Usable content area: ~984px wide.
+
+#### Think Before You Draw
+
+Before inserting ANY Pencil elements, use extended thinking to plan the full page layout.
+This planning step is critical — without it you will default to a dashboard layout, which
+is NOT what The Economist looks like.
+
+1. **Count your blocks** — how many content blocks, what types, what sizes they need
+2. **Sketch the grid in your mind** — which blocks share a row? Which span full width?
+3. **Compute dimensions** — usable area is ~984px wide × ~1460px tall. Every pixel must be
+   accounted for. Allocate specific heights per row. They must sum to fill the page.
+4. **Pair blocks** — every block should share its row with another block unless it genuinely
+   needs full width (only charts and process strips qualify). A single KPI alone on a row
+   is wasted space — pair it with a text annotation or another data block.
+5. **Check density** — if any row has more than 24px of empty padding around its content,
+   the content is too small or the row is too tall. Scale up or redistribute.
+
+Only after you have a complete layout plan should you start inserting elements.
+
+#### Reference: What a Stat-Heavy Economist Page Looks Like
+
+This is the spatial composition you're aiming for. Study it — notice how dense it is,
+how blocks share rows, how text and data interweave:
 
 ```
---primary:            #C00000    (Economist red)
---accent:             #C00000
---accent-amber:       #D4A017    (secondary — icons, tertiary highlights)
---background:         #FBF9F3    (cream)
---background-alt:     #F0EDE4    (darker cream for alt zones)
---foreground:         #1A1A1A
---foreground-muted:   #666666
---chart-fill:         #C00000    (bar fill)
---chart-fill-2:       #E8A0A0    (secondary bar fill)
---chart-fill-3:       #D4A017    (tertiary — amber)
---rule-color:         #C00000    (section dividers)
+┌──────────────────────────────────────────────────┐
+│ DEUTSCHE BAHN AG | TECHVISION SOLUTIONS | 2026   │ ← red uppercase metadata, 11px
+│══════════════════════════════════════════════════│ ← double rule (black)
+│                                                  │
+│ KI-Videoanalytik senkt                          │ ← serif headline, 38-42px bold
+│ Sicherheitsvorfälle um 73%                      │
+│ Warum Deutsche Bahn jetzt auf automatisierte... │ ← subline, 14px muted
+│──────────────────────────────────────────────────│ ← RED rule line
+│ 🛡                        ⏱           📷   🕐  │
+│ 73%              < 2s    500+   24/7  │ ← hero 96px + 3 stats 44px
+│ weniger Vorfälle   Erkennungs- Kameras Über-    │   ALL ON THE SAME ROW
+│ nach Pilotprojekt  zeit    skalierbar wachung   │
+│ München Hbf                                     │
+│ Quelle: Interne...                              │
+│──────────────────────────────────────────────────│ ← RED rule line
+│ Sicherheitsvorfälle    │ Kontext Deutschland     │ ← TWO COLUMNS side by side
+│ pro Quartal            │                         │
+│ ┌──┐┌──┐┌──┐          │  ⚠ 688                  │
+│ │  ││  ││  │┌──┐      │    Bahnsuizide 2023     │
+│ │  ││  ││  ││  │┌──┐  │                         │
+│ │172│168│155│ 89│ 47│  │  ⓘ 2.661                │
+│ └──┘└──┘└──┘└──┘└──┘  │    Übergriffe           │
+│ Q1   Q2  Q3  Q4  Q1   │                         │
+│ 24   24  24  24  25   │  🏢 5.400                │
+│                        │    Bahnhöfe             │
+│──────────────────────────────────────────────────│ ← RED rule line
+│ 🚀 12 Wochen          │ Kameradaten → KI-Analyse │ ← KPI + PROCESS on same row
+│ bis zum Pilotstart     │ → Echtzeit-Alert →      │
+│ schlüsselfertige Impl. │ Einsatzsteuerung        │
+│──────────────────────────────────────────────────│ ← RED rule line
+│▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓│
+│▓ Pilot in 12 Wochen starten  [Erstgespräch]    ▓│ ← dark CTA band
+│▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓│
+│ Deutsche Bahn AG    April 2026   TechVision Sol. │
+│ Quellen: BKA Bundeslagebild 2023, Interne Pilot..│
+└──────────────────────────────────────────────────┘
 ```
 
-For non-economist presets, set `--chart-fill` = `$--primary`, `--rule-color` = `$--foreground-muted`.
+Key things to notice in this reference:
+- **Hero KPI (73%) shares its row with the supporting stats** — not separate sections
+- **Bar chart sits beside context evidence** — two columns, not stacked
+- **12 Wochen shares its row with the process strip** — never one item alone on a row
+- **Red rules between every major section** — 4-5 rules on the page
+- **No borders on any data block** — only rules and spatial grouping
+- **The page is completely FULL** — no row has unused space
 
-### 3. Open Document
+#### Page Composition: The Newspaper Grid
 
-1. `get_guidelines("design-system")`
-2. `open_document("{output_path}")` — file-backed, not "new"
-3. Create root page frame: `page=I("root", {width: W, height: H, layout: "none", fill: "$--background"})`
-   - Portrait (default for economist): 1080 x 1528
-   - Landscape: 1528 x 1080
+Think like a magazine editor laying out a feature page:
 
-### 4. Render Blocks
+**Top band** (full width): Title block
+- Double rule line (2px black, 1px black, 4px gap) across full width — The Economist header
+- Metadata line (uppercase, 11px, red, letterspaced) — "DEUTSCHE BAHN AG | TECHVISION SOLUTIONS | APRIL 2026"
+- Headline (serif, 36-42px, bold black) immediately below
+- Subline (16px, muted) beneath headline
+- Red rule line below the title band
 
-Compose a dense editorial grid layout. Title at top, CTA + footer at bottom, content blocks
-fill the middle. The layout should feel like a newspaper page — zones sit beside each other,
-not just stacked vertically. Use the brief's `layout_type` to guide composition.
+**Content area** (2-3 column grid, fills the middle 60-70% of the page):
+- Divide into columns: 2-col = ~480px each, 3-col = ~312px each, with 24px gutters
+- **Place blocks beside each other across columns**, not just stacked vertically
+- A hero KPI can take a full column or half. A stat-row of 3 items spans full width.
+- A bar chart spans 1.5-2 columns. A text block or icon-grid fills 1 column beside it.
+- Between major content rows, insert a red rule line (full width, 2px, `$--rule-color`)
+- Alternate cream bands: every other content row gets `$--background-alt` fill behind it
 
-**Example — kpi-card with icon-left:**
-```
-kpi=I(page, {x: 48, y: 180, width: 480, height: 160, layout: "horizontal", gap: 12, padding: [0, 12, 8, 12]})
-  icon=I(kpi, {width: 48, height: 48, fill: "$--primary at 10%", cornerRadius: 24})
-    I(icon, {type: "icon_font", fontSize: 28, fill: "$--primary", content: "shield"})
-  content=I(kpi, {layout: "vertical", gap: 2})
-    I(content, {width: "fill_container", height: 2, fill: "$--rule-color"})
-    num=I(content, {layout: "horizontal", gap: 0})
-      I(num, {type: "text", fontSize: 64, fontWeight: "Bold", fontFamily: "$--font-primary", fill: "$--primary", content: "73"})
-      I(num, {type: "text", fontSize: 44, fontWeight: "Bold", fontFamily: "$--font-primary", fill: "$--primary", content: "%"})
-    I(content, {type: "text", fontSize: 12, fontWeight: "Bold", fontFamily: "$--font-body", fill: "$--foreground", content: "weniger Vorfälle"})
-    I(content, {type: "text", fontSize: 10, fontFamily: "$--font-body", fill: "$--foreground-muted", content: "nach 6 Monaten Pilotbetrieb"})
-```
+**Block rendering — what each block becomes on the page:**
 
-This example shows the Pencil syntax patterns: `I(parent, {...})` for inserts, `$--token`
-references for colors/fonts, layout modes, and frame nesting. Generalize this pattern to
-all block types — the visual goal per block type is the same as described in the brief schema.
+| Block Type | What It Becomes |
+|------------|----------------|
+| **kpi-card** | Large red number (64-80px bold) with tiny label below (10-12px muted). Red/amber icon (36-48px) to the left or above. Source line (9px muted) at bottom. NO border, NO card frame. Sits directly on cream. |
+| **stat-row** | Horizontal strip spanning full width. Each stat: bold number (36-48px) with tiny label below. Separated by vertical thin rules or spacing. Icons (28-36px, amber) beside each number. |
+| **chart** | Bar chart spanning 1.5-2 columns. Red fill bars, proportional heights computed as `bar_h = value / max_value * max_bar_height`. Value labels (11px bold) above each bar. Category labels (10px) below. Thin axis line at bottom. |
+| **comparison-pair** | Two columns with visual weight difference. Left (status quo): muted text, small red warning icon. Right (proposed): bold text, green/amber success icon. Vertical rule line between columns. Column headers bold with icon. |
+| **process-strip** | Horizontal chain: icon circles (36px, red fill) connected by thin arrows. Step labels (11px) below each. Spans full width. |
+| **text-block** | Headline (16px bold) + body (12px) flowing in a single column. Sits beside a chart or stat block, not on its own row. |
+| **icon-grid** | 2-3 column mini-grid. Each item: icon (36px, red/amber) + bold label (13px) + sublabel (11px muted). No borders on items. |
+| **cta** | Dark band (`$--surface-dark`) spanning full width. White headline text + red button. |
+| **footer** | Full width: left/center/right metadata + source line. Tiny text (9-10px). Top border rule. |
 
-**Key rendering principles:**
-- **Icons are mandatory.** Every block with an Icon-Prompt gets a visible icon. Icons are more important than text labels for visual impact. Map Icon-Prompt descriptions to Lucide icon names using the mapping table in the layouts library.
-- **Numbers dominate.** Hero numbers in kpi-cards are the largest elements. Stat-row numbers are bold and colored. This is the data-editorial style — numbers are the story.
-- **Typography hierarchy.** Headlines bold and large, body text regular and smaller, labels and sources small and muted. The hierarchy should be obvious at a glance.
-- **Bar charts are proportional.** Compute `BAR_H = value / max_value * available_height`. Never eyeball bar heights.
-- **Red rule lines** separate sections — they are The Economist's visual signature.
-- **Batch 15-25 operations** per `batch_design` call. Create parent frames before children.
+**Critical layout rules:**
+- Fill the page — if content doesn't reach the bottom, increase spacing or scale up elements
+- Never stack more than 2 blocks vertically without placing something beside them
+- Hero numbers and icons must be visible from arm's length — if they're small, scale up
+- Red rule lines between every major section transition — aim for 3-5 rules on the page
 
-### 5. Validate
+**Pencil syntax patterns:**
+- `I(parent, {...})` for inserts, `$--token` references for colors/fonts
+- Create parent frames before children
+- Batch 15-25 operations per `batch_design` call
+- Rule line: `I(parent, {width: "fill_container", height: 2, fill: "$--rule-color"})`
+
+### 4. Validate
 
 1. `get_screenshot()` — visual verification
 2. `snapshot_layout(problemsOnly: true)` — detect overlaps/clipping
-3. Evaluate against quality gates:
+3. Check quality gates:
 
-| Gate | Pass | Fail |
-|------|------|------|
-| **Text Readability** | All text legible, no truncation or overlap | Text clipped, overlapping, or insufficient contrast |
-| **Number Prominence** | Hero numbers visually dominate via red accent | Numbers lost among other content |
-| **Bar Chart Accuracy** | Bar heights reflect relative data values | Heights don't match data proportions |
-| **Grid Alignment** | Zones align to a clean grid, no drift | Zones misaligned or overlapping |
-| **Editorial Character** | Clean, dense, no decorative noise, red accent used sparingly | Sparse, decorated, or noisy |
+| Gate | What to Look For |
+|------|-----------------|
+| **Density** | Page should feel FULL — like a newspaper, not a dashboard. No large empty areas. |
+| **Number Scale** | Hero numbers must be the largest elements on the page — visible from across a room |
+| **No Cards/Boxes** | Blocks must NOT have bordered containers. Only red rules and spatial grouping. |
+| **Column Layout** | Content must flow in 2-3 columns, not single-column stack |
+| **Red Rules** | Thin red horizontal lines between major sections — The Economist signature |
+| **Icon Size** | Icons at 36-48px in red/amber fill, not tiny dots |
+| **Bar Proportions** | Bar heights must match actual data ratios |
 
-4. Fix issues with targeted `batch_design` Update operations
-5. Maximum 2 fix iterations
+4. Fix issues with targeted Update operations. Maximum 2 fix iterations.
 
-### 6. Export and Return
+### 5. Export and Return
 
 Export to PNG: `export_nodes({format: "png", ...})`
 
-Return JSON only (no prose):
-
+Return JSON only:
 ```json
 {"ok": true, "pen_path": "{path}", "layout_type": "{type}", "style_preset": "{preset}", "orientation": "{orientation}", "blocks_rendered": {N}, "total_ops": {N}}
 ```
-
-Error: `{"ok": false, "e": "{error_description}"}`
-
-## Constraints
-
-- Do not modify brief content (headlines, numbers, labels)
-- Do not invent blocks or content not in the brief
-- Do not skip blocks or reorder them
-- Do not use hardcoded colors — always reference `$--` design tokens
-- Do not add rounded corners for economist — `cornerRadius: 0` everywhere
-- Do not add shadows, gradients, or decorative elements
-- Must compute bar heights proportionally from actual data values
-- Must map Icon-Prompt descriptions to Lucide icon names
-- Must use portrait orientation as default for economist
-- Return JSON-only response
 
 ## Error Recovery
 
 | Scenario | Action |
 |----------|--------|
 | Brief not found | Return error JSON |
-| Pencil MCP unavailable | Return error JSON |
+| Pencil MCP unavailable | Fall back to generating a self-contained HTML file with the same editorial styling. Use the `generate-infographic.py` script at `$CLAUDE_PLUGIN_ROOT/skills/render-infographic/scripts/generate-infographic.py` if available, or generate HTML directly. Return `{"ok": true, "fallback": "html", "html_path": "{path}", ...}` |
 | Invalid layout_type | Default to stat-heavy |
 | Chart type not bar | Render as stat-row of values |
 | Icon-prompt has no Lucide match | Use `circle-dot` fallback |

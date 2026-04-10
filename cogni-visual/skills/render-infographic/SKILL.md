@@ -48,9 +48,15 @@ Spawn the appropriate agent with:
 - `BRIEF_PATH`: absolute path to the infographic-brief.md
 - `OUTPUT_PATH`: user-provided output path, or let the agent default to `{brief_dir}/`
 
+**Important:** Excalidraw agents share a single canvas instance. Never dispatch two
+Excalidraw-based renders in parallel — they will draw over each other. If rendering
+multiple briefs, serialize Excalidraw renders. Pencil agents use file-backed documents
+and can run alongside Excalidraw agents safely.
+
 ### Step 4: Return Result
 
 The agent returns JSON. Forward it to the user along with:
-- Path to the output file (.excalidraw or .pen)
+- Path to the output file (.excalidraw, .pen, or .html if Pencil fell back to HTML)
 - Share URL (if Excalidraw)
 - Element/operation count
+- If the agent used an HTML fallback (Pencil unavailable), note this to the user

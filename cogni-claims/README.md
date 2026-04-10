@@ -1,5 +1,7 @@
 # cogni-claims
 
+> **Preview** (v0.x) — core skills defined but may change. Feedback welcome.
+
 cogni-claims is the citation-integrity layer for [Claude Cowork](https://claude.ai/cowork) — a systematic verification workflow that detects when sourced claims misrepresent, overstate, or contradict what their cited sources actually say.
 
 ## Why this exists

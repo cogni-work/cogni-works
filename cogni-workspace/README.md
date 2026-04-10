@@ -1,5 +1,7 @@
 # cogni-workspace
 
+> **Preview** (v0.x) — core skills defined but may change. Feedback welcome.
+
 The foundation-layer plugin for the [insight-wave](https://claude.ai/cowork) ecosystem — the only plugin that other cogni-x plugins depend on, and the one that must be initialized first. cogni-workspace owns environment configuration, MCP server installation, theme storage, plugin discovery, workspace health diagnostics, and Obsidian vault integration, giving every downstream plugin a consistent, fully-configured base to build on.
 
 ## Why this exists
@@ -115,6 +117,7 @@ cogni-workspace/
 │   ├── discover-plugins.sh
 │   ├── generate-settings.sh
 │   ├── install-mcp.sh            Clone, build, and wrap git-based MCP servers
+│   ├── patch-desktop-config.py   Merge MCP entries into Claude Desktop config
 │   ├── setup-obsidian.sh
 │   └── update-obsidian.sh
 ├── bash/                         Cross-platform utilities

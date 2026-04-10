@@ -1,5 +1,7 @@
 # cogni-narrative
 
+> **Preview** (v0.x) — core skills defined but may change. Feedback welcome.
+
 Story arc-driven narrative transformation plugin for [Claude Cowork](https://claude.ai/cowork). Transforms research syntheses, analyses, and structured content into compelling executive narratives using 10 story arc frameworks and 8 narrative techniques. Includes TIPS-native trend panorama, theme-thesis for investment theme narratives, JTBD portfolio arcs for buyer-job-centric portfolio narratives, company-credo for About-Us pages, and engagement-model for How-We-Work pages. Narrative review scoring and derivative format adaptation (executive briefs, talking points, one-pagers). Bilingual EN/DE.
 
 ## Why this exists
@@ -29,7 +31,7 @@ A story arc engine for the insight-wave ecosystem. Ten arc frameworks — Corpor
 
 ## What it means for you
 
-- **Arc-disciplined, not improvised.** Every narrative follows a proven story arc structure — consistent quality across documents and authors.
+- **Arc-disciplined, not improvised.** Every narrative follows one of 10 proven story arc structures — cutting first-draft time from hours to under 15 minutes while maintaining consistent quality across documents and authors.
 - **Ten frameworks for ten contexts.** Corporate Visions for sales, Technology Futures for innovation, Competitive Intelligence for threats, Strategic Foresight for planning, Industry Transformation for change, Trend Panorama for TIPS output, Theme-Thesis for investment themes, JTBD Portfolio for buyer-job-centric portfolio narratives, Company-Credo for About-Us pages, Engagement-Model for How-We-Work pages.
 - **Quality-gated.** Automated scoring (0-100, A-F grades) on structural compliance, critical accuracy, evidence density, and language — with improvement suggestions per dimension.
 - **One narrative, three derivative formats.** Executive briefs, talking points, and one-pagers — adapted from the source narrative without rewriting.
@@ -146,6 +148,7 @@ cogni-narrative/
 | cogni-copywriting | No | Arc-aware executive polish (downstream) |
 | cogni-visual | No | Slide decks and visual assets from narrative output (downstream) |
 | cogni-sales | No | Consumes Corporate Visions arc patterns (downstream) |
+| cogni-claims | No | company-credo arc references cogni-claims data files for claim-backed credibility sections |
 
 cogni-narrative is standalone. It transforms structured input from any source — cogni-x plugins or plain markdown files.
 

@@ -1,5 +1,7 @@
 # cogni-copywriting
 
+> **Preview** (v0.x) — core skills defined but may change. Feedback welcome.
+
 Professional copywriting toolkit for [Claude Cowork](https://claude.ai/cowork). Polish documents for executive readability, get multi-stakeholder feedback, strengthen story arc narratives, and enhance sales copy with Power Positions — in English or German. Applies messaging frameworks, readability standards, and impact techniques. Polish JSON fields via the copy-json adapter, and audit arc-preservation references against upstream cogni-narrative definitions.
 
 ## Why this exists
@@ -33,7 +35,7 @@ A professional editing toolkit for the insight-wave ecosystem. Seven messaging f
 - **Ship executive-ready documents in one pass** instead of 3-4 editing rounds — BLUF framing, Pyramid structure, active voice, and visual hierarchy applied together, not piecemeal.
 - **Stress-test with 5 parallel personas** to catch what a single reviewer misses — legal risks, technical gaps, marketing opportunities surfaced before the document leaves your desk.
 - **Protect your narrative investment.** Arc-aware polishing detects story arc structure and applies element-specific techniques — so a document that took cogni-narrative 30 minutes to compose doesn't lose its persuasive spine during editing.
-- **Publish in both markets.** English uses Flesch scoring; German uses Wolf Schneider rules with Amstad scoring — one polishing pass produces publication-ready text in either language.
+- **Publish in both markets without a second editing cycle.** English uses Flesch scoring (target 50-60); German uses Wolf Schneider rules with Amstad scoring (target 30-50) — eliminating the separate localization review that typically adds 1-2 days per document.
 
 ## Installation
 

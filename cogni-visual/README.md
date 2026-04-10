@@ -1,5 +1,7 @@
 # cogni-visual
 
+> **Preview** (v0.x) — core skills defined but may change. Feedback welcome.
+
 A [Claude Cowork](https://claude.ai/cowork) plugin that transforms polished narratives and structured data into visual deliverables — presentation briefs, slide decks, big-picture journey maps, Big Block solution architecture diagrams, scrollable web narratives, poster storyboards, and visual assets. Supports Excalidraw, Pencil MCP, and PPTX rendering.
 
 ## Why this exists

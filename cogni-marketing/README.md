@@ -1,5 +1,7 @@
 # cogni-marketing
 
+> **Incubating** (v0.0.x) — skills, data formats, and workflows may change at any time.
+
 B2B marketing content engine for [Claude Cowork](https://claude.ai/cowork). Bridges cogni-trends strategic themes and cogni-portfolio propositions into channel-ready content. Supports thought leadership, demand generation, lead generation, sales enablement, and ABM across markets with configurable brand voice. Bilingual DE/EN.
 
 ## Why this exists

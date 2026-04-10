@@ -1,5 +1,7 @@
 # cogni-website
 
+> **Incubating** (v0.0.x) — skills, data formats, and workflows may change at any time.
+
 Assembles multi-page customer websites from portfolio, marketing, trend, and research content produced by other insight-wave plugins — outputting a deployable static site with shared navigation, theming, and responsive HTML.
 
 ## Why this exists
@@ -95,7 +97,7 @@ Or describe what you want in natural language:
 
 ```
 cogni-website/
-├── .claude-plugin/               Plugin manifest (v0.3.2)
+├── .claude-plugin/               Plugin manifest (v0.0.3)
 │   └── plugin.json
 ├── skills/                       6 workflow skills
 │   ├── website-setup/

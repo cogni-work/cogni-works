@@ -1,6 +1,8 @@
 # cogni-consulting
 
-A [Claude Cowork](https://claude.ai/cowork) plugin that orchestrates consulting engagements through the Double Diamond framework — diverge to explore, converge to decide, twice.
+> **Incubating** (v0.0.x) — skills, data formats, and workflows may change at any time.
+
+A [Claude Cowork](https://claude.ai/cowork) plugin that orchestrates consulting engagements through the Double Diamond framework — diverge to explore, converge to decide, twice. Includes Lean Canvas authoring via business-model-hypothesis, and lightweight how-might-we engagements for bounded challenges using guided ideation.
 
 ## Why this exists
 

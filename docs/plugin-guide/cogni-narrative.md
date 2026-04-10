@@ -10,7 +10,7 @@ Story arc-driven narrative transformation for the insight-wave ecosystem.
 
 cogni-narrative sits in the composition layer of the insight-wave pipeline: after research is collected and before content is polished or visualised. Its job is to impose narrative structure on unstructured input — research syntheses, analyses, TIPS trend reports, competitive landscapes — so the output reads as a deliberate argument rather than an information dump.
 
-The plugin provides eight story arc frameworks. Each framework is a sequence of named elements (for example: Why Change → Why Now → Why You → Why Pay) with defined rhetorical intent, evidence requirements, and transition patterns between elements. When you run `/narrative`, the skill reads your source files, proposes the best-fit arc, and writes a ~1,675-word insight summary structured around it. The output file (`insight-summary.md`) carries YAML frontmatter with an `arc_id` field that downstream plugins (cogni-copywriting, cogni-visual) use to apply arc-aware processing.
+The plugin provides ten story arc frameworks. Each framework is a sequence of named elements (for example: Why Change → Why Now → Why You → Why Pay) with defined rhetorical intent, evidence requirements, and transition patterns between elements. When you run `/narrative`, the skill reads your source files, proposes the best-fit arc, and writes a ~1,675-word insight summary structured around it. The output file (`insight-summary.md`) carries YAML frontmatter with an `arc_id` field that downstream plugins (cogni-copywriting, cogni-visual) use to apply arc-aware processing.
 
 ### When to reach for this plugin
 
@@ -36,6 +36,9 @@ An arc framework defines the shape of an argument. Rather than writing a narrati
 | `industry-transformation` | Forces → Friction → Evolution → Leadership | Industry analysis; regulatory impact; transformation roadmaps |
 | `trend-panorama` | Forces → Impact → Horizons → Foundations | TIPS trend-scout output; Trendradar-native reports |
 | `theme-thesis` | Why Change → Why Now → Why You → Why Pay | Investment theme narratives within TIPS reports |
+| `jtbd-portfolio` | Jobs → Friction → Portfolio → Invitation | Portfolio introductions; capability overviews; pre-sales |
+| `company-credo` | Mission → Conviction → Credibility → Promise | Website About-Us pages; company introductions |
+| `engagement-model` | Principles → Process → Partnership → Outcomes | Website How-We-Work pages; engagement sections of proposals |
 
 ### Arc auto-detection
 
@@ -109,7 +112,7 @@ Key parameters:
 | Parameter | Description |
 |-----------|-------------|
 | `--source-path` | Directory of `.md` files, or a single file |
-| `--arc-id` | Override auto-detection: `corporate-visions`, `technology-futures`, `competitive-intelligence`, `strategic-foresight`, `industry-transformation`, `trend-panorama`, `theme-thesis` |
+| `--arc-id` | Override auto-detection: `corporate-visions`, `technology-futures`, `competitive-intelligence`, `strategic-foresight`, `industry-transformation`, `trend-panorama`, `theme-thesis`, `jtbd-portfolio`, `company-credo`, `engagement-model` |
 | `--language` | `en` (default) or `de` |
 | `--output-path` | Defaults to `insight-summary.md` in source directory |
 | `--target-length` | Word count (default ~1,675); section proportions scale accordingly |

@@ -1,5 +1,7 @@
 # cogni-help
 
+> **Incubating** (v0.0.x) — skills, data formats, and workflows may change at any time.
+
 cogni-help unifies the [insight-wave](https://github.com/cogni-work/insight-wave) ecosystem into a single entry point — teaching users through a 12-course curriculum, routing tasks to the right plugin, chaining multi-plugin workflows, and diagnosing problems — so 12 plugins with 70+ skills behave like one coherent system.
 
 ## Why this exists
@@ -118,7 +120,7 @@ Exercise artifacts are written to `_teacher-exercises/`.
 
 ```
 cogni-help/
-├── .claude-plugin/plugin.json    Plugin manifest (v0.2.18)
+├── .claude-plugin/plugin.json    Plugin manifest (v0.0.2)
 ├── agents/                       1 delegation agent
 │   └── course-deck-generator.md
 ├── skills/                       7 skills
@@ -145,8 +147,10 @@ cogni-help/
 
 ## Dependencies
 
-All ecosystem plugins are soft dependencies — required for their respective courses
-but not for using guide, troubleshoot, workflow, cheatsheet, or issues.
+| Plugin | Required | Purpose |
+|--------|----------|---------|
+| cogni-workspace | No | troubleshoot delegates to workspace-status for infrastructure health checks |
+| All ecosystem plugins | No | Required for their respective courses but not for guide, troubleshoot, workflow, cheatsheet, or issues |
 
 ## Contributing
 

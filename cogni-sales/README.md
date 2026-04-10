@@ -1,5 +1,7 @@
 # cogni-sales
 
+> **Preview** (v0.x) — core skills defined but may change. Feedback welcome.
+
 B2B sales pitch generation for [Claude Cowork](https://claude.ai/cowork) using Corporate Visions Why Change methodology. Creates sales presentations and proposals for named customers (deal-specific) or market segments (reusable). Builds on cogni-portfolio data with optional TIPS strategic enrichment. Bilingual DE/EN.
 
 ## Why this exists
@@ -115,7 +117,7 @@ Each pitch project tracks state in `pitch-log.json` with pitch mode (customer/se
 
 ```
 cogni-sales/
-├── .claude-plugin/               Plugin manifest (v0.4.1)
+├── .claude-plugin/               Plugin manifest (v0.4.0)
 ├── skills/                       1 pitch skill
 │   └── why-change/
 │       ├── SKILL.md

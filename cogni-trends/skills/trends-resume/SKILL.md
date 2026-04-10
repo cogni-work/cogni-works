@@ -196,7 +196,6 @@ When `phase` is `complete`, the `next_actions` array from `project-status.sh` co
 - `cogni-visual:enrich-report` — Themed HTML with Chart.js visualizations and Excalidraw diagrams
 - `cogni-visual:story-to-slides` — PowerPoint presentation brief
 - `cogni-visual:story-to-web` — Scrollable web landing page
-- `cogni-visual:story-to-big-picture` — Single-canvas visual journey map
 - `cogni-visual:story-to-storyboard` — Multi-poster print storyboard
 
 **Accumulate**

@@ -120,7 +120,7 @@ Training-sourced candidates capped: source_quality max 0.4, signal_strength max 
 | cogni-claims | downstream | trend-report registers claims; verify via cogni-claims:claims |
 | cogni-copywriting | downstream | Executive polish on trend reports with tone scoping |
 | cogni-workspace | upstream | pick-theme for dashboard theming |
-| cogni-visual | downstream | Big Block diagrams from value-modeler solution networks; enrich-report themed HTML from trend-report |
+| cogni-visual | downstream | enrich-report themed HTML from trend-report; story-to-slides for presentations |
 
 ## Key Conventions
 

@@ -310,7 +310,7 @@ Ask the user to:
 
 | Plugin | What It Produces | Formats |
 |--------|-----------------|---------|
-| cogni-visual | Slide decks, big-picture journey maps, solution architectures | PPTX, Excalidraw |
+| cogni-visual | Slide decks, infographics, themed HTML reports | PPTX, Excalidraw, HTML |
 | document-skills | Reports, proposals, spreadsheets | DOCX, XLSX, PDF |
 
 The **deliverable map** links each vision class to its recommended deliverable package:

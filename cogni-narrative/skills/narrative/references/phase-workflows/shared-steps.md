@@ -23,7 +23,7 @@ All 6 counts must be integers (0 is valid for missing/empty directories). These 
 
 ## Step: Output Template
 
-The output document follows this exact structure. The 4 `##` headers are arc-specific (see your workflow file for the correct headers). Downstream visualization tools (story-to-slides, story-to-big-picture, story-to-storyboard, story-to-web) parse these 4 elements to create matching visual segments, so the structure cannot be modified.
+The output document follows this exact structure. The 4 `##` headers are arc-specific (see your workflow file for the correct headers). Downstream visualization tools (story-to-slides, story-to-storyboard, story-to-web) parse these 4 elements to create matching visual segments, so the structure cannot be modified.
 
 ```markdown
 ---

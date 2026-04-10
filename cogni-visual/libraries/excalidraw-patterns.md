@@ -1,6 +1,6 @@
 # Excalidraw Concept Diagram Patterns
 
-> **Note:** This file is for Excalidraw MCP rendering only (big pictures, big blocks, and when interactive `.excalidraw` output is needed). For concept diagram inline SVG generation (used by the `concept-diagram-svg` agent and the enrich-report skill), see `svg-patterns.md`.
+> **Note:** This file is for Excalidraw MCP rendering only (when interactive `.excalidraw` output is needed). For concept diagram inline SVG generation (used by the `concept-diagram-svg` agent and the enrich-report skill), see `svg-patterns.md`.
 
 Element recipes for generating concept diagrams via Excalidraw MCP, themed with design-variables colors. Each pattern describes the spatial layout, element types, and color mapping.
 

@@ -587,7 +587,7 @@ This phase also handles the **deferred flow**: when the user verified and resolv
 
 **Optional cross-plugin:** `cogni-narrative` theme-thesis arc (Phase 2 investment theme writer guidance), `cogni-claims:claims` (Phase 3)
 
-**Downstream (via `/trends-resume`):** `cogni-copywriting:copywrite` (prose polish), `cogni-visual:enrich-report` (themed HTML), `cogni-visual:story-to-slides` (presentation), `cogni-visual:story-to-web` (landing page), `cogni-visual:story-to-big-picture` (journey map), `cogni-visual:story-to-storyboard` (print posters), `trends-catalog import`, `trends-dashboard`
+**Downstream (via `/trends-resume`):** `cogni-copywriting:copywrite` (prose polish), `cogni-visual:enrich-report` (themed HTML), `cogni-visual:story-to-slides` (presentation), `cogni-visual:story-to-web` (landing page), `cogni-visual:story-to-storyboard` (print posters), `trends-catalog import`, `trends-dashboard`
 
 ## Debugging
 

@@ -510,11 +510,9 @@ When perspectives disagree, use these tiebreakers:
 | Brief Type | Rule |
 |-----------|------|
 | **Slides** | Presenter confidence overrides Design elegance — claims the presenter can't defend in front of a senior audience must be softened or sourced |
-| **Big Picture** | Story World coherence overrides individual station quality — one weak station in a strong world is better than strong stations in a forced metaphor |
 | **Web** | Hook/opening section is sacred — if Audience flags the opening as weak, that's automatically CRITICAL regardless of other perspectives |
 | **Storyboard** | Readability at distance overrides information density — if Print Designer flags readability, that's HIGH minimum even if content is strong |
 | **Infographic** | 10-second comprehension is sacred — if Target Audience fails to understand the core message in 10 seconds, that's automatically CRITICAL regardless of design quality |
-| **Big Block** | Technical accuracy is non-negotiable — Solution Architect failures on tier logic or connection integrity are automatically CRITICAL |
 
 ### Priority Tiers
 

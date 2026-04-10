@@ -17,7 +17,7 @@ deliverables. Six output types:
 |------|--------|----------|
 | Presentation Brief | Structured outline | Planning slide content before designing |
 | Slide Deck | .pptx | Client presentations, board meetings |
-| Big Picture Journey Map | Excalidraw | Strategic overviews, process visualization |
+| Infographic | Excalidraw | Data summaries, strategic overviews |
 | Scrollable Web Narrative | HTML | Interactive online reports |
 | Poster Storyboard | Visual layout | Print materials, event displays |
 | Visual Assets | Various | Icons, diagrams, supporting graphics |
@@ -151,67 +151,66 @@ Mid-market companies are falling behind in AI adoption.
 
 ---
 
-## Module 3: Big Picture Journey Maps
+## Module 3: Infographics
 
 ### Theory (3 min)
 
-**Big Picture Journey Maps** use Excalidraw to create strategic overviews
-and process visualizations. These are the "hand-drawn" diagrams that feel
-approachable and engaging in workshops and strategy sessions.
+**Infographics** use Excalidraw to create single-page visual summaries
+in a hand-drawn sketchnote style. They distill narratives into 3-8 content
+blocks with strict word limits for maximum visual impact.
 
 **Use cases**:
-- Customer journey visualization
-- Strategic roadmaps
-- Process flows and workflows
-- Ecosystem maps
-- Transformation timelines
+- Data-heavy summaries (KPIs, metrics, comparisons)
+- Process overviews and timelines
+- Strategic snapshots for executives
+- Event handouts and social media assets
 
-**Excalidraw advantages**:
-- Hand-drawn aesthetic feels less formal, more collaborative
-- Interactive: zoom, pan, explore details
-- Easy to update and iterate
-- Can be embedded in presentations or shared standalone
+**Infographic features**:
+- 7 layout types (stat-heavy, timeline-flow, comparison, hub-spoke, funnel-pyramid, list-grid, flow-diagram)
+- 5 style presets (editorial, data-viz, sketchnote, corporate, whiteboard)
+- Hand-drawn Excalidraw aesthetic — approachable and engaging
+- "Less is categorically better" — every element earns its place
 
-**Creating journey maps**:
-1. Provide the content/process to visualize
-2. Specify the type: journey, roadmap, process, ecosystem
-3. Claude generates the Excalidraw diagram
+**Creating infographics**:
+1. Provide the narrative or data to visualize
+2. Claude selects the best layout type and style preset
+3. A brief is generated, then rendered as an Excalidraw scene (150-250 elements)
 4. Review and refine interactively
 
 ### Demo
 
-Walk through creating a journey map:
-1. Define a simple process (e.g., the TIPS pipeline from Courses 4-5)
-2. Ask Claude to create a big picture journey map
-3. Show the resulting Excalidraw diagram
-4. Demonstrate interactive exploration
+Walk through creating an infographic:
+1. Take a polished narrative (e.g., from Course 3)
+2. Ask Claude to create an infographic from it
+3. Show the resulting Excalidraw sketchnote
+4. Demonstrate the 10-second comprehension test
 5. Show how to iterate on the design
 
 ### Exercise
 
 Ask the user to:
-1. Choose a process they frequently explain to clients
-2. Ask Claude: "Create a big picture journey map for [their process]"
-3. Review the result: Is the flow clear? Are the right elements highlighted?
+1. Choose a data-heavy topic they frequently present
+2. Ask Claude: "Create an infographic for [their topic]"
+3. Review the result: Can you grasp the core message in 10 seconds?
 4. Request one refinement
 
 ### Quiz
 
-1. **Multiple choice**: Why use Excalidraw over PowerPoint for journey maps?
-   - a) It's faster to create
-   - b) Hand-drawn style feels more collaborative and approachable
-   - c) It's required for consulting
-   - d) It has more features
-   **Answer**: b
+1. **Multiple choice**: What is the key principle of infographic design?
+   - a) Include as much information as possible
+   - b) Use the most colorful style preset
+   - c) Less is categorically better — every element earns its place
+   - d) Always use the stat-heavy layout
+   **Answer**: c
 
-2. **Open-ended**: Name one consulting scenario where a big picture map would be more effective than slides.
+2. **Open-ended**: Name one scenario where an infographic would be more effective than a slide deck.
 
 ### Recap
 
-- Big picture maps = strategic overviews in hand-drawn style
-- Excalidraw: approachable, interactive, easy to iterate
-- Great for workshops, strategy sessions, client discussions
-- Provides visual complement to formal slide decks
+- Infographics = single-page visual summaries in hand-drawn style
+- 7 layout types × 5 style presets for different content patterns
+- Strict word limits enforce clarity and visual impact
+- Great for executive summaries, data snapshots, and handouts
 
 ---
 
@@ -354,7 +353,7 @@ Congratulations! You've completed the core insight-wave visual skills!
 
 **What you can now do**:
 - Create presentation briefs and slide decks from polished narratives
-- Build big picture journey maps in Excalidraw for strategy sessions
+- Create infographics in Excalidraw for data summaries and overviews
 - Generate scrollable web narratives and poster storyboards
 - Run the full pipeline from research to visual deliverable
 

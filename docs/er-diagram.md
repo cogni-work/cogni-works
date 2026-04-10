@@ -90,7 +90,7 @@ graph LR
 |------------|------|-----|---------|
 | `portfolio-context.json` | cogni-portfolio | cogni-trends | Portfolio products, features, markets for trend-to-portfolio mapping |
 | `portfolio-opportunities.json` | cogni-trends | cogni-portfolio | Growth opportunities scored by ranking, TAM alignment, competitive whitespace |
-| `tips-value-model.json` | cogni-trends | cogni-visual | Solution templates, investment themes, TIPS paths for Big Block rendering |
+| `tips-value-model.json` | cogni-trends | cogni-portfolio | Solution templates, investment themes, TIPS paths for trends-bridge import |
 | `pitch-log.json` | cogni-sales | (internal) | Workflow state, buying center config, phase tracking |
 | `marketing-project.json` | cogni-marketing | (internal) | Brand voice, source paths, market-GTM path configuration |
 | `claims.json` | various | cogni-claims | Claim records with source URLs, status, and deviation evidence |

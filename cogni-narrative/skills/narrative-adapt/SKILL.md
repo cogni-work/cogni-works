@@ -97,7 +97,7 @@ Read and follow the format-specific template in [references/format-templates.md]
 | Talking Points | N/A (bullets) | Presentations, calls | Answer-first bullets, no citations |
 | One-Pager | 400-600 | Print, handout | Metrics table + next steps |
 
-**Why arc structure is preserved in every format:** Downstream tools (story-to-slides, story-to-big-picture, story-to-storyboard) parse the 4 arc elements to create matching visual segments. Renaming headers, reordering elements, or merging sections breaks this pipeline. Each format keeps all 4 `##` headers in their original order with the exact arc element names from the source.
+**Why arc structure is preserved in every format:** Downstream tools (story-to-slides, story-to-storyboard, story-to-web) parse the 4 arc elements to create matching visual segments. Renaming headers, reordering elements, or merging sections breaks this pipeline. Each format keeps all 4 `##` headers in their original order with the exact arc element names from the source.
 
 **Why fidelity matters:** Derivatives condense -- they never embellish. Adding information that wasn't in the source narrative would break the evidence chain back to the original research. Every claim in the derivative should be traceable to the source. This is especially important for quantitative claims: if a number appears in the derivative, it appeared in the source.
 

@@ -25,7 +25,7 @@ A story arc engine for the insight-wave ecosystem. Ten arc frameworks — Corpor
 
 ## What it does
 
-1. **Transform** structured content into executive narratives using a story arc framework — auto-detected or manually selected → `insight-summary.md` → story-to-slides, story-to-big-picture, story-to-web, why-change
+1. **Transform** structured content into executive narratives using a story arc framework — auto-detected or manually selected → `insight-summary.md` → story-to-slides, story-to-web, why-change
 2. **Review** narratives against quality gates — structural compliance, evidence density, element balance, language correctness — with scores and grades
 3. **Adapt** full narratives into derivative formats: executive briefs (300-500 words), talking points (bullet list), or one-pagers (structured reference) → `executive-brief.md` + `talking-points.md` + `one-pager.md` → copywriter
 

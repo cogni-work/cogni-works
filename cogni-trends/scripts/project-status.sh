@@ -516,7 +516,6 @@ case "$PHASE" in
     fi
     add_action "cogni-visual:story-to-slides" "Create a PowerPoint presentation from the report"
     add_action "cogni-visual:story-to-web" "Create a scrollable landing page from the report"
-    add_action "cogni-visual:story-to-big-picture" "Create a visual journey map poster"
     add_action "cogni-visual:story-to-storyboard" "Create a multi-poster print storyboard"
     # Accumulate
     add_action "cogni-trends:trends-catalog" "Import to industry catalog for cross-pursuit reuse"

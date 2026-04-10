@@ -42,7 +42,7 @@ Internal portfolio data (slugs, TAM/SAM/SOM, relevance tiers, quality scores) is
 | `workbook` | Leadership, analysts | Structured spreadsheet with all portfolio data | XLSX |
 | Custom/ad-hoc | Any audience | User-defined voice, sections, review | Markdown |
 
-Each use case defines its own voice, output templates, and review criteria. Both the `pitch` and `customer-narrative` use cases emit output with `arc_id` in frontmatter, making them directly consumable by story-to-slides, story-to-web, story-to-big-picture, and story-to-storyboard — **no intermediate `/narrative` step needed.** `customer-narrative` is unique in that its arc varies per scope: `home` and `persona` use `jtbd-portfolio`, `about` uses `company-credo`, `capability` uses `corporate-visions`, `approach` uses `engagement-model`. See `references/templates-customer-narrative.md` for the full scope → arc mapping.
+Each use case defines its own voice, output templates, and review criteria. Both the `pitch` and `customer-narrative` use cases emit output with `arc_id` in frontmatter, making them directly consumable by story-to-slides, story-to-web, and story-to-storyboard — **no intermediate `/narrative` step needed.** `customer-narrative` is unique in that its arc varies per scope: `home` and `persona` use `jtbd-portfolio`, `about` uses `company-credo`, `capability` uses `corporate-visions`, `approach` uses `engagement-model`. See `references/templates-customer-narrative.md` for the full scope → arc mapping.
 
 ## Prerequisites
 
@@ -371,7 +371,6 @@ For **customer-narrative**:
 - **Visual formats** (direct — no intermediate `/narrative` step needed, because each file already carries `arc_id`):
   - `/story-to-web` → scrollable web page (one per file, or an indexed multi-page site)
   - `/story-to-slides` → PowerPoint version of any page
-  - `/story-to-big-picture` → illustrated visual journey map of the home or about page
   - `/enrich-report` → themed HTML with concept diagrams (value flows, relationship maps) and interactive charts
 - **Marketing content** (if cogni-marketing installed): "These customer narratives are automatically discovered by `/marketing-setup` and used as voice/messaging enrichment when generating marketing content — ensuring consistency between how the website speaks to buyers and how your marketing speaks to the same audience"
 
@@ -381,7 +380,6 @@ For **pitch**:
 - **Visual formats** (direct — no intermediate step needed):
   - `/story-to-slides` → PowerPoint presentation
   - `/story-to-web` → scrollable landing page
-  - `/story-to-big-picture` → illustrated visual journey map
   - `/story-to-storyboard` → multi-poster print storyboard
   - `/enrich-report` → themed HTML with concept diagrams and data charts
 - **Deepen**: "Run `/why-change` to add web research, customer-specific context, and TIPS enrichment for a deal-ready version"

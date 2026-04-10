@@ -236,7 +236,7 @@ Export as slides and a web narrative — the client wants a digital leave-behind
 | Executive boardroom | Slide deck (PPTX via cogni-visual) |
 | Project team handoff | Detailed document (DOCX) |
 | Digital follow-up | Web narrative (Pencil MCP via cogni-visual) |
-| Workshop facilitation | Big Picture journey map (Excalidraw via cogni-visual) |
+| Workshop facilitation | Infographic or themed HTML report (Excalidraw / enrich-report via cogni-visual) |
 
 ## Resuming an Engagement
 

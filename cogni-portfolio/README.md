@@ -182,7 +182,7 @@ cogni-portfolio/
 | Plugin | Required | Purpose |
 |--------|----------|---------|
 | cogni-narrative | No | Pitch use case reads arc definitions for narrative structure; output is directly consumable by story-to-slides and story-to-web |
-| cogni-visual | No | Pitch output consumable by story-to-slides, story-to-web, story-to-big-picture, and story-to-storyboard |
+| cogni-visual | No | Pitch output consumable by story-to-slides, story-to-web, and story-to-storyboard |
 | cogni-marketing | No | Customer narratives from portfolio-communicate are auto-discovered by marketing-setup for voice/messaging enrichment |
 | cogni-claims | No | Claim verification for research-backed assertions via portfolio-verify |
 | cogni-trends | No | Bidirectional TIPS integration via trends-bridge |

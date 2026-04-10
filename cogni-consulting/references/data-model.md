@@ -206,5 +206,5 @@ Phase gates are enforced at the skill level: each phase skill checks that requir
 | cogni-trends | Orchestrates | Discover, Develop | Invokes trend-scout (Discover) and value-modeler (Develop) |
 | cogni-portfolio | Orchestrates | Discover, Develop, Deliver | Invokes portfolio-scan, compete, propositions, solutions, portfolio-verify |
 | cogni-claims | Orchestrates | Define, Deliver | Invokes claims verification for assumption and deliverable quality gates |
-| cogni-visual | Orchestrates | Export | Invokes story-to-slides, story-to-big-picture for final deliverables |
+| cogni-visual | Orchestrates | Export | Invokes story-to-slides, enrich-report for final deliverables |
 | document-skills | Orchestrates | Export | Formats outputs as PPTX, DOCX, XLSX |

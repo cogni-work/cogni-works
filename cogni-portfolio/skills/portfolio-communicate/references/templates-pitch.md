@@ -1,6 +1,6 @@
 # Templates: Pitch Narrative
 
-Output templates for the `pitch` use case. Transforms portfolio entities into arc-structured presentation narratives that cogni-narrative downstream tools (story-to-slides, story-to-web, story-to-big-picture, story-to-storyboard) can consume directly.
+Output templates for the `pitch` use case. Transforms portfolio entities into arc-structured presentation narratives that cogni-narrative downstream tools (story-to-slides, story-to-web, story-to-storyboard) can consume directly.
 
 **Use case**: `pitch`
 **Audience**: Executives, decision-makers, conference audiences, board members
@@ -378,6 +378,5 @@ After generating a pitch narrative, suggest:
 3. **Visualize**:
    - `/story-to-slides` → PowerPoint presentation via PPTX skill
    - `/story-to-web` → scrollable landing page via Pencil MCP
-   - `/story-to-big-picture` → illustrated visual journey map via Excalidraw
    - `/story-to-storyboard` → multi-poster print storyboard via Pencil MCP
 4. **Deepen** (if needed): `/why-change` — adds web research, customer-specific context, and TIPS enrichment for a deal-ready version

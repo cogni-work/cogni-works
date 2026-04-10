@@ -40,7 +40,7 @@ Each scope produces a main component of a portfolio-driven website, driven by a 
 
 **Deprecated scopes (v1):** The `overview` / `market` / `customer` scopes from the previous version are replaced by `home` / (dropped) / `persona`. The old `market/*.md` files are no longer generated — their content was redundant with persona pages and had no role in a standard website IA. Existing market files from past runs are left on disk and not automatically migrated; regenerating with scope=`all` simply stops producing them.
 
-**Downstream pipeline:** Each output file carries `arc_id` in frontmatter so it is directly consumable by downstream cogni-visual skills — `/story-to-web` for pages, `/story-to-slides` for deck versions, `/story-to-big-picture` for visual journey maps — **with no intermediate `/narrative` pass**. Optionally run `/copywrite` on any file before rendering for extra prose polish.
+**Downstream pipeline:** Each output file carries `arc_id` in frontmatter so it is directly consumable by downstream cogni-visual skills — `/story-to-web` for pages, `/story-to-slides` for deck versions — **with no intermediate `/narrative` pass**. Optionally run `/copywrite` on any file before rendering for extra prose polish.
 
 ---
 
@@ -91,9 +91,9 @@ Each scope produces a main component of a portfolio-driven website, driven by a 
 | `overview` | `pitch/portfolio-overview.md` | Portfolio-wide narrative for investors, board, or keynotes |
 | `all` | All of the above | Overview + one narrative per market (ordered by priority) |
 
-**Key differentiator**: Pitch output includes `arc_id` in frontmatter — this makes it directly consumable by story-to-slides, story-to-web, story-to-big-picture, and story-to-storyboard without an intermediate `/narrative` step. Default arc: `jtbd-portfolio`.
+**Key differentiator**: Pitch output includes `arc_id` in frontmatter — this makes it directly consumable by story-to-slides, story-to-web, and story-to-storyboard without an intermediate `/narrative` step. Default arc: `jtbd-portfolio`.
 
-**Downstream pipeline:** `/narrative-review` → `/copywrite` → `/story-to-slides`, `/story-to-web`, `/story-to-big-picture`, `/story-to-storyboard`
+**Downstream pipeline:** `/narrative-review` → `/copywrite` → `/story-to-slides`, `/story-to-web`, `/story-to-storyboard`
 
 ---
 

@@ -185,10 +185,10 @@ produce trend reports for strategic decision-making. DACH-focused. Bilingual EN/
 
 ## cogni-visual
 
-**Purpose**: Transform narratives into visual deliverables — slide decks, big-picture
-journey maps, Big Block architectures, web narratives, poster storyboards.
+**Purpose**: Transform narratives into visual deliverables — slide decks, web narratives,
+poster storyboards, infographics, and themed HTML reports with charts and diagrams.
 
-**Key commands**: `/render-slides`, `/render-big-picture`, `/render-web-narrative`
+**Key commands**: `/render-slides`, `/render-web-narrative`, `/enrich-report`
 
 **Use when**: User has polished narrative content and needs visual output. Supports
 Excalidraw, Pencil MCP, and PPTX rendering.

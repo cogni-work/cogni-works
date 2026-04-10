@@ -195,7 +195,7 @@ This file contains detailed sub-steps, extended thinking prompts, and quality ga
 
 #### Why exactly 4 sections matters
 
-The output uses exactly 4 `##` section headers matching the selected arc's element names. This isn't arbitrary -- downstream visualization tools (story-to-slides, story-to-big-picture, story-to-storyboard, story-to-web) parse these 4 elements to create matching visual segments. Creative renaming or adding extra sections breaks this pipeline. See `references/language-templates.md` section "Insight Summary (Arc Element Headers)" for the exact header text per arc and language.
+The output uses exactly 4 `##` section headers matching the selected arc's element names. This isn't arbitrary -- downstream visualization tools (story-to-slides, story-to-storyboard, story-to-web) parse these 4 elements to create matching visual segments. Creative renaming or adding extra sections breaks this pipeline. See `references/language-templates.md` section "Insight Summary (Arc Element Headers)" for the exact header text per arc and language.
 
 #### Summary workflow (when no arc-specific file exists)
 

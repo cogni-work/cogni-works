@@ -139,7 +139,7 @@ Use `cogni-docs` skills to manage: `doc-audit` detects drift, `doc-generate` fix
 
 | Server | Plugins | Purpose |
 |--------|---------|---------|
-| excalidraw | cogni-visual, cogni-portfolio | Diagram rendering (big pictures, big blocks, architecture) |
+| excalidraw | cogni-visual, cogni-portfolio | Diagram rendering (infographics, concept diagrams, architecture) |
 | claude-in-chrome | cogni-claims, cogni-help, cogni-website, cogni-workspace | Browser automation (verification, issue filing, preview, theme extraction) |
 | pencil | cogni-visual, cogni-website | Web narrative, storyboard, poster, hero rendering |
 

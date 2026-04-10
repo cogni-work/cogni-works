@@ -131,6 +131,5 @@ Wait for user confirmation or adjustments before proceeding.
 | Format | CTA Rendering | Primary CTA Placement | Notes |
 |--------|--------------|----------------------|-------|
 | **Slides** | Speaker notes CTA prompts, closing slide CTA | Closing slide (always) | Per-slide CTAs inform speaker delivery, not visual elements |
-| **Big Picture** | Station body text, final station as CTA station | Final station (call-to-action role) | CTAs are narrative, not interactive (no buttons) |
 | **Web** | CTA buttons, hero CTA, section micro-CTAs | Hero section + final CTA section | `commit` CTAs render as buttons; `explore`/`share` as text links |
 | **Storyboard** | Poster body text, summary poster CTA | Summary poster (always last) | CTAs guide presenter's verbal delivery during walkthrough |

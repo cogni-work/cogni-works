@@ -44,27 +44,12 @@ Every slide title, station headline, section headline, and poster headline must 
 
 Statistics are reframed for visual impact rather than presented as raw numbers. A slide reading "14% of organizations have adopted AI-powered maintenance" becomes a hero number play: "Only 1 in 7 organizations has adopted predictive maintenance — 85% are leaving cost savings on the table." Three reframing patterns: ratio framing, hero number isolation, and before/after contrast.
 
-### Big Picture vs. Big Block
-
-These two visual formats have different inputs, scales, and purposes:
-
-| Aspect | Big Picture | Big Block |
-|--------|-------------|-----------|
-| Input | Narrative (prose) | TIPS value-modeler (JSON) |
-| Output | Illustrated journey map canvas | Solution architecture tier diagram |
-| Elements | 1,100–1,500 (per canvas) | 150–250 (per diagram) |
-| Rendering | N parallel station agents + 4 zone reviewers | 8 sequential phases |
-| Layout unit | Illustrated station as landscape object | Solution block in BR tier band |
-| Use case | Workshop poster, executive walkthrough | Strategy diagram, solution landscape |
-
 ### Pipeline Position
 
 ```
 cogni-narrative  →  cogni-copywriting  →  cogni-visual
 (compose)            (polish)              (visualize)
 ```
-
-For Big Block diagrams, the upstream source is cogni-trends value-modeler output, not a narrative.
 
 ---
 

@@ -1,6 +1,6 @@
 # Templates: Customer Narrative
 
-Output templates for the `customer-narrative` use case. These templates produce the **main components of a portfolio-driven website** from the buyer's perspective — each file is arc-structured and carries an `arc_id` in its YAML frontmatter so that `/story-to-web` (and `/story-to-slides`, `/story-to-big-picture`) can render it directly, with no intermediate `/narrative` pass needed.
+Output templates for the `customer-narrative` use case. These templates produce the **main components of a portfolio-driven website** from the buyer's perspective — each file is arc-structured and carries an `arc_id` in its YAML frontmatter so that `/story-to-web` (and `/story-to-slides`) can render it directly, with no intermediate `/narrative` pass needed.
 
 **Use case**: `customer-narrative`
 **Audience**: Buyers, executives, decision-makers navigating a portfolio-driven website

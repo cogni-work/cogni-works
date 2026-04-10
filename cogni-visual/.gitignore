@@ -2,7 +2,6 @@
 *.pen
 *-brief.md
 !libraries/EXAMPLE_BRIEF.md
-!libraries/EXAMPLE_BIG_PICTURE_BRIEF.md
 !libraries/EXAMPLE_WEB_NARRATIVE_BRIEF.md
 
 # Workspaces

@@ -28,7 +28,7 @@
     {
       "name": "cogni-narrative",
       "source": "./cogni-narrative",
-      "version": "0.9.1",
+      "version": "0.9.2",
       "maturity": "preview",
       "description": "Story arc-driven narrative transformation. Transforms research syntheses and structured content into compelling executive narratives using 10 story arc frameworks and 8 narrative techniques. Includes TIPS-native trend panorama, theme-thesis for investment theme narratives, JTBD portfolio for buyer-job-centric portfolio narratives, company-credo for About-Us pages, and engagement-model for How-We-Work pages. Narrative review scoring and derivative format adaptation. Bilingual EN/DE.",
       "keywords": [
@@ -74,7 +74,7 @@
     {
       "name": "cogni-trends",
       "source": "./cogni-trends",
-      "version": "0.4.1",
+      "version": "0.4.2",
       "maturity": "preview",
       "description": "Strategic trend scouting and reporting pipeline. Combines the Smarter Service Trendradar (4-dimension structure) with the TIPS content framework (Trends, Implications, Possibilities, Solutions). Bilingual trend scouting, investment theme modeling, evidence-backed CxO reports, and reusable industry catalogs. DACH-focused, EN/DE.",
       "keywords": [
@@ -90,7 +90,7 @@
     {
       "name": "cogni-portfolio",
       "source": "./cogni-portfolio",
-      "version": "0.9.2",
+      "version": "0.9.3",
       "maturity": "preview",
       "description": "Portfolio messaging and proposition planning for SMEs using IS/DOES/MEANS framework. Features are market-independent (IS). Advantages (DOES) and benefits (MEANS) are market-specific. Includes TAM/SAM/SOM targeting, competitor and customer analysis, deep-dive research for features and propositions, Lean Canvas bootstrapping, presentation-ready pitch narratives, and eight pluggable industry taxonomies.",
       "keywords": [
@@ -109,7 +109,7 @@
       "source": "./cogni-visual",
       "version": "0.9.0",
       "maturity": "preview",
-      "description": "Transform polished narratives and structured data into visual deliverables \u2014 presentation briefs, slide decks, scrollable web narratives, poster storyboards, single-page infographics, and visual assets. Supports Excalidraw, Pencil MCP, PPTX, and HTML rendering.",
+      "description": "Transform polished narratives and structured data into visual deliverables — presentation briefs, slide decks, scrollable web narratives, poster storyboards, single-page infographics, and visual assets. Supports Excalidraw, Pencil MCP, PPTX, and HTML rendering.",
       "keywords": [
         "presentations",
         "slides",
@@ -125,7 +125,7 @@
     {
       "name": "cogni-help",
       "source": "./cogni-help",
-      "version": "0.0.3",
+      "version": "0.0.4",
       "maturity": "incubating",
       "description": "Central help hub for the insight-wave ecosystem. Interactive courses (12-course curriculum), plugin discovery, cross-plugin workflow guides, troubleshooting, quick-reference cheatsheets, and GitHub issue filing.",
       "keywords": [
@@ -204,7 +204,7 @@
       "source": "./cogni-website",
       "version": "0.0.4",
       "maturity": "incubating",
-      "description": "Assembles multi-page customer websites from portfolio, marketing, trend, and research content produced by other insight-wave plugins \u2014 outputting a deployable static site with shared navigation, theming, and responsive HTML.",
+      "description": "Assembles multi-page customer websites from portfolio, marketing, trend, and research content produced by other insight-wave plugins — outputting a deployable static site with shared navigation, theming, and responsive HTML.",
       "keywords": [
         "website",
         "static-site",
@@ -221,7 +221,7 @@
     {
       "name": "cogni-consulting",
       "source": "./cogni-consulting",
-      "version": "0.0.8",
+      "version": "0.0.9",
       "maturity": "incubating",
       "description": "Double Diamond consulting orchestrator. Guides engagements through Discover, Define, Develop, Deliver phases by dispatching to insight-wave plugins (research, trends, portfolio, claims) at the right moment. Vision-first, method-aware, phase-gated. Includes themed HTML engagement reports with concept diagrams and data charts, Lean Canvas authoring via business-model-hypothesis, and lightweight how-might-we engagements for bounded challenges.",
       "keywords": [

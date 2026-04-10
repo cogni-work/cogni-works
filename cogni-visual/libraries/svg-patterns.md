@@ -2,7 +2,7 @@
 
 Element recipes for generating concept diagrams as inline SVG strings, themed with design-variables colors. Each pattern describes the viewBox, element structure, coordinate formulas, and color mapping.
 
-> **Note:** This file is for LLM-crafted inline SVG generation (used by the `concept-diagram-svg` agent). For Excalidraw MCP rendering (big pictures, big blocks), see `excalidraw-patterns.md`.
+> **Note:** This file is for LLM-crafted inline SVG generation (used by the `concept-diagram-svg` agent). For Excalidraw MCP rendering, see `excalidraw-patterns.md`.
 
 ## General Principles
 

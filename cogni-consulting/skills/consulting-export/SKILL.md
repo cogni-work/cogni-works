@@ -56,10 +56,10 @@ For each deliverable, identify the source content and rendering plugin:
 |---|---|---|
 | Strategic Options Brief | `deliver/option-scoring.md` + `develop/options/` | document-skills:docx or document-skills:pptx |
 | Business Case | `deliver/business-case.md` | document-skills:xlsx (financials) + document-skills:docx (narrative) |
-| Decision Board | `develop/options/option-synthesis.md` + `deliver/option-scoring.md` | Excalidraw (via cogni-visual story-to-big-picture) |
+| Decision Board | `develop/options/option-synthesis.md` + `deliver/option-scoring.md` | cogni-visual:story-to-slides or enrich-report |
 | Executive Summary | `deliver/executive-summary.md` | document-skills:pptx (one-pager) |
 | Action Roadmap | `deliver/roadmap.md` | document-skills:pptx or document-skills:xlsx |
-| TIPS Landscape | plugin_refs.tips_project output | cogni-trends trends-dashboard or Excalidraw (via cogni-visual story-to-big-picture) |
+| TIPS Landscape | plugin_refs.tips_project output | cogni-trends trends-dashboard or cogni-visual:enrich-report |
 | Portfolio Snapshot | plugin_refs.portfolio_project output | cogni-portfolio portfolio-dashboard |
 | Claim Verification Log | `deliver/claims-verification.md` | document-skills:xlsx or markdown |
 | Solution Brief | `deliver/solution-brief.md` | document-skills:docx or markdown |

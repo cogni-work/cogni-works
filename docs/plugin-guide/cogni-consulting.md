@@ -228,7 +228,7 @@ Just the executive summary as a PPTX
 
 | Plugin dispatched | What it produces |
 |------------------|-----------------|
-| cogni-visual | Slide decks, journey maps, big picture diagrams |
+| cogni-visual | Slide decks, infographics, themed HTML reports |
 | document-skills | PPTX, DOCX, XLSX formatted documents |
 
 ---

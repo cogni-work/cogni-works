@@ -109,6 +109,32 @@ Content that needs to communicate clearly without aesthetic distraction.
 
 ---
 
+## economist
+
+**Character:** The Economist magazine editorial. Bold stat callouts, clean grid, minimal
+ornamentation. Numbers dominate the page, color is disciplined (red accent only), and
+information density is high but spacious. Think weekly newsmagazine data page — authoritative,
+precise, visually striking without being decorative.
+
+**Visual DNA:**
+- Cream/off-white background (`#FBF9F3`) — warm, not sterile
+- Deep red (`#C00000`) for bar charts, accent borders, rule lines, and icon highlights
+- Near-black (`#1A1A1A`) for body text and headlines
+- Amber (`#D4A017`) for secondary callout icons and tertiary accents
+- Sharp edges — `border-radius: 0` for all blocks, no exceptions
+- Percentage signs and units rendered at same visual weight as digits (not superscript)
+- Thin 2px red rule lines under section headers
+- Monospace or tabular figures for all numbers — numbers are the star
+- No shadows, no gradients, no rounded corners, no decorative elements
+- High white-space discipline — generous padding (40-60px), clean gutters
+- Simple bar charts with solid red fills — no 3D, no patterns, no chartjunk
+
+**Best for:** C-suite insight summaries, trend reports for senior leadership, investor-facing
+data stories, board presentations, research findings. Content where "The Economist credibility"
+is the design goal — data-forward, editorially confident, zero visual noise.
+
+---
+
 ## Preset Selection Guidance
 
 When presenting style options to the user, lead with the context match:
@@ -116,9 +142,10 @@ When presenting style options to the user, lead with the context match:
 ```
 "Based on [source type / audience / context], I recommend:
 
-1. **data-viz** — dashboard-style, numbers-forward. Best for your trend data.
-2. **editorial** — clean magazine aesthetic. Best for executive credibility.
-3. **sketchnote** — informal workshop feel. Best for collaborative settings."
+1. **economist** — The Economist magazine style. Bold stats, red accent, cream background. Best for C-suite data stories.
+2. **data-viz** — dashboard-style, numbers-forward. Best for your trend data.
+3. **editorial** — clean magazine aesthetic. Best for executive credibility.
+4. **sketchnote** — informal workshop feel. Best for collaborative settings."
 ```
 
 The user's context awareness (who will see this, where, for what purpose) always overrides

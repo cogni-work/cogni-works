@@ -20,5 +20,8 @@ Pass through all user-provided parameters. If the user provides a source path, t
 language, layout type, or style preset, forward them.
 
 After the skill completes, report the output path and key metrics (layout type, style
-preset, block count, distillation ratio). Guide the user to rendering with
-`/render-infographic` or the `render-infographic` skill.
+preset, orientation, block count, distillation ratio). Guide the user to the appropriate
+renderer based on style preset:
+
+- `sketchnote`, `whiteboard` → `/render-infographic` (Excalidraw, hand-drawn)
+- `economist`, `editorial`, `data-viz`, `corporate` → `/render-infographic-pencil` (Pencil MCP, clean editorial)

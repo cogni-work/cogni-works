@@ -9,9 +9,10 @@ description: >
   from narrative", "stat sheet", "KPI poster", or wants to distill a narrative into a
   scannable visual with hero numbers, icons, and minimal text. Also trigger for "dashboard
   poster", "Einseiter mit Zahlen", "visual one-pager", and requests to summarize a report
-  as a single visual page. Produces an infographic-brief.md that the render-infographic
-  skill renders into self-contained HTML. Important: this skill CREATES the brief from a
-  narrative source — it does NOT render an existing brief (use render-infographic for that),
+  as a single visual page. Produces an infographic-brief.md that render-infographic
+  (Excalidraw sketchnote) or render-infographic-pencil (Pencil MCP editorial) renders
+  into visual output. Important: this skill CREATES the brief from a
+  narrative source — it does NOT render an existing brief (use render-infographic or render-infographic-pencil for that),
   does NOT create slides (use story-to-slides), does NOT create a scrollable web page (use
   story-to-web), does NOT create a multi-poster storyboard (use story-to-storyboard), and
   does NOT enrich an existing report with inline visuals (use enrich-report).
@@ -48,8 +49,8 @@ Briefs contain no color fields.
 | `customer_name` / `provider_name` | from metadata | Organization names |
 | `output_path` | `{source_dir}/cogni-visual/infographic-brief.md` | Brief output location |
 | `layout_type` | `auto` | Pre-selected layout. When `auto`, Step 4 auto-selects based on content. |
-| `style_preset` | `auto` | Style preset: editorial, data-viz, sketchnote, corporate, whiteboard. When `auto`, Step 4 selects. |
-| `orientation` | `landscape` | Page orientation: landscape (1920x1080) or portrait (1080x1920) |
+| `style_preset` | `auto` | Style preset: editorial, data-viz, sketchnote, corporate, whiteboard, economist. When `auto`, Step 4 selects. |
+| `orientation` | `auto` | Page orientation (DIN A4 ratio). When `auto`: economist/funnel-pyramid default to portrait (1080x1528), others to landscape (1528x1080). |
 | `conversion_goal` | `consultation` | CTA type: consultation, demo, download, trial, contact, calculate |
 | `arc_type` | `auto` | Story arc hint: why-change, problem-solution, journey, argument, report |
 | `arc_id` | from frontmatter | Narrative arc ID from cogni-narrative |
@@ -89,12 +90,24 @@ Always specify language explicitly in the brief frontmatter.
 
 Briefs contain ZERO visual fields: no `Background:`, `Text-Color:`, `Icon-Color:`. The renderer reads the theme and style preset directly.
 
-### The "Less is More" Principle
+### Content Density by Style Preset
 
-This is the core design philosophy for infographics. AI generators (and LLMs) fail when they
-have to guess too many decisions. The structured brief format constrains decisions to content
-only — visual decisions are pre-constrained by theme + style preset + layout type. Within
-content, strict word limits and block count caps prevent information overload.
+Content density varies by style preset. The "less is more" principle applies to all presets
+but the threshold differs:
+
+| Style Preset | Max Content Blocks | Max Word Count | Philosophy |
+|-------------|-------------------|----------------|------------|
+| sketchnote, whiteboard | 6-8 | 150 | Minimal — scan in 10 seconds |
+| editorial, data-viz, corporate | 6-8 | 150 | Focused — scan in 10 seconds |
+| **economist** | **10-14** | **250** | **Dense editorial — read in 60 seconds** |
+
+The **economist** preset produces magazine-density content: prose text blocks sit alongside
+stat callouts in a multi-column grid. Extract more data points from the narrative, include
+short explanatory paragraphs (2-3 sentences), and fill a 2-3 column editorial layout.
+Aim for 10-14 content blocks including 3-5 text-blocks with prose alongside the stats.
+
+For all other presets, the original "less is more" principle applies: 3-8 content blocks,
+max 150 words total, 10-second scan test.
 
 ---
 
@@ -332,11 +345,24 @@ transformation_notes: |
 
 ### Step 10: Guide to Rendering
 
-Tell the user the brief is ready and point them to rendering:
+Tell the user the brief is ready and recommend the right renderer based on style preset:
 
-> "Infographic brief written to `{output_path}`. To render it as a sketchnote-style Excalidraw scene, use `/render-infographic` or invoke the `render-infographic` skill."
+| Style Preset | Renderer | Command |
+|-------------|----------|---------|
+| `sketchnote`, `whiteboard` | Excalidraw (hand-drawn) | `/render-infographic` |
+| `economist`, `editorial`, `data-viz`, `corporate` | Pencil MCP (pixel-precise) | `/render-infographic-pencil` |
 
-Report: layout type, style preset, block count, total word count, distillation ratio (source words → brief words).
+Example message:
+
+> "Infographic brief written to `{output_path}`.
+> Style preset: **{style_preset}** — recommended renderer: **`/render-infographic-pencil`** (clean editorial via Pencil MCP)."
+
+For `sketchnote`/`whiteboard`:
+
+> "Infographic brief written to `{output_path}`.
+> Style preset: **{style_preset}** — recommended renderer: **`/render-infographic`** (hand-drawn Excalidraw sketchnote)."
+
+Report: layout type, style preset, orientation, block count, total word count, distillation ratio (source words → brief words).
 
 ---
 

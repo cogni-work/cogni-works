@@ -457,7 +457,7 @@ footer (frame, fill_container, dark bg, padding [48px, 120px])
 
 ## Rendering Order
 
-Sections render top-to-bottom. No z-order complexity (unlike big-picture posters).
+Sections render top-to-bottom. No z-order complexity.
 
 | Order | Element | Notes |
 |-------|---------|-------|

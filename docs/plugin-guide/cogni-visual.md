@@ -16,7 +16,7 @@ cogni-visual sits at the end of the insight-wave delivery pipeline, after conten
 
 All visual output inherits brand identity (colors, fonts, identity) from the active cogni-workspace theme. There are no color or font fields in briefs — renderers read `theme.md` directly.
 
-The two rendering skills (`render-big-picture` and `render-big-block`) are the most complex in the plugin. `render-big-picture` dispatches parallel agent pipelines that compose 1,100–1,500 Excalidraw elements per canvas across 5–6 illustrated stations. `render-big-block` runs a sequential 8-phase pipeline that produces 150–250 element structured diagrams from TIPS value-modeler data.
+The `render-infographic` skill uses Excalidraw MCP to compose 150–250 element sketchnote-style infographics from brief data.
 
 ---
 
@@ -112,22 +112,6 @@ Invoke via `/render-html-slides` or by running the skill directly.
 
 ---
 
-### story-to-big-picture
-
-Transform any narrative into a single-canvas illustrated journey map brief. Each narrative section becomes a station — an illustrated landscape object (factory floor, city skyline, airport terminal, etc.) in a cohesive panoramic scene. Supports A0–A3 poster sizes and dark/light themes. The brief is rendered by `render-big-picture`.
-
-**Example prompt:** "Create a big-picture journey map from my digital transformation narrative for a workshop poster"
-
----
-
-### story-to-big-block
-
-Transform TIPS value-modeler output (`tips-value-model.json`, `tips-big-block.md`) into a solution architecture brief. Classifies solutions into Business Relevance (BR) tiers 1–4, maps TIPS path connections between solution blocks, assigns implementation waves, extracts SPIs and foundations. The brief is rendered by `render-big-block`.
-
-**Example prompt:** "Build a Big Block solution architecture diagram from the industrial automation TIPS project"
-
----
-
 ### story-to-web
 
 Transform any narrative into a scrollable web narrative brief. Maps content to section types (hero, data story, capability, CTA, etc.), selects from 200+ style guide tags, generates design tokens, and outputs image prompts per section. The brief is rendered into a `.pen` design file and self-contained HTML via the Pencil MCP.
@@ -144,31 +128,11 @@ Transform any narrative into a multi-poster print storyboard brief. Paginates th
 
 ---
 
-### render-big-picture
-
-Render a `big-picture-brief.md` into an Excalidraw illustrated scene. Runs a station-first pipeline with parallel workers: N station-structure-artist agents (130–160 elements per station, Pass 1) followed by N station-enrichment-artist agents (100–130 elements per station, Pass 2), then 4 zone-reviewer agents in parallel covering the four canvas quadrants. Dark/light color mode is auto-detected from the theme's background luminance and passed to all agents.
-
-Invoke via `/render-big-picture` or by running the skill directly.
-
-**Example prompt:** "/render-big-picture" (when a `big-picture-brief.md` is present in the working directory)
-
----
-
-### render-big-block
-
-Render a `big-block-brief.md` into an Excalidraw solution architecture diagram. Runs 8 sequential phases: canvas setup, title banner, tier bands, solution blocks, TIPS path connections, SPI and foundation cards, implementation roadmap, and footer export. Produces a 150–250 element diagram.
-
-Invoke via `/render-big-block` or by running the skill directly.
-
-**Example prompt:** "/render-big-block" (when a `big-block-brief.md` is present)
-
----
-
 ### review-brief
 
-Evaluate a visual brief from three stakeholder perspectives — design quality, audience experience, and usability — before committing to the rendering step. Supports all five brief types: presentation-brief, big-picture-brief, web-brief, storyboard-brief, and big-block-brief. The skill dispatches the `brief-review-assessor` agent, which returns a structured verdict (accept/revise/reject) with a score and prioritized improvements. If set to auto-improve, it applies critical and high-priority fixes and re-runs the assessment (max 2 rounds).
+Evaluate a visual brief from three stakeholder perspectives — design quality, audience experience, and usability — before committing to the rendering step. Supports presentation-brief, web-brief, storyboard-brief, and infographic-brief. The skill dispatches the `brief-review-assessor` agent, which returns a structured verdict (accept/revise/reject) with a score and prioritized improvements. If set to auto-improve, it applies critical and high-priority fixes and re-runs the assessment (max 2 rounds).
 
-Reviewing at the brief stage is efficient: editing text is cheap, re-rendering an entire 1,100-element Excalidraw scene is not.
+Reviewing at the brief stage is efficient: editing text is cheap, re-rendering is not.
 
 **Example prompt:** "Review my presentation brief before rendering" or `/review-brief`
 
@@ -192,7 +156,7 @@ This skill supersedes the deprecated `cogni-research:export-report` and is the s
 |--------|-----------------|
 | cogni-narrative | Polished narratives with `arc_id` frontmatter as source for all five brief-generating skills |
 | cogni-copywriting | Executive-polished prose (narratives should be copywriting-complete before visual transformation) |
-| cogni-trends | `tips-value-model.json` and `tips-big-block.md` for story-to-big-block; trend reports for enrich-report |
+| cogni-trends | Trend reports for enrich-report |
 | cogni-research | Completed research reports for enrich-report (themed HTML with visualizations) |
 | cogni-workspace | Theme files (`themes/{id}/theme.md`) for brand-driven colors and fonts in all renderers |
 
@@ -202,7 +166,7 @@ This skill supersedes the deprecated `cogni-research:export-report` and is the s
 |--------------|-----------------|
 | document-skills:pptx | Presentation brief (`presentation-brief.md`) for PPTX rendering |
 | render-html-slides | Presentation brief (`presentation-brief.md`) for HTML slide rendering |
-| Excalidraw MCP | Big-picture brief and Big Block brief for canvas rendering |
+| Excalidraw MCP | Infographic brief for canvas rendering |
 | Pencil MCP | Web brief and storyboard brief for `.pen` design rendering |
 
 ---
@@ -223,59 +187,25 @@ For the full multi-plugin flow, see [../workflows/trend-report-to-deliverables.m
 
 ---
 
-### Workflow 2: TIPS Solution Architecture Diagram
-
-Use this to visualize a completed cogni-trends value-modeler run as a structured diagram.
-
-1. cogni-trends `/value-modeler` — complete Phase 4 (Big Block summary output)
-2. cogni-visual `/story-to-big-block` — auto-discover value-modeler output, generate Big Block brief
-3. Review the brief (tier assignments, path connections, SPI list)
-4. `/render-big-block` — render the Excalidraw diagram
-
----
-
-### Workflow 3: Workshop Poster from Narrative
-
-Use this to create a physical walkthrough asset for a client workshop or strategy session.
-
-1. Prepare a polished narrative (from cogni-narrative + cogni-copywriting)
-2. cogni-visual `/story-to-big-picture` — generate journey map brief with metaphor selection (factory, city, airport, etc.) and poster size (A0 recommended for room-tour)
-3. Review the brief (station objects, narrative connections, color mode)
-4. `/render-big-picture` — render the Excalidraw canvas (approximately 20–30 minutes for full 1,100–1,500 element scene)
-5. Export from Excalidraw as PNG or PDF for print
-
----
-
 ## Troubleshooting
 
 | Symptom | Likely cause | Fix |
 |---------|-------------|-----|
 | Story-to-slides generates topic labels instead of assertions | Source narrative uses section headings rather than claims | Add assertion headlines to your narrative sections before running the skill, or ask the skill to infer assertions from section body text |
-| Big Picture rendering stops mid-way | Excalidraw MCP connection timeout during large batch | Restore from the most recent snapshot checkpoint (8 checkpoints are saved during rendering) and resume |
-| Big Block tier assignments look wrong | BR scores in `tips-value-model.json` are missing or all identical | Re-run cogni-trends `/value-modeler` Phase 3 (interactive BR scoring) before running story-to-big-block |
 | Colors don't match brand | No cogni-workspace theme active | Run `/pick-theme` in cogni-workspace and confirm a theme is active before rendering |
 | Web brief renders without images | Pencil MCP not connected | Verify Pencil MCP is running and accessible; the web agent requires it for `.pen` file rendering |
 | Slides are too long | Narrative too long for available slide count | Set a target slide count in your story-to-slides prompt, e.g., "max 10 slides" |
-| Station objects in Big Picture are generic | Brief uses vague object names | Edit `big-picture-brief.md` to give stations specific, concrete object names (e.g., "stamping press with conveyor belt" not "manufacturing equipment") |
 
 ---
 
 ## Known Issues
-
-**Chrome native messaging host conflict (KI-001):** When both Claude Desktop (Cowork) and Claude Code are installed, the `zone-reviewer` skill — which uses browser automation to visually inspect rendered big-picture canvases — may fail silently when browser tools are missing. The Chrome extension connects to one native host and ignores the other.
-
-**Workaround:** Toggle native messaging host configs by renaming the `.json` file for the unused product in `~/Library/Application Support/Google/Chrome/NativeMessagingHosts/` and restarting Chrome. Zone review can still proceed via Excalidraw MCP tool inspection without browser preview. See the [Known Issues Registry](../../cogni-docs/references/known-issues.md) for detailed steps.
-
----
 
 ## Extending This Plugin
 
 cogni-visual accepts contributions in several areas:
 
 - **Visual templates** — new layout types for story-to-slides (currently 11 layouts)
-- **Station metaphors** — new landscape metaphors for story-to-big-picture (e.g., port, hospital, data center)
-- **Big Block extensions** — new section types below the tier grid (currently: SPIs, Foundations, Roadmap)
-- **Shape recipes** — additions to `render-big-picture/references/shape-recipes-v3.md` for new station objects
 - **Web section types** — new section schemas for story-to-web
+- **Infographic block types** — new block types for story-to-infographic
 
 See [CONTRIBUTING.md](../../cogni-visual/CONTRIBUTING.md) for guidelines.

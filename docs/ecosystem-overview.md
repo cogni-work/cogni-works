@@ -49,7 +49,7 @@ See the [Double Diamond Engagement workflow](workflows/consulting-engagement.md)
 
 | Plugin | What it does |
 |--------|-------------|
-| [cogni-visual](../cogni-visual/README.md) | Converts polished narratives and structured data into presentation briefs, slide decks, big-picture journey maps, Big Block solution architecture diagrams, scrollable web narratives, and poster storyboards. Supports Excalidraw, Pencil MCP, and PPTX rendering. |
+| [cogni-visual](../cogni-visual/README.md) | Converts polished narratives and structured data into presentation briefs, slide decks, scrollable web narratives, poster storyboards, and single-page infographics. Supports Excalidraw, Pencil MCP, PPTX, and HTML rendering. |
 
 ### Website Generation
 

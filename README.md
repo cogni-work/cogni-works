@@ -61,9 +61,9 @@ Each plugin implements an established framework (Corporate Visions, Double Diamo
 
 ### Visual Production
 
-[cogni-visual](cogni-visual/README.md) transforms narratives into five visual formats: slide decks (11 layout types), big-picture journey maps (1,100-1,500 Excalidraw elements), Big Block solution architecture diagrams, scrollable web narratives, and printed poster storyboards. 11 skills generate structured briefs; 17 agents render them into .pptx, .excalidraw, .pen, or .html files. All visuals inherit brand identity from your workspace theme.
+[cogni-visual](cogni-visual/README.md) transforms narratives into visual formats: slide decks (11 layout types), scrollable web narratives, printed poster storyboards, and single-page infographics. Skills generate structured briefs; agents render them into .pptx, .excalidraw, .pen, or .html files. All visuals inherit brand identity from your workspace theme.
 
-> "Create a slide deck from the sales presentation, then render the strategy as a big picture journey map"
+> "Create a slide deck from the sales presentation, then enrich the trend report with charts and diagrams"
 
 → [Plugin guide](docs/plugin-guide/cogni-visual.md)
 

@@ -186,7 +186,7 @@ Re-enter a project mid-stream. Reads project state, shows phase progress and ent
 | cogni-narrative | (manual) | Trend report and insight summary as narrative input |
 | cogni-claims | trend-report | Claims registry submitted for source URL verification |
 | cogni-copywriting | (manual) | Report prose for executive polish |
-| cogni-visual | story-to-big-block | TIPS value-modeler output as Big Block diagram data |
+| cogni-visual | story-to-slides | Trend report narratives as slide deck input |
 
 ---
 
@@ -224,8 +224,7 @@ Use this when you have a completed trend report and need to transform it into vi
 
 1. `/trend-report` — complete the trend report with evidence and claims
 2. cogni-narrative `/narrative` — transform the report into an arc-driven narrative
-3. cogni-visual `/story-to-big-block` — generate a Big Block solution architecture diagram from `tips-value-model.json`
-4. cogni-visual `/story-to-slides` — create a slide deck from the narrative
+3. cogni-visual `/story-to-slides` — create a slide deck from the narrative
 5. cogni-claims `/claims` — verify the claims registry
 
 ---

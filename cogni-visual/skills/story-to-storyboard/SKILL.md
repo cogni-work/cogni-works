@@ -11,8 +11,7 @@ description: >
   and arc-station-per-poster layouts in both English and German. Produces a storyboard-brief.md
   that the storyboard agent renders via Pencil MCP. Important: this skill CREATES the brief
   from a narrative source — it does NOT render an existing brief (use storyboard agent for
-  that), does NOT create slides (use story-to-slides), does NOT create a single-canvas
-  journey map (use story-to-big-picture), does NOT create a web page (use story-to-web),
+  that), does NOT create slides (use story-to-slides), does NOT create a web page (use story-to-web),
   and does NOT polish prose (use Copywriter skill).
 allowed-tools: Read, Write, Edit, Bash, Grep, Glob, TodoWrite, AskUserQuestion
 version: 0.7.0

@@ -81,17 +81,16 @@ cogni-narrative → cogni-copywriting → cogni-visual
 
 Between the compose/polish phase and the render phase, cogni-visual inserts a brief: a structured Markdown file with YAML frontmatter that describes what to render without describing how to render it.
 
-A presentation brief lists slides with headlines, body copy, and CTA proposals. It does not specify colors, fonts, layout coordinates, or element types. A big-picture brief (v3.0) lists stations with `object_name` and `narrative_connection` fields. It does not specify shape composition, element counts, or spatial relationships — those decisions belong to the rendering agents.
+A presentation brief lists slides with headlines, body copy, and CTA proposals. It does not specify colors, fonts, layout coordinates, or element types. An infographic brief lists content blocks with block types, headlines, and data points. It does not specify element composition or spatial relationships — those decisions belong to the rendering agents.
 
 This separation has two practical benefits:
 
 1. The brief can be reviewed, edited, or regenerated independently of the rendering step. A user can run `story-to-slides` to produce a brief, adjust the headline on slide 3, and then render without re-running the content pipeline.
 
-2. The rendering agents can evolve independently. When the big-picture rendering pipeline upgraded from v4.1 to v4.2 (changing from connector-based reading flow to inline numbered headlines), existing briefs remained valid because brief format v3.0 made no assumptions about rendering technique.
+2. The rendering agents can evolve independently. When rendering pipelines upgrade, existing briefs remain valid because brief formats make no assumptions about rendering technique.
 
 cogni-visual's CLAUDE.md: "Briefs are YAML frontmatter + Markdown. Frontmatter holds metadata (type, version, theme, arc_type, arc_id, confidence_score). Body holds the content specification."
 
-The Big Block pipeline works differently: it takes structured JSON output from cogni-trends' value-modeler (not a narrative brief) and produces a data-driven architecture diagram. The brief format for Big Block carries solution names, BR scores, tier assignments, and path connections rather than assertion headlines and body copy.
 
 ---
 

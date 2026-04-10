@@ -4,7 +4,6 @@ version: "1.0"
 purpose: "Single source of truth for arc_id → arc_type mapping and arc element names across all cogni-visual skills"
 consumers:
   - story-to-slides (Step 1)
-  - story-to-big-picture (Step 1)
   - story-to-web (Step 1)
   - story-to-storyboard (Step 1)
 ---

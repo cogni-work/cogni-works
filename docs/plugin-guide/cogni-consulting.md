@@ -247,7 +247,7 @@ Just the executive summary as a PPTX
 | cogni-portfolio | Deliver | `portfolio-verify` |
 | cogni-claims | Define | `claims` (verify mode) |
 | cogni-claims | Deliver | `claims` (verify mode) |
-| cogni-visual | Export | `story-to-slides`, `story-to-big-picture` |
+| cogni-visual | Export | `story-to-slides` |
 | document-skills | Export | PPTX, DOCX, XLSX generation |
 
 ### Standalone value without plugins

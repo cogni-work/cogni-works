@@ -198,7 +198,7 @@ Use this to feed a research report into the cogni-trends or cogni-narrative pipe
 1. `/research-report` — research the industry or technology topic
 2. `/verify-report` — verify claims before downstream use
 3. cogni-narrative `/narrative` — transform the verified report into an arc-driven narrative
-4. cogni-visual `/story-to-slides` or `/story-to-big-picture` — produce visual deliverables
+4. cogni-visual `/story-to-slides` — produce visual deliverables
 
 ---
 

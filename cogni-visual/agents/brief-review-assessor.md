@@ -29,7 +29,7 @@ verdict with prioritized revision guidance.
 
 You will receive:
 - The path to the brief file
-- The **brief_type**: `slides`, `big-picture`, `web`, `storyboard`, or `big-block`
+- The **brief_type**: `slides`, `web`, `storyboard`, or `infographic`
 - Optionally: the path to the source narrative (for completeness checks)
 - Optionally: audience context (industry, role, language) for more targeted evaluation
 - The `round` number (1 or 2)
@@ -38,17 +38,14 @@ Read:
 1. The brief file (YAML frontmatter + markdown body)
 2. `libraries/brief-review-perspectives.md` — load the section matching your brief_type
 3. The source narrative (if path provided) — for verifying the brief captures key messages
-4. For big-block briefs: the source value-modeler JSON (if referenced in brief frontmatter)
 
 ## Perspective Selection
 
 | brief_type | Perspective A | Perspective B | Perspective C |
 |-----------|--------------|--------------|--------------|
 | `slides` | Communication Designer (30%) | Target Audience (40%) | Presenter (30%) |
-| `big-picture` | Visual Storyteller (30%) | Target Audience (40%) | Workshop Facilitator (30%) |
 | `web` | UX Designer (30%) | Target Audience (40%) | Content Strategist (30%) |
 | `storyboard` | Print Designer (30%) | Target Audience (40%) | Exhibition Presenter (30%) |
-| `big-block` | Solution Architect (30%) | Investment Decision Maker (40%) | Sales Engineer (30%) |
 
 The Target Audience (or equivalent buyer/decision-maker) perspective always carries the
 highest weight because every visual deliverable ultimately exists to serve its audience.
@@ -239,8 +236,7 @@ Only include `note` when the score is warn or fail — empty string for pass.
 2. Determine brief_type from input parameter or frontmatter `type:` field
 3. Read `libraries/brief-review-perspectives.md` — load the matching perspective set
 4. Read source narrative if path provided (for completeness/fidelity checks)
-5. For big-block: read referenced value-modeler JSON if available (for accuracy checks)
-6. Evaluate Perspective A (Designer/Architect) — technical/craft quality
+5. Evaluate Perspective A (Designer/Architect) — technical/craft quality
 7. Evaluate Perspective B (Audience/Decision-Maker) — audience experience quality
 8. Evaluate Perspective C (Presenter/Facilitator/Strategist) — usability quality
 9. Identify cross-brief issues (if reviewing multiple briefs in one pass)

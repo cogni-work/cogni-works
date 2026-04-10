@@ -132,7 +132,7 @@ tools: ["WebSearch", "WebFetch", "Read", "Write", "Bash", "Glob"]
 ...
 ```
 
-**`name`** — the agent identifier. By convention, worker agents use noun-verb or role-based names (`section-researcher`, `zone-reviewer`, `claim-verifier`). Orchestrator-wrapper agents use the output type (`big-picture`, `storyboard`).
+**`name`** — the agent identifier. By convention, worker agents use noun-verb or role-based names (`section-researcher`, `claim-verifier`). Orchestrator-wrapper agents use the output type (`storyboard`, `web`).
 
 **`description`** — the routing specification. Include `<example>` blocks with realistic context, user message, and `<commentary>` explaining when this agent is the right choice. This helps the skill's orchestration logic select the correct agent.
 
@@ -222,8 +222,8 @@ Generic words that always require a prefix: `setup`, `scan`, `ingest`, `export`,
 Validate names with `cogni-workspace/scripts/check-skill-names.sh` before submitting a PR.
 
 **Agent names** follow role-based patterns:
-- Worker agents: `{role}-{task}` — `section-researcher`, `zone-reviewer`, `claim-verifier`
-- Orchestrator-wrapper agents: `{output-type}` — `big-picture`, `storyboard`
+- Worker agents: `{role}-{task}` — `section-researcher`, `claim-verifier`
+- Orchestrator-wrapper agents: `{output-type}` — `storyboard`, `web`
 - Assessment agents: `{entity}-{task}-assessor` — `proposition-quality-assessor`, `feature-review-assessor`
 
 **File slugs** use kebab-case derived from the entity or concept name. No underscores, no camelCase, no spaces.

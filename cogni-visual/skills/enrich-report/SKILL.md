@@ -23,8 +23,7 @@ description: >
   visuals", "looks boring", "is text-only", or should become a "dashboard-style"
   or "themed HTML" output. This skill works on EXISTING reports (post-processing) —
   it does NOT create new reports (use research-report/trend-report), does NOT create
-  slide decks (use story-to-slides), does NOT create posters or journey maps (use
-  story-to-big-picture), does NOT create web landing pages (use story-to-web), does
+  slide decks (use story-to-slides), does NOT create web landing pages (use story-to-web), does
   NOT create TIPS dashboards (use trends-dashboard), and does NOT polish prose
   (use cogni-copywriting).
 allowed-tools: Read, Write, Edit, Bash, Grep, Glob, AskUserQuestion, Agent, Skill

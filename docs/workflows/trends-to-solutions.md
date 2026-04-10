@@ -1,15 +1,15 @@
 # Trends to Solutions
 
-**Pipeline**: cogni-trends (trend-scout + value-modeler) → cogni-portfolio (trends-bridge) → cogni-visual (render-big-block)
+**Pipeline**: cogni-trends (trend-scout + value-modeler) → cogni-portfolio (trends-bridge) → cogni-visual (story-to-slides / enrich-report)
 **Duration**: 4–8 hours for a complete trends-to-solutions analysis
-**End deliverable**: Ranked solution blueprints with a Big Block architecture diagram showing solution tiers and value paths
+**End deliverable**: Ranked solution blueprints with visual deliverables (slide deck or enriched HTML report)
 
 ```mermaid
 graph LR
     A[trend-scout] -->|scored candidates| B[value-modeler]
     B -->|investment themes + blueprints| C[trends-bridge]
-    C -->|portfolio-anchored solutions| D[render-big-block]
-    D -->|Big Block diagram| E[Deliverable]
+    C -->|portfolio-anchored solutions| D[story-to-slides / enrich-report]
+    D -->|slides or HTML report| E[Deliverable]
 ```
 
 ## What You Get
@@ -19,9 +19,9 @@ A structured path from raw trend signals to portfolio-anchored solutions, with a
 - **Scored trend candidates** mapped to the Smarter Service Trendradar (4 dimensions, 3 action horizons)
 - **Investment themes** (Handlungsfelder) with T→I→P→S value paths — each trend analyzed through Trend, Implications, Possibilities, Solutions
 - **Solution blueprints** with portfolio composition, readiness scoring, and optionally anchored to your actual products and features
-- **Big Block diagram** visualizing solution tiers, technology layers, and value path connections in Excalidraw
+- **Visual deliverables** — slide deck or enriched HTML report presenting the solution landscape
 
-This workflow is suited to strategy and advisory work where clients need to understand which trends matter and what to do about them, illustrated with a solution architecture.
+This workflow is suited to strategy and advisory work where clients need to understand which trends matter and what to do about them.
 
 ## Prerequisites
 
@@ -29,8 +29,7 @@ This workflow is suited to strategy and advisory work where clients need to unde
 |-------------|-----|
 | cogni-trends installed | Runs trend scouting and value modeling |
 | cogni-portfolio installed | Provides product anchoring via trends-bridge |
-| cogni-visual installed | Renders the Big Block architecture diagram |
-| Excalidraw MCP configured | Renders the Big Block canvas |
+| cogni-visual installed | Renders visual deliverables (slides, enriched reports) |
 | Web access enabled | cogni-trends dispatches 32+ bilingual web searches |
 | cogni-portfolio project (optional) | Enables product-anchored solution blueprints |
 
@@ -102,35 +101,23 @@ This maps solution components to real products and features in your portfolio, p
 
 **Output**: Investment themes with T→I→P→S paths and solution blueprints in `value-model/` directory.
 
-### Step 3: Render the Big Block Diagram
+### Step 3: Produce Visual Deliverables
 
-The Big Block diagram visualizes solution architecture from value-modeler output. It produces a structured Excalidraw diagram with solution tiers, technology layers, and T→I→P→S path connections — 150–250 elements.
+Use cogni-visual to present the solution landscape visually:
 
-**Command**: Invoke `render-big-block` or `story-to-big-block`
+**Option A — Slide deck**: Run `story-to-slides` on a narrative derived from the value-modeler output to create an executive presentation.
+
+**Option B — Enriched report**: Run `/enrich-report` on the trend report to produce a themed HTML report with Chart.js visualizations.
 
 **Example prompts:**
 
 ```
-Build a Big Block solution architecture from the automotive investment themes
+Create a slide deck from the automotive investment themes narrative
 ```
 
 ```
-/render-big-block
+/enrich-report path/to/tips-trend-report.md
 ```
-
-```
-Create a Big Block diagram from the value model — focus on the three highest-ranked themes
-```
-
-**What the diagram shows:**
-
-- **Top tier**: Investment themes (Handlungsfelder) as anchor blocks
-- **Middle tiers**: Solution blueprints grouped by technology domain
-- **Bottom tier**: Foundation capabilities required across themes
-- **Connections**: T→I→P→S paths between tiers, showing how trends flow to solutions
-- **Labels**: Readiness scores and action horizons per solution block
-
-The diagram inherits your cogni-workspace brand theme. Review and adjust layout in Excalidraw after generation — the render pipeline produces a solid starting structure, but visual refinement is expected.
 
 ## Variations
 
@@ -145,10 +132,9 @@ The diagram inherits your cogni-workspace brand theme. Review and adjust layout 
 
 ## Common Pitfalls
 
-- **Too many themes.** The value modeler can produce up to 7 investment themes. For a client presentation, 3–4 themes are more digestible. Narrow before generating the Big Block diagram.
-- **Weak trend selection in Step 1.** Generic trends produce generic solutions. Invest time in Step 1 reviewing and culling the 60 candidates — the quality of the Big Block diagram depends on the quality of what feeds into value modeling.
+- **Too many themes.** The value modeler can produce up to 7 investment themes. For a client presentation, 3–4 themes are more digestible. Narrow before generating visual deliverables.
+- **Weak trend selection in Step 1.** Generic trends produce generic solutions. Invest time in Step 1 reviewing and culling the 60 candidates — the quality of the final deliverable depends on the quality of what feeds into value modeling.
 - **Skipping Business Relevance scoring.** The scoring interface lets you weight themes by what matters to the client. Default weights may not reflect the client's strategic priorities — adjust before generating blueprints.
-- **Running Big Block without value-modeler output.** The `render-big-block` pipeline reads specifically from value-modeler structured output. It cannot generate meaningful architecture from unstructured trend notes.
 
 ## Related Guides
 

@@ -3,10 +3,10 @@ name: review-brief
 description: >
   Review a visual brief from three stakeholder perspectives — design quality, audience
   experience, and usability. Supports all cogni-visual brief types: presentation-brief,
-  big-picture-brief, web-brief, storyboard-brief, and big-block-brief. Returns a structured
+  web-brief, storyboard-brief, and infographic-brief. Returns a structured
   verdict (accept/revise/reject) with prioritized improvements. Use this skill whenever
   the user mentions "review brief", "check brief quality", "assess brief", "brief review",
-  "review my presentation brief", "review my big picture brief", "is this brief ready",
+  "review my presentation brief", "is this brief ready",
   "stakeholder review", "review from audience perspective", "review from design perspective",
   or wants quality assurance on a visual brief before rendering. Also trigger when the user
   asks to review an existing brief after manual edits, or wants to evaluate whether a brief
@@ -34,7 +34,7 @@ vs. post-rendering (re-render entire scene).
 |-----------|---------|-------------|
 | `brief_path` | auto-discovered | Path to the brief file. When omitted, searches nearby for `*-brief.md` files. |
 | `source_narrative` | auto-discovered | Path to the source narrative (for completeness checks). Optional. |
-| `brief_type` | auto-detected | One of: `slides`, `big-picture`, `web`, `storyboard`, `big-block`. Auto-detected from brief frontmatter `type:` field or filename pattern. |
+| `brief_type` | auto-detected | One of: `slides`, `web`, `storyboard`, `infographic`. Auto-detected from brief frontmatter `type:` field or filename pattern. |
 | `auto_improve` | `false` | When true, apply CRITICAL and HIGH improvements automatically (max 2 rounds). |
 | `audience_context` | none | Optional audience description (industry, role, language) for more targeted evaluation. |
 
@@ -56,7 +56,7 @@ Read the brief file. Extract:
 Detect `brief_type` from:
 1. Explicit parameter (if provided)
 2. Frontmatter `type:` field
-3. Filename pattern: `presentation-brief.md` → slides, `big-picture-brief.md` → big-picture, `web-brief.md` → web, `storyboard-brief.md` → storyboard, `big-block-brief.md` → big-block
+3. Filename pattern: `presentation-brief.md` → slides, `web-brief.md` → web, `storyboard-brief.md` → storyboard, `infographic-brief.md` → infographic
 
 ### Step 2: Discover Source Narrative
 

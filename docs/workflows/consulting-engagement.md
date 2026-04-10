@@ -173,7 +173,7 @@ Generate solution options based on the defined problem — use the trend investm
 **Tips for Develop:**
 
 - Generate 3–5 distinct solution options, not just one. The client needs to choose, and choice requires alternatives.
-- Use the Big Block diagram (`/render-big-block`) to visualize solution architecture at this stage — it helps the client grasp structural differences between options.
+- Use slides or infographics to visualize solution options at this stage — they help the client grasp structural differences between options.
 - Score options on business relevance before advancing to Deliver.
 
 **Phase gate:**

@@ -13,8 +13,7 @@ description: >
   projects, research reports, competitive intelligence, trend panoramas, and both English
   and German output. Produces a web-brief.md that the web agent renders. Important: this
   skill CREATES the brief from a narrative source — it does NOT render an existing brief
-  (use web agent for that), does NOT create slides (use story-to-slides), does NOT create
-  a single-canvas poster (use story-to-big-picture), does NOT create print storyboard
+  (use web agent for that), does NOT create slides (use story-to-slides), does NOT create print storyboard
   posters (use story-to-storyboard), and does NOT polish prose (use Copywriter skill).
 allowed-tools: Read, Write, Edit, Bash, Grep, Glob, AskUserQuestion
 version: 0.5.0
@@ -271,7 +270,7 @@ For each section:
 
 For each section, generate:
 
-1. **Assertion headline** (max 70 chars — longer than big-picture for web readability)
+1. **Assertion headline** (max 70 chars)
 2. **Body text** or **bullets** (per section type constraints)
 3. **Stat numbers** with reframed number plays (where applicable)
 4. **Image prompt** (for hero background, feature images — per section type)

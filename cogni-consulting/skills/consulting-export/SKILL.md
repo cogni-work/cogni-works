@@ -2,12 +2,15 @@
 name: consulting-export
 description: |
   Generate the final deliverable package for a Double Diamond engagement. Produces formatted
-  outputs (PPTX, DOCX, XLSX, Excalidraw) by dispatching to cogni-visual and document-skills.
+  outputs (PPTX, DOCX, XLSX, Excalidraw, themed HTML) by dispatching to cogni-visual and
+  document-skills. The themed HTML deliverable combines all engagement content into one
+  navigable document with concept diagrams and data charts via cogni-visual:enrich-report.
   Use whenever the user wants to produce engagement outputs — even partially or for a single
   deliverable. Trigger on: "generate deliverables", "export engagement", "create the deck",
   "produce the report", "final package", "export diamond", "create the slides",
   "I need to present to [audience]", "package it up", "generate the business case document",
   "make the roadmap visual", "export to PowerPoint", "output the results",
+  "themed HTML", "HTML version", "visual report", "engagement report",
   or any request to render engagement content into a specific format.
   Also trigger when the user asks for a single deliverable (e.g., "just the executive summary
   as a PPTX") — this skill handles both full packages and individual deliverable generation.
@@ -16,7 +19,7 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Skill
 
 # Diamond Export — Generate Deliverables
 
-Produce the final deliverable package by dispatching to cogni-visual and document-skills plugins. This skill reads all engagement outputs and generates formatted deliverables matched to the engagement vision.
+Produce the final deliverable package by dispatching to cogni-visual and document-skills plugins. This skill reads all engagement outputs and generates formatted deliverables matched to the engagement vision. The **Engagement HTML Report** is a first-class output format: a single themed, navigable HTML document combining all deliverable content with concept diagrams (process flows, relationship maps, TIPS flows) and data charts — produced by composing a unified markdown and dispatching to `cogni-visual:enrich-report`.
 
 ## Diamond Coach Protocol
 
@@ -61,8 +64,79 @@ For each deliverable, identify the source content and rendering plugin:
 | Claim Verification Log | `deliver/claims-verification.md` | document-skills:xlsx or markdown |
 | Solution Brief | `deliver/solution-brief.md` | document-skills:docx or markdown |
 | Action Plan | `deliver/action-plan.md` | document-skills:xlsx or markdown |
+| **Engagement HTML Report** | All deliverable markdowns (composed) | cogni-visual:enrich-report |
 
-**Visual enrichment:** Any markdown-based deliverable (Business Case, Action Roadmap, Solution Brief, Executive Summary, Action Plan) can also be post-processed with `/enrich-report` to produce themed HTML with interactive Chart.js visualizations and Excalidraw concept diagrams (value flows, process flows, relationship maps). This is additive — the original format rendering still applies. Offer this option after each markdown deliverable is generated: "Would you also like a themed HTML version with concept diagrams and charts?"
+**Themed HTML deliverable:** The Engagement HTML Report combines all engagement deliverables into a single themed, navigable HTML document with concept diagrams and data charts. This is a first-class output format — offer it alongside PPTX/DOCX/XLSX when presenting format options to the consultant: "Formats available: PPTX slides, DOCX documents, XLSX spreadsheets, and a **themed HTML report** combining everything into one navigable document with concept diagrams and charts."
+
+The HTML report is produced by composing all deliverable markdowns into one unified document (Step 2.5) and dispatching to `/enrich-report`, which handles theming, concept diagram generation (via the `cogni-visual:concept-diagram` agent — process flows, relationship maps, TIPS flows, 2x2 matrices), Chart.js data visualizations, and responsive HTML assembly.
+
+**Individual enrichment:** Any single markdown deliverable can also be post-processed with `/enrich-report` independently. This is additive — the original format rendering still applies.
+
+### 2.5. Compose Engagement HTML Source
+
+If the consultant wants the Engagement HTML Report (offer this proactively as a format option), compose all deliverable markdowns into a single unified document before dispatching to enrich-report.
+
+**Composition steps:**
+
+1. **Collect sources**: Read all markdown deliverable files that exist in the engagement directory (`deliver/`, `define/`, `develop/`). Skip missing files gracefully — note them in a comment block at the top of the composed document.
+
+2. **Order by narrative flow**: Arrange sections in engagement narrative order, not directory order. The ordering depends on the vision class — follow the deliverable sequence from `$CLAUDE_PLUGIN_ROOT/references/deliverable-map.md`. Default ordering for all vision classes:
+   1. Executive Summary (`deliver/executive-summary.md`)
+   2. Problem Context (`define/problem-statement.md`)
+   3. Strategic Options / Option Synthesis (`develop/options/option-synthesis.md`)
+   4. Option Scoring (`deliver/option-scoring.md`)
+   5. Business Case (`deliver/business-case.md`)
+   6. Roadmap / Action Plan (`deliver/roadmap.md` or `deliver/action-plan.md`)
+   7. Solution Brief (`deliver/solution-brief.md`)
+   8. Claims Verification (`deliver/claims-verification.md`)
+
+3. **Write `output/engagement-report.md`** with this structure:
+
+   ```markdown
+   ---
+   title: "{engagement_name} — Engagement Report"
+   client: "{client_name}"
+   vision_class: "{vision_class}"
+   date: "{date}"
+   language: "{language}"
+   generated_by: consulting-export
+   ---
+
+   # {Engagement Name}
+
+   **Client:** {client} | **Vision:** {vision_class} | **Date:** {date}
+
+   ---
+
+   ## Executive Summary
+
+   {content from deliver/executive-summary.md, stripped of its own H1/frontmatter}
+
+   ## Problem Context
+
+   {content from define/problem-statement.md}
+
+   ## Strategic Options
+
+   {content from develop/options/option-synthesis.md}
+
+   ...each deliverable as an H2 section...
+   ```
+
+4. **Preserve data structures**: Keep all tables, numeric data, bullet lists, and process descriptions verbatim — these are what enrich-report's content pattern detection uses to decide where to place charts and concept diagrams. Specifically:
+   - Tables with numeric columns → trigger `comparison-bar` or `stat-chart`
+   - Sequential steps with "leads to" / "results in" language → trigger `process-flow` concept diagrams
+   - Scoring matrices → trigger chart visualizations
+   - T→I→P→S chain references → trigger `tips-flow` concept diagrams
+   - Stakeholder or theme interconnections → trigger `relationship-map` concept diagrams
+
+5. **Dispatch to enrich-report**: Invoke `/enrich-report` with:
+   - `source_path`: `{engagement_dir}/output/engagement-report.md`
+   - `density`: `balanced` (default — consultant can request `minimal` or `rich`)
+   - `language`: from `consulting-project.json`
+   - `theme`: pass the workspace theme if already resolved in this session, otherwise let enrich-report invoke `pick-theme`
+
+   The enrich-report skill handles everything from here: theme derivation, content analysis, enrichment planning (with interactive review), concept diagram generation via the `concept-diagram` agent, Chart.js chart generation, and HTML assembly. The output lands at `output/engagement-report-enriched.html`.
 
 ### 3. Generate Each Deliverable
 
@@ -100,6 +174,7 @@ Create `output/README.md` as an index of all generated deliverables:
 | 3 | Business Case | XLSX + DOCX | business-case.xlsx, business-case.docx |
 | 4 | Action Roadmap | PPTX | entry-roadmap.pptx |
 | 5 | Claim Verification Log | XLSX | claims-verification.xlsx |
+| 6 | Engagement HTML Report | HTML | engagement-report-enriched.html |
 ```
 
 ### 5. Present Summary

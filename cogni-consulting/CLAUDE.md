@@ -53,7 +53,8 @@ The plugin uses two kinds of personas:
 | Develop | cogni-portfolio | propositions, solutions |
 | Deliver | cogni-claims | claims (verify mode) |
 | Deliver | cogni-portfolio | portfolio-verify |
-| Export | cogni-visual | story-to-slides, story-to-big-picture, enrich-report (concept diagrams + charts for markdown deliverables) |
+| Export | cogni-visual | story-to-slides, story-to-big-picture, enrich-report (themed HTML with concept diagrams via concept-diagram agent + Chart.js charts) |
+| Export | document-skills | docx, pptx, xlsx |
 
 ## Vision Classes
 

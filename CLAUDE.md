@@ -97,8 +97,8 @@ Key integration patterns:
 
 - Plugin version lives in `.claude-plugin/plugin.json` `version` field (semver)
 - Bump the patch version after any change to skills, agents, or structure
-- Marketplace sync is driven by git commit hash, not the version string
-- Claude Code reads plugin.json version for display; never put version in marketplace.json
+- Marketplace sync is driven by git commit hash, but plugin versions must also be mirrored in marketplace.json for Claude Desktop update detection
+- When bumping a plugin version in plugin.json, also update the matching entry in marketplace.json
 
 ### Plugin Maturity Model
 

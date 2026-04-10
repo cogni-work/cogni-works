@@ -67,7 +67,8 @@ agents/              Autonomous rendering agents (brief -> output)
   story-to-storyboard.md  Orchestrates the story-to-storyboard skill
   storyboard.md        Renders storyboard briefs into multi-poster .pen via Pencil MCP
   enrich-report.md     Orchestrates the enrich-report skill (report → themed HTML)
-  concept-diagram.md   Worker agent — generates one concept diagram (TIPS flow, relationship map, process flow, concept sketch) via Excalidraw MCP, returns SVG. Cross-plugin: any skill dispatching to enrich-report benefits from this agent (cogni-portfolio, cogni-consulting, cogni-trends, cogni-research)
+  concept-diagram.md   Worker agent — generates one concept diagram via Excalidraw MCP, returns SVG. Retained as fallback for Excalidraw-native output scenarios (interactive .excalidraw files). Superseded by concept-diagram-svg for enrich-report
+  concept-diagram-svg.md  Worker agent — generates one concept diagram as clean inline SVG using LLM-crafted geometric primitives. No Excalidraw dependency. Produces gradient fills, drop shadows, zone backgrounds. Visual review via browser screenshot. Default for enrich-report concept track. Cross-plugin: any skill dispatching to enrich-report benefits (cogni-portfolio, cogni-consulting, cogni-trends, cogni-research)
   brief-review-assessor.md  Stakeholder review of visual briefs (3 perspectives per brief type, haiku)
 
 libraries/           Shared reference material loaded at Step 1
@@ -82,6 +83,8 @@ libraries/           Shared reference material loaded at Step 1
   EXAMPLE_STORYBOARD_BRIEF.md  Reference storyboard brief (4-poster, stacked web sections)
   big-block-layouts.md     Block sizing, tier bands, connection routing, SPI/foundation sections
   EXAMPLE_BIG_BLOCK_BRIEF.md   Reference Big Block brief (9 solutions, 4 tiers, manufacturing)
+  svg-patterns.md          SVG element recipes for concept diagrams (inline SVG generation, concept-diagram-svg agent)
+  excalidraw-patterns.md   Excalidraw MCP element recipes (big pictures, big blocks, Excalidraw-native output only)
   cta-taxonomy.md          CTA types, urgency levels, arc-to-CTA heuristics (all skills)
   brief-review-perspectives.md  5 perspective sets for stakeholder review (slides, big-picture, web, storyboard, big-block)
 ```
@@ -91,9 +94,9 @@ libraries/           Shared reference material loaded at Step 1
 | Type | Count | Items |
 |------|-------|-------|
 | Skills | 10 | story-to-slides, story-to-big-picture, story-to-big-block, story-to-web, story-to-storyboard, render-big-picture, render-big-block, render-html-slides, enrich-report, review-brief |
-| Agents | 18 | story-to-slides, pptx, html-slides, story-to-big-picture, big-picture (wrapper), story-to-big-block, big-block (wrapper), station-structure-artist (worker ×N), station-enrichment-artist (worker ×N), slides-enrichment-artist (worker), zone-reviewer (worker ×4), story-to-web, web, story-to-storyboard, storyboard, enrich-report, concept-diagram (worker), brief-review-assessor |
+| Agents | 19 | story-to-slides, pptx, html-slides, story-to-big-picture, big-picture (wrapper), story-to-big-block, big-block (wrapper), station-structure-artist (worker ×N), station-enrichment-artist (worker ×N), slides-enrichment-artist (worker), zone-reviewer (worker ×4), story-to-web, web, story-to-storyboard, storyboard, enrich-report, concept-diagram (worker, Excalidraw fallback), concept-diagram-svg (worker, default inline SVG), brief-review-assessor |
 | Commands | 5 | render-big-picture, render-big-block, render-html-slides, enrich-report, review-brief |
-| Libraries | 13 | arc-taxonomy, cta-taxonomy, pptx-layouts, EXAMPLE_BRIEF, big-picture-layouts, EXAMPLE_BIG_PICTURE_BRIEF, big-block-layouts, EXAMPLE_BIG_BLOCK_BRIEF, web-layouts, EXAMPLE_WEB_BRIEF, storyboard-layouts, EXAMPLE_STORYBOARD_BRIEF, brief-review-perspectives |
+| Libraries | 14 | arc-taxonomy, cta-taxonomy, pptx-layouts, EXAMPLE_BRIEF, big-picture-layouts, EXAMPLE_BIG_PICTURE_BRIEF, big-block-layouts, EXAMPLE_BIG_BLOCK_BRIEF, web-layouts, EXAMPLE_WEB_BRIEF, storyboard-layouts, EXAMPLE_STORYBOARD_BRIEF, brief-review-perspectives, svg-patterns |
 
 ## Big Picture Rendering Pipeline (v4.2 — Contrast, Inline Numbers, Bigger Title)
 
@@ -211,7 +214,7 @@ cogni-trends/cogni-research → enrich-report → browser / PDF / DOCX
 |--------|----------------|-------------------|---------------------|-------------------|-------------------|-----------------|-------------|---------------------|---------------|
 | Input | Narrative (prose) | Presentation brief (v4.0) | Narrative (prose) | Value-modeler (JSON) | Brief (v3.0) | Brief (v1.0) | Narrative (prose) | Narrative (prose) | Markdown report (any) |
 | Output | Multi-slide YAML brief | Self-contained HTML slide deck | Single-canvas scene brief (v3.0) | Solution architecture brief (v1.0) | .excalidraw illustrated scene | .excalidraw structured diagram | Scrollable section brief | Multi-poster print brief | Self-contained themed HTML + optional PDF/DOCX |
-| Renderer | PPTX skill | Python script + Mermaid CDN | N/A (produces brief) | render-big-block | Excalidraw MCP (station-first, N+N+4 agents) | Excalidraw MCP (sequential, 8 phases) | Pencil MCP (web agent) | Pencil MCP (storyboard agent) | Python script + Chart.js CDN + Excalidraw MCP (SVG export) |
+| Renderer | PPTX skill | Python script + Mermaid CDN | N/A (produces brief) | render-big-block | Excalidraw MCP (station-first, N+N+4 agents) | Excalidraw MCP (sequential, 8 phases) | Pencil MCP (web agent) | Pencil MCP (storyboard agent) | Python script + Chart.js CDN + inline SVG (concept-diagram-svg agent) |
 | Layout unit | Slide with layout type | Slide with HTML/CSS layout | Station as landscape object | Solution block in tier band | Station as 250+ element two-pass illustration | Solution block in tier grid | Section with auto-layout | Poster with 1-3 stacked sections | Report section with injected chart/SVG |
 | Element count | N/A | N/A | N/A | N/A | 1100-1500 total (stations only) | 150-250 total | N/A | N/A | 10-22 enrichments (Chart.js + SVG) |
 | Quality review | N/A | 5-point validation (count, notes, citations, mermaid, theme) | 4-layer validation | 8-point schema validation | 9-gate zone-based (4 parallel reviewers, 2 passes) | Snapshot checkpoints | 4-layer validation | N/A | 5-gate validation (citations, charts, SVG, theme, content) |

@@ -325,16 +325,16 @@ For each data-track enrichment:
    - `options` — themed: colors from `var(--accent)`, `var(--primary)`, etc.; font-family from `var(--font-body)`; grid colors from `var(--border)`
 4. Chart dimensions: max-width 720px, height auto by type (bar: 400px, doughnut: 350px, radar: 400px, line: 350px).
 
-**Concept track (Excalidraw via concept-diagram agent):**
+**Concept track (inline SVG via concept-diagram-svg agent):**
 
-For each concept-track enrichment, sequentially:
+For each concept-track enrichment:
 1. Read the section content and extract the conceptual structure (e.g., T→I→P→S chain: trend name, implication names, possibility names, solution names).
 2. Select `diagram_type` based on the enrichment type from the enrichment plan: `tips-flow` for T→I→P→S chains, `relationship-map` for theme interconnections, `process-flow` for sequential workflows, `concept-sketch` for layered/convergence/phase/matrix patterns.
-3. Dispatch to `concept-diagram` agent with: `DIAGRAM_TYPE`, `DATA` (structured payload extracted from section), `DESIGN_VARIABLES` (from design-variables), `LANGUAGE`.
+3. Dispatch to `concept-diagram-svg` agent with: `DIAGRAM_TYPE`, `CONCEPT_SUBTYPE` (if applicable), `DATA` (structured payload extracted from section), `DESIGN_VARIABLES` (from design-variables), `LANGUAGE`.
 4. Collect SVG string from agent JSON response (`svg` field).
 5. Write SVG to `{source_dir}/cogni-visual/svgs/enr-XXX.svg`.
 
-Concept diagrams are dispatched sequentially (not in parallel) because all agents share one Excalidraw canvas — parallel clear/build/export would corrupt each other's work. Each diagram is 10-25 elements, so sequential execution is fast.
+**Parallelization:** `concept-diagram-svg` agents generate SVG independently — no shared canvas. Dispatch all concept-track enrichments in a single parallel Agent batch for faster execution.
 
 ---
 
@@ -448,7 +448,7 @@ After all requested formats are generated:
 | `references/02-section-analysis.md` | Phase 1 | Section mapping rules per report type, data extraction patterns |
 | `references/03-enrichment-catalog.md` | Phase 2 | Enrichment types, trigger conditions, scoring model, density thresholds |
 | `references/04-chart-patterns.md` | Phase 4 | Chart.js config templates per chart type, themed with CSS variables |
-| `${CLAUDE_PLUGIN_ROOT}/libraries/excalidraw-patterns.md` | Phase 4 | Excalidraw element recipes for concept diagrams (shared library — also used by concept-diagram agent) |
+| `${CLAUDE_PLUGIN_ROOT}/libraries/svg-patterns.md` | Phase 4 | SVG element recipes for concept diagrams (shared library — also used by concept-diagram-svg agent) |
 | `references/06-html-structure.md` | Phase 5 | HTML layout, CSS architecture, responsive breakpoints, script structure |
 | `references/07-citation-normalization.md` | Phase 7 | Citation format detection and normalization for DOCX export |
 | `schemas/design-variables.schema.json` | Phase 0 | JSON schema for design-variables validation |

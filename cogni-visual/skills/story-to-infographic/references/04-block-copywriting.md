@@ -122,8 +122,8 @@ Chart type selection:
 | label | 3 | Action verb preferred: "Erfassen", "Analysieren", "Alarmieren" |
 | icon-prompt | — | Descriptive SVG icon prompt for each step |
 
-**4-8 steps.** Each step is a verb + object or a concise noun. Connector arrows rendered
-automatically by the HTML generator — do not describe them in the brief.
+**4-8 steps.** Each step is a verb + object or a concise noun. Connector arrows are drawn
+automatically by the render agent (Excalidraw or Pencil) — do not describe them in the brief.
 
 ### text-block
 

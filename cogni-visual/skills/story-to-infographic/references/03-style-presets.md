@@ -84,7 +84,9 @@ Think Bloomberg Terminal meets annual report — the data is the design.
 - Accent-colored backgrounds for KPI cards (light tint of accent)
 - Chart blocks get maximum space allocation (50%+ of content area)
 - Subtle grid lines in background (light border color, 1px)
-- Status colors for positive/negative indicators (success green, danger red)
+- Brand accent = positive only; ink/muted gray carries negative. Do NOT add a second
+  accent (red for "bad", green for "good") — traffic-light coding dilutes the brand and
+  makes every dashboard look the same regardless of theme.
 - Small labels in text-muted, uppercase, letter-spacing: 0.05em
 
 **Best for:** Trend reports, market data, KPI dashboards, research findings, data-heavy

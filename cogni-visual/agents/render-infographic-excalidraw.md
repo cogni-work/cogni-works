@@ -94,6 +94,31 @@ whiteboard is mostly white with content islands — like a teacher drawing one c
 - **ALWAYS** take a `snapshot_scene()` checkpoint before each zone so you can `restore_snapshot()` on failure.
 - **ALWAYS** write the `.excalidraw` file before returning.
 
+### Brand-accent discipline (no traffic-light coding)
+
+An infographic lives inside a brand. The theme palette is the whole color vocabulary — do not
+add colors outside it to signal semantics. In particular: **never introduce a second accent
+(red, amber, yellow) to mean "bad" or "problem" while using the theme accent to mean "good".**
+That is traffic-light coding, and it dilutes the brand.
+
+The discipline is asymmetric:
+
+- **Theme accent = positive only.** Use it for hero numbers that represent progress, the
+  proposed/solution side of a comparison, the CTA band, and 1–2 emphasis marks. Because the
+  accent is rare, it earns attention when it appears.
+- **Ink and muted gray = everything else.** Problem numbers, cost-of-inaction stats,
+  status-quo columns, supporting labels — all render in near-black ink, optionally with a
+  slightly muted weight. Weight, size, and position carry the emphasis, not hue.
+- **No red unless red IS the brand accent.** If `theme.primary` is red (rare — the Economist
+  editorial preset is the main case, and that runs on a different agent), then red is the
+  positive color. Otherwise red must never appear.
+
+Why this matters: the user explicitly flagged that the hand-drawn renders were using green for
+"solution" and red for "cost of inaction". That feels intuitive but it fights brand discipline
+and makes every scene look the same regardless of theme. A strong hand-drawn infographic can
+deliver the full problem → solution contrast using only ink, gray, and one accent color. Rely
+on size, placement, and iconography — not on a second palette — to carry the emotional load.
+
 ## Workflow
 
 ### Step 1: Parse Brief
@@ -173,7 +198,7 @@ Each block type has a visual purpose. The brief provides content; you provide co
 |------------|---------------------------|
 | **kpi-card** | "This number is the headline." Hero number dominates — largest element in the zone, accent-colored. Everything else (label, source, icon) supports it. |
 | **stat-row** | "Here's the supporting evidence." Scannable row of 2–4 stats — numbers prominent, labels muted, even spacing. |
-| **comparison-pair** | "See the contrast." Two-column layout with a clear visual divider. Left side (status quo) feels heavier/more problematic; right side (proposed) feels lighter/better. Muted/danger tones left, accent/success tones right. |
+| **comparison-pair** | "See the contrast." Two-column layout with a clear visual divider. Left side (status quo, problem) uses **ink and muted gray only** — heavier weight, tighter spacing, no accent color. Right side (proposed, solution) uses the **brand accent** for 1–2 highlight elements — lighter weight, airier spacing. The contrast is built from weight and tone, not from red-vs-green. Never introduce red for "bad" unless red IS the brand accent. |
 | **process-strip** | "Here's how it works." A chain of steps connected by arrows. Each step: icon + label. Flow direction must be obvious. |
 | **chart** | "The data tells a story." Bars, lines, or circles with proportional sizing. **Bar heights must be computed from actual data values** — this is data integrity, not aesthetics. |
 | **text-block** | "Here's context." Headline + body. Keep it scannable. |
@@ -201,6 +226,7 @@ zones and element ids when you identify a failure — vague observations do not 
 | **Flow & Connections** | Arrows guide natural reading order, not confuse it |
 | **Style Character** | Roughness, font choice, and border style clearly match the chosen preset |
 | **Accent Discipline** | Accent color appears only on the elements you committed to in Step 3 |
+| **Brand Palette Fidelity** | Walk every stroke and fill. Every non-ink color must be the theme accent (or a direct tint of it) and must mark a **positive** element. If you see red/amber/yellow signalling "bad" while the theme accent signals "good", you have traffic-light coded the scene and it fails this gate — replace all negative-semantic reds with ink/gray before passing. |
 | **Named-Reference Check** | Imagine handing this scene to Mike Rohde (sketchnote) or to an RSA Animate illustrator (whiteboard). Would they recognize it as belonging to their tradition, or would they call it a PowerPoint slide with rough edges? Name one concrete thing they would fix, or confirm it passes. |
 
 **Forbidden elements (non-negotiable).** Walk the scene and confirm none of these appear —

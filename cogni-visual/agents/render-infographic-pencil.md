@@ -83,6 +83,11 @@ derive from the brief's governing thought — never fabricate numbers.
 - **DO NOT** use rounded corners, drop shadows, card borders, or a fourth accent color.
 - **DO NOT** render a single-column stack — this is a newspaper page, not a slide.
 - **DO NOT** return prose alongside the JSON output. Single-line JSON only.
+- **DO NOT** introduce semantic traffic-light coding (a second accent meaning "bad" while
+  the primary accent means "good"). The Economist discipline is exactly two accents
+  (`theme.primary` + `theme.secondary`) used **structurally** — rule lines, hero numbers,
+  bars — not as red-for-problem and green-for-solution. A problem stat and a solution stat
+  can both wear the primary accent; the contrast is carried by weight, label, and position.
 - **ALWAYS** compute bar heights proportionally from real data values.
 - **ALWAYS** place every block beside a neighbor unless it genuinely needs full width.
 - **ALWAYS** include a red rule line at every major section transition (3–5 per page).

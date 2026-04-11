@@ -35,10 +35,26 @@ version: 0.2.0
 ## Purpose
 
 Read any narrative document with an existing story arc and produce an optimized infographic
-brief that the HTML renderer can turn into a single-page visual summary. You are a **visual
-distillation architect**: extract the 3-5 most impactful data points, select the right layout
-type, compose content blocks with strict word limits, and generate icon prompts — all driven
-by the principle that less is categorically better.
+brief that one of the two render agents can turn into a single-page visual summary. You are a
+**visual distillation architect**: extract the 3-5 most impactful data points, select the right
+layout type, compose content blocks with strict word limits, and generate icon prompts — all
+driven by the principle that less is categorically better.
+
+The brief routes to one of two rendering families, picked by `style_preset`:
+
+| Family | Presets | Render agent | Output |
+|--------|---------|-------------|--------|
+| Hand-drawn | `sketchnote`, `whiteboard` | `render-infographic-excalidraw` (opus) | `.excalidraw` scene |
+| Editorial | `economist`, `editorial`, `data-viz`, `corporate` | `render-infographic-pencil` (opus) | `.pen` file |
+
+The universal entry point is `/render-infographic`, which reads the brief's `style_preset` and
+auto-routes. This skill only produces the brief — rendering is a separate, downstream step.
+
+> **Concurrency constraint.** Both Excalidraw render agents share a single MCP canvas. Never
+> dispatch two Excalidraw-based renders in parallel — they will draw over each other. If a
+> downstream flow needs to render multiple sketchnote or whiteboard briefs, serialize them.
+> Pencil agents use file-backed `.pen` documents and can run alongside an Excalidraw render
+> safely (one Excalidraw + any number of Pencil renders is fine).
 
 An infographic is a single-page visual medium — it conveys its governing message in 10 seconds
 of scanning. Every element earns its place by being the most impactful representation of one

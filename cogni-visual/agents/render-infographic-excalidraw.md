@@ -1,12 +1,16 @@
 ---
 name: render-infographic-excalidraw
 description: >
-  Render an infographic-brief.md (v1.0) into a hand-drawn Excalidraw scene — sketchnote or
-  whiteboard style. Use when the user wants a hand-drawn infographic, sketchnote infographic,
-  whiteboard infographic, or when the brief's style_preset is sketchnote or whiteboard.
-  Dispatched by the /render-infographic command (auto-routed on sketchnote/whiteboard style
-  preset) or the /render-infographic-excalidraw command (direct). Not for clean/editorial
-  styles (use render-infographic-pencil for economist, editorial, data-viz, corporate).
+  Render an infographic-brief.md (v1.1) into a hand-drawn Excalidraw scene — sketchnote
+  (Mike Rohde / graphic recording tradition) or whiteboard (RSA Animate / Dan Roam
+  "Back of the Napkin") style. Use when the user wants a hand-drawn infographic,
+  sketchnote infographic, whiteboard infographic, "sketchnoting", "visual facilitation",
+  "graphic recording", "whiteboard explainer", "Mike Rohde style", "RSA Animate style",
+  "Back of the Napkin diagram", or when the brief's style_preset is sketchnote or
+  whiteboard. Dispatched by the /render-infographic command (auto-routed on
+  sketchnote/whiteboard style preset) or the /render-infographic-handdrawn command
+  (direct). Not for clean/editorial styles (use render-infographic-pencil for
+  economist, editorial, data-viz, corporate).
 model: opus
 color: green
 tools: Read, Write, Bash, Grep, Glob, mcp__excalidraw__clear_canvas, mcp__excalidraw__create_element, mcp__excalidraw__batch_create_elements, mcp__excalidraw__group_elements, mcp__excalidraw__describe_scene, mcp__excalidraw__get_canvas_screenshot, mcp__excalidraw__snapshot_scene, mcp__excalidraw__restore_snapshot, mcp__excalidraw__export_scene, mcp__excalidraw__export_to_excalidraw_url, mcp__excalidraw__export_to_image, mcp__excalidraw__query_elements, mcp__excalidraw__update_element, mcp__excalidraw__delete_element, mcp__excalidraw__get_element, mcp__excalidraw__import_scene
@@ -94,10 +98,11 @@ whiteboard is mostly white with content islands — like a teacher drawing one c
 
 ### Step 1: Parse Brief
 
-1. Read `infographic-brief.md`; validate `type: infographic-brief`, `version: "1.0"`
-2. Extract frontmatter: `layout_type`, `style_preset`, `orientation`, `dimensions`, `language`, `governing_thought`, `theme_path`
-3. Parse all `## Block N:` sections — build ordered block list `[{block_type, fields}]`
+1. Read `infographic-brief.md`; validate `type: infographic-brief`, accept `version: "1.0"` or `version: "1.1"` (v1.1 adds `pull-quote` block, `voice_tone`, `palette_override` fields)
+2. Extract frontmatter: `layout_type`, `style_preset`, `orientation`, `dimensions`, `language`, `governing_thought`, `theme_path`, and (v1.1, optional) `voice_tone` and `palette_override`
+3. Parse all `## Block N:` sections — build ordered block list `[{block_type, fields}]`. Recognize block types: `title`, `kpi-card`, `stat-row`, `chart`, `process-strip`, `text-block`, `comparison-pair`, `pull-quote`, `icon-grid`, `svg-diagram`, `cta`, `footer`
 4. Read `theme.md` from `theme_path`. Extract color palette. If theme unavailable, use sensible defaults (warm cream surface `#F7F3EA`, near-black text `#111111`, green or blue accent)
+5. If `voice_tone` is set, let it shape micro-copy instincts only: `playful`/`punchy` → looser lettering, more exclamation marks in icons; `analytical`/`executive` → quieter labels, no emoji-ish flourishes. Never override the brief's actual text.
 
 ### Step 2: Clear Canvas Before Anything Else
 
@@ -173,6 +178,7 @@ Each block type has a visual purpose. The brief provides content; you provide co
 | **chart** | "The data tells a story." Bars, lines, or circles with proportional sizing. **Bar heights must be computed from actual data values** — this is data integrity, not aesthetics. |
 | **text-block** | "Here's context." Headline + body. Keep it scannable. |
 | **icon-grid** | "Here are the components." Grid of icon-label cards. Visual rhythm matters — even spacing, consistent sizing. |
+| **pull-quote** | "Someone actually said this." Hand-lettered speech bubble or quote cloud — one rounded/irregular bubble shape with a small tail pointing toward the attribution. The quote text is slightly larger than body lettering, attribution beneath in smaller muted text. If an `Emphasis` phrase is given, render that phrase in the accent color; the rest stays in ink. One per scene — it should read as a deliberate human voice, not decoration. |
 | **svg-diagram** | "Here's the relationship." Hub-spoke or process-flow using basic shapes and arrows. |
 
 ### Step 5: Visual Self-Review
@@ -195,10 +201,22 @@ zones and element ids when you identify a failure — vague observations do not 
 | **Flow & Connections** | Arrows guide natural reading order, not confuse it |
 | **Style Character** | Roughness, font choice, and border style clearly match the chosen preset |
 | **Accent Discipline** | Accent color appears only on the elements you committed to in Step 3 |
+| **Named-Reference Check** | Imagine handing this scene to Mike Rohde (sketchnote) or to an RSA Animate illustrator (whiteboard). Would they recognize it as belonging to their tradition, or would they call it a PowerPoint slide with rough edges? Name one concrete thing they would fix, or confirm it passes. |
 
-For each failing gate, identify the specific element id and the targeted `update_element` or
-`delete_element` call that would fix it. If the fix would cascade (resizing one element pushes
-another off-canvas), call that out and plan the chain before executing.
+**Forbidden elements (non-negotiable).** Walk the scene and confirm none of these appear —
+they are the telltale signs of a digital template impersonating a hand-drawn scene:
+
+| Preset | Forbidden |
+|--------|-----------|
+| sketchnote | linear gradients, drop shadows, 3D extrusion, photorealism, stock-icon clipart, pristine vector curves, uniformly straight baselines, Helvetica/Arial/Cascadia (use Virgil fontFamily 1), rectangles with `roundness: null` (must have playful rounded corners or hand-drawn edges) |
+| whiteboard | linear gradients, drop shadows, fills beyond the 1–2 accented elements, dashed borders (whiteboard is solid), colored backgrounds (must be white), more than one accent color |
+
+If any forbidden element appears, it must be removed or replaced before returning. A scene
+that passes all 8 gates but still contains a forbidden element fails.
+
+For each failing gate or forbidden element, identify the specific element id and the targeted
+`update_element` or `delete_element` call that would fix it. If the fix would cascade (resizing
+one element pushes another off-canvas), call that out and plan the chain before executing.
 </analysis>
 
 Apply the fixes. **Maximum 3 fix iterations** — if gates are still failing after the third

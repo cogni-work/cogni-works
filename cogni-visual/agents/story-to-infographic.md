@@ -23,8 +23,8 @@ After the skill completes, report the output path and key metrics (layout type, 
 preset, orientation, block count, distillation ratio). Guide the user to the renderer:
 
 - Universal entry point: `/render-infographic` — reads the brief's `style_preset` and
-  auto-routes to the right agent (Excalidraw for sketchnote/whiteboard, Pencil MCP for
-  economist/editorial/data-viz/corporate).
+  auto-routes to the right agent (hand-drawn family for sketchnote/whiteboard, editorial
+  family for economist/editorial/data-viz/corporate).
 - Direct commands (skip dispatch) for power users who already know the family:
-  - `/render-infographic-excalidraw` — hand-drawn sketchnote/whiteboard
-  - `/render-infographic-pencil` — editorial including the Economist flagship style
+  - `/render-infographic-handdrawn` — hand-drawn sketchnote/whiteboard (Excalidraw backend)
+  - `/render-infographic-editorial` — editorial including the Economist flagship style (Pencil backend)

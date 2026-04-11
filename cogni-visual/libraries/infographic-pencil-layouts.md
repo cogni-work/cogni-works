@@ -15,29 +15,58 @@ and API syntax patterns.
 
 ---
 
-## Economist Design Token Overrides
+## Economist Design Tokens — Discipline, Not Red
 
-When `style_preset == economist`, call `set_variables` a second time with these overrides.
-They layer The Economist's visual identity on top of the theme's base tokens.
+The Economist style is **structural discipline**, not a specific red. The agent renders every
+editorial preset (`economist`, `editorial`, `data-viz`, `corporate`) using exactly three
+colors on a cream surface: primary accent, secondary accent, and near-black text. The source
+of those colors is the **project theme** by default — the page reads as "Economist-shaped,
+wearing the brand". Only when the brief sets `palette_override: canonical` does the agent
+fall back to the hard-coded Economist palette below.
+
+### Theme-driven path (default — all editorial presets)
+
+The agent derives the tokens from `theme.md` in Step 2 of the workflow. The canonical
+mapping lives in `agents/render-infographic-pencil.md:Step 2`. The short version:
+
+- `--accent-primary` ← `theme.primary`
+- `--accent-secondary` ← `theme.secondary` (or amber-ish fallback)
+- `--text-base` ← near-black (`theme.foreground` if near-black, else `#1A1A1A`)
+- `--surface` ← cream-leaning (`theme.background` if cream, else `#FBF9F3`)
+- `--rule-color` ← `--accent-primary` (rules are always the primary accent)
+- `--chart-fill` ← `--accent-primary`
+- `--chart-fill-2` ← `--accent-secondary`
+
+No fourth accent color. No tinted block backgrounds. No card borders.
+
+### Canonical Economist palette (opt-in — `palette_override: canonical`)
+
+When the brief explicitly sets `palette_override: canonical` (and `style_preset: economist`),
+call `set_variables` with these exact values. They reproduce a canonical Economist data page.
 
 ```
---primary:            #C00000    (Economist red)
---accent:             #C00000    (red is the accent)
---accent-amber:       #D4A017    (secondary — icons, tertiary highlights)
---background:         #FBF9F3    (cream)
---background-alt:     #F0EDE4    (darker cream for alternate zones)
---foreground:         #1A1A1A    (near-black)
---foreground-muted:   #666666    (mid-grey for sublabels)
+--accent-primary:     #C00000    (Economist red)
+--accent-secondary:   #D4A017    (Economist amber)
+--text-base:          #1A1A1A    (near-black)
+--text-muted:         #666666    (mid-grey for sublabels)
+--surface:            #FBF9F3    (cream)
+--surface-alt:        #F0EDE4    (darker cream for alternate zones)
 --surface-dark:       #1A1A1A    (dark bands)
 --surface-dark-text:  #FFFFFF    (white on dark)
 --surface-dark-muted: #AAAAAA    (muted on dark)
---chart-fill:         #C00000    (primary bar fill)
---chart-fill-2:       #E8A0A0    (secondary bar — lighter red)
---chart-fill-3:       #D4A017    (tertiary — amber for multi-series)
---rule-color:         #C00000    (section divider rule lines)
+--rule-color:         #C00000    (section divider rule lines = primary)
+--chart-fill:         #C00000    (primary bar fill = primary)
+--chart-fill-2:       #D4A017    (secondary bar = amber)
 ```
 
-For other presets: `--chart-fill` = `$--primary`, `--rule-color` = `$--foreground-muted`.
+Use only when reproducing The Economist aesthetic verbatim (portfolio examples, editorial-
+anchor demonstrations). Do not force canonical silently — the brief must opt in.
+
+### Canonical fallback (theme unavailable)
+
+If `theme.md` cannot be read and `palette_override` is unset, use the canonical Economist
+palette as a safe default — a faithful Economist reproduction is always better than an
+uncoordinated mix of brand-agnostic guesses.
 
 ---
 
@@ -82,7 +111,7 @@ in the same batch.
 **Copy:** `bar=C("source_id", "parent_id", { overrides })`
 **Replace:** `baz=R("old_id", { properties })`
 
-Variable references use `$--` prefix in property values: `fill: "$--primary"`,
+Variable references use `$--` prefix in property values: `fill: "$--accent-primary"`,
 `fontFamily: "$--font-body"`. Variable names are defined WITHOUT `$` in `set_variables`.
 
 ---
@@ -102,7 +131,7 @@ row=I(page, {x: 48, y: Y, width: 984, height: 280, layout: "horizontal", gap: 32
     I(left, {type: "text", fontSize: 13, fontWeight: "Bold", content: "Sicherheitsvorfälle pro Quartal"})
     // ... chart bars here
   right=I(row, {width: 352, layout: "vertical", gap: 16})
-    I(right, {type: "text", fontSize: 11, fontWeight: "Bold", fill: "$--primary", content: "KONTEXT DEUTSCHLAND"})
+    I(right, {type: "text", fontSize: 11, fontWeight: "Bold", fill: "$--accent-primary", content: "KONTEXT DEUTSCHLAND"})
     // ... context stats here
 ```
 
@@ -113,8 +142,8 @@ The hero number shares its row with 3 supporting stats — everything on one lin
 ```
 row=I(page, {x: 48, y: Y, width: 984, height: 140, layout: "horizontal", gap: 0})
   hero=I(row, {width: 360, layout: "vertical", gap: 4})
-    I(hero, {type: "icon_font", fontSize: 36, fill: "$--primary", content: "shield"})
-    I(hero, {type: "text", fontSize: 96, fontWeight: "Bold", fill: "$--primary", content: "73%"})
+    I(hero, {type: "icon_font", fontSize: 36, fill: "$--accent-primary", content: "shield"})
+    I(hero, {type: "text", fontSize: 96, fontWeight: "Bold", fill: "$--accent-primary", content: "73%"})
     I(hero, {type: "text", fontSize: 14, fontWeight: "Bold", content: "weniger Vorfälle"})
   stats=I(row, {width: 624, layout: "horizontal", gap: 24, padding: [24, 0, 0, 48]})
     // 3 stat columns here, each with icon + number (44px) + label (11px)
@@ -132,7 +161,7 @@ Short prose text that sits beside a chart or stat block, explaining context:
 
 ```
 ann=I(row, {width: 300, layout: "vertical", gap: 8, padding: [8, 16, 8, 16]})
-  I(ann, {type: "text", fontSize: 11, fontWeight: "Bold", fill: "$--primary", content: "WARUM DAS WICHTIG IST"})
+  I(ann, {type: "text", fontSize: 11, fontWeight: "Bold", fill: "$--accent-primary", content: "WARUM DAS WICHTIG IST"})
   I(ann, {type: "text", fontSize: 12, lineHeight: 1.5, content: "Seit dem Pilotstart in München sinken die Vorfälle rapide. Der Trend zeigt: KI-gestützte Überwachung wirkt präventiv."})
 ```
 
@@ -141,14 +170,14 @@ ann=I(row, {width: 300, layout: "vertical", gap: 8, padding: [8, 16, 8, 16]})
 An icon at editorial scale — serves as visual anchor, not UI element:
 
 ```
-icon_bg=I(parent, {width: 80, height: 80, fill: "$--primary at 8%", cornerRadius: 0})
-  I(icon_bg, {type: "icon_font", fontSize: 48, fill: "$--primary", content: "shield"})
+icon_bg=I(parent, {width: 80, height: 80, fill: "$--accent-primary at 8%", cornerRadius: 0})
+  I(icon_bg, {type: "icon_font", fontSize: 48, fill: "$--accent-primary", content: "shield"})
 ```
 
 ### Section Subheading (red uppercase label)
 
 ```
-I(parent, {type: "text", fontSize: 11, fontWeight: "Bold", fill: "$--primary", letterSpacing: 1.5, content: "DAS PROBLEM"})
+I(parent, {type: "text", fontSize: 11, fontWeight: "Bold", fill: "$--accent-primary", letterSpacing: 1.5, content: "DAS PROBLEM"})
 ```
 
 ### Proportional Bar Chart

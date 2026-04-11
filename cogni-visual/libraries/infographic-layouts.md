@@ -1,5 +1,10 @@
 # Infographic Layouts
 
+**Schema version: 1.1** — infographic-brief.md documents should declare `version: "1.1"`
+in their frontmatter. v1.1 adds the `pull-quote` block type, the `voice_tone` frontmatter
+field, and the `palette_override` frontmatter field on top of v1.0. v1.0 briefs remain
+readable by both render agents — missing v1.1 fields are treated as absent.
+
 Layout type schemas and block type catalog for infographic briefs. The `story-to-infographic`
 skill selects one layout type based on content analysis, and the rendering agents
 (`render-infographic-excalidraw` and `render-infographic-pencil`, dispatched by the
@@ -381,6 +386,35 @@ Right:
 ```
 
 **Constraints:** 3-5 bullets per side. Max 6 words per bullet. Structurally parallel (same number of bullets).
+
+### pull-quote
+
+A short quotation lifted directly from a stakeholder, source, or the governing thought. An
+editorial signature move: The Economist uses italic accent-color pull quotes; a sketchnote
+treats them as hand-lettered speech bubbles. Available from brief schema v1.1 onward.
+
+```yaml
+Block-Type: pull-quote
+Quote-Text: "Die automatisierte Erkennung hat unsere Reaktionszeit halbiert."  # max 20 words
+Attribution: "Dr. Meier, Leiter Sicherheit"                                   # optional, max 6 words
+Emphasis: "halbiert"                                                           # optional, key phrase to color-highlight
+Source: "Interview April 2026"                                                 # optional, attribution source
+```
+
+**Word limits:** Quote text max 20 words. Attribution max 6 words. Emphasis is an optional
+phrase already contained in the quote — renderers highlight it in the accent color.
+
+**Rendering intent:**
+- **sketchnote / whiteboard:** hand-lettered speech bubble or quote cloud. Attribution sits
+  beneath on a smaller line. Emphasis phrase gets the accent color stroke. No more than one
+  pull quote per scene — it should feel like a deliberate callout, not decoration.
+- **economist / editorial / data-viz / corporate:** italic serif setting in `--accent-primary`,
+  body remains near-black. Hangs beside a data block (never alone). Attribution in small
+  uppercase muted letters beneath. Emphasis phrase bolder or underlined. A single pull quote
+  on the page is an accent; two is noise.
+
+**Constraints:** Max 1 pull-quote block per infographic. The quote must be a near-verbatim
+lift from the source narrative — renderers must not paraphrase or compress further.
 
 ### icon-grid
 

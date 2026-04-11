@@ -1,5 +1,5 @@
 ---
-description: Render an infographic-brief.md into a visual output — auto-routes to the right rendering agent based on the brief's style_preset. Use whenever the user says "render infographic", "Infografik rendern", "make the infographic visual", "draw the infographic", "turn the brief into an infographic", or has an infographic-brief.md they want to render and does not know (or care) which renderer to use. Handles both hand-drawn families (sketchnote, whiteboard → Excalidraw) and editorial families (economist, editorial, data-viz, corporate → Pencil MCP). For style-known direct dispatch use /render-infographic-excalidraw or /render-infographic-pencil.
+description: Render an infographic-brief.md into a visual output — auto-routes to the right rendering agent based on the brief's style_preset. Use whenever the user says "render infographic", "Infografik rendern", "make the infographic visual", "draw the infographic", "turn the brief into an infographic", or has an infographic-brief.md they want to render and does not know (or care) which renderer to use. Handles both the hand-drawn family (sketchnote, whiteboard — Mike Rohde / RSA Animate tradition) and the editorial family (economist, editorial, data-viz, corporate — The Economist data page / data journalism tradition). For style-known direct dispatch use /render-infographic-handdrawn or /render-infographic-editorial.
 allowed-tools: Read, Grep, Glob, AskUserQuestion, Agent, mcp__excalidraw__clear_canvas, mcp__excalidraw__create_element, mcp__excalidraw__batch_create_elements, mcp__excalidraw__group_elements, mcp__excalidraw__describe_scene, mcp__excalidraw__get_canvas_screenshot, mcp__excalidraw__snapshot_scene, mcp__excalidraw__restore_snapshot, mcp__excalidraw__export_scene, mcp__excalidraw__export_to_excalidraw_url, mcp__excalidraw__export_to_image, mcp__excalidraw__query_elements, mcp__excalidraw__update_element, mcp__excalidraw__delete_element, mcp__excalidraw__get_element, mcp__excalidraw__import_scene, mcp__pencil__batch_design, mcp__pencil__batch_get, mcp__pencil__export_nodes, mcp__pencil__get_editor_state, mcp__pencil__get_guidelines, mcp__pencil__get_screenshot, mcp__pencil__get_variables, mcp__pencil__open_document, mcp__pencil__set_variables, mcp__pencil__snapshot_layout
 ---
 
@@ -8,10 +8,10 @@ allowed-tools: Read, Grep, Glob, AskUserQuestion, Agent, mcp__excalidraw__clear_
 Render an infographic-brief.md into a visual output. This command is the **smart dispatcher** —
 it reads the brief's `style_preset` and routes to the right rendering agent. Two families exist:
 
-| Style Presets | Family | Rendering Agent | Output |
-|---------------|--------|-----------------|--------|
-| `sketchnote`, `whiteboard` | Hand-drawn (Mike Rohde / RSA Animate) | `render-infographic-excalidraw` | `.excalidraw` scene |
-| `economist`, `editorial`, `data-viz`, `corporate` | Editorial (The Economist data page) | `render-infographic-pencil` | `.pen` file |
+| Style Presets | Family | Direct Command | Rendering Agent | Output |
+|---------------|--------|---------------|-----------------|--------|
+| `sketchnote`, `whiteboard` | Hand-drawn (Mike Rohde / RSA Animate) | `/render-infographic-handdrawn` | `render-infographic-excalidraw` | `.excalidraw` scene |
+| `economist`, `editorial`, `data-viz`, `corporate` | Editorial (The Economist data page) | `/render-infographic-editorial` | `render-infographic-pencil` | `.pen` file |
 
 ## Usage
 
@@ -82,8 +82,8 @@ Excalidraw renders safely.
 If you already know the style family and want to skip the dispatch step, use the direct
 commands:
 
-- `/render-infographic-excalidraw` — dispatches straight to the Excalidraw agent
-- `/render-infographic-pencil` — dispatches straight to the Pencil agent
+- `/render-infographic-handdrawn` — dispatches straight to the hand-drawn agent (Excalidraw backend; sketchnote, whiteboard)
+- `/render-infographic-editorial` — dispatches straight to the editorial agent (Pencil backend; economist, editorial, data-viz, corporate)
 
 These do not read the brief's `style_preset` — they trust the caller. Use them when you are
 certain about the family and want to save one file read.

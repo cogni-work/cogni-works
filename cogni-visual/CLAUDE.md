@@ -48,9 +48,9 @@ skills/              Intelligent transformation & rendering skills
 commands/            User-facing slash commands
   render-html-slides.md  /render-html-slides — render presentation brief as HTML slide deck
   enrich-report.md       /enrich-report — enrich a report with themed visualizations
-  render-infographic.md  /render-infographic — smart dispatcher: reads brief style_preset, routes to the right render agent (Excalidraw or Pencil)
-  render-infographic-excalidraw.md  /render-infographic-excalidraw — direct dispatch to the Excalidraw hand-drawn render agent (sketchnote, whiteboard)
-  render-infographic-pencil.md  /render-infographic-pencil — direct dispatch to the Pencil editorial render agent (economist, editorial, data-viz, corporate)
+  render-infographic.md  /render-infographic — smart dispatcher: reads brief style_preset, routes to the right render agent (hand-drawn or editorial family)
+  render-infographic-handdrawn.md  /render-infographic-handdrawn — direct dispatch to the hand-drawn render agent (sketchnote, whiteboard — Excalidraw backend)
+  render-infographic-editorial.md  /render-infographic-editorial — direct dispatch to the editorial render agent (economist, editorial, data-viz, corporate — Pencil backend)
   review-brief.md        /review-brief — stakeholder review of any visual brief
 
 agents/              Autonomous rendering agents (brief -> output)
@@ -78,9 +78,11 @@ libraries/           Shared reference material loaded at Step 1
   EXAMPLE_WEB_BRIEF.md     Reference web narrative brief
   storyboard-layouts.md    Poster composition model, section stacking, portrait adaptations, print constraints
   EXAMPLE_STORYBOARD_BRIEF.md  Reference storyboard brief (4-poster, stacked web sections)
-  infographic-layouts.md   Layout type schemas (7 layouts) + block type catalog (11 block types) for infographics
-  infographic-pencil-layouts.md  Pencil MCP reference: Economist token overrides, Lucide icon mapping, batch_design syntax
+  infographic-layouts.md   Layout type schemas (7 layouts) + block type catalog (12 block types, v1.1) for infographics
+  infographic-pencil-layouts.md  Pencil MCP reference: Economist tokens (theme-driven + canonical), Lucide icon mapping, batch_design syntax
   EXAMPLE_INFOGRAPHIC_BRIEF.md  Reference infographic brief (stat-heavy, data-viz)
+  EXAMPLE_SKETCHNOTE_BRIEF.md   Reference infographic brief (timeline-flow, sketchnote — hand-drawn family anchor, Mike Rohde tradition)
+  EXAMPLE_ECONOMIST_BRIEF.md    Reference infographic brief (stat-heavy portrait, economist — editorial family anchor, The Economist data page tradition)
   svg-patterns.md          SVG element recipes for concept diagrams (inline SVG generation, concept-diagram-svg agent)
   excalidraw-patterns.md   Excalidraw MCP element recipes (Excalidraw-native output only)
   cta-taxonomy.md          CTA types, urgency levels, arc-to-CTA heuristics (all skills)
@@ -93,8 +95,8 @@ libraries/           Shared reference material loaded at Step 1
 |------|-------|-------|
 | Skills | 7 | story-to-slides, story-to-web, story-to-storyboard, story-to-infographic, render-html-slides, enrich-report, review-brief |
 | Agents | 15 | story-to-slides, pptx, html-slides, slides-enrichment-artist (worker), story-to-web, web, story-to-storyboard, storyboard, story-to-infographic, render-infographic-excalidraw (opus), render-infographic-pencil (opus), enrich-report, concept-diagram (worker, Excalidraw fallback), concept-diagram-svg (worker, default inline SVG), brief-review-assessor |
-| Commands | 6 | render-html-slides, render-infographic, render-infographic-excalidraw, render-infographic-pencil, enrich-report, review-brief |
-| Libraries | 13 | arc-taxonomy, cta-taxonomy, pptx-layouts, EXAMPLE_BRIEF, web-layouts, EXAMPLE_WEB_BRIEF, storyboard-layouts, EXAMPLE_STORYBOARD_BRIEF, infographic-layouts, infographic-pencil-layouts, EXAMPLE_INFOGRAPHIC_BRIEF, brief-review-perspectives, svg-patterns |
+| Commands | 6 | render-html-slides, render-infographic, render-infographic-handdrawn, render-infographic-editorial, enrich-report, review-brief |
+| Libraries | 15 | arc-taxonomy, cta-taxonomy, pptx-layouts, EXAMPLE_BRIEF, web-layouts, EXAMPLE_WEB_BRIEF, storyboard-layouts, EXAMPLE_STORYBOARD_BRIEF, infographic-layouts, infographic-pencil-layouts, EXAMPLE_INFOGRAPHIC_BRIEF, EXAMPLE_SKETCHNOTE_BRIEF, EXAMPLE_ECONOMIST_BRIEF, brief-review-perspectives, svg-patterns |
 
 ## Pipeline Position
 
@@ -122,16 +124,16 @@ cogni-trends/cogni-research → enrich-report → browser / PDF / DOCX
 - **Progressive disclosure.** Reference files are read only at the step that needs them, not all at once.
 - **Theme-driven visuals.** Briefs contain no color/font fields; the renderer reads theme.md directly (or maps to design tokens for web and storyboard briefs).
 - **CTA proposals.** All narrative skills extract and generate CTAs via shared `libraries/cta-taxonomy.md`. Each content unit gets a per-section `cta:` field (text, type, urgency). A `CTA Summary` block aggregates 3-5 prioritized proposals with a `primary_cta`. Interactive CTA checkpoint lets users review/edit before finalization.
-- **Infographic = content distillation + dual rendering.** story-to-infographic distills narratives into 3-8 content blocks with strict word limits. 7 layout types × 6 style presets organized into two families. 11 block types as content primitives. The `/render-infographic` command is a smart dispatcher that reads the brief's `style_preset` and routes to one of two Opus-powered agents: `render-infographic-excalidraw` (Mike Rohde sketchnote / RSA Animate whiteboard style) for the hand-drawn family (sketchnote, whiteboard); `render-infographic-pencil` (The Economist data page style) for the editorial family (economist, editorial, data-viz, corporate). Power users can skip dispatch via the direct commands `/render-infographic-excalidraw` and `/render-infographic-pencil`. Both agents trust frontier LLM knowledge of these well-known visual styles — instructions focus on WHY and WHAT, not prescriptive pixel coordinates.
+- **Infographic = content distillation + dual rendering.** story-to-infographic distills narratives into 3-8 content blocks (or 10-14 for the economist preset) with strict word limits. Brief schema v1.1 adds a `pull-quote` block, a `voice_tone` frontmatter field, and a `palette_override` frontmatter field. 7 layout types × 6 style presets organized into two families. 12 block types as content primitives. The `/render-infographic` command is a smart dispatcher that reads the brief's `style_preset` and routes to one of two Opus-powered agents: `render-infographic-excalidraw` (Mike Rohde sketchnote / RSA Animate whiteboard tradition) for the hand-drawn family (sketchnote, whiteboard); `render-infographic-pencil` (The Economist data page / data journalism tradition) for the editorial family (economist, editorial, data-viz, corporate). Power users can skip dispatch via the family-named direct commands `/render-infographic-handdrawn` and `/render-infographic-editorial`. Both agents trust frontier LLM knowledge of these well-known visual styles — instructions focus on WHY and WHAT (plus a style-character gate and a per-preset forbidden-elements list), not prescriptive pixel coordinates. The editorial family enforces Economist **discipline** (exactly three colors — two accents + near-black on cream) using theme colors by default; briefs may opt into the canonical Economist red/amber palette via `palette_override: canonical`.
 - **Stakeholder review for briefs.** All story-to-X skills support a `stakeholder_review` parameter (defaults to `interactive`). When enabled, the `brief-review-assessor` agent evaluates the brief from 3 type-adapted perspectives (design, audience, usability) with 5 weighted criteria each. Verdict is accept/revise/reject with max 2 revision rounds. Perspectives are defined in `libraries/brief-review-perspectives.md`. The standalone `review-brief` skill and `/review-brief` command enable reviewing existing briefs outside the generation flow.
 
 ## Skill Differences
 
 | Aspect | story-to-slides | render-html-slides | story-to-web | story-to-storyboard | story-to-infographic | /render-infographic (command) | enrich-report |
 |--------|----------------|-------------------|-------------|---------------------|---------------------|-------------------------------|---------------|
-| Input | Narrative (prose) | Presentation brief (v4.0) | Narrative (prose) | Narrative (prose) | Narrative (prose) | Infographic brief (v1.0) | Markdown report (any) |
-| Output | Multi-slide YAML brief | Self-contained HTML slide deck | Scrollable section brief | Multi-poster print brief | Single-page infographic brief (v1.0) | .excalidraw scene (hand-drawn family) or .pen file (editorial family) | Self-contained themed HTML + optional PDF/DOCX |
-| Renderer | PPTX skill | Python script + Mermaid CDN | Pencil MCP (web agent) | Pencil MCP (storyboard agent) | N/A (produces brief) | Command-level router: reads `style_preset` in brief, dispatches to `render-infographic-excalidraw` (opus) or `render-infographic-pencil` (opus). Direct commands `/render-infographic-excalidraw` and `/render-infographic-pencil` skip the routing step | Python script + Chart.js CDN + inline SVG (concept-diagram-svg agent) |
+| Input | Narrative (prose) | Presentation brief (v4.0) | Narrative (prose) | Narrative (prose) | Narrative (prose) | Infographic brief (v1.1) | Markdown report (any) |
+| Output | Multi-slide YAML brief | Self-contained HTML slide deck | Scrollable section brief | Multi-poster print brief | Single-page infographic brief (v1.1) | .excalidraw scene (hand-drawn family) or .pen file (editorial family) | Self-contained themed HTML + optional PDF/DOCX |
+| Renderer | PPTX skill | Python script + Mermaid CDN | Pencil MCP (web agent) | Pencil MCP (storyboard agent) | N/A (produces brief) | Command-level router: reads `style_preset` in brief, dispatches to `render-infographic-excalidraw` (opus, hand-drawn family) or `render-infographic-pencil` (opus, editorial family). Family-named direct commands `/render-infographic-handdrawn` and `/render-infographic-editorial` skip the routing step | Python script + Chart.js CDN + inline SVG (concept-diagram-svg agent) |
 | Layout unit | Slide with layout type | Slide with HTML/CSS layout | Section with auto-layout | Poster with 1-3 stacked sections | Block with block type (11 types) | Zone with Excalidraw elements (150-250) or Pencil frames (80-160 ops) | Report section with injected chart/SVG |
 | Element count | N/A | N/A | N/A | N/A | 3-8 content blocks | N/A | 10-22 enrichments (Chart.js + SVG) |
 | Quality review | N/A | 5-point validation (count, notes, citations, mermaid, theme) | 4-layer validation | N/A | 4-layer validation (schema, density, integrity, distillation) | 6-gate screenshot validation (excalidraw) or 5-gate screenshot validation (pencil) — both at agent layer | 5-gate validation (citations, charts, SVG, theme, content) |

@@ -84,13 +84,13 @@ Based on report type:
 ### Phase 2: Draft Writing
 
 1. Write each section using findings from the relevant context entities
-2. Include inline citations using the configured `CITATION_FORMAT` style (see Writing Guidelines below). Default fallback: `[Source: publisher-name](URL)` format
+2. Include inline citations using the configured `CITATION_FORMAT` style (see Writing Guidelines below). Default fallback: `[Source: publisher-name](URL)` for web sources, `(publisher-name)` without link for wiki/file sources
 3. **Cite aggressively** — every statistic, data point, quote, date, percentage, and named finding should have its own inline citation, even if the same source is cited multiple times in a paragraph. A well-cited report typically has 2-3 citations per paragraph. When multiple sources support the same point, cite all of them to show convergence of evidence
 4. Every factual claim must reference a source entity
 5. **URL validation**: Before citing any source, verify its source entity has a non-empty `url` field. Sources use three URL schemes:
-   - `https://` — clickable web URL. Use directly in citations
-   - `wiki://<slug>/<page>` — cogni-wiki source. Not clickable, but cite-worthy. If the source entity has an `original_url` field with an `https://` URL, use that for the citation link. Otherwise, cite using author/title attribution without a link — the source is still valid evidence
-   - `file://<path>` — local document. Not clickable, but cite-worthy. Cite using title attribution without a link
+   - `https://` — clickable web URL. Use directly in inline citations, e.g., APA: `([Author, Year](https://url))`
+   - `wiki://<slug>/<page>` — cogni-wiki source. Not clickable, but cite-worthy. If the source entity has an `original_url` field with an `https://` URL, use that as the link (same format as web sources). Otherwise, use the same citation format but without a link wrapper — e.g., APA: `(Author, Year)`, Chicago: `<sup>N</sup>`. The citation format stays identical; only the markdown link is omitted
+   - `file://<path>` — local document. Not clickable, but cite-worthy. Same as wiki without original_url: use unlinked citation format, e.g., APA: `(Author, Year)`
    If a source has a completely empty URL: use a different source that has one, or present the finding with hedging language ("Industry reports suggest...", "According to analyst estimates...") without a citation bracket. Never fabricate or guess URLs
 5. Ensure smooth narrative flow between sections
 6. Use professional, analytical tone

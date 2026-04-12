@@ -17,32 +17,46 @@ allowed-tools: Read, Bash, Glob, ToolSearch, AskUserQuestion
 
 # Research Setup
 
-This skill configures and initializes a research project. It collects user preferences via AskUserQuestion and creates the project directory. It does not perform any research — that is handled by the research-report skill after setup completes.
+This skill configures and initializes a research project. It collects user preferences through an interactive text menu and creates the project directory. It does not perform any research — that is handled by the research-report skill after setup completes.
 
 ## Interaction Model
 
-**Before your first AskUserQuestion call**, fetch its schema: call `ToolSearch(query="select:AskUserQuestion")`. Do this once per session.
+This skill uses two interaction modes depending on the question type:
 
-This skill communicates with the user exclusively through `AskUserQuestion` tool calls. The reason: AskUserQuestion renders as a structured dialog in the UI, while text output appears as a separate chat bubble. If you print a menu as text and also call AskUserQuestion, the user sees the same content twice in two different formats — confusing and wasteful. If you add conversational filler ("Perfekt!", "Great, starting research...") before or after the tool call, it creates an extra chat bubble that interrupts the clean dialog flow.
+1. **Text output** — for open-ended questions (topic), the Configuration Menu (multi-option selection), source path requests, advanced option explanations, and the final project-initialized confirmation. Text lets the user reply naturally with free-form answers or partial selections. On text-output turns, produce ONLY text — no AskUserQuestion call.
 
-The principle: put your question content in the `question` parameter of AskUserQuestion, and produce no text output on that turn. Each AskUserQuestion call ends your turn — the user must respond before you can continue.
+2. **AskUserQuestion** — for discrete choices with a small option set: project location (standard / here / custom path) and conflict resolution (resume / new / different location). The structured dialog renders well for "pick one of three" choices. On AskUserQuestion turns, produce NO text output — the question parameter carries all content. Before your first AskUserQuestion call, fetch its schema: call `ToolSearch(query="select:AskUserQuestion")`.
+
+Never combine both modes in the same turn. Each turn is either pure text or a single AskUserQuestion call.
 
 ### Turn Structure
 
-- **Turn 1** (no topic provided): Ask "What topic should I research?" (turn ends)
-- **Turn 1 or 2** (topic known): Extract options (Step 1), assemble the Configuration Menu (Step 2), pass it as the `question` parameter of AskUserQuestion (turn ends)
-- **Next turn** (user replied to config menu): Process choices. If source mode needs paths, ask for paths (turn ends). Otherwise, ask for project location via Step 3 (turn ends).
-- **Next turn** (location answered): Run initialize-project.sh (Step 4). Print the project path. Setup is complete.
+- **Turn 1** (no topic provided): Text output — "What topic should I research?"
+- **Turn 1 or 2** (topic known): Text output — extract options (Step 1), render the Configuration Menu (Step 2)
+- **Next turn** (user replied to config menu): Process choices. If source mode needs paths, text output asking for paths. Otherwise, AskUserQuestion for project location (Step 3).
+- **Next turn** (location answered): Run initialize-project.sh (Step 4). Text output with the project path. Setup is complete.
 
 ## Quick Example
 
 **User**: "Write a research report on quantum computing's impact on cryptography"
 
-**Skill's ONLY action this turn** — call AskUserQuestion with the menu as the question parameter:
+**Skill renders this as text output** (no AskUserQuestion — the Configuration Menu is open-ended):
 
-    AskUserQuestion(question="Research Configuration\n\nTopic: quantum computing's impact on cryptography\nDetected: type = basic\n\nDepth:\n- basic = 3-5K words, 5 sub-questions\n- detailed = 5-10K words, up to 10 sub-questions\n- deep = 8-15K words, recursive tree\n- outline = structured framework only\n- resource = annotated source list\n\nTone: objective (default) | formal | analytical | persuasive | informative | explanatory | descriptive | critical | comparative | speculative | narrative | optimistic | simple | casual | executive\nCitations: APA (default) | MLA | Chicago | Harvard | IEEE | Wikilink\nMarket: global (default) | dach | de | us | uk | fr\nSources: web (default) | local | wiki | hybrid\n\nAdvanced: output language, sub-question count, domain filter, researcher role, diagram generation — ask about any of these\n\nReply with your choices, or 'go' for defaults.")
+> **Research Configuration**
+>
+> Topic: quantum computing's impact on cryptography
+>
+> **Depth:** basic (3-5K, 5 sub-questions) | detailed (5-10K, up to 10) | deep (8-15K, recursive) | outline | resource
+> **Tone:** objective *(default)* | formal | analytical | persuasive | informative | explanatory | descriptive | critical | comparative | speculative | narrative | optimistic | simple | casual | executive
+> **Citations:** APA *(default)* | MLA | Chicago | Harvard | IEEE | Wikilink
+> **Market:** global *(default)* | dach | de | us | uk | fr
+> **Sources:** web *(default)* | local (your documents) | wiki (cogni-wiki) | hybrid (web + docs + wiki)
+>
+> Advanced: output language, sub-question count, domain filter, researcher role, diagram generation — ask about any of these.
+>
+> Reply with your choices, or "go" for defaults.
 
-The user sees the AskUserQuestion dialog and replies in the next turn. No text output accompanies the call.
+The user replies naturally: "go", "deep, analytical", "detailed with IEEE citations for DACH", etc.
 
 ## Workflow
 
@@ -63,9 +77,9 @@ Scan the user's request and extract any options they already specified. These be
 - **Wiki paths**: paths to cogni-wiki roots -> collect for wiki_paths
 - **Curate sources**: "prioritize authoritative sources" -> enable
 
-### Step 2: Configuration Menu (turn ends)
+### Step 2: Configuration Menu (text output, turn ends)
 
-Assemble the menu dynamically and pass it as the `question` parameter of a single AskUserQuestion call:
+Assemble the menu dynamically and render it as text output:
 
 **Assemble the menu dynamically:**
 
@@ -84,7 +98,7 @@ Assemble the menu dynamically and pass it as the `question` parameter of a singl
 4. Always include one line for advanced options: "Advanced: output language, sub-question count, domain filter, researcher role, diagram generation — ask about any of these"
 5. End with: `Reply with your choices, or "go" for defaults.`
 
-**Menu variations** — both use AskUserQuestion because auto-starting research without confirmation wastes compute if the user wanted to tweak something:
+**Menu variations** (both as text output — auto-starting research without confirmation wastes compute if the user wanted to tweak something):
 
 - **Normal case** (any option unset): Show the full menu with all choosers above.
 - **All four primary options pre-specified** (type + tone + citations + source mode all in the user's original prompt), or user said "just go" / "defaults are fine" / "start now": Show a compact confirmation instead:
@@ -93,24 +107,24 @@ Assemble the menu dynamically and pass it as the `question` parameter of a singl
 **Handling user responses (next turn):**
 - "go" / "defaults" / "start" -> accept detected + default values
 - Specific choices ("deep, analytical, IEEE") -> merge with detected values
-- Question about an advanced option ("what roles are available?") -> read the relevant reference file from `${CLAUDE_PLUGIN_ROOT}/references/` (agent-roles.md, writing-tones.md, citation-formats.md), explain the option, then re-present the menu via `AskUserQuestion`
+- Question about an advanced option ("what roles are available?") -> read the relevant reference file from `${CLAUDE_PLUGIN_ROOT}/references/` (agent-roles.md, writing-tones.md, citation-formats.md), explain the option as text output, then re-present the menu as text
 - Partial choices ("make it detailed") -> update that option, ask if anything else or proceed
 
 After accepting configuration: if the resolved `report_source` is `local`, `wiki`, or `hybrid`, run the **Source mode follow-up** below before proceeding to Step 3. If `report_source` is `web` (or defaulted to web), skip to Step 3.
 
-**Source mode follow-up** (turn ends): When the user selects `local`, `wiki`, or `hybrid`:
+**Source mode follow-up** (text output, turn ends): When the user selects `local`, `wiki`, or `hybrid`:
 
-- **`local`**: Call `AskUserQuestion` with: "Which documents should I analyze? Provide file paths or glob patterns (e.g., `~/docs/*.pdf`, `./data/`)."
-- **`wiki`**: Call `AskUserQuestion` with: "Which cogni-wiki should I query? Provide the wiki root path(s) (e.g., `~/cogni-wikis/my-wiki`)."
-- **`hybrid`**: Ask for both document paths (if not already set) and wiki paths (if not already set).
+- **`local`**: Text output: "Which documents should I analyze? Provide file paths or glob patterns (e.g., `~/docs/*.pdf`, `./data/`)."
+- **`wiki`**: Text output: "Which cogni-wiki should I query? Provide the wiki root path(s) (e.g., `~/cogni-wikis/my-wiki`)."
+- **`hybrid`**: Text output asking for both document paths (if not already set) and wiki paths (if not already set).
 
 If the user already provided paths in their original prompt (detected in Step 1), skip the follow-up for that path type.
 
-### Step 3: Ask for Project Location (turn ends)
+### Step 3: Ask for Project Location (AskUserQuestion, turn ends)
 
 After research configuration is confirmed, **always** ask where to store the project. The only exception is when the user already specified a location (e.g., "save in standard", "put it in ~/research", "here").
 
-Call `AskUserQuestion` with:
+This is a discrete three-option choice — use AskUserQuestion (fetch its schema via ToolSearch first if not yet loaded):
 "Where should I store this project?\n- standard (recommended) — cogni-research/{project-slug}\n- here — current directory\n- Or provide a custom path"
 
 **Handling location responses (next turn):**
@@ -142,7 +156,7 @@ Check the `already_exists` field in the JSON output.
 
 **If `already_exists` is `false`**: Print the project path. Setup is complete.
 
-**If `already_exists` is `true`**: A project with the same slug already exists. Call `AskUserQuestion` with:
+**If `already_exists` is `true`**: A project with the same slug already exists. This is a discrete three-option choice — use `AskUserQuestion`:
 
 "A research project already exists at {project_path}\n- Topic: {existing_topic}\n- Completed phases: {completed_phases}\n\nWhat would you like to do?\n1. Resume — continue this existing project\n2. New project — create a separate project alongside\n3. Different location — save elsewhere"
 

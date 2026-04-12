@@ -145,10 +145,12 @@ Present the user with a configuration menu using `AskUserQuestion` so they can s
 > "Starting **detailed** research on X — analytical tone, IEEE citations, English. Change anything? (or 'go')"
 
 **Handling user responses:**
-- "go" / "defaults" / "start" → accept detected + default values for research config, then proceed to the **mandatory location question** (Step 2b)
-- Specific choices ("deep, analytical, IEEE") → merge with detected values, then proceed to Step 2b
+- "go" / "defaults" / "start" → accept detected + default values for research config
+- Specific choices ("deep, analytical, IEEE") → merge with detected values
 - Question about an advanced option ("what roles are available?") → read the relevant reference file (`references/agent-roles.md`, `references/writing-tones.md`, etc.), explain the option, then re-present the menu
 - Partial choices ("make it detailed") → update that option, ask if anything else or proceed
+
+After accepting configuration (first, second, or fourth branch above): if the resolved `report_source` is `local`, `wiki`, or `hybrid`, run the **Source mode follow-up** below before proceeding to Step 2b. If `report_source` is `web` (or defaulted to web), skip the follow-up and go directly to Step 2b.
 
 **Source mode follow-up**: When the user selects `local`, `wiki`, or `hybrid` as their source mode (either in this menu or detected from the original prompt), ask the necessary follow-up questions before proceeding to Step 2b:
 

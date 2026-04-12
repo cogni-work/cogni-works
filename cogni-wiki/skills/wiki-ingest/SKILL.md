@@ -43,11 +43,11 @@ Walk upward from the current working directory to find the nearest `.cogni-wiki/
 - **URL**: Fetch via WebFetch, then write a local copy under `raw/` with a slug-named filename so the source is preserved even if the URL rots.
 - **Pasted text**: Write the paste to `raw/paste-{YYYYMMDD-HHMMSS}.md` first, then proceed as a file ingest. Never ingest pasted content without persisting the raw.
 
-Mandatory: every wiki page cites a file in `raw/` or a stable URL. No exceptions.
+Every wiki page must cite a file in `raw/` or a stable URL. This link to raw/ is what makes the wiki trustworthy — every claim traces through a page to its original source, and that chain breaks if any page floats without a raw anchor.
 
 ### 3. Surface key takeaways BEFORE writing the page
 
-This is the most important step. Do not skip. Before writing any page, state in plain prose:
+This is the most important step. Skipping it risks duplicating an existing page or writing content that fragments rather than compounds the wiki. Before writing any page, state in plain prose:
 
 1. **What the source is** — type, author, date, length
 2. **Three to seven key takeaways** — the claims a future reader of the wiki would actually want
@@ -96,7 +96,7 @@ Keep the category list alphabetized within its section.
 
 ### 6. Run the backlink audit
 
-Invoke `${CLAUDE_PLUGIN_ROOT}/skills/wiki-ingest/scripts/backlink_audit.py --wiki-root <wiki-root> --new-page {slug}`. The script returns JSON with candidate backlinks — existing pages that mention the new page's title, tags, or key entities.
+Invoke `${CLAUDE_PLUGIN_ROOT}/skills/wiki-ingest/scripts/backlink_audit.py --wiki-root <wiki-root> --new-page {slug}`. The script returns JSON with candidate backlinks — existing pages that mention the new page's title, tags, or key entities. If the script exits non-zero or returns malformed JSON, report the error to the user and skip the backlink step — the page itself is already written.
 
 For each candidate, read the target page, decide whether a `[[{slug}]]` link would help the reader, and if so add it in an appropriate sentence (not as a dangling "See also" unless the page already has a See-also section). Always add backlinks as natural inline references, not as dumps.
 

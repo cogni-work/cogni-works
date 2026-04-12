@@ -1,6 +1,6 @@
 ---
 name: wiki-dashboard
-description: "Generate a self-contained HTML dashboard for a Karpathy-style wiki — pages by type, tag cloud, backlink graph, recent activity, and size/age histograms. Single HTML file with no external CDN calls, safe to open offline or share. Use this skill whenever the user says 'wiki dashboard', 'visualize my wiki', 'show me the wiki in HTML', 'generate a dashboard', 'wiki overview as HTML', 'render the wiki', or wants a visual birds-eye view of their knowledge base beyond what wiki-resume offers as plain text."
+description: "Generate a self-contained HTML dashboard for a Karpathy-style wiki — pages by type, tag cloud, backlink graph, recent activity, and size/age histograms. Single HTML file with no external CDN calls, safe to open offline or share. Use this skill whenever the user says 'wiki dashboard', 'visualize my wiki', 'show me the wiki in HTML', 'generate a dashboard', 'wiki overview as HTML', 'render the wiki', 'what does my wiki look like', 'wiki graph', 'wiki visual overview', or wants a visual birds-eye view of their knowledge base beyond what wiki-resume offers as plain text."
 allowed-tools: Read, Write, Bash, Glob
 ---
 
@@ -48,7 +48,7 @@ Invoke `${CLAUDE_PLUGIN_ROOT}/skills/wiki-dashboard/scripts/render_dashboard.py 
 - Orphan pages list
 - Full page index grouped by type, with inline-link counts
 
-The output HTML is self-contained: one file, no external CSS/JS/fonts, no CDN calls. Safe to open offline and safe to share — nothing leaves the user's machine to render it.
+The output HTML is self-contained: one file, no external CSS/JS/fonts, no CDN calls. Safe to open offline and safe to share — nothing leaves the user's machine to render it. If the script exits non-zero, report the error to the user with the raw stderr output — do not write a partial or broken HTML file.
 
 ### 3. Report to the user
 
@@ -66,20 +66,15 @@ The dashboard does not touch the wiki content. It does not append to `log.md` �
 - A single HTML file at `<output>` (default `<wiki-root>/wiki-dashboard.html`)
 - Nothing else written
 
-## Design constraints
+## Constraints
 
-1. **Self-contained.** No external CSS, no CDN, no Google Fonts, no CDN JS. Inline everything.
-2. **Stdlib only.** Python 3 stdlib for rendering; no Jinja, no pandas, no plotly.
-3. **Print-friendly.** The HTML must render well when saved as PDF from a browser — no flexbox tricks that break in print layouts.
-4. **Accessible color.** The default palette uses color-safe combinations; no content conveyed by color alone.
-5. **Fast.** Even on wikis with 1,000+ pages the render should complete in under a few seconds because everything is string concatenation.
-
-## Golden rules
-
-1. **Read-only.** Dashboard never writes to the wiki.
-2. **Single file output.** Never emit a directory of assets.
-3. **No network calls at render time.** The script must not reach out to any URL.
-4. **Idempotent.** Running twice in a row produces identical bytes (modulo the "generated at" timestamp).
+1. **Read-only.** The dashboard never writes to the wiki — no log appends, no config updates.
+2. **Self-contained single file.** No external CSS, CDN, Google Fonts, or JS libraries. Inline everything into one HTML file.
+3. **No network calls.** The script must not reach out to any URL at render time.
+4. **Stdlib only.** Python 3 stdlib for rendering — no Jinja, pandas, or plotly.
+5. **Print-friendly.** Renders well when saved as PDF from a browser.
+6. **Accessible color.** No content conveyed by color alone.
+7. **Idempotent.** Running twice produces identical bytes (modulo the "generated at" timestamp).
 
 ## References
 

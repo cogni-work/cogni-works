@@ -36,7 +36,7 @@ Walk upward to find `.cogni-wiki/config.json`. If none, stop and offer `wiki-set
 
 ### 2. Run the status script
 
-Invoke `${CLAUDE_PLUGIN_ROOT}/skills/wiki-resume/scripts/wiki_status.sh --wiki-root <path>`. The script emits JSON with:
+Invoke `${CLAUDE_PLUGIN_ROOT}/skills/wiki-resume/scripts/wiki_status.sh --wiki-root <path>`. If the script exits non-zero or returns malformed JSON, fall back to reading `config.json` and `wiki/log.md` directly — report what you can, note that the full status script failed, and suggest the user check `wiki_status.sh` manually. The script emits JSON with:
 
 - `name`, `slug`, `created`, `description` — from `config.json`
 - `entries_count` — actual file count in `wiki/pages/` excluding `lint-*.md`

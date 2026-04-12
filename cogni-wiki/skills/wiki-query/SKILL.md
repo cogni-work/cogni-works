@@ -1,6 +1,6 @@
 ---
 name: wiki-query
-description: "Answer a question by reading the Karpathy-style wiki — never from memory. Claude consults wiki/index.md first, then reads the relevant wiki/pages/*.md files, synthesizes an answer with [[wikilink]] citations, and optionally files the answer back as a new wiki page so the knowledge compounds. Use this skill whenever the user says 'query the wiki', 'ask the wiki', 'what do I know about X', 'what does my wiki say about Y', 'wiki query', 'search the wiki for Z', or asks any question after setting up a wiki and expects Claude to reason from it. Also trigger when the user asks a question that clearly lives inside their wiki's domain (e.g. they have an AI-safety wiki and ask about CAI) — offer the wiki as the source of truth."
+description: "Answer a question by reading the Karpathy-style wiki — never from memory. Claude consults wiki/index.md first, then reads the relevant wiki/pages/*.md files, synthesizes an answer with [[wikilink]] citations, and optionally files the answer back as a new wiki page so the knowledge compounds. Use this skill whenever the user says 'query the wiki', 'ask the wiki', 'what do I know about X', 'what does my wiki say about Y', 'wiki query', 'search the wiki for Z', or asks any question after setting up a wiki and expects Claude to reason from it. Also trigger when the user asks 'look up X in the wiki', 'check the wiki for X', or asks a question that clearly lives inside their wiki's domain (e.g. they have an AI-safety wiki and ask about CAI) — offer the wiki as the source of truth."
 allowed-tools: Read, Write, Glob, Grep, Bash, AskUserQuestion
 ---
 
@@ -20,7 +20,7 @@ Read `${CLAUDE_PLUGIN_ROOT}/references/karpathy-pattern.md` once at the start of
 ## Never run when
 
 - No wiki exists in the current directory or any ancestor — offer `wiki-setup`
-- The question is about a topic the wiki has never ingested a source for — report honestly that the wiki is silent, do NOT fabricate an answer
+- The question is about a topic the wiki has never ingested a source for — report honestly that the wiki is silent; the user's trust depends on answers being grounded exclusively in wiki content
 
 ## Parameters
 
@@ -108,7 +108,7 @@ The log records every query so the user can see what the wiki has been asked.
 
 ## Golden rules
 
-1. **Never answer from memory.** If the wiki does not contain a claim, the answer does not contain that claim.
+1. **Answer only from wiki content.** The user chose a wiki precisely because they want answers grounded in curated sources, not in training data that may be stale or wrong. If the wiki does not contain a claim, the answer does not contain that claim.
 2. **Every factual sentence is `[[cited]]`.** Rhetoric and connective text can go uncited; claims cannot.
 3. **Contradictions are surfaced, not reconciled.** Only `wiki-update` resolves contradictions; `wiki-query` reports them.
 4. **Thin coverage is declared.** If the wiki has one page on a topic, say so — don't pretend to a consensus.

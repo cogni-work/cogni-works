@@ -1,6 +1,6 @@
 ---
 name: wiki-lint
-description: "Audit a Karpathy-style wiki for health problems — broken [[wikilinks]], orphan pages with no inbound links, stale dates, missing frontmatter fields, contradictions between pages, tag typos, and sources that no longer exist in raw/. Writes a severity-tiered report to wiki/pages/lint-YYYY-MM-DD.md and always appends to wiki/log.md. Use this skill whenever the user says 'lint the wiki', 'check the wiki', 'audit my wiki', 'health check the wiki', 'wiki lint', 'find broken links in the wiki', or after every ~5–10 ingests as a maintenance pass. Also trigger when `wiki-resume` reports the wiki has not been linted in a while."
+description: "Audit a Karpathy-style wiki for health problems — broken [[wikilinks]], orphan pages with no inbound links, stale dates, missing frontmatter fields, contradictions between pages, tag typos, and sources that no longer exist in raw/. Writes a severity-tiered report to wiki/pages/lint-YYYY-MM-DD.md and always appends to wiki/log.md. Use this skill whenever the user says 'lint the wiki', 'check the wiki', 'audit my wiki', 'health check the wiki', 'wiki lint', 'find broken links in the wiki', 'is my wiki healthy', 'anything broken in the wiki', or after every ~5–10 ingests as a maintenance pass. Also trigger when `wiki-resume` reports the wiki has not been linted in a while."
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep
 ---
 
@@ -37,29 +37,11 @@ Walk upward to find `.cogni-wiki/config.json`. Set `wiki-root`.
 
 ### 2. Run the mechanical lint script
 
-Invoke `${CLAUDE_PLUGIN_ROOT}/skills/wiki-lint/scripts/lint_wiki.py --wiki-root <path>`. The script emits JSON with three severity tiers: `errors`, `warnings`, `info`.
+Invoke `${CLAUDE_PLUGIN_ROOT}/skills/wiki-lint/scripts/lint_wiki.py --wiki-root <path>`. The script emits JSON with three severity tiers: `errors`, `warnings`, `info`. If the script exits non-zero or returns malformed JSON, report the raw error to the user and stop — do not write a partial lint report.
 
 ### 3. Read the script output
 
-Script findings include:
-
-**Errors (🔴)** — must be fixed:
-- Broken `[[wikilink]]` to a page that does not exist in `wiki/pages/`
-- Page frontmatter missing a required field (`id`, `title`, `type`, `created`, `updated`)
-- Page `id` does not match its filename
-- Source file referenced in frontmatter but not present in `raw/`
-
-**Warnings (🟡)** — should be reviewed:
-- Orphan page (no inbound `[[wikilinks]]` from any other page) — acceptable for top-level entry points, flagged otherwise
-- `updated` date more than 180 days old on a page with `status: draft`
-- Page has no `sources:` field and `type` is not `decision` or `note`
-- Tag that differs from another tag by edit distance ≤2 (likely typo: `mashine-learning` vs `machine-learning`)
-
-**Info (🔵)** — observations:
-- Page count per type
-- Average sources per page
-- Tag distribution
-- Log activity in the last 30 days
+The script categorizes findings into three severity tiers — see `./references/severity-tiers.md` for the full classification. In brief: **Errors** (broken structural contracts like dead wikilinks or missing frontmatter), **Warnings** (accumulating debt like orphan pages, stale drafts, tag typos), **Info** (descriptive statistics like page counts and tag distribution).
 
 ### 4. Read contradicted pages (semantic pass)
 
@@ -176,7 +158,7 @@ Print a ≤5-line summary:
 
 ## Rules
 
-1. **Never auto-fix findings.** Lint only reports. Fixes happen via `wiki-update`, with diff-before-write discipline.
+1. **Never auto-fix findings.** Lint only reports because auto-fixing bypasses the diff-before-write review that catches unintended changes. Fixes happen via `wiki-update`.
 2. **Log even on clean runs.** The absence of findings is itself useful signal.
 3. **Contradictions are surfaced, not resolved.** Only `wiki-update` reconciles them.
 4. **Report date is the invocation date** — if the lint runs at 23:59 and writes past midnight, the filename uses the invocation date.

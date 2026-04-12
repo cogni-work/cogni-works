@@ -391,6 +391,8 @@ Ask the user whether to generate a themed HTML version of the report with intera
 
 > **Next steps:**
 > 1. `/verify-report` — Verify claims against cited sources. Runs in a clean context window for thorough fact-checking.
+> 2. `/copywriter` — Polish the report for executive readability (BLUF structure, tighter prose, consistent tone).
+> 3. `/enrich-report` — Generate themed HTML with interactive charts and diagrams (skip if already done in Phase 5.5).
 
 ## Resumption
 

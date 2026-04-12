@@ -25,7 +25,7 @@ Read `${CLAUDE_PLUGIN_ROOT}/references/karpathy-pattern.md` once before proceedi
 
 | Parameter | Required | Description |
 |-----------|----------|-------------|
-| `--wiki-root` | No | Absolute path to the wiki directory. Defaults to `$HOME/cogni-wikis/{slug}` where `{slug}` is derived from the wiki name. If `.claude/cogni-wiki.local.md` defines `wiki_root`, use that as the parent. |
+| `--wiki-root` | No | Absolute or relative path to the wiki directory. Defaults to `cogni-wiki/{slug}` relative to the current working directory, where `{slug}` is derived from the wiki name. Use this to place a wiki outside the standard workspace layout. |
 | `--name` | Yes (prompted) | Human-readable wiki name, e.g. `"Primary Knowledge Base"` or `"AI-Safety Research Wiki"`. Used for the slug and for `.cogni-wiki/config.json`. |
 | `--description` | No | One-sentence description of the wiki's scope and purpose. Seeded into `overview.md`. |
 
@@ -35,11 +35,10 @@ If parameters are missing, ask the user once with AskUserQuestion. Do not invent
 
 ### 1. Resolve the wiki root
 
-1. Read `.claude/cogni-wiki.local.md` if present in the current working directory or any parent up to `$HOME`. Extract `wiki_root` and `default_wiki` from YAML frontmatter.
-2. If `--wiki-root` was passed, use it as-is.
-3. Otherwise, compute `{wiki_root}/{slug}` where `slug = kebab-case(name)`.
-4. If the resolved path already exists and contains `.cogni-wiki/config.json`, stop — this wiki is already set up. Report the path and exit.
-5. If the path exists but is not a wiki, ask the user whether to proceed inside it before creating files.
+1. If `--wiki-root` was passed, use it as-is (absolute or relative).
+2. Otherwise, compute `cogni-wiki/{slug}` relative to the current working directory, where `slug = kebab-case(name)`. This follows the standard cogni-plugin convention (`cogni-{plugin}/{project-slug}/`).
+3. If the resolved path already exists and contains `.cogni-wiki/config.json`, stop — this wiki is already set up. Report the path and exit.
+4. If the path exists but is not a wiki, ask the user whether to proceed inside it before creating files.
 
 ### 2. Create the directory layout
 
@@ -119,7 +118,7 @@ Do not create example pages or sample sources. An empty wiki is the correct star
 
 ## Output
 
-The wiki directory, populated as above. No file is created anywhere else in the user's environment except `.claude/cogni-wiki.local.md` if the user asked to update the default wiki pointer (and only with explicit confirmation).
+The wiki directory, populated as above. No file is created anywhere else in the user's environment.
 
 ## References
 

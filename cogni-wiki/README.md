@@ -71,20 +71,13 @@ sources: [../raw/bai-et-al-2022.pdf]
 claude plugin install cogni-wiki
 ```
 
-Configure the default wiki root (optional) in `.claude/cogni-wiki.local.md`:
-
-```markdown
----
-wiki_root: ~/cogni-wikis
-default_wiki: primary
----
-```
+Wikis are created under `cogni-wiki/{slug}/` in your current workspace by default, following the standard cogni-plugin convention. Use `--wiki-root` to override the location.
 
 ## Quick start
 
 ```
 /cogni-wiki:wiki-setup                   # Bootstrap a new wiki
-# (drop a paper in ~/cogni-wikis/primary/raw/)
+# (drop a paper in cogni-wiki/primary/raw/)
 /cogni-wiki:wiki-ingest                  # Summarise + cross-link
 /cogni-wiki:wiki-query "what did I learn about X?"
 /cogni-wiki:wiki-lint                    # After every 5–10 ingests

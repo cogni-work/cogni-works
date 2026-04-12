@@ -45,7 +45,7 @@ Three structural advantages over RAG:
 ## What This Plugin Adds on Top
 
 - **Two extra skills** — `wiki-resume` (status dashboard) and `wiki-dashboard` (self-contained HTML overview) — beyond the reference five, matching cogni-* conventions where every plugin surfaces its own state.
-- **Plugin configuration** — a `.claude/cogni-wiki.local.md` file lets the user point the plugin at a default wiki root without passing a path every invocation.
+- **Workspace-local convention** — wikis live under `cogni-wiki/{slug}/` in the current workspace, matching all other cogni-* plugins. Use `--wiki-root` to override.
 - **Integration hooks (deferred)** — future versions will let upstream insight-wave plugins (cogni-research, cogni-narrative, cogni-consulting) deposit into and read from the wiki. MVP is standalone.
 
 ## Non-goals
@@ -56,4 +56,4 @@ Three structural advantages over RAG:
 
 ## Reference Implementation
 
-[kfchou/wiki-skills](https://github.com/kfchou/wiki-skills) is the closest prior art in the Claude Code ecosystem. cogni-wiki diverges only in (a) cogni-* naming conventions, (b) two extra skills for status/dashboard, and (c) configurable wiki root via `.claude/*.local.md`.
+[kfchou/wiki-skills](https://github.com/kfchou/wiki-skills) is the closest prior art in the Claude Code ecosystem. cogni-wiki diverges only in (a) cogni-* naming conventions, (b) two extra skills for status/dashboard, and (c) workspace-relative wiki root matching cogni-* conventions.

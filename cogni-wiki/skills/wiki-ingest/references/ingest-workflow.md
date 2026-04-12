@@ -4,7 +4,7 @@ A concrete walkthrough of the ingest workflow using a realistic source. Read thi
 
 ## Scenario
 
-The user has a fresh wiki at `~/cogni-wikis/ai-research/` with three pages already:
+The user has a fresh wiki at `cogni-wiki/ai-research/` with three pages already:
 
 - `wiki/pages/rlhf-limitations.md`
 - `wiki/pages/anthropic-safety-team.md`
@@ -14,7 +14,7 @@ They drop a new paper at `raw/bai-et-al-2022-constitutional-ai.pdf` and ask Clau
 
 ## Step 1: Locate the wiki
 
-From the current working directory, walk upward looking for `.cogni-wiki/config.json`. Found at `~/cogni-wikis/ai-research/`. The working wiki root is set.
+From the current working directory, walk upward looking for `.cogni-wiki/config.json`. Found at `cogni-wiki/ai-research/`. The working wiki root is set.
 
 ## Step 2: Read the source
 
@@ -101,7 +101,7 @@ Under the `## Safety` category heading, insert:
 
 ### Step 6: Backlink audit
 
-Run `backlink_audit.py --wiki-root ~/cogni-wikis/ai-research --new-page many-shot-jailbreaking`. The script returns:
+Run `backlink_audit.py --wiki-root cogni-wiki/ai-research --new-page many-shot-jailbreaking`. The script returns:
 
 ```json
 {

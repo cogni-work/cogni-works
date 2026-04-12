@@ -50,7 +50,7 @@ references/
 
 ## Wiki Data Layout (outside the plugin)
 
-Created by `wiki-setup` at the user-chosen root (default `~/cogni-wikis/{slug}/`):
+Created by `wiki-setup` at the user-chosen root (default `cogni-wiki/{slug}/` relative to the workspace):
 
 ```
 <wiki-root>/

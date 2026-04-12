@@ -18,19 +18,24 @@ allowed-tools: Read, Write, Edit, Bash, Glob, Grep, WebSearch, Task, Skill, AskU
 
 # Research Report Skill
 
-When this skill loads:
-1. If no topic was provided → ask: "What topic should I research?" — then STOP and wait for the user's answer
-2. Once topic is known (either from the original prompt or from the user's answer to step 1):
-   - Extract any options already stated (report type, tone, citations, source mode, market, etc.)
-   - **ALWAYS present the full Configuration Menu** (Phase 0 Step 2) using AskUserQuestion — even if no options were detected, even if most will be defaults. The menu IS the skill's core UX; skipping it is a bug.
-   - The ONLY exception: the user explicitly said "just go", "defaults are fine", "start now", or specified ALL of type + tone + citations + source mode in their prompt.
-3. Never greet, re-explain capabilities, or auto-confirm defaults without showing the menu first
+This skill uses a TURN-BY-TURN protocol. Each AskUserQuestion call is the LAST action in your turn — after calling it, produce no further tool calls, no further text, no planning. The user's reply arrives as a new conversation turn.
+
+**Turn 1** (no topic provided): Call AskUserQuestion → "What topic should I research?"
+YOUR TURN ENDS. Do not proceed further.
+
+**Turn 1 or 2** (topic known): Extract options from the prompt (Step 1 below), then assemble the Configuration Menu (Step 2 below). Call AskUserQuestion with the menu.
+YOUR TURN ENDS. Do not initialize the project. Do not run WebSearch. Do not continue to Step 2b.
+
+**Next turn** (user replied to config menu): Process their choices. If source mode is local/wiki/hybrid and paths are missing → call AskUserQuestion for paths. YOUR TURN ENDS.
+Otherwise → call AskUserQuestion for project location (Step 2b). YOUR TURN ENDS.
+
+**Next turn** (location answered): Run initialize-project.sh (Step 3), then continue to Phase 0.5+. This is the first turn where research begins.
 
 ## Quick Example
 
 **User**: "Write a research report on quantum computing's impact on cryptography"
 
-**Skill presents**:
+**Skill calls AskUserQuestion** with the Configuration Menu (turn ends here — no other actions):
 > **Research Configuration**
 > Topic: "quantum computing's impact on cryptography"
 > Detected: type = basic
@@ -54,7 +59,7 @@ When this skill loads:
 >
 > Reply with your choices, or "go" for defaults.
 
-**User**: "detailed, analytical" *(or just "go")*
+**Next turn — User replies**: "detailed, analytical" *(or just "go")*
 
 **Result**: A 5000-10000 word report with inline citations, produced via:
 1. Topic decomposition into sub-questions
@@ -122,9 +127,9 @@ Scan the user's request and extract any options they already specified. These be
 - **Curate sources**: "prioritize authoritative sources" → enable
 - **Project location**: "save in standard folder", "store here", "put it in ~/research" → capture. Default: ask in Step 2b (no silent default)
 
-#### Step 2: Interactive Configuration
+#### Step 2: Configuration Menu (TURN-ENDING)
 
-Present the user with a configuration menu using `AskUserQuestion` so they can see what options exist and choose before research starts. This is the heart of Phase 0 — it makes the skill's capabilities discoverable rather than hidden behind keyword detection.
+Present the user with the configuration menu via `AskUserQuestion`. This call ends your turn — you must not call any other tool or produce any further output after it. The user's reply arrives in the next conversation turn.
 
 **Assemble the menu dynamically:**
 
@@ -143,14 +148,15 @@ Present the user with a configuration menu using `AskUserQuestion` so they can s
 4. Always include one line for advanced options: "Advanced: output language, sub-question count, domain filter, researcher role, diagram generation — ask about any of these"
 5. End with: `Reply with your choices, or "go" for defaults.`
 
-**Default behavior is to SHOW the menu.** The conditional skip below is the exception, not the rule. If in doubt, show the menu. A user who only provided a topic — even with a market like "DACH" or a depth like "deep" — has NOT specified all options.
+**AskUserQuestion is always called** — there is no skip path. The content varies:
 
-**Conditional skip** (strict): Skip the interactive menu ONLY when one of these is true:
-1. The user's **original prompt** (not a follow-up topic answer) explicitly specified ALL FOUR primary options: type + tone + citations + source mode
-2. The user used an explicit urgency signal: "just go", "start now", "defaults are fine", "use defaults"
+- **Normal case** (any option unset): Show the full menu with all choosers above.
+- **All four primary options pre-specified** (type + tone + citations + source mode all in the user's original prompt), or user said "just go" / "defaults are fine" / "start now": Show a compact confirmation instead:
+  > "Starting **detailed** research on X — analytical tone, IEEE citations, web sources. Change anything? (reply 'go' to confirm)"
 
-If neither condition is met, present the full menu. Collapse to a compact confirmation only when one of the above holds:
-> "Starting **detailed** research on X — analytical tone, IEEE citations, English. Change anything? (or 'go')"
+Either way, call AskUserQuestion. Either way, your turn ends.
+
+**End of turn**: After assembling the menu (full or compact), call AskUserQuestion with it. Do not call any other tool after this. Do not run initialize-project.sh. Do not run WebSearch. Do not continue to Step 2b or any Phase.
 
 **Handling user responses:**
 - "go" / "defaults" / "start" → accept detected + default values for research config
@@ -260,6 +266,8 @@ fi
 Available markets: `global` (default), `dach`, `de`, `us`, `uk`, `fr`. The market and output language are usually aligned (e.g., market=dach → output_language=de) but can diverge (e.g., market=fr, output_language=en for an English report about the French market).
 
 ### Phase 0.5: Preliminary Search
+
+**PREREQUISITE**: This phase requires an initialized project — `project-config.json` must exist from Step 3 (initialize-project.sh). If you have not yet run Step 3, STOP. You have skipped the Configuration Menu. Return to Phase 0 Step 2 and call AskUserQuestion.
 
 Before generating sub-questions, gather context about what information is actually available online. Sub-questions generated in a vacuum often target angles that have no searchable content, wasting researcher agents on dead ends.
 

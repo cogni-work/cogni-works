@@ -87,7 +87,11 @@ Based on report type:
 2. Include inline citations using the configured `CITATION_FORMAT` style (see Writing Guidelines below). Default fallback: `[Source: publisher-name](URL)` format
 3. **Cite aggressively** — every statistic, data point, quote, date, percentage, and named finding should have its own inline citation, even if the same source is cited multiple times in a paragraph. A well-cited report typically has 2-3 citations per paragraph. When multiple sources support the same point, cite all of them to show convergence of evidence
 4. Every factual claim must reference a source entity
-5. **URL validation**: Before citing any source, verify its source entity has a non-empty `url` field. If a source lacks a URL: use a different source that has one, or present the finding with hedging language ("Industry reports suggest...", "According to analyst estimates...") without a citation bracket. Never fabricate or guess URLs
+5. **URL validation**: Before citing any source, verify its source entity has a non-empty `url` field. Sources use three URL schemes:
+   - `https://` — clickable web URL. Use directly in citations
+   - `wiki://<slug>/<page>` — cogni-wiki source. Not clickable, but cite-worthy. If the source entity has an `original_url` field with an `https://` URL, use that for the citation link. Otherwise, cite using author/title attribution without a link — the source is still valid evidence
+   - `file://<path>` — local document. Not clickable, but cite-worthy. Cite using title attribution without a link
+   If a source has a completely empty URL: use a different source that has one, or present the finding with hedging language ("Industry reports suggest...", "According to analyst estimates...") without a citation bracket. Never fabricate or guess URLs
 5. Ensure smooth narrative flow between sections
 6. Use professional, analytical tone
 7. When you have multiple sources for the same topic, use them to build a richer narrative — compare findings, note agreements and disagreements, and synthesize across sources rather than relying on a single source per section
@@ -95,7 +99,12 @@ Based on report type:
 ### Phase 3: Output
 
 1. Write draft to `output/draft-v{DRAFT_VERSION}.md`
-2. Include a source references section at the end. **Every reference entry MUST include the source's actual URL as a clickable markdown link.** Exclude any source without a URL from the references section entirely — a reference without a URL is useless to the reader
+2. Include a source references section at the end. **Every source cited in the report body MUST appear in the references section.** Format reference URLs by scheme:
+   - `https://` URLs: render as clickable markdown links (e.g., `[https://example.com](https://example.com)`)
+   - `wiki://` URLs: if the source entity has an `original_url` with an `https://` URL, render that as a clickable link. Otherwise, append `[cogni-wiki: <slug>/<page>]` as a non-clickable provenance marker
+   - `file://` URLs: append `[Local document: <filename>]` as a non-clickable provenance marker
+   - Exclude only sources with a completely empty URL from the references section
+   Use `author` and `year` fields from the source entity when available for proper citation formatting (e.g., "Steimel, B. (2025). *Title*." instead of "cogni-wiki:smarter-service. *Title*."). Fall back to `publisher` when `author` is absent, and to `fetched_at` year when `year` is absent
 3. Return compact JSON:
 
 ```json
@@ -131,7 +140,7 @@ When OUTPUT_LANGUAGE=en (default), write in English. Sources in other languages 
   - **harvard**: `([Author Year](url))` inline, Available at reference list
   - **ieee**: Numbered `[[N](url)]` inline, numbered reference list
   - **wikilink**: Superscript `<sup>[[N]](#ref-N)</sup>` inline, anchored numbered reference list. Number sources sequentially by first appearance. Each reference entry starts with `<a id="ref-N"></a>` anchor. The inline superscript links to that anchor so readers can jump to the reference. **Every wikilink citation MUST use the full `<sup>[[N]](#ref-N)</sup>` format — never bare `[[N]]` without the `<sup>` wrapper and `#ref-N` anchor link.** Bare `[[N]]` breaks HTML export. For multiple citations, repeat the full format: `<sup>[[1]](#ref-1)</sup><sup>[[2]](#ref-2)</sup>`
-  - Always include URLs as clickable markdown hyperlinks in all formats
+  - For `https://` sources, always include URLs as clickable markdown hyperlinks. For `wiki://` and `file://` sources, use the `original_url` if available; otherwise render the reference with title/author attribution and a non-clickable provenance marker
 - **Word count targets are mandatory minimums**, not suggestions. A basic report must reach at least 3000 words, detailed at least 5000, deep at least 8000. If you find yourself finishing below the minimum, expand sections with more evidence, analysis, implications, or cross-references between findings — never pad with filler
 - If `RESEARCHER_ROLE` is provided, adopt that persona's analytical lens, terminology, and domain expertise throughout the report. For example, a "Financial Analyst" should use financial metrics and investor-oriented framing; a "Scientific Literature Reviewer" should use academic citation conventions and methodological rigor
 - If no role is provided, default to professional, analytical approach

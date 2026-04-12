@@ -24,11 +24,13 @@ All agents use sonnet. Earlier versions used haiku for parallel researchers to s
 | Report Type | Agents | Researcher Agents | Pipeline Agents | Estimated Cost |
 |-------------|--------|-------------------|-----------------|----------------|
 | Basic | ~7 | 3-5 (sonnet) | 2-3 (writer, reviewer, revisor) | ~$0.15-0.40 |
+| Basic (hybrid) | ~12-15 | 6-10 (sonnet, 3-5 per channel) | 2-3 (writer, reviewer, revisor) | ~$0.30-0.70 |
 | Detailed | ~15 | 5-10 (sonnet) | 4-6 (writer, extractor, reviewer, revisor) | ~$0.40-0.80 |
+| Detailed (hybrid) | ~20-26 | 10-20 (sonnet, 5-10 per channel) | 4-6 (writer, extractor, reviewer, revisor) | ~$0.70-1.50 |
 | Deep | ~25 | 10-20 (sonnet) | 4-6 (writer, extractor, reviewer, revisor) | ~$0.80-1.50 |
+| Deep (hybrid) | ~30-46 | 20-40 (sonnet, 10-20 per channel) | 4-6 (writer, extractor, reviewer, revisor) | ~$1.50-2.80 |
 | Outline | ~6 | 3-5 (sonnet) | 1-2 (writer, reviewer) | ~$0.10-0.30 |
 | Resource | ~6 | 3-5 (sonnet) | 1-2 (writer, reviewer) | ~$0.10-0.30 |
-| Basic (hybrid) | ~12 | 5-10 (sonnet, web+local) | 2-3 (writer, reviewer, revisor) | ~$0.30-0.70 |
 
 ## Runtime Cost Tracking
 

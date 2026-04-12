@@ -63,13 +63,17 @@ For each candidate page (ordered by relevance, highest first):
 
 1. Read the page fully
 2. Note the page's YAML frontmatter: `id`, `title`, `type`, `tags`, `sources`, `updated`
-3. Extract findings relevant to the sub-question:
+3. Extract publication metadata from the page body for downstream citation formatting:
+   - **Author**: Look for patterns like `**Autoren**:`, `**Author**:`, `**Autor**:`, `**Verfasser**:`, `**Herausgeber**:`, or `by ` followed by names. Extract the primary author's surname (e.g., "Bernhard Steimel" → "Steimel"). If multiple authors, extract all
+   - **Year**: Look for patterns like `**Erschienen**:`, `**Published**:`, `**Jahr**:`, or a four-digit year (20xx) in publication context. Also check the page `title` for trailing year patterns (e.g., "Trendbook 2024" → "2024")
+   - **Original URL**: Check the page's `sources:` frontmatter array and body text for `https://` URLs that point to the original publication. If found, record as `original_url`. Local file paths (`../raw/...`) are not original URLs
+4. Extract findings relevant to the sub-question:
    - Claims, data points, conclusions, definitions, methodologies
    - Note which wiki and page each finding comes from
    - Preserve the page's own source traceability (`sources:` frontmatter field)
    - Follow `[[wikilinks]]` to related pages if they seem directly relevant (read up to 3 linked pages per wiki, counting against the 12-page cap)
-4. Flag contradictions between pages — if two pages disagree, record both positions with their page references
-5. Track cumulative word count across all pages read — stop deep analysis if approaching 15,000 words of extracted content
+5. Flag contradictions between pages — if two pages disagree, record both positions with their page references
+6. Track cumulative word count across all pages read — stop deep analysis if approaching 15,000 words of extracted content
 
 ### Phase 3: Source + Context Entity Creation
 
@@ -79,7 +83,7 @@ For each wiki page that yielded findings, create a source entity:
 bash "${CLAUDE_PLUGIN_ROOT}/scripts/create-entity.sh" \
   --project-path "${PROJECT_PATH}" \
   --entity-type source \
-  --data '{"frontmatter": {"url": "wiki://<wiki-slug>/<page-slug>", "title": "<page title from frontmatter>", "publisher": "cogni-wiki:<wiki-slug>", "fetch_method": "Read", "fetched_at": "<timestamp>", "quality_score": 0.90}, "content": ""}' \
+  --data '{"frontmatter": {"url": "wiki://<wiki-slug>/<page-slug>", "title": "<page title from frontmatter>", "publisher": "cogni-wiki:<wiki-slug>", "author": "<extracted author or empty string>", "year": "<extracted year or empty string>", "original_url": "<https URL from sources/body, or empty string>", "fetch_method": "Read", "fetched_at": "<timestamp>", "quality_score": 0.90}, "content": ""}' \
   --json
 ```
 
@@ -88,6 +92,9 @@ Notes on source entity fields:
 - `publisher` is `cogni-wiki:<wiki-slug>` — enables downstream filtering and attribution
 - `quality_score` defaults to 0.90 because wiki pages are pre-curated and synthesized; adjust down to 0.80 if the page is `status: draft` or `status: stale`
 - `title` comes from the page's YAML frontmatter `title` field
+- `author` is extracted from the wiki page body (e.g., "Autoren: Bernhard Steimel" → "Steimel"). Leave as empty string if no author is identifiable. Never fabricate authors
+- `year` is extracted from the wiki page body (e.g., "Erschienen: 2025" → "2025"). Leave as empty string if no year is identifiable. Never guess years
+- `original_url` is the first `https://` URL found in the page's `sources:` frontmatter array or body text that points to the original publication. This gives the writer a clickable URL for the bibliography. Leave as empty string if no web URL is found — local file paths (`../raw/...`) do not qualify
 
 Create a single context entity synthesizing all findings across all wikis:
 

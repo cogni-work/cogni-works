@@ -234,6 +234,8 @@ Deep mode with wiki sources: use wiki-researcher (not deep-researcher), same rat
 
 Run available researcher types in parallel based on configured paths, then merge all findings in Phase 3. This produces the richest context.
 
+Hybrid mode is additive: each channel gets the full sub-question set. If deep mode produces 8 leaf sub-questions, hybrid spawns 8 web-researchers + 8 wiki-researchers (16 total), not 4+4. Wiki and local researchers are cheap (local file reads, no rate limiting), so the added coverage justifies the extra agents. Only the batching cap (4-5 concurrent) constrains throughput.
+
 ```
 For each sub-question entity in 00-sub-questions/data/:
   # Wiki research (if wiki_paths configured)

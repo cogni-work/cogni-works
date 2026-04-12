@@ -7,7 +7,12 @@ cogni-research is a multi-agent research report generator inspired by GPT-Resear
 ## Architecture
 
 ```
-research-report skill (orchestrator, phases 0-6)
+research-setup skill (configuration, project init, AskUserQuestion)
+  → interactive Configuration Menu (report type, tone, citations, market, source mode)
+  → project directory creation via initialize-project.sh
+
+research-report skill (orchestrator, phases 0.5-6)
+  → prerequisite gate: invokes research-setup if no project-config.json
   → section-researcher agents (parallel web research, sonnet)
   → local-researcher agents (parallel local document analysis, sonnet)
   → wiki-researcher agents (parallel cogni-wiki querying, sonnet)
@@ -23,7 +28,7 @@ verify-report skill (claims verification, separate context window)
   → revisor agent (feedback incorporation, sonnet)
 ```
 
-The two-skill split ensures claims verification runs in a fresh context window. The research pipeline (phases 0-4) saturates context with sub-questions, contexts, sources, and the draft — leaving insufficient capacity for thorough claims verification. verify-report loads only the draft and source entities, giving the claims pipeline full attention.
+The three-skill split serves two purposes: (1) research-setup isolates user interaction from the research pipeline — the model cannot race past configuration to start research because setup has no research phases; (2) verify-report runs claims verification in a fresh context window, since the research pipeline saturates context with sub-questions, contexts, sources, and the draft.
 
 Five report types: basic, detailed, deep, outline, resource.
 Four source modes: web (default), local (documents only), wiki (cogni-wiki instances), hybrid (web + documents + wikis).

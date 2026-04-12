@@ -13,53 +13,20 @@ description: |
   or requests comprehensive topic analysis with citations.
   Also use when the user wants to "resume research", "continue research report", "pick up the research",
   "finish the report", "what happened to my report", or resume an interrupted research run.
-allowed-tools: Read, Write, Edit, Bash, Glob, Grep, WebSearch, Task, Skill, AskUserQuestion
+allowed-tools: Read, Write, Edit, Bash, Glob, Grep, WebSearch, Task, Skill
 ---
 
 # Research Report Skill
 
-This skill uses a TURN-BY-TURN protocol. Each AskUserQuestion call is the LAST action in your turn — after calling it, produce no further tool calls, no further text, no planning. The user's reply arrives as a new conversation turn.
-
-**Turn 1** (no topic provided): Call AskUserQuestion → "What topic should I research?"
-YOUR TURN ENDS. Do not proceed further.
-
-**Turn 1 or 2** (topic known): Extract options from the prompt (Step 1 below), then assemble the Configuration Menu (Step 2 below). Call AskUserQuestion with the menu.
-YOUR TURN ENDS. Do not initialize the project. Do not run WebSearch. Do not continue to Step 2b.
-
-**Next turn** (user replied to config menu): Process their choices. If source mode is local/wiki/hybrid and paths are missing → call AskUserQuestion for paths. YOUR TURN ENDS.
-Otherwise → call AskUserQuestion for project location (Step 2b). YOUR TURN ENDS.
-
-**Next turn** (location answered): Run initialize-project.sh (Step 3), then continue to Phase 0.5+. This is the first turn where research begins.
+This skill executes the research pipeline (Phases 0.5-6) on an initialized project. Configuration and project creation are handled by the **research-setup** skill — this skill does not present configuration menus or ask the user for preferences.
 
 ## Quick Example
 
 **User**: "Write a research report on quantum computing's impact on cryptography"
 
-**Skill calls AskUserQuestion** with the Configuration Menu (turn ends here — no other actions):
-> **Research Configuration**
-> Topic: "quantum computing's impact on cryptography"
-> Detected: type = basic
->
-> **Depth** (research scope):
-> `basic` = 3-5K words, 5 sub-questions — standard report
-> `detailed` = 5-10K words, up to 10 sub-questions — comprehensive
-> `deep` = 8-15K words, recursive tree — maximum depth
-> `outline` = structured framework only (no prose)
-> `resource` = annotated source list / bibliography
->
-> **Tone**: objective *(default)* | analytical | critical | persuasive | formal | informative | explanatory | descriptive | comparative | speculative | narrative | optimistic | simple
-> **Citations**: APA *(default)* | MLA | Chicago | Harvard | IEEE | Wikilink
-> **Market**: global *(default)* | dach | de | us | uk | fr (localizes search queries + authority sources)
-> **Sources** (where to research):
-> `web` *(default)* = search the internet
-> `local` = analyze your documents (PDF, DOCX, MD, CSV, ...)
-> `wiki` = query your cogni-wiki knowledge bases
-> `hybrid` = combine web + documents + wiki
-> Advanced: output language, sub-question count, domain filter, researcher role, diagram generation — ask about any of these
->
-> Reply with your choices, or "go" for defaults.
-
-**Next turn — User replies**: "detailed, analytical" *(or just "go")*
+1. Skill checks for an initialized project (project-config.json)
+2. Not found -> invokes `Skill("research-setup")` with the user's topic. Setup handles all configuration turns.
+3. After setup completes, reads project-config.json and starts Phase 0.5.
 
 **Result**: A 5000-10000 word report with inline citations, produced via:
 1. Topic decomposition into sub-questions
@@ -104,138 +71,16 @@ Read these reference files when the corresponding phase needs them:
 
 ## Workflow
 
-### Phase 0: Project Initialization
+### Phase 0: Project Prerequisite
 
-A well-structured project directory is the foundation for resumability and cross-agent coordination. Without it, agents cannot find each other's outputs, the review loop cannot track iterations, and a crash mid-research loses all progress.
+Check for an initialized project. Look for `project-config.json` in:
+1. Path provided by user (if any)
+2. `cogni-research/{topic-slug}/.metadata/project-config.json` (relative to cwd)
+3. `./{topic-slug}/.metadata/project-config.json`
 
-#### Step 1: Extract options from user's prompt
+**If project-config.json exists**: Store `PROJECT_PATH` and continue to Phase 0.1.
 
-Scan the user's request and extract any options they already specified. These become "detected" settings that won't be re-asked in the configuration menu.
-
-- **Report type**: keywords like "detailed", "deep research", "outline", "sources" → map to basic/detailed/deep/outline/resource (see `references/report-types.md`)
-- **Tone**: style keywords like "analytical", "persuasive", "formal" → map to tone from `references/writing-tones.md`. Default: "objective"
-- **Citation format**: "IEEE", "APA format", "Chicago style", "wikilink", "superscript citations" → capture. Default: "apa". See `references/citation-formats.md`
-- **Market**: "French market", "DACH", "for Germany", "für Deutschland", "US market", "UK market" → map to region code (fr, dach, de, us, uk). Default: "global"
-- **Output language**: "in German", "auf Deutsch" → "de" (+ market=dach if no explicit market). "in French", "en français" → "fr" (+ market=fr). Default: auto (derived from market)
-- **Language** (legacy): "in German" → market=dach, output_language=de. Default: "en"
-- **Source URLs**: any URLs in the prompt → collect for pre-fetch
-- **Query domains**: "only .gov sources", "restrict to arxiv" → collect domains
-- **Max subtopics**: "use 8 sub-questions", "12 dimensions" → capture count
-- **Report source**: "analyze these PDFs", "research from my files" → "local"; "use my wiki", "query the wiki", "from my wiki" → "wiki"; combinations like "wiki and web" → "hybrid". Default: "web"
-- **Document paths**: file paths or glob patterns for local/hybrid mode
-- **Wiki paths**: paths to cogni-wiki roots (e.g., `~/cogni-wikis/my-wiki`) → collect for wiki_paths. Triggered by wiki directory paths or mentions of "wiki", "knowledge base"
-- **Curate sources**: "prioritize authoritative sources" → enable
-- **Project location**: "save in standard folder", "store here", "put it in ~/research" → capture. Default: ask in Step 2b (no silent default)
-
-#### Step 2: Configuration Menu (TURN-ENDING)
-
-Present the user with the configuration menu via `AskUserQuestion`. This call ends your turn — you must not call any other tool or produce any further output after it. The user's reply arrives in the next conversation turn.
-
-**Assemble the menu dynamically:**
-
-1. Show the detected topic
-2. List any options already extracted from the prompt (e.g., "Detected: type = deep, citations = IEEE")
-3. For **unset primary options**, show the compact chooser:
-   - **Depth** (only if report type not yet detected): list all 5 types with word counts and one-line descriptions
-   - **Tone** (only if not detected): list all 13 options, mark default
-   - **Citations** (only if not detected): list all 5 formats, mark default
-   - **Market** (only if not detected): global | dach | de | us | uk | fr
-   - **Sources** (only if report_source not detected): show all 4 modes with one-line descriptions:
-     - `web` *(default)* = search the internet
-     - `local` = analyze your documents (PDF, DOCX, MD, CSV, ...)
-     - `wiki` = query your cogni-wiki knowledge bases
-     - `hybrid` = combine web + documents + wiki
-4. Always include one line for advanced options: "Advanced: output language, sub-question count, domain filter, researcher role, diagram generation — ask about any of these"
-5. End with: `Reply with your choices, or "go" for defaults.`
-
-**AskUserQuestion is always called** — there is no skip path. The content varies:
-
-- **Normal case** (any option unset): Show the full menu with all choosers above.
-- **All four primary options pre-specified** (type + tone + citations + source mode all in the user's original prompt), or user said "just go" / "defaults are fine" / "start now": Show a compact confirmation instead:
-  > "Starting **detailed** research on X — analytical tone, IEEE citations, web sources. Change anything? (reply 'go' to confirm)"
-
-Either way, call AskUserQuestion. Either way, your turn ends.
-
-**End of turn**: After assembling the menu (full or compact), call AskUserQuestion with it. Do not call any other tool after this. Do not run initialize-project.sh. Do not run WebSearch. Do not continue to Step 2b or any Phase.
-
-**Handling user responses:**
-- "go" / "defaults" / "start" → accept detected + default values for research config
-- Specific choices ("deep, analytical, IEEE") → merge with detected values
-- Question about an advanced option ("what roles are available?") → read the relevant reference file (`references/agent-roles.md`, `references/writing-tones.md`, etc.), explain the option, then re-present the menu
-- Partial choices ("make it detailed") → update that option, ask if anything else or proceed
-
-After accepting configuration (first, second, or fourth branch above): if the resolved `report_source` is `local`, `wiki`, or `hybrid`, run the **Source mode follow-up** below before proceeding to Step 2b. If `report_source` is `web` (or defaulted to web), skip the follow-up and go directly to Step 2b.
-
-**Source mode follow-up**: When the user selects `local`, `wiki`, or `hybrid` as their source mode (either in this menu or detected from the original prompt), ask the necessary follow-up questions before proceeding to Step 2b:
-
-- **`local`**: "Which documents should I analyze? Provide file paths or glob patterns (e.g., `~/docs/*.pdf`, `./data/`)."
-- **`wiki`**: "Which cogni-wiki should I query? Provide the wiki root path(s) (e.g., `~/cogni-wikis/my-wiki`)."
-- **`hybrid`**: Ask for both document paths (if `document_paths` not already set) and wiki paths (if `wiki_paths` not already set). Web research is always included in hybrid mode.
-
-If the user already provided paths in their original prompt (detected in Step 1), skip the follow-up for that path type.
-
-#### Step 2b: Ask for project location (mandatory)
-
-After research configuration is confirmed, **always** ask where to store the project — even if the user said "go" or "defaults". The only exception is when the user already explicitly specified a location in their original prompt or config responses (e.g., "save in standard", "put it in ~/research", "here").
-
-Use `AskUserQuestion` to present:
-
-> **Where should I store this project?**
-> - `standard` *(recommended)* — `cogni-research/{project-slug}` (organized under plugin namespace)
-> - `here` — current directory (`{cwd}/{project-slug}`)
-> - Or provide a custom path
-
-The reason this is a separate, explicit question: reports that land in the wrong directory are hard to find later and break the user's workspace organization. Asking once upfront avoids that.
-
-**Handling location responses:**
-- "standard" / "recommended" → `cogni-research/` relative to current working directory
-- "here" → current working directory
-- Any path → use as-is
-
-#### Step 3: Initialize project
-
-Once configuration is confirmed and the user has answered the location question (Step 2b), resolve the workspace path:
-- "here" → current working directory
-- "standard" → `cogni-research/` relative to current working directory
-- custom path → use as-is
-
-Then initialize:
-
-```bash
-bash "${CLAUDE_PLUGIN_ROOT}/scripts/initialize-project.sh" \
-  --topic "<user topic>" --type <basic|detailed|deep|outline|resource> \
-  --workspace "<workspace path>" \
-  [--market "<region-code>"] \
-  [--output-language "<lang>"] \
-  [--tone "<tone>"] \
-  [--citation-format "<apa|mla|chicago|harvard|ieee>"] \
-  [--source-urls "<url1,url2,...>"] \
-  [--query-domains "<domain1,domain2,...>"] \
-  [--max-subtopics <N>] \
-  [--report-source "<web|local|hybrid>"] \
-  [--document-paths "<path1,path2,...>"] \
-  [--curate-sources]
-```
-
-Check the `already_exists` field in the JSON output before proceeding.
-
-**If `already_exists` is `false`**: store the returned `project_path` and continue to Phase 0.1.
-
-**If `already_exists` is `true`**: a project with the same slug already exists at that location. Do NOT silently continue — this would overwrite or mix into the user's prior research. Present a choice via `AskUserQuestion`:
-
-> A research project already exists at `{project_path}`
-> - **Topic**: "{existing_topic}"
-> - **Completed phases**: {completed_phases}
->
-> What would you like to do?
-> 1. **Resume** — continue this existing project from where it left off
-> 2. **New project** — create a separate project alongside the existing one
-> 3. **Different location** — save the new project somewhere else
-
-Handle the user's choice:
-- **Resume**: read `.metadata/execution-log.json` from the existing project and jump to the Resumption logic (skip remaining Phase 0 steps)
-- **New project**: re-run `initialize-project.sh` with `--suffix 2`. If that also collides, increment the suffix (3, 4, ...) until a fresh directory is created
-- **Different location**: ask the user for a path, then re-run `initialize-project.sh` with the new `--workspace` value
+**If project-config.json does NOT exist**: Invoke `Skill("research-setup", args: "<user's original request>")` and STOP. Do not proceed to any research phase. The research-setup skill handles all configuration and project initialization. After setup completes, read the created `project-config.json` and continue to Phase 0.1.
 
 ### Phase 0.1: Market & Language Resolution
 
@@ -267,7 +112,7 @@ Available markets: `global` (default), `dach`, `de`, `us`, `uk`, `fr`. The marke
 
 ### Phase 0.5: Preliminary Search
 
-**PREREQUISITE**: This phase requires an initialized project — `project-config.json` must exist from Step 3 (initialize-project.sh). If you have not yet run Step 3, STOP. You have skipped the Configuration Menu. Return to Phase 0 Step 2 and call AskUserQuestion.
+**PREREQUISITE**: `project-config.json` must exist. If it does not, STOP — invoke `Skill("research-setup")` to configure and initialize the project. Do not proceed without an initialized project.
 
 Before generating sub-questions, gather context about what information is actually available online. Sub-questions generated in a vacuum often target angles that have no searchable content, wasting researcher agents on dead ends.
 

@@ -12,7 +12,7 @@ description: |
   "research settings", "research options", "research configuration",
   "configure my report", "change research settings", "report settings",
   "new research project", "initialize research", "research preferences".
-allowed-tools: Read, Bash, Glob, ToolSearch, AskUserQuestion
+allowed-tools: Read, Bash, Glob, ToolSearch, AskUserQuestion, Skill
 ---
 
 # Research Setup
@@ -115,10 +115,30 @@ After accepting configuration: if the resolved `report_source` is `local`, `wiki
 **Source mode follow-up** (text output, turn ends): When the user selects `local`, `wiki`, or `hybrid`:
 
 - **`local`**: Text output: "Which documents should I analyze? Provide file paths or glob patterns (e.g., `~/docs/*.pdf`, `./data/`)."
-- **`wiki`**: Text output: "Which cogni-wiki should I query? Provide the wiki root path(s) (e.g., `~/cogni-wikis/my-wiki`)."
-- **`hybrid`**: Text output asking for both document paths (if not already set) and wiki paths (if not already set).
+- **`wiki`** or **`hybrid`** (wiki path needed): Run **wiki discovery** first (see below), then present results.
+- **`hybrid`**: Also ask for document paths if not already set.
 
 If the user already provided paths in their original prompt (detected in Step 1), skip the follow-up for that path type.
+
+**Wiki discovery** — instead of asking the user to type wiki paths from memory, auto-discover available wikis:
+
+1. Use `Glob` to find `.cogni-wiki/config.json` files. Search these locations in order, stop after the first that yields results:
+   - Current working directory tree: `**/.cogni-wiki/config.json`
+   - `$HOME` with shallow depth: `*/.cogni-wiki/config.json` and `*/*/.cogni-wiki/config.json`
+2. For each found config, `Read` the JSON and extract `name`, `slug`, `description`. The wiki root is the config file's parent's parent directory.
+3. Present discovered wikis as a numbered pick-list (text output):
+
+```
+Available wikis:
+
+1. {{name}} — {{description}} ({{wiki-root-path}})
+2. {{name}} — {{description}} ({{wiki-root-path}})
+
+Select wikis by number (e.g., "1" or "1,2"), or provide a custom path.
+```
+
+4. If **no wikis found**: fall back to the manual prompt: "No wikis detected in your workspace. Provide the wiki root path(s) (e.g., `~/my-wiki/`)."
+5. Parse the user's reply: numbers map to discovered paths, free-text paths are used as-is. Collect all selected paths into `wiki_paths`.
 
 ### Step 3: Ask for Project Location (AskUserQuestion, turn ends)
 
@@ -169,5 +189,6 @@ Handle the response:
 
 When setup is complete, print:
 
-> Research project initialized at `{project_path}`
-> Run `/research-report` to start the research, or the research-report skill will pick it up automatically.
+> Research project initialized at `{project_path}` — starting research...
+
+Then immediately invoke `Skill("research-report")` to begin the research pipeline. The research-report skill will read the just-created `project-config.json` and start Phase 0.5 without further user interaction.

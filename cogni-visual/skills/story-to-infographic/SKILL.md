@@ -207,6 +207,11 @@ does not carry it, infer one register from the source:
 Record the inferred tone verbatim in the brief frontmatter — renderers use it as a
 micro-copy signal, nothing more.
 
+**Citation handling.** When the source contains inline citations (e.g., `[Source: Publisher](URL)`,
+footnote markers, or parenthetical references), strip them before extracting data inventory
+items. Record publisher names separately — they feed the footer Source-Line. Do not count
+citation markup toward word limits in any downstream block.
+
 **Pull-quote candidates.** Scan the source for direct quotations attributed to a named speaker
 or for a single sentence so striking the brief should lift it verbatim. At most one survives to
 the brief; if none qualifies, omit the `pull-quote` block entirely.

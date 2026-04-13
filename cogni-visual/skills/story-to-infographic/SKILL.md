@@ -19,15 +19,16 @@ description: >
   whiteboard) rendered via /render-infographic-handdrawn into an Excalidraw scene, or
   an editorial family (economist — The Economist data page style, plus editorial,
   data-viz, corporate) rendered via /render-infographic-editorial into a Pencil MCP
-  .pen file. The unified /render-infographic command auto-routes based on the brief's
-  style_preset. Important: this skill CREATES the brief from a narrative source — it
-  does NOT render an existing brief (use /render-infographic to auto-route or one of
-  the direct render commands for that), does NOT create slides (use story-to-slides),
+  .pen file. After brief creation, the skill auto-dispatches /render-infographic to
+  render the output (disable with render: false). Important: this skill CREATES the
+  brief from a narrative source and then renders it — it does NOT render an existing
+  brief (use /render-infographic to auto-route or one of the direct render commands
+  for that), does NOT create slides (use story-to-slides),
   does NOT create a scrollable web page (use story-to-web), does NOT create a
   multi-poster storyboard (use story-to-storyboard), and does NOT enrich an existing
   report with inline visuals (use enrich-report).
-allowed-tools: Read, Write, Edit, Bash, Grep, Glob, AskUserQuestion, Agent
-version: 0.2.1
+allowed-tools: Read, Write, Edit, Bash, Grep, Glob, AskUserQuestion, Agent, Skill
+version: 0.3.0
 ---
 
 # Story-to-Infographic Skill
@@ -49,7 +50,8 @@ The brief routes to one of two rendering families, picked by `style_preset`:
 | Editorial | `economist`, `editorial`, `data-viz`, `corporate` | `render-infographic-pencil` (opus) | `.pen` file |
 
 The universal entry point is `/render-infographic`, which reads the brief's `style_preset` and
-auto-routes. This skill only produces the brief — rendering is a separate, downstream step.
+auto-routes. After producing the brief, this skill auto-dispatches `/render-infographic` by
+default (disable with `render: false` to produce the brief only).
 
 > **Concurrency constraint.** Both Excalidraw render agents share a single MCP canvas. Never
 > dispatch two Excalidraw-based renders in parallel — they will draw over each other. If a
@@ -85,6 +87,7 @@ Briefs contain no color fields.
 | `palette_override` | `theme` | Either `theme` (default — renderers derive the Economist-discipline palette from the project theme) or `canonical` (force Economist's canonical red/amber/near-black/cream regardless of theme). Only meaningful for `style_preset: economist`. |
 | `interactive` | `true` | When `true`, present choices via AskUserQuestion |
 | `stakeholder_review` | `interactive` | When `true`, run brief-review-assessor after validation |
+| `render` | `true` | When `true`, auto-dispatch `/render-infographic` after validation. Set `false` to produce brief only. |
 | `governing_thought` | auto-extracted | Pre-computed governing thought from caller |
 
 ---
@@ -420,52 +423,59 @@ transformation_notes: |
 
 ---
 
-### Step 10: Guide to Rendering
+### Step 10: Summary and Render Dispatch
 
-Tell the user the brief is ready. The universal entry point is `/render-infographic`, which
-auto-routes to the right rendering family based on the brief's `style_preset`. Power users
-who want to skip the dispatch step can call the direct commands.
+#### Step 10a: Brief Summary (always runs)
 
-| Style Preset | Family | Output | Universal | Direct |
-|--------------|--------|--------|-----------|--------|
-| `sketchnote`, `whiteboard` | Hand-drawn (Mike Rohde / RSA Animate) | `.excalidraw` scene | `/render-infographic` | `/render-infographic-handdrawn` |
-| `economist` | Editorial (The Economist data page — flagship) | `.pen` file | `/render-infographic` | `/render-infographic-editorial` |
-| `editorial`, `data-viz`, `corporate` | Editorial (data journalism tradition) | `.pen` file | `/render-infographic` | `/render-infographic-editorial` |
+Print a structured summary to the user:
 
-Example message (sketchnote/whiteboard):
+- Output path
+- Layout type
+- Style preset and family
+- Orientation
+- Content block count
+- Total word count
+- Distillation ratio (source words → brief words)
+
+Reference: the style preset routes to the following rendering agents:
+
+| Style Preset | Family | Output | Rendering Agent |
+|--------------|--------|--------|-----------------|
+| `sketchnote`, `whiteboard` | Hand-drawn (Mike Rohde / RSA Animate) | `.excalidraw` scene | sketchnote or whiteboard agent |
+| `economist` | Editorial (The Economist data page — flagship) | `.pen` file | pencil agent |
+| `editorial`, `data-viz`, `corporate` | Editorial (data journalism tradition) | `.pen` file | pencil agent |
+
+#### Step 10b: Dispatch Render (conditional)
+
+**When `render` parameter is `true` (default):**
+
+Immediately dispatch the render by calling:
+
+```
+Skill("render-infographic", args: "{output_path}")
+```
+
+The `/render-infographic` command handles everything from here: brief discovery (skipped
+because we pass the path), style_preset routing, agent dispatch, and the post-render
+interactive edit checkpoint. Do not duplicate any of that logic here.
+
+**When `render` parameter is `false`:**
+
+Tell the user the brief is ready and how to render it manually:
 
 > "Infographic brief written to `{output_path}`.
-> Style preset: **{style_preset}** (hand-drawn family) — run **`/render-infographic`** to
-> render. After the render completes, the scene is live in your Excalidraw browser and
-> you can tweak anything on the canvas; just tell me **`save`** when you're done and I'll
-> re-export the final version to disk."
+> Run **`/render-infographic`** to render, or use the direct commands:
+> `/render-infographic-handdrawn` (sketchnote/whiteboard) or
+> `/render-infographic-editorial` (economist/editorial/data-viz/corporate)."
 
-Example message (economist):
-
-> "Infographic brief written to `{output_path}`.
-> Style preset: **economist** (The Economist data page) — run **`/render-infographic`** to
-> render. After the render completes, the scene is live in your Pencil browser and you can
-> tweak any frame; tell me **`save`** when you're done and I'll refresh the PNG preview."
-
-Example message (editorial/data-viz/corporate):
-
-> "Infographic brief written to `{output_path}`.
-> Style preset: **{style_preset}** (editorial family) — run **`/render-infographic`** to
-> render. After the render completes, the scene is live in your Pencil browser and you can
-> tweak any frame; tell me **`save`** when you're done and I'll refresh the PNG preview."
-
-Report: layout type, style preset, orientation, block count, total word count, distillation ratio (source words → brief words).
-
-**Post-render edit checkpoint** (reminder for the user and for future maintainers of this
-skill): the render commands (`/render-infographic`, `/render-infographic-handdrawn`,
-`/render-infographic-editorial`) all include an interactive edit checkpoint as their final
-step. After the agent finishes drawing, the command prints a prompt telling the user they
-can edit the live canvas in the browser and say `save` to re-export the final state. This
-is the mechanism that lets a user's manual touch-ups (move a zone, fix a typo, swap an
-icon, adjust an accent mark) become the persisted result. The checkpoint is load-bearing
-— without it, manual edits in the browser would be silently lost the next time the
-pipeline runs. Do not remove it from the render commands when editing them in the future;
-if you restructure the commands, preserve the post-render `save` affordance.
+**Post-render edit checkpoint** (informational note for maintainers): the render commands
+(`/render-infographic`, `/render-infographic-handdrawn`, `/render-infographic-editorial`)
+all include an interactive edit checkpoint as their final step. After the agent finishes
+drawing, the command prints a prompt telling the user they can edit the live canvas in
+the browser and say `save` to re-export the final state. This checkpoint is load-bearing
+— without it, manual edits in the browser would be silently lost. Do not remove it from
+the render commands when editing them in the future; if you restructure the commands,
+preserve the post-render `save` affordance.
 
 ---
 

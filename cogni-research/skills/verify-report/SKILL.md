@@ -244,6 +244,18 @@ When verdict="accept" or iteration reaches 3: proceed to Phase 5.
 > - Review iterations: N, final score: X.XX
 > - Verified report: `output/report.md`
 
+4. **Recommend next steps** — two independent downstream paths:
+
+> **Next steps**
+> The report is now fact-checked. Two independent downstream paths:
+>
+> **Polish & Visualize** (most common — keeps the research report format):
+> 1. `/copywriter` — Polish for executive readability (BLUF, tighter prose)
+> 2. `/enrich-report` — Themed HTML with interactive charts
+>
+> **Narrative path** (alternative — transforms the report into a story-arc document):
+> - `/cogni-narrative:narrative` — Executive narrative with story arc framework
+
 ## Error Recovery
 
 | Scenario | Recovery |

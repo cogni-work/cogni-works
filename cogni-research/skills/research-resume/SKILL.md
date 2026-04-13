@@ -160,22 +160,22 @@ For conditions 2-7, research-report has built-in resumption logic — it reads `
 - Verify before polish: running copywrite on unverified claims wastes effort if claims get revised
 - Verify before narrative: narrative transformation should use the verified draft
 - Polish before visual enrichment: enrich-report should use the polished prose
+- Narrative is NOT a precondition for enrich-report — they are independent paths
 
 ### Downstream Options for Completed Reports
 
-When the project is fully complete (report finalized + claims verified or user chose to skip verification), present downstream options grouped by purpose:
+When the project is fully complete (report finalized + claims verified or user chose to skip verification), present downstream options as two independent paths:
 
-**Verify & Polish**
-- `verify-report` — Verify claims against cited sources (if not yet done)
-- `cogni-copywriting:copywrite` — Polish report for executive readability (BLUF, tighter prose, consistent tone)
+**Path A — Polish & Visualize** (keeps the research report format):
+1. `cogni-copywriting:copywrite` — Polish report for executive readability (BLUF, tighter prose, consistent tone)
+2. `cogni-visual:enrich-report` — Themed HTML with interactive charts and concept diagrams
 
-**Transform**
+**Path B — Narrative transformation** (converts to story-arc document):
 - `cogni-narrative:narrative` — Transform into executive narrative with story arc framework
+- After narrative: optionally polish with `cogni-copywriting:copywrite`, then visualize with `cogni-visual:enrich-report`
 
-**Visualize**
-- `cogni-visual:enrich-report` — Themed HTML with interactive charts and concept diagrams (skip if already done in Phase 5.5)
-
-**New Project**
+**Other:**
+- `verify-report` — Verify claims against cited sources (if not yet done)
 - `research-setup` — Start a new research project
 
 Highlight the top 2-3 most impactful actions based on what hasn't been done yet. Offer to proceed with the user's choice immediately.

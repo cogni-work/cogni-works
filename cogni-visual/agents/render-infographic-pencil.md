@@ -530,7 +530,7 @@ output JSON's `warnings` field.
             --accent-primary: #C00000;
             --surface: #FBF9F3;
             /* ... all resolved tokens ... */
-            max-width: 860px;
+            max-width: 1080px;
             margin: 0 auto;
             font-family: var(--font-body, system-ui, sans-serif);
           }

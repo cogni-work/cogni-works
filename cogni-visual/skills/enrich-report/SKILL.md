@@ -272,7 +272,7 @@ The agent uses Pencil MCP tools (`open_document`, `batch_design`, `export_nodes`
 | 2 (brief only) | pre-existing | generated | generated | generated (best-effort) | not generated |
 | 3 (from scratch) | generated | generated | generated | generated (best-effort) | generated |
 
-**Three-tier infographic priority in Phase 5:** The Python script uses the highest-quality artifact available: HTML fragment > PNG > JSON fallback. The HTML fragment provides native responsive HTML with Pencil's editorial precision; the PNG embeds as base64 with a lightbox; the JSON generates inline HTML from templates.
+**Three-tier infographic priority in Phase 5:** The Python script uses the highest-quality artifact available: PNG (pixel-perfect) > HTML fragment (fallback) > JSON fallback. The PNG embeds the Pencil-rendered image as base64 with a lightbox for full-screen viewing; the HTML fragment provides native responsive HTML as fallback when no PNG is available; the JSON generates inline HTML from templates.
 
 ---
 
@@ -440,8 +440,8 @@ Read `references/06-html-structure.md` for the two-zone HTML layout and CSS arch
 
 Before calling the script, verify these prerequisite artifacts exist:
 1. At least one infographic artifact from Phase 2a — checked in priority order:
-   - `{source_dir}/cogni-visual/infographic-fragment.html` — Pencil-rendered HTML fragment (highest quality: native HTML, selectable text, responsive)
-   - `{source_dir}/cogni-visual/infographic-preview.png` — Pencil-rendered PNG (embedded as base64 with lightbox)
+   - `{source_dir}/cogni-visual/infographic-preview.png` — Pencil-rendered PNG (pixel-perfect, embedded as base64 with lightbox — preferred)
+   - `{source_dir}/cogni-visual/infographic-fragment.html` — Pencil-rendered HTML fragment (fallback when PNG unavailable)
    - `{source_dir}/cogni-visual/infographic-data.json` — structured data for Python-generated HTML fallback
 2. `{source_dir}/cogni-visual/enrichment-plan.json` — from Phase 2b (required, may have empty `enrichments` array if `density=none`)
 3. `{source_dir}/cogni-visual/svgs/` — from Phase 4 (directory with `enr-XXX.svg` files; can be empty if no concept-track enrichments)
@@ -462,7 +462,7 @@ python3 {SKILL_PATH}/scripts/generate-enriched-report.py \
   --density "{density}"
 ```
 
-The script uses a **three-tier infographic priority cascade**: `--infographic-html` (Pencil HTML fragment, native responsive HTML) > `--infographic-image` (Pencil PNG, base64 with lightbox) > `--infographic-data` (Python-generated HTML from templates). The script checks each tier in order and uses the first one that exists and is non-empty.
+The script uses a **three-tier infographic priority cascade**: `--infographic-image` (Pencil PNG, pixel-perfect base64 with lightbox) > `--infographic-html` (Pencil HTML fragment, fallback) > `--infographic-data` (Python-generated HTML from templates). The script checks each tier in order and uses the first one that exists and is non-empty.
 
 The script handles everything:
 1. **Validates enrichment plan** — enforces density caps, type restrictions, per-section caps. Logs what was trimmed.

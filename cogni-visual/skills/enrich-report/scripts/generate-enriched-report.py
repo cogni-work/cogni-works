@@ -957,6 +957,15 @@ def generate_css(dv):
     sh = dv.get("shadows", DEFAULT_THEME["shadows"])
     radius = dv.get("radius", "12px")
     gf = dv.get("google_fonts_import", "")
+    # Normalize: bare URL → @import so it works inside <style>
+    if gf and not gf.strip().startswith("@import") and not gf.strip().startswith("<"):
+        gf = f"@import url('{gf.strip()}');"
+
+    # Derive brand-accent: use primary if it's a chromatic color, else fall back to accent
+    primary_hex = c['primary']
+    r, g, b = int(primary_hex[1:3], 16), int(primary_hex[3:5], 16), int(primary_hex[5:7], 16)
+    lum = (0.299 * r + 0.587 * g + 0.114 * b) / 255
+    brand_accent = primary_hex if 0.1 < lum < 0.85 else c['accent']
 
     return f"""{gf}
 
@@ -966,6 +975,7 @@ def generate_css(dv):
   --accent: {c['accent']};
   --accent-muted: {c['accent_muted']};
   --accent-dark: {c['accent_dark']};
+  --brand-accent: {brand_accent};
   --bg: {c['background']};
   --surface: {c['surface']};
   --surface2: {c['surface2']};
@@ -1005,13 +1015,14 @@ body {{
   margin: 48px auto 48px;
   padding: 40px 48px;
   background: var(--surface);
-  border-top: 3px solid var(--accent);
+  border-top: 3px solid var(--brand-accent);
   border-bottom: 1px solid var(--border);
   page-break-inside: avoid;
 }}
 
-/* Pencil-rendered HTML fragment (highest quality path) */
+/* Pencil-rendered HTML fragment (fallback when PNG unavailable) */
 .infographic-pencil-html {{
+  max-width: 1080px;
   padding: 0;
   overflow: hidden;
 }}
@@ -1019,8 +1030,9 @@ body {{
   max-width: 100%;
 }}
 
-/* Pencil-rendered infographic image */
+/* Pencil-rendered infographic image (pixel-perfect, preferred path) */
 .infographic-rendered {{
+  max-width: 1080px;
   padding: 0;
   overflow: hidden;
 }}
@@ -1153,7 +1165,7 @@ body {{
   font-style: italic;
   color: var(--text);
   line-height: 1.55;
-  border-left: 2px solid var(--accent);
+  border-left: 2px solid var(--brand-accent);
   padding: 0 0 0 16px;
   margin: 0;
   background: none;
@@ -1185,7 +1197,7 @@ body {{
   letter-spacing: 0.04em;
   margin-bottom: 8px;
   padding-bottom: 4px;
-  border-bottom: 2px solid var(--accent);
+  border-bottom: 2px solid var(--brand-accent);
 }}
 .ig-comparison ul {{
   list-style: none;
@@ -1242,7 +1254,7 @@ nav.sidebar a {{
   transition: all 0.15s ease;
 }}
 nav.sidebar a:hover {{ background: var(--surface2); color: var(--text); }}
-nav.sidebar a.active {{ background: var(--accent); color: var(--surface-dark); font-weight: 500; }}
+nav.sidebar a.active {{ background: var(--brand-accent); color: var(--surface-dark); font-weight: 500; }}
 nav.sidebar a.depth-3 {{ padding-left: 28px; font-size: 0.8rem; }}
 nav.sidebar a.depth-4 {{ padding-left: 44px; font-size: 0.75rem; }}
 
@@ -1253,7 +1265,7 @@ main.content {{
 /* Typography */
 h1 {{ font-family: var(--font-headers); font-size: 2.2rem; font-weight: 700; margin: 0 0 24px; line-height: 1.2; }}
 h2 {{ font-family: var(--font-headers); font-size: 1.6rem; font-weight: 600; margin: 48px 0 16px; line-height: 1.3;
-      padding-bottom: 8px; border-bottom: 2px solid var(--accent); }}
+      padding-bottom: 8px; border-bottom: 2px solid var(--brand-accent); }}
 h3 {{ font-family: var(--font-headers); font-size: 1.2rem; font-weight: 600; margin: 32px 0 12px; }}
 h4 {{ font-family: var(--font-headers); font-size: 1.05rem; font-weight: 600; margin: 24px 0 8px; }}
 p {{ margin: 0 0 16px; }}
@@ -1264,7 +1276,7 @@ code {{ font-family: var(--font-mono); font-size: 0.88em; background: var(--surf
 pre {{ background: var(--surface-dark); color: var(--text-light); padding: 16px 20px; border-radius: var(--radius);
        overflow-x: auto; margin: 16px 0; }}
 pre code {{ background: none; padding: 0; color: inherit; }}
-blockquote {{ border-left: 3px solid var(--accent); padding: 12px 20px; margin: 16px 0; background: var(--surface);
+blockquote {{ border-left: 3px solid var(--brand-accent); padding: 12px 20px; margin: 16px 0; background: var(--surface);
              border-radius: 0 var(--radius) var(--radius) 0; font-style: italic; color: var(--text-muted); }}
 hr {{ border: none; border-top: 1px solid var(--border); margin: 32px 0; }}
 ul, ol {{ margin: 0 0 16px; padding-left: 24px; }}
@@ -1294,7 +1306,7 @@ tr:hover td {{ background: var(--surface); }}
 .kpi-card {{
   flex: 1; min-width: 140px; max-width: 220px;
   background: var(--surface); border-radius: var(--radius); padding: 20px; text-align: center;
-  box-shadow: var(--shadow-sm); border-top: 3px solid var(--accent);
+  box-shadow: var(--shadow-sm); border-top: 3px solid var(--brand-accent);
 }}
 .kpi-value {{ font-family: var(--font-headers); font-size: 2rem; font-weight: 700; color: var(--accent-dark); line-height: 1.2; }}
 .kpi-label {{ font-size: 0.85rem; color: var(--text-muted); margin-top: 6px; }}
@@ -1312,7 +1324,7 @@ tr:hover td {{ background: var(--surface); }}
 .summary-card {{
   max-width: 720px; margin: 24px auto; padding: 20px 24px;
   background: var(--surface); border-radius: var(--radius);
-  border-left: 4px solid var(--accent); box-shadow: var(--shadow-sm);
+  border-left: 4px solid var(--brand-accent); box-shadow: var(--shadow-sm);
 }}
 .summary-card-content p {{ margin: 0; font-size: 0.95rem; }}
 .summary-badge {{
@@ -1539,12 +1551,12 @@ def generate_html(source_path, enrichment_plan, infographic_data, svg_dir, dv,
         )
 
     # Build infographic and inject AFTER first H2 section (executive summary)
-    # Three-tier priority: Pencil HTML fragment > Pencil PNG > Python-generated HTML
+    # Three-tier priority: Pencil PNG (pixel-perfect) > HTML fragment (fallback) > Python-generated HTML
     output_dir = os.path.dirname(output_path) or '.'
     ig_chart_configs = []
-    ig_html = _load_infographic_html_fragment(infographic_html, output_dir)
-    if not ig_html and infographic_image and os.path.isfile(infographic_image):
-        ig_html = _generate_infographic_image_html(infographic_image, output_dir)
+    ig_html = _generate_infographic_image_html(infographic_image, output_dir)
+    if not ig_html:
+        ig_html = _load_infographic_html_fragment(infographic_html, output_dir)
     if not ig_html:
         ig_html, ig_chart_configs = generate_infographic_header(infographic_data, dv)
 
@@ -1663,8 +1675,8 @@ def main():
     parser.add_argument("--output", required=True, help="Output HTML path")
     parser.add_argument("--language", default="en", help="Language code (en/de)")
     parser.add_argument("--density", default="balanced", help="Enrichment density (none/minimal/balanced/rich)")
-    parser.add_argument("--infographic-image", default="", help="Pencil-rendered infographic PNG (fallback when HTML fragment unavailable)")
-    parser.add_argument("--infographic-html", default="", help="Pencil-rendered HTML fragment (highest quality, preferred over PNG and JSON)")
+    parser.add_argument("--infographic-image", default="", help="Pencil-rendered infographic PNG (pixel-perfect, preferred over HTML fragment and JSON)")
+    parser.add_argument("--infographic-html", default="", help="Pencil-rendered HTML fragment (fallback when PNG unavailable)")
     # Legacy support: --chart-configs is accepted but ignored (configs generated internally)
     parser.add_argument("--chart-configs", default="", help=argparse.SUPPRESS)
     args = parser.parse_args()

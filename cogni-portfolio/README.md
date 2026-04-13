@@ -159,7 +159,7 @@ Each portfolio project lives in `cogni-portfolio/{slug}/` with typed JSON files 
 
 ```
 cogni-portfolio/
-├── .claude-plugin/               Plugin manifest (v0.9.0)
+├── .claude-plugin/               Plugin manifest (v0.9.3)
 ├── templates/                    8 pluggable industry taxonomy templates
 │   ├── b2b-ict/                  Enterprise ICT (8 dims, 57 cats)
 │   ├── b2b-saas/                 B2B SaaS (8 dims, 47 cats)

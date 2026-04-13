@@ -35,6 +35,10 @@ A brief-based visual production pipeline. Skills generate structured briefs (YAM
 - **Brand-driven, not template-driven.** Visuals inherit colors, fonts, and identity from your cogni-workspace theme — changing one theme file reskins all output, not editing each object.
 - **Review before you render.** Three-stakeholder brief review catches weak headlines, missing CTAs, and layout mismatches before committing to a rendering pipeline — cheaper to fix a line of text than re-render.
 
+## Known Limitations
+
+> **Chrome native messaging host conflict between Cowork and Claude Code** (S2-major) — Browser-based zone review for rendered visuals may fail silently when tools are missing. Workaround: Toggle native messaging host configs by renaming the .json file for the unused product and restarting Chrome. See [Known Issues Registry](../../cogni-docs/references/known-issues.md#ki-001) for details.
+
 ## Installation
 
 This plugin is part of the [insight-wave monorepo](https://github.com/cogni-work/insight-wave) and is installed automatically with the marketplace.
@@ -47,7 +51,10 @@ This plugin is part of the [insight-wave monorepo](https://github.com/cogni-work
 story-to-slides <narrative.md>             # presentation brief → document-skills:pptx
 story-to-web <narrative.md>                # web narrative brief → Pencil MCP
 story-to-storyboard <narrative.md>         # poster storyboard brief → Pencil MCP
-story-to-infographic <narrative.md>        # infographic brief → Excalidraw sketchnote
+story-to-infographic <narrative.md>        # infographic brief (7 layouts × 6 style presets)
+/render-infographic <brief.md>             # auto-routes to Excalidraw or Pencil based on style
+/render-infographic-handdrawn <brief.md>   # direct: sketchnote or whiteboard → Excalidraw
+/render-infographic-editorial <brief.md>   # direct: economist/editorial/data-viz → Pencil MCP
 /enrich-report <report.md>                 # markdown report → themed HTML with charts + diagrams
 /render-html-slides <brief.md>             # presentation brief → self-contained HTML slide deck
 /review-brief <brief.md>                   # visual brief → stakeholder review (3 perspectives)
@@ -78,6 +85,7 @@ The pipeline follows a compose-polish-visualize flow: narratives from cogni-narr
 | `story-to-slides` | skill | Transform any narrative into an optimized multi-slide presentation brief that the PPTX skill can render |
 | `story-to-web` | skill | Transform any narrative into an optimized scrollable web narrative brief that the web agent can render |
 | `story-to-storyboard` | skill | Transform any narrative into a multi-poster print storyboard brief for executive walkthroughs |
+| `story-to-infographic` | skill | Transform any narrative into a single-page infographic brief (7 layout types, 6 style presets) |
 | `render-html-slides` | skill | Render a presentation-brief.md into a self-contained HTML slide presentation with speaker notes and keyboard navigation |
 | `enrich-report` | skill | Post-process any completed markdown report into a themed, self-contained HTML file with Chart.js visualizations |
 | `review-brief` | skill | Review a visual brief from three stakeholder perspectives — design quality, audience experience, and usability |
@@ -89,44 +97,60 @@ The pipeline follows a compose-polish-visualize flow: narratives from cogni-narr
 | `web` | agent | Renders web briefs into .pen + self-contained HTML via Pencil MCP |
 | `story-to-storyboard` | agent | Orchestrates the story-to-storyboard skill |
 | `storyboard` | agent | Renders storyboard briefs into multi-poster .pen via Pencil MCP |
+| `story-to-infographic` | agent | Orchestrates the story-to-infographic skill |
+| `render-infographic-pencil` | agent | Renders infographic briefs into editorial .pen via Pencil MCP (economist, editorial, data-viz, corporate) |
+| `render-infographic-sketchnote` | agent | Renders infographic briefs into hand-drawn Excalidraw scenes — sketchnote tradition (Mike Rohde) |
+| `render-infographic-whiteboard` | agent | Renders infographic briefs into hand-drawn Excalidraw scenes — whiteboard tradition (Dan Roam) |
+| `editorial-sketch` | agent | Worker — generates one editorial-discipline line-art sketch as inline SVG |
 | `enrich-report` | agent | Orchestrates the enrich-report skill (markdown report → themed HTML) |
-| `concept-diagram` | agent | Worker agent — generates one concept diagram (TIPS flow, relationship map, process flow, concept sketch) via Excalidraw MCP |
+| `concept-diagram` | agent | Worker — generates one concept diagram via Excalidraw MCP (fallback for interactive .excalidraw) |
+| `concept-diagram-svg` | agent | Worker — generates one concept diagram as clean inline SVG using geometric primitives (default) |
 | `brief-review-assessor` | agent | Assesses visual brief quality from three stakeholder perspectives adapted to the brief type |
-| `/render-html-slides` | command | Render a presentation-brief.md into a themed HTML slide presentation with speaker notes and keyboard navigation |
-| `/enrich-report` | command | Enrich a markdown report with themed Chart.js visualizations and Excalidraw concept diagrams |
+| `/enrich-report` | command | Enrich a markdown report with themed Chart.js visualizations and concept diagrams |
+| `/render-html-slides` | command | Render a presentation-brief.md into a themed HTML slide presentation with speaker notes |
+| `/render-infographic` | command | Render an infographic brief — auto-routes to the right rendering agent based on style preset |
+| `/render-infographic-handdrawn` | command | Render an infographic brief as a hand-drawn Excalidraw scene (sketchnote or whiteboard) |
+| `/render-infographic-editorial` | command | Render an infographic brief as an editorial .pen file via Pencil MCP |
 | `/review-brief` | command | Review a visual brief from stakeholder perspectives (design, audience, usability) |
 | `ensure-excalidraw-canvas` | hook (PreToolUse) | Auto-starts Excalidraw canvas frontend before any Excalidraw MCP tool call |
 
 ## Architecture
 
 ```
-cogni-visual/                              # 8 skills · 11 agents · 4 commands · 1 hook
-├── .claude-plugin/                        # plugin manifest
-├── skills/                               # 7 skills (4 brief generators · 1 renderer · 1 enricher · 1 reviewer)
+cogni-visual/                              # 7 skills · 17 agents · 6 commands · 1 hook
+├── .claude-plugin/                        Plugin manifest (v0.16.0)
+├── skills/                               7 visual skills (4 brief generators · 1 renderer · 1 enricher · 1 reviewer)
 │   ├── story-to-slides/
-│   ├── story-to-slides-workspace/        # dev workspace (iteration artifacts, not a skill)
 │   ├── story-to-web/
 │   ├── story-to-storyboard/
 │   ├── story-to-infographic/
 │   ├── render-html-slides/
 │   ├── enrich-report/
 │   └── review-brief/
-├── agents/                               # 11 agents (orchestration · rendering · workers)
-├── commands/                             # 6 slash commands (including /render-infographic smart dispatcher and its two direct variants)
-├── hooks/                                # 1 PreToolUse hook (Excalidraw canvas auto-start)
-└── libraries/                            # 12 shared reference files
-    ├── arc-taxonomy.md                   # arc ID → visual arc type mapping
-    ├── cta-taxonomy.md                   # CTA types and urgency levels
-    ├── pptx-layouts.md                   # slide layout schemas
-    ├── web-layouts.md                    # section types and design tokens
-    ├── storyboard-layouts.md             # poster dimensions and zone anatomy
-    ├── infographic-layouts.md            # layout type schemas for infographics
-    ├── brief-review-perspectives.md      # perspective sets for stakeholder review
-    ├── EXAMPLE_BRIEF.md                  # annotated presentation brief example
-    ├── EXAMPLE_STORYBOARD_BRIEF.md       # annotated storyboard brief example
-    ├── EXAMPLE_WEB_BRIEF.md              # annotated web narrative brief example
-    ├── EXAMPLE_INFOGRAPHIC_BRIEF.md      # annotated infographic brief example
-    └── svg-patterns.md                   # SVG element recipes for concept diagrams
+├── agents/                               17 agents (orchestration · rendering · workers)
+├── commands/                             6 slash commands (including /render-infographic dispatcher + 2 direct variants)
+├── hooks/                                1 PreToolUse hook (Excalidraw canvas auto-start)
+├── scripts/                              Utility scripts (rasterize-sketch.py, cartographic-outline.py)
+├── references/                           Reference data (cartographic-data/)
+├── evals/                                Evaluation harnesses (render-infographic)
+└── libraries/                            17 shared reference files
+    ├── arc-taxonomy.md                   arc ID → visual arc type mapping
+    ├── cta-taxonomy.md                   CTA types and urgency levels
+    ├── pptx-layouts.md                   slide layout schemas
+    ├── web-layouts.md                    section types and design tokens
+    ├── storyboard-layouts.md             poster dimensions and zone anatomy
+    ├── infographic-layouts.md            layout type schemas for infographics
+    ├── infographic-pencil-layouts.md     Pencil MCP: Economist tokens, Lucide icons, batch_design syntax
+    ├── brief-review-perspectives.md      perspective sets for stakeholder review
+    ├── svg-patterns.md                   SVG element recipes for concept diagrams
+    ├── excalidraw-patterns.md            Excalidraw MCP element recipes
+    ├── render-excalidraw-common.md       shared hand-drawn discipline (canvas lifecycle, review gates)
+    ├── EXAMPLE_BRIEF.md                  annotated presentation brief example
+    ├── EXAMPLE_WEB_BRIEF.md              annotated web narrative brief example
+    ├── EXAMPLE_STORYBOARD_BRIEF.md       annotated storyboard brief example
+    ├── EXAMPLE_INFOGRAPHIC_BRIEF.md      annotated infographic brief (stat-heavy, data-viz)
+    ├── EXAMPLE_SKETCHNOTE_BRIEF.md       annotated infographic brief (timeline-flow, sketchnote)
+    └── EXAMPLE_ECONOMIST_BRIEF.md        annotated infographic brief (stat-heavy portrait, economist)
 ```
 
 ## Dependencies

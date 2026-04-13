@@ -45,7 +45,7 @@ This plugin is part of the [insight-wave monorepo](https://github.com/cogni-work
 **Prerequisites:**
 - **cogni-portfolio** (required — provides propositions, markets, competitors)
 - **cogni-trends** (required — provides strategic themes and trend data)
-- Optional: **cogni-copywriting** (polish generated content), **cogni-narrative** (long-form arc transformation), **cogni-visual** (slides and visual assets), **cogni-claims** (evidence verification)
+- Optional: **cogni-copywriting** (polish generated content), **cogni-visual** (slides and visual assets)
 
 ## Quick start
 
@@ -165,9 +165,7 @@ cogni-marketing/
 | cogni-portfolio | Yes | Products, propositions, markets, competitors, solutions |
 | cogni-trends | Yes | Strategic themes (Handlungsfelder), trend data, claims |
 | cogni-copywriting | No | Polish generated content with messaging frameworks |
-| cogni-narrative | No | Arc-driven transformation for long-form thought leadership |
 | cogni-visual | No | Slide decks and visual assets from content briefs |
-| cogni-claims | No | Evidence verification for sourced claims in content |
 
 ## Contributing
 

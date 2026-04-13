@@ -1,6 +1,6 @@
 # insight-wave
 
-Open-source plugins for consulting, sales, and marketing on [Claude Code](https://claude.ai/code). 13 AGPL-3.0 plugins that automate the research-heavy, methodology-driven work behind B2B deliverables — trend scouting, portfolio positioning, sales pitches, content creation, visual production, website generation, and source verification.
+Open-source plugins for consulting, sales, and marketing on [Claude Code](https://claude.ai/code). 14 AGPL-3.0 plugins that automate the research-heavy, methodology-driven work behind B2B deliverables — trend scouting, portfolio positioning, sales pitches, content creation, visual production, website generation, knowledge management, and source verification.
 
 Each plugin implements an established framework (Corporate Visions, Double Diamond, TIPS, IS/DOES/MEANS) rather than general-purpose text generation. Outputs include inline citations, structured data models, and quality gates. Every deliverable follows a reproducible methodology you can inspect and override.
 
@@ -9,11 +9,11 @@ Each plugin implements an established framework (Corporate Visions, Double Diamo
 
 ## What the plugins do
 
-13 plugins organized around nine capability areas. Each area handles a distinct part of the consulting-to-delivery workflow; plugins within an area share data formats and can be used independently or together.
+14 plugins organized around ten capability areas. Each area handles a distinct part of the consulting-to-delivery workflow; plugins within an area share data formats and can be used independently or together.
 
 ### Research
 
-[cogni-research](cogni-research/README.md) runs 5-25 parallel web research agents to produce multi-section reports with inline citations — from a basic 3,000-word scan to recursive deep-research trees of 15,000 words. Five report types (basic, detailed, deep, outline, resource), three source modes (web, local documents, hybrid), and a structural review loop before finalization. 3 skills and 8 agents.
+[cogni-research](cogni-research/README.md) runs 5-25 parallel web research agents to produce multi-section reports with inline citations — from a basic 3,000-word scan to recursive deep-research trees of 15,000 words. Five report types (basic, detailed, deep, outline, resource), four source modes (web, local documents, wiki, hybrid), and a structural review loop before finalization. 5 skills and 9 agents.
 
 > "Write a detailed research report on AI regulation in the EU with IEEE citations"
 
@@ -100,6 +100,14 @@ Each plugin implements an established framework (Corporate Visions, Double Diamo
 > "Which plugin should I use to verify claims in my research report?"
 
 → [Plugin guide](docs/plugin-guide/cogni-help.md)
+
+#### Knowledge Management
+
+[cogni-wiki](cogni-wiki/README.md) maintains a persistent, interlinked markdown wiki that compiles sources once at ingest — no embeddings, no vector store, no re-discovery per query. Based on Andrej Karpathy's LLM Wiki pattern: answers come from the wiki (not model memory), contradictions are surfaced at ingest, and knowledge compounds instead of starting from zero. 7 skills.
+
+> "Ingest this research paper into my wiki and show me what changed"
+
+→ [Plugin guide](docs/plugin-guide/cogni-wiki.md)
 
 Beyond the open-source plugins, cogni-works offers consulting services — plugin engineering for domain-specific workflows, managed deployment, and a partner certification program — through [cogni-work.ai](https://cogni-work.ai). Whether you run a consulting practice, a sales organization, or a marketing team, the site shows how these capabilities translate into managed workflows and onboarding for your team.
 
@@ -243,6 +251,7 @@ For the full deployment guide including GDPR compliance, data handling policies,
 /plugin install cogni-claims@insight-wave
 /plugin install cogni-consulting@insight-wave
 /plugin install cogni-website@insight-wave
+/plugin install cogni-wiki@insight-wave
 /plugin install cogni-help@insight-wave
 ```
 
@@ -265,11 +274,11 @@ The workplace combines Claude Code with [Obsidian](https://obsidian.md/) for per
 ```
 insight-wave/
 ├── .claude-plugin/
-│   └── marketplace.json                    # Marketplace manifest (13 plugins)
+│   └── marketplace.json                    # Marketplace manifest (14 plugins)
 ├── docs/                                   # User documentation
 │   ├── getting-started.md                  # Installation and first steps
 │   ├── ecosystem-overview.md               # Plugin landscape and data flow
-│   ├── plugin-guide/                       # Per-plugin deep dives (13 guides)
+│   ├── plugin-guide/                       # Per-plugin deep dives (14 guides)
 │   ├── workflows/                          # Cross-plugin pipeline guides (6 workflows)
 │   ├── architecture/                       # Design philosophy, plugin anatomy, ER diagram
 │   └── contributing/                       # Plugin development guide
@@ -285,6 +294,7 @@ insight-wave/
 ├── cogni-trends/                           # Trend scouting & reporting
 ├── cogni-visual/                           # Visual deliverables
 ├── cogni-website/                          # Multi-page customer websites
+├── cogni-wiki/                             # Persistent knowledge wiki (Karpathy pattern)
 ├── cogni-workspace/                        # Workspace orchestrator
 ├── cogni-portfolio-evals/                  # Eval harness (not a marketplace plugin)
 ├── CLA.md                                  # Contributor License Agreement
@@ -304,7 +314,7 @@ Plugins follow the [Claude Code plugin standard](https://code.claude.com/docs/en
 
 | Plugin | Capability | Skills | Agents | What it does |
 |--------|-----------|--------|--------|--------------|
-| [cogni-research](cogni-research/README.md) | Research | 3 | 8 | Multi-agent web research with parallel section researchers, five report types, and claims-verified review loops |
+| [cogni-research](cogni-research/README.md) | Research | 5 | 9 | Multi-agent web research with parallel section researchers, five report types, and claims-verified review loops |
 | [cogni-trends](cogni-trends/README.md) | Trend Intelligence | 6 | 9 | TIPS trend scouting with bilingual DE/EN research, investment theme modeling, and reusable industry catalogs |
 | [cogni-portfolio](cogni-portfolio/README.md) | Portfolio | 19 | 20 | IS/DOES/MEANS portfolio positioning with eight industry taxonomies, competitive analysis, and market sizing |
 | [cogni-marketing](cogni-marketing/README.md) | Content | 11 | 3 | B2B marketing content engine — 16 formats across thought leadership, demand gen, lead gen, sales enablement, ABM |
@@ -312,13 +322,14 @@ Plugins follow the [Claude Code plugin standard](https://code.claude.com/docs/en
 | [cogni-narrative](cogni-narrative/README.md) | Content | 3 | 3 | Story arc narrative transformation using 10 frameworks with quality scoring and derivative format adaptation |
 | [cogni-sales](cogni-sales/README.md) | Sales | 1 | 4 | Corporate Visions Why Change pitch generation for named customers or market segments |
 | [cogni-consulting](cogni-consulting/README.md) | Consulting | 7 | 1 | Double Diamond consulting orchestrator with 8 vision classes and Lean Canvas authoring |
-| [cogni-visual](cogni-visual/README.md) | Visual | 11 | 17 | Slide decks, journey maps, solution architectures, web narratives, and poster storyboards from narratives |
+| [cogni-visual](cogni-visual/README.md) | Visual | 8 | 17 | Slide decks, infographics, web narratives, poster storyboards, and report enrichment from narratives |
 | [cogni-website](cogni-website/README.md) | Website | 6 | 3 | Multi-page customer websites from portfolio, marketing, and research content with shared navigation and theming |
 | [cogni-claims](cogni-claims/README.md) | Quality | 2 | 2 | Source verification — catches misquotations, unsupported conclusions, and stale data in sourced claims |
 | [cogni-help](cogni-help/README.md) | Platform | 7 | 1 | 12-course curriculum, plugin discovery, workflow templates, troubleshooting, and cheatsheets |
+| [cogni-wiki](cogni-wiki/README.md) | Platform | 7 | 0 | Persistent interlinked markdown wiki — compile-time knowledge from sources, wiki-grounded answers, backlink audit, health lint |
 | [cogni-workspace](cogni-workspace/README.md) | Platform | 5 | 0 | Shared foundation — env vars, MCP installation, theme management, plugin discovery, workspace health, Obsidian integration |
 
-**85 skills, 73 agents** across the ecosystem.
+**91 skills, 74 agents** across the ecosystem.
 
 See [Cross-Plugin Data Flow](docs/er-diagram.md) for how data flows between plugins, or browse the [full documentation](docs/getting-started.md).
 

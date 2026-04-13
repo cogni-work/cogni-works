@@ -71,10 +71,10 @@ sources: [../raw/bai-et-al-2022.pdf]
 
 ## What it means for you
 
-- **A knowledge base that compounds.** Every source you add leaves the wiki denser and more interconnected than before — up to 95% token reduction vs re-loading full documents per query.
-- **No memory-based answers.** `wiki-query` physically reads the wiki before answering. If the wiki is silent, the answer says so — no hallucinated filler.
-- **Outlive the tool.** `SCHEMA.md` ships inside every wiki so it remains readable even if cogni-wiki is uninstalled or replaced. Plain markdown, plain backlinks — open the wiki in Obsidian, VS Code, or `grep` and it still works.
-- **Review every change before it lands.** `wiki-update` shows the diff before modifying a page and requires a source citation for every new claim.
+- **Compound your knowledge, not your effort.** Each ingest aims to leave the wiki denser and more interconnected than before — up to 95% token reduction vs re-loading full documents per query, with every source compiled once rather than re-synthesized on demand.
+- **Ground every answer in curated sources.** `wiki-query` reads the wiki before answering — never from model memory. If the wiki has no page on a topic, the answer says so rather than filling the gap with hallucinated filler.
+- **Keep your knowledge portable across any tool, indefinitely.** `SCHEMA.md` ships inside every wiki directory, so the wiki aims to remain fully readable even if cogni-wiki is uninstalled or replaced — plain markdown, plain backlinks, zero lock-in. Open it in Obsidian, VS Code, or `grep` today; hand it off in 5 years.
+- **Catch unsourced claims before they silently enter your wiki.** `wiki-update` shows the diff before modifying any page and requires a source citation for every new claim — zero silent writes across all 7 skills.
 
 ## Installation
 

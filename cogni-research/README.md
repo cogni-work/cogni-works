@@ -123,6 +123,8 @@ The pipeline uses two skills that split the work across separate context windows
 | Component | Type | What it does |
 |-----------|------|--------------|
 | `research-report` | skill | Generate a multi-agent research report using parallel web research with structural review |
+| `research-resume` | skill | Resume, continue, or check status of a cogni-research project across sessions |
+| `research-setup` | skill | Configure and initialize a cogni-research project via interactive Configuration Menu |
 | `verify-report` | skill | Verify claims in a research report against cited sources using cogni-claims |
 | `section-researcher` | agent (sonnet) | Parallel web researcher for a single sub-question or report section |
 | `local-researcher` | agent (sonnet) | Parallel document analyst for a single sub-question from local files (PDF, DOCX, TXT, MD, CSV) |
@@ -141,11 +143,15 @@ The pipeline uses two skills that split the work across separate context windows
 ```
 cogni-research/
 ├── .claude-plugin/               Plugin manifest
-├── skills/                       2 orchestration skills
+├── skills/                       4 skills (research-report, research-resume, research-setup, verify-report)
 │   ├── research-report/
 │   │   ├── SKILL.md
 │   │   └── references/           Report types, sub-questions, review criteria, agent roles
 │   ├── research-report-workspace/ Dev workspace (evals, iterations — not a skill)
+│   ├── research-resume/
+│   │   └── SKILL.md
+│   ├── research-setup/
+│   │   └── SKILL.md
 │   └── verify-report/
 │       ├── SKILL.md
 │       └── references/           Claims integration, standalone mode, review criteria
@@ -176,6 +182,7 @@ cogni-research/
 |--------|----------|---------|
 | cogni-claims | No | Claims verification loop in `verify-report` — extracts and checks claims against source URLs |
 | cogni-visual | No | Visual enrichment and format export via `enrich-report` — themed HTML with charts, optional PDF/DOCX |
+| cogni-wiki | No | Wiki source mode for research queries via wiki-researcher agent |
 | cogni-workspace | No | Theme selection for visual exports (indirect — consumed via cogni-visual:enrich-report) |
 | cogni-narrative | No | Downstream — user invokes `/narrative` on research output for arc-driven executive summary |
 | cogni-copywriting | No | Downstream — user invokes copywriter on narrative output for arc-aware executive polish |

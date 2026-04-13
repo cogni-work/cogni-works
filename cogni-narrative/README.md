@@ -2,7 +2,7 @@
 
 > **Preview** (v0.x) — core skills defined but may change. Feedback welcome.
 
-Story arc-driven narrative transformation plugin for [Claude Cowork](https://claude.ai/cowork). Transforms research syntheses, analyses, and structured content into compelling executive narratives using 10 story arc frameworks and 8 narrative techniques. Includes TIPS-native trend panorama, theme-thesis for investment theme narratives, JTBD portfolio arcs for buyer-job-centric portfolio narratives, company-credo for About-Us pages, and engagement-model for How-We-Work pages. Narrative review scoring and derivative format adaptation (executive briefs, talking points, one-pagers). Bilingual EN/DE.
+A Claude Cowork plugin that shapes research output into executive-grade narratives — selecting the right story arc for the context, enforcing rhetorical discipline across 10 frameworks, and adapting the result into briefs, talking points, and one-pagers. Bilingual EN/DE.
 
 ## Why this exists
 
@@ -21,7 +21,7 @@ This plugin applies structured story arc frameworks — each with defined sectio
 
 ## What it is
 
-A story arc engine for the insight-wave ecosystem. Ten arc frameworks — Corporate Visions for sales, Technology Futures for innovation, Competitive Intelligence for threats, Strategic Foresight for planning, Industry Transformation for change, Trend Panorama for TIPS output, Theme-Thesis for investment theme narratives, JTBD Portfolio for buyer-job-centric portfolio narratives, Company-Credo for About-Us pages, and Engagement-Model for How-We-Work pages — impose narrative discipline on structured content. Other plugins produce research and data; cogni-narrative shapes it into executive-grade stories that drive decisions.
+A story arc engine for the insight-wave ecosystem. Ten named arc frameworks — covering sales, innovation, competitive intelligence, investment themes, portfolio introductions, and company pages — impose rhetorical discipline on structured content, mapping evidence to arc elements, transitions, and quality gates. Other plugins produce research and data; cogni-narrative shapes it into executive-grade stories that drive decisions.
 
 ## What it does
 
@@ -32,10 +32,10 @@ A story arc engine for the insight-wave ecosystem. Ten arc frameworks — Corpor
 ## What it means for you
 
 - **Arc-disciplined, not improvised.** Every narrative follows one of 10 proven story arc structures — cutting first-draft time from hours to under 15 minutes while maintaining consistent quality across documents and authors.
-- **Ten frameworks for ten contexts.** Corporate Visions for sales, Technology Futures for innovation, Competitive Intelligence for threats, Strategic Foresight for planning, Industry Transformation for change, Trend Panorama for TIPS output, Theme-Thesis for investment themes, JTBD Portfolio for buyer-job-centric portfolio narratives, Company-Credo for About-Us pages, Engagement-Model for How-We-Work pages.
+- **Match the arc to the audience before you write.** Ten frameworks cover every consulting output type — from sales enablement to board-ready investment themes to company pages — so structure decisions are made by context, not guesswork.
 - **Quality-gated.** Automated scoring (0-100, A-F grades) on structural compliance, critical accuracy, evidence density, and language — with improvement suggestions per dimension.
 - **One narrative, three derivative formats.** Executive briefs, talking points, and one-pagers — adapted from the source narrative without rewriting.
-- **Bilingual.** Full EN/DE support with localized section headers and proper Unicode handling.
+- **Ship in the reader's language.** Full EN/DE support with localized arc headers and proper Unicode — no post-processing needed for German-language clients or DACH reports.
 
 ## Installation
 

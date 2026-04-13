@@ -2,9 +2,9 @@
 
 > **Preview** (v0.x) — core skills defined but may change. Feedback welcome.
 
-A [Claude Cowork](https://claude.ai/cowork) plugin for scouting, selecting, and reporting on strategic industry trends — **specialized for the German Mittelstand and DACH markets**. Combines the [Smarter Service Trendradar](https://www.smarter-service.com/2023/01/31/trendradar-fuer-die-multikrise-und-neue-geooekonomie/) (4-dimension structure by Bernhard Steimel) with the TIPS content framework (Trends, Implications, Possibilities, Solutions — a B2B consulting methodology widely used since the early 2000s; see [WO2018046399A1](https://patents.google.com/patent/WO2018046399A1/en) for a detailed treatment, filed by Siemens 2017, ceased 2019).
+A [Claude Cowork](https://claude.ai/cowork) plugin for scouting, selecting, and reporting on strategic industry trends — **rooted in the German Mittelstand, covering European markets (DE/FR/IT/PL/NL/ES) and US/UK**. Combines the [Smarter Service Trendradar](https://www.smarter-service.com/2023/01/31/trendradar-fuer-die-multikrise-und-neue-geooekonomie/) (4-dimension structure by Bernhard Steimel) with the TIPS content framework (Trends, Implications, Possibilities, Solutions — a B2B consulting methodology widely used since the early 2000s; see [WO2018046399A1](https://patents.google.com/patent/WO2018046399A1/en) for a detailed treatment, filed by Siemens 2017, ceased 2019).
 
-> **Market scope:** This plugin is purpose-built for DACH (Germany, Austria, Switzerland). It searches bilingually in English and German, targets curated German institutional sources (VDMA, BITKOM, Fraunhofer, Zukunftsinstitut, EUR-Lex), and uses German-language dimension names from the Smarter Service Trendradar. The underlying bilingual search architecture is generalizable to other markets — see [`references/architecture-pattern.md`](references/architecture-pattern.md) for the reusable pattern.
+> **Market scope:** Developed for the German Mittelstand and expanded to six European markets (DE/FR/IT/PL/NL/ES) plus US/UK. Each market gets its own curated institutional sources, local-language search queries, and regional authority references — DACH draws on VDMA, BITKOM, and Fraunhofer; FR on INRIA, ARCEP, and Les Echos; IT on CNR, AGCOM, and ASI; PL on UKE, POLSA, and GUS; NL on TNO and ACM; ES on CNMC, INTA, and CDTI. The Smarter Service Trendradar's German-language dimension names are preserved as the structural backbone across all markets.
 
 ## Frameworks
 
@@ -68,7 +68,7 @@ If you need to stay ahead of industry trends for strategy, advisory, or portfoli
 - **Polished visual output in one step.** Reports finish as themed, interactive HTML with 5+ Chart.js visualizations and concept diagrams — share-ready, not a raw markdown file you have to format yourself.
 - **Cross-pursuit learning.** Industry catalogs accumulate curated solutions, SPIs, and metrics across engagements — each pursuit gets +20-40% richer context from prior work.
 - **Multi-session workflow.** Resume any project mid-stream with full state recovery via `/trends-resume` — zero context loss between sessions.
-- **Research DACH natively.** Bilingual (DE/EN) queries against curated German institutional sources (VDMA, BITKOM, Fraunhofer, EUR-Lex) — 0 reliance on US-centric datasets, output in your chosen language.
+- **Research your market natively.** Per-market bilingual queries against curated regional institutional sources — DACH (VDMA, BITKOM, Fraunhofer), FR (INRIA, Les Echos), IT (CNR, AGCOM), PL (UKE, POLSA), NL (TNO, ACM), ES (CNMC, INTA), plus US/UK. Zero reliance on generic US-centric datasets; output in your chosen language.
 
 ## Installation
 
@@ -221,7 +221,7 @@ Contributions welcome — trend frameworks, industry taxonomies, research source
 
 ## Custom development
 
-Need a custom trend framework, non-DACH market adaptation, or a new plugin for your domain? Contact [stephan@cogni-work.ai](mailto:stephan@cogni-work.ai).
+Need a custom trend framework, additional market coverage, or a new plugin for your domain? Contact [stephan@cogni-work.ai](mailto:stephan@cogni-work.ai).
 
 ## License
 

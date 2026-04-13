@@ -24,7 +24,7 @@ Layout architecture, CSS patterns, and script structure for the enriched report 
 │  │          │  │  │  Horizon Distribution     │   │  │
 │  │          │  │  └─────────────────────────┘   │  │
 │  │          │  │                                 │  │
-│  │          │  │  ┌─[Excalidraw SVG]─────────┐   │  │
+│  │          │  │  ┌─[Concept SVG]─────────────┐   │  │
 │  │          │  │  │  T → I → P → S flow      │   │  │
 │  │          │  │  └─────────────────────────┘   │  │
 │  │          │  │                                 │  │
@@ -48,7 +48,7 @@ All styles use CSS custom properties from `:root {}` — no hardcoded values in 
 | Class | Purpose | Max-Width |
 |-------|---------|-----------|
 | `.chart-container` | Chart.js canvas wrapper | 720px |
-| `.concept-diagram` | Excalidraw SVG wrapper | 720px |
+| `.concept-diagram` | Concept diagram SVG wrapper | 720px |
 | `.summary-card` | Key takeaway callout | 720px |
 | `.kpi-row` | Flex container for KPI cards | 720px |
 | `.kpi-card` | Individual metric card | 220px |
@@ -70,7 +70,7 @@ Each chart gets:
 
 ## SVG Embedding
 
-Excalidraw exports are embedded inline as `<svg>` elements (not `<img src>`). This ensures:
+Concept diagrams are embedded inline as `<svg>` elements (not `<img src>`). This ensures:
 - No external file dependencies (self-contained HTML)
 - SVG inherits page context (though colors are baked in from export)
 - Responsive scaling via `max-width: 100%; height: auto`

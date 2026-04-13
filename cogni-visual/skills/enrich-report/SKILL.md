@@ -3,7 +3,7 @@ name: enrich-report
 description: >
   Post-process any completed markdown report (trend-report, research-report, or
   generic) into a themed, self-contained HTML file — optionally with interactive
-  Chart.js data visualizations and Excalidraw concept diagrams embedded as inline
+  Chart.js data visualizations and concept diagrams embedded as inline
   SVG. Analyzes the report structure, identifies data-rich sections (statistics,
   tables, distributions, value chains, timelines, cost comparisons), generates
   themed charts and diagrams, and assembles a polished HTML deliverable with
@@ -43,7 +43,7 @@ A great enriched report does not just decorate prose with random charts. Each vi
 Two-track visualization pipeline:
 
 1. **Data track** — Chart.js charts (bar, doughnut, radar, line, stacked bar) for statistics, distributions, comparisons, timelines. Themed with CSS custom properties from design-variables.
-2. **Concept track** — Excalidraw MCP diagrams exported to inline SVG for T→I→P→S flows, relationship maps, strategic concept sketches. Themed with design-variable colors.
+2. **Concept track** — LLM-crafted inline SVG via concept-diagram-svg agent (no Excalidraw dependency) for T→I→P→S flows, relationship maps, strategic concept sketches. Themed with design-variable colors.
 
 The HTML assembly uses a Python generator script (`scripts/generate-enriched-report.py`) that converts markdown to HTML and mounts visualizations at planned injection points — same architectural pattern as `cogni-trends/skills/trends-dashboard` and `cogni-portfolio/skills/portfolio-dashboard`.
 
@@ -76,7 +76,7 @@ The source markdown is never modified. Every word, every citation, every heading
 
 ### Theme-driven visuals
 
-All colors in Chart.js configs and Excalidraw elements reference the design-variables palette. No hardcoded hex values in visualization code. This means the same enriched report can be re-themed by changing the design-variables.json.
+All colors in Chart.js configs and SVG elements reference the design-variables palette. No hardcoded hex values in visualization code. This means the same enriched report can be re-themed by changing the design-variables.json.
 
 ### Citation preservation
 
@@ -309,7 +309,7 @@ When `interactive=false`: auto-approve all, log plan.
 
 ### Phase 4: Visualization Generation
 
-> Generate Chart.js configs and Excalidraw SVGs for each approved enrichment.
+> Generate Chart.js configs and concept-diagram SVGs for each approved enrichment.
 
 Read `references/04-chart-patterns.md` for Chart.js configuration templates.
 **Data track (Chart.js):**
@@ -358,7 +358,7 @@ python3 {SKILL_PATH}/scripts/generate-enriched-report.py \
 
 Before calling the script:
 1. Write `chart-configs.json` — array of all Chart.js configs from Phase 4.
-2. Write SVG files to `{source_dir}/cogni-visual/svgs/enr-XXX.svg` — one per Excalidraw diagram.
+2. Write SVG files to `{source_dir}/cogni-visual/svgs/enr-XXX.svg` — one per concept diagram.
 
 The script:
 1. Parses markdown → HTML sections (headings, paragraphs, tables, blockquotes, code blocks, inline citations → `<a>` links).

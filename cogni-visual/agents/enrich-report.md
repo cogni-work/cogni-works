@@ -2,10 +2,10 @@
 name: enrich-report
 description: >
   Transform a text-only markdown report into a themed HTML deliverable with Chart.js
-  data visualizations and Excalidraw conceptual drawings. Use when the user wants to
+  data visualizations and conceptual diagrams as inline SVG. Use when the user wants to
   enrich a report, add visuals to a report, create a visual report, or make a trend
   report visual. Handles theme selection, enrichment planning, chart generation,
-  Excalidraw diagram creation, and HTML assembly.
+  concept diagram SVG generation, and HTML assembly.
 tools: Read, Write, Edit, Bash, Grep, Glob, AskUserQuestion, Agent, Skill
 model: sonnet
 ---

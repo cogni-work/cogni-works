@@ -102,8 +102,9 @@ Scan the user's request and extract any options they already specified. These be
 - **Wiki paths**: paths to cogni-wiki roots -> collect for wiki_paths
 - **Curate sources**: "prioritize authoritative sources" -> enable
 - **Confirm plan**: "just run it", "don't ask", "silent", "skip confirmation" -> `confirm_plan: false`. Default: `true`
-- **Recursion (deep mode)**: "recursive", "multi-hop", "go deeper" -> `recursive_depth: 2`. "no recursion", "single-pass", "flat" -> `recursive_depth: 0`. Default: 0 (off) — deep mode still runs the full sub-question tree, but with `section-researcher` rather than `deep-researcher`, since recursion is a large cost multiplier most users don't actually need
+- **Recursion (deep mode)**: "recursive", "multi-hop", "go deeper" -> `recursive_depth: 2`. "no recursion", "single-pass", "flat", "cheaper" -> `recursive_depth: 0`. **Default for deep mode: 2** (on) — deep mode runs the full sub-question tree with `deep-researcher` so leaf sub-questions get 2-level internal recursion. A user who wants the cheaper flat path can say "flat" or pick "Disable recursion" in the Phase 1.5 plan-confirmation menu. All non-deep report types default to `recursive_depth: 0` (the field is ignored outside deep mode).
 - **Batch size**: "batch size N", "N at a time", "gentler batches" -> capture int (2/4/6). Default: 4
+- **Allow short**: "short is fine", "don't expand", "I'll edit prose myself", "skip the word-count gate" -> `allow_short: true`. Default: `false`. When false, the Phase 4.5 gate re-dispatches the writer once if the draft falls below the report-type minimum, and Phase 5 runs a second review iteration to verify the expansion. When true, those gates log the deficit but take no expansion action — intended for power users who want the tree structure but will hand-edit length downstream
 
 ### Step 2: Configuration Menu (text output, turn ends)
 
@@ -123,7 +124,7 @@ Assemble the menu dynamically and render it as text output:
      - `local` = analyze your documents (PDF, DOCX, MD, CSV, ...)
      - `wiki` = query your cogni-wiki knowledge bases
      - `hybrid` = combine web + documents + wiki
-4. Always include one line for advanced options: "Advanced: output language, sub-question count, domain filter, researcher role, diagram generation — ask about any of these"
+4. Always include one line for advanced options: "Advanced: output language, sub-question count, domain filter, researcher role, diagram generation, allow short (skip word-count expansion gates) — ask about any of these"
 5. End with: `Reply with your choices, or "go" for defaults.`
 
 **Menu variations** (both as text output — auto-starting research without confirmation wastes compute if the user wanted to tweak something):

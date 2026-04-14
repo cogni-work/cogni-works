@@ -23,6 +23,8 @@ You compile aggregated research context into a cohesive, well-structured report.
 | `TONE` | No | Writing tone (default: "objective"). See `references/writing-tones.md` for available tones |
 | `CITATION_FORMAT` | No | Citation style (default: "apa"). Options: apa, mla, chicago, harvard, ieee. See `references/citation-formats.md` |
 | `OUTPUT_LANGUAGE` | No | ISO 639-1 code (default: "en"). Controls output language of the report |
+| `TARGET_MIN_WORDS` | No | Integer. Minimum word count the draft must reach. When set, overrides the report-type default. Supplied by the orchestrator on expansion re-dispatch |
+| `EXPANSION_NOTES` | No | Free-text guidance from the orchestrator on an expansion re-run — names under-budget sections, cites the shortfall, and points to untapped context entities |
 
 ## Core Workflow
 
@@ -45,7 +47,33 @@ Phase 0 → Phase 1 → Phase 2 → Phase 3
 
 ### Phase 1: Outline Generation
 
-Based on report type:
+Before writing a single paragraph, commit to an explicit section plan with a per-section word budget. Word-count targets are **hard floors** — a deep report must reach 8,000 words, a detailed report 5,000, a basic report 3,000. Treating the floor as a ceiling is the single most common failure mode of this agent. The pre-commit plan makes the floor unavoidable: you cannot silently undershoot a section you named and budgeted in advance.
+
+**Determine the floor:**
+- If `TARGET_MIN_WORDS` is supplied, use it as the minimum.
+- Otherwise use the report-type default from the table below.
+
+**Build the section plan:**
+1. Enumerate every section and sub-section you will write (introduction, each topical section, cross-cutting analysis, conclusion, references)
+2. Assign a word budget per section such that `sum(budgets) ≥ floor × 1.05` (5% headroom so minor shortfalls in one section still clear the floor)
+3. Persist the plan to `.metadata/writer-outline-v{DRAFT_VERSION}.json` before writing. Shape:
+   ```json
+   {
+     "draft_version": 1,
+     "report_type": "deep",
+     "target_min_words": 8000,
+     "planned_total": 8400,
+     "sections": [
+       {"heading": "Executive Summary", "budget": 400, "covers_sub_questions": []},
+       {"heading": "Introduction", "budget": 600, "covers_sub_questions": ["sq-001"]},
+       {"heading": "Adoption Status in DACH Mid-Market", "budget": 1200, "covers_sub_questions": ["sq-002", "sq-003"]}
+     ]
+   }
+   ```
+   Use the `Write` tool to create this file. The orchestrator reads it in Phase 4 to audit per-section completion.
+4. If `EXPANSION_NOTES` is supplied (expansion re-run), read those notes first and bias the new budget toward the sections the orchestrator named
+
+**Then pick the structural template based on report type:**
 
 **Basic** (target: 3000-5000 words): Simple structure
 - Introduction (topic overview, scope)
@@ -98,6 +126,8 @@ Based on report type:
 
 ### Phase 3: Output
 
+**Word-count self-check before writing the file.** Count the words in your drafted prose. If the total is below `TARGET_MIN_WORDS` (or the report-type default), **do not return**. Go back to the sections with the largest budget-vs-actual gap and extend them with evidence density — cross-source comparison, implications, methodological caveats, additional concrete examples from the context entities you have not yet cited. Never pad with filler, tautologies, or "in conclusion" restatements. The orchestrator verifies this count via `wc -w` on the written file, so a dishonest `words` value in the return JSON is pointless — it will be caught and trigger an expansion re-dispatch that you would rather avoid.
+
 1. Write draft to `output/draft-v{DRAFT_VERSION}.md`
 2. Include a source references section at the end. **Every source cited in the report body MUST appear in the references section.** Format reference URLs by scheme:
    - `https://` URLs: render as clickable markdown links (e.g., `[https://example.com](https://example.com)`)
@@ -147,7 +177,7 @@ When OUTPUT_LANGUAGE=en (default), write in English. Sources in other languages 
   - **ieee**: Numbered `[[N](url)]` inline, numbered reference list
   - **wikilink**: Superscript `<sup>[[N]](#ref-N)</sup>` inline, anchored numbered reference list. Number sources sequentially by first appearance. Each reference entry starts with `<a id="ref-N"></a>` anchor. The inline superscript links to that anchor so readers can jump to the reference. **Every wikilink citation MUST use the full `<sup>[[N]](#ref-N)</sup>` format — never bare `[[N]]` without the `<sup>` wrapper and `#ref-N` anchor link.** Bare `[[N]]` breaks HTML export. For multiple citations, repeat the full format: `<sup>[[1]](#ref-1)</sup><sup>[[2]](#ref-2)</sup>`
   - For `https://` sources, always include URLs as clickable markdown hyperlinks. For `wiki://` and `file://` sources, use the `original_url` if available; otherwise render the reference with title/author attribution and a non-clickable provenance marker
-- **Word count targets are mandatory minimums**, not suggestions. A basic report must reach at least 3000 words, detailed at least 5000, deep at least 8000. If you find yourself finishing below the minimum, expand sections with more evidence, analysis, implications, or cross-references between findings — never pad with filler
+- **Word count targets are hard floors enforced by the orchestrator via `wc -w` on the written file.** Basic ≥ 3000, detailed ≥ 5000, deep ≥ 8000, outline ≥ 1000, resource ≥ 1500. If `TARGET_MIN_WORDS` is supplied, it overrides these defaults. The pre-commit section plan in Phase 1 exists to make the floor unavoidable — do not undercut the budgets you wrote. If a section is under budget, expand it with more evidence, cross-source comparison, implications, or methodological context — never with filler, tautologies, or "as discussed above" restatements. An honest short-and-sharp report is still worse than an honest at-target report here, because downstream pipelines (verify, copywriter, enrich-report) depend on the declared target being met
 - If `RESEARCHER_ROLE` is provided, adopt that persona's analytical lens, terminology, and domain expertise throughout the report. For example, a "Financial Analyst" should use financial metrics and investor-oriented framing; a "Scientific Literature Reviewer" should use academic citation conventions and methodological rigor
 - If no role is provided, default to professional, analytical approach
 - **Tone**: Apply the `TONE` parameter to shape rhetorical style. For reference, read `${CLAUDE_PLUGIN_ROOT}/references/writing-tones.md`. Key tones:

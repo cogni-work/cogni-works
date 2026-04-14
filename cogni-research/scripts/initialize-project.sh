@@ -3,7 +3,7 @@ set -euo pipefail
 # initialize-project.sh - Create project directory structure for a research report
 # Version: 1.0.0
 #
-# Usage: initialize-project.sh --topic <topic> --type <basic|detailed|deep|outline|resource> --workspace <path> [--market <region-code>] [--output-language <lang>] [--language <en|de>] [--tone <tone>] [--researcher-role <role>] [--source-urls <url1,url2,...>] [--query-domains <domain1,domain2,...>] [--max-subtopics <N>] [--citation-format <apa|mla|chicago|harvard|ieee>] [--report-source <web|local|wiki|hybrid>] [--document-paths <path1,path2,...>] [--wiki-paths <wiki-root1,wiki-root2,...>] [--confirm-plan <true|false>] [--recursive-depth <N>] [--batch-size <N>] [--suffix <N>]
+# Usage: initialize-project.sh --topic <topic> --type <basic|detailed|deep|outline|resource> --workspace <path> [--market <region-code>] [--output-language <lang>] [--language <en|de>] [--tone <tone>] [--researcher-role <role>] [--source-urls <url1,url2,...>] [--query-domains <domain1,domain2,...>] [--max-subtopics <N>] [--citation-format <apa|mla|chicago|harvard|ieee>] [--report-source <web|local|wiki|hybrid>] [--document-paths <path1,path2,...>] [--wiki-paths <wiki-root1,wiki-root2,...>] [--confirm-plan <true|false>] [--recursive-depth <N>] [--batch-size <N>] [--allow-short <true|false>] [--suffix <N>]
 #
 # Creates:
 #   {workspace}/{slug}-{date}/
@@ -37,6 +37,7 @@ CURATE_SOURCES=""
 CONFIRM_PLAN=""
 RECURSIVE_DEPTH=""
 BATCH_SIZE=""
+ALLOW_SHORT=""
 SUFFIX=""
 
 while [[ $# -gt 0 ]]; do
@@ -60,6 +61,7 @@ while [[ $# -gt 0 ]]; do
     --confirm-plan) CONFIRM_PLAN="$2"; shift 2;;
     --recursive-depth) RECURSIVE_DEPTH="$2"; shift 2;;
     --batch-size) BATCH_SIZE="$2"; shift 2;;
+    --allow-short) ALLOW_SHORT="$2"; shift 2;;
     --suffix) SUFFIX="$2"; shift 2;;
     *) echo "{\"success\": false, \"error\": \"Unknown argument: $1\"}" >&2; exit 2;;
   esac
@@ -248,9 +250,17 @@ if [[ -n "$CONFIRM_PLAN" ]]; then
 fi
 if [[ -n "$RECURSIVE_DEPTH" ]]; then
   CONFIG=$(echo "$CONFIG" | jq --argjson v "$RECURSIVE_DEPTH" '. + {recursive_depth: $v}')
+elif [[ "$REPORT_TYPE" == "deep" ]]; then
+  # Deep mode defaults to recursive_depth=2. Writing this explicitly closes the
+  # silent-downgrade loophole where an unset field was resolved to 0 downstream
+  # and deep mode quietly ran through the flat section-researcher path.
+  CONFIG=$(echo "$CONFIG" | jq '. + {recursive_depth: 2}')
 fi
 if [[ -n "$BATCH_SIZE" ]]; then
   CONFIG=$(echo "$CONFIG" | jq --argjson v "$BATCH_SIZE" '. + {batch_size: $v}')
+fi
+if [[ "$ALLOW_SHORT" == "true" ]]; then
+  CONFIG=$(echo "$CONFIG" | jq '. + {allow_short: true}')
 fi
 echo "$CONFIG" > "$PROJECT_DIR/.metadata/project-config.json"
 

@@ -78,7 +78,13 @@ For each issue:
 - Preserve proper character encoding — never introduce ASCII fallbacks: DE (ä/ö/ü/ß), FR (é/è/ê/ç/à/â), IT (à/è/é/ì/ò/ù), PL (ą/ć/ę/ł/ń/ó/ś/ź/ż), NL (ë/ï), ES (á/é/í/ó/ú/ñ/ü)
 - Keep framework terms in English (SWOT, MECE, etc.)
 
-**Word budget**: Track words added vs. removed. If the revision pushes the report beyond the original draft length + 20%, trim lower-priority additions. The writer agent already calibrated report length to the available context — unbounded growth signals scope creep, not quality improvement.
+**Word budget** (conditional):
+
+- **Default mode** — when the verdict has no high-severity word-deficit issue: track words added vs. removed. If the revision pushes the report beyond the original draft length + 20%, trim lower-priority additions. The writer agent already calibrated report length to the available context — unbounded growth signals scope creep, not quality improvement.
+- **Expansion mode** — when the verdict's issues list contains a high-severity issue whose text begins with `word deficit` or `Word deficit` (the exact phrase the reviewer emits from its Word Count Gate): the +20% cap is lifted. Grow the draft toward the report-type minimum (basic 3000 / detailed 5000 / deep 8000 / outline 1000 / resource 1500). Target for expansion is `max(report_type_minimum, original_words × 1.2)`. If the verdict names specific sections as under budget, bias new content toward those sections first.
+  - Expansion mode is still bound by the anti-fabrication rules in Phase 2 and the grounding rules below. Every new finding must cite an existing source entity or a new WebSearch-backed source. Prefer reusing already-curated sources before pulling in new ones — the aim is evidence density, not new topics.
+  - Do not add new top-level sections in expansion mode unless the verdict explicitly names a missing section. Deepen existing sections with cross-source comparison, implications, methodological context, and concrete examples from the research tree.
+  - If after expansion you still cannot reach the floor without filler, stop short of the floor and let the orchestrator's Phase 4 gate log the deficit rather than padding.
 
 **History-aware revision:**
 - Check previous verdicts to avoid re-introducing issues that were fixed

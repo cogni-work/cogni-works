@@ -72,14 +72,27 @@ Scan the references section for entries missing URLs. Count references that have
 
 #### Word Count Gate
 
-Before scoring dimensions, count the draft's words and check against report-type minimums:
+Before scoring dimensions, count the draft's words (use `wc -w` via Bash on the file, not your own guess) and check against report-type minimums:
 - **Basic**: 3000 words minimum
 - **Detailed**: 5000 words minimum
 - **Deep**: 8000 words minimum
 - **Outline**: 1000 words minimum
 - **Resource**: 1500 words minimum
 
-If the draft is below the minimum, **cap the completeness score at 0.60** regardless of topic coverage. A report that addresses all sub-questions but treats them superficially due to insufficient length is incomplete by definition. Note the word deficit in the issues list with severity "high".
+Compute the delivered-to-minimum ratio: `ratio = actual_words / minimum`. Apply a stepped cap on the completeness score based on how severe the deficit is — a 50% shortfall is a categorically worse failure than a 10% shortfall, and the score must reflect that so the Phase 3 decision matrix actually forces a revise rather than silently letting the weighted average drift past the accept threshold:
+
+- `ratio ≥ 1.00` — no cap, score completeness normally
+- `0.75 ≤ ratio < 1.00` — cap completeness at **0.60** (mild shortfall)
+- `0.50 ≤ ratio < 0.75` — cap completeness at **0.45** (significant shortfall)
+- `ratio < 0.50` — cap completeness at **0.30** (catastrophic shortfall — forces overall weighted score below the 0.75 accept threshold even when every other dimension is perfect)
+
+When any cap applies, add a high-severity issue to the issues list whose text begins with the exact phrase `Word deficit` — the revisor keys on this prefix to switch into expansion mode. Recommended issue text:
+
+```
+Word deficit: delivered N words, minimum M required for {report_type} mode (ratio: R). Expand under-budget sections with additional evidence density rather than new top-level content.
+```
+
+A report that addresses all sub-questions but treats them superficially due to insufficient length is incomplete by definition — the stepped cap encodes this judgment numerically.
 
 ### Phase 2: Claims-Based Review
 

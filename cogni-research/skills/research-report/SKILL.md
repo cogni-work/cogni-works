@@ -189,8 +189,13 @@ plan = {
   "channels":           <resolved list — see below>,
   "web_agent":          <"deep-researcher" if deep mode AND recursive_depth > 0,
                          else "section-researcher">,
-  "recursive_depth":    <recursive_depth from project-config.json;
-                         default 2 in deep mode, 0 otherwise>,
+  "recursive_depth":    <recursive_depth from project-config.json.
+                         Default resolution: if the field is absent or null,
+                         use 2 when report_type == "deep", otherwise 0.
+                         This default matters — a missing field in deep mode
+                         must NOT silently downgrade to flat section-researcher.
+                         A user who consciously wants depth=0 in deep mode can
+                         still choose "Disable recursion" in 1.5c>,
   "batch_size":         <batch_size from project-config.json; default 4>,
   "total_agents":       <sub_question_count × number of active channels>,
   "batch_count":        <ceil(total_agents / batch_size)>,
@@ -463,7 +468,62 @@ Task(writer,
   OUTPUT_LANGUAGE=<output_language>)
 ```
 
-Verify: draft written to `output/draft-v1.md`, reasonable word count.
+Verify: draft written to `output/draft-v1.md` and writer's outline plan written to `.metadata/writer-outline-v1.json` (new contract — see `agents/writer.md` Phase 1).
+
+#### Phase 4.5: Word-count gate (authoritative, file-level)
+
+The writer's self-reported `words` in return JSON has historically drifted (observed: agent claimed 12,500, actual file was 3,356). The orchestrator must measure the draft itself, not trust the agent's self-report.
+
+1. Measure the actual word count from the file:
+   ```bash
+   ACTUAL_WORDS=$(wc -w < "${PROJECT_PATH}/output/draft-v1.md" | tr -d ' ')
+   ```
+2. Resolve the minimum floor for this report type:
+
+   | Report type | Minimum floor |
+   |---|---|
+   | basic | 3000 |
+   | detailed | 5000 |
+   | deep | 8000 |
+   | outline | 1000 |
+   | resource | 1500 |
+
+3. Compute `gate_floor = floor × 0.9` (10% tolerance band so a writer that came in at 7,200 words against an 8,000 deep-mode minimum is not penalized for rounding).
+4. Decision:
+   - **`ACTUAL_WORDS >= gate_floor`** → gate passes. Continue to Phase 5.
+   - **`ACTUAL_WORDS < gate_floor` AND `project-config.json` has `allow_short: true`** → log the deficit but skip the re-dispatch. Record `phase_4_word_deficit: {actual, floor, action: "allow_short_opt_out"}` in `.metadata/execution-log.json`. Continue to Phase 5.
+   - **`ACTUAL_WORDS < gate_floor` AND no `allow_short` opt-out** → re-dispatch the writer **once** with:
+     ```
+     Task(writer,
+       PROJECT_PATH=<project_path>,
+       DRAFT_VERSION=2,
+       REPORT_TYPE=<type>,
+       RESEARCHER_ROLE=<role>,
+       TONE=<tone>,
+       CITATION_FORMAT=<citation_format>,
+       OUTPUT_LANGUAGE=<output_language>,
+       TARGET_MIN_WORDS=<floor>,
+       EXPANSION_NOTES="Previous draft ({actual_words} words) fell below the {floor}-word {type}-mode minimum by {floor - actual_words} words. Read .metadata/writer-outline-v1.json and identify sections whose drafted length fell below their planned budget — expand those first. Add evidence density (cross-source comparison, implications, methodological context, concrete examples from untapped context entities). Do not add new top-level sections. Do not pad with filler or 'in conclusion' restatements.")
+     ```
+5. After the re-dispatch, measure `wc -w output/draft-v2.md`. If still below `gate_floor`, do NOT re-dispatch a third time — cap at one expansion attempt to bound cost. Instead:
+   - Log `phase_4_word_deficit: {actual_v1, actual_v2, floor, action: "writer_cap_reached"}` in `.metadata/execution-log.json`
+   - Continue to Phase 5 with `draft-v2.md` as the input — the reviewer's stepped completeness cap will downgrade the verdict, and the Phase 5 expansion-review loop (see Phase 5 below) gives the revisor one more chance to close the gap
+6. Record the gate outcome in `.metadata/execution-log.json` under `phases.phase_4_writer`:
+   ```json
+   {
+     "phase_4_writer": {
+       "drafts": [
+         {"version": 1, "actual_words": 3356, "self_reported_words": 12500, "gate_passed": false},
+         {"version": 2, "actual_words": 8240, "self_reported_words": 8400, "gate_passed": true}
+       ],
+       "floor": 8000,
+       "gate_floor": 7200,
+       "re_dispatches": 1,
+       "allow_short": false
+     }
+   }
+   ```
+   The `self_reported_words` field surfaces the honesty-drift signal — a large gap between self-reported and actual is informational (not a block), but useful diagnostics for maintainers.
 
 ### Phase 5: Structural Review
 
@@ -497,7 +557,15 @@ Task(revisor,
   MARKET=<market>)
 ```
 
-Maximum 1 structural review iteration. After revision (or if the first review accepts), proceed to Phase 5.5.
+**Iteration cap** — conditional on the verdict's issue profile:
+
+- **Default: 1 structural review iteration.** After revision (or if the first review accepts), proceed to Phase 5.5. This is the common case and costs no more than today.
+- **Exception: 2 iterations when iteration 1's verdict contains a high-severity issue whose text begins with `Word deficit`** (the exact phrase emitted by the reviewer's Word Count Gate — see `agents/reviewer.md`). When this issue is present, the revisor runs in expansion mode (see `agents/revisor.md` — the +20% cap is lifted for expansion). Without a second review pass, the expansion cannot be verified and the word-count gate would be a dead letter.
+  - After the revisor produces `draft-v{N+1}.md`, re-run the reviewer once more with `REVIEW_ITERATION=2`, generating `.metadata/review-verdicts/v2.json`.
+  - Regardless of the iteration-2 verdict (accept or revise), proceed to Phase 5.5 — no third iteration. The expansion-review loop is a one-shot: close the gap or log it and move on.
+  - If `project-config.json` has `allow_short: true`, skip the second iteration entirely — the user opted out of auto-expansion in Phase 4.5, so there is no point spending tokens verifying an expansion that did not happen.
+
+This narrow exception applies only to word-deficit deficits. Every other revise reason (structural issues, coherence gaps, source diversity) still caps at 1 iteration — no behavior change for the common case, no runaway cost.
 
 ### Phase 5.5: Visual Enrichment via cogni-visual (Optional)
 
@@ -528,7 +596,15 @@ Ask the user whether to generate a themed HTML version of the report with intera
    - `enrich_report_path`: path to enriched HTML or null
 4. Report summary to user:
    - Topic and report type
-   - Word count and section count
+   - **Word count**: always formatted as `Delivered: N words (target: {min}–{max} for {report_type} mode)`. Resolve `{min}` and `{max}` from the Report Types table in Phase 1 (basic 3000–5000, detailed 5000–10000, deep 8000–15000, outline 1000–2000, resource 1500–3000).
+   - **Word-count gate status** — read `.metadata/execution-log.json phases.phase_4_writer`:
+     - If `re_dispatches == 0` and the final `actual_words >= floor`: do not print any warning
+     - If `re_dispatches == 1` and the final `actual_words >= floor`: print `✓ Word-count gate: expansion re-dispatch succeeded ({v1} → {v2} words).` — a positive signal the gate earned its cost
+     - If the final `actual_words < floor`: print `⚠ Below target by {floor - actual_words} words.` followed by one of:
+       - `allow_short: true was set — expansion skipped.` (opt-out path)
+       - `Writer re-dispatch cap reached after one attempt.` (cap-hit path)
+     - If `phase_5_review.iteration_count == 2`: print `✓ Phase 5 expansion-review loop ran — reviewer re-verified the revised draft.`
+   - Section count
    - Sources cited
    - Structural review score
    - **Estimated cost** (total USD from cost_summary)
@@ -556,6 +632,8 @@ If a project directory already exists at init:
 | All researchers fail | Ask user to rephrase topic or try different sub-questions |
 | Most researchers fail | Proceed with available contexts, note gaps in report |
 | Writer produces empty draft | Re-run with more explicit instructions |
+| Writer below minimum word count | Phase 4.5 gate re-dispatches writer once with `TARGET_MIN_WORDS` and `EXPANSION_NOTES`. If the second attempt still falls short, Phase 5 expansion-review loop runs (capped at iteration 2). Final deficit surfaced in Phase 6 summary |
+| Writer self-reports inflated word count | Phase 4.5 measures `wc -w` on the file — self-reported value is ignored for the gate, logged as diagnostic |
 | Claims verification needed | Handled by verify-report skill in a separate context window — not run here |
 | Review loop reaches max (3) | Accept current draft with quality warning |
 | Local documents unreadable | Log skipped files, proceed with readable ones. If none readable, ask user for alternative paths |

@@ -27,8 +27,39 @@ import sys
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Set, Tuple
 
-# Maximum words allowed in aggregated context (matches GPT-Researcher's safety margin)
-MAX_CONTEXT_WORDS = 25000
+# Maximum words allowed in aggregated context, per report type.
+# The writer's output target drives the input budget — a deep report needs to
+# emit 8000+ words, so a flat 25K input cap forces ~3:1 compression which
+# structurally pushes the writer toward terse synthesis. Scaling the cap by
+# report type gives the writer enough raw material to retain evidence density
+# at the required output length. Basic/detailed keep the legacy 25K ceiling;
+# deep gets headroom; outline/resource are trimmed since their output targets
+# are much smaller.
+MAX_CONTEXT_WORDS_BY_TYPE: Dict[str, int] = {
+    "basic": 12000,
+    "detailed": 25000,
+    "deep": 45000,
+    "outline": 8000,
+    "resource": 10000,
+}
+DEFAULT_MAX_CONTEXT_WORDS = 25000
+
+
+def load_report_type(project_path: Path) -> str:
+    """Read report_type from .metadata/project-config.json. Returns empty string on miss."""
+    cfg_path = project_path / ".metadata" / "project-config.json"
+    if not cfg_path.is_file():
+        return ""
+    try:
+        cfg = json.loads(cfg_path.read_text(encoding='utf-8'))
+        return str(cfg.get("report_type", "")).lower()
+    except (OSError, json.JSONDecodeError):
+        return ""
+
+
+def get_max_context_words(report_type: str) -> int:
+    """Select the context word cap for a given report type, with a safe default."""
+    return MAX_CONTEXT_WORDS_BY_TYPE.get(report_type, DEFAULT_MAX_CONTEXT_WORDS)
 
 
 def parse_frontmatter(text: str) -> Tuple[Dict[str, Any], str]:
@@ -138,6 +169,10 @@ def main() -> None:
             print(f"ERROR: {msg}", file=sys.stderr)
         sys.exit(1)
 
+    # Resolve the context word cap from the project's report type.
+    report_type = load_report_type(project_path)
+    max_context_words = get_max_context_words(report_type)
+
     # Load contexts and sources
     contexts = load_entities(project_path / "01-contexts" / "data")
     sources = load_entities(project_path / "02-sources" / "data")
@@ -202,14 +237,16 @@ def main() -> None:
 
     aggregated["total_words"] = total_words
 
-    # Trim contexts to stay within word limit (keep most recent, matching original's strategy)
-    if total_words > MAX_CONTEXT_WORDS:
+    # Trim contexts to stay within the report-type word limit (keep most recent, matching original's strategy)
+    aggregated["report_type"] = report_type
+    aggregated["max_context_words"] = max_context_words
+    if total_words > max_context_words:
         trimmed_contexts = []
         running_words = 0
         # Process in reverse to keep most recent contexts (later sub-questions tend to be deeper)
         for ctx in reversed(aggregated["contexts"]):
             wc = ctx["word_count"]
-            if running_words + wc <= MAX_CONTEXT_WORDS:
+            if running_words + wc <= max_context_words:
                 trimmed_contexts.insert(0, ctx)
                 running_words += wc
             else:
@@ -240,8 +277,12 @@ def main() -> None:
         "contexts": len(contexts),
         "sources": len(seen_source_ids),
         "total_words": total_words,
+        "report_type": report_type,
+        "max_context_words": max_context_words,
         "output_path": str(output_path),
     }
+    if "trimmed_from" in aggregated:
+        result["trimmed_from"] = aggregated["trimmed_from"]
 
     if args.json:
         print(json.dumps(result))

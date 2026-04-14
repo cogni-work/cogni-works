@@ -902,7 +902,7 @@ def generate_infographic_header(ig_data, dv):
     sources = escape_html(ig_data.get("sources", ""))
 
     parts = []
-    parts.append('<div class="infographic-editorial">')
+    parts.append('<div class="infographic-editorial infographic-breakout">')
 
     # Editorial title
     parts.append(f'<div class="ig-title">{title}</div>')
@@ -1061,6 +1061,26 @@ def verify_content_preservation(source_md, output_html):
     }
 
 
+def verify_enrichment_completeness(output_html, enrichment_plan, density):
+    """Verify all approved enrichments from the plan appear in the HTML.
+
+    Applies the same density/section trimming as generate_html so only
+    enrichments that *should* have been rendered are checked. Returns dict
+    with pass/fail and the list of missing enrichment IDs.
+    """
+    validated, _ = validate_enrichment_plan(enrichment_plan, density)
+    expected_ids = {e["id"] for e in validated}
+    # Match id="enr-XXX" on canvas, div, svg, or section elements
+    found_ids = set(re.findall(r'id="(enr-\d+)"', output_html))
+    missing = sorted(expected_ids - found_ids)
+    return {
+        "pass": len(missing) == 0,
+        "expected": sorted(expected_ids),
+        "found": sorted(found_ids),
+        "missing": missing,
+    }
+
+
 # ---------------------------------------------------------------------------
 # HTML assembly
 # ---------------------------------------------------------------------------
@@ -1112,6 +1132,7 @@ def generate_css(dv):
   --shadow-md: {sh['md']};
   --shadow-lg: {sh['lg']};
   --shadow-xl: {sh['xl']};
+  --sidebar-width: 260px;
 }}
 
 *, *::before, *::after {{ box-sizing: border-box; margin: 0; padding: 0; }}
@@ -1122,23 +1143,31 @@ body {{
   color: var(--text);
   line-height: 1.7;
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }}
 
 /* ========== EDITORIAL INFOGRAPHIC (Economist-style, inline after exec summary) ========== */
 
 .infographic-editorial {{
-  max-width: 860px;
-  margin: 48px auto 48px;
-  padding: 40px 48px;
   background: var(--surface);
-  border-top: 3px solid var(--brand-accent);
-  border-bottom: 1px solid var(--border);
   page-break-inside: avoid;
 }}
 
-/* Pencil-rendered HTML fragment (fallback when PNG unavailable) */
+/* Full-width breakout: spans from sidebar edge to right page edge */
+.infographic-breakout {{
+  max-width: none;
+  width: calc(100% + 80px);
+  margin-left: -40px;
+  margin-right: -40px;
+  padding: 48px 40px;
+  border-top: 3px solid var(--brand-accent);
+  border-bottom: 1px solid var(--border);
+  margin-top: 48px;
+  margin-bottom: 48px;
+}}
+
+/* Pencil-rendered HTML fragment */
 .infographic-pencil-html {{
-  max-width: 1080px;
   padding: 0;
   overflow: hidden;
 }}
@@ -1455,6 +1484,7 @@ tr:hover td {{ background: var(--surface); }}
   nav.sidebar {{ display: none; }}
   main.content {{ padding: 24px 20px; max-width: 100%; }}
   .infographic-inner {{ padding: 0 20px; }}
+  .infographic-breakout {{ width: calc(100% + 40px); margin-left: -20px; margin-right: -20px; padding: 40px 20px; }}
 }}
 @media (max-width: 768px) {{
   .kpi-row {{ flex-direction: column; align-items: center; }}
@@ -1596,8 +1626,9 @@ def _build_content_section_based(sections, enrich_by_section, svg_dir, dv):
 
 
 def _generate_infographic_image_html(image_path, output_dir):
-    """Embed a Pencil-rendered infographic PNG as a magazine-style peek strip.
+    """Embed a Pencil-rendered infographic image as a magazine-style peek strip.
 
+    Prefers WebP over PNG when both exist (25-35% smaller base64).
     A vertical strip on the right edge shows a sliver of the infographic —
     like a magazine page peeking out. Clicking it triggers a 3D page-turn
     unfold animation revealing the full infographic panel. Click the overlay,
@@ -1605,6 +1636,11 @@ def _generate_infographic_image_html(image_path, output_dir):
     full-screen lightbox.
     """
     import base64
+    # Prefer WebP over PNG for smaller base64 embedding
+    if image_path:
+        webp_path = os.path.splitext(image_path)[0] + '.webp'
+        if os.path.isfile(webp_path):
+            image_path = webp_path
     if not image_path or not os.path.isfile(image_path):
         return ''
     with open(image_path, 'rb') as f:
@@ -1674,7 +1710,7 @@ def _generate_infographic_image_html(image_path, output_dir):
     position: fixed;
     top: 0;
     right: 0;
-    left: 260px;
+    left: var(--sidebar-width, 260px);
     height: 100vh;
     z-index: 9999;
     background: #ffffff;
@@ -1823,8 +1859,8 @@ def _load_infographic_html_fragment(html_path, output_dir):
         fragment = f.read().strip()
     if not fragment or len(fragment) < 100:
         return ''
-    # Wrap in the editorial container for consistent spacing with other paths
-    return f'<div class="infographic-editorial infographic-pencil-html">\n{fragment}\n</div>'
+    # Wrap in the editorial container with breakout for full-width placement
+    return f'<div class="infographic-editorial infographic-pencil-html infographic-breakout">\n{fragment}\n</div>'
 
 
 def generate_html(source_path, enrichment_plan, infographic_data, svg_dir, dv,
@@ -3134,7 +3170,8 @@ def _assemble_flipbook(scroll_html, language='en'):
 
 def post_process_html(html_path, source_path, layout='scroll',
                       language='en', infographic_image=None,
-                      infographic_html_path=None, infographic_data_path=None):
+                      infographic_html_path=None, infographic_data_path=None,
+                      enrichment_plan_path=None, density='balanced'):
     """Post-process an LLM-written HTML file: inject infographic + validate content.
 
     When layout='flipbook', first transforms scroll-mode HTML into flipbook layout
@@ -3143,7 +3180,8 @@ def post_process_html(html_path, source_path, layout='scroll',
     When layout='scroll', injects infographic at <!-- INFOGRAPHIC_INJECTION_POINT -->
     using the three-tier priority cascade.
 
-    Always validates content preservation against the source markdown.
+    Always validates content preservation and enrichment completeness against
+    the source markdown and enrichment plan.
     """
     with open(html_path, encoding='utf-8') as f:
         html = f.read()
@@ -3171,7 +3209,7 @@ def post_process_html(html_path, source_path, layout='scroll',
         if '<!-- INFOGRAPHIC_INJECTION_POINT -->' in html:
             html = html.replace('<!-- INFOGRAPHIC_INJECTION_POINT -->', ig_html)
         else:
-            # Fallback: inject after <main> tag or into flipbook container
+            # Fallback: inject before second <h2 (after executive summary)
             if layout == 'flipbook':
                 html = html.replace(
                     '<div class="page page-infographic"',
@@ -3179,7 +3217,13 @@ def post_process_html(html_path, source_path, layout='scroll',
                     1
                 )
             else:
-                html = html.replace('<main>', '<main>\n' + ig_html, 1)
+                h2_matches = list(re.finditer(r'<h2\b', html))
+                if len(h2_matches) >= 2:
+                    pos = h2_matches[1].start()
+                    html = html[:pos] + ig_html + '\n' + html[pos:]
+                else:
+                    # Fallback: only 1 or 0 H2s — inject after <main>
+                    html = html.replace('<main>', '<main>\n' + ig_html, 1)
 
     # Write back
     with open(html_path, 'w', encoding='utf-8') as f:
@@ -3187,6 +3231,16 @@ def post_process_html(html_path, source_path, layout='scroll',
 
     # Validate content preservation
     validation = verify_content_preservation(md_text, html)
+
+    # Validate enrichment completeness (if enrichment plan provided)
+    if enrichment_plan_path and os.path.isfile(enrichment_plan_path):
+        with open(enrichment_plan_path, encoding='utf-8') as f:
+            plan = json.load(f)
+        enr_check = verify_enrichment_completeness(html, plan, density)
+        validation["enrichment_completeness"] = enr_check
+        if not enr_check["pass"]:
+            validation["pass"] = False
+
     return html_path, validation
 
 
@@ -3228,6 +3282,8 @@ def main():
                 infographic_image=args.infographic_image or None,
                 infographic_html_path=args.infographic_html or None,
                 infographic_data_path=args.infographic_data or None,
+                enrichment_plan_path=args.enrichment_plan or None,
+                density=args.density,
             )
             result = {"status": "ok", "path": out, "validation": validation, "mode": "post-process"}
             print(json.dumps(result, indent=2))

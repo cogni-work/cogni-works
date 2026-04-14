@@ -29,12 +29,13 @@ A great enriched report does not just decorate prose with random charts. Each vi
 
 ## Two-Zone Architecture
 
-The enriched report uses a two-zone layout — an infographic header for visual data storytelling, and a prose body for deep reading:
+The enriched report uses a two-zone layout — an executive summary followed by a full-width infographic, then the detailed report body:
 
-1. **Infographic header** — A page-filling editorial visual executive summary at the top of the HTML. Contains KPI cards, 1-2 charts, optional pull-quote, optional comparison pair. Distilled from the complete report using story-to-infographic editorial-preset principles. Designed to be scanned in 60 seconds. This is where ALL the data visualization lives.
-2. **Report body** — The full prose report with sidebar navigation below the infographic. Every paragraph, citation, table, blockquote, list, and subsection heading from the source markdown appears verbatim. Very sparse illustrations only (3-5 max at `balanced` density): process-flows, concept diagrams, or key comparison charts — only where a visual genuinely aids comprehension of a specific passage.
+1. **Executive summary** — The first H2 section of the report (e.g., "Executive Summary", "Management Summary"). Rendered at normal content width (860px) with sidebar navigation.
+2. **Infographic** — A full-width editorial visual executive summary placed immediately after the executive summary, breaking out of the content column to span from the sidebar edge to the right page edge. Contains KPI cards, 1-2 charts, optional pull-quote, optional comparison pair. Distilled from the complete report using story-to-infographic editorial-preset principles. Designed to be scanned in 60 seconds. This is where ALL the data visualization lives. Uses the `.infographic-breakout` CSS class for full-width placement.
+3. **Report body** — The remaining prose sections with sidebar navigation. Every paragraph, citation, table, blockquote, list, and subsection heading from the source markdown appears verbatim. Very sparse illustrations only (3-5 max at `balanced` density): process-flows, concept diagrams, or key comparison charts — only where a visual genuinely aids comprehension of a specific passage.
 
-This matches the consulting deliverable pattern: executive one-pager up front, detailed report below. The infographic satisfies the desire for visuals; the report body stays clean and readable.
+This matches the consulting deliverable pattern: executive summary as context, visual one-pager for the scan, detailed report for deep reading.
 
 ## Architecture
 
@@ -45,8 +46,9 @@ The pipeline splits creative and deterministic work between an LLM agent and a P
   - **Concept track** — LLM-crafted inline SVG (no Excalidraw dependency) for flows, relationship maps, concept sketches. Uses `${CLAUDE_PLUGIN_ROOT}/libraries/svg-patterns.md` recipes.
 
 - **`generate-enriched-report.py --post-process` (Python script)** — handles deterministic post-processing after the agent writes the HTML:
-  - Infographic injection (HTML fragment > PNG base64 > JSON fallback)
+  - Infographic injection (HTML fragment > WebP/PNG base64 > JSON fallback) — placed after executive summary with full-width breakout
   - Content preservation validation (word count >= 80%, heading count, citation count)
+  - Enrichment completeness validation (every approved `enr-XXX` ID from the plan appears in the HTML)
   - Enrichment plan validation (density caps, type restrictions)
   - Flipbook derivation (when called with `--layout flipbook` on a copy of the scroll HTML) — transforms into paginated two-page spreads with cover extraction, lazy Chart.js init, and pagination engine
 
@@ -196,11 +198,12 @@ This phase produces a DIN A4 portrait infographic (Economist data-page style). B
 
 Check for rendered infographic artifacts in `{source_dir}/cogni-visual/` only (the canonical location for all visual working artifacts):
 - `{source_dir}/cogni-visual/infographic-fragment.html` (HTML fragment — highest quality, responsive, selectable text)
+- `{source_dir}/cogni-visual/infographic-preview.webp` (WebP — preferred image format, 25-35% smaller than PNG)
 - `{source_dir}/cogni-visual/infographic-preview.png` (PNG — pixel-perfect fallback)
 
-**Migration (v0.16.11):** If `infographic-preview.png` is not found, also check for the legacy filename `preview.png` in `{source_dir}/cogni-visual/`. If found, rename it to `infographic-preview.png` and continue.
+**Migration (v0.16.11):** If neither `.webp` nor `.png` is found, also check for the legacy filename `preview.png` in `{source_dir}/cogni-visual/`. If found, rename it to `infographic-preview.png` and continue.
 
-1. **Rendered artifacts exist:** `{source_dir}/cogni-visual/infographic-fragment.html` OR `{source_dir}/cogni-visual/infographic-preview.png`
+1. **Rendered artifacts exist:** `{source_dir}/cogni-visual/infographic-fragment.html` OR `{source_dir}/cogni-visual/infographic-preview.webp` OR `{source_dir}/cogni-visual/infographic-preview.png`
    - If any file exists: **skip all of Phase 2a**. The infographic is already rendered.
    - Tell the user: "Reusing existing infographic artifacts (skipping distillation + render)."
    - Store the path to the best artifact found (HTML fragment preferred over PNG).
@@ -255,13 +258,13 @@ The agent uses Pencil MCP tools (`open_document`, `batch_design`, `export_nodes`
 
 **Output artifacts (vary by path):**
 
-| Path | infographic-brief.md | infographic.pen | infographic-preview.png | infographic-fragment.html | infographic-data.json |
-|------|---------------------|----------------|------------------------|--------------------------|----------------------|
-| 1 (render exists) | pre-existing | pre-existing | pre-existing (reused) | pre-existing or absent | not needed |
-| 2 (brief only) | pre-existing | generated | generated | generated (best-effort) | not generated |
-| 3 (from scratch) | generated | generated | generated | generated (best-effort) | generated |
+| Path | infographic-brief.md | infographic.pen | infographic-preview.png | infographic-preview.webp | infographic-fragment.html | infographic-data.json |
+|------|---------------------|----------------|------------------------|-------------------------|--------------------------|----------------------|
+| 1 (render exists) | pre-existing | pre-existing | pre-existing (reused) | pre-existing or absent | pre-existing or absent | not needed |
+| 2 (brief only) | pre-existing | generated | generated | generated (best-effort) | generated (best-effort) | not generated |
+| 3 (from scratch) | generated | generated | generated | generated (best-effort) | generated (best-effort) | generated |
 
-**Three-tier infographic priority in Phase 4:** The post-processor uses the highest-quality artifact available: HTML fragment (native responsive HTML with Pencil's editorial precision, selectable text, responsive layout) > PNG (pixel-perfect base64 with magazine peek strip + lightbox) > JSON fallback (template-generated inline HTML). The HTML fragment is preferred because it preserves text selectability, link clickability, and responsive layout from Pencil's tree-walk conversion.
+**Three-tier infographic priority in Phase 4:** The post-processor uses the highest-quality artifact available: HTML fragment (native responsive HTML with Pencil's editorial precision, selectable text, responsive layout) > WebP/PNG image (pixel-perfect base64 with magazine peek strip + lightbox — WebP preferred over PNG for ~30% smaller base64) > JSON fallback (template-generated inline HTML). The HTML fragment is preferred because it preserves text selectability, link clickability, and responsive layout from Pencil's tree-walk conversion.
 
 ---
 
@@ -377,6 +380,8 @@ cp "{scroll_output_path}" "{flipbook_output_path}"
 python3 {SKILL_PATH}/scripts/generate-enriched-report.py --post-process \
   --html "{flipbook_output_path}" \
   --source "{source_path}" \
+  --enrichment-plan "{source_dir}/cogni-visual/enrichment-plan.json" \
+  --density "{density}" \
   --layout "flipbook" \
   --language "{language}" \
   --infographic-image "{INFOGRAPHIC_IMAGE}" \
@@ -394,7 +399,7 @@ Omit infographic flags for paths that don't exist. The copy must happen BEFORE t
 
 > Verify the enriched HTML is complete and correct.
 
-**Six validation gates:**
+**Seven validation gates:**
 
 1. **Content completeness** — every H2 section heading from source appears in HTML (grep section IDs or heading text).
 2. **Citation preservation** — count `<a href=` in HTML >= count of `[text](url)` in source markdown.
@@ -402,6 +407,7 @@ Omit infographic flags for paths that don't exist. The copy must happen BEFORE t
 4. **SVG integrity** — every inline `<svg` block is well-formed (has closing `</svg>`).
 5. **Infographic presence** — the HTML contains the infographic (grep for `infographic` class or `ig-lightbox` id). If missing, the post-processor failed — re-run or inject manually.
 6. **Content preservation** — HTML word count (excluding infographic and chart containers) >= 80% of source word count, and HTML `<h2>` count >= source `##` count.
+7. **Enrichment completeness** — every `enr-XXX` ID from the approved enrichment plan has a corresponding element in the HTML (`<canvas>`, `<svg>`, or `<div>` with that ID). The post-processor checks this automatically and reports missing IDs in `validation.enrichment_completeness.missing`. If any enrichment is missing, the report-html-writer must add it and re-run the post-processor — the user approved these enrichments in Phase 3.
 
 If any gate fails: fix the specific issue and re-validate. Do not regenerate from scratch.
 

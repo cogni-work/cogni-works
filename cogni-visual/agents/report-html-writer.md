@@ -30,7 +30,7 @@ Your ENTIRE response must be a SINGLE LINE of JSON — no text before or after, 
 
 **Success:**
 ```json
-{"ok":true,"output_path":"/abs/path/report-enriched.html","enrichments":{"total":5,"data":3,"concept":2,"html":0},"preservation":{"source_words":11200,"html_words":10950,"ratio":0.98,"h2_source":11,"h2_html":11,"citations_source":46,"citations_html":46},"post_processor":{"infographic_tier":"html-fragment","validation_pass":true}}
+{"ok":true,"output_path":"/abs/path/report-enriched.html","enrichments":{"total":5,"data":3,"concept":2,"html":0},"preservation":{"source_words":11200,"html_words":10950,"ratio":0.98,"h2_source":11,"h2_html":11,"citations_source":46,"citations_html":46},"enrichment_completeness":{"expected":5,"found":5,"missing":[]},"post_processor":{"infographic_tier":"html-fragment","validation_pass":true}}
 ```
 
 **Error:**
@@ -89,14 +89,16 @@ Write the entire self-contained HTML file to `OUTPUT_PATH` using the Write tool.
 
 Write a `<style>` block containing:
 
-- **`:root {}` block** with CSS custom properties from design-variables: `--primary`, `--secondary`, `--accent`, `--accent-muted`, `--accent-dark`, `--bg`, `--surface`, `--surface2`, `--surface-dark`, `--border`, `--text`, `--text-light`, `--text-muted`, status colors, typography tokens (`--font-headers`, `--font-body`, `--font-mono`), spacing tokens (`--radius`, `--shadow-sm/md/lg/xl`)
-- **Two-zone layout** — sidebar (260px, sticky, full viewport height) + content area
+- **`:root {}` block** with CSS custom properties from design-variables: `--primary`, `--secondary`, `--accent`, `--accent-muted`, `--accent-dark`, `--bg`, `--surface`, `--surface2`, `--surface-dark`, `--border`, `--text`, `--text-light`, `--text-muted`, status colors, typography tokens (`--font-headers`, `--font-body`, `--font-mono`), spacing tokens (`--radius`, `--shadow-sm/md/lg/xl`), `--sidebar-width: 260px`
+- **Two-zone layout** — sidebar (`var(--sidebar-width)`, sticky, full viewport height) + content area
 - **Heading hierarchy** — h1: 2.2rem, h2: 1.6rem, h3: 1.2rem, h4: 1.05rem, all using `var(--font-headers)`
 - **Body text** — `line-height: 1.7`, `var(--font-body)` at browser default size
 - **Content backbone** — `main.content` max-width 860px with `padding: 48px 40px`
 - **Enrichment insets** — `.chart-container`, `.concept-diagram`, `.summary-card` at max-width 720px with `margin: 32px auto` (the 140px width difference signals visual subordination)
 - **Table, blockquote, citation link styles**
-- **Responsive breakpoints** — >1024px: sidebar visible; 768-1024px: sidebar hidden, content full-width with 20px padding; <768px: KPI cards stack, charts full-width, smaller headings
+- **Infographic breakout** — `.infographic-breakout` breaks out of the content column to span from sidebar edge to right page edge: `max-width: none; width: calc(100% + 80px); margin-left: -40px; margin-right: -40px; padding: 48px 40px; border-top: 3px solid var(--primary); border-bottom: 1px solid var(--border); margin-top: 48px; margin-bottom: 48px;`
+- **`body` overflow** — `overflow-x: hidden` to prevent horizontal scrollbar from breakout pattern
+- **Responsive breakpoints** — >1024px: sidebar visible; 768-1024px: sidebar hidden, content full-width with 20px padding, `.infographic-breakout { width: calc(100% + 40px); margin-left: -20px; margin-right: -20px; padding: 40px 20px; }`; <768px: KPI cards stack, charts full-width, smaller headings
 
 ### 3.3 Sidebar Navigation
 
@@ -111,7 +113,7 @@ Build a fixed sidebar from the heading hierarchy (H2/H3):
 
 ### 3.4 Infographic Injection Point
 
-Place `<!-- INFOGRAPHIC_INJECTION_POINT -->` immediately after `<main>` and before the first `<h1>`. The post-processor replaces this with the infographic.
+Place `<!-- INFOGRAPHIC_INJECTION_POINT -->` after the last paragraph of the first `<h2>` section (executive summary / management summary), immediately before the second `<h2>`. This puts the infographic between the executive summary and the detailed report body. The post-processor replaces this marker with the infographic wrapped in `.infographic-breakout` so it spans the full available width.
 
 ### 3.5 Main Content Conversion
 
@@ -156,6 +158,8 @@ Run the post-processor to inject the infographic header and validate content pre
 python3 {SCRIPT_PATH} --post-process \
   --html "{OUTPUT_PATH}" \
   --source "{SOURCE_PATH}" \
+  --enrichment-plan "{ENRICHMENT_PLAN_PATH}" \
+  --density "{DENSITY}" \
   --layout "scroll" \
   --language "{LANGUAGE}" \
   --infographic-image "{INFOGRAPHIC_IMAGE}" \
@@ -163,15 +167,16 @@ python3 {SCRIPT_PATH} --post-process \
   --infographic-data "{INFOGRAPHIC_DATA}"
 ```
 
-Omit infographic flags for paths that were not provided.
+Omit infographic flags for paths that were not provided. `DENSITY` defaults to `balanced` if not specified.
 
 **What the post-processor does:**
 1. Replaces `<!-- INFOGRAPHIC_INJECTION_POINT -->` with the infographic (tier 1: HTML fragment > tier 2: PNG base64 > tier 3: JSON fallback)
 2. Validates content preservation (word count >= 80%, H2 count match, citation count)
-3. Writes the result back to the same file
-4. Returns JSON with `validation` field
+3. Validates enrichment completeness (every `enr-XXX` ID from the plan has a matching element in the HTML)
+4. Writes the result back to the same file
+5. Returns JSON with `validation` field (includes `enrichment_completeness` sub-object)
 
-If `validation.pass` is `false`, identify which content was lost, fix the HTML, and re-run.
+If `validation.pass` is `false`, check `validation.enrichment_completeness.missing` for skipped enrichments and `validation.word_ratio` for lost content. Fix the HTML and re-run.
 
 ## Step 5: Verify Preservation
 
@@ -183,6 +188,23 @@ After post-processing, verify the counts from Step 2:
 
 If any check fails, fix the HTML and re-run the post-processor.
 
+## Step 5.5: Verify Enrichment Completeness
+
+Cross-check that every enrichment from the plan made it into the HTML:
+
+1. Read the enrichment plan and collect all `enrichments[].id` values (e.g., `enr-001`, `enr-002`, ...)
+2. Grep the output HTML for all `id="enr-XXX"` occurrences
+3. Compare: every expected ID must appear at least once
+
+If any enrichment is missing:
+1. Identify which enrichment was skipped (read its `type`, `track`, `target_section` from the plan)
+2. Add the missing enrichment at its planned `injection_after_line` position — data-track: `<canvas id="enr-XXX">` + Chart.js init; concept-track: inline SVG; html-track: summary-card div
+3. Re-run the post-processor to re-validate
+
+**This is a hard gate.** The user approved these enrichments in Phase 3. Silently dropping one is a pipeline failure.
+
 ## Step 6: Return JSON
 
-Return the JSON response with output path, enrichment counts, and preservation metrics.
+Return the JSON response with output path, enrichment counts, preservation metrics, and enrichment completeness.
+
+Include `enrichment_completeness: {"expected": N, "found": N, "missing": []}` in the response.

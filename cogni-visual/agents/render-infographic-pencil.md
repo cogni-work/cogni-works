@@ -417,6 +417,10 @@ output JSON's `warnings` field.
 1. Export PNG via `export_nodes({format: "png", filePath: "{brief_dir}/infographic-preview.png"})`.
    The canonical filename is `infographic-preview.png` — this is the name that enrich-report
    and other downstream consumers search for.
+1b. Export WebP via `export_nodes({format: "webp", quality: 90, filePath: "{brief_dir}/infographic-preview.webp"})`.
+   WebP is typically 25-35% smaller than PNG at equivalent visual quality — significant for
+   base64 embedding in HTML. The downstream `enrich-report` pipeline prefers WebP over PNG
+   when both exist. If this export fails, continue — the PNG is the minimum viable output.
 2. **Flush the `.pen` file to disk.** Pencil MCP has no native `save_document` tool — the
    Electron app holds the document in an in-memory session and only writes the `.pen` file
    when the user presses Cmd+S in the UI. That makes `infographic-preview.png` the only artifact
@@ -575,13 +579,14 @@ output JSON's `warnings` field.
 3. **Self-check before returning:**
    - Was the `.pen` file actually written? (best-effort — record as warning if it wasn't)
    - Was the PNG exported? (required — this IS the correctness gate)
+   - Was the WebP exported? (best-effort — preferred by enrich-report for smaller base64)
    - Was the HTML fragment written? (best-effort — record as warning if it wasn't)
    - Does the JSON below use real values from the run, not placeholders? (required)
 
 Return single-line JSON (no prose before or after):
 
 ```json
-{"ok": true, "pen_path": "{path}", "png_path": "{path}", "fragment_path": "{path_or_null}", "layout_type": "{type}", "style_preset": "{preset}", "orientation": "{orientation}", "blocks_rendered": {N}, "total_ops": {N}}
+{"ok": true, "pen_path": "{path}", "png_path": "{path}", "webp_path": "{path_or_null}", "fragment_path": "{path_or_null}", "layout_type": "{type}", "style_preset": "{preset}", "orientation": "{orientation}", "blocks_rendered": {N}, "total_ops": {N}}
 ```
 
 On error:

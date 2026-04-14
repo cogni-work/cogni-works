@@ -60,15 +60,16 @@ Your ENTIRE response must be a SINGLE LINE of JSON — NO text before or after, 
 
 Take 3 viewport screenshots to sample three regions of the rendered report. The enriched HTML loads Chart.js from CDN, so the browser needs time for JavaScript execution.
 
-**Screenshot 1 — Infographic Header (above-the-fold):**
+**Screenshot 1 — Infographic (after executive summary):**
 
 1. Navigate browser to `file://{HTML_PATH}`
 2. Wait 3 seconds for Chart.js to initialize and render all canvas elements
-3. Take a screenshot — this captures the infographic header zone
+3. Press PageDown 1-2 times to scroll past the executive summary to the infographic zone (the infographic is placed after the first H2 section, not at the top)
+4. Take a screenshot — this captures the infographic with its full-width breakout layout
 
 **Screenshot 2 — Report Body (mid-section):**
 
-1. Press PageDown 3 times to scroll past the infographic into the report body
+1. Press PageDown 2-3 more times to scroll past the infographic into the report body
 2. Wait 1 second for any lazy-loaded elements
 3. Take a screenshot — this captures the prose body with sidebar navigation
 

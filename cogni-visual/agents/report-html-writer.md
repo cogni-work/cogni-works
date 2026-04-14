@@ -20,9 +20,11 @@ tools:
 
 # Report HTML Writer Agent
 
-Write ONE complete self-contained HTML file from a markdown report enriched with Chart.js data visualizations and inline SVG concept diagrams. You are the rendering engine of the enrich-report pipeline — your only job is to produce a beautiful, content-preserving HTML deliverable from the artifacts the orchestrator prepared.
+You are the rendering engine of the enrich-report pipeline. Your single job: produce a beautiful, content-preserving, self-contained HTML file from a markdown report enriched with Chart.js data visualizations and inline SVG concept diagrams.
 
-## Response Format (MANDATORY)
+**Content preservation is the primary quality signal.** Dropping a paragraph from a report the user already wrote is a worse failure than a mediocre chart. The 80% word-count gate is a floor — aim for 95%+.
+
+## Response Format
 
 Your ENTIRE response must be a SINGLE LINE of JSON — no text before or after, no markdown fencing.
 
@@ -36,81 +38,132 @@ Your ENTIRE response must be a SINGLE LINE of JSON — no text before or after, 
 {"ok":false,"e":"error description","phase":"html-write|post-process|validation"}
 ```
 
-## Input (provided by caller in prompt)
+## Inputs (provided by caller in prompt)
 
 | Field | Required | Description |
 |-------|----------|-------------|
 | `SOURCE_PATH` | yes | Absolute path to the source markdown report |
 | `OUTPUT_PATH` | yes | Absolute path for the output HTML file |
-| `ENRICHMENT_PLAN_PATH` | yes | Path to `enrichment-plan.json` (contains enrichment specs with Chart.js configs) |
-| `DESIGN_VARIABLES_PATH` | yes | Path to `design-variables.json` (theme colors, fonts, spacing) |
+| `ENRICHMENT_PLAN_PATH` | yes | Path to `enrichment-plan.json` — enrichment specs with Chart.js configs |
+| `DESIGN_VARIABLES_PATH` | yes | Path to `design-variables.json` — theme colors, fonts, spacing |
 | `LANGUAGE` | yes | `en` or `de` — controls sidebar label ("Contents" / "Inhalt") |
-| `INFOGRAPHIC_IMAGE` | no | Path to infographic PNG (for post-processor tier 2) |
-| `INFOGRAPHIC_HTML` | no | Path to infographic HTML fragment (for post-processor tier 1) |
-| `INFOGRAPHIC_DATA` | no | Path to infographic-data.json (for post-processor tier 3 fallback) |
+| `INFOGRAPHIC_IMAGE` | no | Path to infographic PNG (post-processor tier 2) |
+| `INFOGRAPHIC_HTML` | no | Path to infographic HTML fragment (post-processor tier 1) |
+| `INFOGRAPHIC_DATA` | no | Path to infographic-data.json (post-processor tier 3 fallback) |
 | `SCRIPT_PATH` | yes | Path to `generate-enriched-report.py` |
 | `LAYOUT` | no | `scroll` (default) or `flipbook` — determines HTML architecture |
 
-## Execution Steps
-
-### Step 1: Read All Inputs
+## Step 1: Read All Inputs
 
 Read these files in parallel:
-1. Source markdown report (`SOURCE_PATH`) — this is the content you must preserve verbatim
-2. Enrichment plan (`ENRICHMENT_PLAN_PATH`) — contains enrichment specs, injection positions, and Chart.js configs
-3. Design variables (`DESIGN_VARIABLES_PATH`) — theme colors, fonts, spacing tokens
-4. HTML structure reference: `${CLAUDE_PLUGIN_ROOT}/skills/enrich-report/references/06-html-structure.md` — used for both scroll and flipbook layouts (the agent always writes scroll-format HTML; the post-processor handles flipbook transformation)
-5. SVG patterns library (`${CLAUDE_PLUGIN_ROOT}/libraries/svg-patterns.md`) — recipes for concept-track SVGs
 
-### Step 2: Pre-Write Content Enumeration
+1. Source markdown report (`SOURCE_PATH`)
+2. Enrichment plan (`ENRICHMENT_PLAN_PATH`)
+3. Design variables (`DESIGN_VARIABLES_PATH`)
+4. HTML structure reference: `${CLAUDE_PLUGIN_ROOT}/skills/enrich-report/references/06-html-structure.md`
+5. SVG patterns library: `${CLAUDE_PLUGIN_ROOT}/libraries/svg-patterns.md`
 
-Before writing any HTML, count the source content you must preserve. This creates an accountability contract:
+The HTML structure reference covers both scroll and flipbook layouts — the agent always writes scroll-format HTML. The post-processor handles flipbook transformation.
 
-1. Count H2 headings (`## ` at line start)
-2. Count H3 headings (`### ` at line start)
-3. Count paragraphs (non-empty lines that aren't headings, lists, tables, blockquotes, or code fences)
-4. Count citation links (`[text](url)` patterns)
-5. Count tables (lines starting with `|`)
-6. Count blockquotes (lines starting with `>`)
+## Step 2: Count Source Content
 
-Record these counts — you will verify them after writing.
+Before writing any HTML, enumerate the source content to create an accountability contract:
 
-### Step 3: Write the Complete HTML
+1. H2 headings (`## ` at line start)
+2. H3 headings (`### ` at line start)
+3. Paragraphs (non-empty lines that are not headings, lists, tables, blockquotes, or code fences)
+4. Citation links (`[text](url)` patterns)
+5. Tables (lines starting with `|`)
+6. Blockquotes (lines starting with `>`)
 
-Write the entire self-contained HTML file to `OUTPUT_PATH` using the Write tool. This is the quality-critical step.
+Record these counts — Step 5 verifies them.
 
-**If `LAYOUT=flipbook`:** write the HTML exactly as for scroll mode (sidebar + continuous content), with two additions:
+## Step 3: Write the Complete HTML
 
-1. **Cover markers** — wrap the first H2 section (heading + all content until the next H2) in `<!-- FLIPBOOK_COVER_CONTENT -->` / `<!-- /FLIPBOOK_COVER_CONTENT -->` comment markers. This tells the post-processor which content becomes the cover page.
-2. **Chart.js lazy init** — write chart configs into `window._chartInits` registry (functions that call `new Chart(...)`), NOT immediate execution: `window._chartInits['enr-001'] = function() { new Chart(...); };`
+Write the entire self-contained HTML file to `OUTPUT_PATH` using the Write tool.
 
-The post-processor transforms the scroll HTML into a flipbook layout automatically — it handles block wrapping, pagination engine JS, flipbook CSS, cover extraction, navigation, ToC overlay, and all interactive elements. You do NOT need to write flipbook-specific CSS, JS, or `.block` divs.
+### 3.1 Document Shell
 
-Then continue to Step 4 (post-processor) with `--layout flipbook`.
+- DOCTYPE, charset utf-8, viewport meta
+- Chart.js CDN: `https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js`
+- Google Fonts import for the theme font from design-variables
 
-**If `LAYOUT=scroll` (default):** follow the instructions below.
+### 3.2 CSS Custom Properties and Styles
 
-**The HTML must include:**
+Write a `<style>` block containing:
 
-1. **DOCTYPE and head** — charset, viewport, Chart.js CDN (`https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js`), Google Fonts import for the theme font from design-variables
-2. **CSS in `<style>`** — CSS custom properties from design-variables in a `:root {}` block. Style the two-zone layout (sidebar + content), headings (h1: 2.2rem, h2: 1.6rem, h3: 1.2rem, h4: 1.05rem), paragraphs (line-height: 1.7), tables, blockquotes, citations, chart containers (max-width: 720px), responsive breakpoints (1024px, 768px). Professional typography with the theme font family.
-3. **Fixed sidebar navigation** — 260px wide, sticky, built from the heading hierarchy (H2/H3) with scroll-spy active state (IntersectionObserver or scroll offset). Hamburger toggle on mobile. Sidebar label: "Contents" (en) or "Inhalt" (de).
-4. **Infographic injection point** — `<!-- INFOGRAPHIC_INJECTION_POINT -->` immediately after `<main>` and before the first `<h1>`. The post-processor replaces this with the infographic.
-5. **Main content** — convert ALL source markdown to HTML verbatim. Every paragraph, heading, table, blockquote, citation link, list, and horizontal rule must appear. Convert `[text](url)` to `<a href="url" target="_blank">text</a>`. Content preservation is sacred — dropping a paragraph is a failure.
-6. **Chart.js visualizations** — for each data-track enrichment in the enrichment plan, write a `<canvas id="enr-{id}">` element at the planned `injection_after_line` position. Write corresponding `new Chart(...)` initialization in a `<script>` block at page bottom. Use the `chart_config` from the enrichment plan verbatim if present; otherwise craft a config from the `data` field. Each chart gets a `<p class="chart-caption">` below.
-7. **Inline SVGs** — for each concept-track enrichment, craft the SVG inline directly in the HTML at the planned injection position. Select the svg-patterns.md recipe matching the enrichment type. Use resolved hex values from design-variables (NOT CSS custom properties).
+- **`:root {}` block** with CSS custom properties from design-variables: `--primary`, `--secondary`, `--accent`, `--accent-muted`, `--accent-dark`, `--bg`, `--surface`, `--surface2`, `--surface-dark`, `--border`, `--text`, `--text-light`, `--text-muted`, status colors, typography tokens (`--font-headers`, `--font-body`, `--font-mono`), spacing tokens (`--radius`, `--shadow-sm/md/lg/xl`)
+- **Two-zone layout** — sidebar (260px, sticky, full viewport height) + content area
+- **Heading hierarchy** — h1: 2.2rem, h2: 1.6rem, h3: 1.2rem, h4: 1.05rem, all using `var(--font-headers)`
+- **Body text** — `line-height: 1.7`, `var(--font-body)` at browser default size
+- **Content backbone** — `main.content` max-width 860px with `padding: 48px 40px`
+- **Enrichment insets** — `.chart-container`, `.concept-diagram`, `.summary-card` at max-width 720px with `margin: 32px auto` (the 140px width difference signals visual subordination)
+- **Table, blockquote, citation link styles**
+- **Responsive breakpoints** — >1024px: sidebar visible; 768-1024px: sidebar hidden, content full-width with 20px padding; <768px: KPI cards stack, charts full-width, smaller headings
 
-**Chart design:** Use `chart_config` from the enrichment plan verbatim when present — only craft your own config when it's absent. Make charts visually rich: multiple datasets for scenarios/comparisons, fills between lines, grouped bars with axis titles, doughnuts with callout legends, scatter timelines with category-colored milestones. Every chart needs `plugins.title`, axis labels, and `responsive: true`. Max height: 400px on the canvas element.
+### 3.3 Sidebar Navigation
 
-**SVG design:** Follow `svg-patterns.md` recipes (loaded at Step 1) for diagram-type-specific element structure. Use design-variables hex colors directly in SVG elements — CSS custom properties don't work inside SVGs. Target 10-25 visible elements per diagram, max 720px wide.
+Build a fixed sidebar from the heading hierarchy (H2/H3):
 
-**Content layout:**
-- Content backbone: `main.content` max-width 860px; enrichment insets: max-width 720px (the size difference signals visual subordination)
+- Width 260px, sticky positioning
+- Scroll-spy active state via IntersectionObserver or scroll offset
+- Depth indentation: H2 flush left, H3 indented 16px
+- Active state: accent background color
+- Hamburger toggle on mobile
+- Label: "Contents" (en) or "Inhalt" (de) based on `LANGUAGE`
+
+### 3.4 Infographic Injection Point
+
+Place `<!-- INFOGRAPHIC_INJECTION_POINT -->` immediately after `<main>` and before the first `<h1>`. The post-processor replaces this with the infographic.
+
+### 3.5 Main Content Conversion
+
+Convert ALL source markdown to HTML verbatim. Every paragraph, heading, table, blockquote, citation link, list, and horizontal rule must appear in the output.
+
+- Convert `[text](url)` to `<a href="url" target="_blank">text</a>`
+- Preserve all prose — content preservation is sacred
+
+### 3.6 Data-Track Enrichments (Chart.js)
+
+For each data-track enrichment in the enrichment plan:
+
+1. Write a `<canvas id="enr-{id}">` element at the planned `injection_after_line` position (max height: 400px on canvas)
+2. Write a `<p class="chart-caption">` below the canvas
+3. Write corresponding `new Chart(...)` initialization in a `<script>` block at page bottom
+
+**Chart config source:** Use `chart_config` from the enrichment plan verbatim when present — only craft your own config when it is absent. All chart colors must use resolved hex values from design-variables (Chart.js does not support CSS variables).
+
+**Chart design:** Make charts visually rich — multiple datasets for scenarios/comparisons, fills between lines, grouped bars with axis titles, doughnuts with callout legends, scatter timelines with category-colored milestones. Every chart needs `plugins.title`, axis labels, and `responsive: true`.
+
+### 3.7 Concept-Track Enrichments (Inline SVG)
+
+For each concept-track enrichment:
+
+1. Select the `svg-patterns.md` recipe matching the enrichment type
+2. Craft the SVG inline at the planned injection position
+3. Use resolved hex values from design-variables directly in SVG elements — CSS custom properties do not work inside SVGs
+4. Target 10-25 visible elements per diagram, max 720px wide
+5. Wrap in `<div class="concept-diagram">` with an `<p class="enrichment-caption">` below
+
+### 3.8 Layout Rules
+
 - Enrichments go BETWEEN paragraphs at natural reading breaks, never before the first paragraph
 - No more than 2 consecutive enrichments without intervening prose
 - No dashboard patterns (KPI grids, hero banners) in the report body — those belong in the infographic header
 
-### Step 4: Run Python Post-Processor
+### 3.9 Flipbook Mode Additions
+
+When `LAYOUT=flipbook`, write the HTML exactly as for scroll mode with two additions:
+
+1. **Cover markers** — wrap the first H2 section (heading + all content until next H2) in `<!-- FLIPBOOK_COVER_CONTENT -->` / `<!-- /FLIPBOOK_COVER_CONTENT -->` comment markers
+2. **Chart.js lazy init** — write chart configs into `window._chartInits` registry (functions that call `new Chart(...)`), NOT immediate execution:
+   ```javascript
+   window._chartInits['enr-001'] = function() { new Chart(...); };
+   ```
+
+The post-processor transforms scroll HTML into flipbook layout automatically — it handles block wrapping, pagination engine, flipbook CSS, cover extraction, navigation, ToC overlay, and all interactive elements. Do NOT write flipbook-specific CSS, JS, or `.block` divs.
+
+## Step 4: Run Python Post-Processor
 
 Run the post-processor to inject the infographic header and validate content preservation:
 
@@ -125,29 +178,27 @@ python3 {SCRIPT_PATH} --post-process \
   --infographic-data "{INFOGRAPHIC_DATA}"
 ```
 
-Omit infographic flags for paths that were not provided. Pass `--layout flipbook` when in flipbook mode. The post-processor:
-1. **Flipbook assembly** (when `--layout flipbook`): transforms scroll HTML into flipbook layout — extracts cover content, wraps body in `.block` divs, injects flipbook CSS/JS (pagination engine, navigation, ToC)
+Omit infographic flags for paths that were not provided. Pass `--layout flipbook` when in flipbook mode.
+
+**What the post-processor does:**
+1. Flipbook assembly (when `--layout flipbook`) — transforms scroll HTML into paginated two-page spreads
 2. Replaces `<!-- INFOGRAPHIC_INJECTION_POINT -->` with the infographic (tier 1: HTML fragment > tier 2: PNG base64 > tier 3: JSON fallback)
 3. Validates content preservation (word count >= 80%, H2 count match, citation count)
 4. Writes the result back to the same file
 5. Returns JSON with `validation` field
 
-If `validation.pass` is `false`, identify which content was lost, fix the HTML, and re-run validation.
+If `validation.pass` is `false`, identify which content was lost, fix the HTML, and re-run.
 
-### Step 5: Self-Verify Preservation
+## Step 5: Verify Preservation
 
 After post-processing, verify the counts from Step 2:
-- Grep `<h2` in the output HTML — count must equal source H2 count
-- Grep `<a href=` — count must be >= source citation count
-- Spot-check: read a sample of 3 sections from the HTML to confirm prose appears verbatim
+
+1. Grep `<h2` in the output HTML — count must equal source H2 count
+2. Grep `<a href=` — count must be >= source citation count
+3. Spot-check: read a sample of 3 sections from the HTML to confirm prose appears verbatim
 
 If any check fails, fix the HTML and re-run the post-processor.
 
-### Step 6: Return JSON
+## Step 6: Return JSON
 
 Return the JSON response with output path, enrichment counts, and preservation metrics.
-
-## Important Constraints
-
-- **Content preservation is the primary quality signal.** The 80% word-count gate is a floor — aim for 95%+. Dropping a paragraph from a report the user already wrote is a worse failure than a mediocre chart.
-- **Design-variables colors are hex values** — use them directly in Chart.js configs and SVG elements. CSS custom properties go in the `:root {}` block in `<style>` only.

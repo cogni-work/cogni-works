@@ -39,7 +39,7 @@ This is the chain to use when the report will be read by decision-makers or shar
 
 ## Step-by-Step
 
-### Step 0: Set Up a Local Wiki
+### Step 0: Set Up a Local Wiki (Optional)
 
 Before starting research, set up a Karpathy-style wiki to persist your knowledge. The wiki compiles sources once at ingestion instead of re-discovering them per query — your knowledge compounds with every ingest.
 
@@ -123,7 +123,7 @@ Resume the research on AI regulation
 Ingest the research report into my wiki
 ```
 
-### Step 2: Verify Claims
+### Step 2: Verify Claims (Optional)
 
 The research report contains inline citations linking claims to source URLs. `/verify-report` extracts those claims and checks each one against its cited source in a dedicated context window, then iterates until quality standards are met.
 
@@ -158,7 +158,7 @@ Resolve any deviated claims you want to handle manually before polishing:
 /claims resolve {claim-id}
 ```
 
-### Step 3: Polish for Executive Readability
+### Step 3: Polish for Executive Readability (Optional)
 
 Take the verified report into cogni-copywriting for structural polish and readability optimization. The plugin applies messaging frameworks (Pyramid Principle, BLUF, active voice), transforms passive construction, and adds visual hierarchy.
 
@@ -186,7 +186,7 @@ Polish this research report for executive readability — use Pyramid structure
 
 This runs 5 parallel stakeholder personas (executive, technical, legal, marketing, end-user) and synthesizes feedback into prioritized improvements.
 
-### Step 4: Create an Infographic
+### Step 4: Create an Infographic (Optional)
 
 Distill the polished report into a single-page visual summary using cogni-visual's story-to-infographic skill. This extracts the 3–5 most impactful data points and produces an infographic brief that auto-renders into a visual.
 
@@ -219,7 +219,7 @@ The infographic renders automatically after the brief is created. The output is 
 
 **When to skip**: If you only need the enriched HTML report (Step 5 already includes an infographic header). Use this step when you want a standalone one-pager to share separately.
 
-### Step 5: Enrich the Report as Visual HTML
+### Step 5: Enrich the Report as Visual HTML (Optional)
 
 Transform the polished markdown report into a themed, self-contained HTML deliverable with interactive Chart.js visualizations, concept diagrams, and sidebar navigation. The original markdown stays untouched — this creates a visual rendition.
 

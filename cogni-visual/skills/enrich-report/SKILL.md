@@ -1,31 +1,22 @@
 ---
 name: enrich-report
 description: >
-  Post-process any completed markdown report (trend-report, research-report, or
-  generic) into a themed, self-contained HTML file — optionally with interactive
-  Chart.js data visualizations and concept diagrams embedded as inline
-  SVG. Analyzes the report structure, identifies data-rich sections (statistics,
-  tables, distributions, value chains, timelines, cost comparisons), generates
-  themed charts and diagrams, and assembles a polished HTML deliverable with
-  navigation sidebar — without changing the original markdown. Also supports
-  exporting to PDF and DOCX formats via the `formats` parameter. This is the
-  single output skill for all report formats — it replaces the deprecated
-  cogni-research:export-report. Use this skill whenever the user has an existing
-  text-only report and wants to make it visual or export it: "enrich report",
-  "add charts to report", "visualize my report", "make the report visual",
-  "turn this into a visual HTML", "export report", "save as PDF", "export to PDF",
-  "export to Word", "export to DOCX", "download report", "convert report",
-  "make it pretty", "publish report", "report mit Diagrammen anreichern",
-  "Bericht visualisieren", "als PDF exportieren", "add data visualizations",
-  "generate HTML version with charts", "I need charts in my trend report",
-  "make this presentable with visuals". Also trigger when the user mentions
-  tips-trend-report.md, output/report.md, or any markdown report that "needs
-  visuals", "looks boring", "is text-only", or should become a "dashboard-style"
-  or "themed HTML" output. This skill works on EXISTING reports (post-processing) —
-  it does NOT create new reports (use research-report/trend-report), does NOT create
-  slide decks (use story-to-slides), does NOT create web landing pages (use story-to-web), does
-  NOT create TIPS dashboards (use trends-dashboard), and does NOT polish prose
-  (use cogni-copywriting).
+  Use this skill whenever the user has an existing markdown report and wants it
+  transformed into a polished visual deliverable. This is the go-to skill for
+  turning any completed .md report into themed HTML with interactive Chart.js
+  charts, an infographic header, sidebar navigation, and inline SVG concept
+  diagrams — or exporting it to PDF or DOCX. Trigger for any request that
+  involves an already-written report needing visual enrichment, format
+  conversion, or presentable output: adding charts or diagrams to a report,
+  making a report look good or presentable, generating an HTML version of a
+  report, exporting a report as PDF or Word, enriching a report with
+  visualizations, or converting a text-only report into a themed deliverable.
+  Also trigger for German equivalents (Bericht visualisieren, als PDF
+  exportieren, Diagramme hinzufuegen). The key signal is that the user already
+  has a finished report file and wants to make it visual or export it — this
+  skill post-processes existing content, it never creates new reports from
+  scratch (that is cogni-research or cogni-trends), never creates slides (that
+  is story-to-slides), and never rewrites prose (that is cogni-copywriting).
 allowed-tools: Read, Write, Edit, Bash, Grep, Glob, AskUserQuestion, Agent, Skill
 version: 1.0.0
 ---

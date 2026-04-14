@@ -93,13 +93,32 @@ if [[ -n "$REPORT_SOURCE" ]] && [[ ! "$REPORT_SOURCE" =~ ^(web|local|wiki|hybrid
   exit 2
 fi
 
-# Resolve market and output_language
-# Backward compat: if --language is set but --market is not, derive market from language
+# Derive the canonical market list from market-sources.json so this script
+# and the skill menu share one source of truth. Keys starting with "_" are
+# internal (e.g., _default) and not user-selectable.
+_INIT_SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+MARKET_SOURCES_FILE="$(dirname "$_INIT_SCRIPT_DIR")/references/market-sources.json"
+VALID_MARKETS=""
+if [[ -f "$MARKET_SOURCES_FILE" ]]; then
+  VALID_MARKETS=$(jq -r 'keys[] | select(startswith("_") | not)' "$MARKET_SOURCES_FILE" 2>/dev/null | tr '\n' ' ' | sed 's/ $//')
+fi
+
+if [[ -n "$MARKET" ]] && [[ -n "$VALID_MARKETS" ]] && ! echo "$VALID_MARKETS" | grep -qw "$MARKET"; then
+  echo "{\"success\": false, \"error\": \"Invalid --market: $MARKET. Valid markets: $VALID_MARKETS\"}" >&2
+  exit 2
+fi
+
+# Market must resolve to a real code. The research-setup skill is responsible
+# for chatting with the user when the topic is ambiguous — we do not invent a
+# default here, because silent fallbacks mask user intent in downstream agents.
+# Exception: the legacy --language de bridge is kept so existing callers that
+# only pass --language keep working.
 if [[ -z "$MARKET" ]]; then
   if [[ "$LANGUAGE" == "de" ]]; then
     MARKET="dach"
   else
-    MARKET="global"
+    echo "{\"success\": false, \"error\": \"Missing --market. Supply one of: $VALID_MARKETS\"}" >&2
+    exit 2
   fi
 fi
 

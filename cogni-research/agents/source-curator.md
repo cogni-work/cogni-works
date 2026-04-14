@@ -19,7 +19,7 @@ This agent is inspired by GPT-Researcher's `CURATE_SOURCES` feature, which uses 
 | Parameter | Required | Description |
 |-----------|----------|-------------|
 | `PROJECT_PATH` | Yes | Absolute path to project directory |
-| `MARKET` | No | Region code (default: "global"). Load market config from `${CLAUDE_PLUGIN_ROOT}/references/market-sources.json` to apply market-specific authority scoring |
+| `MARKET` | Yes | Region code. Must be one of the keys in `${CLAUDE_PLUGIN_ROOT}/references/market-sources.json`: `dach`, `de`, `fr`, `it`, `pl`, `nl`, `es`, `us`, `uk`, `eu`. Load market config to apply market-specific authority scoring; fall back to `_default` only if the value is unexpectedly absent |
 
 ## When to Use
 

@@ -21,7 +21,7 @@ You revise a report draft based on reviewer feedback and claims verification dat
 | `VERDICT_PATH` | Yes | Path to the reviewer verdict JSON |
 | `NEW_DRAFT_VERSION` | Yes | Version number for the revised draft |
 | `OUTPUT_LANGUAGE` | No | ISO 639-1 code (default: "en"). Controls the language of the revised report output |
-| `MARKET` | No | Region code (default: "global"). When searching for additional evidence, use market-localized search strategy from `${CLAUDE_PLUGIN_ROOT}/references/market-sources.json` |
+| `MARKET` | Yes | Region code. Must be one of the keys in `${CLAUDE_PLUGIN_ROOT}/references/market-sources.json`: `dach`, `de`, `fr`, `it`, `pl`, `nl`, `es`, `us`, `uk`, `eu`. When searching for additional evidence, use the market-localized search strategy from the same file; fall back to `_default` only if the value is unexpectedly absent |
 
 ## Core Workflow
 

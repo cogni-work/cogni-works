@@ -49,7 +49,7 @@ Never combine both modes in the same turn. Each turn is either pure text or a si
 > **Depth:** basic (3-5K, 5 sub-questions) | detailed (5-10K, up to 10) | deep (8-15K, recursive) | outline | resource
 > **Tone:** objective *(default)* | formal | analytical | persuasive | informative | explanatory | descriptive | critical | comparative | speculative | narrative | optimistic | simple | casual | executive
 > **Citations:** APA *(default)* | MLA | Chicago | Harvard | IEEE | Wikilink
-> **Market:** global *(default)* | dach | de | us | uk | fr
+> **Market:** dach | de | fr | it | pl | nl | es | us | uk | eu   *(required — pick one)*
 > **Sources:** web *(default)* | local (your documents) | wiki (cogni-wiki) | hybrid (web + docs + wiki)
 >
 > Advanced: output language, sub-question count, domain filter, researcher role, diagram generation — ask about any of these.
@@ -67,7 +67,29 @@ Scan the user's request and extract any options they already specified. These be
 - **Report type**: keywords like "detailed", "deep research", "outline", "sources" -> map to basic/detailed/deep/outline/resource
 - **Tone**: style keywords like "analytical", "persuasive", "formal" -> map to tone. Default: "objective"
 - **Citation format**: "IEEE", "APA format", "Chicago style", "wikilink" -> capture. Default: "apa"
-- **Market**: "French market"->fr, "DACH"->dach, "for Germany"->de, "US market"->us, "UK market"->uk, "Italian market"/"Italy"->it, "Polish market"/"Poland"->pl, "Dutch market"/"Netherlands"->nl, "Spanish market"/"Spain"->es, "European market"/"EU"/"pan-European"->eu. Default: "global"
+- **Market**: must resolve to one of the 10 canonical codes defined in `references/market-sources.json`: `dach`, `de`, `fr`, `it`, `pl`, `nl`, `es`, `us`, `uk`, `eu`. There is no "global" option — downstream researchers use these codes to pick authority-source profiles, and an unknown code silently falls back to the DACH `_default` profile, masking user intent.
+
+  Resolve the market in three tiers, stopping at the first confident match:
+
+  1. **Explicit market phrase** → direct mapping:
+     - "DACH" / "für DACH" → `dach`
+     - "Deutschland" / "for Germany" / "German market" → `de`
+     - "Österreich" / "Austria" / "Schweiz" / "Switzerland" → `dach` (composite)
+     - "French market" / "pour la France" / "Frankreich" → `fr`
+     - "Italy" / "Italia" / "italienischer Markt" → `it`
+     - "Poland" / "Polska" / "polnischer Markt" → `pl`
+     - "Netherlands" / "Nederland" / "Dutch market" → `nl`
+     - "Spain" / "España" / "spanischer Markt" → `es`
+     - "US market" / "USA" / "United States" → `us`
+     - "UK market" / "Great Britain" / "United Kingdom" → `uk`
+     - "European market" / "EU" / "pan-European" / "EU-weit" → `eu`
+
+  2. **Output-language signal** (only if no phrase matched in tier 1):
+     - topic written in German with no other country cue → `dach` (DACH is the working default for German-language research)
+     - topic written in French → `fr`, Italian → `it`, Polish → `pl`, Dutch → `nl`, Spanish → `es`
+     - topic written in English with no country cue → **ambiguous**, fall through to tier 3
+
+  3. **Ambiguous — ask the user**: do NOT invent a default. Render the Configuration Menu with the Market row expanded and a one-line note telling the user you could not tell which market from the topic. Their reply in the next turn resolves it. Never call `initialize-project.sh` without a resolved market — the script will reject it.
 - **Output language**: "in German", "auf Deutsch" -> "de" (+ market=dach if no explicit market). "in French" -> "fr". "in Italian" -> "it". "in Polish" -> "pl". "in Dutch" -> "nl". "in Spanish" -> "es". Default: auto (derived from market)
 - **Source URLs**: any URLs in the prompt -> collect for pre-fetch
 - **Query domains**: "only .gov sources", "restrict to arxiv" -> collect domains
@@ -89,7 +111,7 @@ Assemble the menu dynamically and render it as text output:
    - **Depth** (only if report type not yet detected): list all 5 types with word counts and one-line descriptions
    - **Tone** (only if not detected): show these options: objective *(default)* | formal | analytical | persuasive | informative | explanatory | descriptive | critical | comparative | speculative | narrative | optimistic | simple | casual | executive
    - **Citations** (only if not detected): list all 5 formats, mark default
-   - **Market** (only if not detected): global | dach | de | fr | it | pl | nl | es | us | uk | eu
+   - **Market** (only if not detected with confidence, or ambiguous): `dach | de | fr | it | pl | nl | es | us | uk | eu`. If Step 1 flagged the market as ambiguous (tier 3), prefix this row with a one-line note: `> I couldn't tell which market you mean from the topic — please pick one.` The canonical list equals the keys of `references/market-sources.json` minus `_default` — keep this menu in sync with that file (if a new market is added there, add it here; if one is removed, remove it here).
    - **Sources** (only if report_source not detected): show all 4 modes with one-line descriptions:
      - `web` *(default)* = search the internet
      - `local` = analyze your documents (PDF, DOCX, MD, CSV, ...)
@@ -105,7 +127,7 @@ Assemble the menu dynamically and render it as text output:
   "Starting **{type}** research on {topic} — {tone} tone, {citations} citations, {source} sources. Change anything? (reply 'go' to confirm)"
 
 **Handling user responses (next turn):**
-- "go" / "defaults" / "start" -> accept detected + default values
+- "go" / "defaults" / "start" -> accept detected + default values. **Exception**: if market was ambiguous (tier 3 in Step 1) and the user's "go" reply did not pick a market, do NOT proceed — re-render the menu with just the Market row and the note "I still need a market — pick one of: dach, de, fr, it, pl, nl, es, us, uk, eu". The script will reject a missing market anyway; catching it here keeps the conversation clean.
 - Specific choices ("deep, analytical, IEEE") -> merge with detected values
 - Question about an advanced option ("what roles are available?") -> read the relevant reference file from `${CLAUDE_PLUGIN_ROOT}/references/` (agent-roles.md, writing-tones.md, citation-formats.md), explain the option as text output, then re-present the menu as text
 - Partial choices ("make it detailed") -> update that option, ask if anything else or proceed

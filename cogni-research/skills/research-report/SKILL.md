@@ -86,7 +86,7 @@ Check for an initialized project. Look for `project-config.json` in:
 
 Read `market` and `output_language` from `project-config.json` (stored by `initialize-project.sh`). These control search localization and report output language respectively.
 
-Backward compatibility: if `market` is absent, derive it from the legacy `language` field (`"de"` maps to `"dach"`, anything else maps to `"global"`). If `output_language` is absent, look up the market's `default_output_language` in `${CLAUDE_PLUGIN_ROOT}/references/market-sources.json`, falling back to `"en"`.
+Backward compatibility: `market` is normally written by `initialize-project.sh` from the resolved research-setup choice. The only auto-fallback still in place is legacy `--language de` → `market=dach`; any other missing-market case is rejected by the script, so you should never see a project without a real market here. If `output_language` is absent, look up the market's `default_output_language` in `${CLAUDE_PLUGIN_ROOT}/references/market-sources.json`, falling back to `"en"`.
 
 **`MARKET`** controls search localization for researcher agents:
 - Researcher agents load `${CLAUDE_PLUGIN_ROOT}/references/market-sources.json` and use the market entry to generate intent-based bilingual queries, boost authority sources, and apply geographic modifiers
@@ -96,7 +96,7 @@ Backward compatibility: if `market` is absent, derive it from the legacy `langua
 - Writer produces the report in the specified language
 - Reviewer evaluates prose quality in the output language
 
-Available markets: `global` (default), `dach`, `de`, `fr`, `it`, `pl`, `nl`, `es`, `us`, `uk`, `eu`. The market and output language are usually aligned (e.g., market=dach → output_language=de, market=it → output_language=it) but can diverge (e.g., market=fr, output_language=en for an English report about the French market). The `eu` market is a composite that fans out per-country researchers — see composite dispatch below.
+Available markets (keys of `references/market-sources.json`): `dach`, `de`, `fr`, `it`, `pl`, `nl`, `es`, `us`, `uk`, `eu`. There is no `global` option — research-setup resolves ambiguity by asking the user before the project is initialized. The market and output language are usually aligned (e.g., market=dach → output_language=de, market=it → output_language=it) but can diverge (e.g., market=fr, output_language=en for an English report about the French market). The `eu` market is a composite that fans out per-country researchers — see composite dispatch below.
 
 #### Composite Market Dispatch (market=eu)
 

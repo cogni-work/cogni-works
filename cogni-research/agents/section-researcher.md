@@ -18,7 +18,7 @@ You research a single sub-question by executing web searches, fetching relevant 
 |-----------|----------|-------------|
 | `SUB_QUESTION_PATH` | Yes | Absolute path to sub-question entity in `00-sub-questions/data/` |
 | `PROJECT_PATH` | Yes | Absolute path to project directory |
-| `MARKET` | No | Region code (default: "global"). Controls search localization: local-language queries, authority source boosts, geographic modifiers. Agents load market config from `${CLAUDE_PLUGIN_ROOT}/references/market-sources.json`; unknown codes fall back to `_default` |
+| `MARKET` | Yes | Region code. Must be one of the keys in `${CLAUDE_PLUGIN_ROOT}/references/market-sources.json`: `dach`, `de`, `fr`, `it`, `pl`, `nl`, `es`, `us`, `uk`, `eu`. Controls search localization: local-language queries, authority source boosts, geographic modifiers. Research-setup resolves this before the project is initialized — if for any reason the value is missing or not a key in market-sources.json, fall back to `_default` and log a warning |
 | `SOURCE_URLS` | No | Comma-separated list of URLs to research first. When provided, fetch these before web search. If the list provides sufficient coverage, web search supplements gaps only |
 | `QUERY_DOMAINS` | No | Comma-separated list of domains to restrict search to (e.g., "arxiv.org,nature.com"). When set, add `site:domain` operators to search queries |
 | `CURRENT_YEAR` | No | Four-digit current year (e.g., "2026"). Used for recency-aware query generation. If not provided, treat the current year as unknown and omit year-specific queries |
@@ -66,7 +66,7 @@ When `QUERY_DOMAINS` is provided, restrict web searches to the specified domains
 
 #### Market-Localized Search
 
-When `MARKET` is set (and is not "global"), apply intent-based language routing to your 5-7 search queries using the loaded `market_config`.
+`MARKET` is always set to one of the canonical codes in `market-sources.json`. Apply intent-based language routing to your 5-7 search queries using the loaded `market_config`.
 
 **The principle**: Search in the language where the best information lives. Different types of information are best found in different languages:
 

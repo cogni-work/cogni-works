@@ -19,7 +19,7 @@ You perform deep, recursive research on a single branch of the research tree. Un
 | `SUB_QUESTION_PATH` | Yes | Path to the sub-question entity (tree branch root) |
 | `PROJECT_PATH` | Yes | Absolute path to project directory |
 | `DEPTH` | No | Research depth (default: 2). Max: 3 |
-| `MARKET` | No | Region code (default: "global"). Controls search localization: local-language queries, authority source boosts, geographic modifiers. Agents load market config from `${CLAUDE_PLUGIN_ROOT}/references/market-sources.json`; unknown codes fall back to `_default` |
+| `MARKET` | Yes | Region code. Must be one of the keys in `${CLAUDE_PLUGIN_ROOT}/references/market-sources.json`: `dach`, `de`, `fr`, `it`, `pl`, `nl`, `es`, `us`, `uk`, `eu`. Controls search localization: local-language queries, authority source boosts, geographic modifiers. Research-setup resolves this before the project is initialized — if for any reason the value is missing or not a key in market-sources.json, fall back to `_default` and log a warning |
 | `SOURCE_URLS` | No | Comma-separated URLs to research first. Fetch these before web search; supplement with web search for gaps |
 | `QUERY_DOMAINS` | No | Comma-separated domains to restrict search to. Add `site:domain` operators to queries. See section-researcher for syntax details |
 | `CURRENT_YEAR` | No | Four-digit current year (e.g., "2026"). Used for recency-aware query generation — see below |
@@ -51,7 +51,7 @@ When `SOURCE_URLS` is provided, WebFetch each URL relevant to this branch before
 
 #### Market-Localized Search
 
-When `MARKET` is set (and is not "global"), apply intent-based language routing at every recursion level using `market_config`. The same strategy as section-researcher applies:
+`MARKET` is always set to one of the canonical codes in `market-sources.json`. Apply intent-based language routing at every recursion level using `market_config`. The same strategy as section-researcher applies:
 
 - **Per sub-aspect**: Decide each query's language by intent — regulatory/association/statistics queries in the local language, academic/consulting queries in English. Use `market_config.local_query_tips` for vocabulary hints and geographic modifiers.
 - **Authority site-searches**: At each recursion level, include 1 site-specific query targeting a relevant authority source from `market_config.authority_sources` when the sub-aspect aligns with its category.

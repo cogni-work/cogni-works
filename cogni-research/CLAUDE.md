@@ -69,9 +69,9 @@ Project config (`project-config.json`) supports these optional fields:
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `market` | string | "global" | Region code for search localization (global/dach/de/fr/it/pl/nl/es/us/uk/eu). Controls local-language query generation, authority source boosts, and geographic modifiers. `eu` is a composite market that fans out per-country researchers. See `references/market-sources.json` |
+| `market` | string | *required* | Region code for search localization. Must be one of the keys in `references/market-sources.json`: `dach`, `de`, `fr`, `it`, `pl`, `nl`, `es`, `us`, `uk`, `eu`. `eu` is a composite market that fans out per-country researchers. No `global` option — research-setup resolves ambiguity by asking the user. The script refuses to run without a valid code (the only compat exception is legacy `--language de` → `dach`). |
 | `output_language` | string | auto from market | ISO 639-1 code for report output language. Defaults to market's `default_output_language`. Can diverge from market (e.g., market=fr, output_language=en) |
-| `language` | string | "en" | **Legacy** — backward compat alias. When set without `market`, "de" maps to market=dach, "en" maps to market=global |
+| `language` | string | "en" | **Legacy** — backward compat alias. When set without `market`, "de" maps to `market=dach` as a compat bridge; any other language without an explicit market causes `initialize-project.sh` to exit with an error (research-setup resolves ambiguity by asking the user). |
 | `tone` | string | "objective" | Writing tone — see `references/writing-tones.md` |
 | `citation_format` | string | "apa" | Citation style (apa/mla/chicago/harvard/ieee/wikilink) — see `references/citation-formats.md` |
 | `researcher_role` | string | auto-selected | Domain persona — see `references/agent-roles.md` |

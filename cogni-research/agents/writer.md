@@ -72,6 +72,7 @@ Before writing a single paragraph, commit to an explicit section plan with a per
    ```
    Use the `Write` tool to create this file. The orchestrator reads it in Phase 4 to audit per-section completion.
 4. If `EXPANSION_NOTES` is supplied (expansion re-run), read those notes first and bias the new budget toward the sections the orchestrator named
+5. **Token-budget discipline for deep + hybrid runs.** In deep mode with hybrid sources the aggregated context is large (up to 45K words) and your total output budget must cover both the drafted file and the final status JSON — with enough headroom for the `Write` call itself to fire. The per-section budgets you commit to here are the only reliable way to avoid overrunning mid-section: if a section is running long, stop and trim rather than let it eat into later sections or, worse, the `Write` call that persists the file. A draft that overruns the output budget and never lands on disk is indistinguishable from no draft at all
 
 **Then pick the structural template based on report type:**
 
@@ -128,14 +129,17 @@ Before writing a single paragraph, commit to an explicit section plan with a per
 
 **Word-count self-check before writing the file.** Count the words in your drafted prose. If the total is below `TARGET_MIN_WORDS` (or the report-type default), **do not return**. Go back to the sections with the largest budget-vs-actual gap and extend them with evidence density — cross-source comparison, implications, methodological caveats, additional concrete examples from the context entities you have not yet cited. Never pad with filler, tautologies, or "in conclusion" restatements. The orchestrator verifies this count via `wc -w` on the written file, so a dishonest `words` value in the return JSON is pointless — it will be caught and trigger an expansion re-dispatch that you would rather avoid.
 
-1. Write draft to `output/draft-v{DRAFT_VERSION}.md`
-2. Include a source references section at the end. **Every source cited in the report body MUST appear in the references section.** Format reference URLs by scheme:
+**The draft prose belongs in the file, not in your response body.** Your natural-language response to the orchestrator must contain only the compact status JSON described below — never the drafted markdown itself. This is not a style preference: in deep mode with hybrid sources the aggregated context is large enough that spilling the draft into the response body can exhaust your output token budget before the `Write` call fires, leaving the file empty or missing. The orchestrator reads the file, not your message, so a drafted body that never lands on disk is a lost draft no matter how complete it looked in the conversation. This is the single most damaging failure mode of this agent and the entire Phase 3 contract exists to prevent it.
+
+1. **Write the draft** to `output/draft-v{DRAFT_VERSION}.md` using the `Write` tool. Call `Write` exactly once with the full drafted markdown as `content`. Do not emit the markdown anywhere else.
+2. **Read-back verification.** Immediately after `Write` returns, call `Read` on the same path. The returned content must be non-empty and must match the draft you composed — same section headings, same approximate length. If `Read` fails, returns empty content, or returns a file obviously shorter than what you just drafted, call `Write` once more with the same content and re-verify with `Read`. If the second attempt also fails verification, stop and return the `write_failed` failure JSON shown below — do not pretend the write succeeded. The read-back is the only way to prove persistence before you hand control back, and without it the orchestrator's word-count gate cannot distinguish a short draft from a missing one.
+3. Include a source references section at the end. **Every source cited in the report body MUST appear in the references section.** Format reference URLs by scheme:
    - `https://` URLs: render as clickable markdown links (e.g., `[https://example.com](https://example.com)`)
    - `wiki://` URLs: if the source entity has an `original_url` with an `https://` URL, render that as a clickable link. Otherwise, append `[cogni-wiki: <slug>/<page>]` as a non-clickable provenance marker
    - `file://` URLs: append `[Local document: <filename>]` as a non-clickable provenance marker
    - Exclude only sources with a completely empty URL from the references section
    Use `author` and `year` fields from the source entity when available for proper citation formatting (e.g., "Steimel, B. (2025). *Title*." instead of "cogni-wiki:smarter-service. *Title*."). Fall back to `publisher` when `author` is absent, and to `fetched_at` year when `year` is absent
-3. Return compact JSON:
+4. Return compact JSON — and nothing else in your response body:
 
 ```json
 {"ok": true, "draft": "output/draft-v1.md", "words": 3500, "sections": 5, "sources_cited": 12, "cost_estimate": {"input_words": 25000, "output_words": 3500, "estimated_usd": 0.095}}
@@ -143,9 +147,14 @@ Before writing a single paragraph, commit to an explicit section plan with a per
 
 Include `cost_estimate` with approximate word counts for all content read (aggregated context + source entities + curated sources) and produced (draft). See `references/model-strategy.md` for the estimation formula.
 
-On failure:
+On input failure (no context to write from):
 ```json
 {"ok": false, "error": "No context entities found — cannot write report without research data"}
+```
+
+On write failure (read-back verification failed on both attempts):
+```json
+{"ok": false, "error": "write_failed", "reason": "Write call returned but read-back verification failed twice — likely output token budget exhausted before Write fired. The drafted prose was not persisted."}
 ```
 
 ## Writing Guidelines

@@ -468,11 +468,34 @@ Task(writer,
   OUTPUT_LANGUAGE=<output_language>)
 ```
 
-Verify: draft written to `output/draft-v1.md` and writer's outline plan written to `.metadata/writer-outline-v1.json` (new contract — see `agents/writer.md` Phase 1).
+Verify: writer's outline plan written to `.metadata/writer-outline-v1.json` (see `agents/writer.md` Phase 1). **The authoritative file-existence check for the draft itself happens in Phase 4.5 Step 0 below** — do not treat the writer's return JSON as proof of persistence, and do not assume `output/draft-v1.md` exists until Step 0 has confirmed it.
 
 #### Phase 4.5: Word-count gate (authoritative, file-level)
 
 The writer's self-reported `words` in return JSON has historically drifted (observed: agent claimed 12,500, actual file was 3,356). The orchestrator must measure the draft itself, not trust the agent's self-report.
+
+**Step 0: File-existence precheck (authoritative).** Before measuring word count, confirm that the writer actually persisted the draft. In deep + hybrid runs the writer can exhaust its output token budget writing prose into its response body instead of calling the `Write` tool, leaving the file missing or zero-byte. The word-count gate below would then silently treat this as a catastrophic shortfall and trigger a full expansion re-dispatch for a run that needs a different fix entirely — the writer needs to be told to actually write the file, not to write more words.
+
+- **0a. Existence check.** Test `[ -s "${PROJECT_PATH}/output/draft-v${DRAFT_VERSION}.md" ]` (exists and non-zero size). If the file is present, skip straight to the word-count measurement at step 1 below.
+- **0b. Log the failure.** If the file is missing or empty, record `phases.phase_4_writer.write_failure` in `.metadata/execution-log.json`:
+  ```json
+  {"version": 1, "reason": "missing_or_empty_file", "recovery": "retry_dispatch"}
+  ```
+- **0c. Re-dispatch once.** Re-spawn the writer with the same parameters, reusing the same `DRAFT_VERSION` (not N+1, so the rest of the pipeline sees a normal v1 and the word-count gate below runs against the recovered file), plus an emphatic `EXPANSION_NOTES` that names the failure mode explicitly so the next writer invocation understands what went wrong:
+  ```
+  Task(writer,
+    PROJECT_PATH=<project_path>,
+    DRAFT_VERSION=<same N as before>,
+    REPORT_TYPE=<type>,
+    RESEARCHER_ROLE=<role>,
+    TONE=<tone>,
+    CITATION_FORMAT=<citation_format>,
+    OUTPUT_LANGUAGE=<output_language>,
+    EXPANSION_NOTES="Your previous run returned draft text in the response body instead of writing output/draft-v{N}.md to disk. Call the Write tool with the full drafted markdown as content. After Write returns, call Read on the same path to verify persistence. Return only the compact status JSON — never the drafted prose itself. See agents/writer.md Phase 3 for the read-back contract.")
+  ```
+- **0d. Re-check and decide.** After the retry, re-run the existence check. If the file is still missing or empty, **halt Phase 4**: print a user-visible error block containing the topic, the project path, and a pointer to `.metadata/execution-log.json phases.phase_4_writer.write_failure`, then stop. Do not fall through to the `wc -w` measurement or Phase 5 — a phantom draft would corrupt every downstream phase (reviewer, revisor, verify-report). If the retry succeeds, set `phases.phase_4_writer.write_failure.recovered: true` in the execution log so the Phase 6 summary can surface the recovery, then continue to the word-count measurement with the recovered file.
+
+Only once Step 0 confirms the file is present do the remaining gate steps apply:
 
 1. Measure the actual word count from the file:
    ```bash

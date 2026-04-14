@@ -1,7 +1,7 @@
 # Research to Report
 
 **Pipeline**: cogni-wiki → cogni-research → cogni-claims → cogni-copywriting → cogni-visual
-**Duration**: 3–6 hours depending on research depth, claims volume, and visual enrichment
+**Duration**: 10 min – 5 hours depending on research depth, claims volume, and visual enrichment
 **End deliverable**: A verified, polished research report as themed HTML with data visualizations — plus an optional one-page infographic
 
 ```mermaid

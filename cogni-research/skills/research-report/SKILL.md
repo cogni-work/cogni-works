@@ -621,6 +621,7 @@ Ask the user whether to generate a themed HTML version of the report with intera
    - Topic and report type
    - **Word count**: always formatted as `Delivered: N words (target: {min}–{max} for {report_type} mode)`. Resolve `{min}` and `{max}` from the Report Types table in Phase 1 (basic 3000–5000, detailed 5000–10000, deep 8000–15000, outline 1000–2000, resource 1500–3000).
    - **Word-count gate status** — read `.metadata/execution-log.json phases.phase_4_writer`:
+     - If `phases.phase_4_writer.write_failure` exists and `write_failure.recovered == true`: print `✓ Phase 4.5 write-failure recovery: writer persisted the draft on retry after a first-run silent-persist failure.` Then continue to the branches below — the write-failure line is additive, not a replacement for the word-count status.
      - If `re_dispatches == 0` and the final `actual_words >= floor`: do not print any warning
      - If `re_dispatches == 1` and the final `actual_words >= floor`: print `✓ Word-count gate: expansion re-dispatch succeeded ({v1} → {v2} words).` — a positive signal the gate earned its cost
      - If the final `actual_words < floor`: print `⚠ Below target by {floor - actual_words} words.` followed by one of:
@@ -654,7 +655,8 @@ If a project directory already exists at init:
 |----------|----------|
 | All researchers fail | Ask user to rephrase topic or try different sub-questions |
 | Most researchers fail | Proceed with available contexts, note gaps in report |
-| Writer produces empty draft | Re-run with more explicit instructions |
+| Writer returns `write_failed` (read-back verification failed twice) | Phase 4.5 Step 0 detects the missing/empty draft file, logs `phases.phase_4_writer.write_failure` in `.metadata/execution-log.json`, and re-dispatches the writer once — reusing the same `DRAFT_VERSION` — with emphatic `EXPANSION_NOTES` naming the silent-persist failure mode. On a second failure, Phase 4 halts with a user-visible error pointing to the log entry — no phantom draft reaches Phase 5. On successful recovery, the Phase 6 summary prints the `✓ Phase 4.5 write-failure recovery` line |
+| Draft file missing or zero-byte after writer returns `ok` | Same Phase 4.5 Step 0 recovery path as above — the orchestrator trusts the filesystem, not the return JSON, so the `ok`/`write_failed` distinction does not change the flow |
 | Writer below minimum word count | Phase 4.5 gate re-dispatches writer once with `TARGET_MIN_WORDS` and `EXPANSION_NOTES`. If the second attempt still falls short, Phase 5 expansion-review loop runs (capped at iteration 2). Final deficit surfaced in Phase 6 summary |
 | Writer self-reports inflated word count | Phase 4.5 measures `wc -w` on the file — self-reported value is ignored for the gate, logged as diagnostic |
 | Claims verification needed | Handled by verify-report skill in a separate context window — not run here |

@@ -100,35 +100,15 @@ Then continue to Step 4 (post-processor) with `--layout flipbook`.
 6. **Chart.js visualizations** — for each data-track enrichment in the enrichment plan, write a `<canvas id="enr-{id}">` element at the planned `injection_after_line` position. Write corresponding `new Chart(...)` initialization in a `<script>` block at page bottom. Use the `chart_config` from the enrichment plan verbatim if present; otherwise craft a config from the `data` field. Each chart gets a `<p class="chart-caption">` below.
 7. **Inline SVGs** — for each concept-track enrichment, craft the SVG inline directly in the HTML at the planned injection position. Select the svg-patterns.md recipe matching the enrichment type. Use resolved hex values from design-variables (NOT CSS custom properties).
 
-**Chart design principles:**
-- Use multiple datasets when data supports it (scenarios, comparisons, breakdowns)
-- Line charts: `tension: 0.3`, `fill` between datasets, `pointRadius: 4`, `borderDash` for projections
-- Bar charts: `borderRadius: 6`, grouped bars for comparisons, `indexAxis: "y"` for horizontal, axis titles
-- Doughnut: `cutout: "55%"`, right-positioned legend with `usePointStyle: true, pointStyle: "rectRounded"`
-- Timeline/Scatter: category-colored points (use status colors), labeled milestones, NOT a flat y=1 line
-- Combo charts: bar + line overlay with dual Y axes (`yAxisID: "y"` and `yAxisID: "y1"`)
-- Always add `plugins.title` with a descriptive chart title using the header font
-- Always add axis labels via `scales.x.title` / `scales.y.title`
-- Always set `responsive: true, maintainAspectRatio: true`
-- Max chart height: 400px via `style="max-height: 400px"` on the canvas
+**Chart design:** Use `chart_config` from the enrichment plan verbatim when present — only craft your own config when it's absent. Make charts visually rich: multiple datasets for scenarios/comparisons, fills between lines, grouped bars with axis titles, doughnuts with callout legends, scatter timelines with category-colored milestones. Every chart needs `plugins.title`, axis labels, and `responsive: true`. Max height: 400px on the canvas element.
 
-**SVG design principles** (follow svg-patterns.md recipes):
-- Standard `<defs>` block: linear gradients, drop shadow filter (`dx=0, dy=2, stdDeviation=3, flood-opacity=0.12`), arrow markers
-- Use design-variables hex colors directly (NOT CSS custom properties) — SVGs must be self-contained
-- Text: `text-anchor="middle"`, `dominant-baseline="central"`, `<tspan>` wrapping at 20 chars
-- Boxes: `<rect rx="8">` with gradient fills, `filter="url(#shadow)"` on key elements
-- Arrows: `<line>` or `<path>` with `marker-end`
-- Zone backgrounds: large `<rect>` with low-opacity fills to group related elements
-- Target: 10-25 visible elements, 50-150 SVG lines per diagram
-- Max width: 720px (centered within 860px content column)
-- No `<foreignObject>` — native SVG elements only
+**SVG design:** Follow `svg-patterns.md` recipes (loaded at Step 1) for diagram-type-specific element structure. Use design-variables hex colors directly in SVG elements — CSS custom properties don't work inside SVGs. Target 10-25 visible elements per diagram, max 720px wide.
 
-**Content layout rules:**
-- Content backbone: `main.content` max-width 860px, padding 48px 40px
-- Enrichment insets: max-width 720px, margin 32px auto (140px narrower = visual subordination)
-- No dashboard patterns in report body: no KPI grids, hero banners, key-findings grids
-- Enrichments appear BETWEEN paragraphs at natural reading breaks, never before the first paragraph
+**Content layout:**
+- Content backbone: `main.content` max-width 860px; enrichment insets: max-width 720px (the size difference signals visual subordination)
+- Enrichments go BETWEEN paragraphs at natural reading breaks, never before the first paragraph
 - No more than 2 consecutive enrichments without intervening prose
+- No dashboard patterns (KPI grids, hero banners) in the report body — those belong in the infographic header
 
 ### Step 4: Run Python Post-Processor
 
@@ -169,8 +149,5 @@ Return the JSON response with output path, enrichment counts, and preservation m
 
 ## Important Constraints
 
-- **Never modify the source markdown** — you are creating a visual rendition, not editing the source
-- **Content preservation is sacred** — every paragraph, citation, table, and heading from the source must appear in the HTML. The 80% word-count gate is a floor, not a target — aim for 95%+
-- **The enriched report is a REPORT, not a dashboard** — all source prose must appear. The infographic header zone is the only place for dense data visualization; the report body has sparse illustrations only
-- **Chart.js configs from the enrichment plan are preferred** — use `chart_config` verbatim when present. Only craft your own config when `chart_config` is absent
-- **Design-variables colors are hex values** — use them directly in Chart.js configs and SVG elements. CSS custom properties go in the `<style>` block only
+- **Content preservation is the primary quality signal.** The 80% word-count gate is a floor — aim for 95%+. Dropping a paragraph from a report the user already wrote is a worse failure than a mediocre chart.
+- **Design-variables colors are hex values** — use them directly in Chart.js configs and SVG elements. CSS custom properties go in the `:root {}` block in `<style>` only.

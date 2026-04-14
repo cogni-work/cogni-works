@@ -17,8 +17,6 @@ description: >
   skill post-processes existing content, it never creates new reports from
   scratch (that is cogni-research or cogni-trends), never creates slides (that
   is story-to-slides), and never rewrites prose (that is cogni-copywriting).
-allowed-tools: Read, Write, Edit, Bash, Grep, Glob, AskUserQuestion, Agent, Skill
-version: 1.0.0
 ---
 
 # Enrich Report
@@ -38,34 +36,30 @@ The enriched report uses a two-zone layout — an infographic header for visual 
 
 This matches the consulting deliverable pattern: executive one-pager up front, detailed report below. The infographic satisfies the desire for visuals; the report body stays clean and readable.
 
-## Reading Experience Principles
-
-1. **Text is the primary content** in the report body. Visuals live in the infographic header. If a section has no concept worth diagramming, leave it as styled prose.
-2. **Content preservation is sacred.** Every paragraph, citation, table, blockquote, and heading from the source markdown MUST appear in the report body verbatim. Enrichment adds visuals between existing prose — it never replaces, summarizes, or abbreviates prose.
-3. **Visual subordination in the report body.** Content max-width is 860px. Enrichment max-width is 720px (centered within content). Charts max 300px height. This size difference signals that text is the backbone and visuals are insets.
-4. **No dashboard patterns in the report body.** No hero banners, key-findings grids, KPI cards, or section-lead summaries that replace prose. Those elements belong in the infographic header.
-5. **Dedicated HTML writer agent, scripts validate and inject.** The `report-html-writer` opus agent writes the complete self-contained HTML file — all CSS, Chart.js chart configs, sidebar navigation, markdown-to-HTML conversion, and responsive layout. This agent receives a clean context with only the inputs it needs (source markdown, enrichment plan, design variables), producing richer, more contextual data visualizations than template-based generation. The Python script serves as a **post-processor** that: (1) injects the Pencil-rendered infographic at the top, and (2) validates content preservation (word count, heading count, citation count). The LLM's creative control over chart design is the key quality differentiator.
-
 ## Architecture
 
-**The `report-html-writer` agent writes the full HTML.** In Phase 4, you dispatch the dedicated opus worker agent that produces a complete, self-contained HTML file with inline CSS, Chart.js CDN, charts, sidebar, and all report prose. The Python post-processor (`scripts/generate-enriched-report.py --post-process`) then injects the infographic header and runs validation gates. This division plays to each system's strengths: the opus agent excels at contextual chart design, content-preserving markdown-to-HTML conversion, and layout decisions with a focused context; scripts excel at deterministic infographic embedding and content verification.
+The pipeline splits creative and deterministic work between an LLM agent and a Python script:
 
-Two-track visualization pipeline (both handled by the `report-html-writer` agent):
+- **`report-html-writer` (opus agent)** — writes the complete self-contained HTML: CSS, Chart.js configs, inline SVG diagrams, sidebar navigation, and all report prose. Receives a clean context (source markdown, enrichment plan, design variables) so it can focus on contextual chart design and content-preserving markdown-to-HTML conversion. Two visualization tracks:
+  - **Data track** — Chart.js charts (bar, doughnut, radar, line, scatter, combo) with multi-dataset configs, themed colors from design-variables.
+  - **Concept track** — LLM-crafted inline SVG (no Excalidraw dependency) for flows, relationship maps, concept sketches. Uses `${CLAUDE_PLUGIN_ROOT}/libraries/svg-patterns.md` recipes.
 
-1. **Data track** — Chart.js charts (bar, doughnut, radar, line, scatter, combo) for statistics, distributions, comparisons, timelines. The agent writes complete Chart.js configs with multiple datasets, fills, annotations, and themed colors from design-variables. Charts should be visually rich: multi-dataset line charts with scenario fills, grouped bars with axis titles, doughnuts with callout legends, scatter timelines with category-colored milestone points.
-2. **Concept track** — LLM-crafted inline SVG written directly in the HTML (no separate agent dispatch, no Excalidraw dependency) for T→I→P→S flows, relationship maps, strategic concept sketches. Themed with design-variable colors. Follow `${CLAUDE_PLUGIN_ROOT}/libraries/svg-patterns.md` recipes for diagram-type-specific element structure and coordinate formulas.
+- **`generate-enriched-report.py --post-process` (Python script)** — handles deterministic post-processing after the agent writes the HTML:
+  - Flipbook assembly (when `--layout flipbook`) — transforms scroll HTML into paginated two-page spreads
+  - Infographic injection (HTML fragment > PNG base64 > JSON fallback)
+  - Content preservation validation (word count >= 80%, heading count, citation count)
+  - Enrichment plan validation (density caps, type restrictions)
 
-The Python post-processor (`scripts/generate-enriched-report.py --post-process`) handles:
-- **Flipbook assembly** (when `--layout flipbook`) — transforms scroll HTML into flipbook layout: extracts cover content from markers, wraps body elements in `.block` divs for pagination, injects flipbook CSS and JS (pagination engine, navigation, ToC), assembles the complete two-page spread structure. The agent always writes scroll-format HTML; the script handles the flipbook transformation deterministically.
-- Injecting the infographic header (PNG base64 with lightbox, HTML fragment, or JSON fallback)
-- Validating content preservation (word count >= 80%, heading count, citation count)
-- Validates the enrichment plan (enforces density caps, type restrictions, per-section caps)
-- Verifies content preservation (word count >= 80% of source)
+This division matters because chart design benefits from LLM creativity (contextual axis labels, multi-dataset scenario modeling, chart type selection), while infographic embedding and content verification need deterministic correctness.
+
+**Content preservation** — every paragraph, citation, table, blockquote, and heading from the source markdown appears verbatim in the HTML output. Enrichments are injected *between* existing prose, never replacing it. The validation gate enforces a hard floor: HTML word count >= 80% of source, with H2 and citation counts matching. This matters because the enriched report is a *visual rendition* of the source — readers who know the original will notice missing content.
+
+**Visual subordination** — in the report body, content max-width is 860px while enrichment max-width is 720px (centered). Charts max 300px height. This size difference signals that text is the backbone and visuals are insets. Dashboard patterns (hero banners, KPI grids, section-lead summaries) belong in the infographic header, not the report body.
 
 **Theming** follows the 3-stage design-variables pattern from cogni-workspace:
 1. User picks theme via `cogni-workspace:pick-theme`
 2. LLM derives `design-variables.json` from theme.md
-3. Python script injects CSS custom properties into HTML
+3. All colors in Chart.js configs and SVGs reference the design-variables palette — the same report can be re-themed by swapping the JSON
 
 ## Parameters
 
@@ -86,36 +80,20 @@ The Python post-processor (`scripts/generate-enriched-report.py --post-process`)
 
 ## Conventions
 
-### Original content is sacred
-
-The source markdown is never modified. Every word, every citation, every heading from the original appears in the HTML output. Visualizations are ADDED between sections — they supplement, never replace.
-
-### Theme-driven visuals
-
-All colors in Chart.js configs and SVG elements reference the design-variables palette. No hardcoded hex values in visualization code. This means the same enriched report can be re-themed by changing the design-variables.json.
-
-### Citation preservation
-
-Every inline citation `[text](url)` from the source becomes a clickable `<a href="url">text</a>` in the HTML. The validation gate counts links: HTML count must be >= source count.
-
-### Interactive checkpoint
-
-Phase 3 presents the enrichment plan for user review before any visualization is generated. This prevents wasted computation on unwanted charts. When `interactive=false`, auto-approve all planned enrichments.
-
 ### German fidelity
 
-German reports use real Unicode umlauts (ä ö ü ß), dot-separated thousands (2.661), and German chart axis labels. ASCII umlaut substitutions are a credibility failure.
+German reports use real Unicode umlauts (ä ö ü ß), dot-separated thousands (2.661), and German chart axis labels. ASCII substitutions (ae/oe/ue) undermine credibility with German-speaking readers who immediately notice them.
 
 ### Density controls report-body enrichment volume
 
 The `density` parameter gates how many **report-body** enrichments pass through. The infographic header is always generated regardless of density.
 
-- **none** — Zero report-body visualizations. Produces an infographic header + beautifully themed HTML with sidebar navigation, styled prose, and preserved citations — but no inline charts or diagrams in the report body. Use for "make it pretty" without visual noise, or as a clean base for PDF/DOCX export.
-- **minimal** — 1-2 report-body illustrations. Only where a visual is essential for comprehension (e.g., a complex process flow).
-- **balanced** — 3-5 report-body illustrations. Default. Sparse and purposeful — only process-flows, concept diagrams, or key comparison charts.
-- **rich** — 5-8 report-body illustrations. For workshop materials or reports where more inline visuals aid the reading experience.
+- **none** — Infographic header + themed prose only. No inline charts or diagrams in the report body. Good for "make it pretty" or as a clean base for PDF/DOCX export.
+- **minimal** — 1-2 report-body illustrations. Only where essential for comprehension.
+- **balanced** — 3-5 report-body illustrations. Default. Sparse and purposeful.
+- **rich** — 5-8 report-body illustrations. For workshop materials or visual-heavy reading.
 
-When `density=none`: skip Phase 2b (enrichment planning). Still run Phase 2a (infographic distillation). Go to Phase 4 with an empty enrichment plan but valid infographic data — no charts or SVGs will be generated.
+When `density=none`: skip Phase 2b (enrichment planning). Still run Phase 2a (infographic distillation). Go to Phase 4 with an empty enrichment plan but valid infographic data.
 
 The Python script enforces density caps deterministically — even if the enrichment plan exceeds the limit, the script trims to the cap and logs what was dropped.
 
@@ -293,105 +271,22 @@ The agent uses Pencil MCP tools (`open_document`, `batch_design`, `export_nodes`
 
 > Plan very sparse report-body illustrations. The infographic already covers data storytelling.
 
-Read `references/03-enrichment-catalog.md` for enrichment types, triggers, and scoring.
+Read `references/03-enrichment-catalog.md` — it contains the complete enrichment type catalog, structural rules per report type, content-pattern detection triggers, scoring model (0-100 with data density, content relevance, section importance, and variety bonuses), spacing rules, theme/section consistency checks, and density thresholds. Follow it as the authoritative reference for this phase.
 
-**Three-layer decision engine:**
+The high-level decision flow:
 
-**Layer 1 — Structural rules (report-type-specific, always apply):**
+1. **Layer 1 — Structural rules** fire based on section tags from Phase 1 (report-type-specific). See the catalog's structural rules tables.
+2. **Layer 2 — Content pattern detection** scans section text for numeric clusters, process language, comparison language, temporal references. See the catalog's content-pattern triggers.
+3. **Layer 3 — Scoring and filtering** ranks candidates, applies table-proximity demotion, minimum distance (300 words), density caps, type whitelist/blacklist, appendix exclusion, and synthesis affinity. See the catalog's scoring reference.
+4. **Consistency checks** ensure visual rhythm across sections — theme consistency (trend-report) and section consistency (research-report). See the catalog's consistency rules.
 
-For trend-report:
-| Section tag | Enrichment | Track |
-|------------|------------|-------|
-| `headline-evidence` | `kpi-dashboard` | data |
-| `value-chain` (each) | `tips-flow` | concept |
-| `horizon-distribution` | `horizon-chart` | data |
-| `mece-validation` | `distribution-doughnut` | data |
-| `evidence-coverage` | `coverage-heatmap` | data |
-| `strategic-themes-table` | `theme-radar` | data |
+**Key editorial principles** (the "why" behind the scoring model):
+- **Table-proximity demotion:** Charts that restate data from an adjacent markdown table waste space. A chart earns its place by revealing patterns the table cannot — cross-section comparisons, time-series trends, scenario projections. Demote by 30 points or skip when chart data duplicates a table.
+- **Appendix exclusion:** Reference sections (Quellenregister, Claims Registry, References) are data sources, not visualization hosts. Charts derived from appendix data belong in the last narrative section before the appendix.
 
-For research-report (content-pattern-driven — fires based on section content, not heading text):
-| Content pattern | Enrichment | Track |
-|----------------|------------|-------|
-| `executive-summary` + 3+ numeric claims | `kpi-dashboard` | data |
-| `has-data-table` (numeric table with 4+ rows) | `comparison-bar` | data |
-| `has-comparison` (table or prose comparing entities) | `comparison-bar` | data |
-| `has-timeline` (3+ chronological dates) | `timeline-chart` | data |
-| `has-distribution` (proportional data ~100%) | `distribution-doughnut` | data |
-| `stat-dense` (5+ numeric claims clustered) | `stat-chart` | data |
-| `has-process` (sequential steps / causal chain) | `process-flow` | concept |
-| `has-synthesis` (cross-section aggregation) | `relationship-map` | concept |
-| `has-thesis` + section >800 words | `summary-card` | html |
-| `methodology` + `has-process` | `process-flow` | concept |
-| Pre-planned (diagram-plan.json) | per-plan type | concept |
+**Chart config authoring:** For every data-track enrichment, write a complete Chart.js config in `chart_config` — a JSON object with `type`, `data`, and `options`. The `report-html-writer` agent embeds these verbatim, so you have full creative control: multiple datasets, combo types, dual axes, fills, annotations. Use hex values from `design_variables.colors` for all chart colors. The `data` field is also required alongside `chart_config` as structured metadata for validation and fallback.
 
-**Layer 2 — Content pattern detection (generic, scored):**
-
-Scan each section's text for patterns:
-- 3+ numeric claims in close proximity → `stat-chart` candidate (data)
-- Table with 4+ rows of numeric data → `comparison-bar` or `distribution-doughnut` candidate (data)
-- Process/sequence language ("leads to", "triggers", "results in") → `process-flow` candidate (concept)
-- Comparison language ("vs", "compared to", "while X, Y") → `comparison-bar` candidate (data)
-- Temporal references (dates, quarters, deadlines, milestones) → `timeline-chart` candidate (data)
-- Section >800 words with identifiable thesis sentence → `summary-card` candidate (html)
-- Theme interconnection (mentions 2+ other theme names) → `relationship-map` candidate (concept)
-
-**Layer 3 — Scoring and spacing:**
-
-Each candidate gets a score (0-100) based on:
-- Data density: more numbers/rows = higher (max 40 points)
-- Content relevance: how well the data fits the visualization type (max 30 points)
-- Section importance: H2 > H3 > H4 (max 15 points)
-- Variety bonus: +15 if this type hasn't been used anywhere in the plan yet (first use of a type), +10 if not used in last 3 enrichments, -15 if same type as previous enrichment, -10 if this type already accounts for 40%+ of all planned enrichments (prevents any single type from dominating)
-
-Apply filters:
-- **Table-proximity demotion:** If the target section contains a markdown table whose columns or rows present the same data the chart would show (e.g., a segment breakdown table followed by a doughnut of the same segments), demote the enrichment by 30 points or skip it. Charts earn their place by showing patterns the table *cannot* — cross-section comparisons, time-series trends, scenario projections, dual-axis correlations. A chart that restates a table wastes space and signals low editorial intelligence.
-- Minimum distance: no two enrichments within 300 words of each other
-- Density cap: `minimal` keeps top 5-8, `balanced` keeps top 10-15, `rich` keeps top 15-22
-- Type whitelist/blacklist from parameters
-- **Appendix exclusion:** Never place enrichments inside appendix sections (Quellenregister, Claims Registry, References, Bibliography). These are data sources, not visualization hosts. Charts derived from appendix data belong in the last narrative section before the appendix.
-- **Synthesis affinity:** Cross-theme aggregate charts (claims distribution, investment comparison across all themes) belong in the synthesis/closing section, placed after the paragraph containing the aggregate numbers.
-
-**Theme consistency check (trend-report):**
-
-After scoring, verify that every investment theme H2 section has at least 2 enrichments at `balanced` density:
-1. A `summary-card` (key takeaway at the theme opening)
-2. One data chart (best fit: `comparison-bar` for cost comparisons, `timeline-chart` for deadline-heavy themes, `stat-chart` for evidence clusters)
-
-If a theme has fewer than 2, force-add from this baseline. Score force-added items at 50. This prevents the visual rhythm from breaking — all themes share the same internal structure, so they must share a consistent visual baseline. See `references/03-enrichment-catalog.md` "Theme Consistency Rule" for full details.
-
-**Section consistency check (research-report):**
-
-After scoring, verify that data-rich H2 sections (600+ words AND at least one content-pattern data tag: `has-data-table`, `stat-dense`, `has-comparison`, `has-timeline`, `has-distribution`) have at least 1 enrichment at `balanced` density:
-1. A `summary-card` (if `has-thesis` detected — section >800 words with thesis sentence)
-2. One data chart (highest-scoring match from content-pattern structural rules)
-
-If a qualifying section has fewer enrichments than baseline, force-add. Score force-added `summary-card` at 40, data charts at 35. Sections without any content-pattern data tags are pure analytical prose — do NOT force enrichments. See `references/03-enrichment-catalog.md` "Section Consistency Rule" for full details.
-
-**Chart config authoring (data-track enrichments):** For every data-track enrichment, write a complete Chart.js config in the `chart_config` field. This is the **preferred path** — the Python script will embed your config verbatim instead of using its basic templates. You have full creative control over chart design: multiple datasets, combo chart types, dual axes, fills, gradients, annotations, custom legends. Read the design-variables to use theme colors.
-
-Write `chart_config` as a JSON object with three keys: `type` (Chart.js chart type), `data` (labels + datasets), `options` (scales, plugins, legend, tooltip). Use the design-variables palette for all colors — reference them directly as hex values from `design_variables.colors`. Example patterns that produce visually rich charts:
-
-- **Line chart with scenarios**: multiple datasets with different `borderDash`, `fill`, `tension`, annotated crossover points
-- **Doughnut with callout**: `cutout: "55%"`, right-positioned legend with `pointStyle: "rectRounded"`, labeled segments
-- **Grouped bar**: multiple datasets side-by-side, `borderRadius`, axis titles
-- **Combo bar+line**: bar dataset for primary metric, line overlay for secondary on dual Y axis
-- **Timeline**: scatter with category-colored points and labeled milestones (NOT a flat y=1 line)
-
-The `data` field is still required alongside `chart_config` — it serves as structured metadata for validation and fallback if `chart_config` is absent.
-
-**Data extraction completeness:** Every enrichment needs a non-empty `data` field:
-- `kpi-dashboard`: `stats[]` with value, label, source_url
-- `comparison-bar`: `items[]` with label and value (from table rows or comparison pairs)
-- `stat-chart`: `claims[]` with value, label, unit
-- `timeline-chart`: `events[]` with date, label, category
-- `distribution-doughnut`: `segments[]` with label, value, percentage
-- `process-flow`: `steps[]` with label, sublabel, and `connections[]`
-- `relationship-map`: `nodes[]` and `connections[]` with labels
-- `summary-card`: `summary` text and `word_count`
-
-If you cannot extract meaningful data for an enrichment, demote it (lower its score by 20) rather than leaving `data` empty.
-
-**Injection line precision:** Every enrichment needs an `injection_after_line` value pointing to the specific source line after which it should appear. When multiple enrichments target the same section, spread them across different paragraphs — do NOT give them all the same line number. The Python generator uses these lines to interleave enrichments within the section content. If all enrichments share one line, they stack together at one position instead of being distributed through the prose.
+**Injection line precision:** Every enrichment needs `injection_after_line` pointing to a specific source line. When multiple enrichments target the same section, spread them across different paragraphs — stacking them at one line number clusters visuals instead of distributing them through the prose.
 
 **Output:** `enrichment-plan.json` (written to `{source_dir}/cogni-visual/enrichment-plan.json`):
 

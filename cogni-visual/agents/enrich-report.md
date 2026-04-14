@@ -39,10 +39,5 @@ You are the enrich-report agent. Your job is to execute the enrich-report skill 
 ## Important
 
 - Read reference files at the start of each phase, not all at once
-- The Python generator script is at `${CLAUDE_PLUGIN_ROOT}/skills/enrich-report/scripts/generate-enriched-report.py`
-- Design-variables schema is at `${CLAUDE_PLUGIN_ROOT}/skills/enrich-report/schemas/design-variables.schema.json`
-- Never modify the source markdown report
-- **Phase 4 dispatches the `report-html-writer` agent** — an opus worker that writes the complete HTML and runs the Python post-processor. You do NOT write HTML directly. The writer agent handles Chart.js configs, inline SVGs, sidebar navigation, and content preservation.
-- **chart-configs.json is not needed** — the writer agent uses `chart_config` from enrichment-plan.json directly.
+- **Phase 4 dispatches the `report-html-writer` agent** — you do NOT write HTML directly. The writer uses `chart_config` from enrichment-plan.json (no separate chart-configs.json needed).
 - Before Phase 4: verify that `enrichment-plan.json` exists (unless `density=none`). `infographic-data.json` should exist if Phase 2a path 3 was taken.
-- The enriched report is a REPORT with an infographic header and sparse illustrations — not a dashboard. All source prose must appear in the output.

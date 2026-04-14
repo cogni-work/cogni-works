@@ -2,9 +2,11 @@
 name: research-setup
 description: |
   Configure and initialize a cogni-research project — interactive menu for report type,
-  tone, citation style, market, and source mode (web / local / wiki / hybrid). Creates
-  the project directory and project-config.json. Mandatory first step before research-report
-  can run; research-report routes here automatically when no project is initialized.
+  tone, citation style, target market (10 supported: DACH, DE, FR, IT, PL, NL, ES, US,
+  UK, EU — each with per-market authority sources and intent-based bilingual search),
+  output language, and source mode (web / local / wiki / hybrid). Creates the project
+  directory and project-config.json. Mandatory first step before research-report can
+  run; research-report routes here automatically when no project is initialized.
   Use when the user says "set up research project", "configure research", "new research
   project", "initialize research", "research settings", "change research options",
   "research preferences", or wants to start a research project before any report is generated.

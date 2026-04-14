@@ -5,7 +5,9 @@ description: |
   research with structural review. Three modes: basic (fast single-pass), detailed
   (multi-section with outline), deep (recursive tree exploration). Four source modes:
   web (default), local (user's files), wiki (cogni-wiki), hybrid. Requires an initialized
-  project — routes to research-setup first if none exists. Use whenever the user asks
+  project — routes to research-setup first if none exists. Runs localized search for the
+  project's configured market (10 supported: DACH, DE, FR, IT, PL, NL, ES, US, UK, EU)
+  with intent-based bilingual search and per-market authority sources. Use whenever the user asks
   for a research report, wants to investigate a topic, says "deep research", "gpt-researcher
   style", "multi-agent research", "analyze these documents", "research from my files",
   "query the wiki", or requests comprehensive topic analysis with citations. Claims

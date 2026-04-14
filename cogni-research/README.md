@@ -2,7 +2,7 @@
 
 > **Preview** (v0.x) — core skills defined but may change. Feedback welcome.
 
-Multi-agent research report generator for [Claude Cowork](https://claude.ai/cowork). STORM-inspired editorial workflow with parallel section research and claims-verified review loops. Five report types (basic, detailed, deep, outline, resource) and four source modes (web, local documents, wiki, hybrid) — from quick overviews to deep recursive explorations.
+Multi-agent research report generator for [Claude Cowork](https://claude.ai/cowork). STORM-inspired editorial workflow with parallel section research and claims-verified review loops. Five report types (basic, detailed, deep, outline, resource) and four source modes (web, local documents, wiki, hybrid) — from quick overviews to deep recursive explorations. Research runs localized across 10 markets (DACH, DE, FR, IT, PL, NL, ES, US, UK, EU) with intent-based bilingual search and per-market authority sources.
 
 ## Why this exists
 
@@ -37,6 +37,7 @@ If you produce research, analysis, or any content that needs to be both sourced 
 
 - **Ship reports in minutes, not hours.** Basic reports dispatch 5–7 agents concurrently; deep reports run 15–25. Research that would take hours completes in minutes.
 - **Verify every factual claim against its source URL.** Every claim is extracted, matched to its source URL, and checked for deviations — misquotation, unsupported conclusions, selective omission.
+- **Research in your market's language, against your market's authorities.** Ten localized markets (DACH, DE, FR, IT, PL, NL, ES, US, UK, EU) with intent-based bilingual search (local language + English), authority-source boosts per region, and configurable output language — independent of where the evidence came from.
 - **Deliver reports as themed, interactive HTML.** Reports finish with data visualizations — not just markdown. Optional PDF and DOCX export included.
 - **Resume interrupted runs from the last completed phase.** Interrupted runs pick up from the first incomplete phase. No lost work.
 - **Trace every finding back to a source.** Every finding links to a source, every claim links to a verification result. The full workspace is Obsidian-browsable.

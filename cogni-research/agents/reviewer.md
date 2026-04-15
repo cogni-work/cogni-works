@@ -70,6 +70,42 @@ Diagram issues are informational (low severity) unless syntax is invalid (medium
 
 Scan the references section for entries missing URLs. Count references that have "Available:" text or a description but no actual `https://` link. If more than 20% of references lack clickable URLs, flag as a high-severity issue: "References missing URLs: N of M references have no clickable link." This forces a revise verdict because a reference without a URL cannot be verified by the reader.
 
+#### Inline Citation Density Gate
+
+The Source Diversity dimension above measures variety of unique sources in the reference list — it is insensitive to paragraph-level distribution. A draft with 32 unique cited sources scores high on diversity even when half the paragraphs are uncited, and the Reference URL Gate only checks the bibliography. Neither catches under-cited prose. This gate closes that blind spot by measuring inline citation density per section so under-cited expansions cannot ride a high diversity score into an accept verdict. Empirical motivation: a deep-mode chain measured at 8.0 → 7.1 → 6.8 cites/1000w across writer → revisor → revisor, with one section as low as 1.1 cites/1000w, still landed at 0.872 (above the 0.82 structural-only accept threshold). This gate is what would have caught it.
+
+Scan the draft for H2 section boundaries, **excluding** a trailing `## References` / `## Quellen` / `## Bibliographie` / `## Bibliografia` / `## Bibliografía` / `## Bibliografie` section (pick whichever matches the output language). For each remaining H2 section, count:
+
+- **Body words**: the full word count of the section, excluding the heading itself.
+- **Inline citations**: any of these forms, summed —
+  - Linked author-year: `([Author, 2025](https://...))` — regex approximately `\(\[[^\]]+,\s*\d{4}\]\([^)]+\)\)` — this is the APA/markdown form the writer emits.
+  - Unlinked author-year: `(Author, 2025)` — regex approximately `\([A-Z][\w\s&\.\-]+,\s*\d{4}\)` — catches bibliography-format citations.
+  - Wiki-style unlinked publisher: `(Publisher)` inline reference (per `writer.md` Phase 2 step 5 for wiki citations without `original_url`) — regex approximately `\([A-Z][\w\s&\.\-]{2,}\)` when immediately preceded by a prose sentence, not a numeric range. The regex is deliberately language-agnostic because the bracket shape is identical across DE/FR/IT/PL/NL/ES — German `([Autor, 2025](url))` matches exactly the same pattern as English.
+
+Compute `density = cites / words × 1000` for each section. Apply the tiered thresholds:
+
+| Density (cites per 1000w) | Status | Issue severity |
+|---|---|---|
+| `≥ 6.0` | **ok** | none — section passes |
+| `[3.0, 6.0)` | **low** | low-severity issue |
+| `< 3.0` | **high** | **high-severity** issue |
+
+The 6.0 floor is calibrated against the writer's single-pass baseline (8.0 on KI-Adoption v1) — a well-cited draft naturally sits above 6.0; the `[3.0, 6.0)` low band is the **nudge zone** where a section is thin but not failing, and a section below 3.0 is approaching "uncited prose". Sections below 100 body words are exempt (tiny conclusions or callouts cannot carry meaningful density signal).
+
+Based on the count and severity of degraded sections, apply a **stepped cap on the Depth dimension** — the same cap pattern the Word Count Gate uses for completeness, for the same reason: a dimension score that ignores a categorical failure is worse than a bounded score that reflects it:
+
+- **0 degraded sections** — no cap, score Depth normally.
+- **1–2 low-severity sections only** — cap Depth at **0.85**. The draft is mostly healthy; the low-severity signal is a nudge, not a block.
+- **3+ low-severity sections, OR any 1 high-severity section** — cap Depth at **0.70**. This is the threshold that forces the weighted-average score below the 0.82 structural-only accept threshold on a draft that is otherwise strong. A Depth cap of 0.70 paired with 0.88/0.83/0.90/0.88 on the other four dimensions yields ~0.845 × weight_distribution ≈ 0.81 overall, which correctly flips the verdict to `revise`.
+
+For each degraded section, add an entry to the issues list. **High-severity** issues MUST use the exact prefix `Citation density deficit` (matching the `Word deficit` convention) — the revisor keys on this prefix to switch into citation-density expansion mode in a future iteration. **Low-severity** issues use the prefix `Citation density deficit (low)` for informational surfacing without triggering expansion. Recommended issue text:
+
+```
+Citation density deficit: Section "<heading>" has <cites> citations across <words> words (density <D>/1000w, threshold 3.0 for high / 6.0 for low). Add evidence density — reuse existing sources where possible, add WebSearch-backed sources only when the existing pool is exhausted.
+```
+
+This gate applies in **both** claims-available and structural-only modes — it only depends on the draft file and does not need cogni-claims data.
+
 #### Word Count Gate
 
 Before scoring dimensions, count the draft's words (use `wc -w` via Bash on the file, not your own guess) and check against report-type minimums:
@@ -147,7 +183,28 @@ Write verdict to `.metadata/review-verdicts/v{REVIEW_ITERATION}.json`:
     "source_unavailable": 1,
     "verification_rate": 0.78
   },
+  "citation_density": {
+    "overall": {"cites_per_1000w": 6.8},
+    "per_section": [
+      {"heading": "Synthese und strategische Handlungsempfehlungen", "words": 883, "cites": 1, "density": 1.1, "severity": "high"},
+      {"heading": "Strukturelle Hemmnisse", "words": 897, "cites": 4, "density": 4.5, "severity": "low"},
+      {"heading": "Service- und After-Sales-Transformation", "words": 631, "cites": 2, "density": 3.2, "severity": "low"},
+      {"heading": "Post-Quantum Standards", "words": 1240, "cites": 11, "density": 8.9, "severity": "none"}
+    ],
+    "degraded_sections": [
+      "Synthese und strategische Handlungsempfehlungen",
+      "Strukturelle Hemmnisse",
+      "Service- und After-Sales-Transformation"
+    ],
+    "gate_status": "fail",
+    "gate_severity": "high"
+  },
   "issues": [
+    {
+      "section": "Synthese und strategische Handlungsempfehlungen",
+      "issue": "Citation density deficit: Section \"Synthese und strategische Handlungsempfehlungen\" has 1 citation across 883 words (density 1.1/1000w, threshold 3.0 for high / 6.0 for low). Add evidence density — reuse existing sources where possible, add WebSearch-backed sources only when the existing pool is exhausted.",
+      "severity": "high"
+    },
     {
       "section": "Post-Quantum Standards",
       "issue": "Claim 'NIST selected 4 algorithms' is a misquotation — source says 3 were finalized",
@@ -162,6 +219,8 @@ Write verdict to `.metadata/review-verdicts/v{REVIEW_ITERATION}.json`:
   ]
 }
 ```
+
+The `citation_density` block is populated on every review pass regardless of claims availability. `gate_status` is `"pass"` when no sections are degraded and `"fail"` when at least one is. `gate_severity` is `"high"` if any section has high severity, `"low"` if the only flags are low-severity, and `"none"` on a clean pass. `per_section[]` lists every scanned H2 section (references section excluded) so reviewers and orchestrators can inspect the full distribution, not just the failures. `degraded_sections[]` is a convenience extract of headings flagged low or high. This schema mirrors the revisor's `citation_density` block (see `agents/revisor.md` Phase 3) so the two agents stay in lockstep across the Phase 5 expansion loop.
 
 ## Output Format
 

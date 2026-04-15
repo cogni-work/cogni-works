@@ -1,16 +1,19 @@
 # Content Pipeline
 
-**Pipeline**: cogni-marketing (setup + content generation) → cogni-copywriting (polish) → cogni-visual (slides / web)
+**Pipeline**: cogni-marketing (setup + content generation) → cogni-narrative (story arc shaping, long-form only) → cogni-copywriting (polish) → cogni-visual (slides / web)
 **Duration**: 2–6 hours for a complete content batch, depending on format count and polish depth
 **End deliverable**: A multi-channel marketing content package — polished articles, battle cards, email nurtures, and optionally a slide deck or web narrative
 
 ```mermaid
 graph LR
     A[marketing-setup] -->|content-strategy.json| B[content generation]
-    B -->|raw content pieces| C[cogni-copywriting]
+    B -->|raw content pieces| N[cogni-narrative]
+    N -->|arc-shaped long-form| C[cogni-copywriting]
     C -->|polished content| D[cogni-visual]
     D -->|slides / web| E[Deliverable]
 ```
+
+**Narrative bridge (long-form only).** For thought leadership, whitepapers, keynote abstracts, and other long-form formats, `cogni-narrative` sits between `cogni-marketing` content generation and `cogni-copywriting` polish. It applies one of 10 story arc frameworks (Corporate Visions, JTBD Portfolio, Strategic Foresight, etc.) and writes `insight-summary.md` with `arc_id` frontmatter that `cogni-copywriting` reads to apply arc-aware polishing. Short-form formats (LinkedIn posts, battle cards, emails) skip this step and go straight from generation to polish. See the [cogni-narrative plugin guide](../plugin-guide/cogni-narrative.md) for arc selection guidance.
 
 ## What You Get
 
@@ -30,7 +33,8 @@ All content is sourced — each piece references the TIPS claims and portfolio p
 | cogni-marketing installed | Orchestrates content generation |
 | cogni-portfolio installed | Provides propositions, markets, and competitors |
 | cogni-trends installed | Provides strategic themes (Handlungsfelder) |
-| cogni-copywriting installed | Polishes generated content |
+| cogni-narrative installed (optional) | Shapes long-form content with a story arc before polishing; required for thought-leadership / whitepaper / keynote formats |
+| cogni-copywriting installed | Polishes generated content; reads `arc_id` frontmatter from narrative output for arc-aware polishing |
 | cogni-visual installed (optional) | Renders content to slides or web |
 | Portfolio project initialized | cogni-marketing reads from cogni-portfolio |
 | TIPS project available (optional) | Required for strategy-connected content; generic themes are used otherwise |

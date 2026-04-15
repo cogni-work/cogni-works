@@ -10,7 +10,7 @@ For the canonical IS/DOES/MEANS positioning of this plugin, see the [cogni-resea
 
 cogni-research automates the research pipeline from topic to verified, sourced report. The core problem it addresses: LLM-generated reports cite sources confidently, but citation hallucination rates range from 14% to 95% in published studies. Reports that look well-sourced may have no verifiable backing at all.
 
-The plugin separates research from verification across two skills and context windows. `research-report` runs a six-phase orchestration pipeline ending in a structurally reviewed draft. `verify-report` then loads only the draft and source entities — without competing for context with research data — and runs a claims verification loop via cogni-claims.
+The plugin separates research from verification across four skills. `research-setup` configures project defaults interactively (report type, tone, citation style, target market, language). `research-report` runs a six-phase orchestration pipeline ending in a structurally reviewed draft. `verify-report` then loads only the draft and source entities in a fresh context window — without competing for context with research data — and runs a claims verification loop via cogni-claims. `research-resume` reads project state and recommends the next action for interrupted or multi-session runs.
 
 Research runs in parallel. A basic report dispatches 5–7 section-researcher agents concurrently. A deep report runs 15–25 agents in recursive tree exploration mode. All agents report cost estimates; all phases write to disk so interrupted runs resume from the first incomplete phase.
 
@@ -137,6 +137,22 @@ Claims verification in a fresh context window. Extracts verifiable factual claim
 Workspace-aware variant of `research-report` for integrated project environments. Use this when research is part of a larger consulting engagement or portfolio workflow where the project directory needs to align with workspace conventions.
 
 **Example prompt:** Typically invoked by cogni-consulting during the Discover phase, not directly by the user.
+
+---
+
+### research-setup
+
+Interactive configuration skill. Prompts for report type, tone, citation style, target market (DACH, DE, FR, IT, PL, NL, ES, US, UK, EU), and output language, then writes `project-config.json` so subsequent `research-report` runs pick up the defaults. Use this before the first `research-report` invocation in a new project directory.
+
+**Example prompt:** "Set up a research project for competitive intelligence on European cloud providers, DACH market, German output"
+
+---
+
+### research-resume
+
+Reads the current project directory and recommends the next action — resume an interrupted `research-report` from the first incomplete phase, run `verify-report` on a completed draft, or start a new research project. Use this when returning to a project across sessions.
+
+**Example prompt:** "Where was I on the quantum computing report?"
 
 ---
 

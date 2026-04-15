@@ -140,6 +140,10 @@ cogni-wiki/
     └── wiki-dashboard/              Self-contained HTML overview
 ```
 
+## Dependencies
+
+cogni-wiki is standalone — no required or optional cross-plugin dependencies in v0.0.x. Integration contracts with cogni-research, cogni-narrative, cogni-consulting, and cogni-claims are planned for v0.1.x; see [CLAUDE.md](CLAUDE.md) "Future Integration Points".
+
 ## Credits
 
 - **Andrej Karpathy** — [LLM Wiki gist](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f). The pattern this plugin implements.

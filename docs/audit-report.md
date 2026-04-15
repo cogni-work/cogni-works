@@ -1,142 +1,108 @@
 # Documentation Drift Report
-Generated: 2026-04-06
+
+Generated: 2026-04-15
 Repo: /Users/stephandehaas/GitHub/dev/insight-wave
 
-## Summary
+## Repository-Level
 
-| Plugin | Components | Architecture | Descriptions | Dependencies | plugin.json | CLAUDE.md | Messaging | docs/ | Commercial | Doc Logic | Known Issues | Overall |
-|--------|-----------|--------------|-------------|-------------|-------------|-----------|-----------|-------|------------|-----------|--------------|---------|
-| cogni-claims | OK | OK | OK | OK | OK | OK | OK | OK | OK | OK | OK | OK |
-| cogni-narrative | OK | OK | OK | OK | OK | OK | OK | OK | OK | OK | N/A | OK |
-| cogni-copywriting | OK | DRIFT | OK | OK | OK | OK | WEAK | OK | OK | OK | N/A | NEEDS UPDATE |
-| cogni-workspace | OK | OK | OK | OK | OK | OK | OK | OK | OK | OK | OK | OK |
-| cogni-trends | OK | OK | OK | OK | OK | OK | OK | OK | OK | OK | N/A | OK |
-| cogni-portfolio | OK | DRIFT | OK | OK | OK | OK | OK | OK | OK | DRIFT | N/A | NEEDS UPDATE |
-| cogni-visual | OK | OK | OK | OK | OK | OK | WEAK | OK | OK | OK | OK | NEEDS UPDATE |
-| cogni-help | OK | OK | OK | OK | OK | OK | OK | OK | OK | OK | OK | OK |
-| cogni-marketing | OK | OK | DRIFT | OK | OK | OK | OK | STALE | OK | OK | N/A | NEEDS UPDATE |
-| cogni-research | DRIFT | DRIFT | DRIFT | OK | OK | OK | OK | STALE | OK | OK | N/A | NEEDS UPDATE |
-| cogni-sales | OK | OK | DRIFT | OK | OK | OK | OK | STALE | OK | OK | N/A | NEEDS UPDATE |
-| cogni-website | OK | OK | OK | OK | OK | OK | WEAK | OK | OK | DRIFT | N/A | NEEDS UPDATE |
-| cogni-consulting | DRIFT | DRIFT | DRIFT | OK | OK | OK | WEAK | OK | OK | OK | N/A | NEEDS UPDATE |
+| Check | Verdict | Detail |
+|-------|---------|--------|
+| Root README (Check 12) | OK | All signals pass — plugin table matches marketplace (14/14), diagram + SVG present, commercial tone within zones, Security & compliance and MCP servers subsections present, all 6 workflow guides linked from root |
+| Deploy Data Freshness (Check 10d) | OK | `deploy-data.json` researched 2026-04-04 (10 days ago, well under 90-day threshold); `deploy-guide.md` companion present |
+| Known Issues Registry (Check 11) | OK | `known-issues.json` and `known-issues.md` both present in cogni-docs references |
 
-**5 OK** · **8 NEEDS UPDATE** · **0 MISSING**
+## Summary (Per-Plugin)
 
----
+| Plugin | Components | Architecture | Descriptions | Dependencies | plugin.json | CLAUDE.md | Messaging | docs/ | Commercial | Doc Logic | Known Issues | Maturity | Overall |
+|--------|-----------|--------------|-------------|-------------|-------------|-----------|-----------|-------|------------|-----------|--------------|----------|---------|
+| cogni-claims | OK | OK | OK | OK | OK | OK | WEAK | OK | OK | OK | OK | OK | NEEDS UPDATE |
+| cogni-consulting | OK | OK | OK | OK | OK | OK | OK | OK | OK | OK | OK | OK | OK |
+| cogni-copywriting | OK | OK | OK | OK | OK | OK | OK | DRIFT | OK | OK | OK | OK | NEEDS UPDATE |
+| cogni-help | OK | OK | OK | OK | OK | OK | OK | DRIFT | OK | OK | OK | OK | NEEDS UPDATE |
+| cogni-marketing | OK | OK | OK | OK | OK | OK | OK | OK | OK | OK | OK | OK | OK |
+| cogni-narrative | OK | OK | OK | OK | OK | OK | WEAK | OK | OK | OK | OK | OK | NEEDS UPDATE |
+| cogni-portfolio | OK | DRIFT | OK | OK | OK | OK | OK | OK | OK | OK | OK | OK | NEEDS UPDATE |
+| cogni-research | OK | OK | OK | OK | OK | OK | OK | DRIFT | OK | OK | OK | OK | NEEDS UPDATE |
+| cogni-sales | DRIFT | DRIFT | OK | OK | OK | OK | OK | OK | OK | OK | OK | OK | NEEDS UPDATE |
+| cogni-trends | OK | OK | OK | OK | OK | OK | OK | OK | OK | OK | OK | OK | OK |
+| cogni-visual | OK | DRIFT | OK | OK | OK | OK | OK | OK | OK | OK | OK | OK | NEEDS UPDATE |
+| cogni-website | OK | OK | OK | OK | OK | OK | OK | OK | OK | OK | OK | OK | OK |
+| cogni-wiki | OK | OK | OK | DRIFT | OK | OK | OK | OK | OK | OK | OK | OK | NEEDS UPDATE |
+| cogni-workspace | OK | OK | OK | OK | OK | OK | OK | OK | OK | OK | OK | OK | OK |
 
-## Cross-Cutting Patterns
-
-### 1. Undocumented workspace directories
-Three plugins have `*-workspace` directories inside `skills/` not listed in Components or Architecture:
-- **cogni-copywriting**: `copywriter-workspace/` (stale `insight-summary.md` artifact at root)
-- **cogni-research**: `research-report-workspace/`
-- **cogni-consulting**: `consulting-define-workspace/`
-
-These are dev/eval workspace directories (no SKILL.md), not real skills. Architecture trees should annotate them the way cogni-visual annotates `story-to-slides-workspace`.
-
-### 2. "for Claude Cowork" divergence
-4 plugins (cogni-marketing, cogni-research, cogni-sales, cogni-consulting) include `[Claude Cowork](https://claude.ai/cowork)` in their README first paragraph, but neither plugin.json nor marketplace.json contains this link. This is a consistent README-vs-manifest divergence.
-
-### 3. Missing CONTRIBUTING.md
-4 plugins lack CONTRIBUTING.md: cogni-marketing, cogni-research, cogni-website, cogni-consulting.
-
-### 4. Pipeline registry stale entries
-`synthesize` and `portfolio-export` are registered in `pipeline-registry.json` as cogni-portfolio skills but no longer exist on disk — stale registry entries.
-
-### 5. MEANS quantifier weakness
-4 plugins have WEAK messaging primarily due to MEANS bullets lacking hard quantifiers:
-- **cogni-copywriting**: "one pass" is vague
-- **cogni-visual**: no numeric quantifiers despite problem table citing "1-2 days"
-- **cogni-website**: no time/count/percentage stats
-- **cogni-consulting**: qualitative claims only ("weeks later with full continuity")
+**Overall: NEEDS UPDATE** — 8 of 14 plugins drifted; repository-level checks all OK.
 
 ---
+
+## cogni-claims
+
+### Power Messaging
+- WEAK: MEANS bullet 3 ("Keep a paper trail.") has no quantifier — add a count, time unit, or before/after measure
 
 ## cogni-copywriting
 
-### Architecture Tree Drift
-- DRIFT: Stale `insight-summary.md` artifact exists at plugin root, not in architecture tree
+### docs/
+- DRIFT: Cross-plugin dependency `cogni-narrative` documented in Dependencies table but no workflow guide in `docs/workflows/` covers the cogni-copywriting ↔ cogni-narrative connection (`content-pipeline.md` and `research-to-report.md` mention cogni-copywriting but not cogni-narrative; `portfolio-to-pitch.md` mentions cogni-narrative but not cogni-copywriting)
+
+## cogni-help
+
+### docs/
+- DRIFT: stale plugin guide — guide lists 5 skills, current count is 7 (missing: `course-deck`, `cogni-issues`)
+
+## cogni-narrative
 
 ### Power Messaging
-- WEAK: MEANS bullets lack hard quantifiers. "Ship in one pass" and "Preserve story arc structure" are qualitative — need measurable outcomes
-
----
+- WEAK: Generic IS — title paragraph opens with "A Claude Cowork plugin that..." with no named methodology or ecosystem positioning (e.g., "story arc engine for the insight-wave pipeline between research and visual delivery")
 
 ## cogni-portfolio
 
 ### Architecture Tree Drift
-- DRIFT: `portfolio-canvas-workspace/` exists on disk but not annotated in architecture tree
-- DRIFT: `templates/power-positions.md` is undocumented in architecture tree
-
-### Documentation Logic Drift
-- DRIFT: Pipeline registry contains 2 stale entries — `synthesize` and `portfolio-export` no longer exist as skills on disk
-
----
-
-## cogni-visual
-
-### Power Messaging
-- WEAK: Only 3 MEANS bullets, none with hard quantifiers. Problem table cites "1-2 days of formatting work" but MEANS doesn't echo a matching quantified counter-claim
-
----
-
-## cogni-marketing
-
-### Description Alignment
-- DRIFT: README first paragraph includes "for [Claude Cowork]" link absent from plugin.json and marketplace.json
-
----
+- DRIFT: Wrong version annotation — README architecture tree says `(v0.9.3)` but `plugin.json` version is `0.9.4`
 
 ## cogni-research
 
-### Component Table Drift
-- DRIFT: `research-report-workspace/` exists on disk but not in Components table (dev workspace, not a real skill — should be annotated)
-
-### Architecture Tree Drift
-- DRIFT: `research-report-workspace/` absent from architecture tree
-
-### Description Alignment
-- DRIFT: README adds "for [Claude Cowork]" prefix not in plugin.json/marketplace.json
-
----
+### docs/
+- DRIFT: stale plugin guide — guide references "two skills" (`research-report`, `verify-report`) but current skill count is 4 (`research-resume` and `research-setup` added since guide was generated)
 
 ## cogni-sales
 
-### Description Alignment
-- DRIFT: README adds "for [Claude Cowork]" prefix not in plugin.json/marketplace.json
-
----
-
-## cogni-website
-
-### Power Messaging
-- WEAK: MEANS bullets have no numeric quantifiers
-
-### Documentation Logic Drift
-- DRIFT: Zero pipeline registry entries for all 5 skills — pipeline suffixes unavailable for "What it does" items
-
----
-
-## cogni-consulting
-
 ### Component Table Drift
-- DRIFT: `consulting-define-workspace/` exists on disk but not in Components table
+- DRIFT: Description stale — `pitch-review-assessor` row in Components table is truncated ("...and marketing di") and does not match agent description "Assess sales pitch quality from three stakeholder perspectives (buyer, sales, marketing)"
 
 ### Architecture Tree Drift
-- DRIFT: `consulting-define-workspace/` absent from architecture tree
+- DRIFT: Missing directory `skills/why-change/evals/` — exists on disk but not shown in Architecture tree
+- DRIFT: Missing directory `skills/why-change/why-change-workspace/` — exists on disk but not shown in Architecture tree
 
-### Description Alignment
-- DRIFT: README lead paragraph diverges from plugin.json/marketplace description
+## cogni-visual
 
-### Power Messaging
-- WEAK: MEANS bullets have no numeric quantifiers ("Big-5 complexity", "your consulting judgment")
+### Architecture Tree Drift
+- DRIFT: Wrong version annotation — README architecture tree says `Plugin manifest (v0.16.18)` but `plugin.json` version is `0.16.19`
+
+## cogni-wiki
+
+### Dependency Table Drift
+- DRIFT: Missing `## Dependencies` section — README has no Dependencies table; auto-generated section expected even when no cross-plugin dependencies exist
 
 ---
 
-## Recommended Actions
+## Recommended Next Steps
 
-1. **Fix structural drift** — Run `/doc-generate` for cogni-research, cogni-consulting, cogni-portfolio, cogni-copywriting to update Components tables and Architecture trees (annotate workspace dirs)
-2. **Align descriptions** — Run `/doc-sync` for cogni-marketing, cogni-research, cogni-sales, cogni-consulting to reconcile README first paragraphs with plugin.json/marketplace.json
-3. **Strengthen messaging** — Run `/doc-power` for cogni-copywriting, cogni-visual, cogni-website, cogni-consulting to add hard quantifiers to MEANS bullets
-4. **Clean pipeline registry** — Remove stale `synthesize` and `portfolio-export` entries from `pipeline-registry.json`; add cogni-website skills
-5. **Refresh stale docs/** — Regenerate plugin guides for cogni-marketing, cogni-research, cogni-sales via `/doc-hub --category=plugin-guide`
+Per-plugin fixes (structural → messaging → docs), then repo-level:
+
+1. **Fix structural drift first:**
+   - `/doc-generate cogni-portfolio --section=architecture` (fix v0.9.3 → v0.9.4 annotation)
+   - `/doc-generate cogni-visual --section=architecture` (fix v0.16.18 → v0.16.19 annotation)
+   - `/doc-generate cogni-sales --section=components` (fix truncated `pitch-review-assessor` row)
+   - `/doc-generate cogni-sales --section=architecture` (add `evals/`, `why-change-workspace/` dirs)
+   - `/doc-generate cogni-wiki --section=dependencies` (add empty Dependencies section)
+
+2. **Strengthen messaging:**
+   - `/doc-power cogni-claims` (add quantifier to MEANS bullet 3)
+   - `/doc-power cogni-narrative` (strengthen IS title paragraph with framework/ecosystem positioning)
+
+3. **Generate user docs:**
+   - `/doc-hub cogni-help` (regenerate plugin guide — 5 → 7 skills)
+   - `/doc-hub cogni-research` (regenerate plugin guide — 2 → 4 skills)
+   - `/doc-hub cogni-copywriting` (add a workflow guide covering the cogni-copywriting ↔ cogni-narrative connection, or extend `content-pipeline.md` to include cogni-narrative)
+
+Repository-level: all OK — no `/doc-readme-root`, `/doc-deploy refresh`, or `/doc-issues` remediation needed this run.

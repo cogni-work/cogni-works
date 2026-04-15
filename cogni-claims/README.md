@@ -36,7 +36,7 @@ If you ship research, reports, or any content that leans on sourced claims, this
 
 - **Catch errors before they reach your audience.** Each claim is fetched against its cited source and checked for 5 deviation types — misquotation, unsupported conclusions, selective omission, data staleness, and source contradiction.
 - **Stay in control.** Deviation detection is LLM-based, but every finding routes through one of three explicit decisions — correct, dispute, or accept. 100% of claims pass through human review before publish; the tool flags, you decide.
-- **Keep a paper trail.** Every claim, verification result, and resolution decision is stored as structured JSON — a complete audit trail from assertion to source to decision.
+- **Reconstruct the evidence chain in seconds, not hours.** Every claim, verification result, and resolution decision persists as structured JSON in three linked records (ClaimRecord + DeviationRecord + ResolutionRecord) with timestamps and source excerpts — so an audit question a quarter later resolves in one `/claims inspect` call instead of half a day digging through drafts.
 
 ## Installation
 

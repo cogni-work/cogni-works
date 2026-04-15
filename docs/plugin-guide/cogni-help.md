@@ -234,6 +234,8 @@ cogni-help references every other plugin — it is the only plugin with no funct
 | `workflow` | Chains 3–5 plugins per template; requires them for live walkthroughs |
 | `troubleshoot` | Checks plugin file integrity and dependencies; works even if plugins are broken |
 | `cheatsheet` | Reads plugin metadata to generate cards; requires the plugin installed |
+| `cogni-issues` | Files GitHub issues against any insight-wave plugin via browser automation; works without the target plugin installed |
+| `course-deck` | Generates PPTX slide decks from course content; delegates to document-skills:pptx for rendering |
 
 ### Downstream — cogni-workspace
 

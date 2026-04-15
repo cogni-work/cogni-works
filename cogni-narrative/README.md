@@ -2,7 +2,7 @@
 
 > **Preview** (v0.x) — core skills defined but may change. Feedback welcome.
 
-A Claude Cowork plugin that shapes research output into executive-grade narratives — selecting the right story arc for the context, enforcing rhetorical discipline across 10 frameworks, and adapting the result into briefs, talking points, and one-pagers. Bilingual EN/DE.
+The story arc engine for the insight-wave ecosystem — transforms structured research and portfolio output into executive-grade narratives using 10 arc frameworks (Corporate Visions, JTBD Portfolio, Strategic Foresight, Trend Panorama, and six more) and 8 narrative techniques, sitting between cogni-research and cogni-copywriting in the pipeline and feeding cogni-visual, cogni-sales, and cogni-marketing downstream. Bilingual EN/DE.
 
 ## Why this exists
 

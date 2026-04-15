@@ -351,7 +351,6 @@
   },
 
   "mk": {
-    "_note": "EU candidate country, not an EU member. Regulatory alignment follows the EU acquis rather than direct EUR-Lex applicability. Currency is the Macedonian denar (MKD); Latin 'Severna Makedonija' used for search compatibility.",
     "region_qualifiers": {
       "en": "North Macedonia",
       "local": "Severna Makedonija"

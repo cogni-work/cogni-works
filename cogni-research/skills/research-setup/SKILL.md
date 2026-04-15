@@ -47,7 +47,7 @@ Never combine both modes in the same turn. Each turn is either pure text or a si
 > **Depth:** basic (5 sub-questions) | detailed (up to 10) | deep (recursive tree) | outline | resource
 > **Length:** brief (1.5K) | standard (3K) | deep-dive (5K) *(default for deep)* | comprehensive (8K) | whitepaper (12K) — or specify e.g. "~6500 words"
 > **Tone:** objective *(default)* | formal | analytical | persuasive | informative | explanatory | descriptive | critical | comparative | speculative | narrative | optimistic | simple | casual | executive
-> **Citations:** APA *(default)* | MLA | Chicago | Harvard | IEEE | Wikilink
+> **Citations:** APA *(default)* | MLA | Chicago | Harvard | IEEE | Wikilink | Local-Wikilink
 > **Market:** dach | de | fr | it | pl | nl | es | us | uk | eu   *(required — pick one)*
 > **Sources:** web *(default)* | local (your documents) | wiki (cogni-wiki) | hybrid (web + docs + wiki)
 >
@@ -76,7 +76,7 @@ Scan the user's request and extract any options they already specified. These be
   - **Default resolution**: if no length cue was detected, do NOT pass `--target-words` to `initialize-project.sh`; let the script apply its default-by-depth table. If a length cue was detected, pass `--target-words <N>` with the resolved integer.
   - **Ambiguity guard**: if the user only said "long" or "short" without a scale anchor, ask a clarifying follow-up ("about 3K words, 5K, or closer to 10K?") — don't guess.
 - **Tone**: style keywords like "analytical", "persuasive", "formal" -> map to tone. Default: "objective"
-- **Citation format**: "IEEE", "APA format", "Chicago style", "wikilink" -> capture. Default: "apa"
+- **Citation format**: "IEEE", "APA format", "Chicago style", "wikilink", "local wikilink" / "local-wikilink" -> capture. Default: "apa"
 - **Market**: must resolve to one of the 10 canonical codes defined in `references/market-sources.json`: `dach`, `de`, `fr`, `it`, `pl`, `nl`, `es`, `us`, `uk`, `eu`. There is no "global" option — downstream researchers use these codes to pick authority-source profiles, and an unknown code silently falls back to the DACH `_default` profile, masking user intent.
 
   Resolve the market in three tiers, stopping at the first confident match:
@@ -125,7 +125,7 @@ Assemble the menu dynamically and render it as text output:
    - **Depth** (only if report type not yet detected): list all 5 types with one-line descriptions **without** word counts — length is decoupled from depth and has its own row. Example: "basic = standard report, 5 sub-questions | detailed = multi-section with outline, 5-10 sub-questions | deep = recursive tree, 10-20 leaf sub-questions | outline = structured framework, no prose | resource = annotated bibliography".
    - **Length** (only if target_words not detected): show the 5 named presets with their word counts and mark the default derived from the detected or selected depth: `brief (1.5K) | standard (3K) | deep-dive (5K, deep default in v0.7.7) | comprehensive (8K) | whitepaper (12K)`. Add a one-line note: "Length is optional — defaults to 3K/5K/5K/1K/1.5K for basic/detailed/deep/outline/resource. Override with a preset above or an explicit integer (e.g., `target_words: 6500`)."
    - **Tone** (only if not detected): show these options: objective *(default)* | formal | analytical | persuasive | informative | explanatory | descriptive | critical | comparative | speculative | narrative | optimistic | simple | casual | executive
-   - **Citations** (only if not detected): list all 5 formats, mark default
+   - **Citations** (only if not detected): list all 7 formats (`apa`, `mla`, `chicago`, `harvard`, `ieee`, `wikilink`, `local-wikilink`), mark `apa` as default. Keep this list in sync with `VALID_CITATION_FORMATS` in `scripts/initialize-project.sh` — if a new format is added there, add it here.
    - **Market** (only if not detected with confidence, or ambiguous): `dach | de | fr | it | pl | nl | es | us | uk | eu`. If Step 1 flagged the market as ambiguous (tier 3), prefix this row with a one-line note: `> I couldn't tell which market you mean from the topic — please pick one.` The canonical list equals the keys of `references/market-sources.json` minus `_default` — keep this menu in sync with that file (if a new market is added there, add it here; if one is removed, remove it here).
    - **Sources** (only if report_source not detected): show all 4 modes with one-line descriptions:
      - `web` *(default)* = search the internet

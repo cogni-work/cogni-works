@@ -323,7 +323,7 @@ for f in glob.glob('$PROJECT_DIR/features/*.json'):
 fi
 
 # Valid region codes from the taxonomy
-VALID_REGIONS="de dach eu uk nordics us na cn apac jp latam mea global"
+VALID_REGIONS="de dach eu uk nordics us na cn apac jp latam mea global at pl cz sk hu ro hr gr mk"
 
 # Validate markets have required fields (slug, name, region, description)
 if [ -d "$PROJECT_DIR/markets" ]; then

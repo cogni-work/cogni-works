@@ -39,11 +39,11 @@ A structured portfolio messaging workflow for Claude Cowork. Eight pluggable tax
 ## What it means for you
 
 - **Portfolio positioning in days, not weeks.** What used to take 2 weeks of analyst time per product line — market sizing, competitive mapping, proposition writing — runs in structured parallel with research agents.
-- **Market-specific by design.** Every proposition is scoped to a Feature x Market pair. The same feature gets different DOES/MEANS messaging for enterprise vs. mid-market.
+- **Market-specific by design.** Every proposition is scoped to a Feature × Market pair, so one feature generates a distinct DOES/MEANS pitch per segment — no more single generic message stretched across 3–5 target markets.
 - **Eight industry taxonomies built in.** B2B ICT (57 categories), SaaS, FinTech, HealthTech, MarTech, Industrial Tech, Professional Services, Commercial Open Source — auto-selected by company context.
-- **Export-ready.** Proposals, market briefs, portfolio workbooks (markdown and XLSX), and an interactive HTML dashboard — ready for sales, investors, or internal strategy.
-- **Canvas-ready.** Bootstrap a full portfolio from a Lean Canvas — extract products, features, and markets from a founding-stage hypothesis in one step.
-- **Deep-dive capable.** Research how individual features or propositions compete in the market, validate buyer language, and co-create sharper messaging through dialogue.
+- **Export-ready across four formats.** Proposals, market briefs, portfolio workbooks (markdown + XLSX), and an interactive HTML dashboard — one `portfolio-communicate` run produces all four from the same entity data.
+- **Canvas to portfolio in one step.** Bootstrap a full portfolio directly from a Lean Canvas — extract products, features, and markets from a founding-stage hypothesis without a single field of manual re-entry.
+- **Deep-dive without leaving the plugin.** Two dedicated research agents (`feature-deep-diver`, `proposition-deep-diver`) validate buyer language against live web evidence and propose refinements grounded in verifiable sources.
 
 ## Installation
 

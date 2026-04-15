@@ -90,9 +90,9 @@
     {
       "name": "cogni-portfolio",
       "source": "./cogni-portfolio",
-      "version": "0.9.3",
+      "version": "0.9.4",
       "maturity": "preview",
-      "description": "Portfolio messaging and proposition planning for SMEs using IS/DOES/MEANS framework. Features are market-independent (IS). Advantages (DOES) and benefits (MEANS) are market-specific. Includes TAM/SAM/SOM targeting, competitor and customer analysis, deep-dive research for features and propositions, Lean Canvas bootstrapping, presentation-ready pitch narratives, and eight pluggable industry taxonomies.",
+      "description": "Portfolio messaging and proposition planning for SMEs using the IS/DOES/MEANS (FAB) framework — market-specific value propositions with competitive analysis, customer profiling, and export-ready deliverables across eight pluggable industry taxonomies.",
       "keywords": [
         "portfolio",
         "messaging",
@@ -107,7 +107,7 @@
     {
       "name": "cogni-visual",
       "source": "./cogni-visual",
-      "version": "0.16.18",
+      "version": "0.16.19",
       "maturity": "preview",
       "description": "Transform polished narratives and structured data into visual deliverables — presentation briefs, slide decks, scrollable web narratives, poster storyboards, single-page infographics, and visual assets. Supports Excalidraw, Pencil MCP, PPTX, and HTML rendering.",
       "keywords": [

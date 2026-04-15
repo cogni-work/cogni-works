@@ -2,7 +2,7 @@
 
 > **Preview** (v0.x) — core skills defined but may change. Feedback welcome.
 
-A [Claude Cowork](https://claude.ai/cowork) plugin that transforms polished narratives and structured data into visual deliverables — presentation briefs, slide decks, scrollable web narratives, poster storyboards, single-page infographics, and visual assets. Supports Excalidraw, Pencil MCP, PPTX, and HTML rendering.
+A [Claude Cowork](https://claude.ai/cowork) plugin for brief-based visual production — skills distill polished narratives into structured YAML+Markdown briefs (slides, infographics, storyboards, web narratives, enriched reports), then rendering agents hand those briefs to PPTX, Excalidraw, Pencil MCP, and HTML backends. Every output inherits brand identity from your cogni-workspace theme instead of generic templates.
 
 ## Why this exists
 
@@ -103,6 +103,8 @@ The pipeline follows a compose-polish-visualize flow: narratives from cogni-narr
 | `render-infographic-whiteboard` | agent | Renders infographic briefs into hand-drawn Excalidraw scenes — whiteboard tradition (Dan Roam) |
 | `editorial-sketch` | agent | Worker — generates one editorial-discipline line-art sketch as inline SVG |
 | `enrich-report` | agent | Orchestrates the enrich-report skill (markdown report → themed HTML) |
+| `report-html-writer` | agent | Worker (opus) — writes the scroll-layout HTML from source markdown, enrichment-plan, and design-variables for enrich-report Phase 4a |
+| `enriched-report-reviewer` | agent | Worker — visual quality review of enriched HTML via Browser MCP screenshots (10-gate rubric) for enrich-report Phase 5b |
 | `concept-diagram` | agent | Worker — generates one concept diagram via Excalidraw MCP (fallback for interactive .excalidraw) |
 | `concept-diagram-svg` | agent | Worker — generates one concept diagram as clean inline SVG using geometric primitives (default) |
 | `brief-review-assessor` | agent | Assesses visual brief quality from three stakeholder perspectives adapted to the brief type |
@@ -117,8 +119,8 @@ The pipeline follows a compose-polish-visualize flow: narratives from cogni-narr
 ## Architecture
 
 ```
-cogni-visual/                              # 7 skills · 17 agents · 6 commands · 1 hook
-├── .claude-plugin/                        Plugin manifest (v0.16.0)
+cogni-visual/                              # 7 skills · 19 agents · 6 commands · 1 hook
+├── .claude-plugin/                        Plugin manifest (v0.16.18)
 ├── skills/                               7 visual skills (4 brief generators · 1 renderer · 1 enricher · 1 reviewer)
 │   ├── story-to-slides/
 │   ├── story-to-web/
@@ -127,7 +129,7 @@ cogni-visual/                              # 7 skills · 17 agents · 6 commands
 │   ├── render-html-slides/
 │   ├── enrich-report/
 │   └── review-brief/
-├── agents/                               17 agents (orchestration · rendering · workers)
+├── agents/                               19 agents (orchestration · rendering · workers)
 ├── commands/                             6 slash commands (including /render-infographic dispatcher + 2 direct variants)
 ├── hooks/                                1 PreToolUse hook (Excalidraw canvas auto-start)
 ├── scripts/                              Utility scripts (rasterize-sketch.py, cartographic-outline.py)

@@ -331,7 +331,7 @@
       {"domain": "avcr.cz", "category": "research", "authority": 5, "search_pattern": "site:avcr.cz {TOPIC_LOCAL} výzkum {YEAR}"},
       {"domain": "ctu.cz", "category": "government", "authority": 5, "search_pattern": "site:ctu.cz {TOPIC_LOCAL} telekomunikace regulace {YEAR}"},
       {"domain": "uoou.cz", "category": "government", "authority": 5, "search_pattern": "site:uoou.cz {TOPIC_LOCAL} ochrana údajů {YEAR}"},
-      {"domain": "ihned.cz", "category": "media", "authority": 3, "search_pattern": "site:ihned.cz {TOPIC_LOCAL} {YEAR}"}
+      {"domain": "e15.cz", "category": "media", "authority": 3, "search_pattern": "site:e15.cz {TOPIC_LOCAL} {YEAR}"}
     ],
     "regulatory_bodies": ["EUR-Lex (EU)", "ÚOOÚ", "ČTÚ", "NÚKIB"],
     "currency": "CZK"
@@ -347,7 +347,7 @@
       "geographic_modifiers": ["Slovensko", "slovenský", "slovenská", "Slovakia"]
     },
     "authority_sources": [
-      {"domain": "statistics.sk", "category": "statistics", "authority": 5, "search_pattern": "site:statistics.sk {TOPIC_LOCAL} štatistika {YEAR}"},
+      {"domain": "slovak.statistics.sk", "category": "statistics", "authority": 5, "search_pattern": "site:slovak.statistics.sk {TOPIC_LOCAL} štatistika {YEAR}"},
       {"domain": "sav.sk", "category": "research", "authority": 5, "search_pattern": "site:sav.sk {TOPIC_LOCAL} výskum {YEAR}"},
       {"domain": "teleoff.gov.sk", "category": "government", "authority": 5, "search_pattern": "site:teleoff.gov.sk {TOPIC_LOCAL} telekomunikácie {YEAR}"},
       {"domain": "dataprotection.gov.sk", "category": "government", "authority": 5, "search_pattern": "site:dataprotection.gov.sk {TOPIC_LOCAL} ochrana údajov {YEAR}"},
@@ -368,7 +368,7 @@
     },
     "authority_sources": [
       {"domain": "ksh.hu", "category": "statistics", "authority": 5, "search_pattern": "site:ksh.hu {TOPIC_LOCAL} statisztika {YEAR}"},
-      {"domain": "mta.hu", "category": "research", "authority": 5, "search_pattern": "site:mta.hu {TOPIC_LOCAL} kutatás {YEAR}"},
+      {"domain": "hun-ren.hu", "category": "research", "authority": 5, "search_pattern": "site:hun-ren.hu {TOPIC_LOCAL} kutatás {YEAR}"},
       {"domain": "nmhh.hu", "category": "government", "authority": 5, "search_pattern": "site:nmhh.hu {TOPIC_LOCAL} távközlés szabályozás {YEAR}"},
       {"domain": "naih.hu", "category": "government", "authority": 5, "search_pattern": "site:naih.hu {TOPIC_LOCAL} adatvédelem {YEAR}"},
       {"domain": "portfolio.hu", "category": "media", "authority": 3, "search_pattern": "site:portfolio.hu {TOPIC_LOCAL} {YEAR}"}
@@ -427,7 +427,7 @@
       "geographic_modifiers": ["Ελλάδα", "ελληνικός", "ελληνική", "Greece", "Hellenic"]
     },
     "authority_sources": [
-      {"domain": "statistics.gr", "category": "statistics", "authority": 5, "search_pattern": "site:statistics.gr {TOPIC_LOCAL} στατιστική {YEAR}"},
+      {"domain": "www.statistics.gr", "category": "statistics", "authority": 5, "search_pattern": "site:www.statistics.gr {TOPIC_LOCAL} στατιστική {YEAR}"},
       {"domain": "academyofathens.gr", "category": "research", "authority": 5, "search_pattern": "site:academyofathens.gr {TOPIC_LOCAL} έρευνα {YEAR}"},
       {"domain": "eett.gr", "category": "government", "authority": 5, "search_pattern": "site:eett.gr {TOPIC_LOCAL} τηλεπικοινωνίες {YEAR}"},
       {"domain": "dpa.gr", "category": "government", "authority": 5, "search_pattern": "site:dpa.gr {TOPIC_LOCAL} προστασία δεδομένων {YEAR}"},

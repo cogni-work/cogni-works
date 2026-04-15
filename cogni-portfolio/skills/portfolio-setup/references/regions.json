@@ -6,7 +6,8 @@
       "scope": ["DE"],
       "currency": "EUR",
       "locale": "de-DE",
-      "timezone": "Europe/Berlin"
+      "timezone": "Europe/Berlin",
+      "regulatory_bodies": ["BfDI", "Bundesnetzagentur (BNetzA)", "BSI"]
     },
     "at": {
       "name": "Austria",

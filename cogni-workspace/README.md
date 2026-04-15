@@ -2,7 +2,7 @@
 
 > **Preview** (v0.x) — core skills defined but may change. Feedback welcome.
 
-The foundation-layer plugin for the [insight-wave](https://claude.ai/cowork) ecosystem — the only plugin that other cogni-x plugins depend on, and the one that must be initialized first. cogni-workspace owns environment configuration, MCP server installation, theme storage, plugin discovery, workspace health diagnostics, and Obsidian vault integration, giving every downstream plugin a consistent, fully-configured base to build on.
+The foundation-layer plugin for the [insight-wave](https://claude.ai/cowork) ecosystem — the only plugin that other cogni-x plugins depend on, and the one that must be initialized first. cogni-workspace owns environment configuration, MCP server installation, theme storage, plugin discovery, workspace health diagnostics, and Obsidian vault integration — so every cogni-x plugin starts running, not configuring.
 
 ## Why this exists
 

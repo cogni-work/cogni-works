@@ -45,7 +45,7 @@ This plugin automates the research-heavy parts while keeping strategic judgment 
 
 ## What it is
 
-Runs a four-stage trend intelligence pipeline for the insight-wave ecosystem. The Smarter Service Trendradar provides the 4-dimension scoring structure; the TIPS framework (Trends → Implications → Possibilities → Solutions) drives the value chain from scouted signals to portfolio-grounded solution blueprints. Upstream of cogni-portfolio (which consumes solution templates via trends-bridge) and cogni-narrative (which transforms trend output into arc-driven reports). Reusable industry catalogs accumulate knowledge across engagements.
+A four-stage trend intelligence pipeline for the insight-wave ecosystem that scouts, models, reports, and catalogs industry signals. The Smarter Service Trendradar provides the 4-dimension scoring structure; the TIPS framework (Trends → Implications → Possibilities → Solutions) drives the value chain from scouted signals to portfolio-grounded solution blueprints. Upstream of cogni-portfolio (which consumes solution templates via trends-bridge) and cogni-narrative (which transforms trend output into arc-driven reports). Reusable industry catalogs accumulate knowledge across engagements.
 
 ## What it does
 

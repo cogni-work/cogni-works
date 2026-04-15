@@ -37,7 +37,7 @@ A pitch generation pipeline built on the Corporate Visions Why Change methodolog
 - **Methodology-disciplined across 100% of pitches.** Every deck follows all four Why Change phases (Why Change → Why Now → Why You → Why Pay) with proper evidence structure — no phase skipped, no message diluted.
 - **Cover both 1:1 and 1:many sales motions without rebuilding the pipeline.** Customer mode researches the named account; segment mode produces a reusable template for any organization in the vertical — one engine, zero duplication effort per new pitch.
 - **Claims-verified before you present.** Every factual claim in the deck is registered with a source URL; optional cogni-claims integration verifies all of them in one pass — zero unsourced statistics in front of the customer.
-- **Pick up interrupted pitches from the last completed phase.** No research is lost, no phase reruns, no rework when a conversation ends mid-workflow — multi-day pitch projects stay intact across sessions.
+- **Keep multi-day deals moving without rework.** Interrupted pitches resume from the last completed phase — no research lost, no phase reruns, no pipeline stall when a conversation ends mid-workflow.
 
 ## Installation
 

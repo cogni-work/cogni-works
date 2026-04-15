@@ -2,7 +2,7 @@
 
 > **Preview** (v0.x) — core skills defined but may change. Feedback welcome.
 
-Professional copywriting toolkit for [Claude Cowork](https://claude.ai/cowork). Polish documents for executive readability, get multi-stakeholder feedback, strengthen story arc narratives, and enhance sales copy with Power Positions — in English or German. Applies messaging frameworks, readability standards, and impact techniques. Polish JSON fields via the copy-json adapter, and audit arc-preservation references against upstream cogni-narrative definitions.
+A [Claude Cowork](https://claude.ai/cowork) plugin that turns AI-generated drafts into executive-ready documents. Seven messaging frameworks, five parallel stakeholder personas for blind-spot review, and bilingual readability validation (English Flesch, German Amstad + Wolf Schneider) — while preserving upstream story arc structure from cogni-narrative.
 
 ## Why this exists
 
@@ -19,7 +19,7 @@ This plugin applies structured messaging frameworks (BLUF, Pyramid, SCQA, STAR, 
 
 ## What it is
 
-A professional editing toolkit for the insight-wave ecosystem. Seven messaging frameworks (BLUF, Pyramid, SCQA, STAR, PSB, FAB, Power Positions) handle structure and tone. Five stakeholder personas (executive, technical, legal, marketing, end-user) simulate reader reactions in parallel. When paired with cogni-narrative, it detects story arc frontmatter and applies element-specific techniques — polishing without breaking narrative structure.
+A professional editing toolkit for the insight-wave ecosystem. Seven messaging frameworks (BLUF, Pyramid, SCQA, STAR, PSB, FAB, Inverted Pyramid) handle structure and tone, with Power Positions (IS/DOES/MEANS) available as a sales-mode enhancement. Five stakeholder personas (executive, technical, legal, marketing, end-user) simulate reader reactions in parallel. When paired with cogni-narrative, it detects story arc frontmatter and applies element-specific techniques — polishing without breaking narrative structure.
 
 ## What it does
 

@@ -20,7 +20,7 @@ A process orchestrator for the insight-wave ecosystem. cogni-consulting doesn't 
 
 ## What it does
 
-1. **Frame the vision** — select from 8 vision classes (strategic options, business case, GTM roadmap, cost optimization, digital transformation, innovation portfolio, market entry, business model hypothesis) and define engagement scope → `consulting-project.json` → consulting-discover
+1. **Frame the vision** — select from 9 vision classes (strategic options, business case, GTM roadmap, cost optimization, digital transformation, innovation portfolio, market entry, business model hypothesis, how-might-we) and define engagement scope → `consulting-project.json` → consulting-discover
 2. **Discover** (D1 diverge) — launch desk research, trend scouting, and competitive baseline via cogni-research, cogni-trends, and cogni-portfolio → `discover/synthesis.md` → consulting-define
 3. **Define** (D1 converge) — verify assumptions via cogni-claims, cluster findings, synthesize the core problem statement → `define/problem-statement.md` + `define/hmw-questions.md` → consulting-develop
 4. **Develop** (D2 diverge) — generate solution options via cogni-trends value-modeler and cogni-portfolio proposition modeling → `develop/options/option-synthesis.md` → consulting-deliver

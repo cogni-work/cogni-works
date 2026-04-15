@@ -107,7 +107,7 @@ All entities are markdown with YAML frontmatter — Obsidian-browsable with wiki
 |------|--------------|--------|-------|----------|
 | Basic | 5 | 7–9 | 3,000–5,000 | Quick overview, single topic |
 | Detailed | 5–10 | 10–15 | 5,000–10,000 | Multi-section report with outline |
-| Deep | 10–20 (tree) | 15–25 | 8,000–15,000 | Recursive exploration, maximum depth |
+| Deep | 10–20 (tree) | 15–25 | 5,000–15,000 | Recursive exploration, maximum depth |
 | Outline | 5 | 5–7 | 1,000–2,000 | Structured framework only, no prose |
 | Resource | 5 | 5–7 | 1,500–3,000 | Annotated bibliography / reading list |
 

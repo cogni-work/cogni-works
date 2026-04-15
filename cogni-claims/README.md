@@ -23,7 +23,7 @@ A systematic claim-verification workflow for Claude Cowork. Other plugins genera
 
 ## What it does
 
-1. **Submit** claims with their source URLs — individually or batch-imported from markdown → `cogni-claims/claims.json` → cogni-consulting/consulting-deliver, synthesize
+1. **Submit** claims with their source URLs — individually or batch-imported from markdown → `cogni-claims/claims.json` → consulting-deliver
 2. **Verify** them by fetching each source and detecting deviations (misquotation, unsupported conclusions, selective omission, data staleness, source contradiction)
 3. **Review** a dashboard showing all claims grouped by status, with inline deviation summaries and severity indicators
 4. **Inspect** flagged claims by opening the source in your browser with the relevant passage highlighted for side-by-side comparison
@@ -38,9 +38,13 @@ If you ship research, reports, or any content that leans on sourced claims, this
 - **Stay in control.** Deviation detection is LLM-based, but every finding routes through one of three explicit decisions — correct, dispute, or accept. 100% of claims pass through human review before publish; the tool flags, you decide.
 - **Reconstruct the evidence chain in seconds, not hours.** Every claim, verification result, and resolution decision persists as structured JSON in three linked records (ClaimRecord + DeviationRecord + ResolutionRecord) with timestamps and source excerpts — so an audit question a quarter later resolves in one `/claims inspect` call instead of half a day digging through drafts.
 
+## Known Limitations
+
+> **Chrome native messaging host conflict between Cowork and Claude Code** (S2-major) — Browser-based claim source co-browsing unavailable when Claude Code's native host is active — claim verification falls back to web fetch only. Workaround: Toggle native messaging host configs by renaming the .json file for the unused product and restarting Chrome. See [Known Issues Registry](../../cogni-docs/references/known-issues.md#ki-001) for details.
+
 ## Installation
 
-cogni-claims is part of the [insight-wave](https://github.com/cogni-work/insight-wave) plugin suite and installs automatically via the Claude Cowork marketplace. No manual setup required.
+This plugin is part of the [insight-wave monorepo](https://github.com/cogni-work/insight-wave) and is installed automatically with the marketplace.
 
 ## Quick start
 
@@ -112,16 +116,15 @@ Claims are stored in your project's `cogni-claims/` directory as JSON. When you 
 
 ```
 cogni-claims/
-├── .claude-plugin/               Plugin manifest
+├── .claude-plugin/plugin.json    Plugin manifest
 ├── skills/                       2 verification skills
 │   ├── claims/                   Lifecycle orchestrator (submit → verify → resolve)
 │   └── claim-entity/             Cross-plugin data contract and schema definitions
 ├── agents/                       2 verification agents
 │   ├── claim-verifier.md         Source fetch and deviation detection
 │   └── source-inspector.md       Browser-based passage highlighter
-├── commands/                     1 slash command
-│   └── claims.md                 Entry point for all six modes
-└── claims-workspace/             Dev workspace (evals, skill snapshots)
+└── commands/                     1 slash command
+    └── claims.md                 Entry point for all six modes
 ```
 
 ## Dependencies
@@ -138,14 +141,6 @@ cogni-claims is standalone — it provides a verification service that other plu
 ## Contributing
 
 Contributions welcome — bug fixes, new deviation types, verification improvements, and documentation. See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
-
-## Known Limitations
-
-| ID | Issue | Severity | Affected Skills | Workaround |
-|----|-------|----------|----------------|------------|
-| KI-001 | Chrome native messaging host conflict between Cowork and Claude Code | S2-major | `/claims` (cobrowse) | Toggle native host configs by renaming the `.json` file for the unused product and restarting Chrome. See [known-issues registry](https://github.com/anthropics/managed-service/blob/main/cogni-docs/references/known-issues.md) for detailed steps. |
-
-> When both Claude Desktop (Cowork) and Claude Code are installed, their competing native messaging host configurations cause browser automation tools to silently vanish. The `/claims` cobrowse mode falls back to web fetch only — claim verification still works, but interactive source inspection is unavailable until the conflict is resolved.
 
 ## Custom development
 

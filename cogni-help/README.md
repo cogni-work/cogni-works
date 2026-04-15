@@ -2,7 +2,7 @@
 
 > **Incubating** (v0.0.x) — skills, data formats, and workflows may change at any time.
 
-cogni-help unifies the [insight-wave](https://github.com/cogni-work/insight-wave) ecosystem into a single entry point — teaching users through a 12-course curriculum, routing tasks to the right plugin, chaining multi-plugin workflows, and diagnosing problems — so 12 plugins with 70+ skills behave like one coherent system.
+cogni-help unifies the [insight-wave](https://github.com/cogni-work/insight-wave) ecosystem into a single entry point — teaching users through a 12-course curriculum, routing tasks to the right plugin, chaining multi-plugin workflows, diagnosing problems, generating one-screen cheatsheets, and filing GitHub issues straight from the session — so 12 plugins with 70+ skills behave like one coherent system.
 
 ## Why this exists
 

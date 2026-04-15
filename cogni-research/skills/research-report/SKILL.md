@@ -471,7 +471,7 @@ Verify output: contexts count, sources count, total words. If too few sources (<
 
 ### Phase 4: Report Writing
 
-All report types dispatch a single writer agent in full mode. The writer produces both the outline (`.metadata/writer-outline-v{DRAFT_VERSION}.json`) and the complete draft in one response. Deep mode does **not** shard per section — empirical comparison on the KI-Adoption corpus showed section-sharded dispatch produces fragmented voice, repeated framings, mini-conclusions per section, and hero-stat duplication by construction, while a single-voice expansion chain (writer → revisor → revisor) compounds past the single-call output ceiling via Phase 4.5 / Phase 5 whole-draft re-dispatch and reaches the 8K deep floor with readable single-voice coherence.
+All report types dispatch a single writer agent in full mode. The writer produces both the outline (`.metadata/writer-outline-v{DRAFT_VERSION}.json`) and the complete draft in one response. Deep mode does **not** shard per section — empirical comparison on the KI-Adoption corpus showed section-sharded dispatch produces fragmented voice, repeated framings, mini-conclusions per section, and hero-stat duplication by construction, while a single-voice expansion chain (writer → revisor → revisor) compounds past the single-call output ceiling via Phase 4.5 / Phase 5 whole-draft re-dispatch and reaches the configured `target_words` floor (historically 8K; 5K default in v0.7.7+) with readable single-voice coherence.
 
 Spawn writer agent:
 ```
@@ -605,8 +605,9 @@ Task(revisor,
 
 **Iteration cap** — conditional on the verdict's issue profile and report type:
 
-- **Default: 1 structural review iteration.** After revision (or if the first review accepts), proceed to Phase 5.5. This is the common case and costs no more than today.
-- **Word-deficit expansion loop**, triggered when iteration 1's verdict contains a high-severity issue whose text begins with `Word deficit` (the exact phrase emitted by the reviewer's Word Count Gate — see `agents/reviewer.md`). When this issue is present, the revisor runs in expansion mode (see `agents/revisor.md` — the +20% cap is lifted for expansion). Without follow-up review passes, the expansion cannot be verified and the word-count gate would be a dead letter.
+- **Default: 1 structural review iteration.** After revision, or if the first review accepts and its issues list contains no high-severity `Word deficit` entry, proceed to Phase 5.5. This is the common case and costs no more than today.
+  - **Word-deficit carve-out on accept.** The reviewer's Word Count Gate can emit a high-severity `Word deficit` issue alongside an `accept` verdict when the draft lands at the accept threshold with a completeness cap applied (score e.g. `0.820`, ratio e.g. `0.970`). In that edge case the default short-circuit does **not** fire — the word-deficit expansion loop below does, because the Phase 6 promotion gate would otherwise block promotion in deep mode (and emit `⚠ Below target` warnings in other modes) on a draft Phase 5 just let through.
+- **Word-deficit expansion loop**, triggered when **any iteration's** verdict JSON contains an entry in `issues[]` where `severity == "high"` AND `issue.startswith("Word deficit")` — regardless of the top-level `verdict` field. This is the predicate that resolves the documented orchestration contradiction "accept verdict says ship, word-deficit issue says expand". When this issue is present, the revisor runs in expansion mode (see `agents/revisor.md` — the +20% cap is lifted for expansion). Without follow-up review passes, the expansion cannot be verified and the word-count gate would be a dead letter.
 
   The iteration cap in this branch depends on report type:
 
@@ -664,6 +665,7 @@ Once the promotion gate passes (or the user selects Option A), continue with the
    - Agent counts and durations
    - Final structural review score and iteration count
    - `phase_5_review.claims_verification: "deferred to verify-report"`
+   - `phase_5_review.word_deficit_expansion_triggered: true|false` — `true` if the Phase 5 word-deficit expansion loop fired this run (any iteration's verdict had a `severity == "high"` issue starting with `Word deficit`, regardless of the top-level `verdict` field), `false` if Phase 5 exited via the default single-iteration short-circuit. This is distinct from `phase_5_review.word_deficit_cleared` recorded inside the loop body — the trigger flag records whether the loop ran at all, the cleared flag records whether the loop's final iteration closed the gap. Downstream tooling (Phase 6 promotion gate, audit trails) reads both fields to distinguish "expansion triggered but did not clear" from "loop never triggered".
    - Cost summary: `{"total_estimated_usd": N, "breakdown": {"researchers": N, "writer": N, ...}}`
    - `enrich_report_applied`: true/false
    - `enrich_report_path`: path to enriched HTML or null

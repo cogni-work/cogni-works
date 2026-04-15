@@ -44,7 +44,8 @@ Never combine both modes in the same turn. Each turn is either pure text or a si
 >
 > Topic: quantum computing's impact on cryptography
 >
-> **Depth:** basic (3-5K, 5 sub-questions) | detailed (5-10K, up to 10) | deep (8-15K, recursive) | outline | resource
+> **Depth:** basic (5 sub-questions) | detailed (up to 10) | deep (recursive tree) | outline | resource
+> **Length:** brief (1.5K) | standard (3K) | deep-dive (5K) *(default for deep)* | comprehensive (8K) | whitepaper (12K) — or specify e.g. "~6500 words"
 > **Tone:** objective *(default)* | formal | analytical | persuasive | informative | explanatory | descriptive | critical | comparative | speculative | narrative | optimistic | simple | casual | executive
 > **Citations:** APA *(default)* | MLA | Chicago | Harvard | IEEE | Wikilink
 > **Market:** dach | de | fr | it | pl | nl | es | us | uk | eu   *(required — pick one)*
@@ -71,7 +72,7 @@ Scan the user's request and extract any options they already specified. These be
 - **Target words (length)**: length is now independent of depth (v0.7.7, issue #35). Capture explicit integers and named presets separately from report type, and only apply a detected length if it actually differs from the depth default — otherwise let the default-by-depth table handle it.
   - **Named presets**: `brief` → 1500, `standard` → 3000, `deep-dive` → 5000, `comprehensive` → 8000, `whitepaper` → 12000. Trigger on phrases like "brief", "short", "standard length", "deep-dive", "comprehensive", "long-form", "whitepaper", "white paper", "reference document".
   - **Explicit integers**: "5K words", "~8000 words", "roughly 6500", "about 5,000 words", "10K", "12k" → parse to the nearest 500-word value and pass through.
-  - **Interaction with `report_type`**: the two are orthogonal. "deep research, whitepaper length" → `report_type=deep, target_words=12000`. "detailed but short" → `report_type=detailed, target_words=3000`. "basic, make it thorough" → `report_type=basic, target_words=5000`. "deep research on X" with no length cue → `report_type=deep` (default `target_words=5000`, reduced from 8000 in v0.7.7 — pass `--target-words 8000` only if the user asks for it explicitly).
+  - **Interaction with `report_type`**: the two are orthogonal. "deep research, whitepaper length" → `report_type=deep, target_words=12000`. "detailed but short" → `report_type=detailed, target_words=3000`. "basic, make it thorough" → `report_type=basic, target_words=5000`. "deep research on X" with no length cue → `report_type=deep, target_words=5000` (the v0.7.7 default, reduced from 8000). To restore the legacy 8K floor, the user must say so explicitly ("deep research, ~8000 words" or "deep, comprehensive") — never infer it.
   - **Default resolution**: if no length cue was detected, do NOT pass `--target-words` to `initialize-project.sh`; let the script apply its default-by-depth table. If a length cue was detected, pass `--target-words <N>` with the resolved integer.
   - **Ambiguity guard**: if the user only said "long" or "short" without a scale anchor, ask a clarifying follow-up ("about 3K words, 5K, or closer to 10K?") — don't guess.
 - **Tone**: style keywords like "analytical", "persuasive", "formal" -> map to tone. Default: "objective"

@@ -37,15 +37,11 @@ A brief-based visual production pipeline. Skills generate structured briefs (YAM
 
 ## Known Limitations
 
-> **Chrome native messaging host conflict between Cowork and Claude Code** (S2-major) — Browser-based zone review for rendered visuals may fail silently when tools are missing. Workaround: Toggle native messaging host configs by renaming the .json file for the unused product and restarting Chrome. See [Known Issues Registry](../../cogni-docs/references/known-issues.md#ki-001) for details.
+> **Chrome native messaging host conflict between Cowork and Claude Code** (S2-major) — Browser-based zone review for rendered visuals may fail silently when tools are missing. Workaround: Toggle native messaging host configs by renaming the .json file for the unused product and restarting Chrome. See [Known Issues Registry](../docs/known-issues.md#ki-001) for details.
 
 ## Installation
 
 This plugin is part of the [insight-wave monorepo](https://github.com/cogni-work/insight-wave) and is installed automatically with the marketplace.
-
-### Claude Code desktop (recommended for insight-wave)
-
-Install Claude Code via the native installer, then register the insight-wave marketplace and install this plugin:
 
 ```bash
 # 1. Install Claude Code (macOS — other platforms: https://code.claude.com/docs/en/setup)
@@ -58,14 +54,7 @@ curl -fsSL https://claude.ai/install.sh | bash
 /plugin install cogni-visual@insight-wave
 ```
 
-### Claude Cowork (short text-only tasks)
-
-Cowork runs in Claude Desktop and is available on paid plans (Pro, Max, Team, Enterprise). For insight-wave, prefer Claude Code desktop — Cowork has two caveats that affect this plugin's workflows:
-
-- **Context window**: Cowork caps context at ~200K tokens; long multi-agent flows trigger mid-session compressions.
-- **Pencil MCP fidelity**: lower visual fidelity in Cowork than in Claude Code desktop.
-
-See the [consultant install guide](../docs/claude-code-desktop.md) and the [repo-level deployment guide](../docs/deployment-guide.md) for the full path-by-path walkthrough.
+See the [install-to-infographic workflow](../docs/workflows/install-to-infographic.md) and the [repo-level deployment guide](../docs/deployment-guide.md) for the full path-by-path walkthrough.
 
 > **insight-wave readiness**: Claude Code desktop is the recommended interface for insight-wave today. This guidance will flip when Cowork closes the context-window and Pencil-fidelity gaps.
 

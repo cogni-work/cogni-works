@@ -45,7 +45,7 @@ A structured portfolio messaging workflow for Claude Cowork. Eight pluggable tax
 - **Canvas to portfolio in one step.** Bootstrap a full portfolio directly from a Lean Canvas — extract products, features, and markets from a founding-stage hypothesis without a single field of manual re-entry.
 - **Deep-dive without leaving the plugin.** Two dedicated research agents (`feature-deep-diver`, `proposition-deep-diver`) validate buyer language against live web evidence and propose refinements grounded in verifiable sources.
 
-## Installation
+## Install
 
 This plugin is part of the [insight-wave monorepo](https://github.com/cogni-work/insight-wave) and is installed automatically with the marketplace.
 
@@ -73,9 +73,7 @@ Cowork runs in Claude Desktop and is available on paid plans (Pro, Max, Team, En
 
 See the [consultant install guide](../docs/claude-code-desktop.md) and the [repo-level deployment guide](../docs/deployment-guide.md) for the full path-by-path walkthrough.
 
-> **insight-wave readiness**: Claude Code desktop is the recommended interface for insight-wave today. This guidance will flip when Cowork closes the context-window and Pencil-fidelity gaps.
-
-> **Note**: All outputs — especially market sizing, competitive intelligence, and claim verification — should be reviewed by domain experts before use in sales materials, proposals, or strategic decisions.
+> **insight-wave readiness**: Claude Code desktop is the recommended interface for insight-wave today. This guidance will flip when Cowork closes the context-window and Pencil-MCP fidelity gaps.
 
 ## Quick start
 

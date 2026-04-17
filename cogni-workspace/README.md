@@ -41,7 +41,7 @@ In the Claude Cowork plugin model, workspace-level state (paths, env vars, insta
 - **Catch workspace drift before skills break.** Five-tier health diagnostics (foundation, env vars, plugin registry, themes, dependencies) surface mismatches and missing deps before they cause cryptic runtime failures.
 - **Safe updates with rollback in seconds.** `manage-workspace` backs up before modifying — if an update breaks something, restore the previous state in one command, no manual file recovery.
 
-## Installation
+## Install
 
 This plugin is part of the [insight-wave monorepo](https://github.com/cogni-work/insight-wave) and is installed automatically with the marketplace.
 
@@ -69,13 +69,7 @@ Cowork runs in Claude Desktop and is available on paid plans (Pro, Max, Team, En
 
 See the [consultant install guide](../docs/claude-code-desktop.md) and the [repo-level deployment guide](../docs/deployment-guide.md) for the full path-by-path walkthrough.
 
-> **insight-wave readiness**: Claude Code desktop is the recommended interface for insight-wave today. This guidance will flip when Cowork closes the context-window and Pencil-fidelity gaps.
-
-**Prerequisites:**
-- `jq` (required — JSON processing)
-- `python3` (required — stdlib only, no pip)
-- `bash 3.2+` (required)
-- Optional: `curl`, `git`, `bc`
+> **insight-wave readiness (Claude Code desktop)**: Claude Code desktop is the recommended interface for insight-wave today. This guidance will flip when Cowork closes the context-window and Pencil-fidelity gaps.
 
 ## Quick start
 
@@ -174,6 +168,8 @@ cogni-workspace has no required plugin dependencies — it is the foundation lay
 | cogni-visual | No | manage-themes passes color variables to cogni-visual renderers (render-big-picture, render-big-block) |
 | cogni-website | No | Referenced in manage-workspace and workspace-status for website-related workspace configuration |
 | cogni-help | No | Referenced inline in workspace skills for issue filing and guided help |
+| cogni-portfolio | No | install-mcp references cogni-portfolio as a consumer of excalidraw MCP in the installation plan |
+| cogni-claims | No | workspace-status references cogni-claims as a provider plugin for the claude-in-chrome MCP server check |
 
 ## Contributing
 

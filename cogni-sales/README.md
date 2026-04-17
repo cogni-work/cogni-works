@@ -132,7 +132,7 @@ Each pitch project tracks state in `pitch-log.json` with pitch mode (customer/se
 | `why-change` | skill | Create a Why Change sales pitch for a named customer or a reusable segment pitch for a market. |
 | `why-change-researcher` | agent (opus) | Research and generate content for a specific phase of the Why Change pitch workflow. |
 | `pitch-synthesizer` | agent (sonnet) | Assemble final sales-presentation.md and sales-proposal.md from phase research. |
-| `pitch-review-assessor` | agent (haiku) | Assess completed sales pitch quality from three stakeholder perspectives: target buyer, sales director, and marketing director. |
+| `pitch-review-assessor` | agent (haiku) | Assess sales pitch quality from three stakeholder perspectives (buyer, sales, marketing). |
 | `pitch-revisor` | agent (sonnet) | Revise sales pitch deliverables based on pitch-review-assessor feedback. |
 | `/why-change` | command | Create a Why Change sales pitch for a named customer or market segment (aliases: `/pitch`, `/sales-pitch`, `/segment-pitch`) |
 | `discover-portfolio.sh` | script | Scan workspace for cogni-portfolio projects and return JSON metadata |

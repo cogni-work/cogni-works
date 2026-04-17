@@ -161,7 +161,7 @@ Contributions welcome — theme templates, platform support, diagnostic checks, 
 
 | ID | Issue | Severity | Affected Skills | Workaround |
 |----|-------|----------|----------------|------------|
-| KI-001 | Chrome native messaging host conflict between Cowork and Claude Code | S2-major | `/manage-themes` (website extraction) | Toggle native host configs by renaming the `.json` file for the unused product and restarting Chrome. See [known-issues registry](https://github.com/anthropics/managed-service/blob/main/cogni-docs/references/known-issues.md) for detailed steps. |
+| KI-001 | Chrome native messaging host conflict between Cowork and Claude Code | S2-major | `/manage-themes` (website extraction) | Toggle native host configs by renaming the `.json` file for the unused product and restarting Chrome. See [Known Issues Registry](../docs/known-issues.md#ki-001) for detailed steps. |
 
 > When both Claude Desktop (Cowork) and Claude Code are installed, their competing native messaging host configurations cause browser automation tools to silently vanish. The `/manage-themes` skill's live website extraction mode falls back to manual theme specification until the conflict is resolved.
 

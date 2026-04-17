@@ -41,11 +41,13 @@ A professional editing toolkit for the insight-wave ecosystem. Seven messaging f
 
 ## Install
 
-Part of the [insight-wave monorepo](https://github.com/cogni-work/insight-wave). See the [install guide](../cogni-docs/references/Claude%20Code%20desktop.md) for the full setup walkthrough.
+Install insight-wave via Claude Code desktop:
 
-**Prerequisites:**
-- Python 3 (for readability calculations)
-- Optional: **cogni-narrative** (arc-aware polishing when `arc_id` frontmatter is present)
+- **5-minute walkthrough** — [From Install to Infographic](../docs/workflows/install-to-infographic.md)
+- **Full setup reference** — [Claude Code desktop](../docs/claude-code-desktop.md)
+- **Enterprise / compliance setup** — [Deployment guide](../docs/deployment-guide.md)
+
+This plugin is part of the [insight-wave ecosystem](../docs/ecosystem-overview.md).
 
 ## Quick start
 

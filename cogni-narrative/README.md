@@ -39,9 +39,15 @@ A story arc engine for the insight-wave ecosystem. Ten named arc frameworks — 
 - **One narrative, three derivative formats.** Executive briefs, talking points, and one-pagers — adapted from the source narrative without rewriting.
 - **Ship in the reader's language.** Full EN/DE support with localized arc headers and proper Unicode — no post-processing needed for German-language clients or DACH reports.
 
-## Installation
+## Install
 
-This plugin is part of the [insight-wave monorepo](https://github.com/cogni-work/insight-wave). See the [install-to-infographic workflow](../docs/workflows/install-to-infographic.md) for the full setup path.
+Install insight-wave via Claude Code desktop:
+
+- **5-minute walkthrough** — [From Install to Infographic](../docs/workflows/install-to-infographic.md)
+- **Full setup reference** — [Claude Code desktop](../docs/claude-code-desktop.md)
+- **Enterprise / compliance setup** — [Deployment guide](../docs/deployment-guide.md)
+
+This plugin is part of the [insight-wave ecosystem](../docs/ecosystem-overview.md).
 
 ## Quick start
 

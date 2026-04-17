@@ -45,14 +45,13 @@ A static-site generation pipeline purpose-built for the insight-wave ecosystem. 
 
 ## Install
 
-This plugin is part of the [insight-wave monorepo](https://github.com/cogni-work/insight-wave). Follow the [install-to-infographic walkthrough](../docs/workflows/install-to-infographic.md) to get Claude Code desktop, the marketplace, and this plugin set up in one pass. For enterprise environments (SSO, GDPR data residency, audit logging) read the [deployment guide](../docs/deployment-guide.md) first.
+Install insight-wave via Claude Code desktop:
 
-> **Readiness** (Claude Code desktop) — Claude Code desktop is the recommended interface for insight-wave today. This guidance will flip when Cowork closes the context-window and Pencil-fidelity gaps.
+- **5-minute walkthrough** — [From Install to Infographic](../docs/workflows/install-to-infographic.md)
+- **Full setup reference** — [Claude Code desktop](../docs/claude-code-desktop.md)
+- **Enterprise / compliance setup** — [Deployment guide](../docs/deployment-guide.md)
 
-**Prerequisites:**
-- **cogni-portfolio** (required — provides products, features, propositions, markets, solutions)
-- **cogni-workspace** (required — provides theme selection and design variables)
-- Optional: **cogni-marketing** (blog posts, articles, landing pages), **cogni-trends** (insights page), **cogni-research** (resources/whitepapers page)
+This plugin is part of the [insight-wave ecosystem](../docs/ecosystem-overview.md).
 
 ## Quick start
 

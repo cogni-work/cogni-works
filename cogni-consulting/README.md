@@ -45,8 +45,6 @@ Install insight-wave via Claude Code desktop:
 
 This plugin is part of the [insight-wave ecosystem](../docs/ecosystem-overview.md).
 
-> **insight-wave readiness (Claude Code desktop recommended)** — Claude Code desktop is the recommended interface for insight-wave today. Cowork is a secondary path and is not yet production-ready for insight-wave workflows because of context-window and Pencil-MCP fidelity gaps — see the [deployment guide](../docs/deployment-guide.md) for detail. This guidance will flip when those gaps close upstream.
-
 ## Quick start
 
 ```

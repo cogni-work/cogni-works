@@ -158,11 +158,11 @@ For CMS integration and managed content operations: [cogni-work.ai](https://cogn
 
 ## Install
 
-Install insight-wave via Claude Code desktop — about 15 minutes from zero:
+Install insight-wave via Claude Code desktop — about 15 minutes from zero, in this order:
 
-- **Walkthrough** — [From Install to Infographic](docs/workflows/install-to-infographic.md) — adds the marketplace, installs plugins, runs `/install-mcp`, renders your first infographic.
-- **Claude Code desktop install** — [Claude Code desktop guide](docs/claude-code-desktop.md) — macOS, Windows, authentication, troubleshooting.
-- **Enterprise deployment** — [Deployment Guide](docs/deployment-guide.md) — GDPR, SSO, managed settings, MDM / Group Policy.
+1. **Install Claude Code** — [Claude Code desktop guide](docs/claude-code-desktop.md) — macOS, Windows, authentication, troubleshooting. Skip if you already have it.
+2. **Configure for your environment** *(optional, enterprise only)* — [Deployment Guide](docs/deployment-guide.md) — GDPR, SSO, managed settings, MDM / Group Policy. Skip unless your firm mandates managed Claude Code settings before install.
+3. **Install insight-wave and render your first infographic** — [From Install to Infographic](docs/workflows/install-to-infographic.md) — adds the marketplace, installs plugins, runs `/install-mcp`, renders your first infographic. This is the capstone step where you go from installed to producing.
 
 ### MCP servers at a glance
 

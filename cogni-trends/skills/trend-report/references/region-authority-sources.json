@@ -16,7 +16,8 @@
       { "dimension": "digitale-wertetreiber", "query": "site:handelsblatt.com {SUBSECTOR_LOCAL} Trend Digitalisierung {CURRENT_YEAR}" },
       { "dimension": "digitale-wertetreiber", "query": "site:zvei.org {SUBSECTOR_LOCAL} Innovation Industrie {CURRENT_YEAR}" },
       { "dimension": "digitales-fundament", "query": "site:rolandberger.com {SUBSECTOR_EN} trends Germany {CURRENT_YEAR}" },
-      { "dimension": "digitales-fundament", "query": "site:mckinsey.com {SUBSECTOR_EN} Germany digital {CURRENT_YEAR}" }
+      { "dimension": "digitales-fundament", "query": "site:mckinsey.com {SUBSECTOR_EN} Germany digital {CURRENT_YEAR}" },
+      { "dimension": "digitales-fundament", "query": "site:destatis.de {SUBSECTOR_LOCAL} Statistik {CURRENT_YEAR}" }
     ],
     "regulatory_bodies": ["EUR-Lex (EU)", "BaFin", "Bundesnetzagentur", "BSI"],
     "regulatory_search": "\"EU regulation\" \"{SUBSECTOR_EN}\" compliance deadline {CURRENT_YEAR}",
@@ -370,6 +371,29 @@
     "regulatory_search": "\"EU acquis\" \"{SUBSECTOR_EN}\" compliance \"North Macedonia\" {CURRENT_YEAR}",
     "currency": "MKD",
     "org_size_reference": "mid-size organization with 3B MKD revenue"
+  },
+
+  "eu": {
+    "_note": "Composite EU market — pan-European trends from EU institutions and cross-border industry associations. Use when the trend has explicit EU-wide regulatory or strategic dimension; for country-specific work prefer per-country entries (de, fr, it, pl, nl, es). Mirrors the cogni-research and cogni-portfolio eu entries so the three catalogs agree on the EU composite key.",
+    "region_qualifiers": {
+      "en": "Europe European Union",
+      "local": "Europe European Union"
+    },
+    "local_language": "en",
+    "site_searches": [
+      { "dimension": "externe-effekte", "query": "site:eur-lex.europa.eu {SUBSECTOR_EN} regulation {CURRENT_YEAR}" },
+      { "dimension": "externe-effekte", "query": "site:commission.europa.eu {SUBSECTOR_EN} digital strategy {CURRENT_YEAR}" },
+      { "dimension": "neue-horizonte", "query": "site:esa.int {SUBSECTOR_EN} satellite programme {CURRENT_YEAR}" },
+      { "dimension": "neue-horizonte", "query": "site:enisa.europa.eu {SUBSECTOR_EN} cybersecurity threat {CURRENT_YEAR}" },
+      { "dimension": "digitale-wertetreiber", "query": "site:digitaleurope.org {SUBSECTOR_EN} digital industry {CURRENT_YEAR}" },
+      { "dimension": "digitale-wertetreiber", "query": "site:etno.eu {SUBSECTOR_EN} telecom Europe {CURRENT_YEAR}" },
+      { "dimension": "digitales-fundament", "query": "site:eurostat.ec.europa.eu {SUBSECTOR_EN} statistics Europe {CURRENT_YEAR}" },
+      { "dimension": "digitales-fundament", "query": "site:mckinsey.com {SUBSECTOR_EN} Europe digital {CURRENT_YEAR}" }
+    ],
+    "regulatory_bodies": ["EUR-Lex", "European Commission", "BEREC", "ENISA", "EASA", "EIB"],
+    "regulatory_search": "\"EU regulation\" \"{SUBSECTOR_EN}\" compliance deadline {CURRENT_YEAR}",
+    "currency": "EUR",
+    "org_size_reference": "mid-size organization with €500M revenue"
   },
 
   "_default": {

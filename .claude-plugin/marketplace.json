@@ -61,7 +61,7 @@
     {
       "name": "cogni-workspace",
       "source": "./cogni-workspace",
-      "version": "0.6.6",
+      "version": "0.6.7",
       "maturity": "preview",
       "description": "Foundation-layer plugin for insight-wave marketplace plugins. Manages shared infrastructure (env vars, settings), MCP server installation and Desktop config patching, theme management, theme picker, plugin discovery, workspace health, Obsidian vault integration, and a bundled vendor-curated insight-wave reference wiki queryable via the ask skill.",
       "keywords": [
@@ -76,7 +76,7 @@
     {
       "name": "cogni-trends",
       "source": "./cogni-trends",
-      "version": "0.4.5",
+      "version": "0.4.6",
       "maturity": "preview",
       "description": "Strategic trend scouting and reporting pipeline. Combines the Smarter Service Trendradar (4-dimension structure) with the TIPS content framework (Trends, Implications, Possibilities, Solutions). Multilingual trend scouting, investment theme modeling, evidence-backed CxO reports, and reusable industry catalogs. European markets (DE/FR/IT/PL/NL/ES) + US/UK.",
       "keywords": [

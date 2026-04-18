@@ -19,6 +19,7 @@ node_modules/
 
 # Skill eval workspaces (large run outputs, dev-time artifacts)
 *-workspace/
+!cogni-workspace/
 
 # Eval run artifacts but NOT eval definitions (evals.json tracks test prompts + expectations)
 **/evals/fixtures/

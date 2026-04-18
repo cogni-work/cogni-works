@@ -1,0 +1,23 @@
+{
+  "skill_name": "install-mcp",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I just installed cogni-visual and cogni-portfolio plugins but excalidraw tools aren't showing up. Can you set up the MCP servers I need?",
+      "expected_output": "Should detect that mcp_excalidraw is needed (git-based), check if Pencil is needed, detect Desktop config, run install-mcp.sh, patch claude_desktop_config.json with dry-run preview, and verify tools via ToolSearch.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "My claude_desktop_config.json is missing the excalidraw entry. Can you fix it without reinstalling everything?",
+      "expected_output": "Should detect that the git-installed server already exists (skip re-install), focus on patching the Desktop config only. Should show dry-run first, then patch after confirmation.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "I want to update all my MCP servers to their latest versions. The excalidraw canvas has been buggy.",
+      "expected_output": "Should run install-mcp.sh with --force to pull latest and rebuild, then re-patch Desktop config if needed. Should verify the updated server loads correctly.",
+      "files": []
+    }
+  ]
+}

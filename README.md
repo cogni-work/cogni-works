@@ -251,6 +251,26 @@ See [Cross-Plugin Data Flow](docs/er-diagram.md) for how data flows between plug
 
 Workflow guides: [Install to Infographic](docs/workflows/install-to-infographic.md) | [Research to Report](docs/workflows/research-to-report.md) | [Portfolio to Pitch](docs/workflows/portfolio-to-pitch.md) | [Portfolio to Website](docs/workflows/portfolio-to-website.md) | [Trends to Solutions](docs/workflows/trends-to-solutions.md) | [Consulting Engagement](docs/workflows/consulting-engagement.md) | [Content Pipeline](docs/workflows/content-pipeline.md)
 
+## Querying the wiki
+
+A vendor-curated reference wiki ships at [`wiki/`](wiki/) with grounded, citable answers about the ecosystem — plugins, skills, agents, architecture, conventions, workflows, and cross-cutting concepts. Built on [`cogni-wiki`](cogni-wiki/README.md): every answer cites specific wiki pages, never draws from model memory, and links back to the canonical source on GitHub.
+
+**From a clone of this repo:**
+
+```
+cogni-wiki:wiki-query --question "How does claims propagation work?"
+```
+
+(Run from inside the repo so wiki-query finds `wiki/.cogni-wiki/config.json` automatically.)
+
+**From a marketplace install:** the same wiki ships bundled inside `cogni-workspace`. Once cogni-workspace is installed, ask via the wrapper skill:
+
+```
+/cogni-workspace:ask "How does claims propagation work?"
+```
+
+Plugin updates refresh the bundled wiki automatically — no separate update step needed. Users who want their own personal knowledge base should run `cogni-wiki:wiki-setup` to create a separate, mutable wiki of their own.
+
 ## Contributing
 
 We welcome contributions. See [CONTRIBUTING.md](CONTRIBUTING.md) for workflow, CLA requirements, and marketplace plugin guidelines. By participating you agree to abide by our [Code of Conduct](CODE_OF_CONDUCT.md).

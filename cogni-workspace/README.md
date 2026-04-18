@@ -34,6 +34,7 @@ In the Claude Cowork plugin model, workspace-level state (paths, env vars, insta
 5. **Diagnose** workspace health — five-tier report (foundation, env vars, plugin registry, themes, dependencies)
 6. **Install MCP servers** — clone and build git-based MCP servers, detect native app MCPs, and patch Claude Desktop config so rendering plugins find their tools without manual JSON editing
 7. **Obsidian integration** — scaffold `.obsidian/` vault or incrementally update terminal profiles, handled as sub-steps of manage-workspace
+8. **Ask the bundled wiki** — `ask` wraps `cogni-wiki:wiki-query` against a vendor-curated insight-wave reference wiki bundled at `wiki/` so users can ask grounded questions about plugins, skills, agents, architecture, and conventions without grepping source files
 
 ## What it means for you
 
@@ -70,6 +71,8 @@ Or describe what you want:
 - "What's the status of my workspace?"
 - "Extract a theme from this website"
 - "Update my workspace after installing new plugins"
+- "Ask the wiki: how does claims propagation work?"
+- "Ask the wiki: which plugin generates IS/DOES/MEANS messaging?"
 
 ## Try it
 

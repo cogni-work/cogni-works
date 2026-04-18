@@ -7,8 +7,9 @@
 #   - cogni-research/references/market-sources.json
 #
 # Also verifies that cogni-trends DACH region references all CLAUDE.md-curated
-# DACH authority sources (fraunhofer.de, bitkom.org, vdma.org, destatis.de,
-# handelsblatt.com).
+# DACH authority sources. The curated list is loaded from
+# cogni-workspace/references/curated-region-sources.json — the single source of
+# truth synced with CLAUDE.md's "Multilingual European Support" section.
 #
 # Exits non-zero if any drift is detected with a per-class remediation hint.
 # Prints a single-line JSON envelope `{success, data, error}` on the final line
@@ -22,9 +23,10 @@ REPO_ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 PORTFOLIO="${REPO_ROOT}/cogni-portfolio/skills/portfolio-setup/references/regions.json"
 TRENDS="${REPO_ROOT}/cogni-trends/skills/trend-report/references/region-authority-sources.json"
 RESEARCH="${REPO_ROOT}/cogni-research/references/market-sources.json"
+CURATED="${REPO_ROOT}/cogni-workspace/references/curated-region-sources.json"
 
-# Verify all three catalogs exist before doing anything else.
-for f in "$PORTFOLIO" "$TRENDS" "$RESEARCH"; do
+# Verify all catalog files exist before doing anything else.
+for f in "$PORTFOLIO" "$TRENDS" "$RESEARCH" "$CURATED"; do
   if [[ ! -f "$f" ]]; then
     rel="${f#"$REPO_ROOT/"}"
     echo "ERROR: catalog file not found: $rel" >&2
@@ -35,20 +37,11 @@ done
 
 # All comparison logic lives in python so the set arithmetic and JSON parsing
 # stay readable. The script body is just orchestration.
-python3 - "$PORTFOLIO" "$TRENDS" "$RESEARCH" <<'PY'
+python3 - "$PORTFOLIO" "$TRENDS" "$RESEARCH" "$CURATED" <<'PY'
 import json
 import sys
 
-portfolio_path, trends_path, research_path = sys.argv[1:4]
-
-# CLAUDE.md DACH authority sources — keep in sync with insight-wave/CLAUDE.md.
-EXPECTED_DACH_SOURCES = {
-    "fraunhofer.de",
-    "bitkom.org",
-    "vdma.org",
-    "destatis.de",
-    "handelsblatt.com",
-}
+portfolio_path, trends_path, research_path, curated_path = sys.argv[1:5]
 
 
 def load(path):
@@ -64,6 +57,10 @@ def real_keys(d):
 portfolio_raw = load(portfolio_path)
 trends = load(trends_path)
 research = load(research_path)
+
+# CLAUDE.md DACH authority sources — loaded from curated-region-sources.json
+# (single source of truth synced with CLAUDE.md 'Multilingual European Support').
+EXPECTED_DACH_SOURCES = set(load(curated_path)["dach"])
 
 # cogni-portfolio nests regions under a "regions" key; the other two don't.
 portfolio_regions = portfolio_raw.get("regions", portfolio_raw)

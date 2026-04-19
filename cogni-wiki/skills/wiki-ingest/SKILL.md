@@ -97,13 +97,26 @@ Write the page file. Do not write anything else yet.
 
 ### 5. Update `wiki/index.md`
 
-Read `wiki/index.md`. Decide which category heading the new page belongs under (create a new `##` heading if needed). Insert the line:
+Decide which category heading the new page belongs under — that decision still belongs to the orchestrator, because it requires judgement about the taxonomy. Then hand the write itself to the helper script so *placement* becomes deterministic:
 
 ```
-- [[{slug}]] — {one-sentence summary}
+${CLAUDE_PLUGIN_ROOT}/skills/wiki-ingest/scripts/wiki_index_update.py \
+    --wiki-root <wiki-root> \
+    --slug {slug} \
+    --summary "{one-sentence summary}" \
+    --category "{category heading text}"
 ```
 
-Keep the category list alphabetized within its section.
+The script:
+
+- inserts `- [[{slug}]] — {summary}` under the matching `##` or `###` heading, creating the heading at the end of the file if it does not yet exist;
+- on re-ingest, **updates the existing line in place** rather than appending a duplicate — so `mode: re-ingest` from Step 1 is safe to chain through without extra orchestrator bookkeeping;
+- keeps the category section alphabetised by slug after every insert;
+- writes atomically via `tempfile + os.replace` (the same pattern used elsewhere in the plugin) so a crash mid-write cannot leave a half-updated index.
+
+Output extends the standard `{success, data, error}` contract with `data.action` (`inserted` | `updated`), `data.category`, `data.category_created`, and the final `data.line` that was written. Surface the action to the user so they see whether this was a new line or an in-place refresh.
+
+If the script exits non-zero or returns malformed JSON, report the error to the user and stop; the page write from Step 4 stays on disk, but the index is known-good because of the atomic `tempfile + os.replace`.
 
 ### 6. Run the backlink audit, then apply curated backlinks atomically
 
@@ -182,3 +195,4 @@ Tell the user, in ≤5 sentences:
 - `./references/page-frontmatter.md` — full frontmatter schema
 - `./references/ingest-workflow.md` — worked example
 - `./scripts/backlink_audit.py` — candidate backlink finder
+- `./scripts/wiki_index_update.py` — deterministic `wiki/index.md` insert/update helper

@@ -26,12 +26,27 @@ Read `${CLAUDE_PLUGIN_ROOT}/references/karpathy-pattern.md` once at the start of
 
 | Parameter | Required | Description |
 |-----------|----------|-------------|
-| `--source` | Yes | Path to a file in `raw/`, a URL, or the literal string `--stdin` when the user pasted content |
-| `--title` | No | Override the page title; otherwise derive from the source (first heading, URL title, filename) |
-| `--type` | No | Page type: `concept | entity | summary | decision | learning | note`. Defaults to `summary` for full-source ingests, `note` for short pastes |
-| `--tags` | No | Comma-separated tags |
+| `--source` | Yes (single-source mode) | Path to a file in `raw/`, a URL, or the literal string `--stdin` when the user pasted content. Mutually exclusive with `--batch-file` |
+| `--batch-file` | Yes (batch mode) | Path to a JSON file listing multiple sources to ingest in one dispatch. See `./references/batch-mode.md` for schema. Mutually exclusive with `--source` |
+| `--title` | No | Override the page title; otherwise derive from the source (first heading, URL title, filename). Single-source mode only — in batch mode, titles are per-entry in the JSON |
+| `--type` | No | Page type: `concept | entity | summary | decision | learning | note`. Defaults to `summary` for full-source ingests, `note` for short pastes. Single-source mode only |
+| `--tags` | No | Comma-separated tags. Single-source mode only |
 
 ## Workflow
+
+### 0. Dispatch: single-source vs batch
+
+If `--batch-file` is present:
+
+- Read the JSON and validate it against the schema in `./references/batch-mode.md` (top-level `sources[]`, per-entry `source` required).
+- Abort before any write if the schema is invalid, if any `source` path is missing, or if both `--source` and `--batch-file` were passed.
+- Otherwise, run Steps 1–8 as a loop over `sources[]`. Each entry flows through Step 1's `mode: fresh | re-ingest` detection independently — the batch is never a mode-wide toggle.
+- Fail-fast policy: if any per-source step errors, halt the loop and report what completed, what failed, and what was skipped in Step 9. The wiki stays consistent because every per-source step already writes atomically; see `./references/batch-mode.md` §"Error policy" for the details and resume procedure.
+- Step 9 emits one aggregated report instead of a per-source report.
+
+If `--batch-file` is absent, run Steps 1–9 on the single `--source` as before. This is the existing path; nothing about it changes.
+
+In both cases, the skill instructions and `references/karpathy-pattern.md` + `references/page-frontmatter.md` load exactly once per dispatch — that is the point of batch mode.
 
 ### 1. Locate the wiki and detect ingest mode
 
@@ -169,10 +184,12 @@ Never rewrite existing log lines.
 
 ### 9. Report to the user
 
-Tell the user, in ≤5 sentences:
+**Single-source mode.** Tell the user, in ≤5 sentences:
 - The new page slug and path
 - How many existing pages got backlinks
 - What to do next (usually: drop another source or run `wiki-query`)
+
+**Batch mode.** Emit one aggregated block instead of a per-source report. For every entry that reached this step, print the slug, its resolved mode (`fresh` or `re-ingest`), and its backlink count. Report `entries_count` delta (fresh sources only; re-ingests never increment). On a fail-fast halt, also list the source that failed with its error and any sources that were skipped. See `./references/batch-mode.md` §"Step 9 in batch mode" for the exact format.
 
 ## Output
 
@@ -194,5 +211,6 @@ Tell the user, in ≤5 sentences:
 - `${CLAUDE_PLUGIN_ROOT}/references/karpathy-pattern.md` — the pattern
 - `./references/page-frontmatter.md` — full frontmatter schema
 - `./references/ingest-workflow.md` — worked example
+- `./references/batch-mode.md` — `--batch-file` input schema, per-source mode rules, error policy, and worked example
 - `./scripts/backlink_audit.py` — candidate backlink finder
 - `./scripts/wiki_index_update.py` — deterministic `wiki/index.md` insert/update helper

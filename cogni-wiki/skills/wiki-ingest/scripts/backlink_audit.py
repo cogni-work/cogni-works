@@ -1,22 +1,49 @@
 #!/usr/bin/env python3
 """
-backlink_audit.py — find candidate backlinks for a newly ingested wiki page.
+backlink_audit.py — find candidate backlinks for a newly ingested wiki page,
+and (optionally) apply a curated plan of backlink writes atomically.
 
-Given a wiki root and a newly created page, scan existing pages for textual
-references that could justify adding a `[[new-page]]` backlink. Returns a
-ranked list of candidates as JSON on stdout so the calling skill can decide
-which links to actually insert.
+Two modes, sharing one script so the audit + write cycle stays a single
+skill-invocation unit:
 
-Usage:
-    backlink_audit.py --wiki-root <path> --new-page <slug>
+    Audit mode (default)
+        backlink_audit.py --wiki-root <path> --new-page <slug>
 
-Output contract:
+        Scans existing pages for textual references that could justify a
+        `[[new-page]]` backlink. Returns a ranked candidate list. No writes.
+
+    Apply mode
+        backlink_audit.py --wiki-root <path> --new-page <slug> \\
+                          --apply-plan <path-or-dash>
+
+        Reads a curated plan JSON and, for each target, inserts the caller's
+        backlink sentence and bumps the target page's `updated:` frontmatter
+        field to today — as a single atomic write per page. The plan is
+        authored by the orchestrator after reviewing the audit's candidates;
+        the script never auto-selects targets, preserving the
+        "never invent backlinks" discipline from SKILL.md.
+
+Output contract (audit mode):
     {
       "success": true,
       "data": {
         "candidates": [...],
         "search_terms": [...],
         "total_pages_scanned": <int>
+      },
+      "error": ""
+    }
+
+Output contract (apply mode) — extends audit output with write-result fields:
+    {
+      "success": true,
+      "data": {
+        "candidates": [...],
+        "search_terms": [...],
+        "total_pages_scanned": <int>,
+        "applied": [ {"slug": "...", "updated": "YYYY-MM-DD"}, ... ],
+        "skipped_existing_backlink": ["slug", ...],
+        "failed": [ {"slug": "...", "error": "..."}, ... ]
       },
       "error": ""
     }
@@ -30,9 +57,28 @@ Candidate object:
       "existing_backlink": true | false
     }
 
+Plan schema (consumed by --apply-plan):
+    {
+      "targets": [
+        {
+          "slug": "target-page-slug",         # required; must exist under wiki/pages/
+          "sentence": "... [[new-page]] ...", # required; MUST contain [[new-slug]]
+          "insert_after_heading": "## Foo"    # optional; exact heading line to insert after
+        },
+        ...
+      ]
+    }
+
+    If `insert_after_heading` is present and matches a heading line in the target
+    page body, the sentence is inserted as the first paragraph under that heading.
+    If absent (or the heading is not found), the sentence is appended at the end
+    of the body. In every case the frontmatter `updated:` field is rewritten to
+    today's ISO date in the same atomic write.
+
 Flags:
-    --top-n <N>           After ranking, keep only the top N candidates.
-    --min-confidence X    Drop candidates below confidence X (low|medium|high).
+    --top-n <N>           Audit mode: keep only the top N candidates.
+    --min-confidence X    Audit mode: drop candidates below X (low|medium|high).
+    --apply-plan <path>   Apply mode: path to plan JSON, or `-` for stdin.
 
 Ranking is stable: candidates are sorted by confidence bucket (high > medium >
 low), then by matched_score descending, then by page slug alphabetically. Terms
@@ -47,14 +93,18 @@ stdlib-only. Python 3.8+.
 from __future__ import annotations
 
 import argparse
+import datetime as _dt
 import json
+import os
 import re
 import sys
+import tempfile
 from pathlib import Path
 
 
 FRONTMATTER_RE = re.compile(r"^---\s*\n(.*?)\n---\s*\n", re.DOTALL)
 WIKILINK_RE = re.compile(r"\[\[([a-z0-9][a-z0-9\-]*)\]\]")
+UPDATED_FIELD_RE = re.compile(r"^(updated:\s*).*$", re.MULTILINE)
 
 
 def fail(msg: str) -> None:
@@ -177,6 +227,174 @@ def score_match(matched_score: float, match_count: int, body_len: int) -> str:
     return "low"
 
 
+def _load_apply_plan(path: str) -> dict:
+    """Load the apply-plan JSON. `-` reads from stdin."""
+    if path == "-":
+        raw = sys.stdin.read()
+    else:
+        plan_path = Path(path).expanduser().resolve()
+        if not plan_path.is_file():
+            fail(f"apply plan not found: {plan_path}")
+        raw = plan_path.read_text(encoding="utf-8")
+    try:
+        plan = json.loads(raw)
+    except json.JSONDecodeError as e:
+        fail(f"apply plan is not valid JSON: {e}")
+        return {}
+    if not isinstance(plan, dict) or not isinstance(plan.get("targets"), list):
+        fail("apply plan must be an object with a 'targets' list")
+    return plan
+
+
+def _validate_target(target: dict, new_slug: str) -> str:
+    """Return an error string on invalid target, empty string on valid."""
+    if not isinstance(target, dict):
+        return "target is not an object"
+    slug = target.get("slug")
+    if not isinstance(slug, str) or not slug.strip():
+        return "target missing 'slug'"
+    sentence = target.get("sentence")
+    if not isinstance(sentence, str) or not sentence.strip():
+        return f"target {slug!r} missing 'sentence'"
+    wikilink = f"[[{new_slug}]]"
+    if wikilink not in sentence:
+        return f"target {slug!r} sentence does not contain {wikilink}"
+    heading = target.get("insert_after_heading")
+    # Absence (None) or empty string is fine — both mean "append at end of body".
+    # Only reject truly non-string values (numbers, lists, objects).
+    if heading is not None and not isinstance(heading, str):
+        return f"target {slug!r} has a non-string 'insert_after_heading'"
+    return ""
+
+
+def _bump_updated_frontmatter(text: str, today: str) -> str:
+    """Rewrite the frontmatter `updated:` field to today's date.
+
+    Only touches the first frontmatter block. Preserves surrounding content
+    byte-for-byte. If no frontmatter or no `updated:` field is present, returns
+    the text unchanged — an atomic write still happens, just without the bump.
+    """
+    m = FRONTMATTER_RE.match(text)
+    if not m:
+        return text
+    fm_block = m.group(0)
+    # Use a lambda substitution so we don't hit Python's \1 + "2026..." ambiguity
+    # where the leading digit gets parsed into the backreference (\12 would mean
+    # group 12) and corrupts the output.
+    new_fm, count = UPDATED_FIELD_RE.subn(
+        lambda mm: mm.group(1) + today, fm_block, count=1
+    )
+    if count == 0:
+        return text
+    return new_fm + text[len(fm_block):]
+
+
+def _split_frontmatter_body(text: str) -> tuple:
+    """Return (frontmatter_including_trailing_newline, body)."""
+    m = FRONTMATTER_RE.match(text)
+    if not m:
+        return "", text
+    return m.group(0), text[len(m.group(0)):]
+
+
+def _insert_sentence(body: str, sentence: str, heading: str) -> str:
+    """Insert `sentence` at the right place in `body`.
+
+    If `heading` is truthy and matches a line exactly, insert `sentence` as a
+    new paragraph immediately after that heading (with a blank-line separator).
+    Otherwise append at the end of the body, preceded by a blank line.
+    """
+    stripped_sentence = sentence.strip()
+    if heading:
+        heading_line = heading.rstrip("\n")
+        # Split lines but keep track so we can rebuild faithfully.
+        lines = body.split("\n")
+        for i, line in enumerate(lines):
+            if line.rstrip() == heading_line:
+                # Insert a blank line then the sentence after the heading.
+                # If the next line is already blank, keep it; then drop our
+                # own separator so we don't produce three-blank-lines.
+                rest_start = i + 1
+                insert_lines = ["", stripped_sentence, ""]
+                new_lines = lines[:rest_start] + insert_lines + lines[rest_start:]
+                return "\n".join(new_lines)
+    if not body.endswith("\n"):
+        body = body + "\n"
+    return body + "\n" + stripped_sentence + "\n"
+
+
+def _atomic_write(path: Path, content: str) -> None:
+    """Write `content` to `path` atomically (write to temp file then os.replace)."""
+    parent = path.parent
+    fd, tmp = tempfile.mkstemp(prefix=".backlink-", dir=str(parent))
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8") as f:
+            f.write(content)
+        os.replace(tmp, path)
+    except Exception:
+        try:
+            os.unlink(tmp)
+        except OSError:
+            pass
+        raise
+
+
+def apply_plan(plan: dict, pages_dir: Path, new_slug: str) -> tuple:
+    """Execute an apply-plan over `pages_dir`.
+
+    Returns (applied, skipped_existing, failed) lists for the output JSON.
+    Each list entry is a small dict the caller embeds under data.*.
+
+    Semantics:
+      - If `[[new_slug]]` already appears in the target body, skip the write
+        entirely (no sentence insert, no `updated:` bump). This keeps re-runs
+        idempotent so the orchestrator can safely re-apply a plan after fixing
+        a typo in one target.
+      - Otherwise, perform one atomic write that both inserts the sentence and
+        rewrites `updated:` to today.
+      - Any per-target failure is captured in `failed[]` without aborting the
+        whole run — partial success is better than no success at scale.
+    """
+    today = _dt.date.today().isoformat()
+    applied: list = []
+    skipped: list = []
+    failed: list = []
+    wikilink_marker = f"[[{new_slug}]]"
+
+    for target in plan.get("targets", []):
+        err = _validate_target(target, new_slug)
+        slug = target.get("slug") if isinstance(target, dict) else None
+        if err:
+            failed.append({"slug": slug, "error": err})
+            continue
+        target_path = pages_dir / f"{slug}.md"
+        if not target_path.is_file():
+            failed.append({"slug": slug, "error": f"target page not found: {target_path.name}"})
+            continue
+        try:
+            text = target_path.read_text(encoding="utf-8")
+        except OSError as e:
+            failed.append({"slug": slug, "error": f"could not read target: {e}"})
+            continue
+        if wikilink_marker in text:
+            skipped.append(slug)
+            continue
+        fm, body = _split_frontmatter_body(text)
+        new_body = _insert_sentence(body, target["sentence"], target.get("insert_after_heading", ""))
+        # Bump `updated:` in the frontmatter block only, so we don't touch any
+        # other `updated:` string that might appear in the body.
+        new_fm = _bump_updated_frontmatter(fm, today) if fm else fm
+        new_text = new_fm + new_body
+        try:
+            _atomic_write(target_path, new_text)
+        except OSError as e:
+            failed.append({"slug": slug, "error": f"atomic write failed: {e}"})
+            continue
+        applied.append({"slug": slug, "updated": today})
+
+    return applied, skipped, failed
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Find candidate backlinks for a new wiki page")
     parser.add_argument("--wiki-root", required=True, help="Absolute path to the wiki root")
@@ -186,6 +404,9 @@ def main() -> None:
     parser.add_argument("--min-confidence", choices=["low", "medium", "high"],
                         default="low",
                         help="Drop candidates below this confidence tier")
+    parser.add_argument("--apply-plan", default=None,
+                        help="Path to a plan JSON (or '-' for stdin). When set, apply the "
+                             "plan's backlink writes atomically after running the audit.")
     args = parser.parse_args()
 
     wiki_root = Path(args.wiki_root).expanduser().resolve()
@@ -208,7 +429,14 @@ def main() -> None:
     new_fm = parse_frontmatter(new_text)
     title_terms, tag_terms = extract_terms(new_text, new_fm)
     if not title_terms and not tag_terms:
-        ok({"candidates": [], "note": "new page has no extractable search terms"})
+        out_empty = {"candidates": [], "note": "new page has no extractable search terms"}
+        if args.apply_plan:
+            plan = _load_apply_plan(args.apply_plan)
+            applied, skipped, failed = apply_plan(plan, pages_dir, new_slug)
+            out_empty["applied"] = applied
+            out_empty["skipped_existing_backlink"] = skipped
+            out_empty["failed"] = failed
+        ok(out_empty)
 
     # Always include the slug itself and the title lowercased as title-weighted terms.
     title_terms.add(new_slug)
@@ -269,11 +497,20 @@ def main() -> None:
     if args.top_n > 0:
         candidates = candidates[: args.top_n]
 
-    ok({
+    out = {
         "candidates": candidates,
         "search_terms": sorted(term_weights.keys()),
         "total_pages_scanned": total_pages,
-    })
+    }
+
+    if args.apply_plan:
+        plan = _load_apply_plan(args.apply_plan)
+        applied, skipped, failed = apply_plan(plan, pages_dir, new_slug)
+        out["applied"] = applied
+        out["skipped_existing_backlink"] = skipped
+        out["failed"] = failed
+
+    ok(out)
 
 
 if __name__ == "__main__":

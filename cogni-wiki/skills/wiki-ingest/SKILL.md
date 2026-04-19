@@ -118,13 +118,29 @@ Output extends the standard `{success, data, error}` contract with `data.action`
 
 If the script exits non-zero or returns malformed JSON, report the error to the user and stop; the page write from Step 4 stays on disk, but the index is known-good because of the atomic `tempfile + os.replace`.
 
-### 6. Run the backlink audit
+### 6. Run the backlink audit, then apply curated backlinks atomically
 
-Invoke `${CLAUDE_PLUGIN_ROOT}/skills/wiki-ingest/scripts/backlink_audit.py --wiki-root <wiki-root> --new-page {slug}`. The script returns JSON with candidate backlinks — existing pages that mention the new page's title, tags, or key entities. If the script exits non-zero or returns malformed JSON, report the error to the user and skip the backlink step — the page itself is already written.
+**6a. Audit.** Invoke `${CLAUDE_PLUGIN_ROOT}/skills/wiki-ingest/scripts/backlink_audit.py --wiki-root <wiki-root> --new-page {slug}`. The script returns JSON with candidate backlinks — existing pages that mention the new page's title, tags, or key entities. If the script exits non-zero or returns malformed JSON, report the error to the user and skip the backlink step — the page itself is already written.
 
-For each candidate, read the target page, decide whether a `[[{slug}]]` link would help the reader, and if so add it in an appropriate sentence (not as a dangling "See also" unless the page already has a See-also section). Always add backlinks as natural inline references, not as dumps.
+**6b. Curate.** For each candidate, read the target page and decide whether a `[[{slug}]]` link would help the reader. Always add backlinks as natural inline references, not as dumps. For every target you pick, draft (i) a sentence containing `[[{slug}]]` and (ii) the heading line it should go under (or omit the heading to append at the end). This curation step stays human-in-the-loop — the script never auto-selects targets, to preserve the "never invent backlinks" discipline in the Failure modes section.
 
-Edit each page that gains a backlink, updating its `updated:` frontmatter field to today.
+**6c. Apply atomically.** Re-invoke the same script with `--apply-plan -` and pipe the curated plan JSON on stdin:
+
+```json
+{
+  "targets": [
+    {
+      "slug": "<target-slug>",
+      "sentence": "…inline prose containing [[{slug}]]…",
+      "insert_after_heading": "## <exact heading line>"
+    }
+  ]
+}
+```
+
+The `--apply-plan` pass writes the backlink sentence and bumps the target page's `updated:` frontmatter field to today in a **single atomic write per page**. This replaces the older two-step flow where the orchestrator had to remember to edit `updated:` separately — a rule that worked at 7 pages but drifted silently at larger scale (issue #73). The apply pass is idempotent: targets that already contain `[[{slug}]]` are skipped, so re-running the same plan after a fix is safe.
+
+Output extends the audit JSON with `data.applied[]`, `data.skipped_existing_backlink[]`, and `data.failed[]`. Surface these to the user in the Step 9 report so they can see exactly which pages changed.
 
 ### 7. Append to `wiki/log.md`
 

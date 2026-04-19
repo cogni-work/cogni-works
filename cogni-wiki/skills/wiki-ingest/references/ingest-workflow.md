@@ -119,9 +119,9 @@ The script inserts `- [[many-shot-jailbreaking]] — Exploiting long context by 
 
 On re-ingest the same invocation returns `action: "updated"` instead of appending a duplicate. If the script exits non-zero or returns malformed JSON, report the error and stop — the page from Step 4 is already on disk and the index is known-good because of the atomic `tempfile + os.replace`.
 
-### Step 6: Backlink audit
+### Step 6: Backlink audit + atomic apply
 
-Run `backlink_audit.py --wiki-root cogni-wiki/ai-research --new-page many-shot-jailbreaking`. The script returns:
+**Audit.** Run `backlink_audit.py --wiki-root cogni-wiki/ai-research --new-page many-shot-jailbreaking`. The script returns:
 
 ```json
 {
@@ -135,9 +135,25 @@ Run `backlink_audit.py --wiki-root cogni-wiki/ai-research --new-page many-shot-j
 }
 ```
 
-For `long-context-vulnerabilities`, add an inline `[[many-shot-jailbreaking]]` link in the body text where the page already discusses attack classes — not in a dangling "See also" list. Update that page's `updated:` field.
+**Curate.** For `long-context-vulnerabilities`, decide a `[[many-shot-jailbreaking]]` link belongs in the attack-classes paragraph — not in a dangling "See also" list. For `rlhf-limitations`, skip — the match is shallow and forcing a backlink would be noise. The orchestrator is the curator; the script never auto-selects targets.
 
-For `rlhf-limitations`, skip — the match was shallow and forcing a backlink would be noise.
+**Apply atomically.** Re-invoke the script with a plan piped on stdin. This writes the backlink sentence and bumps the target page's `updated:` field in a single atomic write, so there is no way to forget the timestamp bump:
+
+```sh
+cat <<'PLAN' | backlink_audit.py --wiki-root cogni-wiki/ai-research --new-page many-shot-jailbreaking --apply-plan -
+{
+  "targets": [
+    {
+      "slug": "long-context-vulnerabilities",
+      "sentence": "The canonical instantiation of this class of attack is [[many-shot-jailbreaking]], which exploits the same long-context-window expansion to prime harmful completions via hundreds of fake dialogue turns.",
+      "insert_after_heading": "## Attack classes"
+    }
+  ]
+}
+PLAN
+```
+
+Output extends the audit JSON with `data.applied[]`, `data.skipped_existing_backlink[]`, and `data.failed[]` so you can confirm exactly which pages the apply pass changed before reporting to the user.
 
 ### Step 7–9: Log, config, report
 

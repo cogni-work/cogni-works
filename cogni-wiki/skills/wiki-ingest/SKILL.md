@@ -1,6 +1,6 @@
 ---
 name: wiki-ingest
-description: "Ingest a source document (file, URL, pasted text, transcript, paper, article) into a Karpathy-style wiki — Claude reads the source, surfaces key takeaways, writes a summary page with YAML frontmatter, updates wiki/index.md, appends to wiki/log.md, and runs a backlink audit to weave the new page into existing knowledge. Use this skill whenever the user says 'ingest this', 'add this to my wiki', 'summarise this paper into the wiki', 'file this source', 'wiki ingest', 'wiki add', drops a document and asks Claude to process it, or pastes content with a request to save it as a wiki page. Also trigger when the user moves a new file into raw/ and asks 'what should I do with this?' — offer to ingest it."
+description: "Ingest a source document (file, URL, pasted text, transcript, paper, article) into a Karpathy-style wiki — Claude reads the source, surfaces key takeaways, writes a summary page with YAML frontmatter, updates wiki/index.md, appends to wiki/log.md, and runs a backlink audit to weave the new page into existing knowledge. Use this skill whenever the user says 'ingest this', 'add this to my wiki', 'summarise this paper into the wiki', 'file this source', 'wiki ingest', 'wiki add', drops a document and asks Claude to process it, or pastes content with a request to save it as a wiki page. Also trigger when the user moves a new file into raw/ and asks 'what should I do with this?' — offer to ingest it. Also trigger when the user asks to ingest multiple sources at once ('ingest these papers', 'batch ingest raw/', 'ingest everything in raw/')."
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep, AskUserQuestion
 ---
 
@@ -24,6 +24,8 @@ Read `${CLAUDE_PLUGIN_ROOT}/references/karpathy-pattern.md` once at the start of
 
 ## Parameters
 
+Exactly one of `--source` or `--batch-file` must be provided.
+
 | Parameter | Required | Description |
 |-----------|----------|-------------|
 | `--source` | Yes (single-source mode) | Path to a file in `raw/`, a URL, or the literal string `--stdin` when the user pasted content. Mutually exclusive with `--batch-file` |
@@ -38,15 +40,14 @@ Read `${CLAUDE_PLUGIN_ROOT}/references/karpathy-pattern.md` once at the start of
 
 If `--batch-file` is present:
 
-- Read the JSON and validate it against the schema in `./references/batch-mode.md` (top-level `sources[]`, per-entry `source` required).
-- Abort before any write if the schema is invalid, if any `source` path is missing, or if both `--source` and `--batch-file` were passed.
-- Otherwise, run Steps 1–8 as a loop over `sources[]`. Each entry flows through Step 1's `mode: fresh | re-ingest` detection independently — the batch is never a mode-wide toggle.
-- Fail-fast policy: if any per-source step errors, halt the loop and report what completed, what failed, and what was skipped in Step 9. The wiki stays consistent because every per-source step already writes atomically; see `./references/batch-mode.md` §"Error policy" for the details and resume procedure.
-- Step 9 emits one aggregated report instead of a per-source report.
+- Validate the JSON against the schema in `${CLAUDE_PLUGIN_ROOT}/references/batch-mode.md` and abort before any write on schema, missing-source, or mutual-exclusion violations (see `${CLAUDE_PLUGIN_ROOT}/references/batch-mode.md` §"Input schema" and §"Error policy").
+- Otherwise, run Steps 1–8 as a loop over `sources[]`. Each entry flows through Step 1's `mode: fresh | re-ingest` detection independently. Detect mode per entry; do not treat the batch as a mode-wide toggle.
+- Fail-fast policy: if any per-source step errors, halt the loop and report what completed, what failed, and what was skipped in Step 9. The wiki stays consistent because every per-source step already writes atomically; see `${CLAUDE_PLUGIN_ROOT}/references/batch-mode.md` §"Error policy" for the details and resume procedure.
+- In Step 9, emit one aggregated report instead of a per-source report.
 
 If `--batch-file` is absent, run Steps 1–9 on the single `--source` as before. This is the existing path; nothing about it changes.
 
-In both cases, the skill instructions and `references/karpathy-pattern.md` + `references/page-frontmatter.md` load exactly once per dispatch — that is the point of batch mode.
+In both cases, the skill instructions and `${CLAUDE_PLUGIN_ROOT}/references/karpathy-pattern.md` + `${CLAUDE_PLUGIN_ROOT}/references/page-frontmatter.md` load exactly once per dispatch — one context load, N sources, materially fewer tokens and lower latency than N single-source dispatches.
 
 ### 1. Locate the wiki and detect ingest mode
 

@@ -48,7 +48,7 @@ Per-entry fields mirror the single-source CLI parameters exactly:
 | `type` | No | `concept \| entity \| summary \| decision \| learning \| note`; matches `--type` |
 | `tags` | No | List of strings; matches `--tags` (no comma splitting needed) |
 
-Any unknown field causes the batch to abort before Step 1 of the first entry — malformed input never half-writes the wiki.
+Unknown top-level keys (siblings of `sources`) and unknown per-entry fields both cause the batch to abort before Step 1 of the first entry — malformed input never half-writes the wiki.
 
 ## Per-source mode resolution
 

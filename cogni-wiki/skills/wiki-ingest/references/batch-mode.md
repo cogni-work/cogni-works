@@ -2,12 +2,18 @@
 
 `wiki-ingest` normally runs the nine-step workflow against a single `--source`. On bulk rebuilds (e.g., Phase 2 of the pilot rebuild, ~164 skill+agent pages), re-dispatching the skill per source reloads `SKILL.md` + `references/karpathy-pattern.md` + `references/page-frontmatter.md` for every page — the cost is not in the per-page work but in the repeated instruction load.
 
-Batch mode eliminates that redundancy. Pass `--batch-file <path>` to a JSON list of per-source entries. The skill loads its instructions and references once, then iterates Steps 1–8 per entry. Step 9 aggregates the results into a single report.
+Batch mode eliminates that redundancy. The skill loads its instructions and references once, then iterates Steps 1–8 per entry. Step 9 aggregates the results into a single report.
+
+There are two ways to feed it:
+
+- **`--discover`** — the skill walks the filesystem (or the wiki's own backlog) and builds the batch itself. This is the right default for almost every bulk case. See §"Discovery" below.
+- **`--batch-file`** — the caller supplies a pre-written JSON list. Use this when the batch is an ad-hoc selection the discovery modes can't express cleanly. See §"Advanced: hand-crafted batch files" at the bottom.
 
 ## When to use batch mode
 
 - Bulk rebuilds of script-generated pages (e.g., every skill page, every agent page, every plugin page).
 - Seeding a new wiki from a folder of raw sources in one go.
+- Refreshing stub drafts that point at updated sources.
 - Any operation where re-dispatching `wiki-ingest` per source would burn tokens on repeated skill loads.
 
 Do **not** use batch mode when:
@@ -15,9 +21,58 @@ Do **not** use batch mode when:
 - You have one source to ingest. The single-source path is simpler and its Step 9 report is richer per page.
 - The sources require different user-visible acknowledgments between them (each Step 3 takeaway synthesis still fires per source in batch mode, but a user looking for a decision point per source should run single-source ingests).
 
+## Discovery
+
+`--discover <spec>` asks the skill to enumerate the batch itself instead of the user typing it out. Three specs are supported; pick the one that matches how the user described the job.
+
+### `--discover orphans`
+
+Files under `<wiki-root>/raw/` that no page cites in its `sources:` frontmatter. This is the direct answer to "I dropped a bunch of files in `raw/`, ingest them all".
+
+```
+wiki-ingest --discover orphans                       # interactive: shows batch, asks to confirm
+wiki-ingest --discover orphans --discover-dry-run    # prints the batch JSON and exits
+```
+
+### `--discover stubs [--older-than-days N]`
+
+Pages whose frontmatter has `status: draft`. Use this to refresh stub pages after their source documents changed. The re-ingest branch of Step 1 handles the overwrite; `entries_count` stays correct because re-ingests don't increment it.
+
+```
+wiki-ingest --discover stubs                            # every draft
+wiki-ingest --discover stubs --older-than-days 180      # only stale drafts
+```
+
+### `--discover glob:<pattern>[:<root>]`
+
+Any files matching a filesystem glob. This is the mode for cross-plugin monorepo rebuilds — e.g., "ingest every SKILL.md in insight-wave that isn't in the wiki yet". The pattern is resolved relative to the wiki root unless an absolute path or an explicit `:<root>` suffix is given.
+
+```
+# Every SKILL.md in every sibling cogni-* plugin, skipping ones already in the wiki,
+# with titles that match the existing slug convention:
+wiki-ingest --discover 'glob:../cogni-*/skills/**/SKILL.md' \
+            --title-template 'skill-{parent3}-{parent}' \
+            --exclude-ingested
+```
+
+### Shared flags (all discovery modes)
+
+| Flag | Purpose |
+|------|---------|
+| `--discover-dry-run` | Print the resolved batch as JSON and exit. Review, then re-run without `--discover-dry-run`, or pipe the output into `--batch-file` |
+| `--exclude-ingested` | Drop any source whose derived slug already exists as a page. Key dedupe — makes the command idempotent: rerun it until `count == 0` to be sure nothing new slipped in |
+| `--title-template T` | Format string for per-entry titles when the wiki's slug convention isn't `{filename}`. Placeholders: `{stem}`, `{parent}`, `{parent2}`, `{parent3}`, `{parts[-N]}`. Example: for the insight-wave convention `skill-{plugin}-{skill}`, pass `--title-template 'skill-{parent3}-{parent}'` |
+| `--older-than-days N` | `--discover stubs` only: restrict to drafts updated more than N days ago |
+| `--type`, `--tags` | Apply as defaults to every discovered entry |
+| `--limit N` | Cap the resolved batch at N entries; useful for incremental runs |
+
+### Why discovery instead of hand-crafted JSON
+
+Hand-typing a 163-entry JSON list is neither respectful of the user's time nor safe. Silent mistakes — a dropped entry, a wrong path, a duplicate — only surface mid-ingest or not at all. The discovery modes collapse the list-building task into one deterministic command, and `--discover-dry-run` preserves the "eyeball before write" discipline for anyone who wants it. Direct `--batch-file` remains available for custom selections, but it should be the exception, not the default.
+
 ## Input schema
 
-`--batch-file` accepts a path to a UTF-8 JSON file. Top-level shape:
+Whether produced by `batch_builder.py` (the script behind `--discover`) or hand-crafted by the user, the payload is the same JSON:
 
 ```json
 {
@@ -66,7 +121,7 @@ If any per-source step (1–8) fails — script non-zero exit, malformed JSON, m
 
 The wiki is never left half-written because every per-source step already writes atomically (`wiki/pages/{slug}.md` is one write; `wiki_index_update.py` uses `tempfile + os.replace`; `backlink_audit.py --apply-plan` writes each target atomically; `wiki/log.md` append is one append; `.cogni-wiki/config.json` update is one write). A mid-batch crash leaves the wiki consistent for every source that had completed before the failure.
 
-**To resume** after a failure: re-invoke with a new `--batch-file` containing only the failed source plus the ones that were skipped. The completed sources are already in the wiki and will naturally re-route through the `mode: re-ingest` branch if you re-submit them (harmless — they update in place).
+**To resume** after a failure: re-run the same `--discover` command with `--exclude-ingested` and the script will drop every source that already has a page (every completed entry from the previous run). Or, if you used `--batch-file`, re-invoke with a trimmed batch containing only the failed source plus the ones that were skipped. The completed sources are already in the wiki and will naturally re-route through the `mode: re-ingest` branch if you re-submit them (harmless — they update in place).
 
 Continue-on-error semantics (`--on-error continue`) are a deliberate Phase 2 follow-up: useful for the 164-page pilot rebuild once the fail-fast path proves stable.
 
@@ -94,9 +149,29 @@ Batch halted at source 2/3
 entries_count: 42 → 42 (no fresh source completed)
 ```
 
-## Worked example: 3-source batch
+## Worked example: discovering the Phase 2 rebuild
 
-Say the user has seeded `raw/` with three new papers and wants them ingested in one shot. They write `batch.json`:
+The user is doing the Phase 2 pilot rebuild and wants every SKILL.md across the sibling plugins in the monorepo into the wiki, minus the ones already there. From the wiki root:
+
+```
+wiki-ingest --discover 'glob:../cogni-*/skills/**/SKILL.md' \
+            --title-template 'skill-{parent3}-{parent}' \
+            --exclude-ingested \
+            --discover-dry-run > /tmp/phase2-batch.json
+```
+
+Execution:
+
+1. `batch_builder.py` walks the matching files, renders each title per the template (so `../cogni-claims/skills/claims/SKILL.md` becomes `skill-cogni-claims-claims`), and drops any whose slug already has a page.
+2. The dry-run prints the `{"sources": [...]}` JSON on stdout. The user reviews it — e.g., spots one spurious `skill-snapshot-*` entry from a workspace directory and removes it by hand.
+3. The user re-runs without `--discover-dry-run` (or equivalently, `wiki-ingest --batch-file /tmp/phase2-batch.json` after the manual trim).
+4. Steps 1–8 loop over every entry; Step 9 reports the per-slug mode and backlink counts.
+
+Contrast with the old path: the user (or Claude-on-behalf-of-the-user) hand-typed 160+ JSON entries, hoping no skill was missed or duplicated. Discovery makes the list-build step deterministic and auditable.
+
+## Advanced: hand-crafted batch files
+
+Some batches can't be expressed as a discovery mode — e.g., three specific papers the user drops into `raw/` at the same time with different tag sets, or a curated selection across unrelated directories. For those, write the JSON by hand and pass it with `--batch-file`:
 
 ```json
 {
@@ -108,16 +183,11 @@ Say the user has seeded `raw/` with three new papers and wants them ingested in 
 }
 ```
 
-They invoke `wiki-ingest --batch-file batch.json`. Execution:
-
-1. **Step 0** — parse `batch.json`, validate the schema, confirm all three `source` paths exist. Load the skill instructions and references once.
-2. **Per-source loop** — Steps 1–8 run per entry. The first source detects `constitutional-ai` already exists at the target slug and enters `mode: re-ingest` (emitting the verbatim re-ingest warning and leaving `entries_count` untouched for that entry). The other two are fresh.
-3. **Step 9** — aggregate. Report 3/3 sources, the per-entry mode and backlink count, and the `entries_count` delta.
-
-The skill+references loaded once (not three times); each page still went through Step 3's takeaway synthesis, Step 5's atomic index update, and Step 6's backlink audit — identical per-page behaviour to single-source mode.
+`wiki-ingest --batch-file batch.json` runs the same pipeline the discovery modes feed into — one instruction load, N per-source loops, one aggregated Step 9 report. Same schema, same atomicity, same fail-fast rules.
 
 ## Related
 
 - `./ingest-workflow.md` — the single-source worked example this mode layers above.
 - `./page-frontmatter.md` — YAML schema; unchanged by batch mode.
+- `../scripts/batch_builder.py` — the discovery helper behind `--discover`; usable standalone to produce a batch JSON for review.
 - `../scripts/wiki_index_update.py` and `../scripts/backlink_audit.py` — already atomic and idempotent, so calling them in a loop is safe.

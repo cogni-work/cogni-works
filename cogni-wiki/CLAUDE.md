@@ -13,10 +13,12 @@ skills/                         7 wiki skills
   wiki-ingest/                    Add sources → summary page → backlink audit → log
     scripts/
       backlink_audit.py           Scans pages/, proposes bidirectional [[links]]
+      wiki_index_update.py        Deterministic index.md insert/update (atomic)
+      batch_builder.py            Enumerates candidates for --discover; emits batch JSON
     references/
       page-frontmatter.md         YAML schema (id, title, tags, type, sources, ...)
       ingest-workflow.md          Step-by-step ingest behavior
-      batch-mode.md               --batch-file input schema, error policy, worked example
+      batch-mode.md               --batch-file + --discover schema, error policy, examples
   wiki-query/                     Ask questions; answer from wiki, never from memory
     references/
       query-patterns.md           Read-before-answer, citation discipline
@@ -47,7 +49,7 @@ references/
 | Agents | 0 | — (skills are self-contained in MVP) |
 | Commands | 0 | — (skills serve as slash commands per plugin-dev guidance) |
 | Hooks | 0 | — (all bookkeeping lives inside skills) |
-| Scripts | 4 | backlink_audit.py, lint_wiki.py, wiki_status.sh, render_dashboard.py |
+| Scripts | 6 | backlink_audit.py, wiki_index_update.py, batch_builder.py, lint_wiki.py, wiki_status.sh, render_dashboard.py |
 
 ## Wiki Data Layout (outside the plugin)
 

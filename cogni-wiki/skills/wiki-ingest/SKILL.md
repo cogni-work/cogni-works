@@ -1,6 +1,6 @@
 ---
 name: wiki-ingest
-description: "Ingest a source (file, URL, paste, paper, article) into a Karpathy-style wiki — writes a summary page with YAML frontmatter, updates wiki/index.md, appends to wiki/log.md, and runs a backlink audit. Trigger when the user says 'ingest this', 'add this to my wiki', 'summarise this into the wiki', 'wiki ingest', drops a file in raw/ and asks what to do with it, or asks to batch ingest multiple sources ('ingest these papers', 'batch ingest raw/', 'ingest everything in raw/')."
+description: "Ingest a source (file, URL, paste, paper, article) into a Karpathy-style wiki — writes a summary page with YAML frontmatter, updates wiki/index.md, appends to wiki/log.md, and runs a backlink audit. Also handles bulk ingests: point it at a folder, a glob, or the wiki's own orphan/stub backlog and it enumerates sources itself instead of asking the user for a hand-crafted batch file. Trigger when the user says 'ingest this', 'add this to my wiki', 'summarise this into the wiki', 'wiki ingest', drops a file in raw/ and asks what to do with it, OR when the user asks to bulk/batch ingest ('ingest all the SKILL.md files', 'batch ingest the monorepo', 'ingest everything in raw/', 'rebuild the wiki from the skills', 'ingest all orphan raws', 'refresh the stub pages')."
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep, AskUserQuestion
 ---
 
@@ -24,30 +24,53 @@ Read `${CLAUDE_PLUGIN_ROOT}/references/karpathy-pattern.md` once at the start of
 
 ## Parameters
 
-Exactly one of `--source` or `--batch-file` must be provided.
+Exactly one of `--source`, `--batch-file`, or `--discover` must be provided.
 
 | Parameter | Required | Description |
 |-----------|----------|-------------|
-| `--source` | Yes (single-source mode) | Path to a file in `raw/`, a URL, or the literal string `--stdin` when the user pasted content. Mutually exclusive with `--batch-file` |
-| `--batch-file` | Yes (batch mode) | Path to a JSON file listing multiple sources to ingest in one dispatch. See `${CLAUDE_PLUGIN_ROOT}/skills/wiki-ingest/references/batch-mode.md` for schema. Mutually exclusive with `--source` |
-| `--title` | No | Override the page title; otherwise derive from the source (first heading, URL title, filename). Single-source mode only — in batch mode, titles are per-entry in the JSON |
-| `--type` | No | Page type: `concept | entity | summary | decision | learning | note`. Defaults to `summary` for full-source ingests, `note` for short pastes. Single-source mode only |
-| `--tags` | No | Comma-separated tags. Single-source mode only |
+| `--source` | Yes (single-source mode) | Path to a file in `raw/`, a URL, or the literal string `--stdin` when the user pasted content. Mutually exclusive with `--batch-file` and `--discover` |
+| `--batch-file` | Yes (batch mode) | Path to a JSON file listing multiple sources to ingest in one dispatch. See `${CLAUDE_PLUGIN_ROOT}/skills/wiki-ingest/references/batch-mode.md` for schema. Mutually exclusive with `--source` and `--discover` |
+| `--discover` | Yes (discovery mode) | Produce the batch from the filesystem instead of a hand-written JSON file. Accepts `orphans` (raw/ files not yet cited by any page), `stubs` (pages with `status: draft`), or `glob:<pattern>` (any files matching the pattern). See `${CLAUDE_PLUGIN_ROOT}/skills/wiki-ingest/references/batch-mode.md` §"Discovery" for the full grammar. Mutually exclusive with `--source` and `--batch-file` |
+| `--discover-dry-run` | No (discovery mode) | Print the resolved batch JSON and exit without ingesting. Use this to review the batch before committing to the writes. |
+| `--title-template` | No (discovery mode) | Format string for per-entry titles so the discovered batch matches the wiki's existing slug convention (e.g., `skill-{parent3}-{parent}` turns `../cogni-claims/skills/claims/SKILL.md` into `skill-cogni-claims-claims`). Passed through to `batch_builder.py`; see its `--title-template` help for placeholders. Required with `--discover glob:` whenever the wiki uses anything other than plain filename slugs |
+| `--older-than-days` | No (discovery mode) | For `--discover stubs`: restrict to drafts whose `updated:` date is older than N days |
+| `--exclude-ingested` | No (discovery mode) | Drop any discovered source whose derived slug already exists as a wiki page. Use this to run `--discover` repeatedly and only ever ingest the deltas. |
+| `--title` | No | Override the page title; otherwise derive from the source (first heading, URL title, filename). Single-source mode only — in batch/discovery mode, titles are per-entry |
+| `--type` | No | Page type: `concept | entity | summary | decision | learning | note`. Defaults to `summary` for full-source ingests, `note` for short pastes. In discovery mode, applied as a default to every discovered entry |
+| `--tags` | No | Comma-separated tags. In discovery mode, applied as a default to every discovered entry |
 
 ## Workflow
 
-### 0. Dispatch: single-source vs batch
+### 0. Dispatch: single-source vs batch vs discovery
 
-If `--batch-file` is present:
+The three input modes are mutually exclusive. Pick the one that matches the caller's inputs and follow the corresponding rule; everything from Step 1 onwards is identical across modes.
+
+**If `--discover` is present** (discovery mode):
+
+Discovery means "build the batch from the filesystem instead of asking the user to type it out". It exists because on a bulk rebuild — dozens of SKILL.md files across a monorepo, a folder of newly-dropped PDFs, a backlog of stub drafts — hand-crafting a JSON listing every entry is neither respectful of the user's time nor safe (typos silently drop sources). The skill should do the walk itself, let the user review, and then ingest.
+
+1. Invoke `${CLAUDE_PLUGIN_ROOT}/skills/wiki-ingest/scripts/batch_builder.py` with the flags parsed from `--discover`, plus any of `--title-template`, `--older-than-days`, `--exclude-ingested`, `--type`, `--tags`, `--limit` that the user passed. The `--discover` argument maps as follows:
+   - `--discover orphans` → `batch_builder.py --orphans`
+   - `--discover stubs` → `batch_builder.py --stubs`
+   - `--discover glob:<pattern>` → `batch_builder.py --glob '<pattern>'`
+   - `--discover glob:<pattern>:<root>` → `batch_builder.py --glob '<pattern>' --root <root>` (the second colon-separated field is optional and overrides the default walk base).
+2. Parse the script's JSON. On `success: false`, surface the error verbatim and stop.
+3. **Present the resolved batch to the user before any write.** Print `data.count`, `data.skipped_existing` (when `--exclude-ingested` is set), and the first 10 `data.sources[]` entries. If `data.count == 0`, report "nothing to ingest" and stop — this is a normal outcome, not an error.
+4. If `--discover-dry-run` is set, emit the full JSON on stdout and stop. No writes. This is the review hand-off: the user can redirect to a file, edit it, and pass it back as `--batch-file` later.
+5. Otherwise, confirm with the user ("Ingest these N sources?") unless they passed a phrasing that implied "just do it" (e.g., "ingest all of them, no need to confirm"). On confirmation, feed `data.sources[]` into the batch-mode pipeline at the same entry point `--batch-file` uses. The rest of this step 0 (fail-fast, atomic per-source writes, aggregated Step 9 report) is identical.
+
+Slug collisions in discovery mode are already handled by Step 1's `mode: fresh | re-ingest` detection — `--exclude-ingested` is an optimisation that skips known-existing slugs at discovery time so the user reviews a smaller, more actionable list. Both layers are safe; the re-ingest branch is the authoritative fallback.
+
+**If `--batch-file` is present** (batch mode):
 
 - Validate the JSON against the schema in `${CLAUDE_PLUGIN_ROOT}/skills/wiki-ingest/references/batch-mode.md` and abort before any write on schema, missing-source, or mutual-exclusion violations (see `${CLAUDE_PLUGIN_ROOT}/skills/wiki-ingest/references/batch-mode.md` §"Input schema" and §"Error policy").
 - Otherwise, run Steps 1–8 as a loop over `sources[]`. Each entry flows through Step 1's `mode: fresh | re-ingest` detection independently. Detect mode per entry; do not treat the batch as a mode-wide toggle.
 - Fail-fast policy: if any per-source step errors, halt the loop and report what completed, what failed, and what was skipped in Step 9. The wiki stays consistent because every per-source step already writes atomically; see `${CLAUDE_PLUGIN_ROOT}/skills/wiki-ingest/references/batch-mode.md` §"Error policy" for the details and resume procedure.
 - In Step 9, emit one aggregated report instead of a per-source report.
 
-If `--batch-file` is absent, run Steps 1–9 on the single `--source` as before. This is the existing path; nothing about it changes.
+**If neither `--batch-file` nor `--discover` is present**, run Steps 1–9 on the single `--source`. This is the existing path; nothing about it changes.
 
-In both cases, the skill instructions and shared references load exactly once per dispatch — one context load, N sources, materially fewer tokens and lower latency than N single-source dispatches.
+In all three cases, the skill instructions and shared references load exactly once per dispatch — one context load, N sources, materially fewer tokens and lower latency than N single-source dispatches.
 
 ### 1. Locate the wiki and detect ingest mode
 
@@ -215,3 +238,4 @@ Never rewrite existing log lines.
 - `${CLAUDE_PLUGIN_ROOT}/skills/wiki-ingest/references/batch-mode.md` — `--batch-file` input schema, per-source mode rules, error policy, and worked example
 - `${CLAUDE_PLUGIN_ROOT}/skills/wiki-ingest/scripts/backlink_audit.py` — candidate backlink finder
 - `${CLAUDE_PLUGIN_ROOT}/skills/wiki-ingest/scripts/wiki_index_update.py` — deterministic `wiki/index.md` insert/update helper
+- `${CLAUDE_PLUGIN_ROOT}/skills/wiki-ingest/scripts/batch_builder.py` — discovery helper; enumerates candidates for `--discover` and emits the batch-mode payload on stdout

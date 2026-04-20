@@ -80,10 +80,12 @@ _Description_: {description}
 Apply the first rule that matches:
 
 1. **`entries_count == 0`** → "Drop a source in `raw/` and run `/cogni-wiki:wiki-ingest`."
-2. **`orphan_raw_count > 0`** → "You have N raw sources that aren't yet in the wiki. Run `/cogni-wiki:wiki-ingest` on them."
+2. **`orphan_raw_count > 0`** → "You have {N} raw sources that aren't yet in the wiki. Run `/cogni-wiki:wiki-ingest --discover orphans --discover-dry-run` to review them, then drop `--discover-dry-run` to ingest. No need to hand-craft a batch file — the skill enumerates the orphans for you."
 3. **`days_since_lint == null` OR `days_since_lint > 14`** → "It's been {N} days (or never) since the last lint. Run `/cogni-wiki:wiki-lint`."
 4. **`ingest_count_30d == 0 AND query_count_30d == 0 AND update_count_30d == 0`** → "The wiki hasn't been touched in 30 days. Either ingest something new or run `/cogni-wiki:wiki-query` to reactivate it."
 5. **Else** → "The wiki looks healthy. Continue with whatever you were doing, or run `/cogni-wiki:wiki-dashboard` for a visual overview."
+
+Rule 2's concrete `--discover` command is deliberate: the older prose-only recommendation ("run wiki-ingest on them") left Claude (and by extension the user) to figure out how to enumerate the orphans, which in practice meant asking the user to type them out. Emitting the exact command closes that loop — the skill knows it has the `--discover orphans` mode, so `wiki-resume` should hand that over directly.
 
 ### 5. Do not write anything
 

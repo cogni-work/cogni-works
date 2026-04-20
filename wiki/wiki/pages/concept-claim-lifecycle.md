@@ -4,7 +4,7 @@ title: Claim lifecycle (unverified → verified | deviated → resolved)
 type: concept
 tags: [cogni-claims, claims, lifecycle, verification]
 created: 2026-04-17
-updated: 2026-04-18
+updated: 2026-04-20
 sources:
   - https://github.com/cogni-work/insight-wave/blob/main/docs/architecture/er-diagram.md
 status: stable
@@ -38,3 +38,5 @@ The deviated state matters because not every deviation warrants automatic correc
 Claim records use UUID-v4 slugs (`claim-550e8400-...`) — see [[concept-slug-based-lookups]]. Claims have no natural name, so their identifier is their identity.
 
 **Source**: [docs/architecture/er-diagram.md on GitHub](https://github.com/cogni-work/insight-wave/blob/main/docs/architecture/er-diagram.md)
+
+The record types and field definitions that compose each state are specified in [[skill-cogni-claims-claim-entity]].

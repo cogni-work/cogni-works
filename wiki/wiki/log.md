@@ -58,3 +58,6 @@ Append-only record of every wiki operation. Never rewritten.
 ## [2026-04-17] lint | phase-4+5 sweep — 0 errors, 172 orphan-page warnings (expected for thin entity-leaf pages)
 ## [2026-04-18] re-ingest | agent-cogni-claims-claim-verifier — cogni-claims:claim-verifier (agent) [pilot via real wiki-ingest, replaces script-generated stub; 4 backlinks added]
 ## [2026-04-18] re-ingest | skill-cogni-portfolio-propositions — cogni-portfolio:propositions (skill) [pilot via real wiki-ingest, replaces script-generated stub; 3 backlinks added across plugin-cogni-portfolio, agent-cogni-portfolio-proposition-generator, agent-cogni-portfolio-proposition-quality-assessor]
+## [2026-04-20] lint | 0 errors, 166 mechanical warnings + 2 semantic contradictions (plugin-count drift, stale cogni-docs reference)
+## [2026-04-20] re-ingest | skill-cogni-claims-claim-entity — cogni-claims:claim-entity (skill) [replaces script-generated stub; 7 backlinks added]
+## [2026-04-20] re-ingest | skill-cogni-claims-claims — cogni-claims:claims (skill) [replaces script-generated stub; 8 backlinks added]

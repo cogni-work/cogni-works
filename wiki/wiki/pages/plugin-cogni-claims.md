@@ -4,7 +4,7 @@ title: "cogni-claims (plugin)"
 type: entity
 tags: [cogni-claims, plugin, claims, verification, fact-checking]
 created: 2026-04-17
-updated: 2026-04-18
+updated: 2026-04-20
 sources:
   - https://github.com/cogni-work/insight-wave/blob/main/cogni-claims/README.md
   - https://github.com/cogni-work/insight-wave/blob/main/docs/plugin-guide/cogni-claims.md
@@ -40,3 +40,7 @@ Upstream submitters: cogni-research (after report generation), cogni-trends (aft
 Preview. Core skills are stable; the cobrowse mechanism may evolve. Known issue: Chrome native messaging host conflict between Claude Desktop and Claude Code — see the docs/known-issues.md registry.
 
 **Source**: [cogni-claims README](https://github.com/cogni-work/insight-wave/blob/main/cogni-claims/README.md) · [plugin guide](https://github.com/cogni-work/insight-wave/blob/main/docs/plugin-guide/cogni-claims.md)
+
+The shared data contract for all claim operations lives in [[skill-cogni-claims-claim-entity]] — any plugin submitting or reading claims conforms to it.
+
+The user-facing orchestrator for all six modes (submit/verify/dashboard/inspect/resolve/cobrowse) is [[skill-cogni-claims-claims]].

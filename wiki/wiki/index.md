@@ -70,8 +70,8 @@ One page per skill across all 14 plugins. Grouped by plugin, alphabetical within
 
 #### cogni-claims
 
-- [[skill-cogni-claims-claim-entity]] — Cross-plugin data model for claim verification — defines ClaimRecord, DeviationRecord, and ResolutionRecord schemas, status transitions, deviation types, severity levels, and workspace layout.
-- [[skill-cogni-claims-claims]] — Manage claim verification lifecycle — submit, verify, review dashboard, inspect, resolve, and cobrowse claims.
+- [[skill-cogni-claims-claim-entity]] — Cross-plugin data contract inside cogni-claims — defines ClaimRecord/DeviationRecord/ResolutionRecord schemas, 5 deviation types, 4 severity levels, 5 resolution actions, and the workspace layout.
+- [[skill-cogni-claims-claims]] — Claim-verification orchestrator inside cogni-claims — six modes (submit, verify, dashboard, inspect, resolve, cobrowse), WebFetch for automated verification, claude-in-chrome for interactive recovery.
 
 #### cogni-consulting
 
@@ -315,3 +315,7 @@ One page per agent role across all 14 plugins. Grouped by plugin, alphabetical w
 - [[agent-cogni-website-hero-renderer]] — Render the homepage hero section using Pencil MCP for AI-generated imagery.
 - [[agent-cogni-website-page-generator]] — Generate a single HTML page from source content and a page template specification.
 - [[agent-cogni-website-site-assembler]] — Generate shared CSS stylesheet, navigation partials, and sitemap.
+
+### Maintenance
+
+- [[lint-2026-04-20]] — Lint report: 0 errors, 168 warnings (160 orphan-pattern, 6 tag-typo heuristics, 2 semantic contradictions)

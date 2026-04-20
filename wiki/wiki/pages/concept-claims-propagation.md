@@ -4,7 +4,7 @@ title: Claims propagation (auto-log, verify, cascade)
 type: concept
 tags: [cogni-claims, claims, propagation, source-lineage, cogni-research, cogni-portfolio, cogni-trends]
 created: 2026-04-17
-updated: 2026-04-18
+updated: 2026-04-20
 sources:
   - https://github.com/cogni-work/insight-wave/blob/main/CLAUDE.md
   - https://github.com/cogni-work/insight-wave/blob/main/docs/architecture/er-diagram.md
@@ -35,3 +35,7 @@ cogni-claims owns verification logic but never generates claims itself — that 
 cogni-claims uses UUID-v4 slugs (`claim-550e8400-...`) rather than name-derived slugs because claims have no natural name — their identifier is their identity. See [[concept-slug-based-lookups]] for the broader convention.
 
 **Source**: [insight-wave/CLAUDE.md on GitHub](https://github.com/cogni-work/insight-wave/blob/main/CLAUDE.md) (see also [er-diagram.md](https://github.com/cogni-work/insight-wave/blob/main/docs/architecture/er-diagram.md))
+
+The `entity_ref` and `propagated_at` fields that make cascade propagation work are defined in [[skill-cogni-claims-claim-entity]].
+
+The operational entry point for the propagation cycle is [[skill-cogni-claims-claims]].

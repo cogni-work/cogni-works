@@ -4,7 +4,7 @@ title: "cogni-research:verify-report"
 type: entity
 tags: [cogni-research, research, multi-agent, skill, verify-report]
 created: 2026-04-17
-updated: 2026-04-17
+updated: 2026-04-20
 sources:
   - https://github.com/cogni-work/insight-wave/blob/main/cogni-research/skills/verify-report/SKILL.md
 status: stable
@@ -17,3 +17,7 @@ Verify claims in a research report against their cited sources using cogni-claim
 
 **Source**: `cogni-research:verify-report`
 ([SKILL.md on GitHub](https://github.com/cogni-work/insight-wave/blob/main/cogni-research/skills/verify-report/SKILL.md))
+
+Extracted claims are shaped to the cross-plugin contract in [[skill-cogni-claims-claim-entity]] before submission.
+
+Verified claims are submitted via [[skill-cogni-claims-claims]] in submit mode and verified via verify mode.

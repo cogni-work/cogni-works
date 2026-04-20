@@ -4,7 +4,7 @@ title: "cogni-trends:trend-report"
 type: entity
 tags: [cogni-trends, trends, tips, skill, trend-report]
 created: 2026-04-17
-updated: 2026-04-17
+updated: 2026-04-20
 sources:
   - https://github.com/cogni-work/insight-wave/blob/main/cogni-trends/skills/trend-report/SKILL.md
 status: stable
@@ -17,3 +17,5 @@ Generate a strategic TIPS trend report organized around investment themes (Handl
 
 **Source**: `cogni-trends:trend-report`
 ([SKILL.md on GitHub](https://github.com/cogni-work/insight-wave/blob/main/cogni-trends/skills/trend-report/SKILL.md))
+
+Post-generation claim verification is handed to [[skill-cogni-claims-claims]] in submit mode.

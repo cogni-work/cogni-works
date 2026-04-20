@@ -4,7 +4,7 @@ title: "cogni-consulting:consulting-deliver"
 type: entity
 tags: [cogni-consulting, consulting, double-diamond, skill, consulting-deliver]
 created: 2026-04-17
-updated: 2026-04-17
+updated: 2026-04-20
 sources:
   - https://github.com/cogni-work/insight-wave/blob/main/cogni-consulting/skills/consulting-deliver/SKILL.md
 status: stable
@@ -17,3 +17,5 @@ Execute the Deliver phase of a Double Diamond engagement — converge on validat
 
 **Source**: `cogni-consulting:consulting-deliver`
 ([SKILL.md on GitHub](https://github.com/cogni-work/insight-wave/blob/main/cogni-consulting/skills/consulting-deliver/SKILL.md))
+
+The final verification pass before deliverables is driven by [[skill-cogni-claims-claims]].

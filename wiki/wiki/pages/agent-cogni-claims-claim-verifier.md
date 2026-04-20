@@ -4,7 +4,7 @@ title: "cogni-claims:claim-verifier (agent)"
 type: entity
 tags: [cogni-claims, claims, agent, sonnet, web-fetch]
 created: 2026-04-17
-updated: 2026-04-18
+updated: 2026-04-20
 sources:
   - https://github.com/cogni-work/insight-wave/blob/main/cogni-claims/agents/claim-verifier.md
 status: stable
@@ -65,3 +65,7 @@ This agent is the verifier in the larger [[concept-claims-propagation]] flow: up
 ## Sources
 
 - [`cogni-claims/agents/claim-verifier.md`](https://github.com/cogni-work/insight-wave/blob/main/cogni-claims/agents/claim-verifier.md) — agent definition (frontmatter + system prompt)
+
+The verifier emits `DeviationRecord` values conforming to the schema in [[skill-cogni-claims-claim-entity]] — including the five deviation types and four severity levels.
+
+The verifier is dispatched in parallel (one per unique source URL) by [[skill-cogni-claims-claims]] in verify mode.

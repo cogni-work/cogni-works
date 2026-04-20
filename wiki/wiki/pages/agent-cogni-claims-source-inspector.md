@@ -4,7 +4,7 @@ title: "cogni-claims:source-inspector (agent)"
 type: entity
 tags: [cogni-claims, claims, agent, sonnet]
 created: 2026-04-17
-updated: 2026-04-18
+updated: 2026-04-20
 sources:
   - https://github.com/cogni-work/insight-wave/blob/main/cogni-claims/agents/source-inspector.md
 status: stable
@@ -17,3 +17,7 @@ Fetch a source URL via claude-in-chrome, locate the relevant passage, and presen
 
 **Source**: agent definition
 ([source-inspector.md on GitHub](https://github.com/cogni-work/insight-wave/blob/main/cogni-claims/agents/source-inspector.md))
+
+The inspector surfaces evidence for claims already shaped by [[skill-cogni-claims-claim-entity]].
+
+The inspector is launched by [[skill-cogni-claims-claims]] in inspect mode (automatically) and resolve mode (when helpful).

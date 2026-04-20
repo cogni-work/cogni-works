@@ -38,12 +38,25 @@ Exactly one of `--source`, `--batch-file`, or `--discover` must be provided.
 | `--title` | No | Override the page title; otherwise derive from the source (first heading, URL title, filename). Single-source mode only — in batch/discovery mode, titles are per-entry |
 | `--type` | No | Page type: `concept | entity | summary | decision | learning | note`. Defaults to `summary` for full-source ingests, `note` for short pastes. In discovery mode, applied as a default to every discovered entry |
 | `--tags` | No | Comma-separated tags. In discovery mode, applied as a default to every discovered entry |
+| `--auto-backlinks <K>` | No | Skip Step 6 hand-curation: auto-apply the top-K `confidence != low` candidates from `backlink_audit.py`. Mutually exclusive with `--review`. Default for batch/discover mode is `--auto-backlinks 5`; default for single-source mode is hand-curation. Pass explicitly (e.g. `--auto-backlinks 3` or `--auto-backlinks 8`) to tune the cap. |
+| `--review` | No | Force Step 6 hand-curation, even in batch/discover mode. Mutually exclusive with `--auto-backlinks`. Default (and no-op) in single-source mode; the opt-out against the new batch/discover default. |
 
 ## Workflow
 
 ### 0. Dispatch: single-source vs batch vs discovery
 
 The three input modes are mutually exclusive. Pick the one that matches the caller's inputs and follow the corresponding rule; everything from Step 1 onwards is identical across modes.
+
+**Backlink-curation decision (once, at dispatch).** Resolve `auto_backlinks` before any Step 1 work so every worker receives a consistent instruction:
+
+- Both `--auto-backlinks` and `--review` set → abort with `{"success": false, "error": "--auto-backlinks and --review are mutually exclusive"}` before any write.
+- `--auto-backlinks <K>` set → `auto_backlinks = K`.
+- `--review` set → `auto_backlinks = null` (force hand-curation).
+- Neither set:
+  - Single-source (`--source`): `auto_backlinks = null` (unchanged behaviour).
+  - Batch (`--batch-file`) or discovery (`--discover`): `auto_backlinks = 5` (new default — bulk rebuilds skip per-target hand-curation unless the caller opts back in with `--review`).
+
+The resolved value travels into Step 6 — either inline (single-source) or via the per-source worker prompt (batch/discover).
 
 **If `--discover` is present** (discovery mode):
 
@@ -68,7 +81,7 @@ Slug collisions in discovery mode are already handled by Step 1's `mode: fresh |
   1. Resolve `batch_size` from `<wiki-root>/.cogni-wiki/config.json` (key `batch_size`, range 2–8). Default **5** if absent. This caps the number of workers dispatched concurrently.
   2. Partition `sources[]` into order-preserving chunks of `batch_size` entries each (the last chunk may be shorter).
   3. For each chunk, **in order**:
-     - Dispatch one `Task(subagent_type: "ingest-worker", run_in_background: true, prompt: "source_entry: <json>\nwiki_root: <abs path>\n\nExecute Steps 1–8 per your agent instructions and return the JSON block.")` per source in the chunk. The per-source `source_entry` is the raw batch row (with its `source`, optional `title`, `type`, `tags`); `wiki_root` is the absolute path you resolved in Step 1.
+     - Dispatch one `Task(subagent_type: "ingest-worker", run_in_background: true, prompt: "source_entry: <json>\nwiki_root: <abs path>\nauto_backlinks: <K or null>\n\nExecute Steps 1–8 per your agent instructions and return the JSON block.")` per source in the chunk. The per-source `source_entry` is the raw batch row (with its `source`, optional `title`, `type`, `tags`); `wiki_root` is the absolute path you resolved in Step 1; `auto_backlinks` is the dispatch-time resolution described in the "Backlink-curation decision" paragraph above — `5` by default in batch mode, `null` when the user passed `--review`, or the explicit `K` from `--auto-backlinks K`.
      - Wait for every Task in the chunk to complete before dispatching the next chunk. Do not stream across chunks — bounded concurrency is the whole point.
      - For each return, extract the final fenced ` ```json ... ``` ` block. If **no** block is present, synthesize `{source, slug: null, mode: null, backlinks_added: 0, index_action: null, errors: [{step: null, message: "worker returned no JSON payload"}]}` and treat as a failure. Do not retry; surface the crash.
   4. **Fail-fast across chunks.** If any result in a completed chunk has a non-empty `errors[]`, **halt** — do not dispatch further chunks. Sources dispatched in the failing chunk that returned cleanly still count as completed (the atomic per-source scripts guarantee the wiki is consistent for them). Sources in not-yet-dispatched chunks are reported as "skipped" in Step 9.
@@ -165,13 +178,27 @@ Output extends the standard `{success, data, error}` contract with `data.action`
 
 If the script exits non-zero or returns malformed JSON, report the error to the user and stop; the page write from Step 4 stays on disk, but the index is known-good because of the atomic `tempfile + os.replace`.
 
-### 6. Run the backlink audit, then apply curated backlinks atomically
+### 6. Run the backlink audit, then apply backlinks atomically
+
+Two paths — hand-curation (`auto_backlinks = null`) or auto-mode (`auto_backlinks = K`) — resolved at Step 0 and branched here. Both paths end with the same `--apply-plan -` atomic-write call, so downstream reporting (Step 9) is uniform.
+
+#### Path A — Hand-curation (when `auto_backlinks = null`)
 
 **6a. Audit.** Invoke `${CLAUDE_PLUGIN_ROOT}/skills/wiki-ingest/scripts/backlink_audit.py --wiki-root <wiki-root> --new-page {slug}`. The script returns JSON with candidate backlinks — existing pages that mention the new page's title, tags, or key entities. If the script exits non-zero or returns malformed JSON, report the error to the user and skip the backlink step — the page itself is already written.
 
 **6b. Curate.** For each candidate, read the target page and decide whether a `[[{slug}]]` link would help the reader. Always add backlinks as natural inline references, not as dumps. For every target you pick, draft (i) a sentence containing `[[{slug}]]` and (ii) the heading line it should go under (or omit the heading to append at the end). This curation step stays human-in-the-loop — the script never auto-selects targets, to preserve the "never invent backlinks" discipline in the Failure modes section.
 
-**6c. Apply atomically.** Re-invoke the same script with `--apply-plan -` and pipe the curated plan JSON on stdin:
+#### Path B — Auto-mode (when `auto_backlinks = K` is an integer)
+
+**6a'. Compact audit.** Invoke `${CLAUDE_PLUGIN_ROOT}/skills/wiki-ingest/scripts/backlink_audit.py --wiki-root <wiki-root> --new-page {slug} --top K --min-confidence medium`. This returns the top-K candidates already pre-filtered to `confidence ∈ {medium, high}` plus summary counters (`total_candidates`, `by_confidence`) so the orchestrator can log the shape without reading a full candidate dump. If the script exits non-zero or returns malformed JSON, report the error and skip the backlink step.
+
+**6b'. Bulk-draft sentences.** For each returned candidate, read **only** the target page's title + first paragraph (do not read the full body — that defeats the point of auto-mode) and write one short sentence containing `[[{slug}]]` that would read naturally in that context. No heading is required — auto-mode always appends at the end of the target body so the draft does not collide with an existing heading the worker hasn't read.
+
+The "never invent backlinks" discipline is preserved by two mechanisms: (i) `--min-confidence medium` drops the keyword-noise bucket at audit time; (ii) K is bounded by the dispatch-time cap (default 5). The sentence itself is drafted by the worker LLM from the target's title + first paragraph, keeping it anchored to real page content rather than pattern-matched phrasing. The tradeoff is explicit: auto-mode replaces "hand-curated-with-7-ideal-backlinks" with "auto-applied-with-up-to-K-decent-backlinks" — the right call for bulk rebuilds, not for single high-effort sources.
+
+#### 6c. Apply atomically (both paths)
+
+Re-invoke the same script with `--apply-plan -` and pipe the plan JSON on stdin:
 
 ```json
 {

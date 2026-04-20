@@ -76,9 +76,28 @@ Plan schema (consumed by --apply-plan):
     today's ISO date in the same atomic write.
 
 Flags:
-    --top-n <N>           Audit mode: keep only the top N candidates.
+    --top <K>             Audit mode: compact output — keep only the top K
+                          candidates AND add summary counters (total_candidates,
+                          by_confidence). Preferred for bulk-rebuild callers
+                          that want a lean payload. Use --verbose to also
+                          include the full candidate list.
+    --verbose             Audit mode: when paired with --top, emit the full
+                          candidate list alongside the summary counters. Useful
+                          for debugging an auto-backlinks run.
+    --top-n <N>           Audit mode: legacy pre-filter — keep only the top N
+                          candidates with no summary counters. New callers
+                          should prefer --top.
     --min-confidence X    Audit mode: drop candidates below X (low|medium|high).
     --apply-plan <path>   Apply mode: path to plan JSON, or `-` for stdin.
+
+Summary counters (only emitted when --top is set):
+    total_candidates: <int>
+        Count of candidates that passed --min-confidence, *before* the --top
+        truncation. Lets the caller see how many were dropped by the cap.
+    by_confidence: {"high": <int>, "medium": <int>, "low": <int>}
+        Distribution across the full matched-candidate corpus (pre
+        --min-confidence, pre --top). Shows the shape the caller would have
+        seen at the relaxed setting.
 
 Ranking is stable: candidates are sorted by confidence bucket (high > medium >
 low), then by matched_score descending, then by page slug alphabetically. Terms
@@ -399,8 +418,17 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Find candidate backlinks for a new wiki page")
     parser.add_argument("--wiki-root", required=True, help="Absolute path to the wiki root")
     parser.add_argument("--new-page", required=True, help="Slug of the newly ingested page")
+    parser.add_argument("--top", type=int, default=0, dest="top",
+                        help="After ranking, keep only the top K candidates AND emit summary "
+                             "counters (total_candidates, by_confidence). 0 = disabled. "
+                             "Preferred for bulk-rebuild callers; use --verbose to include the "
+                             "full candidate list alongside the counters.")
+    parser.add_argument("--verbose", action="store_true",
+                        help="With --top: keep the full candidate list in output alongside the "
+                             "summary counters. No effect without --top.")
     parser.add_argument("--top-n", type=int, default=0,
-                        help="After ranking, keep only the top N candidates (0 = no limit)")
+                        help="Legacy: keep only the top N candidates, no summary counters "
+                             "(0 = no limit). New callers should prefer --top.")
     parser.add_argument("--min-confidence", choices=["low", "medium", "high"],
                         default="low",
                         help="Drop candidates below this confidence tier")
@@ -490,18 +518,45 @@ def main() -> None:
         key=lambda c: (order[c["confidence"]], -c["matched_score"], c["page"])
     )
 
-    # Apply --min-confidence filter, then --top-n cap.
+    # Snapshot the full-corpus distribution *before* --min-confidence and --top
+    # prune it. This is what we emit as `by_confidence` so the caller sees the
+    # shape they'd get at the relaxed setting.
+    by_confidence_pre_filter = {"high": 0, "medium": 0, "low": 0}
+    for c in candidates:
+        by_confidence_pre_filter[c["confidence"]] += 1
+
+    # Apply --min-confidence filter, then --top / --top-n cap.
     if args.min_confidence != "low":
         cutoff = order[args.min_confidence]
         candidates = [c for c in candidates if order[c["confidence"]] <= cutoff]
-    if args.top_n > 0:
-        candidates = candidates[: args.top_n]
+
+    # `total_candidates` reflects the post-filter, pre-truncation count — i.e.
+    # "how many would you have seen without --top/--top-n?".
+    total_after_filter = len(candidates)
+
+    # --top wins over --top-n when both are set; they're redundant by design.
+    top_k = args.top if args.top > 0 else args.top_n
+    if top_k > 0:
+        candidates_truncated = candidates[:top_k]
+    else:
+        candidates_truncated = candidates
+
+    # In compact mode (--top set, no --verbose), emit only the top-K plus
+    # summary counters. In verbose mode, emit the full post-filter list AND
+    # the summary counters. Without --top, legacy behaviour (no counters).
+    if args.top > 0 and args.verbose:
+        emitted_candidates = candidates
+    else:
+        emitted_candidates = candidates_truncated
 
     out = {
-        "candidates": candidates,
+        "candidates": emitted_candidates,
         "search_terms": sorted(term_weights.keys()),
         "total_pages_scanned": total_pages,
     }
+    if args.top > 0:
+        out["total_candidates"] = total_after_filter
+        out["by_confidence"] = by_confidence_pre_filter
 
     if args.apply_plan:
         plan = _load_apply_plan(args.apply_plan)

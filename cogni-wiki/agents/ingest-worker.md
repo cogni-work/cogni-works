@@ -22,8 +22,9 @@ Do **not** execute Step 9. The orchestrator aggregates.
 |-----------|----------|-------------|
 | `source_entry` | Yes | One JSON object matching the `batch-mode.md` schema: `{source, title?, type?, tags?}`. `source` is a path relative to the wiki root or a URL. |
 | `wiki_root` | Yes | Absolute path to the wiki root — the directory containing `.cogni-wiki/config.json`. |
+| `auto_backlinks` | Yes | Integer `K` or the literal `null`. When `K`, Step 6 runs in auto-mode (compact audit + bulk-draft sentences, no per-target hand-curation). When `null`, Step 6 runs in hand-curation mode (today's behaviour). The orchestrator resolves this once at dispatch per the SKILL.md "Backlink-curation decision" rule. |
 
-The orchestrator embeds both in your prompt. Parse them at the top of your run.
+The orchestrator embeds all three in your prompt. Parse them at the top of your run.
 
 ## Workflow
 
@@ -34,7 +35,9 @@ Follow `${CLAUDE_PLUGIN_ROOT}/skills/wiki-ingest/SKILL.md` Steps 1–8 verbatim 
 - **Step 3 — surface takeaways BEFORE writing.** Emit the synthesis in your own transcript (type, 3–7 key takeaways, existing pages this source touches, proposed type/title). **Autonomous-run semantics**: emit and proceed — do not wait. Single-source path line 107 already sanctions this in autonomous runs; batch mode is an autonomous run by construction.
 - **Step 4 — write page.** `<wiki_root>/wiki/pages/{slug}.md` with the full frontmatter schema (`${CLAUDE_PLUGIN_ROOT}/skills/wiki-ingest/references/page-frontmatter.md`).
 - **Step 5 — index update.** Invoke `${CLAUDE_PLUGIN_ROOT}/skills/wiki-ingest/scripts/wiki_index_update.py` per SKILL.md Step 5. Capture `data.action` (`inserted` | `updated`) from the JSON output for your return payload.
-- **Step 6 — backlink audit + curate + apply.** Invoke `backlink_audit.py` for candidates, **curate by judgement** (never auto-select targets — this rule survives fan-out), then re-invoke with `--apply-plan -` and a curated plan on stdin. Capture `len(data.applied)` for `backlinks_added`.
+- **Step 6 — backlink audit + (curate | bulk-draft) + apply.** Branch on `auto_backlinks`:
+  - `auto_backlinks == null` → hand-curate as today. Invoke `backlink_audit.py` for candidates, **curate by judgement**, then re-invoke with `--apply-plan -` and a curated plan on stdin. Capture `len(data.applied)` for `backlinks_added`.
+  - `auto_backlinks == K` (integer) → auto-mode. Invoke `backlink_audit.py --top K --min-confidence medium`, then for each returned candidate read only the target page's title + first paragraph and draft one short sentence containing `[[{slug}]]`. Omit `insert_after_heading` — auto-mode always appends at body end. Pipe the plan to `--apply-plan -` exactly as in hand-curation. Capture `len(data.applied)` for `backlinks_added`. The `--min-confidence medium` filter and the K cap together preserve the "never invent backlinks" discipline: you are still selecting from a pre-filtered set of real textual matches, not generating links from thin air.
 - **Step 7 — log append.** One line to `<wiki_root>/wiki/log.md` with the mode-correct verb (`ingest` for fresh, `re-ingest` for re-ingest).
 - **Step 8 — config update.** `mode: fresh` → increment `entries_count`. `mode: re-ingest` → leave untouched.
 
@@ -84,7 +87,7 @@ Load on demand, not upfront:
 
 ## Rules you must never break
 
-- **Do not auto-select backlink targets.** Step 6 curation stays human-in-the-loop in spirit — you pick by judgement. The `backlink_audit.py` script never chooses for you; it proposes.
+- **Do not auto-select backlink targets unless explicitly authorised.** When `auto_backlinks == null`, Step 6 curation stays human-in-the-loop in spirit — you pick by judgement. When `auto_backlinks == K`, the orchestrator has explicitly opted into auto-mode; you apply the compact audit's top-K candidates (pre-filtered to `confidence != low`) without per-target review. The `backlink_audit.py` script still never chooses for you — it proposes, you (or auto-mode's cap + confidence filter) pick.
 - **Do not skip Step 3.** The takeaways-before-writing discipline prevents duplicate pages. Batch mode is not permission to skip it; it's permission to not wait for confirmation.
 - **Do not summarise from memory.** Every claim on the page traces back to the source text (or the raw/-persisted fetch). If the source is silent on a topic, the page is silent on it.
 - **Do not overwrite silently.** If a page exists at `{slug}`, you must set `mode: re-ingest` and emit the re-ingest warning before any write.

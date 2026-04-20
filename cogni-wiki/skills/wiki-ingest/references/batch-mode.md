@@ -54,6 +54,35 @@ Batch mode does **not** run Steps 1–8 as an inline loop in the orchestrator co
 
 **Fan-out never runs in `--discover-dry-run`.** Workers only fire after the Step 0 confirmation gate; the dry-run prints the resolved batch JSON and exits with no writes.
 
+## Backlink curation defaults
+
+Batch and discover modes default to `--auto-backlinks 5` as of v0.0.11 (issue #83). Each worker skips per-target hand-curation and instead auto-applies the top-5 `confidence ∈ {medium, high}` candidates from `backlink_audit.py --top 5 --min-confidence medium`, with sentences drafted by the worker from each target's title + first paragraph. This default exists because Step 6 is the dominant per-source cost on bulk rebuilds (50–150 candidates per source, most low-confidence noise), and the subagent fan-out from #82 only parallelised the problem — it did not make per-source curation cheap.
+
+To opt back into hand-curation for a specific batch, pass `--review`:
+
+```
+wiki-ingest --batch-file batch.json --review
+```
+
+To tune the cap, pass `--auto-backlinks K` explicitly:
+
+```
+wiki-ingest --discover orphans --auto-backlinks 3       # tighter — 3 per source
+wiki-ingest --discover orphans --auto-backlinks 8       # looser — 8 per source
+```
+
+Single-source mode (`--source`) retains its hand-curation default; per-candidate judgement is worth the attention when you only have one page to write.
+
+### Auto-backlinks tradeoff
+
+Auto-applied backlinks are keyword-driven (tag/term overlap filtered by the IDF-weighted `confidence` score), not reader-value-driven. A human curator catches cases where a high-score candidate is actually a poor link target (e.g., two pages sharing four generic tags but orthogonal topics). For bulk rebuilds this is an acceptable degradation:
+
+- Without auto-mode at scale: "stub with 0 backlinks" (because per-source curation is too expensive to actually run).
+- With auto-mode: "synthesis with up to 5 decent backlinks".
+- *Not*: "hand-curated with 7 ideal backlinks" → "auto-curated with 5 decent backlinks". That's not the comparison — at 179-page scale, hand curation never happens.
+
+The `--min-confidence medium` filter and the K cap preserve the "never invent backlinks" discipline (`SKILL.md` §"Failure modes and rules"): you are still selecting from a pre-filtered set of real textual matches, not generating links from thin air.
+
 ## Discovery
 
 `--discover <spec>` asks the skill to enumerate the batch itself instead of the user typing it out. Three specs are supported; pick the one that matches how the user described the job.

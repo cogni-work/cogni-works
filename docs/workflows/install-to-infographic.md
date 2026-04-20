@@ -14,7 +14,7 @@ Before starting, confirm:
 
 ## Step 1: Add the Marketplace
 
-Start Claude Code first — **the commands in this guide are Claude Code slash commands, not shell commands.** Open a terminal (macOS: `Cmd+Space` → type `Terminal` → Enter; Windows: press the Windows key → type `Terminal` → Enter), type `claude`, and press Enter. Claude Code's prompt opens inside the terminal. Paste every command below into that prompt.
+Open the Claude Code desktop app. **The commands in this guide are slash commands — paste them into Claude Code's main prompt (the "Type `/` for commands" field at the bottom of the window), not into an external shell.** The desktop app also exposes a built-in Terminal pane in the right-hand panel if you ever need a shell, but nothing in this guide requires one.
 
 The insight-wave marketplace lives at [`cogni-work/insight-wave`](https://github.com/cogni-work/insight-wave). Register it:
 

@@ -1,7 +1,7 @@
 # Course 8: Research Reports
 
 **Duration**: 45 minutes | **Modules**: 5 | **Prerequisites**: Course 3
-**Plugin**: cogni-research (v0.5.1, 4 skills, 8 agents)
+**Plugin**: cogni-research (v0.7.14, 4 skills, 9 agents)
 **Audience**: Consultants generating research-backed reports and intelligence
 
 ---

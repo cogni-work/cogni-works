@@ -40,11 +40,23 @@ Pick **Marketplaces → insight-wave** and switch on the auto-update option. Cla
 /plugin marketplace update insight-wave
 ```
 
-Install the plugins this workflow needs — at minimum `cogni-workspace` and `cogni-visual`:
+Install the full insight-wave plugin set — any workflow you pick from Step 5 can then run without you coming back here. Start with `cogni-workspace` (the foundation the others depend on), then the rest:
 
 ```
 /plugin install cogni-workspace@insight-wave
+/plugin install cogni-claims@insight-wave
+/plugin install cogni-narrative@insight-wave
+/plugin install cogni-copywriting@insight-wave
+/plugin install cogni-trends@insight-wave
+/plugin install cogni-portfolio@insight-wave
 /plugin install cogni-visual@insight-wave
+/plugin install cogni-help@insight-wave
+/plugin install cogni-marketing@insight-wave
+/plugin install cogni-research@insight-wave
+/plugin install cogni-sales@insight-wave
+/plugin install cogni-website@insight-wave
+/plugin install cogni-consulting@insight-wave
+/plugin install cogni-wiki@insight-wave
 ```
 
 Or browse the **Discover** tab interactively inside `/plugin`.

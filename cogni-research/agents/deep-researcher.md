@@ -145,10 +145,12 @@ bash "${CLAUDE_PLUGIN_ROOT}/scripts/create-entity.sh" \
 
 Return compact JSON:
 ```json
-{"ok": true, "sq": "sq-lattice-crypto-a1b2c3d4", "sub_aspects": 3, "sources": 12, "findings": 8, "words": 1500, "depth_reached": 2, "follow_ups_pursued": 4, "cost_estimate": {"input_words": 20000, "output_words": 2500, "estimated_usd": 0.073}}
+{"ok": true, "sq": "sq-lattice-crypto-a1b2c3d4", "sub_aspects": 3, "sources": 12, "findings": 8, "words": 1500, "depth_reached": 2, "follow_ups_pursued": 4, "authority_domains_matched": ["fraunhofer.de", "bitkom.org"], "cost_estimate": {"input_words": 20000, "output_words": 2500, "estimated_usd": 0.073}}
 ```
 
 Include `cost_estimate` with approximate word counts for all content read (sub-question + all fetched pages across recursion levels) and produced (entities + synthesis). See `references/model-strategy.md` for the estimation formula.
+
+Include `authority_domains_matched` — the subset of `market_config.authority_sources[].domain` values that appear as the host of at least one cited source URL across all recursion levels of this sub-question. Empty list `[]` if none matched. The orchestrator takes the union across all researchers in Phase 3 and renders it in the Phase 6 "Research method" footer. Match on the host only (drop `www.`), not on the full URL.
 
 On failure:
 ```json

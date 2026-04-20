@@ -121,10 +121,12 @@ If no findings were extracted (wikis are silent on this sub-question):
 
 Return compact JSON:
 ```json
-{"ok": true, "sq": "sq-cloud-security-a1b2c3d4", "sources": 4, "findings": 6, "words": 1200, "wikis_queried": 2, "pages_read": 7, "pages_empty": 0, "cost_estimate": {"input_words": 8000, "output_words": 1200, "estimated_usd": 0.03}}
+{"ok": true, "sq": "sq-cloud-security-a1b2c3d4", "sources": 4, "findings": 6, "words": 1200, "wikis_queried": 2, "wiki_slugs": ["insight-wave", "internal-playbook"], "pages_read": 7, "pages_empty": 0, "cost_estimate": {"input_words": 8000, "output_words": 1200, "estimated_usd": 0.03}}
 ```
 
 Include `cost_estimate` with approximate word counts for all content read (sub-question + wiki indexes + wiki pages) and produced (entities + synthesis).
+
+Include `wiki_slugs` — the unique set of wiki `slug` values (from each wiki's `.cogni-wiki/config.json`) that were actually queried for this sub-question. The orchestrator takes the union across all wiki-researcher runs in Phase 3 so the Phase 6 "Research method" footer can name the wikis the report drew on ("12 wiki pages were consulted from insight-wave, internal-playbook"). Empty list `[]` if no wiki was readable for this sub-question.
 
 On failure:
 ```json

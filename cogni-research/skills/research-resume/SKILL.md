@@ -98,9 +98,11 @@ Show a concise, scannable summary. Keep the tone warm and oriented toward action
 ```
 Research Project: {topic}
 Type: {report_type} | Source: {report_source} | Tone: {tone}
-Market: {market} | Language: {output_language} | Citations: {citation_format}
+Market: {market_headline}  |  Language: {output_language} | Citations: {citation_format}
 Created: {created_at}
 ```
+
+Resolve `{market_headline}` by shelling out to `${CLAUDE_PLUGIN_ROOT}/scripts/market-summary.py {market} --format headline`. The helper returns a single line like `DACH (DE/AT/CH) — 27 authority domains (fraunhofer.de, bitkom.org, vdma.org +24 more); bilingual DE/EN search`. Substitute that into the Market field verbatim. Returning visitors who set up a project days ago should not have to remember what `dach` means — the dashboard names the region, shows the curation count, and previews the top domains. If the script fails for any reason, fall back to the bare `{market}` code so the dashboard still renders.
 
 **Phase Progress Table:**
 

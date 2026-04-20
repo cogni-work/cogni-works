@@ -228,6 +228,10 @@ plan = {
 
 If `source_mode == "hybrid"` but neither `wiki_paths` nor `document_paths` is set, `channels` collapses to `["web"]` only. Don't fail — the user asked for hybrid and should get the web leg — but flag this silent downgrade in the 1.5b trade-off lines (see below) so they can fix the config if they meant otherwise.
 
+**Channel stats for the plan echo**: when `local` is in channels, glob each `document_paths` entry with Bash (`ls`, `find`, or shell glob) and count the matching files into `plan.document_count`. When `wiki` is in channels, for each path in `wiki_paths` count the markdown pages under `wiki/pages/` (e.g., `find "$wiki_root/wiki/pages" -name '*.md' | wc -l`) and sum into `plan.wiki_page_count`. These counts feed the Market & sources block in 1.5b — they make local/wiki visible as real, measurable channels instead of abstract options. If a glob matches zero files, keep the zero and let the echo flag it ("Local: 0 documents matched your paths — add files or fix the glob") so silent empty channels don't stay silent.
+
+**Market summary for the plan echo**: shell out once to `${CLAUDE_PLUGIN_ROOT}/scripts/market-summary.py <market> --format block` and capture the output into `plan.market_block`. This produces the multi-line "Market: X — N authority domains boosted (research: A, associations: B, …)" block that 1.5b embeds under Market & sources. The script reads `references/market-sources.json` directly, so no drift is possible between what the menu promised at setup and what the plan says at dispatch.
+
 **Cost estimate** lookup: use the row from `references/model-strategy.md` ("Cost Estimation" table) that matches `report_type × source_mode`. Do not compute a new cost formula — the table is the source of truth. For the hybrid row, report the full low–high range.
 
 #### 1.5b: Print the plan
@@ -244,6 +248,11 @@ Report type: <type> → <sub_question_count> sub-questions generated
 Length: <target_words> words (<"user-set" if field was present in project-config.json, else "default for <type>">)
 Source mode: <mode> (channels: <comma-separated channels>)
 
+Market & sources:
+  <plan.market_block — multi-line output from market-summary.py --format block>
+  Local:   <plan.document_count> documents ready            (only if local in channels)
+  Wiki:    <plan.wiki_page_count> pages indexed across <len(wiki_paths)> wiki(s)   (only if wiki in channels)
+
 Per sub-question:
   • web    → <web_agent> (recursion: <on depth=N | off>)
   • wiki   → wiki-researcher       (only if wiki in channels)
@@ -256,6 +265,7 @@ Estimated cost: $<low> – $<high>  (from model-strategy.md, <type>[ (hybrid)])
 
 Trade-offs:
   • Recursion <on|off>: <one-line explanation of the choice and what flipping it would cost>
+  • Authority boost: market-curated domains get priority in query generation and source ranking — this is why a DACH report reads different from a US report on the same topic. Disable only by picking a market with no authority list (never the default).
   • <source-mode-specific note>
   • Batch size <N>: <rate-limit vs. speed note>
 ```
@@ -462,6 +472,13 @@ The source-curator produces `.metadata/curated-sources.json` with quality rankin
 
 Aggregation deduplicates sources and enforces a context word limit (25,000 words) to prevent writer overload. Without this step, deep reports with 15+ researchers can produce far more raw context than a single writer agent can meaningfully synthesize, leading to shallow treatment of all topics rather than deep treatment of each.
 
+**Accumulate research quality signals while batches return.** Alongside the per-agent `cost_estimate` accumulation, collect from each researcher JSON:
+- `authority_domains_matched` (section-researcher, deep-researcher) — take the union across all web researchers; duplicates collapse.
+- `documents_analyzed`, `documents_words`, `documents_strongly_matched` (local-researcher) — sum across local runs.
+- `wiki_pages_consulted`, `wiki_instance` (wiki-researcher) — sum pages; take the unique set of wiki_instance slugs.
+
+Stash these into an in-session `research_quality` dict. Phase 6 persists it to `execution-log.json` and feeds it to `research-quality-footer.py`. If an agent's JSON is missing a field (older agent run, degraded mode, unresolvable market), treat it as zero / empty — this accumulator must never block the pipeline on a missing count.
+
 ```bash
 python3 "${CLAUDE_PLUGIN_ROOT}/scripts/merge-context.py" \
   --project-path "${PROJECT_PATH}" --json
@@ -659,7 +676,21 @@ Once the promotion gate passes (or the user selects Option A), continue with the
 
 1. Copy final accepted draft to `output/report.md`
    - The project directory is a self-contained unit of output — report, sources, and metadata together, all Obsidian-browsable. Keep the canonical deliverable at `{project_path}/output/report.md` and do not copy or symlink it elsewhere. If the user wants a different format or location, the enrich-report phase (Phase 5.5) handles that.
-   - **Write deterministic Report-Metadaten footer.** Immediately after the copy, run `${CLAUDE_PLUGIN_ROOT}/scripts/write-report-metadata.sh --project-path {project_path} --target-file {project_path}/output/report.md`.
+   - **Aggregate research quality signals** (collected from researcher agent JSON across Phase 2 — see the agents' return contract in `agents/section-researcher.md`, `agents/local-researcher.md`, `agents/wiki-researcher.md`). Build one JSON object:
+     ```
+     {
+       "market": "<market from project-config.json>",
+       "authority_domains_cited": <union of authority_domains_matched across all section-researcher / deep-researcher results — preserves which of the market's curated domains actually made it into citations>,
+       "sub_questions": <count of sub-questions that ran>,
+       "local_documents": <sum of documents_analyzed across local-researcher results, 0 if no local channel>,
+       "local_strongly_matched": <sum of documents_strongly_matched across local-researcher results>,
+       "wiki_pages": <sum of wiki_pages_consulted across wiki-researcher results, 0 if no wiki channel>,
+       "wiki_instances": <unique wiki_instance values from wiki-researcher results>
+     }
+     ```
+     Persist this object to `.metadata/execution-log.json phases.phase_6_finalization.research_quality` so verify-report, research-resume, and downstream tools can read the same numbers.
+   - **Append "## Research method" section to `output/report.md`.** Pipe the quality JSON to `${CLAUDE_PLUGIN_ROOT}/scripts/research-quality-footer.py --mode markdown` and append the resulting markdown block to the end of `output/report.md` **before** the Report-Metadaten footer (written next step). The section makes the market curation and local/wiki coverage visible in the deliverable itself — a reader receiving only the report still sees what profile it was researched against. This is the point of the whole quality-signal pass: what the README promises, the artifact should declare. The script degrades gracefully on zero-authority-match edge cases (`_default` fallback, tiny markets, wiki-only runs with no web citations) — never silently skip this step.
+   - **Write deterministic Report-Metadaten footer.** Immediately after the Research method append, run `${CLAUDE_PLUGIN_ROOT}/scripts/write-report-metadata.sh --project-path {project_path} --target-file {project_path}/output/report.md`.
      - The script owns the `**Report-Metadaten**:` / `**Report Metadata**:` block at the tail of `output/report.md` — it replaces only that named region, never other content. Inputs: `agents/revisor.md` YAML `model:` field (source of truth for author attribution), `.metadata/execution-log.json` `phases.phase_5_review.iteration_count`, and `project-config.json` `output_language` for date formatting and DE/EN labels.
      - Fail-open: on non-zero exit or `{"success": false}` JSON (including the degenerate case where `agents/revisor.md` has no `model:` field and the script raises `ValueError`), log the error to `.metadata/execution-log.json` `phases.phase_6_finalization.metadata_write_error` and continue — the report ships without the footer rather than blocking finalization.
      - Why this step exists: replaces the hallucinated LLM-generated footer that caused issue #49 (revisor self-attributing as Haiku when the agent YAML declares Sonnet).
@@ -688,6 +719,7 @@ Once the promotion gate passes (or the user selects Option A), continue with the
    - Sources cited
    - Structural review score
    - **Estimated cost** (total USD from cost_summary)
+   - **Research quality** — pipe the same research_quality JSON (from `phases.phase_6_finalization.research_quality`) to `${CLAUDE_PLUGIN_ROOT}/scripts/research-quality-footer.py --mode echo` and print the multi-line block verbatim. This surfaces the market curation and channel coverage in the live transcript — the user sees that DACH boosted 27 domains, 14 made it into the cited sources, 8 local documents contributed, 12 wiki pages were consulted. The echo complements the markdown footer: the footer lives in the artifact, the echo lives in the session.
    - Full absolute path to `output/report.md`
    - Project folder path (for browsing sources and metadata)
 4. **Recommend next steps** (in order):

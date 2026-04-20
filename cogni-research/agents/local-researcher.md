@@ -108,10 +108,12 @@ For each document that yielded findings:
 
 Return compact JSON:
 ```json
-{"ok": true, "sq": "sq-cloud-security-a1b2c3d4", "sources": 4, "findings": 6, "words": 1200, "documents_analyzed": 4, "documents_skipped": 1, "cost_estimate": {"input_words": 15000, "output_words": 1800, "estimated_usd": 0.054}}
+{"ok": true, "sq": "sq-cloud-security-a1b2c3d4", "sources": 4, "findings": 6, "words": 1200, "documents_analyzed": 4, "documents_skipped": 1, "documents_strongly_matched": 2, "documents_words": 18400, "cost_estimate": {"input_words": 15000, "output_words": 1800, "estimated_usd": 0.054}}
 ```
 
 Include `cost_estimate` with approximate word counts for all content read (sub-question + documents) and produced (entities + synthesis). See `references/model-strategy.md` for the estimation formula.
+
+Include `documents_strongly_matched` — the count of analyzed documents that scored as highly relevant to this sub-question (contributed to findings, not just scanned and dismissed). And `documents_words` — approximate total word count across all *analyzed* documents (skip over skipped documents). The orchestrator sums these across all local-researcher runs in Phase 3 so the Phase 6 "Research method" footer can say "8 local documents were analyzed (2 matched the topic strongly)" — users see that local mode wasn't just a file pointer, it was real evidence contribution.
 
 On failure:
 ```json

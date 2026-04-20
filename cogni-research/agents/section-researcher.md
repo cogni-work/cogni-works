@@ -151,10 +151,12 @@ Discard sources scoring below 0.3. For remaining sources:
 Return compact JSON only — no markdown, no prose:
 
 ```json
-{"ok": true, "sq": "sq-post-quantum-crypto-a1b2c3d4", "sources": 6, "findings": 4, "words": 850, "cost_estimate": {"input_words": 8000, "output_words": 1200, "estimated_usd": 0.032}}
+{"ok": true, "sq": "sq-post-quantum-crypto-a1b2c3d4", "sources": 6, "findings": 4, "words": 850, "authority_domains_matched": ["fraunhofer.de", "bitkom.org"], "cost_estimate": {"input_words": 8000, "output_words": 1200, "estimated_usd": 0.032}}
 ```
 
 Include `cost_estimate` with approximate word counts for all content read (sub-question + fetched pages) and produced (entities + synthesis). See `references/model-strategy.md` for the estimation formula.
+
+Include `authority_domains_matched` — the subset of `market_config.authority_sources[].domain` values that actually appear as the host of at least one cited source URL from this sub-question. Empty list `[]` if none matched (which is fine; not every sub-question needs to hit the market's curated domains). The orchestrator takes the union across all researchers in Phase 3 and renders it in the Phase 6 "Research method" footer — this is what lets the final report name the authority domains that actually contributed, instead of just claiming generic "market-localized search". Match on the host only (drop `www.`), not on the full URL.
 
 On failure:
 ```json

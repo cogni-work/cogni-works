@@ -48,8 +48,26 @@ Never combine both modes in the same turn. Each turn is either pure text or a si
 > **Length:** brief (1.5K) | standard (3K) | deep-dive (5K) *(default for deep)* | comprehensive (8K) | whitepaper (12K) — or specify e.g. "~6500 words"
 > **Tone:** objective *(default)* | formal | analytical | persuasive | informative | explanatory | descriptive | critical | comparative | speculative | narrative | optimistic | simple | casual | executive
 > **Citations:** APA *(default)* | MLA | Chicago | Harvard | IEEE | Wikilink | Local-Wikilink
-> **Market:** dach | de | fr | it | pl | nl | es | us | uk | eu   *(required — pick one)*
-> **Sources:** web *(default)* | local (your documents) | wiki (cogni-wiki) | hybrid (web + docs + wiki)
+> **Market** *(required — curated authority sources per region)*:
+> ```
+>   dach   DACH (DE/AT/CH) — 27 authority domains (fraunhofer.de, bitkom.org, vdma.org +24); bilingual DE/EN
+>   de     Germany — 14 authority domains (fraunhofer.de, bitkom.org +11); bilingual DE/EN
+>   fr     France — 16 authority domains (inria.fr, cnrs.fr, insee.fr +13); bilingual FR/EN
+>   it     Italy — 15 authority domains (cnr.it, asi.it, istat.it +12); bilingual IT/EN
+>   pl     Poland — 14 authority domains (pan.pl, nask.pl, stat.gov.pl +11); bilingual PL/EN
+>   nl     Netherlands — 15 authority domains (tno.nl, nwo.nl, cbs.nl +12); bilingual NL/EN
+>   es     Spain — 14 authority domains (csic.es, inta.es, ine.es +11); bilingual ES/EN
+>   us     United States — 13 authority domains (nist.gov, mit.edu, bls.gov +10); English-only
+>   uk     United Kingdom — 10 authority domains (gov.uk, ukri.org, ons.gov.uk +7); English-only
+>   eu     EU composite — 10 EU-wide domains; fans out per-country (de, fr, it, pl, nl, es)
+> ```
+> (The exact list comes from `scripts/market-summary.py --format table --all` — the skill renders it fresh so the counts and top domains never drift from `references/market-sources.json`.)
+>
+> **Sources** *(how evidence is gathered)*:
+> - `web` *(default)* — search the internet with market-boosted authority domains (above)
+> - `local` — analyze your own PDF, DOCX, MD, CSV, XLSX, PPTX documents — zero web calls
+> - `wiki` — query your cogni-wiki knowledge bases — fast, pre-synthesized, cached
+> - `hybrid` — run web + local + wiki in parallel; use when you have proprietary docs AND want fresh web evidence
 >
 > **Execution defaults** (research-report will show the full plan before running; change here to pre-set):
 > - **Confirm before running:** yes *(default)* | no   — show the execution plan preview and ask before spawning researchers
@@ -126,12 +144,12 @@ Assemble the menu dynamically and render it as text output:
    - **Length** (only if target_words not detected): show the 5 named presets with their word counts and mark the default derived from the detected or selected depth: `brief (1.5K) | standard (3K) | deep-dive (5K, deep default in v0.7.7) | comprehensive (8K) | whitepaper (12K)`. Add a one-line note: "Length is optional — defaults to 3K/5K/5K/1K/1.5K for basic/detailed/deep/outline/resource. Override with a preset above or an explicit integer (e.g., `target_words: 6500`)."
    - **Tone** (only if not detected): show these options: objective *(default)* | formal | analytical | persuasive | informative | explanatory | descriptive | critical | comparative | speculative | narrative | optimistic | simple | casual | executive
    - **Citations** (only if not detected): list all 7 formats (`apa`, `mla`, `chicago`, `harvard`, `ieee`, `wikilink`, `local-wikilink`), mark `apa` as default. Keep this list in sync with `VALID_CITATION_FORMATS` in `scripts/initialize-project.sh` — if a new format is added there, add it here.
-   - **Market** (only if not detected with confidence, or ambiguous): `dach | de | fr | it | pl | nl | es | us | uk | eu`. If Step 1 flagged the market as ambiguous (tier 3), prefix this row with a one-line note: `> I couldn't tell which market you mean from the topic — please pick one.` The canonical list equals the keys of `references/market-sources.json` minus `_default` — keep this menu in sync with that file (if a new market is added there, add it here; if one is removed, remove it here).
-   - **Sources** (only if report_source not detected): show all 4 modes with one-line descriptions:
-     - `web` *(default)* = search the internet
-     - `local` = analyze your documents (PDF, DOCX, MD, CSV, ...)
-     - `wiki` = query your cogni-wiki knowledge bases
-     - `hybrid` = combine web + documents + wiki
+   - **Market** (only if not detected with confidence, or ambiguous): render the full headline table by shelling out to `${CLAUDE_PLUGIN_ROOT}/scripts/market-summary.py --format table --all` and embedding the output under a `**Market** *(required — curated authority sources per region)*:` heading. Each row shows the code, the region name, the count of curated authority domains, the top 3 example domains, and whether queries run bilingually or English-only. The table is data-derived so it never drifts from `references/market-sources.json` — if a new market is added there, the menu picks it up automatically. If Step 1 flagged the market as ambiguous (tier 3), prefix the table with the one-line note `> I couldn't tell which market you mean from the topic — please pick one.`. Surfacing the curation upfront is the point: the user should see *what* DACH actually means (Fraunhofer, BITKOM, VDMA, +24 more) before picking it, so the quality signal registers at the moment of choice rather than staying hidden in a reference file.
+   - **Sources** (only if report_source not detected): show all 4 modes with a one-line "when to pick this" description. The local/wiki options are a differentiator users routinely miss — name the *value* not just the mechanism:
+     - `web` *(default)* = search the internet with market-boosted authority domains (the table above)
+     - `local` = analyze your own PDF, DOCX, MD, CSV, XLSX, PPTX documents — zero web calls, fastest path when you already have the evidence
+     - `wiki` = query your cogni-wiki knowledge bases — pre-synthesized, cached, near-instant
+     - `hybrid` = run web + local + wiki in parallel; use when you have proprietary docs AND want fresh web evidence on top
 4. Always include one line for advanced options: "Advanced: output language, sub-question count, domain filter, researcher role, diagram generation, allow short (skip word-count expansion gates) — ask about any of these"
 5. End with: `Reply with your choices, or "go" for defaults.`
 

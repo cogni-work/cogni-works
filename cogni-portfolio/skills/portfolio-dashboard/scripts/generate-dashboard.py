@@ -481,7 +481,36 @@ def load_all_entities(project_dir):
     # Load TIPS data (portfolio-anchored STs and opportunities)
     data["tips"] = load_tips_data(project_dir, data)
 
+    # Load scan diagnostic output (scan-output.json v1.2.0+) if present.
+    # Only used to render the optional "Provider units" section — never
+    # authoritative for entity data.
+    data["scan_output"] = load_scan_output(project_dir)
+
     return data
+
+
+def load_scan_output(project_dir):
+    """Load research/.metadata/scan-output.json as diagnostic metadata.
+
+    Returns a compact dict when the file exists AND carries a non-empty
+    provider_units array (v1.2.0+). Returns None otherwise — older scan
+    outputs (v1.0.0/v1.1.0) simply lack provider_units, so the presence
+    check doubles as a version gate. Missing file is silent.
+    """
+    path = os.path.join(project_dir, "research", ".metadata", "scan-output.json")
+    raw = load_json(path)
+    if not raw:
+        return None
+    units = raw.get("provider_units")
+    if not isinstance(units, list) or not units:
+        return None
+    return {
+        "version": raw.get("version", ""),
+        "created": raw.get("created", ""),
+        "company_name": raw.get("company_name", ""),
+        "domains_analyzed": raw.get("domains_analyzed", []),
+        "provider_units": units,
+    }
 
 
 def discover_tips_project(project_dir, data):
@@ -726,6 +755,7 @@ def generate_html(data, status, project_dir, theme):
     anchored_sts = tips_data.get("anchored_sts", {})
     opportunities_data = tips_data.get("opportunities")
     has_tips = bool(anchored_sts) or bool(opportunities_data)
+    scan_output = data.get("scan_output")
     _tax = portfolio.get("taxonomy") or {}
     has_taxonomy = _tax.get("type") == "b2b-ict" and any(
         f.get("taxonomy_mapping", {}).get("category_id") for f in data["features"].values()
@@ -2139,6 +2169,7 @@ body::after {{
   <span class="nav-brand">{company_name}</span>
   <a href="#" data-section="Entity">Overview</a>
   <a href="#" data-section="Products">Products</a>
+  {'<a href="#" data-section="Provider units">Provider units</a>' if scan_output else ''}
   <a href="#" data-section="Markets">Markets</a>
   <a href="#" data-section="Matrix">Matrix</a>
   {'<a href="#" data-section="Taxonomy">Taxonomy</a>' if has_taxonomy else ''}
@@ -2257,6 +2288,82 @@ body::after {{
                 purpose_html = f'<br><span class="fpurpose" style="color: var(--text2); font-style: italic; font-size: 0.85em;">{fpurpose}</span>' if fpurpose else ''
                 html += f'      <div class="feature-item"><span class="fname">{fname}{readiness_html}{anchor_html}</span>{purpose_html}<br><span class="fdesc">{fdesc}</span></div>\n'
             html += "    </div>\n  </div>\n"
+        html += "</div>\n"
+
+    # --- Provider Units (scan diagnostic) ---
+    # Only renders when portfolio-scan has written scan-output.json v1.2.0+
+    # with at least one provider unit. Absent for non-scan portfolios.
+    if scan_output:
+        units = scan_output.get("provider_units", [])
+        created = scan_output.get("created", "")
+        created_short = created[:10] if isinstance(created, str) and len(created) >= 10 else ""
+        version = scan_output.get("version", "")
+        domains = scan_output.get("domains_analyzed", []) or []
+        included_units = [u for u in units if u.get("included")]
+        total_feature_count = sum((u.get("feature_count") or 0) for u in included_units)
+
+        html += """
+<!-- Provider Units (scan diagnostic) -->
+<div class="section reveal">
+  <div class="section-title">Provider units (scan diagnostic)</div>
+"""
+        caption = (
+            "Organizational units (subsidiaries, practice areas, brands) scanned independently by "
+            "<code>portfolio-scan</code>. Diagnostic only — authoritative feature-to-unit mapping "
+            "lives in each feature's <code>source_lineage</code>."
+        )
+        html += f'  <div style="font-size:13px;color:var(--text2);margin-bottom:12px;max-width:820px">{caption}</div>\n'
+
+        if not included_units:
+            html += (
+                '  <div style="font-size:13px;color:var(--text2);padding:16px;'
+                'border:1px dashed var(--border);border-radius:var(--radius)">'
+                'No provider units were marked included in the most recent scan.'
+                '</div>\n'
+            )
+        else:
+            html += (
+                '  <div class="cards stagger" style="grid-template-columns:repeat(auto-fill,minmax(260px,1fr))">\n'
+            )
+            for u in included_units:
+                uname = escape_html(u.get("name", ""))
+                udomain = escape_html(u.get("domain", ""))
+                utype = escape_html(u.get("type", ""))
+                ucount = u.get("feature_count")
+                ucount_display = ucount if isinstance(ucount, int) else "—"
+                type_chip = (
+                    f'<span class="badge" style="margin-top:6px">{utype}</span>' if utype else ""
+                )
+                domain_line = (
+                    f'<div class="sub"><a href="https://{udomain}" target="_blank" rel="noopener" '
+                    f'style="color:var(--text2);text-decoration:none">{udomain}</a></div>'
+                    if udomain else ""
+                )
+                html += f"""    <div class="card">
+      <div class="label">{uname}</div>
+      <div class="value">{ucount_display}</div>
+      <div class="sub">feature{"s" if ucount_display != 1 else ""} attributed</div>
+      {domain_line}
+      {type_chip}
+    </div>
+"""
+            html += "  </div>\n"
+
+        # Footer line: included vs total, scan timestamp, domains analyzed count.
+        footer_bits = []
+        footer_bits.append(f'{len(included_units)} of {len(units)} units included')
+        footer_bits.append(f'{total_feature_count} feature{"s" if total_feature_count != 1 else ""} total')
+        if domains:
+            footer_bits.append(f'{len(domains)} domain{"s" if len(domains) != 1 else ""} analyzed')
+        if created_short:
+            footer_bits.append(f'scanned {created_short}')
+        if version:
+            footer_bits.append(f'scan-output.json v{escape_html(version)}')
+        html += (
+            '  <div style="margin-top:14px;font-size:12px;color:var(--text2)">'
+            + ' &middot; '.join(footer_bits)
+            + '</div>\n'
+        )
         html += "</div>\n"
 
     # --- Markets Overview ---

@@ -95,6 +95,31 @@ sources: [../raw/paper-xyz.pdf, https://...]
 - **Stdlib-only scripts.** bash 3.2 + python3 stdlib, no pip or npm dependencies. JSON output format `{success, data, error}`.
 - **No hooks.** All index/log maintenance lives inside the skills for debuggability.
 
+## Concurrency Invariant (batch-mode safety)
+
+`wiki-ingest` runs per-source workers concurrently in batch mode, so any shared file that is read-modified-written by more than one worker **must** be protected by the advisory lock. This invariant is load-bearing — it is what closed issue #84 (silent data loss from concurrent writes to `index.md`, backlink targets, and `config.json.entries_count`).
+
+**Rule.** Any script that performs a read-modify-write on a file shared across concurrent ingest workers MUST wrap the critical section in `_wiki_lock(wiki_root)`, a `fcntl.flock(LOCK_EX)` context manager on `<wiki-root>/.cogni-wiki/.lock`. Parallel writes to **distinct** per-source output paths (e.g. `wiki/pages/{new-slug}.md` where the slug is freshly computed for that worker) do not need the lock.
+
+**Shared files covered today** (must always be lock-wrapped on write):
+
+| File | Write operation | Locked call site |
+|------|-----------------|------------------|
+| `wiki/index.md` | Insert/update entry line | `wiki_index_update.py::update_index` (line 335) |
+| `wiki/pages/<target>.md` | Backlink append into an *existing* page | `backlink_audit.py::apply_plan` (lines 489, 590) |
+| `.cogni-wiki/config.json` | `entries_count` bump (and any future counters) | `config_bump.py::main` (line 105) |
+
+**When adding a new shared-state file**, the author MUST:
+
+1. Add a row to the table above.
+2. Wrap every read-modify-write call site in `with _wiki_lock(wiki_root): ...`.
+3. Prefer routing the mutation through an existing locked script (e.g. `config_bump.py`) rather than inlining the write in a new code path — each inlined write is a new place the invariant can be missed.
+4. Never edit any file in the table by hand from a SKILL.md workflow step; always go through the locked script. Hand-edits bypass the lock.
+
+**Known tech debt.** `_wiki_lock` is currently duplicated across three scripts (`backlink_audit.py`, `wiki_index_update.py`, `config_bump.py`). A future consolidation into a shared `cogni-wiki/skills/wiki-ingest/scripts/_wikilock.py` helper would remove the drift risk, but is a non-urgent refactor — the three copies are byte-identical today.
+
+**Do NOT rely on:** `os.replace` atomicity alone (it guarantees atomic file replacement, not correctness of the read-modify-write), per-worker output path uniqueness (workers share index/config even when output slugs differ), or Python's GIL (workers are separate subagent processes, not threads).
+
 ## Distinction from Auto-Memory
 
 insight-wave already uses Claude Code's auto-memory system at `~/.claude/projects/.../memory/` for **Claude's learning about the user** (feedback, preferences, session-spanning patterns). cogni-wiki is the complementary primitive: **the user's learning about their domain** — explicitly curated, portable across projects, queryable. No duplication; different intent.

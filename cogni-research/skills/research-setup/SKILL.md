@@ -57,10 +57,10 @@ Never combine both modes in the same turn. Each turn is either pure text or a si
 >   pl     Poland — 14 authority domains (pan.pl, nask.pl, stat.gov.pl +11); bilingual PL/EN
 >   nl     Netherlands — 15 authority domains (tno.nl, nwo.nl, cbs.nl +12); bilingual NL/EN
 >   es     Spain — 14 authority domains (csic.es, inta.es, ine.es +11); bilingual ES/EN
->   mx     Mexico — 12 authority domains (inegi.org.mx, conacyt.mx, unam.mx +9); bilingual ES/EN
+>   mx     Mexico — 14 authority domains (inegi.org.mx, inai.org.mx, unam.mx +11); bilingual ES/EN
 >   us     United States — 13 authority domains (nist.gov, mit.edu, bls.gov +10); English-only
 >   uk     United Kingdom — 10 authority domains (gov.uk, ukri.org, ons.gov.uk +7); English-only
->   eu     EU composite — 10 EU-wide domains; fans out per-country (de, fr, it, pl, nl, es)
+>   eu     EU composite — 10 EU-wide domains; fans out per-country (de, fr, it, pl, nl, es — mx excluded, non-EU)
 > ```
 > (The exact list comes from `scripts/market-summary.py --format table --all` — the skill renders it fresh so the counts and top domains never drift from `references/market-sources.json`.)
 >
@@ -122,7 +122,7 @@ Scan the user's request and extract any options they already specified. These be
      - topic written in English with no country cue → **ambiguous**, fall through to tier 3
 
   3. **Ambiguous — ask the user**: do NOT invent a default. Render the Configuration Menu with the Market row expanded and a one-line note telling the user you could not tell which market from the topic. Their reply in the next turn resolves it. Never call `initialize-project.sh` without a resolved market — the script will reject it.
-- **Output language**: "in German", "auf Deutsch" -> "de" (+ market=dach if no explicit market). "in French" -> "fr". "in Italian" -> "it". "in Polish" -> "pl". "in Dutch" -> "nl". "in Spanish" -> "es" or "mx" depending on country cue (do not silently default to `es`). Default: auto (derived from market)
+- **Output language**: "in German", "auf Deutsch" -> "de" (+ market=dach if no explicit market). "in French" -> "fr". "in Italian" -> "it". "in Polish" -> "pl". "in Dutch" -> "nl". "in Spanish" -> resolve via market tiers above; do not silently default to `es` — Mexican queries must never land on Spain by accident. Default: auto (derived from market)
 - **Source URLs**: any URLs in the prompt -> collect for pre-fetch
 - **Query domains**: "only .gov sources", "restrict to arxiv" -> collect domains
 - **Max subtopics**: "use 8 sub-questions", "12 dimensions" -> capture count

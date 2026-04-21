@@ -311,7 +311,7 @@
     },
     "authority_sources": [
       {"domain": "inegi.org.mx", "category": "statistics", "authority": 5, "search_pattern": "site:inegi.org.mx {TOPIC_LOCAL} estadísticas {YEAR}"},
-      {"domain": "conacyt.mx", "category": "research", "authority": 5, "search_pattern": "site:conacyt.mx {TOPIC_LOCAL} investigación {YEAR}"},
+      {"domain": "conahcyt.mx", "category": "research", "authority": 5, "search_pattern": "site:conahcyt.mx {TOPIC_LOCAL} investigación {YEAR}"},
       {"domain": "unam.mx", "category": "research", "authority": 5, "search_pattern": "site:unam.mx {TOPIC_LOCAL} investigación {YEAR}"},
       {"domain": "banxico.org.mx", "category": "government", "authority": 5, "search_pattern": "site:banxico.org.mx {TOPIC_LOCAL} economía {YEAR}"},
       {"domain": "ift.org.mx", "category": "government", "authority": 5, "search_pattern": "site:ift.org.mx {TOPIC_LOCAL} telecomunicaciones {YEAR}"},
@@ -321,7 +321,9 @@
       {"domain": "amiti.org.mx", "category": "association", "authority": 4, "search_pattern": "site:amiti.org.mx {TOPIC_LOCAL} TI industria {YEAR}"},
       {"domain": "elfinanciero.com.mx", "category": "media", "authority": 3, "search_pattern": "site:elfinanciero.com.mx {TOPIC_LOCAL} {YEAR}"},
       {"domain": "eleconomista.com.mx", "category": "media", "authority": 3, "search_pattern": "site:eleconomista.com.mx {TOPIC_LOCAL} {YEAR}"},
-      {"domain": "expansion.mx", "category": "media", "authority": 3, "search_pattern": "site:expansion.mx {TOPIC_LOCAL} {YEAR}"}
+      {"domain": "expansion.mx", "category": "media", "authority": 3, "search_pattern": "site:expansion.mx {TOPIC_LOCAL} {YEAR}"},
+      {"domain": "cofece.org.mx", "category": "government", "authority": 5, "search_pattern": "site:cofece.org.mx {TOPIC_LOCAL} competencia económica {YEAR}"},
+      {"domain": "tec.mx", "category": "research", "authority": 5, "search_pattern": "site:tec.mx {TOPIC_LOCAL} investigación innovación {YEAR}"}
     ],
     "regulatory_bodies": ["INAI", "IFT", "COFECE", "PROFECO", "CNBV"],
     "currency": "MXN"

@@ -6,7 +6,7 @@ description: |
   (multi-section with outline), deep (recursive tree exploration). Four source modes:
   web (default), local (user's files), wiki (cogni-wiki), hybrid. Requires an initialized
   project — routes to research-setup first if none exists. Runs localized search for the
-  project's configured market (10 supported: DACH, DE, FR, IT, PL, NL, ES, US, UK, EU)
+  project's configured market (11 supported: DACH, DE, FR, IT, PL, NL, ES, MX, US, UK, EU)
   with intent-based bilingual search and per-market authority sources. Use whenever the user asks
   for a research report, wants to investigate a topic, says "deep research", "gpt-researcher
   style", "multi-agent research", "analyze these documents", "research from my files",
@@ -99,7 +99,7 @@ Backward compatibility: `market` is normally written by `initialize-project.sh` 
 - Writer produces the report in the specified language
 - Reviewer evaluates prose quality in the output language
 
-Available markets (keys of `references/market-sources.json`): `dach`, `de`, `fr`, `it`, `pl`, `nl`, `es`, `us`, `uk`, `eu`. There is no `global` option — research-setup resolves ambiguity by asking the user before the project is initialized. The market and output language are usually aligned (e.g., market=dach → output_language=de, market=it → output_language=it) but can diverge (e.g., market=fr, output_language=en for an English report about the French market). The `eu` market is a composite that fans out per-country researchers — see composite dispatch below.
+Available markets (keys of `references/market-sources.json`): `dach`, `de`, `fr`, `it`, `pl`, `nl`, `es`, `mx`, `us`, `uk`, `eu`. There is no `global` option — research-setup resolves ambiguity by asking the user before the project is initialized. The market and output language are usually aligned (e.g., market=dach → output_language=de, market=it → output_language=it) but can diverge (e.g., market=fr, output_language=en for an English report about the French market). The `eu` market is a composite that fans out per-country researchers — see composite dispatch below.
 
 #### Composite Market Dispatch (market=eu)
 

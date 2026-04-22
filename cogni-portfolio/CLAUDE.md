@@ -5,10 +5,11 @@ Portfolio messaging and proposition planning — from product definition through
 ## Plugin Architecture
 
 ```
-skills/                         19 portfolio skills
+skills/                         20 portfolio skills
   portfolio-setup/                Initialize project with company context and taxonomy
   portfolio-canvas/               Bootstrap from Lean Canvas or Business Model Canvas
   portfolio-scan/                 Discover offerings via web scanning + taxonomy classification
+  manage-taxonomies/              Clone, author, or import a project-local taxonomy
   portfolio-ingest/               Extract entities from uploaded documents (md, docx, pptx, xlsx, pdf)
   products/                       Define and manage top-level product offerings
   features/                       Define market-independent capabilities (IS layer)
@@ -37,7 +38,7 @@ skills/                         19 portfolio skills
   trends-bridge/                  Bidirectional integration with cogni-trends TIPS analysis
   portfolio-resume/               Detect workflow phase and recommend next actions
 
-agents/                         19 delegation agents
+agents/                         20 delegation agents
   market-researcher.md            Web research for TAM/SAM/SOM with claim submission
   competitor-researcher.md        Web research for competitive intelligence
   customer-researcher.md          Web research for named customer profiling
@@ -51,6 +52,7 @@ agents/                         19 delegation agents
   solution-review-assessor.md     Review solutions from procurement, provider SA, client SA
   feature-quality-assessor.md     Assess feature description quality (any language)
   feature-review-assessor.md      Review feature set from PM, strategist, pre-sales perspectives
+  feature-deduplication-detector.md Detect set-wide duplicate features within a product (Phase 7 dedupe)
   feature-deep-diver.md           Deep research — competitive landscape, differentiation, positioning
   quality-enricher.md             Research to improve feature/proposition quality gaps
   customer-narrative-writer.md    Parallel per-scope customer-narrative generation (sonnet)
@@ -68,7 +70,7 @@ templates/                      8 pluggable industry taxonomies
   b2b-professional-services/      Professional Services (8 dims, 44 categories)
   b2b-opensource/                  Commercial Open Source (8 dims, 50 categories)
 
-scripts/                        10 utility scripts
+scripts/                        12 utility scripts
   project-init.sh                 Initialize project directory structure
   project-status.sh               Show status with entity counts and gap analysis
   quality-audit.sh                Structural quality checks on portfolio entities
@@ -79,6 +81,8 @@ scripts/                        10 utility scripts
   propagate-corrections.sh        Apply resolved claim corrections to entity JSON files
   generate-scan-mapping.sh        Generate scan-to-taxonomy mapping
   source-registry.sh              Source lineage registry management (init, register, check, staleness)
+  clone-taxonomy.sh               Copy a bundled taxonomy into the project for local customization
+  validate-taxonomy.sh            Validate the project-local taxonomy (canonical files, frontmatter, category/search coverage)
 
 references/
   data-model.md                   Full entity schema and project structure reference
@@ -88,8 +92,8 @@ references/
 
 | Type | Count | Items |
 |------|-------|-------|
-| Skills | 19 | portfolio-setup, portfolio-canvas, portfolio-scan, portfolio-ingest, products, features, markets, propositions, solutions, packages, compete, customers, portfolio-verify, portfolio-communicate, portfolio-dashboard, portfolio-architecture, portfolio-lineage, trends-bridge, portfolio-resume |
-| Agents | 19 | market-researcher, competitor-researcher, customer-researcher, customer-review-assessor, proposition-generator, proposition-quality-assessor, proposition-review-assessor, proposition-deep-diver, solution-architect, solution-planner, solution-review-assessor, feature-quality-assessor, feature-review-assessor, feature-deep-diver, quality-enricher, customer-narrative-writer, communicate-review-assessor, dashboard-refresher, portfolio-web-researcher |
+| Skills | 20 | portfolio-setup, portfolio-canvas, portfolio-scan, manage-taxonomies, portfolio-ingest, products, features, markets, propositions, solutions, packages, compete, customers, portfolio-verify, portfolio-communicate, portfolio-dashboard, portfolio-architecture, portfolio-lineage, trends-bridge, portfolio-resume |
+| Agents | 20 | market-researcher, competitor-researcher, customer-researcher, customer-review-assessor, proposition-generator, proposition-quality-assessor, proposition-review-assessor, proposition-deep-diver, solution-architect, solution-planner, solution-review-assessor, feature-quality-assessor, feature-review-assessor, feature-deduplication-detector, feature-deep-diver, quality-enricher, customer-narrative-writer, communicate-review-assessor, dashboard-refresher, portfolio-web-researcher |
 
 ## Typical Workflow
 
@@ -154,7 +158,7 @@ Quality gates block downstream generation when upstream entities fail. Features 
 | Research | inherit (caller's model) | market-researcher, competitor-researcher, customer-researcher, proposition-generator, solution-architect, solution-planner |
 | Content Generation | sonnet | customer-narrative-writer |
 | Deep Research | sonnet | feature-deep-diver, proposition-deep-diver, quality-enricher |
-| Quality Assessment | haiku | feature-quality-assessor, proposition-quality-assessor, feature-review-assessor, proposition-review-assessor, solution-review-assessor, customer-review-assessor, communicate-review-assessor, dashboard-refresher |
+| Quality Assessment | haiku | feature-quality-assessor, proposition-quality-assessor, feature-review-assessor, proposition-review-assessor, solution-review-assessor, customer-review-assessor, communicate-review-assessor, dashboard-refresher, feature-deduplication-detector |
 | Web Research | haiku | portfolio-web-researcher |
 
 Research agents auto-log claims with source URLs and entity provenance (`entity_ref`) to `cogni-claims/claims.json` via `scripts/append-claim.sh`. After verification and resolution, `portfolio-verify` Step 8 propagates corrections back to entity files via `scripts/propagate-corrections.sh` and cascades staleness to downstream entities.

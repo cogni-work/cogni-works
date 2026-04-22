@@ -146,14 +146,26 @@ Use when the user has a structured taxonomy definition in hand.
 
 ## Validation
 
-After any of the three modes completes, run these checks before handing off:
+After any of the three modes completes, run the validation script:
 
-1. `{PROJECT_PATH}/taxonomy/template.md` exists and has parseable frontmatter.
-2. `{PROJECT_PATH}/taxonomy/categories.json` is valid JSON with at least one entry per dimension declared in `template.md`.
-3. Every category id mentioned in `categories.json` appears at least once in `search-patterns.md`.
-4. `portfolio.json` has `taxonomy.source_path: "taxonomy/"`.
+```bash
+bash $CLAUDE_PLUGIN_ROOT/scripts/validate-taxonomy.sh "${PROJECT_PATH}"
+```
 
-If any check fails, report it to the user and suggest which file to fix — do not silently repair, because the user's edit intent might differ from the fix.
+The script returns JSON `{"success": bool, "data": {...}}` and exits 0 on full pass, 1 on any failure. It enforces six checks — parse the output and surface results to the user:
+
+| Check | What it enforces |
+|---|---|
+| `canonical_files` | All 7 canonical files present (`template.md`, `categories.json`, `search-patterns.md`, `product-template.md`, `cross-category-rules.md`, `provider-unit-rules.md`, `report-template.md`) |
+| `template_frontmatter` | `template.md` has YAML frontmatter with `type`, `version`, `dimensions`, `categories` fields |
+| `categories_json` | `categories.json` parses as a non-empty array where every entry has `id`, `name`, `dimension` |
+| `search_patterns_coverage` | Every category id in `categories.json` appears at least once in `search-patterns.md` (catches mismatches that would silently drop search coverage) |
+| `portfolio_json_source_path` | `portfolio.json` has `taxonomy.source_path: "taxonomy/"` so the resolver picks up the project-local taxonomy |
+| `product_skeleton` | `product-template.md` declares at least one product (markdown table, bullet list, or JSON example with a kebab-case slug) |
+
+On any failure: report the failing check's `detail` verbatim to the user and suggest which file to fix. Do not silently repair — the user's edit intent might differ from the fix. Offer to re-run the script after the user confirms edits.
+
+On success: confirm with the user and tell them the taxonomy is ready for `portfolio-scan`.
 
 ---
 

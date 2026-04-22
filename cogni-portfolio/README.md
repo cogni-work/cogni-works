@@ -126,6 +126,7 @@ Each portfolio project lives in `cogni-portfolio/{slug}/` with typed JSON files 
 | `portfolio-setup` | skill | Initialize a new portfolio project with company context and directory structure |
 | `portfolio-canvas` | skill | Bootstrap a portfolio project from a Lean Canvas or Business Model Canvas |
 | `portfolio-scan` | skill | Discover offerings via website scanning and classify against taxonomy |
+| `manage-taxonomies` | skill | Clone, author, or import a project-local taxonomy so categories, search patterns, and product skeleton can be customized without touching bundled templates |
 | `portfolio-ingest` | skill | Extract portfolio entities from uploaded documents (md, docx, pptx, xlsx, pdf) |
 | `products` | skill | Define and manage the top-level product offerings in the portfolio |
 | `features` | skill | Define and manage market-independent product features (IS layer of FAB) |
@@ -178,13 +179,13 @@ cogni-portfolio/
 │   ├── b2b-industrial-tech/      Industrial Tech (8 dims, 48 cats)
 │   ├── b2b-professional-services/ Professional Services (8 dims, 44 cats)
 │   └── b2b-opensource/           Commercial Open Source (8 dims, 50 cats)
-├── skills/                       19 portfolio skills
+├── skills/                       20 portfolio skills
 │   └── portfolio-canvas-workspace/ Dev workspace (evals, iterations — not a skill)
 ├── agents/                       20 delegation agents
 ├── hooks/                        1 guardrail hook (Excalidraw canvas auto-start)
 ├── references/
 │   └── data-model.md             Full entity schema and project structure reference
-└── scripts/                      10 utility scripts
+└── scripts/                      12 utility scripts
 ```
 
 ## Dependencies

@@ -5,9 +5,10 @@ description: |
   across providers. Use whenever the user mentions "consolidate scans",
   "coverage matrix", "roll up research-only scans", "cross-scan matrix",
   "compare providers by taxonomy", "taxonomy coverage across companies",
-  "peer coverage comparison", "portfolio consolidation", or "consolidated
-  portfolio" — typically after running `portfolio-scan --mode=research-only`
-  against two or more companies in the same industry taxonomy.
+  "peer coverage comparison", "coverage gaps across providers", "portfolio
+  consolidation", or "consolidated portfolio" — typically after running
+  `portfolio-scan --mode=research-only` against two or more companies in the
+  same industry taxonomy.
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion
 ---
 

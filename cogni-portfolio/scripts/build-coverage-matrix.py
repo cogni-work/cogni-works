@@ -75,34 +75,64 @@ def _parse_report(report_path):
 
 
 def _load_scan(scan_output_path):
-    """Load one scan-output.json + its report; return (dict, error)."""
+    """Load one scan-output.json + its report; return (scan, warning, error).
+
+    ``warning`` is ``None`` on the happy path. When ``output_file`` is absent
+    from the scan metadata, or when the referenced report cannot be found on
+    disk, the scan still loads (statuses default to empty) but a structured
+    warning is returned so ``cmd_build`` can surface the cause in the JSON
+    envelope. The matrix still renders '—' for missing reports — behaviour is
+    unchanged; only the diagnostic signal is added.
+    """
     raw, err = _load_json(scan_output_path)
     if err:
-        return None, f"{scan_output_path}: {err}"
+        return None, None, f"{scan_output_path}: {err}"
     if not isinstance(raw, dict):
-        return None, f"{scan_output_path}: top-level is not an object"
+        return None, None, f"{scan_output_path}: top-level is not an object"
 
     template_type = raw.get("template_type")
     if not template_type:
-        return None, f"{scan_output_path}: missing `template_type`"
+        return None, None, f"{scan_output_path}: missing `template_type`"
 
     # The report lives relative to the scan's project root (two dirs up from
     # research/.metadata/scan-output.json).
     project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(scan_output_path))))
     output_file = raw.get("output_file", "")
-    report_path = os.path.join(project_root, output_file) if output_file else None
-    statuses = _parse_report(report_path) if report_path and os.path.isfile(report_path) else {}
+    company_slug = raw.get("company_slug", "")
+    warning = None
+
+    if not output_file:
+        report_path = None
+        statuses = {}
+        warning = {
+            "scan_output_path": scan_output_path,
+            "company_slug": company_slug,
+            "report_path": None,
+            "reason": "no_output_file",
+        }
+    else:
+        report_path = os.path.join(project_root, output_file)
+        if os.path.isfile(report_path):
+            statuses = _parse_report(report_path)
+        else:
+            statuses = {}
+            warning = {
+                "scan_output_path": scan_output_path,
+                "company_slug": company_slug,
+                "report_path": report_path,
+                "reason": "report_not_found",
+            }
 
     return {
         "scan_output_path": scan_output_path,
-        "company_name": raw.get("company_name") or raw.get("company_slug") or "",
-        "company_slug": raw.get("company_slug", ""),
+        "company_name": raw.get("company_name") or company_slug or "",
+        "company_slug": company_slug,
         "template_type": template_type,
         "consolidation_mode": raw.get("consolidation_mode", "consolidate"),
         "created": raw.get("created", ""),
         "report_path": report_path,
         "statuses": statuses,
-    }, None
+    }, warning, None
 
 
 def _load_taxonomy(taxonomy_dir):
@@ -180,16 +210,22 @@ def _render_markdown(scans, categories, template_type, scope_slug):
 
 def cmd_build(args):
     input_paths = [p for p in args.inputs if p]
-    if len(input_paths) < 1:
-        _respond(False, error="no inputs provided")
+    if len(input_paths) < 2:
+        _respond(
+            False,
+            error=f"consolidation requires at least two scans; got {len(input_paths)}",
+        )
 
     scans = []
+    warnings = []
     mismatches = []
     template_type = None
     for path in input_paths:
-        scan, err = _load_scan(path)
+        scan, warning, err = _load_scan(path)
         if err:
             _respond(False, error=err)
+        if warning is not None:
+            warnings.append(warning)
         if template_type is None:
             template_type = scan["template_type"]
         elif scan["template_type"] != template_type:
@@ -261,6 +297,7 @@ def cmd_build(args):
         "categories_count": len(categories),
         "confirmed_cells": confirmed_cells,
         "template_type": template_type,
+        "warnings": warnings,
     })
 
 

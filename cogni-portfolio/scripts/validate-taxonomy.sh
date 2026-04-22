@@ -116,6 +116,27 @@ if os.path.isfile(cat_path):
 else:
     record("categories_json", False, "categories.json missing")
 
+# Check 3b — every category id matches the canonical ^\d+\.\d+$ format.
+# Import mode accepts external shapes and can pass through malformed ids
+# ("1a", "1-1", "cat.1.1") that satisfy presence checks but break scan Phase 3
+# category matching (which pivots on the dotted-number form). Catch here.
+if categories:
+    id_re = re.compile(r"^[0-9]+\.[0-9]+$")
+    malformed = []
+    for c in categories:
+        cid = str(c.get("id", "")).strip()
+        if not id_re.match(cid):
+            malformed.append({"id": cid, "name": c.get("name", "")})
+    if malformed:
+        first = malformed[0]
+        more = f" (+{len(malformed)-1} more)" if len(malformed) > 1 else ""
+        record("category_id_format", False,
+               f"{len(malformed)} category id(s) not in ^\\d+\\.\\d+$ form — first: {first['id']!r} ({first['name']}){more}")
+    else:
+        record("category_id_format", True, "all category ids match ^\\d+\\.\\d+$")
+else:
+    record("category_id_format", False, "cannot validate — no categories loaded")
+
 # Check 4 — every category id appears in search-patterns.md
 sp_path = os.path.join(tax_dir, "search-patterns.md")
 if os.path.isfile(sp_path) and categories:

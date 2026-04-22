@@ -59,6 +59,14 @@ The `company.products` array in `portfolio.json` (if present) provides initial o
 4. Read `portfolio.json` and extract `slug`, `company.name`
 5. **Resolve taxonomy template** (project-local wins over bundled):
    - **Step 5a — project-local check.** If `${PROJECT_PATH}/taxonomy/template.md` exists, the project owns its taxonomy. Set `TEMPLATE_PATH="${PROJECT_PATH}/taxonomy"` and proceed. `portfolio.json` typically records this with `taxonomy.source_path: "taxonomy/"` but the directory check is the source of truth — a present directory always wins.
+
+     **Pre-flight validation.** Project-local taxonomies are user-editable and can drift into scan-breaking shapes silently (malformed category ids, categories without matching search patterns, missing product skeleton). Before Phase 1 dispatches 100+ web searches, validate:
+
+     ```bash
+     "$CLAUDE_PLUGIN_ROOT/scripts/validate-taxonomy.sh" "${PROJECT_PATH}"
+     ```
+
+     The script returns `{"success": true, "data": {...}}` on pass and exits 0. On failure it prints `{"success": false, "error": "...", "data": {"checks": [...]}}` and exits 1 — when this happens, show the failed checks to the user, tell them to run `cogni-portfolio:manage-taxonomies` (or hand-fix the pointed-to file, then revalidate), and **stop the scan** without starting Phase 1. Bundled templates (Step 5b) skip this step — they are shape-safe by construction.
    - **Step 5b — bundled fallback.** If no project-local taxonomy exists:
      - If `portfolio.json` has `taxonomy.type` (e.g. `"b2b-ict"`), load `$CLAUDE_PLUGIN_ROOT/templates/{taxonomy.type}/template.md`
      - If absent, scan `$CLAUDE_PLUGIN_ROOT/templates/*/template.md` frontmatter for `industry_match` patterns that match `company.industry`
@@ -401,7 +409,7 @@ See `${TEMPLATE_PATH}/product-template.md` for the taxonomy-to-data-model mappin
 Branch on `CONSOLIDATION_MODE` (selected in Phase 0) **before** any mapping work. See [references/consolidation-modes.md](references/consolidation-modes.md) for the full rationale.
 
 - **`research-only`** — **Skip Phase 7 entirely.** Do not run Steps 7.1–7.7. Tell the user: "Scan complete in `research-only` mode — report at `${OUTPUT_FILE}`. No features were created or modified." Then stop the skill.
-- **`shadow`** — Run Steps 7.1, 7.2 (**categorize only — do not create products in `portfolio.json`**), and a modified Step 7.3 that writes candidate JSONs to `research/scan-candidates/${COMPANY_SLUG}/{slug}.json` instead of the staging file. **Skip Steps 7.4–7.7** — no dedupe, no `features/` writes, no `portfolio.json` taxonomy update. Tell the user: "Scan complete in `shadow` mode — N candidate files under `research/scan-candidates/${COMPANY_SLUG}/`. Review them and run the `features` skill's promote step to pull selected candidates into your feature set."
+- **`shadow`** — Run Steps 7.1, 7.2 (**categorize only — do not create products in `portfolio.json`**), and a modified Step 7.3 that writes candidate JSONs to `research/scan-candidates/${COMPANY_SLUG}/{slug}.json` instead of the staging file. **Skip Steps 7.4–7.7** — no dedupe, no `features/` writes, no `portfolio.json` taxonomy update. Tell the user: "Scan complete in `shadow` mode — N candidate files under `research/scan-candidates/${COMPANY_SLUG}/`. To adopt a candidate into your portfolio today, copy its JSON into `features/{slug}.json` and run `cogni-portfolio:features` to normalise it. A first-class promote flow inside the `features` skill is tracked as a follow-on issue — it will land in a later release."
 - **`consolidate`** — Run Steps 7.1 through 7.7 as documented below. This is today's full-import behaviour.
 
 Shadow candidates use the same feature JSON shape as production features **plus** two diagnostic fields documented in [references/consolidation-modes.md](references/consolidation-modes.md):

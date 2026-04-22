@@ -9,6 +9,9 @@ skills/                         20 portfolio skills
   portfolio-setup/                Initialize project with company context and taxonomy
   portfolio-canvas/               Bootstrap from Lean Canvas or Business Model Canvas
   portfolio-scan/                 Discover offerings via web scanning + taxonomy classification
+    references/
+      consolidation-modes.md        Scan-time consolidate | shadow | research-only semantics
+      scan-entity-schema.md         Offering → feature mapping + scan-output.json schema
   manage-taxonomies/              Clone, author, or import a project-local taxonomy
   portfolio-ingest/               Extract entities from uploaded documents (md, docx, pptx, xlsx, pdf)
   products/                       Define and manage top-level product offerings

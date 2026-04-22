@@ -2,6 +2,10 @@
 
 Each discovered offering is captured with 12 fields during research. These are intermediate research artifacts stored in `research/.logs/` — they are NOT first-class data model entities. After the scan, offerings are mapped to features and products.
 
+## Consolidation Mode
+
+Whether the discovered offerings below become `features/*.json` depends on the `consolidation_mode` field written into `research/.metadata/scan-output.json` at Phase 6 (`consolidate` | `shadow` | `research-only`). The shadow branch persists candidates under `research/scan-candidates/{COMPANY_SLUG}/*.json` using the feature JSON shape plus two diagnostic fields (`_shadow_candidate`, `_source_offering`). See [consolidation-modes.md](consolidation-modes.md) for the full semantics and the shadow-candidate shape — that file is the canonical spec.
+
 ## Offering Fields (Research Phase)
 
 | Field | Description | Example Values |

@@ -57,12 +57,14 @@ The `company.products` array in `portfolio.json` (if present) provides initial o
    find . -path "*/cogni-portfolio/*/portfolio.json" -type f 2>/dev/null
    ```
 4. Read `portfolio.json` and extract `slug`, `company.name`
-5. **Resolve taxonomy template:**
-   - Check `portfolio.json` for `taxonomy.type` field
-   - If set (e.g., `"b2b-ict"`), load template from `$CLAUDE_PLUGIN_ROOT/templates/{taxonomy.type}/template.md`
-   - If absent, scan `$CLAUDE_PLUGIN_ROOT/templates/*/template.md` frontmatter for `industry_match` patterns that match `company.industry`
-   - If multiple matches or no match, present available templates via AskUserQuestion
-   - Once resolved, set `TEMPLATE_PATH=$CLAUDE_PLUGIN_ROOT/templates/{type}`
+5. **Resolve taxonomy template** (project-local wins over bundled):
+   - **Step 5a — project-local check.** If `${PROJECT_PATH}/taxonomy/template.md` exists, the project owns its taxonomy. Set `TEMPLATE_PATH="${PROJECT_PATH}/taxonomy"` and proceed. `portfolio.json` typically records this with `taxonomy.source_path: "taxonomy/"` but the directory check is the source of truth — a present directory always wins.
+   - **Step 5b — bundled fallback.** If no project-local taxonomy exists:
+     - If `portfolio.json` has `taxonomy.type` (e.g. `"b2b-ict"`), load `$CLAUDE_PLUGIN_ROOT/templates/{taxonomy.type}/template.md`
+     - If absent, scan `$CLAUDE_PLUGIN_ROOT/templates/*/template.md` frontmatter for `industry_match` patterns that match `company.industry`
+     - If multiple matches or no match, present available templates via `AskUserQuestion`
+     - Once resolved, set `TEMPLATE_PATH=$CLAUDE_PLUGIN_ROOT/templates/{type}`
+   - If the user wants to customize their taxonomy (add/rename categories, tweak search patterns), direct them to the `cogni-portfolio:manage-taxonomies` skill before running the scan — that skill clones a bundled template into `${PROJECT_PATH}/taxonomy/` so edits survive plugin updates.
 6. **Select consolidation mode:** The scan produces a structured report (Phase 6) regardless of mode. What differs is what Phase 7 does with the discovered offerings. See [references/consolidation-modes.md](references/consolidation-modes.md) for the full rationale and when to pick each mode.
 
    Present this choice via `AskUserQuestion` with three options:

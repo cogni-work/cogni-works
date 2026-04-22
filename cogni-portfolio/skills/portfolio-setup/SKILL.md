@@ -106,12 +106,14 @@ After the script creates directories, write `portfolio.json` in the project root
 
 Match the company to a portfolio taxonomy template using all available context — industry field, company description, and broad service areas from web research (if Step 1 included web research). This is more reliable than matching on an industry keyword alone.
 
-1. Scan `$CLAUDE_PLUGIN_ROOT/templates/*/template.md` frontmatter for `industry_match` patterns
-2. Evaluate matches against the full company context (industry + description + service areas), not just `company.industry`
-3. If a template matches (e.g., a company offering managed IT services, cloud infrastructure, and consulting maps to `b2b-ict`), present it:
+1. **Project-local short-circuit.** If `{PROJECT_PATH}/taxonomy/template.md` exists, the project already owns its taxonomy — skip the bundled match entirely. Read the project-local template to display its type/dimensions/categories to the user for confirmation.
+2. Otherwise, scan `$CLAUDE_PLUGIN_ROOT/templates/*/template.md` frontmatter for `industry_match` patterns
+3. Evaluate matches against the full company context (industry + description + service areas), not just `company.industry`
+4. If a template matches (e.g., a company offering managed IT services, cloud infrastructure, and consulting maps to `b2b-ict`), present it:
    - "Based on your company profile, the **B2B ICT Portfolio** template (8 dimensions, 57 service categories) is a good fit. Apply this template?"
-4. If user confirms, add taxonomy to `portfolio.json` (schema unchanged)
-5. If no template matches or user declines, skip — the portfolio works fine without a taxonomy template
+5. If user confirms, add taxonomy to `portfolio.json` (schema unchanged)
+6. If no template matches or user declines, skip — the portfolio works fine without a taxonomy template
+7. **Customize path.** After confirming a bundled template, mention the `cogni-portfolio:manage-taxonomies` skill as the way to customize it (clone the bundled template into `{PROJECT_PATH}/taxonomy/` so edits to categories, search patterns, or product skeleton survive plugin updates). If no bundled template fit the user's vertical, the same skill's `author`/`import` modes let them build a taxonomy from scratch.
 
 ### 5.5. Ask About Additional Data Sources
 

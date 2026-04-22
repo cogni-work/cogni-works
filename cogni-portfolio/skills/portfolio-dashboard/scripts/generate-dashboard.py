@@ -617,6 +617,11 @@ def load_shadow_candidates(project_dir):
 
     Returns a dict keyed by company_slug: {slug: [{slug, product_slug, name,
     taxonomy_mapping}, ...]}. Empty dict when the directory is absent or empty.
+
+    Gating contract: callers (see `load_all_entities`) invoke this only when
+    `consolidation_mode == 'shadow'`. The helper does not self-gate, so a
+    shadow directory left over from a prior mode switch will not surface
+    unless the current run still requests shadow mode.
     """
     root = os.path.join(project_dir, "research", "scan-candidates")
     if not os.path.isdir(root):
@@ -2719,6 +2724,11 @@ body::after {{
         consolidation_mode = scan_output.get("consolidation_mode", "consolidate")
         mode_badge_html = ""
         if not is_derived:
+            # CSS tokens used below are all guaranteed by the design-variables
+            # contract (schemas/design-variables.schema.json): --green and --yellow
+            # via status_ok / status_warn, --text2 via text_muted, and --surface2
+            # via surface2 — all four are in the schema's `required` array, so
+            # pick-theme must emit them and no inline hex fallback is needed.
             _mode_styles = {
                 "consolidate": ("var(--green)", "rgba(46,125,50,0.12)", "consolidated"),
                 "shadow": ("var(--yellow)", "rgba(229,161,0,0.12)", "shadow review"),

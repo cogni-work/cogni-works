@@ -182,7 +182,11 @@ def cmd_promote(args):
     except OSError as exc:
         _respond(
             False,
-            data={"feature_path": target_path, "archived_to": archived_to},
+            data={
+                "feature_path": target_path,
+                "archived_to": archived_to,
+                "partial_success": True,
+            },
             error=f"feature written but source cleanup failed: {exc}",
         )
 

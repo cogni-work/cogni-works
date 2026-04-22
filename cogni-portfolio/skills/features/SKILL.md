@@ -546,7 +546,13 @@ When the user provides a product description, website content, or document:
 
 When the user says "promote shadow candidates", "import scan candidates", "pull the shadow features in", or after a `portfolio-scan --mode=shadow` run has staged offerings under `research/scan-candidates/{company_slug}/`.
 
-The full workflow lives in [`references/promote-shadow.md`](references/promote-shadow.md) so this entry stays lean. In short: list candidates via `$CLAUDE_PLUGIN_ROOT/skills/features/scripts/promote-shadow.py list`, let the user pick one or many, show a dry-run preview (target paths, diagnostic fields to strip, delete-vs-archive choice), run `promote-shadow.py promote` per selection, then dispatch `feature-deduplication-detector` in candidate mode against the affected product so new features compete with existing ones on equal footing. The helper handles the mechanical bits (`_shadow_candidate` / `_source_offering` field strip, move to `features/{slug}.json`, delete or archive the source).
+The full workflow lives in [`references/promote-shadow.md`](references/promote-shadow.md) so this entry stays lean:
+1. List candidates via `$CLAUDE_PLUGIN_ROOT/skills/features/scripts/promote-shadow.py list`
+2. Let the user pick one or many, then show a dry-run preview (target paths, diagnostic fields to strip, delete-vs-archive choice)
+3. Run `promote-shadow.py promote` per selection
+4. Dispatch `feature-deduplication-detector` in candidate mode against the affected product so new features compete with existing ones on equal footing
+
+The helper handles the mechanical bits (`_shadow_candidate` / `_source_offering` field strip, move to `features/{slug}.json`, delete or archive the source).
 
 ### Feature Review
 

@@ -42,7 +42,7 @@ Sort candidates alphabetically by slug within each company. Multiple companies m
 Before writing any file, show the user what will happen for each selected candidate:
 
 - **Target path**: `features/{slug}.json` (relative to project root).
-- **Slug collision**: if `features/{slug}.json` already exists, flag it — do not overwrite silently. Offer to rename (append `-scan` suffix), skip, or let the user edit the slug. Default to **skip** for safety.
+- **Slug collision**: if `features/{slug}.json` already exists, flag it — do not overwrite silently. Offer to rename (append `-scan` suffix), skip, or let the user edit the slug. Default to **skip** for safety. (The helper only accepts a final `--slug` override via `promote`; the suffix-rename and user-edit UX is this skill's responsibility — build the new slug in the prompt flow and pass it to the helper.)
 - **Diagnostic fields to strip**: `_shadow_candidate`, `_source_offering`. Call these out explicitly so the user understands the JSON will be modified before landing.
 - **Post-action**: delete the source candidate JSON (default) or move it to `research/scan-candidates/{COMPANY_SLUG}/.archive/{slug}.json` when the user opts in to archive.
 

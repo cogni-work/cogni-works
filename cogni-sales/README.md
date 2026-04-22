@@ -119,7 +119,7 @@ Each pitch project tracks state in `pitch-log.json` with pitch mode (customer/se
 
 ```
 cogni-sales/
-├── .claude-plugin/               Plugin manifest (v0.4.1)
+├── .claude-plugin/               Plugin manifest (v0.4.2)
 ├── skills/                       1 pitch skill
 │   └── why-change/
 │       ├── SKILL.md

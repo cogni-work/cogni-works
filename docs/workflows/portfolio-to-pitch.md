@@ -47,6 +47,15 @@ Pick before Step 2 — the rest of the flow reconverges:
 
 If both apply (e.g., an existing firm launching a new line), start with Path B for the established offering, then re-enter Path A for the new line inside the same project.
 
+## Start or resume with `/portfolio-resume`
+
+`/portfolio-resume` is the standard entry gate for cogni-portfolio — run it first at the top of every session, whether you are starting a new portfolio or coming back to one you already have:
+
+- **New session, no project yet** — `/portfolio-resume` detects that nothing exists and points you straight at `/portfolio-setup` (Step 1 below).
+- **Returning to existing work** — it reports current progress against the stages in this workflow, flags stale entities, and recommends the next skill to run, so you pick up exactly where you left off instead of guessing.
+
+The rest of this workflow still applies as written. Think of `/portfolio-resume` as the dashboard you check first; the numbered steps below are what it dispatches you into.
+
 ## Step-by-Step
 
 ### Step 1 — Initialize the project (shared)

@@ -27,13 +27,19 @@ CANONICAL_FILES = ("colors", "typography", "spacing", "radii", "shadows", "motio
 
 
 def _emit_block(stem: str, data: dict) -> list:
-    """Return CSS lines for one tokens/<stem>.json block."""
+    """Return CSS lines for one tokens/<stem>.json block.
+
+    Token keys are normalised by replacing underscores with hyphens *before*
+    being composed into the CSS variable name. This avoids a double-dash
+    artefact (``--colors--focus``) when a JSON key starts with an underscore.
+    """
     lines = ["  /* {} */".format(stem)]
     for key in sorted(data.keys()):
         value = data[key]
         if not isinstance(value, (str, int, float)) or isinstance(value, bool):
             continue
-        var_name = "--{}-{}".format(stem, key).replace("_", "-")
+        normalised_key = key.replace("_", "-").lstrip("-")
+        var_name = "--{}-{}".format(stem, normalised_key)
         lines.append("  {}: {};".format(var_name, value))
     return lines
 

@@ -11,8 +11,8 @@ description: >-
   "select a theme", or when any visual output skill needs theme resolution. Also
   triggers when skills internally need theme selection as a prerequisite step.
   Also triggers on "apply a theme", "use this theme", or "theme my output".
-  This is the single standard entry point for theme selection across both
-  insight-wave and insight-wave-pro marketplaces.
+  This is the single standard entry point for theme selection across the
+  insight-wave marketplace.
 version: 0.2.0
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion
 ---

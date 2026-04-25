@@ -4,7 +4,7 @@
 
 > **insight-wave readiness (Claude Code desktop)** — Claude Code desktop is the recommended interface for insight-wave today. Cowork is a secondary path and is not yet production-ready for insight-wave workflows because of context-window and Pencil-MCP fidelity gaps — see the [deployment guide](../docs/deployment-guide.md) for detail. This guidance will flip when those gaps close upstream.
 
-A [Claude Cowork](https://claude.ai/cowork) plugin that orchestrates consulting engagements through the Double Diamond framework — diverge to explore, converge to decide, twice. Includes Lean Canvas authoring via business-model-hypothesis, and lightweight how-might-we engagements for bounded challenges using guided ideation.
+A [Claude Cowork](https://claude.ai/cowork) plugin for structured consulting engagements built on the Double Diamond framework (UK Design Council, 2005). Diverge to explore, converge to decide, twice. Four gated phases coordinate six insight-wave plugins under a Diamond Coach that opens with intent and closes with accomplishments. Lean Canvas authoring and lightweight how-might-we engagements ship in the same workflow.
 
 ## Why this exists
 
@@ -33,7 +33,7 @@ A process orchestrator for the insight-wave ecosystem. cogni-consulting doesn't 
 
 - **Run Big-5 engagements with a boutique team.** A structured methodology coordinating 6 plugins means a full strategic options analysis — research, trend synthesis, portfolio modeling, verified deliverables — that would take a 4-person team 3-4 weeks completes in days.
 - **Resume — or refine — any engagement with full context.** Engagement state, 40+ decisions, and method selections persist in `consulting-project.json`. Pick up weeks later without re-reading notes, or re-enter a completed phase to refine it — the Diamond Coach reads your existing artifacts and focuses the iteration on what you want to improve.
-- **Phase gates protect quality, Diamond Coach explains why.** Each diamond transition blocks by default when required inputs are missing or inadequate — checking content quality, not just file existence. The Diamond Coach opens every phase with its intent and what good looks like, guides you through a task list, and closes with an accomplishment summary. You can override any gate explicitly when you're ready to proceed.
+- **Quality gates with named mechanisms.** Phase transitions block downstream generation until upstream entities pass haiku quality assessment plus 3-perspective stakeholder review. The same three-layer gate every entity-producing plugin uses. Overrides are explicit and recorded in `consulting-project.json`.
 
 ## Install
 

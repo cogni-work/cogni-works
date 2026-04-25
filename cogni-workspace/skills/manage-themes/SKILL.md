@@ -104,13 +104,13 @@ Extract a visual theme from a live website using claude-in-chrome (the user's Ch
    - Font families from headings and body text
    - Background colors and surface patterns
    - Border radius, spacing patterns
-5. Research the brand via WebSearch for design philosophy context and official brand colors
-6. Calculate WCAG contrast ratios for extracted color pairs
-7. Generate theme.md following the template (see Theme File Format below)
-8. Save to `{themes-dir}/{theme-slug}/theme.md`
-9. Emit a starter `manifest.json` next to `theme.md` (see [Starter Manifest](#starter-manifest) below) and validate with `validate-theme-manifest.py` before completing
-10. Offer to deepen this into a tiered theme system (Operation #7)
-11. Offer to generate a theme showcase (Operation #8)
+6. Research the brand via WebSearch for design philosophy context and official brand colors
+7. Calculate WCAG contrast ratios for extracted color pairs
+8. Generate theme.md following the template (see Theme File Format below)
+9. Save to `{themes-dir}/{theme-slug}/theme.md`
+10. Emit a starter `manifest.json` next to `theme.md` (see [Starter Manifest](#starter-manifest) below) and validate with `validate-theme-manifest.py` before completing
+11. Offer to deepen this into a tiered theme system (Operation #7)
+12. Offer to generate a theme showcase (Operation #8)
 
 **Tips for accurate extraction**: Take multiple screenshots (hero section, navigation,
 footer) to capture the full palette. Use WebSearch to find the brand's official style
@@ -185,13 +185,13 @@ When the user wants feedback on an existing theme — e.g., "my theme feels off"
 
 **Output format**: Present findings as a checklist grouped by dimension, with pass/fail/warning per item and concrete suggestions for anything that fails. If the user agrees with suggestions, apply the fixes directly to the theme.md. After applying fixes, offer to regenerate the theme showcase (Operation #8) so the user can verify the changes visually.
 
-**Manifest handling**: If the theme already has a `manifest.json`, leave it untouched (the audit fixes go in `theme.md`). If the theme is tier-0 and the audit surfaces structural needs that tokens would solve — e.g., the same hex repeats across many surfaces, downstream skills hard-code values that should swap by theme — offer to promote the theme via Operation #7 (Author a Deep Theme System) rather than expanding `theme.md` further. If the theme has neither, emit a starter `manifest.json` (see [Starter Manifest](#starter-manifest) below) so the next operation has an entry point.
+**Manifest handling**: If the theme already has a `manifest.json`, leave it untouched (the audit fixes go in `theme.md`). If the theme is tier-0 and the audit surfaces structural needs that tokens would solve — e.g., the same hex repeats across many surfaces, downstream skills hard-code values that should swap by theme — offer to promote the theme via Operation #7 (Author a Deep Theme System) rather than expanding `theme.md` further. If the theme has neither a `theme.md` nor a `manifest.json` (rare — Op 6 mostly acts on existing themes), emit a starter `manifest.json` (see [Starter Manifest](#starter-manifest) below) so the next operation has an entry point.
 
 ### 7. Author a Deep Theme System
 
 When a theme outgrows the single-file `theme.md` and the user wants structured authoring — variable swap-out by downstream skills, component primitives, voice/copy templates — promote the theme to a **tiered** layout per Theme System v2 (RFC #124). This operation is opt-in: tier-0 themes (`theme.md` only, no manifest) remain valid forever.
 
-**When to offer**: After a successful Operation 3, 4, or 5 (ask: *"Want to deepen this into a tiered theme system?"*), or when the user explicitly asks to "build a deep theme", "author tokens", "make this brand a system", or "match the cogni-work pattern". The migration guide (forward link `references/theme-migration-guide.md`, lands with [#130](https://github.com/cogni-work/insight-wave/issues/130)) walks an existing tier-0 theme through the upgrade end-to-end.
+**When to offer**: After a successful Operation 3, 4, or 5 (ask: *"Want to deepen this into a tiered theme system?"*), or when the user explicitly asks to "build a deep theme", "author tokens", "make this brand a system", or "match the cogni-work pattern". A migration guide that walks an existing tier-0 theme through the upgrade end-to-end is tracked in [#130](https://github.com/cogni-work/insight-wave/issues/130) — once that lands, the file will be available at `references/theme-migration-guide.md`.
 
 **Reference implementation**: `themes/cogni-work/` is the canonical Phase-2 pilot. Read its `manifest.json` and `tokens/` layout before authoring any new tiered theme — that file shape is the contract every downstream consumer expects.
 
@@ -249,7 +249,7 @@ A non-zero exit means the theme is not shippable; fix the failure before declari
 
 After creating, extracting, or improving a theme, offer to generate an interactive React showcase component that demonstrates every design token in context — colors, typography, buttons, cards, tables, forms, status badges, KPI panels, pricing layouts, and navigation patterns.
 
-**When to offer**: After any successful theme creation or update (Operations 3–6), ask the user: *"Want me to generate a theme showcase component so you can see all the tokens in action?"*
+**When to offer**: After any successful theme creation, deepening, or update (Operations 3–7), ask the user: *"Want me to generate a theme showcase component so you can see all the tokens in action?"*
 
 **Workflow**:
 
@@ -296,7 +296,7 @@ Follow the template at `{themes-dir}/_template/theme.md`. Key sections:
 
 ## Starter Manifest
 
-Operations 3, 4, and 5 emit a minimal `manifest.json` next to `theme.md` for every newly-created theme. The file is the entry point that lets a tier-0 theme opt in to Theme System v2 later (via Operation #7) without renaming or restructuring anything that already shipped:
+Operations 3, 4, 5, and (conditionally) 6 emit a minimal `manifest.json` next to `theme.md` for every newly-created theme. The file is the entry point that lets a tier-0 theme opt in to Theme System v2 later (via Operation #7) without renaming or restructuring anything that already shipped:
 
 ```json
 {

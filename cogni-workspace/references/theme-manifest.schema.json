@@ -1,0 +1,75 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Cogni Workspace Theme Manifest v1.0",
+  "description": "Manifest schema for Theme System v2 themes. A theme directory MAY ship a manifest.json conforming to this schema; absence is valid (tier-0 themes). Reserved keys 'live', 'live_within_session', and 'copy' are forbidden in v1.0 and reserved for Phase 3.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "name", "slug"],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0",
+      "description": "Manifest schema version. Currently only '1.0' is recognised."
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Human-readable theme name shown in pickers and dashboards."
+    },
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]*$",
+      "description": "Kebab-case identifier matching the theme directory name."
+    },
+    "tiers": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Tiers the theme exposes. Every tier is optional; a theme with an empty tiers object is valid (advisory metadata only).",
+      "properties": {
+        "tokens": {
+          "type": "string",
+          "description": "Path to the tokens directory (typically 'tokens/'). JSON is canonical; tokens.css is generated."
+        },
+        "assets": {
+          "type": "string",
+          "description": "Path to the assets directory (logos, fonts, raster art)."
+        },
+        "components": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Component primitive directories keyed by surface family. HTML is canonical; JSX is permitted alongside HTML.",
+          "patternProperties": {
+            "^(web|deck|dashboard)$": {
+              "type": "string"
+            }
+          }
+        },
+        "templates": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Template files keyed by surface (deck, report, landing, dashboard).",
+          "patternProperties": {
+            "^(deck|report|landing|dashboard)$": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "showcase": {
+      "type": "string",
+      "description": "Optional path to a showcase artifact (e.g. a JSX or HTML preview)."
+    },
+    "voice_ref": {
+      "type": "string",
+      "description": "Optional pointer into theme.md (e.g. '#voice--copy-guidelines') for skills consuming voice content. Voice rules stay in theme.md in v1.0; the 'copy' tier is reserved for Phase 3."
+    }
+  },
+  "not": {
+    "anyOf": [
+      { "required": ["live"] },
+      { "required": ["live_within_session"] },
+      { "required": ["copy"] }
+    ]
+  }
+}

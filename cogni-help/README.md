@@ -23,7 +23,7 @@ A meta-plugin for the insight-wave ecosystem. While other plugins produce conten
 
 1. **Teach** through 12 interactive courses — adaptive pacing, hands-on exercises, quizzes, and progress tracking across the full plugin ecosystem
 2. **Guide** users to the right plugin — match natural-language task descriptions to capabilities across 12 plugins and 70+ skills
-3. **Chain** plugins into pipelines — 6 cross-plugin workflow templates from research-to-slides through full consulting engagements
+3. **Chain** plugins into pipelines — 6 cross-plugin workflow templates from research-to-report through full consulting engagements
 4. **Diagnose** plugin problems — check integrity, dependencies, workspace health, and known issues before they surface as runtime failures
 5. **Summarize** any plugin — generate one-screen quick-reference cheatsheets with commands, capabilities, and tips
 6. **Generate** training decks — PPTX slide decks for curriculum overview or per-course introductions
@@ -33,7 +33,7 @@ A meta-plugin for the insight-wave ecosystem. While other plugins produce conten
 
 - **Skip the memorization.** Describe your task in plain language and the guide skill routes it to the exact plugin and skill across 12 plugins and 70+ skills — first productive result in under 5 minutes.
 - **Build real skills in 9 hours.** Complete all 12 courses (~45 minutes each) with hands-on exercises that produce real output. Resume any course mid-module — progress is tracked to the lesson.
-- **Collapse multi-plugin work into 3–4 steps.** Run any of 6 workflow templates to chain plugins into repeatable pipelines — research-to-slides in 3 steps, portfolio-to-pitch in 4.
+- **Collapse multi-plugin work into 3–4 steps.** Run any of 6 workflow templates to chain plugins into repeatable pipelines — research-to-report in 3 steps, portfolio-to-pitch in 4.
 - **Catch failures before they surface.** Run the 5-tier health check to surface missing dependencies, stale configs, and integrity issues before they become cryptic runtime errors.
 
 ## Install
@@ -51,7 +51,7 @@ This plugin is part of the [insight-wave ecosystem](../docs/ecosystem-overview.m
 ```
 /guide "I need to create a sales pitch"   # find the right plugin
 /teach 1                                   # start Course 1: Cowork Fundamentals
-/workflow research-to-slides               # see a cross-plugin pipeline
+/workflow research-to-report               # see a cross-plugin pipeline
 /cheatsheet cogni-trends                   # quick reference for a plugin
 /troubleshoot                              # run diagnostics
 cogni-issues                               # file a bug or feature request (skill, no slash command)
@@ -111,10 +111,10 @@ Each course is ~45 minutes with ~5 modules: Theory → Demo → Exercise → Qui
 
 | Workflow | Pipeline |
 |----------|----------|
-| `research-to-slides` | cogni-research → cogni-narrative → cogni-visual |
-| `trend-to-marketing` | cogni-trends → cogni-portfolio → cogni-marketing |
+| `research-to-report` | cogni-research → cogni-narrative → cogni-visual |
+| `trends-to-solutions` | cogni-trends → cogni-portfolio → cogni-marketing |
 | `portfolio-to-pitch` | cogni-portfolio → cogni-narrative → cogni-sales → cogni-visual |
-| `new-engagement` | cogni-consulting phases (Discover → Define → Develop → Deliver) |
+| `consulting-engagement` | cogni-consulting phases (Discover → Define → Develop → Deliver) |
 | `docs-pipeline` | cogni-docs: doc-start → audit → generate → sync → power → claude → hub → bridge |
 | `full-onboarding` | cogni-workspace → cogni-help courses 1-12 |
 

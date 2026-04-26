@@ -4,7 +4,7 @@
     {
       "id": 0,
       "prompt": "How do I go from trend research to a marketing campaign?",
-      "expected_output": "Presents the trend-to-marketing workflow: cogni-trends → cogni-portfolio → cogni-marketing, with step-by-step commands and tips",
+      "expected_output": "Presents the trends-to-solutions workflow: cogni-trends → cogni-portfolio → cogni-marketing, with step-by-step commands and tips",
       "files": []
     },
     {

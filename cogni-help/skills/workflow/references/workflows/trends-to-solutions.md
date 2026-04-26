@@ -1,4 +1,4 @@
-# Workflow: Trend to Marketing
+# Workflow: Trends to Solutions
 
 **Pipeline**: cogni-trends → cogni-portfolio → cogni-marketing
 **Duration**: 3-6 hours for a full campaign

@@ -4,7 +4,7 @@ description: >-
   Cross-plugin workflow templates for common multi-plugin pipelines. Use this skill
   whenever the user asks about workflows, pipelines, end-to-end processes, "how do I
   go from X to Y", "what's the process for", "show me the steps", "workflow for",
-  "pipeline from research to slides", "how do these plugins work together", or wants
+  "pipeline from research to a report", "how do these plugins work together", or wants
   guidance on chaining multiple insight-wave plugins. Also trigger when a user describes
   a multi-step task that spans plugins — even if they don't say "workflow" explicitly.
 version: 0.1.0
@@ -35,21 +35,21 @@ Keep in English regardless of language setting:
 
 Six bundled templates covering the most common plugin chains:
 
-| Canonical ID | Current template file | Pipeline | Use case |
-|--------------|-----------------------|----------|----------|
-| `research-to-report` | `research-to-slides` (rename tracked by #146) | research → narrative → visual | Analyst producing a presentation from research |
-| `trends-to-solutions` | `trend-to-marketing` (rename tracked by #146) | tips → portfolio → marketing | GTM team turning trends into campaigns |
-| `portfolio-to-pitch` | `portfolio-to-pitch` (aligned) | portfolio → narrative → sales → visual | Sales creating a customer pitch deck |
-| `consulting-engagement` | `new-engagement` (rename tracked by #146) | consulting setup → 4 phases | Consultant starting a structured engagement |
+| Canonical ID | Template file | Pipeline | Use case |
+|--------------|---------------|----------|----------|
+| `research-to-report` | `research-to-report` | research → narrative → visual | Analyst producing a report-and-presentation deliverable from research |
+| `trends-to-solutions` | `trends-to-solutions` | tips → portfolio → marketing | GTM team turning trends into campaigns |
+| `portfolio-to-pitch` | `portfolio-to-pitch` | portfolio → narrative → sales → visual | Sales creating a customer pitch deck |
+| `consulting-engagement` | `consulting-engagement` | consulting setup → 4 phases | Consultant starting a structured engagement |
 | — (operational-only) | `docs-pipeline` | doc-start → audit → generate → sync → power → claude → hub → bridge | Maintainer documenting the monorepo |
 | — (operational-only) | `full-onboarding` | workspace → help courses 1-11 | New user learning the full ecosystem |
 
 The first column is the canonical workflow ID from `docs/workflows/`; the
-second is the current filename in `references/workflows/` (which may differ
-until #146 lands the renames). Reference workflows from other surfaces
-(`teach`, `guide`, `cheatsheet`, `docs/`) by canonical ID, not template
-filename. Operational-only rows have no canonical ID — see
-`references/canonical-workflows.md` Table B for the policy.
+second is the corresponding filename in `references/workflows/`. The 4
+user-facing canonical workflows share the same ID as their template
+filename — reference them by canonical ID from any surface (`teach`,
+`guide`, `cheatsheet`, `docs/`). Operational-only rows have no canonical
+ID — see `references/canonical-workflows.md` Table B for the policy.
 
 ## Canonical Workflow IDs
 
@@ -59,16 +59,10 @@ those canonical IDs. The reconciliation table — every cogni-help template ID
 and every `docs/workflows/<name>.md` filename mapped to a single canonical ID
 with a migration action — lives at `references/canonical-workflows.md`.
 
-The current template filenames in the table above may not yet match the
-canonical IDs (migration is tracked in the reference file). When a workflow
-is referenced from another surface (`teach`, `guide`, `cheatsheet`, `docs/`),
-use the canonical ID — never the legacy template filename.
-
-Propagation of canonical IDs into the downstream surfaces is tracked
-alongside the rename/add work: template renames in #146, missing-template
-adds in #147, operational-only template prunes in #148, `teach` curriculum
-extension in #149, course reference scaffolding in #150, and `guide`
-plugin-catalog plus `cheatsheet` cross-reference updates in #151.
+When a workflow is referenced from another surface (`teach`, `guide`,
+`cheatsheet`, `docs/`), use the canonical ID. The reconciliation table in
+`references/canonical-workflows.md` is the source of truth for which IDs
+are user-facing vs operational-only and for any pending alignment work.
 
 ## How to Present Workflows
 
@@ -98,15 +92,15 @@ cogni-docs. These complement the bundled templates above — the templates here 
 step-by-step playbooks with commands and tips; the docs/ guides are narrative tutorials
 with context and variations.
 
-| Canonical workflow (`docs/workflows/<id>.md`) | Current cogni-help template | Notes |
-|-----------------------------------------------|------------------------------|-------|
-| `research-to-report` | `research-to-slides` (rename in #146) | Same pipeline, docs version focuses on the report |
-| `trends-to-solutions` | `trend-to-marketing` (rename in #146) | Same starting point, different end goal |
-| `portfolio-to-pitch` | `portfolio-to-pitch` (aligned) | Same pipeline |
-| `consulting-engagement` | `new-engagement` (rename in #146) | Same pipeline |
-| `content-pipeline` | — (add in #147) | Marketing pipeline from trends to campaign assets |
-| `install-to-infographic` | — (add in #147) | Install-to-deliverable pipeline ending in an infographic |
-| `portfolio-to-website` | — (add in #147) | Portfolio rendered as a static website |
+| Canonical workflow (`docs/workflows/<id>.md`) | cogni-help template | Notes |
+|-----------------------------------------------|---------------------|-------|
+| `research-to-report` | `research-to-report` | Same pipeline, docs version focuses on the report |
+| `trends-to-solutions` | `trends-to-solutions` | Same starting point, different end goal |
+| `portfolio-to-pitch` | `portfolio-to-pitch` | Same pipeline |
+| `consulting-engagement` | `consulting-engagement` | Same pipeline |
+| `content-pipeline` | — (no template yet) | Marketing pipeline from trends to campaign assets — refer the user to `docs/workflows/content-pipeline.md` |
+| `install-to-infographic` | — (no template yet) | Install-to-deliverable pipeline — refer the user to `docs/workflows/install-to-infographic.md` |
+| `portfolio-to-website` | — (no template yet) | Portfolio rendered as a static website — refer the user to `docs/workflows/portfolio-to-website.md` |
 
 When presenting a workflow, mention the corresponding docs/ guide if it exists:
 "For a narrative walkthrough with more context, see `docs/workflows/<name>.md`."

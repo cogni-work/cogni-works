@@ -10,7 +10,7 @@
     {
       "id": 1,
       "prompt": "Which plugins should I use to go from a trend analysis to a marketing campaign?",
-      "expected_output": "Suggests the pipeline: cogni-trends (scouting) → cogni-portfolio (propositions) → cogni-marketing (content). Mentions /workflow command for the trend-to-marketing template",
+      "expected_output": "Suggests the pipeline: cogni-trends (scouting) → cogni-portfolio (propositions) → cogni-marketing (content). Mentions /workflow command for the trends-to-solutions template",
       "files": []
     },
     {

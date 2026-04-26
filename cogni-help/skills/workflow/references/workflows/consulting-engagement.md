@@ -1,4 +1,4 @@
-# Workflow: New Consulting Engagement
+# Workflow: Consulting Engagement
 
 **Pipeline**: cogni-consulting setup → Discover → Define → Develop → Deliver
 **Duration**: Days to weeks depending on engagement scope

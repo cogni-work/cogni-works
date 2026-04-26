@@ -56,10 +56,10 @@ and names the migration action that the phase-2 children must execute.
 
 | Canonical ID | docs/workflows/ guide | cogni-help template (legacy) | Migration action | Tracked by | Notes |
 |---|---|---|---|---|---|
-| `research-to-report` | `docs/workflows/research-to-report.md` | `research-to-slides` | `rename` (template) | #146 | Pipeline unchanged. Rename template file and update SKILL.md cross-references. |
-| `trends-to-solutions` | `docs/workflows/trends-to-solutions.md` | `trend-to-marketing` | `rename` (template) | #146 | Pipeline unchanged. Rename template file and update SKILL.md cross-references. |
+| `research-to-report` | `docs/workflows/research-to-report.md` | `research-to-slides` → `research-to-report` | `completed by #146` | #146 | Template renamed in #146. Pipeline unchanged. |
+| `trends-to-solutions` | `docs/workflows/trends-to-solutions.md` | `trend-to-marketing` → `trends-to-solutions` | `completed by #146` | #146 | Template renamed in #146. Pipeline unchanged. |
 | `portfolio-to-pitch` | `docs/workflows/portfolio-to-pitch.md` | `portfolio-to-pitch` | `unchanged` | — | Already aligned on both sides. |
-| `consulting-engagement` | `docs/workflows/consulting-engagement.md` | `new-engagement` | `rename` (template) | #146 | Pipeline unchanged. Rename template file and update SKILL.md cross-references. |
+| `consulting-engagement` | `docs/workflows/consulting-engagement.md` | `new-engagement` → `consulting-engagement` | `completed by #146` | #146 | Template renamed in #146. Pipeline unchanged. |
 | `content-pipeline` | `docs/workflows/content-pipeline.md` | — | `add` (template) | #147 | docs/ guide is canonical; cogni-help adds presentation template. |
 | `install-to-infographic` | `docs/workflows/install-to-infographic.md` | — | `add` (template) | #147 | docs/ guide is canonical; cogni-help adds presentation template. |
 | `portfolio-to-website` | `docs/workflows/portfolio-to-website.md` | — | `add` (template) | #147 | docs/ guide is canonical; cogni-help adds presentation template. |
@@ -69,6 +69,7 @@ Migration action vocabulary:
 - `rename` — the cogni-help template exists under a non-canonical filename; rename the file to `<canonical-id>.md` and update SKILL.md and any cross-references.
 - `add` — no cogni-help template exists yet; create one that walks through the canonical pipeline.
 - `unchanged` — the template filename already matches the canonical ID; no migration action needed.
+- `completed by #N` — the migration shipped in PR/issue N; row preserved as historical record.
 - `prune-or-keep-internal` — the cogni-help template is operational-only and not part of the canonical user-facing set (see Table B).
 
 ## Table B — Operational-only templates (out of canonical user-facing set)
@@ -90,7 +91,7 @@ match the canonical ID.
 ## Coverage check
 
 - **cogni-help templates** (current contents of `cogni-help/skills/workflow/references/workflows/`):
-  `docs-pipeline`, `full-onboarding`, `new-engagement`, `portfolio-to-pitch`, `research-to-slides`, `trend-to-marketing` — **6 templates, each appears in exactly one row** (4 in Table A, 2 in Table B).
+  `consulting-engagement`, `docs-pipeline`, `full-onboarding`, `portfolio-to-pitch`, `research-to-report`, `trends-to-solutions` — **6 templates, each appears in exactly one row** (4 in Table A, 2 in Table B).
 - **docs/workflows/ guides** (current contents):
   `consulting-engagement`, `content-pipeline`, `install-to-infographic`, `portfolio-to-pitch`, `portfolio-to-website`, `research-to-report`, `trends-to-solutions` — **7 guides, each appears in exactly one row** (all in Table A).
 

@@ -19,7 +19,7 @@ skills/                         7 help skills
       known-issues.md             Known issues and resolution patterns
   workflow/                       Pipeline templates — 5 cross-plugin workflow playbooks
     references/
-      workflows/                  6 workflow definitions (research-to-slides, trend-to-marketing, etc.)
+      workflows/                  6 workflow definitions (research-to-report, trends-to-solutions, etc.)
   cheatsheet/                     Quick reference — one-screen cards for any plugin
   cogni-issues/                   Issue lifecycle — create, list, status via GitHub browser automation
 
@@ -67,11 +67,11 @@ Each course ~45 minutes with ~5 modules: Theory → Demo → Exercise → Quiz �
 
 | Workflow | Pipeline |
 |----------|----------|
-| research-to-slides | cogni-research → cogni-narrative → cogni-visual |
-| trend-to-marketing | cogni-trends → cogni-portfolio → cogni-marketing |
+| research-to-report | cogni-research → cogni-narrative → cogni-visual |
+| trends-to-solutions | cogni-trends → cogni-portfolio → cogni-marketing |
 | portfolio-to-pitch | cogni-portfolio → cogni-narrative → cogni-sales → cogni-visual |
 | docs-pipeline | cogni-docs: doc-start → audit → generate → sync → power → claude → hub → bridge |
-| new-engagement | cogni-consulting phases (Discover → Define → Develop → Deliver) |
+| consulting-engagement | cogni-consulting phases (Discover → Define → Develop → Deliver) |
 | full-onboarding | cogni-workspace → cogni-help courses 1-12 |
 
 ## Data Model

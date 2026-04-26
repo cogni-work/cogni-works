@@ -10,8 +10,8 @@ allowed-tools:
 Show step-by-step workflow templates for chaining insight-wave plugins.
 
 Accept either:
-- A workflow name (research-to-slides, trend-to-marketing, portfolio-to-pitch,
-  new-engagement, full-onboarding) — show that specific workflow
+- A workflow name (research-to-report, trends-to-solutions, portfolio-to-pitch,
+  consulting-engagement, full-onboarding) — show that specific workflow
 - No argument — list all available workflows
 
 Steps:

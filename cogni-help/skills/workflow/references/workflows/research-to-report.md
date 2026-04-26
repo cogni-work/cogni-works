@@ -1,4 +1,4 @@
-# Workflow: Research to Slides
+# Workflow: Research to Report
 
 **Pipeline**: cogni-research → cogni-narrative → cogni-visual
 **Duration**: 2-4 hours depending on research depth

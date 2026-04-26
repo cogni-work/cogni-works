@@ -28,21 +28,28 @@ If still unclear, default to English.
 Keep in English regardless of language setting:
 - Plugin names (`cogni-trends`, `cogni-narrative`, etc.)
 - Command names (`/workflow`, `/consult`, etc.)
-- Workflow IDs (`research-to-slides`, `trend-to-marketing`, etc.)
+- Canonical workflow IDs (`research-to-report`, `trends-to-solutions`, etc.)
 - Technical terms, file paths, code snippets
 
 ## Available Workflows
 
 Six bundled templates covering the most common plugin chains:
 
-| Workflow | Pipeline | Use case |
-|----------|----------|----------|
-| `research-to-slides` | research → narrative → visual | Analyst producing a presentation from research |
-| `trend-to-marketing` | tips → portfolio → marketing | GTM team turning trends into campaigns |
-| `portfolio-to-pitch` | portfolio → narrative → sales → visual | Sales creating a customer pitch deck |
-| `docs-pipeline` | doc-start → audit → generate → sync → power → claude → hub → bridge | Maintainer documenting the monorepo |
-| `new-engagement` | consulting setup → 4 phases | Consultant starting a structured engagement |
-| `full-onboarding` | workspace → help courses 1-11 | New user learning the full ecosystem |
+| Canonical ID | Current template file | Pipeline | Use case |
+|--------------|-----------------------|----------|----------|
+| `research-to-report` | `research-to-slides` (rename tracked by #146) | research → narrative → visual | Analyst producing a presentation from research |
+| `trends-to-solutions` | `trend-to-marketing` (rename tracked by #146) | tips → portfolio → marketing | GTM team turning trends into campaigns |
+| `portfolio-to-pitch` | `portfolio-to-pitch` (aligned) | portfolio → narrative → sales → visual | Sales creating a customer pitch deck |
+| `consulting-engagement` | `new-engagement` (rename tracked by #146) | consulting setup → 4 phases | Consultant starting a structured engagement |
+| — (operational-only) | `docs-pipeline` | doc-start → audit → generate → sync → power → claude → hub → bridge | Maintainer documenting the monorepo |
+| — (operational-only) | `full-onboarding` | workspace → help courses 1-11 | New user learning the full ecosystem |
+
+The first column is the canonical workflow ID from `docs/workflows/`; the
+second is the current filename in `references/workflows/` (which may differ
+until #146 lands the renames). Reference workflows from other surfaces
+(`teach`, `guide`, `cheatsheet`, `docs/`) by canonical ID, not template
+filename. Operational-only rows have no canonical ID — see
+`references/canonical-workflows.md` Table B for the policy.
 
 ## Canonical Workflow IDs
 
@@ -52,10 +59,16 @@ those canonical IDs. The reconciliation table — every cogni-help template ID
 and every `docs/workflows/<name>.md` filename mapped to a single canonical ID
 with a migration action — lives at `references/canonical-workflows.md`.
 
-The current template IDs above may not yet match the canonical IDs (migration
-is tracked there). When a workflow is referenced from another surface
-(`teach`, `guide`, `cheatsheet`, `docs/`), use the canonical ID — never the
-legacy template filename.
+The current template filenames in the table above may not yet match the
+canonical IDs (migration is tracked in the reference file). When a workflow
+is referenced from another surface (`teach`, `guide`, `cheatsheet`, `docs/`),
+use the canonical ID — never the legacy template filename.
+
+Propagation of canonical IDs into the downstream surfaces is tracked
+alongside the rename/add work: template renames in #146, missing-template
+adds in #147, operational-only template prunes in #148, `teach` curriculum
+extension in #149, course reference scaffolding in #150, and `guide`
+plugin-catalog plus `cheatsheet` cross-reference updates in #151.
 
 ## How to Present Workflows
 
@@ -85,13 +98,15 @@ cogni-docs. These complement the bundled templates above — the templates here 
 step-by-step playbooks with commands and tips; the docs/ guides are narrative tutorials
 with context and variations.
 
-| docs/ workflow | Related template | Notes |
-|----------------|-----------------|-------|
-| `docs/workflows/research-to-report.md` | `research-to-slides` | Same pipeline, docs version focuses on the report |
-| `docs/workflows/portfolio-to-pitch.md` | `portfolio-to-pitch` | Same pipeline |
-| `docs/workflows/trends-to-solutions.md` | `trend-to-marketing` | Same starting point, different end goal |
-| `docs/workflows/consulting-engagement.md` | `new-engagement` | Same pipeline |
-| `docs/workflows/content-pipeline.md` | `trend-to-marketing` | Marketing-focused variant |
+| Canonical workflow (`docs/workflows/<id>.md`) | Current cogni-help template | Notes |
+|-----------------------------------------------|------------------------------|-------|
+| `research-to-report` | `research-to-slides` (rename in #146) | Same pipeline, docs version focuses on the report |
+| `trends-to-solutions` | `trend-to-marketing` (rename in #146) | Same starting point, different end goal |
+| `portfolio-to-pitch` | `portfolio-to-pitch` (aligned) | Same pipeline |
+| `consulting-engagement` | `new-engagement` (rename in #146) | Same pipeline |
+| `content-pipeline` | — (add in #147) | Marketing pipeline from trends to campaign assets |
+| `install-to-infographic` | — (add in #147) | Install-to-deliverable pipeline ending in an infographic |
+| `portfolio-to-website` | — (add in #147) | Portfolio rendered as a static website |
 
 When presenting a workflow, mention the corresponding docs/ guide if it exists:
 "For a narrative walkthrough with more context, see `docs/workflows/<name>.md`."

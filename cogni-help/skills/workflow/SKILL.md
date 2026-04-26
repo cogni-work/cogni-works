@@ -33,19 +33,22 @@ Keep in English regardless of language setting:
 
 ## Available Workflows
 
-Six bundled templates covering the most common plugin chains:
+Nine bundled templates covering the most common plugin chains:
 
 | Canonical ID | Template file | Pipeline | Use case |
 |--------------|---------------|----------|----------|
+| `install-to-infographic` | `install-to-infographic` | workspace → themes → visual | First-run capstone — install, theme, render an infographic |
 | `research-to-report` | `research-to-report` | research → narrative → visual | Analyst producing a report-and-presentation deliverable from research |
 | `trends-to-solutions` | `trends-to-solutions` | tips → portfolio → marketing | GTM team turning trends into campaigns |
 | `portfolio-to-pitch` | `portfolio-to-pitch` | portfolio → narrative → sales → visual | Sales creating a customer pitch deck |
+| `portfolio-to-website` | `portfolio-to-website` | portfolio → workspace → website | Generate a deployable static site from the portfolio model |
+| `content-pipeline` | `content-pipeline` | marketing → narrative → copywriting → visual | Multi-channel marketing content production |
 | `consulting-engagement` | `consulting-engagement` | consulting setup → 4 phases | Consultant starting a structured engagement |
 | — (operational-only) | `docs-pipeline` | doc-start → audit → generate → sync → power → claude → hub → bridge | Maintainer documenting the monorepo |
 | — (operational-only) | `full-onboarding` | workspace → help courses 1-11 | New user learning the full ecosystem |
 
 The first column is the canonical workflow ID from `docs/workflows/`; the
-second is the corresponding filename in `references/workflows/`. The 4
+second is the corresponding filename in `references/workflows/`. The 7
 user-facing canonical workflows share the same ID as their template
 filename — reference them by canonical ID from any surface (`teach`,
 `guide`, `cheatsheet`, `docs/`). Operational-only rows have no canonical
@@ -94,13 +97,13 @@ with context and variations.
 
 | Canonical workflow (`docs/workflows/<id>.md`) | cogni-help template | Notes |
 |-----------------------------------------------|---------------------|-------|
+| `install-to-infographic` | `install-to-infographic` | Same first-run pipeline, docs version covers platform-specific Claude Code setup |
 | `research-to-report` | `research-to-report` | Same pipeline, docs version focuses on the report |
 | `trends-to-solutions` | `trends-to-solutions` | Same starting point, different end goal |
 | `portfolio-to-pitch` | `portfolio-to-pitch` | Same pipeline |
+| `portfolio-to-website` | `portfolio-to-website` | Same pipeline, docs version includes deployment hints and prerequisite matrix |
+| `content-pipeline` | `content-pipeline` | Same pipeline, docs version covers campaign orchestration and content-calendar scheduling |
 | `consulting-engagement` | `consulting-engagement` | Same pipeline |
-| `content-pipeline` | — (no template yet) | Marketing pipeline from trends to campaign assets — refer the user to `docs/workflows/content-pipeline.md` |
-| `install-to-infographic` | — (no template yet) | Install-to-deliverable pipeline — refer the user to `docs/workflows/install-to-infographic.md` |
-| `portfolio-to-website` | — (no template yet) | Portfolio rendered as a static website — refer the user to `docs/workflows/portfolio-to-website.md` |
 
 When presenting a workflow, mention the corresponding docs/ guide if it exists:
 "For a narrative walkthrough with more context, see `docs/workflows/<name>.md`."

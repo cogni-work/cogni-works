@@ -60,9 +60,9 @@ and names the migration action that the phase-2 children must execute.
 | `trends-to-solutions` | `docs/workflows/trends-to-solutions.md` | `trend-to-marketing` → `trends-to-solutions` | `completed by #146` | #146 | Template renamed in #146. Pipeline unchanged. |
 | `portfolio-to-pitch` | `docs/workflows/portfolio-to-pitch.md` | `portfolio-to-pitch` | `unchanged` | — | Already aligned on both sides. |
 | `consulting-engagement` | `docs/workflows/consulting-engagement.md` | `new-engagement` → `consulting-engagement` | `completed by #146` | #146 | Template renamed in #146. Pipeline unchanged. |
-| `content-pipeline` | `docs/workflows/content-pipeline.md` | — | `add` (template) | #147 | docs/ guide is canonical; cogni-help adds presentation template. |
-| `install-to-infographic` | `docs/workflows/install-to-infographic.md` | — | `add` (template) | #147 | docs/ guide is canonical; cogni-help adds presentation template. |
-| `portfolio-to-website` | `docs/workflows/portfolio-to-website.md` | — | `add` (template) | #147 | docs/ guide is canonical; cogni-help adds presentation template. |
+| `content-pipeline` | `docs/workflows/content-pipeline.md` | `content-pipeline` | `completed by #147` | #147 | Template added in #147. Pipeline matches docs/ guide. |
+| `install-to-infographic` | `docs/workflows/install-to-infographic.md` | `install-to-infographic` | `completed by #147` | #147 | Template added in #147. Pipeline matches docs/ guide. |
+| `portfolio-to-website` | `docs/workflows/portfolio-to-website.md` | `portfolio-to-website` | `completed by #147` | #147 | Template added in #147. Pipeline matches docs/ guide. |
 
 Migration action vocabulary:
 
@@ -91,7 +91,7 @@ match the canonical ID.
 ## Coverage check
 
 - **cogni-help templates** (current contents of `cogni-help/skills/workflow/references/workflows/`):
-  `consulting-engagement`, `docs-pipeline`, `full-onboarding`, `portfolio-to-pitch`, `research-to-report`, `trends-to-solutions` — **6 templates, each appears in exactly one row** (4 in Table A, 2 in Table B).
+  `consulting-engagement`, `content-pipeline`, `docs-pipeline`, `full-onboarding`, `install-to-infographic`, `portfolio-to-pitch`, `portfolio-to-website`, `research-to-report`, `trends-to-solutions` — **9 templates, each appears in exactly one row** (7 in Table A, 2 in Table B).
 - **docs/workflows/ guides** (current contents):
   `consulting-engagement`, `content-pipeline`, `install-to-infographic`, `portfolio-to-pitch`, `portfolio-to-website`, `research-to-report`, `trends-to-solutions` — **7 guides, each appears in exactly one row** (all in Table A).
 

@@ -242,6 +242,10 @@ a persisted field in the offering or feature schema. Step 7.1 reads the flag
 from the in-flight scan output and decides whether to keep, synthesize, or
 re-evaluate; it is not surfaced in `features/*.json`.
 
+See `portfolio-scan` SKILL.md Step 7.1 (the authoritative two-pass rule)
+and `skills/portfolio-scan/references/scan-entity-schema.md` (Description
+selection contract) for the downstream contract this gate feeds into.
+
 #### Dual-Category Assignment Rules
 
 Some offerings legitimately span multiple taxonomy categories. When extracting offerings, check against the template's cross-category rules (read `{{TEMPLATE_PATH}}/cross-category-rules.md` if available) and create TWO offering entries if matched.

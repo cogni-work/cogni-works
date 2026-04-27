@@ -39,7 +39,7 @@ When importing offerings as portfolio features (Phase 7), map fields as follows:
 |---|---|---|
 | Name | `name` + `slug` (kebab-case) | Slug derived from name |
 | — | `purpose` | Derived: 5-12 word customer-readable statement of what the feature is FOR (from web copy context) |
-| Description | `description` | Two-pass selection: keep snippet if it contains a `taxonomy_mapping.category_name` keyword (stop-word set shared with `feature-deduplication-detector`); otherwise synthesize from `feature_name + usp + category_name`. See SKILL.md Step 7.1 (authoritative) and `portfolio-web-researcher.md` Step 3 (Description Selection). |
+| Description | `description` | Two-pass selection: keep snippet if it contains a `taxonomy_mapping.category_name` keyword (stop-word set shared with `feature-deduplication-detector`); otherwise synthesize from `feature_name + usp + category_name`. When `portfolio.json.language` is not `en`, both passes write the result in `language` (proper nouns preserved); see the LANGUAGE contract bullet below. See SKILL.md Step 7.1 (authoritative) and `portfolio-web-researcher.md` Step 3 (Description Selection). |
 | Category ID | `taxonomy_mapping.category_id` | From taxonomy classification |
 | Dimension | `taxonomy_mapping.dimension` | First digit of category ID |
 | Dimension Name | `taxonomy_mapping.dimension_name` | From taxonomy |
@@ -82,6 +82,22 @@ survivor is the candidate whose description has the highest category_name
 keyword overlap (ties broken by longest within the 20-35 word budget). The
 non-winning candidates' descriptions are preserved in `source_lineage` with
 `entity_role: "aggregated_from"` so per-stack evidence is not lost.
+
+3. **LANGUAGE contract (both stages).** When `portfolio.json.language` is
+   set and is not `en`, both the extraction-time gate
+   (`portfolio-web-researcher` Step 3) and the mapping-time gate
+   (`portfolio-scan` SKILL.md Step 7.1) must produce `description` (and
+   Step 7.1 `purpose`) text in `language`. Web-sourced snippets are
+   translated rather than adopted verbatim — Pass A keeps the candidate's
+   *content*, not its source language. Product names, provider sub-brands,
+   technology partner names, technical abbreviations (e.g. `API`, `SD-WAN`,
+   `IaaS`, `PaaS`, `SaaS`, `5G`, `NOC`, `SOC`, `IAM`), compliance
+   frameworks (`BSI C5`, `ISO 27001`, `SOC 2`, `GDPR`/`DSGVO`),
+   standards-org names, domain names, and URLs are preserved verbatim. The
+   `description_confidence` flag and the audit trail
+   (`rejected_descriptions[]`) are language-agnostic — log entries record
+   the original snippet wording so reviewers can see what was actually on
+   the page, not a translation.
 
 ## Null-Safe Field Access
 

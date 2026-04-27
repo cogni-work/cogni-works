@@ -83,7 +83,6 @@ graph LR
 **Tips**:
 - Iterate on theme tweaks, copy edits, or page additions by re-running `/website-build` after changes
 - For deployment, the `website/` directory is self-contained — push it to any static host (Netlify, GitHub Pages, S3)
-- Add legally required pages — `/website-legal` generates Impressum, Datenschutzerklärung, and cookie notices for the configured jurisdiction
 
 ## Common Pitfalls
 

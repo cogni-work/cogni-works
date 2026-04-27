@@ -73,7 +73,7 @@ graph LR
 
 ## Step 5: Render to Visual (Optional, cogni-visual)
 
-**Command**: Describe the output you want — `/render-html-slides`, web narrative, or a campaign summary deck
+**Command**: Describe the output you want — a presentation, a scrollable web narrative, or a campaign summary deck
 
 **Input**: Long-form polished content from Step 4
 **Output**: A PPTX deck, a scrollable web narrative, or a campaign-summary deck

@@ -33,14 +33,16 @@ Keep in English regardless of language setting:
 
 ## Available Workflows
 
-Four bundled user-facing templates covering the most common plugin chains (two additional internal/operational templates are documented in the next section):
+Four bundled user-facing templates cover the most common plugin chains.
+Two additional internal/operational templates are documented in the next
+section.
 
-| Canonical ID | Template file | Pipeline | Use case |
-|--------------|---------------|----------|----------|
-| `research-to-report` | `research-to-report` | research → narrative → visual | Analyst producing a report-and-presentation deliverable from research |
-| `trends-to-solutions` | `trends-to-solutions` | tips → portfolio → marketing | GTM team turning trends into campaigns |
-| `portfolio-to-pitch` | `portfolio-to-pitch` | portfolio → narrative → sales → visual | Sales creating a customer pitch deck |
-| `consulting-engagement` | `consulting-engagement` | consulting setup → 4 phases | Consultant starting a structured engagement |
+| Canonical ID | Reference file | Pipeline | Use case |
+|--------------|----------------|----------|----------|
+| `research-to-report` | `references/workflows/research-to-report.md` | research → narrative → visual | Analyst producing a report-and-presentation deliverable from research |
+| `trends-to-solutions` | `references/workflows/trends-to-solutions.md` | tips → portfolio → marketing | GTM team turning trends into campaigns |
+| `portfolio-to-pitch` | `references/workflows/portfolio-to-pitch.md` | portfolio → narrative → sales → visual | Sales creating a customer pitch deck |
+| `consulting-engagement` | `references/workflows/consulting-engagement.md` | consulting setup → 4 phases | Consultant starting a structured engagement |
 
 These are the canonical user-facing workflows — every entry has a one-to-one
 backing guide at `docs/workflows/<canonical-id>.md`. Reference them by
@@ -59,7 +61,7 @@ ID.
 | Internal ID | Pipeline | Use case |
 |-------------|----------|----------|
 | `docs-pipeline` | doc-start → audit → generate → sync → power → claude → hub → bridge | Maintainer documenting the monorepo |
-| `full-onboarding` | workspace → help courses 1-11 | New user learning the full ecosystem |
+| `full-onboarding` | workspace → help courses 1-12 | New user learning the full ecosystem |
 
 These do not appear in the default `/workflow` listing (no-args invocation),
 do not carry canonical IDs, and are not part of the docs/workflows 1:1 set —
@@ -103,8 +105,13 @@ user-facing "Available Workflows" table above and ask which one the user
 wants to explore. Do not list `docs-pipeline` or `full-onboarding` in the
 default listing — they are operational and surface only when the user names
 the ID explicitly (e.g., `/workflow docs-pipeline`). When that happens, open
-the template and prepend an "Internal / operational workflow" banner so the
-user sees the framing.
+the template and prepend the exact banner below so the user sees the
+framing:
+
+```
+> **Internal / operational workflow** — not part of the default `/workflow`
+> listing. This template describes a maintainer pipeline.
+```
 
 ## docs/ Workflow Guides
 

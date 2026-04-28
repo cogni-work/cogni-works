@@ -122,9 +122,9 @@ Reference: `references/workflow-phases/phase-3-scoring.md`
 Present the TIPS paths and Solution Templates to the user for customer-specific
 Business Relevance (BR) scoring on a 1-5 scale. Generate an interactive scoring UI.
 Step 0.5 first runs the `br-pre-scorer` agent to produce a suggested 1–5 score
-and one-line rationale per candidate (trend, implications, possibilities) — the
-user accepts, adjusts, or overrides them in the UI; only the user's final
-`business_relevance` feeds formula F1, the suggestion fields are audit-trail
+and one-line rationale per candidate (trend, implications, possibilities). The
+user accepts, adjusts, or overrides each suggestion in the UI. Only the user's
+final `business_relevance` feeds formula F1; the suggestion fields are audit-trail
 metadata.
 
 ### Phase 4: Rank & Visualize
@@ -208,8 +208,8 @@ Value chains are nested under their parent Investment Theme.
       "name": "Personalized Digital Experiences",
       "business_relevance": null,
       "business_relevance_suggested": 4,
-      "business_relevance_rationale": "Direct lever on customer retention KPI.",
-      "business_relevance_suggested_confidence": "high"
+      "business_relevance_rationale": "Inferred from chain narrative — retention-KPI lever is plausible but not directly cited in scout evidence.",
+      "business_relevance_suggested_confidence": "low"
     }
   ],
   "possibilities": [
@@ -282,6 +282,8 @@ audit-trail metadata, never inputs to ranking.
   "ranking_value": null
 }
 ```
+
+Solution Templates do not carry suggestion fields; BR scoring applies to TIPs only in Phase 1.
 
 ### Solution Process Improvement (SPI)
 

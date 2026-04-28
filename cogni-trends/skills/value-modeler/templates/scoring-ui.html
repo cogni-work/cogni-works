@@ -47,8 +47,8 @@
   .chain-narrative { color: var(--muted); font-size: 0.875rem; margin-bottom: 1rem;
     font-style: italic; }
 
-  .tip-row { display: flex; align-items: center; gap: 1rem; padding: 0.75rem 0;
-    border-top: 1px solid var(--border); }
+  .tip-row { padding: 0.75rem 0; border-top: 1px solid var(--border); }
+  .tip-row-main { display: flex; align-items: center; gap: 1rem; }
   .tip-role { width: 24px; height: 24px; border-radius: 50%; display: flex;
     align-items: center; justify-content: center; font-weight: 700; font-size: 0.75rem;
     flex-shrink: 0; }
@@ -70,6 +70,30 @@
   .br-btn.s3.selected { background: var(--mid); border-color: var(--mid); color: #000; }
   .br-btn.s4.selected { background: #84cc16; border-color: #84cc16; color: #000; }
   .br-btn.s5.selected { background: var(--high); border-color: var(--high); color: #000; }
+
+  .tip-details { margin-top: 0.6rem; margin-left: 40px; font-size: 0.85rem;
+    color: var(--muted); }
+  .tip-details summary { cursor: pointer; padding: 0.25rem 0.5rem; border-radius: 4px;
+    user-select: none; list-style: none; display: inline-flex; align-items: center;
+    gap: 0.4rem; }
+  .tip-details summary::-webkit-details-marker { display: none; }
+  .tip-details summary::before { content: '\25B8'; font-size: 0.7rem; color: var(--muted);
+    transition: transform 0.15s; display: inline-block; }
+  .tip-details[open] summary::before { transform: rotate(90deg); }
+  .tip-details summary:hover { color: var(--accent); }
+  .tip-details-body { margin-top: 0.5rem; padding: 0.75rem 1rem;
+    border-left: 2px solid var(--border); background: rgba(255,255,255,0.02);
+    border-radius: 0 4px 4px 0; color: var(--text); }
+  .tip-details-body p { margin-bottom: 0.6rem; line-height: 1.5; }
+  .tip-details-body h4 { font-size: 0.7rem; text-transform: uppercase;
+    letter-spacing: 0.05em; color: var(--muted); margin-top: 0.6rem;
+    margin-bottom: 0.3rem; font-weight: 600; }
+  .tip-details-body h4:first-child { margin-top: 0; }
+  .tip-details-body ul { padding-left: 1.25rem; margin-bottom: 0.5rem; }
+  .tip-details-body ul li { margin-bottom: 0.25rem; line-height: 1.45; }
+  .tip-details-body a { color: var(--accent); text-decoration: none;
+    word-break: break-word; }
+  .tip-details-body a:hover { text-decoration: underline; }
 
   .legend { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 2rem;
     font-size: 0.8rem; color: var(--muted); }
@@ -134,6 +158,43 @@ if (!MODEL_DATA.investment_themes && !MODEL_DATA.themes && (MODEL_DATA.value_cha
   });
 }
 
+function esc(s) {
+  if (s == null) return '';
+  return String(s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function renderTipDetails(tip) {
+  const description = tip.description;
+  const rationale = tip.rationale;
+  const evidence = Array.isArray(tip.evidence) ? tip.evidence.filter(Boolean) : [];
+  const sources = Array.isArray(tip.sources) ? tip.sources.filter(Boolean) : [];
+  if (!description && !rationale && !evidence.length && !sources.length) return '';
+  const parts = [];
+  if (description) parts.push(`<h4>Beschreibung</h4><p>${esc(description)}</p>`);
+  if (rationale)   parts.push(`<h4>Begr&uuml;ndung</h4><p>${esc(rationale)}</p>`);
+  if (evidence.length) {
+    const items = evidence.map(e => `<li>${esc(e)}</li>`).join('');
+    parts.push(`<h4>Evidenz</h4><ul>${items}</ul>`);
+  }
+  if (sources.length) {
+    const items = sources.map(src => {
+      if (typeof src === 'string') return `<li>${esc(src)}</li>`;
+      const title = esc(src.title || src.url || '');
+      const url = src.url ? esc(src.url) : null;
+      return url
+        ? `<li><a href="${url}" target="_blank" rel="noopener">${title}</a></li>`
+        : `<li>${title}</li>`;
+    }).join('');
+    parts.push(`<h4>Quellen</h4><ul>${items}</ul>`);
+  }
+  return `<details class="tip-details"><summary>Details</summary><div class="tip-details-body">${parts.join('')}</div></details>`;
+}
+
 function init() {
   const container = document.getElementById('themes');
   const seen = new Set();
@@ -191,17 +252,20 @@ function init() {
         row.dataset.themeId = itId;
         const roleClass = tip.role === 'T' ? 'role-t' : tip.role === 'I' ? 'role-i' : 'role-p';
         row.innerHTML = `
-          <div class="tip-role ${roleClass}">${tip.role}</div>
-          <div class="tip-info">
-            <div class="tip-name">${tip.name}</div>
-            <div class="tip-meta">${ref}</div>
+          <div class="tip-row-main">
+            <div class="tip-role ${roleClass}">${tip.role}</div>
+            <div class="tip-info">
+              <div class="tip-name">${esc(tip.name)}</div>
+              <div class="tip-meta">${esc(ref)}</div>
+            </div>
+            <div class="br-buttons">
+              ${[1,2,3,4,5].map(n =>
+                `<button class="br-btn s${n}" data-ref="${esc(ref)}" data-score="${n}" data-theme="${itId}"
+                  onclick="setScore('${esc(ref)}', ${n}, '${itId}')">${n}</button>`
+              ).join('')}
+            </div>
           </div>
-          <div class="br-buttons">
-            ${[1,2,3,4,5].map(n =>
-              `<button class="br-btn s${n}" data-ref="${ref}" data-score="${n}" data-theme="${itId}"
-                onclick="setScore('${ref}', ${n}, '${itId}')">${n}</button>`
-            ).join('')}
-          </div>
+          ${renderTipDetails(tip)}
         `;
         card.appendChild(row);
 

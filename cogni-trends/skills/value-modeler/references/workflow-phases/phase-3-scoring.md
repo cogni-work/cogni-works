@@ -42,10 +42,37 @@ Use the HTML template at `$CLAUDE_PLUGIN_ROOT/skills/value-modeler/templates/sco
 3. Write to `value-modeler-scoring.html` in the project directory
 4. Open it: `open value-modeler-scoring.html`
 
+### TIP candidate enrichment in the payload
+
+When you build the TIP entries inside `value_chains[].trend`, `value_chains[].implications[]`,
+and `value_chains[].possibilities[]`, carry the full candidate context — not just the short
+name. The template renders an expandable `<details>` block per TIP that shows description,
+rationale, evidence, and sources so the user can score 30+ candidates without keeping
+`trend-candidates.md` open in a second window (issue #175).
+
+For each TIP entry in the payload, include these fields alongside the existing `name`,
+`candidate_ref`, `score`, and horizon fields:
+
+| Field | Type | Source |
+|-------|------|--------|
+| `description` | string | `tips_candidates.items[].description` from `.metadata/trend-scout-output.json` |
+| `rationale` | string | `tips_candidates.items[].rationale` from same |
+| `evidence` | array of strings | `tips_candidates.items[].evidence` from same (bullet points) |
+| `sources` | array of `{title, url}` objects (or plain strings) | `tips_candidates.items[].sources` from same |
+
+Look up each candidate by `candidate_ref` against `tips_candidates.items[*].candidate_ref`
+(or `id`) and merge the four fields into the TIP entry before serializing. Any of the four
+may be empty or omitted on the source candidate — the template degrades gracefully and
+omits the corresponding section, so do not synthesize placeholder content. If
+`trend-scout-output.json` is missing entirely (legacy projects), serialize the payload
+without these fields and the template will simply skip the details block on each row.
+
 The template renders Strategic Themes as sections, with value chains as cards beneath each
 theme. Each card has 1-5 button scoring per TIP candidate. Candidates appearing in multiple
 chains are synced — the user scores once, it propagates. A progress bar shows scoring
-coverage per theme and overall. "Export" downloads `br-scores.json`.
+coverage per theme and overall. Each TIP row carries an inline expandable "Details" section
+(native HTML5 `<details>`/`<summary>`, no JS) that reveals description, rationale, evidence,
+and sources when clicked. "Export" downloads `br-scores.json`.
 
 The user may show this to stakeholders — it's designed to be professional and self-contained.
 The theme-level grouping makes it practical even for non-technical stakeholders to work

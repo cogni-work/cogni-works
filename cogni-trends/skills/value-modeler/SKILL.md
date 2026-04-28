@@ -121,6 +121,11 @@ Reference: `references/workflow-phases/phase-3-scoring.md`
 
 Present the TIPS paths and Solution Templates to the user for customer-specific
 Business Relevance (BR) scoring on a 1-5 scale. Generate an interactive scoring UI.
+Step 0.5 first runs the `br-pre-scorer` agent to produce a suggested 1–5 score
+and one-line rationale per candidate (trend, implications, possibilities) — the
+user accepts, adjusts, or overrides them in the UI; only the user's final
+`business_relevance` feeds formula F1, the suggestion fields are audit-trail
+metadata.
 
 ### Phase 4: Rank & Visualize
 Reference: `references/workflow-phases/phase-4-rank.md`
@@ -192,20 +197,29 @@ Value chains are nested under their parent Investment Theme.
   "trend": {
     "candidate_ref": "externe-effekte/act/1",
     "name": "GLP-1 Market Impact",
-    "business_relevance": null
+    "business_relevance": null,
+    "business_relevance_suggested": 5,
+    "business_relevance_rationale": "Mission-critical demand shift — every adjacent CPG roadmap depends on it.",
+    "business_relevance_suggested_confidence": "high"
   },
   "implications": [
     {
       "candidate_ref": "digitale-wertetreiber/act/29",
       "name": "Personalized Digital Experiences",
-      "business_relevance": null
+      "business_relevance": null,
+      "business_relevance_suggested": 4,
+      "business_relevance_rationale": "Direct lever on customer retention KPI.",
+      "business_relevance_suggested_confidence": "high"
     }
   ],
   "possibilities": [
     {
       "candidate_ref": "neue-horizonte/act/14",
       "name": "GLP-1 Portfolio Reformulation",
-      "business_relevance": null
+      "business_relevance": null,
+      "business_relevance_suggested": 4,
+      "business_relevance_rationale": "Reformulation pipeline already on the 2026 portfolio roadmap.",
+      "business_relevance_suggested_confidence": "high"
     }
   ],
   "foundation_requirements": [
@@ -221,6 +235,15 @@ Value chains are nested under their parent Investment Theme.
 
 A single candidate may appear in multiple chains — the same Trend can drive different
 Implications depending on context. The chain captures the *reasoning*, not just grouping.
+
+**Suggested vs. final BR:** `business_relevance_suggested` and
+`business_relevance_rationale` are populated by the `br-pre-scorer` agent in
+Phase 3 Step 0.5 — the LLM's grounded baseline that the user accepts, adjusts,
+or overrides in the scoring UI. `business_relevance_suggested_confidence`
+(`"high"` or `"low"`) flags suggestions extrapolated from chain narrative
+alone (when `trend-scout-output.json` lacks the candidate). Only
+`business_relevance` is consumed by formula F1 — the suggestion fields are
+audit-trail metadata, never inputs to ranking.
 
 ### Solution Template
 

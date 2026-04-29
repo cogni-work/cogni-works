@@ -123,33 +123,50 @@ After the tables:
 
 Keep the tone warm and oriented toward action — this is a welcome-back moment, not a status report.
 
-**Example rendered output** (English project, mid-modeling phase):
+**Example rendered output** (German project, post-modeling state — value model complete, report pending):
 
 ```
-TIPS Project: Industrial AI for Process Manufacturing
-Industry: manufacturing / process-industries
-Language: en
+TIPS-Projekt: Vom Chat-Assistenten zum agentischen Wissensarbeiter
+Branche: Professional Services / Consulting
+Sprache: de
 
-| Stage                | Status  | Details                              |
-|----------------------|---------|--------------------------------------|
-| Web Research         | Done    | 36 signals across 4 dimensions       |
-| Candidate Generation | Done    | 60 candidates scored                 |
-| Candidate Review     | Done    | 48 accepted, 8 revised, 4 rejected   |
-| Portfolio Anchors    | Done    | 3 products, 12/14 needs delivered    |
-| Portfolio Bridge     | Ready   | context v3.0 (upgrade available)     |
-| Value Modeler        | Pending | Run /value-modeler                   |
-| Trend Report         | N/A     | Awaiting modeling                    |
+| Stage                   | Status       | Details                                  |
+|-------------------------|--------------|------------------------------------------|
+| Web-Recherche           | Erledigt     | 38 Signale gefunden                      |
+| Kandidatengenerierung   | Erledigt     | 60 generiert                             |
+| Kandidatenauswahl       | Erledigt     | 60/60 vereinbart                         |
+| Portfolio-Brücke        | Erledigt     | v3.2 Kontext, 0 Features                 |
+| Wertketten & Themen     | Erledigt     | 5 strategische Themen                    |
+| Lösungsvorlagen         | Erledigt     | 12 Lösungen generiert                    |
+| BR-Bewertung & Ranking  | Erledigt     | 12 Lösungen bewertet                     |
+| Lösungs-Blueprints      | Erledigt     | 12/12 ausgearbeitet, avg readiness 0.99  |
+| Portfolio-Anker         | Erledigt     | 3 Produkte, 33/3 abgedeckt/ungedeckt     |
+| Trendbericht            | Ausstehend   | 0/4 Sektionen                            |
+| Claims-Register         | Erledigt     | 84 Claims extrahiert                     |
+| Insight-Zusammenfassung | Übersprungen | optional                                 |
+| Claim-Verifikation      | Ausstehend   | 84 Claims warten auf Verifikation        |
+| Executive-Polishing     | Übersprungen | optional                                 |
+| Visueller Bericht       | Übersprungen | optional                                 |
+| Dashboard               | Erledigt     | interaktive HTML-Visualisierung          |
 
-Phase: modeling — value model not yet built.
+Phase: reporting — Wertemodell vollständig, Bericht muss noch generiert werden.
 
-Next:
-  1. /bridge portfolio-to-tips — anchor solutions in current portfolio context
-  2. /value-modeler — build TIPS networks and rank solutions
+Nächster Schritt:
+  1. /trend-report — Wertemodell vollständig, Bericht aus den Investment-Themen aufbauen
 
-Welcome back — pick one and I'll proceed.
+Willkommen zurück — soll ich direkt /trend-report starten?
 ```
 
-Use this as a calibration target: terse columns, named phase translated to plain language, numbered next-actions surfaced from the script's `next_actions`, one short closer.
+Use this as the calibration target: 16 rows in the exact order the script emits them in `stages[]`, status enum translated per the table above, details rendered verbatim from `stages[i].details`, phase label matches the `phase` enum, next step renders verbatim from `next_actions[0]`.
+
+**Critical anti-patterns** — do **not** do any of these, even if the rendered output looks "cleaner":
+
+- Do not collapse the five value-modeler stages (rows 5–9: Value Chains & Themes, Solution Templates, BR Scoring & Ranking, Solution Blueprints, Portfolio Anchors) into a single "Value Modeler" row. The script emits five separate entries and they must render as five separate rows.
+- Do not invent stages that aren't in `stages[]` (e.g., there is no "Candidate Review" or "Value Modeler" stage — they don't exist in the array).
+- Do not substitute prose details ("Run /value-modeler") for the script's quantified details ("5 strategic themes"). If `stages[i].details` says "5 strategic themes", render "5 strategic themes" — even if the row's status is `pending` and a CTA might feel more helpful.
+- Do not flip a `done` row to `pending` (or vice versa) by re-deriving status from `workflow_state` or count fields. The script has already considered everything when it built `stages[]`.
+
+The example is rendered in German because the project's language is `de`; for non-DE projects, translate the status word and the details phrase, but never deviate from the row count, row order, or row names emitted by the script.
 
 ### 5. Recommend Next Action
 

@@ -20,6 +20,8 @@ TIPS projects span multiple sessions and skills (trend-scout → value-modeler �
 
 ## Workflow
 
+**Plugin root fallback.** Every bash call below uses `$CLAUDE_PLUGIN_ROOT`, which Claude Code is expected to inject. If a call fails with `No such file or directory` on a path beginning with `/scripts/…`, the variable was lost in the subshell. Recover by running `ls -td $HOME/.claude/plugins/cache/insight-wave/cogni-trends/*/ | head -1` to find the most recent cached plugin root, then re-invoke the same command with that absolute path substituted for `$CLAUDE_PLUGIN_ROOT`. Do this transparently — do not ask the user.
+
 ### 1. Find TIPS Projects
 
 Discover TIPS projects in the workspace using the discovery script.
@@ -81,21 +83,23 @@ Language: {language}
 
 **Progress Table:**
 
+All `{path.to.field}` placeholders below are dotted JSON paths into the JSON object returned by `project-status.sh --health-check`. Bind each placeholder by reading the matching key from that JSON — do not infer field names.
+
 | Stage | Status | Details |
 |-------|--------|---------|
-| Web Research | Done / Pending | {web_research_status}, {candidates_web} signals found |
+| Web Research | Done / Pending | {web_research_status}, {counts.candidates_web} signals found |
 | Candidate Generation | Done / Pending | 60 generated |
-| Candidate Selection | Done / Pending | {candidates_total}/60 agreed |
-| Portfolio Bridge | Done / Ready / N/A | v{context_version} context, {features_count} features |
-| Value Chains & Themes | Done / Pending | {themes_count} strategic themes |
-| Solution Templates | Done / Pending | {solutions_count} solutions generated |
-| BR Scoring & Ranking | Done / Pending | {ranked_count} solutions ranked |
-| Solution Blueprints | Done / Pending / N/A | {blueprints}/{solutions_count} blueprinted, avg readiness {avg_readiness}, {anchored_solutions} portfolio-anchored |
-| Portfolio Anchors | Done / N/A | {products_count} products, {features_count} features, {delivered}/{unmet} needs, {quality_issues} quality flags |
-| Trend Report | Done / Pending | {report_sections}/4 sections |
-| Claims Registry | Done / Pending | {claims_total} claims extracted |
+| Candidate Selection | Done / Pending | {counts.candidates_total}/60 agreed |
+| Portfolio Bridge | Done / Ready / N/A | v{portfolio_bridge.context_version} context, {portfolio_bridge.features_count} features |
+| Value Chains & Themes | Done / Pending | {counts.investment_themes} strategic themes |
+| Solution Templates | Done / Pending | {counts.solutions} solutions generated |
+| BR Scoring & Ranking | Done / Pending | {counts.ranked_solutions} solutions ranked |
+| Solution Blueprints | Done / Pending / N/A | {counts.blueprints}/{counts.solutions} blueprinted, avg readiness {counts.avg_readiness}, {counts.anchored_solutions} portfolio-anchored |
+| Portfolio Anchors | Done / N/A | {len(portfolio_anchors.products)} products, {portfolio_anchors.needs_delivered}/{portfolio_anchors.needs_undelivered} needs, {portfolio_anchors.quality_issues} quality flags |
+| Trend Report | Done / Pending | {counts.report_sections}/4 sections |
+| Claims Registry | Done / Pending | {counts.claims_total} claims extracted |
 | Insight Summary | Done / Skipped | |
-| Claim Verification | Done / Pending / Skipped | {verdict}: {passed} passed, {failed} failed |
+| Claim Verification | Done / Pending / Skipped | {verification.verdict}: {verification.passed} passed, {verification.failed} failed |
 | Executive Polish | Done / Skipped | tone (cogni-copywriting) |
 | Visual Report | Done / Skipped | themed HTML with charts (cogni-visual:enrich-report) |
 | Dashboard | Done / Skipped | interactive HTML visualization |
@@ -115,7 +119,9 @@ Render a per-product summary table from `portfolio_anchors.products`:
 
 | Product | Features | Solutions | Delivered | Unmet | Quality |
 |---------|----------|-----------|-----------|-------|---------|
-| {product_slug} | {features} | {solutions} | {needs_delivered} | {needs_undelivered} | OK or {quality_issues} flags |
+| {portfolio_anchors.products[i].product_slug} | {portfolio_anchors.products[i].features} | {portfolio_anchors.products[i].solutions} | {portfolio_anchors.products[i].needs_delivered} | {portfolio_anchors.products[i].needs_undelivered} | OK or {portfolio_anchors.products[i].quality_issues} flags |
+
+Render one row per element of `portfolio_anchors.products`.
 
 Coverage above 70% (delivered / total needs) indicates healthy anchoring. Products with quality flags need attention before customer-facing use — point users to `/trends-dashboard` for per-solution detail.
 
@@ -130,9 +136,9 @@ When the phase is `modeling` or `modeling-paths` and the Portfolio Bridge status
 When Portfolio Bridge status is **Done (upgrade available)** and the phase is `reporting` or later, add to recommendations: "Re-run `/bridge portfolio-to-tips` to add provider differentiators — trend-report will use them for stronger portfolio close sections."
 
 **Scoring Summary** (if candidates exist):
-- Average score: {avg_score}
-- Leading indicators: {leading_pct}%
-- Confidence: {high} high, {medium} medium, {low} low
+- Average score: {scoring.avg_score}
+- Leading indicators: {scoring.leading_pct}%
+- Confidence: {scoring.confidence_distribution.high} high, {scoring.confidence_distribution.medium} medium, {scoring.confidence_distribution.low} low
 
 **Dimension Balance** (if candidates exist):
 

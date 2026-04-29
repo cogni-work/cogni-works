@@ -65,7 +65,7 @@ The `company.products` array in `portfolio.json` (if present) provides initial o
      **Pre-flight validation.** Project-local taxonomies are user-editable and can drift into scan-breaking shapes silently (malformed category ids, categories without matching search patterns, missing product skeleton). Before Phase 1 dispatches 100+ web searches, validate:
 
      ```bash
-     "$CLAUDE_PLUGIN_ROOT/scripts/validate-taxonomy.sh" "${PROJECT_PATH}"
+     bash "${CLAUDE_PLUGIN_ROOT:-$(ls -td "$HOME"/.claude/plugins/cache/insight-wave/cogni-portfolio/*/ | head -1)}/scripts/validate-taxonomy.sh" "${PROJECT_PATH}"
      ```
 
      The script returns `{"success": true, "data": {...}}` on pass and exits 0. On failure it prints `{"success": false, "error": "...", "data": {"checks": [...]}}` and exits 1 — when this happens, show the failed checks to the user, tell them to run `cogni-portfolio:portfolio-taxonomy` (or hand-fix the pointed-to file, then revalidate), and **stop the scan** without starting Phase 1. Bundled templates (Step 5b) skip this step — they are shape-safe by construction.

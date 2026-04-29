@@ -199,7 +199,7 @@ Add or update the `canvas_context` object in `portfolio.json`:
 Run the portfolio sync script if products were created:
 
 ```bash
-$CLAUDE_PLUGIN_ROOT/scripts/sync-portfolio.sh <project-dir>
+bash "${CLAUDE_PLUGIN_ROOT:-$(ls -td "$HOME"/.claude/plugins/cache/insight-wave/cogni-portfolio/*/ | head -1)}/scripts/sync-portfolio.sh" <project-dir>
 ```
 
 Present a summary:

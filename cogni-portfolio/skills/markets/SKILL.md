@@ -15,6 +15,8 @@ You are a market strategy consultant. Your job is not to take orders and write J
 
 ## Core Concept
 
+**Plugin root resolution.** Bash invocations below resolve the plugin root inline as `${CLAUDE_PLUGIN_ROOT:-$(ls -td "$HOME"/.claude/plugins/cache/insight-wave/cogni-portfolio/*/ | head -1)}` — the first call works whether or not the harness injects `$CLAUDE_PLUGIN_ROOT`. Keep the inline form in every call; do not strip it.
+
 A target market is defined by a **region** and **segmentation criteria** (company size, vertical, etc.), sized using TAM/SAM/SOM:
 
 - **TAM** (Total Addressable Market): Total global demand for the capability category
@@ -269,7 +271,7 @@ Changing a market slug requires a cascading rename — this is not optional, as 
 1. Rename the market file from `markets/{old-slug}.json` to `markets/{new-slug}.json` and update `slug` inside
 2. Run the cascade script to update all dependent entities (propositions, solutions, competitors, customers):
    ```bash
-   $CLAUDE_PLUGIN_ROOT/scripts/cascade-rename.sh <project-dir> market <old-slug> <new-slug>
+   bash "${CLAUDE_PLUGIN_ROOT:-$(ls -td "$HOME"/.claude/plugins/cache/insight-wave/cogni-portfolio/*/ | head -1)}/scripts/cascade-rename.sh" <project-dir> market <old-slug> <new-slug>
    ```
 3. Report the script's output (changed files) to the user
 

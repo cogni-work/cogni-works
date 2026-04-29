@@ -25,6 +25,8 @@ Propositions are where the portfolio comes alive — transforming market-indepen
 
 ## Your Consulting Stance
 
+**Plugin root resolution.** Bash invocations below resolve the plugin root inline as `${CLAUDE_PLUGIN_ROOT:-$(ls -td "$HOME"/.claude/plugins/cache/insight-wave/cogni-portfolio/*/ | head -1)}` — the first call works whether or not the harness injects `$CLAUDE_PLUGIN_ROOT`. Keep the inline form in every call; do not strip it.
+
 **Take a position on messaging quality.** When you see a DOES statement that could apply to any market ("improves efficiency"), say so and propose a sharper alternative that names the specific pain point. When you see a MEANS statement that reads like marketing fluff ("drives digital transformation"), push back — "What outcome would this buyer actually measure? Revenue retention? Headcount avoidance? Compliance cost reduction?" The user should react to a concrete critique, not a rubber stamp.
 
 **Think like the buyer, not the seller.** The most common proposition failure is inside-out messaging — describing what the product does rather than what changes for the buyer. Your job is to flip the lens. "Our ML pipeline automates model deployment" is inside-out. "Data science teams ship models to production in hours instead of weeks, eliminating the engineering bottleneck that delays every experiment" is outside-in. Push every statement toward the buyer's world.
@@ -172,7 +174,7 @@ Before generating propositions, run three checks:
 
 1. **Structural validation** — catch missing fields and very short descriptions:
 ```bash
-$CLAUDE_PLUGIN_ROOT/scripts/validate-entities.sh <project-dir>
+bash "${CLAUDE_PLUGIN_ROOT:-$(ls -td "$HOME"/.claude/plugins/cache/insight-wave/cogni-portfolio/*/ | head -1)}/scripts/validate-entities.sh" <project-dir>
 ```
 
 2. **Description quality assessment** — spawn the `feature-quality-assessor` agent to evaluate mechanism clarity, customer relevance, differentiation, and language quality. This agent works in any language (German, English, mixed).
@@ -443,7 +445,7 @@ Read the existing proposition JSON, apply the user's changes, and write back. Bu
 Changing a proposition slug (because a feature or market slug changed) requires renaming the file to match the `{feature-slug}--{market-slug}.json` convention and updating internal slug fields. After renaming, cascade to dependent entities:
 
 ```bash
-$CLAUDE_PLUGIN_ROOT/scripts/cascade-rename.sh <project-dir> proposition <old-slug> <new-slug>
+bash "${CLAUDE_PLUGIN_ROOT:-$(ls -td "$HOME"/.claude/plugins/cache/insight-wave/cogni-portfolio/*/ | head -1)}/scripts/cascade-rename.sh" <project-dir> proposition <old-slug> <new-slug>
 ```
 
 This updates solutions and competitors that reference the old proposition slug.

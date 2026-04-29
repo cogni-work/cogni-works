@@ -220,7 +220,7 @@ After moving files, update the source lineage registry for each processed file:
 If any products were created during ingestion, run the centralized sync script:
 
 ```bash
-$CLAUDE_PLUGIN_ROOT/scripts/sync-portfolio.sh <project-dir>
+bash "${CLAUDE_PLUGIN_ROOT:-$(ls -td "$HOME"/.claude/plugins/cache/insight-wave/cogni-portfolio/*/ | head -1)}/scripts/sync-portfolio.sh" <project-dir>
 ```
 
 Skip this step if no products were created.

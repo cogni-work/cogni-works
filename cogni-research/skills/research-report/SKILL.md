@@ -222,7 +222,22 @@ plan = {
                          restore instruction. Projects created with
                          initialize-project.sh >= v0.7.7 always have
                          target_words set explicitly, so the notice only fires
-                         on pre-v0.7.7 project re-runs.>
+                         on pre-v0.7.7 project re-runs.>,
+  "story_arc_id":       <story_arc_id from project-config.json; default
+                         "standard-research" when the field is missing.
+                         Phase 1.5a is the single resolution site — Phase 4
+                         writer dispatch, Phase 4.5 expansion re-dispatch,
+                         Phase 5 reviewer dispatch, and Phase 6 summary all
+                         consume this pinned value rather than re-reading
+                         project-config.json. The two values that ship in v1
+                         are "standard-research" (today's behavior — sections
+                         derived from sub-questions per report-type template)
+                         and "corporate-visions" (Why Change → Why Now → Why
+                         You → Why Pay structure at fixed proportions of
+                         target_words, restricted to report_type == "detailed"
+                         and output_language ∈ {en, de}). Validation against
+                         the registry happened at initialize-project.sh time —
+                         do not re-validate here.>
 }
 ```
 
@@ -266,6 +281,8 @@ Web is never partitioned this way — it always gets `N` agents, one per sub-que
 
 **Cost estimate** lookup: use the row from `references/model-strategy.md` ("Cost Estimation" table) that matches `report_type × source_mode`. Do not compute a new cost formula — the table is the source of truth. For the hybrid row, report the full low–high range.
 
+**Resolving the Structure line** (`plan.story_arc_id_label`): when `plan.story_arc_id == "standard-research"`, set the label to `standard-research (sections derived from sub-questions)` — this makes the default explicit so the user sees what they're getting, not an absent line. When `plan.story_arc_id` names another arc, read the arc's `display_name`, `elements[]`, and per-element `proportion` fields from `${CLAUDE_PLUGIN_ROOT}/references/story-arcs.json` and format the label as `<arc_id> arc — <element1> ~<p1>% / <element2> ~<p2>% / ... of <target_words> words`. For `corporate-visions` at `target_words: 5000`, the label reads `corporate-visions arc — Why Change ~37% / Why Now ~21% / Why You ~27% / Why Pay ~15% of 5000 words` (note the Why Change share folds in the 10% hook proportion). The line gives the user one place to see, before researchers spawn, that the report will be arc-shaped — the writer's element-level word budgets are already locked in by the arc spec at this point.
+
 #### 1.5b: Print the plan
 
 Print this summary **unconditionally** — even when `confirm_plan=false`. Silent mode only suppresses the confirmation question in 1.5c; the plan itself should always appear in the transcript so the cost/quality decision is auditable after the fact. A silent run that never showed the user what was about to happen defeats the whole point of this phase.
@@ -278,6 +295,7 @@ Produce a compact text summary for the user. Use this exact shape (fill in the c
 Topic: <topic from project-config.json>
 Report type: <type> → <sub_question_count> sub-questions generated
 Length: <target_words> words (<"user-set" if field was present in project-config.json, else "default for <type>">)
+Structure: <plan.story_arc_id_label — see structure block resolution below>
 Source mode: <mode> (channels: <comma-separated channels>)
 
 Market & sources:
@@ -570,10 +588,11 @@ Task(writer,
   TONE=<tone from project-config.json, default "objective">,
   CITATION_FORMAT=<citation_format from project-config.json, default "apa">,
   OUTPUT_LANGUAGE=<output_language>,
-  TARGET_MIN_WORDS=<target_words resolved on the Phase 1.5a plan object — Phase 1.5a is the single resolution site; it reads project-config.json target_words with the default-by-depth fallback when the field is missing, then pins the value onto the plan at .logs/phase-1.5-plan.json for every downstream phase to consume>)
+  TARGET_MIN_WORDS=<target_words resolved on the Phase 1.5a plan object — Phase 1.5a is the single resolution site; it reads project-config.json target_words with the default-by-depth fallback when the field is missing, then pins the value onto the plan at .logs/phase-1.5-plan.json for every downstream phase to consume>,
+  STORY_ARC_ID=<story_arc_id resolved on the Phase 1.5a plan object; default "standard-research" when project-config.json has no story_arc_id field. Phase 1.5a is the single resolution site for this field too — Phase 4 is a consumer that reads .logs/phase-1.5-plan.json story_arc_id, never project-config.json directly.>)
 ```
 
-**Always pass `TARGET_MIN_WORDS` on every writer dispatch**, not just expansion re-dispatches. Since length is decoupled from depth in v0.7.7 (issue #35), the writer no longer has a safe fallback to a per-type constant — it needs the orchestrator-resolved `target_words` value on the first pass so its Phase 1 outline budgets match the project's actual length floor. Phase 4 reads the value from the Phase 1.5a plan object (it does not re-resolve from project-config.json); this keeps Phase 1.5a as the single source of truth and prevents three-site drift. The writer's documented per-type fallback table is retained only as a last-resort safety net for agent-level testing where the orchestrator is absent.
+**Always pass `TARGET_MIN_WORDS` and `STORY_ARC_ID` on every writer dispatch**, not just expansion re-dispatches. Since length is decoupled from depth in v0.7.7 (issue #35), the writer no longer has a safe fallback to a per-type constant — it needs the orchestrator-resolved `target_words` value on the first pass so its Phase 1 outline budgets match the project's actual length floor. Phase 4 reads the value from the Phase 1.5a plan object (it does not re-resolve from project-config.json); this keeps Phase 1.5a as the single source of truth and prevents three-site drift. The writer's documented per-type fallback table is retained only as a last-resort safety net for agent-level testing where the orchestrator is absent.
 
 Note: no `WRITER_MODE` parameter — the writer defaults to `full` mode for every report type including deep.
 
@@ -601,6 +620,7 @@ The writer's self-reported `words` in return JSON has historically drifted (obse
     CITATION_FORMAT=<citation_format>,
     OUTPUT_LANGUAGE=<output_language>,
     TARGET_MIN_WORDS=<target_words>,
+    STORY_ARC_ID=<story_arc_id from the plan object>,
     EXPANSION_NOTES="Your previous run returned draft text in the response body instead of writing output/draft-v{N}.md to disk. Call the Write tool with the full drafted markdown as content. After Write returns, call Read on the same path to verify persistence. Return only the compact status JSON — never the drafted prose itself. See agents/writer.md Phase 3 for the read-back contract.")
   ```
 - **0d. Re-check and decide.** After the retry, re-run the existence check. If the file is still missing or empty, **halt Phase 4**: print a user-visible error block containing the topic, the project path, and a pointer to `.metadata/execution-log.json phases.phase_4_writer.write_failure`, then stop. Do not fall through to the `wc -w` measurement or Phase 5 — a phantom draft would corrupt every downstream phase (reviewer, revisor, verify-report). If the retry succeeds, set `phases.phase_4_writer.write_failure.recovered: true` in the execution log so the Phase 6 summary can surface the recovery, then continue to the word-count measurement with the recovered file.
@@ -634,6 +654,7 @@ Only once Step 0 confirms the file is present do the remaining gate steps apply:
        CITATION_FORMAT=<citation_format>,
        OUTPUT_LANGUAGE=<output_language>,
        TARGET_MIN_WORDS=<floor>,
+       STORY_ARC_ID=<story_arc_id from the plan object>,
        EXPANSION_NOTES="Previous draft ({actual_words} words) fell below the {floor}-word {type}-mode minimum by {floor - actual_words} words. Read .metadata/writer-outline-v1.json and identify sections whose drafted length fell below their planned budget — expand those first. Add evidence density (cross-source comparison, implications, methodological context, concrete examples from untapped context entities). Do not add new top-level sections. Do not pad with filler or 'in conclusion' restatements.")
      ```
 5. After the re-dispatch, measure `wc -w output/draft-v2.md`. If still below `gate_floor`, do NOT re-dispatch a third time — cap at one expansion attempt to bound Phase 4 cost. Instead:
@@ -674,10 +695,11 @@ Task(reviewer,
   PROJECT_PATH=<project_path>,
   DRAFT_PATH="output/draft-v{N}.md",
   REVIEW_ITERATION=1,
-  OUTPUT_LANGUAGE=<output_language>)
+  OUTPUT_LANGUAGE=<output_language>,
+  STORY_ARC_ID=<story_arc_id from the plan object>)
 ```
 
-Note: no `CLAIMS_DASHBOARD` parameter — the reviewer runs structural criteria only (completeness, coherence, source diversity, depth, clarity). The higher accept threshold (0.82) for structural-only review applies automatically.
+Note: no `CLAIMS_DASHBOARD` parameter — the reviewer runs structural criteria only (completeness, coherence, source diversity, depth, clarity, plus the Arc-Structural Gate when `STORY_ARC_ID != standard-research`). The higher accept threshold (0.82) for structural-only review applies automatically.
 
 #### 5b: Revise (if verdict="revise")
 ```
@@ -687,7 +709,8 @@ Task(revisor,
   VERDICT_PATH=".metadata/review-verdicts/v1.json",
   NEW_DRAFT_VERSION=N+1,
   OUTPUT_LANGUAGE=<output_language>,
-  MARKET=<market>)
+  MARKET=<market>,
+  STORY_ARC_ID=<story_arc_id from the plan object>)
 ```
 
 **Iteration cap** — conditional on the verdict's issue profile and report type:
@@ -705,6 +728,7 @@ Task(revisor,
 
   The loop:
   - After the revisor produces `draft-v{N+1}.md`, re-run the reviewer with `REVIEW_ITERATION=N+1`, generating `.metadata/review-verdicts/v{N+1}.json`.
+  - **Pass `STORY_ARC_ID` on every dispatch in this loop**, both reviewer and revisor — read it from the Phase 1.5a plan object the same way Phase 5a above does. Without it, an arc-driven project's follow-up reviewer pass would silently skip the Arc-Structural Gate and the revisor would lose the arc-preservation discipline, allowing a Word-deficit expansion to rename or reorder element headings without anyone noticing until the user reads the final report.
   - **Iteration persistence is mandatory.** After each follow-up reviewer dispatch returns, verify the verdict file exists and is non-empty via `[ -s "${PROJECT_PATH}/.metadata/review-verdicts/v${N+1}.json" ]`. If missing, the reviewer failed to persist its verdict — log `phase_5_review.iteration_{N+1}_missing: true` in `.metadata/execution-log.json` and halt Phase 5 with a user-visible error. Do not fall through to Phase 5.5 or Phase 6 with an unverified post-revisor draft — the whole point of the follow-up iteration is to confirm whether the expansion closed the gap.
   - If the verdict is `accept`, exit the loop and proceed to Phase 5.5.
   - If the verdict is still `revise` with another `Word deficit` issue AND the cap for the current report type has not been reached, dispatch another revisor expansion pass and then another reviewer pass. Non-deep modes stop after iteration 2; deep mode stops after iteration 3.
@@ -777,6 +801,7 @@ Once the promotion gate passes (or the user selects Option A), continue with the
 4. Report summary to user:
    - Topic and report type
    - **Word count**: always formatted as `Delivered: N words (target: {target_words} words)`. Read `{target_words}` from the Phase 1.5a plan object at `.logs/phase-1.5-plan.json` — the single resolution site that Phase 4 dispatch, Phase 4.5 Step 2, and the Phase 6 promotion gate all consume. Do not re-resolve from `project-config.json` here. Length is decoupled from depth in v0.7.7 — there is no per-type range; the user committed to a specific target in setup (or via the default-by-depth fallback Phase 1.5a applied), and the summary reports against that target. If `phases.phase_4_writer.re_dispatches >= 1`, also show `(expanded from {v1_words} via expansion chain)` so the user sees when the gate earned its cost.
+   - **Story arc summary** (only when `plan.story_arc_id != "standard-research"`): print one line of element distribution — `Arc: <arc_id> — <element1> <a1>% (target <e1>%), <element2> <a2>% (target <e2>%), …`. Read the per-element actual proportion from the latest reviewer verdict's `arc_structural.checks[]` block (look for entries with `"check": "element_proportion"` and use the `actual` and `expected` fields, formatted as percentages). When the gate status was `pass` or `skipped`, omit this line — it only adds value when there was a check to summarize, and a passed arc structure is implicit in the `Delivered: N words` line landing at target.
    - **Word-count gate status** — read `.metadata/execution-log.json phases.phase_4_writer`:
      - If `phases.phase_4_writer.write_failure` exists and `write_failure.recovered == true`: print `✓ Phase 4.5 write-failure recovery: writer persisted the draft on retry after a first-run silent-persist failure.` Then continue to the branches below — the write-failure line is additive, not a replacement for the word-count status.
      - If `re_dispatches == 0` and the final `actual_words >= floor`: do not print any warning

@@ -155,6 +155,7 @@ Scan the user's request and extract any options they already specified. These be
 - **Recursion (deep mode)**: "recursive", "multi-hop", "go deeper" -> `recursive_depth: 2`. "no recursion", "single-pass", "flat", "cheaper" -> `recursive_depth: 0`. **Default for deep mode: 2** (on) — deep mode runs the full sub-question tree with `deep-researcher` so leaf sub-questions get 2-level internal recursion. A user who wants the cheaper flat path can say "flat" or pick "Disable recursion" in the Phase 1.5 plan-confirmation menu. All non-deep report types default to `recursive_depth: 0` (the field is ignored outside deep mode).
 - **Batch size**: "batch size N", "N at a time", "gentler batches" -> capture int (2/4/6). Default: 4
 - **Allow short**: "short is fine", "don't expand", "I'll edit prose myself", "skip the word-count gate" -> `allow_short: true`. Default: `false`. When false, the Phase 4.5 gate re-dispatches the writer once if the draft falls below the report-type minimum, and Phase 5 runs a second review iteration to verify the expansion. When true, those gates log the deficit but take no expansion action — intended for power users who want the tree structure but will hand-edit length downstream
+- **Story arc**: phrases like "executive narrative", "Why Change / Why Now / Why You / Why Pay", "investment thesis arc", "B2B sales narrative", "compelling case for change", "Corporate Visions arc", "narrative-shaped report" → `story_arc: corporate-visions`. Phrases like "standard report", "classic structure", "by sub-question", "regular research report" → `story_arc: standard-research` (the default). The two valid values in v1 are `standard-research` (default — sections derived from sub-questions, today's behaviour) and `corporate-visions` (Why Change → Why Now → Why You → Why Pay at fixed proportions of `target_words`). When the topic clearly fits an executive-narrative use case (sales enablement, market-positioning argument, strategic investment case) and the user did not specify a structure, you may suggest `corporate-visions` in the Configuration Menu but leave the default as `standard-research` — never silently pick the named arc. Constraints: `corporate-visions` is restricted to `report_type == "detailed"` and `output_language ∈ {en, de}`; if the user picked an incompatible combination, surface the constraint at menu time rather than letting `initialize-project.sh` reject it later. The full registry of arcs and their constraints is `references/story-arcs.json`.
 
 ### Step 2: Configuration Menu (text output, turn ends)
 
@@ -175,6 +176,11 @@ Assemble the menu dynamically and render it as text output:
      - `local` = analyze your own PDF, DOCX, MD, CSV, XLSX, PPTX documents — zero web calls, fastest path when you already have the evidence
      - `wiki` = query your cogni-wiki knowledge bases — pre-synthesized, cached, near-instant
      - `hybrid` = run web + local + wiki in parallel; use when you have proprietary docs AND want fresh web evidence on top
+   - **Story arc** (only if not detected, and only when relevant — see suppression rule below): show the current v1 options:
+     - `standard-research` *(default)* = today's structure — sections derived from sub-questions, suitable for any report type
+     - `corporate-visions` = Why Change → Why Now → Why You → Why Pay at fixed proportions of `target_words` (for executive narratives, sales enablement, market-positioning arguments). Restricted to `report_type == "detailed"` and `output_language ∈ {en, de}`.
+
+     **Suppression rule**: omit this row when `report_type ∉ {"detailed"}` (named arcs aren't compatible) OR when `output_language ∉ {"en", "de"}` (named arcs aren't localized for the picked language) — the default `standard-research` is the only valid choice in those cases, and showing a one-option menu adds noise. Show the row only when the user has at least one real choice. Keep the option list in sync with `references/story-arcs.json` — when new arcs are added there, surface them here.
 4. Always include one line for advanced options: "Advanced: output language, sub-question count, domain filter, researcher role, diagram generation, allow short (skip word-count expansion gates) — ask about any of these"
 5. End with: `Reply with your choices, or "go" for defaults.`
 
@@ -253,12 +259,15 @@ bash "${CLAUDE_PLUGIN_ROOT}/scripts/initialize-project.sh" \
   [--confirm-plan <true|false>] \
   [--recursive-depth <0|2>] \
   [--batch-size <2|4|6>] \
-  [--target-words <N>]
+  [--target-words <N>] \
+  [--story-arc "<standard-research|corporate-visions>"]
 ```
 
 Pass `--confirm-plan`, `--recursive-depth`, `--batch-size` only if the user explicitly picked a non-default value in the Execution defaults block. Omit them otherwise — `research-report` applies the documented defaults (confirm: on, recursion: off, batch size: 4) when the keys are missing from `project-config.json`.
 
 Pass `--target-words` only if the user explicitly picked a length preset or integer in Step 1 (from a named preset like "whitepaper" or an integer like "~5000 words"). Omit it when the user accepted depth-default length — `initialize-project.sh` applies the default-by-depth table (basic 3000, detailed 5000, **deep 5000**, outline 1000, resource 1500) and writes `target_words` into project-config.json at creation so the value is pinned for the project's lifetime. In v0.7.7 the deep default was reduced from 8000 to 5000 (issue #35); users who want the old 8K-deep floor set `target_words: 8000` explicitly (via a length preset choice, an integer in the prompt, or hand-editing project-config.json).
+
+Pass `--story-arc` only when the user explicitly chose a named arc in Step 1 or Step 2 (e.g., `corporate-visions`). Omit the flag when the user accepted the default `standard-research` — `initialize-project.sh` does not persist the field for the default, keeping configs minimal. `initialize-project.sh` validates per-arc compatibility (`compatible_report_types`, `min_target_words`, `max_target_words`, `supported_languages`) against `references/story-arcs.json` and rejects with a clear error if the combination is invalid; this skill should also surface the constraint at menu time so the user doesn't see a script error after answering.
 
 Check the `already_exists` field in the JSON output.
 

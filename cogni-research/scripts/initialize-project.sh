@@ -3,7 +3,17 @@ set -euo pipefail
 # initialize-project.sh - Create project directory structure for a research report
 # Version: 1.0.0
 #
-# Usage: initialize-project.sh --topic <topic> --type <basic|detailed|deep|outline|resource> --workspace <path> [--market <region-code>] [--output-language <lang>] [--language <en|de>] [--tone <tone>] [--researcher-role <role>] [--source-urls <url1,url2,...>] [--query-domains <domain1,domain2,...>] [--max-subtopics <N>] [--citation-format <apa|mla|chicago|harvard|ieee>] [--report-source <web|local|wiki|hybrid>] [--document-paths <path1,path2,...>] [--wiki-paths <wiki-root1,wiki-root2,...>] [--confirm-plan <true|false>] [--recursive-depth <N>] [--batch-size <N>] [--allow-short <true|false>] [--target-words <N>] [--suffix <N>]
+# Usage: initialize-project.sh --topic <topic> --type <basic|detailed|deep|outline|resource> --workspace <path> [--market <region-code>] [--output-language <lang>] [--language <en|de>] [--tone <tone>] [--researcher-role <role>] [--source-urls <url1,url2,...>] [--query-domains <domain1,domain2,...>] [--max-subtopics <N>] [--citation-format <apa|mla|chicago|harvard|ieee>] [--report-source <web|local|wiki|hybrid>] [--document-paths <path1,path2,...>] [--wiki-paths <wiki-root1,wiki-root2,...>] [--confirm-plan <true|false>] [--recursive-depth <N>] [--batch-size <N>] [--allow-short <true|false>] [--target-words <N>] [--story-arc <arc-id>] [--suffix <N>]
+#
+# --story-arc selects the section structure of the report. Defaults to
+# "standard-research" (today's behaviour: sections derived from sub-questions
+# per the report-type template). Set to a named arc (e.g., "corporate-visions")
+# to have the writer structure the report around the arc's fixed elements
+# (Why Change → Why Now → Why You → Why Pay) at fixed proportions of
+# --target-words. The registry of valid arcs and their per-arc constraints
+# (compatible report_types, supported languages, min/max target_words) lives
+# in references/story-arcs.json — kept in sync with cogni-narrative's
+# upstream arc definitions via the audit-arcs skill.
 #
 # --target-words controls the writer word-count floor independently of --type.
 # If omitted, falls back to the default-by-depth table: basic 3000, detailed 5000,
@@ -45,6 +55,7 @@ RECURSIVE_DEPTH=""
 BATCH_SIZE=""
 ALLOW_SHORT=""
 TARGET_WORDS=""
+STORY_ARC=""
 SUFFIX=""
 
 while [[ $# -gt 0 ]]; do
@@ -70,6 +81,7 @@ while [[ $# -gt 0 ]]; do
     --batch-size) BATCH_SIZE="$2"; shift 2;;
     --allow-short) ALLOW_SHORT="$2"; shift 2;;
     --target-words) TARGET_WORDS="$2"; shift 2;;
+    --story-arc) STORY_ARC="$2"; shift 2;;
     --suffix) SUFFIX="$2"; shift 2;;
     *) echo "{\"success\": false, \"error\": \"Unknown argument: $1\"}" >&2; exit 2;;
   esac
@@ -145,6 +157,42 @@ if [[ -z "$TARGET_WORDS" ]]; then
   esac
 fi
 
+# Validate --story-arc against the local registry. The registry encodes
+# per-arc compatibility (report_types, languages, target_words bounds), so
+# we surface those errors here rather than letting the writer agent reject
+# the dispatch downstream. standard-research is the default and is
+# intentionally compatible with everything; named arcs like corporate-visions
+# carry stricter constraints from their cogni-narrative source-of-truth.
+_INIT_SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+STORY_ARCS_FILE="$(dirname "$_INIT_SCRIPT_DIR")/references/story-arcs.json"
+if [[ -z "$STORY_ARC" ]]; then
+  STORY_ARC="standard-research"
+fi
+if [[ ! -f "$STORY_ARCS_FILE" ]]; then
+  echo "{\"success\": false, \"error\": \"Missing story-arcs registry at $STORY_ARCS_FILE\"}" >&2
+  exit 2
+fi
+VALID_ARCS=$(jq -r '.arcs | keys[]' "$STORY_ARCS_FILE" 2>/dev/null | tr '\n' ' ' | sed 's/ $//')
+if ! echo "$VALID_ARCS" | grep -qw "$STORY_ARC"; then
+  echo "{\"success\": false, \"error\": \"Invalid --story-arc: $STORY_ARC. Valid arcs: $VALID_ARCS\"}" >&2
+  exit 2
+fi
+ARC_REPORT_TYPES=$(jq -r --arg a "$STORY_ARC" '.arcs[$a].compatible_report_types | join(" ")' "$STORY_ARCS_FILE")
+if ! echo "$ARC_REPORT_TYPES" | grep -qw "$REPORT_TYPE"; then
+  echo "{\"success\": false, \"error\": \"Story arc '$STORY_ARC' is not compatible with --type $REPORT_TYPE. Compatible report types: $ARC_REPORT_TYPES\"}" >&2
+  exit 2
+fi
+ARC_MIN_WORDS=$(jq -r --arg a "$STORY_ARC" '.arcs[$a].min_target_words' "$STORY_ARCS_FILE")
+ARC_MAX_WORDS=$(jq -r --arg a "$STORY_ARC" '.arcs[$a].max_target_words' "$STORY_ARCS_FILE")
+if [[ "$TARGET_WORDS" -lt "$ARC_MIN_WORDS" ]]; then
+  echo "{\"success\": false, \"error\": \"Story arc '$STORY_ARC' requires --target-words >= $ARC_MIN_WORDS (got $TARGET_WORDS). The arc's element proportions need a minimum total word count to land at usable per-element budgets.\"}" >&2
+  exit 2
+fi
+if [[ "$TARGET_WORDS" -gt "$ARC_MAX_WORDS" ]]; then
+  echo "{\"success\": false, \"error\": \"Story arc '$STORY_ARC' requires --target-words <= $ARC_MAX_WORDS (got $TARGET_WORDS).\"}" >&2
+  exit 2
+fi
+
 # Derive the canonical market list from market-sources.json so this script
 # and the skill menu share one source of truth. Keys starting with "_" are
 # internal (e.g., _default) and not user-selectable.
@@ -187,6 +235,15 @@ fi
 
 # Sync language field for backward compat
 LANGUAGE="$OUTPUT_LANGUAGE"
+
+# Validate the resolved OUTPUT_LANGUAGE against the story arc's
+# supported_languages list. We check it here (not in the earlier --story-arc
+# block) because OUTPUT_LANGUAGE is only known after market resolution.
+ARC_LANGS=$(jq -r --arg a "$STORY_ARC" '.arcs[$a].supported_languages | join(" ")' "$STORY_ARCS_FILE")
+if ! echo "$ARC_LANGS" | grep -qw "$OUTPUT_LANGUAGE"; then
+  echo "{\"success\": false, \"error\": \"Story arc '$STORY_ARC' does not support output_language '$OUTPUT_LANGUAGE'. Supported languages: $ARC_LANGS\"}" >&2
+  exit 2
+fi
 
 # Generate slug
 SLUG=$(echo "$TOPIC" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9 ]//g' | tr ' ' '-' | sed 's/-\+/-/g' | head -c 40 | sed 's/-$//')
@@ -292,6 +349,12 @@ if [[ "$ALLOW_SHORT" == "true" ]]; then
   CONFIG=$(echo "$CONFIG" | jq '. + {allow_short: true}')
 fi
 CONFIG=$(echo "$CONFIG" | jq --argjson v "$TARGET_WORDS" '. + {target_words: $v}')
+# Persist story_arc_id only when the user chose a named arc. Omitting the
+# field for the default keeps configs clean and makes "no field set"
+# semantically equivalent to "story_arc_id: standard-research" downstream.
+if [[ -n "$STORY_ARC" ]] && [[ "$STORY_ARC" != "standard-research" ]]; then
+  CONFIG=$(echo "$CONFIG" | jq --arg v "$STORY_ARC" '. + {story_arc_id: $v}')
+fi
 echo "$CONFIG" > "$PROJECT_DIR/.metadata/project-config.json"
 
 # Initialize execution log using jq

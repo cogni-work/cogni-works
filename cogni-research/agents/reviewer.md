@@ -21,6 +21,7 @@ You evaluate a report draft against quality criteria, informed by claims verific
 | `CLAIMS_DASHBOARD` | No | Path to cogni-claims dashboard or claims.json |
 | `REVIEW_ITERATION` | Yes | Current review iteration (1-3) |
 | `OUTPUT_LANGUAGE` | No | ISO 639-1 code (default: "en"). When non-English, evaluate clarity in the specified language |
+| `STORY_ARC_ID` | No | Arc ID from `${CLAUDE_PLUGIN_ROOT}/references/story-arcs.json`. Default: `standard-research` (no arc-structural review — gate is skipped). When set to a named arc (e.g., `corporate-visions`), the Arc-Structural Gate runs against the draft to verify element coverage, order, and per-element word proportion. Resolved by the orchestrator from `project-config.json story_arc_id`. |
 
 ## Core Workflow
 
@@ -39,6 +40,7 @@ Loading previous verdicts is essential for multi-iteration review. Without this 
 3. Read previous review verdicts from `.metadata/review-verdicts/` (if iteration > 1)
 4. Read `.metadata/user-claims-review.json` if present — this contains the user's decisions on deviated claims (mandatory fixes, drops, accepted deviations) from the interactive claims review step
 5. If `CLAIMS_DASHBOARD` is not provided or file does not exist, proceed with structural-only review (skip Phase 2)
+6. If `STORY_ARC_ID` is set to a non-default arc (i.e., not `null` and not `"standard-research"`), read the arc spec from `${CLAUDE_PLUGIN_ROOT}/references/story-arcs.json` for use in the Arc-Structural Gate. The default `standard-research` arc skips the gate and does not need the registry read.
 
 ### Phase 1: Structural Review
 
@@ -133,6 +135,60 @@ Word deficit: delivered N words, minimum M required for {report_type} mode (rati
 
 A report that addresses all sub-questions but treats them superficially due to insufficient length is incomplete by definition — the stepped cap encodes this judgment numerically.
 
+#### Arc-Structural Gate
+
+This gate runs only when `STORY_ARC_ID` is set to a named arc (i.e., `STORY_ARC_ID NOT IN (null, "standard-research")`). When the project is using the default `standard-research` arc, the gate is **skipped entirely** — the draft has no fixed-element contract to enforce, so emit `arc_structural: {"gate_status": "skipped", "reason": "standard-research arc has dynamic elements"}` and apply no caps. When `STORY_ARC_ID` is set, the gate enforces the structural contract the writer's Phase 1 outline committed to: an arc-driven report must have exactly the arc's elements as H2 headers, in the right order, at the right word proportions. Without this gate, a writer that forgets one element or compresses Why Pay into a sentence would still pass the Word Count Gate (total words intact) and the Citation Density Gate (per-section density intact for the elements that *did* land), so the structural failure would ride a high overall score into an accept verdict — exactly the failure mode the standard reviewer is blind to in arc mode.
+
+Load the arc spec from `${CLAUDE_PLUGIN_ROOT}/references/story-arcs.json`. The relevant fields per element are: `id`, `heading_match_prefix_en`, `heading_match_prefix_de`, `proportion`, and `is_hook` (hooks are not standalone H2s — their proportion is folded into the first non-hook element's budget). Read `arc.tolerance` (default `0.10`) and apply it as the band width on proportion drift.
+
+Scan H2 boundaries in the draft excluding the trailing references section (same exclusion the Citation Density Gate already uses — language-aware match against `## References` / `## Quellen` / `## Bibliographie` / etc.). Run three checks in order:
+
+1. **Element coverage**. For each non-hook element in the arc, attempt to match an H2 in the draft by prefix — case-insensitive `startsWith()` against the element's `heading_match_prefix_en` (when `OUTPUT_LANGUAGE == "en"`) or `heading_match_prefix_de` (when `OUTPUT_LANGUAGE == "de"`). Strip leading whitespace and any markdown formatting (e.g., bold) from the H2 text before comparing. **Any unmatched element is a high-severity failure** — record `{"check": "element_coverage", "element_id": "<id>", "expected_prefix": "<prefix>", "found": false}` and append a high-severity issue to the issues list.
+2. **Element order**. Walk the matched elements in the order they appear in the draft; compare against the arc's `elements[]` order (skipping the hook, which has no H2). Any inversion is a medium-severity failure — record `{"check": "element_order", "expected_order": [...], "actual_order": [...], "match": false}` and append a medium-severity issue.
+3. **Element word proportion**. For each matched element, count the body words between its H2 and the next H2 (or the references section / EOF). Compute `actual_proportion = section_words / total_body_words`, where `total_body_words` is the sum of body words across all matched arc elements (i.e., the references section is excluded from both numerator and denominator). Compare to the element's expected proportion. **Note**: the hook proportion is folded into the first non-hook element's expected share, so for `corporate-visions` with hook=0.10 and why_change=0.27, the expected proportion of the Why Change section is `0.10 + 0.27 = 0.37` (against the same `total_body_words` denominator). Compute drift `|actual − expected|`. Tiered severity:
+   - `drift ≤ tolerance` (default 0.10) — pass, no issue.
+   - `tolerance < drift ≤ 0.25` — low severity; one entry with `{"check": "element_proportion", "element_id": "<id>", "expected": <e>, "actual": <a>, "drift": <d>, "severity": "low"}`.
+   - `drift > 0.25` — high severity; the element is dramatically over- or under-budgeted.
+
+Apply a **stepped cap on the Coherence dimension** (mirrors the Word Count Gate's stepped Completeness cap and the Citation Density Gate's stepped Depth cap):
+
+- **0 failures across all three checks** — no cap, score Coherence normally.
+- **1–2 low-severity proportion drifts only** — cap Coherence at **0.85**. The arc shape is mostly intact; element pacing is slightly off but the structure is recognisable.
+- **Any high-severity failure (missing element OR proportion drift > 0.25), OR 3+ low-severity proportion drifts** — cap Coherence at **0.70**. This is the threshold that drives the weighted overall score below the structural-only accept threshold (0.82) on a draft that is otherwise strong, so the verdict correctly flips to `revise`.
+- **Any medium-severity element-order failure** — cap Coherence at **0.75** (between the low and high tiers — order inversions read as discordant but not as broken as a missing element).
+
+Issue text conventions (the revisor keys on these prefixes):
+
+- High-severity missing element: `Arc element missing: expected H2 starting with "<prefix>" for element "<id>" — the writer must add this section in its required position to satisfy the <arc_id> arc.`
+- High-severity proportion drift: `Arc element proportion off-target: element "<id>" landed at <actual_pct>% of body words (expected <expected_pct>% ± <tolerance_pct>%, drift <drift_pct>%). Re-balance by expanding/condensing this section against the arc's word proportions.`
+- Medium-severity order inversion: `Arc element order inverted: elements appeared in [<actual>] but the <arc_id> arc requires [<expected>]. Re-sequence the H2 sections in the next iteration.`
+- Low-severity proportion drift: `Arc element proportion drift (low): element "<id>" landed at <actual_pct>% (expected <expected_pct>%, drift <drift_pct>%). Within revisor budget tolerance — re-balance only if other issues require an iteration.`
+
+Persist the gate output as a top-level `arc_structural` block in the verdict JSON (parallel to `citation_density`). Shape:
+
+```json
+{
+  "arc_structural": {
+    "story_arc_id": "corporate-visions",
+    "gate_status": "fail",
+    "gate_severity": "high",
+    "checks": [
+      {"check": "element_coverage", "element_id": "why_change", "expected_prefix": "Why Change", "found": true},
+      {"check": "element_coverage", "element_id": "why_now", "expected_prefix": "Why Now", "found": true},
+      {"check": "element_coverage", "element_id": "why_you", "expected_prefix": "Why You", "found": true},
+      {"check": "element_coverage", "element_id": "why_pay", "expected_prefix": "Why Pay", "found": false},
+      {"check": "element_order", "expected_order": ["why_change","why_now","why_you","why_pay"], "actual_order": ["why_change","why_now","why_you"], "match": false},
+      {"check": "element_proportion", "element_id": "why_change", "expected": 0.37, "actual": 0.42, "drift": 0.05, "severity": "low"},
+      {"check": "element_proportion", "element_id": "why_now", "expected": 0.21, "actual": 0.31, "drift": 0.10, "severity": "low"},
+      {"check": "element_proportion", "element_id": "why_you", "expected": 0.27, "actual": 0.27, "drift": 0.00, "severity": "none"}
+    ],
+    "applied_coherence_cap": 0.70
+  }
+}
+```
+
+When the gate is skipped, the block collapses to `{"story_arc_id": "standard-research", "gate_status": "skipped", "reason": "standard-research arc has dynamic elements"}` and `applied_coherence_cap` is omitted. The orchestrator and revisor both read `gate_status` first; `skipped` and `pass` are treated identically downstream.
+
 ### Phase 2: Claims-Based Review
 
 Structural review catches organizational and stylistic issues but is blind to factual accuracy. A report can score 0.9 on all structural dimensions while containing misquoted statistics or unsupported conclusions. Claims-based review closes this gap by comparing what the report states against what the cited sources actually say — the most damaging errors are precisely those that read well but are wrong.
@@ -198,6 +254,11 @@ Write verdict to `.metadata/review-verdicts/v{REVIEW_ITERATION}.json`:
     ],
     "gate_status": "fail",
     "gate_severity": "high"
+  },
+  "arc_structural": {
+    "story_arc_id": "standard-research",
+    "gate_status": "skipped",
+    "reason": "standard-research arc has dynamic elements"
   },
   "issues": [
     {

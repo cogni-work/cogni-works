@@ -22,6 +22,7 @@ You revise a report draft based on reviewer feedback and claims verification dat
 | `NEW_DRAFT_VERSION` | Yes | Version number for the revised draft |
 | `OUTPUT_LANGUAGE` | No | ISO 639-1 code (default: "en"). Controls the language of the revised report output |
 | `MARKET` | Yes | Region code. Must be one of the keys in `${CLAUDE_PLUGIN_ROOT}/references/market-sources.json`: `dach`, `de`, `fr`, `it`, `pl`, `nl`, `es`, `us`, `uk`, `eu`. When searching for additional evidence, use the market-localized search strategy from the same file; fall back to `_default` only if the value is unexpectedly absent |
+| `STORY_ARC_ID` | No | Arc ID from `${CLAUDE_PLUGIN_ROOT}/references/story-arcs.json`. Default: `standard-research`. When the project is on a non-default arc (e.g., `corporate-visions`), the revisor must preserve the arc's H2 element headings exactly during revision — see the Arc-Preservation Discipline note in Phase 2. Resolved by the orchestrator from `project-config.json story_arc_id`. |
 
 ## Core Workflow
 
@@ -80,6 +81,17 @@ For each issue:
 2. Improve transitions for coherence issues
 3. Add additional sources for diversity concerns
 4. Deepen analysis where depth is flagged
+
+**Arc-preservation discipline** (when `STORY_ARC_ID` is set to a non-default arc such as `corporate-visions`):
+
+The reviewer's Arc-Structural Gate enforces that the draft's H2 sections match the arc's element headings exactly (case-insensitive prefix match against `heading_match_prefix_en` / `heading_match_prefix_de`), in the right order, at the right word proportions. A revision that "improves clarity" by renaming `Why Change: The Unconsidered Need` to `The Unconsidered Need` would silently turn a passing arc structure into a failing one — the gate would emit `Arc element missing: expected H2 starting with "Why Change"`, and the next iteration would have to add the prefix back. To avoid this churn:
+
+1. **Never rename an H2 heading that matches an arc element prefix.** Read the verdict's `arc_structural.checks[]` block — every entry with `"check": "element_coverage", "found": true` names a heading that must survive the revision intact. Copy the H2 line byte-for-byte from the existing draft to the revised draft. If the heading needs editing for prose reasons, only edit the *suffix* (the part after the matched prefix and its colon, e.g., `: The Unconsidered Need`) — never the prefix itself. A safer default is to leave element headings untouched on every revision pass.
+2. **Never reorder H2 sections.** The arc's element order is fixed (Why Change → Why Now → Why You → Why Pay for `corporate-visions`). Reordering on a revision pass to "improve flow" creates a medium-severity arc-order failure. If the verdict's `arc_structural` block reports an order failure, that is the only legitimate trigger for re-sequencing — and the new order must match the arc spec exactly.
+3. **Element word proportions take precedence over the +20% growth cap.** When an arc-driven project hits expansion mode (Word deficit issue) AND the verdict's `arc_structural.checks[]` includes a high-severity `element_proportion` failure, target the under-budget element first and bring it toward `target_words × element.proportion` (folded hook proportion included on the first non-hook element). Do not grow elements that are already on-budget — that would push the on-budget elements above the tolerance band and create a new high-severity drift on the next pass.
+4. **Cross-references between arc elements must respect the arc's transitions.** When emitting cross-reference phrases per the cross-reference-before-restating rule, use the arc's transition phrases (read `arc.transitions` from the registry) for inter-element bridges where appropriate — German `wie in Warum jetzt beschrieben` / English `as discussed in Why Now`. The transitions are part of the arc's rhetorical contract, not just decoration.
+
+When the project is on `standard-research` (default), this block does not apply — the writer has no fixed-element contract to preserve, so renaming, reordering, or restructuring sections is fair game in revision.
 
 **Language-aware revision** (when `OUTPUT_LANGUAGE` is not "en"):
 - Maintain the output language throughout — do not switch to English when adding content

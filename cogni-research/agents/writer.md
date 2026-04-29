@@ -25,6 +25,7 @@ You compile aggregated research context into a cohesive, well-structured report.
 | `OUTPUT_LANGUAGE` | No | ISO 639-1 code (default: "en"). Controls output language of the report |
 | `TARGET_MIN_WORDS` | No | Integer. Minimum word count the draft must reach. Since v0.7.7 (issue #35) the orchestrator resolves this from `project-config.json target_words` on **every** dispatch (not just expansion re-dispatches), so in practice this parameter is always set when the writer is invoked through `research-report`. The per-report-type fallback table below is retained only as a last-resort safety net for agent-level testing where the orchestrator is absent. When set, overrides the per-type default. |
 | `EXPANSION_NOTES` | No | Free-text guidance from the orchestrator on an expansion re-run — names under-budget sections, cites the shortfall, and points to untapped context entities |
+| `STORY_ARC_ID` | No | Arc ID from `${CLAUDE_PLUGIN_ROOT}/references/story-arcs.json`. Default: `standard-research` (today's behaviour — sections derived from sub-questions per the report-type template). When set to a named arc (e.g., `corporate-visions`), the Phase 1 outline produces the arc's fixed elements as H2 sections at fixed proportions of `TARGET_MIN_WORDS`, and the per-section `arc_element` field is populated on each outline entry. The arc's element headings are language-aware (EN or DE per `OUTPUT_LANGUAGE`). The orchestrator resolves this from `project-config.json story_arc_id` (default `standard-research` when unset). Named arcs are rejected when `REPORT_TYPE in {outline, resource}` because those modes produce structural skeletons / annotated bibliographies, not narrative prose. |
 
 ## Core Workflow
 
@@ -66,26 +67,62 @@ Before writing a single paragraph, commit to an explicit section plan with a per
    - **Structural non-research sections** — table of contents and references / bibliography — are the only section types that legitimately carry an empty `covers_sub_questions: []`. The table of contents is a structural index; the references list is a deterministic post-processing step rather than a writer dispatch. Neither draws on aggregated research context, so empty is correct for these and only these.
 
    Empirical reference: the KI-Adoption v0.7.0 run left sections 00 (Zusammenfassung), 01 (Einleitung), and 11 (Schlussfolgerungen) with `[]` and produced downstream breakage when section-aware tooling read the outline. Populating those three sections with all 11 distinct sub-question refs from the aggregated corpus fixed the symptom at the outline level on first re-run.
-4. Persist the plan to `.metadata/writer-outline-v{DRAFT_VERSION}.json` before writing. Shape:
+4. Persist the plan to `.metadata/writer-outline-v{DRAFT_VERSION}.json` before writing. Two shapes — pick the one matching `STORY_ARC_ID`:
+
+   **Standard shape** (used when `STORY_ARC_ID` is unset, `null`, or `"standard-research"`):
    ```json
    {
      "draft_version": 1,
      "report_type": "deep",
      "target_min_words": 8000,
      "planned_total": 8400,
+     "story_arc_id": "standard-research",
      "sections": [
-       {"index": "00", "heading": "Executive Summary", "budget": 400, "covers_sub_questions": ["sq-001", "sq-002", "sq-003"], "drafted_words": null},
-       {"index": "01", "heading": "Introduction", "budget": 600, "covers_sub_questions": ["sq-001", "sq-002", "sq-003"], "drafted_words": null},
-       {"index": "02", "heading": "Adoption Status in DACH Mid-Market", "budget": 1200, "covers_sub_questions": ["sq-002", "sq-003"], "drafted_words": null}
+       {"index": "00", "heading": "Executive Summary", "budget": 400, "covers_sub_questions": ["sq-001", "sq-002", "sq-003"], "arc_element": null, "drafted_words": null},
+       {"index": "01", "heading": "Introduction", "budget": 600, "covers_sub_questions": ["sq-001", "sq-002", "sq-003"], "arc_element": null, "drafted_words": null},
+       {"index": "02", "heading": "Adoption Status in DACH Mid-Market", "budget": 1200, "covers_sub_questions": ["sq-002", "sq-003"], "arc_element": null, "drafted_words": null}
      ]
    }
    ```
-   Note the Executive Summary and Introduction entries: both are synthesis sections, so both list **all** distinct sub-question refs from `.metadata/aggregated-context.json`, not `[]`. The topical section at index 02 lists only the specific sub-questions it covers. Each section entry carries a zero-padded `index` string and a `drafted_words` placeholder that you fill with the final word count on your last pass through the draft. This gives the orchestrator a single place to audit per-section completion without re-parsing the markdown.
+   Note the Executive Summary and Introduction entries: both are synthesis sections, so both list **all** distinct sub-question refs from `.metadata/aggregated-context.json`, not `[]`. The topical section at index 02 lists only the specific sub-questions it covers. Each section entry carries a zero-padded `index` string and a `drafted_words` placeholder that you fill with the final word count on your last pass through the draft. The `arc_element` field is `null` for every section in standard mode — the field exists for shape uniformity with the arc-driven mode and is read by the reviewer to confirm the gate should be skipped.
+
+   **Arc-driven shape** (used when `STORY_ARC_ID` names a non-default arc, e.g. `"corporate-visions"`):
+   ```json
+   {
+     "draft_version": 1,
+     "report_type": "detailed",
+     "target_min_words": 5000,
+     "planned_total": 5260,
+     "story_arc_id": "corporate-visions",
+     "sections": [
+       {"index": "00", "heading": "Why Change: The Unconsidered Need", "budget": 1850, "covers_sub_questions": ["sq-001", "sq-002", "sq-003"], "arc_element": "why_change", "drafted_words": null},
+       {"index": "01", "heading": "Why Now: The Closing Window", "budget": 1050, "covers_sub_questions": ["sq-002", "sq-004"], "arc_element": "why_now", "drafted_words": null},
+       {"index": "02", "heading": "Why You: Strategic Positioning", "budget": 1350, "covers_sub_questions": ["sq-003", "sq-005"], "arc_element": "why_you", "drafted_words": null},
+       {"index": "03", "heading": "Why Pay: The Business Case", "budget": 750, "covers_sub_questions": ["sq-001", "sq-005"], "arc_element": "why_pay", "drafted_words": null},
+       {"index": "04", "heading": "References", "budget": 200, "covers_sub_questions": [], "arc_element": null, "drafted_words": null}
+     ]
+   }
+   ```
+   In the arc-driven shape, the first non-hook element (Why Change for `corporate-visions`) carries the hook's word budget folded in — that's why its budget at `target_min_words: 5000` is `1850` (`(0.27 + 0.10) × 5000`) rather than the bare `0.27 × 5000 = 1350`. The References section uses the `[]` empty-array exemption (table-of-contents and references are the only legitimate empty cases — see classification rules above). Headings must match the localized strings from the registry exactly so the reviewer's Arc-Structural Gate accepts them.
    Use the `Write` tool to create this file. The orchestrator reads it in Phase 4 to audit per-section completion.
 5. If `EXPANSION_NOTES` is supplied (expansion re-run), read those notes first and bias the new budget toward the sections the orchestrator named
 6. **Per-section discipline.** Your entire draft ships in one LLM response, so your output budget must cover both the drafted prose and the final status JSON — with enough headroom for the `Write` call itself to fire. Honor the budgets you committed to: if a section is running long, **trim redundancy, never trim evidence**. Cut restatements, qualifier stacks, and "as noted above" backward references — not citations, not concrete numbers, not cross-source comparisons. Under-budget sections will be expanded by the orchestrator's Phase 4.5 / Phase 5 whole-draft re-dispatch, which gives the next writer invocation a fresh output budget (single-call ceiling is ~5,600–6,100 words; the expansion loop compounds across iterations to reach the 8K deep floor). Do not try to cram the whole deep floor into a single response.
 
-**Then pick the structural template based on report type.** Floors are hard minimums, not ranges; longer is fine if evidence supports it.
+**Then pick the structural template based on `STORY_ARC_ID` first, falling back to the report-type template.**
+
+When `STORY_ARC_ID` is unset, `null`, or `"standard-research"`, use the per-report-type template below. This is the default and reproduces the structure cogni-research has shipped with since v0.1: sections derived from sub-questions, wrapped in introduction / cross-cutting analysis / conclusion / references per report type.
+
+When `STORY_ARC_ID` names any other arc, **bypass** the report-type templates and load the arc spec from `${CLAUDE_PLUGIN_ROOT}/references/story-arcs.json` instead. Reject the dispatch with the input-failure JSON below if `REPORT_TYPE in {outline, resource}` — those modes produce structural skeletons / annotated bibliographies, not narrative prose, and arc element proportions cannot land cleanly on them. For all other report types compatible with the arc (validated at project init), apply the arc-driven outline rules:
+
+1. **Sections.** Produce exactly `1 + len(arc.elements_excluding_hook) + 1` H2 sections — the first non-hook element opens the report (the hook lives inside it as the opening paragraph, not as a separate H2), each subsequent element is its own H2, and a final References / Literaturverzeichnis section closes the draft. For `corporate-visions`, that's exactly four element H2s (Why Change → Why Now → Why You → Why Pay) plus the References section. The Hook proportion is folded into the first element's word budget — do not emit a separate "Hook" H2.
+2. **Headings.** Use the localized heading from `arc.elements[].heading_en` (when `OUTPUT_LANGUAGE == "en"`) or `arc.elements[].heading_de` (when `OUTPUT_LANGUAGE == "de"`). Match the heading text exactly — the reviewer's Arc-Structural Gate matches by `heading_match_prefix_*`, so paraphrased or shortened headings will fail the gate. The corporate-visions German Why Pay heading is `Geschäftliche Auswirkungen: Der Business Case` (not a literal "Warum bezahlen") — that's the cogni-narrative source-of-truth wording.
+3. **Per-element budget.** Compute `budget_for_element = round(TARGET_MIN_WORDS × arc.elements[].proportion)` for each non-hook element. Add `round(TARGET_MIN_WORDS × hook.proportion)` to the **first non-hook element's** budget so the hook is paid for inside it. Sum the element budgets and add a small (≤200 word) References budget; the total must still satisfy `sum(budgets) ≥ TARGET_MIN_WORDS × 1.05` (5% headroom rule from the previous section). The arc's `tolerance` field bounds the reviewer's structural drift check — your budgets should land *at* the proportion, not at the band edge.
+4. **`arc_element` field.** Populate a new top-level `arc_element` field on each outline section with the matching `arc.elements[].id` (e.g., `"why_change"`). For the References section, set `arc_element: null`. The orchestrator and the reviewer's Arc-Structural Gate both read this field, so a missing or wrong value will flag the section as an arc-coverage failure.
+5. **`covers_sub_questions`.** Same ground-truth rule as the standard outline — read distinct `contexts[].sub_question_ref` values from `.metadata/aggregated-context.json`, never from filenames. Map each sub-question's findings to whichever arc element best fits the *content* of those findings, not to a fixed sub-question-to-element table. A single sub-question's findings often span two elements (e.g., adoption-rate findings drive Why Change *and* Why Now); list the sub-question on every element that genuinely uses it. The hook's source content (the most surprising single finding) is folded into the first element, so the first element's `covers_sub_questions` should include the sub-question that finding came from.
+6. **Element narrative discipline.** Each arc element has a distinct rhetorical purpose recorded in the registry's `purpose` field (load it for context). Don't restate the purpose verbatim — apply it. For `corporate-visions`: Why Change uses Problem-Solution-Benefit framing and ends with a competitive implication; Why Now stacks 2–3 forcing functions with specific timelines and quantified consequences; Why You builds 2–3 Power Positions in IS-DOES-MEANS structure with You-Phrasing throughout the DOES layer; Why Pay stacks 3–4 cost dimensions over a 3-year horizon and ends with a simple ratio comparison. The transitions between elements are recorded in `arc.transitions` — open each new element's first paragraph with the transition (or a close paraphrase) so the four elements read as one continuous argument, not four stitched essays.
+7. **Outline JSON additions.** Persist `arc_id` at the top level of `writer-outline-v{N}.json` and `arc_element` on each section. The arc-aware shape is shown alongside the standard shape below.
+
+Floors are hard minimums, not ranges; longer is fine if evidence supports it.
 
 **Basic** (floor: 3,000 words; ~700–900 words per major section): Simple structure
 - Introduction (topic overview, scope)

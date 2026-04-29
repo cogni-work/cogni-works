@@ -20,7 +20,7 @@ TIPS projects span multiple sessions and skills (trend-scout → value-modeler �
 
 ## Workflow
 
-**Plugin root fallback.** Every bash call below uses `$CLAUDE_PLUGIN_ROOT`, which Claude Code is expected to inject. If a call fails with `No such file or directory` on a path beginning with `/scripts/…`, the variable was lost in the subshell. Recover by running `ls -td $HOME/.claude/plugins/cache/insight-wave/cogni-trends/*/ | head -1` to find the most recent cached plugin root, then re-invoke the same command with that absolute path substituted for `$CLAUDE_PLUGIN_ROOT`. Do this transparently — do not ask the user.
+**Plugin root resolution.** Every bash call below resolves the plugin root inline as `${CLAUDE_PLUGIN_ROOT:-$(ls -td "$HOME"/.claude/plugins/cache/insight-wave/cogni-trends/*/ | head -1)}`. When Claude Code injects `$CLAUDE_PLUGIN_ROOT` (the normal case) the fallback never runs. If the harness fails to inject it (observed in some sessions, where `bash $CLAUDE_PLUGIN_ROOT/...` would produce `No such file or directory`), the inline fallback discovers the most recently cached plugin root automatically — no failed first call, no recovery prompt. Keep the inline form in every call; do not strip it.
 
 ### 1. Find TIPS Projects
 
@@ -34,13 +34,13 @@ Discover TIPS projects in the workspace using the discovery script.
 Pass the root explicitly with `--root`:
 
 ```bash
-bash $CLAUDE_PLUGIN_ROOT/scripts/discover-projects.sh --json --root "<workspace-root>"
+bash "${CLAUDE_PLUGIN_ROOT:-$(ls -td "$HOME"/.claude/plugins/cache/insight-wave/cogni-trends/*/ | head -1)}/scripts/discover-projects.sh" --json --root "<workspace-root>"
 ```
 
 If you cannot determine a specific root, omit `--root` and the script falls back to `$PROJECT_AGENTS_OPS_ROOT` or `$PWD`:
 
 ```bash
-bash $CLAUDE_PLUGIN_ROOT/scripts/discover-projects.sh --json
+bash "${CLAUDE_PLUGIN_ROOT:-$(ls -td "$HOME"/.claude/plugins/cache/insight-wave/cogni-trends/*/ | head -1)}/scripts/discover-projects.sh" --json
 ```
 
 Returns JSON with `count` and `projects` array. Each project includes `path`, `slug`, `industry`, `subsector`, `research_topic`, `workflow_state`, `candidates_total`, and `has_report`.
@@ -52,7 +52,7 @@ The script searches:
 If `count` is 0:
 - First, ask the user if they have a project in a different directory (e.g., OneDrive, external workspace). If they provide a path, register it:
   ```bash
-  bash $CLAUDE_PLUGIN_ROOT/scripts/discover-projects.sh --register "<path>"
+  bash "${CLAUDE_PLUGIN_ROOT:-$(ls -td "$HOME"/.claude/plugins/cache/insight-wave/cogni-trends/*/ | head -1)}/scripts/discover-projects.sh" --register "<path>"
   ```
   Then re-run discovery.
 - If no path is provided, suggest the `trend-scout` skill to start a new project.
@@ -65,7 +65,7 @@ If `count` is 0:
 ### 3. Run Project Status with Health Check
 
 ```bash
-bash $CLAUDE_PLUGIN_ROOT/scripts/project-status.sh "<project-dir>" --health-check
+bash "${CLAUDE_PLUGIN_ROOT:-$(ls -td "$HOME"/.claude/plugins/cache/insight-wave/cogni-trends/*/ | head -1)}/scripts/project-status.sh" "<project-dir>" --health-check
 ```
 
 The script returns JSON with `project`, `counts` (including `blueprints`, `anchored_solutions`, `avg_readiness`), `portfolio_anchors` (per-product breakdown with needs coverage and quality flags), `scoring`, `artifacts`, `portfolio_bridge`, `phase`, `next_actions`, and `stale_warnings`.

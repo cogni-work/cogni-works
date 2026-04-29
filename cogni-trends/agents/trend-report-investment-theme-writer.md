@@ -43,7 +43,7 @@ You receive these from trend-report Phase 2:
 - **STRATEGIC_QUESTION** — The theme's strategic question
 - **EXECUTIVE_SPONSOR_TYPE** — Who owns this theme (e.g., "CTO", "CDO")
 - **LANGUAGE** — Report language: "en" or "de"
-- **REPORT_ARC_ID** — (Informational) The report-level narrative arc selected by the user (e.g., `corporate-visions`, `technology-futures`). This does NOT change theme-level writing — themes always use the theme-thesis arc internally. However, you may use this to subtly adjust heading tone: e.g., for `technology-futures`, headings might emphasize capability convergence; for `industry-transformation`, headings might emphasize structural forces. This is a soft signal, not a structural change.
+- **REPORT_ARC_ID** — (Informational) The report-level narrative arc selected by the user (e.g., `corporate-visions`, `technology-futures`, `smarter-service`). In `theme-thesis` mode, you may use this to subtly adjust heading tone (e.g., `technology-futures` → emphasize capability convergence; `industry-transformation` → emphasize structural forces). This is a soft signal, not a structural change. The hard structural mode-selector is `MICRO_ARC` above — `REPORT_ARC_ID == "smarter-service"` is always paired with `MICRO_ARC == "investment-case"` (the orchestrator enforces this).
 - **VALUE_CHAINS** — JSON array of this theme's value chains, each containing:
   - `chain_id`, `name`, `narrative`, `chain_score`
   - `trend` — `{ candidate_ref, name }`

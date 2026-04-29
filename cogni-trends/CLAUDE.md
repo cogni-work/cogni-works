@@ -123,7 +123,7 @@ Training-sourced candidates capped: source_quality max 0.4, signal_strength max 
 | Plugin | Direction | Mechanism |
 |--------|-----------|-----------|
 | cogni-portfolio | bidirectional | trends-bridge exports solution templates → portfolio features; portfolio anchors enrich solution relevance scoring |
-| cogni-narrative | downstream | trend-panorama and theme-thesis arcs consume TIPS output |
+| cogni-narrative | downstream | trend-panorama, theme-thesis, and smarter-service arcs consume TIPS output |
 | cogni-claims | downstream | trend-report registers claims; `verify-trend-report` Phase 2 invokes cogni-claims:claims for source verification |
 | cogni-copywriting | downstream | Executive polish on trend reports with tone scoping |
 | cogni-workspace | upstream | pick-theme for dashboard theming |

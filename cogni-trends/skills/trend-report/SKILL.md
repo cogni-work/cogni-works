@@ -1,7 +1,7 @@
 ---
 name: trend-report
 description: |
-  Generate a strategic TIPS trend report organized around investment themes (Handlungsfelder) with inline citations and verifiable claims. The user selects a report-level narrative arc from cogni-narrative's 7 story arcs (corporate-visions, technology-futures, competitive-intelligence, strategic-foresight, industry-transformation, trend-panorama, theme-thesis) — the arc frames the executive summary, bridge paragraphs between themes, and a synthesis closing section that bind investment themes into one cohesive narrative. Each investment theme internally uses the theme-thesis arc (Why Change → Why Now → Why You → Why Pay) backed by T→I→P→S value chain evidence. Reads agreed trend candidates, enriches each with web-sourced quantitative evidence via parallel agents, assembles the report with arc-framed executive summary, bridge paragraphs, theme sections, synthesis section, and claims registry. Produces a clean draft + claims registry; verification, structural review, revision, polish, and visualization are handled by the separate `verify-trend-report` skill (auto-recommended at the end of Phase 4). Required pipeline: trend-scout → value-modeler → trend-report → verify-trend-report. Use when: (1) trend-scout and value-modeler have completed, (2) user wants a written trend report, (3) user mentions "trend report", "TIPS report", "write up trends", "summarize trends", "trend analysis document", "strategic stories", (4) preparing a deliverable from scouted trends, (5) user asks to "generate report from trends" or "create trend deliverable". Always use this skill when trend-scout output exists and the user wants any kind of written trend analysis — even if they don't use the exact phrase "trend report".
+  Generate a strategic TIPS trend report organized around investment themes (Handlungsfelder) with inline citations and verifiable claims. The user selects a report-level narrative arc from cogni-narrative's 8 story arcs (smarter-service [recommended default for themed reports], corporate-visions, technology-futures, competitive-intelligence, strategic-foresight, industry-transformation, trend-panorama, theme-thesis) — the arc frames the executive summary, bridge paragraphs between themes, and a synthesis closing section that bind investment themes into one cohesive narrative. Each investment theme is written in one of two structural modes selected by `MICRO_ARC`: full theme-thesis arc (Why Change → Why Now → Why You → Why Pay) under flat-themes arcs, or slim 3-beat investment-case (Stake / Move / Cost-of-Inaction) under smarter-service, in both cases backed by T→I→P→S value chain evidence. Reads agreed trend candidates, enriches each with web-sourced quantitative evidence via parallel agents, assembles the report with arc-framed executive summary, bridge paragraphs, theme sections, synthesis section, and claims registry. Produces a clean draft + claims registry; verification, structural review, revision, polish, and visualization are handled by the separate `verify-trend-report` skill (auto-recommended at the end of Phase 4). Required pipeline: trend-scout → value-modeler → trend-report → verify-trend-report. Use when: (1) trend-scout and value-modeler have completed, (2) user wants a written trend report, (3) user mentions "trend report", "TIPS report", "write up trends", "summarize trends", "trend analysis document", "strategic stories", (4) preparing a deliverable from scouted trends, (5) user asks to "generate report from trends" or "create trend deliverable". Always use this skill when trend-scout output exists and the user wants any kind of written trend analysis — even if they don't use the exact phrase "trend report".
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Task, AskUserQuestion, Skill
 ---
 
@@ -14,9 +14,9 @@ Generate a strategic TIPS trend report from agreed trend-scout candidates. Organ
 Transform agreed trend-scout candidates into a strategic, evidence-backed report draft:
 
 1. Load value-modeler investment themes and validate prerequisites
-2. User selects a report-level narrative arc (from cogni-narrative's 7 arcs) to frame the overall story
+2. User selects a report-level narrative arc (from cogni-narrative's 8 arcs) to frame the overall story
 3. Enrich each trend with quantitative evidence from web research
-4. Assemble investment theme narratives using theme-thesis arc (Why Change → Why Now → Why You → Why Pay) with embedded evidence
+4. Assemble investment theme narratives in the structural mode dictated by the chosen report arc — full theme-thesis (Why Change → Why Now → Why You → Why Pay) for flat-themes arcs, or slim investment-case (Stake / Move / Cost-of-Inaction) under smarter-service — with embedded evidence
 5. Generate arc-framed executive summary, bridge paragraphs between themes, and synthesis closing section
 6. Generate inline citations for every quantitative claim
 7. Produce a claims registry compatible with `cogni-claims:claims`
@@ -38,7 +38,7 @@ Report prose, section headers, and TIPS labels all adapt to the chosen output la
 - `trend-scout` completed with `execution.workflow_state == "agreed"` and 60 candidates
 - `value-modeler` completed with `tips-value-model.json` containing investment themes
 - Web access enabled for evidence enrichment
-- Optional: `cogni-narrative` plugin for theme-thesis arc guidance (graceful fallback if absent — investment themes use flat structure)
+- Optional: `cogni-narrative` plugin for arc-aware guidance — theme-thesis arc (flat-themes flow) and smarter-service arc + macro-skeleton synthesis (smarter-service flow). Graceful fallback if absent — themes use flat structure
 - Downstream: `verify-trend-report` (in this plugin) handles claim verification, cross-theme structural review, post-verification revision, and the final polish/visualize menu
 
 ## Context Independence
@@ -680,7 +680,7 @@ catalog, dashboard).
 
 **Pipeline:** `trend-scout → value-modeler → trend-report → verify-trend-report`
 
-**Optional cross-plugin:** `cogni-narrative` theme-thesis arc (Phase 2 investment theme writer guidance)
+**Optional cross-plugin:** `cogni-narrative` theme-thesis arc (flat-themes flow) and smarter-service arc (macro-skeleton flow) — Phase 2 investment theme writer / composer guidance
 
 **Downstream (via `/verify-trend-report`):** claim verification (`cogni-claims:claims`), cross-theme structural review, post-verification revision, executive polish (`cogni-copywriting:copywriter`), themed HTML (`cogni-visual:enrich-report`)
 

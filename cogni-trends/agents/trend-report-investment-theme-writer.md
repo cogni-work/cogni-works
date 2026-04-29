@@ -1,6 +1,6 @@
 ---
 name: trend-report-investment-theme-writer
-description: Write a single investment theme section. Two modes — legacy theme-thesis (full Why Change → Why Now → Why You → Why Pay arc, default) and investment-case (slim 3-beat Stake / Move / Cost-of-Inaction, used by smarter-service arc). Mode selected by MICRO_ARC parameter. DO NOT USE DIRECTLY — invoked by trend-report Phase 2.
+description: Write a single investment theme section in one of two structural modes selected by MICRO_ARC — full theme-thesis arc (Why Change → Why Now → Why You → Why Pay) for flat-themes report arcs, or slim 3-beat investment-case (Stake / Move / Cost-of-Inaction) for the smarter-service arc. DO NOT USE DIRECTLY — invoked by trend-report Phase 2.
 tools: Read, Write
 model: sonnet
 color: blue

@@ -118,6 +118,11 @@ Per agent:
       - open:   { st_id: { mode: "open",   entries: [{ vendor_or_customer, outcome, source_url, source_authority, publication_date? }, ...] } }
       STs with no examples are omitted from the object. May be {} if no STs
       in this theme have example arrays populated.}
+    THEME_TARGET_WORDS: {Integer per-theme prose target computed by Phase 0.4e.
+      The agent applies fixed Why-arc proportions (Hook 8% / WhyChange 25% /
+      WhyNow 20% / WhyYou 30% / WhyPay 17%) clamped to per-element minimums
+      (Hook 30, WhyChange 80, WhyNow 80, WhyYou 100, WhyPay 90 — sum 380).
+      Tolerance for the total section is ±15%. Excludes claims registry rows.}
     LABELS: {JSON object with relevant i18n labels:
       EXECUTIVE_SPONSOR, INVESTMENT_THESIS, VALUE_CHAINS, TREND,
       IMPLICATION, POSSIBILITY, FOUNDATION, SOLUTION_TEMPLATES,
@@ -233,6 +238,8 @@ generated_at: "{ISO-8601}"
 ### Executive Summary Content — Arc-Aware
 
 The Zusammenfassung is ONE flat section — no subsections (`###`), no tables. A CxO reading only this section should feel "I must act."
+
+**Length:** target `EXEC_TARGET_WORDS` words ±20% (computed in Phase 0.4e — typically 150 at standard tier, 200 at maximum tier). At the lower end, this means a tighter opener (1–2 sentences instead of 2–3) and a leaner closer; the numbered list of themes is unchanged either way because every theme must still appear.
 
 **The opener and closer adopt the report-level arc's rhetorical frame.** Read the selected arc's templates from [references/report-arc-frames.md](references/report-arc-frames.md) and use the "Exec Summary Opener" and "Exec Summary Closer" patterns. The middle section (bridge sentence + numbered list) stays the same for all arcs.
 
@@ -354,7 +361,9 @@ Must start and end with one blank line (for clean concatenation between theme se
 
 Display `"{PHASE_2_SYNTHESIS_START}"`.
 
-The synthesis section is a 300-500 word closing section that ties all investment themes together through the report-level arc's final element lens. It replaces the pattern where the report simply stops after the last theme's "Nächste Schritte."
+The synthesis section ties all investment themes together through the report-level arc's final element lens. It replaces the pattern where the report simply stops after the last theme's "Nächste Schritte."
+
+**Length:** target `SYNTHESIS_TARGET_WORDS` words ±15% (computed in Phase 0.4e — typically 500 at standard tier, 1,200 at maximum). The synthesis budget within this target splits roughly: opening (~10%), body (~60%), unified action roadmap (~20%), closing (~10%). At the lower end, the body compresses to the highest-leverage cross-theme insight; the action roadmap stays at three bullets.
 
 **Process:**
 1. Read the arc-specific synthesis frame from [references/report-arc-frames.md](references/report-arc-frames.md) for `REPORT_ARC_ID`
@@ -367,9 +376,9 @@ The synthesis section is a 300-500 word closing section that ties all investment
 ```markdown
 ## {SYNTHESIS_HEADING}
 
-{Opening: 2-3 sentences through the arc's synthesis lens}
+{Opening: 2-3 sentences through the arc's synthesis lens (~10% of SYNTHESIS_TARGET_WORDS)}
 
-{Body: 200-350 words that:
+{Body: ~60% of SYNTHESIS_TARGET_WORDS that:
 - Aggregate the strongest evidence across themes
 - Identify shared foundations / investments that unlock multiple themes
 - Present the combined cost-of-inaction vs. proactive investment

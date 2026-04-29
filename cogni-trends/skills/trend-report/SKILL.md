@@ -80,6 +80,7 @@ Read references **only when needed** for the specific phase:
 | [references/report-structure.md](references/report-structure.md) | Dimension section templates (written by Phase 1 agents) |
 | [references/evidence-enrichment.md](references/evidence-enrichment.md) | Configuring agent web search strategy (Phase 1) |
 | [references/claims-format.md](references/claims-format.md) | Extracting/merging claims (Phase 1-2) |
+| [references/report-length-tiers.md](references/report-length-tiers.md) | Length-tier definitions, per-theme budget formula, override semantics (Phase 0.4d-e) |
 | [references/i18n/labels-en.md](references/i18n/labels-en.md) | English report headings and labels |
 | [references/i18n/labels-de.md](references/i18n/labels-de.md) | German report headings and labels |
 
@@ -278,6 +279,96 @@ AskUserQuestion:
 
 If the user selects **Edit**, ask them to provide their preferred title and/or subtitle as free text. Store the final values as `{TITLE}` and `{SUBTITLE}`.
 
+#### Step 0.4d: Select Report Length Tier
+
+Read [references/report-length-tiers.md](references/report-length-tiers.md) for tier definitions and budget formula.
+
+The tier controls how long the **prose** of the report is — executive summary + theme sections + bridges + synthesis. The claims registry / sources appendix is **always rendered in full** regardless of tier, and is **not counted** toward the target. The reviewer in `verify-trend-report` measures prose the same way.
+
+**Resume rule:** Read `{PROJECT_PATH}/tips-project.json`. If it already contains a `report_tier` field (and optionally `report_target_words`), skip the question — display `"Length tier: {report_tier} (~{report_target_words} prose words)"` and continue. This keeps re-runs deterministic and lets users pre-seed the choice from automation. Re-asking only happens when the field is absent.
+
+Otherwise present the question. Default is `standard` (4,000 prose words — the analog of cogni-research's "detailed" mode):
+
+**If INTERACTION_LANGUAGE == "de":**
+```yaml
+AskUserQuestion:
+  question: "{PHASE_0_LENGTH_QUESTION}"
+  header: "{PHASE_0_LENGTH_HEADER}"
+  options:
+    - label: "{LENGTH_TIER_STANDARD}"
+      description: "{LENGTH_TIER_STANDARD_DESC}"
+    - label: "{LENGTH_TIER_EXTENDED}"
+      description: "{LENGTH_TIER_EXTENDED_DESC}"
+    - label: "{LENGTH_TIER_COMPREHENSIVE}"
+      description: "{LENGTH_TIER_COMPREHENSIVE_DESC}"
+    - label: "{LENGTH_TIER_MAXIMUM}"
+      description: "{LENGTH_TIER_MAXIMUM_DESC}"
+```
+
+**If INTERACTION_LANGUAGE == "en":**
+```yaml
+AskUserQuestion:
+  question: "{PHASE_0_LENGTH_QUESTION}"
+  header: "{PHASE_0_LENGTH_HEADER}"
+  options:
+    - label: "{LENGTH_TIER_STANDARD}"
+      description: "{LENGTH_TIER_STANDARD_DESC}"
+    - label: "{LENGTH_TIER_EXTENDED}"
+      description: "{LENGTH_TIER_EXTENDED_DESC}"
+    - label: "{LENGTH_TIER_COMPREHENSIVE}"
+      description: "{LENGTH_TIER_COMPREHENSIVE_DESC}"
+    - label: "{LENGTH_TIER_MAXIMUM}"
+      description: "{LENGTH_TIER_MAXIMUM_DESC}"
+```
+
+> **AskUserQuestion limit:** The picker supports max 4 options, so the four tiers fill it. Power users wanting an exact custom integer can pre-seed `report_tier: "custom"` and `report_target_words: <int>` in `tips-project.json` before running this skill — the resume rule above will pick that up and skip the question.
+
+Map the user's choice to `{REPORT_TIER, REPORT_TARGET_WORDS}` per `report-length-tiers.md`:
+
+| Tier | `report_target_words` |
+|---|---|
+| standard | 4000 |
+| extended | 5500 |
+| comprehensive | 7000 |
+| maximum | 8000 |
+
+If `report_tier == "custom"` (only reachable via pre-seeded config), validate `2500 ≤ report_target_words ≤ 12000`. Outside that range: HALT with the bounds and ask the user to correct the config — do not silently clamp.
+
+Persist the choice by updating `{PROJECT_PATH}/tips-project.json`:
+
+```json
+{
+  "report_tier": "{tier}",
+  "report_target_words": {N}
+}
+```
+
+Re-runs and `verify-trend-report` will read these fields directly without re-asking.
+
+#### Step 0.4e: Compute Length Budget
+
+The orchestrator now has `REPORT_TARGET_WORDS` and the investment-theme count `N` (from the value model loaded in Step 0.2). Compute the per-section budgets that will be threaded through Phase 2:
+
+```text
+exec_words      = clamp(REPORT_TARGET_WORDS * 0.04, 80, 250)
+synthesis_words = clamp(REPORT_TARGET_WORDS * 0.13, 350, 1300)
+remaining       = REPORT_TARGET_WORDS - exec_words - synthesis_words
+per_theme_words = max(380, round(remaining / N))
+```
+
+Where `N` is the count of investment themes from `tips-value-model.json`. The 380 floor is the sum of the writer agent's per-element minimums (Hook 30 + WhyChange 80 + WhyNow 80 + WhyYou 100 + WhyPay 90) — it protects the Why-* arc from collapsing at small budgets. When the floor binds, the agent overshoots target slightly; this is intentional.
+
+The claims registry is NOT in this formula — it is data-driven and rendered separately in Phase 2 Step 2.5. It is excluded from word accounting at every stage.
+
+Set the four scalars for downstream use:
+
+- `THEME_TARGET_WORDS = per_theme_words`
+- `SYNTHESIS_TARGET_WORDS = synthesis_words`
+- `EXEC_TARGET_WORDS = exec_words`
+- `REPORT_TARGET_WORDS` (already set above; passed to the reviewer in verify-trend-report)
+
+Display `"Budget computed: ~{REPORT_TARGET_WORDS} prose words across {N} themes (~{THEME_TARGET_WORDS} per theme)"`.
+
 #### Step 0.5: Load i18n Labels
 
 Read the labels file matching the chosen language:
@@ -465,9 +556,13 @@ Add to `{PROJECT_PATH}/.metadata/trend-scout-output.json`:
   "trend_report_claims_path": "tips-trend-report-claims.json",
   "trend_report_mode": "strategic-themes",
   "trend_report_investment_theme_count": N,
-  "trend_report_generated_at": "ISO-8601"
+  "trend_report_generated_at": "ISO-8601",
+  "report_tier": "{REPORT_TIER}",
+  "report_target_words": {REPORT_TARGET_WORDS}
 }
 ```
+
+`report_tier` and `report_target_words` are mirrored into trend-scout-output.json so `verify-trend-report` can read the prose-word target without re-loading `tips-project.json` — the reviewer uses it for tier-aware Completeness scoring.
 
 #### Step 4.2: Display Summary
 
@@ -476,6 +571,7 @@ Trend Report Draft Complete (Investment Themes)
 ───────────────────────────────────────────────
 Report:       {PROJECT_PATH}/tips-trend-report.md
 Themes:       {N} investment themes ({REPORT_ARC_ID} arc)
+Length tier:  {REPORT_TIER} (~{REPORT_TARGET_WORDS} prose words target; registry excluded)
 Claims:       {PROJECT_PATH}/tips-trend-report-claims.json
 Trends:       60 across {N} investment themes
 Claims:       {total_claims} quantitative claims extracted

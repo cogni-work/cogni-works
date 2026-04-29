@@ -47,6 +47,7 @@ You receive these from trend-report Phase 2:
   - When a ST has no examples (empty array or missing key), fall back to plain capability prose for that ST with no example citations.
 - **SOLUTION_PRICING** — JSON array of solution pricing data for this theme's grounded features: `[{ feature_slug, market_slug, solution_type, pricing, cost_model, implementation }]` (may be empty). Extracted from portfolio solution files by the orchestrator. Used in Why Pay for proactive investment figures. See "Solution costing data" in Why Pay section.
 - **MARKET_REGION** — Target market region code (e.g., "dach", "de", "us", "uk"). Default: "dach". Used to load region-specific currency and organization size references from `$CLAUDE_PLUGIN_ROOT/skills/trend-report/references/region-authority-sources.json`.
+- **THEME_TARGET_WORDS** — Integer target for this theme's section (excluding the H2/H4 heading lines and excluding any rendered claims-registry content — the registry is appended by the orchestrator, not written here). Tolerance is `±15%` for the section total. Per-element minimums override fixed proportions when the budget is tight: Hook 30, WhyChange 80, WhyNow 80, WhyYou 100, WhyPay 90 (sum 380). When `THEME_TARGET_WORDS ≥ 380`, fixed proportions (Hook 8% / WhyChange 25% / WhyNow 20% / WhyYou 30% / WhyPay 17%) determine per-element targets; below that, minimums dominate and the section overshoots target slightly. The 4 Why-* elements are ALL required regardless of budget — a tighter target means tighter prose, not skipped elements.
 - **LABELS** — JSON object with i18n labels for section headings
 - **THEME_INDEX** — The 1-based display index for this theme in the report
 - **NARRATIVE_ARC_PATH** — (Optional) Path to `theme-thesis/arc-definition.md` from cogni-narrative
@@ -105,6 +106,23 @@ Before writing, classify each candidate by which arc element it primarily serves
 
 A candidate can serve multiple elements. For example, an Act-horizon I-candidate creates urgency in Why Now AND shows value chain disruption cost in Why Pay.
 
+### Step 2.6: Apply per-element budget
+
+Compute the per-element word targets that anchor your writing in Step 3. The proportions are fixed (Hook 8% / WhyChange 25% / WhyNow 20% / WhyYou 30% / WhyPay 17%) and the minimums are floors, not soft suggestions.
+
+```text
+hook_target       = max( 30, round(THEME_TARGET_WORDS * 0.08))
+why_change_target = max( 80, round(THEME_TARGET_WORDS * 0.25))
+why_now_target    = max( 80, round(THEME_TARGET_WORDS * 0.20))
+why_you_target    = max(100, round(THEME_TARGET_WORDS * 0.30))
+why_pay_target    = max( 90, round(THEME_TARGET_WORDS * 0.17))
+section_target    = THEME_TARGET_WORDS                      # tolerance ±15%, with the per-element floors as a hard lower bound
+```
+
+When the floors bind (small `THEME_TARGET_WORDS`, typically when standard tier × many themes drives `per_theme` near 380), the section will land slightly above `THEME_TARGET_WORDS` — that is intentional. Trying to compress below the floors collapses the Why-* arc and breaks the reviewer's Evidence-density / Actionability gates downstream.
+
+When `THEME_TARGET_WORDS` is generous (extended tier and above), the proportions dominate cleanly and per-element targets sit comfortably above their floors.
+
 ### Step 3: Write Theme Section
 
 Write the theme section to `{PROJECT_PATH}/.logs/report-investment-theme-{THEME_ID}.md`.
@@ -123,12 +141,13 @@ Write in the target language (`{LANGUAGE}`). The section tells a complete invest
 
 **{EXECUTIVE_SPONSOR_LABEL}:** {EXECUTIVE_SPONSOR_TYPE}
 
-{Hook: ~8% of section — the theme's most surprising quantified finding from enriched evidence,
-reframed as a challenge to conventional thinking. End with the strategic question.}
+{Hook: ~`hook_target` words (8% of THEME_TARGET_WORDS, minimum 30) — the theme's most surprising
+quantified finding from enriched evidence, reframed as a challenge to conventional thinking.
+End with the strategic question.}
 
 ### {WHY_CHANGE_MESSAGE_HEADING}
 
-{~25% of section — Reframe T-candidates as an unconsidered need using PSB structure:
+{~`why_change_target` words (25% of THEME_TARGET_WORDS, minimum 80) — Reframe T-candidates as an unconsidered need using PSB structure:
 
 **Problem (~33%):** What most organizations in this industry assume about this domain.
 The status quo mindset — draw from the conventional framing of T-candidate trends.
@@ -151,7 +170,7 @@ evidence shows Y" — and compress it into a message heading (<90 chars). This h
 
 ### {WHY_NOW_MESSAGE_HEADING}
 
-{~20% of section — Stack 2-3 forcing functions from Act-horizon candidates:
+{~`why_now_target` words (20% of THEME_TARGET_WORDS, minimum 80) — Stack 2-3 forcing functions from Act-horizon candidates:
 
 For each forcing function:
 - Specific deadline or tipping point from evidence_md (not vague "soon")
@@ -180,9 +199,9 @@ at least one date or number.}
 
 ### {WHY_YOU_MESSAGE_HEADING}
 
-{~30% of section — Present the strategic capabilities (from solution templates or
-P-candidates) as the answer to the Why Change and Why Now pressures. The tone is
-low-key consultative — a trusted advisor explaining what needs to happen, not a
+{~`why_you_target` words (30% of THEME_TARGET_WORDS, minimum 100) — Present the strategic capabilities
+(from solution templates or P-candidates) as the answer to the Why Change and Why Now pressures.
+The tone is low-key consultative — a trusted advisor explaining what needs to happen, not a
 sales pitch.
 
 **Heading rule:** The Why You heading must tie back to Why Change + Why Now and
@@ -317,7 +336,7 @@ jetzt anpacken". Do NOT summarize a single solution.}
 
 ### {WHY_PAY_MESSAGE_HEADING}
 
-{~17% of section — Compound impact calculation stacking 3 cost dimensions:
+{~`why_pay_target` words (17% of THEME_TARGET_WORDS, minimum 90) — Compound impact calculation stacking 3 cost dimensions:
 
 **Cost Dimension 1:** Regulatory/market loss (whichever is strongest in evidence).
 Specific € range over 3-year horizon for a mid-size organization in this industry.
@@ -423,7 +442,7 @@ If `NARRATIVE_ARC_PATH` was not provided or could not be read, use this flat str
 
 ### {INVESTMENT_THESIS_LABEL}
 
-{Extended narrative: 300-500 words weaving quantitative evidence from the theme's trends.
+{Extended narrative: `THEME_TARGET_WORDS ± 20%` (minimum 250) weaving quantitative evidence from the theme's trends.
 Strategic argument for why this investment domain demands attention. Flow: external force →
 business implication → strategic response. Mirror T→I→P causal logic in prose.}
 
@@ -467,7 +486,8 @@ Now replace the placeholder heading markers in the written file with the actual 
 #### Writing Guidelines
 
 **Arc quality gate (when arc is loaded):** After writing, verify:
-- Each element meets its proportional word target (+/-10%)
+- Total section length is `THEME_TARGET_WORDS ± 15%` (counted across the H2/H4 heading lines and all element prose, excluding any orchestrator-appended claims-registry rows). When per-element minimums dominate (small `THEME_TARGET_WORDS` × tight budget), the section may overshoot the upper tolerance — that is the expected behavior of the floor and is not a gate failure.
+- Each element meets `max(proportion × THEME_TARGET_WORDS, element_minimum) ± 15%`. The minimums (Hook 30, WhyChange 80, WhyNow 80, WhyYou 100, WhyPay 90) are hard floors — never write less than the floor, even if the proportional target is smaller.
 - **Why Change:** PSB structure applied, Contrast Structure used, ends with competitive implication
 - **Why Now:** ≥2 forcing functions with specific timelines, before/after contrast, window closing statement. FF1 should be a regulatory deadline if evidence contains one. Each forcing function should be specific to this theme — reusing the same deadline (e.g., EU AI Act August 2026) as the primary forcing function in multiple themes makes the report feel repetitive and weakens urgency. If the same deadline applies across themes, reference it briefly ("alongside the EU AI Act deadline") but lead with a theme-specific forcing function.
 - **Why You:** IS-DOES-MEANS logic applied (invisibly) to ≥1 solution template or P-candidate. You-Phrasing for outcomes. No ST-IDs, no "Power Position", no visible IS/DOES/MEANS labels — flowing prose only. No solution table. Portfolio close present (if PORTFOLIO_PRODUCTS non-empty). Heading uses "Lösungen"/"solutions" and ties back to urgency. **Examples gate:** when `EXAMPLE_REFERENCES` carries at least one entry for any ST in this theme, the Why You section MUST cite at least one example — inline per ST in vendor mode, or via the `Referenzbeispiele` block in open mode. Vendor-mode citations use the `portfolio://` scheme; open-mode citations use public HTTPS URLs with no more than one entry per second-level domain. If `EXAMPLE_REFERENCES` is empty/absent for this theme, skip the examples gate (backward compatibility).
@@ -479,7 +499,7 @@ Now replace the placeholder heading markers in the written file with the actual 
 - **Currency consistency:** All monetary figures must be in the region's currency (from `region-authority-sources.json[MARKET_REGION].currency` — EUR for dach/de, USD for us, GBP for uk). If source data is in a different currency, convert and note the original. Do not mix currencies in the same section.
 
 **Fallback quality gate (no arc):** After writing, verify:
-- Word count ≥250 words (target 300-500). If under 250, expand with additional evidence.
+- Word count = `THEME_TARGET_WORDS ± 20%`, with a hard minimum of 250 regardless of tier. If under the minimum, expand with additional evidence.
 - At least 3 inline citations with URLs.
 - Narrative follows T→I→P flow: external force → business implication → strategic response.
 
@@ -519,6 +539,7 @@ Return ONLY this JSON — nothing else:
   "why_pay_ratio": "3x",
   "why_pay_closing_statement": "Verzögern kostet 3x mehr als Handeln — €6,9M vs. €2,3M über drei Jahre",
   "primary_forcing_function": "EU AI Act 2. August 2026",
+  "target_words": 700,
   "word_count": 720,
   "citations_count": 12,
   "quality_gate_pass": true,

@@ -176,6 +176,24 @@ ARC_THEME_THESIS: "Theme Thesis"
 ARC_THEME_THESIS_DESC: "Each theme as an investment thesis with its own quantified business case"
 ```
 
+## Report Length Tier Selection
+
+```text
+PHASE_0_LENGTH_QUESTION: "How long should the report be? Length controls prose only — the claims registry is always rendered in full and never counted."
+PHASE_0_LENGTH_HEADER: "Report length"
+LENGTH_TIER_STANDARD: "Standard (≈4,000 words)"
+LENGTH_TIER_STANDARD_DESC: "Detailed research report — analog to cogni-research's 'detailed' mode. Recommended default."
+LENGTH_TIER_EXTENDED: "Extended (≈5,500 words)"
+LENGTH_TIER_EXTENDED_DESC: "Strategic deep dive with more evidence per theme."
+LENGTH_TIER_COMPREHENSIVE: "Comprehensive (≈7,000 words)"
+LENGTH_TIER_COMPREHENSIVE_DESC: "Full-depth analysis for stakeholders who want everything."
+LENGTH_TIER_MAXIMUM: "Maximum (≈8,000 words)"
+LENGTH_TIER_MAXIMUM_DESC: "Pre-tier behavior — exhaustive prose, full evidence weave per theme."
+LENGTH_TIER_CUSTOM_DESC: "Pre-seeded by automation via tips-project.json. Bounds: 2,500 ≤ target_words ≤ 12,000 prose."
+```
+
+> Tier labels reference *prose* word counts — executive summary + theme sections + bridges + synthesis. The claims registry / sources appendix adds another ~1,500–3,500 words depending on claim volume and is always present regardless of tier.
+
 ## Synthesis Section Headings (per arc)
 
 ```text

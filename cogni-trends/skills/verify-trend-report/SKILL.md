@@ -101,6 +101,14 @@ bash "${CLAUDE_PLUGIN_ROOT:-$(ls -td "$HOME"/.claude/plugins/cache/insight-wave/
 
 Read `tips-project.json` for `language` (set as `OUTPUT_LANGUAGE`) and `market_region` (set as `MARKET`, default `dach` for legacy projects).
 
+Resolve the **prose word target** the reviewer needs for tier-aware Completeness scoring. Try in order:
+
+1. `.metadata/trend-scout-output.json → report_target_words` (mirrored there by `trend-report` Phase 4.1).
+2. `tips-project.json → report_target_words` (the source of truth, written by `trend-report` Phase 0.4d).
+3. Default `4000` (standard tier) — apply when both fields are absent on legacy projects that pre-date the length-tier feature.
+
+Set `REPORT_TARGET_WORDS` for downstream use in Phase 4.
+
 ---
 
 ### Phase 0.5: Resumability Check
@@ -258,7 +266,10 @@ Task:
     REPORT_PATH: {current_report_path}
     REVIEW_ITERATION: {N}
     OUTPUT_LANGUAGE: {OUTPUT_LANGUAGE}
+    REPORT_TARGET_WORDS: {REPORT_TARGET_WORDS}
 ```
+
+`REPORT_TARGET_WORDS` is the **prose** target (executive summary + theme sections + bridges + synthesis — claims registry excluded). It anchors the reviewer's tier-aware Completeness scoring. Reviews of legacy reports without a recorded target fall back to `4000` (standard tier).
 
 The reviewer scores 5 dimensions (completeness, evidence density, source diversity, narrative coherence, actionability) and returns a verdict:
 

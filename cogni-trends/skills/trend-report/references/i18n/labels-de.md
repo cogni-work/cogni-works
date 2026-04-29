@@ -176,6 +176,24 @@ ARC_THEME_THESIS: "Handlungsfeld-These"
 ARC_THEME_THESIS_DESC: "Jedes Handlungsfeld als Investitionsthese mit eigenem quantifiziertem Business Case"
 ```
 
+## Auswahl der Berichtslänge
+
+```text
+PHASE_0_LENGTH_QUESTION: "Wie lang soll der Bericht sein? Die Länge bezieht sich nur auf den Fließtext — das Quellenregister wird immer vollständig ausgegeben und nicht mitgezählt."
+PHASE_0_LENGTH_HEADER: "Berichtslänge"
+LENGTH_TIER_STANDARD: "Standard (≈4.000 Wörter)"
+LENGTH_TIER_STANDARD_DESC: "Detaillierter Researchbericht — Pendant zum 'detailed'-Modus von cogni-research. Empfohlener Standard."
+LENGTH_TIER_EXTENDED: "Erweitert (≈5.500 Wörter)"
+LENGTH_TIER_EXTENDED_DESC: "Strategische Vertiefung mit mehr Evidenz pro Handlungsfeld."
+LENGTH_TIER_COMPREHENSIVE: "Umfassend (≈7.000 Wörter)"
+LENGTH_TIER_COMPREHENSIVE_DESC: "Vollständige Tiefenanalyse für Leser, die alle Details wünschen."
+LENGTH_TIER_MAXIMUM: "Maximal (≈8.000 Wörter)"
+LENGTH_TIER_MAXIMUM_DESC: "Bisheriges Verhalten — ausführlicher Fließtext, volle Evidenz pro Handlungsfeld."
+LENGTH_TIER_CUSTOM_DESC: "Per Automation in tips-project.json vorgegeben. Grenzen: 2.500 ≤ target_words ≤ 12.000 Fließtext-Wörter."
+```
+
+> Die Längenangaben beziehen sich auf den *Fließtext* — Zusammenfassung + Handlungsfeld-Abschnitte + Brücken + Synthese. Das Quellenregister fügt je nach Anzahl der Aussagen weitere ~1.500–3.500 Wörter hinzu und ist in jedem Modus vollständig enthalten.
+
 ## Synthese-Abschnittsüberschriften (pro Erzählbogen)
 
 ```text

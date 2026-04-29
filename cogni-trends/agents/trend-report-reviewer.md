@@ -22,6 +22,7 @@ Adapted from cogni-research's reviewer agent for the specific structure of TIPS 
 | `REPORT_PATH` | Yes | Path to `tips-trend-report.md` |
 | `REVIEW_ITERATION` | Yes | Current review iteration (1-2). Max 2 iterations. |
 | `OUTPUT_LANGUAGE` | No | ISO 639-1 code (default: "de"). Evaluate clarity in this language. Supported: de, en, fr, it, pl, nl, es. Check proper character encoding: DE (ä/ö/ü/ß), FR (é/è/ê/ç), IT (à/è/é/ì/ò/ù), PL (ą/ć/ę/ł/ń/ó/ś/ź/ż), ES (á/é/í/ó/ú/ñ). |
+| `REPORT_TARGET_WORDS` | No | Integer **prose** word target the report was generated against (executive summary + theme sections + bridges + synthesis — claims registry is **excluded**). Sourced from `.metadata/trend-scout-output.json → report_target_words` by the `verify-trend-report` skill, or from `tips-project.json → report_target_words`. Default: `4000` (the standard tier) when neither is present. Used by the Completeness rubric for tier-aware scoring. |
 
 ## Core Workflow
 
@@ -32,10 +33,16 @@ Phase 0 → Phase 1 → Phase 2 → Phase 3
 ### Phase 0: Load Inputs
 
 1. Read the trend report at `REPORT_PATH`
-2. Read `{PROJECT_PATH}/tips-project.json` for industry and theme context
+2. Read `{PROJECT_PATH}/tips-project.json` for industry and theme context. Resolve `REPORT_TARGET_WORDS`: use the value passed in the prompt if present; otherwise read `report_target_words` from `tips-project.json`; otherwise default to `4000`.
 3. Read `{PROJECT_PATH}/tips-value-model.json` for investment theme definitions (to verify completeness)
 4. Read previous review verdicts from `{PROJECT_PATH}/.metadata/review-verdicts/` (if iteration > 1)
 5. Count investment themes, dimension sections, and trend references
+6. Compute the **prose word count** for tier-aware Completeness scoring. Sum word counts of these per-section log files in `{PROJECT_PATH}/.logs/`:
+   - `report-header.md` (executive summary)
+   - `report-investment-theme-*.md` (all theme sections)
+   - `report-bridge-*.md` (all bridges)
+   - `report-synthesis.md`
+   Do NOT count `report-claims-registry.md` and do NOT word-count the assembled `tips-trend-report.md` directly — the registry is appended at assembly time and would inflate the count. If the per-section log files are unavailable (e.g., the orchestrator cleaned them up), fall back to counting `tips-trend-report.md` minus the words under the `## {CLAIMS_REGISTRY_LABEL}` H2 (typically labeled "Claims Registry" / "Quellenregister"). Set `prose_word_count` to the resulting integer.
 
 ### Phase 1: Structural Review
 
@@ -43,8 +50,8 @@ Score on 5 dimensions (0.0-1.0, weighted):
 
 | Dimension | Weight | What's Scored |
 |-----------|--------|---------------|
-| **Completeness** | 0.25 | All investment themes present with 4 Corporate Visions elements (Why Change, Why Now, Why You, Why Pay)? All 4 Trendradar dimensions covered in the dimension sections? Executive summary present and synthesizing (not just summarizing)? |
-| **Evidence density** | 0.20 | Minimum 3 inline citations per investment theme? At least 1 quantitative data point (number, percentage, date) per theme? No themes relying entirely on qualitative assertions? |
+| **Completeness** | 0.25 | All investment themes present with 4 Corporate Visions elements (Why Change, Why Now, Why You, Why Pay)? All 4 Trendradar dimensions covered in the dimension sections? Executive summary present and synthesizing (not just summarizing)? **Length tier compliance:** `prose_word_count` is within `REPORT_TARGET_WORDS ± 20%`. See the "Length tier scoring" subsection below for the exact stepped caps. |
+| **Evidence density** | 0.20 | Minimum 3 inline citations per investment theme? At least 1 quantitative data point (number, percentage, date) per theme? No themes relying entirely on qualitative assertions? This gate is **tier-invariant** — every theme needs ≥3 citations regardless of length tier. |
 | **Source diversity** | 0.20 | No investment theme citing > 2 times from the same source? Mix of source types (institutional, consulting, academic, media) across themes? No single publisher providing > 30% of citations? |
 | **Narrative coherence** | 0.20 | Do bridge paragraphs connect dimension sections to investment themes? Does the executive summary reference all themes? Are forcing functions in Why Now sections consistent (not contradicting between themes)? Smooth transitions between sections? |
 | **Actionability** | 0.15 | Do Why Pay sections include specific cost estimates or ROI ranges? Do recommendations have calendar-specific timeframes (not just "soon")? Are solution references concrete (named capabilities, not vague "digital transformation")? If portfolio context available, are product references included? |
@@ -53,6 +60,29 @@ Score on 5 dimensions (0.0-1.0, weighted):
 - Score each dimension independently on 0.0-1.0 scale
 - For each dimension, list specific issues found (max 5 per dimension)
 - Compute weighted composite: `0.25*completeness + 0.20*evidence + 0.20*diversity + 0.20*coherence + 0.15*actionability`
+
+**Length tier scoring (Completeness):**
+
+The Completeness dimension is tier-aware — it scores against `REPORT_TARGET_WORDS` (the *prose* target the report was generated for, registry excluded), not against an absolute word floor. A legitimately-shorter standard-tier report must not be penalized for hitting its target.
+
+Apply these stepped caps after structural completeness has been scored:
+
+```text
+ratio = prose_word_count / REPORT_TARGET_WORDS
+
+if ratio < 0.80:                           # under-budget — material is missing
+    completeness = min(completeness, 0.6)
+    list issue: "Report is {prose_word_count} prose words vs. {REPORT_TARGET_WORDS} target ({(1-ratio)*100:.0f}% short). Themes may have skipped Why-* elements or thin evidence."
+elif ratio > 1.25:                         # over-budget — likely padding
+    completeness = min(completeness, 0.7)
+    list issue: "Report is {prose_word_count} prose words vs. {REPORT_TARGET_WORDS} target ({(ratio-1)*100:.0f}% over). Likely repetition or inflated prose."
+else:                                       # 0.80 ≤ ratio ≤ 1.25 — within tolerance
+    no length-driven cap
+```
+
+Do NOT penalize "missing arc element" purely because the report is short — every theme must still have all 4 Why-* elements regardless of tier. The writer agent's per-element minimums guarantee this. If an element is genuinely missing, that is a structural failure (already covered by the Completeness rubric) and is independent of length.
+
+The tolerance band (0.80 ≤ ratio ≤ 1.25) is wider than the writer agent's ±15% per-section tolerance because the report total absorbs N-theme variance, exec/synthesis clamps, and minor variation in individual sections.
 
 ### Phase 2: Cross-Theme Analysis
 
@@ -97,6 +127,9 @@ Read previous verdict. If an issue from iteration 1 reappears after revision, no
   "iteration": 1,
   "verdict": "revise",
   "composite_score": 0.72,
+  "report_target_words": 4000,
+  "prose_word_count": 3850,
+  "length_ratio": 0.96,
   "dimension_scores": {
     "completeness": 0.80,
     "evidence_density": 0.60,

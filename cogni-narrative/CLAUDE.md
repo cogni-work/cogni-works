@@ -1,6 +1,6 @@
 # cogni-narrative
 
-Story arc engine for the insight-wave ecosystem — transforms structured content into executive narratives using 10 arc frameworks and 8 narrative techniques.
+Story arc engine for the insight-wave ecosystem — transforms structured content into executive narratives using 11 arc frameworks and 8 narrative techniques.
 
 ## Plugin Architecture
 
@@ -23,14 +23,16 @@ skills/                         3 narrative skills
         phase-4b-synthesis-jtbd-portfolio.md
         phase-4b-synthesis-company-credo.md
         phase-4b-synthesis-engagement-model.md
-      story-arc/                  10 arc framework definitions
+        phase-4b-synthesis-smarter-service.md
+      story-arc/                  11 arc framework definitions
         arc-registry.md           Index of all available story arcs
         corporate-visions/        Why Change → Why Now → Why You → Why Pay
         technology-futures/       Emerging → Converging → Possible → Required
         competitive-intelligence/ Landscape → Shifts → Positioning → Implications
         strategic-foresight/      Signals → Scenarios → Strategies → Decisions
         industry-transformation/  Forces → Friction → Evolution → Leadership
-        trend-panorama/           Forces → Impact → Horizons → Foundations (TIPS-native)
+        trend-panorama/           Forces → Impact → Horizons → Foundations (TIPS-native, theme-less)
+        smarter-service/          Forces → Impact → Horizons → Foundations (TIPS-native, theme-aware sibling)
         theme-thesis/             Investment theme narratives (Corporate Visions arc for themes)
         jtbd-portfolio/           Jobs-to-be-Done portfolio narrative (buyer jobs → solutions)
         company-credo/            Mission → Conviction → Credibility → Promise (About-Us pages)
@@ -61,7 +63,7 @@ commands/                       3 slash commands
 | Agents | 3 | narrative-writer (sonnet), narrative-reviewer (sonnet), narrative-adapter (sonnet) |
 | Commands | 3 | narrative, narrative-review, narrative-adapt |
 
-## 10 Story Arc Frameworks
+## 11 Story Arc Frameworks
 
 | Arc ID | Element Flow | Best For |
 |--------|-------------|----------|
@@ -70,7 +72,8 @@ commands/                       3 slash commands
 | competitive-intelligence | Landscape → Shifts → Positioning → Implications | Competitive analysis, threat assessment |
 | strategic-foresight | Signals → Scenarios → Strategies → Decisions | Long-range planning, scenario analysis |
 | industry-transformation | Forces → Friction → Evolution → Leadership | Industry analysis, regulatory impact |
-| trend-panorama | Forces → Impact → Horizons → Foundations | TIPS trend-scout output (Trendradar-native) |
+| trend-panorama | Forces → Impact → Horizons → Foundations | TIPS trend-scout output (theme-less, Trendradar-native) |
+| smarter-service | Forces → Impact → Horizons → Foundations | TIPS reports with investment themes (theme-aware sibling of trend-panorama) |
 | theme-thesis | Why Change → Why Now → Why You → Why Pay | Investment theme narratives within TIPS reports |
 | jtbd-portfolio | Jobs → Friction → Portfolio → Invitation | Portfolio introductions, capability overviews, pre-sales |
 | company-credo | Mission → Conviction → Credibility → Promise | Website About-Us pages, company introductions |

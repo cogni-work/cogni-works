@@ -444,6 +444,16 @@ Exact `##` section headers for insight-summary.md output, per arc and language. 
 | 3 | Partnership: What We Expect From You | Partnerschaft: Was wir von Ihnen erwarten |
 | 4 | Outcomes: What Success Looks Like | Ergebnisse: Wie Erfolg aussieht |
 
+**smarter-service** (theme-aware sibling of trend-panorama; same elements, plus a Foundations-anchored synthesis section):
+
+| Element | English (en) | German (de) | TIPS Dimension |
+|---------|--------------|-------------|----------------|
+| 1 | Forces: External Pressures & Market Signals | Kräfte: Externe Einflüsse & Marktsignale | T (Externe Effekte) |
+| 2 | Impact: Value Chain Disruption | Wirkung: Wertschöpfungsdynamik | I (Digitale Wertetreiber) |
+| 3 | Horizons: Strategic Possibilities | Horizonte: Strategische Möglichkeiten | P (Neue Horizonte) |
+| 4 | Foundations: Capability Requirements | Fundamente: Kompetenzanforderungen | S (Digitales Fundament) |
+| Synthesis | The Capability Imperative | Der Fähigkeitsimperativ | cross-theme close on S |
+
 ## German Text Formatting
 
 When generating content in German (`language: "de"`):

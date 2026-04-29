@@ -13,11 +13,12 @@ This registry indexes all available story arcs for the cogni-narrative plugin. E
 | 3 | `competitive-intelligence` | Landscape → Shifts → Positioning → Implications | - | Competitive analysis, threats | `content_type: "competitive"` |
 | 4 | `strategic-foresight` | Signals → Scenarios → Strategies → Decisions | - | Long-range planning, scenarios | `content_type: "foresight"` |
 | 5 | `industry-transformation` | Forces → Friction → Evolution → Leadership | - | Industry analysis, regulation | `content_type: "industry"` |
-| 6 | `trend-panorama` | Forces → Impact → Horizons → Foundations | T→I→P→S | Trend-scout output, TIPS reports | Structural + `"smarter-service"` |
+| 6 | `trend-panorama` | Forces → Impact → Horizons → Foundations | T→I→P→S | Trend-scout output (theme-less), TIPS panoramas | Structural: `trend-scout-output.json` without value model |
 | 7 | `theme-thesis` | Change → Now → You → Pay | T→I→P→S | Theme-level investment narratives | `content_type: "theme"` |
 | 8 | `jtbd-portfolio` | Jobs → Friction → Portfolio → Invitation | - | Portfolio introductions, capability overviews, pre-sales | `content_type: "jtbd"` |
 | 9 | `company-credo` | Mission → Conviction → Credibility → Promise | - | About-Us pages, company introductions, brand identity narratives | `content_type: "company-credo"` or `"about-us"` |
 | 10 | `engagement-model` | Principles → Process → Partnership → Outcomes | - | How-We-Work pages, engagement sections of proposals, partner onboarding | `content_type: "engagement-model"` or `"how-we-work"` |
+| 11 | `smarter-service` | Forces → Impact → Horizons → Foundations | T→I→P→S | TIPS reports with investment themes (theme-aware sibling of trend-panorama) | Structural: `tips-value-model.json` present |
 
 ## Arc Selection Logic
 
@@ -362,25 +363,85 @@ A 4-element B2B narrative that answers "how will this work land in my organizati
 
 ---
 
+### 11. Smarter Service
+
+**Arc ID:** `smarter-service`
+**Display Name:** Smarter Service
+**Elements:** Forces → Impact → Horizons → Foundations (TIPS: T → I → P → S, theme-aware)
+
+**Best For:**
+- TIPS trend reports built on top of a value model with investment themes (primary)
+- CxO-level reports where investment themes need a coherent macro spine
+- Strategic foresight briefings with cross-dimensional theme anchoring
+- Multi-theme transformation roadmaps grounded in dimensional forces
+
+**Description:**
+A theme-aware sibling of `trend-panorama`. Same four elements and same TIPS dimension mapping, but each macro element doubles as an H2 section that nests one or more investment-theme cases (H3) anchored to that dimension. The arc adds a Foundations-anchored synthesis section ("The Capability Imperative") that aggregates capability requirements across themes. Selected over `trend-panorama` whenever `tips-value-model.json` is present in the project.
+
+**Detection Signals:**
+- Structural (highest confidence): `tips-value-model.json` present in source directory or `.metadata/`
+- `content_type: "smarter-service"` or `"investment-theme-report"`
+- `research_type: "smarter-service-themed"`
+- Keywords (≥12% density): "investment theme", "Handlungsfeld", "value chain", "solution template", "Smarter Service", "Trendradar"
+
+**Smarter-Service-Specific Constraints:**
+- Each investment theme appears exactly once in main flow — anchored to its dominant TIPS pole, not duplicated across elements
+- Anchoring rule deterministic: dominant `candidate_ref` count, tiebreaker = highest single-candidate composite score
+- Secondary poles get one-line callouts, not full sub-sections
+- Theme-cases must NOT restate macro Forces/Impact/Horizons/Foundations context — that lives in dimension narratives once
+- Synthesis section "The Capability Imperative" is required in theme-aware mode and aggregates across themes (not per-theme summary)
+
+**TIPS Candidate Mapping:**
+- Forces (T): Externe Effekte — economy, regulation, society
+- Impact (I): Digitale Wertetreiber — CX, products, processes
+- Horizons (P): Neue Horizonte — strategy, leadership, governance
+- Foundations (S): Digitales Fundament — culture, workforce, technology
+- Theme anchoring: each theme's dominant pole determines the macro section it nests under
+
+**Section Proportions (theme-aware mode, with N themes):**
+- Executive Summary: 10%
+- Forces (dimension narrative + nested theme-cases): 22%
+- Impact (dimension narrative + nested theme-cases): 22%
+- Horizons (dimension narrative + nested theme-cases): 22%
+- Foundations (dimension narrative + nested theme-cases): 16%
+- Synthesis ("The Capability Imperative"): 8%
+- **Default total:** scales with cogni-trends length tiers (4,000–8,000 prose words)
+
+**Section Proportions (insight-summary fallback, no themes):**
+- Hook: 10% / Forces: 24% / Impact: 24% / Horizons: 24% / Foundations: 18%
+- Default total: 1,675 words (degrades to trend-panorama-equivalent structure)
+
+**Definition File:** `story-arc/smarter-service/arc-definition.md`
+
+---
+
 ## Arc Detection Algorithm
 
 ### Step 1: Explicit Selection
 
 If the caller provides `arc_id` directly, use it without detection.
 
-### Step 2: Structural Detection (trend-panorama only)
+### Step 2: Structural Detection (trend-panorama / smarter-service)
 
-Before content-type mapping, check for structural signals that uniquely identify trend-scout output:
+Before content-type mapping, check for structural signals that uniquely identify TIPS reports. The presence of `tips-value-model.json` is the deciding signal between the theme-less (`trend-panorama`) and theme-aware (`smarter-service`) variants.
 
 ```javascript
-// Check for trend-scout structural signals (highest confidence detection)
-if (fileExists(".metadata/trend-scout-output.json") || fileExists("trend-scout-output.json")) {
-  detected_arc = "trend-panorama"
-  detection_reason = "structural: trend-scout-output.json detected"
+// Step 2a: theme-aware TIPS report — value model present means themes exist
+if (fileExists("tips-value-model.json") || fileExists(".metadata/tips-value-model.json")) {
+  detected_arc = "smarter-service"
+  detection_reason = "structural: tips-value-model.json detected (theme-aware TIPS report)"
 }
-if (fileExists("tips-trend-report.md")) {
+
+// Step 2b: theme-less TIPS panorama — trend-scout output without a value model
+else if (fileExists(".metadata/trend-scout-output.json") || fileExists("trend-scout-output.json")) {
   detected_arc = "trend-panorama"
-  detection_reason = "structural: tips-trend-report.md detected"
+  detection_reason = "structural: trend-scout-output.json detected (theme-less TIPS panorama)"
+}
+else if (fileExists("tips-trend-report.md")) {
+  // Existing report with H2 investment-theme sections strongly implies value model;
+  // fall back to trend-panorama only if value model was deleted post-generation.
+  detected_arc = "trend-panorama"
+  detection_reason = "structural: tips-trend-report.md detected (no value model — fallback)"
 }
 ```
 
@@ -391,7 +452,8 @@ const arcMap = {
   "trend": "trend-panorama",
   "trends": "trend-panorama",
   "tips": "trend-panorama",
-  "smarter-service": "trend-panorama",
+  "smarter-service": "smarter-service",
+  "investment-theme-report": "smarter-service",
   "theme": "theme-thesis",
   "investment-theme": "theme-thesis",
   "technology": "technology-futures",
@@ -408,10 +470,15 @@ const arcMap = {
   "generic": "corporate-visions"
 }
 
-// Also check research_type field
-if (research_type === "smarter-service") {
+// Also check research_type field — note: theme-aware variant takes precedence
+// when a value model exists (Step 2 already handled the structural signal).
+if (research_type === "smarter-service-themed") {
+  detected_arc = "smarter-service"
+  detection_reason = `research_type="smarter-service-themed"`
+}
+else if (research_type === "smarter-service") {
   detected_arc = "trend-panorama"
-  detection_reason = `research_type="smarter-service"`
+  detection_reason = `research_type="smarter-service" (theme-less)`
 }
 
 if (content_type in arcMap) {
@@ -427,6 +494,7 @@ Analyze the input content for keyword density:
 ```javascript
 keyword_sets = {
   "trend-panorama": ["trend", "horizon", "act", "plan", "observe", "TIPS", "signal intensity", "dimension"],
+  "smarter-service": ["investment theme", "Handlungsfeld", "value chain", "solution template", "Smarter Service", "Trendradar", "Externe Effekte", "Digitale Wertetreiber", "Neue Horizonte", "Digitales Fundament"],
   "theme-thesis": ["theme", "investment thesis", "value chain", "solution template", "strategic question", "candidate_ref", "chain_score"],
   "technology-futures": ["emerging", "innovation", "capability", "technology", "R&D", "breakthrough"],
   "competitive-intelligence": ["competitor", "market share", "positioning", "differentiation", "threat", "rivalry"],
@@ -439,6 +507,7 @@ keyword_sets = {
 
 thresholds = {
   "trend-panorama": 0.12,
+  "smarter-service": 0.12,
   "theme-thesis": 0.15,
   "technology-futures": 0.15,
   "competitive-intelligence": 0.12,

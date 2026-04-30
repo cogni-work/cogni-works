@@ -450,26 +450,29 @@ Read the labels file matching the chosen language:
 On re-runs, remove stale files to prevent mixing old and new content:
 
 ```bash
-rm -f "{PROJECT_PATH}/.logs/report-header.md" \
-      "{PROJECT_PATH}/.logs/section-"*.md \
-      "{PROJECT_PATH}/.logs/investment-theme-"*.md \
-      "{PROJECT_PATH}/.logs/theme-case-"*.md \
-      "{PROJECT_PATH}/.logs/macro-section-"*.md \
-      "{PROJECT_PATH}/.logs/report-section-"*.md \
-      "{PROJECT_PATH}/.logs/report-investment-theme-"*.md \
-      "{PROJECT_PATH}/.logs/report-theme-case-"*.md \
-      "{PROJECT_PATH}/.logs/report-macro-section-"*.md \
-      "{PROJECT_PATH}/.logs/report-shared-primer.md" \
-      "{PROJECT_PATH}/.logs/report-theme-anchors.json" \
-      "{PROJECT_PATH}/.logs/report-bridge-"*.md \
-      "{PROJECT_PATH}/.logs/report-synthesis.md" \
-      "{PROJECT_PATH}/.logs/enriched-trends-"*.json \
-      "{PROJECT_PATH}/.logs/claims-"*.json \
-      "{PROJECT_PATH}/.logs/report-claims-registry.md" \
-      "{PROJECT_PATH}/tips-trend-report.md" \
-      "{PROJECT_PATH}/.logs/phase2-value-model.json" \
-      "{PROJECT_PATH}/tips-trend-report-claims.json" \
-      "{PROJECT_PATH}/tips-insight-summary.md"
+# bash -O nullglob: zsh aborts on first unmatched glob ("no matches found") and skips
+# remaining patterns; nullglob makes empty matches a no-op so every pattern is evaluated.
+bash -O nullglob -c 'rm -f \
+  "{PROJECT_PATH}/.logs/report-header.md" \
+  "{PROJECT_PATH}/.logs/section-"*.md \
+  "{PROJECT_PATH}/.logs/investment-theme-"*.md \
+  "{PROJECT_PATH}/.logs/theme-case-"*.md \
+  "{PROJECT_PATH}/.logs/macro-section-"*.md \
+  "{PROJECT_PATH}/.logs/report-section-"*.md \
+  "{PROJECT_PATH}/.logs/report-investment-theme-"*.md \
+  "{PROJECT_PATH}/.logs/report-theme-case-"*.md \
+  "{PROJECT_PATH}/.logs/report-macro-section-"*.md \
+  "{PROJECT_PATH}/.logs/report-shared-primer.md" \
+  "{PROJECT_PATH}/.logs/report-theme-anchors.json" \
+  "{PROJECT_PATH}/.logs/report-bridge-"*.md \
+  "{PROJECT_PATH}/.logs/report-synthesis.md" \
+  "{PROJECT_PATH}/.logs/enriched-trends-"*.json \
+  "{PROJECT_PATH}/.logs/claims-"*.json \
+  "{PROJECT_PATH}/.logs/report-claims-registry.md" \
+  "{PROJECT_PATH}/tips-trend-report.md" \
+  "{PROJECT_PATH}/.logs/phase2-value-model.json" \
+  "{PROJECT_PATH}/tips-trend-report-claims.json" \
+  "{PROJECT_PATH}/tips-insight-summary.md"'
 ```
 
 The cleanup glob covers both Phase-2 modes — switching `REPORT_ARC_ID` between runs (e.g., from `corporate-visions` to `smarter-service`) will purge stale artefacts from either mode so resume logic doesn't mix them.

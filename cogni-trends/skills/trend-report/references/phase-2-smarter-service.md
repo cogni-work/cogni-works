@@ -130,9 +130,9 @@ For each investment theme, dispatch a `trend-report-investment-theme-writer` age
 
 ### Resume Check
 
-Before dispatching for a theme, check if `{PROJECT_PATH}/.logs/report-theme-case-{theme_id}.md` exists and is >600 bytes. If so, skip — display `"{PHASE_2_THEME_CASE_AGENT_SKIP_RESUME}"`.
+Before dispatching for a theme, check if `{PROJECT_PATH}/.logs/theme-case-{theme_id}.md` exists and is >600 bytes. If so, skip — display `"{PHASE_2_THEME_CASE_AGENT_SKIP_RESUME}"`.
 
-> Note the file naming differs from the legacy flow: smarter-service uses `report-theme-case-{theme_id}.md` (slim 3-beat output) instead of `report-investment-theme-{theme_id}.md` (full Why-* output). Resume across modes is intentionally not supported — switching `REPORT_ARC_ID` requires regenerating Phase 2.
+> Note the file naming differs from the legacy flow: smarter-service uses `theme-case-{theme_id}.md` (slim 3-beat output) instead of `investment-theme-{theme_id}.md` (full Why-* output). Resume across modes is intentionally not supported — switching `REPORT_ARC_ID` requires regenerating Phase 2.
 
 ### Agent Prompt Template
 
@@ -224,7 +224,7 @@ Closes with a specific ratio anchored to a date or event. ~120 words at extended
   "top_claims": [
     {"claim_id": "claim_nh_002", "short_text": "...", "value": "...", "unit": "USD", "source_url": "..."}
   ],
-  "theme_case_file": ".logs/report-theme-case-it-001.md"
+  "theme_case_file": ".logs/theme-case-it-001.md"
 }
 ```
 
@@ -247,7 +247,7 @@ Once all theme-case agents complete (or were skipped via resume), dispatch the `
 
 ### Resume Check (per dimension)
 
-Before dispatching for a dimension, check if `{PROJECT_PATH}/.logs/report-macro-section-{dimension}.md` exists and is >800 bytes. If so, skip — display `"{PHASE_2_COMPOSER_SKIP_RESUME}"`.
+Before dispatching for a dimension, check if `{PROJECT_PATH}/.logs/macro-section-{dimension}.md` exists and is >800 bytes. If so, skip — display `"{PHASE_2_COMPOSER_SKIP_RESUME}"`.
 
 ### Agent Prompt Template
 
@@ -264,7 +264,7 @@ Per dimension (4 sequential calls):
     MACRO_HEADING_LABEL: {label for this macro element from report-arc-frames.md § 8 — e.g., "Forces — Externe Effekte"}
     LANGUAGE: {LANGUAGE}
     SHARED_PRIMER_PATH: "{PROJECT_PATH}/.logs/report-shared-primer.md"
-    THEME_CASE_PATHS: {JSON array of report-theme-case-{theme_id}.md paths for themes anchored to this dimension, ordered by composite-score of anchor pole (highest first). May be empty.}
+    THEME_CASE_PATHS: {JSON array of theme-case-{theme_id}.md paths for themes anchored to this dimension, ordered by composite-score of anchor pole (highest first). May be empty.}
     SECONDARY_CALLOUTS: {JSON array of one-line callouts to render at end of dimension narrative for themes anchored elsewhere but with secondary pole here. Format: "→ See also Theme {N} in {Macro Section}"}
     DIMENSION_NARRATIVE_TARGET_WORDS: {Integer from Phase 0.4e — typically 250 at standard tier, 400 at maximum tier. Floor 250.}
     LABELS: {JSON object with relevant i18n labels for headings, transitions, and section markers}
@@ -274,7 +274,7 @@ Per dimension (4 sequential calls):
 
 ### Composer Output
 
-The composer writes `{PROJECT_PATH}/.logs/report-macro-section-{dimension}.md`:
+The composer writes `{PROJECT_PATH}/.logs/macro-section-{dimension}.md`:
 
 ```markdown
 ## {DIMENSION_INDEX}. {MACRO_HEADING_LABEL}
@@ -307,12 +307,12 @@ The composer's only writing is the dimension narrative + the H2 heading + second
   "dimension": "externe-effekte",
   "dimension_index": 1,
   "dimension_narrative_word_count": 312,
-  "theme_cases_concatenated": ["report-theme-case-it-001.md", "report-theme-case-it-003.md"],
+  "theme_cases_concatenated": ["theme-case-it-001.md", "theme-case-it-003.md"],
   "secondary_callout_count": 2,
   "horizon_cascade_present": true,
   "anchor_pivot_sentence_present": true,
   "primer_referenced": true,
-  "macro_section_file": ".logs/report-macro-section-externe-effekte.md"
+  "macro_section_file": ".logs/macro-section-externe-effekte.md"
 }
 ```
 
@@ -389,7 +389,7 @@ Externe Effekte bis Digitales Fundament:" or "Four Smarter Service dimensions
 carry [N] investment themes — from Forces to Foundations:"}
 
 1. **{Forces / Externe Effekte}**: {one-sentence summary of macro Forces story —
-   pulled from report-macro-section-externe-effekte.md dimension narrative}.
+   pulled from macro-section-externe-effekte.md dimension narrative}.
    Anchored: {comma-separated theme names whose anchor_dimension == "externe-effekte"}.
 2. **{Impact / Digitale Wertetreiber}**: {one-sentence summary}.
    Anchored: {theme names}.
@@ -487,7 +487,7 @@ FILES="{PROJECT_PATH}/.logs/report-header.md"
 
 # 4 macro sections in TIPS order
 for DIM in externe-effekte digitale-wertetreiber neue-horizonte digitales-fundament; do
-  FILES="$FILES {PROJECT_PATH}/.logs/report-macro-section-${DIM}.md"
+  FILES="$FILES {PROJECT_PATH}/.logs/macro-section-${DIM}.md"
 done
 
 # Synthesis section (Foundations-anchored close)
@@ -529,7 +529,7 @@ Same as legacy flow — merge all 4 dimension claims into `tips-trend-report-cla
 | Composer returns `ok: false` | Retry once, then HALT with dimension name |
 | Composer dimension narrative <250 words | WARN; macro section may feel thin |
 | `report-shared-primer.md` missing when theme-case agent dispatches | HALT: Step 2.0b must complete before Step 2.1 |
-| `report-theme-case-{theme_id}.md` missing when composer dispatches for that anchor | HALT: Step 2.1 must complete before Step 2.2 |
+| `theme-case-{theme_id}.md` missing when composer dispatches for that anchor | HALT: Step 2.1 must complete before Step 2.2 |
 | Resume file exists but is corrupt (smaller than threshold) | Re-dispatch the relevant agent |
 
 ---

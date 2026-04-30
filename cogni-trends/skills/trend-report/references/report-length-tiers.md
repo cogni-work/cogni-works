@@ -13,13 +13,13 @@ The original tier table (`standard` / `extended` / `comprehensive` / `maximum`) 
 
 **Legacy flow:**
 - the executive summary (`report-header.md`)
-- each investment-theme section (`report-investment-theme-{id}.md`)
+- each investment-theme section (`investment-theme-{id}.md`)
 - bridge paragraphs between themes (`report-bridge-{N}-{N+1}.md`)
 - the synthesis section (`report-synthesis.md`)
 
 **Smarter-service flow:**
 - the executive summary (`report-header.md`)
-- each macro section (`report-macro-section-{dimension}.md`) — includes both the dimension narrative AND the nested theme-case files concatenated by the composer
+- each macro section (`macro-section-{dimension}.md`) — includes both the dimension narrative AND the nested theme-case files concatenated by the composer
 - the synthesis section (`report-synthesis.md`)
 - the shared primer (`report-shared-primer.md`) is **internal** and excluded from the prose budget — it's never assembled into the final report
 

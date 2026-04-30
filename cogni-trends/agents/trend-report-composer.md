@@ -38,7 +38,7 @@ You receive these from trend-report Phase 2 Step 2.2:
 - **MACRO_HEADING_LABEL** — The full label for this macro element from `report-arc-frames.md § 8` — e.g., `"Forces — Externe Effekte"` (en) or `"Kräfte — Externe Effekte"` (de). This becomes the H2 heading text after `## {DIMENSION_INDEX}.`.
 - **LANGUAGE** — Report language: `"en"` or `"de"`.
 - **SHARED_PRIMER_PATH** — Absolute path to the shared dimension primer (`.logs/report-shared-primer.md`). You read this to align voice with the primer's framing and to identify which themes anchor here.
-- **THEME_CASE_PATHS** — JSON array of absolute paths to theme-case files (`.logs/report-theme-case-{theme_id}.md`) for themes anchored to THIS dimension. Already ordered by composite-score of anchor pole (highest first). Concatenate these in order. May be empty if no themes anchored to this dimension.
+- **THEME_CASE_PATHS** — JSON array of absolute paths to theme-case files (`.logs/theme-case-{theme_id}.md`) for themes anchored to THIS dimension. Already ordered by composite-score of anchor pole (highest first). Concatenate these in order. May be empty if no themes anchored to this dimension.
 - **SECONDARY_CALLOUTS** — JSON array of one-line callouts to render at the end of the macro section. Each entry has shape `{ "theme_index": N, "theme_name": "...", "topic": "..." }`. Render as: `"> → See also Theme {N} for the {topic} dependency."` (en) or `"> → Siehe auch Handlungsfeld {N} für die {topic}-Abhängigkeit."` (de). May be empty.
 - **DIMENSION_NARRATIVE_TARGET_WORDS** — Integer target for the dimension narrative (excluding H2 heading and concatenated theme-cases). Tolerance ±15%. Floor: 250. Typically 250 at standard tier, 600 at maximum tier.
 - **LABELS** — JSON object with relevant i18n labels:
@@ -134,7 +134,7 @@ The dimension narrative target is `DIMENSION_NARRATIVE_TARGET_WORDS ± 15%`, wit
 
 ### Step 7: Assemble the Macro Section File
 
-Write `{PROJECT_PATH}/.logs/report-macro-section-{DIMENSION}.md` with the following structure:
+Write `{PROJECT_PATH}/.logs/macro-section-{DIMENSION}.md` with the following structure:
 
 ```markdown
 ## {DIMENSION_INDEX}. {MACRO_HEADING_LABEL}
@@ -187,8 +187,8 @@ Return ONLY this JSON — nothing else:
   "dimension_index": 1,
   "dimension_narrative_word_count": 312,
   "theme_cases_concatenated": [
-    ".logs/report-theme-case-it-001.md",
-    ".logs/report-theme-case-it-003.md"
+    ".logs/theme-case-it-001.md",
+    ".logs/theme-case-it-003.md"
   ],
   "secondary_callout_count": 2,
   "horizon_cascade_present": true,
@@ -196,7 +196,7 @@ Return ONLY this JSON — nothing else:
   "primer_referenced": true,
   "citations_count": 5,
   "subcategory_coverage": ["regulation", "economy"],
-  "macro_section_file": ".logs/report-macro-section-externe-effekte.md"
+  "macro_section_file": ".logs/macro-section-externe-effekte.md"
 }
 ```
 

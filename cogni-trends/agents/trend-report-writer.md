@@ -206,7 +206,7 @@ Rules: one claim per distinct number, include the full sentence as `text`, `valu
 
 You MUST write all three files listed below. The section file is critical — Phase 2.5 (insight summary) reads these files as input. Skipping it will break the downstream pipeline.
 
-**Section file** — `{PROJECT_PATH}/.logs/report-section-{DIMENSION}.md`
+**Section file** — `{PROJECT_PATH}/.logs/section-{DIMENSION}.md`
 The full dimension section from Step 2. Write the complete markdown narrative here. Must end with two trailing newlines (`\n\n`) so files concatenate cleanly during report assembly. This file is NOT optional — it is a required output alongside the enriched-trends JSON.
 
 **Claims file** — `{PROJECT_PATH}/.logs/claims-{DIMENSION}.json`
@@ -267,7 +267,7 @@ Return ONLY this JSON — nothing else:
   "searches_failed": 1,
   "trends_with_evidence": 10,
   "trends_qualitative_only": 3,
-  "section_file": ".logs/report-section-externe-effekte.md",
+  "section_file": ".logs/section-externe-effekte.md",
   "claims_file": ".logs/claims-externe-effekte.json",
   "enriched_file": ".logs/enriched-trends-externe-effekte.json"
 }

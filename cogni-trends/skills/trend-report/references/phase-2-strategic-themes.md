@@ -70,7 +70,7 @@ For each investment theme (ordered by `investment_theme_id`), dispatch a `trend-
 
 ### Resume Check
 
-Before dispatching an agent for an investment theme, check if `{PROJECT_PATH}/.logs/report-investment-theme-{investment_theme_id}.md` already exists and is >1000 bytes. If so, skip that agent — display `"{PHASE_2_INVESTMENT_THEME_AGENT_SKIP_RESUME}"` and continue to the next investment theme. This means re-runs only dispatch for missing or incomplete investment themes.
+Before dispatching an agent for an investment theme, check if `{PROJECT_PATH}/.logs/investment-theme-{investment_theme_id}.md` already exists and is >1000 bytes. If so, skip that agent — display `"{PHASE_2_INVESTMENT_THEME_AGENT_SKIP_RESUME}"` and continue to the next investment theme. This means re-runs only dispatch for missing or incomplete investment themes.
 
 ### Agent Prompt Template
 
@@ -177,7 +177,7 @@ Wait for all investment theme agents to complete. Each agent returns compact JSO
   ],
   "actions_count": 4,
   "chains_written": 3,
-  "investment_theme_file": ".logs/report-investment-theme-it-001.md"
+  "investment_theme_file": ".logs/investment-theme-it-001.md"
 }
 ```
 
@@ -205,13 +205,13 @@ This does not HALT the pipeline — the report is still usable — but it flags 
 
 ## Step 2.4: Write Executive Summary (after reading investment theme sections)
 
-The executive summary is written AFTER all investment theme agents complete. The orchestrator reads every `report-investment-theme-{investment_theme_id}.md` file to synthesize a grounded Zusammenfassung from the actual prose — not from metadata or agent return JSON alone.
+The executive summary is written AFTER all investment theme agents complete. The orchestrator reads every `investment-theme-{investment_theme_id}.md` file to synthesize a grounded Zusammenfassung from the actual prose — not from metadata or agent return JSON alone.
 
 **Why this ordering matters:** The Zusammenfassung is crispier and more specific when the LLM has read the full investment theme narratives. It can pull the most surprising evidence, the sharpest reframes, and the most compelling cost-of-inaction ratios directly from the written sections.
 
 ### Process
 
-1. Read ALL `{PROJECT_PATH}/.logs/report-investment-theme-{investment_theme_id}.md` files (in investment theme order)
+1. Read ALL `{PROJECT_PATH}/.logs/investment-theme-{investment_theme_id}.md` files (in investment theme order)
 2. Read the value model for investment theme names and strategic questions
 3. Write `{PROJECT_PATH}/.logs/report-header.md` in a single pass
 
@@ -413,7 +413,7 @@ FILES="{PROJECT_PATH}/.logs/report-header.md"
 # Investment theme sections with bridges interleaved
 THEME_IDS=(it-001 it-002 ... it-N)
 for i in "${!THEME_IDS[@]}"; do
-  FILES="$FILES {PROJECT_PATH}/.logs/report-investment-theme-${THEME_IDS[$i]}.md"
+  FILES="$FILES {PROJECT_PATH}/.logs/investment-theme-${THEME_IDS[$i]}.md"
   # Add bridge after each theme except the last
   NEXT=$((i + 1))
   if [ $NEXT -lt ${#THEME_IDS[@]} ]; then

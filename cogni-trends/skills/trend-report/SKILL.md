@@ -451,6 +451,10 @@ On re-runs, remove stale files to prevent mixing old and new content:
 
 ```bash
 rm -f "{PROJECT_PATH}/.logs/report-header.md" \
+      "{PROJECT_PATH}/.logs/section-"*.md \
+      "{PROJECT_PATH}/.logs/investment-theme-"*.md \
+      "{PROJECT_PATH}/.logs/theme-case-"*.md \
+      "{PROJECT_PATH}/.logs/macro-section-"*.md \
       "{PROJECT_PATH}/.logs/report-section-"*.md \
       "{PROJECT_PATH}/.logs/report-investment-theme-"*.md \
       "{PROJECT_PATH}/.logs/report-theme-case-"*.md \
@@ -563,7 +567,7 @@ Agents self-load candidates and raw signals from disk using `PROJECT_PATH` — n
 Dimensions: `externe-effekte` (T), `digitale-wertetreiber` (I), `neue-horizonte` (P), `digitales-fundament` (S).
 
 Each agent writes:
-- `{PROJECT_PATH}/.logs/report-section-{dimension}.md` — narrative section (dimension-level prose)
+- `{PROJECT_PATH}/.logs/section-{dimension}.md` — narrative section (dimension-level prose)
 - `{PROJECT_PATH}/.logs/claims-{dimension}.json` — extracted claims
 - `{PROJECT_PATH}/.logs/enriched-trends-{dimension}.json` — per-trend evidence blocks keyed by candidate_ref; `actions_md` uses semicolon-separated keywords (used in investment theme assembly)
 
@@ -579,12 +583,12 @@ After all 4 agents complete, verify that all 12 expected files exist:
 
 ```
 For each dimension in [externe-effekte, digitale-wertetreiber, neue-horizonte, digitales-fundament]:
-  ✓ {PROJECT_PATH}/.logs/report-section-{dimension}.md    — narrative section (intermediate artifact)
+  ✓ {PROJECT_PATH}/.logs/section-{dimension}.md    — narrative section (intermediate artifact)
   ✓ {PROJECT_PATH}/.logs/claims-{dimension}.json           — extracted claims
   ✓ {PROJECT_PATH}/.logs/enriched-trends-{dimension}.json  — per-trend evidence blocks (required for Phase 2)
 ```
 
-If any `report-section-{dimension}.md` file is missing, log a WARNING. Phase 2 can proceed (it uses enriched-trends).
+If any `section-{dimension}.md` file is missing, log a WARNING. Phase 2 can proceed (it uses enriched-trends).
 
 ---
 
@@ -608,16 +612,16 @@ The flows differ in: H2 layout, number and shape of agent dispatches, presence o
 **Summary of steps** (details in [phase-2-strategic-themes.md](references/phase-2-strategic-themes.md)):
 
 1. **Read value model** — Read `.logs/phase2-value-model.json` for investment themes, value chains, solution templates, orphan candidates, coverage data.
-2. **Dispatch investment theme agents (parallel)** — For each investment theme, dispatch a `cogni-trends:trend-report-investment-theme-writer` agent with `MICRO_ARC: "theme-thesis"` (default), `MARKET_REGION: {MARKET_REGION}`, and `REPORT_ARC_ID: {REPORT_ARC_ID}` in the prompt. All agents in a single message (parallel). Each writes `report-investment-theme-{investment_theme_id}.md`.
+2. **Dispatch investment theme agents (parallel)** — For each investment theme, dispatch a `cogni-trends:trend-report-investment-theme-writer` agent with `MICRO_ARC: "theme-thesis"` (default), `MARKET_REGION: {MARKET_REGION}`, and `REPORT_ARC_ID: {REPORT_ARC_ID}` in the prompt. All agents in a single message (parallel). Each writes `investment-theme-{investment_theme_id}.md`.
 3. **Collect agent results** — Validate `ok: true`. Retry once on failure.
-4. **Write executive summary** — Read ALL `report-investment-theme-*.md` files. Use `REPORT_ARC_ID` to select arc-specific opener/closer patterns from `report-arc-frames.md`. Write `report-header.md`.
+4. **Write executive summary** — Read ALL `investment-theme-*.md` files. Use `REPORT_ARC_ID` to select arc-specific opener/closer patterns from `report-arc-frames.md`. Write `report-header.md`.
 5. **Write bridge paragraphs** — For each consecutive theme pair, generate a 2–4 sentence bridge using the arc's bridge pattern. Write `report-bridge-{N}-{N+1}.md` files.
 6. **Write synthesis section** — Generate a 300–500 word closing section using the arc's synthesis frame. Write `report-synthesis.md`.
 7. **Write claims registry** — Read 4 `claims-{dimension}.json` files, map claims to investment themes via the value model, write `report-claims-registry.md`.
 8. **Assemble** — Concatenate: header + (theme1 + bridge-1-2 + theme2 + bridge-2-3 + ... + themeN) + synthesis + claims → `tips-trend-report.md`.
 9. **Merge claims** → `tips-trend-report-claims.json`.
 
-**Resume logic (Flow A):** Before dispatching an agent for an investment theme, check if `report-investment-theme-{investment_theme_id}.md` already exists and is >1000 bytes. If so, skip — display `"{PHASE_2_INVESTMENT_THEME_AGENT_SKIP_RESUME}"`. Re-runs only dispatch for missing investment themes.
+**Resume logic (Flow A):** Before dispatching an agent for an investment theme, check if `investment-theme-{investment_theme_id}.md` already exists and is >1000 bytes. If so, skip — display `"{PHASE_2_INVESTMENT_THEME_AGENT_SKIP_RESUME}"`. Re-runs only dispatch for missing investment themes.
 
 #### Flow B: Smarter-service macro skeleton
 
@@ -626,8 +630,8 @@ The flows differ in: H2 layout, number and shape of agent dispatches, presence o
 1. **Read value model** — Same as Flow A.
 2. **Step 2.0a — Compute theme anchoring** — For each theme, compute `anchor_dimension` (highest `candidate_ref` count per pole; tiebreak on highest single-candidate composite score; final tiebreak T > I > P > S). Persist to `.logs/report-theme-anchors.json`. Skip if file exists with all themes mapped.
 3. **Step 2.0b — Write shared dimension primer (orchestrator)** — Read all 4 `.logs/enriched-trends-{dimension}.json` files and the value model. Write 4 paragraphs (~120 words each, ~480 total) to `.logs/report-shared-primer.md` — one per Smarter Service dimension, each ending with the anchor pivot sentence naming themes anchored there. Skip if primer file exists and is >800 bytes.
-4. **Step 2.1 — Dispatch theme-case writers (parallel)** — For each theme, dispatch a `cogni-trends:trend-report-investment-theme-writer` agent with `MICRO_ARC: "investment-case"`, `ANCHOR_DIMENSION`, `SECONDARY_POLES`, `SHARED_PRIMER_PATH`, `THEME_CASE_TARGET_WORDS`. All in a single parallel message. Each writes `report-theme-case-{theme_id}.md` (slim 3-beat). Resume: skip if file exists and is >600 bytes.
-5. **Step 2.2 — Dispatch dimension composers (sequential, 4 calls)** — For each dimension in TIPS order (`externe-effekte` → `digitale-wertetreiber` → `neue-horizonte` → `digitales-fundament`), dispatch one `cogni-trends:trend-report-composer` agent. **Sequential, NOT parallel** — voice consistency depends on this. Each composer writes `report-macro-section-{dimension}.md` (= H2 heading + dimension narrative + concatenated theme-cases anchored here + secondary callouts). Resume per dimension: skip if file exists and is >800 bytes.
+4. **Step 2.1 — Dispatch theme-case writers (parallel)** — For each theme, dispatch a `cogni-trends:trend-report-investment-theme-writer` agent with `MICRO_ARC: "investment-case"`, `ANCHOR_DIMENSION`, `SECONDARY_POLES`, `SHARED_PRIMER_PATH`, `THEME_CASE_TARGET_WORDS`. All in a single parallel message. Each writes `theme-case-{theme_id}.md` (slim 3-beat). Resume: skip if file exists and is >600 bytes.
+5. **Step 2.2 — Dispatch dimension composers (sequential, 4 calls)** — For each dimension in TIPS order (`externe-effekte` → `digitale-wertetreiber` → `neue-horizonte` → `digitales-fundament`), dispatch one `cogni-trends:trend-report-composer` agent. **Sequential, NOT parallel** — voice consistency depends on this. Each composer writes `macro-section-{dimension}.md` (= H2 heading + dimension narrative + concatenated theme-cases anchored here + secondary callouts). Resume per dimension: skip if file exists and is >800 bytes.
 6. **Step 2.3 — Write executive summary** — Read primer and all 4 macro section files. Use `report-arc-frames.md § 8` for the smarter-service exec opener/closer. Write `report-header.md`. The exec summary's numbered list iterates over the **4 dimensions** (not over themes), naming anchored themes within each dimension entry.
 7. **Step 2.4 — Write claims registry** — Same as Flow A but with a `dimension` column added.
 8. **Step 2.5 — Write synthesis section ("The Capability Imperative")** — Foundations-anchored, aggregates *across* themes. Write `report-synthesis.md`.
@@ -728,10 +732,10 @@ catalog, dashboard).
 
 Log files in `{PROJECT_PATH}/.logs/`:
 - `report-header.md` — frontmatter + exec summary
-- `report-section-{dimension}.md` — dimension sections (4 files, written by agents)
+- `section-{dimension}.md` — dimension sections (4 files, written by agents)
 - `phase2-value-model.json` — pruned value-model subset for Phase 2
 - `enriched-trends-{dimension}.json` — per-trend evidence blocks (4 files, used in investment theme assembly)
-- `report-investment-theme-{investment_theme_id}.md` — investment theme sections (3-7 files, written by investment theme agents)
+- `investment-theme-{investment_theme_id}.md` — investment theme sections (3-7 files, written by investment theme agents)
 - `claims-{dimension}.json` — dimension claims (4 files)
 - `report-claims-registry.md` — claims table
 

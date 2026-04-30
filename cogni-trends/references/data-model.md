@@ -20,7 +20,7 @@ cogni-trends/{project-slug}/
 │   ├── trend-generator-candidates.json  # Full candidate generation data
 │   ├── candidates-compact.json    # Compact format for Phase 3
 │   ├── report-header.md           # Report header section
-│   ├── report-section-{dimension}.md   # Per-dimension report sections (4 files)
+│   ├── section-{dimension}.md   # Per-dimension report sections (4 files)
 │   ├── claims-{dimension}.json    # Per-dimension claims (4 files)
 │   ├── report-portfolio.md        # Portfolio analysis section
 │   └── report-claims-registry.md  # Claims table section
@@ -525,7 +525,7 @@ tips-project.json (root manifest)
         ├── .logs/web-research-raw.json (raw signals -> candidates)
         ├── .logs/trend-generator-candidates.json (60 candidates)
         ├── tips-trend-report.md (report <- candidates)
-        │     ├── .logs/report-section-{dimension}.md (4 sections)
+        │     ├── .logs/section-{dimension}.md (4 sections)
         │     ├── tips-trend-report-claims.json (extracted claims)
         │     ├── tips-insight-summary.md (narrative summary)
         │     └── .metadata/trend-report-verification.json (verification results)

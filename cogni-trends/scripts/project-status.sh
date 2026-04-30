@@ -392,7 +392,7 @@ done
 REPORT_SECTIONS=0
 if [ -d "$PROJECT_DIR/.logs" ]; then
   for dim in externe-effekte digitale-wertetreiber neue-horizonte digitales-fundament; do
-    [ -f "$PROJECT_DIR/.logs/report-section-${dim}.md" ] && REPORT_SECTIONS=$((REPORT_SECTIONS + 1))
+    [ -f "$PROJECT_DIR/.logs/section-${dim}.md" ] && REPORT_SECTIONS=$((REPORT_SECTIONS + 1))
   done
 fi
 

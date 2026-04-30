@@ -39,7 +39,7 @@ Phase 0 → Phase 1 → Phase 2 → Phase 3
 5. Count investment themes, dimension sections, and trend references
 6. Compute the **prose word count** for tier-aware Completeness scoring. Sum word counts of these per-section log files in `{PROJECT_PATH}/.logs/`:
    - `report-header.md` (executive summary)
-   - `report-investment-theme-*.md` (all theme sections)
+   - `investment-theme-*.md` (all theme sections)
    - `report-bridge-*.md` (all bridges)
    - `report-synthesis.md`
    Do NOT count `report-claims-registry.md` and do NOT word-count the assembled `tips-trend-report.md` directly — the registry is appended at assembly time and would inflate the count. If the per-section log files are unavailable (e.g., the orchestrator cleaned them up), fall back to counting `tips-trend-report.md` minus the words under the `## {CLAIMS_REGISTRY_LABEL}` H2 (typically labeled "Claims Registry" / "Quellenregister"). Set `prose_word_count` to the resulting integer.

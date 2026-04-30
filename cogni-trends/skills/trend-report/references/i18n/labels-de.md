@@ -231,6 +231,8 @@ LENGTH_TIER_COMPREHENSIVE_DESC: "Vollständige Tiefenanalyse für Leser, die all
 LENGTH_TIER_MAXIMUM: "Maximal (≈8.000 Wörter)"
 LENGTH_TIER_MAXIMUM_DESC: "Bisheriges Verhalten — ausführlicher Fließtext, volle Evidenz pro Handlungsfeld."
 LENGTH_TIER_CUSTOM_DESC: "Per Automation in tips-project.json vorgegeben. Grenzen: 2.500 ≤ target_words ≤ 12.000 Fließtext-Wörter."
+LENGTH_BUDGET_REBALANCED_NOTE: "Hinweis: Das Dimension-Narrativ-Budget wurde unter die anfängliche 12%-Allokation gesenkt, damit die Per-Handlungsfeld-Ziele Headroom über dem strukturellen Floor (Stake 80 + Move 130 + Cost 80 = 290) erhalten. Die Composer-Agenten halten weiterhin den 250-Wörter-Floor pro Dimension ein."
+LENGTH_BUDGET_FLOOR_WARNING: "Warnung: Das Per-Handlungsfeld-Ziel bindet auch nach Umverteilung der Dimension-Narrative am strukturellen Floor (290 Wörter = Stake 80 + Move 130 + Cost 80). Die Handlungsfeld-Fälle werden voraussichtlich 30–60 % über dem Ziel landen und der Gesamtbericht kann das Tier-Wortziel überschreiten. Empfehlung: Erweitert-Tier wählen oder auf ≤5 Investment-Handlungsfelder konsolidieren."
 ```
 
 > Die Längenangaben beziehen sich auf den *Fließtext* — Zusammenfassung + Handlungsfeld-Abschnitte + Brücken + Synthese. Das Quellenregister fügt je nach Anzahl der Aussagen weitere ~1.500–3.500 Wörter hinzu und ist in jedem Modus vollständig enthalten.

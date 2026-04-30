@@ -231,6 +231,8 @@ LENGTH_TIER_COMPREHENSIVE_DESC: "Full-depth analysis for stakeholders who want e
 LENGTH_TIER_MAXIMUM: "Maximum (≈8,000 words)"
 LENGTH_TIER_MAXIMUM_DESC: "Pre-tier behavior — exhaustive prose, full evidence weave per theme."
 LENGTH_TIER_CUSTOM_DESC: "Pre-seeded by automation via tips-project.json. Bounds: 2,500 ≤ target_words ≤ 12,000 prose."
+LENGTH_BUDGET_REBALANCED_NOTE: "Note: dimension-narrative budget reduced from its initial 12% allocation to give per-theme-case targets headroom above the structural floor (Stake 80 + Move 130 + Cost 80 = 290). Composer agents still meet the 250-word dimension floor."
+LENGTH_BUDGET_FLOOR_WARNING: "Warning: per-theme-case target is binding at the structural floor (290 words = Stake 80 + Move 130 + Cost 80) even after rebalancing dimension narratives. Theme cases will likely land 30–60% above target and the full report may exceed the tier word target. Recommendation: switch to Extended tier or consolidate to ≤5 investment themes."
 ```
 
 > Tier labels reference *prose* word counts — executive summary + theme sections + bridges + synthesis. The claims registry / sources appendix adds another ~1,500–3,500 words depending on claim volume and is always present regardless of tier.

@@ -415,14 +415,30 @@ Set:
 **If `REPORT_ARC_ID == "smarter-service"` (macro skeleton):**
 
 ```text
+# Initial allocation
 exec_words              = clamp(REPORT_TARGET_WORDS * 0.10, 200, 350)
 synthesis_words         = clamp(REPORT_TARGET_WORDS * 0.08, 300, 800)
 dim_narrative_words     = clamp(REPORT_TARGET_WORDS * 0.12, 250, 600)   # PER dimension
 theme_cases_total       = REPORT_TARGET_WORDS - exec_words - synthesis_words - 4 * dim_narrative_words
-per_theme_case_words    = max(290, round(theme_cases_total / N))
+
+# Floor-binding redistribution: when per-theme-case would land at or below the
+# structural floor (290), shift budget from dim_narrative_words (down to its 250
+# floor) into theme_cases_total to give the writer agent realistic headroom.
+COMFORT_TARGET = 340  # ~17% above the 290 hard floor — see report-length-tiers.md
+if theme_cases_total < COMFORT_TARGET * N:
+    desired_total      = COMFORT_TARGET * N
+    gap                = desired_total - theme_cases_total
+    available_from_dim = 4 * (dim_narrative_words - 250)
+    redistributed      = min(gap, available_from_dim)
+    dim_narrative_words = dim_narrative_words - round(redistributed / 4)
+    theme_cases_total   = REPORT_TARGET_WORDS - exec_words - synthesis_words - 4 * dim_narrative_words
+
+per_theme_case_words = max(290, round(theme_cases_total / N))
+floor_bound_after_rebalance = (per_theme_case_words == 290 and theme_cases_total < COMFORT_TARGET * N)
+rebalance_fired = (dim_narrative_words < clamp(REPORT_TARGET_WORDS * 0.12, 250, 600))
 ```
 
-The 290 floor is the sum of the slim-mode minimums (Stake 80 + Move 130 + Cost 80). The 250 dimension-narrative floor protects the macro framing.
+The 290 floor is the sum of the slim-mode minimums (Stake 80 + Move 130 + Cost 80) — kept as a hard structural minimum even after redistribution. The 250 dimension-narrative floor protects the macro framing. The redistribution step exists because at Standard tier × N≥5 the initial allocation pinned `per_theme_case_words` exactly to the 290 floor, which is a structural minimum (sum of beat floors) and not a realistic writing target — agents land near 400+ in practice and the report overshoots tier semantics by ~80%. See `references/report-length-tiers.md` for the detailed rationale and worked examples.
 
 Set:
 - `THEME_CASE_TARGET_WORDS = per_theme_case_words` — passed to each theme-case writer
@@ -438,6 +454,8 @@ The claims registry is NOT in either formula — it is data-driven and rendered 
 Display:
 - Legacy: `"Budget computed: ~{REPORT_TARGET_WORDS} prose words across {N} themes (~{THEME_TARGET_WORDS} per theme)"`.
 - Smarter-service: `"Budget computed: ~{REPORT_TARGET_WORDS} prose words across 4 dimensions + {N} theme-cases (~{DIMENSION_NARRATIVE_TARGET_WORDS} per dimension narrative, ~{THEME_CASE_TARGET_WORDS} per theme-case)"`.
+- Smarter-service, when `rebalance_fired` is true and `floor_bound_after_rebalance` is false: also display `{LENGTH_BUDGET_REBALANCED_NOTE}` (informational — explains why the dimension-narrative target landed below its initial 12% allocation).
+- Smarter-service, when `floor_bound_after_rebalance` is true: also display `{LENGTH_BUDGET_FLOOR_WARNING}` (transparency — the per-theme-case target is binding at the structural floor and theme cases will land 30–60 % above target; recommend Extended tier or fewer themes).
 
 #### Step 0.5: Load i18n Labels
 

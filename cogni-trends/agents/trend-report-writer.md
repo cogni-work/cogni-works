@@ -50,6 +50,38 @@ Rate confidence for each quantitative claim before registering it:
 | **Low** | Limited evidence, plausible but unverified | Flag with `[No quantitative data available]`, skip claim registration |
 | **Unknown** | No evidence found | State limitation explicitly — never fabricate a placeholder |
 
+### JSON String Safety (STRICT)
+
+<!-- keep in sync with references/json-quote-discipline.md -->
+
+This applies to every JSON string value you emit in any `.logs/*.json` file or
+JSON response. The downstream parsers (`jq`, `python3 -c "json.loads(...)"`,
+`prepare-phase3-data.sh`, `validate-enriched-trends.sh`) interpret ASCII U+0022 (`"`)
+as the JSON string delimiter. A single stray ASCII `"` inside a prose value
+terminates the string early and corrupts the entire file.
+
+- **Quote pairing in prose:** When you need typographic quotes inside a JSON string in DE
+  mode, pair them correctly. The German opening quote U+201E (`„`, low-9 quotation mark)
+  MUST be closed with U+201D (`”`, right double quotation mark). Never close it with ASCII
+  U+0022 (`"`). The same discipline applies to FR/IT/ES (guillemets `« »` U+00AB/U+00BB)
+  and any future locale: typography pairs with typography, never with ASCII.
+- **ASCII `"` is reserved:** Inside a JSON string value, the bare ASCII double-quote U+0022
+  is reserved for the JSON delimiter itself. If ASCII `"` must appear in prose (e.g.
+  quoting an English term inside a DE sentence), escape it as `\"`. Better: use the
+  locale-appropriate typographic pair instead.
+- **Self-check before Write:** Construct the payload as a Python dict and
+  serialize with `json.dumps(payload, ensure_ascii=False, indent=2)` rather than
+  hand-assembling JSON with string concatenation. `json.dumps` will refuse to produce
+  invalid output, so a stray ASCII `"` inside a prose value is impossible by
+  construction. If you must template JSON manually, validate the result with
+  `json.loads(rendered)` before calling `Write` — and on failure, repair the offending
+  ASCII closer (`"`) with U+201D (`”`) for that span and re-validate. This is a hard
+  gate, not advisory: one mismatched pair blocks the next phase for the whole project.
+
+This is the same constraint that applies to FR (guillemets `«…»`), IT (typographic
+double quotes), and ES (typographic double quotes or `«…»`). Keep prose typography
+consistent within each locale; reserve ASCII `"` for the JSON envelope only.
+
 ## Input Parameters
 
 You receive these from trend-report:

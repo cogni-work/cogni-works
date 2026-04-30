@@ -590,6 +590,26 @@ For each dimension in [externe-effekte, digitale-wertetreiber, neue-horizonte, d
 
 If any `section-{dimension}.md` file is missing, log a WARNING. Phase 2 can proceed (it uses enriched-trends).
 
+**JSON-validity gate (issue #182 hardening).** The four `enriched-trends-{dimension}.json`
+files are consumed by Phase 2 (and Phase 2.0b in the smarter-service flow) — a single
+malformed file silently blocks the rest of the pipeline. After the existence check above,
+run the parse-then-repair gate on all four files:
+
+```bash
+bash "${CLAUDE_PLUGIN_ROOT}/skills/trend-report/scripts/validate-enriched-trends.sh" "${PROJECT_PATH}"
+```
+
+The script is idempotent: it only rewrites a file if `json.loads` fails AND the proven
+quote-repair regex produces valid JSON. It applies the same defense-in-depth pattern as
+`prepare-phase3-data.sh` (issue #169) so the two safety nets share one repair recipe.
+
+- On `{"ok":true, ...}` (exit 0): proceed. If `repaired[]` is non-empty, log the count
+  per file so the user sees that the gate caught a regression.
+- On `{"ok":false, "error":"json_unrepairable", "file":..., "line":N, "column":N, ...}`
+  (exit 4): HALT. Surface the file path and line/column to the user. Do NOT proceed to
+  Phase 2 — the broken file would corrupt theme assembly. Recovery: re-dispatch the
+  affected dimension's `trend-report-writer` agent.
+
 ---
 
 ### Phase 2: Report Assembly — TWO FLOWS

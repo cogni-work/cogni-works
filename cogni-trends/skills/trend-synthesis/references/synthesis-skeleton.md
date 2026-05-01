@@ -7,7 +7,7 @@ Phase 2 produces a report whose H2 spine is the four Smarter Service dimensions,
 **Three structural pillars:**
 
 1. **A shared dimension primer (Step 2.0)** — written once by the orchestrator before any theme-case dispatch — gives theme writers the macro framing they must reference instead of re-establishing.
-2. **Slim 3-beat theme-cases (Step 2.1)** — `trend-report-investment-theme-writer` runs in `MICRO_ARC=investment-case` mode, producing Stake / Move / Cost-of-Inaction. Themes do not own macro framing.
+2. **Slim 3-beat theme-cases (Step 2.1)** — `trend-report-investment-theme-writer` produces Stake / Move / Cost-of-Inaction. Themes do not own macro framing.
 3. **Sequential dimension composer (Step 2.2)** — `trend-report-composer` is invoked four times, once per macro section, with manageable context (one dimension's evidence). The composer integrates dimension narrative + nested theme-cases into a single voice per macro section.
 
 ---
@@ -132,9 +132,9 @@ Display `"{PHASE_2_PRIMER_WRITTEN}"`.
 
 ---
 
-## Step 2.1: Dispatch Theme-Case Writers (slim mode, parallel)
+## Step 2.1: Dispatch Theme-Case Writers (parallel)
 
-For each investment theme, dispatch a `cogni-trends:trend-report-investment-theme-writer` agent with `MICRO_ARC = "investment-case"`. Dispatch all agents in a single message (parallel tool calls).
+For each investment theme, dispatch a `cogni-trends:trend-report-investment-theme-writer` agent. Dispatch all agents in a single message (parallel tool calls). The writer produces a slim 3-beat case (Stake / Move / Cost-of-Inaction) — that is the only output shape this agent supports.
 
 ### Resume Check
 
@@ -148,7 +148,6 @@ Per agent:
   model: sonnet
   prompt: |
     PROJECT_PATH: {PROJECT_PATH}
-    MICRO_ARC: "investment-case"
     INVESTMENT_THEME_ID: {theme.investment_theme_id}
     INVESTMENT_THEME_NAME: {theme.name}
     STRATEGIC_QUESTION: {theme.strategic_question}
@@ -176,7 +175,7 @@ Per agent:
     NARRATIVE_TECHNIQUES_PATH: {path to cogni-narrative techniques-overview.md}
 ```
 
-### Beat Rules (the slim 3-beat micro-arc)
+### Beat Rules (the slim 3-beat structure)
 
 The agent produces output with exactly 3 beats. Beat headers are **silent** — they do not appear as visible markdown headings; they're rhetorical structure only. The output looks like:
 

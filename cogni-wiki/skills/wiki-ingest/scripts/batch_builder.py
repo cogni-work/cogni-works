@@ -37,6 +37,23 @@ Discovery modes (exactly one required):
                         old. Stubs re-enter the wiki via the mode: re-ingest
                         branch of Step 1, which is the intended refresh path.
 
+    --research SLUG     A cogni-research project at `cogni-research-<SLUG>/`
+                        relative to the workspace root (override with
+                        --research-root). One batch entry per sub-question is
+                        emitted; the source field points at a synthesised
+                        markdown file written to
+                        `<wiki-root>/raw/research-<SLUG>/sq-NN-<short>.md`.
+                        Materialisation is unavoidable here: cogni-research
+                        spreads each sub-question's evidence across four
+                        entity types (sub-question + contexts + sources +
+                        verified report-claims) and wiki-ingest's per-source
+                        worker reads exactly one file. The synthesis is
+                        deterministic — re-running with the same inputs
+                        overwrites byte-identically. This is the one
+                        discovery mode that writes to the wiki; pair with
+                        --discover-dry-run if you want to inspect the planned
+                        materialisation without fan-out.
+
 Filters (compose freely with any discovery mode):
 
     --exclude-ingested  Drop any source whose derived slug already exists as
@@ -47,6 +64,17 @@ Filters (compose freely with any discovery mode):
     --type TYPE         Apply as the per-entry `type` default (one of:
                         concept, entity, summary, decision, learning, note).
     --tags a,b,c        Apply as the per-entry `tags` default.
+    --research-root P   Override the auto-located cogni-research project root.
+                        Default lookup tries `<workspace>/cogni-research-<SLUG>/`
+                        where workspace is the wiki root's parent.
+
+    --no-materialize    Pair with --research: enumerate only, skip the
+                        per-sub-question raw file writes. The emitted batch
+                        still references the would-be paths; pair this with
+                        --discover-dry-run when reviewing without polluting
+                        raw/. A subsequent run without --no-materialize will
+                        write the files deterministically.
+
     --title-template T  Python-style format string for the per-entry title,
                         derived from the discovered path. Placeholders:
                             {stem}      filename without extension
@@ -68,7 +96,7 @@ Output contract:
     {
       "success": true,
       "data": {
-        "mode": "glob" | "orphans" | "stubs",
+        "mode": "glob" | "orphans" | "stubs" | "research",
         "count": <int>,
         "skipped_existing": <int>,
         "sources": [ { "source": "...", ... }, ... ]
@@ -280,6 +308,351 @@ def discover_stubs(wiki_root: Path, older_than_days: int | None) -> list:
     return stubs
 
 
+def _truncate_title(text: str, limit: int = 80) -> str:
+    """Single-line, length-capped title for a sub-question batch entry.
+
+    The downstream slug derivation (SKILL Step 1) cleans non-[a-z0-9] runs to
+    hyphens, so a long title yields a long slug. Cap aggressively; the full
+    query stays in the materialised page body and frontmatter.
+    """
+    one_line = " ".join(text.split())
+    if len(one_line) <= limit:
+        return one_line.rstrip(" .?!,;:")
+    cut = one_line[: limit].rsplit(" ", 1)[0]
+    return cut.rstrip(" .?!,;:")
+
+
+def _read_research_entity(path: Path) -> tuple[dict, str]:
+    """Read a cogni-research .md entity → (frontmatter dict, body text).
+
+    Re-uses the script's own frontmatter parser; cogni-research entities use
+    the same YAML-subset shape as wiki pages (top-level scalars + `- ` list
+    items), so the parser already handles the shapes that matter here.
+    """
+    text = path.read_text(encoding="utf-8")
+    fm = parse_frontmatter(text)
+    body = FRONTMATTER_RE.sub("", text, count=1).lstrip("\n")
+    return fm, body
+
+
+def _unquote(s: str) -> str:
+    """Strip surrounding single or double quotes from a YAML scalar."""
+    s = s.strip()
+    if len(s) >= 2 and s[0] == s[-1] and s[0] in ('"', "'"):
+        return s[1:-1]
+    return s
+
+
+def _strip_wikilink(ref: str) -> str:
+    """`[[01-contexts/data/ctx-foo-12345678]]` → `ctx-foo-12345678`.
+
+    Tolerant of surrounding quotes — cogni-research's create-entity.py emits
+    quoted wikilinks because YAML treats `[[…]]` as a flow-sequence start
+    otherwise. The script's parse_frontmatter keeps the quotes verbatim.
+    """
+    inner = _unquote(ref)
+    if inner.startswith("[[") and inner.endswith("]]"):
+        inner = inner[2:-2]
+    return inner.rsplit("/", 1)[-1]
+
+
+def _locate_research_project(slug_or_path: str, wiki_root: Path, override: str | None) -> Path:
+    """Resolve --research SLUG to a project directory.
+
+    Lookup order:
+      1. --research-root if given (must point at the project dir directly).
+      2. The slug itself if it contains a path separator (relative to cwd, then absolute).
+      3. `<workspace>/cogni-research-<slug>/` where workspace = wiki_root.parent.
+      4. `<wiki_root>/cogni-research-<slug>/` (e.g. wiki sits at workspace root).
+    Fail with the candidates checked so the user can correct the layout.
+    """
+    if override:
+        project = Path(override).resolve()
+        if not project.is_dir():
+            fail(f"--research-root not a directory: {project}")
+        return project
+
+    if "/" in slug_or_path or slug_or_path.startswith("."):
+        candidate = Path(slug_or_path).resolve()
+        if candidate.is_dir():
+            return candidate
+        fail(f"--research path not found: {candidate}")
+
+    slug = slug_or_path
+    candidates = [
+        wiki_root.parent / f"cogni-research-{slug}",
+        wiki_root / f"cogni-research-{slug}",
+    ]
+    for c in candidates:
+        if c.is_dir():
+            return c.resolve()
+    fail(
+        "cogni-research project not found. Tried: "
+        + ", ".join(str(c) for c in candidates)
+        + ". Pass --research-root to override."
+    )
+    return Path()  # unreachable
+
+
+def _load_sub_questions(project: Path) -> list[dict]:
+    """Read all sq-*.md and return entity dicts ordered by section_index."""
+    sq_dir = project / "00-sub-questions" / "data"
+    if not sq_dir.is_dir():
+        fail(f"sub-questions dir missing: {sq_dir}")
+    items: list[dict] = []
+    for path in sorted(sq_dir.glob("sq-*.md")):
+        fm, _ = _read_research_entity(path)
+        if not fm.get("query"):
+            continue
+        try:
+            section_index = int(fm.get("section_index", 0))
+        except (TypeError, ValueError):
+            section_index = 0
+        items.append({
+            "id": _unquote(fm.get("dc:identifier") or path.stem),
+            "query": _unquote(fm["query"]),
+            "parent_topic": _unquote(fm.get("parent_topic", "")),
+            "section_index": section_index,
+            "status": _unquote(fm.get("status", "")),
+            "path": path,
+        })
+    items.sort(key=lambda x: (x["section_index"], x["id"]))
+    return items
+
+
+def _index_research_entities(project: Path) -> tuple[dict, dict, list[dict]]:
+    """Pre-load contexts (by sub_question id), sources (by id), and verified claims.
+
+    Returns:
+      contexts_by_sq: { sq_id: [context dict, ...] }
+      sources_by_id:  { src_id: source dict }
+      verified_claims: list of report-claim dicts with verification_status='verified'
+    """
+    contexts_by_sq: dict[str, list[dict]] = {}
+    ctx_dir = project / "01-contexts" / "data"
+    if ctx_dir.is_dir():
+        for path in sorted(ctx_dir.glob("ctx-*.md")):
+            fm, body = _read_research_entity(path)
+            sq_ref = fm.get("sub_question_ref", "")
+            sq_id = _strip_wikilink(sq_ref) if isinstance(sq_ref, str) else ""
+            source_refs = fm.get("source_refs", []) or []
+            if not isinstance(source_refs, list):
+                source_refs = []
+            contexts_by_sq.setdefault(sq_id, []).append({
+                "id": fm.get("dc:identifier") or path.stem,
+                "source_ids": [_strip_wikilink(r) for r in source_refs if isinstance(r, str)],
+                "body": body.strip(),
+            })
+
+    sources_by_id: dict[str, dict] = {}
+    src_dir = project / "02-sources" / "data"
+    if src_dir.is_dir():
+        for path in sorted(src_dir.glob("src-*.md")):
+            fm, _ = _read_research_entity(path)
+            sid = fm.get("dc:identifier") or path.stem
+            sources_by_id[_unquote(sid)] = {
+                "id": _unquote(sid),
+                "url": _unquote(fm.get("url", "")),
+                "title": _unquote(fm.get("title", "")),
+                "publisher": _unquote(fm.get("publisher", "")),
+            }
+
+    verified_claims: list[dict] = []
+    rc_dir = project / "03-report-claims" / "data"
+    if rc_dir.is_dir():
+        for path in sorted(rc_dir.glob("rc-*.md")):
+            fm, _ = _read_research_entity(path)
+            if fm.get("verification_status") != "verified":
+                continue
+            verified_claims.append({
+                "id": _unquote(fm.get("dc:identifier") or path.stem),
+                "statement": _unquote(fm.get("statement", "")),
+                "section": _unquote(fm.get("section", "")),
+                "source_id": _strip_wikilink(fm.get("source_ref", "")) if isinstance(fm.get("source_ref"), str) else "",
+                "source_url": _unquote(fm.get("source_url", "")),
+                "source_title": _unquote(fm.get("source_title", "")),
+                "verified_at": _unquote(fm.get("verified_at", "")),
+            })
+
+    return contexts_by_sq, sources_by_id, verified_claims
+
+
+def _render_synthesis(
+    sq: dict,
+    contexts: list[dict],
+    sources_by_id: dict,
+    verified_claims: list[dict],
+    project_slug: str,
+) -> tuple[str, list[dict]]:
+    """Compose the per-sub-question markdown body and collect cited sources.
+
+    Returns (body_text, cited_sources_list). The cited list is ordered by first
+    appearance and goes into both the body's Sources section and the page's
+    sources: frontmatter (set later by the wiki-ingest worker via Step 1, which
+    will pick the synthesised file as a single raw/ source — the inline URL
+    list inside the body lets the worker discover them on read).
+    """
+    # Collect source IDs in deterministic order: contexts first (in context
+    # order, source order within each), then any verified-claim sources not
+    # yet seen.
+    cited_ids: list[str] = []
+    seen: set = set()
+    for ctx in contexts:
+        for sid in ctx["source_ids"]:
+            if sid and sid not in seen:
+                seen.add(sid)
+                cited_ids.append(sid)
+
+    # Match verified claims to this sub-question by source overlap (the
+    # cleanest structural join — claim.source_ref ∈ context.source_refs of
+    # this sub-question's contexts). A claim with no overlap belongs to a
+    # different section and is not included here.
+    sq_claims = [c for c in verified_claims if c["source_id"] in seen]
+
+    # Pull in any verified-claim sources we haven't already listed (rare —
+    # claims usually cite a context source — but cover the case).
+    for c in sq_claims:
+        if c["source_id"] and c["source_id"] not in seen:
+            seen.add(c["source_id"])
+            cited_ids.append(c["source_id"])
+
+    cited_sources = [sources_by_id[sid] for sid in cited_ids if sid in sources_by_id]
+
+    lines: list[str] = []
+    lines.append(f"# {sq['query']}")
+    lines.append("")
+    lines.append(
+        f"*Synthesised from cogni-research project `{project_slug}` "
+        f"(topic: {sq['parent_topic'] or '—'}, sub-question {sq['section_index']:02d}).*"
+    )
+    lines.append("")
+
+    if contexts:
+        lines.append("## Findings")
+        lines.append("")
+        for ctx in contexts:
+            if ctx["body"]:
+                lines.append(ctx["body"])
+                lines.append("")
+
+    if sq_claims:
+        lines.append("## Verified claims")
+        lines.append("")
+        for c in sq_claims:
+            url = c["source_url"] or (sources_by_id.get(c["source_id"], {}).get("url", ""))
+            tail = f" ([source]({url}))" if url else ""
+            verified_tag = f" — verified {c['verified_at'][:10]}" if c["verified_at"] else ""
+            lines.append(f"- {c['statement']}{tail}{verified_tag}")
+        lines.append("")
+
+    if cited_sources:
+        lines.append("## Sources")
+        lines.append("")
+        for s in cited_sources:
+            label = s["title"] or s["url"] or s["id"]
+            url = s["url"]
+            pub = f" — {s['publisher']}" if s["publisher"] else ""
+            if url:
+                lines.append(f"- [{label}]({url}){pub}")
+            else:
+                lines.append(f"- {label}{pub}")
+        lines.append("")
+
+    return "\n".join(lines).rstrip() + "\n", cited_sources
+
+
+def _short_slug(text: str, limit: int = 40) -> str:
+    """Filename-safe short slug for the materialised raw file."""
+    base = SLUG_CLEAN_RE.sub("-", text.lower()).strip("-")
+    if len(base) <= limit:
+        return base or "untitled"
+    cut = base[:limit].rsplit("-", 1)[0]
+    return cut.rstrip("-") or base[:limit].rstrip("-") or "untitled"
+
+
+def discover_research(
+    slug_or_path: str,
+    wiki_root: Path,
+    research_root_override: str | None,
+    materialize: bool,
+) -> tuple[list, dict]:
+    """Enumerate one batch entry per sub-question; materialise per-sq raw files.
+
+    Returns (entries, stats). Stats captures sub-question/context/source/claim
+    counts for the Step 0 report so the user knows what they're about to ingest.
+    """
+    project = _locate_research_project(slug_or_path, wiki_root, research_root_override)
+
+    project_slug = project.name
+    if project_slug.startswith("cogni-research-"):
+        project_slug = project_slug[len("cogni-research-"):]
+
+    config_path = project / "project-config.json"
+    if not config_path.is_file():
+        fail(f"not a cogni-research project (missing project-config.json): {project}")
+
+    sub_questions = _load_sub_questions(project)
+    if not sub_questions:
+        return [], {
+            "project": str(project),
+            "project_slug": project_slug,
+            "sub_questions": 0,
+            "contexts": 0,
+            "sources": 0,
+            "verified_claims": 0,
+            "materialised": 0,
+        }
+
+    contexts_by_sq, sources_by_id, verified_claims = _index_research_entities(project)
+
+    raw_subdir_name = f"research-{project_slug}"
+    raw_subdir = wiki_root / "raw" / raw_subdir_name
+    if materialize:
+        raw_subdir.mkdir(parents=True, exist_ok=True)
+
+    entries: list[dict] = []
+    materialised = 0
+    total_contexts = 0
+    for sq in sub_questions:
+        contexts = contexts_by_sq.get(sq["id"], [])
+        total_contexts += len(contexts)
+        body, _cited = _render_synthesis(
+            sq, contexts, sources_by_id, verified_claims, project_slug
+        )
+
+        short = _short_slug(sq["query"])
+        filename = f"sq-{sq['section_index']:02d}-{short}.md"
+        out_path = raw_subdir / filename
+
+        if materialize:
+            tmp = out_path.with_suffix(".md.tmp")
+            tmp.write_text(body, encoding="utf-8")
+            os.replace(tmp, out_path)
+            materialised += 1
+
+        # Source path is wiki-root-relative so it slots into the existing
+        # batch-mode "source is relative to the wiki root" rule.
+        rel_source = f"raw/{raw_subdir_name}/{filename}"
+
+        entries.append({
+            "source": rel_source,
+            "title": _truncate_title(sq["query"]),
+            "type": "concept",
+            "tags": ["research", project_slug],
+        })
+
+    stats = {
+        "project": str(project),
+        "project_slug": project_slug,
+        "sub_questions": len(sub_questions),
+        "contexts": total_contexts,
+        "sources": len(sources_by_id),
+        "verified_claims": len(verified_claims),
+        "materialised": materialised,
+    }
+    return entries, stats
+
+
 def render_title(template: str, path_obj: Path) -> str:
     parts = path_obj.parts
     fmt_vars = {
@@ -382,7 +755,10 @@ def parse_args() -> argparse.Namespace:
     mode.add_argument("--glob", help="Filesystem glob pattern (resolved against --root).")
     mode.add_argument("--orphans", action="store_true", help="Files in raw/ not yet in any page's sources: frontmatter.")
     mode.add_argument("--stubs", action="store_true", help="Pages with status: draft.")
+    mode.add_argument("--research", help="cogni-research project SLUG (auto-located at <workspace>/cogni-research-<SLUG>) or path. Emits one entry per sub-question and materialises per-sq raw files.")
 
+    parser.add_argument("--research-root", dest="research_root", help="Override auto-located cogni-research project root (used with --research).")
+    parser.add_argument("--no-materialize", dest="no_materialize", action="store_true", help="With --research: enumerate only, skip raw file writes. Use during dry-run.")
     parser.add_argument("--root", help="Walk base for --glob (default: wiki root).")
     parser.add_argument("--wiki-root", help="Override auto-detected wiki root.")
     parser.add_argument("--older-than-days", type=int, default=None, help="For --stubs: filter to drafts older than N days.")
@@ -425,6 +801,24 @@ def main() -> None:
         stubs = discover_stubs(wiki_root, args.older_than_days)
         entries = build_entries_from_stubs(stubs, args.default_type, default_tags, wiki_root)
         mode_name = "stubs"
+    elif args.research:
+        if args.older_than_days is not None:
+            fail("--older-than-days applies only to --stubs")
+        if args.title_template:
+            fail("--title-template does not apply to --research (titles come from sub-question text)")
+        entries, research_stats = discover_research(
+            args.research,
+            wiki_root,
+            args.research_root,
+            materialize=not args.no_materialize,
+        )
+        # Allow --type / --tags to override the per-entry defaults.
+        for e in entries:
+            if args.default_type:
+                e["type"] = args.default_type
+            if default_tags is not None:
+                e["tags"] = list(default_tags)
+        mode_name = "research"
     else:  # argparse enforces required mutex group, but keep the guard explicit
         fail("no discovery mode selected")
         return
@@ -436,12 +830,15 @@ def main() -> None:
     if args.limit is not None and args.limit >= 0:
         entries = entries[: args.limit]
 
-    ok({
+    payload = {
         "mode": mode_name,
         "count": len(entries),
         "skipped_existing": skipped_existing,
         "sources": entries,
-    })
+    }
+    if args.research:
+        payload["research"] = research_stats
+    ok(payload)
 
 
 if __name__ == "__main__":

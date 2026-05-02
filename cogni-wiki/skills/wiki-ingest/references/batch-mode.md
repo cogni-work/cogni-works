@@ -105,6 +105,46 @@ wiki-ingest --discover stubs                            # every draft
 wiki-ingest --discover stubs --older-than-days 180      # only stale drafts
 ```
 
+### `--discover research:<project-slug>[:<research-root>]`
+
+Cogni-research projects produce one or more sub-questions, each backed by contexts, sources, and (post-`verify-report`) verified report-claims. This mode emits **one batch entry per sub-question** with a synthesised raw file that bundles the findings, verified claims, and source list — the natural unit for an Option-B (sub-question-centric) deposit pattern.
+
+```
+wiki-ingest --discover research:quantum-cryptography     # auto-locate sibling project
+wiki-ingest --discover research:quantum-cryptography:/path/to/cogni-research-quantum-cryptography
+```
+
+**Project location.** Without the optional `:<research-root>` suffix, the script tries `<workspace>/cogni-research-<slug>/` (workspace = wiki root's parent), then `<wiki-root>/cogni-research-<slug>/`. Use the `:<root>` suffix to point at a non-standard layout.
+
+**This is the one discovery mode that writes to the wiki.** Cogni-research spreads each sub-question's evidence across four entity types and `wiki-ingest`'s per-source worker reads exactly one file. The script materialises one synthesised markdown file per sub-question at `<wiki-root>/raw/research-<project-slug>/sq-NN-<short>.md` before emitting the batch. Materialisation is deterministic (same entities → byte-identical output), idempotent across re-runs, and confined to a single subdirectory you can `git rm -rf` if you change your mind. Pair with `--discover-dry-run` to inspect the planned batch without writes (the SKILL passes `--no-materialize` to the script under the hood).
+
+**What lands in each synthesised file:**
+
+```markdown
+# <sub-question text>
+
+*Synthesised from cogni-research project `<slug>` (topic: <parent_topic>, sub-question NN).*
+
+## Findings
+<context bodies for this sub-question>
+
+## Verified claims
+- <statement> ([source](<url>)) — verified <date>
+
+## Sources
+- [<title>](<url>) — <publisher>
+```
+
+**Verified-claim filtering.** Only `verification_status: verified` claims are included; `pending`, `deviated`, and `source_unavailable` claims are skipped because the wiki's "every claim citable" discipline (`wiki-update` SKILL §"What it means for you") would otherwise admit unsupported assertions. Run `verify-report` before ingest to maximise yield.
+
+**Sub-question ↔ claim join.** A verified claim is attached to a sub-question when its `source_ref` overlaps any source cited by the sub-question's contexts. This is a structural join, not a section-name match — section labels in `report-claim.section` are writer-chosen and unstable across drafts.
+
+**Per-entry defaults.** `type: concept`, `tags: ["research", "<project-slug>"]`. Override with `--type` and `--tags` like any other discovery mode.
+
+**`--title-template` is rejected** in research mode — titles come from the sub-question text. The slug derives from the title via the standard rule (Step 1 of the per-source worker), capped at 40 chars in the filename.
+
+**Empty result.** A project with zero sub-questions emits `count: 0` (graceful) rather than failing.
+
 ### `--discover glob:<pattern>[:<root>]`
 
 Any files matching a filesystem glob. This is the mode for cross-plugin monorepo rebuilds — e.g., "ingest every SKILL.md in insight-wave that isn't in the wiki yet". The pattern is resolved relative to the wiki root unless an absolute path or an explicit `:<root>` suffix is given.
@@ -125,6 +165,7 @@ wiki-ingest --discover 'glob:../cogni-*/skills/**/SKILL.md' \
 | `--exclude-ingested` | Drop any source whose derived slug already exists as a page. Key dedupe — makes the command idempotent: rerun it until `count == 0` to be sure nothing new slipped in |
 | `--title-template T` | Format string for per-entry titles when the wiki's slug convention isn't `{filename}`. Placeholders: `{stem}`, `{parent}`, `{parent2}`, `{parent3}`, `{parts[-N]}`. Example: for the insight-wave convention `skill-{plugin}-{skill}`, pass `--title-template 'skill-{parent3}-{parent}'` |
 | `--older-than-days N` | `--discover stubs` only: restrict to drafts updated more than N days ago |
+| `--research-root P` | `--discover research:` only: override auto-located project root. Equivalent to the `:<research-root>` suffix on the discover spec — pass whichever reads more naturally. |
 | `--type`, `--tags` | Apply as defaults to every discovered entry |
 | `--limit N` | Cap the resolved batch at N entries; useful for incremental runs |
 

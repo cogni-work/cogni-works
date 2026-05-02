@@ -16,7 +16,7 @@ skills/                         7 wiki skills
     scripts/
       backlink_audit.py           Scans pages/, proposes bidirectional [[links]]
       wiki_index_update.py        Deterministic index.md insert/update (atomic)
-      batch_builder.py            Enumerates candidates for --discover; emits batch JSON
+      batch_builder.py            Enumerates candidates for --discover (orphans, stubs, glob, research:<slug>); emits batch JSON. Materialises per-sub-question synthesis files for research mode.
     references/
       page-frontmatter.md         YAML schema (id, title, tags, type, sources, ...)
       ingest-workflow.md          Step-by-step ingest behavior
@@ -124,14 +124,17 @@ sources: [../raw/paper-xyz.pdf, https://...]
 
 insight-wave already uses Claude Code's auto-memory system at `~/.claude/projects/.../memory/` for **Claude's learning about the user** (feedback, preferences, session-spanning patterns). cogni-wiki is the complementary primitive: **the user's learning about their domain** — explicitly curated, portable across projects, queryable. No duplication; different intent.
 
+## Cross-Plugin Integration
+
+- **cogni-research → cogni-wiki** (v0.0.17, sub-question-centric — Option B). `wiki-ingest --discover research:<project-slug>` enumerates one batch entry per sub-question of a completed cogni-research project, materialises per-sub-question synthesis files under `<wiki-root>/raw/research-<slug>/sq-NN-<short>.md`, and feeds them through the standard batch-mode pipeline (Steps 1–8 per source). The synthesis bundles findings (from contexts), verified claims (filtered to `verification_status: verified`), and source URLs. Materialisation is the one deviation from the discovery-is-read-only rule and is unavoidable: cogni-research spreads each sub-question's evidence across four entity types, and the per-source ingest-worker reads one file. Materialisation is deterministic and idempotent. See `skills/wiki-ingest/references/batch-mode.md` §"Discovery → research" for the full contract. The reverse path (`wiki-researcher` agent reading a wiki as a RAG source for a research project) is owned by cogni-research and pre-dates this integration.
+
 ## Future Integration Points
 
 Deferred to post-MVP, documented here so the contract stays visible:
 
-- **cogni-research → cogni-wiki** — research reports deposit verified findings as wiki pages
 - **cogni-narrative ← cogni-wiki** — narrative skill reads wiki pages as structured input
 - **cogni-consulting → cogni-wiki** — engagement knowledge (interviews, decisions, constraints) persists beyond the engagement slug
-- **cogni-claims ↔ cogni-wiki** — wiki claim extraction and verification via cogni-claims
+- **cogni-claims ↔ cogni-wiki** — wiki claim extraction and verification via cogni-claims (today only one direction: verified claims from cogni-research arrive via the research deposit pipeline above)
 
 ## Pipeline Position
 

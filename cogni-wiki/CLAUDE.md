@@ -42,6 +42,10 @@ skills/                         9 wiki skills
   wiki-refresh/                   Stale-page refresh loop. Pull-mode: matches lint-flagged stale pages to sub-questions of an existing cogni-research project (Jaccard token overlap), then dispatches wiki-update per match. Sequential, batch-confirmed.
     scripts/
       refresh_planner.py            Reads stale wiki pages + research entities; emits per-page match plan as JSON
+  wiki-claims-resweep/            Re-verify claims embedded in existing wiki pages against their cited source URLs. Pull-mode, report-only: extracts inline-cited statements deterministically, dispatches cogni-claims:claims (submit + verify), and writes a sweep report to raw/claims-resweep-<date>/ plus a lint-bridge JSON. Never mutates wiki/pages/.
+    scripts/
+      extract_page_claims.py        Deterministic claim-candidate extractor (sentences near URLs); never network-touches
+      resweep_planner.py            Two-phase: materialises sweep workspace (plan), aggregates verification results (aggregate); writes lint-bridge under lock
 
 references/
   karpathy-pattern.md             Shared Karpathy-pattern reference, cited by all skills
@@ -51,11 +55,11 @@ references/
 
 | Type | Count | Items |
 |------|-------|-------|
-| Skills | 9 | wiki-setup, wiki-ingest, wiki-query, wiki-lint, wiki-update, wiki-resume, wiki-dashboard, wiki-from-research, wiki-refresh |
+| Skills | 10 | wiki-setup, wiki-ingest, wiki-query, wiki-lint, wiki-update, wiki-resume, wiki-dashboard, wiki-from-research, wiki-refresh, wiki-claims-resweep |
 | Agents | 1 | ingest-worker (per-source fan-out worker for wiki-ingest batch mode; not directly dispatchable) |
 | Commands | 0 | — (skills serve as slash commands per plugin-dev guidance) |
 | Hooks | 0 | — (all bookkeeping lives inside skills) |
-| Scripts | 7 | backlink_audit.py, wiki_index_update.py, batch_builder.py, lint_wiki.py, wiki_status.sh, render_dashboard.py, refresh_planner.py |
+| Scripts | 9 | backlink_audit.py, wiki_index_update.py, batch_builder.py, lint_wiki.py, wiki_status.sh, render_dashboard.py, refresh_planner.py, extract_page_claims.py, resweep_planner.py |
 
 ## Wiki Data Layout (outside the plugin)
 
@@ -112,6 +116,7 @@ sources: [../raw/paper-xyz.pdf, https://...]
 | `wiki/index.md` | Insert/update entry line | `wiki_index_update.py::update_index` (line 335) |
 | `wiki/pages/<target>.md` | Backlink append into an *existing* page | `backlink_audit.py::apply_plan` (lines 489, 590) |
 | `.cogni-wiki/config.json` | `entries_count` bump (and any future counters) | `config_bump.py::main` (line 105) |
+| `.cogni-wiki/last-resweep.json` | Sweep summary write at end of `wiki-claims-resweep` aggregate phase | `resweep_planner.py::phase_aggregate` |
 
 **When adding a new shared-state file**, the author MUST:
 
@@ -133,6 +138,7 @@ insight-wave already uses Claude Code's auto-memory system at `~/.claude/project
 - **cogni-research → cogni-wiki** (v0.0.17, sub-question-centric — Option B). `wiki-ingest --discover research:<project-slug>` enumerates one batch entry per sub-question of a completed cogni-research project, materialises per-sub-question synthesis files under `<wiki-root>/raw/research-<slug>/sq-NN-<short>.md`, and feeds them through the standard batch-mode pipeline (Steps 1–8 per source). The synthesis bundles findings (from contexts), verified claims (filtered to `verification_status: verified`), and source URLs. Materialisation is the one deviation from the discovery-is-read-only rule and is unavoidable: cogni-research spreads each sub-question's evidence across four entity types, and the per-source ingest-worker reads one file. Materialisation is deterministic and idempotent. See `skills/wiki-ingest/references/batch-mode.md` §"Discovery → research" for the full contract. The reverse path (`wiki-researcher` agent reading a wiki as a RAG source for a research project) is owned by cogni-research and pre-dates this integration.
 - **wiki-from-research cold-start** (v0.0.18). The `wiki-from-research` skill chains `cogni-research:research-setup` → `cogni-research:research-report` (auto-chained internally) → `cogni-wiki:wiki-setup` → `cogni-wiki:wiki-ingest --discover research:<slug>` in one dispatch. Mode A starts from a free-text `--topic`; Mode B starts from an existing `--research-slug`. The skill is a pure orchestrator — it writes nothing directly; every artefact comes from its sub-skills' contracts. Pre-flight is fail-fast: wiki-target collisions are detected before any cogni-research dispatch (so an unusable target never burns research budget). Mode B verifies `output/report.md` exists, refuses `report_source ∈ {wiki, hybrid}` projects (circular-evidence risk), and nudges the user to run `verify-report` first if zero claims are verified.
 - **wiki-refresh stale-page loop** (v0.0.19, pull-mode only). The `wiki-refresh` skill closes the *update* loop — stale wiki pages get fresh evidence from a completed cogni-research project. Calls `lint_wiki.py` directly to enumerate `stale_page` (>365d) and `stale_draft` (>180d) findings, runs `refresh_planner.py` to match each stale page to the highest-scoring sub-question via Jaccard token overlap on `(title + tags + type)` vs `(query + parent_topic)`, prints a batch plan for one user confirmation, then materialises one synthesis file per match under `<wiki-root>/raw/refresh-<research-slug>-<YYYY-MM-DD>/<page-slug>.md` and dispatches `wiki-update` sequentially per page. Default match threshold `0.30`, tunable via `--match-threshold` or interactively via the `refine` action in the plan-review prompt. Push-mode auto-research per stale page is deferred (cost-prohibitive at scale). The entity-loading helpers in `refresh_planner.py` mirror those in `batch_builder.py` — known tech debt, parallel to the `_wiki_lock` duplication noted in §"Concurrency Invariant".
+- **wiki-claims-resweep citation re-verify** (v0.0.20, pull-mode only). The `wiki-claims-resweep` skill closes the *citation-drift* loop — existing wiki pages have their cited source URLs re-checked against current content. `extract_page_claims.py` walks `wiki/pages/` and yields one claim candidate per sentence containing an inline `[text](http(s)://...)` link or bare URL (deterministic, no LLM, no network). The orchestrator runs `resweep_planner.py --phase plan` to materialise per-page claim manifests under `<wiki-root>/raw/claims-resweep-<YYYY-MM-DD>/`, batch-confirms with the user, then dispatches `cogni-claims:claims` (`submit` then `verify`) sequentially per page. The cogni-claims source-cache (`cogni-claims/sources/{url-hash}.json`) keeps repeat WebFetches free across pages within one sweep. After verification, `resweep_planner.py --phase aggregate` writes `report.md` to the workspace and `last-resweep.json` (lock-wrapped) to `.cogni-wiki/`. **Report-only**: this skill never modifies `wiki/pages/`. Stale-marker decisions go through `wiki-update` manually. Circular sources (URLs pointing back into the wiki tree) are skipped per claim and counted, mirroring the `report_source ∈ {wiki, hybrid}` refusal pattern from `wiki-from-research`/`wiki-refresh`. A future `claim_drift` warning class in `wiki-lint` can read `last-resweep.json` to surface flagged pages — deferred to a follow-up PR (the JSON contract exists today).
 
 ## Future Integration Points
 
@@ -140,7 +146,7 @@ Deferred to post-MVP, documented here so the contract stays visible:
 
 - **cogni-narrative ← cogni-wiki** — narrative skill reads wiki pages as structured input
 - **cogni-consulting → cogni-wiki** — engagement knowledge (interviews, decisions, constraints) persists beyond the engagement slug
-- **cogni-claims ↔ cogni-wiki** — wiki claim extraction and verification via cogni-claims (today only one direction: verified claims from cogni-research arrive via the research deposit pipeline above)
+- **cogni-claims ↔ cogni-wiki** — initial direction live as of v0.0.20 via `wiki-claims-resweep` (re-verifies inline-cited claims in existing wiki pages against their source URLs). Reverse direction — propagating cogni-claims resolutions back into wiki pages — remains deferred
 
 ## Pipeline Position
 

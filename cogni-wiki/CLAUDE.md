@@ -5,9 +5,7 @@ Compile-time knowledge engine for personal and small-team knowledge work — a b
 ## Plugin Architecture
 
 ```
-agents/                         1 agent (fan-out worker)
-  ingest-worker.md                Per-source subagent for wiki-ingest batch mode (Steps 1–8)
-skills/                         9 wiki skills
+skills/                         10 wiki skills
   wiki-setup/                     Bootstrap a new wiki at a user-chosen root
     references/
       SCHEMA.md.template          Copied into the wiki at setup time
@@ -56,7 +54,7 @@ references/
 | Type | Count | Items |
 |------|-------|-------|
 | Skills | 10 | wiki-setup, wiki-ingest, wiki-query, wiki-lint, wiki-update, wiki-resume, wiki-dashboard, wiki-from-research, wiki-refresh, wiki-claims-resweep |
-| Agents | 1 | ingest-worker (per-source fan-out worker for wiki-ingest batch mode; not directly dispatchable) |
+| Agents | 0 | — (wiki-ingest batch mode runs sequentially in the orchestrator's own context as of v0.0.22; the previous `ingest-worker` per-source subagent was removed because parallel fan-out broke the Karpathy-pattern invariant that source N+1 must see source N's page) |
 | Commands | 0 | — (skills serve as slash commands per plugin-dev guidance) |
 | Hooks | 0 | — (all bookkeeping lives inside skills) |
 | Scripts | 9 | backlink_audit.py, wiki_index_update.py, batch_builder.py, lint_wiki.py, wiki_status.sh, render_dashboard.py, refresh_planner.py, extract_page_claims.py, resweep_planner.py |
@@ -103,11 +101,13 @@ sources: [../raw/paper-xyz.pdf, https://...]
 - **Stdlib-only scripts.** bash 3.2 + python3 stdlib, no pip or npm dependencies. JSON output format `{success, data, error}`.
 - **No hooks.** All index/log maintenance lives inside the skills for debuggability.
 
-## Concurrency Invariant (batch-mode safety)
+## Concurrency Invariant (defence-in-depth lock)
 
-`wiki-ingest` runs per-source workers concurrently in batch mode, so any shared file that is read-modified-written by more than one worker **must** be protected by the advisory lock. This invariant is load-bearing — it is what closed issue #84 (silent data loss from concurrent writes to `index.md`, backlink targets, and `config.json.entries_count`).
+As of v0.0.22, `wiki-ingest` is **sequential** within any single dispatch — both single-source and batch/discover modes process one source at a time in the orchestrator's own context. The earlier per-source subagent fan-out (and its `batch_size` chunking) was removed because it broke the Karpathy-pattern invariant that source N+1 must see source N's just-written page; see `skills/wiki-ingest/references/batch-mode.md` §"Execution model" for the full history.
 
-**Rule.** Any script that performs a read-modify-write on a file shared across concurrent ingest workers MUST wrap the critical section in `_wiki_lock(wiki_root)`, a `fcntl.flock(LOCK_EX)` context manager on `<wiki-root>/.cogni-wiki/.lock`. Parallel writes to **distinct** per-source output paths (e.g. `wiki/pages/{new-slug}.md` where the slug is freshly computed for that worker) do not need the lock.
+The advisory lock at `<wiki-root>/.cogni-wiki/.lock` is **retained as defence-in-depth** for the case where the user runs two `wiki-ingest` invocations against the same wiki from separate sessions (two terminals, two Claude Code windows, a script + an interactive session). With sequential intra-skill execution, that's the only remaining concurrency hazard — and it's exactly the one that originally motivated issue #84's fix in v0.0.12.
+
+**Rule.** Any script that performs a read-modify-write on a file shared across `wiki-ingest` invocations MUST wrap the critical section in `_wiki_lock(wiki_root)`, a `fcntl.flock(LOCK_EX)` context manager on `<wiki-root>/.cogni-wiki/.lock`. Per-source output paths that are unique by construction (e.g. `wiki/pages/{new-slug}.md` for a freshly computed slug) do not need the lock.
 
 **Shared files covered today** (must always be lock-wrapped on write):
 
@@ -127,7 +127,7 @@ sources: [../raw/paper-xyz.pdf, https://...]
 
 **Known tech debt.** `_wiki_lock` is currently duplicated across three scripts (`backlink_audit.py`, `wiki_index_update.py`, `config_bump.py`). A future consolidation into a shared `cogni-wiki/skills/wiki-ingest/scripts/_wikilock.py` helper would remove the drift risk, but is a non-urgent refactor — the three copies are byte-identical today.
 
-**Do NOT rely on:** `os.replace` atomicity alone (it guarantees atomic file replacement, not correctness of the read-modify-write), per-worker output path uniqueness (workers share index/config even when output slugs differ), or Python's GIL (workers are separate subagent processes, not threads).
+**Do NOT rely on:** `os.replace` atomicity alone (it guarantees atomic file replacement, not correctness of the read-modify-write), or Python's GIL (cross-process invocations from separate sessions are not protected by it). The `batch_size` config key referenced in `wiki-ingest` versions ≤0.0.21 is no longer read; legacy wikis with the key are harmless.
 
 ## Distinction from Auto-Memory
 

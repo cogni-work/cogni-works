@@ -47,16 +47,16 @@ Exactly one of `--source`, `--batch-file`, or `--discover` must be provided.
 
 The three input modes are mutually exclusive. Pick the one that matches the caller's inputs and follow the corresponding rule; everything from Step 1 onwards is identical across modes.
 
-**Backlink-curation decision (once, at dispatch).** Resolve `auto_backlinks` before any Step 1 work so every worker receives a consistent instruction:
+**Sequential by design.** Batch and discovery modes execute Steps 1–8 as a strict sequential loop in the orchestrator's own context — one source at a time, in input order, with every page write, index update, backlink apply, log line, and config bump committed to disk before the next iteration begins. This is load-bearing: source N+1's Step 3 ("which existing pages does this source touch") and Step 6 (backlink audit) must see the page that source N just created, otherwise the wiki fragments instead of compounds. See `${CLAUDE_PLUGIN_ROOT}/skills/wiki-ingest/references/batch-mode.md` §"Execution model" for the rationale and the history of why an earlier per-source subagent fan-out was removed.
+
+**Backlink-curation decision (once, at dispatch).** Resolve `auto_backlinks` before any Step 1 work so every iteration applies the same rule:
 
 - Both `--auto-backlinks` and `--review` set → abort with `{"success": false, "error": "--auto-backlinks and --review are mutually exclusive"}` before any write.
-- `--auto-backlinks <K>` set → `auto_backlinks = K`.
-- `--review` set → `auto_backlinks = null` (force hand-curation).
-- Neither set:
-  - Single-source (`--source`): `auto_backlinks = null` (unchanged behaviour).
-  - Batch (`--batch-file`) or discovery (`--discover`): `auto_backlinks = 5` (new default — bulk rebuilds skip per-target hand-curation unless the caller opts back in with `--review`).
+- `--auto-backlinks <K>` set → `auto_backlinks = K` (auto-mode opt-in).
+- `--review` set → `auto_backlinks = null` (force hand-curation; this is the default in all modes — `--review` is a no-op kept for backwards compatibility).
+- Neither set: `auto_backlinks = null` in all modes — single-source, batch, and discovery alike. Hand-curation is the Karpathy-aligned default; auto-mode is an explicit opt-in via `--auto-backlinks K`.
 
-The resolved value travels into Step 6 — either inline (single-source) or via the per-source worker prompt (batch/discover).
+The resolved value travels into Step 6.
 
 **If `--discover` is present** (discovery mode):
 
@@ -72,28 +72,21 @@ Discovery means "build the batch from the filesystem instead of asking the user 
 2. Parse the script's JSON. On `success: false`, surface the error verbatim and stop.
 3. **Present the resolved batch to the user before any wiki-page write.** Print `data.count`, `data.skipped_existing` (when `--exclude-ingested` is set), and the first 10 `data.sources[]` entries. For `--discover research:`, also surface the `data.research` block (sub-question / context / source / verified-claim counts) so the user knows the deposit shape — and note that the per-sub-question synthesis files have already been materialised under `raw/research-<slug>/` (or were not, if `--discover-dry-run` triggered `--no-materialize`). If `data.count == 0`, report "nothing to ingest" and stop — this is a normal outcome, not an error.
 4. If `--discover-dry-run` is set, emit the full JSON on stdout and stop. No writes. This is the review hand-off: the user can redirect to a file, edit it, and pass it back as `--batch-file` later.
-5. Otherwise, confirm with the user ("Ingest these N sources?") unless they passed a phrasing that implied "just do it" (e.g., "ingest all of them, no need to confirm"). On confirmation, feed `data.sources[]` into the batch-mode pipeline at the same entry point `--batch-file` uses. The rest of this step 0 (fail-fast, atomic per-source writes, aggregated Step 9 report) is identical.
+5. Otherwise, confirm with the user ("Ingest these N sources?") unless they passed a phrasing that implied "just do it" (e.g., "ingest all of them, no need to confirm"). On confirmation, feed `data.sources[]` into the same sequential pipeline `--batch-file` uses.
 
 Slug collisions in discovery mode are already handled by Step 1's `mode: fresh | re-ingest` detection — `--exclude-ingested` is an optimisation that skips known-existing slugs at discovery time so the user reviews a smaller, more actionable list. Both layers are safe; the re-ingest branch is the authoritative fallback.
 
 **If `--batch-file` is present** (batch mode):
 
-- Validate the JSON against the schema in `${CLAUDE_PLUGIN_ROOT}/skills/wiki-ingest/references/batch-mode.md` and abort before any write on schema, missing-source, or mutual-exclusion violations (see `${CLAUDE_PLUGIN_ROOT}/skills/wiki-ingest/references/batch-mode.md` §"Input schema" and §"Error policy"). Malformed input never half-dispatches — no worker fires until the whole batch validates.
-- Otherwise, execute `sources[]` via **per-source subagent fan-out**, not an inline loop. The orchestrator must not read page bodies or backlink audit JSON; each source's Steps 1–8 run inside a `cogni-wiki:ingest-worker` subagent with its own context window, and only a compact JSON payload returns here. See `${CLAUDE_PLUGIN_ROOT}/skills/wiki-ingest/references/batch-mode.md` §"Execution model" for the full contract.
-  1. Resolve `batch_size` from `<wiki-root>/.cogni-wiki/config.json` (key `batch_size`, range 2–8). Default **5** if absent. This caps the number of workers dispatched concurrently.
-  2. Partition `sources[]` into order-preserving chunks of `batch_size` entries each (the last chunk may be shorter).
-  3. For each chunk, **in order**:
-     - Dispatch one `Task(subagent_type: "ingest-worker", run_in_background: true, prompt: "source_entry: <json>\nwiki_root: <abs path>\nauto_backlinks: <K or null>\n\nExecute Steps 1–8 per your agent instructions and return the JSON block.")` per source in the chunk. The per-source `source_entry` is the raw batch row (with its `source`, optional `title`, `type`, `tags`); `wiki_root` is the absolute path you resolved in Step 1; `auto_backlinks` is the dispatch-time resolution described in the "Backlink-curation decision" paragraph above — `5` by default in batch mode, `null` when the user passed `--review`, or the explicit `K` from `--auto-backlinks K`.
-     - Wait for every Task in the chunk to complete before dispatching the next chunk. Do not stream across chunks — bounded concurrency is the whole point.
-     - For each return, extract the final fenced ` ```json ... ``` ` block. If **no** block is present, synthesize `{source, slug: null, mode: null, backlinks_added: 0, index_action: null, errors: [{step: null, message: "worker returned no JSON payload"}]}` and treat as a failure. Do not retry; surface the crash.
-  4. **Fail-fast across chunks.** If any result in a completed chunk has a non-empty `errors[]`, **halt** — do not dispatch further chunks. Sources dispatched in the failing chunk that returned cleanly still count as completed (the atomic per-source scripts guarantee the wiki is consistent for them). Sources in not-yet-dispatched chunks are reported as "skipped" in Step 9.
-  5. After all chunks complete (or on halt), run Step 9 aggregation from the collected worker returns — the orchestrator never loads per-source bodies.
-- Step 3 takeaway synthesis still fires **per source inside its worker** (autonomous-run semantics, SKILL.md Step 3 line 107). Workers' Step 3 output appears inside their subagent transcripts, not interleaved in the parent; the aggregated Step 9 report restates mode per slug so the user can correlate.
-- In Step 9, emit one aggregated report instead of a per-source report, built from the worker return payloads.
+- Validate the JSON against the schema in `${CLAUDE_PLUGIN_ROOT}/skills/wiki-ingest/references/batch-mode.md` and abort before any write on schema, missing-source, or mutual-exclusion violations (see `${CLAUDE_PLUGIN_ROOT}/skills/wiki-ingest/references/batch-mode.md` §"Input schema" and §"Error policy"). Malformed input never half-writes — no source is touched until the whole batch validates.
+- Otherwise, execute `sources[]` as a **strict sequential loop**. For each `source_entry` in input order, run Steps 1–8 inline in this orchestrator's context (read source → Step 3 takeaway synthesis → write page → update index → backlink audit + apply → log → config bump), passing `auto_backlinks` resolved above into Step 6. Only after all per-source scripts have returned and their writes committed do you advance to the next entry.
+- **Fail-fast.** If any iteration's step (1–8) fails, halt the loop immediately. Sources processed before the failure are atomically consistent on disk (per-page writes use `tempfile + os.replace`; shared-state writes go through the locked scripts). Record the failed entry's error and the list of un-attempted entries for the Step 9 report.
+- **Step 3 in batch mode.** Surface the takeaway synthesis to the user transcript exactly as in single-source mode. Batch mode is autonomous-run by construction (the user said "ingest all of them"), so emit the synthesis and proceed to Step 4 without waiting for confirmation — the discipline is "synthesis is visible", not "the user must approve every page".
+- In Step 9, emit one aggregated report covering every entry that completed, the entry that failed (if any), and any entries skipped by the fail-fast halt.
 
 **If neither `--batch-file` nor `--discover` is present**, run Steps 1–9 on the single `--source`. This is the existing path; nothing about it changes.
 
-In all three cases, the skill instructions and shared references load exactly once per dispatch — one context load, N sources, materially fewer tokens and lower latency than N single-source dispatches.
+In all three cases, the skill instructions and shared references load exactly once per dispatch — one context load, N sources, materially fewer tokens than N single-source dispatches. The throughput cost vs the removed parallel fan-out is real and accepted: knowledge accumulation must be sequential for source N+1 to see source N's page, which is the whole point of a compounding wiki.
 
 ### 1. Locate the wiki and detect ingest mode
 
@@ -197,9 +190,9 @@ Two paths — hand-curation (`auto_backlinks = null`) or auto-mode (`auto_backli
 
 **6a'. Compact audit.** Invoke `${CLAUDE_PLUGIN_ROOT}/skills/wiki-ingest/scripts/backlink_audit.py --wiki-root <wiki-root> --new-page {slug} --top K --min-confidence medium`. This returns the top-K candidates already pre-filtered to `confidence ∈ {medium, high}` plus summary counters (`total_candidates`, `by_confidence`) so the orchestrator can log the shape without reading a full candidate dump. If the script exits non-zero or returns malformed JSON, report the error and skip the backlink step.
 
-**6b'. Bulk-draft sentences.** For each returned candidate, read **only** the target page's title + first paragraph (do not read the full body — that defeats the point of auto-mode) and write one short sentence containing `[[{slug}]]` that would read naturally in that context. No heading is required — auto-mode always appends at the end of the target body so the draft does not collide with an existing heading the worker hasn't read.
+**6b'. Bulk-draft sentences.** For each returned candidate, read **only** the target page's title + first paragraph (do not read the full body — that defeats the point of auto-mode) and write one short sentence containing `[[{slug}]]` that would read naturally in that context. No heading is required — auto-mode always appends at the end of the target body so the draft does not collide with an existing heading you haven't read.
 
-The "never invent backlinks" discipline is preserved by two mechanisms: (i) `--min-confidence medium` drops the keyword-noise bucket at audit time; (ii) K is bounded by the dispatch-time cap (default 5). The sentence itself is drafted by the worker LLM from the target's title + first paragraph, keeping it anchored to real page content rather than pattern-matched phrasing. The tradeoff is explicit: auto-mode replaces "hand-curated-with-7-ideal-backlinks" with "auto-applied-with-up-to-K-decent-backlinks" — the right call for bulk rebuilds, not for single high-effort sources.
+The "never invent backlinks" discipline is preserved by two mechanisms: (i) `--min-confidence medium` drops the keyword-noise bucket at audit time; (ii) K is bounded by the explicit `--auto-backlinks K` cap. The sentence itself is drafted by you from the target's title + first paragraph, keeping it anchored to real page content rather than pattern-matched phrasing. The tradeoff is explicit: auto-mode replaces "hand-curated-with-7-ideal-backlinks" with "auto-applied-with-up-to-K-decent-backlinks" — useful for bulk rebuilds where the user explicitly opts in via `--auto-backlinks K`, not the default for any mode.
 
 #### 6c. Apply atomically (both paths)
 
@@ -243,7 +236,7 @@ Never rewrite existing log lines.
 
 ### 8. Update `.cogni-wiki/config.json`
 
-- `mode: fresh` — invoke `${CLAUDE_PLUGIN_ROOT}/skills/wiki-ingest/scripts/config_bump.py --wiki-root <wiki-root> --key entries_count --delta 1`. The script grabs the shared `.cogni-wiki/.lock` before read-modify-write, so concurrent batch-mode workers cannot clobber each other (issue #84). Never edit `config.json` inline — the inline read-modify-write race produced silent under-counts before v0.0.12.
+- `mode: fresh` — invoke `${CLAUDE_PLUGIN_ROOT}/skills/wiki-ingest/scripts/config_bump.py --wiki-root <wiki-root> --key entries_count --delta 1`. The script grabs the shared `.cogni-wiki/.lock` before read-modify-write — defence-in-depth for users who run two `wiki-ingest` invocations against the same wiki from separate sessions (the original concurrency hazard fixed by issue #84 in v0.0.12). Never edit `config.json` inline — the inline read-modify-write race produced silent under-counts before v0.0.12 and the lock contract is the established way to keep `entries_count` correct.
 - `mode: re-ingest` — leave `entries_count` untouched. The field reflects distinct pages in `wiki/pages/`, not ingest invocations; `wiki-resume`, `wiki-dashboard`, and `wiki-lint` all treat it as a page count, so re-ingests must not inflate it.
 
 If `config_bump.py` exits non-zero or returns malformed JSON, report the error but do not abort — the page, index, backlinks, and log are already consistent on disk. The script is idempotent-safe to re-run with a compensating `--delta` to reconcile drift.
@@ -281,4 +274,3 @@ If `config_bump.py` exits non-zero or returns malformed JSON, report the error b
 - `${CLAUDE_PLUGIN_ROOT}/skills/wiki-ingest/scripts/backlink_audit.py` — candidate backlink finder
 - `${CLAUDE_PLUGIN_ROOT}/skills/wiki-ingest/scripts/wiki_index_update.py` — deterministic `wiki/index.md` insert/update helper
 - `${CLAUDE_PLUGIN_ROOT}/skills/wiki-ingest/scripts/batch_builder.py` — discovery helper; enumerates candidates for `--discover` and emits the batch-mode payload on stdout
-- `${CLAUDE_PLUGIN_ROOT}/agents/ingest-worker.md` — per-source subagent dispatched from batch mode; owns Steps 1–8 for one source entry and returns a compact JSON payload to the orchestrator

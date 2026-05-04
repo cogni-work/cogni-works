@@ -1,8 +1,8 @@
-# Batch mode: one dispatch, N sources
+# Batch mode: one dispatch, N sources, sequential
 
-`wiki-ingest` normally runs the nine-step workflow against a single `--source`. On bulk rebuilds (e.g., Phase 2 of the pilot rebuild, ~164 skill+agent pages), re-dispatching the skill per source reloads `SKILL.md` + `references/karpathy-pattern.md` + `references/page-frontmatter.md` for every page — the cost is not in the per-page work but in the repeated instruction load.
+`wiki-ingest` normally runs the nine-step workflow against a single `--source`. On bulk rebuilds (a folder of newly-dropped sources, every SKILL.md across a monorepo, a completed cogni-research project), re-dispatching the skill per source reloads `SKILL.md` + `references/karpathy-pattern.md` + `references/page-frontmatter.md` for every page — the cost is not in the per-page work but in the repeated instruction load.
 
-Batch mode eliminates that redundancy. The skill loads its instructions and references once, then iterates Steps 1–8 per entry. Step 9 aggregates the results into a single report.
+Batch mode eliminates that redundancy. The skill loads its instructions and references once, then **iterates Steps 1–8 per entry sequentially**. Step 9 aggregates the results into a single report. Sequential is non-negotiable: source N+1 must see the page source N just created, otherwise the wiki fragments instead of compounds (see §"Execution model" below for the history of why an earlier parallel-fan-out design was removed).
 
 There are two ways to feed it:
 
@@ -23,65 +23,53 @@ Do **not** use batch mode when:
 
 ## Execution model
 
-Batch mode does **not** run Steps 1–8 as an inline loop in the orchestrator context. Inline looping was the v0.0.8/0.0.9 design; it did not scale past a few dozen sources because each source consumed ~15–20k tokens of orchestrator context (source read + Step 3 synthesis + backlink audit JSON + curation). Issue #82 replaced it with per-source subagent fan-out.
+Batch mode runs Steps 1–8 as a **strict sequential loop in the orchestrator's own context** — one source at a time, in input order, with every page write, index update, backlink apply, log line, and config bump committed to disk before the next iteration starts.
 
-**How fan-out works:**
+This was not always so. The v0.0.10–v0.0.21 design used per-source subagent fan-out (`Task(subagent_type: "ingest-worker", run_in_background: true)`) with chunked concurrency (`batch_size`, default 5). Fan-out was originally introduced (issue #82) to keep the orchestrator's context small on 100+ source rebuilds. It was removed because it broke the load-bearing property of the Karpathy pattern: **a new ingest must see the pages prior ingests in the same run just created**. Source N+1's Step 3 ("which existing wiki pages does this source touch?") greps the wiki for entity matches and Step 6 (`backlink_audit.py`) proposes candidate cross-references. Both run against on-disk state. With concurrent workers, every worker in a chunk reads the wiki as it existed *before* the chunk started, so two workers can independently create pages for the same entity (slug-collision detection only catches *exact* slug matches, not near-duplicates), and a new entity page from worker A is invisible to workers B…E ingesting siblings that mention it. The wiki ends up with disconnected fragments where it should compound.
 
-1. `wiki-ingest` validates the batch schema (whether produced by `batch_builder.py` via `--discover` or supplied by `--batch-file`). Malformed input aborts before any worker fires.
-2. The skill resolves `batch_size` from `<wiki-root>/.cogni-wiki/config.json` (key `batch_size`, range 2–8; default **5**). `batch_size` caps the number of concurrently dispatched workers.
-3. `sources[]` is partitioned into order-preserving chunks of `batch_size` entries. For each chunk, one `ingest-worker` subagent is dispatched per source (`Task(subagent_type: "ingest-worker", run_in_background: true, …)`). The orchestrator waits for the whole chunk to complete before dispatching the next chunk — bounded concurrency.
-4. Each worker owns Steps 1–8 for exactly one source. See `../../../agents/ingest-worker.md` for the agent contract.
-5. Each worker returns a single fenced ` ```json ... ``` ` block as its final message. The orchestrator extracts these blocks and aggregates them into the Step 9 report. No source body, page body, or backlink audit JSON is ever loaded into the orchestrator.
+**How sequential iteration works:**
 
-**Worker return schema:**
+1. `wiki-ingest` validates the batch schema (whether produced by `batch_builder.py` via `--discover` or supplied by `--batch-file`). Malformed input aborts before any source is touched.
+2. For each `source_entry` in `sources[]`, in input order:
+   - Run Steps 1–8 of `SKILL.md` inline in this context: locate wiki + detect mode, read source, surface takeaways, write the new page, update `wiki/index.md` via `wiki_index_update.py`, run `backlink_audit.py` and apply the curated/auto plan via `--apply-plan -`, append to `wiki/log.md`, bump `entries_count` via `config_bump.py` (fresh only).
+   - Wait for every script invocation to return cleanly before moving to the next source. There is no concurrent I/O within a batch.
+3. After the loop completes (or halts on failure), run Step 9 once to emit the aggregated report.
+
+**Per-source result row:** captured in the orchestrator's own state across the loop iterations. Schema mirrors the old worker return for continuity in Step 9 reporting:
 
 | Field | Type | Notes |
 |-------|------|-------|
-| `source` | string | Echo of the input `source_entry.source`. Lets the orchestrator match returns to batch entries. |
-| `slug` | string \| null | Resolved slug, or `null` if the worker failed before Step 1. |
+| `source` | string | Echo of the input `source_entry.source`. Lets the Step 9 report match rows to batch entries. |
+| `slug` | string \| null | Resolved slug, or `null` if Step 1 did not complete. |
 | `mode` | `"fresh"` \| `"re-ingest"` \| `null` | Per-entry Step 1 detection. `null` if Step 1 did not complete. |
 | `backlinks_added` | integer | Count from `data.applied` in the Step 6 `--apply-plan` response. `0` if Step 6 was skipped or failed. |
 | `index_action` | `"inserted"` \| `"updated"` \| `null` | From Step 5 `wiki_index_update.py` output. `null` if Step 5 did not run. |
 | `errors` | array | Empty on success. On failure: `[{"step": <1-8 or null>, "message": "<verbatim>"}]`. |
 
-**Concurrency rationale.** Default `batch_size: 5` balances wall-clock on large rebuilds (the 179-source #80 scope) against model-cost burst and subagent dispatch ceilings. Override via `.cogni-wiki/config.json`:
+**Throughput.** Sequential iteration is materially slower than the removed fan-out for large rebuilds (a 100-source batch that took ~20 chunk-rounds of 5 workers each will now run as 100 strictly-ordered iterations). This cost is accepted: the wiki's value is the cross-source interconnection, and parallel dispatch traded that interconnection for wall-clock — the wrong direction for a knowledge engine whose entire premise is compounding. If a user's bulk rebuild is too slow, the right fix is fewer sources per batch (split by topic, run one batch per session), not concurrent ingestion.
 
-- `batch_size: 2` — metered usage, quiet hosts, slow networks. Gentler on WebFetch rate limits for URL-heavy batches.
-- `batch_size: 5` — default. Sweet spot for ~50–200 source rebuilds on typical developer workstations.
-- `batch_size: 8` — aggressive. Only if you know the Anthropic subagent dispatch limits in your environment tolerate it; no guarantee higher is faster.
+**No `batch_size` config key.** The previous `.cogni-wiki/config.json` `batch_size` field is ignored if present (legacy wikis with the key are harmless; nothing reads it). New wikis from `wiki-setup` no longer write the key.
 
-**Chunk wall-clock.** A chunk completes when every worker in it finishes, so chunk wall-clock is bounded by the slowest worker. A slow URL fetch in chunk `k` does not starve workers in chunks `k+1…` — they simply wait their turn. Step 3 synthesis inside a worker is visible inside that worker's subagent transcript, not interleaved in the parent; batch mode is reduced-interactivity by construction.
+**Step 3 synthesis is visible.** Each iteration's Step 3 takeaways (source type, 3–7 takeaways, existing pages this source touches, proposed type/title) are printed in the orchestrator's own transcript before the page write, exactly as in single-source mode. Batch mode is autonomous-run by construction (the user said "ingest all of them"), so the synthesis is emitted and the iteration proceeds without confirmation — but the synthesis itself is never skipped, and a user reading the run can correlate each takeaway block to its slug.
 
-**Fan-out never runs in `--discover-dry-run`.** Workers only fire after the Step 0 confirmation gate; the dry-run prints the resolved batch JSON and exits with no writes.
+**Discover-dry-run still gates writes.** No iteration starts until the user confirms the resolved batch (or skipped that confirmation by phrasing). `--discover-dry-run` prints the JSON and exits with zero writes, exactly as before.
 
 ## Backlink curation defaults
 
-Batch and discover modes default to `--auto-backlinks 5` as of v0.0.11 (issue #83). Each worker skips per-target hand-curation and instead auto-applies the top-5 `confidence ∈ {medium, high}` candidates from `backlink_audit.py --top 5 --min-confidence medium`, with sentences drafted by the worker from each target's title + first paragraph. This default exists because Step 6 is the dominant per-source cost on bulk rebuilds (50–150 candidates per source, most low-confidence noise), and the subagent fan-out from #82 only parallelised the problem — it did not make per-source curation cheap.
-
-To opt back into hand-curation for a specific batch, pass `--review`:
+Hand-curation is the default in **all** modes (single, batch, discover). To opt into auto-mode for a batch, pass `--auto-backlinks K`:
 
 ```
-wiki-ingest --batch-file batch.json --review
+wiki-ingest --discover orphans --auto-backlinks 3       # auto-apply up to 3 medium/high-confidence backlinks per source
+wiki-ingest --batch-file batch.json --auto-backlinks 5  # auto-apply up to 5 per source
 ```
 
-To tune the cap, pass `--auto-backlinks K` explicitly:
+Each per-source iteration then invokes `backlink_audit.py --top K --min-confidence medium` and drafts a one-sentence backlink for each returned candidate from the target page's title + first paragraph. The "never invent backlinks" discipline is preserved by two mechanisms: (i) `--min-confidence medium` drops the keyword-noise bucket at audit time; (ii) K is bounded by the explicit cap. You are still selecting from a pre-filtered set of real textual matches, not generating links from thin air.
 
-```
-wiki-ingest --discover orphans --auto-backlinks 3       # tighter — 3 per source
-wiki-ingest --discover orphans --auto-backlinks 8       # looser — 8 per source
-```
-
-Single-source mode (`--source`) retains its hand-curation default; per-candidate judgement is worth the attention when you only have one page to write.
+`--review` remains as a no-op (kept for backwards-compat with scripts that pass it explicitly to force hand-curation); since hand-curation is the default, passing it has no effect beyond intent-signalling.
 
 ### Auto-backlinks tradeoff
 
-Auto-applied backlinks are keyword-driven (tag/term overlap filtered by the IDF-weighted `confidence` score), not reader-value-driven. A human curator catches cases where a high-score candidate is actually a poor link target (e.g., two pages sharing four generic tags but orthogonal topics). For bulk rebuilds this is an acceptable degradation:
-
-- Without auto-mode at scale: "stub with 0 backlinks" (because per-source curation is too expensive to actually run).
-- With auto-mode: "synthesis with up to 5 decent backlinks".
-- *Not*: "hand-curated with 7 ideal backlinks" → "auto-curated with 5 decent backlinks". That's not the comparison — at 179-page scale, hand curation never happens.
-
-The `--min-confidence medium` filter and the K cap preserve the "never invent backlinks" discipline (`SKILL.md` §"Failure modes and rules"): you are still selecting from a pre-filtered set of real textual matches, not generating links from thin air.
+Auto-applied backlinks are keyword-driven (tag/term overlap filtered by the IDF-weighted `confidence` score), not reader-value-driven. A human curator catches cases where a high-score candidate is actually a poor link target (e.g., two pages sharing four generic tags but orthogonal topics). When the user opts into auto-mode for a bulk rebuild, the trade is explicit: faster per-source iteration in exchange for keyword-driven instead of reader-value-driven backlinks. The default landed back on hand-curation because the parallel-fan-out throughput pressure that originally motivated `--auto-backlinks 5` as a default is gone now that batches are sequential.
 
 ## Discovery
 
@@ -116,7 +104,7 @@ wiki-ingest --discover research:quantum-cryptography:/path/to/cogni-research-qua
 
 **Project location.** Without the optional `:<research-root>` suffix, the script tries `<workspace>/cogni-research-<slug>/` (workspace = wiki root's parent), then `<wiki-root>/cogni-research-<slug>/`. Use the `:<root>` suffix to point at a non-standard layout.
 
-**This is the one discovery mode that writes to the wiki.** Cogni-research spreads each sub-question's evidence across four entity types and `wiki-ingest`'s per-source worker reads exactly one file. The script materialises one synthesised markdown file per sub-question at `<wiki-root>/raw/research-<project-slug>/sq-NN-<short>.md` before emitting the batch. Materialisation is deterministic (same entities → byte-identical output), idempotent across re-runs, and confined to a single subdirectory you can `git rm -rf` if you change your mind. Pair with `--discover-dry-run` to inspect the planned batch without writes (the SKILL passes `--no-materialize` to the script under the hood).
+**This is the one discovery mode that writes to the wiki.** Cogni-research spreads each sub-question's evidence across four entity types and each per-source iteration of `wiki-ingest` reads exactly one file. The script materialises one synthesised markdown file per sub-question at `<wiki-root>/raw/research-<project-slug>/sq-NN-<short>.md` before emitting the batch. Materialisation is deterministic (same entities → byte-identical output), idempotent across re-runs, and confined to a single subdirectory you can `git rm -rf` if you change your mind. Pair with `--discover-dry-run` to inspect the planned batch without writes (the SKILL passes `--no-materialize` to the script under the hood).
 
 **What lands in each synthesised file:**
 
@@ -141,7 +129,7 @@ wiki-ingest --discover research:quantum-cryptography:/path/to/cogni-research-qua
 
 **Per-entry defaults.** `type: concept`, `tags: ["research", "<project-slug>"]`. Override with `--type` and `--tags` like any other discovery mode.
 
-**`--title-template` is rejected** in research mode — titles come from the sub-question text. The slug derives from the title via the standard rule (Step 1 of the per-source worker), capped at 40 chars in the filename.
+**`--title-template` is rejected** in research mode — titles come from the sub-question text. The slug derives from the title via the standard rule (Step 1 of each per-source iteration), capped at 40 chars in the filename.
 
 **Empty result.** A project with zero sub-questions emits `count: 0` (graceful) rather than failing.
 
@@ -214,27 +202,28 @@ The `mode: fresh | re-ingest` resolution from Step 1 runs **per entry**, not per
 
 Batch mode does **not** accept a batch-wide mode toggle. Trying to force every source through one mode would be the wrong primitive: the pilot rebuild case explicitly mixes fresh new pages with re-syntheses of existing stubs, and a batch-wide flag would either double-count fresh entries or silently skip re-ingests.
 
-## Error policy: fail-fast for Phase 1
+## Error policy: fail-fast
 
-Workers fail in two shapes; the orchestrator handles them the same way but distinguishes them in the Step 9 report.
+The loop halts on the first iteration that fails any of Steps 1–8. The orchestrator records the failed entry's error (`{step: <1-8>, message: "<verbatim>"}`), counts every entry processed before the failure as completed (the per-source scripts' atomicity guarantees mean their writes are consistent on disk), and lists every entry after the failure as skipped (never attempted).
 
-**Graceful failure (worker returned a JSON block with populated `errors[]`).** The worker reached a per-source step (1–8), hit a failure (script non-zero exit, malformed JSON from a script, missing source file, WebFetch failure, write error), stopped at that step, and returned `{… "errors": [{"step": <1-8>, "message": "<verbatim>"}]}`. The per-source scripts' atomicity guarantees mean partial work that *had* completed before the failure is consistent on disk.
+Failures look like one of:
 
-**Silent crash (worker returned no JSON block).** The subagent terminated without emitting the mandatory final fenced JSON block. The orchestrator synthesizes `{source, slug: null, mode: null, backlinks_added: 0, index_action: null, errors: [{step: null, message: "worker returned no JSON payload"}]}` and treats it as a failure. Do **not** retry — surface the crash so the user can diagnose (the worker's own transcript usually shows the cause).
-
-Either shape triggers the same fail-fast behavior at chunk boundaries: the orchestrator **does not dispatch further chunks** after a chunk returns with any failure. Sources dispatched in the failing chunk that returned cleanly still count as completed (atomic per-source scripts make this safe). Sources in not-yet-dispatched chunks are **skipped** — never attempted.
+- **Script non-zero exit or malformed JSON** from `wiki_index_update.py`, `backlink_audit.py`, or `config_bump.py`.
+- **Missing source file** at the path in `source_entry.source` (after the dispatch-time validation; e.g., the file existed when the batch was built but was moved before its iteration).
+- **WebFetch failure** for URL sources.
+- **Write error** (disk full, permission denied) on `wiki/pages/{slug}.md` or `wiki/log.md`.
 
 Step 9 reports:
 
 1. How many sources completed successfully (slugs, modes).
-2. Which sources failed and the errors.
-3. Which sources were skipped (never attempted because an earlier chunk halted the batch).
+2. Which source failed and the error.
+3. Which sources were skipped (the tail of `sources[]` after the failure).
 
-The wiki is never left half-written because every per-source step already writes atomically (`wiki/pages/{slug}.md` is one write; `wiki_index_update.py` uses `tempfile + os.replace`; `backlink_audit.py --apply-plan` writes each target atomically; `wiki/log.md` append is one append; `.cogni-wiki/config.json` update is one write). A mid-batch crash leaves the wiki consistent for every source that had completed before the failure.
+The wiki is never left half-written: every per-source step writes atomically (`wiki/pages/{slug}.md` is one write; `wiki_index_update.py` uses `tempfile + os.replace`; `backlink_audit.py --apply-plan` writes each target atomically; `wiki/log.md` append is one append; `.cogni-wiki/config.json` update is one locked write). A mid-batch failure leaves the wiki consistent for every source that had completed before it.
 
-**To resume** after a failure: re-run the same `--discover` command with `--exclude-ingested` and the script will drop every source that already has a page (every completed entry from the previous run). Or, if you used `--batch-file`, re-invoke with a trimmed batch containing only the failed source plus the ones that were skipped. The completed sources are already in the wiki and will naturally re-route through the `mode: re-ingest` branch if you re-submit them (harmless — they update in place).
+**To resume** after a failure: re-run the same `--discover` command with `--exclude-ingested` and the script will drop every source that already has a page (every completed entry from the previous run). Or, if you used `--batch-file`, re-invoke with a trimmed batch containing only the failed source plus the ones that were skipped. Completed sources already in the wiki will re-route through the `mode: re-ingest` branch if re-submitted (harmless — they update in place).
 
-Continue-on-error semantics (`--on-error continue`) are a deliberate Phase 2 follow-up: useful for the 164-page pilot rebuild once the fail-fast path proves stable.
+Continue-on-error semantics (`--on-error continue`) remain a deferred follow-up.
 
 ## Step 9 in batch mode
 
@@ -302,4 +291,3 @@ Some batches can't be expressed as a discovery mode — e.g., three specific pap
 - `./page-frontmatter.md` — YAML schema; unchanged by batch mode.
 - `../scripts/batch_builder.py` — the discovery helper behind `--discover`; usable standalone to produce a batch JSON for review.
 - `../scripts/wiki_index_update.py` and `../scripts/backlink_audit.py` — already atomic and idempotent, so calling them in a loop is safe.
-- `../../../agents/ingest-worker.md` — per-source subagent dispatched from batch mode; owns Steps 1–8 for one source entry and returns the compact JSON payload described in §"Execution model".

@@ -138,7 +138,6 @@ Claude Code already has an auto-memory system at `~/.claude/projects/.../memory/
 | wiki-from-research | Skill | Cold-start orchestrator: chains cogni-research's setup + report into wiki-setup + wiki-ingest in one dispatch (Mode A from a topic, Mode B from an existing research slug) |
 | wiki-refresh | Skill | Refresh stale wiki pages with fresh evidence from a completed cogni-research project; Jaccard match, batch-confirmed, sequential wiki-update dispatch |
 | wiki-claims-resweep | Skill | Re-verify inline-cited URLs in existing wiki pages against current source content via cogni-claims; report-only, writes a sweep report and a lint-bridge JSON |
-| ingest-worker | Agent | Per-source subagent invoked by wiki-ingest batch mode (Steps 1–8); not directly dispatchable |
 
 ## Architecture
 
@@ -151,8 +150,6 @@ cogni-wiki/
 ├── references/                      Shared reference material
 │   ├── karpathy-pattern.md          Karpathy LLM Wiki pattern
 │   └── claude-research-karparthy.md RAG vs wiki benchmark research
-├── agents/                          1 fan-out worker agent
-│   └── ingest-worker.md             Per-source subagent for wiki-ingest batch mode
 └── skills/                          10 wiki skills
     ├── wiki-setup/                  Bootstrap a new wiki
     ├── wiki-ingest/                 Ingest sources into wiki pages

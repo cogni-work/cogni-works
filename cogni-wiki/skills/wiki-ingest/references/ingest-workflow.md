@@ -368,3 +368,112 @@ A learning anchored to zero `[[wikilink]]` source pages is a hunch, not a learni
 - **Source doesn't fit any template.** Fall back to `default.md`. The scaffolds are guidance, not a gate; an honest freeform page is better than a forced ADR.
 - **`--type note`.** No template; pastes are typically too short to benefit from a scaffold. Promote to a typed page later via `wiki-update` if it crystallises.
 - **`--type synthesis`.** No template; `wiki-query --file-back yes` writes the body directly per its own discipline (see `wiki-query/references/query-patterns.md`).
+
+## Worked example: `.docx` ingest end-to-end (Step 2a auto-conversion)
+
+The preceding examples all assumed a markdown or PDF source — those bypass Step 2a entirely. This section shows the full path for a non-markdown source so the auto-conversion branch is concrete.
+
+### Scenario
+
+A consulting team has a discovery call recording transcribed by their notetaker into Word format and dropped at `raw/discovery-acme-q2-2026-04-22.docx`. They invoke:
+
+```
+wiki-ingest --source raw/discovery-acme-q2-2026-04-22.docx \
+            --type interview --tags customer-call,acme,q2 \
+            --title "Discovery call: Acme CS pain (Q2 2026)"
+```
+
+### Step 1: locate the wiki, detect mode
+
+`config.json` is found three levels up. Slug `discovery-acme-cs-pain-q2-2026` is derived from the title; no page at that slug yet, so `mode: fresh`.
+
+### Step 2: read the source
+
+Extension is `.docx` — neither `.md` nor `.pdf`, so the Step 2a auto-conversion sub-step fires.
+
+### Step 2a: auto-convert
+
+```
+${CLAUDE_PLUGIN_ROOT}/skills/wiki-ingest/scripts/convert_to_md.py \
+    --source raw/discovery-acme-q2-2026-04-22.docx
+```
+
+`markitdown` is on `$PATH`; the script shells out and writes the converted markdown to `raw/discovery-acme-q2-2026-04-22.docx.converted.md`. Output:
+
+```json
+{
+  "success": true,
+  "data": {
+    "source_path": "raw/discovery-acme-q2-2026-04-22.docx",
+    "converted_path": "raw/discovery-acme-q2-2026-04-22.docx.converted.md",
+    "backend": "markitdown",
+    "cached": false
+  },
+  "error": ""
+}
+```
+
+Surface the backend in the response transcript:
+
+```
+Source: raw/discovery-acme-q2-2026-04-22.docx [backend: markitdown]
+        → raw/discovery-acme-q2-2026-04-22.docx.converted.md
+```
+
+The orchestrator now reads the converted markdown for the rest of Steps 3 and 4. The original `.docx` is untouched and remains the citation anchor.
+
+### Step 2a fallback paths (one of these is what you hit, not all of them)
+
+- **`markitdown` not installed but the source is `.html` / `.txt`.** Backend is `stdlib-html` or `stdlib-passthrough`; no install needed; surface the backend tag and proceed.
+- **`markitdown` not installed and the source is a binary office format.** Script returns `success: false`, `backend: unsupported`. Stop and tell the user: "`.docx` requires markitdown — `pip install markitdown` (see `README.md` §Optional dependencies) or convert the file to `.md` manually and re-invoke. Aborting before any wiki write." No partial state to clean up — Step 2a runs before Step 4.
+- **`markitdown` installed but errors on this file.** Script returns `success: false`, `backend: markitdown-error`, with stderr in `error`. Surface verbatim and offer two paths: re-invoke with `--no-convert` (the orchestrator reads the binary path directly — useful for inspecting metadata when the file is text-shaped despite the extension) or hand-convert. Do not invent a fallback that silently half-extracts.
+- **Re-ingest of the same `.docx`.** Backend returns `cache-hit` because `<source>.converted.md` is newer than the source; the conversion is skipped, the cached markdown is read, and Step 2a finishes in milliseconds. To force re-conversion (e.g., after a markitdown upgrade), pass `--force` to `convert_to_md.py` directly or delete the cache file before invoking.
+
+### Step 3: takeaways before writing
+
+Surface in plain prose, e.g.:
+
+> **Source**: 38-minute discovery call with Priya Rao (PM Onboarding, Acme CS), 2026-04-22. Converted from `.docx` via markitdown; original retained at `raw/discovery-acme-q2-2026-04-22.docx`.
+>
+> **Key takeaways:**
+> 1. Day-1 setup time predicts 90-day retention more than feature depth — three of last quarter's churned accounts had multi-day setup gaps.
+> 2. Acme has no signal-detection on stuck onboarding flows; "stuck" only surfaces when the AE notices low usage on a check-in.
+> 3. Re-onboarding (champion turnover) hits ~30% of accounts annually and is treated as ad-hoc rather than a flow.
+>
+> **Existing pages this touches:**
+> - `[[priya-rao]]` — does not yet exist; will file a stub per the `interview.md` template's required-link rule.
+> - `[[customer-onboarding]]` — exists; will gain a backlink.
+> - `[[acme-engagement-q2-2026]]` — does not yet exist; will file a stub for the engagement.
+>
+> **Proposed**: type=interview, template=customer-call.md (because of the `customer-call` tag), title=Discovery call: Acme CS pain (Q2 2026).
+
+### Step 4: write the page
+
+Step 4a resolves to `customer-call.md` (type `interview` + tag `customer-call`). Stubs are filed for `priya-rao` and `acme-engagement-q2-2026` first per the "never invent backlinks" rule. Then the page itself:
+
+```markdown
+---
+id: discovery-acme-cs-pain-q2-2026
+title: "Discovery call: Acme CS pain (Q2 2026)"
+type: interview
+tags: [customer-call, acme, q2]
+created: 2026-04-22
+updated: 2026-04-22
+sources:
+  - ../raw/discovery-acme-q2-2026-04-22.docx
+---
+
+…body filled per customer-call.md scaffold…
+```
+
+The `sources:` line points at the **`.docx` original**, not the `.converted.md` cache — see `SKILL.md` §"Failure modes" ("Original source is the citation, not the cache"). A future re-ingest can rebuild the cache from the original if a markitdown release improves extraction; nothing in the wiki should depend on the cache path.
+
+### Steps 5–9
+
+Identical to the markdown / PDF examples earlier in this document. The auto-conversion sub-step is invisible to everything downstream of Step 2; the `.converted.md` cache file lives quietly next to the original under `raw/` and is only re-touched on a deliberate `--force` or cache-mtime-older-than-source.
+
+### Anti-patterns specific to multi-format ingest
+
+- **Pointing `sources:` at the `.converted.md` file.** The cache is derived; the citation chain must trace to the original artefact the user actually has on disk. A page citing a `.converted.md` will silently rot the next time markitdown improves and the cache is regenerated with different formatting.
+- **Deleting the original `.docx` after conversion succeeded.** The wiki's portability promise rests on every page tracing to a `raw/` artefact. The cache is **not** a substitute — it's a derived view.
+- **Using `--no-convert` to silence a `markitdown-error`.** That just kicks the problem downstream — the orchestrator will read a binary blob and write a noise-filled page. Either fix the markitdown failure (or upgrade) or hand-convert the source to `.md`.

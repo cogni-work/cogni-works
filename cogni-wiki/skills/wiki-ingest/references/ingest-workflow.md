@@ -247,3 +247,124 @@ entries_count: 42 → 44 (2 fresh, 1 re-ingest unchanged)
 - On error, the fail-fast policy halts the loop and reports partial progress. Every completed source is already safely in the wiki because all per-source writes are atomic — see `./batch-mode.md` §"Error policy" for the full resume procedure.
 
 For the full schema, error policy, and the Phase 2 follow-ups deferred from this iteration (continue-on-error, parallel dispatch), read `./batch-mode.md`.
+
+## Worked examples by template
+
+The two preceding examples (`many-shot-jailbreaking.md`, `constitutional-ai.md`) illustrate the `default.md` scaffold — `type: summary`, generic key-takeaways/details/sources shape. The remaining body templates each cover a domain-specific shape; one short example per template follows so Step 4a's selection rules can be checked against a concrete page.
+
+Each example assumes Step 1 found the wiki and Step 3's takeaway synthesis cleared duplication risk; we focus on Step 4 (template pick + frontmatter + body shape) and call out the per-template required `[[wikilinks]]`.
+
+### `interview.md` — captured conversation
+
+Source: `raw/interview-pm-onboarding-2026-04-22.md` (a 40-minute call with the PM of a customer-success org about onboarding pain).
+
+Invocation: `wiki-ingest --source raw/interview-pm-onboarding-2026-04-22.md --type interview --title "Interview: PM onboarding pain (Acme CS)"`
+
+Step 4a resolves: `type=interview`, no `customer-call` tag → `template=interview.md`. Required links: an interviewee entity page, at least one topic concept page.
+
+```markdown
+---
+id: interview-pm-onboarding-acme
+title: "Interview: PM onboarding pain (Acme CS)"
+type: interview
+tags: [onboarding, customer-success, acme]
+created: 2026-04-22
+updated: 2026-04-22
+sources:
+  - ../raw/interview-pm-onboarding-2026-04-22.md
+---
+
+40-minute interview with `[[priya-rao]]` on `[[customer-onboarding]]` friction in Acme's CS org; surfaced three repeatable failure modes.
+
+## Key takeaways
+
+- Day-1 setup time is the single biggest predictor of 90-day retention, not feature depth `[[customer-onboarding]]`.
+- Self-serve flows hide the moments where humans should intervene — three of the lost accounts had a clear "stuck" signal in week 2 that nobody saw.
+- Re-onboarding (after a champion leaves) is treated as a special case but happens for ~30% of accounts annually.
+
+## Details
+
+### Interviewee
+
+- **Name / role**: `[[priya-rao]]` — PM of Onboarding, Acme CS
+- **Affiliation**: Acme Inc.
+- **Date interviewed**: 2026-04-22
+- **Format**: recorded call, transcript in `raw/`
+
+### Context
+
+Follow-up to the Q1 churn analysis. We picked Priya because her team owns the day-1 → day-30 window and she had visibility into the three accounts that churned in March.
+
+### Topics covered
+
+#### Day-1 setup time
+…
+
+#### Stuck-signal detection
+…
+
+#### Re-onboarding mechanics
+…
+
+### Notable quotes
+
+> The accounts that survived the first 14 days at all weren't the ones who used more features — they were the ones who got the first integration live before the kickoff call ended.
+>
+> — Priya Rao, on what predicts retention
+
+### Open questions raised
+
+- Could the stuck-signal detection generalise across CS orgs, or is it Acme-specific?
+- What does "first integration live" mean operationally for a non-API product?
+
+## Sources
+
+- [Interview transcript — Acme PM onboarding](../raw/interview-pm-onboarding-2026-04-22.md)
+```
+
+The interviewee link to `[[priya-rao]]` is required per the template; if the page doesn't exist, Step 4a's stub-first rule files `wiki/pages/priya-rao.md` (frontmatter only, one-line summary) before writing this page.
+
+### `customer-call.md` — sales / CS variant
+
+Source: `raw/call-acme-q2-renewal.md`. Invocation: `wiki-ingest --source raw/call-acme-q2-renewal.md --type interview --tags customer-call,renewal --title "Acme Q2 renewal call"`.
+
+Step 4a sees `type: interview` + tag `customer-call` → `template=customer-call.md`. Required links: customer entity, engagement / opportunity. The body uses the customer-call scaffold (call meta / pains / signals / objections / asks-and-commitments / next steps) instead of the generic interview shape — the table-driven asks-and-commitments structure is the load-bearing difference.
+
+### `meeting.md` — meeting notes
+
+Source: `raw/q2-planning-2026-04-15.md`. Invocation: `wiki-ingest --source raw/q2-planning-2026-04-15.md --type meeting --title "Q2 planning — leadership"`.
+
+Step 4a resolves: `type=meeting` → `template=meeting.md`. Required links: at least one attendee or team, plus the project/topic the meeting concerns. Body shape: meeting meta → goal → key discussions → decisions made → action items table → parking lot.
+
+If a decision recorded in the meeting deserves an ADR, file a separate `type: decision` page and link to it from the meeting's "Decisions made" section. The meeting page records that the decision happened; the decision page records the rationale.
+
+### `decision.md` — ADR-shaped record
+
+Source: `raw/decision-replatform-2026-03-10.md`. Invocation: `wiki-ingest --source raw/decision-replatform-2026-03-10.md --type decision --title "Decision: replatform onto stack X"`.
+
+Step 4a resolves: `type=decision` → `template=decision.md`. Required links: the engagement / project / scope; any prior decision this one supersedes. Body shape: context → options considered (table) → decision → rationale → consequences (positive / negative / open risks) → revisit conditions.
+
+The `revisit conditions` section is the highest-leverage discipline for `decision` pages — without it, decisions ossify silently. A page that lacks them should be flagged in lint once the per-type required-section rule lands (deferred to issue #210's lint contract).
+
+### `retro.md` — retrospective variant
+
+Source: `raw/retro-engagement-acme-q1-2026.md`. Invocation: `wiki-ingest --source raw/retro-engagement-acme-q1-2026.md --type learning --tags retro --title "Retro: Acme Q1 engagement"`.
+
+Step 4a sees `type: learning` + tag `retro` → `template=retro.md`. Required links: the engagement / sprint / initiative; the team / participants. Body shape: retro meta → what worked → what didn't → what we'll change (table with owner + checkpoint) → patterns worth promoting.
+
+The "patterns worth promoting" section is what turns retros from journaling into anti-repetition memory: when a learning recurs across two retros, promote it to a `type: learning` page in its own right and link both retros to it.
+
+### `learning.md` — generalised lesson
+
+Invocation: `wiki-ingest --source raw/learning-three-engagement-shape.md --type learning --title "Learning: three-engagement-shape pattern"`.
+
+Step 4a resolves: `type=learning`, no `retro` tag → `template=learning.md`. Required links: at least one source page or entity the learning generalises from. Body shape: where this came from (cited sources with `[[wikilinks]]`) → when it applies → when it doesn't → implications → open questions.
+
+A learning anchored to zero `[[wikilink]]` source pages is a hunch, not a learning — the template's "Where this came from" section is mandatory to keep this distinction visible.
+
+## Template-selection edge cases
+
+- **Mixed-shape source.** A meeting that contains a major decision: file the meeting under `meeting.md`, then file the decision separately under `decision.md` and cross-link. Do not stretch one template to cover both — `wiki-query` reliability comes from uniform per-type structure.
+- **Source doesn't fit any template.** Fall back to `default.md`. The scaffolds are guidance, not a gate; an honest freeform page is better than a forced ADR.
+- **`--type note`.** No template; pastes are typically too short to benefit from a scaffold. Promote to a typed page later via `wiki-update` if it crystallises.
+- **`--type synthesis`.** No template; `wiki-query --file-back yes` writes the body directly per its own discipline (see `wiki-query/references/query-patterns.md`).

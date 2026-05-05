@@ -36,7 +36,7 @@ Exactly one of `--source`, `--batch-file`, or `--discover` must be provided.
 | `--older-than-days` | No (discovery mode) | For `--discover stubs`: restrict to drafts whose `updated:` date is older than N days |
 | `--exclude-ingested` | No (discovery mode) | Drop any discovered source whose derived slug already exists as a wiki page. Use this to run `--discover` repeatedly and only ever ingest the deltas. |
 | `--title` | No | Override the page title; otherwise derive from the source (first heading, URL title, filename). Single-source mode only — in batch/discovery mode, titles are per-entry |
-| `--type` | No | Page type: `concept | entity | summary | decision | learning | note`. Defaults to `summary` for full-source ingests, `note` for short pastes. In discovery mode, applied as a default to every discovered entry |
+| `--type` | No | Page type: `concept | entity | summary | decision | interview | meeting | learning | note`. Defaults to `summary` for full-source ingests, `note` for short pastes. Also selects the body template Step 4 uses — see Step 4 for the type→template map. In discovery mode, applied as a default to every discovered entry |
 | `--tags` | No | Comma-separated tags. In discovery mode, applied as a default to every discovered entry |
 | `--auto-backlinks <K>` | No | Skip Step 6 hand-curation: auto-apply the top-K `confidence != low` candidates from `backlink_audit.py`. Mutually exclusive with `--review`. Default for batch/discover mode is `--auto-backlinks 5`; default for single-source mode is hand-curation. Pass explicitly (e.g. `--auto-backlinks 3` or `--auto-backlinks 8`) to tune the cap. |
 | `--review` | No | Force Step 6 hand-curation, even in batch/discover mode. Mutually exclusive with `--auto-backlinks`. Default (and no-op) in single-source mode; the opt-out against the new batch/discover default. |
@@ -126,6 +126,40 @@ Show this synthesis to the user before proceeding to write. For autonomous runs 
 
 Path: `<wiki-root>/wiki/pages/{slug}.md` where `slug` is derived from the title.
 
+#### 4a. Select the body template
+
+Domain-specific scaffolds live under `${CLAUDE_PLUGIN_ROOT}/skills/wiki-ingest/references/templates/` — one markdown file per `type` (plus two tag-driven variants). Pick the template **before** drafting the body so the page conforms to the per-type heading shape and required `[[wikilinks]]`. The map (also documented in `references/page-frontmatter.md`):
+
+| Resolved type | Template |
+|---|---|
+| `summary`, `concept`, `entity` | `default.md` |
+| `interview` (default) | `interview.md` |
+| `interview` + tag `customer-call` | `customer-call.md` |
+| `meeting` | `meeting.md` |
+| `decision` | `decision.md` |
+| `learning` (default) | `learning.md` |
+| `learning` + tag `retro` | `retro.md` |
+| `synthesis`, `note` | no template — write the body directly |
+
+Resolution order:
+
+1. **Explicit `--type T`.** Use `T`. If the user also passed `--tags` containing `customer-call` (with `--type interview`) or `retro` (with `--type learning`), pick the matching variant. Otherwise pick the default for `T`.
+2. **No `--type` was passed.** Infer from the source using these heuristics, in order — first hit wins:
+   - Source is a transcript with named speakers → `type: interview`. If the speakers include a customer / account context (the source is in a `customer-calls/` folder, or the user prompt mentions an account name), pick the `customer-call` variant via tag.
+   - Source has agenda + attendees + action items → `type: meeting`.
+   - Source is an ADR-shaped document (Context / Options / Decision / Consequences) → `type: decision`.
+   - Source is a retrospective board / "what went well, what didn't, actions" → `type: learning` with the `retro` tag.
+   - Source is a generalised lesson distilled across multiple inputs (no one-source anchor) → `type: learning`.
+   - Source is a paper, article, blog post, or report → `type: summary`.
+   - Source is a freeform paste under ~500 chars → `type: note`.
+   - Otherwise → `type: summary` with `default.md`.
+3. **Re-ingest mode.** Read the existing page's `type` (and any variant-defining tag like `customer-call` or `retro`) from frontmatter and pick the matching template. Do **not** silently switch templates on re-ingest — if the source has shifted shape, surface it in Step 3's takeaway synthesis and ask the user to confirm a type change before writing.
+4. **Surface the choice.** Step 3's takeaway block already names "Proposed page type and title"; extend that line to include the resolved template (e.g. `Proposed: type=interview, template=customer-call.md`). Autonomous runs proceed without confirmation; otherwise wait for the user.
+
+If a required `[[wikilink]]` declared in the template's header comment is unresolvable (the entity / concept / engagement page does not exist yet), file a stub at `wiki/pages/{stub-slug}.md` (frontmatter only, body is the one-line summary) before linking — never link to a page that doesn't exist (`SKILL.md` Failure modes: "Never invent backlinks").
+
+#### 4b. Compose the page
+
 Frontmatter (see `${CLAUDE_PLUGIN_ROOT}/skills/wiki-ingest/references/page-frontmatter.md` for the full schema):
 
 ```yaml
@@ -144,12 +178,14 @@ publisher_url: https://{publisher canonical URL, only if observable}
 
 **On `publisher_url`**: populate it only when the canonical URL is observable — do not fabricate. URL ingest → set it to the source URL (same one passed to WebFetch). File ingest with a URL printed on the PDF cover / in PDF metadata / in source text → use that URL. File ingest with no observable URL → omit the `publisher_url` key entirely (the field is optional). A guessed URL that 404s costs more credibility than an unlinked citation downstream; cogni-research will fall back to the wiki's `publisher_base_url` if set.
 
-Body structure:
+Body structure (the template selected in Step 4a sets the per-type heading shape inside `Details`; the four top-level sections below are constant):
 
 1. **One-sentence summary** (the line that will appear in `index.md`)
 2. **Key takeaways** — bulleted, each with a `[[wikilink]]` or source citation where applicable
-3. **Details** — the actual distilled content, organized with `##` subheadings
+3. **Details** — the actual distilled content. Use the headings the template prescribes (e.g. `Interviewee / Context / Topics covered / Notable quotes / Open questions raised` for `interview.md`). Drop sections the source genuinely doesn't support — empty scaffolds are noise. Add type-specific sections only when the template invites them.
 4. **Sources** — markdown-linked list of raw files and URLs
+
+Verify the body contains every required `[[wikilink]]` listed in the template's header comment before writing. A template-required link that points at a non-existent page is the trigger to file a stub per Step 4a — write the stub first, then write this page.
 
 Write the page file. Do not write anything else yet.
 
@@ -268,7 +304,8 @@ If `config_bump.py` exits non-zero or returns malformed JSON, report the error b
 ## References
 
 - `${CLAUDE_PLUGIN_ROOT}/references/karpathy-pattern.md` — the pattern
-- `${CLAUDE_PLUGIN_ROOT}/skills/wiki-ingest/references/page-frontmatter.md` — full frontmatter schema
+- `${CLAUDE_PLUGIN_ROOT}/skills/wiki-ingest/references/page-frontmatter.md` — full frontmatter schema, type enum, type→template map
+- `${CLAUDE_PLUGIN_ROOT}/skills/wiki-ingest/references/templates/` — body scaffolds per type (`default`, `interview`, `customer-call`, `meeting`, `decision`, `retro`, `learning`); see `templates/README.md` for selection rules
 - `${CLAUDE_PLUGIN_ROOT}/skills/wiki-ingest/references/ingest-workflow.md` — worked example
 - `${CLAUDE_PLUGIN_ROOT}/skills/wiki-ingest/references/batch-mode.md` — `--batch-file` input schema, per-source mode rules, error policy, and worked example
 - `${CLAUDE_PLUGIN_ROOT}/skills/wiki-ingest/scripts/backlink_audit.py` — candidate backlink finder

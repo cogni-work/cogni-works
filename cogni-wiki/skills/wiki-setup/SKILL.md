@@ -114,6 +114,16 @@ Use the current date via `date +%Y-%m-%d`. Omit `publisher_base_url` (do not emi
 Report in plain prose:
 - Where the wiki was created (absolute path)
 - Next recommended action — usually `drop a source document in raw/ and run /cogni-wiki:wiki-ingest`
+- Available body templates so the user knows which `--type` values trigger a domain-specific scaffold. Source of truth: `${CLAUDE_PLUGIN_ROOT}/skills/wiki-ingest/references/templates/`. Surface as a single short list:
+  - `default` — generic source ingest (`--type summary | concept | entity`)
+  - `interview` — captured conversation (`--type interview`)
+  - `customer-call` — sales / customer-success variant (`--type interview --tags customer-call`)
+  - `meeting` — meeting notes (`--type meeting`)
+  - `decision` — ADR-shaped record (`--type decision`)
+  - `retro` — retrospective variant (`--type learning --tags retro`)
+  - `learning` — generalised lesson (`--type learning`)
+
+  Point the user at `references/templates/README.md` for the per-template required `[[wikilinks]]` and authoring conventions when they want to dig deeper.
 - Gentle reminder that Claude will never answer `wiki-query` calls from memory — only from the wiki
 
 Do not create example pages or sample sources. An empty wiki is the correct starting state.

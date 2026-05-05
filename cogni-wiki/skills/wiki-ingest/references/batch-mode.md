@@ -191,7 +191,7 @@ Per-entry fields mirror the single-source CLI parameters exactly:
 |-------|----------|-----------|
 | `source` | Yes | Path (relative to the wiki root) or URL; matches today's `--source` parameter |
 | `title` | No | Override; matches `--title` |
-| `type` | No | `concept \| entity \| summary \| decision \| learning \| note`; matches `--type` |
+| `type` | No | `concept \| entity \| summary \| decision \| interview \| meeting \| learning \| note`; matches `--type`. See `./page-frontmatter.md` §"Type → body template mapping" for which template each type dispatches to |
 | `tags` | No | List of strings; matches `--tags` (no comma splitting needed) |
 
 Unknown top-level keys (siblings of `sources`) and unknown per-entry fields both cause the batch to abort before Step 1 of the first entry — malformed input never half-writes the wiki.

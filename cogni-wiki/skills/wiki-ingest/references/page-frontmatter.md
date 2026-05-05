@@ -46,11 +46,31 @@ One of:
 | `entity` | Specific person, organization, product, project, place |
 | `summary` | A condensed version of one raw source, paper, or article |
 | `decision` | A choice made and the reasoning — includes the alternatives considered |
-| `learning` | A generalized takeaway drawn from multiple sources or experience (typically authored by hand or filed during ingest) |
+| `interview` | A captured conversation: customer / expert / user / stakeholder. Use the `customer-call` tag to mark sales / customer-success calls, the most common variant |
+| `meeting` | Internal or external meeting notes — agenda, discussion, decisions made, action items |
+| `learning` | A generalized takeaway drawn from multiple sources or experience (typically authored by hand or filed during ingest). Use the `retro` tag for retrospectives |
 | `synthesis` | An LLM-synthesised answer derived from other wiki pages — filed back by `wiki-query --file-back yes`. Sources are `wiki://<slug>` references to the pages it draws from, not raw files. Distinguishes wiki→wiki derivation from raw-source learnings |
 | `note` | A loose observation that hasn't crystallized — often promoted later to `concept` or `learning` |
 
 Pick the most specific type. `wiki-lint` will warn when a page's body has drifted far from its declared type.
+
+`customer-call` and `retro` are deliberately **not** distinct types — they are scaffold variants distinguished by tag. This keeps the enum small while still giving `wiki-query` and the dashboard a way to slice by use case (`tag:customer-call`, `tag:retro`).
+
+### Type → body template mapping
+
+`wiki-ingest` Step 4 dispatches each `type` to a body scaffold under `${CLAUDE_PLUGIN_ROOT}/skills/wiki-ingest/references/templates/`:
+
+| Type | Template file |
+|------|---------------|
+| `summary`, `concept`, `entity` | `default.md` |
+| `interview` | `interview.md` (or `customer-call.md` when tagged `customer-call`) |
+| `meeting` | `meeting.md` |
+| `decision` | `decision.md` |
+| `learning` | `learning.md` (or `retro.md` when tagged `retro`) |
+| `synthesis` | n/a — `wiki-query --file-back yes` writes the body directly |
+| `note` | n/a — pastes are short by design; default scaffold optional |
+
+See `./templates/README.md` for authoring conventions and per-template required `[[wikilinks]]`.
 
 ### `tags` (optional)
 

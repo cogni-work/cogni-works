@@ -62,7 +62,8 @@ Filters (compose freely with any discovery mode):
                         safe to rerun after partial progress.
 
     --type TYPE         Apply as the per-entry `type` default (one of:
-                        concept, entity, summary, decision, learning, note).
+                        concept, entity, summary, decision, interview,
+                        meeting, learning, note).
     --tags a,b,c        Apply as the per-entry `tags` default.
     --research-root P   Override the auto-located cogni-research project root.
                         Default lookup tries `<workspace>/cogni-research-<SLUG>/`
@@ -127,7 +128,7 @@ from pathlib import Path
 from typing import Iterable
 
 
-VALID_TYPES = {"concept", "entity", "summary", "decision", "learning", "note"}
+VALID_TYPES = {"concept", "entity", "summary", "decision", "interview", "meeting", "learning", "note"}
 FRONTMATTER_RE = re.compile(r"^---\s*\n(.*?)\n---\s*\n", re.DOTALL)
 SLUG_CLEAN_RE = re.compile(r"[^a-z0-9]+")
 

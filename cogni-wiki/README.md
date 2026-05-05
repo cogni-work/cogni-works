@@ -61,7 +61,7 @@ sources: [../raw/bai-et-al-2022.pdf]
 ---
 ```
 
-Page types: `concept`, `entity`, `summary`, `decision`, `learning`, `synthesis`, `note`. The `synthesis` type (introduced in v0.0.23) is reserved for LLM-derived answers that `wiki-query --file-back yes` files back into the wiki; sources for these pages are `wiki://<slug>` references rather than raw files.
+Page types: `concept`, `entity`, `summary`, `decision`, `interview`, `meeting`, `learning`, `synthesis`, `note`. The `synthesis` type (v0.0.23) is reserved for LLM-derived answers that `wiki-query --file-back yes` files back into the wiki; sources for these pages are `wiki://<slug>` references rather than raw files. The `interview` and `meeting` types (v0.0.24) drive `wiki-ingest`'s body-template dispatch — `customer-call` and `retro` are tag variants of `interview` and `learning`, not new types.
 
 ## What it does
 

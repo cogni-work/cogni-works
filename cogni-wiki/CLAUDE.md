@@ -77,7 +77,7 @@ Created by `wiki-setup` at the user-chosen root (default `cogni-wiki/{slug}/` re
     └── config.json            { "name", "slug", "created", "entries_count", "last_lint" }
 ```
 
-Pages stay flat under `wiki/pages/`; the `type:` frontmatter field carries the semantic distinction (concept / entity / summary / decision / learning / synthesis / note). Per-type directories are explicitly deferred — see the parent tracking issue for the Karpathy-pattern parity work.
+Pages stay flat under `wiki/pages/`; the `type:` frontmatter field carries the semantic distinction (concept / entity / summary / decision / interview / meeting / learning / synthesis / note). Per-type directories are explicitly deferred — see the parent tracking issue for the Karpathy-pattern parity work.
 
 ## Page Frontmatter
 
@@ -85,7 +85,7 @@ Pages stay flat under `wiki/pages/`; the `type:` frontmatter field carries the s
 ---
 id: <slug>
 title: <human-readable>
-type: concept | entity | summary | decision | learning | synthesis | note
+type: concept | entity | summary | decision | interview | meeting | learning | synthesis | note
 tags: [tag1, tag2]
 created: YYYY-MM-DD
 updated: YYYY-MM-DD
@@ -93,7 +93,9 @@ sources: [../raw/paper-xyz.pdf, https://..., wiki://other-slug]
 ---
 ```
 
-The `synthesis` type (introduced in v0.0.23) is reserved for LLM-derived answers that `wiki-query --file-back yes` files back into the wiki. Synthesis pages cite their wiki provenance via `wiki://<slug>` entries in `sources:` rather than `../raw/` paths; `wiki-lint` enforces this contract. See `skills/wiki-ingest/references/page-frontmatter.md` for the full schema.
+The `synthesis` type (introduced in v0.0.23) is reserved for LLM-derived answers that `wiki-query --file-back yes` files back into the wiki. Synthesis pages cite their wiki provenance via `wiki://<slug>` entries in `sources:` rather than `../raw/` paths; `wiki-lint` enforces this contract.
+
+The `interview` and `meeting` types (introduced in v0.0.24) carry the consulting-domain shapes that drive `wiki-ingest`'s body-template dispatch. `customer-call` and `retro` are deliberately **not** distinct types — they are scaffold variants distinguished by the `tags:` field (`tag:customer-call` swaps `interview.md` → `customer-call.md`; `tag:retro` swaps `learning.md` → `retro.md`), so the enum stays small while `wiki-query` can still slice by use case. See `skills/wiki-ingest/references/page-frontmatter.md` for the full schema and `skills/wiki-ingest/references/templates/README.md` for the type→template map.
 
 ## Key Conventions
 

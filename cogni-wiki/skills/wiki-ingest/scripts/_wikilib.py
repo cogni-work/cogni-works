@@ -26,6 +26,7 @@ import json
 import os
 import re
 import sys
+import tempfile
 from contextlib import contextmanager
 from pathlib import Path
 
@@ -208,3 +209,49 @@ def build_slug_index(wiki_root: Path, include_audit: bool = False) -> dict:
     100-page wikis (matches health.py's performance contract).
     """
     return {slug: (path, ptype) for slug, path, ptype in iter_pages(wiki_root, include_audit=include_audit)}
+
+
+# ---------------------------------------------------------------------------
+# v0.0.29 additions: shared write + JSON-emit helpers.
+#
+# These two patterns were inlined byte-for-byte in every script under
+# `cogni-wiki/skills/*/scripts/`. New writers (starting with
+# rebuild_context_brief.py for #219) consume them from here so the contract
+# is owned in exactly one place. Existing inlines are NOT refactored in
+# v0.0.29 — keep the diff additive; lift them in a follow-up PR if desired.
+# ---------------------------------------------------------------------------
+
+
+def atomic_write(path: Path, text: str) -> None:
+    """Atomically replace `path` with `text` (UTF-8).
+
+    Same `tempfile + os.replace` pattern used inline by every other writer in
+    the plugin (e.g. `wiki_index_update.py::update_index`). Creates parent
+    dirs as needed. A crash mid-write leaves either the previous content or
+    the new content on disk — never a partial write. The temp file lives in
+    the same directory as the target so `os.replace` cannot cross devices.
+    """
+    path.parent.mkdir(parents=True, exist_ok=True)
+    fd, tmp = tempfile.mkstemp(
+        prefix=f".{path.name}.", suffix=".tmp", dir=str(path.parent)
+    )
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8") as f:
+            f.write(text)
+        os.replace(tmp, path)
+    except Exception:
+        try:
+            os.unlink(tmp)
+        except OSError:
+            pass
+        raise
+
+
+def emit_json(success: bool, data=None, error: str = "") -> None:
+    """Print the standard `{success, data, error}` JSON line on stdout.
+
+    Every wiki script inlines a near-identical helper today (see
+    `lint_wiki.py` `ok()`/`fail()`). Extracted here so new scripts can
+    `from _wikilib import emit_json` instead of re-deriving the contract.
+    """
+    print(json.dumps({"success": bool(success), "data": data or {}, "error": error or ""}))

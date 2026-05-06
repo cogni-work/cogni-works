@@ -6,7 +6,7 @@ allowed-tools: Read, Bash, Glob
 
 # Wiki Resume
 
-Give the user a fast, grounded status view of their wiki so they know what's inside and what the right next action is. As of v0.0.27, resume also runs `wiki-health` automatically as part of every status call — a free, zero-LLM structural pre-flight that surfaces broken wikilinks, missing frontmatter, and other mechanical issues without the user having to think about it. No writing to wiki pages — this skill is read-only against the wiki itself; it only logs the health invocation it dispatches.
+Give the user a fast, grounded status view of their wiki so they know what's inside and what the right next action is. As of v0.0.27, resume also runs `wiki-health` automatically as part of every status call — a free, zero-LLM structural pre-flight that surfaces broken wikilinks, missing frontmatter, and other mechanical issues without the user having to think about it. As of v0.0.29, resume also reads `wiki/context_brief.md` (auto-rebuilt by `wiki-ingest`) before any other status work, so a fresh session orients from one ≤ 8 KiB file instead of a 3+ file scan. No writing to wiki pages — this skill is read-only against the wiki itself; it only logs the health invocation it dispatches.
 
 Read `${CLAUDE_PLUGIN_ROOT}/references/karpathy-pattern.md` once for new sessions.
 
@@ -31,9 +31,11 @@ Read `${CLAUDE_PLUGIN_ROOT}/references/karpathy-pattern.md` once for new session
 
 ## Workflow
 
-### 1. Locate the wiki
+### 1. Locate the wiki, then read the context brief
 
 Walk upward to find `.cogni-wiki/config.json`. If none, stop and offer `wiki-setup`.
+
+Once the wiki root is resolved, **read `<wiki-root>/wiki/context_brief.md` first if it exists** (v0.0.29+). The brief is the canonical "first read" for a session — auto-rebuilt at the end of every `wiki-ingest` dispatch by `${CLAUDE_PLUGIN_ROOT}/skills/wiki-ingest/scripts/rebuild_context_brief.py`, it summarises type counts, top entities by inbound backlinks, the last 30 days of activity, cached open lints, and a fresh `health.py` snapshot in ≤ 8 KiB. With it, the rest of this skill's status block reads as a delta on top of what's already known instead of starting from cold. If the brief is absent (older wikis pre-v0.0.29, wikis where `wiki-ingest` has never run, or wikis where the rebuild failed), skip silently and proceed to Step 2 — every section of the eventual status view still works without it.
 
 ### 2. Run the status script (which now also runs wiki-health)
 
@@ -119,7 +121,7 @@ Rules 1–3 are new in v0.0.27 — they fire on the freshly-collected health sna
 
 ### 5. Side effects
 
-This skill is read-only against `wiki/<type>/` and `.cogni-wiki/config.json` — it never edits them. The one side effect introduced in v0.0.27 is that the dispatched `wiki-health` invocation appends a `## [YYYY-MM-DD] health | N errors, N warnings` line to `wiki/log.md`. That's intentional: every health pre-flight should be on the audit trail, and resume is the canonical session-start trigger. Use `--skip-health` if you genuinely want zero side effects.
+This skill is read-only against `wiki/<type>/` and `.cogni-wiki/config.json` — it never edits them. The one side effect introduced in v0.0.27 is that the dispatched `wiki-health` invocation appends a `## [YYYY-MM-DD] health | N errors, N warnings` line to `wiki/log.md`. That's intentional: every health pre-flight should be on the audit trail, and resume is the canonical session-start trigger. Use `--skip-health` if you genuinely want zero side effects. The v0.0.29 context-brief read in Step 1 introduces no new side effects — it is a plain `Read` of `wiki/context_brief.md`.
 
 ## Output
 
@@ -132,6 +134,7 @@ This skill is read-only against `wiki/<type>/` and `.cogni-wiki/config.json` —
 2. **Health is automatic.** The user shouldn't have to remember to preflight — resume does it for them.
 3. **Always recommend an action.** The user should leave this skill knowing what to do next.
 4. **Ground the numbers in the filesystem**, not in cached config values — the script counts files directly so a stale `entries_count` in `config.json` doesn't mislead.
+5. **Read the brief before running the script** (v0.0.29+). The status script's output is the delta on top of `context_brief.md`, not a from-scratch summary.
 
 ## References
 
@@ -139,3 +142,4 @@ This skill is read-only against `wiki/<type>/` and `.cogni-wiki/config.json` —
 - `./scripts/wiki_status.sh` — the status collector (now also dispatches health.py)
 - `${CLAUDE_PLUGIN_ROOT}/skills/wiki-health/SKILL.md` — the structural pre-flight skill
 - `${CLAUDE_PLUGIN_ROOT}/skills/wiki-health/scripts/health.py` — the deterministic check engine
+- `${CLAUDE_PLUGIN_ROOT}/skills/wiki-ingest/scripts/rebuild_context_brief.py` — produces `wiki/context_brief.md` (v0.0.29+) at the end of every ingest dispatch

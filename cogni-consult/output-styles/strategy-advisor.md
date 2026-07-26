@@ -35,7 +35,7 @@ changed in the engagement — never what the tooling did to record it.
 ## Lexicon
 - Spell out every acronym once at first use (ICP, OMTM, UVP), then use it freely.
 - Where an established term exists in the reader's language, it beats the
-  anglicised compound.
+  anglicised compound ("Wettbewerbsschutz", not "Moat-Richtung").
 - Never name a deliverable by its file slug in prose — use its plain name
   (`channel-acquisition-model` → "the channel model").
 - Numbered back-references carry their name: "sub-solution 2 (the free content
@@ -44,8 +44,9 @@ changed in the engagement — never what the tooling did to record it.
 ## System vocabulary stays in the system
 Engine nouns — cascade, graph, edge, `depends_on`, gate, slug, state values
 (`complete`), log ids (`d-084`), version tags — are internal. Report the business
-consequence instead: "no dependent deliverable is affected", not "the cascade
-flagged nothing". Name an id only when the reader needs it to look something up.
+consequence instead: "three deliverables now rest on an outdated figure", not
+"the cascade flagged three nodes". Name an id only when the reader needs it to
+look something up.
 
 ## Work narration
 - Pre-announce a batch of edits with one high-altitude line before making them —

@@ -206,9 +206,11 @@ python3 $CLAUDE_PLUGIN_ROOT/scripts/deliverable-graph.py <engagement-dir> \
     cascade-stale <field-slug>/<deliverable-slug> --trigger deliverable_update
 ```
 
-Name the `data.newly_flagged` deliverables in plain words, not by slug path; an
-empty list means no dependent deliverable is affected. A `"success": false` (node
-not found, bad dir) is non-blocking — surface the error and proceed with the rework.
+Name the `data.newly_flagged` deliverables in plain words, not by slug path. An
+empty list means nothing became stale *this run* — `data.already_stale` and
+`data.downstream_count` say whether dependents are still waiting, so check them
+before sounding an all-clear. A `"success": false` (node not found, bad dir) is
+non-blocking — surface the error and proceed with the rework.
 
 ### 3. Empathize
 
@@ -443,7 +445,8 @@ python3 $CLAUDE_PLUGIN_ROOT/scripts/deliverable-graph.py <engagement-dir> \
 ```
 
 In the session summary name the `data.newly_flagged` deliverables in plain words,
-not by slug path; an empty list means nothing downstream is affected. A `"success": false` (node not found,
+not by slug path. An empty list means nothing became stale *this run*, not that
+nothing needs revisiting — report `data.already_stale` alongside it. A `"success": false` (node not found,
 bad dir) is non-blocking — the completion stands; surface the error and
 continue. If it does not survive, loop back — advance `dt_stage` to the stage
 the revision needs (often `define` or `ideate`) via the helper (a re-entry to

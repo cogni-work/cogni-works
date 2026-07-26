@@ -206,9 +206,11 @@ python3 $CLAUDE_PLUGIN_ROOT/scripts/deliverable-graph.py <engagement-dir> \
     cascade-stale <field-slug>/<deliverable-slug> --trigger deliverable_update
 ```
 
-Surface `data.newly_flagged` (the deliverables now marked stale). A
-`"success": false` (node not found, bad dir) is non-blocking — surface the
-error and proceed with the rework.
+Name the `data.newly_flagged` deliverables in plain words, not by slug path. An
+empty list means nothing became stale *this run* — `data.already_stale` and
+`data.downstream_count` say whether dependents are still waiting, so check them
+before sounding an all-clear. A `"success": false` (node not found, bad dir) is
+non-blocking — surface the error and proceed with the rework.
 
 ### 3. Empathize
 
@@ -442,8 +444,9 @@ python3 $CLAUDE_PLUGIN_ROOT/scripts/deliverable-graph.py <engagement-dir> \
     cascade-stale <field-slug>/<deliverable-slug> --trigger deliverable_update
 ```
 
-Surface `data.newly_flagged` in the session summary so the consultant knows
-which deliverables now need revisiting. A `"success": false` (node not found,
+In the session summary name the `data.newly_flagged` deliverables in plain words,
+not by slug path. An empty list means nothing became stale *this run*, not that
+nothing needs revisiting — report `data.already_stale` alongside it. A `"success": false` (node not found,
 bad dir) is non-blocking — the completion stands; surface the error and
 continue. If it does not survive, loop back — advance `dt_stage` to the stage
 the revision needs (often `define` or `ideate`) via the helper (a re-entry to
@@ -451,9 +454,10 @@ an earlier stage is permitted) and continue; `state` stays `in-progress`.
 
 ### 8. Close the Session
 
-Summarize: the deliverable's final state, the artifact path, key decisions
-logged, which personas challenged it, and the Test-stage promote-check outcome
-(assumptions promoted to the registry, or a recorded opt-out). Recommend the next step — the next
+Summarize in business terms, not raw state values or log ids: the deliverable is
+finished, the artifact path (kept as a path — it is there to look up), what was
+decided and why, which personas challenged it, and the Test-stage promote-check
+outcome (assumptions promoted to the registry, or a recorded opt-out). Recommend the next step — the next
 unstarted deliverable in the WBS (via the WBS dashboard skill when present in
 the plugin, or by reading the field manifests directly).
 

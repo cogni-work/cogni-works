@@ -49,8 +49,10 @@ cogni-consult/
 │       │                          owned by consult-personas step 5
 │       └── close-kb-deposit.md    Elected KB deposit + kb-deposit-waiver contract
 ├── output-styles/
-│   └── strategy-advisor.md        Executive-advisory voice register (opt-in,
-│                                  auto-discovered in the /config picker)
+│   ├── strategy-advisor.md        Executive-advisory voice register (opt-in,
+│   │                              auto-discovered in the /config picker)
+│   └── strategy-advisor-de.md     German sister register: same stance, German
+│                                  terminology + orthography rules
 ├── agents/
 │   ├── consult-dashboard-refresher.md  Milestone HTML dashboard refresh (haiku,
 │   │                              read-only, no theme prompt)
@@ -122,7 +124,7 @@ cogni-consult/
 - **Orchestrator, not producer** — manages engagement state; content work dispatches to existing plugins
 - **Read-only fan-out agents, single write owner** — parallelizable per-item judgment (Test-stage persona challenge, Empathize empathy-mapping, Test-gate framework-adherence review) is delegated to read-only agents that return `{success, data, error}` envelopes; the orchestrating skill merges the envelopes and owns every write. The persona-challenge write contract lives in exactly one place (consult-personas' challenge mode); the DT loop delegates instead of reimplementing. Together with structural validation and the persona challenge, the advisory adherence review completes the repo's Three-Layer Quality Gate; all gates are advisory — auto-walk never deadlocks. Dense fan-out/merge/idempotency contracts live in `references/orchestration/`, keeping the SKILL body under the 500-line cap
 - **Path references, not data copies** — cross-references via slugs/paths, no shared DB
-- **Voice in the output style, phase discipline in the skills** — the always-on executive-advisory *voice* lives in the `output-styles/strategy-advisor.md` output style (opt-in, fixed at session start); the diverge/converge *phase discipline* stays in the consult-* skills, which load contextually so they never fire outside an active engagement
+- **Voice in the output style, phase discipline in the skills** — the always-on executive-advisory *voice* lives in the output styles `output-styles/strategy-advisor.md` (EN-led) and `output-styles/strategy-advisor-de.md` (German sister register, terminology + orthography rules on top of the same stance), both opt-in and fixed at session start; the diverge/converge *phase discipline* stays in the consult-* skills, which load contextually so they never fire outside an active engagement. The two style files carry no shared reference — output styles do not load `references/`, so EN and DE must be kept in step deliberately
 
 ## Data Model
 

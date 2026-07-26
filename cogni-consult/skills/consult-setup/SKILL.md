@@ -94,7 +94,7 @@ The wrapper delegates to the cogni-workspace discovery helper with the cogni-con
 
 Close by confirming what exists (engagement directory, bound knowledge base, registry entry), pointing the consultant at the engagement-root `README.md` — the wayfinding front door that already renders the scaffold state and stays current as the engagement progresses — and recommending `consult-scope` as the next step — the SMART key question and five scoping dimensions anchor the engagement before any action field is derived. When the user wants to continue immediately, dispatch `Skill("cogni-consult:consult-scope")` in the same session; otherwise stop here and report that the engagement is ready for scoping.
 
-> **Strategy Advisor voice** — point the consultant at the Strategy Advisor output style this plugin ships (answer-first, MECE options). Enable it from the `/config` output-style picker; it's opt-in and fixed at session start, so set it before scoping begins.
+> **Strategy Advisor voice** — this plugin ships two advisory output styles: **Strategy Advisor** (EN-led, answer-first, MECE options) and **Strategy Advisor (DE)** for German-language engagements. Enable one from the `/config` output-style picker; it's opt-in and fixed at session start, so set it before scoping begins.
 
 ## Important Notes
 

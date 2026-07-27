@@ -33,6 +33,13 @@ records (their field contract lives in
   Two flags read alike but are not: `no open roles` means the project needs
   nobody right now, while `staffing unknown` means it never declared
   `open_roles`, so coverage cannot be read — never narrate it as covered.
+  The headline figure (`data.open_roles` and the `Open roles` tile) counts
+  unfilled roles on non-closed projects only — closed work is delivered or
+  lost, not live demand — so it matches the set `projects-staff` shortlists. A
+  `prospective` project still counts, so read it as live-and-pipeline demand,
+  not active-only. The closed project stays in the table with its `closed`
+  flag and still counts toward the `Projects` tile, so a shrinking open-role
+  total is not a missing project.
 - **Portfolio value**: projects grouped by `strategic_impact` (1–5), so the
   high-impact work is visible at a glance.
 - **Utilization**: the envelope carries an average-allocation figure and a

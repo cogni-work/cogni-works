@@ -26,7 +26,7 @@ Full reference: `cogni-docs/references/maturity-model.md`.
 
 ## Bump discipline
 
-The patch version bumps after **any** change to skills, agents, or structure. Plugin versions live in `.claude-plugin/plugin.json` and **must** be mirrored to `.claude-plugin/marketplace.json` for Claude Desktop's update detection — bumping one without the other ships an invisible update.
+The patch version bumps **post-merge**, automatically, for each plugin a merge actually touched — feature branches never author a version line. Plugin versions live in `.claude-plugin/plugin.json` and **must** be mirrored to `.claude-plugin/marketplace.json` for Claude Desktop's update detection — bumping one without the other ships an invisible update, which is why the `Version bump` workflow always edits the pair together.
 
 Marketplace sync is driven by git commit hash, but Desktop reads the marketplace.json version field for its update prompt.
 

@@ -36,7 +36,7 @@ Five cross-plugin pipelines have dedicated wiki pages: [[workflow-content-pipeli
 
 ## Versioning and maturity
 
-Plugin versions live in `.claude-plugin/plugin.json` and are mirrored to `.claude-plugin/marketplace.json` for Claude Desktop update detection. The patch version bumps after any change to skills, agents, or structure. Maturity is hard-derived from the version itself ([[concept-plugin-maturity-model]]) — `0.0.x` Incubating through `2.x.x+` Established — and READMEs carry an auto-generated maturity callout for pre-1.0 and archived plugins.
+Plugin versions live in `.claude-plugin/plugin.json` and are mirrored to `.claude-plugin/marketplace.json` for Claude Desktop update detection. The patch version bumps post-merge, automatically, for each plugin a merge touched — both files together, never in a feature branch. Maturity is hard-derived from the version itself ([[concept-plugin-maturity-model]]) — `0.0.x` Incubating through `2.x.x+` Established — and READMEs carry an auto-generated maturity callout for pre-1.0 and archived plugins.
 
 ## MCP servers
 

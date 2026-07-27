@@ -42,8 +42,11 @@ records (their field contract lives in
   rather than calling it portfolio-wide. With none declared at all,
   `data.avg_allocation` is `null` — read as unknown, not `0%`.
 
-Role labels are free strings, so an assignment naming a role that no open
-entry matches is surfaced as a warning rather than silently mis-counted.
+Role labels are free strings, so when a project lists `open_roles`, a label an
+assignment names that no entry matches is surfaced as a warning rather than
+silently mis-counted — but only then: a project with absent or empty
+`open_roles` yields no such warning, so a quiet warnings list is not proof the
+labels line up.
 
 ## Workflow
 

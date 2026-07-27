@@ -52,6 +52,56 @@ setup owns scaffolding and the knowledge-base binding.
   substitute for the user's choice or override the list-and-stop obligation.
   Only a name or slug explicitly named in the user's message may skip the list.
 
+Render that list as this table — never as raw field names:
+
+```
+# | Engagement                                                  | Zuletzt bearbeitet
+1 | Lean-Canvas-Schärfung cogni-work                            | 13.07.2026
+2 | Benchmark Skill- & Agent-Entwicklung · noch nicht geschärft | 11.07.2026
+3 | Marktzugang Mittelstand                                     | 02.07.2026
+4 | Serviceportfolio Nord                                       | 28.06.2026
+5 | Digitalisierung Werk 2 · noch nicht geschärft               | 21.06.2026
+
+Weitere 6 — sag „alle“ für die vollständige Liste.
+
+Nummer oder Name genügt. Danach zeige ich dir den Stand und einen nächsten Schritt.
+```
+
+Pad the name column to the widest rendered cell so the date column lines up —
+the suffixed rows usually set that width.
+
+Sort by last activity, newest first, breaking ties on engagement name ascending
+so the numbering is stable across a re-render. Number the rendered rows `1`,
+`2`, `3` — bare, never `#1`. Cap the table at five rows: with five or fewer
+engagements render every one and omit the overflow line entirely (never
+`Weitere 0`); above five, render the top five and set `N` to the remainder. On
+an „alle“ reply, re-render every engagement with continuous numbering and no
+overflow line — the closing line still applies, and the list-and-stop
+obligation above still holds.
+
+The number is a reply index into the list as most recently rendered, not a new
+pre-list skip signal — the matcher above is unchanged and still selects on a
+name or slug the user types. The table carries no slug and no `Scope` column;
+instead, where `scope_state` (the scoping-phase status, not the engagement's
+scope) is not `complete`, append ` · noch nicht geschärft` inside the
+engagement's name cell. The parenthetical in the obligation above enumerates
+the data to load, not the columns to render.
+
+`Zuletzt bearbeitet` is the newest `transitions[].timestamp` in
+`<path>/.metadata/execution-log.json` (`<path>` from discovery), date part only.
+Fall back to the engagement's root `updated` only when that log is absent,
+empty, or unreadable — per `references/data-model.md`, "Deliverable work never
+touches it", so root `updated` tracks scope edits rather than engagement
+freshness. When neither is available, sort the engagement last and render `—`.
+Read the log once per discovered engagement here, after discovery and before
+the sort; the single-engagement and named-engagement branches skip that cost
+entirely.
+
+German sessions render the strings above and dates as `TT.MM.JJJJ`; an English
+session uses the natural-language English equivalents and the same day-first
+date shape. The columns, sort, cap, overflow line, and closing line are the
+same in either language.
+
 Conduct the conversation in the resolved **interaction language** (workspace
 default, overridden by the user's message language) — independent of the
 engagement's `language` field, which is the deliverable axis. See
@@ -76,15 +126,24 @@ problem for the consultant to see, not to paper over).
 Lead with the key question, then one table row per action field:
 
 ```
-Engagement: <name> (<slug>) — scope config updated <date>
+Engagement: <name> — zuletzt bearbeitet <TT.MM.JJJJ>
 Key question: <key_question>
 
 | Action Field | Status | Deliverables | Next Deliverable |
 |--------------|--------|--------------|------------------|
-| market-evidence | complete | 2/2 complete | — |
-| portfolio-fit | in-progress | 1/3 complete | competitor-map (ideate · pyramid-principle) |
-| go-to-market | pending | 0/2 started | channel-strategy (empathize · —) |
+| Marktevidenz | complete | 2/2 complete | — |
+| Portfolio-Fit | in-progress | 1/3 complete | Wettbewerbskarte (ideate · pyramid-principle) |
+| Markteintritt | pending | 0/2 started | Kanalstrategie (empathize · —) |
 ```
+
+Name action fields and deliverables by the `title` in their `field.json`,
+falling back to the slug only when no title is stored — slugs are storage keys,
+not display names. `zuletzt bearbeitet` resolves exactly as in step 2; compute
+it for the selected engagement here when step 2's branch did not already.
+Step 2's language rule covers this table too: render the header label and the
+column headers in the interaction language, and dates in the same day-first
+shape. Action-field and deliverable titles are rendered as stored — never
+translated.
 
 `Deliverables` counts `complete` over total; `Next Deliverable` names the
 first non-complete deliverable with its `dt_stage` and stored

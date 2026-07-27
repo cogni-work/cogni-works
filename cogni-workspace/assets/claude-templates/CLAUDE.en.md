@@ -4,4 +4,4 @@
 
 - Respond in English unless the user switches language
 - Use concise, professional language
-- Technical terms, code identifiers, and filenames remain in English
+- Technical terms, code identifiers, and filenames remain in their English form when they must be named

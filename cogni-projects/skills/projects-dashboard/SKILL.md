@@ -27,26 +27,21 @@ directory rooted by `projects-portfolio.json` — and derives, from the entity
 records (their field contract lives in
 [`../../references/data-model.md`](../../references/data-model.md)):
 
-- **Staffing coverage** per project: a project lists the roles it still needs in
-  `open_roles`; a role counts as *filled* when a planned or active assignment for
-  that project names a matching role. The dashboard shows filled-vs-open plus a
-  one-word health flag that tells a partner at a glance whether a project is
-  covered, still waiting on people, or closed — and, importantly, distinguishes a
-  project that needs nobody right now from one whose staffing simply can't be read
-  because it declares no `open_roles` (surfaced as *staffing unknown*, not as
-  covered). When roles remain open, the flag also carries the open-vs-total count.
-
+- **Staffing coverage** per project: filled-vs-open roles plus a one-word
+  health flag. Coverage counts current commitments only — an assignment that
+  has finished no longer holds its role, so a role can reappear as open
+  without anyone editing the project. Two flags read alike but are not:
+  `no open roles` means the project needs nobody right now, while
+  `staffing unknown` means it never declared `open_roles`, so coverage cannot
+  be read — never narrate it as covered.
 - **Portfolio value**: projects grouped by `strategic_impact` (1–5), so the
   high-impact work is visible at a glance.
-- **Utilization**: `data.avg_allocation` (average consultant allocation) and
-  `data.fully_allocated` (consultants at or above 100%). When no consultant has a
-  usable `allocation_pct`, `data.avg_allocation` is `null` — read it as unknown,
-  not `0%`.
+- **Utilization**: the envelope carries an average-allocation figure and a
+  count of fully allocated consultants. With no usable `allocation_pct` on
+  any consultant, `data.avg_allocation` is `null` — read as unknown, not `0%`.
 
-Role labels are free strings, so an assignment naming a role that no open entry
-matches is surfaced as a warning rather than silently mis-counted. Any missing or
-malformed field produces a **partial snapshot with a warning**, never a hard
-failure — a portfolio mid-authoring still renders.
+Role labels are free strings, so an assignment naming a role that no open
+entry matches is surfaced as a warning rather than silently mis-counted.
 
 ## Workflow
 
@@ -98,8 +93,8 @@ A failure here is cosmetic — the dashboard is already written to `data.path`.
 - **The renderer is the source of truth for the flags and aggregates.**
   `scripts/render-dashboard.py` computes every health flag, the strategic-impact
   grouping, and the utilization figures; this section explains what the output
-  *means* so it can be narrated to a partner, not how it is computed. To change a
-  threshold or a flag rule, change the script, not this skill.
+  *means* so it can be narrated to a partner, not how it is computed. To
+  change a threshold or a flag rule, change the script, not this skill.
 - **Read-only.** The renderer never writes `projects-portfolio.json` (only
   `projects-entities` does, via `register-entity.py`) and never touches
   `.metadata/`. Re-running only rewrites `output/dashboard.html`.

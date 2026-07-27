@@ -222,6 +222,43 @@ def _project_health(filled, open_roles, status):
     return ("%d/%d roles open" % (total - filled, total), "warn")
 
 
+def _is_closed(status):
+    """Whether a project status means the work is over — delivered or lost.
+
+    Matches case-insensitively, the way staffing-score.py does, so the dashboard
+    and the staffing shortlist agree on which projects are still live.
+
+    Two older checks in this file — _project_health's `status == "closed"` and
+    the warning gate in _compute — compare the literal case-sensitively and are
+    deliberately left alone here, since switching them changes what a row
+    renders. That means a non-conforming `status: Closed` is read as closed by
+    this predicate but not by those two, so the tile and the row would disagree.
+    The schema only admits lowercase `closed`, so that split needs a record that
+    already failed validation; unify the three when one is willing to take the
+    rendering change.
+    """
+    return str(status or "").strip().lower() == "closed"
+
+
+def _open_role_demand(projects):
+    """Sum unfilled roles across the projects that still represent live demand.
+
+    A closed project is delivered or lost, so its declared roles are not work
+    anyone will staff — staffing-score.py drops the same set before scoring, and
+    the data model says as much. Counting them here made the headline number
+    disagree with the shortlist a partner acts on.
+
+    Only `closed` is excluded, never an `active` allowlist: `prospective` is a
+    valid status, and filtering to active alone would silently drop pipeline
+    demand — the same divergence in the other direction.
+    """
+    return sum(
+        p["roles_total"] - p["roles_filled"]
+        for p in projects
+        if not _is_closed(p["status"])
+    )
+
+
 def _compute(entities, warnings):
     """Derive per-project staffing + the portfolio value/utilization aggregates.
 
@@ -349,7 +386,7 @@ def _render_html(portfolio, projects, value_by_impact, util, warnings, theme):
         )
 
     avg = "—" if util["avg_allocation"] is None else "%d%%" % util["avg_allocation"]
-    total_open = sum(p["roles_total"] - p["roles_filled"] for p in projects)
+    total_open = _open_role_demand(projects)
 
     return """<!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8">
@@ -495,7 +532,7 @@ def main(argv):
             "consultants": util["consultants"],
             "avg_allocation": util["avg_allocation"],
             "fully_allocated": util["fully_allocated"],
-            "open_roles": sum(p["roles_total"] - p["roles_filled"] for p in projects),
+            "open_roles": _open_role_demand(projects),
             "warnings": warnings,
             "partial": bool(warnings),
         },

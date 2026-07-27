@@ -391,6 +391,50 @@ assert_html_lacks "8e url() beacon theme value rejected" \
 assert_html "8f safe accent still applied alongside rejected url()" \
   "#00ff88" "$PF8/output/dashboard.html"
 
+# Fixture 9 — a closed project's declared roles are not open demand. The closed
+# project stays visible in the table with its flag (9g/9h); only the headline
+# figure drops it, so a shrinking total is not a vanished project. 9c and 9f are
+# a pair because the envelope and the HTML tile are separate call sites in the
+# renderer — fixing one alone would ship a dashboard that disagrees with itself,
+# so asserting only one of them would let that regression through.
+PF9="$TMPROOT/closed"
+seed_portfolio "$PF9"
+write_entity "$PF9/projects/live-crm.md" <<'EOF'
+---
+type: project
+slug: live-crm
+name: Live CRM Rollout
+client: Northwind
+strategic_impact: 4
+status: active
+open_roles: [crm-lead]
+---
+# Live CRM Rollout
+EOF
+write_entity "$PF9/projects/legacy-migration.md" <<'EOF'
+---
+type: project
+slug: legacy-migration
+name: Legacy Migration
+client: Northwind
+strategic_impact: 3
+status: closed
+open_roles: [migration-lead, data-engineer]
+---
+# Legacy Migration
+EOF
+run "$PF9"
+HTML9="$PF9/output/dashboard.html"
+assert_json "9a closed-portfolio render succeeds" "d['success'] is True"
+assert_json "9b closed project still counted as a project" "d['data']['projects'] == 2"
+assert_json "9c open roles exclude the closed project" "d['data']['open_roles'] == 1"
+assert_json "9d closed project emits no warning" "d['data']['warnings'] == []"
+assert_json "9e clean snapshot" "d['data']['partial'] is False"
+assert_html "9f tile agrees with the envelope" \
+  '<div class="n">1</div><div class="l">Open roles</div>' "$HTML9"
+assert_html "9g closed project still listed" "Legacy Migration" "$HTML9"
+assert_html "9h closed health flag still rendered" ">closed</span>" "$HTML9"
+
 echo
 if [ "$failures" -eq 0 ]; then
   echo "All render-dashboard tests passed."

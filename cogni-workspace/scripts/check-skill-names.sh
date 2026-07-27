@@ -29,6 +29,10 @@ while IFS= read -r skill_md; do
     violations=$((violations + 1))
     continue
   fi
+  # A literal tab would forge the separator of the name<TAB>plugin pair below:
+  # awk -F'\t' would read the tab's tail as the plugin column and its head as the
+  # whole name, fabricating a duplicate against any real skill of that shorter name.
+  name=${name//$'\t'/ }
   rel_path="${skill_md#"$REPO_ROOT/"}"
   plugin=$(echo "$rel_path" | cut -d/ -f1)
   printf '%s\t%s\n' "$name" "$plugin" >> "$pairs_file"

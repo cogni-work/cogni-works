@@ -3,11 +3,21 @@
 #
 # Contract under test:
 #   - stays free of the bash-4 `declare -A` construct (static guard, enforced on
-#     every interpreter incl. CI bash 5.x) and, when a real bash 3.x is present
-#     (e.g. /bin/bash on macOS), runs to completion under it
-#   - detects a skill name duplicated across plugins (ERROR + non-zero exit)
-#   - detects a generic name without a domain prefix (ERROR + non-zero exit)
+#     every interpreter incl. CI bash 5.x)
+#   - detects a skill name duplicated across plugins (ERROR + exit 1)
+#   - detects a generic name without a domain prefix (ERROR + exit 1)
 #   - a clean, correctly-prefixed tree reports OK and exits 0
+#   - a literal tab inside a skill name does not fabricate a duplicate
+#
+# Every behavioural case runs under each interpreter in $INTERPRETERS: PATH
+# `bash` plus a real bash 3.x when the host has a distinct one (macOS /bin/bash
+# is 3.2.57). The second interpreter is what keeps the coverage honest — PATH
+# `bash` is frequently a newer homebrew build, and running only under it leaves
+# the script's *violation* path (the `${awk_violations:-0}` fold and the
+# `if [[ $violations -gt 0 ]]` branch) unexercised on the very interpreter this
+# check exists to support. A bash-4-ism reachable only from that path — say
+# `${var^^}` or `mapfile`, neither of which the static guard looks for — would
+# otherwise ship undetected.
 #
 # The check globs "$REPO_ROOT"/cogni-*/skills/*/SKILL.md, so each case builds a
 # throwaway fixture tree and points the script at it via the REPO_ROOT override.
@@ -25,6 +35,37 @@ failures=0
 pass() { echo "OK   $1"; }
 fail() { echo "FAIL $1"; failures=$((failures + 1)); }
 
+# Assert the script under test exists before anything reads it. Without this the
+# static guard (Case 4) would sed/grep a missing file, match nothing, and report a
+# spurious PASS — and on Linux/CI, where no bash 3.x exists, Case 4 is the only
+# portability assertion left standing.
+[ -f "$CHECK" ] || { fail "0 script under test not found at $CHECK"; exit 1; }
+
+# Interpreter matrix, derived once. Only *distinct* binaries are listed: on a
+# stock macOS with no homebrew bash, PATH `bash` already IS /bin/bash 3.2.57, and
+# running the same binary twice per case would buy no coverage.
+PATH_BASH="$(command -v bash)"
+BASH3=""
+if [ "$("$PATH_BASH" -c 'echo "${BASH_VERSINFO[0]}"' 2>/dev/null)" = "3" ]; then
+  BASH3="$PATH_BASH"
+else
+  for cand in /bin/bash /usr/bin/bash; do
+    [ -x "$cand" ] || continue
+    if [ "$("$cand" -c 'echo "${BASH_VERSINFO[0]}"' 2>/dev/null)" = "3" ]; then
+      BASH3="$cand"; break
+    fi
+  done
+fi
+INTERPRETERS="$PATH_BASH"
+if [ -n "$BASH3" ] && [ "$BASH3" != "$PATH_BASH" ]; then
+  INTERPRETERS="$INTERPRETERS $BASH3"
+fi
+if [ -n "$BASH3" ]; then
+  echo "INFO interpreters: $INTERPRETERS (real bash 3.x: $BASH3)"
+else
+  echo "SKIP no real bash 3.x found (checked PATH bash, /bin/bash, /usr/bin/bash) — behavioural cases run under $PATH_BASH only; static guard 4a still enforced"
+fi
+
 # mk_skill <fixture-root> <plugin> <skill-dir> <name>
 mk_skill() {
   local d="$1/$2/skills/$3"
@@ -32,74 +73,94 @@ mk_skill() {
   printf -- '---\nname: %s\ndescription: fixture skill\n---\n' "$4" > "$d/SKILL.md"
 }
 
-# run_check <fixture-root> [interpreter] -> sets RC and OUT
-# The interpreter defaults to `bash` (PATH), so Cases 1-3 are unchanged; Case 4b
-# passes a detected real bash 3.x to exercise the script under it.
+# run_check <fixture-root> <interpreter> -> sets RC and OUT
+# The interpreter is a required argument, so no call site can silently fall back
+# to PATH bash and quietly drop the bash-3.x half of the matrix.
 run_check() {
-  OUT="$(REPO_ROOT="$1" "${2:-bash}" "$CHECK" 2>&1)"; RC=$?
+  OUT="$(REPO_ROOT="$1" "$2" "$CHECK" 2>&1)"; RC=$?
+}
+
+# Assertions read RC/OUT from the last run_check. `case` does fixed-string
+# containment as a shell builtin, so an assertion costs no fork.
+assert_rc()        { [ "$RC" -eq "$1" ] && pass "$2" || fail "$2 — exit $RC, want $1: $OUT"; }
+assert_out_has()   { case "$OUT" in *"$1"*) pass "$2" ;; *) fail "$2 — missing '$1': $OUT" ;; esac; }
+assert_out_lacks() { case "$OUT" in *"$1"*) fail "$2 — unexpected '$1': $OUT" ;; *) pass "$2" ;; esac; }
+
+# Scoped to the bash 3.x interpreter: bash >= 4 executes `declare -A` fine and so
+# is structurally incapable of emitting this error. Reporting it green there would
+# be exactly the vacuous coverage the matrix above exists to eliminate.
+assert_no_bash4_error() {
+  [ "$BIN" = "$BASH3" ] || return 0
+  case "$OUT" in
+    *"declare: -A"*|*"typeset: -A"*) fail "$1 — bash-4 associative-array runtime error: $OUT" ;;
+    *) pass "$1" ;;
+  esac
 }
 
 # --- Case 1: clean, correctly-prefixed tree -> OK, exit 0 ---
 CLEAN="$TMPROOT/clean"
 mk_skill "$CLEAN" cogni-alpha alpha-setup alpha-setup
 mk_skill "$CLEAN" cogni-beta beta-dashboard beta-dashboard
-run_check "$CLEAN"
-[ "$RC" -eq 0 ] && pass "1a clean tree exits 0" || fail "1a clean tree exit ($RC)"
-printf '%s\n' "$OUT" | grep -qF "OK: All skill names follow the naming convention." \
-  && pass "1b clean tree reports OK" || fail "1b clean tree OK line ($OUT)"
+for BIN in $INTERPRETERS; do
+  run_check "$CLEAN" "$BIN"
+  assert_rc 0 "1a clean tree exits 0 ($BIN)"
+  assert_out_has "OK: All skill names follow the naming convention." "1b clean tree reports OK ($BIN)"
+  assert_no_bash4_error "1c clean tree free of bash-4 runtime error ($BIN)"
+done
 
 # --- Case 2: duplicate name across two plugins -> ERROR, exit 1 ---
+# 2c pins the FAIL summary because it is emitted from the violation branch, past
+# the `${awk_violations:-0}` fold — the stretch of the script the matrix exists
+# to reach under bash 3.x.
 DUP="$TMPROOT/dup"
 mk_skill "$DUP" cogni-alpha alpha-x iw-shared
 mk_skill "$DUP" cogni-beta beta-y iw-shared
-run_check "$DUP"
-[ "$RC" -ne 0 ] && pass "2a duplicate exits non-zero" || fail "2a duplicate exit ($RC)"
-printf '%s\n' "$OUT" | grep -qF "ERROR: Duplicate skill name 'iw-shared' in:" \
-  && pass "2b duplicate ERROR line" || fail "2b duplicate ERROR line ($OUT)"
+for BIN in $INTERPRETERS; do
+  run_check "$DUP" "$BIN"
+  assert_rc 1 "2a duplicate exits 1 ($BIN)"
+  assert_out_has "ERROR: Duplicate skill name 'iw-shared' in:" "2b duplicate ERROR line ($BIN)"
+  assert_out_has "FAIL: 1 naming violation(s) found." "2c duplicate FAIL summary ($BIN)"
+  assert_no_bash4_error "2d duplicate free of bash-4 runtime error ($BIN)"
+done
 
 # --- Case 3: generic name without a domain prefix -> ERROR, exit 1 ---
 GEN="$TMPROOT/gen"
 mk_skill "$GEN" cogni-alpha the-dash dashboard
-run_check "$GEN"
-[ "$RC" -ne 0 ] && pass "3a generic exits non-zero" || fail "3a generic exit ($RC)"
-printf '%s\n' "$OUT" | grep -qF "ERROR: Generic skill name 'dashboard' requires a domain prefix" \
-  && pass "3b generic ERROR line" || fail "3b generic ERROR line ($OUT)"
+for BIN in $INTERPRETERS; do
+  run_check "$GEN" "$BIN"
+  assert_rc 1 "3a generic exits 1 ($BIN)"
+  assert_out_has "ERROR: Generic skill name 'dashboard' requires a domain prefix" "3b generic ERROR line ($BIN)"
+  assert_no_bash4_error "3c generic free of bash-4 runtime error ($BIN)"
+done
 
 # --- Case 4: portability — the bash-4 `declare -A` construct must never return ---
-# 4a is interpreter-independent: a static check that fires even on CI's bash 5.x,
-# where a *runtime* declare-error check is inert (bash 5 runs `declare -A` fine).
-# This is the guard that actually catches a re-introduced bash-4-ism on CI.
-# Comments are stripped first so an *explanatory* `declare -A` mention (the script
-# documents why it avoids the construct) is not mistaken for a code re-introduction.
-# Matches the direct synonym `typeset -A` too, the other spelling of the same bash-4
-# associative-array declaration.
+# 4a is a source-text check, so it fires even on CI's bash 5.x, where a runtime
+# check is inert (bash 5 runs `declare -A` fine). It is the guard that catches a
+# re-introduced bash-4-ism on a host with no bash 3.x at all. Comments are
+# stripped first so the script's own explanation of why it avoids the construct is
+# not read as a re-introduction. `typeset -A` is the same declaration under its
+# other spelling. The live bash-3.x half of this contract runs inline as the
+# assert_no_bash4_error step of the fixture cases, which reach the violation path
+# as well as the OK branch.
 if sed 's/#.*//' "$CHECK" | grep -qE '(declare|typeset) -A'; then
   fail "4a check-skill-names.sh re-introduced 'declare -A'/'typeset -A' in code (bash-4 only)"
 else
   pass "4a check-skill-names.sh free of code-level associative-array declaration"
 fi
 
-# 4b/4c additionally exercise the script under a real bash 3.x when one exists
-# (macOS system /bin/bash is 3.2.57), so the exact runtime failure this PR fixes
-# is reproduced live. When no bash 3.x is present, emit a visible SKIP rather than
-# a silent green.
-BASH3=""
-for cand in /bin/bash /usr/bin/bash; do
-  [ -x "$cand" ] || continue
-  if [ "$("$cand" -c 'echo "${BASH_VERSINFO[0]}"' 2>/dev/null)" = "3" ]; then
-    BASH3="$cand"; break
-  fi
+# --- Case 5: a literal tab inside a skill name must not fabricate a duplicate ---
+# The script streams `name<TAB>plugin` pairs into `awk -F'\t'`, so an unsanitized
+# tab would let a name's tail be read as the plugin column — turning an unrelated
+# skill named `foo` into a phantom collision with `foo<TAB>bar`.
+TABF="$TMPROOT/tabname"
+mk_skill "$TABF" cogni-alpha alpha-tab "$(printf 'foo\tbar')"
+mk_skill "$TABF" cogni-beta beta-foo foo
+for BIN in $INTERPRETERS; do
+  run_check "$TABF" "$BIN"
+  assert_rc 0 "5a tabbed name exits 0 ($BIN)"
+  assert_out_lacks "ERROR: Duplicate skill name 'foo'" "5b tabbed name reports no phantom duplicate ($BIN)"
+  assert_no_bash4_error "5c tabbed name free of bash-4 runtime error ($BIN)"
 done
-if [ -n "$BASH3" ]; then
-  run_check "$CLEAN" "$BASH3"
-  [ "$RC" -eq 0 ] && pass "4b clean tree exits 0 under real bash 3.x ($BASH3)" \
-    || fail "4b clean tree exit under $BASH3 ($RC): $OUT"
-  printf '%s\n' "$OUT" | grep -q "declare: -A" \
-    && fail "4c 'declare: -A' runtime error under $BASH3" \
-    || pass "4c no 'declare: -A' runtime error under $BASH3"
-else
-  echo "SKIP 4b/4c no real bash 3.x found (checked /bin/bash /usr/bin/bash) — static guard 4a still enforced"
-fi
 
 if [ "$failures" -gt 0 ]; then
   echo ""

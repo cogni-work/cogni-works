@@ -267,7 +267,7 @@ Branch on the derived state, first match wins, and say *why*:
   for an `in-progress` or resumed deliverable, which the branches below own.)
 - **A deliverable is `in-progress`** → resume it where it stands; recommend
   `consult-design-thinking` naming the field, the deliverable, and its
-  `dt_stage` ("competitor-map is mid-ideate — pick the loop back up there").
+  `dt_stage` ("Competitor map is mid-ideate — pick the loop back up there").
 - **A deliverable is `complete` but its `persona_review` is `pending` or
   `in-progress`** → the acting-persona challenge hasn't closed; recommend
   `consult-personas` to run (or finish) the challenge pass.

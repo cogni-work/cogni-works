@@ -45,7 +45,7 @@ setup owns scaffolding and the knowledge-base binding.
   against discovery and select it directly; confirm only when the match is
   ambiguous.
 - **Multiple, and the user named none** → you MUST output the full engagement
-  list (name, slug, `scope_state`, scope config `updated`) and STOP for the
+  list, rendered as the table below, and STOP for the
   user's explicit choice. Never silently select or infer an engagement in this
   case. The active git branch, working-tree / uncommitted changes, and recent
   commit history are **not** authorized selection signals — they must never
@@ -84,8 +84,7 @@ pre-list skip signal — the matcher above is unchanged and still selects on a
 name or slug the user types. The table carries no slug and no `Scope` column;
 instead, where `scope_state` (the scoping-phase status, not the engagement's
 scope) is not `complete`, append ` · noch nicht geschärft` inside the
-engagement's name cell. The parenthetical in the obligation above enumerates
-the data to load, not the columns to render.
+engagement's name cell.
 
 `Zuletzt bearbeitet` is the newest `transitions[].timestamp` in
 `<path>/.metadata/execution-log.json` (`<path>` from discovery), date part only.
@@ -131,19 +130,22 @@ Key question: <key_question>
 
 | Action Field | Status | Deliverables | Next Deliverable |
 |--------------|--------|--------------|------------------|
-| Marktevidenz | complete | 2/2 complete | — |
-| Portfolio-Fit | in-progress | 1/3 complete | Wettbewerbskarte (ideate · pyramid-principle) |
-| Markteintritt | pending | 0/2 started | Kanalstrategie (empathize · —) |
+| Market Evidence | complete | 2/2 complete | — |
+| Portfolio Fit | in-progress | 1/3 complete | Competitor map (ideate · pyramid-principle) |
+| Go-to-Market | pending | 0/2 started | Channel strategy (empathize · —) |
 ```
+
+That is a German session: the `zuletzt bearbeitet` label follows the
+interaction language, while the action-field and deliverable names are the
+stored titles — here English, because an engagement's stored titles keep their
+technical terms whatever the session language.
 
 Name action fields and deliverables by the `title` in their `field.json`,
 falling back to the slug only when no title is stored — slugs are storage keys,
-not display names. `zuletzt bearbeitet` resolves exactly as in step 2; compute
-it for the selected engagement here when step 2's branch did not already.
-Step 2's language rule covers this table too: render the header label and the
-column headers in the interaction language, and dates in the same day-first
-shape. Action-field and deliverable titles are rendered as stored — never
-translated.
+not display names. Titles are rendered as stored, never translated.
+`zuletzt bearbeitet` resolves exactly as in step 2; compute it for the selected
+engagement here when step 2's branch did not already. Step 2's language rule
+covers the header label and the date shape in this table too.
 
 `Deliverables` counts `complete` over total; `Next Deliverable` names the
 first non-complete deliverable with its `dt_stage` and stored

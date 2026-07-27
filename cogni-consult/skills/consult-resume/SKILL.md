@@ -45,12 +45,65 @@ setup owns scaffolding and the knowledge-base binding.
   against discovery and select it directly; confirm only when the match is
   ambiguous.
 - **Multiple, and the user named none** → you MUST output the full engagement
-  list (name, slug, `scope_state`, scope config `updated`) and STOP for the
+  list, rendered as the table below, and STOP for the
   user's explicit choice. Never silently select or infer an engagement in this
   case. The active git branch, working-tree / uncommitted changes, and recent
   commit history are **not** authorized selection signals — they must never
   substitute for the user's choice or override the list-and-stop obligation.
   Only a name or slug explicitly named in the user's message may skip the list.
+
+Render that list as this table — never as raw field names:
+
+```
+# | Engagement                                                  | Zuletzt bearbeitet
+1 | Lean-Canvas-Schärfung cogni-work                            | 13.07.2026
+2 | Benchmark Skill- & Agent-Entwicklung · noch nicht geschärft | 11.07.2026
+3 | Marktzugang Mittelstand                                     | 02.07.2026
+4 | Serviceportfolio Nord                                       | 28.06.2026
+5 | Digitalisierung Werk 2 · noch nicht geschärft               | 21.06.2026
+
+Weitere 6 — sag „alle“ für die vollständige Liste.
+
+Nummer oder Name genügt. Danach zeige ich dir den Stand und einen nächsten Schritt.
+```
+
+Pad the name column to the widest rendered cell so the date column lines up —
+the suffixed rows usually set that width.
+
+Sort by last activity, newest first, breaking ties on engagement name ascending
+so the numbering is stable across a re-render. Number the rendered rows `1`,
+`2`, `3` — bare, never `#1`. Cap the table at five rows: with five or fewer
+engagements render every one and omit the overflow line entirely (never
+`Weitere 0`); above five, render the top five and set `N` to the remainder. On
+an „alle“ reply, re-render every engagement with continuous numbering and no
+overflow line — the closing line still applies, and the list-and-stop
+obligation above still holds.
+
+The number is a reply index into the list as most recently rendered, not a new
+pre-list skip signal — the matcher above is unchanged and still selects on a
+name or slug the user types. The table carries no slug and no `Scope` column;
+instead, where `scope_state` (the scoping-phase status, not the engagement's
+scope) is not `complete`, append ` · noch nicht geschärft` inside the
+engagement's name cell.
+
+`Zuletzt bearbeitet` is the newest `transitions[].timestamp` in
+`<path>/.metadata/execution-log.json` (`<path>` from discovery), date part only.
+Fall back to the engagement's root `updated` only when that log is absent,
+empty, or unreadable — per `references/data-model.md`, "Deliverable work never
+touches it", so root `updated` tracks scope edits rather than engagement
+freshness. When neither is available, sort the engagement last and render `—`.
+Read the log once per discovered engagement here, after discovery and before
+the sort; the single-engagement and named-engagement branches skip that cost
+entirely.
+
+German sessions render the strings above and dates as `TT.MM.JJJJ`. An English
+session renders the same table, so it is seeded by example too rather than left
+to improvise: header `# | Engagement | Last worked on`, row suffix
+` · not yet scoped`, overflow line `N more — say “all” for the full list.`, and
+closing line `A number or a name is enough. Then I'll show you where it stands
+and one next step.` Dates keep the same day-first shape, so a date reads the
+same way in either session. The columns, sort, cap, and the list-and-stop
+obligation are identical in both languages.
 
 Conduct the conversation in the resolved **interaction language** (workspace
 default, overridden by the user's message language) — independent of the
@@ -76,15 +129,30 @@ problem for the consultant to see, not to paper over).
 Lead with the key question, then one table row per action field:
 
 ```
-Engagement: <name> (<slug>) — scope config updated <date>
+Engagement: <name> — zuletzt bearbeitet <TT.MM.JJJJ>
 Key question: <key_question>
 
 | Action Field | Status | Deliverables | Next Deliverable |
 |--------------|--------|--------------|------------------|
-| market-evidence | complete | 2/2 complete | — |
-| portfolio-fit | in-progress | 1/3 complete | competitor-map (ideate · pyramid-principle) |
-| go-to-market | pending | 0/2 started | channel-strategy (empathize · —) |
+| Market Evidence | complete | 2/2 complete | — |
+| Portfolio Fit | in-progress | 1/3 complete | Competitor map (ideate · pyramid-principle) |
+| Go-to-Market | pending | 0/2 started | Channel strategy (empathize · —) |
 ```
+
+That is a German session: the `zuletzt bearbeitet` label follows the
+interaction language, while the action-field and deliverable names are the
+stored titles — here English, because an engagement's stored titles keep their
+technical terms whatever the session language.
+
+Name action fields by the `title` read from
+`<engagement-path>/action-fields/<slug>/field.json` — step 3's rollup carries a
+field's `slug` but not its title — and deliverables by the `title` the rollup
+passes through with each deliverable. Fall back to the slug only when no title
+is stored; slugs are storage keys, not display names, and titles are rendered
+as stored, never translated.
+`zuletzt bearbeitet` resolves exactly as in step 2; compute it for the selected
+engagement here when step 2's branch did not already. Step 2's language rule
+covers the header label and the date shape in this table too.
 
 `Deliverables` counts `complete` over total; `Next Deliverable` names the
 first non-complete deliverable with its `dt_stage` and stored
@@ -199,7 +267,7 @@ Branch on the derived state, first match wins, and say *why*:
   for an `in-progress` or resumed deliverable, which the branches below own.)
 - **A deliverable is `in-progress`** → resume it where it stands; recommend
   `consult-design-thinking` naming the field, the deliverable, and its
-  `dt_stage` ("competitor-map is mid-ideate — pick the loop back up there").
+  `dt_stage` ("Competitor map is mid-ideate — pick the loop back up there").
 - **A deliverable is `complete` but its `persona_review` is `pending` or
   `in-progress`** → the acting-persona challenge hasn't closed; recommend
   `consult-personas` to run (or finish) the challenge pass.

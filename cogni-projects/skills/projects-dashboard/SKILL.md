@@ -28,17 +28,19 @@ records (their field contract lives in
 [`../../references/data-model.md`](../../references/data-model.md)):
 
 - **Staffing coverage** per project: filled-vs-open roles plus a one-word
-  health flag. Coverage counts current commitments only — an assignment that
-  has finished no longer holds its role, so a role can reappear as open
-  without anyone editing the project. Two flags read alike but are not:
-  `no open roles` means the project needs nobody right now, while
-  `staffing unknown` means it never declared `open_roles`, so coverage cannot
-  be read — never narrate it as covered.
+  health flag. Only a live commitment covers a role — a finished assignment
+  releases it, so a role can reappear as open with no edit to the project.
+  Two flags read alike but are not: `no open roles` means the project needs
+  nobody right now, while `staffing unknown` means it never declared
+  `open_roles`, so coverage cannot be read — never narrate it as covered.
 - **Portfolio value**: projects grouped by `strategic_impact` (1–5), so the
   high-impact work is visible at a glance.
 - **Utilization**: the envelope carries an average-allocation figure and a
-  count of fully allocated consultants. With no usable `allocation_pct` on
-  any consultant, `data.avg_allocation` is `null` — read as unknown, not `0%`.
+  count of fully allocated consultants. The average covers only consultants
+  who declare `allocation_pct` — the rest are dropped silently, so the
+  envelope's `consultants` count is not its denominator; caveat the figure
+  rather than calling it portfolio-wide. With none declared at all,
+  `data.avg_allocation` is `null` — read as unknown, not `0%`.
 
 Role labels are free strings, so an assignment naming a role that no open
 entry matches is surfaced as a warning rather than silently mis-counted.
@@ -99,10 +101,9 @@ A failure here is cosmetic — the dashboard is already written to `data.path`.
   `projects-entities` does, via `register-entity.py`) and never touches
   `.metadata/`. Re-running only rewrites `output/dashboard.html`.
 - **Partial snapshots are expected mid-authoring.** A project without a
-  `strategic_impact`, a project that omits `open_roles`, an assignment whose
-  `role` does not match any `open_roles` label, or an entity file that cannot be
-  read or decoded is reported in the warnings list, not treated as an error. One
-  bad record never costs the rest of the portfolio.
+  `strategic_impact`, a project that omits `open_roles`, or an entity file
+  that cannot be read or decoded is reported in the warnings list, not
+  treated as an error. One bad record never costs the rest of the portfolio.
 - **Theming is optional.** The dashboard renders with a built-in palette;
   pass `--design-variables <path.json>` to override colors when a themed look is
   wanted.

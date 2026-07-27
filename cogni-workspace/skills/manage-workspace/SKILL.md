@@ -248,9 +248,20 @@ bash ${CLAUDE_PLUGIN_ROOT}/scripts/install-workspace-deps.sh --force
 Same fail-soft contract as Init Mode Step 3.5: warn and continue if `python3` /
 the `venv` module / the network is unavailable — never block the update.
 
-### 4. Update Output Styles and Theme Template
+### 4. Update Output Styles, CLAUDE.md Templates, and Theme Template
 
 Copy latest output-style files from `${CLAUDE_PLUGIN_ROOT}/assets/output-styles/` to `.claude/output-styles/`, overwriting existing ones (these are plugin-managed, not user-customized).
+
+Refresh both language templates in `.claude/templates/`. Like the output styles these are plugin-managed — the Obsidian Terminal launcher copies from them to the workspace root on every per-session language switch, so a correction to a template only reaches an existing workspace if this step runs. Init Mode installs them; without the refresh here they stay at whatever version was current when the workspace was created:
+
+```bash
+mkdir -p "${WORKSPACE_DIR}/.claude/templates"
+cp "${CLAUDE_PLUGIN_ROOT}/assets/claude-templates/CLAUDE.en.md" \
+   "${CLAUDE_PLUGIN_ROOT}/assets/claude-templates/CLAUDE.de.md" \
+   "${WORKSPACE_DIR}/.claude/templates/"
+```
+
+Do **not** overwrite the workspace-root `CLAUDE.md` here. Nothing declares it plugin-managed the way the output styles are declared above, and it is the natural place for a user to add project-specific instructions on top of the language rules. Compare it against `.claude/templates/CLAUDE.${LANGUAGE}.md` instead; if they differ, show the difference and ask whether to adopt the updated template, keep the current file, or merge by hand — defaulting to keeping the current file.
 
 Refresh `_template/theme.md` from `${CLAUDE_PLUGIN_ROOT}/themes/_template/`. Preserve all user-created themes.
 

@@ -8,7 +8,7 @@
 - Bei Workspace-Pfaden Umgebungsvariablen verwenden (z.B. `$COGNI_RESEARCH_ROOT`) statt absolute Pfade
 - Bei Dateioperationen relative Pfade vom Workspace-Root anzeigen
 - Bei Multi-Plugin-Operationen angeben, welches Plugin welches Artefakt besitzt
-- Fachbegriffe, Code-Bezeichner und Dateinamen bleiben auf Englisch
+- Fachbegriffe, Code-Bezeichner und Dateinamen bleiben in ihrer englischen Form, wenn sie genannt werden müssen
 
 ## Intent Router
 

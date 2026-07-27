@@ -528,6 +528,131 @@ assert_no_traceback "10g no traceback on stderr" "$STDERR10"
 assert_html "10h healthy project still rendered" \
   "Sound Delivery" "$PF10/output/dashboard.html"
 
+# ---------------------------------------------------------------------------
+# Fixture 11 — a role label that is not text. The same parse-time int coercion
+# that hit `status` reaches `role`, and lands harder: _compute sorts the
+# covered-role set, and Python refuses to order a str against an int, so one
+# `role: 2` next to any text role raised and cost the whole render.
+#
+# 11c and 11d are the truthy/falsy pair, mirroring 10c/10d — a guard keyed on
+# truthiness rather than on None would let `role: 0` through unremarked.
+#
+# 11f, 11g and 11k are the symmetry guard, and they are the reason this fixture
+# carries a second project. `open_roles` entries are coerced by the same parser,
+# so stringifying only the assignment side would fix the crash and introduce
+# something quieter: `symmetry`'s numeric role matches its numeric open_roles
+# entry today, and would stop matching, reporting a filled role as open. With
+# only one side coerced, 11f reads 1 instead of 0.
+# ---------------------------------------------------------------------------
+PF11="$TMPROOT/nonstring-role"
+seed_portfolio "$PF11"
+write_entity "$PF11/projects/mixed.md" <<'EOF'
+---
+type: project
+slug: mixed
+name: Mixed Roles
+client: MixCo
+strategic_impact: 3
+status: active
+open_roles: [lead]
+---
+# Mixed Roles
+EOF
+write_entity "$PF11/projects/symmetry.md" <<'EOF'
+---
+type: project
+slug: symmetry
+name: Symmetry Check
+client: SymCo
+strategic_impact: 2
+status: active
+open_roles: [2026]
+---
+# Symmetry Check
+EOF
+# Every assignment names a project that exists — _compute filters on the
+# project before it reads the role, so an orphan would never reach the
+# coercion and the fixture would pass against the unfixed script. `active` is
+# in ACTIVE_ASSIGNMENT_STATES, so these genuinely reach the role read.
+write_entity "$PF11/assignments/numeric-role.md" <<'EOF'
+---
+type: assignment
+slug: ada--mixed
+consultant: ada
+project: mixed
+role: 2
+start_date: 2026-02-01
+end_date: 2026-08-01
+status: active
+---
+# assignment
+EOF
+write_entity "$PF11/assignments/text-role.md" <<'EOF'
+---
+type: assignment
+slug: bo--mixed
+consultant: bo
+project: mixed
+role: lead
+start_date: 2026-02-01
+end_date: 2026-08-01
+status: active
+---
+# assignment
+EOF
+write_entity "$PF11/assignments/zero-role.md" <<'EOF'
+---
+type: assignment
+slug: cy--mixed
+consultant: cy
+project: mixed
+role: 0
+start_date: 2026-02-01
+end_date: 2026-08-01
+status: active
+---
+# assignment
+EOF
+write_entity "$PF11/assignments/symmetry-role.md" <<'EOF'
+---
+type: assignment
+slug: di--symmetry
+consultant: di
+project: symmetry
+role: 2026
+start_date: 2026-02-01
+end_date: 2026-08-01
+status: active
+---
+# assignment
+EOF
+
+# Direct invoke for the same reason Fixture 10 does it — run() discards stderr
+# and 11i asserts a traceback never reached it.
+STDERR11="$TMPROOT/stderr11.txt"
+LAST_JSON="$(python3 "$SCRIPT" "$PF11" 2>"$STDERR11" | tail -n 1)"
+HTML11="$PF11/output/dashboard.html"
+
+assert_json "11a non-string role still succeeds" "d['success'] is True"
+assert_json "11b marked partial"                 "d['data']['partial'] is True"
+assert_json "11c non-string role surfaced by file" \
+  "any('non-string role' in w and 'numeric-role.md' in w for w in d['data']['warnings'])"
+assert_json "11d falsy zero role still warns" \
+  "any('non-string role' in w and 'zero-role.md' in w for w in d['data']['warnings'])"
+assert_json "11e non-string open_roles entry surfaced by project" \
+  "any('non-string open_roles entry' in w and 'Symmetry Check' in w for w in d['data']['warnings'])"
+assert_json "11f numeric role still fills its numeric open_role" \
+  "d['data']['open_roles'] == 0"
+# Scoped to Symmetry Check on purpose — Mixed Roles legitimately reports its
+# coerced '0' and '2' roles as matching no open_roles label.
+assert_json "11g symmetric match raises no mismatch warning" \
+  "not any('matches no open_roles label' in w and 'Symmetry Check' in w for w in d['data']['warnings'])"
+assert_json "11h every project still counted"    "d['data']['projects'] == 2"
+assert_no_traceback "11i no traceback on stderr" "$STDERR11"
+assert_html "11j symmetry project still rendered" "Symmetry Check" "$HTML11"
+assert_html "11k open-roles tile agrees with the envelope" \
+  '<div class="n">0</div><div class="l">Open roles</div>' "$HTML11"
+
 echo
 if [ "$failures" -eq 0 ]; then
   echo "All render-dashboard tests passed."

@@ -112,10 +112,10 @@ A failure here is cosmetic — the dashboard is already written to `data.path`.
   `.metadata/`. Re-running only rewrites `output/dashboard.html`.
 - **Partial snapshots are expected mid-authoring.** A project without a
   `strategic_impact`, a project that omits `open_roles`, an entity whose
-  `status` is not text (an all-digit value such as `status: 2026` is read as a
-  number, then coerced back to text), or an entity file that cannot be read or
-  decoded is reported in the warnings list, not treated as an error. One bad
-  record never costs the rest of the portfolio.
+  `status` or role label is not text (an all-digit value such as `status: 2026`
+  or `role: 2` is read as a number, then coerced back to text), or an entity
+  file that cannot be read or decoded is reported in the warnings list, not
+  treated as an error. One bad record never costs the rest of the portfolio.
 - **Theming is optional.** The dashboard renders with a built-in palette;
   pass `--design-variables <path.json>` to override colors when a themed look is
   wanted.

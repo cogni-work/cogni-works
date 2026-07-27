@@ -240,29 +240,50 @@ def _is_closed(status):
     return str(status or "").strip().lower() == "closed"
 
 
-def _status_text(raw, label, warnings):
-    """Read an entity's `status` as text, warning when it was not text already.
+def _text_field(raw, field, label, warnings):
+    """Read a parsed entity field as text, warning when it was not text already.
 
     The frontmatter parser this script borrows from validate-entities.py coerces
     any all-digit scalar to an int before the schema enum is ever checked — and
-    the renderer never runs that validator. So a hand-edited `status: 2026`
-    arrives here as an int, and calling a str method on it straight raises
-    inside _compute, which no local handler catches: the module-level catch-all
-    then discards every warning collected so far and fails the whole render.
-    That inverts this script's contract, where one bad record costs a warning
-    and nothing else.
+    the renderer never runs that validator. So a hand-edited `status: 2026` or
+    `role: 2` arrives here as an int. Comparing or calling a str method on it
+    raises inside _compute, which no local handler catches: the module-level
+    catch-all then discards every warning collected so far and fails the whole
+    render. That inverts this script's contract, where one bad record costs a
+    warning and nothing else.
 
-    The guard keys on `raw is not None`, deliberately not on truthiness —
-    `status: 0` coerces to a falsy int, which a truthy check would silently
-    normalize to "unknown" with no warning at all.
+    `role` fails harder than `status`, because _compute sorts the covered-role
+    set and Python refuses to order a str against an int — one numeric role
+    beside any text role was enough.
+
+    Both sides of a comparison must come through here, not just the side that
+    raised. `open_roles` entries are coerced by the same parser, so normalizing
+    only the assignment role would trade the crash for something quieter and
+    worse: a numeric role that matches its numeric open_roles entry today would
+    stop matching, silently reporting a filled role as open.
+
+    The guard keys on `raw is not None`, deliberately not on truthiness — a
+    falsy `status: 0` or `role: 0` would otherwise normalize away with no
+    warning at all.
+
+    Normalizing every text field once, where the entities are parsed, would
+    close this class rather than its instances, and retire this helper with it.
+    That is tracked as its own change: it decides the string-typed field set for
+    every entity type, and staffing-score.py reads the same parser, where a
+    numeric role label scores every consultant at zero fit instead of raising.
     """
     if raw is None:
         return ""
     if not isinstance(raw, str):
         warnings.append(
-            "%s has a non-string status %r — coerced to text; fix the record" % (label, raw)
+            "%s has a non-string %s %r — coerced to text; fix the record" % (label, field, raw)
         )
     return str(raw).strip()
+
+
+def _status_text(raw, label, warnings):
+    """Read an entity's `status` as text. See _text_field for the why."""
+    return _text_field(raw, "status", label, warnings)
 
 
 def _open_role_demand(projects):
@@ -303,7 +324,10 @@ def _compute(entities, warnings):
         label = "project %s" % (proj.get("name") or slug or "(unnamed)")
         # An undeclared open_roles is not an empty one — see _normalize_open_roles.
         declared_roles = _normalize_open_roles(proj)
-        open_roles = declared_roles or []
+        # Coerced so both sides of the covered/open_roles comparison are text.
+        # Length is preserved, so roles_total and _project_health still see the
+        # declared count.
+        open_roles = [_text_field(r, "open_roles entry", label, warnings) for r in (declared_roles or [])]
         status = _status_text(proj.get("status"), label, warnings)
         if declared_roles is None and status != "closed":
             warnings.append("%s has no open_roles — staffing status unknown" % label)
@@ -316,7 +340,7 @@ def _compute(entities, warnings):
                 continue
             a_label = "assignment %s" % (a.get("_file") or a.get("slug") or "(unknown)")
             if _status_text(a.get("status"), a_label, warnings) in ACTIVE_ASSIGNMENT_STATES:
-                role = a.get("role")
+                role = _text_field(a.get("role"), "role", a_label, warnings)
                 if role:
                     covered.add(role)
         # An assignment role that matches no listed open role may be a label

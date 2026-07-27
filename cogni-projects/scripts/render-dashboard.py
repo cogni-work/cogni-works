@@ -240,6 +240,31 @@ def _is_closed(status):
     return str(status or "").strip().lower() == "closed"
 
 
+def _status_text(raw, label, warnings):
+    """Read an entity's `status` as text, warning when it was not text already.
+
+    The frontmatter parser this script borrows from validate-entities.py coerces
+    any all-digit scalar to an int before the schema enum is ever checked — and
+    the renderer never runs that validator. So a hand-edited `status: 2026`
+    arrives here as an int, and calling a str method on it straight raises
+    inside _compute, which no local handler catches: the module-level catch-all
+    then discards every warning collected so far and fails the whole render.
+    That inverts this script's contract, where one bad record costs a warning
+    and nothing else.
+
+    The guard keys on `raw is not None`, deliberately not on truthiness —
+    `status: 0` coerces to a falsy int, which a truthy check would silently
+    normalize to "unknown" with no warning at all.
+    """
+    if raw is None:
+        return ""
+    if not isinstance(raw, str):
+        warnings.append(
+            "%s has a non-string status %r — coerced to text; fix the record" % (label, raw)
+        )
+    return str(raw).strip()
+
+
 def _open_role_demand(projects):
     """Sum unfilled roles across the projects that still represent live demand.
 
@@ -279,13 +304,18 @@ def _compute(entities, warnings):
         # An undeclared open_roles is not an empty one — see _normalize_open_roles.
         declared_roles = _normalize_open_roles(proj)
         open_roles = declared_roles or []
-        status = (proj.get("status") or "").strip()
+        status = _status_text(proj.get("status"), label, warnings)
         if declared_roles is None and status != "closed":
             warnings.append("%s has no open_roles — staffing status unknown" % label)
 
         covered = set()
         for a in assignments:
-            if a.get("project") == slug and (a.get("status") or "").strip() in ACTIVE_ASSIGNMENT_STATES:
+            # Filter first — an assignment belonging to another project must not
+            # have its status read here, or it would warn once per project.
+            if a.get("project") != slug:
+                continue
+            a_label = "assignment %s" % (a.get("_file") or a.get("slug") or "(unknown)")
+            if _status_text(a.get("status"), a_label, warnings) in ACTIVE_ASSIGNMENT_STATES:
                 role = a.get("role")
                 if role:
                     covered.add(role)

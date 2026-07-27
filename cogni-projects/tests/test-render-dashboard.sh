@@ -63,6 +63,17 @@ assert_html_lacks() {
   fi
 }
 
+# Every "the renderer degraded instead of crashing" fixture needs this, and the
+# crash signature belongs in one place — widening it later should be one edit.
+assert_no_traceback() {
+  local label="$1" file="$2"
+  if grep -qF 'Traceback' "$file"; then
+    fail "$label" "traceback present: $(head -3 "$file")"
+  else
+    pass "$label"
+  fi
+}
+
 seed_portfolio() {
   # $1 = portfolio dir. Seeds a manifest + entity subdirs.
   local pf="$1"
@@ -327,11 +338,7 @@ assert_json "6e warns on unknown staffing (both shapes)" \
   "sum('staffing status unknown' in w for w in d['data']['warnings']) == 2"
 assert_json "6f warns on undecodable file" \
   "any('cannot read' in w and 'latin1' in w for w in d['data']['warnings'])"
-if grep -qF 'Traceback' "$STDERR6"; then
-  fail "6g no traceback on stderr" "traceback present: $(head -3 "$STDERR6")"
-else
-  pass "6g no traceback on stderr"
-fi
+assert_no_traceback "6g no traceback on stderr" "$STDERR6"
 assert_html "6h unknown staffing flagged in HTML" \
   "staffing unknown" "$PF6/output/dashboard.html"
 
@@ -434,6 +441,92 @@ assert_html "9f tile agrees with the envelope" \
   '<div class="n">1</div><div class="l">Open roles</div>' "$HTML9"
 assert_html "9g closed project still listed" "Legacy Migration" "$HTML9"
 assert_html "9h closed health flag still rendered" ">closed</span>" "$HTML9"
+
+# ---------------------------------------------------------------------------
+# Fixture 10 — a status that is not text. The frontmatter parser coerces an
+# all-digit scalar to an int before any enum check runs, so `status: 2026`
+# reached a str method and raised, and the module-level catch-all then threw
+# away every warning collected so far — one hand-edited record cost the whole
+# dashboard. 10c and 10d are a pair: `2026` used to crash while `0` is *falsy*
+# and used to normalize silently to "unknown", so a guard keyed on truthiness
+# rather than on None would pass one and fail the other.
+# ---------------------------------------------------------------------------
+PF10="$TMPROOT/nonstring-status"
+seed_portfolio "$PF10"
+write_entity "$PF10/projects/numeric-status.md" <<'EOF'
+---
+type: project
+slug: numeric-status
+name: Numeric Status
+client: NumCo
+strategic_impact: 3
+status: 2026
+open_roles: [lead]
+---
+# Numeric Status
+EOF
+write_entity "$PF10/projects/zero-status.md" <<'EOF'
+---
+type: project
+slug: zero-status
+name: Zero Status
+client: ZeroCo
+strategic_impact: 2
+status: 0
+open_roles: [lead]
+---
+# Zero Status
+EOF
+write_entity "$PF10/projects/sound.md" <<'EOF'
+---
+type: project
+slug: sound
+name: Sound Delivery
+client: SoundCo
+strategic_impact: 4
+status: active
+open_roles: [architect]
+---
+# Sound Delivery
+EOF
+# `project: sound` must name a real project — _compute filters on the project
+# before it reads an assignment's status, so an orphan assignment would never
+# reach the coercion and the fixture would pass against the unfixed script.
+write_entity "$PF10/assignments/numeric-assignment.md" <<'EOF'
+---
+type: assignment
+slug: rena--sound
+consultant: rena
+project: sound
+role: architect
+start_date: 2026-02-01
+end_date: 2026-08-01
+status: 1
+---
+# assignment
+EOF
+
+# The shared run() helper discards stderr, so invoke directly the way Fixture 6
+# does — 10g asserts on the absence of a traceback.
+STDERR10="$TMPROOT/stderr10.txt"
+LAST_JSON="$(python3 "$SCRIPT" "$PF10" 2>"$STDERR10" | tail -n 1)"
+
+assert_json "10a non-string status still succeeds" "d['success'] is True"
+assert_json "10b marked partial"                   "d['data']['partial'] is True"
+assert_json "10c falsy int status still warns" \
+  "any('non-string status' in w and 'Zero Status' in w for w in d['data']['warnings'])"
+assert_json "10d project surfaced by name" \
+  "any('non-string status' in w and 'Numeric Status' in w for w in d['data']['warnings'])"
+# The assignment is named by its relative path — _read_entities sets _file on
+# every kept entity, while slug is optional frontmatter.
+assert_json "10e assignment surfaced by file" \
+  "any('non-string status' in w and 'numeric-assignment.md' in w for w in d['data']['warnings'])"
+assert_json "10f every project still counted"      "d['data']['projects'] == 3"
+assert_no_traceback "10g no traceback on stderr" "$STDERR10"
+# A needle without quote characters: warnings reach the HTML through _esc, which
+# rewrites the quotes %r puts around a value.
+assert_html "10h healthy project still rendered" \
+  "Sound Delivery" "$PF10/output/dashboard.html"
 
 echo
 if [ "$failures" -eq 0 ]; then

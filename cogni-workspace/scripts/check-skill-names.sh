@@ -17,8 +17,12 @@ GENERIC_WORDS="setup scan ingest export dashboard verify bridge catalog reader c
 
 violations=0
 
-# Collect one name<TAB>plugin pair per SKILL.md frontmatter. An empty name is a
-# violation surfaced here (the awk pass below only sees named skills).
+# Collect one name<TAB>plugin pair per SKILL.md frontmatter; the awk pass below
+# only ever sees named skills. The -z branch below is a belt-and-braces guard, not
+# the live path for a nameless SKILL.md: under `set -euo pipefail` the grep|sed
+# pipeline already exits non-zero on a missing `name:` line and aborts the script
+# first. That is the base script's behaviour too, preserved here deliberately —
+# changing it is a separate concern from bash 3.2 portability.
 pairs_file="$(mktemp)"
 trap 'rm -f "$pairs_file"' EXIT
 

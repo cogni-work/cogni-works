@@ -133,19 +133,34 @@ for BIN in $INTERPRETERS; do
   assert_no_bash4_error "3c generic free of bash-4 runtime error ($BIN)"
 done
 
-# --- Case 4: portability — the bash-4 `declare -A` construct must never return ---
+# --- Case 4: portability — no bash-4-only construct may reach the script ---
 # 4a is a source-text check, so it fires even on CI's bash 5.x, where a runtime
-# check is inert (bash 5 runs `declare -A` fine). It is the guard that catches a
-# re-introduced bash-4-ism on a host with no bash 3.x at all. Comments are
-# stripped first so the script's own explanation of why it avoids the construct is
-# not read as a re-introduction. `typeset -A` is the same declaration under its
-# other spelling. The live bash-3.x half of this contract runs inline as the
-# assert_no_bash4_error step of the fixture cases, which reach the violation path
-# as well as the OK branch.
-if sed 's/#.*//' "$CHECK" | grep -qE '(declare|typeset) -A'; then
-  fail "4a check-skill-names.sh re-introduced 'declare -A'/'typeset -A' in code (bash-4 only)"
+# check is inert (bash 5 runs these constructs fine). On a host with no bash 3.x
+# it is the ONLY portability assertion standing, which is why it enumerates the
+# bash-4-only forms someone might plausibly reach for rather than `declare -A`
+# alone: a guard that covers one construct lets every other bash-4-ism ship green
+# on CI. The list is necessarily incomplete — the live bash-3.x half of the
+# contract (the assert_no_bash4_error step of the fixture cases, which reaches the
+# violation path as well as the OK branch) is what catches the rest, wherever a
+# real bash 3.x exists. Comments are stripped first so the script's own
+# explanation of what it avoids is not read as a re-introduction.
+CHECK_SRC="$(sed 's/#.*//' "$CHECK")"
+bash4_hits=""
+for pat in \
+  '(declare|typeset|local)[[:space:]]+-[A-Za-z]*[An]' \
+  '\$\{[A-Za-z_][A-Za-z0-9_]*(\^\^|,,|\^|,)' \
+  '(^|[;&|[:space:]])(mapfile|readarray)([[:space:]]|$)' \
+  '\$\{[A-Za-z_][A-Za-z0-9_]*@[QEPAKauL]\}'
+do
+  if printf '%s\n' "$CHECK_SRC" | grep -qE "$pat"; then
+    bash4_hits="$bash4_hits
+    $pat"
+  fi
+done
+if [ -n "$bash4_hits" ]; then
+  fail "4a check-skill-names.sh contains bash-4-only construct(s) matching:$bash4_hits"
 else
-  pass "4a check-skill-names.sh free of code-level associative-array declaration"
+  pass "4a check-skill-names.sh free of the enumerated bash-4-only constructs"
 fi
 
 # --- Case 5: a literal tab inside a skill name must not fabricate a duplicate ---

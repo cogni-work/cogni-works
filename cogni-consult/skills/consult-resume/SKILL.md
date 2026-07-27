@@ -96,10 +96,14 @@ Read the log once per discovered engagement here, after discovery and before
 the sort; the single-engagement and named-engagement branches skip that cost
 entirely.
 
-German sessions render the strings above and dates as `TT.MM.JJJJ`; an English
-session uses the natural-language English equivalents and the same day-first
-date shape. The columns, sort, cap, overflow line, and closing line are the
-same in either language.
+German sessions render the strings above and dates as `TT.MM.JJJJ`. An English
+session renders the same table, so it is seeded by example too rather than left
+to improvise: header `# | Engagement | Last worked on`, row suffix
+` · not yet scoped`, overflow line `N more — say “all” for the full list.`, and
+closing line `A number or a name is enough. Then I'll show you where it stands
+and one next step.` Dates keep the same day-first shape, so a date reads the
+same way in either session. The columns, sort, cap, and the list-and-stop
+obligation are identical in both languages.
 
 Conduct the conversation in the resolved **interaction language** (workspace
 default, overridden by the user's message language) — independent of the
@@ -140,9 +144,12 @@ interaction language, while the action-field and deliverable names are the
 stored titles — here English, because an engagement's stored titles keep their
 technical terms whatever the session language.
 
-Name action fields and deliverables by the `title` in their `field.json`,
-falling back to the slug only when no title is stored — slugs are storage keys,
-not display names. Titles are rendered as stored, never translated.
+Name action fields by the `title` read from
+`<engagement-path>/action-fields/<slug>/field.json` — step 3's rollup carries a
+field's `slug` but not its title — and deliverables by the `title` the rollup
+passes through with each deliverable. Fall back to the slug only when no title
+is stored; slugs are storage keys, not display names, and titles are rendered
+as stored, never translated.
 `zuletzt bearbeitet` resolves exactly as in step 2; compute it for the selected
 engagement here when step 2's branch did not already. Step 2's language rule
 covers the header label and the date shape in this table too.

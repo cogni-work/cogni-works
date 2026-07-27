@@ -1,0 +1,290 @@
+# Post-merge auto version bump.
+#
+# The version bump moved OUT of feature branches (see the root CLAUDE.md
+# "Version Management" section and scripts/check-version-bump.py). Feature PRs no
+# longer touch `<plugin>/.claude-plugin/plugin.json` or its mirrored entry in the
+# root `.claude-plugin/marketplace.json`; those paired version lines were the
+# canonical merge-conflict class — the instant one PR merged, every other open
+# PR's version lines became a textual conflict. insight-wave had it worse than a
+# one-manifest-per-plugin repo, because marketplace.json is a SINGLE file all 14
+# plugins share, so the conflict was repo-wide rather than per-plugin. This
+# workflow is the sole actor that advances a version: on every push to main it
+# patch-increments each plugin the merge actually touched, in both manifests,
+# once, with no PR racing it.
+#
+# Authorization. This pushes straight to main with the built-in GITHUB_TOKEN,
+# raised to `contents: write` by the `permissions:` block below. The repo's
+# Actions setting "default workflow permissions: read" sets only the DEFAULT
+# grant for workflows that declare no `permissions:` key; a workflow-level block
+# overrides it. The `admin` ruleset on refs/heads/main carries only `deletion`
+# and `non_fast_forward` rules — no pull-request requirement — so a fast-forward
+# push by github-actions[bot] is permitted. No PAT, no Actions secret, no bypass
+# allowlist. If that ruleset ever gains a PR requirement, drop a fine-grained PAT
+# (Contents: write, this repo only) into the Actions secret VERSION_BUMP_TOKEN
+# and the checkout below picks it up with no other change.
+#
+# Loop-guards, three of them, because losing one must not re-arm the loop:
+#   1. This workflow's own commit is `bump(...)`; the job-level `if` skips any
+#      push whose head commit message starts with `bump(`.
+#   2. An in-script re-check re-asserts (1) against the fetched HEAD — the job
+#      `if` is falsy when head_commit is null, which some push shapes produce.
+#   3. Inherent: a push made with GITHUB_TOKEN does not trigger further workflow
+#      runs. Harmless here — neither lint.yml (pull_request) nor cla.yml
+#      (issue_comment / pull_request_target) is push-triggered, so this workflow
+#      is the only thing that would have re-fired. This guard disappears if a PAT
+#      is ever installed, which is exactly why 1 and 2 are both kept.
+#
+# Non-goal: `maturity` and the maturity keyword inside `keywords[]` are derived
+# from the version RANGE. A patch bump only ever increments a numeric last
+# component, so it structurally cannot cross a maturity boundary and neither
+# field is ever touched. Boundary crossings stay human, per CLAUDE.md.
+
+name: Version bump
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Compute and verify the bump but write, commit and push nothing"
+        type: boolean
+        default: true
+      range:
+        description: "Git range for the touched-file set (default: HEAD^..HEAD)"
+        type: string
+        default: ""
+
+permissions:
+  contents: write
+
+# Serialize: two merges landing close together must EACH get their own bump,
+# never dropped. Never cancel in progress — a cancelled bump is a silently
+# skipped version.
+concurrency:
+  group: version-bump-main
+  cancel-in-progress: false
+
+jobs:
+  bump:
+    name: Post-merge patch bump
+    runs-on: ubuntu-latest
+    # Primary loop-guard: never run on our own bump( commit. head_commit is null
+    # for some push shapes and for workflow_dispatch; startsWith(null, ...) is
+    # false, so the job still runs and the in-script guard below covers it.
+    if: ${{ !startsWith(github.event.head_commit.message, 'bump(') }}
+    steps:
+      - name: Check out main
+        uses: actions/checkout@v4
+        with:
+          # Load-bearing: the pre-push verification compares the freshly bumped
+          # HEAD against the pre-bump origin/main tip. A shallow clone has no
+          # origin/main ref, so that verification could only degrade to a vacuous
+          # pass — and the vacuity assertion below would then fail the run.
+          fetch-depth: 0
+          ref: main
+          token: ${{ secrets.VERSION_BUMP_TOKEN || github.token }}
+
+      - name: Compute the touched-file set
+        id: touched
+        env:
+          BEFORE: ${{ github.event.before }}
+          AFTER: ${{ github.event.after }}
+          RANGE_INPUT: ${{ inputs.range }}
+        run: |
+          set -uo pipefail
+          ZERO='0000000000000000000000000000000000000000'
+
+          # Secondary loop-guard, for the null-head_commit push shapes the job
+          # `if` cannot see: skip when the tip commit is already one of ours.
+          HEAD_MSG="$(git log -1 --pretty=%s)"
+          case "$HEAD_MSG" in
+            'bump('*)
+              echo "tip is a bump( commit — nothing to do"
+              echo "skip=true" >> "$GITHUB_OUTPUT"
+              exit 0 ;;
+          esac
+
+          # Which range tells us WHICH plugins the merge touched:
+          #   * an explicit workflow_dispatch range wins;
+          #   * an all-zero AFTER is a branch delete — nothing to bump;
+          #   * an all-zero BEFORE is a branch create / force push, so fall back
+          #     to the head commit's own diff;
+          #   * otherwise the ordinary before..after range.
+          if [ -n "${RANGE_INPUT:-}" ]; then
+            RANGE="$RANGE_INPUT"
+          elif [ -z "${AFTER:-}" ]; then
+            RANGE="HEAD^..HEAD"
+          elif [ "$AFTER" = "$ZERO" ]; then
+            echo "push carries no head commit — nothing to do"
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          elif [ -z "${BEFORE:-}" ] || [ "$BEFORE" = "$ZERO" ]; then
+            RANGE="${AFTER}^..${AFTER}"
+          else
+            RANGE="${BEFORE}..${AFTER}"
+          fi
+
+          if ! git diff --name-only "$RANGE" > changed-files.txt 2> diff.err; then
+            echo "::warning::range '$RANGE' unusable ($(head -c 200 diff.err)); falling back to HEAD^..HEAD"
+            if ! git diff --name-only "HEAD^..HEAD" > changed-files.txt 2>/dev/null; then
+              echo "::warning::no usable diff range — nothing to bump"
+              echo "skip=true" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+          fi
+
+          echo "skip=false" >> "$GITHUB_OUTPUT"
+          echo "touched files ($RANGE):"
+          cat changed-files.txt
+
+      - name: Apply the patch bump
+        id: bump
+        if: steps.touched.outputs.skip != 'true'
+        env:
+          DRY_RUN: ${{ inputs.dry_run }}
+        run: |
+          set -uo pipefail
+          ARGS="--changed-file changed-files.txt"
+          if [ "${DRY_RUN:-}" = "true" ]; then ARGS="$ARGS --dry-run"; fi
+
+          python3 scripts/apply-version-bump.py $ARGS > bump.json 2> bump.err
+          RC=$?
+          cat bump.json
+          cat bump.err >&2
+
+          if [ "$RC" -eq 2 ]; then
+            echo "::error::apply-version-bump.py errored — nothing was written"
+            exit 1
+          fi
+
+          # One annotation per skipped plugin. Tab-delimited and read with
+          # `while IFS= read` — never `for s in $(...)`, because a skip reason
+          # contains spaces that word-splitting would smear across lines.
+          python3 - <<'PY' > skips.tsv
+          import json
+          for s in json.load(open("bump.json"))["data"]["skipped"]:
+              print("%s\t%s: %s" % (s["severity"], s["plugin"], s["reason"]))
+          PY
+          while IFS=$'\t' read -r SEV MSG; do
+            [ -n "${MSG:-}" ] || continue
+            echo "::${SEV}::version-bump skipped ${MSG}"
+          done < skips.tsv
+
+          COUNT="$(python3 -c 'import json;print(len(json.load(open("bump.json"))["data"]["bumped"]))')"
+          echo "count=$COUNT" >> "$GITHUB_OUTPUT"
+          # RC 1 means a touched plugin was skipped with severity "error" — almost
+          # always mirror drift. The healthy plugins WERE written, so the run is
+          # failed at the very end instead, letting their bump still reach main.
+          echo "deferred_failure=$RC" >> "$GITHUB_OUTPUT"
+
+          if [ "$COUNT" = "0" ]; then
+            echo "no touched plugin to bump — nothing to do"
+          fi
+
+      - name: Commit, verify, and push
+        if: ${{ steps.bump.outputs.count != '' && steps.bump.outputs.count != '0' && inputs.dry_run != true }}
+        run: |
+          set -uo pipefail
+
+          # A single-plugin bump names the plugin and its new version, satisfying
+          # both the loop-guard (`bump(` prefix) and the repo's commit format.
+          MSG="$(python3 - <<'PY'
+          import json
+          b = json.load(open("bump.json"))["data"]["bumped"]
+          if len(b) == 1:
+              x = b[0]
+              print("bump(%s): v%s — post-merge auto-increment" % (x["plugin"], x["new"]))
+          else:
+              names = ", ".join("%s v%s" % (x["plugin"], x["new"]) for x in b)
+              print("bump(multi): %s — post-merge auto-increment" % names)
+          PY
+          )"
+
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          # Stage ONLY the manifests this bump owns — never `git add -A`, so the
+          # runner's scratch files (bump.json, changed-files.txt, skips.tsv,
+          # diff.err) cannot ride along in the bump commit.
+          python3 -c 'import json;[print(p) for p in json.load(open("bump.json"))["data"]["paths_to_stage"]]' \
+            | while IFS= read -r f; do [ -n "$f" ] && git add "$f"; done
+
+          # Prove it rather than trust it: the index must hold only the root
+          # marketplace manifest and per-plugin plugin.json files.
+          UNEXPECTED="$(git diff --cached --name-only \
+            | grep -vE '^(\.claude-plugin/marketplace\.json|[^/]+/\.claude-plugin/plugin\.json)$' || true)"
+          if [ -n "$UNEXPECTED" ]; then
+            echo "::error::unexpected staged path(s) in the bump commit: $UNEXPECTED"
+            exit 1
+          fi
+
+          git commit -qm "$MSG"
+
+          # Verify before pushing: every plugin the bump commit touched must be
+          # strictly greater than the pre-bump origin/main tip, and the
+          # plugin.json <-> marketplace.json mirror must hold repo-wide.
+          #
+          # Graded twice from ONE invocation. check-version-bump.py exits 0 both
+          # when the gate passed AND when it could not compare anything (status
+          # "degraded" — base ref unresolvable), so the exit code alone cannot
+          # tell "clean" from "never actually checked". Without the status check
+          # a degraded verify would wave a bad bump straight through.
+          verify() {
+            python3 scripts/check-version-bump.py --mode post-merge \
+              > verify.json 2> verify.err
+            local rc=$?
+            cat verify.json
+            cat verify.err >&2
+            [ "$rc" -eq 0 ] || return 1
+            python3 - <<'PY'
+          import json, sys
+          d = json.load(open("verify.json")).get("data") or {}
+          if d.get("status") == "degraded":
+              sys.exit("post-merge verification is VACUOUS (status: degraded) — %s\n"
+                       "It compared nothing. This usually means fetch-depth: 0 was "
+                       "removed from the checkout step." % d.get("degraded_reason"))
+          print("post-merge verification ran for real (status: %s)" % d.get("status"))
+          PY
+          }
+
+          if ! verify; then
+            echo "::error::post-merge version verification failed — refusing to push"
+            exit 1
+          fi
+
+          # Retry the push: a racing human merge can advance main between our
+          # fetch and our push. `concurrency` serializes our OWN runs; a human
+          # merge is outside that group.
+          for attempt in 1 2 3 4; do
+            if git push origin HEAD:main; then
+              echo "pushed: $MSG"
+              exit 0
+            fi
+            echo "push attempt $attempt failed; rebasing on origin/main and retrying"
+            # Explicit refspec: a bare `git fetch origin main` does not reliably
+            # update refs/remotes/origin/main under the refspec actions/checkout
+            # configures, and the re-verify below anchors on exactly that ref.
+            git fetch origin +refs/heads/main:refs/remotes/origin/main || true
+            if ! git rebase origin/main; then
+              echo "::error::rebase conflict on the bump — aborting; the version does not advance"
+              git rebase --abort
+              exit 1
+            fi
+            # The rebase moved the anchor, so re-assert the bump is still strictly
+            # greater against the freshly advanced main. Fail closed rather than
+            # push a stale bump.
+            if ! verify; then
+              echo "::error::post-rebase verification failed — refusing to push"
+              exit 1
+            fi
+            sleep "$((attempt * 2))"
+          done
+          echo "::error::could not push the bump after 4 attempts"
+          exit 1
+
+      - name: Fail the run on a hard skip
+        if: ${{ steps.bump.outputs.deferred_failure == '1' }}
+        run: |
+          echo "::error::At least one touched plugin was skipped with severity=error (see the annotations above) — almost always plugin.json <-> marketplace.json mirror drift. The healthy plugins were bumped and pushed; reconcile the flagged plugin by hand, then re-run this workflow with an explicit range input."
+          exit 1

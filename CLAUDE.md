@@ -104,10 +104,13 @@ Key integration patterns:
 
 ## Version Management
 
-- Plugin version lives in `.claude-plugin/plugin.json` `version` field (semver)
-- Bump the patch version after any change to skills, agents, or structure
-- Marketplace sync is driven by git commit hash, but plugin versions must also be mirrored in marketplace.json for Claude Desktop update detection
-- When bumping a plugin version in plugin.json, also update the matching entry in marketplace.json
+**Do not bump a version in a feature branch.** The patch bump is applied post-merge, automatically, per plugin actually touched.
+
+- Plugin version lives in `.claude-plugin/plugin.json` `version` field (semver), mirrored on the plugin's entry in the repo-root `.claude-plugin/marketplace.json` — Claude Desktop reads the marketplace copy for update detection, so the two must always agree
+- `.github/workflows/cogni-version-bump.yml` owns the bump. On every push to `main` it patch-increments each plugin the merge touched, editing **both** manifests in one `bump(...)` commit. `scripts/apply-version-bump.py` does the edit; nothing is written unless the rewritten JSON re-parses and differs *only* in the intended version values
+- A feature branch that still touches a version reintroduces the merge-conflict class the post-merge move eliminated: when every PR bumped at authoring time, the instant one PR merged, every other open PR's version lines became a textual conflict. insight-wave had it worse than a one-manifest-per-plugin repo, because marketplace.json is a single file all 14 plugins share — so the conflict was repo-wide, not per-plugin
+- `scripts/check-version-bump.py` enforces this at PR time (CI: "Version-bump gate" in `.github/workflows/lint.yml`). It flags `version-touched` on any version change vs the fork point, and `version-mirror-desync` whenever plugin.json and marketplace.json disagree. Fix a `version-touched` finding by reverting the version line in **both** files
+- The auto-bump is patch-only and structurally cannot cross a maturity boundary, so `maturity` and the maturity keyword in `keywords[]` are never touched by it. **Boundary crossings stay human** — make them on a `bump/…` branch, which the PR-time gate exempts
 
 ### Plugin Maturity Model
 
@@ -158,6 +161,7 @@ Managed by `cogni-workspace:install-mcp`. Plugin `.mcp.json` files reference ins
 
 - CLA required on first PR to core plugins (CLA Assistant bot prompts on PR)
 - Feature branches from `main`; one feature or fix per PR
+- Do **not** bump `plugin.json` / `marketplace.json` versions in the branch — the post-merge workflow applies the bump (see Version Management)
 - Validate skill names with `cogni-workspace/scripts/check-skill-names.sh` before PR
 - Keep maintainer breadcrumbs out of SKILL.md / agent files — `scripts/check-breadcrumbs.py` (CI: "Maintainer-breadcrumb guard" in `.github/workflows/lint.yml`) fails on newly introduced issue/PR refs (`#NNN`), version tags, or milestone/slice/finding codes. It ratchets against `scripts/baselines/breadcrumb-baseline.json`, so only *new* breadcrumbs trip it; fix by removing the breadcrumb and stating the rationale semantically (provenance lives in git history, CHANGELOG, and `references/`)
 - Generic skill names (`setup`, `scan`, `resume`, `dashboard`, `verify`) must be prefixed with the domain term

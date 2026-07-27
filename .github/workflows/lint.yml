@@ -36,3 +36,55 @@ jobs:
         run: |
           set -euo pipefail
           python3 scripts/check-external-dispatch.py
+
+  version-bump-gate:
+    name: Version-bump gate (feature branches must not touch versions)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # Load-bearing here, unlike the two guards above. This gate anchors on
+          # the MERGE-BASE with origin/main; the default shallow checkout has no
+          # origin/main ref and no merge-base, under which the gate can only
+          # degrade to a vacuous pass. Do not remove — the vacuity assertion in
+          # the step below fails the build if this is dropped.
+          fetch-depth: 0
+          # Check out the PR HEAD, not the auto-generated merge ref. Merge-base
+          # anchoring is what makes "untouched" immune to main's version
+          # advancing after the fork; on a merge ref the merge-base collapses
+          # onto main's tip and that property is lost. Empty on
+          # workflow_dispatch, where checkout falls back to the default ref.
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Assert no plugin version was touched on this branch
+        run: |
+          set -uo pipefail
+          python3 scripts/check-version-bump.py > version-gate.json 2> version-gate.err
+          rc=$?
+          cat version-gate.json
+          cat version-gate.err >&2
+
+          if [ "$rc" -eq 2 ]; then
+            echo "::error::version-bump gate errored"
+            exit 1
+          fi
+
+          # Graded twice from ONE invocation. The script exits 0 both when the
+          # gate passed AND when it could not compare anything (status
+          # "degraded" — base ref unresolvable), so the exit code alone cannot
+          # tell "clean" from "never actually checked". Deliberately NOT a
+          # second invocation: re-running the script would grade a different run
+          # than the one that gated the build.
+          python3 - <<'PY'
+          import json, sys
+          d = json.load(open("version-gate.json")).get("data") or {}
+          if d.get("status") == "degraded":
+              sys.exit("version-bump gate is VACUOUS (status: degraded) — %s\n"
+                       "It compared nothing. This usually means fetch-depth: 0 "
+                       "was removed from the checkout step." % d.get("degraded_reason"))
+          print("version-bump gate ran for real (status: %s)" % d.get("status"))
+          PY
+          vrc=$?
+          [ "$vrc" -eq 0 ] || exit 1
+          exit "$rc"

@@ -77,6 +77,26 @@ A genuine load-bearing compatibility fact (e.g. "requires `gh` ≥ 2.40 because�
 python3 scripts/check-breadcrumbs.py --update-baseline
 ```
 
+### Version-Bump Gate
+
+**Do not bump a plugin version in your branch.** Every plugin's version lives in two places — `<plugin>/.claude-plugin/plugin.json` and the plugin's entry in the repo-root `.claude-plugin/marketplace.json` — and the `Version bump` workflow advances both, automatically, on merge to `main`, for each plugin your PR actually touched.
+
+The bump moved post-merge because that version line was the canonical merge-conflict class: when every PR bumped at authoring time, the instant one PR merged, every other open PR's version lines conflicted. Since `marketplace.json` is a single file shared by all 14 plugins, that conflict was repo-wide rather than per-plugin.
+
+The CI `Lint` workflow runs `scripts/check-version-bump.py` on every PR and fails on:
+
+- **`version-touched`** — your branch changed a version. Fix: revert the version line in **both** `plugin.json` and `marketplace.json` to the value on `main`.
+- **`version-mirror-desync`** — the two files disagree for some plugin. Fix: set them to the same value.
+
+Run it locally before a PR:
+
+```bash
+python3 scripts/check-version-bump.py     # fails (exit 1) on a touched version
+bash tests/test_check_version_bump.sh     # self-test the gate itself
+```
+
+A deliberate **maturity boundary crossing** (`0.x` → `1.0.0`, `1.x` → `2.0.0`) is the one case a human edits a version by hand. Make it on a `bump/…` branch — the gate exempts those, and the auto-bump is patch-only so it never crosses a boundary on its own.
+
 ---
 
 ## Publishing a Marketplace Plugin

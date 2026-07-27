@@ -65,6 +65,8 @@ Create `my-plugin/.claude-plugin/plugin.json`:
 
 Use semantic versioning. Start at `0.1.0`. The `description` field appears in marketplace listings — describe the function, not the value.
 
+That initial version is the one version you author by hand. Every bump after it is applied post-merge by the `Version bump` workflow, which advances `plugin.json` and the `marketplace.json` mirror together for each plugin a merge touched. Do not bump a version in a feature branch — the PR-time version-bump gate fails on it.
+
 ### Create a `CLAUDE.md`
 
 Write a developer reference document at `my-plugin/CLAUDE.md`. This is the first file a developer reads when working on your plugin. Include:
@@ -302,6 +304,7 @@ To list your plugin, submit a PR to the insight-wave repository that adds your p
 - [ ] `LICENSE` file is present with Apache-2.0 text
 - [ ] Skill names pass the naming convention check
 - [ ] No external package dependencies in scripts
+- [ ] No version line changed — `plugin.json` and `marketplace.json` versions are advanced post-merge by the `Version bump` workflow
 
 ### Contribution Terms
 

@@ -27,6 +27,8 @@ cogni-consult/
 │   ├── publish-routing.md         Canonical publish format→route contract
 │   ├── research-routing.md        Canonical cogni-knowledge research rule (binding,
 │   │                              pipeline rungs, depth framing, storage contract)
+│   ├── subagent-output-contract.md  Register rules the SubagentStart hook emits
+│   │                              verbatim into every dispatched agent
 │   ├── personas/                  Packaged default advisors (consulting-partner,
 │   │                              project-manager)
 │   ├── methods/
@@ -56,9 +58,9 @@ cogni-consult/
 ├── hooks/
 │   ├── hooks.json                 SubagentStart, matched on the four consult-*
 │   │                              agent types (auto-discovered at the plugin root)
-│   └── on-subagent-start.sh       Inject the workspace interaction language +
-│                                  the register's hard rules into dispatched
-│                                  agents, which inherit neither from the main loop
+│   └── on-subagent-start.sh       Resolve the workspace interaction language and
+│                                  emit it with references/subagent-output-contract.md
+│                                  into dispatched agents, which inherit neither
 ├── agents/
 │   ├── consult-dashboard-refresher.md  Milestone HTML dashboard refresh (haiku,
 │   │                              read-only, no theme prompt)
@@ -134,7 +136,7 @@ cogni-consult/
 
   **Why the styles stay opt-in.** A plugin *can* force its own style on every session (`force-for-plugin: true`), and that is exactly why we do not: a forced style is session-global, and multi-plugin resolution is first-loaded-wins, so with the marketplace installed cogni-consult would govern the voice of every unrelated session. Both files also declare `keep-coding-instructions: true`, which is the documented opt-out from a style replacing Claude Code's `# Doing tasks` block (prefer-editing-existing-files, the OWASP warning, the over-engineering rules). On Claude Code 2.1.220 that field is **honored for styles loaded from a directory but silently ignored for plugin-shipped ones**, so activating either style today still costs those engineering defaults while it is active — a real cost for skills that run `deliverable-graph.py` and do idempotent `Edit` round-trips on `field.json`. `# Executing actions with care` survives either way, so the loss is bounded. The declaration is correct per the schema and starts working the moment the plugin loader reads it; until then it is a second reason to keep the register opt-in
 
-- **Language reaches subagents only through the hook** — a subagent's system prompt is its own body plus a notes block and the environment info: no settings `language` key, no `CLAUDE.md`, no active output style. `hooks/hooks.json` registers a `SubagentStart` hook matched on the four `consult-*` agent types; `hooks/on-subagent-start.sh` resolves the workspace default language and injects it with the register's hard rules. Because a hook cannot see the user's message, rung 2 of `references/interaction-language.md` (message-detection override) travels as the `interaction_language` dispatch input, which wins over the hook's default. Keep the doctrine in the hook, not in the four agent bodies — those hold only the input declaration
+- **Language reaches subagents only through the hook** — a subagent's system prompt is its own body plus a notes block and the environment info: no settings `language` key, no `CLAUDE.md`, no active output style. `hooks/hooks.json` registers a `SubagentStart` hook matched on the four `consult-*` agent types; `hooks/on-subagent-start.sh` resolves the workspace default language and emits it together with `references/subagent-output-contract.md`, read verbatim. Because a hook cannot see the user's message, rung 2 of `references/interaction-language.md` (message-detection override) travels as the `interaction_language` dispatch input, which wins over the hook's default. Keep the doctrine in the reference, not in the hook script and not in the four agent bodies — the script is a delivery mechanism, and the agent bodies hold only the input declaration. When `references/user-facing-output.md` lands, reconcile the two: one contract, two delivery paths (that file loads in the main loop, this one is injected into agents)
 
 ## Data Model
 

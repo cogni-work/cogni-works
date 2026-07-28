@@ -201,8 +201,8 @@ cogni-consult/
 ├── output-styles/                 Strategy-advisor voice register (EN + DE,
 │                                  opt-in, auto-discovered in /config)
 ├── hooks/                         SubagentStart hook carrying the interaction
-│                                  language + register rules into the four agents,
-│                                  which inherit neither from the main loop
+│                                  language + subagent-output-contract.md into the
+│                                  four agents, which inherit neither from the main loop
 ├── scripts/                       Engagement init/status/discovery, dt-stage advance,
 │                                  deliverable dependency graph + the engagement-root
 │                                  README front-door generator, refreshed at the

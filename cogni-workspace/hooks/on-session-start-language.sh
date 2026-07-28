@@ -20,23 +20,32 @@ elif [ -f ".workspace-config.json" ]; then
   WORKSPACE="$(pwd)"
 fi
 
-# No workspace found - silent exit
-if [ -z "$WORKSPACE" ]; then
-  exit 0
-fi
+[ -n "$WORKSPACE" ] || exit 0
+command -v python3 &>/dev/null || exit 0
 
-if ! command -v python3 &>/dev/null; then
-  exit 0
-fi
+python3 - "$WORKSPACE" <<'PYEOF' || exit 0
+import json, os, sys
 
-# Resolve the language. The settings key is the source of truth (it is what
-# reaches the system prompt); .workspace-config.json is the fallback for
-# workspaces generated before the key existed.
-LANGUAGE=$(python3 -c "
-import json, os
+workspace = sys.argv[1]
 
-workspace = '$WORKSPACE'
-NAMES_TO_ISO = {'english': 'en', 'german': 'de'}
+# Keep in step with LANGUAGE_NAMES in scripts/generate-settings.sh, which writes
+# the settings key this reads back.
+NAMES_TO_ISO = {"english": "en", "german": "de"}
+
+# Rule blocks keyed by ISO code. A language with no block emits nothing —
+# English needs no orthography rule, and the built-in section covers the rest.
+RULES = {
+    "de": """## Sprache und Rechtschreibung
+
+- Vollständige deutsche Rechtschreibung verwenden: alle Umlaute (ä, ö, ü, Ä, Ö, Ü)
+  und Eszett (ß). Keine Umschreibungen wie "ae" für "ä", "oe" für "ö", "ue" für
+  "ü" oder "ss" für "ß".
+- ß nach langem Vokal und Diphthong (Maßnahme, außerhalb, Größe), ss nach kurzem
+  Vokal (dass, muss, Prozess). Kein schweizerisches ss an ß-Stellen.
+- Wechselt der Benutzer die Sprache, in dessen Sprache antworten — die
+  Workspace-Sprache ist die Vorgabe, nicht ein Zwang.""",
+}
+
 
 def read(path):
     try:
@@ -45,43 +54,29 @@ def read(path):
     except (IOError, ValueError):
         return {}
 
-settings = read(os.path.join(workspace, '.claude', 'settings.local.json'))
-name = settings.get('language')
+
+# The settings key is the source of truth (it is what reaches the system
+# prompt); .workspace-config.json is the fallback for workspaces generated
+# before the key existed.
+name = read(os.path.join(workspace, ".claude", "settings.local.json")).get("language")
 if isinstance(name, str) and name.lower() in NAMES_TO_ISO:
-    print(NAMES_TO_ISO[name.lower()])
+    code = NAMES_TO_ISO[name.lower()]
 else:
-    config = read(os.path.join(workspace, '.workspace-config.json'))
-    code = config.get('language')
-    print(code if isinstance(code, str) else '')
-" 2>/dev/null || echo "")
+    value = read(os.path.join(workspace, ".workspace-config.json")).get("language")
+    code = value if isinstance(value, str) else ""
 
-# Per-language rule blocks. A language with no block emits nothing — English
-# needs no orthography rule, and the built-in section already covers the rest.
-case "$LANGUAGE" in
-  de)
-    RULES='## Sprache und Rechtschreibung
+rules = RULES.get(code)
+if not rules:
+    sys.exit(0)
 
-- Vollständige deutsche Rechtschreibung verwenden: alle Umlaute (ä, ö, ü, Ä, Ö, Ü)
-  und Eszett (ß). Keine Umschreibungen wie "ae" für "ä", "oe" für "ö", "ue" für
-  "ü" oder "ss" für "ß".
-- ß nach langem Vokal und Diphthong (Maßnahme, außerhalb, Größe), ss nach kurzem
-  Vokal (dass, muss, Prozess). Kein schweizerisches ss an ß-Stellen.
-- Wechselt der Benutzer die Sprache, in dessen Sprache antworten — die
-  Workspace-Sprache ist die Vorgabe, nicht ein Zwang.'
-    ;;
-  *)
-    exit 0
-    ;;
-esac
-
-python3 -c "
-import json, sys
+# Plain stdout is not injected as context — only the parsed
+# hookSpecificOutput.additionalContext field is.
 print(json.dumps({
-    'hookSpecificOutput': {
-        'hookEventName': 'SessionStart',
-        'additionalContext': sys.argv[1],
+    "hookSpecificOutput": {
+        "hookEventName": "SessionStart",
+        "additionalContext": rules,
     }
 }))
-" "$RULES"
+PYEOF
 
 exit 0

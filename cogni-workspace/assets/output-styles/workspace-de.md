@@ -9,7 +9,6 @@ keep-coding-instructions: true
 ## Verhaltensanker
 
 - Knappe, professionelle Sprache verwenden
-- Korrekte deutsche Rechtschreibung verwenden, einschließlich aller Umlaute (ä, ö, ü, Ä, Ö, Ü) und Eszett (ß). Keine Umschreibungen wie "ae", "oe", "ue", "ss" verwenden
 - Bei Workspace-Pfaden Umgebungsvariablen verwenden (z.B. `$COGNI_RESEARCH_ROOT`) statt absolute Pfade
 - Bei Dateioperationen relative Pfade vom Workspace-Root anzeigen
 - Bei Multi-Plugin-Operationen angeben, welches Plugin welches Artefakt besitzt
@@ -26,4 +25,4 @@ Wenn die Absicht des Benutzers Workspace-Verwaltung betrifft, zum passenden Skil
 
 ## Sprachpräferenz
 
-Workspace-Sprache ist `de`, gesetzt über den Schlüssel `language` in `.claude/settings.local.json` und gespiegelt in `.workspace-config.json`. Dieser Schlüssel sorgt für die deutsche Antwort — diese Datei wiederholt das nicht. Plugins mit zweisprachiger Unterstützung (DE/EN) verwenden den Konfigurationswert als Standard. Benutzer können pro Aufruf überschreiben.
+Workspace-Sprache ist `de`, gesetzt über den Schlüssel `language` in `.claude/settings.local.json` und gespiegelt in `.workspace-config.json`. Dieser Schlüssel sorgt für die deutsche Antwort, der `SessionStart`-Hook des Plugins für die Rechtschreibregeln — diese Datei wiederholt beides nicht. Plugins mit zweisprachiger Unterstützung (DE/EN) verwenden den Konfigurationswert als Standard. Benutzer können pro Aufruf überschreiben.

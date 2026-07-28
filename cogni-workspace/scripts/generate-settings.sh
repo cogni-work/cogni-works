@@ -99,6 +99,9 @@ settings["env"] = env
 # The "language" settings key builds a "# Language" system-prompt section, so
 # the workspace language reaches a fresh session with no output style and no
 # CLAUDE.md. The key wants a natural-language name, not an ISO code.
+# Adding a language means updating the inverse map in
+# hooks/on-session-start-language.sh (and cogni-consult's subagent hook) too —
+# the market registry carries ISO codes only, so there is no shared source yet.
 LANGUAGE_NAMES = {"en": "english", "de": "german"}
 language_name = LANGUAGE_NAMES.get(language)
 if language_name:
@@ -153,7 +156,6 @@ result = {
     "data": {
         "target": target,
         "language": language,
-        "settings_language": language_name,
         "env_vars_count": len(env),
         "files_written": [
             ".claude/settings.local.json",

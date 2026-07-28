@@ -110,12 +110,16 @@ A failure here is cosmetic — the dashboard is already written to `data.path`.
 - **Read-only.** The renderer never writes `projects-portfolio.json` (only
   `projects-entities` does, via `register-entity.py`) and never touches
   `.metadata/`. Re-running only rewrites `output/dashboard.html`.
-- **Partial snapshots are expected mid-authoring.** A project without a
+- **Partial snapshots are expected mid-authoring.** Any of these is reported in
+  the warnings list, not treated as an error: a project without a
   `strategic_impact`, a project that omits `open_roles`, an entity whose
-  `status` or role label is not text (an all-digit value such as `status: 2026`
-  or `role: 2` is read as a number, then coerced back to text), or an entity
-  file that cannot be read or decoded is reported in the warnings list, not
-  treated as an error. One bad record never costs the rest of the portfolio.
+  `status`, role label, or `open_roles` entry is not text, or an entity file
+  that cannot be read or decoded. A non-text value — `status: 2026`, `role: 2`,
+  or `open_roles: [2]` — is read as a number, then coerced back to text. Both
+  sides of the role comparison are coerced, so a numeric role still matches its
+  numeric `open_roles` entry and still counts as filled: such a warning says to
+  fix the record, not that the coverage figure beside it is wrong. One bad
+  record never costs the rest of the portfolio.
 - **Theming is optional.** The dashboard renders with a built-in palette;
   pass `--design-variables <path.json>` to override colors when a themed look is
   wanted.

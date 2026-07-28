@@ -518,9 +518,11 @@ assert_json "10c falsy int status still warns" \
 assert_json "10d project surfaced by name" \
   "any('non-string status' in w and 'Numeric Status' in w for w in d['data']['warnings'])"
 # The assignment is named by its relative path — _read_entities sets _file on
-# every kept entity, while slug is optional frontmatter.
-assert_json "10e assignment surfaced by file" \
-  "any('non-string status' in w and 'numeric-assignment.md' in w for w in d['data']['warnings'])"
+# every kept entity, while slug is optional frontmatter. Counted for the same
+# reason 11c/11d are: this read sits inside _compute's per-project slug filter,
+# and hoisting it out would warn once per project while `any(...)` stayed green.
+assert_json "10e assignment surfaced by file, exactly once" \
+  "sum('non-string status' in w and 'numeric-assignment.md' in w for w in d['data']['warnings']) == 1"
 assert_json "10f every project still counted"      "d['data']['projects'] == 3"
 assert_no_traceback "10g no traceback on stderr" "$STDERR10"
 # A needle without quote characters: warnings reach the HTML through _esc, which
@@ -543,6 +545,12 @@ assert_html "10h healthy project still rendered" \
 # something quieter: `symmetry`'s numeric role matches its numeric open_roles
 # entry today, and would stop matching, reporting a filled role as open. With
 # only one side coerced, 11f reads 1 instead of 0.
+#
+# The third project is clean throughout, and 11h/11l are its pair: they assert a
+# bad record costs neither the project count nor the render of an untouched
+# project — the same claim Fixture 10 makes with Sound Delivery at 10f/10h.
+# Both of this fixture's other projects are bad-record demonstrations, so
+# without it nothing here checks that resilience.
 # ---------------------------------------------------------------------------
 PF11="$TMPROOT/nonstring-role"
 seed_portfolio "$PF11"
@@ -569,6 +577,18 @@ status: active
 open_roles: [2026]
 ---
 # Symmetry Check
+EOF
+write_entity "$PF11/projects/clean.md" <<'EOF'
+---
+type: project
+slug: clean
+name: Clean Delivery
+client: CleanCo
+strategic_impact: 4
+status: active
+open_roles: [architect]
+---
+# Clean Delivery
 EOF
 # Every assignment names a project that exists — _compute filters on the
 # project before it reads the role, so an orphan would never reach the
@@ -626,6 +646,22 @@ status: active
 ---
 # assignment
 EOF
+# Text role matching the declared open_roles entry, so `clean` contributes no
+# open role and 11f/11k stay at 0 — the clean project has to be genuinely
+# clean, or it would perturb the very counts the symmetry guard pins.
+write_entity "$PF11/assignments/clean-role.md" <<'EOF'
+---
+type: assignment
+slug: eli--clean
+consultant: eli
+project: clean
+role: architect
+start_date: 2026-02-01
+end_date: 2026-08-01
+status: active
+---
+# assignment
+EOF
 
 # Direct invoke for the same reason Fixture 10 does it — run() discards stderr
 # and 11i asserts a traceback never reached it.
@@ -635,10 +671,14 @@ HTML11="$PF11/output/dashboard.html"
 
 assert_json "11a non-string role still succeeds" "d['success'] is True"
 assert_json "11b marked partial"                 "d['data']['partial'] is True"
-assert_json "11c non-string role surfaced by file" \
-  "any('non-string role' in w and 'numeric-role.md' in w for w in d['data']['warnings'])"
-assert_json "11d falsy zero role still warns" \
-  "any('non-string role' in w and 'zero-role.md' in w for w in d['data']['warnings'])"
+# Counted, not merely present: the role read sits inside _compute's per-project
+# slug filter, so each offending assignment must warn exactly once. Moving that
+# read outside the filter would warn once per project iteration instead — a
+# regression `any(...)` cannot see, because the warning is still there.
+assert_json "11c non-string role surfaced by file, exactly once" \
+  "sum('non-string role' in w and 'numeric-role.md' in w for w in d['data']['warnings']) == 1"
+assert_json "11d falsy zero role still warns, exactly once" \
+  "sum('non-string role' in w and 'zero-role.md' in w for w in d['data']['warnings']) == 1"
 assert_json "11e non-string open_roles entry surfaced by project" \
   "any('non-string open_roles entry' in w and 'Symmetry Check' in w for w in d['data']['warnings'])"
 assert_json "11f numeric role still fills its numeric open_role" \
@@ -647,11 +687,12 @@ assert_json "11f numeric role still fills its numeric open_role" \
 # coerced '0' and '2' roles as matching no open_roles label.
 assert_json "11g symmetric match raises no mismatch warning" \
   "not any('matches no open_roles label' in w and 'Symmetry Check' in w for w in d['data']['warnings'])"
-assert_json "11h every project still counted"    "d['data']['projects'] == 2"
+assert_json "11h every project still counted"    "d['data']['projects'] == 3"
 assert_no_traceback "11i no traceback on stderr" "$STDERR11"
 assert_html "11j symmetry project still rendered" "Symmetry Check" "$HTML11"
 assert_html "11k open-roles tile agrees with the envelope" \
   '<div class="n">0</div><div class="l">Open roles</div>' "$HTML11"
+assert_html "11l clean sibling project still rendered" "Clean Delivery" "$HTML11"
 
 echo
 if [ "$failures" -eq 0 ]; then

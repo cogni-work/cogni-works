@@ -100,7 +100,15 @@ settings_path, lang = sys.argv[1], sys.argv[2]
 # Keep in step with LANGUAGE_NAMES in cogni-workspace/scripts/generate-settings.sh.
 # This script runs standalone from the Obsidian terminal with no plugin
 # environment, so it cannot source the map from there.
-NAMES = {"en": "english", "de": "german"}
+NAMES = {
+    "en": "english",
+    "de": "german",
+    "fr": "french",
+    "it": "italian",
+    "nl": "dutch",
+    "pl": "polish",
+    "es": "spanish",
+}
 name = NAMES.get(lang)
 if not name:
     sys.exit(1)

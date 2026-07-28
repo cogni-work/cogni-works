@@ -9,6 +9,14 @@
 # an adherence finding) would default to English and to engine vocabulary unless
 # something injects the rules at dispatch time. This is that something.
 #
+# NOTE ON SCOPE — do not "align" this with cogni-workspace's SessionStart language
+# hook. That hook deliberately carries only the residue Claude Code's built-in
+# "# Language" section leaves behind (German ß/ss, the mid-conversation switch),
+# because the main loop already gets respond-in-X, identifier handling, and full
+# diacritic correctness from that section. Subagents get none of it, so the block
+# below must restate all of it. The two hooks emitting different rule sets is
+# correct, not drift.
+#
 # It supplies the workspace *default* language. A hook cannot see the user's
 # message, so rung 2 of references/interaction-language.md (message-detection
 # override) is resolved by the dispatching skill and passed as an
@@ -40,9 +48,17 @@ import json, os, sys
 
 workspace, contract_path = sys.argv[1], sys.argv[2]
 
-# Keep in step with LANGUAGE_NAMES in cogni-workspace's generate-settings.sh,
-# which writes the settings key this reads back.
-NAMES_TO_ISO = {"english": "en", "german": "de"}
+# Inverse of LANGUAGE_NAMES in cogni-workspace's generate-settings.sh, which
+# writes the settings key this reads back. Keep the two in step.
+NAMES_TO_ISO = {
+    "english": "en",
+    "german": "de",
+    "french": "fr",
+    "italian": "it",
+    "dutch": "nl",
+    "polish": "pl",
+    "spanish": "es",
+}
 
 LANGUAGE_RULES = {
     "de": """Antworte auf Deutsch. Vollständige deutsche Rechtschreibung: alle

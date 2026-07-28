@@ -1,11 +1,23 @@
 #!/usr/bin/env bash
-# on-session-start-language.sh - Inject the workspace language rules Claude Code
-# does not already carry in its own "# Language" system-prompt section.
+# on-session-start-language.sh - Inject the language rules Claude Code's own
+# "# Language" system-prompt section does not already carry.
 #
-# That built-in section says "Always respond in <language>" and "technical terms
-# and code identifiers should remain in their original form" — nothing about
-# orthography, and nothing about the user switching language mid-conversation.
-# Both are workspace doctrine, so they travel here.
+# That section (built from the `language` settings key) covers three things for
+# every language: respond in it, keep technical terms and code identifiers in
+# their original form, and maintain full orthographic correctness including all
+# diacritics — never substituting ASCII equivalents, with German examples built
+# in. So none of that belongs here.
+#
+# What it does not cover, and what this hook exists for:
+#   - German ß/ss discipline. Choosing ß after a long vowel or diphthong versus
+#     ss after a short one is not an ASCII substitution, so the built-in rule
+#     says nothing about it.
+#   - The mid-conversation switch. The built-in says "Always respond in X" with
+#     no escape clause, but workspace doctrine is that a user writing in another
+#     language wins over the workspace default.
+#
+# That is also why the RULES table below is German-only by design rather than by
+# omission: other languages have no residue once diacritics are covered upstream.
 #
 # Emits a SessionStart hookSpecificOutput envelope on stdout, or nothing at all.
 # Always exits 0 (non-blocking).
@@ -28,18 +40,24 @@ import json, os, sys
 
 workspace = sys.argv[1]
 
-# Keep in step with LANGUAGE_NAMES in scripts/generate-settings.sh, which writes
-# the settings key this reads back.
-NAMES_TO_ISO = {"english": "en", "german": "de"}
+# Inverse of LANGUAGE_NAMES in scripts/generate-settings.sh, which writes the
+# settings key this reads back. Keep the two in step.
+NAMES_TO_ISO = {
+    "english": "en",
+    "german": "de",
+    "french": "fr",
+    "italian": "it",
+    "dutch": "nl",
+    "polish": "pl",
+    "spanish": "es",
+}
 
-# Rule blocks keyed by ISO code. A language with no block emits nothing —
-# English needs no orthography rule, and the built-in section covers the rest.
+# Rule blocks keyed by ISO code, holding only what the built-in "# Language"
+# section does not carry (see header). A language with no residue has no entry
+# and emits nothing.
 RULES = {
-    "de": """## Sprache und Rechtschreibung
+    "de": """## Rechtschreibung: ß und ss
 
-- Vollständige deutsche Rechtschreibung verwenden: alle Umlaute (ä, ö, ü, Ä, Ö, Ü)
-  und Eszett (ß). Keine Umschreibungen wie "ae" für "ä", "oe" für "ö", "ue" für
-  "ü" oder "ss" für "ß".
 - ß nach langem Vokal und Diphthong (Maßnahme, außerhalb, Größe), ss nach kurzem
   Vokal (dass, muss, Prozess). Kein schweizerisches ss an ß-Stellen.
 - Wechselt der Benutzer die Sprache, in dessen Sprache antworten — die

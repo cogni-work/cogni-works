@@ -38,7 +38,7 @@ fresh entry.
 
 Dispatch the read-only `consult-framework-adherence-reviewer` agent — it scores
 the artifact against the stored `chosen_framework` and returns concrete drift
-findings, never a pass/fail bit (it holds no Write/Edit tools). Pass its four
+findings, never a pass/fail bit (it holds no Write/Edit tools). Pass its five
 required inputs:
 
 - `engagement_dir`: absolute path to the engagement directory (the one holding
@@ -46,6 +46,11 @@ required inputs:
 - `field_slug`: the deliverable's action field.
 - `deliverable_slug`: the deliverable under review.
 - `plugin_root`: `$CLAUDE_PLUGIN_ROOT`.
+- `interaction_language`: the language resolved for this conversation
+  (`references/interaction-language.md`), as an ISO 639-1 code. The findings are
+  read by the consultant, and a subagent inherits none of the main loop's
+  language context — the plugin's `SubagentStart` hook supplies the workspace
+  default, but only this dispatch has seen the user's message.
 
 The agent resolves the framework signature(s), reads the artifact, and returns
 the standard envelope with `data.adherence` (`strong` / `partial` / `drifted`),

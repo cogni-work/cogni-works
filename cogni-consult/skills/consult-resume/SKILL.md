@@ -303,7 +303,8 @@ state calls for them — not as standing menu items:
 - **A deliverable is `complete` with a non-`null` `chosen_framework` whose
   conformance hasn't been verified** → offer a **framework-adherence review**:
   dispatch the `consult-framework-adherence-reviewer` agent
-  (`engagement_dir`, `field_slug`, `deliverable_slug`, `plugin_root`) to score
+  (`engagement_dir`, `field_slug`, `deliverable_slug`, `plugin_root`,
+  `interaction_language`) to score
   the finished artifact against its stored framework's structure signature and
   report drift with concrete findings. This is a structural-conformance axis
   distinct from the persona-challenge (Test) pass, so it complements rather

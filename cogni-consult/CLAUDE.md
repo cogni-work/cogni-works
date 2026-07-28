@@ -53,6 +53,12 @@ cogni-consult/
 │   │                              auto-discovered in the /config picker)
 │   └── strategy-advisor-de.md     German sister register: same stance, German
 │                                  terminology + orthography rules
+├── hooks/
+│   ├── hooks.json                 SubagentStart, matched on the four consult-*
+│   │                              agent types (auto-discovered at the plugin root)
+│   └── on-subagent-start.sh       Inject the workspace interaction language +
+│                                  the register's hard rules into dispatched
+│                                  agents, which inherit neither from the main loop
 ├── agents/
 │   ├── consult-dashboard-refresher.md  Milestone HTML dashboard refresh (haiku,
 │   │                              read-only, no theme prompt)
@@ -125,6 +131,10 @@ cogni-consult/
 - **Read-only fan-out agents, single write owner** — parallelizable per-item judgment (Test-stage persona challenge, Empathize empathy-mapping, Test-gate framework-adherence review) is delegated to read-only agents that return `{success, data, error}` envelopes; the orchestrating skill merges the envelopes and owns every write. The persona-challenge write contract lives in exactly one place (consult-personas' challenge mode); the DT loop delegates instead of reimplementing. Together with structural validation and the persona challenge, the advisory adherence review completes the repo's Three-Layer Quality Gate; all gates are advisory — auto-walk never deadlocks. Dense fan-out/merge/idempotency contracts live in `references/orchestration/`, keeping the SKILL body under the 500-line cap
 - **Path references, not data copies** — cross-references via slugs/paths, no shared DB
 - **Voice in the output style, phase discipline in the skills** — the always-on executive-advisory *voice* lives in the output styles `output-styles/strategy-advisor.md` (EN-led) and `output-styles/strategy-advisor-de.md` (German sister register, terminology + orthography rules on top of the same stance), both opt-in and fixed at session start; the diverge/converge *phase discipline* stays in the consult-* skills, which load contextually so they never fire outside an active engagement. The two style files carry no shared reference — output styles do not load `references/`, so EN and DE must be kept in step deliberately
+
+  **Why the styles stay opt-in.** A plugin *can* force its own style on every session (`force-for-plugin: true`), and that is exactly why we do not: a forced style is session-global, and multi-plugin resolution is first-loaded-wins, so with the marketplace installed cogni-consult would govern the voice of every unrelated session. Both files also declare `keep-coding-instructions: true`, which is the documented opt-out from a style replacing Claude Code's `# Doing tasks` block (prefer-editing-existing-files, the OWASP warning, the over-engineering rules). On Claude Code 2.1.220 that field is **honored for styles loaded from a directory but silently ignored for plugin-shipped ones**, so activating either style today still costs those engineering defaults while it is active — a real cost for skills that run `deliverable-graph.py` and do idempotent `Edit` round-trips on `field.json`. `# Executing actions with care` survives either way, so the loss is bounded. The declaration is correct per the schema and starts working the moment the plugin loader reads it; until then it is a second reason to keep the register opt-in
+
+- **Language reaches subagents only through the hook** — a subagent's system prompt is its own body plus a notes block and the environment info: no settings `language` key, no `CLAUDE.md`, no active output style. `hooks/hooks.json` registers a `SubagentStart` hook matched on the four `consult-*` agent types; `hooks/on-subagent-start.sh` resolves the workspace default language and injects it with the register's hard rules. Because a hook cannot see the user's message, rung 2 of `references/interaction-language.md` (message-detection override) travels as the `interaction_language` dispatch input, which wins over the hook's default. Keep the doctrine in the hook, not in the four agent bodies — those hold only the input declaration
 
 ## Data Model
 

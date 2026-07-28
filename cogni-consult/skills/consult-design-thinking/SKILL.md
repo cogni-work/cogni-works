@@ -258,7 +258,8 @@ comes from the knowledge base, never from raw web search.
 **Run the fan-out.** With the evidence context in hand from the rung above,
 dispatch `consult-empathy-mapper` once per relevant `personas/*.json` (inputs
 `engagement_dir`, `field_slug`, `deliverable_slug`, `persona_slug`,
-`plugin_root`, and `evidence_refs` — the research-synthesis and prior-deliverable
+`plugin_root`, `interaction_language` — the language resolved in step 0, as an
+ISO 639-1 code — and `evidence_refs`, the research-synthesis and prior-deliverable
 paths gathered above). Merge the `success: true` envelopes and apply this stage's
 write contract per
 `$CLAUDE_PLUGIN_ROOT/references/orchestration/empathize-empathy-mapping.md`: per
@@ -382,7 +383,8 @@ is non-`null` (already in hand from the Prerequisite Gate), run the
 framework-adherence review per
 `$CLAUDE_PLUGIN_ROOT/references/orchestration/test-adherence-review.md` —
 dispatch the read-only `consult-framework-adherence-reviewer` agent (inputs
-`engagement_dir`, `field_slug`, `deliverable_slug`, `plugin_root`), surface its
+`engagement_dir`, `field_slug`, `deliverable_slug`, `plugin_root`,
+`interaction_language`), surface its
 advisory `adherence` band and drift findings to the consultant, and record the
 outcome as an `adherence-review` decision-log entry keyed by
 `(action_field, deliverable)`. This is the framework-adherence rung of the

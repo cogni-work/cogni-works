@@ -81,16 +81,45 @@ select_language() {
     esac
 }
 
-copy_claude_template() {
+write_settings_language() {
     local lang="$1"
-    local template="$WORKPLACE_ROOT/.claude/templates/CLAUDE.${lang}.md"
-    local destination="$WORKPLACE_ROOT/CLAUDE.md"
+    local settings="$WORKPLACE_ROOT/.claude/settings.local.json"
 
-    if [[ -f "$template" ]]; then
-        cp "$template" "$destination"
-        echo -e "${GREEN}✓${NC} CLAUDE.md updated for ${lang}" >&2
+    if ! command -v python3 &>/dev/null; then
+        echo -e "${YELLOW}⚠${NC} python3 not found — language not switched" >&2
+        return 0
+    fi
+
+    # The "language" settings key builds a "# Language" system-prompt section,
+    # so the choice reaches the session directly. The workspace-root CLAUDE.md
+    # is the user's file and is never touched here.
+    if python3 - "$settings" "$lang" <<'PYEOF'
+import json, os, sys
+
+settings_path, lang = sys.argv[1], sys.argv[2]
+NAMES = {"en": "english", "de": "german"}
+name = NAMES.get(lang)
+if not name:
+    sys.exit(1)
+
+settings = {}
+if os.path.isfile(settings_path):
+    try:
+        with open(settings_path) as f:
+            settings = json.load(f)
+    except (IOError, ValueError):
+        settings = {}
+
+settings["language"] = name
+os.makedirs(os.path.dirname(settings_path), exist_ok=True)
+with open(settings_path, "w") as f:
+    json.dump(settings, f, indent=2)
+    f.write("\n")
+PYEOF
+    then
+        echo -e "${GREEN}✓${NC} Session language set to ${lang}" >&2
     else
-        echo -e "${YELLOW}⚠${NC} Template CLAUDE.${lang}.md not found (keeping existing)" >&2
+        echo -e "${YELLOW}⚠${NC} Could not set session language to ${lang}" >&2
     fi
 }
 
@@ -111,7 +140,7 @@ launch_claude() {
     LANGUAGE="$(select_language)"
     echo ""
 
-    copy_claude_template "$LANGUAGE"
+    write_settings_language "$LANGUAGE"
     echo ""
 
     # Resolve output-style

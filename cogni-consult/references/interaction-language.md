@@ -18,17 +18,32 @@ which language to *converse* in.
 
 Resolve it the same way `cogni-help:cogni-issues` does, in this order:
 
-1. **Workspace default** — read `.workspace-config.json` in the workspace root;
-   its `language` field (e.g. `"en"` or `"de"`) is the default interaction
-   language. The workspace `CLAUDE.md` may also state a preferred language.
+1. **Workspace default** — the `language` key in `.claude/settings.local.json`
+   (a natural-language name, e.g. `"english"` or `"german"`) is the workspace
+   default. It is authoritative because Claude Code turns it into a `# Language`
+   system-prompt section, so it governs the session whether or not any skill
+   reads it. Fall back to the `language` field in `.workspace-config.json`
+   (ISO 639-1, e.g. `"en"` / `"de"`) for workspaces created before the key
+   existed. Do **not** read the workspace `CLAUDE.md` — it is the user's file
+   and states nothing about language.
 2. **Message-detection override** — if the user's message is written in a
    different language, prefer the user's language. Someone writing in German
    wants a German reply even when the workspace is set to English.
-3. **Fallback** — if `.workspace-config.json` is missing and the message
-   language is unclear, default to English.
+3. **Fallback** — if neither source is present and the message language is
+   unclear, default to English.
 
 Conduct the entire conversation in the resolved interaction language; technical
 terms, slugs, skill names, CLI commands, and file names stay English regardless.
+
+## Subagents do not inherit it
+
+The `# Language` section reaches the main loop only. A subagent's system prompt
+is its own body plus a short notes block and the environment info — no settings
+language, no `CLAUDE.md`. Any dispatched agent that produces user-facing prose
+must therefore be told the language explicitly: cogni-consult's `SubagentStart`
+hook supplies the workspace default to every `consult-*` agent, and a dispatch
+that resolved rung 2 passes `interaction_language` in its inputs, which wins
+over the hook's default.
 
 ## Why they are separate
 

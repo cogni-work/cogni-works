@@ -144,7 +144,9 @@ its writes:
 
 1. **Fan out the objections (read-only).** For each relevant persona, dispatch
    the read-only `consult-persona-challenger` agent (inputs `engagement_dir`,
-   `field_slug`, `deliverable_slug`, `persona_slug`, `plugin_root`); it adopts
+   `field_slug`, `deliverable_slug`, `persona_slug`, `plugin_root`,
+   `interaction_language` — the language resolved in step 1, as an ISO 639-1
+   code); it adopts
    that persona's `voice` bounded by its `capabilities`/`wants`/`needs`/
    `core_tension` and returns the standard `{success, data, error}` envelope
    carrying the structured challenge (`missing[]`, `pushbacks[]`,

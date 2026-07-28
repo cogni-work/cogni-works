@@ -174,7 +174,9 @@ cogni-workspace/
 │   └── mcp-wrappers/             Wrapper scripts for git-based MCP servers
 ├── hooks/                        Session lifecycle hooks
 │   ├── hooks.json
-│   └── on-session-start.sh
+│   ├── on-session-start.sh       One-line workspace status
+│   └── on-session-start-language.sh  Language rules the built-in "# Language"
+│                                 system-prompt section does not carry
 ├── scripts/                      Utility scripts
 │   ├── check-dependencies.sh
 │   ├── check-skill-names.sh
@@ -200,7 +202,6 @@ cogni-workspace/
 ├── references/                   Reference documentation
 ├── docs/                         Developer notes (e.g. theme-system v2 migration)
 └── assets/
-    ├── claude-templates/         Language-specific CLAUDE.md templates (EN/DE)
     └── output-styles/            Language-specific behavioral anchors (EN/DE)
 ```
 

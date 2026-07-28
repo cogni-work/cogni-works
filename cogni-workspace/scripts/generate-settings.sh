@@ -82,18 +82,31 @@ for p in plugins:
     if path:
         env[plugin_var] = path
 
-# Merge with existing custom vars if update mode
+# Merge with existing settings if update mode. Read-modify-write the whole
+# document, not just "env": the file is the user's too (permissions, hooks,
+# outputStyle), and replacing it wholesale destroys anything we don't generate.
 settings_path = os.path.join(target, ".claude", "settings.local.json")
+settings = {}
 if update_mode and os.path.isfile(settings_path):
     with open(settings_path) as f:
-        existing = json.load(f)
-    for k, v in existing.get("env", {}).items():
+        settings = json.load(f)
+    for k, v in settings.get("env", {}).items():
         if k not in env:
             env[k] = v
 
+settings["env"] = env
+
+# The "language" settings key builds a "# Language" system-prompt section, so
+# the workspace language reaches a fresh session with no output style and no
+# CLAUDE.md. The key wants a natural-language name, not an ISO code.
+LANGUAGE_NAMES = {"en": "english", "de": "german"}
+language_name = LANGUAGE_NAMES.get(language)
+if language_name:
+    settings["language"] = language_name
+
 # Write settings.local.json
 with open(settings_path, "w") as f:
-    json.dump({"env": env}, f, indent=2)
+    json.dump(settings, f, indent=2)
     f.write("\n")
 
 # Write .workspace-env.sh
@@ -140,6 +153,7 @@ result = {
     "data": {
         "target": target,
         "language": language,
+        "settings_language": language_name,
         "env_vars_count": len(env),
         "files_written": [
             ".claude/settings.local.json",

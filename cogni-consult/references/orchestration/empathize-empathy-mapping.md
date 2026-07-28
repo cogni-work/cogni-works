@@ -30,10 +30,16 @@ whose reality shapes whether the deliverable lands (the shipped advisors plus an
 scope-seeded stakeholder whose `context` touches the topic). Dispatch the
 read-only `consult-empathy-mapper` agent **once per relevant persona** (the
 fan-out), passing `engagement_dir`, `field_slug`, `deliverable_slug`,
-`persona_slug`, `plugin_root`, and `evidence_refs` — the on-disk research
-synthesis and prior-deliverable paths the stage's gap-check / research-routing
-rung already gathered. Each dispatch maps exactly one persona so their inner
-worlds stay distinct. This reuses the per-persona-dispatch → envelope → merge
+`persona_slug`, `plugin_root`, `interaction_language`, and `evidence_refs` — the
+on-disk research synthesis and prior-deliverable paths the stage's gap-check /
+research-routing rung already gathered. Each dispatch maps exactly one persona so
+their inner worlds stay distinct.
+
+`interaction_language` is the language resolved for this conversation (see
+`references/interaction-language.md`), passed as an ISO 639-1 code. Required for
+the same reason as in the Test-stage challenge: a subagent inherits none of the
+main loop's language context, and only the dispatching skill has seen the user's
+message. This reuses the per-persona-dispatch → envelope → merge
 convention established by the Test-stage persona challenge.
 
 ## Envelope + merge

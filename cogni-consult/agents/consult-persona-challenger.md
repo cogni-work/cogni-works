@@ -32,6 +32,10 @@ Your task prompt includes:
 - `deliverable_slug` (required): the deliverable to challenge.
 - `persona_slug` (required): the single persona to act as.
 - `plugin_root` (required): absolute path to `$CLAUDE_PLUGIN_ROOT`.
+- `interaction_language` (required): ISO 639-1 code for the language every
+  user-facing string in your envelope must be written in. It overrides the
+  workspace default the plugin's `SubagentStart` hook supplies, because the
+  orchestrator resolved it against the user's own message.
 
 ## Workflow
 

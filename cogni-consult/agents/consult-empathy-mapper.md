@@ -31,6 +31,10 @@ Your task prompt includes:
 - `deliverable_slug` (required): the deliverable being empathized for.
 - `persona_slug` (required): the single persona to map.
 - `plugin_root` (required): absolute path to `$CLAUDE_PLUGIN_ROOT`.
+- `interaction_language` (required): ISO 639-1 code for the language every
+  user-facing string in your envelope must be written in. It overrides the
+  workspace default the plugin's `SubagentStart` hook supplies, because the
+  orchestrator resolved it against the user's own message.
 - `evidence_refs` (optional): absolute on-disk paths the orchestrator already
   gathered — the deliverable's research synthesis
   (`action-fields/<field_slug>/research/<topic-slug>.md`) and prior deliverables

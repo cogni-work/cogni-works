@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "SubagentStart": [
+      {
+        "matcher": "^(consult-persona-challenger|consult-empathy-mapper|consult-framework-adherence-reviewer|consult-dashboard-refresher)$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/on-subagent-start.sh",
+            "timeout": 15
+          }
+        ]
+      }
+    ]
+  }
+}

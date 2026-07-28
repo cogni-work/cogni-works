@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 # generate-settings.sh - Generate .claude/settings.local.json and .workspace-env.sh
-# Usage: generate-settings.sh --target <dir> --language <en|de> --plugins <json-file-or-string>
+# Usage: generate-settings.sh --target <dir> --language <iso-code> --plugins <json-file-or-string>
+# --language takes an ISO 639-1 code. Codes with a natural-language name in
+# LANGUAGE_NAMES below also get the Claude Code "language" settings key; anything
+# else is reported as data.language_key_skipped and gets no key.
 # Optional: --update (preserve custom env vars)
 
 set -euo pipefail
@@ -82,18 +85,49 @@ for p in plugins:
     if path:
         env[plugin_var] = path
 
-# Merge with existing custom vars if update mode
+# Merge with existing settings if update mode. Read-modify-write the whole
+# document, not just "env": the file is the user's too (permissions, hooks,
+# outputStyle), and replacing it wholesale destroys anything we don't generate.
 settings_path = os.path.join(target, ".claude", "settings.local.json")
+settings = {}
 if update_mode and os.path.isfile(settings_path):
     with open(settings_path) as f:
-        existing = json.load(f)
-    for k, v in existing.get("env", {}).items():
+        settings = json.load(f)
+    for k, v in settings.get("env", {}).items():
         if k not in env:
             env[k] = v
 
+settings["env"] = env
+
+# The "language" settings key builds a "# Language" system-prompt section, so
+# the workspace language reaches a fresh session with no output style and no
+# CLAUDE.md. The key wants a natural-language name, not an ISO code.
+#
+# Adding a language means updating the inverse maps in
+# hooks/on-session-start-language.sh and cogni-consult/hooks/on-subagent-start.sh
+# too — the market registry carries ISO codes only, so there is no shared source
+# to point at yet.
+LANGUAGE_NAMES = {
+    "en": "english",
+    "de": "german",
+    "fr": "french",
+    "it": "italian",
+    "nl": "dutch",
+    "pl": "polish",
+    "es": "spanish",
+}
+language_name = LANGUAGE_NAMES.get(language)
+language_key_skipped = None
+if language_name:
+    settings["language"] = language_name
+else:
+    # Report it rather than silently shipping a workspace with no "# Language"
+    # section at all: without the key, nothing sets the response language.
+    language_key_skipped = language
+
 # Write settings.local.json
 with open(settings_path, "w") as f:
-    json.dump({"env": env}, f, indent=2)
+    json.dump(settings, f, indent=2)
     f.write("\n")
 
 # Write .workspace-env.sh
@@ -141,6 +175,7 @@ result = {
         "target": target,
         "language": language,
         "env_vars_count": len(env),
+        **({"language_key_skipped": language_key_skipped} if language_key_skipped else {}),
         "files_written": [
             ".claude/settings.local.json",
             ".workspace-env.sh",

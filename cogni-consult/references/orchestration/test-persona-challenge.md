@@ -23,9 +23,17 @@ Determine the relevant personas: both shipped advisors
 (`consulting-partner`, `project-manager`) plus any persona whose `context`
 touches the deliverable's topic. Dispatch the read-only
 `consult-persona-challenger` agent **once per relevant persona** (the fan-out),
-passing `engagement_dir`, `field_slug`, `deliverable_slug`, `persona_slug`, and
-`plugin_root`. Each dispatch speaks for exactly one persona so voices stay
-distinct.
+passing `engagement_dir`, `field_slug`, `deliverable_slug`, `persona_slug`,
+`plugin_root`, and `interaction_language`. Each dispatch speaks for exactly one
+persona so voices stay distinct.
+
+`interaction_language` is the language resolved for this conversation (see
+`references/interaction-language.md`) — pass it as an ISO 639-1 code. It is a
+required input because a subagent inherits none of the main loop's language
+context: not the settings key, not `CLAUDE.md`, not the active output style. The
+plugin's `SubagentStart` hook supplies the workspace default as a floor, but only
+the dispatching skill has seen the user's message, so only it can carry rung 2's
+override. Pass it even when it matches the workspace default.
 
 ## Envelope + merge
 

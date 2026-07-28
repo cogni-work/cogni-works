@@ -27,6 +27,8 @@ cogni-consult/
 │   ├── publish-routing.md         Canonical publish format→route contract
 │   ├── research-routing.md        Canonical cogni-knowledge research rule (binding,
 │   │                              pipeline rungs, depth framing, storage contract)
+│   ├── subagent-output-contract.md  Register rules the SubagentStart hook emits
+│   │                              verbatim into every dispatched agent
 │   ├── personas/                  Packaged default advisors (consulting-partner,
 │   │                              project-manager)
 │   ├── methods/
@@ -53,6 +55,12 @@ cogni-consult/
 │   │                              auto-discovered in the /config picker)
 │   └── strategy-advisor-de.md     German sister register: same stance, German
 │                                  terminology + orthography rules
+├── hooks/
+│   ├── hooks.json                 SubagentStart, matched on the four consult-*
+│   │                              agent types (auto-discovered at the plugin root)
+│   └── on-subagent-start.sh       Resolve the workspace interaction language and
+│                                  emit it with references/subagent-output-contract.md
+│                                  into dispatched agents, which inherit neither
 ├── agents/
 │   ├── consult-dashboard-refresher.md  Milestone HTML dashboard refresh (haiku,
 │   │                              read-only, no theme prompt)
@@ -125,6 +133,12 @@ cogni-consult/
 - **Read-only fan-out agents, single write owner** — parallelizable per-item judgment (Test-stage persona challenge, Empathize empathy-mapping, Test-gate framework-adherence review) is delegated to read-only agents that return `{success, data, error}` envelopes; the orchestrating skill merges the envelopes and owns every write. The persona-challenge write contract lives in exactly one place (consult-personas' challenge mode); the DT loop delegates instead of reimplementing. Together with structural validation and the persona challenge, the advisory adherence review completes the repo's Three-Layer Quality Gate; all gates are advisory — auto-walk never deadlocks. Dense fan-out/merge/idempotency contracts live in `references/orchestration/`, keeping the SKILL body under the 500-line cap
 - **Path references, not data copies** — cross-references via slugs/paths, no shared DB
 - **Voice in the output style, phase discipline in the skills** — the always-on executive-advisory *voice* lives in the output styles `output-styles/strategy-advisor.md` (EN-led) and `output-styles/strategy-advisor-de.md` (German sister register, terminology + orthography rules on top of the same stance), both opt-in and fixed at session start; the diverge/converge *phase discipline* stays in the consult-* skills, which load contextually so they never fire outside an active engagement. The two style files carry no shared reference — output styles do not load `references/`, so EN and DE must be kept in step deliberately
+
+  **Why the styles stay opt-in.** A plugin *can* force its own style on every session (`force-for-plugin: true`), and that is exactly why we do not: a forced style is session-global, and multi-plugin resolution is first-loaded-wins, so with the marketplace installed cogni-consult would govern the voice of every unrelated session. That reason is independent of Claude Code's version and is the only one to record.
+
+  **Both files declare `keep-coding-instructions: true`, and it is load-bearing.** Without it, activating a style drops Claude Code's `# Doing tasks` block — prefer-editing-existing-files, the OWASP warning, the over-engineering rules — which matters for skills that run `deliverable-graph.py` and do idempotent `Edit` round-trips on `field.json`. The plugin output-style loader reads the field (`keepCodingInstructions` travels with `forceForPlugin` from the frontmatter through the merged style map into the prompt assembler), so declaring it keeps those instructions in place. `# Executing actions with care` is unconditional and survives either way. Treat the declaration as behaviour, not decoration: if either file loses it, activating that register silently costs the engineering defaults
+
+- **Language reaches subagents only through the hook** — a subagent's system prompt is its own body plus a notes block and the environment info: no settings `language` key, no `CLAUDE.md`, no active output style. `hooks/hooks.json` registers a `SubagentStart` hook matched on the four `consult-*` agent types; `hooks/on-subagent-start.sh` resolves the workspace default language and emits it together with `references/subagent-output-contract.md`, read verbatim. Because a hook cannot see the user's message, rung 2 of `references/interaction-language.md` (message-detection override) travels as the `interaction_language` dispatch input, which wins over the hook's default. Keep the doctrine in the reference, not in the hook script and not in the four agent bodies — the script is a delivery mechanism, and the agent bodies hold only the input declaration. When `references/user-facing-output.md` lands, reconcile the two: one contract, two delivery paths (that file loads in the main loop, this one is injected into agents)
 
 ## Data Model
 

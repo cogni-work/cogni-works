@@ -110,7 +110,7 @@ success it returns `data.action` of `installed` / `updated` / `skipped` and the
 provisioned package list. Packages are declared in
 `references/python-deps-registry.json`.
 
-### 4. Install Output Styles, CLAUDE.md Templates, and Theme Template
+### 4. Install Output Styles and Theme Template
 
 Copy the language-appropriate output-style file. These files contain behavioral anchors that shape Claude's communication patterns in this workspace:
 
@@ -119,21 +119,9 @@ cp "${CLAUDE_PLUGIN_ROOT}/assets/output-styles/workspace-${LANGUAGE}.md" \
    "${TARGET_DIR}/.claude/output-styles/"
 ```
 
-Copy the language-specific CLAUDE.md template to the workspace root and to the templates directory (used by the Obsidian Terminal launcher for per-session language switching):
+Do **not** write a workspace-root `CLAUDE.md`. The language rules reach a fresh session without it: step 2's `generate-settings.sh` writes the `language` key into `.claude/settings.local.json`, which Claude Code turns into a `# Language` system-prompt section, and the plugin's `SessionStart` hook adds the orthography rules that section does not carry. The root `CLAUDE.md` is the user's file — the place for project-specific instructions — and this skill never creates or overwrites it.
 
-```bash
-cp "${CLAUDE_PLUGIN_ROOT}/assets/claude-templates/CLAUDE.${LANGUAGE}.md" \
-   "${TARGET_DIR}/CLAUDE.md"
-
-mkdir -p "${TARGET_DIR}/.claude/templates"
-cp "${CLAUDE_PLUGIN_ROOT}/assets/claude-templates/CLAUDE.en.md" \
-   "${CLAUDE_PLUGIN_ROOT}/assets/claude-templates/CLAUDE.de.md" \
-   "${TARGET_DIR}/.claude/templates/"
-```
-
-The CLAUDE.md at workspace root ensures Claude uses the correct language and orthography (including umlauts for German). The templates directory enables the Obsidian launcher to switch languages per session.
-
-Create the `output-styles` and `templates` directories first if needed. Then copy the theme template:
+Create the `output-styles` directory first if needed. Then copy the theme template:
 
 ```bash
 cp -r "${CLAUDE_PLUGIN_ROOT}/themes/_template/" \
@@ -248,20 +236,16 @@ bash ${CLAUDE_PLUGIN_ROOT}/scripts/install-workspace-deps.sh --force
 Same fail-soft contract as Init Mode Step 3.5: warn and continue if `python3` /
 the `venv` module / the network is unavailable — never block the update.
 
-### 4. Update Output Styles, CLAUDE.md Templates, and Theme Template
+### 4. Update Output Styles and Theme Template
 
 Copy latest output-style files from `${CLAUDE_PLUGIN_ROOT}/assets/output-styles/` to `.claude/output-styles/`, overwriting existing ones (these are plugin-managed, not user-customized).
 
-Refresh both language templates in `.claude/templates/`. Like the output styles these are plugin-managed — the Obsidian Terminal launcher copies from them to the workspace root on every per-session language switch, so a correction to a template only reaches an existing workspace if this step runs. Init Mode installs them; without the refresh here they stay at whatever version was current when the workspace was created:
+**Migrate a workspace created before the language settings key.** Step 2's `generate-settings.sh --update` writes the `language` key into `.claude/settings.local.json`, which is now where the workspace language lives. Two retired artifacts may still be on disk:
 
-```bash
-mkdir -p "${WORKSPACE_DIR}/.claude/templates"
-cp "${CLAUDE_PLUGIN_ROOT}/assets/claude-templates/CLAUDE.en.md" \
-   "${CLAUDE_PLUGIN_ROOT}/assets/claude-templates/CLAUDE.de.md" \
-   "${WORKSPACE_DIR}/.claude/templates/"
-```
+- `.claude/templates/` — the cache that fed the Obsidian launcher's per-session `CLAUDE.md` copy. Nothing reads it any more. Delete it.
+- The workspace-root `CLAUDE.md`, if it was written by a retired template. Compare it against the language block the plugin used to ship (a `# Workspace Instructions` / `# Workspace-Anweisungen` heading followed only by language bullets). If that is all it contains, say the rules now arrive via the settings key and the `SessionStart` hook and offer to delete it — defaulting to keeping the file. If it contains anything else, leave it untouched and say why.
 
-Do **not** overwrite the workspace-root `CLAUDE.md` here. Nothing declares it plugin-managed the way the output styles are declared above, and it is the natural place for a user to add project-specific instructions on top of the language rules. Compare it against `.claude/templates/CLAUDE.${LANGUAGE}.md` instead; if they differ, show the difference and ask whether to adopt the updated template, keep the current file, or merge by hand — defaulting to keeping the current file.
+Do **not** overwrite the workspace-root `CLAUDE.md` under any branch. It is the user's file.
 
 Refresh `_template/theme.md` from `${CLAUDE_PLUGIN_ROOT}/themes/_template/`. Preserve all user-created themes.
 

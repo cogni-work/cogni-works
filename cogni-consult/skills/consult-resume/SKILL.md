@@ -130,19 +130,36 @@ Lead with the key question, then one table row per action field:
 
 ```
 Engagement: <name> — zuletzt bearbeitet <TT.MM.JJJJ>
-Key question: <key_question>
+Schlüsselfrage: <key_question>
 
-| Action Field | Status | Deliverables | Next Deliverable |
-|--------------|--------|--------------|------------------|
-| Market Evidence | complete | 2/2 complete | — |
-| Portfolio Fit | in-progress | 1/3 complete | Competitor map (ideate · pyramid-principle) |
-| Go-to-Market | pending | 0/2 started | Channel strategy (empathize · —) |
+| Handlungsfeld | Stand | Deliverables | Nächstes Deliverable |
+|---------------|-------|--------------|----------------------|
+| Market Evidence | fertig | 2/2 fertig | — |
+| Portfolio Fit | in Arbeit | 1/3 fertig | Competitor map (ideate · pyramid-principle) |
+| Go-to-Market | offen | 0/2 begonnen | Channel strategy (empathize · —) |
 ```
 
-That is a German session: the `zuletzt bearbeitet` label follows the
-interaction language, while the action-field and deliverable names are the
-stored titles — here English, because an engagement's stored titles keep their
-technical terms whatever the session language.
+That is a German session: the column headers, the `Stand` values, the
+deliverable counts and the `Schlüsselfrage` / `zuletzt bearbeitet` labels all
+follow the interaction language. `Deliverables` is the same token in both header
+rows — the established German loanword, not an untranslated leftover, so leave
+it. The one carve-out is the action-field and
+deliverable names — `Market Evidence`, `Competitor map`, `Channel strategy` are
+the stored titles, here English, because stored titles keep their technical
+terms whatever the session language. That carve-out covers those names and
+nothing else; it is not a licence for English elsewhere in the table. The
+parenthesised stage and framework are engine values surfaced read-only, so they
+keep their stored lowercase spelling in either session.
+
+An English session renders the same table, seeded by example too: preamble
+labels `Engagement: <name> — last worked on <DD.MM.YYYY>` and
+`Key question: <key_question>`, header
+`| Action Field | Status | Deliverables | Next Deliverable |`, `Status` values
+`complete`, `in progress` and `pending`, counts `2/2 complete` and
+`0/2 started`. `in progress` reads as two words — natural language in either
+session, never the stored `in-progress` enum. Dates keep the day-first shape of
+step 2. The columns, the row order and the one-row-per-action-field rule are
+identical in both languages.
 
 Name action fields by the `title` read from
 `<engagement-path>/action-fields/<slug>/field.json` — step 3's rollup carries a
@@ -151,17 +168,19 @@ passes through with each deliverable. Fall back to the slug only when no title
 is stored; slugs are storage keys, not display names, and titles are rendered
 as stored, never translated.
 `zuletzt bearbeitet` resolves exactly as in step 2; compute it for the selected
-engagement here when step 2's branch did not already. Step 2's language rule
-covers the header label and the date shape in this table too.
+engagement here when step 2's branch did not already.
 
-`Deliverables` counts `complete` over total; `Next Deliverable` names the
+`Deliverables` counts deliverables at `complete` over the field total — that
+`complete` is the engine state being counted, not the word to print; the cell
+renders its count in the interaction language (`2/2 fertig` / `2/2 complete`).
+`Nächstes Deliverable` / `Next Deliverable` names the
 first non-complete deliverable with its `dt_stage` and stored
 `chosen_framework` in parentheses (`<stage> · <framework>`), or the
 first whose `persona_review` is still open when everything else is done.
-The framework is surfaced read-only — a registry slug verbatim, or for a
+Render the framework as its registry slug verbatim, or for a
 `combo:<slugA>+<slugB>` pairing the two slugs joined as `<slugA> + <slugB>`
 (the stored `combo:` prefix dropped for display), or `—` when none is stored
-(legacy deliverables); it is never inferred here.
+(legacy deliverables) — never inferred here.
 Keep it to this one table — the deep WBS view (planning deliverable sets,
 splitting fields) belongs to `consult-action-fields`, not here.
 
@@ -169,11 +188,10 @@ splitting fields) belongs to `consult-action-fields`, not here.
 themed, browsable HTML view of the same status via `/cogni-consult:consult-dashboard`
 (action-field WBS, deliverable states, design-thinking stages, persona-review
 coverage). When the engagement already has `output/design-variables.json` from a
-prior dashboard run, you can regenerate and open it without a theme prompt by
-delegating to the `consult-dashboard-refresher` agent with
-`engagement_dir: <engagement-dir>` and `plugin_root: $CLAUDE_PLUGIN_ROOT`. This
-stays read-only — the agent runs the read-only generator; it never edits
-engagement state.
+prior dashboard run, regenerate and open it without a theme prompt by delegating
+to the `consult-dashboard-refresher` agent with
+`engagement_dir: <engagement-dir>` and `plugin_root: $CLAUDE_PLUGIN_ROOT` — it
+runs the read-only generator and edits no engagement state.
 
 **Point at the project plan (only when scheduling data exists).** When the engagement
 carries a schedule, surface it here as a one-line read-only pointer. Detect it cheaply:
@@ -184,47 +202,37 @@ entry. When it does, name the **next critical-path deliverable** — the first
 not-yet-`complete` deliverable whose key is in `data.critical_path[]` — and offer
 `/cogni-consult:consult-project-plan` to (re)render `project-plan.md` (phase timeline +
 critical path + optional gantt). When no deliverable carries scheduling fields (the
-`schedule` read is empty or every entry is `unscheduled`), say nothing — this pointer
-degrades silently and the dashboard above is unchanged. It is informational only: do not
-add it as a branch in the Step-5 next-action ladder — the project plan is a derived
-read model, not a competing recommendation.
+`schedule` read is empty or every entry is `unscheduled`), say nothing — the pointer
+degrades silently. It is informational only, never a branch in the Step-5
+next-action ladder: the project plan is a derived read model, not a competing
+recommendation.
 
-**Milestone README refresh.** On every re-entry, also run
-`python3 $CLAUDE_PLUGIN_ROOT/scripts/generate-engagement-readme.py "<engagement-dir>"`
-automatically (no prompt) to refresh the engagement-root README front door —
-unconditional (unlike the theme-gated dashboard offer above, no
-`output/design-variables.json` needed) and non-fatal: on failure, warn and
-continue. An engagement that predates the README front door gains one here on
-its next re-entry — no migration step needed; a hand-authored root `README.md`
-is never overwritten (the generator refuses when its marker footer is absent —
-that refusal is the same non-fatal warning case). The README is a derived front-door
-artifact regenerated from engagement state, not engagement state itself, so the
-read-only contract over `consult-project.json`, `field.json`, personas, and logs
-holds.
+**Refresh the front-door artifacts.** On every re-entry, run both generators
+automatically (no prompt) and unconditionally — unlike the theme-gated dashboard
+offer above, neither needs `output/design-variables.json`:
 
-**Assumption register refresh.** On every re-entry, also run
-`python3 $CLAUDE_PLUGIN_ROOT/scripts/register-generator.py "<engagement-dir>"`
-automatically (no prompt) to regenerate the engagement-root `assumptions.md`
-register — the human-browsable table of every registered assumption's value,
-provenance, status, and `used_by[]` backlinks — from `assumptions.json`.
-Unconditional and non-fatal: the generator's `load_assumptions` is fail-soft (a
-missing, empty, or malformed registry degrades to an empty register, never an
-error), and on any failure, warn and continue. An engagement that carries a
-populated `assumptions.json` but never had its readable register generated gains
-one here on its next re-entry — no migration step needed; a hand-authored
-`assumptions.md` is never overwritten (the generator refuses when its generated
-marker footer is absent — that refusal is the same non-fatal warning case). Like
-the README, `assumptions.md` is a derived read model regenerated from the
-registry, not engagement state itself, so the read-only contract above holds.
+- `python3 $CLAUDE_PLUGIN_ROOT/scripts/generate-engagement-readme.py "<engagement-dir>"`
+  refreshes the engagement-root `README.md` front door.
+- `python3 $CLAUDE_PLUGIN_ROOT/scripts/register-generator.py "<engagement-dir>"`
+  regenerates the engagement-root `assumptions.md` register from
+  `assumptions.json` — the human-browsable table of every registered
+  assumption's value, provenance, status, and `used_by[]` backlinks. Its
+  `load_assumptions` is fail-soft: a missing, empty, or malformed registry
+  degrades to an empty register, never an error.
 
-**Point at the register (only when it is non-empty).** When the generator returns
-`success: true` with `data.assumptions_count > 0`, surface a one-line read-only
-pointer to the regenerated `assumptions.md` — mirroring the project-plan pointer
-above so the refresh is visible rather than silent (e.g. *"Assumption register:
-`assumptions.md` (N registered) — value, provenance, and `used_by[]` backlinks"*).
-When the count is `0` (no registered assumptions) or the generator warned, say
-nothing — the pointer degrades silently. It is informational only: like the
-project-plan pointer, do not add it as a branch in the Step-5 next-action ladder.
+Both are non-fatal — on any failure, warn and continue. Both refuse to overwrite
+a hand-authored file (the generated marker footer is absent), and that refusal is
+the same warn-and-continue case. So an engagement that predates either artifact
+gains it on its next re-entry, with no migration step. Both outputs are derived
+read models, not engagement state, so the read-only contract holds.
+
+**Point at the register (only when it is non-empty).** When the register
+generator returns `success: true` with `data.assumptions_count > 0`, surface a
+one-line read-only pointer to the regenerated `assumptions.md` so the refresh is
+visible rather than silent (e.g. *"Assumption register: `assumptions.md`
+(N registered) — value, provenance, and `used_by[]` backlinks"*). On a count of
+`0` or a warning, say nothing: like the project-plan pointer it degrades
+silently and is informational only, never a branch in the Step-5 ladder.
 
 > **Strategy Advisor voice** — this plugin ships two advisory output styles: **Strategy Advisor** (EN-led, answer-first, MECE options) and **Strategy Advisor (DE)** for German-language engagements. Enable one from the `/config` output-style picker; it's opt-in and fixed at session start, so set it now or `/clear` after.
 
@@ -251,18 +259,17 @@ Branch on the derived state, first match wins, and say *why*:
   they are safe to refresh now); a deeper-layer deliverable is refreshed only
   once the layer above it has been. Route to `knowledge-refresh` for the
   research, then `consult-design-thinking` to re-run that deliverable's loop.
-  Never recommend refreshing a dependent before its upstream dependency.
 - **`scope_state` is `complete` AND `personas_gate` is `"pending"`** (no
   scope-seeded persona and no `.gate-waiver` marker yet) → the first
   design-thinking deliverable's empathize and test stages would run on degraded
   fallback, and the hard gate blocks a not-yet-started deliverable until personas
   are seeded. Recommend `consult-personas` to seed acting personas from the
   scope's Stakeholder dimension (or waive to defaults) *before* recommending any
-  deliverable work. Placed after the scope/unreadable/stale checks so it never
-  masks a broken manifest or a stale set, but ahead of the pending-deliverable
-  recommendation so it front-runs the first deliverable. Read `personas_gate`
-  from the `engagement-status.sh` rollup already fetched above; this stays a
-  read-only route — never write persona state here. (This gate is naturally
+  deliverable work. Its placement — after the scope/unreadable/stale checks, so
+  it never masks a broken manifest or a stale set, but ahead of the
+  pending-deliverable branch, so it front-runs the first deliverable — is
+  deliberate. Read `personas_gate` from the rollup already fetched above and
+  never write persona state here. (This gate is naturally
   once-per-engagement: once satisfied it stays satisfied, and it never fires
   for an `in-progress` or resumed deliverable, which the branches below own.)
 - **A deliverable is `in-progress`** → resume it where it stands; recommend
@@ -277,12 +284,12 @@ Branch on the derived state, first match wins, and say *why*:
 - **Everything is `complete`** → say so — the engagement is complete by
   derivation — and offer `consult-action-fields` to extend the WBS if the
   consultant wants to add fields or deliverables. Per-deliverable publish/render
-  next steps follow the publish offer below (read each `complete` deliverable's
-  `publish[]` and offer `consult-publish` or the Claude Design handoff) — surface
-  them only as elect-only offers, never as a standing menu item.
+  next steps follow the elect-only publish offer below.
 
-Four further offers surface only when the consultant's request or a deliverable's
-state calls for them — not as standing menu items:
+Four further offers surface only when the consultant's request or a
+deliverable's state calls for them — never as standing menu items, blanket
+nagging, or a standing audit. Each stays read-only the same way: resume offers
+and routes, the named skill or agent does the writing.
 
 - **The consultant names an already-`complete` deliverable to revisit or
   modify** (a rework request) → offer to reopen it and route to
@@ -290,16 +297,14 @@ state calls for them — not as standing menu items:
   the rework should re-enter (often `define` or `ideate`). The reopen itself —
   the `complete` → `in-progress` Edit and the up-front cascade-stale of its
   downstream dependents — is owned by `consult-design-thinking`'s Open-the-Loop
-  step, so resume stays read-only; it routes, it does not write.
+  step.
 - **A deliverable's stored `chosen_framework` is `null`** (a legacy deliverable
   created before a framework was chosen) and the consultant wants to assign one
   → offer to set it inline rather than sending them on a separate
   `consult-action-fields` round-trip. "Inline" means the offer surfaces here in
-  the recommendation flow; the actual `field.json` write is delegated to
-  `consult-action-fields` (which owns the deliverable manifest), so resume's
-  read-only contract holds. Surface this only when the framework gap is
-  relevant to the next action — never as blanket nagging across every legacy
-  deliverable.
+  the recommendation flow; the `field.json` write is delegated to
+  `consult-action-fields`, which owns the deliverable manifest. Offer it only
+  when that gap bears on the next action.
 - **A deliverable is `complete` with a non-`null` `chosen_framework` whose
   conformance hasn't been verified** → offer a **framework-adherence review**:
   dispatch the `consult-framework-adherence-reviewer` agent
@@ -308,24 +313,21 @@ state calls for them — not as standing menu items:
   the finished artifact against its stored framework's structure signature and
   report drift with concrete findings. This is a structural-conformance axis
   distinct from the persona-challenge (Test) pass, so it complements rather
-  than duplicates `consult-personas`. The reviewer is read-only — it reports
-  drift, it never rewrites the artifact — so resume stays read-only too;
-  acting on a finding is a separate `consult-design-thinking` rework. Surface
-  this only when the conformance question is relevant to the next action, not
-  as a standing audit of every complete deliverable.
+  than duplicates `consult-personas`. It reports drift and never rewrites the
+  artifact; acting on a finding is a separate `consult-design-thinking` rework.
+  Offer it only when the conformance question bears on the next action.
 - **A `complete` deliverable (its `persona_review` closed) is unpublished, or
   published but not yet rendered** → offer the publish / render next step from
   its `publish[]` lineage, even before the whole engagement is complete: an
   empty/absent `publish[]` → offer `/cogni-consult:consult-publish` to produce a
   presentation-ready brief; a populated `publish[]` → name its `brief_path`(s)
   and point the consultant to hand them to Claude Design (claude.ai/design) to
-  render. This is read-only over `publish[]` — `consult-publish` owns brief
-  production; resume only routes. Surface it only when the consultant elects it
-  or names that deliverable, never as a standing menu item.
+  render. `consult-publish` owns brief production; offer it only when the
+  consultant elects it or names that deliverable.
 
-Recommend one action, not a menu. On the consultant's confirmation, dispatch
-the named skill via `Skill(...)` with the engagement path as the in-session
-handoff (the target skills skip rediscovery on handoff).
+On the consultant's confirmation, dispatch the named skill via `Skill(...)` with
+the engagement path as the in-session handoff (the target skills skip
+rediscovery on handoff).
 
 ## Important Notes
 

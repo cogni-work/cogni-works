@@ -106,11 +106,15 @@ Read `data.warnings[]` too. An `unknown field (ignored)` warning is usually a
 misspelled key — the value is being dropped, not stored — so correct it against
 the data model before registering.
 
-The validator checks **frontmatter shape only**: required keys, enums, slug
-casing, ISO dates and their ordering, numeric ranges. It does **not** resolve an
-assignment's `consultant` / `project` slugs to real entity files, so a passing
-run is not evidence the refs exist — reading both referenced entities in Step 2
-remains the guard against a dangling reference.
+The validator checks **frontmatter shape** — required keys, enums, slug casing,
+ISO dates and their ordering, numeric ranges — and, when given a **portfolio
+directory**, additionally resolves each assignment's `consultant` / `project`
+slug against the collected consultant / project entities and errors on a
+dangling reference. Step 4 above passes a **single file**, which stays
+shape-only (no portfolio-wide slug set is available to resolve against), so a
+passing single-file run is not evidence the refs exist — reading both
+referenced entities in Step 2 remains the guard against a dangling reference on
+the single-file authoring path.
 
 ### Step 5: Register in the manifest and log the transition
 

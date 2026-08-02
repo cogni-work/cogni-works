@@ -6,8 +6,11 @@ Checks the YAML frontmatter of consultant / project / assignment entity files
 enum values, kebab-case slug shape, ISO dates and their start <= end ordering,
 and numeric ranges.
 
-Frontmatter shape only: an assignment's consultant / project values are not
-resolved to real entity files.
+Frontmatter shape is always checked. When a path argument is a portfolio
+directory, an assignment's consultant / project values are additionally
+resolved against the collected consultant / project entity slugs, and a
+dangling reference is an error. A single-file argument stays shape-only:
+no portfolio-wide slug set is available to resolve against.
 
 Stdlib-only (no PyYAML): a small frontmatter-subset parser handles the flat
 scalar + simple-list frontmatter the data model uses.
@@ -217,6 +220,17 @@ def _entity_files(path):
     return files
 
 
+def _entity_type(fm, filepath):
+    """Resolve a file's entity type the same way validate_file does: the
+    declared `type` when it is a known type, else the type inferred from the
+    file's parent subdirectory. Returns None when neither resolves.
+    """
+    parent = os.path.basename(os.path.dirname(filepath))
+    inferred = SUBDIR_TO_TYPE.get(parent)
+    declared = fm.get("type") if fm else None
+    return declared if declared in SCHEMA else inferred
+
+
 def validate_file(filepath):
     """Validate one entity file. Returns (errors, warnings) as lists of dicts."""
     errors, warnings = [], []
@@ -337,6 +351,7 @@ def main(argv):
         return 2
 
     all_files = []
+    any_dir = False
     for path in argv:
         if not os.path.exists(path):
             print(json.dumps({
@@ -344,6 +359,8 @@ def main(argv):
                 "error": "path not found: %s" % path,
             }, ensure_ascii=False))
             return 2
+        if os.path.isdir(path):
+            any_dir = True
         found = _entity_files(path)
         # Fail closed on a mistargeted directory. A path that expands to no
         # entity files would otherwise report success, which a caller gating
@@ -383,6 +400,59 @@ def main(argv):
             }], []
         errors.extend(e)
         warnings.extend(w)
+
+    # Referential integrity — only when a portfolio directory was given, so a
+    # single-file invocation (which cannot see the sibling entities) keeps its
+    # shape-only contract. Resolve each assignment's consultant / project
+    # frontmatter value against the slugs collected from the portfolio's
+    # consultant / project entities; an unresolved reference is a dangling ref.
+    if any_dir:
+        # Files that already failed shape validation are excluded from both the
+        # slug sets and the ref check: their slug / consultant / project values
+        # are unreliable, and re-flagging them here would double-report one
+        # malformed record.
+        errored_files = {e["file"] for e in errors}
+        consultant_slugs, project_slugs = set(), set()
+        assignment_records = []
+        for f in all_files:
+            if f in errored_files:
+                continue
+            try:
+                with open(f, "r", encoding="utf-8") as fh:
+                    fm = parse_frontmatter(fh.read())
+            except (OSError, UnicodeDecodeError):
+                continue
+            if not fm:
+                continue
+            etype = _entity_type(fm, f)
+            if etype == "consultant":
+                slug = fm.get("slug")
+                if isinstance(slug, str) and slug:
+                    consultant_slugs.add(slug)
+            elif etype == "project":
+                slug = fm.get("slug")
+                if isinstance(slug, str) and slug:
+                    project_slugs.add(slug)
+            elif etype == "assignment":
+                assignment_records.append((f, fm))
+
+        for f, fm in assignment_records:
+            consultant = fm.get("consultant")
+            if (isinstance(consultant, str) and consultant
+                    and consultant not in consultant_slugs):
+                errors.append({
+                    "entity": "assignment", "file": f, "field": "consultant",
+                    "message": "consultant %r does not resolve to a consultant "
+                               "entity in the portfolio" % consultant,
+                })
+            project = fm.get("project")
+            if (isinstance(project, str) and project
+                    and project not in project_slugs):
+                errors.append({
+                    "entity": "assignment", "file": f, "field": "project",
+                    "message": "project %r does not resolve to a project entity "
+                               "in the portfolio" % project,
+                })
 
     success = len(errors) == 0
     print(json.dumps({

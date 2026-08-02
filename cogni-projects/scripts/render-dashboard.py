@@ -587,6 +587,8 @@ def main(argv):
             "avg_allocation": util["avg_allocation"],
             "fully_allocated": util["fully_allocated"],
             "open_roles": _open_role_demand(projects),
+            "projects_detail": projects,
+            "value_by_impact": value_by_impact,
             "warnings": warnings,
             "partial": bool(warnings),
         },

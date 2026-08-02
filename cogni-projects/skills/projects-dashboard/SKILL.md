@@ -31,8 +31,8 @@ records (their field contract lives in
   health flag. Only a live commitment covers a role — a finished assignment
   releases it, so a role can reappear as open with no edit to the project.
   Two flags read alike but are not: `no open roles` means the project needs
-  nobody right now, while `staffing unknown` means it never declared
-  `open_roles`, so coverage cannot be read — never narrate it as covered.
+  nobody right now, while `staffing unknown` means its coverage cannot be read
+  at all — never narrate it as covered.
   The headline figure (`data.open_roles` and the `Open roles` tile) counts
   unfilled roles on non-closed projects only — closed work is delivered or
   lost, not live demand — so it matches the set `projects-staff` shortlists. A
@@ -135,12 +135,12 @@ stays the source of truth for how those are computed (see Notes below).
 Illustrative shape only — take every number, name, and label from the envelope,
 never from this example:
 
-> Six projects, nine consultants, eleven roles still open. Two projects are
+> Six projects, nine consultants, eleven roles still open. Three projects are
 > flagged: **Harbour Replatform** is `unstaffed`, **Meridian Rollout** is
-> `2/3 roles open`. **Southbank Archive** carries `closed`. The strategic
-> weight sits in tier 5 (three projects), with nothing at tier 1. One warning:
-> **Tallow Freight** never declared `open_roles`, so its coverage cannot be
-> read.
+> `2/3 roles open`, **Tallow Freight** is `staffing unknown`. **Southbank
+> Archive** carries `closed`. The strategic weight sits in tier 5 (three
+> projects), with nothing at tier 1. One warning, relayed as reported:
+> *project Tallow Freight has no open_roles — staffing status unknown*.
 
 ## Notes
 

@@ -80,7 +80,10 @@ what was missing or mismatched — relay those so the user knows the snapshot is
 incomplete and which records to fix. Note that `partial` is set by *any*
 warning, including a non-substantive one such as an unreadable
 `--design-variables` file, so check what the warnings actually say before
-describing the portfolio data itself as incomplete.
+describing the portfolio data itself as incomplete. The `data` envelope also
+carries `projects_detail` (a per-project list with `health_label` / `health_sev`
+/ `impact`) and `value_by_impact` (project count per strategic-impact tier) —
+Step 4 reads these to narrate the snapshot.
 
 **When `success` is `false`:** the render did not run at all — read `error`. This
 is the environment-level failure branch (missing portfolio directory, missing
@@ -99,6 +102,28 @@ xdg-open "<data.path>"  # Linux
 ```
 
 A failure here is cosmetic — the dashboard is already written to `data.path`.
+
+### Step 4: Narrate the snapshot
+
+The dashboard's purpose is to be explained to a partner, so close with a few
+plain lines — do not stop at reporting the path. Read these from the renderer's
+stdout envelope only; do not re-open `output/dashboard.html` and do not
+re-derive anything from the entity records:
+
+- **Counts** — `data.projects` projects and `data.consultants` consultants,
+  with `data.open_roles` roles still open across the portfolio.
+- **At-risk projects, by name** — from `data.projects_detail`, name each project
+  whose `health_sev` is `risk` or `warn` (quote its `health_label`). If none are
+  flagged, say the portfolio is fully staffed.
+- **Where the strategic-impact weight sits** — from `data.value_by_impact` (a
+  map of impact tier `1`–`5` to project count), point to the tier(s) carrying
+  the most projects.
+- **Warnings** — if `data.partial` is `true`, relay `data.warnings` so the
+  partner knows which records to fix.
+
+Read `health_sev`, `health_label`, and the impact tiers as the renderer reports
+them — never restate a flag's trigger condition or threshold. `render-dashboard.py`
+stays the source of truth for how those are computed (see Notes below).
 
 ## Notes
 

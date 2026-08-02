@@ -160,6 +160,12 @@ assert_html "1g AC-1 lists other project" "Compliance Audit" "$HTML1"
 assert_html "1h AC-1 fill status shown"  "1/3" "$HTML1"
 assert_html "1i AC-1 health flag shown"  "unstaffed" "$HTML1"
 assert_html "1j AC-2 value section"      "strategic impact" "$HTML1"
+# Narrate-step envelope fields: projects_detail + value_by_impact are surfaced
+# on stdout so the skill can name at-risk projects and the impact grouping
+# without parsing the HTML. json.dumps stringifies the int impact keys.
+assert_json "1k envelope carries projects_detail"        "len(d['data']['projects_detail']) == 2"
+assert_json "1l projects_detail carries per-project health" "all('health_label' in p and 'health_sev' in p for p in d['data']['projects_detail'])"
+assert_json "1m envelope carries value_by_impact"        "d['data']['value_by_impact']['5'] == 1 and d['data']['value_by_impact']['2'] == 1"
 
 # ---------------------------------------------------------------------------
 # Fixture 2 — idempotent re-render: running twice rewrites the same file and

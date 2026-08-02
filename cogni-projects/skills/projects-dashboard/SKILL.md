@@ -81,9 +81,11 @@ incomplete and which records to fix. Note that `partial` is set by *any*
 warning, including a non-substantive one such as an unreadable
 `--design-variables` file, so check what the warnings actually say before
 describing the portfolio data itself as incomplete. The `data` envelope also
-carries `projects_detail` (a per-project list with `health_label` / `health_sev`
-/ `impact`) and `value_by_impact` (project count per strategic-impact tier) —
-Step 4 reads these to narrate the snapshot.
+carries `projects_detail` (per project: `name`, `client`, `status`, `impact`,
+`roles_total`, `roles_filled`, `health_label`, `health_sev`, plus an
+`open_roles` **list** of that project's still-unfilled role labels — not the
+portfolio integer `data.open_roles`) and `value_by_impact` (project count per
+strategic-impact tier) — Step 4 reads these to narrate the snapshot.
 
 **When `success` is `false`:** the render did not run at all — read `error`. This
 is the environment-level failure branch (missing portfolio directory, missing
@@ -113,11 +115,17 @@ re-derive anything from the entity records:
 - **Counts** — `data.projects` projects and `data.consultants` consultants,
   with `data.open_roles` roles still open across the portfolio.
 - **At-risk projects, by name** — from `data.projects_detail`, name each project
-  whose `health_sev` is `risk` or `warn` (quote its `health_label`). If none are
-  flagged, say the portfolio is fully staffed.
+  whose `health_sev` is `risk` or `warn` (quote its `health_label`). If no
+  project carries `risk` or `warn`, say no project is currently flagged — and
+  name any `closed` or `no open roles` projects rather than folding them into a
+  staffing claim, since those read as `muted`/`ok`, not `fully staffed`.
 - **Where the strategic-impact weight sits** — from `data.value_by_impact` (a
-  map of impact tier `1`–`5` to project count), point to the tier(s) carrying
-  the most projects.
+  map of impact tier `"1"`–`"5"`, string keys in the JSON envelope, to project
+  count), point to the tier(s) carrying the most projects. Projects whose
+  `strategic_impact` is missing or outside 1–5 are omitted (they surface as a
+  warning and carry `impact: null` in `projects_detail`), so these counts need
+  not sum to `data.projects`; when no project declares a valid impact the map is
+  all zeros — a meaningless five-way tie, not a real distribution to point at.
 - **Warnings** — if `data.partial` is `true`, relay `data.warnings` so the
   partner knows which records to fix.
 

@@ -165,6 +165,7 @@ assert_html "1j AC-2 value section"      "strategic impact" "$HTML1"
 # without parsing the HTML. json.dumps stringifies the int impact keys.
 assert_json "1k envelope carries projects_detail"        "len(d['data']['projects_detail']) == 2"
 assert_json "1l projects_detail carries per-project health" "all('health_label' in p and 'health_sev' in p for p in d['data']['projects_detail'])"
+assert_json "1n named at-risk project pinned with its flag" "any(p['name'] == 'Compliance Audit' and p['health_label'] == 'unstaffed' and p['health_sev'] == 'risk' for p in d['data']['projects_detail'])"
 assert_json "1m envelope carries value_by_impact"        "d['data']['value_by_impact']['5'] == 1 and d['data']['value_by_impact']['2'] == 1"
 
 # ---------------------------------------------------------------------------

@@ -165,8 +165,8 @@ assert_html "1j AC-2 value section"      "strategic impact" "$HTML1"
 # without parsing the HTML. json.dumps stringifies the int impact keys.
 assert_json "1k envelope carries projects_detail"        "len(d['data']['projects_detail']) == 2"
 assert_json "1l projects_detail carries per-project health" "all('health_label' in p and 'health_sev' in p for p in d['data']['projects_detail'])"
-assert_json "1n named at-risk project pinned with its flag" "any(p['name'] == 'Compliance Audit' and p['health_label'] == 'unstaffed' and p['health_sev'] == 'risk' for p in d['data']['projects_detail'])"
 assert_json "1m envelope carries value_by_impact"        "d['data']['value_by_impact']['5'] == 1 and d['data']['value_by_impact']['2'] == 1"
+assert_json "1n named at-risk project pinned with its flag" "any(p['name'] == 'Compliance Audit' and p['health_label'] == 'unstaffed' and p['health_sev'] == 'risk' for p in d['data']['projects_detail'])"
 
 # ---------------------------------------------------------------------------
 # Fixture 2 — idempotent re-render: running twice rewrites the same file and
@@ -264,6 +264,9 @@ run "$PF5"
 assert_json "5a injection render succeeds" "d['success'] is True"
 assert_html_lacks "5b entity markup escaped" \
   '<script>alert(1)</script>' "$PF5/output/dashboard.html"
+# _esc is confined to _render_html — the envelope must hand the narrating agent
+# the raw name, not HTML entities.
+assert_json "5c injection name reaches the envelope unescaped" "any(p['name'] == '<script>alert(1)</script>' for p in d['data']['projects_detail'])"
 
 # ---------------------------------------------------------------------------
 # Fixture 6 — genuinely malformed entities, not merely incomplete ones: a
@@ -448,6 +451,10 @@ assert_html "9f tile agrees with the envelope" \
   '<div class="n">1</div><div class="l">Open roles</div>' "$HTML9"
 assert_html "9g closed project still listed" "Legacy Migration" "$HTML9"
 assert_html "9h closed health flag still rendered" ">closed</span>" "$HTML9"
+# _open_role_demand drops closed projects from the headline figure only — the
+# closed row must still reach projects_detail with its flag, or a widened
+# exclusion would pass the suite while the HTML table still showed the row.
+assert_json "9i closed project reaches the envelope with its flag" "any(p['name'] == 'Legacy Migration' and p['health_label'] == 'closed' and p['health_sev'] == 'muted' for p in d['data']['projects_detail'])"
 
 # ---------------------------------------------------------------------------
 # Fixture 10 — a status that is not text. The frontmatter parser coerces an

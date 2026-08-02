@@ -25,7 +25,9 @@ cogni-projects/
 │   ├── staffing-score.py             Deterministic staffing scorer (availability/fit/impact)
 │   └── render-dashboard.py           Portfolio health + value HTML render (read-only, stdlib-only)
 ├── tests/
+│   ├── test_portfolio_init.sh        Portfolio scaffolder idempotency + no-debris suite
 │   ├── test_register_entity.sh       Atomic-write + idempotency regression suite
+│   ├── test_validate_entities_refs.sh  Assignment ref-integrity + single-file regression suite
 │   └── test-render-dashboard.sh      Dashboard render regression test (stdlib-only)
 └── references/
     └── data-model.md                 Consultant / project / assignment entity schemas
@@ -34,7 +36,9 @@ cogni-projects/
 Run the tests directly — bash + python3, no pytest or pip:
 
 ```bash
+bash cogni-projects/tests/test_portfolio_init.sh
 bash cogni-projects/tests/test_register_entity.sh
+bash cogni-projects/tests/test_validate_entities_refs.sh
 bash cogni-projects/tests/test-render-dashboard.sh
 ```
 

@@ -106,11 +106,16 @@ Read `data.warnings[]` too. An `unknown field (ignored)` warning is usually a
 misspelled key — the value is being dropped, not stored — so correct it against
 the data model before registering.
 
-The validator checks **frontmatter shape only**: required keys, enums, slug
-casing, ISO dates and their ordering, numeric ranges. It does **not** resolve an
-assignment's `consultant` / `project` slugs to real entity files, so a passing
-run is not evidence the refs exist — reading both referenced entities in Step 2
-remains the guard against a dangling reference.
+The validator checks **frontmatter shape** on any argument: required keys,
+enums, slug casing, ISO dates and their ordering, numeric ranges. It resolves an
+assignment's `consultant` / `project` slugs against the `consultants/` and
+`projects/` records only when given a whole portfolio directory — that is what
+collects the records to resolve against. This step passes a single file, so no
+ref check runs here and a passing run is not evidence the refs exist; reading
+both referenced entities in Step 2 remains the guard against a dangling
+reference. To surface dangling refs across the whole portfolio, run the command
+above with the portfolio directory `cogni-projects/<portfolio-slug>` in place of
+the single entity file path.
 
 ### Step 5: Register in the manifest and log the transition
 

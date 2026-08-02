@@ -275,7 +275,14 @@ values, kebab-case slug shape, ISO dates and their `start_date <= end_date` /
 repo-standard `{"success", "data", "error"}` envelope with `success: false` and
 a per-field `{entity, file, field, message}` list when an entity is malformed.
 
-It validates **frontmatter shape only**. An assignment's `consultant` and
-`project` values are not resolved to real entity files, so a passing run is not
-evidence those refs exist — read both referenced entities before authoring an
-assignment.
+**Frontmatter shape is checked for any argument; referential integrity depends
+on what you pass.** Given a portfolio directory, it also resolves each
+assignment's `consultant` and `project` against the `consultants/` and
+`projects/` records collected from that same directory, and reports a dangling
+ref as an ordinary `{entity, file, field, message}` error. Resolution is scoped
+per directory, so passing two portfolios in one invocation never resolves one
+portfolio's refs against the other's records.
+
+Given a single file there is no portfolio-wide collection to resolve against, so
+that invocation stays shape-only and a passing run is not evidence those refs
+exist — read both referenced entities before authoring an assignment.

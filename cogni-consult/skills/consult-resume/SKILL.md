@@ -130,38 +130,58 @@ Lead with the key question, then one table row per action field:
 
 ```
 Engagement: <name> — zuletzt bearbeitet <TT.MM.JJJJ>
-Key question: <key_question>
+Schlüsselfrage: <key_question>
 
-| Action Field | Status | Deliverables | Next Deliverable |
-|--------------|--------|--------------|------------------|
-| Market Evidence | complete | 2/2 complete | — |
-| Portfolio Fit | in-progress | 1/3 complete | Competitor map (ideate · pyramid-principle) |
-| Go-to-Market | pending | 0/2 started | Channel strategy (empathize · —) |
+| Handlungsfeld | Stand | Deliverables | Nächstes Deliverable |
+|---------------|-------|--------------|----------------------|
+| Market Evidence | fertig | 2/2 fertig | — |
+| Portfolio Fit | in Arbeit | 1/3 fertig | Competitor map (Ideate · pyramid-principle) |
+| Go-to-Market | offen | 0/2 fertig | Channel strategy (Empathize · —) |
 ```
 
-That is a German session: the `zuletzt bearbeitet` label follows the
-interaction language, while the action-field and deliverable names are the
-stored titles — here English, because an engagement's stored titles keep their
-technical terms whatever the session language.
+That is a German session. `Deliverables` is the same token in both header
+rows — the established German loanword, not an untranslated leftover, so leave
+it. The one carve-out is the action-field and deliverable names in the table
+above — stored titles, here English, because stored titles keep their technical
+terms whatever the session language. That carve-out covers those names and
+nothing else; it is not a licence for English elsewhere in the table.
+
+The parenthesised pair's stage is a display label, so it takes proper casing
+(`Empathize`, `Define`, `Ideate`, `Prototype`, `Test`) in either session.
+
+An English session renders the same table, seeded by example too: preamble
+labels `Engagement: <name> — last worked on <DD.MM.YYYY>` and
+`Key question: <key_question>`, header
+`| Action Field | Status | Deliverables | Next Deliverable |`, `Status` values
+`complete`, `in progress` and `pending` — the shapes
+`generate-engagement-readme.py`'s `STATE_LABEL` already renders, so the two
+surfaces agree — counts `2/2 complete` and `0/2 complete`. Dates keep the
+day-first shape of step 2. The columns, the row order and the
+one-row-per-action-field rule are identical in both languages.
 
 Name action fields by the `title` read from
 `<engagement-path>/action-fields/<slug>/field.json` — step 3's rollup carries a
 field's `slug` but not its title — and deliverables by the `title` the rollup
 passes through with each deliverable. Fall back to the slug only when no title
-is stored; slugs are storage keys, not display names, and titles are rendered
+is stored — slugs are storage keys, not display names, and titles are rendered
 as stored, never translated.
 `zuletzt bearbeitet` resolves exactly as in step 2; compute it for the selected
 engagement here when step 2's branch did not already. Step 2's language rule
-covers the header label and the date shape in this table too.
+covers this table too — its column headers, status cells, preamble labels and
+the date shape.
 
-`Deliverables` counts `complete` over total; `Next Deliverable` names the
+`Deliverables` counts deliverables at `complete` over the field total — that
+`complete` is the engine state being counted, not the word to print; the cell
+renders its count in the interaction language (`2/2 fertig` / `2/2 complete`).
+`Nächstes Deliverable` / `Next Deliverable` names the
 first non-complete deliverable with its `dt_stage` and stored
 `chosen_framework` in parentheses (`<stage> · <framework>`), or the
 first whose `persona_review` is still open when everything else is done.
-The framework is surfaced read-only — a registry slug verbatim, or for a
-`combo:<slugA>+<slugB>` pairing the two slugs joined as `<slugA> + <slugB>`
-(the stored `combo:` prefix dropped for display), or `—` when none is stored
-(legacy deliverables); it is never inferred here.
+The framework is the stored `chosen_framework` surfaced verbatim, read-only — a
+registry slug that keeps its stored spelling in either session; for a
+`combo:<slugA>+<slugB>` pairing, join the two slugs as `<slugA> + <slugB>` (the
+stored `combo:` prefix dropped for display); render `—` when no framework is
+stored (legacy deliverables) — never inferred here.
 Keep it to this one table — the deep WBS view (planning deliverable sets,
 splitting fields) belongs to `consult-action-fields`, not here.
 

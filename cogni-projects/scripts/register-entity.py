@@ -24,6 +24,11 @@ swap, since mkstemp would otherwise force every target to 0600.
 
 Validates before registering, via validate-entities.py, so the manifest cannot
 take an entity the validator rejects even when this script is invoked directly.
+An assignment's consultant / project refs are additionally resolved against the
+whole portfolio directory — the pass the validator runs only for a directory
+argument, never for the single file this script hands it — so a dangling ref is
+refused here rather than surfacing later as a role that silently reads unfilled.
+Each unresolved ref is reported in data.errors[].
 
 Stdlib-only (no PyYAML).
 
@@ -68,11 +73,37 @@ REF_FIELDS = {
 }
 
 
-def _fail(message, code=2):
+def _fail(message, code=2, data=None):
     print(json.dumps(
-        {"success": False, "data": {}, "error": message}, ensure_ascii=False
+        {"success": False, "data": data or {}, "error": message},
+        ensure_ascii=False,
     ))
     return code
+
+
+def _same_file(a, b):
+    """True when `a` and `b` name the same file on disk.
+
+    Never a string compare: the ref errors carry the path _entity_files built
+    from the caller's raw portfolio-dir argument, while the entity file is an
+    independent raw argument, so the two spellings of one file routinely differ
+    (relative vs absolute, a trailing "/.", a symlinked portfolio root).
+
+    samefile rather than the realpath equality used for the portfolio-escape
+    check below, because realpath does not case-fold: on a case-insensitive
+    filesystem a case-variant path to the same file compares unequal, which
+    would drop the registered entity's own ref error and let the gate fail
+    OPEN — registering exactly the dangling assignment it exists to refuse.
+    Comparing (st_dev, st_ino) is also correct through a hard link.
+
+    Both paths exist whenever this is called, so the OSError branch is only a
+    concurrent-unlink race; falling back keeps the helper raise-free for the
+    imported-main callers the __main__ catch-all does not cover.
+    """
+    try:
+        return os.path.samefile(a, b)
+    except OSError:
+        return os.path.realpath(a) == os.path.realpath(b)
 
 
 def _intended_mode(path):
@@ -136,6 +167,37 @@ def main(argv):
             % (entity_type, ", ".join(sorted(REF_FIELDS))),
             code=1,
         )
+
+    # Resolve this assignment's refs against the portfolio. validate_file is
+    # single-file by design and so runs no ref pass; without this, an assignment
+    # naming a misspelled consultant passes the gate above, lands in the
+    # manifest, and then reads as an unfilled role with no error anywhere.
+    #
+    # The batch must be the whole portfolio, never [entity_file]: the known-slug
+    # sets are built from the consultant and project records in the batch, so a
+    # single-file expansion resolves nothing and every ref would dangle. That is
+    # also why this is scoped to assignments — they are the only type carrying
+    # refs, and the walk is O(portfolio), so running it for a consultant or a
+    # project would read every record to build a result that cannot be non-empty.
+    #
+    # Placed after the type is known but before the portfolio-escape check below,
+    # which is harmless: an entity outside the portfolio never appears in the
+    # walk, so the filter is empty and that check still raises its own error.
+    # _ref_errors reads through read_frontmatter, which returns (None, exc)
+    # rather than raising, so no guard is needed here.
+    if entity_type == "assignment":
+        ref_errors = [
+            e for e in _ve._ref_errors(_ve._entity_files(portfolio_dir))
+            if _same_file(e["file"], entity_file)
+        ]
+        if ref_errors:
+            return _fail(
+                "entity failed ref validation (%d error(s)) — a consultant or "
+                "project ref does not resolve within this portfolio; fix each "
+                "data.errors[] entry before registering" % len(ref_errors),
+                code=1,
+                data={"errors": ref_errors},
+            )
 
     array_name = _ve.SCHEMA[entity_type]["subdir"]
     slug = str(fm["slug"])

@@ -82,6 +82,45 @@ def make_consultant(root, slug, name):
     return path
 
 
+def make_project(root, slug, name):
+    # make_portfolio creates only consultants/ and .metadata/, so the subdir has
+    # to be made here — and exist_ok because a portfolio takes several records.
+    os.makedirs(os.path.join(root, "projects"), exist_ok=True)
+    path = os.path.join(root, "projects", slug + ".md")
+    with open(path, "w", encoding="utf-8") as f:
+        f.write(
+            "---\n"
+            "type: project\n"
+            "slug: %s\n"
+            "name: %s\n"
+            "client: Northwind\n"
+            "strategic_impact: 4\n"
+            "---\n\n# %s\n" % (slug, name, name)
+        )
+    return path
+
+
+def make_assignment(root, consultant_ref, project_ref):
+    """Write an assignment. Its refs are whatever the caller passes, so a
+    dangling one is written without disturbing the records it points at."""
+    os.makedirs(os.path.join(root, "assignments"), exist_ok=True)
+    slug = "%s--%s" % (consultant_ref, project_ref)
+    path = os.path.join(root, "assignments", slug + ".md")
+    with open(path, "w", encoding="utf-8") as f:
+        f.write(
+            "---\n"
+            "type: assignment\n"
+            "slug: %s\n"
+            "consultant: %s\n"
+            "project: %s\n"
+            "role: Lead Engineer\n"
+            "start_date: 2026-02-01\n"
+            "end_date: 2026-08-01\n"
+            "---\n\n# %s\n" % (slug, consultant_ref, project_ref, slug)
+        )
+    return path
+
+
 def register(root, entity_file):
     """Run register-entity.main and return (exit_code, parsed_envelope)."""
     buf = io.StringIO()
@@ -199,6 +238,59 @@ check("modes: upsert succeeded", env.get("success") is True, str(env))
 man_mode2 = os.stat(os.path.join(root4, "projects-portfolio.json")).st_mode & 0o777
 check("modes: upsert preserves the existing mode",
       man_mode2 == 0o640, "%o != 0o640" % man_mode2)
+
+# --- Portfolio ref resolution on the write path ------------------------------
+# validate_file is single-file and runs no ref pass, so before the gate an
+# assignment naming a misspelled consultant registered clean and then read as an
+# unfilled role. Every record below is on disk before the first register call:
+# the project case only proves the gate leaves non-assignments alone if a
+# dangling assignment is already sitting in the same portfolio.
+root5 = make_portfolio("refs")
+make_consultant(root5, "ana-silva", "Ana Silva")
+proj = make_project(root5, "nordic-erp", "Nordic ERP")
+# Misspelled but still kebab-valid: an underscore would fail the composite-slug
+# rule and the assertions below would be measuring a shape error, not a ref one.
+dangling = make_assignment(root5, "ana-silvaa", "nordic-erp")
+
+
+def registered_assignments():
+    with open(os.path.join(root5, "projects-portfolio.json"), encoding="utf-8") as f:
+        return json.load(f)["assignments"]
+
+
+code, env = register(root5, proj)
+check("refs: a project still registers while a dangling assignment exists",
+      env.get("success") is True, str(env))
+
+code, env = register(root5, dangling)
+errs = env.get("data", {}).get("errors", [])
+assigns = registered_assignments()
+check("refs: dangling consultant ref fails registration",
+      env.get("success") is False and code == 1, "code=%s env=%s" % (code, env))
+check("refs: the offending ref comes back in data.errors[]", len(errs) == 1, str(env))
+check("refs: the error keeps the standard {entity, file, field, message} shape",
+      bool(errs) and set(errs[0]) == {"entity", "file", "field", "message"}
+      and errs[0]["entity"] == "assignment" and errs[0]["field"] == "consultant",
+      str(errs))
+check("refs: nothing was written to the manifest", assigns == [], str(assigns))
+
+# The filter compares files, not path strings. Passing the portfolio as
+# "<root>/." makes _entity_files emit "<root>/./assignments/..." — a string
+# compare matches none of the errors, the gate fails open, the registration
+# succeeds, and this goes red.
+code, env = register(os.path.join(root5, "."), dangling)
+assigns = registered_assignments()
+check("refs: still rejected when the portfolio is passed as <root>/.",
+      env.get("success") is False and code == 1 and assigns == [],
+      "code=%s assignments=%s env=%s" % (code, assigns, env))
+
+# The dangling assignment stays on disk, so this also proves the filter reports
+# only the entity being registered rather than the whole portfolio's errors.
+resolving = make_assignment(root5, "ana-silva", "nordic-erp")
+code, env = register(root5, resolving)
+check("refs: an assignment whose refs resolve registers unaffected",
+      env.get("success") is True
+      and env.get("data", {}).get("action") == "created", str(env))
 
 print()
 if failures:

@@ -15,8 +15,8 @@ a hard failure, because a partial snapshot is more useful than no snapshot to a
 partner reviewing a portfolio that is still being authored.
 
 Stdlib-only (no PyYAML). Reuses validate-entities.py's read_frontmatter and
-_entity_files by file-path load rather than re-implementing a reader or a
-directory walk — the same idiom register-entity.py uses.
+_entity_files via the shared _projects_lib loader rather than re-implementing a
+reader or a directory walk.
 
 Usage:
   python3 render-dashboard.py <portfolio-dir> [--design-variables <path.json>]
@@ -29,25 +29,24 @@ Exit: 0 ok / 2 usage or environment failure.
 import argparse
 import datetime
 import html
-import importlib.util
 import json
 import os
 import sys
 
-# validate-entities.py is not an importable module name (hyphens), so load it by
-# file location and reuse its parser + entity-file discovery — the same idiom
-# register-entity.py uses, so the dashboard reads exactly the shape the
-# validator enforces rather than duplicating (and drifting from) those rules.
-_v_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "validate-entities.py")
-_spec = importlib.util.spec_from_file_location("validate_entities", _v_path)
-if _spec is None or _spec.loader is None:
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from _projects_lib import VALIDATOR_PATH, load_validator  # noqa: E402
+
+# Reusing the validator's parser + entity-file discovery means the dashboard
+# reads exactly the shape the validator enforces rather than duplicating (and
+# drifting from) those rules. The envelope and exit code stay here: this check
+# fires at import time, before argparse, and that timing is part of the contract.
+_ve = load_validator()
+if _ve is None:
     print(json.dumps({
         "success": False, "data": {},
-        "error": "cannot load validator module: %s" % _v_path,
+        "error": "cannot load validator module: %s" % VALIDATOR_PATH,
     }))
     sys.exit(2)
-_ve = importlib.util.module_from_spec(_spec)
-_spec.loader.exec_module(_ve)
 
 
 # The built-in palette. The dashboard renders with this whenever no

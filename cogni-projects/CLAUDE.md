@@ -19,6 +19,7 @@ cogni-projects/
 │   ├── projects-staff/SKILL.md         Rank candidate consultants per open project role
 │   └── projects-dashboard/SKILL.md     Render a partner-meeting portfolio dashboard (read-only)
 ├── scripts/
+│   ├── _projects_lib.py                Shared loader for the hyphen-named validate-entities.py
 │   ├── portfolio-init.sh               Idempotent portfolio scaffolder (stdlib-only)
 │   ├── validate-entities.py            Entity validator: frontmatter + assignment refs
 │   ├── register-entity.py              Slug-keyed manifest upsert + execution-log append

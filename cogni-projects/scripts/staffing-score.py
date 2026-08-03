@@ -31,8 +31,8 @@ fixed precision, projects order by strategic impact then slug, candidate ties
 break on the consultant slug, and no wall-clock value enters the result.
 
 Reads entity frontmatter with the same stdlib reader the validator uses
-(`validate-entities.py:read_frontmatter`, loaded by file location as
-`register-entity.py` does) — no duplicated reader, no PyYAML.
+(`validate-entities.py:read_frontmatter`, obtained through the shared
+`_projects_lib` loader) — no duplicated reader, no PyYAML.
 
 Usage:
   python3 staffing-score.py <portfolio-dir>
@@ -47,10 +47,12 @@ install) / 2 usage (wrong argument count).
 """
 
 import datetime
-import importlib.util
 import json
 import os
 import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from _projects_lib import load_validator  # noqa: E402
 
 # --- Scoring weights (defensible MVP defaults; tunable is a follow-up concern) ---
 # The combined score ranks candidates WITHIN a role, so it blends only the two
@@ -98,21 +100,17 @@ def _fail(message, code):
 
 
 def _load_read_frontmatter():
-    """Load read_frontmatter from the sibling validate-entities.py by file path.
+    """Reuse the validator's canonical frontmatter reader.
 
-    validate-entities.py is not an importable module name (hyphens), so — exactly
-    as register-entity.py does — load it by location to reuse the one canonical
-    frontmatter reader rather than duplicating the open/read/parse/guard sequence.
     Returns the callable, or None if the validator module cannot be loaded.
+
+    Deliberately kept lazy, at function scope: main() calls it after its argument
+    and portfolio-dir preflight, so a bad-args invocation still reports the usage
+    error (exit 2) and a broken install stays a domain failure (exit 1).
     """
-    v_path = os.path.join(
-        os.path.dirname(os.path.abspath(__file__)), "validate-entities.py"
-    )
-    spec = importlib.util.spec_from_file_location("validate_entities", v_path)
-    if spec is None or spec.loader is None:
+    module = load_validator()
+    if module is None:
         return None
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
     return getattr(module, "read_frontmatter", None)
 
 

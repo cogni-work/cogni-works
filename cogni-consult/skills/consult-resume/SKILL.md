@@ -165,7 +165,8 @@ Name action fields by the `title` read from
 `<engagement-path>/action-fields/<slug>/field.json` — step 3's rollup carries a
 field's `slug` but not its title — and deliverables by the `title` the rollup
 passes through with each deliverable. Fall back to the slug only when no title
-is stored — slugs are storage keys, not display names.
+is stored — slugs are storage keys, not display names, and titles are rendered
+as stored, never translated.
 `zuletzt bearbeitet` resolves exactly as in step 2; compute it for the selected
 engagement here when step 2's branch did not already. Step 2's language rule
 covers this table too — its column headers, status cells, preamble labels and

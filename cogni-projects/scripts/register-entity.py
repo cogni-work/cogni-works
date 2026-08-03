@@ -183,22 +183,25 @@ def main(argv):
     # Placed after the type is known but before the portfolio-escape check below,
     # which is harmless: an entity outside the portfolio never appears in the
     # walk, so the filter is empty and that check still raises its own error.
-    # _ref_errors itself is raise-free — it reads through read_frontmatter,
-    # which returns (None, exc) rather than raising. _entity_files is not: its
-    # os.listdir walk is unguarded, so an unreadable portfolio subdirectory
-    # escapes as an OSError. The __main__ catch-all below would convert that to
-    # an envelope for CLI callers, but not for the in-process callers (the test
-    # harness among them) that call main() directly, so the guard belongs here.
+    # Neither helper is trusted to be raise-free, matching validate-entities.py's
+    # own main(), which wraps this identical call because the envelope is the
+    # contract. _entity_files' os.listdir walk is unguarded, so an unreadable
+    # subdirectory raises OSError; and read_frontmatter calls parse_frontmatter
+    # outside its try, so a parser fault (int() on an over-long digit scalar)
+    # surfaces as ValueError. The __main__ catch-all below would convert either
+    # to an envelope for CLI callers, but not for the in-process callers (the
+    # test harness among them) that call main() directly — hence the guard here.
     if entity_type == "assignment":
         try:
             ref_errors = [
                 e for e in _ve._ref_errors(_ve._entity_files(portfolio_dir))
                 if _same_file(e["file"], entity_file)
             ]
-        except OSError as exc:
+        except Exception as exc:  # noqa: BLE001 — the envelope is the contract
             # Default code 2 (environment failure), never code 1 — the entity
             # did not fail validation; the portfolio could not be read.
-            return _fail("cannot scan portfolio for refs: %s" % exc)
+            return _fail("cannot scan portfolio for refs: %s: %s"
+                         % (type(exc).__name__, exc))
         if ref_errors:
             return _fail(
                 "entity failed ref validation (%d error(s)) — a consultant or "

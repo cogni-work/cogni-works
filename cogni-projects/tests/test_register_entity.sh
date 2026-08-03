@@ -365,6 +365,26 @@ else:
     finally:
         os.chmod(os.path.join(root5, "consultants"), 0o755)
 
+# The scan is not trusted to raise only OSError: read_frontmatter calls
+# parse_frontmatter outside its own try, so a parser fault surfaces as
+# ValueError. The envelope is the contract for every exception type, not just
+# the one that happened to be found first.
+_real_ref_errors = reg._ve._ref_errors
+try:
+    def _boom(_files):
+        raise ValueError("simulated parser fault")
+    reg._ve._ref_errors = _boom
+    code, env = register(root5, resolving)
+    check("refs: a non-OSError from the ref scan still returns the envelope",
+          env.get("success") is False and code == 2, "code=%s env=%s" % (code, env))
+    check("refs: the envelope names the failing exception type",
+          "ValueError" in (env.get("error") or ""), str(env))
+except Exception as exc:
+    check("refs: a non-OSError from the ref scan still returns the envelope",
+          False, "main() raised %s: %s" % (type(exc).__name__, exc))
+finally:
+    reg._ve._ref_errors = _real_ref_errors
+
 print()
 if failures:
     print("%d check(s) failed." % failures)

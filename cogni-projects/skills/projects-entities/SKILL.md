@@ -113,9 +113,17 @@ assignment's `consultant` / `project` slugs against the `consultants/` and
 collects the records to resolve against. This step passes a single file, so no
 ref check runs here and a passing run is not evidence the refs exist; reading
 both referenced entities in Step 2 remains the guard against a dangling
-reference. To surface dangling refs across the whole portfolio, run the command
-above with the portfolio directory `cogni-projects/<portfolio-slug>` in place of
-the single entity file path.
+reference.
+
+A portfolio-wide sweep for dangling refs is a separate run, not this gate: pass
+`cogni-projects/<portfolio-slug>` instead of the file path. A dangling ref comes
+back as an ordinary `data.errors[]` entry whose `field` is `consultant` or
+`project` and whose `message` names the unresolved slug, so the fix loop above
+applies unchanged. Its `success: false` covers every entity in the portfolio,
+not only the one just authored — locate the relevant entries by each error's
+`file` field. A dangling ref is reported on the *assignment's* file, and its
+`message` names the missing consultant or project, not the assignment's own
+slug.
 
 ### Step 5: Register in the manifest and log the transition
 

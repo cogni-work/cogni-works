@@ -8,6 +8,11 @@
 # case is the regression guard for projects-entities Step 4 and for
 # register-entity.py, which both hand the validator one file at a time.
 #
+# Also covers the pass's edges: an assignment dangling on both fields is
+# reported once per field; a portfolio missing the consultants/ subdirectory
+# still dangles the ref rather than resolving it vacuously; and a
+# frontmatter-less file is skipped by the ref pass rather than raising.
+#
 # stdlib-only (bash + python3, no pytest/pip), matching the house convention.
 # The script is exercised through main() rather than a subprocess so a failing
 # assertion reports the parsed envelope, not a shell exit code.
@@ -65,8 +70,13 @@ def write(path, frontmatter):
 PROJECT = "apollo-migration"
 
 
-def make_portfolio(name, consultant_ref):
-    """Seed a portfolio whose assignment points at the given consultant slug."""
+def make_portfolio(name, consultant_ref, project_ref=PROJECT):
+    """Seed a portfolio whose assignment points at the given refs.
+
+    The consultant and project *records* are always the same two well-formed
+    entities; `consultant_ref` / `project_ref` are what the assignment points
+    at, so either side can be made to dangle without rebuilding the record set.
+    """
     root = os.path.join(WORK, name)
     os.makedirs(root, exist_ok=True)
     with open(os.path.join(root, "projects-portfolio.json"), "w",
@@ -81,10 +91,10 @@ def make_portfolio(name, consultant_ref):
         "client": "Apollo GmbH", "strategic_impact": "4",
     })
     assignment = os.path.join(root, "assignments",
-                              "%s--%s.md" % (consultant_ref, PROJECT))
+                              "%s--%s.md" % (consultant_ref, project_ref))
     write(assignment, {
-        "type": "assignment", "slug": "%s--%s" % (consultant_ref, PROJECT),
-        "consultant": consultant_ref, "project": PROJECT,
+        "type": "assignment", "slug": "%s--%s" % (consultant_ref, project_ref),
+        "consultant": consultant_ref, "project": project_ref,
         "role": "Tech Lead", "start_date": "2026-01-05",
         "end_date": "2026-06-30",
     })
@@ -179,6 +189,52 @@ _, env = run(root)
 consultant_errs = [e for e in env["data"]["errors"] if e["field"] == "consultant"]
 check("an absent consultant ref is reported exactly once",
       len(consultant_errs) == 1, json.dumps(consultant_errs))
+
+# --- 7. Both refs dangling are reported once each, per field --------------
+root, both = make_portfolio("both-dangle", "grace-hopper", "mars-rollout")
+_, env = run(root)
+errs = ref_errors(env)
+check("both dangling refs yield one error each",
+      len(errs) == 2, json.dumps(errs))
+check("the two errors name distinct fields on the same file",
+      {e["field"] for e in errs} == {"consultant", "project"}
+      and {e["file"] for e in errs} == {both}, json.dumps(errs))
+msgs = {e["field"]: e["message"] for e in errs}
+check("each message names its own unresolved slug",
+      "grace-hopper" in msgs.get("consultant", "")
+      and "mars-rollout" in msgs.get("project", ""), json.dumps(errs))
+
+# --- 8. An absent consultants/ directory still dangles the ref ------------
+# The pass gates on directory-ness, not on a non-empty slug set: a portfolio
+# with no consultants/ at all must report the ref rather than resolve it
+# vacuously.
+root, _ = make_portfolio("no-consultants-dir", "ada-lovelace")
+os.remove(os.path.join(root, "consultants", "ada-lovelace.md"))
+os.rmdir(os.path.join(root, "consultants"))
+code, env = run(root)
+errs = ref_errors(env)
+check("a ref still dangles when consultants/ is absent entirely",
+      len(errs) == 1 and errs[0]["field"] == "consultant",
+      json.dumps(errs))
+check("the absent-subdirectory run fails rather than passing vacuously",
+      env["success"] is False and code == 1, json.dumps(env["data"]["errors"]))
+
+# --- 9. A frontmatter-less file is skipped by the ref pass, not raised -----
+# validate_file already reports it as <frontmatter>; the ref pass must skip it
+# rather than raise, so one unparseable file cannot abort the whole sweep.
+root, _ = make_portfolio("no-frontmatter", "ada-lovelace")
+orphan = os.path.join(root, "assignments", "orphan-note.md")
+with open(orphan, "w", encoding="utf-8") as f:
+    f.write("Just a note, no fence.\n")
+code, env = run(root)
+check("a frontmatter-less file returns an envelope rather than raising",
+      code == 1 and env["success"] is False, json.dumps(env["data"]["errors"]))
+check("the ref pass skips it instead of naming it a dangling ref",
+      ref_errors(env) == [], json.dumps(ref_errors(env)))
+check("it is still reported once as a frontmatter error",
+      [e["file"] for e in env["data"]["errors"]
+       if e["field"] == "<frontmatter>"] == [orphan],
+      json.dumps(env["data"]["errors"]))
 
 print()
 if failures:

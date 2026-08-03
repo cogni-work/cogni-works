@@ -10,27 +10,27 @@ have landed; the backfilling recommender arrives in later roadmap children.
 
 ```
 cogni-projects/
-├── .claude-plugin/plugin.json        Plugin manifest (name, version, description)
-├── README.md                         Plugin documentation (IS/DOES/MEANS messaging)
-├── CLAUDE.md                         This developer guide
+├── .claude-plugin/plugin.json          Plugin manifest (name, version, description)
+├── README.md                           Plugin documentation (IS/DOES/MEANS messaging)
+├── CLAUDE.md                           This developer guide
 ├── skills/
-│   ├── projects-setup/SKILL.md       Initialize a portfolio directory (entry point)
-│   ├── projects-entities/SKILL.md    Author + register one consultant/project/assignment
-│   ├── projects-staff/SKILL.md       Rank candidate consultants per open project role
-│   └── projects-dashboard/SKILL.md   Render a partner-meeting portfolio dashboard (read-only)
+│   ├── projects-setup/SKILL.md         Initialize a portfolio directory (entry point)
+│   ├── projects-entities/SKILL.md      Author + register one consultant/project/assignment
+│   ├── projects-staff/SKILL.md         Rank candidate consultants per open project role
+│   └── projects-dashboard/SKILL.md     Render a partner-meeting portfolio dashboard (read-only)
 ├── scripts/
-│   ├── portfolio-init.sh             Idempotent portfolio scaffolder (stdlib-only)
-│   ├── validate-entities.py          Entity frontmatter validator (stdlib-only)
-│   ├── register-entity.py            Slug-keyed manifest upsert + execution-log append
-│   ├── staffing-score.py             Deterministic staffing scorer (availability/fit/impact)
-│   └── render-dashboard.py           Portfolio health + value HTML render (read-only, stdlib-only)
+│   ├── portfolio-init.sh               Idempotent portfolio scaffolder (stdlib-only)
+│   ├── validate-entities.py            Entity frontmatter validator (stdlib-only)
+│   ├── register-entity.py              Slug-keyed manifest upsert + execution-log append
+│   ├── staffing-score.py               Deterministic staffing scorer (availability/fit/impact)
+│   └── render-dashboard.py             Portfolio health + value HTML render (read-only, stdlib-only)
 ├── tests/
-│   ├── test_portfolio_init.sh        Portfolio scaffolder idempotency + no-debris suite
-│   ├── test_register_entity.sh       Atomic-write + idempotency regression suite
+│   ├── test_portfolio_init.sh          Portfolio scaffolder idempotency + no-debris suite
+│   ├── test_register_entity.sh         Atomic-write + idempotency regression suite
 │   ├── test_validate_entities_refs.sh  Assignment ref-integrity + single-file regression suite
-│   └── test-render-dashboard.sh      Dashboard render regression test (stdlib-only)
+│   └── test-render-dashboard.sh        Dashboard render regression test (stdlib-only)
 └── references/
-    └── data-model.md                 Consultant / project / assignment entity schemas
+    └── data-model.md                   Consultant / project / assignment entity schemas
 ```
 
 Run the tests directly — bash + python3, no pytest or pip:

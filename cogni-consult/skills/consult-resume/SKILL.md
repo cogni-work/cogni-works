@@ -153,9 +153,11 @@ An English session renders the same table, seeded by example too: preamble
 labels `Engagement: <name> — last worked on <DD.MM.YYYY>` and
 `Key question: <key_question>`, header
 `| Action Field | Status | Deliverables | Next Deliverable |`, `Status` values
-`complete`, `in-progress` and `pending`, counts `2/2 complete` and
-`0/2 complete`. Dates keep the day-first shape of step 2. The columns, the row
-order and the one-row-per-action-field rule are identical in both languages.
+`complete`, `in progress` and `pending` — the shapes
+`generate-engagement-readme.py`'s `STATE_LABEL` already renders, so the two
+surfaces agree — counts `2/2 complete` and `0/2 complete`. Dates keep the
+day-first shape of step 2. The columns, the row order and the
+one-row-per-action-field rule are identical in both languages.
 
 Name action fields by the `title` read from
 `<engagement-path>/action-fields/<slug>/field.json` — step 3's rollup carries a

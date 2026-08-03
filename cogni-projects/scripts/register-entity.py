@@ -41,25 +41,27 @@ Exit: 0 ok / 1 the entity failed validation / 2 usage or environment failure.
 """
 
 import datetime
-import importlib.util
 import json
 import os
 import sys
 import tempfile
 
-# validate-entities.py is not an importable module name (hyphens), so load it by
-# file location rather than duplicating its rules here — this script must gate on
-# exactly the schema the validator enforces.
-_v_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "validate-entities.py")
-_spec = importlib.util.spec_from_file_location("validate_entities", _v_path)
-if _spec is None or _spec.loader is None:
+# Anchored on __file__ rather than the CWD, and load-bearing rather than
+# decorative: tests/test_register_entity.sh loads this script through importlib
+# from a heredoc, where sys.path[0] is the temp working directory, so a bare
+# `from _projects_lib import ...` would raise ModuleNotFoundError under test.
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from _projects_lib import VALIDATOR_PATH, load_validator  # noqa: E402
+
+# This script must gate on exactly the schema the validator enforces, so the load
+# stays at module scope and fails before main()'s own usage check ever runs.
+_ve = load_validator()
+if _ve is None:
     print(json.dumps({
         "success": False, "data": {},
-        "error": "cannot load validator module: %s" % _v_path,
+        "error": "cannot load validator module: %s" % VALIDATOR_PATH,
     }))
     sys.exit(2)
-_ve = importlib.util.module_from_spec(_spec)
-_spec.loader.exec_module(_ve)
 
 # The summary-ref fields each type carries into the manifest (see
 # references/data-model.md "Manifest registration"). These are an editorial

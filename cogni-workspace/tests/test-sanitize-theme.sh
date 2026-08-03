@@ -71,7 +71,11 @@ assert_py "1d empty rejected"           'g.is_safe_value("") is False'
 assert_py "1e non-string rejected"      'g.is_safe_value(123) is False'
 assert_py "1f overlong rejected"        'g.is_safe_value("#" + "a"*200) is False'
 assert_py "1g font stack single-quotes ok" "g.is_safe_value(\"'Segoe UI', Roboto\") is True"
-assert_py "1h unknown profile falls back to strict" 'g.is_safe_value("#000000</style>", "nope") is False'
+# Discriminating probe: rgba(...) is rejected by strict but accepted by the two
+# relaxed profiles, so this pins "falls back to *strict*". A markup-breakout
+# probe would not — every profile's denylist rejects that, so it would still
+# pass if the fallback were changed to font-aware.
+assert_py "1h unknown profile falls back to strict" 'g.is_safe_value("rgba(0,0,0,0.1)", "nope") is False'
 
 echo "=== font-aware profile ==="
 # The exact DEFAULT_THEME value this plugin's own renderer ships (184 chars) —
@@ -207,6 +211,43 @@ assert_py "2r non-import scalar falls back to default" \
 assert_py "2s normalize_font_import returns None on a non-import" \
   'g.normalize_font_import("Roboto") is None'
 
+# _URL's character class is the load-bearing safety property of the normalizer:
+# it is what makes re-wrapping the captured URL in url('...') provably
+# well-formed. Nothing else pins it — widening it to https://[^\s]+ leaves every
+# other assertion in this file green while making the guard inject a live rule
+# (the URL closes its own wrapper, terminates the at-rule, and opens a block).
+# One assertion per excluded character class, so a partial widening is caught too.
+assert_py "2t quote in URL rejected (would close the url('...') wrapper)" \
+  "g.is_safe_value(\"https://a.example/x');}body{background:red\", 'import-aware') is False"
+assert_py "2u normalize refuses a quote-bearing URL" \
+  "g.normalize_font_import(\"https://a.example/x')\") is None"
+assert_py "2w backslash in URL rejected" \
+  "g.is_safe_value('https://a.example/x\\\\y', 'import-aware') is False"
+assert_py "2x angle bracket in URL rejected" \
+  "g.is_safe_value('https://a.example/x<style>', 'import-aware') is False"
+assert_py "2y brace in URL rejected" \
+  "g.is_safe_value('https://a.example/x{y}', 'import-aware') is False"
+# Parens and whitespace are NOT in the denylist (font-aware needs parens for
+# rgba(...)), so these pass is_safe_value and are stopped at the emission
+# boundary instead — the acceptance-is-not-sufficiency property. Asserting them
+# on is_safe_value would be asserting the wrong thing; assert where it bites.
+assert_py "2v paren in URL never emitted" \
+  "g.normalize_font_import('https://a.example/x)') is None"
+assert_py "2z whitespace in URL never emitted" \
+  "g.normalize_font_import('https://a.example/x y') is None"
+assert_py "2v2 paren-bearing import falls back to default" \
+  "g.sanitize_section('google_fonts_import', 'https://a.example/x)', '') == ('', ['google_fonts_import'])"
+# The same payload must not survive the section policy either.
+assert_py "2za wrapper-closing payload falls back to default" \
+  "g.sanitize_section('google_fonts_import', \"https://a.example/x');}body{background:red\", '') == ('', ['google_fonts_import'])"
+# An import-aware profile forced onto a dict section must not smuggle the gate
+# back into a declaration slot — the per-key path cannot normalize.
+assert_py "2zb import-aware forced on a dict section does not accept a gate-shaped value" \
+  "g.sanitize_section('fonts', {'body':'$INJ_URL'}, {'body':'Roboto'}, 'import-aware') == ({'body':'Roboto'}, ['body'])"
+# Unknown sections fail closed rather than raising, matching _profile.
+assert_py "2zc unknown section falls back to strict instead of raising" \
+  "g.sanitize_section('gradients', {'a':'rgba(0,0,0,0.1)'}, {'a':'none'}) == ({'a':'none'}, ['a'])"
+
 echo "=== shipped defaults must survive their own profiles ==="
 # Arity first, so the all()-loops below cannot pass vacuously on an empty dict.
 assert_py "5a DEFAULT_THEME ships 4 shadows and 3 font stacks" \
@@ -241,8 +282,11 @@ assert_json "3c CLI reports rejected font key" "$TMPROOT/cli-font-evil.json" \
   'd["data"]["rejected"].get("fonts")==["body"]'
 assert_json "3d CLI reports rejected scalar section" "$TMPROOT/cli-font-evil.json" \
   'd["data"]["rejected"].get("google_fonts_import")==["google_fonts_import"]'
+# Paired with the checked count so this cannot hold vacuously: a pure negative
+# ("not in rejected") would still pass if the CLI stopped walking those sections
+# altogether. The fixture supplies 4 override values across 4 sections.
 assert_json "3e CLI accepts legitimate shadow + radius" "$TMPROOT/cli-font-evil.json" \
-  '"shadows" not in d["data"]["rejected"] and "radius" not in d["data"]["rejected"]'
+  '"shadows" not in d["data"]["rejected"] and "radius" not in d["data"]["rejected"] and d["data"]["checked"]==4'
 assert_json "3f CLI reports per-section profiles" "$TMPROOT/cli-font-evil.json" \
   'd["data"]["section_profiles"]["colors"]=="strict" and d["data"]["section_profiles"]["fonts"]=="font-aware"'
 assert_json "3fa CLI reports import-aware for the import slot" "$TMPROOT/cli-font-evil.json" \

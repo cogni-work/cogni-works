@@ -56,10 +56,21 @@ Profiles
     shape and a two-declaration injection by effect.
 
     Rejected under both profiles: ``</style>`` / ``<script>`` and any markup
-    breakout, rule-block injection (``{``/``}``), ``;`` declaration injection,
-    ``data:`` / ``http:`` / protocol-relative schemes, chained imports
+    breakout, rule-block injection (``{``/``}``), and ``;`` declaration
+    injection. Rejected under ``import-aware`` specifically: ``data:`` /
+    ``http:`` / protocol-relative schemes, chained imports
     (``@import a;@import b;``), media-qualified imports
-    (``@import url(...) screen;``), and anything with trailing content.
+    (``@import url(...) screen;``), and anything with trailing content —
+    all of these are properties of the *shape gate*, which ``font-aware``
+    deliberately does not carry.
+
+    **Consequence for ``font-aware``:** with no shape gate it permits an
+    arbitrary ``url(...)``, including non-https schemes, because the denylist
+    alone cannot distinguish them. That is safe only in a slot whose consuming
+    CSS property cannot fetch — ``font-family``, ``box-shadow`` and
+    ``border-radius``, which is exactly what the profile covers. A renderer must
+    **not** route a fetchable property (``background``, ``src``, ``mask``, …)
+    through ``font-aware``; such a slot needs ``strict``, or a new row here.
 
     **Accepted residual, by policy:** a well-formed *https* ``@import`` from an
     arbitrary host passes — there is deliberately no host allowlist, so
@@ -188,6 +199,14 @@ def is_safe_value(value, profile=DEFAULT_PROFILE):
     reach the stylesheet as raw text, so only vetted strings may pass. An
     unknown profile name falls back to ``strict``, i.e. fails closed onto the
     tightest policy.
+
+    **For a profile declaring a normalizer, acceptance here is necessary but not
+    sufficient.** The denylist path accepts values the shape gate never sees, so
+    an ``import-aware`` value can pass this check and still be unemittable —
+    ``'Roboto'`` is accepted, yet emitting it where an ``@import`` belongs
+    reintroduces the ``:root``-swallowing failure :func:`normalize_font_import`
+    exists to prevent. Callers must go through :func:`sanitize_section` (or
+    apply the profile's normalizer themselves) before emitting such a value.
     """
     forbidden, max_len, shape, _ = _profile(profile)
     if not isinstance(value, str) or not (0 < len(value) <= max_len):
@@ -240,11 +259,19 @@ def sanitize_section(section, value, defaults, profile=None):
     valid rendering in that slot, so it is rejected rather than emitted raw.
 
     ``profile`` overrides the section's default profile; leave it ``None`` to
-    apply the policy the renderers actually use.
+    apply the policy the renderers actually use. The override is **ignored for a
+    dict-shaped section when it names a normalizer-carrying profile**: the
+    per-key path cannot normalize, so honouring it would accept a gate-shaped
+    value and emit it raw into a declaration slot — reinstating the very
+    injection the profile split closes. An unknown section falls back to the
+    tightest policy rather than raising, matching :func:`_profile`, so a renderer
+    using a section outside the table degrades instead of killing the render.
     """
-    shape, section_profile = SECTION_PROFILES[section]
+    shape, section_profile = SECTION_PROFILES.get(section, ("dict", DEFAULT_PROFILE))
     applied = profile or section_profile
     if shape == "dict":
+        if _profile(applied)[3] is not None:
+            applied = section_profile
         return sanitize_values(value, defaults, applied)
     if value in (None, ""):
         return defaults, []

@@ -150,10 +150,11 @@ engagement's `language` field, which is the deliverable axis. See
 `$CLAUDE_PLUGIN_ROOT/references/interaction-language.md`.
 
 **Personas gate (fresh starts only).** Before opening the loop for a deliverable
-whose `state` is `pending`, the engagement's personas gate must be satisfied, so
-Empathize (which maps personas) and Test (which challenges *as* personas)
-operate on real stakeholders rather than the degraded fallback. Read the derived
-rollup:
+whose `state` is `pending` (a fresh start — not a resume or rework), the
+engagement's personas gate must be satisfied, so Empathize (which maps personas)
+and Test (which challenges *as* personas) operate on real stakeholders rather
+than the degraded fallback. Read the derived rollup — this gate does not
+otherwise call it:
 
 ```bash
 bash $CLAUDE_PLUGIN_ROOT/scripts/engagement-status.sh <engagement-dir>
@@ -165,15 +166,18 @@ and branch on `data.personas_gate`:
   `personas/.gate-waiver` marker — the seeded default advisors alone do not
   satisfy it): do **not** open the loop. Dispatch
   `Skill("cogni-consult:consult-personas")` and stop — write nothing. Explain
-  that the gate is unsatisfied and flips to `satisfied` once scope-specific
-  stakeholders are seeded (define mode) or an explicit waiver is recorded (for
-  engagements with no external stakeholders); the consultant returns here then.
+  that the engagement's personas gate is unsatisfied, and that it flips to
+  `satisfied` once scope-specific stakeholders are seeded (define mode) or an
+  explicit waiver is recorded (for engagements with no external stakeholders);
+  the consultant returns here once it is satisfied.
 - If `"satisfied"`: proceed to *Open the Loop* as usual.
 
-This start-of-loop guard applies only to the `pending` (fresh-start) branch
-below — a resume or a rework re-entry is never blocked. Once satisfied the gate
-stays satisfied, so in practice it only ever gates the engagement's first
-deliverable; the Empathize/Test fallbacks remain a last-resort safety net.
+This guard applies only to the `pending` (fresh-start) branch below. A
+deliverable that is already `in-progress` (resume) or being reopened from
+`complete` (rework) is never blocked — the gate is a start-of-loop check, and
+once satisfied it stays satisfied, so in practice it only ever gates the
+engagement's first deliverable. The Empathize/Test fallbacks remain as a
+last-resort safety net but do not trigger for the scope-seeded flow.
 
 ### 2. Open the Loop
 
@@ -207,15 +211,19 @@ consultant's verbatim answer to `.metadata/decision-log.json`'s `decisions[]` as
 discrete keys, no prose `decision` string, mirroring the gap-check and
 adherence-review shapes; `target_stage` is the value passed to
 `dt-stage-advance.sh`, so record and write cannot drift. The append is
-idempotent *within one reopen*, not across reopens: an entry for these
-`(action_field, deliverable)` coordinates with no `complete` transition after its
-`timestamp` belongs to this same open episode — reuse it rather than appending a
-second. A `complete` transition closes the episode, so the next reopen keys a
-fresh entry: successive reworks carry successive intents. The ordering is
-load-bearing: capture before the `dt-stage-advance.sh` call, so an abandoned
-re-entry never leaves an advanced stage with no recorded intent. It runs in both
-modes — a write input, not a confirmation gate: opting back to auto-walk drops
-the stage pauses, never this question.
+idempotent *within one reopen*, not across reopens: read
+`.metadata/execution-log.json`'s `transitions[]` for this deliverable, and an
+entry for these `(action_field, deliverable)` coordinates with no `complete`
+transition after its `timestamp` belongs to this same open episode — reuse it
+rather than appending a second. A `complete` transition closes the episode, so
+the next reopen keys a fresh entry: successive reworks carry successive intents.
+That is what separates this kind from the append-once waiver kinds, which stay
+at one entry per deliverable for the engagement's life. The ordering is
+load-bearing: capture before both the `field.json` state `Edit` and the
+`dt-stage-advance.sh` call, so an abandoned re-entry never leaves an advanced
+stage with no recorded intent. It runs in both modes — a write input, not a
+confirmation gate: opting back to auto-walk drops the stage pauses, never this
+question.
 
 Because the deliverable's content is about to change, flag its downstream
 dependents stale now — before the rework begins — so the consultant sees the
@@ -291,15 +299,17 @@ Close the stage by advancing `dt_stage` → `"define"` via the helper.
 
 Read `$CLAUDE_PLUGIN_ROOT/references/methods/hmw-synthesis.md` and sharpen the
 deliverable's problem spec from the empathize outputs plus the field's `framing`.
-On a rework re-entry the primary framing input is instead the most recent
+On a rework re-entry both of those stay in play, joined by the most recent
 `rework-intent` entry for this deliverable's `(action_field, deliverable)`
-coordinates, recorded in Step 2 — the consultant reopened the deliverable for a
-stated reason, so where that intent conflicts with an inherited persona objection
-from the previous pass, the consultant's stated intent wins; name the conflict in
-the locked spec's `rationale` below. Lock 1-3 HMW questions
-with the consultant. When a framework lens is in play (see *The framework lens*
-above), let its Structure signature frame how you organize the problem and the
-approach — e.g. `mece-issue-tree` decomposes the problem into
+coordinates, recorded in Step 2 — which ranks first among the three, since the
+consultant reopened the deliverable for a stated reason. It re-ranks the inputs,
+it does not replace them: the empathize outputs still describe the stakeholders
+and the field's `framing` still bounds the work. Where that intent conflicts with
+an inherited persona objection from the previous pass, the consultant's stated
+intent wins; name the conflict in the locked spec's `rationale` below. Lock 1-3
+HMW questions with the consultant. When a framework lens is in play (see *The
+framework lens* above), let its Structure signature frame how you organize the
+problem and the approach — e.g. `mece-issue-tree` decomposes the problem into
 mutually-exclusive, collectively-exhaustive branches before drafting, while
 `pyramid-principle` leads with the answer and groups the supporting arguments
 beneath it. For a `combo:` choice, let the first signature frame the problem and

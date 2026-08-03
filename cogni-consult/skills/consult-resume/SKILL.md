@@ -189,10 +189,11 @@ splitting fields) belongs to `consult-action-fields`, not here.
 themed, browsable HTML view of the same status via `/cogni-consult:consult-dashboard`
 (action-field WBS, deliverable states, design-thinking stages, persona-review
 coverage). When the engagement already has `output/design-variables.json` from a
-prior dashboard run, regenerate and open it without a theme prompt by
+prior dashboard run, you can regenerate and open it without a theme prompt by
 delegating to the `consult-dashboard-refresher` agent with
 `engagement_dir: <engagement-dir>` and `plugin_root: $CLAUDE_PLUGIN_ROOT`. This
-stays read-only — the agent runs the read-only generator.
+stays read-only — the agent runs the read-only generator; it never edits
+engagement state.
 
 **Point at the project plan (only when scheduling data exists).** When the engagement
 carries a schedule, surface it here as a one-line read-only pointer. Detect it cheaply:

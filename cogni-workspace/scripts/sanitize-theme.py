@@ -12,7 +12,10 @@ lives in one place instead of being copy-pasted per renderer.
 Two consumption surfaces:
 
   * **In-plugin import** (the fast path used by renderers): load this file by
-    path and call :func:`is_safe_value` / :func:`sanitize_values`. Renderers in
+    path and call :func:`sanitize_section`, which resolves each section's profile
+    and shape from :data:`SECTION_PROFILES` so no renderer restates that policy.
+    (:func:`is_safe_value` / :func:`sanitize_values` remain the lower-level
+    surface for a caller that already knows the profile it wants.) Renderers in
     *other* plugins cannot rely on a normal ``import`` (separate plugin cache
     dirs), so the natural consumers are cogni-workspace's own renderers; the
     cross-plugin sharing mechanism is a separate, deferred decision.
@@ -31,17 +34,28 @@ Profiles
 
 ``font-aware``
     Denylist ``<>{};@\\`` (``strict``'s set minus the two paren characters), max
-    length 300. For the values ``strict`` cannot express: font stacks, shadows,
-    ``radius``, and ``google_fonts_import``. Permits ``rgba(...)`` / ``url(...)``
-    by allowing parens, and — through a *second, anchored acceptance path* — one
-    ``@import url(<https-url>);`` statement or one bare ``https://…`` URL. That
-    shape gate is the only way ``@`` and ``;`` can appear, which is what keeps
-    the relaxation from turning every declaration slot into an injection point:
-    a bare ``;`` would let ``red; background-image: url(https://evil/beacon.png)``
-    ride along inside ``:root``, and an ungated ``@`` would let the
-    top-level ``google_fonts_import`` slot carry any number of at-rules.
+    length 300, **no shape gate**. For the declaration *values* ``strict`` cannot
+    express: font stacks, shadows and ``radius``. Permits ``rgba(...)`` /
+    ``url(...)`` by allowing parens, while ``;`` and ``@`` stay forbidden.
 
-    Rejected under ``font-aware``: ``</style>`` / ``<script>`` and any markup
+``import-aware``
+    ``font-aware``'s denylist and bound, plus a *second, anchored acceptance
+    path*: one ``@import url(<https-url>);`` statement or one bare ``https://…``
+    URL. Applied to ``google_fonts_import`` alone.
+
+    The split between these two profiles is load-bearing, and collapsing them is
+    the bug this table shape exists to prevent. The shape gate's URL alternative
+    must tolerate ``@`` and ``;`` *inside* the URL — the shipped default needs
+    both for ``wght@400;500`` — so a value accepted by the gate can carry those
+    characters. That is safe **only** where the value is emitted as a complete
+    at-rule statement of its own, which is true of ``google_fonts_import`` and of
+    nothing else. Wired to a section interpolated as a raw declaration value
+    inside ``:root`` — as ``fonts`` / ``shadows`` / ``radius`` are — the same gate
+    re-admits exactly the declaration chaining the denylist exists to block:
+    ``https://a.example/x;background:red;position:fixed`` is a "bare URL" by
+    shape and a two-declaration injection by effect.
+
+    Rejected under both profiles: ``</style>`` / ``<script>`` and any markup
     breakout, rule-block injection (``{``/``}``), ``;`` declaration injection,
     ``data:`` / ``http:`` / protocol-relative schemes, chained imports
     (``@import a;@import b;``), media-qualified imports
@@ -76,29 +90,74 @@ import sys
 # This gate is consulted **only when the denylist path already failed**, i.e. for
 # values carrying ``@`` or ``;``. A value with none of the forbidden characters
 # is accepted without ever being shape-checked — deliberately, since it provably
-# cannot break out, and demanding this shape of every value would reject the
-# ``rgba(...)`` shadows and font stacks the profile exists to allow.
+# cannot break out.
+#
+# It belongs to ``import-aware`` alone. Because the URL alternative must allow
+# ``@`` and ``;`` inside the URL (the shipped default needs ``wght@400;500``),
+# wiring it to a profile covering raw declaration values would let
+# ``https://a.example/x;background:red`` through as a "bare URL" — see the
+# module docstring.
 #
 # ``_URL`` is named once because both alternatives must stay identical: excluding
 # whitespace, quotes, parens, angle brackets, braces and backslash is what makes
-# a shape-accepted value provably free of every breakout character. It still
-# allows ``@`` and ``;`` *inside* the URL — the shipped default needs both for
-# ``wght@400;500``.
+# a shape-accepted value provably free of every breakout character, and is also
+# what makes the captured URL safe to re-wrap in ``url('…')`` below.
 _URL = r"https://[^\s'\"()<>{}\\]+"
+# The named groups exist so :func:`normalize_font_import` can recover the URL
+# from either alternative. Group 1 stays the optional quote (the ``\1``
+# backreference pairs the closing quote with the opening one), so the named
+# groups are added *after* it.
 _FONT_IMPORT_RE = re.compile(
-    r"^(?:@import\s+url\(\s*(['\"]?)" + _URL + r"\1\s*\)\s*;?|" + _URL + r")\Z"
+    r"^(?:@import\s+url\(\s*(['\"]?)(?P<stmt>" + _URL + r")\1\s*\)\s*;?"
+    r"|(?P<bare>" + _URL + r"))\Z"
 )
 
-# profile name -> (forbidden character set, max length, optional shape regex).
-# The regex is the profile's *second* acceptance path; carrying it in the record
-# keeps this table the complete statement of policy, so a future profile is a new
-# row rather than a new branch inside is_safe_value.
+def normalize_font_import(value):
+    """Canonicalize an accepted import value into ``@import url('<url>');``.
+
+    Returns the canonical statement, or ``None`` when ``value`` is not a
+    well-formed import — the caller treats that as "no usable override" and
+    keeps its default.
+
+    Normalizing is a correctness requirement, not tidiness. The value is emitted
+    verbatim at the top of the ``<style>`` block, immediately before ``:root {``,
+    and two shapes the gate accepts are not self-terminating there: a **bare
+    URL** (no ``@import``, no ``;``) and an ``@import`` whose optional trailing
+    ``;`` is absent. In both cases CSS error recovery consumes the following
+    block, so the whole ``:root`` rule is swallowed and every theme variable is
+    silently lost. Re-emitting one canonical, terminated statement makes both
+    inputs safe by construction.
+
+    Re-wrapping is provably well-formed because ``_URL`` excludes quotes,
+    parens and whitespace, so the captured URL can never close the ``url('…')``
+    it is placed inside.
+    """
+    match = _FONT_IMPORT_RE.match(value) if isinstance(value, str) else None
+    if match is None:
+        return None
+    return "@import url('%s');" % (match.group("stmt") or match.group("bare"))
+
+
+# profile name -> (forbidden character set, max length, optional shape regex,
+# optional normalizer). The regex is the profile's *second* acceptance path and
+# the normalizer canonicalizes what that path accepts; carrying both in the
+# record keeps this table the complete statement of policy, so a future profile
+# is a new row rather than a new branch inside is_safe_value or sanitize_section.
+# A gate-carrying profile whose normalizer were wired up by name somewhere else
+# would fail silently — see normalize_font_import for what that costs.
 _PROFILES = {
-    "strict": (set("<>{}();@\\"), 120, None),
-    "font-aware": (set("<>{};@\\"), 300, _FONT_IMPORT_RE),
+    "strict": (set("<>{}();@\\"), 120, None, None),
+    "font-aware": (set("<>{};@\\"), 300, None, None),
+    "import-aware": (set("<>{};@\\"), 300, _FONT_IMPORT_RE, normalize_font_import),
 }
 DEFAULT_PROFILE = "strict"
 FONT_AWARE_PROFILE = "font-aware"
+IMPORT_AWARE_PROFILE = "import-aware"
+
+
+def _profile(name):
+    """Resolve a profile name to its record, failing closed onto ``strict``."""
+    return _PROFILES[name if name in _PROFILES else DEFAULT_PROFILE]
 
 # Which profile each design-variables section is vetted under, and whether it is
 # a ``{key: value}`` map or a single string value. This is a fact about the
@@ -110,7 +169,7 @@ SECTION_PROFILES = {
     "status": ("dict", DEFAULT_PROFILE),
     "fonts": ("dict", FONT_AWARE_PROFILE),
     "shadows": ("dict", FONT_AWARE_PROFILE),
-    "google_fonts_import": ("scalar", FONT_AWARE_PROFILE),
+    "google_fonts_import": ("scalar", IMPORT_AWARE_PROFILE),
     "radius": ("scalar", FONT_AWARE_PROFILE),
 }
 
@@ -130,8 +189,7 @@ def is_safe_value(value, profile=DEFAULT_PROFILE):
     unknown profile name falls back to ``strict``, i.e. fails closed onto the
     tightest policy.
     """
-    name = profile if profile in _PROFILES else DEFAULT_PROFILE
-    forbidden, max_len, shape = _PROFILES[name]
+    forbidden, max_len, shape, _ = _profile(profile)
     if not isinstance(value, str) or not (0 < len(value) <= max_len):
         return False
     if not (forbidden & set(value)):
@@ -175,6 +233,12 @@ def sanitize_section(section, value, defaults, profile=None):
     ``google_fonts_import`` legitimately means "no import" — so it yields
     ``defaults`` with nothing rejected rather than being reported as unsafe.
 
+    A scalar is additionally passed through its profile's normalizer, when that
+    profile declares one, so the value a renderer interpolates is canonical — for
+    ``import-aware`` that means an always-terminated ``@import`` statement. A
+    value that passes the denylist but the normalizer cannot canonicalize has no
+    valid rendering in that slot, so it is rejected rather than emitted raw.
+
     ``profile`` overrides the section's default profile; leave it ``None`` to
     apply the policy the renderers actually use.
     """
@@ -185,7 +249,10 @@ def sanitize_section(section, value, defaults, profile=None):
     if value in (None, ""):
         return defaults, []
     if is_safe_value(value, applied):
-        return value, []
+        normalizer = _profile(applied)[3]
+        clean = normalizer(value) if normalizer is not None else value
+        if clean is not None:
+            return clean, []
     return defaults, [section]
 
 
@@ -205,7 +272,7 @@ def _cli(argv):
     if not args:
         return {"success": False, "data": None,
                 "error": "usage: sanitize-theme.py <design-variables.json> "
-                         "[--profile=strict|font-aware]"}
+                         "[--profile=strict|font-aware|import-aware]"}
     if forced_profile is not None and forced_profile not in _PROFILES:
         return {"success": False, "data": None,
                 "error": "unknown profile %r (available: %s)"
@@ -237,9 +304,13 @@ def _cli(argv):
         if bad:
             rejected[section] = bad
     return {"success": True,
-            # ``profile`` is what was *forced*; null means each section was
-            # vetted under its own default, which ``section_profiles`` spells out.
-            "data": {"profile": forced_profile,
+            # ``profile`` stays a string on every invocation — it names the
+            # profile in force across the walk, falling back to the default when
+            # none was forced. Reporting the *forced* value here (and so ``null``
+            # by default) would be a type change on a field callers already read
+            # as always-a-string; the per-section detail this profile model adds
+            # is carried additively by ``section_profiles`` instead.
+            "data": {"profile": forced_profile or DEFAULT_PROFILE,
                      "section_profiles": section_profiles,
                      "checked": checked,
                      "rejected": rejected},

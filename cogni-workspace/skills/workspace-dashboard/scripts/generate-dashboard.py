@@ -162,6 +162,22 @@ def parse_theme_md(theme_path):
     return theme
 
 
+def _merge_section(override, default):
+    """Merge one unvetted design-variables section onto its built-in default.
+
+    The degraded path's counterpart to the guard's own merge. Backfilling is not
+    cosmetic: ``render_css`` indexes ``theme['fonts']['headers'|'body'|'mono']``
+    and the shadow keys directly, so a partial override reaching it short a key
+    raises ``KeyError`` and kills the render — turning "the guard is missing"
+    into a hard failure, which is exactly what the no-hard-dependency contract
+    promises never happens. An absent or empty override is no override.
+    """
+    if isinstance(default, dict):
+        return {k: override.get(k, v) for k, v in default.items()} \
+            if isinstance(override, dict) else default
+    return override or default
+
+
 def merge_tokens(design_variables, parsed_theme):
     """Pick the strongest available token source. Order: design-vars > theme.md > default.
 
@@ -169,12 +185,12 @@ def merge_tokens(design_variables, parsed_theme):
     the shared theme-value guard (``cogni-workspace/scripts/sanitize-theme.py``)
     before it can reach the ``<style>`` block: a rejected value is dropped, the
     built-in value is kept for that key, and the rejection is surfaced as a
-    warning. Two profiles, because the values differ in kind — ``colors`` /
-    ``status`` are hex tokens vetted under ``strict``, while ``fonts`` /
-    ``shadows`` / ``radius`` / ``google_fonts_import`` are vetted under
-    ``font-aware``, which permits the ``rgba(...)`` / ``url(...)`` /
-    ``@import url(...)`` forms they legitimately carry while still rejecting
-    breakout and declaration injection.
+    warning. Three profiles, because the values differ in kind — ``colors`` /
+    ``status`` are hex tokens vetted under ``strict``; ``fonts`` / ``shadows`` /
+    ``radius`` are declaration values vetted under ``font-aware``, which permits
+    the ``rgba(...)`` / ``url(...)`` forms they legitimately carry; and
+    ``google_fonts_import``, the one slot emitted as a complete at-rule, is
+    vetted under ``import-aware``, the only profile that admits ``@`` and ``;``.
 
     Routing ``fonts`` through the guard also backfills any key the override
     omits, which matters beyond safety: ``render_css`` indexes
@@ -185,8 +201,17 @@ def merge_tokens(design_variables, parsed_theme):
     Which profile covers which section is the guard's policy, not this
     renderer's — ``sanitize_section`` resolves it — so the five sibling
     renderers inherit the same mapping when they are wired to the guard rather
-    than each restating it. If the guard fails to load, every override passes
-    through unguarded; theming is never a hard dependency.
+    than each restating it.
+
+    Theming is never a hard dependency, and that holds against a *stale* guard as
+    well as an absent one. The guard is loaded by path from its home plugin, so
+    an installed copy can predate ``sanitize_section`` while importing cleanly —
+    a call is then an ``AttributeError`` at render time, which the import-time
+    ``try`` cannot catch. Each surface is therefore feature-detected: the current
+    ``sanitize_section`` when present, else the older ``sanitize_values`` for the
+    hex-token sections, else unguarded pass-through. The detection is
+    ``hasattr``-based rather than a blanket ``try/except`` so a real failure
+    inside a present guard still surfaces instead of silently degrading.
     """
     warnings = []
     if design_variables:
@@ -198,18 +223,28 @@ def merge_tokens(design_variables, parsed_theme):
             "google_fonts_import": "",
             "radius": DEFAULT_THEME["radius"],
         }
-        if _THEME_GUARD is not None:
-            vetted, rejected = {}, []
-            for section, default in defaults.items():
-                vetted[section], bad = _THEME_GUARD.sanitize_section(
-                    section, design_variables.get(section), default)
-                rejected += bad
-            if rejected:
-                warnings.append(
-                    "design-variables: ignored unsafe value(s) for %s — using the "
-                    "built-in palette for those keys" % ", ".join(rejected))
-        else:
-            vetted = {s: design_variables.get(s, d) for s, d in defaults.items()}
+        # Resolve each surface once. ``getattr`` on ``None`` yields ``None``, so
+        # this covers "guard absent" and "guard too old" in one lookup.
+        guard_section = getattr(_THEME_GUARD, "sanitize_section", None)
+        guard_values = getattr(_THEME_GUARD, "sanitize_values", None)
+        vetted, rejected = {}, []
+        for section, default in defaults.items():
+            override = design_variables.get(section)
+            if guard_section is not None:
+                vetted[section], bad = guard_section(section, override, default)
+            elif guard_values is not None and section in ("colors", "status"):
+                # Older guard: vet what that surface can vet. Naming the two
+                # hex-token sections here does restate a slice of the guard's
+                # policy, but only for the degraded path — the current path above
+                # still asks the guard, which stays the single source of truth.
+                vetted[section], bad = guard_values(override, default)
+            else:
+                vetted[section], bad = _merge_section(override, default), []
+            rejected += bad
+        if rejected:
+            warnings.append(
+                "design-variables: ignored unsafe value(s) for %s — using the "
+                "built-in palette for those keys" % ", ".join(rejected))
         theme = dict(vetted)
         theme["name"] = design_variables.get("theme_name", "custom")
         return theme, warnings

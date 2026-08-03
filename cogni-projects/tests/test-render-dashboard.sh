@@ -23,25 +23,9 @@ if [ ! -f "$SCRIPT" ]; then
   exit 1
 fi
 
-TMPROOT="$(mktemp -d)"
-trap 'rm -rf "$TMPROOT"' EXIT
+. "$TESTS_DIR/fixtures/test_helpers.sh"
 
-failures=0
-pass() { printf 'OK   %s\n' "$1"; }
-fail() { printf 'FAIL %s: %s\n' "$1" "$2" >&2; failures=$((failures + 1)); }
-
-# assert_json <label> <python-bool-expr over `d`> — pipes the last stdout line
-# (the envelope) into python3 and checks the expression is truthy.
-assert_json() {
-  local label="$1" expr="$2"
-  if printf '%s' "$LAST_JSON" | python3 -c "import json,sys
-d = json.loads(sys.stdin.read())
-sys.exit(0 if ($expr) else 1)" 2>/dev/null; then
-    pass "$label"
-  else
-    fail "$label" "expr false: $expr | json=$LAST_JSON"
-  fi
-}
+init_tmproot
 
 assert_html() {
   local label="$1" needle="$2" file="$3"
@@ -63,34 +47,10 @@ assert_html_lacks() {
   fi
 }
 
-# Every "the renderer degraded instead of crashing" fixture needs this, and the
-# crash signature belongs in one place — widening it later should be one edit.
-assert_no_traceback() {
-  local label="$1" file="$2"
-  if grep -qF 'Traceback' "$file"; then
-    fail "$label" "traceback present: $(head -3 "$file")"
-  else
-    pass "$label"
-  fi
-}
-
-seed_portfolio() {
-  # $1 = portfolio dir. Seeds a manifest + entity subdirs.
-  local pf="$1"
-  mkdir -p "$pf"/{consultants,projects,assignments,.metadata}
-  cat > "$pf/projects-portfolio.json" <<'EOF'
-{"slug":"test","name":"Test Portfolio","language":"en","consultants":[],"projects":[],"assignments":[],"created":"2026-01-01","updated":"2026-01-01"}
-EOF
-}
-
-write_entity() { # $1 = path, $2 = frontmatter body (heredoc'd by caller)
-  cat > "$1"
-}
-
-# run [args...] — invoke the renderer with any arguments (including none) and
-# capture the last stdout line, which is the envelope, into LAST_JSON.
+# run [args...] — invoke the renderer with any arguments (including none),
+# binding the interpreter and script path the shared runner needs.
 run() {
-  LAST_JSON="$(python3 "$SCRIPT" "$@" 2>/dev/null | tail -n 1)"
+  run_script python3 "$SCRIPT" "$@"
 }
 
 # ---------------------------------------------------------------------------
@@ -167,6 +127,7 @@ assert_json "1k envelope carries projects_detail"        "len(d['data']['project
 assert_json "1l projects_detail carries per-project health" "all('health_label' in p and 'health_sev' in p for p in d['data']['projects_detail'])"
 assert_json "1m envelope carries value_by_impact"        "d['data']['value_by_impact']['5'] == 1 and d['data']['value_by_impact']['2'] == 1"
 assert_json "1n named at-risk project pinned with its flag" "any(p['name'] == 'Compliance Audit' and p['health_label'] == 'unstaffed' and p['health_sev'] == 'risk' for p in d['data']['projects_detail'])"
+assert_exit "1o happy render exits zero" 0 "$RUN_CODE"
 
 # ---------------------------------------------------------------------------
 # Fixture 2 — idempotent re-render: running twice rewrites the same file and
@@ -327,15 +288,19 @@ open_roles:
 # open_roles present but empty — still unknown, not an assertion of zero
 EOF
 # A genuinely non-UTF-8 file: a latin-1 encoded byte that is invalid UTF-8.
-# Written via python3 because bash printf parses a leading '---' as options.
-python3 -c "
-import sys
-open(sys.argv[1], 'wb').write(
-    '---\ntype: project\nslug: latin1\nname: Caf\xe9 Rollout\nstatus: active\n---\n'.encode('latin-1')
-)" "$PF6/projects/latin1.md"
+write_latin1 "$PF6/projects/latin1.md" <<'EOF'
+---
+type: project
+slug: latin1
+name: Café Rollout
+status: active
+---
+EOF
 
+# Its own stderr sink, as 6g asserts on the absence of a traceback.
 STDERR6="$TMPROOT/stderr6.txt"
-LAST_JSON="$(python3 "$SCRIPT" "$PF6" 2>"$STDERR6" | tail -n 1)"
+RUN_ERRFILE="$STDERR6"
+run "$PF6"
 
 assert_json "6a malformed set still succeeds"  "d['success'] is True"
 assert_json "6b marked partial"                "d['data']['partial'] is True"
@@ -367,6 +332,7 @@ run
 assert_json "7a no-args still prints envelope" "d['success'] is False"
 assert_json "7b no-args error names usage"     "'usage' in d['error']"
 assert_json "7c usage names the real argument" "'portfolio_dir' in d['error']"
+assert_exit "7d usage error exits 2" 2 "$RUN_CODE"
 
 # ---------------------------------------------------------------------------
 # Fixture 8 — a design-variables value that would break out of the <style>
@@ -520,10 +486,10 @@ status: 1
 # assignment
 EOF
 
-# The shared run() helper discards stderr, so invoke directly the way Fixture 6
-# does — 10g asserts on the absence of a traceback.
+# Its own stderr sink, as 10g asserts on the absence of a traceback.
 STDERR10="$TMPROOT/stderr10.txt"
-LAST_JSON="$(python3 "$SCRIPT" "$PF10" 2>"$STDERR10" | tail -n 1)"
+RUN_ERRFILE="$STDERR10"
+run "$PF10"
 
 assert_json "10a non-string status still succeeds" "d['success'] is True"
 assert_json "10b marked partial"                   "d['data']['partial'] is True"
@@ -677,10 +643,10 @@ status: active
 # assignment
 EOF
 
-# Direct invoke for the same reason Fixture 10 does it — run() discards stderr
-# and 11i asserts a traceback never reached it.
+# Its own stderr sink, as 11i asserts a traceback never reached it.
 STDERR11="$TMPROOT/stderr11.txt"
-LAST_JSON="$(python3 "$SCRIPT" "$PF11" 2>"$STDERR11" | tail -n 1)"
+RUN_ERRFILE="$STDERR11"
+run "$PF11"
 HTML11="$PF11/output/dashboard.html"
 
 assert_json "11a non-string role still succeeds" "d['success'] is True"

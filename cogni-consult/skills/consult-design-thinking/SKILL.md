@@ -61,13 +61,12 @@ and log entry as it goes, surfacing the resulting entries — fast, and right fo
 an obvious-shape deliverable. To steer the work, the consultant opts into
 **interactive mode** (also *transparent mode*) at loop entry ("run it
 interactively", "transparent mode", "with confirmation gates") or as a
-per-engagement default stated at the start, which covers a fresh start and a
-plain resume. A **rework re-entry** (Step 2's `complete` → `in-progress` branch)
-opens in **interactive mode** instead — a reopened deliverable's intent is
-unsettled, so it opens with the confirmation seams on; the consultant may still
-opt back to auto-walk for the pass by saying so at re-entry. That rework default
-is derived at re-entry from the deliverable's stored `state`, never stored as a
-mode. Interaction mode is **ephemeral** — it governs only this session's
+per-engagement default stated at the start. That auto-walk default stands for a
+fresh start (`pending`) and a plain resume (`in-progress`). A **rework re-entry**
+(Step 2's `complete` → `in-progress` branch) opens in **interactive mode**
+instead — a reopened deliverable's intent is unsettled — though the consultant
+may opt back to auto-walk for the pass by saying so at re-entry. That default is
+derived at re-entry from the stored `state`, never stored as a mode. Interaction mode is **ephemeral** — it governs only this session's
 conversation flow and is never written to `field.json`, `consult-project.json`,
 or any log; state-write ownership and the logging contract are identical in both
 modes.
@@ -191,8 +190,8 @@ If the deliverable is already `in-progress`, resume at its current `dt_stage`
 
 If the deliverable is `complete` and the consultant wants rework ("continue
 the deliverable", a revision request), confirm the re-entry first — including
-the stage the rework needs — then capture the improvement intent and record it
-as a `rework-intent` decision-log entry (below), then one `Edit` of
+the stage the rework needs — then capture the improvement intent as a
+`rework-intent` entry (below), then one `Edit` of
 `field.json` sets `state` back to `"in-progress"`, advance `dt_stage` to the
 stage the rework needs (often `define` or `ideate`) via the helper, and one
 `Edit` of `.metadata/execution-log.json` appends the `complete` →
@@ -206,14 +205,16 @@ consultant's verbatim answer to `.metadata/decision-log.json`'s `decisions[]` as
 "target_stage": "<stage the rework re-enters>", "timestamp": "<ISO>"}` —
 discrete keys, no prose `decision` string, mirroring the gap-check and
 adherence-review shapes; `target_stage` is the value passed to
-`dt-stage-advance.sh`, so record and write cannot drift. Unlike the append-once
-waiver kinds, each reopen appends a fresh entry: successive reworks have
-successive intents. Guard the append as the adherence review does
-(`$CLAUDE_PLUGIN_ROOT/references/orchestration/test-adherence-review.md`,
-Idempotency) — an entry for these coordinates with no later `complete` transition
-means this reopen was already captured, so reuse it. The ordering is
+`dt-stage-advance.sh`, so record and write cannot drift. The append is
+idempotent *within one reopen*, not across reopens: an entry for these
+`(action_field, deliverable)` coordinates with no `complete` transition after its
+`timestamp` belongs to this same open episode — reuse it rather than appending a
+second. A `complete` transition closes the episode, so the next reopen keys a
+fresh entry: successive reworks carry successive intents. The ordering is
 load-bearing: capture before the `dt-stage-advance.sh` call, so an abandoned
-re-entry never leaves an advanced stage with no recorded intent.
+re-entry never leaves an advanced stage with no recorded intent. It runs in both
+modes — a write input, not a confirmation gate: opting back to auto-walk drops
+the stage pauses, never this question.
 
 Because the deliverable's content is about to change, flag its downstream
 dependents stale now — before the rework begins — so the consultant sees the
@@ -466,7 +467,9 @@ skill when present in the plugin, or by reading the field manifests directly).
 
 **Milestone actions.** When this session moved the deliverable's `state` to
 `"complete"` (or the delegated persona challenge closed its `persona_review`),
-the engagement's status changed — run all four of the following.
+the engagement's status changed — refresh the two derived views below. The two
+elective rungs after them fire only on the `state` → `"complete"` leg, never on
+a persona-review close.
 
 **Milestone dashboard refresh.** Offer the consultant a
 fresh visual dashboard. If the engagement already has

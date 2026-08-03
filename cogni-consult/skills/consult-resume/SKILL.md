@@ -139,9 +139,9 @@ Schlüsselfrage: <key_question>
 | Go-to-Market | offen | 0/2 begonnen | Channel strategy (Empathize · —) |
 ```
 
-That is a German session. `Deliverables` is the same token in both header rows —
-the established German loanword, not an untranslated leftover, so leave it. The
-one carve-out is action-field and deliverable names — `Market Evidence`,
+That is a German session. `Deliverables` is the same token in both header
+rows — the established German loanword, not an untranslated leftover, so leave
+it. The one carve-out is action-field and deliverable names — `Market Evidence`,
 `Competitor map`, `Channel strategy` are the stored titles, here English,
 because stored titles keep their technical terms whatever the session language.
 That carve-out covers those names and nothing else; it is not a licence for
@@ -158,8 +158,8 @@ labels `Engagement: <name> — last worked on <DD.MM.YYYY>` and
 `complete`, `in progress` and `not started`, counts `2/2 complete` and
 `0/2 started`. `in progress` reads as two words — natural language in either
 session, never the engine's hyphenated enum spelling. Dates keep the day-first
-shape of step 2. The columns, the row order and the one-row-per-action-field rule are
-identical in both languages.
+shape of step 2. The columns, the row order and the one-row-per-action-field
+rule are identical in both languages.
 
 Name action fields by the `title` read from
 `<engagement-path>/action-fields/<slug>/field.json` — step 3's rollup carries a

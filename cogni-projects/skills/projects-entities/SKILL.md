@@ -151,6 +151,12 @@ It returns the same `{"success", "data", "error"}` envelope; `data.action` is
 `created` or `updated`, which is how a re-run reports that it replaced an
 existing ref rather than adding a second one.
 
+When the entity was an assignment, follow the successful registration with the
+portfolio-directory sweep described in Step 4 — that run is what turns Step 2's
+slug comparison into a checked fact. The Step 4 gate above stays as written; this
+is the sweep, and it belongs here because it is only worth running once the
+assignment is in the manifest.
+
 ### Step 6: Summarize
 
 Report the file written, the manifest array it was registered in, and the

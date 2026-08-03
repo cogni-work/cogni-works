@@ -10,8 +10,11 @@
 #
 # Also covers the pass's edges: an assignment dangling on both fields is
 # reported once per field; a portfolio missing the consultants/ subdirectory
-# still dangles the ref rather than resolving it vacuously; and a
-# frontmatter-less file is skipped by the ref pass rather than raising.
+# still dangles the ref rather than resolving it vacuously; a frontmatter-less
+# file is skipped by the ref pass rather than raising; the same directory passed
+# twice reports each dangling ref once; and a ref pass that raises degrades to an
+# ordinary error with the accumulated per-file errors intact, rather than
+# discarding them.
 #
 # stdlib-only (bash + python3, no pytest/pip), matching the house convention.
 # The script is exercised through main() rather than a subprocess so a failing
@@ -235,6 +238,68 @@ check("it is still reported once as a frontmatter error",
       [e["file"] for e in env["data"]["errors"]
        if e["field"] == "<frontmatter>"] == [orphan],
       json.dumps(env["data"]["errors"]))
+
+# --- 10. A repeated directory argument reports each dangling ref once ------
+# The realpath de-duplication: without it the same portfolio passed twice runs
+# the ref pass twice and every dangling ref surfaces as two byte-identical
+# errors. A portfolio-wide audit is the run most likely to repeat a path.
+root, assignment = make_portfolio("repeated-arg", "grace-hopper")
+code, env = run(root, root)
+errs = ref_errors(env)
+check("a repeated directory argument yields exactly one ref error",
+      len(errs) == 1, json.dumps(errs))
+check("that error is the dangling consultant on the assignment",
+      bool(errs) and errs[0]["field"] == "consultant"
+      and errs[0]["file"] == assignment, json.dumps(errs))
+check("the repeated-argument run still fails",
+      env["success"] is False and code == 1, json.dumps(env["data"]["errors"]))
+
+# --- 11. A raising ref pass degrades to an error, not an empty envelope ----
+# Without the per-batch try/except the exception reaches the module-level
+# catch-all, which prints an empty errors[] at exit 2 and discards every
+# per-file error already accumulated. The shape error below is what proves the
+# accumulated errors survive.
+root, _ = make_portfolio("ref-pass-raises", "ada-lovelace")
+write(os.path.join(root, "consultants", "ada-lovelace.md"), {
+    "type": "consultant", "slug": "ada-lovelace", "name": "Ada Lovelace",
+    "seniority": "not-a-seniority", "skills": "[compilers]",
+})
+original_ref_errors = ve._ref_errors
+
+
+def _raising_ref_errors(files):
+    raise RuntimeError("injected")
+
+
+ve._ref_errors = _raising_ref_errors
+try:
+    # main() is driven directly, so an unhandled exception would escape the
+    # harness rather than reach the __main__ catch-all. Catching it here keeps
+    # a regression legible as a failed assertion instead of a traceback.
+    escaped = None
+    try:
+        code, env = run(root)
+    except Exception as exc:  # noqa: BLE001 — the escape IS the regression
+        escaped, code, env = exc, None, {"data": {"errors": []}}
+finally:
+    ve._ref_errors = original_ref_errors
+
+check("the ref pass contains its own failure instead of propagating",
+      escaped is None, "%r escaped main()" % (escaped,))
+refs_errs = [e for e in env["data"]["errors"] if e["field"] == "<refs>"]
+check("a raising ref pass is reported as one ordinary <refs> error",
+      len(refs_errs) == 1, json.dumps(env["data"]["errors"]))
+check("the <refs> error names the injected exception",
+      bool(refs_errs) and "RuntimeError" in refs_errs[0]["message"],
+      json.dumps(refs_errs))
+check("the accumulated per-file shape error survives the failure",
+      any(e["field"] == "seniority" for e in env["data"]["errors"]),
+      json.dumps(env["data"]["errors"]))
+check("the run exits 1 with a populated errors[], not 2 with an empty one",
+      code == 1 and env.get("success") is False
+      and env["data"]["errors"] != [], json.dumps(env))
+check("the restore put the real ref pass back",
+      ve._ref_errors is original_ref_errors, repr(ve._ref_errors))
 
 print()
 if failures:

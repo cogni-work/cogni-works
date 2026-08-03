@@ -82,6 +82,45 @@ def make_consultant(root, slug, name):
     return path
 
 
+def make_project(root, slug, name):
+    # make_portfolio creates only consultants/ and .metadata/, so the subdir has
+    # to be made here — and exist_ok because a portfolio takes several records.
+    os.makedirs(os.path.join(root, "projects"), exist_ok=True)
+    path = os.path.join(root, "projects", slug + ".md")
+    with open(path, "w", encoding="utf-8") as f:
+        f.write(
+            "---\n"
+            "type: project\n"
+            "slug: %s\n"
+            "name: %s\n"
+            "client: Northwind\n"
+            "strategic_impact: 4\n"
+            "---\n\n# %s\n" % (slug, name, name)
+        )
+    return path
+
+
+def make_assignment(root, consultant_ref, project_ref):
+    """Write an assignment. Its refs are whatever the caller passes, so a
+    dangling one is written without disturbing the records it points at."""
+    os.makedirs(os.path.join(root, "assignments"), exist_ok=True)
+    slug = "%s--%s" % (consultant_ref, project_ref)
+    path = os.path.join(root, "assignments", slug + ".md")
+    with open(path, "w", encoding="utf-8") as f:
+        f.write(
+            "---\n"
+            "type: assignment\n"
+            "slug: %s\n"
+            "consultant: %s\n"
+            "project: %s\n"
+            "role: Lead Engineer\n"
+            "start_date: 2026-02-01\n"
+            "end_date: 2026-08-01\n"
+            "---\n\n# %s\n" % (slug, consultant_ref, project_ref, slug)
+        )
+    return path
+
+
 def register(root, entity_file):
     """Run register-entity.main and return (exit_code, parsed_envelope)."""
     buf = io.StringIO()
@@ -199,6 +238,152 @@ check("modes: upsert succeeded", env.get("success") is True, str(env))
 man_mode2 = os.stat(os.path.join(root4, "projects-portfolio.json")).st_mode & 0o777
 check("modes: upsert preserves the existing mode",
       man_mode2 == 0o640, "%o != 0o640" % man_mode2)
+
+# --- Portfolio ref resolution on the write path ------------------------------
+# validate_file is single-file and runs no ref pass, so before the gate an
+# assignment naming a misspelled consultant registered clean and then read as an
+# unfilled role. Every record below is on disk before the first register call:
+# the project case only proves the gate leaves non-assignments alone if a
+# dangling assignment is already sitting in the same portfolio.
+root5 = make_portfolio("refs")
+make_consultant(root5, "ana-silva", "Ana Silva")
+proj = make_project(root5, "nordic-erp", "Nordic ERP")
+# Misspelled but still kebab-valid: an underscore would fail the composite-slug
+# rule and the assertions below would be measuring a shape error, not a ref one.
+dangling = make_assignment(root5, "ana-silvaa", "nordic-erp")
+
+
+def registered_assignments():
+    with open(os.path.join(root5, "projects-portfolio.json"), encoding="utf-8") as f:
+        return json.load(f)["assignments"]
+
+
+# A rejected registration must leave both write targets untouched. The parsed
+# assignments[] check alone is too weak: it would still pass if the manifest were
+# rewritten with equivalent JSON, and it never looks at the execution log at all.
+def manifest_bytes():
+    with open(os.path.join(root5, "projects-portfolio.json"), "rb") as f:
+        return f.read()
+
+
+def transition_count():
+    # No missing-file fallback on purpose: every caller runs after a successful
+    # registration, so an absent log is a real regression and should raise here
+    # rather than read as a legitimate count of zero.
+    path = os.path.join(root5, ".metadata", "execution-log.json")
+    with open(path, encoding="utf-8") as f:
+        return len(json.load(f).get("transitions", []))
+
+
+def check_untouched(tag, man_before, trans_before):
+    """Assert a rejected registration wrote to neither the manifest nor the log."""
+    trans_after = transition_count()
+    check("refs: %s leaves the manifest byte-identical" % tag,
+          manifest_bytes() == man_before, "manifest changed")
+    check("refs: %s leaves execution-log transitions[] unchanged" % tag,
+          trans_after == trans_before, "%d != %d" % (trans_after, trans_before))
+
+
+code, env = register(root5, proj)
+check("refs: a project still registers while a dangling assignment exists",
+      env.get("success") is True, str(env))
+
+man_before, trans_before = manifest_bytes(), transition_count()
+code, env = register(root5, dangling)
+errs = env.get("data", {}).get("errors", [])
+assigns = registered_assignments()
+check("refs: dangling consultant ref fails registration",
+      env.get("success") is False and code == 1, "code=%s env=%s" % (code, env))
+check("refs: the offending ref comes back in data.errors[]", len(errs) == 1, str(env))
+check("refs: the error keeps the standard {entity, file, field, message} shape",
+      bool(errs) and set(errs[0]) == {"entity", "file", "field", "message"}
+      and errs[0]["entity"] == "assignment" and errs[0]["field"] == "consultant",
+      str(errs))
+check("refs: nothing was written to the manifest", assigns == [], str(assigns))
+check_untouched("a dangling consultant ref", man_before, trans_before)
+
+# The filter compares files, not path strings. Passing the portfolio as
+# "<root>/." makes _entity_files emit "<root>/./assignments/..." — a string
+# compare matches none of the errors, the gate fails open, the registration
+# succeeds, and this goes red.
+man_before, trans_before = manifest_bytes(), transition_count()
+code, env = register(os.path.join(root5, "."), dangling)
+assigns = registered_assignments()
+check("refs: still rejected when the portfolio is passed as <root>/.",
+      env.get("success") is False and code == 1 and assigns == [],
+      "code=%s assignments=%s env=%s" % (code, assigns, env))
+check_untouched("a non-canonical portfolio path", man_before, trans_before)
+
+# _ref_errors loops over both ref fields, so the consultant case above exercises
+# only half of it. A resolving consultant with a misspelled project covers the
+# other half — and again kebab-valid, so this measures a ref error, not a shape one.
+dangling_project = make_assignment(root5, "ana-silva", "nordic-erpp")
+man_before, trans_before = manifest_bytes(), transition_count()
+code, env = register(root5, dangling_project)
+errs = env.get("data", {}).get("errors", [])
+check("refs: dangling project ref fails registration",
+      env.get("success") is False and code == 1, "code=%s env=%s" % (code, env))
+check("refs: the dangling project is the single reported error",
+      len(errs) == 1 and errs[0]["entity"] == "assignment"
+      and errs[0]["field"] == "project", str(errs))
+assigns = registered_assignments()
+check("refs: nothing was written to the manifest for a dangling project",
+      assigns == [], str(assigns))
+check_untouched("a dangling project ref", man_before, trans_before)
+
+# The dangling assignments stay on disk, so this also proves the filter reports
+# only the entity being registered rather than the whole portfolio's errors.
+resolving = make_assignment(root5, "ana-silva", "nordic-erp")
+code, env = register(root5, resolving)
+check("refs: an assignment whose refs resolve registers unaffected",
+      env.get("success") is True
+      and env.get("data", {}).get("action") == "created", str(env))
+# Length, not just success: a duplicate append would satisfy the check above.
+assigns = registered_assignments()
+check("refs: the resolving assignment is registered exactly once",
+      len(assigns) == 1, str(assigns))
+
+# The ref scan walks the portfolio, so an unreadable subdirectory raises inside
+# _entity_files. main() must still answer with the envelope: the __main__
+# catch-all only covers CLI callers, and register() here calls main() directly —
+# exactly the in-process caller that would otherwise get a traceback.
+if os.geteuid() == 0:
+    print("SKIP: refs: unreadable subdir (running as root — mode bits do not deny)")
+else:
+    os.chmod(os.path.join(root5, "consultants"), 0o000)
+    try:
+        code, env = register(root5, resolving)
+        # code 2 (environment failure), never 1 — the entity did not fail
+        # validation; the portfolio could not be read.
+        check("refs: an unreadable portfolio subdir returns the envelope, not a traceback",
+              env.get("success") is False and code == 2, "code=%s env=%s" % (code, env))
+        check("refs: the unreadable-subdir error names the ref scan",
+              "cannot scan portfolio for refs" in (env.get("error") or ""), str(env))
+    except OSError as exc:
+        check("refs: an unreadable portfolio subdir returns the envelope, not a traceback",
+              False, "main() raised %s: %s" % (type(exc).__name__, exc))
+    finally:
+        os.chmod(os.path.join(root5, "consultants"), 0o755)
+
+# The scan is not trusted to raise only OSError: read_frontmatter calls
+# parse_frontmatter outside its own try, so a parser fault surfaces as
+# ValueError. The envelope is the contract for every exception type, not just
+# the one that happened to be found first.
+_real_ref_errors = reg._ve._ref_errors
+try:
+    def _boom(_files):
+        raise ValueError("simulated parser fault")
+    reg._ve._ref_errors = _boom
+    code, env = register(root5, resolving)
+    check("refs: a non-OSError from the ref scan still returns the envelope",
+          env.get("success") is False and code == 2, "code=%s env=%s" % (code, env))
+    check("refs: the envelope names the failing exception type",
+          "ValueError" in (env.get("error") or ""), str(env))
+except Exception as exc:
+    check("refs: a non-OSError from the ref scan still returns the envelope",
+          False, "main() raised %s: %s" % (type(exc).__name__, exc))
+finally:
+    reg._ve._ref_errors = _real_ref_errors
 
 print()
 if failures:

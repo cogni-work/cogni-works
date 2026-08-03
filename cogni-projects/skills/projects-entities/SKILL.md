@@ -39,7 +39,10 @@ are separate tool calls, not a transaction — an interrupted run can leave an
 entity file on disk that the manifest does not yet reference. That state is
 repaired by **re-running the skill for the same slug**: registration is
 idempotent (`register-entity.py` upserts keyed on `slug`), so a repeated run
-never double-registers.
+never double-registers. A registration *refused* for an unresolved consultant /
+project ref is a different case — a precondition failure, not an interrupted
+run — and re-running fails identically until the ref itself resolves; Step 5
+covers what to fix.
 
 ## Workflow
 
@@ -76,7 +79,8 @@ assignment, read the referenced consultant and project records first and confirm
 each record's frontmatter `slug` equals the value going into `consultant` /
 `project`. The validator resolves a ref against the record's `slug`, not its
 filename, so a file that merely exists under a similar name still dangles — that
-slug match, not the file's existence, is the guard.
+slug match, not the file's existence, is what makes the ref resolve; Step 5's
+registration is what refuses one that does not.
 
 ### Step 3: Read siblings, then write the entity file
 
@@ -116,9 +120,10 @@ enums, slug casing, ISO dates and their ordering, numeric ranges. It resolves an
 assignment's `consultant` / `project` slugs against the `consultants/` and
 `projects/` records only when given a whole portfolio directory — that is what
 collects the records to resolve against. This step passes a single file, so no
-ref check runs here and a passing run is not evidence the refs exist; confirming
-in Step 2 that each record's frontmatter `slug` equals the ref remains the guard
-against a dangling reference.
+ref check runs here and a passing run is not evidence the refs exist. Step 5's
+registration is the gate that enforces ref resolution; confirming in Step 2 that
+each record's frontmatter `slug` equals the ref catches the problem earlier,
+before a file is written.
 
 When the user asks for a portfolio-wide audit rather than a single authoring
 run, sweep for dangling refs with a separate invocation — not this gate: pass
@@ -130,18 +135,25 @@ unchanged. Its `success: false` covers every entity in the portfolio, not only
 the one just authored — locate the relevant entries by each error's `file`.
 
 Authoring an assignment is the one case worth sweeping unprompted rather than on
-request: it is the only entity type that carries refs, so a portfolio-directory
-run right after Step 5 is what turns Step 2's read-and-compare into a checked
-fact. Keep it after registration and never in place of the Step 4 gate — the
-single-file gate's behaviour is unchanged.
+request: it is the only entity type that carries refs. Step 5's registration
+already checks the refs of the assignment it registers, so the sweep covers the
+*rest* of the portfolio, where a record renamed or removed since it was authored
+can leave an older assignment dangling. Run it after registration, never in
+place of the Step 4 gate — that gate runs no ref check.
 
 ### Step 5: Register in the manifest and log the transition
 
 Once validation passes, register the entity. Do not hand-edit
 `projects-portfolio.json` — run the script, which upserts the summary ref keyed
 on `slug`, bumps the manifest `updated` date, and appends the
-`.metadata/execution-log.json` transition in a single invocation (it re-runs the
-validator itself, so it refuses an entity the Step 4 gate would have caught):
+`.metadata/execution-log.json` transition in a single invocation. It re-runs the
+validator, so it refuses an entity the Step 4 gate would have caught — but it
+reports those shape failures only as an error count, which is why Step 4 is
+still the run that surfaces the per-field detail. For an assignment it
+additionally resolves the `consultant` / `project` refs against the whole
+portfolio, catching a dangling ref the single-file gate passes; each unresolved
+ref comes back as a full `data.errors[]` entry naming the offending field and
+the missing referent.
 
 ```bash
 python3 "${CLAUDE_PLUGIN_ROOT:-$(ls -td "$HOME"/.claude/plugins/cache/*/cogni-projects/*/ 2>/dev/null | head -1)}/scripts/register-entity.py" "cogni-projects/<portfolio-slug>" "cogni-projects/<portfolio-slug>/<subdir>/<entity>.md"
@@ -151,11 +163,14 @@ It returns the same `{"success", "data", "error"}` envelope; `data.action` is
 `created` or `updated`, which is how a re-run reports that it replaced an
 existing ref rather than adding a second one.
 
+A registration that fails on a dangling ref leaves the manifest and the
+execution log untouched; the entity file written in Step 3 stays on disk. So only
+the ref needs fixing — correct the misspelled slug (or author the missing
+record) and re-run this same command.
+
 When the entity was an assignment, follow the successful registration with the
-portfolio-directory sweep described in Step 4 — that run is what turns Step 2's
-slug comparison into a checked fact. The Step 4 gate above stays as written; this
-is the sweep, and it belongs here because it is only worth running once the
-assignment is in the manifest.
+portfolio-directory sweep described in Step 4 — it is only worth running once
+the assignment is in the manifest.
 
 ### Step 6: Summarize
 

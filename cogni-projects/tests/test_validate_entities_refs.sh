@@ -6,7 +6,10 @@
 # from that same directory, while a single file argument — which carries no
 # portfolio-wide collection — keeps its shape-only behaviour. The single-file
 # case is the regression guard for projects-entities Step 4 and for
-# register-entity.py, which both hand the validator one file at a time.
+# register-entity.py, which both hand the validator one file at a time. That
+# still describes what they hand validate_file; register-entity.py additionally
+# runs its own portfolio-scoped ref pass on top of this gate, so a clean result
+# here is not evidence that registration accepts the entity.
 #
 # Also covers the pass's edges: an assignment dangling on both fields is
 # reported once per field; a portfolio missing the consultants/ subdirectory
@@ -141,9 +144,11 @@ if errs:
           "grace-hopper" in e["message"], e["message"])
 
 # --- 3. Single-file invocation on the SAME dangling assignment -----------
-# The guard for projects-entities Step 4 and register-entity.py: with no
-# portfolio-wide collection there is nothing to resolve against, so the file
-# must still validate clean.
+# The guard for projects-entities Step 4 and for the validate_file call inside
+# register-entity.py: with no portfolio-wide collection there is nothing to
+# resolve against, so the file must still validate clean. Registration refuses
+# this assignment anyway — it runs its own portfolio-scoped ref pass after this
+# gate — which is precisely why that behaviour is asserted there, not here.
 code, env = run(assignment)
 check("single-file invocation runs no ref check",
       env["success"] is True and code == 0, json.dumps(env["data"]["errors"]))

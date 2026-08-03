@@ -29,34 +29,19 @@ if [ ! -f "$SCRIPT" ]; then
   exit 1
 fi
 
-TMPROOT="$(mktemp -d)"
-trap 'chmod -R u+rwx "$TMPROOT" 2>/dev/null; rm -rf "$TMPROOT"' EXIT
+. "$TESTS_DIR/fixtures/test_helpers.sh"
 
-failures=0
-pass() { printf 'OK   %s\n' "$1"; }
-fail() { printf 'FAIL %s: %s\n' "$1" "$2" >&2; failures=$((failures + 1)); }
-
-# assert_json <label> <python-bool-expr over `d`> — pipes the captured last
-# stdout line (the envelope) into python3 and checks the expression is truthy.
-assert_json() {
-  local label="$1" expr="$2"
-  if printf '%s' "$LAST_JSON" | python3 -c "import json,sys
-d = json.loads(sys.stdin.read())
-sys.exit(0 if ($expr) else 1)" 2>/dev/null; then
-    pass "$label"
-  else
-    fail "$label" "envelope assertion failed on: $LAST_JSON"
-  fi
-}
+init_tmproot
 
 # --- Fixture 1: happy path -------------------------------------------------
 # A clean run emits {success:true} and writes projects-portfolio.json last.
+# The script is invoked from inside the work dir, so the shared runner gets
+# RUN_CWD rather than a directory argument.
 WORK1="$TMPROOT/happy"
 mkdir -p "$WORK1"
-OUT1="$(cd "$WORK1" && bash "$SCRIPT" demo "Demo Portfolio" 2>/dev/null)"
-RC1=$?
-LAST_JSON="$(printf '%s\n' "$OUT1" | tail -n 1)"
-if [ "$RC1" -eq 0 ]; then pass "1a happy path exits zero"; else fail "1a happy path exits zero" "rc=$RC1"; fi
+RUN_CWD="$WORK1"
+run_script bash "$SCRIPT" demo "Demo Portfolio"
+assert_exit "1a happy path exits zero" 0 "$RUN_CODE"
 assert_json "1b happy path envelope success:true" "d['success'] is True"
 if [ -f "$WORK1/cogni-projects/demo/projects-portfolio.json" ]; then
   pass "1c manifest written"
@@ -75,10 +60,9 @@ else
   WORK2="$TMPROOT/failure"
   mkdir -p "$WORK2/cogni-projects/demo/.metadata"
   chmod 0555 "$WORK2/cogni-projects/demo/.metadata"
-  OUT2="$(cd "$WORK2" && bash "$SCRIPT" demo "Demo Portfolio" 2>/dev/null)"
-  RC2=$?
-  LAST_JSON="$(printf '%s\n' "$OUT2" | tail -n 1)"
-  if [ "$RC2" -ne 0 ]; then pass "2a write failure exits non-zero"; else fail "2a write failure exits non-zero" "rc=$RC2"; fi
+  RUN_CWD="$WORK2"
+  run_script bash "$SCRIPT" demo "Demo Portfolio"
+  if [ "$RUN_CODE" -ne 0 ]; then pass "2a write failure exits non-zero"; else fail "2a write failure exits non-zero" "rc=$RUN_CODE"; fi
   assert_json "2b failure envelope parses"          "isinstance(d, dict)"
   assert_json "2c failure envelope success:false"   "d['success'] is False"
   assert_json "2d failure envelope carries error"   "isinstance(d.get('error'), str) and len(d['error']) > 0"

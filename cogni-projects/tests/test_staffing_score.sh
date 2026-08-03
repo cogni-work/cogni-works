@@ -25,72 +25,15 @@ if [ ! -f "$SCRIPT" ]; then
   exit 1
 fi
 
-TMPROOT="$(mktemp -d)"
-trap 'rm -rf "$TMPROOT"' EXIT
+. "$TESTS_DIR/fixtures/test_helpers.sh"
 
-failures=0
-pass() { printf 'OK   %s\n' "$1"; }
-fail() { printf 'FAIL %s: %s\n' "$1" "$2" >&2; failures=$((failures + 1)); }
+init_tmproot
 
-# assert_json <label> <python-bool-expr over `d`> — pipes the last stdout line
-# (the envelope) into python3 and checks the expression is truthy.
-assert_json() {
-  local label="$1" expr="$2"
-  if printf '%s' "$LAST_JSON" | python3 -c "import json,sys
-d = json.loads(sys.stdin.read())
-sys.exit(0 if ($expr) else 1)" 2>/dev/null; then
-    pass "$label"
-  else
-    fail "$label" "expr false: $expr | json=$LAST_JSON"
-  fi
-}
-
-# The crash signature belongs in one place — widening it later should be one
-# edit. This is the assertion the whole suite exists for.
-assert_no_traceback() {
-  local label="$1" file="$2"
-  if grep -qF 'Traceback' "$file"; then
-    fail "$label" "traceback present: $(head -3 "$file")"
-  else
-    pass "$label"
-  fi
-}
-
-assert_exit() {
-  local label="$1" want="$2" got="$3"
-  if [ "$want" = "$got" ]; then
-    pass "$label"
-  else
-    fail "$label" "want exit $want, got $got"
-  fi
-}
-
-seed_portfolio() {
-  # $1 = portfolio dir. Seeds a manifest + entity subdirs. The manifest's ref
-  # lists stay empty on purpose: _load_entities then falls back to scanning the
-  # subdirectories, which is the path a hand-authored record takes.
-  local pf="$1"
-  mkdir -p "$pf"/{consultants,projects,assignments,.metadata}
-  cat > "$pf/projects-portfolio.json" <<'EOF'
-{"slug":"test","name":"Test Portfolio","language":"en","consultants":[],"projects":[],"assignments":[],"created":"2026-01-01","updated":"2026-01-01"}
-EOF
-}
-
-write_entity() { # $1 = path; body heredoc'd by the caller on stdin
-  cat > "$1"
-}
-
-# run_score <stderr-file> [args...] — invoke the scorer, setting LAST_JSON to the
-# last stdout line (the envelope) and RUN_CODE to the script's own exit status.
-# Redirecting to a file rather than piping into `tail` is load-bearing: after a
-# `$(... | tail -n 1)` substitution, `$?` is tail's status, which is always 0, so
-# every exit-code assertion would pass vacuously.
+# run_score <stderr-file> [args...] — invoke the scorer with this fixture's own
+# stderr sink, binding the interpreter and script path for the shared runner.
 run_score() {
-  local errfile="$1"; shift
-  local outfile="$TMPROOT/stdout.txt"
-  python3 "$SCRIPT" "$@" >"$outfile" 2>"$errfile"
-  RUN_CODE=$?
-  LAST_JSON="$(tail -n 1 "$outfile")"
+  RUN_ERRFILE="$1"; shift
+  run_script python3 "$SCRIPT" "$@"
 }
 
 # Seed two valid consultants and one active project with an open role. Shared by
@@ -175,13 +118,19 @@ PFB="$TMPROOT/latin1"
 seed_portfolio "$PFB"
 seed_entities "$PFB"
 
-# Written via python3 in wb mode because bash printf parses a leading '---' as
-# options; \xe9 is 'é' in latin-1 and an invalid UTF-8 start byte here.
-python3 -c "
-import sys
-open(sys.argv[1], 'wb').write(
-    '---\ntype: consultant\nslug: cesar\nname: C\xe9sar Rossi\nseniority: senior\nskills: [cloud]\navailable_from: 2026-01-01\navailable_until: 2026-12-31\n---\n'.encode('latin-1')
-)" "$PFB/consultants/cesar.md"
+# Latin-1 encoded, so the 'é' lands as a byte that is an invalid UTF-8 start
+# byte here — which is the record this fixture exists for.
+write_latin1 "$PFB/consultants/cesar.md" <<'EOF'
+---
+type: consultant
+slug: cesar
+name: César Rossi
+seniority: senior
+skills: [cloud]
+available_from: 2026-01-01
+available_until: 2026-12-31
+---
+EOF
 
 STDERRB="$TMPROOT/stderr-b.txt"
 run_score "$STDERRB" "$PFB"

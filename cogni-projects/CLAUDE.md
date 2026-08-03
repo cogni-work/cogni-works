@@ -26,6 +26,7 @@ cogni-projects/
 │   ├── staffing-score.py               Deterministic staffing scorer (availability/fit/impact)
 │   └── render-dashboard.py             Portfolio health + value HTML render (read-only, stdlib-only)
 ├── tests/
+│   ├── fixtures/test_helpers.sh        Shared bash assertion harness + exit-code-safe runner
 │   ├── test_portfolio_init.sh          Portfolio scaffolder idempotency + no-debris suite
 │   ├── test_register_entity.sh         Atomic-write + idempotency regression suite
 │   ├── test_validate_entities_refs.sh  Assignment ref-integrity + single-file regression suite
@@ -44,6 +45,13 @@ bash cogni-projects/tests/test_validate_entities_refs.sh
 bash cogni-projects/tests/test_staffing_score.sh
 bash cogni-projects/tests/test-render-dashboard.sh
 ```
+
+`test_portfolio_init.sh`, `test_staffing_score.sh` and `test-render-dashboard.sh`
+source `tests/fixtures/test_helpers.sh` for their assertions and their script
+runner; the runner captures the invoked script's own exit status rather than a
+pipeline's, which is what makes an exit-code assertion meaningful. The other two
+suites assert inside a single inline `python3 - <<'PY'` heredoc and define no
+bash-level assertions, so they do not source it.
 
 Planned (not yet scaffolded — see the roadmap epic):
 

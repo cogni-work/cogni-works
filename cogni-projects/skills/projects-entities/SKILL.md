@@ -125,14 +125,14 @@ registration is the gate that enforces ref resolution; confirming in Step 2 that
 each record's frontmatter `slug` equals the ref catches the problem earlier,
 before a file is written.
 
-To sweep the whole portfolio for dangling refs, use a separate invocation — not
-this gate: pass `cogni-projects/<portfolio-slug>` instead of the file path. A
-dangling ref comes back as an ordinary `data.errors[]` entry on the
-*assignment's* `file`, with `field` set to `consultant` or `project` and a
-`message` naming the missing referent (not the assignment's own slug), so the
-fix loop above applies unchanged. Its `success: false` covers every entity in
-the portfolio, not only the one just authored — locate the relevant entries by
-each error's `file`.
+When the user asks for a portfolio-wide audit, sweep for dangling refs with a
+separate invocation — not this gate: pass `cogni-projects/<portfolio-slug>`
+instead of the file path. A dangling ref comes back as an ordinary
+`data.errors[]` entry on the *assignment's* `file`, with `field` set to
+`consultant` or `project` and a `message` naming the missing referent (not the
+assignment's own slug), so the fix loop above applies unchanged. Its
+`success: false` covers every entity in the portfolio, not only the one just
+authored — locate the relevant entries by each error's `file`.
 
 ### Step 5: Register in the manifest and log the transition
 
@@ -161,11 +161,11 @@ execution log untouched; the entity file written in Step 3 stays on disk. So onl
 the ref needs fixing — correct the misspelled slug (or author the missing
 record) and re-run this same command.
 
-Because an assignment is the only entity type that carries refs, and this
-successful registration already checked the ones on this assignment, follow it
-with the Step 4 portfolio-directory sweep to catch any other assignment left
-dangling elsewhere in the portfolio by a record renamed or removed since it was
-authored.
+When the entity was an assignment, follow the successful registration with the
+Step 4 portfolio-directory sweep: assignments are the only entity type carrying
+refs, and this registration checked only the ones on the assignment it just
+registered — the sweep catches any other assignment left dangling by a record
+renamed or removed since it was authored.
 
 ### Step 6: Summarize
 

@@ -125,21 +125,14 @@ registration is the gate that enforces ref resolution; confirming in Step 2 that
 each record's frontmatter `slug` equals the ref catches the problem earlier,
 before a file is written.
 
-When the user asks for a portfolio-wide audit rather than a single authoring
-run, sweep for dangling refs with a separate invocation — not this gate: pass
-`cogni-projects/<portfolio-slug>` instead of the file path. A dangling ref comes
-back as an ordinary `data.errors[]` entry on the *assignment's* `file`, with
-`field` set to `consultant` or `project` and a `message` naming the missing
-referent (not the assignment's own slug), so the fix loop above applies
-unchanged. Its `success: false` covers every entity in the portfolio, not only
-the one just authored — locate the relevant entries by each error's `file`.
-
-Authoring an assignment is the one case worth sweeping unprompted rather than on
-request: it is the only entity type that carries refs. Step 5's registration
-already checks the refs of the assignment it registers, so the sweep covers the
-*rest* of the portfolio, where a record renamed or removed since it was authored
-can leave an older assignment dangling. Run it after registration, never in
-place of the Step 4 gate — that gate runs no ref check.
+When the user asks for a portfolio-wide audit, sweep for dangling refs with a
+separate invocation — not this gate: pass `cogni-projects/<portfolio-slug>`
+instead of the file path. A dangling ref comes back as an ordinary
+`data.errors[]` entry on the *assignment's* `file`, with `field` set to
+`consultant` or `project` and a `message` naming the missing referent (not the
+assignment's own slug), so the fix loop above applies unchanged. Its
+`success: false` covers every entity in the portfolio, not only the one just
+authored — locate the relevant entries by each error's `file`.
 
 ### Step 5: Register in the manifest and log the transition
 
@@ -169,8 +162,10 @@ the ref needs fixing — correct the misspelled slug (or author the missing
 record) and re-run this same command.
 
 When the entity was an assignment, follow the successful registration with the
-portfolio-directory sweep described in Step 4 — it is only worth running once
-the assignment is in the manifest.
+Step 4 portfolio-directory sweep: assignments are the only entity type carrying
+refs, and this registration checked only the ones on the assignment it just
+registered — the sweep catches any other assignment left dangling by a record
+renamed or removed since it was authored.
 
 ### Step 6: Summarize
 

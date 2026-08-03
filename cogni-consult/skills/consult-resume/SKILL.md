@@ -136,30 +136,26 @@ Schlüsselfrage: <key_question>
 |---------------|-------|--------------|----------------------|
 | Market Evidence | fertig | 2/2 fertig | — |
 | Portfolio Fit | in Arbeit | 1/3 fertig | Competitor map (Ideate · pyramid-principle) |
-| Go-to-Market | offen | 0/2 begonnen | Channel strategy (Empathize · —) |
+| Go-to-Market | offen | 0/2 fertig | Channel strategy (Empathize · —) |
 ```
 
 That is a German session. `Deliverables` is the same token in both header
 rows — the established German loanword, not an untranslated leftover, so leave
-it. The one carve-out is action-field and deliverable names — `Market Evidence`,
-`Competitor map`, `Channel strategy` are the stored titles, here English,
-because stored titles keep their technical terms whatever the session language.
-That carve-out covers those names and nothing else; it is not a licence for
-English elsewhere in the table. The parenthesised pair carries two kinds of
-value: the framework is a registry slug surfaced verbatim, so it keeps its
-stored spelling in either session; the stage is a display label, so it takes
-proper casing (`Empathize`, `Define`, `Ideate`, `Prototype`, `Test`) in either
-session.
+it. The one carve-out is the action-field and deliverable names in the table
+above — stored titles, here English, because stored titles keep their technical
+terms whatever the session language. That carve-out covers those names and
+nothing else; it is not a licence for English elsewhere in the table.
+
+The parenthesised pair's stage is a display label, so it takes proper casing
+(`Empathize`, `Define`, `Ideate`, `Prototype`, `Test`) in either session.
 
 An English session renders the same table, seeded by example too: preamble
 labels `Engagement: <name> — last worked on <DD.MM.YYYY>` and
 `Key question: <key_question>`, header
 `| Action Field | Status | Deliverables | Next Deliverable |`, `Status` values
-`complete`, `in progress` and `not started`, counts `2/2 complete` and
-`0/2 started`. `in progress` reads as two words — natural language in either
-session, never the engine's hyphenated enum spelling. Dates keep the day-first
-shape of step 2. The columns, the row order and the one-row-per-action-field
-rule are identical in both languages.
+`complete`, `in-progress` and `pending`, counts `2/2 complete` and
+`0/2 complete`. Dates keep the day-first shape of step 2. The columns, the row
+order and the one-row-per-action-field rule are identical in both languages.
 
 Name action fields by the `title` read from
 `<engagement-path>/action-fields/<slug>/field.json` — step 3's rollup carries a
@@ -179,9 +175,11 @@ renders its count in the interaction language (`2/2 fertig` / `2/2 complete`).
 first non-complete deliverable with its `dt_stage` and stored
 `chosen_framework` in parentheses (`<stage> · <framework>`), or the
 first whose `persona_review` is still open when everything else is done.
-For a `combo:<slugA>+<slugB>` pairing, join the two slugs as
-`<slugA> + <slugB>` (the stored `combo:` prefix dropped for display); render
-`—` when no framework is stored (legacy deliverables) — never inferred here.
+The framework is the stored `chosen_framework` surfaced verbatim, read-only — a
+registry slug that keeps its stored spelling in either session; for a
+`combo:<slugA>+<slugB>` pairing, join the two slugs as `<slugA> + <slugB>` (the
+stored `combo:` prefix dropped for display); render `—` when no framework is
+stored (legacy deliverables) — never inferred here.
 Keep it to this one table — the deep WBS view (planning deliverable sets,
 splitting fields) belongs to `consult-action-fields`, not here.
 

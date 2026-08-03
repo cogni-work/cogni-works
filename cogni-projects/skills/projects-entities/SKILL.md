@@ -113,9 +113,9 @@ enums, slug casing, ISO dates and their ordering, numeric ranges. It resolves an
 assignment's `consultant` / `project` slugs against the `consultants/` and
 `projects/` records only when given a whole portfolio directory — that is what
 collects the records to resolve against. This step passes a single file, so no
-ref check runs here and a passing run is not evidence the refs exist; reading
-both referenced entities in Step 2 remains the guard against a dangling
-reference.
+ref check runs here and a passing run is not evidence the refs exist; confirming
+in Step 2 that each record's frontmatter `slug` equals the ref remains the guard
+against a dangling reference.
 
 When the user asks for a portfolio-wide audit rather than a single authoring
 run, sweep for dangling refs with a separate invocation — not this gate: pass

@@ -37,20 +37,20 @@ value is one of: a stable `slug` from
 `$CLAUDE_PLUGIN_ROOT/references/frameworks-registry.md` (e.g.
 `pyramid-principle`), a `"combo:<slugA>+<slugB>"` pairing of two, or `null`.
 
-The Prerequisite Gate (step 1) already reads `field.json`, so the value is in
-hand — no extra read is needed. When it is non-`null`, resolve its one-line
-**Structure signature** from the registry's framework table (for a `combo:`,
-resolve both and apply them together) and carry that signature into the
-**Define** and **Prototype** stages below: it shapes how the problem is framed
-and how the artifact body is organized. The registry is thin by design — it
-pins the signature and the stable key; supply the framework's depth at runtime:
-where the registry `slug` cell links to a first-party page, follow it for the
-framework's substance; otherwise supply that substance from your own knowledge.
+The Prerequisite Gate (step 1) already reads `field.json`, so no extra read is
+needed. When it is non-`null`, resolve its one-line **Structure signature** from
+the registry's framework table (for a `combo:`, resolve both) and carry it into
+the **Define** and **Prototype** stages below: it shapes how the problem is
+framed and how the artifact body is organized. The registry is thin by design —
+it pins the signature and the stable key; supply the framework's depth at
+runtime, following the registry `slug` cell's first-party link where it has one
+and otherwise drawing on your own knowledge.
 
 When `chosen_framework` is `null` — a legacy deliverable created before a
-framework was chosen, or a deliberate no-framework choice — run those stages
-exactly as written below, with no framework structuring. The framework only
-adds shape when present; it never blocks production when absent.
+framework was chosen, or a deliberate no-framework choice — run Define and
+Prototype exactly as written below, on their default framing and outline, with
+no framework structuring. Those stages do not restate this rule. The framework
+only adds shape when present; it never blocks production when absent.
 
 ## Workflow
 
@@ -58,14 +58,19 @@ adds shape when present; it never blocks production when absent.
 
 By default this loop runs as an **auto-walk**: it writes each stage's artifact
 and log entry as it goes, surfacing the resulting entries — fast, and right for
-an obvious-shape deliverable. A consultant who wants to steer the work can
-instead opt into **interactive mode** (also *transparent mode*): trigger it at
-loop entry with a phrase such as "run it interactively", "transparent mode", or
-"with confirmation gates", or set it as a per-engagement default the consultant
-states at the start. Interaction mode is **ephemeral** — it governs only this
-session's conversation flow and is never written to `field.json`,
-`consult-project.json`, or any log; the state-write ownership and the logging
-contract below are identical in both modes.
+an obvious-shape deliverable. To steer the work, the consultant opts into
+**interactive mode** (also *transparent mode*) at loop entry ("run it
+interactively", "transparent mode", "with confirmation gates") or as a
+per-engagement default stated at the start. That auto-walk default stands for a
+fresh start (`pending`) and a plain resume (`in-progress`). A **rework re-entry**
+(Step 2's `complete` → `in-progress` branch) opens in **interactive mode**
+instead — a reopened deliverable's intent is unsettled — though the consultant
+may opt back to auto-walk for the pass by saying so at re-entry. That default is
+derived at re-entry from the stored `state`, never stored as a mode. Interaction
+mode is **ephemeral** — it governs only this session's conversation flow and is
+never written to `field.json`, `consult-project.json`,
+or any log; state-write ownership and the logging contract are identical in both
+modes.
 
 In interactive mode, at each stage gate marked **Interactive mode** below (start
 of Empathize, the Empathize pre-write merge confirmation, end of Define, end of
@@ -83,13 +88,12 @@ writes; they never change what gets written or who owns it.
 
 ### Advancing the stage
 
-Every `dt_stage` boundary below — in both auto-walk and interactive mode — moves
-the stage through the guarded helper rather than a free-text `Edit` of
-`field.json`. The helper validates the transition (rejects an unknown stage name
-and a forward jump that skips a stage), writes `dt_stage` via an idempotent
-read-modify-write, and appends a per-stage move to `.metadata/stage-log.json` so
-the loop's iterations leave a trail (the execution log keeps recording *state*
-transitions only, never per-stage moves):
+Every `dt_stage` boundary below moves the stage through the guarded helper
+rather than a free-text `Edit` of `field.json`. The helper validates the
+transition (rejecting an unknown stage name and a forward jump that skips a
+stage), writes `dt_stage` via an idempotent read-modify-write, and appends a
+per-stage move to `.metadata/stage-log.json` so the loop's iterations leave a
+trail:
 
 ```bash
 bash $CLAUDE_PLUGIN_ROOT/scripts/dt-stage-advance.sh \
@@ -98,14 +102,14 @@ bash $CLAUDE_PLUGIN_ROOT/scripts/dt-stage-advance.sh \
 
 A single-step forward advance, an idempotent same-stage re-set, and a re-entry
 to any earlier stage (the loop may iterate) are all permitted; a forward jump
-that skips a stage is refused with `success: false`. The helper degrades
-gracefully on a legacy `field.json` whose deliverable has no `dt_stage` (it logs
-the move with `from: null`). On a `success: false` (a refused jump, a missing
-deliverable, an unreadable manifest) do not proceed past the boundary — surface
-the error and resolve it before retrying, since an unwritten `dt_stage` leaves
-the loop state inconsistent. Should the helper be absent (an older install),
-fall back to a free-text `Edit` of `field.json` setting `dt_stage` directly.
-Where a stage below says "advance `dt_stage` → `"X"`", run this helper with
+that skips a stage is refused with `success: false`. On a legacy `field.json`
+whose deliverable has no `dt_stage`, the helper degrades gracefully and logs the
+move with `from: null`. On a `success: false` (a refused jump, a missing
+deliverable, an unreadable manifest) do not proceed past the boundary — an
+unwritten `dt_stage` leaves the loop state inconsistent; surface the error and
+resolve it before retrying. Should the helper be absent (an older install), fall
+back to a free-text `Edit` of `field.json` setting `dt_stage` directly. Where a
+stage below says "advance `dt_stage` → `"X"`", run this helper with
 `<target-stage>` `X`.
 
 ### 1. Prerequisite Gate
@@ -190,12 +194,41 @@ If the deliverable is already `in-progress`, resume at its current `dt_stage`
 `dt_stage` honest at each boundary.
 
 If the deliverable is `complete` and the consultant wants rework ("continue
-the deliverable", a revision request), confirm the re-entry first, then one
-`Edit` of `field.json` sets `state` back to `"in-progress"`, advance `dt_stage`
-to the stage the rework needs (often `define` or `ideate`) via the helper (see
-*Advancing the stage* above — a re-entry to an earlier stage is permitted), and
-one `Edit` of `.metadata/execution-log.json` appends the `complete` →
+the deliverable", a revision request), confirm the re-entry first — including
+the stage the rework needs — then capture the improvement intent as a
+`rework-intent` entry (below), then one `Edit` of
+`field.json` sets `state` back to `"in-progress"`, advance `dt_stage` to the
+stage the rework needs (often `define` or `ideate`) via the helper, and one
+`Edit` of `.metadata/execution-log.json` appends the `complete` →
 `in-progress` transition to `transitions[]`.
+
+**Capture the improvement intent.** Ask a short question of the shape "what
+should this deliverable do better that it does not do today?" and append the
+consultant's verbatim answer to `.metadata/decision-log.json`'s `decisions[]` as
+`{"id": "d-NNN", "kind": "rework-intent", "action_field": "<field-slug>",
+"deliverable": "<deliverable-slug>", "intent": "<consultant's verbatim answer>",
+"target_stage": "<stage the rework re-enters>", "timestamp": "<ISO>"}` —
+discrete keys, no prose `decision` string, mirroring the gap-check and
+adherence-review shapes; `target_stage` is the value passed to
+`dt-stage-advance.sh`, so record and write cannot drift. The append is
+idempotent *within one reopen*, not across reopens: look for the most recent
+`rework-intent` entry in `decisions[]` for these `(action_field, deliverable)`
+coordinates — the same entry Define reads — then read `.metadata/execution-log.json`'s `transitions[]` for the
+same coordinates. When no `"to": "complete"` transition carries a `timestamp`
+later than that entry's, the entry belongs to this same open episode — reuse it
+rather than appending a second. Match on `"to"`, not on the word *complete*: the
+reopen's own `complete` → `in-progress` transition is a `"from": "complete"`, and
+it is appended moments after the intent entry, so reading it as an episode close
+would defeat the guard on every re-run. A `"to": "complete"` transition does
+close the episode, so the next reopen keys a fresh entry: successive reworks
+carry successive intents.
+That is what separates this kind from the append-once waiver kinds, which stay
+at one entry per deliverable for the engagement's life. The ordering is
+load-bearing: capture before both the `field.json` state `Edit` and the
+`dt-stage-advance.sh` call, so an abandoned re-entry never leaves an advanced
+stage with no recorded intent. It runs in both modes — a write input, not a
+confirmation gate: opting back to auto-walk drops the stage pauses, never this
+question.
 
 Because the deliverable's content is about to change, flag its downstream
 dependents stale now — before the rework begins — so the consultant sees the
@@ -214,20 +247,17 @@ non-blocking — surface the error and proceed with the rework.
 
 ### 3. Empathize
 
-The empathize-stage per-persona empathy mapping runs as a **read-only fan-out**:
-one `consult-empathy-mapper` dispatch per relevant `personas/*.json`, merged and
-written by this stage (the agent never writes). It embodies
-`$CLAUDE_PLUGIN_ROOT/references/methods/empathy-mapping.md`; the full fan-out,
-envelope, merge, write, and idempotency contract is authoritative in
-`$CLAUDE_PLUGIN_ROOT/references/orchestration/empathize-empathy-mapping.md`.
-Define and Ideate stay fully inline — only this per-persona mapping is delegated.
-When `personas/` is empty, say so and continue with the consultant's own
-stakeholder knowledge — persona files can be added later without redoing the loop.
+The empathize-stage per-persona empathy mapping runs as a **read-only fan-out**
+(the agent never writes; this stage merges and writes), embodying
+`$CLAUDE_PLUGIN_ROOT/references/methods/empathy-mapping.md`. Define and Ideate
+stay fully inline — only this per-persona mapping is delegated. When `personas/`
+is empty, say so and continue with the consultant's own stakeholder knowledge —
+persona files can be added later without redoing the loop.
 
 **Interactive mode — input material first.** Before the gap-check, run the
-Empathize source-material intake rung — the pre-gap-check intake of
-consultant-supplied files, pasted text, and URLs, the ingest-into-bound-base
-vs. read-direct-first-party sink choice, and its re-entry idempotency — per
+Empathize source-material intake rung — consultant-supplied files, pasted text,
+and URLs, the ingest-into-bound-base vs. read-direct-first-party sink choice,
+and its re-entry idempotency — per
 `$CLAUDE_PLUGIN_ROOT/references/orchestration/empathize-intake.md`. In
 auto-walk mode, skip this prompt and proceed directly to the gap-check on the
 scope-time material.
@@ -238,30 +268,28 @@ contract for every research run in the engagement. Start with the gap-check
 rung: dispatch `Skill("cogni-knowledge:knowledge-query")` with
 `--knowledge-slug <plugin_refs.knowledge_base>` for the deliverable's topic.
 Record each gap-check per the Gap-Check Recording contract in the Research
-Routing Rule — append one entry to `.metadata/decision-log.json`'s
-`decisions[]` array tagged `"kind": "gap-check"`, carrying the **verbatim**
-question plus the coverage outcome as discrete keys (never fold the verdict
-or overlap scores into a prose `decision` string):
+Routing Rule — append one entry to `.metadata/decision-log.json`'s `decisions[]`
+array tagged `"kind": "gap-check"` (`kind`, not `type`), carrying the
+**verbatim** question plus the coverage outcome as discrete keys, never folded
+into a prose `decision` string and with no `evidence_refs`, so gap-checks stay
+filterable and the routing decision replays programmatically:
 `{"id": "d-NNN", "kind": "gap-check", "action_field": ..., "deliverable":
 ..., "question": "<verbatim --question>", "theme_label": <label-or-null>,
 "verdict": "covered"|"partial"|"uncovered", "top_hit": "<page-slug>"|null,
-"top_score": <score>|null, "timestamp": ...}`. Use `kind` (not `type`) and
-emit `verdict`/`top_hit`/`top_score` as their own keys — no `decision`
-prose, no `evidence_refs` — so gap-checks stay filterable and the routing
-decision replays programmatically.
+"top_score": <score>|null, "timestamp": ...}`.
 When the base has no coverage, escalate to the full inverted pipeline (or
 the `--source wiki` re-run on a populated base) per the rule, and copy the
 finalized synthesis to `action-fields/<field-slug>/research/<topic-slug>.md`
-so this deliverable — and later ones — find it at a stable path. Evidence
-comes from the knowledge base, never from raw web search.
+so this deliverable — and later ones — find it at a stable path.
 
 **Run the fan-out.** With the evidence context in hand from the rung above,
 dispatch `consult-empathy-mapper` once per relevant `personas/*.json` (inputs
 `engagement_dir`, `field_slug`, `deliverable_slug`, `persona_slug`,
 `plugin_root`, `interaction_language` — the language resolved in step 0, as an
 ISO 639-1 code — and `evidence_refs`, the research-synthesis and prior-deliverable
-paths gathered above). Merge the `success: true` envelopes and apply this stage's
-write contract per
+paths gathered above). Merge the `success: true` envelopes and apply this
+stage's write contract — fan-out, envelope, merge, write, and idempotency all
+authoritative in
 `$CLAUDE_PLUGIN_ROOT/references/orchestration/empathize-empathy-mapping.md`: per
 persona, `Edit` `personas/<slug>.json` to populate `empathy_map` and `needs`,
 promote `maturity` to `"researched"` when the envelope recommends it, and append
@@ -270,34 +298,36 @@ deliverable)`. Surface the cross-persona overlaps and tensions — they feed the
 Define spec. **Interactive mode:** before these writes, present the merged maps
 and each persona's key insight, confirm with the consultant, then write.
 
-Close the stage by advancing `dt_stage` → `"define"` via the helper (see
-*Advancing the stage* above).
+Close the stage by advancing `dt_stage` → `"define"` via the helper.
 
 ### 4. Define
 
-Read `$CLAUDE_PLUGIN_ROOT/references/methods/hmw-synthesis.md` and sharpen
-the deliverable's problem spec from the empathize outputs plus the field's
-`framing`. Lock 1-3 HMW questions with the consultant. When a framework lens
-is in play (see *The framework lens* above), let its Structure signature frame
-how you organize the problem and the approach — e.g. a `mece-issue-tree`
-signature decomposes the problem into mutually-exclusive, collectively-
-exhaustive branches before drafting, while a `pyramid-principle` signature
-pushes you to lead with the answer and group the supporting arguments beneath
-it. For a `combo:` choice, let the first signature frame the problem and the
-second the approach. When `chosen_framework` is `null`, frame the spec as you
-would by default.
-When sharpening the spec surfaces an evidence gap (an assumption the
-consultant cannot ground),
-route the research per
-`$CLAUDE_PLUGIN_ROOT/references/research-routing.md` before locking — a
-spec built on an unverified assumption fails at the test stage anyway.
+Read `$CLAUDE_PLUGIN_ROOT/references/methods/hmw-synthesis.md` and sharpen the
+deliverable's problem spec from the empathize outputs plus the field's `framing`.
+On a rework re-entry both of those stay in play, joined by the most recent
+`rework-intent` entry for this deliverable's `(action_field, deliverable)`
+coordinates, recorded in Step 2 — which ranks first among the three, since the
+consultant reopened the deliverable for a stated reason. It re-ranks the inputs,
+it does not replace them: the empathize outputs still describe the stakeholders
+and the field's `framing` still bounds the work. Where that intent conflicts with
+an inherited persona objection from the previous pass, the consultant's stated
+intent wins; name the conflict in the locked spec's `rationale` below. Lock 1-3
+HMW questions with the consultant. When a framework lens is in play (see *The
+framework lens* above), let its Structure signature frame how you organize the
+problem and the approach — e.g. `mece-issue-tree` decomposes the problem into
+mutually-exclusive, collectively-exhaustive branches before drafting, while
+`pyramid-principle` leads with the answer and groups the supporting arguments
+beneath it. For a `combo:` choice, let the first signature frame the problem and
+the second the approach. When sharpening the spec surfaces an evidence gap (an
+assumption the consultant cannot ground), route the research per
+`$CLAUDE_PLUGIN_ROOT/references/research-routing.md` before locking — a spec
+built on an unverified assumption fails at the test stage anyway.
 
 **Interactive mode:** before logging, present the locked 1-3 HMW questions and
-the framing reasoning that produced them (including how the framework lens, if
-any, shaped them), and confirm them with the consultant; revise until accepted,
-then write.
+the framing reasoning that produced them, including how the framework lens (if
+any) shaped them.
 
-Append the locked spec to `.metadata/decision-log.json`'s `decisions[]` array as a decision
+Append the locked spec to `.metadata/decision-log.json`'s `decisions[]` array
 (`{"id": "d-NNN", "action_field": ..., "deliverable": ..., "decision":
 "<locked problem framing>", "rationale": ..., "evidence_refs": [...],
 "timestamp": ...}`). Then advance `dt_stage` → `"ideate"` via the helper.
@@ -310,8 +340,7 @@ proportionate — a deliverable with an obvious shape needs one quick pass, not
 a full workshop.
 
 **Interactive mode:** before logging, surface the chosen ideation method and why
-it fits this spec (proportionate to the deliverable's shape — one quick pass vs.
-a full workshop), and confirm it with the consultant before writing.
+it fits this spec at the proportion above.
 
 Append the method selection to `.metadata/method-log.json`'s `methods[]` array
 (`{"action_field": ..., "deliverable": ..., "proposed": [...], "selected":
@@ -321,9 +350,8 @@ helper.
 ### 6. Prototype
 
 **Interactive mode:** before drafting, surface the prototype direction — the
-chosen approach and how the framework lens (if any) will shape the artifact body
-— and confirm it with the consultant; revise the direction on feedback, then
-draft.
+chosen approach and how the framework lens (if any) will shape the artifact
+body.
 
 Draft the deliverable artifact at
 `action-fields/<field-slug>/<deliverable-slug>.md` — Obsidian markdown with
@@ -333,8 +361,7 @@ YAML frontmatter exactly per the data model: `slug`, `action_field`,
 or, for read-direct first-party material carried in from the Empathize intake
 rung, a `file://` `source_url` with `evidence_class: first-party` and no
 `kb_ref`; canonical shape in `$CLAUDE_PLUGIN_ROOT/references/data-model.md`),
-and `updated`. State is intentionally absent from the frontmatter — it lives
-in `field.json` only.
+and `updated`.
 
 Structure the body from the loop's outputs: the problem (define), options
 considered (ideate), the chosen approach, and the content itself. When a
@@ -343,9 +370,8 @@ artifact body to its Structure signature rather than that default outline —
 e.g. `pyramid-principle` → lead with the answer, then MECE-grouped supporting
 arguments; `scqa` → Situation → Complication → Question → Answer;
 `journey-process` → sequential stages along the path. For a `combo:` choice,
-apply both signatures together (typically one frames the opening, the other
-the body). When `chosen_framework` is `null`, use the default outline above.
-Every evidence-backed claim carries a `sources[]` entry. Then advance
+apply both signatures together (typically one frames the opening, the other the
+body). Every evidence-backed claim carries a `sources[]` entry. Then advance
 `dt_stage` → `"test"` via the helper.
 
 ### 7. Test
@@ -354,8 +380,7 @@ Every evidence-backed claim carries a `sources[]` entry. Then advance
 intend to apply — which personas will challenge (per the relevance rule in
 `$CLAUDE_PLUGIN_ROOT/references/orchestration/test-persona-challenge.md`:
 shipped advisors plus context-matching personas) and the objections each is
-likely to raise — so the consultant can steer the challenge before it runs;
-then proceed.
+likely to raise — so the consultant can steer the challenge before it runs.
 
 Challenge the draft as the stakeholder personas by **delegating to the
 write-contract owner** — do not reimplement the persona-challenge writes inline
@@ -365,12 +390,12 @@ as the in-session handoff. consult-personas fans out the per-persona in-voice
 objections (one read-only `consult-persona-challenger` dispatch per relevant
 `personas/*.json`), merges the returned `{success, data, error}` envelopes, and
 owns the single append-`work_log` / append-`## Persona Challenges` /
-advance-`persona_review` write contract — so that contract lives in exactly one
-place. The full fan-out, merge, idempotency, and zero-personas fallback contract
-is authoritative in
+advance-`persona_review` write contract, so that contract lives in one place;
+the full fan-out, merge, idempotency, and zero-personas fallback contract is
+authoritative in
 `$CLAUDE_PLUGIN_ROOT/references/orchestration/test-persona-challenge.md`. Revise
-the artifact where a challenge lands; the challenge is advisory and never blocks
-completion — the consultant decides what to revise.
+the artifact where a challenge lands — advisory, never blocking: the consultant
+decides what to revise.
 
 If the draft survives (consultant accepts): first record the deliverable's
 evidence provenance per
@@ -378,47 +403,44 @@ evidence provenance per
 deliverable completes without a provenance record: reuse the Empathize
 `gap-check` decision-log entry when present, otherwise append an
 `evidence-provenance-waiver`, and set the resulting `evidence_class` on the
-`field.json` deliverable entry. Then, when the deliverable's `chosen_framework`
-is non-`null` (already in hand from the Prerequisite Gate), run the
-framework-adherence review per
+`field.json` deliverable entry. The three rungs that follow are the Three-Layer
+Quality Gate's advisory tiers: each records its outcome as a decision-log entry
+keyed by `(action_field, deliverable)`, and none of them blocks completion.
+
+Then, when the deliverable's `chosen_framework` is non-`null` (already in hand
+from the Prerequisite Gate), run the framework-adherence review per
 `$CLAUDE_PLUGIN_ROOT/references/orchestration/test-adherence-review.md` —
 dispatch the read-only `consult-framework-adherence-reviewer` agent (inputs
 `engagement_dir`, `field_slug`, `deliverable_slug`, `plugin_root`,
-`interaction_language`), surface its
-advisory `adherence` band and drift findings to the consultant, and record the
-outcome as an `adherence-review` decision-log entry keyed by
-`(action_field, deliverable)`. This is the framework-adherence rung of the
-Three-Layer Quality Gate — advisory, never blocking (auto-walk proceeds to
-completion; interactive mode may elect to loop back). A `null`-framework
-deliverable skips it entirely and completes with no adherence stop.
+`interaction_language`), surface its advisory `adherence` band and drift
+findings to the consultant, and record the outcome as an `adherence-review`
+entry. Auto-walk proceeds to completion; interactive mode may elect to loop
+back. A `null`-framework deliverable skips this rung entirely.
 
-Next, the advisory language-polish rung — the register-quality tier of the
-Three-Layer Quality Gate, alongside the framework-adherence rung above.
-Dispatch `Skill("cogni-copywriting:copywriter")` over the deliverable artifact
-with `FILE_PATH=<engagement-dir>/action-fields/<field-slug>/<deliverable-slug>.md`
-and `--scope=tone` — register-only, so tone scope skips restructuring and the
-framework structure is not re-imposed; only the prose register is polished
-(clause length, Floskel and Denglish reduction per the copywriter's German
-style rules). The copywriter natively freezes every `{{asm:<slug>}}` placeholder
-and the `## Persona Challenges` table byte-identical and excludes the
-frontmatter `sources[]` lineage, so the tone pass cannot corrupt a
-resolver-critical token. The copywriter **writes the polish in place** and backs
-the original up to `<engagement-dir>/action-fields/<field-slug>/.<deliverable-slug>.md`
-(its dotfile backup), so surface the resulting diff to the consultant **after**
-the write and let them **accept or reject**: on reject, restore the deliverable
-from that backup dotfile so a rejected polish never lingers on disk; on accept
-(and on skip/error, where no polish was written) the backup dotfile is redundant
-and may be removed — the copywriter overwrites it on the next polish run either
-way. The `chosen_framework` headings are the accept/reject gate's safeguard
-against any heading rewording. Record the outcome as a
-`copywriter-polish` decision-log entry keyed by `(action_field, deliverable)`
-for parity with the adherence-review rung (shape: `{"id": "d-NNN", "kind":
-"copywriter-polish", "action_field": <field-slug>, "deliverable": <deliverable-slug>, "outcome":
-"accepted" | "rejected" | "skipped" | "error", "timestamp": <iso8601>}`). This rung is **advisory and strictly
-non-blocking**: whether the polish runs, is skipped, is rejected, or errors, the
-DT loop proceeds to completion unchanged — a language pass must never stall the
-flow. `output_language`-agnostic: it polishes whatever language the deliverable
-is written in, and a copywriter failure is swallowed as a WARN, never a halt.
+Next, the language-polish rung — the register-quality tier. Dispatch
+`Skill("cogni-copywriting:copywriter")` over the deliverable artifact with
+`FILE_PATH=<engagement-dir>/action-fields/<field-slug>/<deliverable-slug>.md`
+and `--scope=tone` — register-only, so it skips restructuring and never
+re-imposes the framework structure; only the prose register is polished (clause
+length, Floskel and Denglish reduction per the copywriter's German style rules).
+It natively freezes every `{{asm:<slug>}}` placeholder and the `## Persona
+Challenges` table byte-identical and excludes the frontmatter `sources[]`
+lineage, so the tone pass cannot corrupt a resolver-critical token. It **writes
+the polish in place**, backing the original up to
+`<engagement-dir>/action-fields/<field-slug>/.<deliverable-slug>.md`, so surface
+the resulting diff to the consultant **after** the write and let them **accept
+or reject** — the `chosen_framework` headings are that gate's safeguard against
+any heading rewording. On reject, restore the deliverable from that backup
+dotfile so a rejected polish never lingers on disk; on accept (and on
+skip/error, where no polish was written) the dotfile is redundant and may be
+removed — the next polish run overwrites it either way. Record the outcome as a
+`copywriter-polish` entry (`{"id": "d-NNN", "kind": "copywriter-polish",
+"action_field": <field-slug>, "deliverable": <deliverable-slug>, "outcome":
+"accepted" | "rejected" | "skipped" | "error", "timestamp": <iso8601>}`).
+Whether the polish runs, is skipped, is rejected, or errors, the loop proceeds
+unchanged — a copywriter failure is swallowed as a WARN, never a halt — and the
+rung is `output_language`-agnostic: it polishes whatever language the
+deliverable is written in.
 
 Next, the promote-check rung — the assumption-registration tier that keeps
 load-bearing planning numbers in the engagement's single source of truth. Run it
@@ -428,28 +450,24 @@ headcounts, price points) written directly rather than cited as a
 `{{asm:<slug>}}` placeholder backed by the engagement-root `assumptions.json`
 registry; propose registry entries (`provenance_type` + capped `status`), convert
 accepted occurrences to their placeholders, verify with a `resolve-assumptions.py`
-dry-run (fail-loud), and record an `assumption-promotion` decision-log entry keyed
-by `(action_field, deliverable)`. This rung **acts by default** — it promotes
-rather than only warning — but stays advisory and never a hard fail (the
-consultant may opt out on the record) and is idempotent on a Step-7 resume. A
-promotable literal must never stall the flow.
+dry-run (fail-loud), and record an `assumption-promotion` entry. This rung
+**acts by default** — it promotes rather than only warning — but the consultant
+may opt out on the record, and it is idempotent on a Step-7 resume.
 
-Then: one `Edit` of `field.json` sets
-`state` → `"complete"` (keep `dt_stage` at `"test"`) and the `evidence_class`,
-and one `Edit` of `.metadata/execution-log.json` appends the `in-progress` →
-`complete` transition to `transitions[]`. Then run the dependency cascade so every
-downstream deliverable that listed this one in its `depends_on[]` is flagged
-stale:
+Then: one `Edit` of `field.json` sets `state` → `"complete"` (keep `dt_stage` at
+`"test"`) and the `evidence_class`, and one `Edit` of
+`.metadata/execution-log.json` appends the `in-progress` → `complete` transition
+to `transitions[]`. Then run the dependency cascade over the deliverables that
+listed this one in `depends_on[]`:
 
 ```bash
 python3 $CLAUDE_PLUGIN_ROOT/scripts/deliverable-graph.py <engagement-dir> \
     cascade-stale <field-slug>/<deliverable-slug> --trigger deliverable_update
 ```
 
-In the session summary name the `data.newly_flagged` deliverables in plain words,
-not by slug path. An empty list means nothing became stale *this run*, not that
-nothing needs revisiting — report `data.already_stale` alongside it. A `"success": false` (node not found,
-bad dir) is non-blocking — the completion stands; surface the error and
+Report the result in the session summary on the Step 2 cascade terms above —
+plain-word names, `data.already_stale` alongside an empty `newly_flagged`, a
+`"success": false` non-blocking against the completion — then
 continue. If it does not survive, loop back — advance `dt_stage` to the stage
 the revision needs (often `define` or `ideate`) via the helper (a re-entry to
 an earlier stage is permitted) and continue; `state` stays `in-progress`.
@@ -459,46 +477,48 @@ an earlier stage is permitted) and continue; `state` stays `in-progress`.
 Summarize in business terms, not raw state values or log ids: the deliverable is
 finished, the artifact path (kept as a path — it is there to look up), what was
 decided and why, which personas challenged it, and the Test-stage promote-check
-outcome (assumptions promoted to the registry, or a recorded opt-out). Recommend the next step — the next
-unstarted deliverable in the WBS (via the WBS dashboard skill when present in
-the plugin, or by reading the field manifests directly).
+outcome (assumptions promoted to the registry, or a recorded opt-out). Recommend
+the next step — the next unstarted deliverable in the WBS (via the WBS dashboard
+skill when present in the plugin, or by reading the field manifests directly).
 
-**Milestone dashboard refresh.** When this session moved the deliverable's
-`state` to `"complete"` (or the delegated persona challenge closed its
-`persona_review`), the engagement's
-status changed — offer the consultant a fresh visual dashboard. If the
-engagement already has `output/design-variables.json` (a prior
-`consult-dashboard` run set up a theme), regenerate the HTML without prompting
-by delegating to the `consult-dashboard-refresher` agent with
+**Milestone actions.** When this session moved the deliverable's `state` to
+`"complete"` (or the delegated persona challenge closed its `persona_review`),
+the engagement's status changed — refresh the two derived views below. The two
+elective rungs after them fire only on the `state` → `"complete"` leg, never on
+a persona-review close.
+
+**Milestone dashboard refresh.** Offer the consultant a
+fresh visual dashboard. If the engagement already has
+`output/design-variables.json` (a prior `consult-dashboard` run set up a theme),
+regenerate the HTML without prompting by delegating to the
+`consult-dashboard-refresher` agent with
 `engagement_dir: <engagement-dir>` and `plugin_root: $CLAUDE_PLUGIN_ROOT`; the
 agent runs the read-only generator and opens `output/dashboard.html`. If no
 theme is configured yet, point the consultant at `/cogni-consult:consult-dashboard`
-to set one up. This is a lightweight snapshot — the dashboard reflects the
-engagement state at this checkpoint, which is exactly what the consultant wants
-to see before picking the next deliverable.
+to set one up — a lightweight snapshot of the engagement at this checkpoint,
+which is what the consultant wants before picking the next deliverable.
 
-**Milestone README refresh.** On the same trigger, also run
+**Milestone README refresh.** Also run
 `python3 $CLAUDE_PLUGIN_ROOT/scripts/generate-engagement-readme.py "<engagement-dir>"` —
-unconditional (unlike the theme-gated dashboard, no `output/design-variables.json`
-needed) and non-fatal: on failure, warn and continue.
+not theme-gated (unlike the dashboard refresh above) and non-fatal: on failure,
+warn and continue.
 
-**Knowledge-base deposit is elected, not automatic.** When this session moved
-the deliverable to `complete`, offer to deposit the completed artifact into the
-engagement's bound knowledge base (default-on: deposit without pausing in
-auto-walk mode, confirm first in interactive mode, never auto-fire without
-offering) so future gap-checks and research reuse its findings; the consultant
-may decline only on the record via a `kb-deposit-waiver`. The full deposit
+**Knowledge-base deposit is elected, not automatic.** Offer
+to deposit the completed artifact into the engagement's bound knowledge base
+(default-on: deposit without pausing in auto-walk mode, confirm first in
+interactive mode, never auto-fire without offering) so future gap-checks and
+research reuse its findings; the consultant may decline only on the record via a
+`kb-deposit-waiver`. The full deposit
 signature (reusing `cogni-knowledge:knowledge-ingest-source` verbatim), the
 provenance carried into the deposit context, and the waiver shape + idempotency
 are in `$CLAUDE_PLUGIN_ROOT/references/orchestration/close-kb-deposit.md`.
 
-**Publishing is elected, not automatic.** When this session moved the
-deliverable to `complete`, the consultant *may* now turn it into a
-presentation-ready brief for Claude Design with `/cogni-consult:consult-publish`
-(slides, web-poster, report, or infographic). Mention it as an available next
-step only — never auto-fire it from this loop. Publishing is a deliberate
-consultant judgment call about which deliverables are presentation-worthy and
-which format fits; the design-thinking loop ends at `complete`.
+**Publishing is elected, not automatic.** The consultant
+*may* now turn the deliverable into a presentation-ready brief for Claude Design
+with `/cogni-consult:consult-publish` (slides, web-poster, report, or
+infographic). Mention it as an available next step only — never auto-fire it:
+which deliverables are presentation-worthy, and in which format, is a deliberate
+consultant judgment call; the design-thinking loop ends at `complete`.
 
 ## Important Notes
 
@@ -542,9 +562,8 @@ which format fits; the design-thinking loop ends at `complete`.
   `resolve-propagate` mutates the assumption of record (demotes `verified` →
   `reviewed`) and is **fail-loud** (`"success": false` / exit 1) — surface
   `data.failed_check` and STOP, don't cascade a value that never changed. Every
-  `cascade-stale` form is non-blocking (exit 0) — surface the error and
-  continue. cogni-claims has no push callback into cogni-consult, so this stays
-  a consultant-initiated step, run when a correction is noticed.
+  `cascade-stale` form is non-blocking (exit 0). cogni-claims has no push
+  callback into cogni-consult, so this stays a consultant-initiated step.
 - **Loop, not gate**: stages may re-enter earlier stages; `state` stays
   `in-progress` until the test stage passes. State transitions go in the
   execution log; per-stage `dt_stage` moves are logged separately to

@@ -211,9 +211,9 @@ consultant's verbatim answer to `.metadata/decision-log.json`'s `decisions[]` as
 discrete keys, no prose `decision` string, mirroring the gap-check and
 adherence-review shapes; `target_stage` is the value passed to
 `dt-stage-advance.sh`, so record and write cannot drift. The append is
-idempotent *within one reopen*, not across reopens: look for an existing
+idempotent *within one reopen*, not across reopens: look for the most recent
 `rework-intent` entry in `decisions[]` for these `(action_field, deliverable)`
-coordinates, then read `.metadata/execution-log.json`'s `transitions[]` for the
+coordinates — the same entry Define reads — then read `.metadata/execution-log.json`'s `transitions[]` for the
 same coordinates. When no `"to": "complete"` transition carries a `timestamp`
 later than that entry's, the entry belongs to this same open episode — reuse it
 rather than appending a second. Match on `"to"`, not on the word *complete*: the

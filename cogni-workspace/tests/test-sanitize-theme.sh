@@ -114,6 +114,12 @@ assert_py "1me shadows section rejects the injection payload" \
   "g.sanitize_section('shadows', {'sm':'$INJ_URL'}, {'sm':'0 1px 3px rgba(0,0,0,0.04)'}) == ({'sm':'0 1px 3px rgba(0,0,0,0.04)'}, ['sm'])"
 assert_py "1mf radius section rejects the injection payload" \
   "g.sanitize_section('radius', '$INJ_URL', '12px') == ('12px', ['radius'])"
+# Isolates the '@' clause of the font-aware denylist. 1mb and 1mc both feed
+# payloads carrying a ';' too, so the ';' clause alone accounts for their
+# rejection and neither would notice '@' going missing. This payload shares
+# exactly one character with the denylist, so it fails iff '@' is dropped.
+assert_py "1mg font-aware rejects a bare @ carrying no other denylisted character" \
+  'g.is_safe_value("@import url(https://evil.example/x.css)", "font-aware") is False'
 assert_py "1n style breakout still rejected" \
   'g.is_safe_value("</style><script>alert(1)</script>", "font-aware") is False'
 assert_py "1o declaration injection rejected" \
@@ -269,6 +275,15 @@ python3 "$GUARD" "$TMPROOT/dv-evil.json" > "$TMPROOT/cli-evil.json"
 assert_json "3a CLI reports rejected color key" "$TMPROOT/cli-evil.json" \
   'd["success"] and d["data"]["rejected"].get("colors")==["background"]' 
 python3 "$GUARD" >/dev/null 2>&1 && fail "3b CLI no-arg errors" || pass "3b CLI no-arg errors"
+# The --profile gate rejects only an unknown *forced* profile, so pin the
+# rejecting branch on both its exit status and its envelope. 3fc already covers
+# a valid --profile semantically; 3bc adds the exit-code-0 half no check had.
+python3 "$GUARD" "$TMPROOT/dv-evil.json" --profile=bogus > "$TMPROOT/cli-bogus.json" 2>/dev/null \
+  && fail "3ba CLI unknown profile errors" || pass "3ba CLI unknown profile errors"
+assert_json "3bb CLI unknown profile still prints an envelope" "$TMPROOT/cli-bogus.json" \
+  'd["success"] is False and d["data"] is None and "bogus" in d["error"]'
+python3 "$GUARD" "$TMPROOT/dv-evil.json" --profile=strict >/dev/null 2>&1 \
+  && pass "3bc CLI valid forced profile accepted" || fail "3bc CLI valid forced profile accepted"
 
 # The CLI walks font/shadow/@import/radius too, each under its renderer's profile.
 cat > "$TMPROOT/dv-font-evil.json" <<'EOF'

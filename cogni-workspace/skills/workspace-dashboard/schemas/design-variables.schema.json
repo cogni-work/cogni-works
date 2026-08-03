@@ -56,7 +56,7 @@
     },
     "google_fonts_import": {
       "type": "string",
-      "description": "Full CSS @import statement for Google Fonts (e.g. \"@import url('https://fonts.googleapis.com/...');\")",
+      "description": "Google Fonts import: either a full CSS @import statement (e.g. \"@import url('https://fonts.googleapis.com/...');\") or a bare https:// URL, which is normalized to the canonical terminated @import form. Empty string for system fonts.",
       "default": ""
     },
     "radius": {

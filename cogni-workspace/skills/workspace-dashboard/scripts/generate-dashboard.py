@@ -165,41 +165,54 @@ def parse_theme_md(theme_path):
 def merge_tokens(design_variables, parsed_theme):
     """Pick the strongest available token source. Order: design-vars > theme.md > default.
 
-    Returns ``(theme, warnings)``. When design-variables supply ``colors`` /
-    ``status`` overrides, each value is vetted by the shared theme-value guard
-    (``cogni-workspace/scripts/sanitize-theme.py``) before it can reach the
-    ``<style>`` block: a value carrying stylesheet or markup breakout characters
-    is dropped and the built-in palette value is kept for that key, with the
-    rejection surfaced as a warning. Font, shadow, and ``@import`` values are
-    left untouched — they legitimately carry ``rgba(...)`` / ``url(...)`` and are
-    handled under a separate, deferred font-aware policy. If the guard fails to
-    load, override values pass through unguarded (theming is never a hard
-    dependency).
+    Returns ``(theme, warnings)``. Every design-variables override is vetted by
+    the shared theme-value guard (``cogni-workspace/scripts/sanitize-theme.py``)
+    before it can reach the ``<style>`` block: a rejected value is dropped, the
+    built-in value is kept for that key, and the rejection is surfaced as a
+    warning. Two profiles, because the values differ in kind — ``colors`` /
+    ``status`` are hex tokens vetted under ``strict``, while ``fonts`` /
+    ``shadows`` / ``radius`` / ``google_fonts_import`` are vetted under
+    ``font-aware``, which permits the ``rgba(...)`` / ``url(...)`` /
+    ``@import url(...)`` forms they legitimately carry while still rejecting
+    breakout and declaration injection.
+
+    Routing ``fonts`` through the guard also backfills any key the override
+    omits, which matters beyond safety: ``render_css`` indexes
+    ``theme['fonts']['headers'|'body'|'mono']`` directly, so a design-variables
+    file supplying only ``fonts.body`` used to crash the render with a
+    ``KeyError``.
+
+    Which profile covers which section is the guard's policy, not this
+    renderer's — ``sanitize_section`` resolves it — so the five sibling
+    renderers inherit the same mapping when they are wired to the guard rather
+    than each restating it. If the guard fails to load, every override passes
+    through unguarded; theming is never a hard dependency.
     """
     warnings = []
     if design_variables:
+        defaults = {
+            "colors": DEFAULT_THEME["colors"],
+            "status": DEFAULT_THEME["status"],
+            "fonts": DEFAULT_THEME["fonts"],
+            "shadows": DEFAULT_THEME["shadows"],
+            "google_fonts_import": "",
+            "radius": DEFAULT_THEME["radius"],
+        }
         if _THEME_GUARD is not None:
-            colors, rejected_colors = _THEME_GUARD.sanitize_values(
-                design_variables.get("colors", {}), DEFAULT_THEME["colors"])
-            status, rejected_status = _THEME_GUARD.sanitize_values(
-                design_variables.get("status", {}), DEFAULT_THEME["status"])
-            rejected = rejected_colors + rejected_status
+            vetted, rejected = {}, []
+            for section, default in defaults.items():
+                vetted[section], bad = _THEME_GUARD.sanitize_section(
+                    section, design_variables.get(section), default)
+                rejected += bad
             if rejected:
                 warnings.append(
                     "design-variables: ignored unsafe value(s) for %s — using the "
                     "built-in palette for those keys" % ", ".join(rejected))
         else:
-            colors = design_variables.get("colors", DEFAULT_THEME["colors"])
-            status = design_variables.get("status", DEFAULT_THEME["status"])
-        return {
-            "name": design_variables.get("theme_name", "custom"),
-            "colors": colors,
-            "status": status,
-            "fonts": design_variables.get("fonts", DEFAULT_THEME["fonts"]),
-            "google_fonts_import": design_variables.get("google_fonts_import", ""),
-            "radius": design_variables.get("radius", DEFAULT_THEME["radius"]),
-            "shadows": design_variables.get("shadows", DEFAULT_THEME["shadows"]),
-        }, warnings
+            vetted = {s: design_variables.get(s, d) for s, d in defaults.items()}
+        theme = dict(vetted)
+        theme["name"] = design_variables.get("theme_name", "custom")
+        return theme, warnings
     if parsed_theme:
         return parsed_theme, warnings
     return json.loads(json.dumps(DEFAULT_THEME)), warnings

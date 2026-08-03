@@ -189,11 +189,10 @@ splitting fields) belongs to `consult-action-fields`, not here.
 themed, browsable HTML view of the same status via `/cogni-consult:consult-dashboard`
 (action-field WBS, deliverable states, design-thinking stages, persona-review
 coverage). When the engagement already has `output/design-variables.json` from a
-prior dashboard run, you can regenerate and open it without a theme prompt by
+prior dashboard run, regenerate and open it without a theme prompt by
 delegating to the `consult-dashboard-refresher` agent with
 `engagement_dir: <engagement-dir>` and `plugin_root: $CLAUDE_PLUGIN_ROOT`. This
-stays read-only — the agent runs the read-only generator; it never edits
-engagement state.
+stays read-only — the agent runs the read-only generator.
 
 **Point at the project plan (only when scheduling data exists).** When the engagement
 carries a schedule, surface it here as a one-line read-only pointer. Detect it cheaply:
@@ -229,13 +228,11 @@ register — the human-browsable table of every registered assumption's value,
 provenance, status, and `used_by[]` backlinks — from `assumptions.json`.
 Unconditional and non-fatal: the generator's `load_assumptions` is fail-soft (a
 missing, empty, or malformed registry degrades to an empty register, never an
-error), and on any failure, warn and continue. An engagement that carries a
-populated `assumptions.json` but never had its readable register generated gains
-one here on its next re-entry — no migration step needed; a hand-authored
-`assumptions.md` is never overwritten (the generator refuses when its generated
-marker footer is absent — that refusal is the same non-fatal warning case). Like
-the README, `assumptions.md` is a derived read model regenerated from the
-registry, not engagement state itself, so the read-only contract above holds.
+error), and on any failure, warn and continue. Back-fill and no-overwrite
+behave as for the README above: a populated `assumptions.json` gains a register
+on its next re-entry, and a hand-authored `assumptions.md` is never overwritten.
+Like the README it is a derived read model, not engagement state itself, so the
+read-only contract above holds.
 
 **Point at the register (only when it is non-empty).** When the generator returns
 `success: true` with `data.assumptions_count > 0`, surface a one-line read-only
@@ -307,10 +304,12 @@ state calls for them — not as standing menu items:
 - **The consultant names an already-`complete` deliverable to revisit or
   modify** (a rework request) → offer to reopen it and route to
   `consult-design-thinking`, naming the field, the deliverable, and the stage
-  the rework should re-enter (often `define` or `ideate`). The reopen itself —
+  the rework should re-enter (often `define` or `ideate`); mention that the loop
+  will first ask what the rework should improve and record it as a
+  `rework-intent` entry. That intent capture, like the reopen write itself —
   the `complete` → `in-progress` Edit and the up-front cascade-stale of its
   downstream dependents — is owned by `consult-design-thinking`'s Open-the-Loop
-  step, so resume stays read-only; it routes, it does not write.
+  step, so resume stays read-only; it routes, it does not ask and does not write.
 - **A deliverable's stored `chosen_framework` is `null`** (a legacy deliverable
   created before a framework was chosen) and the consultant wants to assign one
   → offer to set it inline rather than sending them on a separate

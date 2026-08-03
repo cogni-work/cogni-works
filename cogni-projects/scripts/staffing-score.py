@@ -30,9 +30,9 @@ ranking. Output is deterministic for identical inputs — scores are rounded to 
 fixed precision, projects order by strategic impact then slug, candidate ties
 break on the consultant slug, and no wall-clock value enters the result.
 
-Reads entity frontmatter with the same stdlib parser the validator uses
-(`validate-entities.py:parse_frontmatter`, loaded by file location as
-`register-entity.py` does) — no duplicated parser, no PyYAML.
+Reads entity frontmatter with the same stdlib reader the validator uses
+(`validate-entities.py:read_frontmatter`, loaded by file location as
+`register-entity.py` does) — no duplicated reader, no PyYAML.
 
 Usage:
   python3 staffing-score.py <portfolio-dir>
@@ -97,12 +97,12 @@ def _fail(message, code):
     return code
 
 
-def _load_parse_frontmatter():
-    """Load parse_frontmatter from the sibling validate-entities.py by file path.
+def _load_read_frontmatter():
+    """Load read_frontmatter from the sibling validate-entities.py by file path.
 
     validate-entities.py is not an importable module name (hyphens), so — exactly
     as register-entity.py does — load it by location to reuse the one canonical
-    frontmatter parser rather than duplicating the schema-shaped parsing rules.
+    frontmatter reader rather than duplicating the open/read/parse/guard sequence.
     Returns the callable, or None if the validator module cannot be loaded.
     """
     v_path = os.path.join(
@@ -113,18 +113,7 @@ def _load_parse_frontmatter():
         return None
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
-    return getattr(module, "parse_frontmatter", None)
-
-
-def _read_frontmatter(parse_frontmatter, path):
-    """Return the parsed frontmatter dict for an entity file, or {} on any miss."""
-    try:
-        with open(path, "r", encoding="utf-8") as f:
-            text = f.read()
-    except OSError:
-        return {}
-    fm = parse_frontmatter(text)
-    return fm if isinstance(fm, dict) else {}
+    return getattr(module, "read_frontmatter", None)
 
 
 def _overlap_fraction(cf, cu, ps, pe):
@@ -276,7 +265,7 @@ def _round(x):
     return round(x, SCORE_PRECISION)
 
 
-def _load_entities(parse_frontmatter, portfolio_dir, manifest, kind, subdir):
+def _load_entities(read_frontmatter, portfolio_dir, manifest, kind, subdir):
     """Read every entity of one kind into a list of frontmatter dicts.
 
     Prefers the manifest's summary refs (the index later skills scan) for the
@@ -300,13 +289,15 @@ def _load_entities(parse_frontmatter, portfolio_dir, manifest, kind, subdir):
                     files.append(path)
     entities = []
     for path in files:
-        fm = _read_frontmatter(parse_frontmatter, path)
+        # An unreadable or frontmatter-less record is dropped silently — this
+        # script has no warnings channel to report it through.
+        fm, _exc = read_frontmatter(path)
         if fm:
             entities.append(fm)
     return entities
 
 
-def score_portfolio(portfolio_dir, parse_frontmatter):
+def score_portfolio(portfolio_dir, read_frontmatter):
     """Build the ranked-shortlist data structure for a portfolio directory."""
     manifest_path = os.path.join(portfolio_dir, "projects-portfolio.json")
     try:
@@ -317,10 +308,10 @@ def score_portfolio(portfolio_dir, parse_frontmatter):
                            % (manifest_path, exc))
 
     consultants = _load_entities(
-        parse_frontmatter, portfolio_dir, manifest, "consultants", "consultants"
+        read_frontmatter, portfolio_dir, manifest, "consultants", "consultants"
     )
     projects = _load_entities(
-        parse_frontmatter, portfolio_dir, manifest, "projects", "projects"
+        read_frontmatter, portfolio_dir, manifest, "projects", "projects"
     )
 
     # A closed project is delivered or lost — its roles are not open work to
@@ -420,17 +411,17 @@ def main(argv):
             "(run /cogni-projects:projects-setup first)" % portfolio_dir, 1
         )
 
-    parse_frontmatter = _load_parse_frontmatter()
-    if parse_frontmatter is None:
+    read_frontmatter = _load_read_frontmatter()
+    if read_frontmatter is None:
         # A broken/partial install (validator missing), not a caller usage
         # error — so exit 1 (domain failure), reserving exit 2 for bad args.
         return _fail(
-            "cannot load validate-entities.py:parse_frontmatter (expected sibling "
+            "cannot load validate-entities.py:read_frontmatter (expected sibling "
             "of this script) — the cogni-projects install looks broken", 1
         )
 
     try:
-        data = score_portfolio(portfolio_dir, parse_frontmatter)
+        data = score_portfolio(portfolio_dir, read_frontmatter)
     except RuntimeError as exc:
         return _fail(str(exc), 1)
 

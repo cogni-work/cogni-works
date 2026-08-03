@@ -202,6 +202,34 @@ def _split_inline_list(inner):
     return [p.strip() for p in parts if p.strip() != ""]
 
 
+def read_frontmatter(path):
+    """Read an entity file and parse its frontmatter. Returns ``(fm, exc)``.
+
+    The one place the open/read/parse sequence lives, so the guard cannot drift
+    between the scripts that need it. It never raises for a read or decode
+    failure: ``exc`` carries the exception instead, so a caller reports it
+    however its own output contract requires — and one that needs the
+    read-vs-decode distinction tests ``isinstance(exc, UnicodeDecodeError)``.
+
+    ``exc`` is None whenever the file was read; ``fm`` is then whatever
+    ``parse_frontmatter`` returned — a dict, or None if the file carries no
+    ``---`` fence. On failure the pair is ``(None, exc)``.
+
+    Entity records are UTF-8 by contract, but a record saved as latin-1 (a DACH
+    name is the usual way in) would otherwise raise past the envelope every path
+    returns. UnicodeDecodeError is a ValueError, not an OSError, so it escapes a
+    bare OSError guard — it is named explicitly rather than widening to
+    ValueError, so a future parser fault still surfaces instead of being
+    silently reported as an unreadable file.
+    """
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            text = f.read()
+    except (OSError, UnicodeDecodeError) as exc:
+        return None, exc
+    return parse_frontmatter(text), None
+
+
 def _entity_files(path):
     """Expand a path to the entity .md files it covers.
 
@@ -241,11 +269,7 @@ def _ref_errors(files):
         etype = SUBDIR_TO_TYPE.get(os.path.basename(os.path.dirname(path)))
         if etype is None:
             continue
-        try:
-            with open(path, "r", encoding="utf-8") as f:
-                fm = parse_frontmatter(f.read())
-        except (OSError, UnicodeDecodeError):
-            continue
+        fm, _exc = read_frontmatter(path)
         if fm is None:
             # Unreadable or frontmatter-less records are already reported by
             # validate_file; naming the same defect a second way here would
@@ -295,20 +319,16 @@ def validate_file(filepath):
             {"entity": entity, "file": rel, "field": field, "message": message}
         )
 
-    try:
-        with open(filepath, "r", encoding="utf-8") as f:
-            text = f.read()
-    except OSError as exc:
-        err("<file>", "cannot read file: %s" % exc)
-        return errors, warnings
-    except UnicodeDecodeError as exc:
-        # Entity records are UTF-8 by contract, but a record saved as latin-1
-        # (a DACH name is the usual way in) would otherwise raise past the
-        # envelope every other path returns.
+    fm, exc = read_frontmatter(filepath)
+    # Decode first: the branch below it is the catch-all, so order is what keeps
+    # the two messages distinct.
+    if isinstance(exc, UnicodeDecodeError):
         err("<file>", "cannot decode file as UTF-8 — re-save it as UTF-8: %s" % exc)
         return errors, warnings
+    if exc is not None:
+        err("<file>", "cannot read file: %s" % exc)
+        return errors, warnings
 
-    fm = parse_frontmatter(text)
     if fm is None:
         err("<frontmatter>", "no YAML frontmatter block found (expected leading --- ... --- fence)")
         return errors, warnings

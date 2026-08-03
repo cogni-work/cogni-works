@@ -14,8 +14,8 @@ malformed entity field yields a partial snapshot with a surfaced warning, never
 a hard failure, because a partial snapshot is more useful than no snapshot to a
 partner reviewing a portfolio that is still being authored.
 
-Stdlib-only (no PyYAML). Reuses validate-entities.py's parse_frontmatter and
-_entity_files by file-path load rather than re-implementing a parser or a
+Stdlib-only (no PyYAML). Reuses validate-entities.py's read_frontmatter and
+_entity_files by file-path load rather than re-implementing a reader or a
 directory walk — the same idiom register-entity.py uses.
 
 Usage:
@@ -143,15 +143,10 @@ def _read_entities(portfolio_dir):
     warnings = []
     for path in _ve._entity_files(portfolio_dir):
         rel = os.path.relpath(path, portfolio_dir)
-        try:
-            with open(path, "r", encoding="utf-8") as f:
-                fm = _ve.parse_frontmatter(f.read())
-        # UnicodeDecodeError is a ValueError, not an OSError, so it escaped the
-        # original guard: one non-UTF-8 entity file must degrade to a single
-        # warning, not abort the whole render. Named explicitly rather than
-        # widening to ValueError, so a future parser fault still surfaces
-        # instead of being silently reported as an unreadable file.
-        except (OSError, UnicodeDecodeError) as exc:
+        # One unreadable entity file must degrade to a single warning, not abort
+        # the whole render.
+        fm, exc = _ve.read_frontmatter(path)
+        if exc is not None:
             warnings.append("cannot read %s: %s" % (rel, exc))
             continue
         if not fm:

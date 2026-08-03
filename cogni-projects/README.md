@@ -83,7 +83,7 @@ The manifest holds portfolio identity (`slug`, `name`, `language`, timestamps) p
 | Skill | `projects-staff` | Rank candidate consultants per open project role |
 | Skill | `projects-dashboard` | Render a read-only partner-meeting portfolio snapshot |
 | Script | `portfolio-init.sh` | Idempotent portfolio scaffolder |
-| Script | `validate-entities.py` | Entity frontmatter validator |
+| Script | `validate-entities.py` | Entity validator (frontmatter + assignment refs) |
 | Script | `register-entity.py` | Slug-keyed manifest upsert + execution-log append |
 | Script | `staffing-score.py` | Deterministic staffing scorer (availability/fit/impact) |
 | Script | `render-dashboard.py` | Render the portfolio dashboard HTML from entity data |

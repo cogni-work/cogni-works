@@ -6,8 +6,11 @@ Checks the YAML frontmatter of consultant / project / assignment entity files
 enum values, kebab-case slug shape, ISO dates and their start <= end ordering,
 and numeric ranges.
 
-Frontmatter shape only: an assignment's consultant / project values are not
-resolved to real entity files.
+Frontmatter shape is checked for every argument. A portfolio directory argument
+additionally resolves each assignment's consultant / project value against the
+consultants/ and projects/ records collected from that same directory, so a
+dangling ref is reported as an ordinary per-field error. A single file argument
+carries no portfolio-wide collection, so it stays shape-only.
 
 Stdlib-only (no PyYAML): a small frontmatter-subset parser handles the flat
 scalar + simple-list frontmatter the data model uses.
@@ -217,6 +220,71 @@ def _entity_files(path):
     return files
 
 
+def _ref_errors(files):
+    """Resolve assignment consultant / project refs within one portfolio batch.
+
+    `files` is a single directory argument's expansion (see `_entity_files`), so
+    the slug sets are built from the same portfolio the assignments live in —
+    two portfolio directories passed in one invocation never resolve each
+    other's refs. Returns errors in the shared {entity, file, field, message}
+    shape.
+
+    Reads the batch's frontmatter a second time rather than having
+    `validate_file` hand it back: that function's (errors, warnings) signature
+    is called directly by register-entity.py, and widening it to serve this one
+    invocation shape would change the contract for every caller.
+    """
+    known = {"consultant": set(), "project": set()}
+    assignments = []
+
+    for path in files:
+        etype = SUBDIR_TO_TYPE.get(os.path.basename(os.path.dirname(path)))
+        if etype is None:
+            continue
+        try:
+            with open(path, "r", encoding="utf-8") as f:
+                fm = parse_frontmatter(f.read())
+        except (OSError, UnicodeDecodeError):
+            continue
+        if fm is None:
+            # Unreadable or frontmatter-less records are already reported by
+            # validate_file; naming the same defect a second way here would
+            # bury the actionable error under derived noise.
+            continue
+        if etype == "assignment":
+            assignments.append((path, fm))
+        else:
+            slug = str(fm.get("slug") or "").strip()
+            if slug:
+                known[etype].add(slug)
+            if not slug or not KEBAB_RE.match(slug):
+                # This record's own slug is missing or malformed — already an
+                # error against it. Admit the filename stem so that single
+                # defect does not cascade into a dangling-ref error on every
+                # assignment pointing at the file. A record with a valid slug
+                # is deliberately NOT resolvable by filename: every consumer
+                # (the manifest, the dashboard) matches on the slug, so
+                # accepting the stem there would pass a ref they then drop.
+                known[etype].add(os.path.splitext(os.path.basename(path))[0])
+
+    errors = []
+    for path, fm in assignments:
+        for field in ("consultant", "project"):
+            value = str(fm.get(field) or "").strip()
+            # An absent ref is already a required-key error from validate_file,
+            # so only a present-but-unresolvable value is reported here.
+            if not value or value in known[field]:
+                continue
+            errors.append({
+                "entity": "assignment",
+                "file": path,
+                "field": field,
+                "message": "%s %r does not resolve to a record in %s/"
+                           % (field, value, SCHEMA[field]["subdir"]),
+            })
+    return errors
+
+
 def validate_file(filepath):
     """Validate one entity file. Returns (errors, warnings) as lists of dicts."""
     errors, warnings = [], []
@@ -337,6 +405,15 @@ def main(argv):
         return 2
 
     all_files = []
+    # all_files is a flat concatenation, so nothing downstream can recover
+    # which files came from which directory — and _ref_errors resolves per
+    # portfolio. Keep each directory's expansion separate for it.
+    portfolio_batches = []
+    # A directory passed twice would otherwise resolve its refs twice and report
+    # every dangling ref as two byte-identical errors. Shape errors from a
+    # repeated path still duplicate (all_files is unchanged here), but a
+    # portfolio-wide audit is exactly the run most likely to repeat a path.
+    seen_portfolios = set()
     for path in argv:
         if not os.path.exists(path):
             print(json.dumps({
@@ -363,6 +440,11 @@ def main(argv):
                          "projects/, or assignments/" % path,
             }, ensure_ascii=False))
             return 2
+        if not os.path.isfile(path):
+            real = os.path.realpath(path)
+            if real not in seen_portfolios:
+                seen_portfolios.add(real)
+                portfolio_batches.append(found)
         all_files.extend(found)
 
     errors, warnings = [], []
@@ -383,6 +465,22 @@ def main(argv):
             }], []
         errors.extend(e)
         warnings.extend(w)
+
+    # Same posture as the per-file loop above: an unexpected failure in the ref
+    # pass becomes an ordinary error rather than escaping to the module-level
+    # catch-all, which would print an empty errors[] and discard every per-file
+    # error already accumulated.
+    for batch in portfolio_batches:
+        try:
+            errors.extend(_ref_errors(batch))
+        except Exception as exc:  # noqa: BLE001 — the envelope is the contract
+            errors.append({
+                "entity": "unknown",
+                "file": batch[0] if batch else "<portfolio>",
+                "field": "<refs>",
+                "message": "unexpected failure while resolving refs: %s: %s"
+                           % (type(exc).__name__, exc),
+            })
 
     success = len(errors) == 0
     print(json.dumps({

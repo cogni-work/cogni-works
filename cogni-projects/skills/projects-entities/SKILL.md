@@ -72,9 +72,11 @@ if this list and the data model ever disagree, the data model wins:
   composite: `<consultant-slug>--<project-slug>`.
 
 Derive the slug from the name (kebab-case) unless the user supplies one. For an
-assignment, confirm both referenced entities already exist under `consultants/`
-and `projects/` — read them first, which is also the guard against a dangling
-reference.
+assignment, read the referenced consultant and project records first and confirm
+each record's frontmatter `slug` equals the value going into `consultant` /
+`project`. The validator resolves a ref against the record's `slug`, not its
+filename, so a file that merely exists under a similar name still dangles — that
+slug match, not the file's existence, is the guard.
 
 ### Step 3: Read siblings, then write the entity file
 
@@ -98,7 +100,10 @@ python3 "${CLAUDE_PLUGIN_ROOT:-$(ls -td "$HOME"/.claude/plugins/cache/*/cogni-pr
 The validator returns `{"success": bool, "data": {"errors": [...], "warnings":
 [...]}, "error": str}`. If `success` is `false`, fix each `data.errors[]` entry
 (they name the offending `field` and `message`) and re-run — do **not** register
-a malformed entity into the manifest. Run this step even though Step 5's script
+a malformed entity into the manifest. When `data.errors[]` is empty, the failure
+is with the argument rather than the entity: the top-level `error` holds the
+reason (a path that does not exist, or a directory that is neither an entity file
+nor a portfolio root), so fix the path. Run this step even though Step 5's script
 validates again: that script reports only an error count and points back here, so
 this is the run that surfaces the per-field errors needed to fix the file.
 
@@ -106,11 +111,29 @@ Read `data.warnings[]` too. An `unknown field (ignored)` warning is usually a
 misspelled key — the value is being dropped, not stored — so correct it against
 the data model before registering.
 
-The validator checks **frontmatter shape only**: required keys, enums, slug
-casing, ISO dates and their ordering, numeric ranges. It does **not** resolve an
-assignment's `consultant` / `project` slugs to real entity files, so a passing
-run is not evidence the refs exist — reading both referenced entities in Step 2
-remains the guard against a dangling reference.
+The validator checks **frontmatter shape** on any argument: required keys,
+enums, slug casing, ISO dates and their ordering, numeric ranges. It resolves an
+assignment's `consultant` / `project` slugs against the `consultants/` and
+`projects/` records only when given a whole portfolio directory — that is what
+collects the records to resolve against. This step passes a single file, so no
+ref check runs here and a passing run is not evidence the refs exist; confirming
+in Step 2 that each record's frontmatter `slug` equals the ref remains the guard
+against a dangling reference.
+
+When the user asks for a portfolio-wide audit rather than a single authoring
+run, sweep for dangling refs with a separate invocation — not this gate: pass
+`cogni-projects/<portfolio-slug>` instead of the file path. A dangling ref comes
+back as an ordinary `data.errors[]` entry on the *assignment's* `file`, with
+`field` set to `consultant` or `project` and a `message` naming the missing
+referent (not the assignment's own slug), so the fix loop above applies
+unchanged. Its `success: false` covers every entity in the portfolio, not only
+the one just authored — locate the relevant entries by each error's `file`.
+
+Authoring an assignment is the one case worth sweeping unprompted rather than on
+request: it is the only entity type that carries refs, so a portfolio-directory
+run right after Step 5 is what turns Step 2's read-and-compare into a checked
+fact. Keep it after registration and never in place of the Step 4 gate — the
+single-file gate's behaviour is unchanged.
 
 ### Step 5: Register in the manifest and log the transition
 
@@ -127,6 +150,12 @@ python3 "${CLAUDE_PLUGIN_ROOT:-$(ls -td "$HOME"/.claude/plugins/cache/*/cogni-pr
 It returns the same `{"success", "data", "error"}` envelope; `data.action` is
 `created` or `updated`, which is how a re-run reports that it replaced an
 existing ref rather than adding a second one.
+
+When the entity was an assignment, follow the successful registration with the
+portfolio-directory sweep described in Step 4 — that run is what turns Step 2's
+slug comparison into a checked fact. The Step 4 gate above stays as written; this
+is the sweep, and it belongs here because it is only worth running once the
+assignment is in the manifest.
 
 ### Step 6: Summarize
 

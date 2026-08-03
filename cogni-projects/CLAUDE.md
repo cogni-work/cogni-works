@@ -20,7 +20,7 @@ cogni-projects/
 │   └── projects-dashboard/SKILL.md     Render a partner-meeting portfolio dashboard (read-only)
 ├── scripts/
 │   ├── portfolio-init.sh               Idempotent portfolio scaffolder (stdlib-only)
-│   ├── validate-entities.py            Entity frontmatter validator (stdlib-only)
+│   ├── validate-entities.py            Entity validator: frontmatter + assignment refs
 │   ├── register-entity.py              Slug-keyed manifest upsert + execution-log append
 │   ├── staffing-score.py               Deterministic staffing scorer (availability/fit/impact)
 │   └── render-dashboard.py             Portfolio health + value HTML render (read-only, stdlib-only)

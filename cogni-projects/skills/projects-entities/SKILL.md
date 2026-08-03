@@ -72,9 +72,11 @@ if this list and the data model ever disagree, the data model wins:
   composite: `<consultant-slug>--<project-slug>`.
 
 Derive the slug from the name (kebab-case) unless the user supplies one. For an
-assignment, confirm both referenced entities already exist under `consultants/`
-and `projects/` — read them first, which is also the guard against a dangling
-reference.
+assignment, read the referenced consultant and project records first and confirm
+each record's frontmatter `slug` equals the value going into `consultant` /
+`project`. The validator resolves a ref against the record's `slug`, not its
+filename, so a file that merely exists under a similar name still dangles. That
+slug match is the guard against a dangling reference.
 
 ### Step 3: Read siblings, then write the entity file
 
@@ -115,15 +117,14 @@ ref check runs here and a passing run is not evidence the refs exist; reading
 both referenced entities in Step 2 remains the guard against a dangling
 reference.
 
-A portfolio-wide sweep for dangling refs is a separate run, not this gate: pass
+When the user asks for a portfolio-wide audit rather than a single authoring
+run, sweep for dangling refs with a separate invocation — not this gate: pass
 `cogni-projects/<portfolio-slug>` instead of the file path. A dangling ref comes
-back as an ordinary `data.errors[]` entry whose `field` is `consultant` or
-`project` and whose `message` names the unresolved slug, so the fix loop above
-applies unchanged. Its `success: false` covers every entity in the portfolio,
-not only the one just authored — locate the relevant entries by each error's
-`file` field. A dangling ref is reported on the *assignment's* file, and its
-`message` names the missing consultant or project, not the assignment's own
-slug.
+back as an ordinary `data.errors[]` entry on the *assignment's* `file`, with
+`field` set to `consultant` or `project` and a `message` naming the missing
+referent (not the assignment's own slug), so the fix loop above applies
+unchanged. Its `success: false` covers every entity in the portfolio, not only
+the one just authored — locate the relevant entries by each error's `file`.
 
 ### Step 5: Register in the manifest and log the transition
 

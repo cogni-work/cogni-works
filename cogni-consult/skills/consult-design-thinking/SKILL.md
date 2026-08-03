@@ -66,8 +66,9 @@ fresh start (`pending`) and a plain resume (`in-progress`). A **rework re-entry*
 (Step 2's `complete` → `in-progress` branch) opens in **interactive mode**
 instead — a reopened deliverable's intent is unsettled — though the consultant
 may opt back to auto-walk for the pass by saying so at re-entry. That default is
-derived at re-entry from the stored `state`, never stored as a mode. Interaction mode is **ephemeral** — it governs only this session's
-conversation flow and is never written to `field.json`, `consult-project.json`,
+derived at re-entry from the stored `state`, never stored as a mode. Interaction
+mode is **ephemeral** — it governs only this session's conversation flow and is
+never written to `field.json`, `consult-project.json`,
 or any log; state-write ownership and the logging contract are identical in both
 modes.
 

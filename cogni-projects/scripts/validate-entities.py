@@ -409,6 +409,11 @@ def main(argv):
     # which files came from which directory — and _ref_errors resolves per
     # portfolio. Keep each directory's expansion separate for it.
     portfolio_batches = []
+    # A directory passed twice would otherwise resolve its refs twice and report
+    # every dangling ref as two byte-identical errors. Shape errors from a
+    # repeated path still duplicate (all_files is unchanged here), but a
+    # portfolio-wide audit is exactly the run most likely to repeat a path.
+    seen_portfolios = set()
     for path in argv:
         if not os.path.exists(path):
             print(json.dumps({
@@ -436,7 +441,10 @@ def main(argv):
             }, ensure_ascii=False))
             return 2
         if not os.path.isfile(path):
-            portfolio_batches.append(found)
+            real = os.path.realpath(path)
+            if real not in seen_portfolios:
+                seen_portfolios.add(real)
+                portfolio_batches.append(found)
         all_files.extend(found)
 
     errors, warnings = [], []
@@ -458,8 +466,21 @@ def main(argv):
         errors.extend(e)
         warnings.extend(w)
 
+    # Same posture as the per-file loop above: an unexpected failure in the ref
+    # pass becomes an ordinary error rather than escaping to the module-level
+    # catch-all, which would print an empty errors[] and discard every per-file
+    # error already accumulated.
     for batch in portfolio_batches:
-        errors.extend(_ref_errors(batch))
+        try:
+            errors.extend(_ref_errors(batch))
+        except Exception as exc:  # noqa: BLE001 — the envelope is the contract
+            errors.append({
+                "entity": "unknown",
+                "file": batch[0] if batch else "<portfolio>",
+                "field": "<refs>",
+                "message": "unexpected failure while resolving refs: %s: %s"
+                           % (type(exc).__name__, exc),
+            })
 
     success = len(errors) == 0
     print(json.dumps({

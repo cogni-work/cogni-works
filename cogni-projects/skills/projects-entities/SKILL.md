@@ -75,8 +75,8 @@ Derive the slug from the name (kebab-case) unless the user supplies one. For an
 assignment, read the referenced consultant and project records first and confirm
 each record's frontmatter `slug` equals the value going into `consultant` /
 `project`. The validator resolves a ref against the record's `slug`, not its
-filename, so a file that merely exists under a similar name still dangles. That
-slug match is the guard against a dangling reference.
+filename, so a file that merely exists under a similar name still dangles — that
+slug match, not the file's existence, is the guard.
 
 ### Step 3: Read siblings, then write the entity file
 
@@ -100,7 +100,10 @@ python3 "${CLAUDE_PLUGIN_ROOT:-$(ls -td "$HOME"/.claude/plugins/cache/*/cogni-pr
 The validator returns `{"success": bool, "data": {"errors": [...], "warnings":
 [...]}, "error": str}`. If `success` is `false`, fix each `data.errors[]` entry
 (they name the offending `field` and `message`) and re-run — do **not** register
-a malformed entity into the manifest. Run this step even though Step 5's script
+a malformed entity into the manifest. When `data.errors[]` is empty, the failure
+is with the argument rather than the entity: the top-level `error` holds the
+reason (a path that does not exist, or a directory that is neither an entity file
+nor a portfolio root), so fix the path. Run this step even though Step 5's script
 validates again: that script reports only an error count and points back here, so
 this is the run that surfaces the per-field errors needed to fix the file.
 
@@ -125,6 +128,12 @@ back as an ordinary `data.errors[]` entry on the *assignment's* `file`, with
 referent (not the assignment's own slug), so the fix loop above applies
 unchanged. Its `success: false` covers every entity in the portfolio, not only
 the one just authored — locate the relevant entries by each error's `file`.
+
+Authoring an assignment is the one case worth sweeping unprompted rather than on
+request: it is the only entity type that carries refs, so a portfolio-directory
+run right after Step 5 is what turns Step 2's read-and-compare into a checked
+fact. Keep it after registration and never in place of the Step 4 gate — the
+single-file gate's behaviour is unchanged.
 
 ### Step 5: Register in the manifest and log the transition
 

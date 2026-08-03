@@ -120,6 +120,15 @@ assert_py "1mf radius section rejects the injection payload" \
 # exactly one character with the denylist, so it fails iff '@' is dropped.
 assert_py "1mg font-aware rejects a bare @ carrying no other denylisted character" \
   'g.is_safe_value("@import url(https://evil.example/x.css)", "font-aware") is False'
+# Generalises 1mg to the whole table: "a" + c shares exactly one character with
+# the profile's denylist, so it is rejected iff that character is still listed.
+# Hardcoded on purpose — reading the sets from g._PROFILES would walk the table
+# a mutation edits, so a removed character would silently stop being tested.
+# Two-char payloads clear every max_len, and import-aware's shape gate (anchored
+# on '@import url(' / 'https://') cannot match a value starting with 'a'.
+# Pins removals only: a character or profile ADDED to _PROFILES is not covered.
+assert_py "1mh every denylist character is independently rejected" \
+  'all(g.is_safe_value("a" + c, p) is False for p, cs in {"strict": "<>{}();@\\", "font-aware": "<>{};@\\", "import-aware": "<>{};@\\"}.items() for c in cs)'
 assert_py "1n style breakout still rejected" \
   'g.is_safe_value("</style><script>alert(1)</script>", "font-aware") is False'
 assert_py "1o declaration injection rejected" \

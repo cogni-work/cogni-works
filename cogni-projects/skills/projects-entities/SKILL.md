@@ -39,7 +39,10 @@ are separate tool calls, not a transaction — an interrupted run can leave an
 entity file on disk that the manifest does not yet reference. That state is
 repaired by **re-running the skill for the same slug**: registration is
 idempotent (`register-entity.py` upserts keyed on `slug`), so a repeated run
-never double-registers.
+never double-registers. A registration *refused* for an unresolved consultant /
+project ref is a different case — a precondition failure, not an interrupted
+run — and re-running fails identically until the ref itself resolves; Step 5
+covers what to fix.
 
 ## Workflow
 
@@ -76,7 +79,8 @@ assignment, read the referenced consultant and project records first and confirm
 each record's frontmatter `slug` equals the value going into `consultant` /
 `project`. The validator resolves a ref against the record's `slug`, not its
 filename, so a file that merely exists under a similar name still dangles — that
-slug match, not the file's existence, is the guard.
+slug match, not the file's existence, is what makes the ref resolve; Step 5's
+registration is what refuses one that does not.
 
 ### Step 3: Read siblings, then write the entity file
 
@@ -159,8 +163,10 @@ It returns the same `{"success", "data", "error"}` envelope; `data.action` is
 `created` or `updated`, which is how a re-run reports that it replaced an
 existing ref rather than adding a second one.
 
-A registration that fails on a dangling ref wrote nothing — fix the misspelled
-slug (or author the missing record) and re-run this same command.
+A registration that fails on a dangling ref leaves the manifest and the
+execution log untouched; the entity file written in Step 3 stays on disk. So only
+the ref needs fixing — correct the misspelled slug (or author the missing
+record) and re-run this same command.
 
 When the entity was an assignment, follow the successful registration with the
 portfolio-directory sweep described in Step 4 — it is only worth running once

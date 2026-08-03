@@ -183,13 +183,22 @@ def main(argv):
     # Placed after the type is known but before the portfolio-escape check below,
     # which is harmless: an entity outside the portfolio never appears in the
     # walk, so the filter is empty and that check still raises its own error.
-    # _ref_errors reads through read_frontmatter, which returns (None, exc)
-    # rather than raising, so no guard is needed here.
+    # _ref_errors itself is raise-free — it reads through read_frontmatter,
+    # which returns (None, exc) rather than raising. _entity_files is not: its
+    # os.listdir walk is unguarded, so an unreadable portfolio subdirectory
+    # escapes as an OSError. The __main__ catch-all below would convert that to
+    # an envelope for CLI callers, but not for the in-process callers (the test
+    # harness among them) that call main() directly, so the guard belongs here.
     if entity_type == "assignment":
-        ref_errors = [
-            e for e in _ve._ref_errors(_ve._entity_files(portfolio_dir))
-            if _same_file(e["file"], entity_file)
-        ]
+        try:
+            ref_errors = [
+                e for e in _ve._ref_errors(_ve._entity_files(portfolio_dir))
+                if _same_file(e["file"], entity_file)
+            ]
+        except OSError as exc:
+            # Default code 2 (environment failure), never code 1 — the entity
+            # did not fail validation; the portfolio could not be read.
+            return _fail("cannot scan portfolio for refs: %s" % exc)
         if ref_errors:
             return _fail(
                 "entity failed ref validation (%d error(s)) — a consultant or "

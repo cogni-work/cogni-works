@@ -258,10 +258,37 @@ def registered_assignments():
         return json.load(f)["assignments"]
 
 
+# A rejected registration must leave both write targets untouched. The parsed
+# assignments[] check alone is too weak: it would still pass if the manifest were
+# rewritten with equivalent JSON, and it never looks at the execution log at all.
+def manifest_bytes():
+    with open(os.path.join(root5, "projects-portfolio.json"), "rb") as f:
+        return f.read()
+
+
+def transition_count():
+    # No missing-file fallback on purpose: every caller runs after a successful
+    # registration, so an absent log is a real regression and should raise here
+    # rather than read as a legitimate count of zero.
+    path = os.path.join(root5, ".metadata", "execution-log.json")
+    with open(path, encoding="utf-8") as f:
+        return len(json.load(f).get("transitions", []))
+
+
+def check_untouched(tag, man_before, trans_before):
+    """Assert a rejected registration wrote to neither the manifest nor the log."""
+    trans_after = transition_count()
+    check("refs: %s leaves the manifest byte-identical" % tag,
+          manifest_bytes() == man_before, "manifest changed")
+    check("refs: %s leaves execution-log transitions[] unchanged" % tag,
+          trans_after == trans_before, "%d != %d" % (trans_after, trans_before))
+
+
 code, env = register(root5, proj)
 check("refs: a project still registers while a dangling assignment exists",
       env.get("success") is True, str(env))
 
+man_before, trans_before = manifest_bytes(), transition_count()
 code, env = register(root5, dangling)
 errs = env.get("data", {}).get("errors", [])
 assigns = registered_assignments()
@@ -273,24 +300,70 @@ check("refs: the error keeps the standard {entity, file, field, message} shape",
       and errs[0]["entity"] == "assignment" and errs[0]["field"] == "consultant",
       str(errs))
 check("refs: nothing was written to the manifest", assigns == [], str(assigns))
+check_untouched("a dangling consultant ref", man_before, trans_before)
 
 # The filter compares files, not path strings. Passing the portfolio as
 # "<root>/." makes _entity_files emit "<root>/./assignments/..." — a string
 # compare matches none of the errors, the gate fails open, the registration
 # succeeds, and this goes red.
+man_before, trans_before = manifest_bytes(), transition_count()
 code, env = register(os.path.join(root5, "."), dangling)
 assigns = registered_assignments()
 check("refs: still rejected when the portfolio is passed as <root>/.",
       env.get("success") is False and code == 1 and assigns == [],
       "code=%s assignments=%s env=%s" % (code, assigns, env))
+check_untouched("a non-canonical portfolio path", man_before, trans_before)
 
-# The dangling assignment stays on disk, so this also proves the filter reports
+# _ref_errors loops over both ref fields, so the consultant case above exercises
+# only half of it. A resolving consultant with a misspelled project covers the
+# other half — and again kebab-valid, so this measures a ref error, not a shape one.
+dangling_project = make_assignment(root5, "ana-silva", "nordic-erpp")
+man_before, trans_before = manifest_bytes(), transition_count()
+code, env = register(root5, dangling_project)
+errs = env.get("data", {}).get("errors", [])
+check("refs: dangling project ref fails registration",
+      env.get("success") is False and code == 1, "code=%s env=%s" % (code, env))
+check("refs: the dangling project is the single reported error",
+      len(errs) == 1 and errs[0]["entity"] == "assignment"
+      and errs[0]["field"] == "project", str(errs))
+assigns = registered_assignments()
+check("refs: nothing was written to the manifest for a dangling project",
+      assigns == [], str(assigns))
+check_untouched("a dangling project ref", man_before, trans_before)
+
+# The dangling assignments stay on disk, so this also proves the filter reports
 # only the entity being registered rather than the whole portfolio's errors.
 resolving = make_assignment(root5, "ana-silva", "nordic-erp")
 code, env = register(root5, resolving)
 check("refs: an assignment whose refs resolve registers unaffected",
       env.get("success") is True
       and env.get("data", {}).get("action") == "created", str(env))
+# Length, not just success: a duplicate append would satisfy the check above.
+assigns = registered_assignments()
+check("refs: the resolving assignment is registered exactly once",
+      len(assigns) == 1, str(assigns))
+
+# The ref scan walks the portfolio, so an unreadable subdirectory raises inside
+# _entity_files. main() must still answer with the envelope: the __main__
+# catch-all only covers CLI callers, and register() here calls main() directly —
+# exactly the in-process caller that would otherwise get a traceback.
+if os.geteuid() == 0:
+    print("SKIP: refs: unreadable subdir (running as root — mode bits do not deny)")
+else:
+    os.chmod(os.path.join(root5, "consultants"), 0o000)
+    try:
+        code, env = register(root5, resolving)
+        # code 2 (environment failure), never 1 — the entity did not fail
+        # validation; the portfolio could not be read.
+        check("refs: an unreadable portfolio subdir returns the envelope, not a traceback",
+              env.get("success") is False and code == 2, "code=%s env=%s" % (code, env))
+        check("refs: the unreadable-subdir error names the ref scan",
+              "cannot scan portfolio for refs" in (env.get("error") or ""), str(env))
+    except OSError as exc:
+        check("refs: an unreadable portfolio subdir returns the envelope, not a traceback",
+              False, "main() raised %s: %s" % (type(exc).__name__, exc))
+    finally:
+        os.chmod(os.path.join(root5, "consultants"), 0o755)
 
 print()
 if failures:

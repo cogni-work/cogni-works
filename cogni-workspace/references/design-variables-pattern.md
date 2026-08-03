@@ -18,13 +18,13 @@ Every design-variables file should include at minimum:
 | `colors` | `text_muted`, `text_light`, `surface2`, `surface_dark` | Derived variants |
 | `colors` | `accent_muted`, `accent_dark` | Accent variants for hover/active states |
 | `fonts` | `headers`, `body`, `mono` | Font stacks with system fallbacks |
-| `google_fonts_import` | Full `@import url(<https-url>);` statement, or a bare `https://` URL | Empty string if using system fonts |
+| `google_fonts_import` | Full `@import url(<https-url>);` statement, or a bare `https://` URL | Empty string if using system fonts. The bare-URL form is canonicalized only by renderers wired to `cogni-workspace/scripts/sanitize-theme.py` (today only cogni-workspace `workspace-dashboard`) — elsewhere emit the full terminated `@import url(...);` statement |
 
 Optional but recommended: `radius`, `shadows` (sm/md/lg/xl), `status` (success/warning/danger/info).
 
 ## Value Guard
 
-Design-variables values reach the stylesheet as raw text, so a renderer that consumes `cogni-workspace/scripts/sanitize-theme.py` vets every value before it is interpolated. A rejected value is **silently replaced by the built-in default** and reported in that renderer's output envelope under `theme_warnings` — so a theme that renders is not necessarily a theme that was honoured in full. Check `theme_warnings` when a token appears to have no effect.
+Design-variables values reach the stylesheet as raw text, so a renderer that consumes `cogni-workspace/scripts/sanitize-theme.py` — today only cogni-workspace `workspace-dashboard`; the sibling dashboards in cogni-website, cogni-visual, cogni-trends, cogni-portfolio and cogni-consult are not yet wired — vets every value before it is interpolated. A rejected value is **silently replaced by the built-in default** and reported in that renderer's output envelope under `theme_warnings` — so a theme that renders is not necessarily a theme that was honoured in full. Check `theme_warnings` when a token appears to have no effect.
 
 Each section is vetted under one of three profiles:
 

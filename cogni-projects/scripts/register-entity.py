@@ -118,10 +118,12 @@ def main(argv):
             code=1,
         )
 
-    try:
-        with open(entity_file, "r", encoding="utf-8") as f:
-            fm = _ve.parse_frontmatter(f.read())
-    except OSError as exc:
+    # Route through the shared reader, not a local open(): it guards
+    # UnicodeDecodeError too, so a latin-1 record reports "cannot read entity
+    # file" rather than the __main__ catch-all's generic message — and the
+    # validate_file gate above rejecting it first stops being load-bearing.
+    fm, exc = _ve.read_frontmatter(entity_file)
+    if exc is not None:
         return _fail("cannot read entity file: %s" % exc)
 
     # `type` is required for every type and the validator errors when it

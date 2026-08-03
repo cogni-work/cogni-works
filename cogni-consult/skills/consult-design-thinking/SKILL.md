@@ -211,12 +211,17 @@ consultant's verbatim answer to `.metadata/decision-log.json`'s `decisions[]` as
 discrete keys, no prose `decision` string, mirroring the gap-check and
 adherence-review shapes; `target_stage` is the value passed to
 `dt-stage-advance.sh`, so record and write cannot drift. The append is
-idempotent *within one reopen*, not across reopens: read
-`.metadata/execution-log.json`'s `transitions[]` for this deliverable, and an
-entry for these `(action_field, deliverable)` coordinates with no `complete`
-transition after its `timestamp` belongs to this same open episode — reuse it
-rather than appending a second. A `complete` transition closes the episode, so
-the next reopen keys a fresh entry: successive reworks carry successive intents.
+idempotent *within one reopen*, not across reopens: look for an existing
+`rework-intent` entry in `decisions[]` for these `(action_field, deliverable)`
+coordinates, then read `.metadata/execution-log.json`'s `transitions[]` for the
+same coordinates. When no `"to": "complete"` transition carries a `timestamp`
+later than that entry's, the entry belongs to this same open episode — reuse it
+rather than appending a second. Match on `"to"`, not on the word *complete*: the
+reopen's own `complete` → `in-progress` transition is a `"from": "complete"`, and
+it is appended moments after the intent entry, so reading it as an episode close
+would defeat the guard on every re-run. A `"to": "complete"` transition does
+close the episode, so the next reopen keys a fresh entry: successive reworks
+carry successive intents.
 That is what separates this kind from the append-once waiver kinds, which stay
 at one entry per deliverable for the engagement's life. The ordering is
 load-bearing: capture before both the `field.json` state `Edit` and the

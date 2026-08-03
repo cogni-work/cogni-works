@@ -7,7 +7,9 @@
 #      unreadable one — the run still returns its {success, data, error}
 #      envelope rather than a bare traceback,
 #   C. usage and preflight errors still report through that envelope, so B
-#      cannot be satisfied by swallowing every failure.
+#      cannot be satisfied by swallowing every failure,
+#   D. an exception main() has no guard for still reports as an envelope
+#      rather than a bare traceback — the class B pins one instance of.
 #
 # stdlib-only (bash + python3, no pytest/pip), matching the house convention.
 #
@@ -165,6 +167,29 @@ run_score "$STDERRC" "$TMPROOT/not-a-portfolio"
 assert_exit  "3g non-portfolio dir exits 1"      1 "$RUN_CODE"
 assert_json  "3h non-portfolio reports envelope" "d['success'] is False and 'projects-portfolio.json' in d['error']"
 assert_no_traceback "3i non-portfolio stderr is clean" "$STDERRC"
+
+# ---------------------------------------------------------------------------
+# Fixture D — a manifest holding valid JSON of the wrong type parses cleanly,
+# so it survives the manifest-read guard and only fails later, deeper in, with
+# an exception main() has no guard for. Only the module-level catch-all keeps
+# that inside the envelope. No entities are seeded: the failure precedes any
+# entity I/O, so seeding them would imply a dependency that is not there.
+#
+# If a dedicated guard is ever added for a wrong-typed manifest — an
+# isinstance check in score_portfolio would be the natural home, and would
+# report better than the generic catch-all does — this fixture must be
+# re-pointed at an escape that still has no typed home, or it will fail on an
+# improvement rather than a regression.
+# ---------------------------------------------------------------------------
+PFD="$TMPROOT/bad-manifest"
+mkdir -p "$PFD"
+printf '[]' > "$PFD/projects-portfolio.json"
+STDERRD="$TMPROOT/stderr-d.txt"
+
+run_score "$STDERRD" "$PFD"
+assert_exit  "4a wrong-shaped manifest exits 2" 2 "$RUN_CODE"
+assert_json  "4b wrong shape reports envelope"  "d['success'] is False and d['error'].startswith('unexpected failure:')"
+assert_no_traceback "4c wrong shape stderr is clean" "$STDERRD"
 
 if [ "$failures" -gt 0 ]; then
   printf '\n%d assertion(s) failed\n' "$failures" >&2

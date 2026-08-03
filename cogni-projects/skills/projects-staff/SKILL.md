@@ -80,15 +80,16 @@ python3 "${CLAUDE_PLUGIN_ROOT:-$(ls -td "$HOME"/.claude/plugins/cache/*/cogni-pr
 ```
 
 It returns `{"success", "data", "error"}` (exit 0 ok / 1 domain failure / 2
-usage). On `success: false`, surface `error` to the user and stop. A domain
-failure (exit 1) usually means the portfolio directory or its manifest is
-unreadable — but an `error` naming `validate-entities.py` instead means a
-broken or partial plugin install, not a portfolio-data problem; say so rather
-than pointing the user at their entities. On success, `data.projects[]` holds
-only the non-closed projects (closed projects are skipped) and, per project, an
-`open_roles[]` array where each role carries a `candidates[]` list already ranked
-by combined score (best first) and a per-role `excluded_count` of consultants
-dropped for no availability overlap with that project's window.
+usage or unexpected failure). On `success: false`, surface `error` to the user
+and stop. A domain failure (exit 1) usually means the portfolio directory or
+its manifest is unreadable — but an `error` naming `validate-entities.py`
+instead means a broken or partial plugin install, not a portfolio-data
+problem; say so rather than pointing the user at their entities. On success,
+`data.projects[]` holds only the non-closed projects (closed projects are
+skipped) and, per project, an `open_roles[]` array where each role carries a
+`candidates[]` list already ranked by combined score (best first) and a
+per-role `excluded_count` of consultants dropped for no availability overlap
+with that project's window.
 
 ### Step 3: Write the staffing-recommendation artifact
 

@@ -17,6 +17,6 @@
     "knowledge-base",
     "orchestrator",
     "agent",
-    "hook"
+    "hooks"
   ]
 }

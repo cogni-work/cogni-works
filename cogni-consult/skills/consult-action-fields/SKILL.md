@@ -109,7 +109,7 @@ deliverables in manifest order:
 |---|---|---|---|---|
 | market-evidence | market-sizing | fertig | pyramid-principle | fertig |
 | market-evidence | competitor-landscape | in Arbeit · Ideate | — | offen |
-| portfolio-fit | — (no deliverables planned) | | | |
+| portfolio-fit | — (keine Deliverables geplant) | | | |
 | go-to-market | ⚠ field.json nicht lesbar (siehe Warnungen) | | | |
 ```
 
@@ -125,7 +125,8 @@ sixth cell: `Route: <deliverable> · <producing_route>`, e.g.
 
 An English session renders the same table: header
 `| Action field | Deliverable | Status | Framework | Persona review |`, values
-`complete` / `in progress · Ideate` / `pending`, the unreadable-field row
+`complete` / `in progress · Ideate` / `pending`, the no-deliverables row
+`— (no deliverables planned)`, the unreadable-field row
 `⚠ field.json not readable (see warnings)`, and the same `Route:` note line.
 
 `Framework` shows the stored `chosen_framework` read-only — a registry slug

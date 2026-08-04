@@ -50,13 +50,13 @@ Start with `tour-install-to-infographic` — it is the first-run capstone and as
 
 ## Getting Started
 
-If you are new to insight-wave, start with Course 1:
+If you are new to insight-wave, start with the first-run capstone tour:
 
 ```
-/teach 1
+/teach tour-install-to-infographic
 ```
 
-The teach skill introduces you to the Cowork environment, the plugin model, and how to navigate the ecosystem. From there you can continue through the curriculum at your own pace.
+It walks you from a fresh workspace through theme selection to a rendered infographic, so you finish with a working artifact rather than notes. From there, pick whichever tour matches the pipeline you need — the rest are independent.
 
 If you already know what you need to do but not which plugin handles it:
 
@@ -77,16 +77,12 @@ The teach skill delivers any of the 7 workflow tours interactively. It tracks yo
 Start or resume a tour by ID:
 
 ```
-/teach 1
+/teach tour-research-to-report
 ```
 
-Continue where you left off:
+Progress is tracked to the lesson, so re-running the same tour ID resumes where you left off.
 
-```
-/teach continue
-```
-
-Check which courses you have completed:
+Check which tours you have completed:
 
 ```
 /courses
@@ -239,7 +235,7 @@ cogni-help references every other plugin — it is the only plugin with no funct
 
 ### Downstream — cogni-workspace
 
-Before running any course involving plugin-specific work, ensure the workspace is initialized. If `workspace-status` reports issues, resolve them before starting Course 2 and beyond. See [cogni-workspace](../plugin-guide/cogni-workspace.md).
+Before running any tour involving plugin-specific work, ensure the workspace is initialized. If `workspace-status` reports issues, resolve them before starting. See [cogni-workspace](../plugin-guide/cogni-workspace.md).
 
 ---
 
@@ -250,10 +246,9 @@ Before running any course involving plugin-specific work, ensure the workspace i
 Walk a new user through the full ecosystem:
 
 1. Run `manage-workspace` from cogni-workspace to prepare the environment
-2. Start `/teach 1` — Cowork Fundamentals covers the mental model and navigation
-3. Continue through `/teach 2` — Workspace and Obsidian for environment setup
-4. Use `/guide` to match their first real task to the right plugin
-5. Run the relevant course for that plugin
+2. Start `/teach tour-install-to-infographic` — the first-run capstone, from install to a rendered artifact
+3. Use `/guide` to match their first real task to the right plugin
+4. Run the tour matching that plugin's pipeline
 
 For a structured onboarding plan covering the full curriculum, use `/workflow full-onboarding`.
 
@@ -295,7 +290,7 @@ For automated pipeline orchestration, see [cogni-consult](../plugin-guide/cogni-
 
 **Chrome native messaging host conflict (KI-001):** When both Claude Desktop (Cowork) and Claude Code are installed, the `cogni-issues` skill — which files GitHub issues via browser automation — may not have access to browser tools. The Chrome extension connects to one native host and ignores the other, so 16 of 19 browser automation tools can silently vanish.
 
-**Workaround:** Toggle native messaging host configs by renaming the `.json` file for the unused product in `~/Library/Application Support/Google/Chrome/NativeMessagingHosts/` and restarting Chrome. Alternatively, file issues using the `gh` CLI or manually on github.com. See the [Known Issues Registry](../../cogni-docs/references/known-issues.md) for detailed steps.
+**Workaround:** Toggle native messaging host configs by renaming the `.json` file for the unused product in `~/Library/Application Support/Google/Chrome/NativeMessagingHosts/` and restarting Chrome. Alternatively, file issues using the `gh` CLI or manually on github.com. See the [Known Issues Registry](../known-issues.md#ki-001) for detailed steps.
 
 ---
 
@@ -303,8 +298,8 @@ For automated pipeline orchestration, see [cogni-consult](../plugin-guide/cogni-
 
 The highest-value contributions to cogni-help are:
 
-- **New courses** — if a plugin exists in the ecosystem but has no dedicated course, adding one follows the Theory → Demo → Exercise → Quiz → Recap structure used by existing courses
-- **New workflow templates** — if you have developed a repeatable multi-plugin pipeline not in the current six templates, document it as a new workflow definition in `workflow/references/workflows/`
+- **New tours** — if a canonical pipeline exists but has no dedicated tour, adding one follows the Theory → Demo → Exercise → Quiz → Recap structure used by existing tours
+- **New workflow templates** — if you have developed a repeatable multi-plugin pipeline not in the current seven user-facing templates, document it as a new workflow definition in `workflow/references/workflows/`
 - **Diagnostic checks** — the troubleshoot skill's known-issues catalog grows best when users report problems and someone encodes the resolution pattern
 - **Plugin catalog updates** — whenever a new plugin or significant new skill lands in the ecosystem, `guide/references/plugin-catalog.md` needs updating
 

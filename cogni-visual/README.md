@@ -143,7 +143,7 @@ In the second phase, a rendering agent consumes the brief and produces the outpu
 
 ```
 cogni-visual/                              # 7 skills · 19 agents · 6 commands · 1 hook
-├── .claude-plugin/                        Plugin manifest (v0.16.26)
+├── .claude-plugin/                        Plugin manifest
 ├── skills/                               7 visual skills (4 brief generators · 1 renderer · 1 enricher · 1 reviewer)
 │   ├── story-to-slides/
 │   ├── story-to-web/
@@ -155,8 +155,8 @@ cogni-visual/                              # 7 skills · 19 agents · 6 commands
 ├── agents/                               19 agents (orchestration · rendering · workers)
 ├── commands/                             6 slash commands (including /render-infographic dispatcher + 2 direct variants)
 ├── hooks/                                1 PreToolUse hook (Excalidraw canvas auto-start)
-├── scripts/                              Utility scripts (rasterize-sketch.py, cartographic-outline.py)
-├── references/                           Reference data (cartographic-data/)
+├── scripts/                              Utility scripts (rasterize-sketch.py, cartographic-outline.py, load-theme-component.py)
+├── references/                           Reference data (cartographic-data/, theme-component-loader.md)
 ├── evals/                                Evaluation harnesses (render-infographic)
 └── libraries/                            17 shared reference files
     ├── arc-taxonomy.md                   arc ID → visual arc type mapping

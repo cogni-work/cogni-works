@@ -33,6 +33,24 @@ generator is **read-only** — it never modifies any engagement file.
 
 ## Workflow
 
+### 0. Resolve the Interaction Language
+
+Before any user-facing output, resolve the **interaction language** — the
+workspace default, overridden by the user's message language — per
+`$CLAUDE_PLUGIN_ROOT/references/interaction-language.md`, which owns the
+resolution ladder; do not restate the ladder here. It is independent of the
+engagement's `language` field, which is the deliverable axis. This contract
+holds on the default path: it does not depend on an output style being active.
+
+The `description` of a Bash tool call is rendered to the consultant, so it is
+user copy — write it in the interaction language, outcome-shaped, at most 6
+words, with no script, file, or skill names, and never derived from the
+script's filename or header comment. Worked pair:
+`Discover cogni-consult engagements` → `Laufende Engagements holen`.
+
+The dashboard document's own `<html lang>` attribute and language badge follow
+the engagement's deliverable `language`, not the interaction language.
+
 ### 1. Find the Active Engagement
 
 Discover engagements with `scripts/discover-projects.sh` (the registry wrapper), or scan
@@ -186,9 +204,3 @@ with "pending").
 - The HTML file is fully self-contained (inline CSS, no external dependencies beyond an optional
   Google Fonts import).
 - Re-running the script overwrites the previous dashboard at `output/dashboard.html`.
-- **Interaction language**: communicate with the user (status messages, instructions,
-  recommendations, questions) in the resolved interaction language — the workspace default,
-  overridden by the user's message language — not the engagement's `language` field, which is
-  the deliverable axis (it controls the dashboard document's `<html lang>` and the language
-  badge, not how you address the user). Technical terms, skill names, and CLI commands remain in
-  English. See `$CLAUDE_PLUGIN_ROOT/references/interaction-language.md`.

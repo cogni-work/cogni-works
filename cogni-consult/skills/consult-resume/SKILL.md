@@ -25,6 +25,21 @@ other write belongs to the skill it routes to.
 
 ## Workflow
 
+### 0. Resolve the Interaction Language
+
+Before any user-facing output, resolve the **interaction language** — the
+workspace default, overridden by the user's message language — per
+`$CLAUDE_PLUGIN_ROOT/references/interaction-language.md`, which owns the
+resolution ladder; do not restate the ladder here. It is independent of the
+engagement's `language` field, which is the deliverable axis. This contract
+holds on the default path: it does not depend on an output style being active.
+
+The `description` of a Bash tool call is rendered to the consultant, so it is
+user copy — write it in the interaction language, outcome-shaped, at most 6
+words, with no script, file, or skill names, and never derived from the
+script's filename or header comment. Worked pair:
+`Discover cogni-consult engagements` → `Laufende Engagements holen`.
+
 ### 1. Discover Engagements
 
 ```bash
@@ -105,11 +120,6 @@ and one next step.` Dates keep the same day-first shape, so a date reads the
 same way in either session. The columns, sort, cap, and the list-and-stop
 obligation are identical in both languages.
 
-Conduct the conversation in the resolved **interaction language** (workspace
-default, overridden by the user's message language) — independent of the
-engagement's `language` field, which is the deliverable axis. See
-`$CLAUDE_PLUGIN_ROOT/references/interaction-language.md`.
-
 ### 3. Read the Engagement Status
 
 ```bash
@@ -166,7 +176,7 @@ passes through with each deliverable. Fall back to the slug only when no title
 is stored — slugs are storage keys, not display names, and titles are rendered
 as stored, never translated.
 `zuletzt bearbeitet` resolves exactly as in step 2; compute it for the selected
-engagement here when step 2's branch did not already. Step 2's language rule
+engagement here when step 2's branch did not already. Step 2's rendering rule
 covers this table too — its column headers, status cells, preamble labels and
 the date shape.
 

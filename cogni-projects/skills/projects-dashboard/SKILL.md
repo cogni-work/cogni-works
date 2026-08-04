@@ -165,10 +165,15 @@ never from this example:
   numeric role still matches its numeric `open_roles` entry and still counts as
   filled. An unresolved `project` is named whatever the assignment's status — a
   completed assignment pointing at a deleted project is still a broken
-  reference — and coverage is unchanged. The non-text warning and the
-  not-lowercase warning both say to fix the record, not that the coverage
-  figure or flag beside it is wrong. One bad record never costs the rest of the
-  portfolio.
+  reference — and the assignment covers no role until the reference is fixed,
+  so the project it was meant to staff reads as more open than its author
+  intended. Assignments authored before their project files orphan until those
+  projects land — a run of these warnings early in authoring is expected, not
+  portfolio damage. An unusable `project` — `project: [alpha, beta]` — is one
+  the lookup cannot key on at all, and is reported like any other unresolved
+  reference. The non-text warning and the not-lowercase warning both say to fix
+  the record, not that the coverage figure or flag beside it is wrong. One bad
+  record never costs the rest of the portfolio.
 - **Theming is optional.** The dashboard renders with a built-in palette;
   pass `--design-variables <path.json>` to override colors when a themed look is
   wanted.

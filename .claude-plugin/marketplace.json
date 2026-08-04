@@ -192,7 +192,7 @@
     {
       "name": "cogni-help",
       "source": "./cogni-help",
-      "version": "0.0.11",
+      "version": "0.0.12",
       "maturity": "incubating",
       "description": "Central help hub for the insight-wave ecosystem. Interactive courses (workflow-tour curriculum), plugin discovery, cross-plugin workflow guides, troubleshooting, quick-reference cheatsheets, and GitHub issue filing.",
       "keywords": [

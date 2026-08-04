@@ -210,6 +210,17 @@ and by whom, and any challenge the consultant still needs to disposition.
 When a challenged deliverable needs rework, point at its producing route as
 the next step.
 
+**Close budget: at most six lines** — one result line, at most three substance
+lines, one artifact line, one next-step line. At most one table, and only at
+four or five rows: section (d) of
+`$CLAUDE_PLUGIN_ROOT/references/user-facing-output.md` bars a table under four
+rows, so anything smaller is prose. Announce before *or* report after, never
+both — section (e) of that same register owns that rule. The producing-route
+pointer above is that one next-step line: it carries exactly one
+recommendation, generalizing to every close what
+`$CLAUDE_PLUGIN_ROOT/skills/consult-resume/SKILL.md` states for re-entry under
+its `## Important Notes` ("One recommendation").
+
 ## Important Notes
 
 - **Acting, not gating**: personas challenge in their own voice and ground

@@ -925,6 +925,150 @@ assert_json "12t plain prospective is live demand too" \
 assert_json "12u padded closed without open_roles is not nagged either" \
   "sum('staffing status unknown' in w and 'Roleless Padded' in w for w in d['data']['warnings']) == 0 and any(p['name'] == 'Roleless Padded' and p['health_label'] == 'closed' for p in d['data']['projects_detail'])"
 
+# ---------------------------------------------------------------------------
+# Fixture 13: an assignment whose `project` names no project in the portfolio.
+# Every project here is schema-clean — lowercase status, a valid
+# strategic_impact, a declared open_roles — so on the base script this portfolio
+# renders with `warnings == []` and `partial: false`. That is deliberate: it
+# makes 13b and 13k fail on base and pass only once the orphan pass exists,
+# rather than riding on some unrelated record's warning.
+#
+# 13c-13f are counted rather than `any(...)` for the reason 10e, 11c and 12p
+# are: an orphan is precisely the assignment no project matches, so an
+# implementation that checked orphan-ness inside the per-project loop would warn
+# once per project while `any(...)` stayed green. 13k pins the same property
+# from the other side, as an exact total.
+# ---------------------------------------------------------------------------
+PF13="$TMPROOT/orphan-assignment"
+seed_portfolio "$PF13"
+write_entity "$PF13/projects/harbor-crm.md" <<'EOF'
+---
+type: project
+slug: harbor-crm
+name: Harbor CRM
+client: Harbor Co
+strategic_impact: 3
+status: active
+open_roles: [lead]
+---
+# Harbor CRM
+EOF
+# An all-digit slug is int-coerced by the parser, and so is an assignment's
+# all-digit `project`. The name stays text on purpose — an all-digit name would
+# be coerced into the envelope too and muddy what this fixture pins.
+write_entity "$PF13/projects/numeric-slug.md" <<'EOF'
+---
+type: project
+slug: 2026
+name: Numeric Slug Project
+client: NumCo
+strategic_impact: 2
+status: active
+open_roles: [analyst]
+---
+# Numeric Slug Project
+EOF
+write_entity "$PF13/assignments/orphan-active.md" <<'EOF'
+---
+type: assignment
+slug: gia--ghost
+consultant: gia
+project: ghost-crm
+role: lead
+start_date: 2026-02-01
+end_date: 2026-08-01
+status: active
+---
+# assignment
+EOF
+# Status-independence: a completed assignment naming a project that does not
+# exist is still a broken reference, so it must warn like any other orphan.
+write_entity "$PF13/assignments/orphan-completed.md" <<'EOF'
+---
+type: assignment
+slug: hu--ghost
+consultant: hu
+project: ghost-crm
+role: lead
+start_date: 2026-02-01
+end_date: 2026-04-01
+status: completed
+---
+# assignment
+EOF
+# A list-valued `project:` is unhashable — a bare `not in <set>` raises
+# TypeError, the module-level catch-all discards every warning collected so far,
+# and one hand-edited record costs the whole render.
+write_entity "$PF13/assignments/orphan-listval.md" <<'EOF'
+---
+type: assignment
+slug: ivy--ghost
+consultant: ivy
+project: [alpha, beta]
+role: lead
+start_date: 2026-02-01
+end_date: 2026-08-01
+status: active
+---
+# assignment
+EOF
+write_entity "$PF13/assignments/orphan-absent.md" <<'EOF'
+---
+type: assignment
+slug: jo--ghost
+consultant: jo
+role: lead
+start_date: 2026-02-01
+end_date: 2026-08-01
+status: active
+---
+# assignment
+EOF
+# The symmetry control: both sides are int-coerced to 2026, so this resolves and
+# must NOT warn. A one-sided coercion of the assignment's `project` to "2026"
+# would miss its own int slug and report this matched assignment as an orphan.
+write_entity "$PF13/assignments/symmetry-2026.md" <<'EOF'
+---
+type: assignment
+slug: ken--numeric
+consultant: ken
+project: 2026
+role: analyst
+start_date: 2026-02-01
+end_date: 2026-08-01
+status: active
+---
+# assignment
+EOF
+
+# Its own stderr sink, as 13j asserts a traceback never reached it.
+STDERR13="$TMPROOT/stderr13.txt"
+RUN_ERRFILE="$STDERR13"
+run "$PF13"
+
+assert_json "13a orphan assignments still render"  "d['success'] is True"
+assert_json "13b marked partial"                   "d['data']['partial'] is True"
+assert_json "13c orphan surfaced by file, exactly once" \
+  "sum('names no known project' in w and 'orphan-active.md' in w for w in d['data']['warnings']) == 1"
+assert_json "13d completed orphan warns too, exactly once" \
+  "sum('names no known project' in w and 'orphan-completed.md' in w for w in d['data']['warnings']) == 1"
+assert_json "13e unhashable project value warns instead of crashing, exactly once" \
+  "sum('names no known project' in w and 'orphan-listval.md' in w for w in d['data']['warnings']) == 1"
+assert_json "13f absent project is surfaced, exactly once" \
+  "sum('names no known project' in w and 'orphan-absent.md' in w for w in d['data']['warnings']) == 1"
+# Two halves: the matched assignment raises no orphan warning, AND it still
+# fills its role — so a regression that stopped warning by stopping resolving
+# cannot pass this.
+assert_json "13g numeric slug resolves raw-to-raw and fills its role" \
+  "not any('names no known project' in w and 'symmetry-2026.md' in w for w in d['data']['warnings']) and any(p['name'] == 'Numeric Slug Project' and p['roles_filled'] == 1 for p in d['data']['projects_detail'])"
+assert_json "13h orphans invent no project row"    "d['data']['projects'] == 2"
+# Harbor CRM's lead is unfilled; the numeric-slug project's analyst is filled by
+# symmetry-2026. No orphan contributes a role either way.
+assert_json "13i orphans fill no role and add none" "d['data']['open_roles'] == 1"
+assert_no_traceback "13j no traceback on stderr" "$STDERR13"
+assert_json "13k exactly one warning per orphan, four in total" \
+  "len(d['data']['warnings']) == 4"
+
 echo
 if [ "$failures" -eq 0 ]; then
   echo "All render-dashboard tests passed."

@@ -313,6 +313,9 @@ The helper returns:
 Capture `number` and `url` for the next step. If the helper exits non-zero, surface the
 JSON error to the user and stop — never retry blindly. Common errors:
 
+- `could not read repo labels` → the label query itself failed, so nothing is known about
+  the repo's label set; surface the `detail` field and have the user check network access,
+  that the repo exists, and that their token has repo scope.
 - `label(s) missing from repo` → tell the user which labels are missing and ask whether
   to file without them or to create the labels first.
 - `gh issue create failed` → surface the `detail` field; usually a network or auth issue.

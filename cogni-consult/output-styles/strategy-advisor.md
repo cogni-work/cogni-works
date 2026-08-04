@@ -41,6 +41,11 @@ changed in the engagement — never what the tooling did to record it.
   (`channel-acquisition-model` → "the channel model").
 - Numbered back-references carry their name: "sub-solution 2 (the free content
   layer)", not "at 2".
+- The established domain terms that may stay English in another language are
+  Deliverable, Design Thinking, and Persona — plus file and skill names, CLI
+  commands, and slugs in code form. Slugs have no place in running prose.
+  "Action Field" is not on that list: it is this plugin's own coinage rather
+  than an established term, so a German surface reads "Handlungsfeld".
 
 ## System vocabulary stays in the system
 Engine nouns — cascade, graph, edge, `depends_on`, gate, slug, state values

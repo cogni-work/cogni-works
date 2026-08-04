@@ -10,14 +10,22 @@
 # The matcher is read back out of hooks.json rather than hardcoded, so widening
 # the alternation cannot drift from what this test believes it says.
 #
+# Every match assertion uses `re.search`, not `re.fullmatch`, because that is what
+# the host does: it builds `new RegExp(matcher)` and calls `.test(agent_type)`,
+# which searches rather than anchoring. Keeping the matcher anchored is therefore
+# the regex's job and asserting it is this file's job — under `fullmatch` the
+# near-miss cases below would pass against an unanchored alternation that leaks
+# the hook into other plugins' subagents at runtime.
+#
 # Coverage:
 #   1  declaration   exactly one SubagentStart entry, type `command` (required by
 #                    Claude Code since 2.1.142), command file present + executable
-#   2  bare names    the matcher fullmatches all four bare agent names
-#   3  qualified     the matcher fullmatches all four `cogni-consult:`-qualified
+#   2  bare names    the matcher matches all four bare agent names
+#   3  qualified     the matcher matches all four `cogni-consult:`-qualified
 #                    names — the form a plugin-supplied agent is dispatched under
-#   4  near-misses   a foreign qualification, a suffix near-miss and a bare prefix
-#                    are all rejected
+#   4  near-misses   the matcher is anchored at both ends, and a foreign
+#                    qualification, a suffix near-miss, a prefix affix and a bare
+#                    prefix are all rejected
 #   5  drift guard   the alternation and cogni-consult/agents/ agree in both
 #                    directions
 #   6  envelope      the hook script emits a valid SubagentStart envelope whose
@@ -85,13 +93,14 @@ import json, os
 print(json.load(open(os.environ["HOOKS_JSON"]))["hooks"]["SubagentStart"][0]["matcher"])
 ')"
 
-# Assert the matcher fullmatches (or not) a candidate subagent name.
+# Assert the matcher matches (or not) a candidate subagent name, using the same
+# semantics as the host: `re.search`, mirroring JavaScript's `RegExp.test`.
 # Args: <name> <candidate> <want: yes|no>
 assert_match() {
   local name="$1" candidate="$2" want="$3"
   MATCHER="$MATCHER" CANDIDATE="$candidate" WANT="$want" python3 -c '
 import os, re, sys
-got = "yes" if re.fullmatch(os.environ["MATCHER"], os.environ["CANDIDATE"]) else "no"
+got = "yes" if re.search(os.environ["MATCHER"], os.environ["CANDIDATE"]) else "no"
 sys.exit(0 if got == os.environ["WANT"] else 1)
 ' && pass "$name" || fail "$name" "matcher=$MATCHER candidate=$candidate want=$want"
 }
@@ -111,9 +120,45 @@ for a in $AGENTS; do
   assert_match "qualified: cogni-consult:$a" "cogni-consult:$a" yes
 done
 
-# 4 near-misses
+# 4 near-misses.
+#
+# Anchoring first, structurally: `^` and `$` at the ends of the string are not
+# enough, because `^(cogni-consult:)?a|b|c|d$` has both and still substring-matches
+# on b and c. Every TOP-LEVEL alternative has to carry its own anchors, so split
+# the regex on `|` at paren depth 0 and check each piece. That form is the exact
+# way a future widening goes wrong, and the two affix rejections below are what
+# catch it at runtime.
+MATCHER="$MATCHER" python3 -c '
+import os, sys
+m = os.environ["MATCHER"]
+alts, depth, start, in_class, i = [], 0, 0, False, 0
+while i < len(m):
+    ch = m[i]
+    if ch == "\\":
+        i += 2
+        continue
+    if in_class:
+        in_class = ch != "]"
+    elif ch == "[":
+        in_class = True
+    elif ch == "(":
+        depth += 1
+    elif ch == ")":
+        depth -= 1
+    elif ch == "|" and depth == 0:
+        alts.append(m[start:i])
+        start = i + 1
+    i += 1
+alts.append(m[start:])
+loose = [a for a in alts if not (a.startswith("^") and a.endswith("$"))]
+if loose:
+    sys.exit("top-level alternative(s) not anchored at both ends: %r" % loose)
+' && pass "anchoring: every top-level alternative is anchored" \
+  || fail "anchoring" "matcher=$MATCHER (see above)"
+
 assert_match "reject: foreign qualification" "cogni-portfolio:consult-persona-challenger" no
 assert_match "reject: suffix near-miss" "consult-dashboard-refresherX" no
+assert_match "reject: prefix affix" "xconsult-empathy-mapper" no
 assert_match "reject: prefix alone" "cogni-consult:" no
 
 # 5 drift guard — the alternation and agents/ agree in both directions.

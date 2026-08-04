@@ -57,7 +57,11 @@ After the merge, `consult-personas` applies exactly these writes:
   (`{"action_field", "deliverable", "action": "challenged", "date"}`).
 - Append (or update) a consolidated `## Persona Challenges` section in the
   deliverable artifact summarizing each persona's challenge and the consultant's
-  disposition (accepted / revised / rejected with reason).
+  disposition. The disposition triple is prose, not a stored field, and renders
+  per `references/user-facing-output.md` — übernommen / überarbeitet / begründet
+  verworfen, or accepted / revised / rejected with reason. The set is closed at
+  exactly those three: there is no fourth state, and one offered is an invention
+  rather than a value to pass through.
 - When the field's manifest entry carries a `persona_review` field, advance it
   (`pending` → `in-progress` when challenges start, → `complete` only once every
   challenge is dispositioned); when it doesn't, the `work_log` entries and the

@@ -55,8 +55,10 @@ festzuhalten.
 - Nummerierte Rückverweise tragen ihren Namen mit: „Teillösung 2 (die freie
   Content-Schicht)“, nicht „bei 2“.
 - Englisch bleiben dürfen die etablierten Domänenbegriffe (Deliverable, Design
-  Thinking, Persona, Action Field) sowie Datei- und Skill-Namen, CLI-Befehle
-  und Slugs in Codeform. Im Fließtext haben Slugs nichts verloren.
+  Thinking, Persona) sowie Datei- und Skill-Namen, CLI-Befehle und Slugs in
+  Codeform. Im Fließtext haben Slugs nichts verloren. „Action Field“ gehört
+  nicht dazu — es ist eine plugin-eigene Prägung, kein etablierter deutscher
+  Beratungsbegriff, und heißt auf deutschen Oberflächen „Handlungsfeld“.
 
 ## Systemvokabular bleibt im System
 Engine-Begriffe — Cascade, Graph, Kante, `depends_on`, Gate, Slug, Zustandswerte

@@ -31,7 +31,8 @@ cogni-consult/
 │   │                              verbatim into every dispatched agent
 │   ├── user-facing-output.md      Main-loop register contract (surface scope,
 │   │                              state lexicon, table rules, step announcements,
-│   │                              tool-call description copy)
+│   │                              tool-call description copy, prose anglicism
+│   │                              lexicon)
 │   ├── personas/                  Packaged default advisors (consulting-partner,
 │   │                              project-manager)
 │   ├── methods/

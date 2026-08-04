@@ -53,10 +53,17 @@ Four notes travel with the table:
   entry — never conflated with `pending`, which means not started. Surface the
   warning's substance; do not pass the token through.
 - The disposition triple is **prose vocabulary**, not a stored field. It names
-  how the consultant answered a persona challenge; no JSON key carries it.
+  how the consultant answered a persona challenge; no JSON key carries it. It is
+  also **closed**: exactly three values, and a fourth is an invention rather than
+  a gap to add. The row-gap rule above admits values the engine actually writes;
+  a disposition the engine never writes has no row to add, so reach for one of
+  the three or rewrite the sentence.
 - Design-thinking stage names (`empathize` → `define` → `ideate` → `prototype` →
   `test`) are method terms: proper-case them for display (`ideate` → `Ideate`),
-  do not translate them.
+  do not translate them. The casing is what carries the meaning: lower-cased,
+  they read as engine values — the consultant sees a stored token rather than
+  the name of a method stage, which is exactly the failure proper-casing
+  prevents.
 
 Where an English display string happens to equal the engine token, that is a
 coincidence of vocabulary, not an exemption — the value still passes through the
@@ -128,6 +135,67 @@ Worked pair: `Discover cogni-consult engagements` → `Laufende Engagements hole
 
 A description failing any of the five is a defect on the same footing as a raw
 engine value in a table cell. This is a surface, not a debug channel.
+
+## (g) Prose anglicisms
+
+(c) governs how a **stored engine token** is displayed. This section governs the
+**prose word the consultant reads** — vocabulary that carries no backing field
+and so has no row to look up. Of the terms below only `Stale` is also a (c) row
+(`lineage_status.status: "stale"`); `Cascade` and `Gate` are engine vocabulary
+governed by the rule delegated at the end of this file. Where both apply they
+agree, so there is nothing to reconcile.
+
+Before reaching for the table, run the three-step test — the method comes from
+cogni-copywriting's German-style principles, cited here rather than loaded,
+because nothing in this plugin loads that file:
+
+1. Does an equally precise German word exist? If yes, use it.
+2. Is the anglicism established with no good German equivalent (*Meeting*,
+   *Software*, *Update*)? If yes, keep it.
+3. Is it a hyphenated English compound? Those almost always have a German
+   rendering — replace them.
+
+The table is what step 3 resolves to for this plugin's own coinages:
+
+| English | German | Note |
+|---|---|---|
+| Front-Door | Einstiegsseite | |
+| Ramp | Anlaufphase | |
+| Slip-Signal | Verzugssignal | |
+| Base-Case / Base-Fall | Basisfall | |
+| Promote-Check | Annahmenprüfung | |
+| Gate | Freigabepunkt | usually cut entirely rather than translated — name what the consultant decides, not the checkpoint |
+| Cascade | als überholt markieren | |
+| Stale | überholt | |
+| Rollup | Gesamtstand | |
+| Handoff | Übergabe | |
+| Waiver | begründete Ausnahme | |
+| WBS | Arbeitsstruktur | |
+
+`Action Field` is this plugin's own coinage, not an established German
+consulting term, so on a German surface it reads **Handlungsfeld**. The English
+table templates keep `Action Field` deliberately — that is the two-language
+split doing its job, not a leak.
+
+**Never invent a system term that does not exist.** An invented term is worse
+than a leaked one: a leaked engine value can at least be looked up in the
+system, while an invented one resolves nowhere the consultant can reach — not in
+the artifact, not in a manifest, not in this file. The observed instance is
+`Routed`, offered as a fourth disposition alongside the three real ones; the
+plugin has never written it. When a word is needed for a state, take it from
+(c), or describe what happened in plain language.
+
+This table is owned here rather than borrowed. cogni-copywriting's German-style
+table addresses sales and go-to-market vocabulary and shares no term with the
+list above; it transliterates its umlauts to ASCII, which contradicts the
+orthography this plugin mandates; and no load path reaches it from here. The
+method above is worth citing, the vocabulary is not worth importing.
+
+The naming discipline in this section has a subagent counterpart —
+`references/subagent-output-contract.md` (`## Register`) carries it, because an
+agent's envelope prose is exactly where an invented term surfaces. Unlike (f),
+which is main-loop-only by its own terms, a rule changed here is checked against
+that file.
 
 ## What binds here but lives elsewhere
 

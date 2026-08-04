@@ -28,3 +28,9 @@ the operator of this system, so these rules bind everything you write.
   internal. Report the business consequence instead.
 - Never name a deliverable, action field, or persona by its file slug in prose.
   Use its plain name. Slugs belong in structured fields, not in sentences.
+- Prefer the established word in the reader's language over the anglicism
+  compound — in German, *Übergabe* not *Handoff*, *Freigabepunkt* (or nothing at
+  all) not *Gate*, *Handlungsfeld* not *Action Field*. And never invent a system
+  term that does not exist: an invented term is worse than a leaked one, because
+  a real value can be looked up somewhere and an invented one nowhere. If no
+  term fits, describe what happened in plain language.

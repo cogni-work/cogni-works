@@ -98,14 +98,15 @@ proper-cased for display (`ideate` → `Ideate`). A `complete` deliverable
 renders no stage — a **render-time** suppression only, so `dt_stage` stays
 stored in `field.json`.
 
-`Route` is no longer a column: when a deliverable's `producing_route` differs
-from the default `consult-design-thinking`, append a note line under it —
-`Route: <deliverable> · <producing_route>`, e.g.
-`Route: market-sizing · cogni-visual`.
+`Route` is not a column: when a deliverable's `producing_route` differs from
+the default `consult-design-thinking`, note it beneath the table, never a
+sixth cell: `Route: <deliverable> · <producing_route>`, e.g.
+`Route: gtm-onepager · cogni-visual`.
 
-An English session renders the same table, seeded by example: header
+An English session renders the same table: header
 `| Action field | Deliverable | Status | Framework | Persona review |`, values
-`done` / `in progress · Ideate` / `open`, and the same `Route:` note line.
+`complete` / `in progress · Ideate` / `pending`, and the same `Route:` note
+line.
 
 `Framework` shows the stored `chosen_framework` read-only — a registry slug
 verbatim, a `combo:<slugA>+<slugB>` pairing rendered `<slugA> + <slugB>` (the
@@ -124,10 +125,10 @@ deeper layers only once the layer above is refreshed. Route to
 Only when nothing is stale, fall through to the first deliverable with
 `state: "pending"`, walking in that same order. When a field has an empty
 `deliverables[]`, recommend planning that field's set (step 4) instead — an
-empty container outranks a half-done one. Skip unreadable fields — surface their warning rather than a
-planning recommendation that would `Edit` a malformed `field.json`. When every
-deliverable is `complete` and current, say so — completion is derived, nothing
-is stored.
+empty container outranks a half-done one. Skip unreadable fields — surface
+their warning rather than a planning recommendation that would `Edit` a
+malformed `field.json`. When every deliverable is `complete` and current, say
+so — completion is derived, nothing is stored.
 
 **Offer the visual dashboard.** This text table is the quick check; for a
 themed, browsable view, offer `/cogni-consult:consult-dashboard`. When the

@@ -4,7 +4,7 @@
 
 > **insight-wave readiness (Claude Code desktop)** — Claude Code desktop is the recommended interface for insight-wave today. Cowork is a secondary path and is not yet production-ready for insight-wave workflows because of context-window and Pencil-MCP fidelity gaps — see the [deployment guide](../docs/deployment-guide.md) for detail. This guidance will flip when those gaps close upstream.
 
-> **Markets covered.** 25 pluggable regions — single-country (DE, FR, IT, ES, NL, PL, AT, CZ, SK, HU, RO, HR, GR, MK), composite (DACH, EU, Nordics, US/NA, APAC, LATAM, MEA), extended (CN, JP), and global (UK, Global) — market-segmented propositions, competitors, and customer personas — not one-size-fits-all.
+> **Markets covered.** 25 pluggable regions — single-country, composite, extended, and global — DACH (BDEW, BDI, BITKOM), plus EU, UK, US, NA, Nordics, APAC, LATAM, and MEA — market-segmented propositions, competitors, and customer personas — not one-size-fits-all.
 
 > **Start here.** Run `/cogni-portfolio:portfolio-resume` for project status and next-step guidance — whether you're starting fresh or returning to an in-progress project.
 

@@ -30,7 +30,8 @@ cogni-consult/
 │   ├── subagent-output-contract.md  Register rules the SubagentStart hook emits
 │   │                              verbatim into every dispatched agent
 │   ├── user-facing-output.md      Main-loop register contract (surface scope,
-│   │                              state lexicon, table rules, step announcements)
+│   │                              state lexicon, table rules, step announcements,
+│   │                              tool-call description copy)
 │   ├── personas/                  Packaged default advisors (consulting-partner,
 │   │                              project-manager)
 │   ├── methods/

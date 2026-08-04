@@ -22,7 +22,7 @@ below applies in whatever language that resolves to.
 
 These rules govern **every** user-facing surface, not only prose: table cells,
 column headers, list items, headings, count lines, step announcements,
-offer lines, and the `description` of a tool call.
+offer lines, and the `description` of a tool call, whose own copy rules are (f).
 
 A table is not an exemption from the register — it is where register failures are
 most visible, because a column header reads as a label the system endorses.
@@ -94,6 +94,29 @@ Three rules keep the announcement cheap:
   not "vier Agenten" — the consultant knows the stakeholders, not the machinery.
 - **No wall-clock estimates.** A wrong estimate is a trust withdrawal, which
   inverts what the announcement is for.
+
+## (f) Tool-call descriptions
+
+The `description` of a Bash tool call is rendered to the consultant, so it is
+user copy. (b) names it a governed surface; this section owns its specifics.
+Every `consult-*` skill's Step 0 cites this section instead of restating them —
+edit the rule here, not there.
+
+Five constraints, all binding:
+
+1. Written in the resolved interaction language, per (a).
+2. Outcome-shaped — what the consultant gets back, not what the machine runs.
+3. At most 6 words.
+4. No script, file, or skill names. Those are engine vocabulary, and (c) no more
+   exempts a description than it exempts a table cell.
+5. Never derived from the script's filename or its header comment. A filename is
+   an engineering label; deriving from it reproduces engine vocabulary in the one
+   place the consultant reads it.
+
+Worked pair: `Discover cogni-consult engagements` → `Laufende Engagements holen`.
+
+A description failing any of the five is a defect on the same footing as a raw
+engine value in a table cell. This is a surface, not a debug channel.
 
 ## What binds here but lives elsewhere
 

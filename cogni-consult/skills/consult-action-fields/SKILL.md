@@ -81,49 +81,58 @@ skill's to replace).
 
 ### 3. Render the WBS Dashboard
 
-Present one table, fields in `action_fields[]` order (that order is the WBS
-priority), deliverables in manifest order:
+Present one table, fields in `action_fields[]` order (the WBS priority),
+deliverables in manifest order:
 
 ```
-| Action field | Deliverable | State | DT stage | Framework | Route | Persona review |
-|---|---|---|---|---|---|---|
-| market-evidence | market-sizing | complete | test | pyramid-principle | consult-design-thinking | complete |
-| market-evidence | competitor-landscape | in-progress | ideate | — | consult-design-thinking | pending |
-| portfolio-fit | — (no deliverables planned) | | | | | |
-| go-to-market | ⚠ unreadable field.json (see warnings) | | | | | |
+| Handlungsfeld | Deliverable | Stand | Framework | Persona-Prüfung |
+|---|---|---|---|---|
+| market-evidence | market-sizing | fertig | pyramid-principle | fertig |
+| market-evidence | competitor-landscape | in Arbeit · Ideate | — | offen |
+| portfolio-fit | — (no deliverables planned) | | | |
+| go-to-market | ⚠ unreadable field.json (see warnings) | | | |
 ```
 
-`Framework` shows the deliverable's stored `chosen_framework` read-only — a
-registry slug verbatim, or for a `combo:<slugA>+<slugB>` pairing the two slugs
-joined as `<slugA> + <slugB>` (the stored `combo:` prefix dropped for display),
-or `—` when none is stored (legacy deliverables, or one created before a
-framework was chosen). The value is never inferred or chosen here.
+`Stand` merges the stored `state` and `dt_stage` into one value, the stage
+proper-cased for display (`ideate` → `Ideate`). A `complete` or `pending`
+deliverable renders no stage — a **render-time** suppression only, so
+`dt_stage` stays stored in `field.json`.
+
+`Route` is not a column: when a deliverable's `producing_route` differs from
+the default `consult-design-thinking`, note it beneath the table, never a
+sixth cell: `Route: <deliverable> · <producing_route>`, e.g.
+`Route: gtm-onepager · cogni-visual`.
+
+An English session renders the same table: header
+`| Action field | Deliverable | Status | Framework | Persona review |`, values
+`complete` / `in progress · Ideate` / `pending`, and the same `Route:` note
+line.
+
+`Framework` shows the stored `chosen_framework` read-only — a registry slug
+verbatim, a `combo:<slugA>+<slugB>` pairing rendered `<slugA> + <slugB>` (the
+stored `combo:` prefix dropped), or `—` when none is stored. Never inferred or
+chosen here.
 
 Close the dashboard with the **next-deliverable recommendation**. Check for
 stale deliverables first: any deliverable carrying `lineage_status.status:
-"stale"` has been invalidated by an upstream change, and refreshing it outranks
-starting fresh pending work (new work built on a stale foundation is wasted).
-When stale deliverables exist, run `deliverable-graph.py <engagement-dir>
-refresh-order` and recommend refreshing them in **topological order — upstream
-before dependents**: the layer-0 deliverable(s) first (nothing else stale
-depends on them, so they are safe to refresh now), deeper layers only once the
-layer above is refreshed. Route to `knowledge-refresh`, then
-`consult-design-thinking` to re-run the deliverable's loop.
+"stale"` was invalidated upstream, and refreshing it outranks fresh work,
+which a stale foundation would waste. When stale deliverables exist, run
+`deliverable-graph.py <engagement-dir> refresh-order` and recommend refreshing
+them in **topological order — upstream before dependents**: layer-0 first,
+deeper layers only once the layer above is refreshed. Route to
+`knowledge-refresh`, then `consult-design-thinking` to re-run the loop.
 
 Only when nothing is stale, fall through to the first deliverable with
-`state: "pending"`, walking fields in `action_fields[]` order and deliverables
-in manifest order. When a field has an empty `deliverables[]`, recommend
-planning that field's set (step 4) instead — an empty container outranks a
-half-done one. Skip unreadable fields in this walk — the rollup reports them
-with an empty `deliverables[]` too, but the right response is surfacing their
-warning, not a planning recommendation that would `Edit` a malformed
-`field.json`. When every deliverable is `complete` and current, say so: the
-engagement is complete by derivation, there is nothing to store.
+`state: "pending"`, walking in that same order. When a field has an empty
+`deliverables[]`, recommend planning that field's set (step 4) instead — an
+empty container outranks a half-done one. Skip unreadable fields — surface
+their warning rather than a planning recommendation that would `Edit` a
+malformed `field.json`. When every deliverable is `complete` and current, say
+so — completion is derived, nothing is stored.
 
 **Offer the visual dashboard.** This text table is the quick check; for a
-themed, browsable view of the same WBS — deliverable states, design-thinking
-stages, and persona-review coverage — offer `/cogni-consult:consult-dashboard`.
-When the engagement already has `output/design-variables.json` and the WBS
+themed, browsable view, offer `/cogni-consult:consult-dashboard`. When the
+engagement already has `output/design-variables.json` and the WBS
 structure changed this session (a field's deliverable set was planned in step 4,
 or a field was added/split/merged), regenerate the HTML snapshot without
 prompting by delegating to the `consult-dashboard-refresher` agent with
@@ -131,9 +140,8 @@ prompting by delegating to the `consult-dashboard-refresher` agent with
 
 **Milestone README refresh.** Whenever the WBS structure changed this session,
 also run `python3 $CLAUDE_PLUGIN_ROOT/scripts/generate-engagement-readme.py "<engagement-dir>"`
-to refresh the engagement-root README front door — unconditional (unlike the
-theme-gated dashboard, no `output/design-variables.json` needed) and non-fatal:
-on failure, warn and continue.
+to refresh the engagement-root README front door — no theme gate, and
+non-fatal: on failure, warn and continue.
 
 ### 4. Plan a Field's Deliverable Set
 

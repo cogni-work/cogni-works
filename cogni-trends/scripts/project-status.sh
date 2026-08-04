@@ -316,7 +316,21 @@ fi
 
 # Extract value-modeler status
 if [ "$HAS_VALUE_MODEL" = "true" ]; then
-  eval "$(python3 -c "
+  # Assign first, then eval — do NOT collapse this back into a single
+  # `eval "$(python3 -c "...")"`. In argument position bash 3.2 brace-expands
+  # and word-splits the multi-key dict literals below (anchor_agg[prod] = {...}
+  # and the products_list comprehension), re-invoking python3 once per comma
+  # fragment with the braces stripped. Every fragment is invalid Python, so the
+  # interpreter fails to compile and emits nothing at all — not even the earlier
+  # print() output — leaving every counter here at its 0 default. The `except`
+  # below and the `2>/dev/null` both hide it. The discriminator is not the dict
+  # literal itself but an UNPROTECTED brace-comma group in eval ARGUMENT
+  # position: every other eval site in this file keeps its braces inside some
+  # quoting context — escaped double quotes in the copywriter block above,
+  # single quotes around the interpolated JSON further up — which re-protects
+  # them. Command substitution on the right of an assignment is not subject to
+  # that expansion, so this form is safe.
+  __VM_STATUS_OUT="$(python3 -c "
 import json
 try:
     d = json.load(open('$PROJECT_DIR/tips-value-model.json'))
@@ -366,6 +380,7 @@ try:
 except Exception:
     pass
 " 2>/dev/null)"
+  eval "$__VM_STATUS_OUT"
 fi
 
 # Detect value-modeler sub-phase from output metadata

@@ -34,6 +34,18 @@ insight-wave/
 
 All scripts return JSON: `{"success": bool, "data": {...}, "error": "string"}`. Scripts are stdlib-only — bash + python3, no pip dependencies.
 
+### Hook Matcher Conventions
+
+A hook matcher that matches on an **agent name** must accept the plugin-qualified `plugin:agent` form, because that is the string the host dispatches under — a plugin-supplied agent arrives as `cogni-consult:consult-dashboard-refresher`, never as a bare `consult-dashboard-refresher`. Make the qualifier optional rather than replacing the bare name, so both forms match:
+
+```
+^(cogni-consult:)?(agent-a|agent-b)$
+```
+
+Keep both anchors. The matcher is applied as a search, not a full match, so an unanchored pattern fires for other plugins' subagents too.
+
+A bare-name-only matcher fails **silently**: the hook simply never runs, the script it would have called stays correct, and hook scripts exit 0 on every path — so nothing anywhere raises. The only evidence is the absence of whatever the hook injects. Nothing will report this class of bug for you, and no guard script checks matchers today — so when you add an agent-name matcher, pin both name forms in a suite under the plugin's `tests/`, which CI does run (see Contributing).
+
 ### Agent Model Strategy
 
 | Role | Model | Rationale |
@@ -163,5 +175,6 @@ Managed by `cogni-workspace:install-mcp`. Plugin `.mcp.json` files reference ins
 - Feature branches from `main`; one feature or fix per PR
 - Do **not** bump `plugin.json` / `marketplace.json` versions in the branch — the post-merge workflow applies the bump (see Version Management)
 - Validate skill names with `cogni-workspace/scripts/check-skill-names.sh` before PR
+- Plugin and repo-root `tests/*.sh` are CI-enforced — `scripts/run-plugin-tests.py` (CI: "Plugin test suites (discover and run tests/*.sh)" in `.github/workflows/lint.yml`) discovers `tests/*.sh` and `*/tests/*.sh` and fails the build on any non-zero exit. Run the full sweep locally with `python3 scripts/run-plugin-tests.py`, or one plugin's with `--filter <plugin>`. A suite only needs to exit non-zero on failure, run as `bash <path>` with no arguments, and touch no network — the runner reads exit status and nothing else
 - Keep maintainer breadcrumbs out of SKILL.md / agent files — `scripts/check-breadcrumbs.py` (CI: "Maintainer-breadcrumb guard" in `.github/workflows/lint.yml`) fails on newly introduced issue/PR refs (`#NNN`), version tags, or milestone/slice/finding codes. It ratchets against `scripts/baselines/breadcrumb-baseline.json`, so only *new* breadcrumbs trip it; fix by removing the breadcrumb and stating the rationale semantically (provenance lives in git history, CHANGELOG, and `references/`)
 - Generic skill names (`setup`, `scan`, `resume`, `dashboard`, `verify`) must be prefixed with the domain term

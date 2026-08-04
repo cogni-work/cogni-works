@@ -24,6 +24,15 @@
 
 set -eu
 
+# The gate resolves the branch for its ^bump/ exemption from VERSION_BUMP_BRANCH,
+# then GITHUB_HEAD_REF, and only then the checked-out branch. Under GitHub
+# Actions GITHUB_HEAD_REF is set to the PR's own head branch, which would be
+# read in place of each fixture repo's branch — case 4 puts its fixture on
+# bump/auto-abc123 and would be judged against the ambient PR branch instead,
+# losing the exemption it exists to assert. Clear both so every fixture case
+# exercises the checked-out-branch fallback, identically everywhere.
+unset VERSION_BUMP_BRANCH GITHUB_HEAD_REF || true
+
 TESTS_DIR="$(cd "$(dirname "$0")" && pwd)"
 REPO_ROOT="$(cd "$TESTS_DIR/.." && pwd)"
 GATE="$REPO_ROOT/scripts/check-version-bump.py"

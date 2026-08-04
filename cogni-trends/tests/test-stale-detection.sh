@@ -2,15 +2,18 @@
 # Regression test for cogni-trends/scripts/project-status.sh stale-report
 # detection. Pins the script's contract for issue #187:
 #
-#   1. Mirroring is not drift  — Phase 4.1 of /trend-report writes report_tier
+#   1. Mirroring is not drift  — Step 3.1 of /trend-synthesis writes report_tier
 #      back into .metadata/trend-scout-output.json, bumping its mtime. The
 #      pre-#187 mtime check fired stale_report on every resume after a report.
 #      The post-#187 hash anchor must NOT fire.
 #
 #   2. Real candidate drift fires — when a candidate id-set or item content
 #      actually changes, stale_report must fire with subtype scout_drift, and
-#      the action injector must prepend a cogni-trends:trend-report next_action
-#      naming the diff (added / removed / changed counts).
+#      the action injector must prepend a cogni-trends:trend-research next_action
+#      naming the diff (added / removed / changed counts). The skill is
+#      trend-research, not the retired trend-report: that skill was split into
+#      trend-research + trend-synthesis + trend-booklet, so refreshing after
+#      drift means re-running research, then re-synthesising.
 #
 #   3. Legacy projects stay silent — projects whose report was generated before
 #      this fix have no content_hash_at_report anchor; the script must not fall
@@ -85,7 +88,8 @@ PYEOF
 # Shared fixture builder — produces a project workspace that has reached
 # "complete" phase: scout-output with 4 candidates (one per dimension/horizon
 # slot the script checks), value-model with one investment theme, and a
-# trend-report file. The hash anchor is then computed and embedded.
+# tips-trend-report.md file (the /trend-synthesis artifact). The hash anchor
+# is then computed and embedded.
 # ---------------------------------------------------------------------------
 build_project() {
   local proj="$1"
@@ -127,7 +131,7 @@ EOF
 
   printf 'tips trend report body\n' > "$proj/tips-trend-report.md"
 
-  # Compute and embed the hash anchor — simulates trend-report Phase 4.1.
+  # Compute and embed the hash anchor — simulates /trend-synthesis Step 3.1.
   local anchor
   anchor="$(python3 "$HASH_HELPER" anchor "$proj/.metadata/trend-scout-output.json" "$proj/tips-value-model.json")"
   python3 - "$proj/.metadata/trend-scout-output.json" "$anchor" <<'PYEOF'
@@ -213,7 +217,7 @@ import json, sys
 d = json.load(sys.stdin)
 warns = [w for w in d["warnings"] if w.get("type") == "stale_report"]
 acts  = d["actions"]
-report_actions = [a for a in acts if a.get("skill") == "cogni-trends:trend-report"]
+refresh_actions = [a for a in acts if a.get("skill") == "cogni-trends:trend-research"]
 print(json.dumps({
     "stale_count": len(warns),
     "subtype":     warns[0].get("subtype") if warns else None,
@@ -221,7 +225,7 @@ print(json.dumps({
     "changed":     warns[0].get("changed") if warns else None,
     "first_action_skill":  acts[0].get("skill")  if acts else None,
     "first_action_reason": acts[0].get("reason") if acts else None,
-    "report_actions":      report_actions,
+    "refresh_actions":     refresh_actions,
 }))
 ')"
 
@@ -238,17 +242,20 @@ if "t-003" not in (s["added"] or []):
     problems.append(f"added={s['added']!r} (expected to contain 't-003')")
 if "t-001" not in (s["changed"] or []):
     problems.append(f"changed={s['changed']!r} (expected to contain 't-001')")
-if s["first_action_skill"] != "cogni-trends:trend-report":
-    problems.append(f"first action skill={s['first_action_skill']!r} (expected cogni-trends:trend-report)")
+if s["first_action_skill"] != "cogni-trends:trend-research":
+    problems.append(f"first action skill={s['first_action_skill']!r} (expected cogni-trends:trend-research)")
 reason = s["first_action_reason"] or ""
-for fragment in ("1 added", "1 changed", "/trend-report"):
+# Both halves of the post-split refresh path are part of the contract: the
+# research pass regathers the drifted candidates, the synthesis pass rebuilds
+# the report from them. Naming only one would let a half-updated injector pass.
+for fragment in ("1 added", "1 changed", "/trend-research", "/trend-synthesis"):
     if fragment not in reason:
         problems.append(f"first action reason missing fragment {fragment!r}: {reason!r}")
 if problems:
     print("\n".join("FAIL case 2 — " + p for p in problems), file=sys.stderr)
     sys.exit(1)
 print("OK   case 2 — drift fired with subtype=scout_drift, added={t-003}, changed={t-001}")
-print("OK   case 2 — concrete cogni-trends:trend-report action prepended naming the diff")
+print("OK   case 2 — concrete cogni-trends:trend-research action prepended naming the diff")
 PYEOF
 RC=$?
 if [ $RC -ne 0 ]; then FAIL_COUNT=$((FAIL_COUNT + 1)); fi

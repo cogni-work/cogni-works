@@ -97,6 +97,21 @@ bash tests/test_check_version_bump.sh     # self-test the gate itself
 
 A deliberate **maturity boundary crossing** (`0.x` → `1.0.0`, `1.x` → `2.0.0`) is the one case a human edits a version by hand. Make it on a `bump/…` branch — the gate exempts those, and the auto-bump is patch-only so it never crosses a boundary on its own.
 
+### Plugin Test Suites
+
+**Every plugin's `tests/*.sh` and the repo-root `tests/*.sh` are CI-enforced.** The `Lint` workflow's `Plugin test suites (discover and run tests/*.sh)` job runs `scripts/run-plugin-tests.py`, which discovers `tests/*.sh` and `*/tests/*.sh` and fails the build if any suite exits non-zero. Discovery is deliberately non-recursive — one directory level only — which is what keeps suites parked under `_archive/` and sourced-only helper libraries under `tests/fixtures/` out of the sweep without either having to be enumerated.
+
+A suite needs three properties and nothing else: it exits non-zero on failure and zero otherwise, it runs as `bash <path>` with no arguments from any working directory, and it needs no network or credentials, writing only inside its own `mktemp -d`. The runner reads exit status and never parses stdout, so there is no shared pass/fail-counter convention to conform to.
+
+Run it locally before a PR:
+
+```bash
+python3 scripts/run-plugin-tests.py                 # full sweep
+python3 scripts/run-plugin-tests.py --list          # discover only, run nothing
+python3 scripts/run-plugin-tests.py --filter trends # one plugin's suites
+bash tests/test_run_plugin_tests.sh                 # self-test the runner itself
+```
+
 ---
 
 ## Publishing a Marketplace Plugin

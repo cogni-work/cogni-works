@@ -492,50 +492,71 @@ an earlier stage is permitted) and continue; `state` stays `in-progress`.
 ### 8. Close the Session
 
 Summarize in business terms, not raw state values or log ids: the deliverable is
-finished, the artifact path (kept as a path — it is there to look up), what was
-decided and why, which personas challenged it, and the Test-stage promote-check
-outcome (assumptions promoted to the registry, or a recorded opt-out). Recommend
-the next step — the next unstarted deliverable in the WBS (via the WBS dashboard
-skill when present in the plugin, or by reading the field manifests directly).
+finished, the artifact path (kept as a path), what was decided and why, which
+personas challenged it, and the Test-stage promote-check outcome (assumptions
+promoted to the registry, or a recorded opt-out). Recommend the next step — the
+next unstarted deliverable in the WBS (via the WBS dashboard skill when present,
+or by reading the field manifests directly).
+
+**Close budget: at most six lines** — one result, at most three substance, one
+artifact, one next-step. Six is the ceiling on the whole close: a trailing offer
+spends one of the substance lines rather than adding a seventh, so a close that
+makes an offer carries at most two other substance lines. At most one table, and
+only at four or five rows — section (d) of
+`$CLAUDE_PLUGIN_ROOT/references/user-facing-output.md`; anything smaller is
+prose, and its overflow line spends a substance line too. Announce before *or* report after, never both — section (e) of
+that same register. The next-step line carries exactly one recommendation,
+generalizing `$CLAUDE_PLUGIN_ROOT/skills/consult-resume/SKILL.md`
+`## Important Notes` ("One recommendation") to every close.
 
 **Milestone actions.** When this session moved the deliverable's `state` to
 `"complete"` (or the delegated persona challenge closed its `persona_review`),
-the engagement's status changed — refresh the two derived views below. The two
-elective rungs after them fire only on the `state` → `"complete"` leg, never on
-a persona-review close.
+refresh the two derived views below. The two elective rungs after them fire only
+on the `state` → `"complete"` leg, never on a persona-review close.
 
-**Milestone dashboard refresh.** Offer the consultant a
-fresh visual dashboard. If the engagement already has
-`output/design-variables.json` (a prior `consult-dashboard` run set up a theme),
-regenerate the HTML without prompting by delegating to the
-`consult-dashboard-refresher` agent with
-`engagement_dir: <engagement-dir>` and `plugin_root: $CLAUDE_PLUGIN_ROOT`; the
-agent runs the read-only generator and opens `output/dashboard.html`. If no
-theme is configured yet, point the consultant at `/cogni-consult:consult-dashboard`
-to set one up — a lightweight snapshot of the engagement at this checkpoint,
-which is what the consultant wants before picking the next deliverable.
+**One offer per close.** A consultant-facing *offer* is a trailing item asking
+the consultant to decide this turn — at most one per close. Rank the available
+offers and emit the top-ranked one: 1. knowledge-base deposit, 2. publishing, 3.
+dashboard theme setup — because a deferred deposit stops compounding into the
+next deliverable's gap-check, while publishing loses nothing by waiting. The
+rest go unmentioned and surface next turn if the emitted one is declined; an
+offer already declined on the record (a logged `kb-deposit-waiver`) leaves the
+ranking rather than resurfacing every close. An item that fires without asking
+is a result, not an offer, and belongs on the artifact line. Rank from the live
+conversation only, never from a stored field — `### Interaction mode` keeps the
+mode ephemeral. The next-deliverable recommendation is the next-step line, not
+an offer.
+
+**Milestone dashboard refresh.** If the engagement already has
+`output/design-variables.json` (a theme is configured), regenerate the HTML
+without prompting: delegate to the `consult-dashboard-refresher` agent with
+`engagement_dir: <engagement-dir>` and `plugin_root: $CLAUDE_PLUGIN_ROOT`; it
+runs the read-only generator and opens `output/dashboard.html`. If no theme is
+configured yet, pointing the consultant at `/cogni-consult:consult-dashboard` to
+set one up is the rank-3 offer.
 
 **Milestone README refresh.** Also run
 `python3 $CLAUDE_PLUGIN_ROOT/scripts/generate-engagement-readme.py "<engagement-dir>"` —
-not theme-gated (unlike the dashboard refresh above) and non-fatal: on failure,
-warn and continue.
+unconditional within these milestone actions, not theme-gated and
+non-fatal: on failure,
+warn and continue. It emits nothing to the consultant, so it is never an offer
+and never counts against the offer budget.
 
-**Knowledge-base deposit is elected, not automatic.** Offer
-to deposit the completed artifact into the engagement's bound knowledge base
-(default-on: deposit without pausing in auto-walk mode, confirm first in
-interactive mode, never auto-fire without offering) so future gap-checks and
-research reuse its findings; the consultant may decline only on the record via a
-`kb-deposit-waiver`. The full deposit
+**Knowledge-base deposit is elected, not automatic** (rank 1). Offer to deposit
+the completed artifact into the engagement's bound knowledge base (default-on:
+deposit without pausing in auto-walk mode, confirm first in interactive mode,
+never auto-fire without offering) so future gap-checks reuse its findings; the
+consultant may decline only on the record via a `kb-deposit-waiver`. The deposit
 signature (reusing `cogni-knowledge:knowledge-ingest-source` verbatim), the
-provenance carried into the deposit context, and the waiver shape + idempotency
-are in `$CLAUDE_PLUGIN_ROOT/references/orchestration/close-kb-deposit.md`.
+provenance it carries, and the waiver shape + idempotency are in
+`$CLAUDE_PLUGIN_ROOT/references/orchestration/close-kb-deposit.md`.
 
-**Publishing is elected, not automatic.** The consultant
-*may* now turn the deliverable into a presentation-ready brief for Claude Design
-with `/cogni-consult:consult-publish` (slides, web-poster, report, or
-infographic). Mention it as an available next step only — never auto-fire it:
-which deliverables are presentation-worthy, and in which format, is a deliberate
-consultant judgment call; the design-thinking loop ends at `complete`.
+**Publishing is elected, not automatic** (rank 2). The consultant *may* now turn
+the deliverable into a
+presentation-ready brief for Claude Design with `/cogni-consult:consult-publish`
+(slides, web-poster, report, or infographic).
+Mention it as an available next step only — never auto-fire it: format choice
+is the consultant's judgment call, and the loop ends at `complete`.
 
 ## Important Notes
 

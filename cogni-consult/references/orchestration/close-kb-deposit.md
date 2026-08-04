@@ -8,7 +8,10 @@ loop points here; the contract below is authoritative.
 **Knowledge-base deposit is elected, not automatic.** When this session moved
 the deliverable to `complete`, the completed artifact can compound the
 engagement's bound knowledge base so future engagements' gap-checks and research
-reuse its distilled findings. Offer to deposit it — default-on, the same
+reuse its distilled findings. Offer to deposit it when it is the top-ranked
+offer for this close under the design-thinking loop's one-offer-per-close rule
+(it ranks first, so it usually is; otherwise it surfaces on a later turn) —
+default-on, the same
 elected-not-automatic posture as the Close-stage publishing mention in the
 design-thinking loop: in auto-walk mode deposit without
 pausing; in interactive mode confirm first; never auto-fire without offering.

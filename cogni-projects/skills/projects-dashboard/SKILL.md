@@ -158,12 +158,13 @@ never from this example:
   `status`, role label, or `open_roles` entry is not text, an entity whose
   `status` is text but not lowercase, or an entity file that cannot be read or
   decoded. A non-text value — `status: 2026`, `role: 2`, or `open_roles: [2]` —
-  is read as a number, then coerced back to text; a `status: Closed` is read
-  case-insensitively and reported normalized. Both sides of the role comparison
-  are coerced, so a numeric role still matches its numeric `open_roles` entry
-  and still counts as filled. The non-text warning and the not-lowercase warning
-  both say to fix the record, not that the coverage figure or flag beside it is
-  wrong. One bad record never costs the rest of the portfolio.
+  is read as a number, then coerced back to text. A status authored in mixed
+  case — `status: Closed` — is read case-insensitively and reported normalized.
+  Both sides of the role comparison are coerced, so a numeric role still matches
+  its numeric `open_roles` entry and still counts as filled. The non-text warning
+  and the not-lowercase warning both say to fix the record, not that the coverage
+  figure or flag beside it is wrong. One bad record never costs the rest of the
+  portfolio.
 - **Theming is optional.** The dashboard renders with a built-in palette;
   pass `--design-variables <path.json>` to override colors when a themed look is
   wanted.

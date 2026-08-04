@@ -137,7 +137,10 @@ print(json.dumps({
     [ -z "$BODY_FILE" ] && { emit_error "create: --body-file is required"; exit 1; }
     [ ! -f "$BODY_FILE" ] && { emit_error "create: body file not found" path "$BODY_FILE"; exit 1; }
     if [ -n "$LABELS_CSV" ]; then
-      EXISTING_LABELS=$(gh label list --repo "$REPO" --json name --jq '.[].name' 2>/dev/null || true)
+      # --limit is required: gh label list defaults to 30, so on a repo with more
+      # labels than that the ones past the first page read as missing and the
+      # check below rejects a label that exists.
+      EXISTING_LABELS=$(gh label list --repo "$REPO" --limit 1000 --json name --jq '.[].name' 2>/dev/null || true)
       MISSING=""
       IFS=',' read -r -a LABEL_ARR <<< "$LABELS_CSV"
       for LBL in "${LABEL_ARR[@]}"; do

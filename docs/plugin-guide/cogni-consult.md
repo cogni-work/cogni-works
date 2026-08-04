@@ -82,6 +82,24 @@ Defines personas from the scope's Stakeholder dimension (or enriches the shipped
 
 Discovers engagements (registry-backed, works from any directory), renders the action-fields × deliverables × status dashboard, surfaces manifest warnings, and recommends exactly one next action keyed on derived state — scope not done → `consult-scope`; unplanned field → `consult-action-fields`; deliverable mid-loop → `consult-design-thinking`; challenge pass open → `consult-personas`. Read-only: it never writes engagement state.
 
+### `consult-dashboard` — the engagement in a browser
+
+Generates an interactive HTML dashboard of the engagement: action fields, their deliverables, each deliverable's design-thinking stage, and persona-review progress. Where `consult-resume` answers "what do I do next?" in the terminal, `consult-dashboard` answers "what does the whole engagement look like?" in a browser — the view you open before a status call rather than between work sessions.
+
+> Show me the engagement dashboard
+
+### `consult-project-plan` — sequenced roadmap of the WBS
+
+Turns the engagement's own deliverables into a phased roadmap, sequenced from the dependency graph and per-deliverable durations, and writes it as an Obsidian-browsable markdown artifact. This is an *internal* engagement-management view — a read-mostly sibling of `consult-dashboard` and `consult-resume` — not a client-facing deliverable. Reach for it when the question is "when does this engagement finish?" rather than "what should the client see?".
+
+> Show the roadmap — when does the engagement finish?
+
+### `consult-publish` — deliverable to render-ready brief
+
+Turns a completed deliverable into presentation-ready documentation: a brief handed off to the rendering layer for slides, a poster, a web page, a report, or an infographic. Two properties matter. It runs only when the named deliverable's `state` is `complete`, so half-finished work cannot be published by accident. And it is consultant-elected — you invoke it explicitly; the design-thinking loop never auto-fires it, because deciding that a deliverable is ready to leave the engagement is a judgment call, not a pipeline step.
+
+> Turn the operating-model deliverable into slides
+
 ---
 
 ## Integration Points

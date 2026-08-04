@@ -128,7 +128,7 @@ The four research phases each dispatch the `why-change-researcher` agent. The re
 
 ```
 cogni-sales/
-├── .claude-plugin/               Plugin manifest (v0.4.2)
+├── .claude-plugin/               Plugin manifest (v0.4.3)
 ├── skills/                       1 pitch skill
 │   └── why-change/
 │       ├── SKILL.md

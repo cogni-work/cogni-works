@@ -162,6 +162,8 @@ Publishing is **consultant-elected and never automatic** — it does not fire at
 | `schedule-edit.py` | Script | Read/write one deliverable's optional scheduling fields (`start_date`, `due_date`, `duration`, `owner`, `milestone`) in `field.json` — the write surface backing the `consult-project-plan` roadmap |
 | `resolve-assumptions.py` | Script | Render-time resolver replacing `{{asm:id}}` placeholders with values from the engagement-root `assumptions.json` registry — fail-loud on unresolvable placeholders, wired into `consult-publish`; opt-in `--mode link` emits `[[assumptions#slug\|value]]` wikilinks into the register |
 | `register-generator.py` | Script | Generate the browsable `assumptions.md` register (summary table + anchored `## <slug>` sections with value, provenance, source lineage, and `used_by[]` backlinks) from `assumptions.json`; overwrite-guarded |
+| `submit-assumption-claim.py` | Script | Adapter for the assumption ↔ cogni-claims verify round-trip: `submit` appends an `unverified` ClaimRecord under a lock (idempotent — one assumption, one record), `propagate` writes `status: verified` + `citation.claim_id` back onto the assumption record, `resolve-propagate` completes the deviated→resolved leg for the three value-affecting resolution actions |
+| `assumption-change-frequency.sh` | Script | Read-only retrospective spike over a deliverable corpus's git history: reports how often bare numeric literals changed (`edits_per_literal`), sizing the payoff of propagation automation independently of `assumptions.json` |
 | `discover-projects.sh` | Script | Engagement discovery (delegates to the cogni-workspace helper) |
 | `consult-dashboard/scripts/generate-dashboard.py` | Script | Render the engagement HTML dashboard from `consult-project.json` + `field.json` files (read-only) |
 
@@ -182,8 +184,10 @@ cogni-consult/
 │   │                              Prototype framework lens
 │   ├── interaction-language.md    Interaction language vs. deliverable language rule
 │   ├── persona-schema.md          Acting-persona schema + acting contract
+│   ├── project-plan-model.md      Scheduling-field schema + roadmap read-model
 │   ├── publish-routing.md         Canonical publish format→route contract
 │   ├── research-routing.md        Canonical cogni-knowledge research rule
+│   ├── subagent-output-contract.md  Register rules the SubagentStart hook emits
 │   ├── personas/                  Packaged default advisors (partner, PM)
 │   ├── methods/                   Stage methods (scope dimensions, empathy mapping,
 │   │                              HMW synthesis, guided ideation)
@@ -220,6 +224,8 @@ cogni-consult/
 | cogni-knowledge | Yes | Bound once at setup (`plugin_refs.knowledge_base`) — the research spine every deliverable's evidence routes through |
 | cogni-workspace | No | Cross-session engagement discovery (`discover-projects.sh` delegates to its helper); `pick-theme` themes the `consult-dashboard` HTML (falls back to a built-in theme) |
 | cogni-visual / document-skills | No | Deliverable export (slides, documents) when a deliverable names an export route |
+| cogni-claims | No | consult-design-thinking routes the claims-correction cascade; `submit-assumption-claim.py` submits assumption claims for verification |
+| cogni-copywriting | No | consult-publish runs an optional `copywriter` polish pass before brief handoff |
 
 cogni-consult is standalone as an orchestrator — it structures the engagement, the WBS, and the design-thinking loops on its own. cogni-knowledge is the one required integration: without it, deliverable research has no compounding base.
 
@@ -229,7 +235,7 @@ Need a tailored deliverable type, a custom acting persona, or this orchestrator 
 
 ## License
 
-[Apache-2.0](LICENSE) — see [CONTRIBUTING.md](CONTRIBUTING.md) for contribution terms.
+[Apache-2.0](../LICENSE) — see [CONTRIBUTING.md](../CONTRIBUTING.md) for contribution terms.
 
 ---
 

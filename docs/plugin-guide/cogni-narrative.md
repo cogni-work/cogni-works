@@ -10,7 +10,7 @@ Story arc-driven narrative transformation for the insight-wave ecosystem.
 
 cogni-narrative sits in the composition layer of the insight-wave pipeline: after research is collected and before content is polished or visualised. Its job is to impose narrative structure on unstructured input — research syntheses, analyses, TIPS trend reports, competitive landscapes — so the output reads as a deliberate argument rather than an information dump.
 
-The plugin provides ten story arc frameworks. Each framework is a sequence of named elements (for example: Why Change → Why Now → Why You → Why Pay) with defined rhetorical intent, evidence requirements, and transition patterns between elements. When you run `/narrative`, the skill reads your source files, proposes the best-fit arc, and writes a ~1,675-word insight summary structured around it. The output file (`insight-summary.md`) carries YAML frontmatter with an `arc_id` field that downstream plugins (cogni-copywriting, cogni-visual) use to apply arc-aware processing.
+The plugin provides eleven story arc frameworks. Each framework is a sequence of named elements (for example: Why Change → Why Now → Why You → Why Pay) with defined rhetorical intent, evidence requirements, and transition patterns between elements. When you run `/narrative`, the skill reads your source files, proposes the best-fit arc, and writes a ~1,675-word insight summary structured around it. The output file (`insight-summary.md`) carries YAML frontmatter with an `arc_id` field that downstream plugins (cogni-copywriting, cogni-visual) use to apply arc-aware processing.
 
 ### When to reach for this plugin
 
@@ -35,6 +35,7 @@ An arc framework defines the shape of an argument. Rather than writing a narrati
 | `strategic-foresight` | Signals → Scenarios → Strategies → Decisions | Long-range planning; scenario analysis; strategic options |
 | `industry-transformation` | Forces → Friction → Evolution → Leadership | Industry analysis; regulatory impact; transformation roadmaps |
 | `trend-panorama` | Forces → Impact → Horizons → Foundations | TIPS trend-scout output; Trendradar-native reports |
+| `smarter-service` | Forces → Impact → Horizons → Foundations | TIPS reports with investment themes (theme-aware sibling of trend-panorama) |
 | `theme-thesis` | Why Change → Why Now → Why You → Why Pay | Investment theme narratives within TIPS reports |
 | `jtbd-portfolio` | Jobs → Friction → Portfolio → Invitation | Portfolio introductions; capability overviews; pre-sales |
 | `company-credo` | Mission → Conviction → Credibility → Promise | Website About-Us pages; company introductions |
@@ -174,8 +175,6 @@ This is the most common sequence: research output exists, an executive needs a c
 2. Run `/narrative-review ./insight-summary.md` — check the quality scorecard; address any warn/fail gates
 3. Run `/narrative-adapt ./insight-summary.md --format executive-brief` — produce the 300-500 word email-ready version
 4. Optional: run `/copywrite executive-brief.md` (cogni-copywriting) for final polish
-
-See [../workflows/research-to-narrative.md](../workflows/research-to-narrative.md) for the full pipeline.
 
 ### Trend report with German output
 

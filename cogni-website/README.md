@@ -137,13 +137,15 @@ Open `index.html` over a local HTTP server with `/cogni-website:website-preview`
 
 ```
 cogni-website/
-├── .claude-plugin/               Plugin manifest (v0.0.4)
+├── .claude-plugin/               Plugin manifest (v0.0.6)
 │   └── plugin.json
 ├── skills/                       6 workflow skills
 │   ├── website-setup/
 │   │   └── SKILL.md              Source discovery, theme selection, project scaffolding, legal foundation
 │   ├── website-plan/
-│   │   └── SKILL.md              Deep content scan, page proposal, navigation design
+│   │   ├── SKILL.md              Deep content scan, page proposal, navigation design
+│   │   └── references/
+│   │       └── page-type-registry.md     Page-type definitions consumed by the planner
 │   ├── website-legal/
 │   │   ├── SKILL.md              Jurisdiction-driven legal page generation
 │   │   └── references/
@@ -155,7 +157,9 @@ cogni-website/
 │   │           ├── ch/           Impressum, Datenschutz, Cookies (revDSG)
 │   │           └── eu/           Legal Notice, Privacy Policy, Cookies (GDPR/ePrivacy)
 │   ├── website-build/
-│   │   └── SKILL.md              Build orchestration, parallel page generation
+│   │   ├── SKILL.md              Build orchestration, parallel page generation
+│   │   └── scripts/
+│   │       └── generate-css.py           Theme-driven stylesheet generation
 │   ├── website-preview/
 │   │   └── SKILL.md              Link validation, browser preview
 │   └── website-resume/

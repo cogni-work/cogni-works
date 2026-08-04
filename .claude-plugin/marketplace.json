@@ -46,7 +46,9 @@
         "deliverables",
         "personas",
         "knowledge-base",
-        "orchestrator"
+        "orchestrator",
+        "agent",
+        "hooks"
       ]
     },
     {

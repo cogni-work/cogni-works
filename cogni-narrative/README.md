@@ -96,6 +96,7 @@ The adapter writes `executive-brief.md` alongside the source, condensing proport
 | `strategic-foresight` | Signals → Scenarios → Strategies → Decisions | Long-range planning, scenario analysis, strategic options |
 | `industry-transformation` | Forces → Friction → Evolution → Leadership | Industry analysis, regulatory impact, transformation roadmaps |
 | `trend-panorama` | Forces → Impact → Horizons → Foundations | Trend-scout output, TIPS trend reports, multi-horizon landscapes |
+| `smarter-service` | Forces → Impact → Horizons → Foundations | TIPS reports with investment themes (theme-aware sibling of trend-panorama) |
 | `theme-thesis` | Why Change → Why Now → Why You → Why Pay | Investment theme narratives within TIPS reports |
 | `jtbd-portfolio` | Jobs → Friction → Portfolio → Invitation | Portfolio introductions, capability overviews, pre-sales |
 | `company-credo` | Mission → Conviction → Credibility → Promise | Website About-Us pages, company introductions |

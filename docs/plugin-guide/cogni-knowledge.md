@@ -103,6 +103,14 @@ Status skill and session entry point. Reads `binding.json` and computes the wiki
 
 Bootstraps a knowledge base. Dispatches `cogni-wiki:wiki-setup` to create the wiki if it does not exist, then writes `binding.json`. The only setup work this skill does beyond wiki creation is initializing the binding manifest; all wiki structure is owned by cogni-wiki.
 
+### knowledge-run
+
+The ordered-phase driver — the fresh-topic entry point. Runs the whole seven-phase chain (`knowledge-plan` → `curate` → `fetch` → `ingest` → `distill` → `compose` → `verify` → `finalize`) in one invocation, threading a single resolved project path between phases, so researching a new topic no longer means hand-dispatching seven skills and re-reading each SKILL.md. Takes one explicit `--topic` and ends with a deposited, claim-verified `type: synthesis` page in the bound wiki.
+
+Distinguish it from its two siblings: `knowledge-refresh` lints the wiki and re-researches whatever is stale (no explicit topic), and `knowledge-refresh-synthesis` extends one *existing* synthesis from a freshly-landed source. `knowledge-run` researches a brand-new topic from scratch.
+
+> Run the knowledge pipeline on the EU AI Act's GPAI obligations into my eu-ai-act base
+
 ### knowledge-plan
 
 Phase 1 of the inverted pipeline. Decomposes a topic into 3–7 sub-questions with per-sub-question `candidate_domains[]`, using no web access. Writes `<project>/.metadata/plan.json`. When a market is configured, reads `cogni-workspace/scripts/get-market-config.py` to seed bilingual domain candidates for localized search in Phase 2.
@@ -168,6 +176,14 @@ Seeds the base with curated foundation concept pages (Porter's Five Forces, JTBD
 ### knowledge-lint
 
 Semantic lint — surfaces stale pages/drafts, claim drift, and broken reverse links. `--fix` repairs the mechanical classes (reverse-link backfill, drift reconciliation). Runs on the vendored lint engine.
+
+### knowledge-index
+
+Rebuilds the curated root index and per-type sub-indexes of a base on demand, delegating to the locked renderers (`sub_index.py`, `root_index.py`) so index-shaping logic stays in one place. It also owns two repair paths: migrating a pre-0.0.8 wiki to the curated layout (control files into `wiki/meta/`, overview folded into the index intro, flat root split into root-map plus sub-indexes), and repairing drifted machine-owned regions such as theme-scoped ROOT-LINKS or a lagging schema version on a base already at 0.0.8+.
+
+Reach for it when `knowledge-resume` or `knowledge-health` surfaces a migration nudge or a structural-drift verdict.
+
+> Rebuild the knowledge index
 
 ### knowledge-health
 

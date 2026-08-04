@@ -43,7 +43,8 @@ projects-portfolio.json manifest.
 Output: a single JSON line following the repo contract
   {"success": bool, "data": {...}, "error": str}
 Exit: 0 ok / 1 domain failure (bad portfolio / unreadable manifest / broken
-install) / 2 usage (wrong argument count).
+install) / 2 usage (wrong argument count) or an unexpected failure the
+module-level catch-all converted into the envelope.
 """
 
 import datetime
@@ -412,7 +413,7 @@ def main(argv):
     read_frontmatter = _load_read_frontmatter()
     if read_frontmatter is None:
         # A broken/partial install (validator missing), not a caller usage
-        # error — so exit 1 (domain failure), reserving exit 2 for bad args.
+        # error — so exit 1 (domain failure), never exit 2.
         return _fail(
             "cannot load validate-entities.py:read_frontmatter (expected sibling "
             "of this script) — the cogni-projects install looks broken", 1
@@ -430,4 +431,15 @@ def main(argv):
 
 
 if __name__ == "__main__":
-    sys.exit(main(sys.argv[1:]))
+    # Same envelope contract as the sibling scripts: the errors main() knows
+    # about already route through _fail, but anything else — a hand-edited
+    # manifest of the wrong shape, say — would otherwise escape as a
+    # traceback, which reads to callers as neither success nor a reportable
+    # failure.
+    try:
+        _code = main(sys.argv[1:])
+    except Exception as _exc:  # noqa: BLE001 — deliberate catch-all
+        _code = _fail(
+            "unexpected failure: %s: %s" % (type(_exc).__name__, _exc), 2
+        )
+    sys.exit(_code)

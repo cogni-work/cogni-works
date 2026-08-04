@@ -60,6 +60,10 @@ words, with no script, file, or skill names, and never derived from the
 script's filename or header comment. Worked pair:
 `Discover cogni-consult engagements` → `Laufende Engagements holen`.
 
+The register that output follows — scope, state lexicon, table rules, step
+announcements — is `$CLAUDE_PLUGIN_ROOT/references/user-facing-output.md`;
+table cells and headers are user copy too, not an exemption.
+
 ### 1. Locate the engagement and the deliverable
 
 Resolve the engagement root (the directory holding `consult-project.json`) and

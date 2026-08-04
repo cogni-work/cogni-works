@@ -49,6 +49,10 @@ words, with no script, file, or skill names, and never derived from the
 script's filename or header comment. Worked pair:
 `Discover cogni-consult engagements` → `Laufende Engagements holen`.
 
+The register that output follows — scope, state lexicon, table rules, step
+announcements — is `$CLAUDE_PLUGIN_ROOT/references/user-facing-output.md`;
+table cells and headers are user copy too, not an exemption.
+
 ### 1. Prerequisite Gate
 
 When arriving via an in-session `consult-scope` handoff, the engagement
@@ -106,7 +110,7 @@ deliverables in manifest order:
 | market-evidence | market-sizing | fertig | pyramid-principle | fertig |
 | market-evidence | competitor-landscape | in Arbeit · Ideate | — | offen |
 | portfolio-fit | — (no deliverables planned) | | | |
-| go-to-market | ⚠ unreadable field.json (see warnings) | | | |
+| go-to-market | ⚠ field.json nicht lesbar (siehe Warnungen) | | | |
 ```
 
 `Stand` merges the stored `state` and `dt_stage` into one value, the stage
@@ -121,8 +125,8 @@ sixth cell: `Route: <deliverable> · <producing_route>`, e.g.
 
 An English session renders the same table: header
 `| Action field | Deliverable | Status | Framework | Persona review |`, values
-`complete` / `in progress · Ideate` / `pending`, and the same `Route:` note
-line.
+`complete` / `in progress · Ideate` / `pending`, the unreadable-field row
+`⚠ field.json not readable (see warnings)`, and the same `Route:` note line.
 
 `Framework` shows the stored `chosen_framework` read-only — a registry slug
 verbatim, a `combo:<slugA>+<slugB>` pairing rendered `<slugA> + <slugB>` (the

@@ -29,6 +29,8 @@ cogni-consult/
 │   │                              pipeline rungs, depth framing, storage contract)
 │   ├── subagent-output-contract.md  Register rules the SubagentStart hook emits
 │   │                              verbatim into every dispatched agent
+│   ├── user-facing-output.md      Main-loop register contract (surface scope,
+│   │                              state lexicon, table rules, step announcements)
 │   ├── personas/                  Packaged default advisors (consulting-partner,
 │   │                              project-manager)
 │   ├── methods/
@@ -138,7 +140,7 @@ cogni-consult/
 
   **Both files declare `keep-coding-instructions: true`, and it is load-bearing.** Without it, activating a style drops Claude Code's `# Doing tasks` block — prefer-editing-existing-files, the OWASP warning, the over-engineering rules — which matters for skills that run `deliverable-graph.py` and do idempotent `Edit` round-trips on `field.json`. The plugin output-style loader reads the field (`keepCodingInstructions` travels with `forceForPlugin` from the frontmatter through the merged style map into the prompt assembler), so declaring it keeps those instructions in place. `# Executing actions with care` is unconditional and survives either way. Treat the declaration as behaviour, not decoration: if either file loses it, activating that register silently costs the engineering defaults
 
-- **Language reaches subagents only through the hook** — a subagent's system prompt is its own body plus a notes block and the environment info: no settings `language` key, no `CLAUDE.md`, no active output style. `hooks/hooks.json` registers a `SubagentStart` hook matched on the four `consult-*` agent types; `hooks/on-subagent-start.sh` resolves the workspace default language and emits it together with `references/subagent-output-contract.md`, read verbatim. Because a hook cannot see the user's message, rung 2 of `references/interaction-language.md` (message-detection override) travels as the `interaction_language` dispatch input, which wins over the hook's default. Keep the doctrine in the reference, not in the hook script and not in the four agent bodies — the script is a delivery mechanism, and the agent bodies hold only the input declaration. When `references/user-facing-output.md` lands, reconcile the two: one contract, two delivery paths (that file loads in the main loop, this one is injected into agents)
+- **Language reaches subagents only through the hook** — a subagent's system prompt is its own body plus a notes block and the environment info: no settings `language` key, no `CLAUDE.md`, no active output style. `hooks/hooks.json` registers a `SubagentStart` hook matched on the four `consult-*` agent types; `hooks/on-subagent-start.sh` resolves the workspace default language and emits it together with `references/subagent-output-contract.md`, read verbatim. Because a hook cannot see the user's message, rung 2 of `references/interaction-language.md` (message-detection override) travels as the `interaction_language` dispatch input, which wins over the hook's default. Keep the doctrine in the reference, not in the hook script and not in the four agent bodies — the script is a delivery mechanism, and the agent bodies hold only the input declaration. `references/user-facing-output.md` is the other half: one contract, two delivery paths (that file loads in the main loop, this one is injected into agents), so a rule changed in either is checked against the other
 
 ## Data Model
 

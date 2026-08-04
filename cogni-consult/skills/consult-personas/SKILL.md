@@ -45,6 +45,10 @@ words, with no script, file, or skill names, and never derived from the
 script's filename or header comment. Worked pair:
 `Discover cogni-consult engagements` → `Laufende Engagements holen`.
 
+The register that output follows — scope, state lexicon, table rules, step
+announcements — is `$CLAUDE_PLUGIN_ROOT/references/user-facing-output.md`;
+table cells and headers are user copy too, not an exemption.
+
 ### 1. Prerequisite Gate
 
 When arriving via an in-session handoff (e.g. a design-thinking test stage
@@ -179,11 +183,15 @@ its writes:
    idempotent: skip a persona already carrying a `challenged` entry for these
    `(action_field, deliverable)` coordinates; append (or update) a consolidated
    `## Persona Challenges` section in the deliverable artifact summarizing each
-   persona's challenge and the consultant's disposition (accepted / revised /
-   rejected with reason); when the field's manifest entry carries a
+   persona's challenge and the consultant's disposition. The disposition triple
+   is prose, not a stored field, and renders per `references/user-facing-output.md`
+   — übernommen / überarbeitet / begründet verworfen, or accepted / revised /
+   rejected with reason; when the field's manifest entry carries a
    `persona_review` field, advance it (`pending` → `in-progress` when
    challenges start, → `complete` only once the consultant has dispositioned
-   every challenge) — never create the field on an entry that lacks it.
+   every challenge) — never create the field on an entry that lacks it. Those
+   are the stored values; report them to the consultant as offen / in Arbeit /
+   fertig, or pending / in progress / complete in an English session.
 4. **Zero personas on disk.** When no persona files exist at all (step 2's
    seeding normally prevents this), run the challenge against the consultant
    directly ("what would your engagement partner push back on?") and note the

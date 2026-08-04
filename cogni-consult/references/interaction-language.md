@@ -32,8 +32,15 @@ Resolve it the same way `cogni-help:cogni-issues` does, in this order:
 3. **Fallback** — if neither source is present and the message language is
    unclear, default to English.
 
-Conduct the entire conversation in the resolved interaction language; technical
-terms, slugs, skill names, CLI commands, and file names stay English regardless.
+Conduct the entire conversation in the resolved interaction language. Technical
+terms, slugs, skill names, CLI commands, and file names are identifiers: once one
+is surfaced at all, it keeps the exact form the system writes it in — never
+translated, never re-cased, never Title-Cased. `scope_state` stays `scope_state`;
+rendering it as `Scope` is the defect this rule forbids.
+
+That governs *how* an identifier is spelled, not *whether* it belongs on the
+surface at all. The whether question is owned by
+`references/user-facing-output.md`, where the default answer is **no**.
 
 ## Subagents do not inherit it
 
@@ -61,3 +68,6 @@ language per this file, but whose own copy constraints are owned by section (f)
 of `references/user-facing-output.md`. Deliberately not restated here: a fourth
 copy of the specifics is the drift this split exists to prevent. Look for a copy
 rule there, not here.
+
+The same split governs identifiers: this file says how one is spelled once it
+appears, and `references/user-facing-output.md` says whether it may appear.

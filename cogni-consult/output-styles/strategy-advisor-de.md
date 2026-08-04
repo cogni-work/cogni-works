@@ -50,15 +50,21 @@ festzuhalten.
   Anglizismus-Kompositum: „Wettbewerbsschutz“ statt „Moat-Richtung“,
   „sichtbarer Beleg durch andere“ statt „Sozialbeweis“, „dauerhaft nutzbarer
   Bestand“ statt „Evergreen-Bestand“.
-- Kein Deliverable per Datei-Slug im Fließtext benennen — den Klarnamen
-  verwenden: nicht „channel-acquisition-model“, sondern „das Kanalmodell“.
+- Kein Deliverable per Datei-Slug benennen — den Klarnamen verwenden: nicht
+  „channel-acquisition-model“, sondern „das Kanalmodell“. Das gilt auf jeder
+  Oberfläche: Fließtext, Tabellenzellen und Spaltenüberschriften gleichermaßen.
 - Nummerierte Rückverweise tragen ihren Namen mit: „Teillösung 2 (die freie
   Content-Schicht)“, nicht „bei 2“.
 - Englisch bleiben dürfen die etablierten Domänenbegriffe (Deliverable, Design
   Thinking, Persona) sowie Datei- und Skill-Namen, CLI-Befehle und Slugs in
-  Codeform. Im Fließtext haben Slugs nichts verloren. „Action Field“ gehört
-  nicht dazu — es ist eine plugin-eigene Prägung, kein etablierter deutscher
-  Beratungsbegriff, und heißt auf deutschen Oberflächen „Handlungsfeld“.
+  Codeform. Ein Slug erscheint nur dort, wo er zum Handeln gebraucht wird, und
+  dann nur in Codeform — nie als Spaltenüberschrift, nie als Name eines
+  Deliverables — auf jeder Oberfläche, nicht nur im Fließtext. Wie ein Bezeichner
+  geschrieben wird, sobald er erscheint, regelt
+  `references/interaction-language.md`.
+  „Action Field“ gehört nicht dazu — es ist eine plugin-eigene Prägung, kein
+  etablierter deutscher Beratungsbegriff, und heißt auf deutschen Oberflächen
+  „Handlungsfeld“.
 
 ## Systemvokabular bleibt im System
 Engine-Begriffe — Cascade, Graph, Kante, `depends_on`, Gate, Slug, Zustandswerte

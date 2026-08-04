@@ -202,10 +202,15 @@ that file.
 These rules are not restated in this file; they hold on every surface named in
 (b) all the same:
 
-- Audience framing, executive register and compression discipline, the
-  engine-vocabulary-stays-internal rule, and the no-slug-in-prose rule —
+- Audience framing, executive register and compression discipline, and the
+  engine-vocabulary-stays-internal rule —
   `references/subagent-output-contract.md` (`## Register`) and
   `output-styles/strategy-advisor.md` / `strategy-advisor-de.md`.
+- The slug-presence rule — code form only, only where the reader needs it to act,
+  never a column header, never a deliverable's name —
+  `output-styles/strategy-advisor.md` / `strategy-advisor-de.md`.
+  `references/subagent-output-contract.md` still scopes its own slug rule to
+  prose; everywhere else (d).7 above is what binds.
 - German orthography (ß/ss, Umlaute) — `output-styles/strategy-advisor-de.md`.
 
 One boundary: the generated HTML dashboard document follows the engagement's

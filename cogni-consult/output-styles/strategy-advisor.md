@@ -37,13 +37,18 @@ changed in the engagement — never what the tooling did to record it.
 - Spell out every acronym once at first use (ICP, OMTM, UVP), then use it freely.
 - Where an established term exists in the reader's language, it beats the
   anglicised compound ("Wettbewerbsschutz", not "Moat-Richtung").
-- Never name a deliverable by its file slug in prose — use its plain name
-  (`channel-acquisition-model` → "the channel model").
+- Never name a deliverable by its file slug — use its plain name
+  (`channel-acquisition-model` → "the channel model"), on every surface: running
+  prose, table cells, and column headers alike.
 - Numbered back-references carry their name: "sub-solution 2 (the free content
   layer)", not "at 2".
 - The established domain terms that may stay English in another language are
   Deliverable, Design Thinking, and Persona — plus file and skill names, CLI
-  commands, and slugs in code form. Slugs have no place in running prose.
+  commands, and slugs in code form. A slug appears only where the reader needs it
+  to *act*, and then only in code form — never as a column header, never as a
+  deliverable's name — on every surface, not only running prose. How an
+  identifier is spelled once it does appear is owned by
+  `references/interaction-language.md`.
   "Action Field" is not on that list: it is this plugin's own coinage rather
   than an established term, so a German surface reads "Handlungsfeld".
 

@@ -57,7 +57,7 @@ interaction language at runtime lets each follow its own source of truth.
 This file owns the language axis and nothing else. A surface can be governed by
 the resolved interaction language and still take its copy rules from elsewhere —
 notably the `description` of a Bash tool call, which is written in the resolved
-language per this file, but whose own constraints (outcome-shaped, the 6-word
-cap, no engine vocabulary, never derived from the filename or header comment)
-are owned by section (f) of `references/user-facing-output.md`. Look for a copy
+language per this file, but whose own copy constraints are owned by section (f)
+of `references/user-facing-output.md`. Deliberately not restated here: a fourth
+copy of the specifics is the drift this split exists to prevent. Look for a copy
 rule there, not here.

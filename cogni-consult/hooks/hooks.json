@@ -2,7 +2,7 @@
   "hooks": {
     "SubagentStart": [
       {
-        "matcher": "^(consult-persona-challenger|consult-empathy-mapper|consult-framework-adherence-reviewer|consult-dashboard-refresher)$",
+        "matcher": "^(cogni-consult:)?(consult-persona-challenger|consult-empathy-mapper|consult-framework-adherence-reviewer|consult-dashboard-refresher)$",
         "hooks": [
           {
             "type": "command",

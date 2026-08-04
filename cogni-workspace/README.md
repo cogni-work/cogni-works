@@ -137,6 +137,7 @@ State lives in two layers that other plugins consume. Configuration (env vars, t
 | `audit-region-sources` | skill | Read-only sibling of manage-markets — audit per-plugin region-source overlays against the canonical registry for orphans and drift |
 | `workspace-dashboard` | skill | Interactive HTML dashboard of workspace foundation, env vars, plugin registry, themes, and dependencies |
 | `on-session-start.sh` | hook (SessionStart) | Sources workspace environment and validates plugin availability at session start |
+| `on-session-start-language.sh` | hook (SessionStart) | Injects the language rules the built-in "# Language" system-prompt section does not carry |
 | `check-dependencies.sh` | script | Returns JSON with availability/version of required and optional dependencies |
 | `check-skill-names.sh` | script | Validates skill directory names against plugin.json manifest for consistency |
 | `check-workspace-python-deps.sh` | script | Fail-soft health check for optional Python packages in the workspace venv; reports per-package importability (`success` stays true) |
@@ -166,8 +167,7 @@ cogni-workspace/
 │   └── workspace-status/
 ├── wiki/                         Bundled vendor-curated insight-wave reference wiki (read by ask)
 │   ├── .cogni-wiki/              Wiki config + lockfile
-│   ├── raw/                      Immutable source snapshots (plugin READMEs, curation notes)
-│   ├── assets/                   Attachments (SVG, images) referenced by wiki pages
+│   ├── SCHEMA.md                 Wiki page schema
 │   └── wiki/                     LLM-maintained pages, index, log, overview
 ├── templates/                    Shared templates
 │   ├── obsidian/                 Obsidian vault config templates
@@ -188,7 +188,8 @@ cogni-workspace/
 │   ├── install-workspace-deps.sh Provision optional Python deps into an isolated venv
 │   ├── patch-desktop-config.py   Merge MCP entries into Claude Desktop config
 │   ├── setup-obsidian.sh
-│   └── update-obsidian.sh
+│   ├── update-obsidian.sh
+│   └── baselines/                Tier-0 output baselines for script contract checks
 ├── bash/                         Cross-platform utilities
 │   └── portability-utils.sh
 ├── contracts/                    Script interface definitions
@@ -200,6 +201,7 @@ cogni-workspace/
 ├── schemas/                      JSON schemas
 │   └── examples/                 Schema usage examples
 ├── references/                   Reference documentation
+├── tests/                        Script unit tests (check-skill-names, sanitize-theme)
 ├── docs/                         Developer notes (e.g. theme-system v2 migration)
 └── assets/
     └── output-styles/            Language-specific behavioral anchors (EN/DE)
@@ -216,6 +218,8 @@ cogni-workspace has no required plugin dependencies — it is the foundation lay
 | cogni-help | No | Referenced inline in workspace skills for issue filing and guided help |
 | cogni-portfolio | No | install-mcp references cogni-portfolio as a consumer of excalidraw MCP in the installation plan |
 | cogni-claims | No | workspace-status references cogni-claims as a provider plugin for the claude-in-chrome MCP server check |
+| cogni-trends | No | audit-region-sources and manage-markets read the trends region-authority overlay when auditing market coverage |
+| cogni-knowledge | No | ask, workspace-status, and manage-workspace route knowledge-base questions to knowledge-setup / knowledge-query |
 
 ## Contributing
 

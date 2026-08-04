@@ -222,6 +222,7 @@ cogni-portfolio/
 | cogni-knowledge | No | Pitch arcs (technology-futures, strategic-foresight, trend-panorama, theme-thesis) in portfolio-communicate draw on cogni-knowledge research syntheses for evidence |
 | cogni-workspace | No | Theme selection for portfolio-dashboard via pick-theme |
 | cogni-sales | No | Downstream consumer — why-change pitch builds on portfolio features and propositions |
+| cogni-copywriting | No | portfolio-communicate pitch templates tune acronym-expansion depth via the `copywriter` audience field |
 | document-skills | No | Document ingestion (docx, pptx, xlsx, pdf) via portfolio-ingest; XLSX export via portfolio-communicate |
 
 cogni-portfolio is standalone for core messaging workflows. All integrations are optional and activate when the respective plugin is installed.

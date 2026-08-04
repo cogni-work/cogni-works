@@ -15,7 +15,7 @@ Each plugin implements an established framework (Corporate Visions, Double Diamo
 
 ### Knowledge Management
 
-[cogni-knowledge](cogni-knowledge/README.md) is the wiki-first research orchestrator — it binds its own vendored wiki knowledge base to any number of research projects so findings compound across runs instead of dying in chat history. Its zero-network inverted pipeline (plan → curate → fetch → ingest → compose → verify → finalize) deposits verified syntheses straight into the wiki, where future questions read them as prior framing. 12 skills.
+[cogni-knowledge](cogni-knowledge/README.md) is the wiki-first research orchestrator — it binds its own vendored wiki knowledge base to any number of research projects so findings compound across runs instead of dying in chat history. Its zero-network inverted pipeline (plan → curate → fetch → ingest → compose → verify → finalize) deposits verified syntheses straight into the wiki, where future questions read them as prior framing. 21 skills and 16 agents.
 
 > "Set up a knowledge base on the EU AI Act and deposit my first research synthesis"
 
@@ -23,15 +23,21 @@ Each plugin implements an established framework (Corporate Visions, Double Diamo
 
 ### Consulting Orchestration
 
-[cogni-consult](cogni-consult/README.md) manages consulting engagements where action fields are the work-breakdown-structure containers for every deliverable. Scoping derives 3-6 action fields from one SMART key question; each deliverable runs its own design-thinking loop (empathize→define→ideate→prototype→test), acting stakeholder personas challenge the work in their own voice, and one cogni-knowledge base per engagement compounds research across all deliverables. 6 skills.
+[cogni-consult](cogni-consult/README.md) manages consulting engagements where action fields are the work-breakdown-structure containers for every deliverable. Scoping derives 3-6 action fields from one SMART key question; each deliverable runs its own design-thinking loop (empathize→define→ideate→prototype→test), acting stakeholder personas challenge the work in their own voice, and one cogni-knowledge base per engagement compounds research across all deliverables. 9 skills and 4 agents.
 
 > "I need to evaluate strategic options for expanding our cloud services portfolio in the DACH mid-market"
 
 → [Plugin guide](docs/plugin-guide/cogni-consult.md) · [Consulting Engagement workflow](docs/workflows/consulting-engagement.md)
 
+[cogni-projects](cogni-projects/README.md) steers the other side of a consulting practice — the people, not the engagement. It holds one self-contained portfolio of consultants, projects, and assignments, then ranks candidates for every open role on availability, profile fit, and strategic impact, so staffing decisions are defensible rather than recalled. A read-only dashboard renders staffing coverage, at-risk projects, and portfolio value for partner meetings. 4 skills.
+
+> "Who should I put on the Nordics ERP rollout, and which projects are at risk?"
+
+→ [Plugin guide](docs/plugin-guide/cogni-projects.md)
+
 ### Trend Intelligence
 
-[cogni-trends](cogni-trends/README.md) scouts industry trends across four TIPS dimensions with bilingual DE/EN web research, producing 60 scored trend candidates per run using multi-framework analysis (TIPS, Ansoff, Rogers, CRAAP). The value-modeler consolidates candidates into 3-7 investment themes with solution blueprints. Reusable industry catalogs accumulate knowledge across engagements. European-first with curated institutional sources per market — German-rooted (VDMA, BITKOM, Fraunhofer) and extending across FR/IT/ES/NL/PL plus UK/US. 6 skills and 9 agents.
+[cogni-trends](cogni-trends/README.md) scouts industry trends across four TIPS dimensions with bilingual DE/EN web research, producing 60 scored trend candidates per run using multi-framework analysis (TIPS, Ansoff, Rogers, CRAAP). The value-modeler consolidates candidates into 3-7 investment themes with solution blueprints. Reusable industry catalogs accumulate knowledge across engagements. European-first with curated institutional sources per market — German-rooted (VDMA, BITKOM, Fraunhofer) and extending across FR/IT/ES/NL/PL plus UK/US. 9 skills and 12 agents.
 
 > "Scout trends for the automotive industry, then model investment themes from the results"
 
@@ -39,7 +45,7 @@ Each plugin implements an established framework (Corporate Visions, Double Diamo
 
 ### Portfolio Messaging
 
-[cogni-portfolio](cogni-portfolio/README.md) structures products, features, and target markets into market-specific value propositions using IS/DOES/MEANS messaging. 19 skills handle the full positioning lifecycle — from TAM/SAM/SOM market sizing and competitive analysis through three-layer quality assessment to export-ready proposals and workbooks. Eight industry taxonomies (ICT, SaaS, FinTech, HealthTech, MarTech, Industrial Tech, Professional Services, Open Source) classify your portfolio automatically. 19 skills and 20 agents.
+[cogni-portfolio](cogni-portfolio/README.md) structures products, features, and target markets into market-specific value propositions using IS/DOES/MEANS messaging. 21 skills handle the full positioning lifecycle — from TAM/SAM/SOM market sizing and competitive analysis through three-layer quality assessment to export-ready proposals and workbooks. Eight industry taxonomies (ICT, SaaS, FinTech, HealthTech, MarTech, Industrial Tech, Professional Services, Open Source) classify your portfolio automatically. 21 skills and 20 agents.
 
 > "Set up a portfolio for our cloud monitoring product targeting mid-market SaaS companies in DACH"
 
@@ -47,7 +53,7 @@ Each plugin implements an established framework (Corporate Visions, Double Diamo
 
 ### Content Production
 
-[cogni-marketing](cogni-marketing/README.md) bridges portfolio propositions and trend themes into channel-ready content across 16 formats — blogs, LinkedIn articles, whitepapers, battle cards, email nurtures, video scripts, and more. A 3D content matrix (market x GTM path x content type) tracks coverage gaps. [cogni-copywriting](cogni-copywriting/README.md) polishes any document for executive readability using 7 messaging frameworks (BLUF, Pyramid, SCQA, STAR, PSB, FAB, Inverted Pyramid) and runs 5 parallel stakeholder personas to catch blind spots. [cogni-narrative](cogni-narrative/README.md) transforms structured content into executive narratives using 10 story arc frameworks with quality scoring (0-100, A-F grades). Together: 18 skills and 8 agents.
+[cogni-marketing](cogni-marketing/README.md) bridges portfolio propositions and trend themes into channel-ready content across 16 formats — blogs, LinkedIn articles, whitepapers, battle cards, email nurtures, video scripts, and more. A 3D content matrix (market x GTM path x content type) tracks coverage gaps. [cogni-copywriting](cogni-copywriting/README.md) polishes any document for executive readability using 7 messaging frameworks (BLUF, Pyramid, SCQA, STAR, PSB, FAB, Inverted Pyramid) and runs 5 parallel stakeholder personas to catch blind spots. [cogni-narrative](cogni-narrative/README.md) transforms structured content into executive narratives using 11 story arc frameworks with quality scoring (0-100, A-F grades). Together: 18 skills and 8 agents.
 
 > "Generate thought leadership content for the AI automation theme across LinkedIn and blog formats"
 
@@ -81,7 +87,7 @@ Each plugin implements an established framework (Corporate Visions, Double Diamo
 
 #### Workspace Foundation
 
-[cogni-workspace](cogni-workspace/README.md) manages the shared foundation — environment variables, MCP server installation, theme management, plugin discovery, and workspace health. Runs dependency checks, discovers installed plugins, and generates shared settings. Includes Obsidian vault integration for browsable knowledge management. 5 skills.
+[cogni-workspace](cogni-workspace/README.md) manages the shared foundation — environment variables, MCP server installation, theme management, plugin discovery, and workspace health. Runs dependency checks, discovers installed plugins, and generates shared settings. Includes Obsidian vault integration for browsable knowledge management. 9 skills.
 
 > "Initialize my insight-wave workspace and check plugin health"
 
@@ -97,7 +103,7 @@ Each plugin implements an established framework (Corporate Visions, Double Diamo
 
 #### Help & Learning
 
-[cogni-help](cogni-help/README.md) provides a 12-course interactive curriculum, 6 cross-plugin workflow templates, and troubleshooting diagnostics. Routes tasks to the right plugin, chains multi-plugin workflows, and generates cheatsheets for any plugin. 7 skills and 1 agent.
+[cogni-help](cogni-help/README.md) provides a 7-tour interactive curriculum, 7 cross-plugin workflow templates, and troubleshooting diagnostics. Routes tasks to the right plugin, chains multi-plugin workflows, and generates cheatsheets for any plugin. 7 skills and 1 agent.
 
 > "Which plugin should I use to verify claims in my research report?"
 
@@ -227,21 +233,22 @@ Plugins follow the [Claude Code plugin standard](https://code.claude.com/docs/en
 
 | Plugin | Capability | Skills | Agents | What it does |
 |--------|-----------|--------|--------|--------------|
-| [cogni-knowledge](cogni-knowledge/README.md) | Platform | 12 | 7 | Wiki-first research orchestrator — binds its own vendored wiki base to N research projects so findings compound across runs via a zero-network inverted pipeline |
-| [cogni-consult](cogni-consult/README.md) | Consulting | 6 | 0 | Action-fields-WBS consulting orchestrator with per-deliverable design thinking and acting stakeholder personas |
+| [cogni-knowledge](cogni-knowledge/README.md) | Platform | 21 | 16 | Wiki-first research orchestrator — binds its own vendored wiki base to N research projects so findings compound across runs via a zero-network inverted pipeline |
+| [cogni-consult](cogni-consult/README.md) | Consulting | 9 | 4 | Action-fields-WBS consulting orchestrator with per-deliverable design thinking and acting stakeholder personas |
+| [cogni-projects](cogni-projects/README.md) | Consulting | 4 | 0 | Partner project-portfolio steering — consultants, projects, and a deterministic staffing match engine with a partner-meeting dashboard |
 | [cogni-trends](cogni-trends/README.md) | Trend Intelligence | 9 | 12 | TIPS trend scouting with bilingual DE/EN research, investment theme modeling, and reusable industry catalogs |
 | [cogni-portfolio](cogni-portfolio/README.md) | Portfolio | 21 | 20 | IS/DOES/MEANS portfolio positioning with eight industry taxonomies, competitive analysis, and market sizing |
 | [cogni-marketing](cogni-marketing/README.md) | Content | 11 | 3 | B2B marketing content engine — 16 formats across thought leadership, demand gen, lead gen, sales enablement, ABM |
 | [cogni-copywriting](cogni-copywriting/README.md) | Content | 4 | 2 | Professional copywriting with 7 messaging frameworks, 5 stakeholder personas, and arc-aware polishing |
 | [cogni-narrative](cogni-narrative/README.md) | Content | 3 | 3 | Story arc narrative transformation using 11 frameworks with quality scoring and derivative format adaptation |
 | [cogni-sales](cogni-sales/README.md) | Sales | 1 | 4 | Corporate Visions Why Change pitch generation for named customers or market segments |
-| [cogni-visual](cogni-visual/README.md) | Visual | 8 | 19 | Slide decks, infographics, web narratives, poster storyboards, and report enrichment from narratives |
+| [cogni-visual](cogni-visual/README.md) | Visual | 7 | 19 | Slide decks, infographics, web narratives, poster storyboards, and report enrichment from narratives |
 | [cogni-website](cogni-website/README.md) | Website | 6 | 3 | Multi-page customer websites from portfolio, marketing, and research content with shared navigation and theming |
 | [cogni-claims](cogni-claims/README.md) | Quality | 2 | 2 | Source verification — catches misquotations, unsupported conclusions, and stale data in sourced claims |
-| [cogni-help](cogni-help/README.md) | Platform | 7 | 1 | 12-course curriculum, plugin discovery, workflow templates, troubleshooting, and cheatsheets |
+| [cogni-help](cogni-help/README.md) | Platform | 7 | 1 | 7-tour curriculum, plugin discovery, workflow templates, troubleshooting, and cheatsheets |
 | [cogni-workspace](cogni-workspace/README.md) | Platform | 9 | 0 | Shared foundation — env vars, MCP installation, theme management, plugin discovery, workspace health, Obsidian integration, bundled wiki |
 
-**99 skills, 76 agents** across the 14 active plugins.
+**114 skills, 89 agents** across the 14 active plugins.
 
 See [Cross-Plugin Data Flow](docs/er-diagram.md) for how data flows between plugins, or browse the [full documentation](docs/ecosystem-overview.md).
 

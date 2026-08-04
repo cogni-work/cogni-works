@@ -6,11 +6,11 @@
 
 ## Overview
 
-cogni-help is the navigation and learning layer for the insight-wave ecosystem. With 12 plugins and 70+ skills available in the marketplace, it is easy to know something exists but not know which specific skill handles a given task. cogni-help addresses this in four ways:
+cogni-help is the navigation and learning layer for the insight-wave ecosystem. With 14 plugins and 110+ skills available in the marketplace, it is easy to know something exists but not know which specific skill handles a given task. cogni-help addresses this in four ways:
 
 1. **Plugin discovery** — describe what you need, and the guide skill matches it to the right plugin and skill
-2. **Structured learning** — a 12-course curriculum covers every plugin from fundamentals through advanced workflows, each course running about 45 minutes
-3. **Workflow templates** — six cross-plugin pipeline playbooks show how to chain plugins into end-to-end workflows (research to slides, trends to marketing, portfolio to pitch)
+2. **Structured learning** — a 7-tour curriculum keyed 1:1 to the canonical cross-plugin pipelines, each tour running about 45–60 minutes
+3. **Workflow templates** — seven cross-plugin pipeline playbooks show how to chain plugins into end-to-end workflows (install to infographic, research to report, portfolio to pitch)
 4. **Diagnostics** — the troubleshoot skill checks plugin integrity, workspace health, and dependency state before problems surface as cryptic errors at runtime
 
 cogni-help produces no content of its own — it teaches, routes, templates, and diagnoses. Think of it as the layer that makes the rest of the ecosystem learnable and navigable.
@@ -22,32 +22,29 @@ cogni-help produces no content of its own — it teaches, routes, templates, and
 | Term | What it means |
 |------|--------------|
 | **Guide** | Task-to-plugin matching — describe what you want, get the right skill recommendation |
-| **Course** | A ~45-minute interactive module: Theory → Demo → Exercise → Quiz → Recap |
-| **Curriculum** | The 12-course sequence covering the full ecosystem, ordered by dependency |
+| **Tour** | A ~45–60-minute interactive walkthrough of one pipeline: Theory → Demo → Exercise → Quiz → Recap |
+| **Curriculum** | The 7-tour sequence, one tour per canonical cross-plugin pipeline |
 | **Workflow template** | A step-by-step playbook for chaining 3–5 plugins into an end-to-end pipeline |
 | **Cheatsheet** | A one-screen quick-reference card for a specific plugin's commands and concepts |
 | **Troubleshoot** | Plugin-level diagnostics: integrity checks, dependency validation, known issue matching |
-| **Course progress** | Per-user progress stored in `.claude/cogni-help.local.md` — persists across sessions |
+| **Tour progress** | Per-user progress stored in `.claude/cogni-help.local.md` — tracked to the lesson, persists across sessions |
 | **Plugin catalog** | The index in `guide/references/plugin-catalog.md` that maps capabilities to plugins |
 
-### The 12-course curriculum
+### The 7-tour curriculum
 
-| # | Course | Plugins covered |
-|---|--------|-----------------|
-| 1 | Cowork Fundamentals | cogni-help (meta) |
-| 2 | Workspace and Obsidian | cogni-workspace, cogni-help:cogni-issues |
-| 3 | Basic Tools | cogni-copywriting, cogni-narrative, cogni-claims |
-| 4 | Trend Scouting | cogni-trends (part 1) |
-| 5 | Trend Reporting | cogni-trends (part 2) |
-| 6 | Portfolio Messaging | cogni-consult, cogni-portfolio |
-| 7 | Visual Deliverables | cogni-visual |
-| 8 | Research Reports | cogni-knowledge |
-| 9 | B2B Marketing | cogni-marketing |
-| 10 | Sales Pitches | cogni-sales |
-| 11 | Consulting Orchestration | cogni-consult |
-| 12 | Documentation Pipeline | cogni-docs |
+| Tour ID | Title | Pipeline |
+|---------|-------|----------|
+| `tour-install-to-infographic` | Install-to-Infographic | cogni-workspace → themes → cogni-visual |
+| `tour-research-to-report` | Research-to-Report | cogni-knowledge → cogni-narrative → cogni-visual |
+| `tour-trends-to-solutions` | Trends-to-Solutions | cogni-trends → cogni-portfolio → cogni-marketing |
+| `tour-content-pipeline` | Content-Pipeline | cogni-marketing → cogni-narrative → cogni-copywriting → cogni-visual |
+| `tour-portfolio-to-pitch` | Portfolio-to-Pitch | cogni-portfolio → cogni-narrative → cogni-sales → cogni-visual |
+| `tour-portfolio-to-website` | Portfolio-to-Website | cogni-portfolio → cogni-workspace → cogni-website |
+| `tour-consulting-engagement` | Consulting-Engagement | cogni-consult (setup → scope → action fields → design-thinking → personas) |
 
-Courses are designed to be completed in order — later courses assume familiarity with earlier ones. You can jump in at any course if you know the prerequisites.
+Tour IDs are 1:1 with the canonical workflow IDs in `docs/workflows/`, so the tour that teaches a pipeline and the guide that documents it always carry the same name.
+
+Start with `tour-install-to-infographic` — it is the first-run capstone and assumes nothing. The rest are independent: pick the pipeline you need rather than working through them in order.
 
 ---
 
@@ -75,9 +72,9 @@ The guide skill reads your task description, consults the plugin catalog, and re
 
 ### `teach` — Interactive course delivery
 
-The teach skill delivers any of the 12 courses interactively. It tracks your progress per course and adapts pacing based on your responses.
+The teach skill delivers any of the 7 workflow tours interactively. It tracks your progress to the lesson and adapts pacing based on your responses.
 
-Start or resume a course by number:
+Start or resume a tour by ID:
 
 ```
 /teach 1
@@ -133,24 +130,27 @@ Available templates:
 
 | Workflow | Pipeline |
 |----------|---------|
-| `research-to-slides` | cogni-knowledge → cogni-narrative → cogni-visual |
-| `trend-to-marketing` | cogni-trends → cogni-portfolio → cogni-marketing |
+| `install-to-infographic` | cogni-workspace → cogni-workspace (themes) → cogni-visual |
+| `research-to-report` | cogni-knowledge → cogni-narrative → cogni-visual |
+| `trends-to-solutions` | cogni-trends → cogni-portfolio → cogni-marketing |
 | `portfolio-to-pitch` | cogni-portfolio → cogni-narrative → cogni-sales → cogni-visual |
-| `new-engagement` | cogni-consult: action fields + a design-thinking loop per deliverable |
-| `docs-pipeline` | cogni-knowledge → cogni-docs → cogni-narrative |
-| `full-onboarding` | cogni-workspace → cogni-help courses 1–12 |
+| `portfolio-to-website` | cogni-portfolio → cogni-workspace → cogni-website |
+| `content-pipeline` | cogni-marketing → cogni-narrative → cogni-copywriting → cogni-visual |
+| `consulting-engagement` | cogni-consult (setup → scope → action fields → design-thinking → personas) |
+
+Two further templates are internal maintainer pipelines with no `docs/workflows/` companion: `docs-pipeline` (the cogni-docs sweep) and `full-onboarding` (cogni-workspace → the workflow tours).
 
 Open a specific workflow:
 
 ```
-/workflow research-to-slides
+/workflow research-to-report
 ```
 
 ```
 How do I go from trend analysis to a marketing campaign?
 ```
 
-Workflow definitions live in `cogni-help/skills/workflow/references/workflows/`.
+User-facing workflow definitions live in `cogni-help/skills/workflow/references/workflows/`; the internal ones live in `references/internal-workflows/`.
 
 ---
 
@@ -208,8 +208,8 @@ Issue state is tracked locally in `cogni-issues/issues.json` in your project dir
 
 The course-deck skill generates PPTX slide decks for training sessions. Two modes:
 
-1. **Curriculum overview** — all 12 courses at a glance, for introducing the program to a group
-2. **Course introduction** — learning objectives, module breakdown, and prerequisites for a specific course
+1. **Curriculum overview** — all 7 tours at a glance, for introducing the program to a group
+2. **Tour introduction** — learning objectives, module breakdown, and prerequisites for a specific tour
 
 ```
 /course-deck curriculum

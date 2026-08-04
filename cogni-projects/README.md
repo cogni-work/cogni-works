@@ -2,6 +2,8 @@
 
 > **Incubating** (v0.0.x) — skills, data formats, and workflows may change at any time.
 
+> **insight-wave readiness (Claude Code desktop recommended)** — Claude Code desktop is the recommended interface for insight-wave today. Cowork is a secondary path and is not yet production-ready for insight-wave workflows because of context-window and Pencil-MCP fidelity gaps — see the [deployment guide](../docs/deployment-guide.md) for detail. This guidance will flip when those gaps close upstream.
+
 Partner project-portfolio steering for consulting firms on Claude Code. cogni-projects gives partners one place to model consultants, projects, and staffing — so they can match the right people to the right work by availability, profile fit, and strategic impact. The portfolio scaffold, entity authoring, the staffing match engine, and a read-only partner-meeting dashboard have shipped; the backfilling recommender arrives in a later release.
 
 ## Why this exists
@@ -90,6 +92,26 @@ The manifest holds portfolio identity (`slug`, `name`, `language`, timestamps) p
 | Script | `render-dashboard.py` | Render the portfolio dashboard HTML from entity data |
 
 ## Architecture
+
+```
+cogni-projects/
+├── .claude-plugin/plugin.json          Plugin manifest
+├── skills/                             4 portfolio skills
+│   ├── projects-setup/                 Initialize a portfolio directory (entry point)
+│   ├── projects-entities/              Author + register one consultant/project/assignment
+│   ├── projects-staff/                 Rank candidate consultants per open project role
+│   └── projects-dashboard/             Render a partner-meeting portfolio dashboard (read-only)
+├── scripts/                            6 stdlib-only utilities
+│   ├── _projects_lib.py                Shared loader for the hyphen-named validate-entities.py
+│   ├── portfolio-init.sh               Idempotent portfolio scaffolder
+│   ├── validate-entities.py            Entity validator: frontmatter + assignment refs
+│   ├── register-entity.py              Slug-keyed manifest upsert + execution-log append
+│   ├── staffing-score.py               Deterministic staffing scorer (availability/fit/impact)
+│   └── render-dashboard.py             Portfolio health + value HTML render
+├── tests/                              5 bash regression suites
+│   └── fixtures/                       Shared assertion harness + exit-code-safe runner
+└── references/                         Consultant / project / assignment entity schemas
+```
 
 cogni-projects is standalone at this stage. Its portfolio directory is the shared substrate for its skills (entity authoring, staffing match, dashboard) and for later ones (backfilling), and for planned cross-plugin bridges to cogni-consult and cogni-portfolio.
 

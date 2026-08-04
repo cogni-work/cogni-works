@@ -70,6 +70,12 @@ DEFAULT_THEME = {
 # completed assignment no longer staffs an open role.
 ACTIVE_ASSIGNMENT_STATES = ("planned", "active")
 
+# Named so a status *comparison* is distinguishable at a glance from a status
+# *label* the renderer prints — "closed" is both, and only the comparison
+# depends on _status_text having normalized its input. See _status_text.
+PROJECT_STATUS_CLOSED = "closed"
+PROJECT_STATUS_ACTIVE = "active"
+
 # Theme values are interpolated into the <style> block rather than into escaped
 # text nodes, so a value carrying CSS-structural or markup characters could
 # close the stylesheet and inject arbitrary markup into the self-contained HTML.
@@ -202,7 +208,7 @@ def _project_health(filled, open_roles, status):
     the same green as a fully staffed project would show an unstaffed project as
     healthy on a partner's decision surface, so it gets its own warn state.
     """
-    if status == "closed":
+    if status == PROJECT_STATUS_CLOSED:
         return ("closed", "muted")
     if open_roles is None:
         return ("staffing unknown", "warn")
@@ -211,7 +217,7 @@ def _project_health(filled, open_roles, status):
         return ("no open roles", "ok")
     if filled >= total:
         return ("fully staffed", "ok")
-    if filled == 0 and status == "active":
+    if filled == 0 and status == PROJECT_STATUS_ACTIVE:
         return ("unstaffed", "risk")
     return ("%d/%d roles open" % (total - filled, total), "warn")
 
@@ -219,19 +225,11 @@ def _project_health(filled, open_roles, status):
 def _is_closed(status):
     """Whether a project status means the work is over — delivered or lost.
 
-    Matches case-insensitively, the way staffing-score.py does, so the dashboard
-    and the staffing shortlist agree on which projects are still live.
-
-    Two older checks in this file — _project_health's `status == "closed"` and
-    the warning gate in _compute — compare the literal case-sensitively and are
-    deliberately left alone here, since switching them changes what a row
-    renders. That means a non-conforming `status: Closed` is read as closed by
-    this predicate but not by those two, so the tile and the row would disagree.
-    The schema only admits lowercase `closed`, so that split needs a record that
-    already failed validation; unify the three when one is willing to take the
-    rendering change.
+    Takes a status _status_text has already normalized — this compares, it does
+    not fold. Passing a raw frontmatter value here reads a mixed-case `Closed`
+    as still live.
     """
-    return str(status or "").strip().lower() == "closed"
+    return status == PROJECT_STATUS_CLOSED
 
 
 def _text_field(raw, field, label, warnings):
@@ -276,8 +274,33 @@ def _text_field(raw, field, label, warnings):
 
 
 def _status_text(raw, label, warnings):
-    """Read an entity's `status` as text. See _text_field for the why."""
-    return _text_field(raw, "status", label, warnings)
+    """Read an entity's `status` as normalized text. See _text_field for the why.
+
+    The single place a status is folded to lower case, so the health flag, the
+    missing-open_roles gate, _is_closed, the assignment-state check and the
+    rendered row all read one string. Folding at each site instead would satisfy
+    the same tests while rebuilding the drift this exists to remove. Only
+    `status` is folded — role labels and open_roles entries are free text
+    matched by exact equality, so case-folding them would change what counts as
+    a filled role.
+
+    A status that had to be normalized is reported, like every other
+    schema-deviating record here: the schema admits only the lowercase value, so
+    `Closed` is a record to fix, not a spelling to accept quietly.
+
+    The isinstance guard keeps one defect to one warning. _text_field returns
+    str(raw).strip() for a non-string and has already warned about it, and a
+    list-valued `status: [Closed]` arrives as "['Closed']" — whose folded form
+    differs, so ungated it would report the same record twice.
+    """
+    text = _text_field(raw, "status", label, warnings)
+    normalized = text.lower()
+    if isinstance(raw, str) and normalized != text:
+        warnings.append(
+            "%s has a non-lowercase status %r — normalized to %r; fix the record"
+            % (label, text, normalized)
+        )
+    return normalized
 
 
 def _open_role_demand(projects):
@@ -323,7 +346,7 @@ def _compute(entities, warnings):
         # declared count.
         open_roles = [_text_field(r, "open_roles entry", label, warnings) for r in (declared_roles or [])]
         status = _status_text(proj.get("status"), label, warnings)
-        if declared_roles is None and status != "closed":
+        if declared_roles is None and status != PROJECT_STATUS_CLOSED:
             warnings.append("%s has no open_roles — staffing status unknown" % label)
 
         covered = set()
@@ -333,6 +356,8 @@ def _compute(entities, warnings):
             if a.get("project") != slug:
                 continue
             a_label = "assignment %s" % (a.get("_file") or a.get("slug") or "(unknown)")
+            # Normalized too, deliberately: exempting assignment status would
+            # rebuild the split one call site over.
             if _status_text(a.get("status"), a_label, warnings) in ACTIVE_ASSIGNMENT_STATES:
                 role = _text_field(a.get("role"), "role", a_label, warnings)
                 if role:

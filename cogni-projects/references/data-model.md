@@ -133,6 +133,14 @@ Valid `status` values:
 | `active` | In delivery |
 | `closed` | Delivered or lost |
 
+The dashboard and the staffing scorer both read `status` case-insensitively,
+after stripping surrounding whitespace, so the two agree on which projects are
+still live; the dashboard additionally reports any record it had to normalize
+and renders the normalized value. The schema is the stricter of the two and
+admits only the lowercase spellings above, so `status: Closed` is still a
+validation failure — the readers' tolerance keeps one hand-edited record from
+skewing a partner meeting, it does not widen what the record may say.
+
 `open_roles` is a list of role labels the project still needs staffed.
 
 The staffing engine matches an `open_roles` label against a consultant's
@@ -190,6 +198,9 @@ Valid `status` values:
 | `planned` | Committed but not yet started |
 | `active` | Consultant currently on the project |
 | `completed` | Assignment finished |
+
+The dashboard reads this `status` the way it reads a project's, so a hand-edited
+`Active` still counts the assignment as covering its role.
 
 ---
 

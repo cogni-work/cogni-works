@@ -674,6 +674,257 @@ assert_html "11k open-roles tile agrees with the envelope" \
   '<div class="n">0</div><div class="l">Open roles</div>' "$HTML11"
 assert_html "11l clean sibling project still rendered" "Clean Delivery" "$HTML11"
 
+# ---------------------------------------------------------------------------
+# Fixture 12 — a status whose case does not match the schema. The file used to
+# read `status` three ways: the health flag and the missing-open_roles gate
+# compared the literal case-sensitively, while _is_closed lower-cased first. So
+# one `status: Closed` record was dropped from the open-roles total and
+# simultaneously rendered as not-closed — the tile and the row disagreed about
+# the same project. Every status now goes through one normalizing reader.
+#
+# 12f is the discriminator, and the assignment is what makes it one: the closed
+# projects were already excluded on base (_is_closed lower-cased them), so a
+# fixture built only from mixed-case *projects* would have counted the same
+# before and after. The assignment's `status: Active` is the case that changes
+# the total.
+#
+# 12d and 12s are row-scoped on purpose. `Clean Closed` renders `<td>closed</td>`
+# and `>closed</span>` on base too, so either needle alone would pass against the
+# unfixed script while pinning nothing.
+#
+# 12j is the control for the other direction: _text_field already strips, so a
+# padding-only status normalized silently before this change and must keep
+# doing so. Without it a reader could take the new warning to mean whitespace.
+# ---------------------------------------------------------------------------
+PF12="$TMPROOT/mixed-case-status"
+seed_portfolio "$PF12"
+write_entity "$PF12/projects/cased-closed.md" <<'EOF'
+---
+type: project
+slug: cased-closed
+name: Cased Closed
+client: CasedCo
+strategic_impact: 4
+status: Closed
+open_roles: [migration-lead, data-engineer]
+---
+# Cased Closed
+EOF
+write_entity "$PF12/projects/shouty-closed.md" <<'EOF'
+---
+type: project
+slug: shouty-closed
+name: Shouty Closed
+client: ShoutCo
+strategic_impact: 3
+status: CLOSED
+open_roles: [ops-lead]
+---
+# Shouty Closed
+EOF
+# Quoted so the frontmatter parser keeps the inner spaces — it strips the raw
+# value before it strips the quotes, so an unquoted padding never survives.
+write_entity "$PF12/projects/padded-closed.md" <<'EOF'
+---
+type: project
+slug: padded-closed
+name: Padded Closed
+client: PadCo
+strategic_impact: 2
+status: ' Closed '
+open_roles: [qa-lead]
+---
+# Padded Closed
+EOF
+write_entity "$PF12/projects/padded-only.md" <<'EOF'
+---
+type: project
+slug: padded-only
+name: Padded Only
+client: OnlyCo
+strategic_impact: 2
+status: ' closed '
+open_roles: [ops-analyst]
+---
+# Padded Only
+EOF
+write_entity "$PF12/projects/clean-closed.md" <<'EOF'
+---
+type: project
+slug: clean-closed
+name: Clean Closed
+client: CleanCo
+strategic_impact: 3
+status: closed
+open_roles: [doc-lead]
+---
+# Clean Closed
+EOF
+write_entity "$PF12/projects/roleless-cased.md" <<'EOF'
+---
+type: project
+slug: roleless-cased
+name: Roleless Cased
+client: RolelessCo
+strategic_impact: 2
+status: Closed
+---
+# Roleless Cased
+EOF
+# The padded spelling with no open_roles at all. Roleless Cased deviates by case
+# and Padded Only declares roles, so neither one reaches the missing-open_roles
+# gate by way of padding — this record is the one that does.
+write_entity "$PF12/projects/roleless-padded.md" <<'EOF'
+---
+type: project
+slug: roleless-padded
+name: Roleless Padded
+client: PadRolelessCo
+strategic_impact: 2
+status: ' closed '
+---
+# Roleless Padded
+EOF
+write_entity "$PF12/projects/cased-active.md" <<'EOF'
+---
+type: project
+slug: cased-active
+name: Cased Active
+client: ActiveCo
+strategic_impact: 5
+status: Active
+open_roles: [architect]
+---
+# Cased Active
+EOF
+write_entity "$PF12/projects/cased-prospective.md" <<'EOF'
+---
+type: project
+slug: cased-prospective
+name: Cased Prospective
+client: ProspectCo
+strategic_impact: 3
+status: Prospective
+open_roles: [scout-lead]
+---
+# Cased Prospective
+EOF
+# The schema-conforming spelling of the same state. Without it the active-only
+# allowlist regression is guarded for `Prospective` but not for `prospective`.
+write_entity "$PF12/projects/plain-prospective.md" <<'EOF'
+---
+type: project
+slug: plain-prospective
+name: Plain Prospective
+client: PipelineCo
+strategic_impact: 3
+status: prospective
+open_roles: [pipeline-lead]
+---
+# Plain Prospective
+EOF
+write_entity "$PF12/projects/statusless.md" <<'EOF'
+---
+type: project
+slug: statusless
+name: Statusless
+client: NoStatusCo
+strategic_impact: 2
+open_roles: [analyst]
+---
+# Statusless
+EOF
+write_entity "$PF12/projects/assign-host.md" <<'EOF'
+---
+type: project
+slug: assign-host
+name: Cased Assignment Host
+client: HostCo
+strategic_impact: 4
+status: active
+open_roles: [engineer]
+---
+# Cased Assignment Host
+EOF
+# The project is spelled correctly and the role matches, so the assignment's own
+# status is the only thing that decides whether the role reads as filled.
+write_entity "$PF12/assignments/cased-assignment.md" <<'EOF'
+---
+type: assignment
+slug: rio--assign-host
+consultant: rio
+project: assign-host
+role: engineer
+start_date: 2026-02-01
+end_date: 2026-08-01
+status: Active
+---
+# assignment
+EOF
+
+# Its own stderr sink, as 12r asserts a traceback never reached it.
+STDERR12="$TMPROOT/stderr12.txt"
+RUN_ERRFILE="$STDERR12"
+run "$PF12"
+HTML12="$PF12/output/dashboard.html"
+
+assert_json "12a mixed-case portfolio still succeeds" "d['success'] is True"
+assert_json "12b marked partial"                      "d['data']['partial'] is True"
+assert_json "12c every cased-closed spelling reads as closed" \
+  "all(any(p['name'] == n and p['health_label'] == 'closed' and p['health_sev'] == 'muted' for p in d['data']['projects_detail']) for n in ('Cased Closed', 'Shouty Closed', 'Padded Closed'))"
+# Scoped to the Cased Closed row: the status cell is a bare <td>%s</td> right
+# after the name cell, so this pins the rendered value for one known project.
+assert_html "12d Status column renders the normalized value" \
+  "<td><strong>Cased Closed</strong><div class='sub'>CasedCo</div></td><td>closed</td>" "$HTML12"
+assert_json "12e envelope reports the normalized status" \
+  "any(p['name'] == 'Cased Closed' and p['status'] == 'closed' for p in d['data']['projects_detail'])"
+# Seven closed projects drop out, two of which declare no roles at all, and the
+# host's one role is filled by an assignment whose 'Active' now normalizes —
+# leaving Cased Active, Cased Prospective, Plain Prospective and Statusless.
+assert_json "12f open roles exclude every closed spelling" \
+  "d['data']['open_roles'] == 4"
+assert_html "12g tile agrees with the envelope" \
+  '<div class="n">4</div><div class="l">Open roles</div>' "$HTML12"
+assert_json "12h cased-closed project without open_roles is not nagged" \
+  "sum('staffing status unknown' in w and 'Roleless Cased' in w for w in d['data']['warnings']) == 0"
+assert_json "12i normalization reported once for the deviating record" \
+  "sum('normalized to' in w and 'Cased Closed' in w for w in d['data']['warnings']) == 1"
+assert_json "12j conforming status reports nothing" \
+  "sum('normalized to' in w and 'Clean Closed' in w for w in d['data']['warnings']) == 0"
+assert_json "12k padding alone was always stripped, and still says nothing" \
+  "sum('normalized to' in w and 'Padded Only' in w for w in d['data']['warnings']) == 0 and any(p['name'] == 'Padded Only' and p['health_label'] == 'closed' for p in d['data']['projects_detail'])"
+assert_json "12l absent status is not closed and needs no normalizing" \
+  "sum('normalized to' in w and 'Statusless' in w for w in d['data']['warnings']) == 0 and any(p['name'] == 'Statusless' and p['status'] == 'unknown' for p in d['data']['projects_detail'])"
+# prospective is live demand, not an active-only allowlist — the same
+# divergence in the other direction _open_role_demand's docstring warns about.
+assert_json "12m cased prospective still counts as demand" \
+  "any(p['name'] == 'Cased Prospective' and p['roles_total'] - p['roles_filled'] == 1 for p in d['data']['projects_detail'])"
+assert_json "12n cased active still reaches the risk branch" \
+  "any(p['name'] == 'Cased Active' and p['health_sev'] == 'risk' for p in d['data']['projects_detail'])"
+assert_html "12o risk flag rendered" "unstaffed" "$HTML12"
+# Counted for the same reason as 10e and 11c: the assignment status is read
+# inside _compute's per-project slug filter, so hoisting it out would warn once
+# per project while `any(...)` stayed green.
+assert_json "12p cased assignment fills its role and says it was normalized" \
+  "any(p['name'] == 'Cased Assignment Host' and p['roles_filled'] == 1 for p in d['data']['projects_detail']) and sum('normalized to' in w and 'cased-assignment.md' in w for w in d['data']['warnings']) == 1"
+assert_json "12q every project still counted"    "d['data']['projects'] == 12"
+assert_no_traceback "12r no traceback on stderr" "$STDERR12"
+# The health flag is the other half of what 12d pins, and #9aa7b4 is
+# DEFAULT_THEME['muted'], so reaching the closing tag pins the rendered severity
+# in HTML the way 12c pins it in the envelope. `migration-lead, data-engineer`
+# is unique to this row, so anchoring there scopes the needle without coupling
+# it to the name markup, star glyph or coverage format.
+assert_html "12s mixed-case closed row renders the closed health flag" \
+  "<td>migration-lead, data-engineer</td><td><span class='flag' style='color:#9aa7b4'>closed</span>" "$HTML12"
+# The schema-conforming half of 12m — same divergence, spelled the way the
+# schema asks for, so the allowlist regression is pinned for both spellings.
+assert_json "12t plain prospective is live demand too" \
+  "any(p['name'] == 'Plain Prospective' and p['roles_total'] - p['roles_filled'] == 1 for p in d['data']['projects_detail'])"
+# A control in 12j's sense: padding alone was always stripped, so this passes on
+# base too. It exists to pin that the padded spelling reaches the gate at all.
+assert_json "12u padded closed without open_roles is not nagged either" \
+  "sum('staffing status unknown' in w and 'Roleless Padded' in w for w in d['data']['warnings']) == 0 and any(p['name'] == 'Roleless Padded' and p['health_label'] == 'closed' for p in d['data']['projects_detail'])"
+
 echo
 if [ "$failures" -eq 0 ]; then
   echo "All render-dashboard tests passed."

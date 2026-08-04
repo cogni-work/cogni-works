@@ -156,15 +156,24 @@ never from this example:
   the warnings list, not treated as an error: a project without a
   `strategic_impact`, a project that omits `open_roles`, an entity whose
   `status`, role label, or `open_roles` entry is not text, an entity whose
-  `status` is text but not lowercase, or an entity file that cannot be read or
-  decoded. A non-text value — `status: 2026`, `role: 2`, or `open_roles: [2]` —
-  is read as a number, then coerced back to text. A status authored in mixed
-  case — `status: Closed` — is read case-insensitively and reported normalized.
-  Both sides of the role comparison are coerced, so a numeric role still matches
-  its numeric `open_roles` entry and still counts as filled. The non-text warning
-  and the not-lowercase warning both say to fix the record, not that the coverage
-  figure or flag beside it is wrong. One bad record never costs the rest of the
-  portfolio.
+  `status` is text but not lowercase, an assignment whose `project` is absent,
+  unusable, or names no project in the portfolio, or an entity file that cannot
+  be read or decoded. A non-text value — `status: 2026`, `role: 2`, or
+  `open_roles: [2]` — is read as a number, then coerced back to text. A status
+  authored in mixed case — `status: Closed` — is read case-insensitively and
+  reported normalized. Both sides of the role comparison are coerced, so a
+  numeric role still matches its numeric `open_roles` entry and still counts as
+  filled. An unresolved `project` is named whatever the assignment's status — a
+  completed assignment pointing at a deleted project is still a broken
+  reference — and the assignment covers no role until the reference is fixed,
+  so the project it was meant to staff reads as more open than its author
+  intended. Assignments authored before their project files orphan until those
+  projects land — a run of these warnings early in authoring is expected, not
+  portfolio damage. An unusable `project` — `project: [alpha, beta]` — is one
+  the lookup cannot key on at all, and is reported like any other unresolved
+  reference. The non-text warning and the not-lowercase warning both say to fix
+  the record, not that the coverage figure or flag beside it is wrong. One bad
+  record never costs the rest of the portfolio.
 - **Theming is optional.** The dashboard renders with a built-in palette;
   pass `--design-variables <path.json>` to override colors when a themed look is
   wanted.

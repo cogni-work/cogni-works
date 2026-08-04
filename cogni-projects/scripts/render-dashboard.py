@@ -388,6 +388,67 @@ def _compute(entities, warnings):
             "health_sev": health_sev,
         })
 
+    # Orphan assignments: an assignment whose `project` names no project in the
+    # portfolio — a typo, or a project file since deleted. It matches no slug on
+    # any iteration of the loop above, so without this it is skipped silently by
+    # every one of them and reduces role coverage with nothing said.
+    #
+    # One pass over `assignments`, deliberately OUTSIDE that loop: nested inside
+    # it this would warn once per project per orphan, because an orphan is
+    # precisely the assignment every project fails to match. One warning per
+    # assignment, not one per project iteration.
+    #
+    # Status is never read here. A `completed` assignment naming a project that
+    # does not exist is still a broken reference, so the check must not narrow
+    # to ACTIVE_ASSIGNMENT_STATES the way the coverage filter above does.
+    known_slugs = set()
+    for p in entities["project"]:
+        raw_slug = p.get("slug")
+        # Dropped on `is None` or empty, deliberately not on truthiness — same
+        # reasoning as _text_field's guard, so a real falsy slug stays a known
+        # project. Without the drop, a project whose slug is absent would adopt
+        # every assignment whose `project` is absent, masking two bad records.
+        if raw_slug is None or raw_slug == "":
+            continue
+        try:
+            known_slugs.add(raw_slug)
+        except TypeError:
+            # An unhashable slug cannot be held in a set, so it is dropped from
+            # known_slugs. Where an assignment's equally unhashable `project`
+            # still matches it via the `!=` filter above, that record is warned
+            # as unresolved anyway — a false positive over two hand-edited
+            # malformed records, accepted over letting TypeError reach the
+            # module-level catch-all and discard every warning — see below.
+            continue
+    for a in assignments:
+        proj_ref = a.get("project")
+        try:
+            known = proj_ref in known_slugs
+        except TypeError:
+            # A list- or dict-valued `project:` is unhashable, so `in` raises
+            # before it can miss. Nothing unhashable is ever a valid slug, so
+            # read it as unresolved: letting it propagate would reach the
+            # module-level catch-all, which discards every warning collected so
+            # far and fails the whole render over one hand-edited record.
+            known = False
+        if known:
+            continue
+        # Both sides stay raw, never routed through _text_field. The borrowed
+        # parser coerces an all-digit scalar to int for `slug` and `project`
+        # alike, and the coverage filter above compares raw to raw — coercing
+        # only this side would turn `2026` into "2026", miss its own int slug,
+        # and report a legitimately matched assignment as an orphan.
+        #
+        # validate-entities.py reports the same dangling ref, but resolves it
+        # through str() and fails hard. That divergence is deliberate: the
+        # renderer never runs the validator, and matching its coercion here
+        # would break the raw-to-raw symmetry the filter above depends on.
+        a_label = "assignment %s" % (a.get("_file") or a.get("slug") or "(unknown)")
+        warnings.append(
+            "%s names no known project %r — fix the assignment's project ref "
+            "or add the project" % (a_label, proj_ref)
+        )
+
     # Utilization: a simple average of consultant allocation_pct, plus a count of
     # consultants at or above 100%. Consultants with no allocation_pct are
     # excluded from the average rather than counted as zero, so a thinly authored

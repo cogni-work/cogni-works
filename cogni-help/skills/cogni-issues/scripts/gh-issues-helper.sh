@@ -140,7 +140,17 @@ print(json.dumps({
       # --limit is required: gh label list defaults to 30, so on a repo with more
       # labels than that the ones past the first page read as missing and the
       # check below rejects a label that exists.
-      EXISTING_LABELS=$(gh label list --repo "$REPO" --limit 1000 --json name --jq '.[].name' 2>/dev/null || true)
+      #
+      # A failed query is told apart by exit status, never by an empty result: a
+      # repo whose label set is genuinely empty is a legitimate empty set and must
+      # still reach the "missing from repo" error below, not this one. Merging
+      # stderr into the capture is safe here even though it becomes the label set
+      # the whole-line match below reads, because gh's notices only print when
+      # stdout and stderr are both terminals, which command substitution prevents.
+      if ! EXISTING_LABELS=$(gh label list --repo "$REPO" --limit 1000 --json name --jq '.[].name' 2>&1); then
+        emit_error "create: could not read repo labels" repo "$REPO" detail "$EXISTING_LABELS" hint "Check network access, that the repo exists and is visible to you, and that the token has repo scope (gh auth status)"
+        exit 1
+      fi
       MISSING=""
       IFS=',' read -r -a LABEL_ARR <<< "$LABELS_CSV"
       for LBL in "${LABEL_ARR[@]}"; do

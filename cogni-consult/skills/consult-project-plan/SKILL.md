@@ -49,9 +49,10 @@ schedule. Populating the scheduling fields is the job of `consult-action-fields`
 Before any user-facing output, resolve the **interaction language** — the
 workspace default, overridden by the user's message language — per
 `$CLAUDE_PLUGIN_ROOT/references/interaction-language.md`, which owns the
-resolution ladder; do not restate the ladder here. It is independent of the
-engagement's `language` field, which is the deliverable axis. This contract
-holds on the default path: it does not depend on an output style being active.
+resolution ladder. Conduct the entire conversation in the resolved language.
+It is independent of the engagement's `language` field, which is the
+deliverable axis. This contract holds on the default path: it does not depend
+on an output style being active.
 
 The `description` of a Bash tool call is rendered to the consultant, so it is
 user copy — write it in the interaction language, outcome-shaped, at most 6

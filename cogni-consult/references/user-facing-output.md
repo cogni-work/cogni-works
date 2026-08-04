@@ -99,8 +99,19 @@ Three rules keep the announcement cheap:
 
 The `description` of a Bash tool call is rendered to the consultant, so it is
 user copy. (b) names it a governed surface; this section owns its specifics.
-Every `consult-*` skill's Step 0 cites this section instead of restating them —
-edit the rule here, not there.
+
+Every `consult-*` skill's Step 0 also states the five constraints inline and
+cites this section. That duplication is deliberate: unlike the resolution ladder
+in (a), which cannot be applied without opening its reference, a description can
+be written — wrongly — without ever opening this file, so the constraints have to
+sit where the model always reads them. Edit them here first, then mirror the
+change into the nine Step 0 blocks; `tests/test_step0_register_block.sh` fails
+if the copies drift apart or get thinned.
+
+Main-loop-only, deliberately: a dispatched agent's user-facing surface is the
+envelope it returns, not its own tool calls, so
+`references/subagent-output-contract.md` carries no counterpart to this section
+and none is owed.
 
 Five constraints, all binding:
 

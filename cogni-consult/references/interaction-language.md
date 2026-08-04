@@ -51,3 +51,13 @@ A consultant can legitimately produce English deliverables for a client while
 working through them with a German-speaking stakeholder. One axis cannot express
 that. Keeping the deliverable language in `consult-project.json` and deriving the
 interaction language at runtime lets each follow its own source of truth.
+
+## What this file does not own
+
+This file owns the language axis and nothing else. A surface can be governed by
+the resolved interaction language and still take its copy rules from elsewhere —
+notably the `description` of a Bash tool call, which is written in the resolved
+language per this file, but whose own constraints (outcome-shaped, the 6-word
+cap, no engine vocabulary, never derived from the filename or header comment)
+are owned by section (f) of `references/user-facing-output.md`. Look for a copy
+rule there, not here.

@@ -54,10 +54,17 @@ It is independent of the engagement's `language` field, which is the
 deliverable axis. This contract holds on the default path: it does not depend
 on an output style being active.
 
-The register that output follows — surface scope, state lexicon, table rules,
-step announcements, and the copy rules for a Bash tool call's `description` —
-is `$CLAUDE_PLUGIN_ROOT/references/user-facing-output.md`, which owns them.
-Table cells, headers and tool-call descriptions are user copy, not exemptions.
+The `description` of a Bash tool call is rendered to the consultant, so it is
+user copy — write it in the interaction language, outcome-shaped, at most 6
+words, with no script, file, or skill names, and never derived from the
+script's filename or header comment. Worked pair:
+`Discover cogni-consult engagements` → `Laufende Engagements holen`.
+Section (f) of `$CLAUDE_PLUGIN_ROOT/references/user-facing-output.md` owns
+these five constraints — edit them there, then mirror the change here.
+
+The register that output follows — scope, state lexicon, table rules, step
+announcements — is `$CLAUDE_PLUGIN_ROOT/references/user-facing-output.md`;
+table cells and headers are user copy too, not an exemption.
 
 ### 1. Locate the engagement and the deliverable
 

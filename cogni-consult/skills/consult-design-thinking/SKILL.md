@@ -54,6 +54,22 @@ only adds shape when present; it never blocks production when absent.
 
 ## Workflow
 
+### 0. Resolve the Interaction Language
+
+Before any user-facing output, resolve the **interaction language** — the
+workspace default, overridden by the user's message language — per
+`$CLAUDE_PLUGIN_ROOT/references/interaction-language.md`, which owns the
+resolution ladder. Conduct the entire conversation in the resolved language.
+It is independent of the engagement's `language` field, which is the
+deliverable axis. This contract holds on the default path: it does not depend
+on an output style being active.
+
+The `description` of a Bash tool call is rendered to the consultant, so it is
+user copy — write it in the interaction language, outcome-shaped, at most 6
+words, with no script, file, or skill names, and never derived from the
+script's filename or header comment. Worked pair:
+`Discover cogni-consult engagements` → `Laufende Engagements holen`.
+
 ### Interaction mode
 
 By default this loop runs as an **auto-walk**: it writes each stage's artifact
@@ -143,11 +159,6 @@ Dispatch `Skill("cogni-consult:consult-action-fields")` to plan the field's
 deliverable set (it writes the full planned-entry shape, including
 `producing_route` and `persona_review`), then resume here with the planned
 entry.
-
-Conduct the conversation in the resolved **interaction language** (workspace
-default, overridden by the user's message language) — independent of the
-engagement's `language` field, which is the deliverable axis. See
-`$CLAUDE_PLUGIN_ROOT/references/interaction-language.md`.
 
 **Personas gate (fresh starts only).** Before opening the loop for a deliverable
 whose `state` is `pending` (a fresh start — not a resume or rework), the

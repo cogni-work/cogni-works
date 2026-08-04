@@ -29,6 +29,22 @@ templates live in `$CLAUDE_PLUGIN_ROOT/references/personas/`.
 
 Modes: define (step 3), waive (step 3a), enrich (step 4), challenge (step 5).
 
+### 0. Resolve the Interaction Language
+
+Before any user-facing output, resolve the **interaction language** — the
+workspace default, overridden by the user's message language — per
+`$CLAUDE_PLUGIN_ROOT/references/interaction-language.md`, which owns the
+resolution ladder. Conduct the entire conversation in the resolved language.
+It is independent of the engagement's `language` field, which is the
+deliverable axis. This contract holds on the default path: it does not depend
+on an output style being active.
+
+The `description` of a Bash tool call is rendered to the consultant, so it is
+user copy — write it in the interaction language, outcome-shaped, at most 6
+words, with no script, file, or skill names, and never derived from the
+script's filename or header comment. Worked pair:
+`Discover cogni-consult engagements` → `Laufende Engagements holen`.
+
 ### 1. Prerequisite Gate
 
 When arriving via an in-session handoff (e.g. a design-thinking test stage
@@ -45,11 +61,6 @@ registered. Read `<engagement-dir>/consult-project.json`. If it is missing
 `Skill("cogni-consult:consult-setup")` and stop — write nothing. Scoping is
 NOT a prerequisite — the two default advisors are useful from day one; only
 scope-seeding (step 3) needs a completed scope.
-
-Conduct the conversation in the resolved **interaction language** (workspace
-default, overridden by the user's message language) — independent of the
-engagement's `language` field, which is the deliverable axis. See
-`$CLAUDE_PLUGIN_ROOT/references/interaction-language.md`.
 
 ### 2. Ensure the Default Advisors Exist
 
@@ -95,7 +106,7 @@ waiver is that escape, and it is a deliberate, confirmed decision — never a
 silent default.
 
 Only take this path when the consultant explicitly confirms it. Ask, in the
-resolved interaction language (see step 1), whether the engagement genuinely
+resolved interaction language (see step 0), whether the engagement genuinely
 has no external stakeholders to model beyond the shipped advisors. Do **not**
 write the marker on silence, on ambiguity, or as a fallback when scope-seeding
 merely hasn't happened yet — a *pending* gate and a *waived* gate are
@@ -145,7 +156,7 @@ its writes:
 1. **Fan out the objections (read-only).** For each relevant persona, dispatch
    the read-only `consult-persona-challenger` agent (inputs `engagement_dir`,
    `field_slug`, `deliverable_slug`, `persona_slug`, `plugin_root`,
-   `interaction_language` — the language resolved in step 1, as an ISO 639-1
+   `interaction_language` — the language resolved in step 0, as an ISO 639-1
    code); it adopts
    that persona's `voice` bounded by its `capabilities`/`wants`/`needs`/
    `core_tension` and returns the standard `{success, data, error}` envelope

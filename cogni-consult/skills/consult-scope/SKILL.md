@@ -19,6 +19,22 @@ Produce the keystone deliverable of a cogni-consult engagement: one SMART key qu
 
 ## Workflow
 
+### 0. Resolve the Interaction Language
+
+Before any user-facing output, resolve the **interaction language** — the
+workspace default, overridden by the user's message language — per
+`$CLAUDE_PLUGIN_ROOT/references/interaction-language.md`, which owns the
+resolution ladder. Conduct the entire conversation in the resolved language.
+It is independent of the engagement's `language` field, which is the
+deliverable axis. This contract holds on the default path: it does not depend
+on an output style being active.
+
+The `description` of a Bash tool call is rendered to the consultant, so it is
+user copy — write it in the interaction language, outcome-shaped, at most 6
+words, with no script, file, or skill names, and never derived from the
+script's filename or header comment. Worked pair:
+`Discover cogni-consult engagements` → `Laufende Engagements holen`.
+
 ### 1. Prerequisite Gate
 
 When arriving via an in-session `consult-setup` handoff, the engagement directory is already known — skip discovery. Otherwise locate the engagement:
@@ -36,8 +52,6 @@ When `workflow_state.scope` is already `complete`, this is a re-scope (pivot): c
 ### 2. Open the Scoping Conversation
 
 Read `$CLAUDE_PLUGIN_ROOT/references/methods/scope-dimensions.md`, then set `workflow_state.scope` to `"in-progress"` and `updated` to today's ISO date in one `Edit` — never rewrite `consult-project.json` (the `created` timestamp and `plugin_refs` set by setup must survive; `updated` covers scope edits per the data model, so an interrupted session still shows fresh modification).
-
-Conduct the conversation in the resolved **interaction language** (workspace default, overridden by the user's message language) — independent of the engagement's `language` field, which is the deliverable axis. See `$CLAUDE_PLUGIN_ROOT/references/interaction-language.md`.
 
 ### 3. Key Question, Then the Five Dimensions
 

@@ -44,6 +44,22 @@ not automatic**:
 
 ## Workflow
 
+### 0. Resolve the Interaction Language
+
+Before any user-facing output, resolve the **interaction language** — the
+workspace default, overridden by the user's message language — per
+`$CLAUDE_PLUGIN_ROOT/references/interaction-language.md`, which owns the
+resolution ladder. Conduct the entire conversation in the resolved language.
+It is independent of the engagement's `language` field, which is the
+deliverable axis. This contract holds on the default path: it does not depend
+on an output style being active.
+
+The `description` of a Bash tool call is rendered to the consultant, so it is
+user copy — write it in the interaction language, outcome-shaped, at most 6
+words, with no script, file, or skill names, and never derived from the
+script's filename or header comment. Worked pair:
+`Discover cogni-consult engagements` → `Laufende Engagements holen`.
+
 ### 1. Locate the engagement and the deliverable
 
 Resolve the engagement root (the directory holding `consult-project.json`) and

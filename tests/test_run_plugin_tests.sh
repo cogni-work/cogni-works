@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # test_run_plugin_tests.sh — self-test for the plugin test-suite runner.
 #
-# The runner discovers `tests/*.sh` and `cogni-*/tests/*.sh` and gates the CI
+# The runner discovers `tests/*.sh` and `*/tests/*.sh` and gates the CI
 # sweep on each suite's exit status. Cases:
 #   1. All-passing fixture tree -> exit 0, JSON reports every suite passed.
 #   2. One failing suite -> exit 1, the failing path named in failed_suites.
@@ -16,6 +16,10 @@
 #      Deliberately NOT an exact suite count: plugins add suites routinely, and
 #      a hardcoded total would turn every such addition into a false failure
 #      here. Structure is the invariant; the number is not.
+#   8. An empty root -> zero discovery is a FAILURE, not a vacuous pass: exit 1
+#      and success:false. This is the assertion that keeps the runner from
+#      reporting green if the globs ever stop matching — the same silent-zero
+#      class the CI job was written to end.
 #
 # Only case 7 touches the real tree, and it is --list only, so this suite never
 # recurses into the full sweep.
@@ -176,6 +180,27 @@ assert not bad, bad
 roots={s.split('/')[0] for s in d['suites']}
 assert 'tests' in roots, 'the four repo-root guard suites must be discovered too'
 assert any(r.startswith('cogni-') for r in roots), roots
+"
+
+# ---------------------------------------------------------------------------
+# Case 8 — an empty root discovers nothing, which must fail rather than pass.
+# ---------------------------------------------------------------------------
+FIX8="$WORK/empty"
+mkdir -p "$FIX8"
+
+set +e
+OUT8="$(python3 "$RUNNER" --root "$FIX8" 2>/dev/null)"
+CODE8=$?
+set -e
+check "empty root exits 1 rather than reporting a vacuous pass" \
+  "$([ "$CODE8" -eq 1 ] && echo 0 || echo 1)"
+assert_json "empty root reports success:false, total 0, and a non-empty error" "$OUT8" "
+import json,sys
+d=json.load(sys.stdin)
+assert d['success'] is False, d
+assert d['data']['total']==0, d
+assert d['data']['suites']==[], d
+assert d['error'], 'a discovery failure must carry an explanatory error string'
 "
 
 echo ""

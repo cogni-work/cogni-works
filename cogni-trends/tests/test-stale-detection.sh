@@ -2,7 +2,7 @@
 # Regression test for cogni-trends/scripts/project-status.sh stale-report
 # detection. Pins the script's contract for issue #187:
 #
-#   1. Mirroring is not drift  — Phase 4.1 of /trend-report writes report_tier
+#   1. Mirroring is not drift  — Step 3.1 of /trend-synthesis writes report_tier
 #      back into .metadata/trend-scout-output.json, bumping its mtime. The
 #      pre-#187 mtime check fired stale_report on every resume after a report.
 #      The post-#187 hash anchor must NOT fire.
@@ -88,7 +88,8 @@ PYEOF
 # Shared fixture builder — produces a project workspace that has reached
 # "complete" phase: scout-output with 4 candidates (one per dimension/horizon
 # slot the script checks), value-model with one investment theme, and a
-# trend-report file. The hash anchor is then computed and embedded.
+# tips-trend-report.md file (the /trend-synthesis artifact). The hash anchor
+# is then computed and embedded.
 # ---------------------------------------------------------------------------
 build_project() {
   local proj="$1"
@@ -130,7 +131,7 @@ EOF
 
   printf 'tips trend report body\n' > "$proj/tips-trend-report.md"
 
-  # Compute and embed the hash anchor — simulates trend-report Phase 4.1.
+  # Compute and embed the hash anchor — simulates /trend-synthesis Step 3.1.
   local anchor
   anchor="$(python3 "$HASH_HELPER" anchor "$proj/.metadata/trend-scout-output.json" "$proj/tips-value-model.json")"
   python3 - "$proj/.metadata/trend-scout-output.json" "$anchor" <<'PYEOF'

@@ -323,8 +323,13 @@ if [ "$HAS_VALUE_MODEL" = "true" ]; then
   # fragment with the braces stripped. Every fragment is invalid Python, so the
   # interpreter fails to compile and emits nothing at all — not even the earlier
   # print() output — leaving every counter here at its 0 default. The `except`
-  # below and the `2>/dev/null` both hide it. Command substitution on the right
-  # of an assignment is not subject to that expansion, so this form is safe.
+  # below and the `2>/dev/null` both hide it. The discriminator is not the dict
+  # literal itself but an UNPROTECTED brace-comma group in eval ARGUMENT
+  # position: every other eval site in this file keeps its braces inside some
+  # quoting context — escaped double quotes in the copywriter block above,
+  # single quotes around the interpolated JSON further up — which re-protects
+  # them. Command substitution on the right of an assignment is not subject to
+  # that expansion, so this form is safe.
   __VM_STATUS_OUT="$(python3 -c "
 import json
 try:

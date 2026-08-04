@@ -80,5 +80,8 @@ tables). Cosmetic reformats — column swap, extra column, switching from
 the underlying contract is unchanged. When reformatting any covered
 SKILL.md, update the patterns in the matching test script.
 
-CI integration is deferred (cogni-knowledge has no CI today). Tests are
-expected to be run pre-PR by the human author.
+These suites are CI-enforced: the `Plugin test suites (discover and run
+tests/*.sh)` job runs `scripts/run-plugin-tests.py`, which discovers every
+`cogni-knowledge/tests/*.sh` suite and fails the build on a non-zero exit.
+Run them yourself before a PR with `python3 scripts/run-plugin-tests.py
+--filter knowledge`.

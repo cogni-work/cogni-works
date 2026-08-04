@@ -52,6 +52,10 @@ script's filename or header comment. Worked pair:
 The dashboard document's own `<html lang>` attribute and language badge follow
 the engagement's deliverable `language`, not the interaction language.
 
+The register that output follows — scope, state lexicon, table rules, step
+announcements — is `$CLAUDE_PLUGIN_ROOT/references/user-facing-output.md`;
+table cells and headers are user copy too, not an exemption.
+
 ### 1. Find the Active Engagement
 
 Discover engagements with `scripts/discover-projects.sh` (the registry wrapper), or scan

@@ -41,6 +41,10 @@ words, with no script, file, or skill names, and never derived from the
 script's filename or header comment. Worked pair:
 `Discover cogni-consult engagements` → `Laufende Engagements holen`.
 
+The register that output follows — scope, state lexicon, table rules, step
+announcements — is `$CLAUDE_PLUGIN_ROOT/references/user-facing-output.md`;
+table cells and headers are user copy too, not an exemption.
+
 ### 1. Discover Engagements
 
 ```bash
@@ -132,8 +136,9 @@ the rollups at read time: `scope_state`, an engagement-level `personas_gate`
 (`satisfied` once a scope-seeded persona or a `.gate-waiver` marker exists,
 else `pending`), and per field its `state` plus each deliverable's `state`,
 `dt_stage`, `producing_route`, and `persona_review`.
-Surface any `warnings[]` verbatim (an `unreadable` field manifest is a
-problem for the consultant to see, not to paper over).
+Never suppress `warnings[]` (an unreadable field manifest is a problem for
+the consultant to see, not to paper over), but render its state as its
+display string, not the raw value.
 
 ### 4. Present the Dashboard
 

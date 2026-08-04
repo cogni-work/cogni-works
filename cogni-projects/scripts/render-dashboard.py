@@ -413,8 +413,12 @@ def _compute(entities, warnings):
         try:
             known_slugs.add(raw_slug)
         except TypeError:
-            # An unhashable slug can never be matched by an assignment anyway,
-            # and raising here would cost the entire render — see below.
+            # An unhashable slug cannot be held in a set, so it is dropped from
+            # known_slugs. Where an assignment's equally unhashable `project`
+            # still matches it via the `!=` filter above, that record is warned
+            # as unresolved anyway — a false positive over two hand-edited
+            # malformed records, accepted over letting TypeError reach the
+            # module-level catch-all and discard every warning — see below.
             continue
     for a in assignments:
         proj_ref = a.get("project")

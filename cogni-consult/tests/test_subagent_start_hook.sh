@@ -96,7 +96,12 @@ sys.exit(0 if got == os.environ["WANT"] else 1)
 ' && pass "$name" || fail "$name" "matcher=$MATCHER candidate=$candidate want=$want"
 }
 
-# 2 bare names
+# 2 bare names — a HEDGE, not an observed requirement. The qualified form below
+# is the one confirmed live; the bare branch is kept because the harness-side
+# name format is undocumented and costs nothing to tolerate. If dispatch is ever
+# confirmed to be always-qualified, these four assertions may be dropped along
+# with the alternation's optional prefix — unlike block 3, they pin no known
+# behaviour.
 for a in $AGENTS; do
   assert_match "bare: $a" "$a" yes
 done

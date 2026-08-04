@@ -115,8 +115,8 @@ chosen here.
 
 Close the dashboard with the **next-deliverable recommendation**. Check for
 stale deliverables first: any deliverable carrying `lineage_status.status:
-"stale"` has been invalidated by an upstream change, and refreshing it outranks
-starting fresh pending work. When stale deliverables exist, run
+"stale"` was invalidated upstream, and refreshing it outranks fresh work,
+which a stale foundation would waste. When stale deliverables exist, run
 `deliverable-graph.py <engagement-dir> refresh-order` and recommend refreshing
 them in **topological order — upstream before dependents**: layer-0 first,
 deeper layers only once the layer above is refreshed. Route to
@@ -140,7 +140,7 @@ prompting by delegating to the `consult-dashboard-refresher` agent with
 
 **Milestone README refresh.** Whenever the WBS structure changed this session,
 also run `python3 $CLAUDE_PLUGIN_ROOT/scripts/generate-engagement-readme.py "<engagement-dir>"`
-to refresh the engagement-root README front door — unconditional and
+to refresh the engagement-root README front door — no theme gate, and
 non-fatal: on failure, warn and continue.
 
 ### 4. Plan a Field's Deliverable Set

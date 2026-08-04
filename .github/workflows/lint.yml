@@ -88,3 +88,44 @@ jobs:
           vrc=$?
           [ "$vrc" -eq 0 ] || exit 1
           exit "$rc"
+
+  plugin-test-suites:
+    name: Plugin test suites (discover and run tests/*.sh)
+    runs-on: ubuntu-latest
+    # The full sequential sweep measures ~3.5 minutes locally; this is headroom
+    # for a slower runner, not a target.
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        # The shallow default is load-bearing here — in the OPPOSITE direction
+        # from version-bump-gate above, so do not copy its fetch-depth: 0.
+        # tests/test_check_version_bump.sh case 10 runs the real version gate
+        # against the checked-out tree. With full history origin/main resolves,
+        # that case grades the tree for real, and a genuine version-touched
+        # finding would fail this sweep IN ADDITION TO the dedicated
+        # version-bump-gate job — one defect reported twice, and mislabelled
+        # here as a test-suite failure. Shallow, the gate reports
+        # status: degraded / clean: true and exits 0, so this job grades the
+        # suites and the runner while version-bump-gate keeps owning the
+        # tree's version state.
+
+      - name: Discover and run every plugin and repo-root test suite
+        run: |
+          # Not `set -e`: the runner's exit code is the result we report on,
+          # so it must be captured rather than abort the step.
+          set -uo pipefail
+          python3 scripts/run-plugin-tests.py > plugin-tests.json
+          rc=$?
+
+          # The runner's own progress and per-failure output already reached the
+          # log on stderr (only stdout was redirected), so this adds the one
+          # thing it cannot emit itself: a GitHub annotation per failing suite.
+          python3 - <<'PY'
+          import json
+          d = json.load(open("plugin-tests.json")).get("data") or {}
+          for suite in d.get("failed_suites", []):
+              print("::error file=%s::test suite failed: %s" % (suite, suite))
+          PY
+
+          exit "$rc"

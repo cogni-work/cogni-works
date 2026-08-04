@@ -59,6 +59,8 @@ user copy — write it in the interaction language, outcome-shaped, at most 6
 words, with no script, file, or skill names, and never derived from the
 script's filename or header comment. Worked pair:
 `Discover cogni-consult engagements` → `Laufende Engagements holen`.
+Section (f) of `$CLAUDE_PLUGIN_ROOT/references/user-facing-output.md` owns
+these five constraints — edit them there, then mirror the change here.
 
 The engagement's `language` field controls the artifact's `lang` frontmatter,
 not how you address the user.

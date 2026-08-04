@@ -48,6 +48,8 @@ user copy — write it in the interaction language, outcome-shaped, at most 6
 words, with no script, file, or skill names, and never derived from the
 script's filename or header comment. Worked pair:
 `Discover cogni-consult engagements` → `Laufende Engagements holen`.
+Section (f) of `$CLAUDE_PLUGIN_ROOT/references/user-facing-output.md` owns
+these five constraints — edit them there, then mirror the change here.
 
 The register that output follows — scope, state lexicon, table rules, step
 announcements — is `$CLAUDE_PLUGIN_ROOT/references/user-facing-output.md`;

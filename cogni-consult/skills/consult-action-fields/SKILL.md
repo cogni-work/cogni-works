@@ -94,9 +94,9 @@ deliverables in manifest order:
 ```
 
 `Stand` merges the stored `state` and `dt_stage` into one value, the stage
-proper-cased for display (`ideate` → `Ideate`). A `complete` deliverable
-renders no stage — a **render-time** suppression only, so `dt_stage` stays
-stored in `field.json`.
+proper-cased for display (`ideate` → `Ideate`). A `complete` or `pending`
+deliverable renders no stage — a **render-time** suppression only, so
+`dt_stage` stays stored in `field.json`.
 
 `Route` is not a column: when a deliverable's `producing_route` differs from
 the default `consult-design-thinking`, note it beneath the table, never a

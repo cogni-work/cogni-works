@@ -752,6 +752,64 @@ else
   PHASE="complete"
 fi
 
+# Commercial-model consolidation gate (#1230): per product x market, is the
+# commercial structure shared/fixed? Keyed on product.revenue_model — a decided
+# shared/fixed model (subscription/hybrid/partnership) means one commercial
+# structure for the product, so the solutions layer should consolidate (a shared
+# reference cut / a package ladder) instead of fanning out one tiered solution
+# per proposition. project (the default) and any off-enum value stay not-shared.
+# Computed here (before next_actions) so the enrichment recommendation below can
+# read COMMERCIAL_ANY_SHARED / COMMERCIAL_SHARED_MODELS.
+commercial_model_status="{}"
+COMMERCIAL_ANY_SHARED="false"
+COMMERCIAL_SHARED_MODELS=""
+if [ -d "$PROJECT_DIR/products" ]; then
+  commercial_model_status=$(python3 -c "
+import json, os, glob
+
+proj = '$PROJECT_DIR'
+SHARED_MODELS = {'subscription', 'hybrid', 'partnership'}
+
+markets = sorted(
+    os.path.basename(m)[:-5]
+    for m in glob.glob(os.path.join(proj, 'markets', '*.json'))
+)
+
+matrix = []
+shared_products = []
+shared_models_seen = []
+
+for pf in sorted(glob.glob(os.path.join(proj, 'products', '*.json'))):
+    try:
+        d = json.load(open(pf))
+    except Exception:
+        continue
+    pslug = d.get('slug', os.path.basename(pf)[:-5])
+    rm = d.get('revenue_model') or 'project'
+    shared = rm in SHARED_MODELS  # commercial-structure shared check (mutation-check.sh flips this)
+    if shared:
+        shared_products.append(pslug)
+        shared_models_seen.append(rm)
+    for mslug in (markets or [None]):
+        matrix.append({
+            'product': pslug,
+            'market': mslug,
+            'revenue_model': rm,
+            'commercial_model_shared': shared,
+        })
+
+result = {
+    'matrix': matrix,
+    'any_shared': len(shared_products) > 0,
+    'shared_products': shared_products,
+    'shared_revenue_models': sorted(set(shared_models_seen)),
+}
+print(json.dumps(result))
+" 2>/dev/null || echo "{}")
+  COMMERCIAL_ANY_SHARED=$(CMS="$commercial_model_status" python3 -c "import json, os; d = json.loads(os.environ.get('CMS') or '{}'); print('true' if d.get('any_shared') else 'false')" 2>/dev/null || echo "false")
+  COMMERCIAL_SHARED_MODELS=$(CMS="$commercial_model_status" python3 -c "import json, os; d = json.loads(os.environ.get('CMS') or '{}'); print(','.join(d.get('shared_revenue_models', [])))" 2>/dev/null || echo "")
+fi
+
 # Build next_actions array
 next_actions="["
 na_first=true
@@ -838,7 +896,14 @@ case "$PHASE" in
     fi
     if [ "$SOLUTIONS_PCT" -lt 100 ]; then
       missing_sol=$((PROPOSITIONS - SOLUTIONS))
-      add_action "solutions" "$missing_sol proposition(s) lack solution plans" 7
+      if [ "$COMMERCIAL_ANY_SHARED" = "true" ]; then
+        # Shared/fixed commercial model detected (#1230): recommend consolidation
+        # (a shared reference cut / a package ladder) instead of one tiered
+        # solution per proposition. This suppresses the standard 1:1 action.
+        add_action "solutions" "Kaufmännische Struktur prüfen: geteiltes/fixes Erlösmodell erkannt (revenue_model=$COMMERCIAL_SHARED_MODELS) — geteilten Referenzzuschnitt bzw. Paketleiter (packages / shared_solution) empfehlen statt $missing_sol Einzellösungen je Proposition" 7
+      else
+        add_action "solutions" "$missing_sol proposition(s) lack solution plans" 7
+      fi
     fi
     if [ "$PACKAGES_PCT" -lt 100 ] && [ "$PACKAGEABLE_COUNT" -gt 0 ]; then
       missing_pkg=$((PACKAGEABLE_COUNT - PACKAGES))
@@ -1370,6 +1435,7 @@ cat << EOF
   "solutions_by_type": $solutions_by_type,
   "blueprint_status": $blueprint_status,
   "shared_solution_status": $shared_solution_status,
+  "commercial_model_status": $commercial_model_status,
   "relevance_matrix": $relevance_matrix,
   "phase": "$PHASE",
   "next_actions": $next_actions,

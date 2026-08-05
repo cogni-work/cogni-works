@@ -208,8 +208,6 @@ When working with cogni-narrative output, the sequence integrates naturally:
 
 No extra flags needed. The `arc_id` in frontmatter triggers the preservation mode.
 
-See [../workflows/research-to-narrative.md](../workflows/research-to-narrative.md) for the full research-to-polished-narrative pipeline.
-
 ### German document editing
 
 For DACH market documents:

@@ -206,11 +206,10 @@ These rules are not restated in this file; they hold on every surface named in
   engine-vocabulary-stays-internal rule —
   `references/subagent-output-contract.md` (`## Register`) and
   `output-styles/strategy-advisor.md` / `strategy-advisor-de.md`.
-- The slug-presence rule — code form only, only where the reader needs it to act,
-  never a column header, never a deliverable's name —
-  `output-styles/strategy-advisor.md` / `strategy-advisor-de.md`.
-  `references/subagent-output-contract.md` still scopes its own slug rule to
-  prose; everywhere else (d).7 above is what binds.
+- The slug-presence rule — (d).7 above owns it;
+  `output-styles/strategy-advisor.md` / `strategy-advisor-de.md` carry it on the
+  styled path. `references/subagent-output-contract.md` still scopes its own
+  slug rule to prose.
 - German orthography (ß/ss, Umlaute) — `output-styles/strategy-advisor-de.md`.
 
 One boundary: the generated HTML dashboard document follows the engagement's

@@ -34,9 +34,14 @@ Resolve it the same way `cogni-help:cogni-issues` does, in this order:
 
 Conduct the entire conversation in the resolved interaction language. Technical
 terms, slugs, skill names, CLI commands, and file names are identifiers: once one
-is surfaced at all, it keeps the exact form the system writes it in — never
-translated, never re-cased, never Title-Cased. `scope_state` stays `scope_state`;
-rendering it as `Scope` is the defect this rule forbids.
+is surfaced *as an identifier* — in code form, the way the system writes it — it
+keeps that exact form: never translated, never re-cased, never Title-Cased.
+`scope_state` stays `scope_state`; rendering it as `Scope` is the defect this
+rule forbids. The one carve-out is the design-thinking stage names, which
+`references/user-facing-output.md` (c) note 4 mandates be proper-cased for
+display (`ideate` → `Ideate`) because there the casing is what carries the
+meaning — a method term surfacing as a method term, not an identifier surfacing
+as an identifier.
 
 That governs *how* an identifier is spelled, not *whether* it belongs on the
 surface at all. The whether question is owned by

@@ -44,13 +44,13 @@ changed in the engagement — never what the tooling did to record it.
   layer)", not "at 2".
 - The established domain terms that may stay English in another language are
   Deliverable, Design Thinking, and Persona — plus file and skill names, CLI
-  commands, and slugs in code form. A slug appears only where the reader needs it
-  to *act*, and then only in code form — never as a column header, never as a
-  deliverable's name — on every surface, not only running prose. How an
-  identifier is spelled once it does appear is owned by
-  `references/interaction-language.md`.
-  "Action Field" is not on that list: it is this plugin's own coinage rather
-  than an established term, so a German surface reads "Handlungsfeld".
+  commands, and slugs in code form. "Action Field" is not among those
+  established terms: it is this plugin's own coinage, so a German surface reads
+  "Handlungsfeld".
+  A slug appears only where the reader needs it to *act*, and then only in code
+  form — never as a column header, never as a deliverable's name — on every
+  surface, not only running prose. How an identifier is spelled once it does
+  appear is owned by `references/interaction-language.md`.
 
 ## System vocabulary stays in the system
 Engine nouns — cascade, graph, edge, `depends_on`, gate, slug, state values

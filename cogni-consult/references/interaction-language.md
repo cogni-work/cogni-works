@@ -32,8 +32,20 @@ Resolve it the same way `cogni-help:cogni-issues` does, in this order:
 3. **Fallback** — if neither source is present and the message language is
    unclear, default to English.
 
-Conduct the entire conversation in the resolved interaction language; technical
-terms, slugs, skill names, CLI commands, and file names stay English regardless.
+Conduct the entire conversation in the resolved interaction language. Technical
+terms, slugs, skill names, CLI commands, and file names are identifiers: once one
+is surfaced *as an identifier* — in code form, the way the system writes it — it
+keeps that exact form: never translated, never re-cased, never Title-Cased.
+`scope_state` stays `scope_state`; rendering it as `Scope` is the defect this
+rule forbids. The one carve-out is the design-thinking stage names, which
+`references/user-facing-output.md` (c) note 4 mandates be proper-cased for
+display (`ideate` → `Ideate`) because there the casing is what carries the
+meaning — a method term surfacing as a method term, not an identifier surfacing
+as an identifier.
+
+That governs *how* an identifier is spelled, not *whether* it belongs on the
+surface at all. The whether question is owned by
+`references/user-facing-output.md`, where the default answer is **no**.
 
 ## Subagents do not inherit it
 
@@ -61,3 +73,6 @@ language per this file, but whose own copy constraints are owned by section (f)
 of `references/user-facing-output.md`. Deliberately not restated here: a fourth
 copy of the specifics is the drift this split exists to prevent. Look for a copy
 rule there, not here.
+
+The same split governs identifiers: this file says how one is spelled once it
+appears, and `references/user-facing-output.md` says whether it may appear.

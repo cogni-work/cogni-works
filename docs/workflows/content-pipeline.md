@@ -13,7 +13,7 @@ graph LR
     D -->|slides / web| E[Deliverable]
 ```
 
-**Narrative bridge (long-form only).** For thought leadership, whitepapers, keynote abstracts, and other long-form formats, `cogni-narrative` sits between `cogni-marketing` content generation and `cogni-copywriting` polish. It applies one of 10 story arc frameworks (Corporate Visions, JTBD Portfolio, Strategic Foresight, etc.) and writes `insight-summary.md` with `arc_id` frontmatter that `cogni-copywriting` reads to apply arc-aware polishing. Short-form formats (LinkedIn posts, battle cards, emails) skip this step and go straight from generation to polish. See the [cogni-narrative plugin guide](../plugin-guide/cogni-narrative.md) for arc selection guidance.
+**Narrative bridge (long-form only).** For thought leadership, whitepapers, keynote abstracts, and other long-form formats, `cogni-narrative` sits between `cogni-marketing` content generation and `cogni-copywriting` polish. It applies one of 11 story arc frameworks (Corporate Visions, JTBD Portfolio, Strategic Foresight, etc.) and writes `insight-summary.md` with `arc_id` frontmatter that `cogni-copywriting` reads to apply arc-aware polishing. Short-form formats (LinkedIn posts, battle cards, emails) skip this step and go straight from generation to polish. See the [cogni-narrative plugin guide](../plugin-guide/cogni-narrative.md) for arc selection guidance.
 
 ## What You Get
 

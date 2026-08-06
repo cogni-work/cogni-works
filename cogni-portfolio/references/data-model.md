@@ -34,6 +34,7 @@ cogni-portfolio/{project-slug}/
 └── research/                               # Portfolio scan artifacts (when scan is used)
     ├── research-report.md                  # Scan findings per taxonomy dimension
     ├── scan-solutions-draft.json           # Per-stack delivery seeds for solutions/ (category-aggregation mode only; persistent across sessions)
+    ├── solution-candidates.json            # Solution candidates pre-registered from a canvas/offer Solutions block (seed for solutions/, never counted as finished)
     ├── .logs/                              # Raw scan data (offerings, sources)
     ├── .metadata/
     │   └── scan-output.json                # Scan-run metadata (consolidation_mode, dedupe_summary, provider_units)
@@ -77,6 +78,40 @@ Fields:
   - `delivery_stack` — inferred from link host + USP text (e.g. `open-telekom-cloud`, `aws-frankfurt`, `gcp-frankfurt`, `on-prem`, `unknown`). Refinement rules are owned by the consuming `solutions/` entry point, not by scan.
 
 **Lifecycle:** scan writes the file during Phase 7.6 Branch F and does **not** remove it in the post-write sweep — `research/scan-solutions-draft.json` persists across scan sessions so `solutions/` can consume it whenever the user next runs the seed-from-scan-draft entry point. After that entry point has processed a draft, the consuming skill is responsible for deleting or archiving it. Until the `solutions/` seed-from-scan-draft entry point lands, the file is purely diagnostic — inspect it manually with `cat` to see what per-stack seeds the scan proposes.
+
+### Solution Candidate Register
+
+**`research/solution-candidates.json`** *(persistent)* — pre-registered solution **candidates** carried forward from a canvas or offer document's **Solutions block**. A Lean Canvas holds offerings the founder has already decided on; without this register that content is dropped at ingest, the `solutions/` layer starts empty, and the `solutions` skill falls back to generating one solution per proposition (the 1:1 default). `portfolio-canvas` (Step 6.5) and `portfolio-ingest` (Step 7b) write this register via `scripts/register-solution-candidates.py`, and `portfolio-setup` defers to that path for canvas bootstraps.
+
+It lives under `research/`, **not** `solutions/`, on purpose: `project-status.sh` counts `solutions/*.json` as finished solutions and `validate-entities.sh` validates them against the full solution schema, so a draft placed there would be miscounted and rejected. A candidate is a *seed*, distinguished from a finished solution by its `status` field — finished solutions carry `solution_type` / `shared_solution_ref`, never `status: "candidate"`.
+
+Schema:
+
+```json
+{
+  "version": 1,
+  "candidates": [
+    {
+      "slug": "cloud-monitoring",
+      "name": "Cloud Monitoring",
+      "status": "candidate",
+      "product_ref": "cloud-monitoring",
+      "source": "lean-canvas.json",
+      "created": "2026-01-16T10:00:00+00:00"
+    }
+  ]
+}
+```
+
+Fields:
+- `slug` — deterministic kebab-case slug derived from `name`; the **idempotency key**. Re-running the register upserts by slug (updates a matching record in place, appends only genuinely new slugs), so a canvas re-ingest never duplicates a candidate.
+- `name` — the offering text from the Solutions block.
+- `status` — `candidate` (or `draft`); the marker that keeps a candidate out of the finished-solution count.
+- `product_ref` — the `products/{slug}.json` this candidate resolves to, or `null` when no product matches. Candidates key on **products** (present at canvas/ingest time), not propositions or markets, which frequently do not exist yet.
+- `source` — the canvas/offer filename the candidate came from.
+- `created` — ISO-8601 timestamp; preserved across upserts.
+
+**Lifecycle:** written whenever a Solutions block is ingested; an **absent or empty** Solutions block is a no-op (the register is neither created nor mutated). The `solutions` skill reads it as a seed so its work begins from the decided offering structure instead of the 1:1 fallback.
 
 ## Entity Schemas
 

@@ -176,6 +176,18 @@ After writing all context entries, rebuild `context/context-index.json` by scann
 
 Include `version`, `entry_count`, and `updated` fields. See `$CLAUDE_PLUGIN_ROOT/references/data-model.md` for the full index schema.
 
+### 7b. Pre-register Solutions-block Candidates
+
+When the ingested document carries a **Solution / Solutions block** (a Lean Canvas, an offer catalog, a pitch deck's offering slide), its entries are offerings the company has already decided on. Historically that content was dropped — the solutions layer stayed empty and the `solutions` skill fell back to generating one solution per proposition (the 1:1 default). Carry those offerings forward as marked **candidates** instead.
+
+Run this **after** Step 6 wrote the products (a candidate resolves to a product):
+
+```bash
+python3 "${CLAUDE_PLUGIN_ROOT:-$(ls -td "$HOME"/.claude/plugins/cache/insight-wave/cogni-portfolio/*/ | head -1)}/scripts/register-solution-candidates.py" --project <project-dir> --canvas <ingested-file>
+```
+
+The script writes each offering to `research/solution-candidates.json` with `status: "candidate"`, a deterministic slug, and a `product_ref` resolved against `products/`. It is a **no-op (exit 0)** when the document has no Solutions block, so it is safe to run on any ingested file, and **idempotent** — re-ingesting upserts by slug rather than duplicating. Candidates live outside `solutions/`, so `project-status.sh` never counts them as finished; the `solutions` skill reads the register as its seed. Skip this step for documents that plainly carry no offering block (e.g. a pure pricing sheet or win/loss report) — the no-op makes running it harmless either way.
+
 ### 8. Move Processed Files
 
 After all confirmed items are written, move processed files to `uploads/processed/`. Create the directory if it doesn't exist. Only move files that were successfully processed. If a file yielded no usable entities or context (user skipped everything), still move it to avoid re-processing on the next run.

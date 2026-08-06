@@ -1,0 +1,75 @@
+<!doctype html>
+<!-- @dsCard group="Brand" name="Brand · Logo & wordmark" subtitle="Brain mark + wordmark on light and dark" viewport="700x180" --><html><head><meta charset="utf-8"><title>Logo + Wordmark</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  :root{
+    --ink:#111; --accent:#C8E62E; --accent-dk:#8BA31E;
+    --cream:#FAFAF8; --stone:#F2F2EE; --line:#E0E0DC; --fg-3:#6B7280;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;padding:24px 28px;background:#fff;font-family:var(--font-sans);color:var(--ink)}
+  h2{font-family:var(--font-mono);font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--fg-3);margin:0 0 12px}
+
+  .feature{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:22px}
+  .cell{padding:26px 28px;border-radius:12px;display:flex;align-items:center;gap:18px}
+  .light{background:var(--cream);border:1px solid var(--line)}
+  .dark{background:var(--ink);color:#fff}
+
+  .mark{flex-shrink:0;display:block}
+  .lab{font-family:var(--font-mono);font-size:10px;color:var(--fg-3);letter-spacing:.1em;text-transform:uppercase;font-weight:600;margin-left:auto}
+  .dark .lab{color:rgba(255,255,255,.45)}
+
+  .wm{font-size:30px;font-weight:700;letter-spacing:-.03em;line-height:1;display:flex;align-items:baseline}
+  .wm .hy{color:var(--accent);margin:0 1px}
+  .wm .tld{color:var(--accent);font-weight:700;font-size:23px;margin-left:1px}
+
+  .lockups{background:var(--stone);border-radius:12px;padding:22px 24px;display:flex;gap:22px;align-items:center;flex-wrap:wrap}
+  .set{display:flex;align-items:center;gap:10px}
+  .wm-sm{font-size:16px;font-weight:700;letter-spacing:-.02em;display:flex;align-items:baseline}
+  .wm-sm .hy,.wm-sm .tld{color:var(--accent)}
+  .wm-sm .tld{font-size:13px}
+  .wm-xs{font-size:13px;font-weight:700;letter-spacing:-.02em;display:flex;align-items:baseline}
+  .wm-xs .hy,.wm-xs .tld{color:var(--accent)}
+  .wm-xs .tld{font-size:11px}
+  .mono{font-family:var(--font-mono);font-size:11px;color:var(--fg-3);font-weight:600}
+  .mono .hy,.mono .tld{color:var(--accent-dk)}
+  .divider{width:1px;height:26px;background:var(--line)}
+
+  .note{font-family:var(--font-mono);font-size:11px;color:var(--fg-3);line-height:1.6;margin-top:-6px;margin-bottom:22px}
+</style></head><body>
+
+  <div class="feature">
+    <div class="cell light">
+      <svg class="mark" width="52" height="52" viewBox="0 0 60 60"><polygon points="30,6 56,52 4,52" fill="#C8E62E"/></svg>
+      <div class="wm">cogni<span class="hy">-</span>work<span class="tld">.ai</span></div>
+      <span class="lab">On light</span>
+    </div>
+    <div class="cell dark">
+      <svg class="mark" width="52" height="52" viewBox="0 0 60 60"><polygon points="30,6 56,52 4,52" fill="#C8E62E"/></svg>
+      <div class="wm">cogni<span class="hy">-</span>work<span class="tld">.ai</span></div>
+      <span class="lab">On dark</span>
+    </div>
+  </div>
+
+  <p class="note">Point-up equilateral triangle · chartreuse <code>#C8E62E</code> · no container, sits on any surface.</p>
+
+  <h2>Lockup variants · sizes &amp; media</h2>
+  <div class="lockups">
+    <div class="set">
+      <svg class="mark" width="36" height="36" viewBox="0 0 60 60"><polygon points="30,6 56,52 4,52" fill="#C8E62E"/></svg>
+      <div class="wm-sm">cogni<span class="hy">-</span>work<span class="tld">.ai</span></div>
+    </div>
+    <div class="divider"></div>
+    <div class="set">
+      <svg class="mark" width="22" height="22" viewBox="0 0 60 60"><polygon points="30,6 56,52 4,52" fill="#C8E62E"/></svg>
+      <div class="wm-xs">cogni<span class="hy">-</span>work<span class="tld">.ai</span></div>
+    </div>
+    <div class="divider"></div>
+    <div class="set">
+      <svg class="mark" width="14" height="14" viewBox="0 0 60 60"><polygon points="30,6 56,52 4,52" fill="#C8E62E"/></svg>
+      <span class="mono">cogni<span class="hy">-</span>work<span class="tld">.ai</span></span>
+    </div>
+    <span class="lab" style="margin-left:auto">~14 → 52px</span>
+  </div>
+
+</body></html>

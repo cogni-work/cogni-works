@@ -1,0 +1,29 @@
+<!doctype html>
+<!-- @dsCard group="Brand" name="Colors · Status" subtitle="Success / warning / danger / info + badges" viewport="700x220" --><html><head><meta charset="utf-8"><title>Status colors</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body{margin:0;padding:24px;background:#fff}
+  .row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:12px}
+  .sw{border:1px solid var(--cw-border);border-radius:10px;overflow:hidden;background:#fff}
+  .sw .chip{height:52px}
+  .sw .meta{padding:8px 12px}
+  .sw .name{font-size:12px;font-weight:600;color:var(--cw-text)}
+  .sw .hex{font-family:var(--font-mono);font-size:11px;color:var(--cw-text-muted);margin-top:2px}
+  .badges{display:flex;gap:8px;flex-wrap:wrap}
+  .badge{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;padding:5px 12px;border-radius:6px}
+  .badge .dot{width:6px;height:6px;border-radius:3px}
+</style></head><body>
+<div class="row">
+  <div class="sw"><div class="chip" style="background:#2E7D32"></div><div class="meta"><div class="name">Success</div><div class="hex">#2E7D32</div></div></div>
+  <div class="sw"><div class="chip" style="background:#E5A100"></div><div class="meta"><div class="name">Warning</div><div class="hex">#E5A100</div></div></div>
+  <div class="sw"><div class="chip" style="background:#D32F2F"></div><div class="meta"><div class="name">Danger</div><div class="hex">#D32F2F</div></div></div>
+  <div class="sw"><div class="chip" style="background:#1565C0"></div><div class="meta"><div class="name">Info</div><div class="hex">#1565C0</div></div></div>
+</div>
+<div class="badges">
+  <span class="badge" style="background:rgba(46,125,50,.1);color:#2E7D32"><span class="dot" style="background:#2E7D32"></span>Active</span>
+  <span class="badge" style="background:rgba(229,161,0,.12);color:#9a6d00"><span class="dot" style="background:#E5A100"></span>Warning</span>
+  <span class="badge" style="background:rgba(211,47,47,.1);color:#D32F2F"><span class="dot" style="background:#D32F2F"></span>Error</span>
+  <span class="badge" style="background:rgba(21,101,192,.1);color:#1565C0"><span class="dot" style="background:#1565C0"></span>Info</span>
+  <span class="badge" style="background:#111;color:#C8E62E"><span class="dot" style="background:#C8E62E"></span>New</span>
+</div>
+</body></html>

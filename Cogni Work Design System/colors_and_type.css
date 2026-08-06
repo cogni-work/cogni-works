@@ -1,0 +1,177 @@
+/* ============================================================
+   Cogni Work — Design Tokens
+   Firmitas · Utilitas · Venustas
+   Dark structural anchors · high-contrast clarity · chartreuse accent
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  /* ─── Color primitives ─── */
+  --cw-primary:       #111111; /* near-black — structural anchor */
+  --cw-secondary:     #333333; /* dark charcoal */
+  --cw-accent:        #C8E62E; /* chartreuse — the signature */
+  --cw-accent-muted:  #A8C424; /* olive lime — hover */
+  --cw-accent-dark:   #8BA31E; /* deep lime — pressed */
+  --cw-bg:            #FAFAF8; /* warm white canvas */
+  --cw-surface:       #F2F2EE; /* light warm gray — cards, panels */
+  --cw-surface-2:     #E8E8E4; /* 2nd elevation */
+  --cw-surface-dark:  #111111; /* dark sections, heroes */
+  --cw-text:          #111111;
+  --cw-text-light:    #FFFFFF;
+  --cw-text-muted:    #6B7280;
+  --cw-border:        #E0E0DC;
+
+  /* ─── Status ─── */
+  --cw-success: #2E7D32;
+  --cw-warning: #E5A100;
+  --cw-danger:  #D32F2F;
+  --cw-info:    #1565C0;
+
+  /* ─── Semantic foreground/background ─── */
+  --fg-1: var(--cw-primary);      /* body text, primary */
+  --fg-2: var(--cw-secondary);    /* subheads, supporting */
+  --fg-3: var(--cw-text-muted);   /* captions, metadata */
+  --fg-on-dark: var(--cw-text-light);
+  --fg-accent:  var(--cw-accent);
+
+  --bg-canvas:   var(--cw-bg);
+  --bg-surface:  var(--cw-surface);
+  --bg-dark:     var(--cw-surface-dark);
+
+  /* ─── Typography ─── */
+  --font-sans:  'DM Sans', 'Inter', 'Calibri', system-ui, sans-serif;
+  --font-mono:  'JetBrains Mono', 'Fira Code', Consolas, monospace;
+
+  /* Display / headings */
+  --fs-display: 56px;   --lh-display: 1.05;  --ls-display: -0.035em;
+  --fs-h1:      42px;   --lh-h1:      1.1;   --ls-h1:      -0.03em;
+  --fs-h2:      32px;   --lh-h2:      1.15;  --ls-h2:      -0.02em;
+  --fs-h3:      24px;   --lh-h3:      1.25;  --ls-h3:      -0.01em;
+  --fs-h4:      18px;   --lh-h4:      1.3;   --ls-h4:       0;
+  --fs-body:    15px;   --lh-body:    1.6;
+  --fs-small:   13px;   --lh-small:   1.55;
+  --fs-micro:   11px;   --lh-micro:   1.4;   --ls-micro:    0.12em;  /* eyebrow / labels */
+
+  /* ─── Spacing (4pt base) ─── */
+  --sp-0: 0;
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 24px;
+  --sp-6: 32px;
+  --sp-7: 48px;
+  --sp-8: 64px;
+  --sp-9: 96px;
+
+  /* ─── Radii ─── */
+  --r-xs: 4px;
+  --r-sm: 6px;
+  --r-md: 8px;
+  --r-lg: 10px;
+  --r-xl: 12px;
+  --r-2xl: 16px;
+  --r-pill: 999px;
+
+  /* ─── Shadows (soft, restrained) ─── */
+  --sh-sm: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.06);
+  --sh-md: 0 4px 16px rgba(0,0,0,0.06), 0 1px 4px rgba(0,0,0,0.04);
+  --sh-lg: 0 12px 40px rgba(0,0,0,0.1), 0 4px 12px rgba(0,0,0,0.05);
+  --sh-xl: 0 24px 64px rgba(0,0,0,0.14), 0 8px 20px rgba(0,0,0,0.06);
+  --sh-accent-ring: 0 0 0 3px rgba(200,230,46,0.15);
+
+  /* ─── Motion ─── */
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --dur-fast: 150ms;
+  --dur-med:  250ms;
+  --dur-slow: 400ms;
+}
+
+/* ============================================================
+   Semantic element defaults
+   ============================================================ */
+html, body {
+  font-family: var(--font-sans);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  color: var(--fg-1);
+  background: var(--bg-canvas);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1, .cw-h1 {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: var(--fs-h1);
+  line-height: var(--lh-h1);
+  letter-spacing: var(--ls-h1);
+  margin: 0;
+}
+h2, .cw-h2 {
+  font-weight: 700;
+  font-size: var(--fs-h2);
+  line-height: var(--lh-h2);
+  letter-spacing: var(--ls-h2);
+  margin: 0;
+}
+h3, .cw-h3 {
+  font-weight: 600;
+  font-size: var(--fs-h3);
+  line-height: var(--lh-h3);
+  letter-spacing: var(--ls-h3);
+  margin: 0;
+}
+h4, .cw-h4 {
+  font-weight: 600;
+  font-size: var(--fs-h4);
+  line-height: var(--lh-h4);
+  margin: 0;
+}
+.cw-display {
+  font-weight: 700;
+  font-size: var(--fs-display);
+  line-height: var(--lh-display);
+  letter-spacing: var(--ls-display);
+}
+p, .cw-p {
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  color: var(--fg-1);
+  text-wrap: pretty;
+}
+.cw-small  { font-size: var(--fs-small); line-height: var(--lh-small); color: var(--fg-3); }
+.cw-eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--fs-micro);
+  line-height: var(--lh-micro);
+  letter-spacing: var(--ls-micro);
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--fg-3);
+}
+code, pre, .cw-mono {
+  font-family: var(--font-mono);
+  font-size: 13px;
+}
+
+/* Accent helper — use for single word highlights, never body runs */
+.cw-accent { color: var(--cw-accent); }
+
+/* ============================================================
+   Utility classes
+   ============================================================ */
+.cw-dark {
+  background: var(--bg-dark);
+  color: var(--fg-on-dark);
+}
+.cw-dark .cw-eyebrow,
+.cw-dark h1, .cw-dark h2, .cw-dark h3, .cw-dark h4 { color: var(--fg-on-dark); }
+
+.cw-card {
+  background: #fff;
+  border: 1px solid var(--cw-border);
+  border-radius: var(--r-xl);
+  padding: var(--sp-5);
+}

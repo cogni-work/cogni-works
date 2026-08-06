@@ -1,0 +1,77 @@
+<!doctype html>
+<!-- @dsCard group="Brand" name="Voice — microcopy" subtitle="CTAs, forms, errors, empty & success" viewport="720x800" --><html><head><meta charset="utf-8"><title>Voice — microcopy</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body{margin:0;padding:28px 32px;background:#fff;font-family:var(--font-sans);max-width:680px;color:#111}
+  .eye{font-family:var(--font-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#6B7280;font-weight:600;margin-bottom:10px}
+  h2{font-size:24px;font-weight:700;letter-spacing:-.02em;margin:0 0 22px;line-height:1.2}
+  h3{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:#6B7280;font-weight:600;margin:24px 0 10px}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+  /* CTA samples */
+  .cta{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:8px;font-size:14px;font-weight:600;letter-spacing:-.005em;background:#C8E62E;color:#111;border:none;text-decoration:none}
+  .cta.ghost{background:transparent;color:#111;border:1.5px solid #111}
+  .cta.link{background:transparent;color:#111;padding:0;font-weight:500;border-bottom:1.5px solid #C8E62E}
+  .cta-row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:8px}
+  .rule{font-size:12.5px;color:#6B7280;line-height:1.5}
+
+  /* Form sample */
+  .field{display:block;margin-bottom:14px}
+  .field label{display:block;font-size:13px;color:#111;margin-bottom:6px;font-weight:500}
+  .field label .req{color:#8BA31E;margin-left:2px}
+  .field input{display:block;width:100%;padding:10px 12px;border:1.5px solid #E0E0DC;border-radius:8px;font-family:inherit;font-size:14px;color:#111;background:#fff;box-sizing:border-box}
+  .field input::placeholder{color:#9A9A92}
+  .field .help{font-size:12px;color:#6B7280;margin-top:5px}
+
+  /* Error / empty / success cards */
+  .card{border:1px solid #E0E0DC;border-radius:8px;padding:14px 16px;background:#fff;font-size:13.5px;line-height:1.5}
+  .card.err{border-left:3px solid #D32F2F}
+  .card.empty{background:#F2F2EE;border-color:transparent;text-align:center;padding:22px 16px}
+  .card.empty p{margin:0 0 10px;color:#6B7280}
+  .card.empty .cta{font-size:13px;padding:8px 14px}
+  .card.ok{border-left:3px solid #2E7D32}
+  .card .status{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:#6B7280;font-weight:600;margin-bottom:4px}
+
+  /* progress / system */
+  .sys{font-family:var(--font-mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:#111;font-weight:500}
+  .sys .dim{color:#9A9A92}
+</style></head><body>
+<div class="eye">VOICE · 07</div>
+<h2>Microcopy</h2>
+
+<h3>Buttons &amp; CTAs · Title Case, verb-led, ≤ 4 words</h3>
+<div class="cta-row">
+  <button class="cta">Get Started</button>
+  <button class="cta ghost">Book a Walkthrough</button>
+  <a class="cta link" href="#">Read the methodology →</a>
+</div>
+<p class="rule">One primary CTA per surface. Arrow trails ghost CTAs and text links — never filled chartreuse buttons. Never <i>Click here</i>, <i>Submit</i>, or <i>Learn more</i> without an object.</p>
+
+<h3>Form labels — sentence case, helper without period</h3>
+<div class="field">
+  <label>Email address <span class="req">*</span></label>
+  <input type="email" placeholder="name@firm.com">
+  <div class="help">We'll send the brief to this address</div>
+</div>
+
+<h3>States</h3>
+<div class="grid">
+  <div class="card err">
+    <div class="status">ERROR</div>
+    This email is already on the list — sign in instead.
+  </div>
+  <div class="card ok">
+    <div class="status">SENT</div>
+    Brief sent to 3 reviewers.
+  </div>
+  <div class="card empty">
+    <p>No runs yet. Start a plugin to see its history here.</p>
+    <button class="cta">Browse Plugins</button>
+  </div>
+  <div class="card">
+    <div class="status">SYSTEM</div>
+    <div class="sys">GENERATING DECK <span class="dim">·</span> 4 OF 7 SLIDES</div>
+  </div>
+</div>
+
+</body></html>

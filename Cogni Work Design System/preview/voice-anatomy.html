@@ -1,0 +1,49 @@
+<!doctype html>
+<!-- @dsCard group="Brand" name="Voice — copy block anatomy" subtitle="Eyebrow → header → subhead → body → CTA" viewport="800x580" --><html><head><meta charset="utf-8"><title>Voice — copy block anatomy</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body{margin:0;padding:28px 32px;background:#FAFAF8;font-family:var(--font-sans);max-width:760px;color:#111}
+  .eye{font-family:var(--font-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#6B7280;font-weight:600;margin-bottom:10px}
+  h2{font-size:24px;font-weight:700;letter-spacing:-.02em;margin:0 0 22px;line-height:1.2}
+  .frame{display:grid;grid-template-columns:170px 1fr;gap:0;background:#fff;border:1px solid #E0E0DC;border-radius:12px;overflow:hidden}
+  .spec{background:#F2F2EE;padding:24px 18px;border-right:1px solid #E0E0DC}
+  .spec ol{margin:0;padding:0;list-style:none;counter-reset:step}
+  .spec li{counter-increment:step;font-family:var(--font-mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:#6B7280;font-weight:600;padding:10px 0 10px 26px;position:relative;border-top:1px dashed #E0E0DC;line-height:1.4}
+  .spec li:first-child{border-top:none}
+  .spec li::before{content:counter(step,decimal-leading-zero);position:absolute;left:0;top:10px;width:18px;height:18px;background:#111;color:#C8E62E;border-radius:50%;font-size:9.5px;display:flex;align-items:center;justify-content:center;letter-spacing:0;font-weight:700}
+  .spec li small{display:block;color:#9A9A92;font-weight:500;margin-top:3px;letter-spacing:.06em}
+
+  .copy{padding:30px 32px}
+  .copy .eyebrow{font-family:var(--font-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#111;font-weight:600;margin-bottom:8px}
+  .copy h3{font-size:26px;font-weight:700;letter-spacing:-.025em;line-height:1.15;margin:0 0 8px;max-width:440px}
+  .copy .sub{font-size:15px;line-height:1.55;color:#6B7280;margin:0 0 14px;max-width:440px}
+  .copy p{font-size:14.5px;line-height:1.6;color:#111;margin:0 0 18px;max-width:440px}
+  .copy a.cta{display:inline-flex;align-items:center;gap:6px;background:#C8E62E;color:#111;font-weight:600;padding:10px 16px;border-radius:8px;text-decoration:none;font-size:14px}
+
+  .rule{font-size:12.5px;color:#6B7280;margin-top:14px;line-height:1.55}
+  .rule b{color:#111}
+</style></head><body>
+<div class="eye">VOICE · 10</div>
+<h2>Anatomy of a copy block</h2>
+
+<div class="frame">
+  <div class="spec">
+    <ol>
+      <li>Eyebrow<small>1–4 words · mono</small></li>
+      <li>Header<small>4–10 words · Title Case</small></li>
+      <li>Subhead<small>≤ 20 words · sentence</small></li>
+      <li>Body<small>1–3 short paras</small></li>
+      <li>CTA<small>≤ 4 words · verb-led</small></li>
+    </ol>
+  </div>
+  <div class="copy">
+    <div class="eyebrow">THE CHALLENGE</div>
+    <h3>Knowledge Workers Deserve Better Tools</h3>
+    <p class="sub">Coordination eats the day; the work that matters waits.</p>
+    <p>Professionals spend 60% of their day on low-value coordination — emails, status updates, and searching for information across siloed tools. Cogni Work returns that time to the work that matters.</p>
+    <a href="#" class="cta">Get Started →</a>
+  </div>
+</div>
+
+<p class="rule"><b>Cut from the bottom.</b> Drop the CTA before the subhead; drop the subhead before the body. <b>Never cut the eyebrow</b> — it is the rhythm.</p>
+</body></html>

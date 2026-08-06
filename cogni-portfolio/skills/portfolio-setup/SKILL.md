@@ -46,7 +46,7 @@ If the user already provided a URL or company name in their initial message, ski
 
 - **URL provided →** delegate to a subagent (Agent tool) immediately to extract company name, description, industry sector, and broad service areas from the company's public pages. Store the company domain for use in Step 5.5. Do NOT attempt detailed product discovery or feature-level analysis — that is the job of the full portfolio scan in Step 5.5.
 - **Documents in uploads/ →** scan them for company context (name, description, industry, products). A strategy deck or lean canvas often contains all four fields.
-- **Canvas file →** extract via canvas mapping (the `portfolio-canvas` skill handles this, but you can extract company-level context directly).
+- **Canvas file →** extract via canvas mapping (the `portfolio-canvas` skill handles this, but you can extract company-level context directly). A canvas Solutions block is pre-registered as solution **candidates** (`research/solution-candidates.json`) by `portfolio-canvas` Step 6.5 — defer to it rather than re-implementing here. If setup writes products directly from a canvas without running `portfolio-canvas`, run `scripts/register-solution-candidates.py --project <project-dir> --canvas <canvas-file>` after the products are written so the decided offerings still seed the `solutions` skill (the script is an idempotent no-op-on-empty, so a later `portfolio-canvas` run does not double-register).
 - **Just a name (no URL, no documents) →** fall back to asking for description, industry, and products individually. This is the last resort, not the default path.
 
 #### Step 1d: State what you found

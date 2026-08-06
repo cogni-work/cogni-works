@@ -34,6 +34,7 @@ The key insight: a canvas already contains products, markets, and pricing buried
 | **Customer Segments** | Markets | Each segment becomes a market. Primary → `priority: "beachhead"`, Secondary → `"expansion"`, Tertiary → `"aspirational"`. Pain points feed downstream proposition DOES/MEANS. |
 | **Solution** (layers/components) | Products | Each distinct solution layer or component becomes a product with `maturity: "concept"` and inferred `revenue_model`. |
 | **Solution** (capabilities within layers) | Features | Specific capabilities mentioned within solution layers become features with `readiness: "planned"`. |
+| **Solution** (decided offerings) | Solution **candidates** | Each already-decided offering in the Solutions block is pre-registered as a marked candidate in `research/solution-candidates.json` (Step 6.5), so the `solutions` skill starts from the decided structure instead of generating 1:1 from propositions. Candidates carry `status: "candidate"` and live outside `solutions/`, so they are never counted as finished solutions. |
 | **Revenue Streams** | Solution pricing templates | Pricing assumptions seed solution `pricing` or `subscription` fields. The revenue type (license, subscription, consulting, maintenance) determines `solution_type`. |
 | **Problem** | *Context* | Pain points inform proposition DOES statements downstream — stored as `canvas_context.problems` in `portfolio.json` for reference. |
 | **UVP** | *Context* | The overarching value proposition informs product `positioning` — stored as `canvas_context.uvp` in `portfolio.json`. |
@@ -162,6 +163,18 @@ For each confirmed entity, write JSON following the schemas in `$CLAUDE_PLUGIN_R
 - Include pain points from the canvas in `description`
 - Leave `tam`/`sam`/`som` empty with a note — founding-stage businesses typically have hypotheses, not validated sizing. The `markets` skill can add sizing later.
 - Set `segmentation` fields where the canvas provides enough detail (employee range, vertical, etc.)
+
+### 6.5 Pre-register Solutions-block Candidates
+
+A Lean Canvas Solutions block holds offerings the founder has *already decided on*. If that content is dropped at ingest, the `solutions` skill later starts from an empty layer and falls back to generating one solution per proposition (the 1:1 default). Carry those offerings forward as marked **candidates** so solutions work begins from the decided structure.
+
+Run this **after** the products are written in Step 6 — a candidate resolves to a product, so the products must exist first:
+
+```bash
+python3 "${CLAUDE_PLUGIN_ROOT:-$(ls -td "$HOME"/.claude/plugins/cache/insight-wave/cogni-portfolio/*/ | head -1)}/scripts/register-solution-candidates.py" --project <project-dir> --canvas <canvas-file>
+```
+
+The script parses the canvas Solutions block and writes each offering to `research/solution-candidates.json` with `status: "candidate"`, a deterministic slug, and a `product_ref` resolved against `products/` when a match exists. It is a **no-op (exit 0)** when the Solutions block is absent or empty, and **idempotent** — re-running upserts by slug rather than duplicating, so a canvas re-ingest is safe. Candidates live outside `solutions/`, so `project-status.sh` never counts them as finished solutions; the `solutions` skill reads the register as its seed.
 
 ### 7. Write Canvas Context to portfolio.json
 

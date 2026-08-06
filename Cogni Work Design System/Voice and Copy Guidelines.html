@@ -1,0 +1,167 @@
+<!doctype html>
+<!-- @dsCard group="Brand" name="Voice &amp; Copy — index" subtitle="All specimens + 10-second checklist on one page" -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Voice &amp; Copy Guidelines · Cogni Work</title>
+<link rel="stylesheet" href="colors_and_type.css">
+<style>
+  :root{ --w: 1120px; }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:var(--font-sans);background:#FAFAF8;color:#111;-webkit-font-smoothing:antialiased}
+
+  /* Dark anchor */
+  .anchor{background:#111;color:#fff;padding:64px 48px 56px;position:relative;overflow:hidden}
+  .anchor .grid{position:absolute;inset:0;opacity:.05}
+  .anchor .grid span{position:absolute;top:0;bottom:0;width:1px;background:#C8E62E}
+  .anchor .inner{max-width:var(--w);margin:0 auto;position:relative}
+  .anchor .eye{font-family:var(--font-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#C8E62E;font-weight:600}
+  .anchor h1{font-size:56px;font-weight:700;letter-spacing:-.035em;line-height:1.05;margin:14px 0 10px;max-width:780px}
+  .anchor h1 .accent{color:#C8E62E}
+  .anchor p{color:rgba(255,255,255,.7);font-size:17px;line-height:1.55;margin:0;max-width:620px}
+  .anchor .motto{margin-top:36px;font-family:var(--font-mono);font-size:11px;letter-spacing:.18em;color:rgba(255,255,255,.55);font-weight:600;display:flex;gap:14px}
+  .anchor .motto span:not(:last-child)::after{content:"·";color:#C8E62E;margin-left:14px}
+
+  /* Section header */
+  .section{max-width:var(--w);margin:0 auto;padding:64px 48px 16px}
+  .section .eye{font-family:var(--font-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#6B7280;font-weight:600}
+  .section h2{font-size:32px;font-weight:700;letter-spacing:-.02em;line-height:1.15;margin:8px 0 8px;max-width:720px}
+  .section .lead{font-size:15.5px;line-height:1.6;color:#6B7280;margin:0;max-width:640px}
+
+  /* Specimen grid */
+  .grid-wrap{max-width:var(--w);margin:0 auto;padding:24px 48px 80px}
+  .cards{display:grid;grid-template-columns:repeat(12,1fr);gap:20px}
+  .card{grid-column:span 6;background:#fff;border:1px solid #E0E0DC;border-radius:12px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 1px 2px rgba(17,17,17,.04)}
+  .card.wide{grid-column:span 12}
+  .card.tall{grid-column:span 6}
+  .card-head{padding:18px 22px 14px;border-bottom:1px solid #F0EFEB;display:flex;align-items:baseline;justify-content:space-between;gap:14px}
+  .card-head .ix{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:#6B7280;font-weight:600}
+  .card-head h3{font-size:18px;font-weight:700;letter-spacing:-.015em;margin:4px 0 0;line-height:1.25}
+  .card-head .sub{font-size:13px;color:#6B7280;line-height:1.5;margin:5px 0 0;max-width:360px}
+  .card iframe{display:block;border:none;width:100%;background:#fff}
+
+  /* 10-second checklist */
+  .checklist{max-width:var(--w);margin:0 auto;padding:0 48px 96px}
+  .checklist-card{background:#111;color:#fff;border-radius:14px;padding:44px 48px;position:relative;overflow:hidden}
+  .checklist-card .grid{position:absolute;inset:0;opacity:.05}
+  .checklist-card .grid span{position:absolute;top:0;bottom:0;width:1px;background:#C8E62E}
+  .checklist-card .inner{position:relative}
+  .checklist-card .eye{font-family:var(--font-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#C8E62E;font-weight:600}
+  .checklist-card h2{font-size:36px;font-weight:700;letter-spacing:-.025em;line-height:1.1;margin:10px 0 6px;max-width:560px}
+  .checklist-card p{color:rgba(255,255,255,.65);font-size:15px;line-height:1.55;margin:0 0 28px;max-width:520px}
+  .checklist-card ul{margin:0;padding:0;list-style:none;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 32px}
+  .checklist-card li{display:flex;gap:14px;align-items:flex-start;font-size:15px;line-height:1.45}
+  .checklist-card li .box{flex:0 0 22px;height:22px;border:1.5px solid rgba(255,255,255,.35);border-radius:5px;margin-top:1px}
+  .checklist-card li:last-child{font-style:italic;color:rgba(255,255,255,.65)}
+
+  /* Footnote */
+  .foot{max-width:var(--w);margin:0 auto;padding:0 48px 80px;font-size:13px;color:#6B7280;line-height:1.6}
+  .foot a{color:#111;text-decoration:none;border-bottom:1.5px solid #C8E62E}
+</style>
+</head>
+<body>
+
+<section class="anchor">
+  <div class="grid">
+    <span style="left:8%"></span><span style="left:18%"></span><span style="left:30%"></span>
+    <span style="left:42%"></span><span style="left:54%"></span><span style="left:66%"></span>
+    <span style="left:78%"></span><span style="left:90%"></span>
+  </div>
+  <div class="inner">
+    <div class="eye">VOICE &amp; COPY GUIDELINES</div>
+    <h1>We know what we're doing,<br><span class="accent">without trying hard.</span></h1>
+    <p>Cogni Work writes like a senior consultant who has nothing to prove: short clauses, concrete verbs, real numbers, no theatre. The chartreuse is loud, so everything we write stays quiet.</p>
+    <div class="motto"><span>Firmitas</span><span>Utilitas</span><span>Venustas</span></div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="eye">FOUNDATIONS</div>
+  <h2>How Cogni Work sounds</h2>
+  <p class="lead">Three registers, one rhythm. Five traits. One claim per surface. These specimens are the operating reference — read them, then write against them.</p>
+</section>
+
+<div class="grid-wrap">
+  <div class="cards">
+    <div class="card">
+      <div class="card-head"><div><h3>The five traits</h3><p class="sub">Executive, confident, methodology-driven, quietly European, restrained.</p></div><div class="ix">01</div></div>
+      <iframe src="preview/voice-principles.html" height="520" loading="lazy"></iframe>
+    </div>
+    <div class="card">
+      <div class="card-head"><div><h3>Three registers, one rhythm</h3><p class="sub">Eyebrow, header, body — fixed casing, fixed jobs.</p></div><div class="ix">02</div></div>
+      <iframe src="preview/voice-registers.html" height="640" loading="lazy"></iframe>
+    </div>
+    <div class="card">
+      <div class="card-head"><div><h3>Person &amp; address</h3><p class="sub">You / We / never I. Role over generic noun.</p></div><div class="ix">03</div></div>
+      <iframe src="preview/voice-person.html" height="480" loading="lazy"></iframe>
+    </div>
+    <div class="card">
+      <div class="card-head"><div><h3>Numbers are heroes</h3><p class="sub">Hero metric formatting and grounding rules.</p></div><div class="ix">04</div></div>
+      <iframe src="preview/voice-numbers.html" height="580" loading="lazy"></iframe>
+    </div>
+    <div class="card wide">
+      <div class="card-head"><div><h3>Anatomy of a copy block</h3><p class="sub">Eyebrow → header → subhead → body → CTA. Cut from the bottom.</p></div><div class="ix">05</div></div>
+      <iframe src="preview/voice-anatomy.html" height="580" loading="lazy"></iframe>
+    </div>
+  </div>
+</div>
+
+<section class="section">
+  <div class="eye">DISCIPLINE</div>
+  <h2>Structure and rewriting</h2>
+  <p class="lead">Every surface picks one framework and commits to it. Every weak phrase has a stronger rewrite already waiting.</p>
+</section>
+
+<div class="grid-wrap">
+  <div class="cards">
+    <div class="card">
+      <div class="card-head"><div><h3>Frameworks</h3><p class="sub">BLUF · Pyramid · SCQA — pick one, commit, don't mix.</p></div><div class="ix">06</div></div>
+      <iframe src="preview/voice-frameworks.html" height="780" loading="lazy"></iframe>
+    </div>
+    <div class="card">
+      <div class="card-head"><div><h3>Do &amp; don't</h3><p class="sub">Side-by-side rewrites with the reason.</p></div><div class="ix">07</div></div>
+      <iframe src="preview/voice-do-dont.html" height="780" loading="lazy"></iframe>
+    </div>
+    <div class="card">
+      <div class="card-head"><div><h3>Vocabulary</h3><p class="sub">Words we use, words we cut, words to handle with care.</p></div><div class="ix">08</div></div>
+      <iframe src="preview/voice-vocabulary.html" height="620" loading="lazy"></iframe>
+    </div>
+    <div class="card">
+      <div class="card-head"><div><h3>Bilingual — EN / DE</h3><p class="sub">Wolf-Schneider clarity in both languages.</p></div><div class="ix">09</div></div>
+      <iframe src="preview/voice-bilingual.html" height="620" loading="lazy"></iframe>
+    </div>
+    <div class="card wide">
+      <div class="card-head"><div><h3>Microcopy</h3><p class="sub">CTAs, form labels, errors, empty &amp; success states, system status.</p></div><div class="ix">10</div></div>
+      <iframe src="preview/voice-microcopy.html" height="820" loading="lazy"></iframe>
+    </div>
+  </div>
+</div>
+
+<div class="checklist">
+  <div class="checklist-card">
+    <div class="grid">
+      <span style="left:8%"></span><span style="left:20%"></span><span style="left:32%"></span>
+      <span style="left:44%"></span><span style="left:56%"></span><span style="left:68%"></span>
+      <span style="left:80%"></span><span style="left:92%"></span>
+    </div>
+    <div class="inner">
+      <div class="eye">THE LAST PASS</div>
+      <h2>The 10-second checklist</h2>
+      <p>Read every piece of copy once against this list before it ships. Cut what fails.</p>
+      <ul>
+        <li><span class="box"></span>One claim per sentence</li>
+        <li><span class="box"></span>Numbers grounded, where present</li>
+        <li><span class="box"></span>Three registers used correctly</li>
+        <li><span class="box"></span>No emoji, no exclamations, no bingo words</li>
+        <li><span class="box"></span>One primary CTA</li>
+        <li><span class="box"></span>You / we / never I</li>
+        <li><span class="box"></span>Would a senior consultant nod, or wince?</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<p class="foot">Canonical reference: <a href="voice-and-copy.md">voice-and-copy.md</a> — full guidelines including punctuation rules, naming &amp; signatures, and voice across surfaces.</p>
+
+</body>
+</html>

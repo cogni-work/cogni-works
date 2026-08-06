@@ -1,0 +1,217 @@
+{
+  "plugins": [
+    "react",
+    "import"
+  ],
+  "rules": {
+    "react/forbid-elements": [
+      "warn",
+      {
+        "forbid": []
+      }
+    ],
+    "no-restricted-imports": [
+      "warn",
+      {
+        "patterns": [
+          {
+            "group": [
+              "raw/**",
+              "slides/**",
+              "ui_kits/plugin/**",
+              "ui_kits/shared/**",
+              "ui_kits/website/**"
+            ],
+            "message": "Import design-system components from 'index.js', not component internals."
+          }
+        ]
+      }
+    ],
+    "no-restricted-syntax": [
+      "warn",
+      {
+        "selector": "Literal[value=/#[0-9a-fA-F]{3,8}\\b/]",
+        "message": "Raw hex color — use a design-system color token via var()."
+      },
+      {
+        "selector": "Literal[value=/\\b\\d+px\\b/]",
+        "message": "Raw px value — use a design-system spacing token via var()."
+      },
+      {
+        "selector": "Literal[value=/font-family\\s*:\\s*(?!['\\\"]?(?:DM Sans|JetBrains Mono))/i]",
+        "message": "Font not provided by the design system. Available: DM Sans, JetBrains Mono."
+      }
+    ]
+  },
+  "overrides": [
+    {
+      "files": [
+        "**/index.js"
+      ],
+      "rules": {
+        "no-restricted-imports": "off"
+      }
+    }
+  ],
+  "x-omelette": {
+    "components": {},
+    "tokens": [
+      "--bg-canvas",
+      "--bg-dark",
+      "--bg-surface",
+      "--cw-accent",
+      "--cw-accent-dark",
+      "--cw-accent-muted",
+      "--cw-bg",
+      "--cw-border",
+      "--cw-danger",
+      "--cw-info",
+      "--cw-primary",
+      "--cw-secondary",
+      "--cw-success",
+      "--cw-surface",
+      "--cw-surface-2",
+      "--cw-surface-dark",
+      "--cw-text",
+      "--cw-text-light",
+      "--cw-text-muted",
+      "--cw-warning",
+      "--dur-fast",
+      "--dur-med",
+      "--dur-slow",
+      "--ease-standard",
+      "--fg-1",
+      "--fg-2",
+      "--fg-3",
+      "--fg-accent",
+      "--fg-on-dark",
+      "--font-mono",
+      "--font-sans",
+      "--fs-body",
+      "--fs-display",
+      "--fs-h1",
+      "--fs-h2",
+      "--fs-h3",
+      "--fs-h4",
+      "--fs-micro",
+      "--fs-small",
+      "--lh-body",
+      "--lh-display",
+      "--lh-h1",
+      "--lh-h2",
+      "--lh-h3",
+      "--lh-h4",
+      "--lh-micro",
+      "--lh-small",
+      "--ls-display",
+      "--ls-h1",
+      "--ls-h2",
+      "--ls-h3",
+      "--ls-h4",
+      "--ls-micro",
+      "--r-2xl",
+      "--r-lg",
+      "--r-md",
+      "--r-pill",
+      "--r-sm",
+      "--r-xl",
+      "--r-xs",
+      "--sh-accent-ring",
+      "--sh-lg",
+      "--sh-md",
+      "--sh-sm",
+      "--sh-xl",
+      "--sp-0",
+      "--sp-1",
+      "--sp-2",
+      "--sp-3",
+      "--sp-4",
+      "--sp-5",
+      "--sp-6",
+      "--sp-7",
+      "--sp-8",
+      "--sp-9"
+    ],
+    "tokenKinds": {
+      "--cw-primary": "color",
+      "--cw-secondary": "color",
+      "--cw-accent": "color",
+      "--cw-accent-muted": "color",
+      "--cw-accent-dark": "color",
+      "--cw-bg": "color",
+      "--cw-surface": "color",
+      "--cw-surface-2": "color",
+      "--cw-surface-dark": "color",
+      "--cw-text": "font",
+      "--cw-text-light": "font",
+      "--cw-text-muted": "font",
+      "--cw-border": "color",
+      "--cw-success": "color",
+      "--cw-warning": "color",
+      "--cw-danger": "color",
+      "--cw-info": "color",
+      "--fg-1": "color",
+      "--fg-2": "color",
+      "--fg-3": "color",
+      "--fg-on-dark": "color",
+      "--fg-accent": "color",
+      "--bg-canvas": "color",
+      "--bg-surface": "color",
+      "--bg-dark": "color",
+      "--font-sans": "font",
+      "--font-mono": "font",
+      "--fs-display": "spacing",
+      "--lh-display": "other",
+      "--ls-display": "spacing",
+      "--fs-h1": "spacing",
+      "--lh-h1": "other",
+      "--ls-h1": "spacing",
+      "--fs-h2": "spacing",
+      "--lh-h2": "other",
+      "--ls-h2": "spacing",
+      "--fs-h3": "spacing",
+      "--lh-h3": "other",
+      "--ls-h3": "spacing",
+      "--fs-h4": "spacing",
+      "--lh-h4": "other",
+      "--ls-h4": "other",
+      "--fs-body": "spacing",
+      "--lh-body": "other",
+      "--fs-small": "spacing",
+      "--lh-small": "other",
+      "--fs-micro": "spacing",
+      "--lh-micro": "other",
+      "--ls-micro": "spacing",
+      "--sp-0": "other",
+      "--sp-1": "spacing",
+      "--sp-2": "spacing",
+      "--sp-3": "spacing",
+      "--sp-4": "spacing",
+      "--sp-5": "spacing",
+      "--sp-6": "spacing",
+      "--sp-7": "spacing",
+      "--sp-8": "spacing",
+      "--sp-9": "spacing",
+      "--r-xs": "spacing",
+      "--r-sm": "spacing",
+      "--r-md": "spacing",
+      "--r-lg": "spacing",
+      "--r-xl": "spacing",
+      "--r-2xl": "spacing",
+      "--r-pill": "spacing",
+      "--sh-sm": "shadow",
+      "--sh-md": "shadow",
+      "--sh-lg": "shadow",
+      "--sh-xl": "shadow",
+      "--sh-accent-ring": "shadow",
+      "--ease-standard": "other",
+      "--dur-fast": "other",
+      "--dur-med": "other",
+      "--dur-slow": "other"
+    },
+    "fontFamilies": [
+      "DM Sans",
+      "JetBrains Mono"
+    ]
+  }
+}

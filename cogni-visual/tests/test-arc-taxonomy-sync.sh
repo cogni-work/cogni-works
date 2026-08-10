@@ -28,16 +28,24 @@
 #   intended trade: adding an arc without a visual mapping is an incomplete change, and a
 #   loud failure in the wrong place beats a silent one in the right place.
 #
-# CASE LABEL SHAPE: `ok: <id>` / `FAIL: <id>` — NOT the `OK   ` / `FAIL ` shape used by
-#   three older suites in this repo. The shared mutation harness classifies a case by reading
-#   OUTPUT LINES rather than the exit code, matching `FAIL: <case>` for red and
-#   `ok: <case>` / `PASS: <case>` for green. The no-colon shape matches neither pattern, so a
-#   suite wearing it cannot be driven by the harness and its mutation recipe is unrunnable as
-#   written.
+# CASE LABEL SHAPE: `ok: <id>` / `FAIL: <id>` — NOT the `OK   ` / `FAIL ` shape carried by most
+#   of this repo's older per-case verdict helpers. This IS a departure from the more common
+#   shape, and it is deliberate: it is forced by the machinery that has to read this output,
+#   not chosen as a matter of style. Three facts, each independently checkable:
 #
-#   The colon form is also the repo majority, not a deviation from house style: of the suites
-#   carrying a pass()/fail() helper, nineteen already emit `FAIL: <case>` and three emit the
-#   no-colon shape. This suite is born compatible rather than needing to be migrated later.
+#     - The shared mutation harness classifies a case by reading OUTPUT LINES rather than the
+#       exit code. Red is `^[ \t]*FAIL:[ \t]+<case>`, green is `^[ \t]*(ok|PASS):[ \t]+<case>`.
+#       The no-colon shape matches neither, so a suite wearing it returns case_not_found and
+#       its mutation recipe cannot be run at all.
+#     - The handoff preflight instrument that runs that recipe is registered NON-ADVISORY, so a
+#       suite the harness cannot classify also cannot clear the standard author-to-merger
+#       handoff. The incompatibility is blocking, not cosmetic.
+#     - This repo's other mutation harness, cogni-portfolio/scripts/mutation-check.sh, already
+#       emits the colon form, for the same reason.
+#
+#   The cost is one deviation from the older shape; the saving is a migration this suite would
+#   otherwise need later. Do not "restore" the no-colon form without first changing the
+#   classifier — doing so silently disarms the negative case below.
 #
 #   Two label rules are load-bearing, not style:
 #     - a case id is a single token followed by a space or end-of-line, never `S2:` or `S2 -`;
@@ -100,14 +108,25 @@ failures=0
 pass() { echo "ok: $1"; }
 fail() { echo "FAIL: $1"; failures=$((failures + 1)); }
 
-# Every case downstream of the non-vacuity guards, declared once. Cases that cannot be evaluated
-# must still emit their own id: a case id that is simply absent from the output is
-# indistinguishable, to the harness, from a typo'd --case — so an unevaluated case is reported as
-# a failure under its own name rather than skipped silently.
-#
-# MAINTENANCE: adding a case below the V-guards means adding its id here too. This list is the
-# single declaration bail_out reads; a case missing from it vanishes from the bail output.
-DOWNSTREAM_CASES="S1 S2 T1 E1 D1 M1"
+# THE CASE REGISTRY — the one declaration every other case list in this file derives from.
+# A guard whose whole purpose is pinning one list against another has no business carrying an
+# un-pinned list of its own, so this one is verified rather than merely maintained: M1 compares
+# it against the ids a complete run actually emits, in both directions. A case added without
+# registering it here, or an id left here after its case was deleted, turns M1 red.
+ALL_CASES="V1 V2 V3 V4 S1 S2 T1 E1 D1 M1"
+
+# Every case downstream of the non-vacuity guards — derived from the registry, never re-typed.
+# Cases that cannot be evaluated must still emit their own id: a case id simply absent from the
+# output is indistinguishable, to the harness, from a typo'd --case, so an unevaluated case is
+# reported as a failure under its own name rather than skipped silently.
+DOWNSTREAM_CASES=""
+for case_id in $ALL_CASES; do
+  case "$case_id" in
+    V*) ;;
+    *) DOWNSTREAM_CASES="$DOWNSTREAM_CASES $case_id" ;;
+  esac
+done
+DOWNSTREAM_CASES="${DOWNSTREAM_CASES# }"
 
 # Deliberately not prefixed `FAIL:` — that shape is reserved for per-case verdicts, and a
 # summary wearing it would be misread as a case named by its first token.
@@ -385,10 +404,34 @@ then
   # separately keeps the assertion readable and avoids anchoring inside a wildcard.
   mutant_s2=$(printf '%s\n' "$mutant_out" | grep '^FAIL: S2 ' || true)
 
+  # Registry pin, riding on the run M1 already performed. $mutant_out is a COMPLETE run of every
+  # case except M1 itself — the recursion guard above sits between them, so a child never reaches
+  # M1, and that is the one legitimate absence. Every other id in ALL_CASES must appear, and no
+  # id may appear that is not in ALL_CASES. Both directions matter: an unregistered case vanishes
+  # from bail_out's output, and a registered id whose case was deleted leaves bail_out promising a
+  # verdict nothing produces. Same comm idiom as S1/S2, on the same single collation authority.
+  # grep -E + awk rather than a sed alternation: BSD sed has no `\|`, so a `\(ok\|FAIL\)` pattern
+  # matches nothing on macOS while working on GNU — the silent-empty failure mode this whole file
+  # exists to reject. The verdict line's second field IS the case id, by the label rules above.
+  printf '%s\n' "$mutant_out" \
+    | grep -E '^(ok|FAIL): ' \
+    | awk '{print $2}' \
+    | sort -u > "$TMPROOT/emitted_cases.txt"
+  for case_id in $ALL_CASES; do
+    [ "$case_id" = "M1" ] || echo "$case_id"
+  done | sort -u > "$TMPROOT/expected_cases.txt"
+
+  unregistered=$(comm -13 "$TMPROOT/expected_cases.txt" "$TMPROOT/emitted_cases.txt" | tr '\n' ' ' | sed 's/ *$//')
+  unemitted=$(comm -23 "$TMPROOT/expected_cases.txt" "$TMPROOT/emitted_cases.txt" | tr '\n' ' ' | sed 's/ *$//')
+
   if [ "$mutant_rc" -eq 0 ]; then
     fail "M1 dropping the '$victim' mapping row left the suite GREEN — the guard is vacuous"
+  elif [ -n "$unregistered" ]; then
+    fail "M1 case(s) emitted by a full run but missing from ALL_CASES: $unregistered — register them or bail_out will never report them"
+  elif [ -n "$unemitted" ]; then
+    fail "M1 case id(s) in ALL_CASES that a full run never emitted: $unemitted — the case was removed or renamed"
   elif [ -n "$mutant_s2" ] && printf '%s\n' "$mutant_s2" | grep -qE "(^| )$victim( |$)"; then
-    pass "M1 dropping the '$victim' mapping row turns S2 red (child exit $mutant_rc)"
+    pass "M1 dropping the '$victim' mapping row turns S2 red (child exit $mutant_rc); case registry matches the full run"
   else
     fail "M1 mutant run exited $mutant_rc, but not via S2 naming '$victim' — got: $(printf '%s' "$mutant_out" | grep '^FAIL:' | tr '\n' ';')"
   fi

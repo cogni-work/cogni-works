@@ -31,17 +31,30 @@
 # CASE LABEL SHAPE: `ok: <id>` / `FAIL: <id>` — NOT the `OK   ` / `FAIL ` shape carried by most
 #   of this repo's older per-case verdict helpers. This IS a departure from the more common
 #   shape, and it is deliberate: it is forced by the machinery that has to read this output,
-#   not chosen as a matter of style. Three facts, each independently checkable:
+#   not chosen as a matter of style. Two facts carry it.
 #
-#     - The shared mutation harness classifies a case by reading OUTPUT LINES rather than the
-#       exit code. Red is `^[ \t]*FAIL:[ \t]+<case>`, green is `^[ \t]*(ok|PASS):[ \t]+<case>`.
-#       The no-colon shape matches neither, so a suite wearing it returns case_not_found and
-#       its mutation recipe cannot be run at all.
-#     - The handoff preflight instrument that runs that recipe is registered NON-ADVISORY, so a
-#       suite the harness cannot classify also cannot clear the standard author-to-merger
-#       handoff. The incompatibility is blocking, not cosmetic.
-#     - This repo's other mutation harness, cogni-portfolio/scripts/mutation-check.sh, already
-#       emits the colon form, for the same reason.
+#   READ THIS BEFORE CHECKING THEM: neither cited file is at an insight-wave path. Both live in
+#   the INSTALLED cogni-service plugin (quoted here from v0.0.383), which a reviewer scoped to an
+#   insight-wave worktree cannot see — so grepping this checkout for them finds nothing and the
+#   citations read as fabricated. They are not; re-verify against the installed plugin. That
+#   invisibility, not the shape itself, is what turned this into a three-round dispute on #1254.
+#
+#     - scripts/mutation-check.sh:412-413 — the shared mutation harness classifies a case by
+#       reading OUTPUT LINES rather than the exit code. Red is `^[ \t]*FAIL:[ \t]+<case>`, green
+#       is `^[ \t]*(?:ok|PASS):[ \t]+<case>`. The no-colon shape matches neither, so a suite
+#       wearing it returns case_not_found (mutation-check.sh:434, exit 2) and its mutation recipe
+#       cannot be run at all.
+#     - scripts/check-preflight.sh:792 — the handoff preflight instrument that runs that recipe is
+#       registered `"advisory": False`, so a suite the harness cannot classify also cannot clear
+#       the standard author-to-merger handoff. The incompatibility is blocking, not cosmetic.
+#
+#   NOT a supporting fact, recorded so it is not cited again: cogni-portfolio/scripts/mutation-check.sh
+#   also emits a colon form, but it classifies its sub-runs by EXIT CODE (lines 62, 86, 116) and
+#   never parses a verdict line, so its output is harness messaging consumed by no classifier. An
+#   earlier draft of this header offered it as precedent for the shape. It is not one.
+#
+#   Ratified in issue #1251's `## Acceptance criteria`, which now requires the colon form outright.
+#   The contract-derivation boilerplate that still pins the older shape is tracked in #1259.
 #
 #   The cost is one deviation from the older shape; the saving is a migration this suite would
 #   otherwise need later. Do not "restore" the no-colon form without first changing the

@@ -1,10 +1,9 @@
 ---
 name: narrative-writer
-description: "Transform structured content into executive narratives via the narrative skill. Enables parallel narrative generation across multiple content sets as an autonomous subprocess."
-model: sonnet
-color: magenta
-whenToUse: |
-  Use this agent when another plugin or skill needs to delegate narrative transformation to an autonomous subprocess. The agent invokes the cogni-narrative:narrative skill and returns its output.
+description: |
+  Transform structured content into executive narratives via the narrative skill. Enables parallel narrative generation across multiple content sets as an autonomous subprocess.
+
+  Use this agent when another plugin or skill needs to delegate narrative transformation to an autonomous subprocess, including fanning out one agent per content set so several directories are narrated in parallel.
 
   <example>
   Context: A research synthesis skill needs to generate an insight summary from dimension syntheses
@@ -14,15 +13,8 @@ whenToUse: |
   The synthesis skill delegates narrative work to this agent. The agent invokes the narrative skill and returns the skill's JSON summary.
   </commentary>
   </example>
-
-  <example>
-  Context: Multiple narratives need to be generated in parallel for different content sets
-  user: "Generate narratives for all three analysis directories"
-  assistant: "I'll launch narrative-writer agents in parallel for each directory."
-  <commentary>
-  Each agent invokes the narrative skill independently. Agents can run in parallel.
-  </commentary>
-  </example>
+model: sonnet
+color: magenta
 tools:
   - Read
   - Write

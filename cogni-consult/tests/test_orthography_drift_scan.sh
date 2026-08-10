@@ -8,7 +8,7 @@
 # Coverage
 #   1  clean            correct short-vowel ss (dass, muss, Prozess) reports nothing
 #   2  markdown-finding a Swiss form in scope/key-question.md carries path, line, form,
-#                       suggestion
+#                       suggestion; the per-file breakdown matches the findings list
 #   3  stem-match       Messgrösse is reported from the bare Grösse entry (a whole-word
 #                       matcher would miss the issue's own headline example)
 #   4  case-variance    both heisst and sentence-initial Heisst report
@@ -233,6 +233,31 @@ if [ -z "$shape" ]; then
   pass "markdown-finding: path + line + form + suggestion"
 else
   fail "markdown-finding" "$shape"
+fi
+
+# The per-file breakdown is a reported field, so it carries its own assertion: an
+# aggregate total alone cannot express "12 occurrences across 4 named files", which is
+# the shape the reported evidence actually takes.
+breakdown="$(printf '%s' "$env_drift" | python3 -c '
+import json, sys
+d = json.loads(sys.stdin.read())["data"]
+by_file = d["by_file"]
+counted = {}
+for f in d["findings"]:
+    counted[f["path"]] = counted.get(f["path"], 0) + 1
+if by_file != counted:
+    print("by_file %r does not match the findings list %r" % (by_file, counted))
+elif sum(by_file.values()) != d["total_findings"]:
+    print("by_file sums to %d, total_findings is %d" % (sum(by_file.values()), d["total_findings"]))
+elif "scope/key-question.md" not in by_file:
+    print("expected a per-file entry for scope/key-question.md, got %s" % sorted(by_file))
+else:
+    print("")
+')"
+if [ -z "$breakdown" ]; then
+  pass "markdown-finding: per-file breakdown matches the findings list and sums to the total"
+else
+  fail "markdown-finding/by_file" "$breakdown"
 fi
 
 # --- 3  stem-match ----------------------------------------------------------

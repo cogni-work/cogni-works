@@ -101,6 +101,9 @@ cogni-consult/
 │   ├── assumption-change-frequency.sh  Read-only git-history spike: how often
 │   │                              numeric literals in a deliverable corpus
 │   │                              changed (sizing datum for propagation automation)
+│   ├── orthography-drift-scan.py  Read-only Swiss-ss-in-ß-position scan over one
+│   │                              engagement's stored corpus; curated pair list with
+│   │                              bounded recall, reports only (no repair mode)
 │   ├── discover-projects.sh       Thin wrapper over the cogni-workspace discovery helper
 │   └── _discover_extractor.py     Per-engagement field extractor for the wrapper
 └── skills/

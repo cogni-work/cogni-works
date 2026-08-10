@@ -6,7 +6,9 @@
 # so every case builds a minimal engagement in a temp directory.
 #
 # Coverage
-#   1  clean            correct short-vowel ss (dass, muss, Prozess) reports nothing
+#   1  clean            correct short-vowel ss (dass, muss, Prozess, müssen, Schlüssel,
+#                       Ausschuss) reports nothing, as do the -weis compounds whose ss
+#                       straddles a morpheme boundary (Beweissicherung, Ausweisstelle)
 #   2  markdown-finding a Swiss form in scope/key-question.md carries path, line, form,
 #                       suggestion; the per-file breakdown matches the findings list
 #   3  stem-match       Messgrösse is reported from the bare Grösse entry (a whole-word
@@ -23,6 +25,12 @@
 #  10  envelope-shape   exactly one stdout line per exit path; literal ß bytes, no escapes
 #  11  read-only-flag   --fix is rejected as unexpected_argument
 #  12  read-only-tree   the fixture tree is byte-identical before and after a scan
+#  12b scoping          a sibling engagement's Swiss text contributes zero findings —
+#                       asserted on the stated sibling relationship, so a later refactor
+#                       to per-case mktemp -d fails here instead of silently ceasing to
+#                       test scoping at all
+#  12c unreadable-root  a root that cannot be read fails loud rather than reporting a
+#                       clean corpus it never opened (skipped when running as root)
 #  13  goes-red         emptying the pair list, or anchoring the matcher whole-word,
 #                       flips this suite's own detection cases red
 #
@@ -32,7 +40,9 @@ set -u
 
 TESTS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PLUGIN_DIR="$(dirname "$TESTS_DIR")"
-SCRIPT="$PLUGIN_DIR/scripts/orthography-drift-scan.py"
+# Overridable so scripts/mutation-check.sh can aim this suite at a mutated copy in a temp
+# dir without touching the working tree. Unset in every ordinary run, including CI.
+SCRIPT="${CONSULT_ORTHOGRAPHY_SCAN:-$PLUGIN_DIR/scripts/orthography-drift-scan.py}"
 
 if [ ! -f "$SCRIPT" ]; then
   echo "FAIL orthography-drift-scan.py not found at $SCRIPT" >&2
@@ -126,6 +136,8 @@ build_clean() {
   cat > "$e/scope/key-question.md" <<'MD'
 Der Prozess muss zeigen, dass die Masse und die Busse korrekt sind.
 Einfluss und Ergebnis bleiben davon unberührt.
+Wir müssen den Schlüssel finden, bevor der Ausschuss tagt.
+Die Beweissicherung und das Beweisstück liegen bei der Ausweisstelle.
 MD
   printf '%s' "$e"
 }
@@ -202,10 +214,16 @@ fi
 
 env_drift="$(scan "$DRIFT")"
 assert_envelope "drift: envelope is success (drift is a successful scan)" true "" "$env_drift"
-if [ "$(total_findings "$env_drift")" -gt 0 ]; then
-  pass "drift: reports a non-zero finding count"
+# Pinned to the exact seeded count, not merely -gt 0: a non-zero check passes just as
+# happily on 1 as on 8, so it cannot see a regression that silently loses most findings.
+# The eight, by file: scope/key-question.md carries grösse (in Messgrösse), heisst,
+# sentence-initial Heisst and Grösse; field.json's framing carries schliesslich;
+# .metadata/decision-log.json's rationale carries Strasse and gemäss; the marker-less
+# sources/README.md carries Strasse. The two marker-bearing echoes contribute nothing.
+if [ "$(total_findings "$env_drift")" = "8" ]; then
+  pass "drift: reports exactly the 8 seeded findings"
 else
-  fail "drift" "expected findings, got 0"
+  fail "drift" "expected exactly 8 findings, got $(total_findings "$env_drift")"
 fi
 
 # --- 2  markdown-finding ----------------------------------------------------
@@ -219,11 +237,15 @@ if not hits:
     print("no Grösse finding in scope/key-question.md")
     raise SystemExit(0)
 f = hits[0]
-missing = [k for k in ("path", "line", "form", "suggestion") if k not in f]
+missing = [k for k in ("path", "line", "column", "form", "suggestion") if k not in f]
 if missing:
     print("finding missing keys: %s" % missing)
 elif f["line"] != 4:
     print("expected line 4, got %r" % f["line"])
+elif f["column"] != 5:
+    # "Die Grösse bleibt offen." — the match starts at the 5th character. Without a
+    # column, two hits of one form on a line are indistinguishable objects.
+    print("expected column 5, got %r" % f["column"])
 elif f["suggestion"] != "Größe":
     print("expected suggestion Größe, got %r" % f["suggestion"])
 else:
@@ -296,6 +318,10 @@ if not framing:
     print("field.json framing finding missing")
 elif framing[0].get("json_key") != "framing":
     print("expected json_key framing, got %r" % framing[0].get("json_key"))
+elif not isinstance(framing[0].get("value_offset"), int):
+    # Every hit inside one JSON value shares that value start line, so without an
+    # offset into the decoded value several hits collapse to one coordinate.
+    print("framing finding carries no integer value_offset: %r" % framing[0].get("value_offset"))
 elif slug:
     print("a non-prose key (deliverable) produced a finding: %r" % slug)
 else:
@@ -400,6 +426,19 @@ else
   fail "envelope-shape" "reported forms must be the literal bytes Grösse / Größe"
 fi
 
+# The header declares "error": str, and the plugin's other scripts pass "" on success
+# (resolve-assumptions.py, assumption-change-frequency.py). A consumer doing
+# `if envelope["error"]:` on that declared type gets None instead if this regresses.
+error_repr="$(printf '%s' "$env_drift" | python3 -c '
+import json, sys
+print(repr(json.loads(sys.stdin.read())["error"]))
+')"
+if [ "$error_repr" = "''" ]; then
+  pass "envelope-shape: the success envelope's error is the empty string, not null"
+else
+  fail "envelope-shape" "success envelope error is $error_repr, want ''"
+fi
+
 # --- 11  read-only-flag ----------------------------------------------------
 
 assert_envelope "read-only-flag: --fix rejected" false "unexpected_argument" "$(scan "$DRIFT" --fix)"
@@ -412,6 +451,46 @@ if [ "$DRIFT_DIGEST_BEFORE" = "$after" ]; then
   pass "read-only-tree: fixture tree byte-identical across a drift-reporting scan"
 else
   fail "read-only-tree" "the scan modified the corpus it was asked to inspect"
+fi
+
+# --- 12b  scoping -----------------------------------------------------------
+#
+# The clean scan already returns zero while a Swiss-laden engagement sits beside it, so
+# scoping holds today — but only incidentally, because nothing states that the fixtures
+# ARE siblings. Asserting the arrangement makes the property load-bearing: a later
+# refactor to per-case `mktemp -d` fails here instead of quietly ceasing to test scoping
+# while every other assertion still passes.
+if [ "$(dirname "$CLEAN")" = "$TMPROOT" ] && [ "$(dirname "$DRIFT")" = "$TMPROOT" ]; then
+  clean_by_file="$(printf '%s' "$env_clean" | python3 -c '
+import json, sys
+print(json.dumps(json.loads(sys.stdin.read())["data"]["by_file"]))
+')"
+  if [ "$clean_by_file" = "{}" ]; then
+    pass "scoping: a sibling engagement's Swiss text contributes zero findings"
+  else
+    fail "scoping" "the clean scan reached outside its engagement: by_file=$clean_by_file"
+  fi
+else
+  fail "scoping" "fixtures are no longer siblings under TMPROOT — this case tests nothing"
+fi
+
+# --- 12c  unreadable-root ---------------------------------------------------
+#
+# os.walk swallows a permission error on the root and yields nothing, so without a
+# pre-flight check the scan reports a clean corpus it never opened — the one zero a
+# caller cannot tell from a real one. Skipped as root, where the chmod does not bite.
+if [ "$(id -u)" -ne 0 ]; then
+  unreadable="$TMPROOT/unreadable"
+  mkdir -p "$unreadable/scope"
+  printf 'Die Strasse heisst so.\n' > "$unreadable/scope/key-question.md"
+  chmod 000 "$unreadable"
+  unreadable_envelope="$(scan "$unreadable")"
+  # Restored immediately so the EXIT trap's rm -rf can still remove the fixture.
+  chmod 755 "$unreadable"
+  assert_envelope "fail-loud: an unreadable engagement root" false "engagement_unreadable" \
+    "$unreadable_envelope"
+else
+  pass "fail-loud: an unreadable engagement root (skipped as root)"
 fi
 
 # --- 13  goes-red ----------------------------------------------------------

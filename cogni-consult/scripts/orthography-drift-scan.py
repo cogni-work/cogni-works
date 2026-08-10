@@ -15,8 +15,30 @@ nothing on the list appeared. "ß position" cannot be derived from spelling alon
 because correct German uses ss freely (dass, muss, Prozess), so a bare `ss` match
 would be all false positives.
 
+PRECISION IS BOUNDED THE SAME WAY, by the completeness of the per-entry guard lists
+(_ENTRY_GUARDS / _ENTRY_LEFT_GUARDS) rather than of SWISS_PAIRS. Where an entry can sit
+inside a correct-German word — the ss straddling a morpheme boundary, as in
+Beweis+sicherung — only a listed guard stem suppresses it, so an unlisted one reports as
+drift with a suggestion that is wrong. Recall and precision are both curated here; a
+finding is a prompt to look, not a verdict.
+
 Read-only. Nothing under the engagement root is opened for writing, and there is no
 repair mode: finding drift and fixing it are separate concerns.
+
+SCANNED SET. Everything under the engagement root ending in .md or .json is scanned,
+including dot-directories such as .metadata/ — decision-log.json lives there and carries
+prose. Only .git is skipped by path. sources/ and output/ ARE scanned deliberately:
+sources/ is the verbatim third-party inbox and may legitimately be Swiss, and output/ is
+a deliverable surface, but both are files a consultant can edit, so drift in either is
+worth seeing — an exclusion would have to be justified by provenance the scan cannot
+verify. The one exclusion is by content, not path: a generated echo is skipped when it
+carries the generators' own footer sentinel (see GENERATED_MARKER_SENTINEL below), which
+is what the generators themselves treat as authoritative.
+
+Each finding carries a coordinate as well as a line: markdown findings carry a 1-based
+`column`, JSON findings a 0-based `value_offset` into the decoded value. Without one, two
+occurrences of the same form on a line are byte-identical objects, and several hits
+inside one long JSON value all collapse onto that value's start line.
 
 Finding drift is a SUCCESSFUL scan — it exits 0 with a non-zero data.total_findings.
 Consumers branch on data.total_findings, never on the exit code. A non-zero exit means
@@ -66,6 +88,35 @@ SWISS_PAIRS = (
 # widen to a neighbouring form. "weiss" is the only entry with a correct-German
 # right-extension: "weissagen" / "Weissagung" keep their ss.
 _ENTRY_GUARDS = {"weiss": ("weissag",)}
+
+# Left-side counterpart, keyed identically so it can never widen to another entry. Here
+# the ss is not one morpheme's but two: a "-weis" stem meets a second element opening in
+# s (Beweis+sicherung, Beweis+stück, Ausweis+stelle). That is correct standard German and
+# there is no ß form to suggest, so the match is dropped rather than reported.
+# The stems are the bound forms of the -weisen verbs, which is what makes the list
+# extensible rather than anecdotal: each is a real first element that can take an
+# s-initial second element. Adding one costs no recall, because no Swiss form contains a
+# -weis stem followed by ss.
+# "reis" is deliberately absent: "weiss" cannot match inside a Reis/Reiß word at all (no
+# w), so the stem would suppress nothing that is ever matched.
+# A bare "is the preceding character a letter?" test would be shorter and wrong: it would
+# also suppress schneeweiss, a genuine Swiss compound whose ß form is schneeweiß.
+_ENTRY_LEFT_GUARDS = {
+    "weiss": (
+        "beweis",
+        "ausweis",
+        "nachweis",
+        "hinweis",
+        "verweis",
+        "anweis",
+        "abweis",
+        "erweis",
+        "zuweis",
+        "einweis",
+        "überweis",
+        "unterweis",
+    )
+}
 
 # Prose-bearing JSON keys, per references/data-model.md. Every other value in these
 # files is an engine token (state, dt_stage, slugs, ids, kind, verdict) and is never
@@ -129,10 +180,27 @@ def _guarded(text, start, form):
     """True when this match opens a correct-German word that keeps its ss.
 
     Scoped to the matched form's own guards, and anchored at the match offset, so a
-    guard can never suppress a different entry that merely sits nearby.
+    guard can never suppress a different entry that merely sits nearby. Both sides are
+    checked: a right-extension keeps its ss (weissagen), and a left stem can put the two
+    s characters on either side of a morpheme boundary (Beweis+sicherung).
     """
-    for stem in _ENTRY_GUARDS.get(form.lower(), ()):
-        if text.lower().startswith(stem, start):
+    key = form.lower()
+    right_stems = _ENTRY_GUARDS.get(key, ())
+    left_stems = _ENTRY_LEFT_GUARDS.get(key, ())
+    # Only one entry carries guards, so bail before lowering the text: this runs once per
+    # match of every form, and lowering unconditionally makes the guard O(matches × file).
+    if not right_stems and not left_stems:
+        return False
+    lowered = text.lower()
+    for stem in right_stems:
+        if lowered.startswith(stem, start):
+            return True
+    # The entry's own final s belongs to the second element, so the stem ends one
+    # character before the match does. Bounded endswith rather than a prefix slice, which
+    # would copy up to the whole file per match.
+    cut = start + len(form) - 1
+    for stem in left_stems:
+        if lowered.endswith(stem, 0, cut):
             return True
     return False
 
@@ -159,9 +227,19 @@ def _line_of(text, offset):
     return text.count("\n", 0, offset) + 1
 
 
+def _column_of(text, offset):
+    """1-based column of offset. rfind returns -1 on the first line, which is correct."""
+    return offset - text.rfind("\n", 0, offset)
+
+
 def _scan_markdown(text):
     return [
-        {"line": _line_of(text, off), "form": form, "suggestion": suggestion}
+        {
+            "line": _line_of(text, off),
+            "column": _column_of(text, off),
+            "form": form,
+            "suggestion": suggestion,
+        }
         for off, form, suggestion in _scan_text(text)
     ]
 
@@ -193,16 +271,20 @@ def _scan_json(text):
             # offset indexes the decoded string, and a JSON string holds no literal
             # newline, so every match inside it is on the value's own line anyway.
             line = _line_of(text, m.start(1))
-            for _off, form, suggestion in _scan_text(value):
+            for off, form, suggestion in _scan_text(value):
                 findings.append(
                     {
                         "line": line,
+                        # 0-based offset INTO THE DECODED VALUE, not into the file: the
+                        # raw span is escaped, so a file offset would not survive the
+                        # decode. It is what distinguishes several hits sharing a line.
+                        "value_offset": off,
                         "form": form,
                         "suggestion": suggestion,
                         "json_key": key,
                     }
                 )
-    findings.sort(key=lambda f: (f["line"], f["form"]))
+    findings.sort(key=lambda f: (f["line"], f["value_offset"], f["form"]))
     return findings
 
 
@@ -289,8 +371,18 @@ def main(argv):
         _emit(False, {"failed_check": "engagement_missing", "path": root}, "engagement not found: %s" % root)
     if not os.path.isdir(root):
         _emit(False, {"failed_check": "not_a_directory", "path": root}, "not a directory: %s" % root)
+    # os.walk swallows a permission error on the root and simply yields nothing, so
+    # without this the scan would report a clean corpus it never actually read — the one
+    # failure a caller cannot distinguish from a real zero. Checked here rather than via
+    # os.walk(onerror=...) so the envelope fails loudly instead of reporting a partial.
+    if not os.access(root, os.R_OK | os.X_OK):
+        _emit(
+            False,
+            {"failed_check": "engagement_unreadable", "path": root},
+            "engagement not readable: %s" % root,
+        )
 
-    _emit(True, _scan_engagement(root), None)
+    _emit(True, _scan_engagement(root), "")
 
 
 if __name__ == "__main__":

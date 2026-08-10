@@ -170,7 +170,7 @@ engine value in a table cell. This is a surface, not a debug channel.
 **prose word the consultant reads** — vocabulary that carries no backing field
 and so has no row to look up. Of the terms below only `Stale` is also a (c) row
 (`lineage_status.status: "stale"`); `Cascade` and `Gate` are engine vocabulary
-governed by the rule delegated at the end of this file. Where both apply they
+governed by the engine-vocabulary rule in (h) below. Where both apply they
 agree, so there is nothing to reconcile.
 
 Before reaching for the table, run the three-step test — the method comes from
@@ -241,14 +241,35 @@ agent's envelope prose is exactly where an invented term surfaces. Unlike (f),
 which is main-loop-only by its own terms, a rule changed here is checked against
 that file.
 
+## (h) Executive register and engine vocabulary
+
+Write in an executive register: precise, concise, no filler, no restating the
+question, no postamble.
+
+**Compression discipline.** Minimize words with zero precision loss. Cut hedging,
+throat-clearing and restatement — never cut a fact, a number, a caveat or an
+option to be shorter. Brevity must lose words, not information.
+
+**Engine vocabulary stays in the system.** Engine nouns — cascade, graph, edge,
+`depends_on`, gate, slug, state values (`complete`), log ids (`d-084`), version
+tags — are internal. Report the business consequence instead: "drei Deliverables
+ruhen jetzt auf einer überholten Zahl", not "das Cascade hat drei Knoten
+geflaggt"; "die Entscheidung ist im Protokoll festgehalten", not "d-084
+eingetragen"; "alle vierzehn Deliverables sind fertig", not "14/14 Deliverables
+complete". Name an id only when the reader needs it to look something up.
+
+This section is stated here rather than delegated because it has to reach the
+**main loop**. `references/subagent-output-contract.md` (`## Register`) carries
+the same three rules for the agent path, and it is injected into a dispatched
+agent — never loaded here — so a pointer to it would leave the main loop with no
+reachable copy. This is the one-contract-two-delivery-paths rule at the top of
+this file doing its job, not a duplication.
+
 ## What binds here but lives elsewhere
 
 These rules are not restated in this file; they hold on every surface named in
 (b) all the same:
 
-- Executive register, compression discipline, and the
-  engine-vocabulary-stays-internal rule —
-  `references/subagent-output-contract.md` (`## Register`).
 - Audience framing and the answer-first advisory stance —
   `output-styles/strategy-advisor.md`, on the styled path only. That file is
   opt-in and carries stance alone; it restates none of the register.

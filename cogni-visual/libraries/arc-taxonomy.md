@@ -20,7 +20,7 @@ Map narrative arc IDs from cogni-narrative to visual arc types used by cogni-vis
 
 ## Arc ID to Visual Arc Type Mapping
 
-When the source narrative carries an `arc_id` from cogni-narrative (in YAML frontmatter or passed as parameter), map it to the visual arc type used for decomposition. This bridges the rich narrative taxonomy (6 arc types with 4-element structures) to the visual taxonomy (5 visual arc types optimized for layout selection).
+When the source narrative carries an `arc_id` from cogni-narrative (in YAML frontmatter or passed as parameter), map it to the visual arc type used for decomposition. This bridges the rich narrative taxonomy (11 arc types with 4-element structures) to the visual taxonomy (5 visual arc types optimized for layout selection).
 
 | cogni-narrative `arc_id` | Visual `arc_type` | Display Name | Reasoning |
 |--------------------------|-------------------|--------------|-----------|
@@ -34,6 +34,7 @@ When the source narrative carries an `arc_id` from cogni-narrative (in YAML fron
 | `jtbd-portfolio` | `argument` | JTBD Portfolio | Elements (Job Landscape/Friction Map/Portfolio Map/Invitation) build an analytical case from buyer jobs through friction to solutions |
 | `company-credo` | `argument` | Company Credo | Elements (Mission/Conviction/Credibility/Promise) build a belief-driven argument: the company states what it believes, backs it with receipts, and closes with a forward commitment |
 | `engagement-model` | `journey` | Engagement Model | Elements (Principles/Process/Partnership/Outcomes) describe a chronological progression through an engagement — Process is the longest element and reads as a phase sequence with artifacts and time bands |
+| `smarter-service` | `journey` | Smarter Service | Elements (Forces/Impact/Horizons/Foundations) describe the same progression from external pressures to capability requirements as Trend Panorama — the theme-aware sibling arc shares the identical TIPS dimension mapping, so it takes the same visual arc type |
 
 **Fallback:** If `arc_id` is not in this table, fall back to auto-detection from narrative content (same behavior as when no `arc_id` is present).
 
@@ -132,6 +133,17 @@ Each arc has 4 ordered elements that represent the phases of the narrative struc
 | 2 | Process | Prozess | Canonical 4–6 phases with artifacts and time bands |
 | 3 | Partnership | Partnerschaft | Reciprocal — what the buyer must bring for the engagement to work |
 | 4 | Outcomes | Ergebnisse | Cross-cutting results the buyer can observe |
+
+### smarter-service
+
+| # | Element (EN) | Element (DE) | Narrative Function |
+|---|-------------|-------------|-------------------|
+| 1 | Forces | Kräfte | External pressures and market signals (TIPS T-dimension) |
+| 2 | Impact | Wirkung | Value chain disruption and digital value drivers (TIPS I-dimension) |
+| 3 | Horizons | Horizonte | Strategic possibilities and new opportunities (TIPS P-dimension) |
+| 4 | Foundations | Fundamente | Capability requirements and digital foundations (TIPS S-dimension) |
+
+Same four elements as Trend Panorama — `smarter-service` is its theme-aware sibling. Element labels are identical; only the narrative wrapper differs (investment themes nest under each element).
 
 ---
 

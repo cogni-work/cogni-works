@@ -125,7 +125,7 @@ cogni-trends/cogni-knowledge → enrich-report → browser / PDF / DOCX
 ## Key Conventions
 
 - **Briefs are YAML frontmatter + Markdown.** Frontmatter holds metadata (type, version, theme, arc_type, arc_id, confidence_score). Body holds the content specification.
-- **Unified arc taxonomy.** All narrative skills read `arc_id` from narrative frontmatter, map to visual `arc_type` via `libraries/arc-taxonomy.md` (10 narrative arcs → 5 visual arc types), and optionally load arc element names for labeling (section labels, arc labels, methodology phases).
+- **Unified arc taxonomy.** All narrative skills read `arc_id` from narrative frontmatter, map to visual `arc_type` via `libraries/arc-taxonomy.md` (11 narrative arcs → 5 visual arc types), and optionally load arc element names for labeling (section labels, arc labels, methodology phases).
 - **Agent responses are JSON-only.** Agents return structured JSON; no prose.
 - **Assertion headlines.** Every slide title, section headline, and poster headline must be an assertion (contains a verb), not a topic label.
 - **Number plays.** Statistics are reframed for visual impact (ratio framing, hero number isolation, before/after contrast).

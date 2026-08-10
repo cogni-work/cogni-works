@@ -65,7 +65,7 @@ Read and internalize the source narrative so you can make informed condensation 
    - Hook paragraph (text between `#` title and first `##`)
    - 4 arc element sections (each `##` section with body text)
    - Citations (all `<sup>[N](file.md)</sup>` references)
-4. If frontmatter is missing `arc_id`, detect it from the `##` section headers by matching against known arc element names (see the narrative skill's arc registry for the 6 arc types and their element names)
+4. If frontmatter is missing `arc_id`, detect it from the `##` section headers by matching against known arc element names (see the narrative skill's arc registry for the 11 arc types and their element names)
 5. Determine language: explicit `--language` parameter > frontmatter `language` field > default `en`
 
 **Before proceeding,** verify you can identify: the arc type, all 4 element headers, the hook's central tension, and the key quantitative claims. If the file doesn't have exactly 4 `##` sections or lacks recognizable arc structure, it may not be a cogni-narrative output -- halt with an error (see Error Handling).

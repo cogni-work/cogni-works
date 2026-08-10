@@ -108,7 +108,12 @@ for kind, sub in (('product', 'products'), ('proposition', 'propositions')):
             continue
         v = d.get('commercial_model')
         if isinstance(v, str) and v and v not in VALID:
-            print('%s|%s|%s' % (kind, os.path.basename(path)[:-5], v.replace('|', ' ')))
+            # The warning is interpolated into a hand-built JSON string
+            # downstream, so escape the value: a stray quote or backslash in an
+            # off-enum value would otherwise emit unparseable validator output.
+            # '|' is the field separator for the read loop, so it goes too.
+            safe = json.dumps(v)[1:-1].replace('|', ' ')
+            print('%s|%s|%s' % (kind, os.path.basename(path)[:-5], safe))
 " 2>/dev/null)
 
 # Validate delivery_blueprint on products (optional — only checked when present)

@@ -1,10 +1,9 @@
 ---
 name: narrative-adapter
-description: "Adapt narratives into derivative formats — executive briefs, talking points, or one-pagers. Enables parallel adaptation across multiple narratives as an autonomous subprocess."
-model: sonnet
-color: yellow
-whenToUse: |
-  Use this agent when another plugin or skill needs to delegate narrative adaptation to an autonomous subprocess. The agent invokes the cogni-narrative:narrative-adapt skill and returns its output.
+description: |
+  Adapt narratives into derivative formats — executive briefs, talking points, or one-pagers. Enables parallel adaptation across multiple narratives as an autonomous subprocess.
+
+  Use this agent when another plugin or skill needs to delegate narrative adaptation to an autonomous subprocess — a reporting pipeline asking for talking points from one narrative, or a batch workflow fanning out executive briefs or one-pagers across a whole directory. The agent invokes the cogni-narrative:narrative-adapt skill and returns its output.
 
   <example>
   Context: An orchestrator needs to generate executive briefs for multiple narratives in parallel
@@ -14,24 +13,8 @@ whenToUse: |
   Each agent invokes the narrative-adapt skill independently with format=executive-brief. Agents can run in parallel.
   </commentary>
   </example>
-
-  <example>
-  Context: A reporting pipeline needs talking points from a completed narrative
-  user: "Generate talking points from the research narrative"
-  assistant: "I'll use the narrative-adapter agent to transform the narrative into talking points."
-  <commentary>
-  The pipeline delegates derivative format work to this agent. The agent invokes the narrative-adapt skill and returns the skill's JSON summary.
-  </commentary>
-  </example>
-
-  <example>
-  Context: A batch workflow needs one-pagers for all narratives in a project
-  user: "Create one-pagers for every narrative in the output directory"
-  assistant: "I'll launch narrative-adapter agents in parallel for each narrative file."
-  <commentary>
-  Batch delegation with format=one-pager. Each agent handles one narrative independently.
-  </commentary>
-  </example>
+model: sonnet
+color: yellow
 tools:
   - Read
   - Write

@@ -8,29 +8,11 @@ description: >
   for batch generation.
 
   <example>
-  Context: The thought-leadership skill needs to generate a blog post
-  user: "Generate a thought leadership blog post about AI predictive maintenance for DACH mid-market"
-  assistant: "I'll use the content-writer agent to generate this blog post."
-  <commentary>
-  The thought-leadership skill delegates individual content generation to this agent with full context.
-  </commentary>
-  </example>
-
-  <example>
   Context: The demand-generation skill needs 4 LinkedIn posts in parallel
   user: "Create 4 LinkedIn posts promoting different angles of the cloud-native theme"
   assistant: "I'll launch 4 content-writer agents in parallel, each with a different angle."
   <commentary>
   Parallel generation for batch content — each agent gets a unique angle to ensure variety.
-  </commentary>
-  </example>
-
-  <example>
-  Context: The lead-generation skill needs a whitepaper
-  user: "Generate a whitepaper on sustainability reporting ROI"
-  assistant: "I'll use the content-writer agent to generate the whitepaper."
-  <commentary>
-  Long-form content is delegated to keep the main skill context clean.
   </commentary>
   </example>
 model: sonnet

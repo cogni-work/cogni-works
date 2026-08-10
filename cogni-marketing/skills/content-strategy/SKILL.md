@@ -1,7 +1,6 @@
 ---
 name: content-strategy
 description: "This skill should be used when the user asks to plan a content strategy, build a content matrix, decide what content to create, map content to funnel stages, prioritize a content backlog, or plan GTM content. Trigger phrases include: 'plan content strategy', 'content matrix', 'what content should we create', 'content planning', 'marketing strategy', 'funnel mapping', 'content roadmap', 'content backlog', 'content prioritization', 'what should we write next', 'map GTM paths to content', 'marketing plan'. It builds a 3D matrix (market × GTM path × content type) with auto-recommended formats."
-version: "1.0"
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep, Agent
 ---
 

@@ -18,6 +18,14 @@ which owns the resolution ladder and the separation from the engagement's
 deliverable `language`. Do not restate the ladder — read it there. Everything
 below applies in whatever language that resolves to.
 
+**German orthography.** Write ß after a long vowel or a diphthong (Maßnahme,
+außerhalb, Größe) and ss after a short vowel (dass, muss, Prozess).
+Kein schweizerisches ss an ß-Stellen — the Swiss convention of writing ss in
+every ß position is never used here. Umlauts are covered by the repo-wide
+encoding convention that forbids ASCII substitutes, which this file already
+relies on where it declines to import cogni-copywriting's table for
+transliterating them.
+
 ## (b) Scope — every surface, not only prose
 
 These rules govern **every** user-facing surface, not only prose: table cells,
@@ -102,6 +110,26 @@ Three rules keep the announcement cheap:
 - **No wall-clock estimates.** A wrong estimate is a trust withdrawal, which
   inverts what the announcement is for.
 
+**Work narration.** A batch of edits is one perceptible step, not many. Announce
+it with a single high-altitude line before making it — what is changing and why
+("Aktualisiere N Dateien, um …") — never a file-by-file preview. Afterwards, do
+not restate each individual edit or diff back in prose: the change itself is the
+record, and re-narrating it buries the answer in low-altitude detail. Close the
+batch with a compact summary — which files were touched and to what collective
+purpose — not a walkthrough of each diff. This does not contradict the
+announce-before-*or*-report-after rule above: that rule binds per perceptible
+step, and a batch gets one opening line at batch altitude plus one closing
+summary, never a per-edit narration.
+
+**A numbered back-reference carries its name** — "Teillösung 2 (die freie
+Content-Schicht)", not "bei 2". A bare ordinal makes the reader scroll back to
+recover what it points at.
+
+Work narration is main-loop-only, in the style of (f) below: a dispatched agent's
+user-facing surface is the envelope it returns, not a sequence of edits it
+narrates, so `references/subagent-output-contract.md` carries no counterpart and
+none is owed.
+
 ## (f) Tool-call descriptions
 
 The `description` of a Bash tool call is rendered to the consultant, so it is
@@ -142,7 +170,7 @@ engine value in a table cell. This is a surface, not a debug channel.
 **prose word the consultant reads** — vocabulary that carries no backing field
 and so has no row to look up. Of the terms below only `Stale` is also a (c) row
 (`lineage_status.status: "stale"`); `Cascade` and `Gate` are engine vocabulary
-governed by the rule delegated at the end of this file. Where both apply they
+governed by the engine-vocabulary rule in (h) below. Where both apply they
 agree, so there is nothing to reconcile.
 
 Before reaching for the table, run the three-step test — the method comes from
@@ -172,10 +200,26 @@ The table is what step 3 resolves to for this plugin's own coinages:
 | Waiver | begründete Ausnahme | |
 | WBS | Arbeitsstruktur | |
 
+The established domain terms that may stay English are
+**Deliverable**, **Design Thinking** and **Persona**, together with file and
+skill names, CLI commands, and slugs in code form. That list is closed — anything
+outside it takes the three-step test above rather than being waved through as
+established.
+
 `Action Field` is this plugin's own coinage, not an established German
-consulting term, so on a German surface it reads **Handlungsfeld**. The English
-table templates keep `Action Field` deliberately — that is the two-language
-split doing its job, not a leak.
+consulting term, so on a German surface it reads **Handlungsfeld**. It is the
+worked exclusion from the list just above. The English table templates keep
+`Action Field` deliberately — that is the two-language split doing its job, not
+a leak.
+
+**Spell an acronym out once at first use** — ICP, OMTM, UVP — then use it freely
+for the rest of the exchange.
+
+Step 1 of the test resolves these recurring consulting anglicisms. They are not
+this plugin's coinages, so they sit here rather than in the table above, whose
+scope is deliberately narrower: `Moat-Richtung` → **Wettbewerbsschutz**;
+`Sozialbeweis` → **sichtbarer Beleg durch andere**; `Evergreen-Bestand` →
+**dauerhaft nutzbarer Bestand**.
 
 **Never invent a system term that does not exist.** An invented term is worse
 than a leaked one: a leaked engine value can at least be looked up in the
@@ -197,20 +241,44 @@ agent's envelope prose is exactly where an invented term surfaces. Unlike (f),
 which is main-loop-only by its own terms, a rule changed here is checked against
 that file.
 
+## (h) Executive register and engine vocabulary
+
+Write in an executive register: precise, concise, no filler, no restating the
+question, no postamble.
+
+**Compression discipline.** Minimize words with zero precision loss. Cut hedging,
+throat-clearing and restatement — never cut a fact, a number, a caveat or an
+option to be shorter. Brevity must lose words, not information.
+
+**Engine vocabulary stays in the system.** Engine nouns — cascade, graph, edge,
+`depends_on`, gate, slug, state values (`complete`), log ids (`d-084`), version
+tags — are internal. Report the business consequence instead: "drei Deliverables
+ruhen jetzt auf einer überholten Zahl", not "das Cascade hat drei Knoten
+geflaggt"; "die Entscheidung ist im Protokoll festgehalten", not "d-084
+eingetragen"; "alle vierzehn Deliverables sind fertig", not "14/14 Deliverables
+complete". Name an id only when the reader needs it to look something up.
+
+This section is stated here rather than delegated because it has to reach the
+**main loop**. `references/subagent-output-contract.md` (`## Register`) carries
+the same three rules for the agent path, and it is injected into a dispatched
+agent — never loaded here — so a pointer to it would leave the main loop with no
+reachable copy. This is the one-contract-two-delivery-paths rule at the top of
+this file doing its job, not a duplication.
+
 ## What binds here but lives elsewhere
 
 These rules are not restated in this file; they hold on every surface named in
 (b) all the same:
 
-- Audience framing, executive register and compression discipline, and the
-  engine-vocabulary-stays-internal rule —
-  `references/subagent-output-contract.md` (`## Register`) and
-  `output-styles/strategy-advisor.md` / `strategy-advisor-de.md`.
-- The slug-presence rule — (d).7 above owns it;
-  `output-styles/strategy-advisor.md` / `strategy-advisor-de.md` carry it on the
-  styled path. `references/subagent-output-contract.md` still scopes its own
-  slug rule to prose.
-- German orthography (ß/ss, Umlaute) — `output-styles/strategy-advisor-de.md`.
+- Audience framing and the answer-first advisory stance —
+  `output-styles/strategy-advisor.md`, on the styled path only. That file is
+  opt-in and carries stance alone; it restates none of the register.
+- The slug-presence rule — (d).7 above owns it.
+  `references/subagent-output-contract.md` still scopes its own slug rule to
+  prose.
+
+German orthography is no longer delegated: (a) above owns it outright, because
+the sole file that used to carry it no longer exists.
 
 One boundary: the generated HTML dashboard document follows the engagement's
 deliverable `language` axis, not the interaction language, and is therefore

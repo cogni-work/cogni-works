@@ -42,7 +42,11 @@ set -u
 
 TESTS_DIR="$(cd "$(dirname "$0")" && pwd)"
 PLUGIN_DIR="$(cd "$TESTS_DIR/.." && pwd)"
-SCRIPT="$PLUGIN_DIR/scripts/_discover_extractor.py"
+# Overridable so scripts/mutation-check.sh can aim the assert_extract cases at a
+# mutated copy in a temp dir without touching the working tree. Unset in every
+# ordinary run, including CI. M13 is deliberately unaffected — it exercises the
+# real extractor through the discovery wrapper, which loads it by its own path.
+SCRIPT="${CONSULT_DISCOVER_EXTRACTOR:-$PLUGIN_DIR/scripts/_discover_extractor.py}"
 
 if [ ! -f "$SCRIPT" ]; then
   echo "FAIL: _discover_extractor.py not found at $SCRIPT" >&2
@@ -261,6 +265,11 @@ EOF
 import json, sys
 d = json.load(sys.stdin)
 ps = d.get('projects', [])
+# An EXACT count, not a >= floor. The usual reason to avoid one here is that the
+# wrapper merges the developer's real $HOME registry into the result — the
+# --registry pin above removes that cause, so exactly the two fixture
+# engagements are discovered and the stronger assertion is the safe one. It also
+# guards the vacuity case: an empty projects[] would satisfy every all() below.
 ok = (
     len(ps) == 2
     and all(isinstance(p.get('last_activity'), str) for p in ps)

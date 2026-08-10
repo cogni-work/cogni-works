@@ -19,8 +19,10 @@ PRECISION IS BOUNDED THE SAME WAY, by the completeness of the per-entry guard li
 (_ENTRY_GUARDS / _ENTRY_LEFT_GUARDS) rather than of SWISS_PAIRS. Where an entry can sit
 inside a correct-German word — the ss straddling a morpheme boundary, as in
 Beweis+sicherung — only a listed guard stem suppresses it, so an unlisted one reports as
-drift with a suggestion that is wrong. Recall and precision are both curated here; a
-finding is a prompt to look, not a verdict.
+drift with a suggestion that is wrong. Proper nouns are the other known false-positive
+class and the guards do not cover them at all: a surname like Weiss or Strasser reports
+confidently and wrongly, on exactly the stakeholder text an engagement corpus carries.
+Recall and precision are both curated here; a finding is a prompt to look, not a verdict.
 
 Read-only. Nothing under the engagement root is opened for writing, and there is no
 repair mode: finding drift and fixing it are separate concerns.
@@ -31,9 +33,12 @@ prose. Only .git is skipped by path. sources/ and output/ ARE scanned deliberate
 sources/ is the verbatim third-party inbox and may legitimately be Swiss, and output/ is
 a deliverable surface, but both are files a consultant can edit, so drift in either is
 worth seeing — an exclusion would have to be justified by provenance the scan cannot
-verify. The one exclusion is by content, not path: a generated echo is skipped when it
-carries the generators' own footer sentinel (see GENERATED_MARKER_SENTINEL below), which
-is what the generators themselves treat as authoritative.
+verify. The one exclusion is by content, not path: a generated echo — in practice the
+engagement-root README.md and assumptions.md, written by generate-engagement-readme.py and
+register-generator.py — is skipped when it carries those generators' own footer sentinel
+(see GENERATED_MARKER_SENTINEL below), which is what the generators themselves treat as
+authoritative. Naming the two files is not the same as excluding them by path: a
+marker-less README.md is hand-authored and IS scanned, which is the point.
 
 Each finding carries a coordinate as well as a line: markdown findings carry a 1-based
 `column`, JSON findings a 0-based `value_offset` into the decoded value. Without one, two

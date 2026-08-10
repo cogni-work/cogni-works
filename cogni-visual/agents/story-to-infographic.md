@@ -1,4 +1,5 @@
 ---
+name: story-to-infographic
 model: sonnet
 description: >
   Transform any narrative into a single-page infographic brief. Orchestrates the

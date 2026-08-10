@@ -5,16 +5,14 @@ description: >
   into a multi-poster print storyboard brief for executive walkthroughs. Use this skill
   whenever the user mentions "storyboard", "poster series", "print posters from narrative",
   "Poster erstellen", "Storyboard aus Bericht", "Posterpraesentation", "Druckposter",
-  "Poster fuer Workshop", "poster walkthrough", "create poster storyboard", "physical
-  walkthrough posters", or wants to paginate a narrative into 3-5 portrait DIN A posters
-  with stacked web sections. Also trigger for room-tour materials, guided exhibition posters,
-  and arc-station-per-poster layouts in both English and German. Produces a storyboard-brief.md
+  "Poster fuer Workshop", "poster walkthrough", or wants to paginate a narrative into 3-5
+  portrait DIN A posters with stacked web sections. Also trigger for room-tour materials
+  and guided exhibition posters in English or German. Produces a storyboard-brief.md
   that the storyboard agent renders via Pencil MCP. Important: this skill CREATES the brief
   from a narrative source — it does NOT render an existing brief (use storyboard agent for
   that), does NOT create slides (use story-to-slides), does NOT create a web page (use story-to-web),
   and does NOT polish prose (use Copywriter skill).
 allowed-tools: Read, Write, Edit, Bash, Grep, Glob, TodoWrite, AskUserQuestion
-version: 0.7.0
 ---
 
 # Story-to-Storyboard Skill

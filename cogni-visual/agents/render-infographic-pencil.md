@@ -6,9 +6,9 @@ description: >
   data-ink discipline, Financial Times visual journalism, Alberto Cairo, Nigel Holmes).
   Use when the brief's style_preset is economist, editorial, data-viz, or corporate,
   or when the user asks for a "clean infographic", "editorial infographic",
-  "Economist-style infographic", "The Economist data page", "magazine-style data
-  page", "data journalism infographic", "FT chart", "FT-style infographic", "Tufte
-  data-ink one-pager", "Alberto Cairo functional infographic", or "Pencil infographic".
+  "The Economist data page", "magazine-style data page", "data journalism
+  infographic", "FT chart", "Tufte data-ink one-pager", "Alberto Cairo functional
+  infographic", or "Pencil infographic".
   Dispatched by the /render-infographic command (auto-routed on
   economist/editorial/data-viz/corporate style preset) or the /render-infographic-editorial
   command (direct). Not for hand-drawn styles — use render-infographic-sketchnote for

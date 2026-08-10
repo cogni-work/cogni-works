@@ -14,8 +14,7 @@ description: >
   it does NOT render an existing brief (use PPTX skill for that), does NOT create a
   a web page
   (use story-to-web), and does NOT enhance prose (use Copywriter skill).
-allowed-tools: Read, Write, Edit, Bash, Grep, Glob, AskUserQuestion, Agent
-version: 1.0.0
+allowed-tools: Read, Write, Edit, Bash, Grep, Glob, AskUserQuestion, Agent, Skill
 ---
 
 # Story-to-Slides Skill

@@ -3,32 +3,17 @@ name: story-to-infographic
 description: >
   Transform any narrative (insight summary, trend report, strategy document, sales pitch,
   research report) into a single-page infographic brief optimized for visual scanning. Use
-  this skill whenever the user mentions "infographic", "Infografik", "visual summary",
-  "one-page visual", "data poster", "single-page overview", "visuelle Zusammenfassung",
-  "Dateninfografik", "create infographic from report", "make this visual", "infographic
-  from narrative", "stat sheet", "KPI poster", or wants to distill a narrative into a
-  scannable visual with hero numbers, icons, and minimal text. Also trigger for "dashboard
-  poster", "Einseiter mit Zahlen", "visual one-pager", and requests to summarize a report
-  as a single visual page. Trigger equally on named-style requests — "Economist-style
-  one-pager", "Economist data page", "The Economist infographic", "data journalism
-  infographic", "Tufte data-ink one-pager", "FT visual journalism infographic",
-  "magazine-style data page", "Mike Rohde sketchnote", "RSA Animate whiteboard",
-  "sketchnoting", "visual facilitation", "graphic recording", "Back of the Napkin
-  diagram", "whiteboard explainer" — these are all valid entry points. Produces an
-  infographic-brief.md in one of two style families: a hand-drawn family (sketchnote,
-  whiteboard) rendered via /render-infographic-handdrawn into an Excalidraw scene, or
-  an editorial family (economist — The Economist data page style, plus editorial,
-  data-viz, corporate) rendered via /render-infographic-editorial into a Pencil MCP
-  .pen file. After brief creation, the skill auto-dispatches /render-infographic to
-  render the output (disable with render: false). Important: this skill CREATES the
-  brief from a narrative source and then renders it — it does NOT render an existing
-  brief (use /render-infographic to auto-route or one of the direct render commands
-  for that), does NOT create slides (use story-to-slides),
-  does NOT create a scrollable web page (use story-to-web), does NOT create a
-  multi-poster storyboard (use story-to-storyboard), and does NOT enrich an existing
-  report with inline visuals (use enrich-report).
+  this skill whenever the user mentions "infographic", "Infografik", "data poster",
+  "one-pager", "visuelle Zusammenfassung", "Dateninfografik", "Einseiter mit Zahlen", or
+  wants a narrative distilled into a scannable visual. Also on named styles — "Economist
+  data page", "Tufte data-ink", "FT visual journalism", "Mike Rohde sketchnote", "RSA
+  Animate whiteboard", "Back of the Napkin". Produces an infographic-brief.md: hand-drawn
+  (sketchnote, whiteboard) via /render-infographic-handdrawn, or editorial (economist,
+  editorial, data-viz, corporate) via /render-infographic-editorial. It CREATES the brief;
+  it does NOT render an existing brief (use /render-infographic), create slides
+  (story-to-slides), a scrollable web page (story-to-web), a storyboard
+  (story-to-storyboard), or enrich a report with inline visuals (enrich-report).
 allowed-tools: Read, Write, Edit, Bash, Grep, Glob, AskUserQuestion, Agent, Skill
-version: 0.3.0
 ---
 
 # Story-to-Infographic Skill

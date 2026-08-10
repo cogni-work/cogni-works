@@ -108,15 +108,14 @@ instead, where `scope_state` (the scoping-phase status, not the engagement's
 scope) is not `complete`, append ` · noch nicht geschärft` inside the
 engagement's name cell.
 
-`Zuletzt bearbeitet` is the newest `transitions[].timestamp` in
-`<path>/.metadata/execution-log.json` (`<path>` from discovery), date part only.
-Fall back to the engagement's root `updated` only when that log is absent,
-empty, or unreadable — per `references/data-model.md`, "Deliverable work never
-touches it", so root `updated` tracks scope edits rather than engagement
-freshness. When neither is available, sort the engagement last and render `—`.
-Read the log once per discovered engagement here, after discovery and before
-the sort; the single-engagement and named-engagement branches skip that cost
-entirely.
+`Zuletzt bearbeitet` is the `last_activity` field discovery already returns per
+engagement — the newest transition timestamp from that engagement's execution
+log, falling back to its root `updated` only when that log is absent, empty, or
+unreadable; per `references/data-model.md`, "Deliverable work never touches
+it", so root `updated` tracks scope edits, not engagement freshness. Never read
+that log here. Values arrive raw and heterogeneous (a full timestamp or a bare
+date), so render and sort on the date part alone; an empty `last_activity`
+sorts last and renders `—`.
 
 German sessions render the strings above and dates as `TT.MM.JJJJ`. An English
 session renders the same table, so it is seeded by example too rather than left
@@ -183,10 +182,10 @@ field's `slug` but not its title — and deliverables by the `title` the rollup
 passes through with each deliverable. Fall back to the slug only when no title
 is stored — slugs are storage keys, not display names, and titles are rendered
 as stored, never translated.
-`zuletzt bearbeitet` resolves exactly as in step 2; compute it for the selected
-engagement here when step 2's branch did not already. Step 2's rendering rule
-covers this table too — its column headers, status cells, preamble labels and
-the date shape.
+`zuletzt bearbeitet` is the same discovery-supplied `last_activity` for the
+selected engagement, resolved and rendered exactly as in step 2 — that step's
+rendering rule covers this table too: its column headers, status cells,
+preamble labels and the date shape.
 
 `Deliverables` counts deliverables at `complete` over the field total — that
 `complete` is the engine state being counted, not the word to print; the cell

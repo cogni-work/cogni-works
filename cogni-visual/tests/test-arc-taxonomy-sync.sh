@@ -29,12 +29,15 @@
 #   loud failure in the wrong place beats a silent one in the right place.
 #
 # CASE LABEL SHAPE: `ok: <id>` / `FAIL: <id>` — NOT the `OK   ` / `FAIL ` shape used by
-#   some older suites in this repo. The shared mutation harness classifies a case by reading
+#   three older suites in this repo. The shared mutation harness classifies a case by reading
 #   OUTPUT LINES rather than the exit code, matching `FAIL: <case>` for red and
 #   `ok: <case>` / `PASS: <case>` for green. The no-colon shape matches neither pattern, so a
 #   suite wearing it cannot be driven by the harness and its mutation recipe is unrunnable as
-#   written. Normalising to the colon form is the direction already set for this repo's other
-#   suites; this one is born compatible rather than needing to be migrated later.
+#   written.
+#
+#   The colon form is also the repo majority, not a deviation from house style: of the suites
+#   carrying a pass()/fail() helper, nineteen already emit `FAIL: <case>` and three emit the
+#   no-colon shape. This suite is born compatible rather than needing to be migrated later.
 #
 #   Two label rules are load-bearing, not style:
 #     - a case id is a single token followed by a space or end-of-line, never `S2:` or `S2 -`;
@@ -51,18 +54,38 @@
 #   turn the duplicate check red on a clean file. Likewise the mapping-table parse is bounded to
 #   its own section so the Example table's `|`-leading rows are not read as arc rows.
 #
+# THE NEGATIVE CASE IS SELF-HOSTED (M1), not merely recorded in prose. A guard that only ever
+#   sees a healthy tree is indistinguishable from a guard that cannot fail, and a mutation
+#   recipe written into a pull-request description is not replayable by anyone reading the repo
+#   later. M1 therefore copies the taxonomy into this run's own mktemp -d, deletes one mapping
+#   row FROM THE COPY, re-invokes this same file against the mutant, and asserts the child both
+#   exits non-zero and reports S2 red by name. It runs on every CI sweep, and the tracked
+#   arc-taxonomy.md is never written to — a negative case that edits its own repository is a
+#   dirty-tree hazard, not a test.
+#
 # stdlib-only: bash + coreutils + python3. No network, no credentials, no pip dependencies.
 # Writes only under its own mktemp -d. Self-locates from $0, so it is cwd-independent — the
 # mutation harness runs it with cwd set to the tree under test, not to this directory.
 
 set -u
 
+# One collation authority for every ordered comparison in this file. `comm` requires both inputs
+# ordered the same way and reports a WRONG difference set — silently, exit 0 — when they are not.
+# Its inputs come from two different sorters: python's byte-wise sorted() and coreutils sort,
+# whose order is locale-dependent. Under a UTF-8 locale, sort demotes punctuation to a secondary
+# level, so a future arc-id pair like `smart-service` / `smartservice` would order differently in
+# the two files and the comparison would quietly return nonsense. Pinning C makes both agree.
+export LC_ALL=C
+
 HERE="$(cd "$(dirname "$0")" && pwd)"
 PLUGIN_DIR="$(cd "$HERE/.." && pwd)"
 REPO_ROOT="$(cd "$PLUGIN_DIR/.." && pwd)"
 
-TAXONOMY="$PLUGIN_DIR/libraries/arc-taxonomy.md"
-ARC_DIR="$REPO_ROOT/cogni-narrative/skills/narrative/references/story-arc"
+# Both inputs default to the real tracked paths and are overridable only so M1 can aim this
+# same file at a mutant under $TMPROOT. The override exists for the negative case, not as a
+# configuration surface — a normal run, and every CI run, resolves both defaults.
+TAXONOMY="${ARC_TAXONOMY_PATH:-$PLUGIN_DIR/libraries/arc-taxonomy.md}"
+ARC_DIR="${ARC_STORY_ARC_DIR:-$REPO_ROOT/cogni-narrative/skills/narrative/references/story-arc}"
 
 # The five valid visual arc types. arc-taxonomy.md does not declare this set itself — it is
 # stated by the consuming surfaces (cogni-visual/skills/story-to-slides, story-to-web,
@@ -77,10 +100,14 @@ failures=0
 pass() { echo "ok: $1"; }
 fail() { echo "FAIL: $1"; failures=$((failures + 1)); }
 
-# Cases that cannot be evaluated must still emit their own id. A case id that is simply absent
-# from the output is indistinguishable, to the harness, from a typo'd --case — so an
-# unevaluated case is reported as a failure under its own name rather than skipped silently.
-NOT_EVALUATED="S1 S2 T1 E1 D1"
+# Every case downstream of the non-vacuity guards, declared once. Cases that cannot be evaluated
+# must still emit their own id: a case id that is simply absent from the output is
+# indistinguishable, to the harness, from a typo'd --case — so an unevaluated case is reported as
+# a failure under its own name rather than skipped silently.
+#
+# MAINTENANCE: adding a case below the V-guards means adding its id here too. This list is the
+# single declaration bail_out reads; a case missing from it vanishes from the bail output.
+DOWNSTREAM_CASES="S1 S2 T1 E1 D1 M1"
 
 # Deliberately not prefixed `FAIL:` — that shape is reserved for per-case verdicts, and a
 # summary wearing it would be misread as a case named by its first token.
@@ -97,7 +124,7 @@ finish() {
 # Abandon the run when an input is missing or unparseable, reporting every downstream case
 # under its own id first.
 bail_out() {
-  for case_id in $NOT_EVALUATED; do
+  for case_id in $DOWNSTREAM_CASES; do
     fail "$case_id not evaluated — non-vacuity guard failed"
   done
   finish
@@ -206,6 +233,8 @@ then
   bail_out
 fi
 
+# `sort` here agrees with python's byte-wise sorted() above because LC_ALL=C is exported at the
+# top of this file. See that comment — the agreement is what makes every `comm` below sound.
 find "$ARC_DIR" -mindepth 1 -maxdepth 1 -type d -exec basename {} \; | sort > "$TMPROOT/dir_ids.txt"
 
 map_count=$(wc -l < "$TMPROOT/map_ids.txt" | tr -d ' ')
@@ -287,6 +316,84 @@ if [ -z "$duplicate_ids" ]; then
   pass "D1 no arc_id appears more than once in the mapping table"
 else
   fail "D1 duplicate mapping-table arc_id(s): $duplicate_ids"
+fi
+
+# ------------------------------------------------------------------ executed negative case (M1)
+# Proves this guard can actually go red, in-repo and on every sweep, without ever writing to the
+# tracked taxonomy. Deletes one mapping row from a COPY, runs this same file against the mutant,
+# and requires the child to report S2 red by name. Asserting on the child's exit code alone would
+# be too weak: a non-zero exit cannot distinguish S2 going red from any other case going red.
+
+if [ "${ARC_TAXONOMY_SYNC_MUTANT:-0}" = "1" ]; then
+  # This run IS the mutant child. Recursing here would not terminate.
+  finish
+fi
+
+# The victim row. `smarter-service` is the omission this guard was written for, so it is
+# preferred when present — but it is looked up in the parsed set rather than assumed, and any
+# arc_id serves equally, so removing or renaming that arc cannot stale this case out.
+victim=$(grep -x 'smarter-service' "$TMPROOT/map_ids.txt" || head -n 1 "$TMPROOT/map_ids.txt")
+
+if [ -z "$victim" ]; then
+  fail "M1 no arc_id available to mutate — the mapping table parsed empty"
+  finish
+fi
+
+# Section-scoped deletion, for the same reason the main parse is section-scoped: the arc's own
+# element table further down the file also has rows, and an unscoped match would cut one of those
+# instead. Exits non-zero unless at least one row was removed, so a silently-ineffective mutation
+# is never mistaken for a passing negative case. The condition is "the victim is now unmapped",
+# not "exactly one line was cut": on a file that already carries a duplicate row — the state D1
+# exists to catch — cutting only one would leave the arc still mapped, S2 still green, and M1
+# would then wrongly report the guard vacuous. Removing every matching row keeps M1 diagnosing
+# its own property rather than going red in sympathy with D1.
+if python3 - "$TAXONOMY" "$TMPROOT/mutant.md" "$victim" <<'PY'
+import sys
+
+source_path, mutant_path, victim = sys.argv[1], sys.argv[2], sys.argv[3]
+
+with open(source_path, encoding="utf-8") as handle:
+    lines = handle.read().splitlines(keepends=True)
+
+MAPPING_HEADING = "## Arc ID to Visual Arc Type Mapping"
+
+kept, removed, in_section = [], 0, False
+for line in lines:
+    stripped = line.strip()
+    if stripped == MAPPING_HEADING:
+        in_section = True
+    elif in_section and stripped.startswith("## "):
+        in_section = False
+    if in_section and stripped.startswith("|"):
+        first_cell = stripped.strip("|").split("|")[0].replace("`", "").strip()
+        if first_cell == victim:
+            removed += 1
+            continue
+    kept.append(line)
+
+with open(mutant_path, "w", encoding="utf-8") as handle:
+    handle.writelines(kept)
+
+sys.exit(0 if removed >= 1 else 1)
+PY
+then
+  mutant_out=$(ARC_TAXONOMY_SYNC_MUTANT=1 ARC_TAXONOMY_PATH="$TMPROOT/mutant.md" \
+    bash "$HERE/$(basename "$0")" 2>&1)
+  mutant_rc=$?
+
+  # The S2 verdict line the child emitted, if any. Matching the case id and the victim name
+  # separately keeps the assertion readable and avoids anchoring inside a wildcard.
+  mutant_s2=$(printf '%s\n' "$mutant_out" | grep '^FAIL: S2 ' || true)
+
+  if [ "$mutant_rc" -eq 0 ]; then
+    fail "M1 dropping the '$victim' mapping row left the suite GREEN — the guard is vacuous"
+  elif [ -n "$mutant_s2" ] && printf '%s\n' "$mutant_s2" | grep -qE "(^| )$victim( |$)"; then
+    pass "M1 dropping the '$victim' mapping row turns S2 red (child exit $mutant_rc)"
+  else
+    fail "M1 mutant run exited $mutant_rc, but not via S2 naming '$victim' — got: $(printf '%s' "$mutant_out" | grep '^FAIL:' | tr '\n' ';')"
+  fi
+else
+  fail "M1 could not remove any '$victim' mapping row from the copy"
 fi
 
 # ------------------------------------------------------------------------------------ summary

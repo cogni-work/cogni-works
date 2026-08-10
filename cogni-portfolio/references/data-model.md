@@ -216,6 +216,18 @@ The commercial-consolidation gate (`project-status.sh` `commercial_model_status`
 
 `commercial_model` is also an optional field on propositions (see the propositions schema below) — it is what the ratio signal in (4) counts.
 
+**Status output shape.** `project-status.sh` emits the gate's result as `commercial_model_status`:
+
+| Key | Shape | Meaning |
+|-----|-------|---------|
+| `matrix[]` | one entry per product × market: `product`, `market`, `revenue_model`, `commercial_model`, `commercial_model_shared` | the per-combination verdict |
+| `any_shared` | boolean | true when at least one product is shared |
+| `shared_products[]` | product slugs | the products the gate marked shared |
+| `shared_signals[]` | enum values | the markers that drove each shared verdict |
+| `shared_revenue_models[]` | enum values | **deprecated** alias of `shared_signals`, retained for existing readers |
+
+`shared_signals[]` **mixes the `revenue_model` and `commercial_model` enums** — any of the four signals above can supply the marker, so a value such as `catalog` or `usage` is a `commercial_model`, not a revenue model.
+
 #### Delivery Blueprint (optional)
 
 A `delivery_blueprint` object on the product captures the standard delivery pattern — phases, pricing strategy, role composition, and assumptions that apply across all markets. The solution-planner agent uses it as a structural starting point when generating per-Feature×Market solutions, adapting durations, pricing, and assumptions to market context.

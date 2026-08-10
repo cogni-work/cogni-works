@@ -17,6 +17,8 @@
 #   8  ref-invalid-solution-type           _shared/ invalid solution_type (exit 9) — closes #251
 #   9  overlay-half-declared-overlay-only  messaging_overlay without shared_solution_ref — closes #252
 #  10  overlay-half-declared-ref-only      shared_solution_ref without messaging_overlay — closes #252
+#  11  commercial-model-off-enum           out-of-enum commercial_model → warning on product + proposition
+#  12  commercial-model-in-enum            in-enum commercial_model → no warning (negative twin)
 #
 # Usage: bash cogni-portfolio/tests/test-validate-entities.sh
 # Exits non-zero on any assertion failure.
@@ -209,6 +211,28 @@ for e in doc.get(kind, []):
     n += 1
 print(n)
 " "$kind" "$substring"
+}
+
+# Count entries of $kind (errors|warnings) for an arbitrary $entity matching
+# $substring — the entity-agnostic sibling of count_solution_entries, used by
+# the commercial_model fixtures below (which assert on product and proposition
+# entities rather than solutions).
+count_entity_entries() {
+  local kind="$1" entity="$2" substring="${3:-}"
+  printf '%s' "$VALIDATOR_OUTPUT" | python3 -c "
+import json, sys
+kind, entity = sys.argv[1], sys.argv[2]
+substring = sys.argv[3] if len(sys.argv) > 3 else ''
+doc = json.load(sys.stdin)
+n = 0
+for e in doc.get(kind, []):
+    if e.get('entity') != entity:
+        continue
+    if substring and substring not in e.get('message', ''):
+        continue
+    n += 1
+print(n)
+" "$kind" "$entity" "$substring"
 }
 
 # Print solution errors and warnings (for diagnostic output on failure).
@@ -459,6 +483,64 @@ if [ "$RC" = "0" ] && [ "$n_err" = "0" ] && [ "$n_match" = "1" ]; then
 else
   fail "overlay-half-declared-ref-only" "expected rc=0, 0 errors, 1 warning matching 'messaging_overlay not set to true', got rc=$RC errors=$n_err match=$n_match"
   dump_solution_entries >&2
+fi
+
+# ─── Fixture 11: commercial-model-off-enum ──────────────────────────────────
+# The consolidation gate silently ignores an out-of-enum commercial_model, so a
+# casing slip would disable a signal with no diagnostic at all. The validator
+# raises a warning (never an error — the field is optional) on both the product
+# and the proposition surface. Without this fixture that documented behaviour
+# had nothing pinning it.
+pdir="$(seed_project commercial-model-off-enum subscription)"
+python3 - "$pdir" <<'PY'
+import json, sys
+p = sys.argv[1]
+prod = json.load(open(p + '/products/acme-suite.json'))
+prod['commercial_model'] = 'Catalog'          # casing slip — off-enum
+json.dump(prod, open(p + '/products/acme-suite.json', 'w'))
+json.dump({
+    "slug": "cogni-x--dach", "feature_slug": "cogni-x", "market_slug": "dach",
+    "commercial_model": "bogus",
+    "is_statement": "Cogni X is a tool that helps DACH buyers daily reliably here now today.",
+    "does_statement": "It automates what DACH buyers need for productivity and steady measurable growth.",
+    "means_statement": "DACH buyers save time and money adopting Cogni X for productivity and growth.",
+}, open(p + '/propositions/cogni-x--dach.json', 'w'))
+PY
+run_validator "$pdir"
+n_prod=$(count_entity_entries warnings product "commercial_model 'Catalog'")
+n_prop=$(count_entity_entries warnings proposition "commercial_model 'bogus'")
+n_prod_err=$(count_entity_entries errors product "commercial_model")
+if [ "$n_prod" = "1" ] && [ "$n_prop" = "1" ] && [ "$n_prod_err" = "0" ]; then
+  pass "commercial-model-off-enum: 1 product + 1 proposition warning, 0 errors (warning-level, not fatal)"
+else
+  fail "commercial-model-off-enum" "expected 1/1/0, got product=$n_prod proposition=$n_prop product_errors=$n_prod_err"
+fi
+
+# ─── Fixture 12: commercial-model-in-enum ───────────────────────────────────
+# The negative twin: a valid value on either surface must stay silent, or the
+# warning would fire on every well-formed project and be ignored as noise.
+pdir="$(seed_project commercial-model-in-enum subscription)"
+python3 - "$pdir" <<'PY'
+import json, sys
+p = sys.argv[1]
+prod = json.load(open(p + '/products/acme-suite.json'))
+prod['commercial_model'] = 'catalog'
+json.dump(prod, open(p + '/products/acme-suite.json', 'w'))
+json.dump({
+    "slug": "cogni-x--dach", "feature_slug": "cogni-x", "market_slug": "dach",
+    "commercial_model": "subscription",
+    "is_statement": "Cogni X is a tool that helps DACH buyers daily reliably here now today.",
+    "does_statement": "It automates what DACH buyers need for productivity and steady measurable growth.",
+    "means_statement": "DACH buyers save time and money adopting Cogni X for productivity and growth.",
+}, open(p + '/propositions/cogni-x--dach.json', 'w'))
+PY
+run_validator "$pdir"
+n_prod=$(count_entity_entries warnings product "commercial_model")
+n_prop=$(count_entity_entries warnings proposition "commercial_model")
+if [ "$n_prod" = "0" ] && [ "$n_prop" = "0" ]; then
+  pass "commercial-model-in-enum: valid values raise no commercial_model warning"
+else
+  fail "commercial-model-in-enum" "expected 0/0, got product=$n_prod proposition=$n_prop"
 fi
 
 if [ "$failures" -gt 0 ]; then

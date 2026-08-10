@@ -86,6 +86,31 @@ with open('$p') as fh:
   done
 fi
 
+# Validate commercial_model enum on products and propositions (optional field).
+# Warning-level, not an error: the field is optional and an out-of-enum value is
+# a diagnostic, not a broken record. Without it a casing slip ("Catalog") would
+# silently disable the consolidation gate's signal with no output at all — see
+# references/data-model.md, "Commercial-structure consolidation signals".
+COMMERCIAL_MODEL_ENUM="catalog subscription usage project partnership"
+while IFS='|' read -r cm_kind cm_slug cm_value; do
+  [ -n "$cm_slug" ] || continue
+  add_warning "$cm_kind" "$cm_slug" "commercial_model '$cm_value' is not one of: $COMMERCIAL_MODEL_ENUM (the consolidation gate ignores out-of-enum values)"
+done < <(python3 -c "
+import json, glob, os
+
+VALID = {'catalog', 'subscription', 'usage', 'project', 'partnership'}
+for kind, sub in (('product', 'products'), ('proposition', 'propositions')):
+    for path in sorted(glob.glob(os.path.join('$PROJECT_DIR', sub, '*.json'))):
+        try:
+            with open(path) as fh:
+                d = json.load(fh)
+        except Exception:
+            continue
+        v = d.get('commercial_model')
+        if isinstance(v, str) and v and v not in VALID:
+            print('%s|%s|%s' % (kind, os.path.basename(path)[:-5], v.replace('|', ' ')))
+" 2>/dev/null)
+
 # Validate delivery_blueprint on products (optional — only checked when present)
 if [ -d "$PROJECT_DIR/products" ]; then
   for p in "$PROJECT_DIR/products"/*.json; do

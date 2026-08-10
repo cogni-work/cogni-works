@@ -210,9 +210,9 @@ Valid `revenue_model` values: `subscription` (SaaS/license), `project` (consulti
 The commercial-consolidation gate (`project-status.sh` `commercial_model_status`, consumed by the `solutions` and `portfolio-resume` skills) recommends consolidating a product's solutions layer — a single shared reference cut or a package ladder — instead of fanning out one tiered solution per proposition, whenever the product has **one shared/fixed commercial structure**. It reads four signals; any one marks the product shared:
 
 1. **Shared `revenue_model`** — `revenue_model` ∈ {`subscription`, `hybrid`, `partnership`}.
-2. **Fixed/catalog `commercial_model`** — the optional `commercial_model` field, a more explicit statement of commercial structure than `revenue_model`. Valid values: `catalog`, `subscription`, `usage`, `project`, `partnership`. The **shared set** is {`catalog`, `subscription`, `usage`, `partnership`}; `project` is bespoke and stays not-shared.
+2. **Fixed/catalog `commercial_model`** — the optional `commercial_model` field, a more explicit statement of commercial structure than `revenue_model`. Valid values: `catalog`, `subscription`, `usage`, `project`, `partnership`. The **shared set** is {`catalog`, `subscription`, `usage`, `partnership`}; `project` is bespoke and stays not-shared. **Out-of-enum disposition:** unlike `revenue_model` (signal 3), a `commercial_model` outside the enum carries **no** shared disposition — it is simply not in the shared set, so the signal does not fire. The value is not silently equivalent to an absent field, though: `validate-entities.sh` raises a warning-level `commercial_model` finding for any out-of-enum value on a product or proposition, so a casing slip such as `"Catalog"` surfaces as a diagnostic rather than a silently disabled signal.
 3. **Off-enum `revenue_model` disposition** — a `revenue_model` value outside the enum above no longer silently defaults to not-shared. The documented disposition: `transaction-fee` and `product_and_license` map to **shared**; `project-fee` (and any other unlisted value) maps to **not-shared**.
-4. **Propositions:distinct-commercial-models ratio** — when a product has at least 3 propositions that each declare a `commercial_model` and those declared values collapse to exactly **one** distinct value, the product has one shared structure. Propositions without a `commercial_model` are excluded, so the zero-declared case never triggers this signal.
+4. **Propositions:distinct-commercial-models ratio** — when a product has at least 3 propositions that each declare a `commercial_model`, those declared values collapse to exactly **one** distinct value, and that value is in the **shared set** from (2), the product has one shared structure. Propositions without a `commercial_model` are excluded, so the zero-declared case never triggers this signal. The shared-set qualifier is what keeps this signal consistent with (2): three propositions unanimously declaring `project` have agreed to stay bespoke, so they leave the product not-shared.
 
 `commercial_model` is also an optional field on propositions (see the propositions schema below) — it is what the ratio signal in (4) counts.
 
@@ -1159,6 +1159,7 @@ erDiagram
         string description
         string positioning
         string revenue_model "project|subscription|partnership|hybrid"
+        string commercial_model "catalog|subscription|usage|project|partnership"
         string maturity "concept|development|launch|growth|mature|decline"
     }
     Feature {
@@ -1195,6 +1196,7 @@ erDiagram
         string is_statement
         string does_statement
         string means_statement
+        string commercial_model "catalog|subscription|usage|project|partnership"
         array evidence
         object quality_assessment
     }

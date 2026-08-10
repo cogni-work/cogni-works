@@ -17,6 +17,9 @@
 #   test_catalog_consolidates                  fixed/catalog commercial_model -> consolidation (rm=project)
 #   test_models_ratio_consolidates             one distinct proposition commercial_model across >=3 props -> consolidation
 #   test_off_enum_disposition_shared           off-enum revenue_model (product_and_license) -> documented shared disposition
+#   test_project_models_ratio_stays_one_to_one unanimous `project` across 3 propositions -> NOT shared (ratio negative)
+#   test_off_enum_project_fee_stays_one_to_one off-enum `project-fee` -> NOT shared (disposition negative)
+#   test_partial_models_ratio_stays_one_to_one mixed models, and below the >=3 threshold -> NOT shared (ratio negatives)
 #
 # Usage: bash cogni-portfolio/tests/test-commercial-consolidation.sh [test_name ...]
 #   No args -> run every test (the CI path). One or more names -> run only those
@@ -56,15 +59,17 @@ fail() { printf 'FAIL %s: %s\n' "$1" "$2" >&2; failures=$((failures + 1)); }
 # Seed a minimal enrichment-phase project: 1 product (revenue_model=$2), 3 features,
 # 1 market, 1 customer, 3 propositions (all pairs covered -> MISSING_COUNT=0), and 0
 # solutions (SOLUTIONS_PCT<100) so PHASE=enrichment and the solutions next_action fires.
-# Optional $3 sets the product's commercial_model; optional $4 sets each
-# proposition's commercial_model (both omitted -> the field is absent, matching a
-# pre-#1232 project).
+# Optional $3 sets the product's commercial_model; optional $4 sets the
+# propositions' commercial_model (both omitted -> the field is absent, matching a
+# pre-#1232 project). $4 is either a single value applied to every proposition,
+# or a comma-separated per-proposition list in a,b,c order whose empty entries
+# leave that proposition's commercial_model absent — which is what lets a test
+# seed a mixed-value or below-threshold set, not just a unanimous one.
 seed_project() {
   local name="$1" rm="$2" pcm="${3:-}" prop_cm="${4:-}"
   local d="$TMPROOT/$name"
-  local pcm_field="" prop_cm_field=""
+  local pcm_field=""
   [ -n "$pcm" ] && pcm_field="\"commercial_model\": \"$pcm\", "
-  [ -n "$prop_cm" ] && prop_cm_field="\"commercial_model\": \"$prop_cm\", "
   mkdir -p "$d/products" "$d/features" "$d/markets" "$d/customers" "$d/propositions" "$d/solutions"
   printf '{"company": {"name": "Acme", "products": ["acme"]}, "taxonomy": {}}\n' > "$d/portfolio.json"
   cat > "$d/products/acme.json" <<EOF
@@ -82,10 +87,18 @@ EOF
   cat > "$d/customers/kunde.json" <<EOF
 {"slug": "kunde", "name": "Kunde", "description": "A customer profile for DACH satisfying the customers phase gate here now.", "market_slug": "dach"}
 EOF
+  local idx=1
   for f in a b c; do
+    # `cut` echoes the whole line when the string carries no delimiter, so a
+    # single value replicates across all three propositions for free and the
+    # existing callers keep their meaning.
+    local this_cm prop_cm_field=""
+    this_cm="$(printf '%s' "$prop_cm" | cut -d',' -f"$idx")"
+    [ -n "$this_cm" ] && prop_cm_field="\"commercial_model\": \"$this_cm\", "
     cat > "$d/propositions/feat-$f--dach.json" <<EOF
 {"slug": "feat-$f--dach", "feature_slug": "feat-$f", "market_slug": "dach", ${prop_cm_field}"is_statement": "Feat $f is a tool that helps DACH buyers daily reliably here now today.", "does_statement": "It automates what DACH buyers need for productivity and steady measurable growth here now.", "means_statement": "DACH buyers save time and money adopting Feat $f for productivity and growth here now."}
 EOF
+    idx=$((idx + 1))
   done
   echo "$d"
 }
@@ -109,6 +122,25 @@ any_shared_value() {
   printf '%s' "$STATUS_OUT" | python3 -c "import json,sys; print(json.load(sys.stdin).get('commercial_model_status', {}).get('any_shared'))"
 }
 
+# Assert a seeded project is NOT shared: no consolidation recommendation and the
+# standard 1:1 action kept. $1 test name, $2 project dir, $3 case label.
+# Every signal needs a negative case as well as a positive one — asserting only
+# the positive direction is how an over-broad predicate passes a green run.
+assert_one_to_one() {
+  local tname="$1" d="$2" label="$3"
+  run_status "$d"
+  [ "$RC" = "0" ] || { fail "$tname" "$label: status rc=$RC"; return 1; }
+  local reason; reason="$(solutions_reason)"
+  local any_shared; any_shared="$(any_shared_value)"
+  if [ "$any_shared" = "False" ] \
+     && printf '%s' "$reason" | grep -qF "$ONE_TO_ONE_ACTION" \
+     && ! printf '%s' "$reason" | grep -qiE 'shared_solution|Paketleiter|packages'; then
+    return 0
+  fi
+  fail "$tname" "$label: any_shared=$any_shared reason='$reason'"
+  return 1
+}
+
 test_hybrid_consolidates() {
   local d; d="$(seed_project hybrid-consolidates hybrid)"
   run_status "$d"
@@ -127,20 +159,11 @@ test_hybrid_consolidates() {
 }
 
 test_project_still_one_to_one() {
-  local d; d="$(seed_project project-1to1 project)"
-  run_status "$d"
-  [ "$RC" = "0" ] || { fail test_project_still_one_to_one "status rc=$RC"; return; }
-  local reason; reason="$(solutions_reason)"
-  local any_shared; any_shared="$(any_shared_value)"
   # Regression guard: a project revenue model keeps the standard 1:1 action and
   # triggers no consolidation recommendation.
-  if [ "$any_shared" = "False" ] \
-     && printf '%s' "$reason" | grep -qF "$ONE_TO_ONE_ACTION" \
-     && ! printf '%s' "$reason" | grep -qiE 'shared_solution|Paketleiter|packages'; then
-    pass "test_project_still_one_to_one: standard per-proposition action kept"
-  else
-    fail test_project_still_one_to_one "any_shared=$any_shared reason='$reason'"
-  fi
+  local d; d="$(seed_project project-1to1 project)"
+  assert_one_to_one test_project_still_one_to_one "$d" "project revenue_model" \
+    && pass "test_project_still_one_to_one: standard per-proposition action kept"
 }
 
 test_status_emits_shared_flag() {
@@ -248,7 +271,38 @@ test_off_enum_disposition_shared() {
   fi
 }
 
-ALL_TESTS="test_hybrid_consolidates test_project_still_one_to_one test_status_emits_shared_flag test_recommendation_names_shared_solution test_no_stale_one_to_one_wording test_catalog_consolidates test_models_ratio_consolidates test_off_enum_disposition_shared"
+test_project_models_ratio_stays_one_to_one() {
+  # The negative twin of test_models_ratio_consolidates. Three propositions can
+  # agree unanimously on `project` — that is agreeing to stay bespoke, so the
+  # ratio must NOT fire. Without the shared-set membership test, the ratio
+  # signal disagrees with the catalog signal about `project` and silently
+  # reverses the project-stays-1:1 guarantee this gate exists to hold.
+  local d; d="$(seed_project project-ratio-1to1 project "" "project,project,project")"
+  assert_one_to_one test_project_models_ratio_stays_one_to_one "$d" "unanimous project" \
+    && pass "test_project_models_ratio_stays_one_to_one: unanimous bespoke model stays 1:1"
+}
+
+test_off_enum_project_fee_stays_one_to_one() {
+  # The negative twin of test_off_enum_disposition_shared. `project-fee` is
+  # off-enum but carries the documented NOT-shared disposition, so signal 3 must
+  # not treat "off-enum" as a synonym for "shared".
+  local d; d="$(seed_project off-enum-1to1 project-fee)"
+  assert_one_to_one test_off_enum_project_fee_stays_one_to_one "$d" "project-fee" \
+    && pass "test_off_enum_project_fee_stays_one_to_one: undocumented off-enum value stays 1:1"
+}
+
+test_partial_models_ratio_stays_one_to_one() {
+  # Two ways the ratio must decline even on shared-set values: propositions that
+  # disagree (3 distinct models), and a set below the >=3 declared threshold
+  # (one declares, two are silent). Both keep the standard 1:1 action.
+  local mixed; mixed="$(seed_project mixed-ratio-1to1 project "" "subscription,usage,catalog")"
+  local sparse; sparse="$(seed_project sparse-ratio-1to1 project "" "subscription,,")"
+  assert_one_to_one test_partial_models_ratio_stays_one_to_one "$mixed" "3 distinct models" || return
+  assert_one_to_one test_partial_models_ratio_stays_one_to_one "$sparse" "1 declared, below threshold" || return
+  pass "test_partial_models_ratio_stays_one_to_one: mixed and below-threshold sets stay 1:1"
+}
+
+ALL_TESTS="test_hybrid_consolidates test_project_still_one_to_one test_status_emits_shared_flag test_recommendation_names_shared_solution test_no_stale_one_to_one_wording test_catalog_consolidates test_models_ratio_consolidates test_off_enum_disposition_shared test_project_models_ratio_stays_one_to_one test_off_enum_project_fee_stays_one_to_one test_partial_models_ratio_stays_one_to_one"
 
 if [ "$#" -gt 0 ]; then
   for t in "$@"; do "$t"; done

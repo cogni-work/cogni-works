@@ -106,12 +106,15 @@ Write the proposition to the path specified in the task:
       "source_title": "Source Title"
     }
   ],
+  "commercial_model": "subscription",
   "created": "YYYY-MM-DD"
 }
 ```
 
 Required: `slug`, `feature_slug`, `market_slug`, `is_statement`, `does_statement`, `means_statement`
-Optional: `evidence`, `created`
+Optional: `evidence`, `commercial_model`, `created`
+
+`commercial_model` is one of `catalog`, `subscription`, `usage`, `project`, `partnership`. Carry it forward from the parent product JSON you already read in step 2: when that product declares a `commercial_model`, copy its value onto the proposition. Only diverge when the research showed this Feature×Market offer is genuinely sold on a different structure, and omit the field entirely when the parent product declares none — the consolidation gate excludes undeclared propositions, so an absent field is the honest signal and a guessed one silently drives a consolidation recommendation.
 
 ## Content Length Constraints
 

@@ -759,7 +759,9 @@ fi
 #   3. an off-enum revenue_model carrying a documented shared disposition
 #      (transaction-fee / product_and_license);
 #   4. at least three propositions whose declared commercial_model values
-#      collapse to exactly one distinct value.
+#      collapse to exactly one distinct value, and that value is itself in the
+#      shared set from (2) — a product whose propositions all declare the
+#      bespoke `project` model stays not-shared.
 # A shared structure means the solutions layer should consolidate (a shared
 # reference cut / a package ladder) instead of fanning out one tiered solution
 # per proposition.
@@ -784,7 +786,11 @@ REVENUE_MODEL_ENUM = {'subscription', 'project', 'partnership', 'hybrid'}
 OFF_ENUM_SHARED = {'transaction-fee', 'product_and_license'}
 # Propositions:distinct-commercial-models ratio — a product whose propositions
 # collapse to a single declared commercial_model across at least this many
-# propositions (many propositions, one model) has one shared structure.
+# propositions (many propositions, one model) has one shared structure — but
+# only when that one model is itself shared. Agreeing on `project` is agreeing
+# to stay bespoke, so the ratio tests SHARED_COMMERCIAL_MODELS membership just
+# as the catalog signal does; otherwise the two signals would disagree about
+# `project` and the ratio would reopen the project-stays-1:1 guarantee.
 RATIO_MIN_PROPOSITIONS = 3
 
 markets = sorted(
@@ -836,7 +842,11 @@ for pf in sorted(glob.glob(os.path.join(proj, 'products', '*.json'))):
     catalog_signal = bool(cm) and cm in SHARED_COMMERCIAL_MODELS
     disposition_signal = rm not in REVENUE_MODEL_ENUM and rm in OFF_ENUM_SHARED
     declared = prop_models.get(pslug, [])
-    ratio_signal = len(declared) >= RATIO_MIN_PROPOSITIONS and len(set(declared)) == 1
+    ratio_signal = (
+        len(declared) >= RATIO_MIN_PROPOSITIONS
+        and len(set(declared)) == 1
+        and declared[0] in SHARED_COMMERCIAL_MODELS
+    )
     shared = shared or catalog_signal or ratio_signal or disposition_signal
     if shared:
         shared_products.append(pslug)

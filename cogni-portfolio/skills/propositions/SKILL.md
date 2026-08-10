@@ -210,12 +210,15 @@ Every field has a strict length target. Concise messaging is sharper messaging �
       "source_title": "Cloud Monitoring Case Study 2025"
     }
   ],
+  "commercial_model": "subscription",
   "created": "2026-01-20",
   "updated": "2026-02-10"
 }
 ```
 
-Required: `slug`, `feature_slug`, `market_slug`, `is_statement`, `does_statement`, `means_statement`. Optional: `evidence`, `created`, `updated`.
+Required: `slug`, `feature_slug`, `market_slug`, `is_statement`, `does_statement`, `means_statement`. Optional: `evidence`, `commercial_model`, `created`, `updated`.
+
+`commercial_model` declares the commercial structure of this Feature×Market offer — one of `catalog`, `subscription`, `usage`, `project`, `partnership`. Default it to the parent product's `commercial_model` when the product declares one and this offer does not differ; leave it absent when the structure is genuinely undecided, since the consolidation gate excludes undeclared propositions rather than guessing. It is what the gate's propositions:distinct-commercial-models signal counts — three or more propositions agreeing on one shared-set value tell the `solutions` skill to consolidate instead of tiering one solution per proposition (`references/data-model.md`).
 
 Each evidence entry has `statement` (required), `source_url` (string or null), and `source_title` (string or null). Entries from web research include the source URL for claim verification; entries without a source use null.
 

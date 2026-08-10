@@ -261,7 +261,7 @@ When the count is `0` (no registered assumptions) or the generator warned, say
 nothing — the pointer degrades silently. It is informational only: like the
 project-plan pointer, do not add it as a branch in the Step-5 next-action ladder.
 
-> **Strategy Advisor voice** — this plugin ships two advisory output styles: **Strategy Advisor** (EN-led, answer-first, MECE options) and **Strategy Advisor (DE)** for German-language engagements. Enable one from the `/config` output-style picker; it's opt-in and fixed at session start, so set it now or `/clear` after.
+> **Strategy Advisor voice** — this plugin ships one advisory output style: **Strategy Advisor** (answer-first, MECE options), language-neutral, so it renders in the resolved interaction language. Enable it from the `/config` output-style picker; it's opt-in and fixed at session start, so set it now or `/clear` after.
 
 ### 5. Recommend the Next Action
 

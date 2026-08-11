@@ -364,7 +364,7 @@ This example shows the complete decomposition process applied to a narrative abo
 
 A 1700-word narrative about predictive maintenance for the German Mittelstand. Arc type: why-change. Contains 8 data points, 3 major arguments, and a before/after case study. Sections:
 
-1. Opening: "Ungeplante Stillstande bedrohen den Maschinenbau" (problem framing, 23 days stat, EUR 38k/day)
+1. Opening: "Ungeplante Stillstände bedrohen den Maschinenbau" (problem framing, 23 days stat, EUR 38k/day)
 2. "Drei Krisen gleichzeitig" (skills shortage 64k, quality drift 1:5, maintenance costs 41%)
 3. "Sensorik und Edge-KI" (solution: real-time condition monitoring, 500 readings/sec, 14-day prediction window)
 4. "KI-Training auf historischen Daten" (approach: custom ML models, not generic)
@@ -374,7 +374,7 @@ A 1700-word narrative about predictive maintenance for the German Mittelstand. A
 ### Step 1: Section Inventory
 
 ```
-Section 1: "Ungeplante Stillstande..."
+Section 1: "Ungeplante Stillstände..."
   Arc role: problem
   Word count: ~180
   Stats: 2 (23 days, EUR 38k)
@@ -473,7 +473,7 @@ Current count: 8 total (hero + 6 interior content + CTA).
 | # | Type | section_theme | Arc Role | Position | Headline |
 |---|------|---------------|----------|----------|----------|
 | 1 | hero | dark | hook | — | "Predictive Maintenance macht Ihre Fertigung unaufhaltsam" |
-| 2 | problem-statement | light | problem | — | "23 Tage Stillstand kosten Ihre Wettbewerbsfahigkeit" |
+| 2 | problem-statement | light | problem | — | "23 Tage Stillstand kosten Ihre Wettbewerbsfähigkeit" |
 | 3 | stat-row | dark | urgency | — | "Drei Krisen treffen den Maschinenbau gleichzeitig" |
 | 4 | feature-alternating | light | solution | odd | "Sensoren lesen den Maschinenzustand in Echtzeit" |
 | 5 | feature-alternating | light-alt | solution | even | "KI-Training auf Ihren historischen Daten beschleunigt den ROI" |

@@ -204,7 +204,7 @@ These three examples demonstrate the complete reasoning chain from section conte
 type: hero
 arc_role: hook
 headline: "Predictive Maintenance macht Ihre Fertigung unaufhaltsam"
-subline: "Senken Sie ungeplante Stillstande um 73%..."
+subline: "Senken Sie ungeplante Stillstände um 73%..."
 style_guide: "Corporate Tech"
 ```
 
@@ -270,7 +270,7 @@ Verification: Single subject (wearable device). "No text, no people" present. Sq
 type: feature-alternating
 arc_role: evidence
 headline: "Automatisierte Compliance spart 12.000 Arbeitsstunden pro Jahr"
-body: "KI-gestutzte Regelprufung scannt Transaktionen in Echtzeit..."
+body: "KI-gestützte Regelprüfung scannt Transaktionen in Echtzeit..."
 style_guide: "Corporate Finance"
 ```
 

@@ -4,13 +4,13 @@ version: "2.0"
 theme: smarter-service
 theme_path: "/cogni-workspace/themes/smarter-service/theme.md"
 style_guide: "Corporate Tech"
-customer: "Muller Werkzeugmaschinen GmbH"
+customer: "Müller Werkzeugmaschinen GmbH"
 provider: "SmartFactory Solutions"
 language: "de"
 generated: "2026-02-27"
 arc_type: "why-change"
 arc_id: "industry-transformation"
-governing_thought: "Predictive Maintenance senkt ungeplante Stillstande um 73% und macht den Maschinenbau fit fur die nachste Dekade."
+governing_thought: "Predictive Maintenance senkt ungeplante Stillstände um 73% und macht den Maschinenbau fit für die nächste Dekade."
 confidence_score: 0.88
 industry: "maschinenbau"
 poster_size: "A1"
@@ -33,14 +33,14 @@ transformation_notes: |
 
 # Storyboard Brief: Predictive Maintenance im Maschinenbau
 
-Predictive Maintenance senkt ungeplante Stillstande um 73% und macht den Maschinenbau fit fur die nachste Dekade.
+Predictive Maintenance senkt ungeplante Stillstände um 73% und macht den Maschinenbau fit für die nächste Dekade.
 
 ---
 
-## Poster 1: Krafte (Why Change)
+## Poster 1: Kräfte (Why Change)
 
 ```yaml
-poster_label: "Krafte"
+poster_label: "Kräfte"
 sequence: "1/4"
 sections: 2
 height_allocation: [60, 40]
@@ -52,8 +52,8 @@ section_1:
 
   headline: "Predictive Maintenance macht Ihre Fertigung unaufhaltsam"
   subline: "Vom ungeplanten Stillstand zur intelligenten Fertigung"
-  cta_text: "Erstgesprach buchen"
-  section_label: "KRAFTE"
+  cta_text: "Erstgespräch buchen"
+  section_label: "KRÄFTE"
 
   image_prompt: |
     Wide panoramic industrial landscape illustration.
@@ -80,11 +80,11 @@ section_2:
   body: |
     Jede CNC-Anlage steht durchschnittlich 23 Tage pro Jahr ungeplant still.
     Bei 38.000 Euro Kosten pro Stillstandstag summiert sich der Verlust auf
-    874.000 Euro jahrlich.
+    874.000 Euro jährlich.
 
   bullets:
     - "38.000 Euro Kosten pro Stillstandstag"
-    - "Verschleiss wird erst nach Ausfall erkannt"
+    - "Verschleiß wird erst nach Ausfall erkannt"
     - "Wartungszyklen basieren auf starren Intervallen"
 
   cta:
@@ -115,13 +115,13 @@ section_1:
 
   stats:
     - number: "64.000"
-      label: "fehlende Fachkrafte bis 2028"
+      label: "fehlende Fachkräfte bis 2028"
       icon: "users"
     - number: "1:5"
-      label: "Reklamationen durch Qualitaetsdrift"
+      label: "Reklamationen durch Qualitätsdrift"
       icon: "triangle-alert"
     - number: "41%"
-      label: "hoehere Instandhaltungskosten"
+      label: "höhere Instandhaltungskosten"
       icon: "trending-up"
     - number: "18+"
       label: "Monate Einarbeitungszeit"
@@ -140,7 +140,7 @@ section_2:
   left_bullets:
     - "23 Tage ungeplanter Stillstand"
     - "874.000 Euro Verlust pro Anlage"
-    - "Verschleiss erst nach Ausfall erkannt"
+    - "Verschleiß erst nach Ausfall erkannt"
     - "Starre Wartungsintervalle"
 
   right_label: "NACHHER"
@@ -152,7 +152,7 @@ section_2:
     - "Datengetriebene Wartungsfenster"
 
   cta:
-    text: "Vergleichsanalyse fur Ihren Betrieb"
+    text: "Vergleichsanalyse für Ihren Betrieb"
     type: evaluate
     urgency: medium
 ```
@@ -173,11 +173,11 @@ section_1:
   height_percent: 50
 
   headline: "Sensoren liefern 14 Tage Vorwarnung vor dem Ausfall"
-  section_label: "DIE LOESUNG"
+  section_label: "DIE LÖSUNG"
 
   body: |
     Vibrationssensoren an Spindel, Vorschub und Lager erfassen den
-    Maschinenzustand 500-mal pro Sekunde. Edge-KI erkennt Verschleissmuster
+    Maschinenzustand 500-mal pro Sekunde. Edge-KI erkennt Verschleißmuster
     und warnt 14 Tage vor dem Ausfall.
 
   image_prompt: |
@@ -199,29 +199,29 @@ section_2:
   height_percent: 50
 
   headline: "Vier Bausteine der intelligenten Fertigung"
-  section_label: "FAEHIGKEITEN"
+  section_label: "FÄHIGKEITEN"
 
   cards:
     - card_headline: "Echtzeit-Sensorik"
       card_body: "500 Messungen pro Sekunde an Spindel, Vorschub und Lager"
       icon: "activity"
     - card_headline: "Edge-KI"
-      card_body: "Verschleissmuster erkennen und Wartungsfenster vorschlagen"
+      card_body: "Verschleißmuster erkennen und Wartungsfenster vorschlagen"
       icon: "cpu"
     - card_headline: "Digitaler Zwilling"
-      card_body: "Virtuelles Maschinenabbild fur Simulation und Planung"
+      card_body: "Virtuelles Maschinenabbild für Simulation und Planung"
       icon: "layers"
     - card_headline: "OEE-Dashboard"
-      card_body: "Anlagenverfuegbarkeit und Qualitaet in Echtzeit verfolgen"
+      card_body: "Anlagenverfügbarkeit und Qualität in Echtzeit verfolgen"
       icon: "bar-chart-2"
 ```
 
 ---
 
-## Poster 4: Fuhrung (Why Pay)
+## Poster 4: Führung (Why Pay)
 
 ```yaml
-poster_label: "Fuhrung"
+poster_label: "Führung"
 sequence: "4/4"
 sections: 2
 height_allocation: [55, 45]
@@ -236,10 +236,10 @@ section_1:
 
   steps:
     - label: "Sensorik-Pilotlinie"
-      description: "8 CNC-Anlagen ausrusten, Basisdaten erfassen"
+      description: "8 CNC-Anlagen ausrüsten, Basisdaten erfassen"
       duration: "Woche 1-4"
     - label: "KI-Training"
-      description: "Verschleissmodelle auf historischen Daten trainieren"
+      description: "Verschleißmodelle auf historischen Daten trainieren"
       duration: "Woche 5-8"
     - label: "Rollout"
       description: "Auf alle Anlagen skalieren, OEE-Dashboard live"
@@ -257,7 +257,7 @@ section_2:
 
   headline: "Starten Sie Ihren Predictive-Maintenance-Piloten"
   subline: "Drei Schritte trennen Sie von 73% weniger Stillstand."
-  cta_text: "Erstgesprach fur Pilotprojekt buchen"
+  cta_text: "Erstgespräch für Pilotprojekt buchen"
 ```
 
 ---
@@ -266,7 +266,7 @@ section_2:
 
 ```yaml
 cta_proposals:
-  - text: "Erstgesprach fur Pilotprojekt buchen"
+  - text: "Erstgespräch für Pilotprojekt buchen"
     type: commit
     urgency: high
     supporting_sections: [poster_3_section_1, poster_4_section_1]
@@ -278,7 +278,7 @@ cta_proposals:
     type: evaluate
     urgency: medium
     supporting_sections: [poster_1_section_2, poster_2_section_2]
-  - text: "Vergleichsanalyse fur Ihren Betrieb"
+  - text: "Vergleichsanalyse für Ihren Betrieb"
     type: evaluate
     urgency: medium
     supporting_sections: [poster_2_section_1, poster_2_section_2]
@@ -287,7 +287,7 @@ cta_proposals:
     urgency: low
     supporting_sections: [poster_1_section_2]
 
-primary_cta: "Erstgesprach fur Pilotprojekt buchen"
+primary_cta: "Erstgespräch für Pilotprojekt buchen"
 conversion_goal: "consultation"
 ```
 
@@ -296,7 +296,7 @@ conversion_goal: "consultation"
 ## Generation Metadata
 
 **Story Arc:** why-change (industry-transformation)
-**Governing Thought:** Predictive Maintenance senkt ungeplante Stillstande um 73% und macht den Maschinenbau fit fur die nachste Dekade.
+**Governing Thought:** Predictive Maintenance senkt ungeplante Stillstände um 73% und macht den Maschinenbau fit für die nächste Dekade.
 
 **Storyboard Architecture:**
 - Poster size: A1 portrait (3508 x 4961 px print, 1440 x 2036 px base)

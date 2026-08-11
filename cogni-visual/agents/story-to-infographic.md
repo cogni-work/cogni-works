@@ -70,9 +70,3 @@ path, where the `render` parameter is `false` and no render ran. Take `out` from
 render dispatch forwards back; never guess it or construct it by path arithmetic from `brief`.
 When a requested render fails, return the error shape with the `render` code — not a success
 shape carrying a fabricated or null `out`. Every other key stays abbreviated.
-
-## Tool declaration
-
-`tools:` mirrors `skills/story-to-infographic/SKILL.md`'s `allowed-tools`: the Skill tool
-runs that skill in this agent's context, so narrowing to `Skill` alone removes capability,
-not privilege.

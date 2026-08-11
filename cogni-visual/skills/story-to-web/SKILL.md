@@ -1,11 +1,11 @@
 ---
 name: story-to-web
 description: >
-  Transform any narrative (insight summary, trend report, strategy document, sales pitch,
-  project update) into an optimized scrollable web narrative brief that the web agent
+  Transform any narrative into an optimized scrollable web narrative brief that the web agent
   renders via Pencil MCP into a .pen file. Use this skill whenever the user mentions
   "web narrative", "landing page from narrative", "scrollable web page", "web story",
-  "Webseite aus Bericht", "Landingpage erstellen", "Web-Narrative", "scrollbare Webseite",
+  "single-page narrative", "Webseite aus Bericht", "Landingpage erstellen",
+  "Web-Narrative", "scrollbare Webseite",
   "create a web page from report", or wants to convert prose into a scroll-driven
   section architecture with design tokens and auto-layout. Also trigger for style guide
   selection, section type mapping, and hero/CTA optimization, in English or German.

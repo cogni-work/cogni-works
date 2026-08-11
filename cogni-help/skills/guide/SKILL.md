@@ -8,7 +8,6 @@ description: >-
   plugin handles that?", or any question about plugin capabilities, ecosystem navigation,
   or tool selection. Also trigger when a user seems lost or unsure which plugin to use
   for a specific task — even if they don't explicitly ask for guidance.
-version: 0.1.0
 allowed-tools: Read, Glob
 ---
 

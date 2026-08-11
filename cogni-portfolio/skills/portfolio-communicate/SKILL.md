@@ -7,12 +7,14 @@ description: |
   Use whenever the user mentions "communicate portfolio", "portfolio documentation",
   "customer-facing documentation", "capability overview", "service catalog",
   "what do we offer", "portfolio narrative", "portfolio website", "website content",
-  "landing page", "home page", "enrich README", "repo documentation",
-  "developer documentation", "GitHub README", "pitch", "portfolio pitch",
-  "pitch deck from portfolio", "slides from portfolio", "proposal", "sales proposal",
-  "marketing brief", "market brief", "export to Excel", "spreadsheet", "XLSX",
-  "workbook", "portfolio workbook", or otherwise wants internal portfolio data
-  turned into something an audience can read, present, or analyze.
+  "landing page", "home page", "about us page", "how we work page",
+  "capability page", "for [persona] page", "enrich README",
+  "repo documentation", "developer documentation", "GitHub README", "pitch",
+  "portfolio pitch", "pitch deck from portfolio", "slides from portfolio",
+  "proposal", "sales proposal", "marketing brief", "market brief",
+  "export to Excel", "spreadsheet", "XLSX", "workbook", "portfolio workbook",
+  or otherwise wants internal portfolio data turned into something an audience
+  can read, present, or analyze.
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion, Skill
 ---
 

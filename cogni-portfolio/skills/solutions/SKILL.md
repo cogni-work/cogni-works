@@ -319,7 +319,7 @@ For German content, cut filler words rather than exceeding limits. Every sentenc
 
 ### 6. Write Solution Entity
 
-Once the solution is agreed and passes quality gates, write to `solutions/{feature-slug}--{market-slug}.json`. Always include `solution_type`. See `$CLAUDE_PLUGIN_ROOT/skills/portfolio-setup/references/data-model.md` for the complete JSON schemas per solution type.
+Once the solution is agreed and passes quality gates, write to `solutions/{feature-slug}--{market-slug}.json`. Always include `solution_type`. See `$CLAUDE_PLUGIN_ROOT/references/data-model.md` for the complete JSON schemas per solution type.
 
 Required for all types: `slug`, `proposition_slug`, `solution_type`
 
@@ -668,4 +668,4 @@ A solution can be deleted freely -- it has no downstream dependents. Confirm wit
 - Customer profiles (if available) inform buying criteria and budget expectations -- read them during context gathering
 - **Content Language**: Read `portfolio.json` in the project root. If a `language` field is present, generate all user-facing text content (phase descriptions, scope text, rationale) in that language. JSON field names and slugs remain in English. If no `language` field is present, default to English.
 - **Communication Language**: If `portfolio.json` has a `language` field, communicate with the user in that language (status messages, instructions, recommendations, questions). Technical terms, skill names, and CLI commands remain in English. Default to English if no `language` field is present.
-- Refer to `$CLAUDE_PLUGIN_ROOT/skills/portfolio-setup/references/data-model.md` for complete entity schemas
+- Refer to `$CLAUDE_PLUGIN_ROOT/references/data-model.md` for complete entity schemas

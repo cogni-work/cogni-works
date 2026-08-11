@@ -8,7 +8,7 @@ description: |
   roadmap", "gantt", "gantt chart", "schedule the engagement", "when does the
   engagement finish", "plan the timeline", "render the project plan", or when a
   WBS/dashboard view hands off a request for the sequenced plan — even if the user
-  doesn't say "project plan" explicitly. This is an INTERNAL engagement-management
+  doesn't say "project plan" explicitly. This is an internal engagement-management
   view (a read-mostly sibling of consult-dashboard and consult-resume), not a
   client-facing content producer. Double Diamond phase phrasing ("discover phase",
   "deliver phase timeline") refers to a legacy engagement model no longer in the

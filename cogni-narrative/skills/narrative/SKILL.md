@@ -290,9 +290,11 @@ If any gate fails, fix the specific issue and re-validate all gates (fixes can b
 | `strategic-foresight` | Signals -> Scenarios -> Strategies -> Decisions | Long-range planning, scenario analysis |
 | `industry-transformation` | Forces -> Friction -> Evolution -> Leadership | Industry analysis, regulatory impact |
 | `trend-panorama` | Forces -> Impact -> Horizons -> Foundations (TIPS) | Trend-scout output, TIPS trend reports |
+| `theme-thesis` | Why Change -> Why Now -> Why You -> Why Pay (Corporate Visions adapted for themes) | Theme sections within TIPS trend reports, investment thesis narratives, CxO-level theme justification |
 | `jtbd-portfolio` | Jobs -> Friction -> Portfolio -> Invitation | Portfolio introductions, capability overviews, pre-sales |
 | `company-credo` | Mission -> Conviction -> Credibility -> Promise | About-Us pages, company introductions, brand identity narratives |
 | `engagement-model` | Principles -> Process -> Partnership -> Outcomes | How-We-Work pages, engagement sections of proposals, partner onboarding |
+| `smarter-service` | Forces -> Impact -> Horizons -> Foundations (TIPS, theme-aware) | TIPS trend reports built on an investment-theme value model, theme-anchored CxO reports and foresight briefings |
 
 See [references/story-arc/arc-registry.md](references/story-arc/arc-registry.md) for detection signals, word targets, and extension guidelines.
 

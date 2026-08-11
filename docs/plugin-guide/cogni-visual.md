@@ -34,7 +34,7 @@ Briefs use YAML frontmatter for metadata (`type`, `version`, `theme`, `arc_type`
 
 ### Arc Taxonomy
 
-Narrative skills detect the story arc from the source document's `arc_id` frontmatter and map it to a visual arc type via `libraries/arc-taxonomy.md`. Six narrative arcs map to five visual arc types, which control layout ordering, station labels, and section sequencing.
+Narrative skills detect the story arc from the source document's `arc_id` frontmatter and map it to a visual arc type via `libraries/arc-taxonomy.md`. Eleven narrative arcs map to five visual arc types, which control layout ordering, station labels, and section sequencing.
 
 ### Assertion Headlines
 

@@ -77,6 +77,9 @@ agents/              Autonomous rendering agents (brief -> output)
 scripts/             Plugin-shared utility scripts (called by agents, not skills)
   rasterize-sketch.py  Rasterize an SVG file to PNG for Pencil MCP embedding. Detects rsvg-convert / cairosvg / inkscape on PATH (first one wins). Used by render-infographic-pencil Step 2.5 to convert editorial-sketch SVGs into PNGs that Pencil can place as file-backed images in frames. Graceful fallback when no rasterizer is available — returns JSON error with install_hint so the caller can demote sketch blocks to text-blocks without crashing the render.
 
+tests/               Plugin test suites (CI-discovered by scripts/run-plugin-tests.py)
+  test-arc-taxonomy-sync.sh  Pins the arc_id set in libraries/arc-taxonomy.md to the arc directories under cogni-narrative/skills/narrative/references/story-arc/. Also checks arc_type validity, element-section coverage and duplicate rows. Hard assert: a cogni-narrative arc added without a visual mapping turns this suite red. Carries its own executed negative case (M1), which drops a mapping row from a copy under mktemp -d and re-runs the suite against the mutant — so every sweep re-proves the guard can fail, without ever writing to the tracked taxonomy.
+
 libraries/           Shared reference material loaded at Step 1
   arc-taxonomy.md          Shared arc_id → arc_type mapping + element names (all skills)
   pptx-layouts.md          Slide layout schemas for PPTX skill
@@ -125,7 +128,7 @@ cogni-trends/cogni-knowledge → enrich-report → browser / PDF / DOCX
 ## Key Conventions
 
 - **Briefs are YAML frontmatter + Markdown.** Frontmatter holds metadata (type, version, theme, arc_type, arc_id, confidence_score). Body holds the content specification.
-- **Unified arc taxonomy.** All narrative skills read `arc_id` from narrative frontmatter, map to visual `arc_type` via `libraries/arc-taxonomy.md` (10 narrative arcs → 5 visual arc types), and optionally load arc element names for labeling (section labels, arc labels, methodology phases).
+- **Unified arc taxonomy.** All narrative skills read `arc_id` from narrative frontmatter, map to visual `arc_type` via `libraries/arc-taxonomy.md` (11 narrative arcs → 5 visual arc types), and optionally load arc element names for labeling (section labels, arc labels, methodology phases).
 - **Agent responses are JSON-only.** Agents return structured JSON; no prose.
 - **Assertion headlines.** Every slide title, section headline, and poster headline must be an assertion (contains a verb), not a topic label.
 - **Number plays.** Statistics are reframed for visual impact (ratio framing, hero number isolation, before/after contrast).

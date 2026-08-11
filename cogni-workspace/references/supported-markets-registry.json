@@ -49,16 +49,7 @@
       "market_count_claim": 25,
       "callout_lede": "25 pluggable regions — single-country, composite, extended, and global",
       "primary_regions_shown_in_callout": [
-        "DACH",
-        "EU",
-        "Nordics",
-        "UK",
-        "US/NA",
-        "APAC",
-        "LATAM",
-        "MEA",
-        "CN",
-        "JP"
+        "DACH"
       ],
       "tail_clause": "market-segmented propositions, competitors, and customer personas — not one-size-fits-all"
     }

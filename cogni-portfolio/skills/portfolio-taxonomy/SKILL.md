@@ -6,16 +6,14 @@ description: |
   from scratch, import from an external reference model, inspect what's
   there, edit categories or dimensions safely, validate before scan, or
   export the customized taxonomy as a reusable template. Use whenever the
-  user wants to customize the taxonomy, clone a standard taxonomy for
-  editing, create a new taxonomy, override the bundled template, add or
+  user wants to customize the taxonomy, override the bundled template, add or
   rename dimensions or categories, tweak search patterns, import a taxonomy
   JSON, view the current taxonomy, check if the taxonomy is valid, save the
   taxonomy for reuse in another project, or says "my industry isn't in the
   templates", "my vertical isn't supported", "rename a dimension", "show me
   my taxonomy", "is my taxonomy valid", or "save this taxonomy for another
-  project". Project-local: the customized taxonomy lives inside the
-  portfolio project, survives plugin updates, and overrides the bundled
-  template during scan and setup resolution.
+  project". Project-local: the taxonomy lives inside the portfolio project,
+  survives plugin updates, and overrides the bundled template.
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion
 ---
 

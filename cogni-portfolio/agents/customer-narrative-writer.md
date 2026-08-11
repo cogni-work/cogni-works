@@ -1,10 +1,8 @@
 ---
 name: customer-narrative-writer
-description: "Generate a single customer-narrative markdown file (one scope) from portfolio entities. Enables parallel fan-out: the parent skill dispatches N instances in a single message to produce home, about, capability, persona, and approach pages concurrently."
+description: |
+  Generate a single customer-narrative markdown file (one scope) from portfolio entities. Enables parallel fan-out: the parent skill dispatches N instances in a single message to produce home, about, capability, persona, and approach pages concurrently.
 
-model: sonnet
-color: cyan
-whenToUse: |
   Use this agent when portfolio-communicate needs to generate customer-narrative output.
   The parent skill dispatches one instance per scope (home, about, capability, persona, approach).
   For the `all` scope the parent dispatches all instances in a single parallel message.
@@ -19,15 +17,8 @@ whenToUse: |
   </commentary>
   </example>
 
-  <example>
-  Context: portfolio-communicate generates just the home page
-  user: "Generate the customer narrative home page"
-  assistant: "I'll dispatch one customer-narrative-writer agent for the home scope."
-  <commentary>
-  Even single-scope dispatches go through the agent for context hygiene — the template
-  prose stays in the agent's context, not the parent's.
-  </commentary>
-  </example>
+model: sonnet
+color: cyan
 tools:
   - Read
   - Write

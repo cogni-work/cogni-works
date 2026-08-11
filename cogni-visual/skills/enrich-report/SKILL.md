@@ -441,7 +441,7 @@ The agent takes 3 screenshots (infographic header, report body, chart-heavy sect
 - Score < 8.0 on first pass: **FIX** — the agent applies targeted corrections to intermediate artifacts (`design-variables.json`, `enrichment-plan.json`), re-runs `generate-enriched-report.py`, and re-evaluates. Maximum 2 review passes.
 - Score < 8.0 on second pass: **ACCEPT WITH WARNINGS** — proceed to Phase 6 with known issues logged.
 
-**When Browser MCP is unavailable:** Skip Phase 5b entirely. The 6 automated validation gates from Phase 5 remain the quality floor. Log: "Visual review skipped — Browser MCP not available."
+**When Browser MCP is unavailable:** Skip Phase 5b entirely. The 7 automated validation gates from Phase 5 remain the quality floor. Log: "Visual review skipped — Browser MCP not available."
 
 ---
 

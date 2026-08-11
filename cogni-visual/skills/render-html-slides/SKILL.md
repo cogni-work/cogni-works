@@ -190,9 +190,9 @@ If error, read the error message and attempt to fix the input data. Common issue
 - Missing required fields in slide-data.json → re-parse the brief
 - Invalid JSON in slide-data.json → fix and retry
 
-#### Theme System v2 (tier-aware rendering, Phase-2 pilot)
+#### Theme System v2 (tier-aware rendering)
 
-Tier-1 tokens are wired today. Pass `theme_slug: cogni-work` to import the canonical Phase-2 pilot's CSS custom properties. Tier-3 deck-component primitives (`title-slide.html`, `content-slide.html`, etc.) are the next increment — the loader infrastructure is in place at `cogni-visual/scripts/load-theme-component.py` (see `cogni-visual/references/theme-component-loader.md`), but `cogni-work` does not yet ship a `tiers.components.deck` family, so component-substitution is gated on a follow-up issue. Today's behavior: every layout renderer uses its inline template; tomorrow's behavior (after deck primitives ship): the renderer prefers theme-supplied primitives and falls back to inline on miss.
+Tier-1 tokens are wired today. Pass `theme_slug: cogni-work` to import that theme's canonical CSS custom properties. Tier-3 deck-component primitives (`title-slide.html`, `content-slide.html`, etc.) are the next increment — the loader infrastructure is in place at `cogni-visual/scripts/load-theme-component.py` (see `cogni-visual/references/theme-component-loader.md`), but `cogni-work` does not yet ship a `tiers.components.deck` family, so component-substitution is gated on a follow-up issue. Today's behavior: every layout renderer uses its inline template; tomorrow's behavior (after deck primitives ship): the renderer prefers theme-supplied primitives and falls back to inline on miss.
 
 **Backwards-compat contract.** Omitting `--theme-slug` preserves the legacy (pre-Theme-System-v2) rendering path byte-for-byte — `theme.md`-derived design variables still apply; only the tier-1 `tokens.css` import is skipped. With `--theme-slug` set, themes without `tiers.tokens` (and tier-0 themes generally) exercise the same fallback path — there is no failure case for unmigrated themes. `evals/run.py` enforces this with three regression cases: tier-0 baseline, tier-1 cogni-work tokens.css imported, tier-0 `_template` with `--theme-slug` set (graceful fallback).
 

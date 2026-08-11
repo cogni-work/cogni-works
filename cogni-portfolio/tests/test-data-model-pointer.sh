@@ -1,20 +1,20 @@
 #!/usr/bin/env bash
 # Acceptance suite for the canonical-data-model pointer contract.
 #
-# cogni-portfolio ships two schema documents: the canonical
-# `references/data-model.md`, and a partial note file at
-# `skills/portfolio-setup/references/data-model.md`. The note file is NOT a
-# mirror to be kept field-for-field in sync — it is deliberately partial, and
-# canonical wins wherever the two disagree. These tests pin that contract so the
-# citations do not silently regrow: nothing in the plugin may cite the note file,
-# the note file must announce that it is non-canonical, and canonical must never
-# be trimmed down to match it.
+# cogni-portfolio ships exactly one schema document: the canonical
+# `references/data-model.md`. It used to ship a second, partial note file at
+# `skills/portfolio-setup/references/data-model.md`; that file's content has since
+# been migrated into canonical and the file deleted. These tests pin the resulting
+# contract so the split does not silently regrow: nothing in the plugin may cite
+# the old note path, a note file that reappears must announce that it is
+# non-canonical, and canonical must never be trimmed back toward what the note held.
 #
 # Named acceptance tests:
 #   test_no_file_cites_notes             nothing in the plugin cites the note file
-#   test_notes_scope_declared            the note file declares itself non-canonical up front
+#   test_notes_scope_declared            a reappearing note file declares itself non-canonical up front
 #   test_canonical_keeps_lineage_fields  canonical keeps the lineage fields the notes omit
 #   test_canonical_carries_migrated_prose canonical carries the six passages the notes held alone
+#   test_canonical_carries_solution_commercials  canonical carries the solutions/packages commercial semantics
 #
 # Usage: bash cogni-portfolio/tests/test-data-model-pointer.sh [test_name ...]
 #   No args -> run every test (the CI path). One or more names -> run only those
@@ -43,6 +43,19 @@
 #   the mutant and green on HEAD.
 #   There is no in-repo copy of the SHARED harness; if that version directory is gone,
 #   use the newest under the same parent — everything after the path is version-independent.
+#
+# Mutation recipe for test_canonical_carries_solution_commercials — same harness,
+#   same rules, replayable as written from the repo root:
+#   bash ~/.claude/plugins/cache/managed-service/cogni-service/0.0.383/scripts/mutation-check.sh \
+#     --root . \
+#     --file cogni-portfolio/references/data-model.md \
+#     --expr 's#Resources required for delivery#Resources needed at delivery time#g' \
+#     --test 'bash cogni-portfolio/tests/test-data-model-pointer.sh test_canonical_carries_solution_commercials' \
+#     --case test_canonical_carries_solution_commercials
+#   The expr rewrites one of the six migrated prose literals the case asserts, so the
+#   case goes red on the mutant and green on HEAD. Pick a metacharacter-free target:
+#   the harness feeds the expr to `perl -0pi`, where the dot in `subscription.model`
+#   would be a wildcard rather than a literal.
 
 # `set -u` only — `set -e` would abort on the first failing assertion and defeat
 # the per-test failure counter below.
@@ -166,7 +179,32 @@ test_canonical_carries_migrated_prose() {
   pass test_canonical_carries_migrated_prose "canonical carries all six migrated passages"
 }
 
-ALL_TESTS="test_no_file_cites_notes test_notes_scope_declared test_canonical_keeps_lineage_fields test_canonical_carries_migrated_prose"
+test_canonical_carries_solution_commercials() {
+  # The second migration wave: the solutions cost_model / subscription / partnership
+  # field semantics and the packages tier-requirement prose, which lived only in the
+  # note file until it was deleted. Same discipline as the case above — every literal
+  # here occurred zero times in canonical beforehand, so each one can actually detect
+  # a missing migration.
+  #
+  # Deliberately NOT asserted: `bill_of_materials`, `effort_by_tier`, `unit_economics`,
+  # `margin_pct` and `tiered`. All five already appeared inside canonical's JSON
+  # example fences before this migration, so a case built on them would report green
+  # while the prose field docs were still absent — the exact rubber-stamp this suite
+  # exists to avoid. The literals below appear only in prose, so they discriminate.
+  local missing="" literal
+  for literal in 'Resources required for delivery' '(price - internal_cost) / price * 100' \
+                 'LTV/CAC ratio' 'subscription.model' 'program.revenue_share' \
+                 'Each tier requires'; do
+    grep -qF "$literal" "$CANONICAL" || missing="$missing [$literal]"
+  done
+  if [ -n "$missing" ]; then
+    fail test_canonical_carries_solution_commercials "canonical missing commercial semantics:$missing"
+    return
+  fi
+  pass test_canonical_carries_solution_commercials "canonical carries the solutions/packages commercial semantics"
+}
+
+ALL_TESTS="test_no_file_cites_notes test_notes_scope_declared test_canonical_keeps_lineage_fields test_canonical_carries_migrated_prose test_canonical_carries_solution_commercials"
 
 # Reject an unknown case name instead of letting bash's "command not found" pass
 # through: with no `set -e` and no failures increment, an unrecognised name would

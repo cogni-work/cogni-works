@@ -10,7 +10,7 @@ Define how narratives decompose into web sections, map arc roles to section type
 
 ## Narrative Arc ID to Visual Arc Type Mapping
 
-**Arc mapping:** See `$CLAUDE_PLUGIN_ROOT/libraries/arc-taxonomy.md` for the complete arc_id → arc_type mapping table, arc element names with EN/DE translations, and the element-to-role assignment heuristic. The shared library is the single source of truth for all three visual skills.
+**Arc mapping:** See `$CLAUDE_PLUGIN_ROOT/libraries/arc-taxonomy.md` for the complete arc_id → arc_type mapping table, arc element names with EN/DE translations, and the element-to-role assignment heuristic. The shared library is the single source of truth for every cogni-visual skill that resolves an arc; its frontmatter `consumers:` list names them.
 
 ### Arc Element Names as Section Labels
 

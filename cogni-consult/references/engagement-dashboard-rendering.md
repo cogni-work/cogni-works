@@ -29,8 +29,9 @@ above — stored titles, here English, because stored titles keep their technica
 terms whatever the session language. That carve-out covers those names and
 nothing else; it is not a licence for English elsewhere in the table.
 
-The parenthesised pair's stage is a display label, so it takes proper casing
-(`Empathize`, `Define`, `Ideate`, `Prototype`, `Test`) in either session.
+The parenthesised pair's stage is a display label, so it takes the casing
+`$CLAUDE_PLUGIN_ROOT/references/user-facing-output.md` (c) note 4 mandates
+(`ideate` → `Ideate`), in either session.
 
 An English session renders the same table, seeded by example too: preamble
 labels `Engagement: <name> — last worked on <DD.MM.YYYY>` and

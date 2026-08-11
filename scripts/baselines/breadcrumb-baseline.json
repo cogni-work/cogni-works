@@ -72,16 +72,6 @@
       "line_sha": "e1a88e90082a6d561a22ce668be53f0d76857b63"
     },
     {
-      "file": "cogni-portfolio/skills/portfolio-consolidate/SKILL.md",
-      "match": "#103",
-      "line_sha": "dbec4d286ae03f8004926ad4fa381b7b12f4c9c2"
-    },
-    {
-      "file": "cogni-portfolio/skills/portfolio-consolidate/SKILL.md",
-      "match": "v0.9.23",
-      "line_sha": "ffaa3e048f33cb2a669df27987bddb891c17e7b2"
-    },
-    {
       "file": "cogni-portfolio/skills/portfolio-dashboard/SKILL.md",
       "match": "v1.2.0",
       "line_sha": "56c19444cde76c15ef1437e517004c1c2ebcdf5f"

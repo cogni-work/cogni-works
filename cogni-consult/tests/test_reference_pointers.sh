@@ -110,7 +110,7 @@ for rel in "$LIST_REF" "$DASH_REF"; do
 done
 # Explicit presence half, which the derived check above cannot make: grep -F pins
 # the umlauts, so an ASCII-folded copy of a relocated rule fails to match.
-for tok in 'Weitere' 'TT.MM.JJJJ' 'Nächstes Deliverable' 'Schlüsselfrage:'; do
+for tok in 'Weitere' 'TT.MM.JJJJ' 'Nächstes Deliverable' 'Schlüsselfrage:' 'Fortschritt'; do
   grep -qF -- "$tok" "$PLUGIN_DIR/$LIST_REF" "$PLUGIN_DIR/$DASH_REF" 2>/dev/null ||
     fail "contract-relocated" "token absent from both reference files: $tok"
 done

@@ -78,9 +78,12 @@ Render that list as the table defined in
 `$CLAUDE_PLUGIN_ROOT/references/engagement-list-rendering.md` — never as raw
 field names — which is authoritative for its columns, padding, sort, five-row
 cap and overflow line, the „alle“ re-render, the reply-index rule, the
-`scope_state` name-cell suffix, the `last_activity` resolution, and both
-language seeds. Read it before rendering. The list-and-stop obligation above
-still holds.
+`scope_state` name-cell suffix, the `last_activity` resolution, the
+`Fortschritt` column and the per-displayed-row status read that fills it, and
+both language seeds. Read it before rendering. The list-and-stop obligation
+above still holds. Step 3's status read for the picked engagement is separate
+from that column's per-row read and unaffected by it — Step 3 re-runs it fresh,
+per **Derived, not stored** below.
 
 ### 3. Read the Engagement Status
 

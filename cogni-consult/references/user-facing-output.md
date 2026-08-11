@@ -104,6 +104,14 @@ lexicon rather than being printed because it "already looks like English".
 6. No table under four rows. Below that, prose or a list reads better.
 7. A slug appears only where the reader needs it to *act*, in code form. Never
    as a header, and never as a deliverable's name.
+8. A cell standing in for a missing or unmeasured **quantity or state** renders
+   `—`, never a zero-valued token (`0/0`, `0 von 0`): zero reads as a
+   measurement, the em-dash as "nothing here to measure". A value that could
+   not be read is a third case again — name it rather than flattening it into
+   either of the first two. This does not govern a boolean marker column (a
+   glyph when true, blank when false), which is its own established idiom. And
+   rule 5 never licenses dropping a column to hide a state the reader needs
+   to see.
 
 ## (e) Step announcements and brevity budgets
 

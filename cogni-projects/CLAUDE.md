@@ -3,8 +3,9 @@
 Partner-facing project-portfolio steering for consulting firms. Models
 consultants, projects, and staffing so partners can match people to work by
 availability, profile fit, and strategic impact. The data model, entity
-authoring, the staffing match engine, and the read-only portfolio dashboard
-have landed; the backfilling recommender arrives in later roadmap children.
+authoring, the staffing match engine, the read-only portfolio dashboard, and the
+backfilling recommender have landed; cross-plugin bridges arrive in later
+roadmap children.
 
 ## Plugin Architecture
 
@@ -17,7 +18,8 @@ cogni-projects/
 │   ├── projects-setup/SKILL.md         Initialize a portfolio directory (entry point)
 │   ├── projects-entities/SKILL.md      Author + register one consultant/project/assignment
 │   ├── projects-staff/SKILL.md         Rank candidate consultants per open project role
-│   └── projects-dashboard/SKILL.md     Render a partner-meeting portfolio dashboard (read-only)
+│   ├── projects-dashboard/SKILL.md     Render a partner-meeting portfolio dashboard (read-only)
+│   └── projects-backfill/SKILL.md      Rank next roles for a rolling-off consultant + replacements
 ├── scripts/
 │   ├── _projects_lib.py                Shared loader for the hyphen-named validate-entities.py
 │   ├── portfolio-init.sh               Idempotent portfolio scaffolder (stdlib-only)
@@ -55,7 +57,7 @@ bash-level assertions, so they do not source it.
 
 Planned (not yet scaffolded — see the roadmap epic):
 
-- `skills/` for the backfilling recommender.
+- Cross-plugin bridges to cogni-consult and cogni-portfolio.
 
 ## Data Model
 
@@ -72,6 +74,12 @@ A portfolio is one `cogni-projects/<portfolio-slug>/` directory:
   array. Also holds `staffing-recommendations.json` — the last-run staffing
   scorer output snapshot (overwritten each run, **not** an append-only log) that
   the backfilling recommender and dashboard read.
+- `backfill-log.json` — `projects-backfill`'s own append-only log, an object
+  `{"backfills": [...]}`. `portfolio-init.sh` does **not** seed it, so that skill
+  creates it on demand with that exact envelope. It also writes
+  `backfill-recommendations.json`, its last-run snapshot, kept distinct from the
+  `projects-staff`-owned `staffing-recommendations.json` so neither skill
+  clobbers the other.
 
 ## Conventions
 

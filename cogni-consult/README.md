@@ -129,7 +129,7 @@ Acting personas gate the first deliverable: before design thinking starts, perso
 
 Research never goes to raw web search: the engagement's bound knowledge base serves quick gap-checks (`knowledge-query`), full inverted-pipeline runs for new topics, and `--source wiki` re-runs on covered topics — with finalized syntheses copied to the owning action field's `research/` directory. Routing every run through one base is what lets later deliverables build on earlier findings instead of paying to rediscover them.
 
-The plugin also ships two **Strategy Advisor output styles** that turn Claude Code into an executive advisor rather than a coder — answer-first (Pyramid Principle), hypothesis-driven, MECE options with explicit tradeoffs, a fluff-free compression discipline, and a lexicon rule that keeps engine vocabulary (cascade, slug, state values, log ids) out of the advisory text. **Strategy Advisor** is EN-led and answers in the user's language; **Strategy Advisor (DE)** is the German sister register, with German terminology guidance and full orthography (Umlaute, ß). Enable one from the `/config` output-style picker once cogni-consult is installed; they are opt-in (never auto-applied) and fixed at session start, so switching styles mid-engagement needs `/clear` or a new session.
+The plugin also ships one **Strategy Advisor output style** that turns Claude Code into an executive advisor rather than a coder — answer-first (Pyramid Principle), hypothesis-driven, MECE options with explicit tradeoffs. It is language-neutral: it carries the advisory stance, and the wording register it applies — lexicon, orthography, table and announcement rules, in whatever language the session resolves to — lives in `references/user-facing-output.md`, which the consult-* skills load. A German engagement therefore gets the same discipline without a second style file to keep in step. Enable it from the `/config` output-style picker once cogni-consult is installed; it is opt-in (never auto-applied) and fixed at session start, so switching styles mid-engagement needs `/clear` or a new session.
 
 ## Publishing deliverables
 
@@ -164,6 +164,7 @@ Publishing is **consultant-elected and never automatic** — it does not fire at
 | `register-generator.py` | Script | Generate the browsable `assumptions.md` register (summary table + anchored `## <slug>` sections with value, provenance, source lineage, and `used_by[]` backlinks) from `assumptions.json`; overwrite-guarded |
 | `submit-assumption-claim.py` | Script | Adapter for the assumption ↔ cogni-claims verify round-trip: `submit` appends an `unverified` ClaimRecord under a lock (idempotent — one assumption, one record), `propagate` writes `status: verified` + `citation.claim_id` back onto the assumption record, `resolve-propagate` completes the deviated→resolved leg for the three value-affecting resolution actions |
 | `assumption-change-frequency.sh` | Script | Read-only retrospective spike over a deliverable corpus's git history: reports how often bare numeric literals changed (`edits_per_literal`), sizing the payoff of propagation automation independently of `assumptions.json` |
+| `orthography-drift-scan.py` | Script | Read-only scan reporting Swiss-`ss` spellings that sit in `ß` positions across one engagement's stored corpus, so a drifted corpus stops silently out-arguing the orthography rule in `references/user-facing-output.md` §(a). Curated-list heuristic with bounded recall — a zero-finding report means nothing on the list appeared, not that the corpus is `ß`-correct — and reports only: there is no repair mode and nothing under the engagement root is opened for writing |
 | `discover-projects.sh` | Script | Engagement discovery (delegates to the cogni-workspace helper) |
 | `consult-dashboard/scripts/generate-dashboard.py` | Script | Render the engagement HTML dashboard from `consult-project.json` + `field.json` files (read-only) |
 
@@ -188,6 +189,9 @@ cogni-consult/
 │   ├── publish-routing.md         Canonical publish format→route contract
 │   ├── research-routing.md        Canonical cogni-knowledge research rule
 │   ├── subagent-output-contract.md  Register rules the SubagentStart hook emits
+│   ├── user-facing-output.md      Main-loop register contract (language, state
+│   │                              lexicon, table rules, step announcements,
+│   │                              orthography, prose anglicism lexicon)
 │   ├── personas/                  Packaged default advisors (partner, PM)
 │   ├── methods/                   Stage methods (scope dimensions, empathy mapping,
 │   │                              HMW synthesis, guided ideation)
@@ -202,15 +206,18 @@ cogni-consult/
 │                                  challenge fan-out),
 │                                  consult-empathy-mapper (per-persona Empathize
 │                                  mapping fan-out)
-├── output-styles/                 Strategy-advisor voice register (EN + DE,
-│                                  opt-in, auto-discovered in /config)
+├── output-styles/                 Strategy-advisor stance file (language-neutral,
+│                                  opt-in, auto-discovered in /config); the register
+│                                  lives in references/user-facing-output.md
 ├── hooks/                         SubagentStart hook carrying the interaction
 │                                  language + subagent-output-contract.md into the
 │                                  four agents, which inherit neither from the main loop
 ├── scripts/                       Engagement init/status/discovery, dt-stage advance,
 │                                  deliverable dependency graph + the engagement-root
 │                                  README front-door generator, refreshed at the
-│                                  dashboard milestones (stdlib-only)
+│                                  dashboard milestones, plus a read-only Swiss-ss
+│                                  orthography drift scan over an engagement corpus
+│                                  (stdlib-only)
 ├── tests/                         Regression tests (deliverable graph, dt-stage
 │                                  advance, dashboard + README generators)
 └── skills/                        The nine skills listed under Components

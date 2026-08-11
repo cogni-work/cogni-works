@@ -26,6 +26,15 @@ encoding convention that forbids ASCII substitutes, which this file already
 relies on where it declines to import cogni-copywriting's table for
 transliterating them.
 
+**When the engagement's own text disagrees.** The paragraph above is read once; an
+engagement's stored files arrive as in-context evidence and out-argue it. A corpus
+already written in Swiss ss therefore teaches every later turn to keep writing it,
+and the drift reinforces itself silently. To check a corpus rather than trust it,
+run `python3 $CLAUDE_PLUGIN_ROOT/scripts/orthography-drift-scan.py "<engagement-dir>"`.
+Treat a finding as the stored text being wrong, not the rule. The scan is read-only
+and matches a curated pair list with bounded recall, so a zero-finding report means
+nothing on that list appeared — not that the corpus is ß-correct.
+
 ## (b) Scope — every surface, not only prose
 
 These rules govern **every** user-facing surface, not only prose: table cells,

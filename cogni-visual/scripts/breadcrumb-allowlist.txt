@@ -17,6 +17,12 @@
 # after `#` are not both digits (`#F59E0B`, `#8B5CF6`, `#FFFFFF`, `#F7F3EA`)
 # never matched and need no entry.
 #
+# COLLISION SURFACE, because exemption is by exact token and not by line: a
+# GENUINE issue reference written as literally `#06` or `#22` in either of the
+# two concept-diagram agent files would also be swallowed by those entries. Issue
+# numbers are four digits today, so cite them in full (`#1284`, never `#22`) in
+# those two files and the collision cannot arise.
+#
 # RETIRE THIS FILE when cogni-work/managed-service#880 lands — that issue fixes
 # the pattern upstream so it stops matching hex colours, at which point every
 # entry below becomes dead weight and should be deleted.

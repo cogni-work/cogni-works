@@ -80,7 +80,13 @@ Four notes travel with the table:
   do not translate them. The casing is what carries the meaning: lower-cased,
   they read as engine values — the consultant sees a stored token rather than
   the name of a method stage, which is exactly the failure proper-casing
-  prevents.
+  prevents. That mandate governs the stage where it appears **as a display
+  label** — a table cell, a badge, prose naming the stage as a stage. Two forms
+  fall outside it and stay lowercase: a code span (`` `ideate` ``), where the
+  token is deliberately being shown as the stored value, and a hyphenated
+  compound built from one (`mid-ideate`), where the stage has become a word
+  inside a phrase rather than a label being displayed. These two are the
+  complete exception set; anywhere else, proper-case.
 
 Where an English display string happens to equal the engine token, that is a
 coincidence of vocabulary, not an exemption — the value still passes through the

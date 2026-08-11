@@ -752,28 +752,77 @@ else
   PHASE="complete"
 fi
 
-# Commercial-model consolidation gate (#1230): per product x market, is the
-# commercial structure shared/fixed? Keyed on product.revenue_model — a decided
-# shared/fixed model (subscription/hybrid/partnership) means one commercial
-# structure for the product, so the solutions layer should consolidate (a shared
+# Commercial-model consolidation gate: per product x market, is the commercial
+# structure shared/fixed? Four signals, OR-ed — any one marks the product shared:
+#   1. a shared revenue_model (subscription/hybrid/partnership);
+#   2. a fixed/catalog commercial_model (catalog/subscription/usage/partnership);
+#   3. an off-enum revenue_model carrying a documented shared disposition
+#      (transaction-fee / product_and_license);
+#   4. at least three propositions whose declared commercial_model values
+#      collapse to exactly one distinct value, and that value is itself in the
+#      shared set from (2) — a product whose propositions all declare the
+#      bespoke `project` model stays not-shared.
+# A shared structure means the solutions layer should consolidate (a shared
 # reference cut / a package ladder) instead of fanning out one tiered solution
-# per proposition. project (the default) and any off-enum value stay not-shared.
+# per proposition.
 # Computed here (before next_actions) so the enrichment recommendation below can
-# read COMMERCIAL_ANY_SHARED / COMMERCIAL_SHARED_MODELS.
+# read COMMERCIAL_ANY_SHARED / COMMERCIAL_SHARED_SIGNALS.
 commercial_model_status="{}"
 COMMERCIAL_ANY_SHARED="false"
-COMMERCIAL_SHARED_MODELS=""
+COMMERCIAL_SHARED_SIGNALS=""
 if [ -d "$PROJECT_DIR/products" ]; then
   commercial_model_status=$(python3 -c "
 import json, os, glob
 
 proj = '$PROJECT_DIR'
 SHARED_MODELS = {'subscription', 'hybrid', 'partnership'}
+# Unstructured shared-model signals: three deterministic ways a product can carry
+# a shared/fixed commercial structure beyond a bare shared revenue_model. A
+# backing commercial_model field whose value denotes a fixed/shared structure:
+SHARED_COMMERCIAL_MODELS = {'catalog', 'subscription', 'usage', 'partnership'}
+# The revenue_model enum; a value outside it is off-enum. Off-enum values get a
+# documented disposition instead of silently defaulting to not-shared.
+REVENUE_MODEL_ENUM = {'subscription', 'project', 'partnership', 'hybrid'}
+OFF_ENUM_SHARED = {'transaction-fee', 'product_and_license'}
+# Propositions:distinct-commercial-models ratio — a product whose propositions
+# collapse to a single declared commercial_model across at least this many
+# propositions (many propositions, one model) has one shared structure — but
+# only when that one model is itself shared. Agreeing on `project` is agreeing
+# to stay bespoke, so the ratio tests SHARED_COMMERCIAL_MODELS membership just
+# as the catalog signal does; otherwise the two signals would disagree about
+# `project` and the ratio would reopen the project-stays-1:1 guarantee.
+RATIO_MIN_PROPOSITIONS = 3
 
 markets = sorted(
     os.path.basename(m)[:-5]
     for m in glob.glob(os.path.join(proj, 'markets', '*.json'))
 )
+
+# feature_slug -> product_slug, so a proposition (keyed by feature) resolves to
+# its product for the models-ratio join below.
+feature_product = {}
+for ff in glob.glob(os.path.join(proj, 'features', '*.json')):
+    try:
+        fd = json.load(open(ff))
+    except Exception:
+        continue
+    feature_product[fd.get('slug', os.path.basename(ff)[:-5])] = fd.get('product_slug')
+
+# product_slug -> the declared (non-null) commercial_model of each proposition.
+# Propositions without a commercial_model are excluded, so the zero-declared case
+# never triggers the ratio signal.
+prop_models = {}
+for pp in glob.glob(os.path.join(proj, 'propositions', '*.json')):
+    try:
+        pd = json.load(open(pp))
+    except Exception:
+        continue
+    cm = pd.get('commercial_model')
+    if not cm:
+        continue
+    prod = feature_product.get(pd.get('feature_slug'))
+    if prod is not None:
+        prop_models.setdefault(prod, []).append(cm)
 
 matrix = []
 shared_products = []
@@ -786,28 +835,58 @@ for pf in sorted(glob.glob(os.path.join(proj, 'products', '*.json'))):
         continue
     pslug = d.get('slug', os.path.basename(pf)[:-5])
     rm = d.get('revenue_model') or 'project'
+    cm = d.get('commercial_model')
     shared = rm in SHARED_MODELS  # commercial-structure shared check (mutation-check.sh flips this)
+    # Fold the three unstructured signals in as OR-clauses AFTER the base check
+    # above (kept verbatim so the mutation harness still locates it).
+    catalog_signal = bool(cm) and cm in SHARED_COMMERCIAL_MODELS
+    disposition_signal = rm not in REVENUE_MODEL_ENUM and rm in OFF_ENUM_SHARED
+    declared = prop_models.get(pslug, [])
+    ratio_signal = (
+        len(declared) >= RATIO_MIN_PROPOSITIONS
+        and len(set(declared)) == 1
+        and declared[0] in SHARED_COMMERCIAL_MODELS
+    )
+    shared = shared or catalog_signal or ratio_signal or disposition_signal
     if shared:
         shared_products.append(pslug)
-        shared_models_seen.append(rm)
+        # Record the marker that drove the shared verdict so the recommendation
+        # can name the actual signal, not only revenue_model.
+        if rm in SHARED_MODELS:
+            shared_models_seen.append(rm)
+        elif catalog_signal:
+            shared_models_seen.append(cm)
+        elif disposition_signal:
+            shared_models_seen.append(rm)
+        else:  # ratio_signal
+            shared_models_seen.append(declared[0])
     for mslug in (markets or [None]):
         matrix.append({
             'product': pslug,
             'market': mslug,
             'revenue_model': rm,
+            'commercial_model': cm,
             'commercial_model_shared': shared,
         })
+
+# Any of the four signals can supply the marker, so this array mixes
+# revenue_model and commercial_model enum values — hence the neutral name.
+# Bound once so the deprecated alias below is equal by construction, not by
+# two literals happening to match.
+signals = sorted(set(shared_models_seen))
 
 result = {
     'matrix': matrix,
     'any_shared': len(shared_products) > 0,
     'shared_products': shared_products,
-    'shared_revenue_models': sorted(set(shared_models_seen)),
+    'shared_signals': signals,
+    # Deprecated alias of shared_signals, retained for existing readers.
+    'shared_revenue_models': signals,
 }
 print(json.dumps(result))
 " 2>/dev/null || echo "{}")
   COMMERCIAL_ANY_SHARED=$(CMS="$commercial_model_status" python3 -c "import json, os; d = json.loads(os.environ.get('CMS') or '{}'); print('true' if d.get('any_shared') else 'false')" 2>/dev/null || echo "false")
-  COMMERCIAL_SHARED_MODELS=$(CMS="$commercial_model_status" python3 -c "import json, os; d = json.loads(os.environ.get('CMS') or '{}'); print(','.join(d.get('shared_revenue_models', [])))" 2>/dev/null || echo "")
+  COMMERCIAL_SHARED_SIGNALS=$(CMS="$commercial_model_status" python3 -c "import json, os; d = json.loads(os.environ.get('CMS') or '{}'); print(','.join(d.get('shared_signals', [])))" 2>/dev/null || echo "")
 fi
 
 # Build next_actions array
@@ -897,10 +976,11 @@ case "$PHASE" in
     if [ "$SOLUTIONS_PCT" -lt 100 ]; then
       missing_sol=$((PROPOSITIONS - SOLUTIONS))
       if [ "$COMMERCIAL_ANY_SHARED" = "true" ]; then
-        # Shared/fixed commercial model detected (#1230): recommend consolidation
-        # (a shared reference cut / a package ladder) instead of one tiered
-        # solution per proposition. This suppresses the standard 1:1 action.
-        add_action "solutions" "Kaufmännische Struktur prüfen: geteiltes/fixes Erlösmodell erkannt (revenue_model=$COMMERCIAL_SHARED_MODELS) — geteilten Referenzzuschnitt bzw. Paketleiter (packages / shared_solution) empfehlen statt $missing_sol Einzellösungen je Proposition" 7
+        # COMMERCIAL_ANY_SHARED / COMMERCIAL_SHARED_SIGNALS come from the
+        # consolidation gate above (search "Commercial-model consolidation
+        # gate"), which defines the four signals. A shared structure suppresses
+        # the standard 1:1 action in favour of consolidation.
+        add_action "solutions" "Kaufmännische Struktur prüfen: geteilte/fixe kaufmännische Struktur erkannt (Signal: $COMMERCIAL_SHARED_SIGNALS) — geteilten Referenzzuschnitt bzw. Paketleiter (packages / shared_solution) empfehlen statt $missing_sol Einzellösungen je Proposition" 7
       else
         add_action "solutions" "$missing_sol proposition(s) lack solution plans" 7
       fi

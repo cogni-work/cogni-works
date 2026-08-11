@@ -9,7 +9,6 @@ description: >-
   "training deck", "tour introduction slides", or mentions creating presentation
   materials for cogni-help workflow tours. Also trigger when someone says "prepare
   materials for a training session" or "I need slides for onboarding new learners".
-version: 0.1.0
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 ---
 

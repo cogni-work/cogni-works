@@ -1,6 +1,5 @@
 ---
 name: cogni-issues
-version: 0.4.0
 description: |
   File and track GitHub issues (bugs, features, change requests, questions) against
   insight-wave plugins via the GitHub CLI (`gh`). Consults the user, resolves the

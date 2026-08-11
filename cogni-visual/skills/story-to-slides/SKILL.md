@@ -1,8 +1,7 @@
 ---
 name: story-to-slides
 description: >
-  Transform any narrative (insight summary, trend report, strategy document, sales pitch,
-  project update) into an optimized multi-slide presentation brief that the PPTX skill
+  Transform any narrative into an optimized multi-slide presentation brief that the PPTX skill
   renders into PowerPoint. Use this skill whenever the user mentions "presentation",
   "slide deck", "slides", "PowerPoint", "Foliensatz", "Praesentation erstellen",
   "Folien aus Bericht", "pitch deck", "create slides from report", or wants to convert
@@ -11,11 +10,9 @@ description: >
   Covers Why Change projects, research reports, competitive intelligence, trend panoramas,
   and both English and German output. Produces a presentation-brief.md (v4.0) that the
   PPTX agent renders. Important: this skill CREATES the brief from a narrative source —
-  it does NOT render an existing brief (use PPTX skill for that), does NOT create a
-  a web page
+  it does NOT render an existing brief (use PPTX skill for that), does NOT create a web page
   (use story-to-web), and does NOT enhance prose (use Copywriter skill).
-allowed-tools: Read, Write, Edit, Bash, Grep, Glob, AskUserQuestion, Agent
-version: 1.0.0
+allowed-tools: Read, Write, Edit, Bash, Grep, Glob, AskUserQuestion, Agent, Skill
 ---
 
 # Story-to-Slides Skill

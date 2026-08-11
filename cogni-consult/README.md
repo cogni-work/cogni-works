@@ -180,6 +180,8 @@ cogni-consult/
 │   ├── deliverable-types.md       Deliverable-type catalog (field-type affinity)
 │   ├── dependency-model.md        Deliverable dependency graph: edge schema,
 │   │                              validation, cascade + topological refresh
+│   ├── engagement-dashboard-rendering.md  Step-4 action-field dashboard rendering contract
+│   ├── engagement-list-rendering.md  Step-2 engagement-list rendering + the shared bilingual contract
 │   ├── evaluation-criteria.md     Six criteria from the dogfood replacement evaluation
 │   ├── frameworks-registry.md     Consulting-framework catalog backing the Define/
 │   │                              Prototype framework lens

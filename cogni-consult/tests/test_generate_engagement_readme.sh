@@ -48,8 +48,16 @@ TMPROOT="$(mktemp -d)"
 trap 'rm -rf "$TMPROOT"' EXIT
 
 failures=0
-pass() { printf 'OK   %s\n' "$1"; }
-fail() { printf 'FAIL %s: %s\n' "$1" "$2" >&2; failures=$((failures + 1)); }
+# Case labels use the `PASS: <case>` / `FAIL: <case>` shape. cogni-service's
+# mutation-check.sh --case classifies a run by scanning suite output for
+# `FAIL: <case>` (red) or `ok:`/`PASS: <case>` (green); anything else is
+# case_not_found. The `OK   `/`FAIL ` shape this suite used before matched
+# neither, so a mutation recipe naming one of these cases could not return a
+# verdict at all. (The plugin-local scripts/mutation-check.sh is a different
+# instrument — it takes no --case and reads only exit status.) Suites here are
+# mixed on this today; test_reference_pointers.sh already uses this shape.
+pass() { printf 'PASS: %s\n' "$1"; }
+fail() { printf 'FAIL: %s - %s\n' "$1" "$2" >&2; failures=$((failures + 1)); }
 
 run() { python3 "$SCRIPT" "$@"; }
 
@@ -354,6 +362,22 @@ assert_md_has "8c bound slug + count"   "$MD8" 'Bound knowledge base: `eu-ai-act
 assert_md_has "8d scope research link"  "$MD8" "(scope/research)"
 assert_md_has "8e field research link"  "$MD8" "(action-fields/market-evidence/research)"
 assert_links_resolve "8f links resolve" "$D8"
+
+# --- Fixture 9: in-progress deliverable — the next-action line displays the
+# design-thinking stage, and it must be proper-cased per
+# references/user-facing-output.md (c) note 4 rather than surfacing the stored
+# token raw. The suite pinned only next_action_rung before, never the display
+# text, which is how a raw `ideate` shipped in user-facing prose unnoticed.
+D9="$TMPROOT/dt-stage-display"
+seed_scoped "$D9" '[
+  {"slug": "competitor-map", "title": "Competitor map", "state": "in-progress", "dt_stage": "ideate"}
+]'
+echo '{"source": "scope-seeded", "name": "CFO"}' > "$D9/personas/cfo.json"
+OUT9="$(run "$D9")"
+MD9="$D9/README.md"
+assert_json "9a rung continue"          "$OUT9" "d['data']['next_action_rung'] == 'continue'"
+assert_md_has "9b stage proper-cased"   "$MD9" "(design thinking, Ideate stage)"
+assert_md_lacks "9c raw token absent"   "$MD9" "(design thinking, ideate stage)"
 
 # --- Summary ----------------------------------------------------------------------
 if [ "$failures" -eq 0 ]; then

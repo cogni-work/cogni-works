@@ -94,7 +94,9 @@ A product is a named offering that bundles related features. Every feature belon
 ```
 
 Required fields: `slug`, `name`, `description`
-Optional fields: `positioning`, `pricing_tier`, `revenue_model`, `maturity`, `launch_date`, `version`, `source_file`, `created`
+Optional fields: `positioning`, `pricing_tier`, `revenue_model`, `commercial_model`, `maturity`, `launch_date`, `version`, `source_file`, `created`
+
+This is a reduced setup-time mirror of the product schema. `cogni-portfolio/references/data-model.md` is the canonical product schema — consult it for the full field set and for the commercial-structure consolidation signals.
 
 Valid `maturity` values: `concept`, `development`, `launch`, `growth`, `mature`, `decline`
 

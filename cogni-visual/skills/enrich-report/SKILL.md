@@ -198,7 +198,7 @@ Check for rendered infographic artifacts in `{source_dir}/cogni-visual/` only (t
 - `{source_dir}/cogni-visual/infographic-preview.webp` (WebP — preferred image format, 25-35% smaller than PNG)
 - `{source_dir}/cogni-visual/infographic-preview.png` (PNG — pixel-perfect fallback)
 
-**Migration (v0.16.11):** If neither `.webp` nor `.png` is found, also check for the legacy filename `preview.png` in `{source_dir}/cogni-visual/`. If found, rename it to `infographic-preview.png` and continue.
+**Migration:** If neither `.webp` nor `.png` is found, also check for the legacy filename `preview.png` in `{source_dir}/cogni-visual/`. If found, rename it to `infographic-preview.png` and continue.
 
 1. **Rendered artifacts exist:** `{source_dir}/cogni-visual/infographic-fragment.html` OR `{source_dir}/cogni-visual/infographic-preview.webp` OR `{source_dir}/cogni-visual/infographic-preview.png`
    - If any file exists: **skip all of Phase 2a**. The infographic is already rendered.

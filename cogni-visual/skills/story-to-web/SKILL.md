@@ -91,7 +91,9 @@ On empty or blank responses, auto-select the best option and move on. When `inte
 
 ### German fidelity
 
-German web narratives go to executives and get embedded in reports. ASCII-ified umlauts (`ae`/`oe`/`ue`) immediately signal "machine-generated" and undermine credibility. Use real Unicode throughout: ae->ä oe->ö ue->ü ss->ß. German number formatting: 2.661 (dot as thousands separator).
+German web narratives go to executives and get embedded in reports. ASCII-ified umlauts (`ae`/`oe`/`ue`) immediately signal "machine-generated" and undermine credibility. Use real Unicode throughout the generated copy: ae->ä oe->ö ue->ü ss->ß. German number formatting: 2.661 (dot as thousands separator).
+
+This rule governs generated output copy only — headlines, body text, section labels, and CTA text. It does not govern filenames, slugs, or other machine identifiers, which transliterate umlauts deliberately. It also does not govern the trigger phrases in this skill's frontmatter description, where any ASCII spellings are deliberate: a user on a non-German keyboard types them that way, so respelling one silently drops German triggering coverage. Leave the frontmatter block unchanged when correcting umlauts anywhere else in this file.
 
 ---
 
@@ -251,7 +253,7 @@ For each section:
 7. Set feature-alternating positions (odd/even)
 8. Assign `section_label` (content-source-first, role-based fallback):
    - If arc_elements available: check which narrative H2 chapter content came from -> match to arc element name (content-source method). Fall back to role-based mapping for intro/synthesized content. Use localized names per `language`. See `$CLAUDE_PLUGIN_ROOT/libraries/arc-taxonomy.md` for full heuristic.
-   - If no arc_elements: use generic role-based labels (e.g., "Das Problem", "Die Losung", "Der Weg")
+   - If no arc_elements: use generic role-based labels (e.g., "Das Problem", "Die Lösung", "Der Weg")
 
 **Content checkpoint:** State section count, section types used, theme alternation pattern, any low-confidence mappings.
 

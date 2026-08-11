@@ -90,7 +90,9 @@ On empty or blank responses, auto-select the best option and move on. When `inte
 
 ### German fidelity
 
-German presentations go to executives. ASCII-ified umlauts (`ae`/`oe`/`ue`) immediately signal "machine-generated" and undermine credibility. Use real Unicode throughout: ae→ä oe→ö ue→ü ss→ß. German number formatting: 2.661 (dot as thousands separator).
+German presentations go to executives. ASCII-ified umlauts (`ae`/`oe`/`ue`) immediately signal "machine-generated" and undermine credibility. Use real Unicode throughout the generated copy: ae→ä oe→ö ue→ü ss→ß. German number formatting: 2.661 (dot as thousands separator).
+
+This rule governs generated output copy only — headlines, body text, section labels, and CTA text. It does not govern filenames, slugs, or other machine identifiers, which transliterate umlauts deliberately. It also does not govern the trigger phrases in this skill's frontmatter description, where any ASCII spellings are deliberate: a user on a non-German keyboard types them that way, so respelling one silently drops German triggering coverage. Leave the frontmatter block unchanged when correcting umlauts anywhere else in this file.
 
 ### Client-facing copy hygiene
 

@@ -438,6 +438,22 @@ The `/render-infographic` command handles everything from here: brief discovery 
 because we pass the path), style_preset routing, agent dispatch, and the post-render
 interactive edit checkpoint. Do not duplicate any of that logic here.
 
+**Capture the artifact path.** The render command forwards the rendering agent's single-line
+JSON back verbatim. Read the artifact path from whichever key that JSON carries — `pen_path`
+for the editorial family (Pencil backend), `excalidraw_path` for the hand-drawn family — and
+report that absolute path as `out` in the response contract. Check for both keys rather than
+assuming one; the two families genuinely differ. This reads an already-forwarded result; it
+re-implements no routing and no rendering.
+
+If the forwarded JSON reports `ok` false, or carries neither `pen_path` nor `excalidraw_path`,
+do not invent or derive a path: return the `render` error code the response contract already
+defines for a requested render that failed.
+
+That response contract — the `brief` and `out` paths, and the `param` / `skill` / `files` /
+`validation` / `render` error codes — lives in `cogni-visual/agents/story-to-infographic.md`
+under `## RESPONSE FORMAT`. Consult it there when this skill runs outside that agent, so the
+shape stays defined in exactly one place.
+
 **When `render` parameter is `false`:**
 
 Tell the user the brief is ready and how to render it manually:
@@ -446,6 +462,9 @@ Tell the user the brief is ready and how to render it manually:
 > Run **`/render-infographic`** to render, or use the direct commands:
 > `/render-infographic-handdrawn` (sketchnote/whiteboard) or
 > `/render-infographic-editorial` (economist/editorial/data-viz/corporate)."
+
+Report `out` as `null` on this path — no artifact was produced. A `null` marks "render never
+requested", which is why a failed render returns the `render` error code instead.
 
 **Post-render edit checkpoint** (informational note for maintainers): the render commands
 (`/render-infographic`, `/render-infographic-handdrawn`, `/render-infographic-editorial`)

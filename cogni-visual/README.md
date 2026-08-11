@@ -156,7 +156,7 @@ cogni-visual/                              # 7 skills · 19 agents · 6 commands
 ├── commands/                             6 slash commands (including /render-infographic dispatcher + 2 direct variants)
 ├── hooks/                                1 PreToolUse hook (Excalidraw canvas auto-start)
 ├── scripts/                              Utility scripts (rasterize-sketch.py, cartographic-outline.py, load-theme-component.py)
-├── references/                           Reference data (cartographic-data/, theme-component-loader.md)
+├── references/                           Reference data (cartographic-data/, theme-component-loader.md, agent-tool-declarations.md)
 ├── evals/                                Evaluation harnesses (render-infographic)
 └── libraries/                            17 shared reference files
     ├── arc-taxonomy.md                   arc ID → visual arc type mapping

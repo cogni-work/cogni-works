@@ -511,9 +511,11 @@ Alternative DOES/MEANS messaging derived from TIPS value chains. The top-level s
 
 ### solutions/{feature-slug}--{market-slug}.json
 
-A solution attaches commercial terms to a proposition (same slug). Structure depends on the parent product's `revenue_model`.
+A solution attaches commercial terms to a proposition (same slug). Structure depends on the parent product's `revenue_model`. The `solution_type` field selects which of the shapes below applies; when absent it defaults to `"project"` for backward compatibility.
 
 #### Project Solutions (`solution_type: "project"` or absent)
+
+Traditional implementation-based solutions with phased delivery and project pricing tiers. Used for consulting, implementation, and advisory engagements.
 
 ```json
 {
@@ -549,6 +551,8 @@ A solution attaches commercial terms to a proposition (same slug). Structure dep
 
 #### Subscription Solutions (`solution_type: "subscription"`)
 
+Recurring-revenue solutions with onboarding, subscription tiers, and optional professional services. Used for SaaS, platform, and license-based products.
+
 ```json
 {
   "slug": "deep-research--beratung-kmu-dach",
@@ -583,6 +587,8 @@ A solution attaches commercial terms to a proposition (same slug). Structure dep
 ```
 
 #### Partnership Solutions (`solution_type: "partnership"`)
+
+Revenue-share or co-investment programs with staged partner engagement.
 
 ```json
 {
@@ -626,6 +632,52 @@ Common optional fields: `solution_type`, `cost_model`, `blueprint_ref`, `bluepri
 `blueprint_version` (integer, optional): The `blueprint_version` value from the product's `delivery_blueprint` at the time this solution was generated. Used for drift detection — when the product's current `blueprint_version` exceeds this value, the solution is flagged as drifted and eligible for regeneration. Must be present when `blueprint_ref` is present.
 
 `blueprint_guidance_applied` (boolean, optional): Indicates that user-provided blueprint adjustments were applied during batch generation. Present only on solutions generated in batch mode where the user provided non-null adjustments to the blueprint approach in the blueprint discussion step. When `true`, the solution may deviate from the standard blueprint in ways the user explicitly requested.
+
+The three subsections below document the per-type fields the Schema Reference table summarises — one per `solution_type`, in the same order as the examples above.
+
+#### Project Solution Fields
+
+Required: `implementation` (array of phases), `pricing` (tier object).
+
+Each implementation phase has `phase` (string, required), `duration_weeks` (number, required), and `description` (string, required). Each pricing tier has `price` (number, required), `currency` (string, required), and `scope` (string, required).
+
+The `cost_model` object is optional but recommended for rigorous business cases:
+
+- **`assumptions`** (string array): Explicit statements about rate basis, client prerequisites, scope exclusions, and target margins. These are the statements that get challenged in deal reviews — making them explicit prevents hidden assumptions from undermining pricing credibility.
+- **`bill_of_materials`**: Resources required for delivery.
+  - `roles` (array): Each entry has `role` (string), `rate_day` (number), `currency` (string). Roles can reference defaults from `portfolio.json` `delivery_defaults.roles` or be overridden per solution.
+  - `tooling` (array, optional): Each entry has `item` (string), `cost` (number), `note` (string, optional). Software licenses, platforms, or tools consumed during delivery.
+  - `infrastructure` (array, optional): Each entry has `item` (string), `cost_monthly` (number), `currency` (string). Recurring infrastructure costs during the engagement.
+- **`effort_by_tier`**: Effort allocation for each pricing tier. Each tier object has:
+  - `total_days` (number): Total person-days for this tier
+  - `breakdown` (array): Per-role allocation with `role` (string) and `days` (number)
+  - `internal_cost` (number): Computed cost (sum of role days * rates + tooling + infrastructure)
+  - `margin_pct` (number): `(price - internal_cost) / price * 100`
+
+#### Subscription Solution Fields
+
+Required: `subscription` (object with `model`, `tiers`, `currency`). Optional: `onboarding`, `professional_services`.
+
+- **`subscription.model`**: `"tiered"` (Free/Pro/Enterprise), `"usage"` (pay-per-use), or `"flat"` (single price)
+- **`subscription.tiers`**: Object with tier names as keys. Each tier has `price_monthly` (number or null), `price_annual` (number or null), `scope` (string). Optional: `limits` (string), `note` (string).
+- **`subscription.currency`**: ISO currency code
+- **`subscription.billing_cycle`**: `"monthly | annual"` or `"annual"`
+- **`subscription.discount_annual_pct`**: Annual discount percentage (optional)
+
+The `cost_model` for subscription solutions uses `unit_economics` instead of `effort_by_tier`:
+
+- **`unit_economics.cac`**: Customer acquisition cost
+- **`unit_economics.ltv`**: Customer lifetime value
+- **`unit_economics.ltv_cac_ratio`**: LTV/CAC ratio (target > 3)
+- **`unit_economics.gross_margin_pct`**: Gross margin percentage (target > 70%)
+- **`unit_economics.churn_monthly_pct`**: Monthly churn rate (target < 5%)
+
+#### Partnership Solution Fields
+
+Required: `program` (object with `stages` array and `revenue_share`).
+
+- **`program.stages`**: Array of engagement stages with `stage` (string), `duration_months` (number), `description` (string), `commitment` (string)
+- **`program.revenue_share`**: Object with `model` (string), `partner_pct` (number), `description` (string)
 
 #### Shared Solutions
 
@@ -701,6 +753,67 @@ Bundles solutions from one product into sellable tiers for a specific market.
 }
 ```
 
+**Subscription packages** (`package_type: "subscription"`) carry `price_monthly` / `price_annual` per tier instead of a single `price`:
+
+```json
+{
+  "slug": "insight-wave--beratung-kmu-dach",
+  "product_slug": "insight-wave",
+  "market_slug": "beratung-kmu-dach",
+  "package_type": "subscription",
+  "name": "insight-wave Consulting Platform",
+  "positioning": "AI-powered consulting toolkit in one subscription",
+  "tiers": [
+    {
+      "tier": "starter",
+      "name": "Starter",
+      "included_solutions": ["deep-research--beratung-kmu-dach"],
+      "solution_sizes": { "deep-research--beratung-kmu-dach": "small" },
+      "price_monthly": 99,
+      "price_annual": 990,
+      "currency": "EUR",
+      "scope": "Core research capability"
+    },
+    {
+      "tier": "professional",
+      "name": "Professional",
+      "included_solutions": [
+        "deep-research--beratung-kmu-dach",
+        "report-generator--beratung-kmu-dach"
+      ],
+      "solution_sizes": {
+        "deep-research--beratung-kmu-dach": "medium",
+        "report-generator--beratung-kmu-dach": "small"
+      },
+      "price_monthly": 249,
+      "price_annual": 2490,
+      "currency": "EUR",
+      "scope": "Full research + automated reporting"
+    },
+    {
+      "tier": "enterprise",
+      "name": "Enterprise",
+      "included_solutions": [
+        "deep-research--beratung-kmu-dach",
+        "report-generator--beratung-kmu-dach",
+        "portfolio-analyzer--beratung-kmu-dach"
+      ],
+      "solution_sizes": {
+        "deep-research--beratung-kmu-dach": "large",
+        "report-generator--beratung-kmu-dach": "medium",
+        "portfolio-analyzer--beratung-kmu-dach": "medium"
+      },
+      "price_monthly": null,
+      "price_annual": null,
+      "currency": "EUR",
+      "scope": "Full platform, SSO, SLA, dedicated CSM"
+    }
+  ],
+  "bundle_savings_pct": 20,
+  "created": "2026-03-11"
+}
+```
+
 Required fields: `slug`, `product_slug`, `market_slug`, `package_type`, `name`, `tiers` (array)
 Optional fields: `positioning`, `bundle_savings_pct`, `created`
 
@@ -716,6 +829,8 @@ Optional fields: `positioning`, `bundle_savings_pct`, `created`
 | `exclusions` | recommended | recommended | recommended |
 
 `solution_sizes` maps every slug in `included_solutions` to the pricing tier selected from that solution (`proof_of_value`, `small`, `medium`, `large`); `exclusions` lists what the tier deliberately does not cover.
+
+Each tier requires `tier` (a kebab-case identifier) and `name` in addition to the per-type fields in the table above.
 
 ### competitors/{feature-slug}--{market-slug}.json
 

@@ -24,8 +24,6 @@ Features are the IS layer (base) of the FAB framework and the Corporate Visions 
 
 ## Your Consulting Stance
 
-**Plugin root resolution.** Bash invocations below resolve the plugin root inline as `${CLAUDE_PLUGIN_ROOT:-$(ls -td "$HOME"/.claude/plugins/cache/insight-wave/cogni-portfolio/*/ | head -1)}` — the first call works whether or not the harness injects `$CLAUDE_PLUGIN_ROOT`. Keep the inline form in every call; do not strip it.
-
 **Take a position.** When you see a feature that's too broad ("monitoring"), say so and propose how to split it. When you see three features that are really one ("email alerts", "SMS alerts", "push notifications"), recommend merging them. Don't hedge — say "I think these should be one feature called Notification Engine, here's why" and let the user decide.
 
 **Think in capabilities, not marketing.** Features are factual statements about what a product can do. "AI-powered insights" is marketing copy. "Anomaly detection using statistical models on time-series data" is a feature. Push the user to be specific — if a feature can't be demonstrated in a product demo, it's probably not a feature.
@@ -49,7 +47,7 @@ The workflow adapts to what the user brings. Don't force every interaction throu
 
 - **User is vague** ("it's a BI tool, you know the drill") → Start with discovery, then shape features
 - **User dumps a capability list** → Skip discovery, go straight to shaping and consolidation
-- **User asks to review existing features** → Jump to review mode — first run structural triage (fill missing required fields like `product_slug`, `taxonomy_mapping`, `readiness`), then critique what's there, cross-reference with the product description, propose improvements
+- **User asks to review existing features** → Jump to review mode — first run structural triage (fill missing required and strongly-recommended fields like `product_slug`, `taxonomy_mapping`, `readiness`), then critique what's there, cross-reference with the product description, propose improvements
 - **User wants to add/edit a specific feature** → Handle the operation, but assess whether it reveals a broader issue
 
 In all cases, read available data before asking questions — see the data-read list in Discovery below. If no products exist, tell the user to define them first using the `products` skill. If only one product exists, use it automatically. If multiple exist, ask which product to work on.
@@ -293,7 +291,7 @@ The Completion Loop runs in two passes: a **set-wide pass** (Layer 0) that catch
    - A table of all features with their quality status (pass/warn/deferred)
    - Offer: "Would you like to review the updated features before I run the stakeholder review? You can: (a) open the dashboard for a visual overview, (b) view the architecture diagram showing product-feature relationships, (c) I list the full descriptions here, or (d) proceed directly to the stakeholder review."
 
-   Wait for the user's explicit response, then act on it: (a) delegate to the `dashboard-refresher` agent with `project_dir` and `plugin_root: $CLAUDE_PLUGIN_ROOT` for a dashboard snapshot; (b) delegate to the `portfolio-architecture` skill to generate and present the Excalidraw architecture diagram; (c) present each feature's name, description, word count, and quality status. After any of these, ask again whether they are ready, and only proceed to step 9 once they confirm.
+   Wait for the user's explicit response, then act on it: (a) delegate to the `dashboard-refresher` agent with `project_dir` and `plugin_root: $CLAUDE_PLUGIN_ROOT` for a dashboard snapshot; (b) delegate to the `portfolio-architecture` skill to generate and present the Excalidraw architecture diagram; (c) present each feature's name, description, word count, and quality status; (d) proceed to step 9 directly. After (a), (b) or (c), ask again whether they are ready, and only proceed to step 9 once they confirm — (d) is the confirmation, so it needs no re-ask.
 
    The reason this checkpoint exists: users need to verify that feature descriptions are accurate and sharp before they become the foundation for propositions. Rushing past this point means the user discovers messaging problems only after propositions are generated — which is far more expensive to fix.
 
@@ -326,6 +324,8 @@ The following three layers are the assessment tools used by the Quality Completi
 
 ### 1. Structural Validation (fast, automated — fix before proceeding)
 
+**Plugin root resolution.** Bash invocations below resolve the plugin root inline as `${CLAUDE_PLUGIN_ROOT:-$(ls -td "$HOME"/.claude/plugins/cache/insight-wave/cogni-portfolio/*/ | head -1)}` — the first call works whether or not the harness injects `$CLAUDE_PLUGIN_ROOT`. Keep the inline form in every call; do not strip it.
+
 Run the validation script to check for structural issues (missing fields, referential integrity, very short descriptions):
 
 ```bash
@@ -334,7 +334,7 @@ bash "${CLAUDE_PLUGIN_ROOT:-$(ls -td "$HOME"/.claude/plugins/cache/insight-wave/
 
 This catches descriptions under 15 words and data model errors. It runs fast and works standalone.
 
-**If structural issues are found, fix them immediately** — fill missing `product_slug`, `taxonomy_mapping`, and `readiness` fields before moving to quality assessment. Structural gaps propagate into downstream grading failures that mask the real quality signal. Don't just report structural issues; resolve them.
+**If structural issues are found, fix them immediately** — fill missing `product_slug`, `taxonomy_mapping`, and `readiness` fields before moving to quality assessment, filling `taxonomy_mapping` via the resolver precedence in Feature Review step 2 (never invent a `category_id`). Structural gaps propagate into downstream grading failures that mask the real quality signal. Don't just report structural issues; resolve them.
 
 ### 2. Description Quality Assessment (LLM-powered, multilingual)
 
@@ -426,7 +426,7 @@ When quality assessment reveals warn or fail dimensions, offer to research the c
    When confidence is low, the agent returns targeted questions instead of a proposed rewrite. Present these questions to the user — their domain knowledge fills gaps that web research can't. After the user answers, you can either rewrite the description yourself using their input or re-delegate to the agent with the additional context.
 
 6. User chooses per feature: **Accept** / **Edit** / **Skip**
-7. Write accepted changes to the feature JSON file, set the `updated` field to today's date. While writing, also fill any missing structural fields (`product_slug`, `taxonomy_mapping`, `readiness`) — improving a description is the natural moment to ensure the feature is structurally complete.
+7. Write accepted changes to the feature JSON file, set the `updated` field to today's date. While writing, also fill any missing structural fields (`product_slug`, `taxonomy_mapping`, `readiness`), resolving `taxonomy_mapping` via the resolver precedence in Feature Review step 2 (never invent a `category_id`) — improving a description is the natural moment to ensure the feature is structurally complete.
 8. Warn about downstream cascades: "Feature X was updated → N propositions may need refresh. Run the `propositions` skill to review them."
 9. Optionally re-run the quality assessor on changed features to confirm improvement
 
@@ -494,7 +494,7 @@ These checks catch data model inconsistencies early, before they cascade into do
 
 ### Listing Features
 
-Read all JSON files in the project's `features/` directory. Before presenting, check each feature for missing required fields (`product_slug`, `taxonomy_mapping`, `readiness`) and fill them — same structural triage as in Feature Review. Present grouped by product, with category subgrouping where categories exist. Include your assessment — is the feature set complete? Well-balanced? Any gaps jump out?
+Read all JSON files in the project's `features/` directory. Before presenting, check each feature for missing required and strongly-recommended fields (`product_slug`, `taxonomy_mapping`, `readiness`) and fill them — same structural triage as in Feature Review. Present grouped by product, with category subgrouping where categories exist. Include your assessment — is the feature set complete? Well-balanced? Any gaps jump out?
 
 ### Editing Features
 
@@ -552,9 +552,14 @@ The helper handles the mechanical bits (`_shadow_candidate` / `_source_offering`
 When the user asks to review or improve their feature set (or when you notice issues during other operations), jump straight into the critique — don't start with discovery questions.
 
 1. Read all features for the relevant product(s) and the product description
-2. **Structural triage** (before quality assessment): Scan every feature file for missing required fields. This is the first thing you do — incomplete data propagates errors downstream.
+2. **Structural triage** (before quality assessment): Scan every feature file for missing required and strongly-recommended fields. This is the first thing you do — incomplete data propagates errors downstream.
    - `product_slug`: Infer from the product directory or the product the user is working on. Every feature must have this.
-   - `taxonomy_mapping`: Must contain `dimension`, `category_id`, and `category_name` from the active taxonomy. Resolve the taxonomy in this order: project-local `{PROJECT_PATH}/taxonomy/` if present (it carries ids the bundled one lacks), else `$CLAUDE_PLUGIN_ROOT/templates/{taxonomy.type}/`, else stop and route the user to `cogni-portfolio:portfolio-taxonomy` for the industry-match fallback before filling anything. Once a taxonomy resolves, assign best-fit from the description using that bundle's `template.md` and `categories.json` — never invent a `category_id`.
+   - `taxonomy_mapping`: Must contain `dimension`, `category_id`, and `category_name` from the active taxonomy. Resolve the taxonomy bundle in this order:
+     1. `<project-dir>/taxonomy/` when present — it carries ids the bundled taxonomy lacks.
+     2. Otherwise `$CLAUDE_PLUGIN_ROOT/templates/{type}/`, where `{type}` is the `taxonomy.type` field read from the project's `portfolio.json`.
+     3. If neither resolves, stop and route the user to `cogni-portfolio:portfolio-taxonomy` for the industry-match fallback before filling anything.
+
+     Once a taxonomy resolves, assign best-fit from the description using that bundle's `template.md` and `categories.json` — never invent a `category_id`.
    - `readiness`: Must be `ga`, `beta`, or `planned`. Default to `ga` for features describing existing production capabilities.
    - Present a structural fix table showing what was missing and what you filled, then write the corrected files immediately. Don't wait for user confirmation on structural fields — these are mechanical fixes, not judgment calls.
 3. **Gap analysis**: Cross-reference every capability claim in `products/{slug}.json` against the feature files. Every capability mentioned in the product description that has no corresponding feature is a concrete gap — list them explicitly, don't just note "there might be gaps."

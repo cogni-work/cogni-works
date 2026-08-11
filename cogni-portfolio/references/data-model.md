@@ -688,6 +688,7 @@ Bundles solutions from one product into sellable tiers for a specific market.
       "tier": "foundation",
       "name": "Foundation",
       "included_solutions": ["cloud-monitoring--mid-market-saas-dach"],
+      "solution_sizes": { "cloud-monitoring--mid-market-saas-dach": "medium" },
       "price": 45000,
       "currency": "EUR",
       "scope": "Core monitoring for one environment"
@@ -707,8 +708,12 @@ Optional fields: `positioning`, `bundle_savings_pct`, `created`
 | `price_monthly` | -- | required (or null) | required (or null) |
 | `price_annual` | -- | required (or null) | required (or null) |
 | `included_solutions` | required | required | required |
+| `solution_sizes` | required | required | required |
 | `scope` | required | required | required |
 | `currency` | required | required | required |
+| `exclusions` | recommended | recommended | recommended |
+
+`solution_sizes` maps every slug in `included_solutions` to the pricing tier selected from that solution (`proof_of_value`, `small`, `medium`, `large`); `exclusions` lists what the tier deliberately does not cover.
 
 ### competitors/{feature-slug}--{market-slug}.json
 

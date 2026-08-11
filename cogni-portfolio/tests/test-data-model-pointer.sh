@@ -14,7 +14,7 @@
 #   test_no_file_cites_notes             nothing in the plugin cites the note file
 #   test_notes_scope_declared            the note file declares itself non-canonical up front
 #   test_canonical_keeps_lineage_fields  canonical keeps the lineage fields the notes omit
-#   test_canonical_carries_migrated_prose canonical carries the passages the notes held alone
+#   test_canonical_carries_migrated_prose canonical carries the four passages the notes held alone
 #
 # Usage: bash cogni-portfolio/tests/test-data-model-pointer.sh [test_name ...]
 #   No args -> run every test (the CI path). One or more names -> run only those
@@ -140,21 +140,27 @@ test_canonical_keeps_lineage_fields() {
 }
 
 test_canonical_carries_migrated_prose() {
-  # Three passages lived only in the note file. Once nothing reads that file,
+  # Four passages lived only in the note file. Once nothing reads that file,
   # prose left there is unreachable — so canonical must carry it instead. Each
   # literal is one the notes held and canonical did not, so each can actually
   # detect a missing migration rather than passing on text canonical already had.
   # Prefer format literals over sentence fragments where one exists: canonical is
   # a live target for prose-editing passes, and an assertion on wording churns.
+  #
+  # `solution_sizes` is a field name, not prose: packages/SKILL.md declares it
+  # required on every tier and gates on it, while citing canonical for the schema,
+  # so canonical dropping it puts the two in direct contradiction. Its sibling
+  # `exclusions` is deliberately NOT asserted — the bare word occurs elsewhere in
+  # canonical, so it cannot distinguish the tier row from unrelated prose.
   local missing="" literal
-  for literal in '{domain}/{language}' 'coverage heatmap' 'CAC, LTV, churn'; do
+  for literal in '{domain}/{language}' 'coverage heatmap' 'CAC, LTV, churn' 'solution_sizes'; do
     grep -qF "$literal" "$CANONICAL" || missing="$missing [$literal]"
   done
   if [ -n "$missing" ]; then
     fail test_canonical_carries_migrated_prose "canonical missing migrated prose:$missing"
     return
   fi
-  pass test_canonical_carries_migrated_prose "canonical carries all three migrated passages"
+  pass test_canonical_carries_migrated_prose "canonical carries all four migrated passages"
 }
 
 ALL_TESTS="test_no_file_cites_notes test_notes_scope_declared test_canonical_keeps_lineage_fields test_canonical_carries_migrated_prose"

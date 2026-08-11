@@ -8,8 +8,9 @@
 # Every entry below is a FALSE POSITIVE, not a silenced breadcrumb. A genuine
 # maintainer breadcrumb — a citation of the issue/PR/version that motivated an
 # edit — must never be added here; scrub the prose instead. The two real ones
-# this plugin carried (`v0.9.23` and `#103`, both in portfolio-consolidate)
-# were removed at source under #1283 rather than exempted here.
+# this plugin carries (`v0.9.23` and `#103`, both in portfolio-consolidate) are
+# being removed at source under #1283 rather than exempted here — until that
+# lands the guard correctly still reports them as 2 offenders.
 #
 # Two distinct misclassifications are covered.
 #
@@ -35,9 +36,18 @@
 # `#334155`) while issue numbers are four digits today, so a genuine issue
 # reference cannot collide with them. Keep citing issues in full (`#1295`).
 #
-# RETIRE THIS FILE when cogni-work/managed-service#880 lands — that issue fixes
-# the pattern upstream so it stops matching hex colours, at which point the
-# class-1 entries become dead weight. Re-measure the class-2 entries then too.
+# The class-2 tokens carry the larger and nearer-term collision surface, because
+# they are plugin-version-SHAPED: `v1.0.0`–`v1.4.0` are exempted anywhere in
+# those two files. cogni-portfolio is at 0.9.x today, so once it crosses v1.0.0
+# a genuine release breadcrumb written in portfolio-scan or portfolio-dashboard
+# would be silently swallowed — exactly the vacuous-guard failure this file
+# exists to fence off. RE-MEASURE THESE ENTRIES BEFORE THE PLUGIN CROSSES v1.0.0.
+#
+# RETIRE THE CLASS-1 ENTRIES when cogni-work/managed-service#880 lands — that
+# issue fixes the pattern upstream so it stops matching hex colours, at which
+# point those four become dead weight. The class-2 entries SURVIVE #880 (it does
+# not touch the version-tag pattern) and need the separate re-measurement above,
+# so do not delete this file wholesale on that issue landing.
 #
 # Tracked by cogni-work/insight-wave#1295.
 

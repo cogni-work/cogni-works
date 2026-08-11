@@ -1,6 +1,7 @@
 ---
 name: story-to-infographic
 model: sonnet
+color: green
 description: >
   Transform any narrative into a single-page infographic brief. Orchestrates the
   story-to-infographic skill which distills narratives into scannable visual summaries

@@ -13,7 +13,7 @@ description: >
   from a narrative source — it does NOT render an existing brief (use storyboard agent for
   that), does NOT create slides (use story-to-slides), does NOT create a web page (use story-to-web),
   and does NOT polish prose (use Copywriter skill).
-allowed-tools: Read, Write, Edit, Bash, Grep, Glob, TodoWrite, AskUserQuestion
+allowed-tools: Read, Write, Edit, Bash, Grep, Glob, TodoWrite, AskUserQuestion, Agent
 ---
 
 # Story-to-Storyboard Skill

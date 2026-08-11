@@ -13,7 +13,7 @@ description: >
   source — it does NOT render an existing brief (use web agent for that), does NOT
   create slides (use story-to-slides), does NOT create print storyboard posters
   (use story-to-storyboard), and does NOT polish prose (use Copywriter skill).
-allowed-tools: Read, Write, Edit, Bash, Grep, Glob, AskUserQuestion, Skill
+allowed-tools: Read, Write, Edit, Bash, Grep, Glob, AskUserQuestion, Agent, Skill
 ---
 
 # Story-to-Web Skill

@@ -12,7 +12,8 @@ description: >
   that the storyboard agent renders via Pencil MCP. Important: this skill CREATES the brief
   from a narrative source — it does NOT render an existing brief (use storyboard agent for
   that), does NOT create slides (use story-to-slides), does NOT create a web page (use story-to-web),
-  and does NOT polish prose (use Copywriter skill).
+  does NOT create a single-page infographic (use story-to-infographic), and does NOT polish prose
+  (use cogni-copywriting:copywriter).
 allowed-tools: Read, Write, Edit, Bash, Grep, Glob, TodoWrite, AskUserQuestion, Agent
 ---
 

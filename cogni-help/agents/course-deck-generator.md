@@ -1,31 +1,20 @@
 ---
 name: course-deck-generator
-description: "Generate PPTX course decks via the course-deck skill. Enables delegation from other plugins needing training materials as an autonomous subprocess."
-model: sonnet
-color: green
-whenToUse: |
-  Use this agent when another plugin or orchestration flow needs to generate course
-  materials as a subprocess, e.g. preparing onboarding materials for a new project
-  or creating training decks as part of a broader deliverable pipeline.
+description: |
+  Generate PPTX course decks via the course-deck skill. Enables delegation from other plugins needing training materials as an autonomous subprocess.
+
+  Use this agent when another plugin or orchestration flow needs to generate course materials as a subprocess, e.g. preparing onboarding materials for a new project or creating training decks as part of a broader deliverable pipeline, including launching one agent per tour so several intro decks render in parallel.
 
   <example>
   Context: A workspace setup flow wants to generate onboarding materials
   user: "Set up the new project workspace with training materials"
   assistant: "I'll use the course-deck-generator agent to create the training deck."
   <commentary>
-  Another skill delegates deck generation to this agent. The agent invokes the
-  course-deck skill and returns the generated file path.
+  Another skill delegates deck generation to this agent. The agent invokes the course-deck skill and returns the generated file path.
   </commentary>
   </example>
-
-  <example>
-  Context: Multiple tour intro decks needed in parallel
-  user: "Generate intro decks for tour-research-to-report, tour-portfolio-to-pitch, and tour-trends-to-solutions"
-  assistant: "I'll launch course-deck-generator agents in parallel for each tour."
-  <commentary>
-  Each agent invokes the course-deck skill independently. Agents can run in parallel.
-  </commentary>
-  </example>
+model: sonnet
+color: green
 tools:
   - Read
   - Write

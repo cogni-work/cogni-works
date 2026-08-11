@@ -74,57 +74,13 @@ setup owns scaffolding and the knowledge-base binding.
   substitute for the user's choice or override the list-and-stop obligation.
   Only a name or slug explicitly named in the user's message may skip the list.
 
-Render that list as this table — never as raw field names:
-
-```
-# | Engagement                                                  | Zuletzt bearbeitet
-1 | Lean-Canvas-Schärfung cogni-work                            | 13.07.2026
-2 | Benchmark Skill- & Agent-Entwicklung · noch nicht geschärft | 11.07.2026
-3 | Marktzugang Mittelstand                                     | 02.07.2026
-4 | Serviceportfolio Nord                                       | 28.06.2026
-5 | Digitalisierung Werk 2 · noch nicht geschärft               | 21.06.2026
-
-Weitere 6 — sag „alle“ für die vollständige Liste.
-
-Nummer oder Name genügt. Danach zeige ich dir den Stand und einen nächsten Schritt.
-```
-
-Pad the name column to the widest rendered cell so the date column lines up —
-the suffixed rows usually set that width.
-
-Sort by last activity, newest first, breaking ties on engagement name ascending
-so the numbering is stable across a re-render. Number the rendered rows `1`,
-`2`, `3` — bare, never `#1`. Cap the table at five rows: with five or fewer
-engagements render every one and omit the overflow line entirely (never
-`Weitere 0`); above five, render the top five and set `N` to the remainder. On
-an „alle“ reply, re-render every engagement with continuous numbering and no
-overflow line — the closing line still applies, and the list-and-stop
-obligation above still holds.
-
-The number is a reply index into the list as most recently rendered, not a new
-pre-list skip signal — the matcher above is unchanged and still selects on a
-name or slug the user types. The table carries no slug and no `Scope` column;
-instead, where `scope_state` (the scoping-phase status, not the engagement's
-scope) is not `complete`, append ` · noch nicht geschärft` inside the
-engagement's name cell.
-
-`Zuletzt bearbeitet` is the `last_activity` field discovery already returns per
-engagement — the newest transition timestamp from that engagement's execution
-log, falling back to its root `updated` only when that log is absent, empty, or
-unreadable; per `references/data-model.md`, "Deliverable work never touches
-it", so root `updated` tracks scope edits, not engagement freshness. Never read
-that log here. Values arrive raw and heterogeneous (a full timestamp or a bare
-date), so render and sort on the date part alone; an empty `last_activity`
-sorts last and renders `—`.
-
-German sessions render the strings above and dates as `TT.MM.JJJJ`. An English
-session renders the same table, so it is seeded by example too rather than left
-to improvise: header `# | Engagement | Last worked on`, row suffix
-` · not yet scoped`, overflow line `N more — say “all” for the full list.`, and
-closing line `A number or a name is enough. Then I'll show you where it stands
-and one next step.` Dates keep the same day-first shape, so a date reads the
-same way in either session. The columns, sort, cap, and the list-and-stop
-obligation are identical in both languages.
+Render that list as the table defined in
+`$CLAUDE_PLUGIN_ROOT/references/engagement-list-rendering.md` — never as raw
+field names — which is authoritative for its columns, padding, sort, five-row
+cap and overflow line, the „alle“ re-render, the reply-index rule, the
+`scope_state` name-cell suffix, the `last_activity` resolution, and both
+language seeds. Read it before rendering. The list-and-stop obligation above
+still holds.
 
 ### 3. Read the Engagement Status
 
@@ -143,62 +99,12 @@ display string, not the raw value.
 
 ### 4. Present the Dashboard
 
-Lead with the key question, then one table row per action field:
-
-```
-Engagement: <name> — zuletzt bearbeitet <TT.MM.JJJJ>
-Schlüsselfrage: <key_question>
-
-| Handlungsfeld | Stand | Deliverables | Nächstes Deliverable |
-|---------------|-------|--------------|----------------------|
-| Market Evidence | fertig | 2/2 fertig | — |
-| Portfolio Fit | in Arbeit | 1/3 fertig | Competitor map (Ideate · pyramid-principle) |
-| Go-to-Market | offen | 0/2 fertig | Channel strategy (Empathize · —) |
-```
-
-That is a German session. `Deliverables` is the same token in both header
-rows — the established German loanword, not an untranslated leftover, so leave
-it. The one carve-out is the action-field and deliverable names in the table
-above — stored titles, here English, because stored titles keep their technical
-terms whatever the session language. That carve-out covers those names and
-nothing else; it is not a licence for English elsewhere in the table.
-
-The parenthesised pair's stage is a display label, so it takes proper casing
-(`Empathize`, `Define`, `Ideate`, `Prototype`, `Test`) in either session.
-
-An English session renders the same table, seeded by example too: preamble
-labels `Engagement: <name> — last worked on <DD.MM.YYYY>` and
-`Key question: <key_question>`, header
-`| Action Field | Status | Deliverables | Next Deliverable |`, `Status` values
-`complete`, `in progress` and `pending` — the shapes
-`generate-engagement-readme.py`'s `STATE_LABEL` already renders, so the two
-surfaces agree — counts `2/2 complete` and `0/2 complete`. Dates keep the
-day-first shape of step 2. The columns, the row order and the
-one-row-per-action-field rule are identical in both languages.
-
-Name action fields by the `title` read from
-`<engagement-path>/action-fields/<slug>/field.json` — step 3's rollup carries a
-field's `slug` but not its title — and deliverables by the `title` the rollup
-passes through with each deliverable. Fall back to the slug only when no title
-is stored — slugs are storage keys, not display names, and titles are rendered
-as stored, never translated.
-`zuletzt bearbeitet` is the same discovery-supplied `last_activity` for the
-selected engagement, resolved and rendered exactly as in step 2 — that step's
-rendering rule covers this table too: its column headers, status cells,
-preamble labels and the date shape.
-
-`Deliverables` counts deliverables at `complete` over the field total — that
-`complete` is the engine state being counted, not the word to print; the cell
-renders its count in the interaction language (`2/2 fertig` / `2/2 complete`).
-`Nächstes Deliverable` / `Next Deliverable` names the
-first non-complete deliverable with its `dt_stage` and stored
-`chosen_framework` in parentheses (`<stage> · <framework>`), or the
-first whose `persona_review` is still open when everything else is done.
-The framework is the stored `chosen_framework` surfaced verbatim, read-only — a
-registry slug that keeps its stored spelling in either session; for a
-`combo:<slugA>+<slugB>` pairing, join the two slugs as `<slugA> + <slugB>` (the
-stored `combo:` prefix dropped for display); render `—` when no framework is
-stored (legacy deliverables) — never inferred here.
+Lead with the key question, then one table row per action field, rendered per
+`$CLAUDE_PLUGIN_ROOT/references/engagement-dashboard-rendering.md`, which is
+authoritative for the table's columns, row order, action-field and deliverable
+naming, the completion counts, the next-deliverable and `chosen_framework`
+display rules, and both language seeds. Read that file before emitting the
+table.
 Keep it to this one table — the deep WBS view (planning deliverable sets,
 splitting fields) belongs to `consult-action-fields`, not here.
 

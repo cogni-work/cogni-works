@@ -10,7 +10,8 @@ client's leadership team.
 
 This file carries stance only. The register — wording, lexicon, orthography,
 table and announcement rules, in whatever language the session resolves to —
-lives in `references/user-facing-output.md`, which the consult-* skills load.
+lives in `$CLAUDE_PLUGIN_ROOT/references/user-facing-output.md`, which the
+consult-* skills load.
 
 ## Audience
 The reader is the consultant, not the operator of this system. Report what

@@ -164,6 +164,7 @@ Publishing is **consultant-elected and never automatic** — it does not fire at
 | `register-generator.py` | Script | Generate the browsable `assumptions.md` register (summary table + anchored `## <slug>` sections with value, provenance, source lineage, and `used_by[]` backlinks) from `assumptions.json`; overwrite-guarded |
 | `submit-assumption-claim.py` | Script | Adapter for the assumption ↔ cogni-claims verify round-trip: `submit` appends an `unverified` ClaimRecord under a lock (idempotent — one assumption, one record), `propagate` writes `status: verified` + `citation.claim_id` back onto the assumption record, `resolve-propagate` completes the deviated→resolved leg for the three value-affecting resolution actions |
 | `assumption-change-frequency.sh` | Script | Read-only retrospective spike over a deliverable corpus's git history: reports how often bare numeric literals changed (`edits_per_literal`), sizing the payoff of propagation automation independently of `assumptions.json` |
+| `orthography-drift-scan.py` | Script | Read-only scan reporting Swiss-`ss` spellings that sit in `ß` positions across one engagement's stored corpus, so a drifted corpus stops silently out-arguing the orthography rule in `references/user-facing-output.md` §(a). Curated-list heuristic with bounded recall — a zero-finding report means nothing on the list appeared, not that the corpus is `ß`-correct — and reports only: there is no repair mode and nothing under the engagement root is opened for writing |
 | `discover-projects.sh` | Script | Engagement discovery (delegates to the cogni-workspace helper) |
 | `consult-dashboard/scripts/generate-dashboard.py` | Script | Render the engagement HTML dashboard from `consult-project.json` + `field.json` files (read-only) |
 
@@ -179,6 +180,8 @@ cogni-consult/
 │   ├── deliverable-types.md       Deliverable-type catalog (field-type affinity)
 │   ├── dependency-model.md        Deliverable dependency graph: edge schema,
 │   │                              validation, cascade + topological refresh
+│   ├── engagement-dashboard-rendering.md  Step-4 action-field dashboard rendering contract
+│   ├── engagement-list-rendering.md  Step-2 engagement-list rendering + the shared bilingual contract
 │   ├── evaluation-criteria.md     Six criteria from the dogfood replacement evaluation
 │   ├── frameworks-registry.md     Consulting-framework catalog backing the Define/
 │   │                              Prototype framework lens
@@ -214,7 +217,9 @@ cogni-consult/
 ├── scripts/                       Engagement init/status/discovery, dt-stage advance,
 │                                  deliverable dependency graph + the engagement-root
 │                                  README front-door generator, refreshed at the
-│                                  dashboard milestones (stdlib-only)
+│                                  dashboard milestones, plus a read-only Swiss-ss
+│                                  orthography drift scan over an engagement corpus
+│                                  (stdlib-only)
 ├── tests/                         Regression tests (deliverable graph, dt-stage
 │                                  advance, dashboard + README generators)
 └── skills/                        The nine skills listed under Components

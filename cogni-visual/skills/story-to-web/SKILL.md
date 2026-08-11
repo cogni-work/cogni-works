@@ -1,22 +1,19 @@
 ---
 name: story-to-web
 description: >
-  Transform any narrative (insight summary, trend report, strategy document, sales pitch,
-  project update) into an optimized scrollable web narrative brief that the web agent
+  Transform any narrative into an optimized scrollable web narrative brief that the web agent
   renders via Pencil MCP into a .pen file. Use this skill whenever the user mentions
   "web narrative", "landing page from narrative", "scrollable web page", "web story",
-  "Webseite aus Bericht", "Landingpage erstellen", "Web-Narrative", "scrollbare Webseite",
-  "create a web page from report", "single-page narrative", or wants to convert prose
-  into a scroll-driven section architecture with design tokens and auto-layout. Also
-  trigger when the user needs style guide selection, section type mapping, hero/CTA
-  optimization, or image prompt generation for a web-format narrative. Covers Why Change
-  projects, research reports, competitive intelligence, trend panoramas, and both English
-  and German output. Produces a web-brief.md that the web agent renders. Important: this
-  skill CREATES the brief from a narrative source — it does NOT render an existing brief
-  (use web agent for that), does NOT create slides (use story-to-slides), does NOT create print storyboard
-  posters (use story-to-storyboard), and does NOT polish prose (use Copywriter skill).
-allowed-tools: Read, Write, Edit, Bash, Grep, Glob, AskUserQuestion
-version: 0.5.0
+  "single-page narrative", "Webseite aus Bericht", "Landingpage erstellen",
+  "Web-Narrative", "scrollbare Webseite",
+  "create a web page from report", or wants to convert prose into a scroll-driven
+  section architecture with design tokens and auto-layout. Also trigger for style guide
+  selection, section type mapping, and hero/CTA optimization, in English or German.
+  Produces a web-brief.md. Important: this skill CREATES the brief from a narrative
+  source — it does NOT render an existing brief (use web agent for that), does NOT
+  create slides (use story-to-slides), does NOT create print storyboard posters
+  (use story-to-storyboard), and does NOT polish prose (use Copywriter skill).
+allowed-tools: Read, Write, Edit, Bash, Grep, Glob, AskUserQuestion, Agent, Skill
 ---
 
 # Story-to-Web Skill
@@ -94,7 +91,9 @@ On empty or blank responses, auto-select the best option and move on. When `inte
 
 ### German fidelity
 
-German web narratives go to executives and get embedded in reports. ASCII-ified umlauts (`ae`/`oe`/`ue`) immediately signal "machine-generated" and undermine credibility. Use real Unicode throughout: ae->ä oe->ö ue->ü ss->ß. German number formatting: 2.661 (dot as thousands separator).
+German web narratives go to executives and get embedded in reports. ASCII-ified umlauts (`ae`/`oe`/`ue`) immediately signal "machine-generated" and undermine credibility. Use real Unicode throughout the generated copy: ae->ä oe->ö ue->ü ss->ß. German number formatting: 2.661 (dot as thousands separator).
+
+This rule governs generated output copy only — headlines, body text, section labels, and CTA text. It does not govern filenames, slugs, or other machine identifiers, which transliterate umlauts deliberately. It also does not govern the trigger phrases in this skill's frontmatter description, where any ASCII spellings are deliberate: a user on a non-German keyboard types them that way, so respelling one silently drops German triggering coverage. Leave the frontmatter block unchanged when correcting umlauts anywhere else in this file.
 
 ---
 
@@ -254,7 +253,7 @@ For each section:
 7. Set feature-alternating positions (odd/even)
 8. Assign `section_label` (content-source-first, role-based fallback):
    - If arc_elements available: check which narrative H2 chapter content came from -> match to arc element name (content-source method). Fall back to role-based mapping for intro/synthesized content. Use localized names per `language`. See `$CLAUDE_PLUGIN_ROOT/libraries/arc-taxonomy.md` for full heuristic.
-   - If no arc_elements: use generic role-based labels (e.g., "Das Problem", "Die Losung", "Der Weg")
+   - If no arc_elements: use generic role-based labels (e.g., "Das Problem", "Die Lösung", "Der Weg")
 
 **Content checkpoint:** State section count, section types used, theme alternation pattern, any low-confidence mappings.
 

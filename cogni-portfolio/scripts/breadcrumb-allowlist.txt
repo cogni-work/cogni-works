@@ -1,0 +1,67 @@
+# Breadcrumb-guard allowlist for cogni-portfolio.
+#
+# Format: <relative-path>|<token> — one entry per line, matched on file plus
+# EXACT token (deliberately not file:line, so entries survive edits that shift
+# line numbers). Read by check-breadcrumbs.sh, which check-preflight.sh points
+# at via BREADCRUMB_ALLOWLIST.
+#
+# Every entry below is a FALSE POSITIVE, not a silenced breadcrumb. A genuine
+# maintainer breadcrumb — a citation of the issue/PR/version that motivated an
+# edit — must never be added here; scrub the prose instead. The two real ones
+# this plugin carries (`v0.9.23` and `#103`, both in portfolio-consolidate) are
+# being removed at source under #1283 rather than exempted here — until that
+# lands the guard correctly still reports them as 2 offenders.
+#
+# Two distinct misclassifications are covered.
+#
+# 1. HEX COLOURS. The guard's issue-ref pattern is `#[0-9]{2,}`, which matches
+#    the leading digits of a six-digit hex colour literal. portfolio-architecture
+#    is a diagram skill, so its readiness palette is load-bearing output — the
+#    renderer emits these values. Note the token is the pattern's match, not the
+#    full colour: `#92400e` is exempted as `#92400`, `#64748b` as `#64748`.
+#    Colours whose first two characters after `#` are not both digits
+#    (`#bbf7d0`, `#fef08a`, `#e5e7eb`, `#6b7280`, `#f8fafc`) never matched and
+#    need no entry.
+#
+# 2. CONTENT-MODEL SCHEMA GENERATIONS. `v1.0.0`–`v1.4.0` in portfolio-scan and
+#    portfolio-dashboard are `scan-output.json` schema versions, not plugin
+#    versions. The surrounding prose is compatibility documentation consumers
+#    depend on ("Consumers reading v1.2.0 or earlier must treat absent
+#    consolidation_mode as consolidate"), and the deprecation mappings are
+#    load-bearing on the tokens. Removing them would break real content.
+#
+# COLLISION SURFACE, because exemption is by exact token and not by line: an
+# entry swallows any occurrence of that literal token anywhere in that file. The
+# truncated colour tokens are five and six digits (`#92400`, `#64748`, `#166534`,
+# `#334155`) while issue numbers are four digits today, so a genuine issue
+# reference cannot collide with them. Keep citing issues in full (`#1295`).
+#
+# The class-2 tokens carry the larger and nearer-term collision surface, because
+# they are plugin-version-SHAPED: `v1.0.0`–`v1.4.0` are exempted anywhere in
+# those two files. cogni-portfolio is at 0.9.x today, so once it crosses v1.0.0
+# a genuine release breadcrumb written in portfolio-scan or portfolio-dashboard
+# would be silently swallowed — exactly the vacuous-guard failure this file
+# exists to fence off. RE-MEASURE THESE ENTRIES BEFORE THE PLUGIN CROSSES v1.0.0.
+#
+# RETIRE THE CLASS-1 ENTRIES when cogni-work/managed-service#880 lands — that
+# issue fixes the pattern upstream so it stops matching hex colours, at which
+# point those four become dead weight. The class-2 entries SURVIVE #880 (it does
+# not touch the version-tag pattern) and need the separate re-measurement above,
+# so do not delete this file wholesale on that issue landing.
+#
+# Tracked by cogni-work/insight-wave#1295.
+
+# Excalidraw readiness palette — ga / beta stroke, product stroke, metadata text.
+skills/portfolio-architecture/SKILL.md|#166534
+skills/portfolio-architecture/SKILL.md|#92400
+skills/portfolio-architecture/SKILL.md|#334155
+skills/portfolio-architecture/SKILL.md|#64748
+
+# scan-output.json schema generations cited in consumer-compatibility prose.
+skills/portfolio-dashboard/SKILL.md|v1.2.0
+skills/portfolio-dashboard/SKILL.md|v1.3.0
+skills/portfolio-scan/SKILL.md|v1.0.0
+skills/portfolio-scan/SKILL.md|v1.1.0
+skills/portfolio-scan/SKILL.md|v1.2.0
+skills/portfolio-scan/SKILL.md|v1.3.0
+skills/portfolio-scan/SKILL.md|v1.4.0

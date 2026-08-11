@@ -20,6 +20,34 @@ The preset is stored in the brief frontmatter as `style_preset`. The rendering d
 
 ---
 
+# Content Density by Style Preset
+
+Every content-density gate in the skill — the Step 5 self-check, the Step 8 validation layer,
+the Step 9 final checks — and the Block Density criterion of the Step 8b review rubric resolves
+its ceiling **here**, from the brief's active `style_preset`. This table is the only place those
+numbers are stated; the gates cite it rather than restating a figure, so adding a preset cannot
+desynchronize them.
+
+| Style Preset | Max Content Blocks | Max Word Count | Philosophy |
+|-------------|-------------------|----------------|------------|
+| sketchnote, whiteboard, editorial, data-viz, corporate | 8 | 150 | Minimal to focused — scan in 10 seconds |
+| **economist** | **14** | **250** | **Dense editorial — read in 60 seconds** |
+
+Resolve on the preset itself, not on its rendering family: `editorial`, `data-viz` and
+`corporate` are editorial-family presets but carry the *standard* budget. Only `economist` is
+dense. When `style_preset` is absent or unrecognized, fall back to the standard row (8 / 150) —
+never to the economist ceiling.
+
+The maxima above are hard ceilings. A universal floor applies to every preset: fewer than
+3 content blocks (excluding title, CTA and footer) is too sparse and fails.
+
+The **economist** preset produces magazine-density content: prose text blocks sit alongside
+stat callouts in a multi-column grid. Extract more data points from the narrative, include
+short explanatory paragraphs (2-3 sentences), and fill a 2-3 column editorial layout.
+Aim for 10-14 content blocks including 3-5 text-blocks with prose alongside the stats.
+
+---
+
 # Editorial family
 
 Rendered by `render-infographic-pencil` via Pencil MCP. The editorial family composes dense,

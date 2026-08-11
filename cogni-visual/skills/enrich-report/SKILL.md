@@ -3,19 +3,16 @@ name: enrich-report
 description: >
   Use this skill whenever the user has an existing markdown report and wants it
   transformed into a polished visual deliverable. This is the go-to skill for
-  turning any completed .md report into themed HTML with interactive Chart.js
-  charts, an infographic header, sidebar navigation, and inline SVG concept
-  diagrams — or exporting it to PDF or DOCX. Trigger for any request that
-  involves an already-written report needing visual enrichment, format
-  conversion, or presentable output: adding charts or diagrams to a report,
-  making a report look good or presentable, generating an HTML version of a
-  report, exporting a report as PDF or Word, enriching a report with
-  visualizations, or converting a text-only report into a themed deliverable.
-  Also trigger for German equivalents (Bericht visualisieren, als PDF
-  exportieren, Diagramme hinzufuegen). The key signal is that the user already
-  has a finished report file and wants to make it visual or export it — this
-  skill post-processes existing content, it never creates new reports from
-  scratch (that is cogni-trends or an upstream research run), never creates slides (that
+  turning any completed .md report into themed HTML with Chart.js charts, an
+  infographic header, sidebar navigation, and inline SVG concept diagrams — or
+  exporting it to PDF or DOCX. Trigger for any already-written report needing
+  visual enrichment, format conversion, or presentable output: adding charts or
+  diagrams, making a report look presentable, generating an HTML version, or
+  exporting it as PDF or Word. Also trigger for German equivalents (Bericht
+  visualisieren, als PDF exportieren, Diagramme hinzufuegen). The key signal: the
+  user already has a finished report and wants it visual or exported — this skill
+  post-processes existing content, it never creates new reports from
+  scratch (that is cogni-trends or upstream research), never creates slides (that
   is story-to-slides), and never rewrites prose (that is cogni-copywriting).
 ---
 
@@ -201,7 +198,7 @@ Check for rendered infographic artifacts in `{source_dir}/cogni-visual/` only (t
 - `{source_dir}/cogni-visual/infographic-preview.webp` (WebP — preferred image format, 25-35% smaller than PNG)
 - `{source_dir}/cogni-visual/infographic-preview.png` (PNG — pixel-perfect fallback)
 
-**Migration (v0.16.11):** If neither `.webp` nor `.png` is found, also check for the legacy filename `preview.png` in `{source_dir}/cogni-visual/`. If found, rename it to `infographic-preview.png` and continue.
+**Migration:** If neither `.webp` nor `.png` is found, also check for the legacy filename `preview.png` in `{source_dir}/cogni-visual/`. If found, rename it to `infographic-preview.png` and continue.
 
 1. **Rendered artifacts exist:** `{source_dir}/cogni-visual/infographic-fragment.html` OR `{source_dir}/cogni-visual/infographic-preview.webp` OR `{source_dir}/cogni-visual/infographic-preview.png`
    - If any file exists: **skip all of Phase 2a**. The infographic is already rendered.

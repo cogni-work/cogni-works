@@ -5,7 +5,7 @@ description: |
   the status of a cogni-consult engagement across sessions. Trigger on:
   "continue the engagement", "resume the engagement", "engagement status",
   "where was I with the engagement", "what's next for the engagement", "show
-  engagement progress", "consult resume", or ANY session start that references
+  engagement progress", "consult resume", or any session start that references
   an existing cogni-consult engagement — even if the user doesn't say "resume"
   explicitly. Double Diamond phrasing ("resume diamond", "diamond status",
   phase talk like "continue discover") refers to a legacy engagement model no
@@ -66,8 +66,8 @@ setup owns scaffolding and the knowledge-base binding.
 - **Multiple, and the user named one** → fuzzy-match the named name or slug
   against discovery and select it directly; confirm only when the match is
   ambiguous.
-- **Multiple, and the user named none** → you MUST output the full engagement
-  list, rendered as the table below, and STOP for the
+- **Multiple, and the user named none** → output the full engagement
+  list, rendered as the table below, and stop for the
   user's explicit choice. Never silently select or infer an engagement in this
   case. The active git branch, working-tree / uncommitted changes, and recent
   commit history are **not** authorized selection signals — they must never
@@ -112,7 +112,7 @@ splitting fields) belongs to `consult-action-fields`, not here.
 themed, browsable HTML view of the same status via `/cogni-consult:consult-dashboard`
 (action-field WBS, deliverable states, design-thinking stages, persona-review
 coverage). When the engagement already has `output/design-variables.json` from a
-prior dashboard run, you can regenerate and open it without a theme prompt by
+prior dashboard run, regenerate and open it without a theme prompt by
 delegating to the `consult-dashboard-refresher` agent with
 `engagement_dir: <engagement-dir>` and `plugin_root: $CLAUDE_PLUGIN_ROOT`. This
 stays read-only — the agent runs the read-only generator; it never edits

@@ -1,8 +1,7 @@
 ---
 name: story-to-slides
 description: >
-  Transform any narrative (insight summary, trend report, strategy document, sales pitch,
-  project update) into an optimized multi-slide presentation brief that the PPTX skill
+  Transform any narrative into an optimized multi-slide presentation brief that the PPTX skill
   renders into PowerPoint. Use this skill whenever the user mentions "presentation",
   "slide deck", "slides", "PowerPoint", "Foliensatz", "Praesentation erstellen",
   "Folien aus Bericht", "pitch deck", "create slides from report", or wants to convert
@@ -11,11 +10,9 @@ description: >
   Covers Why Change projects, research reports, competitive intelligence, trend panoramas,
   and both English and German output. Produces a presentation-brief.md (v4.0) that the
   PPTX agent renders. Important: this skill CREATES the brief from a narrative source —
-  it does NOT render an existing brief (use PPTX skill for that), does NOT create a
-  a web page
+  it does NOT render an existing brief (use PPTX skill for that), does NOT create a web page
   (use story-to-web), and does NOT enhance prose (use Copywriter skill).
-allowed-tools: Read, Write, Edit, Bash, Grep, Glob, AskUserQuestion, Agent
-version: 1.0.0
+allowed-tools: Read, Write, Edit, Bash, Grep, Glob, AskUserQuestion, Agent, Skill
 ---
 
 # Story-to-Slides Skill
@@ -93,7 +90,9 @@ On empty or blank responses, auto-select the best option and move on. When `inte
 
 ### German fidelity
 
-German presentations go to executives. ASCII-ified umlauts (`ae`/`oe`/`ue`) immediately signal "machine-generated" and undermine credibility. Use real Unicode throughout: ae→ä oe→ö ue→ü ss→ß. German number formatting: 2.661 (dot as thousands separator).
+German presentations go to executives. ASCII-ified umlauts (`ae`/`oe`/`ue`) immediately signal "machine-generated" and undermine credibility. Use real Unicode throughout the generated copy: ae→ä oe→ö ue→ü ss→ß. German number formatting: 2.661 (dot as thousands separator).
+
+This rule governs generated output copy only — headlines, body text, section labels, and CTA text. It does not govern filenames, slugs, or other machine identifiers, which transliterate umlauts deliberately. It also does not govern the trigger phrases in this skill's frontmatter description, where any ASCII spellings are deliberate: a user on a non-German keyboard types them that way, so respelling one silently drops German triggering coverage. Leave the frontmatter block unchanged when correcting umlauts anywhere else in this file.
 
 ### Client-facing copy hygiene
 

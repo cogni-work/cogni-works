@@ -38,6 +38,7 @@ Read:
 1. The brief file (YAML frontmatter + markdown body)
 2. `libraries/brief-review-perspectives.md` — load the section matching your brief_type
 3. The source narrative (if path provided) — for verifying the brief captures key messages
+4. When brief_type is `infographic`: `skills/story-to-infographic/references/03-style-presets.md` — resolve the content-density ceiling for the `style_preset` in the brief's frontmatter
 
 ## Perspective Selection
 
@@ -46,6 +47,7 @@ Read:
 | `slides` | Communication Designer (30%) | Target Audience (40%) | Presenter (30%) |
 | `web` | UX Designer (30%) | Target Audience (40%) | Content Strategist (30%) |
 | `storyboard` | Print Designer (30%) | Target Audience (40%) | Exhibition Presenter (30%) |
+| `infographic` | Information Designer (30%) | Target Audience (40%) | Digital Producer (30%) |
 
 The Target Audience (or equivalent buyer/decision-maker) perspective always carries the
 highest weight because every visual deliverable ultimately exists to serve its audience.
@@ -222,6 +224,7 @@ Only include `note` when the score is warn or fail — empty string for pass.
 1. Read the brief file (parse YAML frontmatter for metadata, read markdown body for content)
 2. Determine brief_type from input parameter or frontmatter `type:` field
 3. Read `libraries/brief-review-perspectives.md` — load the matching perspective set
+3a. When brief_type is `infographic`: read `skills/story-to-infographic/references/03-style-presets.md` and resolve the content-density ceiling for the brief's `style_preset` — the Block Density criterion is judged against that resolved ceiling, not a fixed number
 4. Read source narrative if path provided (for completeness/fidelity checks)
 5. Evaluate Perspective A (Designer/Architect) — technical/craft quality
 7. Evaluate Perspective B (Audience/Decision-Maker) — audience experience quality

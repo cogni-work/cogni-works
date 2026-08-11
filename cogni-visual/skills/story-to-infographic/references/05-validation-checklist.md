@@ -26,12 +26,16 @@ Structural correctness. Every field must exist and conform to its type.
 
 ## Layer 2: Content Density
 
-Infographics fail when they're overloaded. These limits are derived from the 10-second scan test.
+Infographics fail when they're overloaded. The first two limits derive from the active
+`style_preset`'s scan/read target — a 10-second scan for the standard presets, a 60-second
+read for `economist` — so both resolve from the Content Density table in
+`03-style-presets.md`. Every remaining row is a fixed per-block-type cap that does not vary
+by preset.
 
 | Check | Pass | Fail |
 |-------|------|------|
-| Content block count | 3-8 blocks (excluding title, CTA, footer) | < 3 (too sparse) or > 8 (overloaded) |
-| Total word count | Under 150 words across all blocks | Over 150 words |
+| Content block count | At least 3 blocks and within the active `style_preset`'s max (Content Density table, `03-style-presets.md`), excluding title, CTA, footer | < 3 (too sparse) or over the preset's max (overloaded) |
+| Total word count | Within the active `style_preset`'s max word count (Content Density table) | Over the preset's max |
 | KPI card word limit | Each kpi-card <= 15 words (excl. number and source) | Any kpi-card over 15 words |
 | Text block body limit | Each text-block body <= 40 words | Any body over 40 words |
 | Text block headline limit | Each text-block headline <= 8 words | Any headline over 8 words |
@@ -85,5 +89,5 @@ The hardest layer — it evaluates whether the distillation was effective, not j
 Report validation results as a summary:
 ```
 Validation: Layer 1 ✓ | Layer 2 ✓ | Layer 3 ✓ | Layer 4 ✓
-Content blocks: 6/8 max | Words: 87/150 max | Charts: 1/2 max
+Content blocks: 6/{preset max} | Words: 87/{preset max} | Charts: 1/2 max
 ```

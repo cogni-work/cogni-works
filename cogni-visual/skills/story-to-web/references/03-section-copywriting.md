@@ -16,7 +16,7 @@ Web headlines follow a different hierarchy than slides. Prioritize transformatio
 
 1. **Transformation** — What changes for the reader ("Ihre Fertigung wird unaufhaltsam")
 2. **Outcome** — What they achieve ("73% weniger Stillstand")
-3. **Benefit** — What they gain ("Kosten senken, Qualitat steigern")
+3. **Benefit** — What they gain ("Kosten senken, Qualität steigern")
 
 ### Headline Rules
 
@@ -24,10 +24,10 @@ Web headlines follow a different hierarchy than slides. Prioritize transformatio
 |------|-----------|---------|
 | Must be assertion | Contains a verb | "Sensoren lesen den Maschinenzustand" |
 | Max length | 70 characters | Longer than slides (60) for web readability |
-| No topic labels | Never "Uberblick", "Zusammenfassung" | Use the assertion instead |
+| No topic labels | Never "Überblick", "Zusammenfassung" | Use the assertion instead |
 | Hero headline | Transformation-first, 10 words max | "Predictive Maintenance macht Ihre Fertigung unaufhaltsam" |
-| Section headline | Outcome or benefit, 12 words max | "23 Tage Stillstand kosten Ihre Wettbewerbsfahigkeit" |
-| Card headline | Feature-focused, 6 words max | "Echtzeit-Zustandsuberwachung" |
+| Section headline | Outcome or benefit, 12 words max | "23 Tage Stillstand kosten Ihre Wettbewerbsfähigkeit" |
+| Card headline | Feature-focused, 6 words max | "Echtzeit-Zustandsüberwachung" |
 
 ### Headline Reasoning Process
 
@@ -49,7 +49,7 @@ REASON through headline construction for each section:
        → Example: "73% weniger Stillstand in der Pilotlinie bewiesen"
      → Does it describe a BENEFIT? (what they gain)
        → Lead with what improves: "Kosten senken..."
-       → Example: "Kosten senken, Qualitat steigern — in einem Schritt"
+       → Example: "Kosten senken, Qualität steigern — in einem Schritt"
      → RULE: Never fall below the benefit level to a topic label.
        A topic label means you have not yet distilled the message.
 
@@ -57,18 +57,18 @@ REASON through headline construction for each section:
      → Scan the narrative section for the most impactful statistic
      → Weave it naturally into the headline:
        ✗ "Die Situation im Maschinenbau" (topic label — no verb, no number)
-       ✓ "23 Tage Stillstand kosten Ihre Wettbewerbsfahigkeit" (number + verb + consequence)
+       ✓ "23 Tage Stillstand kosten Ihre Wettbewerbsfähigkeit" (number + verb + consequence)
      → If no number exists: use a strong verb + specific claim instead
-       ✗ "Unsere Losung" (vague label)
+       ✗ "Unsere Lösung" (vague label)
        ✓ "Sensoren lesen den Maschinenzustand in Echtzeit" (specific + active)
 
   4. ACTIVATE the verb
      → Web readers scan faster than slide audiences — passive voice loses them
      → Test: Is the subject DOING something?
-       ✗ "Stillstande werden reduziert" (passive — by whom?)
-       ✓ "Predictive Maintenance senkt Stillstande um 73%" (active — PM does the work)
+       ✗ "Stillstände werden reduziert" (passive — by whom?)
+       ✓ "Predictive Maintenance senkt Stillstände um 73%" (active — PM does the work)
      → Test: Is there a verb at all?
-       ✗ "Predictive Maintenance fur den Maschinenbau" (noun phrase — no claim)
+       ✗ "Predictive Maintenance für den Maschinenbau" (noun phrase — no claim)
        ✓ "Predictive Maintenance macht Ihre Fertigung unaufhaltsam" (verb: macht)
 
   5. CHECK the character limit
@@ -92,7 +92,7 @@ For each section type:
 | Section Type | Formula | Example |
 |-------------|---------|---------|
 | hero | {Transformation verb} + {audience benefit} | "Predictive Maintenance macht Ihre Fertigung unaufhaltsam" |
-| problem-statement | {Number} + {negative consequence} | "23 Tage Stillstand kosten Ihre Wettbewerbsfahigkeit" |
+| problem-statement | {Number} + {negative consequence} | "23 Tage Stillstand kosten Ihre Wettbewerbsfähigkeit" |
 | stat-row | {Count} + {plural noun} + {verb} + {object} | "Drei Krisen treffen den Maschinenbau gleichzeitig" |
 | feature-alternating | {Subject} + {action verb} + {benefit} | "Sensoren lesen den Maschinenzustand in Echtzeit" |
 | comparison | {Number}% + {improvement} + {proof qualifier} | "73% weniger Stillstand in der Pilotlinie bewiesen" |
@@ -105,13 +105,13 @@ These are common mistakes. If you catch yourself writing any of these, STOP and 
 
 | Anti-Pattern | Why It Fails | Fix |
 |-------------|-------------|-----|
-| Topic label: "Uberblick" / "Overview" | No claim, no verb, no reason to stop scrolling | Rewrite as assertion: "{Subject} {verb} {outcome}" |
-| Topic label: "Unsere Losung" / "Our Solution" | Tells the reader nothing about WHAT the solution does | Lead with the capability: "Sensoren lesen den Maschinenzustand" |
+| Topic label: "Überblick" / "Overview" | No claim, no verb, no reason to stop scrolling | Rewrite as assertion: "{Subject} {verb} {outcome}" |
+| Topic label: "Unsere Lösung" / "Our Solution" | Tells the reader nothing about WHAT the solution does | Lead with the capability: "Sensoren lesen den Maschinenzustand" |
 | Topic label: "Zusammenfassung" / "Key Findings" | Reader already forgot what they read — headline must remind them | State the conclusion: "73% weniger Stillstand bewiesen" |
-| Passive voice: "Stillstande werden durch KI reduziert" | Buries the actor, weakens the claim | Active: "KI reduziert Stillstande um 73%" |
+| Passive voice: "Stillstände werden durch KI reduziert" | Buries the actor, weakens the claim | Active: "KI reduziert Stillstände um 73%" |
 | No verb: "Predictive Maintenance im Maschinenbau" | Description, not a claim — readers scroll past | Add the verb: "Predictive Maintenance senkt Ihre Ausfallzeiten" |
-| Buzzword soup: "Innovative KI-gestutzte digitale Transformation" | Empty words, no specific claim | Replace with concrete result: "KI erkennt Verschleiss 14 Tage vor dem Ausfall" |
-| Too long: "Durch den Einsatz modernster Sensortechnologie und kunstlicher Intelligenz lassen sich ungeplante Maschinenstillstande drastisch reduzieren" (120 chars) | Exceeds 70-char limit, unreadable on mobile | Trim to core: "Sensoren und KI senken Stillstande um 73%" (43 chars) |
+| Buzzword soup: "Innovative KI-gestützte digitale Transformation" | Empty words, no specific claim | Replace with concrete result: "KI erkennt Verschleiß 14 Tage vor dem Ausfall" |
+| Too long: "Durch den Einsatz modernster Sensortechnologie und künstlicher Intelligenz lassen sich ungeplante Maschinenstillstände drastisch reduzieren" (120 chars) | Exceeds 70-char limit, unreadable on mobile | Trim to core: "Sensoren und KI senken Stillstände um 73%" (43 chars) |
 
 ---
 
@@ -136,7 +136,7 @@ The CTA subline should reduce friction:
 "{Value proposition} in {low-commitment action}."
 
 Examples:
-- "Berechnen Sie Ihr Einsparpotenzial in einem kostenlosen 30-Minuten-Gesprach."
+- "Berechnen Sie Ihr Einsparpotenzial in einem kostenlosen 30-Minuten-Gespräch."
 - "Sehen Sie die Plattform in einer personalisierten 20-Minuten-Demo."
 ```
 
@@ -147,7 +147,7 @@ Examples:
 | Vague CTA: "Mehr erfahren" / "Learn More" | No specific action, low conversion intent | Use goal-specific text: "Beratung anfragen" |
 | Aggressive CTA: "Jetzt kaufen" when conversion_goal is `consultation` | Mismatches the funnel stage, creates friction | Match the goal: "Beratung anfragen" |
 | Long CTA button text: "Fordern Sie jetzt Ihre kostenlose Beratung an" | Button text must be scannable — 2-3 words max | Shorten: "Beratung anfragen" |
-| No friction reducer in subline: "Kontaktieren Sie uns" (no time/commitment info) | Reader imagines worst case (long sales call) | Add specifics: "in einem kostenlosen 30-Minuten-Gesprach" |
+| No friction reducer in subline: "Kontaktieren Sie uns" (no time/commitment info) | Reader imagines worst case (long sales call) | Add specifics: "in einem kostenlosen 30-Minuten-Gespräch" |
 
 ---
 
@@ -171,7 +171,7 @@ REASON through body text for each section:
 
   1. ASK: "What does the reader need AFTER reading the headline?"
      → If the headline has a NUMBER → body explains the context behind the number
-       Headline: "23 Tage Stillstand kosten Ihre Wettbewerbsfahigkeit"
+       Headline: "23 Tage Stillstand kosten Ihre Wettbewerbsfähigkeit"
        Body: explains what causes 23 days, what it costs per day, who is affected
      → If the headline has a TRANSFORMATION → body explains how it works
        Headline: "Sensoren lesen den Maschinenzustand in Echtzeit"
@@ -188,8 +188,8 @@ REASON through body text for each section:
   3. CHECK for parallel bullet structure (where bullets exist)
      → All bullets must follow the same grammatical pattern
      → Choose ONE form: verb-first, number-first, or noun-first
-       ✗ Mixed: "38.000 EUR Kosten" / "Erkennt Verschleiss zu spat" / "Lieferketten"
-       ✓ Parallel: "38.000 EUR pro Stillstandstag" / "14 Tage zu spate Erkennung" / "72h Ersatzteil-Lieferzeit"
+       ✗ Mixed: "38.000 EUR Kosten" / "Erkennt Verschleiß zu spät" / "Lieferketten"
+       ✓ Parallel: "38.000 EUR pro Stillstandstag" / "14 Tage zu späte Erkennung" / "72h Ersatzteil-Lieferzeit"
 ```
 
 ### Body Text Anti-Patterns
@@ -264,7 +264,7 @@ REASON through number play selection for each section:
        → This works in comparison sections
 
      → Per-unit cost that accumulates?
-       → MULTIPLIER: "38.000 EUR/Tag x 23 Tage" -> "874.000 EUR jahrliche Kosten"
+       → MULTIPLIER: "38.000 EUR/Tag x 23 Tage" -> "874.000 EUR jährliche Kosten"
        → This works when the total is more shocking than the daily cost
 
      → Duration or timeline?
@@ -286,7 +286,7 @@ REASON through number play selection for each section:
 | Ratio framing | "20% of complaints" | "1:5" + "Reklamationen" | When ratio is more visceral than percentage |
 | Before/after contrast | "23 days -> 6 days" | Left: "23 Tage" / Right: "6 Tage (-73%)" | Comparison sections |
 | Time compression | "12 weeks implementation" | "12 Wochen" (timeline hero) | Timeline/roadmap sections |
-| Multiplier | "38,000 per day x 23 days" | "874.000 EUR" + "jahrliche Stillstandskosten" | When total is more shocking |
+| Multiplier | "38,000 per day x 23 days" | "874.000 EUR" + "jährliche Stillstandskosten" | When total is more shocking |
 
 ### Number Play Decision Matrix
 
@@ -295,7 +295,7 @@ REASON through number play selection for each section:
 | Single large count | Hero isolation | problem-statement, stat-row | "23" + "Tage Stillstand/Jahr" |
 | Percentage < 50% (risk) | Ratio framing | stat-row | "1:5" + "Reklamationen" |
 | Before/after metric | B/A contrast | comparison | "23 Tage" vs "6 Tage (-73%)" |
-| Per-unit cost | Multiplier | problem-statement | "874.000 EUR jahrliche Kosten" |
+| Per-unit cost | Multiplier | problem-statement | "874.000 EUR jährliche Kosten" |
 | Duration | Time compression | timeline | "12 Wochen" |
 | Percentage > 50% (improvement) | Hero isolation | comparison, stat-row | "73%" + "weniger Stillstand" |
 | Multiple related stats | Stat row | stat-row (3-4 cards) | Three crisis dimensions side by side |
@@ -336,7 +336,7 @@ Each section can have a small uppercase label above the headline:
 | hook | (none — hero has no label, or use topic) | (none) |
 | problem | "Das Problem" | "The Problem" |
 | urgency | "Warum jetzt" | "Why Now" |
-| solution | "Die Losung" / "Der Ansatz" | "The Solution" / "Our Approach" |
+| solution | "Die Lösung" / "Der Ansatz" | "The Solution" / "Our Approach" |
 | proof | "Bewiesene Ergebnisse" | "Proven Results" |
 | roadmap | "Der Weg" | "The Path" |
 | call-to-action | (none — CTA has no label) | (none) |
@@ -349,19 +349,17 @@ Labels are optional. Use them when the narrative structure benefits from explici
 
 ### German (DE) Patterns
 
-> **Note on examples:** German examples throughout this file use ASCII-safe simplified umlauts (e.g., "Losung" instead of "Lösung", "Uberwachung" instead of "Überwachung") for rendering compatibility in code blocks and YAML. Production briefs should preserve proper umlauts where the rendering system supports them.
-
 German web copy differs from English in structure, compound nouns, and formal address:
 
 | Aspect | Guidance | Example |
 |--------|----------|---------|
 | Formal address | Use "Sie" (formal you) in all headlines and body text | "Ihre Fertigung", "Starten Sie..." |
-| Compound nouns | German forms single compound words — use them for concise headlines | "Echtzeit-Zustandsuberwachung" (not "Uberwachung des Zustands in Echtzeit") |
+| Compound nouns | German forms single compound words — use them for concise headlines | "Echtzeit-Zustandsüberwachung" (not "Überwachung des Zustands in Echtzeit") |
 | Verb position | In assertions, the verb often comes second (V2 rule) | "Sensoren lesen den Maschinenzustand" |
 | Imperative | Formal imperative uses "Sie" after the verb | "Starten Sie Ihren Piloten" (not "Starten Ihren Piloten") |
 | Number formatting | Period for thousands, comma for decimals | "38.000 EUR", "73,5%" |
-| Umlaut handling | Preserve umlauts where possible, accept simplified forms in generated code | "Losung" is acceptable when "Loesung" would break rendering |
-| Article usage | German headlines often include articles where English drops them | DE: "Die Losung fur Ihre Fertigung" / EN: "Solution for Your Production" |
+| Umlaut handling | Always use real Unicode umlauts in German copy — briefs, code blocks and renderers are UTF-8 end to end | "Die Lösung", "Echtzeit-Zustandsüberwachung", "Verschleiß" |
+| Article usage | German headlines often include articles where English drops them | DE: "Die Lösung für Ihre Fertigung" / EN: "Solution for Your Production" |
 
 ### English (EN) Patterns
 
@@ -377,7 +375,7 @@ German web copy differs from English in structure, compound nouns, and formal ad
 | Pitfall | Example | Fix |
 |---------|---------|-----|
 | Mixing languages within a section | DE headline + EN body text | All text in one section must be the same language |
-| English calques in German | "in Echtzeit monitoren" (Denglisch) | Use German verbs: "in Echtzeit uberwachen" |
+| English calques in German | "in Echtzeit monitoren" (Denglisch) | Use German verbs: "in Echtzeit überwachen" |
 | German sentence structure in English | "The downtime can by AI reduced be" (V2 bleed) | English word order: "AI can reduce the downtime" |
 | Wrong number format for language | DE: "38,000" or EN: "38.000" | DE: "38.000" / EN: "38,000" |
 | Missing formal address in German | "Starte deinen Piloten" (informal du) | "Starten Sie Ihren Piloten" (formal Sie) |
@@ -401,7 +399,7 @@ From source narrative (role: problem):
   "Der deutsche Maschinenbau-Mittelstand verzeichnet im Durchschnitt 23 Tage
    ungeplanten Stillstand pro CNC-Anlage und Jahr. Dies entspricht Kosten von
    rund 38.000 Euro pro Stillstandstag. Manuelle Wartungszyklen erkennen
-   Verschleissmuster erst nach dem Ausfall. Hinzu kommen Ersatzteil-Lieferketten
+   Verschleißmuster erst nach dem Ausfall. Hinzu kommen Ersatzteil-Lieferketten
    mit durchschnittlich 72 Stunden Lieferzeit bei Notbestellungen. Insgesamt
    wurden 2.800 Betriebe befragt."
 
@@ -418,20 +416,20 @@ STEP A: HEADLINE REASONING
 
   3. INJECT number:
      → Most impactful number: 23 (days — tangible, relatable)
-     → Weave into headline: "23 Tage Stillstand kosten Ihre Wettbewerbsfahigkeit"
+     → Weave into headline: "23 Tage Stillstand kosten Ihre Wettbewerbsfähigkeit"
 
   4. ACTIVATE verb:
      → "kosten" is active — downtime does the costing ✓
-     → Subject (23 Tage Stillstand) is doing something (kosten) to the reader (Ihre Wettbewerbsfahigkeit) ✓
+     → Subject (23 Tage Stillstand) is doing something (kosten) to the reader (Ihre Wettbewerbsfähigkeit) ✓
 
   5. CHECK length:
-     → "23 Tage Stillstand kosten Ihre Wettbewerbsfahigkeit" = 52 chars ✓ (under 70)
+     → "23 Tage Stillstand kosten Ihre Wettbewerbsfähigkeit" = 52 chars ✓ (under 70)
 
   6. VERIFY standalone:
      → Reading only the headline — does the reader understand the problem? YES ✓
      → The reader knows: downtime exists (23 days), it hurts (costs competitiveness)
 
-  HEADLINE: "23 Tage Stillstand kosten Ihre Wettbewerbsfahigkeit"
+  HEADLINE: "23 Tage Stillstand kosten Ihre Wettbewerbsfähigkeit"
 
 =============================================
 STEP B: NUMBER PLAY REASONING
@@ -462,7 +460,7 @@ STEP B: NUMBER PLAY REASONING
      → 23 is from a VDMA study of 2.800 companies — verified average ✓
      → No distortion ✓
 
-  HERO: 23 / LABEL: "Tage Stillstand pro Anlage/Jahr" / CONTEXT: "Durchschnitt uber 2.800 befragte Betriebe"
+  HERO: 23 / LABEL: "Tage Stillstand pro Anlage/Jahr" / CONTEXT: "Durchschnitt über 2.800 befragte Betriebe"
 
 =============================================
 STEP C: BODY TEXT + BULLETS
@@ -473,7 +471,7 @@ STEP C: BODY TEXT + BULLETS
 
   2. WRITE body (50 words max):
      "Jede CNC-Anlage im deutschen Mittelstand steht durchschnittlich 23 Tage
-      pro Jahr ungeplant still. Manuelle Wartungszyklen erkennen Verschleiss
+      pro Jahr ungeplant still. Manuelle Wartungszyklen erkennen Verschleiß
       erst nach dem Ausfall — und kosten 38.000 Euro pro Stillstandstag."
      → Word count: 30 ✓ (under 50)
      → Supports headline: explains the 23 days + adds the cost dimension
@@ -481,35 +479,35 @@ STEP C: BODY TEXT + BULLETS
   3. WRITE bullets (parallel structure, 8 words max each):
      → Choose FORM: number-first (to reinforce data-driven problem section)
      → "38.000 EUR Kosten pro Stillstandstag" (5 words) ✓
-     → "Manuelle Wartung erkennt Verschleiss zu spat" (6 words) ✓
-     → "Ersatzteil-Lieferketten verstarken den Effekt" (5 words) ✓
+     → "Manuelle Wartung erkennt Verschleiß zu spät" (6 words) ✓
+     → "Ersatzteil-Lieferketten verstärken den Effekt" (5 words) ✓
      → All noun/number-first ✓, all under 8 words ✓
 
 =============================================
 OUTPUT: COMPLETE SECTION SPECIFICATION
 =============================================
 
-  ## Section 2: 23 Tage Stillstand kosten Ihre Wettbewerbsfahigkeit
+  ## Section 2: 23 Tage Stillstand kosten Ihre Wettbewerbsfähigkeit
 
   type: problem-statement
   section_theme: light
   arc_role: problem
 
   section_label: "Das Problem"
-  headline: "23 Tage Stillstand kosten Ihre Wettbewerbsfahigkeit"
+  headline: "23 Tage Stillstand kosten Ihre Wettbewerbsfähigkeit"
   body: |
     Jede CNC-Anlage im deutschen Mittelstand steht durchschnittlich 23 Tage
-    pro Jahr ungeplant still. Manuelle Wartungszyklen erkennen Verschleiss
+    pro Jahr ungeplant still. Manuelle Wartungszyklen erkennen Verschleiß
     erst nach dem Ausfall — und kosten 38.000 Euro pro Stillstandstag.
 
   stat_number: "23"
   stat_label: "Tage Stillstand pro Anlage/Jahr"
-  stat_context: "Durchschnitt uber 2.800 befragte Betriebe"
+  stat_context: "Durchschnitt über 2.800 befragte Betriebe"
 
   bullets:
     - "38.000 EUR Kosten pro Stillstandstag"
-    - "Manuelle Wartung erkennt Verschleiss zu spat"
-    - "Ersatzteil-Lieferketten verstarken den Effekt"
+    - "Manuelle Wartung erkennt Verschleiß zu spät"
+    - "Ersatzteil-Lieferketten verstärken den Effekt"
 
   source: "[VDMA Produktionsausfallstudie 2025](https://www.vdma.org/produktionsausfall-studie)"
 ```
@@ -522,10 +520,10 @@ INPUT: Narrative excerpt (urgency section, DE)
 =============================================
 
   "Der Maschinenbau steht vor drei gleichzeitigen Krisen: Erstens fehlen laut
-   IAB-Prognose bis 2028 rund 64.000 Fachkrafte. Zweitens fuhrt die schleichende
-   Qualitatsdrift dazu, dass jede funfte Reklamation auf ungeplante Maschinenstillstande
-   zuruckgeht. Drittens liegt der Instandhaltungskosten-Anteil bei 41% der
-   Gesamtbetriebskosten — deutlich uber dem europaischen Durchschnitt von 28%."
+   IAB-Prognose bis 2028 rund 64.000 Fachkräfte. Zweitens führt die schleichende
+   Qualitätsdrift dazu, dass jede fünfte Reklamation auf ungeplante Maschinenstillstände
+   zurückgeht. Drittens liegt der Instandhaltungskosten-Anteil bei 41% der
+   Gesamtbetriebskosten — deutlich über dem europäischen Durchschnitt von 28%."
 
 =============================================
 REASONING
@@ -543,14 +541,14 @@ REASONING
 
   3. NUMBER PLAY per card:
 
-     Card 1: 64.000 fehlende Fachkrafte
+     Card 1: 64.000 fehlende Fachkräfte
      → Technique: HERO ISOLATION (large absolute number creates urgency)
-     → stat_number: "64.000" / stat_label: "fehlende Fachkrafte bis 2028"
+     → stat_number: "64.000" / stat_label: "fehlende Fachkräfte bis 2028"
      → NOT using ratio framing — 64.000 as an absolute count is already alarming
 
-     Card 2: Jede funfte Reklamation
+     Card 2: Jede fünfte Reklamation
      → Technique: RATIO FRAMING ("20%" -> "1:5")
-     → stat_number: "1:5" / stat_label: "Reklamationen durch Qualitatsdrift"
+     → stat_number: "1:5" / stat_label: "Reklamationen durch Qualitätsdrift"
      → WHY ratio over percentage: "1 in 5" feels personal — any complaint could be next
      → "20% Reklamationsquote" is abstract; "1:5" is visceral
 
@@ -580,10 +578,10 @@ OUTPUT: COMPLETE SECTION SPECIFICATION
 
   stats:
     - number: "64.000"
-      label: "fehlende Fachkrafte bis 2028"
+      label: "fehlende Fachkräfte bis 2028"
       icon: "users"
     - number: "1:5"
-      label: "Reklamationen durch Qualitatsdrift"
+      label: "Reklamationen durch Qualitätsdrift"
       icon: "trending-down"
     - number: "41%"
       label: "Instandhaltungskosten-Anteil"

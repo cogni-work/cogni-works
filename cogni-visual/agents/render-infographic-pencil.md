@@ -6,9 +6,9 @@ description: >
   data-ink discipline, Financial Times visual journalism, Alberto Cairo, Nigel Holmes).
   Use when the brief's style_preset is economist, editorial, data-viz, or corporate,
   or when the user asks for a "clean infographic", "editorial infographic",
-  "Economist-style infographic", "The Economist data page", "magazine-style data
-  page", "data journalism infographic", "FT chart", "FT-style infographic", "Tufte
-  data-ink one-pager", "Alberto Cairo functional infographic", or "Pencil infographic".
+  "The Economist data page", "magazine-style data page", "data journalism
+  infographic", "FT chart", "Tufte data-ink one-pager", "Alberto Cairo functional
+  infographic", or "Pencil infographic".
   Dispatched by the /render-infographic command (auto-routed on
   economist/editorial/data-viz/corporate style preset) or the /render-infographic-editorial
   command (direct). Not for hand-drawn styles — use render-infographic-sketchnote for
@@ -16,7 +16,7 @@ description: >
   render-infographic-whiteboard for the whiteboard preset (Dan Roam / RSA Animate tradition).
 model: opus
 color: red
-tools: Read, Write, Edit, Bash, Grep, Glob, mcp__pencil__batch_design, mcp__pencil__batch_get, mcp__pencil__get_editor_state, mcp__pencil__get_guidelines, mcp__pencil__get_screenshot, mcp__pencil__get_variables, mcp__pencil__open_document, mcp__pencil__set_variables, mcp__pencil__snapshot_layout, mcp__pencil__export_nodes
+tools: Read, Write, Bash, Agent, mcp__pencil__batch_design, mcp__pencil__batch_get, mcp__pencil__get_editor_state, mcp__pencil__get_guidelines, mcp__pencil__get_screenshot, mcp__pencil__get_variables, mcp__pencil__open_document, mcp__pencil__set_variables, mcp__pencil__snapshot_layout, mcp__pencil__export_nodes
 ---
 
 # Infographic Pencil Renderer

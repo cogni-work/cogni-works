@@ -9,7 +9,7 @@ language: "de"
 generated: "2026-02-26"
 arc_type: "why-change"
 arc_id: "industry-transformation"
-governing_thought: "Predictive Maintenance senkt ungeplante Stillstande um 73% und macht den Maschinenbau fit fur die nachste Dekade."
+governing_thought: "Predictive Maintenance senkt ungeplante Stillstände um 73% und macht den Maschinenbau fit für die nächste Dekade."
 confidence_score: 0.89
 style_guide: "Corporate Tech"
 conversion_goal: "consultation"
@@ -24,7 +24,7 @@ transformation_notes: |
 
 # Web Narrative Brief: Predictive Maintenance im Maschinenbau
 
-Predictive Maintenance senkt ungeplante Stillstande um 73% und macht den Maschinenbau fit fur die nachste Dekade.
+Predictive Maintenance senkt ungeplante Stillstände um 73% und macht den Maschinenbau fit für die nächste Dekade.
 
 ---
 
@@ -45,7 +45,7 @@ section_theme: dark
 arc_role: hook
 
 headline: "Predictive Maintenance macht Ihre Fertigung unaufhaltsam"
-subline: "Senken Sie ungeplante Stillstande um 73% — mit KI-gestutzter Zustandsuberwachung fur den Maschinenbau."
+subline: "Senken Sie ungeplante Stillstände um 73% — mit KI-gestützter Zustandsüberwachung für den Maschinenbau."
 section_label: ""
 cta_text: "Jetzt Potenzial berechnen"
 
@@ -59,7 +59,7 @@ image_prompt: |
 
 ---
 
-## Section 2: 23 Tage Stillstand kosten Ihre Wettbewerbsfahigkeit
+## Section 2: 23 Tage Stillstand kosten Ihre Wettbewerbsfähigkeit
 
 ```yaml
 type: problem-statement
@@ -67,20 +67,20 @@ section_theme: light
 arc_role: problem
 
 section_label: "Kräfte"
-headline: "23 Tage Stillstand kosten Ihre Wettbewerbsfahigkeit"
+headline: "23 Tage Stillstand kosten Ihre Wettbewerbsfähigkeit"
 body: |
   Jede CNC-Anlage im deutschen Mittelstand steht durchschnittlich 23 Tage
-  pro Jahr ungeplant still. Manuelle Wartungszyklen erkennen Verschleiss
+  pro Jahr ungeplant still. Manuelle Wartungszyklen erkennen Verschleiß
   erst nach dem Ausfall — und kosten 38.000 Euro pro Stillstandstag.
 
 stat_number: "23"
 stat_label: "Tage Stillstand pro Anlage/Jahr"
-stat_context: "Durchschnitt uber 2.800 befragte Betriebe"
+stat_context: "Durchschnitt über 2.800 befragte Betriebe"
 
 bullets:
   - "38.000 EUR Kosten pro Stillstandstag"
-  - "Manuelle Wartung erkennt Verschleiss zu spat"
-  - "Ersatzteil-Lieferketten verstarken den Effekt"
+  - "Manuelle Wartung erkennt Verschleiß zu spät"
+  - "Ersatzteil-Lieferketten verstärken den Effekt"
 
 cta:
   text: "Ihre Stillstandskosten berechnen"
@@ -104,10 +104,10 @@ headline: "Drei Krisen treffen den Maschinenbau gleichzeitig"
 
 stats:
   - number: "64.000"
-    label: "fehlende Fachkrafte bis 2028"
+    label: "fehlende Fachkräfte bis 2028"
     icon: "users"
   - number: "1:5"
-    label: "Reklamationen durch Qualitatsdrift"
+    label: "Reklamationen durch Qualitätsdrift"
     icon: "trending-down"
   - number: "41%"
     label: "Instandhaltungskosten-Anteil"
@@ -128,7 +128,7 @@ section_label: "Evolution"
 headline: "Sensoren lesen den Maschinenzustand in Echtzeit"
 body: |
   Vibrationssensoren an Spindel, Vorschub und Lager erfassen den
-  Maschinenzustand 500-mal pro Sekunde. Edge-KI erkennt Verschleissmuster
+  Maschinenzustand 500-mal pro Sekunde. Edge-KI erkennt Verschleißmuster
   14 Tage vor dem Ausfall — und gibt Ihrem Team Zeit zu handeln.
 
 image_prompt: |
@@ -161,7 +161,7 @@ headline: "KI-Training auf Ihren historischen Daten beschleunigt den ROI"
 body: |
   Unsere Modelle lernen aus Ihren eigenen Maschinen- und Wartungsdaten.
   Kein generisches Modell von der Stange — sondern KI, die Ihre
-  spezifischen Verschleissmuster kennt und immer praziser wird.
+  spezifischen Verschleißmuster kennt und immer präziser wird.
 
 image_prompt: |
   Abstract visualization of machine learning data flow, neural network
@@ -189,7 +189,7 @@ left_bullets:
   - "23 Tage ungeplanter Stillstand/Jahr"
   - "Reaktive Fehlersuche nach Ausfall"
   - "Hohe Ersatzteil-Notbestellkosten"
-  - "Qualitatsabweichung erst bei Endkontrolle"
+  - "Qualitätsabweichung erst bei Endkontrolle"
 
 right_label: "Nachher"
 right_headline: "Predictive Maintenance"
@@ -197,7 +197,7 @@ right_bullets:
   - "6 Tage Stillstand/Jahr (-73%)"
   - "14 Tage Vorwarnung vor Ausfall"
   - "41% Instandhaltungskosten-Reduktion"
-  - "Echtzeit-Qualitatsuberwachung"
+  - "Echtzeit-Qualitätsüberwachung"
 ```
 
 ---
@@ -234,7 +234,7 @@ section_theme: accent
 arc_role: call-to-action
 
 headline: "Starten Sie Ihren Predictive-Maintenance-Piloten"
-subline: "Berechnen Sie Ihr Einsparpotenzial in einem kostenlosen 30-Minuten-Gesprach."
+subline: "Berechnen Sie Ihr Einsparpotenzial in einem kostenlosen 30-Minuten-Gespräch."
 cta_text: "Beratung anfragen"
 ```
 
@@ -286,7 +286,7 @@ conversion_goal: "consultation"
 
 **Story Arc:** why-change (from arc_id: industry-transformation)
 **Arc Elements:** Kräfte → Reibung → Evolution → Führung
-**Governing Thought:** Predictive Maintenance senkt ungeplante Stillstande um 73% und macht den Maschinenbau fit fur die nachste Dekade.
+**Governing Thought:** Predictive Maintenance senkt ungeplante Stillstände um 73% und macht den Maschinenbau fit für die nächste Dekade.
 
 **Web Architecture:**
 - Style guide: Corporate Tech

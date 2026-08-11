@@ -1,34 +1,19 @@
 ---
 name: story-to-infographic
 description: >
-  Transform any narrative (insight summary, trend report, strategy document, sales pitch,
-  research report) into a single-page infographic brief optimized for visual scanning. Use
-  this skill whenever the user mentions "infographic", "Infografik", "visual summary",
-  "one-page visual", "data poster", "single-page overview", "visuelle Zusammenfassung",
-  "Dateninfografik", "create infographic from report", "make this visual", "infographic
-  from narrative", "stat sheet", "KPI poster", or wants to distill a narrative into a
-  scannable visual with hero numbers, icons, and minimal text. Also trigger for "dashboard
-  poster", "Einseiter mit Zahlen", "visual one-pager", and requests to summarize a report
-  as a single visual page. Trigger equally on named-style requests — "Economist-style
-  one-pager", "Economist data page", "The Economist infographic", "data journalism
-  infographic", "Tufte data-ink one-pager", "FT visual journalism infographic",
-  "magazine-style data page", "Mike Rohde sketchnote", "RSA Animate whiteboard",
-  "sketchnoting", "visual facilitation", "graphic recording", "Back of the Napkin
-  diagram", "whiteboard explainer" — these are all valid entry points. Produces an
-  infographic-brief.md in one of two style families: a hand-drawn family (sketchnote,
-  whiteboard) rendered via /render-infographic-handdrawn into an Excalidraw scene, or
-  an editorial family (economist — The Economist data page style, plus editorial,
-  data-viz, corporate) rendered via /render-infographic-editorial into a Pencil MCP
-  .pen file. After brief creation, the skill auto-dispatches /render-infographic to
-  render the output (disable with render: false). Important: this skill CREATES the
-  brief from a narrative source and then renders it — it does NOT render an existing
-  brief (use /render-infographic to auto-route or one of the direct render commands
-  for that), does NOT create slides (use story-to-slides),
-  does NOT create a scrollable web page (use story-to-web), does NOT create a
-  multi-poster storyboard (use story-to-storyboard), and does NOT enrich an existing
-  report with inline visuals (use enrich-report).
+  Transform any narrative into a single-page infographic brief. Use this skill whenever
+  the user mentions "infographic", "Infografik", "data poster", "visual one-pager", "stat sheet",
+  "KPI poster", "single-page overview", "visual summary", "visuelle Zusammenfassung", "Dateninfografik",
+  "Einseiter mit Zahlen", or wants a narrative distilled into a scannable visual.
+  Also on named styles — "Economist data page", "Tufte data-ink", "FT visual journalism",
+  "Mike Rohde sketchnote", "graphic recording", "visual facilitation",
+  "RSA Animate whiteboard", "Back of the Napkin". Creates and renders an infographic-brief.md:
+  hand-drawn (sketchnote, whiteboard) via /render-infographic-handdrawn, or editorial (economist,
+  editorial, data-viz, corporate) via /render-infographic-editorial.
+  It does NOT render an existing brief (use /render-infographic), create slides
+  (story-to-slides), a scrollable web page (story-to-web), a storyboard
+  (story-to-storyboard), or enrich a report with inline visuals (enrich-report).
 allowed-tools: Read, Write, Edit, Bash, Grep, Glob, AskUserQuestion, Agent, Skill
-version: 0.3.0
 ---
 
 # Story-to-Infographic Skill
@@ -125,21 +110,14 @@ Briefs contain ZERO visual fields: no `Background:`, `Text-Color:`, `Icon-Color:
 ### Content Density by Style Preset
 
 Content density varies by style preset. The "less is more" principle applies to all presets
-but the threshold differs:
+but the threshold differs.
 
-| Style Preset | Max Content Blocks | Max Word Count | Philosophy |
-|-------------|-------------------|----------------|------------|
-| sketchnote, whiteboard | 6-8 | 150 | Minimal — scan in 10 seconds |
-| editorial, data-viz, corporate | 6-8 | 150 | Focused — scan in 10 seconds |
-| **economist** | **10-14** | **250** | **Dense editorial — read in 60 seconds** |
-
-The **economist** preset produces magazine-density content: prose text blocks sit alongside
-stat callouts in a multi-column grid. Extract more data points from the narrative, include
-short explanatory paragraphs (2-3 sentences), and fill a 2-3 column editorial layout.
-Aim for 10-14 content blocks including 3-5 text-blocks with prose alongside the stats.
-
-For all other presets, the original "less is more" principle applies: 3-8 content blocks,
-max 150 words total, 10-second scan test.
+The per-preset block and word ceilings live in one place — the Content Density table in
+`$CLAUDE_PLUGIN_ROOT/skills/story-to-infographic/references/03-style-presets.md`, loaded at
+Step 4. Every density gate below (Step 5 self-check, Step 8 validation, Step 9 final checks)
+resolves its ceiling from that table using the brief's active `style_preset`, so no step
+restates a figure. Resolve on the preset, not its rendering family: only `economist` carries
+the dense budget.
 
 ---
 
@@ -278,10 +256,11 @@ belong to the chosen family, with recommendations grounded in source cues:
 - **Hand-drawn family** → pick between `sketchnote` (warm, organic, dashed borders, accent
   color on several marks) and `whiteboard` (disciplined minimalism, solid borders, accent
   color only on hero numbers and CTA).
-- **Editorial family** → pick among `economist` (flagship dense 10–14 blocks, 250-word),
-  `editorial` (HBR/McKinsey 6–8 blocks, generous whitespace), `data-viz` (Bloomberg Terminal
-  dashboard feel, monospace numbers), `corporate` (annual report / governance, structured
-  grid, serif-friendly).
+- **Editorial family** → pick among `economist` (flagship, magazine-dense), `editorial`
+  (HBR/McKinsey, generous whitespace), `data-viz` (Bloomberg Terminal dashboard feel,
+  monospace numbers), `corporate` (annual report / governance, structured grid,
+  serif-friendly). Each preset's density budget is in the Content Density table of
+  `03-style-presets.md`, loaded at this step.
 
 Present via AskUserQuestion with 2–3 options. On empty response, auto-select top
 recommendation.
@@ -310,7 +289,7 @@ Apply block copywriting rules:
 - **Word limits**: strict per block type (see infographic-layouts.md)
 - **No maps, use flags**: geographic references use flag icons per article guidance
 
-**Self-check:** Count content blocks (max 8 excluding title/CTA/footer). If over 8, merge or cut the weakest blocks.
+**Self-check:** Count content blocks (excluding title/CTA/footer) against the max for the active `style_preset` in the Content Density table of `03-style-presets.md`. If over that max, merge or cut the weakest blocks.
 
 **Output:** Ordered list of block specifications with all content fields filled.
 
@@ -347,7 +326,7 @@ If interactive: present CTA proposal via AskUserQuestion (Approve/Adjust). On em
 Four layers — stop on first failure, fix, re-check:
 
 1. **Schema** — block types valid, required fields present, valid YAML, no color fields
-2. **Content density** — max 8 content blocks, word counts within limits per block type, total word count under 150
+2. **Content density** — content-block count and total word count within the active `style_preset`'s ceilings (Content Density table, `03-style-presets.md`), word counts within limits per block type
 3. **Data integrity** — numbers match source narrative, chart data valid, no fabricated statistics
 4. **Distillation quality** — title is assertion (not topic label), hero numbers isolated, icon prompts specific, 10-second scan test passes
 
@@ -416,7 +395,7 @@ transformation_notes: |
 - YAML frontmatter complete (all fields above)
 - Each block has Block-Type and all required fields per infographic-layouts.md
 - Title block headline is an assertion (verb + consequence)
-- Total content blocks <= 8 (excluding title, CTA, footer)
+- Total content blocks within the active `style_preset`'s max from the Content Density table (excluding title, CTA, footer)
 - Word count per block within limits
 - Zero color fields in entire document
 - Generation metadata block at end
@@ -459,6 +438,22 @@ The `/render-infographic` command handles everything from here: brief discovery 
 because we pass the path), style_preset routing, agent dispatch, and the post-render
 interactive edit checkpoint. Do not duplicate any of that logic here.
 
+**Capture the artifact path.** The render command forwards the rendering agent's single-line
+JSON back verbatim. Read the artifact path from whichever key that JSON carries — `pen_path`
+for the editorial family (Pencil backend), `excalidraw_path` for the hand-drawn family — and
+report that absolute path as `out` in the response contract. Check for both keys rather than
+assuming one; the two families genuinely differ. This reads an already-forwarded result; it
+re-implements no routing and no rendering.
+
+If the forwarded JSON reports `ok` false, or carries neither `pen_path` nor `excalidraw_path`,
+do not invent or derive a path: return the `render` error code the response contract already
+defines for a requested render that failed.
+
+That response contract — the `brief` and `out` paths, and the `param` / `skill` / `files` /
+`validation` / `render` error codes — lives in `cogni-visual/agents/story-to-infographic.md`
+under `## RESPONSE FORMAT`. Consult it there when this skill runs outside that agent, so the
+shape stays defined in exactly one place.
+
 **When `render` parameter is `false`:**
 
 Tell the user the brief is ready and how to render it manually:
@@ -467,6 +462,9 @@ Tell the user the brief is ready and how to render it manually:
 > Run **`/render-infographic`** to render, or use the direct commands:
 > `/render-infographic-handdrawn` (sketchnote/whiteboard) or
 > `/render-infographic-editorial` (economist/editorial/data-viz/corporate)."
+
+Report `out` as `null` on this path — no artifact was produced. A `null` marks "render never
+requested", which is why a failed render returns the `render` error code instead.
 
 **Post-render edit checkpoint** (informational note for maintainers): the render commands
 (`/render-infographic`, `/render-infographic-handdrawn`, `/render-infographic-editorial`)
@@ -501,7 +499,7 @@ skill creates `output/` when generating the enriched HTML.
 |-----------|------|---------|
 | **01-content-distillation.md** | 3 | "Less is more" rules, 10-second test, number selection, icon-over-text |
 | **02-infographic-mapping.md** | 4 | Layout type selection heuristics, content pattern → layout mapping |
-| **03-style-presets.md** | 4 | 5 style presets with character descriptions and selection heuristics |
+| **03-style-presets.md** | 4, 5, 8, 9 | 6 style presets with character descriptions and selection heuristics, plus the canonical Content Density table (block and word ceilings by preset) |
 | **04-block-copywriting.md** | 5 | Per-block-type copy rules, assertion headlines, number plays, icon prompts |
 | **05-validation-checklist.md** | 8 | 4-layer validation framework (schema, density, integrity, distillation) |
 

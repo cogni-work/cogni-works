@@ -132,7 +132,7 @@ For each section, verify:
 - `[C]` Every headline is an assertion (contains a verb)
   - **How to detect:** Read the headline. If you can put "About:" in front of it and it still makes sense, it is a topic label, not an assertion.
   - If this fails, the section has no clear message. Fix: rewrite as `{subject} + {verb} + {object/benefit}`. Example: "Overview of Predictive Maintenance" becomes "Predictive Maintenance eliminates unplanned downtime".
-- `[C]` No topic labels ("Overview", "Summary", "Uberblick", "Zusammenfassung", "Introduction", "Einleitung", "Fazit")
+- `[C]` No topic labels ("Overview", "Summary", "Überblick", "Zusammenfassung", "Introduction", "Einleitung", "Fazit")
   - If this fails, the reader sees a chapter title instead of a message. Fix: replace with the section's core assertion.
 - `[W]` Headlines are unique (no duplicates or near-duplicates)
   - **How to detect:** Compare all headlines. Two headlines making the same claim in different words are near-duplicates.
@@ -310,7 +310,7 @@ type: problem-statement
 section_theme: light
 arc_role: problem
 headline: "Das Problem mit Stillstand"
-body: "Fabriken verlieren viel Geld durch ungeplante Ausfalle."
+body: "Fabriken verlieren viel Geld durch ungeplante Ausfälle."
 stat_number: "23 Tage"
 stat_label: ""
 ```
@@ -321,7 +321,7 @@ type: feature-alternating
 section_theme: light
 arc_role: solution
 position: odd
-headline: "Sensoren erkennen Verschleiss fruhzeitig"
+headline: "Sensoren erkennen Verschleiß frühzeitig"
 body: "Unsere Sensoren messen den Maschinenzustand in Echtzeit."
 ```
 
@@ -366,7 +366,7 @@ cta_text: "Beratung anfragen"
 |---|-------|----------|--------|---------|-----|
 | 1 | Hero headline is assertion | `[C]` | **FAIL** | "Predictive Maintenance" is a topic label, not an assertion. No verb. | Rewrite: "Predictive Maintenance macht Ihre Fertigung unaufhaltsam" |
 | 2 | Hero headline max 10 words | `[C]` | PASS | 2 words (after fix: 7 words) | -- |
-| 3 | Section 2 headline is assertion | `[C]` | **FAIL** | "Das Problem mit Stillstand" is a topic label. You can say "About: Das Problem mit Stillstand" and it still works. | Rewrite: "23 Tage Stillstand kosten Ihre Wettbewerbsfahigkeit" |
+| 3 | Section 2 headline is assertion | `[C]` | **FAIL** | "Das Problem mit Stillstand" is a topic label. You can say "About: Das Problem mit Stillstand" and it still works. | Rewrite: "23 Tage Stillstand kosten Ihre Wettbewerbsfähigkeit" |
 | 4 | Stat number isolated | `[C]` | **FAIL** | `stat_number: "23 Tage"` — units embedded in number | Change to `stat_number: "23"`, `stat_label: "Tage Stillstand/Jahr"` |
 | 5 | Stat label not empty | `[W]` | **FAIL** | `stat_label: ""` | Set to "Tage Stillstand pro Anlage/Jahr" |
 | 6 | CTA headline imperative | `[W]` | **FAIL** | "Kontaktieren Sie uns" is generic. | Rewrite: "Starten Sie Ihren Predictive-Maintenance-Piloten" |

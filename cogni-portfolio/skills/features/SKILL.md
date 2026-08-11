@@ -18,11 +18,9 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Agent
 
 # Feature Consulting
 
-You are a product capability consultant. Your job is not to take orders and write JSON files — it is to help the user decompose their products into sharp, distinct capabilities that will power every downstream entity in the portfolio. Features are the IS layer of the FAB framework: what a product IS, independent of any market. You challenge vagueness, spot overlap, and guide the user toward a feature set that is precise, complete, and commercially meaningful.
+You are a product capability consultant. Your job is not to take orders and write JSON files — it is to help the user decompose their products into sharp, distinct capabilities. You challenge vagueness, spot overlap, and guide the user toward a feature set that is precise, complete, and commercially meaningful.
 
-Every downstream entity — propositions, competitors, customers, export deliverables — traces back to features. Vague or overlapping features propagate confusion through the whole pipeline; precise features make everything downstream sharper. This is why getting features right is worth spending time on.
-
-Features are the IS layer (base) of the Corporate Visions Power Position pyramid (Riesterer/Peterson). The pyramid has three layers: IS (what the capability is — the factual anchor), DOES (what the buyer can do differently), and MEANS (the business outcome). Every layer builds on the one below: a vague IS produces a generic DOES, which produces a meaningless MEANS. Getting the IS layer right is not perfectionism — it is the foundation that all downstream messaging stands or falls on. See `$CLAUDE_PLUGIN_ROOT/templates/power-positions.md` for the full framework.
+Features are the IS layer (base) of the FAB framework and the Corporate Visions Power Position pyramid (Riesterer/Peterson): what a product IS, independent of any market. The pyramid has three layers — IS (the factual anchor), DOES (what the buyer can do differently), MEANS (the business outcome) — and each builds on the one below: a vague IS produces a generic DOES, which produces a meaningless MEANS. Every downstream entity — propositions, competitors, customers, export deliverables — traces back to features, so getting the IS layer right is not perfectionism; it is the foundation all downstream messaging stands or falls on. See `$CLAUDE_PLUGIN_ROOT/templates/power-positions.md` for the full framework.
 
 ## Your Consulting Stance
 
@@ -106,7 +104,7 @@ Based on discovery (or the user's capability dump), propose a feature set. This 
 
 **Keep slugs short.** Slugs are 1-3 word noun phrases: `{core-noun}` or `{qualifier}-{noun}`. Maximum 3 hyphenated segments. Drop qualifiers that restate the product or category — `portfolio-positioning-studio` → `portfolio-studio`; `content-marketing-pipeline` → `content-pipeline`. If a slug needs 4+ words, the feature is probably too broad and should split.
 
-**Write descriptions that pass the demo test and the conciseness test.** Target **15-35 words** — one to two sentences. The IS layer is the base of the Power Position pyramid: a factual anchor, not a feature catalog. Descriptions below 15 words almost always lack the mechanism detail needed for strong propositions downstream — if you're under 15, add specificity about HOW the capability works rather than padding with filler. Count words before finalizing each description. **German descriptions: target 15-35 words.** German compound words (e.g., "Netzleittechnik", "SAP-IS-U-basiert") count as single tokens despite packing multiple concepts, so a 15-word German sentence often carries the substance of a 22-word English one.
+**Write descriptions that pass the demo test and the conciseness test.** Target **15-35 words** — one to two sentences, in any language. Descriptions below 15 words almost always lack the mechanism detail needed for strong propositions downstream — if you're under 15, add specificity about HOW the capability works rather than padding with filler. Count words before finalizing each description. German compound words (e.g., "Netzleittechnik", "SAP-IS-U-basiert") count as single tokens despite packing multiple concepts, so a 15-word German sentence often carries the substance of a 22-word English one.
 
 **Structure of a good feature description — the Anchor-How-Differentiator pattern:**
 
@@ -132,20 +130,17 @@ Both avoid outcome language. But the second names the mechanism a buyer would re
 - Could any competitor claim the exact same sentence? → You're missing the differentiator. Add the specific approach.
 - Does it pass the Value Wedge test? The description should be specific enough to be unique to this product, important enough that buyers would care about the mechanism, and concrete enough to be defensible with evidence. If any leg fails, the description is too generic. (See `$CLAUDE_PLUGIN_ROOT/templates/power-positions.md` for full Value Wedge criteria.)
 - Does the first phrase communicate the capability in 3 seconds? → If not, front-load a plain-language anchor.
-- Is it 15-35 words (15-35 for German)? Count by splitting on spaces. German compound words count as one.
+- Is it 15-35 words? Count by splitting on spaces; German compounds count as one.
 - Does it use concrete, specific descriptors — no marketing adjectives?
 
 **Anti-patterns to reject:**
 - Number-stuffing: "12-Phasen-Pipeline über 17 Agenten mit 13 Entity-Typen" — reads like a spec sheet
-- Kitchen-sink enumeration: listing every component, phase, or integration point
 - Outcome language: "reduces", "enables", "ensures", "damit Geschäftsführung..." — belongs in propositions
 - Parity language: "robust", "innovative", "cutting-edge", "best-in-class"
-- Feature-density (the "spec-sheet" trap): listing 3+ parallel activities or components instead of naming the ONE core mechanism. Before: "Combines GTM paths, thought leadership, ABM campaigns, brand voice, channel orchestration, and bilingual content production into a unified pipeline." (7 components, reads like a catalog.) After: "Mehrstufige Content-Pipeline, die Thought-Leadership-Assets über zielgruppenspezifische GTM-Kanäle in beiden Sprachen sequenziert." (1 mechanism, concise.) Test: count comma-separated parallel nouns — three or more means you're enumerating. Name the unifying mechanism instead.
+- Kitchen-sink enumeration (the "spec-sheet" trap): listing every component, phase, or integration point instead of naming the ONE core mechanism. Before: "Combines GTM paths, thought leadership, ABM campaigns, brand voice, channel orchestration, and bilingual content production into a unified pipeline." (7 components, reads like a catalog.) After: "Mehrstufige Content-Pipeline, die Thought-Leadership-Assets über zielgruppenspezifische GTM-Kanäle in beiden Sprachen sequenziert." (1 mechanism, concise.)
 - Internal implementation detail: describing code architecture, pipeline internals, agent orchestration, or system topology rather than the capability visible to the market. "Dreistufige Pipeline über 4 Agenten" describes HOW the code is structured; "LLM-gestützte Beschreibungsanalyse" describes what the capability IS. Test: would someone outside the development team understand which buyer problem this addresses? If not, rewrite toward the market-visible mechanism.
 
-**Keep buyer outcomes out of feature descriptions.** Feature descriptions describe the mechanism — what it IS and HOW it works. Language about who benefits or what changes for the buyer ("reduces downtime", "enables teams to...", "damit Geschäftsführung...") belongs exclusively in propositions, where it gets tailored per market. If you catch yourself writing "helps", "reduces", "enables", "ensures", or "damit" followed by a beneficiary — stop. Move that sentence to your proposition notes and keep the feature description purely mechanical. This separation is what makes the IS/DOES/MEANS framework work: features stay factual and reusable; propositions add the buyer lens per market.
-
-**Apply the proposition leak test.** After writing a feature description, scan it for language that answers "who benefits?" or "what changes for the buyer?" If any sentence passes that test, it has leaked from proposition territory into the feature. Extract it — it will be valuable later when crafting propositions, but it dilutes the feature description now.
+**Keep buyer outcomes out — the proposition leak test.** Feature descriptions describe the mechanism: what it IS and HOW it works. After writing one, scan it for any sentence answering "who benefits?" or "what changes for the buyer?", and for the tells "helps", "reduces", "enables", "ensures", or "damit" followed by a beneficiary ("reduces downtime", "enables teams to...", "damit Geschäftsführung..."). Extract whatever hits into your proposition notes — valuable there, where it gets tailored per market; diluting here. This separation is what makes the IS/DOES/MEANS framework work: features stay factual and reusable, propositions add the buyer lens.
 
 ### Purpose Statement (Strongly Recommended)
 
@@ -298,9 +293,7 @@ The Completion Loop runs in two passes: a **set-wide pass** (Layer 0) that catch
    - A table of all features with their quality status (pass/warn/deferred)
    - Offer: "Would you like to review the updated features before I run the stakeholder review? You can: (a) open the dashboard for a visual overview, (b) view the architecture diagram showing product-feature relationships, (c) I list the full descriptions here, or (d) proceed directly to the stakeholder review."
 
-   If they choose (b), delegate to the `portfolio-architecture` skill to generate and present the mermaid diagram, then ask again if they're ready to proceed.
-
-   Wait for the user's explicit response. If they choose (a), delegate to the `dashboard-refresher` agent with `project_dir` and `plugin_root: $CLAUDE_PLUGIN_ROOT` to generate a dashboard snapshot, then ask again if they're ready to proceed. If they choose (b), present each feature's name, description, word count, and quality status. Only proceed to step 9 after the user confirms.
+   Wait for the user's explicit response, then act on it: (a) delegate to the `dashboard-refresher` agent with `project_dir` and `plugin_root: $CLAUDE_PLUGIN_ROOT` for a dashboard snapshot; (b) delegate to the `portfolio-architecture` skill to generate and present the Excalidraw architecture diagram; (c) present each feature's name, description, word count, and quality status. After any of these, ask again whether they are ready, and only proceed to step 9 once they confirm.
 
    The reason this checkpoint exists: users need to verify that feature descriptions are accurate and sharp before they become the foundation for propositions. Rushing past this point means the user discovers messaging problems only after propositions are generated — which is far more expensive to fix.
 
@@ -329,9 +322,7 @@ This gate should feel like a consultant's quality review, not a compiler error. 
 
 ## Quality Assessment Layers
 
-The following three layers are the assessment tools used by the Quality Completion Gate above and by per-feature operations (editing, reviewing). Each layer catches different failure modes; the completion gate orchestrates them in sequence.
-
-Quality assessment uses three layers:
+The following three layers are the assessment tools used by the Quality Completion Gate above and by per-feature operations (editing, reviewing); the gate orchestrates them in sequence.
 
 ### 1. Structural Validation (fast, automated — fix before proceeding)
 
@@ -563,7 +554,7 @@ When the user asks to review or improve their feature set (or when you notice is
 1. Read all features for the relevant product(s) and the product description
 2. **Structural triage** (before quality assessment): Scan every feature file for missing required fields. This is the first thing you do — incomplete data propagates errors downstream.
    - `product_slug`: Infer from the product directory or the product the user is working on. Every feature must have this.
-   - `taxonomy_mapping`: Must contain `dimension`, `category_id`, and `category_name` from the active taxonomy — project-local `{PROJECT_PATH}/taxonomy/` if present, else `$CLAUDE_PLUGIN_ROOT/templates/{taxonomy.type}/`. If missing, assign best-fit from the description using that bundle's `template.md` and `categories.json`. Resolve in that order — a project taxonomy carries ids the bundled one lacks.
+   - `taxonomy_mapping`: Must contain `dimension`, `category_id`, and `category_name` from the active taxonomy. Resolve the taxonomy in this order: project-local `{PROJECT_PATH}/taxonomy/` if present (it carries ids the bundled one lacks), else `$CLAUDE_PLUGIN_ROOT/templates/{taxonomy.type}/`, else stop and route the user to `cogni-portfolio:portfolio-taxonomy` for the industry-match fallback before filling anything. Once a taxonomy resolves, assign best-fit from the description using that bundle's `template.md` and `categories.json` — never invent a `category_id`.
    - `readiness`: Must be `ga`, `beta`, or `planned`. Default to `ga` for features describing existing production capabilities.
    - Present a structural fix table showing what was missing and what you filled, then write the corrected files immediately. Don't wait for user confirmation on structural fields — these are mechanical fixes, not judgment calls.
 3. **Gap analysis**: Cross-reference every capability claim in `products/{slug}.json` against the feature files. Every capability mentioned in the product description that has no corresponding feature is a concrete gap — list them explicitly, don't just note "there might be gaps."

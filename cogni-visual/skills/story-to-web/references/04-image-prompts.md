@@ -237,7 +237,7 @@ Verification: Single subject (factory floor). "No text, no people" present. Wide
 type: feature-alternating
 arc_role: solution
 headline: "Remote Patient Monitoring reduziert Klinikbesuche um 40%"
-body: "Wearable-Sensoren ubermitteln Vitalwerte in Echtzeit an das Arzteteam..."
+body: "Wearable-Sensoren übermitteln Vitalwerte in Echtzeit an das Ärzteteam..."
 style_guide: "Clean Medical"
 ```
 

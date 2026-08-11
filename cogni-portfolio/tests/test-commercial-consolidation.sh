@@ -20,6 +20,19 @@
 #   (used by scripts/mutation-check.sh to run a single assertion against a mutant).
 # Honors PROJECT_STATUS_SCRIPT to point at an alternate project-status.sh.
 # Exits non-zero on any assertion failure.
+#
+# Mutation recipe — the SHARED cogni-service harness, which classifies on the output
+#   labels below (the plugin-local scripts/mutation-check.sh named above covers this
+#   same mutation by exit status instead, and takes no flags). Replayable as written,
+#   from the repo root:
+#   bash ~/.claude/plugins/cache/managed-service/cogni-service/0.0.383/scripts/mutation-check.sh \
+#     --root . \
+#     --file cogni-portfolio/scripts/project-status.sh \
+#     --expr 's/shared = rm in SHARED_MODELS/shared = False/' \
+#     --test 'bash cogni-portfolio/tests/test-commercial-consolidation.sh test_hybrid_consolidates' \
+#     --case test_hybrid_consolidates
+#   There is no in-repo copy of the SHARED harness; if that version directory is gone,
+#   use the newest under the same parent — everything after the path is version-independent.
 
 # `set -u` only — `set -e` would abort on the first failing assertion and defeat
 # the per-test failure counter below.
@@ -47,8 +60,11 @@ TMPROOT="$(mktemp -d)"
 trap 'rm -rf "$TMPROOT"' EXIT
 
 failures=0
-pass() { printf 'OK   %s\n' "$1"; }
-fail() { printf 'FAIL %s: %s\n' "$1" "$2" >&2; failures=$((failures + 1)); }
+# Keep the message a SEPARATE argument. The shared mutation harness anchors on the
+# case token and needs whitespace or end-of-line right after it, so folding it back
+# into one `<case>: <msg>` string puts a colon there and the case stops matching.
+pass() { printf 'ok: %s %s\n' "$1" "${2:-}"; }
+fail() { printf 'FAIL: %s %s\n' "$1" "${2:-}" >&2; failures=$((failures + 1)); }
 
 # Seed a minimal enrichment-phase project: 1 product (revenue_model=$2), 3 features,
 # 1 market, 1 customer, 3 propositions (all pairs covered -> MISSING_COUNT=0), and 0
@@ -111,7 +127,7 @@ test_hybrid_consolidates() {
   if [ "$any_shared" = "True" ] \
      && printf '%s' "$reason" | grep -qiE 'shared_solution|Paketleiter|packages' \
      && ! printf '%s' "$reason" | grep -qF "$ONE_TO_ONE_ACTION"; then
-    pass "test_hybrid_consolidates: consolidation recommended, no per-proposition tiering"
+    pass test_hybrid_consolidates "consolidation recommended, no per-proposition tiering"
   else
     fail test_hybrid_consolidates "any_shared=$any_shared reason='$reason'"
   fi
@@ -128,7 +144,7 @@ test_project_still_one_to_one() {
   if [ "$any_shared" = "False" ] \
      && printf '%s' "$reason" | grep -qF "$ONE_TO_ONE_ACTION" \
      && ! printf '%s' "$reason" | grep -qiE 'shared_solution|Paketleiter|packages'; then
-    pass "test_project_still_one_to_one: standard per-proposition action kept"
+    pass test_project_still_one_to_one "standard per-proposition action kept"
   else
     fail test_project_still_one_to_one "any_shared=$any_shared reason='$reason'"
   fi
@@ -148,7 +164,7 @@ ok = bool(mx) \
 print('yes' if ok else 'no')
 ")"
   if [ "$ok" = "yes" ]; then
-    pass "test_status_emits_shared_flag: commercial_model_shared=true per product x market"
+    pass test_status_emits_shared_flag "commercial_model_shared=true per product x market"
   else
     fail test_status_emits_shared_flag "matrix missing or a pair not shared"
   fi
@@ -160,7 +176,7 @@ test_recommendation_names_shared_solution() {
   [ "$RC" = "0" ] || { fail test_recommendation_names_shared_solution "status rc=$RC"; return; }
   local reason; reason="$(solutions_reason)"
   if printf '%s' "$reason" | grep -qiE 'shared_solution|Paketleiter|packages'; then
-    pass "test_recommendation_names_shared_solution: names the shared path"
+    pass test_recommendation_names_shared_solution "names the shared path"
   else
     fail test_recommendation_names_shared_solution "reason='$reason'"
   fi
@@ -181,7 +197,7 @@ test_no_stale_one_to_one_wording() {
   if grep -qF "$STALE_STEP8" "$SOLUTIONS_SKILL"; then bad=1; fi
   if printf '%s' "$STATUS_OUT" | grep -qF "$ONE_TO_ONE_ACTION"; then bad=1; fi
   if [ "$bad" = "0" ]; then
-    pass "test_no_stale_one_to_one_wording: stale 1:1 wording absent from all surfaces"
+    pass test_no_stale_one_to_one_wording "stale 1:1 wording absent from all surfaces"
   else
     fail test_no_stale_one_to_one_wording "stale 1:1 wording still present"
   fi

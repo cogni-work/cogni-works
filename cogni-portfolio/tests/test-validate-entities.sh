@@ -20,6 +20,21 @@
 #
 # Usage: bash cogni-portfolio/tests/test-validate-entities.sh
 # Exits non-zero on any assertion failure.
+#
+# This suite has NO per-case selector — all ten fixtures are unconditional top-level
+#   code, so an argument naming one is ignored. The recipe below therefore runs the
+#   whole suite, and the harness classifies on the named fixture's own output line.
+#
+# Mutation recipe — the SHARED cogni-service harness. Replayable as written, from the
+#   repo root:
+#   bash ~/.claude/plugins/cache/managed-service/cogni-service/0.0.383/scripts/mutation-check.sh \
+#     --root . \
+#     --file cogni-portfolio/scripts/validate-entities.sh \
+#     --expr 's/if not os\.path\.isfile\(shared_path\)/if False/' \
+#     --test 'bash cogni-portfolio/tests/test-validate-entities.sh' \
+#     --case overlay-missing-ref
+#   There is no in-repo copy of the SHARED harness; if that version directory is gone,
+#   use the newest under the same parent — everything after the path is version-independent.
 
 # `set -u` only — `set -e` would abort on the first failing assertion and
 # defeat the per-fixture failure counter below.
@@ -38,8 +53,11 @@ TMPROOT="$(mktemp -d)"
 trap 'rm -rf "$TMPROOT"' EXIT
 
 failures=0
-pass() { printf 'OK   %s\n' "$1"; }
-fail() { printf 'FAIL %s: %s\n' "$1" "$2" >&2; failures=$((failures + 1)); }
+# Keep the message a SEPARATE argument. The shared mutation harness anchors on the
+# case token and needs whitespace or end-of-line right after it, so folding it back
+# into one `<case>: <msg>` string puts a colon there and the case stops matching.
+pass() { printf 'ok: %s %s\n' "$1" "${2:-}"; }
+fail() { printf 'FAIL: %s %s\n' "$1" "${2:-}" >&2; failures=$((failures + 1)); }
 
 # Seed shared scaffolding (portfolio.json, product, feature, market, proposition)
 # Returns the project directory path.
@@ -233,7 +251,7 @@ run_validator "$pdir"
 n_err=$(count_solution_entries errors)
 n_warn=$(count_solution_entries warnings)
 if [ "$RC" = "0" ] && [ "$n_err" = "0" ] && [ "$n_warn" = "0" ]; then
-  pass "overlay-valid: rc=0, 0 solution errors, 0 solution warnings"
+  pass "overlay-valid" "rc=0, 0 solution errors, 0 solution warnings"
 else
   fail "overlay-valid" "expected rc=0/0/0, got rc=$RC errors=$n_err warnings=$n_warn"
   dump_solution_entries >&2
@@ -247,7 +265,7 @@ run_validator "$pdir"
 n_total=$(count_solution_entries errors)
 n_match=$(count_solution_entries errors "references non-existent file")
 if [ "$RC" != "0" ] && [ "$n_total" = "1" ] && [ "$n_match" = "1" ]; then
-  pass "overlay-missing-ref: rc!=0, 1 error naming the missing path"
+  pass "overlay-missing-ref" "rc!=0, 1 error naming the missing path"
 else
   fail "overlay-missing-ref" "expected rc!=0 and 1 error matching 'references non-existent file', got rc=$RC total=$n_total match=$n_match"
   dump_solution_entries >&2
@@ -261,7 +279,7 @@ run_validator "$pdir"
 n_total=$(count_solution_entries errors)
 n_match=$(count_solution_entries errors "does not match shared reference type")
 if [ "$RC" != "0" ] && [ "$n_total" = "1" ] && [ "$n_match" = "1" ]; then
-  pass "overlay-type-mismatch: rc!=0, 1 error naming the mismatch"
+  pass "overlay-type-mismatch" "rc!=0, 1 error naming the mismatch"
 else
   fail "overlay-type-mismatch" "expected rc!=0 and 1 error matching 'does not match shared reference type', got rc=$RC total=$n_total match=$n_match"
   dump_solution_entries >&2
@@ -284,7 +302,7 @@ run_validator "$pdir"
 n_total=$(count_solution_entries errors)
 n_match=$(count_solution_entries errors "Shared reference (subscription/hybrid) missing required subscription object")
 if [ "$RC" != "0" ] && [ "$n_total" = "1" ] && [ "$n_match" = "1" ]; then
-  pass "ref-incomplete-subscription: rc!=0, 1 error on the reference, not the overlay"
+  pass "ref-incomplete-subscription" "rc!=0, 1 error on the reference, not the overlay"
 else
   fail "ref-incomplete-subscription" "expected rc!=0 and 1 error on the reference, got rc=$RC total=$n_total match=$n_match"
   dump_solution_entries >&2
@@ -307,7 +325,7 @@ run_validator "$pdir"
 n_total=$(count_solution_entries errors)
 n_match=$(count_solution_entries errors "Shared reference (project) missing implementation phases")
 if [ "$RC" != "0" ] && [ "$n_total" = "1" ] && [ "$n_match" = "1" ]; then
-  pass "ref-incomplete-project: rc!=0, 1 error on the reference"
+  pass "ref-incomplete-project" "rc!=0, 1 error on the reference"
 else
   fail "ref-incomplete-project" "expected rc!=0 and 1 error on the reference, got rc=$RC total=$n_total match=$n_match"
   dump_solution_entries >&2
@@ -324,7 +342,7 @@ run_validator "$pdir"
 n_err=$(count_solution_entries errors)
 n_warn=$(count_solution_entries warnings)
 if [ "$RC" = "0" ] && [ "$n_err" = "0" ] && [ "$n_warn" = "0" ]; then
-  pass "overlay-hybrid: rc=0, 0 solution errors, 0 solution warnings"
+  pass "overlay-hybrid" "rc=0, 0 solution errors, 0 solution warnings"
 else
   fail "overlay-hybrid" "expected rc=0/0/0, got rc=$RC errors=$n_err warnings=$n_warn"
   dump_solution_entries >&2
@@ -355,7 +373,7 @@ run_validator "$pdir"
 n_err=$(count_solution_entries errors)
 n_warn_drift=$(count_solution_entries warnings "Pricing drift detected")
 if [ "$RC" = "0" ] && [ "$n_err" = "0" ] && [ "$n_warn_drift" = "1" ]; then
-  pass "overlay-hybrid-drift: rc=0, 0 errors, 1 warning matching 'Pricing drift detected'"
+  pass "overlay-hybrid-drift" "rc=0, 0 errors, 1 warning matching 'Pricing drift detected'"
 else
   fail "overlay-hybrid-drift" "expected rc=0, 0 errors, 1 drift warning; got rc=$RC errors=$n_err drift=$n_warn_drift"
   dump_solution_entries >&2
@@ -393,7 +411,7 @@ n_total=$(count_solution_entries errors)
 # value and the reference file path. Single substring covers both.
 n_match=$(count_solution_entries errors "_shared/acme-suite--dach has invalid solution_type 'consulting'")
 if [ "$RC" != "0" ] && [ "$n_total" = "1" ] && [ "$n_match" = "1" ]; then
-  pass "ref-invalid-solution-type: rc!=0, 1 error naming the invalid type"
+  pass "ref-invalid-solution-type" "rc!=0, 1 error naming the invalid type"
 else
   fail "ref-invalid-solution-type" "expected rc!=0 and 1 error naming the invalid type and ref path, got rc=$RC total=$n_total match=$n_match"
   dump_solution_entries >&2
@@ -423,7 +441,7 @@ run_validator "$pdir"
 n_err=$(count_solution_entries errors)
 n_match=$(count_solution_entries warnings "shared_solution_ref is missing")
 if [ "$RC" = "0" ] && [ "$n_err" = "0" ] && [ "$n_match" = "1" ]; then
-  pass "overlay-half-declared-overlay-only: rc=0, 0 errors, 1 warning naming the missing ref"
+  pass "overlay-half-declared-overlay-only" "rc=0, 0 errors, 1 warning naming the missing ref"
 else
   fail "overlay-half-declared-overlay-only" "expected rc=0, 0 errors, 1 warning matching 'shared_solution_ref is missing', got rc=$RC errors=$n_err match=$n_match"
   dump_solution_entries >&2
@@ -455,7 +473,7 @@ run_validator "$pdir"
 n_err=$(count_solution_entries errors)
 n_match=$(count_solution_entries warnings "messaging_overlay not set to true")
 if [ "$RC" = "0" ] && [ "$n_err" = "0" ] && [ "$n_match" = "1" ]; then
-  pass "overlay-half-declared-ref-only: rc=0, 0 errors, 1 warning naming the missing overlay flag"
+  pass "overlay-half-declared-ref-only" "rc=0, 0 errors, 1 warning naming the missing overlay flag"
 else
   fail "overlay-half-declared-ref-only" "expected rc=0, 0 errors, 1 warning matching 'messaging_overlay not set to true', got rc=$RC errors=$n_err match=$n_match"
   dump_solution_entries >&2

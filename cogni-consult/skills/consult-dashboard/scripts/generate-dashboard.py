@@ -25,6 +25,19 @@ from datetime import datetime, timezone
 
 DT_STAGES = ["empathize", "define", "ideate", "prototype", "test"]
 
+
+def dt_stage_label(stage):
+    """The display form of a stored dt_stage, per references/user-facing-output.md
+    (c) note 4: stage names are method terms and are proper-cased wherever they
+    are displayed, so an engine value is never surfaced raw. Every display site
+    in this script routes through here — including the dt-label span, whose CSS
+    deliberately carries no text-transform, so this function is the single
+    casing authority rather than one of two. The stored tokens stay lowercase.
+    An unrecognised value passes through unchanged rather than being capitalised
+    on a guess, so a stage this script does not know surfaces visibly as
+    unmapped instead of silently posing as a known one."""
+    return stage.capitalize() if stage in DT_STAGES else stage
+
 # ---------------------------------------------------------------------------
 # Theme — design-variables JSON is the contract; --theme parses a theme.md as a
 # legacy/CI fallback; DEFAULT_THEME is the last resort. Precedence:
@@ -312,7 +325,7 @@ def next_action(eng, summary, refresh=None, deliv_index=None):
         for d in f["deliverables"]:
             if d.get("state") == "in-progress":
                 stage = d.get("dt_stage") or "empathize"
-                return f"Continue “{d.get('title', d.get('slug'))}” in {f['title']} (design thinking, {stage} stage)."
+                return f"Continue “{d.get('title', d.get('slug'))}” in {f['title']} (design thinking, {dt_stage_label(stage)} stage)."
     for f in eng["action_fields"]:
         for d in f["deliverables"]:
             if d.get("state") == "pending":
@@ -366,8 +379,8 @@ def dt_indicator(stage):
             cls += " dt-done"
         elif idx >= 0 and i == idx:
             cls += " dt-current"
-        dots.append(f'<span class="{cls}" title="{esc(name)}"></span>')
-    label = esc(stage) if stage else "—"
+        dots.append(f'<span class="{cls}" title="{esc(dt_stage_label(name))}"></span>')
+    label = esc(dt_stage_label(stage)) if stage else "—"
     return f'<span class="dt-track">{"".join(dots)}</span><span class="dt-label">{label}</span>'
 
 
@@ -639,7 +652,7 @@ header.hero .hero-meta {{ margin-top: 1rem; display: flex; flex-wrap: wrap; gap:
 .dt-dot {{ width: 9px; height: 9px; border-radius: 50%; background: var(--border); display: inline-block; }}
 .dt-dot.dt-done {{ background: var(--accent-muted); }}
 .dt-dot.dt-current {{ background: var(--accent-dark); box-shadow: 0 0 0 2px var(--surface2); }}
-.dt-label {{ font-size: .72rem; color: var(--text-muted); margin-left: .4rem; text-transform: capitalize; }}
+.dt-label {{ font-size: .72rem; color: var(--text-muted); margin-left: .4rem; }}
 .badge {{ display: inline-block; font-size: .72rem; font-weight: 600; padding: .12rem .5rem; border-radius: 999px; text-transform: capitalize; }}
 .badge-success {{ background: color-mix(in srgb, var(--green) 16%, transparent); color: var(--green); }}
 .badge-warning {{ background: color-mix(in srgb, var(--yellow) 18%, transparent); color: var(--yellow); }}

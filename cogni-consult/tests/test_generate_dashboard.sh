@@ -43,8 +43,16 @@ TMPROOT="$(mktemp -d)"
 trap 'rm -rf "$TMPROOT"' EXIT
 
 failures=0
-pass() { printf 'OK   %s\n' "$1"; }
-fail() { printf 'FAIL %s: %s\n' "$1" "$2" >&2; failures=$((failures + 1)); }
+# Case labels use the `PASS: <case>` / `FAIL: <case>` shape. cogni-service's
+# mutation-check.sh --case classifies a run by scanning suite output for
+# `FAIL: <case>` (red) or `ok:`/`PASS: <case>` (green); anything else is
+# case_not_found. The `OK   `/`FAIL ` shape this suite used before matched
+# neither, so a mutation recipe naming one of these cases could not return a
+# verdict at all. (The plugin-local scripts/mutation-check.sh is a different
+# instrument — it takes no --case and reads only exit status.) Suites here are
+# mixed on this today; test_reference_pointers.sh already uses this shape.
+pass() { printf 'PASS: %s\n' "$1"; }
+fail() { printf 'FAIL: %s - %s\n' "$1" "$2" >&2; failures=$((failures + 1)); }
 
 run() { python3 "$SCRIPT" "$@"; }
 
@@ -182,6 +190,14 @@ assert_html_has "4b slug chip rendered"   "$HTML4" '<span class="fw-chip" title=
 assert_html_has "4c combo split rendered" "$HTML4" '<span class="fw-chip" title="Structuring framework">scqa + pyramid-principle</span>'
 # The legacy deliverable with no chosen_framework renders the empty-cell dash.
 assert_html_has "4d absent renders dash"  "$HTML4" '<span class="deliv-fw-empty" title="No framework chosen">'
+# The in-progress options-brief carries dt_stage "ideate". Every site that
+# *displays* that stage is proper-cased per references/user-facing-output.md (c)
+# note 4 — the dt-indicator label and the next-action line alike, so one rendered
+# artifact cannot disagree with itself. Nothing pinned a stage token before, so
+# neither raw-token render would have been caught.
+assert_html_has "4e dt label proper-cased" "$HTML4" '<span class="dt-label">Ideate</span>'
+assert_html_has "4f next-action stage"     "$HTML4" "(design thinking, Ideate stage)"
+assert_html_lacks "4g raw token absent"    "$HTML4" '<span class="dt-label">ideate</span>'
 
 # --- Fixture 5: optional scheduling fields surfaced read-only ----------------------
 # A deliverable carrying scheduling fields (start_date/due_date/duration/owner/milestone)

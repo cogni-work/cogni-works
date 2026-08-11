@@ -223,6 +223,26 @@ def load_refresh_order(engagement_dir):
     return data if isinstance(data, dict) else None
 
 
+DT_STAGES = ["empathize", "define", "ideate", "prototype", "test"]
+
+
+def dt_stage_label(stage):
+    """The display form of a stored dt_stage, per references/user-facing-output.md
+    (c) note 4: stage names are method terms and are proper-cased wherever they
+    are displayed, so an engine value is never surfaced raw. Every display site
+    in this script routes through here. The stored tokens stay lowercase.
+    An unrecognised value passes through unchanged rather than being capitalised
+    on a guess, so a stage this script does not know surfaces visibly as
+    unmapped instead of silently posing as a known one.
+
+    Deliberately duplicated from the consult-dashboard generator rather than
+    shared: no cogni-consult script imports another, and the two live in
+    different directories with no package path between them. Kept
+    line-for-line identical to that copy so a future edit to one is visibly
+    absent from the other."""
+    return stage.capitalize() if stage in DT_STAGES else stage
+
+
 def next_action(eng, summary, personas_gate, engagement_dir):
     """The single recommendation as (rung, text). Precedence: scope-incomplete,
     then the stale set upstream-first, then the personas gate, then in-progress,
@@ -258,7 +278,7 @@ def next_action(eng, summary, personas_gate, engagement_dir):
         for d in f["deliverables"]:
             if d.get("state", "pending") == "in-progress":
                 stage = d.get("dt_stage") or "empathize"
-                return "continue", f"Continue “{d.get('title', d.get('slug'))}” in {f['title']} (design thinking, {stage} stage)."
+                return "continue", f"Continue “{d.get('title', d.get('slug'))}” in {f['title']} (design thinking, {dt_stage_label(stage)} stage)."
     for f in eng["action_fields"]:
         for d in f["deliverables"]:
             if d.get("state", "pending") == "pending":

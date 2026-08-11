@@ -16,6 +16,8 @@ cogni-consult/
 │   ├── dependency-model.md        Deliverable dependency graph: edge schema,
 │   │                              validation, cascade + topological refresh
 │   ├── deliverable-types.md       Deliverable-type catalog (field-type affinity)
+│   ├── engagement-dashboard-rendering.md  Step-4 action-field dashboard rendering contract
+│   ├── engagement-list-rendering.md  Step-2 engagement-list rendering + the shared bilingual contract
 │   ├── evaluation-criteria.md     Six criteria from the replacement evaluation,
 │   │                              each with a concrete pass signal
 │   ├── frameworks-registry.md     Consulting-framework catalog backing the Define/

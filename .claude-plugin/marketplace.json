@@ -35,7 +35,7 @@
     {
       "name": "cogni-consult",
       "source": "./cogni-consult",
-      "version": "0.1.97",
+      "version": "0.1.98",
       "maturity": "preview",
       "description": "Consulting engagement orchestrator where action fields are the work-breakdown-structure containers for every deliverable: each deliverable runs its own design-thinking loop (empathize→define→ideate→prototype→test), acting stakeholder personas challenge the work in their own voice, and one cogni-knowledge base per engagement is the central research tool that compounds across all deliverables.",
       "keywords": [
@@ -159,7 +159,7 @@
     {
       "name": "cogni-portfolio",
       "source": "./cogni-portfolio",
-      "version": "0.9.57",
+      "version": "0.9.58",
       "maturity": "preview",
       "description": "Portfolio messaging and proposition planning for SMEs using the IS/DOES/MEANS (FAB) framework — market-specific value propositions with competitive analysis, customer profiling, and export-ready deliverables across eight pluggable industry taxonomies and first-class market coverage spanning DACH/EU, UK/US, LATAM (MX/BR), and China (CN).",
       "keywords": [
@@ -194,7 +194,7 @@
     {
       "name": "cogni-help",
       "source": "./cogni-help",
-      "version": "0.0.14",
+      "version": "0.0.15",
       "maturity": "incubating",
       "description": "Central help hub for the insight-wave ecosystem. Interactive courses (workflow-tour curriculum), plugin discovery, cross-plugin workflow guides, troubleshooting, quick-reference cheatsheets, and GitHub issue filing.",
       "keywords": [

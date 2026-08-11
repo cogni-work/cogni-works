@@ -11,7 +11,7 @@ description: >
   and both English and German output. Produces a presentation-brief.md (v4.0) that the
   PPTX agent renders. Important: this skill CREATES the brief from a narrative source —
   it does NOT render an existing brief (use PPTX skill for that), does NOT create a web page
-  (use story-to-web), and does NOT enhance prose (use Copywriter skill).
+  (use story-to-web), and does NOT enhance prose (use cogni-copywriting:copywriter).
 allowed-tools: Read, Write, Edit, Bash, Grep, Glob, AskUserQuestion, Agent, Skill
 ---
 

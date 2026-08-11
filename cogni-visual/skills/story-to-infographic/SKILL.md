@@ -2,13 +2,14 @@
 name: story-to-infographic
 description: >
   Transform any narrative into a single-page infographic brief. Use this skill whenever
-  the user mentions "infographic", "Infografik", "data poster", "visual one-pager", "stat sheet",
-  "KPI poster", "single-page overview", "visual summary", "visuelle Zusammenfassung", "Dateninfografik",
-  "Einseiter mit Zahlen", or wants a narrative distilled into a scannable visual.
-  Also on named styles — "Economist data page", "Tufte data-ink", "FT visual journalism",
+  the user mentions "infographic", "Infografik", "data poster", "dashboard poster",
+  "visual one-pager", "stat sheet", "KPI poster", "single-page overview", "visual summary",
+  "visuelle Zusammenfassung", "Dateninfografik", "Einseiter mit Zahlen", "make this visual",
+  or wants a narrative distilled visually.
+  Named styles — "Economist data page", "Tufte data-ink", "FT visual journalism",
   "Mike Rohde sketchnote", "graphic recording", "visual facilitation",
   "RSA Animate whiteboard", "Back of the Napkin". Creates and renders an infographic-brief.md:
-  hand-drawn (sketchnote, whiteboard) via /render-infographic-handdrawn, or editorial (economist,
+  hand-drawn (sketchnote, whiteboard) via /render-infographic-handdrawn, editorial (economist,
   editorial, data-viz, corporate) via /render-infographic-editorial.
   It does NOT render an existing brief (use /render-infographic), create slides
   (story-to-slides), a scrollable web page (story-to-web), a storyboard

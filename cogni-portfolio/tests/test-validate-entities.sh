@@ -23,7 +23,7 @@
 # Usage: bash cogni-portfolio/tests/test-validate-entities.sh
 # Exits non-zero on any assertion failure.
 #
-# This suite has NO per-case selector — all ten fixtures are unconditional top-level
+# This suite has NO per-case selector — every fixture is unconditional top-level
 #   code, so an argument naming one is ignored. The recipe below therefore runs the
 #   whole suite, and the harness classifies on the named fixture's own output line.
 #
@@ -529,7 +529,7 @@ n_prod=$(count_entity_entries warnings product "commercial_model 'Catalog'")
 n_prop=$(count_entity_entries warnings proposition "commercial_model 'bogus'")
 n_prod_err=$(count_entity_entries errors product "commercial_model")
 if [ "$n_prod" = "1" ] && [ "$n_prop" = "1" ] && [ "$n_prod_err" = "0" ]; then
-  pass commercial-model-off-enum "1 product + 1 proposition warning, 0 errors (warning-level, not fatal)"
+  pass "commercial-model-off-enum" "1 product + 1 proposition warning, 0 errors (warning-level, not fatal)"
 else
   fail "commercial-model-off-enum" "expected 1/1/0, got product=$n_prod proposition=$n_prop product_errors=$n_prod_err"
 fi
@@ -556,7 +556,7 @@ run_validator "$pdir"
 n_prod=$(count_entity_entries warnings product "commercial_model")
 n_prop=$(count_entity_entries warnings proposition "commercial_model")
 if [ "$n_prod" = "0" ] && [ "$n_prop" = "0" ]; then
-  pass commercial-model-in-enum "valid values raise no commercial_model warning"
+  pass "commercial-model-in-enum" "valid values raise no commercial_model warning"
 else
   fail "commercial-model-in-enum" "expected 0/0, got product=$n_prod proposition=$n_prop"
 fi

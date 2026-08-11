@@ -16,18 +16,21 @@
 #
 # WHAT A GREEN RUN DOES AND DOES NOT MEAN
 #   Green means NO ENUMERATED TOKEN APPEARED. It does NOT mean the corpus is
-#   orthographically correct. This distinction is not hedging — at the time this suite
-#   was written the corpus ALREADY contained ASCII-ified German outside this vocabulary,
-#   in a story-to-web image-prompt worked example. That defect is tracked separately and
-#   this suite is deliberately green on it.
+#   orthographically correct. This distinction is not hedging — the vocabulary is a
+#   curated list, so a corruption whose token is not on it passes unseen, and has done.
+#   Read a green run as "no enumerated token regressed", never as proof the German in
+#   the corpus is clean.
 #
 # WHY A CURATED VOCABULARY RATHER THAN A GENERAL ORTHOGRAPHY PATTERN
 #   Forced, not stylistic. A general pattern that infers "this looks like a de-umlauted
-#   German word" is red on the base tree, because of the out-of-vocabulary defect noted
-#   above. The requirement this suite was written against is that it exit 0 on a clean
-#   base. Only an enumerated vocabulary can satisfy both at once. The cost is that the
-#   guard catches exactly what it lists, which is why extending it is a first-class,
-#   test-enforced operation (see below) rather than an afterthought.
+#   German word" is red on the base tree: the scanned corpus deliberately documents the
+#   umlaut-to-ASCII transliteration used for slugs and filenames, and carries English
+#   prose and brand words, none of which such an inference separates from real
+#   corruption — which is why the EXEMPT table and the de-context guard column exist.
+#   So the suite has to do two things at once: flag genuine ASCII-ified German, and exit
+#   0 on a clean base. Only an enumerated vocabulary can satisfy both at once. The cost
+#   is that the guard catches exactly what it lists, which is why extending it is a
+#   first-class, test-enforced operation (see below) rather than an afterthought.
 #
 # HOW TO EXTEND THE VOCABULARY
 #   1. Add a row to VOCABULARY: ascii_token|correct_form|style|guard

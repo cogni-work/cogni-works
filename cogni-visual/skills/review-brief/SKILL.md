@@ -12,7 +12,6 @@ description: >
   asks to review an existing brief after manual edits, or wants to evaluate whether a brief
   is ready for the PPTX, Excalidraw, or Pencil rendering pipeline.
 allowed-tools: Read, Glob, AskUserQuestion, Agent
-version: 1.0.0
 ---
 
 # Review Brief Skill

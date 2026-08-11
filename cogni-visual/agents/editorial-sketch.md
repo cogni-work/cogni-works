@@ -1,6 +1,13 @@
 ---
 name: editorial-sketch
-description: Generate a single editorial-discipline line-art sketch as inline SVG and write it to disk. Produces one-color outline illustrations in the Economist/FT/Bloomberg data journalism tradition — cartographic outlines (via bundled Natural Earth country data), stakeholder silhouettes, object line art, small process diagrams, and metaphor sketches. Strict discipline: one color only, outline-only strokes, no gradients, no drop shadows, no rounded decorative flourishes. Use when render-infographic-pencil needs to embed an illustration alongside a data block without breaking Economist data-ink discipline.
+description: >
+  Generate a single editorial-discipline line-art sketch as inline SVG and write it to disk.
+  Produces one-color outline illustrations in the Economist/FT/Bloomberg data journalism
+  tradition — cartographic outlines (via bundled Natural Earth country data), stakeholder
+  silhouettes, object line art, small process diagrams, and metaphor sketches. Strict
+  discipline: one color only, outline-only strokes, no gradients, no drop shadows, no
+  rounded decorative flourishes. Use when render-infographic-pencil needs to embed an
+  illustration alongside a data block without breaking Economist data-ink discipline.
 model: sonnet
 color: red
 tools:

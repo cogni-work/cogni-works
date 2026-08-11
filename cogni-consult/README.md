@@ -183,6 +183,7 @@ cogni-consult/
 │   ├── engagement-dashboard-rendering.md  Step-4 action-field dashboard rendering contract
 │   ├── engagement-list-rendering.md  Step-2 engagement-list rendering + the shared bilingual contract
 │   ├── evaluation-criteria.md     Six criteria from the dogfood replacement evaluation
+│   ├── framework-selection.md     Step-4 chosen_framework selection + idempotency guard
 │   ├── frameworks-registry.md     Consulting-framework catalog backing the Define/
 │   │                              Prototype framework lens
 │   ├── interaction-language.md    Interaction language vs. deliverable language rule

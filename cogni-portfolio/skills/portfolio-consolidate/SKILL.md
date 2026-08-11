@@ -85,7 +85,7 @@ Typical follow-ons from a fresh coverage matrix:
 
 - **Extend the scope**: run `portfolio-scan --mode=research-only` against one or two more peers and re-run consolidation.
 - **Deep-dive a category**: if one category is covered by everyone except the portfolio's own company, that's the strongest candidate for a `compete`-driven response or a new feature investment.
-- **Wait for Phase 2**: whitespace analysis and per-dimension exec summary are follow-up issues; if the user wants those immediately, point them at the deferred items listed under Scope (Phase 1) above.
+- **Wait for Phase 2**: whitespace analysis and per-dimension exec summary are deferred to a follow-up phase; if the user wants those immediately, point them at the deferred items listed under Scope (Phase 1) above.
 
 ## Inputs and outputs
 

@@ -563,7 +563,7 @@ When the user asks to review or improve their feature set (or when you notice is
 1. Read all features for the relevant product(s) and the product description
 2. **Structural triage** (before quality assessment): Scan every feature file for missing required fields. This is the first thing you do — incomplete data propagates errors downstream.
    - `product_slug`: Infer from the product directory or the product the user is working on. Every feature must have this.
-   - `taxonomy_mapping`: Must contain `dimension`, `category_id`, and `category_name` from the b2b-ict taxonomy. If missing, assign the best-fit category based on the feature's description and the taxonomy template at `$CLAUDE_PLUGIN_ROOT/skills/portfolio-setup/references/data-model.md`.
+   - `taxonomy_mapping`: Must contain `dimension`, `category_id`, and `category_name` from the active taxonomy — project-local `{PROJECT_PATH}/taxonomy/` if present, else `$CLAUDE_PLUGIN_ROOT/templates/{taxonomy.type}/`. If missing, assign best-fit from the description using that bundle's `template.md` and `categories.json`. Resolve in that order — a project taxonomy carries ids the bundled one lacks.
    - `readiness`: Must be `ga`, `beta`, or `planned`. Default to `ga` for features describing existing production capabilities.
    - Present a structural fix table showing what was missing and what you filled, then write the corrected files immediately. Don't wait for user confirmation on structural fields — these are mechanical fixes, not judgment calls.
 3. **Gap analysis**: Cross-reference every capability claim in `products/{slug}.json` against the feature files. Every capability mentioned in the product description that has no corresponding feature is a concrete gap — list them explicitly, don't just note "there might be gaps."
@@ -587,4 +587,4 @@ For features with quality issues that need company-specific information to fix (
 - When reviewing existing features, always check the product description for uncovered capabilities — this is the single most valuable consulting move and the baseline misses it most often
 - **Content Language**: Read `portfolio.json` in the project root. If a `language` field is present, generate all user-facing text content (feature names, descriptions) in that language. JSON field names and slugs remain in English. If no `language` field is present, default to English.
 - **Communication Language**: If `portfolio.json` has a `language` field, communicate with the user in that language (status messages, instructions, recommendations, questions). Technical terms, skill names, and CLI commands remain in English. Default to English if no `language` field is present.
-- Refer to `$CLAUDE_PLUGIN_ROOT/skills/portfolio-setup/references/data-model.md` for complete entity schemas
+- Refer to `$CLAUDE_PLUGIN_ROOT/references/data-model.md` for complete entity schemas

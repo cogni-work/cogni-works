@@ -1,4 +1,11 @@
-# cogni-portfolio Data Model Reference
+# cogni-portfolio Data Model Notes (non-canonical, retained draft)
+
+`cogni-portfolio/references/data-model.md` is the canonical schema for every
+entity type and wins wherever the two disagree. No skill cites this file — the
+field lists here are partial and are deliberately not kept in sync, so nothing
+should link it. It is retained only because its solutions and packages sections
+still document field semantics canonical has not absorbed yet; once that content
+is merged into canonical this file should be deleted rather than maintained.
 
 ## Entity Schemas
 

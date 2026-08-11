@@ -326,4 +326,4 @@ When entering:
 - Changing a feature or market slug after propositions exist requires renaming proposition files (see Operations → Editing).
 - **Content language**: read `portfolio.json`. If a `language` field is present, generate all user-facing text content (IS/DOES/MEANS, evidence descriptions) in that language. JSON field names and slugs remain in English. Default to English if absent.
 - **Communication language**: if `portfolio.json` has a `language` field, communicate with the user in that language (status messages, instructions, recommendations, questions). Technical terms, skill names, and CLI commands remain in English. Default to English if absent.
-- Refer to `$CLAUDE_PLUGIN_ROOT/skills/portfolio-setup/references/data-model.md` for complete entity schemas.
+- Refer to `$CLAUDE_PLUGIN_ROOT/references/data-model.md` for complete entity schemas.

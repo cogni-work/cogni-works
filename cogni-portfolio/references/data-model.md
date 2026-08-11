@@ -161,6 +161,8 @@ Lightweight root manifest for project discovery and resume. Created during setup
 Required fields: `slug`, `company.name`, `company.description`, `company.industry`
 Optional fields: `company.domain`, `company.regional_urls`, `language`, `delivery_defaults`, `taxonomy`, `created`, `updated`
 
+The `company.domain` field is the company's primary website domain (e.g., `"t-systems.com"`). The `company.regional_urls` object maps ISO 639-1 language codes to regional URL paths (e.g., `{"de": "t-systems.com/de", "en": "t-systems.com/en"}`). When `regional_urls` is absent, the calling skill derives the regional URL as `{domain}/{language}`.
+
 The `language` field is a lowercase ISO 639-1 code (e.g., `"de"`, `"en"`). If absent, defaults to `"en"`. Controls the language of all generated user-facing content. JSON field names and slugs always remain in English.
 
 The `taxonomy` object adopts an industry-standard classification system. Supported taxonomy types:
@@ -177,6 +179,8 @@ The `taxonomy` object adopts an industry-standard classification system. Support
 | `b2b-martech` | 8 | 45 | Marketing technology & AdTech providers |
 
 All taxonomies share Dimension 0 (Provider Profile Metrics, 6 categories). The `portfolio-setup` skill auto-selects a taxonomy by matching company context against `industry_match` patterns in each template's frontmatter. Template definitions live in `templates/{type}/template.md`.
+
+When a taxonomy is set, the `/portfolio-dashboard` skill shows a coverage heatmap (categories with/without mapped features) and the `/features` skill suggests taxonomy mappings for new features.
 
 The `delivery_defaults` object provides company-wide defaults for solution cost modeling: roles with day rates, target margin percentage, and shared delivery assumptions.
 
@@ -203,7 +207,11 @@ Optional fields: `positioning`, `pricing_tier`, `revenue_model`, `commercial_mod
 
 Valid `maturity` values: `concept`, `development`, `launch`, `growth`, `mature`, `decline`
 
-Valid `revenue_model` values: `subscription` (SaaS/license), `project` (consulting/implementation, **default when absent**), `partnership` (revenue-share), `hybrid` (combination)
+Valid `revenue_model` values:
+- `subscription` — Recurring revenue (SaaS, license). Solutions use onboarding + subscription tiers + optional professional services. Cost model uses unit economics (CAC, LTV, churn, gross margin).
+- `project` — One-time engagements (consulting, implementation). Solutions use implementation phases + project pricing tiers (PoV/Small/Medium/Large). Cost model uses effort × rate + margin. **This is the default when `revenue_model` is absent.**
+- `partnership` — Revenue-share or co-investment models. Solutions use program stages + revenue-share terms.
+- `hybrid` — Combination (e.g., subscription base + consulting add-ons). Solutions combine subscription tiers with optional project-scoped services.
 
 #### Commercial-structure consolidation signals (`commercial_model`)
 

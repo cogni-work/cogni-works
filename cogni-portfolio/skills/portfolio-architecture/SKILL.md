@@ -178,4 +178,4 @@ Run `$CLAUDE_PLUGIN_ROOT/scripts/project-status.sh <project-dir>` to determine p
 
 - The diagram preserves user edits: re-running this skill imports the existing file and offers incremental update options instead of overwriting
 - Products must exist before the diagram shows anything meaningful; features are optional but make it useful
-- Refer to `$CLAUDE_PLUGIN_ROOT/skills/portfolio-setup/references/data-model.md` for complete entity schemas
+- Refer to `$CLAUDE_PLUGIN_ROOT/references/data-model.md` for complete entity schemas

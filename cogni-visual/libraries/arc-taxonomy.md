@@ -1,11 +1,12 @@
 ---
 type: shared-library
 version: "1.0"
-purpose: "Single source of truth for arc_id → arc_type mapping and arc element names across all cogni-visual skills"
+purpose: "Single source of truth for arc_id → arc_type mapping and arc element names across all cogni-visual skills. The consumers list below is scoped to cogni-visual skills only; the one external, out-of-plugin reader, cogni-website:website-plan, is named here but deliberately not listed."
 consumers:
   - story-to-slides (Step 1)
   - story-to-web (Step 1)
   - story-to-storyboard (Step 1)
+  - story-to-infographic (Step 1)
 ---
 
 # Arc Taxonomy

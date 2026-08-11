@@ -402,10 +402,15 @@ Does the selected layout type match the content pattern?
 - **Fail**: Layout type contradicts the content. Process content in a hub-spoke layout. Data content in a list-grid.
 
 #### 4. Block Density (15%)
-Is the information density appropriate for a single-page scan?
-- **Pass**: 4-8 content blocks. Each block carries one idea. No block requires more than 3 seconds to absorb. Total word count under 150.
+Is the information density appropriate for this brief's style preset?
+Resolve the block-count and word-count ceiling from the brief's `style_preset` frontmatter
+field against the Content Density table in
+`skills/story-to-infographic/references/03-style-presets.md`. The dense `economist` preset and
+the standard presets carry different budgets, so judge against the resolved ceiling, not a
+fixed number.
+- **Pass**: At least 3 content blocks and within the resolved block ceiling. Each block carries one idea. Total word count within the resolved word ceiling.
 - **Warn**: Slightly dense — 1-2 blocks could be simplified or merged.
-- **Fail**: Overloaded. More than 8 content blocks, or blocks with text walls. Fails the 10-second scan test.
+- **Fail**: Over the resolved block ceiling for this preset, or blocks with text walls. Fails the preset's scan/read test.
 
 #### 5. Number Presentation (15%)
 Are statistics formatted for maximum visual impact?

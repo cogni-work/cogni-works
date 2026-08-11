@@ -29,7 +29,7 @@ If the user is asking "who offers what", use this skill. If they are asking "how
 
 ## Scope (Phase 1)
 
-The v0.9.23 cut ships the minimum useful slice:
+Phase 1 ships the minimum useful slice:
 
 - Two cell states — `✓` (Confirmed; includes Emerging and Extended) and `—` (Not Offered or not reported).
 - Per-category coverage rate (count of `✓` cells over the provider set).
@@ -85,7 +85,7 @@ Typical follow-ons from a fresh coverage matrix:
 
 - **Extend the scope**: run `portfolio-scan --mode=research-only` against one or two more peers and re-run consolidation.
 - **Deep-dive a category**: if one category is covered by everyone except the portfolio's own company, that's the strongest candidate for a `compete`-driven response or a new feature investment.
-- **Wait for Phase 2**: whitespace analysis and per-dimension exec summary are follow-up issues; if the user wants those immediately, point them at issue #103's deferred section.
+- **Wait for Phase 2**: whitespace analysis and per-dimension exec summary are follow-up issues; if the user wants those immediately, point them at the deferred items listed under Scope (Phase 1) above.
 
 ## Inputs and outputs
 

@@ -32,12 +32,18 @@ without re-reading the brief.
 - NO text before or after the JSON
 - NO markdown formatting
 - NO prose, greetings, summaries, or explanations
-- Target: <120 characters total, excluding the `brief` absolute path
+- Target: <120 characters total, excluding the `brief` and `out` absolute paths
 
 **Example valid response:**
 
 ```
-{"ok":true,"brief":"/abs/path/infographic-brief.md","layout":"hero-stat","style":"economist","orient":"portrait","blocks":7,"ratio":0.12}
+{"ok":true,"brief":"/abs/path/infographic-brief.md","out":"/abs/path/infographic.pen","layout":"hero-stat","style":"economist","orient":"portrait","blocks":7,"ratio":0.12}
+```
+
+**Example valid response when `render` is `false` (brief only):**
+
+```
+{"ok":true,"brief":"/abs/path/infographic-brief.md","out":null,"layout":"hero-stat","style":"economist","orient":"portrait","blocks":7,"ratio":0.12}
 ```
 
 **On failure, return the error shape instead:**
@@ -57,8 +63,13 @@ Error codes: `param` (a required parameter is missing or unusable), `skill` (the
 not complete), `files` (source unreadable or output path unwritable), `validation` (the
 brief failed its own schema check), `render` (rendering was requested and failed).
 
-`brief` is the absolute path to the written `infographic-brief.md` — the one field a caller
-stores. Every other key stays abbreviated.
+`brief` and `out` are the two absolute paths a caller stores. `brief` is the written
+`infographic-brief.md`; `out` is the rendered artifact — a `.pen` file for the editorial style
+family, an `.excalidraw` scene for the hand-drawn family. `out` is `null` on the brief-only
+path, where the `render` parameter is `false` and no render ran. Take `out` from the result the
+render dispatch forwards back; never guess it or construct it by path arithmetic from `brief`.
+When a requested render fails, return the error shape with the `render` code — not a success
+shape carrying a fabricated or null `out`. Every other key stays abbreviated.
 
 ## Tool declaration
 

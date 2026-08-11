@@ -608,13 +608,15 @@ A solution attaches commercial terms to a proposition (same slug). Structure dep
 | Field | project | subscription | partnership | hybrid |
 |---|---|---|---|---|
 | `solution_type` | `"project"` or absent | `"subscription"` | `"partnership"` | `"hybrid"` |
-| `implementation` | required | -- | -- | -- |
+| `implementation` | required | -- | -- | optional (reduced) |
 | `pricing` (PoV/S/M/L) | required | -- | -- | -- |
 | `onboarding` | -- | optional | -- | optional |
 | `subscription` | -- | required | -- | required |
 | `professional_services` | -- | optional | -- | optional |
 | `program` | -- | -- | required | -- |
 | `cost_model` | optional (effort-based) | optional (unit economics) | optional | optional |
+
+**Hybrid solutions** combine `subscription` (required) with optional `onboarding`, `professional_services`, and/or a reduced `implementation` block for initial setup projects.
 
 Common required fields: `slug`, `proposition_slug`
 Common optional fields: `solution_type`, `cost_model`, `blueprint_ref`, `blueprint_version`, `source_refs`, `lineage_status`, `created`
@@ -1226,7 +1228,7 @@ erDiagram
         string slug PK "feature--market"
         string proposition_slug FK
         string solution_type "project|subscription|partnership|hybrid"
-        array implementation "project only"
+        array implementation "project required, hybrid optional"
         object pricing "project only"
         object subscription "subscription|hybrid"
         object onboarding "subscription|hybrid optional"

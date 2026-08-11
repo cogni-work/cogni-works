@@ -324,7 +324,7 @@ The following three layers are the assessment tools used by the Quality Completi
 
 ### 1. Structural Validation (fast, automated — fix before proceeding)
 
-**Plugin root resolution.** Bash invocations below resolve the plugin root inline as `${CLAUDE_PLUGIN_ROOT:-$(ls -td "$HOME"/.claude/plugins/cache/insight-wave/cogni-portfolio/*/ | head -1)}` — the first call works whether or not the harness injects `$CLAUDE_PLUGIN_ROOT`. Keep the inline form in every call; do not strip it.
+**Plugin root resolution.** Every Bash invocation in this skill resolves the plugin root inline as `${CLAUDE_PLUGIN_ROOT:-$(ls -td "$HOME"/.claude/plugins/cache/insight-wave/cogni-portfolio/*/ | head -1)}` — the first call works whether or not the harness injects `$CLAUDE_PLUGIN_ROOT`. Keep the inline form in every call; do not strip it.
 
 Run the validation script to check for structural issues (missing fields, referential integrity, very short descriptions):
 
@@ -552,7 +552,7 @@ The helper handles the mechanical bits (`_shadow_candidate` / `_source_offering`
 When the user asks to review or improve their feature set (or when you notice issues during other operations), jump straight into the critique — don't start with discovery questions.
 
 1. Read all features for the relevant product(s) and the product description
-2. **Structural triage** (before quality assessment): Scan every feature file for missing required and strongly-recommended fields. This is the first thing you do — incomplete data propagates errors downstream.
+2. **Structural triage** (before quality assessment): Scan every feature file for the missing required and strongly-recommended fields below (`purpose` and `sort_order` are the two strongly-recommended fields handled elsewhere — in the purpose-coverage and Value-to-Utility ordering steps). This is the first thing you do — incomplete data propagates errors downstream.
    - `product_slug`: Infer from the product directory or the product the user is working on. Every feature must have this.
    - `taxonomy_mapping`: Must contain `dimension`, `category_id`, and `category_name` from the active taxonomy. Resolve the taxonomy bundle in this order:
      1. `<project-dir>/taxonomy/` when present — it carries ids the bundled taxonomy lacks.

@@ -6,9 +6,9 @@ field lists here are partial and are deliberately not kept in sync, so nothing
 should link it. This is a maintainer-only migration source, not a reference to
 read for schema answers: the only reason it survives is that a few passages have
 not been moved into canonical yet — the solutions `cost_model` sub-field prose
-(`bill_of_materials`, `effort_by_tier`, `unit_economics`), the hybrid-solutions
-sentence, and the subscription-package example. Once those are merged into
-canonical this file should be deleted rather than maintained.
+(`bill_of_materials`, `effort_by_tier`, `unit_economics`) and the
+subscription-package example. Once those are merged into canonical this file
+should be deleted rather than maintained.
 
 ## Entity Schemas
 

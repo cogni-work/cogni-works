@@ -5,22 +5,14 @@ description: |
   workbooks for any audience. Routes through a use-case registry that matches
   the audience and purpose to the right voice, templates, and review perspectives.
   Use whenever the user mentions "communicate portfolio", "portfolio documentation",
-  "customer-facing documentation", "present portfolio", "portfolio overview",
-  "capability overview", "service catalog", "enrich README", "repo documentation",
-  "developer documentation", "update README with portfolio", "document the project",
-  "open-source documentation", "GitHub README", "project overview for developers",
-  "technical documentation from portfolio", "what do we offer", "external portfolio",
-  "portfolio narrative", "make this customer-ready", "portfolio website",
-  "website content", "landing page", "home page", "about us page", "how we work page",
-  "capability page", "for [persona] page", "web content from portfolio", "pitch", "portfolio pitch",
-  "presentation narrative", "pitch deck from portfolio", "slides from portfolio",
-  "portfolio story", "pitch for [market]", "proposal", "create a proposal",
-  "sales proposal", "marketing brief", "market brief", "export to Excel",
-  "spreadsheet", "XLSX", "workbook", "portfolio workbook", "send to Excel",
-  "download portfolio", "collateral", "deliverable", or wants to turn internal
-  portfolio data into something any audience can read, present, or analyze — even
-  if they don't say "communicate" explicitly. Also trigger when the user asks
-  "how do I present this", "how do I document this", or "how do I export this".
+  "customer-facing documentation", "capability overview", "service catalog",
+  "what do we offer", "portfolio narrative", "portfolio website", "website content",
+  "landing page", "home page", "enrich README", "repo documentation",
+  "developer documentation", "GitHub README", "pitch", "portfolio pitch",
+  "pitch deck from portfolio", "slides from portfolio", "proposal", "sales proposal",
+  "marketing brief", "market brief", "export to Excel", "spreadsheet", "XLSX",
+  "workbook", "portfolio workbook", or otherwise wants internal portfolio data
+  turned into something an audience can read, present, or analyze.
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion, Skill
 ---
 

@@ -1,42 +1,16 @@
 ---
 name: feature-deduplication-detector
-description: Detect set-wide duplicate features within a single product using lexical and semantic similarity — works in any language. Two modes — (1) existing-only: cluster features in `features/` for the Quality Completion Gate (Layer 0); (2) candidate mode: also pool in a staging file of freshly discovered candidates from portfolio-scan so the calling skill can merge new evidence into stable existing features instead of creating duplicates.
+description: |
+  Detect set-wide duplicate features within a single product using lexical and semantic similarity — works in any language. Two modes — (1) existing-only: cluster features in `features/` for the Quality Completion Gate (Layer 0); (2) candidate mode: also pool in a staging file of freshly discovered candidates from portfolio-scan so the calling skill can merge new evidence into stable existing features instead of creating duplicates.
 
-<example>
-Context: The user is running the Quality Completion Gate on a portfolio after multiple ingest sessions.
-user: "Run the quality gate on the t-systems portfolio"
-assistant: "I'll start the gate. Layer 0 first — I'm dispatching the feature-deduplication-detector to find any set-wide duplicates in each product before we polish individual descriptions."
-<commentary>
-The Completion Loop now runs Layer 0 (set-wide dedupe) before per-feature quality assessment so polish work isn't wasted on features about to be merged.
-</commentary>
-</example>
-
-<example>
-Context: The user notices a product has too many features and suspects duplication.
-user: "application-services has 42 features — feels like a lot. Are any of them duplicates?"
-assistant: "Let me dispatch feature-deduplication-detector against the application-services product."
-<commentary>
-Set-wide dedupe is exactly what this agent is for — pairwise similarity scoring across all features in one product, returning hard/soft/related clusters with merge recommendations.
-</commentary>
-</example>
-
-<example>
-Context: The user is resuming a portfolio project and asks for the current health.
-user: "Are there any duplicate features I should clean up?"
-assistant: "I'll run feature-deduplication-detector across each product in the portfolio."
-<commentary>
-Reactive dedupe audits are a valid trigger — the agent runs per-product and reports clusters even outside the formal Completion Loop.
-</commentary>
-</example>
-
-<example>
-Context: portfolio-scan Phase 7 has just assembled feature candidates from a fresh web scan and staged them; it needs to know which candidates duplicate existing features before writing anything.
-user: (scan skill dispatches internally)
-assistant: "I'll run feature-deduplication-detector in candidate mode — passing the candidates_file from research/.staging and the target product_slug so the pooled similarity matrix covers both existing features and candidates, and the calling skill can merge new evidence into the stable existing slugs."
-<commentary>
-Candidate mode is what keeps re-scans from polluting features/ with near-duplicates. The agent stays read-only — it only classifies clusters; merge execution and file writes belong to portfolio-scan.
-</commentary>
-</example>
+  <example>
+  Context: The user is running the Quality Completion Gate on a portfolio after multiple ingest sessions.
+  user: "Run the quality gate on the t-systems portfolio"
+  assistant: "I'll start the gate. Layer 0 first — I'm dispatching the feature-deduplication-detector to find any set-wide duplicates in each product before we polish individual descriptions."
+  <commentary>
+  The Completion Loop now runs Layer 0 (set-wide dedupe) before per-feature quality assessment so polish work isn't wasted on features about to be merged.
+  </commentary>
+  </example>
 
 model: haiku
 color: yellow

@@ -44,8 +44,8 @@ date does. Fill it with one `bash $CLAUDE_PLUGIN_ROOT/scripts/engagement-status.
 <engagement-path>` run per **displayed** row, using the `path` discovery already
 returns; n counts the deliverables at `complete` and m is their flattened total
 across every action field the run reports. This is the one place the list reads
-per-engagement state — the prohibition above is on reading an engagement's
-execution log to resolve a date, not on this rollup. Because the column rides
+per-engagement state — the `last_activity` prohibition below is on reading an
+engagement's execution log to resolve a date, not on this rollup. Because the column rides
 the capped rendering only, a rendering costs at most five runs; that bound is
 what makes the column affordable at all, so never widen it to every registered
 engagement. The runs are one announced step, never one announcement per call.

@@ -20,7 +20,8 @@ Re-enter a cogni-consult engagement: discover what exists, show progress
 against the action-fields WBS (fields × deliverables × status), and route to
 the most valuable next action. This skill is a read-only orienter — it never
 edits engagement state; the only files it writes are the derived front-door
-artifacts (`README.md`, `assumptions.md`) regenerated from that state.
+artifacts (`README.md`, `assumptions.md`) regenerated from that state, and every
+other write belongs to the skill it routes to.
 
 ## Workflow
 
@@ -116,7 +117,8 @@ coverage). When the engagement already has `output/design-variables.json` from a
 prior dashboard run, regenerate and open it without a theme prompt by
 delegating to the `consult-dashboard-refresher` agent with
 `engagement_dir: <engagement-dir>` and `plugin_root: $CLAUDE_PLUGIN_ROOT`. This
-stays read-only: the agent runs the read-only generator.
+stays read-only — the agent runs the read-only generator; it never edits
+engagement state.
 
 **Point at the project plan (only when scheduling data exists).** When the engagement
 carries a schedule, surface it here as a one-line read-only pointer. Detect it cheaply:
@@ -140,8 +142,10 @@ unconditional (unlike the theme-gated dashboard offer above, no
 continue. An engagement that predates the README front door gains one here on
 its next re-entry — no migration step needed; a hand-authored root `README.md`
 is never overwritten (the generator refuses when its marker footer is absent —
-that refusal is the same non-fatal warning case). The README is a derived
-front-door artifact, not engagement state, so the read-only contract holds.
+that refusal is the same non-fatal warning case). The README is a derived front-door
+artifact regenerated from engagement state, not engagement state itself, so the
+read-only contract over `consult-project.json`, `field.json`, personas, and logs
+holds.
 
 **Assumption register refresh.** On every re-entry, also run
 `python3 $CLAUDE_PLUGIN_ROOT/scripts/register-generator.py "<engagement-dir>"`
@@ -153,16 +157,17 @@ missing, empty, or malformed registry degrades to an empty register, never an
 error), and on any failure, warn and continue. Back-fill and no-overwrite
 behave as for the README above: a populated `assumptions.json` gains a register
 on its next re-entry, and a hand-authored `assumptions.md` is never overwritten.
-Like the README it is a derived read model, so the read-only contract holds.
+Like the README it is a derived read model, not engagement state itself, so the
+read-only contract above holds.
 
 **Point at the register (only when it is non-empty).** When the generator returns
 `success: true` with `data.assumptions_count > 0`, surface a one-line read-only
-pointer to the regenerated `assumptions.md` (e.g. *"Assumption register:
-`assumptions.md` (N registered) — value, provenance, and `used_by[]` backlinks"*),
-so the refresh is visible rather than silent. When the count is `0` or the
-generator warned, say nothing — the pointer degrades silently. Like the
-project-plan pointer it is informational only: never a branch in the Step-5
-next-action ladder.
+pointer to the regenerated `assumptions.md` — mirroring the project-plan pointer
+above so the refresh is visible rather than silent (e.g. *"Assumption register:
+`assumptions.md` (N registered) — value, provenance, and `used_by[]` backlinks"*).
+When the count is `0` (no registered assumptions) or the generator warned, say
+nothing — the pointer degrades silently. It is informational only: like the
+project-plan pointer, do not add it as a branch in the Step-5 next-action ladder.
 
 > **Strategy Advisor voice** — this plugin ships one advisory output style: **Strategy Advisor** (answer-first, MECE options), language-neutral, so it renders in the resolved interaction language. Enable it from the `/config` output-style picker; it's opt-in and fixed at session start, so set it now or `/clear` after.
 
@@ -230,15 +235,16 @@ state calls for them — not as standing menu items:
   `rework-intent` entry. That intent capture, like the reopen write itself —
   the `complete` → `in-progress` Edit and the up-front cascade-stale of its
   downstream dependents — is owned by `consult-design-thinking`'s Open-the-Loop
-  step; resume routes, it does not ask and does not write.
+  step, so resume stays read-only; it routes, it does not ask and does not write.
 - **A deliverable's stored `chosen_framework` is `null`** (a legacy deliverable
   created before a framework was chosen) and the consultant wants to assign one
   → offer to set it inline rather than sending them on a separate
   `consult-action-fields` round-trip. "Inline" means the offer surfaces here in
   the recommendation flow; the actual `field.json` write is delegated to
-  `consult-action-fields`, which owns the deliverable manifest. Surface this
-  only when the framework gap is relevant to the next action — never as
-  blanket nagging across every legacy deliverable.
+  `consult-action-fields` (which owns the deliverable manifest), so resume's
+  read-only contract holds. Surface this only when the framework gap is
+  relevant to the next action — never as blanket nagging across every legacy
+  deliverable.
 - **A deliverable is `complete` with a non-`null` `chosen_framework` whose
   conformance hasn't been verified** → offer a **framework-adherence review**:
   dispatch the `consult-framework-adherence-reviewer` agent
@@ -247,11 +253,11 @@ state calls for them — not as standing menu items:
   the finished artifact against its stored framework's structure signature and
   report drift with concrete findings. This is a structural-conformance axis
   distinct from the persona-challenge (Test) pass, so it complements rather
-  than duplicates `consult-personas`. The reviewer reports drift and never
-  rewrites the artifact; acting on a finding is a separate
-  `consult-design-thinking` rework. Surface this only when the conformance
-  question is relevant to the next action, not as a standing audit of every
-  complete deliverable.
+  than duplicates `consult-personas`. The reviewer is read-only — it reports
+  drift, it never rewrites the artifact — so resume stays read-only too;
+  acting on a finding is a separate `consult-design-thinking` rework. Surface
+  this only when the conformance question is relevant to the next action, not
+  as a standing audit of every complete deliverable.
 - **A `complete` deliverable (its `persona_review` closed) is unpublished, or
   published but not yet rendered** → offer the publish / render next step from
   its `publish[]` lineage, even before the whole engagement is complete: an

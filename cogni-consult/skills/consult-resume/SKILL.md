@@ -5,7 +5,7 @@ description: |
   the status of a cogni-consult engagement across sessions. Trigger on:
   "continue the engagement", "resume the engagement", "engagement status",
   "where was I with the engagement", "what's next for the engagement", "show
-  engagement progress", "consult resume", or ANY session start that references
+  engagement progress", "consult resume", or any session start that references
   an existing cogni-consult engagement — even if the user doesn't say "resume"
   explicitly. Double Diamond phrasing ("resume diamond", "diamond status",
   phase talk like "continue discover") refers to a legacy engagement model no

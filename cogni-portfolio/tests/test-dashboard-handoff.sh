@@ -21,7 +21,8 @@
 #   test_pipeline_skills_cite_handoff
 #                                    the six pipeline and ops skills each cite it exactly once
 #   test_secondary_paths_reach_handoff
-#                                    alternate write paths point back to that terminal section
+#                                    rostered alternate write paths keep their pointer back to
+#                                    that terminal section (per-skill floors, not a census)
 #   test_handoff_not_duplicated      the handoff is authored once, and no skill restates it
 #   test_entity_handoff_does_not_open
 #                                    the end-of-step path opens nothing on its own
@@ -148,8 +149,10 @@
 #   works because the harness feeds the expr to `perl -0pi`, which slurps the file.
 #   The replacement is deliberately DISJOINT from the searched string: one that still
 #   contained the pointer sentence would hold the count at 3 and the mutation would
-#   survive. No in-repo equivalent is registered — the exact-count assertion is itself
-#   the gate, and it is what this recipe proves has teeth.
+#   survive. No in-repo equivalent is registered — the floor assertion is itself the
+#   gate, and it is what this recipe proves has teeth: a REMOVED pointer still drops the
+#   count below want, which is the failure the case exists to catch. The floor only
+#   stops rejecting the opposite change, extending coverage to a path the rule covers.
 
 # `set -u` only — `set -e` would abort on the first failing assertion and defeat
 # the failure counter below, which exists so one run reports every offender.
@@ -475,9 +478,13 @@ test_pipeline_skills_cite_handoff() {
 # --- test_secondary_paths_reach_handoff ------------------------------------
 # The acceptance bar is falsified by any file "whose end-of-step path can complete
 # without reaching the handoff". Six skills carry alternate write paths that do not
-# flow into the terminal section — nine in total, solutions holding three and
-# portfolio-scan two — so each such path needs an explicit pointer back. Three of them
-# are early exits ABOVE the section rather than paths below it: portfolio-scan's
+# flow into the terminal section — nine pointers rostered below, solutions holding three
+# and portfolio-scan two — so each such path needs an explicit pointer back. The counts
+# are floors rather than a census: which paths owe a pointer is decided by the rule in
+# references/dashboard-handoff.md, and that rule currently covers paths this roster does
+# not yet list. Adding one of those must not turn this case red; losing a rostered one
+# must.
+# Three of them are early exits ABOVE the section rather than paths below it: portfolio-scan's
 # research-only and shadow modes stop before Step 7.7, and portfolio-verify's
 # no-propagable-resolutions branch jumps back to its communicate gate. All three have
 # already written data the dashboard renders, so all three owe the same pointer.
@@ -490,13 +497,19 @@ test_secondary_paths_reach_handoff() {
     skill="${spec%%:*}"
     want="${spec##*:}"
     got="$(grep -cF "$PTR_LINE" "$PLUGIN_DIR/skills/$skill/SKILL.md")"
-    if [ "$got" -ne "$want" ]; then
-      offenders="$offenders $skill(want=$want,got=$got)"
+    # >= so extending coverage to a path the rule already covers cannot break the case.
+    if [ "$got" -lt "$want" ]; then
+      offenders="$offenders $skill(want>=$want,got=$got)"
     fi
   done
 
   # A pointer names the section only. If one ever restates the dispatch it becomes a
-  # second source of truth, and if it re-cites the path it breaks the count above.
+  # second source of truth, and this check still catches that.
+  # What the floor gives up, deliberately: a SURPLUS bare pointer. PTR_LINE names neither
+  # the canonical path nor the agent, so a pointer added to a section the rule excludes is
+  # invisible here, to the strays regex below, and to the citation counts. The exact count
+  # used to catch it, at the price of rejecting correct coverage extensions too. Nothing
+  # replaces that signal today; a ceiling keyed on the rule's excluded shapes would.
   strays="$(grep -lE "$(printf '%s' "$PTR_LINE" | sed 's/[][\.*^$]/\\&/g').*(dashboard-refresher|open_browser|references/dashboard-handoff)" \
             "$PLUGIN_DIR"/skills/*/SKILL.md 2>/dev/null | tr '\n' ' ')"
   if [ -n "$strays" ]; then
@@ -506,7 +519,7 @@ test_secondary_paths_reach_handoff() {
   if [ -n "$offenders" ]; then
     fail test_secondary_paths_reach_handoff "secondary write paths do not reach the handoff:$offenders"
   else
-    pass test_secondary_paths_reach_handoff "every alternate write path points back to the handoff"
+    pass test_secondary_paths_reach_handoff "every rostered alternate write path carries at least its expected pointer count"
   fi
 }
 

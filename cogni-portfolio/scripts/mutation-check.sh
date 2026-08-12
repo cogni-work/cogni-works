@@ -20,6 +20,10 @@
 #   5. portfolio-resume dashboard row: delete the Dashboard row from
 #      skills/portfolio-resume/SKILL.md; expect test_resume_shows_dashboard_row
 #      to go RED.
+#   6. dispatch-site Agent grant: strip the Agent token from the allowed-tools
+#      line of skills/products/SKILL.md, a skill that carries a
+#      dashboard-refresher dispatch; expect test_dispatch_sites_grant_agent
+#      to go RED.
 #
 # Kept under scripts/ (NOT tests/) deliberately: run-plugin-tests.py auto-discovers
 # tests/*.sh and would run this as a normal suite; this is a manual meta-check that
@@ -304,11 +308,74 @@ PY
   return "$rc"
 }
 
+# --- Mutation 5: dispatch-site Agent grant ---------------------------------
+# Strips the Agent token from the allowed-tools line of a skill that documents a
+# dashboard-refresher dispatch, then asserts test_dispatch_sites_grant_agent goes
+# RED against the mutant. The target is a SKILL.md — documentation, not a script —
+# for the same reason as mutation 3: the case asserts on frontmatter content, so
+# mutating a script would leave it green and prove nothing. products/SKILL.md is
+# the grant template and is not otherwise touched by this feature, so the mutation
+# stays independent of the skills the fix edits.
+mutation_dispatch_agent_grant() {
+  local target="$PLUGIN_DIR/skills/products/SKILL.md"
+  local suite="$PLUGIN_DIR/tests/test-dashboard-handoff.sh"
+  local test_name="test_dispatch_sites_grant_agent"
+  for f in "$target" "$suite"; do
+    [ -f "$f" ] || { echo "FAIL: missing $f" >&2; return 1; }
+  done
+
+  # Baseline: the target test must be GREEN before we mutate, or a later red
+  # tells us nothing.
+  if ! bash "$suite" "$test_name" >/dev/null 2>&1; then
+    echo "FAIL: baseline $test_name is already red before mutation" >&2
+    return 1
+  fi
+
+  local backup; backup="$(mktemp)"
+  cp "$target" "$backup"
+
+  if ! python3 - "$target" <<'PY'
+import re, sys
+path = sys.argv[1]
+src = open(path, encoding="utf-8").read()
+# Anchored on the frontmatter grant line, dropping ONLY the trailing Agent token.
+# The replacement carries no copy of the searched literal: one that kept `Agent`
+# on the line would leave the grant intact, the case green, and this mutation
+# would survive unnoticed.
+mutated, n = re.subn(
+    r"^(allowed-tools: .*), Agent$",
+    r"\1",
+    src,
+    count=1,
+    flags=re.MULTILINE,
+)
+if n != 1:
+    sys.stderr.write("allowed-tools line with a trailing Agent token not found — cannot mutate.\n")
+    sys.exit(7)
+open(path, "w", encoding="utf-8").write(mutated)
+PY
+  then
+    echo "FAIL: dispatch-site Agent-grant mutation could not be applied" >&2
+    cp "$backup" "$target"; rm -f "$backup"; return 1
+  fi
+
+  local rc=0
+  if bash "$suite" "$test_name" >/dev/null 2>&1; then
+    echo "FALSIFIER: mutation survived — $test_name stayed GREEN with a dispatching skill's Agent grant stripped" >&2
+    rc=1
+  else
+    echo "OK: mutation caught — $test_name goes red when a dispatching skill loses its Agent grant"
+  fi
+  cp "$backup" "$target"; rm -f "$backup"   # always restore
+  return "$rc"
+}
+
 mutation_commercial_consolidation || overall=1
 mutation_solution_candidates || overall=1
 mutation_dashboard_no_skip_path || overall=1
 mutation_handoff_citation || overall=1
 mutation_resume_dashboard_row || overall=1
+mutation_dispatch_agent_grant || overall=1
 
 if [ "$overall" -eq 0 ]; then
   echo "All mutations caught."

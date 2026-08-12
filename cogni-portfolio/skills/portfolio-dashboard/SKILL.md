@@ -128,9 +128,11 @@ Skills should offer a dashboard at these checkpoints:
 ### How it works at a checkpoint
 
 When a skill offers "open the dashboard" at a review checkpoint:
-1. Delegate to the `dashboard-refresher` agent with `project_dir` and `plugin_root: $CLAUDE_PLUGIN_ROOT` to regenerate and open the dashboard
+1. Delegate to the `dashboard-refresher` agent with `project_dir`, `plugin_root: $CLAUDE_PLUGIN_ROOT` and `open_browser: true` to regenerate and open the dashboard
 2. After the dashboard opens, the calling skill resumes and asks the user if they're ready to proceed
 3. The dashboard generation is a snapshot — it reflects the portfolio state at that moment, which is exactly what the user needs to review before the next phase changes things
+
+`open_browser: true` is what makes step 1 actually open a window, and it belongs only where the user asked for one. A caller that just wants the dashboard refreshed at the end of a work step omits the flag and cites the `url` the agent returns — the step ends with a link rather than a window nobody asked for.
 
 This is lightweight — the generator script runs in seconds and the HTML is self-contained. The cost of generating an intermediate dashboard is negligible compared to the cost of the user discovering problems after the next phase has already run.
 

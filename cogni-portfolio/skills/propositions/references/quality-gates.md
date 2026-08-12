@@ -69,7 +69,7 @@ Present coverage as a table so the user sees the gap clearly. Then offer the app
 
 **The user must explicitly choose (d) to bypass.** Do not auto-proceed past this checkpoint when customer profiles are missing — buyer-grounded messaging is materially better than inferred messaging, and this is the last opportunity to add profiles before generating a large batch.
 
-If the user chooses (a), dispatch the `dashboard-refresher` agent with `project_dir` and `plugin_root: $CLAUDE_PLUGIN_ROOT`, then ask again whether they're ready to proceed. If (b), present feature descriptions with quality status. If (c) where customer profiles are missing, direct them to the `customers` skill. Only proceed to generation after the user confirms (c) when all profiles exist, or explicitly chooses (d).
+If the user chooses (a), dispatch the `dashboard-refresher` agent with `project_dir`, `plugin_root: $CLAUDE_PLUGIN_ROOT` and `open_browser: true`, then ask again whether they're ready to proceed. If (b), present feature descriptions with quality status. If (c) where customer profiles are missing, direct them to the `customers` skill. Only proceed to generation after the user confirms (c) when all profiles exist, or explicitly chooses (d).
 
 After batch generation, log which propositions were generated with customer profile data vs. inferred buyer perspective so the user can later identify which to revisit.
 
@@ -127,7 +127,7 @@ Then offer review options:
 
 > Would you like to: (a) open the dashboard to see the full Feature x Market matrix with the new propositions, (b) read through the generated propositions in detail — I'll present them grouped by feature or market, (c) focus on the flagged propositions that need attention, or (d) proceed to the next tier / next steps?
 
-Wait for the user's explicit response. If (a), dispatch the `dashboard-refresher` agent with `project_dir` and `plugin_root: $CLAUDE_PLUGIN_ROOT`, then ask again whether they're ready. **Do not suggest generating the next tier or moving to solutions until the user has had the chance to review what was just created.**
+Wait for the user's explicit response. If (a), dispatch the `dashboard-refresher` agent with `project_dir`, `plugin_root: $CLAUDE_PLUGIN_ROOT` and `open_browser: true`, then ask again whether they're ready. **Do not suggest generating the next tier or moving to solutions until the user has had the chance to review what was just created.**
 
 When the user chooses to read propositions in detail (option b), present each proposition with full IS/DOES/MEANS text and your consulting commentary — not just the summary table. Group by feature or market based on what reveals the most insight (or ask the user's preference). For each proposition include:
 

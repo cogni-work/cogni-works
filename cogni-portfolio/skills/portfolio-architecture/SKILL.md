@@ -165,7 +165,7 @@ Run `$CLAUDE_PLUGIN_ROOT/scripts/project-status.sh <project-dir>` to determine p
 **Always available:**
 - **(a) Refine products** — delegate to the `products` skill
 - **(b) Refine features** — delegate to the `features` skill
-- **(c) Open the dashboard** — delegate to the `dashboard-refresher` agent
+- **(c) Open the dashboard** — delegate to the `dashboard-refresher` agent with `open_browser: true`
 - **(d) Done** — diagram saved at `output/architecture.excalidraw`
 
 **Conditional (show when relevant):**

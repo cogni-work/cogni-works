@@ -224,6 +224,10 @@ Cross-reference products with existing portfolio entities:
 - **Coverage**: Flag products with zero features — they need attention next
 - **Overlap**: Flag products with near-identical descriptions — they may need merging
 
+## Dashboard handoff
+
+Regenerate the dashboard and hand the user its link, every time, per `$CLAUDE_PLUGIN_ROOT/references/dashboard-handoff.md`. Print the link; do not open a browser.
+
 ## Operations
 
 ### Listing Products

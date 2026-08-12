@@ -164,6 +164,10 @@ After writing, offer: "Would you like to: (a) open the dashboard to see customer
 
 Wait for the user's explicit response. If they choose (a), delegate to the `dashboard-refresher` agent with `project_dir`, `plugin_root: $CLAUDE_PLUGIN_ROOT` and `open_browser: true` to generate a dashboard snapshot, then ask again if they're ready to proceed.
 
+## Dashboard handoff
+
+Regenerate the dashboard and hand the user its link, every time, per `$CLAUDE_PLUGIN_ROOT/references/dashboard-handoff.md`. Print the link; do not open a browser.
+
 ## Important Notes
 
 - Customer files share the same slug as their parent market

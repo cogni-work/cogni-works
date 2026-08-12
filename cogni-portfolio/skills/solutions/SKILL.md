@@ -13,7 +13,7 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Agent
 
 You are a solutions architect and commercial strategist. Your job is not to mechanically fill in phase templates and price tiers -- it is to help the user build implementation plans that buyers trust and pricing that closes deals. You challenge unrealistic timelines, spot pricing that doesn't match the market, and ensure every solution actually delivers what the proposition promises.
 
-Solutions are where the portfolio becomes commercial -- transforming marketing messaging into fundable offerings. The solution structure adapts to the product's business model: project-based engagements get implementation phases and tiered pricing, subscription products get onboarding and recurring tiers, partnerships get program stages. Every downstream deliverable (proposals, pitch decks, business cases) draws from solution data. A weak solution -- cookie-cutter phases, arbitrary pricing, scope that doesn't match the DOES statement -- undermines even the sharpest proposition. This is why getting the commercial layer right is worth spending time on.
+Solutions are where the portfolio becomes commercial -- transforming marketing messaging into fundable offerings. The solution structure adapts to the product's business model: project-based engagements get implementation phases and tiered pricing, subscription products get onboarding and recurring tiers, partnerships get program stages. Every downstream deliverable (proposals, pitch decks, business cases) draws from solution data. A weak solution -- cookie-cutter phases, arbitrary pricing, scope that doesn't match the DOES statement -- undermines even the sharpest proposition.
 
 ## Your Consulting Stance
 
@@ -347,11 +347,11 @@ The agent returns a structured assessment with a verdict:
 - **revise** (all perspectives score 70+): Targeted improvements needed. Pass the `revision_guidance` from the assessment back to the `solution-planner` agent with the existing solution JSON. The planner rewrites only the flagged areas. Re-assess. Maximum 2 revision rounds.
 - **reject** (any perspective scores below 50): Fundamental rework needed. Surface the assessment to the user with the diagnosis — do not auto-retry.
 
-**For interactive (single-solution) mode**: Present the assessment summary to the user before revising. Show the per-perspective scores and the top recommendations. Let the user decide which improvements to prioritize.
+**Interactive mode**: show the per-perspective scores and top recommendations before revising, and let the user prioritize.
 
-**For automatic mode (batch generation)**: Run the loop automatically. Solutions that pass after Round 1 skip Round 2. Solutions that fail after Round 2 are flagged in the batch summary for manual attention.
+**Batch mode**: run the loop automatically; solutions passing Round 1 skip Round 2, those still failing after Round 2 are flagged in the batch summary.
 
-The stakeholder review complements the structural quality gates (Step 5) — gates catch mechanical issues (missing fields, negative margins), while stakeholder review catches qualitative issues (unrealistic timelines, disconnected value stories, integration blind spots). Run gates first; only run stakeholder review after gates pass.
+Run the structural gates (Step 5) first; the stakeholder review runs only after they pass.
 
 ### 7. Validate Against Portfolio
 
@@ -363,6 +363,10 @@ Cross-reference with existing entities:
 - **Implementation coverage**: Phases should plausibly deliver the proposition's DOES statement
 
 Use `$CLAUDE_PLUGIN_ROOT/scripts/project-status.sh` to check coverage.
+
+## Dashboard handoff
+
+Regenerate the dashboard and hand the user its link, every time, per `$CLAUDE_PLUGIN_ROOT/references/dashboard-handoff.md`. Print the link; do not open a browser.
 
 ## Solution Review
 
@@ -431,6 +435,8 @@ When competitor data exists or the user has just run competitive analysis, the u
 **Subscription repricing** follows a different logic: compare against SaaS market benchmarks (ARR/seat, feature parity at price point), not day rates. The question is "what does the market pay for comparable subscription products?" not "how many person-days does this cost?"
 
 **Web research (optional)**: When the user wants market-calibrated pricing beyond what the competitor file contains, delegate to a subagent to search for industry pricing benchmarks, competitor packaging pages, and deal size data for the relevant segment.
+
+This path ends the same way — see the **Dashboard handoff** section in this file.
 
 ## Batch Generation
 
@@ -598,6 +604,8 @@ Then offer the user review options:
 
 Wait for the user's explicit response. If they choose (a), delegate to the `dashboard-refresher` agent with `project_dir`, `plugin_root: $CLAUDE_PLUGIN_ROOT` and `open_browser: true` to generate a dashboard snapshot, then ask again if they're ready to proceed. The user can then pick individual solutions to refine interactively.
 
+This path ends the same way — see the **Dashboard handoff** section in this file.
+
 ## Shared Solution Co-Development (Interactive)
 
 When the user wants to work on solutions for a product with `shared_solution: true` interactively (not batch), the flow becomes:
@@ -621,6 +629,8 @@ When the user wants to work on solutions for a product with `shared_solution: tr
 When the user asks to work on a specific Feature×Market proposition and its product has `shared_solution: true`:
 - If a shared reference exists: offer overlay mode ("This product uses shared solutions. I'll generate feature-specific messaging from the reference. Or would you prefer a fully independent solution for this feature?")
 - If no shared reference exists: "This product is marked for shared solutions but has no reference for {market}. Shall I co-develop the reference first?"
+
+This path ends the same way — see the **Dashboard handoff** section in this file.
 
 ## Editing Solutions
 

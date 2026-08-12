@@ -14,10 +14,13 @@
 #   3. dashboard-refresher no-skip-path: revert the "no theme found" branch of
 #      agents/dashboard-refresher.md to a terminal skipped status; expect
 #      test_refresher_has_no_skip_path to go RED.
-#   4. portfolio-resume dashboard row: delete the Dashboard row from
+#   4. handoff citation: strip the canonical-reference citation from the handoff
+#      section of skills/markets/SKILL.md; expect test_entity_skills_cite_handoff
+#      to go RED.
+#   5. portfolio-resume dashboard row: delete the Dashboard row from
 #      skills/portfolio-resume/SKILL.md; expect test_resume_shows_dashboard_row
 #      to go RED.
-#   5. dispatch-site Agent grant: strip the Agent token from the allowed-tools
+#   6. dispatch-site Agent grant: strip the Agent token from the allowed-tools
 #      line of skills/products/SKILL.md, a skill that carries a
 #      dashboard-refresher dispatch; expect test_dispatch_sites_grant_agent
 #      to go RED.
@@ -193,7 +196,64 @@ PY
   return "$rc"
 }
 
-# --- Mutation 4: portfolio-resume dashboard row ---------------------------
+# --- Mutation 4: handoff citation ------------------------------------------
+# Strips the canonical-reference citation from the handoff section of
+# skills/markets/SKILL.md, then asserts test_entity_skills_cite_handoff goes RED
+# against the mutant. markets/ is the target because it carries the citation
+# exactly once and takes no pointer line, so the count=1 anchor is unambiguous.
+# A documentation file on purpose: the suite asserts on documentation content, so
+# mutating a script would leave the case green and prove nothing.
+mutation_handoff_citation() {
+  local target="$PLUGIN_DIR/skills/markets/SKILL.md"
+  local suite="$PLUGIN_DIR/tests/test-dashboard-handoff.sh"
+  local test_name="test_entity_skills_cite_handoff"
+  for f in "$target" "$suite"; do
+    [ -f "$f" ] || { echo "FAIL: missing $f" >&2; return 1; }
+  done
+
+  # Baseline: the target test must be GREEN before we mutate, or a later red
+  # tells us nothing.
+  if ! bash "$suite" "$test_name" >/dev/null 2>&1; then
+    echo "FAIL: baseline $test_name is already red before mutation" >&2
+    return 1
+  fi
+
+  local backup; backup="$(mktemp)"
+  cp "$target" "$backup"
+
+  if ! python3 - "$target" <<'PY'
+import re, sys
+path = sys.argv[1]
+src = open(path, encoding="utf-8").read()
+mutated, n = re.subn(
+    r"^.*references/dashboard-handoff\.md.*$\n?",
+    "",
+    src,
+    count=1,
+    flags=re.MULTILINE,
+)
+if n != 1:
+    sys.stderr.write("handoff citation not found — cannot mutate.\n")
+    sys.exit(6)
+open(path, "w", encoding="utf-8").write(mutated)
+PY
+  then
+    echo "FAIL: handoff-citation mutation could not be applied" >&2
+    cp "$backup" "$target"; rm -f "$backup"; return 1
+  fi
+
+  local rc=0
+  if bash "$suite" "$test_name" >/dev/null 2>&1; then
+    echo "FALSIFIER: mutation survived — $test_name stayed GREEN with the handoff citation removed" >&2
+    rc=1
+  else
+    echo "OK: mutation caught — $test_name goes red when the handoff citation is removed"
+  fi
+  cp "$backup" "$target"; rm -f "$backup"   # always restore
+  return "$rc"
+}
+
+# --- Mutation 5: portfolio-resume dashboard row ---------------------------
 # Deletes the Dashboard row from the portfolio-resume status table, then
 # asserts test_resume_shows_dashboard_row goes RED against the mutant. The
 # target is a documentation file on purpose: the case asserts on documented
@@ -313,6 +373,7 @@ PY
 mutation_commercial_consolidation || overall=1
 mutation_solution_candidates || overall=1
 mutation_dashboard_no_skip_path || overall=1
+mutation_handoff_citation || overall=1
 mutation_resume_dashboard_row || overall=1
 mutation_dispatch_agent_grant || overall=1
 

@@ -490,6 +490,10 @@ Cross-reference features with existing portfolio entities:
 
 These checks catch data model inconsistencies early, before they cascade into downstream skills.
 
+## Dashboard handoff
+
+Regenerate the dashboard and hand the user its link, every time, per `$CLAUDE_PLUGIN_ROOT/references/dashboard-handoff.md`. Print the link; do not open a browser.
+
 ## Operations
 
 ### Listing Features

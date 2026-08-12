@@ -310,6 +310,10 @@ After validation, offer: "Would you like to: (a) open the dashboard to see the p
 
 Wait for the user's explicit response. If they choose (a), delegate to the `dashboard-refresher` agent with `project_dir`, `plugin_root: $CLAUDE_PLUGIN_ROOT` and `open_browser: true` to generate a dashboard snapshot, then ask again if they're ready to proceed.
 
+## Dashboard handoff
+
+Regenerate the dashboard and hand the user its link, every time, per `$CLAUDE_PLUGIN_ROOT/references/dashboard-handoff.md`. Print the link; do not open a browser.
+
 ## Package Review
 
 When reviewing existing packages:
@@ -328,6 +332,8 @@ For multiple product×market pairs, generate packages sequentially (package desi
 2. Group by product — packages for the same product across different markets should be consistent in tier names and structure
 3. Present the plan and get confirmation
 4. Generate packages, maintaining tier consistency within each product
+
+This path ends the same way — see the **Dashboard handoff** section in this file.
 
 ## Editing Packages
 

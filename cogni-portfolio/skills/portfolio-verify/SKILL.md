@@ -6,7 +6,7 @@ description: |
   review deviations, source check, "are these numbers right", "check my sources",
   or wants to validate portfolio data before generating deliverables — even if they
   don't say "verify" explicitly.
-allowed-tools: Read, Write, Edit, Glob, Grep, Agent, Skill
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Agent, Skill
 ---
 
 # Portfolio Claim Verification

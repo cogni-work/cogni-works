@@ -203,7 +203,7 @@ After presenting, offer: "Would you like to: (a) open the dashboard to see the p
 
 If they choose (b), delegate to the `portfolio-architecture` skill to generate and present the mermaid diagram.
 
-Wait for the user's explicit response. If they choose (a), delegate to the `dashboard-refresher` agent with `project_dir` and `plugin_root: $CLAUDE_PLUGIN_ROOT` to generate a dashboard snapshot, then ask again if they're ready to proceed.
+Wait for the user's explicit response. If they choose (a), delegate to the `dashboard-refresher` agent with `project_dir`, `plugin_root: $CLAUDE_PLUGIN_ROOT` and `open_browser: true` to generate a dashboard snapshot, then ask again if they're ready to proceed.
 
 ## Phase 4: Sync portfolio.json
 

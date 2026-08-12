@@ -308,7 +308,7 @@ bash "${CLAUDE_PLUGIN_ROOT:-$(ls -td "$HOME"/.claude/plugins/cache/insight-wave/
 
 After validation, offer: "Would you like to: (a) open the dashboard to see the package tiers and bundle economics across all products, (b) review individual package details, or (c) proceed to the next steps?"
 
-Wait for the user's explicit response. If they choose (a), delegate to the `dashboard-refresher` agent with `project_dir` and `plugin_root: $CLAUDE_PLUGIN_ROOT` to generate a dashboard snapshot, then ask again if they're ready to proceed.
+Wait for the user's explicit response. If they choose (a), delegate to the `dashboard-refresher` agent with `project_dir`, `plugin_root: $CLAUDE_PLUGIN_ROOT` and `open_browser: true` to generate a dashboard snapshot, then ask again if they're ready to proceed.
 
 ## Package Review
 

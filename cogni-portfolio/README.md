@@ -131,7 +131,7 @@ All entities are stored as JSON files in the project directory:
 
 See [references/data-model.md](references/data-model.md) for the full schema with JSON examples and entity relationships.
 
-See [references/dashboard-handoff.md](references/dashboard-handoff.md) for the end-of-step dashboard handoff every entity-writing skill closes with.
+See [references/dashboard-handoff.md](references/dashboard-handoff.md) for the end-of-step dashboard handoff the entity-writing, pipeline and ops skills all close with.
 
 ## How it works
 

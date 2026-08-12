@@ -15,7 +15,7 @@ description: |
   "export to Excel", "spreadsheet", "XLSX", "workbook", "portfolio workbook",
   or otherwise wants internal portfolio data turned into something an audience
   can read, present, or analyze.
-allowed-tools: Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion, Skill
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Agent, AskUserQuestion, Skill
 ---
 
 # Portfolio Communicate
@@ -38,7 +38,7 @@ Internal portfolio data (slugs, TAM/SAM/SOM, relevance tiers, quality scores) is
 | `workbook` | Leadership, analysts | Structured spreadsheet with all portfolio data | XLSX |
 | Custom/ad-hoc | Any audience | User-defined voice, sections, review | Markdown |
 
-Each use case defines its own voice, output templates, and review criteria. Both the `pitch` and `customer-narrative` use cases emit output with `arc_id` in frontmatter, making them directly consumable by story-to-slides, story-to-web, and story-to-storyboard — **no intermediate `/narrative` step needed.** `customer-narrative` is unique in that its arc varies per scope: `home` and `persona` use `jtbd-portfolio`, `about` uses `company-credo`, `capability` uses `corporate-visions`, `approach` uses `engagement-model`. See `references/templates-customer-narrative.md` for the full scope → arc mapping.
+Each use case defines its own voice, output templates, and review criteria. Both the `pitch` and `customer-narrative` use cases emit output with `arc_id` in frontmatter, making them directly consumable by story-to-slides, story-to-web, and story-to-storyboard — **no intermediate `/narrative` step needed.** `customer-narrative` is unique in that its arc varies per scope — see the mapping table in Step 1b.
 
 ## Prerequisites
 
@@ -114,9 +114,6 @@ Load each scope's arc definition in Step 2 so the templates render with the corr
 
 #### Pitch: user picker
 
-For the `pitch` use case (below) the arc is genuinely a user choice — present the picker.
-### Step 1b (pitch use case only)
-
 For the `pitch` use case, the output's `arc_id` controls which story structure cogni-narrative downstream tools render. The `templates-pitch.md` reference defines `jtbd-portfolio` as the standard default — its 1:1 job-to-solution mapping mirrors the portfolio's Feature × Market structure, and its verb-phrase jobs surface the buyer language that IS/DOES/MEANS already encodes. The user can still override.
 
 **Always present this picker via AskUserQuestion before moving to Step 2** — do not silently apply a default, and do not improvise a different list. The picker must list `jtbd-portfolio` first so the documented default stays visible:
@@ -132,7 +129,7 @@ If the user explicitly passed `--arc-id` on invocation, skip the picker and use 
 
 Pass the chosen `arc_id` into Step 2 so `cogni-narrative/skills/narrative/references/story-arc/{arc-id}/arc-definition.md` is read for the right arc, and into Step 3 so the frontmatter and evidence mapping use the right arc elements.
 
-Skip the pitch picker for non-pitch use cases (`proposal`, `market-brief`, `workbook`, `repo-documentation`, and ad-hoc/custom use cases) — they do not carry `arc_id`. `customer-narrative` is now arc-driven per scope as described above; its arcs are hardcoded and do not need a picker.
+Skip the pitch picker for non-pitch use cases (`proposal`, `market-brief`, `workbook`, `repo-documentation`, and ad-hoc/custom use cases) — they do not carry `arc_id`.
 
 ### Step 2: Load Entities
 
@@ -259,7 +256,7 @@ For each dispatch, prepare the agent payload:
 | `feature_slug` | Required iff `scope == capability` |
 | `market_slug`, `persona_id` | Required iff `scope == persona` |
 
-**Step 3b — Parallel dispatch.** Send ONE message containing all N `Agent` tool calls, each with `subagent_type: customer-narrative-writer`. All dispatches for a given invocation MUST be in a single message with parallel tool calls — serial dispatch defeats the purpose of the agent pattern. For single-scope requests (e.g. just `home`), this is still one dispatch via the agent for context hygiene.
+**Step 3b — Parallel dispatch.** Send ONE message containing all N `Agent` tool calls, each with `subagent_type: customer-narrative-writer` — serial dispatch defeats the purpose of the agent pattern. For single-scope requests (e.g. just `home`), this is still one dispatch via the agent for context hygiene.
 
 **Step 3c — Collect and validate.** As each agent returns its JSON summary:
 
@@ -406,6 +403,10 @@ For **custom/ad-hoc use cases**: suggest downstream steps from the use case's `d
 
 **Save as custom use case (ad-hoc only):** If this was an ad-hoc run, offer: "Would you like to save this configuration as a reusable use case? Next time you can just reference it by name." If yes, write to `communicate-use-cases.json` in the project root (create the file if it doesn't exist; append to the `use_cases` array if it does).
 
+## Dashboard handoff
+
+Regenerate the dashboard and hand the user its link, every time, per `$CLAUDE_PLUGIN_ROOT/references/dashboard-handoff.md`. Print the link; do not open a browser.
+
 ## Ad-Hoc Use Cases
 
 When the user selects "something else" or describes a purpose that doesn't match any registered use case, guide them through defining the parameters:
@@ -437,6 +438,8 @@ When the user selects "something else" or describes a purpose that doesn't match
 **5. Generate** using the collected parameters. The voice, sections, and entity selection follow from the audience definition. Write output to `output/communicate/ad-hoc/` (or a user-chosen directory name).
 
 **6. Persist (optional)**: After generation, offer to save as a reusable custom use case.
+
+This path ends the same way — see the **Dashboard handoff** section in this file.
 
 ## Important Notes
 

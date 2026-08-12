@@ -9,7 +9,7 @@ description: |
   consolidation", or "consolidated portfolio" — typically after running
   `portfolio-scan --mode=research-only` against two or more companies in the
   same industry taxonomy.
-allowed-tools: Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Agent, AskUserQuestion
 ---
 
 # Portfolio Consolidate (Phase 1)
@@ -86,6 +86,11 @@ Typical follow-ons from a fresh coverage matrix:
 - **Extend the scope**: run `portfolio-scan --mode=research-only` against one or two more peers and re-run consolidation.
 - **Deep-dive a category**: if one category is covered by everyone except the portfolio's own company, that's the strongest candidate for a `compete`-driven response or a new feature investment.
 - **Wait for Phase 2**: whitespace analysis and per-dimension exec summary are deferred to a follow-up phase; if the user wants those immediately, point them at the deferred items listed under Scope (Phase 1) above.
+
+## Dashboard handoff
+
+Regenerate the dashboard and hand the user its link, every time, per `$CLAUDE_PLUGIN_ROOT/references/dashboard-handoff.md`. Print the link; do not open a browser.
+This is the end-of-step link handoff only. It renders nothing new, changes no consolidation output, and leaves the coverage-matrix script untouched — the dashboard integration of consolidated scans stays deferred, as the scope section above records.
 
 ## Inputs and outputs
 

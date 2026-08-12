@@ -6,7 +6,7 @@ description: |
   "I have some files", "parse these docs", "use these docs as input", "internal documents",
   "background material", "here's our strategy deck", processing uploads, or wants to
   populate their portfolio from existing material — even if they don't say "ingest".
-allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Skill
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Agent, Skill
 ---
 
 # Upload Ingestion
@@ -255,6 +255,10 @@ Suggest the logical next step based on what was ingested:
 - Competitive or buyer persona data observed but not yet entityable -> mention it and suggest `compete` or `customers` after prerequisite entities are in place
 - Markets created without TAM/SAM/SOM -> list them explicitly and suggest the `markets` skill to add sizing estimates
 - Context entries created -> mention which downstream skills will benefit. For example: "8 context entries extracted (3 pricing, 2 competitive, 2 strategic, 1 customer). These will automatically inform the `solutions`, `compete`, `propositions`, and `customers` skills when you run them."
+
+## Dashboard handoff
+
+Regenerate the dashboard and hand the user its link, every time, per `$CLAUDE_PLUGIN_ROOT/references/dashboard-handoff.md`. Print the link; do not open a browser.
 
 ## Important Notes
 

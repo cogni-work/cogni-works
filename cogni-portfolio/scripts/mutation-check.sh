@@ -31,6 +31,10 @@
 #      allowed-tools line of skills/portfolio-canvas/SKILL.md, a skill that
 #      documents script invocations; expect test_invocation_sites_grant_bash
 #      to go RED.
+#   9. citation-only dispatch Agent grant: strip the mid-list Agent token from
+#      the allowed-tools line of skills/portfolio-ingest/SKILL.md, a skill whose
+#      only documented dispatch is the canonical handoff citation (it never
+#      names the agent); expect test_dispatch_sites_grant_agent to go RED.
 #
 # Kept under scripts/ (NOT tests/) deliberately: run-plugin-tests.py auto-discovers
 # tests/*.sh and would run this as a normal suite; this is a manual meta-check that
@@ -498,6 +502,72 @@ PY
 }
 
 
+# --- Mutation 9: citation-only dispatch Agent grant ------------------------
+# The citation-only counterpart of mutation_dispatch_agent_grant, which targets
+# products/SKILL.md and so exercises only the arm the case could already see.
+# portfolio-ingest reaches the scan surface solely by citing the canonical handoff
+# reference, and is not otherwise mutated here, so the two stay independent.
+mutation_citation_only_agent_grant() {
+  local target="$PLUGIN_DIR/skills/portfolio-ingest/SKILL.md"
+  local suite="$PLUGIN_DIR/tests/test-dashboard-handoff.sh"
+  local test_name="test_dispatch_sites_grant_agent"
+  for f in "$target" "$suite"; do
+    [ -f "$f" ] || { echo "FAIL: missing $f" >&2; return 1; }
+  done
+
+  # Baseline: the target test must be GREEN before we mutate, or a later red
+  # tells us nothing.
+  if ! bash "$suite" "$test_name" >/dev/null 2>&1; then
+    echo "FAIL: baseline $test_name is already red before mutation" >&2
+    return 1
+  fi
+
+  local backup; backup="$(mktemp)"
+  cp "$target" "$backup"
+
+  if ! python3 - "$target" <<'PY'
+import re, sys
+path = sys.argv[1]
+src = open(path, encoding="utf-8").read()
+# MID-LIST, deliberately not the trailing `, Agent$` anchor mutation 6 uses: none
+# of the citation-only skills ends its grant line with Agent, so that anchor would
+# match nothing here and the mutation could never run.
+mutated, n = re.subn(
+    r"^(allowed-tools: .*), Agent,(.*)$",
+    r"\1,\2",
+    src,
+    count=1,
+    flags=re.MULTILINE,
+)
+if n != 1:
+    sys.stderr.write("allowed-tools line with a mid-list Agent token not found — cannot mutate.\n")
+    sys.exit(10)
+# Disjointness is the whole point, so assert it rather than trusting the regex: a
+# replacement that left any whole Agent token would keep the grant, keep the case
+# green, and let this mutation survive unnoticed.
+line = next(l for l in mutated.splitlines() if l.startswith("allowed-tools:"))
+if "Agent" in [t.strip() for t in line.split(":", 1)[1].split(",")]:
+    sys.stderr.write("mutant still grants Agent — mutation is not disjoint.\n")
+    sys.exit(11)
+open(path, "w", encoding="utf-8").write(mutated)
+PY
+  then
+    echo "FAIL: citation-only Agent-grant mutation could not be applied" >&2
+    cp "$backup" "$target"; rm -f "$backup"; return 1
+  fi
+
+  local rc=0
+  if bash "$suite" "$test_name" >/dev/null 2>&1; then
+    echo "FALSIFIER: mutation survived — $test_name stayed GREEN with a citation-only skill's Agent grant stripped" >&2
+    rc=1
+  else
+    echo "OK: mutation caught — $test_name goes red when a skill whose only dispatch is the canonical citation loses its Agent grant"
+  fi
+  cp "$backup" "$target"; rm -f "$backup"   # always restore
+  return "$rc"
+}
+
+
 mutation_commercial_consolidation || overall=1
 mutation_solution_candidates || overall=1
 mutation_dashboard_no_skip_path || overall=1
@@ -506,6 +576,7 @@ mutation_resume_dashboard_row || overall=1
 mutation_dispatch_agent_grant || overall=1
 mutation_pipeline_handoff_citation || overall=1
 mutation_invocation_bash_grant || overall=1
+mutation_citation_only_agent_grant || overall=1
 
 if [ "$overall" -eq 0 ]; then
   echo "All mutations caught."

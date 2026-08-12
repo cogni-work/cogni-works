@@ -4,13 +4,13 @@
 
 > **insight-wave readiness (Claude Code desktop recommended)** — Claude Code desktop is the recommended interface for insight-wave today. Cowork is a secondary path and is not yet production-ready for insight-wave workflows because of context-window and Pencil-MCP fidelity gaps — see the [deployment guide](../docs/deployment-guide.md) for detail. This guidance will flip when those gaps close upstream.
 
-The onboarding and navigation layer for the [insight-wave](https://github.com/cogni-work/insight-wave) ecosystem — the single entry point that makes 14 plugins with 110+ skills behave like one coherent system.
+The onboarding and navigation layer for the [insight-wave](https://github.com/cogni-work/insight-wave) ecosystem — the single entry point that makes 13 plugins with 110 skills behave like one coherent system.
 
 ## Why this exists
 
 | Problem | What happens | Impact |
 |---------|-------------|--------|
-| 14 plugins, no map | New users don't know which plugin handles their task | Trial-and-error onboarding — first productive use takes hours |
+| 13 plugins, no map | New users don't know which plugin handles their task | Trial-and-error onboarding — first productive use takes hours |
 | Disconnected workflows | Research, narrative, visual, and sales plugins work together but no guide shows how | Users run one plugin well, miss the multi-plugin pipelines that deliver 10x value |
 | Silent failures | A missing dependency or stale workspace breaks skills at runtime | Cryptic errors with no diagnostic path — users blame the plugin, not the config |
 | No structured learning | Users learn by stumbling into slash commands | Shallow usage — power features go undiscovered |
@@ -24,7 +24,7 @@ A meta-plugin for the insight-wave ecosystem, built on a workflow-tour curriculu
 ## What it does
 
 1. **Teach** through 7 interactive workflow tours — adaptive pacing, hands-on exercises, quizzes, and progress tracking across the canonical end-to-end pipelines
-2. **Guide** users to the right plugin — match natural-language task descriptions to capabilities across 14 plugins and 110+ skills
+2. **Guide** users to the right plugin — match natural-language task descriptions to capabilities across 13 plugins and 110 skills
 3. **Chain** plugins into pipelines — 7 cross-plugin workflow templates from install-to-infographic through full consulting engagements
 4. **Diagnose** plugin problems — check integrity, dependencies, workspace health, and known issues before they surface as runtime failures
 5. **Summarize** any plugin — generate one-screen quick-reference cheatsheets with commands, capabilities, and tips
@@ -33,7 +33,7 @@ A meta-plugin for the insight-wave ecosystem, built on a workflow-tour curriculu
 
 ## What it means for you
 
-- **Skip the memorization.** Describe your task in plain language and the guide skill routes it to the exact plugin and skill across 14 plugins and 110+ skills — first productive result in under 5 minutes.
+- **Skip the memorization.** Describe your task in plain language and the guide skill routes it to the exact plugin and skill across 13 plugins and 110 skills — first productive result in under 5 minutes.
 - **Build real skills in 5–6 hours.** Complete all 7 workflow tours (~45–60 minutes each) with hands-on exercises that produce real output. Resume any tour mid-module — progress is tracked to the lesson.
 - **Collapse multi-plugin work into 3–4 steps.** Run any of 7 workflow templates to chain plugins into repeatable pipelines — research-to-report in 3 steps, portfolio-to-pitch in 4.
 - **Catch failures before they surface.** Run the 5-tier health check to surface missing dependencies, stale configs, and integrity issues before they become cryptic runtime errors.
@@ -73,7 +73,7 @@ Don't know which plugin handles your task? Describe it in plain language:
 
 > Run `/guide "I need to turn research into a slide deck"`
 
-The guide skill matches your description against all 14 plugins and 110+ skills and routes you to the pipeline, e.g.:
+The guide skill matches your description against all 13 plugins and 110 skills and routes you to the pipeline, e.g.:
 
 ```
 research-to-report pipeline:

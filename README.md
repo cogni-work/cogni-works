@@ -11,7 +11,7 @@ Each plugin implements an established framework (Corporate Visions, Double Diamo
 
 ## What the plugins do
 
-14 plugins organized around nine capability areas. Each area handles a distinct part of the consulting-to-delivery workflow; plugins within an area share data formats and can be used independently or together.
+13 plugins organized around nine capability areas. Each area handles a distinct part of the consulting-to-delivery workflow; plugins within an area share data formats and can be used independently or together.
 
 ### Knowledge Management
 
@@ -28,12 +28,6 @@ Each plugin implements an established framework (Corporate Visions, Double Diamo
 > "I need to evaluate strategic options for expanding our cloud services portfolio in the DACH mid-market"
 
 → [Plugin guide](docs/plugin-guide/cogni-consult.md) · [Consulting Engagement workflow](docs/workflows/consulting-engagement.md)
-
-[cogni-projects](cogni-projects/README.md) steers the other side of a consulting practice — the people, not the engagement. It holds one self-contained portfolio of consultants, projects, and assignments, then ranks candidates for every open role on availability, profile fit, and strategic impact, so staffing decisions are defensible rather than recalled. A read-only dashboard renders staffing coverage, at-risk projects, and portfolio value for partner meetings. 4 skills.
-
-> "Who should I put on the Nordics ERP rollout, and which projects are at risk?"
-
-→ [Plugin guide](docs/plugin-guide/cogni-projects.md)
 
 ### Trend Intelligence
 
@@ -195,7 +189,7 @@ The workplace combines Claude Code with [Obsidian](https://obsidian.md/) for per
 ```
 insight-wave/
 ├── .claude-plugin/
-│   └── marketplace.json                    # Marketplace manifest (14 plugins)
+│   └── marketplace.json                    # Marketplace manifest (13 plugins)
 ├── docs/                                   # User documentation
 │   ├── getting-started.md                  # Forwarder → workflows/install-to-infographic.md
 │   ├── ecosystem-overview.md               # Plugin landscape and data flow
@@ -235,7 +229,6 @@ Plugins follow the [Claude Code plugin standard](https://code.claude.com/docs/en
 |--------|-----------|--------|--------|--------------|
 | [cogni-knowledge](cogni-knowledge/README.md) | Platform | 21 | 16 | Wiki-first research orchestrator — binds its own vendored wiki base to N research projects so findings compound across runs via a zero-network inverted pipeline |
 | [cogni-consult](cogni-consult/README.md) | Consulting | 9 | 4 | Action-fields-WBS consulting orchestrator with per-deliverable design thinking and acting stakeholder personas |
-| [cogni-projects](cogni-projects/README.md) | Consulting | 4 | 0 | Partner project-portfolio steering — consultants, projects, and a deterministic staffing match engine with a partner-meeting dashboard |
 | [cogni-trends](cogni-trends/README.md) | Trend Intelligence | 9 | 12 | TIPS trend scouting with bilingual DE/EN research, investment theme modeling, and reusable industry catalogs |
 | [cogni-portfolio](cogni-portfolio/README.md) | Portfolio | 21 | 20 | IS/DOES/MEANS portfolio positioning with eight industry taxonomies, competitive analysis, and market sizing |
 | [cogni-marketing](cogni-marketing/README.md) | Content | 11 | 3 | B2B marketing content engine — 16 formats across thought leadership, demand gen, lead gen, sales enablement, ABM |

@@ -14,7 +14,7 @@ description: |
   my taxonomy", "is my taxonomy valid", or "save this taxonomy for another
   project". Project-local: the taxonomy lives inside the portfolio project,
   survives plugin updates, and overrides the bundled template.
-allowed-tools: Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Agent, AskUserQuestion
 ---
 
 # Portfolio Taxonomy
@@ -167,6 +167,12 @@ On any failure: report the failing check's `detail` verbatim to the user and sug
 On success: confirm with the user and tell them the taxonomy is ready for `cogni-portfolio:portfolio-scan`.
 
 Note: `edit-taxonomy.sh` already runs the validator after every edit and rolls back on failure, so an edit that returned success is also validation-clean. This Validation section applies to creation modes and to manual hand-edits.
+
+---
+
+## Dashboard handoff
+
+Regenerate the dashboard and hand the user its link, every time, per `$CLAUDE_PLUGIN_ROOT/references/dashboard-handoff.md`. Print the link; do not open a browser.
 
 ---
 

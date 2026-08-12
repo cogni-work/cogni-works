@@ -18,6 +18,8 @@
 #   test_open_browser_optin          default is non-opening, and every intending call site says so
 #   test_refresher_returns_url       a successful result carries a clickable url
 #   test_entity_skills_cite_handoff  all eight entity skills end by citing the canonical handoff
+#   test_pipeline_skills_cite_handoff
+#                                    the six pipeline and ops skills cite it and grant Agent
 #   test_secondary_paths_reach_handoff
 #                                    alternate write paths point back to that terminal section
 #   test_handoff_not_duplicated      the handoff is authored once, and no skill restates it
@@ -74,6 +76,21 @@
 #   prefix, so the assertion would stay green and the mutation would survive.
 #   The in-repo equivalent is registered as mutation_handoff_citation.
 #
+# Mutation recipe — test_pipeline_skills_cite_handoff. Same harness, same shape.
+#   bash ~/.claude/plugins/cache/managed-service/cogni-service/0.0.383/scripts/mutation-check.sh \
+#     --root . \
+#     --file cogni-portfolio/skills/portfolio-verify/SKILL.md \
+#     --expr 's#references/dashboard-handoff#references/absent-handoff#' \
+#     --test 'bash cogni-portfolio/tests/test-dashboard-handoff.sh test_pipeline_skills_cite_handoff' \
+#     --case test_pipeline_skills_cite_handoff
+#   The expr repoints one wired pipeline skill's citation, so the case goes red on the
+#   mutant and green on HEAD. portfolio-verify carries the citation exactly once and
+#   takes no pointer line, so the single-occurrence anchor is unambiguous. As above the
+#   replacement is deliberately DISJOINT from the searched string — a replacement such
+#   as "references/dashboard-handoff-removed" still CONTAINS the searched literal as a
+#   prefix, so the assertion would stay green and the mutation would survive.
+#   The in-repo equivalent is registered as mutation_pipeline_handoff_citation.
+#
 # Mutation recipe — test_dispatch_sites_grant_agent. Same SHARED harness, same
 #   classify-on-labels contract, replayable as written from the repo root.
 #   bash ~/.claude/plugins/cache/managed-service/cogni-service/0.0.383/scripts/mutation-check.sh \
@@ -122,6 +139,11 @@ HANDOFF_REF="$PLUGIN_DIR/references/dashboard-handoff.md"
 HANDOFF_PATH_LITERAL='references/dashboard-handoff.md'
 HANDOFF_HEADING='## Dashboard handoff'
 ENTITY_SKILLS='products features markets propositions solutions compete customers packages'
+# The pipeline and ops skills. A roster and not a derived set on purpose:
+# skills_with_handoff_section() answers "does this section restate or open", but the
+# positive claim — every skill that SHOULD cite one DOES — cannot be computed from the
+# sections themselves, because a skill that forgot its section has nothing to find.
+PIPELINE_SKILLS='portfolio-ingest portfolio-scan portfolio-verify portfolio-communicate portfolio-consolidate portfolio-taxonomy'
 PTR_LINE='This path ends the same way — see the **Dashboard handoff** section in this file.'
 
 failures=0
@@ -173,6 +195,21 @@ entity_surface_ok() {
   done
   if [ -n "$missing" ]; then
     fail "$case_name" "missing entity SKILL.md:$missing; scan surface is broken"
+    return 1
+  fi
+  return 0
+}
+
+# The pipeline/ops counterpart. Separate from entity_surface_ok because the two
+# rosters are different populations, and a case that scans a missing file would
+# report "no offenders" while proving nothing.
+pipeline_surface_ok() {
+  local case_name="$1" missing="" skill
+  for skill in $PIPELINE_SKILLS; do
+    [ -s "$PLUGIN_DIR/skills/$skill/SKILL.md" ] || missing="$missing $skill"
+  done
+  if [ -n "$missing" ]; then
+    fail "$case_name" "missing pipeline SKILL.md:$missing; scan surface is broken"
     return 1
   fi
   return 0
@@ -377,16 +414,66 @@ test_entity_skills_cite_handoff() {
   fi
 }
 
+# --- test_pipeline_skills_cite_handoff --------------------------------------
+# The pipeline and ops skills close their work step the same way the entity skills
+# do. Same exactly-one-citation discipline as the entity case, for the same reason:
+# the single-occurrence count keeps the registered mutation's anchor unambiguous.
+#
+# This case also carries the Agent-grant assertion for its roster, which looks like
+# it belongs in test_dispatch_sites_grant_agent and cannot live there. That case
+# derives its surface from files containing the literal `dashboard-refresher`, and
+# the canonical citation deliberately never names the agent — so these six are
+# invisible to it while still depending on the grant to execute the handoff at all.
+test_pipeline_skills_cite_handoff() {
+  pipeline_surface_ok test_pipeline_skills_cite_handoff || return
+
+  local offenders="" skill f count grant
+  for skill in $PIPELINE_SKILLS; do
+    f="$PLUGIN_DIR/skills/$skill/SKILL.md"
+    count="$(grep -cF "$HANDOFF_PATH_LITERAL" "$f")"
+    if [ "$count" -ne 1 ]; then
+      offenders="$offenders $skill(cites=$count)"
+    elif [ -z "$(handoff_section "$f")" ]; then
+      offenders="$offenders $skill(no-section)"
+    fi
+
+    # The grant LINE only, whole-token — the same idiom test_dispatch_sites_grant_agent
+    # uses. A body-wide grep would be vacuously green (the prose says "agent"), and a
+    # substring match would let Skill or AskUserQuestion pass as the grant.
+    grant="$(grep -m1 '^allowed-tools:' "$f")"
+    if [ -z "$grant" ]; then
+      offenders="$offenders $skill:no-allowed-tools-line"
+    else
+      grant="${grant#allowed-tools:}"
+      case ",${grant//[[:space:]]/}," in
+        *,Agent,*) : ;;
+        *) offenders="$offenders $skill:missing-Agent" ;;
+      esac
+    fi
+  done
+
+  if [ -n "$offenders" ]; then
+    fail test_pipeline_skills_cite_handoff "pipeline skills without exactly one handoff citation and an Agent grant:$offenders"
+  else
+    pass test_pipeline_skills_cite_handoff "all 6 pipeline and ops skills cite the canonical handoff and grant Agent"
+  fi
+}
+
 # --- test_secondary_paths_reach_handoff ------------------------------------
 # The acceptance bar is falsified by any file "whose end-of-step path can complete
-# without reaching the handoff". Three skills carry alternate entity-writing paths
-# that sit below the terminal section — five in total, solutions holding three of
-# them — so each such path needs an explicit pointer back.
+# without reaching the handoff". Six skills carry alternate write paths that do not
+# flow into the terminal section — nine in total, solutions holding three and
+# portfolio-scan two — so each such path needs an explicit pointer back. Three of them
+# are early exits ABOVE the section rather than paths below it: portfolio-scan's
+# research-only and shadow modes stop before Step 7.7, and portfolio-verify's
+# no-propagable-resolutions branch jumps back to its communicate gate. All three have
+# already written data the dashboard renders, so all three owe the same pointer.
 test_secondary_paths_reach_handoff() {
   entity_surface_ok test_secondary_paths_reach_handoff || return
+  pipeline_surface_ok test_secondary_paths_reach_handoff || return
 
   local offenders="" spec skill want got strays
-  for spec in solutions:3 packages:1 propositions:1; do
+  for spec in solutions:3 packages:1 propositions:1 portfolio-communicate:1 portfolio-scan:2 portfolio-verify:1; do
     skill="${spec%%:*}"
     want="${spec##*:}"
     got="$(grep -cF "$PTR_LINE" "$PLUGIN_DIR/skills/$skill/SKILL.md")"
@@ -406,7 +493,7 @@ test_secondary_paths_reach_handoff() {
   if [ -n "$offenders" ]; then
     fail test_secondary_paths_reach_handoff "secondary write paths do not reach the handoff:$offenders"
   else
-    pass test_secondary_paths_reach_handoff "every alternate entity-writing path points back to the handoff"
+    pass test_secondary_paths_reach_handoff "every alternate write path points back to the handoff"
   fi
 }
 
@@ -712,7 +799,7 @@ EOF
 # resolves as a shell function, so run_one() would happily execute it while a no-arg
 # CI run silently skips it — the registration list is the only thing that makes the
 # suite complete.
-ALL_TESTS="test_refresher_has_no_skip_path test_open_browser_optin test_refresher_returns_url test_entity_skills_cite_handoff test_secondary_paths_reach_handoff test_handoff_not_duplicated test_entity_handoff_does_not_open test_midflow_offers_survive test_resume_shows_dashboard_row test_handoff_does_not_open test_dispatch_sites_grant_agent"
+ALL_TESTS="test_refresher_has_no_skip_path test_open_browser_optin test_refresher_returns_url test_entity_skills_cite_handoff test_pipeline_skills_cite_handoff test_secondary_paths_reach_handoff test_handoff_not_duplicated test_entity_handoff_does_not_open test_midflow_offers_survive test_resume_shows_dashboard_row test_handoff_does_not_open test_dispatch_sites_grant_agent"
 
 # Reject an unknown case name instead of letting bash's "command not found" pass
 # through: with no `set -e` and no failures increment, an unrecognised name would

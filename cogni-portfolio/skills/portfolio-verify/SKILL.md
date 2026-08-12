@@ -6,7 +6,7 @@ description: |
   review deviations, source check, "are these numbers right", "check my sources",
   or wants to validate portfolio data before generating deliverables — even if they
   don't say "verify" explicitly.
-allowed-tools: Read, Write, Edit, Glob, Grep, Skill
+allowed-tools: Read, Write, Edit, Glob, Grep, Agent, Skill
 ---
 
 # Portfolio Claim Verification
@@ -144,7 +144,7 @@ Read `cogni-claims/claims.json` and filter for claims where:
 - `resolution.action` is `corrected`, `discarded`, or `alternative_source`
 - `propagated_at` is null (not yet applied to entity files)
 
-If none found, skip to the communicate gate summary.
+If none found, present the communicate gate summary from Step 6 — verification has already rewritten `claims.json` and Step 7 the source registry, so the dashboard has new state to show. This path ends the same way — see the **Dashboard handoff** section in this file.
 
 **8b. Locate target entity files:**
 
@@ -239,6 +239,10 @@ Next steps:
   - Run portfolio-lineage refresh to regenerate stale propositions/solutions
   - Or proceed to portfolio-communicate (stale entities will be flagged)
 ```
+
+## Dashboard handoff
+
+Regenerate the dashboard and hand the user its link, every time, per `$CLAUDE_PLUGIN_ROOT/references/dashboard-handoff.md`. Print the link; do not open a browser.
 
 ## Important Notes
 

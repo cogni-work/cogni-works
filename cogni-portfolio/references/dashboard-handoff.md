@@ -1,7 +1,8 @@
 # End-of-step dashboard handoff
 
-Every skill that writes portfolio entities ends its work step the same way: regenerate the
-dashboard, hand the user a link to it, and move on. This file is the only place those steps are
+Every skill that writes portfolio entities, and every pipeline or ops skill that changes what
+the dashboard would show, ends its work step the same way: regenerate the dashboard, hand the
+user a link to it, and move on. This file is the only place those steps are
 written. Skills cite it; they never restate it.
 
 The reason it is one file: before this existed, the dispatch was copy-pasted into seven skills as

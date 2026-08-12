@@ -19,7 +19,7 @@
 #   test_refresher_returns_url       a successful result carries a clickable url
 #   test_entity_skills_cite_handoff  all eight entity skills end by citing the canonical handoff
 #   test_pipeline_skills_cite_handoff
-#                                    the six pipeline and ops skills cite it and grant Agent
+#                                    the six pipeline and ops skills each cite it exactly once
 #   test_secondary_paths_reach_handoff
 #                                    alternate write paths point back to that terminal section
 #   test_handoff_not_duplicated      the handoff is authored once, and no skill restates it
@@ -28,7 +28,7 @@
 #   test_midflow_offers_survive      the pre-existing review offers still open on request
 #   test_resume_shows_dashboard_row  portfolio-resume surfaces a flag-driven dashboard row
 #   test_handoff_does_not_open       the resume generation offer dispatches without opening a browser
-#   test_dispatch_sites_grant_agent  every skill documenting a dispatch grants Agent in allowed-tools
+#   test_dispatch_sites_grant_agent  every skill dispatching by name or citation grants Agent
 #
 # Usage: bash cogni-portfolio/tests/test-dashboard-handoff.sh [test_name ...]
 #   No args -> run every test (the CI path). One or more names -> run only those
@@ -106,6 +106,31 @@
 #   `Agent` would leave the grant intact, the case green, and the mutation would
 #   survive unnoticed. A documentation file again, for the reason above.
 #   The in-repo equivalent is registered as mutation_dispatch_agent_grant in
+#   cogni-portfolio/scripts/mutation-check.sh.
+#
+# Mutation recipe — test_dispatch_sites_grant_agent (citation-only arm). Same
+#   SHARED harness, same classify-on-labels contract, replayable as written from
+#   the repo root.
+#   bash ~/.claude/plugins/cache/managed-service/cogni-service/0.0.383/scripts/mutation-check.sh \
+#     --root . \
+#     --file cogni-portfolio/skills/portfolio-ingest/SKILL.md \
+#     --expr 's#Grep, Bash, Agent, Skill#Grep, Bash, Skill#' \
+#     --test 'bash cogni-portfolio/tests/test-dashboard-handoff.sh test_dispatch_sites_grant_agent' \
+#     --case test_dispatch_sites_grant_agent
+#   The recipe above covers the OTHER arm of the same case. Its sibling recipe
+#   mutates products/SKILL.md, which names the agent outright; portfolio-ingest
+#   names it nowhere — neither its SKILL.md nor any of its references/*.md carries
+#   the literal — so it enters the surface only through the canonical citation.
+#   Before this case derived both forms, the mutant here survived: the skill was
+#   invisible to the scan, so stripping its grant changed nothing.
+#   `Grep, Bash, Agent, Skill` occurs exactly once in that file and is
+#   metacharacter-free, which matters because the harness feeds the expr to
+#   perl -0pi. The replacement is deliberately DISJOINT from the searched string
+#   and retains no whole Agent token — one that still granted Agent would leave
+#   the case green and the mutation would survive unnoticed. portfolio-verify
+#   carries a byte-identical allowed-tools tail, which is harmless because --file
+#   scopes the harness to one file.
+#   The in-repo equivalent is registered as mutation_citation_only_agent_grant in
 #   cogni-portfolio/scripts/mutation-check.sh.
 #
 # Mutation recipe — test_secondary_paths_reach_handoff. Same SHARED harness, same
@@ -419,15 +444,17 @@ test_entity_skills_cite_handoff() {
 # do. Same exactly-one-citation discipline as the entity case, for the same reason:
 # the single-occurrence count keeps the registered mutation's anchor unambiguous.
 #
-# This case also carries the Agent-grant assertion for its roster, which looks like
-# it belongs in test_dispatch_sites_grant_agent and cannot live there. That case
-# derives its surface from files containing the literal `dashboard-refresher`, and
-# the canonical citation deliberately never names the agent — so these six are
-# invisible to it while still depending on the grant to execute the handoff at all.
+# The Agent grant is NOT asserted here. test_dispatch_sites_grant_agent derives its
+# dispatch lines from either form — naming the agent, or citing the canonical
+# reference — so these six sit inside that case's surface and it covers their grant
+# without a roster. Keeping a rostered copy too would mean the rostered one fails
+# first, and only ever for the skills someone remembered to list.
+# (test_resume_shows_dashboard_row still checks portfolio-resume's own grant as part
+# of its row assertion; that is a narrower claim about one skill, not this roster.)
 test_pipeline_skills_cite_handoff() {
   pipeline_surface_ok test_pipeline_skills_cite_handoff || return
 
-  local offenders="" skill f count grant
+  local offenders="" skill f count
   for skill in $PIPELINE_SKILLS; do
     f="$PLUGIN_DIR/skills/$skill/SKILL.md"
     count="$(grep -cF "$HANDOFF_PATH_LITERAL" "$f")"
@@ -436,26 +463,12 @@ test_pipeline_skills_cite_handoff() {
     elif [ -z "$(handoff_section "$f")" ]; then
       offenders="$offenders $skill(no-section)"
     fi
-
-    # The grant LINE only, whole-token — the same idiom test_dispatch_sites_grant_agent
-    # uses. A body-wide grep would be vacuously green (the prose says "agent"), and a
-    # substring match would let Skill or AskUserQuestion pass as the grant.
-    grant="$(grep -m1 '^allowed-tools:' "$f")"
-    if [ -z "$grant" ]; then
-      offenders="$offenders $skill:no-allowed-tools-line"
-    else
-      grant="${grant#allowed-tools:}"
-      case ",${grant//[[:space:]]/}," in
-        *,Agent,*) : ;;
-        *) offenders="$offenders $skill:missing-Agent" ;;
-      esac
-    fi
   done
 
   if [ -n "$offenders" ]; then
-    fail test_pipeline_skills_cite_handoff "pipeline skills without exactly one handoff citation and an Agent grant:$offenders"
+    fail test_pipeline_skills_cite_handoff "pipeline skills without exactly one handoff citation:$offenders"
   else
-    pass test_pipeline_skills_cite_handoff "all 6 pipeline and ops skills cite the canonical handoff and grant Agent"
+    pass test_pipeline_skills_cite_handoff "all 6 pipeline and ops skills cite the canonical handoff"
   fi
 }
 
@@ -712,6 +725,21 @@ test_handoff_does_not_open() {
 # that skill carrying frontmatter. A skill that starts dispatching tomorrow is
 # covered with no edit here. agents/*.md declare their tools under a different
 # key, so they stay in the scan surface but outside this rule.
+#
+# A documented dispatch is EITHER form: naming the agent, or citing the canonical
+# references/dashboard-handoff.md contract that dispatches it. The canonical
+# end-of-step handoff deliberately never names the agent — that omission is what
+# keeps it clear of test_handoff_not_duplicated and of test_open_browser_optin's
+# offender window — so a name-only surface was blind to exactly the skills using
+# the shared contract, and their grant had to be rostered elsewhere. Deriving both
+# forms here is what lets the grant be asserted in one place. The dot is escaped
+# in the alternation, so a near-miss path like references/dashboard-handoffXmd
+# cannot pass.
+#
+# What this case still shares with test_open_browser_optin is the three-glob FILE
+# surface below, not the dispatch-line derivation: that is deliberately wider here,
+# because promising to open a browser is a different claim from documenting a
+# dispatch, and only the latter is satisfied by citing the contract.
 test_dispatch_sites_grant_agent() {
   local surface scanned
   surface="$(
@@ -730,14 +758,33 @@ test_dispatch_sites_grant_agent() {
     printf '%s\n' "$surface" | while IFS= read -r f; do
       [ -n "$f" ] || continue
       [ "$f" = "$AGENT" ] && continue
-      grep -nF 'dashboard-refresher' "$f" 2>/dev/null | while IFS= read -r hit; do
+      grep -nE 'dashboard-refresher|references/dashboard-handoff\.md' "$f" 2>/dev/null | while IFS= read -r hit; do
         printf '%s:%s\n' "$f" "$hit"
       done
     done
   )"
   dispatch_count="$(printf '%s\n' "$dispatch_lines" | grep -c . )"
   if [ "$dispatch_count" -eq 0 ]; then
-    fail test_dispatch_sites_grant_agent "found no dashboard-refresher dispatch lines; scan surface is broken"
+    fail test_dispatch_sites_grant_agent "found no documented dispatch lines (agent name or canonical citation); scan surface is broken"
+    return
+  fi
+
+  # PARTIAL decay is what the zero-check above structurally cannot catch, and a
+  # two-form derivation is exactly where it bites: the name arm satisfies that
+  # check on its own forever, so the citation arm could die — a renamed reference,
+  # a lost escape — and this case would stay green with the citation-only skills
+  # silently ungoverned again. That is the defect this widening exists to remove,
+  # and the rostered assertion that used to cover those skills is gone, so each arm
+  # carries its own floor. Same discipline as test_invocation_surface_intact in
+  # test-bash-grant.sh. The citation floor is built from HANDOFF_PATH_LITERAL, so a
+  # rename that leaves the alternation behind fails LOUDLY here instead of quietly
+  # narrowing the surface. Floors, never exact counts, so honest churn cannot trip
+  # them.
+  local name_arm citation_arm
+  name_arm="$(printf '%s\n' "$dispatch_lines" | grep -cF 'dashboard-refresher')"
+  citation_arm="$(printf '%s\n' "$dispatch_lines" | grep -cF "$HANDOFF_PATH_LITERAL")"
+  if [ "$name_arm" -eq 0 ] || [ "$citation_arm" -eq 0 ]; then
+    fail test_dispatch_sites_grant_agent "a derivation arm went dead: name hits=$name_arm citation hits=$citation_arm (both must be non-zero)"
     return
   fi
 

@@ -11,6 +11,10 @@ __pycache__/
 .claude/worktrees/
 .claude/cogni-docs-state.json
 
+# Codex local mirror (per-user; AGENTS.md mirrors CLAUDE.md for the Codex CLI)
+/.codex/
+/AGENTS.md
+
 # macOS
 .DS_Store
 

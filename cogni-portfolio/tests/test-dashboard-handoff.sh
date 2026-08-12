@@ -19,6 +19,7 @@
 #   test_refresher_returns_url       a successful result carries a clickable url
 #   test_resume_shows_dashboard_row  portfolio-resume surfaces a flag-driven dashboard row
 #   test_handoff_does_not_open       the resume generation offer dispatches without opening a browser
+#   test_dispatch_sites_grant_agent  every skill documenting a dispatch grants Agent in allowed-tools
 #
 # Usage: bash cogni-portfolio/tests/test-dashboard-handoff.sh [test_name ...]
 #   No args -> run every test (the CI path). One or more names -> run only those
@@ -49,6 +50,23 @@
 #   There is no in-repo copy of the SHARED harness; if that version directory is gone,
 #   use the newest under the same parent — everything after the path is version-independent.
 #   The in-repo equivalent is registered as mutation_dashboard_no_skip_path in
+#   cogni-portfolio/scripts/mutation-check.sh.
+#
+# Mutation recipe — test_dispatch_sites_grant_agent. Same SHARED harness, same
+#   classify-on-labels contract, replayable as written from the repo root.
+#   bash ~/.claude/plugins/cache/managed-service/cogni-service/0.0.383/scripts/mutation-check.sh \
+#     --root . \
+#     --file cogni-portfolio/skills/products/SKILL.md \
+#     --expr 's#Grep, Bash, Agent#Grep, Bash#' \
+#     --test 'bash cogni-portfolio/tests/test-dashboard-handoff.sh test_dispatch_sites_grant_agent' \
+#     --case test_dispatch_sites_grant_agent
+#   The expr strips the Agent token from a skill that carries a dispatch line, so
+#   the case goes red on the mutant and green on HEAD. `Grep, Bash, Agent` occurs
+#   exactly once in that file and is metacharacter-free. The replacement is
+#   deliberately DISJOINT from the searched string — one that still contained
+#   `Agent` would leave the grant intact, the case green, and the mutation would
+#   survive unnoticed. A documentation file again, for the reason above.
+#   The in-repo equivalent is registered as mutation_dispatch_agent_grant in
 #   cogni-portfolio/scripts/mutation-check.sh.
 
 # `set -u` only — `set -e` would abort on the first failing assertion and defeat
@@ -313,7 +331,99 @@ test_handoff_does_not_open() {
   fi
 }
 
-ALL_TESTS="test_refresher_has_no_skip_path test_open_browser_optin test_refresher_returns_url test_resume_shows_dashboard_row test_handoff_does_not_open"
+# --- test_dispatch_sites_grant_agent ---------------------------------------
+# A documented dispatch is only reachable at runtime if the frontmatter GOVERNING
+# that file grants the dispatch tool. Both halves are derived, never enumerated:
+# the surface is the same three-glob scan test_open_browser_optin computes, and
+# the governing file comes from the path — a dispatch in
+# skills/<x>/references/*.md is governed by skills/<x>/SKILL.md, the only file in
+# that skill carrying frontmatter. A skill that starts dispatching tomorrow is
+# covered with no edit here. agents/*.md declare their tools under a different
+# key, so they stay in the scan surface but outside this rule.
+test_dispatch_sites_grant_agent() {
+  local surface scanned
+  surface="$(
+    find "$PLUGIN_DIR/agents" -name '*.md' -type f 2>/dev/null
+    find "$PLUGIN_DIR/skills" -mindepth 2 -maxdepth 2 -name 'SKILL.md' -type f 2>/dev/null
+    find "$PLUGIN_DIR/skills" -mindepth 3 -maxdepth 3 -path '*/references/*.md' -type f 2>/dev/null
+  )"
+  scanned="$(printf '%s\n' "$surface" | grep -c . )"
+  if [ "$scanned" -eq 0 ]; then
+    fail test_dispatch_sites_grant_agent "scanned no files; scan surface is broken"
+    return
+  fi
+
+  local dispatch_lines dispatch_count
+  dispatch_lines="$(
+    printf '%s\n' "$surface" | while IFS= read -r f; do
+      [ -n "$f" ] || continue
+      [ "$f" = "$AGENT" ] && continue
+      grep -nF 'dashboard-refresher' "$f" 2>/dev/null | while IFS= read -r hit; do
+        printf '%s:%s\n' "$f" "$hit"
+      done
+    done
+  )"
+  dispatch_count="$(printf '%s\n' "$dispatch_lines" | grep -c . )"
+  if [ "$dispatch_count" -eq 0 ]; then
+    fail test_dispatch_sites_grant_agent "found no dashboard-refresher dispatch lines; scan surface is broken"
+    return
+  fi
+
+  # One pass, no early exit: every offender lands in $offenders and the single
+  # fail() below names them all. $seen collapses a skill that dispatches from more
+  # than one file so it is reported once. The heredoc — not a pipe — is what keeps
+  # both accumulators in this shell.
+  local offenders="" seen="" governed=0
+  while IFS= read -r entry; do
+    local file governing rel grant
+    file="${entry%%:*}"
+    governing=""
+    case "$file" in
+      "$PLUGIN_DIR"/skills/*/references/*) governing="${file%/references/*}/SKILL.md" ;;
+      "$PLUGIN_DIR"/skills/*/SKILL.md)     governing="$file" ;;
+    esac
+    if [ -n "$governing" ]; then
+      rel="${governing#"$PLUGIN_DIR/"}"
+      case " $seen " in
+        *" $rel "*) : ;;
+        *)
+          seen="$seen $rel"
+          governed=$((governed + 1))
+          if [ ! -s "$governing" ]; then
+            # Distinct from a missing grant on purpose: a broken surface must never
+            # read as a skill that simply forgot the token.
+            offenders="$offenders $rel:governing-SKILL.md-missing"
+          else
+            grant="$(grep -m1 '^allowed-tools:' "$governing")"
+            if [ -z "$grant" ]; then
+              offenders="$offenders $rel:no-allowed-tools-line"
+            else
+              # The grant LINE only, whole-token. Every dispatching skill's prose
+              # says "dashboard-refresher agent", so a body-wide grep for Agent
+              # would be vacuously green; and matching a substring would let
+              # Skill, AskUserQuestion or an mcp__* token pass as the grant.
+              grant="${grant#allowed-tools:}"
+              case ",${grant//[[:space:]]/}," in
+                *,Agent,*) : ;;
+                *) offenders="$offenders $rel:missing-Agent" ;;
+              esac
+            fi
+          fi
+          ;;
+      esac
+    fi
+  done <<EOF
+$dispatch_lines
+EOF
+
+  if [ -n "$offenders" ]; then
+    fail test_dispatch_sites_grant_agent "dispatching skills whose allowed-tools omits Agent:$offenders"
+  else
+    pass test_dispatch_sites_grant_agent "all $governed dispatching skills grant Agent ($dispatch_count dispatch lines scanned)"
+  fi
+}
+
+ALL_TESTS="test_refresher_has_no_skip_path test_open_browser_optin test_refresher_returns_url test_resume_shows_dashboard_row test_handoff_does_not_open test_dispatch_sites_grant_agent"
 
 # Reject an unknown case name instead of letting bash's "command not found" pass
 # through: with no `set -e` and no failures increment, an unrecognised name would

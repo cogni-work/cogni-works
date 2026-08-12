@@ -17,6 +17,8 @@
 #   test_refresher_has_no_skip_path  the agent never terminates without generating
 #   test_open_browser_optin          default is non-opening, and every intending call site says so
 #   test_refresher_returns_url       a successful result carries a clickable url
+#   test_resume_shows_dashboard_row  portfolio-resume surfaces a flag-driven dashboard row
+#   test_handoff_does_not_open       the resume generation offer dispatches without opening a browser
 #
 # Usage: bash cogni-portfolio/tests/test-dashboard-handoff.sh [test_name ...]
 #   No args -> run every test (the CI path). One or more names -> run only those
@@ -237,7 +239,81 @@ test_refresher_returns_url() {
   fi
 }
 
-ALL_TESTS="test_refresher_has_no_skip_path test_open_browser_optin test_refresher_returns_url"
+# The resume skill is the scan surface for the two cases below. Same reasoning
+# as agent_surface_ok: a missing or empty file makes every literal assertion
+# vacuously "not found", which reads as a real failure rather than a broken
+# surface — so say which it is.
+RESUME="$PLUGIN_DIR/skills/portfolio-resume/SKILL.md"
+resume_surface_ok() {
+  local case_name="$1"
+  if [ ! -s "$RESUME" ]; then
+    fail "$case_name" "skills/portfolio-resume/SKILL.md is missing or empty; scan surface is broken"
+    return 1
+  fi
+  return 0
+}
+
+# --- test_resume_shows_dashboard_row ---------------------------------------
+# The resume status table must carry a Dashboard row, and BOTH documented
+# branches must survive: the has_dashboard-driven link, and the opt-in,
+# non-opening generation offer. Anchor on the row's cell shape, not the bare
+# word "dashboard" — that word appears elsewhere in this skill's prose, so a
+# word-level grep would stay green with the row deleted.
+test_resume_shows_dashboard_row() {
+  resume_surface_ok test_resume_shows_dashboard_row || return
+
+  local missing=""
+
+  # The row itself, by cell shape.
+  grep -qF '| Dashboard |' "$RESUME" || missing="$missing dashboard-table-row"
+
+  # Branch 1 — presence comes from the discovery flag, not a fresh probe.
+  # Anchor on the bullet's own phrasing: the bare flag name also appears in the
+  # Step 1 discovery contract, so grepping it alone could never fail.
+  grep -qF 'discovery flag `has_dashboard`' "$RESUME"             || missing="$missing presence-flag-not-cited"
+  grep -qF 'never re-probe the filesystem' "$RESUME"              || missing="$missing filesystem-reprobe-not-banned"
+  grep -qF 'file://<project-dir>/output/dashboard.html' "$RESUME" || missing="$missing no-clickable-link"
+
+  # Branch 2 — the missing case says so, and generation stays opt-in.
+  grep -qF 'offer to generate one' "$RESUME" || missing="$missing no-generation-offer"
+  grep -qF 'if the user accepts' "$RESUME"   || missing="$missing no-opt-in-gate"
+
+  # The frontmatter must permit the dispatch, or the documented branch is inert.
+  grep -q '^allowed-tools:.*Agent' "$RESUME" || missing="$missing agent-tool-not-declared"
+
+  if [ -n "$missing" ]; then
+    fail test_resume_shows_dashboard_row "portfolio-resume dashboard row problems:$missing"
+  else
+    pass test_resume_shows_dashboard_row "dashboard row is flag-driven, links, opt-in gated, and Agent is declared"
+  fi
+}
+
+# --- test_handoff_does_not_open --------------------------------------------
+# The resume offer regenerates a dashboard; it must never launch a browser on
+# its own. The refresher already defaults open_browser to false, but the resume
+# call site states it explicitly so the intent is readable where it is made.
+# test_open_browser_optin does not cover this: that case is scoped to call
+# sites whose surrounding prose promises to open, and this one does not.
+test_handoff_does_not_open() {
+  resume_surface_ok test_handoff_does_not_open || return
+
+  local missing=""
+  grep -qF 'dashboard-refresher' "$RESUME" || missing="$missing no-refresher-dispatch"
+  grep -qF 'open_browser: false' "$RESUME" || missing="$missing generation-may-open-browser"
+  # Presence, not absence, is the defect here — so an explicit if, matching the
+  # inverted-polarity assertions elsewhere in this suite.
+  if grep -qF 'open_browser: true' "$RESUME"; then
+    missing="$missing resume-opens-a-browser"
+  fi
+
+  if [ -n "$missing" ]; then
+    fail test_handoff_does_not_open "portfolio-resume generation offer problems:$missing"
+  else
+    pass test_handoff_does_not_open "the resume generation offer dispatches with the non-opening flag"
+  fi
+}
+
+ALL_TESTS="test_refresher_has_no_skip_path test_open_browser_optin test_refresher_returns_url test_resume_shows_dashboard_row test_handoff_does_not_open"
 
 # Reject an unknown case name instead of letting bash's "command not found" pass
 # through: with no `set -e` and no failures increment, an unrecognised name would

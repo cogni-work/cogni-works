@@ -6,34 +6,30 @@ description: |
   "pick up where I left off", "portfolio status", "what's next", "show progress",
   "where was I", "how far along", or opens a session that involves an existing
   cogni-portfolio project — even if they don't say "resume" explicitly.
-allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Skill
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Skill, Agent
 ---
 
 # Portfolio Resume
 
-Session entry point for returning to portfolio work. This skill orients the user by showing where they left off and what to do next — think of it as the dashboard view that keeps multi-session projects on track.
+Session entry point for returning to portfolio work. This skill orients the user by showing where they left off and what to do next.
 
 ## Core Concept
 
 **Plugin root resolution.** Bash invocations below resolve the plugin root inline as `${CLAUDE_PLUGIN_ROOT:-$(ls -td "$HOME"/.claude/plugins/cache/insight-wave/cogni-portfolio/*/ | head -1)}` — the first call works whether or not the harness injects `$CLAUDE_PLUGIN_ROOT`. Keep the inline form in every call; do not strip it.
 
-Portfolio projects span multiple sessions and skills. Without a clear re-entry point, users lose context between sessions and waste time figuring out what they already did. This skill bridges that gap: it reads the project state, surfaces progress at a glance, and recommends the most valuable next step. The goal is to get the user back into productive flow within seconds.
+Portfolio projects span multiple sessions, and without a clear re-entry point users lose context between them. This skill reads the project state, surfaces progress at a glance, and recommends the most valuable next step.
 
 ## Workflow
 
 ### 1. Find Portfolio Projects
 
-Discover portfolio projects in the workspace using the discovery script. The script resolves the workspace root automatically (priority: `--root` > `$PROJECT_AGENTS_OPS_ROOT` > walk-up from `$PWD` to find a `cogni-portfolio/` ancestor > `$PWD`) and also returns projects from the global registry (`~/.claude/cogni-portfolio-projects.json`) so workspaces hosted outside the insight-wave repo (OneDrive, Dropbox, client folders) surface even when cwd is unrelated.
+Discover portfolio projects in the workspace using the discovery script. The script resolves the workspace root automatically (priority: `--root` > `$PROJECT_AGENTS_OPS_ROOT` > walk-up from `$PWD` to find a `cogni-portfolio/` ancestor > `$PWD`), scans it for `cogni-portfolio/*/portfolio.json`, and also returns projects from the global registry (`~/.claude/cogni-portfolio-projects.json`) so workspaces hosted outside the insight-wave repo (OneDrive, Dropbox, client folders) surface even when cwd is unrelated.
 
 ```bash
 bash "${CLAUDE_PLUGIN_ROOT:-$(ls -td "$HOME"/.claude/plugins/cache/insight-wave/cogni-portfolio/*/ | head -1)}/scripts/discover-projects.sh" --json
 ```
 
 Returns JSON with `count`, `search_root`, and a `projects` array. Each project entry includes `path` (absolute), `slug`, `company_name`, `company_industry`, `language`, `updated`, and pipeline-stage flags (`has_products`, `has_features`, `has_markets`, `has_propositions`, `has_solutions`, `has_dashboard`). Pass `path` verbatim — absolute — to every subsequent script call; never reconstruct it from `$PWD`.
-
-The script searches:
-1. The resolved workspace root for `cogni-portfolio/*/portfolio.json`
-2. The global project registry (`~/.claude/cogni-portfolio-projects.json`) for projects created in other workspaces
 
 If `count` is 0:
 - First, ask the user if they have a project in a different directory (e.g., OneDrive, external workspace). If they provide a path, register it once and re-run discovery:
@@ -43,7 +39,7 @@ If `count` is 0:
   Surface the detected `search_root` in your prompt so the user can see where discovery looked: "I checked `<search_root>` and didn't find a portfolio. Is the project somewhere else?"
 - If the user confirms no project exists yet, briefly tell them "No portfolio project exists in this workspace yet — let's set one up" (in their language if known) and **dispatch the `portfolio-setup` skill via the Skill tool** to begin initialization. Do not ask the user to re-issue a command; the handoff should be seamless. Once setup completes, control returns here naturally — the user can re-invoke `/portfolio-resume` to see the new project's status, or simply continue with the next-step recommendations setup printed.
 
-This makes `portfolio-resume` a safe single entry point: returning users get the dashboard, new users get walked into setup, and nobody has to know which lifecycle stage they're in.
+This makes `portfolio-resume` a safe single entry point: returning users get their status, new users get walked into setup, and nobody has to know which lifecycle stage they're in.
 
 ### 2. Select Project
 
@@ -77,6 +73,7 @@ Show a concise, scannable dashboard. Lead with the company name and project slug
 | Claims | N total | V verified, D deviated, U unverified, P pending propagation. If `claims.pending_stale > 0`, append: "(S on stale entities — deferred)" |
 | Communicate | N files | A accepted, R revise, J rejected (if > 0), STALE if upstream changed |
 | Architecture | exists/missing | STALE if products/features changed since last generation |
+| Dashboard | exists/missing | from `has_dashboard` — when true, link `file://<project-dir>/output/dashboard.html`; when false, offer to generate |
 | Purpose | N / total features | coverage percentage — low coverage limits architecture and customer narrative quality |
 | Context | N entries | breakdown by category (e.g., 3 pricing, 2 competitive, 1 strategic) |
 | Sources | N (D docs, U urls) | S stale, C current (only if `source_lineage.has_registry` is true) |
@@ -101,7 +98,7 @@ After the table:
   - For parity language: "1 feature uses parity language ("innovative", "robust")"
   - For proposition issues: "1 proposition DOES is too long (42 words, target 15-30)"
   - If a flagged feature has downstream propositions, note the cascade risk: fixing the feature description may require refreshing its propositions
-  - **Deferred vs new warnings**: If the quality assessment data includes deferred features (features where the user chose to skip a warning), present them separately: "Deferred from previous session: cogni-sales (12 words — you chose to skip this)". New warnings (features created or edited since the last quality check) are presented normally. This distinction prevents surprise — the user should recognize deferred items as conscious decisions, not new problems.
+  - **Deferred vs new warnings**: If the quality assessment data includes deferred features (features where the user chose to skip a warning), present them separately: "Deferred from previous session: cogni-sales (12 words — you chose to skip this)". New warnings (features created or edited since the last quality check) are presented normally.
   - End with actionable guidance: "Consider running features or propositions skill to review and fix these before generating downstream content."
   - Offer deep assessment: "For thorough quality assessment including mechanism and customer-relevance checks, ask for a full quality audit."
   - If no entities are flagged, skip this section entirely (don't show "0 flagged")
@@ -110,9 +107,10 @@ After the table:
   - If `source_lineage.new_uploads` is non-empty: "N new files in uploads/ have not been ingested yet." Distinguish from changed re-uploads.
   - If `source_lineage.stale_sources` > 0 and no changed_uploads: "N source entries are marked as stale in the registry." Recommend running `portfolio-lineage check` to investigate.
   - If `source_lineage.untracked_entities` > 0: "N entities have no source lineage tracking." This is informational, not urgent — mention it after other drift warnings. Recommend running `portfolio-lineage` to backfill.
-- **Stale entities** — if `stale_entities` is non-empty, show them as priority actions before the regular next steps. Group by reason type: "N propositions need refresh because their upstream features were updated" is more useful than listing each one. If a stale entity also has quality warnings, lead with the quality issue (fix the root cause first, then refresh the proposition). When stale entities AND unverified claims coexist, note the interaction: if `claims.pending_stale > 0`, explain that those claims sit on entities about to be refreshed — verifying them now would be wasted work since the refresh will generate new claims. This helps the user understand why verify isn't the first recommended step despite having hundreds of pending claims.
+- **Stale entities** — if `stale_entities` is non-empty, show them as priority actions before the regular next steps. Group by reason type: "N propositions need refresh because their upstream features were updated" is more useful than listing each one. If a stale entity also has quality warnings, lead with the quality issue (fix the root cause first, then refresh the proposition). When stale entities AND unverified claims coexist, note the interaction: if `claims.pending_stale > 0`, explain that those claims sit on entities about to be refreshed — verifying them now would be wasted work since the refresh will generate new claims.
 - **Stale communicate files** — if `communicate.stale` is `true`, highlight this prominently: "Communicate files may need refresh — upstream data changed since they were generated." Present the reason from `communicate.stale_reason`. Recommend running `portfolio-communicate` to regenerate. This appears alongside stale entity warnings since it represents the same class of problem (downstream output invalidated by upstream changes).
 - **Stale architecture diagram** — if `architecture.stale` is `true`, mention that the architecture diagram may be outdated because products or features changed since it was generated. Recommend running `portfolio-architecture` to refresh. If `architecture.exists` is `false` and features exist, suggest generating the architecture diagram as a visual checkpoint.
+- **Dashboard** — presence comes from the discovery flag `has_dashboard`; never re-probe the filesystem. When true, hand the user the row's `file://` link directly, with no extra prompt. When false, say no dashboard exists yet and offer to generate one; if the user accepts, delegate to the `dashboard-refresher` agent with `project_dir`, `plugin_root: $CLAUDE_PLUGIN_ROOT` and `open_browser: false`, then cite the `url` it returns.
 - **Purpose coverage** — if `purpose_coverage.total_features > 0` and `purpose_coverage.with_purpose` is less than half of `total_features`, note low purpose coverage: "N of M features have purpose statements. Adding purpose improves architecture diagrams and customer-facing materials." Recommend running the `features` skill to add purpose statements.
 - **Context notice** — if `counts.context_entries > 0`, mention available context entries with a category breakdown. Read `context/context-index.json` for the `by_category` map to show counts per category. This helps the user understand what intelligence is available for downstream skills. If context exists but downstream skills haven't been run yet, highlight this: "N context entries from ingested documents are ready — these will automatically inform propositions, solutions, and other skills."
 - **Taxonomy state** — this is the **first** status signal to surface after the table, because scan and downstream classification all depend on it. Read the `taxonomy` block from the script output:
@@ -128,7 +126,7 @@ After the table:
   4. If the script reports `counts.excluded_pairs: 0` but `missing_propositions` contains pairs, cross-check by reading feature files for `excluded_markets` arrays as a fallback — the script may have failed to detect them.
   5. Note incomplete solutions/competitors/customers as separate items.
 
-Keep the tone warm and oriented toward action — this is a welcome-back moment, not a status report. The user should feel oriented, not overwhelmed.
+Keep the tone warm and oriented toward action — this is a welcome-back moment, not a status report.
 
 ### 5. Recommend Next Action
 

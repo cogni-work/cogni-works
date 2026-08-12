@@ -90,6 +90,24 @@
 #   survive unnoticed. A documentation file again, for the reason above.
 #   The in-repo equivalent is registered as mutation_dispatch_agent_grant in
 #   cogni-portfolio/scripts/mutation-check.sh.
+#
+# Mutation recipe — test_secondary_paths_reach_handoff. Same SHARED harness, same
+#   classify-on-labels contract, replayable as written from the repo root.
+#   bash ~/.claude/plugins/cache/managed-service/cogni-service/0.0.383/scripts/mutation-check.sh \
+#     --root . \
+#     --file cogni-portfolio/skills/solutions/SKILL.md \
+#     --expr 's#deal size data for the relevant segment.\n\nThis path ends the same way#deal size data for the relevant segment.\n\nRepricing is complete#' \
+#     --test 'bash cogni-portfolio/tests/test-dashboard-handoff.sh test_secondary_paths_reach_handoff' \
+#     --case test_secondary_paths_reach_handoff
+#   The anchor spans the repricing section's closing paragraph into the pointer that
+#   follows it, so it strips the REPRICING pointer specifically rather than whichever
+#   of the three comes first — solutions drops to 2 against want=3, and the case goes
+#   red on the mutant, green on HEAD (verdict guard_verified). The multi-line anchor
+#   works because the harness feeds the expr to `perl -0pi`, which slurps the file.
+#   The replacement is deliberately DISJOINT from the searched string: one that still
+#   contained the pointer sentence would hold the count at 3 and the mutation would
+#   survive. No in-repo equivalent is registered — the exact-count assertion is itself
+#   the gate, and it is what this recipe proves has teeth.
 
 # `set -u` only — `set -e` would abort on the first failing assertion and defeat
 # the failure counter below, which exists so one run reports every offender.
@@ -361,13 +379,14 @@ test_entity_skills_cite_handoff() {
 
 # --- test_secondary_paths_reach_handoff ------------------------------------
 # The acceptance bar is falsified by any file "whose end-of-step path can complete
-# without reaching the handoff". Three skills have an alternate entity-writing path
-# that sits below the terminal section, so each needs an explicit pointer back.
+# without reaching the handoff". Three skills carry alternate entity-writing paths
+# that sit below the terminal section — five in total, solutions holding three of
+# them — so each such path needs an explicit pointer back.
 test_secondary_paths_reach_handoff() {
   entity_surface_ok test_secondary_paths_reach_handoff || return
 
   local offenders="" spec skill want got strays
-  for spec in solutions:2 packages:1 propositions:1; do
+  for spec in solutions:3 packages:1 propositions:1; do
     skill="${spec%%:*}"
     want="${spec##*:}"
     got="$(grep -cF "$PTR_LINE" "$PLUGIN_DIR/skills/$skill/SKILL.md")"

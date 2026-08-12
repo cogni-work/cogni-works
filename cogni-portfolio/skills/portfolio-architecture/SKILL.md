@@ -7,7 +7,7 @@ description: |
   "visualize the portfolio", portfolio architecture, feature map, product tree,
   "how do the products relate", or wants a visual overview of how products and
   features fit together — even if they don't say "architecture" explicitly.
-allowed-tools: Read, Write, Glob, Grep, Bash, mcp__excalidraw__clear_canvas, mcp__excalidraw__create_element, mcp__excalidraw__batch_create_elements, mcp__excalidraw__group_elements, mcp__excalidraw__describe_scene, mcp__excalidraw__get_canvas_screenshot, mcp__excalidraw__snapshot_scene, mcp__excalidraw__export_scene, mcp__excalidraw__export_to_excalidraw_url, mcp__excalidraw__import_scene, mcp__excalidraw__query_elements, mcp__excalidraw__update_element, mcp__excalidraw__delete_element
+allowed-tools: Read, Write, Glob, Grep, Bash, Agent, mcp__excalidraw__clear_canvas, mcp__excalidraw__create_element, mcp__excalidraw__batch_create_elements, mcp__excalidraw__group_elements, mcp__excalidraw__describe_scene, mcp__excalidraw__get_canvas_screenshot, mcp__excalidraw__snapshot_scene, mcp__excalidraw__export_scene, mcp__excalidraw__export_to_excalidraw_url, mcp__excalidraw__import_scene, mcp__excalidraw__query_elements, mcp__excalidraw__update_element, mcp__excalidraw__delete_element
 ---
 
 # Portfolio Architecture Diagram

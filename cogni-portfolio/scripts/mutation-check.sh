@@ -14,6 +14,9 @@
 #   3. dashboard-refresher no-skip-path: revert the "no theme found" branch of
 #      agents/dashboard-refresher.md to a terminal skipped status; expect
 #      test_refresher_has_no_skip_path to go RED.
+#   4. portfolio-resume dashboard row: delete the Dashboard row from
+#      skills/portfolio-resume/SKILL.md; expect test_resume_shows_dashboard_row
+#      to go RED.
 #
 # Kept under scripts/ (NOT tests/) deliberately: run-plugin-tests.py auto-discovers
 # tests/*.sh and would run this as a normal suite; this is a manual meta-check that
@@ -186,9 +189,65 @@ PY
   return "$rc"
 }
 
+# --- Mutation 4: portfolio-resume dashboard row ---------------------------
+# Deletes the Dashboard row from the portfolio-resume status table, then
+# asserts test_resume_shows_dashboard_row goes RED against the mutant. The
+# target is a documentation file on purpose: the case asserts on documented
+# behaviour, so mutating a script would leave it green and prove nothing.
+mutation_resume_dashboard_row() {
+  local target="$PLUGIN_DIR/skills/portfolio-resume/SKILL.md"
+  local suite="$PLUGIN_DIR/tests/test-dashboard-handoff.sh"
+  local test_name="test_resume_shows_dashboard_row"
+  for f in "$target" "$suite"; do
+    [ -f "$f" ] || { echo "FAIL: missing $f" >&2; return 1; }
+  done
+
+  # Baseline: the target test must be GREEN before we mutate, or a later red
+  # tells us nothing.
+  if ! bash "$suite" "$test_name" >/dev/null 2>&1; then
+    echo "FAIL: baseline $test_name is already red before mutation" >&2
+    return 1
+  fi
+
+  local backup; backup="$(mktemp)"
+  cp "$target" "$backup"
+
+  if ! python3 - "$target" <<'PY'
+import re, sys
+path = sys.argv[1]
+src = open(path, encoding="utf-8").read()
+mutated, n = re.subn(
+    r"^\| Dashboard \|.*\n",
+    "",
+    src,
+    count=1,
+    flags=re.MULTILINE,
+)
+if n != 1:
+    sys.stderr.write("Dashboard status-table row not found - cannot mutate.\n")
+    sys.exit(6)
+open(path, "w", encoding="utf-8").write(mutated)
+PY
+  then
+    echo "FAIL: resume dashboard-row mutation could not be applied" >&2
+    cp "$backup" "$target"; rm -f "$backup"; return 1
+  fi
+
+  local rc=0
+  if bash "$suite" "$test_name" >/dev/null 2>&1; then
+    echo "FALSIFIER: mutation survived — $test_name stayed GREEN with the Dashboard row deleted" >&2
+    rc=1
+  else
+    echo "OK: mutation caught — $test_name goes red when the Dashboard row is deleted"
+  fi
+  cp "$backup" "$target"; rm -f "$backup"   # always restore
+  return "$rc"
+}
+
 mutation_commercial_consolidation || overall=1
 mutation_solution_candidates || overall=1
 mutation_dashboard_no_skip_path || overall=1
+mutation_resume_dashboard_row || overall=1
 
 if [ "$overall" -eq 0 ]; then
   echo "All mutations caught."

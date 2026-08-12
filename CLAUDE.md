@@ -1,12 +1,12 @@
 # insight-wave
 
-14-plugin monorepo for consulting, sales, and marketing on Claude Code. Apache-2.0. All plugins follow the Claude Code plugin standard.
+13-plugin monorepo for consulting, sales, and marketing on Claude Code. Apache-2.0. All plugins follow the Claude Code plugin standard.
 
 ## Repo Structure
 
 ```
 insight-wave/
-├── .claude-plugin/marketplace.json    Marketplace manifest (14 plugins)
+├── .claude-plugin/marketplace.json    Marketplace manifest (13 plugins)
 ├── cogni-{name}/                      Each plugin directory
 │   ├── .claude-plugin/plugin.json     Plugin manifest (name, version, description)
 │   ├── README.md                      Plugin documentation (IS/DOES/MEANS messaging)
@@ -120,7 +120,7 @@ Key integration patterns:
 
 - Plugin version lives in `.claude-plugin/plugin.json` `version` field (semver), mirrored on the plugin's entry in the repo-root `.claude-plugin/marketplace.json` — Claude Desktop reads the marketplace copy for update detection, so the two must always agree
 - `.github/workflows/cogni-version-bump.yml` owns the bump. On every push to `main` it patch-increments each plugin the merge touched, editing **both** manifests in one `bump(...)` commit. `scripts/apply-version-bump.py` does the edit; nothing is written unless the rewritten JSON re-parses and differs *only* in the intended version values
-- A feature branch that still touches a version reintroduces the merge-conflict class the post-merge move eliminated: when every PR bumped at authoring time, the instant one PR merged, every other open PR's version lines became a textual conflict. insight-wave had it worse than a one-manifest-per-plugin repo, because marketplace.json is a single file all 14 plugins share — so the conflict was repo-wide, not per-plugin
+- A feature branch that still touches a version reintroduces the merge-conflict class the post-merge move eliminated: when every PR bumped at authoring time, the instant one PR merged, every other open PR's version lines became a textual conflict. insight-wave had it worse than a one-manifest-per-plugin repo, because marketplace.json is a single file all 13 plugins share — so the conflict was repo-wide, not per-plugin
 - `scripts/check-version-bump.py` enforces this at PR time (CI: "Version-bump gate" in `.github/workflows/lint.yml`). It flags `version-touched` on any version change vs the fork point, and `version-mirror-desync` whenever plugin.json and marketplace.json disagree. Fix a `version-touched` finding by reverting the version line in **both** files
 - The auto-bump is patch-only and structurally cannot cross a maturity boundary, so `maturity` and the maturity keyword in `keywords[]` are never touched by it. **Boundary crossings stay human** — make them on a `bump/…` branch, which the PR-time gate exempts
 

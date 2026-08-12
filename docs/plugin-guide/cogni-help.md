@@ -6,7 +6,7 @@
 
 ## Overview
 
-cogni-help is the navigation and learning layer for the insight-wave ecosystem. With 14 plugins and 110+ skills available in the marketplace, it is easy to know something exists but not know which specific skill handles a given task. cogni-help addresses this in four ways:
+cogni-help is the navigation and learning layer for the insight-wave ecosystem. With 13 plugins and 110 skills available in the marketplace, it is easy to know something exists but not know which specific skill handles a given task. cogni-help addresses this in four ways:
 
 1. **Plugin discovery** — describe what you need, and the guide skill matches it to the right plugin and skill
 2. **Structured learning** — a 7-tour curriculum keyed 1:1 to the canonical cross-plugin pipelines, each tour running about 45–60 minutes

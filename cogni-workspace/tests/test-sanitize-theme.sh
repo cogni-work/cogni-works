@@ -7,8 +7,8 @@
 # must be rejected before it reaches the generated <style> block, with the
 # renderer falling back to its built-in palette for that key.
 #
-# stdlib-only: bash + python3, no pip deps. Mirrors the cogni conventions in
-# cogni-projects/tests/test-render-dashboard.sh.
+# stdlib-only: bash + python3, no pip deps, per the repo-wide script
+# convention — no file pointer here, so this comment cannot dangle.
 
 set -u
 HERE="$(cd "$(dirname "$0")" && pwd)"

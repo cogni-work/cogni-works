@@ -239,6 +239,10 @@ Present propositions with consulting commentary, not just raw statements. Group 
 
 Then deliver your assessment as a consulting perspective: which propositions are strong and ready for downstream use, which need sharper messaging and what specifically to change, whether the set tells a coherent story to each target market, and what to prioritise next.
 
+## Dashboard handoff
+
+Regenerate the dashboard and hand the user its link, every time, per `$CLAUDE_PLUGIN_ROOT/references/dashboard-handoff.md`. Print the link; do not open a browser.
+
 ## Operations
 
 ### Listing
@@ -315,6 +319,8 @@ When entering:
 2. Dispatch research to the `proposition-deep-diver` agent (not `quality-enricher`).
 3. After research completes, conduct the co-creation dialogue per the reference.
 4. Write the improved proposition, run structural validation, and warn about downstream cascade.
+
+This path ends the same way — see the **Dashboard handoff** section in this file.
 
 ## Important Notes
 

@@ -153,6 +153,10 @@ Wait for the user's explicit response. If they choose (a), delegate to the `dash
 
 The user may know competitors the research missed, or may disagree with positioning claims. Iterate until accurate.
 
+## Dashboard handoff
+
+Regenerate the dashboard and hand the user its link, every time, per `$CLAUDE_PLUGIN_ROOT/references/dashboard-handoff.md`. Print the link; do not open a browser.
+
 ## Trap Questions
 
 For each competitor file, include a `trap_questions` array with **3-4 questions** designed to expose competitor weaknesses during an RFP evaluation or vendor comparison. Good trap questions:

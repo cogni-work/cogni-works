@@ -250,6 +250,10 @@ Cross-reference markets with existing portfolio entities:
 
 These checks catch gaps early: a market with zero relevant features suggests a misfit; a feature with no matching market suggests an untapped opportunity.
 
+## Dashboard handoff
+
+Regenerate the dashboard and hand the user its link, every time, per `$CLAUDE_PLUGIN_ROOT/references/dashboard-handoff.md`. Print the link; do not open a browser.
+
 ## Operations
 
 ### Listing Markets

@@ -131,6 +131,8 @@ All entities are stored as JSON files in the project directory:
 
 See [references/data-model.md](references/data-model.md) for the full schema with JSON examples and entity relationships.
 
+See [references/dashboard-handoff.md](references/dashboard-handoff.md) for the end-of-step dashboard handoff every entity-writing skill closes with.
+
 ## How it works
 
 Each portfolio project lives in `cogni-portfolio/{slug}/` as typed JSON files organized by entity. The workflow runs in dependency order — `setup → products → features → markets → propositions → solutions → compete → customers → verify → communicate` — because each step consumes what the previous one produced. Features (the IS layer) must exist before a proposition can say what a capability DOES; markets must be sized before a proposition can be scoped to a segment. The ordering is not cosmetic: it is what makes Feature × Market the core join that propositions, solutions, and competitor analysis all key off.
@@ -205,7 +207,8 @@ cogni-portfolio/
 ├── agents/                       20 delegation agents
 ├── hooks/                        1 guardrail hook (Excalidraw canvas auto-start)
 ├── references/
-│   └── data-model.md             Full entity schema and project structure reference
+│   ├── data-model.md             Full entity schema and project structure reference
+│   └── dashboard-handoff.md      End-of-step dashboard handoff contract
 ├── scripts/                      18 utility scripts
 └── tests/                        Entity-validation test harness
 ```

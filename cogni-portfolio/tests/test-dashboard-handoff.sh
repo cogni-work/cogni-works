@@ -17,6 +17,12 @@
 #   test_refresher_has_no_skip_path  the agent never terminates without generating
 #   test_open_browser_optin          default is non-opening, and every intending call site says so
 #   test_refresher_returns_url       a successful result carries a clickable url
+#   test_entity_skills_cite_handoff  all eight entity skills end by citing the canonical handoff
+#   test_secondary_paths_reach_handoff
+#                                    alternate write paths point back to that terminal section
+#   test_handoff_not_duplicated      the handoff is authored once, and no skill restates it
+#   test_handoff_does_not_open       the end-of-step path opens nothing on its own
+#   test_midflow_offers_survive      the pre-existing review offers still open on request
 #
 # Usage: bash cogni-portfolio/tests/test-dashboard-handoff.sh [test_name ...]
 #   No args -> run every test (the CI path). One or more names -> run only those
@@ -48,6 +54,21 @@
 #   use the newest under the same parent — everything after the path is version-independent.
 #   The in-repo equivalent is registered as mutation_dashboard_no_skip_path in
 #   cogni-portfolio/scripts/mutation-check.sh.
+#
+# Mutation recipe — test_entity_skills_cite_handoff. Same harness, same shape.
+#   bash ~/.claude/plugins/cache/managed-service/cogni-service/0.0.383/scripts/mutation-check.sh \
+#     --root . \
+#     --file cogni-portfolio/skills/markets/SKILL.md \
+#     --expr 's#references/dashboard-handoff#references/absent-handoff#' \
+#     --test 'bash cogni-portfolio/tests/test-dashboard-handoff.sh test_entity_skills_cite_handoff' \
+#     --case test_entity_skills_cite_handoff
+#   The expr repoints one wired skill's citation, so the case goes red on the mutant
+#   and green on HEAD. markets/ carries the citation exactly once and takes no pointer
+#   line, so the single-occurrence anchor is unambiguous. The replacement is
+#   deliberately DISJOINT from the searched string — a replacement such as
+#   "references/dashboard-handoff-removed" still CONTAINS the searched literal as a
+#   prefix, so the assertion would stay green and the mutation would survive.
+#   The in-repo equivalent is registered as mutation_handoff_citation.
 
 # `set -u` only — `set -e` would abort on the first failing assertion and defeat
 # the failure counter below, which exists so one run reports every offender.
@@ -56,6 +77,13 @@ set -u
 TESTS_DIR="$(cd "$(dirname "$0")" && pwd)"
 PLUGIN_DIR="$(cd "$TESTS_DIR/.." && pwd)"
 AGENT="$PLUGIN_DIR/agents/dashboard-refresher.md"
+HANDOFF_REF="$PLUGIN_DIR/references/dashboard-handoff.md"
+# The full literal INCLUDING the .md, matched fixed-string. Both are load-bearing:
+# they are what makes a mutant's rewritten path fail to match.
+HANDOFF_PATH_LITERAL='references/dashboard-handoff.md'
+HANDOFF_HEADING='## Dashboard handoff'
+ENTITY_SKILLS='products features markets propositions solutions compete customers packages'
+PTR_LINE='This path ends the same way — see the **Dashboard handoff** section in this file.'
 
 failures=0
 # Keep the message a SEPARATE argument. The shared mutation harness anchors on the
@@ -74,6 +102,53 @@ agent_surface_ok() {
     return 1
   fi
   return 0
+}
+
+# The canonical reference is the scan surface for the handoff cases, and gets the
+# same treatment as the agent contract above: say "broken surface", not "absent".
+reference_surface_ok() {
+  local case_name="$1"
+  if [ ! -s "$HANDOFF_REF" ]; then
+    fail "$case_name" "references/dashboard-handoff.md is missing or empty; scan surface is broken"
+    return 1
+  fi
+  return 0
+}
+
+# Print one skill's handoff section: from its heading to the next H2. Anchored on
+# ^## so a bolded in-prose "**Dashboard handoff**" inside a pointer line can never
+# open or extend a section.
+handoff_section() {
+  awk -v h="$HANDOFF_HEADING" '$0 == h {f=1; next} f && /^## / {f=0} f' "$1"
+}
+
+# Every rostered entity skill must be present before any of them can be judged. A
+# scan that reads nothing would report "no offenders" and go green having proved
+# nothing — the discipline of test_no_file_cites_notes in test-data-model-pointer.sh.
+# The expected count is derived from ENTITY_SKILLS rather than written out, so
+# extending the roster stays a one-line edit instead of a false surface failure.
+entity_surface_ok() {
+  local case_name="$1" missing="" skill
+  for skill in $ENTITY_SKILLS; do
+    [ -s "$PLUGIN_DIR/skills/$skill/SKILL.md" ] || missing="$missing $skill"
+  done
+  if [ -n "$missing" ]; then
+    fail "$case_name" "missing entity SKILL.md:$missing; scan surface is broken"
+    return 1
+  fi
+  return 0
+}
+
+# Every skill that carries a handoff section, rostered or not. The negative cases
+# below use this rather than ENTITY_SKILLS: the drift this reference exists to
+# prevent is the dispatch reappearing as an inlined paragraph, and it would do that
+# in whichever skill grows one next — including a skill nobody thought to roster.
+skills_with_handoff_section() {
+  local f
+  for f in "$PLUGIN_DIR"/skills/*/SKILL.md; do
+    [ -s "$f" ] || continue
+    [ -n "$(handoff_section "$f")" ] && printf '%s\n' "$f"
+  done
 }
 
 # --- test_refresher_has_no_skip_path ---------------------------------------
@@ -237,7 +312,192 @@ test_refresher_returns_url() {
   fi
 }
 
-ALL_TESTS="test_refresher_has_no_skip_path test_open_browser_optin test_refresher_returns_url"
+# --- test_entity_skills_cite_handoff ---------------------------------------
+# Every entity-writing skill must end its work step by citing the canonical
+# handoff. EXACTLY one citation, not "at least one": the single-occurrence count is
+# what keeps the registered mutation's anchor unambiguous while pointer lines exist
+# elsewhere in the same files.
+test_entity_skills_cite_handoff() {
+  entity_surface_ok test_entity_skills_cite_handoff || return
+
+  local offenders="" skill f count
+  for skill in $ENTITY_SKILLS; do
+    f="$PLUGIN_DIR/skills/$skill/SKILL.md"
+    count="$(grep -cF "$HANDOFF_PATH_LITERAL" "$f")"
+    if [ "$count" -ne 1 ]; then
+      offenders="$offenders $skill(cites=$count)"
+    elif [ -z "$(handoff_section "$f")" ]; then
+      offenders="$offenders $skill(no-section)"
+    fi
+  done
+
+  if [ -n "$offenders" ]; then
+    fail test_entity_skills_cite_handoff "entity skills without exactly one handoff citation:$offenders"
+  else
+    pass test_entity_skills_cite_handoff "all 8 entity skills end by citing the canonical handoff"
+  fi
+}
+
+# --- test_secondary_paths_reach_handoff ------------------------------------
+# The acceptance bar is falsified by any file "whose end-of-step path can complete
+# without reaching the handoff". Three skills have an alternate entity-writing path
+# that sits below the terminal section, so each needs an explicit pointer back.
+test_secondary_paths_reach_handoff() {
+  entity_surface_ok test_secondary_paths_reach_handoff || return
+
+  local offenders="" spec skill want got strays
+  for spec in solutions:2 packages:1 propositions:1; do
+    skill="${spec%%:*}"
+    want="${spec##*:}"
+    got="$(grep -cF "$PTR_LINE" "$PLUGIN_DIR/skills/$skill/SKILL.md")"
+    if [ "$got" -ne "$want" ]; then
+      offenders="$offenders $skill(want=$want,got=$got)"
+    fi
+  done
+
+  # A pointer names the section only. If one ever restates the dispatch it becomes a
+  # second source of truth, and if it re-cites the path it breaks the count above.
+  strays="$(grep -lE "$(printf '%s' "$PTR_LINE" | sed 's/[][\.*^$]/\\&/g').*(dashboard-refresher|open_browser|references/dashboard-handoff)" \
+            "$PLUGIN_DIR"/skills/*/SKILL.md 2>/dev/null | tr '\n' ' ')"
+  if [ -n "$strays" ]; then
+    offenders="$offenders pointer-restates-dispatch:$strays"
+  fi
+
+  if [ -n "$offenders" ]; then
+    fail test_secondary_paths_reach_handoff "secondary write paths do not reach the handoff:$offenders"
+  else
+    pass test_secondary_paths_reach_handoff "every alternate entity-writing path points back to the handoff"
+  fi
+}
+
+# --- test_handoff_not_duplicated -------------------------------------------
+# One author, many citers. A skill that restates the dispatch parameters has forked
+# the contract, which is the drift this reference exists to prevent.
+test_handoff_not_duplicated() {
+  reference_surface_ok test_handoff_not_duplicated || return
+
+  local scanned authors author_count offenders="" f sec
+  scanned="$(find "$PLUGIN_DIR" -name '*.md' -type f | wc -l | tr -d ' ')"
+  if [ "$scanned" -eq 0 ]; then
+    fail test_handoff_not_duplicated "scanned no markdown files; scan surface is broken"
+    return
+  fi
+
+  authors="$(grep -rlF '# End-of-step dashboard handoff' "$PLUGIN_DIR" \
+             --include='*.md' --exclude-dir=tests 2>/dev/null)"
+  author_count="$(printf '%s\n' "$authors" | grep -c . )"
+  if [ "$author_count" -ne 1 ]; then
+    fail test_handoff_not_duplicated "the handoff must be authored in exactly one file, found $author_count"
+    return
+  fi
+
+  # Retention. The citing skills are forbidden from restating the dispatch, so the
+  # reference is the ONLY place these facts exist anywhere in the plugin. Without
+  # this, trimming the reference leaves eight skills citing a document that no
+  # longer says what to dispatch — and every other case here stays green.
+  local token
+  for token in dashboard-refresher project_dir plugin_root url; do
+    grep -qF "$token" "$HANDOFF_REF" || offenders="$offenders canonical-lost:$token"
+  done
+
+  # Rostered or not: whichever skill grows a handoff section next must cite, not copy.
+  for f in $(skills_with_handoff_section); do
+    sec="$(handoff_section "$f")"
+    if printf '%s' "$sec" | grep -qE 'dashboard-refresher|project_dir|plugin_root|open_browser'; then
+      offenders="$offenders ${f#"$PLUGIN_DIR/"}"
+    fi
+  done
+
+  if [ -n "$offenders" ]; then
+    fail test_handoff_not_duplicated "the handoff is not singly authored:$offenders"
+  else
+    pass test_handoff_not_duplicated "authored once in references/, cited never copied ($scanned files scanned)"
+  fi
+}
+
+# --- test_handoff_does_not_open --------------------------------------------
+# The end-of-step path hands back a link, never a window. The reference must say so
+# in the terms the agent contract uses — omission, not `open_browser: false`.
+test_handoff_does_not_open() {
+  reference_surface_ok test_handoff_does_not_open || return
+
+  local problems="" sections=0 f sec
+  grep -qF 'Do not pass `open_browser`' "$HANDOFF_REF" \
+    || problems="$problems no-omission-instruction"
+  # Whole-file, not the open_browser line: pinning both to one physical line makes a
+  # cosmetic reflow of that paragraph fail the case while nothing has changed.
+  grep -qi 'omitting it' "$HANDOFF_REF" \
+    || problems="$problems omission-not-explained"
+  grep -qF 'Never open a browser from this step.' "$HANDOFF_REF" \
+    || problems="$problems no-never-open-sentence"
+  if grep -qF 'open_browser: true' "$HANDOFF_REF"; then
+    problems="$problems reference-passes-the-opt-in"
+  fi
+
+  for f in $(skills_with_handoff_section); do
+    sec="$(handoff_section "$f")"
+    sections=$((sections + 1))
+    if printf '%s' "$sec" | grep -qF 'open_browser: true'; then
+      problems="$problems ${f#"$PLUGIN_DIR/"}:passes-the-opt-in"
+    fi
+    if printf '%s' "$sec" | grep -qiF 'open the dashboard'; then
+      problems="$problems ${f#"$PLUGIN_DIR/"}:promises-to-open"
+    fi
+  done
+
+  if [ "$sections" -eq 0 ]; then
+    fail test_handoff_does_not_open "extracted no handoff sections; scan surface is broken"
+    return
+  fi
+  if [ -n "$problems" ]; then
+    fail test_handoff_does_not_open "end-of-step path can open a browser:$problems"
+  else
+    pass test_handoff_does_not_open "reference states the omission and $sections sections open nothing"
+  fi
+}
+
+# --- test_midflow_offers_survive -------------------------------------------
+# The end-of-step handoff ADDS a path; it must never remove one. Each pre-existing
+# review offer is a deliberate checkpoint where the user asked for a window, so each
+# must still name the opt-in. >= so a future legitimate offer does not break this.
+test_midflow_offers_survive() {
+  # Each caller carries its own expected count, so a lost offer names the file
+  # rather than reporting a bare total that a maintainer has to re-grep by hand.
+  local callers total=0 offenders="" spec rel want f n
+  callers='compete/SKILL.md:1 customers/SKILL.md:1 features/SKILL.md:1 markets/SKILL.md:1
+           packages/SKILL.md:1 portfolio-architecture/SKILL.md:1 portfolio-dashboard/SKILL.md:1
+           products/SKILL.md:1 solutions/SKILL.md:1
+           propositions/references/quality-gates.md:2'
+
+  for spec in $callers; do
+    rel="${spec%:*}"
+    want="${spec##*:}"
+    f="$PLUGIN_DIR/skills/$rel"
+    if [ ! -s "$f" ]; then
+      offenders="$offenders $rel(missing)"
+      continue
+    fi
+    n="$(grep -cE 'dashboard-refresher.*open_browser: true' "$f")"
+    # >= so a future legitimate offer does not break the case.
+    if [ "$n" -lt "$want" ]; then
+      offenders="$offenders $rel(want>=$want,got=$n)"
+    fi
+    total=$((total + n))
+  done
+
+  if [ "$total" -eq 0 ]; then
+    fail test_midflow_offers_survive "found no mid-flow dispatch lines; scan surface is broken"
+    return
+  fi
+
+  if [ -n "$offenders" ]; then
+    fail test_midflow_offers_survive "mid-flow review offers were lost:$offenders"
+  else
+    pass test_midflow_offers_survive "all 10 caller files keep their opt-in offer ($total dispatch lines)"
+  fi
+}
+
+ALL_TESTS="test_refresher_has_no_skip_path test_open_browser_optin test_refresher_returns_url test_entity_skills_cite_handoff test_secondary_paths_reach_handoff test_handoff_not_duplicated test_handoff_does_not_open test_midflow_offers_survive"
 
 # Reject an unknown case name instead of letting bash's "command not found" pass
 # through: with no `set -e` and no failures increment, an unrecognised name would

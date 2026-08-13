@@ -39,7 +39,7 @@ A themed infographic rendered as SVG (Excalidraw) or `.pen` file (Pencil), align
 
 ## How it works
 
-The workflow is sequenced so you verify each layer before depending on it. [[plugin-cogni-workspace]] is installed first because every other plugin depends on it. `manage-workspace` initializes the directory structure, `install-mcp` brings up the MCP servers ([[concept-mcp-server-map]]), and `manage-themes` extracts your brand colors via `claude-in-chrome` browser automation.
+The workflow is sequenced so you verify each layer before depending on it. [[plugin-cogni-workspace]] is installed first because it owns the shared workspace state the later steps read. `manage-workspace` initializes the directory structure, `install-mcp` brings up the MCP servers ([[concept-mcp-server-map]]), and `manage-themes` extracts your brand colors via `claude-in-chrome` browser automation.
 
 [[plugin-cogni-visual]] then renders an infographic. `story-to-infographic` turns a narrative (e.g., a one-paragraph product positioning) into a structured `infographic-brief.md`. The matching render skill (Pencil for editorial, Excalidraw for sketchnote/whiteboard) then produces the visual. See [[concept-brief-based-rendering]].
 

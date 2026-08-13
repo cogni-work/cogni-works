@@ -31,15 +31,19 @@ versions arrive without re-running install. Plugin versions live in
 `plugin.json` and are mirrored in the marketplace manifest — auto-update
 detects new versions via marketplace.json.
 
-The 13 plugins span four tiers:
-- Foundation: cogni-workspace, cogni-help, cogni-claims
-- Content production: cogni-knowledge, cogni-narrative, cogni-copywriting, cogni-visual
-- Domain pipelines: cogni-trends, cogni-portfolio, cogni-sales, cogni-marketing, cogni-website
-- Meta: cogni-consult (orchestrates the rest)
+The 13 plugins split along one line: cogni-workspace is **horizontal**
+infrastructure, and the business plugins are **vertical**, each keeping its own
+project lifecycle. The vertical grouping below is descriptive — it names the role
+each plugin plays, not an order in which they depend on each other:
+- Horizontal: cogni-workspace — owns the shared workspace state the others read
+- Data: cogni-portfolio, cogni-trends, cogni-knowledge, cogni-claims
+- Output: cogni-narrative, cogni-copywriting, cogni-visual, cogni-sales, cogni-marketing, cogni-website
+- Orchestration: cogni-consult (manages engagement state, produces no content itself)
+- Outside the groups: cogni-help — a cross-cutting utility that reads every plugin and is read by none
 
 ### Demo
 
-Install the foundation:
+Install the two plugins this workflow needs:
 1. Run `/plugin marketplace add cogni-work/insight-wave`.
 2. Install cogni-workspace: `/plugin install cogni-workspace@insight-wave`.
 3. Install cogni-visual: `/plugin install cogni-visual@insight-wave`.
@@ -48,8 +52,8 @@ Install the foundation:
 
 ### Exercise
 
-For the learner's actual setup, confirm the marketplace is added and the two
-foundation plugins are installed. If they want to install more for follow-on
+For the learner's actual setup, confirm the marketplace is added and both
+plugins are installed. If they want to install more for follow-on
 workflows, do it now in the same step.
 
 ### Quiz
@@ -77,7 +81,7 @@ workflows, do it now in the same step.
 
 ### Theory (6 min)
 
-`cogni-workspace` is the foundation every other plugin depends on — it owns
+`cogni-workspace` is the horizontal layer you initialize first — it owns
 shared state: themes, environment variables, MCP server configuration, and
 workspace health diagnostics.
 

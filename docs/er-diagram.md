@@ -2,7 +2,7 @@
 
 How data flows between insight-wave plugins. No shared database — all cross-references are resolved at runtime via slug-based lookups, bridge files, and YAML frontmatter contracts.
 
-## Architecture Layers
+## Architectural Groups
 
 ```mermaid
 graph LR
@@ -10,7 +10,7 @@ graph LR
         DM[cogni-consult<br/>engagements, action fields<br/>deliverable state, personas]
     end
 
-    subgraph Foundation["Foundation Layer"]
+    subgraph Foundation["Shared Workspace (horizontal)"]
         WS[cogni-workspace<br/>themes, env vars, discovery<br/>obsidian, terminal, notes]
     end
 
@@ -36,7 +36,7 @@ graph LR
     DM -->|dispatches define/deliver| CL
     DM -->|dispatches export| VI
 
-    %% Foundation → All
+    %% Shared workspace → consumers
     WS -.->|themes| VI
     WS -.->|env vars| PF
     WS -.->|env vars| TI

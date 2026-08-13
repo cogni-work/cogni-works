@@ -14,11 +14,11 @@ related: [concept-theme-inheritance, concept-mcp-server-map]
 
 > **Preview** (v0.6.3) — core skills defined but may change.
 
-Foundation-layer plugin for the insight-wave marketplace. Manages shared infrastructure (env vars, settings), MCP server installation and Desktop config patching, theme management, theme picker, plugin discovery, workspace health, and Obsidian vault integration.
+The horizontal layer of the insight-wave marketplace — it owns the shared workspace state the vertical business plugins consume. Manages shared infrastructure (env vars, settings), MCP server installation and Desktop config patching, theme management, theme picker, plugin discovery, workspace health, and Obsidian vault integration.
 
 ## Layer
 
-[[concept-four-layer-architecture|Foundation layer]]. Every plugin that produces visual HTML output reads themes from cogni-workspace; every plugin needing an MCP server is installed via cogni-workspace.
+[[concept-four-layer-architecture|Horizontal layer]]. Every plugin that produces visual HTML output reads themes from cogni-workspace; every plugin needing an MCP server is installed via cogni-workspace.
 
 ## Skills
 
@@ -42,6 +42,6 @@ Foundation-layer plugin for the insight-wave marketplace. Manages shared infrast
 
 ## Integration
 
-Foundation for all 13 other plugins. cogni-workspace is the first install — `manage-workspace` initializes the directory structure that every other plugin's project directories live inside. `pick-theme` is called by every visual plugin (cogni-visual, cogni-website, cogni-portfolio dashboards, cogni-trends dashboards).
+The horizontal layer the vertical business plugins consume. cogni-workspace is the first install — `manage-workspace` initializes the directory structure that every other plugin's project directories live inside. `pick-theme` is called by every visual plugin (cogni-visual, cogni-website, cogni-portfolio dashboards, cogni-trends dashboards).
 
 **Source**: [cogni-workspace README](https://github.com/cogni-work/insight-wave/blob/main/cogni-workspace/README.md) · [plugin guide](https://github.com/cogni-work/insight-wave/blob/main/docs/plugin-guide/cogni-workspace.md)

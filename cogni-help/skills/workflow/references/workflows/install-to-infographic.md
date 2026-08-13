@@ -20,7 +20,7 @@ graph LR
 **Output**: insight-wave plugins available as slash commands
 
 **Tips**:
-- Start with `cogni-workspace` — it's the foundation every other plugin depends on
+- Start with `cogni-workspace` — it owns the shared workspace state (themes, env vars, MCP config) the other plugins read, so initialize it first
 - Enable auto-update inside `/plugin → Marketplaces → insight-wave` so new versions arrive without re-running this step
 - For this workflow you minimally need `cogni-workspace` and `cogni-visual`; install the rest when you reach a follow-on workflow that needs them
 

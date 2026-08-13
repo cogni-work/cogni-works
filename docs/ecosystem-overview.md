@@ -10,11 +10,11 @@ For the canonical plugin descriptions, see the individual README files. For step
 
 The 13 plugins are grouped by the role they play in a typical engagement — the same set the root [`marketplace.json`](../.claude-plugin/marketplace.json) enumerates.
 
-### Foundation
+### Workspace Infrastructure
 
 | Plugin | What it does |
 |--------|-------------|
-| [cogni-workspace](../cogni-workspace/README.md) | Initializes the shared workspace: environment variables, plugin discovery, theme management, and Obsidian vault integration. Every other plugin depends on it. |
+| [cogni-workspace](../cogni-workspace/README.md) | Initializes the shared workspace: environment variables, plugin discovery, theme management, and Obsidian vault integration. The vertical business plugins consume the shared state it owns; each keeps its own project lifecycle. |
 
 Run `/manage-workspace` once per project directory before using any other plugin.
 

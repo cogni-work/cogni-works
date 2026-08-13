@@ -236,7 +236,7 @@ Excalidraw, Pencil MCP, and PPTX rendering.
 
 ## cogni-workspace
 
-**Purpose**: Lean workspace orchestrator. Manages shared foundation (env vars, settings),
+**Purpose**: Lean workspace orchestrator. Owns the shared workspace state (env vars, settings),
 theme management, plugin discovery, and workspace health diagnostics.
 
 **Key commands**: `/manage-workspace`, `/workspace-status`, `/pick-theme`, `/manage-themes`
@@ -244,6 +244,6 @@ theme management, plugin discovery, and workspace health diagnostics.
 **Use when**: User needs to initialize or maintain their insight-wave workspace, manage
 themes, or diagnose workspace configuration issues.
 
-**Foundation for**: All other plugins (provides shared env vars and settings)
+**Consumed by**: The vertical business plugins, which read the shared env vars, settings, and themes it owns
 
 **Related workflows**: portfolio-to-website, install-to-infographic

@@ -52,4 +52,25 @@ Optional `website-legal` generates Impressum/Datenschutzerklärung/Cookie-Hinwei
 
 The same workflow extends to pull from [[plugin-cogni-marketing]] (thought-leadership → blog) and [[plugin-cogni-trends]] (trend reports → insights pages).
 
+## Steps
+
+**1 — Confirm the portfolio content.** `cogni-portfolio:portfolio-resume`. You need at least one product, propositions and customer profiles. Propositions become page headlines, features become capability lists, and customer narratives become case-study blocks. If propositions or customer profiles are missing, generate them first with `propositions` and `customers` — the website plan keys off them. Operational-only entities (a market with no propositions) never reach the site.
+
+**2 — Pick or confirm a theme.** `cogni-workspace:pick-theme`. The theme drives colors, fonts and design variables across every page. Switching it later and rebuilding reskins the whole site, so theme changes are global rather than per-page. Without a theme yet, run [[workflow-install-to-infographic]] first to extract one.
+
+**3 — Set up the website project.** `cogni-website:website-setup`. Takes a target directory plus target market, primary CTA and language; writes `website-project.json` with the discovered portfolio entities. Setup walks the optional content sources — cogni-marketing for blog and lead-gen pages, cogni-trends for insights pages, cogni-knowledge for whitepapers. Skip sources you have no content for; they can be added on a later run. The chosen language is the site's primary language.
+
+**4 — Plan the sitemap.** `cogni-website:website-plan`. Produces `website-plan.json`: sitemap, content map, navigation flow. Review priorities before building — the planner picks defaults, but the running order shapes the homepage. Pages with shallow sources (a proposition without a customer narrative) generate thin landing pages; fill the gap in cogni-portfolio or drop the page. Re-run after adding propositions to see what the build will change.
+
+**5 — Build.** `cogni-website:website-build`. Renders `website/{page-slug}.html` plus `website/assets/` (themed CSS, JS, hero imagery). The build dispatches the site-assembler agent, which renders every planned page in parallel. With Pencil MCP available the hero-renderer generates hero imagery; without it, hero blocks fall back to themed gradients. Subsequent runs rebuild only modified pages — a theme change forces a full rebuild.
+
+**6 — Preview and iterate.** `cogni-website:website-preview` opens a local browser preview through claude-in-chrome. Iterate on theme tweaks, copy edits or page additions by rebuilding. The `website/` directory is self-contained, so deployment is a push to any static host.
+
+## Common pitfalls
+
+- **Missing propositions or customers.** The plan needs propositions for service-page headlines and customer profiles to seed landing pages. Building before the portfolio is populated yields a thin three-page placeholder.
+- **Theme not picked before build.** The build reads the active theme from workspace state; without one it falls back to the default and the site drifts visually from your slides and dashboards.
+- **Pencil MCP missing.** Hero sections render as themed gradients — usable, but not the generated imagery the demos show.
+- **Optional sources added late.** Installing cogni-marketing or cogni-trends after planning requires re-running plan and build to pick up the new pages.
+
 **Source**: [docs/workflows/portfolio-to-website.md on GitHub](https://github.com/cogni-work/insight-wave/blob/main/docs/workflows/portfolio-to-website.md)

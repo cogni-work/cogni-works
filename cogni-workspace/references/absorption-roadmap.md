@@ -11,8 +11,8 @@ up" something load-bearing.
 **On the figures in this document.** Every count is attributed to the command
 that produced it, measured against base `19e6c1a7`. A number with no reproducible
 command behind it is worse than no number, because it cannot be rechecked as the
-tree moves — so where a figure could not be reproduced, that is recorded plainly
-rather than smoothed over. See *Open questions* at the end.
+tree moves — so where an earlier-quoted figure could not be reproduced, that is
+recorded plainly at the point it matters rather than smoothed over.
 
 ## Decision 1 — the cut line: what becomes its own plugin
 
@@ -81,7 +81,9 @@ questions (how many files a rename touches, versus how many edits it takes):
 | `cogni-visual/` | 98 | 231 | 70 | 144 |
 
 The magnitude is the argument, not the exact figure: a rename is a three-figure
-edit across the tree *plus* an unmigratable change to user data.
+edit across the tree *plus* an unmigratable change to user data. The figures
+above are this document's own measurements — earlier-quoted values of 62 and 51
+did not reproduce under any denominator tried, so they are not carried here.
 
 ## Decision 3 — MCP configuration moves to install time
 
@@ -105,8 +107,9 @@ documented as the no-install alternative to the `excalidraw` server at
 `cogni-workspace/skills/workspace-status/SKILL.md:177`, and
 `cogni-workspace/skills/workspace-status/references/mcp-registry.md:30,35`. It is
 configured, documented and reachable, so this record does not describe it as dead.
-Retiring it would be a behaviour change across two plugins, not a documentation
-edit — see *Open questions*.
+An earlier draft of this decision called it already-dead; that was wrong on the
+evidence above. Retiring it remains possible, but it would be a behaviour change
+across two plugins, not a line in a documentation file.
 
 ## Rejected alternative — renaming cogni-workspace
 
@@ -114,7 +117,7 @@ Renaming the plugin (to `cogni-tools` or similar) was considered, because
 "workspace" describes the state it owns rather than the tools it provides, and
 after the absorption it provides more tools than state.
 
-**Rejected.** Two grounds, neither of them a reference count:
+**Rejected.** Three grounds:
 
 1. **Identity.** `cogni-workspace` is the first thing a user initializes and the
    name every onboarding path, README, and doc page already teaches. The name is
@@ -122,21 +125,29 @@ after the absorption it provides more tools than state.
 2. **Breadth of churn.** A rename does not stop at the plugin: it reaches the
    other registered plugins, `docs/`, both wiki trees, and the marketplace
    manifest — a repo-wide edit whose benefit is a better noun.
+3. **Absolute cost.** Roughly 135 files reference `cogni-workspace` from outside
+   the plugin's own directory — 35 namespaced (`cogni-workspace:`) and 102 by
+   bare path (`cogni-workspace/`), `git grep -l` at base `19e6c1a7`. That is the
+   whole price of the change, and nothing but a better noun is bought with it.
 
-**On the cost figures.** This rejection is deliberately *not* argued from an
-inbound-reference comparison. Measured at base `19e6c1a7` with `git grep -l`,
-excluding each plugin's own directory, the comparison does not favour the
-argument it was meant to support:
+**On the cost figures.** Ground 3 is an *absolute* count, deliberately not the
+inbound-reference **comparison** originally supplied. That comparison — ~193
+inbound files for cogni-workspace against ~70 for the five horizontal candidates
+combined — does not reproduce, because its two sides were transposed. Measured at
+base `19e6c1a7` with `git grep -l`, excluding each plugin's own directory:
 
 | Target | `<name>:` (namespaced) | `<name>/` (bare path) |
 |---|---|---|
 | cogni-workspace | 35 | 102 |
 | five horizontal candidates, summed | 197 | 205 |
 
-The horizontal set carries *more* inbound references than cogni-workspace does,
-and `cogni-visual` alone (85 namespaced / 70 bare-path) exceeds what was claimed
-as the five-way combined total. A cost argument that points the other way cannot
-carry the decision, so the decision rests on identity and churn breadth instead.
+The `~193` figure is the five candidates' *namespaced* sum, not cogni-workspace's
+total; the `~70` is `cogni-visual`'s bare-path count alone. Read correctly, the
+horizontal set carries *more* inbound references than cogni-workspace does, and
+`cogni-visual` alone (85 namespaced / 70 bare-path) exceeds what was claimed as
+the five-way combined total. The comparison therefore points the other way and
+cannot carry the decision — which is why the cost ground above is stated in
+absolute terms instead.
 
 ## Known remaining contradictions
 
@@ -158,20 +169,3 @@ these paths at base `19e6c1a7`, all outside this document's scope:
 Listed so the next editor inherits the set instead of re-deriving it. Reconciling
 the generated surfaces belongs with the docs pass that regenerates them, not with
 a hand edit here.
-
-## Open questions
-
-Three premises behind this record could not be reproduced against the tree. They
-are recorded unresolved rather than asserted, because a decisions record that
-carries a known-false fact is worse than one that admits a gap:
-
-1. **`excalidraw_sketch` disposition.** Recorded above as live and retained, on
-   the evidence of its definition and three documentation sites. If the intent
-   was to retire it, that is a behaviour change spanning cogni-visual and
-   cogni-workspace and needs its own change, not a line in this file.
-2. **Rename cost basis.** The originally-stated comparison does not reproduce and
-   inverts, as shown above. The rejection stands on identity and churn breadth;
-   confirmation is wanted that it still stands with the cost argument removed.
-3. **Data-directory counts.** The figures recorded in Decision 2 are this
-   document's own measurements. Earlier-quoted values of 62 and 51 did not
-   reproduce under any denominator tried, so they are not carried here.

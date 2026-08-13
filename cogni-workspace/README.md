@@ -4,7 +4,7 @@
 
 > **insight-wave readiness (Claude Code desktop)** — Claude Code desktop is the recommended interface for insight-wave today. Cowork is a secondary path and is not yet production-ready for insight-wave workflows because of context-window and Pencil-MCP fidelity gaps — see the [deployment guide](../docs/deployment-guide.md) for detail. This guidance will flip when those gaps close upstream.
 
-The horizontal layer of the [insight-wave](https://claude.ai/cowork) ecosystem — it owns the shared workspace state that the vertical business plugins build on (environment variables, the plugin registry, theme storage, MCP and tool configuration, the supported-markets registry), and it is the one you initialize first.
+The horizontal layer of the [insight-wave](https://claude.ai/cowork) ecosystem — it owns the shared workspace state that the vertical business plugins consume (environment variables, the plugin registry, theme storage, MCP and tool configuration, the supported-markets registry), and it is the one you initialize first.
 
 ## Why this exists
 

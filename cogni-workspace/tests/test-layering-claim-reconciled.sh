@@ -60,8 +60,17 @@
 # This list is why the shared-foundation literal below is prefixed with the
 # plugin name: the bare "is the shared foundation" also matches the first entry,
 # so an unprefixed literal would make this suite red on arrival against a line
-# that is deliberately standing. Without this block a later editor cannot tell a
-# compatible survivor from a missed one.
+# that is deliberately standing.
+#
+# The list is ILLUSTRATIVE, not exhaustive. It names the lines that shaped a
+# literal's wording, not every surviving use of "foundation". More exist — the
+# manage-workspace description propagates verbatim into its own frontmatter
+# (:4, :10), both wiki index.md:167, and both skill-cogni-workspace-manage-
+# workspace.md:16; cogni-help canonical-workflows.md:11 has its own. Those are
+# all the same compatible claim about workspace state, and no literal here
+# targets them. Grepping "foundation" will surface hits this block does not
+# account for; that is expected, and the test is whether the sentence asserts a
+# DEPENDENCY ORDER among plugins, not whether it uses the word.
 #
 # Path exclusions, each with a reason:
 #   - this file (it necessarily contains every literal it forbids)
@@ -430,7 +439,13 @@ if ! git init -q "$G" >/dev/null 2>&1; then
 else
   printf 'Some prose that says foundation layer in passing.\n' > "$G/docs/tracked.md"
   git -C "$G" add docs/tracked.md >/dev/null 2>&1
+  # commit.gpgsign is overridden too: it is a common personal global default, and
+  # a signing failure here would red this case for a reason with nothing to do
+  # with the arm under test — pointing a reader at the wrong code. CI is
+  # unaffected, so this only bites the local pre-PR run, which is where the
+  # suite's fastest signal is meant to come from.
   git -C "$G" -c user.email=guard@example.invalid -c user.name=Guard \
+    -c commit.gpgsign=false \
     commit -q -m "fixture" >/dev/null 2>&1 || l8_ok=0
 
   # Tracked offender must be found, and named, by the git arm.
@@ -446,6 +461,34 @@ if [ "$l8_ok" -eq 1 ]; then
   pass "L8 the git-tracked scan arm is live and skips untracked files"
 else
   fail "L8 the git-tracked scan arm is live and skips untracked files"
+fi
+
+# ---------------------------------------------------------------------------
+# L9 — the manifest exemption is scoped to two exact files, not to every
+# `.claude-plugin/` directory.
+#
+# Same lesson as L8: without a case, the narrowing is asserted only in a comment.
+# L1 is green whether EXCLUDED names the two paths or the old `.claude-plugin/`
+# fragment, because the two exempt manifests carry the literal either way and no
+# other manifest carries it today — so a revert to the fragment would silently
+# re-open a 15-file exemption with every case still passing. This case makes that
+# revert red by planting the literal in a DIFFERENT plugin's manifest, which must
+# be caught, while cogni-workspace's own stays exempt.
+# ---------------------------------------------------------------------------
+l9_ok=1
+X="$TMPROOT/l9"
+mkdir -p "$X/cogni-workspace/.claude-plugin" "$X/cogni-other/.claude-plugin"
+printf '{"description": "Foundation-layer plugin for insight-wave."}\n' \
+  > "$X/cogni-workspace/.claude-plugin/plugin.json"
+printf '{"description": "Foundation-layer plugin for insight-wave."}\n' \
+  > "$X/cogni-other/.claude-plugin/plugin.json"
+run_scan "$X" "manifest-scope"
+assert_rc 1 && assert_out_has "cogni-other/.claude-plugin/plugin.json" || l9_ok=0
+assert_out_lacks "cogni-workspace/.claude-plugin/plugin.json" || l9_ok=0
+if [ "$l9_ok" -eq 1 ]; then
+  pass "L9 the manifest exemption covers two exact files, not every .claude-plugin dir"
+else
+  fail "L9 the manifest exemption covers two exact files, not every .claude-plugin dir"
 fi
 
 # ---------------------------------------------------------------------------

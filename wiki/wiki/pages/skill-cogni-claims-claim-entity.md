@@ -13,7 +13,7 @@ related: [plugin-cogni-claims, skill-cogni-claims-claims, concept-claim-lifecycl
 
 > The shared data contract inside [[plugin-cogni-claims]] — three record types, five deviation types, four severity levels, one workspace layout. Any plugin submitting or consuming claims reads this first.
 
-`claim-entity` is the cross-plugin API contract for claim verification. It does not orchestrate or run verification (that's `[[skill-cogni-claims-claims]]`) — it defines the structures every submitting plugin must produce and every consuming plugin can rely on. Skills in [[plugin-cogni-research]], [[plugin-cogni-portfolio]], [[plugin-cogni-trends]], and [[plugin-cogni-consulting]] all conform to this schema when they submit sourced assertions for verification.
+`claim-entity` is the cross-plugin API contract for claim verification. It does not orchestrate or run verification (that's `[[skill-cogni-claims-claims]]`) — it defines the structures every submitting plugin must produce and every consuming plugin can rely on. Skills in [[plugin-cogni-portfolio]] and [[plugin-cogni-trends]] all conform to this schema when they submit sourced assertions for verification.
 
 ## Key takeaways
 
@@ -50,10 +50,8 @@ Five constraints exist because claim verification involves LLM judgment, which c
 
 | Plugin | Direction | How it uses this contract |
 |--------|-----------|---------------------------|
-| [[plugin-cogni-research]] | submits | `verify-report` extracts claims from draft → submits |
 | [[plugin-cogni-portfolio]] | submits | `portfolio-verify` submits claims from web-sourced entities; reads `entity_ref` to propagate corrections |
 | [[plugin-cogni-trends]] | submits | `trend-report` submits post-generation |
-| [[plugin-cogni-consulting]] | submits | `consulting-deliver` runs final verification before deliverables |
 | [[skill-cogni-claims-claims]] | orchestrates | Consumes this contract for submit/verify/resolve operations |
 
 ## References in the source

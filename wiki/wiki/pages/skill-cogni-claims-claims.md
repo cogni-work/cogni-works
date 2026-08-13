@@ -27,7 +27,7 @@ related: [plugin-cogni-claims, skill-cogni-claims-claim-entity, agent-cogni-clai
 
 ## What this skill does NOT do
 
-- **Generate claims** — that's the submitting plugin's job ([[plugin-cogni-research]] `verify-report`, [[plugin-cogni-portfolio]] `portfolio-verify`, [[plugin-cogni-trends]] `trend-report`, [[plugin-cogni-consulting]] `consulting-deliver`).
+- **Generate claims** — that's the submitting plugin's job ([[plugin-cogni-portfolio]] `portfolio-verify`, [[plugin-cogni-trends]] `trend-report`).
 - **Make editorial decisions** — the user always has final say on resolutions.
 - **Present findings as verdicts** — every finding is an assessment for the user to review.
 
@@ -52,10 +52,8 @@ related: [plugin-cogni-claims, skill-cogni-claims-claim-entity, agent-cogni-clai
 
 | Plugin | Integration point |
 |--------|-------------------|
-| [[plugin-cogni-research]] | `verify-report` calls this skill in submit mode with extracted claims |
 | [[plugin-cogni-portfolio]] | `portfolio-verify` submits web-sourced entity claims; reads `entity_ref` back to propagate corrections |
 | [[plugin-cogni-trends]] | `trend-report` submits all sourced assertions post-generation |
-| [[plugin-cogni-consulting]] | `consulting-deliver` runs final verification pass before producing deliverables |
 
 Claims propagation — how corrections flow back to the originating entity files — is covered in [[concept-claims-propagation]].
 

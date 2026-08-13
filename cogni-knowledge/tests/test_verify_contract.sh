@@ -115,6 +115,9 @@ assert_not_grep 'Skill("cogni-knowledge:revisor' "$VERIFY" "knowledge-verify: no
 assert_not_grep '01-contexts/data' "$VERIFY" "knowledge-verify: does NOT reference cogni-research's 01-contexts/data"
 assert_not_grep '02-sources/data' "$VERIFY" "knowledge-verify: does NOT reference cogni-research's 02-sources/data"
 assert_not_grep 'cogni-claims:' "$VERIFY" "knowledge-verify: does NOT dispatch any cogni-claims skill"
+# Positive control, per tests/README.md: an absence assertion alone also passes on a
+# gutted file, so pair it with the mechanism that replaced the dispatch.
+assert_grep 'pre_extracted_claims:' "$VERIFY" "knowledge-verify: cogni-claims replacement present — scores citations against the cited page's on-disk pre_extracted_claims: frontmatter (zero-network)"
 # allowed-tools must include Task (we dispatch the verifier and revisor).
 VERIFY_TOOLS_LINE=$(grep '^allowed-tools:' "$VERIFY" || true)
 if echo "$VERIFY_TOOLS_LINE" | grep -q Task; then

@@ -107,6 +107,11 @@ assert_grep 'never gates ingest\|never gate ingest\|gate ingest\|roll back\|roll
 assert_not_grep 'Skill("cogni-research:' "$SC" "source-contradictor: no Skill('cogni-research:') dispatch (clean break)"
 assert_not_grep 'Skill("cogni-claims:' "$SC" "source-contradictor: no Skill('cogni-claims:') dispatch (clean break)"
 assert_not_grep 'Skill("cogni-wiki:' "$SC" "source-contradictor: no Skill('cogni-wiki:') dispatch (clean break)"
+# Positive control, per tests/README.md: the absence assertions above also pass on a
+# gutted file, so pair them with the mechanism that replaced the dispatch. The colon
+# form is deliberate — the maintainer comment block's mention is the non-colon
+# "::pre_extracted_claims;", so this literal matches body prose only.
+assert_grep 'pre_extracted_claims:' "$SC" "source-contradictor: cogni-claims replacement present — scores NEW vs PEER claims from on-disk pre_extracted_claims: frontmatter (zero-network)"
 
 # Recency survivor annotation (the resolution{} producer contract, #874).
 assert_grep 'resolution' "$SC" "source-contradictor: documents the resolution annotation"

@@ -148,6 +148,12 @@ assert_grep 'write_failed' "$REV" "wiki-reviewer: documents write_failed failure
 assert_not_grep 'Skill("cogni-research:' "$REV" "wiki-reviewer: no Skill('cogni-research:') dispatch (clean break)"
 assert_not_grep 'Skill("cogni-claims:' "$REV" "wiki-reviewer: no Skill('cogni-claims:') dispatch (clean break)"
 assert_not_grep 'Skill("cogni-wiki:' "$REV" "wiki-reviewer: no Skill('cogni-wiki:') dispatch (clean break)"
+# Positive control, per tests/README.md: an absence assertion alone also passes on a
+# gutted file, so pair it with the mechanism that replaced the dispatch.
+# Anchored on structural_scores, not the pre_extracted_claims: literal the four sibling
+# suites use: this agent's single mention of that literal describes knowledge-verify's
+# job, not its own, so it would not track this agent losing its mechanism.
+assert_grep 'structural_scores' "$REV" "wiki-reviewer: cogni-claims replacement present — emits its own structural_scores verdict instead of a claims-verification multiplier"
 
 if [ $errors -eq 0 ]; then
   green ""

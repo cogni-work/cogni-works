@@ -102,6 +102,9 @@ assert_grep 'citation-manifest' "$FIN" "knowledge-finalize: notes citation-manif
 assert_not_grep 'Skill("cogni-research:' "$FIN" "knowledge-finalize: no Skill('cogni-research:') dispatch (clean break)"
 assert_not_grep 'Skill("cogni-claims:' "$FIN" "knowledge-finalize: no Skill('cogni-claims:') dispatch (clean break)"
 assert_not_grep 'Skill("cogni-wiki:' "$FIN" "knowledge-finalize: no Skill('cogni-wiki:') dispatch (M6 contract: call helpers at script level)"
+# Positive control, per tests/README.md: the absence assertions above also pass on a
+# gutted file, so pair them with the mechanism that replaced the dispatch.
+assert_grep 'pre_extracted_claims:' "$FIN" "knowledge-finalize: cogni-claims replacement present — the contradiction pass reads on-disk pre_extracted_claims: frontmatter (zero-network)"
 # Post-review hardening (v0.0.24, all 15 review findings).
 # E1: wiki:// shape must be bare slug, not path-prefixed (cogni-wiki health.py:206).
 assert_grep 'wiki://" + slug' "$FINREF" "knowledge-finalize: emits bare 'wiki://<slug>' (not 'wiki://<wiki_slug>/<slug>') per cogni-wiki contract"

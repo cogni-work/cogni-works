@@ -14,6 +14,10 @@
 # Exit code 0 on success, 1 on the first failure encountered. Failures print a
 # triage line indicating which child of the v2 epic likely broke. Run
 # `--help` for the full triage table.
+#
+# This harness also runs in CI, via the thin wrapper suite
+# cogni-workspace/tests/test-theme-backcompat.sh that run-plugin-tests.py
+# discovers. Keep it runnable with no arguments and no network access.
 
 set -uo pipefail
 
@@ -347,8 +351,7 @@ for entry in "${VISUAL_CONSUMERS[@]}"; do
   skill="${entry#*:}"
   skill_md="$REPO_ROOT/$plugin/skills/$skill/SKILL.md"
   if [[ ! -f "$skill_md" ]]; then
-    c_skip "$entry — SKILL.md not present at expected path"
-    continue
+    fail "$entry SKILL.md not present at expected path" "$skill_md is missing. A listed visual consumer lost its SKILL.md — either the skill was renamed or removed (update VISUAL_CONSUMERS) or a regeneration dropped the file."
   fi
   if grep -qE 'theme\.md|theme_slug|pick-theme|themes/' "$skill_md"; then
     c_pass "$entry references the theme contract"

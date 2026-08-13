@@ -41,8 +41,13 @@ The harness complements the per-skill validators
 local violations; this catches integration drift across plugins.
 
 `--help` prints a failure-mode triage table mapping each failure to the
-likely upstream child issue (#126–#130). CI integration is intentionally
-out of scope; manual invocation before PRs is the contract.
+likely upstream child issue (#126–#130). The harness runs in CI through the
+wrapper suite `cogni-workspace/tests/test-theme-backcompat.sh`, which
+`scripts/run-plugin-tests.py` discovers and the "Plugin test suites" job in
+`.github/workflows/lint.yml` runs; invoking it manually before a PR still
+gives the faster signal. A listed visual consumer whose `SKILL.md` is missing
+is a hard failure, not a skip — the check has to fire precisely when the file
+it guards has disappeared.
 
 ## Language
 

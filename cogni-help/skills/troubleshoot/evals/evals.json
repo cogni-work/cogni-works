@@ -3,8 +3,8 @@
   "evals": [
     {
       "id": 0,
-      "prompt": "My course progress disappeared after updating insight-wave",
-      "expected_output": "Detects stale cogni-teacher.local.md file, suggests renaming to cogni-help.local.md",
+      "prompt": "There is a cogni-teacher.local.md file in my .claude directory — what is it?",
+      "expected_output": "Identifies it as an inert course-progress file from the retired course system and suggests deleting it rather than migrating it",
       "files": []
     },
     {

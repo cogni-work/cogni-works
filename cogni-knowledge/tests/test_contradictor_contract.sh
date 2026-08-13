@@ -161,6 +161,11 @@ assert_grep 'write_failed' "$CTR" "wiki-contradictor: documents write_failed fai
 assert_not_grep 'Skill("cogni-research:' "$CTR" "wiki-contradictor: no Skill('cogni-research:') dispatch (clean break)"
 assert_not_grep 'Skill("cogni-claims:' "$CTR" "wiki-contradictor: no Skill('cogni-claims:') dispatch (clean break)"
 assert_not_grep 'Skill("cogni-wiki:' "$CTR" "wiki-contradictor: no Skill('cogni-wiki:') dispatch (clean break)"
+# Positive control, per tests/README.md: the absence assertions above also pass on a
+# gutted file, so pair them with the mechanism that replaced the dispatch. The colon
+# form is deliberate — the maintainer comment block's mention is the non-colon
+# "::pre_extracted_claims;", so this literal matches body prose only.
+assert_grep 'pre_extracted_claims:' "$CTR" "wiki-contradictor: cogni-claims replacement present — scores the synthesis against on-disk pre_extracted_claims: frontmatter (zero-network)"
 
 if [ $errors -eq 0 ]; then
   green ""

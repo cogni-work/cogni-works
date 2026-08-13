@@ -2,6 +2,12 @@
 
 Workspace-level infrastructure for the cogni plugin ecosystem: theme management, shared conventions, MCP server installation, orchestration utilities, and Obsidian vault integration.
 
+## Scope
+
+cogni-workspace is the horizontal layer: it owns shared workspace state and tooling, while each vertical business plugin keeps its own project lifecycle. The dividing rule is the `setup → resume → dashboard` arc — a capability that owns one is its own plugin, a capability that owns none is infrastructure.
+
+- See `references/absorption-roadmap.md` for what cogni-workspace absorbs, what it deliberately leaves with the owning plugin, and the rationale behind each call
+
 ## Theme Infrastructure
 
 - `pick-theme` is the entry point for theme selection across all plugins

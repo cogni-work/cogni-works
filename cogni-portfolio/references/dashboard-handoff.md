@@ -43,12 +43,22 @@ one — the user is already looking at the entity they just changed, the next ge
 them a fresh dashboard anyway, and a link after every field edit is noise that trains them to
 ignore the link that matters.
 
-**Known coverage gaps.** Some paths qualify under this rule and do not yet carry a pointer:
-`features` Bulk Import, Promote Shadow Candidates and Feature Review; `products` Portfolio Review;
-and `propositions` Quick Fix, whose sibling Deep Dive already has one. These are tracked coverage
-work, not counter-examples to the rule — grade a new path against the rule, not against them. The
-test suite's per-skill pointer counts are floors rather than a census, so closing a gap does not
-break the guard.
+**Where the pointer goes.** Each skill's `## Dashboard handoff` section is terminal for the main
+flow: a path that runs to the end of the steps above it falls through into that section and needs
+nothing added. A qualifying path owes an explicit pointer line back to that section only when it can
+finish *without reaching* it — either because it is documented below that heading, as the
+`propositions` Deep Dive is, or because it exits early or skips forward past the steps leading
+there, as `portfolio-scan`'s research-only and shadow modes do from above it. Position alone does
+not decide it; reachability does — which is why the `features` Research & Improve and Deep Dive
+sections, both above the heading and both falling through, are correctly pointer-free rather than
+coverage gaps.
+
+**Known coverage gaps (2026-08, tracked as follow-up work).** Some paths qualify under this rule and
+do not yet carry a pointer: `features` Bulk Import, Promote Shadow Candidates and Feature Review;
+`products` Portfolio Review; and `propositions` Quick Fix, whose sibling Deep Dive already has one.
+These are tracked coverage work, not counter-examples to the rule — grade a new path against the
+rule, not against them. The test suite's per-skill pointer counts are floors rather than a census,
+so closing a gap does not break the guard.
 
 ## Dispatch the refresher
 

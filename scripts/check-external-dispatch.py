@@ -1,11 +1,44 @@
 #!/usr/bin/env python3
 """check-external-dispatch.py — deterministic external-dispatch guard.
 
-Asserts that **no live-dispatch surface** dispatches the retired engines
-`cogni-wiki:` or `cogni-research:` anywhere in the repo. This is the machine
-proof behind the FMO archival decision: once cogni-research and cogni-wiki are
-archived (source kept, not installable), a live caller dispatching them would
-break at runtime. The guard makes that absence objective and regression-proof.
+Asserts that **no live-dispatch surface** dispatches a retired engine anywhere in
+the repo. This is the machine proof behind the archival decision: once a plugin is
+archived (source kept, not installable) or absorbed into another, a live caller
+dispatching it would break at runtime. The guard makes that absence objective and
+regression-proof.
+
+The retired set is **data, not source** — it lives in `scripts/retired-plugins.json`
+(override with `--registry`), so retiring another plugin is a one-line edit to that
+file rather than a regex edit here:
+
+    {"retired_prefixes": ["cogni-wiki", "cogni-research"]}
+
+Entries are BARE prefixes with no trailing colon — this script appends the colon that
+makes the token dispatch-shaped, and rejects a colon-bearing entry rather than
+compiling a `cogni-wiki::` pattern that would silently match nothing.
+
+The registry is **mandatory config, not an optional ratchet**: absent, unreadable,
+malformed, wrongly-typed or empty all exit 2. A guard that quietly loaded nothing and
+reported a clean zero would be worse than no guard, because CI would stay green while
+the invariant went unprotected.
+
+Two scoping choices, stated because the sibling guard next door made the opposite one:
+
+  - **Enumerated, not derived.** `check-plugin-inventory.py` deliberately avoids a
+    hand-maintained list of retired names, preferring a bijection that works without
+    being told any. That is the right shape *there*, where the live set is the datum.
+    Here the live set is not enough: `\bcogni-[a-z0-9-]+:` minus the installed plugins
+    would also flag every prose mention of a plugin that simply is not installed in
+    the reader's workspace, so the guard would fire on trees it should not. The cost
+    of enumerating is a registry that can go **stale** — a plugin retired without an
+    entry here is silently unguarded — and nothing detects that today. The retiring
+    change is expected to add its own entry; that expectation is the control.
+  - **Plugin-granular.** An entry is a whole plugin prefix, and this script appends
+    the colon. A retired *skill* on a live plugin (`cogni-x:some-skill`) therefore
+    cannot be expressed, and the loader rejects the colon-bearing entry a maintainer
+    would reach for rather than silently compiling `cogni-x::`, which would match
+    nothing. Widening to full dispatch tokens is a ~10-line change to `load_registry`
+    (validate the shape instead of manufacturing it) if that case ever arrives.
 
 Scope — the surfaces a running session actually dispatches FROM:
 
@@ -37,10 +70,10 @@ a lineage mention there ("modeled on the cogni-research verify-report skill") is
 not a caller.
 
 Unlike the breadcrumb guard, this guard targets a HARD clean-zero — there is no
-legitimate live `cogni-wiki:`/`cogni-research:` dispatch after archival, so the
-ratchet/baseline model is the wrong tool. The single escape hatch is a per-line
-marker for a genuine NON-dispatch prose mention that must keep the literal token
-(rare); state the rationale on the same line:
+legitimate live dispatch of a registered retired prefix, so the ratchet/baseline
+model is the wrong tool. The single escape hatch is a per-line marker for a genuine
+NON-dispatch prose mention that must keep the literal token (rare); state the
+rationale on the same line:
 
     ... see cogni-research:verify-report for the lineage  # external-dispatch-guard:allow
 
@@ -77,13 +110,60 @@ EXCLUDE_PREFIXES = ("cogni-knowledge/",)
 EXCLUDE_SEGMENTS = ("/wiki/", "/docs/")
 EXCLUDE_TOPLEVEL = ("wiki/", "docs/")
 
-# The dispatch-shaped token: `cogni-wiki:` / `cogni-research:` — the `plugin:`
-# half of a `plugin:skill` dispatch reference. A bare "cogni-research" (no
-# colon) is a plain noun and is NOT matched.
-DISPATCH_RE = re.compile(r"\bcogni-(wiki|research):")
+# Default registry location, resolved next to THIS script (never under --root, so
+# scanning a foreign tree still reads our own retired set). Override: --registry.
+REGISTRY_BASENAME = "retired-plugins.json"
 
 # Per-line escape hatch for a genuine non-dispatch prose mention.
 ALLOW_MARKER = "external-dispatch-guard:allow"
+
+
+def load_registry(path):
+    """Return the list of bare retired prefixes from the registry at `path`.
+
+    Every degenerate input raises RuntimeError, which main() renders as the exit-2
+    envelope — there is deliberately no empty-list fallback and no hardcoded default
+    set (see the module docstring for why).
+    """
+    if not os.path.exists(path):
+        raise RuntimeError("retired-plugin registry not found: {}".format(path))
+    try:
+        with open(path, "r", encoding="utf-8") as fh:
+            data = json.load(fh)
+    except (OSError, ValueError) as exc:
+        raise RuntimeError("bad retired-plugin registry {}: {}".format(path, exc))
+
+    prefixes = data.get("retired_prefixes") if isinstance(data, dict) else None
+
+    # Mutation-recipe invariant: keep the next line exactly as written, on ONE
+    # physical line, and do not repeat its text anywhere else in this file — the
+    # recorded recipe rewrites the FIRST match only (perl -0pi, no /g), so a second
+    # occurrence would mutate the wrong site and report the guard as decorative.
+    if not isinstance(prefixes, list) or not prefixes:
+        raise RuntimeError(
+            "retired-plugin registry {} must carry a non-empty "
+            "'retired_prefixes' list".format(path))
+
+    for entry in prefixes:
+        if not isinstance(entry, str) or not entry.strip():
+            raise RuntimeError(
+                "retired-plugin registry {}: every prefix must be a non-empty "
+                "string, got {!r}".format(path, entry))
+        if ":" in entry:
+            raise RuntimeError(
+                "retired-plugin registry {}: prefix {!r} must not carry a colon — "
+                "this guard appends it".format(path, entry))
+    return prefixes
+
+
+def compile_dispatch_re(prefixes):
+    r"""Compile `\b(?:prefix|…):` — the `plugin:` half of a dispatch reference.
+
+    The trailing colon is MANDATORY, so a bare "cogni-research" is a plain noun and
+    is NOT matched, and a hit's `match` is the full "cogni-research:".
+    """
+    return re.compile(
+        r"\b(?:" + "|".join(re.escape(p) for p in prefixes) + r"):")
 
 
 def discover_files(root):
@@ -109,7 +189,7 @@ def discover_files(root):
     return files
 
 
-def scan_file(abs_path, rel_path):
+def scan_file(abs_path, rel_path, dispatch_re):
     """Yield violation dicts for one file."""
     try:
         with open(abs_path, "r", encoding="utf-8") as fh:
@@ -120,7 +200,7 @@ def scan_file(abs_path, rel_path):
         line = raw.rstrip("\n")
         if ALLOW_MARKER in line:
             continue
-        for m in DISPATCH_RE.finditer(line):
+        for m in dispatch_re.finditer(line):
             yield {
                 "file": rel_path,
                 "line": lineno,
@@ -129,7 +209,7 @@ def scan_file(abs_path, rel_path):
             }
 
 
-def collect(root, explicit_files):
+def collect(root, explicit_files, dispatch_re):
     occ = []
     if explicit_files:
         pairs = []
@@ -143,7 +223,7 @@ def collect(root, explicit_files):
     else:
         pairs = [(os.path.join(root, rel), rel) for rel in discover_files(root)]
     for abs_path, rel in pairs:
-        occ.extend(scan_file(abs_path, rel))
+        occ.extend(scan_file(abs_path, rel, dispatch_re))
     return occ
 
 
@@ -154,13 +234,21 @@ def main(argv):
     ap.add_argument("--root", default=None,
                     help="repo root for discovery + relative paths "
                          "(default: parent of scripts/)")
+    ap.add_argument("--registry", default=None,
+                    help="retired-prefix registry JSON (default: {} next to this "
+                         "script). REPLACES the default file — it is not merged "
+                         "with it.".format(REGISTRY_BASENAME))
     args = ap.parse_args(argv)
 
     script_dir = os.path.dirname(os.path.abspath(__file__))
     root = os.path.abspath(args.root) if args.root else os.path.dirname(script_dir)
+    # Anchored on the script, never on --root: scanning a foreign tree must still
+    # read OUR retired set, not whatever that tree happens to ship.
+    registry_path = args.registry or os.path.join(script_dir, REGISTRY_BASENAME)
 
     try:
-        violations = collect(root, args.files)
+        retired = load_registry(registry_path)
+        violations = collect(root, args.files, compile_dispatch_re(retired))
     except RuntimeError as exc:
         print(json.dumps({"success": False, "data": {}, "error": str(exc)}))
         return 2
@@ -185,8 +273,10 @@ def main(argv):
     print(json.dumps(result, indent=2, ensure_ascii=False))
 
     if violations:
-        print("\nFAIL: {} live cogni-wiki:/cogni-research: dispatch(es) found "
-              "in live-dispatch surfaces:".format(len(violations)), file=sys.stderr)
+        print("\nFAIL: {} live {} dispatch(es) found "
+              "in live-dispatch surfaces:".format(
+                  len(violations), "/".join(p + ":" for p in retired)),
+              file=sys.stderr)
         for o in violations:
             print("  {}:{}: {}  ->  {}".format(
                 o["file"], o["line"], o["match"], o["context"]), file=sys.stderr)

@@ -319,7 +319,7 @@ PY
   return "$rc"
 }
 
-# --- Mutation 5: dispatch-site Agent grant ---------------------------------
+# --- Mutation 6: dispatch-site Agent grant ---------------------------------
 # Strips the Agent token from the allowed-tools line of a skill that documents a
 # dashboard-refresher dispatch, then asserts test_dispatch_sites_grant_agent goes
 # RED against the mutant. The target is a SKILL.md — documentation, not a script —

@@ -1,13 +1,64 @@
 # End-of-step dashboard handoff
 
-Every skill that writes portfolio entities, and every pipeline or ops skill that changes what
-the dashboard would show, ends its work step the same way: regenerate the dashboard, hand the
-user a link to it, and move on. This file is the only place those steps are
-written. Skills cite it; they never restate it.
+A work step that ends here ends the same way: regenerate the dashboard, hand the user a link to
+it, and move on. This file is the only place those steps are written. Skills cite it; they never
+restate it. Which paths end here is a rule, stated below — not every write qualifies.
 
 The reason it is one file: before this existed, the dispatch was copy-pasted into seven skills as
 near-identical paragraphs, and they had already drifted. A wording change now lands everywhere at
 once.
+
+## Which paths end here
+
+A path ends at the handoff when it is a **generation run**: a multi-step workflow that produces or
+regenerates a body of entity content and then finishes the user's work step. It usually dispatches
+an agent to do that work. The table below carries the shapes that qualify.
+
+A path does **not** end here when it is a **management operation**: applying a change the user
+already named to one entity in front of them, or only reading. The plugin already uses this split
+elsewhere — `portfolio-taxonomy` calls its two mode families *creation modes* and *management
+modes*, and this is the same line drawn through every skill.
+
+Grade a path with one question: **when it finishes, is there a body of newly written entity content
+the user has not yet seen rendered?** If yes, it ends here.
+
+| Path shape | Ends here |
+|---|---|
+| A skill's main phase workflow | yes |
+| Create or generate a set — batch generation, co-development | yes |
+| Import, scan, ingest, or promote candidates | yes |
+| Regenerate or research-and-rewrite existing entities — repricing, a deep dive | yes |
+| A branch that skips forward past the steps leading here, or exits early | yes |
+| Edit or delete one named entity | no |
+| List, view, or a read-only review pass | no |
+
+The fourth row is why "only paths that create new entities end here" is the wrong rule: repricing a
+solution and deep-diving a proposition both rewrite entities that already exist, and both end here.
+The sixth and seventh rows are why "every path that writes entity data ends here" is also wrong:
+editing and deleting write, across six skills, and correctly do not. Both simpler rules have been
+proposed and both are contradicted by the code; neither should be re-proposed.
+
+Excluding management operations is deliberate. An edit is a step inside a session, not the end of
+one — the user is already looking at the entity they just changed, the next generation run hands
+them a fresh dashboard anyway, and a link after every field edit is noise that trains them to
+ignore the link that matters.
+
+**Where the pointer goes.** Each skill's `## Dashboard handoff` section is terminal for the main
+flow: a path that runs to the end of the steps above it falls through into that section and needs
+nothing added. A qualifying path owes an explicit pointer line back to that section only when it can
+finish *without reaching* it — either because it is documented below that heading, as the
+`propositions` Deep Dive is, or because it exits early or skips forward past the steps leading
+there, as `portfolio-scan`'s research-only and shadow modes do from above it. Position alone does
+not decide it; reachability does — which is why the `features` Research & Improve and Deep Dive
+sections, both above the heading and both falling through, are correctly pointer-free rather than
+coverage gaps.
+
+**Known coverage gaps (2026-08, tracked as follow-up work).** Some paths qualify under this rule and
+do not yet carry a pointer: `features` Bulk Import, Promote Shadow Candidates and Feature Review;
+`products` Portfolio Review; and `propositions` Quick Fix, whose sibling Deep Dive already has one.
+These are tracked coverage work, not counter-examples to the rule — grade a new path against the
+rule, not against them. The test suite's per-skill pointer counts are floors rather than a census,
+so closing a gap does not break the guard.
 
 ## Dispatch the refresher
 

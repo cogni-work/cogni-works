@@ -92,7 +92,7 @@ scripts/                        14 utility scripts
 
 references/
   data-model.md                   Full entity schema and project structure reference
-  dashboard-handoff.md            End-of-step dashboard handoff contract (dispatch, link, quiet degrade)
+  dashboard-handoff.md            End-of-step dashboard handoff contract (which paths end here, dispatch, link, quiet degrade)
 ```
 
 ## Component Inventory

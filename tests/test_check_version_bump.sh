@@ -37,8 +37,10 @@ TESTS_DIR="$(cd "$(dirname "$0")" && pwd)"
 REPO_ROOT="$(cd "$TESTS_DIR/.." && pwd)"
 GATE="$REPO_ROOT/scripts/check-version-bump.py"
 
-red()   { printf '\033[31m%s\033[0m\n' "$1"; }
-green() { printf '\033[32m%s\033[0m\n' "$1"; }
+# Plain text on purpose — result lines are machine-read; tooling anchors a
+# literal PASS:/FAIL: prefix. Emit unconditionally, never probe the environment.
+red()   { printf '%s\n' "$1"; }
+green() { printf '%s\n' "$1"; }
 
 FAILED=0
 check() {  # check <label> <condition-exit-code>

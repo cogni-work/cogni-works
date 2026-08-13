@@ -95,3 +95,16 @@ Plugins do not duplicate shared market fields. The `manage-markets` skill is the
 - Both scripts use `bash/portability-utils.sh` for cross-platform support (macOS, Linux, WSL)
 - Obsidian templates live in `templates/obsidian/`
 - See `references/note-frontmatter-standard.md` for the YAML frontmatter convention used by all plugin outputs
+
+## Issue Reporting and Diagnostics
+
+Two skills adopted from cogni-help as part of its retirement. Both work here today; cogni-help keeps its own copies until the retirement lands, so the copies under this plugin are the ones to maintain.
+
+- `cogni-issues` is the write path for filing a GitHub issue against any marketplace plugin
+- `skills/cogni-issues/scripts/gh-issues-helper.sh` wraps the `gh` CLI (JSON on stdout, errors on stderr); `skills/cogni-issues/scripts/issue-store.sh` maintains the local `issues.json` tracker; `skills/cogni-issues/scripts/resolve-plugin.sh` maps a plugin name to its owning repo, version, and marketplace
+- `skills/cogni-issues/references/issue-templates.md` carries the bug / feature / change-request / question body templates that downstream triage parses
+- `troubleshoot` diagnoses plugin-level and cross-plugin problems — availability, skill-file integrity, dependency checks, progress/state file health — and reports each finding as Problem → Cause → Fix
+- `skills/troubleshoot/references/known-issues.md` is its catalogue of known symptoms and fixes
+- `commands/troubleshoot.md` registers `/troubleshoot`; it is this plugin's first command file
+- `workspace-status` keeps the infrastructure-side checks (env vars, themes, settings) — `troubleshoot` does not duplicate them
+- `tests/test-relocated-skill-hygiene.sh` pins the two properties of the adopted trees that no other guard covers: no `cogni-help:` dispatch token survives, and every `${CLAUDE_PLUGIN_ROOT}` path documented in them resolves under this plugin

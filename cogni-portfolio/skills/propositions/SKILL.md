@@ -288,6 +288,8 @@ Pick the right repair path by the assessor's verdict:
 
 Offer Quick Fix after the post-check shows any `warn` or `fail`, when the user explicitly asks to "improve" / "fix" / "strengthen" / "sharpen", or during Proposition Review when you spot generic messaging. The full Quick Fix workflow (agent dispatch contract, regional URL derivation, before/after presentation, "not all dimensions need research") lives in `$CLAUDE_PLUGIN_ROOT/skills/propositions/references/research-and-enrich.md`.
 
+This path ends the same way — see the **Dashboard handoff** section in this file.
+
 ## Deep Dive (Single-Proposition Intensive)
 
 For propositions needing more than reactive quality repair — buyer language validation, competitive messaging analysis, evidence enrichment, or co-creation dialogue. One proposition at a time. The deep dive produces messaging intelligence that informs not just this proposition but downstream competitor positioning, solution design, and sales enablement.

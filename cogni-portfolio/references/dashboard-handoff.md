@@ -53,13 +53,6 @@ not decide it; reachability does — which is why the `features` Research & Impr
 sections, both above the heading and both falling through, are correctly pointer-free rather than
 coverage gaps.
 
-**Known coverage gaps (2026-08, tracked as follow-up work).** Some paths qualify under this rule and
-do not yet carry a pointer: `features` Bulk Import, Promote Shadow Candidates and Feature Review;
-`products` Portfolio Review; and `propositions` Quick Fix, whose sibling Deep Dive already has one.
-These are tracked coverage work, not counter-examples to the rule — grade a new path against the
-rule, not against them. The test suite's per-skill pointer counts are floors rather than a census,
-so closing a gap does not break the guard.
-
 ## Dispatch the refresher
 
 Delegate to the `dashboard-refresher` agent with two values:

@@ -477,13 +477,13 @@ test_pipeline_skills_cite_handoff() {
 
 # --- test_secondary_paths_reach_handoff ------------------------------------
 # The acceptance bar is falsified by any file "whose end-of-step path can complete
-# without reaching the handoff". Six skills carry alternate write paths that do not
-# flow into the terminal section — nine pointers rostered below, solutions holding three
-# and portfolio-scan two — so each such path needs an explicit pointer back. The counts
-# are floors rather than a census: which paths owe a pointer is decided by the rule in
-# references/dashboard-handoff.md, and that rule currently covers paths this roster does
-# not yet list. Adding one of those must not turn this case red; losing a rostered one
-# must.
+# without reaching the handoff". Eight skills carry alternate write paths that do not
+# flow into the terminal section — fourteen pointers rostered below, solutions and
+# features holding three each, propositions and portfolio-scan two each — so each such
+# path needs an explicit pointer back. The counts are floors rather than a census: which
+# paths owe a pointer is decided by the rule in references/dashboard-handoff.md, so a
+# path that rule covers but this roster has not caught up with must not turn this case
+# red; losing a rostered one must.
 # Three of them are early exits ABOVE the section rather than paths below it: portfolio-scan's
 # research-only and shadow modes stop before Step 7.7, and portfolio-verify's
 # no-propagable-resolutions branch jumps back to its communicate gate. All three have
@@ -493,7 +493,7 @@ test_secondary_paths_reach_handoff() {
   pipeline_surface_ok test_secondary_paths_reach_handoff || return
 
   local offenders="" spec skill want got strays
-  for spec in solutions:3 packages:1 propositions:1 portfolio-communicate:1 portfolio-scan:2 portfolio-verify:1; do
+  for spec in solutions:3 packages:1 propositions:2 portfolio-communicate:1 portfolio-scan:2 portfolio-verify:1 features:3 products:1; do
     skill="${spec%%:*}"
     want="${spec##*:}"
     got="$(grep -cF "$PTR_LINE" "$PLUGIN_DIR/skills/$skill/SKILL.md")"

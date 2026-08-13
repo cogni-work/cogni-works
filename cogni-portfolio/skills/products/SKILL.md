@@ -268,6 +268,8 @@ When the user asks to review or improve their portfolio (or when you notice issu
 
 The key difference from define mode: in review mode you have data to audit, so Phase 1 is analysis not interview, and Phase 2 should challenge the existing structure rather than the user's verbal framing.
 
+This path ends the same way — see the **Dashboard handoff** section in this file.
+
 ## Important Notes
 
 - Products are the first entity to define after portfolio setup — features, markets, and all downstream entities build on them

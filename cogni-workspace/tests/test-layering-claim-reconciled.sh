@@ -42,6 +42,27 @@
 # against editing a literal's wording; for a mutation that a change can actually
 # flip, target the parity checker (see L4).
 #
+# Phrase-level survivors. These lines keep foundation vocabulary on purpose and
+# must NOT be caught. Each says something about the workspace *state* other
+# plugins read, never about the plugin's position in a dependency order, so none
+# is falsified by the scope claim:
+#
+#   - manage-workspace/SKILL.md:23 — "An insight-wave workspace is the shared
+#     foundation that all marketplace plugins depend on" (subject is the
+#     workspace, not cogni-workspace)
+#   - workspace-dashboard/SKILL.md:24 — "the foundation that every other plugin
+#     reads from" (reads from, not depends on)
+#   - cogni-help full-onboarding.md:26 — "the workspace provides the foundation"
+#   - cogni-help tour-install-to-infographic.md — "builds on this foundation" /
+#     "the workspace + theme + MCP foundation" (bootstrap ordering among
+#     workflows, which the scope claim permits)
+#
+# This list is why the shared-foundation literal below is prefixed with the
+# plugin name: the bare "is the shared foundation" also matches the first entry,
+# so an unprefixed literal would make this suite red on arrival against a line
+# that is deliberately standing. Without this block a later editor cannot tell a
+# compatible survivor from a missed one.
+#
 # Path exclusions, each with a reason:
 #   - this file (it necessarily contains every literal it forbids)
 #   - references/absorption-roadmap.md — the decisions record quotes the retired
@@ -52,13 +73,16 @@
 #     editing it would also break the per-page parity assertion below
 #   - cogni-visual/libraries/ — "Foundation Layer" there is an ASCII-art fill
 #     label in a diagram legend, unrelated to the claim
-#   - .claude-plugin/ — the plugin.json description and its marketplace.json
-#     mirror still say "Foundation-layer plugin". They are the retired claim's
+#   - cogni-workspace/.claude-plugin/plugin.json and .claude-plugin/marketplace.json
+#     — these two say "Foundation-layer plugin". They are the retired claim's
 #     upstream source and DO need fixing, but the reconciliation's scope boundary
 #     confines its diff to markdown surfaces and tests/*.sh, so a manifest edit
 #     belongs to its own change. Excluded so the guard stays honest about what it
-#     covers rather than silently green; remove this exclusion when the manifests
-#     are corrected.
+#     covers rather than silently green; remove both entries when the manifests
+#     are corrected. Named as two exact paths, never as a `.claude-plugin/`
+#     fragment — that fragment would exempt all 15 files under every plugin's
+#     manifest directory, so any OTHER plugin could reintroduce the claim
+#     invisibly, and the gap would be far wider than the two files documented here.
 #   - .git/ and .claude/worktrees/ — nested checkouts of this same repo that
 #     local tooling leaves in the tree. Untracked, so `grep_hits` already skips
 #     them on the real repo; these entries only cover the filesystem fallback.
@@ -116,7 +140,8 @@ cogni-workspace/references/absorption-roadmap.md
 wiki/wiki/log.md
 wiki/wiki/pages/lint-2026-04-20.md
 cogni-visual/libraries/
-.claude-plugin/
+cogni-workspace/.claude-plugin/plugin.json
+.claude-plugin/marketplace.json
 .git/
 .claude/worktrees/'
 
@@ -256,9 +281,9 @@ assert_out_lacks(){ case "$LAST_OUT" in *"$1"*) echo "  expected output NOT to c
 # ---------------------------------------------------------------------------
 run_scan "$REPO_ROOT" "repo"
 if assert_rc 0; then
-  pass "L1 the real repo asserts no retired layering claim"
+  pass "L1 the real repo asserts no retired layering claim outside the excluded paths"
 else
-  fail "L1 the real repo asserts no retired layering claim"
+  fail "L1 the real repo asserts no retired layering claim outside the excluded paths"
 fi
 
 # ---------------------------------------------------------------------------
@@ -376,6 +401,51 @@ if assert_rc 0; then
   pass "L7 the real wiki trees agree on every page this change touched"
 else
   fail "L7 the real wiki trees agree on every page this change touched"
+fi
+
+# ---------------------------------------------------------------------------
+# L8 — the git-tracked arm of grep_hits is live, and its narrowing is deliberate.
+#
+# Without this case the arm is untested. Every "caught when planted" fixture
+# (L2, L3, L5) builds under mktemp, which is not a git work tree, so they all
+# exercise the recursive-grep fallback; the only cases reaching the git arm are
+# L1 and L7, and both assert CLEAN. Nothing would prove the arm can find
+# anything — so if it ever returned empty (an edit, a sparse checkout, a flag an
+# older git rejects) L1 would report PASS vacuously. That is the same half-dead
+# arm the `scanned -eq 0` floor and L6 exist to prevent, and the arms were one
+# code path until the scan was made git-aware.
+#
+# The second half pins the narrowing as intended rather than accidental: an
+# untracked file carrying a literal is deliberately skipped, because the claim is
+# an assertion about repo content and scanning ignored scratch made the verdict
+# depend on a developer's local state. If the arm is ever swapped back to a
+# filesystem walk, this half turns red and says so.
+# ---------------------------------------------------------------------------
+l8_ok=1
+G="$TMPROOT/l8"
+mkdir -p "$G/docs"
+if ! git init -q "$G" >/dev/null 2>&1; then
+  echo "  git init failed — cannot exercise the git-tracked arm"
+  l8_ok=0
+else
+  printf 'Some prose that says foundation layer in passing.\n' > "$G/docs/tracked.md"
+  git -C "$G" add docs/tracked.md >/dev/null 2>&1
+  git -C "$G" -c user.email=guard@example.invalid -c user.name=Guard \
+    commit -q -m "fixture" >/dev/null 2>&1 || l8_ok=0
+
+  # Tracked offender must be found, and named, by the git arm.
+  run_scan "$G" "git-tracked"
+  assert_rc 1 && assert_out_has "docs/tracked.md" || l8_ok=0
+
+  # Untracked offender must NOT be found — the deliberate narrowing.
+  printf 'Some prose that says foundation layer in passing.\n' > "$G/docs/untracked.md"
+  run_scan "$G" "git-untracked"
+  assert_rc 1 && assert_out_lacks "docs/untracked.md" || l8_ok=0
+fi
+if [ "$l8_ok" -eq 1 ]; then
+  pass "L8 the git-tracked scan arm is live and skips untracked files"
+else
+  fail "L8 the git-tracked scan arm is live and skips untracked files"
 fi
 
 # ---------------------------------------------------------------------------

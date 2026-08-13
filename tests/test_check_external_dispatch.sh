@@ -16,7 +16,7 @@
 #   R1. Missing registry     -> exit 2, never a silent clean-zero.
 #   R2. Malformed JSON       -> exit 2.
 #   R3. Empty prefix list    -> exit 2.
-#   R4. Non-string / blank / colon-bearing entry -> exit 2.
+#   R4. Non-string / blank / padded / colon-bearing entry -> exit 2.
 #   R5. A prefix added to the registry makes a planted dispatch fire -> exit 1.
 #   R6. --registry REPLACES the default file rather than unioning with it.
 #
@@ -269,13 +269,19 @@ run_reg r3 '{"retired_prefixes": []}' "$CLEAN_REL"
 check "R3 empty registry exits 2 and never 0 (base exits 0 here)" \
   "$([ "$CODE" -eq 2 ] && echo 0 || echo 1)"
 
-# --- R4: wrong type / non-string / blank / colon-bearing entry -> exit 2 ----
+# --- R4: wrong type / non-string / blank / padded / colon-bearing -> exit 2 -
+# The padded variant is the subtlest of the set: it survives the non-empty test
+# (it strips to a real prefix) but re.escape would compile the UNSTRIPPED text
+# into `\ \ cogni\-demo\ \ :`, which matches nothing — a clean-zero exit 0 from a
+# registry that looks populated. Rejecting mirrors the colon-bearing entry rather
+# than quietly repairing it.
 R4_FAILED=0
 R4_N=0
 for BAD in \
   '{"retired_prefixes": "cogni-wiki"}' \
   '{"retired_prefixes": ["cogni-wiki", 7]}' \
   '{"retired_prefixes": ["cogni-wiki", "   "]}' \
+  '{"retired_prefixes": ["cogni-wiki", "  cogni-demo  "]}' \
   '{"retired_prefixes": ["cogni-wiki:"]}' \
   '{"nothing_here": true}'
 do

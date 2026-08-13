@@ -13,9 +13,10 @@ file rather than a regex edit here:
 
     {"retired_prefixes": ["cogni-wiki", "cogni-research"]}
 
-Entries are BARE prefixes with no trailing colon — this script appends the colon that
-makes the token dispatch-shaped, and rejects a colon-bearing entry rather than
-compiling a `cogni-wiki::` pattern that would silently match nothing.
+Entries are BARE prefixes with no trailing colon and no surrounding whitespace — this
+script appends the colon that makes the token dispatch-shaped, and rejects both a
+colon-bearing entry (`cogni-wiki::`) and a padded one (`re.escape("  cogni-wiki  ")`)
+rather than compiling a pattern that would silently match nothing.
 
 The registry is **mandatory config, not an optional ratchet**: absent, unreadable,
 malformed, wrongly-typed or empty all exit 2. A guard that quietly loaded nothing and
@@ -149,6 +150,11 @@ def load_registry(path):
             raise RuntimeError(
                 "retired-plugin registry {}: every prefix must be a non-empty "
                 "string, got {!r}".format(path, entry))
+        if entry != entry.strip():
+            raise RuntimeError(
+                "retired-plugin registry {}: prefix {!r} must not carry surrounding "
+                "whitespace — re.escape would compile it into a pattern that never "
+                "matches".format(path, entry))
         if ":" in entry:
             raise RuntimeError(
                 "retired-plugin registry {}: prefix {!r} must not carry a colon — "

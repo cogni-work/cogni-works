@@ -233,7 +233,7 @@ Your Claude Code is ready. The plugin ecosystem and MCP servers for insight-wave
 
 **Continue here:** [From Install to Infographic](workflows/install-to-infographic.md) — the 15-minute first-run workflow that adds the insight-wave marketplace, installs the plugins you need, runs `/install-mcp` for Pencil + Excalidraw + claude-in-chrome, and renders your first infographic.
 
-Why one walkthrough rather than separate plugin / MCP steps here? insight-wave ships `cogni-workspace` as the foundation layer (it sets up directories, themes, and MCP defaults), and `/install-mcp` handles all three MCP servers at once. Hand-running `claude mcp add` for each server works for generic Claude Code setups but conflicts with the insight-wave pattern. For enterprise-managed MCP configuration (MDM, allow-lists, managed settings), see [Deployment Guide](deployment-guide.md).
+Why one walkthrough rather than separate plugin / MCP steps here? insight-wave ships `cogni-workspace` as the shared workspace layer (it sets up directories, themes, and MCP defaults), and `/install-mcp` handles all three MCP servers at once. Hand-running `claude mcp add` for each server works for generic Claude Code setups but conflicts with the insight-wave pattern. For enterprise-managed MCP configuration (MDM, allow-lists, managed settings), see [Deployment Guide](deployment-guide.md).
 
 ---
 

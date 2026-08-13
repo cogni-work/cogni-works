@@ -149,23 +149,86 @@ the five-way combined total. The comparison therefore points the other way and
 cannot carry the decision — which is why the cost ground above is stated in
 absolute terms instead.
 
-## Known remaining contradictions
+## Decision 5 — the four-layer concept page is retained in reduced form
+
+**Decision.** `concept-four-layer-architecture.md` keeps its descriptive
+Orchestration / Data / Output groupings and loses the dependency ordering built on
+top of them: the total-order claim ("plugins in higher layers depend on lower
+layers, but never the reverse") and the Foundation rung both go, and
+cogni-workspace is restated as the horizontal band alongside the vertical groups.
+The page's filename and frontmatter `id:` are **unchanged**.
+
+**Why.** Two things were tangled on that page. The dependency ordering is falsified
+by Decision 1 and had to go regardless of any taxonomy question. The role groupings
+are a separate, still-useful description of what each plugin does, and nothing in
+this record contradicts them. Deleting the page outright would have discarded the
+second to remove the first, and would have stranded 31 inbound references —
+20 of which are wikilink *aliases* on the per-plugin pages (`Data layer`,
+`Output layer`, `Foundation layer`) where the alias text is the assertion. Nothing
+in CI catches a dangling `[[...]]`: `test-wiki-namespace-sync.sh` checks only
+`plugin-*` / `skill-*` / `agent-*` filename stems against the marketplace roster and
+skips the `concept-*` family entirely.
+
+**What this leaves open.** Replacing the role taxonomy outright with an explicit
+horizontal/vertical vocabulary remains available, and costs no more later than it
+would have here: it would additionally rewrite the 18 surviving `Data layer` /
+`Output layer` aliases across 9 pages × 2 trees, and commit the ecosystem to a
+vocabulary this record does not ratify. That is an architecture-owner call. The
+reduced form is the reversible one, which is why it is the default taken here.
+
+**Reversing it** means re-deriving those 18 aliases and the page body together —
+the same work either way, so nothing is foreclosed.
+
+## Known remaining contradictions — reconciled
 
 The layering claim this record replaces — that cogni-workspace is the layer every
-other plugin depends on — is not confined to the plugin README. It is asserted at
-these paths at base `19e6c1a7`, all outside this document's scope:
+other plugin depends on — was not confined to the plugin README. It was asserted at
+the paths below, measured at base `19e6c1a7`. **All are now reconciled**; the table
+is kept as the historical inventory rather than deleted, so the set stays auditable.
+
+| Path | Note | State |
+|---|---|---|
+| `cogni-workspace/README.md:212` | Inside the auto-generated `## Dependencies` section. | Reconciled — sentence deleted. The `doc-generate` template for this section emits only a heading and a table and specifies no lead-in prose, so the deletion is regeneration-stable and needed no generator change. |
+| `docs/plugin-guide/cogni-workspace.md:9`, `:214` | Generated plugin guide. | Reconciled in the output only. The generator ships from another repository, so the fix could not be made at its source — see the caveat below. |
+| `docs/architecture/er-diagram.md:22` | Architecture prose. | Reconciled — `## Four Architectural Layers` is now `## Architectural Groups`. |
+| `docs/er-diagram.md:13` | Mermaid subgraph label `Foundation["Foundation Layer"]`. | Reconciled — display label only; the `Foundation` subgraph id is unchanged so every edge still resolves. |
+| `docs/claude-code-desktop.md:236` | Onboarding prose. | Reconciled. |
+| `cogni-workspace/wiki/wiki/pages/plugin-cogni-workspace.md:21` | Bundled wiki copy. | Reconciled — alias and the second occurrence at `:45`. |
+| `wiki/wiki/pages/plugin-cogni-workspace.md:21` | Repo-root wiki mirror. | Reconciled — same two edits, byte-identical. |
+| `concept-four-layer-architecture.md` (both wiki trees) | A dedicated page built on the four-layer framing. | Reconciled per Decision 5 above. |
+
+**The inventory above was incomplete.** These carried the same claim, were present
+at `19e6c1a7` too, and were missed when the table was first written:
 
 | Path | Note |
 |---|---|
-| `cogni-workspace/README.md:212` | Inside the auto-generated `## Dependencies` section; narrowly true of the table beneath it. Owned by `cogni-docs:doc-generate`, so a hand edit is regenerated away. |
-| `docs/plugin-guide/cogni-workspace.md:9`, `:214` | Generated plugin guide. |
-| `docs/architecture/er-diagram.md:22` | Architecture prose. |
-| `docs/er-diagram.md:13` | Mermaid subgraph label `Foundation["Foundation Layer"]`. |
-| `docs/claude-code-desktop.md:236` | Onboarding prose. |
-| `cogni-workspace/wiki/wiki/pages/plugin-cogni-workspace.md:21` | Bundled wiki copy. |
-| `wiki/wiki/pages/plugin-cogni-workspace.md:21` | Repo-root wiki mirror. |
-| `concept-four-layer-architecture.md` (both wiki trees) | A dedicated page built on the four-layer framing. |
+| `docs/ecosystem-overview.md:13`, `:17` | A `### Foundation` layer-group heading with cogni-workspace as its sole occupant, plus the table cell beneath it. Rewriting only the cell would have left the framing standing structurally. |
+| `docs/architecture/er-diagram.md:9` | The total-order sentence above the ASCII diagram — the table named only `:22`. |
+| `cogni-help/skills/guide/references/plugin-catalog.md:240`, `:248` | `**Foundation for**: All other plugins`. |
+| `cogni-help/skills/teach/.../tour-install-to-infographic.md:80` | Course prose. |
+| `cogni-help/skills/workflow/references/workflows/install-to-infographic.md:23` | Workflow prose. |
+| `arch-er-diagram.md:15-17` (both trees) | `## Four architectural layers` + the total-order sentence. |
+| `workflow-install-to-infographic.md:42` (both trees) | Wiki workflow prose. |
+| `plugin-cogni-workspace.md:45` (both trees) | `Foundation for all 13 other plugins.` — two paragraphs below the `:21` alias the table did name. |
+| `cogni-workspace/skills/ask/SKILL.md:72` | The worked example quoting the four-layer model. |
 
-Listed so the next editor inherits the set instead of re-deriving it. Reconciling
-the generated surfaces belongs with the docs pass that regenerates them, not with
-a hand edit here.
+**Deliberately left standing**, with reasons, so a future reader does not read them
+as misses: the ASCII-art fill labels in `cogni-visual/libraries/`
+(`excalidraw-patterns.md:165`, `svg-patterns.md:283`) are diagram legends unrelated
+to the claim; `wiki/log.md` and `wiki/pages/lint-2026-04-20.md` are dated historical
+artifacts, and rewriting history is not reconciliation; and
+`plugin-cogni-help.md:18-20` ("depends on every other plugin … is depended on by
+nothing") is an accurate statement *about cogni-help*, which stays true under the
+reduced form.
+
+**One caveat survives.** `docs/plugin-guide/cogni-workspace.md` is `cogni-docs`
+generator output, and `cogni-docs` ships from a separate repository — there is no
+`cogni-docs/` directory here to fix at source. The output is corrected so readers
+stop seeing a falsified claim, but a regeneration pass could reintroduce the wording
+in that one file until the generator is changed.
+
+`cogni-workspace/tests/test-layering-claim-reconciled.sh` guards the reconciled
+state: a forbidden-literal scan over the paths above, plus per-page byte-parity
+between the two wiki trees. Parity is asserted **per touched page**, never
+tree-wide — the trees legitimately differ by one page, so a tree-wide assertion
+would fail on arrival.

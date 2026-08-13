@@ -77,7 +77,7 @@ workflows, do it now in the same step.
 
 ### Theory (6 min)
 
-`cogni-workspace` is the foundation every other plugin depends on — it owns
+`cogni-workspace` is the horizontal layer you initialize first — it owns
 shared state: themes, environment variables, MCP server configuration, and
 workspace health diagnostics.
 

@@ -4,32 +4,30 @@ This document places the insight-wave entity model in context. The canonical dat
 
 ---
 
-## Four Architectural Layers
+## Architectural Groups
 
-The ecosystem organizes into four layers. Plugins in higher layers depend on plugins in lower layers, but not the reverse.
+The ecosystem splits along one line: cogni-workspace is **horizontal** infrastructure, and the business plugins are **vertical**, each keeping its own project lifecycle. The rule is the one recorded in [`absorption-roadmap.md`](../../cogni-workspace/references/absorption-roadmap.md) — a capability owning a full `setup → resume → dashboard` arc is a vertical business plugin; one owning none of that arc is horizontal infrastructure. The vertical plugins are grouped below by the role they play; that grouping is descriptive, not a dependency ordering.
 
 ```
-Orchestration   cogni-consult
-                     |
-Foundation      cogni-workspace
-                     |
-Data            cogni-portfolio  cogni-trends  cogni-knowledge  cogni-claims
-                     |
-Output          cogni-narrative  cogni-copywriting  cogni-visual
-                cogni-sales      cogni-marketing
+horizontal   cogni-workspace  (shared workspace state: themes, env vars, discovery)
+─────────────────────────────────────────────────────────────────────────────────
+vertical     Orchestration   cogni-consult
+             Data            cogni-portfolio  cogni-trends  cogni-knowledge  cogni-claims
+             Output          cogni-narrative  cogni-copywriting  cogni-visual
+                             cogni-sales      cogni-marketing
 ```
 
-**Foundation layer** (cogni-workspace) provides shared infrastructure: themes, environment variables, Obsidian vault configuration. Every plugin that produces visual HTML output reads theme files from cogni-workspace. No plugin writes to cogni-workspace except through the `pick-theme` and `manage-workspace` skills.
+**Shared workspace** (cogni-workspace) provides shared infrastructure: themes, environment variables, Obsidian vault configuration. Every plugin that produces visual HTML output reads theme files from cogni-workspace. No plugin writes to cogni-workspace except through the `pick-theme` and `manage-workspace` skills.
 
-**Data layer** plugins each own a specialized knowledge domain:
+**Data group** plugins each own a specialized knowledge domain:
 - cogni-portfolio owns product and market knowledge (features, propositions, competitors)
 - cogni-trends owns trend and value model knowledge (TIPS paths, solution templates, catalogs)
 - cogni-knowledge owns research artifacts in the bound wiki (sources, syntheses, distilled concepts, question nodes, claims)
 - cogni-claims owns the verification state for sourced assertions from any plugin
 
-**Output layer** plugins transform data-layer content into deliverables. They consume but do not produce data-layer entities.
+**Output group** plugins transform data-group content into deliverables. They consume but do not produce data-group entities.
 
-**Orchestration layer** (cogni-consult) manages engagement state. It dispatches research through the engagement's bound cogni-knowledge base and routes deliverable work to data and output layer plugins, but does not produce content itself. (It succeeds the archived cogni-consulting Double Diamond plugin.)
+**Orchestration group** (cogni-consult) manages engagement state. It dispatches research through the engagement's bound cogni-knowledge base and routes deliverable work to data and output group plugins, but does not produce content itself. (It succeeds the archived cogni-consulting Double Diamond plugin.)
 
 ---
 

@@ -39,7 +39,10 @@ via `trap rm -rf "$WORK" EXIT`.
 
 - bash 3.2 + python3 stdlib only (no pytest, no pip).
 - `set -eu` at the top; exit non-zero on any failure.
-- Color helpers `red`/`green` for human-readable output.
+- Source `fixtures/test_helpers.sh` for `red`/`green` rather than inlining
+  them, so a `PASS:`/`FAIL:` label stays machine-parsable — plain, never
+  wrapped in an escape sequence and never chosen by an environment probe.
+  `test_plain_result_emitters.sh` holds this shape.
 - `assert_grep <pattern> <description>` for contract-level SKILL.md checks.
 - Real Python harness (inline `python3 - <<PY ... PY` heredoc) for
   script-level assertions.

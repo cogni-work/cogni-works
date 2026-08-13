@@ -25,8 +25,8 @@ set -eu
 PLUGIN_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 SETUP="$PLUGIN_ROOT/skills/knowledge-setup/SKILL.md"
 
-red()   { printf '\033[31m%s\033[0m\n' "$1"; }
-green() { printf '\033[32m%s\033[0m\n' "$1"; }
+red()   { printf '%s\n' "$1"; }
+green() { printf '%s\n' "$1"; }
 
 errors=0
 

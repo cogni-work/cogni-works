@@ -12,8 +12,8 @@
 #
 # Bash 3.2 compatible.
 
-red()   { printf '\033[31m%s\033[0m\n' "$1"; }
-green() { printf '\033[32m%s\033[0m\n' "$1"; }
+red()   { printf '%s\n' "$1"; }
+green() { printf '%s\n' "$1"; }
 
 # assert_grep PATTERN FILE DESCRIPTION
 #   Increments the caller's `errors` variable on failure.

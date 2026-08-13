@@ -17,8 +17,8 @@ SCRIPT="$PLUGIN_ROOT/scripts/cycle-guard.py"
 
 . "$TESTS_DIR/fixtures/_cycle_guard_lib.sh"
 
-red()   { printf '\033[31m%s\033[0m\n' "$1"; }
-green() { printf '\033[32m%s\033[0m\n' "$1"; }
+red()   { printf '%s\n' "$1"; }
+green() { printf '%s\n' "$1"; }
 
 WORK=$(mktemp -d)
 trap 'rm -rf "$WORK"' EXIT

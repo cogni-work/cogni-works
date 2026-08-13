@@ -32,8 +32,8 @@ OVERVIEW="$WIKI/wiki/overview.md"
 cleanup() { rm -rf "$WORKDIR"; }
 trap cleanup EXIT
 
-red() { printf '\033[31m%s\033[0m\n' "$1"; }
-green() { printf '\033[32m%s\033[0m\n' "$1"; }
+red() { printf '%s\n' "$1"; }
+green() { printf '%s\n' "$1"; }
 fail() { red "FAIL: $1"; printf -- '----- index.md -----\n'; cat "$INDEX" 2>/dev/null; exit 1; }
 
 if [ ! -f "$UPDATE" ]; then

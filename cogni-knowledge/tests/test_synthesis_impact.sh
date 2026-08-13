@@ -28,8 +28,8 @@ set -eu
 PLUGIN_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 SCRIPT="$PLUGIN_ROOT/scripts/synthesis-impact.py"
 
-red()   { printf '\033[31m%s\033[0m\n' "$1"; }
-green() { printf '\033[32m%s\033[0m\n' "$1"; }
+red()   { printf '%s\n' "$1"; }
+green() { printf '%s\n' "$1"; }
 
 if [ ! -f "$SCRIPT" ]; then
   red "FAIL: synthesis-impact.py not found at $SCRIPT"

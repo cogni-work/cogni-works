@@ -212,6 +212,23 @@ at `19e6c1a7` too, and were missed when the table was first written:
 | `plugin-cogni-workspace.md:45` (both trees) | `Foundation for all 13 other plugins.` — two paragraphs below the `:21` alias the table did name. |
 | `cogni-workspace/skills/ask/SKILL.md:72` | The worked example quoting the four-layer model. |
 
+**A second pass found five more**, all of which the first two passes above also
+missed. They are recorded separately because the shape of each miss is the
+lesson, not the count:
+
+| Path | How it evaded the earlier passes |
+|---|---|
+| `docs/workflows/install-to-infographic.md:43`, `:65` | The narrative tutorial the `cogni-help` workflow template hands off to at its closing line, and which `docs/claude-code-desktop.md:236` recommends as the next step. Reconciling the template while leaving the page it links to meant a reader crossed from a reconciled sentence straight into an unreconciled one. Neither phrasing (`the foundation the others depend on`, `is the shared foundation`) matched any literal the guard then carried. |
+| `plugin-cogni-workspace.md:17` (both trees) | The hyphenated `Foundation-layer plugin`, four lines above the `:21` alias the first table did name — so the page asserted both framings about itself. The hyphen is why it evaded the `foundation layer` grep. |
+| `wiki/wiki/index.md:52` (both trees) | The index one-liner derived from that page's first line; correcting the page alone left the index contradicting it. |
+| `tour-install-to-infographic.md:34-38` (plus `:42`, `:52`) | The retired four-tier taxonomy, 46 lines above the `:80` line the first pass fixed and in the module a first-run learner reads first. It asserted a Foundation rung, and memberships for cogni-help and cogni-claims, that Decision 5 and the rewritten concept page deny. |
+| `.claude-plugin/plugin.json` + its `marketplace.json` mirror | The plugin description — the claim's highest-visibility surface and the upstream source of the wiki line above. **Not reconciled here:** the scope boundary confines this diff to markdown and `tests/*.sh`. The guard excludes `.claude-plugin/` explicitly rather than reporting clean over it; remove that exclusion when the manifests are corrected. |
+
+The recurring shape is worth naming: every miss but the last was **a second
+occurrence in a file the inventory had already listed**, or **a page derived from
+one**. A path-level inventory cannot catch either — only a re-grep of the whole
+tree after each edit can, which is what the guard now automates.
+
 **Deliberately left standing**, with reasons, so a future reader does not read them
 as misses: the ASCII-art fill labels in `cogni-visual/libraries/`
 (`excalidraw-patterns.md:165`, `svg-patterns.md:283`) are diagram legends unrelated

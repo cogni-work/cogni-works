@@ -40,7 +40,7 @@ Pick **Marketplaces → insight-wave** and switch on the auto-update option. Cla
 /plugin marketplace update insight-wave
 ```
 
-Install the full insight-wave plugin set — any workflow you pick from Step 5 can then run without you coming back here. Start with `cogni-workspace` (the foundation the others depend on), then the rest:
+Install the full insight-wave plugin set — any workflow you pick from Step 5 can then run without you coming back here. Start with `cogni-workspace` (it owns the shared workspace state the others read), then the rest:
 
 ```
 /plugin install cogni-workspace@insight-wave
@@ -62,7 +62,7 @@ Or browse the **Discover** tab interactively inside `/plugin`.
 
 ## Step 2: Initialize Your Workspace
 
-cogni-workspace is the shared foundation — it sets up the directories, themes, and MCP servers that every other plugin relies on.
+cogni-workspace is the horizontal layer of the ecosystem — it owns the shared workspace state (directories, themes, MCP servers) that the vertical business plugins consume.
 
 ```
 /manage-workspace

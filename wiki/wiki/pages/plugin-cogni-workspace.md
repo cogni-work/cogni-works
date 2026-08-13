@@ -14,7 +14,7 @@ related: [concept-theme-inheritance, concept-mcp-server-map]
 
 > **Preview** (v0.6.3) — core skills defined but may change.
 
-Foundation-layer plugin for the insight-wave marketplace. Manages shared infrastructure (env vars, settings), MCP server installation and Desktop config patching, theme management, theme picker, plugin discovery, workspace health, and Obsidian vault integration.
+The horizontal layer of the insight-wave marketplace — it owns the shared workspace state the vertical business plugins consume. Manages shared infrastructure (env vars, settings), MCP server installation and Desktop config patching, theme management, theme picker, plugin discovery, workspace health, and Obsidian vault integration.
 
 ## Layer
 

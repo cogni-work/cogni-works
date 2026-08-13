@@ -31,7 +31,16 @@
 # The first two literals measured ZERO on the base — an earlier PR had already
 # removed them, which is why the issue's own acceptance criterion citing them was
 # vacuous. They are retained here anyway, and case L2 plants each one in a
-# fixture, so they are a live regression guard rather than dead config.
+# fixture, so the scanner is proven to catch each phrase.
+#
+# What L2 does and does not prove. L2 reads the literals from FORBIDDEN, plants
+# each in a fixture, and scans with FORBIDDEN — so it proves the SCANNER catches
+# a planted phrase, but it cannot detect a literal being *reworded*: a
+# substitution changes the planted text and the needle together, leaving L2
+# green. The count floor below is what protects the set — dropping an entry takes
+# l2_n under the floor and turns L2 red. Do not read L2 as a regression guard
+# against editing a literal's wording; for a mutation that a change can actually
+# flip, target the parity checker (see L4).
 #
 # Path exclusions, each with a reason:
 #   - this file (it necessarily contains every literal it forbids)
@@ -43,6 +52,16 @@
 #     editing it would also break the per-page parity assertion below
 #   - cogni-visual/libraries/ — "Foundation Layer" there is an ASCII-art fill
 #     label in a diagram legend, unrelated to the claim
+#   - .claude-plugin/ — the plugin.json description and its marketplace.json
+#     mirror still say "Foundation-layer plugin". They are the retired claim's
+#     upstream source and DO need fixing, but the reconciliation's scope boundary
+#     confines its diff to markdown surfaces and tests/*.sh, so a manifest edit
+#     belongs to its own change. Excluded so the guard stays honest about what it
+#     covers rather than silently green; remove this exclusion when the manifests
+#     are corrected.
+#   - .git/ and .claude/worktrees/ — nested checkouts of this same repo that
+#     local tooling leaves in the tree. Untracked, so `grep_hits` already skips
+#     them on the real repo; these entries only cover the filesystem fallback.
 #
 # Parity is per-page, never tree-wide, and that is load-bearing. The two trees
 # legitimately differ (the root tree carries lint-2026-04-20.md and the bundled
@@ -83,7 +102,12 @@ higher layers depend
 depend on lower layers
 depends on lower layers
 depends on nothing
-foundation for all'
+foundation for all
+foundation-layer plugin
+the foundation the others depend on
+cogni-workspace is the shared foundation
+foundation: cogni-workspace
+span four tiers'
 
 # Repo-relative path fragments exempt from the scan. See the header for why each
 # one is here.
@@ -91,7 +115,10 @@ EXCLUDED='cogni-workspace/tests/test-layering-claim-reconciled.sh
 cogni-workspace/references/absorption-roadmap.md
 wiki/wiki/log.md
 wiki/wiki/pages/lint-2026-04-20.md
-cogni-visual/libraries/'
+cogni-visual/libraries/
+.claude-plugin/
+.git/
+.claude/worktrees/'
 
 # Pages that must stay byte-identical between the two wiki trees. Scoped to what
 # this reconciliation touched — see the header on why this is not tree-wide.
@@ -121,6 +148,31 @@ EOF
 
 # scan_literals <root> <label> -> 0 clean, 1 offenders found or root unusable.
 # Prints one "OFFENDER <path>: <literal>" line per hit.
+# Enumerate files under $1 containing the literal $2.
+#
+# Inside a git work tree, restrict the search to TRACKED files. The retired claim
+# is an assertion about repo content, and the filesystem under this root also
+# holds content git deliberately ignores — skill eval workspaces (`*-workspace/`)
+# and nested worktree checkouts of this same repo. Scanning those makes the
+# verdict depend on which branches and evals a developer happens to have on disk:
+# green in CI, where none of it exists, and red on a working machine for reasons
+# no reader can act on. `git grep` searches the working tree, so uncommitted edits
+# to tracked files are still scanned — which is what a pre-commit guard needs.
+#
+# Outside a git work tree (the synthetic fixtures below) fall back to a plain
+# recursive grep. The root must be the work tree's top level; `git grep` from a
+# subdirectory scopes itself to that subdirectory, which would silently narrow
+# the scan.
+grep_hits() {
+  local root="$1" lit="$2" top
+  top="$(git -C "$root" rev-parse --show-toplevel 2>/dev/null || true)"
+  if [ -n "$top" ] && [ "$top" = "$(cd "$root" && pwd -P)" ]; then
+    git -C "$root" grep -IliF -- "$lit" 2>/dev/null || true
+  else
+    grep -RIliF -- "$lit" "$root" 2>/dev/null || true
+  fi
+}
+
 scan_literals() {
   local root="$1" label="$2"
   local offenders=0 scanned=0 lit hit path
@@ -141,7 +193,7 @@ scan_literals() {
       echo "OFFENDER $path: $lit"
       offenders=$((offenders + 1))
     done <<EOF
-$(grep -RIliF -- "$lit" "$root" 2>/dev/null || true)
+$(grep_hits "$root" "$lit")
 EOF
   done <<EOF
 $FORBIDDEN
@@ -210,8 +262,10 @@ else
 fi
 
 # ---------------------------------------------------------------------------
-# L2 — every forbidden literal is caught when planted. This is what keeps the
-# two zero-on-base literals from being dead config.
+# L2 — every forbidden literal is caught when planted, and the set has not
+# shrunk. The scan proves the two zero-on-base literals are wired to a working
+# scanner; the count floor below is what stops one being dropped unnoticed. See
+# the header on what this case cannot prove.
 # ---------------------------------------------------------------------------
 l2_ok=1
 l2_n=0
@@ -226,8 +280,8 @@ while IFS= read -r lit; do
 done <<EOF
 $FORBIDDEN
 EOF
-if [ "$l2_n" -lt 9 ]; then
-  echo "  expected at least 9 literals, found $l2_n"
+if [ "$l2_n" -lt 14 ]; then
+  echo "  expected at least 14 literals, found $l2_n"
   l2_ok=0
 fi
 if [ "$l2_ok" -eq 1 ]; then

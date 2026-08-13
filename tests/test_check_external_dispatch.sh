@@ -3,7 +3,7 @@
 #
 # The guard asserts a HARD clean-zero: no live-dispatch surface
 # (*/skills/*/SKILL.md, */agents/*.md, */commands/*.md, */hooks/**) may carry a
-# `cogni-wiki:` / `cogni-research:` dispatch token. Cases:
+# dispatch token for a prefix listed in scripts/retired-plugins.json. Cases:
 #   1. Negative controls (bare noun "cogni-research" with no colon) -> exit 0.
 #   2. Dispatch-laden fixture (cogni-wiki: + cogni-research:) -> exit 1, naming
 #      the file + line + match.
@@ -11,6 +11,22 @@
 #   4. Path exclusions (cogni-knowledge/ history, */wiki/ mirror) skipped in
 #      discover mode -> exit 0 even though the token is present.
 #   5. Real tree -> exit 0 (clean-zero today).
+#
+# Registry-loading cases (the retired set is data, not source):
+#   R1. Missing registry     -> exit 2, never a silent clean-zero.
+#   R2. Malformed JSON       -> exit 2.
+#   R3. Empty prefix list    -> exit 2.
+#   R4. Non-string / blank / padded / colon-bearing entry -> exit 2.
+#   R5. A prefix added to the registry makes a planted dispatch fire -> exit 1.
+#   R6. --registry REPLACES the default file rather than unioning with it.
+#
+# R1-R4 are the anti-vacuity trio-plus-one: each asserts a NON-ZERO exit on an
+# input where a guard that ignored the registry would exit 0, so none of them can
+# pass against an implementation that does not actually load it. They reach that
+# state by staging a COPY of the guard with (or without) a sibling registry rather
+# than by passing --registry, precisely so the assertion is behavioural — a
+# --registry-based case would go red merely because an older argparse rejects the
+# unknown flag, which proves nothing about the load path.
 #
 # bash 3.2 + stdlib python3 only (+ git for the discover-mode exclusion case).
 
@@ -20,8 +36,14 @@ TESTS_DIR="$(cd "$(dirname "$0")" && pwd)"
 REPO_ROOT="$(cd "$TESTS_DIR/.." && pwd)"
 GUARD="$REPO_ROOT/scripts/check-external-dispatch.py"
 
-red()   { printf '\033[31m%s\033[0m\n' "$1"; }
-green() { printf '\033[32m%s\033[0m\n' "$1"; }
+# Plain, uncoloured result lines — unconditionally, matching the harness-parsable
+# suites elsewhere in the repo. A result line must start with the literal `PASS:` /
+# `FAIL:` so a mutation harness can classify it with `^[[:space:]]*FAIL:[[:space:]]+`;
+# an ANSI escape sequence precedes the label and defeats that match. Deciding by
+# `[ -t 1 ]` instead would make parsability environment-dependent — run the suite
+# under a pty and the colour, and the failure, come back.
+red()   { printf '%s\n' "$1"; }
+green() { printf '%s\n' "$1"; }
 
 FAILED=0
 check() {  # check <label> <condition-exit-code>
@@ -156,6 +178,150 @@ python3 "$GUARD" >/dev/null 2>&1
 CODE=$?
 set -e
 check "real tree passes clean-zero" "$([ "$CODE" -eq 0 ] && echo 0 || echo 1)"
+
+# ===========================================================================
+# Registry-loading cases (R1-R6).
+#
+# Case labels below are `<id> <description>` — an id token followed by a SPACE,
+# never a colon abutting the id. The mutation harness matches
+# `^[[:space:]]*FAIL:[[:space:]]+<case>([[:space:]]|$)` (and the ok|PASS twin)
+# whole-token, so `--case R3` matches `FAIL: R3 empty ...` while `--case 'R3:'`
+# would match neither line and return case_not_found instead of a verdict.
+# ===========================================================================
+
+# stage_guard <name> — copy the REAL guard into "$WORK/<name>/" and echo the path.
+# A copy, taken at run time, is what makes these cases meaningful under mutation:
+# a vendored snippet would keep testing a frozen implementation while the actual
+# script drifted. The staged copy's registry default resolves to its own sibling
+# "$WORK/<name>/retired-plugins.json", which the caller writes (or deliberately
+# omits) per case.
+stage_guard() {
+  mkdir -p "$WORK/$1"
+  cp "$GUARD" "$WORK/$1/check-external-dispatch.py"
+  printf '%s' "$WORK/$1/check-external-dispatch.py"
+}
+
+# run_reg <name> <registry-json|NONE> <rel-file> [extra guard args...] — stage a
+# guard copy, give it (or deny it) a sibling registry, run it, and leave the result
+# in $OUT / $CODE. Each case keeps its own check/assert_json label, so the per-case
+# `<id> <description>` targeting above is unaffected.
+run_reg() {
+  local g; g=$(stage_guard "$1")
+  [ "$2" = NONE ] || printf '%s' "$2" > "$WORK/$1/retired-plugins.json"
+  local rel="$3"; shift 3
+  set +e
+  OUT=$(python3 "$g" "$@" --root "$REG_TREE" "$rel" 2>/dev/null)
+  CODE=$?
+  set -e
+}
+
+# A clean live surface plus a planted one, shared by R1-R6. The clean file
+# deliberately carries an ordinary word-colon token (`name: demo` frontmatter):
+# under the empty-registry mutant the compiled alternation degenerates to
+# `\b(?:):`, which matches exactly that shape — so R3 goes red because the mutant
+# demonstrably fires, not incidentally because nothing was scanned.
+REG_TREE="$WORK/regtree"
+mkdir -p "$REG_TREE/cogni-demo/agents"
+cat > "$REG_TREE/cogni-demo/agents/clean.md" <<'EOF'
+---
+name: demo
+---
+Dispatches cogni-knowledge:knowledge-query only.
+EOF
+cat > "$REG_TREE/cogni-demo/agents/planted.md" <<'EOF'
+---
+name: planted
+---
+First the agent dispatches cogni-demo:demo-skill to read the base.
+EOF
+CLEAN_REL="cogni-demo/agents/clean.md"
+PLANTED_REL="cogni-demo/agents/planted.md"
+
+# --- R1: missing registry -> exit 2, never a silent clean-zero -------------
+# Also proves the default registry path follows __file__ and not --root: --root
+# points at REG_TREE, which has no registry, and the staged dir has none either.
+run_reg r1 NONE "$CLEAN_REL"
+check "R1 missing registry exits 2 (base exits 0 here)" \
+  "$([ "$CODE" -eq 2 ] && echo 0 || echo 1)"
+assert_json "R1 missing registry reports success:false and names the path" "$OUT" "
+import json,sys
+d=json.load(sys.stdin)
+assert d['success'] is False, d
+assert d['error'], d
+assert 'retired-plugins.json' in d['error'], d['error']
+"
+
+# --- R2: malformed JSON -> exit 2 ------------------------------------------
+run_reg r2 '{"retired_prefixes": ["cogni-wiki",' "$CLEAN_REL"
+check "R2 malformed registry JSON exits 2 (base exits 0 here)" \
+  "$([ "$CODE" -eq 2 ] && echo 0 || echo 1)"
+assert_json "R2 malformed registry reports success:false with a non-empty error" "$OUT" "
+import json,sys
+d=json.load(sys.stdin)
+assert d['success'] is False, d
+assert d['error'], d
+"
+
+# --- R3: empty prefix list -> exit 2 ---------------------------------------
+# Kept as its own case rather than folded into R4's table: the recorded mutation
+# recipe targets `--case R3`, which needs a separately-labelled line.
+run_reg r3 '{"retired_prefixes": []}' "$CLEAN_REL"
+check "R3 empty registry exits 2 and never 0 (base exits 0 here)" \
+  "$([ "$CODE" -eq 2 ] && echo 0 || echo 1)"
+
+# --- R4: wrong type / non-string / blank / padded / colon-bearing -> exit 2 -
+# The padded variant is the subtlest of the set: it survives the non-empty test
+# (it strips to a real prefix) but re.escape would compile the UNSTRIPPED text
+# into `\ \ cogni\-demo\ \ :`, which matches nothing — a clean-zero exit 0 from a
+# registry that looks populated. Rejecting mirrors the colon-bearing entry rather
+# than quietly repairing it.
+R4_FAILED=0
+R4_N=0
+for BAD in \
+  '{"retired_prefixes": "cogni-wiki"}' \
+  '{"retired_prefixes": ["cogni-wiki", 7]}' \
+  '{"retired_prefixes": ["cogni-wiki", "   "]}' \
+  '{"retired_prefixes": ["cogni-wiki", "  cogni-demo  "]}' \
+  '{"retired_prefixes": ["cogni-wiki:"]}' \
+  '{"nothing_here": true}'
+do
+  R4_N=$((R4_N + 1))
+  run_reg "r4_$R4_N" "$BAD" "$CLEAN_REL"
+  [ "$CODE" -eq 2 ] || R4_FAILED=1
+done
+check "R4 degenerate registry entries all exit 2 ($R4_N variants)" "$R4_FAILED"
+
+# --- R5: a prefix added to the registry makes a planted dispatch fire -------
+# The data-driven proof: base's hardcoded regex knows nothing of cogni-demo.
+run_reg r5 '{"retired_prefixes": ["cogni-wiki", "cogni-research", "cogni-demo"]}' \
+  "$PLANTED_REL"
+check "R5 registry-added prefix fires on a planted dispatch (exit 1)" \
+  "$([ "$CODE" -eq 1 ] && echo 0 || echo 1)"
+assert_json "R5 registry-added prefix reports match cogni-demo: with file+line" "$OUT" "
+import json,sys
+d=json.load(sys.stdin)
+v=d['data']['violations']
+assert d['success'] is False, d
+got={(x['match'],x['line'],x['file']) for x in v}
+assert ('cogni-demo:',4,'cogni-demo/agents/planted.md') in got, got
+"
+
+# --- R6: --registry REPLACES the default file, never unions with it ---------
+# The staged copy's sibling registry lists cogni-demo; the override does not.
+# Doubles as the negative control that the compiled alternation is not over-broad.
+mkdir -p "$WORK/r6"
+printf '%s' '{"retired_prefixes": ["cogni-wiki", "cogni-research"]}' \
+  > "$WORK/r6/override.json"
+run_reg r6 '{"retired_prefixes": ["cogni-wiki", "cogni-research", "cogni-demo"]}' \
+  "$PLANTED_REL" --registry "$WORK/r6/override.json"
+check "R6 --registry replaces the default set rather than unioning (exit 0)" \
+  "$([ "$CODE" -eq 0 ] && echo 0 || echo 1)"
+assert_json "R6 override set reports zero violations on the planted file" "$OUT" "
+import json,sys
+d=json.load(sys.stdin)
+assert d['success'] is True, d
+assert d['data']['summary']['total']==0, d['data']['summary']
+"
 
 echo ""
 if [ "$FAILED" -eq 0 ]; then

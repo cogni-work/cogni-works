@@ -32,7 +32,10 @@ jobs:
         # Default shallow checkout is sufficient: the guard reads the working
         # tree via `git ls-files`, not git history.
 
-      - name: Assert zero cogni-wiki and cogni-research dispatches in live surfaces
+      # Keep this name free of ": " — an unquoted YAML plain scalar containing a
+      # colon-space makes the whole workflow unparseable, which silently takes
+      # every job in this file offline rather than failing one step.
+      - name: Assert zero retired-plugin dispatches in live surfaces (registry scripts/retired-plugins.json)
         run: |
           set -euo pipefail
           python3 scripts/check-external-dispatch.py

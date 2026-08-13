@@ -61,3 +61,4 @@ Append-only record of every wiki operation. Never rewritten.
 ## [2026-04-20] lint | 0 errors, 166 mechanical warnings + 2 semantic contradictions (plugin-count drift, stale cogni-docs reference)
 ## [2026-04-20] re-ingest | skill-cogni-claims-claim-entity — cogni-claims:claim-entity (skill) [replaces script-generated stub; 7 backlinks added]
 ## [2026-04-20] re-ingest | skill-cogni-claims-claims — cogni-claims:claims (skill) [replaces script-generated stub; 8 backlinks added]
+## [2026-08-13] cleanup | removed 33 pages for archived plugins (14 cogni-research + 8 cogni-wiki + 9 cogni-consulting + 2 workflow pages); pruned index.md

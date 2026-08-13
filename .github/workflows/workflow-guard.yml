@@ -1,0 +1,59 @@
+name: Workflow guard
+
+# Deliberately a SEPARATE workflow file from lint.yml, and that separation is the
+# whole point rather than an organisational preference.
+#
+# A workflow that GitHub Actions cannot parse runs none of its own jobs, so it
+# posts none of its own checks. The failure shows up as a red zero-second run in
+# the Actions list and as nothing at all on the pull request, which is the surface
+# a reviewer actually reads. A guard hosted inside lint.yml therefore could never
+# report lint.yml failing to load -- the job holding the guard would not run
+# either.
+#
+# Splitting the guard into its own file makes the coverage mutual instead of
+# self-referential:
+#
+#   - a break in lint.yml is caught here, by this job;
+#   - a break in this file is caught by lint.yml's test-suite job, which runs
+#     tests/test_check_workflow_yaml.sh, whose real-tree case scans every
+#     workflow file including this one.
+#
+# Two residual gaps, stated rather than hidden:
+#
+#   - Both arms run the SAME scanner, so the mutual coverage above extends only
+#     to the shapes it models -- an unquoted plain scalar carrying a colon-space,
+#     and a file declaring no jobs. A different malformation (bad indentation,
+#     say) is invisible to both directions, not just one.
+#   - If BOTH files are broken in the same commit, neither arm reports at all.
+#
+# No self-hosted CI guard can close the second. Marking this check required in
+# branch protection would, but that is a repository setting rather than a file
+# in the tree.
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  workflow-yaml-guard:
+    name: Workflow-YAML guard (every .github/workflows file parses)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        # Default shallow checkout is sufficient: the guard reads the workflow
+        # files at this commit, not git history.
+
+      # Keep step and job names free of a colon followed by a space. An unquoted
+      # YAML plain scalar carrying one makes the whole file unparseable, which
+      # silently takes every job in it offline rather than failing one step --
+      # exactly the outage this guard exists to prevent, and a shape this file
+      # is itself scanned for.
+      - name: Assert every workflow file parses
+        run: |
+          set -euo pipefail
+          python3 scripts/check-workflow-yaml.py

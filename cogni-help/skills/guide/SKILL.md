@@ -38,8 +38,7 @@ Keep in English regardless of language setting:
 
 2. **Match the user's intent** to 1-3 plugins. Think about what they're actually trying
    to accomplish, not just keyword matches. "I need to make slides" could mean cogni-visual
-   (presentation from narrative), course-deck (training slides), or cogni-marketing
-   (campaign materials).
+   (presentation from narrative) or cogni-marketing (campaign materials).
 
 3. **Present recommendations** with:
    - Plugin name and what it does (one sentence)
@@ -71,6 +70,6 @@ When the user asks for an overview (no specific task), present the ecosystem map
 **Content & Transformation**: cogni-narrative, cogni-copywriting, cogni-visual
 **Go-to-Market**: cogni-marketing, cogni-sales
 **Orchestration**: cogni-consult, cogni-workspace
-**Support & Learning**: cogni-help (this plugin)
+**Support & Navigation**: cogni-help (this plugin)
 
 For detailed information on any plugin, read the full catalog reference.

@@ -4,8 +4,8 @@ description: >-
   Generate quick-reference cards for any insight-wave plugin. Use this skill whenever
   the user asks for a cheatsheet, cheat sheet, quick reference, summary of a plugin,
   "commands for cogni-X", "tldr cogni-X", "what does cogni-X do", "remind me how to
-  use cogni-X", or wants a compact overview of a plugin's capabilities without taking
-  a full course. Also trigger when a user needs a refresher on a plugin they've used
+  use cogni-X", or wants a compact overview of a plugin's capabilities without reading
+  its full guide. Also trigger when a user needs a refresher on a plugin they've used
   before but can't remember the exact commands or concepts.
 allowed-tools: Read, Glob, Grep
 ---
@@ -13,7 +13,7 @@ allowed-tools: Read, Glob, Grep
 # cheatsheet: Quick Reference Cards
 
 Generate concise, one-screen reference cards for any insight-wave plugin. Faster than
-reading docs or taking a course — designed for users who need a quick refresher.
+reading the full plugin guide — designed for users who need a quick refresher.
 
 ## Language
 
@@ -71,7 +71,7 @@ Keep in English regardless of language setting:
 - **cogni-Y**: How it connects
 
 ## Learn More
-Full guide: docs/plugin-guide/<plugin-name>.md | Tour: /teach <tour-id>
+Full guide: docs/plugin-guide/<plugin-name>.md | Workflow: /workflow <workflow-id>
 ```
 
 ## Guidelines
@@ -86,9 +86,9 @@ Full guide: docs/plugin-guide/<plugin-name>.md | Tour: /teach <tour-id>
 - **Always include related plugins.** The ecosystem is interconnected — showing
   how plugins connect helps users plan their workflow.
 - **Include a Learn More footer.** If `docs/plugin-guide/<plugin>.md` exists, link to
-  it. Also include the corresponding `/teach` workflow tour from the curriculum
-  (e.g., cogni-trends → `tour-trends-to-solutions`, cogni-portfolio →
-  `tour-portfolio-to-pitch`, cogni-knowledge → `tour-research-to-report`).
+  it. Also include the corresponding `/workflow` template the plugin participates in
+  (e.g., cogni-trends → `trends-to-solutions`, cogni-portfolio → `portfolio-to-pitch`,
+  cogni-knowledge → `research-to-report`).
 
 ## Listing Plugins
 

@@ -18,8 +18,8 @@ to the relevant doc alongside the plugin recommendation:
 | Architecture | `docs/architecture/` | "How are plugins structured?", "What are the design principles?" |
 | Contributing | `docs/contributing/plugin-development.md` | "How do I build a plugin?" |
 
-These docs use tutorial voice (practical, step-by-step) and complement the interactive
-courses delivered by the teach skill.
+These docs use tutorial voice (practical, step-by-step) and are the primary learning
+surface for the ecosystem.
 
 ---
 
@@ -109,14 +109,13 @@ perspective simulation, or needs readability scoring.
 
 ## cogni-help (this plugin)
 
-**Purpose**: Central help hub — courses, plugin discovery, workflows, troubleshooting,
+**Purpose**: Central help hub — plugin discovery, workflows, troubleshooting,
 cheatsheets, and issue filing.
 
-**Key commands**: `/teach`, `/courses`, `/guide`, `/workflow`, `/troubleshoot`,
-`/cheatsheet`, `/issues`
+**Key commands**: `/guide`, `/workflow`, `/troubleshoot`, `/cheatsheet`, `/issues`
 
-**Use when**: User is learning the ecosystem, needs to find the right plugin, wants
-workflow guidance, or needs to file a bug/feature request.
+**Use when**: User needs to find the right plugin, wants workflow guidance, or needs
+to file a bug/feature request.
 
 ---
 

@@ -1,17 +1,11 @@
 # cogni-help
 
-Onboarding and navigation layer for the insight-wave ecosystem — teaches users through workflow tours, routes tasks to plugins, chains multi-plugin workflows, and diagnoses problems.
+Navigation layer for the insight-wave ecosystem — routes tasks to plugins, chains multi-plugin workflows, and diagnoses problems.
 
 ## Plugin Architecture
 
 ```
-skills/                         7 help skills
-  teach/                          Interactive workflow-tour delivery — 7 tours, adaptive pacing, progress tracking
-    references/
-      courses/
-        tours/                    7 workflow-tour definitions (tour-research-to-report, tour-trends-to-solutions, tour-portfolio-to-pitch, tour-portfolio-to-website, tour-consulting-engagement, tour-content-pipeline, tour-install-to-infographic)
-      exercises/                  Hands-on exercise templates per tour
-  course-deck/                    Generate PPTX slide decks for curriculum or per-tour intros
+skills/                         5 help skills
   guide/                          Plugin discovery — match tasks to plugins, ecosystem map
     references/
       plugin-catalog.md           Plugin capability index for matching
@@ -25,40 +19,19 @@ skills/                         7 help skills
   cheatsheet/                     Quick reference — one-screen cards for any plugin
   cogni-issues/                   Issue lifecycle — create, list, status via GitHub browser automation
 
-agents/
-  course-deck-generator.md        PPTX generation as delegated subprocess (sonnet)
-
-commands/                       7 slash commands
-  teach.md, courses.md, course-deck.md, guide.md,
-  troubleshoot.md, workflow.md, cheatsheet.md
-
-scripts/                        3 utility scripts
-  course-status.sh                Show course progress for a project directory
-  health-check.sh                 Quick health check for plugin ecosystem
-  reset-progress.sh               Reset course progress (per-course or all)
+commands/                       4 slash commands
+  guide.md, troubleshoot.md, workflow.md, cheatsheet.md
 ```
 
 ## Component Inventory
 
 | Type | Count | Items |
 |------|-------|-------|
-| Skills | 7 | teach, course-deck, guide, troubleshoot, workflow, cheatsheet, cogni-issues |
-| Agents | 1 | course-deck-generator (sonnet) |
-| Commands | 7 | teach, courses, course-deck, guide, troubleshoot, workflow, cheatsheet |
+| Skills | 5 | guide, troubleshoot, workflow, cheatsheet, cogni-issues |
+| Agents | 0 | — |
+| Commands | 4 | guide, troubleshoot, workflow, cheatsheet |
 
-## 7-Tour Curriculum
-
-| Tour ID | Title | Pipeline |
-|---------|-------|----------|
-| `tour-install-to-infographic` | Install-to-Infographic | cogni-workspace → themes → cogni-visual |
-| `tour-research-to-report` | Research-to-Report | cogni-knowledge → cogni-narrative → cogni-visual |
-| `tour-trends-to-solutions` | Trends-to-Solutions | cogni-trends → cogni-portfolio → cogni-marketing |
-| `tour-content-pipeline` | Content-Pipeline | cogni-marketing → cogni-narrative → cogni-copywriting → cogni-visual |
-| `tour-portfolio-to-pitch` | Portfolio-to-Pitch | cogni-portfolio → cogni-narrative → cogni-sales → cogni-visual |
-| `tour-portfolio-to-website` | Portfolio-to-Website | cogni-portfolio → cogni-workspace → cogni-website |
-| `tour-consulting-engagement` | Consulting-Engagement | cogni-consult (setup → scope → action fields → design-thinking → personas) |
-
-Each tour is ~45–60 minutes with ~5 modules: Theory → Demo → Exercise → Quiz → Recap. Tour IDs are 1:1 with the canonical workflow IDs in `docs/workflows/` and the `workflow` skill's `references/workflows/`.
+The `cogni-issues` skill has no slash command — it is invoked by name.
 
 ## Workflow Templates
 
@@ -79,24 +52,24 @@ Internal / operational (maintainer pipelines, no canonical docs companion):
 | Workflow | Pipeline |
 |----------|----------|
 | docs-pipeline | cogni-docs: doc-start → audit → generate → sync → power → claude → hub → bridge |
-| full-onboarding | cogni-workspace → cogni-help workflow tours |
+| full-onboarding | cogni-workspace → docs → workflow templates → practice |
 
 ## Data Model
 
-- Course progress stored in `.claude/cogni-help.local.md` (YAML frontmatter)
 - Issue state stored in `cogni-issues/issues.json` in the working directory
-- Exercise artifacts written to `_teacher-exercises/`
+
+`.claude/cogni-help.local.md` may still exist from the retired course system. It is inert —
+no surviving skill reads it, and no migration path is provided.
 
 ## Cross-Plugin Integration
 
 cogni-help references all ecosystem plugins — it is the meta-layer:
-- **teach** skill maps each tour to 3-4 plugins (the cross-plugin handoff chain it walks)
 - **workflow** skill chains 3-5 plugins per pipeline template
 - **guide** skill indexes all plugin capabilities for task matching
 - **troubleshoot** skill checks plugin dependencies and workspace health
 - **cheatsheet** skill reads any plugin's metadata to generate quick reference
 
-All dependencies are soft — cogni-help functions without any specific plugin installed, but courses and workflows require the relevant plugins.
+All dependencies are soft — cogni-help functions without any specific plugin installed, but the workflow templates require the relevant plugins.
 
 ## Relationship to docs/ Directory
 
@@ -104,7 +77,6 @@ The workspace root contains a `docs/` directory generated by cogni-docs with use
 documentation (plugin guides, workflow tutorials, architecture docs, getting-started).
 cogni-help references this documentation in several places:
 
-- **teach skill**: Tour completion sections point to `docs/workflows/<workflow-id>.md` and `docs/plugin-guide/<plugin>.md`
 - **guide skill**: Plugin catalog includes a docs/ resource table for learning queries
 - **cheatsheet skill**: Generated cards include a "Learn More" footer linking to plugin guides
 - **workflow skill**: Workflow templates cross-reference `docs/workflows/` tutorials
@@ -114,7 +86,5 @@ they point to stable paths (`docs/plugin-guide/<plugin>.md`), not specific conte
 
 ## Key Conventions
 
-- Course progress is per-user (stored in user's `.claude/` directory)
-- Exercises create temporary artifacts in `_teacher-exercises/` (gitignored)
 - Plugin catalog in guide/references/plugin-catalog.md must be updated when plugins are added
 - Workflow definitions are standalone markdown files in workflow/references/workflows/ (user-facing) and workflow/references/internal-workflows/ (operational/maintainer pipelines)

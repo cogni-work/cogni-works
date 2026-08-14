@@ -48,7 +48,7 @@ Seven bundled user-facing templates cover the most common plugin chains. See §I
 
 These are the canonical user-facing workflows — every entry has a one-to-one
 backing guide at `docs/workflows/<canonical-id>.md`. Reference them by
-canonical ID from any surface (`teach`, `guide`, `cheatsheet`, `docs/`).
+canonical ID from any surface (`guide`, `cheatsheet`, `docs/`).
 The reconciliation table at `references/canonical-workflows.md` is the
 source of truth.
 
@@ -63,7 +63,7 @@ ID.
 | Internal ID | Pipeline | Use case |
 |-------------|----------|----------|
 | `docs-pipeline` | doc-start → audit → generate → sync → power → claude → hub → bridge | Maintainer documenting the monorepo |
-| `full-onboarding` | workspace → cogni-help workflow tours | New user learning the full ecosystem |
+| `full-onboarding` | workspace → docs → workflow templates → practice | New user learning the full ecosystem |
 
 These do not appear in the default `/workflow` listing (no-args invocation),
 do not carry canonical IDs, and are not part of the docs/workflows 1:1 set —

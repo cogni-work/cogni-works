@@ -17,7 +17,7 @@ The quick-reference answer to "what are the commands for cogni-X" — the cheats
 
 Skills are the primary surface across the ecosystem. A skill is invoked by name — `cogni-trends:trend-scout`, or simply by describing the task, since each skill's description carries its own trigger phrases. Slash commands are a thin optional wrapper that only some plugins ship.
 
-Seven of the thirteen plugins ship **no** commands directory at all: cogni-knowledge, cogni-consult, cogni-workspace, cogni-trends, cogni-portfolio and cogni-website are skill-invoked entirely. Expecting a slash command for those is the most common source of "the command does not exist" confusion. See [[arch-plugin-anatomy]] for how the two surfaces sit on disk.
+Six of the thirteen plugins ship **no** commands directory at all: cogni-knowledge, cogni-consult, cogni-workspace, cogni-trends, cogni-portfolio and cogni-website are skill-invoked entirely. Expecting a slash command for those is the most common source of "the command does not exist" confusion. See [[arch-plugin-anatomy]] for how the two surfaces sit on disk.
 
 ## Slash commands, by plugin
 
@@ -29,7 +29,7 @@ Seven of the thirteen plugins ship **no** commands directory at all: cogni-knowl
 | cogni-visual | `/enrich-report`, `/render-html-slides`, `/render-infographic`, `/render-infographic-editorial`, `/render-infographic-handdrawn`, `/review-brief` |
 | cogni-marketing | `/abm`, `/campaign`, `/content-calendar`, `/content-strategy`, `/demand-gen`, `/lead-gen`, `/marketing-dashboard`, `/marketing-resume`, `/marketing-setup`, `/sales-enablement`, `/thought-leadership` |
 | cogni-sales | `/why-change` |
-| cogni-help | `/cheatsheet`, `/guide`, `/troubleshoot`, `/workflow` |
+| cogni-help | `/cheatsheet`, `/course-deck`, `/courses`, `/guide`, `/teach`, `/troubleshoot`, `/workflow` |
 | cogni-knowledge, cogni-consult, cogni-workspace, cogni-trends, cogni-portfolio, cogni-website | none — skill-invoked |
 
 ## Skills, by plugin
@@ -58,7 +58,7 @@ Seven of the thirteen plugins ship **no** commands directory at all: cogni-knowl
 
 **cogni-website** — `website-setup`, `website-plan`, `website-build`, `website-legal`, `website-preview`, `website-resume`
 
-**cogni-help** — `guide`, `workflow`, `cheatsheet`, `troubleshoot`, `cogni-issues`
+**cogni-help** — `guide`, `workflow`, `cheatsheet`, `course-deck`, `teach`, `troubleshoot`, `cogni-issues`
 
 ## Recurring naming patterns
 

@@ -1,25 +1,19 @@
 ---
 name: manage-themes
 description: >-
-  Manage visual design themes for the workspace — import themes from Claude
-  Design handoff bundles (the recommended authoring path), or extract from live
-  websites (via claude-in-chrome), PowerPoint templates, or presets, then store
-  and apply them to all visual outputs (slides, documents, diagrams, reports).
-  Also audits and improves existing themes: contrast/accessibility checks,
-  palette harmony, typography pairing, and completeness review. Use this skill
-  whenever the user mentions themes, brand colors, visual identity, extracting
-  styles, or wants consistent look-and-feel across outputs. Also triggers when
-  the user wants to review, audit, fix, or improve a theme — e.g., "my theme
-  feels off", "check contrast", "improve my colors". Also triggers when the
-  user needs help choosing or building a theme — e.g., "what theme for my
-  brand?", "help me pick a theme", "I need a visual identity for my startup".
-  Even if the user just says "make it match our brand", "use our company
-  colors", or "grab the style from that site", this skill applies. Also
-  triggers on "brand guidelines", "design system", "brand identity", or
-  "visual standards", or when the user wants to "author tokens", "build a
-  tiered theme system", "deepen a theme", "match the cogni-work pattern", or
-  has a Claude Design bundle URL (api.anthropic.com/v1/design/h/...) to import.
-version: 0.5.0
+  Manage visual design themes for the workspace — create themes from Claude
+  Design bundles, live websites, PowerPoint templates, or presets, audit and
+  improve existing ones, and apply them across all visual outputs. Use this
+  skill whenever the user mentions themes, brand colors, visual identity, or
+  extracting styles, wants a consistent look-and-feel across outputs, or wants
+  to review, audit, fix, improve, choose, or build a theme. Trigger phrases
+  include "my theme feels off", "check contrast", "improve my colors", "what
+  theme for my brand?", "help me pick a theme", "I need a visual identity for
+  my startup", "make it match our brand", "use our company colors", "grab the
+  style from that site", "brand guidelines", "design system", "brand identity",
+  "visual standards", "author tokens", "build a tiered theme system", "deepen a
+  theme", and "match the cogni-work pattern". Also triggers on a Claude Design
+  bundle URL (api.anthropic.com/v1/design/h/...) to import.
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, WebSearch, Skill, mcp__claude-in-chrome__navigate, mcp__claude-in-chrome__read_page, mcp__claude-in-chrome__computer, mcp__claude-in-chrome__tabs_create_mcp, mcp__claude-in-chrome__tabs_context_mcp, mcp__claude-in-chrome__get_page_text
 ---
 

@@ -1,19 +1,20 @@
 ---
 name: manage-themes
 description: >-
-  Manage visual design themes for the workspace — create themes from Claude
-  Design bundles, live websites, PowerPoint templates, or presets, audit and
-  improve existing ones, and apply them across all visual outputs. Use this
-  skill whenever the user mentions themes, brand colors, visual identity, or
-  extracting styles, wants a consistent look-and-feel across outputs, or wants
-  to review, audit, fix, improve, choose, or build a theme. Trigger phrases
-  include "my theme feels off", "check contrast", "improve my colors", "what
+  Create, audit, improve, and apply visual design themes for the workspace —
+  sourced from Claude Design bundles, live websites, PowerPoint templates, or
+  presets. Audits cover contrast and accessibility, palette harmony, typography
+  pairing, and completeness. Use this skill whenever the user mentions themes,
+  brand colors, visual identity, or extracting styles, wants a consistent
+  look-and-feel across outputs, or wants to review, fix, choose, or build a
+  theme. Trigger phrases include "my theme feels off", "check contrast",
+  "improve my colors", "what
   theme for my brand?", "help me pick a theme", "I need a visual identity for
   my startup", "make it match our brand", "use our company colors", "grab the
   style from that site", "brand guidelines", "design system", "brand identity",
   "visual standards", "author tokens", "build a tiered theme system", "deepen a
   theme", and "match the cogni-work pattern". Also triggers on a Claude Design
-  bundle URL (api.anthropic.com/v1/design/h/...) to import.
+  bundle URL (api.anthropic.com/v1/design/h/...).
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, WebSearch, Skill, mcp__claude-in-chrome__navigate, mcp__claude-in-chrome__read_page, mcp__claude-in-chrome__computer, mcp__claude-in-chrome__tabs_create_mcp, mcp__claude-in-chrome__tabs_context_mcp, mcp__claude-in-chrome__get_page_text
 ---
 

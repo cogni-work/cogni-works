@@ -1,7 +1,7 @@
 # Workflow: Full Onboarding
 
-**Pipeline**: cogni-workspace → docs/ → `/guide` → `/workflow` templates → practice
-**Duration**: ~4–5 hours total (spread across sessions)
+**Pipeline**: cogni-workspace → docs/ → `/workflow` templates → practice
+**Duration**: ~6–7 hours total (spread across sessions)
 **Use case**: New user learning the complete insight-wave ecosystem
 
 ```mermaid

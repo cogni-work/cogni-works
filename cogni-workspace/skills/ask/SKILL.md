@@ -1,28 +1,18 @@
 ---
 name: ask
 description: >-
-  Answer a question about the insight-wave plugin ecosystem by reading the
-  bundled insight-wave wiki — never from memory. The wiki ships with cogni-workspace
-  and lives at ${CLAUDE_PLUGIN_ROOT}/wiki/. Reads wiki/wiki/index.md first to
-  find relevant pages, then reads only those pages, then synthesizes a grounded
-  answer with [[wikilink]] citations. Use this skill whenever the user asks about
-  insight-wave plugins, skills, agents, conventions, architecture, workflows, or
-  cross-cutting concepts. Trigger phrases include "ask the wiki", "ask insight-wave",
-  "what does cogni-X do", "how does claims propagation work", "which plugin
-  generates IS/DOES/MEANS", "what is the agent model strategy", "how do plugins
-  share data", "what's the difference between cogni-narrative and cogni-copywriting",
-  "explain the three-layer quality gate", "how does theme inheritance work", or
-  any question about how insight-wave is structured. Also covers plugin discovery
-  — "which plugin should I use", "where do I start", "what plugins are available",
-  "find me a skill for X", "recommend a plugin", "I need to do X — which plugin
-  handles that?" — quick reference — "cheatsheet", "quick reference", "commands
-  for cogni-X", "tldr cogni-X", "remind me how to use cogni-X" — and cross-plugin
-  pipelines — "how do I go from X to Y", "what's the process for", "workflow for",
-  "show me the steps", "how do these plugins work together". Also trigger when a
-  user seems unsure which plugin fits their task, or describes a multi-step task
-  spanning plugins, even without naming a plugin. Especially useful as a first
-  lookup before grepping plugin source files. Answers are grounded — if the wiki
-  has no page on the topic, the skill says so rather than guessing.
+  Answer insight-wave ecosystem questions from the bundled wiki with [[wikilink]]
+  citations. Covers plugins, skills, agents, architecture, conventions, discovery,
+  quick reference, and cross-plugin workflows. Trigger on "ask the wiki", "ask
+  insight-wave", "what does cogni-X do", "which plugin should I use", "where do I
+  start", "what plugins are available", "find me a skill for X", "recommend a
+  plugin", "I need to do X — which plugin handles that?", "cheatsheet", "quick
+  reference", "commands for cogni-X", "tldr cogni-X", "remind me how to use
+  cogni-X", "how do I go from X to Y", "what's the process for", "workflow for",
+  "show me the steps", or "how do these plugins work together". Also use when the
+  user is unsure which plugin fits or describes a multi-step task spanning plugins.
+  Read the wiki index and relevant pages before answering; if coverage is missing,
+  say so instead of guessing.
 allowed-tools: Read, Glob, Grep, Bash
 ---
 

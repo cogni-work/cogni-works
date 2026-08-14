@@ -2,12 +2,10 @@
 name: ask
 description: >-
   Answer a question about the insight-wave plugin ecosystem by reading the
-  bundled insight-wave wiki — never from memory. The wiki ships with cogni-workspace
-  and lives at ${CLAUDE_PLUGIN_ROOT}/wiki/. Reads wiki/wiki/index.md first to
-  find relevant pages, then reads only those pages, then synthesizes a grounded
-  answer with [[wikilink]] citations. Use this skill whenever the user asks about
-  insight-wave plugins, skills, agents, conventions, architecture, workflows, or
-  cross-cutting concepts. Trigger phrases include "ask the wiki", "ask insight-wave",
+  bundled insight-wave wiki — never from memory. Use this skill whenever the
+  user asks about insight-wave plugins, skills, agents, conventions,
+  architecture, workflows, or cross-cutting concepts. Trigger phrases include
+  "ask the wiki", "ask insight-wave",
   "what does cogni-X do", "how does claims propagation work", "which plugin
   generates IS/DOES/MEANS", "what is the agent model strategy", "how do plugins
   share data", "what's the difference between cogni-narrative and cogni-copywriting",

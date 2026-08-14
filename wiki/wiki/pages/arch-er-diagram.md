@@ -4,7 +4,7 @@ title: Entity relationships and cross-plugin data flow (architecture)
 type: summary
 tags: [architecture, entities, data-flow, bridge-files]
 created: 2026-04-17
-updated: 2026-04-17
+updated: 2026-08-13
 sources:
   - https://github.com/cogni-work/insight-wave/blob/main/docs/architecture/er-diagram.md
 status: stable
@@ -12,12 +12,12 @@ status: stable
 
 The cross-plugin entity model and how data flows between plugins. Every arrow is a read-only reference resolved at runtime — never a live connection or shared write path.
 
-## Four architectural layers
+## Architectural groups
 
-Plugins in higher layers depend on lower layers, not the reverse. See [[concept-four-layer-architecture]] for the full mapping.
+cogni-workspace is the horizontal layer owning shared workspace state; the business plugins are vertical, each keeping its own project lifecycle. The role groupings below are descriptive, not a dependency ordering. See [[concept-four-layer-architecture]] for the full mapping.
 
+- **Horizontal** — cogni-workspace (themes, env vars, vault config)
 - **Orchestration** — cogni-consulting (engagement state, phase dispatch)
-- **Foundation** — cogni-workspace (themes, env vars, vault config)
 - **Data** — cogni-portfolio, cogni-trends, cogni-research, cogni-claims (each owns a knowledge domain)
 - **Output** — cogni-narrative, cogni-copywriting, cogni-visual, cogni-sales, cogni-marketing (transform data-layer content into deliverables)
 

@@ -13,7 +13,6 @@ description: >-
   its MCP installation step (step 5), when workspace-status reports MCP servers
   as not loaded and the user wants to fix it, or when a rendering skill
   (render-big-picture, story-to-web) fails because its MCP dependency is missing.
-version: 0.1.0
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep, AskUserQuestion, ToolSearch
 ---
 

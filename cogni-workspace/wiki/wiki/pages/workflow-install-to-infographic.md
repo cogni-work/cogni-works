@@ -39,7 +39,7 @@ A themed infographic rendered as SVG (Excalidraw) or `.pen` file (Pencil), align
 
 ## How it works
 
-The workflow is sequenced so you verify each layer before depending on it. [[plugin-cogni-workspace]] is installed first because every other plugin depends on it. `manage-workspace` initializes the directory structure, `install-mcp` brings up the MCP servers ([[concept-mcp-server-map]]), and `manage-themes` extracts your brand colors via `claude-in-chrome` browser automation.
+The workflow is sequenced so you verify each layer before depending on it. [[plugin-cogni-workspace]] is installed first because it owns the shared workspace state the later steps read. `manage-workspace` initializes the directory structure, `install-mcp` brings up the MCP servers ([[concept-mcp-server-map]]), and `manage-themes` extracts your brand colors via `claude-in-chrome` browser automation.
 
 [[plugin-cogni-visual]] then renders an infographic. `story-to-infographic` turns a narrative (e.g., a one-paragraph product positioning) into a structured `infographic-brief.md`. The matching render skill (Pencil for editorial, Excalidraw for sketchnote/whiteboard) then produces the visual. See [[concept-brief-based-rendering]].
 
@@ -49,7 +49,7 @@ It exercises every layer of the platform — workspace foundation, MCP installat
 
 ## Steps
 
-**1 — Add the marketplace and install plugins.** `/plugin marketplace add cogni-work/insight-wave`, then `/plugin install <plugin>@insight-wave` for each. Start with cogni-workspace — every other plugin depends on it. Enable auto-update under `/plugin → Marketplaces → insight-wave` so new versions arrive without repeating this step. This workflow needs only cogni-workspace and cogni-visual; install the rest when a follow-on workflow needs them.
+**1 — Add the marketplace and install plugins.** `/plugin marketplace add cogni-work/insight-wave`, then `/plugin install <plugin>@insight-wave` for each. Start with cogni-workspace because this workflow's later steps read its shared workspace state. Enable auto-update under `/plugin → Marketplaces → insight-wave` so new versions arrive without repeating this step. This workflow needs only cogni-workspace and cogni-visual; install the rest when a follow-on workflow needs them.
 
 **2 — Initialize the workspace and install MCP servers.** `cogni-workspace:manage-workspace`, then `cogni-workspace:install-mcp`. Accept the defaults — one pass wires up Pencil, Excalidraw and claude-in-chrome. Step 3 uses claude-in-chrome to read your company website; step 4 uses Pencil and Excalidraw to render. Verify with `cogni-workspace:workspace-status`: every MCP should report green before continuing.
 

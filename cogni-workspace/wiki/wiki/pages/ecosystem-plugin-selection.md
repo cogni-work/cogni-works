@@ -56,7 +56,7 @@ Users usually know what they want to accomplish but not which of the thirteen pl
 
 **cogni-consult** — Consulting engagement orchestrator. Scoping derives 3–6 action fields (the work-breakdown structure) from one SMART key question; each deliverable runs its own design-thinking loop (empathize → define → ideate → prototype → test) with acting stakeholder personas challenging the work. Requires a cogni-knowledge base bound at setup as the research spine.
 
-**cogni-workspace** — Foundation layer. Shared env vars and settings, theme management, market registry, MCP installation, workspace health, and this wiki. Every other plugin reads from it — see [[concept-theme-inheritance]].
+**cogni-workspace** — Horizontal workspace layer. Shared env vars and settings, theme management, market registry, MCP installation, workspace health, and this wiki. Other plugins read its shared workspace state when they need those services — see [[concept-theme-inheritance]].
 
 **cogni-help** — Navigation layer. Plugin discovery, cross-plugin workflow templates, diagnostics, quick-reference cards, and GitHub issue filing. Owns no domain data.
 

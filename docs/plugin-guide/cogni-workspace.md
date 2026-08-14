@@ -6,7 +6,7 @@
 
 ## Overview
 
-cogni-workspace is the foundation layer for the insight-wave ecosystem. Before any other cogni-x plugin can run reliably, it needs: a place to find the workspace root, environment variables pointing to shared resources, a theme directory, and knowledge of which other plugins are installed. cogni-workspace provides all of this through a single initialization command and a set of management skills.
+cogni-workspace is the horizontal layer of the insight-wave ecosystem — it owns the shared workspace state that the vertical business plugins consume. Before any other cogni-x plugin can run reliably, it needs: a place to find the workspace root, environment variables pointing to shared resources, a theme directory, and knowledge of which other plugins are installed. cogni-workspace provides all of this through a single initialization command and a set of management skills.
 
 In practice, most users interact with cogni-workspace twice: once when setting up a new workspace (`manage-workspace`), and occasionally when something drifts out of sync (`workspace-status`, `manage-workspace`). Theme management and Obsidian integration are optional — use them if you want visual consistency across plugin outputs or a terminal-integrated note-taking environment.
 
@@ -209,9 +209,9 @@ cogni-workspace owns the canonical market registry (`references/supported-market
 
 ## Integration Points
 
-### Upstream — cogni-workspace depends on nothing
+### Upstream — cogni-workspace requires no other plugin
 
-cogni-workspace is the foundation layer. It has no plugin dependencies. Every other plugin depends on it, not the other way around.
+cogni-workspace has no required plugin dependencies. Its scope is horizontal: the vertical business plugins consume the shared state it owns, while each keeps its own project lifecycle.
 
 ### Downstream — every visual and content plugin uses the workspace
 

@@ -52,7 +52,7 @@ This is the content catalog for **insight-wave**. Every wiki page is listed here
 - [[plugin-cogni-trends]] — Strategic trend scouting and reporting pipeline.
 - [[plugin-cogni-visual]] — Transform polished narratives and structured data into visual deliverables — presentation briefs, slide decks, scrollable web narratives, poster storyboards, single-page infographics, and visual as....
 - [[plugin-cogni-website]] — Assembles multi-page customer websites from portfolio, marketing, trend, and research content produced by other insight-wave plugins.
-- [[plugin-cogni-workspace]] — Foundation-layer plugin for the insight-wave marketplace.
+- [[plugin-cogni-workspace]] — The horizontal layer of the insight-wave marketplace — it owns the shared workspace state the vertical business plugins consume.
 
 ### Workflows
 

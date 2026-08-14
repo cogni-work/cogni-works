@@ -53,4 +53,20 @@ Final hop through [[plugin-cogni-visual]] turns the slide narrative into a brief
 - **Deal-specific** — for a named account; `why-change` researches the customer's specific decision makers and current state
 - **Segment-reusable** — for a market segment; reusable across many accounts in the same Feature × Market
 
+## Steps
+
+**1 — Portfolio data.** `cogni-portfolio:portfolio-resume` if the project already exists, otherwise `portfolio-setup` → the entity skills → `portfolio-communicate`. Output is propositions with IS/DOES/MEANS, competitor analysis and market sizing. Skip to step 2 if you already have portfolio data. `portfolio-architecture` visualizes the product-feature structure and catches gaps before they reach the pitch narrative. Focus on the propositions relevant to this customer or segment; the competitor analysis is what carries the "why us".
+
+**2 — Narrative arc.** `/narrative`. Shapes portfolio propositions and customer context into a story arc — SCQA works well for sales. This step is skippable when you are using the Why Change methodology, since that arc is built into cogni-sales directly. For complex enterprise deals it adds strategic depth worth the extra pass.
+
+**3 — Sales pitch.** `/why-change`. Takes narrative, portfolio data and customer specifics; produces structured pitch content covering unconsidered needs, the business case and the proposal. Named-customer pitches are deal-specific and want customer research; segment pitches are reusable across similar accounts. Optionally enrich with TIPS trends to carry the "why now".
+
+**4 — Visual delivery.** `cogni-visual:story-to-slides` for the brief, then render to HTML slides or PPTX. Sales decks live on visual flow — review and adjust after generation. For a customer meeting, fewer slides with more impact beats a comprehensive deck. Consider also generating a leave-behind in the web-narrative format.
+
+## Common pitfalls
+
+- **Generic propositions.** A customer-specific pitch needs customer-specific value statements; reusing segment-level DOES/MEANS reads as boilerplate.
+- **Missing the "why change".** The methodology needs a compelling reason the status quo is untenable. Without it the deck argues why you are good, not why they should move.
+- **Skipping competitor analysis.** "Why us" is unanswerable without it, and it is the question that decides the deal.
+
 **Source**: [docs/workflows/portfolio-to-pitch.md on GitHub](https://github.com/cogni-work/insight-wave/blob/main/docs/workflows/portfolio-to-pitch.md)

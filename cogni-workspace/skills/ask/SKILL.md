@@ -1,18 +1,18 @@
 ---
 name: ask
 description: >-
-  Answer a question about the insight-wave plugin ecosystem by reading the
-  bundled insight-wave wiki — never from memory. Use this skill whenever the
-  user asks about insight-wave plugins, skills, agents, conventions,
-  architecture, workflows, or cross-cutting concepts. Trigger phrases include
-  "ask the wiki", "ask insight-wave",
-  "what does cogni-X do", "how does claims propagation work", "which plugin
-  generates IS/DOES/MEANS", "what is the agent model strategy", "how do plugins
-  share data", "what's the difference between cogni-narrative and cogni-copywriting",
-  "explain the three-layer quality gate", "how does theme inheritance work", or
-  any question about how insight-wave is structured. Especially useful as a first
-  lookup before grepping plugin source files. Answers are grounded — if the wiki
-  has no page on the topic, the skill says so rather than guessing.
+  Answer insight-wave ecosystem questions from the bundled wiki with [[wikilink]]
+  citations. Covers plugins, skills, agents, architecture, conventions, discovery,
+  quick reference, and cross-plugin workflows. Trigger on "ask the wiki", "ask
+  insight-wave", "what does cogni-X do", "which plugin should I use", "where do I
+  start", "what plugins are available", "find me a skill for X", "recommend a
+  plugin", "I need to do X — which plugin handles that?", "cheatsheet", "quick
+  reference", "commands for cogni-X", "tldr cogni-X", "remind me how to use
+  cogni-X", "how do I go from X to Y", "what's the process for", "workflow for",
+  "show me the steps", or "how do these plugins work together". Also use when the
+  user is unsure which plugin fits or describes a multi-step task spanning plugins.
+  Read the wiki index and relevant pages before answering; if coverage is missing,
+  say so instead of guessing.
 allowed-tools: Read, Glob, Grep, Bash
 ---
 
@@ -54,7 +54,7 @@ Read `${CLAUDE_PLUGIN_ROOT}/wiki/wiki/index.md` top to bottom. The index is the 
 
 From the index, select pages whose one-line summary is relevant to the question. If fewer than 2 clear matches, also run `grep -l -i` over `${CLAUDE_PLUGIN_ROOT}/wiki/wiki/pages/` for the question's key nouns. Cap the total set at `--max-pages` (default 12).
 
-If zero candidate pages emerge after both passes, report honestly: "The insight-wave wiki has no page on this topic. The wiki covers plugins, workflows, architecture, and cross-cutting concepts — your question may be outside that scope. Falling back to plugin source code or asking [`cogni-help:guide`](https://github.com/cogni-work/insight-wave/blob/main/cogni-help/skills/guide/SKILL.md) may help." **Do not answer from memory.**
+If zero candidate pages emerge after both passes, report honestly: "The insight-wave wiki has no page on this topic. The wiki covers plugins, workflows, architecture, and cross-cutting concepts — your question may be outside that scope. Reading the plugin's own source under its directory in [insight-wave](https://github.com/cogni-work/insight-wave), or its guide at `docs/plugin-guide/<plugin>.md`, may help; `cogni-workspace:workspace-status` covers configuration questions." **Do not answer from memory.**
 
 ### 4. Read the selected pages
 

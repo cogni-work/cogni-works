@@ -2,11 +2,11 @@
 name: manage-markets
 description: >-
   Manage the canonical insight-wave market registry — add a new market or
-  show the coverage matrix. Use whenever the user mentions "add a market",
-  "manage markets", "scaffold a new region", "show market coverage",
-  "market status", "missing markets in research/trends", or any question
-  that *changes* the registry. Read-only inspection routes to
-  `audit-region-sources`. Adding plugin-specific overlay metadata
+  change what the registry holds. Use whenever the user mentions "add a
+  market", "manage markets", "scaffold a new region", "market status",
+  "missing markets in research/trends", or any question that *changes* the
+  registry. Read-only inspection — including showing the coverage matrix —
+  routes to `audit-region-sources`. Adding plugin-specific overlay metadata
   (research authority_metadata, trends site_searches) is plugin-side
   curation — edit the overlay file directly.
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion

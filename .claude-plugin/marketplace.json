@@ -12,7 +12,7 @@
     {
       "name": "cogni-knowledge",
       "source": "./cogni-knowledge",
-      "version": "1.0.76",
+      "version": "1.0.77",
       "maturity": "released",
       "description": "Wiki-first research that compounds. Binds each run to a wiki knowledge base; future runs read what prior runs filed before hitting the web. v0.1.0 inverted pipeline (plan → curate → fetch → ingest → distill → compose → verify → finalize) with zero-network, citation-consistent claim verification — opt-in live-source resweep via `knowledge-refresh --resweep`. The shallow `knowledge-query` rung is read-only by default and can optionally file its answer back as an un-verified synthesis page via `--file-back`.",
       "keywords": [
@@ -54,7 +54,7 @@
     {
       "name": "cogni-claims",
       "source": "./cogni-claims",
-      "version": "0.10.6",
+      "version": "0.10.7",
       "maturity": "preview",
       "description": "Claim verification and management system. Verifies sourced claims against cited URLs, detects deviations, guides users through resolution, and provides interactive cobrowsing recovery for unreachable sources.",
       "keywords": [
@@ -135,7 +135,7 @@
     {
       "name": "cogni-trends",
       "source": "./cogni-trends",
-      "version": "0.6.10",
+      "version": "0.6.11",
       "maturity": "preview",
       "description": "Strategic trend scouting and TIPS reporting pipeline. Combines the Smarter Service Trendradar (4 dimensions) with TIPS (Trends, Implications, Possibilities, Solutions): trend-scout → value-modeler → trend-research → trend-synthesis and/or trend-booklet → verify-trend-report. Evidence-backed CxO reports and reusable industry catalogs across DE/FR/IT/PL/NL/ES + US/UK.",
       "keywords": [

@@ -2,7 +2,15 @@
 name: reader
 model: sonnet
 color: cyan
-description: Review documents through parallel stakeholder persona Q&A simulation with synthesized feedback.
+description: >-
+  Use this agent when a markdown document needs stakeholder review through
+  parallel persona Q&A and synthesized feedback. Typical triggers include
+  requests to review a proposal as executive, technical, legal, marketing, or
+  end-user stakeholders; for example, dispatch it when asked to "review this
+  strategy with executive and legal personas."
+tools:
+  - Read
+  - Skill
 ---
 
 # Reader Agent (Orchestrator)

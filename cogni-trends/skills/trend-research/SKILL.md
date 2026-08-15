@@ -1,7 +1,7 @@
 ---
 name: trend-research
 description: |
-  Research groundwork stage of the TIPS trend pipeline: reads agreed
+  Run the research groundwork stage of the TIPS trend pipeline. Reads agreed
   trend-scout candidates, optionally deep-researches 3–5 ACT-horizon trends,
   enriches every candidate with web-sourced quantitative evidence, and writes
   the research manifest `.metadata/trend-research-output.json` — the gate

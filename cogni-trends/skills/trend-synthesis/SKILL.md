@@ -1,10 +1,11 @@
 ---
 name: trend-synthesis
 description: |
-  Compose the canonical TIPS trend report from research artefacts produced by
-  `/trend-research`, organized around the four Smarter Service dimensions
+  Compose the canonical TIPS trend report from `/trend-research` artefacts,
+  organized around the four Smarter Service dimensions
   (Forces → Impact → Horizons → Foundations) with investment themes nested as
-  anchored theme-cases. Produces `tips-trend-report.md` plus
+  anchored theme-cases, closing on a "Capability Imperative" synthesis.
+  Produces `tips-trend-report.md` plus
   `tips-trend-report-claims.json`.
   Required pipeline: trend-scout → value-modeler → trend-research
   → trend-synthesis → verify-trend-report. Use when: (1) `/trend-research`

@@ -10,6 +10,12 @@ description: >-
   strategy with executive and legal personas."
 tools:
   - Read
+  - Write
+  - Edit
+  - Bash
+  - Task
+  - TodoWrite
+  - TodoRead
   - Skill
 ---
 

@@ -293,7 +293,7 @@ For each dimension in [externe-effekte, digitale-wertetreiber, neue-horizonte, d
 
 If any `section-{dimension}.md` is missing, log a WARNING (synthesis can still proceed via enriched-trends).
 
-**JSON-validity gate (issue #182 hardening).** The four `enriched-trends-{dimension}.json` files are consumed by both downstream skills — a single malformed file silently blocks both. After the existence check, run the parse-then-repair gate:
+**JSON-validity gate.** The four `enriched-trends-{dimension}.json` files are consumed by both downstream skills — a single malformed file silently blocks both. After the existence check, run the parse-then-repair gate:
 
 ```bash
 bash "${CLAUDE_PLUGIN_ROOT}/skills/trend-research/scripts/validate-enriched-trends.sh" "${PROJECT_PATH}"

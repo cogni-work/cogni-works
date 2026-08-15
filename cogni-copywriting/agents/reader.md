@@ -42,7 +42,7 @@ Invoke the reader skill using the Skill tool with args parameter.
 
 <example>
 <invoke name="Skill">
-  <parameter name="skill">cogni-copywriting:reader</parameter>
+  <parameter name="skill">cogni-copywriting:copy-reader</parameter>
   <parameter name="args">FILE_PATH={{FILE_PATH}} PERSONAS={{PERSONAS}} AUTO_IMPROVE={{AUTO_IMPROVE}}</parameter>
 </invoke>
 </example>

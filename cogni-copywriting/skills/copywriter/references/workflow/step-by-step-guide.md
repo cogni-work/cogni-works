@@ -373,7 +373,7 @@ Before proceeding, verify:
 If `review_mode: reader`:
 
 ```text
-Delegate to: cogni-copywriting:reader
+Delegate to: cogni-copywriting:copy-reader
 Args: FILE_PATH={{output_path}} PERSONAS={{stakeholders}} AUTO_IMPROVE=true
 ```
 

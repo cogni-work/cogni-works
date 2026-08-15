@@ -224,7 +224,7 @@ IF user asks about markdown syntax:
 
 ```
 IF review_mode = reader:
-  Delegate to cogni-copywriting:reader skill (handles its own reference loading)
+  Delegate to cogni-copywriting:copy-reader skill (handles its own reference loading)
 
 IF review_mode = automated OR review not explicitly skipped:
   LOAD: 10-stakeholder-review/{perspective}-review.md (for each selected stakeholder)

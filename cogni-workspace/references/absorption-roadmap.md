@@ -38,7 +38,6 @@ matching `<plugin>/skills/*/SKILL.md` against the `*-setup` / `*-resume` /
 | cogni-website | yes | yes | no | partial |
 | cogni-claims | no | no | no | none |
 | cogni-copywriting | no | no | no | none |
-| cogni-help | no | no | no | none |
 | cogni-narrative | no | no | no | none |
 | cogni-sales | no | no | no | none |
 | cogni-visual | no | no | no | none |
@@ -48,8 +47,8 @@ no setup or resume skill, and it is the catch-all target of the rule — the
 destination cannot also be a candidate.
 
 **On the plugin count.** The repo-root `.claude-plugin/marketplace.json` registers
-exactly 13 plugins, and the twelve rows above plus the exempt cogni-workspace
-account for all of them. A fourteenth top-level directory, `cogni-portfolio-evals/`,
+exactly 12 plugins, and the eleven rows above plus the exempt cogni-workspace
+account for all of them. A thirteenth top-level directory, `cogni-portfolio-evals/`,
 ships no `.claude-plugin/plugin.json` — it is an eval harness, not a plugin, and is
 correctly outside this table.
 

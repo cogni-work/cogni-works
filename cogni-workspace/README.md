@@ -219,7 +219,6 @@ cogni-workspace/
 |--------|----------|---------|
 | cogni-visual | No | manage-themes passes color variables to cogni-visual renderers (render-big-picture, render-big-block) |
 | cogni-website | No | Referenced in manage-workspace and workspace-status for website-related workspace configuration |
-| cogni-help | No | Referenced inline in workspace skills for issue filing and guided help |
 | cogni-portfolio | No | install-mcp references cogni-portfolio as a consumer of excalidraw MCP in the installation plan |
 | cogni-claims | No | workspace-status references cogni-claims as a provider plugin for the claude-in-chrome MCP server check |
 | cogni-trends | No | audit-region-sources and manage-markets read the trends region-authority overlay when auditing market coverage |

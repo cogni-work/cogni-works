@@ -32,14 +32,13 @@ vertical     Orchestration   cogni-consult
 
 ## Why these groups
 
-Substitutability is the point: a data-group plugin can be rebuilt without touching output plugins (they read entities; they don't depend on internal implementation), and output plugins can be added or replaced without touching data plugins. cogni-help and cogni-docs are cross-cutting utilities (help, documentation) that read from every plugin and are read by none.
+Substitutability is the point: a data-group plugin can be rebuilt without touching output plugins (they read entities; they don't depend on internal implementation), and output plugins can be added or replaced without touching data plugins. cogni-docs is a cross-cutting utility (documentation) that reads from every plugin and is read by none.
 
 The grouping combines with [[concept-data-isolation]] (plugins don't share writes) and [[concept-progressive-disclosure]] (each phase loads only its slice) to make the ecosystem horizontally extensible.
 
 ## Plugins outside the groups
 
-- **cogni-help** — utility, reads every plugin's skills/agents (read-only), is read by none.
-- **cogni-docs** — utility, generates documentation by reading every plugin's structure. Maintainer-side and not one of the 13 marketplace plugins; it ships separately.
+- **cogni-docs** — utility, generates documentation by reading every plugin's structure. Maintainer-side and not one of the 12 marketplace plugins; it ships separately.
 
 These are tools that consume the model rather than participate in it.
 

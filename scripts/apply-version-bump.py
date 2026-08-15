@@ -53,7 +53,7 @@ Usage:
     python3 scripts/apply-version-bump.py --changed-file changed-files.txt
 
     # testing — supply the changed paths directly
-    python3 scripts/apply-version-bump.py --changed cogni-help/README.md
+    python3 scripts/apply-version-bump.py --changed cogni-workspace/README.md
     python3 scripts/apply-version-bump.py --changed ... --dry-run
 
 Output: {"success": bool, "data": {"bumped": [...], "skipped": [...]}, "error": ""}

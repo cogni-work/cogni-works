@@ -17,7 +17,7 @@ When both Claude Desktop (Cowork) and Claude Code are installed, they register c
 | Plugin | Skills | Feature | Impact |
 |--------|--------|---------|--------|
 | cogni-claims | claims | cobrowse | Browser-based claim source co-browsing unavailable when Claude Code's native host is active — claim verification falls back to web fetch only |
-| cogni-help | cogni-issues | browser-based GitHub issue filing | Cannot file GitHub issues via browser automation — must use gh CLI or manual filing instead |
+| cogni-workspace | cogni-issues | browser-based GitHub issue filing | Cannot file GitHub issues via browser automation — must use gh CLI or manual filing instead |
 | cogni-visual | zone-reviewer | browser-based visual review | Browser-based zone review for rendered visuals may fail silently when tools are missing |
 | cogni-workspace | manage-themes | website theme extraction via browser | Live website theme extraction requires browser automation — falls back to manual theme specification |
 

@@ -14,7 +14,7 @@ Before you start, read [architecture/plugin-anatomy.md](../architecture/plugin-a
 - At least one existing plugin installed so you can see how skills activate in practice
 - A clear idea of what your plugin will do that no existing plugin already does
 
-Run `/cogni-help workflow` if you want a guided tour of the ecosystem before starting.
+Browse [docs/workflows/](../workflows/) for cross-plugin pipeline guides before starting.
 
 ### Design Decisions to Make First
 

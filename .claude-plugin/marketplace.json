@@ -5,7 +5,7 @@
     "email": "stephan@cogni-work.ai"
   },
   "metadata": {
-    "description": "Insight-wave is a 13-plugin ecosystem for Claude Code that turns consulting, research, portfolio, and communication workflows into AI-assisted, bilingual (EN/DE) pipelines — trend scouting, portfolio messaging, narrative transformation, visual deliverables, sales enablement, claim verification, knowledge management, wiki-first research, and end-to-end consulting orchestration.",
+    "description": "Insight-wave is a 12-plugin ecosystem for Claude Code that turns consulting, research, portfolio, and communication workflows into AI-assisted, bilingual (EN/DE) pipelines — trend scouting, portfolio messaging, narrative transformation, visual deliverables, sales enablement, claim verification, knowledge management, wiki-first research, and end-to-end consulting orchestration.",
     "version": "1.0.4"
   },
   "plugins": [
@@ -188,26 +188,6 @@
         "excalidraw",
         "web",
         "storyboard",
-        "agent"
-      ]
-    },
-    {
-      "name": "cogni-help",
-      "source": "./cogni-help",
-      "version": "0.0.18",
-      "maturity": "incubating",
-      "description": "Central help hub for the insight-wave ecosystem. Interactive courses (workflow-tour curriculum), plugin discovery, cross-plugin workflow guides, troubleshooting, quick-reference cheatsheets, and GitHub issue filing.",
-      "keywords": [
-        "help",
-        "guide",
-        "courses",
-        "training",
-        "workflow",
-        "troubleshoot",
-        "cheatsheet",
-        "issues",
-        "discovery",
-        "onboarding",
         "agent"
       ]
     },

@@ -1,6 +1,6 @@
 # insight-wave
 
-Open-source plugins for consulting, sales, and marketing on [Claude Code](https://claude.ai/code). 14 Apache-2.0 plugins that automate the research-heavy, methodology-driven work behind B2B deliverables — trend scouting, portfolio positioning, sales pitches, content creation, visual production, website generation, knowledge management, and source verification.
+Open-source plugins for consulting, sales, and marketing on [Claude Code](https://claude.ai/code). 12 Apache-2.0 plugins that automate the research-heavy, methodology-driven work behind B2B deliverables — trend scouting, portfolio positioning, sales pitches, content creation, visual production, website generation, knowledge management, and source verification.
 
 Each plugin implements an established framework (Corporate Visions, Double Diamond, TIPS, IS/DOES/MEANS) rather than general-purpose text generation. Outputs include inline citations, structured data models, and quality gates. Every deliverable follows a reproducible methodology you can inspect and override.
 
@@ -11,7 +11,7 @@ Each plugin implements an established framework (Corporate Visions, Double Diamo
 
 ## What the plugins do
 
-13 plugins organized around nine capability areas. Each area handles a distinct part of the consulting-to-delivery workflow; plugins within an area share data formats and can be used independently or together.
+12 plugins organized around nine capability areas. Each area handles a distinct part of the consulting-to-delivery workflow; plugins within an area share data formats and can be used independently or together.
 
 ### Knowledge Management
 
@@ -95,14 +95,6 @@ Each plugin implements an established framework (Corporate Visions, Double Diamo
 
 → [Plugin guide](docs/plugin-guide/cogni-claims.md)
 
-#### Help & Learning
-
-[cogni-help](cogni-help/README.md) provides a 7-tour interactive curriculum, 7 cross-plugin workflow templates, and troubleshooting diagnostics. Routes tasks to the right plugin, chains multi-plugin workflows, and generates cheatsheets for any plugin. 7 skills and 1 agent.
-
-> "Which plugin should I use to verify claims in my research report?"
-
-→ [Plugin guide](docs/plugin-guide/cogni-help.md)
-
 Beyond the open-source plugins, cogni-works offers consulting services — plugin engineering for domain-specific workflows, managed deployment, and a partner certification program — through [cogni-work.ai](https://cogni-work.ai). Whether you run a consulting practice, a sales organization, or a marketing team, the site shows how these capabilities translate into managed workflows and onboarding for your team.
 
 ## Who this is for
@@ -169,7 +161,7 @@ Some plugins extend their capabilities through external [MCP servers](https://do
 | MCP Server | Used by | What it enables | Install |
 |------------|---------|-----------------|---------|
 | excalidraw | [cogni-visual](cogni-visual/README.md), [cogni-portfolio](cogni-portfolio/README.md) | Diagram rendering (infographics, concept diagrams, solution architecture, report enrichment) | Auto-installed by `manage-workspace` from [yctimlin/mcp_excalidraw](https://github.com/yctimlin/mcp_excalidraw) (git clone + build). Includes React canvas on localhost:3000. |
-| claude-in-chrome | [cogni-claims](cogni-claims/README.md), [cogni-help](cogni-help/README.md), [cogni-website](cogni-website/README.md), [cogni-workspace](cogni-workspace/README.md) | Browser automation — claim verification, issue filing, website preview, theme extraction | Manual — install [Chrome extension](https://code.claude.com/docs/en/chrome) |
+| claude-in-chrome | [cogni-claims](cogni-claims/README.md), [cogni-website](cogni-website/README.md), [cogni-workspace](cogni-workspace/README.md) | Browser automation — claim verification, website preview, theme extraction | Manual — install [Chrome extension](https://code.claude.com/docs/en/chrome) |
 | pencil | [cogni-visual](cogni-visual/README.md), [cogni-website](cogni-website/README.md) | Web narrative, storyboard, and poster rendering; homepage hero generation | Manual — open [Pencil](https://docs.pencil.dev/getting-started/installation) desktop app |
 
 Plugins that don't use MCP servers work without them — only install what you need.
@@ -189,18 +181,17 @@ The workplace combines Claude Code with [Obsidian](https://obsidian.md/) for per
 ```
 insight-wave/
 ├── .claude-plugin/
-│   └── marketplace.json                    # Marketplace manifest (13 plugins)
+│   └── marketplace.json                    # Marketplace manifest (12 plugins)
 ├── docs/                                   # User documentation
 │   ├── getting-started.md                  # Forwarder → workflows/install-to-infographic.md
 │   ├── ecosystem-overview.md               # Plugin landscape and data flow
-│   ├── plugin-guide/                       # Per-plugin deep dives (13 guides)
+│   ├── plugin-guide/                       # Per-plugin deep dives (12 guides)
 │   ├── workflows/                          # Cross-plugin pipeline guides (8 workflows)
 │   ├── architecture/                       # Design philosophy, plugin anatomy, ER diagram
 │   └── contributing/                       # Plugin development guide
 ├── cogni-claims/                           # Claim verification
 ├── cogni-consult/                          # Action-fields-WBS consulting orchestrator
 ├── cogni-copywriting/                      # Copywriting toolkit
-├── cogni-help/                             # Help hub: courses, guide, workflows, troubleshoot
 ├── cogni-knowledge/                        # Wiki-first research orchestrator
 ├── cogni-marketing/                        # B2B marketing content engine
 ├── cogni-narrative/                        # Story arc narrative transformation
@@ -238,10 +229,9 @@ Plugins follow the [Claude Code plugin standard](https://code.claude.com/docs/en
 | [cogni-visual](cogni-visual/README.md) | Visual | 7 | 19 | Slide decks, infographics, web narratives, poster storyboards, and report enrichment from narratives |
 | [cogni-website](cogni-website/README.md) | Website | 6 | 3 | Multi-page customer websites from portfolio, marketing, and research content with shared navigation and theming |
 | [cogni-claims](cogni-claims/README.md) | Quality | 2 | 2 | Source verification — catches misquotations, unsupported conclusions, and stale data in sourced claims |
-| [cogni-help](cogni-help/README.md) | Platform | 7 | 1 | 7-tour curriculum, plugin discovery, workflow templates, troubleshooting, and cheatsheets |
-| [cogni-workspace](cogni-workspace/README.md) | Platform | 9 | 0 | Shared foundation — env vars, MCP installation, theme management, plugin discovery, workspace health, Obsidian integration, bundled wiki |
+| [cogni-workspace](cogni-workspace/README.md) | Platform | 11 | 0 | Shared foundation — env vars, MCP installation, theme management, plugin discovery, workspace health, Obsidian integration, bundled wiki |
 
-**114 skills, 89 agents** across the 14 active plugins.
+**105 skills, 88 agents** across the 12 active plugins.
 
 See [Cross-Plugin Data Flow](docs/er-diagram.md) for how data flows between plugins, or browse the [full documentation](docs/ecosystem-overview.md).
 

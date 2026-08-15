@@ -67,7 +67,7 @@ This is the content catalog for **insight-wave**. Every wiki page is listed here
 
 ### Skills
 
-One page per skill across all 14 plugins. Grouped by plugin, alphabetical within each.
+One page per skill across all 12 plugins. Grouped by plugin, alphabetical within each.
 
 #### cogni-claims
 
@@ -166,7 +166,7 @@ One page per skill across all 14 plugins. Grouped by plugin, alphabetical within
 
 ### Agents
 
-One page per agent role across all 14 plugins. Grouped by plugin, alphabetical within each.
+One page per agent role across all 12 plugins. Grouped by plugin, alphabetical within each.
 
 #### cogni-claims
 

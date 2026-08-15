@@ -1,6 +1,6 @@
 ---
 name: knowledge-finalize
-description: "Phase 7 of the inverted pipeline — deposits the verified draft as a wiki synthesis page, closing the compounding loop. Reads the latest verified draft plus its verify and citation manifests, atomically writes the synthesis page into the bound wiki, and updates the surrounding index, log, and binding state behind a fail-soft conformance and observability pass. The deposited synthesis becomes visible to future knowledge-compose runs as cross-source framing. Use this skill whenever the user says 'finalize the draft', 'deposit the synthesis', 'phase 7 of the knowledge pipeline', 'knowledge finalize', or 'land the verified draft'."
+description: "Phase 7 of the inverted pipeline — deposits the verified draft as a wiki synthesis page, closing the compounding loop. Reads the latest verified draft plus its verify and citation manifests, refuses self-citing loops, atomically writes the synthesis page into the bound wiki, updates the surrounding index, log, and binding state, then runs a fail-soft conformance gate plus advisory contradiction and structural-quality passes. The deposited synthesis becomes visible to future knowledge-compose runs as cross-source framing. Use this skill whenever the user says 'finalize the draft', 'deposit the synthesis', 'phase 7 of the knowledge pipeline', 'knowledge finalize', or 'land the verified draft'."
 allowed-tools: Read, Write, Bash, Task, AskUserQuestion
 ---
 

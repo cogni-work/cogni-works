@@ -5,14 +5,12 @@ description: |
   cobrowse claims. Use this skill whenever the user mentions claims, fact-checking, source
   verification, checking whether statements match their cited sources, reviewing deviations, or
   anything related to tracking the accuracy of sourced statements. Also use it when another plugin
-  submits claims for verification (e.g., after a research or portfolio workflow produces sourced
-  assertions). Even if the user doesn't say "claims" explicitly — if they're asking about verifying
-  facts against sources, checking citations, finding outdated or mismatched data in cited references,
-  reviewing what's been flagged, checking for stale sources, outdated data in references, or asking
+  submits claims for verification. Even if the user doesn't say
+  "claims" explicitly — if they're asking about verifying facts against sources, checking citations,
+  spotting stale or outdated data in cited references, reviewing what's been flagged, or asking
   "which claims need attention" or "what did verification find", this skill handles it. Also trigger
-  when the user wants to cobrowse unreachable sources together, recover unavailable claims
-  interactively, open sources in their browser to help check them, or says things like "let's look
-  at those sources together", "help me check these links", or "browse the unavailable sources".
+  when the user wants to cobrowse unreachable sources together, or says things like
+  "let's look at those sources together", "help me check these links", or "browse the unavailable sources".
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Agent, AskUserQuestion, mcp__claude-in-chrome__navigate, mcp__claude-in-chrome__get_page_text, mcp__claude-in-chrome__read_page, mcp__claude-in-chrome__find, mcp__claude-in-chrome__tabs_create_mcp, mcp__claude-in-chrome__tabs_context_mcp
 ---
 

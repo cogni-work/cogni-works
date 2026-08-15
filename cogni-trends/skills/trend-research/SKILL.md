@@ -2,13 +2,10 @@
 name: trend-research
 description: |
   Run the research groundwork stage of the TIPS trend pipeline. Reads agreed
-  trend-scout candidates, optionally performs recursive deep research on 3–5
-  high-value ACT-horizon trends, then dispatches 4 parallel
-  `cogni-trends:trend-report-writer` agents to enrich every candidate with
-  web-sourced quantitative evidence and extract verifiable claims. Produces
-  per-dimension enriched-trends + claims artefacts and a single research
-  manifest (`.metadata/trend-research-output.json`) that downstream skills
-  (`/trend-synthesis`, `/trend-booklet`) consume as their gate. Required pipeline:
+  trend-scout candidates, optionally deep-researches 3–5 ACT-horizon trends,
+  enriches every candidate with web-sourced quantitative evidence, and writes
+  the research manifest `.metadata/trend-research-output.json` — the gate
+  downstream skills consume. Required pipeline:
   trend-scout → value-modeler → trend-research → (trend-synthesis and/or
   trend-booklet) → verify-trend-report. Use when: (1) trend-scout and
   value-modeler have completed, (2) the user wants to refresh evidence without
@@ -296,7 +293,7 @@ For each dimension in [externe-effekte, digitale-wertetreiber, neue-horizonte, d
 
 If any `section-{dimension}.md` is missing, log a WARNING (synthesis can still proceed via enriched-trends).
 
-**JSON-validity gate (issue #182 hardening).** The four `enriched-trends-{dimension}.json` files are consumed by both downstream skills — a single malformed file silently blocks both. After the existence check, run the parse-then-repair gate:
+**JSON-validity gate.** The four `enriched-trends-{dimension}.json` files are consumed by both downstream skills — a single malformed file silently blocks both. After the existence check, run the parse-then-repair gate:
 
 ```bash
 bash "${CLAUDE_PLUGIN_ROOT}/skills/trend-research/scripts/validate-enriched-trends.sh" "${PROJECT_PATH}"

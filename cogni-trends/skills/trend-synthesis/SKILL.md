@@ -1,17 +1,13 @@
 ---
 name: trend-synthesis
 description: |
-  Compose the canonical TIPS trend report from research artefacts produced by
-  `/trend-research`. The report is always organized around the four Smarter
-  Service dimensions (Forces → Impact → Horizons → Foundations) as H2 sections,
-  with investment themes nested as anchored H3 cases written in a slim 3-beat
-  structure (Stake / Move / Cost-of-Inaction). Closes on a "Capability
-  Imperative" synthesis. The four dimensions form a single CxO story arc — see
-  the Storytelling Spine — and the writer agents thread protagonist-shaped
-  micro-stories under the structural beats. Produces `tips-trend-report.md`
-  plus `tips-trend-report-claims.json` — the same canonical filenames the
-  legacy `trend-report` skill produced, so `/verify-trend-report` keeps working
-  unchanged. Required pipeline: trend-scout → value-modeler → trend-research
+  Compose the canonical TIPS trend report from `/trend-research` artefacts,
+  organized around the four Smarter Service dimensions
+  (Forces → Impact → Horizons → Foundations) with investment themes nested as
+  anchored theme-cases, closing on a "Capability Imperative" synthesis.
+  Produces `tips-trend-report.md` plus
+  `tips-trend-report-claims.json`.
+  Required pipeline: trend-scout → value-modeler → trend-research
   → trend-synthesis → verify-trend-report. Use when: (1) `/trend-research`
   has completed and written `.metadata/trend-research-output.json`, (2) the
   user wants a written trend report, (3) the user mentions "trend report",

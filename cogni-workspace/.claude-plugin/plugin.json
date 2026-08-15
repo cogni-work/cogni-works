@@ -1,7 +1,7 @@
 {
   "name": "cogni-workspace",
   "version": "0.6.56",
-  "description": "Foundation-layer plugin for insight-wave marketplace plugins. Manages shared infrastructure (env vars, settings), MCP server installation and Desktop config patching, theme management, theme picker, plugin discovery, workspace health, an interactive workspace-configuration dashboard, Obsidian vault integration, and a bundled vendor-curated insight-wave reference wiki queryable via the ask skill.",
+  "description": "The horizontal layer of the insight-wave marketplace — it owns the shared workspace state the vertical business plugins consume. Manages shared infrastructure (env vars, settings), MCP server installation and Desktop config patching, theme management, theme picker, plugin discovery, workspace health, an interactive workspace-configuration dashboard, Obsidian vault integration, and a bundled vendor-curated insight-wave reference wiki queryable via the ask skill.",
   "author": {
     "name": "Stephan de Haas",
     "email": "stephan@cogni-work.ai"

@@ -82,19 +82,21 @@
 #     editing it would also break the per-page parity assertion below
 #   - cogni-visual/libraries/ — "Foundation Layer" there is an ASCII-art fill
 #     label in a diagram legend, unrelated to the claim
-#   - cogni-workspace/.claude-plugin/plugin.json and .claude-plugin/marketplace.json
-#     — these two say "Foundation-layer plugin". They are the retired claim's
-#     upstream source and DO need fixing, but the reconciliation's scope boundary
-#     confines its diff to markdown surfaces and tests/*.sh, so a manifest edit
-#     belongs to its own change. Excluded so the guard stays honest about what it
-#     covers rather than silently green; remove both entries when the manifests
-#     are corrected. Named as two exact paths, never as a `.claude-plugin/`
-#     fragment — that fragment would exempt all 15 files under every plugin's
-#     manifest directory, so any OTHER plugin could reintroduce the claim
-#     invisibly, and the gap would be far wider than the two files documented here.
 #   - .git/ and .claude/worktrees/ — nested checkouts of this same repo that
 #     local tooling leaves in the tree. Untracked, so `grep_hits` already skips
 #     them on the real repo; these entries only cover the filesystem fallback.
+#
+# No manifest is exempt. cogni-workspace's own plugin.json and the root
+# marketplace.json were the retired claim's last upstream source and carried a
+# temporary exemption while the reconciliation's scope boundary kept manifest
+# edits out of its diff; both descriptions now assert the horizontal-layer scope
+# claim, so the exemption is gone and the scan covers them like any other file.
+#
+# Never re-add a bare `.claude-plugin/` fragment in their place. `is_excluded`
+# matches by SUBSTRING, so that one fragment would exempt all 15 files under
+# every plugin's manifest directory — any OTHER plugin could then reintroduce
+# the claim invisibly, a gap far wider than the two files it would read as
+# covering. Case L9 is what keeps that revert red.
 #
 # Parity is per-page, never tree-wide, and that is load-bearing. The two trees
 # legitimately differ (the root tree carries lint-2026-04-20.md and the bundled
@@ -149,8 +151,6 @@ cogni-workspace/references/absorption-roadmap.md
 wiki/wiki/log.md
 wiki/wiki/pages/lint-2026-04-20.md
 cogni-visual/libraries/
-cogni-workspace/.claude-plugin/plugin.json
-.claude-plugin/marketplace.json
 .git/
 .claude/worktrees/'
 
@@ -464,31 +464,37 @@ else
 fi
 
 # ---------------------------------------------------------------------------
-# L9 — the manifest exemption is scoped to two exact files, not to every
-# `.claude-plugin/` directory.
+# L9 — no manifest is exempt: every `.claude-plugin` manifest is scanned.
 #
-# Same lesson as L8: without a case, the narrowing is asserted only in a comment.
-# L1 is green whether EXCLUDED names the two paths or the old `.claude-plugin/`
-# fragment, because the two exempt manifests carry the literal either way and no
-# other manifest carries it today — so a revert to the fragment would silently
-# re-open a 15-file exemption with every case still passing. This case makes that
-# revert red by planting the literal in a DIFFERENT plugin's manifest, which must
-# be caught, while cogni-workspace's own stays exempt.
+# Same lesson as L8: without a case, the rule is asserted only in a comment.
+# L1 cannot carry this one. Once the manifests were corrected, no manifest in
+# the real repo holds a forbidden literal, so L1 is green whether EXCLUDED is
+# empty of manifest entries or names them again — a re-added exemption, or a
+# bare `.claude-plugin/` fragment re-opening all 15 files under every plugin's
+# manifest directory, would slip in with every case still passing.
+#
+# This case makes both reverts red by planting the literal in three manifests
+# that must ALL be caught: another plugin's, cogni-workspace's own (formerly
+# exempt), and the root marketplace.json (which no case exercised before).
 # ---------------------------------------------------------------------------
 l9_ok=1
 X="$TMPROOT/l9"
-mkdir -p "$X/cogni-workspace/.claude-plugin" "$X/cogni-other/.claude-plugin"
+mkdir -p "$X/cogni-workspace/.claude-plugin" "$X/cogni-other/.claude-plugin" \
+  "$X/.claude-plugin"
 printf '{"description": "Foundation-layer plugin for insight-wave."}\n' \
   > "$X/cogni-workspace/.claude-plugin/plugin.json"
 printf '{"description": "Foundation-layer plugin for insight-wave."}\n' \
   > "$X/cogni-other/.claude-plugin/plugin.json"
+printf '{"description": "Foundation-layer plugin for insight-wave."}\n' \
+  > "$X/.claude-plugin/marketplace.json"
 run_scan "$X" "manifest-scope"
 assert_rc 1 && assert_out_has "cogni-other/.claude-plugin/plugin.json" || l9_ok=0
-assert_out_lacks "cogni-workspace/.claude-plugin/plugin.json" || l9_ok=0
+assert_out_has "cogni-workspace/.claude-plugin/plugin.json" || l9_ok=0
+assert_out_has ".claude-plugin/marketplace.json" || l9_ok=0
 if [ "$l9_ok" -eq 1 ]; then
-  pass "L9 the manifest exemption covers two exact files, not every .claude-plugin dir"
+  pass "L9 no manifest is exempt — every .claude-plugin manifest is scanned"
 else
-  fail "L9 the manifest exemption covers two exact files, not every .claude-plugin dir"
+  fail "L9 no manifest is exempt — every .claude-plugin manifest is scanned"
 fi
 
 # ---------------------------------------------------------------------------

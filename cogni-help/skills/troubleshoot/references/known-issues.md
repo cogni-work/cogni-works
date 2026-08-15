@@ -4,17 +4,17 @@ Maintained list of diagnosed problems and their fixes. Add new entries as patter
 
 ---
 
-## Stale progress file after cogni-teacher rename
+## Leftover course-progress file
 
-**Symptom**: Course progress not loading, `/courses` shows all courses as not-started
-despite having completed courses.
+**Symptom**: `.claude/cogni-teacher.local.md` or `.claude/cogni-help.local.md` is present
+but nothing reads it.
 
-**Cause**: Progress file still named `.claude/cogni-teacher.local.md` after the plugin
-was renamed to cogni-help.
+**Cause**: Both files held progress for the interactive course system, which has been
+retired. No surviving skill reads them.
 
-**Fix**: Rename the file:
+**Fix**: Delete them. There is nothing to migrate to.
 ```bash
-mv .claude/cogni-teacher.local.md .claude/cogni-help.local.md
+rm -f .claude/cogni-teacher.local.md .claude/cogni-help.local.md
 ```
 
 ---
@@ -63,7 +63,7 @@ diagnose what's missing.
 
 ## PPTX generation fails with "pptxgenjs not found"
 
-**Symptom**: `/course-deck` or `/render-slides` fails.
+**Symptom**: `/render-slides` fails.
 
 **Cause**: PptxGenJS not installed globally.
 

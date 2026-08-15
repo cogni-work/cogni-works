@@ -94,13 +94,11 @@ Read each SKILL.md and verify the frontmatter parses correctly.
 Check `.claude/*.local.md` files for valid YAML frontmatter structure.
 Common issues:
 - Malformed YAML (missing closing `---`, bad indentation)
-- Stale course IDs from renamed plugins
+- Stale project or entity IDs from renamed plugins
 - Corrupted status values
 
-For cogni-help specifically:
-```bash
-bash "${CLAUDE_PLUGIN_ROOT}/scripts/course-status.sh" .
-```
+`.claude/cogni-help.local.md` is inert — it held progress for the retired course
+system and nothing reads it. Treat it as safe to delete, never as a fault.
 
 ### 4. Cross-Plugin Dependencies
 
@@ -112,7 +110,6 @@ Many plugins require others to function. Check that dependencies are installed:
 | cogni-sales | cogni-portfolio, cogni-narrative |
 | cogni-consult | cogni-knowledge (required research spine) |
 | cogni-consulting (archived) | — (archived, no new dependencies) |
-| cogni-help:teach | all plugins (for exercises) |
 
 Verify by checking if the required plugin directories exist in the marketplace.
 
@@ -123,14 +120,15 @@ cogni-consulting was removed (its source remains in git history); route new cons
 After plugin renames, orphaned files may linger:
 
 ```bash
-# Check for old cogni-teacher progress file
-ls .claude/cogni-teacher.local.md 2>/dev/null
-
 # Check for old cogni-diamond state
 ls **/diamond-project.json 2>/dev/null
+
+# Check for inert course-progress files (the course system is retired)
+ls .claude/cogni-teacher.local.md .claude/cogni-help.local.md 2>/dev/null
 ```
 
-If found, suggest renaming to the current filename.
+For a renamed plugin's state file, suggest renaming to the current filename. For
+the course-progress files, suggest deletion — nothing reads them any more.
 
 ### 6. Common Misconfigurations
 
@@ -138,7 +136,7 @@ If found, suggest renaming to the current filename.
   `.workspace-env.sh` exists and is sourced.
 - **GitHub not logged in**: Required for cogni-issues. The skill uses browser
   automation — navigate to `https://github.com` and check login state.
-- **Missing node/npm**: Required for PPTX generation (cogni-visual, course-deck).
+- **Missing node/npm**: Required for PPTX generation (cogni-visual).
 
 ## Full Scan Mode
 

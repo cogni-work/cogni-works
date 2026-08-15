@@ -1,7 +1,7 @@
 {
   "name": "cogni-help",
-  "version": "0.0.17",
-  "description": "Central help hub for the insight-wave ecosystem. Interactive courses (workflow-tour curriculum), plugin discovery, cross-plugin workflow guides, troubleshooting, quick-reference cheatsheets, and GitHub issue filing.",
+  "version": "0.0.18",
+  "description": "Central help hub for the insight-wave ecosystem. Plugin discovery, cross-plugin workflow guides, troubleshooting, quick-reference cheatsheets, and GitHub issue filing.",
   "author": {
     "name": "Stephan de Haas",
     "email": "stephan@cogni-work.ai"
@@ -10,20 +10,13 @@
   "keywords": [
     "help",
     "guide",
-    "teaching",
-    "courses",
-    "training",
     "insight-wave",
     "cowork",
-    "curriculum",
-    "onboarding",
-    "learning",
     "workflow",
     "troubleshoot",
     "cheatsheet",
     "discovery",
     "issues",
-    "diagnostics",
-    "agent"
+    "diagnostics"
   ]
 }

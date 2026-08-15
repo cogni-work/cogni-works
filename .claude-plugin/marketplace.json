@@ -120,7 +120,7 @@
     {
       "name": "cogni-workspace",
       "source": "./cogni-workspace",
-      "version": "0.6.53",
+      "version": "0.6.55",
       "maturity": "preview",
       "description": "Foundation-layer plugin for insight-wave marketplace plugins. Manages shared infrastructure (env vars, settings), MCP server installation and Desktop config patching, theme management, theme picker, plugin discovery, workspace health, an interactive workspace-configuration dashboard, Obsidian vault integration, and a bundled vendor-curated insight-wave reference wiki queryable via the ask skill.",
       "keywords": [
@@ -194,7 +194,7 @@
     {
       "name": "cogni-help",
       "source": "./cogni-help",
-      "version": "0.0.17",
+      "version": "0.0.18",
       "maturity": "incubating",
       "description": "Central help hub for the insight-wave ecosystem. Interactive courses (workflow-tour curriculum), plugin discovery, cross-plugin workflow guides, troubleshooting, quick-reference cheatsheets, and GitHub issue filing.",
       "keywords": [

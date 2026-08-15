@@ -1,11 +1,11 @@
 ---
 name: cogni-issues
 description: |
-  File and track GitHub issues (bugs, features, change requests, questions) against
-  insight-wave plugins via the GitHub CLI (`gh`). Consults the user, resolves the
-  plugin repository, drafts from templates, creates atomically with labels, and
-  tracks locally.
-  Use whenever the user wants to report a bug, request a feature, file a change
+  This skill files and tracks GitHub issues (bugs, features, change requests,
+  questions) against insight-wave plugins via the GitHub CLI (`gh`). It consults
+  the user, resolves the plugin repository, drafts from templates, creates
+  atomically with labels, and tracks locally.
+  It should be used whenever the user wants to report a bug, request a feature, file a change
   request, ask a plugin question, list filed issues, or check issue status. Also
   trigger on "this plugin is broken", "open an issue", "set up GitHub issues",
   "das Plugin funktioniert nicht", "Fehler in {plugin}", "ich kann kein Issue
@@ -51,8 +51,8 @@ Exceptions where English stays:
 ## Environment
 
 The skill scripts live at `${CLAUDE_PLUGIN_ROOT}/skills/cogni-issues/scripts/`.
-`CLAUDE_PLUGIN_ROOT` points to the cogni-workspace plugin directory. If you can't
-find the scripts, tell the user — don't guess paths.
+`CLAUDE_PLUGIN_ROOT` points to the cogni-workspace plugin directory. If the scripts
+cannot be found, report the missing path to the user — never guess paths.
 
 ## gh CLI commands
 
@@ -189,8 +189,8 @@ bash "${CLAUDE_PLUGIN_ROOT}/skills/cogni-issues/scripts/gh-issues-helper.sh" \
 ```
 
 The output is a JSON array of `{number, title, labels, state, url, ...}` objects.
-If you find a likely match, show it to the user and ask: "This looks similar — is it
-the same problem, or something different?" If it's the same, link them to the existing
+When a likely match appears, show it to the user and ask: "This looks similar — is it
+the same problem, or something different?" For the same problem, link to the existing
 issue instead of creating a duplicate.
 
 ### 3. Determine the issue type
@@ -204,7 +204,7 @@ Infer the type from context (match intent across languages, not specific keyword
 | `change-request` | change existing behavior, modify, adjust, different behavior wanted |
 | `question` | how to, why does, confused, wondering |
 
-If genuinely ambiguous, ask. Otherwise trust your judgment.
+If genuinely ambiguous, ask. Otherwise proceed with the inferred type.
 
 **When the complaint involves config changes or unexpected output**, do a quick sanity
 check before classifying: scan the plugin's data model or config schema to verify the
@@ -217,15 +217,15 @@ everyone from filing a misleading issue.
 
 ### 4. Consult the user
 
-Help the user articulate what they need. Many users know something is wrong but haven't
-organized their thoughts. Your job is to be a helpful interviewer, not a form.
+Help the user articulate the need. Many users know something is wrong but have not
+organized their thoughts. Act as a helpful interviewer, not a form.
 
 **First, mine the conversation for existing evidence.** Check recent tool outputs for
-error messages, stack traces, or failed commands. Look at what the user was working on —
-the conversation often contains the exact workflow that triggered the problem. If you see
-a traceback from earlier, use it — don't ask "did you see an error?"
+error messages, stack traces, or failed commands. Inspect what the user was working on —
+the conversation often contains the exact workflow that triggered the problem. Reuse any
+earlier traceback instead of asking whether an error appeared.
 
-**If you did a premise check (above) and found a mismatch**, incorporate that finding
+**When a premise check (above) finds a mismatch**, incorporate that finding
 into your consultation. Instead of generic "what happened?" questions, tell the user
 what you found and ask targeted questions to resolve the gap — e.g., "I checked the
 portfolio config schema and it doesn't have a logo field. Where exactly are you seeing
@@ -245,7 +245,7 @@ enough detail. Acknowledge it: "You've given me a clear picture — let me draft
 
 Read the template from `references/issue-templates.md` for the determined type.
 
-Fill in from conversation + resolver output. Omit sections you can't fill meaningfully —
+Fill in from conversation + resolver output. Omit sections that cannot be filled meaningfully —
 shorter with real content beats complete with placeholders.
 
 **Auto-detect environment:**
@@ -268,7 +268,7 @@ uname -s && uname -r && node -v 2>/dev/null
 The pattern: replace subjective impressions with observable facts, measurable quantities,
 or specific error details.
 
-**Add a root cause hypothesis when you can.** If the error or context suggests a likely
+**Add a root cause hypothesis when evidence supports one.** If the error or context suggests a likely
 cause, include it in "Additional context" — e.g., "The TypeError on `narrative_arc`
 suggests a property was renamed or removed in the latest update, possibly a breaking
 change in the data model." This helps maintainers triage faster. Only do this when the

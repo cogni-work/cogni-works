@@ -1,13 +1,13 @@
 ---
 name: troubleshoot
 description: >-
-  Diagnose and fix common issues with insight-wave plugins. Use this skill whenever
-  the user reports something broken, a skill not working, an error from a plugin,
-  needs debugging help, or says things like "something is wrong", "plugin error",
-  "skill not responding", "it doesn't work", "fix my setup", "diagnose this issue",
-  "why isn't X working", or mentions any plugin malfunction. Also trigger when the
-  user encounters unclear errors during plugin use — even if they don't explicitly
-  ask for troubleshooting.
+  This skill diagnoses and fixes common issues with insight-wave plugins. It should
+  be used whenever the user reports something broken, a skill not working, an error
+  from a plugin, needs debugging help, or says things like "something is wrong",
+  "plugin error", "skill not responding", "it doesn't work", "fix my setup",
+  "diagnose this issue", "why isn't X working", or mentions any plugin malfunction.
+  It also triggers when the user encounters unclear errors during plugin use — even
+  without an explicit troubleshooting request.
 allowed-tools: Read, Bash, Glob, Grep
 ---
 
@@ -94,8 +94,11 @@ Read each SKILL.md and verify the frontmatter parses correctly.
 Check `.claude/*.local.md` files for valid YAML frontmatter structure.
 Common issues:
 - Malformed YAML (missing closing `---`, bad indentation)
-- Stale course IDs from renamed plugins
+- Stale project or entity IDs from renamed plugins
 - Corrupted status values
+
+`.claude/cogni-help.local.md` is inert — it held progress for the retired course
+system and nothing reads it. Treat it as safe to delete, never as a fault.
 
 ### 4. Cross-Plugin Dependencies
 
@@ -117,14 +120,15 @@ cogni-consulting was removed (its source remains in git history); route new cons
 After plugin renames, orphaned files may linger:
 
 ```bash
-# Check for old cogni-teacher progress file
-ls .claude/cogni-teacher.local.md 2>/dev/null
-
 # Check for old cogni-diamond state
 ls **/diamond-project.json 2>/dev/null
+
+# Check for inert course-progress files (the course system is retired)
+ls .claude/cogni-teacher.local.md .claude/cogni-help.local.md 2>/dev/null
 ```
 
-If found, suggest renaming to the current filename.
+For a renamed plugin's state file, suggest renaming to the current filename. For
+the course-progress files, suggest deletion — nothing reads them any more.
 
 ### 6. Common Misconfigurations
 
@@ -132,7 +136,7 @@ If found, suggest renaming to the current filename.
   `.workspace-env.sh` exists and is sourced.
 - **GitHub not logged in**: Required for cogni-issues. The skill uses browser
   automation — navigate to `https://github.com` and check login state.
-- **Missing node/npm**: Required for PPTX generation (cogni-visual, course-deck).
+- **Missing node/npm**: Required for PPTX generation (cogni-visual).
 
 ## Full Scan Mode
 

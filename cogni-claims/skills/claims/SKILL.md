@@ -4,7 +4,8 @@ description: |
   Manage claim verification lifecycle — submit, verify, review dashboard, inspect, resolve, and
   cobrowse claims. Use this skill whenever the user mentions claims, fact-checking, source
   verification, checking whether statements match their cited sources, reviewing deviations, or
-  anything related to tracking the accuracy of sourced statements. Even if the user doesn't say
+  anything related to tracking the accuracy of sourced statements. Also use it when another plugin
+  submits claims for verification. Even if the user doesn't say
   "claims" explicitly — if they're asking about verifying facts against sources, checking citations,
   spotting stale or outdated data in cited references, reviewing what's been flagged, or asking
   "which claims need attention" or "what did verification find", this skill handles it. Also trigger

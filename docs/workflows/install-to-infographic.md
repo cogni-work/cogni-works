@@ -50,7 +50,6 @@ Install the full insight-wave plugin set — any workflow you pick from Step 5 c
 /plugin install cogni-trends@insight-wave
 /plugin install cogni-portfolio@insight-wave
 /plugin install cogni-visual@insight-wave
-/plugin install cogni-help@insight-wave
 /plugin install cogni-marketing@insight-wave
 /plugin install cogni-knowledge@insight-wave
 /plugin install cogni-sales@insight-wave

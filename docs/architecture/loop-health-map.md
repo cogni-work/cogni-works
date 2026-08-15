@@ -19,8 +19,8 @@ rubric: it is what makes a flagged finding credible.
   this" section below restates the five moves, the anti-pattern map, and the
   severity policy — this map is self-contained and re-sweepable without
   cogni-service installed.
-- **Scope:** all 13 plugins in this repo's marketplace — cogni-claims,
-  cogni-consult, cogni-copywriting, cogni-help, cogni-knowledge,
+- **Scope:** all 12 plugins in this repo's marketplace — cogni-claims,
+  cogni-consult, cogni-copywriting, cogni-knowledge,
   cogni-marketing, cogni-narrative, cogni-portfolio, cogni-sales, cogni-trends,
   cogni-visual, cogni-website, cogni-workspace.
 - **Nature:** read-only. This map is a data artifact; it changes no loop and
@@ -92,10 +92,9 @@ hands-off.
 | — | portfolio-resume orienter | `cogni-portfolio/skills/portfolio-resume/SKILL.md` | — | — *(not a loop — excluded)* | single-pass dashboard + recommendation |
 | — | trends-resume orienter | `cogni-trends/skills/trends-resume/SKILL.md` | — | — *(not a loop — excluded)* | single-pass pipeline-position detection + routing |
 | — | website-resume orienter | `cogni-website/skills/website-resume/SKILL.md` | — | — *(not a loop — excluded)* | single-pass state detection + routing to the next skill |
-| — | cogni-help (all skills) | `cogni-help/skills/` | — | — *(assessed empty — no loop surfaces)* | grep over `skills/` for iteration caps / revise-loop / auto-rewrite / re-assess signals returned zero hits across 7 skills |
 | — | cogni-workspace (all skills) | `cogni-workspace/skills/` | — | — *(assessed empty — no loop surfaces)* | grep over `skills/` for iteration caps / revise-loop / auto-rewrite / re-assess signals returned zero hits across 9 skills |
 
-**Totals:** 17 loops assessed (14 flows excluded as non-loops; 2 plugins
+**Totals:** 17 loops assessed (14 flows excluded as non-loops; 1 plugin
 assessed-empty). **14 clean passes.** **3 loops flagged, 3 findings: 1 `major`
 (copy-reader, nodding), 2 advisory `minor` (consult-design-thinking,
 nodding-adjacent; claims cobrowse recovery, nodding-adjacent).** Zero

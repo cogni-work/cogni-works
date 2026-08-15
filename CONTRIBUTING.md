@@ -15,7 +15,6 @@ Core plugins are maintained by insight-wave and licensed under Apache-2.0:
 - cogni-consulting (archived — security patches only)
 - cogni-portfolio
 - cogni-visual
-- cogni-help
 - cogni-marketing
 - cogni-sales
 
@@ -81,7 +80,7 @@ python3 scripts/check-breadcrumbs.py --update-baseline
 
 **Do not bump a plugin version in your branch.** Every plugin's version lives in two places — `<plugin>/.claude-plugin/plugin.json` and the plugin's entry in the repo-root `.claude-plugin/marketplace.json` — and the `Version bump` workflow advances both, automatically, on merge to `main`, for each plugin your PR actually touched.
 
-The bump moved post-merge because that version line was the canonical merge-conflict class: when every PR bumped at authoring time, the instant one PR merged, every other open PR's version lines conflicted. Since `marketplace.json` is a single file shared by all 13 plugins, that conflict was repo-wide rather than per-plugin.
+The bump moved post-merge because that version line was the canonical merge-conflict class: when every PR bumped at authoring time, the instant one PR merged, every other open PR's version lines conflicted. Since `marketplace.json` is a single file shared by all 12 plugins, that conflict was repo-wide rather than per-plugin.
 
 The CI `Lint` workflow runs `scripts/check-version-bump.py` on every PR and fails on:
 

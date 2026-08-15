@@ -174,7 +174,7 @@ MCP server, search for one representative tool:
 |------------|-----------|-----------------|
 | `excalidraw` | `mcp__excalidraw__describe_scene` | cogni-visual, cogni-portfolio |
 | `excalidraw_sketch` | `mcp__excalidraw_sketch__read_me` | cogni-visual |
-| `claude-in-chrome` | `mcp__claude-in-chrome__tabs_context_mcp` | cogni-claims, cogni-help, cogni-website, cogni-workspace |
+| `claude-in-chrome` | `mcp__claude-in-chrome__tabs_context_mcp` | cogni-claims, cogni-website, cogni-workspace |
 | `pencil` | `mcp__pencil__get_editor_state` | Pencil desktop app (manual) |
 
 For each MCP, use `ToolSearch` with `select:` prefix to check if the tool exists.

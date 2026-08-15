@@ -1,6 +1,6 @@
 # Ecosystem Overview
 
-insight-wave is a monorepo of 13 Claude Code plugins that cover the full consulting and B2B content pipeline: from raw research through strategy, content production, visual delivery, and website generation. This document describes how the plugins are organized, how data moves between them, and what infrastructure they share.
+insight-wave is a monorepo of 12 Claude Code plugins that cover the full consulting and B2B content pipeline: from raw research through strategy, content production, visual delivery, and website generation. This document describes how the plugins are organized, how data moves between them, and what infrastructure they share.
 
 For the canonical plugin descriptions, see the individual README files. For step-by-step workflows, see [docs/workflows/](workflows/).
 
@@ -8,7 +8,7 @@ For the canonical plugin descriptions, see the individual README files. For step
 
 ## Plugin Landscape
 
-The 13 plugins are grouped by the role they play in a typical engagement — the same set the root [`marketplace.json`](../.claude-plugin/marketplace.json) enumerates.
+The 12 plugins are grouped by the role they play in a typical engagement — the same set the root [`marketplace.json`](../.claude-plugin/marketplace.json) enumerates.
 
 ### Workspace Infrastructure
 
@@ -64,12 +64,6 @@ See [Portfolio to Website workflow](workflows/portfolio-to-website.md) for how p
 | Plugin | What it does |
 |--------|-------------|
 | [cogni-claims](../cogni-claims/README.md) | Verifies sourced claims against their cited URLs. Detects misquotations, unsupported conclusions, and selective omissions. Used as a review loop inside cogni-knowledge and callable standalone on any document with citations. |
-
-### Learning and Support
-
-| Plugin | What it does |
-|--------|-------------|
-| [cogni-help](../cogni-help/README.md) | Central help hub: 12-course interactive curriculum, plugin discovery, cross-plugin workflow guides, troubleshooting, quick-reference cheatsheets, and GitHub issue filing. |
 
 ---
 

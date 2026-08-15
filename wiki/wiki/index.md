@@ -6,7 +6,7 @@ This is the content catalog for **insight-wave**. Every wiki page is listed here
 
 ### Ecosystem
 
-- [[ecosystem-overview]] — insight-wave is a 13-plugin monorepo for consulting, sales, and marketing on Claude Code, Apache-2.0.
+- [[ecosystem-overview]] — insight-wave is a 12-plugin monorepo for consulting, sales, and marketing on Claude Code, Apache-2.0.
 
 ### Architecture
 
@@ -41,7 +41,6 @@ This is the content catalog for **insight-wave**. Every wiki page is listed here
 
 - [[plugin-cogni-claims]] — cogni-claims manages the full lifecycle of sourced-claim verification within an insight-wave workspace.
 - [[plugin-cogni-copywriting]] — Professional copywriting toolkit providing document polishing with messaging frameworks (BLUF, Pyramid, SCQA, STAR, PSB, FAB, Inverted Pyramid), stakeholder review via parallel persona Q&A, readabi....
-- [[plugin-cogni-help]] — Central help hub for the insight-wave ecosystem.
 - [[plugin-cogni-marketing]] — B2B marketing content engine that bridges cogni-trends strategic themes (GTM paths) and cogni-portfolio propositions into channel-ready content.
 - [[plugin-cogni-narrative]] — Story arc engine for the insight-wave ecosystem.
 - [[plugin-cogni-portfolio]] — cogni-portfolio gives B2B companies a structured way to build market-specific messaging using the IS/DOES/MEANS (FAB) framework applied at the Feature × Market level.
@@ -74,16 +73,6 @@ One page per skill, grouped by plugin, alphabetical within each.
 - [[skill-cogni-copywriting-copy-json]] — Adapter skill that polishes text fields inside JSON files by extracting them, delegating to the copywriter skill for polishing, and writing the polished text back.
 - [[skill-cogni-copywriting-copy-reader]] — This skill should be used when the user wants to review a document from different stakeholder perspectives, simulate how different audiences would read a document, or get multi-perspective feedback....
 - [[skill-cogni-copywriting-copywriter]] — Polish, rewrite, or create business documents (memos, briefs, reports, proposals, one-pagers, executive summaries, emails, blog posts, business letters) using professional messaging frameworks (BLU....
-
-#### cogni-help
-
-- [[skill-cogni-help-cheatsheet]] — Generate quick-reference cards for any insight-wave plugin.
-- [[skill-cogni-help-cogni-issues]] — File and track GitHub issues (bugs, feature requests, change requests, questions) against insight-wave ecosystem plugins using browser automation (claude-in-chrome).
-- [[skill-cogni-help-course-deck]] — Generate professional PPTX slide decks for cogni-help courses.
-- [[skill-cogni-help-guide]] — Help users find the right insight-wave plugin or skill for their task.
-- [[skill-cogni-help-teach]] — Interactive course delivery for learning Claude Cowork and insight-wave plugins.
-- [[skill-cogni-help-troubleshoot]] — Diagnose and fix common issues with insight-wave plugins.
-- [[skill-cogni-help-workflow]] — Cross-plugin workflow templates for common multi-plugin pipelines.
 
 #### cogni-marketing
 
@@ -181,10 +170,6 @@ One page per agent role, grouped by plugin, alphabetical within each.
 
 - [[agent-cogni-copywriting-copywriter]] — Polish markdown documents for executive readability using McKinsey Pyramid Principle and messaging frameworks.
 - [[agent-cogni-copywriting-reader]] — Review documents through parallel stakeholder persona Q&A simulation with synthesized feedback.
-
-#### cogni-help
-
-- [[agent-cogni-help-course-deck-generator]] — Generate PPTX course decks via the course-deck skill.
 
 #### cogni-marketing
 

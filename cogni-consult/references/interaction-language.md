@@ -16,7 +16,7 @@ which language to *converse* in.
 
 ## Resolving the interaction language
 
-Resolve it the same way `cogni-help:cogni-issues` does, in this order:
+Resolve it the same way `cogni-workspace:cogni-issues` does, in this order:
 
 1. **Workspace default** — the `language` key in `.claude/settings.local.json`
    (a natural-language name, e.g. `"english"` or `"german"`) is the workspace

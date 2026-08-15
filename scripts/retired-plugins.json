@@ -2,6 +2,7 @@
   "_comment": "Retired-plugin prefixes read by scripts/check-external-dispatch.py. To retire another plugin, add its prefix here — that is the whole change. Entries are bare prefixes with no trailing colon. Format, failure modes, and the scoping rationale: see that script's docstring.",
   "retired_prefixes": [
     "cogni-wiki",
-    "cogni-research"
+    "cogni-research",
+    "cogni-help"
   ]
 }

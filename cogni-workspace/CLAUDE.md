@@ -98,7 +98,7 @@ Plugins do not duplicate shared market fields. The `manage-markets` skill is the
 
 ## Issue Reporting and Diagnostics
 
-Two skills adopted from cogni-help as part of its retirement. Both work here today; cogni-help keeps its own copies until the retirement lands, so the copies under this plugin are the ones to maintain.
+Two skills absorbed from cogni-help when it was retired. These are now the only copies.
 
 - `cogni-issues` is the write path for filing a GitHub issue against any marketplace plugin
 - `skills/cogni-issues/scripts/gh-issues-helper.sh` wraps the `gh` CLI (JSON on stdout, errors on stderr); `skills/cogni-issues/scripts/issue-store.sh` maintains the local `issues.json` tracker; `skills/cogni-issues/scripts/resolve-plugin.sh` maps a plugin name to its owning repo, version, and marketplace

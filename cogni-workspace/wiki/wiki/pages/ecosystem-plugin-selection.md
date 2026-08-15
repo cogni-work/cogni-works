@@ -12,7 +12,7 @@ status: stable
 related: [ecosystem-overview, ecosystem-command-reference, concept-four-layer-architecture]
 ---
 
-Users usually know what they want to accomplish but not which of the thirteen plugins owns it. This page is the routing table from task to plugin. Match on what the user is trying to *produce*, not on keywords — "I need to make slides" can mean [[plugin-cogni-visual]] (a deck from an existing narrative) or [[plugin-cogni-marketing]] (campaign materials), and picking wrong sends someone down a pipeline that was never going to work.
+Users usually know what they want to accomplish but not which of the twelve plugins owns it. This page is the routing table from task to plugin. Match on what the user is trying to *produce*, not on keywords — "I need to make slides" can mean [[plugin-cogni-visual]] (a deck from an existing narrative) or [[plugin-cogni-marketing]] (campaign materials), and picking wrong sends someone down a pipeline that was never going to work.
 
 ## Task → plugin
 
@@ -30,7 +30,7 @@ Users usually know what they want to accomplish but not which of the thirteen pl
 | Generate a deployable customer website from portfolio content | cogni-website | — |
 | Run a structured consulting engagement with a work-breakdown structure | cogni-consult | — |
 | Set up the workspace, manage themes, install MCP servers, diagnose config | cogni-workspace | — |
-| Find the right plugin, chain plugins, troubleshoot, file an issue | cogni-help | — |
+| Find the right plugin, chain plugins, troubleshoot, file an issue | cogni-workspace | — |
 
 ## What each plugin owns
 
@@ -58,7 +58,6 @@ Users usually know what they want to accomplish but not which of the thirteen pl
 
 **cogni-workspace** — Horizontal workspace layer. Shared env vars and settings, theme management, market registry, MCP installation, workspace health, and this wiki. Other plugins read its shared workspace state when they need those services — see [[concept-theme-inheritance]].
 
-**cogni-help** — Navigation layer. Plugin discovery, cross-plugin workflow templates, diagnostics, quick-reference cards, and GitHub issue filing. Owns no domain data.
 
 ## When nothing fits
 

@@ -35,7 +35,6 @@ Append-only record of every wiki operation. Never rewritten.
 ## [2026-04-17] ingest | plugin-cogni-workspace — cogni-workspace (plugin)
 ## [2026-04-17] ingest | plugin-cogni-trends — cogni-trends (plugin)
 ## [2026-04-17] ingest | plugin-cogni-visual — cogni-visual (plugin)
-## [2026-04-17] ingest | plugin-cogni-help — cogni-help (plugin)
 ## [2026-04-17] ingest | plugin-cogni-marketing — cogni-marketing (plugin)
 ## [2026-04-17] ingest | plugin-cogni-research — cogni-research (plugin)
 ## [2026-04-17] ingest | plugin-cogni-sales — cogni-sales (plugin)

@@ -148,7 +148,7 @@ MCP Servers (auto-configured by plugins):
   excalidraw_sketch https://mcp.excalidraw.com       <- cogni-visual (URL-based, no install needed)
 
 Manual install needed:
-  claude-in-chrome Chrome extension                  <- cogni-claims, cogni-help, cogni-website, cogni-workspace
+  claude-in-chrome Chrome extension                  <- cogni-claims, cogni-website, cogni-workspace
 ```
 
 ### 6. Obsidian Integration (Optional)

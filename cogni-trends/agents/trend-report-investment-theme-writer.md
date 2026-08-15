@@ -1,5 +1,5 @@
 ---
-name: trend-investment-theme-writer
+name: trend-report-investment-theme-writer
 description: Write a single investment theme as a slim 3-beat case (Stake / Move / Cost-of-Inaction) anchored to its dominant Smarter Service dimension. DO NOT USE DIRECTLY — invoked by trend-synthesis Phase 2.
 tools: Read, Write
 model: sonnet

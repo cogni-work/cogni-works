@@ -2,7 +2,20 @@
 name: reader
 model: sonnet
 color: cyan
-description: Review documents through parallel stakeholder persona Q&A simulation with synthesized feedback.
+description: >-
+  Use this agent when a markdown document needs stakeholder review through
+  parallel persona Q&A and synthesized feedback. Typical triggers include
+  requests to review a proposal as executive, technical, legal, marketing, or
+  end-user stakeholders; for example, dispatch it when asked to "review this
+  strategy with executive and legal personas."
+tools:
+  - Read
+  - Write
+  - Edit
+  - Bash
+  - Task
+  - TodoWrite
+  - Skill
 ---
 
 # Reader Agent (Orchestrator)
@@ -42,7 +55,7 @@ Invoke the reader skill using the Skill tool with args parameter.
 
 <example>
 <invoke name="Skill">
-  <parameter name="skill">cogni-copywriting:reader</parameter>
+  <parameter name="skill">cogni-copywriting:copy-reader</parameter>
   <parameter name="args">FILE_PATH={{FILE_PATH}} PERSONAS={{PERSONAS}} AUTO_IMPROVE={{AUTO_IMPROVE}}</parameter>
 </invoke>
 </example>

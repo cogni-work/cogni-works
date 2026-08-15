@@ -1,7 +1,7 @@
 ---
 name: copywriter
-description: Polish, rewrite, or create business documents (memos, briefs, reports, proposals, one-pagers, executive summaries, emails, blog posts, business letters) using professional messaging frameworks (BLUF, McKinsey Pyramid, SCQA, STAR, PSB, FAB) and persuasion techniques (number plays, power words, rhetorical devices). Use this skill when the user asks to polish a document, improve writing, make something more readable, restructure a brief, apply BLUF or Pyramid Principle, rewrite for executives, strengthen messaging, create a proposal, write a one-pager, clean up a report, compress a document to minimum length without losing facts, shorten a synthesis for circulation, tighten a document while keeping every citation and number, or apply any named messaging framework. Also handles German documents (Wolf Schneider style), arc-aware narrative polishing (cogni-narrative arcs with arc_id), and IS/DOES/MEANS sales messaging. Even simple requests like "make this better" about a markdown file should trigger this skill.
-allowed-tools: Read, Write, Edit, Bash, TodoWrite
+description: Polish, rewrite, or create business documents (memos, briefs, reports, proposals, one-pagers, executive summaries, emails, blog posts, business letters) using professional messaging frameworks (BLUF, McKinsey Pyramid, SCQA, STAR, PSB, FAB) and persuasion techniques (number plays, power words, rhetorical devices). Use this skill when the user asks to polish a document, improve writing, make something more readable, restructure a brief, apply BLUF or Pyramid Principle, rewrite for executives, strengthen messaging, create a proposal, write a one-pager, clean up a report, compress a document to minimum length without losing facts, shorten a synthesis for circulation, tighten a document while keeping every citation and number, or apply any named messaging framework. Handles German documents (Wolf Schneider style), arc-aware narrative polishing (cogni-narrative arcs with arc_id), and IS/DOES/MEANS sales messaging. Simple requests like "make this better" about a markdown file should trigger this skill.
+allowed-tools: Read, Write, Edit, Bash, TodoWrite, Skill
 ---
 
 # Copywriter Skill
@@ -85,6 +85,7 @@ These apply even in `--scope=tone` because they are readability essentials, not 
 - `framework` (optional): bluf | pyramid | scqa | star | psb | fab | inverted-pyramid
 - `impact_level` (optional): standard | high
 - `MODE` (optional): standard | sales (default: standard)
+- `review_mode` (optional): reader | automated | skip (default: automated) — selects the Step 4 review path
 - `AUDIENCE` (optional): expert | mixed | lay (default: mixed) — tunes audience-aware disciplines such as acronym expansion depth
 - `TARGET_LANG` (optional): de | en | fr | it | pl | nl | es — when set, runs a translate-then-polish two-pass flow (see Step 2.5). When unset, the skill polishes in the source language only. Translation requires EN or DE on one end of the pair (the pivot); direct non-EN/DE pairs (e.g. fr↔it) are rejected — see pre-check #5.
 
@@ -105,13 +106,13 @@ These apply even in `--scope=tone` because they are readability essentials, not 
 1. Resolve `source_lang` via the existing detector in Step 3 (`--lang` → workspace config → content analysis).
 2. If `source_lang == TARGET_LANG`, log "source language already matches target — skipping translation pass" and fall through to standard polish. **Also unset the translation scope override below** so the user's explicit `--scope` is honoured (a user invoking `--scope=full` on a same-language doc expects Step 2 to run normally).
 3. **Arc-mode gate.** Determine the document's arc: use frontmatter `arc_id` if present; otherwise, if the H2 headings match a known in-scope arc pattern (per `arc-preservation.md` detection), use that `arc_id`. If neither yields an arc, skip this gate (proceed as a non-arc translation). When an arc is identified:
-   - If the arc is **not** one of `corporate-visions`, `jtbd-portfolio` → abort (coverage), **regardless of language**, with: "Arc-mode translation currently covers corporate-visions and jtbd-portfolio; arc `{arc_id}` is future expansion (tracked under #255)." Do not modify the file.
+   - If the arc is **not** one of `corporate-visions`, `jtbd-portfolio` → abort (coverage), **regardless of language**, with: "Arc-mode translation currently covers corporate-visions and jtbd-portfolio; arc `{arc_id}` is not yet supported." Do not modify the file.
    - Else (the arc is in scope) **and** at least one of `source_lang`/`TARGET_LANG` is in `{en, de}` → **allow**: set `arc_mode = true` and proceed. The arc-element and bridge headings will be **substituted** (not freely translated) in Step 2.5. This covers en↔de, en/de→fr/it/pl/nl/es, and the fr/it/pl/nl/es→en/de reverse.
    - Else (the arc is in scope but **neither** end is in `{en, de}` — e.g. a French source with `TARGET_LANG=it`) → do **not** abort here; fall through to pre-check #4 (accept-set) and #5 (pivot guard), which emits the correct direct-non-EN/DE message.
    - If `TARGET_LANG` is not in the accept-set at all → do **not** abort here; fall through to pre-check #4, which emits the correct "not a supported language" message.
-   (Arc-mode translation pivots on EN/DE for these two arcs across `{de,en,fr,it,pl,nl,es}`; the FR/IT/PL/NL/ES coverage is Slice 3 of #255. The remaining 9 arcs — any language — and direct non-EN/DE pairs stay blocking here.)
+   (Arc-mode translation pivots on EN/DE for these two arcs across `{de,en,fr,it,pl,nl,es}`. The remaining 9 arcs — any language — and direct non-EN/DE pairs stay blocking here.)
 4. **Accept-set check.** Accept only `de`, `en`, `fr`, `it`, `pl`, `nl`, `es`. Any other value: abort with "TARGET_LANG=`{value}` is not a supported language. Supported: de, en, fr, it, pl, nl, es."
-5. **Pivot guard.** Translation pivots on EN or DE. If **neither** `source_lang` **nor** `TARGET_LANG` is in `{en, de}` (e.g. a French source with `TARGET_LANG=it`), abort with: "Direct {source_lang}→{TARGET_LANG} translation is not supported — every direction must include English or German on one end. Pivot via EN or DE (translate to en/de first, then to the final language), or follow #255 for direct non-EN/DE pairs (Phase 3)." Do not modify the file.
+5. **Pivot guard.** Translation pivots on EN or DE. If **neither** `source_lang` **nor** `TARGET_LANG` is in `{en, de}` (e.g. a French source with `TARGET_LANG=it`), abort with: "Direct {source_lang}→{TARGET_LANG} translation is not supported — every direction must include English or German on one end. Pivot via EN or DE: translate to en/de first, then to the final language." Do not modify the file.
 
 **Pre-check order:** resolve source (1) → no-op (2) → arc gate (3) → accept-set (4) → pivot guard (5). The arc and accept-set messages are the most actionable, so they win when multiple conditions hold.
 
@@ -252,11 +253,13 @@ Skip if `skip_review: true`, or for informal deliverables (emails, casual memos)
 **Option A — Interactive Reader Skill (recommended for formal deliverables):**
 
 ```text
-Skill: cogni-copywriting:reader
+Skill: cogni-copywriting:copy-reader
 Args: FILE_PATH={{output_path}} PERSONAS={{stakeholders}} AUTO_IMPROVE=true
 ```
 
 The reader skill runs parallel multi-persona Q&A, synthesizes feedback, and applies one auto-improvement loop directly to the document. Use for reports, proposals, executive summaries, and briefs.
+
+Resolve `{{stakeholders}}` from the user's explicit persona list when one is given; otherwise take the audience defaults from the Option B table below.
 
 **Option B — Automated Checklist Review (lighter weight):**
 
@@ -272,7 +275,7 @@ Load stakeholder review profiles from `references/10-stakeholder-review/`. Defau
 
 Evaluate against each stakeholder's 5 weighted criteria. Aggregate feedback, prioritize (3+ stakeholders = CRITICAL, 2 = HIGH, 1 = OPTIONAL), and apply CRITICAL/HIGH improvements. Load `references/10-stakeholder-review/synthesis-guidelines.md` for conflict resolution patterns.
 
-**Review mode parameter:** `reader` (Option A), `automated` (default, Option B), or `skip`.
+Which option runs is set by the `review_mode` parameter resolved in Step 1: `reader` selects Option A, `automated` (the default) selects Option B, and `skip` bypasses this step.
 
 Review enhances quality but never blocks delivery — if review fails, continue to Step 5 with the document as-is.
 

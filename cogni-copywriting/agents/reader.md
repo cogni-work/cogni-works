@@ -15,7 +15,6 @@ tools:
   - Bash
   - Task
   - TodoWrite
-  - TodoRead
   - Skill
 ---
 

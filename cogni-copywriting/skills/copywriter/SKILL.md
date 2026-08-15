@@ -85,6 +85,7 @@ These apply even in `--scope=tone` because they are readability essentials, not 
 - `framework` (optional): bluf | pyramid | scqa | star | psb | fab | inverted-pyramid
 - `impact_level` (optional): standard | high
 - `MODE` (optional): standard | sales (default: standard)
+- `review_mode` (optional): reader | automated | skip (default: automated) — selects the Step 4 review path
 - `AUDIENCE` (optional): expert | mixed | lay (default: mixed) — tunes audience-aware disciplines such as acronym expansion depth
 - `TARGET_LANG` (optional): de | en | fr | it | pl | nl | es — when set, runs a translate-then-polish two-pass flow (see Step 2.5). When unset, the skill polishes in the source language only. Translation requires EN or DE on one end of the pair (the pivot); direct non-EN/DE pairs (e.g. fr↔it) are rejected — see pre-check #5.
 
@@ -258,6 +259,8 @@ Args: FILE_PATH={{output_path}} PERSONAS={{stakeholders}} AUTO_IMPROVE=true
 
 The reader skill runs parallel multi-persona Q&A, synthesizes feedback, and applies one auto-improvement loop directly to the document. Use for reports, proposals, executive summaries, and briefs.
 
+Resolve `{{stakeholders}}` from the user's explicit persona list when one is given; otherwise take the audience defaults from the Option B table below.
+
 **Option B — Automated Checklist Review (lighter weight):**
 
 Load stakeholder review profiles from `references/10-stakeholder-review/`. Default stakeholders by audience:
@@ -272,7 +275,7 @@ Load stakeholder review profiles from `references/10-stakeholder-review/`. Defau
 
 Evaluate against each stakeholder's 5 weighted criteria. Aggregate feedback, prioritize (3+ stakeholders = CRITICAL, 2 = HIGH, 1 = OPTIONAL), and apply CRITICAL/HIGH improvements. Load `references/10-stakeholder-review/synthesis-guidelines.md` for conflict resolution patterns.
 
-**Review mode parameter:** `reader` (Option A), `automated` (default, Option B), or `skip`.
+Which option runs is set by the `review_mode` parameter resolved in Step 1: `reader` selects Option A, `automated` (the default) selects Option B, and `skip` bypasses this step.
 
 Review enhances quality but never blocks delivery — if review fails, continue to Step 5 with the document as-is.
 

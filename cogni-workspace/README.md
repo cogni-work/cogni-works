@@ -33,6 +33,8 @@ cogni-workspace is the ecosystem's infrastructure-as-plugin layer: a dedicated p
 6. **Install MCP servers** — clone and build git-based MCP servers, detect native app MCPs, and patch Claude Desktop config so rendering plugins find their tools without manual JSON editing
 7. **Obsidian integration** — scaffold `.obsidian/` vault or incrementally update terminal profiles, handled as sub-steps of manage-workspace
 8. **Ask the bundled wiki** — `ask` reads a vendor-curated insight-wave reference wiki bundled at `wiki/` (self-contained index-first grounded read) so users can ask grounded questions about plugins, skills, agents, architecture, and conventions without grepping source files
+9. **File and track issues** — `cogni-issues` uses the authenticated GitHub CLI to consult, deduplicate, create, list, and inspect plugin issues with atomic labels
+10. **Troubleshoot plugin failures** — `troubleshoot` diagnoses plugin integrity, cross-plugin dependencies, stale state, and common setup errors through `/troubleshoot`
 
 ## What it means for you
 
@@ -80,9 +82,9 @@ This plugin is part of the [insight-wave ecosystem](../docs/ecosystem-overview.m
 /workspace-status  # check health
 /pick-theme        # select a theme interactively
 /manage-themes     # extract, create, audit, or apply themes
+/troubleshoot      # diagnose plugin and cross-plugin failures
+/cogni-workspace:cogni-issues  # file or inspect GitHub issues
 ```
-
-> **Note:** Issue filing (`/issues`) has moved to [cogni-help](../cogni-help).
 
 Or describe what you want:
 
@@ -136,6 +138,8 @@ State lives in two layers that other plugins consume. Configuration (env vars, t
 | `manage-markets` | skill | Write path for the canonical supported-markets registry — show status and add markets (codes, locales, authorities) |
 | `audit-region-sources` | skill | Read-only sibling of manage-markets — audit per-plugin region-source overlays against the canonical registry for orphans and drift |
 | `workspace-dashboard` | skill | Interactive HTML dashboard of workspace foundation, env vars, plugin registry, themes, and dependencies |
+| `cogni-issues` | skill | File, deduplicate, list, and inspect plugin issues through the authenticated GitHub CLI |
+| `troubleshoot` | skill | Diagnose plugin integrity, cross-plugin dependencies, stale state, and common setup failures |
 | `on-session-start.sh` | hook (SessionStart) | Sources workspace environment and validates plugin availability at session start |
 | `on-session-start-language.sh` | hook (SessionStart) | Injects the language rules the built-in "# Language" system-prompt section does not carry |
 | `check-dependencies.sh` | script | Returns JSON with availability/version of required and optional dependencies |
@@ -155,14 +159,16 @@ State lives in two layers that other plugins consume. Configuration (env vars, t
 ```
 cogni-workspace/
 ├── .claude-plugin/plugin.json    Plugin manifest
-├── skills/                       9 workspace management skills
+├── skills/                       11 workspace management skills
 │   ├── ask/                      Query the bundled insight-wave wiki for grounded answers
 │   ├── audit-region-sources/     Audit per-plugin region-source overlays against the registry
+│   ├── cogni-issues/             File and track plugin issues through the GitHub CLI
 │   ├── install-mcp/              MCP server installation and Desktop config patching
 │   ├── manage-markets/           Write path for the canonical supported-markets registry
 │   ├── manage-workspace/         Init or update workspace (includes Obsidian integration)
 │   ├── manage-themes/
 │   ├── pick-theme/
+│   ├── troubleshoot/             Diagnose plugin and cross-plugin failures
 │   ├── workspace-dashboard/      Interactive HTML workspace status dashboard
 │   └── workspace-status/
 ├── wiki/                         Bundled vendor-curated insight-wave reference wiki (read by ask)

@@ -6,11 +6,11 @@
 # else in the repo enforces either one:
 #
 #   - No `cogni-help:` dispatch token may survive in the adopted copies. The
-#     obvious candidate guard, scripts/check-external-dispatch.py, structurally
-#     cannot catch this: it compiles its pattern from the retired-prefix registry
-#     at scripts/retired-plugins.json, and cogni-help is deliberately absent from
-#     that registry because cogni-help still ships. A verbatim `cogni-help:teach`
-#     leaves that guard green.
+#     obvious candidate guard, scripts/check-external-dispatch.py, reaches only
+#     part of that surface: its globs cover SKILL.md, agents, commands, hooks,
+#     while a skill's own scripts/, evals/ and references/ files match none of
+#     them. P1 below walks every file in both trees instead — the gap is one of
+#     file-type coverage, not of what scripts/retired-plugins.json carries.
 #   - Every `${CLAUDE_PLUGIN_ROOT}`-relative path documented in those trees must
 #     resolve under cogni-workspace. Most such paths are skill-relative and
 #     survive relocation untouched, but a plugin-root-relative one silently
@@ -19,15 +19,15 @@
 #     exist and will not, because that script belongs to the course-delivery
 #     system being retired. Nothing would have reported it.
 #
-# Scope. Every assertion reads the cogni-workspace tree ONLY. cogni-help keeps
-# its own copies during the retirement transition and is legitimately allowed
-# both the dispatch token and the plugin-root-relative path, so scanning it would
-# be red on arrival. Scoping here also means this suite keeps passing unchanged
-# once cogni-help is deleted — it asserts nothing about the source.
+# Scope. Every assertion reads the cogni-workspace tree ONLY. The properties
+# under test belong to the destination copies, so no source tree is an input to
+# any of them: this suite reads the same and passes the same whether or not a
+# cogni-help tree exists anywhere in the repo. That independence is the point —
+# relocation hygiene is checked where the relocated files actually live.
 #
-# Deliberately NOT asserted: counterpart-completeness against cogni-help. That
-# assertion would start failing the moment cogni-help is removed, shipping a
-# guard a later change must remember to rewrite.
+# Deliberately NOT asserted: counterpart-completeness against cogni-help. An
+# assertion reading a tree this plugin does not own breaks whenever that tree
+# changes or disappears — a guard a later change must remember to rewrite.
 #
 # Case-label shape is "PASS: <case>" / "FAIL: <case>", matching
 # test-layering-claim-reconciled.sh and test-wiki-namespace-sync.sh, because the

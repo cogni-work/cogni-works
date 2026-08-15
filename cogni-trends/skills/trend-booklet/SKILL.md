@@ -2,12 +2,10 @@
 name: trend-booklet
 description: |
   Build a comprehensive browsable TIPS booklet that catalogs every trend-scout
-  candidate (~60) organized by Smarter Service dimension → subcategory →
-  horizon, with per-entry summary, key citations, theme back-references, and
-  keywords. The booklet is the companion catalog to the canonical investment
-  themes report (`/trend-synthesis`) — it surfaces *all* candidates including
-  ones that didn't make it into a theme-case (orphans go in an appendix), so
-  readers can see the full landscape behind the report's curated argument.
+  candidate (~60), organized by dimension, subcategory, and horizon with
+  citations and theme back-references. Companion catalog to the curated
+  `/trend-synthesis` report — it also surfaces candidates that made no
+  theme-case.
   Required pipeline: trend-scout → value-modeler → trend-research →
   trend-booklet (± trend-synthesis) → verify-trend-report. Use when: (1)
   `/trend-research` has completed, (2) the user mentions "trend booklet",
@@ -15,8 +13,7 @@ description: |
   "trend appendix", "complete trends overview", "reference catalog", or
   asks to see every candidate with its evidence. Always use this skill when
   the user wants a full-coverage catalog rather than the curated theme report.
-  No web research — reads only the research manifest and per-dimension
-  enriched evidence. Auto-recommends `/verify-trend-report` if not run yet,
+  Auto-recommends `/verify-trend-report` if not run yet,
   else `/trends-resume`.
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Task, AskUserQuestion, Skill
 ---

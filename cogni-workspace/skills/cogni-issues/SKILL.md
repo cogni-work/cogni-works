@@ -256,10 +256,10 @@ uname -s && uname -r && node -v 2>/dev/null
 
 **Write in the user's language** (except title prefixes and technical terms).
 
-**Transform vague input into precise descriptions.** This is the core value you add:
+**Transform vague input into precise descriptions.** This is the skill's core value:
 
-| User says | You write |
-|-----------|-----------|
+| User says | Precise issue text |
+|-----------|--------------------|
 | "it doesn't work" | "The skill exits with a non-zero status code without producing output when invoked with default arguments" |
 | "it's slow" | "Rendering takes 45+ seconds for a 3-station brief, compared to ~15s previously — a 3x regression" |
 | "the output looks wrong" | "Generated propositions show placeholder text ('Lorem ipsum') instead of configured descriptions" |

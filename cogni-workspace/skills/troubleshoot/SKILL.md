@@ -134,8 +134,8 @@ the course-progress files, suggest deletion — nothing reads them any more.
 
 - **Missing COGNI_WORKSPACE_ROOT**: Many plugins need this env var. Check
   `.workspace-env.sh` exists and is sourced.
-- **GitHub not logged in**: Required for cogni-issues. The skill uses browser
-  automation — navigate to `https://github.com` and check login state.
+- **GitHub CLI not authenticated**: Required for cogni-issues. Run `gh auth status`;
+  when authentication is missing, guide the user through `gh auth login`.
 - **Missing node/npm**: Required for PPTX generation (cogni-visual).
 
 ## Full Scan Mode

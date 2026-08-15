@@ -40,13 +40,13 @@ data. All new consulting engagements use cogni-consult
 
 ## GitHub not logged in
 
-**Symptom**: `/issues` fails with authentication or login error.
+**Symptom**: The cogni-issues skill fails with an authentication or login error.
 
-**Cause**: The user is not logged into GitHub in Chrome.
+**Cause**: GitHub CLI is not authenticated for the current user.
 
-**Fix**: Run `/issues` with no argument — the cogni-issues skill will detect the
-missing login and walk you through signing in via the browser. No CLI tools or
-tokens needed.
+**Fix**: Run `gh auth status`. If authentication is missing, run `gh auth login`,
+choose **GitHub.com** and **HTTPS**, and complete the browser or token flow. Then
+retry the cogni-issues operation.
 
 ---
 

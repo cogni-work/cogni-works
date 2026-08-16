@@ -37,7 +37,7 @@ The orchestrator-wrapper pattern reflects [[concept-orchestrator-pattern]] — t
 
 ## File slugs
 
-All entity slugs use kebab-case derived from the entity or concept name. No underscores, no camelCase, no spaces. cogni-portfolio's double-dash convention (`feature--market`) marks paired entities. cogni-claims uses UUID-v4 slugs because claims have no natural name. See [[concept-slug-based-lookups]] for the broader convention.
+All entity slugs use kebab-case derived from the entity or concept name. No underscores, no camelCase, no spaces. cogni-portfolio's double-dash convention (`feature--market`) marks paired entities. Claim records use UUID-v4 slugs because claims have no natural name. See [[concept-slug-based-lookups]] for the broader convention.
 
 ## Script names
 

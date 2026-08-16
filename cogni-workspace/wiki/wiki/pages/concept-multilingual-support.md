@@ -26,7 +26,7 @@ Proper character encoding per language is non-negotiable — never ASCII substit
 - **PL**: ą/ć/ę/ł/ń/ó/ś/ź/ż
 - **ES**: á/é/í/ó/ú/ñ
 
-This matters because downstream rendering (cogni-visual, cogni-website, document export) and comparisons (cogni-claims source matching) all depend on the correct characters being present in the entity files.
+This matters because downstream rendering (cogni-visual, cogni-website, document export) and comparisons (claim-verification source matching) all depend on the correct characters being present in the entity files.
 
 ## Per-market authority sources
 

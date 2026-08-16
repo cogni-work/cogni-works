@@ -12,14 +12,14 @@ status: stable
 related: [ecosystem-overview, ecosystem-command-reference, concept-four-layer-architecture]
 ---
 
-Users usually know what they want to accomplish but not which of the twelve plugins owns it. This page is the routing table from task to plugin. Match on what the user is trying to *produce*, not on keywords — "I need to make slides" can mean [[plugin-cogni-visual]] (a deck from an existing narrative) or [[plugin-cogni-marketing]] (campaign materials), and picking wrong sends someone down a pipeline that was never going to work.
+Users usually know what they want to accomplish but not which of the eleven plugins owns it. This page is the routing table from task to plugin. Match on what the user is trying to *produce*, not on keywords — "I need to make slides" can mean [[plugin-cogni-visual]] (a deck from an existing narrative) or [[plugin-cogni-marketing]] (campaign materials), and picking wrong sends someone down a pipeline that was never going to work.
 
 ## Task → plugin
 
 | If the task is… | Start with | Then usually |
 |---|---|---|
 | Research a topic into a cited synthesis that compounds across runs | cogni-knowledge | cogni-narrative → cogni-visual |
-| Fact-check a document against its cited sources | cogni-claims | — |
+| Fact-check a document against its cited sources | cogni-workspace | — |
 | Identify industry trends and their strategic implications | cogni-trends | cogni-portfolio |
 | Define product/service propositions per market, size the opportunity, map competitors | cogni-portfolio | cogni-marketing or cogni-sales |
 | Turn structured content into an executive story | cogni-narrative | cogni-copywriting → cogni-visual |
@@ -34,9 +34,7 @@ Users usually know what they want to accomplish but not which of the twelve plug
 
 ## What each plugin owns
 
-**cogni-knowledge** — Wiki-first research that compounds. Each project binds to a knowledge base and runs an inverted pipeline: plan → curate → fetch → ingest → distill → compose → verify → finalize, with zero-network citation-consistent claim verification. Use it when the knowledge should persist and sharpen rather than die in a one-off report. Works with cogni-claims (live-source resweep) and cogni-narrative.
-
-**cogni-claims** — Claim verification against cited sources. Detects deviations between what a document asserts and what the source actually says. Use it before publishing research output. See [[concept-claim-lifecycle]] and [[concept-claims-propagation]].
+**cogni-knowledge** — Wiki-first research that compounds. Each project binds to a knowledge base and runs an inverted pipeline: plan → curate → fetch → ingest → distill → compose → verify → finalize, with zero-network citation-consistent claim verification. Use it when the knowledge should persist and sharpen rather than die in a one-off report. Works with `cogni-workspace:claims` (live-source resweep) and cogni-narrative.
 
 **cogni-trends** — Trend scouting and reporting. Smarter Service Trendradar (4 dimensions) combined with the TIPS framework. DACH-focused, bilingual EN/DE. Feeds cogni-portfolio (investment themes) and cogni-marketing (GTM themes). See [[concept-trends-portfolio-bridge]].
 
@@ -56,7 +54,7 @@ Users usually know what they want to accomplish but not which of the twelve plug
 
 **cogni-consult** — Consulting engagement orchestrator. Scoping derives 3–6 action fields (the work-breakdown structure) from one SMART key question; each deliverable runs its own design-thinking loop (empathize → define → ideate → prototype → test) with acting stakeholder personas challenging the work. Requires a cogni-knowledge base bound at setup as the research spine.
 
-**cogni-workspace** — Horizontal workspace layer. Shared env vars and settings, theme management, market registry, MCP installation, workspace health, and this wiki. Other plugins read its shared workspace state when they need those services — see [[concept-theme-inheritance]].
+**cogni-workspace** — Horizontal workspace layer. Shared env vars and settings, theme management, market registry, MCP installation, workspace health, and this wiki. Other plugins read its shared workspace state when they need those services — see [[concept-theme-inheritance]]. It also owns claim verification against cited sources (`cogni-workspace:claims`), detecting deviations between what a document asserts and what the source actually says — use it before publishing research output; see [[concept-claim-lifecycle]] and [[concept-claims-propagation]].
 
 
 ## When nothing fits

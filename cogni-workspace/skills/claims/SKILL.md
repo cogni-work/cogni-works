@@ -49,7 +49,7 @@ Before any operation, make sure the workspace exists. Run the init script — it
 bash "${CLAUDE_PLUGIN_ROOT}/skills/claims/scripts/claims-store.sh" init "${working_dir}"
 ```
 
-The `working_dir` is either passed as a parameter or defaults to the current working directory. All claim state lives in `{working_dir}/cogni-claims/`.
+The `working_dir` is either passed as a parameter or defaults to the current working directory. All claim state lives in `{working_dir}/cogni-claims/` — that directory name is load-bearing and stays as-is regardless of which plugin ships this skill, because it holds accumulated per-project user state.
 
 ## Submit mode
 

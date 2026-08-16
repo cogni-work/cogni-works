@@ -17,19 +17,19 @@ The quick-reference answer to "what are the commands for cogni-X" — the cheats
 
 Skills are the primary surface across the ecosystem. A skill is invoked by name — `cogni-trends:trend-scout`, or simply by describing the task, since each skill's description carries its own trigger phrases. Slash commands are a thin optional wrapper that only some plugins ship.
 
-Six of the twelve plugins ship **no** commands directory at all: cogni-knowledge, cogni-consult, cogni-workspace, cogni-trends, cogni-portfolio and cogni-website are skill-invoked entirely. Expecting a slash command for those is the most common source of "the command does not exist" confusion. See [[arch-plugin-anatomy]] for how the two surfaces sit on disk.
+Five of the eleven plugins ship **no** commands directory at all: cogni-knowledge, cogni-consult, cogni-trends, cogni-portfolio and cogni-website are skill-invoked entirely. Expecting a slash command for those is the most common source of "the command does not exist" confusion. See [[arch-plugin-anatomy]] for how the two surfaces sit on disk.
 
 ## Slash commands, by plugin
 
 | Plugin | Slash commands |
 |---|---|
-| cogni-claims | `/claims` |
+| cogni-workspace | `/claims`, `/troubleshoot` |
 | cogni-narrative | `/narrative`, `/narrative-adapt`, `/narrative-review` |
 | cogni-copywriting | `/copywrite`, `/review-doc` |
 | cogni-visual | `/enrich-report`, `/render-html-slides`, `/render-infographic`, `/render-infographic-editorial`, `/render-infographic-handdrawn`, `/review-brief` |
 | cogni-marketing | `/abm`, `/campaign`, `/content-calendar`, `/content-strategy`, `/demand-gen`, `/lead-gen`, `/marketing-dashboard`, `/marketing-resume`, `/marketing-setup`, `/sales-enablement`, `/thought-leadership` |
 | cogni-sales | `/why-change` |
-| cogni-knowledge, cogni-consult, cogni-workspace, cogni-trends, cogni-portfolio, cogni-website | none — skill-invoked |
+| cogni-knowledge, cogni-consult, cogni-trends, cogni-portfolio, cogni-website | none — skill-invoked |
 
 ## Skills, by plugin
 
@@ -37,13 +37,11 @@ Six of the twelve plugins ship **no** commands directory at all: cogni-knowledge
 
 **cogni-consult** — `consult-setup`, `consult-scope`, `consult-action-fields`, `consult-design-thinking`, `consult-personas`, `consult-project-plan`, `consult-publish`, `consult-dashboard`, `consult-resume`
 
-**cogni-claims** — `claims`, `claim-entity`
-
 **cogni-narrative** — `narrative`, `narrative-adapt`, `narrative-review`
 
 **cogni-copywriting** — `copywriter`, `copy-reader`, `copy-json`, `audit-copywriter`
 
-**cogni-workspace** — `manage-workspace`, `workspace-status`, `workspace-dashboard`, `pick-theme`, `manage-themes`, `manage-markets`, `audit-region-sources`, `install-mcp`, `ask`
+**cogni-workspace** — `manage-workspace`, `workspace-status`, `workspace-dashboard`, `pick-theme`, `manage-themes`, `manage-markets`, `audit-region-sources`, `install-mcp`, `ask`, `claims`, `claim-entity`, `cogni-issues`, `troubleshoot`
 
 **cogni-trends** — `trend-scout`, `trend-research`, `trend-synthesis`, `trend-booklet`, `value-modeler`, `verify-trend-report`, `trends-catalog`, `trends-dashboard`, `trends-resume`
 

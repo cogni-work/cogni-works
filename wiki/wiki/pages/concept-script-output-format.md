@@ -28,7 +28,7 @@ All scripts are bash + python3 standard library. **No pip dependencies, no npm d
 
 ## Where it appears
 
-Every plugin with a `scripts/` directory follows this. cogni-claims has no `scripts/` directory at all (its work is fully agent-driven), but every other plugin uses this format universally. Hook scripts in `hooks/` follow the same convention even though they signal via exit code rather than stdout.
+Every plugin with a `scripts/` directory follows this. cogni-narrative, cogni-copywriting, cogni-marketing and cogni-website have no `scripts/` directory at all, but every plugin that has one uses this format universally. Hook scripts in `hooks/` follow the same convention even though they signal via exit code rather than stdout.
 
 ## Implications for new code
 

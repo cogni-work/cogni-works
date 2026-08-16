@@ -115,7 +115,7 @@ When extracting claims from the generated report section:
 
 ---
 
-## Compatibility with cogni-claims
+## Compatibility with `cogni-workspace:claims`
 
 The merged claims file is directly consumable by `cogni-workspace:claims` via:
 

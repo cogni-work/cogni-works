@@ -175,7 +175,7 @@ cogni-narrative/
 | cogni-copywriting | No | Arc-aware executive polish (downstream) |
 | cogni-visual | No | Slide decks and visual assets from narrative output (downstream) |
 | cogni-sales | No | Consumes Corporate Visions arc patterns (downstream) |
-| cogni-claims | No | company-credo arc references cogni-claims data files for claim-backed credibility sections |
+| cogni-workspace | No | company-credo arc reads the `cogni-claims/` claim store for claim-backed credibility sections |
 
 cogni-narrative is standalone. It transforms structured input from any source — cogni-x plugins or plain markdown files.
 

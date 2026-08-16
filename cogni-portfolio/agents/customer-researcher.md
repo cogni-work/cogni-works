@@ -135,7 +135,7 @@ These rules implement [Anthropic's recommended hallucination reduction technique
 1. Does it have a supporting source URL from actual search results?
 2. Does the number match exactly what the source reported?
 3. Is the company attribution correct, or could it refer to a subsidiary/parent?
-4. **Remove unsourced data points** rather than submitting them as claims — catching them here is cheaper than downstream cogni-claims verification
+4. **Remove unsourced data points** rather than submitting them as claims — catching them here is cheaper than downstream cogni-workspace claim verification
 
 *Confidence Assessment:*
 

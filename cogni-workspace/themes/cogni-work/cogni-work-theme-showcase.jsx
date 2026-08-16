@@ -541,7 +541,7 @@ export default function CogniWorkThemeShowcase() {
             </thead>
             <tbody>
               {[
-                { name: "cogni-claims", status: "Aktiv", statusColor: theme.success, score: 94, trend: "+12%" },
+                { name: "cogni-workspace", status: "Aktiv", statusColor: theme.success, score: 94, trend: "+12%" },
                 { name: "cogni-portfolio", status: "In Arbeit", statusColor: theme.warning, score: 78, trend: "+5%" },
                 { name: "trend-scout", status: "Planung", statusColor: theme.info, score: 62, trend: "Neu" },
               ].map((row) => (

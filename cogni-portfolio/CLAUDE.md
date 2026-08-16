@@ -189,9 +189,8 @@ Research agents auto-log claims with source URLs and entity provenance (`entity_
 
 | Plugin | Direction | Mechanism |
 |--------|-----------|-----------|
-| cogni-workspace | bidirectional | portfolio-verify orchestrates claim verification and propagates corrections back to entity files; research agents auto-log claims with entity_ref provenance |
+| cogni-workspace | bidirectional | portfolio-verify orchestrates claim verification and propagates corrections back to entity files; research agents auto-log claims with entity_ref provenance; portfolio-dashboard uses pick-theme for theme selection |
 | cogni-trends | bidirectional | trends-bridge imports solution templates, exports portfolio anchors |
-| cogni-workspace | upstream | portfolio-dashboard uses pick-theme for theme selection |
 | document-skills | downstream | portfolio-ingest uses docx/pptx/xlsx readers; portfolio-communicate workbook uses XLSX writer |
 | cogni-narrative | downstream | portfolio-communicate pitch use case reads arc definitions for narrative structure |
 | cogni-visual | downstream | portfolio-communicate output consumable by story-to-slides, story-to-web; markdown output enrichable via enrich-report (concept diagrams + charts) |

@@ -37,7 +37,7 @@ Before writing the dimension section and extracting claims to JSON:
 1. Review each citation — does the URL come from actual WebSearch results or raw signal sources?
 2. Check each number — does it match exactly what the source reported?
 3. Verify each claim extracted for the claims registry — is it directly supported by a source?
-4. **Remove unsourced claims** rather than registering them — catching them here prevents downstream cogni-claims verification failures
+4. **Remove unsourced claims** rather than registering them — catching them here prevents downstream cogni-workspace claim verification failures
 
 ### Confidence Assessment
 

@@ -29,8 +29,23 @@
 #
 # The scan root defaults to this file's directory and can be overridden by the
 # first argument, so a wider guard can reuse this file rather than fork it.
-# A wider guard must re-home the liveness floor below — that count is scoped to
-# this plugin.
+# A wider guard must re-home the floors below — the liveness count and the
+# fixtures-arm coverage floor are both scoped to this plugin's tree.
+#
+# This suite owns the deeper fixtures segment, and that ownership is settled
+# rather than incidental. The repo-root result-line plainness guard discovers
+# suites through two non-recursive globs mirroring run-plugin-tests.py, so a
+# shared emitter helper parked one path segment below a tests/ directory is
+# structurally out of its reach. A third, deeper glob was considered and
+# rejected: that two-glob boundary is exactly what keeps the parked _archive/
+# carrier out of the population, and the guard ships no exclusion list,
+# allowlist or baseline to compensate — widening it would have forced the very
+# exemption machinery the guard exists to avoid, to close a gap nothing is
+# failing on today. The accepted cost is that this coverage stays plugin-local
+# and is not discoverable from the repo root. The D1 floor below is what stops
+# it from being dropped silently: break the deeper arm of the discovery loop
+# and the only definer leaves the scanned population, while every sourcing file
+# still counts toward the liveness floor above.
 #
 # bash 3.2 + python3 stdlib only (no pytest, no pip). Matches tests/README.md.
 
@@ -90,6 +105,7 @@ fi
 # carries its own body and feeds every check below from a single read.
 
 definers=0
+fixtures_definers=0
 exercisers=0
 shape_errors=0
 
@@ -109,6 +125,12 @@ for f in "$SCAN_ROOT"/*.sh "$SCAN_ROOT"/fixtures/*.sh; do
 
   definers=$((definers + 1))
   exercisers=$((exercisers + 1))
+
+  # Tally definers found under the deeper segment separately — the D1 floor
+  # below keys on this, not on the whole-population count.
+  case "$f" in
+    */fixtures/*) fixtures_definers=$((fixtures_definers + 1)) ;;
+  esac
 
   n_red=0
   n_green=0
@@ -144,6 +166,25 @@ if [ "$exercisers" -lt 50 ]; then
   errors=$((errors + 1))
 elif [ "$shape_errors" -eq 0 ]; then
   green "PASS: $definers emitter-defining file(s) are paired and plain, of $exercisers exercising the contract"
+fi
+
+# Coverage floor — the shared emitter helper must stay inside the scanned
+# population. Keyed per-arm on definers found under the deeper segment, NOT on
+# the exercisers floor above and NOT on the whole-population definer count:
+# break the deeper arm of the discovery loop and the only definer leaves the
+# population while every sourcing file still counts as an exerciser, so that
+# floor stays green, shape_errors stays 0 because there is nothing left to
+# shape-check, and the dropped coverage reports as a pass. A whole-population
+# definer count would also be satisfied by any future suite that inlines its
+# own emitters, which would mask the same drop. Only the per-arm count sees it.
+# The label carries a stable first-token case id, space-separated and never
+# colon-abutted, so a mutation harness classifies this case instead of
+# reporting case_not_found.
+if [ "$fixtures_definers" -lt 1 ]; then
+  red "FAIL: D1 no emitter-defining file under the fixtures segment was scanned — the shared helper left the scanned population"
+  errors=$((errors + 1))
+else
+  green "PASS: D1 $fixtures_definers emitter-defining file(s) scanned under the fixtures segment, so shared-helper coverage holds"
 fi
 
 echo

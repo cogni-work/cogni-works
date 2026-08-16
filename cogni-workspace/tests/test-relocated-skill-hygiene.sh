@@ -1,7 +1,16 @@
 #!/usr/bin/env bash
-# Relocated-skill hygiene guard for the skills cogni-workspace adopted from
-# retired plugins: cogni-issues and troubleshoot (from cogni-help), and claims
-# and claim-entity (from cogni-claims).
+# Relocated-skill hygiene guard for the skills and agents cogni-workspace adopted
+# from retired plugins: cogni-issues and troubleshoot (from cogni-help), claims
+# and claim-entity (from cogni-claims), narrative / narrative-adapt /
+# narrative-review plus three agents (from cogni-narrative), and copywriter /
+# copy-json / copy-reader plus two agents (from cogni-copywriting).
+#
+# A spec's tree may be a DIRECTORY or a single FILE. Adopted agents land as bare
+# files under agents/, and the earlier directory-only form silently left every
+# adopted agent ungraded — the cogni-claims adoption moved claim-verifier.md and
+# source-inspector.md with no arm covering either. Both cases resolve the same
+# way: `find` over a regular file yields that file, so only the existence tests
+# needed widening from -d to -e.
 #
 # Each tree is paired with the dispatch token its OWN source plugin used, rather
 # than checked against one global literal. A single shared token would be
@@ -59,6 +68,19 @@ $WS_ROOT/skills/cogni-issues|cogni-help:
 $WS_ROOT/skills/troubleshoot|cogni-help:
 $WS_ROOT/skills/claims|cogni-claims:
 $WS_ROOT/skills/claim-entity|cogni-claims:
+$WS_ROOT/agents/claim-verifier.md|cogni-claims:
+$WS_ROOT/agents/source-inspector.md|cogni-claims:
+$WS_ROOT/skills/narrative|cogni-narrative:
+$WS_ROOT/skills/narrative-adapt|cogni-narrative:
+$WS_ROOT/skills/narrative-review|cogni-narrative:
+$WS_ROOT/agents/narrative-writer.md|cogni-narrative:
+$WS_ROOT/agents/narrative-reviewer.md|cogni-narrative:
+$WS_ROOT/agents/narrative-adapter.md|cogni-narrative:
+$WS_ROOT/skills/copywriter|cogni-copywriting:
+$WS_ROOT/skills/copy-json|cogni-copywriting:
+$WS_ROOT/skills/copy-reader|cogni-copywriting:
+$WS_ROOT/agents/copywriter.md|cogni-copywriting:
+$WS_ROOT/agents/reader.md|cogni-copywriting:
 "
 
 failures=0
@@ -92,7 +114,7 @@ p1_scanned=0
 for spec in $TREE_SPECS; do
   tree="${spec%%|*}"
   token="${spec##*|}"
-  if [ ! -d "$tree" ]; then
+  if [ ! -e "$tree" ]; then
     fail "P1 adopted tree missing: cogni-workspace/${tree#"$WS_ROOT"/}"
     continue
   fi
@@ -132,7 +154,7 @@ p2_bad=""
 p2_scanned=0
 for spec in $TREE_SPECS; do
   tree="${spec%%|*}"
-  [ -d "$tree" ] || continue
+  [ -e "$tree" ] || continue
   while IFS= read -r ref; do
     [ -n "$ref" ] || continue
     p2_scanned=$((p2_scanned + 1))

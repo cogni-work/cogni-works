@@ -16,10 +16,8 @@ PLUGIN_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 TESTS_DIR="$(cd "$(dirname "$0")" && pwd)"
 SCRIPT="$PLUGIN_ROOT/scripts/cycle-guard.py"
 
+. "$(dirname "$0")/fixtures/test_helpers.sh"
 . "$TESTS_DIR/fixtures/_cycle_guard_lib.sh"
-
-red()   { printf '%s\n' "$1"; }
-green() { printf '%s\n' "$1"; }
 
 WORK=$(mktemp -d)
 trap 'rm -rf "$WORK"' EXIT

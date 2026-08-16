@@ -32,8 +32,7 @@ OVERVIEW="$WIKI/wiki/overview.md"
 cleanup() { rm -rf "$WORKDIR"; }
 trap cleanup EXIT
 
-red() { printf '%s\n' "$1"; }
-green() { printf '%s\n' "$1"; }
+. "$(dirname "$0")/fixtures/test_helpers.sh"
 fail() { red "FAIL: $1"; printf -- '----- index.md -----\n'; cat "$INDEX" 2>/dev/null; exit 1; }
 
 if [ ! -f "$UPDATE" ]; then

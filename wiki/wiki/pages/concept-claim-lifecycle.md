@@ -10,7 +10,7 @@ sources:
 status: stable
 ---
 
-Claims in cogni-claims move through a three-state lifecycle.
+Claims tracked by `cogni-workspace:claims` move through a three-state lifecycle.
 
 ```
 unverified → verified (no deviation found)

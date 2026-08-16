@@ -29,9 +29,9 @@ Skill:
   args: "--file-path {PROJECT_PATH}/tips-trend-report.md --claims-file {PROJECT_PATH}/tips-trend-report-claims.json --verdict-mode --language {OUTPUT_LANGUAGE}"
 ```
 
-`cogni-claims` reads the claims registry, dispatches `claim-verifier` agents (one per unique source URL), fetches each source, and detects 5 deviation types (`misquotation`, `unsupported_conclusion`, `selective_omission`, `data_staleness`, `source_contradiction`) with severity per claim. Results land in `{PROJECT_PATH}/cogni-claims/claims.json`.
+`cogni-workspace:claims` reads the claims registry, dispatches `claim-verifier` agents (one per unique source URL), fetches each source, and detects 5 deviation types (`misquotation`, `unsupported_conclusion`, `selective_omission`, `data_staleness`, `source_contradiction`) with severity per claim. Results land in `{PROJECT_PATH}/cogni-claims/claims.json`.
 
-If the plugin is not installed, log a warning and skip — do not halt. The skill continues in structural-review-only mode.
+If the `cogni-workspace:claims` skill is not available, log a warning and skip — do not halt. The skill continues in structural-review-only mode.
 
 ## Step 3: Persist verdict
 
@@ -54,7 +54,7 @@ The `verified_by` field distinguishes this skill from the legacy embedded `trend
 
 ## Step 4: Hand off to Phase 3 (interactive review)
 
-Phase 3 of `verify-trend-report/SKILL.md` reads `cogni-claims/claims.json` directly to surface deviations to the user. No additional translation step is needed here — `cogni-claims` already writes the canonical schema.
+Phase 3 of `verify-trend-report/SKILL.md` reads `cogni-claims/claims.json` directly to surface deviations to the user. No additional translation step is needed here — `cogni-workspace:claims` already writes the canonical schema.
 
 ## Graceful degradation
 

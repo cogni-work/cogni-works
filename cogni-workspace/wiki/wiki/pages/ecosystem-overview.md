@@ -10,7 +10,7 @@ sources:
 status: stable
 ---
 
-insight-wave is a 12-plugin monorepo for consulting, sales, and marketing on Claude Code, Apache-2.0, with all plugins following the standard Claude Code plugin shape.
+insight-wave is an 11-plugin monorepo for consulting, sales, and marketing on Claude Code, Apache-2.0, with all plugins following the standard Claude Code plugin shape.
 
 ## Repository shape
 
@@ -28,7 +28,7 @@ Five conventions show up everywhere in the codebase:
 
 ## Plugin data flow
 
-Research output feeds [[plugin-cogni-narrative]] which feeds [[plugin-cogni-copywriting]] which feeds [[plugin-cogni-visual]] rendering. [[plugin-cogni-trends]] and [[plugin-cogni-portfolio]] sit at the strategic core, dispatching to [[plugin-cogni-sales]] (Why Change pitches) and [[plugin-cogni-marketing]] (content engine). [[plugin-cogni-workspace]] verification cuts across every plugin that produces sourced assertions ([[concept-claims-propagation]], [[concept-claim-lifecycle]]), and [[plugin-cogni-workspace]] is a foundational utility every plugin can rely on. [[plugin-cogni-website]] assembles deployable static sites from upstream plugin output. The wiki engine running this very wiki is vendored inside cogni-knowledge. The trends ↔ portfolio bridge is the most complex bidirectional integration — see [[concept-trends-portfolio-bridge]].
+Research output feeds [[plugin-cogni-narrative]] which feeds [[plugin-cogni-copywriting]] which feeds [[plugin-cogni-visual]] rendering. [[plugin-cogni-trends]] and [[plugin-cogni-portfolio]] sit at the strategic core, dispatching to [[plugin-cogni-sales]] (Why Change pitches) and [[plugin-cogni-marketing]] (content engine). [[plugin-cogni-workspace]] is a foundational utility every plugin can rely on, and its claim verification cuts across every plugin that produces sourced assertions ([[concept-claims-propagation]], [[concept-claim-lifecycle]]). [[plugin-cogni-website]] assembles deployable static sites from upstream plugin output. The wiki engine running this very wiki is vendored inside cogni-knowledge. The trends ↔ portfolio bridge is the most complex bidirectional integration — see [[concept-trends-portfolio-bridge]].
 
 ## Common workflows
 
@@ -40,7 +40,7 @@ Plugin versions live in `.claude-plugin/plugin.json` and are mirrored to `.claud
 
 ## MCP servers
 
-Three MCP servers ship with the marketplace: excalidraw (cogni-visual, cogni-portfolio), claude-in-chrome (cogni-claims, cogni-website, cogni-workspace), and pencil (cogni-visual, cogni-website). All managed by `cogni-workspace:install-mcp` — see [[concept-mcp-server-map]].
+Three MCP servers ship with the marketplace: excalidraw (cogni-visual, cogni-portfolio), claude-in-chrome (cogni-website, cogni-workspace), and pencil (cogni-visual, cogni-website). All managed by `cogni-workspace:install-mcp` — see [[concept-mcp-server-map]].
 
 ## Contributing
 

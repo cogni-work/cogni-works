@@ -67,11 +67,9 @@ Claim state persists in the calling project's `cogni-claims/` directory:
 └── history/{id}.json    # Audit trail per claim
 ```
 
-The directory name is a compatibility fact, not relocation debt. It holds accumulated per-project
-user state that no upgrade hook could rewrite across every disk, so it keeps its name even though
-the skill now ships from cogni-workspace. The discriminator for any future namespace sweep is the
-colon: a colon-qualified dispatch token naming the retired plugin is rewritten, a `cogni-claims/`
-path never is.
+This directory name is load-bearing: it holds accumulated per-project user state, so renaming it
+would orphan every claim store already on disk. Read and write it as `cogni-claims/` regardless of
+which plugin ships this skill.
 
 ## Cross-Plugin Integration
 

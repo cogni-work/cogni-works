@@ -1,6 +1,6 @@
 # Ecosystem Overview
 
-insight-wave is a monorepo of 12 Claude Code plugins that cover the full consulting and B2B content pipeline: from raw research through strategy, content production, visual delivery, and website generation. This document describes how the plugins are organized, how data moves between them, and what infrastructure they share.
+insight-wave is a monorepo of 11 Claude Code plugins that cover the full consulting and B2B content pipeline: from raw research through strategy, content production, visual delivery, and website generation. This document describes how the plugins are organized, how data moves between them, and what infrastructure they share.
 
 For the canonical plugin descriptions, see the individual README files. For step-by-step workflows, see [docs/workflows/](workflows/).
 
@@ -8,7 +8,7 @@ For the canonical plugin descriptions, see the individual README files. For step
 
 ## Plugin Landscape
 
-The 12 plugins are grouped by the role they play in a typical engagement — the same set the root [`marketplace.json`](../.claude-plugin/marketplace.json) enumerates.
+The 11 plugins are grouped by the role they play in a typical engagement — the same set the root [`marketplace.json`](../.claude-plugin/marketplace.json) enumerates.
 
 ### Workspace Infrastructure
 
@@ -17,6 +17,8 @@ The 12 plugins are grouped by the role they play in a typical engagement — the
 | [cogni-workspace](../cogni-workspace/README.md) | Initializes the shared workspace: environment variables, plugin discovery, theme management, and Obsidian vault integration. The vertical business plugins consume the shared state it owns; each keeps its own project lifecycle. |
 
 Run `/manage-workspace` once per project directory before using any other plugin.
+
+Claim verification is a cogni-workspace capability, not a separate plugin: the `claims` skill verifies sourced claims against their cited URLs, detecting misquotations, unsupported conclusions, and selective omissions. It runs as a review loop inside cogni-knowledge and is callable standalone on any document with citations.
 
 ### Research and Analysis
 
@@ -59,12 +61,6 @@ See the [Consulting Engagement workflow](workflows/consulting-engagement.md) for
 
 See [Portfolio to Website workflow](workflows/portfolio-to-website.md) for how portfolio and theme data combine into a deployable site.
 
-### Verification
-
-| Plugin | What it does |
-|--------|-------------|
-| [cogni-workspace](../cogni-workspace/README.md) | Verifies sourced claims against their cited URLs. Detects misquotations, unsupported conclusions, and selective omissions. Used as a review loop inside cogni-knowledge and callable standalone on any document with citations. |
-
 ---
 
 ## Data Flow
@@ -75,7 +71,7 @@ Most workflows follow a left-to-right pipeline. The typical path from research t
 cogni-knowledge
   → produces: report-draft.md + source entities
 
-cogni-workspace (via /verify-report)
+cogni-workspace (via /claims)
   → produces: verified report with claim annotations
 
 cogni-narrative

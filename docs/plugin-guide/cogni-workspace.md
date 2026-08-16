@@ -26,6 +26,8 @@ The plugin imposes no data model on the workspace. It writes four files during i
 | **Session hook** | `on-session-start.sh` — sources the workspace environment and validates plugin availability each time a session opens |
 | **Five-tier diagnostic** | The structure of `workspace-status` output: foundation → env vars → plugin registry → themes → dependencies |
 | **Obsidian vault** | A `.obsidian/` configuration directory scaffolded by `manage-workspace` during initialization |
+| **Claim** | A sourced assertion tracked for verification — carries the asserted text, its `source_url`, and `entity_ref` provenance pointing back to the plugin entity it came from |
+| **Deviation** | A detected mismatch between a claim and what its cited source actually says, held for the user to review and resolve |
 
 ### Prerequisites
 
@@ -204,6 +206,59 @@ cogni-workspace owns the canonical market registry (`references/supported-market
 /manage-markets
 /audit-region-sources
 ```
+
+---
+
+### `claims` — Verify sourced claims against their cited sources
+
+Claim verification is a cogni-workspace capability, not a separate plugin. The `claims` skill takes assertions that other plugins produced with a citation, fetches each cited source, and reports where the claim and the source disagree. It never generates claims itself — cogni-trends, cogni-portfolio, and cogni-knowledge submit them; this skill checks them.
+
+Determine the operating mode from intent rather than asking the user to name one:
+
+| Mode | What triggers it | What it does |
+|------|-----------------|--------------|
+| `submit` | A user or plugin provides new claims with sources | Adds claims to the registry for tracking |
+| `verify` | "verify", "check", "re-check", or first run after submission | Fetches sources and compares each claim against them |
+| `dashboard` | "show", "status", "what claims need attention" | Displays all claims grouped by status |
+| `inspect` | "inspect", "what's wrong with", "explain this deviation" + a claim ID | Deep-dives one claim's evidence |
+| `resolve` | "resolve", "fix", "correct" + a claim ID | Walks the user through resolving a deviation |
+| `cobrowse` | "cobrowse", "recover sources", "let's look together" | Interactive cobrowsing to recover `source_unavailable` claims |
+
+`dashboard` is the safe default when intent is ambiguous.
+
+```
+/claims
+```
+
+Two agents do the work. `claim-verifier` runs one dispatch per unique source URL, fetching the source and detecting five deviation types — `misquotation`, `unsupported_conclusion`, `selective_omission`, `data_staleness`, and `source_contradiction` — with a severity per claim. `source-inspector` handles the cobrowse path, recovering claims whose source could not be fetched automatically.
+
+Deviation detection is LLM-based, so findings are assessments for the user to review, not definitive judgments. The user always has the final say on how a deviation is handled.
+
+---
+
+### `claim-entity` — The claim data model
+
+Claims move through a three-state lifecycle:
+
+```
+unverified ──> verified            (no deviations found)
+unverified ──> deviated            (deviations detected)
+unverified ──> source_unavailable  (source unreachable)
+deviated   ──> resolved            (user resolves all deviations)
+```
+
+An unfetchable source yields `source_unavailable`, never `verified` — if a source cannot be read, the claim's accuracy is unknown, and recording it as verified would overstate what was checked.
+
+The store lives under the working directory:
+
+```
+{working_dir}/cogni-claims/
+├── claims.json          # Registry of all ClaimRecords
+├── sources/{hash}.json  # Cached source content per URL
+└── history/{id}.json    # Audit trail per claim
+```
+
+The directory keeps the name `cogni-claims/` because it holds accumulated per-project user state: renaming it would orphan every claim store already on disk. Read and write it under that name regardless of which plugin ships the skill.
 
 ---
 

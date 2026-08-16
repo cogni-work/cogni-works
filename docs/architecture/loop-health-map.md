@@ -19,8 +19,8 @@ rubric: it is what makes a flagged finding credible.
   this" section below restates the five moves, the anti-pattern map, and the
   severity policy — this map is self-contained and re-sweepable without
   cogni-service installed.
-- **Scope:** all 12 plugins in this repo's marketplace — cogni-workspace,
-  cogni-consult, cogni-copywriting, cogni-knowledge,
+- **Scope:** all 11 plugins in this repo's marketplace — cogni-consult,
+  cogni-copywriting, cogni-knowledge,
   cogni-marketing, cogni-narrative, cogni-portfolio, cogni-sales, cogni-trends,
   cogni-visual, cogni-website, cogni-workspace.
 - **Nature:** read-only. This map is a data artifact; it changes no loop and

@@ -4,13 +4,13 @@ title: Claim lifecycle (unverified → verified | deviated → resolved)
 type: concept
 tags: [cogni-claims, claims, lifecycle, verification]
 created: 2026-04-17
-updated: 2026-04-17
+updated: 2026-04-20
 sources:
   - https://github.com/cogni-work/insight-wave/blob/main/docs/architecture/er-diagram.md
 status: stable
 ---
 
-Claims in cogni-claims move through a three-state lifecycle.
+Claims tracked by `cogni-workspace:claims` move through a three-state lifecycle.
 
 ```
 unverified → verified (no deviation found)
@@ -27,7 +27,7 @@ unverified → verified (no deviation found)
 
 ## What happens at each transition
 
-The transitions are owned by `cogni-workspace:claims` (verification of unverified) and the resolution dashboard (deviated → resolved). Once resolved, the [[concept-claims-propagation]] cascade fires: the originating entity file is updated, and downstream entities that referenced it get `propagated_at` timestamps so they can be re-checked.
+The unverified → verified/deviated/source_unavailable transition is performed by the `claim-verifier` agent dispatched by `cogni-workspace:claims`. Deviated → resolved is a user action through the resolution dashboard. Once resolved, the [[concept-claims-propagation]] cascade fires: the originating entity file is updated, and downstream entities that referenced it get `propagated_at` timestamps so they can be re-checked.
 
 ## Why three states, not two
 
@@ -38,3 +38,5 @@ The deviated state matters because not every deviation warrants automatic correc
 Claim records use UUID-v4 slugs (`claim-550e8400-...`) — see [[concept-slug-based-lookups]]. Claims have no natural name, so their identifier is their identity.
 
 **Source**: [docs/architecture/er-diagram.md on GitHub](https://github.com/cogni-work/insight-wave/blob/main/docs/architecture/er-diagram.md)
+
+The record types and field definitions that compose each state are specified in `cogni-workspace:claim-entity`.

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Submit/propagate adapter wiring claim-type assumptions to cogni-claims.
+"""Submit/propagate adapter wiring claim-type assumptions to cogni-workspace:claims.
 
 Usage:
   python3 submit-assumption-claim.py <engagement-dir> submit <asm-id>
@@ -10,18 +10,18 @@ Usage:
       [--corrected-value <value>] [--claim-id <id>] [--project-dir <dir>]
 
 `submit` builds a ClaimRecord for one claim-type assumption and appends it
-(status "unverified") to the workspace cogni-claims registry, under the same
+(status "unverified") to the workspace cogni-claims/ registry, under the same
 mkdir-based lock discipline the ecosystem's claim appenders use. The record's
 entity_ref is the adapted object form of the cross-plugin contract —
 {"type": "assumption", "file": <project-relative assumptions.json path>,
 "field_path": 'assumptions[?id=="<asm-id>"].value'} — mapping cogni-consult's
-flat-string citation.entity_ref coordinate onto the object locator cogni-claims
-consumers destructure. No cogni-claims schema change is involved. Submit is
+flat-string citation.entity_ref coordinate onto the object locator that
+claim-verification consumers destructure. No claim-verification schema change is involved. Submit is
 idempotent: an existing ClaimRecord with the same adapted entity_ref (or one
 already referenced by the assumption's citation.claim_id) is reused, never
 duplicated, so a resumed pipeline maps one assumption to exactly one record.
 
-`propagate` completes the round-trip after cogni-claims verification: it
+`propagate` completes the round-trip after cogni-workspace:claims verification: it
 requires the referenced ClaimRecord to exist with status "verified" (fail loud
 otherwise) and then atomically writes status "verified" plus the
 citation.claim_id back-reference onto the assumption record — the evidence the
@@ -30,7 +30,7 @@ point, so repeated propagates are no-ops.
 
 `resolve-propagate` completes the deviated->resolved leg for the three
 value-affecting resolution actions (mirroring cogni-portfolio's verify Step 8):
-after a verified ClaimRecord is disputed and resolved in cogni-claims, it
+after a verified ClaimRecord is disputed and resolved in cogni-workspace:claims, it
 requires the referenced ClaimRecord to be status "resolved" with a propagable
 resolution.action (fail loud otherwise), then atomically writes the resolution
 back onto the assumption and stamps citation.propagated_at:
@@ -178,13 +178,13 @@ def _load_assumption(engagement_dir, asm_id):
 def _require_claim_type(entry, asm_id):
     if entry.get("provenance_type") != "claim":
         _emit(False, {"failed_check": "not_claim_type", "ids": [asm_id]},
-              "only a claim-type assumption is eligible for the cogni-claims "
+              "only a claim-type assumption is eligible for the cogni-workspace:claims "
               "verify path; %s has provenance_type %r"
               % (asm_id, entry.get("provenance_type")))
 
 
 def _adapted_entity_ref(registry_path, project_dir, asm_id):
-    """Fork-1 adapter: consult coordinates -> the cogni-claims EntityRef object."""
+    """Fork-1 adapter: consult coordinates -> the claim-verification EntityRef object."""
     rel_file = os.path.relpath(os.path.abspath(registry_path),
                                os.path.abspath(project_dir))
     return {
@@ -220,7 +220,7 @@ def cmd_submit(args):
         _emit(False, {"failed_check": "citation_source_url_missing",
                       "ids": [args.asm_id]},
               "submit requires citation.source_url — a claim without a source "
-              "URL has nothing for cogni-claims to verify against")
+              "URL has nothing for cogni-workspace:claims to verify against")
 
     entity_ref = _adapted_entity_ref(registry_path, args.project_dir, args.asm_id)
     claims_dir, claims_file = _claims_paths(args.project_dir)
@@ -229,7 +229,7 @@ def cmd_submit(args):
     with _ClaimsLock(claims_dir):
         if os.path.isfile(claims_file):
             data = _load_json(claims_file, "claims_registry_unreadable",
-                              "cogni-claims registry")
+                              "cogni-claims/ registry")
         else:
             data = {"claims": []}
         # Idempotent re-submit: one assumption maps to exactly one ClaimRecord.
@@ -280,7 +280,7 @@ def cmd_propagate(args):
     citation = entry.get("citation") or {}
     _claims_dir, claims_file = _claims_paths(args.project_dir)
     data = _load_json(claims_file, "claims_registry_unreadable",
-                      "cogni-claims registry")
+                      "cogni-claims/ registry")
     claims = {c.get("id"): c for c in data.get("claims", [])
               if isinstance(c, dict) and c.get("id")}
 
@@ -357,7 +357,7 @@ def cmd_resolve_propagate(args):
     citation = entry.get("citation") or {}
     _claims_dir, claims_file = _claims_paths(args.project_dir)
     data = _load_json(claims_file, "claims_registry_unreadable",
-                      "cogni-claims registry")
+                      "cogni-claims/ registry")
     claims = {c.get("id"): c for c in data.get("claims", [])
               if isinstance(c, dict) and c.get("id")}
 
@@ -485,7 +485,7 @@ def cmd_resolve_propagate(args):
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Submit a claim-type assumption to cogni-claims, propagate "
+        description="Submit a claim-type assumption to cogni-workspace:claims, propagate "
                     "its verified verdict, or propagate a resolved correction "
                     "back onto the assumption record")
     parser.add_argument("engagement_dir",

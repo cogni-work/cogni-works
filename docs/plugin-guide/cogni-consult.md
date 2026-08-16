@@ -108,7 +108,7 @@ Turns a completed deliverable into presentation-ready documentation: a brief han
 |---|---|---|
 | cogni-knowledge | Orchestrates (required) | One base bound at setup; all research runs through the inverted pipeline / `knowledge-query`; finalized syntheses copied to `action-fields/{field}/research/` |
 | cogni-workspace | Consumes | Cross-session engagement discovery via the shared registry helper |
-| cogni-claims | Consumes | Deliverable `sources[]` lineage triples let claim corrections cascade into artifacts |
+| cogni-workspace | Consumes | Deliverable `sources[]` lineage triples let claim corrections cascade into artifacts |
 | cogni-visual / document-skills | Orchestrates (optional) | Deliverable export when a deliverable's `producing_route` names an export path |
 
 cogni-consult is standalone as a methodology orchestrator; cogni-knowledge is the one integration it requires to deliver its compounding-research promise.

@@ -1,12 +1,12 @@
 # Research to Report
 
-**Pipeline**: cogni-knowledge → cogni-claims (optional) → cogni-copywriting → cogni-visual
+**Pipeline**: cogni-knowledge → cogni-workspace (optional) → cogni-copywriting → cogni-visual
 **Duration**: 10 min – 4 hours (all options) depending on research depth, claims volume, and visual enrichment
 **End deliverable**: A verified, polished research report as themed HTML with data visualizations — plus an optional one-page infographic
 
 ```mermaid
 graph LR
-    A[cogni-knowledge] -->|synthesis + cited sources| B[cogni-claims]
+    A[cogni-knowledge] -->|synthesis + cited sources| B[cogni-workspace]
     B -->|live-source re-check| C[cogni-copywriting]
     C -->|polished report| D[cogni-visual]
     D -->|infographic + enriched HTML| E[Deliverables]
@@ -18,7 +18,7 @@ A research report where every citation has been checked against its cited source
 
 - A persistent wiki knowledge base that compounds across runs — future runs read what prior runs filed before hitting the web (cogni-knowledge; the Karpathy-style engine is vendored in)
 - A structured synthesis with inline citations and a source registry, verified **zero-network** against each cited source's extracted claims (cogni-knowledge)
-- An optional **live-source re-check** that flags misquotations, unsupported conclusions, and stale data against the live source URLs (cogni-claims, via `knowledge-refresh --resweep`)
+- An optional **live-source re-check** that flags misquotations, unsupported conclusions, and stale data against the live source URLs (cogni-workspace, via `knowledge-refresh --resweep`)
 - An executive-polished document with strong structure, active voice, and readability scoring (cogni-copywriting)
 - A single-page infographic distilling the 3–5 key data points (cogni-visual / story-to-infographic)
 - A themed HTML report with Chart.js visualizations, concept diagrams, and sidebar navigation (cogni-visual / enrich-report)
@@ -32,7 +32,7 @@ This is the chain to use when the report will be read by decision-makers or shar
 | cogni-knowledge installed | Wiki-first research orchestrator (vendors the Karpathy wiki engine) |
 | cogni-copywriting installed | Applies messaging frameworks and readability polish |
 | cogni-visual installed | Produces infographic and enriched HTML |
-| cogni-claims installed (optional) | Live-source re-check of cited claims via resweep |
+| cogni-workspace installed (optional) | Live-source re-check of cited claims via resweep |
 | Web access enabled | cogni-knowledge dispatches parallel web researchers during curate/fetch |
 
 ## Step-by-Step
@@ -115,14 +115,14 @@ Resume the research on AI regulation
 
 cogni-knowledge verifies every citation **zero-network** during `knowledge-verify` — each cited sentence is scored against the cited page's extracted claims (`verbatim` / `paraphrase` / `unsupported`), with a bounded revisor loop that re-points or rephrases unsupported citations. This is citation-consistent verification with no live web re-fetch, and it runs as part of every pipeline pass.
 
-For a **live-source re-check** (has the source URL changed since it was ingested?), run the optional resweep, which dispatches `cogni-claims` against the live URLs:
+For a **live-source re-check** (has the source URL changed since it was ingested?), run the optional resweep, which dispatches `cogni-workspace` against the live URLs:
 
 **Command**: `/knowledge-refresh --resweep`
 
 **What happens:**
 
 1. cogni-knowledge extracts the bound wiki's cited claims and their source URLs
-2. `cogni-claims` runs a `claim-verifier` per unique source URL against the live page
+2. `cogni-workspace` runs a `claim-verifier` per unique source URL against the live page
 3. Deviations are reported: misquotation, unsupported conclusion, selective omission, data staleness, or source contradiction
 
 **Review the dashboard** to see claim status:
@@ -253,7 +253,7 @@ This matches the consulting deliverable pattern: executive one-pager up front, d
 ## Related Guides
 
 - [cogni-knowledge plugin guide](../plugin-guide/cogni-knowledge.md)
-- [cogni-claims plugin guide](../plugin-guide/cogni-claims.md)
+- [cogni-workspace plugin guide](../plugin-guide/cogni-workspace.md)
 - [cogni-copywriting plugin guide](../plugin-guide/cogni-copywriting.md)
 - [cogni-visual plugin guide](../plugin-guide/cogni-visual.md)
 - [Consulting Engagement workflow](./consulting-engagement.md) — this pipeline runs inside a deliverable's design-thinking loop

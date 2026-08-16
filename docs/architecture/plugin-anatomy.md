@@ -35,7 +35,7 @@ A fully featured plugin looks like this:
 └── README.md                    # User-facing introduction
 ```
 
-Not every plugin uses every directory. cogni-claims has no `scripts/` directory. cogni-workspace has no `agents/` directory. cogni-visual has a `libraries/` directory (shared reference material loaded by multiple agents) rather than per-skill `references/` subdirectories.
+Not every plugin uses every directory. cogni-narrative, cogni-copywriting, cogni-marketing and cogni-website have no `scripts/` directory. cogni-visual has a `libraries/` directory (shared reference material loaded by multiple agents) rather than per-skill `references/` subdirectories.
 
 ---
 
@@ -45,7 +45,7 @@ The plugin manifest identifies the plugin and its version. Claude Code uses this
 
 ```json
 {
-  "name": "cogni-claims",
+  "name": "cogni-workspace",
   "version": "1.0.6",
   "description": "Claim verification and management system. Verifies sourced claims against cited URLs, detects deviations, and guides users through resolution.",
   "author": {

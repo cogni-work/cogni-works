@@ -245,7 +245,7 @@ Useful when returning to a project after days or weeks. The skill reads all proj
 
 | Plugin | Purpose |
 |--------|---------|
-| cogni-claims | Verifies that TIPS claims embedded in content are still supported by their sources |
+| cogni-workspace | Verifies that TIPS claims embedded in content are still supported by their sources |
 
 ### Downstream consumers
 

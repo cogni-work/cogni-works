@@ -29,7 +29,7 @@ One canonical cache per knowledge base, shared across all projects under that ba
 }
 ```
 
-`fetch_method ∈ {webfetch, webfetch_fulltext, cobrowse_interactive, direct}`. `webfetch` / `cobrowse_interactive` are kept aligned with cogni-claims (`cogni-claims/CLAUDE.md:111`, `skills/claims/SKILL.md`) so a future shared verifier can read either cache's entries without translation; `webfetch_fulltext` and `direct` are additionally documented on the cogni-claims side as recognized-but-never-emitted (cogni-claims has neither a fuller-body fetch nor a local-ingest path). Adding a value here is an additive cross-plugin contract change, mirrored in the cogni-claims prose.
+`fetch_method ∈ {webfetch, webfetch_fulltext, cobrowse_interactive, direct}`. `webfetch` / `cobrowse_interactive` are kept aligned with the cogni-workspace claims engine (`cogni-workspace/CLAUDE.md` §Source Fetching Strategy, `cogni-workspace/skills/claims/SKILL.md`) so a future shared verifier can read either cache's entries without translation; `webfetch_fulltext` and `direct` are additionally documented on the claims-engine side as recognized-but-never-emitted (it has neither a fuller-body fetch nor a local-ingest path). Adding a value here is an additive cross-plugin contract change, mirrored in the claims-engine prose.
 
 **`direct` — non-web sources.** `webfetch` and `cobrowse_interactive` are the two web-fetch outcomes (an automated `WebFetch`, or an interactive Claude-in-Chrome recovery). `direct` records a source whose bytes are already in hand and were never fetched over the network — a local file (`.docx`/`.html`/`.txt`), pasted text, a local PDF, or a local interview note. It is the honest provenance value for `knowledge-ingest-source`'s local-input path. A `direct` entry is always `status: ok` (the body exists by definition), so it never carries a `webfetch_*`/negative-cache `reason` — the negative-cache machinery is web-only.
 
@@ -124,17 +124,17 @@ If a future use case wants asymmetric retention (e.g. keep `unavailable` longer 
 
 `fetch-cache.py write` uses temp-file + `os.replace` per entry. Two parallel writers to the same `<sha256>.json` are safe — the loser's bytes are atomically replaced by the winner's. There is no file lock because URL hashes are independent; collisions across distinct URLs are cryptographically impossible at this scale.
 
-## Relationship to cogni-claims' source cache
+## Relationship to the claims engine's source cache
 
-cogni-claims has its own URL→body cache at `cogni-claims/sources/{url-hash}.json` (`cogni-claims/skills/claims/scripts/claims-store.sh:48-50`). Two deliberate differences:
+`cogni-workspace:claims` has its own URL→body cache at `cogni-claims/sources/{url-hash}.json` (the data directory keeps its name) (`cogni-workspace/skills/claims/scripts/claims-store.sh:48-50`). Two deliberate differences:
 
-| | cogni-claims | cogni-knowledge fetch-cache |
+| | claims engine | cogni-knowledge fetch-cache |
 |---|---|---|
 | Cache key | First 16 chars of sha256(url) | Full 64 chars of sha256(url) |
 | Lifecycle | Per-workspace | Per knowledge base |
 | Schema for `fetch_method` | `webfetch` / `cobrowse_interactive` | superset: adds `direct` |
 
-The 64-char key was chosen because at scale (10k+ URLs across a long-lived knowledge base) the 16-char truncation has nontrivial collision risk. The two caches do not share storage — they have different lifecycles — but the **shared** `fetch_method` web values (`webfetch` / `cobrowse_interactive`) are kept identical so a future absorbed verifier can interpret either format consistently. cogni-knowledge additionally writes `direct` for non-web (local) sources, which cogni-claims — a web-source verifier with no local-ingest path — never emits; the value is documented on the cogni-claims side so an absorbed verifier recognizes it rather than treating it as unknown. When cogni-claims is absorbed at v1.0, the truncated keys are the loose end to reconcile (widen cogni-claims to 64 chars, or accept that legacy 16-char entries lose addressability).
+The 64-char key was chosen because at scale (10k+ URLs across a long-lived knowledge base) the 16-char truncation has nontrivial collision risk. The two caches do not share storage — they have different lifecycles — but the **shared** `fetch_method` web values (`webfetch` / `cobrowse_interactive`) are kept identical so a shared verifier can interpret either format consistently. cogni-knowledge additionally writes `direct` for non-web (local) sources, which the claims engine — a web-source verifier with no local-ingest path — never emits; the value is documented on that side so a shared verifier recognizes it rather than treating it as unknown. The claims engine now lives in cogni-workspace, and the truncated keys remain the loose end to reconcile (widen its cache to 64 chars, or accept that legacy 16-char entries lose addressability) — the absorption moved the skill, not the cache format.
 
 ## Why not put this upstream in cogni-wiki?
 

@@ -2,7 +2,7 @@
 id: concept-claim-lifecycle
 title: Claim lifecycle (unverified → verified | deviated → resolved)
 type: concept
-tags: [cogni-claims, claims, lifecycle, verification]
+tags: [cogni-workspace, claims, lifecycle, verification]
 created: 2026-04-17
 updated: 2026-04-20
 sources:
@@ -10,7 +10,7 @@ sources:
 status: stable
 ---
 
-Claims in cogni-claims move through a three-state lifecycle.
+Claims tracked by `cogni-workspace:claims` move through a three-state lifecycle.
 
 ```
 unverified → verified (no deviation found)
@@ -21,13 +21,13 @@ unverified → verified (no deviation found)
 ## States
 
 - **unverified** — the initial state when any data-layer plugin appends a claim record. The claim has source URL, claim text, and `entity_ref` provenance, but no verification has run.
-- **verified** — `cogni-claims:claims` fetched the source, compared it to the claim text, and found no deviation. The claim text is supported by what the source actually says.
+- **verified** — `cogni-workspace:claims` fetched the source, compared it to the claim text, and found no deviation. The claim text is supported by what the source actually says.
 - **deviated** — verification found a mismatch: the source contradicts, weakens, or doesn't address the claim. The deviation record captures the gap.
 - **resolved** — the user reviewed the deviation and acted: accepted a corrected version of the claim, removed the assertion, or marked the deviation as a non-issue (e.g., the source updated since the claim was written).
 
 ## What happens at each transition
 
-The unverified → verified/deviated/source_unavailable transition is performed by [[agent-cogni-claims-claim-verifier]] dispatched by `cogni-claims:claims`. Deviated → resolved is a user action through the resolution dashboard. Once resolved, the [[concept-claims-propagation]] cascade fires: the originating entity file is updated, and downstream entities that referenced it get `propagated_at` timestamps so they can be re-checked.
+The unverified → verified/deviated/source_unavailable transition is performed by the `claim-verifier` agent dispatched by `cogni-workspace:claims`. Deviated → resolved is a user action through the resolution dashboard. Once resolved, the [[concept-claims-propagation]] cascade fires: the originating entity file is updated, and downstream entities that referenced it get `propagated_at` timestamps so they can be re-checked.
 
 ## Why three states, not two
 
@@ -39,4 +39,4 @@ Claim records use UUID-v4 slugs (`claim-550e8400-...`) — see [[concept-slug-ba
 
 **Source**: [docs/architecture/er-diagram.md on GitHub](https://github.com/cogni-work/insight-wave/blob/main/docs/architecture/er-diagram.md)
 
-The record types and field definitions that compose each state are specified in [[skill-cogni-claims-claim-entity]].
+The record types and field definitions that compose each state are specified in `cogni-workspace:claim-entity`.

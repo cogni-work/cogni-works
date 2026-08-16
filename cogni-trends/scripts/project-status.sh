@@ -190,7 +190,7 @@ BOOKLET_DENSITY=""
 [ -f "$PROJECT_DIR/tips-insight-summary.md" ] && HAS_INSIGHT="true"
 [ -f "$PROJECT_DIR/.metadata/trend-report-verification.json" ] && HAS_VERIFICATION="true"
 # Fallback: detect verification from cogni-claims registry (created by /claims skill)
-CLAIMS_STORE_SCRIPT="$(cd "$(dirname "$0")/../.." && pwd)/cogni-claims/skills/claims/scripts/claims-store.sh"
+CLAIMS_STORE_SCRIPT="$(cd "$(dirname "$0")/../.." && pwd)/cogni-workspace/skills/claims/scripts/claims-store.sh"
 if [ "$HAS_VERIFICATION" = "false" ] && [ -f "$PROJECT_DIR/cogni-claims/claims.json" ] && [ -f "$CLAIMS_STORE_SCRIPT" ]; then
   CLAIMS_STATUS=$(bash "$CLAIMS_STORE_SCRIPT" count-by-status "$PROJECT_DIR" 2>/dev/null || echo "")
   if [ -n "$CLAIMS_STATUS" ]; then

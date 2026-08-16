@@ -30,7 +30,7 @@ Eight pluggable industry taxonomies (b2b-ict, b2b-saas, b2b-fintech, b2b-healtht
 
 - **Core entity model**: `products`, `features`, `markets`, `propositions`, `customers`, `solutions`, `packages`, `compete`
 - **Setup & ingestion**: `portfolio-setup`, `portfolio-canvas` (Lean Canvas bootstrap), `portfolio-canvas-workspace`, `portfolio-ingest` (md/docx/pptx/xlsx/pdf), `portfolio-scan` (web discovery)
-- **Quality & lineage**: `portfolio-verify` (via cogni-claims), `portfolio-lineage` (source drift cascade)
+- **Quality & lineage**: `portfolio-verify` (via `cogni-workspace:claims`), `portfolio-lineage` (source drift cascade)
 - **Visualization**: `portfolio-dashboard`, `portfolio-architecture` (Excalidraw)
 - **Communication**: `portfolio-communicate` (audience-routed deliverables)
 - **Cross-plugin**: `trends-bridge` (TIPS solution templates → portfolio features)
@@ -42,6 +42,6 @@ Three-layer pipeline ([[concept-quality-gates]]) blocks downstream generation. F
 
 ## Integration
 
-Upstream: cogni-trends (`portfolio-opportunities.json`, `tips-value-model.json`), cogni-consulting (lean canvas), document-skills (file readers). Downstream: cogni-claims (auto-logged claims), cogni-sales, cogni-marketing, cogni-website, cogni-narrative. The bidirectional cogni-trends integration is the most complex single integration in the ecosystem — see [[concept-trends-portfolio-bridge]].
+Upstream: cogni-trends (`portfolio-opportunities.json`, `tips-value-model.json`), cogni-consulting (lean canvas), document-skills (file readers). Downstream: cogni-workspace (auto-logged claims), cogni-sales, cogni-marketing, cogni-website, cogni-narrative. The bidirectional cogni-trends integration is the most complex single integration in the ecosystem — see [[concept-trends-portfolio-bridge]].
 
 **Source**: [cogni-portfolio README](https://github.com/cogni-work/insight-wave/blob/main/cogni-portfolio/README.md) · [plugin guide](https://github.com/cogni-work/insight-wave/blob/main/docs/plugin-guide/cogni-portfolio.md)

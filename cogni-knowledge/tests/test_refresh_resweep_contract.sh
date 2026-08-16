@@ -11,7 +11,7 @@
 # The re-orchestration: --resweep no longer dispatches
 # cogni-wiki:wiki-claims-resweep. It runs the vendored wiki-claims-resweep
 # scripts (extract_page_claims.py + resweep_planner.py) in-tree and dispatches
-# cogni-claims:claims submit/verify for the live-source re-check — dropping the
+# cogni-workspace:claims submit/verify for the live-source re-check — dropping the
 # residual cogni-wiki: dispatch (archival parity grep-guard) while keeping the
 # public --resweep* flags unchanged. The vendored scripts are resolved
 # vendored-first via resolve_wiki_scripts(), mirroring knowledge-dashboard.
@@ -43,11 +43,11 @@ assert_grep '`--resweep-dry-run`' "$REFRESH" "knowledge-refresh: --resweep-dry-r
 # --- 2) Workflow has a dedicated resweep section ---------------------------
 assert_grep '### 2. Resweep' "$REFRESH" "knowledge-refresh: Workflow has a '### 2. Resweep' section"
 
-# --- 3) The resweep is NATIVE: vendored scripts + cogni-claims, no cogni-wiki dispatch ---
+# --- 3) The resweep is NATIVE: vendored scripts + cogni-workspace, no cogni-wiki dispatch ---
 assert_not_grep 'Skill("cogni-wiki:wiki-claims-resweep"' "$REFRESH" "knowledge-refresh: --resweep no longer dispatches cogni-wiki:wiki-claims-resweep"
 assert_grep 'extract_page_claims.py' "$REFRESH" "knowledge-refresh: --resweep runs vendored extract_page_claims.py"
 assert_grep 'resweep_planner.py' "$REFRESH" "knowledge-refresh: --resweep runs vendored resweep_planner.py"
-assert_grep 'Skill("cogni-claims:claims"' "$REFRESH" "knowledge-refresh: --resweep dispatches cogni-claims:claims for live-source re-verification"
+assert_grep 'Skill("cogni-workspace:claims"' "$REFRESH" "knowledge-refresh: --resweep dispatches cogni-workspace:claims for live-source re-verification"
 assert_grep 'resolve_wiki_scripts wiki-claims-resweep' "$REFRESH" "knowledge-refresh: --resweep resolves vendored scripts vendored-first via resolve_wiki_scripts()"
 # Against the bound wiki, never a duplicated cadence pointer.
 assert_grep 'binding.wiki_path' "$REFRESH" "knowledge-refresh: resweep targets binding.wiki_path"
@@ -69,15 +69,15 @@ else
 fi
 # Never-run-when names the missing-vendored-scripts abort (no longer a missing-plugin abort).
 assert_grep 'vendored wiki-claims-resweep scripts are missing\|missing-vendored-scripts' "$REFRESH" "knowledge-refresh: Never-run-when names the missing-vendored-scripts abort"
-# References block lists the vendored scripts + the cogni-claims dispatch target.
+# References block lists the vendored scripts + the cogni-workspace dispatch target.
 assert_grep 'wiki-claims-resweep/scripts/extract_page_claims.py' "$REFRESH" "knowledge-refresh: References lists the vendored extract_page_claims.py"
 assert_grep 'wiki-claims-resweep/scripts/resweep_planner.py' "$REFRESH" "knowledge-refresh: References lists the vendored resweep_planner.py"
-assert_grep 'cogni-claims:claims` SKILL.md' "$REFRESH" "knowledge-refresh: References lists cogni-claims:claims as the live-source re-verification target"
+assert_grep 'cogni-workspace:claims` SKILL.md' "$REFRESH" "knowledge-refresh: References lists cogni-workspace:claims as the live-source re-verification target"
 
-# --- 7) Pre-flight probes the vendored scripts + cogni-claims (not cogni-wiki) ---
+# --- 7) Pre-flight probes the vendored scripts + cogni-workspace (not cogni-wiki) ---
 assert_not_grep 'probe_plugin cogni-wiki wiki-claims-resweep' "$REFRESH" "knowledge-refresh: pre-flight no longer probes cogni-wiki wiki-claims-resweep"
 assert_grep 'scripts/vendor/cogni-wiki/skills/wiki-claims-resweep/scripts' "$REFRESH" "knowledge-refresh: pre-flight tests the vendored wiki-claims-resweep scripts dir"
-assert_grep 'probe_plugin cogni-claims claims' "$REFRESH" "knowledge-refresh: pre-flight probes cogni-claims when --resweep is passed"
+assert_grep 'probe_plugin cogni-workspace claims' "$REFRESH" "knowledge-refresh: pre-flight probes cogni-workspace when --resweep is passed"
 
 # --- 8) Push-mode survives; pull-mode is removed (regression guard) --------
 assert_not_grep 'Skill("cogni-wiki:wiki-lint"' "$REFRESH" "knowledge-refresh: push-mode lints natively on the vendored engine, not via a cogni-wiki:wiki-lint dispatch"

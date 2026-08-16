@@ -103,15 +103,15 @@ assert_grep 'write_failed' "$SC" "source-contradictor: documents write_failed fa
 # Pure-observability: never gates ingest / never rolls back.
 assert_grep 'never gates ingest\|never gate ingest\|gate ingest\|roll back\|rolls back\|rolling back' "$SC" "source-contradictor: documents it never gates ingest / never rolls back"
 
-# Defence-in-depth: no cogni-wiki / cogni-research / cogni-claims SKILL dispatch.
+# Defence-in-depth: no cogni-wiki / cogni-research / cogni-workspace claim SKILL dispatch.
 assert_not_grep 'Skill("cogni-research:' "$SC" "source-contradictor: no Skill('cogni-research:') dispatch (clean break)"
-assert_not_grep 'Skill("cogni-claims:' "$SC" "source-contradictor: no Skill('cogni-claims:') dispatch (clean break)"
+assert_not_grep 'Skill("cogni-workspace:claim' "$SC" "source-contradictor: no Skill('cogni-workspace:claim') dispatch (clean break)"
 assert_not_grep 'Skill("cogni-wiki:' "$SC" "source-contradictor: no Skill('cogni-wiki:') dispatch (clean break)"
 # Positive control, per tests/README.md: the absence assertions above also pass on a
 # gutted file, so pair them with the mechanism that replaced the dispatch. The colon
 # form is deliberate — the maintainer comment block's mention is the non-colon
 # "::pre_extracted_claims;", so this literal matches body prose only.
-assert_grep 'pre_extracted_claims:' "$SC" "source-contradictor: cogni-claims replacement present — scores NEW vs PEER claims from on-disk pre_extracted_claims: frontmatter (zero-network)"
+assert_grep 'pre_extracted_claims:' "$SC" "source-contradictor: claims-engine replacement present — scores NEW vs PEER claims from on-disk pre_extracted_claims: frontmatter (zero-network)"
 
 # Recency survivor annotation (the resolution{} producer contract, #874).
 assert_grep 'resolution' "$SC" "source-contradictor: documents the resolution annotation"

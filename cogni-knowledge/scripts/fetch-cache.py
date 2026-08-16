@@ -48,7 +48,7 @@ SCHEMA_VERSION = "0.1.0"
 FETCH_CACHE_DIRNAME = "fetch-cache"
 BINDING_DIRNAME = ".cogni-knowledge"
 BINDING_FILENAME = "binding.json"
-# Matches cogni-claims' fetch_method enum (cogni-claims/CLAUDE.md:111,
+# Matches the claims engine's fetch_method enum (cogni-workspace/CLAUDE.md,
 # skills/claims/SKILL.md) so a future shared verifier can read either cache's
 # entries without translation. `webfetch` / `cobrowse_interactive` are the two
 # standard web-fetch outcomes; `webfetch_fulltext` is the fuller-body web-fetch
@@ -58,10 +58,10 @@ BINDING_FILENAME = "binding.json"
 # is always paired with status `ok`. `direct` records a non-web source (a local
 # file / pasted text / local PDF / interview note) whose bytes are already in
 # hand — it is always paired with status `ok` and never carries a negative-cache
-# `reason`. cogni-claims recognizes `webfetch_fulltext` and `direct` but emits
+# `reason`. The claims engine recognizes `webfetch_fulltext` and `direct` but emits
 # neither (it has no fuller-body fetch and no local-ingest path); cogni-knowledge
 # writes both. Adding a value here is a cross-plugin contract change: keep it
-# additive and mirror it in the cogni-claims prose above.
+# additive and mirror it in the claims-engine prose above.
 VALID_FETCH_METHODS = {"webfetch", "webfetch_fulltext", "cobrowse_interactive", "direct"}
 VALID_STATUSES = {"ok", "unavailable"}
 # Closed vocabulary for unavailable-entry `reason`. Single source of truth

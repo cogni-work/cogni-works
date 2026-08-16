@@ -98,13 +98,13 @@ assert_grep 'atomic_write_text' "$FIN" "knowledge-finalize: writes synthesis pag
 assert_grep 'title: " + json.dumps(topic' "$FINREF" "knowledge-finalize: synthesis title quoted via json.dumps (#389 — valid YAML on colon-containing topics)"
 # Cycle-guard adapter signal — the skill notes citation-manifest as the expected input_shape.
 assert_grep 'citation-manifest' "$FIN" "knowledge-finalize: notes citation-manifest as cycle-guard's input_shape"
-# Defence-in-depth: no Skill() dispatches to cogni-research / cogni-claims / cogni-wiki.
+# Defence-in-depth: no Skill() dispatches to cogni-research / cogni-workspace:claim / cogni-wiki.
 assert_not_grep 'Skill("cogni-research:' "$FIN" "knowledge-finalize: no Skill('cogni-research:') dispatch (clean break)"
-assert_not_grep 'Skill("cogni-claims:' "$FIN" "knowledge-finalize: no Skill('cogni-claims:') dispatch (clean break)"
+assert_not_grep 'Skill("cogni-workspace:claim' "$FIN" "knowledge-finalize: no Skill('cogni-workspace:claim') dispatch (clean break)"
 assert_not_grep 'Skill("cogni-wiki:' "$FIN" "knowledge-finalize: no Skill('cogni-wiki:') dispatch (M6 contract: call helpers at script level)"
 # Positive control, per tests/README.md: the absence assertions above also pass on a
 # gutted file, so pair them with the mechanism that replaced the dispatch.
-assert_grep 'pre_extracted_claims:' "$FIN" "knowledge-finalize: cogni-claims replacement present — the contradiction pass reads on-disk pre_extracted_claims: frontmatter (zero-network)"
+assert_grep 'pre_extracted_claims:' "$FIN" "knowledge-finalize: claims-engine replacement present — the contradiction pass reads on-disk pre_extracted_claims: frontmatter (zero-network)"
 # Post-review hardening (v0.0.24, all 15 review findings).
 # E1: wiki:// shape must be bare slug, not path-prefixed (cogni-wiki health.py:206).
 assert_grep 'wiki://" + slug' "$FINREF" "knowledge-finalize: emits bare 'wiki://<slug>' (not 'wiki://<wiki_slug>/<slug>') per cogni-wiki contract"

@@ -17,7 +17,7 @@ horizontal   cogni-workspace
 ─────────────────────────────────────────────────────────────────
 vertical     Orchestration   cogni-consult
              Data            cogni-portfolio  cogni-trends
-                             cogni-knowledge  cogni-claims
+                             cogni-knowledge
              Output          cogni-narrative  cogni-copywriting
                              cogni-visual     cogni-sales
                              cogni-marketing  cogni-website
@@ -25,8 +25,8 @@ vertical     Orchestration   cogni-consult
 
 ## The groups
 
-- **Horizontal** (cogni-workspace) — shared infrastructure: themes, environment variables, Obsidian vault configuration, MCP server installation. Every plugin that produces visual HTML output reads theme files from cogni-workspace. No plugin writes to cogni-workspace except through `pick-theme` and `manage-workspace`.
-- **Data** — each plugin owns a specialized knowledge domain. cogni-portfolio (products, markets, propositions, competitors). cogni-trends (TIPS paths, solution templates, catalogs). cogni-knowledge (sub-questions, contexts, sources, claims). cogni-claims (verification state across all sourced assertions).
+- **Horizontal** (cogni-workspace) — shared infrastructure: themes, environment variables, Obsidian vault configuration, MCP server installation. Every plugin that produces visual HTML output reads theme files from cogni-workspace. No plugin writes to cogni-workspace except through `pick-theme` and `manage-workspace`. It also owns the cross-plugin claim-verification gate: verification state across all sourced assertions.
+- **Data** — each plugin owns a specialized knowledge domain. cogni-portfolio (products, markets, propositions, competitors). cogni-trends (TIPS paths, solution templates, catalogs). cogni-knowledge (sub-questions, contexts, sources, claims).
 - **Output** — cogni-narrative, cogni-copywriting, cogni-visual, cogni-sales, cogni-marketing, cogni-website. Transforms data-group content into deliverables (narratives, polished docs, slides/HTML/infographics, sales pitches, marketing campaigns, customer websites). Consumes but does not produce data-group entities.
 - **Orchestration** (cogni-consult) — manages engagement state. Dispatches to data and output plugins at phase-appropriate moments without producing content itself. See [[concept-orchestrator-pattern]].
 

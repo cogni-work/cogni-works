@@ -6,7 +6,7 @@ This is the content catalog for **insight-wave**. Every wiki page is listed here
 
 ### Ecosystem
 
-- [[ecosystem-overview]] — insight-wave is a 12-plugin monorepo for consulting, sales, and marketing on Claude Code, Apache-2.0.
+- [[ecosystem-overview]] — insight-wave is an 11-plugin monorepo for consulting, sales, and marketing on Claude Code, Apache-2.0.
 
 ### Architecture
 
@@ -19,7 +19,7 @@ This is the content catalog for **insight-wave**. Every wiki page is listed here
 - [[concept-agent-model-strategy]] — Agents pick model tiers by role across insight-wave, with cost-per-task as the deciding factor.
 - [[concept-bridge-files]] — Bridge files are explicit JSON exports written by one plugin and read by another according to a versioned contract.
 - [[concept-brief-based-rendering]] — cogni-visual separates content specification from rendering.
-- [[concept-claim-lifecycle]] — Claims in cogni-claims move through a three-state lifecycle.
+- [[concept-claim-lifecycle]] — Claims in cogni-workspace move through a three-state lifecycle.
 - [[concept-claims-propagation]] — Claims propagation is the cross-plugin pattern that turns sourced assertions into a verifiable, self-correcting knowledge graph.
 - [[concept-data-isolation]] — Each insight-wave plugin owns its data completely.
 - [[concept-data-model-patterns]] — The recurring patterns across every entity-producing plugin in insight-wave.
@@ -39,7 +39,6 @@ This is the content catalog for **insight-wave**. Every wiki page is listed here
 
 ### Plugins
 
-- [[plugin-cogni-claims]] — cogni-claims manages the full lifecycle of sourced-claim verification within an insight-wave workspace.
 - [[plugin-cogni-copywriting]] — Professional copywriting toolkit providing document polishing with messaging frameworks (BLUF, Pyramid, SCQA, STAR, PSB, FAB, Inverted Pyramid), stakeholder review via parallel persona Q&A, readabi....
 - [[plugin-cogni-marketing]] — B2B marketing content engine that bridges cogni-trends strategic themes (GTM paths) and cogni-portfolio propositions into channel-ready content.
 - [[plugin-cogni-narrative]] — Story arc engine for the insight-wave ecosystem.
@@ -61,11 +60,6 @@ This is the content catalog for **insight-wave**. Every wiki page is listed here
 ### Skills
 
 One page per skill, grouped by plugin, alphabetical within each.
-
-#### cogni-claims
-
-- [[skill-cogni-claims-claim-entity]] — Cross-plugin data contract inside cogni-claims — defines ClaimRecord/DeviationRecord/ResolutionRecord schemas, 5 deviation types, 4 severity levels, 5 resolution actions, and the workspace layout.
-- [[skill-cogni-claims-claims]] — Claim-verification orchestrator inside cogni-claims — six modes (submit, verify, dashboard, inspect, resolve, cobrowse), WebFetch for automated verification, claude-in-chrome for interactive recovery.
 
 #### cogni-copywriting
 
@@ -160,11 +154,6 @@ One page per skill, grouped by plugin, alphabetical within each.
 ### Agents
 
 One page per agent role, grouped by plugin, alphabetical within each.
-
-#### cogni-claims
-
-- [[agent-cogni-claims-claim-verifier]] — Single-source verifier: fetch one URL via WebFetch, verify claims against the fetched content, return a strict JSON deviation report.
-- [[agent-cogni-claims-source-inspector]] — Fetch a source URL via claude-in-chrome, locate the relevant passage, and present evidence to the user.
 
 #### cogni-copywriting
 

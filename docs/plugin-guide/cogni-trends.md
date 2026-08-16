@@ -163,7 +163,7 @@ Build a comprehensive, browsable TIPS booklet that catalogs every trend-scout ca
 
 ### verify-trend-report
 
-Run the extended quality pipeline on a generated report — verify every claim against its cited source via cogni-claims, run cross-theme structural review, apply corrections through the revisor, then surface downstream polish and visualization options. Use it after synthesis to fact-check and tighten the report before it ships.
+Run the extended quality pipeline on a generated report — verify every claim against its cited source via cogni-workspace, run cross-theme structural review, apply corrections through the revisor, then surface downstream polish and visualization options. Use it after synthesis to fact-check and tighten the report before it ships.
 
 **Example prompt:** "Verify the claims in the trend report and fix any deviations"
 
@@ -247,7 +247,7 @@ Each cogni-trends project is initialized with a market code stored in `tips-proj
 |--------|-------|-----------------|
 | cogni-portfolio | trends-bridge | Solution templates exported as portfolio features |
 | cogni-narrative | (manual) | Trend report and insight summary as narrative input |
-| cogni-claims | verify-trend-report | Claims registry submitted for source URL verification |
+| cogni-workspace | verify-trend-report | Claims registry submitted for source URL verification |
 | cogni-copywriting | (manual) | Report prose for executive polish |
 | cogni-visual | story-to-slides | Trend report narratives as slide deck input |
 
@@ -290,7 +290,7 @@ Use this when you have a completed trend report and need to transform it into vi
 1. `/trend-synthesis` — compose the trend report from research evidence and claims
 2. cogni-narrative `/narrative` — transform the report into an arc-driven narrative
 3. cogni-visual `/story-to-slides` — create a slide deck from the narrative
-4. cogni-claims `/claims` — verify the claims registry
+4. cogni-workspace `/claims` — verify the claims registry
 
 ---
 

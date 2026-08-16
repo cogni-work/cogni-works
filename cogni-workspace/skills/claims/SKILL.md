@@ -4,13 +4,14 @@ description: |
   Manage claim verification lifecycle — submit, verify, review dashboard, inspect, resolve, and
   cobrowse claims. Use this skill whenever the user mentions claims, fact-checking, source
   verification, checking whether statements match their cited sources, reviewing deviations, or
-  anything related to tracking the accuracy of sourced statements. Also use it when another plugin
-  submits claims for verification. Even if the user doesn't say
-  "claims" explicitly — if they're asking about verifying facts against sources, checking citations,
-  spotting stale or outdated data in cited references, reviewing what's been flagged, or asking
-  "which claims need attention" or "what did verification find", this skill handles it. Also trigger
-  when the user wants to cobrowse unreachable sources together, or says things like
-  "let's look at those sources together", "help me check these links", or "browse the unavailable sources".
+  tracking the accuracy of sourced statements. Also use it when another plugin submits claims for
+  verification. Even without the word "claims": verifying facts against sources, checking
+  citations against their live sources, spotting stale or outdated data in cited references,
+  reviewing what's been flagged, "which claims need attention", or "what did verification find".
+  Also trigger on cobrowsing unreachable sources — "let's look at those sources together", "help
+  me check these links", "browse the unavailable sources".
+  Verification here is live-source: it re-fetches each cited URL and compares. For zero-network
+  scoring of citations against claims extracted at ingest time, that is cogni-knowledge:knowledge-verify.
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Agent, AskUserQuestion, mcp__claude-in-chrome__navigate, mcp__claude-in-chrome__get_page_text, mcp__claude-in-chrome__read_page, mcp__claude-in-chrome__find, mcp__claude-in-chrome__tabs_create_mcp, mcp__claude-in-chrome__tabs_context_mcp
 ---
 
@@ -49,7 +50,7 @@ Before any operation, make sure the workspace exists. Run the init script — it
 bash "${CLAUDE_PLUGIN_ROOT}/skills/claims/scripts/claims-store.sh" init "${working_dir}"
 ```
 
-The `working_dir` is either passed as a parameter or defaults to the current working directory. All claim state lives in `{working_dir}/cogni-claims/`.
+The `working_dir` is either passed as a parameter or defaults to the current working directory. All claim state lives in `{working_dir}/cogni-claims/` — that directory name is load-bearing and stays as-is regardless of which plugin ships this skill, because it holds accumulated per-project user state.
 
 ## Submit mode
 
@@ -59,7 +60,7 @@ Each claim needs: `statement` (the claim text), `source_url`, `source_title`, an
 
 **Steps:**
 1. Generate a unique ID for each claim using the store script: `bash claims-store.sh gen-id`
-2. Create a ClaimRecord with status `unverified` (see the `cogni-claims:claim-entity` skill for the data model)
+2. Create a ClaimRecord with status `unverified` (see the `cogni-workspace:claim-entity` skill for the data model)
 3. Append to `claims.json` and update the `updated_at` timestamp
 4. Write a submission event to `history/{claim-id}.json`
 5. Tell the user how many claims were submitted
@@ -68,7 +69,7 @@ For batch submissions, process all claims in a single registry update to keep th
 
 ## Verify mode
 
-This is where the real work happens — fetching sources and comparing claims against them.
+Fetch the cited sources and compare each claim against them.
 
 ### Step 1: Select which claims to verify
 
@@ -95,11 +96,11 @@ Before dispatching agents, check whether claude-in-chrome is available. Verifica
 
 ### Step 3: Dispatch verification agents
 
-For each unique URL group, launch a `cogni-claims:claim-verifier` agent:
+For each unique URL group, launch a `cogni-workspace:claim-verifier` agent:
 
 ```
 Agent parameters:
-  subagent_type: "cogni-claims:claim-verifier"
+  subagent_type: "cogni-workspace:claim-verifier"
   prompt: Include working_dir, source URL, claim IDs, and claim statements
 ```
 
@@ -135,9 +136,9 @@ If there are deviated claims with severity `medium` or higher, briefly show each
 
 ## Dashboard mode
 
-Show the user where things stand. Read `claims.json`, group by status, and render the dashboard. The complete layout spec is in `references/dashboard-format.md` — follow it for section ordering, truncation rules, and sorting.
+Show the user where things stand. Read `claims.json`, group by status, and render the dashboard following `references/dashboard-format.md` — the complete layout spec, covering section ordering, sorting, the 20-claims-per-section cap, and overflow handling.
 
-The dashboard should give the user a clear picture at a glance and make it obvious what needs attention (deviated claims with high severity) vs. what's fine (verified claims). Show at most 20 claims per status section — see `references/dashboard-format.md` for overflow handling and full layout spec.
+The dashboard should give the user a clear picture at a glance and make it obvious what needs attention (deviated claims with high severity) vs. what's fine (verified claims).
 
 For each deviated claim in the "Deviations Requiring Attention" section, include a one-line summary of what the deviation is (not just the type label) so the user can quickly decide which claims to inspect. When presenting action hints, emphasize that `/claims inspect <id>` will open the source via claude-in-chrome, locate the relevant passage, and let the user review it directly in their browser — this is the primary workflow for handling deviations.
 
@@ -303,7 +304,7 @@ Use AskUserQuestion: "How do you want to handle these results?" with options:
 
 On "Accept all" or after adjustments:
 1. Update `claims.json` — change status from `source_unavailable` to `verified`, `deviated`, or keep as `source_unavailable` based on results. Attach DeviationRecords for deviated claims.
-2. Write source cache to `sources/{url-hash}.json` with `fetch_method: "cobrowse_interactive"` — this distinguishes interactive recovery from the automated cobrowse fallback. (cogni-claims emits only `webfetch` / `cobrowse_interactive`; the shared `fetch_method` vocabulary also includes `webfetch_fulltext` — a fuller-body primary-tier web fetch — and `direct` — a non-web local source — both written by cogni-knowledge and recognized-but-never-emitted here, per `CLAUDE.md`'s Source Fetching Strategy.)
+2. Write source cache to `sources/{url-hash}.json` with `fetch_method: "cobrowse_interactive"` — this distinguishes interactive recovery from the automated cobrowse fallback. (this skill emits only `webfetch` / `cobrowse_interactive`; the shared `fetch_method` vocabulary also includes `webfetch_fulltext` — a fuller-body primary-tier web fetch — and `direct` — a non-web local source — both written by cogni-knowledge and recognized-but-never-emitted here, per `cogni-workspace/CLAUDE.md` § Claim Verification → Source Fetching Strategy.)
 3. Write history event for each claim:
    ```json
    {
@@ -364,15 +365,11 @@ These aren't arbitrary rules — they reflect the fundamental nature of LLM-base
 
 ## Source inspection
 
-**Pre-dispatch guard:** Before dispatching source-inspector, check whether claude-in-chrome was available during the pre-flight check (Step 2.5). If `cobrowse_available = false`, do NOT dispatch the agent — tell the user directly:
-- Source inspection requires claude-in-chrome, which was not available during the pre-flight check
-- Recommendation: enable claude-in-chrome and retry, or skip inspection and proceed to resolve using the deviation data already available from verification
+**Pre-dispatch guard:** Before dispatching source-inspector, check `cobrowse_available` from the pre-flight check (Step 2.5). If it is `false`, skip the dispatch — the agent works by driving the user's browser through claude-in-chrome, so without it the agent can only fail. Tell the user directly that source inspection requires claude-in-chrome, and give them the two ways forward: enable it and retry, or skip inspection and proceed to resolve using the deviation data verification already produced.
 
-When claude-in-chrome is available and the user needs to see a source in context — whether from verify, inspect, or resolve mode — launch the `cogni-claims:source-inspector` agent with the source URL, the verbatim excerpt, the claim statement, and the deviation explanation. The source-inspector uses claude-in-chrome to open the page in the user's browser, extract the text, and locate the relevant passage.
+When claude-in-chrome is available and the user needs to see a source in context — whether from verify, inspect, or resolve mode — launch the `cogni-workspace:source-inspector` agent with the source URL, the verbatim excerpt, the claim statement, and the deviation explanation. It opens the page in the user's browser, extracts the text, and locates the relevant passage, returning a structured result with the matched text, surrounding context, and a screenshot. If the passage was not found on the page, let the user know the source may have been updated since verification.
 
-Source inspection is valuable because LLM-based deviation findings are assessments, not verdicts. Seeing the source content helps the user make informed decisions. Don't make the user request it explicitly — if they're looking at a deviation, they almost certainly want to see the source.
-
-The source-inspector returns a structured result with the matched text, surrounding context, and a screenshot. If the passage was not found on the page, let the user know the source may have been updated since verification.
+Offer inspection proactively rather than waiting to be asked — a user looking at a deviation almost certainly wants to see the source, and findings are assessments they need the evidence to judge (see Guiding principles).
 
 ## Example flows
 
@@ -407,9 +404,9 @@ The source-inspector returns a structured result with the matched text, surround
 
 ## Cross-plugin contract
 
-The ClaimEntity data model (record types, field definitions, status transitions) lives in the `cogni-claims:claim-entity` skill. Consult it when you need to create or validate record structures.
+The ClaimEntity data model (record types, field definitions, status transitions) lives in the `cogni-workspace:claim-entity` skill. Consult it when you need to create or validate record structures.
 
 ## Agents
 
-- **`cogni-claims:claim-verifier`** — Fetches one source URL, verifies all claims against it, returns structured JSON. Launch in parallel for multiple URLs.
-- **`cogni-claims:source-inspector`** — Opens a source URL in the browser and highlights the relevant passage for the user to inspect.
+- **`cogni-workspace:claim-verifier`** — Fetches one source URL, verifies all claims against it, returns structured JSON. Launch in parallel for multiple URLs.
+- **`cogni-workspace:source-inspector`** — Opens a source URL in the browser and highlights the relevant passage for the user to inspect.

@@ -19,7 +19,7 @@ cloud-monitoring--mid-market-saas-dach    cogni-portfolio proposition (paired en
 automotive-ai-predictive-maintenance-abc12345  cogni-trends trend
 siemens-manufacturing-pitch              cogni-sales pitch
 acme-market-entry                        cogni-consulting engagement
-claim-550e8400-e29b-41d4-a716            cogni-claims (UUID-v4 slug)
+claim-550e8400-e29b-41d4-a716            cogni-workspace claim (UUID-v4 slug)
 ```
 
 Slugs serve as both the file name and the cross-plugin identifier. When cogni-consulting stores a reference to a cogni-portfolio project, it stores the project slug, not an internal ID. When cogni-trends exports a bridge file referencing a portfolio feature, it uses the feature slug.
@@ -30,7 +30,7 @@ In cogni-portfolio, paired entities (a feature combined with a market) use a dou
 
 ## Why UUIDs for claims
 
-cogni-claims uses UUID-v4 slugs (`claim-550e8400-...`) rather than name-derived slugs because claims have no natural name — their identifier is their identity. See [[concept-claim-lifecycle]].
+Claim records use UUID-v4 slugs (`claim-550e8400-...`) rather than name-derived slugs because claims have no natural name — their identifier is their identity. See [[concept-claim-lifecycle]].
 
 ## Why slugs over numeric IDs
 

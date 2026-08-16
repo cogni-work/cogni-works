@@ -3,12 +3,12 @@
 extract_page_claims.py — deterministic claim candidate extraction from wiki page prose.
 
 Walks <wiki-root>/wiki/pages/, parses each page's frontmatter and body, and emits
-claim candidates that the wiki-claims-resweep skill submits to cogni-claims for
+claim candidates that the wiki-claims-resweep skill submits to cogni-workspace:claims for
 re-verification.
 
 Boundary: this script is **read-only** and **never** makes network calls. It reads
 markdown, parses frontmatter, and prints JSON. WebFetch happens later, inside the
-cogni-claims:claim-verifier agent that the SKILL dispatches.
+cogni-workspace:claim-verifier agent that the SKILL dispatches.
 
 Extraction rule (deterministic, no LLM):
     For each inline-link `[text](http(s)://...)` and each bare `http(s)://...` URL

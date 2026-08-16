@@ -3,10 +3,10 @@ name: claim-entity
 description: |
   Cross-plugin data model for claim verification — defines ClaimRecord, DeviationRecord,
   and ResolutionRecord schemas, status transitions, deviation types, severity levels, and
-  workspace layout. Use this skill whenever you need to understand claim data structures,
+  claim-store layout. Use this skill whenever you need to understand claim data structures,
   create or validate claim records, check what fields a ClaimRecord has, understand deviation
-  types or severity levels, or work with the cogni-claims directory layout. Any plugin that submits
-  or consumes claims should consult this skill for the contract.
+  types or severity levels, or work with the on-disk `cogni-claims/` claim-store layout. Any plugin that submits
+  or consumes claims should consult this skill for the contract, then submit via cogni-workspace:claims.
 allowed-tools: Read, Write, Edit, Glob, Grep
 ---
 
@@ -67,9 +67,13 @@ Claim state persists in the calling project's `cogni-claims/` directory:
 └── history/{id}.json    # Audit trail per claim
 ```
 
+This directory name is load-bearing: it holds accumulated per-project user state, so renaming it
+would orphan every claim store already on disk. Read and write it as `cogni-claims/` regardless of
+which plugin ships this skill.
+
 ## Cross-Plugin Integration
 
-This skill defines the data structures; the `cogni-claims:claims` skill handles submission, verification, and query execution. To submit or query claims from another plugin, invoke `cogni-claims:claims` skill. See `references/schema.md` for batch submission format and query interfaces.
+This skill defines the data structures; the `cogni-workspace:claims` skill handles submission, verification, and query execution. To submit or query claims from another plugin, invoke `cogni-workspace:claims` skill. See `references/schema.md` for batch submission format and query interfaces.
 
 ## Design principles
 

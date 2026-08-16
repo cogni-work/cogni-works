@@ -56,7 +56,7 @@ Wiki-first means: run research on EU AI Act Article 6 today; tomorrow's run on f
 
 ### Zero-Network Claim Verification
 
-`knowledge-verify` scores citations against the `pre_extracted_claims:` frontmatter that `knowledge-ingest` wrote into each source page during Phase 4. It never re-fetches a URL. The verifier fans out across parallel shards (default 40 citations per shard), runs a revisor loop on `unsupported` deviations, and converges in under 5 minutes per shard. The contrast with cogni-claims' URL re-verification approach (20–30 min baseline) is structural: the claims were extracted at ingest time and are already on disk.
+`knowledge-verify` scores citations against the `pre_extracted_claims:` frontmatter that `knowledge-ingest` wrote into each source page during Phase 4. It never re-fetches a URL. The verifier fans out across parallel shards (default 40 citations per shard), runs a revisor loop on `unsupported` deviations, and converges in under 5 minutes per shard. The contrast with cogni-workspace' URL re-verification approach (20–30 min baseline) is structural: the claims were extracted at ingest time and are already on disk.
 
 ### The Delegation Contract
 

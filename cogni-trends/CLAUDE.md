@@ -33,7 +33,7 @@ skills/                         9 trend intelligence skills
       build-booklet-index.sh       Build .logs/booklet-index.json from value-model + scout + enriched-trends
   verify-trend-report/            Extended quality pipeline: claim verification + structural review + revisor + downstream menu
     references/
-      claims-integration.md        cogni-claims submission and verification protocol
+      claims-integration.md        cogni-workspace:claims submission and verification protocol
       structural-review.md         Reviewer/revisor loop, validation rules, version output
       downstream-options.md        Final menu (copywriter, enrich-report)
   trends-catalog/                 Persistent industry catalogs for cross-pursuit knowledge reuse
@@ -93,7 +93,7 @@ trend-scout → value-modeler → trend-research → (trend-synthesis | trend-bo
    (scout)      (model)         (enrich)         (compose)         (catalog)            (verify+revise)        (accumulate)
 ```
 
-`trend-research` enriches every candidate with web-sourced quantitative evidence and emits a single manifest (`.metadata/trend-research-output.json`) that the two downstream synthesis skills gate on. `trend-synthesis` produces the curated TIPS investment-themes report (`tips-trend-report.md`); `trend-booklet` produces the comprehensive catalog of all candidates (`tips-trend-booklet.md`). The two are independent and can run in either order. `verify-trend-report` is the extended quality pipeline: claim verification via cogni-claims, cross-theme structural review, revisor loop, and a final menu surfacing executive polish (`cogni-copywriting:copywriter`) and visual enrichment (`cogni-visual:enrich-report`). `trends-resume` can re-enter at any stage. `trends-dashboard` visualizes the full lifecycle.
+`trend-research` enriches every candidate with web-sourced quantitative evidence and emits a single manifest (`.metadata/trend-research-output.json`) that the two downstream synthesis skills gate on. `trend-synthesis` produces the curated TIPS investment-themes report (`tips-trend-report.md`); `trend-booklet` produces the comprehensive catalog of all candidates (`tips-trend-booklet.md`). The two are independent and can run in either order. `verify-trend-report` is the extended quality pipeline: claim verification via `cogni-workspace:claims`, cross-theme structural review, revisor loop, and a final menu surfacing executive polish (`cogni-copywriting:copywriter`) and visual enrichment (`cogni-visual:enrich-report`). `trends-resume` can re-enter at any stage. `trends-dashboard` visualizes the full lifecycle.
 
 ## Data Model
 
@@ -129,7 +129,7 @@ Each project lives in a directory with:
 - **STORM** (Shao et al., Stanford 2024) / **GPT-Researcher** (Elovic) — Recursive tree exploration in deep-researcher agent
 - **CURATE_SOURCES** (GPT-Researcher) — 5-dimension signal tiering adapted from embedding-based to LLM-based assessment
 - **4strat STEEP Multi-Agent** — One expert persona per dimension shapes search vocabulary and authority preferences
-- **QAG** (Manakul et al., 2023) — Claims verification via cogni-claims (extract claims, verify against cited sources)
+- **QAG** (Manakul et al., 2023) — Claims verification via `cogni-workspace:claims` (extract claims, verify against cited sources)
 
 ### Multi-Framework Scoring
 
@@ -146,7 +146,7 @@ Training-sourced candidates capped: source_quality max 0.4, signal_strength max 
 |--------|-----------|-----------|
 | cogni-portfolio | bidirectional | trends-bridge exports solution templates → portfolio features; portfolio anchors enrich solution relevance scoring |
 | cogni-narrative | downstream | smarter-service arc consumed by trend-synthesis theme-case writer + dimension composer (graceful fallback when absent) |
-| cogni-claims | downstream | trend-research registers claims; `verify-trend-report` Phase 2 invokes cogni-claims:claims for source verification |
+| cogni-workspace | downstream | trend-research registers claims; `verify-trend-report` Phase 2 invokes cogni-workspace:claims for source verification |
 | cogni-copywriting | downstream | Executive polish on trend reports with tone scoping |
 | cogni-workspace | upstream | pick-theme for dashboard theming; `region-authority-sources.json` is a slim **overlay** of the canonical `references/supported-markets-registry.json` (carries only `site_searches[]` keyed by Smarter Service dimension, plus trends-specific `regulatory_search` and `org_size_reference`). Read sites call `cogni-workspace/scripts/get-market-config.py --plugin trends --market <code>` to join overlay + registry. Drift on the shared market set is structurally impossible; orphan overlays surfaced by `cogni-workspace:audit-region-sources`. |
 | cogni-visual | downstream | enrich-report themed HTML from trend-report or trend-booklet; story-to-slides for presentations |

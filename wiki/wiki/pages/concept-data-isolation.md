@@ -29,7 +29,7 @@ The ecosystem scales horizontally: a new plugin can consume cogni-portfolio outp
 
 ## In practice
 
-The diagram in [[arch-er-diagram]] shows many arrows but each is read-only. cogni-claims reads source URLs from cogni-research entity files but never writes back. cogni-portfolio's proposition-generator reads trend-bridge enrichments from `portfolio-opportunities.json` but never modifies cogni-trends files. The boundary is the bridge file or frontmatter field — everything on each side is private to the owning plugin.
+The diagram in [[arch-er-diagram]] shows many arrows but each is read-only. cogni-workspace's claim verification reads source URLs out of the submitting plugin's entity files but never writes back. cogni-portfolio's proposition-generator reads trend-bridge enrichments from `portfolio-opportunities.json` but never modifies cogni-trends files. The boundary is the bridge file or frontmatter field — everything on each side is private to the owning plugin.
 
 This principle is one half of why [[concept-progressive-disclosure]] works — without isolation, you couldn't load just the slice of context a phase needs.
 

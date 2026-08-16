@@ -5,7 +5,7 @@
     "email": "stephan@cogni-work.ai"
   },
   "metadata": {
-    "description": "Insight-wave is a 12-plugin ecosystem for Claude Code that turns consulting, research, portfolio, and communication workflows into AI-assisted, bilingual (EN/DE) pipelines — trend scouting, portfolio messaging, narrative transformation, visual deliverables, sales enablement, claim verification, knowledge management, wiki-first research, and end-to-end consulting orchestration.",
+    "description": "Insight-wave is an 11-plugin ecosystem for Claude Code that turns consulting, research, portfolio, and communication workflows into AI-assisted, bilingual (EN/DE) pipelines — trend scouting, portfolio messaging, narrative transformation, visual deliverables, sales enablement, claim verification, knowledge management, wiki-first research, and end-to-end consulting orchestration.",
     "version": "1.0.4"
   },
   "plugins": [
@@ -49,22 +49,6 @@
         "orchestrator",
         "agent",
         "hooks"
-      ]
-    },
-    {
-      "name": "cogni-claims",
-      "source": "./cogni-claims",
-      "version": "0.10.7",
-      "maturity": "preview",
-      "description": "Claim verification and management system. Verifies sourced claims against cited URLs, detects deviations, guides users through resolution, and provides interactive cobrowsing recovery for unreachable sources.",
-      "keywords": [
-        "claim-verification",
-        "fact-checking",
-        "source-validation",
-        "deviation-detection",
-        "cross-plugin-contract",
-        "cobrowsing",
-        "agent"
       ]
     },
     {
@@ -122,7 +106,7 @@
       "source": "./cogni-workspace",
       "version": "0.6.62",
       "maturity": "preview",
-      "description": "The horizontal layer of the insight-wave marketplace — it owns the shared workspace state the vertical business plugins consume. Manages shared infrastructure (env vars, settings), MCP server installation and Desktop config patching, theme management, theme picker, plugin discovery, workspace health, an interactive workspace-configuration dashboard, Obsidian vault integration, and a bundled vendor-curated insight-wave reference wiki queryable via the ask skill.",
+      "description": "The horizontal layer of the insight-wave marketplace — it owns the shared workspace state the vertical business plugins consume. Manages shared infrastructure (env vars, settings), MCP server installation and Desktop config patching, theme management, theme picker, plugin discovery, workspace health, an interactive workspace-configuration dashboard, Obsidian vault integration, a bundled vendor-curated insight-wave reference wiki queryable via the ask skill, and cross-plugin claim verification — submitting sourced assertions, verifying them against their cited URLs, and guiding deviation resolution.",
       "keywords": [
         "workspace",
         "themes",

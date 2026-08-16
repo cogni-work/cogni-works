@@ -46,16 +46,40 @@ matching `<plugin>/skills/*/SKILL.md` against the `*-setup` / `*-resume` /
 no setup or resume skill, and it is the catch-all target of the rule — the
 destination cannot also be a candidate.
 
-**On the plugin count.** The repo-root `.claude-plugin/marketplace.json` registers
-exactly 12 plugins, and the eleven rows above plus the exempt cogni-workspace
-account for all of them. A thirteenth top-level directory, `cogni-portfolio-evals/`,
-ships no `.claude-plugin/plugin.json` — it is an eval harness, not a plugin, and is
-correctly outside this table.
+**On the plugin count.** The table above is the scoring snapshot this roadmap was
+derived against, when the repo-root `.claude-plugin/marketplace.json` registered
+12 plugins — the eleven rows plus the exempt cogni-workspace accounted for all of
+them. Rows are kept as the historical record of why each plugin scored as it did;
+they are not re-scored as plugins retire, so read the table against the
+absorption-status ledger below rather than as a current roster. `cogni-claims` has since been absorbed
+into cogni-workspace, leaving 11 registered plugins. A further top-level directory,
+`cogni-portfolio-evals/`, ships no `.claude-plugin/plugin.json` — it is an eval
+harness, not a plugin, and is correctly outside this table.
 
 `cogni-sales` sits in the "none" row on the measurement above. It owns a single
 skill (`why-change`) and no lifecycle arc, so the rule places it with the
 horizontal set even though it reads as a business capability by name. Recorded
 explicitly because it is the one row where the rule and the intuition disagree.
+
+## Absorption status
+
+What Decision 1 has actually produced so far. The scoring tables above are the
+point-in-time analysis that justified each call and are left as measured; this
+section is the running record of what has landed.
+
+| Source plugin | Status | What moved |
+|---|---|---|
+| cogni-help | retired | `cogni-issues` and `troubleshoot` kept as skills; `guide` / `cheatsheet` / `workflow` folded into `ask`'s bundled wiki; the course-delivery system deleted |
+| cogni-claims | retired | the `claims` and `claim-entity` skills, the `claim-verifier` and `source-inspector` agents, and the `/claims` command, all moved verbatim. Nothing folded, nothing dropped — there was no overlapping surface to merge into |
+
+Both prefixes are registered in `scripts/retired-plugins.json`, so
+`scripts/check-external-dispatch.py` fails the build on any surviving
+`cogni-help:` or `cogni-claims:` dispatch token. `tests/test-relocated-skill-hygiene.sh`
+covers the file types that guard's globs miss, pairing each adopted tree with the
+token its own source plugin dispatched under.
+
+The cogni-claims move is the case Decision 2 below was written for: the skills
+changed plugin, the data directory did not.
 
 ## Decision 2 — on-disk data directories keep their names
 
@@ -177,6 +201,71 @@ reduced form is the reversible one, which is why it is the default taken here.
 
 **Reversing it** means re-deriving those 18 aliases and the page body together —
 the same work either way, so nothing is foreclosed.
+
+## Decision 6 — vendored trees follow a rename only where the text dispatches
+
+**Decision.** A vendored tree is a mirror of an upstream origin and is **not**
+rewritten for a downstream plugin rename — except where its text names the
+dispatch target a caller is told to invoke. Those references are rewritten with
+the rest of the surface; everything else in the tree keeps its upstream wording.
+
+**Why.** The two halves fail differently. Prose that merely mentions the source
+plugin is a historical statement and stays true; rewriting it only widens the
+drift between the mirror and its origin, which is the one property the tree
+exists to hold. A reference naming the dispatch target is an **instruction**: it
+tells an operator — or a model reading the docstring — which skill or agent to
+invoke, and after a retirement that name resolves to nothing. Left alone it also
+contradicts the live caller, which *was* re-pointed.
+
+**Applied at the cogni-claims absorption** to the three references in
+`cogni-knowledge/scripts/vendor/cogni-wiki/skills/wiki-claims-resweep/scripts/`
+(`resweep_planner.py`, `extract_page_claims.py`), which name the skill and agent
+that `knowledge-refresh/SKILL.md` dispatches for the resweep. The SKILL.md sites
+moved to `cogni-workspace:`; these moved with them. No other vendored file was
+touched.
+
+These sites sit in a coverage hole by construction:
+`scripts/check-external-dispatch.py` drops `cogni-knowledge/` wholesale via
+`EXCLUDE_PREFIXES`, and `tests/test-relocated-skill-hygiene.sh` walks the adopted
+`cogni-workspace` trees only. Neither guard reports this class — the rule above is
+the record that keeps the next absorption from re-litigating it.
+
+## Decision 7 — a retired namespace token survives where it carries no dispatch intent
+
+**Decision.** After a plugin is retired into an adopting plugin, the completeness
+test for its colon-form token is **dispatch intent, not textual presence**. The
+gate of record is `scripts/check-external-dispatch.py` returning a clean zero. An
+occurrence is a violation only where the text names a target something would
+actually be dispatched to. Three categories are admitted alongside the dated
+historical record:
+
+1. **A guard's forbidden-token lookup table.** The literal is the guard's
+   matching data, not a reference to the retired plugin.
+2. **Meta-documentation of the rewrite rule itself**, including this file and the
+   plugin's `CLAUDE.md`.
+3. **A dated record naming a retired dispatch that has no successor** to be
+   re-pointed at.
+
+**Why.** A textual reading is not merely strict, it is incoherent — it forbids
+the very literal that the hygiene suite must assert. `tests/test-relocated-skill-hygiene.sh`
+carries the retired token in its `TREES` table because that token *is* what the P1
+arm matches on; delete it and the arm still passes while protecting nothing. The
+same collision recurs one level up: a rule that cannot be written down without
+using the literal it governs. Meta-documentation and a guard's own data are
+statements *about* the token, not uses of it, and the two failure modes are
+opposite — a live dispatch resolves to nothing at runtime, whereas rewriting a
+dated record falsifies history to reach a cosmetic zero. That second failure is
+already rejected for CHANGELOG files, and the reasoning does not stop there.
+
+**Applied at the cogni-claims absorption** to five sites: the hygiene suite's
+`TREES` table and header comment, the colon-vs-slash discriminator in
+`cogni-workspace/CLAUDE.md`, the rule statement in this file, and two dated
+records under `cogni-knowledge/references/` — one of which names a pipeline stage
+for which no adopting-plugin equivalent exists, so a rewrite would invent a
+dispatch that never ran. Genuine dispatch-intent sites found in the same sweep,
+the vendored resweep docstrings of Decision 6, were re-pointed rather than
+excepted. That is the line: this rule admits statements about a name, never
+instructions that use it.
 
 ## Known remaining contradictions — reconciled
 

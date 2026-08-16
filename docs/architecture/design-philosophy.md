@@ -66,7 +66,7 @@ Slugs serve as both the file name and the cross-plugin identifier. When cogni-co
 
 The double-dash convention in cogni-portfolio (`feature--market`) distinguishes paired entities from single entities visually and programmatically. The `cascade-rename.sh` script handles slug renaming across dependent entities when a user renames a feature or market after the fact.
 
-cogni-claims uses UUID-v4 slugs (`claim-550e8400-...`) rather than name-derived slugs, because claims have no natural name — their identifier is their identity.
+cogni-workspace's claims engine uses UUID-v4 slugs (`claim-550e8400-...`) rather than name-derived slugs, because claims have no natural name — their identifier is their identity.
 
 ---
 

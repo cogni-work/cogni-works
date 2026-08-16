@@ -1,11 +1,19 @@
 #!/usr/bin/env bash
-# Relocated-skill hygiene guard for the two skills cogni-workspace adopted from
-# cogni-help: cogni-issues and troubleshoot.
+# Relocated-skill hygiene guard for the skills cogni-workspace adopted from
+# retired plugins: cogni-issues and troubleshoot (from cogni-help), and claims
+# and claim-entity (from cogni-claims).
+#
+# Each tree is paired with the dispatch token its OWN source plugin used, rather
+# than checked against one global literal. A single shared token would be
+# vacuous on half the trees and red on arrival on the other half: the claims
+# trees legitimately carry no `cogni-help:` token, and asserting `cogni-claims:`
+# over the cogni-issues tree would assert nothing at all. The pairing keeps every
+# arm falsifiable against the plugin it actually came from.
 #
 # Why this exists. Two properties of those trees are load-bearing and nothing
 # else in the repo enforces either one:
 #
-#   - No `cogni-help:` dispatch token may survive in the adopted copies. The
+#   - No retired-plugin dispatch token may survive in the adopted copies. The
 #     obvious candidate guard, scripts/check-external-dispatch.py, reaches only
 #     part of that surface: its globs cover SKILL.md, agents, commands, hooks,
 #     while a skill's own scripts/, evals/ and references/ files match none of
@@ -44,9 +52,13 @@ set -u
 HERE="$(cd "$(dirname "$0")" && pwd)"
 WS_ROOT="$(cd "$HERE/.." && pwd)"
 
-TREES="
-$WS_ROOT/skills/cogni-issues
-$WS_ROOT/skills/troubleshoot
+# One "<tree>|<forbidden dispatch token>" spec per adopted tree. The token is the
+# one the tree's own source plugin dispatched under, so each arm stays falsifiable.
+TREE_SPECS="
+$WS_ROOT/skills/cogni-issues|cogni-help:
+$WS_ROOT/skills/troubleshoot|cogni-help:
+$WS_ROOT/skills/claims|cogni-claims:
+$WS_ROOT/skills/claim-entity|cogni-claims:
 "
 
 failures=0
@@ -54,26 +66,40 @@ pass() { echo "PASS: $1"; }
 fail() { echo "FAIL: $1"; failures=$((failures + 1)); }
 
 # ---------------------------------------------------------------------------
-# Case P1 — no `cogni-help:` dispatch token in either adopted tree.
+# Case P1 — no source-plugin dispatch token survives in any adopted tree.
 #
-# The colon form is deliberate. Broadening to a bare `cogni-help` would be red on
-# arrival against content carried unchanged on purpose: references/known-issues.md
+# The colon form is deliberate, and for the claims trees it is not merely
+# stylistic — it is the difference between a correct guard and a broken one.
+# `cogni-claims` without the colon is the name of the on-disk claim store,
+# `{working_dir}/cogni-claims/`, which those trees carry on purpose:
+# skills/claims/scripts/claims-store.sh writes it and claim-entity's
+# references/workspace-conventions.md documents it. That directory keeps its name
+# by an explicit decision — renaming it would break every existing user's store
+# with no migration path — so a bare-name check would be red on arrival against
+# content the absorption is required to preserve.
+#
+# The same reasoning already applied to cogni-help: references/known-issues.md
 # documents the cogni-teacher -> cogni-help progress-file rename, and the
 # troubleshoot evals assert exactly that diagnosis. Those are prose about another
 # plugin, not a dispatch surface. The qualified form is the one that would break
 # at runtime.
+#
+# P1 stays ONE aggregated case across all trees rather than splitting per tree,
+# so a mutation recipe resolving `--case P1` keeps matching a single label.
 # ---------------------------------------------------------------------------
 p1_hits=""
 p1_scanned=0
-for tree in $TREES; do
+for spec in $TREE_SPECS; do
+  tree="${spec%%|*}"
+  token="${spec##*|}"
   if [ ! -d "$tree" ]; then
-    fail "P1 adopted tree missing: $tree"
+    fail "P1 adopted tree missing: cogni-workspace/${tree#"$WS_ROOT"/}"
     continue
   fi
   while IFS= read -r f; do
     p1_scanned=$((p1_scanned + 1))
-    if grep -Fq 'cogni-help:' "$f" 2>/dev/null; then
-      p1_hits="$p1_hits $f"
+    if grep -Fq "$token" "$f" 2>/dev/null; then
+      p1_hits="$p1_hits $token@$f"
     fi
   done <<EOF
 $(find "$tree" -type f)
@@ -85,11 +111,12 @@ if [ "$p1_scanned" -eq 0 ]; then
   fail "P1 scanned zero files — the adopted trees are missing or unreadable"
 elif [ -n "$p1_hits" ]; then
   for h in $p1_hits; do
-    echo "  cogni-help: dispatch token in ${h#"$WS_ROOT"/}"
+    hit_file="${h#*@}"
+    echo "  ${h%%@*} dispatch token in cogni-workspace/${hit_file#"$WS_ROOT"/}"
   done
-  fail "P1 adopted trees must contain no 'cogni-help:' dispatch token"
+  fail "P1 adopted trees must contain no source-plugin dispatch token"
 else
-  pass "P1 no 'cogni-help:' dispatch token in the adopted trees ($p1_scanned files scanned)"
+  pass "P1 no source-plugin dispatch token in the adopted trees ($p1_scanned files scanned)"
 fi
 
 # ---------------------------------------------------------------------------
@@ -103,7 +130,8 @@ fi
 # ---------------------------------------------------------------------------
 p2_bad=""
 p2_scanned=0
-for tree in $TREES; do
+for spec in $TREE_SPECS; do
+  tree="${spec%%|*}"
   [ -d "$tree" ] || continue
   while IFS= read -r ref; do
     [ -n "$ref" ] || continue

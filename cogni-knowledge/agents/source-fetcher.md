@@ -1,6 +1,29 @@
 ---
 name: source-fetcher
-description: Phase-3 cobrowse agent for the inverted pipeline. Two modes the orchestrator (knowledge-fetch --cobrowse) selects via MODE. recover (default) takes WebFetch-miss URLs and recovers each via the claude-in-chrome browser extension, writing successes through fetch-cache.py and emitting {fetched[], unavailable[]}. topup takes already-fetched thin primary-tier URLs and reads the fuller browser-rendered body beyond WebFetch's cap, superseding the cached body only if strictly longer (never degrades a good body), emitting topped_up[]. Does NOT WebFetch — that moved to Phase 2's source-curator (Option B). Records availability/enrichment — never decides to drop a URL.
+description: |
+  Phase-3 cobrowse agent, dispatched by knowledge-fetch --cobrowse, which picks the mode via
+  MODE. recover (default) recovers WebFetch-miss URLs through the claude-in-chrome extension,
+  emitting {fetched[], unavailable[]} through fetch-cache.py. topup re-reads thin primary-tier
+  URLs past WebFetch's cap, superseding the cached body only if strictly longer, emitting
+  topped_up[]. Never WebFetches, never drops a URL.
+
+  <example>
+  Context: Phase 2 curation left four URLs as WebFetch misses
+  user: "recover the sources that failed"
+  assistant: "I'll dispatch source-fetcher in recover mode to cobrowse those four."
+  <commentary>
+  Every URL lands in fetched[] or unavailable[].
+  </commentary>
+  </example>
+
+  <example>
+  Context: A primary-tier source was fetched but truncated
+  user: "get the full text for that one"
+  assistant: "I'll dispatch source-fetcher in topup mode to read the rendered body."
+  <commentary>
+  Supersedes the cached body only when strictly longer.
+  </commentary>
+  </example>
 model: sonnet
 color: blue
 tools: ["Read", "Bash", "mcp__claude-in-chrome__tabs_create_mcp", "mcp__claude-in-chrome__navigate", "mcp__claude-in-chrome__get_page_text", "mcp__claude-in-chrome__read_page", "mcp__claude-in-chrome__find"]
@@ -17,10 +40,11 @@ recover the curator's WebFetch misses through the browser. See
 `references/fetch-cache-design.md` for the cache mechanics.
 
 Cobrowse uses the `claude-in-chrome` browser extension, mirroring the tool
-names cogni-claims/source-inspector enumerates. The orchestrator probes the
-extension and walks the user through enabling it before dispatching this
-agent; if a tool call still fails mid-loop the URL records `cobrowse_failed`
-(or `cobrowse_unavailable` when the prefix is absent from the tool list).
+names `cogni-workspace/agents/source-inspector.md` enumerates. The
+orchestrator probes the extension and walks the user through enabling it
+before dispatching this agent; if a tool call still fails mid-loop the URL
+records `cobrowse_failed` (or `cobrowse_unavailable` when the prefix is
+absent from the tool list).
 -->
 
 # Source Fetcher Agent (inverted pipeline, Phase 3 — cobrowse-only)

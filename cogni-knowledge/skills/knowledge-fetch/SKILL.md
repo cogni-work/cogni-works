@@ -89,10 +89,10 @@ Cobrowse is **never** auto-attempted — autonomous runs (`knowledge-refresh --m
 
 ### 3. Cobrowse setup + recovery (when opted in)
 
-**Setup (mirror cogni-claims `skills/claims/SKILL.md` §"Pre-requisite: claude-in-chrome").** Probe `mcp__claude-in-chrome__tabs_context_mcp`.
+**Setup (mirror cogni-workspace `skills/claims/SKILL.md` §"Pre-requisite: claude-in-chrome").** Probe `mcp__claude-in-chrome__tabs_context_mcp`.
 
 - Succeeds → the extension is active; proceed to dispatch.
-- Errors → tell the user (reuse cogni-claims' wording as the single source of truth): "Interactive cobrowsing requires the Claude-in-Chrome extension (your real Chrome browser). Please ensure it is active, then tell me to continue." Wait, then re-probe once. If it still errors → record each cobrowse-eligible miss as `cobrowse_unavailable` in the manifest (no agent dispatch) and go to Step 4.
+- Errors → tell the user (reuse cogni-workspace's wording as the single source of truth): "Interactive cobrowsing requires the Claude-in-Chrome extension (your real Chrome browser). Please ensure it is active, then tell me to continue." Wait, then re-probe once. If it still errors → record each cobrowse-eligible miss as `cobrowse_unavailable` in the manifest (no agent dispatch) and go to Step 4.
 
 `claude-in-chrome` is the **browser extension**, not a git/native MCP server — it is not in `cogni-workspace/references/mcp-git-registry.json` and does not route through `cogni-workspace:install-mcp`. Do not offer `install-mcp` here.
 

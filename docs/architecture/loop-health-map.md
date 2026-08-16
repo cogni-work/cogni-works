@@ -19,8 +19,8 @@ rubric: it is what makes a flagged finding credible.
   this" section below restates the five moves, the anti-pattern map, and the
   severity policy — this map is self-contained and re-sweepable without
   cogni-service installed.
-- **Scope:** all 12 plugins in this repo's marketplace — cogni-claims,
-  cogni-consult, cogni-copywriting, cogni-knowledge,
+- **Scope:** all 11 plugins in this repo's marketplace — cogni-consult,
+  cogni-copywriting, cogni-knowledge,
   cogni-marketing, cogni-narrative, cogni-portfolio, cogni-sales, cogni-trends,
   cogni-visual, cogni-website, cogni-workspace.
 - **Nature:** read-only. This map is a data artifact; it changes no loop and
@@ -77,7 +77,7 @@ hands-off.
 | 14 | solutions review–revise loop (3 call sites, one mechanism) | `cogni-portfolio/skills/solutions/SKILL.md` | No | ✅ Clean pass | — |
 | 15 | portfolio-communicate stakeholder-review loop | `cogni-portfolio/skills/portfolio-communicate/SKILL.md` | No | ✅ Clean pass | — |
 | 16 | knowledge-compose coverage-gated expansion | `cogni-knowledge/skills/knowledge-compose/SKILL.md` | Yes (compose is a phase in the autonomous run/refresh chains) | ✅ Clean pass | — |
-| 17 | claims cobrowse per-URL recovery drain | `cogni-claims/skills/claims/SKILL.md` | No | ⚠ 1 advisory-minor | nodding-adjacent (Verification) |
+| 17 | claims cobrowse per-URL recovery drain | `cogni-workspace/skills/claims/SKILL.md` | No | ⚠ 1 advisory-minor | nodding-adjacent (Verification) |
 | — | trend-research enrichment stage | `cogni-trends/skills/trend-research/SKILL.md` | — | — *(not a loop — excluded)* | single-pass fan-out with retry-once + deterministic JSON gate; manifest hashes hand drift detection downstream |
 | — | trend-synthesis composer pipeline | `cogni-trends/skills/trend-synthesis/SKILL.md` | — | — *(not a loop — excluded)* | single-pass ordered assembly with resume gates; verification lives in verify-trend-report (Loop 4) |
 | — | narrative transform | `cogni-narrative/skills/narrative/SKILL.md` | — | — *(not a loop — excluded)* | single-pass transform; Phase-5 gates are inline deterministic checks (header count, citation count, word bands) |
@@ -168,7 +168,7 @@ autonomously; the opt-in `--resweep` adds its own confirmation gate.
 |------|------------|----------|
 | Discovery | ✅ Healthy | Each run re-derives the work-list fresh: the vendored `lint_wiki.py` staleness pass runs in-tree per invocation, merged with the binding's evidence-based `refresh_candidates[]` (`:: §1 steps 1–2`) — no cached stale-page list is reused across runs. |
 | Handoff | ✅ Healthy | Per-topic dispatch reuses the uniform phase contract (identical to Loop 2 — the SKILL.md states the two entrypoints deliberately share the dispatch block so they cannot drift); resweep bridges verdicts through explicit JSON shapes into `resweep_planner.py --phase aggregate` (`:: §2 step 4`). |
-| Verification | ✅ Healthy | Delegated per topic to the `knowledge-verify` phase (Loop 1); the drain itself never grades content. The opt-in resweep adds live-source re-verification via `cogni-claims` — a second, orthogonal verification surface. |
+| Verification | ✅ Healthy | Delegated per topic to the `knowledge-verify` phase (Loop 1); the drain itself never grades content. The opt-in resweep adds live-source re-verification via `cogni-workspace` — a second, orthogonal verification surface. |
 | Persistence | ✅ Healthy | Fail-soft per topic with a `failures[]` record naming `{topic, failed_phase, error}`; on-disk manifests are declared the truth ("do not roll back"); the resume contract documents per-phase idempotent short-circuits (`:: §1 step 5`, `:: Push-mode resume contract`). |
 | Scheduling | ✅ Healthy | Bounded by the user-selected topic set, sequential per topic, opt-in only — resweep "never auto-runs" so the zero-network per-run invariant holds (`:: §2` intro; `:: Out of scope`). |
 
@@ -190,10 +190,10 @@ review (Phase 3).
 | Move | Assessment | Evidence |
 |------|------------|----------|
 | Discovery | ✅ Healthy | Phase 0 discovers eligible projects fresh via `discover-projects.sh`, and Phase 0.5 explicitly branches on pre-existing verification artifacts (re-verify / inspect / continue / accept) rather than silently re-running or reusing stale results. |
-| Handoff | ✅ Healthy | Claims flow through the canonical `tips-trend-report-claims.json` registry into `cogni-claims:claims` and back as a structured QualityGateResult persisted to `.metadata/trend-report-verification.json`; reviewer and revisor exchange verdict JSON (`revision_priorities[]`) and versioned files, never prose (`:: Phases 2–4`). |
+| Handoff | ✅ Healthy | Claims flow through the canonical `tips-trend-report-claims.json` registry into `cogni-workspace:claims` and back as a structured QualityGateResult persisted to `.metadata/trend-report-verification.json`; reviewer and revisor exchange verdict JSON (`revision_priorities[]`) and versioned files, never prose (`:: Phases 2–4`). |
 | Verification | ✅ Healthy | Runs "in a **fresh context window** — separate from the trend-synthesis pipeline" (`:: intro`); `trend-report-reviewer` (fresh-context agent) grades, `trend-report-revisor` (separate agent) repairs, and the reviewer re-scores each iteration. Post-revision output is additionally validated deterministically (heading preservation, claims-table integrity, no dead references) with an explicit "do not auto-rerun" on failure (`:: Step 4b`). |
 | Persistence | ✅ Healthy | Every step leaves audit state: `.metadata/trend-report-verification.json`, `user-claims-review.json`, per-iteration `review-verdicts/v{N}.json`, versioned `tips-trend-report-v{N}.md` plus pre-revision backups (`:: Debugging`). |
-| Scheduling | ✅ Healthy | Maximum 2 iterations (reduced to 1 when cogni-claims is absent, `:: Phase 4`); termination is verdict-accept OR cap, then the user picks the downstream path (`:: Step 4c`, `:: Phase 5`). |
+| Scheduling | ✅ Healthy | Maximum 2 iterations (reduced to 1 when cogni-workspace is absent, `:: Phase 4`); termination is verdict-accept OR cap, then the user picks the downstream path (`:: Step 4c`, `:: Phase 5`). |
 
 **Sub-signals:** not applicable (interactive). Noted anyway: caps present,
 human steers corrections before any automated revision.
@@ -446,7 +446,7 @@ publish steps are all human checkpoints).
 
 ## Loop 17 — claims cobrowse per-URL recovery drain
 
-**Source:** `cogni-claims/skills/claims/SKILL.md` (Cobrowse mode, Step 3 "Per-URL recovery loop"). **Unattended?** No — user-assisted by design; the mode exists because automated fetching already failed for these sources.
+**Source:** `cogni-workspace/skills/claims/SKILL.md` (Cobrowse mode, Step 3 "Per-URL recovery loop"). **Unattended?** No — user-assisted by design; the mode exists because automated fetching already failed for these sources.
 
 | Move | Assessment | Evidence |
 |------|------------|----------|
@@ -480,7 +480,7 @@ publish steps are all human checkpoints).
 ### F3 — claims cobrowse recovery · nodding-adjacent (Verification) · advisory minor
 
 **Anti-pattern:** adjacent to nodding (Verification) — the verification verdict is produced in the orchestrator's own context, though the orchestrator is not grading its own generation and a human checkpoint sits before every save.
-**Evidence location:** `cogni-claims/skills/claims/SKILL.md :: Cobrowse mode, Step 3e ("Inline verification")` — per-claim verdicts (verified / deviated / still unavailable) are computed inline, applying "the same 5-dimension comparison used by the claim-verifier agent" without dispatching that fresh-context agent; `:: Step 3f` then has the user disposition each per-URL batch (accept / re-read / adjust / skip) before `:: Step 3g` persists anything.
+**Evidence location:** `cogni-workspace/skills/claims/SKILL.md :: Cobrowse mode, Step 3e ("Inline verification")` — per-claim verdicts (verified / deviated / still unavailable) are computed inline, applying "the same 5-dimension comparison used by the claim-verifier agent" without dispatching that fresh-context agent; `:: Step 3f` then has the user disposition each per-URL batch (accept / re-read / adjust / skip) before `:: Step 3g` persists anything.
 **Why advisory, not major:** three real mitigations bound the risk. The claims being verified are upstream artifacts, so the grader is not laundering its own output — the rubric's priority case does not apply cleanly. The recovered page body exists only in this interactive session: the `claim-verifier` agent fetches via WebFetch, which already failed for exactly these sources, so "dispatch the existing agent" is not a drop-in fix. And the user confirms every per-URL batch before it is saved, backed by the skill's hedged-language + mandatory-excerpt discipline (`:: Guiding principles`). Whether a fresh-context verifier should still be interposed (handed the extracted text) is a design judgment, not a statically-decidable absence — the precision gate routes it to advisory `minor`. A follow-up could look at threading the cobrowse-extracted body to a fresh-context verification pass — evidence-gated future work only.
 
 ---

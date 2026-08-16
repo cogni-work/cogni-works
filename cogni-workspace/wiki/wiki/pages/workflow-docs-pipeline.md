@@ -13,7 +13,7 @@ related: [concept-canonical-workflow-ids, concept-readme-convention, ecosystem-o
 
 An operational pipeline, not a user-facing one — the sequence a maintainer runs to document the monorepo or repair drifted plugin documentation. It carries no canonical workflow ID and no `docs/workflows/` companion; see [[concept-canonical-workflow-ids]] for why that distinction is enforced.
 
-cogni-docs is hosted in a different marketplace from the twelve plugins this wiki otherwise covers, so it has no plugin page here.
+cogni-docs is hosted in a different marketplace from the eleven plugins this wiki otherwise covers, so it has no plugin page here.
 
 ## Pipeline
 

@@ -2,7 +2,7 @@
 
 ## Directory Structure
 
-Claim state is stored within the calling project's workspace directory. The calling plugin or user specifies a `working_dir` parameter; cogni-claims creates a `cogni-claims/` subdirectory there.
+Claim state is stored within the calling project's workspace directory. The calling plugin or user specifies a `working_dir` parameter; cogni-workspace creates a `cogni-claims/` subdirectory there.
 
 ```
 {working_dir}/
@@ -78,7 +78,7 @@ For failed fetches (WebFetch failed):
 }
 ```
 
-**`fetch_method` vocabulary.** `webfetch` (automated `WebFetch`) and `cobrowse_interactive` (user-assisted claude-in-chrome recovery) are the two values cogni-claims writes. The shared vocabulary also includes `direct` — a non-web source whose bytes are already in hand (a local file, pasted text, a local PDF, or an interview note), always paired with a success status (`status: success` in cogni-claims' own cache vocabulary, matching the `success`/`failed` examples above; cogni-knowledge writes the same entry as `status: ok`) and no `error`. cogni-claims never emits `direct` (it verifies web sources only); it is documented here so the cache schema stays aligned with cogni-knowledge's fetch-cache, which writes `direct` for its standalone local-source ingest.
+**`fetch_method` vocabulary.** `webfetch` (automated `WebFetch`) and `cobrowse_interactive` (user-assisted claude-in-chrome recovery) are the two values cogni-workspace writes. The shared vocabulary also includes `direct` — a non-web source whose bytes are already in hand (a local file, pasted text, a local PDF, or an interview note), always paired with a success status (`status: success` in cogni-workspace's own cache vocabulary, matching the `success`/`failed` examples above; cogni-knowledge writes the same entry as `status: ok`) and no `error`. cogni-workspace never emits `direct` (it verifies web sources only); it is documented here so the cache schema stays aligned with cogni-knowledge's fetch-cache, which writes `direct` for its standalone local-source ingest.
 
 Hash generation: Use the URL string to produce a short filesystem-safe hash. The claims-store.sh script provides this via `echo -n "$url" | shasum -a 256 | cut -c1-16`.
 
@@ -127,7 +127,7 @@ Complete lifecycle history for a single claim, recording every state transition.
 
 ## Initialization
 
-When cogni-claims is invoked for a project for the first time:
+When claim verification is invoked for a project for the first time:
 
 1. Check if `{working_dir}/cogni-claims/` exists
 2. If not, create directory structure:
@@ -150,7 +150,7 @@ The workspace is designed for single-session use. Multiple parallel claim-verifi
 
 ## Cross-Plugin Usage
 
-Other plugins submit claims by invoking the cogni-claims:claims skill with:
+Other plugins submit claims by invoking the cogni-workspace:claims skill with:
 - `mode`: "submit"
 - `working_dir`: their project directory
 - `claims`: array of {statement, source_url, source_title}

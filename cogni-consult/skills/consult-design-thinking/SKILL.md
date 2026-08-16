@@ -574,7 +574,7 @@ is the consultant's judgment call, and the loop ends at `complete`.
   search; every evidence-backed claim in the artifact carries the
   `sources[]` lineage triple so corrections can cascade.
 - **Claims-correction cascade**: when the consultant surfaces a resolved
-  cogni-claims correction, propagate the corrected ground — the script depends
+  `cogni-workspace:claims` correction, propagate the corrected ground — the script depends
   on what the correction touched:
 
   *A deliverable's cited source* (a claim in its `sources[]` lineage was
@@ -600,7 +600,7 @@ is the consultant's judgment call, and the loop ends at `complete`.
   `resolve-propagate` mutates the assumption of record (demotes `verified` →
   `reviewed`) and is **fail-loud** (`"success": false` / exit 1) — surface
   `data.failed_check` and STOP, don't cascade a value that never changed. Every
-  `cascade-stale` form is non-blocking (exit 0). cogni-claims has no push
+  `cascade-stale` form is non-blocking (exit 0). `cogni-workspace:claims` has no push
   callback into cogni-consult, so this stays a consultant-initiated step.
 - **Loop, not gate**: stages may re-enter earlier stages; `state` stays
   `in-progress` until the test stage passes. State transitions go in the

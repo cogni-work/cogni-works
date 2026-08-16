@@ -209,7 +209,7 @@ Analyze 3–5 competitors per proposition. Competitive analysis is proposition-s
 
 ### portfolio-verify
 
-Verify web-sourced claims in portfolio entities against their cited source URLs via cogni-claims. Research agents auto-log every web-sourced fact to `cogni-claims/claims.json`. This skill checks each claim before generating deliverables.
+Verify web-sourced claims in portfolio entities against their cited source URLs via cogni-workspace. Research agents auto-log every web-sourced fact to `cogni-claims/claims.json`. This skill checks each claim before generating deliverables.
 
 **Example prompt:** "Verify all claims before I generate the portfolio deliverables"
 
@@ -370,7 +370,7 @@ If you realize a market entity was created with the wrong slug or scope, use `sc
 
 | Plugin | Skill | What is provided |
 |--------|-------|-----------------|
-| cogni-claims | portfolio-verify | Claims submitted for source URL verification |
+| cogni-workspace | portfolio-verify | Claims submitted for source URL verification |
 | cogni-trends | trends-bridge | Portfolio anchors that enrich TIPS solution relevance scoring |
 | document-skills | portfolio-communicate | XLSX workbook generation for deliverables |
 | cogni-narrative | portfolio-communicate | Pitch narratives with arc_id for story-to-slides |

@@ -6,7 +6,7 @@ Reference for `trend-synthesis` Step 2.4 — the claims-registry table appended 
 
 ## Purpose
 
-The claims registry is the report's verifiable evidence appendix. Every quantitative claim in the prose has a numbered row here with its source URL, dimension, and investment-theme ownership. `verify-trend-report` reads this registry as its source of truth for `cogni-claims:claims` verification.
+The claims registry is the report's verifiable evidence appendix. Every quantitative claim in the prose has a numbered row here with its source URL, dimension, and investment-theme ownership. `verify-trend-report` reads this registry as its source of truth for `cogni-workspace:claims` verification.
 
 The registry is **always rendered in full regardless of length tier** — evidence is non-negotiable. It is excluded from the prose word target (the tier formula in `report-length-tiers.md` covers prose only).
 
@@ -81,10 +81,10 @@ The macro-label localizations for the Dimension column come from the same labels
 
 The merged claims file `tips-trend-report-claims.json` (written in Step 2.7) is the machine-readable companion to this human-readable table. Its schema is documented in `trend-research/references/claims-format.md § Merged Claims File`.
 
-`verify-trend-report` Phase 2 invokes `cogni-claims:claims` with both files:
+`verify-trend-report` Phase 2 invokes `cogni-workspace:claims` with both files:
 
 ```
-Skill("cogni-claims:claims",
+Skill("cogni-workspace:claims",
       args="--file-path tips-trend-report.md \
             --claims-file tips-trend-report-claims.json \
             --verdict-mode --language {LANGUAGE}")

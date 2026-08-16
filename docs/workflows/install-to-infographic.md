@@ -44,7 +44,7 @@ Install the full insight-wave plugin set — any workflow you pick from Step 5 c
 
 ```
 /plugin install cogni-workspace@insight-wave
-/plugin install cogni-claims@insight-wave
+/plugin install cogni-workspace@insight-wave
 /plugin install cogni-narrative@insight-wave
 /plugin install cogni-copywriting@insight-wave
 /plugin install cogni-trends@insight-wave

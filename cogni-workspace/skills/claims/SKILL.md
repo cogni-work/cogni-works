@@ -59,7 +59,7 @@ Each claim needs: `statement` (the claim text), `source_url`, `source_title`, an
 
 **Steps:**
 1. Generate a unique ID for each claim using the store script: `bash claims-store.sh gen-id`
-2. Create a ClaimRecord with status `unverified` (see the `cogni-claims:claim-entity` skill for the data model)
+2. Create a ClaimRecord with status `unverified` (see the `cogni-workspace:claim-entity` skill for the data model)
 3. Append to `claims.json` and update the `updated_at` timestamp
 4. Write a submission event to `history/{claim-id}.json`
 5. Tell the user how many claims were submitted
@@ -95,11 +95,11 @@ Before dispatching agents, check whether claude-in-chrome is available. Verifica
 
 ### Step 3: Dispatch verification agents
 
-For each unique URL group, launch a `cogni-claims:claim-verifier` agent:
+For each unique URL group, launch a `cogni-workspace:claim-verifier` agent:
 
 ```
 Agent parameters:
-  subagent_type: "cogni-claims:claim-verifier"
+  subagent_type: "cogni-workspace:claim-verifier"
   prompt: Include working_dir, source URL, claim IDs, and claim statements
 ```
 
@@ -303,7 +303,7 @@ Use AskUserQuestion: "How do you want to handle these results?" with options:
 
 On "Accept all" or after adjustments:
 1. Update `claims.json` — change status from `source_unavailable` to `verified`, `deviated`, or keep as `source_unavailable` based on results. Attach DeviationRecords for deviated claims.
-2. Write source cache to `sources/{url-hash}.json` with `fetch_method: "cobrowse_interactive"` — this distinguishes interactive recovery from the automated cobrowse fallback. (cogni-claims emits only `webfetch` / `cobrowse_interactive`; the shared `fetch_method` vocabulary also includes `webfetch_fulltext` — a fuller-body primary-tier web fetch — and `direct` — a non-web local source — both written by cogni-knowledge and recognized-but-never-emitted here, per `CLAUDE.md`'s Source Fetching Strategy.)
+2. Write source cache to `sources/{url-hash}.json` with `fetch_method: "cobrowse_interactive"` — this distinguishes interactive recovery from the automated cobrowse fallback. (this skill emits only `webfetch` / `cobrowse_interactive`; the shared `fetch_method` vocabulary also includes `webfetch_fulltext` — a fuller-body primary-tier web fetch — and `direct` — a non-web local source — both written by cogni-knowledge and recognized-but-never-emitted here, per the plugin CLAUDE.md's Source Fetching Strategy.)
 3. Write history event for each claim:
    ```json
    {
@@ -368,7 +368,7 @@ These aren't arbitrary rules — they reflect the fundamental nature of LLM-base
 - Source inspection requires claude-in-chrome, which was not available during the pre-flight check
 - Recommendation: enable claude-in-chrome and retry, or skip inspection and proceed to resolve using the deviation data already available from verification
 
-When claude-in-chrome is available and the user needs to see a source in context — whether from verify, inspect, or resolve mode — launch the `cogni-claims:source-inspector` agent with the source URL, the verbatim excerpt, the claim statement, and the deviation explanation. The source-inspector uses claude-in-chrome to open the page in the user's browser, extract the text, and locate the relevant passage.
+When claude-in-chrome is available and the user needs to see a source in context — whether from verify, inspect, or resolve mode — launch the `cogni-workspace:source-inspector` agent with the source URL, the verbatim excerpt, the claim statement, and the deviation explanation. The source-inspector uses claude-in-chrome to open the page in the user's browser, extract the text, and locate the relevant passage.
 
 Source inspection is valuable because LLM-based deviation findings are assessments, not verdicts. Seeing the source content helps the user make informed decisions. Don't make the user request it explicitly — if they're looking at a deviation, they almost certainly want to see the source.
 
@@ -407,9 +407,9 @@ The source-inspector returns a structured result with the matched text, surround
 
 ## Cross-plugin contract
 
-The ClaimEntity data model (record types, field definitions, status transitions) lives in the `cogni-claims:claim-entity` skill. Consult it when you need to create or validate record structures.
+The ClaimEntity data model (record types, field definitions, status transitions) lives in the `cogni-workspace:claim-entity` skill. Consult it when you need to create or validate record structures.
 
 ## Agents
 
-- **`cogni-claims:claim-verifier`** — Fetches one source URL, verifies all claims against it, returns structured JSON. Launch in parallel for multiple URLs.
-- **`cogni-claims:source-inspector`** — Opens a source URL in the browser and highlights the relevant passage for the user to inspect.
+- **`cogni-workspace:claim-verifier`** — Fetches one source URL, verifies all claims against it, returns structured JSON. Launch in parallel for multiple URLs.
+- **`cogni-workspace:source-inspector`** — Opens a source URL in the browser and highlights the relevant passage for the user to inspect.

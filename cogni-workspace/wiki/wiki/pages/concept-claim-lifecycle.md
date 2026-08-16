@@ -21,13 +21,13 @@ unverified → verified (no deviation found)
 ## States
 
 - **unverified** — the initial state when any data-layer plugin appends a claim record. The claim has source URL, claim text, and `entity_ref` provenance, but no verification has run.
-- **verified** — `cogni-claims:claims` fetched the source, compared it to the claim text, and found no deviation. The claim text is supported by what the source actually says.
+- **verified** — `cogni-workspace:claims` fetched the source, compared it to the claim text, and found no deviation. The claim text is supported by what the source actually says.
 - **deviated** — verification found a mismatch: the source contradicts, weakens, or doesn't address the claim. The deviation record captures the gap.
 - **resolved** — the user reviewed the deviation and acted: accepted a corrected version of the claim, removed the assertion, or marked the deviation as a non-issue (e.g., the source updated since the claim was written).
 
 ## What happens at each transition
 
-The transitions are owned by `cogni-claims:claims` (verification of unverified) and the resolution dashboard (deviated → resolved). Once resolved, the [[concept-claims-propagation]] cascade fires: the originating entity file is updated, and downstream entities that referenced it get `propagated_at` timestamps so they can be re-checked.
+The transitions are owned by `cogni-workspace:claims` (verification of unverified) and the resolution dashboard (deviated → resolved). Once resolved, the [[concept-claims-propagation]] cascade fires: the originating entity file is updated, and downstream entities that referenced it get `propagated_at` timestamps so they can be re-checked.
 
 ## Why three states, not two
 

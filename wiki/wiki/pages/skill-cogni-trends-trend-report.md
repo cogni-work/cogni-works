@@ -18,4 +18,4 @@ Generate a strategic TIPS trend report organized around investment themes (Handl
 **Source**: `cogni-trends:trend-report`
 ([SKILL.md on GitHub](https://github.com/cogni-work/insight-wave/blob/main/cogni-trends/skills/trend-report/SKILL.md))
 
-Post-generation claim verification is handed to [[skill-cogni-claims-claims]] in submit mode.
+Post-generation claim verification is handed to `cogni-workspace:claims` in submit mode.

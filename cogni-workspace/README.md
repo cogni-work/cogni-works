@@ -220,7 +220,7 @@ cogni-workspace/
 | cogni-visual | No | manage-themes passes color variables to cogni-visual renderers (render-big-picture, render-big-block) |
 | cogni-website | No | Referenced in manage-workspace and workspace-status for website-related workspace configuration |
 | cogni-portfolio | No | install-mcp references cogni-portfolio as a consumer of excalidraw MCP in the installation plan |
-| cogni-claims | No | workspace-status references cogni-claims as a provider plugin for the claude-in-chrome MCP server check |
+| claude-in-chrome | No | The `claims` skill's cobrowse mode and `workspace-status`' MCP health check use the Chrome extension; claim verification degrades to WebFetch without it |
 | cogni-trends | No | audit-region-sources and manage-markets read the trends region-authority overlay when auditing market coverage |
 | cogni-knowledge | No | ask, workspace-status, and manage-workspace route knowledge-base questions to knowledge-setup / knowledge-query |
 

@@ -26,7 +26,7 @@ For each phase, a dedicated researcher agent (running on Claude Opus) conducts w
 - **cogni-portfolio** (required) — provides products, features, propositions, solutions, markets, competitors, and customer profiles
 - **cogni-narrative** (required) — provides the Corporate Visions story arc definition that the researcher agent reads and follows
 - Web access enabled — the researcher agent conducts live web research for each phase
-- Optional: cogni-trends (TIPS strategic theme enrichment), cogni-claims (source verification), cogni-copywriting (executive polish), cogni-visual (PPTX generation)
+- Optional: cogni-trends (TIPS strategic theme enrichment), cogni-workspace (source verification), cogni-copywriting (executive polish), cogni-visual (PPTX generation)
 
 ---
 
@@ -181,7 +181,7 @@ Aliases: `/pitch`, `/sales-pitch`, `/segment-pitch` all invoke the same skill.
 | Plugin | Purpose |
 |--------|---------|
 | cogni-trends | Enriches Why Change and Why Now phases with TIPS strategic theme data, regulatory timelines, and gap analysis |
-| cogni-claims | Verifies web-sourced claims in `claims.json` against their source URLs before the pitch ships |
+| cogni-workspace | Verifies web-sourced claims in `claims.json` against their source URLs before the pitch ships |
 
 ### Downstream consumers
 

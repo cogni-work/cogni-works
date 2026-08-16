@@ -150,7 +150,7 @@ The workspace is designed for single-session use. Multiple parallel claim-verifi
 
 ## Cross-Plugin Usage
 
-Other plugins submit claims by invoking the cogni-claims:claims skill with:
+Other plugins submit claims by invoking the cogni-workspace:claims skill with:
 - `mode`: "submit"
 - `working_dir`: their project directory
 - `claims`: array of {statement, source_url, source_title}

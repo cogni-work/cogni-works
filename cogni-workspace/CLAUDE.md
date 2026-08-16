@@ -107,4 +107,32 @@ Two skills absorbed from cogni-help when it was retired. These are now the only 
 - `skills/troubleshoot/references/known-issues.md` is its catalogue of known symptoms and fixes
 - `commands/troubleshoot.md` registers `/troubleshoot`; it is this plugin's first command file
 - `workspace-status` keeps the infrastructure-side checks (env vars, themes, settings) — `troubleshoot` does not duplicate them
-- `tests/test-relocated-skill-hygiene.sh` pins the two properties of the adopted trees that no other guard covers: no `cogni-help:` dispatch token survives, and every `${CLAUDE_PLUGIN_ROOT}` path documented in them resolves under this plugin
+- `tests/test-relocated-skill-hygiene.sh` pins the two properties of every adopted tree that no other guard covers: no source-plugin dispatch token survives, and every `${CLAUDE_PLUGIN_ROOT}` path documented in them resolves under this plugin. It pairs each tree with the token its own source plugin used, so both the cogni-help arm and the cogni-claims arm stay falsifiable
+
+## Claim Verification
+
+Absorbed from cogni-claims when it was retired. These are now the only copies. Claim verification is the cross-plugin quality gate: cogni-trends, cogni-portfolio, cogni-consult and (on the opt-in `knowledge-refresh --resweep` path only) cogni-knowledge submit sourced assertions here and get back a verdict per claim.
+
+- `claims` is the six-mode orchestrator — `submit`, `verify`, `dashboard`, `inspect`, `resolve`, `cobrowse`
+- `claim-entity` is the data contract every submitting plugin follows: `ClaimRecord`, `DeviationRecord`, `ResolutionRecord`, with five deviation types, four severity levels and five resolution actions
+- `agents/claim-verifier.md` fetches one source URL and verifies every claim against it, returning strict JSON; dispatch one per unique URL, in parallel
+- `agents/source-inspector.md` is the cobrowse path — it opens a source in the browser via claude-in-chrome and locates the passage when WebFetch cannot reach it
+- `commands/claims.md` registers `/claims`
+- `skills/claims/scripts/claims-store.sh` is the JSON state manager
+
+**The on-disk store keeps the name `{working_dir}/cogni-claims/`** — `claims.json`, `sources/`, `history/`. This is deliberate and load-bearing, not leftover debt: those are user files holding the accumulated state of every project already run, and no upgrade hook could find and rewrite them on every user's disk. `references/absorption-roadmap.md` Decision 2 is the standing rationale. When editing anything under `skills/claims/`, the discriminator is the colon: rewrite a `cogni-claims:` dispatch token, never a `cogni-claims/` path.
+
+Verification is live-source: `claims` fetches each cited URL and compares. cogni-knowledge's default pipeline deliberately does **not** use it — `knowledge-verify` scores citations against claims extracted at ingest time, zero-network. The two are different guarantees, and the split is by design.
+
+### Source Fetching Strategy
+
+`claim-verifier` uses **WebFetch** as its sole automated fetch method. On failure (403, timeout, anti-bot, paywall) the claim is marked `source_unavailable` — there is no automatic browser fallback. Unreachable sources are recovered interactively through `/claims cobrowse`, where the user handles authentication, cookie banners and navigation while Claude reads and verifies in real time via claude-in-chrome. `source-inspector` (inspect mode) opens a source in the browser for visual evidence review.
+
+Source cache files record which method succeeded via `fetch_method`. This enum is a **shared cross-plugin contract** — cogni-knowledge's fetch-cache reads and writes the same vocabulary, so keep the two aligned; adding a value is an additive contract change that must be mirrored on both sides:
+
+- `"webfetch"` — the standard automated fetch. Emitted here.
+- `"cobrowse_interactive"` — interactive recovery. Emitted here.
+- `"webfetch_fulltext"` — a fuller-body primary-tier fetch for dense legal/regulatory text whose standard extract may omit sections. Written by cogni-knowledge's `source-curator`; recognized-but-never-emitted here.
+- `"direct"` — a non-web local source already in hand (local file, pasted text, local PDF, interview note). Written by cogni-knowledge's local-source ingest; recognized-but-never-emitted here.
+
+The two recognized-but-never-emitted values exist because this engine is a web-source verifier with neither a fuller-body fetch nor a local-ingest path. Both always record a successfully-held body and carry no negative-cache reason: cogni-knowledge writes them as `status: ok` in its own vocabulary; the equivalent in this engine's source cache, whose statuses are `success` / `failed`, is `status: success`.

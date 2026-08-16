@@ -44,7 +44,7 @@ These MCPs cannot be auto-installed via `.mcp.json` and require user action.
 
 ### claude-in-chrome
 
-- **Used by:** cogni-claims, cogni-website, cogni-workspace
+- **Used by:** cogni-website, cogni-workspace
 - **Type:** Chrome extension (manual install)
 - **Requires:** Claude-in-Chrome extension installed in Chrome and active
 - **Probe tool:** `mcp__claude-in-chrome__tabs_context_mcp`

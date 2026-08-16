@@ -27,7 +27,7 @@ cogni-consulting does not know:
 
 ## How dispatch works
 
-When cogni-consulting runs the Discover phase, it instructs the user to invoke `cogni-research:research-report`, `cogni-trends:trend-scout`, and `cogni-portfolio:portfolio-scan`. It stores the output paths. When the Define phase begins, it reads those paths to verify completion and then dispatches to `cogni-claims:claims` for claim verification.
+When cogni-consulting runs the Discover phase, it instructs the user to invoke `cogni-research:research-report`, `cogni-trends:trend-scout`, and `cogni-portfolio:portfolio-scan`. It stores the output paths. When the Define phase begins, it reads those paths to verify completion and then dispatches to `cogni-workspace:claims` for claim verification.
 
 From cogni-consulting's CLAUDE.md: "Orchestrator, not producer — manages engagement state; content work done by existing plugins."
 

@@ -1,6 +1,6 @@
 # Claims Integration with cogni-claims
 
-How `verify-trend-report` Phase 2 submits and verifies claims via the `cogni-claims:claims` skill. Adapted from the legacy `trend-report/references/phase-3-claim-verification.md` so the verification protocol stays unchanged when the user moves from the embedded flow to the dedicated skill.
+How `verify-trend-report` Phase 2 submits and verifies claims via the `cogni-workspace:claims` skill. Adapted from the legacy `trend-report/references/phase-3-claim-verification.md` so the verification protocol stays unchanged when the user moves from the embedded flow to the dedicated skill.
 
 ---
 
@@ -25,7 +25,7 @@ If the user picks **Skip verification**, log a note and proceed directly to Phas
 
 ```yaml
 Skill:
-  skill: "cogni-claims:claims"
+  skill: "cogni-workspace:claims"
   args: "--file-path {PROJECT_PATH}/tips-trend-report.md --claims-file {PROJECT_PATH}/tips-trend-report-claims.json --verdict-mode --language {OUTPUT_LANGUAGE}"
 ```
 

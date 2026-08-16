@@ -16,7 +16,7 @@ Claims propagation is the cross-plugin pattern that turns sourced assertions int
 ## The four steps
 
 1. **Auto-log on creation.** Research agents append claim records to `cogni-claims/claims.json` as they generate sourced assertions. Each record carries `entity_ref` provenance (the plugin entity the claim came from), `source_url`, and the asserted text. cogni-portfolio uses `scripts/append-claim.sh` for this; cogni-research's report agents auto-log via the same pattern.
-2. **Verify in cogni-claims.** The `cogni-claims:claims` skill walks unverified claims, groups them by source URL, and dispatches one [[agent-cogni-claims-claim-verifier]] per URL — that agent does the WebFetch and detects deviations between each claim and what the source actually says. Verdicts: verified / deviated / resolved (see [[concept-claim-lifecycle]]).
+2. **Verify in cogni-workspace.** The `cogni-workspace:claims` skill walks unverified claims, groups them by source URL, and dispatches one the `claim-verifier` agent per URL — that agent does the WebFetch and detects deviations between each claim and what the source actually says. Verdicts: verified / deviated / resolved (see [[concept-claim-lifecycle]]).
 3. **Propagate corrections back.** When a claim is marked deviated and the user resolves it (by accepting a corrected version or removing the assertion), the correction propagates to the originating entity file via the `entity_ref` pointer.
 4. **Cascade staleness downstream.** Entities that depend on the corrected entity get marked stale via `propagated_at` timestamps. Downstream skills (e.g., proposition-generator reading a corrected feature) detect stale dependencies and either refresh or warn.
 
@@ -36,6 +36,6 @@ cogni-claims uses UUID-v4 slugs (`claim-550e8400-...`) rather than name-derived 
 
 **Source**: [insight-wave/CLAUDE.md on GitHub](https://github.com/cogni-work/insight-wave/blob/main/CLAUDE.md) (see also [er-diagram.md](https://github.com/cogni-work/insight-wave/blob/main/docs/architecture/er-diagram.md))
 
-The `entity_ref` and `propagated_at` fields that make cascade propagation work are defined in [[skill-cogni-claims-claim-entity]].
+The `entity_ref` and `propagated_at` fields that make cascade propagation work are defined in `cogni-workspace:claim-entity`.
 
-The operational entry point for the propagation cycle is [[skill-cogni-claims-claims]].
+The operational entry point for the propagation cycle is `cogni-workspace:claims`.

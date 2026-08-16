@@ -18,7 +18,7 @@ graph LR
         PF[cogni-portfolio<br/>products, features, markets<br/>propositions, solutions]
         TI[cogni-trends<br/>trends, investment themes<br/>value models, catalogs]
         GR[cogni-knowledge<br/>binding, wiki sources<br/>syntheses, concepts, claims]
-        CL[cogni-claims<br/>claims, deviations<br/>resolutions]
+        CL[cogni-workspace<br/>claims, deviations<br/>resolutions]
     end
 
     subgraph Output["Output Layer"]
@@ -74,8 +74,8 @@ graph LR
 |--------|-------------|---------------|----------------------|
 | **cogni-portfolio** | Product, Feature, Market, Proposition, Solution, Package, Competitor, Customer, Scan | JSON files in project directory | Exports `portfolio-context.json` (schema v3.1) to TIPS. Imports `portfolio-opportunities.json` from TIPS |
 | **cogni-trends** | TipsProject, TrendCandidate, TrendReport, InvestmentTheme, SolutionTemplate, Catalog | JSON + YAML in project directory | Exports themes + value-model to Marketing, Sales. Bidirectional bridge with Portfolio |
-| **cogni-knowledge** | Binding (binding.json), WikiSource, Synthesis, Concept, Question (wiki pages) | Markdown + YAML frontmatter (Obsidian-browsable) | Vendors the Karpathy wiki engine; submits resweep claims to cogni-claims via the claim-entity contract |
-| **cogni-claims** | ClaimRecord, DeviationRecord, ResolutionRecord | JSON in `cogni-claims/` directory | Receives claims from all data-layer plugins. Status: unverified → verified/deviated → resolved |
+| **cogni-knowledge** | Binding (binding.json), WikiSource, Synthesis, Concept, Question (wiki pages) | Markdown + YAML frontmatter (Obsidian-browsable) | Vendors the Karpathy wiki engine; submits resweep claims to cogni-workspace via the claim-entity contract |
+| **cogni-workspace** | ClaimRecord, DeviationRecord, ResolutionRecord | JSON in `cogni-claims/` directory | Receives claims from all data-layer plugins. Status: unverified → verified/deviated → resolved |
 | **cogni-sales** | PitchLog, BuyingCenter, PhaseDeliverable (research.json + narrative.md) | JSON + Markdown per phase | Consumes portfolio propositions + narrative arc patterns. Registers claims |
 | **cogni-marketing** | MarketingProject, ContentStrategy, ContentPiece, Campaign, Calendar | JSON + Markdown with YAML frontmatter | Consumes portfolio propositions + TIPS themes. 16 content formats |
 | **cogni-narrative** | Narrative (arc_id, sections, techniques) | Markdown with YAML frontmatter | Consumed by Visual, Copywriting, Sales via `arc_id` frontmatter |
@@ -93,7 +93,7 @@ graph LR
 | `tips-value-model.json` | cogni-trends | cogni-portfolio | Solution templates, investment themes, TIPS paths for trends-bridge import |
 | `pitch-log.json` | cogni-sales | (internal) | Workflow state, buying center config, phase tracking |
 | `marketing-project.json` | cogni-marketing | (internal) | Brand voice, source paths, market-GTM path configuration |
-| `claims.json` | various | cogni-claims | Claim records with source URLs, status, and deviation evidence |
+| `claims.json` | various | cogni-workspace | Claim records with source URLs, status, and deviation evidence |
 | `consult-project.json` | cogni-consult | (internal) | Engagement config, key question, action-field list, knowledge-base binding |
 
 ## Naming Conventions
@@ -105,7 +105,7 @@ graph LR
 | cogni-sales | `{customer-or-segment}-pitch` | `siemens-manufacturing-pitch` |
 | cogni-marketing | `{market}--{gtm-path}--{format}` | `dach-enterprise--ai-automation--whitepaper` |
 | cogni-knowledge | `{slug}` (wiki page / synthesis slugs) | `eu-ai-act-overview` |
-| cogni-claims | `claim-{uuid-v4}` | `claim-550e8400-e29b-41d4-a716-446655440000` |
+| cogni-workspace | `claim-{uuid-v4}` | `claim-550e8400-e29b-41d4-a716-446655440000` |
 | cogni-consult | `{client}-{engagement-topic}` | `acme-market-entry` |
 
 ## Data Isolation Principle

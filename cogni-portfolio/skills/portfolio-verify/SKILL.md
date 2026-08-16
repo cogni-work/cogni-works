@@ -25,7 +25,7 @@ This matters because downstream outputs (synthesis, exports, proposals) inherit 
 
 ## Prerequisites
 
-This skill requires the `cogni-claims` plugin. If the `cogni-claims:claims` skill is not available, inform the user and provide installation guidance.
+This skill requires the `cogni-claims` plugin. If the `cogni-workspace:claims` skill is not available, inform the user and provide installation guidance.
 
 If no `cogni-claims/` directory exists in the project, no claims have been submitted yet. Research agents submit claims automatically when web search is used during market research, competitor research, and proposition generation. Suggest running those skills with web research enabled first.
 
@@ -73,10 +73,10 @@ This step matters because verification hits external URLs — the user should un
 
 ### 3. Run Verification
 
-When the user confirms, invoke the `cogni-claims:claims` skill with mode `verify`:
+When the user confirms, invoke the `cogni-workspace:claims` skill with mode `verify`:
 
 ```
-Use the cogni-claims:claims skill to verify all unverified claims.
+Use the cogni-workspace:claims skill to verify all unverified claims.
 Working directory: <project-dir>
 ```
 
@@ -88,7 +88,7 @@ After verification completes, show the updated summary. If deviations were found
 
 - List claims with `high` or `critical` severity deviations
 - For each, show: claim statement, deviation type, severity, and the source excerpt that contradicts it
-- Suggest using `cogni-claims:claims` skill with mode `inspect` for full evidence on any specific claim
+- Suggest using `cogni-workspace:claims` skill with mode `inspect` for full evidence on any specific claim
 
 Ask explicitly:
 - Any deviations that surprise you?
@@ -99,8 +99,8 @@ Ask explicitly:
 
 If deviated claims exist, offer resolution options:
 
-1. **Review and resolve individually** — invoke `cogni-claims:claims` with mode `resolve` for each
-2. **Show dashboard** — invoke `cogni-claims:claims` with mode `dashboard` for full overview
+1. **Review and resolve individually** — invoke `cogni-workspace:claims` with mode `resolve` for each
+2. **Show dashboard** — invoke `cogni-workspace:claims` with mode `dashboard` for full overview
 3. **Proceed to communicate anyway** — warn that unresolved deviations will be flagged in output
 
 Never auto-resolve deviations. The user must decide whether to correct the data, accept the deviation with justification, or flag it for later review. They know their domain best.
@@ -246,7 +246,7 @@ Regenerate the dashboard and hand the user its link, every time, per `$CLAUDE_PL
 
 ## Important Notes
 
-- This skill orchestrates; `cogni-claims:claims` does the actual verification work
+- This skill orchestrates; `cogni-workspace:claims` does the actual verification work
 - Claims without web sources (internal estimates) are not submitted and do not need verification
 - Re-running verification on already-verified claims is safe (re-checks the source)
 - The `cogni-claims/` directory lives inside the portfolio project directory (managed by the cogni-claims plugin)

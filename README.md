@@ -11,7 +11,7 @@ Each plugin implements an established framework (Corporate Visions, Double Diamo
 
 ## What the plugins do
 
-12 plugins organized around nine capability areas. Each area handles a distinct part of the consulting-to-delivery workflow; plugins within an area share data formats and can be used independently or together.
+11 plugins organized around nine capability areas. Each area handles a distinct part of the consulting-to-delivery workflow; plugins within an area share data formats and can be used independently or together.
 
 ### Knowledge Management
 
@@ -89,11 +89,11 @@ Each plugin implements an established framework (Corporate Visions, Double Diamo
 
 #### Source Verification
 
-[cogni-claims](cogni-claims/README.md) verifies whether sourced claims match what their cited sources actually say — catching misquotations, unsupported conclusions, selective omissions, and stale data. Other plugins register claims during generation; cogni-claims fetches each source and flags deviations for your review. 2 skills and 2 agents.
+[cogni-workspace](cogni-workspace/README.md) verifies whether sourced claims match what their cited sources actually say — catching misquotations, unsupported conclusions, selective omissions, and stale data. Other plugins register claims during generation; cogni-claims fetches each source and flags deviations for your review. 2 skills and 2 agents.
 
 > "Verify all claims in the trend report against their cited sources"
 
-→ [Plugin guide](docs/plugin-guide/cogni-claims.md)
+→ [Plugin guide](docs/plugin-guide/cogni-workspace.md)
 
 Beyond the open-source plugins, cogni-works offers consulting services — plugin engineering for domain-specific workflows, managed deployment, and a partner certification program — through [cogni-work.ai](https://cogni-work.ai). Whether you run a consulting practice, a sales organization, or a marketing team, the site shows how these capabilities translate into managed workflows and onboarding for your team.
 
@@ -161,7 +161,7 @@ Some plugins extend their capabilities through external [MCP servers](https://do
 | MCP Server | Used by | What it enables | Install |
 |------------|---------|-----------------|---------|
 | excalidraw | [cogni-visual](cogni-visual/README.md), [cogni-portfolio](cogni-portfolio/README.md) | Diagram rendering (infographics, concept diagrams, solution architecture, report enrichment) | Auto-installed by `manage-workspace` from [yctimlin/mcp_excalidraw](https://github.com/yctimlin/mcp_excalidraw) (git clone + build). Includes React canvas on localhost:3000. |
-| claude-in-chrome | [cogni-claims](cogni-claims/README.md), [cogni-website](cogni-website/README.md), [cogni-workspace](cogni-workspace/README.md) | Browser automation — claim verification, website preview, theme extraction | Manual — install [Chrome extension](https://code.claude.com/docs/en/chrome) |
+| claude-in-chrome | [cogni-website](cogni-website/README.md), [cogni-workspace](cogni-workspace/README.md) | Browser automation — claim verification, website preview, theme extraction | Manual — install [Chrome extension](https://code.claude.com/docs/en/chrome) |
 | pencil | [cogni-visual](cogni-visual/README.md), [cogni-website](cogni-website/README.md) | Web narrative, storyboard, and poster rendering; homepage hero generation | Manual — open [Pencil](https://docs.pencil.dev/getting-started/installation) desktop app |
 
 Plugins that don't use MCP servers work without them — only install what you need.
@@ -181,15 +181,14 @@ The workplace combines Claude Code with [Obsidian](https://obsidian.md/) for per
 ```
 insight-wave/
 ├── .claude-plugin/
-│   └── marketplace.json                    # Marketplace manifest (12 plugins)
+│   └── marketplace.json                    # Marketplace manifest (11 plugins)
 ├── docs/                                   # User documentation
 │   ├── getting-started.md                  # Forwarder → workflows/install-to-infographic.md
 │   ├── ecosystem-overview.md               # Plugin landscape and data flow
-│   ├── plugin-guide/                       # Per-plugin deep dives (12 guides)
+│   ├── plugin-guide/                       # Per-plugin deep dives (11 guides)
 │   ├── workflows/                          # Cross-plugin pipeline guides (8 workflows)
 │   ├── architecture/                       # Design philosophy, plugin anatomy, ER diagram
 │   └── contributing/                       # Plugin development guide
-├── cogni-claims/                           # Claim verification
 ├── cogni-consult/                          # Action-fields-WBS consulting orchestrator
 ├── cogni-copywriting/                      # Copywriting toolkit
 ├── cogni-knowledge/                        # Wiki-first research orchestrator
@@ -228,10 +227,9 @@ Plugins follow the [Claude Code plugin standard](https://code.claude.com/docs/en
 | [cogni-sales](cogni-sales/README.md) | Sales | 1 | 4 | Corporate Visions Why Change pitch generation for named customers or market segments |
 | [cogni-visual](cogni-visual/README.md) | Visual | 7 | 19 | Slide decks, infographics, web narratives, poster storyboards, and report enrichment from narratives |
 | [cogni-website](cogni-website/README.md) | Website | 6 | 3 | Multi-page customer websites from portfolio, marketing, and research content with shared navigation and theming |
-| [cogni-claims](cogni-claims/README.md) | Quality | 2 | 2 | Source verification — catches misquotations, unsupported conclusions, and stale data in sourced claims |
-| [cogni-workspace](cogni-workspace/README.md) | Platform | 11 | 0 | Shared foundation — env vars, MCP installation, theme management, plugin discovery, workspace health, Obsidian integration, bundled wiki |
+| [cogni-workspace](cogni-workspace/README.md) | Platform | 13 | 2 | Shared foundation — env vars, MCP installation, theme management, plugin discovery, workspace health, Obsidian integration, bundled wiki |
 
-**105 skills, 88 agents** across the 12 active plugins.
+**105 skills, 88 agents** across the 11 active plugins.
 
 See [Cross-Plugin Data Flow](docs/er-diagram.md) for how data flows between plugins, or browse the [full documentation](docs/ecosystem-overview.md).
 

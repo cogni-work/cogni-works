@@ -26,7 +26,7 @@ skills/                         21 portfolio skills
   packages/                       Bundle solutions into sellable packages per Product x Market
   compete/                        Competitive landscape analysis per proposition
   customers/                      Ideal customer profiles and buyer personas per market
-  portfolio-verify/               Orchestrate claim verification via cogni-claims
+  portfolio-verify/               Orchestrate claim verification via cogni-workspace
   portfolio-communicate/          All portfolio output: pitches, proposals, briefs, workbooks, docs
     references/
       templates-customer-narrative.md   Portfolio-driven website components (home/about/capability/persona/approach), each arc-structured
@@ -189,7 +189,7 @@ Research agents auto-log claims with source URLs and entity provenance (`entity_
 
 | Plugin | Direction | Mechanism |
 |--------|-----------|-----------|
-| cogni-claims | bidirectional | portfolio-verify orchestrates claim verification and propagates corrections back to entity files; research agents auto-log claims with entity_ref provenance |
+| cogni-workspace | bidirectional | portfolio-verify orchestrates claim verification and propagates corrections back to entity files; research agents auto-log claims with entity_ref provenance |
 | cogni-trends | bidirectional | trends-bridge imports solution templates, exports portfolio anchors |
 | cogni-workspace | upstream | portfolio-dashboard uses pick-theme for theme selection |
 | document-skills | downstream | portfolio-ingest uses docx/pptx/xlsx readers; portfolio-communicate workbook uses XLSX writer |

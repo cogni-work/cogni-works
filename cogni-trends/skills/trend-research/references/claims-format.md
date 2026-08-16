@@ -1,6 +1,6 @@
 # Claims Format
 
-Reference for extracting and formatting claims compatible with `cogni-claims:claims`.
+Reference for extracting and formatting claims compatible with `cogni-workspace:claims`.
 
 ---
 
@@ -117,10 +117,10 @@ When extracting claims from the generated report section:
 
 ## Compatibility with cogni-claims
 
-The merged claims file is directly consumable by `cogni-claims:claims` via:
+The merged claims file is directly consumable by `cogni-workspace:claims` via:
 
 ```
-Skill("cogni-claims:claims", args="--file-path {report} --claims-file {claims} --verdict-mode --language {lang}")
+Skill("cogni-workspace:claims", args="--file-path {report} --claims-file {claims} --verdict-mode --language {lang}")
 ```
 
 The `--claims-file` flag tells the claims skill to use pre-extracted claims instead of running its own extraction phase.

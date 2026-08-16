@@ -22,7 +22,7 @@ This is the content catalog for **insight-wave**. Every wiki page is listed here
 - [[concept-bridge-files]] — Bridge files are explicit JSON exports written by one plugin and read by another according to a versioned contract.
 - [[concept-brief-based-rendering]] — cogni-visual separates content specification from rendering.
 - [[concept-canonical-workflow-ids]] — Cross-plugin workflows are named from one fixed set, with `docs/workflows/` as the single naming authority.
-- [[concept-claim-lifecycle]] — Claims in cogni-claims move through a three-state lifecycle.
+- [[concept-claim-lifecycle]] — Claims in cogni-workspace move through a three-state lifecycle.
 - [[concept-claims-propagation]] — Claims propagation is the cross-plugin pattern that turns sourced assertions into a verifiable, self-correcting knowledge graph.
 - [[concept-data-isolation]] — Each insight-wave plugin owns its data completely.
 - [[concept-data-model-patterns]] — The recurring patterns across every entity-producing plugin in insight-wave.
@@ -42,7 +42,6 @@ This is the content catalog for **insight-wave**. Every wiki page is listed here
 
 ### Plugins
 
-- [[plugin-cogni-claims]] — cogni-claims manages the full lifecycle of sourced-claim verification within an insight-wave workspace.
 - [[plugin-cogni-copywriting]] — Professional copywriting toolkit providing document polishing with messaging frameworks (BLUF, Pyramid, SCQA, STAR, PSB, FAB, Inverted Pyramid), stakeholder review via parallel persona Q&A, readabi....
 - [[plugin-cogni-marketing]] — B2B marketing content engine that bridges cogni-trends strategic themes (GTM paths) and cogni-portfolio propositions into channel-ready content.
 - [[plugin-cogni-narrative]] — Story arc engine for the insight-wave ecosystem.
@@ -67,12 +66,7 @@ This is the content catalog for **insight-wave**. Every wiki page is listed here
 
 ### Skills
 
-One page per skill across all 12 plugins. Grouped by plugin, alphabetical within each.
-
-#### cogni-claims
-
-- [[skill-cogni-claims-claim-entity]] — Cross-plugin data model for claim verification — defines ClaimRecord, DeviationRecord, and ResolutionRecord schemas, status transitions, deviation types, severity levels, and workspace layout.
-- [[skill-cogni-claims-claims]] — Manage claim verification lifecycle — submit, verify, review dashboard, inspect, resolve, and cobrowse claims.
+One page per skill across all 11 plugins. Grouped by plugin, alphabetical within each.
 
 #### cogni-copywriting
 
@@ -166,12 +160,7 @@ One page per skill across all 12 plugins. Grouped by plugin, alphabetical within
 
 ### Agents
 
-One page per agent role across all 12 plugins. Grouped by plugin, alphabetical within each.
-
-#### cogni-claims
-
-- [[agent-cogni-claims-claim-verifier]] — Verify claims against a single source URL and return deviation analysis as JSON.
-- [[agent-cogni-claims-source-inspector]] — Fetch a source URL via claude-in-chrome, locate the relevant passage, and present evidence to the user.
+One page per agent role across all 11 plugins. Grouped by plugin, alphabetical within each.
 
 #### cogni-copywriting
 

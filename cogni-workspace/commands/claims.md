@@ -40,7 +40,7 @@ Submit one or more claims for tracking and future verification.
 
 **Processing:**
 1. Parse the claim(s) from arguments
-2. Invoke the `cogni-claims:claims` skill with mode `submit`
+2. Invoke the `cogni-workspace:claims` skill with mode `submit`
 3. Report how many claims were submitted and their IDs
 
 ### verify — Run verification pipeline
@@ -57,7 +57,7 @@ Verify unverified claims against their cited sources. Optionally re-verify a spe
 - No options: verify all unverified claims
 
 **Processing:**
-1. Invoke the `cogni-claims:claims` skill with mode `verify`
+1. Invoke the `cogni-workspace:claims` skill with mode `verify`
 2. The skill dispatches `claim-verifier` agents in parallel (one per unique source URL)
 3. Present verification summary to user
 
@@ -74,7 +74,7 @@ Display all claims grouped by status with actionable information.
 - `--show-resolved`: include resolved claims in the display
 
 **Processing:**
-1. Invoke the `cogni-claims:claims` skill with mode `dashboard`
+1. Invoke the `cogni-workspace:claims` skill with mode `dashboard`
 2. Render the formatted dashboard
 
 ### inspect — Review claim evidence
@@ -89,7 +89,7 @@ Show detailed deviation evidence for a specific claim, with option to open the s
 - `<claim-id>`: the claim to inspect
 
 **Processing:**
-1. Invoke the `cogni-claims:claims` skill with mode `inspect`
+1. Invoke the `cogni-workspace:claims` skill with mode `inspect`
 2. Display deviation details with source excerpts
 3. Offer browser inspection if deviations exist
 
@@ -105,7 +105,7 @@ Present resolution options for a claim with detected deviations.
 - `<claim-id>`: the claim to resolve (must have status `deviated`)
 
 **Processing:**
-1. Invoke the `cogni-claims:claims` skill with mode `resolve`
+1. Invoke the `cogni-workspace:claims` skill with mode `resolve`
 2. Present the claim, deviations, and evidence
 3. Show resolution options via AskUserQuestion
 4. Record the user's decision
@@ -128,7 +128,7 @@ Open source URLs in the user's browser for interactive recovery of `source_unava
 **Requires:** claude-in-chrome (user's Chrome browser with the extension active)
 
 **Processing:**
-1. Invoke the `cogni-claims:claims` skill with mode `cobrowse`
+1. Invoke the `cogni-workspace:claims` skill with mode `cobrowse`
 2. The skill opens each source URL in a new Chrome tab
 3. User assists with navigation (login, cookie dismissal, scrolling)
 4. Claude extracts content and verifies claims inline
@@ -181,8 +181,8 @@ Claims state is stored in `{working_dir}/cogni-claims/`.
 
 ## Integration
 
-**Skill used:** `cogni-claims:claims` (main orchestrator)
-**Agents used (via skill):** `cogni-claims:claim-verifier`, `cogni-claims:source-inspector`
+**Skill used:** `cogni-workspace:claims` (main orchestrator)
+**Agents used (via skill):** `cogni-workspace:claim-verifier`, `cogni-workspace:source-inspector`
 
 **Execution pattern:**
 Command → parses mode and args → invokes claims skill → skill dispatches agents → results returned to user

@@ -22,7 +22,7 @@
 #     (Option B #292), no claude-in-chrome tools.
 #   - source-fetcher agent: cobrowse-only (no WebFetch/WebSearch in tools:),
 #     cobrowse_interactive enum, fetch-cache.py store/fetch contract.
-#   - Clean-break invariant: no `cogni-research:` or `cogni-claims:` skill
+#   - Clean-break invariant: no `cogni-research:` or `cogni-workspace:claim*` skill
 #     dispatch references in any of the new files.
 #
 # bash 3.2 + grep only.
@@ -137,7 +137,7 @@ assert_grep 'fetch-manifest.json' "$FETCH" "knowledge-fetch: writes fetch-manife
 assert_not_grep 'Skill("cogni-knowledge:source-fetcher' "$FETCH" "knowledge-fetch: no Skill('cogni-knowledge:source-fetcher) — agents go through Task"
 assert_grep 'Task' "$FETCH" "knowledge-fetch: Task listed in allowed-tools"
 # Option B (#292, v0.0.29): cobrowse recovery is opt-in, and setup mirrors
-# cogni-claims (probe the claude-in-chrome extension, not install-mcp).
+# the claims engine (probe the claude-in-chrome extension, not install-mcp).
 assert_grep '--cobrowse' "$FETCH" "knowledge-fetch: cobrowse recovery is opt-in via --cobrowse"
 assert_grep 'mcp__claude-in-chrome__tabs_context_mcp' "$FETCH" "knowledge-fetch: probes the claude-in-chrome extension before cobrowse"
 
@@ -207,7 +207,7 @@ fi
 assert_grep 'name: source-fetcher' "$FETCHER" "source-fetcher: frontmatter name"
 assert_grep 'fetch-cache.py store' "$FETCHER" "source-fetcher: calls fetch-cache.py store"
 assert_grep 'fetch-cache.py fetch' "$FETCHER" "source-fetcher: calls fetch-cache.py fetch (positive-only cache lookup)"
-assert_grep 'cobrowse_interactive' "$FETCHER" "source-fetcher: uses cobrowse_interactive enum (matches cogni-claims)"
+assert_grep 'cobrowse_interactive' "$FETCHER" "source-fetcher: uses cobrowse_interactive enum (matches the claims engine)"
 assert_grep 'fallback_attempted' "$FETCHER" "source-fetcher: emits fallback_attempted in unavailable[]"
 # Option B (#292, v0.0.29): source-fetcher shrank to cobrowse-only. WebFetch
 # (and the PDF Read-loop) moved to source-curator, so the frontmatter tools:
@@ -229,7 +229,7 @@ else
 fi
 # MCP cobrowse tools must be enumerated so the fallback path actually works
 # (plugin agents do not auto-inherit MCP tools when a tools: array is set —
-# confirmed against cogni-claims/agents/source-inspector which uses the same
+# confirmed against cogni-workspace/agents/source-inspector.md which uses the same
 # mcp__claude-in-chrome__* names).
 if echo "$FETCHER_TOOLS_LINE" | grep -q 'mcp__claude-in-chrome__'; then
   green "PASS: source-fetcher: frontmatter tools: enumerates claude-in-chrome MCP tools for cobrowse fallback"
@@ -240,7 +240,7 @@ else
 fi
 
 # --- Clean-break invariant ------------------------------------------------
-# v0.1.0 forbids dispatching cogni-research or cogni-claims skills/agents
+# v0.1.0 forbids dispatching cogni-research or cogni-workspace claim skills/agents
 # from the new runtime path. v0.0.20 (M6 knowledge-ingest) extends the rule
 # to cogni-wiki: the ingest skill calls wiki-ingest's helper scripts
 # directly at script level (backlink_audit.py, wiki_index_update.py) rather
@@ -252,7 +252,7 @@ fi
 # three new files plus the orchestrator skill). knowledge-plan / knowledge-
 # curate / knowledge-fetch legitimately do not dispatch cogni-wiki either,
 # but they predate the explicit rule; the original loop already proves the
-# weaker cogni-research/cogni-claims invariant for them.
+# weaker cogni-research/cogni-workspace-claims invariant for them.
 INGEST="$PLUGIN_ROOT/skills/knowledge-ingest/SKILL.md"
 SETUP="$PLUGIN_ROOT/skills/knowledge-setup/SKILL.md"
 INGESTER="$PLUGIN_ROOT/agents/source-ingester.md"
@@ -269,9 +269,9 @@ REVIEWER="$PLUGIN_ROOT/agents/wiki-reviewer.md"
 
 for f in "$PLAN" "$CURATE" "$FETCH" "$CURATOR" "$FETCHER" "$INGEST" "$INGESTER" "$CLAIM_EXTRACTOR" "$COMPOSE" "$COMPOSER" "$VERIFY" "$VERIFIER" "$REVISOR" "$FINALIZE" "$DISTILL" "$DISTILLER" "$REVIEWER"; do
   [ -f "$f" ] || continue
-  if grep -qE 'Skill\("?cogni-(research|claims):' "$f" 2>/dev/null; then
-    red "FAIL: clean-break: $f dispatches a cogni-research/cogni-claims skill"
-    grep -nE 'Skill\("?cogni-(research|claims):' "$f"
+  if grep -qE 'Skill\("?(cogni-research:|cogni-workspace:claim)' "$f" 2>/dev/null; then
+    red "FAIL: clean-break: $f dispatches a cogni-research/cogni-workspace-claims skill"
+    grep -nE 'Skill\("?(cogni-research:|cogni-workspace:claim)' "$f"
     errors=$((errors + 1))
   fi
 done
@@ -294,7 +294,7 @@ for f in "$INGEST" "$INGESTER" "$CLAIM_EXTRACTOR" "$COMPOSE" "$COMPOSER" "$VERIF
 done
 
 if [ $errors -eq 0 ]; then
-  green "PASS: clean-break — no cogni-research/cogni-claims/cogni-wiki skill dispatch in new files"
+  green "PASS: clean-break — no cogni-research/cogni-workspace-claims/cogni-wiki skill dispatch in new files"
 fi
 
 # --- wiki-verifier agent honesty bullets ---------------------------------

@@ -111,13 +111,13 @@ assert_grep 'stale_ids' "$VERIFY" "knowledge-verify: prunes stale manifest entri
 # or Skill("cogni-knowledge:revisor) dispatch — agents go through Task.
 assert_not_grep 'Skill("cogni-knowledge:wiki-verifier' "$VERIFY" "knowledge-verify: no Skill('cogni-knowledge:wiki-verifier) — agents go through Task"
 assert_not_grep 'Skill("cogni-knowledge:revisor' "$VERIFY" "knowledge-verify: no Skill('cogni-knowledge:revisor) — agents go through Task"
-# Clean-break: no cogni-research / cogni-claims input shapes leaking through.
+# Clean-break: no cogni-research / cogni-workspace:claim input shapes leaking through.
 assert_not_grep '01-contexts/data' "$VERIFY" "knowledge-verify: does NOT reference cogni-research's 01-contexts/data"
 assert_not_grep '02-sources/data' "$VERIFY" "knowledge-verify: does NOT reference cogni-research's 02-sources/data"
-assert_not_grep 'cogni-claims:' "$VERIFY" "knowledge-verify: does NOT dispatch any cogni-claims skill"
+assert_not_grep 'cogni-workspace:claim' "$VERIFY" "knowledge-verify: does NOT dispatch the cogni-workspace claims engine"
 # Positive control, per tests/README.md: an absence assertion alone also passes on a
 # gutted file, so pair it with the mechanism that replaced the dispatch.
-assert_grep 'pre_extracted_claims:' "$VERIFY" "knowledge-verify: cogni-claims replacement present — scores citations against the cited page's on-disk pre_extracted_claims: frontmatter (zero-network)"
+assert_grep 'pre_extracted_claims:' "$VERIFY" "knowledge-verify: claims-engine replacement present — scores citations against the cited page's on-disk pre_extracted_claims: frontmatter (zero-network)"
 # allowed-tools must include Task (we dispatch the verifier and revisor).
 VERIFY_TOOLS_LINE=$(grep '^allowed-tools:' "$VERIFY" || true)
 if echo "$VERIFY_TOOLS_LINE" | grep -q Task; then
@@ -315,13 +315,13 @@ for token in 'citation_density' 'cross_references_emitted' 'placed-evidence ledg
   fi
 done
 # Clean-break invariant on the body content (the HTML comment legitimately
-# mentions cogni-research / cogni-claims for provenance — the body must not
+# mentions cogni-research / cogni-workspace:claim for provenance — the body must not
 # dispatch them).
-if awk '/^## /{p=1} p' "$REVISOR" | grep -qE 'Skill\("?cogni-(research|claims|wiki):'; then
-  red "FAIL: revisor: body dispatches a cogni-research/cogni-claims/cogni-wiki skill"
+if awk '/^## /{p=1} p' "$REVISOR" | grep -qE 'Skill\("?(cogni-research:|cogni-wiki:|cogni-workspace:claim)'; then
+  red "FAIL: revisor: body dispatches a cogni-research/cogni-workspace-claims/cogni-wiki skill"
   errors=$((errors + 1))
 else
-  green "PASS: revisor: body does NOT dispatch any cogni-research/cogni-claims/cogni-wiki skill"
+  green "PASS: revisor: body does NOT dispatch any cogni-research/cogni-workspace-claims/cogni-wiki skill"
 fi
 
 # --- Phase 6 contract token match ----------------------------------------

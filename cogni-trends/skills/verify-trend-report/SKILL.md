@@ -22,7 +22,7 @@ Quality gate for a generated trend report. Verifies every quantitative claim aga
 
 `trend-synthesis` produces a draft (`tips-trend-report.md`) plus a claims registry (`tips-trend-report-claims.json`). This skill is the dedicated re-entry point that lifts that draft to a deliverable:
 
-1. Verifies claims against source URLs via `cogni-claims:claims`
+1. Verifies claims against source URLs via `cogni-workspace:claims`
 2. Lets the user steer corrections (proceed / fix specific deviations / drop claims / accept)
 3. Runs `trend-report-reviewer` for cross-theme structural quality
 4. Dispatches `trend-report-revisor` to apply corrections, remove unverifiable claims, and find replacement evidence
@@ -165,13 +165,13 @@ Read [references/claims-integration.md](references/claims-integration.md) for th
 
 #### Step 2.1: Check cogni-claims availability
 
-If the `cogni-claims:claims` skill is not installed, log a warning and skip Phases 2 and 3 entirely. Continue with Phase 4 in **structural-review-only** mode (reduced iteration cap of 1).
+If the `cogni-workspace:claims` skill is not installed, log a warning and skip Phases 2 and 3 entirely. Continue with Phase 4 in **structural-review-only** mode (reduced iteration cap of 1).
 
 #### Step 2.2: Run verification
 
 ```yaml
 Skill:
-  skill: "cogni-claims:claims"
+  skill: "cogni-workspace:claims"
   args: "--file-path {PROJECT_PATH}/tips-trend-report.md --claims-file {PROJECT_PATH}/tips-trend-report-claims.json --verdict-mode --language {OUTPUT_LANGUAGE}"
 ```
 
@@ -399,7 +399,7 @@ The user can re-enter this skill later to pick a different path; downstream skil
 **Pipeline:** `trend-scout → value-modeler → trend-research → trend-synthesis → verify-trend-report`
 
 **Plugin dependencies:**
-- `cogni-claims:claims` (recommended) — claim verification
+- `cogni-workspace:claims` (recommended) — claim verification
 - `cogni-copywriting:copywriter` (optional) — Phase 5 menu option
 - `cogni-visual:enrich-report` (optional) — Phase 5 menu option
 

@@ -296,7 +296,7 @@ maps consult's flat-string coordinate to the object locator
 field_path: assumptions[?id=="<asm-id>"].value}` — and appends an `unverified`
 ClaimRecord to the workspace `cogni-claims/claims.json` (idempotent: one
 assumption maps to exactly one record). **Verify:** the existing cogni-claims
-machinery (`cogni-claims:claims`, verify mode) checks the claim against its
+machinery (`cogni-workspace:claims`, verify mode) checks the claim against its
 source; cogni-consult builds **no** verifier of its own. **Propagate:**
 `submit-assumption-claim.py propagate` writes `status: "verified"` plus the
 `citation.claim_id` back-reference onto the assumption record — and refuses

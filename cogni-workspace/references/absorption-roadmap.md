@@ -57,6 +57,26 @@ skill (`why-change`) and no lifecycle arc, so the rule places it with the
 horizontal set even though it reads as a business capability by name. Recorded
 explicitly because it is the one row where the rule and the intuition disagree.
 
+## Absorption status
+
+What Decision 1 has actually produced so far. The scoring tables above are the
+point-in-time analysis that justified each call and are left as measured; this
+section is the running record of what has landed.
+
+| Source plugin | Status | What moved |
+|---|---|---|
+| cogni-help | retired | `cogni-issues` and `troubleshoot` kept as skills; `guide` / `cheatsheet` / `workflow` folded into `ask`'s bundled wiki; the course-delivery system deleted |
+| cogni-claims | retired | the `claims` and `claim-entity` skills, the `claim-verifier` and `source-inspector` agents, and the `/claims` command, all moved verbatim. Nothing folded, nothing dropped — there was no overlapping surface to merge into |
+
+Both prefixes are registered in `scripts/retired-plugins.json`, so
+`scripts/check-external-dispatch.py` fails the build on any surviving
+`cogni-help:` or `cogni-claims:` dispatch token. `tests/test-relocated-skill-hygiene.sh`
+covers the file types that guard's globs miss, pairing each adopted tree with the
+token its own source plugin dispatched under.
+
+The cogni-claims move is the case Decision 2 below was written for: the skills
+changed plugin, the data directory did not.
+
 ## Decision 2 — on-disk data directories keep their names
 
 **Decision.** `{working_dir}/cogni-claims/` and `{source_dir}/cogni-visual/` keep

@@ -63,7 +63,7 @@ See [Portfolio to Website workflow](workflows/portfolio-to-website.md) for how p
 
 | Plugin | What it does |
 |--------|-------------|
-| [cogni-claims](../cogni-claims/README.md) | Verifies sourced claims against their cited URLs. Detects misquotations, unsupported conclusions, and selective omissions. Used as a review loop inside cogni-knowledge and callable standalone on any document with citations. |
+| [cogni-workspace](../cogni-workspace/README.md) | Verifies sourced claims against their cited URLs. Detects misquotations, unsupported conclusions, and selective omissions. Used as a review loop inside cogni-knowledge and callable standalone on any document with citations. |
 
 ---
 
@@ -75,7 +75,7 @@ Most workflows follow a left-to-right pipeline. The typical path from research t
 cogni-knowledge
   → produces: report-draft.md + source entities
 
-cogni-claims (via /verify-report)
+cogni-workspace (via /verify-report)
   → produces: verified report with claim annotations
 
 cogni-narrative
@@ -314,7 +314,7 @@ Seven end-to-end workflow guides document the cross-plugin pipelines:
 
 | Workflow | Pipeline | End deliverable |
 |----------|----------|-----------------|
-| [Research to Report](workflows/research-to-report.md) | cogni-knowledge → cogni-claims → cogni-copywriting | Verified, polished research report |
+| [Research to Report](workflows/research-to-report.md) | cogni-knowledge → cogni-workspace → cogni-copywriting | Verified, polished research report |
 | [Portfolio to Pitch](workflows/portfolio-to-pitch.md) | cogni-portfolio → cogni-sales → cogni-visual | Sales presentation with slides |
 | [Portfolio to Website](workflows/portfolio-to-website.md) | cogni-portfolio → cogni-workspace → cogni-website | Deployable multi-page customer website |
 | [Trends to Solutions](workflows/trends-to-solutions.md) | cogni-trends → cogni-portfolio (bridge) → cogni-visual | Ranked solutions with visual deliverables |

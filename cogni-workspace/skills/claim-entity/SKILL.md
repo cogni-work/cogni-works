@@ -69,7 +69,7 @@ Claim state persists in the calling project's `cogni-claims/` directory:
 
 ## Cross-Plugin Integration
 
-This skill defines the data structures; the `cogni-claims:claims` skill handles submission, verification, and query execution. To submit or query claims from another plugin, invoke `cogni-claims:claims` skill. See `references/schema.md` for batch submission format and query interfaces.
+This skill defines the data structures; the `cogni-workspace:claims` skill handles submission, verification, and query execution. To submit or query claims from another plugin, invoke `cogni-workspace:claims` skill. See `references/schema.md` for batch submission format and query interfaces.
 
 ## Design principles
 

@@ -3,12 +3,13 @@ name: claims
 description: |
   Manage claim verification lifecycle — submit, verify, review dashboard, inspect, resolve, and
   cobrowse claims. Use this skill whenever the user mentions claims, fact-checking, source
-  verification, checking whether statements match their cited sources, or reviewing deviations.
-  Also use it when another plugin submits claims for verification. Even without the word
-  "claims": verifying facts against sources, checking citations, spotting stale data in cited
-  references, reviewing what's been flagged, or "which claims need attention". Also trigger on
-  cobrowsing unreachable sources — "let's look at those sources together", "help me check these
-  links".
+  verification, checking whether statements match their cited sources, reviewing deviations, or
+  tracking the accuracy of sourced statements. Also use it when another plugin submits claims for
+  verification. Even without the word "claims": verifying facts against sources, checking
+  citations against their live sources, spotting stale or outdated data in cited references,
+  reviewing what's been flagged, "which claims need attention", or "what did verification find".
+  Also trigger on cobrowsing unreachable sources — "let's look at those sources together", "help
+  me check these links", "browse the unavailable sources".
   Verification here is live-source: it re-fetches each cited URL and compares. For zero-network
   scoring of citations against claims extracted at ingest time, that is cogni-knowledge:knowledge-verify.
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Agent, AskUserQuestion, mcp__claude-in-chrome__navigate, mcp__claude-in-chrome__get_page_text, mcp__claude-in-chrome__read_page, mcp__claude-in-chrome__find, mcp__claude-in-chrome__tabs_create_mcp, mcp__claude-in-chrome__tabs_context_mcp

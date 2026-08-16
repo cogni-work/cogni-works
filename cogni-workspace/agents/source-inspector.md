@@ -2,7 +2,21 @@
 name: source-inspector
 model: sonnet
 color: cyan
-description: Fetch a source URL via claude-in-chrome, locate the relevant passage, and present evidence to the user. Dispatched by explicit subagent_type when a verified deviation needs the user's own eyes on the live page before a resolution decision is made; requires the Claude-in-Chrome extension to be installed and connected.
+description: |
+  Fetch a source URL via claude-in-chrome, locate the relevant passage, and present evidence to
+  the user. Dispatched by explicit subagent_type when a verified deviation needs the user's own
+  eyes on the live page before a resolution decision is made; requires the Claude-in-Chrome
+  extension to be installed and connected.
+
+  <example>
+  Context: claim-verifier returned a value_mismatch and the user wants to see the page itself
+  user: "show me where that figure actually appears"
+  assistant: "I'll dispatch source-inspector to open the page and locate the passage."
+  <commentary>
+  Follows a verified deviation — it gathers evidence for a resolution call, it does not verify.
+  </commentary>
+  </example>
+
 tools: ["mcp__claude-in-chrome__tabs_create_mcp", "mcp__claude-in-chrome__navigate", "mcp__claude-in-chrome__get_page_text", "mcp__claude-in-chrome__read_page", "mcp__claude-in-chrome__find"]
 ---
 

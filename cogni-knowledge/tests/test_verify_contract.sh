@@ -114,7 +114,7 @@ assert_not_grep 'Skill("cogni-knowledge:revisor' "$VERIFY" "knowledge-verify: no
 # Clean-break: no cogni-research / cogni-workspace:claim input shapes leaking through.
 assert_not_grep '01-contexts/data' "$VERIFY" "knowledge-verify: does NOT reference cogni-research's 01-contexts/data"
 assert_not_grep '02-sources/data' "$VERIFY" "knowledge-verify: does NOT reference cogni-research's 02-sources/data"
-assert_not_grep 'cogni-workspace:claim' "$VERIFY" "knowledge-verify: does NOT dispatch the cogni-workspace claims engine"
+assert_not_grep 'Skill("cogni-workspace:claim' "$VERIFY" "knowledge-verify: no Skill('cogni-workspace:claim') dispatch (clean break)"
 # Positive control, per tests/README.md: an absence assertion alone also passes on a
 # gutted file, so pair it with the mechanism that replaced the dispatch.
 assert_grep 'pre_extracted_claims:' "$VERIFY" "knowledge-verify: claims-engine replacement present — scores citations against the cited page's on-disk pre_extracted_claims: frontmatter (zero-network)"

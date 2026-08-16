@@ -91,13 +91,24 @@ bundle discards them.
 Re-ingest commits enriched the root pages; the bundle was never re-synced afterwards and still
 holds the thinner generated stub.
 
-`agent-cogni-claims-claim-verifier.md`, `agent-cogni-claims-source-inspector.md`,
 `agent-cogni-portfolio-proposition-generator.md`,
 `agent-cogni-portfolio-proposition-quality-assessor.md`, `concept-claim-lifecycle.md`,
-`concept-claims-propagation.md`, `plugin-cogni-claims.md`, `plugin-cogni-portfolio.md`,
+`concept-claims-propagation.md`, `plugin-cogni-portfolio.md`,
 `skill-cogni-portfolio-portfolio-verify.md`, `skill-cogni-portfolio-propositions.md`,
-`skill-cogni-trends-trend-report.md`, `skill-cogni-claims-claim-entity.md`,
-`skill-cogni-claims-claims.md`
+`skill-cogni-trends-trend-report.md`
+
+**Resolved by deletion — 5 former entries.** `agent-cogni-claims-claim-verifier.md`,
+`agent-cogni-claims-source-inspector.md`, `plugin-cogni-claims.md`,
+`skill-cogni-claims-claim-entity.md` and `skill-cogni-claims-claims.md` were deleted from **both**
+trees when cogni-claims was absorbed into cogni-workspace: `test-wiki-namespace-sync.sh` case C1
+derives its roster from `marketplace.json`, so dropping the plugin entry took all five off-roster.
+The root-wins direction above is moot for them — there is no copy left on either side to win.
+
+They are recorded here rather than silently dropped because a reconciliation run that still
+expected them would look for files that no longer exist, and the deletion is the *reason* the
+enrichment asymmetry stopped mattering, not evidence the ledger was wrong. `concept-claim-lifecycle.md`
+and `concept-claims-propagation.md` survive in both trees and stay live Group A entries — they are
+claim *concepts*, not namespaced plugin pages, so C1 never covered them.
 
 ### Group B — 4 files, bundled copy wins
 

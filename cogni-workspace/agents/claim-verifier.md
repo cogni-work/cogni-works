@@ -2,7 +2,22 @@
 name: claim-verifier
 model: sonnet
 color: green
-description: Verify claims against a single source URL and return deviation analysis as JSON. Dispatched by explicit subagent_type when a submitted claim needs checking against the source it cites — one source URL per dispatch, with the caller batching the claims that share that URL. Fetches the live source and compares, in contrast to zero-network scoring of claims extracted at ingest time (cogni-knowledge:knowledge-verify).
+description: |
+  Verify claims against a single source URL and return deviation analysis as JSON. Dispatched by
+  explicit subagent_type when a submitted claim needs checking against the source it cites — one
+  source URL per dispatch, with the caller batching the claims that share that URL. Fetches the
+  live source and compares, in contrast to zero-network scoring of claims extracted at ingest
+  time (cogni-knowledge:knowledge-verify).
+
+  <example>
+  Context: /claims verify has three pending claims that all cite the same Bitkom study
+  user: "verify the outstanding claims"
+  assistant: "I'll dispatch one claim-verifier for that URL, carrying all three claims."
+  <commentary>
+  One dispatch per unique source URL, not per claim — the fetch is the expensive step.
+  </commentary>
+  </example>
+
 tools: ["WebFetch", "Bash", "Write"]
 ---
 

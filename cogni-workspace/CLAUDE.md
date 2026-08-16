@@ -96,6 +96,13 @@ Plugins do not duplicate shared market fields. The `manage-markets` skill is the
 - Obsidian templates live in `templates/obsidian/`
 - See `references/note-frontmatter-standard.md` for the YAML frontmatter convention used by all plugin outputs
 
+## Wiki Trees
+
+The wiki ships twice: `wiki/` at the repository root is the editing surface maintainers change, and `cogni-workspace/wiki/` is the vendored copy that travels inside this plugin so marketplace users get it in their plugin cache. The two trees are allowed to differ, and they do.
+
+- See `references/wiki-tree-reconciliation.md` for the decisions record covering both trees — every way `wiki/` and `cogni-workspace/wiki/` currently disagree, what was decided for each delta, and what reversing it would cost. Counts and figures live there, each attributed to the command that produced it; read them off the record rather than restating them here, where they would go stale silently.
+- `tests/test-wiki-tree-parity.sh` is that record's enforcement arm. It asserts, per tree and never tree-wide: each `.cogni-wiki/config.json` `entries_count` equals a live count of that same tree's pages; every wiki reference in a tree resolves to a page in that same tree; and every page present in only one tree is named in the decisions record. It deliberately does **not** assert that the two trees are equal — they are not, by design, and the record explains each surviving difference. So a one-sided page with no decision written down turns the suite red: the fix is to record the decision in `references/wiki-tree-reconciliation.md`, not to route around the guard.
+
 ## Issue Reporting and Diagnostics
 
 Two skills absorbed from cogni-help when it was retired. These are now the only copies.

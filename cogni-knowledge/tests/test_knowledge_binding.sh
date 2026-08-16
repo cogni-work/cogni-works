@@ -29,8 +29,7 @@ set -eu
 PLUGIN_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 SCRIPT="$PLUGIN_ROOT/scripts/knowledge-binding.py"
 
-red()   { printf '%s\n' "$1"; }
-green() { printf '%s\n' "$1"; }
+. "$(dirname "$0")/fixtures/test_helpers.sh"
 
 if [ ! -f "$SCRIPT" ]; then
   red "FAIL: knowledge-binding.py not found at $SCRIPT"

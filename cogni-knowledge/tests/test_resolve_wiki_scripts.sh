@@ -36,8 +36,7 @@ RESOLVER_SNIPPET="$PLUGIN_ROOT/scripts/resolve-wiki-scripts.sh"
 # instead of carrying an inline copy. These are the flows expected to source it.
 SOURCING_SKILLS="knowledge-ingest knowledge-finalize knowledge-dashboard knowledge-health knowledge-lint knowledge-resume knowledge-ingest-source knowledge-query"
 
-red()   { printf '%s\n' "$1"; }
-green() { printf '%s\n' "$1"; }
+. "$(dirname "$0")/fixtures/test_helpers.sh"
 
 errors=0
 

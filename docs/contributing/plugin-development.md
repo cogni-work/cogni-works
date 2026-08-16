@@ -319,3 +319,4 @@ For PRs to your own plugin from other contributors, set up your own contribution
 - [architecture/plugin-anatomy.md](../architecture/plugin-anatomy.md) — reference for every file type and naming convention
 - [architecture/design-philosophy.md](../architecture/design-philosophy.md) — the principles behind the structure
 - [architecture/er-diagram.md](../architecture/er-diagram.md) — cross-plugin entity relationships to understand integration points
+- [plugin-absorption-slicing.md](plugin-absorption-slicing.md) — how to slice a plugin-absorption change so each stage is reviewable and leaves CI green

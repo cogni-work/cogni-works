@@ -11,6 +11,8 @@
 #   RBW6  --force performs the destructive sync the bare run refused
 #   RBW7  --help prints the whole header and nothing below it
 #   RBW8  an unknown argument still yields the error envelope and exit 1
+#   RBW9  a bundled tree that is absent, or present but holding no pages, still
+#         syncs bare — there is nothing there to destroy
 #
 # Satisfies the runner's three-property contract: it exits non-zero on failure
 # and zero otherwise, runs as `bash <path>` with no arguments from any working
@@ -237,6 +239,29 @@ check_eq "RBW8 an unknown argument reports success false" "False" \
   "$(json_field "$OUT" 'd["success"]')"
 check_eq "RBW8 the error names the offending argument" "True" \
   "$(json_field "$OUT" '"--definitely-not-a-flag" in d["error"]')"
+
+# ---------------------------------------------------------------------------- RBW9
+# Nothing in the bundle means nothing to destroy, so the gate must stay out of
+# the way. Two shapes: the bundled tree missing entirely (a first-ever publish),
+# and present but holding no pages. Both are the bootstrap path, and a gate that
+# refused here would make the bundle impossible to create in the first place.
+make_fixture rbw9a
+rm -rf "$WORK/rbw9a/cogni-workspace/wiki"
+run_fixture rbw9a
+
+check_eq "RBW9 an absent bundled tree syncs bare" "0" "$CODE"
+check_eq "RBW9 that bootstrap sync reports success" "True" "$(json_field "$OUT" 'd["success"]')"
+[ -f "$WORK/rbw9a/cogni-workspace/wiki/wiki/pages/shared.md" ]
+check "RBW9 the bootstrap sync populated the bundled tree" "$?"
+
+make_fixture rbw9b
+rm -f "$WORK/rbw9b/cogni-workspace/wiki/wiki/pages/shared.md"
+run_fixture rbw9b
+
+check_eq "RBW9 an empty bundled page set syncs bare" "0" "$CODE"
+check_eq "RBW9 that sync reports success" "True" "$(json_field "$OUT" 'd["success"]')"
+[ -f "$WORK/rbw9b/cogni-workspace/wiki/wiki/pages/shared.md" ]
+check "RBW9 the empty bundled tree was populated" "$?"
 
 # ----------------------------------------------------------------------------
 if [ "$FAILED" -eq 0 ]; then

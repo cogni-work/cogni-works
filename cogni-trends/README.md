@@ -142,7 +142,7 @@ The pipeline runs in dependency order — scout → model → research → synth
 
 **trend-booklet** walks the value model for candidate → theme back-references and dispatches 4 **trend-booklet-formatter** agents to render every candidate by subcategory → horizon; orphans land in per-dimension appendices.
 
-**verify-trend-report** runs claim verification via cogni-claims, cross-theme structural review, optional revision, and a final menu offering executive polish or themed HTML. **trends-catalog** then curates solutions, SPIs, and metrics into persistent industry catalogs, so each engagement improves the base for the next.
+**verify-trend-report** runs claim verification via `cogni-workspace:claims`, cross-theme structural review, optional revision, and a final menu offering executive polish or themed HTML. **trends-catalog** then curates solutions, SPIs, and metrics into persistent industry catalogs, so each engagement improves the base for the next.
 
 ## Components
 
@@ -154,7 +154,7 @@ The pipeline runs in dependency order — scout → model → research → synth
 | `trend-research` | skill | Research groundwork: deep research + 4 parallel writer agents enrich every candidate with web-sourced quantitative evidence; emits the research manifest |
 | `trend-synthesis` | skill | Compose the canonical TIPS report — 4 H2 dimensions × anchored H3 theme-cases, closing on a Capability Imperative synthesis |
 | `trend-booklet` | skill | Comprehensive TIPS catalog of all ~60 candidates organized by dimension → subcategory → horizon, with summary, citations, theme back-references |
-| `verify-trend-report` | skill | Extended quality pipeline on the canonical report — claim verification via cogni-claims, structural review, revision, downstream menu |
+| `verify-trend-report` | skill | Extended quality pipeline on the canonical report — claim verification via `cogni-workspace:claims`, structural review, revision, downstream menu |
 | `trends-catalog` | skill | Manage persistent industry catalogs that accumulate TIPS knowledge across pursuits |
 | `trends-dashboard` | skill | Generate an interactive HTML dashboard showing the full TIPS project lifecycle |
 | `trend-web-researcher` | agent | Execute bilingual web research (EN/DE) for trend scouting and return aggregated signals as compact JSON (haiku) |
@@ -251,7 +251,7 @@ cogni-trends/
 
 | Plugin | Required | Purpose |
 |--------|----------|---------|
-| cogni-claims | No | Verify citations in trend reports against source URLs |
+| cogni-workspace | No | Verify citations in trend reports against source URLs (`cogni-workspace:claims`) |
 | cogni-copywriting | No | Executive polish on trend reports with tone scoping |
 | cogni-narrative | No | Arc-driven transformation of trend report output; the smarter-service arc drives the canonical report's theme-case writer and macro composer |
 | cogni-portfolio | No | Bidirectional integration via trends-bridge (portfolio context export, opportunity import) |

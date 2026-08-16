@@ -435,7 +435,7 @@ entry. Auto-walk proceeds to completion; interactive mode may elect to loop
 back. A `null`-framework deliverable skips this rung entirely.
 
 Next, the language-polish rung — the register-quality tier. Dispatch
-`Skill("cogni-copywriting:copywriter")` over the deliverable artifact with
+`Skill("cogni-workspace:copywriter")` over the deliverable artifact with
 `FILE_PATH=<engagement-dir>/action-fields/<field-slug>/<deliverable-slug>.md`
 and `--scope=tone` — register-only, so it skips restructuring and never
 re-imposes the framework structure; only the prose register is polished (clause

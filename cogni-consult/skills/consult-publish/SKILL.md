@@ -92,7 +92,7 @@ lineage entry (step 5), so a second format never overwrites the first.
 
 ### 3. Optional voice polish
 
-The brief text may be polished with `cogni-copywriting:copywriter` before
+The brief text may be polished with `cogni-workspace:copywriter` before
 handoff. This is optional and graceful-degrading — **if `cogni-copywriting` is
 not installed, skip it with a one-line note**; the route still produces a valid
 brief.

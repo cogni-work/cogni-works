@@ -13,7 +13,7 @@ description: >
   from a narrative source — it does NOT render an existing brief (use storyboard agent for
   that), does NOT create slides (use story-to-slides), does NOT create a web page (use story-to-web),
   does NOT create a single-page infographic (use story-to-infographic), and does NOT polish prose
-  (use cogni-copywriting:copywriter).
+  (use cogni-workspace:copywriter).
 allowed-tools: Read, Write, Edit, Bash, Grep, Glob, TodoWrite, AskUserQuestion, Agent
 ---
 

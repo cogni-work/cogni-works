@@ -166,11 +166,11 @@ standard path** for the same reason as `report`.
 ## Optional Voice Polish
 
 Before building any brief, the deliverable or outline text may be polished with
-`cogni-copywriting:copywriter`. This step is optional and graceful-degrading —
+`cogni-workspace:copywriter`. This step is optional and graceful-degrading —
 skip it and the route still produces a valid brief.
 
 ```
-Skill: cogni-copywriting:copywriter
+Skill: cogni-workspace:copywriter
   FILE_PATH=<absolute path to the deliverable or outline .md>
   --scope=tone   AUDIENCE=mixed
 ```

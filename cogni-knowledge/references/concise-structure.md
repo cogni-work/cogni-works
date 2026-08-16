@@ -15,7 +15,7 @@ front-loads the conclusion and makes the document scannable in seconds — defea
 
 The Pyramid + answer-first discipline below is adapted at the reference level from
 cogni-copywriting's Pyramid Principle (McKinsey) framework:
-`cogni-copywriting/skills/copywriter/references/02-messaging-frameworks/pyramid-framework.md`.
+`cogni-workspace/skills/copywriter/references/02-messaging-frameworks/pyramid-framework.md`.
 That file is the canonical treatment; this is the cogni-knowledge-scoped subset the
 composer applies, with the citation discipline the inverted pipeline's Phase 6
 verifier requires.

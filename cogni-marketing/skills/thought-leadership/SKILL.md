@@ -139,7 +139,7 @@ Content generated: {format} ({word_count} words)
   Language: {language}
 
 Optional next steps:
-  - Polish with cogni-copywriting: /copywriter {file_path}
+  - Polish with `cogni-workspace:copywriter`: /copywrite {file_path}
   - Transform into narrative arc: /narrative {file_path}
   - Generate derivative LinkedIn post: /demand-gen --market {m} --gtm-path {g} --format linkedin-post
   - Create visual brief: /cogni-visual:story-to-slides {file_path}

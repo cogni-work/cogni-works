@@ -208,7 +208,7 @@ When `phase` is `complete`, the `next_actions` array from `project-status.sh` co
 
 **Verify & Polish**
 - `cogni-trends:verify-trend-report` — Extended pipeline: claim verification, cross-theme structural review, revisor loop, and a downstream menu for polish + visualization
-- `cogni-copywriting:copywrite` — Direct polish-only pass (skip if already invoked through the verify-trend-report Phase 5 menu)
+- `cogni-workspace:copywrite` — Direct polish-only pass (skip if already invoked through the verify-trend-report Phase 5 menu)
 
 **Companion Catalog**
 - `cogni-trends:trend-booklet` — Comprehensive catalog of all ~60 candidates organized by dimension → subcategory → horizon (companion to the curated investment-themes report)

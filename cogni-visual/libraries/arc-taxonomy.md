@@ -248,6 +248,6 @@ IF `arc_definition_path` parameter provided AND file exists:
 ## Arc Definition File Format
 
 Arc definition files live in cogni-narrative at:
-`cogni-narrative/skills/narrative/references/story-arc/{arc-id}/arc-definition.md`
+`cogni-workspace/skills/narrative/references/story-arc/{arc-id}/arc-definition.md`
 
 Each file defines the 4 arc elements with their English and German names, descriptions, and narrative function. The skill extracts the element name lists from these files.

@@ -4,8 +4,8 @@
 #
 # WHAT THIS REPLACES
 #   The `audit-copywriter` skill. That skill existed solely to diff two plugins that
-#   are now one, walking up the directory tree to find cogni-narrative/ and
-#   cogni-copywriting/ as siblings. Once both trees live under this plugin the check
+#   are now one, walking up the directory tree to find the narrative and copywriting
+#   plugin directories as siblings. Once both trees live under this plugin the check
 #   is an intra-plugin invariant, and an invariant a script can assert should not be
 #   an LLM skill a human has to remember to run.
 #

@@ -127,7 +127,7 @@ For the `pitch` use case, the output's `arc_id` controls which story structure c
 
 If the user explicitly passed `--arc-id` on invocation, skip the picker and use that value. Still validate it against the four supported arcs above — reject unsupported arcs (`technology-futures`, `strategic-foresight`, `trend-panorama`, `theme-thesis`) with the explanation from `templates-pitch.md` that those arcs need cogni-trends or cogni-knowledge input and portfolio data alone is usually insufficient.
 
-Pass the chosen `arc_id` into Step 2 so `cogni-narrative/skills/narrative/references/story-arc/{arc-id}/arc-definition.md` is read for the right arc, and into Step 3 so the frontmatter and evidence mapping use the right arc elements.
+Pass the chosen `arc_id` into Step 2 so `cogni-workspace/skills/narrative/references/story-arc/{arc-id}/arc-definition.md` is read for the right arc, and into Step 3 so the frontmatter and evidence mapping use the right arc elements.
 
 Skip the pitch picker for non-pitch use cases (`proposal`, `market-brief`, `workbook`, `repo-documentation`, and ad-hoc/custom use cases) — they do not carry `arc_id`.
 
@@ -145,8 +145,8 @@ Read entity files from the project directory. Which entities to load depends on 
 - `markets/*.json` and `customers/*.json`
 - `competitors/*.json` (for differentiation, reverse-engineered into convictions on `about.md`)
 - `cogni-claims/claims.json` — verified facts for the `about.md` Credibility element
-- Read the arc definition for the target scope from `cogni-narrative/skills/narrative/references/story-arc/{arc-id}/arc-definition.md` (use the scope → arc mapping from Step 1b)
-- Read the matching phase-4b synthesis file from `cogni-narrative/skills/narrative/references/phase-workflows/phase-4b-synthesis-{arc-id}.md` for element-specific writing rules
+- Read the arc definition for the target scope from `cogni-workspace/skills/narrative/references/story-arc/{arc-id}/arc-definition.md` (use the scope → arc mapping from Step 1b)
+- Read the matching phase-4b synthesis file from `cogni-workspace/skills/narrative/references/phase-workflows/phase-4b-synthesis-{arc-id}.md` for element-specific writing rules
 
 **Pitch:**
 - `markets/{market-slug}.json` (or all markets for overview/all scopes)
@@ -155,7 +155,7 @@ Read entity files from the project directory. Which entities to load depends on 
 - `competitors/{feature}--{market-slug}.json` for differentiation (Why You)
 - `solutions/{feature}--{market-slug}.json` and `packages/{product}--{market-slug}.json` for pricing (Why Pay)
 - Run `$CLAUDE_PLUGIN_ROOT/scripts/project-status.sh` for relevance tiers
-- Read arc definition from `cogni-narrative/skills/narrative/references/story-arc/{arc-id}/arc-definition.md`
+- Read arc definition from `cogni-workspace/skills/narrative/references/story-arc/{arc-id}/arc-definition.md`
 - Optional: check for TIPS bridge data (trend entities with `urgency: "Act"` for Why Now)
 
 **Proposal:**
@@ -251,8 +251,8 @@ For each dispatch, prepare the agent payload:
 | `entity_refs` | Object with paths/globs filtered to just what this scope needs — use the scope-specific data source rules from Step 2. For `capability`: just the one feature, its parent product, propositions targeting it, its competitors. For `persona`: just the one market+persona, propositions filtered by persona buying criteria, parent features and products. For `home` and `about`: broader entity sets as Step 2 specifies. |
 | `messaging_modes` | Subset of the modes map computed in Step 2, filtered to the products and features relevant to this scope |
 | `template_ref` | Absolute path to `references/templates-customer-narrative.md` plus the scope heading (e.g. `"Scope 3: \`capability\`"`) |
-| `arc_definition_ref` | Absolute path to `cogni-narrative/skills/narrative/references/story-arc/{arc_id}/arc-definition.md` |
-| `phase_4b_synthesis_ref` | Absolute path to `cogni-narrative/skills/narrative/references/phase-workflows/phase-4b-synthesis-{arc_id}.md` |
+| `arc_definition_ref` | Absolute path to `cogni-workspace/skills/narrative/references/story-arc/{arc_id}/arc-definition.md` |
+| `phase_4b_synthesis_ref` | Absolute path to `cogni-workspace/skills/narrative/references/phase-workflows/phase-4b-synthesis-{arc_id}.md` |
 | `feature_slug` | Required iff `scope == capability` |
 | `market_slug`, `persona_id` | Required iff `scope == persona` |
 

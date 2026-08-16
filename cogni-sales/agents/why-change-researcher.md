@@ -55,7 +55,7 @@ Read the relevant pattern file for this phase. The cogni-narrative plugin root c
 
 ```
 # Find cogni-narrative in the monorepo
-Glob: **/cogni-narrative/skills/narrative/references/story-arc/corporate-visions/
+Glob: **/cogni-workspace/skills/narrative/references/story-arc/corporate-visions/
 ```
 
 Read the arc pattern for the current phase:

@@ -17,10 +17,11 @@ recover the curator's WebFetch misses through the browser. See
 `references/fetch-cache-design.md` for the cache mechanics.
 
 Cobrowse uses the `claude-in-chrome` browser extension, mirroring the tool
-names cogni-claims/source-inspector enumerates. The orchestrator probes the
-extension and walks the user through enabling it before dispatching this
-agent; if a tool call still fails mid-loop the URL records `cobrowse_failed`
-(or `cobrowse_unavailable` when the prefix is absent from the tool list).
+names `cogni-workspace/agents/source-inspector.md` enumerates. The
+orchestrator probes the extension and walks the user through enabling it
+before dispatching this agent; if a tool call still fails mid-loop the URL
+records `cobrowse_failed` (or `cobrowse_unavailable` when the prefix is
+absent from the tool list).
 -->
 
 # Source Fetcher Agent (inverted pipeline, Phase 3 — cobrowse-only)

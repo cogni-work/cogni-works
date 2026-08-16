@@ -93,7 +93,7 @@ for spec in $TREE_SPECS; do
   tree="${spec%%|*}"
   token="${spec##*|}"
   if [ ! -d "$tree" ]; then
-    fail "P1 adopted tree missing: $tree"
+    fail "P1 adopted tree missing: cogni-workspace/${tree#"$WS_ROOT"/}"
     continue
   fi
   while IFS= read -r f; do
@@ -111,7 +111,8 @@ if [ "$p1_scanned" -eq 0 ]; then
   fail "P1 scanned zero files — the adopted trees are missing or unreadable"
 elif [ -n "$p1_hits" ]; then
   for h in $p1_hits; do
-    echo "  ${h%%@*} dispatch token in ${h#*@}"
+    hit_file="${h#*@}"
+    echo "  ${h%%@*} dispatch token in cogni-workspace/${hit_file#"$WS_ROOT"/}"
   done
   fail "P1 adopted trees must contain no source-plugin dispatch token"
 else

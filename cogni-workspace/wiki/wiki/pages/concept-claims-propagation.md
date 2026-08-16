@@ -2,7 +2,7 @@
 id: concept-claims-propagation
 title: Claims propagation (auto-log, verify, cascade)
 type: concept
-tags: [cogni-claims, claims, propagation, source-lineage, cogni-research, cogni-portfolio, cogni-trends]
+tags: [cogni-workspace, claims, propagation, source-lineage, cogni-research, cogni-portfolio, cogni-trends]
 created: 2026-04-17
 updated: 2026-04-20
 sources:

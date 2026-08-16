@@ -9,7 +9,7 @@ Two phases, selected via --phase:
                        per-day sweep workspace under <wiki-root>/raw/claims-resweep-
                        <YYYY-MM-DD>/, write one claim-manifest markdown per page
                        and index.json, then emit a dispatch plan on stdout. The
-                       SKILL hands each manifest to cogni-claims:claims (submit +
+                       SKILL hands each manifest to cogni-workspace:claims (submit +
                        verify).
 
     --phase aggregate  Read verification results (from --results-file or stdin) +

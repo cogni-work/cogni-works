@@ -202,6 +202,34 @@ reduced form is the reversible one, which is why it is the default taken here.
 **Reversing it** means re-deriving those 18 aliases and the page body together —
 the same work either way, so nothing is foreclosed.
 
+## Decision 6 — vendored trees follow a rename only where the text dispatches
+
+**Decision.** A vendored tree is a mirror of an upstream origin and is **not**
+rewritten for a downstream plugin rename — except where its text names the
+dispatch target a caller is told to invoke. Those references are rewritten with
+the rest of the surface; everything else in the tree keeps its upstream wording.
+
+**Why.** The two halves fail differently. Prose that merely mentions the source
+plugin is a historical statement and stays true; rewriting it only widens the
+drift between the mirror and its origin, which is the one property the tree
+exists to hold. A reference naming the dispatch target is an **instruction**: it
+tells an operator — or a model reading the docstring — which skill or agent to
+invoke, and after a retirement that name resolves to nothing. Left alone it also
+contradicts the live caller, which *was* re-pointed.
+
+**Applied at the cogni-claims absorption** to the three references in
+`cogni-knowledge/scripts/vendor/cogni-wiki/skills/wiki-claims-resweep/scripts/`
+(`resweep_planner.py`, `extract_page_claims.py`), which name the skill and agent
+that `knowledge-refresh/SKILL.md` dispatches for the resweep. The SKILL.md sites
+moved to `cogni-workspace:`; these moved with them. No other vendored file was
+touched.
+
+These sites sit in a coverage hole by construction:
+`scripts/check-external-dispatch.py` drops `cogni-knowledge/` wholesale via
+`EXCLUDE_PREFIXES`, and `tests/test-relocated-skill-hygiene.sh` walks the adopted
+`cogni-workspace` trees only. Neither guard reports this class — the rule above is
+the record that keeps the next absorption from re-litigating it.
+
 ## Known remaining contradictions — reconciled
 
 The layering claim this record replaces — that cogni-workspace is the layer every

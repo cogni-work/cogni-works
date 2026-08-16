@@ -2,7 +2,7 @@
 id: concept-claim-lifecycle
 title: Claim lifecycle (unverified → verified | deviated → resolved)
 type: concept
-tags: [cogni-claims, claims, lifecycle, verification]
+tags: [cogni-workspace, claims, lifecycle, verification]
 created: 2026-04-17
 updated: 2026-04-20
 sources:

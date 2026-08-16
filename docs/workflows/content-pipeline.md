@@ -1,19 +1,19 @@
 # Content Pipeline
 
-**Pipeline**: cogni-marketing (setup + content generation) → cogni-narrative (story arc shaping, long-form only) → cogni-copywriting (polish) → cogni-visual (slides / web)
+**Pipeline**: cogni-marketing (setup + content generation) → the `narrative` skill (story arc shaping, long-form only) → the `copywriter` skill (polish) → cogni-visual (slides / web)
 **Duration**: 2–6 hours for a complete content batch, depending on format count and polish depth
 **End deliverable**: A multi-channel marketing content package — polished articles, battle cards, email nurtures, and optionally a slide deck or web narrative
 
 ```mermaid
 graph LR
     A[marketing-setup] -->|content-strategy.json| B[content generation]
-    B -->|raw content pieces| N[cogni-narrative]
-    N -->|arc-shaped long-form| C[cogni-copywriting]
+    B -->|raw content pieces| N[the `narrative` skill]
+    N -->|arc-shaped long-form| C[the `copywriter` skill]
     C -->|polished content| D[cogni-visual]
     D -->|slides / web| E[Deliverable]
 ```
 
-**Narrative bridge (long-form only).** For thought leadership, whitepapers, keynote abstracts, and other long-form formats, `cogni-narrative` sits between `cogni-marketing` content generation and `cogni-copywriting` polish. It applies one of 11 story arc frameworks (Corporate Visions, JTBD Portfolio, Strategic Foresight, etc.) and writes `insight-summary.md` with `arc_id` frontmatter that `cogni-copywriting` reads to apply arc-aware polishing. Short-form formats (LinkedIn posts, battle cards, emails) skip this step and go straight from generation to polish. See the [cogni-narrative plugin guide](../plugin-guide/cogni-narrative.md) for arc selection guidance.
+**Narrative bridge (long-form only).** For thought leadership, whitepapers, keynote abstracts, and other long-form formats, cogni-workspace's `narrative` skill sits between `cogni-marketing` content generation and `copywriter` polish. It applies one of 11 story arc frameworks (Corporate Visions, JTBD Portfolio, Strategic Foresight, etc.) and writes `insight-summary.md` with `arc_id` frontmatter that `copywriter` reads to apply arc-aware polishing. Short-form formats (LinkedIn posts, battle cards, emails) skip this step and go straight from generation to polish. See the [cogni-workspace plugin guide](../plugin-guide/cogni-workspace.md) for arc selection guidance.
 
 ## What You Get
 
@@ -33,8 +33,8 @@ All content is sourced — each piece references the TIPS claims and portfolio p
 | cogni-marketing installed | Orchestrates content generation |
 | cogni-portfolio installed | Provides propositions, markets, and competitors |
 | cogni-trends installed | Provides strategic themes (Handlungsfelder) |
-| cogni-narrative installed (optional) | Shapes long-form content with a story arc before polishing; required for thought-leadership / whitepaper / keynote formats |
-| cogni-copywriting installed | Polishes generated content; reads `arc_id` frontmatter from narrative output for arc-aware polishing |
+| the `narrative` skill installed (optional) | Shapes long-form content with a story arc before polishing; required for thought-leadership / whitepaper / keynote formats |
+| the `copywriter` skill installed | Polishes generated content; reads `arc_id` frontmatter from narrative output for arc-aware polishing |
 | cogni-visual installed (optional) | Renders content to slides or web |
 | Portfolio project initialized | cogni-marketing reads from cogni-portfolio |
 | TIPS project available (optional) | Required for strategy-connected content; generic themes are used otherwise |
@@ -133,7 +133,7 @@ Generate demand gen content for the cloud migration GTM path — LinkedIn posts 
 Generate 3 LinkedIn posts, 1 blog post, and 1 email nurture for the AI automation theme in enterprise — English
 ```
 
-### Step 4: Polish with cogni-copywriting
+### Step 4: Polish with the `copywriter` skill
 
 Raw generated content reads like AI output — competent but generic. `/copywrite` applies messaging frameworks (Pyramid Principle, BLUF, active voice) and readability scoring to each piece.
 
@@ -161,7 +161,7 @@ Polish all the generated thought leadership content for executive readability
 
 This runs 5 parallel reader personas (executive, technical, legal, marketing, end-user) and synthesizes feedback into prioritized improvements. For a whitepaper that will be gated and downloaded, this step is worth the time.
 
-**Language handling.** If you generated German content, cogni-copywriting detects the language automatically and applies Wolf Schneider rules with Amstad readability scoring — the same Polish-then-Review sequence applies.
+**Language handling.** If you generated German content, the `copywriter` skill detects the language automatically and applies Wolf Schneider rules with Amstad readability scoring — the same Polish-then-Review sequence applies.
 
 ### Step 5: Render to Visual Formats (Optional)
 
@@ -229,7 +229,7 @@ Monitor coverage and progress via the dashboard:
 ## Related Guides
 
 - [cogni-marketing plugin guide](../plugin-guide/cogni-marketing.md)
-- [cogni-copywriting plugin guide](../plugin-guide/cogni-copywriting.md)
+- [cogni-workspace plugin guide](../plugin-guide/cogni-workspace.md) — the `narrative` and `copywriter` skills
 - [cogni-visual plugin guide](../plugin-guide/cogni-visual.md)
 - [cogni-portfolio plugin guide](../plugin-guide/cogni-portfolio.md)
 - [cogni-trends plugin guide](../plugin-guide/cogni-trends.md)

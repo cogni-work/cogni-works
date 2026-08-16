@@ -52,7 +52,7 @@ A bare-name-only matcher fails **silently**: the hook simply never runs, the scr
 |------|-------|-----------|
 | Orchestration | sonnet (skill context) | Phase dispatch, sub-question generation |
 | Research | sonnet | Web research, section researchers, deep researchers |
-| Heavy synthesis | opus | Demanding rewrites (cogni-copywriting), 60-candidate scoring (cogni-trends) |
+| Heavy synthesis | opus | Demanding rewrites (the `copywriter` skill), 60-candidate scoring (cogni-trends) |
 | Quality assessment | haiku | High-volume rubric evaluation (3-5 dimensions per entity) |
 | Content generation | sonnet | Narrative writers, report writers, content writers |
 
@@ -94,8 +94,8 @@ Quality gates block downstream generation when upstream entities fail.
 ## Plugin Data Flow
 
 ```
-cogni-knowledge ─→ cogni-narrative ──→ cogni-copywriting ──→ cogni-visual
-  (research)         (compose)           (polish)              (render)
+cogni-knowledge ─→ cogni-workspace ────────────────────────→ cogni-visual
+  (research)         (compose + polish)                        (render)
        ↓                                                         ↑
 cogni-trends ←──→ cogni-portfolio ──→ cogni-sales            cogni-website
   (TIPS scout)     (IS/DOES/MEANS)     (Why Change)          (static site)

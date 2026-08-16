@@ -2,7 +2,7 @@
 
 ## Overview
 
-This registry indexes all available story arcs for the cogni-narrative plugin. Each arc provides a different narrative framework for transforming structured content (research syntheses, analyses, reports) into compelling executive narratives.
+This registry indexes all available story arcs for the `narrative` skill. Each arc provides a different narrative framework for transforming structured content (research syntheses, analyses, reports) into compelling executive narratives.
 
 ## Quick Reference
 

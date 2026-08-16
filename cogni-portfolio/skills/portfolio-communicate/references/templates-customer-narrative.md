@@ -8,7 +8,7 @@ Output templates for the `customer-narrative` use case. These templates produce 
 
 ## The website component model
 
-A portfolio-driven website — from the buyer's perspective — has these main components. Each corresponds to a scope in this use case and is driven by a specific story arc from `cogni-narrative`:
+A portfolio-driven website — from the buyer's perspective — has these main components. Each corresponds to a scope in this use case and is driven by a specific story arc from `the `narrative` skill`:
 
 | Scope | Output file | Component | Arc | Why this arc |
 |---|---|---|---|---|

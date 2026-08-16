@@ -23,7 +23,7 @@ A pitch that lands a week late, leans on stale numbers, or drifts off the Why Ch
 
 ## What it is
 
-A pitch-generation pipeline organized around the Corporate Visions Why Change methodology — the four-question arc of Why Change, Why Now, Why You, and Why Pay. It treats your portfolio as the source of truth: cogni-portfolio supplies the product data, cogni-narrative supplies the story-arc patterns, and cogni-trends optionally layers in strategic themes. Other plugins generate content; this one shapes that content into a buyer-ready sales narrative.
+A pitch-generation pipeline organized around the Corporate Visions Why Change methodology — the four-question arc of Why Change, Why Now, Why You, and Why Pay. It treats your portfolio as the source of truth: cogni-portfolio supplies the product data, cogni-workspace's `narrative` skill supplies the story-arc patterns, and cogni-trends optionally layers in strategic themes. Other plugins generate content; this one shapes that content into a buyer-ready sales narrative.
 
 ## What it does
 
@@ -154,10 +154,8 @@ cogni-sales/
 | Plugin | Required | Purpose |
 |--------|----------|---------|
 | cogni-portfolio | Yes | Products, features, propositions, solutions, markets, competitors, customers |
-| cogni-narrative | Yes | Corporate Visions story arc patterns (why-change, why-now, why-you, why-pay) |
 | cogni-trends | No | TIPS strategic theme enrichment — value-modeler themes, regulatory timelines, gap analysis |
-| cogni-workspace | No | Source verification for web-sourced claims via `cogni-workspace:claims` |
-| cogni-copywriting | No | Executive polish on final deliverables |
+| cogni-workspace | Yes | Corporate Visions story arc patterns from the `narrative` skill; source verification via `cogni-workspace:claims`; executive polish on final deliverables via `copywriter` |
 | cogni-visual | No | PPTX generation from sales presentation |
 
 ## Contributing

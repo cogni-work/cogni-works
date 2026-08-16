@@ -43,7 +43,7 @@ The brief describes WHAT each poster contains and which section types to use. Al
 | `style_guide` | `auto` | Pre-selected style guide name. When provided, skip selection. |
 | `industry` | `auto` | Industry context for image prompts and tag selection |
 | `arc_type` | `auto` | Story arc hint: why-change, problem-solution, journey, argument, report |
-| `arc_id` | from frontmatter | Narrative arc ID from cogni-narrative. Mapped to visual `arc_type` in Step 1. |
+| `arc_id` | from frontmatter | Narrative arc ID from the `narrative` skill. Mapped to visual `arc_type` in Step 1. |
 | `arc_definition_path` | none | Path to arc definition file — element names become poster labels. |
 | `interactive` | `true` | When `true`, present choices via AskUserQuestion. When `false`, auto-select. |
 | `stakeholder_review` | `interactive` | When `true`, run brief-review-assessor after validation. Defaults to value of `interactive`. |

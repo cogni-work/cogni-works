@@ -8,7 +8,7 @@ allowed-tools: Read, Write, Edit, Glob, Grep
 
 ## Purpose
 
-Transform a full cogni-narrative output (insight summary at any target length) into one of three derivative formats. The goal is to condense while preserving the arc's rhetorical power -- each format serves a different communication channel and audience attention span, so the condensation strategy differs accordingly.
+Transform a full the `narrative` skill output (insight summary at any target length) into one of three derivative formats. The goal is to condense while preserving the arc's rhetorical power -- each format serves a different communication channel and audience attention span, so the condensation strategy differs accordingly.
 
 **Use this for:**
 - Condensing a full narrative into an executive brief for email or messaging
@@ -68,7 +68,7 @@ Read and internalize the source narrative so you can make informed condensation 
 4. If frontmatter is missing `arc_id`, detect it from the `##` section headers by matching against known arc element names (see the narrative skill's arc registry for the 11 arc types and their element names)
 5. Determine language: explicit `--language` parameter > frontmatter `language` field > default `en`
 
-**Before proceeding,** verify you can identify: the arc type, all 4 element headers, the hook's central tension, and the key quantitative claims. If the file doesn't have exactly 4 `##` sections or lacks recognizable arc structure, it may not be a cogni-narrative output -- halt with an error (see Error Handling).
+**Before proceeding,** verify you can identify: the arc type, all 4 element headers, the hook's central tension, and the key quantitative claims. If the file doesn't have exactly 4 `##` sections or lacks recognizable arc structure, it may not be a `narrative` skill output -- halt with an error (see Error Handling).
 
 ### Step 2: Extract Key Content
 
@@ -159,7 +159,7 @@ On any unrecoverable failure, return error JSON:
 | Step | Failure | Action |
 |------|---------|--------|
 | 1 | Source file not found | Halt with error |
-| 1 | File lacks 4 `##` sections | Halt -- likely not a cogni-narrative output |
+| 1 | File lacks 4 `##` sections | Halt -- likely not a `narrative` skill output |
 | 1 | No YAML frontmatter | Attempt to detect arc from headers; warn user |
 | 1 | Unrecognized arc type | Halt with list of valid arc types |
 | 3 | Format template not found | Halt with error |

@@ -180,8 +180,8 @@ created: ISO-8601
 
 - **cogni-trends**: `sources.tips_project` → reads `tips-value-model.json` for strategic themes, `trend-scout-output.json` for trend data, `tips-trend-report-claims.json` for evidence
 - **cogni-portfolio**: `sources.portfolio_project` → reads `propositions/`, `competitors/`, `customers/`, `solutions/`, `packages/`, `portfolio.json`. Optionally reads `output/communicate/customer-narrative/` for pre-written audience-tailored narratives (via `sources.enriched_portfolio_narratives`)
-- **cogni-copywriting**: Generated content can be piped to `copywriter` skill for polishing
-- **cogni-narrative**: Long-form thought leadership can be piped to `narrative` skill for arc-driven transformation
+- **the `copywriter` skill**: Generated content can be piped to `copywriter` skill for polishing
+- **the `narrative` skill**: Long-form thought leadership can be piped to `narrative` skill for arc-driven transformation
 - **cogni-visual**: Content briefs can be piped to `story-to-slides` or `canvas` for visual deliverables
 - **cogni-workspace**: Evidence claims in content inherit verification status from TIPS claims registry via `cogni-workspace:claims`
 

@@ -47,7 +47,7 @@ Your ENTIRE response to the orchestrator must be:
 | theme | No | smarter-service | Theme ID |
 | language | No | en | Language code (en/de) |
 | arc_type | No | auto | Story arc hint |
-| arc_id | No | from frontmatter | Narrative arc ID from cogni-narrative |
+| arc_id | No | from frontmatter | Narrative arc ID from the `narrative` skill |
 | arc_definition_path | No | none | Path to arc definition file for element-based arc labels |
 | max_posters | No | 4 | Maximum poster count (3-5) |
 | poster_size | No | A1 | DIN format: A0, A1, A2, A3 |

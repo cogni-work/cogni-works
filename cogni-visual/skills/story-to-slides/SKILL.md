@@ -45,7 +45,7 @@ The brief describes WHAT each slide says and which layout to use. The PPTX rende
 | `output_path` | `{source_dir}/cogni-visual/presentation-brief.md` | Brief output location |
 | `max_slides` | `15` | Maximum slide count (forces consolidation if narrative is long) |
 | `arc_type` | `auto` | Story arc hint: why-change, problem-solution, journey, argument, report |
-| `arc_id` | from frontmatter | Narrative arc ID from cogni-narrative (e.g., `industry-transformation`). Mapped to visual `arc_type` in Step 1. |
+| `arc_id` | from frontmatter | Narrative arc ID from the `narrative` skill (e.g., `industry-transformation`). Mapped to visual `arc_type` in Step 1. |
 | `arc_definition_path` | none | Path to arc definition file — element names become methodology slide phase labels. |
 | `interactive` | `true` | When `true`, present choices via AskUserQuestion. When `false`, auto-select. |
 | `stakeholder_review` | `interactive` | When `true`, run brief-review-assessor after validation. Defaults to value of `interactive`. |

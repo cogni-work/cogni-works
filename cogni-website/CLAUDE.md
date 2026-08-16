@@ -37,7 +37,7 @@ The plugin discovers and aggregates content from:
 
 The primary spine for every narrative page is the arc-structured markdown produced by `cogni-portfolio`'s `portfolio-communicate` skill under the `customer-narrative` use case. v2 produces **one arc-structured file per website component**, each carrying `arc_id` and `arc_display_name` in its YAML frontmatter:
 
-| File | Page type | Arc (from `cogni-narrative`) |
+| File | Page type | Arc (from the `narrative` skill) |
 |---|---|---|
 | `home.md` | `home` | `jtbd-portfolio` |
 | `about.md` | `about` | `company-credo` |

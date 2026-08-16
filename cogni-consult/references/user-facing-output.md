@@ -23,7 +23,7 @@ außerhalb, Größe) and ss after a short vowel (dass, muss, Prozess).
 Kein schweizerisches ss an ß-Stellen — the Swiss convention of writing ss in
 every ß position is never used here. Umlauts are covered by the repo-wide
 encoding convention that forbids ASCII substitutes, which this file already
-relies on where it declines to import cogni-copywriting's table for
+relies on where it declines to import the `copywriter` skill's table for
 transliterating them.
 
 **When the engagement's own text disagrees.** The paragraph above is read once; an
@@ -197,7 +197,7 @@ governed by the engine-vocabulary rule in (h) below. Where both apply they
 agree, so there is nothing to reconcile.
 
 Before reaching for the table, run the three-step test — the method comes from
-cogni-copywriting's German-style principles, cited here rather than loaded,
+the `copywriter` skill's German-style principles, cited here rather than loaded,
 because nothing in this plugin loads that file:
 
 1. Does an equally precise German word exist? If yes, use it.
@@ -252,7 +252,7 @@ the artifact, not in a manifest, not in this file. The observed instance is
 plugin has never written it. When a word is needed for a state, take it from
 (c), or describe what happened in plain language.
 
-This table is owned here rather than borrowed. cogni-copywriting's German-style
+This table is owned here rather than borrowed. the `copywriter` skill's German-style
 table addresses sales and go-to-market vocabulary and shares no term with the
 list above; it transliterates its umlauts to ASCII, which contradicts the
 orthography this plugin mandates; and no load path reaches it from here. The

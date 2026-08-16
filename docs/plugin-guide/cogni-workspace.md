@@ -189,7 +189,7 @@ Answers questions about the insight-wave ecosystem — plugins, skills, agents, 
 ```
 /ask how does claims propagation work across plugins?
 /ask which plugin generates IS/DOES/MEANS messaging?
-/ask what's the difference between cogni-narrative and cogni-copywriting?
+/ask what's the difference between the `narrative` skill and the `copywriter` skill?
 ```
 
 First lookup before grepping source files — faster and doesn't pull plugin internals into your context.
@@ -259,6 +259,45 @@ The store lives under the working directory:
 ```
 
 The directory keeps the name `cogni-claims/` because it holds accumulated per-project user state: renaming it would orphan every claim store already on disk. Read and write it under that name regardless of which plugin ships the skill.
+
+### `narrative` — Shape content into an executive narrative
+
+Absorbed from the retired cogni-narrative plugin. Takes structured input — research syntheses, portfolio entities, plain markdown — and writes `insight-summary.md`: an arc-driven executive narrative with YAML frontmatter carrying `arc_id`, `arc_display_name` and element metadata.
+
+Eleven arc frameworks are available, each a fixed sequence of four named elements with defined rhetorical intent:
+
+| Arc | Element flow | Best for |
+|-----|--------------|----------|
+| `corporate-visions` | Why Change → Why Now → Why You → Why Pay | Sales, B2B market research |
+| `technology-futures` | Emerging → Converging → Possible → Required | Innovation, R&D, technology trends |
+| `competitive-intelligence` | Landscape → Shifts → Positioning → Implications | Competitive analysis |
+| `strategic-foresight` | Signals → Scenarios → Strategies → Decisions | Long-range planning |
+| `industry-transformation` | Forces → Friction → Evolution → Leadership | Industry and regulatory analysis |
+| `trend-panorama` | Forces → Impact → Horizons → Foundations | TIPS trend-scout output (theme-less) |
+| `smarter-service` | Forces → Impact → Horizons → Foundations | TIPS reports with investment themes |
+| `theme-thesis` | Why Change → Why Now → Why You → Why Pay | Investment theme narratives |
+| `jtbd-portfolio` | Jobs → Friction → Portfolio → Invitation | Portfolio introductions, pre-sales |
+| `company-credo` | Mission → Conviction → Credibility → Promise | About-Us pages |
+| `engagement-model` | Principles → Process → Partnership → Outcomes | How-We-Work pages |
+
+The skill analyses the input's structure and proposes a best-fit arc; `--arc {arc-id}` overrides it. Target length defaults to ~1,675 words, with section proportions preserved rather than sections cut.
+
+`narrative-review` scores an existing narrative against the arc's quality gates across four dimensions — structural compliance, critical accuracy, evidence density, language — producing a 0–100 composite, an A–F grade, and the top three actionable fixes. `narrative-adapt` condenses a narrative into an executive brief, talking points, or a one-pager, condensing proportionally so the arc survives the reduction.
+
+Commands: `/narrative`, `/narrative-review`, `/narrative-adapt`.
+
+### `copywriter` — Polish documents for executive readability
+
+Absorbed from the retired cogni-copywriting plugin. Applies seven messaging frameworks — BLUF, McKinsey Pyramid, SCQA, STAR, PSB, FAB, Inverted Pyramid — plus persuasion techniques (number plays, power words, rhetorical devices) to memos, briefs, reports, proposals, one-pagers and blog posts.
+
+Two modes matter beyond ordinary polish:
+
+- **Arc-aware preservation.** When the document carries an `arc_id` in frontmatter, the polish strengthens writing *within* each arc element without altering the skeleton — the title, subtitle, four elements in sequence, and bridge section stay intact. The arc contract it polishes against is mirrored in `skills/copywriter/references/09-preservation-modes/`, and `tests/test-arc-reference-sync.sh` keeps that mirror honest against `skills/narrative/`'s definitions.
+- **Translate-then-polish.** A two-pass flow across seven languages (de/en/fr/it/pl/nl/es), every direction pivoting on English or German. Arc-element and bridge headings are *substituted* from the canonical set rather than freely translated, and only for the `corporate-visions` and `jtbd-portfolio` arcs.
+
+`copy-reader` reviews a document through five parallel stakeholder personas and synthesises their feedback. `copy-json` is the adapter for structured data — it extracts text fields from a JSON file, polishes them through `copywriter`, and writes them back in place.
+
+Commands: `/copywrite`, `/review-doc`.
 
 ---
 

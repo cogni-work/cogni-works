@@ -21,7 +21,7 @@ Available communication use cases for portfolio content. Each use case defines a
 
 **Scopes:**
 
-Each scope produces a main component of a portfolio-driven website, driven by a specific story arc from `cogni-narrative`. Each output file includes `arc_id` in frontmatter so it is directly consumable by `/story-to-web` without an intermediate `/narrative` pass.
+Each scope produces a main component of a portfolio-driven website, driven by a specific story arc from `the `narrative` skill`. Each output file includes `arc_id` in frontmatter so it is directly consumable by `/story-to-web` without an intermediate `/narrative` pass.
 
 | Scope | Output file | Component | Arc |
 |-------|------------|-----------|-----|

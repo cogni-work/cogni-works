@@ -46,7 +46,7 @@ The brief describes WHAT each section says and which section type to use. The Pe
 | `max_sections` | `10` | Maximum section count (forces consolidation if narrative is long) |
 | `style_guide` | `auto` | Pre-selected style guide name. When provided, skip selection. |
 | `arc_type` | `auto` | Story arc hint: why-change, problem-solution, journey, argument, report |
-| `arc_id` | from frontmatter | Narrative arc ID from cogni-narrative. Mapped to visual `arc_type` in Step 1. |
+| `arc_id` | from frontmatter | Narrative arc ID from the `narrative` skill. Mapped to visual `arc_type` in Step 1. |
 | `arc_definition_path` | none | Path to arc definition file — element names become `section_label` values. |
 | `interactive` | `true` | When `true`, present choices via AskUserQuestion. When `false`, auto-select. |
 | `stakeholder_review` | `interactive` | When `true`, run brief-review-assessor after validation. Defaults to value of `interactive`. |

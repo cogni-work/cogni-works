@@ -1,13 +1,13 @@
 # Research to Report
 
-**Pipeline**: cogni-knowledge → cogni-workspace (optional) → cogni-copywriting → cogni-visual
+**Pipeline**: cogni-knowledge → cogni-workspace (optional) → the `copywriter` skill → cogni-visual
 **Duration**: 10 min – 4 hours (all options) depending on research depth, claims volume, and visual enrichment
 **End deliverable**: A verified, polished research report as themed HTML with data visualizations — plus an optional one-page infographic
 
 ```mermaid
 graph LR
     A[cogni-knowledge] -->|synthesis + cited sources| B[cogni-workspace]
-    B -->|live-source re-check| C[cogni-copywriting]
+    B -->|live-source re-check| C[the `copywriter` skill]
     C -->|polished report| D[cogni-visual]
     D -->|infographic + enriched HTML| E[Deliverables]
 ```
@@ -19,7 +19,7 @@ A research report where every citation has been checked against its cited source
 - A persistent wiki knowledge base that compounds across runs — future runs read what prior runs filed before hitting the web (cogni-knowledge; the Karpathy-style engine is vendored in)
 - A structured synthesis with inline citations and a source registry, verified **zero-network** against each cited source's extracted claims (cogni-knowledge)
 - An optional **live-source re-check** that flags misquotations, unsupported conclusions, and stale data against the live source URLs (cogni-workspace, via `knowledge-refresh --resweep`)
-- An executive-polished document with strong structure, active voice, and readability scoring (cogni-copywriting)
+- An executive-polished document with strong structure, active voice, and readability scoring (the `copywriter` skill)
 - A single-page infographic distilling the 3–5 key data points (cogni-visual / story-to-infographic)
 - A themed HTML report with Chart.js visualizations, concept diagrams, and sidebar navigation (cogni-visual / enrich-report)
 
@@ -30,7 +30,7 @@ This is the chain to use when the report will be read by decision-makers or shar
 | Requirement | Why |
 |-------------|-----|
 | cogni-knowledge installed | Wiki-first research orchestrator (vendors the Karpathy wiki engine) |
-| cogni-copywriting installed | Applies messaging frameworks and readability polish |
+| the `copywriter` skill installed | Applies messaging frameworks and readability polish |
 | cogni-visual installed | Produces infographic and enriched HTML |
 | cogni-workspace installed (optional) | Live-source re-check of cited claims via resweep |
 | Web access enabled | cogni-knowledge dispatches parallel web researchers during curate/fetch |
@@ -139,7 +139,7 @@ Resolve any deviated claims you want to handle manually before polishing:
 
 ### Step 3: Polish for Executive Readability (Optional)
 
-Take the verified report into cogni-copywriting for structural polish and readability optimization. The plugin applies messaging frameworks (Pyramid Principle, BLUF, active voice), transforms passive construction, and adds visual hierarchy.
+Take the verified report into the `copywriter` skill for structural polish and readability optimization. The plugin applies messaging frameworks (Pyramid Principle, BLUF, active voice), transforms passive construction, and adds visual hierarchy.
 
 **Command**: `/copywrite {report-path}` or describe the task
 
@@ -254,6 +254,6 @@ This matches the consulting deliverable pattern: executive one-pager up front, d
 
 - [cogni-knowledge plugin guide](../plugin-guide/cogni-knowledge.md)
 - [cogni-workspace plugin guide](../plugin-guide/cogni-workspace.md)
-- [cogni-copywriting plugin guide](../plugin-guide/cogni-copywriting.md)
+- [cogni-workspace plugin guide](../plugin-guide/cogni-workspace.md) — the `narrative` and `copywriter` skills
 - [cogni-visual plugin guide](../plugin-guide/cogni-visual.md)
 - [Consulting Engagement workflow](./consulting-engagement.md) — this pipeline runs inside a deliverable's design-thinking loop

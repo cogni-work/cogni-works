@@ -78,7 +78,7 @@ scripts/             Plugin-shared utility scripts (called by agents, not skills
   rasterize-sketch.py  Rasterize an SVG file to PNG for Pencil MCP embedding. Detects rsvg-convert / cairosvg / inkscape on PATH (first one wins). Used by render-infographic-pencil Step 2.5 to convert editorial-sketch SVGs into PNGs that Pencil can place as file-backed images in frames. Graceful fallback when no rasterizer is available — returns JSON error with install_hint so the caller can demote sketch blocks to text-blocks without crashing the render.
 
 tests/               Plugin test suites (CI-discovered by scripts/run-plugin-tests.py)
-  test-arc-taxonomy-sync.sh  Pins the arc_id set in libraries/arc-taxonomy.md to the arc directories under cogni-workspace/skills/narrative/references/story-arc/. Also checks arc_type validity, element-section coverage and duplicate rows. Hard assert: a cogni-narrative arc added without a visual mapping turns this suite red. Carries its own executed negative case (M1), which drops a mapping row from a copy under mktemp -d and re-runs the suite against the mutant — so every sweep re-proves the guard can fail, without ever writing to the tracked taxonomy.
+  test-arc-taxonomy-sync.sh  Pins the arc_id set in libraries/arc-taxonomy.md to the arc directories under cogni-workspace/skills/narrative/references/story-arc/. Also checks arc_type validity, element-section coverage and duplicate rows. Hard assert: an arc added to the `narrative` skill without a visual mapping turns this suite red. Carries its own executed negative case (M1), which drops a mapping row from a copy under mktemp -d and re-runs the suite against the mutant — so every sweep re-proves the guard can fail, without ever writing to the tracked taxonomy.
   test-de-ascii-orthography.sh  Fails when German-language copy in this plugin's markdown loses its Unicode diacritics, covering both observed corruption styles — the one that drops the mark outright and the one that expands it into a two-letter digraph. Detection is a curated whole-word vocabulary declared as a table, not a general orthography pattern: a general pattern is red on the base tree, so only an enumerated list can also satisfy "green on a clean base". Every row is fold-verified (case W1), so a row whose ASCII form is not what its correct spelling actually folds to cannot be committed, and the vocabulary cannot grow without its fixture coverage growing with it (case W2, both directions). A green run therefore means no enumerated form appeared — NOT that the corpus is orthographically correct. Exemptions are content-anchored rather than line-anchored and are re-verified on every run (case C2), so a reword forces a human to re-confirm the carve-out instead of letting it rot into a false positive on correct content; they cover the checklist that states the rule by naming the forms it forbids, the deliberate diacritic-to-ASCII mapping used for filename slugs, skill frontmatter description trigger phrases, English image-prompt scalars, and slug / filename / id / enum / URL shapes. Carries its own executed negative case (M1), which injects both corruption styles into a copy of the corpus under mktemp -d and re-runs the suite against the mutant, requiring the child to fail by name — so every sweep re-proves the guard can fail, without ever writing to the tracked tree.
 
 libraries/           Shared reference material loaded at Step 1
@@ -113,14 +113,14 @@ libraries/           Shared reference material loaded at Step 1
 ## Pipeline Position
 
 ```
-cogni-narrative -> cogni-copywriting -> cogni-visual
-(compose)         (polish)            (visualize)
+cogni-workspace -> cogni-visual
+(compose + polish)  (visualize)
 
 cogni-trends/cogni-knowledge → enrich-report → browser / PDF / DOCX
 (text report)                 (post-process)   (themed HTML + optional format export)
 ```
 
-- **Upstream (narrative skills):** Narratives from cogni-narrative, polished by cogni-copywriting
+- **Upstream (narrative skills):** Narratives from cogni-workspace's `narrative` skill, polished by its `copywriter` skill
 - **External:** Themes from cogni-workspace (`/cogni-workspace/themes/{id}/theme.md`)
 - **Downstream:** `document-skills:pptx` renders slide briefs into PowerPoint; `render-html-slides` renders slide briefs into self-contained HTML; Excalidraw MCP renders infographic briefs; Pencil MCP renders web and storyboard briefs; `document-skills:pdf` and `document-skills:docx` handle format export from enrich-report
 - **Web HTML export:** Web agent reads rendered .pen design tree to generate self-contained HTML + integration manifest for `export-html-report` landing page overlay

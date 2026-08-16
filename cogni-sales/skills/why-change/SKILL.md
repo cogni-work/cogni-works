@@ -156,7 +156,7 @@ Agent tool:
 ```
 
 The agent will:
-- Read `why-change-patterns.md` from cogni-narrative (PSB structure, contrast patterns)
+- Read `why-change-patterns.md` from the `narrative` skill (PSB structure, contrast patterns)
 - Load portfolio propositions (IS/DOES/MEANS for matched market)
 - "Work backwards" from portfolio capabilities to problems
 - Perform web research — company-specific (customer mode) or industry-level (segment mode)
@@ -206,7 +206,7 @@ Agent tool:
 ```
 
 The agent will:
-- Read `why-now-patterns.md` from cogni-narrative (forcing functions, urgency quantification)
+- Read `why-now-patterns.md` from the `narrative` skill (forcing functions, urgency quantification)
 - Load Phase 1 bridge file for context
 - Research timing triggers — company-specific (customer mode) or industry-level (segment mode)
 - Write `02-why-now/research.json` and `02-why-now/narrative.md`
@@ -230,7 +230,7 @@ Agent tool:
 ```
 
 The agent will:
-- Read `why-you-patterns.md` from cogni-narrative (differentiators with IS-DOES-MEANS)
+- Read `why-you-patterns.md` from the `narrative` skill (differentiators with IS-DOES-MEANS)
 - Load portfolio propositions, solutions, and competitor data
 - Start each IS cell from the portfolio solution entity's capability description, adapted to buyer context
 - Create 2-3 differentiators mapped to buyer needs from Phase 1
@@ -257,7 +257,7 @@ Agent tool:
 ```
 
 The agent will:
-- Read `why-pay-patterns.md` from cogni-narrative (compound cost calculation)
+- Read `why-pay-patterns.md` from the `narrative` skill (compound cost calculation)
 - Load Phase 2 cost-of-inaction data + Phase 3 capability outcomes
 - Load solution pricing tiers from portfolio
 - Build ROI model: cost of inaction vs investment
@@ -415,7 +415,7 @@ Stakeholder Scores: Buyer {N}/100 | Sales {N}/100 | Marketing {N}/100
 Claims registered: {N} — run `/claims verify` to validate sources.
 
 Optional next steps:
-  - `/copywrite sales-presentation.md` — polish with cogni-copywriting
+  - `/copywrite sales-presentation.md` — polish with the `copywriter` skill
   - `/pptx create sales-presentation.md` — generate slide deck via cogni-visual
 ```
 
@@ -435,7 +435,7 @@ These deliverables serve as reusable templates for any customer in the {segment_
 To create a customer-specific pitch based on this template, run `/why-change` in customer mode.
 
 Optional next steps:
-  - `/copywrite sales-presentation.md` — polish with cogni-copywriting
+  - `/copywrite sales-presentation.md` — polish with the `copywriter` skill
   - `/pptx create sales-presentation.md` — generate slide deck via cogni-visual
 ```
 
@@ -455,4 +455,4 @@ If the user wants to continue a pitch that was interrupted:
 - If portfolio has no solutions for the matched market: warn user, proceed with industry-benchmark pricing in Why Pay. Log `"pricing_source": "industry_benchmark"` in pitch-log.json
 - If portfolio has no competitors for the matched market: warn user, proceed with web-researched competitive landscape. Log `"competitor_source": "web_research"` in pitch-log.json
 - If web research returns thin results: customer mode degrades to industry-level research; segment mode uses broader search terms
-- If cogni-narrative arc files not found: error — cogni-narrative plugin must be installed
+- If the arc files are not found: error — the cogni-workspace plugin must be installed

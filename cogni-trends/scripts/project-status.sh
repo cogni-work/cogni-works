@@ -747,7 +747,7 @@ else:
 stages.append({
     'name': 'Executive Polish',
     'status': 'done' if b('HAS_COPYWRITER') else 'skipped',
-    'details': 'tone (cogni-copywriting)' if b('HAS_COPYWRITER') else 'optional'
+    'details': 'tone (the `copywriter` skill)' if b('HAS_COPYWRITER') else 'optional'
 })
 
 # 17. Visual Report

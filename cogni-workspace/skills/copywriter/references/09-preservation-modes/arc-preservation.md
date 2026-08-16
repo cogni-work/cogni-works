@@ -2,7 +2,7 @@
 title: Arc-Aware Preservation Mode
 type: preservation-mode
 category: preservation-modes
-tags: [arc-preservation, story-arc, narrative-structure, polish, cogni-narrative]
+tags: [arc-preservation, story-arc, narrative-structure, polish, narrative]
 audience: [copywriter-skill]
 related:
   - arc-technique-map
@@ -13,7 +13,7 @@ last_updated: 2026-05-27
 # Arc-Aware Preservation Mode
 
 <context>
-You are polishing a narrative that uses a story arc structure created by cogni-narrative. The arc defines the document's skeleton: a title, subtitle, four arc elements in a fixed sequence, and a bridge section. Your job is to strengthen the writing within each element without altering the skeleton.
+You are polishing a narrative that uses a story arc structure created by the `narrative` skill. The arc defines the document's skeleton: a title, subtitle, four arc elements in a fixed sequence, and a bridge section. Your job is to strengthen the writing within each element without altering the skeleton.
 
 Think of it this way: the arc is a building's load-bearing frame. You are repainting walls and upgrading fixtures. You never move a wall, remove a beam, or change the floor plan.
 </context>
@@ -63,7 +63,7 @@ subtitle: "..."
 
 Match rule: Compare the document's H2 headings against the element columns above. A partial match on the first word is sufficient (e.g., "Why" matches "Why Change", "Job" matches "Job Landscape"). If 3 or more of the 4 elements match a single arc row, activate arc-aware mode with that arc_id.
 
-**Localized headings are also valid.** Arc element headings may appear in a non-English language. This table holds the **canonical full headings** for the arcs supported by EN/DE-pivot arc-mode translation (any of de/en/fr/it/pl/nl/es, with EN or DE on one end of the pair), mirrored byte-for-byte from cogni-narrative's `language-templates.md` (the "Insight Summary (Arc Element Headers)" EN/DE tables plus the "Arc-mode translation headings (FR/IT/PL/NL/ES)" subsection). The `audit-copywriter` checks C2/C3 keep this mirror in sync with upstream.
+**Localized headings are also valid.** Arc element headings may appear in a non-English language. This table holds the **canonical full headings** for the arcs supported by EN/DE-pivot arc-mode translation (any of de/en/fr/it/pl/nl/es, with EN or DE on one end of the pair), mirrored byte-for-byte from the `narrative` skill's `language-templates.md` (the "Insight Summary (Arc Element Headers)" EN/DE tables plus the "Arc-mode translation headings (FR/IT/PL/NL/ES)" subsection). `cogni-workspace/tests/test-arc-reference-sync.sh` cases A4/A5 keep this mirror in sync with the `narrative` skill's definitions.
 
 | Arc | # | EN (canonical) | DE (canonical) | FR | IT | PL | NL | ES |
 |-----|---|----------------|----------------|----|----|----|----|----|
@@ -275,7 +275,7 @@ Each element has a word target range in the technique map. Polishing should not 
 
 ## Integration Pattern
 
-When cogni-narrative invokes the copywriter with arc preservation, the task prompt will contain a constraints block like this:
+When the `narrative` skill invokes the copywriter with arc preservation, the task prompt will contain a constraints block like this:
 
 ```text
 CRITICAL PRESERVATION REQUIREMENTS:

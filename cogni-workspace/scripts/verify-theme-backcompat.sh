@@ -371,7 +371,11 @@ phase "Phase D — voice consumers (soft)"
 # is: theme.md (both tier-0 and tiered references) must contain a parseable
 # "Voice & Copy Guidelines" section so any prompt that includes it does not
 # choke on a missing block.
-VOICE_PLUGINS=(cogni-narrative cogni-sales cogni-research cogni-copywriting)
+# cogni-narrative, cogni-copywriting and cogni-research were retired; their voice
+# consumers are now this plugin's own narrative and copywriter skills, which the
+# theme.md contract covers directly. Listing retired names here made the loop below
+# skip silently forever rather than verify anything.
+VOICE_PLUGINS=(cogni-sales)
 VOICE_HEADER='## Voice & Copy Guidelines'
 
 for theme in _template cogni-work; do

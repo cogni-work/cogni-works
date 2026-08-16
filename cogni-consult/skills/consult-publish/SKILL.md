@@ -93,7 +93,7 @@ lineage entry (step 5), so a second format never overwrites the first.
 ### 3. Optional voice polish
 
 The brief text may be polished with `cogni-workspace:copywriter` before
-handoff. This is optional and graceful-degrading — **if `cogni-copywriting` is
+handoff. This is optional and graceful-degrading — **if `the `copywriter` skill` is
 not installed, skip it with a one-line note**; the route still produces a valid
 brief.
 
@@ -126,7 +126,7 @@ execution summary, so read the reference for each route before dispatching:
 one route the skill builds itself rather than dispatching. Consult deliverables
 are framework-shaped (Pyramid / SCQA / MECE), not arc-shaped, so this path does
 **not** dispatch `cogni-visual:story-to-slides` / `story-to-web` and does **not**
-re-narrate through `cogni-narrative` — arc-ifying a framework-shaped deliverable
+re-narrate through `the `narrative` skill` — arc-ifying a framework-shaped deliverable
 weakens its executive register. Derive the outline directly from the
 deliverable's own structure: an ordered list of `{section_title, section_body}`
 entries with citations preserved — Pyramid answer / governing thought → the
@@ -156,7 +156,7 @@ render, so the run never requires `cogni-visual`. `cogni-visual:enrich-report` /
 `story-to-infographic` remain available only as an explicit opt-in local-render
 fallback (they render locally and apply a cogni-visual theme, which the
 brief-only contract otherwise avoids) — they are no longer the standard path.
-When `cogni-copywriting` is absent, the optional polish step is skipped. Either
+When `the `copywriter` skill` is absent, the optional polish step is skipped. Either
 way the run still produces a valid brief.
 
 ### 4.5 Resolve assumption placeholders (mandatory)
@@ -235,7 +235,7 @@ If multiple formats were produced in this session, list each brief path.
   and owns no theme.
 - **No render dependency.** Every format builds a consult-native brief, so the
   standard path never requires `cogni-visual` — it remains an opt-in
-  local-render fallback only. When `cogni-copywriting` is absent the optional
+  local-render fallback only. When `the `copywriter` skill` is absent the optional
   polish step is skipped. Either way the run still produces a valid brief — a
   missing downstream plugin degrades the output, it never fails the run.
 - **Assumption resolution is fail-loud, not graceful-degrading.** The step-4.5

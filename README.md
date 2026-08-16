@@ -11,7 +11,7 @@ Each plugin implements an established framework (Corporate Visions, Double Diamo
 
 ## What the plugins do
 
-11 plugins organized around nine capability areas. Each area handles a distinct part of the consulting-to-delivery workflow; plugins within an area share data formats and can be used independently or together.
+9 plugins organized around nine capability areas. Each area handles a distinct part of the consulting-to-delivery workflow; plugins within an area share data formats and can be used independently or together.
 
 ### Knowledge Management
 
@@ -47,7 +47,7 @@ Each plugin implements an established framework (Corporate Visions, Double Diamo
 
 ### Content Production
 
-[cogni-marketing](cogni-marketing/README.md) bridges portfolio propositions and trend themes into channel-ready content across 16 formats — blogs, LinkedIn articles, whitepapers, battle cards, email nurtures, video scripts, and more. A 3D content matrix (market x GTM path x content type) tracks coverage gaps. [cogni-copywriting](cogni-copywriting/README.md) polishes any document for executive readability using 7 messaging frameworks (BLUF, Pyramid, SCQA, STAR, PSB, FAB, Inverted Pyramid) and runs 5 parallel stakeholder personas to catch blind spots. [cogni-narrative](cogni-narrative/README.md) transforms structured content into executive narratives using 11 story arc frameworks with quality scoring (0-100, A-F grades). Together: 18 skills and 8 agents.
+[cogni-marketing](cogni-marketing/README.md) bridges portfolio propositions and trend themes into channel-ready content across 16 formats — blogs, LinkedIn articles, whitepapers, battle cards, email nurtures, video scripts, and more. A 3D content matrix (market x GTM path x content type) tracks coverage gaps. Narrative shaping and executive polish now live in [cogni-workspace](cogni-workspace/README.md): its `narrative` skill transforms structured content into executive narratives using 11 story arc frameworks with quality scoring (0-100, A-F grades), and its `copywriter` skill polishes any document for executive readability using 7 messaging frameworks (BLUF, Pyramid, SCQA, STAR, PSB, FAB, Inverted Pyramid) with 5 parallel stakeholder personas to catch blind spots. Together with cogni-marketing: 17 skills and 8 agents.
 
 > "Generate thought leadership content for the AI automation theme across LinkedIn and blog formats"
 
@@ -81,7 +81,7 @@ Each plugin implements an established framework (Corporate Visions, Double Diamo
 
 #### Workspace Foundation
 
-[cogni-workspace](cogni-workspace/README.md) manages the shared foundation — environment variables, MCP server installation, theme management, plugin discovery, and workspace health. Runs dependency checks, discovers installed plugins, and generates shared settings. Includes Obsidian vault integration for browsable knowledge management, and owns the cross-plugin claim-verification gate (see Source Verification below). 13 skills and 2 agents.
+[cogni-workspace](cogni-workspace/README.md) manages the shared foundation — environment variables, MCP server installation, theme management, plugin discovery, and workspace health. Runs dependency checks, discovers installed plugins, and generates shared settings. Includes Obsidian vault integration for browsable knowledge management, and owns the cross-plugin claim-verification gate (see Source Verification below), plus story-arc narrative composition and executive copywriting. 19 skills and 7 agents.
 
 > "Initialize my insight-wave workspace and check plugin health"
 
@@ -181,19 +181,17 @@ The workplace combines Claude Code with [Obsidian](https://obsidian.md/) for per
 ```
 insight-wave/
 ├── .claude-plugin/
-│   └── marketplace.json                    # Marketplace manifest (11 plugins)
+│   └── marketplace.json                    # Marketplace manifest (9 plugins)
 ├── docs/                                   # User documentation
 │   ├── getting-started.md                  # Forwarder → workflows/install-to-infographic.md
 │   ├── ecosystem-overview.md               # Plugin landscape and data flow
-│   ├── plugin-guide/                       # Per-plugin deep dives (11 guides)
+│   ├── plugin-guide/                       # Per-plugin deep dives (9 guides)
 │   ├── workflows/                          # Cross-plugin pipeline guides (8 workflows)
 │   ├── architecture/                       # Design philosophy, plugin anatomy, ER diagram
 │   └── contributing/                       # Plugin development guide
 ├── cogni-consult/                          # Action-fields-WBS consulting orchestrator
-├── cogni-copywriting/                      # Copywriting toolkit
 ├── cogni-knowledge/                        # Wiki-first research orchestrator
 ├── cogni-marketing/                        # B2B marketing content engine
-├── cogni-narrative/                        # Story arc narrative transformation
 ├── cogni-portfolio/                        # Portfolio messaging & planning
 ├── cogni-sales/                            # B2B sales pitch generation
 ├── cogni-trends/                           # Trend scouting & reporting
@@ -222,14 +220,12 @@ Plugins follow the [Claude Code plugin standard](https://code.claude.com/docs/en
 | [cogni-trends](cogni-trends/README.md) | Trend Intelligence | 9 | 12 | TIPS trend scouting with bilingual DE/EN research, investment theme modeling, and reusable industry catalogs |
 | [cogni-portfolio](cogni-portfolio/README.md) | Portfolio | 21 | 20 | IS/DOES/MEANS portfolio positioning with eight industry taxonomies, competitive analysis, and market sizing |
 | [cogni-marketing](cogni-marketing/README.md) | Content | 11 | 3 | B2B marketing content engine — 16 formats across thought leadership, demand gen, lead gen, sales enablement, ABM |
-| [cogni-copywriting](cogni-copywriting/README.md) | Content | 4 | 2 | Professional copywriting with 7 messaging frameworks, 5 stakeholder personas, and arc-aware polishing |
-| [cogni-narrative](cogni-narrative/README.md) | Content | 3 | 3 | Story arc narrative transformation using 11 frameworks with quality scoring and derivative format adaptation |
 | [cogni-sales](cogni-sales/README.md) | Sales | 1 | 4 | Corporate Visions Why Change pitch generation for named customers or market segments |
 | [cogni-visual](cogni-visual/README.md) | Visual | 7 | 19 | Slide decks, infographics, web narratives, poster storyboards, and report enrichment from narratives |
 | [cogni-website](cogni-website/README.md) | Website | 6 | 3 | Multi-page customer websites from portfolio, marketing, and research content with shared navigation and theming |
-| [cogni-workspace](cogni-workspace/README.md) | Platform | 13 | 2 | Shared foundation — env vars, MCP installation, theme management, plugin discovery, workspace health, Obsidian integration, bundled wiki |
+| [cogni-workspace](cogni-workspace/README.md) | Platform | 19 | 7 | Shared foundation — env vars, MCP installation, theme management, plugin discovery, workspace health, Obsidian integration, bundled wiki, claim verification, story-arc narrative and executive copywriting |
 
-**105 skills, 88 agents** across the 11 active plugins.
+**104 skills, 88 agents** across the 9 active plugins.
 
 See [Cross-Plugin Data Flow](docs/er-diagram.md) for how data flows between plugins, or browse the [full documentation](docs/ecosystem-overview.md).
 

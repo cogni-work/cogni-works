@@ -18,7 +18,7 @@ source: plugin-name
 
 **Optional:**
 - `tags` (list) — for Obsidian search and graph view
-- `source` (string) — which plugin created the note (e.g., "cogni-trends", "cogni-narrative")
+- `source` (string) — which plugin created the note (e.g., "cogni-trends", "cogni-workspace")
 - `status` (string) — workflow state: draft, review, or final
 - `related` (list) — paths to related notes
 

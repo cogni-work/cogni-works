@@ -8,7 +8,7 @@ allowed-tools: Read, Write, Edit, Glob, Grep
 
 ## Purpose
 
-Evaluate an existing narrative markdown file against the cogni-narrative quality gates. Produce a structured scorecard with pass/warn/fail per gate, an overall score (0-100), and the top 3 actionable improvement suggestions.
+Evaluate an existing narrative markdown file against the `narrative` skill quality gates. Produce a structured scorecard with pass/warn/fail per gate, an overall score (0-100), and the top 3 actionable improvement suggestions.
 
 ## When to Use
 

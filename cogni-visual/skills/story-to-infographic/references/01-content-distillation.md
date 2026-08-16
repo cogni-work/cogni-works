@@ -117,5 +117,5 @@ distillation — they guide where to look first, not what to select (selection c
 still apply):
 
 - **Research reports** (no frontmatter, H2/H3 sections, inline citations, References section at end): The introduction paragraph typically contains the governing assertion. The conclusion or summary section distills the strongest claims. Scan body sections for hero numbers and comparisons, but weight introduction and conclusion highest for assertion extraction. Strip the `## References` list entirely — it contributes no infographic content.
-- **Insight summaries** (arc_id frontmatter, structured narrative): The existing process applies directly — the narrative is already distilled by cogni-narrative.
+- **Insight summaries** (arc_id frontmatter, structured narrative): The existing process applies directly — the narrative is already distilled by the `narrative` skill.
 - **Trend reports** (TIPS structure, Handlungsfeld sections, investment themes): Each Handlungsfeld section is a self-contained argument with its own hero numbers. Extract candidates per theme, then select the 3-5 strongest across all themes. The governing assertion often lives in the report introduction or the "Why Change" framing.

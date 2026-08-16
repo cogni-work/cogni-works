@@ -58,8 +58,8 @@ You require these parameters:
 | theme | No | interactive | Absolute path to theme.md — if omitted, skill triggers `pick-theme` interactive selection |
 | language | No | en | Language code (en/de) |
 | arc_type | No | auto | Story arc hint: auto, why-change, problem-solution, journey, argument, report |
-| arc_id | No | from frontmatter | Narrative arc ID from cogni-narrative (e.g., `industry-transformation`) |
-| arc_definition_path | No | none | Path to cogni-narrative arc definition file for element-based phase labels |
+| arc_id | No | from frontmatter | Narrative arc ID from the `narrative` skill (e.g., `industry-transformation`) |
+| arc_definition_path | No | none | Path to the `narrative` skill arc definition file for element-based phase labels |
 | max_slides | No | 15 | Maximum slide count |
 | customer_name | No | from metadata | Customer organization name |
 | provider_name | No | from metadata | Solution provider name |
@@ -105,7 +105,7 @@ Verify required parameters are present:
 - `{{theme}}` → the theme parameter (default: "smarter-service")
 - `{{language}}` → the language parameter (default: "en")
 - `{{arc_type}}` → the arc_type parameter (default: "auto")
-- `{{arc_id}}` → the arc_id parameter (if provided — narrative arc ID from cogni-narrative)
+- `{{arc_id}}` → the arc_id parameter (if provided — narrative arc ID from the `narrative` skill)
 - `{{arc_definition_path}}` → the arc_definition_path parameter (if provided — path to arc definition file)
 - `{{max_slides}}` → the max_slides parameter (default: "15")
 - `{{customer_name}}` → the customer_name parameter (if provided)

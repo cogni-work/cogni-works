@@ -261,7 +261,7 @@ Never machine-translate marketing copy. Decks may be machine-drafted, then revis
 - **Domain** is `cogni-work.ai` — lowercase, hyphenated, set in DM Sans regular weight in body copy.
 - **Wordmark** is `cogni` + chartreuse hyphen + `work` + chartreuse `.ai`, DM Sans Bold, `-0.02em` tracking. Always rendered, never typed.
 - **Tagline** is `Firmitas · Utilitas · Venustas` — Latin, middle-dot separated, no italics. Use verbatim.
-- **Plugin names** are lowercase, hyphenated: *cogni-copywriting, cogni-portfolio, insight-wave*. Treat as proper nouns; don't expand to title case in prose.
+- **Plugin names** are lowercase, hyphenated: *cogni-workspace, cogni-portfolio, insight-wave*. Treat as proper nouns; don't expand to title case in prose.
 - **Product capitalization in body:** *Cogni Work* (the brand), *insight-wave* (the ecosystem), *the plugin* (a single plugin in context).
 
 ---

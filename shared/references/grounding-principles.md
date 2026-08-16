@@ -40,7 +40,7 @@ Before finalizing output, run a self-audit on every factual claim:
 3. **Verify each inference** — is it directly supported, or are you filling a gap?
 4. **Retract unsupported claims** — if a finding cannot be traced to a specific source, remove it from the output rather than submitting it for downstream verification
 
-The self-audit reduces load on cogni-claims by catching unsupported claims at generation time rather than verification time.
+The self-audit reduces load on `cogni-workspace:claims` by catching unsupported claims at generation time rather than verification time.
 
 ## Confidence Assessment
 

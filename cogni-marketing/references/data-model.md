@@ -183,7 +183,7 @@ created: ISO-8601
 - **cogni-copywriting**: Generated content can be piped to `copywriter` skill for polishing
 - **cogni-narrative**: Long-form thought leadership can be piped to `narrative` skill for arc-driven transformation
 - **cogni-visual**: Content briefs can be piped to `story-to-slides` or `canvas` for visual deliverables
-- **cogni-claims**: Evidence claims in content inherit verification status from TIPS claims registry
+- **cogni-workspace**: Evidence claims in content inherit verification status from TIPS claims registry via `cogni-workspace:claims`
 
 ## Naming Conventions
 

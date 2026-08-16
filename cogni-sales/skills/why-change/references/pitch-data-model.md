@@ -230,7 +230,7 @@ In customer mode, the narrative addresses the named customer directly. In segmen
 
 ## Claims Registration
 
-Claims with web URLs are registered for optional cogni-claims verification. Each claim entry:
+Claims with web URLs are registered for optional `cogni-workspace:claims` verification. Each claim entry:
 
 ```json
 {

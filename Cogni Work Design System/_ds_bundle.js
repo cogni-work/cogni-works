@@ -856,7 +856,7 @@ function CogniWorkThemeShowcase() {
       borderBottom: "1px solid rgba(255,255,255,0.06)"
     }
   }, h)))), /*#__PURE__*/React.createElement("tbody", null, [{
-    name: "cogni-claims",
+    name: "cogni-workspace",
     status: "Aktiv",
     statusColor: theme.success,
     score: 94,

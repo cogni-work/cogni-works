@@ -77,7 +77,7 @@ The macro-label localizations for the Dimension column come from the same labels
 
 ---
 
-## Compatibility with `cogni-claims`
+## Compatibility with `cogni-workspace:claims`
 
 The merged claims file `tips-trend-report-claims.json` (written in Step 2.7) is the machine-readable companion to this human-readable table. Its schema is documented in `trend-research/references/claims-format.md § Merged Claims File`.
 

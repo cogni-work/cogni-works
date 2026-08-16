@@ -323,7 +323,7 @@ These rules implement [Anthropic's recommended hallucination reduction technique
 1. Does it have a supporting source URL from actual WebSearch/WebFetch results?
 2. Does the number/positioning match exactly what the source reported?
 3. Is the competitor attribution correct (not a subsidiary, deprecated product, or different market segment)?
-4. **Remove unsourced findings** rather than including them — catching them here is cheaper than downstream cogni-claims verification
+4. **Remove unsourced findings** rather than including them — catching them here is cheaper than downstream cogni-workspace claim verification
 
 *Confidence Assessment:*
 

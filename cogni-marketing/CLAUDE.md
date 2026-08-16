@@ -70,7 +70,7 @@ Formats with `evidence: true` embed TIPS claims inline as `[claim_id](source_url
 | cogni-copywriting | No | Polish generated content with messaging frameworks |
 | cogni-narrative | No | Arc-driven transformation for long-form thought leadership |
 | cogni-visual | No | Slide decks and visual assets from content briefs |
-| cogni-claims | No | Evidence verification for sourced claims in content |
+| cogni-workspace | No | Evidence verification for sourced claims in content via `cogni-workspace:claims` |
 
 ## Key Conventions
 

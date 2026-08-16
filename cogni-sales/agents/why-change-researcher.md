@@ -387,7 +387,7 @@ These rules implement [Anthropic's recommended hallucination reduction technique
 1. Review each finding — does it have a supporting source URL in its evidence array?
 2. Check each number — does it match exactly what the source reported?
 3. Verify each inference — is it directly supported, or are you filling a gap?
-4. **Remove unsupported findings** rather than registering them as claims — catching them here is cheaper than downstream cogni-claims verification
+4. **Remove unsupported findings** rather than registering them as claims — catching them here is cheaper than downstream cogni-workspace claim verification
 
 **Confidence Assessment:** Rate each finding's evidence strength:
 

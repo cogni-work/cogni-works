@@ -40,7 +40,7 @@ A pitch-generation pipeline organized around the Corporate Visions Why Change me
 - **Pitch in hours, not days.** The researcher agent runs the web research, company analysis, and evidence gathering across all four phases — you review and steer instead of starting from a blank deck.
 - **Stay on-method every time.** Every pitch follows all four Why Change phases with structured evidence — no phase skipped, no message diluted, even under deadline pressure.
 - **Serve 1:1 and 1:many from one engine.** Customer mode researches the named account; segment mode produces a reusable template for the whole vertical — zero pipeline rebuild between deal-specific and market pitches.
-- **Present numbers you can defend.** Every factual claim is registered with a source URL, and optional cogni-claims verification checks them in one pass — no unsourced statistics in front of the buyer.
+- **Present numbers you can defend.** Every factual claim is registered with a source URL, and optional cogni-workspace claim verification checks them in one pass — no unsourced statistics in front of the buyer.
 
 ## Install
 
@@ -156,7 +156,7 @@ cogni-sales/
 | cogni-portfolio | Yes | Products, features, propositions, solutions, markets, competitors, customers |
 | cogni-narrative | Yes | Corporate Visions story arc patterns (why-change, why-now, why-you, why-pay) |
 | cogni-trends | No | TIPS strategic theme enrichment — value-modeler themes, regulatory timelines, gap analysis |
-| cogni-claims | No | Source verification for web-sourced claims |
+| cogni-workspace | No | Source verification for web-sourced claims via `cogni-workspace:claims` |
 | cogni-copywriting | No | Executive polish on final deliverables |
 | cogni-visual | No | PPTX generation from sales presentation |
 

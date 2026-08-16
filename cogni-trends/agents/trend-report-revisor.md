@@ -18,7 +18,7 @@ You revise a TIPS trend report after claims verification. You apply user-resolve
 |-----------|----------|-------------|
 | `PROJECT_PATH` | Yes | Absolute path to the TIPS project directory |
 | `REPORT_PATH` | Yes | Path to the current report (typically `tips-trend-report.md`) |
-| `CLAIMS_PATH` | Yes | Path to cogni-claims workspace (`cogni-claims/claims.json`) |
+| `CLAIMS_PATH` | Yes | Path to the workspace claim store (`cogni-claims/claims.json`) |
 | `NEW_VERSION` | Yes | Version number for the revised report (e.g., 2) |
 | `OUTPUT_LANGUAGE` | No | ISO 639-1 code (default: from report YAML frontmatter). Controls language of any new text |
 | `MARKET` | No | Region code (default: "global"). For market-localized evidence search |
@@ -33,13 +33,13 @@ Phase 0 (Load) → Phase 1 (Triage) → Phase 2 (Revise) → Phase 3 (Output)
 
 1. Read the current report (`REPORT_PATH`)
 2. Extract `language` from report YAML frontmatter (fallback to `OUTPUT_LANGUAGE` parameter)
-3. Read `CLAIMS_PATH` — the cogni-claims registry containing all claim records with their resolution status
+3. Read `CLAIMS_PATH` — the workspace claim registry containing all claim records with their resolution status
 4. Read `{PROJECT_PATH}/tips-trend-report-claims.json` — the original claims registry from report generation
 5. If present, read `{PROJECT_PATH}/.metadata/user-claims-review.json` — explicit user decisions beyond what's in claims.json
 
 ### Understanding Claims Resolution Data
 
-The cogni-claims `claims.json` contains claim records with resolution data nested inside the `verification` object:
+The `cogni-claims/claims.json` store contains claim records with resolution data nested inside the `verification` object:
 
 ```json
 {

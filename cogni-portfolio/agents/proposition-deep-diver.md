@@ -455,7 +455,7 @@ These rules implement [Anthropic's recommended hallucination reduction technique
 1. Does it have a supporting source URL from actual WebSearch/WebFetch results?
 2. Does the buyer language come from actual buyer sources (reviews, RFPs, forums) — not vendor marketing?
 3. Does the competitive messaging accurately reflect the competitor's stated positioning?
-4. **Remove unsourced findings** rather than including them — catching them here is cheaper than downstream cogni-claims verification
+4. **Remove unsourced findings** rather than including them — catching them here is cheaper than downstream cogni-workspace claim verification
 
 *Confidence Assessment:*
 

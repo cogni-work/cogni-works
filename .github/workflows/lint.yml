@@ -132,3 +132,18 @@ jobs:
           PY
 
           exit "$rc"
+
+  result-line-plainness-guard:
+    name: Result-line plainness guard (no escape sequence in discovered suites)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        # Default shallow checkout is sufficient: the guard reads the working
+        # tree at this commit, not git history. Do NOT copy version-bump-gate's
+        # fetch-depth: 0 — that is load-bearing only for its merge-base anchor.
+
+      - name: Assert no discovered suite wraps a result line in an escape sequence
+        run: |
+          set -euo pipefail
+          python3 scripts/check-result-line-plainness.py

@@ -1,4 +1,4 @@
-# Claims Integration with cogni-claims
+# Claims Integration with `cogni-workspace:claims`
 
 How `verify-trend-report` Phase 2 submits and verifies claims via the `cogni-workspace:claims` skill. Adapted from the legacy `trend-report/references/phase-3-claim-verification.md` so the verification protocol stays unchanged when the user moves from the embedded flow to the dedicated skill.
 
@@ -6,7 +6,7 @@ How `verify-trend-report` Phase 2 submits and verifies claims via the `cogni-wor
 
 ## Step 1: Confirm the user wants to verify
 
-Before invoking `cogni-claims`, confirm via `AskUserQuestion` (the user invoked `/verify-trend-report` deliberately, so this is a yes/no rather than a long menu):
+Before invoking `cogni-workspace:claims`, confirm via `AskUserQuestion` (the user invoked `/verify-trend-report` deliberately, so this is a yes/no rather than a long menu):
 
 ```yaml
 AskUserQuestion:
@@ -14,14 +14,14 @@ AskUserQuestion:
   header: "Verify"
   options:
     - label: "Verify now (Recommended)"
-      description: "Submit each claim to cogni-claims, fetch source URLs, detect deviations"
+      description: "Submit each claim to cogni-workspace:claims, fetch source URLs, detect deviations"
     - label: "Skip verification"
       description: "Run structural review only; no source comparison"
 ```
 
 If the user picks **Skip verification**, log a note and proceed directly to Phase 4 with `structural_review_only=true`.
 
-## Step 2: Invoke cogni-claims
+## Step 2: Invoke `cogni-workspace:claims`
 
 ```yaml
 Skill:
@@ -58,17 +58,17 @@ Phase 3 of `verify-trend-report/SKILL.md` reads `cogni-claims/claims.json` direc
 
 ## Graceful degradation
 
-When `cogni-claims` is unavailable:
+When `cogni-workspace:claims` is unavailable:
 
 1. Phase 2 logs a warning and writes a partial verification record:
    ```json
    {
      "verified_at": "ISO-8601",
      "verdict": "SKIPPED",
-     "reason": "cogni-claims not installed",
+     "reason": "cogni-workspace:claims not available",
      "verified_by": "verify-trend-report"
    }
    ```
 2. Phase 3 is skipped entirely — there are no per-claim deviations to review.
 3. Phase 4 runs reviewer-only (no revisor), with iteration cap reduced to 1 (the reviewer's structural verdict alone is enough — without claims data, a second pass adds no new signal).
-4. Phase 5 finalization message includes a recommendation to install `cogni-claims` for full verification.
+4. Phase 5 finalization message includes a recommendation to install `cogni-workspace` for full verification.

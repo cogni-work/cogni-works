@@ -175,8 +175,6 @@ Skill:
   args: "--file-path {PROJECT_PATH}/tips-trend-report.md --claims-file {PROJECT_PATH}/tips-trend-report-claims.json --verdict-mode --language {OUTPUT_LANGUAGE}"
 ```
 
-This is the same invocation the legacy single-skill `trend-report` Phase 3 used — preserved verbatim for compatibility.
-
 #### Step 2.3: Persist results
 
 Parse the QualityGateResult and write `.metadata/trend-report-verification.json`:

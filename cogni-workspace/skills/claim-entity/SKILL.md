@@ -60,18 +60,18 @@ any status ──> re-verify          (returns to verified/deviated/source_unava
 
 Claim state persists in the calling project's `cogni-claims/` directory:
 
-The directory name is a compatibility fact, not relocation debt. It holds accumulated per-project
-user state that no upgrade hook could rewrite across every disk, so it keeps its name even though
-the skill now ships from cogni-workspace. The discriminator for any future namespace sweep is the
-colon: a colon-qualified dispatch token naming the retired plugin is rewritten, a `cogni-claims/`
-path never is.
-
 ```
 {working_dir}/cogni-claims/
 ├── claims.json          # Registry of all ClaimRecords
 ├── sources/{hash}.json  # Cached source content per URL
 └── history/{id}.json    # Audit trail per claim
 ```
+
+The directory name is a compatibility fact, not relocation debt. It holds accumulated per-project
+user state that no upgrade hook could rewrite across every disk, so it keeps its name even though
+the skill now ships from cogni-workspace. The discriminator for any future namespace sweep is the
+colon: a colon-qualified dispatch token naming the retired plugin is rewritten, a `cogni-claims/`
+path never is.
 
 ## Cross-Plugin Integration
 

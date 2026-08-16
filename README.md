@@ -81,7 +81,7 @@ Each plugin implements an established framework (Corporate Visions, Double Diamo
 
 #### Workspace Foundation
 
-[cogni-workspace](cogni-workspace/README.md) manages the shared foundation — environment variables, MCP server installation, theme management, plugin discovery, and workspace health. Runs dependency checks, discovers installed plugins, and generates shared settings. Includes Obsidian vault integration for browsable knowledge management. 9 skills.
+[cogni-workspace](cogni-workspace/README.md) manages the shared foundation — environment variables, MCP server installation, theme management, plugin discovery, and workspace health. Runs dependency checks, discovers installed plugins, and generates shared settings. Includes Obsidian vault integration for browsable knowledge management, and owns the cross-plugin claim-verification gate (see Source Verification below). 13 skills and 2 agents.
 
 > "Initialize my insight-wave workspace and check plugin health"
 
@@ -89,7 +89,7 @@ Each plugin implements an established framework (Corporate Visions, Double Diamo
 
 #### Source Verification
 
-[cogni-workspace](cogni-workspace/README.md) verifies whether sourced claims match what their cited sources actually say — catching misquotations, unsupported conclusions, selective omissions, and stale data. Other plugins register claims during generation; cogni-workspace fetches each source and flags deviations for your review. 2 skills and 2 agents.
+A cogni-workspace capability (not a separate plugin): the `claims` skill verifies whether sourced claims match what their cited sources actually say — catching misquotations, unsupported conclusions, selective omissions, and stale data. Other plugins register claims during generation; cogni-workspace fetches each source and flags deviations for your review.
 
 > "Verify all claims in the trend report against their cited sources"
 

@@ -232,9 +232,8 @@ cogni-consult/
 | Plugin | Required | Purpose |
 |--------|----------|---------|
 | cogni-knowledge | Yes | Bound once at setup (`plugin_refs.knowledge_base`) — the research spine every deliverable's evidence routes through |
-| cogni-workspace | No | Cross-session engagement discovery (`discover-projects.sh` delegates to its helper); `pick-theme` themes the `consult-dashboard` HTML (falls back to a built-in theme) |
+| cogni-workspace | No | Cross-session engagement discovery (`discover-projects.sh` delegates to its helper); `pick-theme` themes the `consult-dashboard` HTML (falls back to a built-in theme); consult-design-thinking routes the claims-correction cascade, and `submit-assumption-claim.py` submits assumption claims to `cogni-workspace:claims` for verification |
 | cogni-visual / document-skills | No | Deliverable export (slides, documents) when a deliverable names an export route |
-| cogni-workspace | No | consult-design-thinking routes the claims-correction cascade; `submit-assumption-claim.py` submits assumption claims to `cogni-workspace:claims` for verification |
 | cogni-copywriting | No | consult-publish runs an optional `copywriter` polish pass before brief handoff |
 
 cogni-consult is standalone as an orchestrator — it structures the engagement, the WBS, and the design-thinking loops on its own. cogni-knowledge is the one required integration: without it, deliverable research has no compounding base.

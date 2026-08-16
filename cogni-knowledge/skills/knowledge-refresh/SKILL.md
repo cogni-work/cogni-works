@@ -36,7 +36,7 @@ Read `${CLAUDE_PLUGIN_ROOT}/references/delegation-contract.md` once per session 
 | `--resweep-page <slug>` | Resweep pass-through | Mapped to `extract_page_claims.py --page`. Sweep a single page only (mutually exclusive with `--resweep-stale-only`). |
 | `--resweep-stale-only` | Resweep pass-through | Mapped to `extract_page_claims.py --stale-only`. Sweep only pages older than the staleness threshold. |
 | `--resweep-days <N>` | Resweep pass-through | Mapped to `extract_page_claims.py --days` (only valid with `--resweep-stale-only`). |
-| `--resweep-dry-run` | Resweep pass-through | Runs only the extract + `resweep_planner.py --phase plan` steps — materialises the plan + manifests under `raw/claims-resweep-<date>/` but dispatches no `cogni-workspace` verification and runs no `--phase aggregate` (no report, no `last-resweep.json` write). |
+| `--resweep-dry-run` | Resweep pass-through | Runs only the extract + `resweep_planner.py --phase plan` steps — materialises the plan + manifests under `raw/claims-resweep-<date>/` but dispatches no `cogni-workspace:claims` verification and runs no `--phase aggregate` (no report, no `last-resweep.json` write). |
 
 The `--resweep-*` pass-throughs are explicitly prefixed so they namespace cleanly against the vendored scripts' own flags.
 
@@ -220,7 +220,7 @@ This is an **inline orchestration over the vendored `wiki-claims-resweep` script
 
    **Opt-in confirmation gate.** Before any live re-fetch, `AskUserQuestion` (single-select): "Re-verify `<data.stats.total_claims>` claims across `<data.stats.pages>` page(s) against their live source URLs? This dispatches `cogni-workspace:claims` (WebFetch + LLM-compare) and costs live-source fetch budget." Options: `proceed`, `abort`. On `abort`, exit 0 — the materialized plan stays on disk for inspection. This gate replaces the upstream skill's own `proceed | refine | abort` batch confirmation and confirms **separately** from push-mode's per-batch gate (opt-in is the whole point).
 
-   **`--resweep-dry-run` short-circuit.** When `--resweep-dry-run` was passed, stop here — the plan + manifests are materialized, but skip the confirmation gate, the `cogni-workspace` dispatch (step 3), and the aggregate (step 4). No report, no `last-resweep.json` write.
+   **`--resweep-dry-run` short-circuit.** When `--resweep-dry-run` was passed, stop here — the plan + manifests are materialized, but skip the confirmation gate, the `cogni-workspace:claims` dispatch (step 3), and the aggregate (step 4). No report, no `last-resweep.json` write.
 
 3. **Re-verify against live sources (`cogni-workspace:claims`).** This is the re-check the vendored scripts deliberately do not do. All claims are submitted into **one** shared claims workspace under the sweep workspace (`<WORKSPACE>`), then verified in a single pass — each claim is re-fetched (WebFetch) and LLM-compared against its live `source_url`:
    - **Submit, looping over `PLAN_JSON.data.plan[]`.** For each plan entry, read its `manifest_abs` (`<slug>-claims.md`, written by the plan phase) — each manifest row carries a claim's `statement` + `source_url` (+ `source_title`). Submit those claims into the shared workspace, tagging each with its page `slug` so step 4 can regroup the verdicts per page. Pass the claim `statement` as the claim text and the `source_url` as the source under verification; the `slug` is the grouping key. One workspace is shared across all pages (do **not** create a workspace per page):
@@ -282,7 +282,7 @@ For the push-mode UX contract (single batch confirmation, sequential, compositio
   - A lock-wrapped `<wiki_path>/.cogni-wiki/last-resweep.json`, written by `resweep_planner.py --phase aggregate`.
   - A claims workspace under the sweep dir with the live-source verification verdicts (`claims.json`).
 
-This skill never uses the `Write` tool directly — push-mode artefacts come from downstream phase dispatches, and resweep artefacts are written by the vendored scripts (`resweep_planner.py`) and `cogni-workspace`.
+This skill never uses the `Write` tool directly — push-mode artefacts come from downstream phase dispatches, and resweep artefacts are written by the vendored scripts (`resweep_planner.py`) and `cogni-workspace:claims`.
 
 ## References
 

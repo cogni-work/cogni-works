@@ -8,8 +8,8 @@ Phase 4 of `verify-trend-report` runs the cross-theme reviewer and, when needed,
 
 | Mode | Max iterations |
 |------|----------------|
-| Default (cogni-claims available) | 2 |
-| Structural-review-only (cogni-claims unavailable OR user skipped Phase 2) | 1 |
+| Default (`cogni-workspace:claims` available) | 2 |
+| Structural-review-only (`cogni-workspace:claims` unavailable OR user skipped Phase 2) | 1 |
 
 The cap applies to the full review-revise pair: iteration 1 = first review, optional first revise; iteration 2 = re-review of the revised report, optional second revise.
 

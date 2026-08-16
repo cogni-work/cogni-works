@@ -28,6 +28,10 @@ insight-wave/
 └── assets/                            Architecture diagram (Excalidraw + SVG)
 ```
 
+### Generated documentation artifacts
+
+The repo-wide documentation-drift audit belongs at `docs/audit-report.md` — that is the single home for audit output, and it is replaced wholesale by a fresh `cogni-docs` audit run rather than hand-edited. A stale header there means the audit is due to be re-run, not patched by hand. `.claude-plugin/` holds the marketplace manifest and nothing else. An older drift report once sat at `.claude-plugin/doc-audit-report.md` and was removed rather than regenerated: nothing in this repo referenced or wrote that path, `docs/audit-report.md` supersedes it, and its plugin roster predated the current marketplace by several retirements. Do not add a report back under `.claude-plugin/`.
+
 ## Cross-Plugin Conventions
 
 ### Script Output Format

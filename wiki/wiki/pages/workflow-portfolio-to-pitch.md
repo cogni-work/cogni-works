@@ -44,7 +44,7 @@ Pre-requisite: [[plugin-cogni-portfolio]] has populated the relevant Feature × 
 - **Why You** — differentiate against the buyer's likely alternatives (pulled from cogni-portfolio's competitive analysis)
 - **Why Pay** — justify investment with quantified business case (pulled from cogni-portfolio's solution pricing tiers)
 
-Output: `sales-presentation.md` (slide narrative) and `sales-proposal.md` (long-form). Both pass through [[plugin-cogni-copywriting]] for Power Positions polish before final rendering.
+Output: `sales-presentation.md` (slide narrative) and `sales-proposal.md` (long-form). Both pass through the `copywriter` skill of [[plugin-cogni-workspace]] for Power Positions polish before final rendering.
 
 Final hop through [[plugin-cogni-visual]] turns the slide narrative into a brief and renders to HTML slides or PPTX. See [[concept-brief-based-rendering]].
 

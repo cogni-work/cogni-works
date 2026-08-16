@@ -205,8 +205,26 @@ Rejected on three grounds:
    the counts still match after the content is gone.
 
 The script's own header states the root tree is the editing surface, so the deletion is
-intentional in principle. What is missing is any refusal when the bundle holds something the
-sync is about to destroy. Issue #1403 carries that.
+intentional in principle. What was missing was any refusal when the bundle holds something the
+sync is about to destroy.
+
+The script now carries that refusal. It classifies the bundled tree *before* writing any bytes
+and exits non-zero, naming every path it would have destroyed, in two classes: a bundled file
+with no source counterpart (ground 1), and a bundled file carrying non-blank lines the source
+copy lacks (ground 2 — the class the count-based check of ground 3 structurally cannot see,
+since an overwrite leaves the file count unchanged). Taking this rejected alternative therefore
+now requires passing `--force` explicitly, which makes converting a held decision into an
+executed one a deliberate act rather than an accident.
+
+Ground 3 still describes the post-sync check accurately. That check is left in place, and it is
+the new pre-sync gate rather than any change to it that supplies the defence.
+
+On the tree as recorded here a bare sync refuses on 27 paths: the 7 of Decision 4, the 4
+group-B pages, and — because the root re-ingest reworded lines rather than only appending — the
+13 group-A pages together with `wiki/index.md`, `wiki/log.md` and `.cogni-wiki/config.json`. The
+gate is deliberately blind to Decision 3's ruling that root wins for group A: a script cannot
+read this document, so it refuses and defers to the operator. Executing #1401 and #1402 is what
+returns a bare sync to silence.
 
 ## Rejected alternative — regenerate `entries_count` with the wiki linter
 
@@ -228,7 +246,7 @@ Kept as a permanent inventory so the set stays auditable rather than being redis
 | `wiki/index.md` needs a merge, not a copy | recorded, not executed | #1401 |
 | 7 bundled-only pages held | awaiting a maintainer ruling | #1402 |
 | `ecosystem-command-reference` names a retired command surface | held with the page above | #1402 |
-| Sync script destroys bundle-only content | open defect | #1403 |
+| Sync script destroys bundle-only content | closed — refuses by default; `--force` is the opt-in | #1403 |
 | This record and its guard are unregistered in the plugin guide | open | #1404 |
 
 ## Deliberately left standing
@@ -246,3 +264,10 @@ that every wiki reference in a tree resolves to a page in that same tree; and th
 present in only one tree is named in this document. The last of those is what makes adding or
 promoting a page without recording a decision here fail rather than pass silently. It does not
 assert the two trees are equal — they are not, by Decisions 1, 4 and 5.
+
+`tests/test_release_bundle_wiki.sh` guards the other direction: that
+`scripts/release-bundle-wiki.sh` refuses, by default, to destroy what this document holds. It
+covers both refused classes, the `--force` opt-in, and — as the case that matters most for the
+gate staying usable — that a bundle which loses nothing still syncs without `--force`. It runs
+entirely against `mktemp` fixtures, never these two trees, because a bare sync against them is
+the data loss the gate exists to prevent.

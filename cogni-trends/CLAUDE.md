@@ -93,7 +93,7 @@ trend-scout → value-modeler → trend-research → (trend-synthesis | trend-bo
    (scout)      (model)         (enrich)         (compose)         (catalog)            (verify+revise)        (accumulate)
 ```
 
-`trend-research` enriches every candidate with web-sourced quantitative evidence and emits a single manifest (`.metadata/trend-research-output.json`) that the two downstream synthesis skills gate on. `trend-synthesis` produces the curated TIPS investment-themes report (`tips-trend-report.md`); `trend-booklet` produces the comprehensive catalog of all candidates (`tips-trend-booklet.md`). The two are independent and can run in either order. `verify-trend-report` is the extended quality pipeline: claim verification via `cogni-workspace:claims`, cross-theme structural review, revisor loop, and a final menu surfacing executive polish (`cogni-copywriting:copywriter`) and visual enrichment (`cogni-visual:enrich-report`). `trends-resume` can re-enter at any stage. `trends-dashboard` visualizes the full lifecycle.
+`trend-research` enriches every candidate with web-sourced quantitative evidence and emits a single manifest (`.metadata/trend-research-output.json`) that the two downstream synthesis skills gate on. `trend-synthesis` produces the curated TIPS investment-themes report (`tips-trend-report.md`); `trend-booklet` produces the comprehensive catalog of all candidates (`tips-trend-booklet.md`). The two are independent and can run in either order. `verify-trend-report` is the extended quality pipeline: claim verification via `cogni-workspace:claims`, cross-theme structural review, revisor loop, and a final menu surfacing executive polish (`cogni-workspace:copywriter`) and visual enrichment (`cogni-visual:enrich-report`). `trends-resume` can re-enter at any stage. `trends-dashboard` visualizes the full lifecycle.
 
 ## Data Model
 
@@ -120,7 +120,7 @@ Each project lives in a directory with:
 - **Ansoff Weak Signals** (1979) — 5-level signal intensity scale mapped to action horizons
 - **Rogers Diffusion of Innovation** (1962) — Adoption stage classification with chasm threshold at 16%
 - **CRAAP Test** (Blakeslee, 2004) — Source quality assessment in signal extraction and curation
-- **Smarter Service** (theme-aware sibling of Trend Panorama) — Macro skeleton: Forces -> Impact -> Horizons -> Foundations as 4 H2 sections, with investment themes nested as anchored H3 cases. Closes on a Foundations-anchored "Capability Imperative" synthesis. The canonical TIPS report skeleton produced by `trend-synthesis`. The arc is registered upstream in `cogni-narrative/skills/narrative/references/story-arc/smarter-service/`.
+- **Smarter Service** (theme-aware sibling of Trend Panorama) — Macro skeleton: Forces -> Impact -> Horizons -> Foundations as 4 H2 sections, with investment themes nested as anchored H3 cases. Closes on a Foundations-anchored "Capability Imperative" synthesis. The canonical TIPS report skeleton produced by `trend-synthesis`. The arc is registered upstream in `cogni-workspace/skills/narrative/references/story-arc/smarter-service/`.
 
 ### LLM Research Techniques
 

@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-# Guard: cogni-visual's arc taxonomy must stay in sync with cogni-narrative's arcs.
+# Guard: cogni-visual's arc taxonomy must stay in sync with the narrative skill's arcs.
 #
 # WHAT THIS PINS
 #   The `arc_id` set in the mapping table of cogni-visual/libraries/arc-taxonomy.md
 #   must equal the set of arc directories under
-#   cogni-narrative/skills/narrative/references/story-arc/.
+#   cogni-workspace/skills/narrative/references/story-arc/.
 #
 # WHY A TEST AND NOT MORE PROSE
 #   Divergence degrades SILENTLY. An `arc_id` absent from the mapping table hits the
@@ -22,7 +22,7 @@
 #   precisely the missing-row direction, which (b) downgrades to a warning and (c) never
 #   fails on at all. Neither weaker option can satisfy it.
 #
-#   The cost is real and accepted: this couples two plugins' CI. A cogni-narrative change
+#   The cost is real and accepted: this couples two plugins' CI. A cogni-workspace change
 #   that adds a twelfth arc will turn *cogni-visual's* suite red until the taxonomy mirror is
 #   updated — a failure attributed to a plugin the author may not have touched. That is the
 #   intended trade: adding an arc without a visual mapping is an incomplete change, and a
@@ -106,7 +106,7 @@ REPO_ROOT="$(cd "$PLUGIN_DIR/.." && pwd)"
 # same file at a mutant under $TMPROOT. The override exists for the negative case, not as a
 # configuration surface — a normal run, and every CI run, resolves both defaults.
 TAXONOMY="${ARC_TAXONOMY_PATH:-$PLUGIN_DIR/libraries/arc-taxonomy.md}"
-ARC_DIR="${ARC_STORY_ARC_DIR:-$REPO_ROOT/cogni-narrative/skills/narrative/references/story-arc}"
+ARC_DIR="${ARC_STORY_ARC_DIR:-$REPO_ROOT/cogni-workspace/skills/narrative/references/story-arc}"
 
 # The five valid visual arc types. arc-taxonomy.md does not declare this set itself — it is
 # stated by the consuming surfaces (cogni-visual/skills/story-to-slides, story-to-web,

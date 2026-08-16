@@ -4,7 +4,7 @@ This document is an **authoring-time** record, not a runtime feature. It
 captures the closed-loop review process used to harden the storytelling
 guidance baked into `trend-synthesis/SKILL.md`. The methodology mirrors
 `skill-creator`'s iterate-against-evals pattern, with a domain-specific
-reviewer in the grader role: `cogni-narrative:narrative-reviewer`, treated
+reviewer in the grader role: `cogni-workspace:narrative-reviewer`, treated
 as a storytelling expert that scores prose against narrative quality gates
 (structural, critical, evidence, structure, language) and returns the top
 three improvements.
@@ -125,7 +125,7 @@ The same methodology can be re-applied whenever the storytelling guidance
 drifts (new audience, new arc, new evidence pattern):
 
 1. Snapshot the current SKILL.md and a representative sample report.
-2. Run `cogni-narrative:narrative-reviewer` on the report (or, in a
+2. Run `cogni-workspace:narrative-reviewer` on the report (or, in a
    code-only review, on the SKILL.md itself treated as a meta-narrative
    about how the report should land). Persist the scorecard.
 3. Apply the top three improvements to the *writer/composer prompts* and

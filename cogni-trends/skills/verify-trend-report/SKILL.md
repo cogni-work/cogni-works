@@ -26,7 +26,7 @@ Quality gate for a generated trend report. Verifies every quantitative claim aga
 2. Lets the user steer corrections (proceed / fix specific deviations / drop claims / accept)
 3. Runs `trend-report-reviewer` for cross-theme structural quality
 4. Dispatches `trend-report-revisor` to apply corrections, remove unverifiable claims, and find replacement evidence
-5. Surfaces downstream options: executive polish (`cogni-copywriting:copywriter`) and visual enrichment (`cogni-visual:enrich-report`)
+5. Surfaces downstream options: executive polish (`cogni-workspace:copywriter`) and visual enrichment (`cogni-visual:enrich-report`)
 
 ## Prerequisites
 
@@ -358,7 +358,7 @@ AskUserQuestion:
   header: "Next step"
   options:
     - label: "Polish prose for executive tone"
-      description: "Run cogni-copywriting:copywriter (preserves citations and structure)"
+      description: "Run cogni-workspace:copywriter (preserves citations and structure)"
     - label: "Generate themed HTML with charts"
       description: "Run cogni-visual:enrich-report (Chart.js + concept diagrams)"
     - label: "Done — return to trends-resume"
@@ -366,7 +366,7 @@ AskUserQuestion:
 ```
 
 Handle the choice:
-- **Polish** → invoke `Skill(cogni-copywriting:copywriter, args="FILE_PATH={PROJECT_PATH}/tips-trend-report.md SCOPE=tone STAKEHOLDERS=executive REVIEW_MODE=automated")`. Validate citation count after polish; revert from backup on failure (rules in [references/downstream-options.md](references/downstream-options.md)).
+- **Polish** → invoke `Skill(cogni-workspace:copywriter, args="FILE_PATH={PROJECT_PATH}/tips-trend-report.md SCOPE=tone STAKEHOLDERS=executive REVIEW_MODE=automated")`. Validate citation count after polish; revert from backup on failure (rules in [references/downstream-options.md](references/downstream-options.md)).
 - **Visualize** → invoke `Skill(cogni-visual:enrich-report, args="--source {PROJECT_PATH}/tips-trend-report.md")`.
 - **Done** → exit cleanly. Recommend the user run `/trends-resume` to see the full option set (slides, web, storyboard, catalog, dashboard).
 
@@ -398,7 +398,7 @@ The user can re-enter this skill later to pick a different path; downstream skil
 
 **Plugin dependencies:**
 - `cogni-workspace:claims` (recommended) — claim verification
-- `cogni-copywriting:copywriter` (optional) — Phase 5 menu option
+- `cogni-workspace:copywriter` (optional) — Phase 5 menu option
 - `cogni-visual:enrich-report` (optional) — Phase 5 menu option
 
 **Downstream (via `/trends-resume`):** `cogni-visual:story-to-slides`, `cogni-visual:story-to-web`, `cogni-visual:story-to-storyboard`, `trends-catalog import`, `trends-dashboard`

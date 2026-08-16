@@ -76,8 +76,8 @@ You receive these from trend-report Phase 2 Step 2.2:
 - **LABELS** — JSON object with relevant i18n labels:
   - `MACRO_FORCES`, `MACRO_IMPACT`, `MACRO_HORIZONS`, `MACRO_FOUNDATIONS` — the 4 macro labels (used to render secondary callouts pointing to other macro sections)
   - `SECONDARY_CALLOUT_PATTERN` — the localized "→ See also..." pattern
-- **NARRATIVE_ARC_PATH** — Absolute path to `cogni-narrative/.../story-arc/smarter-service/arc-definition.md`. Required.
-- **DIMENSION_PATTERN_PATH** — Absolute path to the element pattern file inside the smarter-service arc (e.g., `cogni-narrative/.../story-arc/smarter-service/forces-patterns.md` when DIMENSION = `externe-effekte`). Required.
+- **NARRATIVE_ARC_PATH** — Absolute path to `cogni-workspace/.../story-arc/smarter-service/arc-definition.md`. Required.
+- **DIMENSION_PATTERN_PATH** — Absolute path to the element pattern file inside the smarter-service arc (e.g., `cogni-workspace/.../story-arc/smarter-service/forces-patterns.md` when DIMENSION = `externe-effekte`). Required.
 
 ## Workflow
 

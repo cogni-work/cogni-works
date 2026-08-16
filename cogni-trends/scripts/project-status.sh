@@ -860,7 +860,7 @@ case "$PHASE" in
       add_action "cogni-trends:trend-booklet" "Build the comprehensive TIPS catalog of all candidates as a companion to the report"
     fi
     if [ "$HAS_COPYWRITER" = "false" ]; then
-      add_action "cogni-copywriting:copywrite" "Polish report prose for executive readability"
+      add_action "cogni-workspace:copywrite" "Polish report prose for executive readability"
     fi
     if [ "$HAS_ENRICHED_REPORT" = "false" ]; then
       add_action "cogni-visual:enrich-report" "Generate themed HTML with charts and diagrams"

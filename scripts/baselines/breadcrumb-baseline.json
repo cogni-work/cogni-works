@@ -2,22 +2,22 @@
   "_comment": "Breadcrumb-guard ratchet baseline. Each entry is a breadcrumb occurrence present when the baseline was captured and therefore allowed to pass. Regenerate with `python3 scripts/check-breadcrumbs.py --update-baseline`. The fix for a NEW breadcrumb is to remove it and state the rationale semantically — not to add it here.",
   "entries": [
     {
-      "file": "cogni-copywriting/skills/copywriter/SKILL.md",
+      "file": "cogni-workspace/skills/copywriter/SKILL.md",
       "match": "#255",
       "line_sha": "34a60df590c11837302373a0b6779a5de1330dbc"
     },
     {
-      "file": "cogni-copywriting/skills/copywriter/SKILL.md",
+      "file": "cogni-workspace/skills/copywriter/SKILL.md",
       "match": "#255",
       "line_sha": "4ec315b928e32015549abf8dd8ea49b1824b1b76"
     },
     {
-      "file": "cogni-copywriting/skills/copywriter/SKILL.md",
+      "file": "cogni-workspace/skills/copywriter/SKILL.md",
       "match": "#255",
       "line_sha": "86359af92d8d254f9de23b483236832631b8da0f"
     },
     {
-      "file": "cogni-copywriting/skills/copywriter/SKILL.md",
+      "file": "cogni-workspace/skills/copywriter/SKILL.md",
       "match": "Slice 3",
       "line_sha": "34a60df590c11837302373a0b6779a5de1330dbc"
     },

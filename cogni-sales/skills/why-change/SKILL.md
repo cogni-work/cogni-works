@@ -22,8 +22,8 @@ Both modes produce two deliverables: `sales-presentation.md` (narrative arc) and
 
 ## Arc Methodology
 
-This skill applies the Corporate Visions story arc defined in cogni-narrative:
-- `cogni-narrative/skills/narrative/references/story-arc/corporate-visions/arc-definition.md`
+This skill applies the Corporate Visions story arc defined by the cogni-workspace `narrative` skill:
+- `cogni-workspace/skills/narrative/references/story-arc/corporate-visions/arc-definition.md`
 
 The arc has four elements, each with detailed patterns the researcher agent reads and applies:
 1. **Why Change** — Disrupt status quo with unconsidered needs (problem-solution-benefit structure)

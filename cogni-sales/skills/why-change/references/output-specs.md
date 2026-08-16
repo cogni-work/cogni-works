@@ -195,7 +195,7 @@ portfolio_path: "{portfolio_path}"
 
 ### Quality Criteria (both modes)
 
-Apply the quality gates from `cogni-narrative/skills/narrative/references/story-arc/corporate-visions/arc-definition.md`:
+Apply the quality gates from `cogni-workspace/skills/narrative/references/story-arc/corporate-visions/arc-definition.md`:
 - All 4 elements present (Why Change, Why Now, Why You, Why Pay)
 - PSB structure in Why Change
 - 2-3 forcing functions in Why Now with specific timelines

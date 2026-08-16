@@ -12,7 +12,7 @@ AskUserQuestion:
   header: "Next step"
   options:
     - label: "Polish prose for executive tone"
-      description: "Run cogni-copywriting:copywriter (preserves citations and structure)"
+      description: "Run cogni-workspace:copywriter (preserves citations and structure)"
     - label: "Generate themed HTML with charts"
       description: "Run cogni-visual:enrich-report (Chart.js + concept diagrams)"
     - label: "Done — return to trends-resume"
@@ -24,7 +24,7 @@ If `cogni-copywriting` is not installed, omit the polish option silently. If `co
 ## Option 1 — Polish
 
 ```
-Skill(cogni-copywriting:copywriter,
+Skill(cogni-workspace:copywriter,
   args: "FILE_PATH={PROJECT_PATH}/tips-trend-report.md SCOPE=tone STAKEHOLDERS=executive REVIEW_MODE=automated")
 ```
 

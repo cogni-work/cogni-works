@@ -8,7 +8,7 @@ updated: 2026-04-17
 sources:
   - https://github.com/cogni-work/insight-wave/blob/main/docs/workflows/content-pipeline.md
 status: stable
-related: [plugin-cogni-marketing, plugin-cogni-narrative, plugin-cogni-copywriting, plugin-cogni-visual]
+related: [plugin-cogni-marketing, plugin-cogni-workspace, plugin-cogni-visual]
 ---
 
 The end-to-end content production pipeline — from strategy to channel-ready deliverables.
@@ -35,11 +35,11 @@ A multi-channel marketing content package — polished articles, battle cards, e
 
 ## How it works
 
-[[plugin-cogni-marketing]] generates content per the market × GTM-path × content-type matrix. Long-form pieces (whitepapers, thought-leadership articles, keynote outlines) flow into [[plugin-cogni-narrative]] for arc shaping — the `arc_id` set here drives downstream polish and visual treatment.
+[[plugin-cogni-marketing]] generates content per the market × GTM-path × content-type matrix. Long-form pieces (whitepapers, thought-leadership articles, keynote outlines) flow into the `narrative` skill of [[plugin-cogni-workspace]] for arc shaping — the `arc_id` set here drives downstream polish and visual treatment.
 
-Short-form content (LinkedIn posts, carousels, battle cards) skips narrative and goes straight to [[plugin-cogni-copywriting]] for polish.
+Short-form content (LinkedIn posts, carousels, battle cards) skips narrative and goes straight to the `copywriter` skill of [[plugin-cogni-workspace]] for polish.
 
-[[plugin-cogni-copywriting]] applies messaging frameworks (BLUF, Pyramid, SCQA, STAR, PSB, FAB, Inverted Pyramid) per content type. When `arc_id` is present, polish preserves arc structure (the Why Change → Why Now → Why You → Why Pay sequence in a Corporate Visions narrative stays intact).
+The `copywriter` skill applies messaging frameworks (BLUF, Pyramid, SCQA, STAR, PSB, FAB, Inverted Pyramid) per content type. When `arc_id` is present, polish preserves arc structure (the Why Change → Why Now → Why You → Why Pay sequence in a Corporate Visions narrative stays intact).
 
 Optional final hop: [[plugin-cogni-visual]] turns polished long-form into slide decks (`story-to-slides`) or web narratives (`story-to-web`) for distribution channels that need visual treatment. See [[concept-brief-based-rendering]].
 

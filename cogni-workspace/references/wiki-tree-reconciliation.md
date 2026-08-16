@@ -110,6 +110,30 @@ enrichment asymmetry stopped mattering, not evidence the ledger was wrong. `conc
 and `concept-claims-propagation.md` survive in both trees and stay live Group A entries — they are
 claim *concepts*, not namespaced plugin pages, so C1 never covered them.
 
+**Resolved by deletion — 14 further entries per tree.** The same mechanism fired again when
+cogni-narrative and cogni-copywriting were absorbed: `plugin-cogni-narrative.md`,
+`plugin-cogni-copywriting.md`, the three `skill-cogni-narrative-*` and four
+`skill-cogni-copywriting-*` pages, and the three `agent-cogni-narrative-*` and two
+`agent-cogni-copywriting-*` pages went off-roster the moment both `plugins[]` entries were
+removed, and were deleted from **both** trees in that same commit.
+
+Two consequences worth stating, because neither is obvious from the page list and both turned a
+suite red before they were handled:
+
+- **Both trees' `entries_count` had to move with the page count** — 165 → 151 for the root tree and
+  171 → 157 for the bundled one. `test-wiki-tree-parity.sh` cases W1 and W2 count live pages per
+  tree, so a stale count reads as drift rather than as a deletion.
+- **Six prose references across four pages pointed at the deleted plugin pages.**
+  `ecosystem-overview.md`, `workflow-content-pipeline.md` and `workflow-portfolio-to-pitch.md` in
+  both trees, plus `workflow-research-to-report.md` in the bundled tree only, linked
+  `[[plugin-cogni-narrative]]` / `[[plugin-cogni-copywriting]]` in pipeline prose and in
+  `related:` front-matter. They were rewritten to name the adopting plugin and the relocated skill
+  rather than repointed link-for-link — "feeds cogni-workspace which feeds cogni-workspace" is not
+  a sentence — and each tree's `index.md` lost its two roster bullets.
+
+The dated ingest lines in each tree's `log.md` keep the retired names. They record what was ingested
+on the date they name, which is the same treatment the cogni-claims re-ingest lines already had.
+
 ### Group B — 4 files, bundled copy wins
 
 | Page | Root lines | Bundled lines | Sections only in the bundle |

@@ -52,56 +52,6 @@
       ]
     },
     {
-      "name": "cogni-narrative",
-      "source": "./cogni-narrative",
-      "version": "0.11.9",
-      "maturity": "preview",
-      "description": "Story arc engine for insight-wave. Transforms structured research and portfolio output into executive narratives via 11 arc frameworks (Corporate Visions, JTBD Portfolio, Strategic Foresight, Trend Panorama, Smarter Service + 6) and 8 narrative techniques. Includes review scoring (0–100, A–F) and derivative formats (executive brief, talking points, one-pager). Bilingual EN/DE.",
-      "keywords": [
-        "narrative",
-        "story-arc",
-        "synthesis",
-        "executive-writing",
-        "corporate-visions",
-        "strategic-foresight",
-        "trend-panorama",
-        "smarter-service",
-        "TIPS",
-        "review",
-        "adapt",
-        "citation-bridge",
-        "agent"
-      ]
-    },
-    {
-      "name": "cogni-copywriting",
-      "source": "./cogni-copywriting",
-      "version": "0.6.6",
-      "maturity": "preview",
-      "description": "Document polishing with messaging frameworks (BLUF, Pyramid, SCQA, STAR, PSB, FAB, Inverted Pyramid), parallel-persona stakeholder review, readability optimization, sales Power Positions, JSON field polishing (copy-json), arc audit against cogni-narrative, and translate-then-polish across DE/EN/FR/IT/PL/NL/ES via an EN/DE pivot. Arc-mode translation across all seven languages.",
-      "keywords": [
-        "copywriting",
-        "document-polishing",
-        "executive-writing",
-        "mckinsey-pyramid",
-        "readability",
-        "content-editing",
-        "stakeholder-review",
-        "parallel-persona",
-        "messaging-frameworks",
-        "sales-copy",
-        "power-positions",
-        "bilingual",
-        "translation",
-        "en-de",
-        "multilingual",
-        "fr-it-pl-nl-es",
-        "arc-audit",
-        "copy-json",
-        "agent"
-      ]
-    },
-    {
       "name": "cogni-workspace",
       "source": "./cogni-workspace",
       "version": "0.6.65",

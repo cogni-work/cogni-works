@@ -39,9 +39,7 @@ This is the content catalog for **insight-wave**. Every wiki page is listed here
 
 ### Plugins
 
-- [[plugin-cogni-copywriting]] — Professional copywriting toolkit providing document polishing with messaging frameworks (BLUF, Pyramid, SCQA, STAR, PSB, FAB, Inverted Pyramid), stakeholder review via parallel persona Q&A, readabi....
 - [[plugin-cogni-marketing]] — B2B marketing content engine that bridges cogni-trends strategic themes (GTM paths) and cogni-portfolio propositions into channel-ready content.
-- [[plugin-cogni-narrative]] — Story arc engine for the insight-wave ecosystem.
 - [[plugin-cogni-portfolio]] — cogni-portfolio gives B2B companies a structured way to build market-specific messaging using the IS/DOES/MEANS (FAB) framework applied at the Feature × Market level.
 - [[plugin-cogni-sales]] — B2B sales pitch generation using Corporate Visions Why Change methodology.
 - [[plugin-cogni-trends]] — Strategic trend scouting and reporting pipeline.

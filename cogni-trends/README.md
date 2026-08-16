@@ -193,7 +193,7 @@ cogni-trends combines established strategic foresight frameworks with state-of-t
 | **STORM** | Shao et al., Stanford (2024); [GPT-Researcher](https://github.com/assafelovic/gpt-researcher) | Recursive tree exploration in trend-deep-researcher agent: decompose trend into TIPS sub-aspects, extract learnings, generate follow-up questions, pursue recursively. Single-agent execution for cost control (vs GPT-Researcher's exponential spawning) |
 | **GPT-Researcher CURATE_SOURCES** | Assaf Elovic, [GPT-Researcher](https://github.com/assafelovic/gpt-researcher) (25K+ stars) | Signal curation with 5-dimension composite scoring (relevance, authority, recency, specificity, uniqueness) and tier ranking (primary/secondary/supporting). Adapted from embedding-based to LLM-based assessment |
 | **4strat STEEP Multi-Agent** | 4strat Platform; referenced in STEEP/PESTLE automation literature | One specialized expert persona per Trendradar dimension (Regulatory Analyst, CSO, CX Strategist, CTO) shapes search vocabulary, question patterns, and authority preferences. Cross-dimension synthesis in the trend-generator |
-| **QAG** (Question-Answer-Generation) | Manakul et al. (2023) | Claims verification via cogni-workspace: extract claims from report, formulate verification questions, check against cited sources. Detects misquotation, unsupported conclusions, selective omission |
+| **QAG** (Question-Answer-Generation) | Manakul et al. (2023) | Claims verification via `cogni-workspace:claims` — extract claims from report, formulate verification questions, check against cited sources. Detects misquotation, unsupported conclusions, selective omission |
 
 ### Scoring Model
 
@@ -251,12 +251,11 @@ cogni-trends/
 
 | Plugin | Required | Purpose |
 |--------|----------|---------|
-| cogni-workspace | No | Verify citations in trend reports against source URLs (`cogni-workspace:claims`) |
 | cogni-copywriting | No | Executive polish on trend reports with tone scoping |
 | cogni-narrative | No | Arc-driven transformation of trend report output; the smarter-service arc drives the canonical report's theme-case writer and macro composer |
 | cogni-portfolio | No | Bidirectional integration via trends-bridge (portfolio context export, opportunity import) |
 | cogni-visual | No | Themed HTML report via enrich-report; Big Block diagrams from value-modeler solution networks |
-| cogni-workspace | No | Theme selection for trends-dashboard via pick-theme skill |
+| cogni-workspace | No | Theme selection for trends-dashboard via pick-theme skill; citation verification against source URLs via `cogni-workspace:claims` |
 
 cogni-trends is standalone for trend scouting and reporting. Cross-plugin integrations add verification, narrative polish, portfolio mapping, and visual output.
 

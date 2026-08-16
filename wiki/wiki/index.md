@@ -6,7 +6,7 @@ This is the content catalog for **insight-wave**. Every wiki page is listed here
 
 ### Ecosystem
 
-- [[ecosystem-overview]] — insight-wave is a 12-plugin monorepo for consulting, sales, and marketing on Claude Code, Apache-2.0.
+- [[ecosystem-overview]] — insight-wave is an 11-plugin monorepo for consulting, sales, and marketing on Claude Code, Apache-2.0.
 
 ### Architecture
 

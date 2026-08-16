@@ -258,7 +258,7 @@ Kept as a permanent inventory so the set stays auditable rather than being redis
 | 7 bundled-only pages held | awaiting a maintainer ruling | #1402 |
 | `ecosystem-command-reference` names a retired command surface | held with the page above | #1402 |
 | Sync script destroys bundle-only content | closed — refuses by default; `--force` is the opt-in | #1403 |
-| This record and its guard are unregistered in the plugin guide | open | #1404 |
+| This record and its guard are unregistered in the plugin guide | closed — `cogni-workspace/CLAUDE.md` names both under `## Wiki Trees` | #1404 |
 
 ## Deliberately left standing
 

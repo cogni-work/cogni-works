@@ -8,7 +8,7 @@ For the canonical IS/DOES/MEANS positioning of this plugin, see the [cogni-visua
 
 ## Overview
 
-cogni-visual sits at the end of the insight-wave delivery pipeline, after content has been composed (cogni-narrative) and polished (cogni-copywriting). It takes three kinds of inputs — narratives in prose, structured data from cogni-trends, and completed markdown reports — and produces seven kinds of visual output through a two-stage process: brief generation followed by rendering, plus a report enrichment pipeline.
+cogni-visual sits at the end of the insight-wave delivery pipeline, after content has been composed (the `narrative` skill) and polished (the `copywriter` skill). It takes three kinds of inputs — narratives in prose, structured data from cogni-trends, and completed markdown reports — and produces seven kinds of visual output through a two-stage process: brief generation followed by rendering, plus a report enrichment pipeline.
 
 **Stage 1 (brief):** A skill reads the source material, models the audience, selects the format, maps content to layout units, and writes a structured brief as YAML frontmatter + Markdown body. The brief describes *what* to visualize — objects, messages, flow — without prescribing drawing operations.
 
@@ -47,7 +47,7 @@ Statistics are reframed for visual impact rather than presented as raw numbers. 
 ### Pipeline Position
 
 ```
-cogni-narrative  →  cogni-copywriting  →  cogni-visual
+the `narrative` skill  →  the `copywriter` skill  →  cogni-visual
 (compose)            (polish)              (visualize)
 ```
 
@@ -71,7 +71,7 @@ What happens:
 
 **What to have ready:**
 
-- A narrative document (from cogni-narrative or any well-structured prose)
+- A narrative document (from the `narrative` skill or any well-structured prose)
 - An active cogni-workspace theme (for brand-driven output)
 - document-skills plugin (for PPTX rendering)
 
@@ -139,8 +139,8 @@ This skill is the single output skill for all report formats across the ecosyste
 
 | Plugin | What is consumed |
 |--------|-----------------|
-| cogni-narrative | Polished narratives with `arc_id` frontmatter as source for all four brief-generating skills |
-| cogni-copywriting | Executive-polished prose (narratives should be copywriting-complete before visual transformation) |
+| the `narrative` skill | Polished narratives with `arc_id` frontmatter as source for all four brief-generating skills |
+| the `copywriter` skill | Executive-polished prose (narratives should be copywriting-complete before visual transformation) |
 | cogni-trends | Trend reports for enrich-report |
 | cogni-knowledge | Completed syntheses and research reports for enrich-report (themed HTML with visualizations) |
 | cogni-workspace | Theme files (`themes/{id}/theme.md`) for brand-driven colors and fonts in all renderers |
@@ -160,10 +160,10 @@ This skill is the single output skill for all report formats across the ecosyste
 
 ### Workflow 1: Trend Report to Executive Slides
 
-Use this after a cogni-trends pipeline is complete and the report has been polished by cogni-copywriting.
+Use this after a cogni-trends pipeline is complete and the report has been polished by the `copywriter` skill.
 
-1. cogni-narrative `/narrative` — transform `tips-trend-report.md` into an arc-driven narrative
-2. cogni-copywriting `/copywrite` — executive polish on the narrative
+1. the `narrative` skill `/narrative` — transform `tips-trend-report.md` into an arc-driven narrative
+2. the `copywriter` skill `/copywrite` — executive polish on the narrative
 3. cogni-visual `/story-to-slides` — generate presentation brief from the narrative
 4. Review and edit the brief (assertion headlines, number plays, slide count)
 5. `document-skills:pptx` renders the PPTX file

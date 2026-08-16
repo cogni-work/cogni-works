@@ -10,7 +10,7 @@ Mirrors the root `CLAUDE.md` § "Agent Model Strategy" (the authority). Keep the
 |------|-------|-----------|
 | Orchestration | sonnet (skill context) | Phase dispatch, sub-question generation |
 | Research | sonnet | Web research, section researchers, deep researchers |
-| Heavy synthesis | opus | Demanding rewrites (cogni-copywriting), 60-candidate scoring (cogni-trends) |
+| Heavy synthesis | opus | Demanding rewrites (the `copywriter` skill), 60-candidate scoring (cogni-trends) |
 | Quality assessment | haiku | High-volume rubric evaluation (3-5 dimensions per entity) |
 | Content generation | sonnet | Narrative writers, report writers, content writers |
 

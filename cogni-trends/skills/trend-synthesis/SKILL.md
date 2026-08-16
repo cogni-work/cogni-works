@@ -362,8 +362,8 @@ Task:
     EXAMPLE_REFERENCES: {JSON object keyed by st_id}
     THEME_CASE_TARGET_WORDS: {THEME_CASE_TARGET_WORDS from Phase 1}
     LABELS: {JSON object with relevant i18n labels}
-    NARRATIVE_ARC_PATH: {path to cogni-narrative smarter-service arc-definition.md, optional}
-    NARRATIVE_TECHNIQUES_PATH: {path to cogni-narrative techniques-overview.md, optional}
+    NARRATIVE_ARC_PATH: {path to the `narrative` skill smarter-service arc-definition.md, optional}
+    NARRATIVE_TECHNIQUES_PATH: {path to the `narrative` skill techniques-overview.md, optional}
     STORY_PROTAGONIST: {role + decision context derived from EXECUTIVE_SPONSOR_TYPE and the dominant evidence pattern; e.g. "the head of after-sales watching warranty cost ratios drift" — never abstract like "the CxO"}
     STORY_OBSTACLE: {a specific named market force drawn from the enriched-trend evidence — never abstract like "competition" or "disruption"}
     STORY_MOMENT: {one sensory or behavioural detail anchored in a specific evidence_ref from EXAMPLE_REFERENCES; used once in the case to ground the abstract capability in lived reality. MUST cite the evidence_ref it derives from — never invent}
@@ -537,7 +537,7 @@ catalog, dashboard).
 
 **Pipeline:** `trend-scout → value-modeler → trend-research → trend-synthesis → verify-trend-report`
 
-**Optional cross-plugin:** `cogni-narrative` smarter-service arc — theme-case writer + dimension composer guidance (graceful fallback if absent). The Storytelling Spine in this SKILL.md is self-contained; the cogni-narrative arc-definition is supplementary, not required.
+**Optional cross-plugin:** `the `narrative` skill` smarter-service arc — theme-case writer + dimension composer guidance (graceful fallback if absent). The Storytelling Spine in this SKILL.md is self-contained; the `narrative` skill arc-definition is supplementary, not required.
 
 **Downstream (via `/verify-trend-report`):** claim verification (`cogni-workspace:claims`), cross-theme structural review, post-verification revision, executive polish (`cogni-workspace:copywriter`), themed HTML (`cogni-visual:enrich-report`)
 

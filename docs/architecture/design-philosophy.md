@@ -75,7 +75,7 @@ cogni-workspace's claims engine uses UUID-v4 slugs (`claim-550e8400-...`) rather
 cogni-visual separates content specification from rendering. The pipeline has three stages:
 
 ```
-cogni-narrative → cogni-copywriting → cogni-visual
+cogni-workspace (narrative → copywriter) → cogni-visual
 (compose)         (polish)            (visualize)
 ```
 

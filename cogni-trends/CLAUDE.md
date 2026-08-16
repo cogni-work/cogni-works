@@ -145,9 +145,7 @@ Training-sourced candidates capped: source_quality max 0.4, signal_strength max 
 | Plugin | Direction | Mechanism |
 |--------|-----------|-----------|
 | cogni-portfolio | bidirectional | trends-bridge exports solution templates → portfolio features; portfolio anchors enrich solution relevance scoring |
-| cogni-narrative | downstream | smarter-service arc consumed by trend-synthesis theme-case writer + dimension composer (graceful fallback when absent) |
-| cogni-workspace | downstream | trend-research registers claims; `verify-trend-report` Phase 2 invokes cogni-workspace:claims for source verification |
-| cogni-copywriting | downstream | Executive polish on trend reports with tone scoping |
+| cogni-workspace | downstream | trend-research registers claims; `verify-trend-report` Phase 2 invokes cogni-workspace:claims for source verification; the `narrative` skill's smarter-service arc feeds the theme-case writer + dimension composer (graceful fallback when absent); `copywriter` applies executive polish with tone scoping |
 | cogni-workspace | upstream | pick-theme for dashboard theming; `region-authority-sources.json` is a slim **overlay** of the canonical `references/supported-markets-registry.json` (carries only `site_searches[]` keyed by Smarter Service dimension, plus trends-specific `regulatory_search` and `org_size_reference`). Read sites call `cogni-workspace/scripts/get-market-config.py --plugin trends --market <code>` to join overlay + registry. Drift on the shared market set is structurally impossible; orphan overlays surfaced by `cogni-workspace:audit-region-sources`. |
 | cogni-visual | downstream | enrich-report themed HTML from trend-report or trend-booklet; story-to-slides for presentations |
 

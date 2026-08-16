@@ -15,12 +15,12 @@ This arc operates in two modes; the Phase 4b workflow follows the same first ste
 
 | Signal | Mode | Behavior |
 |--------|------|----------|
-| `tips-value-model.json` exists | **Theme-aware** | Macro elements as H2; theme-cases nested as H3 (handled by consumer skill, e.g., cogni-trends/trend-report). cogni-narrative produces only the macro elements + synthesis section. |
+| `tips-value-model.json` exists | **Theme-aware** | Macro elements as H2; theme-cases nested as H3 (handled by consumer skill, e.g., cogni-trends/trend-report). the `narrative` skill produces only the macro elements + synthesis section. |
 | Only `trend-scout-output.json` exists | **Insight-summary fallback** | Single flowing narrative — degrades to trend-panorama-equivalent structure. |
 
-When invoked from cogni-narrative directly without a value model, default to insight-summary fallback.
+When invoked from the `narrative` skill directly without a value model, default to insight-summary fallback.
 
-When invoked by cogni-trends/trend-report with a value model, the consumer owns the orchestration of theme-cases; cogni-narrative is only consulted for the arc definition and macro patterns.
+When invoked by cogni-trends/trend-report with a value model, the consumer owns the orchestration of theme-cases; the `narrative` skill is only consulted for the arc definition and macro patterns.
 
 ---
 

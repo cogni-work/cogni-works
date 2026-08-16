@@ -85,7 +85,7 @@ voice rules would mislead voice consumers. Real voice content is always
 authored deliberately and beats the stub on every re-import.
 
 The Explore audit that informed this design (search across
-`cogni-narrative`, `cogni-sales`, `cogni-research`, `cogni-copywriting`,
+`cogni-sales`, this plugin's own `narrative` and `copywriter` skills,
 and the visual consumers) found that **no consumer today parses the
 voice section's content from `theme.md`** — the header is load-bearing
 only in the backcompat harness and (now) in the importer's auto-inject

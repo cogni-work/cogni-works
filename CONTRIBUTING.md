@@ -8,8 +8,6 @@ Core plugins are maintained by insight-wave and licensed under Apache-2.0:
 
 - cogni-workspace
 - cogni-trends
-- cogni-narrative
-- cogni-copywriting
 - cogni-consult
 - cogni-consulting (archived — security patches only)
 - cogni-portfolio

@@ -67,7 +67,7 @@ Read each candidate page fully. Note:
 
 Write a plain-prose answer, inline-citing every factual claim with a `[[page-slug]]` link. Example:
 
-> The insight-wave ecosystem splits into a horizontal layer (cogni-workspace, which owns shared workspace state and the cross-plugin claim-verification gate) and vertical business plugins grouped by role — orchestration (cogni-consult), data (cogni-portfolio, cogni-trends, cogni-knowledge), and output (cogni-narrative, cogni-copywriting, cogni-visual, cogni-sales, cogni-marketing) [[concept-four-layer-architecture]]. Each vertical plugin keeps its own project lifecycle and owns its data; cross-plugin reads happen through path references, bridge files, or YAML frontmatter contracts [[concept-data-isolation]].
+> The insight-wave ecosystem splits into a horizontal layer (cogni-workspace, which owns shared workspace state and the cross-plugin claim-verification gate) and vertical business plugins grouped by role — orchestration (cogni-consult), data (cogni-portfolio, cogni-trends, cogni-knowledge), and output (the `narrative` skill, the `copywriter` skill, cogni-visual, cogni-sales, cogni-marketing) [[concept-four-layer-architecture]]. Each vertical plugin keeps its own project lifecycle and owns its data; cross-plugin reads happen through path references, bridge files, or YAML frontmatter contracts [[concept-data-isolation]].
 
 Rules:
 - Every non-trivial claim links to at least one `[[page-slug]]`

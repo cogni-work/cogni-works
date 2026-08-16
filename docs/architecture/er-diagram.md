@@ -13,7 +13,7 @@ horizontal   cogni-workspace  (shared workspace state: themes, env vars, discove
 ─────────────────────────────────────────────────────────────────────────────────
 vertical     Orchestration   cogni-consult
              Data            cogni-portfolio  cogni-trends  cogni-knowledge  cogni-workspace
-             Output          cogni-narrative  cogni-copywriting  cogni-visual
+             Output          cogni-workspace (narrative + copywriter)  cogni-visual
                              cogni-sales      cogni-marketing
 ```
 
@@ -41,12 +41,12 @@ vertical     Orchestration   cogni-consult
 | cogni-workspace | ClaimRecord, DeviationRecord, ResolutionRecord | JSON in `cogni-claims/` directory |
 | cogni-sales | PitchLog, BuyingCenter, PhaseDeliverable | JSON + Markdown per phase |
 | cogni-marketing | MarketingProject, ContentStrategy, ContentPiece, Campaign, Calendar | JSON + Markdown with YAML frontmatter |
-| cogni-narrative | Narrative (arc_id, sections, techniques) | Markdown with YAML frontmatter |
+| cogni-workspace (`narrative`) | Narrative (arc_id, sections, techniques) | Markdown with YAML frontmatter |
 | cogni-visual | Brief (YAML frontmatter + Markdown body) | Per-deliverable brief files |
 | cogni-workspace | Theme, WorkspaceConfig, VaultConfig | Markdown (theme.md) + JSON |
 | cogni-consult | Engagement (consult-project.json), ActionField (field.json), Persona | JSON + Markdown |
 
-cogni-copywriting has no persistent entities — it modifies documents in place and detects `arc_id` frontmatter for arc-aware polishing.
+The `copywriter` skill has no persistent entities — it modifies documents in place and detects `arc_id` frontmatter for arc-aware polishing.
 
 ---
 
@@ -72,7 +72,7 @@ Downstream plugins read YAML frontmatter fields from files produced by upstream 
 
 | Field | Set by | Read by | Purpose |
 |-------|-------|--------|---------|
-| `arc_id` | cogni-narrative | cogni-copywriting, cogni-visual | Arc type for arc-aware polishing and visual theme selection |
+| `arc_id` | cogni-workspace (`narrative`) | cogni-workspace (`copywriter`), cogni-visual | Arc type for arc-aware polishing and visual theme selection |
 | `theme_path` | cogni-workspace | cogni-visual | Path to the active theme file |
 | `portfolio_path` | cogni-portfolio | cogni-consult | Path to the project directory |
 | `arc_type` | cogni-visual (from arc_id mapping) | rendering agents | Visual arc type from libraries/arc-taxonomy.md |

@@ -47,7 +47,7 @@ Consult deliverables are **framework-shaped** (Pyramid / SCQA / MECE), not
 `story-to-web`) auto-detect a narrative arc and build best when the source is a
 story; a WBS-addressed analytical deliverable is not a story, so dispatching them
 directly yields a weak brief. For the same reason this path does **not**
-re-narrate the deliverable through `cogni-narrative` — arc-ifying a
+re-narrate the deliverable through `the `narrative` skill` — arc-ifying a
 framework-shaped deliverable softens the executive/Pyramid register it is written
 in.
 

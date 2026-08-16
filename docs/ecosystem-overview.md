@@ -8,7 +8,7 @@ For the canonical plugin descriptions, see the individual README files. For step
 
 ## Plugin Landscape
 
-The 11 plugins are grouped by the role they play in a typical engagement — the same set the root [`marketplace.json`](../.claude-plugin/marketplace.json) enumerates.
+The 9 plugins are grouped by the role they play in a typical engagement — the same set the root [`marketplace.json`](../.claude-plugin/marketplace.json) enumerates.
 
 ### Workspace Infrastructure
 
@@ -42,8 +42,8 @@ See the [Consulting Engagement workflow](workflows/consulting-engagement.md) for
 
 | Plugin | What it does |
 |--------|-------------|
-| [cogni-narrative](../cogni-narrative/README.md) | Transforms research reports and structured content into executive narratives using 11 story arc frameworks and 8 narrative techniques. Includes a TIPS-native arc for trend panoramas, a theme-thesis arc for investment narratives, and a JTBD portfolio arc for buyer-job-centric portfolio narratives. |
-| [cogni-copywriting](../cogni-copywriting/README.md) | Polishes documents using messaging frameworks (BLUF, Pyramid, SCQA, STAR, PSB, FAB, Inverted Pyramid). Runs parallel stakeholder persona reviews, readability optimization, JSON field polishing, and arc contract audit against cogni-narrative output. Translate-then-polish across DE/EN/FR/IT/PL/NL/ES. |
+| [cogni-workspace](../cogni-workspace/README.md) — `narrative` | Transforms research reports and structured content into executive narratives using 11 story arc frameworks and 8 narrative techniques. Includes a TIPS-native arc for trend panoramas, a theme-thesis arc for investment narratives, and a JTBD portfolio arc for buyer-job-centric portfolio narratives. |
+| [cogni-workspace](../cogni-workspace/README.md) — `copywriter` | Polishes documents using messaging frameworks (BLUF, Pyramid, SCQA, STAR, PSB, FAB, Inverted Pyramid). Runs parallel stakeholder persona reviews, readability optimization and JSON field polishing; the arc contract against the `narrative` skill is now asserted by `test-arc-reference-sync.sh` rather than audited by a skill. Translate-then-polish across DE/EN/FR/IT/PL/NL/ES. |
 | [cogni-marketing](../cogni-marketing/README.md) | Bridges cogni-trends strategic themes and cogni-portfolio propositions into channel-ready content across 16 formats — thought leadership, demand generation, lead generation, sales enablement, and ABM. Configurable brand voice; market-aware content across European and US/UK targets. |
 | [cogni-sales](../cogni-sales/README.md) | Generates B2B sales pitches using the Corporate Visions Why Change methodology. Supports named customer deals (deal-specific) and reusable segment pitches. Builds on cogni-portfolio data with optional TIPS strategic enrichment. Multilingual EN/DE/PT-BR. |
 
@@ -74,11 +74,11 @@ cogni-knowledge
 cogni-workspace (via /claims)
   → produces: verified report with claim annotations
 
-cogni-narrative
+cogni-workspace (narrative)
   → consumes: verified report
   → produces: arc-structured narrative (arc_id in frontmatter)
 
-cogni-copywriting
+cogni-workspace (copywriter)
   → consumes: narrative output (auto-activated by arc_id frontmatter)
   → produces: polished document
 
@@ -128,7 +128,7 @@ cogni-consult (action-fields WBS)
   Per deliverable  → design-thinking loop (empathize→define→ideate→prototype→test)
                      research via the engagement's bound cogni-knowledge base
   Quality          → acting stakeholder personas challenge each deliverable
-  Hand-off         → deliverables feed cogni-narrative, cogni-visual, cogni-sales
+  Hand-off         → deliverables feed the narrative skill, cogni-visual, cogni-sales
 ```
 
 For the entity-level diagram see [er-diagram.md](er-diagram.md).
@@ -141,7 +141,7 @@ All plugins depend on cogni-workspace for three shared concerns:
 
 **Environment variables.** `manage-workspace` generates `.claude/settings.local.json`, which Claude Code auto-injects at session start. Plugins resolve sibling plugin paths via these variables rather than hardcoding paths.
 
-**Theme management.** Visual plugins (cogni-visual, cogni-narrative, cogni-marketing, cogni-website) call the `pick-theme` skill from cogni-workspace to resolve a brand theme. Themes live in `{workspace}/cogni-workspace/themes/` and are shared across all plugins that produce HTML or visual output.
+**Theme management.** Visual plugins (cogni-visual, cogni-marketing, cogni-website) call the `pick-theme` skill from cogni-workspace to resolve a brand theme. Themes live in `{workspace}/cogni-workspace/themes/` and are shared across all plugins that produce HTML or visual output.
 
 **Session hooks.** cogni-workspace installs an `on-session-start.sh` hook that sources workspace environment variables and validates plugin availability each time a Claude Code session opens.
 
@@ -205,7 +205,7 @@ Each plugin that runs a multi-step workflow stores its work under a project dire
     website/
 ```
 
-Downstream plugins reference upstream output by path. For example, cogni-narrative accepts `--source-path` pointing at a cogni-knowledge output directory. cogni-website reads proposition, feature, and customer files directly from the cogni-portfolio project directory.
+Downstream plugins reference upstream output by path. For example, the `narrative` skill accepts `--source-path` pointing at a cogni-knowledge output directory. cogni-website reads proposition, feature, and customer files directly from the cogni-portfolio project directory.
 
 ### Wikilinks
 
@@ -276,7 +276,7 @@ Plugins share data through the filesystem, not through direct calls. The pattern
 2. **Downstream plugin** reads that directory by path, either passed explicitly (e.g., `--source-path`) or resolved via environment variables set by cogni-workspace.
 3. **Environment variables** (generated by `manage-workspace` into `.claude/settings.local.json`) give each plugin a `_ROOT` and `_PLUGIN` variable so paths resolve correctly regardless of workspace location.
 
-For example, cogni-website reads from `$COGNI_PORTFOLIO_ROOT/{slug}/propositions/` and `$COGNI_WORKSPACE_ROOT/themes/`. cogni-narrative accepts `--source-path` pointing at a cogni-knowledge output directory.
+For example, cogni-website reads from `$COGNI_PORTFOLIO_ROOT/{slug}/propositions/` and `$COGNI_WORKSPACE_ROOT/themes/`. the `narrative` skill accepts `--source-path` pointing at a cogni-knowledge output directory.
 
 ### Skill instructions (`SKILL.md`)
 
@@ -310,12 +310,12 @@ Seven end-to-end workflow guides document the cross-plugin pipelines:
 
 | Workflow | Pipeline | End deliverable |
 |----------|----------|-----------------|
-| [Research to Report](workflows/research-to-report.md) | cogni-knowledge → cogni-workspace → cogni-copywriting | Verified, polished research report |
+| [Research to Report](workflows/research-to-report.md) | cogni-knowledge → cogni-workspace (claims → copywriter) | Verified, polished research report |
 | [Portfolio to Pitch](workflows/portfolio-to-pitch.md) | cogni-portfolio → cogni-sales → cogni-visual | Sales presentation with slides |
 | [Portfolio to Website](workflows/portfolio-to-website.md) | cogni-portfolio → cogni-workspace → cogni-website | Deployable multi-page customer website |
 | [Trends to Solutions](workflows/trends-to-solutions.md) | cogni-trends → cogni-portfolio (bridge) → cogni-visual | Ranked solutions with visual deliverables |
 | [Consulting Engagement](workflows/consulting-engagement.md) | cogni-consult → cogni-knowledge (+ persona-gated deliverables) | Full consulting deliverable package |
-| [Content Pipeline](workflows/content-pipeline.md) | cogni-marketing → cogni-narrative → cogni-visual | Multi-channel marketing content |
+| [Content Pipeline](workflows/content-pipeline.md) | cogni-marketing → cogni-workspace → cogni-visual | Multi-channel marketing content |
 
 ---
 

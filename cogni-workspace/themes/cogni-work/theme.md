@@ -89,5 +89,5 @@ _(No voice & copy guidelines provided in the Claude Design bundle. This stub was
 - **Brand Mark**: chartreuse point-up triangle; wordmark `cogni` + chartreuse hyphen + `work` + chartreuse `.ai` in DM Sans Bold (-0.02em tracking)
 - **Tagline**: `Firmitas · Utilitas · Venustas` (Latin triad, middle-dot separator)
 - **Typography**: DM Sans + JetBrains Mono (Google Fonts)
-- **Voice Reference**: cogni-copywriting plugin (BLUF, Pyramid, SCQA frameworks); bilingual EN/DE
+- **Voice Reference**: the `cogni-workspace:copywriter` skill (BLUF, Pyramid, SCQA frameworks); bilingual EN/DE
 - **Extracted**: 2026-04-25

@@ -32,7 +32,7 @@ Internal portfolio data (slugs, TAM/SAM/SOM, relevance tiers, quality scores) is
 |----------|----------|--------|--------|
 | `customer-narrative` | Buyers navigating a portfolio-driven website | Home / About / Capability / Persona / Approach pages, each arc-structured | Markdown with `arc_id` (per-scope) |
 | `repo-documentation` | Developers, OSS community | Technical clarity: what, how, getting started | Markdown |
-| `pitch` | Executives, conference, board | Arc-structured presentation narrative (cogni-narrative compatible) | Markdown with `arc_id` |
+| `pitch` | Executives, conference, board | Arc-structured presentation narrative (the `narrative` skill compatible) | Markdown with `arc_id` |
 | `proposal` | Sales teams, prospects | Per-proposition sales proposal | Markdown |
 | `market-brief` | Marketing teams | Market content package with sizing, buyer profile, messaging | Markdown |
 | `workbook` | Leadership, analysts | Structured spreadsheet with all portfolio data | XLSX |
@@ -114,7 +114,7 @@ Load each scope's arc definition in Step 2 so the templates render with the corr
 
 #### Pitch: user picker
 
-For the `pitch` use case, the output's `arc_id` controls which story structure cogni-narrative downstream tools render. The `templates-pitch.md` reference defines `jtbd-portfolio` as the standard default — its 1:1 job-to-solution mapping mirrors the portfolio's Feature × Market structure, and its verb-phrase jobs surface the buyer language that IS/DOES/MEANS already encodes. The user can still override.
+For the `pitch` use case, the output's `arc_id` controls which story structure the `narrative` skill downstream tools render. The `templates-pitch.md` reference defines `jtbd-portfolio` as the standard default — its 1:1 job-to-solution mapping mirrors the portfolio's Feature × Market structure, and its verb-phrase jobs surface the buyer language that IS/DOES/MEANS already encodes. The user can still override.
 
 **Always present this picker via AskUserQuestion before moving to Step 2** — do not silently apply a default, and do not improvise a different list. The picker must list `jtbd-portfolio` first so the documented default stays visible:
 
@@ -456,7 +456,7 @@ This path ends the same way — see the **Dashboard handoff** section in this fi
 
 - **`references/use-case-registry.md`** — Registry of available use cases with trigger phrases, voice profiles, scope options, and review configuration
 - **`references/templates-customer-narrative.md`** — Templates for portfolio-driven website components (home, about, capability, persona, approach) — each with arc mapping and deduplication discipline
-- **`references/templates-pitch.md`** — Templates for arc-structured pitch narratives (cogni-narrative compatible)
+- **`references/templates-pitch.md`** — Templates for arc-structured pitch narratives (the `narrative` skill compatible)
 - **`references/templates-proposal.md`** — Templates for per-proposition sales proposals
 - **`references/templates-market-brief.md`** — Templates for per-market marketing briefs
 - **`references/templates-repo-documentation.md`** — Templates for developer-facing content (readme-enrichment, plugin-overview, use-case-gallery)

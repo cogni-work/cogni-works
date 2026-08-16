@@ -228,7 +228,7 @@ When `phase` is `complete`, the `next_actions` array from `project-status.sh` co
 
 Only show actions that appear in `next_actions` (e.g., skip copywriting if already applied, skip enrich-report if already done, skip dashboard if already generated). Present the top 2-3 as recommended and the rest as "also available". Offer to proceed with the user's choice immediately.
 
-All visualization skills (`story-to-*`) consume `tips-trend-report.md` directly — no intermediary step (like cogni-narrative) is needed. Pass the report path as `source_path`.
+All visualization skills (`story-to-*`) consume `tips-trend-report.md` directly — no intermediary step (like the `narrative` skill) is needed. Pass the report path as `source_path`.
 
 ## Multi-Session Design
 

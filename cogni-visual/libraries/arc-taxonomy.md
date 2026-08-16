@@ -13,7 +13,7 @@ consumers:
 
 ## Purpose
 
-Map narrative arc IDs from cogni-narrative to visual arc types used by cogni-visual skills. Provide arc element names and translations for labeling (station labels, section labels, methodology phases).
+Map narrative arc IDs from the `narrative` skill to visual arc types used by cogni-visual skills. Provide arc element names and translations for labeling (station labels, section labels, methodology phases).
 
 **How this library is used:** Loaded at Step 1 of any visual skill when `arc_id` is present (from parameter or narrative frontmatter). Provides the mapping table and element names consumed by downstream steps.
 
@@ -21,9 +21,9 @@ Map narrative arc IDs from cogni-narrative to visual arc types used by cogni-vis
 
 ## Arc ID to Visual Arc Type Mapping
 
-When the source narrative carries an `arc_id` from cogni-narrative (in YAML frontmatter or passed as parameter), map it to the visual arc type used for decomposition. This bridges the rich narrative taxonomy (11 arc types with 4-element structures) to the visual taxonomy (5 visual arc types optimized for layout selection).
+When the source narrative carries an `arc_id` from the `narrative` skill (in YAML frontmatter or passed as parameter), map it to the visual arc type used for decomposition. This bridges the rich narrative taxonomy (11 arc types with 4-element structures) to the visual taxonomy (5 visual arc types optimized for layout selection).
 
-| cogni-narrative `arc_id` | Visual `arc_type` | Display Name | Reasoning |
+| the `narrative` skill `arc_id` | Visual `arc_type` | Display Name | Reasoning |
 |--------------------------|-------------------|--------------|-----------|
 | `corporate-visions` | `why-change` | Corporate Visions | Elements (Why Change/Why Now/Why You/Why Pay) map directly to tension-release-action |
 | `industry-transformation` | `why-change` | Industry Transformation | Elements (Forces/Friction/Evolution/Leadership) follow the same tension-release pattern |
@@ -247,7 +247,7 @@ IF `arc_definition_path` parameter provided AND file exists:
 
 ## Arc Definition File Format
 
-Arc definition files live in cogni-narrative at:
+Arc definition files live in the `narrative` skill at:
 `cogni-workspace/skills/narrative/references/story-arc/{arc-id}/arc-definition.md`
 
 Each file defines the 4 arc elements with their English and German names, descriptions, and narrative function. The skill extracts the element name lists from these files.

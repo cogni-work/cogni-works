@@ -116,9 +116,18 @@ Two consequences for slicing:
   when it scans zero files. A guard added before the trees exist fails; a guard added after
   leaves the adoption ungraded in between.
 
-Write a new guard for each adoption rather than widening the existing one. Do not retrofit
-`test-relocated-skill-hygiene.sh` — it is scoped to the trees cogni-workspace adopted from
-cogni-help, and that scoping is what makes it readable.
+Extend `test-relocated-skill-hygiene.sh` rather than writing a parallel guard. This reverses
+earlier advice here, and the reversal is empirical: two absorptions have now added arms to it, and
+the pairing it grew — one `<tree>|<forbidden token>` spec per adopted tree, each checked against the
+token its *own* source plugin used — is what makes multiple source plugins work in one file without
+any arm going vacuous. A second guard would duplicate the walk, the liveness floor and the
+`${CLAUDE_PLUGIN_ROOT}` resolution for no gain.
+
+Two things to get right when you extend it. A spec's tree may be a directory **or a single file** —
+adopted agents land as bare files under `agents/`, and a directory-only form leaves every adopted
+agent silently ungraded, which is exactly what happened to the cogni-claims agents until the
+narrative/copywriting absorption noticed. And the token must stay the **colon-qualified** form, so a
+bare-name path that the adoption is required to preserve is not mistaken for a dispatch.
 
 ## The duplicate-plugin window
 
@@ -157,7 +166,7 @@ Therefore, during the window:
 The queued absorption work is planned against this convention. Slice each of these into the
 stages above rather than filing one pull request per issue:
 
-- **#1351** — absorb cogni-narrative and cogni-copywriting into cogni-workspace
+- **#1351** — absorb cogni-narrative and cogni-copywriting into cogni-workspace — **done**, and the worked example for these four stages
 - **#1352** — move the excalidraw `.mcp.json` out of the plugin into `install-mcp`
 - **#1353** — absorb cogni-visual into cogni-workspace
 - **#1354** — reconcile docs, marketplace metadata, diagrams and wiki for the reduced roster

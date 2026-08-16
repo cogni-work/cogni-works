@@ -1,6 +1,6 @@
 # Templates: Pitch Narrative
 
-Output templates for the `pitch` use case. Transforms portfolio entities into arc-structured presentation narratives that cogni-narrative downstream tools (story-to-slides, story-to-web, story-to-storyboard) can consume directly.
+Output templates for the `pitch` use case. Transforms portfolio entities into arc-structured presentation narratives that the `narrative` skill downstream tools (story-to-slides, story-to-web, story-to-storyboard) can consume directly.
 
 **Use case**: `pitch`
 **Audience**: Executives, decision-makers, conference audiences, board members
@@ -51,7 +51,7 @@ Other arcs (`technology-futures`, `strategic-foresight`, `trend-panorama`, `them
 
 ## YAML Frontmatter
 
-The frontmatter must match cogni-narrative's output format exactly so downstream tools auto-discover it.
+The frontmatter must match the `narrative` skill's output format exactly so downstream tools auto-discover it.
 
 ```yaml
 ---

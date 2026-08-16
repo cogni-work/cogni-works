@@ -457,8 +457,8 @@ Exact `##` section headers for insight-summary.md output, per arc and language. 
 ### Arc-mode translation headings (FR/IT/PL/NL/ES)
 
 These tables are **reference data for downstream arc-mode translation** (consumed by
-cogni-copywriting's copywriter skill, Step 2.5, which substitutes them positionally when translating
-an arc narrative). cogni-narrative itself still **generates `insight-summary.md` only in EN/DE** —
+the `copywriter` skill's copywriter skill, Step 2.5, which substitutes them positionally when translating
+an arc narrative). the `narrative` skill itself still **generates `insight-summary.md` only in EN/DE** —
 the "Language Detection", "Supported Languages", and `^(en|de)$` validation rules at the top of this
 file are unchanged. Only the two customer-facing arcs with downstream localization are covered
 (`corporate-visions`, `jtbd-portfolio`); the other 9 arcs remain EN/DE in their tables above. The

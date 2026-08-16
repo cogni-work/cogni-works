@@ -68,7 +68,7 @@ Briefs contain no color fields.
 | `orientation` | `auto` | Page orientation (DIN A4 ratio). When `auto`: economist/funnel-pyramid default to portrait (1080x1528), others to landscape (1528x1080). |
 | `conversion_goal` | `consultation` | CTA type: consultation, demo, download, trial, contact, calculate |
 | `arc_type` | `auto` | Story arc hint: why-change, problem-solution, journey, argument, report |
-| `arc_id` | from frontmatter | Narrative arc ID from cogni-narrative |
+| `arc_id` | from frontmatter | Narrative arc ID from the `narrative` skill |
 | `voice_tone` | auto-detected | Micro-copy register: `executive`, `analytical`, `punchy`, `playful`. Inherits from upstream narrative frontmatter if present; otherwise inferred in Step 2 from tone cues. Renderers use it to calibrate section subheads and CTA verbs — they never override brief text with it. |
 | `palette_override` | `theme` | Either `theme` (default — renderers derive the Economist-discipline palette from the project theme) or `canonical` (force Economist's canonical red/amber/near-black/cream regardless of theme). Only meaningful for `style_preset: economist`. |
 | `interactive` | `true` | When `true`, present choices via AskUserQuestion |

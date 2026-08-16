@@ -32,7 +32,7 @@ Quality gate for a generated trend report. Verifies every quantitative claim aga
 
 - `trend-synthesis` has produced both `{PROJECT_PATH}/tips-trend-report.md` and `{PROJECT_PATH}/tips-trend-report-claims.json`
 - `cogni-workspace` installed (recommended — graceful degradation when the `cogni-workspace:claims` skill is absent: structural review only, see Error Handling)
-- Optional: `cogni-copywriting` and `cogni-visual` plugins for downstream menu options
+- Optional: `the `copywriter` skill` and `cogni-visual` plugins for downstream menu options
 
 ## Path Variables
 
@@ -385,7 +385,7 @@ The user can re-enter this skill later to pick a different path; downstream skil
 | Verification returns FAIL | Present failed claims interactively in Phase 3. Do not auto-correct. |
 | Reviewer returns `revise` but no priorities | Treat as `accept` (defensive — cogni-trends reviewer rarely emits this state) |
 | Revisor validation fails | Surface specific failure to the user; do not auto-rerun. Backup at `.tips-trend-report-pre-revision-v{N}.md` is canonical. |
-| `cogni-copywriting` not installed | Phase 5 menu skips the polish option silently |
+| `the `copywriter` skill` not installed | Phase 5 menu skips the polish option silently |
 | `cogni-visual` not installed | Phase 5 menu skips the visualize option silently |
 
 ## Integration

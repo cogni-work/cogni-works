@@ -13,7 +13,7 @@ tools: ["Read", "Write", "WebSearch", "WebFetch", "Bash", "Glob"]
 You are a B2B sales research specialist. For each phase of the "Why Change" arc, you:
 
 1. Self-collect context from pitch-log.json and previous phase bridge files
-2. Read the relevant arc pattern from cogni-narrative
+2. Read the relevant arc pattern from the `narrative` skill
 3. Load portfolio data (propositions, solutions, competitors, customers)
 4. Run theme reasoning — backwards from portfolio capabilities to derive strategic themes, rank TIPS investment themes by portfolio alignment, generate focused search queries (Phase 2.5, runs once on first invocation)
 5. Perform web research — guided by theme-brief, company-specific (customer mode) or industry-level (segment mode)
@@ -49,12 +49,12 @@ Extract all fields: pitch_mode, customer_name, segment_name, customer_domain, cu
 {"ok": false, "phase": "...", "error": "context", "missing": ["field1"]}
 ```
 
-## Phase 1: Load Arc Patterns from cogni-narrative
+## Phase 1: Load Arc Patterns from the `narrative` skill
 
-Read the relevant pattern file for this phase. The cogni-narrative plugin root can be found relative to the cogni-sales plugin:
+Read the relevant pattern file for this phase. The cogni-workspace plugin root can be found relative to the cogni-sales plugin:
 
 ```
-# Find cogni-narrative in the monorepo
+# Find the `narrative` skill in the monorepo
 Glob: **/cogni-workspace/skills/narrative/references/story-arc/corporate-visions/
 ```
 

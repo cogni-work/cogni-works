@@ -95,7 +95,7 @@ A sketchnote or whiteboard preset routes to Excalidraw for a hand-drawn scene; a
 
 ## How it works
 
-The plugin sits at the end of a compose-polish-visualize flow: cogni-narrative composes the story, cogni-copywriting polishes the prose, and cogni-visual visualizes the result. It keeps that final stage in two deliberately separate phases — brief generation and rendering — because authoring a design and producing pixels are different jobs with different failure modes.
+The plugin sits at the end of a compose-polish-visualize flow: cogni-workspace's `narrative` skill composes the story, its `copywriter` skill polishes the prose, and cogni-visual visualizes the result. It keeps that final stage in two deliberately separate phases — brief generation and rendering — because authoring a design and producing pixels are different jobs with different failure modes.
 
 In the first phase, a `story-to-X` skill reads the narrative and writes a structured brief: YAML frontmatter for metadata (type, theme, arc) and a Markdown body for the content specification. The brief deliberately carries no colors or fonts — those are resolved later from the theme — so the same brief can be reskinned without re-authoring. Splitting design from rendering is also what makes review cheap: the `review-brief` skill assesses the brief from three stakeholder perspectives (design, audience, usability) before any rendering cost is incurred, so a weak headline is caught as text rather than as a finished file.
 
@@ -182,9 +182,7 @@ cogni-visual/                              # 7 skills · 19 agents · 6 commands
 
 | Plugin | Required | Purpose |
 |--------|----------|---------|
-| cogni-narrative | Yes | Produces narratives consumed by all story-to-X skills (upstream compose step) |
-| cogni-copywriting | Yes | Polishes narratives before visual briefing (upstream polish step) |
-| cogni-workspace | Yes | Provides brand themes for all visual output |
+| cogni-workspace | Yes | Brand themes for all visual output; the `narrative` skill produces the narratives every story-to-X skill consumes, and `copywriter` polishes them before visual briefing |
 | cogni-trends | No | Trend reports for enrich-report |
 | cogni-knowledge | No | enrich-report detects knowledge project configs for report-type-specific enrichment |
 | cogni-portfolio | No | enrich-report references portfolio-dashboard patterns for dashboard-style enrichment |

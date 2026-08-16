@@ -107,7 +107,7 @@ Many plugins require others to function. Check that dependencies are installed:
 | Plugin | Requires |
 |--------|----------|
 | cogni-marketing | cogni-trends, cogni-portfolio |
-| cogni-sales | cogni-portfolio, cogni-narrative |
+| cogni-sales | cogni-portfolio, the `narrative` skill |
 | cogni-consult | cogni-knowledge (required research spine) |
 | cogni-consulting (archived) | — (archived, no new dependencies) |
 

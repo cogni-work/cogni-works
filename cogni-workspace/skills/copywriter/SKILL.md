@@ -1,6 +1,6 @@
 ---
 name: copywriter
-description: Polish, rewrite, or create business documents (memos, briefs, reports, proposals, one-pagers, executive summaries, emails, blog posts, business letters) using professional messaging frameworks (BLUF, McKinsey Pyramid, SCQA, STAR, PSB, FAB) and persuasion techniques (number plays, power words, rhetorical devices). Use this skill when the user asks to polish a document, improve writing, make something more readable, restructure a brief, apply BLUF or Pyramid Principle, rewrite for executives, strengthen messaging, create a proposal, write a one-pager, clean up a report, compress a document to minimum length without losing facts, shorten a synthesis for circulation, tighten a document while keeping every citation and number, or apply any named messaging framework. Handles German documents (Wolf Schneider style), arc-aware narrative polishing (cogni-narrative arcs with arc_id), and IS/DOES/MEANS sales messaging. Simple requests like "make this better" about a markdown file should trigger this skill.
+description: Polish, rewrite, or create business documents (memos, briefs, reports, proposals, one-pagers, executive summaries, emails, blog posts, business letters) using professional messaging frameworks (BLUF, McKinsey Pyramid, SCQA, STAR, PSB, FAB) and persuasion techniques (number plays, power words, rhetorical devices). Use this skill when the user asks to polish a document, improve writing, make something more readable, restructure a brief, apply BLUF or Pyramid Principle, rewrite for executives, strengthen messaging, create a proposal, write a one-pager, clean up a report, compress a document to minimum length without losing facts, shorten a synthesis for circulation, tighten a document while keeping every citation and number, or apply any named messaging framework. Handles German documents (Wolf Schneider style), arc-aware narrative polishing (story arcs with arc_id), and IS/DOES/MEANS sales messaging. Simple requests like "make this better" about a markdown file should trigger this skill.
 allowed-tools: Read, Write, Edit, Bash, TodoWrite, Skill
 ---
 
@@ -181,7 +181,7 @@ Translate the entire document to `TARGET_LANG`, holding to these invariants:
 
 **Arc-heading substitution (runs only when `arc_mode` is active):**
 
-Arc-element and bridge headings are NOT freely translated — they are **substituted** from the canonical table in `references/09-preservation-modes/arc-preservation.md` (the downstream mirror; do **not** read cogni-narrative files at runtime):
+Arc-element and bridge headings are NOT freely translated — they are **substituted** from the canonical table in `references/09-preservation-modes/arc-preservation.md` (the downstream mirror; do **not** read the `narrative` skill's files at runtime):
 
 1. Read `arc_id` from frontmatter and load that arc's canonical headings from `arc-preservation.md`: the 4 element headings (index 1–4) from the canonical heading table, **and** the bridge heading from the bridge list immediately below that table (the bridge is a prose list, not a table row).
 2. Identify the document's headings **positionally**:

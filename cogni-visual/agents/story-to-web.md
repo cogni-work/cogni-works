@@ -46,8 +46,8 @@ Your ENTIRE response to the orchestrator must be:
 | theme | No | interactive | Absolute path to theme.md, or omit to trigger pick-theme selection |
 | language | No | en | Language code (en/de) |
 | arc_type | No | auto | Story arc hint |
-| arc_id | No | from frontmatter | Narrative arc ID from cogni-narrative (e.g., `industry-transformation`) |
-| arc_definition_path | No | none | Path to cogni-narrative arc definition file for element-based section labels |
+| arc_id | No | from frontmatter | Narrative arc ID from the `narrative` skill (e.g., `industry-transformation`) |
+| arc_definition_path | No | none | Path to the `narrative` skill arc definition file for element-based section labels |
 | max_sections | No | 10 | Maximum section count |
 | conversion_goal | No | consultation | CTA type |
 | style_guide | No | auto | Pre-selected style guide name |

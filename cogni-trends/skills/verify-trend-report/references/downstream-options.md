@@ -19,7 +19,7 @@ AskUserQuestion:
       description: "See the full option set (slides, web, storyboard, catalog, dashboard)"
 ```
 
-If `cogni-copywriting` is not installed, omit the polish option silently. If `cogni-visual` is not installed, omit the visualize option. If both are missing, skip the menu entirely and direct the user to `/trends-resume`.
+If `the `copywriter` skill` is not installed, omit the polish option silently. If `cogni-visual` is not installed, omit the visualize option. If both are missing, skip the menu entirely and direct the user to `/trends-resume`.
 
 ## Option 1 — Polish
 

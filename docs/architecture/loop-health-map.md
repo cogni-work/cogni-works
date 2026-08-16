@@ -19,10 +19,11 @@ rubric: it is what makes a flagged finding credible.
   this" section below restates the five moves, the anti-pattern map, and the
   severity policy — this map is self-contained and re-sweepable without
   cogni-service installed.
-- **Scope:** all 11 plugins in this repo's marketplace — cogni-consult,
-  cogni-copywriting, cogni-knowledge,
-  cogni-marketing, cogni-narrative, cogni-portfolio, cogni-sales, cogni-trends,
-  cogni-visual, cogni-website, cogni-workspace.
+- **Scope:** all 9 plugins in this repo's marketplace — cogni-consult,
+  cogni-knowledge, cogni-marketing, cogni-portfolio, cogni-sales, cogni-trends,
+  cogni-visual, cogni-website, cogni-workspace. The loops formerly surveyed under
+  cogni-narrative and cogni-copywriting are now cogni-workspace skills and are
+  listed under it.
 - **Nature:** read-only. This map is a data artifact; it changes no loop and
   proposes no specific code edits. Any targeted hardening of a flagged loop is
   a further, evidence-gated concern — decided from this baseline, not
@@ -70,7 +71,7 @@ hands-off.
 | 7 | review-brief assessor verdict loop | `cogni-visual/skills/review-brief/SKILL.md` | No | ✅ Clean pass | — |
 | 8 | story-to-slides stakeholder-review loop (story-to-* family) | `cogni-visual/skills/story-to-slides/SKILL.md` | No | ✅ Clean pass | — |
 | 9 | why-change assess-revise-reassess loop | `cogni-sales/skills/why-change/SKILL.md` | No | ✅ Clean pass | — |
-| 10 | copy-reader persona review + auto-improvement | `cogni-copywriting/skills/copy-reader/SKILL.md` | No (but agent-callable) | ⚠ 1 major | nodding (Verification) |
+| 10 | copy-reader persona review + auto-improvement | `cogni-workspace/skills/copy-reader/SKILL.md` | No (but agent-callable) | ⚠ 1 major | nodding (Verification) |
 | 11 | consult-design-thinking DT stage machine | `cogni-consult/skills/consult-design-thinking/SKILL.md`, `cogni-consult/scripts/dt-stage-advance.sh` | No | ⚠ 1 advisory-minor | nodding-adjacent (Verification) |
 | 12 | customers stakeholder-review loop | `cogni-portfolio/skills/customers/SKILL.md` | No | ✅ Clean pass | — |
 | 13 | features stakeholder-review closed loop | `cogni-portfolio/skills/features/SKILL.md` | No | ✅ Clean pass | — |
@@ -80,8 +81,8 @@ hands-off.
 | 17 | claims cobrowse per-URL recovery drain | `cogni-workspace/skills/claims/SKILL.md` | No | ⚠ 1 advisory-minor | nodding-adjacent (Verification) |
 | — | trend-research enrichment stage | `cogni-trends/skills/trend-research/SKILL.md` | — | — *(not a loop — excluded)* | single-pass fan-out with retry-once + deterministic JSON gate; manifest hashes hand drift detection downstream |
 | — | trend-synthesis composer pipeline | `cogni-trends/skills/trend-synthesis/SKILL.md` | — | — *(not a loop — excluded)* | single-pass ordered assembly with resume gates; verification lives in verify-trend-report (Loop 4) |
-| — | narrative transform | `cogni-narrative/skills/narrative/SKILL.md` | — | — *(not a loop — excluded)* | single-pass transform; Phase-5 gates are inline deterministic checks (header count, citation count, word bands) |
-| — | narrative-review scorer | `cogni-narrative/skills/narrative-review/SKILL.md` | — | — *(not a loop — excluded)* | single-pass read-only scorer; the fresh-context Verification resource other loops cite |
+| — | narrative transform | `cogni-workspace/skills/narrative/SKILL.md` | — | — *(not a loop — excluded)* | single-pass transform; Phase-5 gates are inline deterministic checks (header count, citation count, word bands) |
+| — | narrative-review scorer | `cogni-workspace/skills/narrative-review/SKILL.md` | — | — *(not a loop — excluded)* | single-pass read-only scorer; the fresh-context Verification resource other loops cite |
 | — | campaign-builder | `cogni-marketing/skills/campaign-builder/SKILL.md` | — | — *(not a loop — excluded)* | single-pass campaign assembly with gap inventory |
 | — | marketing-setup | `cogni-marketing/skills/marketing-setup/SKILL.md` | — | — *(not a loop — excluded)* | single-pass interactive project scaffold with hard/soft validation gates |
 | — | website-plan | `cogni-website/skills/website-plan/SKILL.md` | — | — *(not a loop — excluded)* | single-pass interactive planning; step-4 iterate-until-confirm is a human conversation, not a machine loop |
@@ -317,7 +318,7 @@ condition is a model for documenting *why* a cap exists, not just its value.
 
 ## Loop 10 — copy-reader persona review + auto-improvement
 
-**Source:** `cogni-copywriting/skills/copy-reader/SKILL.md`.
+**Source:** `cogni-workspace/skills/copy-reader/SKILL.md`.
 **Unattended?** No for the human entry point — but `AUTO_IMPROVE` defaults to
 `true`, and the skill exposes a JSON result contract "for agent/skill callers"
 (`:: Step 6`), so its output feeds automated pipelines without a human reading
@@ -466,7 +467,7 @@ publish steps are all human checkpoints).
 ### F1 — copy-reader · nodding (Verification) · major
 
 **Anti-pattern:** nodding (Verification skipped on the revise leg — the flow that produces the edited deliverable also grades it).
-**Evidence location:** `cogni-copywriting/skills/copy-reader/SKILL.md :: Step 5 ("Apply Auto-Improvement Loop")` — edits are applied in the orchestrator's context and validated only deterministically (charset, citation count, protected content), with no re-dispatch of any persona agent; and `:: Step 6 ("Report Results")` — the user-facing report template asserts post-improvement score effects ("raised Executive score to 88", "raised End-user score to 95") that no evaluator re-measured, and the JSON contract for "agent/skill callers" carries `overall_score` + `improvements_applied` downstream on the same unverified basis.
+**Evidence location:** `cogni-workspace/skills/copy-reader/SKILL.md :: Step 5 ("Apply Auto-Improvement Loop")` — edits are applied in the orchestrator's context and validated only deterministically (charset, citation count, protected content), with no re-dispatch of any persona agent; and `:: Step 6 ("Report Results")` — the user-facing report template asserts post-improvement score effects ("raised Executive score to 88", "raised End-user score to 95") that no evaluator re-measured, and the JSON contract for "agent/skill callers" carries `overall_score` + `improvements_applied` downstream on the same unverified basis.
 **Why major, not minor:** this is the rubric's priority case and it is statically confirmable — there is no dispatch between the edit-write and the accept/report, and the report's score-delta claims are structurally unmeasurable in the flow as written. `AUTO_IMPROVE` defaults to `true`, so the self-graded improvement pass is the default path, including when other skills invoke copy-reader programmatically. Mitigations that keep it from being worse (fresh-context *initial* grading, deterministic guardrails with revert-to-backup, an interactive human reading the report in the common case) are real but do not close the gap the rubric targets: bad edits are laundered past the only quality gate with asserted-not-measured scores. The healthy contrast is in this same repo: `cogni-visual/skills/review-brief/SKILL.md :: Step 5` re-launches its assessor after applying improvements. A follow-up could look at re-grading applied edits (or reporting only pre-improvement scores) — evidence-gated, out of this sweep's scope.
 
 <a id="f2"></a>

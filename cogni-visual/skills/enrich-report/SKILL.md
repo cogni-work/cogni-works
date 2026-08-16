@@ -13,7 +13,7 @@ description: >
   user already has a finished report and wants it visual or exported — this skill
   post-processes existing content, it never creates new reports from
   scratch (that is cogni-trends or upstream research), never creates slides (that
-  is story-to-slides), and never rewrites prose (that is cogni-copywriting).
+  is story-to-slides), and never rewrites prose (that is the `copywriter` skill).
 ---
 
 # Enrich Report

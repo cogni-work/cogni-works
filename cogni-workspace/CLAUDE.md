@@ -39,7 +39,7 @@ The harness verifies the Theme System v2 contract end-to-end:
 - **Consumer contracts.** Each known visual consumer (cogni-visual:
   render-html-slides + story-to-* siblings, cogni-portfolio:
   portfolio-dashboard, cogni-website:website-build) and voice consumer
-  (cogni-narrative, cogni-sales, cogni-knowledge, cogni-copywriting) must
+  (cogni-sales, cogni-knowledge, and this plugin's own narrative and copywriter skills) must
   still reference the theme contract in its SKILL.md.
 
 The harness complements the per-skill validators

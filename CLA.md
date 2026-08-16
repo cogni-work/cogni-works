@@ -6,8 +6,6 @@ Thank you for your interest in contributing to insight-wave core plugins. This C
 
 - cogni-workspace
 - cogni-trends
-- cogni-narrative
-- cogni-copywriting
 - cogni-portfolio
 - cogni-visual
 - cogni-marketing

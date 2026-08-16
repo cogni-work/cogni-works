@@ -81,10 +81,8 @@ Each phase has a **quality gate** — the orchestrator presents key findings to 
 | Plugin | Required | Direction | Mechanism |
 |--------|----------|-----------|-----------|
 | cogni-portfolio | Yes | upstream | Products, features, propositions (IS/DOES/MEANS), solutions (pricing tiers), markets (TAM/SAM/SOM, revenue range), competitors, customers (reference accounts) |
-| cogni-narrative | Yes | upstream | Corporate Visions arc definition + per-phase pattern files (why-change-patterns.md, why-now-patterns.md, why-you-patterns.md, why-pay-patterns.md) |
 | cogni-trends | No | upstream | TIPS value-model themes, regulatory timelines, solution templates, gap analysis — enriches all 4 phases when available |
-| cogni-workspace | No | downstream | Claims registered during research with source URLs; `cogni-workspace:claims` verifies them |
-| cogni-copywriting | No | downstream | Executive polish on final deliverables (`/copywrite sales-presentation.md`) |
+| cogni-workspace | Yes | bidirectional | Upstream: the `narrative` skill's Corporate Visions arc definition + per-phase pattern files. Downstream: claims registered during research are verified by `cogni-workspace:claims`, and `copywriter` polishes final deliverables (`/copywrite sales-presentation.md`) |
 | cogni-visual | No | downstream | PPTX generation from sales presentation (`/pptx create sales-presentation.md`) |
 
 ## Data Model

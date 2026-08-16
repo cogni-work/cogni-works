@@ -172,13 +172,13 @@ Prerequisites: Obsidian must be installed. The skill handles Terminal plugin ins
 
 ### `install-mcp` — MCP server installation
 
-End-to-end MCP server installation for the ecosystem. Clones and builds git-based MCPs (Excalidraw, Pencil), detects native-app MCPs (browsermcp, claude-in-chrome), and patches Claude Desktop's `claude_desktop_config.json` so rendering plugins find their tools without hand-edited JSON.
+End-to-end MCP server installation for the ecosystem. Clones and builds git-based MCPs (Excalidraw, Pencil), detects native-app MCPs (browsermcp, claude-in-chrome), and writes the server into your own MCP config — `~/.claude.json` for Claude Code, `claude_desktop_config.json` for Claude Desktop — so rendering plugins find their tools without hand-edited JSON.
 
 ```
 /install-mcp
 ```
 
-Backs up the desktop config before any write; rolls back in one command if an install breaks something. Usually invoked automatically by `manage-workspace` Step 5, but available standalone when you add a new plugin that declares an MCP dependency.
+Backs up the config before any write; rolls back in one command if an install breaks something. Usually invoked automatically by `manage-workspace` Step 5, but available standalone when you add a plugin that needs an MCP server.
 
 ---
 

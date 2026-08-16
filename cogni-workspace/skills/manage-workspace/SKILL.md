@@ -138,14 +138,13 @@ Since manage-workspace already has the confirmed plugin list from step 1, pass i
 install-mcp so it skips redundant plugin discovery. The skill runs non-interactively
 when called from here (no extra user confirmations needed).
 
-After install-mcp completes, also scan for npx/URL-based MCPs in plugin `.mcp.json` files
-and present a combined summary:
+After install-mcp completes, read `references/mcp-git-registry.json` for the full server
+set and present a combined summary:
 
 ```
-MCP Servers (auto-configured by plugins):
-  excalidraw       git-installed + Desktop patched   <- cogni-visual, cogni-portfolio
-  pencil           native app + Desktop patched      <- cogni-visual
-  excalidraw_sketch https://mcp.excalidraw.com       <- cogni-visual (URL-based, no install needed)
+MCP Servers (installed on demand, written to your config):
+  excalidraw       git-installed + config written    <- cogni-visual, cogni-portfolio
+  pencil           native app + config written       <- cogni-visual
 
 Manual install needed:
   claude-in-chrome Chrome extension                  <- cogni-website, cogni-workspace

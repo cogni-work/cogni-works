@@ -21,9 +21,12 @@ allowed-tools: Read, Write, Edit, Bash, Glob, Grep, AskUserQuestion, ToolSearch
 ## Why This Exists
 
 Plugins in insight-wave depend on MCP servers (Excalidraw for diagrams, Pencil for web
-rendering, etc.). Some MCPs are auto-discovered from plugin `.mcp.json` files, but
-git-based MCPs need cloning and building, and Claude Desktop users need their
-`claude_desktop_config.json` patched manually — or rather, they *used to*.
+rendering, etc.). No plugin declares a server itself. A checked-in declaration asserts
+machine state the repository cannot guarantee, so on a machine that never installed the
+server it is spawned at session start and fails visibly. The server is therefore installed
+on demand and written into the user's own config, which is the one place that can honestly
+say what is available. Git-based MCPs also need cloning and building, and users of either
+client used to have to edit that config by hand.
 
 This skill handles the full lifecycle: detect what's needed, install it, configure it
 for the user's environment, and verify it works. No manual JSON editing required.
@@ -32,16 +35,21 @@ for the user's environment, and verify it works. No manual JSON editing required
 
 Determine the user's runtime environment — this affects what needs patching:
 
-1. **Check for Claude Desktop config** at the platform-specific path:
-   - macOS: `~/Library/Application Support/Claude/claude_desktop_config.json`
-   - Linux: `${XDG_CONFIG_HOME:-~/.config}/Claude/claude_desktop_config.json`
-   - Windows: `%APPDATA%/Claude/claude_desktop_config.json`
+1. **Locate the config to write.** Claude Code reads a user-scope config; Claude Desktop
+   reads its own. Check both:
+   - Claude Code (all platforms): `~/.claude.json`, top-level `mcpServers`
+   - Claude Desktop, macOS: `~/Library/Application Support/Claude/claude_desktop_config.json`
+   - Claude Desktop, Linux: `${XDG_CONFIG_HOME:-~/.config}/Claude/claude_desktop_config.json`
+   - Claude Desktop, Windows: `%APPDATA%/Claude/claude_desktop_config.json`
+
+   Only the top-level `mcpServers` in `~/.claude.json` is user scope. The per-project
+   `projects.<path>.mcpServers` objects in that same file are local scope — never write
+   there, or the server disappears the moment the user changes directory.
 
 2. **Classify environment:**
-   - **Claude Code CLI** — plugins use `.mcp.json` files that Claude auto-discovers. Git-based
-     MCPs still need install-mcp.sh, but no Desktop config patching needed.
-   - **Claude Desktop** — needs both the git install AND config patching.
-   - **Both** — Desktop config exists alongside CLI usage. Patch Desktop config too.
+   - **Claude Code CLI** — needs the git install AND a `--target cli` write to `~/.claude.json`.
+   - **Claude Desktop** — needs the git install AND a `--target desktop` write.
+   - **Both** — Desktop config exists alongside CLI usage. Use `--target both`.
 
 Report which environment was detected before proceeding.
 
@@ -63,16 +71,19 @@ in order of preference:
    bash ${CLAUDE_PLUGIN_ROOT}/scripts/discover-plugins.sh
    ```
 3. **Fallback if discover-plugins returns empty** — the plugin cache may be empty in some
-   environments. Fall back to scanning for plugin directories that contain `.mcp.json` files:
+   environments. Fall back to scanning sibling directories for a plugin manifest:
    ```bash
-   # Scan sibling plugin directories for .mcp.json
+   # Scan sibling plugin directories for a plugin manifest
    for dir in $(dirname "${CLAUDE_PLUGIN_ROOT}")/cogni-*; do
-     if [ -f "$dir/.mcp.json" ]; then
+     if [ -f "$dir/.claude-plugin/plugin.json" ]; then
        basename "$dir"
      fi
    done
    ```
    This catches the common case where plugins are installed but the cache index is stale.
+   Key it on the manifest, the same file `discover-plugins.sh` globs — no plugin ships a
+   `.mcp.json` any more, so a scan keyed on that would silently find nothing and report
+   success.
 
 For each server in the registry, check if any installed plugin appears in its `required_by`
 list. Only install servers that have at least one requiring plugin present.
@@ -125,32 +136,47 @@ platform-specific path. Don't try to install it — just report:
 - **Not found** — tell the user where to get it with a direct link:
   - Pencil: download from https://pencil.dev — install the app, then the MCP binary is bundled inside
 
-## Patch Claude Desktop Config
+## Write MCP Servers Into User Config
 
-If a Desktop config file was detected (or the user explicitly wants Desktop config), run
-the patcher:
+Run this **after** the git install succeeds — the writer resolves each server's installed
+wrapper, and reports `skipped: not installed` rather than writing an entry that points at
+a path which does not exist yet.
+
+Pass `--target` for the environment detected above (`desktop`, `cli`, or `both`). Dry-run
+first:
 
 ```bash
 python3 "${CLAUDE_PLUGIN_ROOT}/scripts/patch-desktop-config.py" \
   --registry "${CLAUDE_PLUGIN_ROOT}/references/mcp-git-registry.json" \
+  --target desktop \
   --dry-run
 ```
 
 Show the user what would change. If they confirm (or if running non-interactively from
-manage-workspace), run again without `--dry-run`:
+manage-workspace), run again without `--dry-run`.
+
+For a Claude Code CLI environment, write the user-scope entry the same way. Scope it with
+`--server` so only the server the user actually needs is written — an unrequested entry is
+another server spawned at every session start, which is the condition this whole
+arrangement exists to avoid:
 
 ```bash
 python3 "${CLAUDE_PLUGIN_ROOT}/scripts/patch-desktop-config.py" \
-  --registry "${CLAUDE_PLUGIN_ROOT}/references/mcp-git-registry.json"
+  --registry "${CLAUDE_PLUGIN_ROOT}/references/mcp-git-registry.json" \
+  --target cli --server mcp_excalidraw \
+  --dry-run
 ```
 
 The script:
 - Creates a timestamped backup before modifying anything
+- Preserves every other key in the file — `~/.claude.json` holds unrelated user state
 - Skips servers that are already configured (use `--force` to overwrite)
 - Handles both git-installed servers (resolves wrapper path) and native apps (platform binary)
 - Reports JSON with every action taken
 
-After patching, remind the user: **restart Claude Desktop** for changes to take effect.
+After writing, remind the user to restart: **Claude Desktop** for a desktop write, or the
+**Claude Code session** for a CLI write. Newly written servers do not appear in the session
+that wrote them.
 
 ## Verify Installation
 

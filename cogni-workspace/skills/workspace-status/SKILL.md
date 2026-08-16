@@ -160,9 +160,10 @@ is optional), so treat a non-empty `missing_optional` as an advisory, not a fail
 ### 6. MCP Servers
 
 MCP servers power visual rendering (Excalidraw, Pencil), browser automation (claude-in-chrome),
-and other capabilities. Plugins declare their required MCPs in `.mcp.json` files —
-Desktop/Cowork auto-loads them when the plugin is installed. This check verifies that
-required MCPs are actually available in the current session.
+and other capabilities. No plugin declares an MCP server itself — `install-mcp` installs
+each one on demand and writes it into the user's own config, so what is configured always
+reflects what is actually installed. This check verifies that required MCPs are available
+in the current session.
 
 Read `references/mcp-registry.md` for the full list of ecosystem MCPs and which plugins
 provide them.
@@ -173,7 +174,6 @@ MCP server, search for one representative tool:
 | MCP Server | Probe tool | Provider plugin |
 |------------|-----------|-----------------|
 | `excalidraw` | `mcp__excalidraw__describe_scene` | cogni-visual, cogni-portfolio |
-| `excalidraw_sketch` | `mcp__excalidraw_sketch__read_me` | cogni-visual |
 | `claude-in-chrome` | `mcp__claude-in-chrome__tabs_context_mcp` | cogni-website, cogni-workspace |
 | `pencil` | `mcp__pencil__get_editor_state` | Pencil desktop app (manual) |
 

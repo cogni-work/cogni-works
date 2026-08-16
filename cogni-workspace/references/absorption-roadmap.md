@@ -118,21 +118,35 @@ installed, so the declaration and the machine drift apart with nothing to
 reconcile them. Writing at install time makes the user's config the single source
 of truth about what is actually available.
 
-**Current state.** Exactly two `.mcp.json` files exist at base `19e6c1a7` —
-`cogni-portfolio/.mcp.json` and `cogni-visual/.mcp.json`. cogni-workspace ships
-none. This decision therefore establishes a **new** pattern; it is not the
-relocation of an existing cogni-workspace file, and nothing here has moved yet.
+**Current state.** Implemented. The two `.mcp.json` files this decision was written
+against — `cogni-portfolio/.mcp.json` and `cogni-visual/.mcp.json` — are gone, and no
+plugin in the repo ships one. `install-mcp` writes each server into the user's own config
+on demand, via `patch-desktop-config.py --target {desktop,cli,both}`. The pattern was new
+rather than a relocation of an existing cogni-workspace file, so both the writer and the
+guard that keeps it true were introduced here.
 
-**`excalidraw_sketch` is live and retained.** It is defined at
-`cogni-visual/.mcp.json:3` as a url-type MCP (`https://mcp.excalidraw.com`) and is
-documented as the no-install alternative to the `excalidraw` server at
-`cogni-workspace/skills/manage-workspace/SKILL.md:149`,
-`cogni-workspace/skills/workspace-status/SKILL.md:177`, and
-`cogni-workspace/skills/workspace-status/references/mcp-registry.md:30,35`. It is
-configured, documented and reachable, so this record does not describe it as dead.
-An earlier draft of this decision called it already-dead; that was wrong on the
-evidence above. Retiring it remains possible, but it would be a behaviour change
-across two plugins, not a line in a documentation file.
+**Both declarations had to go together.** `cogni-portfolio`'s `excalidraw` block was
+byte-identical to `cogni-visual`'s, so removing one left the eager-spawn failure intact.
+The duplicate name was also load-bearing in a second way: two plugin-level declarations of
+one server made the client plugin-qualify the tool names, which silently dead-matched the
+`mcp__excalidraw__.*` PreToolUse matcher each plugin carries. Removing both restores the
+unqualified prefix and revives both matchers without editing either hook.
+
+**`excalidraw_sketch` is retired — retracting the paragraph that kept it.** This record
+previously stated it was "live and retained", correcting a still earlier draft that had
+called it already-dead. That correction was right about reachability and wrong about use,
+and the reasoning is worth keeping visible because both earlier readings failed the same
+way: they argued from the documentation rather than from the callers.
+
+What settles it: no file references `mcp__excalidraw_sketch__*` in any executable
+position, and the sole consumer this record cited it for — the `render-big-picture` skill
+— no longer exists in cogni-visual. A server that is configured, documented and reachable
+but has no caller is unused, not live.
+
+Note also that the eager-spawn argument never applied to it. It was a url-type server with
+no local process, so it never spawned at session start and was never part of the failing
+`/mcp` entry. It goes because this decision leaves no per-plugin declaration for a url
+entry to live in, and because nothing calls it — not because it was failing.
 
 ## Rejected alternative — renaming cogni-workspace
 

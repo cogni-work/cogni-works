@@ -230,6 +230,43 @@ These sites sit in a coverage hole by construction:
 `cogni-workspace` trees only. Neither guard reports this class — the rule above is
 the record that keeps the next absorption from re-litigating it.
 
+## Decision 7 — a retired namespace token survives where it carries no dispatch intent
+
+**Decision.** After a plugin is retired into an adopting plugin, the completeness
+test for its colon-form token is **dispatch intent, not textual presence**. The
+gate of record is `scripts/check-external-dispatch.py` returning a clean zero. An
+occurrence is a violation only where the text names a target something would
+actually be dispatched to. Three categories are admitted alongside the dated
+historical record:
+
+1. **A guard's forbidden-token lookup table.** The literal is the guard's
+   matching data, not a reference to the retired plugin.
+2. **Meta-documentation of the rewrite rule itself**, including this file and the
+   plugin's `CLAUDE.md`.
+3. **A dated record naming a retired dispatch that has no successor** to be
+   re-pointed at.
+
+**Why.** A textual reading is not merely strict, it is incoherent — it forbids
+the very literal that the hygiene suite must assert. `tests/test-relocated-skill-hygiene.sh`
+carries the retired token in its `TREES` table because that token *is* what the P1
+arm matches on; delete it and the arm still passes while protecting nothing. The
+same collision recurs one level up: a rule that cannot be written down without
+using the literal it governs. Meta-documentation and a guard's own data are
+statements *about* the token, not uses of it, and the two failure modes are
+opposite — a live dispatch resolves to nothing at runtime, whereas rewriting a
+dated record falsifies history to reach a cosmetic zero. That second failure is
+already rejected for CHANGELOG files, and the reasoning does not stop there.
+
+**Applied at the cogni-claims absorption** to five sites: the hygiene suite's
+`TREES` table and header comment, the colon-vs-slash discriminator in
+`cogni-workspace/CLAUDE.md`, the rule statement in this file, and two dated
+records under `cogni-knowledge/references/` — one of which names a pipeline stage
+for which no adopting-plugin equivalent exists, so a rewrite would invent a
+dispatch that never ran. Genuine dispatch-intent sites found in the same sweep,
+the vendored resweep docstrings of Decision 6, were re-pointed rather than
+excepted. That is the line: this rule admits statements about a name, never
+instructions that use it.
+
 ## Known remaining contradictions — reconciled
 
 The layering claim this record replaces — that cogni-workspace is the layer every

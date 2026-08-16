@@ -2,7 +2,7 @@
 name: verify-trend-report
 description: |
   Run the extended quality pipeline on a generated cogni-trends report — verify
-  claims against their cited sources via cogni-claims, run cross-theme structural
+  claims against their cited sources via `cogni-workspace:claims`, run cross-theme structural
   review, apply corrections through the revisor, and surface downstream polish
   and visualization options to the user. Use whenever the user says "verify
   trend report", "verify claims", "fact-check the trend report", "improve the
@@ -16,7 +16,7 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Task, Skill, AskUserQuestion
 
 # Verify Trend Report Skill
 
-Quality gate for a generated trend report. Verifies every quantitative claim against its cited source via `cogni-claims`, runs a cross-theme structural review, applies corrections through the revisor when deviations or structural issues are found, and surfaces downstream polish and visualization options at the end. Runs in a **fresh context window** — separate from the trend-synthesis pipeline — so claims verification, the review loop, and revision get the full attention they deserve without competing for context with research data.
+Quality gate for a generated trend report. Verifies every quantitative claim against its cited source via `cogni-workspace:claims`, runs a cross-theme structural review, applies corrections through the revisor when deviations or structural issues are found, and surfaces downstream polish and visualization options at the end. Runs in a **fresh context window** — separate from the trend-synthesis pipeline — so claims verification, the review loop, and revision get the full attention they deserve without competing for context with research data.
 
 ## Purpose
 
@@ -31,7 +31,7 @@ Quality gate for a generated trend report. Verifies every quantitative claim aga
 ## Prerequisites
 
 - `trend-synthesis` has produced both `{PROJECT_PATH}/tips-trend-report.md` and `{PROJECT_PATH}/tips-trend-report-claims.json`
-- `cogni-claims` plugin installed (recommended — graceful degradation when absent: structural review only, see Error Handling)
+- `cogni-workspace` installed (recommended — graceful degradation when the `cogni-workspace:claims` skill is absent: structural review only, see Error Handling)
 - Optional: `cogni-copywriting` and `cogni-visual` plugins for downstream menu options
 
 ## Path Variables
@@ -49,7 +49,7 @@ Read references **only when needed** for the specific phase:
 
 | Reference | Read when... |
 |-----------|--------------|
-| [references/claims-integration.md](references/claims-integration.md) | Phase 2 — cogni-claims submission and verification protocol |
+| [references/claims-integration.md](references/claims-integration.md) | Phase 2 — `cogni-workspace:claims` submission and verification protocol |
 | [references/structural-review.md](references/structural-review.md) | Phase 4 — review/revisor loop, validation rules, version output |
 | [references/downstream-options.md](references/downstream-options.md) | Phase 5 — final menu (copywriter, enrich-report, narrative path) |
 
@@ -61,7 +61,7 @@ Phase 0 → Phase 0.5 → Phase 1 → Phase 2 → Phase 3 → Phase 4 → Phase 
    │          │           │          │          │          │          └─ Finalize + downstream menu
    │          │           │          │          │          └─ Structural review + revisor loop (max 2 iterations)
    │          │           │          │          └─ Interactive claims review
-   │          │           │          └─ Submit + verify claims via cogni-claims
+   │          │           │          └─ Submit + verify claims via cogni-workspace:claims
    │          │           └─ Surface claims registry (no re-extraction)
    │          └─ Resumability check (re-verify / inspect / continue)
    └─ Locate project, draft, claims registry; load language and market
@@ -125,7 +125,7 @@ If verification artifacts already exist, present options rather than silently re
 >
 > Options:
 > - **re-verify** — clear previous results, re-submit claims, full verification
-> - **inspect** — open cogni-claims dashboard for the previous results
+> - **inspect** — open the `cogni-workspace:claims` dashboard for the previous results
 > - **continue** — keep results, proceed to Phase 3 (interactive review)
 
 **Revision already applied** (`tips-trend-report-v{N}.md` is the current canonical output):
@@ -159,11 +159,11 @@ Handle the user's choice accordingly.
 
 ---
 
-### Phase 2: Submit + Verify via cogni-claims
+### Phase 2: Submit + Verify via `cogni-workspace:claims`
 
 Read [references/claims-integration.md](references/claims-integration.md) for the full submission protocol.
 
-#### Step 2.1: Check cogni-claims availability
+#### Step 2.1: Check claims-skill availability
 
 If the `cogni-workspace:claims` skill is not installed, log a warning and skip Phases 2 and 3 entirely. Continue with Phase 4 in **structural-review-only** mode (reduced iteration cap of 1).
 
@@ -223,7 +223,7 @@ Show the user verification results and let them steer corrections before automat
 - **fix: 1, 3** — flag specific claims as mandatory fixes
 - **drop: 2** — remove specific claims from the report entirely
 - **accept** — finalize without revision (skip Phase 4, jump to Phase 5)
-- **inspect: 2** — open cogni-claims inspect mode for claim 2 (browser source comparison), then re-present options
+- **inspect: 2** — open `cogni-workspace:claims` inspect mode for claim 2 (browser source comparison), then re-present options
 
 #### Step 3.4: Persist user decisions
 
@@ -250,7 +250,7 @@ If the user chose **accept**, jump to Phase 5.
 
 Read [references/structural-review.md](references/structural-review.md) for the full reviewer/revisor protocol, validation rules, and version-bumping logic.
 
-Maximum **2 iterations** (matches the existing cogni-trends cap). When `cogni-claims` is unavailable, the cap is reduced to **1**.
+Maximum **2 iterations** (matches the existing cogni-trends cap). When `cogni-workspace:claims` is unavailable, the cap is reduced to **1**.
 
 Each iteration:
 
@@ -383,7 +383,7 @@ The user can re-enter this skill later to pick a different path; downstream skil
 | `tips-trend-report.md` missing | HALT: Run `/trend-synthesis` first |
 | `tips-trend-report-claims.json` missing | HALT: Re-run `/trend-synthesis` to regenerate claims registry |
 | `tips-project.json` missing | HALT: Not a valid cogni-trends project |
-| `cogni-claims` not installed | WARNING: Skip Phase 2 + 3, run Phase 4 in structural-review-only mode (max 1 iteration), skip Phase 3 of `references/claims-integration.md` |
+| `cogni-workspace:claims` not available | WARNING: Skip Phase 2 + 3, run Phase 4 in structural-review-only mode (max 1 iteration), skip Phase 3 of `references/claims-integration.md` |
 | Verification returns FAIL | Present failed claims interactively in Phase 3. Do not auto-correct. |
 | Reviewer returns `revise` but no priorities | Treat as `accept` (defensive — cogni-trends reviewer rarely emits this state) |
 | Revisor validation fails | Surface specific failure to the user; do not auto-rerun. Backup at `.tips-trend-report-pre-revision-v{N}.md` is canonical. |

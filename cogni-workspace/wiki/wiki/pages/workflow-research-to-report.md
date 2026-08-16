@@ -8,7 +8,7 @@ updated: 2026-08-13
 sources:
   - https://github.com/cogni-work/insight-wave/blob/main/docs/workflows/research-to-report.md
 status: stable
-related: [plugin-cogni-knowledge, plugin-cogni-narrative, plugin-cogni-visual, plugin-cogni-claims]
+related: [plugin-cogni-knowledge, plugin-cogni-narrative, plugin-cogni-visual, plugin-cogni-workspace]
 ---
 
 Original research turned into a presentation — the pipeline an analyst runs to get from a question to a deck without losing the evidence trail.

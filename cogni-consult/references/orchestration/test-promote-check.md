@@ -52,7 +52,7 @@ verbatim including unit) plus a `provenance_type` and a **capped** `status`:
 
 A scanned bare literal is almost always `given` or `estimate`; do **not** assign
 `provenance_type: "claim"` here — reaching `verified` requires the live
-cogni-claims round-trip (`scripts/submit-assumption-claim.py`), which is out of
+`cogni-workspace:claims` round-trip (`scripts/submit-assumption-claim.py`), which is out of
 scope for an authoring-time promotion. `used_by[]` is resolver-owned — never
 hand-author it (the resolver appends it on `--in-place`). The full field
 contract is `references/data-model.md`, Assumption Registry.

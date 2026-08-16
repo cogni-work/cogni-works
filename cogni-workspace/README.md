@@ -35,6 +35,7 @@ cogni-workspace is the ecosystem's infrastructure-as-plugin layer: a dedicated p
 8. **Ask the bundled wiki** — `ask` reads a vendor-curated insight-wave reference wiki bundled at `wiki/` (self-contained index-first grounded read) so users can ask grounded questions about plugins, skills, agents, architecture, and conventions without grepping source files
 9. **File and track issues** — `cogni-issues` uses the authenticated GitHub CLI to consult, deduplicate, create, list, and inspect plugin issues with atomic labels
 10. **Troubleshoot plugin failures** — `troubleshoot` diagnoses plugin integrity, cross-plugin dependencies, stale state, and common setup errors through `/troubleshoot`
+11. **Verify claims against their cited sources** — `claims` runs the six-mode claim-verification lifecycle (submit, verify, dashboard, inspect, resolve, cobrowse) that cogni-trends, cogni-portfolio, cogni-consult and cogni-knowledge submit sourced assertions to; `claim-entity` is the cross-plugin data contract those plugins write against
 
 ## What it means for you
 
@@ -140,6 +141,12 @@ State lives in two layers that other plugins consume. Configuration (env vars, t
 | `workspace-dashboard` | skill | Interactive HTML dashboard of workspace foundation, env vars, plugin registry, themes, and dependencies |
 | `cogni-issues` | skill | File, deduplicate, list, and inspect plugin issues through the authenticated GitHub CLI |
 | `troubleshoot` | skill | Diagnose plugin integrity, cross-plugin dependencies, stale state, and common setup failures |
+| `claims` | skill | Six-mode claim-verification lifecycle — submit, verify, dashboard, inspect, resolve, cobrowse |
+| `claim-entity` | skill | Cross-plugin ClaimEntity data contract — record shapes, claim types, severity levels, on-disk `cogni-claims/` store layout |
+| `claim-verifier` | agent | Fetches one source URL and verifies every claim against it, returning deviation analysis as strict JSON |
+| `source-inspector` | agent | Opens a source URL via claude-in-chrome and walks the user to the relevant passage (cobrowse / inspect) |
+| `commands/claims.md` | command | Registers `/claims` as the entry point to the verification lifecycle |
+| `claims-store.sh` | script | JSON state manager for the claim store, shipped with the `claims` skill (`skills/claims/scripts/`) |
 | `on-session-start.sh` | hook (SessionStart) | Sources workspace environment and validates plugin availability at session start |
 | `on-session-start-language.sh` | hook (SessionStart) | Injects the language rules the built-in "# Language" system-prompt section does not carry |
 | `check-dependencies.sh` | script | Returns JSON with availability/version of required and optional dependencies |
@@ -159,9 +166,11 @@ State lives in two layers that other plugins consume. Configuration (env vars, t
 ```
 cogni-workspace/
 ├── .claude-plugin/plugin.json    Plugin manifest
-├── skills/                       11 workspace management skills
+├── skills/                       13 workspace management skills
 │   ├── ask/                      Query the bundled insight-wave wiki for grounded answers
 │   ├── audit-region-sources/     Audit per-plugin region-source overlays against the registry
+│   ├── claim-entity/             Cross-plugin ClaimEntity data contract and store layout
+│   ├── claims/                   Claim-verification lifecycle (+ scripts/claims-store.sh)
 │   ├── cogni-issues/             File and track plugin issues through the GitHub CLI
 │   ├── install-mcp/              MCP server installation and Desktop config patching
 │   ├── manage-markets/           Write path for the canonical supported-markets registry
@@ -171,6 +180,12 @@ cogni-workspace/
 │   ├── troubleshoot/             Diagnose plugin and cross-plugin failures
 │   ├── workspace-dashboard/      Interactive HTML workspace status dashboard
 │   └── workspace-status/
+├── agents/                       Claim-verification subagents
+│   ├── claim-verifier.md         Verify claims against one source URL (JSON out)
+│   └── source-inspector.md       Open a source via claude-in-chrome for cobrowse/inspect
+├── commands/                     Slash commands
+│   ├── claims.md                 Registers /claims
+│   └── troubleshoot.md           Registers /troubleshoot
 ├── wiki/                         Bundled vendor-curated insight-wave reference wiki (read by ask)
 │   ├── .cogni-wiki/              Wiki config + lockfile
 │   ├── SCHEMA.md                 Wiki page schema

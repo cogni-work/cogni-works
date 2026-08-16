@@ -132,7 +132,7 @@ Independently of `state`, each deliverable carries an optional `lineage_status`:
 | `status` | Currently always `"stale"` when present; `null` (or the field absent) means current |
 | `reason` | Human-readable explanation naming the upstream coordinate and the trigger |
 | `flagged_at` | ISO-8601 UTC timestamp of when the flag was raised |
-| `trigger` | `"deliverable_update"` (an upstream deliverable was reworked) or `"claims_correction"` (a cogni-claims correction cascaded in) |
+| `trigger` | `"deliverable_update"` (an upstream deliverable was reworked) or `"claims_correction"` (a `cogni-workspace:claims` correction cascaded in) |
 
 `lineage_status` is **orthogonal to `state`**: a deliverable can be `complete` and
 `stale` at the same time. That is the point — the completed artifact and its DT

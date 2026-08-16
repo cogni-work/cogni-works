@@ -89,7 +89,7 @@ Each plugin implements an established framework (Corporate Visions, Double Diamo
 
 #### Source Verification
 
-[cogni-workspace](cogni-workspace/README.md) verifies whether sourced claims match what their cited sources actually say — catching misquotations, unsupported conclusions, selective omissions, and stale data. Other plugins register claims during generation; cogni-claims fetches each source and flags deviations for your review. 2 skills and 2 agents.
+[cogni-workspace](cogni-workspace/README.md) verifies whether sourced claims match what their cited sources actually say — catching misquotations, unsupported conclusions, selective omissions, and stale data. Other plugins register claims during generation; cogni-workspace fetches each source and flags deviations for your review. 2 skills and 2 agents.
 
 > "Verify all claims in the trend report against their cited sources"
 

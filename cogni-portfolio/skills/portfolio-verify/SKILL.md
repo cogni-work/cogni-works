@@ -25,7 +25,7 @@ This matters because downstream outputs (synthesis, exports, proposals) inherit 
 
 ## Prerequisites
 
-This skill requires the `cogni-claims` plugin. If the `cogni-workspace:claims` skill is not available, inform the user and provide installation guidance.
+This skill depends on the `cogni-workspace:claims` skill, which performs the actual source-checking. If that skill is not available, tell the user cogni-workspace is not installed and point them at its installation instructions.
 
 If no `cogni-claims/` directory exists in the project, no claims have been submitted yet. Research agents submit claims automatically when web search is used during market research, competitor research, and proposition generation. Suggest running those skills with web research enabled first.
 
@@ -249,5 +249,5 @@ Regenerate the dashboard and hand the user its link, every time, per `$CLAUDE_PL
 - This skill orchestrates; `cogni-workspace:claims` does the actual verification work
 - Claims without web sources (internal estimates) are not submitted and do not need verification
 - Re-running verification on already-verified claims is safe (re-checks the source)
-- The `cogni-claims/` directory lives inside the portfolio project directory (managed by the cogni-claims plugin)
+- The `cogni-claims/` directory lives inside the portfolio project directory — the directory name is historical; the claim registry is now managed by `cogni-workspace:claims`
 - **Communication Language**: Read `portfolio.json` in the project root. If a `language` field is present, communicate with the user in that language (status messages, instructions, recommendations, questions). Technical terms, skill names, and CLI commands remain in English. If no `language` field is present, default to English.

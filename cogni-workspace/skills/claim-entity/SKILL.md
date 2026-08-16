@@ -5,7 +5,7 @@ description: |
   and ResolutionRecord schemas, status transitions, deviation types, severity levels, and
   workspace layout. Use this skill whenever you need to understand claim data structures,
   create or validate claim records, check what fields a ClaimRecord has, understand deviation
-  types or severity levels, or work with the cogni-claims directory layout. Any plugin that submits
+  types or severity levels, or work with the on-disk `cogni-claims/` claim-store layout. Any plugin that submits
   or consumes claims should consult this skill for the contract.
 allowed-tools: Read, Write, Edit, Glob, Grep
 ---
@@ -59,6 +59,12 @@ any status ──> re-verify          (returns to verified/deviated/source_unava
 ## Workspace Layout
 
 Claim state persists in the calling project's `cogni-claims/` directory:
+
+The directory name is a compatibility fact, not relocation debt. It holds accumulated per-project
+user state that no upgrade hook could rewrite across every disk, so it keeps its name even though
+the skill now ships from cogni-workspace. The discriminator for any future namespace sweep is the
+colon: a colon-qualified dispatch token naming the retired plugin is rewritten, a `cogni-claims/`
+path never is.
 
 ```
 {working_dir}/cogni-claims/

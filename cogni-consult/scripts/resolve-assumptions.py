@@ -16,7 +16,7 @@ write, deduped on the citer's engagement-relative path, so repeated renders
 never duplicate an edge and an unchanged registry is never rewritten).
 A dry-run stays fully read-only toward the registry and field.json. When a
 cited claim-type assumption carries status "verified", the resolver also
-READS (never writes) the workspace cogni-claims registry to check the
+READS (never writes) the workspace cogni-claims/ registry to check the
 verified-evidence gate — see validate_provenance; --claims-file overrides
 the default engagement-relative location ../../cogni-claims/claims.json.
 
@@ -54,7 +54,7 @@ ID_PREFIX = "asm-"
 PROVENANCE_TYPES = ("given", "estimate", "claim")
 STATUS_LADDER = ("stated", "reviewed", "verified")
 # Highest status each type may carry. `verified` (the top of the ladder) is
-# reachable only by a claim-type assumption, and only through the cogni-claims
+# reachable only by a claim-type assumption, and only through the cogni-workspace:claims
 # verify path: the cap admits claim/verified structurally, but the
 # verified-evidence gate in validate_provenance then requires citation.claim_id
 # to resolve to a ClaimRecord whose own status is "verified" — so a hand-set
@@ -170,7 +170,7 @@ def validate_provenance(registry, cited_ids, claims_file):
 
     Verified-evidence gate: a cited claim-type entry at status "verified" is
     additionally required to carry a citation.claim_id that resolves to a
-    ClaimRecord in the cogni-claims registry whose own status is "verified".
+    ClaimRecord in the cogni-claims/ registry whose own status is "verified".
     The claims registry is loaded lazily (read-only) and only when at least one
     cited entry needs the gate, so briefs without verified claims never touch
     it and a dry-run stays read-only.
@@ -210,18 +210,18 @@ def validate_provenance(registry, cited_ids, claims_file):
             "status exceeds the provenance_type cap — a value must never carry "
             "more confidence than its provenance earns (given caps at 'stated', "
             "estimate at 'reviewed'; only a claim may reach 'verified', and "
-            "only through the cogni-claims verify path)",
+            "only through the cogni-workspace:claims verify path)",
         "verified_claim_id_missing":
-            "status 'verified' requires citation.claim_id — the cogni-claims "
+            "status 'verified' requires citation.claim_id — the claim-verification "
             "back-reference the verify path writes; a verified status without "
             "it is hand-authored and rejected",
         "claim_id_dangling":
             "citation.claim_id does not resolve to any ClaimRecord in the "
-            "cogni-claims registry (%s) — the back-reference is dangling"
+            "cogni-claims/ registry (%s) — the back-reference is dangling"
             % claims_file,
         "claim_not_verified":
             "the referenced ClaimRecord is not itself 'verified' in the "
-            "cogni-claims registry — an unverified/deviated/unavailable claim "
+            "cogni-claims/ registry — an unverified/deviated/unavailable claim "
             "cannot back a verified assumption",
     }
     for check, message in prov_messages.items():
@@ -232,7 +232,7 @@ def validate_provenance(registry, cited_ids, claims_file):
 
 
 def _load_claims(claims_file):
-    """Return {claim_id: record} from the cogni-claims registry, read-only.
+    """Return {claim_id: record} from the cogni-claims/ registry, read-only.
 
     A missing or unreadable registry fails loud: the gate exists precisely so a
     verified marker cannot render without checkable evidence, and an absent
@@ -245,7 +245,7 @@ def _load_claims(claims_file):
         _emit(False, {"failed_check": "claims_registry_unreadable",
                       "path": claims_file},
               "a cited claim-type assumption carries status 'verified' but the "
-              "cogni-claims registry could not be read (%s) — the "
+              "cogni-claims/ registry could not be read (%s) — the "
               "verified-evidence gate cannot pass without it (override the "
               "location with --claims-file)" % exc)
     return {c.get("id"): c for c in raw.get("claims", [])
@@ -433,7 +433,7 @@ def main():
                                 "link: substitute [[assumptions#<slug>|<value>]] wikilinks into "
                                 "the browsable register (register-generator.py), marker intact")
     p_resolve.add_argument("--claims-file", default=None,
-                           help="cogni-claims registry the verified-evidence gate reads "
+                           help="cogni-claims/ registry the verified-evidence gate reads "
                                 "(default: <engagement-dir>/../../cogni-claims/claims.json; "
                                 "only consulted when a cited claim-type assumption is 'verified')")
     p_resolve.set_defaults(func=cmd_resolve)

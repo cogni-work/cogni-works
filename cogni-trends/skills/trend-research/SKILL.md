@@ -381,7 +381,7 @@ Write `{PROJECT_PATH}/.metadata/trend-research-output.json`:
       "digitales-fundament": ".logs/claims-digitales-fundament.json"
     },
     "sections": {
-      "externe-effekte": ".logs/section-externe-effekte.json",
+      "externe-effekte": ".logs/section-externe-effekte.md",
       "digitale-wertetreiber": ".logs/section-digitale-wertetreiber.md",
       "neue-horizonte": ".logs/section-neue-horizonte.md",
       "digitales-fundament": ".logs/section-digitales-fundament.md"

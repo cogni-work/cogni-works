@@ -25,8 +25,7 @@ set -eu
 PLUGIN_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 SETUP="$PLUGIN_ROOT/skills/knowledge-setup/SKILL.md"
 
-red()   { printf '%s\n' "$1"; }
-green() { printf '%s\n' "$1"; }
+. "$(dirname "$0")/fixtures/test_helpers.sh"
 
 errors=0
 

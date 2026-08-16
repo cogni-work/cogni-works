@@ -2,7 +2,7 @@
 name: source-inspector
 model: sonnet
 color: cyan
-description: Fetch a source URL via claude-in-chrome, locate the relevant passage, and present evidence to the user.
+description: Fetch a source URL via claude-in-chrome, locate the relevant passage, and present evidence to the user. Dispatched by explicit subagent_type when a verified deviation needs the user's own eyes on the live page before a resolution decision is made; requires the Claude-in-Chrome extension to be installed and connected.
 tools: ["mcp__claude-in-chrome__tabs_create_mcp", "mcp__claude-in-chrome__navigate", "mcp__claude-in-chrome__get_page_text", "mcp__claude-in-chrome__read_page", "mcp__claude-in-chrome__find"]
 ---
 
@@ -52,9 +52,7 @@ You will receive in your task prompt:
 
 ### Step 3: Present Evidence
 
-The source is open in the user's actual browser — they can see it directly. There is no programmatic screenshot; instead the user has live visual access to the page.
-
-This combined with the text match provides evidence for resolution decisions.
+The source is open in the user's actual browser, so they have live visual access to the page — there is no programmatic screenshot. That, combined with the text match, is the evidence for the resolution decision.
 
 ### Step 4: Report to User
 
@@ -84,3 +82,5 @@ Return a concise JSON-compatible message:
   "notes": "Source is open in the user's browser for direct review."
 }
 ```
+
+**Which envelope applies.** Return the Step 1 unavailability envelope and stop ONLY when claude-in-chrome itself is unavailable or navigation fails at the page level — the two cases where no page was ever reached. Every other outcome returns this Step 4 envelope, including a passage that is genuinely absent from a page you did reach: report that as `passage_found: false` with `notes` explaining the miss, never as the unavailability envelope. The distinction matters to the caller, which reads an unavailability envelope as "retry once the extension is connected" and a `passage_found: false` result as evidence about the source itself.

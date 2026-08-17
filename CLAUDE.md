@@ -170,7 +170,9 @@ Use `cogni-docs` skills to manage: `doc-audit` detects drift, `doc-generate` fix
 | claude-in-chrome | cogni-website, cogni-workspace | Browser automation (verification, preview, theme extraction) |
 | pencil | cogni-visual, cogni-website | Web narrative, storyboard, poster, hero rendering |
 
-Managed by `cogni-workspace:install-mcp`. Plugin `.mcp.json` files reference installed servers via `$HOME/.claude/mcp-servers/{name}/start.sh`.
+Managed by `cogni-workspace:install-mcp`, which installs each server on demand and writes it into the user's own config — the top-level `mcpServers` in `~/.claude.json` for Claude Code, `claude_desktop_config.json` for Claude Desktop — pointing at `$HOME/.claude/mcp-servers/{name}/start.sh`.
+
+**No plugin ships a `.mcp.json`.** A checked-in declaration asserts machine state the repo cannot guarantee: the server is spawned at session start even where it was never installed, and it fails visibly there. A second plugin declaring the *same* server name is worse than redundant — the client disambiguates by plugin-qualifying the tool names, which silently dead-matches any `mcp__<server>__.*` hook matcher, with nothing in CI reporting it. `cogni-workspace/tests/test-mcp-declaration-hygiene.sh` enforces the rule.
 
 ## Contributing
 

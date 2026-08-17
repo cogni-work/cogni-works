@@ -40,7 +40,7 @@ This same structure powers cogni-portfolio's proposition messaging — see [[con
 ## Auto-generated vs hand-written
 
 Auto-generated sections are produced by cogni-docs:
-- `doc-generate` writes sections 4, 11-13 from plugin metadata (skills, agents, plugin.json, .mcp.json)
+- `doc-generate` writes sections 4, 11-13 from plugin metadata (skills, agents, plugin.json)
 - `doc-sync` aligns descriptions across plugin.json, marketplace.json, and README first paragraph
 - `doc-power` strengthens IS/DOES/MEANS messaging
 - `doc-audit` detects drift between sections and source of truth

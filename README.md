@@ -156,7 +156,7 @@ For regulated environments — GDPR, SSO, managed settings, MDM / Group Policy, 
 
 ### MCP servers at a glance
 
-Some plugins extend their capabilities through external [MCP servers](https://docs.anthropic.com/en/docs/build-with-claude/mcp). Plugins declare their MCP dependencies in `.mcp.json` files — Desktop/Cowork auto-discovers and starts required servers on install.
+Some plugins extend their capabilities through external [MCP servers](https://docs.anthropic.com/en/docs/build-with-claude/mcp). No plugin declares a server itself — `cogni-workspace:install-mcp` installs it on demand and writes it into your own MCP config, so nothing is configured on a machine that never installed it.
 
 | MCP Server | Used by | What it enables | Install |
 |------------|---------|-----------------|---------|

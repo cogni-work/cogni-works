@@ -9,13 +9,18 @@
 # the production default of 30 ticks (3s); tests set a small value so they can
 # drive the timeout path in fractions of a second.
 # Exit codes: 0 = success, 1 = error
+#
+# Output (single JSON object):
+#   {"success": true,  "data": {...}, "error": null}   stdout, on success
+#   {"success": false, "data": null,  "error": "..."}  stderr, on any failure (exit 1)
+#
 set -euo pipefail
 
 PROJECT_DIR="${1:-}"
 CLAIM_JSON="${2:-}"
 
 if [ -z "$PROJECT_DIR" ] || [ -z "$CLAIM_JSON" ]; then
-  echo '{"error": "Usage: append-claim.sh <project-dir> <claim-json>"}' >&2
+  echo '{"success": false, "data": null, "error": "Usage: append-claim.sh <project-dir> <claim-json>"}' >&2
   exit 1
 fi
 
@@ -67,7 +72,7 @@ while ! mkdir "$LOCK_DIR" 2>/dev/null; do
         continue
       fi
     fi
-    echo "{\"error\": \"Could not acquire lock on claims.json after ${TIMEOUT_LABEL}s\"}" >&2
+    echo "{\"success\": false, \"data\": null, \"error\": \"Could not acquire lock on claims.json after ${TIMEOUT_LABEL}s\"}" >&2
     exit 1
   fi
 done
@@ -87,14 +92,18 @@ import json, sys
 claims_file = sys.argv[1]
 claim_json = sys.argv[2]
 
-with open(claims_file, 'r') as f:
-    data = json.load(f)
+try:
+    with open(claims_file, 'r') as f:
+        data = json.load(f)
 
-claim = json.loads(claim_json)
-data['claims'].append(claim)
+    claim = json.loads(claim_json)
+    data['claims'].append(claim)
 
-with open(claims_file, 'w') as f:
-    json.dump(data, f, indent=2)
+    with open(claims_file, 'w') as f:
+        json.dump(data, f, indent=2)
+except (OSError, ValueError) as exc:
+    sys.stderr.write(json.dumps({'success': False, 'data': None, 'error': str(exc)}) + '\n')
+    sys.exit(1)
 
-print(json.dumps({'status': 'appended', 'claim_id': claim.get('id', 'unknown'), 'total': len(data['claims'])}))
+print(json.dumps({'success': True, 'data': {'status': 'appended', 'claim_id': claim.get('id', 'unknown'), 'total': len(data['claims'])}, 'error': None}))
 " "$CLAIMS_FILE" "$CLAIM_JSON"

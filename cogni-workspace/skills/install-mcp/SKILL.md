@@ -151,7 +151,9 @@ a path which does not exist yet.
 
 Pass `--target` for the environment detected above (`desktop`, `cli`, or `both`), and
 scope every invocation with `--server` so only the servers the plan actually named are
-written. An unrequested entry is another server spawned at every session or app start,
+written — repeating the flag once per server (`--server mcp_excalidraw --server pencil`),
+because it appends rather than splitting a comma-separated value, so a CSV filters on a name
+no registry entry has and the run writes nothing while still reporting success. An unrequested entry is another server spawned at every session or app start,
 which is the condition this whole arrangement exists to avoid — for either target. The
 script's name predates its remit: despite `desktop` in the file name it writes either
 config, selected by `--target`, so a `--target cli` invocation writing `~/.claude.json`

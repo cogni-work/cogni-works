@@ -166,9 +166,10 @@ reflects what is actually installed. This check verifies that required MCPs are 
 in the current session.
 
 Read `${CLAUDE_PLUGIN_ROOT}/skills/workspace-status/references/mcp-registry.md` for the full
-list of ecosystem MCPs and which plugins need them. Per-server `desktop_config_key` and
-install metadata live in `${CLAUDE_PLUGIN_ROOT}/references/mcp-git-registry.json` — read it
-when triaging a server other than the ones tabled below.
+list of ecosystem MCPs and which plugins need them. Read
+`${CLAUDE_PLUGIN_ROOT}/references/mcp-git-registry.json` for any server's `desktop_config_key`
+and install metadata — only `excalidraw`'s key is spelled out inline below, so look `pencil`'s
+up there rather than assuming it.
 
 **Detection approach**: Probe each known server's one representative tool with `ToolSearch`
 using the `select:` prefix — a returned tool definition means the MCP is loaded, no match
@@ -196,15 +197,23 @@ means it is not available. The **Install** column decides how a missing server i
   |---|---|---|---|
   | absent | absent | never installed | route to `/cogni-workspace:install-mcp` |
   | absent | present | built but not configured | re-run the config write — `/cogni-workspace:install-mcp` |
-  | present | present | configured after this session started | advise a session restart |
+  | present | absent | configured but not built, or the install directory was deleted | re-run `/cogni-workspace:install-mcp` to clone and build — this is the state that surfaces a *failed* server under `/mcp`, because the config entry points at a `start.sh` that is not there |
+  | present | present | configured, but not loaded in this session | advise a session restart |
 
-  A restart *on its own* only fixes the last row: `install-mcp.sh` clones and builds, and
-  nothing is configured until `patch-desktop-config.py` runs — so in the first two rows the
-  config write comes first and the new session follows it, never instead of it. The registry
-  read at the top of this check documents both steps
+  A restart *on its own* only fixes the configured-but-not-loaded row: `install-mcp.sh` clones
+  and builds, and nothing is configured until `patch-desktop-config.py` runs — so wherever a
+  step is missing the write or the build comes first and the new session follows it, never
+  instead of it. If a restart does not clear it, treat the server as a failed spawn (a broken
+  build or a port conflict) rather than a configuration gap. Both steps are documented in the
+  `mcp-registry.md` read at the top of this check
 - **Manual**: The MCP is a manual install — the Claude-in-Chrome browser extension or the
   Pencil desktop app. Name what to fetch and inform the user, but don't flag as an error;
-  a missing manual server is not the "Not loaded" case above
+  a missing manual server is not the "Not loaded" case above. The two differ in one way that
+  matters: `claude-in-chrome` has no registry entry and so no config entry at all, whereas
+  `pencil` is a registry `native` server whose `pencil` config entry `install-mcp` still
+  writes. So if Pencil is installed and running and its tools are still missing, check for the
+  `pencil` key in `~/.claude.json` and run `/cogni-workspace:install-mcp` if it is absent,
+  before telling the user to open the app
 
 Only check MCPs for plugins that are actually installed (cross-reference with the plugin
 registry from Check 3).

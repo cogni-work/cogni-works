@@ -39,10 +39,17 @@
 #   exactly once in the fixed script (the read line is `lock_mtime=$(stat ...`,
 #   which does not contain it), so the substitution can never be a no-op.
 #
-#   Only ONE arm is recorded. An arm mutating the GNU-first ordering
-#   (`s/stat -c %Y/stat -f %m/`) would report a vacuous guard: the stub below
-#   answers unconditionally and ignores its flags by design, so no case here can
-#   discriminate `stat -c %Y` from `stat -f %m`.
+#   Only ONE arm is recorded, and the reason is narrower than it may look. An arm
+#   mutating the GNU-first ordering (`s/stat -c %Y/stat -f %m/`) reports a vacuous
+#   guard against the TWO CASES BELOW, because their stub answers unconditionally
+#   and ignores its flags by design — deliberately, so both stay ordering-agnostic.
+#
+#   That is a property of these two cases, NOT a general limit: a flag-aware stub
+#   (`-c` prints an epoch, `-f` prints `%m` and exits 0, simulating GNU) does
+#   discriminate the two orderings, and the ordering is worth pinning on its own
+#   merits — with the floor present but the ordering swapped, a GNU host floors
+#   every contended lock's reading to 0, reads it as ancient, and sweeps a LIVE
+#   peer's lock. Do not read this note as "the ordering cannot be tested".
 
 # `set -u` only — `set -e` would abort on the first failing assertion and defeat
 # the per-case failure counter below. Both cases also run a script that is

@@ -12,24 +12,35 @@ are decided here and carried out elsewhere; the issue that carries them is named
 
 ## On the figures in this document
 
-Every count below is attributed to the command that produced it, measured against
-`origin/main` at `0698cb2c`. Where a previously-quoted figure could not be reproduced, that is
-recorded plainly rather than smoothed over.
+Every count below is attributed to the command that produced it, measured against the ref named
+beside it. Where a previously-quoted figure could not be reproduced, that is recorded plainly
+rather than smoothed over.
 
-| Figure | Command | Value |
-|---|---|---|
-| Pending changes | `bash scripts/release-bundle-wiki.sh --check` | `changes_pending: 28` |
-| Root page count | same command, `source_page_count` | `170` |
-| Bundled page count | `find cogni-workspace/wiki/wiki/pages -maxdepth 1 -name '*.md' \| wc -l` | `176` |
-| Itemised breakdown | `rsync -anci --delete wiki/ cogni-workspace/wiki/` | 20 content + 7 delete + 1 add |
+The figures were re-measured when Decision 3 was executed. The table now carries the **post-
+execution** state; the pre-execution values it replaces are kept in the paragraph below rather
+than overwritten, because the difference between them is what Decision 3 actually did.
 
-**The originating issue says 29; measurement says 28.** Both figures were taken with the same
-command at different times, and the difference is not a miscount — it is the metric moving. An
-earlier measurement at `bab6a9cd` reported `128`, of which 100 lines were attribute-only
-(96 `.f..t....` files plus 4 `.d..t....` directories) produced by `rsync -i` itemising mtime
-differences on a fresh checkout. At `0698cb2c` that class is **empty**: all 28 lines are genuine
-content differences. Anyone re-measuring on a freshly-cloned tree may see the attribute lines
-return, because they are an artefact of checkout order rather than of the trees themselves.
+| Figure | Command | Value | Measured at |
+|---|---|---|---|
+| Substantive pending changes | `rsync -anci --delete wiki/ cogni-workspace/wiki/`, excluding attribute-only lines | 3 content + 7 delete + 1 add = **11** | Decision 3 execution branch |
+| Raw pending changes | `bash scripts/release-bundle-wiki.sh --check` | `changes_pending: 167` on a fresh checkout | Decision 3 execution branch |
+| Root page count | same command, `source_page_count` | `151` | Decision 3 execution branch |
+| Bundled page count | `find cogni-workspace/wiki/wiki/pages -maxdepth 1 -name '*.md' \| wc -l` | `157` | Decision 3 execution branch |
+
+**Read the substantive row, not the raw one.** The two rows disagree by 156 lines and neither is
+wrong: `changes_pending` counts every `rsync` itemise line, and on a freshly-checked-out tree 152
+`.f..t....` files plus 4 `.d..t....` directories are attribute-only mtime differences rather than
+content. This is the same artefact class described below, and it is why the substantive figure is
+quoted first and derived from the itemised command.
+
+**The moving figures, in order.** The originating issue said 29. Measurement at `bab6a9cd` said
+`128`, of which 100 lines were attribute-only. Measurement at `0698cb2c` said `28` with that class
+empty. Measurement at `563098e0` — the base of the Decision 3 execution branch — said **21**
+substantive lines (13 content + 7 delete + 1 add). None of those moves is a miscount; each is the
+metric moving. The `28` → `21` step was not reconciliation work at all: it is the cogni-claims and
+cogni-narrative/cogni-copywriting absorptions deleting pages out of both trees, which retired five
+group-A entries outright and left two more already identical. Executing Decision 3 then took the
+substantive figure from 21 to **11** by closing 10 of the 13 content deltas.
 
 ## Decision 1 — `entries_count` is corrected by hand, per tree
 
@@ -52,32 +63,43 @@ should not read `170 != 176` as fresh drift.
 **Reversing it** restores a count that overstates both trees, which is the state that let three
 page-deleting commits pass unnoticed.
 
-## Decision 2 — the expected pending-changes figure is 28, and the residual is explained
+## Decision 2 — the expected substantive residual is 11 lines, and every one is explained
 
-**Decision.** After this reconciliation, `bash scripts/release-bundle-wiki.sh --check` is
-expected to keep reporting `changes_pending: 28`. That figure is understood and intended.
+**Decision.** After this reconciliation *and* the execution of Decision 3, the itemised
+`rsync -anci --delete wiki/ cogni-workspace/wiki/` is expected to keep reporting **11 substantive
+lines**, plus a checkout-dependent number of attribute-only lines that carry no meaning. That
+residual is understood and intended.
 
-**Why.** The metric counts `rsync` itemise lines, and none of the three classes it counts is
-closed by the changes recorded here:
+**Why.** Each surviving line belongs to a decision that deliberately keeps the two trees apart:
 
 | Class | Lines | Why it survives |
 |---|---:|---|
 | `*deleting` | 7 | The bundled-only pages stay in place pending Decision 4 |
 | `>f+++++++` | 1 | The dated lint page is root-only by design (Decision 5) |
-| Content deltas | 20 | Recorded in Decision 3, executed separately |
+| Content delta — `.cogni-wiki/config.json` | 1 | Each config describes its own tree; the values are *supposed* to differ (Decision 1) |
+| Content delta — `wiki/log.md` | 1 | Frozen dated history, divergent on purpose (Decision 5) |
+| Content delta — `wiki/index.md` | 1 | Merged, never copied: the bundle keeps the seven Decision-4 bullets, the root keeps its maintenance section (Decision 3, group C) |
 
-The wikilink change in Decision 6 lands identically on both sides, so it adds no line. The
-`entries_count` change in Decision 1 does not add a line either: the two configs already
-differed, and they still differ.
+Decision 3's execution closed the other 10 content deltas — the six live group-A pages and the
+four group-B pages are now byte-identical across the trees. The wikilink change in Decision 6
+lands identically on both sides, so it adds no line. The `entries_count` change in Decision 1
+does not add a line either: the two configs already differed, and they still differ.
 
-**Reversing it** means the next person to read `28` treats it as unexplained drift and reaches
-for the sync script — the outcome Decision 3's rejected alternative exists to prevent.
+**Do not gate on `changes_pending`.** `bash scripts/release-bundle-wiki.sh --check` reported
+`changes_pending: 167` on the execution branch, and 156 of those were attribute-only. The
+substantive figure is the one to compare against, and it comes from the itemised command.
 
-## Decision 3 — the 20 content deltas resolve in two opposite directions
+**Reversing it** means the next person to read a large `changes_pending` treats it as unexplained
+drift and reaches for the sync script — the outcome Decision 3's rejected alternative exists to
+prevent.
 
-*Recorded, not executed. Carried out in issue #1401.*
+## Decision 3 — the content deltas resolve in two opposite directions
 
-**Rule.** Direction is decided per group, never by a blanket copy. Thirteen files are newer at
+*Executed in issue #1401.* Six live group-A pages were copied root → bundle, four group-B pages
+were back-ported bundle → root, and `wiki/index.md` was merged. The three structural files remain
+divergent by design; see Decision 2's residual table.
+
+**Rule.** Direction is decided per group, never by a blanket copy. The group-A files are newer at
 the root; four are newer in the bundle; three are structural and take bespoke handling.
 
 **Why.** The root copy is the editing surface, so the reflex is to treat it as correct
@@ -86,16 +108,27 @@ everywhere. For four pages that reflex would delete work. Commit `c44d52c3` appe
 directly to the *bundled* copies. Those sections have no root counterpart, so copying root over
 bundle discards them.
 
-### Group A — 13 files, root copy wins
+### Group A — originally 13 files, 6 live at execution, root copy wins
 
 Re-ingest commits enriched the root pages; the bundle was never re-synced afterwards and still
-holds the thinner generated stub.
+held the thinner generated stub. The six that were still divergent when Decision 3 executed were
+copied root → bundle verbatim and are now byte-identical:
 
 `agent-cogni-portfolio-proposition-generator.md`,
-`agent-cogni-portfolio-proposition-quality-assessor.md`, `concept-claim-lifecycle.md`,
-`concept-claims-propagation.md`, `plugin-cogni-portfolio.md`,
+`agent-cogni-portfolio-proposition-quality-assessor.md`, `plugin-cogni-portfolio.md`,
 `skill-cogni-portfolio-portfolio-verify.md`, `skill-cogni-portfolio-propositions.md`,
 `skill-cogni-trends-trend-report.md`
+
+The copy was verified non-destructive before it ran: on all six the root copy strictly enriched
+the bundled one — added `related:` entries, added wikilinks, expanded summary lines, and on
+`skill-cogni-portfolio-propositions.md` an 87-line rewrite over a 19-line stub — so no bundled
+line was lost. Every wikilink the copies carry already resolved in the destination tree, which is
+what kept parity cases W4 and W5 green.
+
+**Already identical at execution — 2 entries.** `concept-claim-lifecycle.md` and
+`concept-claims-propagation.md` were byte-identical in both trees by the time Decision 3 ran, so
+nothing was copied for them. They were live group-A entries when this was recorded; the re-ingest
+that closed them is the same class of movement the figures section describes.
 
 **Resolved by deletion — 5 former entries.** `agent-cogni-claims-claim-verifier.md`,
 `agent-cogni-claims-source-inspector.md`, `plugin-cogni-claims.md`,
@@ -107,8 +140,9 @@ The root-wins direction above is moot for them — there is no copy left on eith
 They are recorded here rather than silently dropped because a reconciliation run that still
 expected them would look for files that no longer exist, and the deletion is the *reason* the
 enrichment asymmetry stopped mattering, not evidence the ledger was wrong. `concept-claim-lifecycle.md`
-and `concept-claims-propagation.md` survive in both trees and stay live Group A entries — they are
-claim *concepts*, not namespaced plugin pages, so C1 never covered them.
+and `concept-claims-propagation.md` survive in both trees — they are claim *concepts*, not
+namespaced plugin pages, so C1 never covered them. They were live Group A entries when this was
+recorded and had converged to byte-identical by the time Decision 3 executed, as noted above.
 
 **Resolved by deletion — 14 further entries per tree.** The same mechanism fired again when
 cogni-narrative and cogni-copywriting were absorbed: `plugin-cogni-narrative.md`,
@@ -143,15 +177,36 @@ on the date they name, which is the same treatment the cogni-claims re-ingest li
 | `workflow-portfolio-to-pitch.md` | 56 | 72 | Steps, Common pitfalls |
 | `workflow-trends-to-solutions.md` | 52 | 79 | Two scenarios, Steps, Common pitfalls |
 
-These must be back-ported bundle → root *before* any sync runs, then maintained from the root
-like everything else.
+These were back-ported bundle → root *before* any sync ran, and are now maintained from the root
+like everything else. Each was a pure insertion — the shared prefix was byte-identical on both
+sides and `**Source**:` was the last line of both — so the back-port was a verbatim copy with zero
+root-only lines to lose.
+
+All four are now pinned to byte-identity by `PAGE_PARITY` in
+`cogni-workspace/tests/test-layering-claim-reconciled.sh`, so the sections that once existed only
+in the bundle cannot drift back out of the root tree unnoticed.
 
 ### Group C — 3 structural files
 
-`wiki/index.md` — the bundle's seven extra bullets are correct for the tree that holds those
-seven pages, so they are not drift. Separately, the root copy carries five description
-corrections and a root-only maintenance section. Neither side is wholly right; this one is
-merged, not copied.
+`wiki/index.md` — merged, not copied, and **still divergent after the merge, on purpose**. The
+bundle's seven extra bullets are correct for the tree that holds those seven pages, so they are not
+drift and were left in place; promoting them into the root tree would create seven dangling
+references there and pre-decide Decision 4. The root's `### Maintenance` section stays root-only
+for the same reason in reverse: it links `[[lint-2026-04-20]]`, a root-only page.
+
+Measured at execution, the two copies differed on **four** description/intro lines, not the five
+recorded here. Three resolved root-wins: the `### Skills` and `### Agents` preambles (the bundle
+asserted "across all 11 plugins", which the nine-plugin marketplace roster contradicts) and the
+`skill-cogni-portfolio-propositions` bullet (the bundle still carried the terse stub, matching the
+stub page group A replaced).
+
+The fourth is the case this rule was written for — **neither side was right.** The root said the
+website-setup skill discovers content from "cogni-portfolio, cogni-marketing, cogni-trends, and
+cogni-research"; the bundle omitted the fourth source entirely. `cogni-research` has no directory
+and is not on the marketplace roster, and the generating source
+`cogni-website/skills/website-setup/SKILL.md` names `cogni-knowledge`. Both trees now carry that
+corrected text. A blanket root-wins merge would have propagated a plugin name that does not exist;
+a blanket bundle-wins merge would have dropped a real source.
 
 Both `.cogni-wiki/config.json` files — closed by Decision 1.
 
@@ -222,7 +277,7 @@ but those are two of the seven pages Decision 4 holds, so taking that route woul
 Decision 4 as a side effect. Removing the two references decides nothing and leaves four valid
 options in the sentence.
 
-**Why both copies.** This page is one of four pinned to byte-identity between the trees by
+**Why both copies.** This page is one of eight pinned to byte-identity between the trees by
 `cogni-workspace/tests/test-layering-claim-reconciled.sh`. A one-sided edit turns that suite red.
 
 **On promotion.** If Decision 4 resolves toward promoting, restore both references — in both
@@ -254,12 +309,16 @@ executed one a deliberate act rather than an accident.
 Ground 3 still describes the post-sync check accurately. That check is left in place, and it is
 the new pre-sync gate rather than any change to it that supplies the defence.
 
-On the tree as recorded here a bare sync refuses on 27 paths: the 7 of Decision 4, the 4
-group-B pages, and — because the root re-ingest reworded lines rather than only appending — the
-13 group-A pages together with `wiki/index.md`, `wiki/log.md` and `.cogni-wiki/config.json`. The
-gate is deliberately blind to Decision 3's ruling that root wins for group A: a script cannot
-read this document, so it refuses and defers to the operator. Executing #1401 and #1402 is what
-returns a bare sync to silence.
+On the tree as originally recorded here a bare sync refused on 27 paths: the 7 of Decision 4, the
+4 group-B pages, and — because the root re-ingest reworded lines rather than only appending — the
+13 group-A pages together with `wiki/index.md`, `wiki/log.md` and `.cogni-wiki/config.json`.
+
+Once Decision 3 executed, that inventory narrowed to **10**: the 7 of Decision 4, plus
+`wiki/index.md`, `wiki/log.md` and `.cogni-wiki/config.json`. The group-A and group-B pages no
+longer appear, because they are now byte-identical across the trees and a sync has nothing to
+change on them. The gate is deliberately blind to Decision 3's ruling that root wins for group A: a
+script cannot read this document, so it refuses and defers to the operator. Decision 4 is now the
+only decision standing between a bare sync and silence, and #1402 carries it.
 
 ## Rejected alternative — regenerate `entries_count` with the wiki linter
 
@@ -276,9 +335,9 @@ Kept as a permanent inventory so the set stays auditable rather than being redis
 
 | Item | State | Carried by |
 |---|---|---|
-| 13 group-A pages thinner in the bundle | recorded, not executed | #1401 |
-| 4 group-B pages missing sections at the root | recorded, not executed | #1401 |
-| `wiki/index.md` needs a merge, not a copy | recorded, not executed | #1401 |
+| Group-A pages thinner in the bundle | closed — the 6 still divergent were copied root → bundle; 5 had been deleted from both trees and 2 had already converged | #1401 |
+| 4 group-B pages missing sections at the root | closed — back-ported bundle → root and pinned by `PAGE_PARITY` | #1401 |
+| `wiki/index.md` needs a merge, not a copy | closed — merged per the group-C rule; the two copies still differ by design | #1401 |
 | 7 bundled-only pages held | awaiting a maintainer ruling | #1402 |
 | `ecosystem-command-reference` names a retired command surface | held with the page above | #1402 |
 | Sync script destroys bundle-only content | closed — refuses by default; `--force` is the opt-in | #1403 |
@@ -288,8 +347,9 @@ Kept as a permanent inventory so the set stays auditable rather than being redis
 
 The two `log.md` copies and `lint-2026-04-20.md` are untouched, per Decision 5 — a future reader
 should not read them as misses. The two `entries_count` values remain different from each other,
-per Decision 1. The pending-changes figure remains 28, per Decision 2. None of the seven
-bundled-only pages is edited, promoted or deleted, per Decision 4.
+per Decision 1. The substantive residual remains 11 lines, per Decision 2 — and the two
+`wiki/index.md` copies remain different from each other, per Decision 3's group-C rule. None of the
+seven bundled-only pages is edited, promoted or deleted, per Decision 4.
 
 ## What guards this
 

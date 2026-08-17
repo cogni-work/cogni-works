@@ -18,7 +18,9 @@
 # Contract under test:
 #   - each tree's .cogni-wiki/config.json entries_count equals a LIVE count of
 #     that same tree's pages — derived, never hardcoded, one call per arm
-#   - every wiki reference in a tree resolves to a page in that SAME tree
+#   - every wiki reference in a tree resolves within that SAME tree, with that
+#     tree's pages AND its top-level *.md (index / log / overview) scanned as
+#     link SOURCES, not merely resolved as link targets
 #   - every page present in only one tree is named in the decisions record at
 #     cogni-workspace/references/wiki-tree-reconciliation.md
 #   - an empty, missing or config-less arm fails rather than reporting clean
@@ -112,29 +114,35 @@ root, label = sys.argv[1], sys.argv[2]
 pages_dir = os.path.join(root, "wiki", "pages")
 wiki_dir = os.path.join(root, "wiki")
 
-stems = set()
-for name in os.listdir(pages_dir):
-    if name.endswith(".md"):
-        stems.add(name[:-3])
-# index / log / overview live one level up, beside pages/, and are legitimate
-# link targets. Resolving against both locations is what keeps a correct
-# [[index]] from reading as a dangling reference.
-for name in os.listdir(wiki_dir):
-    if name.endswith(".md"):
-        stems.add(name[:-3])
+page_names = [n for n in os.listdir(pages_dir) if n.endswith(".md")]
+# index / log / overview live one level up, beside pages/. They are link targets
+# AND link sources: a catalogue that points at a page it no longer has is the
+# same defect as a page doing it. The isfile filter keeps a directory named
+# *.md from raising IsADirectoryError when it is opened below.
+top_names = [n for n in os.listdir(wiki_dir)
+             if n.endswith(".md") and os.path.isfile(os.path.join(wiki_dir, n))]
 
-if not stems:
+# Both arms are floored, and each floor has a case behind it. Flooring only the
+# pages arm would leave the top-level arm able to scan nothing and still report
+# clean -- which is the pages-only blindness this scan was widened to remove.
+if not page_names:
     print("ERROR [%s] no pages to scan under %s" % (label, pages_dir))
     sys.exit(1)
+if not top_names:
+    print("ERROR [%s] no top-level files to scan under %s" % (label, wiki_dir))
+    sys.exit(1)
+
+# stems is DERIVED from sources rather than accumulated alongside it, so the two
+# halves cannot drift apart. Blinding the scan to an arm also removes that arm
+# from the resolvable set, which turns any surviving reference to it dangling
+# instead of quietly unchecked.
+sources = [(pages_dir, n) for n in sorted(page_names)] + [(wiki_dir, n) for n in sorted(top_names)]
+stems = set(n[:-3] for _, n in sources)
 
 pattern = re.compile(r"\[\[([^\]]+)\]\]")
 offenders = 0
-scanned = 0
-for name in sorted(os.listdir(pages_dir)):
-    if not name.endswith(".md"):
-        continue
-    scanned += 1
-    with open(os.path.join(pages_dir, name), encoding="utf-8") as fh:
+for d, name in sources:
+    with open(os.path.join(d, name), encoding="utf-8") as fh:
         body = fh.read()
     for raw in pattern.findall(body):
         # Strip a display alias and an in-page anchor before resolving.
@@ -145,9 +153,6 @@ for name in sorted(os.listdir(pages_dir)):
             print("DANGLING [%s] %s -> [[%s]]" % (label, name, target))
             offenders += 1
 
-if scanned == 0:
-    print("ERROR [%s] no pages scanned under %s" % (label, pages_dir))
-    sys.exit(1)
 sys.exit(1 if offenders else 0)
 ' "$root" "$label" 2>&1)"
   rc=$?
@@ -245,6 +250,9 @@ mk_config() {
 mk_tree() {
   mk_page "$1/wiki/pages/alpha.md"
   mk_page "$1/wiki/pages/beta.md"
+  # Every real tree has a top-level catalogue, and check_links now requires one,
+  # so a fixture without it would fail on its floor rather than on its subject.
+  mk_page "$1/wiki/index.md" 'fixture catalogue.'
   mk_config "$1" "$2"
 }
 
@@ -363,6 +371,72 @@ if [ "$W8_A" -eq 0 ] && [ "$W8_B" -eq 0 ] && [ "$W8_C" -eq 0 ]; then
   pass "W8 an unrecorded page, a missing config and an empty arm each fail"
 else
   fail "W8 an unrecorded page, a missing config and an empty arm each fail"
+fi
+
+# ---------------------------------------------------------------------------
+# W9 - a dangling reference in a top-level index.md fails and names index.md.
+# The pages arm is left clean on purpose, so the red can only come from the
+# top-level source arm. Without that arm this case reports rc 0 and proves
+# nothing: both real trees carried twelve such references for the whole
+# lifetime of the retired-plugin cleanup with W4/W5 green throughout.
+# ---------------------------------------------------------------------------
+F9="$TMPROOT/w9"
+mk_fixture_repo "$F9"
+mk_page "$F9/wiki/wiki/index.md" 'catalog entry: [[delta-not-here]].'
+run_links "$F9/wiki" "root"
+if assert_rc 1 && assert_out_has "DANGLING" && assert_out_has "index.md" && assert_out_has "delta-not-here"; then
+  pass "W9 a dangling reference in a top-level index.md fails and names index.md"
+else
+  fail "W9 a dangling reference in a top-level index.md fails and names index.md"
+fi
+
+# ---------------------------------------------------------------------------
+# W10 - the new arm does not cry wolf: a valid top-level index.md referencing
+# both pages and another top-level file still scans clean.
+# ---------------------------------------------------------------------------
+F10="$TMPROOT/w10"
+mk_fixture_repo "$F10"
+mk_page "$F10/wiki/wiki/log.md" 'no references here.'
+mk_page "$F10/wiki/wiki/index.md" 'catalog: [[alpha]] and [[beta]], history in [[log]].'
+run_links "$F10/wiki" "root"
+if assert_rc 0; then
+  pass "W10 a valid top-level index.md scans clean and resolves top-level targets"
+else
+  fail "W10 a valid top-level index.md scans clean and resolves top-level targets"
+fi
+
+# ---------------------------------------------------------------------------
+# W11 - the empty-arm floor survives the widening. Making index.md scannable
+# also makes it a stem, so a guard keyed on the stem set alone would now be
+# satisfied by index.md while pages/ sits empty. This pins the floor to the
+# pages enumeration instead.
+# ---------------------------------------------------------------------------
+F11="$TMPROOT/w11"
+mk_fixture_repo "$F11"
+rm -f "$F11/wiki/wiki/pages"/*.md
+mk_page "$F11/wiki/wiki/index.md" 'catalog with no pages behind it.'
+run_links "$F11/wiki" "root"
+if assert_rc 1 && assert_out_has "no pages to scan"; then
+  pass "W11 an emptied pages arm still fails even when a top-level index.md is scannable"
+else
+  fail "W11 an emptied pages arm still fails even when a top-level index.md is scannable"
+fi
+
+# ---------------------------------------------------------------------------
+# W12 - the top-level arm has a floor of its own. Without it a tree whose
+# catalogue is renamed or deleted scans pages only and reports clean, which is
+# exactly the blindness this widening removed. The pages arm cannot stand in
+# for this: the bundled tree has no page referencing [[index]], so losing its
+# catalogue would take the source arm offline with every case still green.
+# ---------------------------------------------------------------------------
+F12="$TMPROOT/w12"
+mk_fixture_repo "$F12"
+rm -f "$F12/wiki/wiki"/*.md
+run_links "$F12/wiki" "root"
+if assert_rc 1 && assert_out_has "no top-level files to scan"; then
+  pass "W12 a tree with no top-level file fails rather than scanning pages only"
+else
+  fail "W12 a tree with no top-level file fails rather than scanning pages only"
 fi
 
 # ---------------------------------------------------------------------------

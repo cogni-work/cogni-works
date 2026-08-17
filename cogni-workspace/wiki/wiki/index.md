@@ -66,13 +66,6 @@ This is the content catalog for **insight-wave**. Every wiki page is listed here
 
 One page per skill, grouped by plugin, alphabetical within each.
 
-#### cogni-copywriting
-
-- [[skill-cogni-copywriting-audit-copywriter]] — Audit cogni-copywriting's arc-preservation references against cogni-narrative's upstream arc definitions.
-- [[skill-cogni-copywriting-copy-json]] — Adapter skill that polishes text fields inside JSON files by extracting them, delegating to the copywriter skill for polishing, and writing the polished text back.
-- [[skill-cogni-copywriting-copy-reader]] — This skill should be used when the user wants to review a document from different stakeholder perspectives, simulate how different audiences would read a document, or get multi-perspective feedback....
-- [[skill-cogni-copywriting-copywriter]] — Polish, rewrite, or create business documents (memos, briefs, reports, proposals, one-pagers, executive summaries, emails, blog posts, business letters) using professional messaging frameworks (BLU....
-
 #### cogni-marketing
 
 - [[skill-cogni-marketing-abm]] — Generate account-based marketing content (account plans, personalized email sequences, executive briefings) tailored to specific named accounts using portfolio customer data and TIPS strategic themes.
@@ -86,12 +79,6 @@ One page per skill, grouped by plugin, alphabetical within each.
 - [[skill-cogni-marketing-marketing-setup]] — Initialize a cogni-marketing project by discovering cogni-trends and cogni-portfolio sources, configuring brand voice, and selecting markets with GTM paths.
 - [[skill-cogni-marketing-sales-enablement]] — Generate sales enablement content (battle cards, one-pagers, demo scripts, objection handlers, proposal sections) that equips sales teams with competitive intelligence and deal-closing tools from p....
 - [[skill-cogni-marketing-thought-leadership]] — Generate thought leadership content (blog posts, LinkedIn articles, keynote abstracts, podcast outlines, op-eds) that positions the brand as an industry expert using TIPS trend data and portfolio d....
-
-#### cogni-narrative
-
-- [[skill-cogni-narrative-narrative]] — Transform structured content into compelling executive narratives using story arc frameworks.
-- [[skill-cogni-narrative-narrative-adapt]] — Transform existing narratives into derivative formats: executive briefs, talking points, and one-pagers.
-- [[skill-cogni-narrative-narrative-review]] — Score and review existing narrative files against story arc quality gates.
 
 #### cogni-portfolio
 
@@ -160,22 +147,11 @@ One page per skill, grouped by plugin, alphabetical within each.
 
 One page per agent role, grouped by plugin, alphabetical within each.
 
-#### cogni-copywriting
-
-- [[agent-cogni-copywriting-copywriter]] — Polish markdown documents for executive readability using McKinsey Pyramid Principle and messaging frameworks.
-- [[agent-cogni-copywriting-reader]] — Review documents through parallel stakeholder persona Q&A simulation with synthesized feedback.
-
 #### cogni-marketing
 
 - [[agent-cogni-marketing-channel-adapter]] — Agent in cogni-marketing; see source.
 - [[agent-cogni-marketing-content-writer]] — Agent in cogni-marketing; see source.
 - [[agent-cogni-marketing-seo-researcher]] — Agent in cogni-marketing; see source.
-
-#### cogni-narrative
-
-- [[agent-cogni-narrative-narrative-adapter]] — Adapt narratives into derivative formats — executive briefs, talking points, or one-pagers.
-- [[agent-cogni-narrative-narrative-reviewer]] — Review and score narrative files against story arc quality gates.
-- [[agent-cogni-narrative-narrative-writer]] — Transform structured content into executive narratives via the narrative skill.
 
 #### cogni-portfolio
 

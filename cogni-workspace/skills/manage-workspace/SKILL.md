@@ -147,8 +147,11 @@ the servers install-mcp can write (`mcp_excalidraw`, `pencil`); claude-in-chrome
 Chrome extension the user installs themselves and has no registry entry. Show a row only
 for a registry server whose `required_by` intersects the plugin list confirmed in step 2 —
 install-mcp installs nothing for an absent plugin — and take each row's action and status
-verbatim from install-mcp's returned summary rather than from the registry. The block below
-is illustrative:
+verbatim from install-mcp's returned summary rather than from the registry. Label each row
+with the entry's `desktop_config_key` — `excalidraw` for the registry server
+`mcp_excalidraw`, `pencil` for `pencil` — because that key is what lands in the user's
+config and what the `mcp__<key>__*` tool names derive from; do not label the row with the
+registry server name. The block below is illustrative:
 
 ```
 MCP Servers (installed on demand, written to your config):
@@ -158,6 +161,11 @@ MCP Servers (installed on demand, written to your config):
 Manual install needed:
   claude-in-chrome Chrome extension                  <- cogni-website, cogni-workspace
 ```
+
+The row-selection rule above covers registry servers only. Show the `Manual install needed:`
+row when the plugin list confirmed in step 2 includes `cogni-website` or `cogni-workspace`;
+that pairing is fixed here rather than read from the registry, since `claude-in-chrome` has
+no registry entry to supply it.
 
 Newly written servers load only after a session restart — relay install-mcp's restart
 reminder in the summary rather than presenting "config written" as a finished state.
@@ -264,9 +272,12 @@ Refresh `_template/theme.md` from `${CLAUDE_PLUGIN_ROOT}/themes/_template/`. Pre
 Same as Init Mode step 5 — delegate to the `install-mcp` skill. In update mode, also
 tell install-mcp to use `--force` for git-based MCPs (pulls latest and rebuilds).
 Removing a plugin does **not** remove its MCP server — the entry now lives in the user's
-own config and `install-mcp` has no removal path, so it is spawned at every session start
-until the user deletes it. Name each server whose `required_by` no longer intersects the
-confirmed plugin list and tell the user which key to remove, from `~/.claude.json`
+own config and `install-mcp` has no removal path, so only the user can delete it.
+Name each server whose `required_by` no longer intersects the confirmed plugin list and
+tell the user which key to remove. The key is the registry entry's
+`desktop_config_key` (for `mcp_excalidraw` that is `excalidraw`), not the registry server
+name — naming the server name instead tells the user to delete a key that is not there, and
+the orphan server keeps spawning at every session start. Remove it from `~/.claude.json`
 (top-level `mcpServers`) and/or `claude_desktop_config.json`.
 
 ### 6. Update Obsidian Integration (Optional)

@@ -142,8 +142,8 @@ can both fall through that probe, both `nohup node dist/server.js`, and both wri
 The intended fix is an atomic claim before the spawn (`mkdir canvas.lock`, or `flock` on
 the pid file), with the loser falling through to the existing wait-for-port loop, applied
 identically to both copies. It is deliberately deferred to its own change: the fix belongs
-to the two hook files together, outside the declaration move's scope, and is tracked as a
-follow-up so the doubled dispatch is not rediscovered later as a mystery.
+to the two hook files together, outside the declaration move's scope, and is tracked as
+issue #1422 so the doubled dispatch is not rediscovered later as a mystery.
 
 **`excalidraw_sketch` is retired — retracting the paragraph that kept it.** This record
 previously stated it was "live and retained", correcting a still earlier draft that had

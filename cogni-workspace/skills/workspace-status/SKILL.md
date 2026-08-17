@@ -1,6 +1,6 @@
 ---
 name: workspace-status
-description: "Diagnose and report on the health of an insight-wave workspace. Use this skill whenever the user mentions workspace status, health, diagnostics, or troubleshooting — including check workspace, is my workspace ok, something broke, why isn't my plugin working, diagnose workspace, verify workspace, or any situation where understanding the workspace state would help resolve a problem. Even if the user doesn't explicitly say status, trigger this skill when they describe symptoms that suggest a misconfigured workspace (missing env vars, plugins not found, themes not loading). This is the first skill to reach for when debugging workspace issues."
+description: "Diagnose and report on the health of an insight-wave workspace. Use this skill whenever the user mentions workspace status, health, diagnostics, or troubleshooting — including check workspace, is my workspace ok, something broke, why isn't my plugin working, diagnose workspace, verify workspace, or any situation where understanding the workspace state would help resolve a problem. Even if the user doesn't explicitly say status, trigger this skill when they describe symptoms that suggest a misconfigured workspace (missing env vars, plugins not found, themes not loading, an MCP server not available in the session). This is the first skill to reach for when debugging workspace issues."
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion, Skill, ToolSearch
 ---
 
@@ -165,13 +165,14 @@ each one on demand and writes it into the user's own config, so what is configur
 reflects what is actually installed. This check verifies that required MCPs are available
 in the current session.
 
-Read `references/mcp-registry.md` for the full list of ecosystem MCPs and which plugins
-need them.
+Read `${CLAUDE_PLUGIN_ROOT}/skills/workspace-status/references/mcp-registry.md` for the full
+list of ecosystem MCPs and which plugins need them. Per-server `desktop_config_key` and
+install metadata live in `${CLAUDE_PLUGIN_ROOT}/references/mcp-git-registry.json` — read it
+when triaging a server other than the ones tabled below.
 
-**Detection approach**: Use `ToolSearch` to probe for MCP tool prefixes. For each known
-MCP server, search for one representative tool. The **Install** column decides how a
-missing server is reported — an `install-mcp` server is a fixable install, a manual one
-needs the user to fetch something first:
+**Detection approach**: Probe each known server's one representative tool with `ToolSearch`
+using the `select:` prefix — a returned tool definition means the MCP is loaded, no match
+means it is not available. The **Install** column decides how a missing server is reported:
 
 | MCP Server | Probe tool | Needed by | Install |
 |------------|-----------|-----------|---------|
@@ -179,27 +180,34 @@ needs the user to fetch something first:
 | `claude-in-chrome` | `mcp__claude-in-chrome__tabs_context_mcp` | cogni-website, cogni-workspace | manual (Chrome extension) |
 | `pencil` | `mcp__pencil__get_editor_state` | cogni-visual | manual (Pencil desktop app) |
 
-For each MCP, use `ToolSearch` with `select:` prefix to check if the tool exists.
-If `ToolSearch` returns the tool definition, the MCP is loaded. If it returns no match,
-the MCP is not available.
-
 **Report format**:
 
 - **Loaded**: The MCP tools are available in this session
-- **Not loaded**: An `install-mcp` server that is needed but not available. A restart only
-  helps if the server is already installed on this machine, so check which case applies
-  before advising: if `$HOME/.claude/mcp-servers/mcp_excalidraw/start.sh` exists it was
-  installed after this session started (advise a session restart); if it is absent it was
-  never installed (route the user to `/cogni-workspace:install-mcp`). `ToolSearch` alone
-  cannot tell the two apart — it returns the same no-match either way. Note the install
-  directory is the registry **server name** (`mcp_excalidraw`), not the `excalidraw` config
-  key the `mcp__excalidraw__*` tool prefix derives from
+- **Not loaded**: An `install-mcp` server that is needed but not available. `ToolSearch`
+  alone cannot say why — it returns the same no-match in every case — and the install is
+  two independent steps, so read two pieces of state before advising:
+  - the **config entry** — the server's `desktop_config_key` (`excalidraw` for the registry
+    server `mcp_excalidraw`) under the top-level `mcpServers` in `~/.claude.json`, and/or the
+    same key in `claude_desktop_config.json` for Claude Desktop
+  - the **install directory** — `$HOME/.claude/mcp-servers/mcp_excalidraw/start.sh`, named
+    for the registry **server name**, not the config key
+
+  | Config entry | `start.sh` | State | Advise |
+  |---|---|---|---|
+  | absent | absent | never installed | route to `/cogni-workspace:install-mcp` |
+  | absent | present | built but not configured | re-run the config write — `/cogni-workspace:install-mcp` |
+  | present | present | configured after this session started | advise a session restart |
+
+  A restart *on its own* only fixes the last row: `install-mcp.sh` clones and builds, and
+  nothing is configured until `patch-desktop-config.py` runs — so in the first two rows the
+  config write comes first and the new session follows it, never instead of it. The registry
+  read at the top of this check documents both steps
 - **Manual**: The MCP is a manual install — the Claude-in-Chrome browser extension or the
   Pencil desktop app. Name what to fetch and inform the user, but don't flag as an error;
   a missing manual server is not the "Not loaded" case above
 
 Only check MCPs for plugins that are actually installed (cross-reference with the plugin
-registry from Check 3). Don't warn about MCPs for plugins the user hasn't installed.
+registry from Check 3).
 
 ## Status Report
 
@@ -240,6 +248,12 @@ Themes:       WARNING  | 2 themes available, 1 tiered, 1 drift advisory
   Drift: cogni-work — upgrade available — workspace copy is tier-0, standard is tiered
     standard imported from bundle https://api.anthropic.com/v1/design/h/X9LG…
   -> Run `manage-themes` to refresh the workspace copy (overwrites local edits)
+
+MCP Servers:  WARNING  | 1/3 loaded (2 manual)
+  excalidraw   built but not configured — start.sh present, no `excalidraw` key in ~/.claude.json
+    -> Run /cogni-workspace:install-mcp to write the config entry, then start a new session
+  pencil       manual install — Pencil desktop app not running
+    -> Open Pencil (https://pencil.dev); informational, not an error
 ```
 
 Every issue should end with a concrete next step — either a skill to run (`manage-workspace`, `manage-themes`) or a command to execute.

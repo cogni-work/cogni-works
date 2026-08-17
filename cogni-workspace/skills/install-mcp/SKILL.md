@@ -112,7 +112,7 @@ For each server with `"type": "git"` that's needed:
 ```bash
 WRAPPER_REL=$(python3 -c "
 import json
-reg = json.load(open('${REGISTRY}'))
+reg = json.load(open('${CLAUDE_PLUGIN_ROOT}/references/mcp-git-registry.json'))
 print(reg['servers']['SERVER_NAME'].get('wrapper', ''))
 ")
 
@@ -152,8 +152,10 @@ a path which does not exist yet.
 Pass `--target` for the environment detected above (`desktop`, `cli`, or `both`), and
 scope every invocation with `--server` so only the servers the plan actually named are
 written. An unrequested entry is another server spawned at every session or app start,
-which is the condition this whole arrangement exists to avoid — the reasoning is the same
-for Desktop as for the CLI, so neither target is left unscoped. Dry-run first:
+which is the condition this whole arrangement exists to avoid — for either target. The
+script's name predates its remit: despite `desktop` in the file name it writes either
+config, selected by `--target`, so a `--target cli` invocation writing `~/.claude.json`
+is correct and not a copy-paste slip. Dry-run first:
 
 ```bash
 python3 "${CLAUDE_PLUGIN_ROOT}/scripts/patch-desktop-config.py" \
@@ -165,14 +167,9 @@ python3 "${CLAUDE_PLUGIN_ROOT}/scripts/patch-desktop-config.py" \
 Show the user what would change. If they confirm (or if running non-interactively from
 manage-workspace), run again without `--dry-run`.
 
-For a Claude Code CLI environment, write the user-scope entry the same way:
-
-```bash
-python3 "${CLAUDE_PLUGIN_ROOT}/scripts/patch-desktop-config.py" \
-  --registry "${CLAUDE_PLUGIN_ROOT}/references/mcp-git-registry.json" \
-  --target cli --server mcp_excalidraw \
-  --dry-run
-```
+For a Claude Code CLI environment, use the same command with `--target cli` — dry-run first,
+then confirm, exactly as above — which writes the user-scope entry in `~/.claude.json`. Use
+`--target both` to write both configs in one run.
 
 **Reading the result depends on the target.** A single-target run reports a flat
 `data.action` and `data.config_path`. `--target both` reports neither at the top level —
@@ -219,8 +216,8 @@ Report status:
 - **Installed but not loaded** — installed successfully, but needs a session restart to appear
 - **Failed** — installation reported success but tools not found even after restart
 
-For servers that show "not loaded", this is expected behavior — the user needs to restart
-their Claude session (CLI or Desktop) for newly installed MCPs to appear.
+A "not loaded" result on a server just written is expected, and clears with the restart
+described above.
 
 ## Summary
 

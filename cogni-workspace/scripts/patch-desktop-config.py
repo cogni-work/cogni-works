@@ -26,7 +26,7 @@ Usage:
       [--target desktop|cli|both] [--server <name>]... [--dry-run] [--force]
       [--config-path <path>] [--cli-config-path <path>]
 
-Output: JSON with success status and actions taken.
+Output: JSON {success, data, error}.
 """
 
 # Load-bearing, not boilerplate: the `X | None` annotations below are evaluated
@@ -133,7 +133,13 @@ def build_mcp_entry(server: dict, target: str) -> dict | None:
 
 
 def result_json(success: bool, **data) -> str:
-    return json.dumps({"success": success, "data": data}, indent=2)
+    """Emit the repo-standard {success, data, error} envelope.
+
+    `error` is lifted out of the keyword data to the top level, matching the
+    other seven .py scripts in this directory and the repo CLAUDE.md contract.
+    """
+    error = data.pop("error", "")
+    return json.dumps({"success": success, "data": data, "error": error}, indent=2)
 
 
 def patch_target(target: str, config_path: Path, servers: dict, *,

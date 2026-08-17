@@ -132,6 +132,19 @@ one server made the client plugin-qualify the tool names, which silently dead-ma
 `mcp__excalidraw__.*` PreToolUse matcher each plugin carries. Removing both restores the
 unqualified prefix and revives both matchers without editing either hook.
 
+**Known consequence — the revived matchers now fire twice.** `cogni-visual` and
+`cogni-portfolio` ship byte-identical `hooks.json` and `ensure-excalidraw-canvas.sh`, so
+on a machine with both installed every `mcp__excalidraw__*` call dispatches two PreToolUse
+hooks where zero fired before. The script guards its spawn on `nc -z localhost "$PORT"`,
+which is a check, not a mutual-exclusion primitive: two dispatches racing a cold canvas
+can both fall through that probe, both `nohup node dist/server.js`, and both write
+`canvas.pid` — leaving the loser dead on `EADDRINUSE` with the pid file pointing at it.
+The intended fix is an atomic claim before the spawn (`mkdir canvas.lock`, or `flock` on
+the pid file), with the loser falling through to the existing wait-for-port loop, applied
+identically to both copies. It is deliberately deferred to its own change: the fix belongs
+to the two hook files together, outside the declaration move's scope, and is tracked as a
+follow-up so the doubled dispatch is not rediscovered later as a mystery.
+
 **`excalidraw_sketch` is retired — retracting the paragraph that kept it.** This record
 previously stated it was "live and retained", correcting a still earlier draft that had
 called it already-dead. That correction was right about reachability and wrong about use,

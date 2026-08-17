@@ -166,16 +166,18 @@ reflects what is actually installed. This check verifies that required MCPs are 
 in the current session.
 
 Read `references/mcp-registry.md` for the full list of ecosystem MCPs and which plugins
-provide them.
+need them.
 
 **Detection approach**: Use `ToolSearch` to probe for MCP tool prefixes. For each known
-MCP server, search for one representative tool:
+MCP server, search for one representative tool. The **Install** column decides how a
+missing server is reported — an `install-mcp` server is a fixable install, a manual one
+needs the user to fetch something first:
 
-| MCP Server | Probe tool | Provider plugin |
-|------------|-----------|-----------------|
-| `excalidraw` | `mcp__excalidraw__describe_scene` | cogni-visual, cogni-portfolio |
-| `claude-in-chrome` | `mcp__claude-in-chrome__tabs_context_mcp` | cogni-website, cogni-workspace |
-| `pencil` | `mcp__pencil__get_editor_state` | Pencil desktop app (manual) |
+| MCP Server | Probe tool | Needed by | Install |
+|------------|-----------|-----------|---------|
+| `excalidraw` | `mcp__excalidraw__describe_scene` | cogni-visual, cogni-portfolio | install-mcp |
+| `claude-in-chrome` | `mcp__claude-in-chrome__tabs_context_mcp` | cogni-website, cogni-workspace | manual (Chrome extension) |
+| `pencil` | `mcp__pencil__get_editor_state` | cogni-visual | manual (Pencil desktop app) |
 
 For each MCP, use `ToolSearch` with `select:` prefix to check if the tool exists.
 If `ToolSearch` returns the tool definition, the MCP is loaded. If it returns no match,
@@ -184,10 +186,15 @@ the MCP is not available.
 **Report format**:
 
 - **Loaded**: The MCP tools are available in this session
-- **Not loaded**: The MCP is declared by an installed plugin but not available — may need
-  a session restart or the provider plugin may not be installed
-- **Manual**: The MCP requires manual installation (Pencil desktop app) — inform the user
-  but don't flag as an error
+- **Not loaded**: An `install-mcp` server that is needed but not available. A restart only
+  helps if the server is already installed on this machine, so check which case applies
+  before advising: if `$HOME/.claude/mcp-servers/<name>/start.sh` exists it was installed
+  after this session started (advise a session restart); if it is absent it was never
+  installed (route the user to `/cogni-workspace:install-mcp`). `ToolSearch` alone cannot
+  tell the two apart — it returns the same no-match either way
+- **Manual**: The MCP is a manual install — the Claude-in-Chrome browser extension or the
+  Pencil desktop app. Name what to fetch and inform the user, but don't flag as an error;
+  a missing manual server is not the "Not loaded" case above
 
 Only check MCPs for plugins that are actually installed (cross-reference with the plugin
 registry from Check 3). Don't warn about MCPs for plugins the user hasn't installed.
@@ -205,7 +212,7 @@ Plugins:      OK       | 5 registered, 5 installed
 Themes:       OK       | 3 themes available, 1 tiered, 0 drift advisories
 Dependencies: OK       | 2/2 required, 3/3 optional
 Python pkgs:  OK       | venv present, 1/1 optional importable
-MCP Servers:  OK       | 3/3 loaded (1 manual)
+MCP Servers:  OK       | 3/3 loaded (2 manual)
 
 Language: EN | Last updated: 2026-03-04
 ```

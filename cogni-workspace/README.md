@@ -30,7 +30,7 @@ cogni-workspace is the ecosystem's infrastructure-as-plugin layer: a dedicated p
 3. **Pick themes** — centralized theme picker used by all visual plugins
 4. **Discover plugins** — scan installed cogni-x plugins, detect versions, compute env var names
 5. **Diagnose** workspace health — five-tier report (foundation, env vars, plugin registry, themes, dependencies)
-6. **Install MCP servers** — clone and build git-based MCP servers, detect native app MCPs, and patch Claude Desktop config so rendering plugins find their tools without manual JSON editing
+6. **Install MCP servers** — clone and build git-based MCP servers, detect native app MCPs, and write the server into your own MCP config (`~/.claude.json` for Claude Code, `claude_desktop_config.json` for Claude Desktop) so rendering plugins find their tools without manual JSON editing
 7. **Obsidian integration** — scaffold `.obsidian/` vault or incrementally update terminal profiles, handled as sub-steps of manage-workspace
 8. **Ask the bundled wiki** — `ask` reads a vendor-curated insight-wave reference wiki bundled at `wiki/` (self-contained index-first grounded read) so users can ask grounded questions about plugins, skills, agents, architecture, and conventions without grepping source files
 9. **File and track issues** — `cogni-issues` uses the authenticated GitHub CLI to consult, deduplicate, create, list, and inspect plugin issues with atomic labels
@@ -42,7 +42,7 @@ cogni-workspace is the ecosystem's infrastructure-as-plugin layer: a dedicated p
 ## What it means for you
 
 - **Set up a whole workspace in one command.** One `manage-workspace` run auto-detects mode, discovers plugins, and generates env vars, settings, themes, and output styles — replacing 20+ minutes of hand-scaffolding, and backing up first so a bad update rolls back in seconds.
-- **Skip hand-editing MCP config entirely.** `install-mcp` clones, builds, and wires up git-based and native MCP servers and patches Claude Desktop config — plugins find their tools without a single JSON edit.
+- **Skip hand-editing MCP config entirely.** `install-mcp` clones, builds, and wires up git-based and native MCP servers and writes them into your own MCP config, for Claude Code or Claude Desktop — plugins find their tools without a single JSON edit.
 - **Reskin everything from one file.** Slides, journey maps, web narratives, and dashboards across 5+ visual plugins inherit colors and fonts from one theme, so a rebrand is a single-file edit.
 - **Catch drift before a skill breaks.** Five-tier health diagnostics surface missing deps and version mismatches as a clear report, not a cryptic mid-run failure.
 
@@ -136,7 +136,7 @@ State lives in two layers that other plugins consume. Configuration (env vars, t
 | `manage-themes` | skill | 9 theme operations: recommend, list, grab from website, grab from PPTX, create from preset, audit, author deep theme system, generate showcase, apply |
 | `pick-theme` | skill | Centralized theme picker — discovers themes, presents interactive selection, returns path |
 | `workspace-status` | skill | Five-tier diagnostic: foundation, env vars, plugin registry, themes, dependencies |
-| `install-mcp` | skill | End-to-end MCP server installation — clone and build git-based MCPs, configure native app MCPs, and patch Claude Desktop config |
+| `install-mcp` | skill | End-to-end MCP server installation — clone and build git-based MCPs, configure native app MCPs, and write the server into the user's own config (`~/.claude.json` or `claude_desktop_config.json`) |
 | `ask` | skill | Answer questions about the insight-wave ecosystem by reading the bundled wiki — grounded, cited, never from memory |
 | `manage-markets` | skill | Write path for the canonical supported-markets registry — show status and add markets (codes, locales, authorities) |
 | `audit-region-sources` | skill | Read-only sibling of manage-markets — audit per-plugin region-source overlays against the canonical registry for orphans and drift |
@@ -171,7 +171,7 @@ State lives in two layers that other plugins consume. Configuration (env vars, t
 | `generate-settings.sh` | script | Generates settings files; supports `--update` to preserve custom env vars |
 | `install-mcp.sh` | script | Installs a git-based MCP server into `~/.claude/mcp-servers/` (clone, build, wrapper); outputs JSON with install and wrapper paths |
 | `install-workspace-deps.sh` | script | Provisions optional Python packages from `python-deps-registry.json` into an isolated venv at `~/.claude/workspace-python-venv/`; idempotent, `--force` reinstalls, JSON envelope |
-| `patch-desktop-config.py` | script | Merges git-installed MCP servers into Claude Desktop's config from `mcp-git-registry.json`, preserving existing entries |
+| `patch-desktop-config.py` | script | Merges git-installed MCP servers into the user's Claude Code (`~/.claude.json`) or Claude Desktop config from `mcp-git-registry.json`, preserving existing entries |
 | `setup-obsidian.sh` | script | Copies vault templates, downloads Terminal plugin, substitutes path placeholders |
 | `update-obsidian.sh` | script | Merges profiles, fixes WSL paths, removes deprecated profiles, copies scripts |
 | `portability-utils.sh` | script | Cross-platform utilities (macOS, Linux, WSL, Git Bash) |
@@ -187,7 +187,7 @@ cogni-workspace/
 │   ├── claim-entity/             Cross-plugin ClaimEntity data contract and store layout
 │   ├── claims/                   Claim-verification lifecycle (+ scripts/claims-store.sh)
 │   ├── cogni-issues/             File and track plugin issues through the GitHub CLI
-│   ├── install-mcp/              MCP server installation and Desktop config patching
+│   ├── install-mcp/              MCP server installation and user-config patching
 │   ├── manage-markets/           Write path for the canonical supported-markets registry
 │   ├── manage-workspace/         Init or update workspace (includes Obsidian integration)
 │   ├── manage-themes/
@@ -222,7 +222,7 @@ cogni-workspace/
 │   ├── get-market-config.py      Merge canonical market registry with plugin overlays
 │   ├── install-mcp.sh            Clone, build, and wrap git-based MCP servers
 │   ├── install-workspace-deps.sh Provision optional Python deps into an isolated venv
-│   ├── patch-desktop-config.py   Merge MCP entries into Claude Desktop config
+│   ├── patch-desktop-config.py   Merge MCP entries into the user's MCP config
 │   ├── setup-obsidian.sh
 │   ├── update-obsidian.sh
 │   └── baselines/                Tier-0 output baselines for script contract checks

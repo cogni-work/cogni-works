@@ -2,17 +2,19 @@
 name: install-mcp
 description: >-
   End-to-end MCP server installation for the insight-wave ecosystem — clone and
-  build git-based MCPs, configure native app MCPs, and patch Claude Desktop's
-  config so everything works without manual JSON editing. Use this skill whenever
-  the user mentions MCP installation, MCP setup, MCP configuration, "my MCPs
-  aren't working", "set up excalidraw", "configure desktop MCPs", "patch desktop
-  config", "install MCP servers", "MCP not found", "excalidraw tools not
-  available", "update MCP servers", "MCP not loaded", "pencil MCP not working",
-  port conflicts with MCP servers (e.g. localhost:3000), or any mention of
-  claude_desktop_config.json. Also trigger when manage-workspace needs to handle
-  its MCP installation step (step 5), when workspace-status reports MCP servers
-  as not loaded and the user wants to fix it, or when a rendering skill
-  (render-big-picture, story-to-web) fails because its MCP dependency is missing.
+  build git-based MCPs, configure native app MCPs, and write the server into the
+  user's own config (`~/.claude.json` for Claude Code, `claude_desktop_config.json`
+  for Claude Desktop) so everything works without manual JSON editing. Use this
+  skill whenever the user mentions MCP installation, MCP setup, MCP configuration,
+  "my MCPs aren't working", "set up excalidraw", "install MCP servers", "MCP not
+  found", "excalidraw tools not available", "excalidraw tools missing in Claude
+  Code", "MCP not loaded", "mcpServers missing in ~/.claude.json", "pencil MCP not
+  working", port conflicts with MCP servers (localhost:3000), or any mention of
+  claude_desktop_config.json.
+  Also trigger when manage-workspace needs to handle its MCP installation step
+  (step 5), when workspace-status reports MCP servers as not loaded and the user
+  wants to fix it, or when a rendering skill (story-to-infographic, story-to-web)
+  fails because its MCP dependency is missing.
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep, AskUserQuestion, ToolSearch
 ---
 
@@ -90,12 +92,16 @@ list. Only install servers that have at least one requiring plugin present.
 
 Present the installation plan to the user before executing:
 
+Name the config that will actually be written, taken from the environment detected
+above — one line per target, so a `both` run shows both:
+
 ```
 MCP Installation Plan:
   mcp_excalidraw  git clone + build    needed by: cogni-visual, cogni-portfolio
   pencil          native app check     needed by: cogni-visual
 
-  Desktop config:  will be patched (claude_desktop_config.json found)
+  Config write:    ~/.claude.json (Claude Code user scope)
+  Config write:    claude_desktop_config.json (Claude Desktop)
 ```
 
 ## Install Git-Based MCP Servers
@@ -142,23 +148,23 @@ Run this **after** the git install succeeds — the writer resolves each server'
 wrapper, and reports `skipped: not installed` rather than writing an entry that points at
 a path which does not exist yet.
 
-Pass `--target` for the environment detected above (`desktop`, `cli`, or `both`). Dry-run
-first:
+Pass `--target` for the environment detected above (`desktop`, `cli`, or `both`), and
+scope every invocation with `--server` so only the servers the plan actually named are
+written. An unrequested entry is another server spawned at every session or app start,
+which is the condition this whole arrangement exists to avoid — the reasoning is the same
+for Desktop as for the CLI, so neither target is left unscoped. Dry-run first:
 
 ```bash
 python3 "${CLAUDE_PLUGIN_ROOT}/scripts/patch-desktop-config.py" \
   --registry "${CLAUDE_PLUGIN_ROOT}/references/mcp-git-registry.json" \
-  --target desktop \
+  --target desktop --server mcp_excalidraw \
   --dry-run
 ```
 
 Show the user what would change. If they confirm (or if running non-interactively from
 manage-workspace), run again without `--dry-run`.
 
-For a Claude Code CLI environment, write the user-scope entry the same way. Scope it with
-`--server` so only the server the user actually needs is written — an unrequested entry is
-another server spawned at every session start, which is the condition this whole
-arrangement exists to avoid:
+For a Claude Code CLI environment, write the user-scope entry the same way:
 
 ```bash
 python3 "${CLAUDE_PLUGIN_ROOT}/scripts/patch-desktop-config.py" \
@@ -166,6 +172,12 @@ python3 "${CLAUDE_PLUGIN_ROOT}/scripts/patch-desktop-config.py" \
   --target cli --server mcp_excalidraw \
   --dry-run
 ```
+
+**Reading the result depends on the target.** A single-target run reports a flat
+`data.action` and `data.config_path`. `--target both` reports neither at the top level —
+it returns `data.targets[]`, one `{target, action, config_path, actions}` object per
+config. Branch on the target before reading the envelope, or a `both` run parses as
+though nothing happened.
 
 The script:
 - Creates a timestamped backup before modifying anything
@@ -206,16 +218,34 @@ their Claude session (CLI or Desktop) for newly installed MCPs to appear.
 
 Present a compact result:
 
+Name the config actually written, and follow the target for the restart line — a CLI
+write needs a new Claude Code session, not a Claude Desktop restart:
+
 ```
 MCP Installation Complete:
 
-  Server            Action          Desktop Config    Status
+  Server            Action          Config Written    Status
   ────────────────  ──────────────  ────────────────  ──────────
-  mcp_excalidraw    installed       patched           loaded
-  pencil            binary found    patched           loaded
+  mcp_excalidraw    installed       ~/.claude.json    loaded
+  pencil            binary found    ~/.claude.json    loaded
 
-  Desktop config: backed up to claude_desktop_config.backup-20260409T...json
-  Next: restart Claude Desktop if any servers show "not loaded"
+  Backup: ~/.claude.backup-20260409T...json
+  Next: start a new Claude Code session if any servers show "not loaded"
+```
+
+Under `--target both`, give each config its own row per server (reading each entry of
+`data.targets[]`), and list a backup line per config written:
+
+```
+  Server            Action          Config Written               Status
+  ────────────────  ──────────────  ───────────────────────────  ──────────
+  mcp_excalidraw    installed       ~/.claude.json               loaded
+  mcp_excalidraw    installed       claude_desktop_config.json   not loaded
+
+  Backup: ~/.claude.backup-20260409T...json
+  Backup: claude_desktop_config.backup-20260409T...json
+  Next: start a new Claude Code session, and restart Claude Desktop, for any
+        server showing "not loaded"
 ```
 
 ## When Called from manage-workspace
@@ -233,6 +263,8 @@ part of workspace init or update:
 - If `install-mcp.sh` fails for a server, report the error from `data.error` and continue
   with remaining servers
 - If `patch-desktop-config.py` fails, show the error and suggest manual patching as fallback
-- If the Desktop config file has invalid JSON, warn the user and skip patching (don't
-  corrupt their config further)
+- If the config being written has invalid JSON, warn the user and skip patching that
+  target (don't corrupt their config further). This applies to `~/.claude.json` as much as
+  to `claude_desktop_config.json` — under `--target both`, a parse failure on one config
+  must not abandon the write to the other
 - If a backup can't be created (permissions), abort patching and tell the user why

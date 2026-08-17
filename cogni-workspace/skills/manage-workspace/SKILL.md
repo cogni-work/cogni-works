@@ -118,7 +118,7 @@ cp "${CLAUDE_PLUGIN_ROOT}/assets/output-styles/workspace-${LANGUAGE}.md" \
    "${TARGET_DIR}/.claude/output-styles/"
 ```
 
-Do **not** write a workspace-root `CLAUDE.md`. The language rules reach a fresh session without it: step 2's `generate-settings.sh` writes the `language` key into `.claude/settings.local.json`, which Claude Code turns into a `# Language` system-prompt section, and the plugin's `SessionStart` hook adds the orthography rules that section does not carry. The root `CLAUDE.md` is the user's file — the place for project-specific instructions — and this skill never creates or overwrites it.
+Do **not** write a workspace-root `CLAUDE.md`. The language rules reach a fresh session without it: step 3's `generate-settings.sh` writes the `language` key into `.claude/settings.local.json`, which Claude Code turns into a `# Language` system-prompt section, and the plugin's `SessionStart` hook adds the orthography rules that section does not carry. The root `CLAUDE.md` is the user's file — the place for project-specific instructions — and this skill never creates or overwrites it.
 
 Create the `output-styles` directory first if needed. Then copy the theme template:
 
@@ -132,14 +132,19 @@ The template gives users a starting point for creating custom themes that visual
 ### 5. MCP Server Installation
 
 Delegate to the `install-mcp` skill, which handles the full lifecycle: git-based server
-installation, native app detection, Claude Desktop config patching, and verification.
+installation, native app detection, writing the server into the user config for the
+detected client (Claude Code `~/.claude.json` and/or Claude Desktop), and verification.
 
-Since manage-workspace already has the confirmed plugin list from step 1, pass it to
+Since manage-workspace already has the plugin list confirmed in step 2, pass it to
 install-mcp so it skips redundant plugin discovery. The skill runs non-interactively
 when called from here (no extra user confirmations needed).
 
-After install-mcp completes, read `references/mcp-git-registry.json` for the full server
-set and present a combined summary:
+After install-mcp completes, read
+`${CLAUDE_PLUGIN_ROOT}/references/mcp-git-registry.json` — anchored because at this point
+in the flow the working directory is the user's workspace target, not the plugin root —
+for the installable server set, and present a combined summary. The registry covers only
+the servers install-mcp can write (`mcp_excalidraw`, `pencil`); claude-in-chrome is a
+Chrome extension the user installs themselves and has no registry entry:
 
 ```
 MCP Servers (installed on demand, written to your config):
@@ -149,6 +154,9 @@ MCP Servers (installed on demand, written to your config):
 Manual install needed:
   claude-in-chrome Chrome extension                  <- cogni-website, cogni-workspace
 ```
+
+Newly written servers load only after a session restart — relay install-mcp's restart
+reminder in the summary rather than presenting "config written" as a finished state.
 
 ### 6. Obsidian Integration (Optional)
 
@@ -162,7 +170,7 @@ If yes, run the setup script:
 bash "${CLAUDE_PLUGIN_ROOT}/scripts/setup-obsidian.sh" "${TARGET_DIR}"
 ```
 
-If `.obsidian/` already exists, skip and mention that the update step (Update Mode step 5) can refresh the terminal config.
+If `.obsidian/` already exists, skip and mention that the update step (Update Mode step 6) can refresh the terminal config.
 
 If the user declines, let them know they can run a workspace update later to add it.
 
@@ -238,7 +246,7 @@ the `venv` module / the network is unavailable — never block the update.
 
 Copy latest output-style files from `${CLAUDE_PLUGIN_ROOT}/assets/output-styles/` to `.claude/output-styles/`, overwriting existing ones (these are plugin-managed, not user-customized).
 
-**Migrate a workspace created before the language settings key.** Step 2's `generate-settings.sh --update` writes the `language` key into `.claude/settings.local.json`, which is now where the workspace language lives. Two retired artifacts may still be on disk:
+**Migrate a workspace created before the language settings key.** Step 3's `generate-settings.sh --update` writes the `language` key into `.claude/settings.local.json`, which is now where the workspace language lives. Two retired artifacts may still be on disk:
 
 - `.claude/templates/` — the cache that fed the Obsidian launcher's per-session `CLAUDE.md` copy. Nothing reads it any more. Delete it.
 - The workspace-root `CLAUDE.md`, if it was written by a retired template. Compare it against the language block the plugin used to ship (a `# Workspace Instructions` / `# Workspace-Anweisungen` heading followed only by language bullets). If that is all it contains, say the rules now arrive via the settings key and the `SessionStart` hook and offer to delete it — defaulting to keeping the file. If it contains anything else, leave it untouched and say why.

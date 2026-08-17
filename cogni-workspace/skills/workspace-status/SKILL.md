@@ -97,7 +97,7 @@ Canonical tier vocabulary: `${CLAUDE_PLUGIN_ROOT}/references/theme-manifest.md`.
 
 The picker merges `${CLAUDE_PLUGIN_ROOT}/themes/` (standard, ships with the plugin) with `${COGNI_WORKSPACE_ROOT}/themes/` (user-owned), and workspace copies shadow standard copies when slugs collide. This shadowing is **intentional** — it enables user customisation. The drift advisories below are **informational, not errors**: the picker still resolves a valid theme either way.
 
-The motivating example is `cogni-work`: after the Phase 3 upgrade (RFC #132), the standard copy ships a tiered layout (manifest.json, tokens/, components/, `.claude-design-source` sidecar). A pre-Phase 3 workspace copy silently downgrades the experience because the picker resolves the workspace copy first.
+The motivating example is `cogni-work`: the standard copy ships a tiered layout (manifest.json, tokens/, components/, `.claude-design-source` sidecar), while an older workspace copy predating tiered themes carries none of it. That older copy silently downgrades the experience, because the picker resolves the workspace copy first.
 
 Run:
 

@@ -5,6 +5,9 @@
 # Creates cogni-claims/ directory and claims.json if they don't exist.
 # Uses mkdir-based locking (portable across macOS and Linux) to prevent
 # race conditions when agents run in parallel.
+# Env: APPEND_CLAIM_MAX_WAIT — lock-acquire ceiling in 0.1s ticks. Unset means
+# the production default of 30 ticks (3s); tests set a small value so they can
+# drive the timeout path in fractions of a second.
 # Exit codes: 0 = success, 1 = error
 set -euo pipefail
 
@@ -24,7 +27,16 @@ LOCK_DIR="$CLAIMS_DIR/.claims.lock"
 mkdir -p "$CLAIMS_DIR/sources" "$CLAIMS_DIR/history"
 
 # Acquire lock using mkdir (atomic on all POSIX systems)
-MAX_WAIT=30
+MAX_WAIT="${APPEND_CLAIM_MAX_WAIT:-30}"
+# Floor on numeric shape: a malformed override would otherwise make the -ge
+# comparison below a hard error mid-loop. Regex unquoted on purpose — a quoted
+# right-hand side matches literally on bash 3.2, which this repo still targets.
+# The `||` form keeps a non-match from tripping `set -e`.
+[[ "$MAX_WAIT" =~ ^[1-9][0-9]*$ ]] || MAX_WAIT=30
+# Derive the diagnostic's number from the ceiling rather than restating it, so
+# the message can never claim a wait the loop no longer honours.
+TIMEOUT_LABEL="$(( MAX_WAIT / 10 )).$(( MAX_WAIT % 10 ))"
+TIMEOUT_LABEL="${TIMEOUT_LABEL%.0}"
 WAITED=0
 while ! mkdir "$LOCK_DIR" 2>/dev/null; do
   sleep 0.1
@@ -55,7 +67,7 @@ while ! mkdir "$LOCK_DIR" 2>/dev/null; do
         continue
       fi
     fi
-    echo '{"error": "Could not acquire lock on claims.json after 3s"}' >&2
+    echo "{\"error\": \"Could not acquire lock on claims.json after ${TIMEOUT_LABEL}s\"}" >&2
     exit 1
   fi
 done

@@ -120,12 +120,15 @@ seed_contended_project() {
 # nothing.
 #
 # The discriminator is stderr EMPTINESS, not a text match. Bash's arithmetic-error
-# message is gettext-localized — on a host whose default locale is not English it
-# reads e.g. `Arithmetischer Syntaxfehler: Operand erwartet` — so a grep for the
-# English wording matches nothing, the case passes against the UNFIXED script, and
-# the guard guards nothing. The fixed script writes exactly 0 bytes here, so
-# emptiness is locale-independent and catches every diagnostic rather than one
-# translation of one of them.
+# message is gettext-localized, and it varies along TWO axes, not one: the host
+# locale, and whether the bash build ships translations at all. Measured on a
+# single host under one unchanged locale, bash 3.2.57 emits `syntax error: operand
+# expected` while bash 5.3.9 emits `Arithmetischer Syntaxfehler: Operand erwartet`.
+# So a grep for the English wording matches nothing, the case passes against the
+# UNFIXED script, and the guard guards nothing — and pinning the locale would not
+# have saved it, because the version axis remains. The fixed script writes exactly
+# 0 bytes here, so emptiness is independent of both axes and catches every
+# diagnostic rather than one translation of one of them.
 #
 # The general rule, worth keeping in view when adding a case: assert a FOREIGN
 # tool's output by SHAPE (exit status, stream emptiness, numeric form), and only

@@ -53,8 +53,21 @@
 #   Mutates the other copy so the pair diverges. Run against the cogni-visual
 #   suite, which reads both copies, so a drift introduced on either side reddens.
 #
+#   M5 -> test_stale_lock_survives_divergent_stat
+#     --expr 's#\[\[ "\$lock_mtime" =~ \^\[0-9\]\+\$ \]\]#[[ -n "\$lock_mtime" ]]#'
+#   Reverts the mtime floor to the emptiness test, which structurally cannot see
+#   a successful wrong answer: the stub's non-numeric reading survives it,
+#   reaches the arithmetic, and aborts the hook. Occurs once.
+#
+#   M6 -> test_stale_lock_survives_divergent_stat
+#     --expr 's#stat -c %Y "\$LOCK_DIR"#stat -f %m "\$LOCK_DIR"#'
+#   Puts the BSD form first, leaving the GNU arm unreachable on the platform
+#   that needs it. The floor keeps the behavioural arm green, so only the
+#   ordering arm reddens — which is exactly the defence-in-depth split. Occurs
+#   once; the quoted form is deliberately absent from every comment.
+#
 #   Mutating a hook copy is required: these cases assert hook behaviour, so
-#   mutating this suite or a docs file would prove nothing. All four recipes
+#   mutating this suite or a docs file would prove nothing. All six recipes
 #   were replayed against the shared harness and each returned guard_verified.
 
 set -u
@@ -128,6 +141,25 @@ EOF
   chmod +x "$fx/bin/node" "$fx/bin/nc" "$fx/bin/curl" "$fx/bin/open" "$fx/bin/xdg-open"
 }
 
+# Shadow `stat` with one whose flag semantics diverge from the BSD shape this
+# hook was first written against. make_fixture deliberately does not stub it:
+# stat is the one external here whose flags mean different things on different
+# platforms, so leaving it real is what let a Linux-only defect pass a macOS
+# run. The hook carries the full rationale for the chain order.
+#
+# Non-numeric for BOTH forms on purpose: what is pinned is the numeric floor
+# itself — that no unusable reading can reach the arithmetic — not which arm of
+# the chain happened to answer.
+add_divergent_stat_stub() {
+  fx="$TMPROOT/$1"
+  cat > "$fx/bin/stat" <<'STATSTUB'
+#!/usr/bin/env bash
+echo /
+exit 0
+STATSTUB
+  chmod +x "$fx/bin/stat"
+}
+
 # Run the hook against a sandbox. stdin must be /dev/null: the hook consumes
 # stdin to avoid a broken pipe and would otherwise block on an inherited
 # terminal.
@@ -188,31 +220,93 @@ test_cold_start_spawns_exactly_one_server() {
   fi
 }
 
+# Plant an aged claim: the state both stale-sweep cases start from.
+plant_stale_claim() {
+  mkdir -p "$TMPROOT/$1/mcp/canvas-start.lock"
+  touch -t 202001010000 "$TMPROOT/$1/mcp/canvas-start.lock"
+}
+
+# Shared post-conditions for both stale-sweep cases: exactly one server
+# started, the hook exited 0, and the claim was released again. Kept in one
+# place so a change to what "swept successfully" means cannot land on one case
+# and silently leave the other asserting the old contract — that failure mode
+# is a GREEN suite, since each case stays self-consistent.
+#
+# The case name travels as a separate argument all the way to pass/fail, so
+# the mutation harness's whole-token match on the result label still holds.
+assert_stale_claim_swept() {
+  _case="$1"; _c="$2"; _rc="$3"; _label="$4"
+
+  _n="$(spawn_count "$_c")"
+  if [ "$_n" = "1" ] && [ "$_rc" = "0" ]; then
+    pass "$_case" "$_label"
+  else
+    fail "$_case" "expected 1 spawn and rc 0, got $_n and $_rc"
+  fi
+
+  _pidfile="$TMPROOT/$_c/mcp/canvas.pid"
+  if [ -f "$_pidfile" ]; then
+    STARTED_PIDS="$STARTED_PIDS $(cat "$_pidfile")"
+  fi
+
+  if [ -d "$TMPROOT/$_c/mcp/canvas-start.lock" ]; then
+    fail "$_case" "claim was not released"
+  else
+    pass "$_case" "claim released"
+  fi
+}
+
 # AC 5: a claim left behind by a killed spawn is swept, not waited on forever.
 test_stale_lock_does_not_deadlock() {
-  c=stale; make_fixture "$c"
-  mkdir -p "$TMPROOT/$c/mcp/canvas-start.lock"
-  touch -t 202001010000 "$TMPROOT/$c/mcp/canvas-start.lock"
+  c=stale; make_fixture "$c"; plant_stale_claim "$c"
 
   run_hook "$c" a; rc=$?
 
-  n="$(spawn_count "$c")"
-  if [ "$n" = "1" ] && [ "$rc" = "0" ]; then
-    pass test_stale_lock_does_not_deadlock "stale claim swept and server started"
-  else
-    fail test_stale_lock_does_not_deadlock "expected 1 spawn and rc 0, got $n and $rc"
-  fi
+  assert_stale_claim_swept test_stale_lock_does_not_deadlock "$c" "$rc" \
+    "stale claim swept and server started"
+}
 
-  pidfile="$TMPROOT/$c/mcp/canvas.pid"
-  if [ -f "$pidfile" ]; then
-    STARTED_PIDS="$STARTED_PIDS $(cat "$pidfile")"
-  fi
+# The sweep must survive a stat whose flags mean something else. This is the
+# cross-platform contract: the suite runs on macOS but CI (and most users) run
+# Linux, so a chain that only works under BSD semantics passes locally and dies
+# there. Two arms, because the fix has two independent halves and neither one
+# alone is observable through the other.
+test_stale_lock_survives_divergent_stat() {
+  # Ordering arm first, and deliberately so. It is a static read of two files
+  # (sub-second) while the behavioural arm below costs a real hook run against
+  # a stubbed canvas (seconds). It is also the ONLY arm that reddens when the
+  # chain order is reverted — the numeric floor keeps the behavioural arm green
+  # by design — so running it first is where the failing path gets its feedback.
+  #
+  # Textual by necessity: because that floor makes both orders behave
+  # identically at runtime, no behavioural case can reach the ordering. It
+  # still matters — a BSD-first chain leaves the GNU arm dead on the platform
+  # that needs it, and the floor then silently degrades every sweep to
+  # "ancient" instead of reading the real age.
+  for h in "$VISUAL_HOOK" "$PORTFOLIO_HOOK"; do
+    chain="$(hook_code "$h" | grep -E 'lock_mtime=\$\(stat ' | head -1)"
+    if [ -z "$chain" ]; then
+      fail test_stale_lock_survives_divergent_stat "no stat chain found in $h"
+      continue
+    fi
+    case "$chain" in
+      *"stat -c "*"stat -f "*)
+        pass test_stale_lock_survives_divergent_stat "GNU form precedes BSD form in $h" ;;
+      *)
+        fail test_stale_lock_survives_divergent_stat "chain is not GNU-first in $h: $chain" ;;
+    esac
+  done
 
-  if [ -d "$TMPROOT/$c/mcp/canvas-start.lock" ]; then
-    fail test_stale_lock_does_not_deadlock "claim was not released"
-  else
-    pass test_stale_lock_does_not_deadlock "claim released"
-  fi
+  # Behavioural arm. Pre-fix this is rc 1 with 0 spawns: the mtime read
+  # succeeds with a non-numeric value, which reaches the arithmetic and aborts
+  # the hook under set -e before it can ever spawn.
+  c=divergentstat; make_fixture "$c"; add_divergent_stat_stub "$c"
+  plant_stale_claim "$c"
+
+  run_hook "$c" a; rc=$?
+
+  assert_stale_claim_swept test_stale_lock_survives_divergent_stat "$c" "$rc" \
+    "swept and started despite a divergent stat"
 }
 
 # AC 4: the two plugin-private copies must not drift apart. Their hooks.json
@@ -301,7 +395,7 @@ test_release_is_trapped_for_signals() {
   done
 }
 
-ALL_TESTS="test_cold_start_spawns_exactly_one_server test_stale_lock_does_not_deadlock test_hook_copies_are_identical test_release_is_trapped_for_signals"
+ALL_TESTS="test_cold_start_spawns_exactly_one_server test_stale_lock_does_not_deadlock test_stale_lock_survives_divergent_stat test_hook_copies_are_identical test_release_is_trapped_for_signals"
 
 run_one() {
   case " $ALL_TESTS " in

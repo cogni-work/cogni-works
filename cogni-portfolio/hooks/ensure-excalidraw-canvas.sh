@@ -105,8 +105,18 @@ if ! nc -z localhost "$PORT" 2>/dev/null; then
     # Sweep a claim left behind by a spawn killed before it could release. The
     # stat chain resolves into a variable first: an empty command substitution
     # nested inside $(( )) is a hard bash syntax error.
-    lock_mtime=$(stat -f %m "$LOCK_DIR" 2>/dev/null || stat -c %Y "$LOCK_DIR" 2>/dev/null || echo 0)
-    [[ -n "$lock_mtime" ]] || lock_mtime=0
+    #
+    # GNU form first, BSD second. The reverse order is unreachable by
+    # construction: on GNU coreutils -f means --file-system, so that call
+    # reports no mtime at all — yet still exits 0, which is what makes the ||
+    # never reach the GNU form. BSD stat has no -c, so this order errors
+    # cleanly there and does fall through.
+    lock_mtime=$(stat -c %Y "$LOCK_DIR" 2>/dev/null || stat -f %m "$LOCK_DIR" 2>/dev/null || echo 0)
+    # Floor on the shape, not on emptiness: the failure above is a successful
+    # wrong answer, which an emptiness test cannot see. Anything unusable
+    # becomes 0, so the claim reads as ancient and is swept — the same
+    # direction the `echo 0` tail already chose.
+    [[ "$lock_mtime" =~ ^[0-9]+$ ]] || lock_mtime=0
     now_secs=$(date +%s)
     lock_age=$(( now_secs - lock_mtime ))
     if [[ "$lock_age" -gt "$LOCK_STALE_SECS" ]]; then

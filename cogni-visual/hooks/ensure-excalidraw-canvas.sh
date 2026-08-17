@@ -63,8 +63,9 @@ if ! nc -z localhost "$PORT" 2>/dev/null; then
   # Four times the hook's own 15s timeout (hooks.json), so a spawn killed at
   # that deadline expires but a healthy in-flight winner is never robbed.
   LOCK_STALE_SECS=60
-  # Declared before the handler that reads it, which runs under `set -u`.
+  # Declared before the handler that reads them, which runs under `set -u`.
   SPAWN_CLAIMED=0
+  SWEPT_DIR=""
 
   # Release the claim, but only if this invocation actually holds it. The guard
   # is load-bearing rather than cosmetic: the trap below is armed
@@ -74,6 +75,13 @@ if ! nc -z localhost "$PORT" 2>/dev/null; then
     if [[ "$SPAWN_CLAIMED" -eq 1 ]]; then
       SPAWN_CLAIMED=0
       rmdir "$LOCK_DIR" 2>/dev/null || true
+    fi
+    # A claim carried aside by the sweep below but not yet discarded. Nothing
+    # else in the tree knows this name, so a hook killed mid-sweep would leave
+    # a directory no later run ever looks at.
+    if [[ -n "$SWEPT_DIR" ]]; then
+      rmdir "$SWEPT_DIR" 2>/dev/null || true
+      SWEPT_DIR=""
     fi
   }
 
@@ -120,16 +128,51 @@ if ! nc -z localhost "$PORT" 2>/dev/null; then
     now_secs=$(date +%s)
     lock_age=$(( now_secs - lock_mtime ))
     if [[ "$lock_age" -gt "$LOCK_STALE_SECS" ]]; then
-      rmdir "$LOCK_DIR" 2>/dev/null || true
-      if try_claim_start; then
-        SPAWN_CLAIMED=1
+      # Retiring a claim has to be as atomic as taking one. A plain rmdir here
+      # is not: two invocations that both judge the same aged claim stale both
+      # reach it, and the second removes the FIRST one's fresh claim, so both
+      # go on to mkdir successfully and both spawn — the defect this hook
+      # exists to remove, reappearing on the recovery path.
+      #
+      # rename(2) is atomic and single-winner, so only one invocation can carry
+      # a given claim aside. The mtime already read for the age test doubles as
+      # that claim's identity: renaming a directory leaves its own mtime alone
+      # and touches only the parent's, so a mismatch means what we carried
+      # aside is not what we judged — somebody claimed in between, and this
+      # invocation must not spawn.
+      #
+      # The mismatched claim is discarded rather than put back. Restoring it
+      # reads as the tidier choice and is worse: its owner is already past its
+      # own claim decision and may release while we hold the directory, and a
+      # restore after that strands it for the whole staleness window with a
+      # fresh mtime, so every later invocation declines to sweep and no canvas
+      # starts. Discarding costs nothing here — the spawn below re-probes the
+      # port, so an invocation arriving into the gap still declines to spawn a
+      # second server.
+      swept="${LOCK_DIR}.stale.$$"
+      if mv "$LOCK_DIR" "$swept" 2>/dev/null; then
+        SWEPT_DIR="$swept"
+        swept_mtime=$(stat -c %Y "$swept" 2>/dev/null || stat -f %m "$swept" 2>/dev/null || echo 0)
+        [[ "$swept_mtime" =~ ^[0-9]+$ ]] || swept_mtime=0
+        rmdir "$swept" 2>/dev/null || true
+        SWEPT_DIR=""
+        if [[ "$swept_mtime" -eq "$lock_mtime" ]] && try_claim_start; then
+          SPAWN_CLAIMED=1
+        fi
       fi
     fi
   fi
 
   # Only the winner spawns, and only the winner writes the pid file — so
   # canvas.pid can never name a process that lost an EADDRINUSE race.
-  if [[ "$SPAWN_CLAIMED" -eq 1 ]]; then
+  #
+  # The port is re-probed rather than trusting the decision made before the
+  # claim was taken. An invocation descheduled between those two points can
+  # acquire the claim after another has already bound the port, and would
+  # otherwise spawn a server doomed to EADDRINUSE and overwrite canvas.pid with
+  # its pid. The claim holder is the only writer by this point, so the
+  # re-check races nothing.
+  if [[ "$SPAWN_CLAIMED" -eq 1 ]] && ! nc -z localhost "$PORT" 2>/dev/null; then
     cd "$EXCALIDRAW_DIR"
     nohup node dist/server.js > "$LOG_FILE" 2>&1 &
     CANVAS_PID=$!

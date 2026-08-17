@@ -66,8 +66,17 @@
 #   ordering arm reddens — which is exactly the defence-in-depth split. Occurs
 #   once; the quoted form is deliberately absent from every comment.
 #
+#   M7 -> test_concurrent_stale_claim_spawns_exactly_one_server
+#     --expr 's#\$swept_mtime" -eq "\$lock_mtime#\$swept_mtime" -ne "\$lock_mtime#'
+#   Inverts the identity test the sweep turns on, so the invocation that really
+#   did carry the aged claim aside declines to claim and the one that did not
+#   finds nothing left to carry: no spawn at all. Chosen over reverting the
+#   sweep to a plain rmdir because it reddens deterministically rather than at
+#   the rate the underlying race happens to hit. Occurs once; the comparison is
+#   never written out in prose.
+#
 #   Mutating a hook copy is required: these cases assert hook behaviour, so
-#   mutating this suite or a docs file would prove nothing. All six recipes
+#   mutating this suite or a docs file would prove nothing. All seven recipes
 #   were replayed against the shared harness and each returned guard_verified.
 
 set -u
@@ -160,11 +169,47 @@ STATSTUB
   chmod +x "$fx/bin/stat"
 }
 
+# Stagger two racers at the one point where the sweep is decided. The hook
+# calls `date` exactly once, between reading the aged claim's mtime and acting
+# on it, so a stub that holds the SECOND caller there puts the two racers into
+# the specific interleaving that breaks a non-atomic sweep: the first retires
+# the stale claim and takes a fresh one, and the second — still holding the
+# staleness verdict it formed about the OLD claim — arrives afterwards and
+# retires the fresh one.
+#
+# Deliberately deterministic rather than left to timing. That interleaving is a
+# few syscalls wide, so racing two unstaggered invocations reproduces it only
+# occasionally: a case that catches the defect at some rate below 1 is not a
+# guard, it is a coin flip that reports green most of the time.
+#
+# `mkdir` is the stagger's own claim primitive for the same reason the hook
+# uses it — it is atomic, so exactly one caller can be first.
+add_staggered_date_stub() {
+  fx="$TMPROOT/$1"
+  cat > "$fx/bin/date" <<EOF
+#!/usr/bin/env bash
+mkdir "$fx/date.first" 2>/dev/null || sleep 0.4
+exec /bin/date "\$@"
+EOF
+  chmod +x "$fx/bin/date"
+}
+
 # Run the hook against a sandbox. stdin must be /dev/null: the hook consumes
 # stdin to avoid a broken pipe and would otherwise block on an inherited
 # terminal.
+#
+# An optional third argument names a gate file to spin on first, which is how
+# the barriered case below releases two racers together. A builtin-only spin,
+# so it forks nothing and both racers resume inside the same millisecond. A
+# FIFO on stdin looks like the tidier barrier and is not one: the writer's
+# open unblocks whichever reader arrived first and its close then sends EOF,
+# so a reader that opens after that close waits for a writer that will never
+# return, and the case hangs instead of racing.
 run_hook() {
   fx="$TMPROOT/$1"
+  if [ -n "${3:-}" ]; then
+    while [ ! -e "$3" ]; do :; done
+  fi
   PATH="$fx/bin:$PATH" \
   EXCALIDRAW_MCP_DIR="$fx/mcp" \
   EXCALIDRAW_CANVAS_PORT=39117 \
@@ -264,6 +309,60 @@ test_stale_lock_does_not_deadlock() {
 
   assert_stale_claim_swept test_stale_lock_does_not_deadlock "$c" "$rc" \
     "stale claim swept and server started"
+}
+
+# The intersection neither case above reaches: concurrency AGAINST a stale
+# claim. test_cold_start races two invocations but only from a virgin sandbox,
+# and test_stale_lock exercises the aged claim with a single invocation. The
+# guarantee breaks exactly where they cross — two racers that both judge the
+# same aged claim stale — so a sweep that retires it non-atomically passes
+# every other case in this file. That is how such a sweep reached review.
+#
+# Barriered rather than started bare: each racer spins on a gate file until it
+# appears, so both resume inside the same millisecond. A bare background start
+# (what the cold-start case uses) routinely lets the first finish before the
+# second is scheduled, which is why that case cannot see this.
+#
+test_concurrent_stale_claim_spawns_exactly_one_server() {
+  c=staleconcurrent
+  make_fixture "$c"
+  add_staggered_date_stub "$c"
+  plant_stale_claim "$c"
+
+  gate="$TMPROOT/$c/gate"
+  run_hook "$c" a "$gate" & pa=$!
+  run_hook "$c" b "$gate" & pb=$!
+  # Let both racers reach the spin before releasing them, so neither is still
+  # being scheduled when the other starts claiming.
+  sleep 0.2
+  : > "$gate"
+
+  wait "$pa"; rca=$?
+  wait "$pb"; rcb=$?
+
+  pidfile="$TMPROOT/$c/mcp/canvas.pid"
+  if [ -f "$pidfile" ]; then
+    STARTED_PIDS="$STARTED_PIDS $(cat "$pidfile")"
+  fi
+
+  n="$(spawn_count "$c")"
+  if [ "$n" = "1" ]; then
+    pass test_concurrent_stale_claim_spawns_exactly_one_server "exactly one spawn against a contested stale claim"
+  else
+    fail test_concurrent_stale_claim_spawns_exactly_one_server "expected 1 spawn, got $n"
+  fi
+
+  if [ "$rca" = "0" ] && [ "$rcb" = "0" ]; then
+    pass test_concurrent_stale_claim_spawns_exactly_one_server "both invocations exited 0"
+  else
+    fail test_concurrent_stale_claim_spawns_exactly_one_server "exit codes were $rca and $rcb"
+  fi
+
+  if [ -d "$TMPROOT/$c/mcp/canvas-start.lock" ]; then
+    fail test_concurrent_stale_claim_spawns_exactly_one_server "claim was not released"
+  else
+    pass test_concurrent_stale_claim_spawns_exactly_one_server "claim released"
+  fi
 }
 
 # The sweep must survive a stat whose flags mean something else. This is the
@@ -395,7 +494,7 @@ test_release_is_trapped_for_signals() {
   done
 }
 
-ALL_TESTS="test_cold_start_spawns_exactly_one_server test_stale_lock_does_not_deadlock test_stale_lock_survives_divergent_stat test_hook_copies_are_identical test_release_is_trapped_for_signals"
+ALL_TESTS="test_cold_start_spawns_exactly_one_server test_stale_lock_does_not_deadlock test_concurrent_stale_claim_spawns_exactly_one_server test_stale_lock_survives_divergent_stat test_hook_copies_are_identical test_release_is_trapped_for_signals"
 
 run_one() {
   case " $ALL_TESTS " in

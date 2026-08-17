@@ -67,7 +67,26 @@
 #   `perl -0pi` slurps the whole file, so an anchored expression would need a `/m`
 #   modifier to match at all.
 #
-#   Only these TWO arms are recorded, and the reason is narrower than it may look. An arm
+#   Third arm — the shape floor applied unconditionally (case 2's negative twin):
+#   bash ~/.claude/plugins/cache/managed-service/cogni-service/0.0.402/scripts/mutation-check.sh \
+#     --root . \
+#     --file cogni-portfolio/scripts/append-claim.sh \
+#     --expr 's/\[\[ "\$lock_mtime" =~ \^\[0-9\]\+\$ \]\] \|\| //' \
+#     --test 'bash cogni-portfolio/tests/test-append-claim-lock.sh' \
+#     --case live-lock-not-swept-on-numeric-stat
+#
+#   This deletes the floor's GUARD and leaves the assignment, so the reading is
+#   forced to 0 for every lock rather than only a malformed one. Case 2 supplies a
+#   numeric current-epoch reading, i.e. a genuinely LIVE peer, so under the
+#   mutation that lock reads as ancient, gets swept, and the case goes red — which
+#   is exactly the destroy-mutual-exclusion failure the case comment below
+#   describes. The first arm pins the same floor from the other side (case 1, the
+#   malformed reading), so the two together pin the floor's presence AND its
+#   conditionality; neither alone does. The `^` and `$` in the expression are
+#   backslash-escaped, so they are literal characters and not anchors — no `/m`
+#   modifier is needed despite the harness slurping with `perl -0pi`.
+#
+#   Only these THREE arms are recorded, and the reason is narrower than it may look. An arm
 #   mutating the GNU-first ordering (`s/stat -c %Y/stat -f %m/`) reports a vacuous
 #   guard against the TWO CASES BELOW, because their stub answers unconditionally
 #   and ignores its flags by design — deliberately, so both stay ordering-agnostic.

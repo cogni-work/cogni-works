@@ -21,8 +21,7 @@ Bridge files are explicit JSON exports written by one plugin and read by another
 | `portfolio-opportunities.json` | cogni-trends | cogni-portfolio | Ranked growth opportunities from trend analysis |
 | `tips-value-model.json` | cogni-trends | cogni-portfolio | Solution templates, TIPS paths, BR scores for trends-bridge import |
 | `claims.json` | various | cogni-workspace | Claim records with source URLs submitted for verification |
-| `consulting-project.json` | cogni-consulting | (internal) | Engagement config, phase state, plugin path references |
-| `canvas-{slug}.md` | cogni-consulting | cogni-portfolio | Lean Canvas sections for entity extraction |
+| `consult-project.json` | cogni-consult | (internal) | Engagement config, action-field and deliverable state, plugin path references |
 
 ## Why bridges, not direct imports
 

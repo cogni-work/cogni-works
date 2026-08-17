@@ -215,6 +215,55 @@ Both `.cogni-wiki/config.json` files — closed by Decision 1.
 **Reversing it** and running a blanket sync destroys the group-B sections and cannot be
 recovered from the bundled tree afterwards.
 
+### Extension — the same rule applied to bare prose names
+
+*Carried out in issue #1426.*
+
+The pass above reached only references shaped as `[[wikilink]]`s or `related:` frontmatter — the
+mechanically detectable set. A **bare** plugin name in prose carries no wrapper, so the wikilink
+resolvers behind W4/W5 never saw that class and the suites stayed green with it fully present. The
+same rule — name the adopting plugin and the relocated skill — now applies to bare prose too.
+
+**The surface is the two-tree intersection of `wiki/wiki/pages/*.md`, non-recursive.** Measured at
+the time of the sweep: 150 pages in the intersection, all 150 byte-identical; 25 of them carried a
+bare retired name. Everything else is outside the surface **structurally, with no exclusion list**:
+
+- `index.md`, `log.md` and `overview.md` fall out by **depth** — they sit at `wiki/wiki/` level.
+- `lint-2026-04-20.md` falls out because it is the only **root-only** page (and Decision 5 freezes it).
+- The 7 pages of Decision 4 fall out because they are **bundled-only** — the very property that
+  decision is about.
+
+A surface with no exclusion entries cannot be widened by accident, which matters here: the
+substring-matching `is_excluded()` in `tests/test-layering-claim-reconciled.sh` turns one loose
+fragment into a repo-wide exemption. It also self-heals — when #1402 rules, the held pages enter or
+leave the surface with no guard edit.
+
+**Adopters used.** `cogni-narrative` and `cogni-copywriting` → cogni-workspace, citing its
+`narrative` and `copywriter` skills (`audit-copywriter` was deleted, not adopted, and is never cited
+as live). `cogni-research` → cogni-knowledge. `cogni-consulting` → cogni-consult, **but not as a
+rename**: several pages described the retired plugin's *phase-gated* architecture, which
+cogni-consult does not have, so those were rewritten against the live model (action fields as WBS
+containers, a per-deliverable design-thinking loop, `consult-project.json`) rather than
+substituted. `cogni-wiki` had zero bare occurrences in the surface.
+
+**Five claims were false, not merely stale**, and were corrected as content: cogni-knowledge ships
+no `hooks/` (the four that do are cogni-consult, cogni-portfolio, cogni-visual, cogni-workspace);
+the "no `scripts/`" census named plugins whose code now lives in cogni-workspace, which has one —
+only cogni-marketing and cogni-website lack it; cogni-knowledge's entity vocabulary is not
+SubQuestion/Context/Source/ReportClaim; the `portfolio_path` frontmatter edge had no cogni-consult
+consumer at all; and the `canvas-{slug}.md` bridge row named a file no plugin emits — removed per
+Decision 6 rather than repointed.
+
+**`cogni-claims/` paths are preserved deliberately.** Per `cogni-workspace/CLAUDE.md`, the
+discriminator is the colon: a `cogni-claims:` dispatch token is rewritten, a `cogni-claims/` path is
+not. All 8 surviving occurrences in the surface (4 per tree) are paths. Two of them share a line
+with a rewritten `cogni-research` token.
+
+**`cogni-docs` and `cogni-service` are not retired** — they are live plugins hosted in a different
+marketplace, already allowlisted as `EXTRA_ALLOWED` in `tests/test-wiki-namespace-sync.sh`. They are
+out of scope here, and any future roster-derived scan needs that same allowance or it reports false
+positives on them.
+
 ## Decision 4 — the 7 bundled-only pages are held pending a maintainer ruling
 
 *Recorded, not executed. Carried out in issue #1402.*
@@ -342,6 +391,11 @@ Kept as a permanent inventory so the set stays auditable rather than being redis
 | `ecosystem-command-reference` names a retired command surface | held with the page above | #1402 |
 | Sync script destroys bundle-only content | closed — refuses by default; `--force` is the opt-in | #1403 |
 | This record and its guard are unregistered in the plugin guide | closed — `cogni-workspace/CLAUDE.md` names both under `## Wiki Trees` | #1404 |
+| Bare prose plugin names are invisible to every resolver | swept over the two-tree `pages/*.md` intersection; no guard yet, so a future retirement can reintroduce the class silently | #1426, guard in #1438 |
+| The 5 bundled-only pages still name retired plugins | held with the pages themselves — editing them would pre-decide the ruling | #1402, sweep in #1440 |
+| `index.md` and `overview.md` carry the same bare-name class | outside the swept surface by depth; needs its own decision, since the two `index.md` copies diverge by design and a TOC of deleted pages is a Decision-6 removal, not a rename | #1439 |
+| The generated `docs/` mirror repeats the dead `portfolio_path` edge | open — cogni-docs ships from a separate repo, so the fix is correct-the-output plus an upstream filing, never a local regeneration | #1441 |
+| Two `consulting-project.json` residues name a manifest no plugin writes | open — outside the page surface (`troubleshoot/known-issues.md`, `docs/contributing/`) | #1442 |
 
 ## Deliberately left standing
 

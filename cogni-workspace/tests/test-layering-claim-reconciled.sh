@@ -159,6 +159,12 @@ cogni-visual/libraries/
 
 # Pages that must stay byte-identical between the two wiki trees. Scoped to what
 # this reconciliation touched — see the header on why this is not tree-wide.
+#
+# plugin-cogni-portfolio.md joins the list with the bare-prose sweep: it carried
+# four off-roster names across two lines, both copies were rewritten, and unlike
+# its siblings here it had no byte-identity arm of its own. Until the
+# roster-derived body scan lands with its two per-tree arms, this entry is the
+# only thing that would catch a one-tree-only regression on that page.
 PAGE_PARITY='plugin-cogni-workspace.md
 workflow-install-to-infographic.md
 arch-er-diagram.md
@@ -166,7 +172,8 @@ concept-four-layer-architecture.md
 workflow-portfolio-to-website.md
 workflow-content-pipeline.md
 workflow-portfolio-to-pitch.md
-workflow-trends-to-solutions.md'
+workflow-trends-to-solutions.md
+plugin-cogni-portfolio.md'
 
 # ---------------------------------------------------------------------------
 # The checkers. Fixture cases and the real-repo cases drive these same two

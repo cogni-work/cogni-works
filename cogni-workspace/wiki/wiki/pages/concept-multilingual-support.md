@@ -30,9 +30,9 @@ This matters because downstream rendering (cogni-visual, cogni-website, document
 
 ## Per-market authority sources
 
-Authority sources are curated per market in two files:
-- `cogni-research/references/market-sources.json`
-- `cogni-trends/references/region-authority-sources.json`
+Authority sources are canonical in one registry, with per-plugin operational overlays:
+- `cogni-workspace/references/supported-markets-registry.json` — canonical, read via `cogni-workspace/scripts/get-market-config.py`
+- `cogni-trends/skills/trend-research/references/region-authority-sources.json` — the trends overlay (`site_searches[]` per Smarter Service dimension)
 
 Default authority sources by market:
 - **DACH**: fraunhofer.de, bitkom.org, vdma.org, destatis.de, handelsblatt.com
@@ -50,8 +50,8 @@ Per-language section header mappings live in `references/section-headers-de.md` 
 
 ## Plugins most affected
 
-- cogni-research, cogni-trends — language-aware web research and authority weighting
-- cogni-narrative, cogni-copywriting, cogni-marketing — language-aware writing tone
+- cogni-knowledge, cogni-trends — language-aware web research and authority weighting
+- cogni-marketing, and the `narrative` and `copywriter` skills of cogni-workspace — language-aware writing tone
 - cogni-visual, cogni-website — language-aware text rendering and section headers
 
 **Source**: [insight-wave/CLAUDE.md on GitHub](https://github.com/cogni-work/insight-wave/blob/main/CLAUDE.md)

@@ -17,9 +17,9 @@ The cross-plugin entity model and how data flows between plugins. Every arrow is
 cogni-workspace is the horizontal layer owning shared workspace state; the business plugins are vertical, each keeping its own project lifecycle. The role groupings below are descriptive, not a dependency ordering. See [[concept-four-layer-architecture]] for the full mapping.
 
 - **Horizontal** — cogni-workspace (themes, env vars, vault config)
-- **Orchestration** — cogni-consulting (engagement state, phase dispatch)
-- **Data** — cogni-portfolio, cogni-trends, cogni-research (each owns a knowledge domain)
-- **Output** — cogni-narrative, cogni-copywriting, cogni-visual, cogni-sales, cogni-marketing (transform data-layer content into deliverables)
+- **Orchestration** — cogni-consult (engagement state, action-field dispatch)
+- **Data** — cogni-portfolio, cogni-trends, cogni-knowledge (each owns a knowledge domain)
+- **Output** — cogni-visual, cogni-sales, cogni-marketing, cogni-website (transform data-layer content into deliverables)
 
 ## Entity types per plugin
 
@@ -27,11 +27,11 @@ Each data-layer plugin owns a specialized domain with its own persistent entitie
 
 - cogni-portfolio: Product, Feature, Market, Proposition, Solution, Package, Competitor, Customer (JSON in project dir)
 - cogni-trends: TipsProject, TrendCandidate, TrendReport, InvestmentTheme, SolutionTemplate, Catalog (JSON + YAML)
-- cogni-research: SubQuestion, Context, Source, ReportClaim (markdown with YAML frontmatter, Obsidian-browsable)
+- cogni-knowledge: sub-questions in `plan.json`, source / concept / question pages under `wiki/`, `pre_extracted_claims:` frontmatter, `citation-manifest.json` (markdown with YAML frontmatter, Obsidian-browsable)
 - cogni-workspace: ClaimRecord, DeviationRecord, ResolutionRecord (JSON in the project-local `cogni-claims/` store — the directory name is historical)
-- cogni-narrative, cogni-visual, cogni-marketing, cogni-sales, cogni-consulting, cogni-workspace also have their own entity types
+- cogni-visual, cogni-marketing, cogni-sales and cogni-consult also have their own entity types
 
-cogni-copywriting deliberately has no persistent entities — it modifies documents in place and detects `arc_id` frontmatter for arc-aware polishing.
+cogni-workspace's `copywriter` skill deliberately has no persistent entities — it modifies documents in place and detects `arc_id` frontmatter for arc-aware polishing.
 
 ## Bridge files
 
@@ -41,11 +41,11 @@ The bidirectional bridge between cogni-portfolio and cogni-trends is the most co
 
 ## YAML frontmatter contracts
 
-Lighter than bridge files: a downstream plugin reads specific frontmatter fields from upstream files. `arc_id` (cogni-narrative → cogni-copywriting/cogni-visual), `theme_path` (cogni-workspace → cogni-visual — see [[concept-theme-inheritance]]), `portfolio_path` (cogni-portfolio → cogni-consulting), `arc_type` (cogni-visual internal mapping for rendering agents).
+Lighter than bridge files: a downstream plugin reads specific frontmatter fields from upstream files. `arc_id` (cogni-workspace's `narrative` skill → its `copywriter` skill and cogni-visual), `theme_path` (cogni-workspace → cogni-visual — see [[concept-theme-inheritance]]), `portfolio_path` (cogni-portfolio → cogni-sales, cogni-marketing, cogni-trends), `arc_type` (cogni-visual internal mapping for rendering agents).
 
 ## Data isolation in practice
 
-The diagram shows many arrows but each is read-only. cogni-workspace reads source URLs from cogni-research entity files but never writes back. cogni-portfolio's proposition-generator reads trend-bridge enrichments from `portfolio-opportunities.json` but never modifies cogni-trends files. The boundary is the bridge file or frontmatter field — everything on each side is private to the owning plugin. See [[concept-data-isolation]].
+The diagram shows many arrows but each is read-only. cogni-workspace reads source URLs from cogni-knowledge entity files but never writes back. cogni-portfolio's proposition-generator reads trend-bridge enrichments from `portfolio-opportunities.json` but never modifies cogni-trends files. The boundary is the bridge file or frontmatter field — everything on each side is private to the owning plugin. See [[concept-data-isolation]].
 
 ## Claim lifecycle
 

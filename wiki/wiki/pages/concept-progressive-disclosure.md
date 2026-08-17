@@ -14,7 +14,7 @@ Skills and agents load reference material only at the step that needs it, never 
 
 ## Where it shows up
 
-cogni-visual, cogni-portfolio, cogni-research, and cogni-consulting apply this consistently. cogni-visual's CLAUDE.md states it directly: "Reference files are read only at the step that needs them, not all at once."
+cogni-visual, cogni-portfolio, cogni-knowledge, and cogni-consult apply this consistently. cogni-visual's CLAUDE.md states it directly: "Reference files are read only at the step that needs them, not all at once."
 
 A typical research-report pipeline:
 

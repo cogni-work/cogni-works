@@ -117,18 +117,22 @@ cogni-consulting was removed (its source remains in git history); route new cons
 
 ### 5. Stale State Detection
 
-After plugin renames, orphaned files may linger:
+After plugin retirements, orphaned files may linger:
 
 ```bash
-# Check for old cogni-diamond state
-ls **/diamond-project.json 2>/dev/null
+# Check for retired cogni-diamond / cogni-consulting engagement state.
+# find, not a ** glob: engagement files sit two segments deep
+# ({plugin}/{engagement-slug}/), and ** only recurses where globstar is on.
+find . -type f \( -name 'diamond-project.json' -o -name 'consulting-project.json' \) 2>/dev/null
 
 # Check for inert course-progress files (the course system is retired)
 ls .claude/cogni-teacher.local.md .claude/cogni-help.local.md 2>/dev/null
 ```
 
-For a renamed plugin's state file, suggest renaming to the current filename. For
-the course-progress files, suggest deletion — nothing reads them any more.
+For a retired plugin's engagement file, suggest archiving rather than renaming —
+nothing reads either name, and cogni-consult has no import path from them; the
+forward path is to scope a fresh engagement with `/cogni-consult:consult-setup`.
+For the course-progress files, suggest deletion — nothing reads them any more.
 
 ### 6. Common Misconfigurations
 

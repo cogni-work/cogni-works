@@ -18,9 +18,9 @@ The end-to-end content production pipeline — from strategy to channel-ready de
 ```
 cogni-marketing (setup + content generation)
    ↓ raw content pieces
-cogni-narrative (story arc shaping, long-form only)
+cogni-workspace `narrative` (story arc shaping, long-form only)
    ↓ narrative with arc_id
-cogni-copywriting (polish, arc-aware)
+cogni-workspace `copywriter` (polish, arc-aware)
    ↓ polished prose
 cogni-visual (slides / web rendering, brief-driven)
 ```

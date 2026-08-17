@@ -23,7 +23,7 @@ All visual plugins read their theme from cogni-workspace. There's no per-plugin 
 - **cogni-visual** — every render agent (slides, infographic, storyboard, web) reads the theme.
 - **cogni-website** — site-assembler generates the shared CSS stylesheet from the theme; page-generator and hero-renderer interpolate variables.
 - **cogni-portfolio** — the portfolio dashboard reads the theme for its HTML output.
-- **cogni-trends, cogni-marketing, cogni-research** — dashboards pull the same theme for visual consistency.
+- **cogni-trends, cogni-marketing** — dashboards pull the same theme for visual consistency.
 
 ## Why centralize themes
 

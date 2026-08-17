@@ -31,6 +31,6 @@ Quality assessors run on haiku because the workload is high-volume rubric evalua
 
 ## Most prominent in cogni-portfolio
 
-cogni-portfolio is the cleanest reference implementation. cogni-trends and cogni-research apply variations. The orchestrator-level decision to *block* vs *warn* is the [[concept-orchestrator-pattern]]'s "warn-not-block" exception — most phase gates are advisory but the Develop proposition gate blocks.
+cogni-portfolio is the cleanest reference implementation. cogni-trends and cogni-knowledge apply variations. The orchestrator-level decision to *block* vs *warn* is the [[concept-orchestrator-pattern]]'s "warn-not-block" exception — most gates are advisory, but cogni-consult's personas gate blocks a fresh deliverable from opening.
 
 **Source**: [insight-wave/CLAUDE.md on GitHub](https://github.com/cogni-work/insight-wave/blob/main/CLAUDE.md) (see also [design-philosophy.md](https://github.com/cogni-work/insight-wave/blob/main/docs/architecture/design-philosophy.md))

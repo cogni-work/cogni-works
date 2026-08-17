@@ -18,11 +18,11 @@ All cross-plugin references use kebab-case slug identifiers. Slugs are derived f
 cloud-monitoring--mid-market-saas-dach    cogni-portfolio proposition (paired entity)
 automotive-ai-predictive-maintenance-abc12345  cogni-trends trend
 siemens-manufacturing-pitch              cogni-sales pitch
-acme-market-entry                        cogni-consulting engagement
+acme-market-entry                        cogni-consult engagement
 claim-550e8400-e29b-41d4-a716            cogni-workspace claim (UUID-v4 slug)
 ```
 
-Slugs serve as both the file name and the cross-plugin identifier. When cogni-consulting stores a reference to a cogni-portfolio project, it stores the project slug, not an internal ID. When cogni-trends exports a bridge file referencing a portfolio feature, it uses the feature slug.
+Slugs serve as both the file name and the cross-plugin identifier. cogni-consult files each deliverable's research under `action-fields/<field-slug>/research/<topic-slug>.md`, addressing the action field and the topic by slug rather than by an internal ID. When cogni-trends exports a bridge file referencing a portfolio feature, it uses the feature slug.
 
 ## The double-dash convention
 

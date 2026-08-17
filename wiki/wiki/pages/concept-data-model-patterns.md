@@ -18,7 +18,7 @@ Entity slugs are kebab-case, derived from the entity name at creation time, and 
 
 ## Project directory layout
 
-Every project sits at `{plugin}/{project-slug}/` with a manifest at the root. cogni-portfolio uses `portfolio.json`, cogni-trends uses `tips-project.json`, cogni-research uses `project.md` with frontmatter, cogni-consulting uses `consulting-project.json`. The manifest is the lightweight index — full entity content lives in subdirectories and is loaded only when needed (see [[concept-progressive-disclosure]]).
+Every project sits at `{plugin}/{project-slug}/` with a manifest at the root. cogni-portfolio uses `portfolio.json`, cogni-trends uses `tips-project.json`, cogni-knowledge uses `.cogni-knowledge/binding.json`, cogni-consult uses `consult-project.json`. The manifest is the lightweight index — full entity content lives in subdirectories and is loaded only when needed (see [[concept-progressive-disclosure]]).
 
 ## The Feature × Market join
 
@@ -48,6 +48,6 @@ These three are the substrate of [[concept-claims-propagation]] — when a claim
 
 ## Obsidian-browsability
 
-All entity outputs are markdown with YAML frontmatter. This means the user can open the project directory in Obsidian and browse the entire knowledge graph natively — no custom tooling needed. This is one reason cogni-research, cogni-narrative, cogni-marketing, and cogni-trends all default to markdown-with-frontmatter rather than pure JSON.
+All entity outputs are markdown with YAML frontmatter. This means the user can open the project directory in Obsidian and browse the entire knowledge graph natively — no custom tooling needed. This is one reason cogni-knowledge, cogni-marketing, cogni-trends, and cogni-workspace's `narrative` skill all default to markdown-with-frontmatter rather than pure JSON.
 
 **Source**: [insight-wave/CLAUDE.md on GitHub](https://github.com/cogni-work/insight-wave/blob/main/CLAUDE.md)

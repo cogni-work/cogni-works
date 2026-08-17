@@ -48,6 +48,6 @@ Three MCP servers — see [[concept-mcp-server-map]]:
 
 ## Integration
 
-Upstream: cogni-narrative (narratives with `arc_id`), cogni-copywriting (polished docs), any plugin producing text deliverables (cogni-research, cogni-trends, cogni-portfolio, cogni-marketing, cogni-sales). Downstream: terminal — produces final visual deliverables that humans consume.
+Upstream: cogni-workspace (narratives with `arc_id` from its `narrative` skill, polished docs from `copywriter`), any plugin producing text deliverables (cogni-knowledge, cogni-trends, cogni-portfolio, cogni-marketing, cogni-sales). Downstream: terminal — produces final visual deliverables that humans consume.
 
 **Source**: [cogni-visual README](https://github.com/cogni-work/insight-wave/blob/main/cogni-visual/README.md) · [plugin guide](https://github.com/cogni-work/insight-wave/blob/main/docs/plugin-guide/cogni-visual.md)

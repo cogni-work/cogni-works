@@ -15,11 +15,11 @@ cogni-visual separates content specification from rendering. Between the compose
 ## The pipeline
 
 ```
-cogni-narrative → cogni-copywriting → cogni-visual
-(compose)         (polish)            (visualize)
+cogni-workspace `narrative` → cogni-workspace `copywriter` → cogni-visual
+(compose)                     (polish)                       (visualize)
 ```
 
-A brief sits between cogni-copywriting's output and cogni-visual's rendering agents.
+A brief sits between the `copywriter` skill's output and cogni-visual's rendering agents.
 
 ## What a brief specifies vs hides
 

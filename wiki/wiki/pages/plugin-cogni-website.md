@@ -24,7 +24,7 @@ Assembles multi-page customer websites from portfolio, marketing, trend, and res
 
 | Skill | Purpose |
 |-------|---------|
-| `cogni-website:website-setup` | Initialize project; discover content from cogni-portfolio, cogni-marketing, cogni-trends, cogni-research; pick theme |
+| `cogni-website:website-setup` | Initialize project; discover content from cogni-portfolio, cogni-marketing, cogni-trends, cogni-knowledge; pick theme |
 | `cogni-website:website-plan` | Plan site structure interactively — discover content, propose pages, map content to sections |
 | `cogni-website:website-build` | Build the static site — orchestrate CSS generation, parallel page generation, hero rendering, sitemap |
 | `cogni-website:website-preview` | Preview generated website in browser via claude-in-chrome; validate links; report structural issues |
@@ -45,6 +45,6 @@ The setup skill walks every other insight-wave plugin's project directories and 
 
 ## Integration
 
-Upstream: cogni-portfolio (propositions, capabilities pages), cogni-marketing (thought-leadership, demand-gen), cogni-trends (trend reports), cogni-research (whitepapers), cogni-workspace (theme). Downstream: deployable static site (terminal output).
+Upstream: cogni-portfolio (propositions, capabilities pages), cogni-marketing (thought-leadership, demand-gen), cogni-trends (trend reports), cogni-knowledge (wiki syntheses), cogni-workspace (theme). Downstream: deployable static site (terminal output).
 
 **Source**: [cogni-website README](https://github.com/cogni-work/insight-wave/blob/main/cogni-website/README.md) · [plugin guide](https://github.com/cogni-work/insight-wave/blob/main/docs/plugin-guide/cogni-website.md)

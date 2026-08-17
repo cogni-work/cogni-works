@@ -18,8 +18,7 @@ horizontal   cogni-workspace
 vertical     Orchestration   cogni-consult
              Data            cogni-portfolio  cogni-trends
                              cogni-knowledge
-             Output          cogni-narrative  cogni-copywriting
-                             cogni-visual     cogni-sales
+             Output          cogni-visual     cogni-sales
                              cogni-marketing  cogni-website
 ```
 
@@ -27,8 +26,8 @@ vertical     Orchestration   cogni-consult
 
 - **Horizontal** (cogni-workspace) — shared infrastructure: themes, environment variables, Obsidian vault configuration, MCP server installation. Every plugin that produces visual HTML output reads theme files from cogni-workspace. No plugin writes to cogni-workspace except through `pick-theme` and `manage-workspace`. It also owns the cross-plugin claim-verification gate: verification state across all sourced assertions.
 - **Data** — each plugin owns a specialized knowledge domain. cogni-portfolio (products, markets, propositions, competitors). cogni-trends (TIPS paths, solution templates, catalogs). cogni-knowledge (sub-questions, contexts, sources, claims).
-- **Output** — cogni-narrative, cogni-copywriting, cogni-visual, cogni-sales, cogni-marketing, cogni-website. Transforms data-group content into deliverables (narratives, polished docs, slides/HTML/infographics, sales pitches, marketing campaigns, customer websites). Consumes but does not produce data-group entities.
-- **Orchestration** (cogni-consult) — manages engagement state. Dispatches to data and output plugins at phase-appropriate moments without producing content itself. See [[concept-orchestrator-pattern]].
+- **Output** — cogni-visual, cogni-sales, cogni-marketing, cogni-website. Transforms data-group content into deliverables (slides/HTML/infographics, sales pitches, marketing campaigns, customer websites). Consumes but does not produce data-group entities. Narrative shaping and prose polish belong to this group in function but ship as the `narrative` and `copywriter` skills of the horizontal cogni-workspace, not as plugins of their own.
+- **Orchestration** (cogni-consult) — manages engagement state. Dispatches to data and output plugins as each action field's deliverables require, without producing content itself. See [[concept-orchestrator-pattern]].
 
 ## Why these groups
 

@@ -18,14 +18,14 @@ Agents pick model tiers by role across insight-wave, with cost-per-task as the d
 |------|-------|-----------|
 | Orchestration | sonnet (skill context) | Phase dispatch, sub-question generation |
 | Research | sonnet | Web research, section researchers, deep researchers |
-| Heavy synthesis | opus | Demanding rewrites (cogni-copywriting), 60-candidate scoring (cogni-trends) |
+| Heavy synthesis | opus | Demanding rewrites (the `copywriter` skill of cogni-workspace), 60-candidate scoring (cogni-trends) |
 | Quality assessment | haiku | High-volume rubric evaluation (3-5 dimensions per entity) |
 | Content generation | sonnet | Narrative writers, report writers, content writers |
 
 ## Why each pick
 
 - **sonnet** is the default for anything that needs solid reasoning at moderate volume — research, synthesis, content generation.
-- **opus** comes out for the hard cases: demanding rewrites where tone subtleties matter (cogni-copywriting), or multi-axis scoring across many candidates (cogni-trends scoring 60 candidates).
+- **opus** comes out for the hard cases: demanding rewrites where tone subtleties matter (the `copywriter` skill of cogni-workspace), or multi-axis scoring across many candidates (cogni-trends scoring 60 candidates).
 - **haiku** is the workhorse for high-volume rubric evaluation. The [[concept-quality-gates]] pattern fires haiku assessors across many entities and many dimensions; sonnet would be cost-prohibitive at that scale.
 
 ## Cost telemetry

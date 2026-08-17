@@ -32,7 +32,23 @@ while ! mkdir "$LOCK_DIR" 2>/dev/null; do
   if [ "$WAITED" -ge "$MAX_WAIT" ]; then
     # Stale lock detection: remove lock older than 60 seconds
     if [ -d "$LOCK_DIR" ]; then
-      lock_age=$(( $(date +%s) - $(stat -f %m "$LOCK_DIR" 2>/dev/null || stat -c %Y "$LOCK_DIR" 2>/dev/null || echo 0) ))
+      # GNU form first: on GNU coreutils `-f` means --file-system, so `stat -f %m`
+      # yields no mtime yet still exits 0, and the `||` never falls through. BSD
+      # has no `-c`, so it errors cleanly and does fall through — only this
+      # direction works on both.
+      #
+      # Resolve the reading into a variable before any arithmetic. A bad
+      # substitution nested directly inside $(( )) is a hard bash error, and the
+      # damage is worse than an abort: on bash 3.2 the error abandons the loop
+      # body AND the loop, so the script resumes after `done` and appends the
+      # claim having never held the lock. (On bash >= 4 it aborts outright.)
+      #
+      # Floor on numeric SHAPE, not emptiness — the failure mode is a successful
+      # *wrong* answer, which an emptiness test structurally cannot catch.
+      lock_mtime=$(stat -c %Y "$LOCK_DIR" 2>/dev/null || stat -f %m "$LOCK_DIR" 2>/dev/null || echo 0)
+      [[ "$lock_mtime" =~ ^[0-9]+$ ]] || lock_mtime=0
+      now=$(date +%s)
+      lock_age=$(( now - lock_mtime ))
       if [ "$lock_age" -gt 60 ]; then
         rmdir "$LOCK_DIR" 2>/dev/null || true
         continue

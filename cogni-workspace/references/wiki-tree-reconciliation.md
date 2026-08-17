@@ -394,8 +394,33 @@ Kept as a permanent inventory so the set stays auditable rather than being redis
 | Bare prose plugin names are invisible to every resolver | swept over the two-tree `pages/*.md` intersection; no guard yet, so a future retirement can reintroduce the class silently | #1426, guard in #1438 |
 | The 5 bundled-only pages still name retired plugins | held with the pages themselves — editing them would pre-decide the ruling | #1402, sweep in #1440 |
 | `index.md` and `overview.md` carry the same bare-name class | outside the swept surface by depth; needs its own decision, since the two `index.md` copies diverge by design and a TOC of deleted pages is a Decision-6 removal, not a rename | #1439 |
-| The generated `docs/` mirror repeats the dead `portfolio_path` edge | open — cogni-docs ships from a separate repo, so the fix is correct-the-output plus an upstream filing, never a local regeneration | #1441 |
+| The generated `docs/` mirror repeats the dead `portfolio_path` edge | output corrected — the one falsified cell now names the live consumers; no guard added, see the guard-decision note below; the upstream generator filing is still outstanding, so a regeneration can still reintroduce the wording | #1441, filing in #1449 |
 | Two `consulting-project.json` residues name a manifest no plugin writes | open — outside the page surface (`troubleshoot/known-issues.md`, `docs/contributing/`) | #1442 |
+
+### Guard decision for the generated `docs/` mirror
+
+**No guard, because** the two forms available both cost more than they are worth here.
+
+A roster-derived scan of `docs/` prose for names absent from `.claude-plugin/marketplace.json` is
+red on arrival. It would flag the deliberate past-tense history in `docs/audit-report.md`,
+`docs/relicensing/vendored-license-audit.md`, `docs/contributing/cogni-consult-evaluation.md`,
+`docs/plugin-guide/cogni-consult.md` and `docs/workflows/consulting-engagement.md`, the four
+"the archived cogni-consulting" sentences inside the corrected files themselves, and the
+`cogni-claims/` directory paths, which are a data location and never a plugin. Its only green
+state is one reached by deleting correct prose. It could not have caught this defect in any case:
+the falsified cell named cogni-consult, a live roster plugin, so the fault was a wrong consumer
+rather than a retired name, and no roster comparison sees it.
+
+The narrower form — pinning the corrected cell as a forbidden literal — is satisfiable locally,
+since `docs/` sits inside the sweep `test-layering-claim-reconciled.sh` already performs. It is
+declined on ownership rather than feasibility: its sole failure mode is an upstream regeneration,
+which #1449 tracks directly at the generator, and grafting the literal onto that suite would put
+an unrelated pin inside cases scoped end to end to the retired layering claim. A separate suite
+for one string is not worth its own file. The sibling caveat recorded in
+`absorption-roadmap.md` shipped the identical shape — corrected generator output, no guard.
+
+**Revisit trigger:** if a regeneration reverts the cell before the upstream fix lands, the narrow
+pin has earned its cost and should be added as its own suite.
 
 ## Deliberately left standing
 

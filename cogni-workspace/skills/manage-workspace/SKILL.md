@@ -144,7 +144,11 @@ After install-mcp completes, read
 in the flow the working directory is the user's workspace target, not the plugin root —
 for the installable server set, and present a combined summary. The registry covers only
 the servers install-mcp can write (`mcp_excalidraw`, `pencil`); claude-in-chrome is a
-Chrome extension the user installs themselves and has no registry entry:
+Chrome extension the user installs themselves and has no registry entry. Show a row only
+for a registry server whose `required_by` intersects the plugin list confirmed in step 2 —
+install-mcp installs nothing for an absent plugin — and take each row's action and status
+verbatim from install-mcp's returned summary rather than from the registry. The block below
+is illustrative:
 
 ```
 MCP Servers (installed on demand, written to your config):
@@ -259,7 +263,11 @@ Refresh `_template/theme.md` from `${CLAUDE_PLUGIN_ROOT}/themes/_template/`. Pre
 
 Same as Init Mode step 5 — delegate to the `install-mcp` skill. In update mode, also
 tell install-mcp to use `--force` for git-based MCPs (pulls latest and rebuilds).
-Note any MCPs from removed plugins that may still be loaded until session restart.
+Removing a plugin does **not** remove its MCP server — the entry now lives in the user's
+own config and `install-mcp` has no removal path, so it is spawned at every session start
+until the user deletes it. Name each server whose `required_by` no longer intersects the
+confirmed plugin list and tell the user which key to remove, from `~/.claude.json`
+(top-level `mcpServers`) and/or `claude_desktop_config.json`.
 
 ### 6. Update Obsidian Integration (Optional)
 

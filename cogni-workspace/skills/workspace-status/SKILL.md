@@ -188,10 +188,12 @@ the MCP is not available.
 - **Loaded**: The MCP tools are available in this session
 - **Not loaded**: An `install-mcp` server that is needed but not available. A restart only
   helps if the server is already installed on this machine, so check which case applies
-  before advising: if `$HOME/.claude/mcp-servers/<name>/start.sh` exists it was installed
-  after this session started (advise a session restart); if it is absent it was never
-  installed (route the user to `/cogni-workspace:install-mcp`). `ToolSearch` alone cannot
-  tell the two apart — it returns the same no-match either way
+  before advising: if `$HOME/.claude/mcp-servers/mcp_excalidraw/start.sh` exists it was
+  installed after this session started (advise a session restart); if it is absent it was
+  never installed (route the user to `/cogni-workspace:install-mcp`). `ToolSearch` alone
+  cannot tell the two apart — it returns the same no-match either way. Note the install
+  directory is the registry **server name** (`mcp_excalidraw`), not the `excalidraw` config
+  key the `mcp__excalidraw__*` tool prefix derives from
 - **Manual**: The MCP is a manual install — the Claude-in-Chrome browser extension or the
   Pencil desktop app. Name what to fetch and inform the user, but don't flag as an error;
   a missing manual server is not the "Not loaded" case above

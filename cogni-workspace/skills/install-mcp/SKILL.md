@@ -67,7 +67,8 @@ cat "$REGISTRY"
 Cross-reference against installed plugins. There are three ways to determine installed plugins,
 in order of preference:
 
-1. **During manage-workspace** — the confirmed plugin list is already available from step 1
+1. **During manage-workspace** — the confirmed plugin list is already available from step 2
+   (the user-confirmed list, not step 1's raw discovery output)
 2. **Standalone invocation** — discover plugins by scanning the marketplace cache:
    ```bash
    bash ${CLAUDE_PLUGIN_ROOT}/scripts/discover-plugins.sh
@@ -179,8 +180,15 @@ it returns `data.targets[]`, one `{target, action, config_path, actions}` object
 config. Branch on the target before reading the envelope, or a `both` run parses as
 though nothing happened.
 
+In both shapes the **per-server** detail is `actions[]` — `{server, action: added | updated
+| skipped, reason}` — while the target-level `action` is `patched`, `noop` (nothing needed)
+or `dry_run`. Build the Summary rows below from `actions[]`, not from the target-level
+verb, or every server collapses into one row and a `noop` reads as a failure.
+
 The script:
-- Creates a timestamped backup before modifying anything
+- Creates a timestamped backup before modifying an **existing** config. A first-ever write
+  has nothing to back up and reports `backup: null` — omit the `Backup:` row in that case
+  rather than rendering `Backup: None`
 - Preserves every other key in the file — `~/.claude.json` holds unrelated user state
 - Skips servers that are already configured (use `--force` to overwrite)
 - Handles both git-installed servers (resolves wrapper path) and native apps (platform binary)
@@ -250,7 +258,7 @@ Under `--target both`, give each config its own row per server (reading each ent
 
 ## When Called from manage-workspace
 
-This skill replaces the inline step 5a/5b logic in manage-workspace. When invoked as
+manage-workspace delegates its MCP step (Init and Update mode step 5) to this skill. When invoked as
 part of workspace init or update:
 
 - Skip the plugin discovery step (use the confirmed plugin list from manage-workspace)
@@ -263,8 +271,12 @@ part of workspace init or update:
 - If `install-mcp.sh` fails for a server, report the error from `data.error` and continue
   with remaining servers
 - If `patch-desktop-config.py` fails, show the error and suggest manual patching as fallback
-- If the config being written has invalid JSON, warn the user and skip patching that
-  target (don't corrupt their config further). This applies to `~/.claude.json` as much as
-  to `claude_desktop_config.json` — under `--target both`, a parse failure on one config
-  must not abandon the write to the other
-- If a backup can't be created (permissions), abort patching and tell the user why
+- If the config being written has invalid JSON, warn the user rather than corrupting it
+  further. This applies to `~/.claude.json` as much as to `claude_desktop_config.json`.
+  **A `--target both` run stops at the first target it cannot write** (desktop is attempted
+  first) and exits non-zero with `data.target` naming it — the other target is left
+  unwritten. Do not read that as a completed run: re-invoke with `--target <the other one>`
+  so the healthy config is still written, and report the failed target separately
+- If a backup can't be created (permissions), the script exits without emitting a JSON
+  envelope at all — surface the raw error rather than waiting for a payload that never
+  comes, and re-invoke per-target as above

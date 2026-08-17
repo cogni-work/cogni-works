@@ -1,6 +1,6 @@
 ---
 name: workspace-status
-description: "Diagnose and report on the health of an insight-wave workspace. Use this skill whenever the user mentions workspace status, health, diagnostics, or troubleshooting — including check workspace, is my workspace ok, something broke, why isn't my plugin working, diagnose workspace, verify workspace, or any situation where understanding the workspace state would help resolve a problem. Even if the user doesn't explicitly say status, trigger this skill when they describe symptoms that suggest a misconfigured workspace (missing env vars, plugins not found, themes not loading). This is the first skill to reach for when debugging workspace issues."
+description: "Diagnose and report on the health of an insight-wave workspace. Use this skill whenever the user mentions workspace status, health, diagnostics, or troubleshooting — including check workspace, is my workspace ok, something broke, why isn't my plugin working, diagnose workspace, verify workspace, or any situation where understanding the workspace state would help resolve a problem. Even if the user doesn't explicitly say status, trigger this skill when they describe symptoms that suggest a misconfigured workspace (missing env vars, plugins not found, themes not loading, an MCP server not available in the session). This is the first skill to reach for when debugging workspace issues."
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion, Skill, ToolSearch
 ---
 
@@ -97,7 +97,7 @@ Canonical tier vocabulary: `${CLAUDE_PLUGIN_ROOT}/references/theme-manifest.md`.
 
 The picker merges `${CLAUDE_PLUGIN_ROOT}/themes/` (standard, ships with the plugin) with `${COGNI_WORKSPACE_ROOT}/themes/` (user-owned), and workspace copies shadow standard copies when slugs collide. This shadowing is **intentional** — it enables user customisation. The drift advisories below are **informational, not errors**: the picker still resolves a valid theme either way.
 
-The motivating example is `cogni-work`: after the Phase 3 upgrade (RFC #132), the standard copy ships a tiered layout (manifest.json, tokens/, components/, `.claude-design-source` sidecar). A pre-Phase 3 workspace copy silently downgrades the experience because the picker resolves the workspace copy first.
+The motivating example is `cogni-work`: the standard copy ships a tiered layout (manifest.json, tokens/, components/, `.claude-design-source` sidecar), while an older workspace copy predating tiered themes carries none of it. That older copy silently downgrades the experience, because the picker resolves the workspace copy first.
 
 Run:
 
@@ -160,37 +160,63 @@ is optional), so treat a non-empty `missing_optional` as an advisory, not a fail
 ### 6. MCP Servers
 
 MCP servers power visual rendering (Excalidraw, Pencil), browser automation (claude-in-chrome),
-and other capabilities. Plugins declare their required MCPs in `.mcp.json` files —
-Desktop/Cowork auto-loads them when the plugin is installed. This check verifies that
-required MCPs are actually available in the current session.
+and other capabilities. No plugin declares an MCP server itself — `install-mcp` installs
+each one on demand and writes it into the user's own config, so what is configured always
+reflects what is actually installed. This check verifies that required MCPs are available
+in the current session.
 
-Read `references/mcp-registry.md` for the full list of ecosystem MCPs and which plugins
-provide them.
+Read `${CLAUDE_PLUGIN_ROOT}/skills/workspace-status/references/mcp-registry.md` for the full
+list of ecosystem MCPs and which plugins need them. Read
+`${CLAUDE_PLUGIN_ROOT}/references/mcp-git-registry.json` for any server's `desktop_config_key`
+and install metadata — only `excalidraw`'s key is spelled out inline below, so look `pencil`'s
+up there rather than assuming it.
 
-**Detection approach**: Use `ToolSearch` to probe for MCP tool prefixes. For each known
-MCP server, search for one representative tool:
+**Detection approach**: Probe each known server's one representative tool with `ToolSearch`
+using the `select:` prefix — a returned tool definition means the MCP is loaded, no match
+means it is not available. The **Install** column decides how a missing server is reported:
 
-| MCP Server | Probe tool | Provider plugin |
-|------------|-----------|-----------------|
-| `excalidraw` | `mcp__excalidraw__describe_scene` | cogni-visual, cogni-portfolio |
-| `excalidraw_sketch` | `mcp__excalidraw_sketch__read_me` | cogni-visual |
-| `claude-in-chrome` | `mcp__claude-in-chrome__tabs_context_mcp` | cogni-website, cogni-workspace |
-| `pencil` | `mcp__pencil__get_editor_state` | Pencil desktop app (manual) |
-
-For each MCP, use `ToolSearch` with `select:` prefix to check if the tool exists.
-If `ToolSearch` returns the tool definition, the MCP is loaded. If it returns no match,
-the MCP is not available.
+| MCP Server | Probe tool | Needed by | Install |
+|------------|-----------|-----------|---------|
+| `excalidraw` | `mcp__excalidraw__describe_scene` | cogni-visual, cogni-portfolio | install-mcp |
+| `claude-in-chrome` | `mcp__claude-in-chrome__tabs_context_mcp` | cogni-website, cogni-workspace | manual (Chrome extension) |
+| `pencil` | `mcp__pencil__get_editor_state` | cogni-visual | manual (Pencil desktop app) |
 
 **Report format**:
 
 - **Loaded**: The MCP tools are available in this session
-- **Not loaded**: The MCP is declared by an installed plugin but not available — may need
-  a session restart or the provider plugin may not be installed
-- **Manual**: The MCP requires manual installation (Pencil desktop app) — inform the user
-  but don't flag as an error
+- **Not loaded**: An `install-mcp` server that is needed but not available. `ToolSearch`
+  alone cannot say why — it returns the same no-match in every case — and the install is
+  two independent steps, so read two pieces of state before advising:
+  - the **config entry** — the server's `desktop_config_key` (`excalidraw` for the registry
+    server `mcp_excalidraw`) under the top-level `mcpServers` in `~/.claude.json`, and/or the
+    same key in `claude_desktop_config.json` for Claude Desktop
+  - the **install directory** — `$HOME/.claude/mcp-servers/mcp_excalidraw/start.sh`, named
+    for the registry **server name**, not the config key
+
+  | Config entry | `start.sh` | State | Advise |
+  |---|---|---|---|
+  | absent | absent | never installed | route to `/cogni-workspace:install-mcp` |
+  | absent | present | built but not configured | re-run the config write — `/cogni-workspace:install-mcp` |
+  | present | absent | configured but not built, or the install directory was deleted | re-run `/cogni-workspace:install-mcp` to clone and build — this is the state that surfaces a *failed* server under `/mcp`, because the config entry points at a `start.sh` that is not there |
+  | present | present | configured, but not loaded in this session | advise a session restart |
+
+  A restart *on its own* only fixes the configured-but-not-loaded row: `install-mcp.sh` clones
+  and builds, and nothing is configured until `patch-desktop-config.py` runs — so wherever a
+  step is missing the write or the build comes first and the new session follows it, never
+  instead of it. If a restart does not clear it, treat the server as a failed spawn (a broken
+  build or a port conflict) rather than a configuration gap. Both steps are documented in the
+  `mcp-registry.md` read at the top of this check
+- **Manual**: The MCP is a manual install — the Claude-in-Chrome browser extension or the
+  Pencil desktop app. Name what to fetch and inform the user, but don't flag as an error;
+  a missing manual server is not the "Not loaded" case above. The two differ in one way that
+  matters: `claude-in-chrome` has no registry entry and so no config entry at all, whereas
+  `pencil` is a registry `native` server whose `pencil` config entry `install-mcp` still
+  writes. So if Pencil is installed and running and its tools are still missing, check for the
+  `pencil` key in `~/.claude.json` and run `/cogni-workspace:install-mcp` if it is absent,
+  before telling the user to open the app
 
 Only check MCPs for plugins that are actually installed (cross-reference with the plugin
-registry from Check 3). Don't warn about MCPs for plugins the user hasn't installed.
+registry from Check 3).
 
 ## Status Report
 
@@ -205,7 +231,7 @@ Plugins:      OK       | 5 registered, 5 installed
 Themes:       OK       | 3 themes available, 1 tiered, 0 drift advisories
 Dependencies: OK       | 2/2 required, 3/3 optional
 Python pkgs:  OK       | venv present, 1/1 optional importable
-MCP Servers:  OK       | 3/3 loaded (1 manual)
+MCP Servers:  OK       | 3/3 loaded (2 manual)
 
 Language: EN | Last updated: 2026-03-04
 ```
@@ -231,6 +257,12 @@ Themes:       WARNING  | 2 themes available, 1 tiered, 1 drift advisory
   Drift: cogni-work — upgrade available — workspace copy is tier-0, standard is tiered
     standard imported from bundle https://api.anthropic.com/v1/design/h/X9LG…
   -> Run `manage-themes` to refresh the workspace copy (overwrites local edits)
+
+MCP Servers:  WARNING  | 1/3 loaded (2 manual)
+  excalidraw   built but not configured — start.sh present, no `excalidraw` key in ~/.claude.json
+    -> Run /cogni-workspace:install-mcp to write the config entry, then start a new session
+  pencil       manual install — Pencil desktop app not running
+    -> Open Pencil (https://pencil.dev); informational, not an error
 ```
 
 Every issue should end with a concrete next step — either a skill to run (`manage-workspace`, `manage-themes`) or a command to execute.

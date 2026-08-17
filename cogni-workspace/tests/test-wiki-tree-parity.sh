@@ -9,7 +9,7 @@
 # one-sided page nobody decided on. Nothing enforced either before this suite:
 #   - test-wiki-namespace-sync.sh compares filename stems against the marketplace
 #     roster, so it never looks inside a page or at either config
-#   - test-layering-claim-reconciled.sh pins four named pages to byte-identity
+#   - test-layering-claim-reconciled.sh pins eight named pages to byte-identity
 #     and scans for retired wording, so it is silent on every other page
 # Both would stay green while a config overstated its tree by nine pages and a
 # page linked to something that had been deleted out from under it. That is the

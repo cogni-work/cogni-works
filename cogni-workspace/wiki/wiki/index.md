@@ -64,7 +64,7 @@ This is the content catalog for **insight-wave**. Every wiki page is listed here
 
 ### Skills
 
-One page per skill across all 11 plugins. Grouped by plugin, alphabetical within each.
+One page per skill, grouped by plugin, alphabetical within each.
 
 #### cogni-copywriting
 
@@ -111,7 +111,7 @@ One page per skill across all 11 plugins. Grouped by plugin, alphabetical within
 - [[skill-cogni-portfolio-portfolio-setup]] — Initialize a new cogni-portfolio project with company context and directory structure.
 - [[skill-cogni-portfolio-portfolio-verify]] — Verify web-sourced claims in portfolio entities against their cited sources.
 - [[skill-cogni-portfolio-products]] — Define and manage the top-level product offerings in the portfolio.
-- [[skill-cogni-portfolio-propositions]] — Generate and manage IS/DOES/MEANS (FAB) value propositions per Feature x Market pair.
+- [[skill-cogni-portfolio-propositions]] — IS/DOES/MEANS (FAB) value-messaging engine: turns features into market-specific propositions per Feature × Market pair, with consulting-style critique and four mandatory tests built in.
 - [[skill-cogni-portfolio-solutions]] — Define implementation plans and pricing tiers for propositions to build customer business cases.
 - [[skill-cogni-portfolio-trends-bridge]] — Bidirectional integration between cogni-trends TIPS analysis and cogni-portfolio product portfolio.
 
@@ -145,7 +145,7 @@ One page per skill across all 11 plugins. Grouped by plugin, alphabetical within
 - [[skill-cogni-website-website-plan]] — This skill plans the site structure for a cogni-website project interactively — discovering available content, proposing pages, mapping content to page sections, and generating website-plan.
 - [[skill-cogni-website-website-preview]] — This skill previews the generated website in a browser, validates links, and reports structural issues.
 - [[skill-cogni-website-website-resume]] — This skill resumes, continues, or checks status of a cogni-website project.
-- [[skill-cogni-website-website-setup]] — This skill initializes a cogni-website project by discovering content sources from cogni-portfolio, cogni-marketing, and cogni-trends, selecting a theme, and scaffolding the project....
+- [[skill-cogni-website-website-setup]] — This skill initializes a cogni-website project by discovering content sources from cogni-portfolio, cogni-marketing, cogni-trends, and cogni-knowledge, selecting a theme, and scaffolding the project....
 
 #### cogni-workspace
 
@@ -158,7 +158,7 @@ One page per skill across all 11 plugins. Grouped by plugin, alphabetical within
 
 ### Agents
 
-One page per agent role across all 11 plugins. Grouped by plugin, alphabetical within each.
+One page per agent role, grouped by plugin, alphabetical within each.
 
 #### cogni-copywriting
 

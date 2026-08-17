@@ -118,7 +118,7 @@ cp "${CLAUDE_PLUGIN_ROOT}/assets/output-styles/workspace-${LANGUAGE}.md" \
    "${TARGET_DIR}/.claude/output-styles/"
 ```
 
-Do **not** write a workspace-root `CLAUDE.md`. The language rules reach a fresh session without it: step 2's `generate-settings.sh` writes the `language` key into `.claude/settings.local.json`, which Claude Code turns into a `# Language` system-prompt section, and the plugin's `SessionStart` hook adds the orthography rules that section does not carry. The root `CLAUDE.md` is the user's file — the place for project-specific instructions — and this skill never creates or overwrites it.
+Do **not** write a workspace-root `CLAUDE.md`. The language rules reach a fresh session without it: step 3's `generate-settings.sh` writes the `language` key into `.claude/settings.local.json`, which Claude Code turns into a `# Language` system-prompt section, and the plugin's `SessionStart` hook adds the orthography rules that section does not carry. The root `CLAUDE.md` is the user's file — the place for project-specific instructions — and this skill never creates or overwrites it.
 
 Create the `output-styles` directory first if needed. Then copy the theme template:
 
@@ -132,24 +132,43 @@ The template gives users a starting point for creating custom themes that visual
 ### 5. MCP Server Installation
 
 Delegate to the `install-mcp` skill, which handles the full lifecycle: git-based server
-installation, native app detection, Claude Desktop config patching, and verification.
+installation, native app detection, writing the server into the user config for the
+detected client (Claude Code `~/.claude.json` and/or Claude Desktop), and verification.
 
-Since manage-workspace already has the confirmed plugin list from step 1, pass it to
+Since manage-workspace already has the plugin list confirmed in step 2, pass it to
 install-mcp so it skips redundant plugin discovery. The skill runs non-interactively
 when called from here (no extra user confirmations needed).
 
-After install-mcp completes, also scan for npx/URL-based MCPs in plugin `.mcp.json` files
-and present a combined summary:
+After install-mcp completes, read
+`${CLAUDE_PLUGIN_ROOT}/references/mcp-git-registry.json` — anchored because at this point
+in the flow the working directory is the user's workspace target, not the plugin root —
+for the installable server set, and present a combined summary. The registry covers only
+the servers install-mcp can write (`mcp_excalidraw`, `pencil`); claude-in-chrome is a
+Chrome extension the user installs themselves and has no registry entry. Show a row only
+for a registry server whose `required_by` intersects the plugin list confirmed in step 2 —
+install-mcp installs nothing for an absent plugin — and take each row's action and status
+verbatim from install-mcp's returned summary rather than from the registry. Label each row
+with the entry's `desktop_config_key` — `excalidraw` for the registry server
+`mcp_excalidraw`, `pencil` for `pencil` — because that key is what lands in the user's
+config and what the `mcp__<key>__*` tool names derive from; do not label the row with the
+registry server name. The block below is illustrative:
 
 ```
-MCP Servers (auto-configured by plugins):
-  excalidraw       git-installed + Desktop patched   <- cogni-visual, cogni-portfolio
-  pencil           native app + Desktop patched      <- cogni-visual
-  excalidraw_sketch https://mcp.excalidraw.com       <- cogni-visual (URL-based, no install needed)
+MCP Servers (installed on demand, written to your config):
+  excalidraw       git-installed + config written    <- cogni-visual, cogni-portfolio
+  pencil           native app + config written       <- cogni-visual
 
 Manual install needed:
   claude-in-chrome Chrome extension                  <- cogni-website, cogni-workspace
 ```
+
+The row-selection rule above covers registry servers only. Show the `Manual install needed:`
+row when the plugin list confirmed in step 2 includes `cogni-website` or `cogni-workspace`;
+that pairing is fixed here rather than read from the registry, since `claude-in-chrome` has
+no registry entry to supply it.
+
+Newly written servers load only after a session restart — relay install-mcp's restart
+reminder in the summary rather than presenting "config written" as a finished state.
 
 ### 6. Obsidian Integration (Optional)
 
@@ -163,7 +182,7 @@ If yes, run the setup script:
 bash "${CLAUDE_PLUGIN_ROOT}/scripts/setup-obsidian.sh" "${TARGET_DIR}"
 ```
 
-If `.obsidian/` already exists, skip and mention that the update step (Update Mode step 5) can refresh the terminal config.
+If `.obsidian/` already exists, skip and mention that the update step (Update Mode step 6) can refresh the terminal config.
 
 If the user declines, let them know they can run a workspace update later to add it.
 
@@ -239,7 +258,7 @@ the `venv` module / the network is unavailable — never block the update.
 
 Copy latest output-style files from `${CLAUDE_PLUGIN_ROOT}/assets/output-styles/` to `.claude/output-styles/`, overwriting existing ones (these are plugin-managed, not user-customized).
 
-**Migrate a workspace created before the language settings key.** Step 2's `generate-settings.sh --update` writes the `language` key into `.claude/settings.local.json`, which is now where the workspace language lives. Two retired artifacts may still be on disk:
+**Migrate a workspace created before the language settings key.** Step 3's `generate-settings.sh --update` writes the `language` key into `.claude/settings.local.json`, which is now where the workspace language lives. Two retired artifacts may still be on disk:
 
 - `.claude/templates/` — the cache that fed the Obsidian launcher's per-session `CLAUDE.md` copy. Nothing reads it any more. Delete it.
 - The workspace-root `CLAUDE.md`, if it was written by a retired template. Compare it against the language block the plugin used to ship (a `# Workspace Instructions` / `# Workspace-Anweisungen` heading followed only by language bullets). If that is all it contains, say the rules now arrive via the settings key and the `SessionStart` hook and offer to delete it — defaulting to keeping the file. If it contains anything else, leave it untouched and say why.
@@ -252,7 +271,14 @@ Refresh `_template/theme.md` from `${CLAUDE_PLUGIN_ROOT}/themes/_template/`. Pre
 
 Same as Init Mode step 5 — delegate to the `install-mcp` skill. In update mode, also
 tell install-mcp to use `--force` for git-based MCPs (pulls latest and rebuilds).
-Note any MCPs from removed plugins that may still be loaded until session restart.
+Removing a plugin does **not** remove its MCP server — the entry now lives in the user's
+own config and `install-mcp` has no removal path, so only the user can delete it.
+Name each server whose `required_by` no longer intersects the confirmed plugin list and
+tell the user which key to remove. The key is the registry entry's
+`desktop_config_key` (for `mcp_excalidraw` that is `excalidraw`), not the registry server
+name — naming the server name instead tells the user to delete a key that is not there, and
+the orphan server keeps spawning at every session start. Remove it from `~/.claude.json`
+(top-level `mcpServers`) and/or `claude_desktop_config.json`.
 
 ### 6. Update Obsidian Integration (Optional)
 

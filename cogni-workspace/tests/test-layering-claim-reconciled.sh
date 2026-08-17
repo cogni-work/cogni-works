@@ -17,7 +17,7 @@
 #   - none of the FORBIDDEN literals appears anywhere outside the excluded paths
 #   - every one of those literals is actually caught when present (no dead config)
 #   - a literal under an excluded path is NOT flagged
-#   - the four pages this reconciliation touched are byte-identical across the
+#   - the eight pages this reconciliation touched are byte-identical across the
 #     two wiki trees
 #   - a scan pointed at a missing or empty tree fails rather than reporting clean
 #
@@ -103,8 +103,11 @@
 # one does not), and scripts/release-bundle-wiki.sh states that drift between
 # releases is acceptable. A tree-wide diff would be red on arrival and would
 # pressure someone into running that rsync --delete sync, which sweeps unrelated
-# drift. Naming the four pages this change touched keeps the assertion true and
-# useful at the same time.
+# drift. Naming the eight pages this change touched keeps the assertion true and
+# useful at the same time. Four are the layering-claim pages; the other four are
+# the group-B workflow pages back-ported bundle -> root, pinned here so the
+# sections that once existed only in the bundle cannot drift back out of the
+# root tree unnoticed.
 #
 # Case-label shape matches test-wiki-namespace-sync.sh on purpose: "PASS: <case>"
 # / "FAIL: <case>", because the cogni-service mutation harness classifies a case
@@ -159,7 +162,11 @@ cogni-visual/libraries/
 PAGE_PARITY='plugin-cogni-workspace.md
 workflow-install-to-infographic.md
 arch-er-diagram.md
-concept-four-layer-architecture.md'
+concept-four-layer-architecture.md
+workflow-portfolio-to-website.md
+workflow-content-pipeline.md
+workflow-portfolio-to-pitch.md
+workflow-trends-to-solutions.md'
 
 # ---------------------------------------------------------------------------
 # The checkers. Fixture cases and the real-repo cases drive these same two

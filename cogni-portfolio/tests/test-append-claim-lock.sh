@@ -50,7 +50,27 @@
 #   exactly once in the fixed script (the read line is `lock_mtime=$(stat ...`,
 #   which does not contain it), so the substitution can never be a no-op.
 #
-#   Second arm — the ceiling-to-message coupling:
+#   Second arm — the shape floor, case 2's side of it:
+#   bash ~/.claude/plugins/cache/managed-service/cogni-service/0.0.402/scripts/mutation-check.sh \
+#     --root . \
+#     --file cogni-portfolio/scripts/append-claim.sh \
+#     --expr 's/\^\[0-9\]\+\$/^NOMATCH\$/' \
+#     --test 'bash cogni-portfolio/tests/test-append-claim-lock.sh' \
+#     --case live-lock-not-swept-on-numeric-stat
+#
+#   Arm one mutates the floor's ASSIGNMENT and is caught by case 1; this one
+#   mutates the floor's CONDITION and is caught by case 2, which is why both are
+#   recorded rather than one standing in for the other. Replacing the character
+#   class with one that cannot match makes the `||` fire unconditionally, so a
+#   live peer's current-epoch reading is floored to 0, reads as ancient, gets
+#   swept, and the script goes on to append — case 2 sees exit 0 where it demands
+#   exit 1. The pattern's `^` and `$` are ESCAPED, i.e. matched as the literal
+#   characters of the regex text on the floor line, not as anchors — so the
+#   expression needs no `/m` under the harness's `perl -0pi`, which slurps the
+#   whole file. `^[0-9]+$` occurs exactly once (the ceiling's own floor above
+#   reads `^[1-9][0-9]*$`), so the substitution can never be a no-op.
+#
+#   Third arm — the ceiling-to-message coupling:
 #   bash ~/.claude/plugins/cache/managed-service/cogni-service/0.0.402/scripts/mutation-check.sh \
 #     --root . \
 #     --file cogni-portfolio/scripts/append-claim.sh \

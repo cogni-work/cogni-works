@@ -138,7 +138,7 @@ One page per skill, grouped by plugin, alphabetical within each.
 - [[skill-cogni-website-website-plan]] — This skill plans the site structure for a cogni-website project interactively — discovering available content, proposing pages, mapping content to page sections, and generating website-plan.
 - [[skill-cogni-website-website-preview]] — This skill previews the generated website in a browser, validates links, and reports structural issues.
 - [[skill-cogni-website-website-resume]] — This skill resumes, continues, or checks status of a cogni-website project.
-- [[skill-cogni-website-website-setup]] — This skill initializes a cogni-website project by discovering content sources from cogni-portfolio, cogni-marketing, cogni-trends, and cogni-research, selecting a theme, and scaffolding the project....
+- [[skill-cogni-website-website-setup]] — This skill initializes a cogni-website project by discovering content sources from cogni-portfolio, cogni-marketing, cogni-trends, and cogni-knowledge, selecting a theme, and scaffolding the project....
 
 #### cogni-workspace
 

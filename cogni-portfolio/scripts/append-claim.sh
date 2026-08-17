@@ -39,9 +39,10 @@ while ! mkdir "$LOCK_DIR" 2>/dev/null; do
       #
       # Resolve the reading into a variable before any arithmetic. A bad
       # substitution nested directly inside $(( )) is a hard bash error, and the
-      # damage is worse than an abort: on bash 3.2 the error abandons the loop
-      # body AND the loop, so the script resumes after `done` and appends the
-      # claim having never held the lock. (On bash >= 4 it aborts outright.)
+      # damage is worse than an abort: on every bash tested (3.2.57 through
+      # 5.3.9) the error abandons the loop body AND the loop, so the script resumes
+      # after `done` and appends the claim having never held the lock — and the
+      # EXIT trap below then removes a live peer's lock directory it never owned.
       #
       # Floor on numeric SHAPE, not emptiness — the failure mode is a successful
       # *wrong* answer, which an emptiness test structurally cannot catch.

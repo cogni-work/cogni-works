@@ -11,8 +11,7 @@
 # Coverage:
 #   1  stale-lock-swept-on-non-numeric-stat   non-numeric mtime reading is floored
 #                                             to 0, the ancient lock is swept, the
-#                                             claim appends, and no arithmetic
-#                                             syntax error reaches stderr
+#                                             claim appends, and stderr stays empty
 #   2  live-lock-not-swept-on-numeric-stat    negative twin — a numeric current-epoch
 #                                             reading leaves a LIVE peer's lock
 #                                             alone; the script times out instead
@@ -103,13 +102,28 @@ seed_contended_project() {
 # word naming a variable the script already sets (`MAX_WAIT`) resolves to a
 # NUMBER and never aborts at all. `%m` is a hard operand syntax error under both.
 #
-# The stderr assertion is equally load-bearing. On bash 3.2 an arithmetic abort
-# inside a `while` loop abandons the loop body AND the loop, then resumes after
-# `done` — so the UNFIXED script still installs the trap, appends the claim and
-# exits 0 with status=appended, never having held the lock. Exit code and stdout
-# are therefore identical before and after the fix; only the syntax error on
-# stderr discriminates. A case asserting just exit-0 and stdout stays green under
-# the mutation recipe above, i.e. it pins nothing.
+# The stderr assertion is equally load-bearing. On every bash tested — 3.2.57
+# through 5.3.9 alike — an arithmetic abort inside a `while` loop abandons the
+# loop body AND the loop, then resumes after `done`. The UNFIXED script therefore
+# still installs the trap, appends the claim and exits 0 with status=appended,
+# never having held the lock; its EXIT trap then removes a live peer's lock
+# directory it never owned. Exit code and stdout are consequently identical
+# before and after the fix, so only stderr discriminates. A case asserting just
+# exit-0 and stdout stays green under the mutation recipe above, i.e. it pins
+# nothing.
+#
+# The discriminator is stderr EMPTINESS, not a text match. Bash's arithmetic-error
+# message is gettext-localized — on a host whose default locale is not English it
+# reads e.g. `Arithmetischer Syntaxfehler: Operand erwartet` — so a grep for the
+# English wording matches nothing, the case passes against the UNFIXED script, and
+# the guard guards nothing. The fixed script writes exactly 0 bytes here, so
+# emptiness is locale-independent and catches every diagnostic rather than one
+# translation of one of them.
+#
+# The general rule, worth keeping in view when adding a case: assert a FOREIGN
+# tool's output by SHAPE (exit status, stream emptiness, numeric form), and only
+# our OWN scripts' literals by text. Case 2 below greps `Could not acquire lock`
+# precisely because append-claim.sh emits that string itself.
 case1_dir="$(seed_contended_project stale-non-numeric)"
 case1_stub="$TMPROOT/stub-non-numeric"
 make_stat_stub "$case1_stub" 'echo "%m"'
@@ -118,8 +132,8 @@ case1_rc=$?
 
 if [ "$case1_rc" -ne 0 ]; then
   fail "stale-lock-swept-on-non-numeric-stat" "expected exit 0, got $case1_rc (stderr: $(cat "$TMPROOT/case1.err"))"
-elif grep -q 'syntax error' "$TMPROOT/case1.err"; then
-  fail "stale-lock-swept-on-non-numeric-stat" "arithmetic aborted on the non-numeric reading: $(cat "$TMPROOT/case1.err")"
+elif [ -s "$TMPROOT/case1.err" ]; then
+  fail "stale-lock-swept-on-non-numeric-stat" "expected silence on stderr, got: $(cat "$TMPROOT/case1.err")"
 elif ! printf '%s' "$case1_out" | python3 -c 'import json,sys; sys.exit(0 if json.load(sys.stdin).get("status") == "appended" else 1)' 2>/dev/null; then
   fail "stale-lock-swept-on-non-numeric-stat" "stdout did not parse as JSON with status=appended: $case1_out"
 else

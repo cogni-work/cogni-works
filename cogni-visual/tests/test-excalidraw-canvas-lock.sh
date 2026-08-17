@@ -247,13 +247,13 @@ test_release_is_trapped_for_signals() {
   for h in "$VISUAL_HOOK" "$PORTFOLIO_HOOK"; do
     code="$(hook_code "$h")"
 
-    traps="$(printf '%s\n' "$code" | grep -c '^trap ')"
+    traps="$(printf '%s\n' "$code" | grep -cE '^[[:space:]]*trap ')"
     if [ "$traps" != "1" ]; then
       fail test_release_is_trapped_for_signals "expected exactly 1 trap line in $h, got $traps"
       continue
     fi
 
-    trapline="$(printf '%s\n' "$code" | grep '^trap ')"
+    trapline="$(printf '%s\n' "$code" | grep -E '^[[:space:]]*trap ')"
     case "$trapline" in
       *EXIT*INT*TERM*) pass test_release_is_trapped_for_signals "release trapped for EXIT INT TERM" ;;
       *) fail test_release_is_trapped_for_signals "trap does not cover INT/TERM: $trapline" ;;
@@ -273,9 +273,24 @@ test_release_is_trapped_for_signals() {
       fail test_release_is_trapped_for_signals "release is not guarded by the claim flag in $h"
     fi
 
+    # No claim machinery may sit above the fast path: an already-warm canvas
+    # must stay a bare probe plus a /health call, and the acceptance contract
+    # pins this textually, not just by runtime cost.
+    fastline="$(printf '%s\n' "$code" | grep -n 'has_ws_client; then' | head -1 | cut -d: -f1)"
+    if [ -n "$fastline" ]; then
+      above="$(printf '%s\n' "$code" | sed -n "1,${fastline}p" | grep -cE 'LOCK_DIR|LOCK_STALE_SECS|SPAWN_CLAIMED|canvas-start.lock|_claim')"
+      if [ "$above" = "0" ]; then
+        pass test_release_is_trapped_for_signals "fast path carries no claim machinery"
+      else
+        fail test_release_is_trapped_for_signals "$above claim token(s) above the fast path in $h"
+      fi
+    else
+      fail test_release_is_trapped_for_signals "could not locate the fast path in $h"
+    fi
+
     # The staleness sweep must outlast the hook's own declared timeout, or a
     # healthy in-flight winner gets robbed and the double spawn comes back.
-    secs="$(printf '%s\n' "$code" | sed -n 's/^LOCK_STALE_SECS=\([0-9][0-9]*\)$/\1/p')"
+    secs="$(printf '%s\n' "$code" | sed -n 's/^[[:space:]]*LOCK_STALE_SECS=\([0-9][0-9]*\)[[:space:]]*$/\1/p')"
     hooks_json="$(dirname "$h")/hooks.json"
     timeout="$(sed -n 's/.*"timeout"[ ]*:[ ]*\([0-9][0-9]*\).*/\1/p' "$hooks_json" | head -1)"
     if [ -n "$secs" ] && [ -n "$timeout" ] && [ "$secs" -gt "$timeout" ]; then

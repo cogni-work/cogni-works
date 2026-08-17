@@ -30,13 +30,6 @@ EXCALIDRAW_DIR="${EXCALIDRAW_MCP_DIR:-$HOME/.claude/mcp-servers/mcp_excalidraw}"
 PORT="${EXCALIDRAW_CANVAS_PORT:-3000}"
 LOG_FILE="${EXCALIDRAW_DIR}/excalidraw-canvas.log"
 PID_FILE="${EXCALIDRAW_DIR}/canvas.pid"
-LOCK_DIR="${EXCALIDRAW_DIR}/canvas-start.lock"
-# Four times the hook's own 15s timeout (hooks.json), so a spawn killed at that
-# deadline expires but a healthy in-flight winner is never robbed mid-start.
-LOCK_STALE_SECS=60
-# Declared at top level, not inside the spawn branch: the release handler reads
-# it under `set -u` from every exit path.
-SPAWN_CLAIMED=0
 
 # Consume stdin (hook input JSON) to prevent broken pipe
 cat > /dev/null
@@ -57,39 +50,47 @@ open_browser() {
   esac
 }
 
-# Release the start claim, but only if this invocation actually holds it. The
-# guard is load-bearing rather than cosmetic: the trap below is armed
-# unconditionally, so without it a loser exiting through the shared wait-loop
-# paths would delete the winner's claim mid-spawn.
-release_start_claim() {
-  if [[ "$SPAWN_CLAIMED" -eq 1 ]]; then
-    SPAWN_CLAIMED=0
-    rmdir "$LOCK_DIR" 2>/dev/null || true
-  fi
-}
-
-# Bare mkdir is the claim: atomic on POSIX, and it fails when the directory
-# already exists, which is the exclusion signal. Never `mkdir -p`, which
-# succeeds against an existing directory and so cannot tell winner from loser.
-# flock(1) is not stock on macOS, which this script already targets.
-try_claim_start() {
-  mkdir "$LOCK_DIR" 2>/dev/null
-}
-
-# Armed before the fast path so every exit reachable while the claim is held is
-# covered, and so a SIGTERM at the hook's 15s deadline — which lands in one of
-# the wait loops below, not at a clean exit — still releases. Bash traps are
-# process-global, so arming here rather than after the claim costs nothing and
-# closes the signal window.
-trap release_start_claim EXIT INT TERM
-
-# Fast path: port up AND WebSocket client connected
+# Fast path: port up AND WebSocket client connected. Nothing above this point
+# touches the start claim, so an already-warm canvas costs one probe plus one
+# /health call, exactly as before.
 if nc -z localhost "$PORT" 2>/dev/null && has_ws_client; then
   exit 0
 fi
 
 # If port not up: start canvas server
 if ! nc -z localhost "$PORT" 2>/dev/null; then
+  LOCK_DIR="${EXCALIDRAW_DIR}/canvas-start.lock"
+  # Four times the hook's own 15s timeout (hooks.json), so a spawn killed at
+  # that deadline expires but a healthy in-flight winner is never robbed.
+  LOCK_STALE_SECS=60
+  # Declared before the handler that reads it, which runs under `set -u`.
+  SPAWN_CLAIMED=0
+
+  # Release the claim, but only if this invocation actually holds it. The guard
+  # is load-bearing rather than cosmetic: the trap below is armed
+  # unconditionally, so without it a loser exiting through the shared wait-loop
+  # paths would delete the winner's claim mid-spawn.
+  release_start_claim() {
+    if [[ "$SPAWN_CLAIMED" -eq 1 ]]; then
+      SPAWN_CLAIMED=0
+      rmdir "$LOCK_DIR" 2>/dev/null || true
+    fi
+  }
+
+  # Bare mkdir is the claim: atomic on POSIX, and it fails when the directory
+  # already exists, which is the exclusion signal. Never `mkdir -p`, which
+  # succeeds against an existing directory and so cannot tell winner from
+  # loser. flock(1) is not stock on macOS, which this script already targets.
+  try_claim_start() {
+    mkdir "$LOCK_DIR" 2>/dev/null
+  }
+
+  # Armed before the claim is taken, so every exit reachable while it is held
+  # is covered — including a SIGTERM at the hook's 15s deadline, which lands in
+  # one of the wait loops below rather than at a clean exit. Bash traps are
+  # process-global, so this still fires at the final exit outside this branch.
+  trap release_start_claim EXIT INT TERM
+
   if [[ ! -f "${EXCALIDRAW_DIR}/dist/server.js" ]]; then
     echo "Warning: Excalidraw canvas server not found at ${EXCALIDRAW_DIR}/dist/server.js" >&2
     exit 0

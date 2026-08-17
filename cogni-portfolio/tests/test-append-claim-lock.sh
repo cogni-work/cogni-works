@@ -16,6 +16,12 @@
 #                                             reading leaves a LIVE peer's lock
 #                                             alone; the script times out instead
 #
+# Both cases export APPEND_CLAIM_MAX_WAIT=3 — a 0.3s acquire ceiling instead of
+#   the production default of 3s. They exist to REACH the ceiling, so its length
+#   is incidental to what they pin, and at the default each burned ~3s of pure
+#   sleep on every CI sweep of the monorepo. The default is what production keeps;
+#   nothing here changes it.
+#
 # Usage: bash cogni-portfolio/tests/test-append-claim-lock.sh
 # Exits non-zero on any assertion failure.
 #
@@ -39,7 +45,29 @@
 #   exactly once in the fixed script (the read line is `lock_mtime=$(stat ...`,
 #   which does not contain it), so the substitution can never be a no-op.
 #
-#   Only ONE arm is recorded, and the reason is narrower than it may look. An arm
+#   Second arm — the derived timeout label:
+#   bash ~/.claude/plugins/cache/managed-service/cogni-service/0.0.402/scripts/mutation-check.sh \
+#     --root . \
+#     --file cogni-portfolio/scripts/append-claim.sh \
+#     --expr 's/\$\{WAIT_LABEL\}/3s/' \
+#     --test 'bash cogni-portfolio/tests/test-append-claim-lock.sh' \
+#     --case live-lock-not-swept-on-numeric-stat
+#
+#   This expression restates the derived label as the old hardcoded literal, which
+#   is precisely the regression it guards. The ceiling is overridable, so a
+#   restated duration is correct only at the default: under this suite's override
+#   the script would wait 0.3s while still claiming 3s, and case 2's grep would
+#   miss. The braced form occurs exactly once in the fixed script — the `echo`
+#   itself; the two assignments read `WAIT_LABEL=`, and the surrounding comments
+#   deliberately name the variable bare. That matters because the harness applies
+#   the expression with `perl -0pi` and NO `/g`: a second occurrence anywhere
+#   above the echo would absorb the substitution, leave the echo untouched, and
+#   silently degrade this arm to a behavioural no-op that does not even trip
+#   `expr_no_op`. The expression also carries no `^`/`$` anchors on purpose —
+#   `perl -0pi` slurps the whole file, so an anchored expression would need a `/m`
+#   modifier to match at all.
+#
+#   Only these TWO arms are recorded, and the reason is narrower than it may look. An arm
 #   mutating the GNU-first ordering (`s/stat -c %Y/stat -f %m/`) reports a vacuous
 #   guard against the TWO CASES BELOW, because their stub answers unconditionally
 #   and ignores its flags by design — deliberately, so both stay ordering-agnostic.
@@ -137,7 +165,7 @@ seed_contended_project() {
 case1_dir="$(seed_contended_project stale-non-numeric)"
 case1_stub="$TMPROOT/stub-non-numeric"
 make_stat_stub "$case1_stub" 'echo "%m"'
-case1_out="$(PATH="$case1_stub:$PATH" bash "$SCRIPT" "$case1_dir" '{"id": "claim-1"}' 2>"$TMPROOT/case1.err")"
+case1_out="$(APPEND_CLAIM_MAX_WAIT=3 PATH="$case1_stub:$PATH" bash "$SCRIPT" "$case1_dir" '{"id": "claim-1"}' 2>"$TMPROOT/case1.err")"
 case1_rc=$?
 
 if [ "$case1_rc" -ne 0 ]; then
@@ -154,16 +182,25 @@ fi
 #
 # Without this case a fix that unconditionally sets lock_mtime=0 satisfies case 1
 # while destroying mutual exclusion — every contended lock would read as ancient
-# and get swept out from under a running peer after 3s.
+# and get swept out from under a running peer once the acquire ceiling is reached.
+#
+# The grep below tracks the DERIVED timeout label, not a fixed duration. The
+# script computes the label from the ceiling, so under this case's override it
+# reads 0.3s where production reads 3s. Asserting the derived form is what keeps
+# the message honest: a future edit that restates a literal duration passes at
+# the default and lies under every override, and this case goes red on it. That
+# is still the suite's house rule rather than an exception to it — the string is
+# append-claim.sh's own output, so text is the right instrument; only the text to
+# expect now depends on the ceiling this case sets.
 case2_dir="$(seed_contended_project live-numeric)"
 case2_stub="$TMPROOT/stub-numeric"
 make_stat_stub "$case2_stub" 'date +%s'
-PATH="$case2_stub:$PATH" bash "$SCRIPT" "$case2_dir" '{"id": "claim-2"}' >/dev/null 2>"$TMPROOT/case2.err"
+APPEND_CLAIM_MAX_WAIT=3 PATH="$case2_stub:$PATH" bash "$SCRIPT" "$case2_dir" '{"id": "claim-2"}' >/dev/null 2>"$TMPROOT/case2.err"
 case2_rc=$?
 
 if [ "$case2_rc" -ne 1 ]; then
   fail "live-lock-not-swept-on-numeric-stat" "expected exit 1, got $case2_rc"
-elif ! grep -q 'Could not acquire lock on claims.json after 3s' "$TMPROOT/case2.err"; then
+elif ! grep -q 'Could not acquire lock on claims.json after 0.3s' "$TMPROOT/case2.err"; then
   fail "live-lock-not-swept-on-numeric-stat" "stderr did not carry the timeout error: $(cat "$TMPROOT/case2.err")"
 elif [ ! -d "$case2_dir/cogni-claims/.claims.lock" ]; then
   fail "live-lock-not-swept-on-numeric-stat" "a live peer's lock was swept"

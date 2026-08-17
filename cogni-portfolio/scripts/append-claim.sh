@@ -48,8 +48,8 @@ MAX_WAIT="${APPEND_CLAIM_MAX_WAIT:-30}"
 [[ "$MAX_WAIT" =~ ^[1-9][0-9]*$ ]] || MAX_WAIT=30
 
 # Derive the timeout label from the ceiling rather than restating it, and do it
-# HERE — at top level, outside the loop. The old message hardcoded "after 3s",
-# which was correct only because 30 x 0.1s happens to equal 3s; under an override
+# HERE — at top level, outside the loop. The old message restated a fixed three
+# seconds, which was correct only because 30 x 0.1s equals that; under an override
 # the script would have kept claiming 3s while actually waiting a tenth of that,
 # and the suite's grep would have stayed green on a message that had become
 # wrong. Placement matters as much as derivation: an arithmetic abort inside the

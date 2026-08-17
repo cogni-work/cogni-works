@@ -69,13 +69,14 @@ Two consequences worth keeping straight:
 ## MCP Server Installation
 
 - The `install-mcp` skill is the primary entry point for end-to-end MCP setup
-- It handles git-based servers (clone + build), native app detection, and Claude Desktop config patching
+- It handles git-based servers (clone + build), native app detection, and writing the user's MCP config
 - `scripts/install-mcp.sh` handles clone, build, and wrapper creation into `~/.claude/mcp-servers/<name>/`
-- `scripts/patch-desktop-config.py` merges MCP entries into `claude_desktop_config.json` (with backup)
+- `scripts/patch-desktop-config.py` merges MCP entries into the user's config, with backup — `--target desktop` writes `claude_desktop_config.json`, `--target cli` writes the top-level `mcpServers` in `~/.claude.json` (Claude Code user scope), `--target both` does each in turn. `--server <name>` scopes the write to one registry server
 - `references/mcp-git-registry.json` (v2.0) declares both git-based and native app MCPs with platform-specific paths
 - `templates/mcp-wrappers/` contains wrapper scripts for MCP servers that need companion processes (e.g. canvas server)
 - `manage-workspace` delegates to `install-mcp` during init/update (step 5)
-- Plugin `.mcp.json` files reference installed servers via `$HOME/.claude/mcp-servers/<name>/start.sh`
+- No plugin ships a `.mcp.json`. A checked-in declaration asserts machine state the repo cannot guarantee — it is spawned at session start even where the server was never installed — so the entry is written to user config at install time instead, pointing at `$HOME/.claude/mcp-servers/<name>/start.sh`
+- `tests/test-mcp-declaration-hygiene.sh` keeps that true: no `cogni-*/.mcp.json` exists, the registry still maps `mcp_excalidraw` to the desktop key `excalidraw` (the key MCP tool names derive from, so renaming it silently breaks every `mcp__excalidraw__*` matcher), both plugins' PreToolUse matchers survive, and the two copies of `concept-mcp-server-map.md` stay byte-identical. It carries a per-arm liveness floor so a glob that stops matching cannot make every case pass vacuously
 
 ## Markets
 

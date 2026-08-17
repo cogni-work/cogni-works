@@ -4,7 +4,7 @@
     {
       "id": 1,
       "prompt": "I just installed cogni-visual and cogni-portfolio plugins but excalidraw tools aren't showing up. Can you set up the MCP servers I need?",
-      "expected_output": "Should detect that mcp_excalidraw is needed (git-based), check if Pencil is needed, detect Desktop config, run install-mcp.sh, patch claude_desktop_config.json with dry-run preview, and verify tools via ToolSearch.",
+      "expected_output": "Should classify the runtime environment first (Claude Code CLI, Claude Desktop, or both) before writing anything, detect that mcp_excalidraw is needed (git-based), check if Pencil is needed, run install-mcp.sh, then write the entry into the config for the detected target via patch-desktop-config.py with a dry-run preview first and --server scoping, and verify tools via ToolSearch. Must name the config it actually wrote and follow the target for the restart advice.",
       "files": []
     },
     {
@@ -17,6 +17,12 @@
       "id": 3,
       "prompt": "I want to update all my MCP servers to their latest versions. The excalidraw canvas has been buggy.",
       "expected_output": "Should run install-mcp.sh with --force to pull latest and rebuild, then re-patch Desktop config if needed. Should verify the updated server loads correctly.",
+      "files": []
+    },
+    {
+      "id": 4,
+      "prompt": "I'm in Claude Code and the excalidraw tools aren't available. Set the MCP up for me.",
+      "expected_output": "Should classify the environment as Claude Code CLI (not Claude Desktop), run install-mcp.sh, then write the top-level mcpServers entry in ~/.claude.json via patch-desktop-config.py --target cli --server mcp_excalidraw, dry-run first. Must not write the per-project projects.<path>.mcpServers object, must not instruct a Claude Desktop restart, and must tell the user the server appears only in a new Claude Code session.",
       "files": []
     }
   ]

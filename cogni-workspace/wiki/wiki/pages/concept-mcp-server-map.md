@@ -22,11 +22,11 @@ Three MCP servers ship with the insight-wave marketplace, mapped to the plugins 
 
 ## Installation
 
-`cogni-workspace:install-mcp` is the canonical installer. It clones git-based MCPs, builds them, configures Claude Desktop, and patches the plugin's `.mcp.json` files to reference installed servers via `$HOME/.claude/mcp-servers/{name}/start.sh`.
+`cogni-workspace:install-mcp` is the canonical installer. It clones git-based MCPs, builds them, and writes each server into the user's own config — the top-level `mcpServers` in `~/.claude.json` for Claude Code, `claude_desktop_config.json` for Claude Desktop — referencing the installed wrapper at `$HOME/.claude/mcp-servers/{name}/start.sh`.
 
-## Plugin discovery convention
+## Server discovery convention
 
-Each plugin that uses an MCP server carries a `.mcp.json` declaring its dependency. `cogni-workspace:install-mcp` walks all plugins, collects `.mcp.json` references, and ensures the underlying server is installed. This keeps the install workflow declarative — adding a new MCP-using plugin doesn't require updating the workspace installer.
+No plugin carries a `.mcp.json` — a checked-in declaration claims the server exists on a machine that may never have installed it, and it is spawned at session start regardless. Instead `references/mcp-git-registry.json` is the single declaration: each server entry lists the plugins that need it under `required_by`, and `cogni-workspace:install-mcp` writes only the servers a present plugin actually requires. This keeps the workflow declarative — adding a new MCP-using plugin means adding it to that server's `required_by`, not shipping another config file.
 
 ## What each does
 

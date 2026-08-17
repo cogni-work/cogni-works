@@ -15,14 +15,20 @@
 #   2  live-lock-not-swept-on-numeric-stat    negative twin — a numeric current-epoch
 #                                             reading leaves a LIVE peer's lock
 #                                             alone; the script times out instead
+#   3  live-lock-not-swept-on-gnu-stat        the ordering pin — a FLAG-AWARE stub
+#                                             simulating GNU, where `-f` means
+#                                             --file-system and answers with a
+#                                             non-mtime, so only a chain that tries
+#                                             `-c` first reads the true mtime and
+#                                             leaves a LIVE peer's lock alone
 #
-# Both cases drive the acquire loop to its ceiling on purpose, so both set
+# Every case drives the acquire loop to its ceiling on purpose, so each sets
 #   APPEND_CLAIM_MAX_WAIT=3 as a per-invocation prefix — 0.3s each instead of the
 #   production 3s, which is what keeps the whole suite around a second rather than
 #   the ~7.3s it cost when the ceiling was a hardcoded constant. The prefix is
 #   deliberately NOT a suite-level export: run-plugin-tests.py invokes each suite
 #   as a bare `bash <path>`, so each case must carry its own ceiling.
-#   Case 2's asserted stderr literal is the DERIVED form for that ceiling
+#   Cases 2 and 3 assert the DERIVED form of that ceiling in their stderr literal
 #   (`after 0.3s`), not a fixed string — change the ceiling and the literal moves
 #   with it. That coupling is the point: it is what stops the message from
 #   drifting back into restating a number the loop no longer honours.
@@ -30,7 +36,7 @@
 # Usage: bash cogni-portfolio/tests/test-append-claim-lock.sh
 # Exits non-zero on any assertion failure.
 #
-# This suite has NO per-case selector — both cases are unconditional top-level
+# This suite has NO per-case selector — all cases are unconditional top-level
 #   code, so an argument naming one is ignored. The recipe below therefore runs
 #   the whole suite, and the harness classifies on the named case's output line.
 #
@@ -87,22 +93,34 @@
 #   `:-30` default), so the substitution can never be a no-op, and the expression
 #   carries no `^`/`$` anchor so it needs no `/m` under the harness's `perl -0pi`.
 #
-#   The remaining unrecorded arm is the GNU-first ORDERING, and the reason is
-#   narrower than it may look. An arm mutating it (`s/stat -c %Y/stat -f %m/`)
-#   reports a vacuous guard against the TWO CASES BELOW, because their stub answers
-#   unconditionally and ignores its flags by design — deliberately, so both stay
-#   ordering-agnostic.
+#   Fourth arm — the GNU-first ORDERING:
+#   bash ~/.claude/plugins/cache/managed-service/cogni-service/0.0.402/scripts/mutation-check.sh \
+#     --root . \
+#     --file cogni-portfolio/scripts/append-claim.sh \
+#     --expr 's/stat -c %Y/stat -f %m/' \
+#     --test 'bash cogni-portfolio/tests/test-append-claim-lock.sh' \
+#     --case live-lock-not-swept-on-gnu-stat
 #
-#   That is a property of these two cases, NOT a general limit: a flag-aware stub
-#   (`-c` prints an epoch, `-f` prints `%m` and exits 0, simulating GNU) does
-#   discriminate the two orderings, and the ordering is worth pinning on its own
-#   merits — with the floor present but the ordering swapped, a GNU host floors
-#   every contended lock's reading to 0, reads it as ancient, and sweeps a LIVE
-#   peer's lock. Do not read this note as "the ordering cannot be tested".
+#   The expression swaps the chain back to BSD-first while leaving the shape floor
+#   intact, so this arm mutates the ORDERING rather than the floor arms one and two
+#   cover. Under case 3's flag-aware stub the mutated script calls `stat -f %m`
+#   first; the stub answers `%m` and exits 0, so the `||` never falls through, the
+#   floor coerces that non-numeric reading to 0, a LIVE peer's lock reads as ancient
+#   and is swept, and the script appends and exits 0 where case 3 demands exit 1.
+#   That is the whole reason the ordering is worth pinning on its own merits: the
+#   floor makes this failure silent rather than loud, it does not make it safe, and
+#   the host it strikes is exactly the one — Linux — the GNU-first fix was about.
+#
+#   Only case 3 catches this arm. Cases 1 and 2 pass a stub that ignores its flags,
+#   so they answer identically under either ordering and stay ordering-agnostic by
+#   design — which is why this arm names case 3 and not one of them. `stat -c %Y`
+#   occurs exactly once in the script (the comment above the read line names only
+#   `stat -f %m`), so the substitution can never be a no-op, and the expression
+#   carries no `^`/`$` anchor so it needs no `/m` under the harness's `perl -0pi`.
 
 # `set -u` only — `set -e` would abort on the first failing assertion and defeat
-# the per-case failure counter below. Both cases also run a script that is
-# EXPECTED to exit non-zero in one of them.
+# the per-case failure counter below. All cases also run a script that is
+# EXPECTED to exit non-zero in two of them.
 set -u
 
 TESTS_DIR="$(cd "$(dirname "$0")" && pwd)"
@@ -128,10 +146,13 @@ fail() { printf 'FAIL: %s %s\n' "$1" "${2:-}" >&2; failures=$((failures + 1)); }
 # file so `date` and `python3` keep resolving to the real binaries — the script
 # calls all three by bare name.
 #
-# The stub ignores its flags and answers unconditionally. That is deliberate: the
-# `||` chain short-circuits on the first exit-0 call, so an unconditional stub is
-# correct under both the pre-fix BSD-first and post-fix GNU-first orderings, and
-# the suite is not coupled to the ordering the fix happens to land with.
+# The helper is body-agnostic — it writes whatever `$2` holds — and the suite uses
+# that in two deliberately different ways. Cases 1 and 2 pass a body that ignores
+# its flags and answers unconditionally: the `||` chain short-circuits on the first
+# exit-0 call, so such a body is correct under both the pre-fix BSD-first and the
+# post-fix GNU-first ordering, which keeps those two cases from being coupled to
+# the ordering the fix happens to land with. Case 3 passes a FLAG-AWARE body and is
+# coupled to the ordering on purpose — that coupling is the thing it exists to pin.
 make_stat_stub() {
   mkdir -p "$1"
   printf '#!/bin/sh\n%s\n' "$2" > "$1/stat"
@@ -181,8 +202,8 @@ seed_contended_project() {
 #
 # The general rule, worth keeping in view when adding a case: assert a FOREIGN
 # tool's output by SHAPE (exit status, stream emptiness, numeric form), and only
-# our OWN scripts' literals by text. Case 2 below greps `Could not acquire lock`
-# precisely because append-claim.sh emits that string itself.
+# our OWN scripts' literals by text. Cases 2 and 3 below grep `Could not acquire
+# lock` precisely because append-claim.sh emits that string itself.
 case1_dir="$(seed_contended_project stale-non-numeric)"
 case1_stub="$TMPROOT/stub-non-numeric"
 make_stat_stub "$case1_stub" 'echo "%m"'
@@ -218,6 +239,55 @@ elif [ ! -d "$case2_dir/cogni-claims/.claims.lock" ]; then
   fail "live-lock-not-swept-on-numeric-stat" "a live peer's lock was swept"
 else
   pass "live-lock-not-swept-on-numeric-stat" "fresh lock left intact, script timed out"
+fi
+
+# --- Case 3: the ordering pin — only a chain that tries `-c` first reads an mtime.
+#
+# Cases 1 and 2 cannot see the ordering at all, and that is by design: their stub
+# answers unconditionally, so the `||` chain's first call succeeds whichever form
+# it is, and both cases stay green under either ordering. The consequence is that
+# nothing above pins the GNU-first chain — reverting it to BSD-first leaves the
+# suite green. This case closes that gap with a FLAG-AWARE stub, which is the
+# minimum needed to tell the two calls apart.
+#
+# The stub simulates GNU coreutils, where `-f` means --file-system rather than a
+# format string: `-c` answers with a real current epoch, `-f` answers with the
+# literal `%m` and — the load-bearing part — exits 0, so a BSD-first chain never
+# falls through to its second call. Against the SHIPPED script this case is
+# behaviourally identical to case 2: `-c` runs first, returns a numeric current
+# epoch, the lock reads as live, and the script times out leaving it intact. The
+# two diverge ONLY when the ordering is swapped, which is exactly what makes this a
+# distinct case rather than a duplicate of case 2 — under the swap the `%m` reading
+# is floored to 0, a live peer's lock reads as ancient and is swept, and the script
+# appends and exits 0.
+#
+# The stub body is SINGLE-quoted so `$1` reaches the written file unexpanded rather
+# than being substituted with this suite's own (empty) `$1` at authoring time, and
+# make_stat_stub passes it as printf's ARGUMENT, so the `%m` inside it is never
+# read as a format specifier — case 1's `echo "%m"` body is the precedent.
+#
+# The stderr grep is of append-claim.sh's OWN literal, which is why it is a text
+# match at all. Anything the shell or coreutils emits is asserted by SHAPE here
+# instead — those diagnostics are gettext-localized, so a text match on one would
+# pass vacuously off an English-locale host.
+case3_dir="$(seed_contended_project live-gnu-ordering)"
+case3_stub="$TMPROOT/stub-gnu-ordering"
+make_stat_stub "$case3_stub" 'case "$1" in
+  -c) date +%s ;;
+  -f) echo "%m" ;;
+  *) exit 1 ;;
+esac'
+PATH="$case3_stub:$PATH" APPEND_CLAIM_MAX_WAIT=3 bash "$SCRIPT" "$case3_dir" '{"id": "claim-3"}' >/dev/null 2>"$TMPROOT/case3.err"
+case3_rc=$?
+
+if [ "$case3_rc" -ne 1 ]; then
+  fail "live-lock-not-swept-on-gnu-stat" "expected exit 1, got $case3_rc — a BSD-first chain would sweep the live lock and append"
+elif ! grep -q 'Could not acquire lock on claims.json after 0.3s' "$TMPROOT/case3.err"; then
+  fail "live-lock-not-swept-on-gnu-stat" "stderr did not carry the timeout error: $(cat "$TMPROOT/case3.err")"
+elif [ ! -d "$case3_dir/cogni-claims/.claims.lock" ]; then
+  fail "live-lock-not-swept-on-gnu-stat" "a live peer's lock was swept"
+else
+  pass "live-lock-not-swept-on-gnu-stat" "GNU-first chain read the true mtime, live lock left intact"
 fi
 
 if [ "$failures" -gt 0 ]; then

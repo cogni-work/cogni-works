@@ -38,6 +38,22 @@ MAX_WAIT="${APPEND_CLAIM_MAX_WAIT:-30}"
 TIMEOUT_LABEL="$(( MAX_WAIT / 10 )).$(( MAX_WAIT % 10 ))"
 TIMEOUT_LABEL="${TIMEOUT_LABEL%.0}"
 WAITED=0
+# Stale-sweep budget. A lock we have failed to remove this many times is not
+# going to become removable: the directory is non-empty, or a peer keeps
+# re-taking it inside the same tick. Without a bound the sweep below `continue`s
+# forever and the timeout diagnostic becomes unreachable, because WAITED only
+# ever climbs -- so once the ceiling test is true it stays true on every later
+# pass. The budget is what lets the loop fall through to that diagnostic instead
+# of spinning at 10Hz over a lock it cannot clear.
+MAX_SWEEPS=3
+SWEEPS=0
+# Empty means "the working stat form is not resolved yet". Resolution is
+# deliberately lazy -- deferred to the first stale-block entry rather than done
+# ahead of the loop -- because an uncontended acquire never enters the loop body
+# at all, so probing up front would add a fork to every one of those to save
+# forks on the rare contended path. The lock directory also need not exist yet
+# at this point; it is created only by the loop's own mkdir below.
+STAT_MTIME=""
 while ! mkdir "$LOCK_DIR" 2>/dev/null; do
   sleep 0.1
   WAITED=$((WAITED + 1))
@@ -58,11 +74,34 @@ while ! mkdir "$LOCK_DIR" 2>/dev/null; do
       #
       # Floor on numeric SHAPE, not emptiness — the failure mode is a successful
       # *wrong* answer, which an emptiness test structurally cannot catch.
-      lock_mtime=$(stat -c %Y "$LOCK_DIR" 2>/dev/null || stat -f %m "$LOCK_DIR" 2>/dev/null || echo 0)
+      #
+      # The candidate list is walked once per acquire and the winner memoized in
+      # STAT_MTIME, so only the first entry pays the failing probe; every later
+      # entry costs a single exec. `$stat_form` and `$STAT_MTIME` expand UNQUOTED
+      # on purpose — each holds a command plus its flags and has to word-split
+      # into three words. Both are set from this file's own literals and the
+      # format specifiers carry no glob character, so the split is safe.
+      # The sentinel for "no form worked" is the `false` builtin, which keeps the
+      # memoized path fork-free and lets the tail below absorb its non-zero
+      # status. Both branches always assign lock_mtime, which is what keeps
+      # `set -u` off the floor that follows; the assignment-as-condition form is
+      # what keeps a failing probe from tripping `set -e`.
+      if [ -z "$STAT_MTIME" ]; then
+        STAT_MTIME=false
+        for stat_form in "stat -c %Y" "stat -f %m"; do
+          if lock_mtime=$($stat_form "$LOCK_DIR" 2>/dev/null); then
+            STAT_MTIME="$stat_form"
+            break
+          fi
+        done
+      else
+        lock_mtime=$($STAT_MTIME "$LOCK_DIR" 2>/dev/null || echo 0)
+      fi
       [[ "$lock_mtime" =~ ^[0-9]+$ ]] || lock_mtime=0
       now=$(date +%s)
       lock_age=$(( now - lock_mtime ))
-      if [ "$lock_age" -gt 60 ]; then
+      if [ "$lock_age" -gt 60 ] && [ "$SWEEPS" -lt "$MAX_SWEEPS" ]; then
+        SWEEPS=$((SWEEPS + 1))
         rmdir "$LOCK_DIR" 2>/dev/null || true
         continue
       fi

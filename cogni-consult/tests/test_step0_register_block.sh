@@ -15,15 +15,26 @@
 #
 # Coverage:
 #   1  glob-count        skills/consult-*/SKILL.md resolves to exactly 9 files
-#   2  anchor-once       each carries exactly one description- and one
-#                        register-paragraph anchor line
-#   3  description-same  the description paragraph is byte-identical in all 9
-#   4  register-same     the register paragraph is byte-identical in all 9
-#   5  ladder-same       the ladder paragraph is byte-identical in all 9
-#   6  specifics-inline  every specific (f) owns is still stated in all 9
-#   7  owner-present     user-facing-output.md carries (f), the 6-word cap and
+#   2  anchor-once-<skill>-description / anchor-once-<skill>-register
+#                        each carries exactly one description- and one
+#                        register-paragraph anchor line (18 lines, 9 skills)
+#   3  description-same-<skill>
+#                        the description paragraph is byte-identical in all 9
+#   4  register-same-<skill>
+#                        the register paragraph is byte-identical in all 9
+#   5  ladder-same-<skill>
+#                        the ladder paragraph is byte-identical in all 9
+#   6  specifics-inline-<n>  (1..5)
+#                        every specific (f) owns is still stated in all 9
+#   7  owner-present-<n>  (1..3)
+#                        user-facing-output.md carries (f), the 6-word cap and
 #                        the worked pair
-#   8  goes-red          a mutated block and a thinned block each fail the guard
+#   8  goes-red-drifted / goes-red-thinned
+#                        a mutated block and a thinned block each fail the guard
+#
+# The emitted first token is the addressable id: each case emits the id shown
+# above — with its per-skill or per-index suffix substituted — as the first
+# token of its result line, so --case names one line and never a sibling.
 #
 # Usage: bash cogni-consult/tests/test_step0_register_block.sh [--root <dir>]
 # Exits non-zero on any assertion failure.

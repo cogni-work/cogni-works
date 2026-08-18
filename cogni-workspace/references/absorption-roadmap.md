@@ -370,8 +370,8 @@ would fail on arrival.
 **Decision.** The "Phrase-level survivors" inventory in the header of
 `cogni-workspace/tests/test-layering-claim-reconciled.sh` **may only name files
 that exist in the current tree**. Three of its entries quoted course and workflow
-prose from a plugin retired into its adopting plugin; all three are **dropped,
-not repointed**. The historical inventory tables under
+prose from `cogni-help`, retired into its adopting plugin; all three are
+**dropped, not repointed**. The historical inventory tables under
 `## Known remaining contradictions — reconciled` keep their retired paths intact
 and are not touched.
 

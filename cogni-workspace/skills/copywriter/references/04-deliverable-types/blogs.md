@@ -334,7 +334,7 @@ Unternehmen, die jetzt handeln, sichern sich messbare Vorteile:
 
 - **35% geringere Compliance-Kosten** durch automatisierte Berichterstattung,
 - **12 Monate Vorsprung** gegenueber Wettbewerbern im regulatorischen Rahmen,
-- **18% hoehere Kundenbindung** durch nachweisbare Nachhaltigkeitsleistung,
+- **18% höhere Kundenbindung** durch nachweisbare Nachhaltigkeitsleistung,
 - **Vollstaendige regulatorische Konformitaet** vor der 2027-Frist.
 ```
 

@@ -134,11 +134,11 @@ else
 fi
 
 matcher_files="$(grep -rl -- "$MATCHER" "$REPO_ROOT"/cogni-*/hooks/hooks.json 2>/dev/null | wc -l | tr -d ' ')"
-if [ "$matcher_files" -eq 2 ]; then
-  pass "L3 exactly two hooks.json carry the excalidraw matcher"
+if [ "$matcher_files" -eq 3 ]; then
+  pass "L3 exactly three hooks.json carry the excalidraw matcher"
 else
-  fail "L3 exactly two hooks.json carry the excalidraw matcher"
-  printf '%s\n' "  found $matcher_files, expected 2 — the scan surface moved"
+  fail "L3 exactly three hooks.json carry the excalidraw matcher"
+  printf '%s\n' "  found $matcher_files, expected 3 — the scan surface moved"
 fi
 
 # --- A1: no plugin ships an MCP declaration -------------------------------
@@ -166,19 +166,19 @@ else
   printf '%s\n' "  got '$desktop_key' — tool names derive from this key, so a rename breaks every mcp__excalidraw__* tool"
 fi
 
-# --- A3: both PreToolUse matchers survive ---------------------------------
+# --- A3: all three PreToolUse matchers survive ----------------------------
 
 missing_matcher=""
-for plugin in cogni-visual cogni-portfolio; do
+for plugin in cogni-visual cogni-portfolio cogni-workspace; do
   hooks="$REPO_ROOT/$plugin/hooks/hooks.json"
   if [ ! -f "$hooks" ] || ! grep -q -- "$MATCHER" "$hooks" 2>/dev/null; then
     missing_matcher="$missing_matcher $plugin"
   fi
 done
 if [ -z "$missing_matcher" ]; then
-  pass "A3 both excalidraw hook matchers survive"
+  pass "A3 all three excalidraw hook matchers survive"
 else
-  fail "A3 both excalidraw hook matchers survive"
+  fail "A3 all three excalidraw hook matchers survive"
   printf '%s\n' "  missing or unmatched in:$missing_matcher"
   printf '%s\n' "  the matcher is correct only while no plugin re-declares the server"
 fi
@@ -214,6 +214,7 @@ if [ -z "${MCP_HYGIENE_ROOT:-}" ]; then
              "$REGISTRY_REL" \
              "cogni-visual/hooks/hooks.json" \
              "cogni-portfolio/hooks/hooks.json" \
+             "cogni-workspace/hooks/hooks.json" \
              "$WIKI_PAGE_REL" \
              "$BUNDLED_PAGE_REL"; do
     mkdir -p "$mutant/$(dirname "$rel")"

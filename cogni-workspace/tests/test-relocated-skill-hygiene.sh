@@ -63,6 +63,14 @@ WS_ROOT="$(cd "$HERE/.." && pwd)"
 
 # One "<tree>|<forbidden dispatch token>" spec per adopted tree. The token is the
 # one the tree's own source plugin dispatched under, so each arm stays falsifiable.
+#
+# A spec's tree is directory-level only where that destination directory holds
+# nothing but adopted files. Where the destination is shared, the spec names each
+# adopted file instead: cogni-workspace's own scripts/verify-theme-backcompat.sh,
+# CLAUDE.md, skills/manage-themes, skills/narrative and the wiki pages all carry
+# `cogni-visual:` legitimately, so a directory-level spec over agents/, references/,
+# scripts/, tests/ or hooks/ would fail on arrival against files this adoption never
+# touched. `find` over a regular file yields that file, so bare-file specs walk fine.
 TREE_SPECS="
 $WS_ROOT/skills/cogni-issues|cogni-help:
 $WS_ROOT/skills/troubleshoot|cogni-help:
@@ -81,6 +89,44 @@ $WS_ROOT/skills/copy-json|cogni-copywriting:
 $WS_ROOT/skills/copy-reader|cogni-copywriting:
 $WS_ROOT/agents/copywriter.md|cogni-copywriting:
 $WS_ROOT/agents/reader.md|cogni-copywriting:
+$WS_ROOT/skills/enrich-report|cogni-visual:
+$WS_ROOT/skills/render-html-slides|cogni-visual:
+$WS_ROOT/skills/review-brief|cogni-visual:
+$WS_ROOT/skills/story-to-infographic|cogni-visual:
+$WS_ROOT/skills/story-to-slides|cogni-visual:
+$WS_ROOT/skills/story-to-storyboard|cogni-visual:
+$WS_ROOT/skills/story-to-web|cogni-visual:
+$WS_ROOT/libraries|cogni-visual:
+$WS_ROOT/references/cartographic-data|cogni-visual:
+$WS_ROOT/agents/brief-review-assessor.md|cogni-visual:
+$WS_ROOT/agents/concept-diagram-svg.md|cogni-visual:
+$WS_ROOT/agents/concept-diagram.md|cogni-visual:
+$WS_ROOT/agents/editorial-sketch.md|cogni-visual:
+$WS_ROOT/agents/enrich-report.md|cogni-visual:
+$WS_ROOT/agents/enriched-report-reviewer.md|cogni-visual:
+$WS_ROOT/agents/html-slides.md|cogni-visual:
+$WS_ROOT/agents/pptx.md|cogni-visual:
+$WS_ROOT/agents/render-infographic-pencil.md|cogni-visual:
+$WS_ROOT/agents/render-infographic-sketchnote.md|cogni-visual:
+$WS_ROOT/agents/render-infographic-whiteboard.md|cogni-visual:
+$WS_ROOT/agents/report-html-writer.md|cogni-visual:
+$WS_ROOT/agents/slides-enrichment-artist.md|cogni-visual:
+$WS_ROOT/agents/story-to-infographic.md|cogni-visual:
+$WS_ROOT/agents/story-to-slides.md|cogni-visual:
+$WS_ROOT/agents/story-to-storyboard.md|cogni-visual:
+$WS_ROOT/agents/story-to-web.md|cogni-visual:
+$WS_ROOT/agents/storyboard.md|cogni-visual:
+$WS_ROOT/agents/web.md|cogni-visual:
+$WS_ROOT/references/agent-tool-declarations.md|cogni-visual:
+$WS_ROOT/references/theme-component-loader.md|cogni-visual:
+$WS_ROOT/scripts/breadcrumb-allowlist.txt|cogni-visual:
+$WS_ROOT/scripts/cartographic-outline.py|cogni-visual:
+$WS_ROOT/scripts/load-theme-component.py|cogni-visual:
+$WS_ROOT/scripts/rasterize-sketch.py|cogni-visual:
+$WS_ROOT/tests/test-arc-taxonomy-sync.sh|cogni-visual:
+$WS_ROOT/tests/test-de-ascii-orthography.sh|cogni-visual:
+$WS_ROOT/tests/test-excalidraw-canvas-lock.sh|cogni-visual:
+$WS_ROOT/hooks/ensure-excalidraw-canvas.sh|cogni-visual:
 "
 
 failures=0

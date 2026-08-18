@@ -160,11 +160,22 @@ span four tiers'
 
 # Repo-relative path fragments exempt from the scan. See the header for why each
 # one is here.
+#
+# The two cogni-workspace/libraries/ entries are the adopted copies of the files
+# `cogni-visual/libraries/` is already exempt for, and they are here for the same
+# reason: both carry `Foundation Layer` as a label inside an ASCII-art diagram,
+# naming a z-order layer in a drawing rather than making any claim about plugin
+# layering. They are listed by exact path rather than as a directory prefix, so a
+# future file added to that tree still has to answer to this guard — the incumbent
+# cogni-visual entry is a directory only because the source tree is retired
+# wholesale in a later stage.
 EXCLUDED='cogni-workspace/tests/test-layering-claim-reconciled.sh
 cogni-workspace/references/absorption-roadmap.md
 wiki/wiki/log.md
 wiki/wiki/pages/lint-2026-04-20.md
 cogni-visual/libraries/
+cogni-workspace/libraries/excalidraw-patterns.md
+cogni-workspace/libraries/svg-patterns.md
 .git/
 .claude/worktrees/'
 

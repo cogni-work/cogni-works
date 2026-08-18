@@ -24,13 +24,26 @@
 #   written, from the repo root. If that version directory is gone, use the
 #   newest under the same parent; everything after the path is version-independent.
 #
+#   The case id names the ASSERTION, not the case function, and every id inside
+#   a loop over EXCALIDRAW_HOOKS also carries the owning plugin directory. That
+#   is why each --case below is spelled out rather than being the same string as
+#   the --test selector: one function emits several result lines, and before the
+#   ids were split a mutation of one line could be credited by a sibling line
+#   going red. --test still names the bare shell function, because ALL_TESTS and
+#   run_one dispatch on the function name — those are unchanged.
+#
+#   The harness matches a case whole-token, so a stale --case does not go red:
+#   it returns case_not_found, which reads as a missing case rather than a
+#   surviving mutant. Re-key every recipe here in the same change that re-ids a
+#   line, and replay it.
+#
 #   M1 -> test_cold_start_spawns_exactly_one_server
 #   bash ~/.claude/plugins/cache/managed-service/cogni-service/0.0.402/scripts/mutation-check.sh \
 #     --root . \
 #     --file cogni-workspace/hooks/ensure-excalidraw-canvas.sh \
 #     --expr 's#mkdir "\$LOCK_DIR" 2>/dev/null#mkdir -p "\$LOCK_DIR" 2>/dev/null#' \
 #     --test 'bash cogni-workspace/tests/test-excalidraw-canvas-lock.sh test_cold_start_spawns_exactly_one_server' \
-#     --case test_cold_start_spawns_exactly_one_server
+#     --case test_cold_start_spawns_exactly_one_server-spawn-count
 #   `mkdir -p` succeeds against an existing directory, so both racers believe
 #   they won and both spawn — exactly the pre-fix behaviour. The searched
 #   literal occurs once (the two other `mkdir` mentions are prose), the
@@ -40,27 +53,32 @@
 #
 #   M2 -> test_stale_lock_does_not_deadlock
 #     --expr 's#LOCK_STALE_SECS=60#LOCK_STALE_SECS=999999999#'
+#     --case test_stale_lock_does_not_deadlock-swept
 #   The aged claim is never swept, so no spawn happens. Occurs once as the
 #   declaration; every use is "$LOCK_STALE_SECS".
 #
 #   M3 -> test_release_is_trapped_for_signals
 #     --expr 's#trap release_start_claim EXIT INT TERM#trap release_start_claim EXIT#'
+#     --case test_release_is_trapped_for_signals-trap-signals-cogni-workspace
 #   Still valid bash, so nothing aborts — only the signal-coverage case reddens.
 #
 #   M4 -> test_hook_copies_are_identical
 #     --file cogni-portfolio/hooks/ensure-excalidraw-canvas.sh
 #     --expr 's#LOCK_STALE_SECS=60#LOCK_STALE_SECS=61#'
+#     --case test_hook_copies_are_identical-hooks-identical
 #   Mutates the other copy so the pair diverges. Run against the cogni-workspace
 #   suite, which reads both copies, so a drift introduced on either side reddens.
 #
 #   M5 -> test_stale_lock_survives_divergent_stat
 #     --expr 's#\[\[ "\$lock_mtime" =~ \^\[0-9\]\+\$ \]\]#[[ -n "\$lock_mtime" ]]#'
+#     --case test_stale_lock_survives_divergent_stat-swept
 #   Reverts the mtime floor to the emptiness test, which structurally cannot see
 #   a successful wrong answer: the stub's non-numeric reading survives it,
 #   reaches the arithmetic, and aborts the hook. Occurs once.
 #
 #   M6 -> test_stale_lock_survives_divergent_stat
 #     --expr 's#stat -c %Y "\$LOCK_DIR"#stat -f %m "\$LOCK_DIR"#'
+#     --case test_stale_lock_survives_divergent_stat-gnu-first-cogni-workspace
 #   Puts the BSD form first, leaving the GNU arm unreachable on the platform
 #   that needs it. Reddens the ordering arm, which reads the chain out of the
 #   hook's source. M8 replays this same substitution against the behavioural
@@ -70,6 +88,7 @@
 #
 #   M7 -> test_concurrent_stale_claim_spawns_exactly_one_server
 #     --expr 's#\$swept_mtime" -eq "\$lock_mtime#\$swept_mtime" -ne "\$lock_mtime#'
+#     --case test_concurrent_stale_claim_spawns_exactly_one_server-spawn-count
 #   Inverts the identity test the sweep turns on, so the invocation that really
 #   did carry the aged claim aside declines to claim and the one that did not
 #   finds nothing left to carry: no spawn at all. Chosen over reverting the
@@ -79,6 +98,7 @@
 #
 #   M8 -> test_live_claim_survives_flag_aware_stat
 #     --expr 's#stat -c %Y "\$LOCK_DIR"#stat -f %m "\$LOCK_DIR"#'
+#     --case test_live_claim_survives_flag_aware_stat-claim-survived
 #   The same substitution M6 makes, replayed against the behavioural case — the
 #   duplication is the point, not a copy error, so do not fold the two arms
 #   together. Under the flag-aware stub a BSD-first chain answers first for a
@@ -89,6 +109,7 @@
 #
 #   M9 -> test_stale_lock_survives_divergent_stat
 #     --expr 's#stat -c %Y "\$swept"#stat -f %m "\$swept"#'
+#     --case test_stale_lock_survives_divergent_stat-gnu-first-cogni-workspace
 #   The sweep's own chain, which no arm reached before. It reddens through the
 #   ordering arm only: under the flag-agnostic stub both forms answer the same
 #   non-numeric value, so reverting this chain leaves every behavioural case
@@ -102,6 +123,12 @@
 #   Mutating a hook copy is required: these cases assert hook behaviour, so
 #   mutating this suite or a docs file would prove nothing. All nine recipes
 #   were replayed against the shared harness and each returned guard_verified.
+#
+#   M3, M6 and M9 mutate the cogni-workspace copy only, so their --case carries
+#   the cogni-workspace slug and the cogni-portfolio sibling id stays GREEN in
+#   the same run. That asymmetry is the point of the per-hook discriminator:
+#   before it existed both iterations shared one token, so a defect introduced
+#   in one copy could be credited by the other copy's line going red.
 
 set -u
 
@@ -118,6 +145,16 @@ MATCHER='mcp__excalidraw__.*'
 # The surviving pair that ships this hook. Stated once: the next change to this
 # population edits one line, so it cannot half-land across the sites below.
 EXCALIDRAW_HOOKS=("$PORTFOLIO_HOOK" "$WORKSPACE_HOOK")
+
+# Slug a hook path down to its owning plugin directory: .../cogni-portfolio/hooks/
+# ensure-excalidraw-canvas.sh -> cogni-portfolio. The discriminator has to come
+# from the DIRECTORY, never `basename` — both copies are named
+# ensure-excalidraw-canvas.sh, so a basename-derived slug is constant and the
+# per-iteration ids would still collide. Parameter expansion, no fork.
+hook_slug() { local _d="${1%/hooks/*}"; printf '%s' "${_d##*/}"; }
+# Same idea for the four-path existence loop, which also covers the hooks.json
+# pair — there the file name does vary, so both parts are kept.
+path_slug() { local _r="${1#"$REPO_ROOT/"}"; printf '%s' "${_r//\//-}"; }
 
 # One reader of the PreToolUse surface, used by both arms below. Both modes are
 # scoped to hooks.PreToolUse, never to the file as a whole: cogni-workspace's
@@ -330,15 +367,15 @@ test_cold_start_spawns_exactly_one_server() {
 
   n="$(spawn_count "$c")"
   if [ "$n" = "1" ]; then
-    pass test_cold_start_spawns_exactly_one_server "exactly one spawn"
+    pass test_cold_start_spawns_exactly_one_server-spawn-count "exactly one spawn"
   else
-    fail test_cold_start_spawns_exactly_one_server "expected 1 spawn, got $n"
+    fail test_cold_start_spawns_exactly_one_server-spawn-count "expected 1 spawn, got $n"
   fi
 
   if [ "$rca" = "0" ] && [ "$rcb" = "0" ]; then
-    pass test_cold_start_spawns_exactly_one_server "both invocations exited 0"
+    pass test_cold_start_spawns_exactly_one_server-exit-codes "both invocations exited 0"
   else
-    fail test_cold_start_spawns_exactly_one_server "exit codes were $rca and $rcb"
+    fail test_cold_start_spawns_exactly_one_server-exit-codes "exit codes were $rca and $rcb"
   fi
 
   pidfile="$TMPROOT/$c/mcp/canvas.pid"
@@ -346,18 +383,18 @@ test_cold_start_spawns_exactly_one_server() {
     livepid="$(cat "$pidfile")"
     STARTED_PIDS="$STARTED_PIDS $livepid"
     if kill -0 "$livepid" 2>/dev/null; then
-      pass test_cold_start_spawns_exactly_one_server "canvas.pid names a live process"
+      pass test_cold_start_spawns_exactly_one_server-canvas-pid "canvas.pid names a live process"
     else
-      fail test_cold_start_spawns_exactly_one_server "canvas.pid $livepid is not live"
+      fail test_cold_start_spawns_exactly_one_server-canvas-pid "canvas.pid $livepid is not live"
     fi
   else
-    fail test_cold_start_spawns_exactly_one_server "canvas.pid was never written"
+    fail test_cold_start_spawns_exactly_one_server-canvas-pid "canvas.pid was never written"
   fi
 
   if [ -d "$TMPROOT/$c/mcp/canvas-start.lock" ]; then
-    fail test_cold_start_spawns_exactly_one_server "claim was not released"
+    fail test_cold_start_spawns_exactly_one_server-claim-released "claim was not released"
   else
-    pass test_cold_start_spawns_exactly_one_server "claim released"
+    pass test_cold_start_spawns_exactly_one_server-claim-released "claim released"
   fi
 }
 
@@ -380,9 +417,9 @@ assert_stale_claim_swept() {
 
   _n="$(spawn_count "$_c")"
   if [ "$_n" = "1" ] && [ "$_rc" = "0" ]; then
-    pass "$_case" "$_label"
+    pass "$_case-swept" "$_label"
   else
-    fail "$_case" "expected 1 spawn and rc 0, got $_n and $_rc"
+    fail "$_case-swept" "expected 1 spawn and rc 0, got $_n and $_rc"
   fi
 
   _pidfile="$TMPROOT/$_c/mcp/canvas.pid"
@@ -391,9 +428,9 @@ assert_stale_claim_swept() {
   fi
 
   if [ -d "$TMPROOT/$_c/mcp/canvas-start.lock" ]; then
-    fail "$_case" "claim was not released"
+    fail "$_case-claim-released" "claim was not released"
   else
-    pass "$_case" "claim released"
+    pass "$_case-claim-released" "claim released"
   fi
 }
 
@@ -443,21 +480,21 @@ test_concurrent_stale_claim_spawns_exactly_one_server() {
 
   n="$(spawn_count "$c")"
   if [ "$n" = "1" ]; then
-    pass test_concurrent_stale_claim_spawns_exactly_one_server "exactly one spawn against a contested stale claim"
+    pass test_concurrent_stale_claim_spawns_exactly_one_server-spawn-count "exactly one spawn against a contested stale claim"
   else
-    fail test_concurrent_stale_claim_spawns_exactly_one_server "expected 1 spawn, got $n"
+    fail test_concurrent_stale_claim_spawns_exactly_one_server-spawn-count "expected 1 spawn, got $n"
   fi
 
   if [ "$rca" = "0" ] && [ "$rcb" = "0" ]; then
-    pass test_concurrent_stale_claim_spawns_exactly_one_server "both invocations exited 0"
+    pass test_concurrent_stale_claim_spawns_exactly_one_server-exit-codes "both invocations exited 0"
   else
-    fail test_concurrent_stale_claim_spawns_exactly_one_server "exit codes were $rca and $rcb"
+    fail test_concurrent_stale_claim_spawns_exactly_one_server-exit-codes "exit codes were $rca and $rcb"
   fi
 
   if [ -d "$TMPROOT/$c/mcp/canvas-start.lock" ]; then
-    fail test_concurrent_stale_claim_spawns_exactly_one_server "claim was not released"
+    fail test_concurrent_stale_claim_spawns_exactly_one_server-claim-released "claim was not released"
   else
-    pass test_concurrent_stale_claim_spawns_exactly_one_server "claim released"
+    pass test_concurrent_stale_claim_spawns_exactly_one_server-claim-released "claim released"
   fi
 }
 
@@ -494,10 +531,11 @@ test_stale_lock_survives_divergent_stat() {
   # a second grep keeps one selector: two would have to be kept in step by hand,
   # and the arm would pass over a different population than the floor counts.
   for h in "${EXCALIDRAW_HOOKS[@]}"; do
+    hslug="$(hook_slug "$h")"
     chains="$(hook_code "$h" | grep -E 'stat ')"
     n_chains="$(printf '%s\n' "$chains" | grep -c .)"
     if [ "$n_chains" != "2" ]; then
-      fail test_stale_lock_survives_divergent_stat "expected 2 stat chains in $h, found $n_chains"
+      fail test_stale_lock_survives_divergent_stat-chain-count-$hslug "expected 2 stat chains in $h, found $n_chains"
       continue
     fi
     bad=0
@@ -508,13 +546,13 @@ test_stale_lock_survives_divergent_stat() {
         *"stat -c "*"stat -f "*) ;;
         *)
           bad=1
-          fail test_stale_lock_survives_divergent_stat "chain is not GNU-first in $h: $chain" ;;
+          fail test_stale_lock_survives_divergent_stat-gnu-first-$hslug "chain is not GNU-first in $h: $chain" ;;
       esac
     done <<EOF
 $chains
 EOF
     if [ "$bad" = "0" ]; then
-      pass test_stale_lock_survives_divergent_stat "both stat chains are GNU-first in $h"
+      pass test_stale_lock_survives_divergent_stat-gnu-first-$hslug "both stat chains are GNU-first in $h"
     fi
   done
 
@@ -558,24 +596,24 @@ test_live_claim_survives_flag_aware_stat() {
   run_hook "$c" a; rc=$?
 
   if [ -d "$TMPROOT/$c/mcp/canvas-start.lock" ]; then
-    pass test_live_claim_survives_flag_aware_stat "a live peer's claim survived the sweep decision"
+    pass test_live_claim_survives_flag_aware_stat-claim-survived "a live peer's claim survived the sweep decision"
   else
-    fail test_live_claim_survives_flag_aware_stat "a live peer's claim was swept"
+    fail test_live_claim_survives_flag_aware_stat-claim-survived "a live peer's claim was swept"
   fi
 
   if [ "$rc" = "0" ]; then
-    pass test_live_claim_survives_flag_aware_stat "hook exited 0"
+    pass test_live_claim_survives_flag_aware_stat-exit-code "hook exited 0"
   else
-    fail test_live_claim_survives_flag_aware_stat "expected rc 0, got $rc"
+    fail test_live_claim_survives_flag_aware_stat-exit-code "expected rc 0, got $rc"
   fi
 
   # Non-vacuity floor: only the stub writes this marker, so its absence means
   # the run never reached a stat chain and the assertions above passed without
   # exercising anything.
   if [ -f "$TMPROOT/$c/stat.called" ]; then
-    pass test_live_claim_survives_flag_aware_stat "the sweep decision read the stubbed stat"
+    pass test_live_claim_survives_flag_aware_stat-stat-called "the sweep decision read the stubbed stat"
   else
-    fail test_live_claim_survives_flag_aware_stat "the stubbed stat was never called — the case never reached the chain"
+    fail test_live_claim_survives_flag_aware_stat-stat-called "the stubbed stat was never called — the case never reached the chain"
   fi
 }
 
@@ -586,15 +624,15 @@ test_live_claim_survives_flag_aware_stat() {
 test_hook_copies_are_identical() {
   for f in "$PORTFOLIO_HOOK" "$WORKSPACE_HOOK" "$PORTFOLIO_HOOKS_JSON" "$WORKSPACE_HOOKS_JSON"; do
     if [ ! -s "$f" ]; then
-      fail test_hook_copies_are_identical "missing or empty: $f"
+      fail test_hook_copies_are_identical-surface-$(path_slug "$f") "missing or empty: $f"
       return
     fi
   done
 
   if cmp -s "$PORTFOLIO_HOOK" "$WORKSPACE_HOOK"; then
-    pass test_hook_copies_are_identical "hook copies are byte-identical"
+    pass test_hook_copies_are_identical-hooks-identical "hook copies are byte-identical"
   else
-    fail test_hook_copies_are_identical "hook copies have diverged"
+    fail test_hook_copies_are_identical-hooks-identical "hook copies have diverged"
   fi
 
   # The two survivors' hooks.json can no longer be compared byte-for-byte:
@@ -607,11 +645,11 @@ test_hook_copies_are_identical() {
   # The emptiness guard is load-bearing: without it two unreadable files would
   # both yield "", compare equal, and green the arm without reading a matcher.
   if [ -z "$portfolio_pre" ] || [ -z "$workspace_pre" ]; then
-    fail test_hook_copies_are_identical "a PreToolUse block could not be read"
+    fail test_hook_copies_are_identical-pretooluse-block "a PreToolUse block could not be read"
   elif [ "$portfolio_pre" = "$workspace_pre" ]; then
-    pass test_hook_copies_are_identical "PreToolUse blocks are equivalent"
+    pass test_hook_copies_are_identical-pretooluse-block "PreToolUse blocks are equivalent"
   else
-    fail test_hook_copies_are_identical "PreToolUse blocks have diverged"
+    fail test_hook_copies_are_identical-pretooluse-block "PreToolUse blocks have diverged"
   fi
 }
 
@@ -620,32 +658,33 @@ test_hook_copies_are_identical() {
 # the harness kills the hook at its declared timeout.
 test_release_is_trapped_for_signals() {
   for h in "${EXCALIDRAW_HOOKS[@]}"; do
+    hslug="$(hook_slug "$h")"
     code="$(hook_code "$h")"
 
     traps="$(printf '%s\n' "$code" | grep -cE '^[[:space:]]*trap ')"
     if [ "$traps" != "1" ]; then
-      fail test_release_is_trapped_for_signals "expected exactly 1 trap line in $h, got $traps"
+      fail test_release_is_trapped_for_signals-trap-count-$hslug "expected exactly 1 trap line in $h, got $traps"
       continue
     fi
 
     trapline="$(printf '%s\n' "$code" | grep -E '^[[:space:]]*trap ')"
     case "$trapline" in
-      *EXIT*INT*TERM*) pass test_release_is_trapped_for_signals "release trapped for EXIT INT TERM" ;;
-      *) fail test_release_is_trapped_for_signals "trap does not cover INT/TERM: $trapline" ;;
+      *EXIT*INT*TERM*) pass test_release_is_trapped_for_signals-trap-signals-$hslug "release trapped for EXIT INT TERM" ;;
+      *) fail test_release_is_trapped_for_signals-trap-signals-$hslug "trap does not cover INT/TERM: $trapline" ;;
     esac
 
     if printf '%s\n' "$code" | grep -q 'mkdir -p'; then
-      fail test_release_is_trapped_for_signals "claim uses mkdir -p, which cannot tell winner from loser"
+      fail test_release_is_trapped_for_signals-bare-mkdir-$hslug "claim uses mkdir -p, which cannot tell winner from loser"
     else
-      pass test_release_is_trapped_for_signals "claim is a bare mkdir"
+      pass test_release_is_trapped_for_signals-bare-mkdir-$hslug "claim is a bare mkdir"
     fi
 
     # The release must be guarded by the claim flag, or a loser deletes the
     # winner's claim on its way out through the shared wait-loop exits.
     if printf '%s\n' "$code" | grep -A 3 'release_start_claim()' | grep -q 'SPAWN_CLAIMED'; then
-      pass test_release_is_trapped_for_signals "release is guarded by the claim flag"
+      pass test_release_is_trapped_for_signals-release-guarded-$hslug "release is guarded by the claim flag"
     else
-      fail test_release_is_trapped_for_signals "release is not guarded by the claim flag in $h"
+      fail test_release_is_trapped_for_signals-release-guarded-$hslug "release is not guarded by the claim flag in $h"
     fi
 
     # No claim machinery may sit above the fast path: an already-warm canvas
@@ -655,12 +694,12 @@ test_release_is_trapped_for_signals() {
     if [ -n "$fastline" ]; then
       above="$(printf '%s\n' "$code" | sed -n "1,${fastline}p" | grep -cE 'LOCK_DIR|LOCK_STALE_SECS|SPAWN_CLAIMED|canvas-start.lock|_claim')"
       if [ "$above" = "0" ]; then
-        pass test_release_is_trapped_for_signals "fast path carries no claim machinery"
+        pass test_release_is_trapped_for_signals-fast-path-$hslug "fast path carries no claim machinery"
       else
-        fail test_release_is_trapped_for_signals "$above claim token(s) above the fast path in $h"
+        fail test_release_is_trapped_for_signals-fast-path-$hslug "$above claim token(s) above the fast path in $h"
       fi
     else
-      fail test_release_is_trapped_for_signals "could not locate the fast path in $h"
+      fail test_release_is_trapped_for_signals-fast-path-$hslug "could not locate the fast path in $h"
     fi
 
     # The staleness sweep must outlast the hook's own declared timeout, or a
@@ -669,9 +708,9 @@ test_release_is_trapped_for_signals() {
     hooks_json="$(dirname "$h")/hooks.json"
     timeout="$(pretooluse_field "$hooks_json" timeout)"
     if [ -n "$secs" ] && [ -n "$timeout" ] && [ "$secs" -gt "$timeout" ]; then
-      pass test_release_is_trapped_for_signals "staleness $secs s outlasts the $timeout s hook timeout"
+      pass test_release_is_trapped_for_signals-staleness-outlasts-timeout-$hslug "staleness $secs s outlasts the $timeout s hook timeout"
     else
-      fail test_release_is_trapped_for_signals "staleness ($secs) does not outlast the hook timeout ($timeout)"
+      fail test_release_is_trapped_for_signals-staleness-outlasts-timeout-$hslug "staleness ($secs) does not outlast the hook timeout ($timeout)"
     fi
   done
 }

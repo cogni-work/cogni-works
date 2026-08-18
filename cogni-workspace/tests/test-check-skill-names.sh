@@ -35,6 +35,14 @@ failures=0
 pass() { printf 'PASS: %s\n' "$1"; }
 fail() { printf 'FAIL: %s\n' "$1"; failures=$((failures + 1)); }
 
+# Slug an interpreter path into a case-id discriminator: /bin/bash -> bin-bash,
+# /opt/homebrew/bin/bash -> opt-homebrew-bin-bash. The discriminator has to come
+# from the FULL PATH, never `basename` — every interpreter in the matrix is named
+# `bash`, so a basename-derived slug is constant and the ids still collide.
+# Parameter expansion, not `tr -c 'A-Za-z0-9' '-'`: that form turns the leading
+# `/` and the trailing newline into dashes and yields `-bin-bash-`.
+bin_slug() { local _p="${1#/}"; printf '%s' "${_p//\//-}"; }
+
 # Assert the script under test exists before anything reads it. Without this the
 # static guard (Case 4) would sed/grep a missing file, match nothing, and report a
 # spurious PASS — and on Linux/CI, where no bash 3.x exists, Case 4 is the only
@@ -102,10 +110,11 @@ CLEAN="$TMPROOT/clean"
 mk_skill "$CLEAN" cogni-alpha alpha-setup alpha-setup
 mk_skill "$CLEAN" cogni-beta beta-dashboard beta-dashboard
 for BIN in $INTERPRETERS; do
+  BIN_SLUG="$(bin_slug "$BIN")"
   run_check "$CLEAN" "$BIN"
-  assert_rc 0 "1a clean tree exits 0 ($BIN)"
-  assert_out_has "OK: All skill names follow the naming convention." "1b clean tree reports OK ($BIN)"
-  assert_no_bash4_error "1c clean tree free of bash-4 runtime error ($BIN)"
+  assert_rc 0 "1a-$BIN_SLUG clean tree exits 0 ($BIN)"
+  assert_out_has "OK: All skill names follow the naming convention." "1b-$BIN_SLUG clean tree reports OK ($BIN)"
+  assert_no_bash4_error "1c-$BIN_SLUG clean tree free of bash-4 runtime error ($BIN)"
 done
 
 # --- Case 2: duplicate name across two plugins -> ERROR, exit 1 ---
@@ -116,21 +125,23 @@ DUP="$TMPROOT/dup"
 mk_skill "$DUP" cogni-alpha alpha-x iw-shared
 mk_skill "$DUP" cogni-beta beta-y iw-shared
 for BIN in $INTERPRETERS; do
+  BIN_SLUG="$(bin_slug "$BIN")"
   run_check "$DUP" "$BIN"
-  assert_rc 1 "2a duplicate exits 1 ($BIN)"
-  assert_out_has "ERROR: Duplicate skill name 'iw-shared' in:" "2b duplicate ERROR line ($BIN)"
-  assert_out_has "FAIL: 1 naming violation(s) found." "2c duplicate FAIL summary ($BIN)"
-  assert_no_bash4_error "2d duplicate free of bash-4 runtime error ($BIN)"
+  assert_rc 1 "2a-$BIN_SLUG duplicate exits 1 ($BIN)"
+  assert_out_has "ERROR: Duplicate skill name 'iw-shared' in:" "2b-$BIN_SLUG duplicate ERROR line ($BIN)"
+  assert_out_has "FAIL: 1 naming violation(s) found." "2c-$BIN_SLUG duplicate FAIL summary ($BIN)"
+  assert_no_bash4_error "2d-$BIN_SLUG duplicate free of bash-4 runtime error ($BIN)"
 done
 
 # --- Case 3: generic name without a domain prefix -> ERROR, exit 1 ---
 GEN="$TMPROOT/gen"
 mk_skill "$GEN" cogni-alpha the-dash dashboard
 for BIN in $INTERPRETERS; do
+  BIN_SLUG="$(bin_slug "$BIN")"
   run_check "$GEN" "$BIN"
-  assert_rc 1 "3a generic exits 1 ($BIN)"
-  assert_out_has "ERROR: Generic skill name 'dashboard' requires a domain prefix" "3b generic ERROR line ($BIN)"
-  assert_no_bash4_error "3c generic free of bash-4 runtime error ($BIN)"
+  assert_rc 1 "3a-$BIN_SLUG generic exits 1 ($BIN)"
+  assert_out_has "ERROR: Generic skill name 'dashboard' requires a domain prefix" "3b-$BIN_SLUG generic ERROR line ($BIN)"
+  assert_no_bash4_error "3c-$BIN_SLUG generic free of bash-4 runtime error ($BIN)"
 done
 
 # --- Case 4: portability — no bash-4-only construct may reach the script ---
@@ -171,10 +182,11 @@ TABF="$TMPROOT/tabname"
 mk_skill "$TABF" cogni-alpha alpha-tab "$(printf 'foo\tbar')"
 mk_skill "$TABF" cogni-beta beta-foo foo
 for BIN in $INTERPRETERS; do
+  BIN_SLUG="$(bin_slug "$BIN")"
   run_check "$TABF" "$BIN"
-  assert_rc 0 "5a tabbed name exits 0 ($BIN)"
-  assert_out_lacks "ERROR: Duplicate skill name 'foo'" "5b tabbed name reports no phantom duplicate ($BIN)"
-  assert_no_bash4_error "5c tabbed name free of bash-4 runtime error ($BIN)"
+  assert_rc 0 "5a-$BIN_SLUG tabbed name exits 0 ($BIN)"
+  assert_out_lacks "ERROR: Duplicate skill name 'foo'" "5b-$BIN_SLUG tabbed name reports no phantom duplicate ($BIN)"
+  assert_no_bash4_error "5c-$BIN_SLUG tabbed name free of bash-4 runtime error ($BIN)"
 done
 
 if [ "$failures" -gt 0 ]; then

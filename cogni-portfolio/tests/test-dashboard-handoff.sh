@@ -303,22 +303,28 @@ test_refresher_has_no_skip_path() {
 # --- test_open_browser_optin -----------------------------------------------
 # Two halves: the documented default is the non-opening one, and every call site
 # whose prose promises to open names the opt-in explicitly.
+#
+# Both halves emit a green line on a clean run, so the addressable id names the
+# HALF rather than the case — a single `test_open_browser_optin` token would name
+# two lines and a mutation of either half could be credited by the other. The
+# function name itself is unchanged: ALL_TESTS/run_one and scripts/mutation-check.sh
+# dispatch on it.
 test_open_browser_optin() {
-  agent_surface_ok test_open_browser_optin || return
+  agent_surface_ok test_open_browser_optin-surface || return
 
   # Half 1 — the input contract.
   local contract_line
   contract_line="$(grep -F '`open_browser` (optional' "$AGENT" | head -1)"
   if [ -z "$contract_line" ]; then
-    fail test_open_browser_optin "no open_browser input-contract line in agents/dashboard-refresher.md"
+    fail test_open_browser_optin-contract-default-false "no open_browser input-contract line in agents/dashboard-refresher.md"
   else
     case "$contract_line" in
-      *"default: false"*) pass test_open_browser_optin "input contract documents the non-opening default" ;;
-      *) fail test_open_browser_optin "input-contract line does not document 'default: false': $contract_line" ;;
+      *"default: false"*) pass test_open_browser_optin-contract-default-false "input contract documents the non-opening default" ;;
+      *) fail test_open_browser_optin-contract-default-false "input-contract line does not document 'default: false': $contract_line" ;;
     esac
   fi
   if grep -qF 'default: true' "$AGENT"; then
-    fail test_open_browser_optin "agent contract still documents 'default: true' somewhere"
+    fail test_open_browser_optin-no-default-true "agent contract still documents 'default: true' somewhere"
   fi
 
   # Half 2 — the call-site surface. Three globs: agents/, skills/*/SKILL.md and
@@ -332,7 +338,7 @@ test_open_browser_optin() {
   )"
   scanned="$(printf '%s\n' "$surface" | grep -c . )"
   if [ "$scanned" -eq 0 ]; then
-    fail test_open_browser_optin "scanned no files; scan surface is broken"
+    fail test_open_browser_optin-scan-surface "scanned no files; scan surface is broken"
     return
   fi
 
@@ -350,7 +356,7 @@ test_open_browser_optin() {
   )"
   dispatch_count="$(printf '%s\n' "$dispatch_lines" | grep -c . )"
   if [ "$dispatch_count" -eq 0 ]; then
-    fail test_open_browser_optin "found no dashboard-refresher dispatch lines; scan surface is broken"
+    fail test_open_browser_optin-dispatch-surface "found no dashboard-refresher dispatch lines; scan surface is broken"
     return
   fi
 
@@ -380,9 +386,9 @@ $dispatch_lines
 EOF
 
   if [ -n "$offenders" ]; then
-    fail test_open_browser_optin "call sites promise to open but pass no flag:$offenders"
+    fail test_open_browser_optin-callsite-optin "call sites promise to open but pass no flag:$offenders"
   else
-    pass test_open_browser_optin "all intending call sites name the opt-in ($dispatch_count dispatch lines scanned)"
+    pass test_open_browser_optin-callsite-optin "all intending call sites name the opt-in ($dispatch_count dispatch lines scanned)"
   fi
 }
 

@@ -103,8 +103,8 @@ this example:
 
 ```
 MCP Installation Plan:
-  mcp_excalidraw  git clone + build    needed by: cogni-visual, cogni-portfolio
-  pencil          native app check     needed by: cogni-visual, cogni-website
+  mcp_excalidraw  git clone + build    needed by: cogni-portfolio, cogni-workspace
+  pencil          native app check     needed by: cogni-website, cogni-workspace
 
   Config write:    ~/.claude.json (Claude Code user scope)
   Config write:    claude_desktop_config.json (Claude Desktop)

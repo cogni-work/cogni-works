@@ -147,3 +147,18 @@ jobs:
         run: |
           set -euo pipefail
           python3 scripts/check-result-line-plainness.py
+
+  mcp-tool-grant-guard:
+    name: MCP agent-grant guard (agent bodies call only servers their frontmatter grants)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        # Default shallow checkout is sufficient: the guard reads the working
+        # tree at this commit, not git history. Do NOT copy version-bump-gate's
+        # fetch-depth: 0 — that is load-bearing only for its merge-base anchor.
+
+      - name: Assert every documented MCP call site is granted and registered
+        run: |
+          set -euo pipefail
+          python3 scripts/check-mcp-tool-grant.py

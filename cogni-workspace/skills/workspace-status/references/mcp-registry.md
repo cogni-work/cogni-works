@@ -12,7 +12,7 @@ only once it is actually installed.
 
 ### excalidraw (yctimlin/mcp_excalidraw)
 
-- **Needed by:** cogni-visual, cogni-portfolio
+- **Needed by:** cogni-portfolio, cogni-workspace
 - **Type:** git-installed (cloned and built by `cogni-workspace/scripts/install-mcp.sh`)
 - **Install path:** `~/.claude/mcp-servers/mcp_excalidraw/`
 - **Entry point:** `~/.claude/mcp-servers/mcp_excalidraw/start.sh` (wrapper that starts canvas + MCP)
@@ -69,7 +69,7 @@ These MCPs are not written by install-mcp and require user action.
 
 ### pencil
 
-- **Needed by:** cogni-visual, cogni-website
+- **Needed by:** cogni-website, cogni-workspace
 - **Type:** Desktop app with bundled MCP server
 - **Install:** Download from https://pencil.dev, open the app — MCP auto-starts
 - **Probe tool:** `mcp__pencil__get_editor_state`

@@ -32,10 +32,47 @@ and cogni-workspace both ship a `concept-diagram-svg` agent whose body says "no
 Excalidraw MCP", and cogni-knowledge's `source-curator` says "no
 claude-in-chrome MCP tools". Those sentences carry no `mcp__<ns>__<tool>`
 token, so requiring a literal token is what makes the guard safe at this scope.
-The complementary prose detector therefore stays plugin-scoped in
-cogni-website/tests/test-mcp-tool-grant.sh, where it is calibrated and green,
-and where it still covers the one shape an affirmative detector structurally
-cannot see: an agent that documents driving a server in prose alone.
+That reasoning held while the only affirmative signal was the token itself. It
+no longer does, and the evaluation of the alternative resolved to ADOPT. The
+registry already names each server's tools in `provides_tools[]`, so a body can
+be read affirmatively with NEITHER prose NOR a token, by asking whether it names
+one of those tools inside a backtick code span. That second arm lives below, and
+the plugin-scoped prose detector that formerly sat in cogni-website's own test
+directory is retired with it.
+
+Measured when adopted: the registry registers 2 servers carrying 18 distinct
+bare names, with NO name owned by more than one server; of the 103 agents that
+declare a `tools:` key, 9 name at least one of those tools in a code span, for
+52 name hits in total, and 0 of them are offenders. The retired arm's single live
+instance was cogni-website/agents/hero-renderer.md, which documents driving
+Pencil with no `mcp__` token anywhere in its body; this arm sees it through
+`get_guidelines` and `batch_design`, both resolving to pencil, which that agent
+grants. Because no bare name has two owners today, the multi-owner rules below
+are forward-looking and fixture-pinned — they describe no live collision.
+
+Resolution is SERVER level, and the code span is the mechanical context
+requirement. A bare name is satisfied by ANY `mcp__<ns>__*` grant of a server
+that provides it; where two servers provide the same name, granting either
+satisfies it, and where neither is granted exactly one finding is emitted
+against the lexicographically-first owner, so the output is deterministic
+rather than dependent on dict order. The span is what makes the arm safe:
+bare names like `get_screenshot` and `export_scene` are ordinary English, and
+matching them in running prose is the very false-positive class that kept the
+old heuristic plugin-scoped.
+
+Three residuals, stated rather than implied away. An agent that names a server
+in prose while naming NONE of its tools in a code span is outside both arms.
+The no-`tools:`-key skip is inherited here, and it is not hypothetical: the
+`storyboard` and `web` agents in cogni-visual and cogni-workspace declare no
+`tools:` key and together carry 22 in-span name hits this arm deliberately does
+not judge. And a code span inside a DISCLAIMING sentence would read as affirmative
+— that has no instance today, and the span requirement is what keeps the edge
+narrow, but it is real. Finally, the vocabulary is only as complete as the
+registry: agents grant 26 distinct tool names across the two registered
+servers while `provides_tools[]` lists 18, so 9 granted names are outside this
+arm's reach. Widening them is a registry-accuracy judgement, deliberately not
+made here — the same class as the stale `required_by` entry the non-failing
+observation below already surfaces.
 
 The namespace token class admits HYPHENS. Real namespaces here are spelled
 `claude-in-chrome`, and an `[A-Za-z0-9_]`-only class matches nothing at all in
@@ -73,6 +110,12 @@ REGISTRY_REL = os.path.join(
 # Namespace and tool segments both admit hyphens: `mcp__claude-in-chrome__navigate`
 # is a real token in this tree, and an underscore-only class matches none of it.
 MCP_TOKEN_RE = re.compile(r"mcp__([A-Za-z0-9_-]+?)__[A-Za-z0-9_-]+")
+
+# The mechanical context requirement for the provides_tools arm: a registry bare
+# name counts only inside a backtick code span. The FENCED alternative is listed
+# first on purpose — an inline branch tried first would pair the opening fence's
+# backticks with each other and mis-slice a fenced block into fragments.
+CODE_SPAN_RE = re.compile(r"```.*?```|`[^`\n]+`", re.S)
 
 # The single anchor for YAML block-list item lines. 15 agents declare `tools:`
 # this way, and 6 of the 7 agents carrying a real body call site are among them,
@@ -176,6 +219,10 @@ def load_registry(root):
     # read it rather than stripping a prefix — a heuristic would agree with the
     # data only coincidentally and would mis-normalize a future key.
     by_namespace = {}
+    # bare tool name -> sorted namespaces providing it. Built from the same
+    # desktop_config_key mapping, so the arm keyed on it inherits the registry's
+    # own naming rather than a second, drifting notion of a namespace.
+    tool_owners = {}
     for key, entry in servers.items():
         if not isinstance(entry, dict):
             continue
@@ -184,7 +231,17 @@ def load_registry(root):
             "key": key,
             "required_by": [str(x) for x in (entry.get("required_by") or [])],
         }
-    return by_namespace
+        for tool in entry.get("provides_tools") or []:
+            tool_owners.setdefault(str(tool), set()).add(namespace)
+    if not tool_owners:
+        raise RuntimeError(
+            "MCP registry at %s declares no provides_tools for any server — an "
+            "empty vocabulary would make the provides_tools arm vacuously "
+            "green, which is the invisible-absence failure this guard closes"
+            % path
+        )
+    tool_owners = {name: sorted(owners) for name, owners in tool_owners.items()}
+    return by_namespace, tool_owners
 
 
 def collect(root):
@@ -195,7 +252,27 @@ def collect(root):
             "repo always ships agents, so an empty sweep means the glob "
             "stopped matching" % root
         )
-    registry = load_registry(root)
+    registry, tool_owners = load_registry(root)
+    # ONE alternation over the whole vocabulary, not a search per name. A `\b`
+    # in leading position defeats re's literal-prefix prescan, so N separate
+    # patterns each walk the full span text; over this tree that is the
+    # difference between ~47ms and ~4ms, and it grows with the vocabulary
+    # rather than staying flat. Alternatives are ordered longest-first so the
+    # engine prefers `batch_create_elements` over the `create_element` it
+    # contains.
+    #
+    # The word boundaries carry two properties this arm depends on, both
+    # verified against the tree rather than assumed. A bare name inside an
+    # `mcp__<ns>__<name>` token never matches, because the preceding `_` is a
+    # word character — so this arm and the body-call-site arm structurally
+    # cannot both report the same call site. And the vocabulary's one
+    # containment pair never matches its own substring, for the same reason.
+    vocabulary_re = re.compile(
+        r"\b(?:%s)\b" % "|".join(
+            re.escape(name)
+            for name in sorted(tool_owners, key=lambda n: (-len(n), n))
+        )
+    )
 
     findings = []
     observations = []
@@ -207,6 +284,13 @@ def collect(root):
         "registered_namespaces": len(registry),
         "skipped_no_tools": 0,
         "skipped_unregistered": 0,
+        "provides_tools_vocabulary": len(tool_owners),
+        # Counted POST-skip, unlike body_call_sites just above, which is counted
+        # before it. The asymmetry is deliberate: this counter is the liveness
+        # floor for what the arm actually judged, so folding in the agents it
+        # skipped would let the population look healthy while the arm examined
+        # nothing.
+        "provides_tools_code_span_names": 0,
     }
     granting_plugins = {}
 
@@ -267,6 +351,41 @@ def collect(root):
                         % (plugin, namespace, registry[namespace]["key"])
                     ),
                 })
+
+        # Third arm. It sits after the required_by loop, and therefore after the
+        # no-`tools:`-key skip above, so an agent with unrestricted tools is
+        # never judged here — the measured "0 offenders" figure is contingent on
+        # that inherited skip, not independent of it.
+        # Joined with a newline, and with the backticks retained, so the
+        # boundaries above bind at each span's edges and no name can match
+        # across two adjacent spans.
+        spans = "\n".join(CODE_SPAN_RE.findall(body))
+        ungranted = {}
+        for name in sorted(set(vocabulary_re.findall(spans))):
+            counters["provides_tools_code_span_names"] += 1
+            owners = tool_owners[name]
+            if granted.intersection(owners):
+                # SERVER level: any grant of any owning server satisfies the
+                # name. Where a name has two owners, granting either is enough.
+                continue
+            # No owner granted. Attribute to the lexicographically-first owner
+            # so a two-owner name yields exactly one finding in a stable place,
+            # rather than one per owner or one chosen by dict order.
+            ungranted.setdefault(owners[0], []).append(name)
+
+        for namespace in sorted(ungranted):
+            names = sorted(ungranted[namespace])
+            findings.append({
+                "file": rel,
+                "line": lineno,
+                "arm": "provides_tools_body_name_ungranted",
+                "namespace": namespace,
+                "detail": (
+                    "body names registry tool(s) %s in a code span but this "
+                    "agent's tools: grants no %s tool"
+                    % (", ".join(names), namespace)
+                ),
+            })
 
     # Non-failing: the arm asserts every GRANTING plugin is listed, not the
     # converse, so a listed plugin that grants nothing is reported for a human

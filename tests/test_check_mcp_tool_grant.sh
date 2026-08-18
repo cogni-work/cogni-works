@@ -9,6 +9,25 @@
 #     reader that only looks at the `tools:` LINE reports those 6 as false
 #     offenders and the guard is red on an otherwise-clean tree. B1 fails
 #     first if that regresses.
+#   * The provides_tools arm keys on a BACKTICK CODE SPAN, and V1/V2 are the
+#     both-directions pair that pins it: same body, same vocabulary, backticks
+#     the only difference. A matcher that ignored the span requirement passes
+#     V1 and reds V2. The arm was ADOPTED to replace a plugin-scoped prose
+#     detector that formerly lived in cogni-website/tests/, whose one live
+#     instance was cogni-website/agents/hero-renderer.md — an agent that
+#     documents driving Pencil with NO `mcp__` token in its body. That agent is
+#     GRANTED (six mcp__pencil__* tokens on its bracketed tools: line), so the
+#     retired arm's live case was a green "prose-only, must be granted"
+#     assertion; the ungranted state is MANUFACTURED by the mutation recipe
+#     below. V7 is the case that carries it, through the two in-span names
+#     get_guidelines and batch_design, both resolving to pencil.
+#   * V4/V4a exercise the multi-owner rules against a fixture only. The real
+#     registry carries 18 bare names across 2 servers with ZERO overlap, so
+#     those rules are forward-looking and must not be read as reproducing a
+#     live collision.
+#   * V8 pins that the two arms cannot both report one call site: `\b` will not
+#     match a bare name inside `mcp__<ns>__<name>`, since the preceding
+#     underscore is a word character.
 #   * Disclaiming prose never fires. Agents elsewhere in the tree say "no
 #     Excalidraw MCP" while granting something else entirely; P1 pins the
 #     shape and P2 pins it against a byte copy of a real disclaiming agent, so
@@ -26,6 +45,25 @@
 # Liveness floors are INEQUALITIES pinned strictly below the values the real
 # tree carries today, so a new agent never turns the suite red, while a
 # collapsed scan population still does.
+#
+# Mutation recipe, transferred from the retired plugin-scoped suite so its
+# defect shape stays reproducible:
+#
+#   scripts/mutation-check.sh --root . \
+#     --file cogni-website/agents/hero-renderer.md \
+#     --expr 's/^tools: \[.*mcp__pencil__.*\]$/tools: [\"Read\", \"Write\", \"Glob\", \"Bash\"]/m' \
+#     --test 'bash tests/test_check_mcp_tool_grant.sh' --case V7
+#
+# The mutation strips the Pencil grants from the frontmatter while leaving the
+# body's Pencil prose and its get_guidelines / batch_design code spans in place
+# — the exact shape the retired arm existed to catch, and the one the mcp__ arm
+# cannot see. The /m modifier is load-bearing: --expr is fed to `perl -0pi`,
+# which slurps the whole file, so without it ^ and $ never bind to the tools:
+# line. The substitution is non-global, which is safe because the target file
+# carries exactly one `^tools: [` line. V7 is two-directional under it: strip
+# the grant and the arm fires (by_arm gains the entry); disable the arm outright
+# and the span counter drops to zero. Either way V7 reds, which is what stops
+# it from being a vacuous real-tree assertion.
 #
 # Every assertion below is on an exit status, on a numeric shape, or on JSON
 # this repo's own guard emits. None reads the wording of a foreign tool's
@@ -93,6 +131,16 @@ PYEOF
 # --- fixture helpers -------------------------------------------------------
 
 # write_registry <root> <key> <namespace> <required_by-json-array>
+#                [provides_tools-json-array, default ["do_thing"]]
+#
+# The provides_tools default is load-bearing, and its blast radius was measured
+# rather than assumed. Every fixture root gets a registry (new_root writes the
+# demo one internally), and an empty vocabulary is an exit-2 error, so without a
+# default every case standing on a fixture root would flip to exit 2 — the two
+# exceptions being Z1, whose root has no agents and errors earlier, and Z2,
+# which deletes the registry outright. The default is also collision-free: no
+# existing fixture body contains a backtick at all, so the provides_tools arm
+# stays silent across every pre-existing case.
 write_registry() {
   mkdir -p "$1/$(dirname "$REGISTRY_REL")"
   cat > "$1/$REGISTRY_REL" <<REGEOF
@@ -102,7 +150,37 @@ write_registry() {
     "$2": {
       "name": "$2",
       "desktop_config_key": "$3",
-      "required_by": $4
+      "required_by": $4,
+      "provides_tools": ${5:-[\"do_thing\"]}
+    }
+  }
+}
+REGEOF
+}
+
+# write_registry_pair <root> <ns-a> <ns-b> <shared-tool>
+#
+# Two registered servers whose provides_tools arrays SHARE a bare name. The real
+# registry has no such overlap (2 servers, 18 names, zero shared), so the
+# multi-owner rules are forward-looking; this fixture is the only place they can
+# be exercised, and V4/V4a must never be read as reproducing a live collision.
+write_registry_pair() {
+  mkdir -p "$1/$(dirname "$REGISTRY_REL")"
+  cat > "$1/$REGISTRY_REL" <<REGEOF
+{
+  "version": "1.0.0",
+  "servers": {
+    "mcp_$2": {
+      "name": "mcp_$2",
+      "desktop_config_key": "$2",
+      "required_by": ["plug"],
+      "provides_tools": ["$4", "only_a"]
+    },
+    "mcp_$3": {
+      "name": "mcp_$3",
+      "desktop_config_key": "$3",
+      "required_by": ["plug"],
+      "provides_tools": ["$4", "only_b"]
     }
   }
 }
@@ -269,7 +347,9 @@ check_eq "P1 disclaiming prose never fires" "0" "$CODE"
 # A byte copy of a real disclaiming agent, so the case cannot pass by agreeing
 # with a fixture nobody ships. It disclaims the REGISTERED namespace excalidraw
 # in body prose while granting a different namespace via the block-list form,
-# so it discriminates on the prose arm and the block-list arm at once.
+# so it discriminates on the disclaiming-prose non-firing property and the
+# block-list form at once. It is silent on the provides_tools arm too: the
+# disclaimer fixtures carry no backticks, and that arm keys on a code span.
 R="$(new_root disclaim_real)"
 write_registry "$R" "mcp_excalidraw" "excalidraw" '["cogni-visual"]'
 mkdir -p "$R/cogni-visual/agents"
@@ -354,6 +434,106 @@ assert ('ghost', 'demo', 'listed_without_grant') in names, names
 assert ('plug', 'demo', 'listed_without_grant') not in names, names
 "
 
+# --- V: the provides_tools arm ---------------------------------------------
+#
+# The arm keys on a registry bare name inside a BACKTICK CODE SPAN. V1/V2 are
+# the both-directions pair on that context rule: same body, same vocabulary,
+# backticks the only difference. Without V2 a matcher that ignored the span
+# requirement entirely would still pass V1.
+
+R="$(new_root pt_span)"
+write_agent "$R" "plug" "spanner" 'tools: ["Read"]' 'It calls `do_thing` on the canvas.'
+run_guard "$R"
+check_eq "V1 a registry tool named in a code span without a grant is reported" "1" "$CODE"
+py_assert "V1a the finding names the new arm and the resolved server" "
+assert len(v) == 1, v
+assert v[0]['arm'] == 'provides_tools_body_name_ungranted', v
+assert v[0]['namespace'] == 'demo', v
+assert v[0]['file'].endswith('spanner.md'), v
+"
+
+R="$(new_root pt_prose)"
+write_agent "$R" "plug" "proser" 'tools: ["Read"]' 'It calls do_thing on the canvas.'
+run_guard "$R"
+check_eq "V2 the same name in plain prose does not fire" "0" "$CODE"
+py_assert "V2a and the span population is genuinely zero, not merely unreported" "
+assert s['provides_tools_code_span_names'] == 0, s
+"
+
+# Resolution is SERVER level: any grant of an owning server satisfies any bare
+# name that server provides. A tool-level matcher reds here, and reds the real
+# tree too — concept-diagram names bare delete_element while granting four
+# other excalidraw tools.
+R="$(new_root pt_server_level)"
+write_registry "$R" "mcp_demo" "demo" '["plug"]' '["do_thing", "other_thing"]'
+write_agent "$R" "plug" "granter" 'tools: ["mcp__demo__other_thing"]' 'It calls `do_thing` here.'
+run_guard "$R"
+check_eq "V3 granting any tool of the owning server satisfies the bare name" "0" "$CODE"
+py_assert "V3a and the name really was seen, so the pass is not vacuous" "
+assert s['provides_tools_code_span_names'] >= 1, s
+"
+
+# V4/V4a exercise the multi-owner rules. The real registry has NO overlapping
+# bare name, so this fixture is the only place they are reachable.
+R="$(new_root pt_two_owners)"
+write_registry_pair "$R" "alpha" "beta" "shared_tool"
+write_agent "$R" "plug" "picksone" 'tools: ["mcp__beta__only_b"]' 'It calls `shared_tool`.'
+run_guard "$R"
+check_eq "V4 a two-owner name is satisfied by granting either owner" "0" "$CODE"
+
+R="$(new_root pt_two_owners_none)"
+write_registry_pair "$R" "alpha" "beta" "shared_tool"
+write_agent "$R" "plug" "picksnone" 'tools: ["Read"]' 'It calls `shared_tool`.'
+run_guard "$R"
+check_eq "V4a granting neither owner reports it once" "1" "$CODE"
+py_assert "V4b attributed deterministically to the first owner, not dict order" "
+assert len(v) == 1, v
+assert v[0]['namespace'] == 'alpha', v
+"
+
+# The arm sits after the no-tools skip, so it inherits it. This is what keeps
+# the four no-tools agents in the real tree from becoming false offenders.
+R="$(new_root pt_no_tools)"
+write_agent "$R" "plug" "unrestricted" 'description: no tools key here' 'It calls `do_thing`.'
+run_guard "$R"
+check_eq "V5 an agent with no tools: key is skipped on this arm too" "0" "$CODE"
+py_assert "V5a and it is counted as skipped rather than silently passed" "
+assert s['skipped_no_tools'] == 1, s
+assert s['provides_tools_code_span_names'] == 0, s
+"
+
+# An empty vocabulary is a loud failure on the same channel as Z1/Z2 — a
+# collapsed provides_tools must not read as a clean arm.
+R="$(new_root pt_empty_vocab)"
+# An empty array and an absent key are one code path in the guard
+# (`entry.get("provides_tools") or []`), so the helper reaches this state — a
+# third inline copy of the registry envelope would be one more place to edit
+# when the schema grows.
+write_registry "$R" "mcp_demo" "demo" '["plug"]' '[]'
+write_agent "$R" "plug" "any" 'tools: ["Read"]' 'Body text.'
+run_guard "$R"
+check_eq "V6 a registry with no provides_tools is an error, not an empty arm" "2" "$CODE"
+py_assert "V6a the error is reported, not swallowed" "
+assert d['success'] is False, d
+assert d['error'], d
+"
+
+# The two arms cannot both report one call site: \b will not match a bare name
+# inside mcp__<ns>__<name>, because the preceding underscore is a word char.
+R="$(new_root pt_no_double)"
+write_agent "$R" "plug" "doubler" 'tools: ["Read"]' 'It calls `mcp__demo__do_thing` directly.'
+run_guard "$R"
+py_assert "V8 a name inside an mcp__ token is reported once, by one arm only" "
+assert len(v) == 1, v
+assert v[0]['arm'] == 'body_call_site_ungranted', v
+assert s['provides_tools_code_span_names'] == 0, s
+"
+
+py_assert "V7 the real tree is clean on the provides_tools arm over a live span population" "
+assert 'provides_tools_body_name_ungranted' not in s['by_arm'], s['by_arm']
+assert s['provides_tools_code_span_names'] > 0, s
+" "$REPO_OUT"
+
 # --- Z: zero discovery is a failure ----------------------------------------
 
 R="$(new_root empty)"
@@ -379,6 +559,10 @@ assert sum(s['tools_form_counts'].values()) >= 90, s['tools_form_counts']
 py_assert "L2 grants and body call sites are still being extracted" "
 assert s['grant_tokens'] >= 100, s['grant_tokens']
 assert s['body_call_sites'] >= 15, s['body_call_sites']
+" "$REPO_OUT"
+py_assert "L3 the provides_tools vocabulary and span population are still live" "
+assert s['provides_tools_vocabulary'] >= 10, s['provides_tools_vocabulary']
+assert s['provides_tools_code_span_names'] >= 20, s['provides_tools_code_span_names']
 " "$REPO_OUT"
 
 printf '%s\n' "$failures failed"

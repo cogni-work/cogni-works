@@ -37,7 +37,7 @@
         }
       },
       "env": {},
-      "provides_tools": ["get_editor_state", "batch_design", "batch_get", "get_guidelines", "open_document", "get_screenshot"],
+      "provides_tools": ["get_editor_state", "batch_design", "batch_get", "get_guidelines", "open_document", "get_screenshot", "set_variables", "export_nodes"],
       "required_by": ["cogni-visual", "cogni-website"],
       "notes": "Pencil desktop app with bundled MCP server. Must have Pencil.app installed. The MCP binary path is platform-specific."
     }

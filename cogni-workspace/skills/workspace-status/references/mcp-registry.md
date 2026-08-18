@@ -73,7 +73,7 @@ These MCPs are not written by install-mcp and require user action.
 - **Type:** Desktop app with bundled MCP server
 - **Install:** Download from https://pencil.dev, open the app — MCP auto-starts
 - **Probe tool:** `mcp__pencil__get_editor_state`
-- **Skills:** story-to-web (web narrative rendering), story-to-storyboard (poster rendering)
+- **Skills:** story-to-web (web narrative rendering), story-to-storyboard (poster rendering), website-build (homepage hero rendering)
 - **Note:** Skills that use Pencil tell the user "open Pencil" if the MCP is unavailable.
   This is handled at the skill level, not by cogni-workspace.
 - **Troubleshooting:**

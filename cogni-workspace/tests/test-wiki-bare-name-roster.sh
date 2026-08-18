@@ -43,16 +43,28 @@
 # separate is what lets that floor be a real assertion. Do not "fix" this back
 # to the sibling's shape.
 #
-# The declared surface is the two-tree INTERSECTION
-# -------------------------------------------------
-# Only pages present in both trees are scanned, and that is load-bearing rather
-# than stylistic: scanning the union would be red on arrival. The one root-only
-# page is a frozen, dated lint report that names plugins retired since it was
-# written, and the bundled-only pages are held pending a maintainer ruling on
-# their fate — editing either to satisfy a guard would pre-decide that ruling.
-# Because those pages fall out of the intersection by construction, and the
-# top-level index / log / overview pages fall out by depth (they sit one level
-# above `pages/`), this suite carries ZERO path-fragment exclusion entries. That
+# Two surfaces: the page INTERSECTION, and an explicit tree-level SET
+# -------------------------------------------------------------------
+# Under `pages/`, only pages present in both trees are scanned, and that is
+# load-bearing rather than stylistic: scanning the union would be red on
+# arrival. The one root-only page is a frozen, dated lint report that names
+# plugins retired since it was written, and the bundled-only pages are held
+# pending a maintainer ruling on their fate — editing either to satisfy a guard
+# would pre-decide that ruling.
+#
+# One level above `pages/` sits the second surface. `index.md` and `overview.md`
+# are scanned by `scan_tree_level` over an explicit two-name set, once PER TREE
+# rather than over an intersection: the two `index.md` copies diverge by design
+# (the decisions record's Decision 3, group C), so an intersection-shaped arm
+# would skip exactly the pair it exists to watch. `log.md` is deliberately in
+# neither surface — it is frozen dated history whose ingest lines name retired
+# plugins, so scanning it would be red on arrival and would force precisely the
+# exclusion list described next.
+#
+# Because the bundled-only and one-sided pages fall out of the intersection by
+# construction, and the tree-level surface is a two-name ALLOWLIST rather than a
+# directory scan minus `log.md`, this suite carries ZERO path-fragment
+# exclusion entries. That
 # matters: a sibling guard records that a substring-matched exclusion list turns
 # one loose fragment into a repo-wide exemption. The fix for a red here is to
 # rename the stale name, never to add an exclusion — but note WHERE the hit is:
@@ -102,6 +114,13 @@
 # roster entry, which reds the boundary case while the real-tree case stays
 # green. The harness ships in the service repo, not this one.
 #
+# For the tree-level arm, drive it separately: an early `return 0` inserted into
+# `scan_tree_level` neutralises both of its per-tree calls while leaving the
+# intersection arm untouched, so the tree-level red and floor cases go red while
+# the real-tree cases — which assert rc 0, exactly what a neutralised arm
+# returns — stay green. That asymmetry is the point: it shows the arm is
+# falsifiable on its own rather than riding on the shared matcher.
+#
 # Portability: bash 3.2 (stock macOS /bin/bash) — no associative arrays, no
 # mapfile/readarray, no case-modifying expansions, no globstar. Stdlib only:
 # bash, coreutils, and python3 for JSON. No network.
@@ -130,6 +149,13 @@ ORG_TOKEN="cogni-work"
 STORE_TOKEN="cogni-claims"
 SLASH_ALLOWED="$ORG_TOKEN $STORE_TOKEN"
 
+# The tree-level surface, one level above `pages/`. An ALLOWLIST of two names,
+# never a directory scan minus an exclusion — that distinction is what keeps
+# this suite's zero-path-fragment-exclusions property true. `log.md` is absent
+# on purpose: the decisions record's Decision 5 freezes it as dated history, and
+# its ingest lines name plugins retired since they were written.
+TREE_LEVEL_PAGES="index.md overview.md"
+
 # ---------------------------------------------------------------------------
 # The checker. Fixture cases and the real-tree case drive these same functions —
 # the matcher is never reimplemented in a case body, so pointing a case at a
@@ -155,11 +181,13 @@ print(" ".join(p["name"] for p in data["plugins"]))
 }
 
 # shared_basenames <dirA> <dirB> -> space-padded basenames present in BOTH.
-# What keeps the top-level index / log / overview pages out is the SCAN ROOT:
-# they sit one level above `pages/`, so no glob rooted here can reach them.
-# Non-recursion is not what excludes them — both page dirs are flat today, so
-# it currently selects nothing. Repointing the root at the parent would pull
-# those three pages in with no exclusion mechanism to catch them.
+# What keeps the top-level index / log / overview pages out of THIS surface is
+# the SCAN ROOT: they sit one level above `pages/`, so no glob rooted here can
+# reach them. Non-recursion is not what excludes them — both page dirs are flat
+# today, so it currently selects nothing. `index.md` and `overview.md` are
+# reached instead by `scan_tree_level`'s explicit basename set, which is why
+# this root is never repointed at the parent: doing so would also pull in
+# `log.md`, with no exclusion mechanism to catch it.
 shared_basenames() {
   local a="$1" b="$2" f base out=""
   for f in "$a"/*.md; do
@@ -171,11 +199,57 @@ shared_basenames() {
   echo " $out"
 }
 
+# scan_file <file> <label> <roster> -> 0 clean, 1 when it emitted any offender.
+# The three declared allowances live HERE and nowhere else, so the intersection
+# arm and the tree-level arm cannot silently diverge on what they bless.
+scan_file() {
+  local f="$1" label="$2" roster="$3"
+  local base="${f##*/}"
+  local offenders=0 hit tok dl p matched
+
+  # Capture the token together with the one delimiter that can follow it, so
+  # the path form and the dispatch form are distinguishable. The character
+  # class is greedy, which is what keeps a longer off-roster name from being
+  # truncated into a shorter allowed one.
+  for hit in $(grep -oE 'cogni-[a-z0-9-]+[/:]?' "$f" 2>/dev/null || true); do
+    case "$hit" in
+      */) tok="${hit%/}"; dl="/" ;;
+      *:) tok="${hit%:}"; dl=":" ;;
+      *)  tok="$hit";     dl=""  ;;
+    esac
+
+    matched=0
+    for p in $roster $EXTRA_ALLOWED; do
+      # Boundary-aware: the name exactly, or the name followed by "-".
+      case "$tok" in
+        "$p"|"$p"-*) matched=1; break ;;
+      esac
+    done
+    # One slash-allowance mechanism, not two: the delimiter rule lives in a
+    # single place so the two entries cannot silently diverge. The comparison
+    # stays an EQUALITY, so this is still token-exact and never a prefix, and
+    # never a blanket "any name followed by a slash".
+    if [ "$matched" -eq 0 ] && [ "$dl" = "/" ]; then
+      for p in $SLASH_ALLOWED; do
+        [ "$tok" = "$p" ] && { matched=1; break; }
+      done
+    fi
+
+    if [ "$matched" -eq 0 ]; then
+      echo "OFF-ROSTER [$label] $base: $tok"
+      offenders=$((offenders + 1))
+    fi
+  done
+
+  [ "$offenders" -eq 0 ] || return 1
+  return 0
+}
+
 # scan_tree <pages_dir> <label> <roster> <shared> -> 0 clean, 1 otherwise.
 scan_tree() {
   local dir="$1" label="$2" roster="$3" shared="$4"
   local offenders=0 total=0
-  local f base hit tok dl p matched
+  local f base
 
   # Roster liveness floor. A manifest that parsed but carried no plugins would
   # otherwise make every token an offender or — with the extras folded in —
@@ -202,40 +276,7 @@ scan_tree() {
       *) continue ;;
     esac
     total=$((total + 1))
-
-    # Capture the token together with the one delimiter that can follow it, so
-    # the path form and the dispatch form are distinguishable. The character
-    # class is greedy, which is what keeps a longer off-roster name from being
-    # truncated into a shorter allowed one.
-    for hit in $(grep -oE 'cogni-[a-z0-9-]+[/:]?' "$f" 2>/dev/null || true); do
-      case "$hit" in
-        */) tok="${hit%/}"; dl="/" ;;
-        *:) tok="${hit%:}"; dl=":" ;;
-        *)  tok="$hit";     dl=""  ;;
-      esac
-
-      matched=0
-      for p in $roster $EXTRA_ALLOWED; do
-        # Boundary-aware: the name exactly, or the name followed by "-".
-        case "$tok" in
-          "$p"|"$p"-*) matched=1; break ;;
-        esac
-      done
-      # One slash-allowance mechanism, not two: the delimiter rule lives in a
-      # single place so the two entries cannot silently diverge. The comparison
-      # stays an EQUALITY, so this is still token-exact and never a prefix, and
-      # never a blanket "any name followed by a slash".
-      if [ "$matched" -eq 0 ] && [ "$dl" = "/" ]; then
-        for p in $SLASH_ALLOWED; do
-          [ "$tok" = "$p" ] && { matched=1; break; }
-        done
-      fi
-
-      if [ "$matched" -eq 0 ]; then
-        echo "OFF-ROSTER [$label] $base: $tok"
-        offenders=$((offenders + 1))
-      fi
-    done
+    scan_file "$f" "$label" "$roster" || offenders=$((offenders + 1))
   done
 
   # Pages-scanned liveness floor. Without it, an arm pointed at a missing or
@@ -251,8 +292,49 @@ scan_tree() {
   return 0
 }
 
-# scan_repo <repo_root> -> 0 clean, 1 otherwise. Scans BOTH trees; each arm is a
-# separate call so either can be independently neutralised by a mutation.
+# scan_tree_level <wiki_dir> <label> <roster> -> 0 clean, 1 otherwise.
+# The tree-level sibling of scan_tree, and deliberately NOT a variant of it: it
+# takes no `shared` argument. The two `index.md` copies diverge by design, so an
+# intersection-shaped arm would silently skip the very pair this arm exists to
+# watch. Called once per tree, each copy is graded against the roster on its own
+# terms and neither is ever compared to the other.
+scan_tree_level() {
+  local dir="$1" label="$2" roster="$3"
+  local offenders=0 total=0
+  local base f
+
+  # Same roster liveness floor as scan_tree, for the same reason: a manifest
+  # that parsed but carried no plugins must never read as "nothing to flag".
+  case "$roster" in
+    *[![:space:]]*) ;;
+    *)
+      echo "ERROR [$label] roster is empty; refusing to scan against nothing"
+      return 1 ;;
+  esac
+
+  for base in $TREE_LEVEL_PAGES; do
+    f="$dir/$base"
+    [ -f "$f" ] || continue
+    total=$((total + 1))
+    scan_file "$f" "$label" "$roster" || offenders=$((offenders + 1))
+  done
+
+  # Pages-scanned liveness floor. This single branch also covers a missing
+  # directory — no named page resolves under one, so the counter stays zero and
+  # the arm fails loudly instead of reporting a clean scan of nothing. That is
+  # why there is no separate directory-exists test here.
+  if [ "$total" -eq 0 ]; then
+    echo "ERROR [$label] no tree-level pages found under $dir"
+    return 1
+  fi
+
+  [ "$offenders" -eq 0 ] || return 1
+  return 0
+}
+
+# scan_repo <repo_root> -> 0 clean, 1 otherwise. Scans BOTH trees on BOTH
+# surfaces; each arm is a separate call so any one can be independently
+# neutralised by a mutation.
 scan_repo() {
   local root="$1" roster shared rc=0
   local root_pages="$root/wiki/wiki/pages"
@@ -261,6 +343,8 @@ scan_repo() {
   shared="$(shared_basenames "$root_pages" "$ws_pages")"
   scan_tree "$root_pages" "root" "$roster" "$shared" || rc=1
   scan_tree "$ws_pages" "workspace" "$roster" "$shared" || rc=1
+  scan_tree_level "$root/wiki/wiki" "root-toplevel" "$roster" || rc=1
+  scan_tree_level "$root/cogni-workspace/wiki/wiki" "workspace-toplevel" "$roster" || rc=1
   return "$rc"
 }
 
@@ -273,6 +357,7 @@ OUT=""
 
 run_scan_repo() { OUT="$(scan_repo "$1" 2>&1)"; RC=$?; }
 run_scan_tree() { OUT="$(scan_tree "$1" "$2" "$3" "$4" 2>&1)"; RC=$?; }
+run_scan_tree_level() { OUT="$(scan_tree_level "$1" "$2" "$3" 2>&1)"; RC=$?; }
 
 assert_rc() { # <expected-rc>
   [ "$RC" -eq "$1" ] && return 0
@@ -355,6 +440,18 @@ mk_fixture_repo() {
   local root="$1"
   mk_marketplace "$root/.claude-plugin/marketplace.json" cogni-workspace cogni-consult
   mk_both "$root" "concept-baseline.md" "The cogni-workspace plugin is live."
+  # The tree-level arm carries its own liveness floor, so a fixture with no
+  # index/overview would fail every "exits 0" case on that floor rather than on
+  # what the case actually tests. Both bodies stay on-roster.
+  mk_toplevel_both "$root" "index.md" "Catalogue for the cogni-workspace trees."
+  mk_toplevel_both "$root" "overview.md" "Overview of the cogni-workspace wiki."
+}
+
+# mk_toplevel_both <root> <basename> <body> — the tree-level counterpart of
+# mk_both: writes one level above `pages/`, where scan_tree_level looks.
+mk_toplevel_both() {
+  mk_body "$1/wiki/wiki/$2" "$3"
+  mk_body "$1/cogni-workspace/wiki/wiki/$2" "$3"
 }
 
 # mk_both <root> <basename> <body> — write the same body into both trees.
@@ -586,6 +683,108 @@ if assert_rc 1 \
   pass "B15 a longer off-roster word is named in full, never truncated to a retired prefix"
 else
   fail "B15 a longer off-roster word is named in full, never truncated to a retired prefix"
+fi
+
+# ---------------------------------------------------------------------------
+# B16 — an offender in the ROOT tree's index.md is named, with the root-toplevel
+# label. B16 and B17 together are what make each tree-level arm independently
+# deletable-and-red, the same property B2/B3 give the intersection arms.
+# ---------------------------------------------------------------------------
+R16="$TMPROOT/b16"; mk_fixture_repo "$R16"
+mk_body "$R16/wiki/wiki/index.md" "Catalogue entry for the cogni-research plugin."
+run_scan_repo "$R16"
+if assert_rc 1 && assert_out_has "OFF-ROSTER [root-toplevel] index.md: cogni-research"; then
+  pass "B16 a bare retired name in the root tree index.md is flagged with the root-toplevel label"
+else
+  fail "B16 a bare retired name in the root tree index.md is flagged with the root-toplevel label"
+fi
+
+# ---------------------------------------------------------------------------
+# B17 — the WORKSPACE arm, exercised through the other basename so neither arm
+# nor either name can be satisfied by the other's coverage.
+# ---------------------------------------------------------------------------
+R17="$TMPROOT/b17"; mk_fixture_repo "$R17"
+mk_body "$R17/cogni-workspace/wiki/wiki/overview.md" "Overview naming the cogni-wiki plugin."
+run_scan_repo "$R17"
+if assert_rc 1 && assert_out_has "OFF-ROSTER [workspace-toplevel] overview.md: cogni-wiki"; then
+  pass "B17 a bare retired name in the workspace tree overview.md is flagged with the workspace-toplevel label"
+else
+  fail "B17 a bare retired name in the workspace tree overview.md is flagged with the workspace-toplevel label"
+fi
+
+# ---------------------------------------------------------------------------
+# B18 — divergence tolerance. The two index.md copies differ by design, so the
+# arm must scan each on its own terms: different clean bodies stay green, and an
+# offender planted in ONE copy reds only that copy's arm. An intersection-shaped
+# arm would skip the pair entirely and report clean.
+# ---------------------------------------------------------------------------
+R18="$TMPROOT/b18"; mk_fixture_repo "$R18"
+mk_body "$R18/wiki/wiki/index.md" "Root catalogue keeping its own maintenance section. See cogni-workspace."
+mk_body "$R18/cogni-workspace/wiki/wiki/index.md" "Bundled catalogue keeping different bullets. See cogni-consult."
+run_scan_repo "$R18"
+b18_divergent_clean=0
+assert_rc 0 && b18_divergent_clean=1
+mk_body "$R18/wiki/wiki/index.md" "Root catalogue naming the cogni-narrative plugin."
+run_scan_repo "$R18"
+if [ "$b18_divergent_clean" -eq 1 ] && assert_rc 1 \
+   && assert_out_has "OFF-ROSTER [root-toplevel] index.md: cogni-narrative" \
+   && assert_out_lacks "[workspace-toplevel]"; then
+  pass "B18 by-design divergence between the two index.md copies is scanned, not skipped"
+else
+  fail "B18 by-design divergence between the two index.md copies is scanned, not skipped"
+fi
+
+# ---------------------------------------------------------------------------
+# B19 — log.md stays outside the surface. Its retired names are frozen dated
+# history, so reaching it would red the suite on arrival and force the exclusion
+# list this suite carries none of.
+# ---------------------------------------------------------------------------
+R19="$TMPROOT/b19"; mk_fixture_repo "$R19"
+mk_body "$R19/wiki/wiki/log.md" "Dated ingest line naming the cogni-research plugin."
+mk_body "$R19/cogni-workspace/wiki/wiki/log.md" "Dated ingest line naming the cogni-research plugin."
+run_scan_repo "$R19"
+if assert_rc 0 && assert_out_lacks "cogni-research"; then
+  pass "B19 log.md is outside the tree-level surface and its frozen retired names are not flagged"
+else
+  fail "B19 log.md is outside the tree-level surface and its frozen retired names are not flagged"
+fi
+
+# ---------------------------------------------------------------------------
+# B20 — tree-level liveness floor. An arm that resolves none of its named pages
+# must fail loudly; a silent clean scan of nothing is the half-dead guard.
+# ---------------------------------------------------------------------------
+mkdir -p "$TMPROOT/b20-empty"
+run_scan_tree_level "$TMPROOT/b20-empty" "toplevel-missing" "$ROSTER9"
+if assert_rc 1 && assert_out_has "ERROR [toplevel-missing] no tree-level pages found"; then
+  pass "B20 a tree-level arm that resolves no named page fails with a named error"
+else
+  fail "B20 a tree-level arm that resolves no named page fails with a named error"
+fi
+
+# ---------------------------------------------------------------------------
+# B21 — the tree-level arm carries the roster floor too, so an empty manifest
+# cannot quietly bless every token on this surface either.
+# ---------------------------------------------------------------------------
+run_scan_tree_level "$R9B/wiki/wiki" "toplevel-noroster" "$ROSTER9B"
+if assert_rc 1 && assert_out_has "ERROR [toplevel-noroster] roster is empty"; then
+  pass "B21 a tree-level arm handed an empty roster fails with a named error"
+else
+  fail "B21 a tree-level arm handed an empty roster fails with a named error"
+fi
+
+# ---------------------------------------------------------------------------
+# B22 — the REAL trees are clean on this surface (asserted here, not only in
+# fixtures), which is what pins today's swept state against regression.
+# ---------------------------------------------------------------------------
+ROSTER22="$(roster_from "$REPO_ROOT/.claude-plugin/marketplace.json")"
+run_scan_tree_level "$REPO_ROOT/wiki/wiki" "root-toplevel" "$ROSTER22"
+b22_root_ok=0
+assert_rc 0 && b22_root_ok=1
+run_scan_tree_level "$REPO_ROOT/cogni-workspace/wiki/wiki" "workspace-toplevel" "$ROSTER22"
+if [ "$b22_root_ok" -eq 1 ] && assert_rc 0; then
+  pass "B22 the real tree-level pages in both trees carry no off-roster plugin names"
+else
+  fail "B22 the real tree-level pages in both trees carry no off-roster plugin names"
 fi
 
 # ---------------------------------------------------------------------------

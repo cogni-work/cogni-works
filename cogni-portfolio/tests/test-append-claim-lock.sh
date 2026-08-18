@@ -181,6 +181,31 @@
 #   and because this suite has no per-case selector the harness runs every case, so
 #   one hanging case hangs the entire replay. A widening reproduces the same defect
 #   observably and terminates.
+#
+#   Seventh arm — the OUTPUT ENVELOPE itself:
+#   bash ~/.claude/plugins/cache/managed-service/cogni-service/0.0.402/scripts/mutation-check.sh \
+#     --root . \
+#     --file cogni-portfolio/scripts/append-claim.sh \
+#     --expr 's/True/False/' \
+#     --test 'bash cogni-portfolio/tests/test-append-claim-lock.sh' \
+#     --case stale-lock-swept-on-non-numeric-stat
+#
+#   The expression flips the success envelope's own flag. `True` occurs exactly once
+#   in the script — the two bash-side emits spell the key double-quoted with a
+#   lowercase `false`, and the python failure branch spells it `False` — so the
+#   substitution can never be a no-op, and it carries no `^`/`$` anchor so it needs
+#   no `/m` under the harness's `perl -0pi`.
+#
+#   Three cases catch this arm — 1, 6 and 7 — because those are the three that both
+#   reach the success print and assert its shape. Cases 2, 3 and 5 exit from the
+#   acquire loop before the print, and case 4 discards stdout. The arm names case 1
+#   only because `--case` takes one name; any of the three discriminates.
+#
+#   Under the mutation the script still exits 0 and still writes nothing to stderr,
+#   and its stdout still parses as JSON — so the exit-code and stderr-emptiness
+#   assertions stay green and only the envelope assertion discriminates. That is
+#   precisely what makes asserting the whole envelope, rather than the nested status
+#   alone, worth its line in all three.
 
 # `set -u` only — `set -e` would abort on the first failing assertion and defeat
 # the per-case failure counter below. All cases also run a script that is
@@ -290,9 +315,9 @@ make_counting_stat_stub() {
 # The stderr assertion is equally load-bearing. On every bash tested — 3.2.57
 # through 5.3.9 alike — an arithmetic abort inside a `while` loop abandons the
 # loop body AND the loop, then resumes after `done`. The UNFIXED script therefore
-# still installs the trap, appends the claim and exits 0 with status=appended,
-# never having held the lock; its EXIT trap then removes a live peer's lock
-# directory it never owned. Exit code and stdout are consequently identical
+# still installs the trap, appends the claim and exits 0 with the success envelope
+# carrying data.status=appended, never having held the lock; its EXIT trap then
+# removes a live peer's lock directory it never owned. Exit code and stdout are consequently identical
 # before and after the fix, so only stderr discriminates. A case asserting just
 # exit-0 and stdout stays green under the mutation recipe above, i.e. it pins
 # nothing.
@@ -322,8 +347,8 @@ if [ "$case1_rc" -ne 0 ]; then
   fail "stale-lock-swept-on-non-numeric-stat" "expected exit 0, got $case1_rc (stderr: $(cat "$TMPROOT/case1.err"))"
 elif [ -s "$TMPROOT/case1.err" ]; then
   fail "stale-lock-swept-on-non-numeric-stat" "expected silence on stderr, got: $(cat "$TMPROOT/case1.err")"
-elif ! printf '%s' "$case1_out" | python3 -c 'import json,sys; sys.exit(0 if json.load(sys.stdin).get("status") == "appended" else 1)' 2>/dev/null; then
-  fail "stale-lock-swept-on-non-numeric-stat" "stdout did not parse as JSON with status=appended: $case1_out"
+elif ! printf '%s' "$case1_out" | python3 -c 'import json,sys; d=json.load(sys.stdin); sys.exit(0 if d["success"] is True and d["data"]["status"] == "appended" and d["error"] is None else 1)' 2>/dev/null; then
+  fail "stale-lock-swept-on-non-numeric-stat" "stdout did not parse as a {success,data,error} object with data.status=appended: $case1_out"
 else
   pass "stale-lock-swept-on-non-numeric-stat" "floored to 0, ancient lock swept, claim appended"
 fi
@@ -503,8 +528,8 @@ if [ "$case6_rc" -ne 0 ]; then
   fail "no-working-stat-form-still-appends" "expected exit 0, got $case6_rc (stderr: $(cat "$TMPROOT/case6.err"))"
 elif [ -s "$TMPROOT/case6.err" ]; then
   fail "no-working-stat-form-still-appends" "expected silence on stderr, got: $(cat "$TMPROOT/case6.err")"
-elif ! printf '%s' "$case6_out" | python3 -c 'import json,sys; sys.exit(0 if json.load(sys.stdin).get("status") == "appended" else 1)' 2>/dev/null; then
-  fail "no-working-stat-form-still-appends" "stdout did not parse as JSON with status=appended: $case6_out"
+elif ! printf '%s' "$case6_out" | python3 -c 'import json,sys; d=json.load(sys.stdin); sys.exit(0 if d["success"] is True and d["data"]["status"] == "appended" and d["error"] is None else 1)' 2>/dev/null; then
+  fail "no-working-stat-form-still-appends" "stdout did not parse as a {success,data,error} object with data.status=appended: $case6_out"
 else
   pass "no-working-stat-form-still-appends" "no form resolved, reading floored to 0, ancient lock swept"
 fi
@@ -537,8 +562,8 @@ case7_rc=$?
 
 if [ "$case7_rc" -ne 0 ]; then
   fail "uncontended-acquire-spawns-no-stat" "expected exit 0, got $case7_rc (stderr: $(cat "$TMPROOT/case7.err"))"
-elif ! printf '%s' "$case7_out" | python3 -c 'import json,sys; sys.exit(0 if json.load(sys.stdin).get("status") == "appended" else 1)' 2>/dev/null; then
-  fail "uncontended-acquire-spawns-no-stat" "stdout did not parse as JSON with status=appended: $case7_out"
+elif ! printf '%s' "$case7_out" | python3 -c 'import json,sys; d=json.load(sys.stdin); sys.exit(0 if d["success"] is True and d["data"]["status"] == "appended" and d["error"] is None else 1)' 2>/dev/null; then
+  fail "uncontended-acquire-spawns-no-stat" "stdout did not parse as a {success,data,error} object with data.status=appended: $case7_out"
 elif [ -s "$case7_counter" ]; then
   fail "uncontended-acquire-spawns-no-stat" "an uncontended acquire spawned stat $(wc -l < "$case7_counter" | tr -d ' ') time(s) — the probe is no longer lazy"
 else

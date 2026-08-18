@@ -1,0 +1,530 @@
+#!/usr/bin/env bash
+#
+# Roster-derived bare-name scan over the wiki page CONTENT.
+#
+# Why this exists
+# ---------------
+# Retiring a plugin renames every dispatch token and every page filename that
+# carries its name, and the resolver-facing guards catch those. What no guard
+# caught until now is the plugin name written as bare prose inside a page body
+# — "see the cogni-research plugin" — which resolves to nothing, reads as
+# current, and survives a retirement silently. A sweep fixed the occurrences
+# that existed; this suite is what stops the next retirement leaving the class
+# behind again.
+#
+# Contract under test
+# -------------------
+#   - No `cogni-…` token anywhere in a page present in BOTH wiki trees names
+#     something absent from the live roster. "Body" in this suite's name means
+#     the page CONTENT as opposed to its FILENAME — the sibling namespace guard
+#     owns filenames — and the scan deliberately covers frontmatter too, since a
+#     retired name in a `sources:` URL or a `related:` link is exactly as stale
+#     as one in prose.
+#   - The allowed set is derived at RUNTIME from the marketplace manifest, so a
+#     plugin retired tomorrow is caught without editing this file.
+#   - Each tree is scanned by its own call, so neutralising one arm reds a case.
+#   - An arm that cannot see pages, or cannot read a roster, FAILS loudly rather
+#     than reporting clean.
+#
+# Roster-derived, never a denylist
+# --------------------------------
+# A hardcoded list of today's retired names would pass every case here and catch
+# nothing at the next absorption — it encodes one historical event rather than
+# the rule. The roster is therefore read from `plugins[].name` and everything
+# off it is an offender. Retired names appear in this file only inside fixtures
+# and inside the reasoned allowances below, never as a scan needle.
+#
+# EXTRA_ALLOWED is appended by the MATCHER, not by roster_from
+# -----------------------------------------------------------
+# The sibling namespace guard folds its extra names into roster_from's return
+# value. This suite deliberately does not: if the constant were baked in there,
+# a manifest with an empty `plugins[]` would still yield a non-empty roster and
+# the roster-size liveness floor below could never reach zero. Keeping the two
+# separate is what lets that floor be a real assertion. Do not "fix" this back
+# to the sibling's shape.
+#
+# The declared surface is the two-tree INTERSECTION
+# -------------------------------------------------
+# Only pages present in both trees are scanned, and that is load-bearing rather
+# than stylistic: scanning the union would be red on arrival. The one root-only
+# page is a frozen, dated lint report that names plugins retired since it was
+# written, and the bundled-only pages are held pending a maintainer ruling on
+# their fate — editing either to satisfy a guard would pre-decide that ruling.
+# Because those pages fall out of the intersection by construction, and the
+# top-level index / log / overview pages fall out by depth (they sit one level
+# above `pages/`), this suite carries ZERO path-fragment exclusion entries. That
+# matters: a sibling guard records that a substring-matched exclusion list turns
+# one loose fragment into a repo-wide exemption. The fix for a red here is to
+# rename the stale name, never to add an exclusion — but note WHERE the hit is:
+# a name in prose is this suite's to fix outright, while a name in a frontmatter
+# `id:` or a wikilink is also a resolver concern, so the rename has to leave the
+# tree-parity guard green rather than trade one red for another.
+#
+# The three declared allowances, and why each is token-exact
+# ---------------------------------------------------------
+#   - Plugins hosted in a DIFFERENT marketplace are live, not retired, and are
+#     legitimately absent from this repo's manifest. They are named in
+#     EXTRA_ALLOWED.
+#   - The GitHub ORG token appears in source URLs throughout the surface. Its
+#     allowance is keyed to the exact token plus a trailing slash, never a
+#     prefix: a prefix would bless every future off-roster name that happens to
+#     start with the same letters, while the live roster entry sharing that
+#     prefix already passes on the roster arm.
+#   - The on-disk claim store keeps a directory name from a plugin that no
+#     longer ships. The discriminator is the delimiter, as the plugin guide
+#     states: the path form is preserved, the dispatch (colon) form is not. So
+#     the allowance is keyed to that one token plus a slash — NOT to a blanket
+#     "any name followed by a slash", which would also exempt a path naming a
+#     genuinely retired plugin.
+#
+# The red halves of the org-token and store-path cases are exercised by fixtures
+# only: no bare org token and no colon form of the store name exists in either
+# tree today. That is forward-looking policy, not dead config — silence there
+# would be a latent wrong answer the first time someone wrote one.
+#
+# Case-label shape
+# ----------------
+# Labels are `PASS: <id> <text>` / `FAIL: <id> <text>` with a letter-prefixed id
+# and a single space after it, never a colon. The mutation harness matches the
+# id as a whole token, so an id written with a trailing colon reports
+# "case not found" instead of a verdict. The final summary line is numeral-led
+# so it can never be read as a case's red line. Emitters stay plain: a colour
+# before the label defeats the same match, and the repo-wide result-line
+# plainness guard forbids an escape sequence anywhere in this file, including
+# inside an emitter body.
+#
+# Mutation recipe
+# ---------------
+# Drive the boundary case, not the real-tree case: the real trees are already
+# clean, so weakening that comparison leaves it green and the harness correctly
+# reports the guard vacuous. Collapsing the boundary-aware alternation in the
+# matcher to a bare prefix glob makes the retired look-alike match the live
+# roster entry, which reds the boundary case while the real-tree case stays
+# green. The harness ships in the service repo, not this one.
+#
+# Portability: bash 3.2 (stock macOS /bin/bash) — no associative arrays, no
+# mapfile/readarray, no case-modifying expansions, no globstar. Stdlib only:
+# bash, coreutils, and python3 for JSON. No network.
+#
+# Assertions here match only this suite's own emitted literals. A foreign
+# tool's diagnostic wording is localized, so asserting on it would pass
+# vacuously on a non-English host.
+
+set -u
+HERE="$(cd "$(dirname "$0")" && pwd)"
+WS_ROOT="$(cd "$HERE/.." && pwd)"
+REPO_ROOT="$(cd "$WS_ROOT/.." && pwd)"
+TMPROOT="$(mktemp -d)"
+trap 'rm -rf "$TMPROOT"' EXIT
+
+failures=0
+pass() { echo "PASS: $1"; }
+fail() { echo "FAIL: $1"; failures=$((failures + 1)); }
+
+# Plugins that legitimately live outside this repo's marketplace. See the header.
+EXTRA_ALLOWED="cogni-docs cogni-service"
+
+# The GitHub organisation token, and the preserved on-disk store directory.
+# Each is allowed ONLY as the exact token followed by a slash. See the header.
+ORG_TOKEN="cogni-work"
+STORE_TOKEN="cogni-claims"
+SLASH_ALLOWED="$ORG_TOKEN $STORE_TOKEN"
+
+# ---------------------------------------------------------------------------
+# The checker. Fixture cases and the real-tree case drive these same functions —
+# the matcher is never reimplemented in a case body, so pointing a case at a
+# broken matcher turns that case red.
+# ---------------------------------------------------------------------------
+
+# roster_from <marketplace.json> -> space-padded roster string (NO extras).
+# Reads ONLY plugins[].name. The file's top-level "name" is the marketplace
+# itself and "owner" is an object carrying a human name; a generic walk for any
+# "name" key would pick both up as phantom namespaces.
+roster_from() {
+  local mf="$1" names
+  # stderr, not stdout: every caller captures stdout into the roster string,
+  # so a message echoed there would be swallowed instead of reported.
+  [ -f "$mf" ] || { echo "ERROR marketplace manifest not found: $mf" >&2; return 1; }
+  names="$(python3 -c '
+import json, sys
+with open(sys.argv[1]) as fh:
+    data = json.load(fh)
+print(" ".join(p["name"] for p in data["plugins"]))
+' "$mf")" || return 1
+  echo " $names "
+}
+
+# shared_basenames <dirA> <dirB> -> space-padded basenames present in BOTH.
+# What keeps the top-level index / log / overview pages out is the SCAN ROOT:
+# they sit one level above `pages/`, so no glob rooted here can reach them.
+# Non-recursion is not what excludes them — both page dirs are flat today, so
+# it currently selects nothing. Repointing the root at the parent would pull
+# those three pages in with no exclusion mechanism to catch them.
+shared_basenames() {
+  local a="$1" b="$2" f base out=""
+  for f in "$a"/*.md; do
+    [ -e "$f" ] || continue
+    base="${f##*/}"
+    [ -f "$b/$base" ] || continue
+    out="$out$base "
+  done
+  echo " $out"
+}
+
+# scan_tree <pages_dir> <label> <roster> <shared> -> 0 clean, 1 otherwise.
+scan_tree() {
+  local dir="$1" label="$2" roster="$3" shared="$4"
+  local offenders=0 total=0
+  local f base hit tok dl p matched
+
+  # Roster liveness floor. A manifest that parsed but carried no plugins would
+  # otherwise make every token an offender or — with the extras folded in —
+  # quietly bless a nearly-empty allowed set. This is a boolean, not a metric:
+  # the roster is empty exactly when it holds no non-whitespace character.
+  case "$roster" in
+    *[![:space:]]*) ;;
+    *)
+      echo "ERROR [$label] roster is empty; refusing to scan against nothing"
+      return 1 ;;
+  esac
+
+  if [ ! -d "$dir" ]; then
+    echo "ERROR [$label] pages directory not found: $dir"
+    return 1
+  fi
+
+  for f in "$dir"/*.md; do
+    [ -e "$f" ] || continue
+    base="${f##*/}"
+    # Only pages present in BOTH trees are in the declared surface.
+    case "$shared" in
+      *" $base "*) ;;
+      *) continue ;;
+    esac
+    total=$((total + 1))
+
+    # Capture the token together with the one delimiter that can follow it, so
+    # the path form and the dispatch form are distinguishable. The character
+    # class is greedy, which is what keeps a longer off-roster name from being
+    # truncated into a shorter allowed one.
+    for hit in $(grep -oE 'cogni-[a-z0-9-]+[/:]?' "$f" 2>/dev/null || true); do
+      case "$hit" in
+        */) tok="${hit%/}"; dl="/" ;;
+        *:) tok="${hit%:}"; dl=":" ;;
+        *)  tok="$hit";     dl=""  ;;
+      esac
+
+      matched=0
+      for p in $roster $EXTRA_ALLOWED; do
+        # Boundary-aware: the name exactly, or the name followed by "-".
+        case "$tok" in
+          "$p"|"$p"-*) matched=1; break ;;
+        esac
+      done
+      # One slash-allowance mechanism, not two: the delimiter rule lives in a
+      # single place so the two entries cannot silently diverge. The comparison
+      # stays an EQUALITY, so this is still token-exact and never a prefix, and
+      # never a blanket "any name followed by a slash".
+      if [ "$matched" -eq 0 ] && [ "$dl" = "/" ]; then
+        for p in $SLASH_ALLOWED; do
+          [ "$tok" = "$p" ] && { matched=1; break; }
+        done
+      fi
+
+      if [ "$matched" -eq 0 ]; then
+        echo "OFF-ROSTER [$label] $base: $tok"
+        offenders=$((offenders + 1))
+      fi
+    done
+  done
+
+  # Pages-scanned liveness floor. Without it, an arm pointed at a missing or
+  # empty directory reports clean, and a half-dead guard is indistinguishable
+  # from a working one — both trees are already clean, so nothing else would
+  # notice its scan had stopped running.
+  if [ "$total" -eq 0 ]; then
+    echo "ERROR [$label] no shared .md pages found under $dir"
+    return 1
+  fi
+
+  [ "$offenders" -eq 0 ] || return 1
+  return 0
+}
+
+# scan_repo <repo_root> -> 0 clean, 1 otherwise. Scans BOTH trees; each arm is a
+# separate call so either can be independently neutralised by a mutation.
+scan_repo() {
+  local root="$1" roster shared rc=0
+  local root_pages="$root/wiki/wiki/pages"
+  local ws_pages="$root/cogni-workspace/wiki/wiki/pages"
+  roster="$(roster_from "$root/.claude-plugin/marketplace.json")" || return 1
+  shared="$(shared_basenames "$root_pages" "$ws_pages")"
+  scan_tree "$root_pages" "root" "$roster" "$shared" || rc=1
+  scan_tree "$ws_pages" "workspace" "$roster" "$shared" || rc=1
+  return "$rc"
+}
+
+# ---------------------------------------------------------------------------
+# Harness
+# ---------------------------------------------------------------------------
+
+RC=0
+OUT=""
+
+run_scan_repo() { OUT="$(scan_repo "$1" 2>&1)"; RC=$?; }
+run_scan_tree() { OUT="$(scan_tree "$1" "$2" "$3" "$4" 2>&1)"; RC=$?; }
+
+assert_rc() { # <expected-rc>
+  [ "$RC" -eq "$1" ] && return 0
+  echo "     expected rc=$1, got rc=$RC; output:"
+  echo "$OUT" | sed 's/^/       /'
+  return 1
+}
+assert_out_has() {
+  case "$OUT" in *"$1"*) return 0 ;; esac
+  echo "     expected output to contain: $1"
+  echo "$OUT" | sed 's/^/       /'
+  return 1
+}
+assert_out_lacks() {
+  case "$OUT" in *"$1"*) echo "     expected output NOT to contain: $1"; return 1 ;; esac
+  return 0
+}
+
+# mk_body <path> <body-line> — a schema-shaped fixture page with a chosen body.
+mk_body() {
+  local dir="${1%/*}" base="${1##*/}"
+  [ -d "$dir" ] || mkdir -p "$dir"
+  printf -- '---\nid: %s\ntitle: fixture\ntype: fixture\n---\n\n%s\n' \
+    "${base%.md}" "$2" > "$1"
+}
+
+# mk_marketplace <path> <plugin-names...> — carries the same confusable shape as
+# the real manifest: a top-level "name" and an "owner" object with its own name.
+mk_marketplace() {
+  local out="$1"; shift
+  local dir="${out%/*}"
+  [ -d "$dir" ] || mkdir -p "$dir"
+  python3 -c '
+import json, sys
+out = sys.argv[1]
+names = sys.argv[2:]
+doc = {
+    "name": "fixture-marketplace",
+    "owner": {"name": "Fixture Owner", "email": "fixture@example.invalid"},
+    "plugins": [{"name": n, "source": "./" + n} for n in names],
+}
+with open(out, "w") as fh:
+    json.dump(doc, fh, indent=2)
+' "$out" "$@"
+}
+
+# mk_fixture_repo <root> — a two-armed stand-in. BOTH arms carry the same clean
+# page, so it is in the intersection: the liveness floor fails an arm with no
+# shared pages, so a one-armed fixture would false-fail every "exits 0" case.
+mk_fixture_repo() {
+  local root="$1"
+  mk_marketplace "$root/.claude-plugin/marketplace.json" cogni-workspace cogni-consult
+  mk_both "$root" "concept-baseline.md" "The cogni-workspace plugin is live."
+}
+
+# mk_both <root> <basename> <body> — write the same body into both trees.
+mk_both() {
+  mk_body "$1/wiki/wiki/pages/$2" "$3"
+  mk_body "$1/cogni-workspace/wiki/wiki/pages/$2" "$3"
+}
+
+# ---------------------------------------------------------------------------
+# B1 — the real trees are clean (asserted here, not only in fixtures).
+# ---------------------------------------------------------------------------
+run_scan_repo "$REPO_ROOT"
+if assert_rc 0; then
+  pass "B1 real wiki page bodies carry no off-roster plugin names"
+else
+  fail "B1 real wiki page bodies carry no off-roster plugin names"
+fi
+
+# ---------------------------------------------------------------------------
+# B2 — an offender on the ROOT arm is named, with that arm's label.
+# ---------------------------------------------------------------------------
+R2="$TMPROOT/b2"; mk_fixture_repo "$R2"
+mk_both "$R2" "concept-drift.md" "Clean baseline."
+mk_body "$R2/wiki/wiki/pages/concept-drift.md" "See the cogni-research plugin."
+run_scan_repo "$R2"
+if assert_rc 1 && assert_out_has "OFF-ROSTER [root] concept-drift.md: cogni-research"; then
+  pass "B2 a bare retired name on the root tree is flagged with the root label"
+else
+  fail "B2 a bare retired name on the root tree is flagged with the root label"
+fi
+
+# ---------------------------------------------------------------------------
+# B3 — an offender on the WORKSPACE arm is named, with that arm's label. B2 and
+# B3 together are what make each arm independently deletable-and-red.
+# ---------------------------------------------------------------------------
+R3="$TMPROOT/b3"; mk_fixture_repo "$R3"
+mk_both "$R3" "concept-drift.md" "Clean baseline."
+mk_body "$R3/cogni-workspace/wiki/wiki/pages/concept-drift.md" "See the cogni-wiki plugin."
+run_scan_repo "$R3"
+if assert_rc 1 && assert_out_has "OFF-ROSTER [workspace] concept-drift.md: cogni-wiki"; then
+  pass "B3 a bare retired name on the workspace tree is flagged with the workspace label"
+else
+  fail "B3 a bare retired name on the workspace tree is flagged with the workspace label"
+fi
+
+# ---------------------------------------------------------------------------
+# B4 — boundary. A retired look-alike that merely EXTENDS a live roster name is
+# still an offender, and the live name itself is not flagged. This is the case
+# the mutation recipe in the header drives.
+# ---------------------------------------------------------------------------
+R4="$TMPROOT/b4"; mk_fixture_repo "$R4"
+# The live name and the retired look-alike sit on SEPARATE pages, so the
+# "not flagged" half is asserted on a page basename rather than on a name that
+# is a prefix of the offender — a needle that is a substring of the red line
+# could never fail, and the green half would assert nothing.
+mk_both "$R4" "concept-boundary-live.md" "The cogni-consult plugin ships."
+mk_both "$R4" "concept-boundary-retired.md" "The cogni-consulting plugin does not."
+run_scan_repo "$R4"
+if assert_rc 1 \
+   && assert_out_has "OFF-ROSTER [root] concept-boundary-retired.md: cogni-consulting" \
+   && assert_out_lacks "concept-boundary-live.md"; then
+  pass "B4 a retired name extending a live roster name is flagged while the live name is not"
+else
+  fail "B4 a retired name extending a live roster name is flagged while the live name is not"
+fi
+
+# ---------------------------------------------------------------------------
+# B5 — the out-of-marketplace allowance is live config, not a silent hatch: the
+# allowed names pass while a retired name on the SAME page is still flagged.
+# ---------------------------------------------------------------------------
+R5="$TMPROOT/b5"; mk_fixture_repo "$R5"
+mk_both "$R5" "concept-extras.md" "Pair cogni-docs and cogni-service with the cogni-tips plugin."
+run_scan_repo "$R5"
+if assert_rc 1 \
+   && assert_out_has "OFF-ROSTER [root] concept-extras.md: cogni-tips" \
+   && assert_out_lacks ": cogni-docs" \
+   && assert_out_lacks ": cogni-service"; then
+  pass "B5 out-of-marketplace plugins are allowed while a retired name beside them is flagged"
+else
+  fail "B5 out-of-marketplace plugins are allowed while a retired name beside them is flagged"
+fi
+
+# ---------------------------------------------------------------------------
+# B6 — the org token is allowed ONLY as the exact token plus a slash. A bare
+# occurrence and a longer off-roster name sharing its prefix are both flagged;
+# the live roster name sharing that prefix passes on the roster arm.
+# ---------------------------------------------------------------------------
+R6="$TMPROOT/b6"; mk_fixture_repo "$R6"
+mk_both "$R6" "concept-org.md" \
+  "Add cogni-work/insight-wave. The cogni-work org. Try cogni-workbench/ too. The cogni-workspace plugin is live."
+run_scan_repo "$R6"
+if assert_rc 1 \
+   && assert_out_has "OFF-ROSTER [root] concept-org.md: cogni-workbench" \
+   && assert_out_lacks ": cogni-workspace"; then
+  pass "B6 the org token is allowed only with its slash, and a prefix look-alike is still flagged"
+else
+  fail "B6 the org token is allowed only with its slash, and a prefix look-alike is still flagged"
+fi
+
+# ---------------------------------------------------------------------------
+# B7 — the store path is allowed ONLY as the exact token plus a slash. The
+# dispatch (colon) form is flagged, and a slash path naming a genuinely retired
+# plugin is flagged too — so the rule is not "any name followed by a slash".
+# ---------------------------------------------------------------------------
+R7="$TMPROOT/b7"; mk_fixture_repo "$R7"
+mk_both "$R7" "concept-store.md" \
+  "Records land in cogni-claims/claims.json. Never dispatch cogni-claims: here, nor read cogni-research/notes.md."
+run_scan_repo "$R7"
+if assert_rc 1 \
+   && assert_out_has "OFF-ROSTER [root] concept-store.md: cogni-research" \
+   && assert_out_has "OFF-ROSTER [root] concept-store.md: cogni-claims"; then
+  pass "B7 the store path is allowed only with its slash while the dispatch form and a retired path are flagged"
+else
+  fail "B7 the store path is allowed only with its slash while the dispatch form and a retired path are flagged"
+fi
+
+# ---------------------------------------------------------------------------
+# B8 — qualified page slugs built from a live roster name are not greedily
+# mis-read as off-roster names, while the same shape on a retired name is.
+# ---------------------------------------------------------------------------
+R8="$TMPROOT/b8"; mk_fixture_repo "$R8"
+mk_both "$R8" "concept-slugs.md" \
+  "See [[skill-cogni-consult-scope]] and [[agent-cogni-workspace-helper]], not cogni-consulting-scope."
+run_scan_repo "$R8"
+if assert_rc 1 \
+   && assert_out_has "OFF-ROSTER [root] concept-slugs.md: cogni-consulting-scope" \
+   && assert_out_lacks ": cogni-consult-scope" \
+   && assert_out_lacks ": cogni-workspace-helper"; then
+  pass "B8 qualified slugs on a live roster name pass while the same shape on a retired name is flagged"
+else
+  fail "B8 qualified slugs on a live roster name pass while the same shape on a retired name is flagged"
+fi
+
+# ---------------------------------------------------------------------------
+# B9 / B10 / B11 — the liveness floors. Each degenerate input gets its OWN case,
+# so a mutation that kills one floor names that floor rather than reporting the
+# same red as a mutation that killed all three.
+# ---------------------------------------------------------------------------
+R9="$TMPROOT/b9"; mk_fixture_repo "$R9"
+ROSTER9="$(roster_from "$R9/.claude-plugin/marketplace.json")"
+SHARED9="$(shared_basenames "$R9/wiki/wiki/pages" "$R9/cogni-workspace/wiki/wiki/pages")"
+
+run_scan_tree "$R9/wiki/wiki/pages-does-not-exist" "missing" "$ROSTER9" "$SHARED9"
+if assert_rc 1 && assert_out_has "ERROR [missing] pages directory not found"; then
+  pass "B9 an arm pointed at a missing directory fails with a named error"
+else
+  fail "B9 an arm pointed at a missing directory fails with a named error"
+fi
+
+mkdir -p "$TMPROOT/b9-empty"
+run_scan_tree "$TMPROOT/b9-empty" "empty" "$ROSTER9" "$SHARED9"
+if assert_rc 1 && assert_out_has "ERROR [empty] no shared .md pages found"; then
+  pass "B10 an arm that finds no shared pages fails with a named error"
+else
+  fail "B10 an arm that finds no shared pages fails with a named error"
+fi
+
+R9B="$TMPROOT/b9b"; mk_fixture_repo "$R9B"
+mk_marketplace "$R9B/.claude-plugin/marketplace.json"
+ROSTER9B="$(roster_from "$R9B/.claude-plugin/marketplace.json")"
+run_scan_tree "$R9B/wiki/wiki/pages" "noroster" "$ROSTER9B" "$SHARED9"
+if assert_rc 1 && assert_out_has "ERROR [noroster] roster is empty"; then
+  pass "B11 an arm handed an empty roster fails with a named error"
+else
+  fail "B11 an arm handed an empty roster fails with a named error"
+fi
+
+# ---------------------------------------------------------------------------
+# B12 — the surface really is the intersection: a page present in only ONE tree
+# is not scanned, even carrying a retired name. This is what lets the suite
+# carry no exclusion list at all.
+# ---------------------------------------------------------------------------
+R10="$TMPROOT/b10"; mk_fixture_repo "$R10"
+mk_body "$R10/wiki/wiki/pages/lint-one-sided.md" "Names the cogni-research plugin."
+run_scan_repo "$R10"
+if assert_rc 0 && assert_out_lacks "cogni-research"; then
+  pass "B12 a page present in only one tree is outside the scanned surface"
+else
+  fail "B12 a page present in only one tree is outside the scanned surface"
+fi
+
+# ---------------------------------------------------------------------------
+# B13 — roster-source isolation: the manifest's own top-level name and its owner
+# name are not plugin names and must never leak into the allowed set.
+# ---------------------------------------------------------------------------
+R11="$TMPROOT/b11"; mk_fixture_repo "$R11"
+mk_both "$R11" "concept-manifest.md" "The cogni-workspace plugin is live."
+ROSTER11="$(roster_from "$R11/.claude-plugin/marketplace.json")"
+if case "$ROSTER11" in *"fixture-marketplace"*|*"Fixture Owner"*) false ;; *) true ;; esac; then
+  pass "B13 the roster is built from plugin names only, never the manifest or owner name"
+else
+  fail "B13 the roster is built from plugin names only, never the manifest or owner name"
+fi
+
+# ---------------------------------------------------------------------------
+if [ "$failures" -gt 0 ]; then
+  echo ""
+  echo "FAIL: $failures wiki-bare-name-roster test(s) failed."
+  exit 1
+fi
+echo ""
+echo "All wiki-bare-name-roster tests passed."

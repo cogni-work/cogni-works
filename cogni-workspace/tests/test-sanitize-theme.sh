@@ -333,14 +333,16 @@ assert_json "3g CLI skips empty scalar section" "$TMPROOT/cli-empty.json" \
 
 echo "=== wired renderer end-to-end ==="
 WS="$TMPROOT/ws"; mkdir -p "$WS"
-run_render() { python3 "$RENDERER" "$WS" --design-variables "$1" --output "$WS/out.html" >/tmp/render-out.json 2>/tmp/render-err.txt; }
+# Result sinks live under the per-run temp root rather than a fixed shared path, so two
+# concurrent runs of this suite cannot overwrite each other's documents mid-assertion.
+run_render() { python3 "$RENDERER" "$WS" --design-variables "$1" --output "$WS/out.html" >"$TMPROOT/render-out.json" 2>"$TMPROOT/render-err.txt"; }
 
 # Malicious color value must not reach the output; renderer must still succeed.
 run_render "$TMPROOT/dv-evil.json"
-assert_json "4a malicious render succeeds" /tmp/render-out.json 'd.get("status")=="ok"'
+assert_json "4a malicious render succeeds" "$TMPROOT/render-out.json" 'd.get("status")=="ok"'
 assert_lacks "4b </style><script> not in output" '</style><script>' "$WS/out.html"
 assert_has   "4c built-in background applied instead" '#FAFAF8' "$WS/out.html"
-assert_json "4d rejection surfaced as warning" /tmp/render-out.json 'd.get("theme_warnings")'
+assert_json "4d rejection surfaced as warning" "$TMPROOT/render-out.json" 'd.get("theme_warnings")'
 
 # Safe theme still applies, and the legitimate @import url(...) font path is untouched.
 cat > "$TMPROOT/dv-safe.json" <<'EOF'
@@ -353,16 +355,16 @@ assert_has "4f legitimate @import url() font preserved" "@import url('https://fo
 # A breakout in google_fonts_import lands at the TOP of the <style> block, before
 # :root — the most exposed slot, and the one that was unguarded until font-aware.
 run_render "$TMPROOT/dv-font-evil.json"
-assert_json "4g font-evil render succeeds" /tmp/render-out.json 'd.get("status")=="ok"'
+assert_json "4g font-evil render succeeds" "$TMPROOT/render-out.json" 'd.get("status")=="ok"'
 assert_lacks "4h @import breakout not in output" '<script>alert(1)</script>' "$WS/out.html"
 assert_lacks "4i font declaration injection not in output" 'background-image: url(https://evil.example' "$WS/out.html"
-assert_json "4j font rejection surfaced as warning" /tmp/render-out.json 'd.get("theme_warnings")'
+assert_json "4j font rejection surfaced as warning" "$TMPROOT/render-out.json" 'd.get("theme_warnings")'
 # Legitimate rgba shadow and radius from the same fixture must survive.
 assert_has "4k legitimate rgba shadow preserved" 'rgba(0,0,0,0.04)' "$WS/out.html"
 
 # An empty google_fonts_import means "no import" — a valid theme, so no warning.
 run_render "$TMPROOT/dv-empty-import.json"
-assert_json "4l empty import produces no warning" /tmp/render-out.json 'not d.get("theme_warnings")'
+assert_json "4l empty import produces no warning" "$TMPROOT/render-out.json" 'not d.get("theme_warnings")'
 # ...and "no import" must mean no import, not a silent fall back to DEFAULT_THEME's
 # hard-coded Google Fonts URL. Without this the absence is indistinguishable in
 # the output from the default having been applied.
@@ -375,8 +377,8 @@ cat > "$TMPROOT/dv-font-url-injection.json" <<'EOF'
  "fonts": {"body": "https://a.example/x;background:red;position:fixed"}}
 EOF
 run_render "$TMPROOT/dv-font-url-injection.json"
-assert_json "4p url-injection render succeeds" /tmp/render-out.json 'd.get("status")=="ok"'
-assert_json "4q url-injection surfaced as warning" /tmp/render-out.json 'd.get("theme_warnings")'
+assert_json "4p url-injection render succeeds" "$TMPROOT/render-out.json" 'd.get("status")=="ok"'
+assert_json "4q url-injection surfaced as warning" "$TMPROOT/render-out.json" 'd.get("theme_warnings")'
 assert_lacks "4r injected declaration not in output" 'a.example' "$WS/out.html"
 assert_has   "4s theming otherwise intact" '#123456' "$WS/out.html"
 
@@ -387,7 +389,7 @@ cat > "$TMPROOT/dv-bare-import.json" <<'EOF'
  "google_fonts_import": "https://fonts.googleapis.com/css2?family=Outfit&display=swap"}
 EOF
 run_render "$TMPROOT/dv-bare-import.json"
-assert_json "4t bare-import render succeeds" /tmp/render-out.json 'd.get("status")=="ok"'
+assert_json "4t bare-import render succeeds" "$TMPROOT/render-out.json" 'd.get("status")=="ok"'
 assert_has "4u bare URL normalized into a terminated @import" \
   "@import url('https://fonts.googleapis.com/css2?family=Outfit&display=swap');" "$WS/out.html"
 assert_has "4v :root not swallowed — theme variable still applied" '#123456' "$WS/out.html"
@@ -397,7 +399,7 @@ cat > "$TMPROOT/dv-partial-fonts.json" <<'EOF'
 {"fonts": {"body": "'Inter', sans-serif"}}
 EOF
 run_render "$TMPROOT/dv-partial-fonts.json"
-assert_json "4m partial fonts override renders" /tmp/render-out.json 'd.get("status")=="ok"'
+assert_json "4m partial fonts override renders" "$TMPROOT/render-out.json" 'd.get("status")=="ok"'
 assert_has "4n header font backfilled from defaults" "'Bricolage Grotesque'" "$WS/out.html"
 assert_has "4o overridden body font still applied" "'Inter', sans-serif" "$WS/out.html"
 
@@ -435,16 +437,17 @@ def sanitize_values(values, defaults, profile="strict"):
 EOF
 LEGACY_RENDERER="$LEGACY/skills/workspace-dashboard/scripts/generate-dashboard.py"
 LWS="$TMPROOT/lws"; mkdir -p "$LWS"
-run_legacy() { python3 "$LEGACY_RENDERER" "$LWS" --design-variables "$1" --output "$LWS/out.html" >/tmp/legacy-out.json 2>/tmp/legacy-err.txt; }
+# Same per-run temp-root discipline as the render helper above.
+run_legacy() { python3 "$LEGACY_RENDERER" "$LWS" --design-variables "$1" --output "$LWS/out.html" >"$TMPROOT/legacy-out.json" 2>"$TMPROOT/legacy-err.txt"; }
 
 run_legacy "$TMPROOT/dv-evil.json"
-assert_json "6a stale guard still renders (no AttributeError)" /tmp/legacy-out.json 'd.get("status")=="ok"'
+assert_json "6a stale guard still renders (no AttributeError)" "$TMPROOT/legacy-out.json" 'd.get("status")=="ok"'
 assert_lacks "6b stale guard still blocks the colour breakout" '</style><script>' "$LWS/out.html"
 assert_has   "6c stale guard falls back to the built-in palette" '#FAFAF8' "$LWS/out.html"
 # render_css indexes fonts[headers|body|mono] directly, so the degraded path must
 # still backfill or the render dies with a KeyError instead of an AttributeError.
 run_legacy "$TMPROOT/dv-partial-fonts.json"
-assert_json "6d stale guard handles a partial fonts override" /tmp/legacy-out.json 'd.get("status")=="ok"'
+assert_json "6d stale guard handles a partial fonts override" "$TMPROOT/legacy-out.json" 'd.get("status")=="ok"'
 assert_has   "6e stale guard backfills the omitted header font" "'Bricolage Grotesque'" "$LWS/out.html"
 
 # And with no guard at all — the unguarded pass-through branch. It must still
@@ -453,7 +456,7 @@ assert_has   "6e stale guard backfills the omitted header font" "'Bricolage Grot
 # in precisely the case the fallback exists to survive.
 rm -f "$LEGACY/scripts/sanitize-theme.py"
 run_legacy "$TMPROOT/dv-partial-fonts.json"
-assert_json "6f absent guard still renders" /tmp/legacy-out.json 'd.get("status")=="ok"'
+assert_json "6f absent guard still renders" "$TMPROOT/legacy-out.json" 'd.get("status")=="ok"'
 assert_has   "6g absent guard backfills the omitted header font" "'Bricolage Grotesque'" "$LWS/out.html"
 assert_has   "6h absent guard still applies the override" "'Inter', sans-serif" "$LWS/out.html"
 

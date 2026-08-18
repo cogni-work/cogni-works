@@ -25,6 +25,13 @@
 # recurses into the full sweep.
 #
 # bash 3.2 + stdlib python3 only.
+#
+# Result-line ids: every emitted PASS:/FAIL: line carries a first-token id
+# (rptNN), unique PER EMITTED LINE rather than per logical case, so
+# `mutation-check.sh --case <id>` addresses exactly one assertion. The id is
+# followed by a SPACE, never a colon abutting it — the harness matches the
+# case whole-token, so a colon-abutting id returns case_not_found. A new
+# assertion takes the next free id rather than renumbering its neighbours.
 
 set -eu
 
@@ -77,8 +84,8 @@ set +e
 OUT1="$(python3 "$RUNNER" --root "$FIX1" 2>/dev/null)"
 CODE1=$?
 set -e
-check "all-passing tree exits 0" "$([ "$CODE1" -eq 0 ] && echo 0 || echo 1)"
-assert_json "all-passing tree reports 3 passed, 0 failed" "$OUT1" "
+check "rpt01 all-passing tree exits 0" "$([ "$CODE1" -eq 0 ] && echo 0 || echo 1)"
+assert_json "rpt02 all-passing tree reports 3 passed, 0 failed" "$OUT1" "
 import json,sys
 d=json.load(sys.stdin)
 assert d['success'] is True, d
@@ -98,8 +105,8 @@ set +e
 OUT2="$(python3 "$RUNNER" --root "$FIX2" 2>/dev/null)"
 CODE2=$?
 set -e
-check "failing suite exits 1" "$([ "$CODE2" -eq 1 ] && echo 0 || echo 1)"
-assert_json "failing suite is named in failed_suites" "$OUT2" "
+check "rpt03 failing suite exits 1" "$([ "$CODE2" -eq 1 ] && echo 0 || echo 1)"
+assert_json "rpt04 failing suite is named in failed_suites" "$OUT2" "
 import json,sys
 d=json.load(sys.stdin)
 assert d['success'] is False, d
@@ -123,8 +130,8 @@ set +e
 OUT3="$(python3 "$RUNNER" --root "$FIX3" --timeout 1 2>/dev/null)"
 CODE3=$?
 set -e
-check "timed-out suite exits 1" "$([ "$CODE3" -eq 1 ] && echo 0 || echo 1)"
-assert_json "timed-out suite is flagged timed_out" "$OUT3" "
+check "rpt05 timed-out suite exits 1" "$([ "$CODE3" -eq 1 ] && echo 0 || echo 1)"
+assert_json "rpt06 timed-out suite is flagged timed_out" "$OUT3" "
 import json,sys
 d=json.load(sys.stdin)
 assert d['data']['failed']==1, d['data']
@@ -146,7 +153,7 @@ printf 'helper_fn() { :; }\n' > "$FIX4/cogni-alpha/tests/fixtures/test_helpers.s
 set +e
 LIST4="$(python3 "$RUNNER" --root "$FIX4" --list 2>/dev/null)"
 set -e
-assert_json "_archive and fixtures paths are not discovered" "$LIST4" "
+assert_json "rpt07 _archive and fixtures paths are not discovered" "$LIST4" "
 import json,sys
 d=json.load(sys.stdin)['data']
 assert d['suites']==['cogni-alpha/tests/test_live.sh'], d['suites']
@@ -156,9 +163,9 @@ set +e
 OUT4="$(python3 "$RUNNER" --root "$FIX4" 2>/dev/null)"
 CODE4=$?
 set -e
-check "non-executable suite with a shebang still runs and passes" \
+check "rpt08 non-executable suite with a shebang still runs and passes" \
   "$([ "$CODE4" -eq 0 ] && echo 0 || echo 1)"
-assert_json "only the live suite ran" "$OUT4" "
+assert_json "rpt09 only the live suite ran" "$OUT4" "
 import json,sys
 d=json.load(sys.stdin)['data']
 assert d['total']==1, d
@@ -172,8 +179,8 @@ set +e
 LIST7="$(python3 "$RUNNER" --root "$REPO_ROOT" --list 2>/dev/null)"
 CODE7=$?
 set -e
-check "real-tree --list exits 0" "$([ "$CODE7" -eq 0 ] && echo 0 || echo 1)"
-assert_json "real tree discovers suites, none under _archive or fixtures" "$LIST7" "
+check "rpt10 real-tree --list exits 0" "$([ "$CODE7" -eq 0 ] && echo 0 || echo 1)"
+assert_json "rpt11 real tree discovers suites, none under _archive or fixtures" "$LIST7" "
 import json,sys
 d=json.load(sys.stdin)['data']
 assert d['total'] > 0, 'discovery found nothing — the globs stopped matching'
@@ -194,9 +201,9 @@ set +e
 OUT8="$(python3 "$RUNNER" --root "$FIX8" 2>/dev/null)"
 CODE8=$?
 set -e
-check "empty root exits 1 rather than reporting a vacuous pass" \
+check "rpt12 empty root exits 1 rather than reporting a vacuous pass" \
   "$([ "$CODE8" -eq 1 ] && echo 0 || echo 1)"
-assert_json "empty root reports success:false, total 0, and a non-empty error" "$OUT8" "
+assert_json "rpt13 empty root reports success:false, total 0, and a non-empty error" "$OUT8" "
 import json,sys
 d=json.load(sys.stdin)
 assert d['success'] is False, d

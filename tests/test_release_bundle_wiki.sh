@@ -39,17 +39,24 @@
 #     --file scripts/release-bundle-wiki.sh \
 #     --expr 's/DESTRUCTIVE_COUNT" -gt 0/DESTRUCTIVE_COUNT" -lt 0/' \
 #     --test 'bash tests/test_release_bundle_wiki.sh' \
-#     --case RBW1
+#     --case RBW1a
 #
 # DESTRUCTIVE_COUNT is a sum of two non-negative counts, so `-lt 0` is
 # unconditionally false: the gate can never fire, the bare run proceeds to the
-# real rsync --delete, and RBW1 goes red on both of its assertions. The
+# real rsync --delete, and RBW1a goes red. The
 # replacement shares no substring with the matched literal, so it cannot be a
 # no-op. Note the harness applies --expr through `perl -0pi` in slurp mode with
 # no /g, so it rewrites only the FIRST occurrence in the file — the literal
 # `DESTRUCTIVE_COUNT" -gt 0` must therefore appear exactly once in the script,
 # on the `if` line. A comment restating the comparison would absorb the mutation
 # and leave the guard intact, reporting a false green.
+#
+# Result-line ids: every emitted PASS:/FAIL: line carries a first-token id
+# (RBW<n><letter>), unique PER EMITTED LINE rather than per logical case, so
+# `mutation-check.sh --case <id>` addresses exactly one assertion. The id is
+# followed by a SPACE, never a colon abutting it — the harness matches the
+# case whole-token, so a colon-abutting id returns case_not_found. A new
+# assertion takes the next free id rather than renumbering its neighbours.
 
 set -eu
 
@@ -140,21 +147,21 @@ BEFORE=$(bundle_manifest rbw1)
 run_fixture rbw1
 AFTER=$(bundle_manifest rbw1)
 
-check_eq "RBW1 a bundle-only page makes a bare sync exit non-zero" "1" "$CODE"
-[ "$BEFORE" = "$AFTER" ]; check "RBW1 the refusal writes no bytes to the bundled tree" "$?"
+check_eq "RBW1a a bundle-only page makes a bare sync exit non-zero" "1" "$CODE"
+[ "$BEFORE" = "$AFTER" ]; check "RBW1b the refusal writes no bytes to the bundled tree" "$?"
 [ -f "$WORK/rbw1/cogni-workspace/wiki/wiki/pages/bundle-only.md" ]
-check "RBW1 the bundle-only page survives the refusal" "$?"
+check "RBW1c the bundle-only page survives the refusal" "$?"
 [ ! -f "$WORK/rbw1/cogni-workspace/wiki/wiki/pages/source-only.md" ]
-check "RBW1 no source-only page was added by the refused run" "$?"
+check "RBW1d no source-only page was added by the refused run" "$?"
 
 printf '%s' "$OUT" | python3 -c 'import json,sys; json.load(sys.stdin)' >/dev/null 2>&1
-check "RBW2 the whole refusal stdout parses as one JSON object" "$?"
-check_eq "RBW2 refusal reports success false" "False" "$(json_field "$OUT" 'd["success"]')"
-check_eq "RBW2 would_delete names the bundle-only page" "wiki/pages/bundle-only.md" \
+check "RBW2a the whole refusal stdout parses as one JSON object" "$?"
+check_eq "RBW2b refusal reports success false" "False" "$(json_field "$OUT" 'd["success"]')"
+check_eq "RBW2c would_delete names the bundle-only page" "wiki/pages/bundle-only.md" \
   "$(json_field "$OUT" 'd["data"]["would_delete"][0]')"
-check_eq "RBW2 destructive_path_count counts it" "1" \
+check_eq "RBW2d destructive_path_count counts it" "1" \
   "$(json_field "$OUT" 'd["data"]["destructive_path_count"]')"
-check_eq "RBW2 the error names the override flag" "True" \
+check_eq "RBW2e the error names the override flag" "True" \
   "$(json_field "$OUT" '"--force" in d["error"]')"
 
 # ---------------------------------------------------------------------- RBW3
@@ -168,11 +175,11 @@ BEFORE=$(bundle_manifest rbw3)
 run_fixture rbw3
 AFTER=$(bundle_manifest rbw3)
 
-check_eq "RBW3 a bundled superset makes a bare sync exit non-zero" "1" "$CODE"
-[ "$BEFORE" = "$AFTER" ]; check "RBW3 the overwrite refusal writes no bytes" "$?"
-check_eq "RBW3 would_overwrite names the shared page" "wiki/pages/shared.md" \
+check_eq "RBW3a a bundled superset makes a bare sync exit non-zero" "1" "$CODE"
+[ "$BEFORE" = "$AFTER" ]; check "RBW3b the overwrite refusal writes no bytes" "$?"
+check_eq "RBW3c would_overwrite names the shared page" "wiki/pages/shared.md" \
   "$(json_field "$OUT" 'd["data"]["would_overwrite"][0]')"
-check_eq "RBW3 would_delete stays empty for the overwrite class" "0" \
+check_eq "RBW3d would_delete stays empty for the overwrite class" "0" \
   "$(json_field "$OUT" 'len(d["data"]["would_delete"])')"
 
 # ---------------------------------------------------------------------- RBW4
@@ -183,10 +190,10 @@ make_fixture rbw4
 printf 'shared page\nnew line from source\n' > "$WORK/rbw4/wiki/wiki/pages/shared.md"
 run_fixture rbw4
 
-check_eq "RBW4 a source-enriched bundle syncs bare, without --force" "0" "$CODE"
-check_eq "RBW4 that sync reports success" "True" "$(json_field "$OUT" 'd["success"]')"
+check_eq "RBW4a a source-enriched bundle syncs bare, without --force" "0" "$CODE"
+check_eq "RBW4b that sync reports success" "True" "$(json_field "$OUT" 'd["success"]')"
 grep -q 'new line from source' "$WORK/rbw4/cogni-workspace/wiki/wiki/pages/shared.md"
-check "RBW4 the source content reached the bundle" "$?"
+check "RBW4c the source content reached the bundle" "$?"
 
 # ---------------------------------------------------------------------- RBW5
 # Regression guard. Deriving the counts with `wc -l` reports 1 for an empty
@@ -195,8 +202,8 @@ check "RBW4 the source content reached the bundle" "$?"
 make_fixture rbw5
 run_fixture rbw5
 
-check_eq "RBW5 an already-identical bundle syncs bare" "0" "$CODE"
-check_eq "RBW5 that sync reports success" "True" "$(json_field "$OUT" 'd["success"]')"
+check_eq "RBW5a an already-identical bundle syncs bare" "0" "$CODE"
+check_eq "RBW5b that sync reports success" "True" "$(json_field "$OUT" 'd["success"]')"
 
 # ---------------------------------------------------------------------- RBW6
 # The opt-in must be a real override, not a no-op.
@@ -205,12 +212,12 @@ printf 'only in the bundle\n' > "$WORK/rbw6/cogni-workspace/wiki/wiki/pages/bund
 printf 'only in the source\n' > "$WORK/rbw6/wiki/wiki/pages/source-only.md"
 run_fixture rbw6 --force
 
-check_eq "RBW6 --force performs the sync the bare run refused" "0" "$CODE"
-check_eq "RBW6 the forced sync reports success" "True" "$(json_field "$OUT" 'd["success"]')"
+check_eq "RBW6a --force performs the sync the bare run refused" "0" "$CODE"
+check_eq "RBW6b the forced sync reports success" "True" "$(json_field "$OUT" 'd["success"]')"
 [ ! -f "$WORK/rbw6/cogni-workspace/wiki/wiki/pages/bundle-only.md" ]
-check "RBW6 --force really deleted the bundle-only page" "$?"
+check "RBW6c --force really deleted the bundle-only page" "$?"
 [ -f "$WORK/rbw6/cogni-workspace/wiki/wiki/pages/source-only.md" ]
-check "RBW6 --force really added the source-only page" "$?"
+check "RBW6d --force really added the source-only page" "$?"
 
 # ---------------------------------------------------------------------- RBW7
 # The help range is a hand-maintained line number and the header just grew, so
@@ -219,25 +226,25 @@ check "RBW6 --force really added the source-only page" "$?"
 make_fixture rbw7
 run_fixture rbw7 --help
 
-check_eq "RBW7 --help exits 0" "0" "$CODE"
+check_eq "RBW7a --help exits 0" "0" "$CODE"
 printf '%s' "$OUT" | grep -q -- '--force'
-check "RBW7 --help documents the --force opt-in" "$?"
+check "RBW7b --help documents the --force opt-in" "$?"
 printf '%s' "$OUT" | grep -q -- '--check'
-check "RBW7 --help still documents --check" "$?"
+check "RBW7c --help still documents --check" "$?"
 printf '%s' "$OUT" | grep -q 'error'
-check "RBW7 --help reaches the last header line" "$?"
+check "RBW7d --help reaches the last header line" "$?"
 ! printf '%s' "$OUT" | grep -q 'set -eu'
-check "RBW7 --help does not run past the header into the code" "$?"
+check "RBW7e --help does not run past the header into the code" "$?"
 
 # ---------------------------------------------------------------------- RBW8
 # The new arms must sit before the catch-all, or every flag becomes "unknown".
 make_fixture rbw8
 run_fixture rbw8 --definitely-not-a-flag
 
-check_eq "RBW8 an unknown argument exits 1" "1" "$CODE"
-check_eq "RBW8 an unknown argument reports success false" "False" \
+check_eq "RBW8a an unknown argument exits 1" "1" "$CODE"
+check_eq "RBW8b an unknown argument reports success false" "False" \
   "$(json_field "$OUT" 'd["success"]')"
-check_eq "RBW8 the error names the offending argument" "True" \
+check_eq "RBW8c the error names the offending argument" "True" \
   "$(json_field "$OUT" '"--definitely-not-a-flag" in d["error"]')"
 
 # ---------------------------------------------------------------------------- RBW9
@@ -249,19 +256,19 @@ make_fixture rbw9a
 rm -rf "$WORK/rbw9a/cogni-workspace/wiki"
 run_fixture rbw9a
 
-check_eq "RBW9 an absent bundled tree syncs bare" "0" "$CODE"
-check_eq "RBW9 that bootstrap sync reports success" "True" "$(json_field "$OUT" 'd["success"]')"
+check_eq "RBW9a an absent bundled tree syncs bare" "0" "$CODE"
+check_eq "RBW9b that bootstrap sync reports success" "True" "$(json_field "$OUT" 'd["success"]')"
 [ -f "$WORK/rbw9a/cogni-workspace/wiki/wiki/pages/shared.md" ]
-check "RBW9 the bootstrap sync populated the bundled tree" "$?"
+check "RBW9c the bootstrap sync populated the bundled tree" "$?"
 
 make_fixture rbw9b
 rm -f "$WORK/rbw9b/cogni-workspace/wiki/wiki/pages/shared.md"
 run_fixture rbw9b
 
-check_eq "RBW9 an empty bundled page set syncs bare" "0" "$CODE"
-check_eq "RBW9 that sync reports success" "True" "$(json_field "$OUT" 'd["success"]')"
+check_eq "RBW9d an empty bundled page set syncs bare" "0" "$CODE"
+check_eq "RBW9e that sync reports success" "True" "$(json_field "$OUT" 'd["success"]')"
 [ -f "$WORK/rbw9b/cogni-workspace/wiki/wiki/pages/shared.md" ]
-check "RBW9 the empty bundled tree was populated" "$?"
+check "RBW9f the empty bundled tree was populated" "$?"
 
 # ----------------------------------------------------------------------------
 if [ "$FAILED" -eq 0 ]; then

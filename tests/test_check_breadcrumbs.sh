@@ -12,6 +12,13 @@
 # edit that adds a NEW breadcrumb to a tracked file will (correctly) fail it.
 #
 # bash 3.2 + stdlib python3 only.
+#
+# Result-line ids: every emitted PASS:/FAIL: line carries a first-token id
+# (cbcNN), unique PER EMITTED LINE rather than per logical case, so
+# `mutation-check.sh --case <id>` addresses exactly one assertion. The id is
+# followed by a SPACE, never a colon abutting it — the harness matches the
+# case whole-token, so a colon-abutting id returns case_not_found. A new
+# assertion takes the next free id rather than renumbering its neighbours.
 
 set -eu
 
@@ -72,8 +79,8 @@ OUT=$(python3 "$GUARD" --root "$WORK/clean" --baseline "$EMPTY_BASELINE" \
         "skills/demo/SKILL.md" 2>/dev/null)
 CODE=$?
 set -e
-check "negative controls exit 0" "$([ "$CODE" -eq 0 ] && echo 0 || echo 1)"
-assert_json "negative controls report zero violations" "$OUT" "
+check "cbc01 negative controls exit 0" "$([ "$CODE" -eq 0 ] && echo 0 || echo 1)"
+assert_json "cbc02 negative controls report zero violations" "$OUT" "
 import json,sys
 d=json.load(sys.stdin)
 assert d['success'] is True, d
@@ -96,8 +103,8 @@ OUT=$(python3 "$GUARD" --root "$WORK/dirty" --baseline "$EMPTY_BASELINE" \
         "agents/bad.md" 2>/dev/null)
 CODE=$?
 set -e
-check "breadcrumb fixture exits 1" "$([ "$CODE" -eq 1 ] && echo 0 || echo 1)"
-assert_json "breadcrumb fixture names every token with correct file+line" "$OUT" "
+check "cbc03 breadcrumb fixture exits 1" "$([ "$CODE" -eq 1 ] && echo 0 || echo 1)"
+assert_json "cbc04 breadcrumb fixture names every token with correct file+line" "$OUT" "
 import json,sys
 d=json.load(sys.stdin)
 v=d['data']['violations']
@@ -128,8 +135,8 @@ OUT=$(python3 "$GUARD" --root "$WORK/allow" --baseline "$EMPTY_BASELINE" \
         "agents/ok.md" 2>/dev/null)
 CODE=$?
 set -e
-check "inline-allow line exits 0" "$([ "$CODE" -eq 0 ] && echo 0 || echo 1)"
-assert_json "inline-allow suppresses the M2 match" "$OUT" "
+check "cbc05 inline-allow line exits 0" "$([ "$CODE" -eq 0 ] && echo 0 || echo 1)"
+assert_json "cbc06 inline-allow suppresses the M2 match" "$OUT" "
 import json,sys
 d=json.load(sys.stdin)
 assert d['data']['summary']['total']==0, d['data']['summary']
@@ -142,7 +149,7 @@ set +e
 python3 "$GUARD" >/dev/null 2>&1
 CODE=$?
 set -e
-check "real tree passes against committed baseline" \
+check "cbc07 real tree passes against committed baseline" \
   "$([ "$CODE" -eq 0 ] && echo 0 || echo 1)"
 
 echo ""

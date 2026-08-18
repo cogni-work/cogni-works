@@ -28,6 +28,13 @@
 # Fixtures always drive the real guard through --root rather than a vendored
 # copy of its logic, so the suite cannot keep passing against a frozen snapshot
 # while the guard itself drifts.
+#
+# Result-line ids: every emitted PASS:/FAIL: line carries a first-token id
+# (WY<n><letter>), unique PER EMITTED LINE rather than per logical case, so
+# `mutation-check.sh --case <id>` addresses exactly one assertion. The id is
+# followed by a SPACE, never a colon abutting it — the harness matches the
+# case whole-token, so a colon-abutting id returns case_not_found. A new
+# assertion takes the next free id rather than renumbering its neighbours.
 
 set -eu
 
@@ -78,8 +85,8 @@ set +e
 OUT1=$(python3 "$GUARD" 2>/dev/null)
 CODE1=$?
 set -e
-check_eq "WY1 real tree scans clean (exit 0)" 0 "$CODE1"
-assert_json "WY1 real tree reports success with no violations" "$OUT1" "
+check_eq "WY1a real tree scans clean (exit 0)" 0 "$CODE1"
+assert_json "WY1b real tree reports success with no violations" "$OUT1" "
 import json,sys
 d=json.load(sys.stdin)
 assert d['success'] is True, d
@@ -88,7 +95,7 @@ assert d['data']['summary']['files_scanned']>=3, d
 "
 
 # --- WY2: the defect shape is flagged ----------------------------------------
-# The exact shape that took every gate job in one file offline. This is the case
+# The exact shape that took every gate job in one file offline. This is the case (WY2a)
 # the mutation recipe pins.
 
 mkdir -p "$WORK/red/.github/workflows"
@@ -108,8 +115,8 @@ set +e
 OUT2=$(python3 "$GUARD" --root "$WORK/red" 2>/dev/null)
 CODE2=$?
 set -e
-check_eq "WY2 unquoted plain-scalar colon-space exits 1" 1 "$CODE2"
-assert_json "WY2 violation names the file, the 1-based line and the kind" "$OUT2" "
+check_eq "WY2a unquoted plain-scalar colon-space exits 1" 1 "$CODE2"
+assert_json "WY2b violation names the file, the 1-based line and the kind" "$OUT2" "
 import json,sys
 d=json.load(sys.stdin)
 assert d['success'] is False, d
@@ -141,7 +148,7 @@ set +e
 python3 "$GUARD" --root "$WORK/quoted" >/dev/null 2>&1
 CODE3=$?
 set -e
-check_eq "WY3 quoted value is accepted (exit 0)" 0 "$CODE3"
+check_eq "WY3a quoted value is accepted (exit 0)" 0 "$CODE3"
 
 # --- WY4: block-scalar body skipped, dedented line re-processed ---------------
 # Modelled on the live shape at .github/workflows/cla.yml — an `if: |` opener at
@@ -172,8 +179,8 @@ set +e
 OUT4=$(python3 "$GUARD" --root "$WORK/dedent" 2>/dev/null)
 CODE4=$?
 set -e
-check_eq "WY4 block body skipped and dedented line re-processed (exit 1)" 1 "$CODE4"
-assert_json "WY4 flags only the line after the dedent, never the block body" "$OUT4" "
+check_eq "WY4a block body skipped and dedented line re-processed (exit 1)" 1 "$CODE4"
+assert_json "WY4b flags only the line after the dedent, never the block body" "$OUT4" "
 import json,sys
 d=json.load(sys.stdin)
 v=[x for x in d['data']['violations'] if x['kind']=='plain_scalar_colon_space']
@@ -191,8 +198,8 @@ set +e
 OUT5=$(python3 "$GUARD" --root "$WORK/empty" 2>/dev/null)
 CODE5=$?
 set -e
-check_eq "WY5 empty workflows directory exits 1" 1 "$CODE5"
-assert_json "WY5 empty directory reports success:false and a non-empty error" "$OUT5" "
+check_eq "WY5a empty workflows directory exits 1" 1 "$CODE5"
+assert_json "WY5b empty directory reports success:false and a non-empty error" "$OUT5" "
 import json,sys
 d=json.load(sys.stdin)
 assert d['success'] is False, d
@@ -210,8 +217,8 @@ set +e
 OUT6=$(python3 "$GUARD" --root "$WORK/nogithub" 2>/dev/null)
 CODE6=$?
 set -e
-check_eq "WY6 missing .github directory exits 1" 1 "$CODE6"
-assert_json "WY6 missing directory reports success:false and a non-empty error" "$OUT6" "
+check_eq "WY6a missing .github directory exits 1" 1 "$CODE6"
+assert_json "WY6b missing directory reports success:false and a non-empty error" "$OUT6" "
 import json,sys
 d=json.load(sys.stdin)
 assert d['success'] is False, d
@@ -242,8 +249,8 @@ set +e
 OUT7=$(python3 "$GUARD" --root "$WORK/jobless" 2>/dev/null)
 CODE7=$?
 set -e
-check_eq "WY7 jobless workflows exit 1" 1 "$CODE7"
-assert_json "WY7 childless jobs reports its line, absent jobs reports null" "$OUT7" "
+check_eq "WY7a jobless workflows exit 1" 1 "$CODE7"
+assert_json "WY7b childless jobs reports its line, absent jobs reports null" "$OUT7" "
 import json,sys
 d=json.load(sys.stdin)
 v={x['file']: x for x in d['data']['violations'] if x['kind']=='no_jobs'}
@@ -274,8 +281,8 @@ set +e
 OUT8=$(python3 "$GUARD" --root "$WORK/ext" 2>/dev/null)
 CODE8=$?
 set -e
-check_eq "WY8 .yaml extension is discovered and scanned (exit 1)" 1 "$CODE8"
-assert_json "WY8 the .yaml file is scanned and the .txt is not" "$OUT8" "
+check_eq "WY8a .yaml extension is discovered and scanned (exit 1)" 1 "$CODE8"
+assert_json "WY8b the .yaml file is scanned and the .txt is not" "$OUT8" "
 import json,sys
 d=json.load(sys.stdin)
 assert d['data']['scanned']==['.github/workflows/broken.yaml'], d['data']['scanned']
@@ -290,8 +297,8 @@ set +e
 OUT9=$(python3 "$GUARD" --root "$WORK/binary" 2>"$WORK/stderr9")
 CODE9=$?
 set -e
-check_eq "WY9 undecodable file exits 2" 2 "$CODE9"
-assert_json "WY9 error envelope carries empty data and a non-empty error" "$OUT9" "
+check_eq "WY9a undecodable file exits 2" 2 "$CODE9"
+assert_json "WY9b error envelope carries empty data and a non-empty error" "$OUT9" "
 import json,sys
 d=json.load(sys.stdin)
 assert d['success'] is False, d
@@ -302,7 +309,7 @@ set +e
 grep -q 'Traceback' "$WORK/stderr9"
 GREP9=$?
 set -e
-check "WY9 no traceback reaches stderr" "$([ "$GREP9" -ne 0 ] && echo 0 || echo 1)"
+check "WY9c no traceback reaches stderr" "$([ "$GREP9" -ne 0 ] && echo 0 || echo 1)"
 
 # --- WY10: a comment carrying a colon-space is not flagged --------------------
 # The live shape in .github/workflows/lint.yml, which WY1 already depends on.
@@ -328,7 +335,7 @@ set +e
 python3 "$GUARD" --root "$WORK/comment" >/dev/null 2>&1
 CODE10=$?
 set -e
-check_eq "WY10 comments carrying a colon-space are not flagged (exit 0)" 0 "$CODE10"
+check_eq "WY10a comments carrying a colon-space are not flagged (exit 0)" 0 "$CODE10"
 
 echo ""
 if [ "$FAILED" -eq 0 ]; then

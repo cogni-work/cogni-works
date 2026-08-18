@@ -18,6 +18,51 @@
 # This harness also runs in CI, via the thin wrapper suite
 # cogni-workspace/tests/test-theme-backcompat.sh that run-plugin-tests.py
 # discovers. Keep it runnable with no arguments and no network access.
+#
+# RESULT-LINE CONTRACT. Every result line is plain, colon-terminated and
+# id-first: `PASS: <case-id> <label>` / `FAIL: <case-id> <label>`. The case id is
+# what the shared mutation harness addresses, and it matches whole-token —
+# `^[ \t]*FAIL:[ \t]+<case>(?:[ \t]|$)` — so no colour, no leading whitespace
+# and no colon may sit between the label and the id, or between the id and the
+# text. Plainness is NOT gated on a capability probe (`[ -t 1 ]`, `$TERM`): that
+# would make parsability depend on where the harness runs, and the colour would
+# come back under a pty.
+#
+# A check's PASS branch and its FAIL branch carry the SAME id, deliberately.
+# The mutation harness returns `guard_verified` only when the mutant is red AND
+# the restore is green under one `--case`, so a check whose two branches carry
+# different ids can never be verified — it degrades to `case_not_found`, which
+# reads as a missing case rather than going red. Several `fail` arms may share
+# one id (the TIERS_PROBE case does): `fail()` exits on the first failure, so at
+# most one FAIL line is ever emitted per run.
+#
+# `c_skip` and `c_info` are deliberately NOT result lines and keep their colour —
+# they must never begin with `PASS:` or `FAIL:`.
+#
+# This file lives under scripts/, one path segment outside
+# scripts/check-result-line-plainness.py's two non-recursive globs
+# (`tests/*.sh`, `*/tests/*.sh`), so that guard does not cover it — before or
+# after this contract was adopted. The plainness above rests on this file, not
+# on CI. Do not "fix" that by moving the harness under tests/: the surviving
+# c_skip/c_info escape literals would then be discovered and turn the guard's
+# hard clean zero red.
+#
+# Mutation recipe — verified, replayable. The wrapper is the only runnable entry
+# point (this harness takes no per-case selector), and because fail() exits on
+# the first failure the mutated file must redden the chosen id before any
+# earlier phase can fail.
+#
+#   M1 -> tbc10-tier0-baseline-match       (verdict: guard_verified)
+#     bash ~/.claude/plugins/cache/managed-service/cogni-service/0.0.402/scripts/mutation-check.sh \
+#       --root . \
+#       --file cogni-workspace/scripts/baselines/_template-tier0-output.json \
+#       --expr 's#"source": "standard"#"source": "mutated"#' \
+#       --test 'bash cogni-workspace/tests/test-theme-backcompat.sh' \
+#       --case tbc10-tier0-baseline-match
+#
+#   Before this contract existed the harness emitted zero addressable lines, so
+#   every invocation of the form above returned case_not_found and no check here
+#   could contribute mutation evidence at all.
 
 set -uo pipefail
 
@@ -44,8 +89,8 @@ trap cleanup EXIT
 # Output helpers
 # --------------------------------------------------------------------------
 
-c_pass() { printf "  \033[32mPASS\033[0m  %s\n" "$1"; }
-c_fail() { printf "  \033[31mFAIL\033[0m  %s\n" "$1"; }
+c_pass() { printf 'PASS: %s\n' "$1"; }
+c_fail() { printf 'FAIL: %s\n' "$1"; }
 c_skip() { printf "  \033[33mSKIP\033[0m  %s\n" "$1"; }
 c_info() { printf "  \033[36mINFO\033[0m  %s\n" "$1"; }
 
@@ -90,29 +135,34 @@ On the first failure, prints a triage line and exits 1.
 
 Failure-mode triage table
 
-  - "tier-0 baseline mismatch" or "tier-0 fixture discover failed":
+  - tbc10-tier0-baseline-match ("tier-0 baseline mismatch") or
+    tbc06-tier0-fixture-discover ("tier-0 fixture discover failed"):
       Likely #126 (cogni-workspace: discover-themes.py reads manifest.json
       with tier-0 fallback). The contract is "no manifest.json => byte-
       identical legacy output"; if discover added a field, this fires.
 
-  - "cogni-work missing tiers.tokens" or "tokens.css absent":
+  - tbc13-cogni-work-tiers-tokens ("cogni-work missing tiers.tokens" or
+    "tokens.css absent"):
       Likely #127 (cogni-workspace: migrate cogni-work theme to tiered
       directory structure as Phase 2 reference implementation) or #128
       (manifest schema). Either the migration regressed or the schema
       stopped accepting the existing manifest.
 
-  - "validate-theme-manifest.py rejects cogni-work":
+  - tbc14-validator-accepts-cogni-work ("validate-theme-manifest.py rejects
+    cogni-work"):
       Likely #128 (manifest schema definition) or #138 (manage-themes deep
       authoring) — schema and authoring surfaces drifted.
 
-  - "render-html-slides theme contract missing":
+  - tbc20-consumer-theme-ref-<plugin>-<skill> ("render-html-slides theme
+    contract missing"):
       Likely #129 (the cogni-visual refactor of render-html-slides to consume
       tier-1 tokens and tier-3 component primitives from cogni-work).
 
-  - "migration guide reference missing":
+  - tbc18-migration-guide-present ("migration guide reference missing"):
       Likely #130 (cogni-workspace: write Theme System v2 migration guide).
 
-  - "consumer SKILL.md reference missing":
+  - tbc20-consumer-theme-ref-<plugin>-<skill> ("consumer SKILL.md reference
+    missing"):
       Cross-cutting drift; could be a SKILL.md regeneration that lost the
       theme reference. File against the affected plugin.
 
@@ -145,29 +195,29 @@ done
 phase "Pre-flight"
 
 if ! command -v python3 >/dev/null 2>&1; then
-  fail "pre-flight" "python3 not found on PATH; the harness needs python3 to run discover-themes.py and to normalize JSON."
+  fail "tbc01-python3-available python3 not found on PATH; the harness needs python3 to run discover-themes.py and to normalize JSON."
 fi
-c_pass "python3 available"
+c_pass "tbc01-python3-available python3 available"
 
 if [[ ! -f "$DISCOVER_SCRIPT" ]]; then
-  fail "pre-flight" "discover-themes.py not at $DISCOVER_SCRIPT (expected under skills/pick-theme/scripts/). Likely #126 moved the script — update DISCOVER_SCRIPT here to match."
+  fail "tbc02-discover-script-present discover-themes.py not at $DISCOVER_SCRIPT (expected under skills/pick-theme/scripts/). Likely #126 moved the script — update DISCOVER_SCRIPT here to match."
 fi
-c_pass "discover-themes.py present"
+c_pass "tbc02-discover-script-present discover-themes.py present"
 
 if [[ ! -f "$VALIDATOR_SCRIPT" ]]; then
-  fail "pre-flight" "validate-theme-manifest.py not at $VALIDATOR_SCRIPT. Likely #128 moved the validator."
+  fail "tbc03-validator-present validate-theme-manifest.py not at $VALIDATOR_SCRIPT. Likely #128 moved the validator."
 fi
-c_pass "validate-theme-manifest.py present"
+c_pass "tbc03-validator-present validate-theme-manifest.py present"
 
 if [[ ! -d "$PLUGIN_ROOT/themes/_template" ]]; then
-  fail "pre-flight" "themes/_template/ not present in $PLUGIN_ROOT — the tier-0 reference theme is missing."
+  fail "tbc04-template-theme-present themes/_template/ not present in $PLUGIN_ROOT — the tier-0 reference theme is missing."
 fi
-c_pass "themes/_template/ present"
+c_pass "tbc04-template-theme-present themes/_template/ present"
 
 if [[ ! -d "$PLUGIN_ROOT/themes/cogni-work" ]]; then
-  fail "pre-flight" "themes/cogni-work/ not present in $PLUGIN_ROOT — the tiered reference theme is missing."
+  fail "tbc05-cogni-work-theme-present themes/cogni-work/ not present in $PLUGIN_ROOT — the tiered reference theme is missing."
 fi
-c_pass "themes/cogni-work/ present"
+c_pass "tbc05-cogni-work-theme-present themes/cogni-work/ present"
 
 # --------------------------------------------------------------------------
 # Helpers — run discover-themes / normalize JSON
@@ -223,32 +273,32 @@ phase "Phase A — discover-themes invariants"
 verbose "Building tier-0 fixture"
 build_tier0_fixture >/dev/null
 TIER0_OUTPUT="$(discover "$TMPDIR" --no-include-tiers 2>/dev/null)" \
-  || fail "tier-0 fixture discover failed" "discover-themes.py exited non-zero against the tier-0 fixture. Likely #126 broke the fallback path."
+  || fail "tbc06-tier0-fixture-discover tier-0 fixture discover failed" "discover-themes.py exited non-zero against the tier-0 fixture. Likely #126 broke the fallback path."
 
 NORMALIZED="$(printf "%s" "$TIER0_OUTPUT" | normalize_for_baseline)" \
-  || fail "tier-0 normalize failed" "JSON normalization failed — output of discover-themes is not valid JSON."
+  || fail "tbc07-tier0-normalize tier-0 normalize failed" "JSON normalization failed — output of discover-themes is not valid JSON."
 
 if [[ "$REGENERATE" -eq 1 ]]; then
   printf "%s\n" "$NORMALIZED" > "$TIER0_BASELINE"
   c_info "Regenerated baseline: $TIER0_BASELINE"
-  c_pass "tier-0 baseline regeneration"
+  c_pass "tbc08-tier0-baseline-regenerated tier-0 baseline regeneration"
 else
   EXPECTED="$(cat "$TIER0_BASELINE")" \
-    || fail "tier-0 baseline read failed" "Cannot read $TIER0_BASELINE. Run with --regenerate-baseline to recreate it."
+    || fail "tbc09-tier0-baseline-read tier-0 baseline read failed" "Cannot read $TIER0_BASELINE. Run with --regenerate-baseline to recreate it."
 
   if [[ "$NORMALIZED" != "$EXPECTED" ]]; then
     if [[ "$VERBOSE" -eq 1 ]]; then
       printf "  --- expected\n%s\n  --- actual\n%s\n" "$EXPECTED" "$NORMALIZED" >&2
     fi
-    fail "tier-0 baseline mismatch" "discover-themes.py output for the tier-0 fixture diverged from $TIER0_BASELINE. Run with -v to see the diff. If the change is intentional, regenerate with --regenerate-baseline."
+    fail "tbc10-tier0-baseline-match tier-0 baseline mismatch" "discover-themes.py output for the tier-0 fixture diverged from $TIER0_BASELINE. Run with -v to see the diff. If the change is intentional, regenerate with --regenerate-baseline."
   fi
-  c_pass "tier-0 baseline matches snapshot"
+  c_pass "tbc10-tier0-baseline-match tier-0 baseline matches snapshot"
 fi
 
 # A2. Tiered cogni-work surfaces tiers.tokens.
 verbose "Running discover against $PLUGIN_ROOT"
 TIERED_OUTPUT="$(discover "$PLUGIN_ROOT" 2>/dev/null)" \
-  || fail "tiered discover failed" "discover-themes.py exited non-zero against the real plugin root."
+  || fail "tbc11-tiered-discover tiered discover failed" "discover-themes.py exited non-zero against the real plugin root."
 
 TIERS_PROBE="$(printf "%s" "$TIERED_OUTPUT" | python3 -c '
 import json, os, sys
@@ -268,16 +318,16 @@ css = os.path.join(tokens, "tokens.css")
 if not os.path.isfile(css):
     print(f"TOKENS_CSS_ABSENT:{css}"); sys.exit(0)
 print("OK")
-')" || fail "tiered probe failed" "JSON parse failed reading discover output."
+')" || fail "tbc12-tiered-probe tiered probe failed" "JSON parse failed reading discover output."
 
 case "$TIERS_PROBE" in
-  OK) c_pass "cogni-work surfaces tiers.tokens with tokens.css" ;;
-  MISSING_THEME) fail "cogni-work missing from discover" "discover-themes.py did not return cogni-work. Likely #127 regressed the migration." ;;
-  MISSING_TIERS) fail "cogni-work missing tiers.tokens" "discover output for cogni-work has no 'tiers' key. Likely #126 (manifest fallback) or #128 (schema). Check $PLUGIN_ROOT/themes/cogni-work/manifest.json." ;;
-  MISSING_TOKENS_KEY) fail "cogni-work tiers.tokens absent" "manifest.json declares no tokens tier. Likely #127/#128 — manifest does not match the v2 schema." ;;
-  TOKENS_DIR_ABSENT:*) fail "cogni-work tokens dir absent" "tiers.tokens resolves to a path that does not exist: ${TIERS_PROBE#TOKENS_DIR_ABSENT:}. Likely #127 dropped the tokens/ dir." ;;
-  TOKENS_CSS_ABSENT:*) fail "cogni-work tokens.css absent" "tokens dir exists but tokens.css is missing: ${TIERS_PROBE#TOKENS_CSS_ABSENT:}. Likely #136 (tier-1 tokens.css) regressed." ;;
-  *) fail "tiered probe unknown response" "Unexpected probe output: $TIERS_PROBE" ;;
+  OK) c_pass "tbc13-cogni-work-tiers-tokens cogni-work surfaces tiers.tokens with tokens.css" ;;
+  MISSING_THEME) fail "tbc13-cogni-work-tiers-tokens cogni-work missing from discover" "discover-themes.py did not return cogni-work. Likely #127 regressed the migration." ;;
+  MISSING_TIERS) fail "tbc13-cogni-work-tiers-tokens cogni-work missing tiers.tokens" "discover output for cogni-work has no 'tiers' key. Likely #126 (manifest fallback) or #128 (schema). Check $PLUGIN_ROOT/themes/cogni-work/manifest.json." ;;
+  MISSING_TOKENS_KEY) fail "tbc13-cogni-work-tiers-tokens cogni-work tiers.tokens absent" "manifest.json declares no tokens tier. Likely #127/#128 — manifest does not match the v2 schema." ;;
+  TOKENS_DIR_ABSENT:*) fail "tbc13-cogni-work-tiers-tokens cogni-work tokens dir absent" "tiers.tokens resolves to a path that does not exist: ${TIERS_PROBE#TOKENS_DIR_ABSENT:}. Likely #127 dropped the tokens/ dir." ;;
+  TOKENS_CSS_ABSENT:*) fail "tbc13-cogni-work-tiers-tokens cogni-work tokens.css absent" "tokens dir exists but tokens.css is missing: ${TIERS_PROBE#TOKENS_CSS_ABSENT:}. Likely #136 (tier-1 tokens.css) regressed." ;;
+  *) fail "tbc13-cogni-work-tiers-tokens tiered probe unknown response" "Unexpected probe output: $TIERS_PROBE" ;;
 esac
 
 # --------------------------------------------------------------------------
@@ -288,40 +338,40 @@ phase "Phase B — pick-theme, manage-themes"
 
 # B1. validate-theme-manifest accepts cogni-work.
 if python3 "$VALIDATOR_SCRIPT" "$PLUGIN_ROOT/themes/cogni-work" >/dev/null 2>&1; then
-  c_pass "validate-theme-manifest accepts cogni-work"
+  c_pass "tbc14-validator-accepts-cogni-work validate-theme-manifest accepts cogni-work"
 else
-  fail "validate-theme-manifest rejects cogni-work" "Run \`python3 $VALIDATOR_SCRIPT $PLUGIN_ROOT/themes/cogni-work\` for the error. Likely #128 (schema) or #138 (manage-themes authoring drift)."
+  fail "tbc14-validator-accepts-cogni-work validate-theme-manifest rejects cogni-work" "Run \`python3 $VALIDATOR_SCRIPT $PLUGIN_ROOT/themes/cogni-work\` for the error. Likely #128 (schema) or #138 (manage-themes authoring drift)."
 fi
 
 # B2. discover-themes returns cogni-work in default invocation (tier-aware).
 if printf "%s" "$TIERED_OUTPUT" | python3 -c 'import json,sys; sys.exit(0 if any(t.get("slug")=="cogni-work" for t in json.load(sys.stdin)) else 1)'; then
-  c_pass "discover returns cogni-work"
+  c_pass "tbc15-discover-returns-cogni-work discover returns cogni-work"
 else
-  fail "discover does not return cogni-work" "Already failed Phase A; pick-theme would not surface the theme to the user."
+  fail "tbc15-discover-returns-cogni-work discover does not return cogni-work" "Already failed Phase A; pick-theme would not surface the theme to the user."
 fi
 
 # B3. pick-theme SKILL.md still references discover-themes.py.
 PICK_SKILL="$PLUGIN_ROOT/skills/pick-theme/SKILL.md"
 if [[ -f "$PICK_SKILL" ]] && grep -q "discover-themes" "$PICK_SKILL"; then
-  c_pass "pick-theme SKILL.md references discover-themes"
+  c_pass "tbc16-pick-theme-references-discover pick-theme SKILL.md references discover-themes"
 else
-  fail "pick-theme SKILL.md theme reference missing" "$PICK_SKILL no longer mentions discover-themes. Likely a SKILL.md drift."
+  fail "tbc16-pick-theme-references-discover pick-theme SKILL.md theme reference missing" "$PICK_SKILL no longer mentions discover-themes. Likely a SKILL.md drift."
 fi
 
 # B4. manage-themes SKILL.md still references manifest.json.
 MANAGE_SKILL="$PLUGIN_ROOT/skills/manage-themes/SKILL.md"
 if [[ -f "$MANAGE_SKILL" ]] && grep -q "manifest\.json" "$MANAGE_SKILL"; then
-  c_pass "manage-themes SKILL.md references manifest.json"
+  c_pass "tbc17-manage-themes-references-manifest manage-themes SKILL.md references manifest.json"
 else
-  fail "manage-themes SKILL.md manifest reference missing" "$MANAGE_SKILL no longer mentions manifest.json. Likely #138 regressed the deep-authoring documentation."
+  fail "tbc17-manage-themes-references-manifest manage-themes SKILL.md manifest reference missing" "$MANAGE_SKILL no longer mentions manifest.json. Likely #138 regressed the deep-authoring documentation."
 fi
 
 # B5. Migration guide present.
 MIGRATION_GUIDE="$PLUGIN_ROOT/docs/theme-system-v2-migration.md"
 if [[ -f "$MIGRATION_GUIDE" ]]; then
-  c_pass "theme-system-v2 migration guide present"
+  c_pass "tbc18-migration-guide-present theme-system-v2 migration guide present"
 else
-  fail "migration guide reference missing" "$MIGRATION_GUIDE not found. Likely #130 was reverted or the path moved."
+  fail "tbc18-migration-guide-present migration guide reference missing" "$MIGRATION_GUIDE not found. Likely #130 was reverted or the path moved."
 fi
 
 # --------------------------------------------------------------------------
@@ -349,14 +399,18 @@ VISUAL_CONSUMERS=(
 for entry in "${VISUAL_CONSUMERS[@]}"; do
   plugin="${entry%%:*}"
   skill="${entry#*:}"
+  # Case ids carry a per-iteration slug or every consumer would share one token.
+  # Parameter expansion, not `tr` — and the colon has to go: the shared mutation
+  # harness needs whitespace or end-of-line straight after the case token.
+  entry_slug="${entry//:/-}"
   skill_md="$REPO_ROOT/$plugin/skills/$skill/SKILL.md"
   if [[ ! -f "$skill_md" ]]; then
-    fail "$entry SKILL.md not present at expected path" "$skill_md is missing. A listed visual consumer lost its SKILL.md — either the skill was renamed or removed (update VISUAL_CONSUMERS) or a regeneration dropped the file."
+    fail "tbc19-consumer-skill-present-$entry_slug SKILL.md not present at expected path" "$skill_md is missing. A listed visual consumer lost its SKILL.md — either the skill was renamed or removed (update VISUAL_CONSUMERS) or a regeneration dropped the file."
   fi
   if grep -qE 'theme\.md|theme_slug|pick-theme|themes/' "$skill_md"; then
-    c_pass "$entry references the theme contract"
+    c_pass "tbc20-consumer-theme-ref-$entry_slug references the theme contract"
   else
-    fail "$entry SKILL.md theme reference missing" "$skill_md no longer mentions the theme contract. Likely a SKILL.md regeneration dropped the reference."
+    fail "tbc20-consumer-theme-ref-$entry_slug SKILL.md theme reference missing" "$skill_md no longer mentions the theme contract. Likely a SKILL.md regeneration dropped the reference."
   fi
 done
 
@@ -381,9 +435,9 @@ VOICE_HEADER='## Voice & Copy Guidelines'
 for theme in _template cogni-work; do
   theme_file="$PLUGIN_ROOT/themes/$theme/theme.md"
   if grep -qF "$VOICE_HEADER" "$theme_file"; then
-    c_pass "themes/$theme/theme.md has Voice & Copy Guidelines section"
+    c_pass "tbc21-voice-section-$theme themes/$theme/theme.md has Voice & Copy Guidelines section"
   else
-    fail "voice section missing in themes/$theme/theme.md" "Voice consumers (${VOICE_PLUGINS[*]}) include this section in prompts; without it, copy generation drifts. Likely #127 (cogni-work migration) or a tier-0 template regression."
+    fail "tbc21-voice-section-$theme voice section missing in themes/$theme/theme.md" "Voice consumers (${VOICE_PLUGINS[*]}) include this section in prompts; without it, copy generation drifts. Likely #127 (cogni-work migration) or a tier-0 template regression."
   fi
 done
 
@@ -392,7 +446,7 @@ for plugin in "${VOICE_PLUGINS[@]}"; do
     c_skip "$plugin — plugin directory not present in $REPO_ROOT"
     continue
   fi
-  c_pass "$plugin present (voice section verified above is the contract for this plugin)"
+  c_pass "tbc22-voice-plugin-present-$plugin $plugin present (voice section verified above is the contract for this plugin)"
 done
 
 # --------------------------------------------------------------------------
@@ -407,10 +461,11 @@ phase "Phase E — external consumers (informational)"
 for ext in "document-skills:pptx" "document-skills:docx"; do
   plugin="${ext%%:*}"
   skill="${ext#*:}"
+  ext_slug="${ext//:/-}"
   skill_md="$REPO_ROOT/$plugin/skills/$skill/SKILL.md"
   if [[ -f "$skill_md" ]]; then
     if grep -qE 'theme\.md|theme_slug|pick-theme|themes/' "$skill_md"; then
-      c_pass "$ext references the theme contract"
+      c_pass "tbc23-external-theme-ref-$ext_slug $ext references the theme contract"
     else
       c_info "$ext present but does not reference the theme contract — informational only"
     fi

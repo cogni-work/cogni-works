@@ -28,10 +28,10 @@
 #   intended trade: adding an arc without a visual mapping is an incomplete change, and a
 #   loud failure in the wrong place beats a silent one in the right place.
 #
-# CASE LABEL SHAPE: `ok: <id>` / `FAIL: <id>` — NOT the `OK   ` / `FAIL ` shape carried by most
-#   of this repo's older per-case verdict helpers. This IS a departure from the more common
-#   shape, and it is deliberate: it is forced by the machinery that has to read this output,
-#   not chosen as a matter of style. Two facts carry it.
+# CASE LABEL SHAPE: `ok: <id>` / `FAIL: <id>` — the shape every discovered suite in this repo
+#   now carries, no longer a departure from an older `OK   ` / `FAIL ` form. It is forced by
+#   the machinery that has to read this output, not chosen as a matter of style. Two facts
+#   carry it.
 #
 #   READ THIS BEFORE CHECKING THEM: neither cited file is at an insight-wave path. Both live in
 #   the INSTALLED cogni-service plugin (quoted here from v0.0.383), which a reviewer scoped to an

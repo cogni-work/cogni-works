@@ -51,8 +51,8 @@ TMPROOT="$(mktemp -d)"
 trap 'rm -rf "$TMPROOT"' EXIT
 
 failures=0
-pass() { printf 'OK   %s\n' "$1"; }
-fail() { printf 'FAIL %s: %s\n' "$1" "$2" >&2; failures=$((failures + 1)); }
+pass() { printf 'PASS: %s\n' "$1"; }
+fail() { printf 'FAIL: %s - %s\n' "$1" "$2" >&2; failures=$((failures + 1)); }
 
 # Derived from disk, never hardcoded: a fifth consult-* agent added to both
 # agents/ and the matcher would keep the drift guard green while loops 2 and 3
@@ -78,11 +78,11 @@ if inner[0].get("type") != "command":
     sys.exit("hook type must be command, got %r" % inner[0].get("type"))
 if "on-subagent-start.sh" not in (inner[0].get("command") or ""):
     sys.exit("command does not point at on-subagent-start.sh: %r" % inner[0].get("command"))
-' && pass "declaration: one command-type SubagentStart entry" \
+' && pass "declaration - one command-type SubagentStart entry" \
   || fail "declaration" "hooks.json shape wrong (see above)"
 
 if [ -f "$HOOK_SCRIPT" ] && [ -x "$HOOK_SCRIPT" ]; then
-  pass "declaration: hook script present and executable"
+  pass "declaration - hook script present and executable"
 else
   fail "declaration" "hook script missing or not executable: $HOOK_SCRIPT"
 fi
@@ -112,12 +112,12 @@ sys.exit(0 if got == os.environ["WANT"] else 1)
 # with the alternation's optional prefix — unlike block 3, they pin no known
 # behaviour.
 for a in $AGENTS; do
-  assert_match "bare: $a" "$a" yes
+  assert_match "bare - $a" "$a" yes
 done
 
 # 3 plugin-qualified names — the regression this test exists for
 for a in $AGENTS; do
-  assert_match "qualified: cogni-consult:$a" "cogni-consult:$a" yes
+  assert_match "qualified - cogni-consult:$a" "cogni-consult:$a" yes
 done
 
 # 4 near-misses.
@@ -153,13 +153,13 @@ alts.append(m[start:])
 loose = [a for a in alts if not (a.startswith("^") and a.endswith("$"))]
 if loose:
     sys.exit("top-level alternative(s) not anchored at both ends: %r" % loose)
-' && pass "anchoring: every top-level alternative is anchored" \
+' && pass "anchoring - every top-level alternative is anchored" \
   || fail "anchoring" "matcher=$MATCHER (see above)"
 
-assert_match "reject: foreign qualification" "cogni-portfolio:consult-persona-challenger" no
-assert_match "reject: suffix near-miss" "consult-dashboard-refresherX" no
-assert_match "reject: prefix affix" "xconsult-empathy-mapper" no
-assert_match "reject: prefix alone" "cogni-consult:" no
+assert_match "reject - foreign qualification" "cogni-portfolio:consult-persona-challenger" no
+assert_match "reject - suffix near-miss" "consult-dashboard-refresherX" no
+assert_match "reject - prefix affix" "xconsult-empathy-mapper" no
+assert_match "reject - prefix alone" "cogni-consult:" no
 
 # 5 drift guard — the alternation and agents/ agree in both directions.
 # The agent-name group is the LAST alternation group, not the first: the matcher
@@ -180,7 +180,7 @@ missing_matcher = sorted(n for n in on_disk if n not in names)
 if missing_file or missing_matcher:
     sys.exit("in matcher but no agent file: %r; agent file but not matched: %r"
              % (missing_file, missing_matcher))
-' && pass "drift guard: matcher alternation matches agents/" \
+' && pass "drift guard - matcher alternation matches agents/" \
   || fail "drift guard" "matcher and agents/ disagree (see above)"
 
 # 6 envelope — run the hook the way Claude Code does.
@@ -211,7 +211,7 @@ for heading in ("# Interaction language and output register",
                 "## Register"):
     if heading not in ctx:
         sys.exit("additionalContext missing %r" % heading)
-' && pass "envelope: valid SubagentStart payload with language block and contract" \
+' && pass "envelope - valid SubagentStart payload with language block and contract" \
   || fail "envelope" "hook output wrong (see above)"
 
 if [ "$failures" -gt 0 ]; then

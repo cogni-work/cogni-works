@@ -30,17 +30,17 @@
 # cannot drift apart again" property this suite owes the issue. Every dimension is
 # therefore asserted individually, off a parsed map rather than a text match.
 #
-# Case-label shape deviates from two of the sibling suites on purpose.
-# test-project-status.sh and test-stale-detection.sh print "OK   <label>"; this
-# suite prints "PASS: <label>" / "FAIL: <label>" — matching
-# test-agent-frontmatter-names.sh — because the cogni-service mutation harness
+# Case-label shape is "PASS: <label>" / "FAIL: <label>" — matching
+# test-agent-frontmatter-names.sh, and the shape every discovered suite in this
+# repo now carries, test-project-status.sh and test-stale-detection.sh included.
+# It is what it is because the cogni-service mutation harness
 # classifies a case GREEN only on ^[[:space:]]*(ok|PASS):[[:space:]]+<case> and
 # RED on the matching FAIL: form. Neither "OK   " nor "OK:" is in that vocabulary.
 # The detail after a case id is separated by a SPACE and never a colon —
 # "FAIL: A2: detail" also reports case_not_found on a genuinely red case. Case ids
 # are A-prefixed and never bare numerals, which keeps the final summary line
 # ("FAIL: <n> research-manifest-sections test(s) failed.") from being read as a
-# case's RED line. Do not "fix" these labels back to the house style.
+# case's RED line — a hazard the colon form creates and every suite must answer.
 #
 # This file deliberately never spells the pre-fix section path as one contiguous
 # token. The repo-wide falsifier for issue #1389 is an unfiltered scan under

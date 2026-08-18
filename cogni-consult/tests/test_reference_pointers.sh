@@ -2,7 +2,7 @@
 # Guard: every absolute reference pointer in cogni-consult resolves, the extracted
 # rendering contracts stay extracted, and neither can be silently re-inlined.
 #
-# Label vocabulary is deliberately NOT the sibling suites' `OK   ` shape. The
+# Label vocabulary is the shape every suite in this directory now carries. The
 # shared mutation harness classifies a case by matching `FAIL: <case>` (red) and
 # `ok: <case>` / `PASS: <case>` (green), each requiring whitespace or end-of-line
 # immediately after the case token. So a case id is a single whitespace-free

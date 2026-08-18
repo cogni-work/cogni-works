@@ -20,9 +20,9 @@
 #     regex validates kebab-case SHAPE alone; a well-formed but wrong name passes.
 # Both were green on the broken tree.
 #
-# Case-label shape deviates from the sibling suites on purpose.
-# test-project-status.sh and test-stale-detection.sh print "OK   <label>"; this
-# suite prints "PASS: <label>" / "FAIL: <label>" because the cogni-service
+# Case-label shape is "PASS: <label>" / "FAIL: <label>", the shape every
+# discovered suite in this repo now carries — test-project-status.sh and
+# test-stale-detection.sh included. The cogni-service
 # mutation harness classifies a case GREEN only on
 # ^[[:space:]]*(ok|PASS):[[:space:]]+<case> and RED on the matching FAIL: form.
 # Neither "OK   " nor "OK:" is in that vocabulary, so a mutation replay against
@@ -31,7 +31,7 @@
 # reports case_not_found on a genuinely red case. Case ids are A-prefixed and
 # never bare numerals, which keeps the final summary line
 # ("FAIL: <n> agent-frontmatter-name test(s) failed.") from being read as a
-# case's RED line. Do not "fix" these labels back to the house style.
+# case's RED line — a hazard the colon form creates and every suite must answer.
 #
 # This file deliberately never spells the pre-fix bare agent name as one
 # contiguous token: the repo-wide falsifier for issue #1388 is an unfiltered

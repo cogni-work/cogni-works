@@ -63,8 +63,8 @@ TMPROOT="$(mktemp -d)"
 trap 'rm -rf "$TMPROOT"' EXIT
 
 failures=0
-pass() { printf 'OK   %s\n' "$1"; }
-fail() { printf 'FAIL %s: %s\n' "$1" "$2" >&2; failures=$((failures + 1)); }
+pass() { printf 'PASS: %s\n' "$1"; }
+fail() { printf 'FAIL: %s - %s\n' "$1" "$2" >&2; failures=$((failures + 1)); }
 
 # Assert the envelope's success flag and (on failure envelopes) failed_check.
 # Args: <name> <expected-success> <expected-failed_check-or-empty> <envelope>

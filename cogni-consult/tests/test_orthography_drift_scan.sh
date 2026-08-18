@@ -45,7 +45,7 @@ PLUGIN_DIR="$(dirname "$TESTS_DIR")"
 SCRIPT="${CONSULT_ORTHOGRAPHY_SCAN:-$PLUGIN_DIR/scripts/orthography-drift-scan.py}"
 
 if [ ! -f "$SCRIPT" ]; then
-  echo "FAIL orthography-drift-scan.py not found at $SCRIPT" >&2
+  echo "FAIL: orthography-drift-scan.py not found at $SCRIPT" >&2
   exit 1
 fi
 
@@ -53,8 +53,8 @@ TMPROOT="$(mktemp -d)"
 trap 'rm -rf "$TMPROOT"' EXIT
 
 failures=0
-pass() { printf 'OK   %s\n' "$1"; }
-fail() { printf 'FAIL %s: %s\n' "$1" "$2" >&2; failures=$((failures + 1)); }
+pass() { printf 'PASS: %s\n' "$1"; }
+fail() { printf 'FAIL: %s - %s\n' "$1" "$2" >&2; failures=$((failures + 1)); }
 
 # Always invoked through python3: this plugin's script mode bits are mixed, and a copied
 # fixture need not keep the executable bit.
@@ -205,15 +205,15 @@ DRIFT_DIGEST_BEFORE="$(digest_tree "$DRIFT")"
 # --- 1  clean ---------------------------------------------------------------
 
 env_clean="$(scan "$CLEAN")"
-assert_envelope "clean: envelope" true "" "$env_clean"
+assert_envelope "clean - envelope" true "" "$env_clean"
 if [ "$(total_findings "$env_clean")" = "0" ]; then
-  pass "clean: dass/muss/Prozess/Masse/Busse report nothing"
+  pass "clean - dass/muss/Prozess/Masse/Busse report nothing"
 else
   fail "clean" "expected 0 findings, got $(total_findings "$env_clean")"
 fi
 
 env_drift="$(scan "$DRIFT")"
-assert_envelope "drift: envelope is success (drift is a successful scan)" true "" "$env_drift"
+assert_envelope "drift - envelope is success (drift is a successful scan)" true "" "$env_drift"
 # Pinned to the exact seeded count, not merely -gt 0: a non-zero check passes just as
 # happily on 1 as on 8, so it cannot see a regression that silently loses most findings.
 # The eight, by file: scope/key-question.md carries grösse (in Messgrösse), heisst,
@@ -221,7 +221,7 @@ assert_envelope "drift: envelope is success (drift is a successful scan)" true "
 # .metadata/decision-log.json's rationale carries Strasse and gemäss; the marker-less
 # sources/README.md carries Strasse. The two marker-bearing echoes contribute nothing.
 if [ "$(total_findings "$env_drift")" = "8" ]; then
-  pass "drift: reports exactly the 8 seeded findings"
+  pass "drift - reports exactly the 8 seeded findings"
 else
   fail "drift" "expected exactly 8 findings, got $(total_findings "$env_drift")"
 fi
@@ -252,7 +252,7 @@ else:
     print("")
 ')"
 if [ -z "$shape" ]; then
-  pass "markdown-finding: path + line + form + suggestion"
+  pass "markdown-finding - path + line + form + suggestion"
 else
   fail "markdown-finding" "$shape"
 fi
@@ -277,7 +277,7 @@ else:
     print("")
 ')"
 if [ -z "$breakdown" ]; then
-  pass "markdown-finding: per-file breakdown matches the findings list and sums to the total"
+  pass "markdown-finding - per-file breakdown matches the findings list and sums to the total"
 else
   fail "markdown-finding/by_file" "$breakdown"
 fi
@@ -285,7 +285,7 @@ fi
 # --- 3  stem-match ----------------------------------------------------------
 
 if [ "$(count_form 'grösse' "$env_drift")" = "1" ]; then
-  pass "stem-match: Messgrösse reported from the bare Grösse entry"
+  pass "stem-match - Messgrösse reported from the bare Grösse entry"
 else
   fail "stem-match" "expected 1 lowercase grösse finding (from Messgrösse), got $(count_form 'grösse' "$env_drift")"
 fi
@@ -293,7 +293,7 @@ fi
 # --- 4  case-variance -------------------------------------------------------
 
 if [ "$(count_form 'heisst' "$env_drift")" -ge 1 ] && [ "$(count_form 'Heisst' "$env_drift")" -ge 1 ]; then
-  pass "case-variance: heisst and sentence-initial Heisst both report"
+  pass "case-variance - heisst and sentence-initial Heisst both report"
 else
   fail "case-variance" "heisst=$(count_form 'heisst' "$env_drift") Heisst=$(count_form 'Heisst' "$env_drift"), want both >= 1"
 fi
@@ -301,7 +301,7 @@ fi
 # --- 5  homographs ----------------------------------------------------------
 
 if [ "$(count_form 'Masse' "$env_drift")" = "0" ] && [ "$(count_form 'Busse' "$env_drift")" = "0" ]; then
-  pass "homographs: Masse and Busse are not entries"
+  pass "homographs - Masse and Busse are not entries"
 else
   fail "homographs" "Masse and Busse must never be reported — spelling cannot disambiguate them"
 fi
@@ -328,7 +328,7 @@ else:
     print("")
 ')"
 if [ -z "$json_verdict" ]; then
-  pass "json-prose-key: framing reports, the non-prose deliverable slug does not"
+  pass "json-prose-key - framing reports, the non-prose deliverable slug does not"
 else
   fail "json-prose-key" "$json_verdict"
 fi
@@ -350,7 +350,7 @@ else:
     print("")
 ')"
 if [ -z "$dot_verdict" ]; then
-  pass "dot-directory: .metadata/decision-log.json rationale reports"
+  pass "dot-directory - .metadata/decision-log.json rationale reports"
 else
   fail "dot-directory" "$dot_verdict"
 fi
@@ -374,7 +374,7 @@ else:
     print("")
 ')"
 if [ -z "$echo_verdict" ]; then
-  pass "generated-echo: marker-bearing echoes excluded, a marker-less file still scanned"
+  pass "generated-echo - marker-bearing echoes excluded, a marker-less file still scanned"
 else
   fail "generated-echo" "$echo_verdict"
 fi
@@ -393,16 +393,16 @@ else:
     print("")
 ')"
 if [ -z "$esc_verdict" ]; then
-  pass "escaped-json: \\uXXXX-escaped values are decoded before matching"
+  pass "escaped-json - \\uXXXX-escaped values are decoded before matching"
 else
   fail "escaped-json" "$esc_verdict"
 fi
 
 # --- 9  failure-paths ------------------------------------------------------
 
-assert_envelope "failure-paths: missing engagement" false "engagement_missing" "$(scan "$TMPROOT/does-not-exist")"
-assert_envelope "failure-paths: not a directory" false "not_a_directory" "$(scan "$DRIFT/scope/key-question.md")"
-assert_envelope "failure-paths: no argument" false "usage" "$(scan)"
+assert_envelope "failure-paths - missing engagement" false "engagement_missing" "$(scan "$TMPROOT/does-not-exist")"
+assert_envelope "failure-paths - not a directory" false "not_a_directory" "$(scan "$DRIFT/scope/key-question.md")"
+assert_envelope "failure-paths - no argument" false "usage" "$(scan)"
 
 # --- 10  envelope-shape ----------------------------------------------------
 
@@ -413,7 +413,7 @@ for envelope in "$env_clean" "$env_drift" "$(scan "$TMPROOT/does-not-exist")" "$
   fi
 done
 if [ "$lines_ok" -eq 1 ]; then
-  pass "envelope-shape: exactly one stdout line on every exit path"
+  pass "envelope-shape - exactly one stdout line on every exit path"
 else
   fail "envelope-shape" "an exit path emitted a preamble line before the JSON"
 fi
@@ -421,7 +421,7 @@ fi
 if printf '%s' "$env_drift" | grep -qF 'Grösse' \
   && printf '%s' "$env_drift" | grep -qF 'Größe' \
   && ! printf '%s' "$env_drift" | grep -q 'u00df'; then
-  pass "envelope-shape: literal ß bytes, no ASCII substitutes and no \\u escapes"
+  pass "envelope-shape - literal ß bytes, no ASCII substitutes and no \\u escapes"
 else
   fail "envelope-shape" "reported forms must be the literal bytes Grösse / Größe"
 fi
@@ -434,21 +434,21 @@ import json, sys
 print(repr(json.loads(sys.stdin.read())["error"]))
 ')"
 if [ "$error_repr" = "''" ]; then
-  pass "envelope-shape: the success envelope's error is the empty string, not null"
+  pass "envelope-shape - the success envelope's error is the empty string, not null"
 else
   fail "envelope-shape" "success envelope error is $error_repr, want ''"
 fi
 
 # --- 11  read-only-flag ----------------------------------------------------
 
-assert_envelope "read-only-flag: --fix rejected" false "unexpected_argument" "$(scan "$DRIFT" --fix)"
+assert_envelope "read-only-flag - --fix rejected" false "unexpected_argument" "$(scan "$DRIFT" --fix)"
 
 # --- 12  read-only-tree ----------------------------------------------------
 
 scan "$DRIFT" >/dev/null
 after="$(digest_tree "$DRIFT")"
 if [ "$DRIFT_DIGEST_BEFORE" = "$after" ]; then
-  pass "read-only-tree: fixture tree byte-identical across a drift-reporting scan"
+  pass "read-only-tree - fixture tree byte-identical across a drift-reporting scan"
 else
   fail "read-only-tree" "the scan modified the corpus it was asked to inspect"
 fi
@@ -466,7 +466,7 @@ import json, sys
 print(json.dumps(json.loads(sys.stdin.read())["data"]["by_file"]))
 ')"
   if [ "$clean_by_file" = "{}" ]; then
-    pass "scoping: a sibling engagement's Swiss text contributes zero findings"
+    pass "scoping - a sibling engagement's Swiss text contributes zero findings"
   else
     fail "scoping" "the clean scan reached outside its engagement: by_file=$clean_by_file"
   fi
@@ -487,10 +487,10 @@ if [ "$(id -u)" -ne 0 ]; then
   unreadable_envelope="$(scan "$unreadable")"
   # Restored immediately so the EXIT trap's rm -rf can still remove the fixture.
   chmod 755 "$unreadable"
-  assert_envelope "fail-loud: an unreadable engagement root" false "engagement_unreadable" \
+  assert_envelope "fail-loud - an unreadable engagement root" false "engagement_unreadable" \
     "$unreadable_envelope"
 else
-  pass "fail-loud: an unreadable engagement root (skipped as root)"
+  pass "fail-loud - an unreadable engagement root (skipped as root)"
 fi
 
 # --- 13  goes-red ----------------------------------------------------------
@@ -539,7 +539,7 @@ if mutate "$TMPROOT/mutant_empty.py" empty-pairs; then
   env_mut="$(mutant_findings "$TMPROOT/mutant_empty.py")"
   got="$(total_findings "$env_mut" 2>/dev/null || echo unparseable)"
   if [ "$got" = "0" ]; then
-    pass "goes-red: emptying SWISS_PAIRS drops every finding (detection has teeth)"
+    pass "goes-red - emptying SWISS_PAIRS drops every finding (detection has teeth)"
   else
     fail "goes-red/empty-pairs" "mutant still reported $got findings — the pair list is not what drives detection"
   fi
@@ -552,7 +552,7 @@ if mutate "$TMPROOT/mutant_anchored.py" anchor-whole-word; then
   env_mut="$(mutant_findings "$TMPROOT/mutant_anchored.py")"
   if printf '%s' "$env_mut" | python3 -c 'import json,sys; sys.exit(0 if json.loads(sys.stdin.read()).get("success") is True else 1)'; then
     if [ "$(count_form 'grösse' "$env_mut")" = "0" ]; then
-      pass "goes-red: anchoring the matcher whole-word loses Messgrösse (stem matching is load-bearing)"
+      pass "goes-red - anchoring the matcher whole-word loses Messgrösse (stem matching is load-bearing)"
     else
       fail "goes-red/anchored" "the anchored mutant still reported Messgrösse — matching is not stem-based"
     fi

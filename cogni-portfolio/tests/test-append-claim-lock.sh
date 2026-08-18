@@ -1,12 +1,14 @@
 #!/usr/bin/env bash
 # Regression test for cogni-portfolio/scripts/append-claim.sh covering the
 # stale-lock sweep's mtime reading — the BSD-first `stat` chain that returns a
-# successful *wrong* answer on GNU coreutils.
+# successful *wrong* answer on GNU coreutils — and the script's output-envelope
+# contract on every emit path, success and failure alike.
 #
 # Fixtures are built inline under a temp root — no committed blobs to maintain.
-# Each case builds a minimal claims project, pre-creates the lock directory so
-# the acquire loop is genuinely contended, shadows `stat` with a stub on PATH,
-# runs the script, and asserts on the exit code plus both output streams.
+# Most cases build a minimal claims project, pre-create the lock directory so
+# the acquire loop is genuinely contended, shadow `stat` with a stub on PATH,
+# run the script, and assert on the exit code plus both output streams. Cases 7
+# and 8 are the exceptions and build less than that — see the note below.
 #
 # Coverage:
 #   1  stale-lock-swept-on-non-numeric-stat   non-numeric mtime reading is floored
@@ -39,6 +41,11 @@
 #                                             never contends must spawn NO stat at
 #                                             all; this is what forbids resolving
 #                                             the form ahead of the loop
+#   8  no-arguments-emits-usage-envelope      the argument guard — the one failure
+#                                             path that never reaches the acquire
+#                                             loop writes a SINGLE error-envelope
+#                                             object to stderr and exits 1, asserted
+#                                             by shape and not by message alone
 #
 # Every case that CONTENDS drives the acquire loop to its ceiling on purpose, so
 #   each sets APPEND_CLAIM_MAX_WAIT as a per-invocation prefix rather than paying
@@ -47,9 +54,11 @@
 #   than the ~7.3s it cost when the ceiling was a hardcoded constant. Cases 4 and 5
 #   each drive the loop through the full sweep budget, so they carry most of the
 #   ~2.4s this suite grew by; folding them into one invocation that emits two result
-#   lines would recover roughly half of that if the budget ever needs tightening. Case 7 is the deliberate exception
-#   and never contends at all — it exists to prove the UNcontended acquire stays
-#   fork-free, so driving the loop is precisely what it must not do.
+#   lines would recover roughly half of that if the budget ever needs tightening.
+#   Cases 7 and 8 are the deliberate exceptions and never contend at all. Case 7
+#   exists to prove the UNcontended acquire stays fork-free, so driving the loop is
+#   precisely what it must not do; case 8 returns at the argument guard before the
+#   loop is reached at all, so it has no loop to drive.
 #   The prefix is deliberately NOT a suite-level export: run-plugin-tests.py
 #   invokes each suite as a bare `bash <path>`, so each case must carry its own
 #   ceiling.
@@ -206,6 +215,52 @@
 #   assertions stay green and only the envelope assertion discriminates. That is
 #   precisely what makes asserting the whole envelope, rather than the nested status
 #   alone, worth its line in all three.
+#
+#   Eighth arm — the TIMEOUT envelope's SHAPE, as distinct from its message:
+#   bash ~/.claude/plugins/cache/managed-service/cogni-service/0.0.402/scripts/mutation-check.sh \
+#     --root . \
+#     --file cogni-portfolio/scripts/append-claim.sh \
+#     --expr 's/\\"data\\": null, //' \
+#     --test 'bash cogni-portfolio/tests/test-append-claim-lock.sh' \
+#     --case live-lock-not-swept-on-numeric-stat
+#
+#   The expression drops the `data` key from the timeout envelope. It matches the
+#   ESCAPED spelling exactly once — the bash-side emit inside the acquire loop's
+#   double-quoted string; the two unescaped spellings in the SCRIPT, in its own
+#   header comment documenting the envelope and in the argument guard's
+#   single-quoted literal, cannot match it. It carries no `^`/`$` anchor, so it
+#   needs no `/m` under the harness's `perl -0pi`.
+#
+#   Cases 2 and 3 both catch this arm — both reach the timeout emit and both now
+#   assert its shape. Case 5 reaches the SAME envelope but asserts only the message
+#   grep, so it stays green under the mutation and is deliberately not a catcher.
+#   The arm names case 2 only because `--case` takes one name.
+#
+#   Under the mutation the script still exits 1, still writes one line to stderr,
+#   and that line still carries the timeout message and still parses as JSON — so
+#   the exit-code assertion and the message grep both stay green, and only the
+#   structural check discriminates. That is what makes the structural check evidence
+#   rather than decoration, and it is why the grep was kept alongside it rather than
+#   replaced by it: the two pin different things.
+#
+#   Ninth arm — the USAGE envelope's shape:
+#   bash ~/.claude/plugins/cache/managed-service/cogni-service/0.0.402/scripts/mutation-check.sh \
+#     --root . \
+#     --file cogni-portfolio/scripts/append-claim.sh \
+#     --expr 's/"data": null, "error": "Usage/"error": "Usage/' \
+#     --test 'bash cogni-portfolio/tests/test-append-claim-lock.sh' \
+#     --case no-arguments-emits-usage-envelope
+#
+#   The expression drops the `data` key from the argument guard's envelope. It
+#   matches exactly once — the guard's own emit; the SCRIPT's header comment spells
+#   the surrounding text differently and cannot match. It carries no `^`/`$` anchor,
+#   so it too needs no `/m`.
+#
+#   Case 8 is the only catcher, because it is the only case that runs the script
+#   with no arguments. Under the mutation the guard still exits 1, still writes one
+#   line to stderr, and that line still carries the `Usage:` literal — so every
+#   assertion in case 8 except the structural one stays green. A case that asserted
+#   the usage path by message alone would not have caught this.
 
 # `set -u` only — `set -e` would abort on the first failing assertion and defeat
 # the per-case failure counter below. All cases also run a script that is
@@ -368,6 +423,8 @@ if [ "$case2_rc" -ne 1 ]; then
   fail "live-lock-not-swept-on-numeric-stat" "expected exit 1, got $case2_rc"
 elif ! grep -q 'Could not acquire lock on claims.json after 0.3s' "$TMPROOT/case2.err"; then
   fail "live-lock-not-swept-on-numeric-stat" "stderr did not carry the timeout error: $(cat "$TMPROOT/case2.err")"
+elif ! python3 -c 'import json,sys; d=json.load(sys.stdin); sys.exit(0 if d["success"] is False and d["data"] is None else 1)' < "$TMPROOT/case2.err" 2>/dev/null; then
+  fail "live-lock-not-swept-on-numeric-stat" "stderr did not parse as a {success,data,error} object with success=false and data=null: $(cat "$TMPROOT/case2.err")"
 elif [ ! -d "$case2_dir/cogni-claims/.claims.lock" ]; then
   fail "live-lock-not-swept-on-numeric-stat" "a live peer's lock was swept"
 else
@@ -417,6 +474,8 @@ if [ "$case3_rc" -ne 1 ]; then
   fail "live-lock-not-swept-on-gnu-stat" "expected exit 1, got $case3_rc — a BSD-first chain would sweep the live lock and append"
 elif ! grep -q 'Could not acquire lock on claims.json after 0.3s' "$TMPROOT/case3.err"; then
   fail "live-lock-not-swept-on-gnu-stat" "stderr did not carry the timeout error: $(cat "$TMPROOT/case3.err")"
+elif ! python3 -c 'import json,sys; d=json.load(sys.stdin); sys.exit(0 if d["success"] is False and d["data"] is None else 1)' < "$TMPROOT/case3.err" 2>/dev/null; then
+  fail "live-lock-not-swept-on-gnu-stat" "stderr did not parse as a {success,data,error} object with success=false and data=null: $(cat "$TMPROOT/case3.err")"
 elif [ ! -d "$case3_dir/cogni-claims/.claims.lock" ]; then
   fail "live-lock-not-swept-on-gnu-stat" "a live peer's lock was swept"
 else
@@ -568,6 +627,52 @@ elif [ -s "$case7_counter" ]; then
   fail "uncontended-acquire-spawns-no-stat" "an uncontended acquire spawned stat $(wc -l < "$case7_counter" | tr -d ' ') time(s) — the probe is no longer lazy"
 else
   pass "uncontended-acquire-spawns-no-stat" "no stat spawned on the uncontended path"
+fi
+
+# --- Case 8: the argument guard emits the full error envelope, not a bare message.
+#
+# This is the script's one failure path that never reaches the acquire loop, so no
+# case above exercises it at all — it returns at the argument check before the lock
+# directory is ever created, which is also why this case needs no seeder and no stub
+# and leaves nothing behind to clean up.
+#
+# The STRUCTURAL assertion is the discriminator, not the message match. A guard that
+# regressed to emitting a bare `{"error": ...}` would keep the same message text, so
+# a grep alone stays green while the envelope around it rots — which is precisely
+# what the ninth mutation arm in the header above demonstrates.
+#
+# `Usage: append-claim.sh` is append-claim.sh's OWN literal, which is what makes a
+# text match legitimate here. Everything the shell or coreutils could emit is
+# asserted by SHAPE instead — the exit status, stdout emptiness, and a line COUNT —
+# because those diagnostics are gettext-localized and a text match on one would pass
+# vacuously off an English-locale host. Case 3's comment states the same rule.
+#
+# The line count is a genuine assertion rather than a formality: the guard's
+# `${1:-}` defaults are what keep `set -u` from adding a second line here, so a
+# regression to bare `$1` would show up as a count of 2 rather than as a message
+# change. `wc -l` reads from a REDIRECT, never a filename argument — the argument
+# form appends the filename to wc's output, which `tr -d ' '` does not strip, and
+# the numeric comparison then dies on a non-numeric operand. Case 7 above is the
+# precedent.
+#
+# The ceiling prefix is behaviourally inert here for the same reason it is on case
+# 7 — the guard returns before the ceiling is ever read — and is carried anyway so
+# every case states its own ceiling rather than inheriting the production default.
+case8_out="$(APPEND_CLAIM_MAX_WAIT=1 bash "$SCRIPT" 2>"$TMPROOT/case8.err")"
+case8_rc=$?
+
+if [ "$case8_rc" -ne 1 ]; then
+  fail "no-arguments-emits-usage-envelope" "expected exit 1, got $case8_rc (stderr: $(cat "$TMPROOT/case8.err"))"
+elif [ -n "$case8_out" ]; then
+  fail "no-arguments-emits-usage-envelope" "expected nothing on stdout, got: $case8_out"
+elif [ "$(wc -l < "$TMPROOT/case8.err" | tr -d ' ')" -ne 1 ]; then
+  fail "no-arguments-emits-usage-envelope" "expected exactly one newline-terminated line on stderr, got $(wc -l < "$TMPROOT/case8.err" | tr -d ' '): $(cat "$TMPROOT/case8.err")"
+elif ! python3 -c 'import json,sys; d=json.load(sys.stdin); sys.exit(0 if d["success"] is False and d["data"] is None and isinstance(d["error"], str) and d["error"] else 1)' < "$TMPROOT/case8.err" 2>/dev/null; then
+  fail "no-arguments-emits-usage-envelope" "stderr did not parse as a {success,data,error} object with success=false, data=null and a non-empty error: $(cat "$TMPROOT/case8.err")"
+elif ! grep -q 'Usage: append-claim.sh' "$TMPROOT/case8.err"; then
+  fail "no-arguments-emits-usage-envelope" "stderr did not carry the usage message: $(cat "$TMPROOT/case8.err")"
+else
+  pass "no-arguments-emits-usage-envelope" "argument guard emitted the full error envelope on stderr"
 fi
 
 if [ "$failures" -gt 0 ]; then

@@ -12,7 +12,7 @@ status: stable
 related: [ecosystem-overview, ecosystem-command-reference, concept-four-layer-architecture]
 ---
 
-Users usually know what they want to accomplish but not which of the eleven plugins owns it. This page is the routing table from task to plugin. Match on what the user is trying to *produce*, not on keywords — "I need to make slides" can mean [[plugin-cogni-visual]] (a deck from an existing narrative) or [[plugin-cogni-marketing]] (campaign materials), and picking wrong sends someone down a pipeline that was never going to work.
+Users usually know what they want to accomplish but not which of the eight plugins owns it. This page is the routing table from task to plugin. Match on what the user is trying to *produce*, not on keywords — "I need to make slides" can mean [[plugin-cogni-workspace]] (a deck from an existing narrative) or [[plugin-cogni-marketing]] (campaign materials), and picking wrong sends someone down a pipeline that was never going to work.
 
 ## Task → plugin
 

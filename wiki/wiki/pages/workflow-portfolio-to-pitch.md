@@ -8,7 +8,7 @@ updated: 2026-04-17
 sources:
   - https://github.com/cogni-work/insight-wave/blob/main/docs/workflows/portfolio-to-pitch.md
 status: stable
-related: [plugin-cogni-portfolio, plugin-cogni-sales, plugin-cogni-visual]
+related: [plugin-cogni-portfolio, plugin-cogni-sales, plugin-cogni-workspace]
 ---
 
 Generate a deal-specific or segment-reusable sales pitch from existing portfolio data.
@@ -46,7 +46,7 @@ Pre-requisite: [[plugin-cogni-portfolio]] has populated the relevant Feature × 
 
 Output: `sales-presentation.md` (slide narrative) and `sales-proposal.md` (long-form). Both pass through the `copywriter` skill of [[plugin-cogni-workspace]] for Power Positions polish before final rendering.
 
-Final hop through [[plugin-cogni-visual]] turns the slide narrative into a brief and renders to HTML slides or PPTX. See [[concept-brief-based-rendering]].
+Final hop through [[plugin-cogni-workspace]] turns the slide narrative into a brief and renders to HTML slides or PPTX. See [[concept-brief-based-rendering]].
 
 ## Two pitch modes
 

@@ -19,7 +19,7 @@ cogni-workspace is the horizontal layer owning shared workspace state; the busin
 - **Horizontal** — cogni-workspace (themes, env vars, vault config)
 - **Orchestration** — cogni-consult (engagement state, action-field dispatch)
 - **Data** — cogni-portfolio, cogni-trends, cogni-knowledge (each owns a knowledge domain)
-- **Output** — cogni-visual, cogni-sales, cogni-marketing, cogni-website (transform data-layer content into deliverables)
+- **Output** — cogni-sales, cogni-marketing, cogni-website (transform data-layer content into deliverables)
 
 ## Entity types per plugin
 
@@ -29,7 +29,7 @@ Each data-layer plugin owns a specialized domain with its own persistent entitie
 - cogni-trends: TipsProject, TrendCandidate, TrendReport, InvestmentTheme, SolutionTemplate, Catalog (JSON + YAML)
 - cogni-knowledge: sub-questions in `plan.json`, source / concept / question pages under `wiki/`, `pre_extracted_claims:` frontmatter, `citation-manifest.json` (markdown with YAML frontmatter, Obsidian-browsable)
 - cogni-workspace: ClaimRecord, DeviationRecord, ResolutionRecord (JSON in the project-local `cogni-claims/` store — the directory name is historical)
-- cogni-visual, cogni-marketing, cogni-sales and cogni-consult also have their own entity types
+- cogni-marketing, cogni-sales and cogni-consult also have their own entity types
 
 cogni-workspace's `copywriter` skill deliberately has no persistent entities — it modifies documents in place and detects `arc_id` frontmatter for arc-aware polishing.
 
@@ -41,7 +41,7 @@ The bidirectional bridge between cogni-portfolio and cogni-trends is the most co
 
 ## YAML frontmatter contracts
 
-Lighter than bridge files: a downstream plugin reads specific frontmatter fields from upstream files. `arc_id` (cogni-workspace's `narrative` skill → its `copywriter` skill and cogni-visual), `theme_path` (cogni-workspace → cogni-visual — see [[concept-theme-inheritance]]), `portfolio_path` (cogni-portfolio → cogni-sales, cogni-marketing, cogni-trends), `arc_type` (cogni-visual internal mapping for rendering agents).
+Lighter than bridge files: a downstream plugin reads specific frontmatter fields from upstream files. `arc_id` (cogni-workspace's `narrative` skill → its `copywriter` skill and its render agents), `theme_path` (`pick-theme` → those render agents — see [[concept-theme-inheritance]]), `portfolio_path` (cogni-portfolio → cogni-sales, cogni-marketing, cogni-trends), `arc_type` (cogni-workspace internal mapping for rendering agents).
 
 ## Data isolation in practice
 

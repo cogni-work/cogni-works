@@ -24,7 +24,7 @@
 #
 # Literals, not a regex over "foundation". `foundation` alone has many legitimate
 # hits (cogni-portfolio prose, cogni-narrative, the theme-system migration guide),
-# and `four layers` collides with cogni-visual's four-layer validation gate and
+# and `four layers` collides with cogni-workspace's four-layer validation gate and
 # cogni-trends' Foundations dimension. Each literal below is a phrase that was
 # measured present-and-wrong on the pre-reconciliation base, so each one is a
 # claim about this repo rather than a guess.
@@ -91,8 +91,6 @@
 #     not reconciliation
 #   - wiki/pages/lint-2026-04-20.md — a dated lint note, and root-tree-only, so
 #     editing it would also break the per-page parity assertion below
-#   - cogni-visual/libraries/ — "Foundation Layer" there is an ASCII-art fill
-#     label in a diagram legend, unrelated to the claim
 #   - .git/ and .claude/worktrees/ — nested checkouts of this same repo that
 #     local tooling leaves in the tree. Untracked, so `grep_hits` already skips
 #     them on the real repo; these entries only cover the filesystem fallback.
@@ -161,19 +159,16 @@ span four tiers'
 # Repo-relative path fragments exempt from the scan. See the header for why each
 # one is here.
 #
-# The two cogni-workspace/libraries/ entries are the adopted copies of the files
-# `cogni-visual/libraries/` is already exempt for, and they are here for the same
-# reason: both carry `Foundation Layer` as a label inside an ASCII-art diagram,
-# naming a z-order layer in a drawing rather than making any claim about plugin
-# layering. They are listed by exact path rather than as a directory prefix, so a
-# future file added to that tree still has to answer to this guard — the incumbent
-# cogni-visual entry is a directory only because the source tree is retired
-# wholesale in a later stage.
+# The two cogni-workspace/libraries/ entries carry `Foundation Layer` as a label
+# inside an ASCII-art diagram, naming a z-order layer in a drawing rather than
+# making any claim about plugin layering. They are listed by exact path rather
+# than as a directory prefix, so a future file added to that tree still has to
+# answer to this guard. The former `cogni-visual/libraries/` directory entry is
+# gone with the source tree it exempted.
 EXCLUDED='cogni-workspace/tests/test-layering-claim-reconciled.sh
 cogni-workspace/references/absorption-roadmap.md
 wiki/wiki/log.md
 wiki/wiki/pages/lint-2026-04-20.md
-cogni-visual/libraries/
 cogni-workspace/libraries/excalidraw-patterns.md
 cogni-workspace/libraries/svg-patterns.md
 .git/
@@ -373,10 +368,10 @@ fi
 # L3 — a literal under an excluded path is not flagged.
 # ---------------------------------------------------------------------------
 l3_ok=1
-mkdir -p "$TMPROOT/l3/cogni-visual/libraries" \
+mkdir -p "$TMPROOT/l3/cogni-workspace/libraries" \
          "$TMPROOT/l3/cogni-workspace/references" \
          "$TMPROOT/l3/wiki/wiki/pages"
-printf '| Foundation Layer | fill |\n' > "$TMPROOT/l3/cogni-visual/libraries/svg-patterns.md"
+printf '| Foundation Layer | fill |\n' > "$TMPROOT/l3/cogni-workspace/libraries/svg-patterns.md"
 printf 'The claim was: every other plugin depends on it.\n' > "$TMPROOT/l3/cogni-workspace/references/absorption-roadmap.md"
 printf 'ingest: foundation layer\n' > "$TMPROOT/l3/wiki/wiki/log.md"
 printf 'quoted `no upward dependencies` in a lint note\n' > "$TMPROOT/l3/wiki/wiki/pages/lint-2026-04-20.md"

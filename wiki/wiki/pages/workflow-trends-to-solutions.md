@@ -8,7 +8,7 @@ updated: 2026-04-17
 sources:
   - https://github.com/cogni-work/insight-wave/blob/main/docs/workflows/trends-to-solutions.md
 status: stable
-related: [plugin-cogni-trends, plugin-cogni-portfolio, plugin-cogni-visual, concept-trends-portfolio-bridge]
+related: [plugin-cogni-trends, plugin-cogni-portfolio, plugin-cogni-workspace, concept-trends-portfolio-bridge]
 ---
 
 Turn scouted trends into ranked solution blueprints with visual deliverables.
@@ -43,7 +43,7 @@ Ranked solution blueprints with visual deliverables (slide deck or enriched HTML
 
 The bridge to [[plugin-cogni-portfolio]] is the most complex single integration in the ecosystem — see [[concept-trends-portfolio-bridge]]. `tips-value-model.json` flows from cogni-trends to cogni-portfolio; `portfolio-context.json` flows back. cogni-portfolio's `trends-bridge` skill imports solution templates as portfolio features and stubs the matching FxM propositions.
 
-[[plugin-cogni-visual]] renders deliverables — `story-to-slides` for a CxO presentation, `enrich-report` for a themed HTML report with Chart.js visualizations of the TIPS network and BR scoring.
+[[plugin-cogni-workspace]] renders deliverables — `story-to-slides` for a CxO presentation, `enrich-report` for a themed HTML report with Chart.js visualizations of the TIPS network and BR scoring.
 
 ## Where TIPS comes from
 

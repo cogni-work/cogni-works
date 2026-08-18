@@ -29,14 +29,14 @@ How insight-wave plugins are structured on disk. Every plugin follows the same s
 └── README.md                     User-facing introduction
 ```
 
-Not every plugin uses every directory. cogni-marketing has no `scripts/`, only four plugins ship `hooks/`, cogni-visual has `libraries/` instead of per-skill `references/`.
+Not every plugin uses every directory. cogni-marketing has no `scripts/`, only four plugins ship `hooks/`, cogni-workspace has `libraries/` alongside per-skill `references/`.
 
 ## The four file kinds
 
 - **`plugin.json`** — name, version, description, author, license, keywords. The description is read by marketplace tooling, so it's one or two sentences about what the plugin does, not why it exists.
 - **`SKILL.md`** — YAML frontmatter (`name`, `description`, `allowed-tools`) followed by the system prompt body. The description field is the trigger specification — it determines when Claude Code activates this skill — so it lists explicit trigger phrases including multilingual variants when relevant.
 - **`agents/{name}.md`** — frontmatter (`name`, `description`, `model`, `color`, `tools`) plus the agent's system prompt. Models are picked per role — see [[concept-agent-model-strategy]]. Tools are narrower than a skill's tool set because agents do bounded tasks.
-- **`hooks/hooks.json` + scripts** — `PreToolUse`/`SessionStart`/`SubagentStart` matchers binding regex tool or agent-name patterns to bash scripts. cogni-portfolio and cogni-visual use a `PreToolUse` matcher to auto-start the Excalidraw canvas before any `mcp__excalidraw__*` call; cogni-consult uses `SubagentStart` to inject engagement context into its own subagents.
+- **`hooks/hooks.json` + scripts** — `PreToolUse`/`SessionStart`/`SubagentStart` matchers binding regex tool or agent-name patterns to bash scripts. cogni-portfolio and cogni-workspace use a `PreToolUse` matcher to auto-start the Excalidraw canvas before any `mcp__excalidraw__*` call; cogni-consult uses `SubagentStart` to inject engagement context into its own subagents.
 
 ## Naming conventions
 

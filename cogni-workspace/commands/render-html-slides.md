@@ -14,7 +14,7 @@ arguments:
     required: false
 ---
 
-Invoke the `render-html-slides` skill from cogni-visual.
+Invoke the `render-html-slides` skill from cogni-workspace.
 
 Read and follow `${CLAUDE_PLUGIN_ROOT}/skills/render-html-slides/SKILL.md`.
 

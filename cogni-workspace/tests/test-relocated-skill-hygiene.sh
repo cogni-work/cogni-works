@@ -75,6 +75,10 @@ WS_ROOT="$(cd "$HERE/.." && pwd)"
 # skills/manage-themes, skills/narrative, skills/narrative-adapt — were repointed at
 # the consumer stage of the cogni-visual absorption; the file-level specs stand on
 # the shared-destination argument alone, not on those files.)
+# commands/ qualifies as directory-level: every file in it arrived by adoption
+# (none is a long-standing cogni-workspace command), so the directory spec is
+# green and additionally covers the commands adopted in earlier retirements,
+# which no file-level row reached.
 # `find` over a regular file yields that file, so bare-file specs walk fine.
 TREE_SPECS="
 $WS_ROOT/skills/cogni-issues|cogni-help:
@@ -132,6 +136,7 @@ $WS_ROOT/tests/test-arc-taxonomy-sync.sh|cogni-visual:
 $WS_ROOT/tests/test-de-ascii-orthography.sh|cogni-visual:
 $WS_ROOT/tests/test-excalidraw-canvas-lock.sh|cogni-visual:
 $WS_ROOT/hooks/ensure-excalidraw-canvas.sh|cogni-visual:
+$WS_ROOT/commands|cogni-visual:
 "
 
 failures=0

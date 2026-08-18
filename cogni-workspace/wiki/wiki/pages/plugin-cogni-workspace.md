@@ -42,6 +42,6 @@ The horizontal layer of the insight-wave marketplace — it owns the shared work
 
 ## Integration
 
-The horizontal layer the vertical business plugins consume. cogni-workspace is the first install — `manage-workspace` initializes the directory structure that every other plugin's project directories live inside. `pick-theme` is called by every visual plugin (cogni-visual, cogni-website, cogni-portfolio dashboards, cogni-trends dashboards).
+The horizontal layer the vertical business plugins consume. cogni-workspace is the first install — `manage-workspace` initializes the directory structure that every other plugin's project directories live inside. `pick-theme` is called by every visual surface (its own render agents, cogni-website, cogni-portfolio dashboards, cogni-trends dashboards).
 
 **Source**: [cogni-workspace README](https://github.com/cogni-work/insight-wave/blob/main/cogni-workspace/README.md) · [plugin guide](https://github.com/cogni-work/insight-wave/blob/main/docs/plugin-guide/cogni-workspace.md)

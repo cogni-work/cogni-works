@@ -18,7 +18,7 @@ This is the content catalog for **insight-wave**. Every wiki page is listed here
 
 - [[concept-agent-model-strategy]] — Agents pick model tiers by role across insight-wave, with cost-per-task as the deciding factor.
 - [[concept-bridge-files]] — Bridge files are explicit JSON exports written by one plugin and read by another according to a versioned contract.
-- [[concept-brief-based-rendering]] — cogni-visual separates content specification from rendering.
+- [[concept-brief-based-rendering]] — cogni-workspace separates content specification from rendering.
 - [[concept-claim-lifecycle]] — Claims in cogni-workspace move through a three-state lifecycle.
 - [[concept-claims-propagation]] — Claims propagation is the cross-plugin pattern that turns sourced assertions into a verifiable, self-correcting knowledge graph.
 - [[concept-data-isolation]] — Each insight-wave plugin owns its data completely.
@@ -43,7 +43,6 @@ This is the content catalog for **insight-wave**. Every wiki page is listed here
 - [[plugin-cogni-portfolio]] — cogni-portfolio gives B2B companies a structured way to build market-specific messaging using the IS/DOES/MEANS (FAB) framework applied at the Feature × Market level.
 - [[plugin-cogni-sales]] — B2B sales pitch generation using Corporate Visions Why Change methodology.
 - [[plugin-cogni-trends]] — Strategic trend scouting and reporting pipeline.
-- [[plugin-cogni-visual]] — Transform polished narratives and structured data into visual deliverables — presentation briefs, slide decks, scrollable web narratives, poster storyboards, single-page infographics, and visual as....
 - [[plugin-cogni-website]] — Assembles multi-page customer websites from portfolio, marketing, trend, and research content produced by other insight-wave plugins.
 - [[plugin-cogni-workspace]] — The horizontal layer of the insight-wave marketplace — it owns the shared workspace state the vertical business plugins consume.
 
@@ -107,16 +106,6 @@ One page per skill, grouped by plugin, alphabetical within each.
 - [[skill-cogni-trends-trends-dashboard]] — Generate an interactive HTML dashboard showing the full TIPS project lifecycle.
 - [[skill-cogni-trends-trends-resume]] — Resume, continue, or check status of a TIPS trend scouting project.
 - [[skill-cogni-trends-value-modeler]] — Build TIPS relationship networks and generate ranked Solution Templates from agreed trend candidates.
-
-#### cogni-visual
-
-- [[skill-cogni-visual-enrich-report]] — Use this skill whenever the user has an existing markdown report and wants it transformed into a polished visual deliverable.
-- [[skill-cogni-visual-render-html-slides]] — Render a presentation-brief.
-- [[skill-cogni-visual-review-brief]] — Review a visual brief from three stakeholder perspectives — design quality, audience experience, and usability.
-- [[skill-cogni-visual-story-to-infographic]] — Transform any narrative (insight summary, trend report, strategy document, sales pitch, research report) into a single-page infographic brief optimized for visual scanning.
-- [[skill-cogni-visual-story-to-slides]] — Transform any narrative (insight summary, trend report, strategy document, sales pitch, project update) into an optimized multi-slide presentation brief that the PPTX skill renders into PowerPoint.
-- [[skill-cogni-visual-story-to-storyboard]] — Transform any narrative (insight summary, trend report, strategy document, sales pitch) into a multi-poster print storyboard brief for executive walkthroughs.
-- [[skill-cogni-visual-story-to-web]] — Transform any narrative (insight summary, trend report, strategy document, sales pitch, project update) into an optimized scrollable web narrative brief that the web agent renders via Pencil MCP in....
 
 #### cogni-website
 
@@ -187,28 +176,6 @@ One page per agent role, grouped by plugin, alphabetical within each.
 - [[agent-cogni-trends-trend-report-writer]] — Generate a narrative TIPS dimension section with inline citations and verifiable claims from trend candidates.
 - [[agent-cogni-trends-trend-signal-curator]] — Evaluate and rank web research signals by quality, relevance, and diversity before candidate generation.
 - [[agent-cogni-trends-trend-web-researcher]] — Execute bilingual web research (EN/DE) for trend scouting and return aggregated signals as compact JSON.
-
-#### cogni-visual
-
-- [[agent-cogni-visual-brief-review-assessor]] — Assess visual brief quality from three stakeholder perspectives adapted to the brief type.
-- [[agent-cogni-visual-concept-diagram]] — Generate a single Excalidraw concept diagram (TIPS flow, relationship map, process flow, or concept sketch) from structured data and export as SVG.
-- [[agent-cogni-visual-concept-diagram-svg]] — Generate a single concept diagram (TIPS flow, relationship map, process flow, or concept sketch) as clean inline SVG using LLM-crafted geometric primitives.
-- [[agent-cogni-visual-editorial-sketch]] — Generate a single editorial-discipline line-art sketch as inline SVG and write it to disk.
-- [[agent-cogni-visual-enrich-report]] — Transform a text-only markdown report into a themed HTML deliverable with Chart.
-- [[agent-cogni-visual-enriched-report-reviewer]] — Visual quality review of an enriched HTML report via Browser MCP screenshots.
-- [[agent-cogni-visual-html-slides]] — Render a presentation-brief.
-- [[agent-cogni-visual-pptx]] — Create, edit, and analyze PowerPoint presentations.
-- [[agent-cogni-visual-render-infographic-pencil]] — Render an infographic-brief.
-- [[agent-cogni-visual-render-infographic-sketchnote]] — Render an infographic-brief.
-- [[agent-cogni-visual-render-infographic-whiteboard]] — Render an infographic-brief.
-- [[agent-cogni-visual-report-html-writer]] — Write a complete self-contained scroll-layout HTML file from a markdown report, enrichment plan, and design variables.
-- [[agent-cogni-visual-slides-enrichment-artist]] — Generate prep slides and speaker notes, then write the complete presentation-brief.
-- [[agent-cogni-visual-story-to-infographic]] — Transform any narrative into a single-page infographic brief.
-- [[agent-cogni-visual-story-to-slides]] — Transform any narrative with a story arc into an optimized presentation brief.
-- [[agent-cogni-visual-story-to-storyboard]] — Transform any narrative with a story arc into a storyboard brief for printed posters.
-- [[agent-cogni-visual-story-to-web]] — Transform any narrative with a story arc into a scrollable web narrative brief.
-- [[agent-cogni-visual-storyboard]] — Render a storyboard-brief.
-- [[agent-cogni-visual-web]] — Render a web-brief.
 
 #### cogni-website
 

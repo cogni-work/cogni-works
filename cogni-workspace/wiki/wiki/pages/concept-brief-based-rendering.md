@@ -2,7 +2,7 @@
 id: concept-brief-based-rendering
 title: Brief-based rendering (separate content spec from rendering)
 type: concept
-tags: [cogni-visual, briefs, rendering, separation-of-concerns]
+tags: [cogni-workspace, briefs, rendering, separation-of-concerns]
 created: 2026-04-17
 updated: 2026-04-17
 sources:
@@ -10,16 +10,16 @@ sources:
 status: stable
 ---
 
-cogni-visual separates content specification from rendering. Between the compose/polish phase and the render phase, cogni-visual inserts a **brief**: a structured Markdown file with YAML frontmatter that describes *what* to render without describing *how*.
+cogni-workspace separates content specification from rendering. Between the compose/polish phase and the render phase, cogni-workspace inserts a **brief**: a structured Markdown file with YAML frontmatter that describes *what* to render without describing *how*.
 
 ## The pipeline
 
 ```
-cogni-workspace `narrative` → cogni-workspace `copywriter` → cogni-visual
+cogni-workspace `narrative` → cogni-workspace `copywriter` → cogni-workspace render agents
 (compose)                     (polish)                       (visualize)
 ```
 
-A brief sits between the `copywriter` skill's output and cogni-visual's rendering agents.
+A brief sits between the `copywriter` skill's output and cogni-workspace's rendering agents.
 
 ## What a brief specifies vs hides
 
@@ -27,7 +27,7 @@ A presentation brief lists slides with headlines, body copy, and CTA proposals. 
 
 An infographic brief lists content blocks with block types, headlines, and data points. It does **not** specify element composition or spatial relationships — those decisions belong to the rendering agents.
 
-cogni-visual's CLAUDE.md: "Briefs are YAML frontmatter + Markdown. Frontmatter holds metadata (type, version, theme, arc_type, arc_id, confidence_score). Body holds the content specification."
+Briefs are YAML frontmatter + Markdown. Frontmatter holds metadata (type, version, theme, arc_type, arc_id, confidence_score). Body holds the content specification.
 
 ## Two practical benefits
 
@@ -35,7 +35,7 @@ cogni-visual's CLAUDE.md: "Briefs are YAML frontmatter + Markdown. Frontmatter h
 
 2. **Rendering agents can evolve independently.** When rendering pipelines upgrade (new chart types, new sketchnote conventions, new export formats), existing briefs remain valid because brief formats make no assumptions about rendering technique.
 
-## Brief types in cogni-visual
+## Brief types in cogni-workspace
 
 - `presentation-brief.md` — slides
 - `infographic-brief.md` — single-page visual summary

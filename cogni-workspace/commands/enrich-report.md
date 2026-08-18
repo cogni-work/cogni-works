@@ -14,7 +14,7 @@ arguments:
     required: false
 ---
 
-Invoke the `enrich-report` skill from cogni-visual.
+Invoke the `enrich-report` skill from cogni-workspace.
 
 Read and follow `${CLAUDE_PLUGIN_ROOT}/skills/enrich-report/SKILL.md`.
 

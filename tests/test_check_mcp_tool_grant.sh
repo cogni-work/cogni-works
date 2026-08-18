@@ -271,10 +271,10 @@ check_eq "P1 disclaiming prose never fires" "0" "$CODE"
 # in body prose while granting a different namespace via the block-list form,
 # so it discriminates on the prose arm and the block-list arm at once.
 R="$(new_root disclaim_real)"
-write_registry "$R" "mcp_excalidraw" "excalidraw" '["cogni-visual"]'
-mkdir -p "$R/cogni-visual/agents"
-cp "$REPO_ROOT/cogni-visual/agents/concept-diagram-svg.md" \
-   "$R/cogni-visual/agents/concept-diagram-svg.md"
+write_registry "$R" "mcp_excalidraw" "excalidraw" '["cogni-workspace"]'
+mkdir -p "$R/cogni-workspace/agents"
+cp "$REPO_ROOT/cogni-workspace/agents/concept-diagram-svg.md" \
+   "$R/cogni-workspace/agents/concept-diagram-svg.md"
 run_guard "$R"
 check_eq "P2 a real disclaiming agent contributes no violation" "0" "$CODE"
 py_assert "P2a the real disclaimer was actually scanned" "
@@ -376,9 +376,14 @@ py_assert "L1 the scan population is still reaching agent files" "
 assert s['agents_discovered'] >= 100, s['agents_discovered']
 assert sum(s['tools_form_counts'].values()) >= 90, s['tools_form_counts']
 " "$REPO_OUT"
+# Floors re-derived after cogni-visual's retirement removed its render agents,
+# which carried most of the repo's mcp__excalidraw__*/mcp__pencil__* grants:
+# grant_tokens fell 130 -> 73 and body_call_sites 23 -> 14. The replacements keep
+# the original ~75% margin below observed, so the arm still catches a collapsed
+# scan (a broken glob reports zero) without reddening on ordinary churn.
 py_assert "L2 grants and body call sites are still being extracted" "
-assert s['grant_tokens'] >= 100, s['grant_tokens']
-assert s['body_call_sites'] >= 15, s['body_call_sites']
+assert s['grant_tokens'] >= 60, s['grant_tokens']
+assert s['body_call_sites'] >= 10, s['body_call_sites']
 " "$REPO_OUT"
 
 printf '%s\n' "$failures failed"

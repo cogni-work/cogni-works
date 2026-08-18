@@ -8,7 +8,7 @@ updated: 2026-04-17
 sources:
   - https://github.com/cogni-work/insight-wave/blob/main/docs/workflows/content-pipeline.md
 status: stable
-related: [plugin-cogni-marketing, plugin-cogni-workspace, plugin-cogni-visual]
+related: [plugin-cogni-marketing, plugin-cogni-workspace]
 ---
 
 The end-to-end content production pipeline — from strategy to channel-ready deliverables.
@@ -22,7 +22,7 @@ cogni-workspace `narrative` (story arc shaping, long-form only)
    ↓ narrative with arc_id
 cogni-workspace `copywriter` (polish, arc-aware)
    ↓ polished prose
-cogni-visual (slides / web rendering, brief-driven)
+cogni-workspace (slides / web rendering, brief-driven)
 ```
 
 ## Duration
@@ -41,7 +41,7 @@ Short-form content (LinkedIn posts, carousels, battle cards) skips narrative and
 
 The `copywriter` skill applies messaging frameworks (BLUF, Pyramid, SCQA, STAR, PSB, FAB, Inverted Pyramid) per content type. When `arc_id` is present, polish preserves arc structure (the Why Change → Why Now → Why You → Why Pay sequence in a Corporate Visions narrative stays intact).
 
-Optional final hop: [[plugin-cogni-visual]] turns polished long-form into slide decks (`story-to-slides`) or web narratives (`story-to-web`) for distribution channels that need visual treatment. See [[concept-brief-based-rendering]].
+Optional final hop: [[plugin-cogni-workspace]] turns polished long-form into slide decks (`story-to-slides`) or web narratives (`story-to-web`) for distribution channels that need visual treatment. See [[concept-brief-based-rendering]].
 
 ## Why this order
 
@@ -67,7 +67,7 @@ Output is raw content in up to sixteen formats. Content-writer agents run in par
 
 **4 — Polish.** `/copywrite <content-path>` per piece, or describe the batch. Applies Pyramid Principle, BLUF, active voice and readability scoring. For multi-stakeholder content run `/review-doc` afterwards — reader personas score and synthesize feedback. German content auto-detects and applies Wolf Schneider rules with Amstad readability scoring.
 
-**5 — Render (optional).** Describe the output you want. cogni-visual reads the polished narrative, detects the story arc, and maps content to layouts with assertion headlines. Prefer the web-narrative format over slides for a leave-behind or microsite. Stop at step 4 if the content stays in markdown — rendering is opt-in.
+**5 — Render (optional).** Describe the output you want. cogni-workspace reads the polished narrative, detects the story arc, and maps content to layouts with assertion headlines. Prefer the web-narrative format over slides for a leave-behind or microsite. Stop at step 4 if the content stays in markdown — rendering is opt-in.
 
 ## Common pitfalls
 

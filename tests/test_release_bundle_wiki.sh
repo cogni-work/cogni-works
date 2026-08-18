@@ -2,17 +2,19 @@
 #
 # Self-test for scripts/release-bundle-wiki.sh's pre-sync destruction gate.
 #
-# Cases:
-#   RBW1  a bundle-only page makes a bare sync refuse, and writes no bytes
-#   RBW2  the refusal is one JSON object naming the path in data.would_delete
-#   RBW3  a bundled copy holding lines the source lacks is refused as would_overwrite
-#   RBW4  a bundle that is a strict subset of source still syncs bare (no over-refusal)
-#   RBW5  an already-identical bundle still syncs bare (the empty-count regression)
-#   RBW6  --force performs the destructive sync the bare run refused
-#   RBW7  --help prints the whole header and nothing below it
-#   RBW8  an unknown argument still yields the error envelope and exit 1
+# Cases: the bracketed id range after each entry is what the suite actually
+# emits as the result line's first token, and is the addressable `--case`
+# value; the RBWn stems group them and are never emitted on their own.
+#   RBW1  a bundle-only page makes a bare sync refuse, and writes no bytes  [RBW1a-RBW1d]
+#   RBW2  the refusal is one JSON object naming the path in data.would_delete  [RBW2a-RBW2e]
+#   RBW3  a bundled copy holding lines the source lacks is refused as would_overwrite  [RBW3a-RBW3d]
+#   RBW4  a bundle that is a strict subset of source still syncs bare (no over-refusal)  [RBW4a-RBW4c]
+#   RBW5  an already-identical bundle still syncs bare (the empty-count regression)  [RBW5a-RBW5b]
+#   RBW6  --force performs the destructive sync the bare run refused  [RBW6a-RBW6d]
+#   RBW7  --help prints the whole header and nothing below it  [RBW7a-RBW7e]
+#   RBW8  an unknown argument still yields the error envelope and exit 1  [RBW8a-RBW8c]
 #   RBW9  a bundled tree that is absent, or present but holding no pages, still
-#         syncs bare — there is nothing there to destroy
+#         syncs bare — there is nothing there to destroy  [RBW9a-RBW9f]
 #
 # Satisfies the runner's three-property contract: it exits non-zero on failure
 # and zero otherwise, runs as `bash <path>` with no arguments from any working
@@ -32,7 +34,7 @@
 # `dirname $0/..`, so running the copy from <fixture>/scripts/ is what makes
 # both roots resolve inside the fixture; there is no path-override flag.
 #
-# Mutation recipe (proves RBW1's refusal assertion can go red):
+# Mutation recipe (proves RBW1a's refusal assertion can go red):
 #
 #   bash cogni-service/scripts/mutation-check.sh \
 #     --root "$REPO_ROOT" \

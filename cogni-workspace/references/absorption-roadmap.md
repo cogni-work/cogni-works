@@ -364,3 +364,41 @@ state: a forbidden-literal scan over the paths above, plus per-page byte-parity
 between the two wiki trees. Parity is asserted **per touched page**, never
 tree-wide — the trees legitimately differ by one page, so a tree-wide assertion
 would fail on arrival.
+
+## Decision 8 — retired-plugin phrasing leaves a live survivor inventory but stays in the historical tables
+
+**Decision.** The "Phrase-level survivors" inventory in the header of
+`cogni-workspace/tests/test-layering-claim-reconciled.sh` **may only name files
+that exist in the current tree**. Three of its entries quoted course and workflow
+prose from a plugin retired into its adopting plugin; all three are **dropped,
+not repointed**. The historical inventory tables under
+`## Known remaining contradictions — reconciled` keep their retired paths intact
+and are not touched.
+
+**Why the two surfaces diverge.** The discriminator is what each surface asserts.
+A survivor inventory is a **live claim about what is standing right now** — it
+exists to explain why a forbidden literal is worded the way it is, and a reader
+who follows one of its citations expects to land on a line the scan deliberately
+leaves alone. The reconciled-contradictions tables assert something else
+entirely: they are an audit record of the pre-reconciliation state, which is why
+that section says the table is kept as the historical inventory rather than
+deleted, so the set stays auditable. Rewriting a dated record to reach a cosmetic
+zero falsifies history — the failure Decision 7 already rejects. Dropping a live
+citation that resolves to nothing does the opposite: it removes a claim that is
+no longer true.
+
+**Why dropped rather than repointed.** There is no successor to point at. The
+three files named — a full-onboarding module, an install-to-infographic tour, and
+a canonical-workflows page — are absent from the tree, and each phrase they
+quoted ("the workspace provides the foundation", "builds on this foundation",
+"the workspace + theme + MCP foundation") occurs nowhere else in the repo. The
+bundled wiki carries a similarly-named workflow page, but it contains none of
+that prose, so repointing there would swap a dead citation for a false one — the
+worse of the two, because a false citation reads as verified.
+
+**The two surviving entries are de-numbered rather than corrected.** Both had
+drifted by one line as the files above them grew. Correcting the numbers would
+have restored the citations only until the next edit; quoting the distinctive
+text instead makes the quote the locator, which cannot drift. This follows the
+same reasoning the block already applies to the `index.md` bullet it identifies
+by wikilink because the two wiki trees number it differently.

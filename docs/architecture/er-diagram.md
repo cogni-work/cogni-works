@@ -74,7 +74,7 @@ Downstream plugins read YAML frontmatter fields from files produced by upstream 
 |-------|-------|--------|---------|
 | `arc_id` | cogni-workspace (`narrative`) | cogni-workspace (`copywriter`), cogni-visual | Arc type for arc-aware polishing and visual theme selection |
 | `theme_path` | cogni-workspace | cogni-visual | Path to the active theme file |
-| `portfolio_path` | cogni-portfolio | cogni-consult | Path to the project directory |
+| `portfolio_path` | cogni-portfolio | cogni-sales, cogni-marketing, cogni-trends | Path to the project directory |
 | `arc_type` | cogni-visual (from arc_id mapping) | rendering agents | Visual arc type from libraries/arc-taxonomy.md |
 
 ---

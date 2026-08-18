@@ -54,7 +54,7 @@
     {
       "name": "cogni-workspace",
       "source": "./cogni-workspace",
-      "version": "0.6.72",
+      "version": "0.6.76",
       "maturity": "preview",
       "description": "The horizontal layer of the insight-wave marketplace — it owns the shared workspace state the vertical business plugins consume. Manages shared infrastructure (env vars, settings), MCP server installation and Desktop config patching, theme management, theme picker, plugin discovery, workspace health, an interactive workspace-configuration dashboard, Obsidian vault integration, a bundled vendor-curated insight-wave reference wiki queryable via the ask skill, and cross-plugin claim verification — submitting sourced assertions, verifying them against their cited URLs, and guiding deviation resolution.",
       "keywords": [
@@ -93,7 +93,7 @@
     {
       "name": "cogni-portfolio",
       "source": "./cogni-portfolio",
-      "version": "0.9.81",
+      "version": "0.9.83",
       "maturity": "preview",
       "description": "Portfolio messaging and proposition planning for SMEs using the IS/DOES/MEANS (FAB) framework — market-specific value propositions with competitive analysis, customer profiling, and export-ready deliverables across eight pluggable industry taxonomies and first-class market coverage spanning DACH/EU, UK/US, LATAM (MX/BR), and China (CN).",
       "keywords": [
@@ -110,7 +110,7 @@
     {
       "name": "cogni-visual",
       "source": "./cogni-visual",
-      "version": "0.16.48",
+      "version": "0.16.49",
       "maturity": "preview",
       "description": "Transform polished narratives and structured data into visual deliverables — presentation briefs, slide decks, scrollable web narratives, poster storyboards, single-page infographics, and visual assets. Supports Excalidraw, Pencil MCP, PPTX, and HTML rendering.",
       "keywords": [

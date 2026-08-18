@@ -142,21 +142,26 @@ when called from here (no extra user confirmations needed).
 After install-mcp completes, read
 `${CLAUDE_PLUGIN_ROOT}/references/mcp-git-registry.json` — anchored because at this point
 in the flow the working directory is the user's workspace target, not the plugin root —
-for the installable server set, and present a combined summary. The registry covers only
-the servers install-mcp can write (`mcp_excalidraw`, `pencil`); claude-in-chrome is a
-Chrome extension the user installs themselves and has no registry entry. Show a row only
+for the installable server set, and present a combined summary. The registry is what says
+which servers install-mcp can write, so read the set from it rather than assuming a fixed
+pair — a server added there is installable without touching this skill. claude-in-chrome
+is the one ecosystem MCP with no registry entry: a Chrome extension the user installs
+themselves. Show a row only
 for a registry server whose `required_by` intersects the plugin list confirmed in step 2 —
 install-mcp installs nothing for an absent plugin — and take each row's action and status
-verbatim from install-mcp's returned summary rather than from the registry. Label each row
-with the entry's `desktop_config_key` — `excalidraw` for the registry server
-`mcp_excalidraw`, `pencil` for `pencil` — because that key is what lands in the user's
-config and what the `mcp__<key>__*` tool names derive from; do not label the row with the
-registry server name. The block below is illustrative:
+verbatim from install-mcp's returned summary rather than from the registry. The Action
+cell is the per-server `action` verb exactly as `actions[]` carries it — `added`,
+`updated` or `skipped` — never a label composed here; composing one reports a write for a
+server the writer may have skipped. Label each row
+with the entry's `desktop_config_key` as the registry gives it (the server
+`mcp_excalidraw` labels as `excalidraw`, for example), because that key is what lands in
+the user's config and what the `mcp__<key>__*` tool names derive from; do not label the
+row with the registry server name. The block below is illustrative:
 
 ```
 MCP Servers (installed on demand, written to your config):
-  excalidraw       git-installed + config written    <- cogni-visual, cogni-portfolio
-  pencil           native app + config written       <- cogni-visual
+  excalidraw       added      loaded       <- cogni-visual, cogni-portfolio
+  pencil           skipped    not loaded   <- cogni-visual, cogni-website
 
 Manual install needed:
   claude-in-chrome Chrome extension                  <- cogni-website, cogni-workspace
@@ -166,6 +171,15 @@ The row-selection rule above covers registry servers only. Show the `Manual inst
 row when the plugin list confirmed in step 2 includes `cogni-website` or `cogni-workspace`;
 that pairing is fixed here rather than read from the registry, since `claude-in-chrome` has
 no registry entry to supply it.
+
+install-mcp does not always return per-server rows, and there is nothing to render when it
+does not. Two shapes produce that: a `--target both` run that fails on its first target
+returns `success: false` carrying `error` and `target` but no `targets[]`/`actions[]`, and
+a config whose backup cannot be created exits with no JSON envelope at all. In either
+case, render no rows rather than inventing them: report the affected servers as not
+configured, surface the raw error and the target it names when there is one, and send the
+user to `/cogni-workspace:install-mcp` to finish the write before treating workspace setup
+as complete.
 
 Newly written servers load only after a session restart — relay install-mcp's restart
 reminder in the summary rather than presenting "config written" as a finished state.

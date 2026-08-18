@@ -69,6 +69,7 @@ These MCPs are not written by install-mcp and require user action.
 
 ### pencil
 
+- **Needed by:** cogni-visual, cogni-website
 - **Type:** Desktop app with bundled MCP server
 - **Install:** Download from https://pencil.dev, open the app — MCP auto-starts
 - **Probe tool:** `mcp__pencil__get_editor_state`

@@ -16,7 +16,7 @@
     {
       "id": 3,
       "prompt": "I want to update all my MCP servers to their latest versions. The excalidraw canvas has been buggy.",
-      "expected_output": "Should run install-mcp.sh with --force to pull latest and rebuild, then re-patch Desktop config if needed. Should verify the updated server loads correctly.",
+      "expected_output": "Should run install-mcp.sh with --force to pull latest and rebuild, then re-run patch-desktop-config.py against the environment detected in this session \u2014 the --target follows that detection rather than assuming Desktop \u2014 scoping the write with --server repeated once per server, never a comma-separated value. Should verify the updated server loads correctly and follow the target for the restart advice.",
       "files": []
     },
     {

@@ -1,20 +1,19 @@
 ---
 name: install-mcp
 description: >-
-  End-to-end MCP server installation for the insight-wave ecosystem — clone and
-  build git-based MCPs, configure native app MCPs, and write the server into the
-  user's own config (`~/.claude.json` for Claude Code, `claude_desktop_config.json`
-  for Claude Desktop) so everything works without manual JSON editing. Use this
-  skill whenever the user mentions MCP installation, MCP setup, MCP configuration,
-  "my MCPs aren't working", "set up excalidraw", "install MCP servers", "MCP not
-  found", "excalidraw tools not available", "excalidraw tools missing in Claude
-  Code", "MCP not loaded", "mcpServers missing in ~/.claude.json", "pencil MCP not
-  working", port conflicts with MCP servers (localhost:3000), or any mention of
-  claude_desktop_config.json.
-  Also trigger when manage-workspace needs to handle its MCP installation step
-  (step 5), when workspace-status reports MCP servers as not loaded and the user
-  wants to fix it, or when a rendering skill (story-to-infographic, story-to-web)
-  fails because its MCP dependency is missing.
+  End-to-end MCP server installation for the insight-wave ecosystem — clone and build
+  git-based MCPs, configure native app MCPs, and write the server into the user's own
+  config for Claude Code or Claude Desktop without manual JSON editing. Use this skill
+  whenever the user mentions MCP installation, MCP setup, MCP configuration, "my MCPs
+  aren't working", "set up excalidraw", "install MCP servers", "update MCP servers",
+  "patch desktop config", "MCP not found", "excalidraw tools not available", "excalidraw
+  tools missing in Claude Code", "MCP not loaded", "mcpServers missing in
+  ~/.claude.json", "pencil MCP not working", port conflicts with MCP servers
+  (localhost:3000), or any mention of claude_desktop_config.json. Also trigger when
+  manage-workspace needs to handle its MCP installation step (step 5), when
+  workspace-status reports MCP servers as not loaded and the user wants to fix it, or
+  when a rendering skill (story-to-infographic, story-to-web) fails because its MCP
+  dependency is missing.
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep, AskUserQuestion, ToolSearch
 ---
 
@@ -53,6 +52,10 @@ Determine the user's runtime environment — this affects what needs patching:
    - **Claude Desktop** — needs the git install AND a `--target desktop` write.
    - **Both** — Desktop config exists alongside CLI usage. Use `--target both`.
 
+Record the classification as `MCP_TARGET`, whose only legal values are `cli`, `desktop`
+and `both`. The write step below sets and consumes it in a single shell — each invocation
+gets a fresh environment, so an assignment made here would not survive to reach it.
+
 Report which environment was detected before proceeding.
 
 ## Discover What's Needed
@@ -64,8 +67,8 @@ REGISTRY="${CLAUDE_PLUGIN_ROOT}/references/mcp-git-registry.json"
 cat "$REGISTRY"
 ```
 
-Cross-reference against installed plugins. There are three ways to determine installed plugins,
-in order of preference:
+Cross-reference against installed plugins, determined one of three ways in order of
+preference:
 
 1. **During manage-workspace** — the confirmed plugin list is already available from step 2
    (the user-confirmed list, not step 1's raw discovery output)
@@ -94,12 +97,14 @@ list. Only install servers that have at least one requiring plugin present.
 Present the installation plan to the user before executing:
 
 Name the config that will actually be written, taken from the environment detected
-above — one line per target, so a `both` run shows both:
+above — one line per target, so a `both` run shows both. The block below is illustrative;
+each server's requiring plugins come from its `required_by` in the registry, never from
+this example:
 
 ```
 MCP Installation Plan:
   mcp_excalidraw  git clone + build    needed by: cogni-visual, cogni-portfolio
-  pencil          native app check     needed by: cogni-visual
+  pencil          native app check     needed by: cogni-visual, cogni-website
 
   Config write:    ~/.claude.json (Claude Code user scope)
   Config write:    claude_desktop_config.json (Claude Desktop)
@@ -128,9 +133,11 @@ bash "${CLAUDE_PLUGIN_ROOT}/scripts/install-mcp.sh" \
   $WRAPPER_ARG
 ```
 
-The script outputs JSON — parse `success` and `data.action` to report what happened
-(installed / skipped / updated / failed). If any server fails, continue with the rest
-but flag the failure clearly.
+The script outputs JSON. On success, `data.action` is `installed` (fresh clone),
+`updated` (a `--force` refetch), `rebuilt` (already cloned but unbuilt, so the build
+reran) or `skipped` (already built). A failure carries no `action` at all — it reports
+`success: false` with the cause in `data.error` — so branch on `success` before reaching
+for `action`. If any server fails, continue with the rest but flag the failure clearly.
 
 To force-update an already-installed server (e.g. after upstream changes), add `--force`.
 
@@ -149,29 +156,42 @@ Run this **after** the git install succeeds — the writer resolves each server'
 wrapper, and reports `skipped: not installed` rather than writing an entry that points at
 a path which does not exist yet.
 
-Pass `--target` for the environment detected above (`desktop`, `cli`, or `both`), and
-scope every invocation with `--server` so only the servers the plan actually named are
-written — repeating the flag once per server (`--server mcp_excalidraw --server pencil`),
-because it appends rather than splitting a comma-separated value, so a CSV filters on a name
-no registry entry has and the run writes nothing while still reporting success. An unrequested entry is another server spawned at every session or app start,
-which is the condition this whole arrangement exists to avoid — for either target. The
-script's name predates its remit: despite `desktop` in the file name it writes either
-config, selected by `--target`, so a `--target cli` invocation writing `~/.claude.json`
-is correct and not a copy-paste slip. Dry-run first:
+With `MCP_TARGET` set to the environment classified above:
+
+- Pass `--target "${MCP_TARGET}"`.
+- The script's name predates its remit: despite `desktop` in the file name it writes
+  either config, selected by `--target`, so a `--target cli` run writing
+  `~/.claude.json` is correct and not a copy-paste slip.
+- Scope every invocation to the servers the plan named. An unrequested entry is another
+  server spawned at every session or app start, which is what this arrangement exists
+  to avoid — for either target.
+- Repeat `--server` once per server (`--server mcp_excalidraw --server pencil`). The
+  flag appends rather than splitting a comma-separated value, so a CSV is read as one
+  server name, matches no registry entry, and the run exits non-zero with
+  `Unknown server(s) in registry: ...` having written nothing.
+
+Dry-run first:
 
 ```bash
+MCP_TARGET="<cli|desktop|both, as classified above>"
+
 python3 "${CLAUDE_PLUGIN_ROOT}/scripts/patch-desktop-config.py" \
   --registry "${CLAUDE_PLUGIN_ROOT}/references/mcp-git-registry.json" \
-  --target desktop --server mcp_excalidraw \
+  --target "${MCP_TARGET}" --server mcp_excalidraw \
   --dry-run
 ```
+
+Substitute the classified value for the placeholder; carried through as written, argparse
+rejects it rather than silently writing the wrong host's config. Keep the assignment in the
+same invocation as the command — a separate one starts a fresh shell and `${MCP_TARGET}`
+expands empty.
 
 Show the user what would change. If they confirm (or if running non-interactively from
 manage-workspace), run again without `--dry-run`.
 
-For a Claude Code CLI environment, use the same command with `--target cli` — dry-run first,
-then confirm, exactly as above — which writes the user-scope entry in `~/.claude.json`. Use
-`--target both` to write both configs in one run.
+The same command covers every environment, because `MCP_TARGET` carries the detection:
+`cli` writes the user-scope entry in `~/.claude.json`, `desktop` writes
+`claude_desktop_config.json`, and `both` writes each in turn.
 
 **Reading the result depends on the target.** A single-target run reports a flat
 `data.action` and `data.config_path`. `--target both` reports neither at the top level —
@@ -179,9 +199,11 @@ it returns `data.targets[]`, one `{target, action, config_path, actions}` object
 config. Branch on the target before reading the envelope, or a `both` run parses as
 though nothing happened.
 
-In both shapes the **per-server** detail is `actions[]` — `{server, action: added | updated
-| skipped, reason}` — while the target-level `action` is `patched`, `noop` (nothing needed)
-or `dry_run`. Build the Summary rows below from `actions[]`, not from the target-level
+In both shapes the **per-server** detail is `actions[]`. Every entry carries `server` and
+`action` (`added`, `updated` or `skipped`); an `added` or `updated` entry also carries
+`config_key`, and only a `skipped` entry carries `reason` — so do not expect `reason` on
+every entry. The target-level `action` is `patched`, `noop` (nothing needed) or
+`dry_run`. Build the Summary rows below from `actions[]`, not from the target-level
 verb, or every server collapses into one row and a `noop` reads as a failure.
 
 The script:
@@ -199,19 +221,13 @@ that wrote them.
 
 ## Verify Installation
 
-After installation and patching, verify that MCP servers are actually available in the
-current session. Use ToolSearch to probe for MCP tool prefixes:
+After installation and patching, verify that MCP servers are available in the current
+session. For each server just installed, use ToolSearch to probe for its tool prefix:
 
 | Server | Probe Tool |
 |--------|-----------|
 | excalidraw | `mcp__excalidraw__describe_scene` |
 | pencil | `mcp__pencil__get_editor_state` |
-
-For each server that was just installed:
-
-```
-Use ToolSearch to search for the probe tool.
-```
 
 Report status:
 - **Loaded** — tools found, server is active
@@ -226,15 +242,17 @@ described above.
 Present a compact result:
 
 Name the config actually written, and follow the target for the restart line — a CLI
-write needs a new Claude Code session, not a Claude Desktop restart:
+write needs a new Claude Code session, not a Claude Desktop restart. The Action cell is
+the `action` verb taken verbatim from that target's `actions[]` (`added`, `updated` or
+`skipped`), never a label composed here:
 
 ```
 MCP Installation Complete:
 
   Server            Action          Config Written    Status
   ────────────────  ──────────────  ────────────────  ──────────
-  mcp_excalidraw    installed       ~/.claude.json    loaded
-  pencil            binary found    ~/.claude.json    loaded
+  mcp_excalidraw    added           ~/.claude.json    not loaded
+  pencil            added           ~/.claude.json    not loaded
 
   Backup: ~/.claude.backup-20260409T...json
   Next: start a new Claude Code session if any servers show "not loaded"
@@ -246,8 +264,8 @@ Under `--target both`, give each config its own row per server (reading each ent
 ```
   Server            Action          Config Written               Status
   ────────────────  ──────────────  ───────────────────────────  ──────────
-  mcp_excalidraw    installed       ~/.claude.json               loaded
-  mcp_excalidraw    installed       claude_desktop_config.json   not loaded
+  mcp_excalidraw    added           ~/.claude.json               loaded
+  mcp_excalidraw    added           claude_desktop_config.json   not loaded
 
   Backup: ~/.claude.backup-20260409T...json
   Backup: claude_desktop_config.backup-20260409T...json
@@ -257,8 +275,8 @@ Under `--target both`, give each config its own row per server (reading each ent
 
 ## When Called from manage-workspace
 
-manage-workspace delegates its MCP step (Init and Update mode step 5) to this skill. When invoked as
-part of workspace init or update:
+manage-workspace delegates its MCP step (Init and Update mode step 5) to this skill.
+When invoked that way:
 
 - Skip the plugin discovery step (use the confirmed plugin list from manage-workspace)
 - Skip the user confirmation of the plan (manage-workspace already has user consent)

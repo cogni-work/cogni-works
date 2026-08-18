@@ -160,8 +160,8 @@ row with the registry server name. The block below is illustrative:
 
 ```
 MCP Servers (installed on demand, written to your config):
-  excalidraw       added      loaded       <- cogni-visual, cogni-portfolio
-  pencil           skipped    not loaded   <- cogni-visual, cogni-website
+  excalidraw       added      loaded       <- cogni-portfolio, cogni-workspace
+  pencil           skipped    not loaded   <- cogni-website, cogni-workspace
 
 Manual install needed:
   claude-in-chrome Chrome extension                  <- cogni-website, cogni-workspace

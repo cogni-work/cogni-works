@@ -78,13 +78,13 @@ if inner[0].get("type") != "command":
     sys.exit("hook type must be command, got %r" % inner[0].get("type"))
 if "on-subagent-start.sh" not in (inner[0].get("command") or ""):
     sys.exit("command does not point at on-subagent-start.sh: %r" % inner[0].get("command"))
-' && pass "declaration - one command-type SubagentStart entry" \
-  || fail "declaration" "hooks.json shape wrong (see above)"
+' && pass "declaration-shape - one command-type SubagentStart entry" \
+  || fail "declaration-shape" "hooks.json shape wrong (see above)"
 
 if [ -f "$HOOK_SCRIPT" ] && [ -x "$HOOK_SCRIPT" ]; then
-  pass "declaration - hook script present and executable"
+  pass "declaration-script - hook script present and executable"
 else
-  fail "declaration" "hook script missing or not executable: $HOOK_SCRIPT"
+  fail "declaration-script" "hook script missing or not executable: $HOOK_SCRIPT"
 fi
 
 # Pull the matcher out of hooks.json once; every regex assertion below uses it.
@@ -112,12 +112,12 @@ sys.exit(0 if got == os.environ["WANT"] else 1)
 # with the alternation's optional prefix — unlike block 3, they pin no known
 # behaviour.
 for a in $AGENTS; do
-  assert_match "bare - $a" "$a" yes
+  assert_match "bare-$a" "$a" yes
 done
 
 # 3 plugin-qualified names — the regression this test exists for
 for a in $AGENTS; do
-  assert_match "qualified - cogni-consult:$a" "cogni-consult:$a" yes
+  assert_match "qualified-$a - cogni-consult:$a" "cogni-consult:$a" yes
 done
 
 # 4 near-misses.
@@ -156,10 +156,10 @@ if loose:
 ' && pass "anchoring - every top-level alternative is anchored" \
   || fail "anchoring" "matcher=$MATCHER (see above)"
 
-assert_match "reject - foreign qualification" "cogni-portfolio:consult-persona-challenger" no
-assert_match "reject - suffix near-miss" "consult-dashboard-refresherX" no
-assert_match "reject - prefix affix" "xconsult-empathy-mapper" no
-assert_match "reject - prefix alone" "cogni-consult:" no
+assert_match "reject-foreign-qualification" "cogni-portfolio:consult-persona-challenger" no
+assert_match "reject-suffix-near-miss" "consult-dashboard-refresherX" no
+assert_match "reject-prefix-affix" "xconsult-empathy-mapper" no
+assert_match "reject-prefix-alone" "cogni-consult:" no
 
 # 5 drift guard — the alternation and agents/ agree in both directions.
 # The agent-name group is the LAST alternation group, not the first: the matcher

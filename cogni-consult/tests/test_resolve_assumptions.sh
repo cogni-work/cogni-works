@@ -92,30 +92,30 @@ EOF
 F="$TMPROOT/brief.md"
 printf 'TAM {{asm:tam-dach-2027}} again {{asm:tam-dach-2027}}.\n' > "$F"
 OUT=$(python3 "$SCRIPT" "$ENG" resolve "$F" --in-place)
-assert_envelope "resolve-in-place envelope" true "" "$OUT"
+assert_envelope "resolve-in-place-envelope" true "" "$OUT"
 grep -q 'TAM 4.2bn EUR again 4.2bn EUR.' "$F" \
-  && pass "resolve-in-place file" || fail "resolve-in-place file" "$(cat "$F")"
+  && pass "resolve-in-place-file" || fail "resolve-in-place-file" "$(cat "$F")"
 
 # 2 dry-run
 F="$TMPROOT/dry.md"
 printf 'dry {{asm:tam-dach-2027}}\n' > "$F"
 OUT=$(python3 "$SCRIPT" "$ENG" resolve "$F")
 echo "$OUT" | python3 -c 'import json,sys; d=json.load(sys.stdin); sys.exit(0 if "4.2bn EUR" in d["data"]["resolved_text"] else 1)' \
-  && pass "dry-run resolved_text" || fail "dry-run resolved_text" "$OUT"
+  && pass "dry-run-resolved-text" || fail "dry-run-resolved-text" "$OUT"
 grep -q '{{asm:tam-dach-2027}}' "$F" \
-  && pass "dry-run file untouched" || fail "dry-run file untouched" "$(cat "$F")"
+  && pass "dry-run-file-untouched" || fail "dry-run-file-untouched" "$(cat "$F")"
 
 # 3 unknown-id: all listed, file untouched
 F="$TMPROOT/unknown.md"
 printf '{{asm:tam-dach-2027}} {{asm:nope-1}} {{asm:nope-2}}\n' > "$F"
 OUT=$(python3 "$SCRIPT" "$ENG" resolve "$F" --in-place)
 RC=$?
-[ "$RC" -ne 0 ] && pass "unknown-id exit" || fail "unknown-id exit" "exit $RC"
-assert_envelope "unknown-id envelope" false "unknown_assumption_id" "$OUT"
+[ "$RC" -ne 0 ] && pass "unknown-id-exit" || fail "unknown-id-exit" "exit $RC"
+assert_envelope "unknown-id-envelope" false "unknown_assumption_id" "$OUT"
 echo "$OUT" | python3 -c 'import json,sys; d=json.load(sys.stdin); sys.exit(0 if d["data"]["ids"] == ["asm-nope-1","asm-nope-2"] else 1)' \
-  && pass "unknown-id lists all" || fail "unknown-id lists all" "$OUT"
+  && pass "unknown-id-lists-all" || fail "unknown-id-lists-all" "$OUT"
 grep -q '{{asm:tam-dach-2027}}' "$F" \
-  && pass "unknown-id file untouched" || fail "unknown-id file untouched" "$(cat "$F")"
+  && pass "unknown-id-file-untouched" || fail "unknown-id-file-untouched" "$(cat "$F")"
 
 # 4 malformed placeholders fail loud
 F="$TMPROOT/malformed.md"
@@ -132,9 +132,9 @@ EOF
 F="$TMPROOT/nested.md"
 printf '{{asm:outer}}\n' > "$F"
 OUT=$(python3 "$SCRIPT" "$NEST" resolve "$F" --in-place)
-assert_envelope "nested-value envelope" false "unresolved_after_substitution" "$OUT"
+assert_envelope "nested-value-envelope" false "unresolved_after_substitution" "$OUT"
 grep -q '{{asm:outer}}' "$F" \
-  && pass "nested-value file untouched" || fail "nested-value file untouched" "$(cat "$F")"
+  && pass "nested-value-file-untouched" || fail "nested-value-file-untouched" "$(cat "$F")"
 
 # 6 missing / null value
 BADVAL="$TMPROOT/badval"; mkdir -p "$BADVAL"
@@ -211,38 +211,38 @@ PYEOF
 F="$UB/action-fields/market/brief.md"
 printf 'TAM {{asm:tam}}\n' > "$F"
 OUT=$(python3 "$SCRIPT" "$UB" resolve "$F" --in-place)
-assert_envelope "used-by-first envelope" true "" "$OUT"
+assert_envelope "used-by-first-envelope" true "" "$OUT"
 echo "$OUT" | python3 -c 'import json,sys; sys.exit(0 if json.load(sys.stdin)["data"]["used_by_added"] == 1 else 1)' \
-  && pass "used-by-first added=1" || fail "used-by-first added=1" "$OUT"
-assert_used_by "used-by-first entry" 1 "action-fields/market/brief.md"
+  && pass "used-by-first-added" || fail "used-by-first-added" "$OUT"
+assert_used_by "used-by-first-entry" 1 "action-fields/market/brief.md"
 
 # 12 used-by-idempotent: same citer again -> no new edge, registry not rewritten
 cp "$UB/assumptions.json" "$TMPROOT/ub-before.json"
 printf 'TAM {{asm:tam}}\n' > "$F"
 OUT=$(python3 "$SCRIPT" "$UB" resolve "$F" --in-place)
-assert_envelope "used-by-idempotent envelope" true "" "$OUT"
+assert_envelope "used-by-idempotent-envelope" true "" "$OUT"
 echo "$OUT" | python3 -c 'import json,sys; sys.exit(0 if json.load(sys.stdin)["data"]["used_by_added"] == 0 else 1)' \
-  && pass "used-by-idempotent added=0" || fail "used-by-idempotent added=0" "$OUT"
+  && pass "used-by-idempotent-added-zero" || fail "used-by-idempotent-added-zero" "$OUT"
 cmp -s "$UB/assumptions.json" "$TMPROOT/ub-before.json" \
-  && pass "used-by-idempotent registry byte-identical" \
-  || fail "used-by-idempotent registry byte-identical" "registry rewritten"
+  && pass "used-by-idempotent-byte-identical" \
+  || fail "used-by-idempotent-byte-identical" "registry rewritten"
 
 # 13 used-by-dry-run: no --in-place -> registry untouched
 cp "$UB/assumptions.json" "$TMPROOT/ub-before.json"
 F="$UB/action-fields/market/dry.md"
 printf 'TAM {{asm:tam}}\n' > "$F"
 OUT=$(python3 "$SCRIPT" "$UB" resolve "$F")
-assert_envelope "used-by-dry-run envelope" true "" "$OUT"
+assert_envelope "used-by-dry-run-envelope" true "" "$OUT"
 cmp -s "$UB/assumptions.json" "$TMPROOT/ub-before.json" \
-  && pass "used-by-dry-run registry untouched" \
-  || fail "used-by-dry-run registry untouched" "registry rewritten by dry-run"
+  && pass "used-by-dry-run-registry-untouched" \
+  || fail "used-by-dry-run-registry-untouched" "registry rewritten by dry-run"
 
 # 14 used-by-multi: a distinct citing file accumulates a second entry
 F2="$UB/action-fields/market/second.md"
 printf 'again {{asm:tam}}\n' > "$F2"
 OUT=$(python3 "$SCRIPT" "$UB" resolve "$F2" --in-place)
-assert_envelope "used-by-multi envelope" true "" "$OUT"
-assert_used_by "used-by-multi entries" 2 "action-fields/market/brief.md,action-fields/market/second.md"
+assert_envelope "used-by-multi-envelope" true "" "$OUT"
+assert_used_by "used-by-multi-entries" 2 "action-fields/market/brief.md,action-fields/market/second.md"
 
 # 15 used-by-write-failed: edge write fails -> envelope, target file untouched
 # (edge is recorded BEFORE the target rewrite, so a failed edge write must
@@ -260,11 +260,11 @@ chmod 555 "$WF"
 OUT=$(python3 "$SCRIPT" "$WF" resolve "$F" --in-place)
 RC=$?
 chmod 755 "$WF"
-[ "$RC" -ne 0 ] && pass "used-by-write-failed exit" || fail "used-by-write-failed exit" "exit $RC"
-assert_envelope "used-by-write-failed envelope" false "used_by_write_failed" "$OUT"
+[ "$RC" -ne 0 ] && pass "used-by-write-failed-exit" || fail "used-by-write-failed-exit" "exit $RC"
+assert_envelope "used-by-write-failed-envelope" false "used_by_write_failed" "$OUT"
 grep -q '{{asm:tam}}' "$F" \
-  && pass "used-by-write-failed target untouched" \
-  || fail "used-by-write-failed target untouched" "$(cat "$F")"
+  && pass "used-by-write-failed-target-untouched" \
+  || fail "used-by-write-failed-target-untouched" "$(cat "$F")"
 
 # --- Provenance typing (16-21) ----------------------------------------------
 PROV="$TMPROOT/prov"; mkdir -p "$PROV"
@@ -279,7 +279,7 @@ EOF
 F="$PROV/brief.md"
 printf 'TAM {{asm:tam}}, legacy {{asm:legacy}}.\n' > "$F"
 OUT=$(python3 "$SCRIPT" "$PROV" resolve "$F")
-assert_envelope "provenance-marker envelope" true "" "$OUT"
+assert_envelope "provenance-marker-envelope" true "" "$OUT"
 echo "$OUT" | python3 -c '
 import json, sys
 t = json.load(sys.stdin)["data"]["resolved_text"]
@@ -288,7 +288,7 @@ t = json.load(sys.stdin)["data"]["resolved_text"]
 ok = ("4.2bn (prov: claim/reviewed)" in t and "legacy 99." in t
       and "99 (prov" not in t and "[" not in t and "{" not in t)
 sys.exit(0 if ok else 1)
-' && pass "provenance-marker render" || fail "provenance-marker render" "$OUT"
+' && pass "provenance-marker-render" || fail "provenance-marker-render" "$OUT"
 
 # 17 cap-exceeded: given caps at 'stated', so given/reviewed fails loud
 cat > "$PROV/assumptions.json" <<'EOF'
@@ -296,9 +296,9 @@ cat > "$PROV/assumptions.json" <<'EOF'
 EOF
 printf '{{asm:g}}\n' > "$F"
 OUT=$(python3 "$SCRIPT" "$PROV" resolve "$F" --in-place)
-assert_envelope "cap-exceeded envelope" false "status_cap_exceeded" "$OUT"
+assert_envelope "cap-exceeded-envelope" false "status_cap_exceeded" "$OUT"
 grep -q '{{asm:g}}' "$F" \
-  && pass "cap-exceeded target untouched" || fail "cap-exceeded target untouched" "$(cat "$F")"
+  && pass "cap-exceeded-target-untouched" || fail "cap-exceeded-target-untouched" "$(cat "$F")"
 
 # 18 verified-evidence-gate: claim/verified is structurally within the cap but
 #    must be backed by a citation.claim_id resolving to a ClaimRecord that is
@@ -340,12 +340,12 @@ cat > "$CLAIMS" <<'EOF'
 {"claims": [{"id": "claim-1111", "status": "verified"}]}
 EOF
 OUT=$(python3 "$SCRIPT" "$PROV" resolve "$F" --claims-file "$CLAIMS")
-assert_envelope "verified-evidence-present envelope" true "" "$OUT"
+assert_envelope "verified-evidence-present-envelope" true "" "$OUT"
 echo "$OUT" | python3 -c '
 import json, sys
 t = json.load(sys.stdin)["data"]["resolved_text"]
 sys.exit(0 if "5 (prov: claim/verified)" in t else 1)
-' && pass "verified-evidence-present render" || fail "verified-evidence-present render" "$OUT"
+' && pass "verified-evidence-present-render" || fail "verified-evidence-present-render" "$OUT"
 
 # 19 incomplete-provenance: provenance_type without status (or vice versa) fails
 cat > "$PROV/assumptions.json" <<'EOF'
@@ -376,16 +376,16 @@ cat > "$PROV/assumptions.json" <<'EOF'
 EOF
 printf 'only {{asm:ok}} here.\n' > "$F"
 OUT=$(python3 "$SCRIPT" "$PROV" resolve "$F")
-assert_envelope "scoped-validation envelope" true "" "$OUT"
+assert_envelope "scoped-validation-envelope" true "" "$OUT"
 echo "$OUT" | python3 -c '
 import json, sys
 t = json.load(sys.stdin)["data"]["resolved_text"]
 sys.exit(0 if "10 (prov: given/stated)" in t else 1)
-' && pass "scoped-validation renders cited" || fail "scoped-validation renders cited" "$OUT"
+' && pass "scoped-validation-renders-cited" || fail "scoped-validation-renders-cited" "$OUT"
 # And the same brief citing the mis-typed one DOES fail.
 printf 'bad {{asm:bad}}.\n' > "$F"
 OUT=$(python3 "$SCRIPT" "$PROV" resolve "$F")
-assert_envelope "scoped-validation cited-bad fails" false "status_cap_exceeded" "$OUT"
+assert_envelope "scoped-validation-cited-bad" false "status_cap_exceeded" "$OUT"
 
 # --- Submit/propagate round-trip (22) ----------------------------------------
 # End-to-end over the DEFAULT layout (<project>/cogni-consult/<eng> beside
@@ -402,9 +402,9 @@ EOF
 
 # 22a submit appends an unverified ClaimRecord with the adapted entity_ref
 OUT=$(python3 "$SUBMIT" "$ENG2" submit asm-rt)
-assert_envelope "submit envelope" true "" "$OUT"
+assert_envelope "submit-envelope" true "" "$OUT"
 CLAIM_ID=$(echo "$OUT" | python3 -c 'import json,sys; print(json.load(sys.stdin)["data"]["claim_id"])')
-python3 - "$PROJ/cogni-claims/claims.json" "$CLAIM_ID" <<'PYEOF' && pass "submit record shape" || fail "submit record shape" "$(cat "$PROJ/cogni-claims/claims.json")"
+python3 - "$PROJ/cogni-claims/claims.json" "$CLAIM_ID" <<'PYEOF' && pass "submit-record-shape" || fail "submit-record-shape" "$(cat "$PROJ/cogni-claims/claims.json")"
 import json, sys
 claims = {c["id"]: c for c in json.load(open(sys.argv[1]))["claims"]}
 c = claims[sys.argv[2]]
@@ -418,11 +418,11 @@ PYEOF
 
 # 22b re-submit reuses the existing record (idempotent, no duplicate)
 OUT=$(python3 "$SUBMIT" "$ENG2" submit asm-rt)
-assert_envelope "re-submit envelope" true "" "$OUT"
+assert_envelope "re-submit-envelope" true "" "$OUT"
 echo "$OUT" | python3 -c 'import json,sys; sys.exit(0 if json.load(sys.stdin)["data"]["reused"] else 1)' \
-  && pass "re-submit reused" || fail "re-submit reused" "$OUT"
+  && pass "re-submit-reused" || fail "re-submit-reused" "$OUT"
 python3 -c 'import json,sys; sys.exit(0 if len(json.load(open(sys.argv[1]))["claims"]) == 1 else 1)' "$PROJ/cogni-claims/claims.json" \
-  && pass "re-submit no duplicate" || fail "re-submit no duplicate" "$(cat "$PROJ/cogni-claims/claims.json")"
+  && pass "re-submit-no-duplicate" || fail "re-submit-no-duplicate" "$(cat "$PROJ/cogni-claims/claims.json")"
 
 # 22c propagate refuses while the ClaimRecord is still unverified
 OUT=$(python3 "$SUBMIT" "$ENG2" propagate asm-rt --claim-id "$CLAIM_ID")
@@ -441,7 +441,7 @@ json.dump(data, open(path, "w"), indent=2)
 PYEOF
 OUT=$(python3 "$SUBMIT" "$ENG2" propagate asm-rt --claim-id "$CLAIM_ID")
 assert_envelope "propagate-verified envelope" true "" "$OUT"
-python3 - "$ENG2/assumptions.json" "$CLAIM_ID" <<'PYEOF' && pass "propagate wrote back-reference" || fail "propagate wrote back-reference" "$(cat "$ENG2/assumptions.json")"
+python3 - "$ENG2/assumptions.json" "$CLAIM_ID" <<'PYEOF' && pass "propagate-back-reference" || fail "propagate-back-reference" "$(cat "$ENG2/assumptions.json")"
 import json, sys
 e = json.load(open(sys.argv[1]))["assumptions"][0]
 sys.exit(0 if e["status"] == "verified" and e["citation"]["claim_id"] == sys.argv[2] else 1)
@@ -449,18 +449,18 @@ PYEOF
 F2="$ENG2/brief.md"
 printf 'RT {{asm:rt}}\n' > "$F2"
 OUT=$(python3 "$SCRIPT" "$ENG2" resolve "$F2")
-assert_envelope "roundtrip resolve envelope" true "" "$OUT"
+assert_envelope "roundtrip-envelope" true "" "$OUT"
 echo "$OUT" | python3 -c '
 import json, sys
 t = json.load(sys.stdin)["data"]["resolved_text"]
 sys.exit(0 if "7 (prov: claim/verified)" in t else 1)
-' && pass "roundtrip resolve renders verified" || fail "roundtrip resolve renders verified" "$OUT"
+' && pass "roundtrip-renders-verified" || fail "roundtrip-renders-verified" "$OUT"
 
 # 22e propagate is idempotent (verified is a fixed point)
 OUT=$(python3 "$SUBMIT" "$ENG2" propagate asm-rt --claim-id "$CLAIM_ID")
-assert_envelope "propagate-idempotent envelope" true "" "$OUT"
+assert_envelope "propagate-idempotent-envelope" true "" "$OUT"
 echo "$OUT" | python3 -c 'import json,sys; sys.exit(0 if json.load(sys.stdin)["data"]["changed"] is False else 1)' \
-  && pass "propagate-idempotent changed=false" || fail "propagate-idempotent changed=false" "$OUT"
+  && pass "propagate-idempotent-changed" || fail "propagate-idempotent-changed" "$OUT"
 
 # 22f propagate survives an explicit null citation (envelope, not a traceback):
 #     the write side must normalize a null/non-dict citation to {} before
@@ -475,8 +475,8 @@ e["status"] = "reviewed"
 json.dump(data, open(path, "w"), indent=2)
 PYEOF
 OUT=$(python3 "$SUBMIT" "$ENG2" propagate asm-rt --claim-id "$CLAIM_ID" 2>/dev/null)
-assert_envelope "propagate-null-citation envelope" true "" "$OUT"
-python3 - "$ENG2/assumptions.json" "$CLAIM_ID" <<'PYEOF' && pass "propagate-null-citation rebuilt citation" || fail "propagate-null-citation rebuilt citation" "$(cat "$ENG2/assumptions.json")"
+assert_envelope "propagate-null-citation-envelope" true "" "$OUT"
+python3 - "$ENG2/assumptions.json" "$CLAIM_ID" <<'PYEOF' && pass "propagate-null-citation-rebuilt" || fail "propagate-null-citation-rebuilt" "$(cat "$ENG2/assumptions.json")"
 import json, sys
 e = json.load(open(sys.argv[1]))["assumptions"][0]
 sys.exit(0 if e["status"] == "verified" and e["citation"]["claim_id"] == sys.argv[2] else 1)
@@ -502,32 +502,32 @@ EOF
 FL="$TMPROOT/link-untyped.md"
 printf 'TAM {{asm:tam-dach-2027}}.\n' > "$FL"
 OUT=$(python3 "$SCRIPT" "$ENGL" resolve "$FL" --mode link)
-assert_envelope "link-mode untyped envelope clean" true "" "$OUT"
+assert_envelope "link-mode-untyped-envelope" true "" "$OUT"
 echo "$OUT" | python3 -c '
 import json, sys
 t = json.load(sys.stdin)["data"]["resolved_text"]
 sys.exit(0 if "[[assumptions#tam-dach-2027|4.2bn EUR]]" in t and "(prov:" not in t else 1)
-' && pass "link-mode untyped wikilink" || fail "link-mode untyped wikilink" "$OUT"
+' && pass "link-mode-untyped-wikilink" || fail "link-mode-untyped-wikilink" "$OUT"
 
 # 23b link-mode typed entry -> wikilink + (prov: type/status) trailing the link
 FL="$TMPROOT/link-typed.md"
 printf 'Conv {{asm:conv-rate}}.\n' > "$FL"
 OUT=$(python3 "$SCRIPT" "$ENGL" resolve "$FL" --mode link)
-assert_envelope "link-mode typed envelope clean" true "" "$OUT"
+assert_envelope "link-mode-typed-envelope" true "" "$OUT"
 echo "$OUT" | python3 -c '
 import json, sys
 t = json.load(sys.stdin)["data"]["resolved_text"]
 sys.exit(0 if "[[assumptions#conv-rate|12%]] (prov: estimate/reviewed)" in t else 1)
-' && pass "link-mode typed wikilink + marker" || fail "link-mode typed wikilink + marker" "$OUT"
+' && pass "link-mode-typed-wikilink" || fail "link-mode-typed-wikilink" "$OUT"
 
 # 23c link-mode --in-place: file rewritten with the wikilink, leftover check clean
 FL="$TMPROOT/link-inplace.md"
 printf '{{asm:tam-dach-2027}} and {{asm:conv-rate}}\n' > "$FL"
 OUT=$(python3 "$SCRIPT" "$ENGL" resolve "$FL" --mode link --in-place)
-assert_envelope "link-mode in-place envelope clean" true "" "$OUT"
+assert_envelope "link-mode-in-place-envelope" true "" "$OUT"
 grep -q '\[\[assumptions#tam-dach-2027|4.2bn EUR\]\]' "$FL" \
   && ! grep -q '{{asm:' "$FL" \
-  && pass "link-mode in-place file rewritten, no leftover" || fail "link-mode in-place file rewritten" "$(cat "$FL")"
+  && pass "link-mode-in-place-file" || fail "link-mode-in-place-file" "$(cat "$FL")"
 
 # 23e link-mode escapes a pipe in the value so the wikilink alias is not split
 python3 - "$ENGL/assumptions.json" <<'PYEOF'
@@ -541,12 +541,12 @@ PYEOF
 FL="$TMPROOT/link-pipe.md"
 printf 'R {{asm:range}}\n' > "$FL"
 OUT=$(python3 "$SCRIPT" "$ENGL" resolve "$FL" --mode link)
-assert_envelope "link-mode pipe envelope clean" true "" "$OUT"
+assert_envelope "link-mode-pipe-envelope" true "" "$OUT"
 echo "$OUT" | python3 -c '
 import json, sys
 t = json.load(sys.stdin)["data"]["resolved_text"]
 sys.exit(0 if "[[assumptions#range|3 \\| 4]]" in t else 1)
-' && pass "link-mode escapes pipe in alias" || fail "link-mode escapes pipe in alias" "$OUT"
+' && pass "link-mode-pipe-alias" || fail "link-mode-pipe-alias" "$OUT"
 
 # 23d default (value) mode is byte-for-byte unchanged (no brackets, literal value)
 FL="$TMPROOT/link-default.md"
@@ -606,13 +606,13 @@ for c in d["claims"]:
 json.dump(d, open(p, "w"), indent=2)
 PYEOF
 OUT=$(python3 "$SUBMIT" "$ENG3" resolve-propagate asm-rc --corrected-value "9" --claim-id claim-rc)
-assert_envelope "resolve-propagate envelope" true "" "$OUT"
+assert_envelope "resolve-propagate-envelope" true "" "$OUT"
 echo "$OUT" | python3 -c 'import json, sys
 d = json.load(sys.stdin)["data"]
 sys.exit(0 if d["changed"] and d["value_changed"] and d["new_value"] == "9"
          and d["old_value"] == "7" and d["status"] == "reviewed" else 1)' \
-  && pass "resolve-propagate envelope shape" || fail "resolve-propagate envelope shape" "$OUT"
-python3 - "$ENG3/assumptions.json" <<'PYEOF' && pass "resolve-propagate wrote value + demoted + stamped" || fail "resolve-propagate wrote value + demoted + stamped" "$(cat "$ENG3/assumptions.json")"
+  && pass "resolve-propagate-shape" || fail "resolve-propagate-shape" "$OUT"
+python3 - "$ENG3/assumptions.json" <<'PYEOF' && pass "resolve-propagate-wrote-value" || fail "resolve-propagate-wrote-value" "$(cat "$ENG3/assumptions.json")"
 import json, sys
 e = json.load(open(sys.argv[1]))["assumptions"][0]
 sys.exit(0 if e["value"] == "9" and e["status"] == "reviewed"
@@ -623,11 +623,11 @@ PYEOF
 # 24d idempotent re-run: changed=false, assumptions.json byte-identical (no re-stamp)
 BEFORE=$(cat "$ENG3/assumptions.json")
 OUT=$(python3 "$SUBMIT" "$ENG3" resolve-propagate asm-rc --corrected-value "9" --claim-id claim-rc)
-assert_envelope "resolve-propagate-idempotent envelope" true "" "$OUT"
+assert_envelope "resolve-propagate-idempotent-envelope" true "" "$OUT"
 echo "$OUT" | python3 -c 'import json,sys; sys.exit(0 if json.load(sys.stdin)["data"]["changed"] is False else 1)' \
-  && pass "resolve-propagate-idempotent changed=false" || fail "resolve-propagate-idempotent changed=false" "$OUT"
+  && pass "resolve-propagate-idempotent-changed" || fail "resolve-propagate-idempotent-changed" "$OUT"
 [ "$BEFORE" = "$(cat "$ENG3/assumptions.json")" ] \
-  && pass "resolve-propagate-idempotent file byte-identical" || fail "resolve-propagate-idempotent file byte-identical" "$(cat "$ENG3/assumptions.json")"
+  && pass "resolve-propagate-idempotent-byte-identical" || fail "resolve-propagate-idempotent-byte-identical" "$(cat "$ENG3/assumptions.json")"
 
 # 24e a corrected value on a still-'verified' assumption is refused a dangling claim
 OUT=$(python3 "$SUBMIT" "$ENG3" resolve-propagate asm-rc --corrected-value "9" --claim-id claim-nope)
@@ -669,14 +669,14 @@ for c in d["claims"]:
 json.dump(d, open(p, "w"), indent=2)
 PYEOF
 OUT=$(python3 "$SUBMIT" "$ENG4" resolve-propagate asm-as --claim-id claim-as)
-assert_envelope "alt-source envelope" true "" "$OUT"
+assert_envelope "alt-source-envelope" true "" "$OUT"
 echo "$OUT" | python3 -c 'import json, sys
 d = json.load(sys.stdin)["data"]
 sys.exit(0 if d["changed"] and d["value_changed"] is False
          and d["old_value"] == "7" and d["new_value"] == "7"
          and d["status"] == "reviewed" and d["action"] == "alternative_source" else 1)' \
-  && pass "alt-source envelope shape" || fail "alt-source envelope shape" "$OUT"
-python3 - "$ENG4/assumptions.json" <<'PYEOF' && pass "alt-source updated citation, kept value, demoted" || fail "alt-source updated citation, kept value, demoted" "$(cat "$ENG4/assumptions.json")"
+  && pass "alt-source-shape" || fail "alt-source-shape" "$OUT"
+python3 - "$ENG4/assumptions.json" <<'PYEOF' && pass "alt-source-citation-updated" || fail "alt-source-citation-updated" "$(cat "$ENG4/assumptions.json")"
 import json, sys
 e = json.load(open(sys.argv[1]))["assumptions"][0]
 c = e["citation"]
@@ -690,9 +690,9 @@ PYEOF
 BEFORE=$(cat "$ENG4/assumptions.json")
 OUT=$(python3 "$SUBMIT" "$ENG4" resolve-propagate asm-as --claim-id claim-as)
 echo "$OUT" | python3 -c 'import json,sys; sys.exit(0 if json.load(sys.stdin)["data"]["changed"] is False else 1)' \
-  && pass "alt-source-idempotent changed=false" || fail "alt-source-idempotent changed=false" "$OUT"
+  && pass "alt-source-idempotent-changed" || fail "alt-source-idempotent-changed" "$OUT"
 [ "$BEFORE" = "$(cat "$ENG4/assumptions.json")" ] \
-  && pass "alt-source-idempotent file byte-identical" || fail "alt-source-idempotent file byte-identical" "$(cat "$ENG4/assumptions.json")"
+  && pass "alt-source-idempotent-byte-identical" || fail "alt-source-idempotent-byte-identical" "$(cat "$ENG4/assumptions.json")"
 
 # --- Resolve/discarded propagation (26) --------------------------------------
 # discarded unbinds citation.claim_id, retains the value (the {{asm:}} placeholder
@@ -716,14 +716,14 @@ EOF
 
 # 26a discarded: value retained, claim_id cleared, demoted, no --corrected-value
 OUT=$(python3 "$SUBMIT" "$ENG5" resolve-propagate asm-di --claim-id claim-di)
-assert_envelope "discarded envelope" true "" "$OUT"
+assert_envelope "discarded-envelope" true "" "$OUT"
 echo "$OUT" | python3 -c 'import json, sys
 d = json.load(sys.stdin)["data"]
 sys.exit(0 if d["changed"] and d["value_changed"] is False
          and d["old_value"] == "7" and d["new_value"] == "7"
          and d["status"] == "reviewed" and d["action"] == "discarded" else 1)' \
-  && pass "discarded envelope shape" || fail "discarded envelope shape" "$OUT"
-python3 - "$ENG5/assumptions.json" <<'PYEOF' && pass "discarded cleared claim_id, kept value, demoted, stamped" || fail "discarded cleared claim_id, kept value, demoted, stamped" "$(cat "$ENG5/assumptions.json")"
+  && pass "discarded-shape" || fail "discarded-shape" "$OUT"
+python3 - "$ENG5/assumptions.json" <<'PYEOF' && pass "discarded-record" || fail "discarded-record" "$(cat "$ENG5/assumptions.json")"
 import json, sys
 e = json.load(open(sys.argv[1]))["assumptions"][0]
 c = e["citation"]
@@ -735,9 +735,9 @@ PYEOF
 BEFORE=$(cat "$ENG5/assumptions.json")
 OUT=$(python3 "$SUBMIT" "$ENG5" resolve-propagate asm-di --claim-id claim-di)
 echo "$OUT" | python3 -c 'import json,sys; sys.exit(0 if json.load(sys.stdin)["data"]["changed"] is False else 1)' \
-  && pass "discarded-idempotent changed=false" || fail "discarded-idempotent changed=false" "$OUT"
+  && pass "discarded-idempotent-changed" || fail "discarded-idempotent-changed" "$OUT"
 [ "$BEFORE" = "$(cat "$ENG5/assumptions.json")" ] \
-  && pass "discarded-idempotent file byte-identical" || fail "discarded-idempotent file byte-identical" "$(cat "$ENG5/assumptions.json")"
+  && pass "discarded-idempotent-byte-identical" || fail "discarded-idempotent-byte-identical" "$(cat "$ENG5/assumptions.json")"
 
 # --- Resolve/corrected value fallback (27) -----------------------------------
 # 27a fallback: with --corrected-value OMITTED, the written value falls back
@@ -761,14 +761,14 @@ cat > "$PROJ6/cogni-claims/claims.json" <<'EOF'
                             "field_path": "assumptions[?id==\"asm-fb\"].value"}}]}
 EOF
 OUT=$(python3 "$SUBMIT" "$ENG6" resolve-propagate asm-fb --claim-id claim-fb)
-assert_envelope "resolve-propagate-fallback envelope" true "" "$OUT"
+assert_envelope "resolve-propagate-fallback-envelope" true "" "$OUT"
 echo "$OUT" | python3 -c 'import json, sys
 d = json.load(sys.stdin)["data"]
 sys.exit(0 if d["changed"] and d["value_changed"]
          and d["new_value"] == "The value is 9." and d["old_value"] == "7"
          and d["status"] == "reviewed" else 1)' \
-  && pass "resolve-propagate-fallback verbatim corrected_statement" || fail "resolve-propagate-fallback verbatim corrected_statement" "$OUT"
-python3 - "$ENG6/assumptions.json" <<'PYEOF' && pass "resolve-propagate-fallback wrote verbatim value + demoted" || fail "resolve-propagate-fallback wrote verbatim value + demoted" "$(cat "$ENG6/assumptions.json")"
+  && pass "resolve-propagate-fallback-verbatim" || fail "resolve-propagate-fallback-verbatim" "$OUT"
+python3 - "$ENG6/assumptions.json" <<'PYEOF' && pass "resolve-propagate-fallback-wrote-value" || fail "resolve-propagate-fallback-wrote-value" "$(cat "$ENG6/assumptions.json")"
 import json, sys
 e = json.load(open(sys.argv[1]))["assumptions"][0]
 sys.exit(0 if e["value"] == "The value is 9." and e["status"] == "reviewed"
@@ -796,9 +796,9 @@ cat > "$PROJ7/cogni-claims/claims.json" <<'EOF'
 EOF
 BEFORE_NOFB=$(cat "$ENG7/assumptions.json")
 OUT=$(python3 "$SUBMIT" "$ENG7" resolve-propagate asm-nofb --claim-id claim-nofb)
-assert_envelope "resolve-propagate-no-fallback envelope" false "corrected_value_missing" "$OUT"
+assert_envelope "resolve-propagate-no-fallback-envelope" false "corrected_value_missing" "$OUT"
 [ "$BEFORE_NOFB" = "$(cat "$ENG7/assumptions.json")" ] \
-  && pass "resolve-propagate-no-fallback file byte-identical (no write)" || fail "resolve-propagate-no-fallback file byte-identical (no write)" "$(cat "$ENG7/assumptions.json")"
+  && pass "resolve-propagate-no-fallback-byte-identical" || fail "resolve-propagate-no-fallback-byte-identical" "$(cat "$ENG7/assumptions.json")"
 
 # 27c fail-loud on an EMPTY-STRING corrected_statement: --corrected-value OMITTED
 #     AND resolution.corrected_statement is "" (not null) -> the `if not new_value`
@@ -822,9 +822,9 @@ cat > "$PROJ8/cogni-claims/claims.json" <<'EOF'
 EOF
 BEFORE_EMPTYFB=$(cat "$ENG8/assumptions.json")
 OUT=$(python3 "$SUBMIT" "$ENG8" resolve-propagate asm-emptyfb --claim-id claim-emptyfb)
-assert_envelope "resolve-propagate-empty-fallback envelope" false "corrected_value_missing" "$OUT"
+assert_envelope "resolve-propagate-empty-fallback-envelope" false "corrected_value_missing" "$OUT"
 [ "$BEFORE_EMPTYFB" = "$(cat "$ENG8/assumptions.json")" ] \
-  && pass "resolve-propagate-empty-fallback file byte-identical (no write)" || fail "resolve-propagate-empty-fallback file byte-identical (no write)" "$(cat "$ENG8/assumptions.json")"
+  && pass "resolve-propagate-empty-fallback-byte-identical" || fail "resolve-propagate-empty-fallback-byte-identical" "$(cat "$ENG8/assumptions.json")"
 
 # 27d explicit empty --corrected-value "" is NOT silently treated as OMITTED: even
 #     with a non-empty resolution.corrected_statement present to fall back on, an
@@ -851,9 +851,9 @@ cat > "$PROJ9/cogni-claims/claims.json" <<'EOF'
 EOF
 BEFORE_EE=$(cat "$ENG9/assumptions.json")
 OUT=$(python3 "$SUBMIT" "$ENG9" resolve-propagate asm-ee --corrected-value "" --claim-id claim-ee)
-assert_envelope "resolve-propagate-explicit-empty envelope" false "corrected_value_missing" "$OUT"
+assert_envelope "resolve-propagate-explicit-empty-envelope" false "corrected_value_missing" "$OUT"
 [ "$BEFORE_EE" = "$(cat "$ENG9/assumptions.json")" ] \
-  && pass "resolve-propagate-explicit-empty not treated as omitted (no fallback, no write)" || fail "resolve-propagate-explicit-empty not treated as omitted (no fallback, no write)" "$(cat "$ENG9/assumptions.json")"
+  && pass "resolve-propagate-explicit-empty-not-omitted" || fail "resolve-propagate-explicit-empty-not-omitted" "$(cat "$ENG9/assumptions.json")"
 
 # 27e idempotency on the FALLBACK path: a first fallback write (--corrected-value
 #     OMITTED, value comes from corrected_statement) is changed=true; a second
@@ -879,19 +879,19 @@ cat > "$PROJ10/cogni-claims/claims.json" <<'EOF'
                             "field_path": "assumptions[?id==\"asm-fbidem\"].value"}}]}
 EOF
 OUT=$(python3 "$SUBMIT" "$ENG10" resolve-propagate asm-fbidem --claim-id claim-fbidem)
-assert_envelope "resolve-propagate-fb-idem first envelope" true "" "$OUT"
+assert_envelope "resolve-propagate-fb-idem-first-envelope" true "" "$OUT"
 echo "$OUT" | python3 -c 'import json, sys
 d = json.load(sys.stdin)["data"]
 sys.exit(0 if d["changed"] and d["value_changed"]
          and d["new_value"] == "The value is 9." and d["status"] == "reviewed" else 1)' \
-  && pass "resolve-propagate-fb-idem first run changed=true (fallback write)" || fail "resolve-propagate-fb-idem first run changed=true (fallback write)" "$OUT"
+  && pass "resolve-propagate-fb-idem-first-changed" || fail "resolve-propagate-fb-idem-first-changed" "$OUT"
 AFTER_FBIDEM=$(cat "$ENG10/assumptions.json")
 OUT=$(python3 "$SUBMIT" "$ENG10" resolve-propagate asm-fbidem --claim-id claim-fbidem)
-assert_envelope "resolve-propagate-fb-idem re-run envelope" true "" "$OUT"
+assert_envelope "resolve-propagate-fb-idem-rerun-envelope" true "" "$OUT"
 echo "$OUT" | python3 -c 'import json, sys; sys.exit(0 if json.load(sys.stdin)["data"]["changed"] is False else 1)' \
-  && pass "resolve-propagate-fb-idem re-run changed=false" || fail "resolve-propagate-fb-idem re-run changed=false" "$OUT"
+  && pass "resolve-propagate-fb-idem-rerun-changed" || fail "resolve-propagate-fb-idem-rerun-changed" "$OUT"
 [ "$AFTER_FBIDEM" = "$(cat "$ENG10/assumptions.json")" ] \
-  && pass "resolve-propagate-fb-idem re-run file byte-identical" || fail "resolve-propagate-fb-idem re-run file byte-identical" "$(cat "$ENG10/assumptions.json")"
+  && pass "resolve-propagate-fb-idem-rerun-byte-identical" || fail "resolve-propagate-fb-idem-rerun-byte-identical" "$(cat "$ENG10/assumptions.json")"
 
 if [ "$failures" -gt 0 ]; then
   echo "$failures assertion(s) failed" >&2

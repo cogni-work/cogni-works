@@ -205,15 +205,15 @@ DRIFT_DIGEST_BEFORE="$(digest_tree "$DRIFT")"
 # --- 1  clean ---------------------------------------------------------------
 
 env_clean="$(scan "$CLEAN")"
-assert_envelope "clean - envelope" true "" "$env_clean"
+assert_envelope "clean-envelope" true "" "$env_clean"
 if [ "$(total_findings "$env_clean")" = "0" ]; then
-  pass "clean - dass/muss/Prozess/Masse/Busse report nothing"
+  pass "clean-zero-findings - dass/muss/Prozess/Masse/Busse report nothing"
 else
-  fail "clean" "expected 0 findings, got $(total_findings "$env_clean")"
+  fail "clean-zero-findings" "expected 0 findings, got $(total_findings "$env_clean")"
 fi
 
 env_drift="$(scan "$DRIFT")"
-assert_envelope "drift - envelope is success (drift is a successful scan)" true "" "$env_drift"
+assert_envelope "drift-envelope - drift is a successful scan" true "" "$env_drift"
 # Pinned to the exact seeded count, not merely -gt 0: a non-zero check passes just as
 # happily on 1 as on 8, so it cannot see a regression that silently loses most findings.
 # The eight, by file: scope/key-question.md carries grösse (in Messgrösse), heisst,
@@ -221,9 +221,9 @@ assert_envelope "drift - envelope is success (drift is a successful scan)" true 
 # .metadata/decision-log.json's rationale carries Strasse and gemäss; the marker-less
 # sources/README.md carries Strasse. The two marker-bearing echoes contribute nothing.
 if [ "$(total_findings "$env_drift")" = "8" ]; then
-  pass "drift - reports exactly the 8 seeded findings"
+  pass "drift-count - reports exactly the 8 seeded findings"
 else
-  fail "drift" "expected exactly 8 findings, got $(total_findings "$env_drift")"
+  fail "drift-count" "expected exactly 8 findings, got $(total_findings "$env_drift")"
 fi
 
 # --- 2  markdown-finding ----------------------------------------------------
@@ -252,9 +252,9 @@ else:
     print("")
 ')"
 if [ -z "$shape" ]; then
-  pass "markdown-finding - path + line + form + suggestion"
+  pass "markdown-finding-shape - path + line + form + suggestion"
 else
-  fail "markdown-finding" "$shape"
+  fail "markdown-finding-shape" "$shape"
 fi
 
 # The per-file breakdown is a reported field, so it carries its own assertion: an
@@ -277,9 +277,9 @@ else:
     print("")
 ')"
 if [ -z "$breakdown" ]; then
-  pass "markdown-finding - per-file breakdown matches the findings list and sums to the total"
+  pass "markdown-finding-by-file - per-file breakdown matches the findings list and sums to the total"
 else
-  fail "markdown-finding/by_file" "$breakdown"
+  fail "markdown-finding-by-file" "$breakdown"
 fi
 
 # --- 3  stem-match ----------------------------------------------------------
@@ -400,9 +400,9 @@ fi
 
 # --- 9  failure-paths ------------------------------------------------------
 
-assert_envelope "failure-paths - missing engagement" false "engagement_missing" "$(scan "$TMPROOT/does-not-exist")"
-assert_envelope "failure-paths - not a directory" false "not_a_directory" "$(scan "$DRIFT/scope/key-question.md")"
-assert_envelope "failure-paths - no argument" false "usage" "$(scan)"
+assert_envelope "failure-paths-missing-engagement" false "engagement_missing" "$(scan "$TMPROOT/does-not-exist")"
+assert_envelope "failure-paths-not-a-directory" false "not_a_directory" "$(scan "$DRIFT/scope/key-question.md")"
+assert_envelope "failure-paths-no-argument" false "usage" "$(scan)"
 
 # --- 10  envelope-shape ----------------------------------------------------
 
@@ -413,17 +413,17 @@ for envelope in "$env_clean" "$env_drift" "$(scan "$TMPROOT/does-not-exist")" "$
   fi
 done
 if [ "$lines_ok" -eq 1 ]; then
-  pass "envelope-shape - exactly one stdout line on every exit path"
+  pass "envelope-shape-one-line - exactly one stdout line on every exit path"
 else
-  fail "envelope-shape" "an exit path emitted a preamble line before the JSON"
+  fail "envelope-shape-one-line" "an exit path emitted a preamble line before the JSON"
 fi
 
 if printf '%s' "$env_drift" | grep -qF 'Grösse' \
   && printf '%s' "$env_drift" | grep -qF 'Größe' \
   && ! printf '%s' "$env_drift" | grep -q 'u00df'; then
-  pass "envelope-shape - literal ß bytes, no ASCII substitutes and no \\u escapes"
+  pass "envelope-shape-literal-bytes - literal ß bytes, no ASCII substitutes and no \\u escapes"
 else
-  fail "envelope-shape" "reported forms must be the literal bytes Grösse / Größe"
+  fail "envelope-shape-literal-bytes" "reported forms must be the literal bytes Grösse / Größe"
 fi
 
 # The header declares "error": str, and the plugin's other scripts pass "" on success
@@ -434,9 +434,9 @@ import json, sys
 print(repr(json.loads(sys.stdin.read())["error"]))
 ')"
 if [ "$error_repr" = "''" ]; then
-  pass "envelope-shape - the success envelope's error is the empty string, not null"
+  pass "envelope-shape-error-empty - the success envelope's error is the empty string, not null"
 else
-  fail "envelope-shape" "success envelope error is $error_repr, want ''"
+  fail "envelope-shape-error-empty" "success envelope error is $error_repr, want ''"
 fi
 
 # --- 11  read-only-flag ----------------------------------------------------
@@ -539,12 +539,12 @@ if mutate "$TMPROOT/mutant_empty.py" empty-pairs; then
   env_mut="$(mutant_findings "$TMPROOT/mutant_empty.py")"
   got="$(total_findings "$env_mut" 2>/dev/null || echo unparseable)"
   if [ "$got" = "0" ]; then
-    pass "goes-red - emptying SWISS_PAIRS drops every finding (detection has teeth)"
+    pass "goes-red-empty-pairs - emptying SWISS_PAIRS drops every finding (detection has teeth)"
   else
-    fail "goes-red/empty-pairs" "mutant still reported $got findings — the pair list is not what drives detection"
+    fail "goes-red-empty-pairs" "mutant still reported $got findings — the pair list is not what drives detection"
   fi
 else
-  fail "goes-red/empty-pairs" "mutation could not be applied — the sentinel comments moved"
+  fail "goes-red-empty-pairs" "mutation could not be applied — the sentinel comments moved"
 fi
 
 # 13b  matching anchored whole-word — the compound case must be lost
@@ -552,15 +552,15 @@ if mutate "$TMPROOT/mutant_anchored.py" anchor-whole-word; then
   env_mut="$(mutant_findings "$TMPROOT/mutant_anchored.py")"
   if printf '%s' "$env_mut" | python3 -c 'import json,sys; sys.exit(0 if json.loads(sys.stdin.read()).get("success") is True else 1)'; then
     if [ "$(count_form 'grösse' "$env_mut")" = "0" ]; then
-      pass "goes-red - anchoring the matcher whole-word loses Messgrösse (stem matching is load-bearing)"
+      pass "goes-red-anchored - anchoring the matcher whole-word loses Messgrösse (stem matching is load-bearing)"
     else
-      fail "goes-red/anchored" "the anchored mutant still reported Messgrösse — matching is not stem-based"
+      fail "goes-red-anchored" "the anchored mutant still reported Messgrösse — matching is not stem-based"
     fi
   else
-    fail "goes-red/anchored" "the anchored mutant did not emit a success envelope — a crash is not detection"
+    fail "goes-red-anchored" "the anchored mutant did not emit a success envelope — a crash is not detection"
   fi
 else
-  fail "goes-red/anchored" "mutation could not be applied — the matcher expression moved"
+  fail "goes-red-anchored" "mutation could not be applied — the matcher expression moved"
 fi
 
 # --- tally -----------------------------------------------------------------

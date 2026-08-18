@@ -90,22 +90,22 @@ printf 'TAM is 4.9bn EUR this year.\nA frozen note: 99 units.\n' > "$BRIEF"
 git_quiet "$REPO" add -A && git_quiet "$REPO" commit -m c3
 
 OUT=$(bash "$SCRIPT" "$REPO")
-assert_envelope "changed-literal envelope" true "" "$OUT"
+assert_envelope "changed-literal-envelope" true "" "$OUT"
 # 4.2bn added in c1, removed in c2 -> 2 edit events; 4.5bn added c2 removed c3
 # -> 2; 4.9bn added c3 -> 1. The frozen "99" (own line) was added once in c1
 # and never touched again -> 1. The trailing unit stays attached ("4.2bn").
-assert_edit_count "changed-literal 4.2bn" "4.2bn" 2 "$OUT"
-assert_edit_count "frozen-literal 99" "99" 1 "$OUT"
+assert_edit_count "changed-literal-edit-count" "4.2bn" 2 "$OUT"
+assert_edit_count "frozen-literal-edit-count" "99" 1 "$OUT"
 
 # 2 window spans the commit dates
 echo "$OUT" | python3 -c '
 import json, sys
 w = json.load(sys.stdin)["data"]["window"]
 sys.exit(0 if w["start"] and w["end"] and w["start"] <= w["end"] else 1)
-' && pass "window populated" || fail "window populated" "$OUT"
+' && pass "window-populated" || fail "window-populated" "$OUT"
 
 # 3 no-registry-dep: the corpus has no assumptions.json at all
-[ ! -f "$REPO/assumptions.json" ] && pass "no-registry-dep (no assumptions.json)" \
+[ ! -f "$REPO/assumptions.json" ] && pass "no-registry-dep" \
   || fail "no-registry-dep" "unexpected assumptions.json present"
 
 # 5 code-fence-skipped: a number only inside a fenced block must not be counted
@@ -154,23 +154,23 @@ git -C "$EMPTY" init -q
 printf 'not markdown\n' > "$EMPTY/notes.txt"
 git_quiet "$EMPTY" add -A && git_quiet "$EMPTY" commit -m only-txt
 OUT3=$(bash "$SCRIPT" "$EMPTY")
-assert_envelope "empty-corpus envelope" true "" "$OUT3"
+assert_envelope "empty-corpus-envelope" true "" "$OUT3"
 echo "$OUT3" | python3 -c '
 import json, sys
 d = json.load(sys.stdin)["data"]
 sys.exit(0 if d["literals_observed"] == 0 and d["edits_per_literal"] == 0.0 else 1)
-' && pass "empty-corpus zeroed" || fail "empty-corpus zeroed" "$OUT3"
+' && pass "empty-corpus-zeroed" || fail "empty-corpus-zeroed" "$OUT3"
 
 # --- 8 not-a-git-repo -------------------------------------------------------
 NOGIT="$TMPROOT/nogit"
 mkdir -p "$NOGIT"
 printf 'TAM 4.2bn\n' > "$NOGIT/brief.md"
 OUT4=$(bash "$SCRIPT" "$NOGIT")
-assert_envelope "not-a-git-repo envelope" false "not_a_git_repo" "$OUT4"
+assert_envelope "not-a-git-repo-envelope" false "not_a_git_repo" "$OUT4"
 
 # --- 9 missing-corpus -------------------------------------------------------
 OUT5=$(bash "$SCRIPT" "$TMPROOT/does-not-exist")
-assert_envelope "missing-corpus envelope" false "corpus_missing" "$OUT5"
+assert_envelope "missing-corpus-envelope" false "corpus_missing" "$OUT5"
 
 if [ "$failures" -gt 0 ]; then
   echo "$failures assertion(s) failed" >&2

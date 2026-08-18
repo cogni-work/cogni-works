@@ -228,7 +228,9 @@ same rule — name the adopting plugin and the relocated skill — now applies t
 the time of the sweep: 150 pages in the intersection, all 150 byte-identical; 25 of them carried a
 bare retired name. Everything else is outside the surface **structurally, with no exclusion list**:
 
-- `index.md`, `log.md` and `overview.md` fall out by **depth** — they sit at `wiki/wiki/` level.
+- `index.md`, `log.md` and `overview.md` fall out of **this** surface by **depth** — they sit at
+  `wiki/wiki/` level. `index.md` and `overview.md` are covered instead by the separate per-tree
+  tree-level arm ruled by Decision 7; `log.md` alone is outside every arm, by Decision 5.
 - `lint-2026-04-20.md` falls out because it is the only **root-only** page (and Decision 5 freezes it).
 - The 7 pages of Decision 4 fall out because they are **bundled-only** — the very property that
   decision is about.
@@ -332,6 +334,53 @@ options in the sentence.
 **On promotion.** If Decision 4 resolves toward promoting, restore both references — in both
 copies — as part of that work. Issue #1402 carries this.
 
+## Decision 7 — the tree-level pages are ruled by removal, and guarded per tree
+
+**Decision.** In `wiki/wiki/index.md` and `wiki/wiki/overview.md` of **both** trees, an entry
+naming a page or a plugin that no longer exists is **removed**, following Decision 6's precedent —
+never rewritten onto the adopting plugin. These two files are catalogues, so a rewritten entry
+fabricates a pointer to a page that does not exist, trading a dead name for a dangling link that
+reds the parity suite. The Extension rule above still governs a live **prose sentence** on those
+pages: there, name the adopting plugin and the relocated skill. Both halves are stated so the next
+retirement is decidable without re-litigating this.
+
+**State at execution — no tree-level wiki file was edited by this decision.** The class was already
+cleared: the retired-plugin catalogue subsections went with the page deletions recorded in
+Decision 3, group A, where each tree's `index.md` lost its two roster bullets. This entry records
+and guards; it does not sweep. Every figure below was produced by running the command beside it on
+the branch that added this section, per `## On the figures in this document`.
+
+| Figure | Command | Value | Measured at |
+|---|---|---|---|
+| `cogni-…` tokens across both `index.md` copies, all on-roster | `grep -ohE 'cogni-[a-z0-9-]+[/:]?' wiki/wiki/index.md cogni-workspace/wiki/wiki/index.md \| wc -l` | 318 | this branch |
+| The two `overview.md` copies are byte-identical | `diff wiki/wiki/overview.md cogni-workspace/wiki/wiki/overview.md` | no output | this branch |
+| The preserved `index.md` divergence | `wc -l wiki/wiki/index.md cogni-workspace/wiki/wiki/index.md` | 221 root, 224 bundled | this branch |
+| Bare-name guard, both surfaces | `bash cogni-workspace/tests/test-wiki-bare-name-roster.sh` | exit 0, 22 cases | this branch |
+| Tree-parity guard | `bash cogni-workspace/tests/test-wiki-tree-parity.sh` | exit 0, 12 cases | this branch |
+
+**Why the guard arm is per tree, not an intersection.** The two `index.md` copies diverge **by
+design** (Decision 3, group C: the root keeps its Maintenance section, the bundle keeps its
+Decision-4 bullets). An intersection-shaped arm compares the trees to each other, so it would skip
+exactly the pair this arm exists to watch. `scan_tree_level` therefore takes no `shared` argument
+and is called once per tree — each copy is graded against the runtime roster on its own terms, and
+neither is ever compared to the other. Two red cases, one per tree, keep both arms independently
+falsifiable.
+
+**Why the surface is an explicit set, not a directory scan.** Decision 5 freezes both `log.md`
+copies, whose dated ingest lines name plugins retired since they were written. Scanning
+`wiki/wiki/*.md` would therefore be red on arrival, and the reflexive repair is a `log.md`
+exclusion — the substring-matched exemption this suite deliberately carries none of, where one
+loose fragment becomes a repo-wide hole. The arm instead reads a two-name **allowlist**,
+`{index.md, overview.md}`, which is why widening the guard cost the suite no exclusion entry.
+
+**The wikilink class is closed elsewhere, not carried.** `cogni-workspace/tests/test-wiki-tree-parity.sh`
+scans each tree's top-level `index.md` as a link **source**, so a catalogue entry pointing at a
+deleted page reds that suite today. No follow-up is owed for it.
+
+**Reversing it.** Leaving these two files outside every content guard restores the state this
+decision closes: the intersection arm reports clean while a catalogue in either tree names a plugin
+that no longer ships, with nothing anywhere reporting it.
+
 ## Rejected alternative — run the sync script and accept the deletions
 
 Rejected on three grounds:
@@ -393,7 +442,7 @@ Kept as a permanent inventory so the set stays auditable rather than being redis
 | This record and its guard are unregistered in the plugin guide | closed — `cogni-workspace/CLAUDE.md` names both under `## Wiki Trees` | #1404 |
 | Bare prose plugin names are invisible to every resolver | closed — swept over the two-tree `pages/*.md` intersection and pinned by `tests/test-wiki-bare-name-roster.sh`, a runtime-roster-derived body scan with one arm per tree | #1426, guard in #1438 |
 | The 5 bundled-only pages still name retired plugins | held with the pages themselves — editing them would pre-decide the ruling | #1402, sweep in #1440 |
-| `index.md` and `overview.md` carry the same bare-name class | outside the swept surface by depth; needs its own decision, since the two `index.md` copies diverge by design and a TOC of deleted pages is a Decision-6 removal, not a rename | #1439 |
+| `index.md` and `overview.md` carry the same bare-name class | closed — verified clean at this branch's base, and the removal landed with the Decision 3 group-A page deletions rather than with the work that closed this row. The remove-not-rewrite ruling is now Decision 7, and both files are pinned per tree by the tree-level arm of `tests/test-wiki-bare-name-roster.sh` | #1439 |
 | The `docs/` ER diagram repeats the dead `portfolio_path` edge | closed — the one falsified cell now names the live consumers. The "generated mirror" framing this row previously carried was itself wrong: `docs/architecture/er-diagram.md` is hand-maintained, not cogni-docs output — that plugin's document-type routing table covers only `design-philosophy` and `plugin-anatomy` under `architecture/`, it ships no ER-diagram template, its own structure reference lists the file as an input rather than an output, its audit checks only that the file exists, and it contains zero `portfolio_path` occurrences. So no upstream filing is owed and no regeneration can revert the cell. No guard added — see the guard-decision note below | #1441 |
 | `consulting-project.json` occurrences name a manifest no plugin writes | closed — the real set was six hits over four files, not two. Both `concept-slug-based-lookups.md` copies were rewritten onto a live `consult-project.json` → `plugin_refs.knowledge_base` slug and pinned by `PAGE_PARITY`; `troubleshoot/known-issues.md` and the `SKILL.md` §5 probe moved from a dead rename to archive-not-rename. The two `docs/contributing/cogni-consult-evaluation.md` hits are accurate cogni-consulting history — a comparison-table cell and a dated run record — so they stand, and are not residues to re-file | #1442 |
 
@@ -434,7 +483,10 @@ The two `log.md` copies and `lint-2026-04-20.md` are untouched, per Decision 5 �
 should not read them as misses. The two `entries_count` values remain different from each other,
 per Decision 1. The substantive residual remains 11 lines, per Decision 2 — and the two
 `wiki/index.md` copies remain different from each other, per Decision 3's group-C rule. None of the
-seven bundled-only pages is edited, promoted or deleted, per Decision 4.
+seven bundled-only pages is edited, promoted or deleted, per Decision 4. None of the four
+tree-level wiki files — `index.md` and `overview.md` in either tree — is edited either, per
+Decision 7: they were already clean when that decision was recorded, so the absence of edits there
+is the expected outcome and not a miss.
 
 `troubleshoot/SKILL.md` §5's stale-state probe and `troubleshoot/references/known-issues.md`'s
 `Leftover engagement file from a retired consulting plugin` entry both still name
@@ -467,10 +519,11 @@ the data loss the gate exists to prevent.
 open. It asserts that no `cogni-…` token in the body of a page present in both trees names something
 absent from the live roster, with the allowed set read at runtime from `plugins[].name` rather than
 written down — so the next retirement is caught without anyone remembering to edit the suite. Its
-declared surface is the two-tree basename intersection of the page directories, and every page
-outside that surface is excluded by construction rather than by a list: the top-level `index.md`,
-`log.md` and `overview.md` fall out by depth, and the one-sided pages fall out by symmetric
-difference. That distinction is what keeps the suite honest here, because those one-sided pages
+declared surface has two parts, and every page outside both is excluded by construction rather than
+by a list: the two-tree basename intersection of the page directories, where the one-sided pages
+fall out by symmetric difference; and a per-tree arm over the explicit `{index.md, overview.md}`
+tree-level set, ruled by Decision 7 and carrying its own named liveness floor. Only `log.md` is now
+outside both, by Decision 5. That distinction is what keeps the suite honest here, because those one-sided pages
 demonstrably still carry retired names — editing them to satisfy a guard would pre-decide the
 rulings Decisions 4 and 5 hold open. Three allowances are declared, each keyed to an exact token
 rather than a substring: plugins hosted in a different marketplace, the GitHub org token, and the

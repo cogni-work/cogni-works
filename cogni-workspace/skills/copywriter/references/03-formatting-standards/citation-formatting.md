@@ -39,7 +39,7 @@ Each citation must attach directly to the claim it supports. Never cluster citat
 BEFORE (citations dumped at header level):
 
 ```markdown
-**Begruendung:** Industrial SaaS offers compelling economics<sup>[1](path)</sup><sup>[2](path)</sup>.
+**Begründung:** Industrial SaaS offers compelling economics<sup>[1](path)</sup><sup>[2](path)</sup>.
 
 **Umsetzung:**
 1. Higher KGV multiples (2-5x)
@@ -50,7 +50,7 @@ BEFORE (citations dumped at header level):
 AFTER (citations at the specific claims they support):
 
 ```markdown
-**Begruendung:** Industrial SaaS offers compelling economics.
+**Begründung:** Industrial SaaS offers compelling economics.
 
 **Umsetzung:**
 1. Higher KGV multiples (2-5x)<sup>[1](path)</sup>
@@ -64,14 +64,14 @@ AFTER (citations at the specific claims they support):
 - When claims are added or removed during editing, the correct citation travels with its claim
 - Fact-checking becomes precise rather than approximate
 
-### Rule 2: Use the Begruendung/Umsetzung Pattern for Recommendation Lists
+### Rule 2: Use the Begründung/Umsetzung Pattern for Recommendation Lists
 
-When a document uses the "Begruendung" (rationale) and "Umsetzung" (implementation) structure, follow this specific pattern:
+When a document uses the "Begründung" (rationale) and "Umsetzung" (implementation) structure, follow this specific pattern:
 
 ```markdown
 ## {Recommendation Title}
 
-**Begruendung:** {Explanation of why -- no citations here, this is synthesis}
+**Begründung:** {Explanation of why -- no citations here, this is synthesis}
 
 **Umsetzung:**
 1. {Specific action item with evidence}<sup>[n](path)</sup>
@@ -82,9 +82,9 @@ When a document uses the "Begruendung" (rationale) and "Umsetzung" (implementati
 **When to apply this pattern:**
 - Documents with TIPS-style insights
 - Strategic recommendations backed by research
-- Any document using "Begruendung -> Umsetzung" structure
+- Any document using "Begründung -> Umsetzung" structure
 
-**Key distinction:** The Begruendung line is your synthesis of multiple sources into a rationale. Individual Umsetzung items carry the specific citations because they contain the verifiable claims.
+**Key distinction:** The Begründung line is your synthesis of multiple sources into a rationale. Individual Umsetzung items carry the specific citations because they contain the verifiable claims.
 
 ### Rule 3: Separate Consecutive Citations with Superscript Commas
 

@@ -671,7 +671,7 @@ The hook is the reader's entry point. Every arc has a Hook element (the opening 
 - Max 12 words (German) / 15 words (English)
 - Main clause only -- no subordinate clauses, no appositional phrases
 - No raw statistics as opener (transform into vivid statement first)
-- Must pass the Kuechenzuruf test (German) or Kitchen Call-Out test (English): can the reader shout the gist to someone in the next room?
+- Must pass the Küchenzuruf test (German) or Kitchen Call-Out test (English): can the reader shout the gist to someone in the next room?
 - Must not be a Binsenweisheit (platitude) or self-evident context
 
 **Hero number isolation:**
@@ -686,7 +686,7 @@ The hook is the reader's entry point. Every arc has a Hook element (the opening 
 | 12-word Hauptsatz | First sentence is max 12 words, main clause only | Shorten and simplify |
 | Surprise or Hauptsache | Contains surprising truth or main conclusion | Find strongest sentence in paragraph, promote it (Schneider Regel 7) |
 | No Binsenweisheit | Reader would NOT respond "Ja, und?" | Replace with concrete finding |
-| Kuechenzuruf | Gist survives being shouted across a room | Sharpen core message |
+| Küchenzuruf | Gist survives being shouted across a room | Sharpen core message |
 | No raw statistics | Does not lead with unframed number | Transform number into vivid statement, move raw number to sentence 2-3 |
 
 If the first sentence fails 3+ tests: restructure the opening 1-2 sentences (permitted under arc-preservation.md Section 7).

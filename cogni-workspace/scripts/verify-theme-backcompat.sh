@@ -335,12 +335,12 @@ phase "Phase C — visual consumers"
 # reference (theme.md, theme_slug, pick-theme, or themes/). It does NOT run
 # the full pipeline — those are each consumer's own evals.
 VISUAL_CONSUMERS=(
-  "cogni-visual:render-html-slides"
-  "cogni-visual:enrich-report"
-  "cogni-visual:story-to-infographic"
-  "cogni-visual:story-to-slides"
-  "cogni-visual:story-to-storyboard"
-  "cogni-visual:story-to-web"
+  "cogni-workspace:render-html-slides"
+  "cogni-workspace:enrich-report"
+  "cogni-workspace:story-to-infographic"
+  "cogni-workspace:story-to-slides"
+  "cogni-workspace:story-to-storyboard"
+  "cogni-workspace:story-to-web"
   "cogni-portfolio:portfolio-dashboard"
   "cogni-website:website-build"
   "cogni-website:website-setup"

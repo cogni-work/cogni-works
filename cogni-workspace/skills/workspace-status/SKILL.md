@@ -188,12 +188,16 @@ means it is not available. The **Install** column decides how a missing server i
   alone cannot say why — it returns the same no-match in every case — and the install is
   two independent steps, so read two pieces of state before advising:
   - the **config entry** — the server's `desktop_config_key` (`excalidraw` for the registry
-    server `mcp_excalidraw`) under the top-level `mcpServers` in `~/.claude.json`, and/or the
-    same key in `claude_desktop_config.json` for Claude Desktop
+    server `mcp_excalidraw`) in the config of the host **this session runs in**: the
+    top-level `mcpServers` in `~/.claude.json` under Claude Code, or the same key in
+    `claude_desktop_config.json` under Claude Desktop. Only that host's config feeds the
+    table below — an entry present solely in the *other* host's config leaves this one
+    unconfigured, and counting it lands on the restart row for a write that never happened
+    here
   - the **install directory** — `$HOME/.claude/mcp-servers/mcp_excalidraw/start.sh`, named
     for the registry **server name**, not the config key
 
-  | Config entry | `start.sh` | State | Advise |
+  | Config entry (this host) | `start.sh` | State | Advise |
   |---|---|---|---|
   | absent | absent | never installed | route to `/cogni-workspace:install-mcp` |
   | absent | present | built but not configured | re-run the config write — `/cogni-workspace:install-mcp` |
@@ -203,8 +207,10 @@ means it is not available. The **Install** column decides how a missing server i
   A restart *on its own* only fixes the configured-but-not-loaded row: `install-mcp.sh` clones
   and builds, and nothing is configured until `patch-desktop-config.py` runs — so wherever a
   step is missing the write or the build comes first and the new session follows it, never
-  instead of it. If a restart does not clear it, treat the server as a failed spawn (a broken
-  build or a port conflict) rather than a configuration gap. Both steps are documented in the
+  instead of it. If a restart does not clear it, first re-check that the entry is in *this*
+  host's config — a server written only with `--target desktop` is absent from
+  `~/.claude.json` and needs a `--target cli` write, not a restart — and only then treat it
+  as a failed spawn (a broken build or a port conflict). Both steps are documented in the
   `mcp-registry.md` read at the top of this check
 - **Manual**: The MCP is a manual install — the Claude-in-Chrome browser extension or the
   Pencil desktop app. Name what to fetch and inform the user, but don't flag as an error;
@@ -212,8 +218,10 @@ means it is not available. The **Install** column decides how a missing server i
   matters: `claude-in-chrome` has no registry entry and so no config entry at all, whereas
   `pencil` is a registry `native` server whose `pencil` config entry `install-mcp` still
   writes. So if Pencil is installed and running and its tools are still missing, check for the
-  `pencil` key in `~/.claude.json` and run `/cogni-workspace:install-mcp` if it is absent,
-  before telling the user to open the app
+  `pencil` key in the config of the host this session runs in — `~/.claude.json` under
+  Claude Code, `claude_desktop_config.json` under Claude Desktop — and run
+  `/cogni-workspace:install-mcp` for that target if it is absent, before telling the user to
+  open the app
 
 Only check MCPs for plugins that are actually installed (cross-reference with the plugin
 registry from Check 3).
@@ -259,7 +267,7 @@ Themes:       WARNING  | 2 themes available, 1 tiered, 1 drift advisory
   -> Run `manage-themes` to refresh the workspace copy (overwrites local edits)
 
 MCP Servers:  WARNING  | 1/3 loaded (2 manual)
-  excalidraw   built but not configured — start.sh present, no `excalidraw` key in ~/.claude.json
+  excalidraw   built but not configured — start.sh present, no `excalidraw` key in this host's config (`~/.claude.json`, Claude Code)
     -> Run /cogni-workspace:install-mcp to write the config entry, then start a new session
   pencil       manual install — Pencil desktop app not running
     -> Open Pencil (https://pencil.dev); informational, not an error

@@ -2,7 +2,7 @@
 id: concept-theme-inheritance
 title: Theme inheritance (cogni-workspace as theme provider)
 type: concept
-tags: [themes, cogni-workspace, cogni-visual, css, design-variables]
+tags: [themes, cogni-workspace, css, design-variables]
 created: 2026-04-17
 updated: 2026-04-17
 sources:
@@ -20,7 +20,7 @@ All visual plugins read their theme from cogni-workspace. There's no per-plugin 
 
 ## Plugins that participate
 
-- **cogni-visual** — every render agent (slides, infographic, storyboard, web) reads the theme.
+- **cogni-workspace** — its own render agents (slides, infographic, storyboard, web) read the theme.
 - **cogni-website** — site-assembler generates the shared CSS stylesheet from the theme; page-generator and hero-renderer interpolate variables.
 - **cogni-portfolio** — the portfolio dashboard reads the theme for its HTML output.
 - **cogni-trends, cogni-marketing** — dashboards pull the same theme for visual consistency.
@@ -39,6 +39,6 @@ CSS custom properties (`--var-name: value;`) defined at `:root` and consumed by 
 
 ## Frontmatter contract
 
-The `theme_path` YAML field is one of the documented frontmatter contracts in [[arch-er-diagram]] — set by cogni-workspace, read by cogni-visual.
+The `theme_path` YAML field is one of the documented frontmatter contracts in [[arch-er-diagram]] — set by cogni-workspace, read by its render agents.
 
 **Source**: [insight-wave/CLAUDE.md on GitHub](https://github.com/cogni-work/insight-wave/blob/main/CLAUDE.md)

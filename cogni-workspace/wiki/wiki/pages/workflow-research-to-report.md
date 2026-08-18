@@ -8,7 +8,7 @@ updated: 2026-08-13
 sources:
   - https://github.com/cogni-work/insight-wave/blob/main/docs/workflows/research-to-report.md
 status: stable
-related: [plugin-cogni-knowledge, plugin-cogni-visual, plugin-cogni-workspace]
+related: [plugin-cogni-knowledge, plugin-cogni-workspace]
 ---
 
 Original research turned into a presentation — the pipeline an analyst runs to get from a question to a deck without losing the evidence trail.
@@ -20,7 +20,7 @@ cogni-knowledge (plan → curate → fetch → ingest → distill → compose �
    ↓ cited synthesis, deposited into the bound wiki
 cogni-narrative (story arc shaping)
    ↓ executive narrative
-cogni-visual (brief → rendered deck)
+cogni-workspace (brief → rendered deck)
    ↓ slides
 ```
 

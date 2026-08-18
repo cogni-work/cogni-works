@@ -377,7 +377,7 @@ one**. A path-level inventory cannot catch either — only a re-grep of the whol
 tree after each edit can, which is what the guard now automates.
 
 **Deliberately left standing**, with reasons, so a future reader does not read them
-as misses: the ASCII-art fill labels in `cogni-visual/libraries/`
+as misses: the ASCII-art fill labels in `cogni-workspace/libraries/`
 (`excalidraw-patterns.md:165`, `svg-patterns.md:283`) are diagram legends unrelated
 to the claim; `wiki/log.md` and `wiki/pages/lint-2026-04-20.md` are dated historical
 artifacts, and rewriting history is not reconciliation; and

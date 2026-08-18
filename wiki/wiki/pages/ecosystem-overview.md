@@ -28,7 +28,7 @@ Five conventions show up everywhere in the codebase:
 
 ## Plugin data flow
 
-Research output feeds the narrative and copywriting skills in [[plugin-cogni-workspace]], which in turn feed [[plugin-cogni-visual]] rendering. [[plugin-cogni-trends]] and [[plugin-cogni-portfolio]] sit at the strategic core, dispatching to [[plugin-cogni-sales]] (Why Change pitches) and [[plugin-cogni-marketing]] (content engine). [[plugin-cogni-workspace]] is a foundational utility every plugin can rely on, and its claim verification cuts across every plugin that produces sourced assertions ([[concept-claims-propagation]], [[concept-claim-lifecycle]]). [[plugin-cogni-website]] assembles deployable static sites from upstream plugin output. The wiki engine running this very wiki is vendored inside cogni-knowledge. The trends ↔ portfolio bridge is the most complex bidirectional integration — see [[concept-trends-portfolio-bridge]].
+Research output feeds the narrative and copywriting skills in [[plugin-cogni-workspace]], which in turn feed [[plugin-cogni-workspace]] rendering. [[plugin-cogni-trends]] and [[plugin-cogni-portfolio]] sit at the strategic core, dispatching to [[plugin-cogni-sales]] (Why Change pitches) and [[plugin-cogni-marketing]] (content engine). [[plugin-cogni-workspace]] is a foundational utility every plugin can rely on, and its claim verification cuts across every plugin that produces sourced assertions ([[concept-claims-propagation]], [[concept-claim-lifecycle]]). [[plugin-cogni-website]] assembles deployable static sites from upstream plugin output. The wiki engine running this very wiki is vendored inside cogni-knowledge. The trends ↔ portfolio bridge is the most complex bidirectional integration — see [[concept-trends-portfolio-bridge]].
 
 ## Common workflows
 
@@ -40,7 +40,7 @@ Plugin versions live in `.claude-plugin/plugin.json` and are mirrored to `.claud
 
 ## MCP servers
 
-Three MCP servers ship with the marketplace: excalidraw (cogni-visual, cogni-portfolio), claude-in-chrome (cogni-website, cogni-workspace), and pencil (cogni-visual, cogni-website). All managed by `cogni-workspace:install-mcp` — see [[concept-mcp-server-map]].
+Three MCP servers ship with the marketplace: excalidraw (cogni-workspace, cogni-portfolio), claude-in-chrome (cogni-website, cogni-workspace), and pencil (cogni-workspace, cogni-website). All managed by `cogni-workspace:install-mcp` — see [[concept-mcp-server-map]].
 
 ## Contributing
 

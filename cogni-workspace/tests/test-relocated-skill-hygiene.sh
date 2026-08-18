@@ -60,6 +60,7 @@ set -u
 
 HERE="$(cd "$(dirname "$0")" && pwd)"
 WS_ROOT="$(cd "$HERE/.." && pwd)"
+REPO_ROOT="$(cd "$HERE/../.." && pwd)"
 
 # One "<tree>|<forbidden dispatch token>" spec per adopted tree. The token is the
 # one the tree's own source plugin dispatched under, so each arm stays falsifiable.
@@ -75,6 +76,10 @@ WS_ROOT="$(cd "$HERE/.." && pwd)"
 # skills/manage-themes, skills/narrative, skills/narrative-adapt — were repointed at
 # the consumer stage of the cogni-visual absorption; the file-level specs stand on
 # the shared-destination argument alone, not on those files.)
+# commands/ qualifies as directory-level: every file in it arrived by adoption
+# (none is a long-standing cogni-workspace command), so the directory spec is
+# green and additionally covers the commands adopted in earlier retirements,
+# which no file-level row reached.
 # `find` over a regular file yields that file, so bare-file specs walk fine.
 TREE_SPECS="
 $WS_ROOT/skills/cogni-issues|cogni-help:
@@ -132,6 +137,7 @@ $WS_ROOT/tests/test-arc-taxonomy-sync.sh|cogni-visual:
 $WS_ROOT/tests/test-de-ascii-orthography.sh|cogni-visual:
 $WS_ROOT/tests/test-excalidraw-canvas-lock.sh|cogni-visual:
 $WS_ROOT/hooks/ensure-excalidraw-canvas.sh|cogni-visual:
+$WS_ROOT/commands|cogni-visual:
 "
 
 failures=0
@@ -195,6 +201,14 @@ fi
 # ---------------------------------------------------------------------------
 # Case P2 — every ${CLAUDE_PLUGIN_ROOT}-relative path resolves under cogni-workspace.
 #
+# BOTH spellings are extracted -- `${CLAUDE_PLUGIN_ROOT}` and bare
+# `$CLAUDE_PLUGIN_ROOT`. The braced-only reader was blind to the unbraced form,
+# which is the majority spelling in the adopted agents (render-infographic-pencil
+# and editorial-sketch both use it for a runtime library read and a Bash script
+# call). A relocation that repointed one of those to a path that does not exist
+# would have left this arm green, which is the same silent-failure shape P3
+# exists for, one spelling over.
+#
 # A reference ending in `/` is a directory reference and is resolved as one; every
 # other reference is resolved as a file. The directory arm is load-bearing, not
 # defensive: cogni-issues/SKILL.md documents the scripts directory itself as
@@ -210,6 +224,10 @@ for spec in $TREE_SPECS; do
     [ -n "$ref" ] || continue
     p2_scanned=$((p2_scanned + 1))
     rel="${ref#\$\{CLAUDE_PLUGIN_ROOT\}}"
+    rel="${rel#\$CLAUDE_PLUGIN_ROOT}"
+    # A bare root reference names the plugin root itself and resolves trivially;
+    # scoring it as a file would make every such mention a false offender.
+    [ -n "$rel" ] || continue
     target="$WS_ROOT$rel"
     case "$ref" in
       */)
@@ -220,7 +238,7 @@ for spec in $TREE_SPECS; do
         ;;
     esac
   done <<EOF
-$(grep -rho '\${CLAUDE_PLUGIN_ROOT}[A-Za-z0-9_./-]*' "$tree" 2>/dev/null | sort -u)
+$(grep -rhoE '\$\{CLAUDE_PLUGIN_ROOT\}[A-Za-z0-9_./-]*|\$CLAUDE_PLUGIN_ROOT[A-Za-z0-9_./-]*' "$tree" 2>/dev/null | sort -u)
 EOF
 done
 
@@ -235,6 +253,64 @@ elif [ -n "$p2_bad" ]; then
   fail "P2 every \${CLAUDE_PLUGIN_ROOT} reference must resolve under cogni-workspace"
 else
   pass "P2 all $p2_scanned \${CLAUDE_PLUGIN_ROOT} references resolve under cogni-workspace"
+fi
+
+# ---------------------------------------------------------------------------
+# Case P3 — no repo-relative source-plugin PATH reference dangles in an adopted tree.
+#
+# P1 pins the DISPATCH form (`cogni-visual:`, with the colon). Nothing pinned the
+# PATH form. Retiring a source plugin deletes its tree, so every surviving
+# `cogni-visual/<dir>/...` path in an adopted copy silently stops resolving while
+# P1, P2 and scripts/check-external-dispatch.py all stay green — they match the
+# dispatch form only. That is the same silent-failure shape P1 exists for, one
+# surface over, and it is the shape that actually bites at runtime: two relocated
+# render agents open Step 1 with a mandatory "read <path> in full" prerequisite.
+#
+# The match is deliberately narrowed to the plugin-structure directories. A bare
+# `<plugin>/` prefix would be red on arrival against the artifact-directory
+# convention `{source_dir}/cogni-visual/`, which absorption-roadmap.md records as
+# a deliberate keep — that path's next segment is an artifact filename, never one
+# of the directories below, so the narrowing separates the two classes exactly.
+#
+# The assertion is "must RESOLVE", not "must not appear". A source plugin that is
+# still live resolves fine and is not this guard's business; the defect is a path
+# left pointing into a tree that no longer exists.
+#
+# Liveness floor counts FILES WALKED, not references extracted — unlike P2, the
+# clean state here is zero references, so flooring on the reference count would
+# fail on a correct tree.
+# ---------------------------------------------------------------------------
+p3_hits=""
+p3_scanned=0
+for spec in $TREE_SPECS; do
+  tree="${spec%%|*}"
+  token="${spec##*|}"
+  src="${token%:}"
+  [ -e "$tree" ] || continue
+  while IFS= read -r f; do
+    [ -n "$f" ] || continue
+    p3_scanned=$((p3_scanned + 1))
+  done <<EOF
+$(find "$tree" -type f)
+EOF
+  while IFS= read -r ref; do
+    [ -n "$ref" ] || continue
+    [ -e "$REPO_ROOT/$ref" ] || p3_hits="$p3_hits $ref"
+  done <<EOF
+$(grep -rhoE "$src/(agents|skills|scripts|libraries|references|commands|hooks|tests)/[A-Za-z0-9_./-]*" "$tree" 2>/dev/null | sort -u)
+EOF
+done
+
+if [ "$p3_scanned" -eq 0 ]; then
+  # Liveness floor: a broken walk must not report clean.
+  fail "P3 scanned zero files — the adopted trees are missing or unreadable"
+elif [ -n "$p3_hits" ]; then
+  for b in $p3_hits; do
+    echo "  dangling source-plugin path: $b"
+  done
+  fail "P3 every repo-relative source-plugin path reference must resolve"
+else
+  pass "P3 no dangling source-plugin path reference in the adopted trees ($p3_scanned files scanned)"
 fi
 
 # ---------------------------------------------------------------------------

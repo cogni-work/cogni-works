@@ -2,7 +2,7 @@
 # test-excalidraw-canvas-lock.sh — pins the atomic start claim in
 # hooks/ensure-excalidraw-canvas.sh.
 #
-# What it guards: cogni-visual and cogni-portfolio ship byte-identical copies of
+# What it guards: cogni-workspace and cogni-portfolio ship byte-identical copies of
 # that hook and register the same unqualified mcp__excalidraw__* PreToolUse
 # matcher, so a machine with both plugins installed dispatches two of them in
 # parallel on every tool call. The hook's port probe is a check, not a
@@ -27,9 +27,9 @@
 #   M1 -> test_cold_start_spawns_exactly_one_server
 #   bash ~/.claude/plugins/cache/managed-service/cogni-service/0.0.402/scripts/mutation-check.sh \
 #     --root . \
-#     --file cogni-visual/hooks/ensure-excalidraw-canvas.sh \
+#     --file cogni-workspace/hooks/ensure-excalidraw-canvas.sh \
 #     --expr 's#mkdir "\$LOCK_DIR" 2>/dev/null#mkdir -p "\$LOCK_DIR" 2>/dev/null#' \
-#     --test 'bash cogni-visual/tests/test-excalidraw-canvas-lock.sh test_cold_start_spawns_exactly_one_server' \
+#     --test 'bash cogni-workspace/tests/test-excalidraw-canvas-lock.sh test_cold_start_spawns_exactly_one_server' \
 #     --case test_cold_start_spawns_exactly_one_server
 #   `mkdir -p` succeeds against an existing directory, so both racers believe
 #   they won and both spawn — exactly the pre-fix behaviour. The searched
@@ -50,7 +50,7 @@
 #   M4 -> test_hook_copies_are_identical
 #     --file cogni-portfolio/hooks/ensure-excalidraw-canvas.sh
 #     --expr 's#LOCK_STALE_SECS=60#LOCK_STALE_SECS=61#'
-#   Mutates the other copy so the pair diverges. Run against the cogni-visual
+#   Mutates the other copy so the pair diverges. Run against the cogni-workspace
 #   suite, which reads both copies, so a drift introduced on either side reddens.
 #
 #   M5 -> test_stale_lock_survives_divergent_stat
@@ -108,10 +108,42 @@ set -u
 HERE="$(cd "$(dirname "$0")" && pwd)"
 PLUGIN_DIR="$(cd "$HERE/.." && pwd)"
 REPO_ROOT="$(cd "$PLUGIN_DIR/.." && pwd)"
-VISUAL_HOOK="$REPO_ROOT/cogni-visual/hooks/ensure-excalidraw-canvas.sh"
+WORKSPACE_HOOK="$REPO_ROOT/cogni-workspace/hooks/ensure-excalidraw-canvas.sh"
 PORTFOLIO_HOOK="$REPO_ROOT/cogni-portfolio/hooks/ensure-excalidraw-canvas.sh"
-VISUAL_HOOKS_JSON="$REPO_ROOT/cogni-visual/hooks/hooks.json"
+WORKSPACE_HOOKS_JSON="$REPO_ROOT/cogni-workspace/hooks/hooks.json"
 PORTFOLIO_HOOKS_JSON="$REPO_ROOT/cogni-portfolio/hooks/hooks.json"
+
+MATCHER='mcp__excalidraw__.*'
+
+# The surviving pair that ships this hook. Stated once: the next change to this
+# population edits one line, so it cannot half-land across the sites below.
+EXCALIDRAW_HOOKS=("$PORTFOLIO_HOOK" "$WORKSPACE_HOOK")
+
+# One reader of the PreToolUse surface, used by both arms below. Both modes are
+# scoped to hooks.PreToolUse, never to the file as a whole: cogni-workspace's
+# hooks.json declares SessionStart first, so a flat scan of the file reads the
+# wrong hook and agrees with the right answer only by coincidence.
+#
+#   block   — the whole key-sorted PreToolUse array. Deliberately NOT filtered by
+#             matcher: the matcher is one of the things that must not drift, so
+#             filtering on it would make a matcher divergence unreadable rather
+#             than reporting it as the divergence it is. Comparing the array
+#             whole also covers a field that becomes dispatch-relevant later
+#             without editing this accessor.
+#   <field> — a field of the excalidraw entry's own hook, selected BY MATCHER so
+#             a second PreToolUse entry could never silently shift which hook is
+#             read. Absent matcher yields empty, and the call site's own floor
+#             turns that into a failure.
+pretooluse_field() {
+  python3 -c 'import json,sys
+blocks = json.load(open(sys.argv[1]))["hooks"]["PreToolUse"]
+if sys.argv[3] == "block":
+    print(json.dumps(blocks, sort_keys=True))
+else:
+    b = next(x for x in blocks if x.get("matcher") == sys.argv[2])
+    print(b["hooks"][0][sys.argv[3]])' \
+    "$1" "$MATCHER" "$2" 2>/dev/null
+}
 
 failures=0
 
@@ -277,7 +309,7 @@ run_hook() {
   PATH="$fx/bin:$PATH" \
   EXCALIDRAW_MCP_DIR="$fx/mcp" \
   EXCALIDRAW_CANVAS_PORT=39117 \
-    bash "$VISUAL_HOOK" < /dev/null > "$fx/out.$2" 2>&1
+    bash "$WORKSPACE_HOOK" < /dev/null > "$fx/out.$2" 2>&1
 }
 
 spawn_count() { wc -l < "$TMPROOT/$1/spawns.log" | tr -d ' '; }
@@ -461,7 +493,7 @@ test_stale_lock_survives_divergent_stat() {
   # can drop it out of the set. Counting the captured lines rather than running
   # a second grep keeps one selector: two would have to be kept in step by hand,
   # and the arm would pass over a different population than the floor counts.
-  for h in "$VISUAL_HOOK" "$PORTFOLIO_HOOK"; do
+  for h in "${EXCALIDRAW_HOOKS[@]}"; do
     chains="$(hook_code "$h" | grep -E 'stat ')"
     n_chains="$(printf '%s\n' "$chains" | grep -c .)"
     if [ "$n_chains" != "2" ]; then
@@ -552,23 +584,34 @@ test_live_claim_survives_flag_aware_stat() {
 # happen at all. Each path is floored on existence so a deleted file cannot
 # read as identical.
 test_hook_copies_are_identical() {
-  for f in "$VISUAL_HOOK" "$PORTFOLIO_HOOK" "$VISUAL_HOOKS_JSON" "$PORTFOLIO_HOOKS_JSON"; do
+  for f in "$PORTFOLIO_HOOK" "$WORKSPACE_HOOK" "$PORTFOLIO_HOOKS_JSON" "$WORKSPACE_HOOKS_JSON"; do
     if [ ! -s "$f" ]; then
       fail test_hook_copies_are_identical "missing or empty: $f"
       return
     fi
   done
 
-  if cmp -s "$VISUAL_HOOK" "$PORTFOLIO_HOOK"; then
+  if cmp -s "$PORTFOLIO_HOOK" "$WORKSPACE_HOOK"; then
     pass test_hook_copies_are_identical "hook copies are byte-identical"
   else
     fail test_hook_copies_are_identical "hook copies have diverged"
   fi
 
-  if cmp -s "$VISUAL_HOOKS_JSON" "$PORTFOLIO_HOOKS_JSON"; then
-    pass test_hook_copies_are_identical "hooks.json copies are byte-identical"
+  # The two survivors' hooks.json can no longer be compared byte-for-byte:
+  # cogni-workspace's is a merge that also declares SessionStart and carries no
+  # top-level description, so `cmp` would report a divergence that is by design.
+  # What must not drift is the dispatch itself, so assert that the two plugins'
+  # excalidraw PreToolUse blocks are equivalent entry-for-entry.
+  portfolio_pre="$(pretooluse_field "$PORTFOLIO_HOOKS_JSON" block)"
+  workspace_pre="$(pretooluse_field "$WORKSPACE_HOOKS_JSON" block)"
+  # The emptiness guard is load-bearing: without it two unreadable files would
+  # both yield "", compare equal, and green the arm without reading a matcher.
+  if [ -z "$portfolio_pre" ] || [ -z "$workspace_pre" ]; then
+    fail test_hook_copies_are_identical "a PreToolUse block could not be read"
+  elif [ "$portfolio_pre" = "$workspace_pre" ]; then
+    pass test_hook_copies_are_identical "PreToolUse blocks are equivalent"
   else
-    fail test_hook_copies_are_identical "hooks.json copies have diverged"
+    fail test_hook_copies_are_identical "PreToolUse blocks have diverged"
   fi
 }
 
@@ -576,7 +619,7 @@ test_hook_copies_are_identical() {
 # for EXIT alone would pass every case above and still strand the claim when
 # the harness kills the hook at its declared timeout.
 test_release_is_trapped_for_signals() {
-  for h in "$VISUAL_HOOK" "$PORTFOLIO_HOOK"; do
+  for h in "${EXCALIDRAW_HOOKS[@]}"; do
     code="$(hook_code "$h")"
 
     traps="$(printf '%s\n' "$code" | grep -cE '^[[:space:]]*trap ')"
@@ -624,7 +667,7 @@ test_release_is_trapped_for_signals() {
     # healthy in-flight winner gets robbed and the double spawn comes back.
     secs="$(printf '%s\n' "$code" | sed -n 's/^[[:space:]]*LOCK_STALE_SECS=\([0-9][0-9]*\)[[:space:]]*$/\1/p')"
     hooks_json="$(dirname "$h")/hooks.json"
-    timeout="$(sed -n 's/.*"timeout"[ ]*:[ ]*\([0-9][0-9]*\).*/\1/p' "$hooks_json" | head -1)"
+    timeout="$(pretooluse_field "$hooks_json" timeout)"
     if [ -n "$secs" ] && [ -n "$timeout" ] && [ "$secs" -gt "$timeout" ]; then
       pass test_release_is_trapped_for_signals "staleness $secs s outlasts the $timeout s hook timeout"
     else

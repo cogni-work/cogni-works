@@ -26,7 +26,7 @@ Proper character encoding per language is non-negotiable — never ASCII substit
 - **PL**: ą/ć/ę/ł/ń/ó/ś/ź/ż
 - **ES**: á/é/í/ó/ú/ñ
 
-This matters because downstream rendering (cogni-visual, cogni-website, document export) and comparisons (claim-verification source matching) all depend on the correct characters being present in the entity files.
+This matters because downstream rendering (cogni-workspace, cogni-website, document export) and comparisons (claim-verification source matching) all depend on the correct characters being present in the entity files.
 
 ## Per-market authority sources
 
@@ -52,6 +52,6 @@ Per-language section header mappings live in `references/section-headers-de.md` 
 
 - cogni-knowledge, cogni-trends — language-aware web research and authority weighting
 - cogni-marketing, and the `narrative` and `copywriter` skills of cogni-workspace — language-aware writing tone
-- cogni-visual, cogni-website — language-aware text rendering and section headers
+- cogni-workspace, cogni-website — language-aware text rendering and section headers
 
 **Source**: [insight-wave/CLAUDE.md on GitHub](https://github.com/cogni-work/insight-wave/blob/main/CLAUDE.md)

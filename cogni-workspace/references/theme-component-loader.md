@@ -1,6 +1,6 @@
 # Theme Component Loader
 
-Reusable loader for Theme System v2 (RFC #124) tier-3 component primitives. Lives at `cogni-visual/scripts/load-theme-component.py`. Stdlib Python, JSON output convention, copy-on-use semantics. Use this from any consuming skill that wants to render with theme-supplied component primitives without reinventing the path resolution.
+Reusable loader for Theme System v2 (RFC #124) tier-3 component primitives. Lives at `cogni-workspace/scripts/load-theme-component.py`. Stdlib Python, JSON output convention, copy-on-use semantics. Use this from any consuming skill that wants to render with theme-supplied component primitives without reinventing the path resolution.
 
 ## When to use
 
@@ -11,7 +11,7 @@ Do not use the loader when the caller wants tier-1 tokens only. `tokens.css` is 
 ## Interface
 
 ```bash
-python3 cogni-visual/scripts/load-theme-component.py \
+python3 cogni-workspace/scripts/load-theme-component.py \
     --themes-dir <abs-path-to-themes-dir> \
     --theme-slug <slug> \
     --surface <surface> \
@@ -23,7 +23,7 @@ Importable form (preferred when the consumer is already Python):
 ```python
 from importlib.util import spec_from_file_location, module_from_spec
 
-spec = spec_from_file_location("loader", "cogni-visual/scripts/load-theme-component.py")
+spec = spec_from_file_location("loader", "cogni-workspace/scripts/load-theme-component.py")
 loader = module_from_spec(spec)
 spec.loader.exec_module(loader)
 
@@ -96,4 +96,4 @@ Component files are templates — they SHOULD use `{placeholder}` markers that m
 
 ## Reference consumer
 
-`cogni-visual/skills/render-html-slides/scripts/generate-html-slides.py` is the first consumer (Phase-2 pilot, issue #129). Its `--theme-slug` flag wires the loader for tier-1 tokens; tier-3 deck primitive integration is the next increment, gated on `cogni-work` shipping a `tiers.components.deck` family. Look there for the conventional themes-dir resolution and the eval pattern under `evals/run.py`.
+`cogni-workspace/skills/render-html-slides/scripts/generate-html-slides.py` is the first consumer (Phase-2 pilot, issue #129). Its `--theme-slug` flag wires the loader for tier-1 tokens; tier-3 deck primitive integration is the next increment, gated on `cogni-work` shipping a `tiers.components.deck` family. Look there for the conventional themes-dir resolution and the eval pattern under `evals/run.py`.

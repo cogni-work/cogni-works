@@ -161,6 +161,13 @@ State lives in two layers that other plugins consume. Configuration (env vars, t
 | `commands/claims.md` | command | Registers `/claims` as the entry point to the verification lifecycle |
 | `commands/narrative.md` | command | Registers `/narrative`, with `/narrative-review` and `/narrative-adapt` alongside it |
 | `commands/copywrite.md` | command | Registers `/copywrite`, with `/review-doc` alongside it |
+| `commands/render-infographic.md` | command | Registers `/render-infographic`, the style-agnostic renderer entry point that auto-routes on the brief's `style_preset` |
+| `commands/render-infographic-handdrawn.md` | command | Registers `/render-infographic-handdrawn` for direct sketchnote / whiteboard dispatch |
+| `commands/render-infographic-editorial.md` | command | Registers `/render-infographic-editorial` for direct Pencil-backed editorial dispatch |
+| `commands/render-html-slides.md` | command | Registers `/render-html-slides` — presentation brief to self-contained HTML slides |
+| `commands/enrich-report.md` | command | Registers `/enrich-report` — markdown report to themed HTML with charts and diagrams |
+| `commands/review-brief.md` | command | Registers `/review-brief` — stakeholder scoring of a visual brief before rendering |
+| `commands/troubleshoot.md` | command | Registers `/troubleshoot` as the diagnostic entry point |
 | `claims-store.sh` | script | JSON state manager for the claim store, shipped with the `claims` skill (`skills/claims/scripts/`) |
 | `on-session-start.sh` | hook (SessionStart) | Sources workspace environment and validates plugin availability at session start |
 | `on-session-start-language.sh` | hook (SessionStart) | Injects the language rules the built-in "# Language" system-prompt section does not carry |
@@ -240,8 +247,14 @@ cogni-workspace/
 │   ├── render-infographic-*.md   Three infographic renderers (pencil, sketchnote, whiteboard)
 │   └── concept-diagram*.md       Diagram workers (Excalidraw and inline-SVG variants)
 ├── libraries/                    17 layout, taxonomy and worked-example files read at render time
-├── commands/                     Slash commands
+├── commands/                     13 slash commands
 │   ├── claims.md                 Registers /claims
+│   ├── narrative*.md             Registers /narrative, /narrative-review, /narrative-adapt
+│   ├── copywrite.md              Registers /copywrite and /review-doc
+│   ├── render-infographic*.md    Registers /render-infographic and its two direct-dispatch variants
+│   ├── render-html-slides.md     Registers /render-html-slides
+│   ├── enrich-report.md          Registers /enrich-report
+│   ├── review-brief.md           Registers /review-brief
 │   └── troubleshoot.md           Registers /troubleshoot
 ├── wiki/                         Bundled vendor-curated insight-wave reference wiki (read by ask)
 │   ├── .cogni-wiki/              Wiki config + lockfile
@@ -289,7 +302,6 @@ cogni-workspace/
 
 | Plugin | Required | Purpose |
 |--------|----------|---------|
-| cogni-visual | No | manage-themes passes color variables to cogni-visual renderers (render-big-picture, render-big-block) |
 | cogni-website | No | Referenced in manage-workspace and workspace-status for website-related workspace configuration |
 | cogni-portfolio | No | install-mcp references cogni-portfolio as a consumer of excalidraw MCP in the installation plan |
 | claude-in-chrome | No | The `claims` skill's cobrowse mode and `workspace-status`' MCP health check use the Chrome extension; claim verification degrades to WebFetch without it |

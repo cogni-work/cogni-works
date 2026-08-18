@@ -115,7 +115,7 @@ The Economist's red outline of Germany beside a GDP stat doesn't add information
 
 1. Interpret `SUBJECT` into a list of **ISO3 country codes** plus optional **city markers**. Use your geographic knowledge for the lookup — you know that DACH is `DEU,AUT,CHE`, EU-5 is `FRA,DEU,ITA,ESP,GBR`, Benelux is `NLD,BEL,LUX`, etc. For cities, resolve each stated city to approximate longitude/latitude from your geographic knowledge (Munich 11.576,48.137; Berlin 13.405,52.520; Vienna 16.373,48.208; and so on). If the `DATA` payload carries `markers`, prefer its `approx_pos` hints when resolving.
 
-2. Call `cogni-visual/scripts/cartographic-outline.py` via Bash with resolved arguments:
+2. Call `$CLAUDE_PLUGIN_ROOT/scripts/cartographic-outline.py` via Bash with resolved arguments:
 
    ```
    python3 $CLAUDE_PLUGIN_ROOT/scripts/cartographic-outline.py \

@@ -47,6 +47,6 @@ The arc is implemented as a structural template in cogni-workspace's `narrative`
 
 ## Integration
 
-Upstream: cogni-portfolio (Feature × Market propositions, customer profiles, competitor analysis), cogni-trends (optional TIPS enrichment for Why Now urgency). Downstream: cogni-workspace (Why Change arc composition via `narrative`, polish via `copywriter`, auto-logged sourced claims in pitches), cogni-visual (slide rendering).
+Upstream: cogni-portfolio (Feature × Market propositions, customer profiles, competitor analysis), cogni-trends (optional TIPS enrichment for Why Now urgency). Downstream: cogni-workspace (Why Change arc composition via `narrative`, polish via `copywriter`, slide rendering, auto-logged sourced claims in pitches).
 
 **Source**: [cogni-sales README](https://github.com/cogni-work/insight-wave/blob/main/cogni-sales/README.md) · [plugin guide](https://github.com/cogni-work/insight-wave/blob/main/docs/plugin-guide/cogni-sales.md)

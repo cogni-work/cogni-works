@@ -108,24 +108,6 @@
       ]
     },
     {
-      "name": "cogni-visual",
-      "source": "./cogni-visual",
-      "version": "0.16.51",
-      "maturity": "preview",
-      "description": "Transform polished narratives and structured data into visual deliverables — presentation briefs, slide decks, scrollable web narratives, poster storyboards, single-page infographics, and visual assets. Supports Excalidraw, Pencil MCP, PPTX, and HTML rendering.",
-      "keywords": [
-        "presentations",
-        "slides",
-        "pptx",
-        "visual",
-        "narrative",
-        "excalidraw",
-        "web",
-        "storyboard",
-        "agent"
-      ]
-    },
-    {
       "name": "cogni-marketing",
       "source": "./cogni-marketing",
       "version": "0.0.9",

@@ -12,21 +12,21 @@ status: stable
 related: [ecosystem-overview, ecosystem-command-reference, concept-four-layer-architecture]
 ---
 
-Users usually know what they want to accomplish but not which of the eleven plugins owns it. This page is the routing table from task to plugin. Match on what the user is trying to *produce*, not on keywords — "I need to make slides" can mean [[plugin-cogni-visual]] (a deck from an existing narrative) or [[plugin-cogni-marketing]] (campaign materials), and picking wrong sends someone down a pipeline that was never going to work.
+Users usually know what they want to accomplish but not which of the eight plugins owns it. This page is the routing table from task to plugin. Match on what the user is trying to *produce*, not on keywords — "I need to make slides" can mean [[plugin-cogni-workspace]] (a deck from an existing narrative) or [[plugin-cogni-marketing]] (campaign materials), and picking wrong sends someone down a pipeline that was never going to work.
 
 ## Task → plugin
 
 | If the task is… | Start with | Then usually |
 |---|---|---|
-| Research a topic into a cited synthesis that compounds across runs | cogni-knowledge | cogni-narrative → cogni-visual |
+| Research a topic into a cited synthesis that compounds across runs | cogni-knowledge | cogni-narrative → cogni-workspace |
 | Fact-check a document against its cited sources | cogni-workspace | — |
 | Identify industry trends and their strategic implications | cogni-trends | cogni-portfolio |
 | Define product/service propositions per market, size the opportunity, map competitors | cogni-portfolio | cogni-marketing or cogni-sales |
-| Turn structured content into an executive story | cogni-narrative | cogni-copywriting → cogni-visual |
+| Turn structured content into an executive story | cogni-narrative | cogni-copywriting → cogni-workspace |
 | Polish a rough draft, or stress-test it against stakeholder personas | cogni-copywriting | — |
-| Produce slides, a web narrative, a poster storyboard, an infographic, or an enriched HTML report | cogni-visual | — |
+| Produce slides, a web narrative, a poster storyboard, an infographic, or an enriched HTML report | cogni-workspace | — |
 | Produce B2B marketing content across channels | cogni-marketing | cogni-copywriting |
-| Build a customer-specific or segment sales pitch | cogni-sales | cogni-visual |
+| Build a customer-specific or segment sales pitch | cogni-sales | cogni-workspace |
 | Generate a deployable customer website from portfolio content | cogni-website | — |
 | Run a structured consulting engagement with a work-breakdown structure | cogni-consult | — |
 | Set up the workspace, manage themes, install MCP servers, diagnose config | cogni-workspace | — |
@@ -40,11 +40,9 @@ Users usually know what they want to accomplish but not which of the eleven plug
 
 **cogni-portfolio** — Portfolio messaging on IS/DOES/MEANS. Market-independent features (IS), market-specific advantages (DOES) and benefits (MEANS), plus TAM/SAM/SOM and competitor analysis. Standalone; pairs with cogni-trends for trend-backed features. Feeds cogni-marketing, cogni-sales and cogni-website.
 
-**cogni-narrative** — Story-arc-driven transformation. Seven narrative frameworks including a TIPS-native trend panorama, executive synthesis, and citation bridging. Takes structured content in, hands a narrative to cogni-visual or cogni-copywriting.
+**cogni-narrative** — Story-arc-driven transformation. Seven narrative frameworks including a TIPS-native trend panorama, executive synthesis, and citation bridging. Takes structured content in, hands a narrative to cogni-workspace or cogni-copywriting.
 
 **cogni-copywriting** — Polishing with messaging frameworks (BLUF, Pyramid, SCQA, STAR, PSB, FAB), stakeholder review via parallel persona Q&A, and readability optimization. Also handles German documents in the Wolf Schneider register.
-
-**cogni-visual** — Narratives and structured data into visual deliverables: slide decks, scrollable web narratives, poster storyboards, single-page infographics, and themed HTML reports with charts. Brief-driven — see [[concept-brief-based-rendering]].
 
 **cogni-marketing** — B2B content engine bridging cogni-trends themes and cogni-portfolio propositions into channel-ready content across sixteen formats. Requires both upstream plugins to have data. Bilingual DE/EN.
 
@@ -54,7 +52,7 @@ Users usually know what they want to accomplish but not which of the eleven plug
 
 **cogni-consult** — Consulting engagement orchestrator. Scoping derives 3–6 action fields (the work-breakdown structure) from one SMART key question; each deliverable runs its own design-thinking loop (empathize → define → ideate → prototype → test) with acting stakeholder personas challenging the work. Requires a cogni-knowledge base bound at setup as the research spine.
 
-**cogni-workspace** — Horizontal workspace layer. Shared env vars and settings, theme management, market registry, MCP installation, workspace health, and this wiki. Other plugins read its shared workspace state when they need those services — see [[concept-theme-inheritance]]. It also owns claim verification against cited sources (`cogni-workspace:claims`), detecting deviations between what a document asserts and what the source actually says — use it before publishing research output; see [[concept-claim-lifecycle]] and [[concept-claims-propagation]].
+**cogni-workspace** — Horizontal workspace layer. Shared env vars and settings, theme management, market registry, MCP installation, workspace health, and this wiki. Other plugins read its shared workspace state when they need those services — see [[concept-theme-inheritance]]. It also owns claim verification against cited sources (`cogni-workspace:claims`), detecting deviations between what a document asserts and what the source actually says — use it before publishing research output; see [[concept-claim-lifecycle]] and [[concept-claims-propagation]]. It additionally turns narratives and structured data into visual deliverables: slide decks, scrollable web narratives, poster storyboards, single-page infographics, and themed HTML reports with charts. Brief-driven — see [[concept-brief-based-rendering]].
 
 
 ## When nothing fits

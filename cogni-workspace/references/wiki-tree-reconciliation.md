@@ -355,7 +355,7 @@ the branch that added this section, per `## On the figures in this document`.
 | `cogni-…` tokens across both `index.md` copies, all on-roster | `grep -ohE 'cogni-[a-z0-9-]+[/:]?' wiki/wiki/index.md cogni-workspace/wiki/wiki/index.md \| wc -l` | 318 | this branch |
 | The two `overview.md` copies are byte-identical | `diff wiki/wiki/overview.md cogni-workspace/wiki/wiki/overview.md` | no output | this branch |
 | The preserved `index.md` divergence | `wc -l wiki/wiki/index.md cogni-workspace/wiki/wiki/index.md` | 221 root, 224 bundled | this branch |
-| Bare-name guard, both surfaces | `bash cogni-workspace/tests/test-wiki-bare-name-roster.sh` | exit 0, 22 cases | this branch |
+| Bare-name guard, both surfaces | `bash cogni-workspace/tests/test-wiki-bare-name-roster.sh` | exit 0, 23 cases | this branch |
 | Tree-parity guard | `bash cogni-workspace/tests/test-wiki-tree-parity.sh` | exit 0, 12 cases | this branch |
 
 **Why the guard arm is per tree, not an intersection.** The two `index.md` copies diverge **by

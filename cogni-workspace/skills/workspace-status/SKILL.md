@@ -179,7 +179,7 @@ means it is not available. The **Install** column decides how a missing server i
 |------------|-----------|-----------|---------|
 | `excalidraw` | `mcp__excalidraw__describe_scene` | cogni-visual, cogni-portfolio | install-mcp |
 | `claude-in-chrome` | `mcp__claude-in-chrome__tabs_context_mcp` | cogni-website, cogni-workspace | manual (Chrome extension) |
-| `pencil` | `mcp__pencil__get_editor_state` | cogni-visual | manual (Pencil desktop app) |
+| `pencil` | `mcp__pencil__get_editor_state` | cogni-visual, cogni-website | manual (Pencil desktop app) |
 
 **Report format**:
 

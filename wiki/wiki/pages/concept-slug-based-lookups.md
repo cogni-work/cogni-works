@@ -36,7 +36,7 @@ Claim records use UUID-v4 slugs (`claim-550e8400-...`) rather than name-derived 
 
 Two reasons:
 
-- **Human-readable in cross-plugin references.** When you read `consulting-project.json` and see `portfolio_path: "../cogni-portfolio/acme-market-entry/"`, you know what's there without opening anything.
+- **Human-readable in cross-plugin references.** When you read a cogni-consult engagement's `consult-project.json` and see `plugin_refs.knowledge_base: "dach-cloud-expansion"`, you know which knowledge base it binds without opening anything.
 - **Stable across reorganization.** Numeric IDs require a registry; slugs are the file system. Moving entities between projects only requires updating path references, not rewriting identifiers.
 
 This pattern combines with [[concept-data-isolation]] to make cross-plugin reads predictable and human-debuggable. See also [[concept-naming-conventions]] for the broader naming rules.

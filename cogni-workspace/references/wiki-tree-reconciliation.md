@@ -395,7 +395,7 @@ Kept as a permanent inventory so the set stays auditable rather than being redis
 | The 5 bundled-only pages still name retired plugins | held with the pages themselves — editing them would pre-decide the ruling | #1402, sweep in #1440 |
 | `index.md` and `overview.md` carry the same bare-name class | outside the swept surface by depth; needs its own decision, since the two `index.md` copies diverge by design and a TOC of deleted pages is a Decision-6 removal, not a rename | #1439 |
 | The generated `docs/` mirror repeats the dead `portfolio_path` edge | open — cogni-docs ships from a separate repo, so the fix is correct-the-output plus an upstream filing, never a local regeneration | #1441 |
-| Two `consulting-project.json` residues name a manifest no plugin writes | open — outside the page surface (`troubleshoot/known-issues.md`, `docs/contributing/`) | #1442 |
+| `consulting-project.json` occurrences name a manifest no plugin writes | closed — the real set was six hits over four files, not two. Both `concept-slug-based-lookups.md` copies were rewritten onto a live `consult-project.json` → `plugin_refs.knowledge_base` slug and pinned by `PAGE_PARITY`; `troubleshoot/known-issues.md` and the `SKILL.md` §5 probe moved from a dead rename to archive-not-rename. The two `docs/contributing/cogni-consult-evaluation.md` hits are accurate cogni-consulting history — a comparison-table cell and a dated run record — so they stand, and are not residues to re-file | #1442 |
 
 ## Deliberately left standing
 
@@ -404,6 +404,17 @@ should not read them as misses. The two `entries_count` values remain different 
 per Decision 1. The substantive residual remains 11 lines, per Decision 2 — and the two
 `wiki/index.md` copies remain different from each other, per Decision 3's group-C rule. None of the
 seven bundled-only pages is edited, promoted or deleted, per Decision 4.
+
+`troubleshoot/SKILL.md` §5's stale-state probe and `troubleshoot/references/known-issues.md`'s
+`Leftover engagement file from a retired consulting plugin` entry both still name
+`consulting-project.json`, deliberately. Neither is a residue: they are detection surfaces, where
+the dead name is the thing being searched for on a user's disk and the thing a reader matches their
+own situation against. Stripping it would leave `/troubleshoot` unable to find or describe the very
+artefact the sweep was about — a documentation fix traded for a functional regression. This is the
+same exemption the neighbouring `Leftover course-progress file` entry already relies on, naming its
+two retired `.claude/*.local.md` files verbatim in both its Symptom line and its `rm -f` remedy. A
+literal zero-hit bar over `cogni-workspace/skills/` is therefore unmeetable by construction, and a
+future sweep should not re-file either occurrence.
 
 ## What guards this
 

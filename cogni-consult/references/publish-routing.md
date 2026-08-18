@@ -35,8 +35,9 @@ catalog default.
 
 Every format is built **natively** as a brief — no route renders locally or
 applies a theme on the standard path. The four `Built by` builders all run
-inside this skill; cogni-visual is no longer dispatched as a standard route (it
-remains an explicit opt-in local-render fallback only — see each route below).
+inside this skill; no renderer is dispatched as a standard route —
+`cogni-workspace:enrich-report` / `cogni-workspace:story-to-infographic` remain
+an explicit opt-in local-render fallback only (see each route below).
 
 ## Routing by Format
 

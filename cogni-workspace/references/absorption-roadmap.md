@@ -310,6 +310,22 @@ intent and move now, while entity pages describing the source plugin are identit
 records — bound to a filename, an id and a source path — and move with the roster
 when the tree is retired.
 
+**Wiki-link identity references are held back with the roster, even on a dispatch
+page.** The split above cuts by page, but four workflow pages carry both halves at
+once: `workflow-portfolio-to-pitch.md`, `workflow-trends-to-solutions.md`,
+`workflow-install-to-infographic.md` and `workflow-research-to-report.md` tell a
+reader which skill to run *and* name the providing plugin in surrounding prose and
+in `[[plugin-cogni-visual]]` links. The dispatch lines moved at the consumer stage;
+the provider prose and the wiki links deliberately did not. A wiki link is an
+identity reference: it resolves to an entity page that is itself held back, still
+bound to a filename, an id and a source path under the retired tree. Repointing
+only the prose would make a workflow page assert a provider the page it links to
+denies, and repointing the link would aim it at a page describing a different tree.
+Both halves move together at the retirement stage, in the same change as the roster
+and the entity pages. Until then a workflow page naming both plugins is accurate —
+both ship all seven skill names — and the bare-name roster guard stays green because
+the source plugin is still on the marketplace roster.
+
 ## Known remaining contradictions — reconciled
 
 The layering claim this record replaces — that cogni-workspace is the layer every

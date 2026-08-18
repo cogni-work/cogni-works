@@ -290,8 +290,8 @@ When the user asks to apply a theme, read the theme.md and feed its contents int
 3. Include the full theme.md content in the prompt/context when invoking the downstream skill. The consuming skill needs the raw color hex codes, font names, and design principles to apply them. For example:
    - **Slides** (`document-skills:pptx`): pass theme colors and fonts so they map to slide master styles
    - **Documents** (`document-skills:docx`): pass palette for heading colors, accent boxes, table styling
-   - **Diagrams** (e.g., `cogni-workspace:story-to-infographic`, `cogni-workspace:enrich-report`): pass primary/secondary/accent colors and design principles
-   - **Web/HTML outputs**: pass full palette and typography for CSS variable mapping
+   - **Diagrams** (e.g., `cogni-workspace:story-to-infographic`): pass primary/secondary/accent colors and design principles
+   - **Web/HTML outputs** (e.g., `cogni-workspace:enrich-report`): pass full palette and typography for CSS variable mapping
 
 The theme.md content is the single source of truth — always read it fresh rather than relying on cached or partial values.
 

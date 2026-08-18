@@ -8,6 +8,9 @@
 # Env: APPEND_CLAIM_MAX_WAIT — lock-acquire ceiling in 0.1s ticks. Unset means
 # the production default of 30 ticks (3s); tests set a small value so they can
 # drive the timeout path in fractions of a second.
+# The duration the timeout diagnostic prints is DERIVED from that ceiling and
+# never restates a fixed number, so the message cannot outlive a change to the
+# ceiling it reports on.
 # Exit codes: 0 = success, 1 = error
 set -euo pipefail
 
@@ -32,9 +35,36 @@ MAX_WAIT="${APPEND_CLAIM_MAX_WAIT:-30}"
 # comparison below a hard error mid-loop. Regex unquoted on purpose — a quoted
 # right-hand side matches literally on bash 3.2, which this repo still targets.
 # The `||` form keeps a non-match from tripping `set -e`.
+#
+# The `[1-9]` lead is deliberate and must NOT be harmonised with the plain-digit
+# floor the stale-lock reading further down uses. A value like 08 or 030
+# satisfies a plain-digit pattern, and arithmetic expansion then reads the
+# leading zero as octal — a hard error, which under `set -e` aborts the script
+# outright. The two patterns look inconsistent because they guard different
+# inputs; unifying them reintroduces that abort on the very values this floor
+# exists to reject.
+#
+# Zero is excluded on the same line for its own reason. The loop below sleeps
+# BEFORE its first -ge check, so a ceiling of 0 and a ceiling of 1 both mean
+# exactly one 0.1s poll — 0 buys no fail-immediately semantics, and it would
+# render a misleading `after 0s` for a path that did in fact wait.
 [[ "$MAX_WAIT" =~ ^[1-9][0-9]*$ ]] || MAX_WAIT=30
 # Derive the diagnostic's number from the ceiling rather than restating it, so
 # the message can never claim a wait the loop no longer honours.
+#
+# The arithmetic is written as ASSIGNMENTS, never as a bare `(( ... ))` command.
+# A bare arithmetic command whose expression evaluates to 0 returns exit status
+# 1, and the default ceiling of 30 ticks makes the remainder exactly 0 — so that
+# form aborts under `set -e` on bash 5.x while passing on 3.2. A version-divergent
+# failure on the DEFAULT path, which is the one every production caller takes.
+#
+# The computation sits at TOP LEVEL, before the acquire loop, and that placement
+# is load-bearing rather than incidental. An arithmetic abort *inside* the loop
+# is the failure the stale-lock block's own comment further down documents: the
+# error abandons the loop body AND the loop, so the script resumes after `done`
+# and appends the claim having never held the lock — after which the release trap
+# removes a live peer's lock directory it never owned. Up here the same abort is
+# a clean exit, before any lock is taken and before that trap is installed.
 TIMEOUT_LABEL="$(( MAX_WAIT / 10 )).$(( MAX_WAIT % 10 ))"
 TIMEOUT_LABEL="${TIMEOUT_LABEL%.0}"
 WAITED=0

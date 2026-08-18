@@ -201,6 +201,14 @@ fi
 # ---------------------------------------------------------------------------
 # Case P2 — every ${CLAUDE_PLUGIN_ROOT}-relative path resolves under cogni-workspace.
 #
+# BOTH spellings are extracted -- `${CLAUDE_PLUGIN_ROOT}` and bare
+# `$CLAUDE_PLUGIN_ROOT`. The braced-only reader was blind to the unbraced form,
+# which is the majority spelling in the adopted agents (render-infographic-pencil
+# and editorial-sketch both use it for a runtime library read and a Bash script
+# call). A relocation that repointed one of those to a path that does not exist
+# would have left this arm green, which is the same silent-failure shape P3
+# exists for, one spelling over.
+#
 # A reference ending in `/` is a directory reference and is resolved as one; every
 # other reference is resolved as a file. The directory arm is load-bearing, not
 # defensive: cogni-issues/SKILL.md documents the scripts directory itself as
@@ -216,6 +224,10 @@ for spec in $TREE_SPECS; do
     [ -n "$ref" ] || continue
     p2_scanned=$((p2_scanned + 1))
     rel="${ref#\$\{CLAUDE_PLUGIN_ROOT\}}"
+    rel="${rel#\$CLAUDE_PLUGIN_ROOT}"
+    # A bare root reference names the plugin root itself and resolves trivially;
+    # scoring it as a file would make every such mention a false offender.
+    [ -n "$rel" ] || continue
     target="$WS_ROOT$rel"
     case "$ref" in
       */)
@@ -226,7 +238,7 @@ for spec in $TREE_SPECS; do
         ;;
     esac
   done <<EOF
-$(grep -rho '\${CLAUDE_PLUGIN_ROOT}[A-Za-z0-9_./-]*' "$tree" 2>/dev/null | sort -u)
+$(grep -rhoE '\$\{CLAUDE_PLUGIN_ROOT\}[A-Za-z0-9_./-]*|\$CLAUDE_PLUGIN_ROOT[A-Za-z0-9_./-]*' "$tree" 2>/dev/null | sort -u)
 EOF
 done
 

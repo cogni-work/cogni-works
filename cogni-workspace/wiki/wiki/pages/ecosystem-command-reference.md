@@ -23,10 +23,9 @@ Five of the eleven plugins ship **no** commands directory at all: cogni-knowledg
 
 | Plugin | Slash commands |
 |---|---|
-| cogni-workspace | `/claims`, `/troubleshoot` |
+| cogni-workspace | `/claims`, `/troubleshoot`, `/enrich-report`, `/render-html-slides`, `/render-infographic`, `/render-infographic-editorial`, `/render-infographic-handdrawn`, `/review-brief` |
 | cogni-narrative | `/narrative`, `/narrative-adapt`, `/narrative-review` |
 | cogni-copywriting | `/copywrite`, `/review-doc` |
-| cogni-visual | `/enrich-report`, `/render-html-slides`, `/render-infographic`, `/render-infographic-editorial`, `/render-infographic-handdrawn`, `/review-brief` |
 | cogni-marketing | `/abm`, `/campaign`, `/content-calendar`, `/content-strategy`, `/demand-gen`, `/lead-gen`, `/marketing-dashboard`, `/marketing-resume`, `/marketing-setup`, `/sales-enablement`, `/thought-leadership` |
 | cogni-sales | `/why-change` |
 | cogni-knowledge, cogni-consult, cogni-trends, cogni-portfolio, cogni-website | none — skill-invoked |
@@ -41,13 +40,11 @@ Five of the eleven plugins ship **no** commands directory at all: cogni-knowledg
 
 **cogni-copywriting** — `copywriter`, `copy-reader`, `copy-json`, `audit-copywriter`
 
-**cogni-workspace** — `manage-workspace`, `workspace-status`, `workspace-dashboard`, `pick-theme`, `manage-themes`, `manage-markets`, `audit-region-sources`, `install-mcp`, `ask`, `claims`, `claim-entity`, `cogni-issues`, `troubleshoot`
+**cogni-workspace** — `manage-workspace`, `workspace-status`, `workspace-dashboard`, `pick-theme`, `manage-themes`, `manage-markets`, `audit-region-sources`, `install-mcp`, `ask`, `claims`, `claim-entity`, `cogni-issues`, `troubleshoot`, `story-to-slides`, `story-to-web`, `story-to-storyboard`, `story-to-infographic`, `render-html-slides`, `render-infographic-editorial`, `enrich-report`, `review-brief`
 
 **cogni-trends** — `trend-scout`, `trend-research`, `trend-synthesis`, `trend-booklet`, `value-modeler`, `verify-trend-report`, `trends-catalog`, `trends-dashboard`, `trends-resume`
 
 **cogni-portfolio** — `portfolio-setup`, `portfolio-scan`, `portfolio-ingest`, `portfolio-taxonomy`, `products`, `features`, `markets`, `customers`, `propositions`, `solutions`, `packages`, `compete`, `portfolio-communicate`, `portfolio-consolidate`, `portfolio-architecture`, `portfolio-canvas`, `portfolio-verify`, `portfolio-lineage`, `portfolio-dashboard`, `portfolio-resume`, `trends-bridge`
-
-**cogni-visual** — `story-to-slides`, `story-to-web`, `story-to-storyboard`, `story-to-infographic`, `render-html-slides`, `render-infographic-editorial`, `enrich-report`, `review-brief`
 
 **cogni-marketing** — `marketing-setup`, `content-strategy`, `content-calendar`, `campaign-builder`, `demand-generation`, `lead-generation`, `thought-leadership`, `sales-enablement`, `abm`, `marketing-dashboard`, `marketing-resume`
 
@@ -64,7 +61,7 @@ Once the patterns are visible, most of this table stops needing lookup — see [
 - **`*-resume`** — the re-entry point across sessions. Shows progress and recommends the next step; the right thing to run when you do not remember where you left off.
 - **`*-dashboard`** — a self-contained HTML view of current state.
 - **`*-verify` / `*-lint` / `*-health`** — quality gates over already-produced entities, not producers themselves.
-- **`story-to-*`** — cogni-visual's brief producers; **`render-*`** turns a brief into an artifact.
+- **`story-to-*`** — cogni-workspace's brief producers; **`render-*`** turns a brief into an artifact.
 
 ## Where to read more
 

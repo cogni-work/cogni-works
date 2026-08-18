@@ -122,7 +122,7 @@ Do not soften it.
 
 ### Step 1: Load shared discipline and parse brief
 
-Before anything else, **read `cogni-workspace/libraries/render-excalidraw-common.md` in full**.
+Before anything else, **read `$CLAUDE_PLUGIN_ROOT/libraries/render-excalidraw-common.md` in full**.
 It owns canvas lifecycle (how to clear reliably), the brand-accent doctrine, the first eight
 self-review gates, the Excalidraw element JSON quick-reference, and the error-recovery table.
 This agent does not repeat any of that.

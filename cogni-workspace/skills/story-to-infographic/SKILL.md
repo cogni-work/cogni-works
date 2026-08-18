@@ -451,7 +451,7 @@ do not invent or derive a path: return the `render` error code the response cont
 defines for a requested render that failed.
 
 That response contract — the `brief` and `out` paths, and the `param` / `skill` / `files` /
-`validation` / `render` error codes — lives in `cogni-workspace/agents/story-to-infographic.md`
+`validation` / `render` error codes — lives in `${CLAUDE_PLUGIN_ROOT}/agents/story-to-infographic.md`
 under `## RESPONSE FORMAT`. Consult it there when this skill runs outside that agent, so the
 shape stays defined in exactly one place.
 

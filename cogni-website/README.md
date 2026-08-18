@@ -221,7 +221,7 @@ cogni-website/
 | cogni-marketing | No | Blog posts, demand-generation articles, lead-generation landing pages |
 | cogni-trends | No | Trend report with investment themes for an Insights page |
 | cogni-knowledge | No | Research syntheses as whitepapers for a Resources page |
-| cogni-visual | No | Pencil MCP access for AI-generated hero imagery (indirect — via hero-renderer agent) |
+| cogni-visual | No | Arc taxonomy (element → block mapping) and story-to-web section-architecture and copywriting references read by website-plan; image-prompt conventions for the hero-renderer agent |
 
 ## Custom development
 

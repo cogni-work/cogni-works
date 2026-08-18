@@ -754,7 +754,7 @@ stages.append({
 stages.append({
     'name': 'Visual Report',
     'status': 'done' if b('HAS_ENRICHED_REPORT') else 'skipped',
-    'details': ('themed HTML with charts (cogni-visual:enrich-report)'
+    'details': ('themed HTML with charts (cogni-workspace:enrich-report)'
                 if b('HAS_ENRICHED_REPORT') else 'optional')
 })
 
@@ -863,11 +863,11 @@ case "$PHASE" in
       add_action "cogni-workspace:copywrite" "Polish report prose for executive readability"
     fi
     if [ "$HAS_ENRICHED_REPORT" = "false" ]; then
-      add_action "cogni-visual:enrich-report" "Generate themed HTML with charts and diagrams"
+      add_action "cogni-workspace:enrich-report" "Generate themed HTML with charts and diagrams"
     fi
-    add_action "cogni-visual:story-to-slides" "Create a PowerPoint presentation from the report"
-    add_action "cogni-visual:story-to-web" "Create a scrollable landing page from the report"
-    add_action "cogni-visual:story-to-storyboard" "Create a multi-poster print storyboard"
+    add_action "cogni-workspace:story-to-slides" "Create a PowerPoint presentation from the report"
+    add_action "cogni-workspace:story-to-web" "Create a scrollable landing page from the report"
+    add_action "cogni-workspace:story-to-storyboard" "Create a multi-poster print storyboard"
     add_action "cogni-trends:trends-catalog" "Import to industry catalog for cross-pursuit reuse"
     if [ "$HAS_DASHBOARD" = "false" ]; then
       add_action "cogni-trends:trends-dashboard" "Generate interactive TIPS project dashboard"

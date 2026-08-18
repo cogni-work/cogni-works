@@ -93,7 +93,7 @@ trend-scout → value-modeler → trend-research → (trend-synthesis | trend-bo
    (scout)      (model)         (enrich)         (compose)         (catalog)            (verify+revise)        (accumulate)
 ```
 
-`trend-research` enriches every candidate with web-sourced quantitative evidence and emits a single manifest (`.metadata/trend-research-output.json`) that the two downstream synthesis skills gate on. `trend-synthesis` produces the curated TIPS investment-themes report (`tips-trend-report.md`); `trend-booklet` produces the comprehensive catalog of all candidates (`tips-trend-booklet.md`). The two are independent and can run in either order. `verify-trend-report` is the extended quality pipeline: claim verification via `cogni-workspace:claims`, cross-theme structural review, revisor loop, and a final menu surfacing executive polish (`cogni-workspace:copywriter`) and visual enrichment (`cogni-visual:enrich-report`). `trends-resume` can re-enter at any stage. `trends-dashboard` visualizes the full lifecycle.
+`trend-research` enriches every candidate with web-sourced quantitative evidence and emits a single manifest (`.metadata/trend-research-output.json`) that the two downstream synthesis skills gate on. `trend-synthesis` produces the curated TIPS investment-themes report (`tips-trend-report.md`); `trend-booklet` produces the comprehensive catalog of all candidates (`tips-trend-booklet.md`). The two are independent and can run in either order. `verify-trend-report` is the extended quality pipeline: claim verification via `cogni-workspace:claims`, cross-theme structural review, revisor loop, and a final menu surfacing executive polish (`cogni-workspace:copywriter`) and visual enrichment (`cogni-workspace:enrich-report`). `trends-resume` can re-enter at any stage. `trends-dashboard` visualizes the full lifecycle.
 
 ## Data Model
 
@@ -145,9 +145,8 @@ Training-sourced candidates capped: source_quality max 0.4, signal_strength max 
 | Plugin | Direction | Mechanism |
 |--------|-----------|-----------|
 | cogni-portfolio | bidirectional | trends-bridge exports solution templates → portfolio features; portfolio anchors enrich solution relevance scoring |
-| cogni-workspace | downstream | trend-research registers claims; `verify-trend-report` Phase 2 invokes cogni-workspace:claims for source verification; the `narrative` skill's smarter-service arc feeds the theme-case writer + dimension composer (graceful fallback when absent); `copywriter` applies executive polish with tone scoping |
+| cogni-workspace | downstream | trend-research registers claims; `verify-trend-report` Phase 2 invokes cogni-workspace:claims for source verification; the `narrative` skill's smarter-service arc feeds the theme-case writer + dimension composer (graceful fallback when absent); `copywriter` applies executive polish with tone scoping; `enrich-report` produces themed HTML from trend-report or trend-booklet, `story-to-slides` presentations |
 | cogni-workspace | upstream | pick-theme for dashboard theming; `region-authority-sources.json` is a slim **overlay** of the canonical `references/supported-markets-registry.json` (carries only `site_searches[]` keyed by Smarter Service dimension, plus trends-specific `regulatory_search` and `org_size_reference`). Read sites call `cogni-workspace/scripts/get-market-config.py --plugin trends --market <code>` to join overlay + registry. Drift on the shared market set is structurally impossible; orphan overlays surfaced by `cogni-workspace:audit-region-sources`. |
-| cogni-visual | downstream | enrich-report themed HTML from trend-report or trend-booklet; story-to-slides for presentations |
 
 ## Key Conventions
 

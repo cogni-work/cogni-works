@@ -125,7 +125,7 @@ execution summary, so read the reference for each route before dispatching:
 **Building the consult-native outline (`slides` / `web-poster`).** This is the
 one route the skill builds itself rather than dispatching. Consult deliverables
 are framework-shaped (Pyramid / SCQA / MECE), not arc-shaped, so this path does
-**not** dispatch `cogni-visual:story-to-slides` / `story-to-web` and does **not**
+**not** dispatch `cogni-workspace:story-to-slides` / `story-to-web` and does **not**
 re-narrate through `the `narrative` skill` — arc-ifying a framework-shaped deliverable
 weakens its executive register. Derive the outline directly from the
 deliverable's own structure: an ordered list of `{section_title, section_body}`
@@ -152,9 +152,9 @@ per-route brief recipe and output path — follow it rather than restating them
 here, so the skill and the reference cannot drift.
 
 **No render dependency.** All four routes build a brief natively and never
-render, so the run never requires `cogni-visual`. `cogni-visual:enrich-report` /
+render, so the run never requires `cogni-workspace`. `cogni-workspace:enrich-report` /
 `story-to-infographic` remain available only as an explicit opt-in local-render
-fallback (they render locally and apply a cogni-visual theme, which the
+fallback (they render locally and apply a cogni-workspace theme, which the
 brief-only contract otherwise avoids) — they are no longer the standard path.
 When `the `copywriter` skill` is absent, the optional polish step is skipped. Either
 way the run still produces a valid brief.
@@ -234,7 +234,7 @@ If multiple formats were produced in this session, list each brief path.
   application happen in Claude Design. This skill produces no rendered artifact
   and owns no theme.
 - **No render dependency.** Every format builds a consult-native brief, so the
-  standard path never requires `cogni-visual` — it remains an opt-in
+  standard path never requires `cogni-workspace` — it remains an opt-in
   local-render fallback only. When `the `copywriter` skill` is absent the optional
   polish step is skipped. Either way the run still produces a valid brief — a
   missing downstream plugin degrades the output, it never fails the run.
@@ -244,5 +244,5 @@ If multiple formats were produced in this session, list each brief path.
   assumption ships a wrong or placeholder number to a client.
 - **Framework-shaped, not arc-shaped.** All four routes build the brief directly
   from the deliverable's framework (Pyramid/MECE/SCQA). None arc-ifies and none
-  dispatches the arc-optimized cogni-visual story skills on the standard path —
+  dispatches the arc-optimized cogni-workspace story skills on the standard path —
   that is a deliberate quality choice, not an omission.

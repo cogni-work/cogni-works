@@ -26,13 +26,13 @@ Quality gate for a generated trend report. Verifies every quantitative claim aga
 2. Lets the user steer corrections (proceed / fix specific deviations / drop claims / accept)
 3. Runs `trend-report-reviewer` for cross-theme structural quality
 4. Dispatches `trend-report-revisor` to apply corrections, remove unverifiable claims, and find replacement evidence
-5. Surfaces downstream options: executive polish (`cogni-workspace:copywriter`) and visual enrichment (`cogni-visual:enrich-report`)
+5. Surfaces downstream options: executive polish (`cogni-workspace:copywriter`) and visual enrichment (`cogni-workspace:enrich-report`)
 
 ## Prerequisites
 
 - `trend-synthesis` has produced both `{PROJECT_PATH}/tips-trend-report.md` and `{PROJECT_PATH}/tips-trend-report-claims.json`
 - `cogni-workspace` installed (recommended — graceful degradation when the `cogni-workspace:claims` skill is absent: structural review only, see Error Handling)
-- Optional: `the `copywriter` skill` and `cogni-visual` plugins for downstream menu options
+- Optional: the `copywriter` and `enrich-report` skills (both `cogni-workspace`) for downstream menu options
 
 ## Path Variables
 
@@ -360,14 +360,14 @@ AskUserQuestion:
     - label: "Polish prose for executive tone"
       description: "Run cogni-workspace:copywriter (preserves citations and structure)"
     - label: "Generate themed HTML with charts"
-      description: "Run cogni-visual:enrich-report (Chart.js + concept diagrams)"
+      description: "Run cogni-workspace:enrich-report (Chart.js + concept diagrams)"
     - label: "Done — return to trends-resume"
       description: "See the full option set (slides, web, storyboard, catalog, dashboard)"
 ```
 
 Handle the choice:
 - **Polish** → invoke `Skill(cogni-workspace:copywriter, args="FILE_PATH={PROJECT_PATH}/tips-trend-report.md SCOPE=tone STAKEHOLDERS=executive REVIEW_MODE=automated")`. Validate citation count after polish; revert from backup on failure (rules in [references/downstream-options.md](references/downstream-options.md)).
-- **Visualize** → invoke `Skill(cogni-visual:enrich-report, args="--source {PROJECT_PATH}/tips-trend-report.md")`.
+- **Visualize** → invoke `Skill(cogni-workspace:enrich-report, args="--source {PROJECT_PATH}/tips-trend-report.md")`.
 - **Done** → exit cleanly. Recommend the user run `/trends-resume` to see the full option set (slides, web, storyboard, catalog, dashboard).
 
 The user can re-enter this skill later to pick a different path; downstream skills do not block each other.
@@ -386,7 +386,7 @@ The user can re-enter this skill later to pick a different path; downstream skil
 | Reviewer returns `revise` but no priorities | Treat as `accept` (defensive — cogni-trends reviewer rarely emits this state) |
 | Revisor validation fails | Surface specific failure to the user; do not auto-rerun. Backup at `.tips-trend-report-pre-revision-v{N}.md` is canonical. |
 | `the `copywriter` skill` not installed | Phase 5 menu skips the polish option silently |
-| `cogni-visual` not installed | Phase 5 menu skips the visualize option silently |
+| `cogni-workspace:enrich-report` not available | Phase 5 menu skips the visualize option silently |
 
 ## Integration
 
@@ -399,9 +399,9 @@ The user can re-enter this skill later to pick a different path; downstream skil
 **Plugin dependencies:**
 - `cogni-workspace:claims` (recommended) — claim verification
 - `cogni-workspace:copywriter` (optional) — Phase 5 menu option
-- `cogni-visual:enrich-report` (optional) — Phase 5 menu option
+- `cogni-workspace:enrich-report` (optional) — Phase 5 menu option
 
-**Downstream (via `/trends-resume`):** `cogni-visual:story-to-slides`, `cogni-visual:story-to-web`, `cogni-visual:story-to-storyboard`, `trends-catalog import`, `trends-dashboard`
+**Downstream (via `/trends-resume`):** `cogni-workspace:story-to-slides`, `cogni-workspace:story-to-web`, `cogni-workspace:story-to-storyboard`, `trends-catalog import`, `trends-dashboard`
 
 ## Debugging
 

@@ -24,9 +24,9 @@ cogni-workspace:install-mcp             (install excalidraw + pencil MCPs)
    ↓
 cogni-workspace:manage-themes           (extract theme from your website)
    ↓
-cogni-visual:story-to-infographic       (turn narrative into infographic brief)
+cogni-workspace:story-to-infographic       (turn narrative into infographic brief)
    ↓
-cogni-visual:render-infographic-...     (render via excalidraw or pencil)
+cogni-workspace:render-infographic-...     (render via excalidraw or pencil)
 ```
 
 ## Duration
@@ -55,7 +55,7 @@ It exercises every layer of the platform — workspace foundation, MCP installat
 
 **3 — Build a theme.** `cogni-workspace:manage-themes` in extract mode against a public company URL, then `cogni-workspace:pick-theme`. The extractor reads the live site through claude-in-chrome and pulls colors, fonts and logo. For sites behind a login wall, pass a PowerPoint template or choose a preset instead. Picking the theme makes it the default for slides, infographics, dashboards and websites — see [[concept-theme-inheritance]].
 
-**4 — Render the first infographic.** `cogni-visual:story-to-infographic` with `--style=sketchnote`, then again with `--style=economist`. A four-to-six-sentence narrative works well as a first try. Running both presets doubles as a live check that both renderers are wired up: `sketchnote` and `whiteboard` route to Excalidraw, `economist`, `editorial`, `data-viz` and `corporate` route to Pencil. Both inherit the theme from step 3, so the colors should match your website.
+**4 — Render the first infographic.** `cogni-workspace:story-to-infographic` with `--style=sketchnote`, then again with `--style=economist`. A four-to-six-sentence narrative works well as a first try. Running both presets doubles as a live check that both renderers are wired up: `sketchnote` and `whiteboard` route to Excalidraw, `economist`, `editorial`, `data-viz` and `corporate` route to Pencil. Both inherit the theme from step 3, so the colors should match your website.
 
 **5 — Pick a follow-on workflow.** You now have a working workspace, a branded theme and two rendered infographics. Choose by what you want to produce next: [[workflow-portfolio-to-pitch]], [[workflow-trends-to-solutions]], [[workflow-content-pipeline]] or [[workflow-portfolio-to-website]].
 

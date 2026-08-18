@@ -66,11 +66,16 @@ WS_ROOT="$(cd "$HERE/.." && pwd)"
 #
 # A spec's tree is directory-level only where that destination directory holds
 # nothing but adopted files. Where the destination is shared, the spec names each
-# adopted file instead: cogni-workspace's own scripts/verify-theme-backcompat.sh,
-# CLAUDE.md, skills/manage-themes, skills/narrative and the wiki pages all carry
-# `cogni-visual:` legitimately, so a directory-level spec over agents/, references/,
-# scripts/, tests/ or hooks/ would fail on arrival against files this adoption never
-# touched. `find` over a regular file yields that file, so bare-file specs walk fine.
+# adopted file instead. A directory-level spec over agents/, references/, scripts/,
+# tests/ or hooks/ would fail on arrival against files this adoption never touched:
+# those trees hold cogni-workspace's own long-standing files, and some of them carry
+# a retired plugin's colon-form token legitimately — this file's own spec table most
+# of all, where the literal is the guard's matching data rather than a dispatch.
+# (The consumer surfaces that used to sit on that list — verify-theme-backcompat.sh,
+# skills/manage-themes, skills/narrative, skills/narrative-adapt — were repointed at
+# the consumer stage of the cogni-visual absorption; the file-level specs stand on
+# the shared-destination argument alone, not on those files.)
+# `find` over a regular file yields that file, so bare-file specs walk fine.
 TREE_SPECS="
 $WS_ROOT/skills/cogni-issues|cogni-help:
 $WS_ROOT/skills/troubleshoot|cogni-help:

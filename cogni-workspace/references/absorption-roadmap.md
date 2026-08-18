@@ -294,6 +294,22 @@ the vendored resweep docstrings of Decision 6, were re-pointed rather than
 excepted. That is the line: this rule admits statements about a name, never
 instructions that use it.
 
+**Applied at the cogni-visual absorption (consumer stage)** to four rulings. The
+hygiene suite's spec table and its header comment stay as guard data — a blanket
+substitution over them was tried and turns case P1 red, because the adopted trees
+now legitimately self-reference the adopting plugin, so the rewritten arm would
+assert against content the absorption is required to have. This plugin's own
+`CLAUDE.md` enumeration of who carries the retired token is category-2
+meta-documentation, so the claim survives, but the file list is refreshed in the
+same change rather than left describing a tree that no longer exists. Two theme
+consumers documented in `skills/manage-themes` named diagram skills that exist in
+neither plugin; a prefix swap would have manufactured two unresolvable tokens, so
+they were re-pointed at real skills under the guard's own documented remedy. And
+the wiki splits: pages that instruct a reader which skill to run carry dispatch
+intent and move now, while entity pages describing the source plugin are identity
+records — bound to a filename, an id and a source path — and move with the roster
+when the tree is retired.
+
 ## Known remaining contradictions — reconciled
 
 The layering claim this record replaces — that cogni-workspace is the layer every

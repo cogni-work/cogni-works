@@ -62,9 +62,11 @@
 #   M6 -> test_stale_lock_survives_divergent_stat
 #     --expr 's#stat -c %Y "\$LOCK_DIR"#stat -f %m "\$LOCK_DIR"#'
 #   Puts the BSD form first, leaving the GNU arm unreachable on the platform
-#   that needs it. The floor keeps the behavioural arm green, so only the
-#   ordering arm reddens — which is exactly the defence-in-depth split. Occurs
-#   once; the quoted form is deliberately absent from every comment.
+#   that needs it. Reddens the ordering arm, which reads the chain out of the
+#   hook's source. M8 replays this same substitution against the behavioural
+#   case, so the one defect is caught by source shape and by consequence
+#   independently — that is the defence-in-depth split. Occurs once; the quoted
+#   form is deliberately absent from every comment.
 #
 #   M7 -> test_concurrent_stale_claim_spawns_exactly_one_server
 #     --expr 's#\$swept_mtime" -eq "\$lock_mtime#\$swept_mtime" -ne "\$lock_mtime#'
@@ -75,8 +77,30 @@
 #   the rate the underlying race happens to hit. Occurs once; the comparison is
 #   never written out in prose.
 #
+#   M8 -> test_live_claim_survives_flag_aware_stat
+#     --expr 's#stat -c %Y "\$LOCK_DIR"#stat -f %m "\$LOCK_DIR"#'
+#   The same substitution M6 makes, replayed against the behavioural case — the
+#   duplication is the point, not a copy error, so do not fold the two arms
+#   together. Under the flag-aware stub a BSD-first chain answers first for a
+#   LIVE claim, succeeds with a non-mtime, floors it to 0, judges the claim
+#   ancient and carries it aside; the case demands it survive. Nothing in that
+#   case reads the hook's source, so it stays red even if the chain is renamed
+#   or moved into a helper.
+#
+#   M9 -> test_stale_lock_survives_divergent_stat
+#     --expr 's#stat -c %Y "\$swept"#stat -f %m "\$swept"#'
+#   The sweep's own chain, which no arm reached before. It reddens through the
+#   ordering arm only: under the flag-agnostic stub both forms answer the same
+#   non-numeric value, so reverting this chain leaves every behavioural case
+#   green — which is why the ordering arm now holds over every chain the hook
+#   contains rather than the first one it finds. Occurs once.
+#
+#   Neither M8 nor M9 carries a ^/$ anchor, so neither needs /m under the
+#   harness's perl -0pi, and neither searched literal appears in any comment —
+#   so neither substitution can be a silent no-op.
+#
 #   Mutating a hook copy is required: these cases assert hook behaviour, so
-#   mutating this suite or a docs file would prove nothing. All seven recipes
+#   mutating this suite or a docs file would prove nothing. All nine recipes
 #   were replayed against the shared harness and each returned guard_verified.
 
 set -u
@@ -166,6 +190,46 @@ add_divergent_stat_stub() {
 echo /
 exit 0
 STATSTUB
+  chmod +x "$fx/bin/stat"
+}
+
+# The sibling of the stub above, and the opposite choice on the one axis that
+# matters: this one ANSWERS THE FLAGS. `-c` returns a real epoch, `-f` returns
+# a string that is not an mtime and still exits 0 — GNU's actual shape, where
+# `-f` means --file-system and so succeeds without reporting a modification
+# time. That exit 0 is the load-bearing half: a failing `-f` would let the `||`
+# fall through to the GNU form and both orders would agree again, which is
+# exactly what makes the flag-agnostic stub above unable to see the ordering.
+#
+# The heredoc is unquoted so $fx interpolates at write time, while \$1 is
+# escaped through to the stub's own runtime — the technique add_staggered_date_stub
+# below uses for \$@. `date` is deliberately NOT stubbed alongside this: the -c
+# arm shells out to the real one, and a staggering date stub would corrupt the
+# reading this case turns on.
+#
+# Two markers, written on every call, deliberately kept separate. port.up is
+# what keeps the case cheap: a live claim sends the hook into its port-wait
+# loop — twenty half-second probes — and the nc stub reports the port up as
+# soon as that file exists, so the loop breaks on its first probe. Removing
+# just that one write costs the suite about ten seconds.
+#
+# stat.called is the witness the case asserts on, and it is separate precisely
+# because port.up is not exclusively ours: the node stub writes it too, on any
+# run that reaches a spawn. This case spawns nothing today, so the two would
+# agree — but a witness that silently depends on that is the kind of guard this
+# suite exists to not ship. Only the stub writes stat.called.
+add_flag_aware_stat_stub() {
+  fx="$TMPROOT/$1"
+  cat > "$fx/bin/stat" <<EOF
+#!/usr/bin/env bash
+: > "$fx/port.up"
+: > "$fx/stat.called"
+case "\$1" in
+  -c) date +%s ;;
+  -f) echo "%m" ;;
+  *) exit 1 ;;
+esac
+EOF
   chmod +x "$fx/bin/stat"
 }
 
@@ -371,29 +435,55 @@ test_concurrent_stale_claim_spawns_exactly_one_server() {
 # there. Two arms, because the fix has two independent halves and neither one
 # alone is observable through the other.
 test_stale_lock_survives_divergent_stat() {
-  # Ordering arm first, and deliberately so. It is a static read of two files
+  # Ordering arm first, and deliberately so: it is a static read of two files
   # (sub-second) while the behavioural arm below costs a real hook run against
-  # a stubbed canvas (seconds). It is also the ONLY arm that reddens when the
-  # chain order is reverted — the numeric floor keeps the behavioural arm green
-  # by design — so running it first is where the failing path gets its feedback.
+  # a stubbed canvas (seconds), so running it first is where a failing path
+  # gets its feedback soonest.
   #
-  # Textual by necessity: because that floor makes both orders behave
-  # identically at runtime, no behavioural case can reach the ordering. It
-  # still matters — a BSD-first chain leaves the GNU arm dead on the platform
-  # that needs it, and the floor then silently degrades every sweep to
-  # "ancient" instead of reading the real age.
+  # This arm is defence in depth, not the primary pin. The ordering IS reachable
+  # behaviourally — test_live_claim_survives_flag_aware_stat asserts it by
+  # consequence — and what this arm adds is the two things that case cannot
+  # give. It holds over EVERY stat chain the hook contains, including the
+  # sweep's own second chain, whose revert leaves every behavioural case in this
+  # file green; and it holds over the portfolio copy, which no case here can
+  # run. The count floor is what keeps both of those honest: fold the chains
+  # into a helper, or drop one, and this arm reddens rather than passing over a
+  # smaller set than it thinks it has.
+  #
+  # Why the ordering is worth pinning at all: a BSD-first chain leaves the GNU
+  # arm dead on the platform that needs it, and the numeric floor then silently
+  # degrades every sweep to "ancient" instead of reading the real age. The floor
+  # makes that failure quiet, not safe.
+  #
+  # The selection keys on the call itself, not on the variable it is assigned to
+  # and not on the assignment shape — so neither renaming lock_mtime or
+  # swept_mtime, nor moving a chain out of an assignment and into a condition,
+  # can drop it out of the set. Counting the captured lines rather than running
+  # a second grep keeps one selector: two would have to be kept in step by hand,
+  # and the arm would pass over a different population than the floor counts.
   for h in "$VISUAL_HOOK" "$PORTFOLIO_HOOK"; do
-    chain="$(hook_code "$h" | grep -E 'lock_mtime=\$\(stat ' | head -1)"
-    if [ -z "$chain" ]; then
-      fail test_stale_lock_survives_divergent_stat "no stat chain found in $h"
+    chains="$(hook_code "$h" | grep -E 'stat ')"
+    n_chains="$(printf '%s\n' "$chains" | grep -c .)"
+    if [ "$n_chains" != "2" ]; then
+      fail test_stale_lock_survives_divergent_stat "expected 2 stat chains in $h, found $n_chains"
       continue
     fi
-    case "$chain" in
-      *"stat -c "*"stat -f "*)
-        pass test_stale_lock_survives_divergent_stat "GNU form precedes BSD form in $h" ;;
-      *)
-        fail test_stale_lock_survives_divergent_stat "chain is not GNU-first in $h: $chain" ;;
-    esac
+    bad=0
+    # Fed by a heredoc, never a pipe: a pipeline runs the loop in a subshell
+    # under bash 3.2 and the counter would not survive it.
+    while IFS= read -r chain; do
+      case "$chain" in
+        *"stat -c "*"stat -f "*) ;;
+        *)
+          bad=1
+          fail test_stale_lock_survives_divergent_stat "chain is not GNU-first in $h: $chain" ;;
+      esac
+    done <<EOF
+$chains
+EOF
+    if [ "$bad" = "0" ]; then
+      pass test_stale_lock_survives_divergent_stat "both stat chains are GNU-first in $h"
+    fi
   done
 
   # Behavioural arm. Pre-fix this is rc 1 with 0 spawns: the mtime read
@@ -406,6 +496,55 @@ test_stale_lock_survives_divergent_stat() {
 
   assert_stale_claim_swept test_stale_lock_survives_divergent_stat "$c" "$rc" \
     "swept and started despite a divergent stat"
+}
+
+# The ordering of the chain, pinned by consequence rather than by source text.
+# The stub's mechanics live with the stub; what matters here is what they buy:
+#
+# Against a GNU-first chain a live peer's claim reads its true, recent mtime and
+# is left alone. Reverse the chain and `-f` answers first, succeeds, and the
+# `||` never falls through; the numeric floor coerces that unusable reading to
+# 0, the claim reads as ancient, and it is carried aside — a live peer's claim
+# swept, and the double spawn back.
+#
+# That survival is the discriminator. The rc check below is a floor, not the
+# pin: a reverted chain still exits 0 (the hook has no failing branch), so rc
+# never moves under the mutation this case grades. What it catches is a hook
+# that aborts mid-run, which would leave both other assertions passing over a
+# run that decided nothing. A spawn count would grade nothing at all here — it
+# is 0 under either ordering.
+#
+# Nothing in this case reads the hook's source, so renaming the variable the
+# chain assigns to cannot quietly make it green again.
+test_live_claim_survives_flag_aware_stat() {
+  c=liveclaim; make_fixture "$c"; add_flag_aware_stat_stub "$c"
+
+  # A LIVE claim — a bare mkdir, deliberately not plant_stale_claim, whose
+  # backdated timestamp is the opposite of the state this case needs.
+  mkdir -p "$TMPROOT/$c/mcp/canvas-start.lock"
+
+  run_hook "$c" a; rc=$?
+
+  if [ -d "$TMPROOT/$c/mcp/canvas-start.lock" ]; then
+    pass test_live_claim_survives_flag_aware_stat "a live peer's claim survived the sweep decision"
+  else
+    fail test_live_claim_survives_flag_aware_stat "a live peer's claim was swept"
+  fi
+
+  if [ "$rc" = "0" ]; then
+    pass test_live_claim_survives_flag_aware_stat "hook exited 0"
+  else
+    fail test_live_claim_survives_flag_aware_stat "expected rc 0, got $rc"
+  fi
+
+  # Non-vacuity floor: only the stub writes this marker, so its absence means
+  # the run never reached a stat chain and the assertions above passed without
+  # exercising anything.
+  if [ -f "$TMPROOT/$c/stat.called" ]; then
+    pass test_live_claim_survives_flag_aware_stat "the sweep decision read the stubbed stat"
+  else
+    fail test_live_claim_survives_flag_aware_stat "the stubbed stat was never called — the case never reached the chain"
+  fi
 }
 
 # AC 4: the two plugin-private copies must not drift apart. Their hooks.json
@@ -494,7 +633,7 @@ test_release_is_trapped_for_signals() {
   done
 }
 
-ALL_TESTS="test_cold_start_spawns_exactly_one_server test_stale_lock_does_not_deadlock test_concurrent_stale_claim_spawns_exactly_one_server test_stale_lock_survives_divergent_stat test_hook_copies_are_identical test_release_is_trapped_for_signals"
+ALL_TESTS="test_cold_start_spawns_exactly_one_server test_stale_lock_does_not_deadlock test_concurrent_stale_claim_spawns_exactly_one_server test_stale_lock_survives_divergent_stat test_live_claim_survives_flag_aware_stat test_hook_copies_are_identical test_release_is_trapped_for_signals"
 
 run_one() {
   case " $ALL_TESTS " in

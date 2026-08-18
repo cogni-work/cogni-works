@@ -217,7 +217,7 @@ German business writing accumulates Floskeln (stock phrases) that inflate senten
 | Verwendung finden | verwendet werden / nutzen |
 | Anwendung finden | angewendet werden |
 | zum Einsatz kommen | eingesetzt werden / nutzen |
-| einer Loesung zufuehren | loesen |
+| einer Lösung zuführen | lösen |
 | in Erscheinung treten | erscheinen / auftreten |
 | Stellung nehmen zu | sich aeussern zu |
 | in Abrede stellen | bestreiten |

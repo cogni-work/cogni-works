@@ -175,29 +175,71 @@ State lives in two layers that other plugins consume. Configuration (env vars, t
 | `setup-obsidian.sh` | script | Copies vault templates, downloads Terminal plugin, substitutes path placeholders |
 | `update-obsidian.sh` | script | Merges profiles, fixes WSL paths, removes deprecated profiles, copies scripts |
 | `portability-utils.sh` | script | Cross-platform utilities (macOS, Linux, WSL, Git Bash) |
+| `story-to-slides` | skill | Turn a narrative with a story arc into a presentation brief |
+| `story-to-web` | skill | Turn a narrative with a story arc into a scrollable web-narrative brief |
+| `story-to-storyboard` | skill | Turn a narrative with a story arc into a printed-poster storyboard brief |
+| `story-to-infographic` | skill | Distil a narrative into a single-page infographic brief |
+| `render-html-slides` | skill | Render a presentation brief into self-contained HTML slides with speaker notes |
+| `enrich-report` | skill | Turn a markdown report into a themed HTML deliverable with charts and inline SVG diagrams |
+| `review-brief` | skill | Score a visual brief from three stakeholder perspectives before rendering |
+| `story-to-slides` | agent | Drive the story-to-slides skill as an autonomous subprocess |
+| `story-to-web` | agent | Drive the story-to-web skill as an autonomous subprocess |
+| `story-to-storyboard` | agent | Drive the story-to-storyboard skill as an autonomous subprocess |
+| `story-to-infographic` | agent | Drive the story-to-infographic skill as an autonomous subprocess |
+| `html-slides` | agent | Render a presentation brief into HTML slides, returning statistics |
+| `pptx` | agent | Create, edit and analyse PowerPoint presentations |
+| `web` | agent | Render a web brief into a .pen file and self-contained HTML page |
+| `storyboard` | agent | Render a storyboard brief into a multi-poster .pen file |
+| `enrich-report` | agent | Orchestrate report enrichment end to end |
+| `render-infographic-pencil` | agent | Render an editorial infographic in the data-journalism tradition |
+| `render-infographic-sketchnote` | agent | Render a hand-drawn infographic in the sketchnote tradition |
+| `render-infographic-whiteboard` | agent | Render a hand-drawn infographic in the whiteboard tradition |
+| `concept-diagram` | agent | Generate one Excalidraw concept diagram and export it as SVG |
+| `concept-diagram-svg` | agent | Generate one concept diagram as clean inline SVG, no Excalidraw dependency |
+| `editorial-sketch` | agent | Generate one-colour editorial line art, including cartographic outlines |
+| `report-html-writer` | agent | Write the complete scroll-layout HTML for an enriched report |
+| `enriched-report-reviewer` | agent | Visually review an enriched HTML report against a 10-gate rubric |
+| `slides-enrichment-artist` | agent | Generate prep slides and speaker notes, then write the presentation brief |
+| `brief-review-assessor` | agent | Assess brief quality from three stakeholder perspectives |
+| `cartographic-outline.py` | script | Render country outlines from the vendored Natural Earth data |
+| `load-theme-component.py` | script | Load a theme component for the rendering skills |
+| `rasterize-sketch.py` | script | Rasterize an SVG sketch |
 
 ## Architecture
 
 ```
 cogni-workspace/
 ├── .claude-plugin/plugin.json    Plugin manifest
-├── skills/                       13 workspace management skills
+├── skills/                       26 workspace and visual-rendering skills
 │   ├── ask/                      Query the bundled insight-wave wiki for grounded answers
 │   ├── audit-region-sources/     Audit per-plugin region-source overlays against the registry
 │   ├── claim-entity/             Cross-plugin ClaimEntity data contract and store layout
 │   ├── claims/                   Claim-verification lifecycle (+ scripts/claims-store.sh)
 │   ├── cogni-issues/             File and track plugin issues through the GitHub CLI
+│   ├── enrich-report/            Markdown report -> themed HTML with charts and diagrams
 │   ├── install-mcp/              MCP server installation and user-config patching
 │   ├── manage-markets/           Write path for the canonical supported-markets registry
-│   ├── manage-workspace/         Init or update workspace (includes Obsidian integration)
 │   ├── manage-themes/
+│   ├── manage-workspace/         Init or update workspace (includes Obsidian integration)
 │   ├── pick-theme/
+│   ├── render-html-slides/       Presentation brief -> self-contained HTML slides
+│   ├── review-brief/             Score a visual brief from three stakeholder perspectives
+│   ├── story-to-infographic/     Narrative -> single-page infographic brief
+│   ├── story-to-slides/          Narrative -> presentation brief
+│   ├── story-to-storyboard/      Narrative -> printed-poster storyboard brief
+│   ├── story-to-web/             Narrative -> scrollable web-narrative brief
 │   ├── troubleshoot/             Diagnose plugin and cross-plugin failures
 │   ├── workspace-dashboard/      Interactive HTML workspace status dashboard
 │   └── workspace-status/
-├── agents/                       Claim-verification subagents
+│                                  narrative, narrative-adapt, narrative-review, copywriter,
+│                                  copy-json and copy-reader are omitted here for brevity
+├── agents/                       26 subagents (claim verification, narrative, copywriting, visual rendering)
 │   ├── claim-verifier.md         Verify claims against one source URL (JSON out)
-│   └── source-inspector.md       Open a source via claude-in-chrome for cobrowse/inspect
+│   ├── source-inspector.md       Open a source via claude-in-chrome for cobrowse/inspect
+│   ├── story-to-*.md             Four narrative -> brief drivers (slides, web, storyboard, infographic)
+│   ├── render-infographic-*.md   Three infographic renderers (pencil, sketchnote, whiteboard)
+│   └── concept-diagram*.md       Diagram workers (Excalidraw and inline-SVG variants)
+├── libraries/                    17 layout, taxonomy and worked-example files read at render time
 ├── commands/                     Slash commands
 │   ├── claims.md                 Registers /claims
 │   └── troubleshoot.md           Registers /troubleshoot

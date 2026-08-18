@@ -394,10 +394,10 @@ Kept as a permanent inventory so the set stays auditable rather than being redis
 | Bare prose plugin names are invisible to every resolver | swept over the two-tree `pages/*.md` intersection; no guard yet, so a future retirement can reintroduce the class silently | #1426, guard in #1438 |
 | The 5 bundled-only pages still name retired plugins | held with the pages themselves — editing them would pre-decide the ruling | #1402, sweep in #1440 |
 | `index.md` and `overview.md` carry the same bare-name class | outside the swept surface by depth; needs its own decision, since the two `index.md` copies diverge by design and a TOC of deleted pages is a Decision-6 removal, not a rename | #1439 |
-| The generated `docs/` mirror repeats the dead `portfolio_path` edge | output corrected — the one falsified cell now names the live consumers; no guard added, see the guard-decision note below; the upstream generator filing is still outstanding, so a regeneration can still reintroduce the wording | #1441, filing in #1449 |
-| Two `consulting-project.json` residues name a manifest no plugin writes | open — outside the page surface (`troubleshoot/known-issues.md`, `docs/contributing/`) | #1442 |
+| The `docs/` ER diagram repeats the dead `portfolio_path` edge | closed — the one falsified cell now names the live consumers. The "generated mirror" framing this row previously carried was itself wrong: `docs/architecture/er-diagram.md` is hand-maintained, not cogni-docs output — that plugin's document-type routing table covers only `design-philosophy` and `plugin-anatomy` under `architecture/`, it ships no ER-diagram template, its own structure reference lists the file as an input rather than an output, its audit checks only that the file exists, and it contains zero `portfolio_path` occurrences. So no upstream filing is owed and no regeneration can revert the cell. No guard added — see the guard-decision note below | #1441 |
+| `consulting-project.json` occurrences name a manifest no plugin writes | closed — the real set was six hits over four files, not two. Both `concept-slug-based-lookups.md` copies were rewritten onto a live `consult-project.json` → `plugin_refs.knowledge_base` slug and pinned by `PAGE_PARITY`; `troubleshoot/known-issues.md` and the `SKILL.md` §5 probe moved from a dead rename to archive-not-rename. The two `docs/contributing/cogni-consult-evaluation.md` hits are accurate cogni-consulting history — a comparison-table cell and a dated run record — so they stand, and are not residues to re-file | #1442 |
 
-### Guard decision for the generated `docs/` mirror
+### Guard decision for the `docs/` ER diagram
 
 **No guard, because** the two forms available both cost more than they are worth here.
 
@@ -413,14 +413,20 @@ rather than a retired name, and no roster comparison sees it.
 
 The narrower form — pinning the corrected cell as a forbidden literal — is satisfiable locally,
 since `docs/` sits inside the sweep `test-layering-claim-reconciled.sh` already performs. It is
-declined on ownership rather than feasibility: its sole failure mode is an upstream regeneration,
-which #1449 tracks directly at the generator, and grafting the literal onto that suite would put
-an unrelated pin inside cases scoped end to end to the retired layering claim. A separate suite
-for one string is not worth its own file. The sibling caveat recorded in
-`absorption-roadmap.md` shipped the identical shape — corrected generator output, no guard.
+declined because the failure mode it would guard against does not exist. That pin earns its cost
+only if something can silently rewrite the cell back, and nothing can: this file is not cogni-docs
+output. Four checks against that plugin agree — its document-type routing table emits only
+`design-philosophy` and `plugin-anatomy` under `architecture/`, it defines no ER-diagram template,
+its structure reference names `er-diagram.md` an existing relocated file and lists it as a content
+source for other documents, and its audit asserts only that the path exists, never what it says.
+It also holds zero `portfolio_path` occurrences, so it could not emit this cell even by accident.
+Secondarily, grafting the literal onto that suite would put an unrelated pin inside cases scoped
+end to end to the retired layering claim, and a separate suite for one string is not worth its own
+file. The sibling caveat recorded in `absorption-roadmap.md` reached the same no-guard answer for
+output that genuinely is generated; the case is stronger here, not merely identical.
 
-**Revisit trigger:** if a regeneration reverts the cell before the upstream fix lands, the narrow
-pin has earned its cost and should be added as its own suite.
+**Revisit trigger:** if cogni-docs ever adds an `er-diagram` entry to its document-type routing
+table, this file becomes generated output and the guard question reopens on the terms above.
 
 ## Deliberately left standing
 
@@ -429,6 +435,17 @@ should not read them as misses. The two `entries_count` values remain different 
 per Decision 1. The substantive residual remains 11 lines, per Decision 2 — and the two
 `wiki/index.md` copies remain different from each other, per Decision 3's group-C rule. None of the
 seven bundled-only pages is edited, promoted or deleted, per Decision 4.
+
+`troubleshoot/SKILL.md` §5's stale-state probe and `troubleshoot/references/known-issues.md`'s
+`Leftover engagement file from a retired consulting plugin` entry both still name
+`consulting-project.json`, deliberately. Neither is a residue: they are detection surfaces, where
+the dead name is the thing being searched for on a user's disk and the thing a reader matches their
+own situation against. Stripping it would leave `/troubleshoot` unable to find or describe the very
+artefact the sweep was about — a documentation fix traded for a functional regression. This is the
+same exemption the neighbouring `Leftover course-progress file` entry already relies on, naming its
+two retired `.claude/*.local.md` files verbatim in both its Symptom line and its `rm -f` remedy. A
+literal zero-hit bar over `cogni-workspace/skills/` is therefore unmeetable by construction, and a
+future sweep should not re-file either occurrence.
 
 ## What guards this
 

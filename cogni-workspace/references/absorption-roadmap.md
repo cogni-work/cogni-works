@@ -335,7 +335,7 @@ lesson, not the count:
 |---|---|
 | `docs/workflows/install-to-infographic.md:43`, `:65` | The narrative tutorial the `cogni-help` workflow template hands off to at its closing line, and which `docs/claude-code-desktop.md:236` recommends as the next step. Reconciling the template while leaving the page it links to meant a reader crossed from a reconciled sentence straight into an unreconciled one. Neither phrasing (`the foundation the others depend on`, `is the shared foundation`) matched any literal the guard then carried. |
 | `plugin-cogni-workspace.md:17` (both trees) | The hyphenated `Foundation-layer plugin`, four lines above the `:21` alias the first table did name — so the page asserted both framings about itself. The hyphen is why it evaded the `foundation layer` grep. |
-| `wiki/wiki/index.md:52` (both trees) | The index one-liner derived from that page's first line; correcting the page alone left the index contradicting it. |
+| `wiki/wiki/index.md` — the `[[plugin-cogni-workspace]]` bullet under `### Plugins`, in both trees (quoted rather than numbered: the two trees number that bullet differently — root `:48`, bundle `:51` — so no single line number is right for both) | The index one-liner derived from that page's first line; correcting the page alone left the index contradicting it. |
 | `tour-install-to-infographic.md:34-38` (plus `:42`, `:52`) | The retired four-tier taxonomy, 46 lines above the `:80` line the first pass fixed and in the module a first-run learner reads first. It asserted a Foundation rung, and memberships for cogni-help and cogni-claims, that Decision 5 and the rewritten concept page deny. |
 | `.claude-plugin/plugin.json` + its `marketplace.json` mirror | The plugin description — the claim's highest-visibility surface and the upstream source of the wiki line above. **Not reconciled here:** the scope boundary confines this diff to markdown and `tests/*.sh`. The guard excludes `.claude-plugin/` explicitly rather than reporting clean over it; remove that exclusion when the manifests are corrected. |
 
@@ -364,3 +364,41 @@ state: a forbidden-literal scan over the paths above, plus per-page byte-parity
 between the two wiki trees. Parity is asserted **per touched page**, never
 tree-wide — the trees legitimately differ by one page, so a tree-wide assertion
 would fail on arrival.
+
+## Decision 8 — retired-plugin phrasing leaves a live survivor inventory but stays in the historical tables
+
+**Decision.** The "Phrase-level survivors" inventory in the header of
+`cogni-workspace/tests/test-layering-claim-reconciled.sh` **may only name files
+that exist in the current tree**. Three of its entries quoted course and workflow
+prose from `cogni-help`, retired into its adopting plugin; all three are
+**dropped, not repointed**. The historical inventory tables under
+`## Known remaining contradictions — reconciled` keep their retired paths intact
+and are not touched.
+
+**Why the two surfaces diverge.** The discriminator is what each surface asserts.
+A survivor inventory is a **live claim about what is standing right now** — it
+exists to explain why a forbidden literal is worded the way it is, and a reader
+who follows one of its citations expects to land on a line the scan deliberately
+leaves alone. The reconciled-contradictions tables assert something else
+entirely: they are an audit record of the pre-reconciliation state, which is why
+that section says the table is kept as the historical inventory rather than
+deleted, so the set stays auditable. Rewriting a dated record to reach a cosmetic
+zero falsifies history — the failure Decision 7 already rejects. Dropping a live
+citation that resolves to nothing does the opposite: it removes a claim that is
+no longer true.
+
+**Why dropped rather than repointed.** There is no successor to point at. The
+three files named — a full-onboarding module, an install-to-infographic tour, and
+a canonical-workflows page — are absent from the tree, and each phrase they
+quoted ("the workspace provides the foundation", "builds on this foundation",
+"the workspace + theme + MCP foundation") occurs nowhere else in the repo. The
+bundled wiki carries a similarly-named workflow page, but it contains none of
+that prose, so repointing there would swap a dead citation for a false one — the
+worse of the two, because a false citation reads as verified.
+
+**The two surviving entries are de-numbered rather than corrected.** Both had
+drifted by one line as the files above them grew. Correcting the numbers would
+have restored the citations only until the next edit; quoting the distinctive
+text instead makes the quote the locator, which cannot drift. This follows the
+same reasoning the block already applies to the `index.md` bullet it identifies
+by wikilink because the two wiki trees number it differently.

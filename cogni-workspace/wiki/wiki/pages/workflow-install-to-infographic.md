@@ -26,7 +26,7 @@ cogni-workspace:manage-themes           (extract theme from your website)
    ↓
 cogni-workspace:story-to-infographic       (turn narrative into infographic brief)
    ↓
-cogni-workspace:render-infographic-...     (render via excalidraw or pencil)
+cogni-workspace render-infographic-...     (render via excalidraw or pencil)
 ```
 
 ## Duration

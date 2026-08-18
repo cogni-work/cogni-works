@@ -54,17 +54,51 @@ SWEEPS=0
 # forks on the rare contended path. The lock directory also need not exist yet
 # at this point; it is created only by the loop's own mkdir below.
 STAT_MTIME=""
+# Read the lock's mtime into lock_mtime, resolving the working stat form on first
+# use and reusing it thereafter. This lives in a function rather than inline so
+# the acquire loop's body carries no stat invocation of its own: the loop asks
+# for a reading, and which form produces it is this function's business.
+#
+# GNU form first: on GNU coreutils `-f` means --file-system, so `stat -f %m`
+# yields no mtime yet still exits 0, and a fallback chain would never fall
+# through. BSD has no `-c`, so it errors cleanly and does fall through — only
+# this direction works on both. The candidate list is therefore ordered, not
+# arbitrary, and reversing it is what the ordering mutation arm exists to catch.
+#
+# The winner is memoized in STAT_MTIME, so only the first entry pays the failing
+# probe; every later entry costs a single exec. `$stat_form` and `$STAT_MTIME`
+# expand UNQUOTED on purpose — each holds a command plus its flags and has to
+# word-split into three words. Both are set from this file's own literals and the
+# format specifiers carry no glob character, so the split is safe.
+#
+# The sentinel for "no form worked" is the `false` builtin, which keeps the
+# memoized path fork-free and lets the read's tail absorb its non-zero status.
+# Every path assigns lock_mtime — a failing substitution still assigns the empty
+# string — which is what keeps `set -u` off the shape floor at the call site, and
+# the assignment-as-condition form is what keeps a failing probe from tripping
+# `set -e`. The function itself always returns 0 for the same reason.
+#
+# Both probe calls keep their stderr redirect, so a real BSD host's complaint
+# about the GNU flag never reaches the caller's stderr.
+read_lock_mtime() {
+  if [ -z "$STAT_MTIME" ]; then
+    STAT_MTIME=false
+    for stat_form in "stat -c %Y" "stat -f %m"; do
+      if lock_mtime=$($stat_form "$LOCK_DIR" 2>/dev/null); then
+        STAT_MTIME="$stat_form"
+        return 0
+      fi
+    done
+    return 0
+  fi
+  lock_mtime=$($STAT_MTIME "$LOCK_DIR" 2>/dev/null || echo 0)
+}
 while ! mkdir "$LOCK_DIR" 2>/dev/null; do
   sleep 0.1
   WAITED=$((WAITED + 1))
   if [ "$WAITED" -ge "$MAX_WAIT" ]; then
     # Stale lock detection: remove lock older than 60 seconds
     if [ -d "$LOCK_DIR" ]; then
-      # GNU form first: on GNU coreutils `-f` means --file-system, so `stat -f %m`
-      # yields no mtime yet still exits 0, and the `||` never falls through. BSD
-      # has no `-c`, so it errors cleanly and does fall through — only this
-      # direction works on both.
-      #
       # Resolve the reading into a variable before any arithmetic. A bad
       # substitution nested directly inside $(( )) is a hard bash error, and the
       # damage is worse than an abort: on every bash tested (3.2.57 through
@@ -74,29 +108,7 @@ while ! mkdir "$LOCK_DIR" 2>/dev/null; do
       #
       # Floor on numeric SHAPE, not emptiness — the failure mode is a successful
       # *wrong* answer, which an emptiness test structurally cannot catch.
-      #
-      # The candidate list is walked once per acquire and the winner memoized in
-      # STAT_MTIME, so only the first entry pays the failing probe; every later
-      # entry costs a single exec. `$stat_form` and `$STAT_MTIME` expand UNQUOTED
-      # on purpose — each holds a command plus its flags and has to word-split
-      # into three words. Both are set from this file's own literals and the
-      # format specifiers carry no glob character, so the split is safe.
-      # The sentinel for "no form worked" is the `false` builtin, which keeps the
-      # memoized path fork-free and lets the tail below absorb its non-zero
-      # status. Both branches always assign lock_mtime, which is what keeps
-      # `set -u` off the floor that follows; the assignment-as-condition form is
-      # what keeps a failing probe from tripping `set -e`.
-      if [ -z "$STAT_MTIME" ]; then
-        STAT_MTIME=false
-        for stat_form in "stat -c %Y" "stat -f %m"; do
-          if lock_mtime=$($stat_form "$LOCK_DIR" 2>/dev/null); then
-            STAT_MTIME="$stat_form"
-            break
-          fi
-        done
-      else
-        lock_mtime=$($STAT_MTIME "$LOCK_DIR" 2>/dev/null || echo 0)
-      fi
+      read_lock_mtime
       [[ "$lock_mtime" =~ ^[0-9]+$ ]] || lock_mtime=0
       now=$(date +%s)
       lock_age=$(( now - lock_mtime ))

@@ -521,12 +521,18 @@ fi
 # The counter is pre-created empty so the assertion distinguishes "the stub never
 # ran" from "the stub was never installed" — an emptiness test on a file that does
 # not exist would pass for the wrong reason.
+#
+# The ceiling prefix is behaviourally inert here — this case never enters the
+# acquire loop, which is the whole point of it — and is carried anyway so every
+# case states its own ceiling rather than inheriting the production default by
+# omission. A reader should not have to know a case never contends to know what
+# ceiling it would run under.
 case7_dir="$(seed_uncontended_project uncontended)"
 case7_stub="$TMPROOT/stub-counting-uncontended"
 case7_counter="$TMPROOT/case7.count"
 : > "$case7_counter"
 make_counting_stat_stub "$case7_stub" "$case7_counter" 'echo 0'
-case7_out="$(PATH="$case7_stub:$PATH" bash "$SCRIPT" "$case7_dir" '{"id": "claim-7"}' 2>"$TMPROOT/case7.err")"
+case7_out="$(PATH="$case7_stub:$PATH" APPEND_CLAIM_MAX_WAIT=1 bash "$SCRIPT" "$case7_dir" '{"id": "claim-7"}' 2>"$TMPROOT/case7.err")"
 case7_rc=$?
 
 if [ "$case7_rc" -ne 0 ]; then

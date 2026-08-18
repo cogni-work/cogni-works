@@ -103,22 +103,22 @@ WIKI="$WORK/overview-placeholder"
 build_curated "$WIKI" "0.0.9" "$OVERVIEW_PLACEHOLDER" "$POPULATED_LINKS"
 OUT="$WORK/overview-placeholder.json"
 python3 "$HEALTH" --wiki-root "$WIKI" > "$OUT"
-assert_grep '"success": true' "$OUT" "AC1a: health succeeds on degraded base"
+assert_grep '"success": true' "$OUT" "AC1a-1 health succeeds on degraded base"
 assert_grep 'structural_drift' "$OUT" \
-  "AC1a: placeholder OVERVIEW-NARRATIVE fires structural_drift"
-assert_grep '"errors": 0' "$OUT" "AC1a: structural drift is a warning, errors stay 0"
+  "AC1a-2 placeholder OVERVIEW-NARRATIVE fires structural_drift"
+assert_grep '"errors": 0' "$OUT" "AC1a-3 structural drift is a warning, errors stay 0"
 if grep -q 'schema_version_lag' "$OUT"; then
-  red "FAIL: AC1a 0.0.9 base wrongly fired schema_version_lag"
+  red "FAIL: AC1a-4 0.0.9 base wrongly fired schema_version_lag"
   errors=$((errors + 1))
 else
-  green "PASS: AC1a current-schema base fires no schema_version_lag"
+  green "PASS: AC1a-4 current-schema base fires no schema_version_lag"
 fi
 # verdict no longer bare OK: at least one warning present
 if grep -q '"warnings": 0' "$OUT"; then
-  red "FAIL: AC1a degraded base reported zero warnings (verdict still bare OK)"
+  red "FAIL: AC1a-5 degraded base reported zero warnings (verdict still bare OK)"
   errors=$((errors + 1))
 else
-  green "PASS: AC1a degraded base reports warnings (verdict no longer bare OK)"
+  green "PASS: AC1a-5 degraded base reports warnings (verdict no longer bare OK)"
 fi
 
 # ---------------------------------------------------------------------------
@@ -129,8 +129,8 @@ build_curated "$WIKI" "0.0.9" "$REAL_OVERVIEW" "$ROOT_LINKS_EMPTY"
 OUT="$WORK/rootlinks-empty.json"
 python3 "$HEALTH" --wiki-root "$WIKI" > "$OUT"
 assert_grep 'structural_drift' "$OUT" \
-  "AC1b: empty ROOT-LINKS span fires structural_drift"
-assert_grep '"errors": 0' "$OUT" "AC1b: structural drift is a warning, errors stay 0"
+  "AC1b-1 empty ROOT-LINKS span fires structural_drift"
+assert_grep '"errors": 0' "$OUT" "AC1b-2 structural drift is a warning, errors stay 0"
 
 # ---------------------------------------------------------------------------
 # AC2. Correctly-finalized base (0.0.9): real overview + populated root-links
@@ -140,18 +140,18 @@ build_curated "$WIKI" "0.0.9" "$REAL_OVERVIEW" "$POPULATED_LINKS"
 OUT="$WORK/clean-finalized.json"
 python3 "$HEALTH" --wiki-root "$WIKI" > "$OUT"
 if grep -q 'structural_drift' "$OUT"; then
-  red "FAIL: AC2 finalized base wrongly fired structural_drift"
+  red "FAIL: AC2-1 finalized base wrongly fired structural_drift"
   errors=$((errors + 1))
 else
-  green "PASS: AC2 finalized base fires no structural_drift"
+  green "PASS: AC2-1 finalized base fires no structural_drift"
 fi
 if grep -q 'schema_version_lag' "$OUT"; then
-  red "FAIL: AC2 current-schema base wrongly fired schema_version_lag"
+  red "FAIL: AC2-2 current-schema base wrongly fired schema_version_lag"
   errors=$((errors + 1))
 else
-  green "PASS: AC2 current-schema base fires no schema_version_lag"
+  green "PASS: AC2-2 current-schema base fires no schema_version_lag"
 fi
-assert_grep '"errors": 0' "$OUT" "AC2: finalized base has zero errors"
+assert_grep '"errors": 0' "$OUT" "AC2-3 finalized base has zero errors"
 
 # ---------------------------------------------------------------------------
 # lag. Curated base at 0.0.8 (behind engine 0.0.9) fires schema_version_lag
@@ -161,8 +161,8 @@ build_curated "$WIKI" "0.0.8" "$REAL_OVERVIEW" "$POPULATED_LINKS"
 OUT="$WORK/schema-lag.json"
 python3 "$HEALTH" --wiki-root "$WIKI" > "$OUT"
 assert_grep 'schema_version_lag' "$OUT" \
-  "lag: a 0.0.8 base behind the engine fires schema_version_lag"
-assert_grep '"errors": 0' "$OUT" "lag: schema_version_lag is a warning, errors stay 0"
+  "lag-1 a 0.0.8 base behind the engine fires schema_version_lag"
+assert_grep '"errors": 0' "$OUT" "lag-2 schema_version_lag is a warning, errors stay 0"
 
 # ---------------------------------------------------------------------------
 # AC3. Pre-0.0.8 base (0.0.7): structural-drift assertions stay silent
@@ -200,8 +200,8 @@ build_curated "$WIKI" "0.0.9" "$REAL_OVERVIEW" "$POPULATED_LINKS"
 set_stamp "$WIKI/.cogni-wiki/config.json" ""
 OUT="$WORK/rel-absent.json"
 python3 "$HEALTH" --wiki-root "$WIKI" > "$OUT"
-assert_grep 'render_engine_lag' "$OUT" "REL1: absent stamp fires render_engine_lag"
-assert_grep '"errors": 0' "$OUT" "REL1: render_engine_lag is a warning, errors stay 0"
+assert_grep 'render_engine_lag' "$OUT" "REL1-1 absent stamp fires render_engine_lag"
+assert_grep '"errors": 0' "$OUT" "REL1-2 render_engine_lag is a warning, errors stay 0"
 
 # REL2. Stamp trails the installed engine → render_engine_lag (lag).
 WIKI="$WORK/rel-trails"
@@ -209,8 +209,8 @@ build_curated "$WIKI" "0.0.9" "$REAL_OVERVIEW" "$POPULATED_LINKS"
 set_stamp "$WIKI/.cogni-wiki/config.json" "1.0.40"
 OUT="$WORK/rel-trails.json"
 python3 "$HEALTH" --wiki-root "$WIKI" > "$OUT"
-assert_grep 'render_engine_lag' "$OUT" "REL2: trailing stamp fires render_engine_lag"
-assert_grep '"errors": 0' "$OUT" "REL2: render_engine_lag is a warning, errors stay 0"
+assert_grep 'render_engine_lag' "$OUT" "REL2-1 trailing stamp fires render_engine_lag"
+assert_grep '"errors": 0' "$OUT" "REL2-2 render_engine_lag is a warning, errors stay 0"
 
 # REL3. Stamp == installed engine → silent.
 WIKI="$WORK/rel-current"

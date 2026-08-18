@@ -200,10 +200,10 @@ PROSE=""; BEFORE=""
 # === 1. render → curated MAP ===
 OUT="$(python3 "$ROOT_SCRIPT" render --wiki-root "$WIKI" --wiki-scripts-dir "$WSD")"
 echo "$OUT" | grep -q '"changed": true' \
-  && green "PASS: 1 render reports changed:true" \
-  || { red "FAIL: 1 render not changed:true ($OUT)"; errors=$((errors+1)); }
-assert_grep "MACHINE-OWNED:ROOT-INDEX" "$IDX" "1 ROOT-INDEX ownership marker present"
-assert_grep "Curated map of this knowledge base" "$IDX" "1 curated intro line present"
+  && green "PASS: 1-1 render reports changed:true" \
+  || { red "FAIL: 1-1 render not changed:true ($OUT)"; errors=$((errors+1)); }
+assert_grep "MACHINE-OWNED:ROOT-INDEX" "$IDX" "1-2 ROOT-INDEX ownership marker present"
+assert_grep "Curated map of this knowledge base" "$IDX" "1-3 curated intro line present"
 # AC#3 (no-fabrication half): the source fixture index carried no
 # OVERVIEW-NARRATIVE block, so the renderer must NOT invent a placeholder one.
 assert_not_grep "MACHINE-OWNED:OVERVIEW-NARRATIVE" "$IDX" "1b no narrative span fabricated when none authored"
@@ -211,74 +211,74 @@ assert_not_grep "MACHINE-OWNED:OVERVIEW-NARRATIVE" "$IDX" "1b no narrative span 
 # === 1c. the 5W1H intent spine is a PRIMARY front-door entry (R8) ===
 # Promoted from a secondary italic "_See also:_" line to a bold primary
 # wayfinding entry leading with the intent spine.
-assert_grep "Start here — browse by intent:" "$IDX" "1c intent spine promoted to a primary front-door line (R8)"
-assert_grep "Perspectives (5W1H) →](perspectives.md)" "$IDX" "1c spine links the 5W1H perspectives overlay (R8)"
-assert_not_grep "_See also: \[Perspectives (5W1H)\](perspectives.md)" "$IDX" "1c old secondary 'See also' framing is gone (R8)"
+assert_grep "Start here — browse by intent:" "$IDX" "1c-1 intent spine promoted to a primary front-door line (R8)"
+assert_grep "Perspectives (5W1H) →](perspectives.md)" "$IDX" "1c-2 spine links the 5W1H perspectives overlay (R8)"
+assert_not_grep "_See also: \[Perspectives (5W1H)\](perspectives.md)" "$IDX" "1c-3 old secondary 'See also' framing is gone (R8)"
 # === 1d. secondary-view labels (R10) + overview-stub signpost (R11) ===
-assert_grep "Other views:" "$IDX" "1d secondary-view labels render on the root portal (R10)"
-assert_grep "\[Recent syntheses\](overview.md)" "$IDX" "1d overview stub signposted from the spine — Recent syntheses (R11)"
+assert_grep "Other views:" "$IDX" "1d-1 secondary-view labels render on the root portal (R10)"
+assert_grep "\[Recent syntheses\](overview.md)" "$IDX" "1d-2 overview stub signposted from the spine — Recent syntheses (R11)"
 
 # === 2. per-theme count-links with counts AND theme-scoped deep-link anchors ===
 # The link now deep-links into the theme's `## <theme>` section of each
 # sub-index (`<type>/index.md#<anchor>`), not the bare unfiltered sub-index.
 # Obsidian resolves a heading link by the heading's literal text: the anchor
 # preserves case (theme "Scope" → `## Scope` → #Scope), spaces → %20.
-assert_grep "Sources (2)](sources/index.md#Scope)" "$IDX" "2 Sources (2) deep-link to #Scope"
-assert_grep "Concepts (1)](concepts/index.md#Scope)" "$IDX" "2 Concepts (1) deep-link to #Scope"
-assert_grep "Questions (1)](questions/index.md#Scope)" "$IDX" "2 Questions (1) deep-link to #Scope"
-assert_grep "Syntheses (1)](syntheses/index.md#Scope)" "$IDX" "2 Syntheses (1) deep-link to #Scope (folded into theme)"
+assert_grep "Sources (2)](sources/index.md#Scope)" "$IDX" "2-1 Sources (2) deep-link to #Scope"
+assert_grep "Concepts (1)](concepts/index.md#Scope)" "$IDX" "2-2 Concepts (1) deep-link to #Scope"
+assert_grep "Questions (1)](questions/index.md#Scope)" "$IDX" "2-3 Questions (1) deep-link to #Scope"
+assert_grep "Syntheses (1)](syntheses/index.md#Scope)" "$IDX" "2-4 Syntheses (1) deep-link to #Scope (folded into theme)"
 
 # === 2b. distinct per-theme anchors + non-ASCII heading-anchor (Obsidian convention) ===
-assert_grep '^## KI Bußgelder' "$IDX" "2b non-ASCII theme heading kept verbatim"
+assert_grep '^## KI Bußgelder' "$IDX" "2b-1 non-ASCII theme heading kept verbatim"
 # The deep link is the Obsidian heading-text anchor for `## KI Bußgelder`:
 # literal text, space → %20, case + ß preserved verbatim (#KI%20Bußgelder) —
 # distinct from the Scope theme's #Scope (so per-theme Explore lines differ).
-assert_grep "Sources (1)](sources/index.md#KI%20Bußgelder)" "$IDX" "2b non-ASCII theme deep-links to #KI%20Bußgelder"
+assert_grep "Sources (1)](sources/index.md#KI%20Bußgelder)" "$IDX" "2b-2 non-ASCII theme deep-links to #KI%20Bußgelder"
 # Regression: NOT the GFM slug form, and NOT slugify's transliterated form
 # (neither resolves to the heading in Obsidian).
-assert_not_grep "sources/index.md#ki-bußgelder)" "$IDX" "2b anchor is NOT the GFM slug form #ki-bußgelder"
-assert_not_grep "sources/index.md#ki-bussgelder)" "$IDX" "2b anchor is NOT the transliterated slugify form #ki-bussgelder"
+assert_not_grep "sources/index.md#ki-bußgelder)" "$IDX" "2b-3 anchor is NOT the GFM slug form #ki-bußgelder"
+assert_not_grep "sources/index.md#ki-bussgelder)" "$IDX" "2b-4 anchor is NOT the transliterated slugify form #ki-bussgelder"
 
 # === 2c. A1 false-filtering fix (#933): theme-label whitespace is normalized so
 #         the rendered `## <theme>` heading and the count-link anchor AGREE. ===
 # The fixture theme_label is "AI  Liability " (double internal space + trailing).
 # The producer-site _collapse normalizes it to "AI Liability", so the heading is
 # single-space and the anchor is the matching single-%20 fragment.
-assert_grep '^## AI Liability' "$IDX" "2c double-space theme heading collapsed to single space"
-assert_not_grep '^## AI  Liability' "$IDX" "2c heading does NOT keep the double space (the drift)"
-assert_grep "Sources (1)](sources/index.md#AI%20Liability)" "$IDX" "2c count-link anchors to the single-%20 fragment that matches the heading"
+assert_grep '^## AI Liability' "$IDX" "2c-1 double-space theme heading collapsed to single space"
+assert_not_grep '^## AI  Liability' "$IDX" "2c-2 heading does NOT keep the double space (the drift)"
+assert_grep "Sources (1)](sources/index.md#AI%20Liability)" "$IDX" "2c-3 count-link anchors to the single-%20 fragment that matches the heading"
 # Regression: the heading↔anchor MUST agree — the drift would have rendered the
 # double-space heading while the anchor collapsed, landing the click at page top.
-assert_not_grep "sources/index.md#AI%20%20Liability)" "$IDX" "2c anchor is NOT the un-collapsed double-%20 form"
+assert_not_grep "sources/index.md#AI%20%20Liability)" "$IDX" "2c-4 anchor is NOT the un-collapsed double-%20 form"
 
 # === 3. no per-page source bullets remain on the root ===
-assert_not_grep '^- \[\[src-a\]\]' "$IDX" "3 per-page src-a bullet dropped from root"
-assert_not_grep '^- \[\[scope-synth\]\]' "$IDX" "3 per-page synthesis bullet dropped from root"
+assert_not_grep '^- \[\[src-a\]\]' "$IDX" "3-1 per-page src-a bullet dropped from root"
+assert_not_grep '^- \[\[scope-synth\]\]' "$IDX" "3-2 per-page synthesis bullet dropped from root"
 
 # === 4. carried PORTAL-LEADIN span (verbatim, date intact) ===
-assert_grep "refreshed:2026-06-01 bullets:3" "$IDX" "4 PORTAL-LEADIN carried with original date"
-assert_grep "Framing for the scope theme." "$IDX" "4 PORTAL-LEADIN inner prose carried"
+assert_grep "refreshed:2026-06-01 bullets:3" "$IDX" "4-1 PORTAL-LEADIN carried with original date"
+assert_grep "Framing for the scope theme." "$IDX" "4-2 PORTAL-LEADIN inner prose carried"
 
 # === 4b. seeded default lead-in for a theme that carries none (#946) ===
 # KI Bußgelder has NO authored lead-in in the legacy root, so the renderer seeds a
 # deterministic engine-owned PORTAL-LEADIN span that names the theme — the
 # legibility default, mirroring the perspectives facet defaults. AC1.
-assert_grep "grouped under the \*\*KI Bußgelder\*\* theme" "$IDX" "4b no-lead-in theme seeded a default PORTAL-LEADIN one-liner"
+assert_grep "grouped under the \*\*KI Bußgelder\*\* theme" "$IDX" "4b-1 no-lead-in theme seeded a default PORTAL-LEADIN one-liner"
 # AC2 (no clobber): the Scope theme's authored span is NOT replaced by the default.
-assert_not_grep "grouped under the \*\*Scope\*\* theme" "$IDX" "4b authored lead-in not clobbered by the seeded default"
+assert_not_grep "grouped under the \*\*Scope\*\* theme" "$IDX" "4b-2 authored lead-in not clobbered by the seeded default"
 
 # === 5. container headings dropped ===
-assert_not_grep '^## Categories' "$IDX" "5 ## Categories container heading dropped"
-assert_not_grep '^## Syntheses' "$IDX" "5 ## Syntheses fixed heading dropped (folded per-theme)"
-assert_grep '^## Scope' "$IDX" "5 real theme heading kept"
+assert_not_grep '^## Categories' "$IDX" "5-1 ## Categories container heading dropped"
+assert_not_grep '^## Syntheses' "$IDX" "5-2 ## Syntheses fixed heading dropped (folded per-theme)"
+assert_grep '^## Scope' "$IDX" "5-3 real theme heading kept"
 
 # === 6. OVERVIEW-NARRATIVE fold carried into intro ===
 PROSE="$(mktemp)"; printf 'This base maps scope for SMEs.' > "$PROSE"
 python3 "$OVR_SCRIPT" narrative-splice --wiki-root "$WIKI" --prose-file "$PROSE" \
   --target-file index.md --wiki-scripts-dir "$WSD" >/dev/null
 python3 "$ROOT_SCRIPT" render --wiki-root "$WIKI" --wiki-scripts-dir "$WSD" >/dev/null
-assert_grep "MACHINE-OWNED:OVERVIEW-NARRATIVE" "$IDX" "6 OVERVIEW-NARRATIVE block in index.md"
-assert_grep "This base maps scope for SMEs." "$IDX" "6 overview narrative prose in intro"
+assert_grep "MACHINE-OWNED:OVERVIEW-NARRATIVE" "$IDX" "6-1 OVERVIEW-NARRATIVE block in index.md"
+assert_grep "This base maps scope for SMEs." "$IDX" "6-2 overview narrative prose in intro"
 
 # === 7. idempotent re-render ===
 OUT2="$(python3 "$ROOT_SCRIPT" render --wiki-root "$WIKI" --wiki-scripts-dir "$WSD")"
@@ -297,14 +297,14 @@ BEFORE="$(mktemp)"; cp "$IDX" "$BEFORE"
 python3 "$WSD/wiki_index_update.py" --wiki-root "$WIKI" --reflow-only >/dev/null 2>&1 || true
 python3 "$WSD/wiki_index_update.py" --wiki-root "$WIKI" --collapse-only >/dev/null 2>&1 || true
 if diff -q "$BEFORE" "$IDX" >/dev/null 2>&1; then
-  green "PASS: 8 curated MAP byte-stable under reflow-only + collapse-only"
+  green "PASS: 8-1 curated MAP byte-stable under reflow-only + collapse-only"
 else
-  red "FAIL: 8 curated MAP drifted under reflow/collapse"; diff "$BEFORE" "$IDX" || true; errors=$((errors+1))
+  red "FAIL: 8-1 curated MAP drifted under reflow/collapse"; diff "$BEFORE" "$IDX" || true; errors=$((errors+1))
 fi
 OUT3="$(python3 "$ROOT_SCRIPT" render --wiki-root "$WIKI" --wiki-scripts-dir "$WSD")"
 echo "$OUT3" | grep -q '"changed": false' \
-  && green "PASS: 8 re-render after reflow/collapse stays changed:false" \
-  || { red "FAIL: 8 re-render after fixers not idempotent ($OUT3)"; errors=$((errors+1)); }
+  && green "PASS: 8-2 re-render after reflow/collapse stays changed:false" \
+  || { red "FAIL: 8-2 re-render after fixers not idempotent ($OUT3)"; errors=$((errors+1)); }
 
 # === 9. transient bullets: a freshly re-filed bullet is dropped next render ===
 python3 - "$IDX" <<'PY'
@@ -315,9 +315,9 @@ t = open(p, encoding="utf-8").read()
 t = t.replace("## Scope\n", "## Scope\n\n- [[src-c]] — a freshly ingested source\n", 1)
 open(p, "w", encoding="utf-8").write(t)
 PY
-assert_grep '\[\[src-c\]\]' "$IDX" "9 transient bullet present before render"
+assert_grep '\[\[src-c\]\]' "$IDX" "9-1 transient bullet present before render"
 python3 "$ROOT_SCRIPT" render --wiki-root "$WIKI" --wiki-scripts-dir "$WSD" >/dev/null
-assert_not_grep '\[\[src-c\]\]' "$IDX" "9 transient bullet dropped on next render"
+assert_not_grep '\[\[src-c\]\]' "$IDX" "9-2 transient bullet dropped on next render"
 
 # === 10. counts subcommand ===
 CNT="$(python3 "$SUB_SCRIPT" counts --type sources --wiki-root "$WIKI")"
@@ -337,20 +337,20 @@ HWIKI="$(mktemp -d)"; mkdir -p "$HWIKI/wiki/sources" "$HWIKI/.cogni-wiki"
 printf '# My hand-written portal\n\nJust prose, no headings, no markers.\n' > "$HWIKI/wiki/index.md"
 HOUT="$(python3 "$ROOT_SCRIPT" render --wiki-root "$HWIKI" --wiki-scripts-dir "$WSD")"
 echo "$HOUT" | grep -q '"skipped_human_page": true' \
-  && green "PASS: 12 hand-authored portal skipped" \
-  || { red "FAIL: 12 human page not skipped ($HOUT)"; errors=$((errors+1)); }
+  && green "PASS: 12-1 hand-authored portal skipped" \
+  || { red "FAIL: 12-1 human page not skipped ($HOUT)"; errors=$((errors+1)); }
 grep -q "hand-written portal" "$HWIKI/wiki/index.md" \
-  && green "PASS: 12 hand-authored portal left untouched" \
-  || { red "FAIL: 12 human page clobbered"; errors=$((errors+1)); }
+  && green "PASS: 12-2 hand-authored portal left untouched" \
+  || { red "FAIL: 12-2 human page clobbered"; errors=$((errors+1)); }
 rm -rf "$HWIKI"
 
 # === 13. python3.9 floor ===
 grep -q "from __future__ import annotations" "$ROOT_SCRIPT" \
-  && green "PASS: 13 root_index.py carries __future__ annotations" \
-  || { red "FAIL: 13 missing __future__ annotations"; errors=$((errors+1)); }
+  && green "PASS: 13-1 root_index.py carries __future__ annotations" \
+  || { red "FAIL: 13-1 missing __future__ annotations"; errors=$((errors+1)); }
 python3 -c "import ast,sys; ast.parse(open(sys.argv[1]).read())" "$ROOT_SCRIPT" \
-  && green "PASS: 13 root_index.py parses under ast" \
-  || { red "FAIL: 13 ast.parse failed"; errors=$((errors+1)); }
+  && green "PASS: 13-2 root_index.py parses under ast" \
+  || { red "FAIL: 13-2 ast.parse failed"; errors=$((errors+1)); }
 
 # === 14. render stamps last_rendered_engine_version into config.json (#947) ===
 # A live render records the producing engine version so health.py can flag a

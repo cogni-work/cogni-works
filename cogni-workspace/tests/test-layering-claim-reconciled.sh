@@ -65,8 +65,12 @@
 # The list is ILLUSTRATIVE, not exhaustive. It names the lines that shaped a
 # literal's wording, not every surviving use of "foundation". More exist — the
 # manage-workspace description propagates verbatim into its own frontmatter
-# (:4, :10), both wiki index.md:167, and both skill-cogni-workspace-manage-
-# workspace.md:16; cogni-help canonical-workflows.md:11 has its own. Those are
+# (:4, :10), into the [[skill-cogni-workspace-manage-workspace]] bullet under
+# the cogni-workspace skills heading of each wiki tree's index.md (identified
+# by wikilink rather than line number: the two trees number that bullet
+# differently, so no single line number is right for both), and into both
+# skill-cogni-workspace-manage-workspace.md:16; cogni-help
+# canonical-workflows.md:11 has its own. Those are
 # all the same compatible claim about workspace state, and no literal here
 # targets them. Grepping "foundation" will surface hits this block does not
 # account for; that is expected, and the test is whether the sentence asserts a

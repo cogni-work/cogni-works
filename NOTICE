@@ -15,9 +15,9 @@ attributions as a courtesy; see each component's in-tree license file for the
 authoritative terms.
 
 * Cartographic country-outline data
-  Location: cogni-visual/references/cartographic-data/countries.geo.json
+  Location: cogni-workspace/references/cartographic-data/countries.geo.json
   Packaging: johan/world.geo.json (MIT License)
   Underlying data: Natural Earth (https://www.naturalearthdata.com/) — released
   into the public domain; no attribution is required, and this credit is a
   courtesy.
-  See: cogni-visual/references/cartographic-data/LICENSE.md
+  See: cogni-workspace/references/cartographic-data/LICENSE.md

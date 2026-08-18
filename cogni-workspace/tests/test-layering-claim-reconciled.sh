@@ -173,13 +173,17 @@ cogni-visual/libraries/
 #
 # plugin-cogni-portfolio.md joins the list with the bare-prose sweep: it carried
 # four off-roster names across two lines, both copies were rewritten, and unlike
-# its siblings here it had no byte-identity arm of its own. Until the
-# roster-derived body scan lands with its two per-tree arms, this entry is the
-# only thing that would catch a one-tree-only regression on that page.
+# its siblings here it had no byte-identity arm of its own. The roster-derived
+# body scan now covers off-roster plugin names on both trees, so that class no
+# longer rests on this entry alone. The entry stays regardless: a name scan sees
+# only names, while byte-identity still catches arbitrary one-tree-only drift on
+# that page — a reworded sentence, a dropped section, a changed link.
 #
 # concept-slug-based-lookups.md joins on the same grounds: its shared bullet named a
 # manifest no plugin writes, both copies were rewritten identically, and no other arm
-# here pins the two copies to each other.
+# here pins the two copies to each other. The roster-derived scan does not reach it
+# either: that bullet named a MANIFEST, not a plugin, so a roster of plugin names
+# never sees it.
 PAGE_PARITY='plugin-cogni-workspace.md
 workflow-install-to-infographic.md
 arch-er-diagram.md

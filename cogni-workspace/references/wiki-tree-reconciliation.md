@@ -391,7 +391,7 @@ Kept as a permanent inventory so the set stays auditable rather than being redis
 | `ecosystem-command-reference` names a retired command surface | held with the page above | #1402 |
 | Sync script destroys bundle-only content | closed — refuses by default; `--force` is the opt-in | #1403 |
 | This record and its guard are unregistered in the plugin guide | closed — `cogni-workspace/CLAUDE.md` names both under `## Wiki Trees` | #1404 |
-| Bare prose plugin names are invisible to every resolver | swept over the two-tree `pages/*.md` intersection; no guard yet, so a future retirement can reintroduce the class silently | #1426, guard in #1438 |
+| Bare prose plugin names are invisible to every resolver | closed — swept over the two-tree `pages/*.md` intersection and pinned by `tests/test-wiki-bare-name-roster.sh`, a runtime-roster-derived body scan with one arm per tree | #1426, guard in #1438 |
 | The 5 bundled-only pages still name retired plugins | held with the pages themselves — editing them would pre-decide the ruling | #1402, sweep in #1440 |
 | `index.md` and `overview.md` carry the same bare-name class | outside the swept surface by depth; needs its own decision, since the two `index.md` copies diverge by design and a TOC of deleted pages is a Decision-6 removal, not a rename | #1439 |
 | The `docs/` ER diagram repeats the dead `portfolio_path` edge | closed — the one falsified cell now names the live consumers. The "generated mirror" framing this row previously carried was itself wrong: `docs/architecture/er-diagram.md` is hand-maintained, not cogni-docs output — that plugin's document-type routing table covers only `design-philosophy` and `plugin-anatomy` under `architecture/`, it ships no ER-diagram template, its own structure reference lists the file as an input rather than an output, its audit checks only that the file exists, and it contains zero `portfolio_path` occurrences. So no upstream filing is owed and no regeneration can revert the cell. No guard added — see the guard-decision note below | #1441 |
@@ -462,3 +462,20 @@ covers both refused classes, the `--force` opt-in, and — as the case that matt
 gate staying usable — that a bundle which loses nothing still syncs without `--force`. It runs
 entirely against `mktemp` fixtures, never these two trees, because a bare sync against them is
 the data loss the gate exists to prevent.
+
+`cogni-workspace/tests/test-wiki-bare-name-roster.sh` closes the prose gap the two guards above leave
+open. It asserts that no `cogni-…` token in the body of a page present in both trees names something
+absent from the live roster, with the allowed set read at runtime from `plugins[].name` rather than
+written down — so the next retirement is caught without anyone remembering to edit the suite. Its
+declared surface is the two-tree basename intersection of the page directories, and every page
+outside that surface is excluded by construction rather than by a list: the top-level `index.md`,
+`log.md` and `overview.md` fall out by depth, and the one-sided pages fall out by symmetric
+difference. That distinction is what keeps the suite honest here, because those one-sided pages
+demonstrably still carry retired names — editing them to satisfy a guard would pre-decide the
+rulings Decisions 4 and 5 hold open. Three allowances are declared, each keyed to an exact token
+rather than a substring: plugins hosted in a different marketplace, the GitHub org token, and the
+preserved `cogni-claims/` store path, whose dispatch form is still caught. Each carries both halves
+of its case, so an allowance cannot quietly widen into an escape hatch. Two per-arm liveness floors —
+one on shared pages scanned, one on roster size — make a half-dead arm fail with a named error
+instead of reporting clean, which is the failure mode a guard over an already-clean surface is
+otherwise blind to.

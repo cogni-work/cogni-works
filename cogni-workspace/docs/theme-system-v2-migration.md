@@ -11,7 +11,7 @@ Promote a theme to tiered when **any** of these is true:
 - The same hex value repeats across many surfaces (slides, dashboards, web pages) and downstream skills hard-code it. Tokens make the swap a single-file edit.
 - Multiple consumer skills want to render the same kind of UI primitive (slide layout, card, KPI panel) and currently each ships its own inline template. Components let you author the primitive once.
 - You ship to several brands (white-label) and need to swap palette + voice without touching consumer-skill code.
-- A downstream consumer requires `tokens.css` to live in the theme directory rather than be hand-derived (e.g., `cogni-visual:render-html-slides` `--theme-slug`).
+- A downstream consumer requires `tokens.css` to live in the theme directory rather than be hand-derived (e.g., `cogni-workspace:render-html-slides` `--theme-slug`).
 
 If none of those apply, stay at tier-0. The deeper tiers exist because compounding gains kick in once they exist; no theme is worse for skipping them.
 
@@ -105,7 +105,7 @@ Reference theme tokens via CSS custom properties (e.g., `var(--colors-primary)`)
 
 **Authoring rule:** primitives only, not compositions. A `title-slide.html` is a primitive. A "5-slide pitch deck composed of title + 3 content + cta" is a composition; that lives in the consuming skill, not in the theme.
 
-**Cogni-work today:** the cogni-work pilot does not yet ship `components/deck/` — the loader infrastructure in `cogni-visual:render-html-slides` is in place (`--theme-slug` + the loader at `cogni-visual/scripts/load-theme-component.py`), but the deck-component family is a deferred follow-up. When it ships, this section will gain a worked example.
+**Cogni-work today:** the cogni-work pilot does not yet ship `components/deck/` — the loader infrastructure in `cogni-workspace:render-html-slides` is in place (`--theme-slug` + the loader at `cogni-visual/scripts/load-theme-component.py`), but the deck-component family is a deferred follow-up. When it ships, this section will gain a worked example.
 
 ### Step 4. Tier 4 — Templates (deferred to Phase 3)
 
@@ -234,7 +234,7 @@ Rollback is **additive in reverse**: the deletion only removes the files you add
 ## Common pitfalls
 
 1. **Hand-editing `tokens.css`.** Always regenerate via `scripts/generate-tokens-css.py --write`. Hand-edits drift and the validator hard-fails them. If you need to tweak a token, edit the corresponding `tokens/<file>.json` and re-run the generator.
-2. **Authoring compositions instead of primitives in `components/`.** `title-slide.html` is a primitive. A "complete 5-slide deck with intro + 3 content + cta" is a composition and does not belong in a theme — it belongs in the consuming skill (e.g., `cogni-visual:story-to-slides`). Themes provide vocabulary; consumer skills compose with that vocabulary.
+2. **Authoring compositions instead of primitives in `components/`.** `title-slide.html` is a primitive. A "complete 5-slide deck with intro + 3 content + cta" is a composition and does not belong in a theme — it belongs in the consuming skill (e.g., `cogni-workspace:story-to-slides`). Themes provide vocabulary; consumer skills compose with that vocabulary.
 3. **Deleting `theme.md` because tokens "cover it".** Tokens carry the *what*; `theme.md` carries the *why* (design principles, brand voice, intent for downstream skills). Both are needed. The validator does not enforce `theme.md` existence in v1.0, but every consumer that reads a theme expects it.
 4. **Forgetting to update the manifest after populating a new tier.** The `tiers` map is the contract — `discover-themes.py` and downstream consumers route exclusively through it. A populated `components/` directory that's not declared in `tiers.components` is invisible to consumers.
 5. **Using camelCase keys in token JSON.** The generator normalizes underscores to hyphens but assumes input keys are kebab-case at minimum. Stick to `accent-muted`, not `accentMuted`, for predictable CSS variable names.

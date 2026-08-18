@@ -38,7 +38,7 @@ A slide deck (or web narrative) whose every substantive claim traces back to a s
 
 **2 — Narrative.** `/narrative` (or `cogni-workspace:narrative`). Takes the synthesis in, hands back an executive narrative shaped by a story arc. Choose the arc for the audience: SCQA for problem-solution, Minto Pyramid for recommendation-first, Hero's Journey for transformation. Review before proceeding — this is where the story takes shape. `/narrative-review` scores it.
 
-**3 — Visual.** `cogni-visual:story-to-slides` produces the presentation brief; `/render-html-slides` renders it. The theme comes from workspace settings — see [[concept-theme-inheritance]]. State a slide count up front if you are time-constrained. For web delivery use `cogni-visual:story-to-web` instead.
+**3 — Visual.** `cogni-workspace:story-to-slides` produces the presentation brief; `/render-html-slides` renders it. The theme comes from workspace settings — see [[concept-theme-inheritance]]. State a slide count up front if you are time-constrained. For web delivery use `cogni-workspace:story-to-web` instead.
 
 ## Common pitfalls
 

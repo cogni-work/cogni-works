@@ -35,15 +35,16 @@ catalog default.
 
 Every format is built **natively** as a brief — no route renders locally or
 applies a theme on the standard path. The four `Built by` builders all run
-inside this skill; cogni-visual is no longer dispatched as a standard route (it
-remains an explicit opt-in local-render fallback only — see each route below).
+inside this skill; no renderer is dispatched as a standard route —
+`cogni-workspace:enrich-report` / `cogni-workspace:story-to-infographic` remain
+an explicit opt-in local-render fallback only (see each route below).
 
 ## Routing by Format
 
 ### slides / web-poster → consult-native outline brief
 
 Consult deliverables are **framework-shaped** (Pyramid / SCQA / MECE), not
-**arc-shaped**. The arc-optimized cogni-visual skills (`story-to-slides`,
+**arc-shaped**. The arc-optimized cogni-workspace skills (`story-to-slides`,
 `story-to-web`) auto-detect a narrative arc and build best when the source is a
 story; a WBS-addressed analytical deliverable is not a story, so dispatching them
 directly yields a weak brief. For the same reason this path does **not**
@@ -136,10 +137,10 @@ it alongside the deliverable, e.g.
 `action-fields/<field-slug>/publish/<deliverable-slug>-report-outline.md`.
 
 **Opt-in fallback.** When the consultant explicitly wants a locally-rendered
-artifact and `cogni-visual` is installed, `cogni-visual:enrich-report`
+artifact and `cogni-workspace` is installed, `cogni-workspace:enrich-report`
 (`source_path: action-fields/<field-slug>/<deliverable-slug>.md`) remains
 available as an opt-in fallback. It is **no longer the standard path** — it
-renders locally and applies a cogni-visual theme, which the brief-only contract
+renders locally and applies a cogni-workspace theme, which the brief-only contract
 otherwise avoids.
 
 ### infographic → consult-native infographic brief
@@ -157,8 +158,8 @@ renders and themes it. Write it alongside the deliverable, e.g.
 `action-fields/<field-slug>/publish/<deliverable-slug>-infographic-brief.md`.
 
 **Opt-in fallback.** When the consultant explicitly wants a locally-rendered,
-auto-themed infographic and `cogni-visual` is installed,
-`cogni-visual:story-to-infographic`
+auto-themed infographic and `cogni-workspace` is installed,
+`cogni-workspace:story-to-infographic`
 (`source_path: action-fields/<field-slug>/<deliverable-slug>.md`, optional
 `style_preset`) remains available as an opt-in fallback. It is **no longer the
 standard path** for the same reason as `report`.

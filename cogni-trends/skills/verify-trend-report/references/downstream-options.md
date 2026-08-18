@@ -14,12 +14,12 @@ AskUserQuestion:
     - label: "Polish prose for executive tone"
       description: "Run cogni-workspace:copywriter (preserves citations and structure)"
     - label: "Generate themed HTML with charts"
-      description: "Run cogni-visual:enrich-report (Chart.js + concept diagrams)"
+      description: "Run cogni-workspace:enrich-report (Chart.js + concept diagrams)"
     - label: "Done — return to trends-resume"
       description: "See the full option set (slides, web, storyboard, catalog, dashboard)"
 ```
 
-If `the `copywriter` skill` is not installed, omit the polish option silently. If `cogni-visual` is not installed, omit the visualize option. If both are missing, skip the menu entirely and direct the user to `/trends-resume`.
+If `the `copywriter` skill` is not installed, omit the polish option silently. If `cogni-workspace:enrich-report` is not available, omit the visualize option. If both are missing, skip the menu entirely and direct the user to `/trends-resume`.
 
 ## Option 1 — Polish
 
@@ -50,11 +50,11 @@ After successful polish, set `metadata.copywriter_applied = true` and `metadata.
 ## Option 2 — Visualize
 
 ```
-Skill(cogni-visual:enrich-report,
+Skill(cogni-workspace:enrich-report,
   args: "--source {PROJECT_PATH}/tips-trend-report.md")
 ```
 
-`cogni-visual:enrich-report` produces a themed HTML deliverable with Chart.js data visualizations and Excalidraw concept diagrams. It writes `{PROJECT_PATH}/output/tips-trend-report-enriched.html` (path detected by `project-status.sh` HAS_ENRICHED_REPORT check).
+`cogni-workspace:enrich-report` produces a themed HTML deliverable with Chart.js data visualizations and Excalidraw concept diagrams. It writes `{PROJECT_PATH}/output/tips-trend-report-enriched.html` (path detected by `project-status.sh` HAS_ENRICHED_REPORT check).
 
 The enrich-report skill handles theme selection, infographic injection, and content validation internally — no parameters need to be threaded through this menu.
 

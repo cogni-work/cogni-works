@@ -182,8 +182,7 @@ created: ISO-8601
 - **cogni-portfolio**: `sources.portfolio_project` → reads `propositions/`, `competitors/`, `customers/`, `solutions/`, `packages/`, `portfolio.json`. Optionally reads `output/communicate/customer-narrative/` for pre-written audience-tailored narratives (via `sources.enriched_portfolio_narratives`)
 - **the `copywriter` skill**: Generated content can be piped to `copywriter` skill for polishing
 - **the `narrative` skill**: Long-form thought leadership can be piped to `narrative` skill for arc-driven transformation
-- **cogni-visual**: Content briefs can be piped to `story-to-slides` or `canvas` for visual deliverables
-- **cogni-workspace**: Evidence claims in content inherit verification status from TIPS claims registry via `cogni-workspace:claims`
+- **cogni-workspace**: Content briefs can be piped to `story-to-slides` or `story-to-infographic` for visual deliverables; evidence claims in content inherit verification status from the TIPS claims registry via `cogni-workspace:claims`
 
 ## Naming Conventions
 

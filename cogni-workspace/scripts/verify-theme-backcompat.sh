@@ -80,7 +80,7 @@ Phases:
      - tiered cogni-work surfaces tiers.tokens with tokens.css
   B. workspace-internal consumers (pick-theme, manage-themes)
   C. visual consumers contract checks
-     - cogni-visual: render-html-slides, enrich-report, story-to-* siblings
+     - cogni-workspace: render-html-slides, enrich-report, story-to-* siblings
      - cogni-portfolio: portfolio-dashboard
      - cogni-website: website-build, website-setup
   D. voice consumers (soft) — narrative, sales, research, copywriting
@@ -106,7 +106,7 @@ Failure-mode triage table
       authoring) — schema and authoring surfaces drifted.
 
   - "render-html-slides theme contract missing":
-      Likely #129 (cogni-visual: refactor render-html-slides to consume
+      Likely #129 (the cogni-visual refactor of render-html-slides to consume
       tier-1 tokens and tier-3 component primitives from cogni-work).
 
   - "migration guide reference missing":

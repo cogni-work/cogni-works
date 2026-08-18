@@ -142,7 +142,7 @@ Optional next steps:
   - Polish with `cogni-workspace:copywriter`: /copywrite {file_path}
   - Transform into narrative arc: /narrative {file_path}
   - Generate derivative LinkedIn post: /demand-gen --market {m} --gtm-path {g} --format linkedin-post
-  - Create visual brief: /cogni-visual:story-to-slides {file_path}
+  - Create visual brief: /cogni-workspace:story-to-slides {file_path}
 ```
 
 Update `content-strategy.json` — increment `pieces_generated` for this cell.

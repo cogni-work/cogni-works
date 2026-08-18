@@ -20,7 +20,7 @@ cogni-portfolio                            (Feature × Market propositions, cust
    ↓ portfolio entities
 cogni-sales:why-change                     (Corporate Visions arc composition)
    ↓ sales-presentation.md + sales-proposal.md
-cogni-visual:story-to-slides → render-html-slides   (slide rendering)
+cogni-workspace:story-to-slides → render-html-slides   (slide rendering)
    ↓
 PPTX deck + proposal document
 ```
@@ -61,7 +61,7 @@ Final hop through [[plugin-cogni-visual]] turns the slide narrative into a brief
 
 **3 — Sales pitch.** `/why-change`. Takes narrative, portfolio data and customer specifics; produces structured pitch content covering unconsidered needs, the business case and the proposal. Named-customer pitches are deal-specific and want customer research; segment pitches are reusable across similar accounts. Optionally enrich with TIPS trends to carry the "why now".
 
-**4 — Visual delivery.** `cogni-visual:story-to-slides` for the brief, then render to HTML slides or PPTX. Sales decks live on visual flow — review and adjust after generation. For a customer meeting, fewer slides with more impact beats a comprehensive deck. Consider also generating a leave-behind in the web-narrative format.
+**4 — Visual delivery.** `cogni-workspace:story-to-slides` for the brief, then render to HTML slides or PPTX. Sales decks live on visual flow — review and adjust after generation. For a customer meeting, fewer slides with more impact beats a comprehensive deck. Consider also generating a leave-behind in the web-narrative format.
 
 ## Common pitfalls
 

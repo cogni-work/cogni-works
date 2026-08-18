@@ -214,11 +214,11 @@ When `phase` is `complete`, the `next_actions` array from `project-status.sh` co
 - `cogni-trends:trend-booklet` — Comprehensive catalog of all ~60 candidates organized by dimension → subcategory → horizon (companion to the curated investment-themes report)
 
 **Visualize**
-- `cogni-visual:story-to-infographic` + `/render-infographic` — Create an editorial infographic from the trend report (optional, for premium Pencil-rendered visual header in enriched HTML)
-- `cogni-visual:enrich-report` — Themed HTML with Chart.js visualizations and concept diagrams (detects and reuses existing infographic if story-to-infographic was run first)
-- `cogni-visual:story-to-slides` — PowerPoint presentation brief
-- `cogni-visual:story-to-web` — Scrollable web landing page
-- `cogni-visual:story-to-storyboard` — Multi-poster print storyboard
+- `cogni-workspace:story-to-infographic` + `/render-infographic` — Create an editorial infographic from the trend report (optional, for premium Pencil-rendered visual header in enriched HTML)
+- `cogni-workspace:enrich-report` — Themed HTML with Chart.js visualizations and concept diagrams (detects and reuses existing infographic if story-to-infographic was run first)
+- `cogni-workspace:story-to-slides` — PowerPoint presentation brief
+- `cogni-workspace:story-to-web` — Scrollable web landing page
+- `cogni-workspace:story-to-storyboard` — Multi-poster print storyboard
 
 **Accumulate**
 - `cogni-trends:trends-catalog` — Import to industry catalog for cross-pursuit reuse

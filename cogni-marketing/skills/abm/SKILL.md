@@ -121,7 +121,7 @@ Generated: {format} for {account_name}
 Next steps:
   - Review account research accuracy before sending
   - Personalize further with account-specific case study: /lead-gen --format whitepaper
-  - Create visual briefing deck: /cogni-visual:story-to-slides {file_path}
+  - Create visual briefing deck: /cogni-workspace:story-to-slides {file_path}
   - Add to CRM as activity
 ```
 

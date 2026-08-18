@@ -269,7 +269,7 @@ Generate `tips-big-block.md` as a structured markdown representation:
 The investment-theme-organized Big Block communicates at a glance: "Here are 5 investment areas,
 each with an executive owner and a clear set of solutions. Fund investment themes 2 and 3 first."
 
-**If cogni-visual is available:** Suggest generating a visual presentation using
+**If cogni-workspace is available:** Suggest generating a visual presentation using
 the slides or enrich-report workflow. The markdown version serves as the content brief.
 
 ## Step 4: Implementation Roadmap
@@ -338,7 +338,7 @@ Files created:
 
 Next steps:
 - Connect portfolio gaps to cogni-portfolio for feature/proposition development
-- Generate a visual Big Block using cogni-visual
+- Generate a visual Big Block using cogni-workspace
 - Use the investment theme structure to drive customer proposal creation — one investment theme per proposal section"
 
 ## Output

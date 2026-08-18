@@ -18,7 +18,7 @@ Transform a full the `narrative` skill output (insight summary at any target len
 **Not for:**
 - Generating new narratives from source files (use `cogni-workspace:narrative`)
 - Reviewing or scoring narratives (use `cogni-workspace:narrative-review`)
-- Creating slide decks (use `cogni-visual:story-to-slides`)
+- Creating slide decks (use `cogni-workspace:story-to-slides`)
 
 ---
 

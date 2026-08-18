@@ -124,8 +124,7 @@
 # / "FAIL: <case>", because the cogni-service mutation harness classifies a case
 # GREEN only on ^[[:space:]]*(ok|PASS):[[:space:]]+<case> and RED on the matching
 # FAIL: form. Case ids are L-prefixed and never bare numerals, so the summary line
-# is not read as a case's RED line. Do not "fix" these back to the house
-# "OK   <label>" style.
+# is not read as a case's RED line.
 #
 # bash-3.2 portable (stock macOS /bin/bash is 3.2.57): no declare -A, no mapfile,
 # no ${var^^}. stdlib-only: bash + coreutils, no pip deps, no network.

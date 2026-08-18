@@ -49,8 +49,8 @@ failures=0
 # case_not_found. The `OK   `/`FAIL ` shape this suite used before matched
 # neither, so a mutation recipe naming one of these cases could not return a
 # verdict at all. (The plugin-local scripts/mutation-check.sh is a different
-# instrument — it takes no --case and reads only exit status.) Suites here are
-# mixed on this today; test_reference_pointers.sh already uses this shape.
+# instrument — it takes no --case and reads only exit status.) Every suite in
+# this directory now uses this shape.
 pass() { printf 'PASS: %s\n' "$1"; }
 fail() { printf 'FAIL: %s - %s\n' "$1" "$2" >&2; failures=$((failures + 1)); }
 

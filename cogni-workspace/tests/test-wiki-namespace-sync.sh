@@ -49,15 +49,14 @@
 # policy, not dead config. Silence here would have been a latent wrong answer the
 # first time someone wrote such a page.
 #
-# Case-label shape deviates from the sibling suites on purpose. test-check-skill-names.sh
-# and test-sanitize-theme.sh print "OK   <label>"; this suite prints "PASS: <label>"
-# / "FAIL: <label>" because the cogni-service mutation harness classifies a case
+# Case-label shape is "PASS: <label>" / "FAIL: <label>", the shape every discovered
+# suite in this repo now carries. The cogni-service mutation harness classifies a case
 # GREEN only on ^[[:space:]]*(ok|PASS):[[:space:]]+<case> and RED on the matching
 # FAIL: form. Neither "OK   " nor "OK:" is in that vocabulary, so a mutation replay
-# against this suite would report case_not_found instead of a verdict. Case ids are
+# against a suite using them reports case_not_found instead of a verdict. Case ids are
 # C-prefixed and never bare numerals, which is what keeps the final summary line
 # ("FAIL: <n> wiki-namespace-sync test(s) failed.") from being read as a case's RED
-# line. Do not "fix" these labels back to the house style.
+# line — a hazard the colon form creates and every suite here has to answer.
 #
 # bash-3.2 portable (stock macOS /bin/bash is 3.2.57): no declare -A / typeset -A,
 # no mapfile / readarray, no ${var^^} / ${var,,}. The roster is carried as a

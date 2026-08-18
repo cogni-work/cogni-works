@@ -58,11 +58,12 @@ trap 'rm -rf "$TMPROOT"' EXIT
 
 failures=0
 
-# Label shape deviates from the sibling suites' `OK   <name>` / `FAIL <name>:` on
-# purpose. cogni-service/scripts/mutation-check.sh classifies a case by scanning
+# Label shape is the one every suite in this directory now uses.
+# cogni-service/scripts/mutation-check.sh classifies a case by scanning
 # output for `^[ \t]*FAIL:[ \t]+<case>([ \t]|$)` (RED) and
-# `^[ \t]*(ok|PASS):[ \t]+<case>([ \t]|$)` (GREEN) — the inherited shape matches
-# neither, so a mutation recipe naming a case here would return case_not_found.
+# `^[ \t]*(ok|PASS):[ \t]+<case>([ \t]|$)` (GREEN) — the older `OK   <name>` /
+# `FAIL <name>:` shape matched neither, so a mutation recipe naming such a case
+# returned case_not_found.
 # The match is whole-token, so --case M1 never matches an M10 line — which is
 # also why the detail is separated from the case-id by a SPACE and not a colon:
 # `FAIL: M1: detail` puts a colon where the harness requires whitespace-or-EOL,

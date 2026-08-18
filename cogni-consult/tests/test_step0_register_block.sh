@@ -67,8 +67,8 @@ Discover cogni-consult engagements
 Laufende Engagements holen'
 
 failures=0
-pass() { printf 'OK   %s\n' "$1"; }
-fail() { printf 'FAIL %s: %s\n' "$1" "$2" >&2; failures=$((failures + 1)); }
+pass() { printf 'PASS: %s\n' "$1"; }
+fail() { printf 'FAIL: %s - %s\n' "$1" "$2" >&2; failures=$((failures + 1)); }
 
 # Extract the paragraph starting at the line matching $2, from file $1.
 # A paragraph ends at the first blank line, which is what makes the comparison
@@ -85,7 +85,7 @@ for f in "$PLUGIN_DIR"/skills/consult-*/SKILL.md; do
 done
 
 if [ "${#skills[@]}" -eq 9 ]; then
-  pass "glob-count: 9 consult-* SKILL.md found"
+  pass "glob-count - 9 consult-* SKILL.md found"
 else
   fail "glob-count" "expected 9 consult-*/SKILL.md, found ${#skills[@]}"
 fi
@@ -104,7 +104,7 @@ for f in "${skills[@]}"; do
     anchor="${pair#*:}"
     n="$(grep -c "$anchor" "$f")"
     if [ "$n" -eq 1 ]; then
-      pass "anchor-once: $name $label"
+      pass "anchor-once - $name $label"
     else
       fail "anchor-once" "$name has $n $label anchors, expected 1"
     fi
@@ -131,7 +131,7 @@ check_identical() {
       continue
     fi
     if [ "$block" = "$reference" ]; then
-      pass "$label: $name matches $reference_name"
+      pass "$label - $name matches $reference_name"
     else
       fail "$label" "$name diverges from $reference_name"
     fi
@@ -153,7 +153,7 @@ while IFS= read -r needle; do
     grep -qF "$needle" "$f" || missing="$missing $(basename "$(dirname "$f")")"
   done
   if [ -z "$missing" ]; then
-    pass "specifics-inline: '$needle' present in all 9"
+    pass "specifics-inline - '$needle' present in all 9"
   else
     fail "specifics-inline" "'$needle' missing from:$missing"
   fi
@@ -168,7 +168,7 @@ if [ ! -f "$OWNER" ]; then
 else
   for needle in '## (f) Tool-call descriptions' '6 words' 'Discover cogni-consult engagements'; do
     if grep -qF "$needle" "$OWNER"; then
-      pass "owner-present: '$needle'"
+      pass "owner-present - '$needle'"
     else
       fail "owner-present" "'$needle' missing from user-facing-output.md"
     fi
@@ -201,7 +201,7 @@ if [ "$NESTED" -eq 0 ]; then
     if bash "$0" --root "$drifted" >/dev/null 2>&1; then
       fail "goes-red" "a drifted register paragraph did not fail the guard"
     else
-      pass "goes-red: a drifted register paragraph fails the guard"
+      pass "goes-red - a drifted register paragraph fails the guard"
     fi
   else
     fail "goes-red" "could not build the drifted fixture"
@@ -216,7 +216,7 @@ if [ "$NESTED" -eq 0 ]; then
     if bash "$0" --root "$thinned" >/dev/null 2>&1; then
       fail "goes-red" "a thinned specific did not fail the guard"
     else
-      pass "goes-red: a thinned specific fails the guard"
+      pass "goes-red - a thinned specific fails the guard"
     fi
   else
     fail "goes-red" "could not build the thinned fixture"

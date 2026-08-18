@@ -167,16 +167,6 @@
       "line_sha": "6bcd9f3435d225b939cdf4a00e727601449e2e9d"
     },
     {
-      "file": "cogni-visual/skills/enrich-report/SKILL.md",
-      "match": "v0.16.11",
-      "line_sha": "ed7134f0ef6634689a6610cd4f885ad8e88cc31a"
-    },
-    {
-      "file": "cogni-visual/skills/render-html-slides/SKILL.md",
-      "match": "v1.0.0",
-      "line_sha": "7c3683e8533ead775f970b7a51cf2abfcd0d5582"
-    },
-    {
       "file": "cogni-workspace/skills/manage-themes/SKILL.md",
       "match": "#10",
       "line_sha": "b97ffccdde83fda2d8f82ea00a24475d08146e52"

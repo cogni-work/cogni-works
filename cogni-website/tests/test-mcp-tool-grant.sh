@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# MCP tool-grant guard: an agent that documents driving an MCP server must
-# actually be granted at least one of that server's tools, and a plugin holding
-# such a grant must be listed in the server's registry `required_by`.
+# MCP tool-grant guard (prose arm, cogni-website scope): an agent whose body
+# documents driving an MCP server in prose must actually be granted at least one
+# of that server's tools.
 #
 # Why this exists. An agent frontmatter `tools:` list and the agent body are
 # written at different times, and nothing at runtime reconciles them. When the
@@ -9,17 +9,29 @@
 # simply unreachable: the agent silently takes whatever fallback it defines,
 # every render degrades, and nothing errors. The failure is invisible precisely
 # because a missing grant and a working fallback look identical from outside.
-# The registry half is the same class one layer down — a grant the server's
-# `required_by` does not mention is inert on any install that does not also pull
-# in some other plugin requiring that server, so the tools are granted but the
-# server is never provisioned.
+#
+# Two tiers, one owner per invariant. The repo-scope guard
+# scripts/check-mcp-tool-grant.py owns the AFFIRMATIVE call-site arm (a literal
+# mcp__<ns>__<tool> token in an agent body must be granted by that agent) and
+# the registry `required_by` arm, for every plugin. This suite keeps the PROSE
+# arm, and keeps it at cogni-website scope, because neither detector subsumes
+# the other: hero-renderer documents driving Pencil in prose alone and carries
+# no mcp__ token anywhere in its body, so no affirmative detector can ever see
+# that shape — while the prose heuristic cannot go repo-wide, since agents
+# elsewhere DISCLAIM a server in the same phrasing ("no Excalidraw MCP"). Do not
+# "finish the migration" by deleting this arm: that silently drops the one class
+# the repo guard is structurally blind to, with every case still green.
+#
+# The registry `required_by` arm formerly lived here and has moved to the repo
+# guard. It asserted a property of cogni-workspace's registry file from
+# cogni-website's suite — an ownership inversion that made a cogni-workspace
+# edit able to turn cogni-website red while leaving the same invariant unguarded
+# for every other plugin.
 #
 # Contract under test:
 #   - Every cogni-website agent that declares a `tools:` key and whose body
 #     names "<server> MCP" for a server in the git registry carries at least one
 #     mcp__<server>__ token in that `tools:` list.
-#   - Every mcp__<server>__ token granted by a cogni-website agent belongs to a
-#     registry server whose `required_by` includes cogni-website.
 #   - The scan surface itself is non-empty, so an absence result means "clean"
 #     rather than "looked at nothing".
 #
@@ -31,16 +43,18 @@
 # with the data only coincidentally and would mis-normalize a future key.
 #
 # Scope, and what this guard does NOT claim. It scans cogni-website's own agents
-# only, and its two detectors are calibrated to what that surface looks like: it
-# reads grants from the `tools:` line itself (both the bracketed JSON-array form
-# this plugin uses and the bare comma list used elsewhere sit on that one line,
-# but a YAML block list would not), and it infers "this agent drives server X"
-# from the body prose "<X> MCP". That prose heuristic is sound here and is not
-# repo-wide safe: elsewhere in the tree the same phrase appears in sentences
-# that DISCLAIM the server ("no Excalidraw MCP"), which would read as an
-# offender. Widening this to every plugin therefore needs an affirmative call
-# site rather than a prose match, and belongs in a repo-level
-# scripts/check-*.py with a thin per-plugin caller — not a copy of this file.
+# only, and its detector is calibrated to what that surface looks like: it reads
+# grants from the `tools:` line itself (both the bracketed JSON-array form this
+# plugin uses and the bare comma list used elsewhere sit on that one line, but a
+# YAML block list would not — 15 agents elsewhere in the tree declare tools that
+# way, which is one reason this arm stays plugin-scoped), and it infers "this
+# agent drives server X" from the body prose "<X> MCP". That prose heuristic is
+# sound here and is not repo-wide safe: elsewhere in the tree the same phrase
+# appears in sentences that DISCLAIM the server ("no Excalidraw MCP"), which
+# would read as an offender. The repo-wide invariant is therefore keyed on an
+# affirmative call site instead, in scripts/check-mcp-tool-grant.py, which
+# parses all three `tools:` forms — this file is not a copy of it and neither
+# replaces the other.
 #
 # An agent with no `tools:` key inherits unrestricted tools and is reported as
 # skipped, not as an offender. A grant naming a server absent from the git
@@ -70,7 +84,6 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PLUGIN_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 
-PLUGIN_NAME="$(basename "$PLUGIN_DIR")"
 AGENTS_DIR="$PLUGIN_DIR/agents"
 REGISTRY="$REPO_ROOT/cogni-workspace/references/mcp-git-registry.json"
 
@@ -82,12 +95,11 @@ fail() { printf '%s\n' "FAIL: $1 ${2:-}"; failures=$((failures + 1)); }
 # files; asserts nothing itself, so every verdict below is made in bash against
 # numeric counts and our own values, never against foreign tool wording.
 scan() {
-  AGENTS_DIR="$AGENTS_DIR" REGISTRY="$REGISTRY" PLUGIN_NAME="$PLUGIN_NAME" python3 - <<'PY'
+  AGENTS_DIR="$AGENTS_DIR" REGISTRY="$REGISTRY" python3 - <<'PY'
 import json, os, re, sys, glob
 
 agents_dir = os.environ["AGENTS_DIR"]
 registry_path = os.environ["REGISTRY"]
-plugin = os.environ["PLUGIN_NAME"]
 
 try:
     with open(registry_path, encoding="utf-8") as fh:
@@ -104,13 +116,13 @@ if not isinstance(servers, dict):
 print("registry_ok=1")
 print("servers=%d" % len(servers))
 
-# Keyed by tool namespace. The registry carries the key -> namespace mapping as
-# data in desktop_config_key; read it rather than re-deriving it from the key's
-# spelling.
-required_by = {}
-for key, entry in servers.items():
-    ns = entry.get("desktop_config_key") or key
-    required_by[ns] = [str(x) for x in (entry.get("required_by") or [])]
+# The set of registered tool namespaces — this suite's server-name vocabulary,
+# and nothing more. The registry carries the key -> namespace mapping as data in
+# desktop_config_key; read it rather than re-deriving it from the key's
+# spelling. The required_by VALUES are deliberately not read here: that arm
+# moved to scripts/check-mcp-tool-grant.py, and keeping the plugin lists alive
+# would make this suite look like it still asserts on cogni-workspace's data.
+namespaces = {(entry.get("desktop_config_key") or key) for key, entry in servers.items()}
 
 paths = sorted(glob.glob(os.path.join(agents_dir, "*.md")))
 print("agents_scanned=%d" % len(paths))
@@ -141,7 +153,7 @@ for path in paths:
     tools_line = lines[tools_idx[0]]
     # One scan feeds both the offender set and the liveness counter that guards
     # it, so the two can never be widened out of step.
-    granted_tokens = re.findall(r"mcp__([A-Za-z0-9_]+?)__[A-Za-z0-9_]+", tools_line)
+    granted_tokens = re.findall(r"mcp__([A-Za-z0-9_-]+?)__[A-Za-z0-9_-]+", tools_line)
     granted = set(granted_tokens)
     grant_tokens += len(granted_tokens)
 
@@ -151,19 +163,16 @@ for path in paths:
     body = "\n".join(lines[fence[1] + 1:]) if len(fence) >= 2 else text
     body_lower = body.lower()
 
-    for ns in sorted(required_by):
+    for ns in sorted(namespaces):
         if re.search(r"\b%s\s+mcp\b" % re.escape(ns.lower()), body_lower):
             body_mentions += 1
             if ns not in granted:
                 print("offender_grant=%s:%s" % (name, ns))
 
     for ns in sorted(granted):
-        if ns not in required_by:
+        if ns not in namespaces:
             skipped_unregistered += 1
             print("skip_unregistered=%s:%s" % (name, ns))
-            continue
-        if plugin not in required_by[ns]:
-            print("offender_required_by=%s:%s" % (name, ns))
 
 print("body_mentions=%d" % body_mentions)
 print("grant_tokens=%d" % grant_tokens)
@@ -206,21 +215,6 @@ test_agent_mcp_grants_match_body() {
   fi
 }
 
-test_registry_required_by_covers_grants() {
-  local case_id="test_registry_required_by_covers_grants"
-  if [ "$REGISTRY_OK" -ne 1 ] || [ "$SERVERS" -lt 1 ] || [ "$GRANT_TOKENS" -lt 1 ]; then
-    fail "$case_id" "scan surface broken — registry_ok=$REGISTRY_OK servers=$SERVERS grants=$GRANT_TOKENS"
-    return
-  fi
-  local offenders
-  offenders="$(collect offender_required_by)"
-  if [ "$offenders" -ne 0 ]; then
-    fail "$case_id" "granted server does not list $PLUGIN_NAME in required_by: $(list_of offender_required_by)"
-  else
-    pass "$case_id" "$GRANT_TOKENS grant token(s) covered by registry required_by"
-  fi
-}
-
 test_grant_surface_intact() {
   local case_id="test_grant_surface_intact"
   local broken=""
@@ -237,7 +231,7 @@ test_grant_surface_intact() {
   fi
 }
 
-ALL_TESTS="test_agent_mcp_grants_match_body test_registry_required_by_covers_grants test_grant_surface_intact"
+ALL_TESTS="test_agent_mcp_grants_match_body test_grant_surface_intact"
 
 run_one() {
   case " $ALL_TESTS " in

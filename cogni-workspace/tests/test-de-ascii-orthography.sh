@@ -31,14 +31,22 @@
 #   0 on a clean base. Only an enumerated vocabulary can satisfy both at once. The cost
 #   is that the guard catches exactly what it lists, which is why extending it is a
 #   first-class, test-enforced operation (see below) rather than an afterthought.
+#   This is a settled decision, not an open question deferred to a later rewrite: it is
+#   recorded in references/absorption-roadmap.md, under the decision covering this guard,
+#   together with the consequences of reversing it. Coverage grows by adding rows.
 #
 # HOW TO EXTEND THE VOCABULARY
-#   1. Add a row to VOCABULARY: ascii_token|correct_form|style|guard
-#   2. Add the token to the matching positive fixture (P1 dropped-vowel, P2 digraph)
-#   W1 rejects a row whose ascii_token is not what correct_form actually folds to under
-#   the declared style, so an unmatchable typo cannot be committed. W2 set-differences
-#   the vocabulary against the tokens the fixtures exercise, in BOTH directions, so the
-#   vocabulary cannot grow without its proof growing with it.
+#   Add one row to VOCABULARY: ascii_token|correct_form|style|guard. That is the whole
+#   manual step. The P1 and P2 positive fixtures are GENERATED at run time by an awk pass
+#   directly over this same table, so a new row is planted in the matching fixture without
+#   anyone editing one — an earlier revision of this comment asked for that edit by hand,
+#   which was already untrue and sent contributors looking for a file that does not exist.
+#   The proof still grows with the vocabulary, it just grows automatically: W1 rejects a
+#   row whose ascii_token is not what correct_form actually folds to under the declared
+#   style, so an unmatchable typo cannot be committed, and W2 set-differences the
+#   vocabulary against the tokens the generated fixtures actually cause the scanner to
+#   report, in BOTH directions — so a row the scanner cannot detect fails just as loudly
+#   as a token with no row.
 #
 # WHY EXEMPTIONS ARE CONTENT-ANCHORED, NEVER LINE-ANCHORED
 #   Two files legitimately contain ASCII forms: one states the umlaut rule by naming the
@@ -78,7 +86,7 @@
 #   registration entry in CLAUDE.md — that file is inside the scanned tree, so naming a
 #   token there turns C1 red.
 #
-# Usage: bash cogni-visual/tests/test-de-ascii-orthography.sh   (no args, no network)
+# Usage: bash cogni-workspace/tests/test-de-ascii-orthography.sh   (no args, no network)
 
 set -u
 export LC_ALL=C
@@ -156,6 +164,13 @@ LOESUNG|LÖSUNG|digraph|plain
 FAEHIGKEITEN|FÄHIGKEITEN|digraph|plain
 Anlagenverfuegbarkeit|Anlagenverfügbarkeit|digraph|plain
 Qualitaet|Qualität|digraph|plain
+Woerter|Wörter|digraph|plain
+Pruefung|Prüfung|digraph|plain
+Naehe|Nähe|digraph|plain
+Hauptsaetze|Hauptsätze|digraph|plain
+Massnahmen|Maßnahmen|digraph|plain
+Beruecksichtigung|Berücksichtigung|digraph|plain
+verkuerzen|verkürzen|digraph|plain
 VOCAB
 
 # ---------------------------------------------------------------------- exemptions

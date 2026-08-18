@@ -112,7 +112,7 @@ The following structure applies to most business blog posts regardless of framew
 
 ### Section Heading Language
 
-- For German blogs: Use German section titles (e.g., "Warum Veraenderung jetzt unvermeidlich ist", "Was sich konkret aendern muss", "Wie Unternehmen den Wandel erfolgreich gestalten")
+- For German blogs: Use German section titles (e.g., "Warum Veränderung jetzt unvermeidlich ist", "Was sich konkret ändern muss", "Wie Unternehmen den Wandel erfolgreich gestalten")
 - For English blogs: Use English section titles
 - Every heading should signal a clear theme and promise value to the reader
 - Follow the logical flow: Why > What > How > Stakes > Action
@@ -333,9 +333,9 @@ over those still waiting for "the right time."
 Unternehmen, die jetzt handeln, sichern sich messbare Vorteile:
 
 - **35% geringere Compliance-Kosten** durch automatisierte Berichterstattung,
-- **12 Monate Vorsprung** gegenueber Wettbewerbern im regulatorischen Rahmen,
+- **12 Monate Vorsprung** gegenüber Wettbewerbern im regulatorischen Rahmen,
 - **18% höhere Kundenbindung** durch nachweisbare Nachhaltigkeitsleistung,
-- **Vollstaendige regulatorische Konformitaet** vor der 2027-Frist.
+- **Vollständige regulatorische Konformität** vor der 2027-Frist.
 ```
 
 ## Quality Standards

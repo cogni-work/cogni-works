@@ -299,7 +299,7 @@ Use these metrics as quality checks during revision. They are targets, not rigid
 
 ### Flesch Reading Ease -- German (Amstad, 1978)
 
-German words average more syllables than English (compound nouns like Qualitaetssicherungssysteme), so the standard English formula produces inaccurate scores. Use the Amstad adaptation.
+German words average more syllables than English (compound nouns like Qualitätssicherungssysteme), so the standard English formula produces inaccurate scores. Use the Amstad adaptation.
 
 **Formula:** 180 - (words / sentences) - 58.5 x (syllables / words)
 
@@ -316,7 +316,7 @@ Key differences from the English formula:
 | 30-50 | Heavy |
 | 0-30 | Very difficult (academic) |
 
-**Target for German business writing:** 30-50 (using Amstad formula). German compound words (e.g., Qualitaetssicherungssysteme) inherently produce lower Amstad scores than equivalent English text on the standard Flesch scale. A German Amstad score of 30-50 corresponds roughly to the readability level of an English text scoring 50-60 on the standard Flesch formula.
+**Target for German business writing:** 30-50 (using Amstad formula). German compound words (e.g., Qualitätssicherungssysteme) inherently produce lower Amstad scores than equivalent English text on the standard Flesch scale. A German Amstad score of 30-50 corresponds roughly to the readability level of an English text scoring 50-60 on the standard Flesch formula.
 
 The readability script auto-detects language and applies the correct formula. Use `--lang de` or `--lang en` to override detection.
 

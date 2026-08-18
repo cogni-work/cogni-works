@@ -166,7 +166,7 @@ Sharpen paragraph transitions within a single element. Do NOT modify cross-eleme
 **7. Restructure weak hook openings.**
 The hook is the exception to structural preservation. If the hook's first sentence fails ANY of these tests, you must restructure it:
 
-- **Kuechenzuruf test:** Can the reader shout the gist to someone in the next room?
+- **Küchenzuruf test:** Can the reader shout the gist to someone in the next room?
 - **Surprise test:** Does it contain a surprising truth or the main conclusion?
 - **Platitude test:** Is it a self-evident statement or generic context?
 - **Raw statistics test:** Does it lead with an unframed number?

@@ -402,3 +402,49 @@ have restored the citations only until the next edit; quoting the distinctive
 text instead makes the quote the locator, which cannot drift. This follows the
 same reasoning the block already applies to the `index.md` bullet it identifies
 by wikilink because the two wiki trees number it differently.
+
+## Decision 9 — the de-ascii orthography guard stays a sampling guard, and grows by rows
+
+**Decision.** `cogni-workspace/tests/test-de-ascii-orthography.sh` **keeps its curated
+vocabulary** and is deliberately **not** widened into a general orthography rule that
+infers de-umlauted German from spelling shape alone. Its coverage grows the only way it
+can grow: by adding rows to the table it already carries. This closes an open question the
+guard's arrival left behind — the plugin's own developer guide previously deferred the
+widening decision to somewhere that did not exist.
+
+**Why a general rule cannot work on this tree.** The rejection is forced by what the
+scanned corpus contains, not by taste. Three populations sit inside the same scan root and
+no shape-based inference separates them:
+
+1. **Deliberate transliteration.** The corpus documents, as content, the very ASCII
+   substitution the guard forbids — a slug-and-filename mapping in one place and a
+   wrong-versus-right teaching table in another. A general rule flags the lesson.
+2. **Other languages.** The tree carries English prose throughout, plus Dutch, French,
+   Spanish and Italian sample documents. Their ordinary vocabulary is dense with the same
+   vowel pairs a general rule would key on; one plugin-wide census counted several hundred
+   such words against roughly a hundred genuinely corrupted ones.
+3. **Correctly-spelled German.** Many German words legitimately carry those vowel pairs
+   with no diacritic at all, and a short medial consonant cluster is as often correct as it
+   is a substitution. Nothing in the spelling distinguishes the two cases.
+
+A suite must do two things at once here: flag genuine corruption, and exit 0 on a clean
+base. Only an enumerated vocabulary satisfies both.
+
+**Consequence of reversing.** Three costs land immediately, which is why this is written
+down rather than left to be rediscovered:
+
+- The exemption table would have to grow **across plugin boundaries**, not just inside the
+  affected corpus — sibling skills legitimately quote ASCII spellings as documented
+  failure-mode examples, and a general rule reddens every one of them.
+- The deliberate-ASCII regions above would false-positive, and the natural repair —
+  narrowing the scan root or exempting the files — silently shrinks what the guard sees.
+  A guard that is quiet because it stopped looking is worse than no guard.
+- The suite would stop exiting 0 on a clean base, so it could no longer be a gate at all.
+
+**The vocabulary now diverges from the sibling copy, intentionally.** The file arrived as a
+byte-identical copy of the originating plugin's suite, and every inherited row was drawn
+from that plugin's corpus — not one matched anything in the trees adopted here, which is
+why a substantial corruption survived the guard's arrival untouched. Rows drawn from this
+plugin's own corpus have now been added, so the two copies are no longer identical. That is
+correct: they scan different trees. **Nothing enforces parity between them**, and nothing
+should — a future reader finding the difference should not "restore" it.

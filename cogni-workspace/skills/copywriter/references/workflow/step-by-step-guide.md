@@ -568,7 +568,7 @@ Report backup creation if applicable.
 READ: references/03-formatting-standards/citation-formatting.md
 ```
 
-1. Move citations from "Begruendung:" paragraphs to individual "Umsetzung:" list items (place at end of specific claim)
+1. Move citations from "Begründung:" paragraphs to individual "Umsetzung:" list items (place at end of specific claim)
 2. Add superscript commas between consecutive citations:
    ```bash
    perl -pi -e 's/<\/sup><sup>/<\/sup><sup>,<\/sup> <sup>/g' "{output_path}"

@@ -57,6 +57,11 @@
 #     no exclusion list is needed to keep it out and none should be added.
 #   - the **Skills:** lines in mcp-registry.md carry a different relation
 #     (skill names, not plugin names) and have no registry counterpart.
+#   - the concept-mcp-server-map.md Plugins column is a fourth mirror of the
+#     same fact. It is correct today and is deliberately NOT compared here: D1
+#     asserts only that the two wiki copies stay byte-identical to each other,
+#     never that either agrees with the registry, so that agreement is an
+#     unguarded gap rather than something D1 already covers.
 #   - three further mirrors of the same fact are out of this suite's reach and
 #     tracked separately: the manage-workspace worked example, and the MCP
 #     tables in the repo-root README.md and CLAUDE.md. Guarding a repo-root
@@ -314,25 +319,31 @@ fi
 # parser found, not just the registry-backed ones, which is what keeps "the
 # parser saw nothing" distinguishable from "this server has no row" (the latter
 # is a MISSING defect on the arm, not a floor failure).
+#
+# The threshold is two, matching L1, because the registry carries two servers:
+# a surface that parses down to a single row has lost at least one of them. A1
+# would also catch that as a MISSING defect, but it would read as a missing row
+# in the document rather than a parser that stopped seeing rows, which is the
+# distinction these floors exist to draw.
 
-if [ "$probe_rows" -ge 1 ]; then
-  pass "L4 workspace-status probe table parsed at least one row"
+if [ "$probe_rows" -ge 2 ]; then
+  pass "L4 workspace-status probe table parsed at least two rows"
 else
-  fail "L4 workspace-status probe table parsed at least one row"
+  fail "L4 workspace-status probe table parsed at least two rows"
   printf '%s\n' "  $PROBE_TABLE_REL yielded $probe_rows rows — the Needed by column moved or the file was renamed"
 fi
 
-if [ "$relation_rows" -ge 1 ]; then
-  pass "L5 mcp-registry relation lines parsed at least one server"
+if [ "$relation_rows" -ge 2 ]; then
+  pass "L5 mcp-registry relation lines parsed at least two servers"
 else
-  fail "L5 mcp-registry relation lines parsed at least one server"
+  fail "L5 mcp-registry relation lines parsed at least two servers"
   printf '%s\n' "  $RELATION_DOC_REL yielded $relation_rows sections — the ### heading or the Needed by/Used by line shape moved"
 fi
 
-if [ "$example_rows" -ge 1 ]; then
-  pass "L6 install-mcp plan example parsed at least one row"
+if [ "$example_rows" -ge 2 ]; then
+  pass "L6 install-mcp plan example parsed at least two rows"
 else
-  fail "L6 install-mcp plan example parsed at least one row"
+  fail "L6 install-mcp plan example parsed at least two rows"
   printf '%s\n' "  $INSTALL_EXAMPLE_REL yielded $example_rows rows — the needed by: separator moved"
 fi
 

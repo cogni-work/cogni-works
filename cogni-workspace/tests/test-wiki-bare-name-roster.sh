@@ -121,6 +121,18 @@
 # returns — stay green. That asymmetry is the point: it shows the arm is
 # falsifiable on its own rather than riding on the shared matcher.
 #
+# For the slash allowance, drive it at the constant: dropping the store token
+# from the allowed set while leaving the org token alone reds B23, which owns
+# that allowance's green half on a fixture of its own. B1 reds alongside it,
+# because the live intersection genuinely carries the path form — but B7 and
+# B22 both stay GREEN, and naming them individually matters because they do not
+# move together: B7's store-token needle is an assert_out_has that the
+# newly-offending slash form also satisfies, and the real tree-level pages B22
+# scans carry no store token at all. That is why the green half needs B23 rather
+# than riding on B1: B1's coverage is incidental on what the live trees happen
+# to contain, so a page retirement or a sweep could remove it with every case
+# still green.
+#
 # Portability: bash 3.2 (stock macOS /bin/bash) — no associative arrays, no
 # mapfile/readarray, no case-modifying expansions, no globstar. Stdlib only:
 # bash, coreutils, and python3 for JSON. No network.
@@ -785,6 +797,24 @@ if [ "$b22_root_ok" -eq 1 ] && assert_rc 0; then
   pass "B22 the real tree-level pages in both trees carry no off-roster plugin names"
 else
   fail "B22 the real tree-level pages in both trees carry no off-roster plugin names"
+fi
+
+# ---------------------------------------------------------------------------
+# B23 — the store path's GREEN half, on a fixture of its own. B7 covers only the
+# red half: scan_file strips the delimiter before emitting, so the path form and
+# the dispatch form of the same token produce byte-identical offender lines, and
+# B7's needle is satisfied by the dispatch form alone even when the path form
+# also offends. This is the case the header's slash-allowance recipe drives.
+# ---------------------------------------------------------------------------
+R23="$TMPROOT/b23"; mk_fixture_repo "$R23"
+mk_both "$R23" "concept-store-path.md" \
+  "Records land in cogni-claims/claims.json under the workspace root."
+run_scan_repo "$R23"
+if assert_rc 0 \
+   && assert_out_lacks "concept-store-path.md: cogni-claims"; then
+  pass "B23 the store path form alone is allowed and emits no offender line"
+else
+  fail "B23 the store path form alone is allowed and emits no offender line"
 fi
 
 # ---------------------------------------------------------------------------

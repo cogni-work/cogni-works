@@ -27,9 +27,10 @@ provisioned.
 Detection is an AFFIRMATIVE CALL SITE, not a prose match. A prose heuristic
 ("<server> MCP" appearing in the body) is sound only inside a plugin whose
 agents never talk about a server they deliberately do not use. Repo-wide it is
-not: several agents DISCLAIM a server in exactly that phrasing — cogni-workspace
-ships a `concept-diagram-svg` agent whose body says "no Excalidraw MCP", and
-cogni-knowledge's `source-curator` says "no claude-in-chrome MCP tools". Those sentences carry no `mcp__<ns>__<tool>`
+not: several agents DISCLAIM a server in exactly that phrasing — cogni-visual
+and cogni-workspace both ship a `concept-diagram-svg` agent whose body says "no
+Excalidraw MCP", and cogni-knowledge's `source-curator` says "no
+claude-in-chrome MCP tools". Those sentences carry no `mcp__<ns>__<tool>`
 token, so requiring a literal token is what makes the guard safe at this scope.
 The complementary prose detector therefore stays plugin-scoped in
 cogni-website/tests/test-mcp-tool-grant.sh, where it is calibrated and green,

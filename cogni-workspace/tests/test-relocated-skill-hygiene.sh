@@ -60,6 +60,7 @@ set -u
 
 HERE="$(cd "$(dirname "$0")" && pwd)"
 WS_ROOT="$(cd "$HERE/.." && pwd)"
+REPO_ROOT="$(cd "$HERE/../.." && pwd)"
 
 # One "<tree>|<forbidden dispatch token>" spec per adopted tree. The token is the
 # one the tree's own source plugin dispatched under, so each arm stays falsifiable.
@@ -240,6 +241,64 @@ elif [ -n "$p2_bad" ]; then
   fail "P2 every \${CLAUDE_PLUGIN_ROOT} reference must resolve under cogni-workspace"
 else
   pass "P2 all $p2_scanned \${CLAUDE_PLUGIN_ROOT} references resolve under cogni-workspace"
+fi
+
+# ---------------------------------------------------------------------------
+# Case P3 — no repo-relative source-plugin PATH reference dangles in an adopted tree.
+#
+# P1 pins the DISPATCH form (`cogni-visual:`, with the colon). Nothing pinned the
+# PATH form. Retiring a source plugin deletes its tree, so every surviving
+# `cogni-visual/<dir>/...` path in an adopted copy silently stops resolving while
+# P1, P2 and scripts/check-external-dispatch.py all stay green — they match the
+# dispatch form only. That is the same silent-failure shape P1 exists for, one
+# surface over, and it is the shape that actually bites at runtime: two relocated
+# render agents open Step 1 with a mandatory "read <path> in full" prerequisite.
+#
+# The match is deliberately narrowed to the plugin-structure directories. A bare
+# `<plugin>/` prefix would be red on arrival against the artifact-directory
+# convention `{source_dir}/cogni-visual/`, which absorption-roadmap.md records as
+# a deliberate keep — that path's next segment is an artifact filename, never one
+# of the directories below, so the narrowing separates the two classes exactly.
+#
+# The assertion is "must RESOLVE", not "must not appear". A source plugin that is
+# still live resolves fine and is not this guard's business; the defect is a path
+# left pointing into a tree that no longer exists.
+#
+# Liveness floor counts FILES WALKED, not references extracted — unlike P2, the
+# clean state here is zero references, so flooring on the reference count would
+# fail on a correct tree.
+# ---------------------------------------------------------------------------
+p3_hits=""
+p3_scanned=0
+for spec in $TREE_SPECS; do
+  tree="${spec%%|*}"
+  token="${spec##*|}"
+  src="${token%:}"
+  [ -e "$tree" ] || continue
+  while IFS= read -r f; do
+    [ -n "$f" ] || continue
+    p3_scanned=$((p3_scanned + 1))
+  done <<EOF
+$(find "$tree" -type f)
+EOF
+  while IFS= read -r ref; do
+    [ -n "$ref" ] || continue
+    [ -e "$REPO_ROOT/$ref" ] || p3_hits="$p3_hits $ref"
+  done <<EOF
+$(grep -rhoE "$src/(agents|skills|scripts|libraries|references|commands|hooks|tests)/[A-Za-z0-9_./-]*" "$tree" 2>/dev/null | sort -u)
+EOF
+done
+
+if [ "$p3_scanned" -eq 0 ]; then
+  # Liveness floor: a broken walk must not report clean.
+  fail "P3 scanned zero files — the adopted trees are missing or unreadable"
+elif [ -n "$p3_hits" ]; then
+  for b in $p3_hits; do
+    echo "  dangling source-plugin path: $b"
+  done
+  fail "P3 every repo-relative source-plugin path reference must resolve"
+else
+  pass "P3 no dangling source-plugin path reference in the adopted trees ($p3_scanned files scanned)"
 fi
 
 # ---------------------------------------------------------------------------

@@ -1,9 +1,9 @@
 # Agent tool declarations
 
-Why the `tools:` line of a `cogni-visual/agents/*.md` file is shaped the way it is. An agent body is
+Why the `tools:` line of a `cogni-workspace/agents/*.md` file is shaped the way it is. An agent body is
 a runtime system prompt, loaded on every dispatch — rationale addressed to a future editor spends
 that budget on text the agent cannot act on, so it lives here instead. Cite this file by its
-repo-relative path (`cogni-visual/references/agent-tool-declarations.md`) rather than restating a
+repo-relative path (`cogni-workspace/references/agent-tool-declarations.md`) rather than restating a
 rationale inside the agent it explains.
 
 ## story-to-infographic

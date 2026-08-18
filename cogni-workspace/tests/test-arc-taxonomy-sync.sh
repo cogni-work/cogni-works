@@ -2,7 +2,7 @@
 # Guard: cogni-visual's arc taxonomy must stay in sync with the narrative skill's arcs.
 #
 # WHAT THIS PINS
-#   The `arc_id` set in the mapping table of cogni-visual/libraries/arc-taxonomy.md
+#   The `arc_id` set in the mapping table of cogni-workspace/libraries/arc-taxonomy.md
 #   must equal the set of arc directories under
 #   cogni-workspace/skills/narrative/references/story-arc/.
 #
@@ -108,7 +108,7 @@ TAXONOMY="${ARC_TAXONOMY_PATH:-$PLUGIN_DIR/libraries/arc-taxonomy.md}"
 ARC_DIR="${ARC_STORY_ARC_DIR:-$PLUGIN_DIR/skills/narrative/references/story-arc}"
 
 # The five valid visual arc types. arc-taxonomy.md does not declare this set itself — it is
-# stated by the consuming surfaces (cogni-visual/skills/story-to-slides, story-to-web,
+# stated by the consuming surfaces (cogni-workspace/skills/story-to-slides, story-to-web,
 # story-to-storyboard, story-to-infographic, render-html-slides), which document `arc_type` as
 # one of these values. Mirrored here because there is no machine-readable source to read.
 VALID_ARC_TYPES="why-change problem-solution journey argument report"

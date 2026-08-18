@@ -105,7 +105,7 @@ Reference theme tokens via CSS custom properties (e.g., `var(--colors-primary)`)
 
 **Authoring rule:** primitives only, not compositions. A `title-slide.html` is a primitive. A "5-slide pitch deck composed of title + 3 content + cta" is a composition; that lives in the consuming skill, not in the theme.
 
-**Cogni-work today:** the cogni-work pilot does not yet ship `components/deck/` — the loader infrastructure in `cogni-workspace:render-html-slides` is in place (`--theme-slug` + the loader at `cogni-visual/scripts/load-theme-component.py`), but the deck-component family is a deferred follow-up. When it ships, this section will gain a worked example.
+**Cogni-work today:** the cogni-work pilot does not yet ship `components/deck/` — the loader infrastructure in `cogni-workspace:render-html-slides` is in place (`--theme-slug` + the loader at `cogni-workspace/scripts/load-theme-component.py`), but the deck-component family is a deferred follow-up. When it ships, this section will gain a worked example.
 
 ### Step 4. Tier 4 — Templates (deferred to Phase 3)
 
@@ -246,5 +246,5 @@ Rollback is **additive in reverse**: the deletion only removes the files you add
 - **JSON Schema:** `cogni-workspace/references/theme-manifest.schema.json`
 - **Manage Themes skill (Operation 7 — Author a Deep Theme System):** `cogni-workspace/skills/manage-themes/SKILL.md`
 - **Reference implementation (cogni-work pilot):** `cogni-workspace/themes/cogni-work/`
-- **First consumer (render-html-slides):** `cogni-visual/skills/render-html-slides/` and `cogni-visual/references/theme-component-loader.md`
+- **First consumer (render-html-slides):** `cogni-workspace/skills/render-html-slides/` and `cogni-workspace/references/theme-component-loader.md`
 - **RFC #124:** [Theme System v2 — Structured theme directories](https://github.com/cogni-work/insight-wave/issues/124)

@@ -170,8 +170,8 @@ run_health() {
 }
 
 FAIL_COUNT=0
-fail() { echo "FAIL $1" >&2; FAIL_COUNT=$((FAIL_COUNT + 1)); }
-ok()   { echo "OK   $1"; }
+fail() { printf 'FAIL: %s\n' "$1" >&2; FAIL_COUNT=$((FAIL_COUNT + 1)); }
+ok()   { printf 'PASS: %s\n' "$1"; }
 
 # ---------------------------------------------------------------------------
 # Case 1: Mirroring is not drift.
@@ -187,9 +187,9 @@ touch "$P1/.metadata/trend-scout-output.json"
 OUT="$(run_health "$P1" | extract)"
 HAS_STALE="$(echo "$OUT" | python3 -c 'import json,sys; w=json.load(sys.stdin)["warnings"]; print(any(x.get("type")=="stale_report" for x in w))')"
 if [ "$HAS_STALE" = "False" ]; then
-  ok "case 1 — mirroring did not fire stale_report"
+  ok "S1 — mirroring did not fire stale_report"
 else
-  fail "case 1 — stale_report fired even though candidate content is unchanged"
+  fail "S1 — stale_report fired even though candidate content is unchanged"
   echo "$OUT" >&2
 fi
 
@@ -233,29 +233,35 @@ print(json.dumps({
 python3 - "$SUMMARY" <<'PYEOF'
 import json, sys
 s = json.loads(sys.argv[1])
-problems = []
+problems_a = []
+problems_b = []
 if s["stale_count"] < 1:
-    problems.append("stale_report did not fire on real drift")
+    problems_a.append("stale_report did not fire on real drift")
 if s["subtype"] != "scout_drift":
-    problems.append(f"subtype={s['subtype']!r} (expected 'scout_drift')")
+    problems_a.append(f"subtype={s['subtype']!r} (expected 'scout_drift')")
 if "t-003" not in (s["added"] or []):
-    problems.append(f"added={s['added']!r} (expected to contain 't-003')")
+    problems_a.append(f"added={s['added']!r} (expected to contain 't-003')")
 if "t-001" not in (s["changed"] or []):
-    problems.append(f"changed={s['changed']!r} (expected to contain 't-001')")
+    problems_a.append(f"changed={s['changed']!r} (expected to contain 't-001')")
 if s["first_action_skill"] != "cogni-trends:trend-research":
-    problems.append(f"first action skill={s['first_action_skill']!r} (expected cogni-trends:trend-research)")
+    problems_b.append(f"first action skill={s['first_action_skill']!r} (expected cogni-trends:trend-research)")
 reason = s["first_action_reason"] or ""
 # Both halves of the post-split refresh path are part of the contract: the
 # research pass regathers the drifted candidates, the synthesis pass rebuilds
 # the report from them. Naming only one would let a half-updated injector pass.
 for fragment in ("1 added", "1 changed", "/trend-research", "/trend-synthesis"):
     if fragment not in reason:
-        problems.append(f"first action reason missing fragment {fragment!r}: {reason!r}")
-if problems:
-    print("\n".join("FAIL case 2 — " + p for p in problems), file=sys.stderr)
+        problems_b.append(f"first action reason missing fragment {fragment!r}: {reason!r}")
+if problems_a:
+    print("\n".join("FAIL: S2a - " + p for p in problems_a), file=sys.stderr)
+else:
+    print("PASS: S2a — drift fired with subtype=scout_drift, added={t-003}, changed={t-001}")
+if problems_b:
+    print("\n".join("FAIL: S2b - " + p for p in problems_b), file=sys.stderr)
+else:
+    print("PASS: S2b — concrete cogni-trends:trend-research action prepended naming the diff")
+if problems_a or problems_b:
     sys.exit(1)
-print("OK   case 2 — drift fired with subtype=scout_drift, added={t-003}, changed={t-001}")
-print("OK   case 2 — concrete cogni-trends:trend-research action prepended naming the diff")
 PYEOF
 RC=$?
 if [ $RC -ne 0 ]; then FAIL_COUNT=$((FAIL_COUNT + 1)); fi
@@ -281,9 +287,9 @@ touch "$P3/.metadata/trend-scout-output.json"
 OUT="$(run_health "$P3" | extract)"
 HAS_STALE="$(echo "$OUT" | python3 -c 'import json,sys; w=json.load(sys.stdin)["warnings"]; print(any(x.get("type")=="stale_report" for x in w))')"
 if [ "$HAS_STALE" = "False" ]; then
-  ok "case 3 — legacy project (no anchor) stayed silent"
+  ok "S3 — legacy project (no anchor) stayed silent"
 else
-  fail "case 3 — stale_report fired on a legacy project (no hash anchor present)"
+  fail "S3 — stale_report fired on a legacy project (no hash anchor present)"
   echo "$OUT" >&2
 fi
 

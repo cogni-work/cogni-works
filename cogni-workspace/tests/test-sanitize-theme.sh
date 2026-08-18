@@ -19,8 +19,8 @@ TMPROOT="$(mktemp -d)"
 trap 'rm -rf "$TMPROOT"' EXIT
 
 failures=0
-pass() { echo "OK   $1"; }
-fail() { echo "FAIL $1"; failures=$((failures + 1)); }
+pass() { printf 'PASS: %s\n' "$1"; }
+fail() { printf 'FAIL: %s\n' "$1"; failures=$((failures + 1)); }
 
 # assert_py "<label>" "<python expr, True to pass>" — the guard is bound as `g`
 # and the renderer as `r`, so an assertion can check the guard against the real

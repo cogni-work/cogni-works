@@ -71,9 +71,9 @@ failures = []
 
 def check(label, actual, expected):
     if actual == expected:
-        print(f"OK   {label}: {actual}")
+        print(f"PASS: {label} - {actual}")
     else:
-        print(f"FAIL {label}: got {actual!r}, expected {expected!r}")
+        print(f"FAIL: {label} - got {actual!r}, expected {expected!r}")
         failures.append(label)
 
 check("counts.investment_themes", counts.get("investment_themes"), 5)
@@ -96,17 +96,17 @@ expected_stage_names = [
 for offset, expected_name in enumerate(expected_stage_names):
     idx = 4 + offset
     if idx >= len(stages):
-        print(f"FAIL stages[{idx}] missing — only {len(stages)} stages emitted")
-        failures.append(f"stages[{idx}]")
+        print(f"FAIL: stages-{idx} - missing, only {len(stages)} stages emitted")
+        failures.append(f"stages-{idx}")
         continue
     s = stages[idx]
     name_ok = s.get("name") == expected_name
     status_ok = s.get("status") == "done"
     if name_ok and status_ok:
-        print(f"OK   stages[{idx}] {s['name']!r} status=done")
+        print(f"PASS: stages-{idx} - {s['name']!r} status=done")
     else:
-        print(f"FAIL stages[{idx}] name={s.get('name')!r} status={s.get('status')!r} (expected {expected_name!r}/done)")
-        failures.append(f"stages[{idx}]")
+        print(f"FAIL: stages-{idx} - name={s.get('name')!r} status={s.get('status')!r} (expected {expected_name!r}/done)")
+        failures.append(f"stages-{idx}")
 
 if failures:
     print(f"\n{len(failures)} assertion(s) failed", file=sys.stderr)

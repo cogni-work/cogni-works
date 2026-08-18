@@ -37,8 +37,8 @@ TMPROOT="$(mktemp -d)"
 trap 'rm -rf "$TMPROOT"' EXIT
 
 failures=0
-pass() { printf 'OK   %s\n' "$1"; }
-fail() { printf 'FAIL %s: %s\n' "$1" "$2" >&2; failures=$((failures + 1)); }
+pass() { printf 'PASS: %s\n' "$1"; }
+fail() { printf 'FAIL: %s - %s\n' "$1" "$2" >&2; failures=$((failures + 1)); }
 
 # Build a minimal engagement with one field manifest. Args: <dir> <dt_stage-json-snippet>
 # The snippet is spliced as the deliverable's dt_stage line (or empty to omit it).

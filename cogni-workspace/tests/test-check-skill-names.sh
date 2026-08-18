@@ -32,14 +32,14 @@ TMPROOT="$(mktemp -d)"
 trap 'rm -rf "$TMPROOT"' EXIT
 
 failures=0
-pass() { echo "OK   $1"; }
-fail() { echo "FAIL $1"; failures=$((failures + 1)); }
+pass() { printf 'PASS: %s\n' "$1"; }
+fail() { printf 'FAIL: %s\n' "$1"; failures=$((failures + 1)); }
 
 # Assert the script under test exists before anything reads it. Without this the
 # static guard (Case 4) would sed/grep a missing file, match nothing, and report a
 # spurious PASS — and on Linux/CI, where no bash 3.x exists, Case 4 is the only
 # portability assertion left standing.
-[ -f "$CHECK" ] || { fail "0 script under test not found at $CHECK"; exit 1; }
+[ -f "$CHECK" ] || { fail "C0 script under test not found at $CHECK"; exit 1; }
 
 # Interpreter matrix, derived once. Only *distinct* binaries are listed: on a
 # stock macOS with no homebrew bash, PATH `bash` already IS /bin/bash 3.2.57, and

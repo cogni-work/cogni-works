@@ -22,7 +22,9 @@
 # or a hook matcher string.
 #
 # Contract under test:
-#   - no cogni-*/.mcp.json exists anywhere in the tree
+#   - no cogni-*/.mcp.json exists at any plugin root — the only depth a
+#     client loads a plugin-level declaration from, so a file nested deeper
+#     is out of scope by glob depth rather than by exclusion
 #   - mcp-git-registry.json still maps mcp_excalidraw to the desktop key
 #     "excalidraw" — MCP tool names derive from that key, so renaming it breaks
 #     every mcp__excalidraw__* tool and both hook matchers at once, silently

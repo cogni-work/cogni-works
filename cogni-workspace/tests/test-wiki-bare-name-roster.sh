@@ -299,6 +299,35 @@ mk_body() {
     "${base%.md}" "$2" > "$1"
 }
 
+# mk_sourced_page <path> <related-token> — a fixture shaped like a real page:
+# the org URL in a frontmatter `sources:` list AND in a footer Source link,
+# which is where the overwhelming majority of org-token occurrences actually
+# sit. The <related-token> goes in a frontmatter `related:` entry. This is the
+# fixture that pins FRONTMATTER coverage: with a body-only scan, a retired name
+# planted in `related:` would go unreported and case B14 reds.
+mk_sourced_page() {
+  local dir="${1%/*}" base="${1##*/}"
+  [ -d "$dir" ] || mkdir -p "$dir"
+  {
+    printf -- '---\n'
+    printf -- 'id: %s\n' "${base%.md}"
+    printf -- 'title: fixture\ntype: fixture\n'
+    printf -- 'sources:\n'
+    printf -- '  - https://github.com/cogni-work/insight-wave/blob/main/cogni-workspace/x.md\n'
+    printf -- 'related:\n'
+    printf -- '  - %s\n' "$2"
+    printf -- '---\n\n'
+    printf -- 'Prose naming nothing stale.\n\n'
+    printf -- '**Source**: [x.md on GitHub](https://github.com/cogni-work/insight-wave/blob/main/cogni-workspace/x.md)\n'
+  } > "$1"
+}
+
+# mk_sourced_both <root> <basename> <related-token>
+mk_sourced_both() {
+  mk_sourced_page "$1/wiki/wiki/pages/$2" "$3"
+  mk_sourced_page "$1/cogni-workspace/wiki/wiki/pages/$2" "$3"
+}
+
 # mk_marketplace <path> <plugin-names...> — carries the same confusable shape as
 # the real manifest: a top-level "name" and an "owner" object with its own name.
 mk_marketplace() {
@@ -518,6 +547,45 @@ if case "$ROSTER11" in *"fixture-marketplace"*|*"Fixture Owner"*) false ;; *) tr
   pass "B13 the roster is built from plugin names only, never the manifest or owner name"
 else
   fail "B13 the roster is built from plugin names only, never the manifest or owner name"
+fi
+
+# ---------------------------------------------------------------------------
+# B14 — frontmatter is part of the scanned surface, in both directions. The org
+# URL sits in a `sources:` list and a footer Source link — the placement its
+# allowance is actually justified by — and stays green; a retired name in a
+# `related:` entry is still flagged. Without this case a regression to scanning
+# only the prose below the frontmatter would leave every other case green, and
+# the coverage loss would be silent.
+# ---------------------------------------------------------------------------
+R14="$TMPROOT/b14"; mk_fixture_repo "$R14"
+mk_sourced_both "$R14" "concept-frontmatter.md" "cogni-research"
+run_scan_repo "$R14"
+if assert_rc 1 \
+   && assert_out_has "OFF-ROSTER [root] concept-frontmatter.md: cogni-research" \
+   && assert_out_lacks "concept-frontmatter.md: cogni-work"; then
+  pass "B14 frontmatter is scanned — a retired name there is flagged while the org URL is not"
+else
+  fail "B14 frontmatter is scanned — a retired name there is flagged while the org URL is not"
+fi
+
+# ---------------------------------------------------------------------------
+# B15 — the tokenizer is greedy, so a retired name is never reported from inside
+# an unrelated longer word that merely starts with it. The complement of B4:
+# there a retired name EXTENDED a live one, here an off-roster word extends a
+# retired one and must be named in full, not truncated to the retired prefix.
+# ---------------------------------------------------------------------------
+R15="$TMPROOT/b15"; mk_fixture_repo "$R15"
+mk_both "$R15" "concept-greedy.md" "A cogni-researcher wrote this."
+run_scan_repo "$R15"
+# The has-half is the whole assertion: a tokenizer that truncated to the retired
+# prefix would emit "cogni-research" INSTEAD of the full word, so this needle
+# fails. A paired assert_out_lacks on the prefix could not discriminate, since
+# the prefix is a substring of the correct output.
+if assert_rc 1 \
+   && assert_out_has "OFF-ROSTER [root] concept-greedy.md: cogni-researcher"; then
+  pass "B15 a longer off-roster word is named in full, never truncated to a retired prefix"
+else
+  fail "B15 a longer off-roster word is named in full, never truncated to a retired prefix"
 fi
 
 # ---------------------------------------------------------------------------

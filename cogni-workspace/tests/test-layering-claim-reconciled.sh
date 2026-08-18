@@ -6,8 +6,9 @@
 # LAYERING claim (cogni-workspace is the layer everything depends on) with a
 # SCOPE claim (it is the horizontal layer; each vertical business plugin keeps
 # its own project lifecycle). The claim was asserted in 19 places across docs/,
-# both wiki trees, cogni-help and cogni-workspace, and reconciling them by hand
-# is only durable if something notices when one comes back. Nothing did:
+# both wiki trees, a since-retired plugin and cogni-workspace, and reconciling
+# them by hand is only durable if something notices when one comes back. Nothing
+# did:
 # test-wiki-namespace-sync.sh checks filename stems against the marketplace
 # roster and never reads page prose, and no suite anywhere compares the two wiki
 # trees against each other. A regenerated doc or a re-imported wiki page could
@@ -45,17 +46,24 @@
 # Phrase-level survivors. These lines keep foundation vocabulary on purpose and
 # must NOT be caught. Each says something about the workspace *state* other
 # plugins read, never about the plugin's position in a dependency order, so none
-# is falsified by the scope claim:
+# is falsified by the scope claim. Each is cited by its quoted text rather than
+# by a line number: the quote is the locator, so an edit above it cannot rot the
+# citation the way a number does.
 #
-#   - manage-workspace/SKILL.md:23 — "An insight-wave workspace is the shared
+#   - manage-workspace/SKILL.md — "An insight-wave workspace is the shared
 #     foundation that all marketplace plugins depend on" (subject is the
 #     workspace, not cogni-workspace)
-#   - workspace-dashboard/SKILL.md:24 — "the foundation that every other plugin
+#   - workspace-dashboard/SKILL.md — "the foundation that every other plugin
 #     reads from" (reads from, not depends on)
-#   - cogni-help full-onboarding.md:26 — "the workspace provides the foundation"
-#   - cogni-help tour-install-to-infographic.md — "builds on this foundation" /
-#     "the workspace + theme + MCP foundation" (bootstrap ordering among
-#     workflows, which the scope claim permits)
+#
+# Two further entries once sat in this list, and a third such citation in the
+# paragraph below, quoting course and workflow prose from a plugin since retired
+# from the marketplace roster. All three are dropped rather than repointed: the
+# files they named are gone from the tree, and the phrases they quoted survive
+# nowhere else, so no page is left to point at. This inventory is a claim about
+# what is standing in the current tree, so it may only name things that exist —
+# the retired paths stay recorded in the historical tables of
+# references/absorption-roadmap.md, whose Decision 8 states the reasoning.
 #
 # This list is why the shared-foundation literal below is prefixed with the
 # plugin name: the bare "is the shared foundation" also matches the first entry,
@@ -69,8 +77,7 @@
 # the cogni-workspace skills heading of each wiki tree's index.md (identified
 # by wikilink rather than line number: the two trees number that bullet
 # differently, so no single line number is right for both), and into both
-# skill-cogni-workspace-manage-workspace.md:16; cogni-help
-# canonical-workflows.md:11 has its own. Those are
+# skill-cogni-workspace-manage-workspace.md:16. Those are
 # all the same compatible claim about workspace state, and no literal here
 # targets them. Grepping "foundation" will surface hits this block does not
 # account for; that is expected, and the test is whether the sentence asserts a

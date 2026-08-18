@@ -176,6 +176,10 @@ cogni-visual/libraries/
 # its siblings here it had no byte-identity arm of its own. Until the
 # roster-derived body scan lands with its two per-tree arms, this entry is the
 # only thing that would catch a one-tree-only regression on that page.
+#
+# concept-slug-based-lookups.md joins on the same grounds: its shared bullet named a
+# manifest no plugin writes, both copies were rewritten identically, and no other arm
+# here pins the two copies to each other.
 PAGE_PARITY='plugin-cogni-workspace.md
 workflow-install-to-infographic.md
 arch-er-diagram.md
@@ -184,7 +188,8 @@ workflow-portfolio-to-website.md
 workflow-content-pipeline.md
 workflow-portfolio-to-pitch.md
 workflow-trends-to-solutions.md
-plugin-cogni-portfolio.md'
+plugin-cogni-portfolio.md
+concept-slug-based-lookups.md'
 
 # ---------------------------------------------------------------------------
 # The checkers. Fixture cases and the real-repo cases drive these same two

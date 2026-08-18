@@ -19,22 +19,25 @@ rm -f .claude/cogni-teacher.local.md .claude/cogni-help.local.md
 
 ---
 
-## Stale project file after cogni-diamond rename
+## Leftover engagement file from a retired consulting plugin
 
-**Symptom**: Consulting engagement data not found when resuming a project.
+**Symptom**: `diamond-project.json` or `consulting-project.json` is present, but no skill
+finds or resumes the engagement.
 
-**Cause**: Project file still named `diamond-project.json` after the plugin was renamed
-to cogni-consulting.
+**Cause**: Both names belong to retired plugins — cogni-diamond, renamed to
+cogni-consulting, then removed (source for both remains in git history). No surviving
+skill reads either name.
 
-**Fix**: Rename the file:
-```bash
-mv diamond-project.json consulting-project.json
+**Fix**: There is nothing to rename to. cogni-consult keeps its engagements at
+`cogni-consult/{engagement-slug}/consult-project.json` and has no import path from
+either legacy file, so keep the old file as an archive and scope a fresh engagement:
+```
+/cogni-consult:consult-setup
 ```
 
-**Note**: cogni-consulting has been removed — replaced by cogni-consult (its source
-remains in git history). This note only applies to legacy Double Diamond engagement
-data. All new consulting engagements use cogni-consult
-(`consult-project.json`).
+**Note**: renaming a legacy file onto the current name does not migrate it — the
+schemas differ (cogni-consult's WBS is action fields, not Double Diamond phases), and
+nothing would read the result either.
 
 ---
 

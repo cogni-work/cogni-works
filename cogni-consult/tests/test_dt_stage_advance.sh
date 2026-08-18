@@ -7,15 +7,19 @@
 # helper, and asserts on the resulting JSON output plus the on-disk state.
 #
 # Coverage:
-#   1  forward-step        single-step advance empathize->define (success, logged)
-#   2  invalid-stage       unknown target stage name rejected (success:false)
-#   3  forward-skip        empathize->ideate skips a stage (success:false)
-#   4  re-entry            test->define backward loop re-entry allowed (success)
-#   5  idempotent          define->define same-stage re-set allowed (success)
-#   6  legacy-no-dt-stage  entry without dt_stage -> from=null, target applied
-#   7  deliverable-missing unknown deliverable slug (success:false)
-#   8  field-missing       no field.json at path (success:false)
-#   9  stage-log-created   stage-log.json created with the move appended
+#   C1  forward-step        single-step advance empathize->define (success, logged);
+#                            emits -result and -persisted
+#   C2  invalid-stage       unknown target stage name rejected (success:false)
+#   C3  forward-skip        empathize->ideate skips a stage (success:false)
+#   C4  re-entry            test->define backward loop re-entry allowed (success)
+#   C5  idempotent          define->define same-stage re-set allowed (success)
+#   C6  legacy-no-dt-stage  entry without dt_stage -> from=null, target applied
+#   C7  deliverable-missing unknown deliverable slug (success:false)
+#   C8  field-missing       no field.json at path (success:false)
+#   C9  stage-log-created   stage-log.json created with the move appended
+#
+# The C-prefix is the addressable id: each case emits `C<n>-<suffix>` as the
+# first token of its result line, so --case names one line and never a sibling.
 #
 # Usage: bash cogni-consult/tests/test_dt_stage_advance.sh
 # Exits non-zero on any assertion failure.

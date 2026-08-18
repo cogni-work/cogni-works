@@ -63,7 +63,7 @@ Any page entry in `website-plan.json` carrying an `arc_id` is rendered through t
 | cogni-marketing | No | Blog posts, articles, whitepapers |
 | cogni-trends | No | Trend reports, investment themes for insights page |
 | cogni-knowledge | No | Research syntheses for resources page |
-| cogni-visual (Pencil MCP) | No | AI-generated hero image via hero-renderer agent |
+| cogni-visual | No | Arc taxonomy and story-to-web decomposition references (website-plan); image-prompt conventions (hero-renderer) |
 
 ## Output
 

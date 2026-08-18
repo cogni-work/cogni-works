@@ -289,7 +289,7 @@ All reference files in this system, organized by directory. Use this as the sour
 - `active-voice-principles.md` -- 80%+ active voice, clear subjects, transformation patterns
 - `acronym-handling-principles.md` -- First-mention acronym expansion, audience-tuned (expert/mixed/lay); proper-noun and structure-marker exclusions
 - `german-style-principles.md` -- Wolf Schneider rules: 12-word clauses, Satzklammer, Mittelfeld, Floskeln
-- `german-hook-principles.md` -- Wolf Schneider / Reiners / Nannen: 12 opening-sentence rules, Kuechenzuruf test, arc hook strategies
+- `german-hook-principles.md` -- Wolf Schneider / Reiners / Nannen: 12 opening-sentence rules, Küchenzuruf test, arc hook strategies
 - `plain-language-principles.md` -- Technical content accessibility
 - `readability-principles.md` -- Visual hierarchy and scannability
 - `translation-principles.md` -- Two-pass translate-then-polish philosophy; what to translate vs preserve; citation-anchored translation; per-language charset table; deterministic dispatch + 7×7 validity matrix

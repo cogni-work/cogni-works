@@ -123,7 +123,8 @@ After plugin retirements, orphaned files may linger:
 # Check for retired cogni-diamond / cogni-consulting engagement state.
 # find, not a ** glob: engagement files sit two segments deep
 # ({plugin}/{engagement-slug}/), and ** only recurses where globstar is on.
-find . -type f \( -name 'diamond-project.json' -o -name 'consulting-project.json' \) 2>/dev/null
+# -maxdepth 3 is that same bound, so the walk skips .git, caches and vaults.
+find . -maxdepth 3 -type f \( -name 'diamond-project.json' -o -name 'consulting-project.json' \) 2>/dev/null
 
 # Check for inert course-progress files (the course system is retired)
 ls .claude/cogni-teacher.local.md .claude/cogni-help.local.md 2>/dev/null

@@ -405,6 +405,17 @@ per Decision 1. The substantive residual remains 11 lines, per Decision 2 — an
 `wiki/index.md` copies remain different from each other, per Decision 3's group-C rule. None of the
 seven bundled-only pages is edited, promoted or deleted, per Decision 4.
 
+`troubleshoot/SKILL.md` §5's stale-state probe and `troubleshoot/references/known-issues.md`'s
+`Leftover engagement file from a retired consulting plugin` entry both still name
+`consulting-project.json`, deliberately. Neither is a residue: they are detection surfaces, where
+the dead name is the thing being searched for on a user's disk and the thing a reader matches their
+own situation against. Stripping it would leave `/troubleshoot` unable to find or describe the very
+artefact the sweep was about — a documentation fix traded for a functional regression. This is the
+same exemption the neighbouring `Leftover course-progress file` entry already relies on, naming its
+two retired `.claude/*.local.md` files verbatim in both its Symptom line and its `rm -f` remedy. A
+literal zero-hit bar over `cogni-workspace/skills/` is therefore unmeetable by construction, and a
+future sweep should not re-file either occurrence.
+
 ## What guards this
 
 `cogni-workspace/tests/test-wiki-tree-parity.sh` asserts, per tree and never tree-wide: that

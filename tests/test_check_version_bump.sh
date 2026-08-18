@@ -5,20 +5,20 @@
 # version == its marketplace.json entry version) and a git-anchored TOUCH check
 # (pr mode: untouched vs the fork point / post-merge mode: strictly greater).
 # Cases:
-#   1. pr, plugin touched but version untouched -> clean, exit 0.
-#   2. pr, version touched -> version-touched, exit 1.
+#   1. pr, plugin touched but version untouched -> clean, exit 0.  [cvb01]
+#   2. pr, version touched -> version-touched, exit 1.  [cvb02]
 #   3. pr, stale-below-main -> CLEAN. The branch never touched the version but
 #      main advanced past it after the fork. This is the merge-base-anchoring
 #      regression test: a base-TIP anchor would false-flag this, and since main's
-#      version now advances on every merge it would false-flag most real PRs.
-#   4. pr, ^bump/ branch -> exempt, clean.
-#   5. post-merge, incremented -> clean, exit 0.
-#   6. post-merge, not incremented -> version-not-incremented, exit 1.
-#   7. post-merge, regressed -> version-regressed, exit 1.
-#   8. mirror drift -> version-mirror-desync in BOTH modes.
+#      version now advances on every merge it would false-flag most real PRs.  [cvb06]
+#   4. pr, ^bump/ branch -> exempt, clean.  [cvb07]
+#   5. post-merge, incremented -> clean, exit 0.  [cvb03]
+#   6. post-merge, not incremented -> version-not-incremented, exit 1.  [cvb04]
+#   7. post-merge, regressed -> version-regressed, exit 1.  [cvb05]
+#   8. mirror drift -> version-mirror-desync in BOTH modes.  [cvb08, cvb09]
 #   9. degraded (no origin/main) -> status degraded, exit 0 — and a mirror
-#      violation is STILL reported, proving the mirror half needs no git.
-#  10. Real tree -> clean (the repo is in sync today).
+#      violation is STILL reported, proving the mirror half needs no git.  [cvb10, cvb11]
+#  10. Real tree -> clean (the repo is in sync today).  [cvb12]
 #
 # bash 3.2 + stdlib python3 + git.
 #

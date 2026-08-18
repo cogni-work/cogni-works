@@ -5,21 +5,21 @@
 # and that plugin's entry inside the single shared root `.claude-plugin/marketplace.json`.
 # The shared file is the risk: an unscoped regex could rewrite a sibling entry or the
 # root `metadata.version`. Cases:
-#   1. Single-plugin bump -> both manifests advance, together.
-#   2. Digit carry 0.0.9 -> 0.0.10 (the byte-growth case that shifts later spans).
+#   1. Single-plugin bump -> both manifests advance, together.  [avb02]
+#   2. Digit carry 0.0.9 -> 0.0.10 (the byte-growth case that shifts later spans).  [avb03]
 #   3. Version collision -> two plugins share a version string; only the touched
-#      one moves. This is the test an unscoped regex fails.
+#      one moves. This is the test an unscoped regex fails.  [avb04]
 #   4. metadata.version immunity -> root metadata carries the same version string
-#      as a bumped plugin and must not move.
+#      as a bumped plugin and must not move.  [avb05]
 #   5. Multi-plugin merge -> three plugins in one run, spans re-derived after each
-#      edit so a carry in plugin #1 cannot misplace plugin #3's edit.
-#   6. Non-numeric tail -> skipped as a warning, exit 0, nothing written.
+#      edit so a carry in plugin #1 cannot misplace plugin #3's edit.  [avb01]
+#   6. Non-numeric tail -> skipped as a warning, exit 0, nothing written.  [avb10-avb12]
 #   7. Mirror drift -> skipped as an error, exit 1, that plugin untouched, but a
-#      co-touched healthy plugin still bumps (partial progress, loud failure).
-#   8. Untouched plugin -> never bumped.
-#   9. --dry-run -> computes and verifies, writes nothing.
-#  10. Formatting + non-ASCII preserved byte-for-byte (no json.dump round-trip).
-#  11. Real tree, --dry-run, empty touched set -> clean no-op.
+#      co-touched healthy plugin still bumps (partial progress, loud failure).  [avb13-avb16]
+#   8. Untouched plugin -> never bumped.  [avb09]
+#   9. --dry-run -> computes and verifies, writes nothing.  [avb17]
+#  10. Formatting + non-ASCII preserved byte-for-byte (no json.dump round-trip).  [avb06-avb08]
+#  11. Real tree, --dry-run, empty touched set -> clean no-op.  [avb18]
 #
 # bash 3.2 + stdlib python3 only. No git required (the touched set is passed in).
 #

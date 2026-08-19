@@ -18,18 +18,26 @@
 # the hook into other plugins' subagents at runtime.
 #
 # Coverage:
-#   1  declaration   exactly one SubagentStart entry, type `command` (required by
+#   1  declaration-shape / declaration-script
+#                    exactly one SubagentStart entry, type `command` (required by
 #                    Claude Code since 2.1.142), command file present + executable
-#   2  bare names    the matcher matches all four bare agent names
-#   3  qualified     the matcher matches all four `cogni-consult:`-qualified
+#   2  bare-<agent>  the matcher matches all four bare agent names
+#   3  qualified-<agent>
+#                    the matcher matches all four `cogni-consult:`-qualified
 #                    names — the form a plugin-supplied agent is dispatched under
-#   4  near-misses   the matcher is anchored at both ends, and a foreign
+#   4  anchoring / reject-foreign-qualification / reject-suffix-near-miss /
+#      reject-prefix-affix / reject-prefix-alone
+#                    the matcher is anchored at both ends, and a foreign
 #                    qualification, a suffix near-miss, a prefix affix and a bare
 #                    prefix are all rejected
-#   5  drift guard   the alternation and cogni-consult/agents/ agree in both
+#   5  drift         the alternation and cogni-consult/agents/ agree in both
 #                    directions
 #   6  envelope      the hook script emits a valid SubagentStart envelope whose
 #                    additionalContext carries the language block and the contract
+#
+# The emitted first token is the addressable id: each case emits the id shown
+# above — with its per-agent suffix substituted for <agent> — as the first token
+# of its result line, so --case names one line and never a sibling.
 #
 # Usage: bash cogni-consult/tests/test_subagent_start_hook.sh
 # Exits non-zero on any assertion failure.
@@ -78,13 +86,13 @@ if inner[0].get("type") != "command":
     sys.exit("hook type must be command, got %r" % inner[0].get("type"))
 if "on-subagent-start.sh" not in (inner[0].get("command") or ""):
     sys.exit("command does not point at on-subagent-start.sh: %r" % inner[0].get("command"))
-' && pass "declaration - one command-type SubagentStart entry" \
-  || fail "declaration" "hooks.json shape wrong (see above)"
+' && pass "declaration-shape - one command-type SubagentStart entry" \
+  || fail "declaration-shape" "hooks.json shape wrong (see above)"
 
 if [ -f "$HOOK_SCRIPT" ] && [ -x "$HOOK_SCRIPT" ]; then
-  pass "declaration - hook script present and executable"
+  pass "declaration-script - hook script present and executable"
 else
-  fail "declaration" "hook script missing or not executable: $HOOK_SCRIPT"
+  fail "declaration-script" "hook script missing or not executable: $HOOK_SCRIPT"
 fi
 
 # Pull the matcher out of hooks.json once; every regex assertion below uses it.
@@ -112,12 +120,12 @@ sys.exit(0 if got == os.environ["WANT"] else 1)
 # with the alternation's optional prefix — unlike block 3, they pin no known
 # behaviour.
 for a in $AGENTS; do
-  assert_match "bare - $a" "$a" yes
+  assert_match "bare-$a" "$a" yes
 done
 
 # 3 plugin-qualified names — the regression this test exists for
 for a in $AGENTS; do
-  assert_match "qualified - cogni-consult:$a" "cogni-consult:$a" yes
+  assert_match "qualified-$a - cogni-consult:$a" "cogni-consult:$a" yes
 done
 
 # 4 near-misses.
@@ -156,10 +164,10 @@ if loose:
 ' && pass "anchoring - every top-level alternative is anchored" \
   || fail "anchoring" "matcher=$MATCHER (see above)"
 
-assert_match "reject - foreign qualification" "cogni-portfolio:consult-persona-challenger" no
-assert_match "reject - suffix near-miss" "consult-dashboard-refresherX" no
-assert_match "reject - prefix affix" "xconsult-empathy-mapper" no
-assert_match "reject - prefix alone" "cogni-consult:" no
+assert_match "reject-foreign-qualification" "cogni-portfolio:consult-persona-challenger" no
+assert_match "reject-suffix-near-miss" "consult-dashboard-refresherX" no
+assert_match "reject-prefix-affix" "xconsult-empathy-mapper" no
+assert_match "reject-prefix-alone" "cogni-consult:" no
 
 # 5 drift guard — the alternation and agents/ agree in both directions.
 # The agent-name group is the LAST alternation group, not the first: the matcher

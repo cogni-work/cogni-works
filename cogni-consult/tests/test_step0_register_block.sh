@@ -15,15 +15,26 @@
 #
 # Coverage:
 #   1  glob-count        skills/consult-*/SKILL.md resolves to exactly 9 files
-#   2  anchor-once       each carries exactly one description- and one
-#                        register-paragraph anchor line
-#   3  description-same  the description paragraph is byte-identical in all 9
-#   4  register-same     the register paragraph is byte-identical in all 9
-#   5  ladder-same       the ladder paragraph is byte-identical in all 9
-#   6  specifics-inline  every specific (f) owns is still stated in all 9
-#   7  owner-present     user-facing-output.md carries (f), the 6-word cap and
+#   2  anchor-once-<skill>-description / anchor-once-<skill>-register
+#                        each carries exactly one description- and one
+#                        register-paragraph anchor line (18 lines, 9 skills)
+#   3  description-same-<skill>
+#                        the description paragraph is byte-identical in all 9
+#   4  register-same-<skill>
+#                        the register paragraph is byte-identical in all 9
+#   5  ladder-same-<skill>
+#                        the ladder paragraph is byte-identical in all 9
+#   6  specifics-inline-<n>  (1..5)
+#                        every specific (f) owns is still stated in all 9
+#   7  owner-present-<n>  (1..3)
+#                        user-facing-output.md carries (f), the 6-word cap and
 #                        the worked pair
-#   8  goes-red          a mutated block and a thinned block each fail the guard
+#   8  goes-red-drifted / goes-red-thinned
+#                        a mutated block and a thinned block each fail the guard
+#
+# The emitted first token is the addressable id: each case emits the id shown
+# above — with its per-skill or per-index suffix substituted — as the first
+# token of its result line, so --case names one line and never a sibling.
 #
 # Usage: bash cogni-consult/tests/test_step0_register_block.sh [--root <dir>]
 # Exits non-zero on any assertion failure.
@@ -104,9 +115,9 @@ for f in "${skills[@]}"; do
     anchor="${pair#*:}"
     n="$(grep -c "$anchor" "$f")"
     if [ "$n" -eq 1 ]; then
-      pass "anchor-once - $name $label"
+      pass "anchor-once-$name-$label - exactly one anchor"
     else
-      fail "anchor-once" "$name has $n $label anchors, expected 1"
+      fail "anchor-once-$name-$label" "$n anchors, expected 1"
     fi
   done
 done
@@ -122,7 +133,7 @@ check_identical() {
     name="$(basename "$(dirname "$f")")"
     block="$(paragraph "$f" "$anchor")"
     if [ -z "$block" ]; then
-      fail "$label" "$name has no paragraph matching $anchor"
+      fail "$label-$name" "no paragraph matching $anchor"
       continue
     fi
     if [ -z "$reference" ]; then
@@ -131,9 +142,9 @@ check_identical() {
       continue
     fi
     if [ "$block" = "$reference" ]; then
-      pass "$label - $name matches $reference_name"
+      pass "$label-$name - matches $reference_name"
     else
-      fail "$label" "$name diverges from $reference_name"
+      fail "$label-$name" "diverges from $reference_name"
     fi
   done
 }
@@ -147,15 +158,19 @@ check_identical "ladder-same" "$LADDER_ANCHOR"
 # Byte-identity alone cannot catch a specific dropped from all nine at once.
 # This asserts each one is still there, so thinning the block in favour of the
 # reference fails rather than passing quietly.
+# The case id is positional: adding, removing or reordering a SPECIFICS entry
+# renumbers every case after it, and nothing goes red to announce that.
+i=0
 while IFS= read -r needle; do
+  i=$((i + 1))
   missing=""
   for f in "${skills[@]}"; do
     grep -qF "$needle" "$f" || missing="$missing $(basename "$(dirname "$f")")"
   done
   if [ -z "$missing" ]; then
-    pass "specifics-inline - '$needle' present in all 9"
+    pass "specifics-inline-$i - '$needle' present in all 9"
   else
-    fail "specifics-inline" "'$needle' missing from:$missing"
+    fail "specifics-inline-$i" "'$needle' missing from:$missing"
   fi
 done <<EOF
 $SPECIFICS
@@ -164,13 +179,16 @@ EOF
 # --- 7  owner-present ------------------------------------------------------
 
 if [ ! -f "$OWNER" ]; then
-  fail "owner-present" "user-facing-output.md not found at $OWNER"
+  fail "owner-present-file" "user-facing-output.md not found at $OWNER"
 else
+  # Positional id, as above — reordering these needles renumbers the cases.
+  j=0
   for needle in '## (f) Tool-call descriptions' '6 words' 'Discover cogni-consult engagements'; do
+    j=$((j + 1))
     if grep -qF "$needle" "$OWNER"; then
-      pass "owner-present - '$needle'"
+      pass "owner-present-$j - '$needle'"
     else
-      fail "owner-present" "'$needle' missing from user-facing-output.md"
+      fail "owner-present-$j" "'$needle' missing from user-facing-output.md"
     fi
   done
 fi
@@ -199,12 +217,12 @@ if [ "$NESTED" -eq 0 ]; then
     && mv "$victim.new" "$victim"
   if grep -q 'not an exception\.' "$victim"; then
     if bash "$0" --root "$drifted" >/dev/null 2>&1; then
-      fail "goes-red" "a drifted register paragraph did not fail the guard"
+      fail "goes-red-drifted" "a drifted register paragraph did not fail the guard"
     else
-      pass "goes-red - a drifted register paragraph fails the guard"
+      pass "goes-red-drifted - a drifted register paragraph fails the guard"
     fi
   else
-    fail "goes-red" "could not build the drifted fixture"
+    fail "goes-red-drifted" "could not build the drifted fixture"
   fi
 
   # 8b — a pinned specific is thinned out of every copy.
@@ -214,12 +232,12 @@ if [ "$NESTED" -eq 0 ]; then
   done
   if ! grep -q 'at most 6' "$thinned/skills/consult-setup/SKILL.md"; then
     if bash "$0" --root "$thinned" >/dev/null 2>&1; then
-      fail "goes-red" "a thinned specific did not fail the guard"
+      fail "goes-red-thinned" "a thinned specific did not fail the guard"
     else
-      pass "goes-red - a thinned specific fails the guard"
+      pass "goes-red-thinned - a thinned specific fails the guard"
     fi
   else
-    fail "goes-red" "could not build the thinned fixture"
+    fail "goes-red-thinned" "could not build the thinned fixture"
   fi
 fi
 

@@ -7,15 +7,19 @@
 # helper, and asserts on the resulting JSON output plus the on-disk state.
 #
 # Coverage:
-#   1  forward-step        single-step advance empathize->define (success, logged)
-#   2  invalid-stage       unknown target stage name rejected (success:false)
-#   3  forward-skip        empathize->ideate skips a stage (success:false)
-#   4  re-entry            test->define backward loop re-entry allowed (success)
-#   5  idempotent          define->define same-stage re-set allowed (success)
-#   6  legacy-no-dt-stage  entry without dt_stage -> from=null, target applied
-#   7  deliverable-missing unknown deliverable slug (success:false)
-#   8  field-missing       no field.json at path (success:false)
-#   9  stage-log-created   stage-log.json created with the move appended
+#   C1  forward-step        single-step advance empathize->define (success, logged);
+#                            emits -result and -persisted
+#   C2  invalid-stage       unknown target stage name rejected (success:false)
+#   C3  forward-skip        empathize->ideate skips a stage (success:false)
+#   C4  re-entry            test->define backward loop re-entry allowed (success)
+#   C5  idempotent          define->define same-stage re-set allowed (success)
+#   C6  legacy-no-dt-stage  entry without dt_stage -> from=null, target applied
+#   C7  deliverable-missing unknown deliverable slug (success:false)
+#   C8  field-missing       no field.json at path (success:false)
+#   C9  stage-log-created   stage-log.json created with the move appended
+#
+# The C-prefix is the addressable id: each case emits `C<n>-<suffix>` as the
+# first token of its result line, so --case names one line and never a sibling.
 #
 # Usage: bash cogni-consult/tests/test_dt_stage_advance.sh
 # Exits non-zero on any assertion failure.
@@ -73,49 +77,49 @@ assert_json() {  # <label> <json> <python-bool-expr over `d`>
 D="$TMPROOT/t1"; make_field "$D" ',
       "dt_stage": "empathize"'
 OUT="$(bash "$SCRIPT" "$D" market-evidence market-sizing define)"
-assert_json "1 forward-step result" "$OUT" "d['success'] is True and d['data']['from']=='empathize' and d['data']['to']=='define'"
+assert_json "C1-forward-step-result" "$OUT" "d['success'] is True and d['data']['from']=='empathize' and d['data']['to']=='define'"
 STORED="$(python3 -c "import json;print(json.load(open('$D/action-fields/market-evidence/field.json'))['deliverables'][0]['dt_stage'])")"
-[ "$STORED" = "define" ] && pass "1 forward-step persisted" || fail "1 forward-step persisted" "field.json dt_stage=$STORED"
+[ "$STORED" = "define" ] && pass "C1-forward-step-persisted" || fail "C1-forward-step-persisted" "field.json dt_stage=$STORED"
 
 # --- 2. invalid-stage ---
 D="$TMPROOT/t2"; make_field "$D" ',
       "dt_stage": "empathize"'
 OUT="$(bash "$SCRIPT" "$D" market-evidence market-sizing prototpye)"
-assert_json "2 invalid-stage rejected" "$OUT" "d['success'] is False and 'invalid target stage' in d['error']"
+assert_json "C2-invalid-stage-rejected" "$OUT" "d['success'] is False and 'invalid target stage' in d['error']"
 
 # --- 3. forward-skip: empathize -> ideate ---
 D="$TMPROOT/t3"; make_field "$D" ',
       "dt_stage": "empathize"'
 OUT="$(bash "$SCRIPT" "$D" market-evidence market-sizing ideate)"
-assert_json "3 forward-skip rejected" "$OUT" "d['success'] is False and 'illegal stage jump' in d['error']"
+assert_json "C3-forward-skip-rejected" "$OUT" "d['success'] is False and 'illegal stage jump' in d['error']"
 
 # --- 4. re-entry: test -> define ---
 D="$TMPROOT/t4"; make_field "$D" ',
       "dt_stage": "test"'
 OUT="$(bash "$SCRIPT" "$D" market-evidence market-sizing define)"
-assert_json "4 re-entry allowed" "$OUT" "d['success'] is True and d['data']['from']=='test' and d['data']['to']=='define'"
+assert_json "C4-re-entry-allowed" "$OUT" "d['success'] is True and d['data']['from']=='test' and d['data']['to']=='define'"
 
 # --- 5. idempotent: define -> define ---
 D="$TMPROOT/t5"; make_field "$D" ',
       "dt_stage": "define"'
 OUT="$(bash "$SCRIPT" "$D" market-evidence market-sizing define)"
-assert_json "5 idempotent allowed" "$OUT" "d['success'] is True and d['data']['to']=='define'"
+assert_json "C5-idempotent-allowed" "$OUT" "d['success'] is True and d['data']['to']=='define'"
 
 # --- 6. legacy entry without dt_stage ---
 D="$TMPROOT/t6"; make_field "$D" ''
 OUT="$(bash "$SCRIPT" "$D" market-evidence market-sizing empathize)"
-assert_json "6 legacy from=null" "$OUT" "d['success'] is True and d['data']['from'] is None and d['data']['to']=='empathize'"
+assert_json "C6-legacy-from-null" "$OUT" "d['success'] is True and d['data']['from'] is None and d['data']['to']=='empathize'"
 
 # --- 7. deliverable missing ---
 D="$TMPROOT/t7"; make_field "$D" ',
       "dt_stage": "empathize"'
 OUT="$(bash "$SCRIPT" "$D" market-evidence nonexistent define)"
-assert_json "7 deliverable-missing rejected" "$OUT" "d['success'] is False and 'not found' in d['error']"
+assert_json "C7-deliverable-missing-rejected" "$OUT" "d['success'] is False and 'not found' in d['error']"
 
 # --- 8. field manifest missing ---
 D="$TMPROOT/t8"; mkdir -p "$D"
 OUT="$(bash "$SCRIPT" "$D" market-evidence market-sizing define)"
-assert_json "8 field-missing rejected" "$OUT" "d['success'] is False and 'not found' in d['error']"
+assert_json "C8-field-missing-rejected" "$OUT" "d['success'] is False and 'not found' in d['error']"
 
 # --- 9. stage-log created + move appended ---
 D="$TMPROOT/t9"; make_field "$D" ',
@@ -128,9 +132,9 @@ m=json.load(open('$D/.metadata/stage-log.json'))['moves']
 e=m[-1]
 print('ok' if (len(m)==1 and e['from']=='empathize' and e['to']=='define' and e['action_field']=='market-evidence' and e['deliverable']=='market-sizing' and e['triggered_by']=='consult-design-thinking' and e['timestamp'].endswith('Z')) else 'bad')
 ")"
-  [ "$LOG_OK" = "ok" ] && pass "9 stage-log created+appended" || fail "9 stage-log created+appended" "move entry malformed"
+  [ "$LOG_OK" = "ok" ] && pass "C9-stage-log-created-appended" || fail "C9-stage-log-created-appended" "move entry malformed"
 else
-  fail "9 stage-log created+appended" "stage-log.json not created"
+  fail "C9-stage-log-created-appended" "stage-log.json not created"
 fi
 
 echo ""

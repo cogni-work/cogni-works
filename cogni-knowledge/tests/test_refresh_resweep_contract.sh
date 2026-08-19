@@ -28,62 +28,62 @@ errors=0
 
 REFRESH="$PLUGIN_ROOT/skills/knowledge-refresh/SKILL.md"
 if [ ! -f "$REFRESH" ]; then
-  red "FAIL: skills/knowledge-refresh/SKILL.md not found"
+  red "FAIL: refresh-resweep-00-skills-knowledge-refresh-skill skills/knowledge-refresh/SKILL.md not found"
   exit 1
 fi
 
 # --- 1) Parameters table documents --resweep + the four pass-throughs ------
 # The public interface is stable across the re-home — the flags table is unchanged.
-assert_grep '`--resweep`' "$REFRESH" "knowledge-refresh: --resweep documented in Parameters table"
-assert_grep '`--resweep-page' "$REFRESH" "knowledge-refresh: --resweep-page pass-through documented"
-assert_grep '`--resweep-stale-only`' "$REFRESH" "knowledge-refresh: --resweep-stale-only pass-through documented"
-assert_grep '`--resweep-days' "$REFRESH" "knowledge-refresh: --resweep-days pass-through documented"
-assert_grep '`--resweep-dry-run`' "$REFRESH" "knowledge-refresh: --resweep-dry-run pass-through documented"
+assert_grep '`--resweep`' "$REFRESH" "refresh-resweep-01-resweep-documented-parameters-table knowledge-refresh: --resweep documented in Parameters table"
+assert_grep '`--resweep-page' "$REFRESH" "refresh-resweep-02-resweep-page-pass-through knowledge-refresh: --resweep-page pass-through documented"
+assert_grep '`--resweep-stale-only`' "$REFRESH" "refresh-resweep-03-resweep-stale-only-pass knowledge-refresh: --resweep-stale-only pass-through documented"
+assert_grep '`--resweep-days' "$REFRESH" "refresh-resweep-04-resweep-days-pass-through knowledge-refresh: --resweep-days pass-through documented"
+assert_grep '`--resweep-dry-run`' "$REFRESH" "refresh-resweep-05-resweep-dry-run-pass knowledge-refresh: --resweep-dry-run pass-through documented"
 
 # --- 2) Workflow has a dedicated resweep section ---------------------------
-assert_grep '### 2. Resweep' "$REFRESH" "knowledge-refresh: Workflow has a '### 2. Resweep' section"
+assert_grep '### 2. Resweep' "$REFRESH" "refresh-resweep-06-workflow-2-resweep-section knowledge-refresh: Workflow has a '### 2. Resweep' section"
 
 # --- 3) The resweep is NATIVE: vendored scripts + cogni-workspace, no cogni-wiki dispatch ---
-assert_not_grep 'Skill("cogni-wiki:wiki-claims-resweep"' "$REFRESH" "knowledge-refresh: --resweep no longer dispatches cogni-wiki:wiki-claims-resweep"
-assert_grep 'extract_page_claims.py' "$REFRESH" "knowledge-refresh: --resweep runs vendored extract_page_claims.py"
-assert_grep 'resweep_planner.py' "$REFRESH" "knowledge-refresh: --resweep runs vendored resweep_planner.py"
-assert_grep 'Skill("cogni-workspace:claims"' "$REFRESH" "knowledge-refresh: --resweep dispatches cogni-workspace:claims for live-source re-verification"
-assert_grep 'resolve_wiki_scripts wiki-claims-resweep' "$REFRESH" "knowledge-refresh: --resweep resolves vendored scripts vendored-first via resolve_wiki_scripts()"
+assert_not_grep 'Skill("cogni-wiki:wiki-claims-resweep"' "$REFRESH" "refresh-resweep-07-resweep-no-longer-dispatches knowledge-refresh: --resweep no longer dispatches cogni-wiki:wiki-claims-resweep"
+assert_grep 'extract_page_claims.py' "$REFRESH" "refresh-resweep-08-resweep-runs-vendored-extract knowledge-refresh: --resweep runs vendored extract_page_claims.py"
+assert_grep 'resweep_planner.py' "$REFRESH" "refresh-resweep-09-resweep-runs-vendored-planner knowledge-refresh: --resweep runs vendored resweep_planner.py"
+assert_grep 'Skill("cogni-workspace:claims"' "$REFRESH" "refresh-resweep-10-resweep-dispatches-cogni-workspace knowledge-refresh: --resweep dispatches cogni-workspace:claims for live-source re-verification"
+assert_grep 'resolve_wiki_scripts wiki-claims-resweep' "$REFRESH" "refresh-resweep-11-resweep-resolves-vendored-scripts knowledge-refresh: --resweep resolves vendored scripts vendored-first via resolve_wiki_scripts()"
 # Against the bound wiki, never a duplicated cadence pointer.
-assert_grep 'binding.wiki_path' "$REFRESH" "knowledge-refresh: resweep targets binding.wiki_path"
+assert_grep 'binding.wiki_path' "$REFRESH" "refresh-resweep-12-resweep-targets-binding-wiki knowledge-refresh: resweep targets binding.wiki_path"
 
 # --- 4) Opt-in / never-auto-run discipline ---------------------------------
-assert_grep 'opt-in' "$REFRESH" "knowledge-refresh: resweep documented as opt-in"
-assert_grep 'never auto-run\|Never auto-runs\|never auto-dispatch' "$REFRESH" "knowledge-refresh: resweep documented as never-auto-run"
+assert_grep 'opt-in' "$REFRESH" "refresh-resweep-13-resweep-documented-opt knowledge-refresh: resweep documented as opt-in"
+assert_grep 'never auto-run\|Never auto-runs\|never auto-dispatch' "$REFRESH" "refresh-resweep-14-resweep-documented-never-auto knowledge-refresh: resweep documented as never-auto-run"
 
 # --- 5) Out of scope names the synthesis-extractor underyield --------------
-assert_grep 'underyield' "$REFRESH" "knowledge-refresh: Out of scope documents synthesis-page underyield"
+assert_grep 'underyield' "$REFRESH" "refresh-resweep-15-out-scope-documents-synthesis knowledge-refresh: Out of scope documents synthesis-page underyield"
 
 # --- 6) When/Never/References surfaces -------------------------------------
 # When to run carries the opt-in resweep bullet.
 if grep -qE 'live source URLs.*--resweep|--resweep.*live' "$REFRESH"; then
-  green "PASS: knowledge-refresh: 'When to run' surfaces the --resweep opt-in"
+  green "PASS: refresh-resweep-16-when-run-surfaces-resweep knowledge-refresh: 'When to run' surfaces the --resweep opt-in"
 else
-  red "FAIL: knowledge-refresh: 'When to run' must surface the --resweep opt-in"
+  red "FAIL: refresh-resweep-16-when-run-surfaces-resweep knowledge-refresh: 'When to run' must surface the --resweep opt-in"
   errors=$((errors + 1))
 fi
 # Never-run-when names the missing-vendored-scripts abort (no longer a missing-plugin abort).
-assert_grep 'vendored wiki-claims-resweep scripts are missing\|missing-vendored-scripts' "$REFRESH" "knowledge-refresh: Never-run-when names the missing-vendored-scripts abort"
+assert_grep 'vendored wiki-claims-resweep scripts are missing\|missing-vendored-scripts' "$REFRESH" "refresh-resweep-17-never-run-when-names knowledge-refresh: Never-run-when names the missing-vendored-scripts abort"
 # References block lists the vendored scripts + the cogni-workspace dispatch target.
-assert_grep 'wiki-claims-resweep/scripts/extract_page_claims.py' "$REFRESH" "knowledge-refresh: References lists the vendored extract_page_claims.py"
-assert_grep 'wiki-claims-resweep/scripts/resweep_planner.py' "$REFRESH" "knowledge-refresh: References lists the vendored resweep_planner.py"
-assert_grep 'cogni-workspace:claims` SKILL.md' "$REFRESH" "knowledge-refresh: References lists cogni-workspace:claims as the live-source re-verification target"
+assert_grep 'wiki-claims-resweep/scripts/extract_page_claims.py' "$REFRESH" "refresh-resweep-18-references-lists-vendored-extract knowledge-refresh: References lists the vendored extract_page_claims.py"
+assert_grep 'wiki-claims-resweep/scripts/resweep_planner.py' "$REFRESH" "refresh-resweep-19-references-lists-vendored-resweep knowledge-refresh: References lists the vendored resweep_planner.py"
+assert_grep 'cogni-workspace:claims` SKILL.md' "$REFRESH" "refresh-resweep-20-references-lists-cogni-workspace knowledge-refresh: References lists cogni-workspace:claims as the live-source re-verification target"
 
 # --- 7) Pre-flight probes the vendored scripts + cogni-workspace (not cogni-wiki) ---
-assert_not_grep 'probe_plugin cogni-wiki wiki-claims-resweep' "$REFRESH" "knowledge-refresh: pre-flight no longer probes cogni-wiki wiki-claims-resweep"
-assert_grep 'scripts/vendor/cogni-wiki/skills/wiki-claims-resweep/scripts' "$REFRESH" "knowledge-refresh: pre-flight tests the vendored wiki-claims-resweep scripts dir"
-assert_grep 'probe_plugin cogni-workspace claims' "$REFRESH" "knowledge-refresh: pre-flight probes cogni-workspace when --resweep is passed"
+assert_not_grep 'probe_plugin cogni-wiki wiki-claims-resweep' "$REFRESH" "refresh-resweep-21-pre-flight-no-longer knowledge-refresh: pre-flight no longer probes cogni-wiki wiki-claims-resweep"
+assert_grep 'scripts/vendor/cogni-wiki/skills/wiki-claims-resweep/scripts' "$REFRESH" "refresh-resweep-22-pre-flight-tests-vendored knowledge-refresh: pre-flight tests the vendored wiki-claims-resweep scripts dir"
+assert_grep 'probe_plugin cogni-workspace claims' "$REFRESH" "refresh-resweep-23-pre-flight-probes-cogni knowledge-refresh: pre-flight probes cogni-workspace when --resweep is passed"
 
 # --- 8) Push-mode survives; pull-mode is removed (regression guard) --------
-assert_not_grep 'Skill("cogni-wiki:wiki-lint"' "$REFRESH" "knowledge-refresh: push-mode lints natively on the vendored engine, not via a cogni-wiki:wiki-lint dispatch"
-assert_grep 'lint_wiki.py' "$REFRESH" "knowledge-refresh: push-mode still lints (vendored lint_wiki.py in-tree)"
-assert_not_grep 'Skill("cogni-wiki:wiki-refresh"' "$REFRESH" "knowledge-refresh: pull-mode wiki-refresh dispatch removed"
-assert_not_grep 'from-research' "$REFRESH" "knowledge-refresh: --from-research flag removed with pull-mode"
+assert_not_grep 'Skill("cogni-wiki:wiki-lint"' "$REFRESH" "refresh-resweep-24-push-mode-lints-natively knowledge-refresh: push-mode lints natively on the vendored engine, not via a cogni-wiki:wiki-lint dispatch"
+assert_grep 'lint_wiki.py' "$REFRESH" "refresh-resweep-25-push-mode-lints-vendored knowledge-refresh: push-mode still lints (vendored lint_wiki.py in-tree)"
+assert_not_grep 'Skill("cogni-wiki:wiki-refresh"' "$REFRESH" "refresh-resweep-26-pull-mode-wiki-refresh knowledge-refresh: pull-mode wiki-refresh dispatch removed"
+assert_not_grep 'from-research' "$REFRESH" "refresh-resweep-27-research-flag-removed-pull knowledge-refresh: --from-research flag removed with pull-mode"
 
 if [ $errors -eq 0 ]; then
   green ""

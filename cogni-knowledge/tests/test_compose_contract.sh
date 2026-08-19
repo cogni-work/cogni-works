@@ -21,33 +21,33 @@ errors=0
 # --- knowledge-compose SKILL.md ------------------------------------------
 COMPOSE="$PLUGIN_ROOT/skills/knowledge-compose/SKILL.md"
 if [ ! -f "$COMPOSE" ]; then
-  red "FAIL: skills/knowledge-compose/SKILL.md not found"
+  red "FAIL: compose-contract-00-skills-knowledge-compose-skill skills/knowledge-compose/SKILL.md not found"
   exit 1
 fi
-assert_grep 'name: knowledge-compose' "$COMPOSE" "knowledge-compose: frontmatter name"
-assert_grep 'plan.json' "$COMPOSE" "knowledge-compose: reads plan.json"
-assert_grep 'ingest-manifest.json' "$COMPOSE" "knowledge-compose: reads ingest-manifest.json"
-assert_grep 'draft-v' "$COMPOSE" "knowledge-compose: writes draft-vN.md"
-assert_grep 'citation-manifest.json' "$COMPOSE" "knowledge-compose: writes citation-manifest.json"
-assert_grep '"schema_version": "0.1.1"' "$COMPOSE" "knowledge-compose: citation-manifest schema 0.1.1 (#395 url field)"
+assert_grep 'name: knowledge-compose' "$COMPOSE" "compose-contract-01-knowledge-compose-frontmatter-name knowledge-compose: frontmatter name"
+assert_grep 'plan.json' "$COMPOSE" "compose-contract-02-reads-plan-json knowledge-compose: reads plan.json"
+assert_grep 'ingest-manifest.json' "$COMPOSE" "compose-contract-03-reads-ingest-manifest-json knowledge-compose: reads ingest-manifest.json"
+assert_grep 'draft-v' "$COMPOSE" "compose-contract-04-writes-draft-vn-md knowledge-compose: writes draft-vN.md"
+assert_grep 'citation-manifest.json' "$COMPOSE" "compose-contract-05-knowledge-compose-writes-citation knowledge-compose: writes citation-manifest.json"
+assert_grep '"schema_version": "0.1.1"' "$COMPOSE" "compose-contract-06-citation-manifest-schema-0-1-1 knowledge-compose: citation-manifest schema 0.1.1 (#395 url field)"
 # #383: Step 4.5's citation-store.py build cross-checks inline URLs against the ingest manifest.
-assert_grep 'ingest-manifest' "$COMPOSE" "knowledge-compose: Step 4.5 passes --ingest-manifest to the build (#383 URL gate)"
-assert_grep 'url_not_in_sources' "$COMPOSE" "knowledge-compose: documents the url_not_in_sources failed_check (#383)"
-assert_grep 'Task(wiki-composer' "$COMPOSE" "knowledge-compose: dispatches wiki-composer via Task"
+assert_grep 'ingest-manifest' "$COMPOSE" "compose-contract-07-step-4-5-passes-ingest knowledge-compose: Step 4.5 passes --ingest-manifest to the build (#383 URL gate)"
+assert_grep 'url_not_in_sources' "$COMPOSE" "compose-contract-08-documents-url-not-sources knowledge-compose: documents the url_not_in_sources failed_check (#383)"
+assert_grep 'Task(wiki-composer' "$COMPOSE" "compose-contract-09-dispatches-wiki-composer-task knowledge-compose: dispatches wiki-composer via Task"
 # Slice 13 (#300): threads the project's output_language into the composer dispatch.
-assert_grep 'OUTPUT_LANGUAGE=' "$COMPOSE" "knowledge-compose: threads OUTPUT_LANGUAGE into the wiki-composer dispatch (#300)"
-assert_grep 'output_language' "$COMPOSE" "knowledge-compose: reads plan.json::output_language (#300)"
+assert_grep 'OUTPUT_LANGUAGE=' "$COMPOSE" "compose-contract-10-threads-output-language-wiki knowledge-compose: threads OUTPUT_LANGUAGE into the wiki-composer dispatch (#300)"
+assert_grep 'output_language' "$COMPOSE" "compose-contract-11-reads-plan-json-output knowledge-compose: reads plan.json::output_language (#300)"
 # #309 P2: TONE + PROSE_DENSITY + a now-LIVE CITATION_FORMAT are threaded into the
 # composer dispatch (resolved flag > plan.json > default).
-assert_grep 'TONE=' "$COMPOSE" "knowledge-compose: threads TONE into the wiki-composer dispatch (#309 P2.3)"
-assert_grep 'PROSE_DENSITY=' "$COMPOSE" "knowledge-compose: threads PROSE_DENSITY into the wiki-composer dispatch (#309 P2.1)"
-assert_grep 'CITATION_FORMAT=' "$COMPOSE" "knowledge-compose: threads CITATION_FORMAT (now live) into the wiki-composer dispatch (#309 P2.2)"
-assert_grep 'Over ceiling' "$COMPOSE" "knowledge-compose: executive-density over-ceiling warning (#309 P2.4)"
-assert_grep 'probe_plugin cogni-wiki' "$COMPOSE" "knowledge-compose: probes cogni-wiki (clean-break)"
-assert_grep 'RESUME_FROM_OUTLINE' "$COMPOSE" "knowledge-compose: F11 — passes RESUME_FROM_OUTLINE to composer"
-assert_grep 'writer-outline-v' "$COMPOSE" "knowledge-compose: F11 — detects writer-outline-vN.json for recovery"
-assert_grep 'wiki/log.md' "$COMPOSE" "knowledge-compose: appends to wiki/log.md"
-assert_grep 'control-path.py" log' "$COMPOSE" "knowledge-compose: resolves the log path via control-path.py (no hardcoded wiki/log.md write target)"
+assert_grep 'TONE=' "$COMPOSE" "compose-contract-12-threads-tone-wiki-composer knowledge-compose: threads TONE into the wiki-composer dispatch (#309 P2.3)"
+assert_grep 'PROSE_DENSITY=' "$COMPOSE" "compose-contract-13-threads-prose-density-wiki knowledge-compose: threads PROSE_DENSITY into the wiki-composer dispatch (#309 P2.1)"
+assert_grep 'CITATION_FORMAT=' "$COMPOSE" "compose-contract-14-threads-citation-format-now knowledge-compose: threads CITATION_FORMAT (now live) into the wiki-composer dispatch (#309 P2.2)"
+assert_grep 'Over ceiling' "$COMPOSE" "compose-contract-15-executive-density-ceiling-warning knowledge-compose: executive-density over-ceiling warning (#309 P2.4)"
+assert_grep 'probe_plugin cogni-wiki' "$COMPOSE" "compose-contract-16-probes-cogni-wiki-clean knowledge-compose: probes cogni-wiki (clean-break)"
+assert_grep 'RESUME_FROM_OUTLINE' "$COMPOSE" "compose-contract-17-f11-passes-resume-outline knowledge-compose: F11 — passes RESUME_FROM_OUTLINE to composer"
+assert_grep 'writer-outline-v' "$COMPOSE" "compose-contract-18-f11-detects-writer-outline knowledge-compose: F11 — detects writer-outline-vN.json for recovery"
+assert_grep 'wiki/log.md' "$COMPOSE" "compose-contract-19-appends-wiki-log-md knowledge-compose: appends to wiki/log.md"
+assert_grep 'control-path.py" log' "$COMPOSE" "compose-contract-20-resolves-log-path-control knowledge-compose: resolves the log path via control-path.py (no hardcoded wiki/log.md write target)"
 
 # Curated-layout control-file indirection (schema 0.0.8): every executable
 # log.md WRITER routes its `>>` append through the control-path.py resolver,
@@ -57,20 +57,20 @@ assert_grep 'control-path.py" log' "$COMPOSE" "knowledge-compose: resolves the l
 # documentation, with no shell redirect to indirect).
 for _wskill in knowledge-ingest knowledge-compose knowledge-verify knowledge-distill knowledge-finalize; do
   assert_not_grep '>> "${WIKI_ROOT}/wiki/log.md"' "$PLUGIN_ROOT/skills/$_wskill/SKILL.md" \
-    "$_wskill: no bare \`>> \"\${WIKI_ROOT}/wiki/log.md\"\` write — must route through control-path.py (#590)"
+    "compose-contract-21-no-bare-wiki-log-${_wskill} $_wskill: no bare \`>> \"\${WIKI_ROOT}/wiki/log.md\"\` write — must route through control-path.py (#590)"
 done
 # #385: the skill captures the per-kind citation breakdown from citation-store.py
 # build and surfaces the distilled-citation (dcl-) rate — the measurement the
 # inert-loop issue asked for (0 dcl- on a converging base is the symptom).
-assert_grep 'claim_kinds' "$COMPOSE" "knowledge-compose: captures data.claim_kinds from the build (#385 dcl- measurement)"
-assert_grep 'Distilled citations' "$COMPOSE" "knowledge-compose: Step 7 summary surfaces the distilled-citation rate (#385)"
-assert_grep 'dcl=' "$COMPOSE" "knowledge-compose: Step 6 log line records dcl=<n> for cross-run measurement (#385)"
+assert_grep 'claim_kinds' "$COMPOSE" "compose-contract-22-captures-data-claim-kinds knowledge-compose: captures data.claim_kinds from the build (#385 dcl- measurement)"
+assert_grep 'Distilled citations' "$COMPOSE" "compose-contract-23-step-7-summary-surfaces knowledge-compose: Step 7 summary surfaces the distilled-citation rate (#385)"
+assert_grep 'dcl=' "$COMPOSE" "compose-contract-24-step-6-log-line knowledge-compose: Step 6 log line records dcl=<n> for cross-run measurement (#385)"
 # #325: the orchestrator builds citation-manifest.json from the composer's raw
 # records via citation-store.py (json.dumps, not LLM-hand-built JSON), and the
 # Step-5 validator re-asserts every draft_sentence is in the draft (authoritative
 # gate, issue #4). The '#325' marker tags the substring guard line.
-assert_grep 'citation-store.py' "$COMPOSE" "knowledge-compose: builds the manifest via citation-store.py (#325)"
-assert_grep 'verbatim substring of the draft' "$COMPOSE" "knowledge-compose: Step-5 asserts every draft_sentence is a verbatim substring of the draft"
+assert_grep 'citation-store.py' "$COMPOSE" "compose-contract-25-builds-manifest-citation-store knowledge-compose: builds the manifest via citation-store.py (#325)"
+assert_grep 'verbatim substring of the draft' "$COMPOSE" "compose-contract-26-step-5-asserts-every knowledge-compose: Step-5 asserts every draft_sentence is a verbatim substring of the draft"
 # #455: Step 4.5 must pass the build paths as quoted LITERAL CLI args, never a
 # command-prefix env-var form (`RECORDS_PATH=… python3 … --records "$RECORDS_PATH"`).
 # That form expands "$RECORDS_PATH" against the still-unset current environment
@@ -79,25 +79,25 @@ assert_grep 'verbatim substring of the draft' "$COMPOSE" "knowledge-compose: Ste
 # literal shape; the negative guard catches the antipattern silently returning. The
 # `RECORDS_PATH="` anchor matches only the assignment form — the corrected rationale
 # prose names `RECORDS_PATH=…` / `"$RECORDS_PATH"`, neither of which contains `="`.
-assert_grep '\-\-records "<project_path>/.metadata/citation-records-v' "$COMPOSE" "knowledge-compose: Step 4.5 passes --records as a quoted literal path (#455)"
-assert_not_grep 'RECORDS_PATH="' "$COMPOSE" "knowledge-compose: Step 4.5 build has no command-prefix RECORDS_PATH= env-var (the #455 empty-arg antipattern)"
+assert_grep '\-\-records "<project_path>/.metadata/citation-records-v' "$COMPOSE" "compose-contract-27-step-4-5-passes-records knowledge-compose: Step 4.5 passes --records as a quoted literal path (#455)"
+assert_not_grep 'RECORDS_PATH="' "$COMPOSE" "compose-contract-28-step-4-5-build-no knowledge-compose: Step 4.5 build has no command-prefix RECORDS_PATH= env-var (the #455 empty-arg antipattern)"
 # Match the actual log-line shape Step 6 emits (`## [DATE] compose | project=...`)
 # rather than the bare word `compose`, which would also match the filename,
 # skill name, and every doc paragraph.
-assert_grep '\] compose | project=' "$COMPOSE" "knowledge-compose: emits the '## [DATE] compose | project=...' log-line shape"
+assert_grep '\] compose | project=' "$COMPOSE" "compose-contract-29-emits-date-compose-project knowledge-compose: emits the '## [DATE] compose | project=...' log-line shape"
 # Defence-in-depth: confirm there is no obsolete Skill("cogni-knowledge:wiki-composer)
 # dispatch. Agents go through Task.
-assert_not_grep 'Skill("cogni-knowledge:wiki-composer' "$COMPOSE" "knowledge-compose: no Skill('cogni-knowledge:wiki-composer) — agents go through Task"
+assert_not_grep 'Skill("cogni-knowledge:wiki-composer' "$COMPOSE" "compose-contract-30-no-skill-cogni-knowledge knowledge-compose: no Skill('cogni-knowledge:wiki-composer) — agents go through Task"
 # Clean-break: no cogni-research input shapes leaking through.
-assert_not_grep 'aggregated-context.json' "$COMPOSE" "knowledge-compose: does NOT reference aggregated-context.json (clean-break — that's cogni-research's input shape)"
-assert_not_grep '01-contexts/data' "$COMPOSE" "knowledge-compose: does NOT reference cogni-research's 01-contexts/data"
-assert_not_grep '02-sources/data' "$COMPOSE" "knowledge-compose: does NOT reference cogni-research's 02-sources/data"
+assert_not_grep 'aggregated-context.json' "$COMPOSE" "compose-contract-31-does-not-reference-aggregated knowledge-compose: does NOT reference aggregated-context.json (clean-break — that's cogni-research's input shape)"
+assert_not_grep '01-contexts/data' "$COMPOSE" "compose-contract-32-knowledge-compose-does-not-reference-cogni-research-s-01-contexts knowledge-compose: does NOT reference cogni-research's 01-contexts/data"
+assert_not_grep '02-sources/data' "$COMPOSE" "compose-contract-33-knowledge-compose-does-not-reference-cogni-research-s-02-sources knowledge-compose: does NOT reference cogni-research's 02-sources/data"
 # allowed-tools must include Task (we dispatch wiki-composer).
 COMPOSE_TOOLS_LINE=$(grep '^allowed-tools:' "$COMPOSE" || true)
 if echo "$COMPOSE_TOOLS_LINE" | grep -q Task; then
-  green "PASS: knowledge-compose: allowed-tools includes Task"
+  green "PASS: compose-contract-34-allowed-tools-includes-task knowledge-compose: allowed-tools includes Task"
 else
-  red "FAIL: knowledge-compose: allowed-tools must include Task"
+  red "FAIL: compose-contract-34-allowed-tools-includes-task knowledge-compose: allowed-tools must include Task"
   red "  got: $COMPOSE_TOOLS_LINE"
   errors=$((errors + 1))
 fi
@@ -109,72 +109,72 @@ fi
 # unchanged by SYNTHESIZING an ingest-manifest from the wiki via
 # wiki-source-manifest.py (mapping each source to the current plan's
 # sub-questions). These guards catch the contract surface silently disappearing.
-assert_grep '\-\-source' "$COMPOSE" "knowledge-compose: documents the --source parameter (source-mode parity)"
-assert_grep 'SOURCE_MODE' "$COMPOSE" "knowledge-compose: Step 0 resolves SOURCE_MODE (web default / wiki)"
-assert_grep 'wiki-source-manifest.py' "$COMPOSE" "knowledge-compose: --source wiki synthesizes the manifest via wiki-source-manifest.py"
-assert_grep 'no web crawl' "$COMPOSE" "knowledge-compose: --source wiki composes with no web crawl"
-assert_grep 'staged' "$COMPOSE" "knowledge-compose: local/hybrid are accepted-but-staged"
+assert_grep '\-\-source' "$COMPOSE" "compose-contract-35-documents-source-parameter-mode knowledge-compose: documents the --source parameter (source-mode parity)"
+assert_grep 'SOURCE_MODE' "$COMPOSE" "compose-contract-36-step-0-resolves-source knowledge-compose: Step 0 resolves SOURCE_MODE (web default / wiki)"
+assert_grep 'wiki-source-manifest.py' "$COMPOSE" "compose-contract-37-source-wiki-synthesizes-manifest knowledge-compose: --source wiki synthesizes the manifest via wiki-source-manifest.py"
+assert_grep 'no web crawl' "$COMPOSE" "compose-contract-38-source-wiki-composes-no knowledge-compose: --source wiki composes with no web crawl"
+assert_grep 'staged' "$COMPOSE" "compose-contract-39-local-hybrid-accepted-staged knowledge-compose: local/hybrid are accepted-but-staged"
 # The synthesized manifest carries source URLs, so the --ingest-manifest URL
 # gate must NOT be documented as omitted/skipped under wiki mode.
-assert_not_grep 'omit the .--ingest-manifest. line' "$COMPOSE" "knowledge-compose: --ingest-manifest gate is NOT omitted under wiki mode (synthetic manifest carries URLs)"
+assert_not_grep 'omit the .--ingest-manifest. line' "$COMPOSE" "compose-contract-40-ingest-manifest-gate-not knowledge-compose: --ingest-manifest gate is NOT omitted under wiki mode (synthetic manifest carries URLs)"
 
 # --- wiki-source-manifest.py contract -------------------------------------
 WSM="$PLUGIN_ROOT/scripts/wiki-source-manifest.py"
 if [ ! -f "$WSM" ]; then
-  red "FAIL: scripts/wiki-source-manifest.py not found"
+  red "FAIL: compose-contract-41-scripts-wiki-source-manifest scripts/wiki-source-manifest.py not found"
   errors=$((errors + 1))
 else
-  assert_grep 'def build' "$WSM" "wiki-source-manifest: has a build()"
-  assert_grep 'wiki-grounding.py' "$WSM" "wiki-source-manifest: loads the shared wiki-grounding primitive by path"
-  assert_grep 'rank_pages' "$WSM" "wiki-source-manifest: ranks source pages per sub-question via rank_pages"
-  assert_grep 'sub_question_refs' "$WSM" "wiki-source-manifest: emits per-source sub_question_refs[]"
-  assert_grep 'schema_version' "$WSM" "wiki-source-manifest: writes a schema_versioned manifest"
+  assert_grep 'def build' "$WSM" "compose-contract-42-build wiki-source-manifest: has a build()"
+  assert_grep 'wiki-grounding.py' "$WSM" "compose-contract-43-loads-shared-wiki-grounding wiki-source-manifest: loads the shared wiki-grounding primitive by path"
+  assert_grep 'rank_pages' "$WSM" "compose-contract-44-ranks-source-pages-sub wiki-source-manifest: ranks source pages per sub-question via rank_pages"
+  assert_grep 'sub_question_refs' "$WSM" "compose-contract-45-emits-source-sub-question wiki-source-manifest: emits per-source sub_question_refs[]"
+  assert_grep 'schema_version' "$WSM" "compose-contract-46-writes-schema-versioned-manifest wiki-source-manifest: writes a schema_versioned manifest"
 fi
 
 # --- wiki-composer agent -------------------------------------------------
 COMPOSER="$PLUGIN_ROOT/agents/wiki-composer.md"
 if [ ! -f "$COMPOSER" ]; then
-  red "FAIL: agents/wiki-composer.md not found"
+  red "FAIL: compose-contract-47-agents-wiki-composer-md agents/wiki-composer.md not found"
   exit 1
 fi
-assert_grep 'name: wiki-composer' "$COMPOSER" "wiki-composer: frontmatter name"
-assert_grep 'Forked from cogni-research/agents/writer.md' "$COMPOSER" "wiki-composer: declares fork lineage"
-assert_grep 'wiki/index.md' "$COMPOSER" "wiki-composer: reads wiki/index.md"
-assert_grep 'wiki/sources/' "$COMPOSER" "wiki-composer: reads wiki/sources/<slug>.md pages"
-assert_grep 'wiki/syntheses/' "$COMPOSER" "wiki-composer: reads prior wiki/syntheses/*.md"
-assert_grep '\[\[sources/' "$COMPOSER" "wiki-composer: emits [[sources/<slug>]] wikilink citations"
-assert_grep 'writer-outline-v' "$COMPOSER" "wiki-composer: F11 — persists writer-outline-vN.json"
-assert_grep 'RESUME_FROM_OUTLINE' "$COMPOSER" "wiki-composer: F11 — honours RESUME_FROM_OUTLINE input"
-assert_grep 'citation-manifest.json' "$COMPOSER" "wiki-composer: writes citation-manifest.json"
-assert_grep 'draft_position' "$COMPOSER" "wiki-composer: citation-manifest entry has draft_position (best-effort locator)"
-assert_grep 'wiki_slug' "$COMPOSER" "wiki-composer: citation-manifest entry has wiki_slug"
-assert_grep 'claim_id' "$COMPOSER" "wiki-composer: citation-manifest entry has claim_id"
+assert_grep 'name: wiki-composer' "$COMPOSER" "compose-contract-48-wiki-composer-frontmatter-name wiki-composer: frontmatter name"
+assert_grep 'Forked from cogni-research/agents/writer.md' "$COMPOSER" "compose-contract-49-declares-fork-lineage wiki-composer: declares fork lineage"
+assert_grep 'wiki/index.md' "$COMPOSER" "compose-contract-50-reads-wiki-index-md wiki-composer: reads wiki/index.md"
+assert_grep 'wiki/sources/' "$COMPOSER" "compose-contract-51-reads-wiki-sources-slug wiki-composer: reads wiki/sources/<slug>.md pages"
+assert_grep 'wiki/syntheses/' "$COMPOSER" "compose-contract-52-reads-prior-wiki-syntheses wiki-composer: reads prior wiki/syntheses/*.md"
+assert_grep '\[\[sources/' "$COMPOSER" "compose-contract-53-emits-sources-slug-wikilink wiki-composer: emits [[sources/<slug>]] wikilink citations"
+assert_grep 'writer-outline-v' "$COMPOSER" "compose-contract-54-f11-persists-writer-outline wiki-composer: F11 — persists writer-outline-vN.json"
+assert_grep 'RESUME_FROM_OUTLINE' "$COMPOSER" "compose-contract-55-f11-honours-resume-outline wiki-composer: F11 — honours RESUME_FROM_OUTLINE input"
+assert_grep 'citation-manifest.json' "$COMPOSER" "compose-contract-56-wiki-composer-writes-citation wiki-composer: writes citation-manifest.json"
+assert_grep 'draft_position' "$COMPOSER" "compose-contract-57-wiki-composer-citation-manifest-entry-draft-position-best wiki-composer: citation-manifest entry has draft_position (best-effort locator)"
+assert_grep 'wiki_slug' "$COMPOSER" "compose-contract-58-citation-manifest-entry-wiki wiki-composer: citation-manifest entry has wiki_slug"
+assert_grep 'claim_id' "$COMPOSER" "compose-contract-59-citation-manifest-entry-claim wiki-composer: citation-manifest entry has claim_id"
 # F22: each citation carries a stable id and the verbatim cited sentence.
-assert_grep 'draft_sentence' "$COMPOSER" "wiki-composer: citation-manifest entry has draft_sentence (F22 stable alignment surface)"
-assert_grep 'cit-001' "$COMPOSER" "wiki-composer: citation ids are the cit-NNN stable join key"
-assert_grep 'pre_extracted_claims' "$COMPOSER" "wiki-composer: looks up claim_id in pre_extracted_claims (zero-network alignment surface)"
-assert_grep 'draft-v' "$COMPOSER" "wiki-composer: writes output/draft-vN.md"
+assert_grep 'draft_sentence' "$COMPOSER" "compose-contract-60-wiki-composer-citation-manifest-entry-draft-sentence-f22 wiki-composer: citation-manifest entry has draft_sentence (F22 stable alignment surface)"
+assert_grep 'cit-001' "$COMPOSER" "compose-contract-61-citation-ids-cit-nnn wiki-composer: citation ids are the cit-NNN stable join key"
+assert_grep 'pre_extracted_claims' "$COMPOSER" "compose-contract-62-looks-up-claim-id wiki-composer: looks up claim_id in pre_extracted_claims (zero-network alignment surface)"
+assert_grep 'draft-v' "$COMPOSER" "compose-contract-63-writes-output-draft-vn wiki-composer: writes output/draft-vN.md"
 # #325: the composer writes a RAW-TEXT citation-records file (never hand-built
 # JSON); the orchestrator serializes it. The old "Compose the JSON envelope and
 # Write it" instruction is the regression that shipped invalid JSON.
-assert_grep 'citation-records' "$COMPOSER" "wiki-composer: writes a raw-text citation-records file (#325)"
-assert_not_grep 'Compose the JSON envelope' "$COMPOSER" "wiki-composer: no longer hand-builds the manifest JSON (#325)"
+assert_grep 'citation-records' "$COMPOSER" "compose-contract-64-writes-raw-text-citation wiki-composer: writes a raw-text citation-records file (#325)"
+assert_not_grep 'Compose the JSON envelope' "$COMPOSER" "compose-contract-65-no-longer-hand-builds wiki-composer: no longer hand-builds the manifest JSON (#325)"
 # #412: draft_sentence must be the exact span ENDING AT the marker (locate-then-copy),
 # not a first-clause summary — a multi-sentence bold-list item ending in one trailing
 # marker is ONE alignment unit. And the composer self-checks every record is a verbatim
 # contiguous substring of the draft BEFORE returning (the in-agent fail-fast the issue
 # asks for, so citation-store.py build never dead-ends the autonomous chain).
-assert_grep 'start of the contiguous prose unit' "$COMPOSER" "wiki-composer: draft_sentence is the span ending at the marker, copied from the unit's start (#412)"
-assert_grep 'one alignment unit\|One alignment unit' "$COMPOSER" "wiki-composer: a multi-sentence trailing-marker block is one alignment unit, not a first-clause summary (#412)"
-assert_grep 'locate-then-copy' "$COMPOSER" "wiki-composer: locate-then-copy / never-synthesize draft_sentence rule (#412)"
-assert_grep 'contiguous substring' "$COMPOSER" "wiki-composer: in-agent substring self-check of records vs draft before return (#412)"
+assert_grep 'start of the contiguous prose unit' "$COMPOSER" "compose-contract-66-draft-sentence-span-ending wiki-composer: draft_sentence is the span ending at the marker, copied from the unit's start (#412)"
+assert_grep 'one alignment unit\|One alignment unit' "$COMPOSER" "compose-contract-67-multi-sentence-trailing-marker wiki-composer: a multi-sentence trailing-marker block is one alignment unit, not a first-clause summary (#412)"
+assert_grep 'locate-then-copy' "$COMPOSER" "compose-contract-68-locate-copy-never-synthesize wiki-composer: locate-then-copy / never-synthesize draft_sentence rule (#412)"
+assert_grep 'contiguous substring' "$COMPOSER" "compose-contract-69-agent-substring-self-check wiki-composer: in-agent substring self-check of records vs draft before return (#412)"
 
 # Scope-discipline negatives — these deferred surfaces may appear in the
 # header HTML comment (as provenance documenting what the fork dropped)
 # but MUST NOT appear in the input parameter table or as live workflow.
 # Pattern is the parameter-table-row form `| \`TOKEN\` |`.
-assert_not_grep '01-contexts/data' "$COMPOSER" "wiki-composer: does NOT reference cogni-research's 01-contexts/data"
-assert_not_grep '02-sources/data' "$COMPOSER" "wiki-composer: does NOT reference cogni-research's 02-sources/data"
+assert_not_grep '01-contexts/data' "$COMPOSER" "compose-contract-70-wiki-composer-does-not-reference-cogni-research-s-01-contexts wiki-composer: does NOT reference cogni-research's 01-contexts/data"
+assert_not_grep '02-sources/data' "$COMPOSER" "compose-contract-71-wiki-composer-does-not-reference-cogni-research-s-02-sources wiki-composer: does NOT reference cogni-research's 02-sources/data"
 # Slice 13 (#300): OUTPUT_LANGUAGE + CITATION_FORMAT are LIVE parameter rows.
 # #309 P2: TONE + PROSE_DENSITY are now ALSO live (the composer honours the
 # project's tone register and standard/executive density).
@@ -183,78 +183,81 @@ assert_not_grep '02-sources/data' "$COMPOSER" "wiki-composer: does NOT reference
 # claims (bounded, fail-soft, ZERO-NETWORK). This is a DISTINCT token from the
 # upstream web-backed EXPANSION_NOTES / STORY_ARC_ID, which stay deferred (the
 # negative loop below still guards them — that is the non-port boundary).
-for token in OUTPUT_LANGUAGE CITATION_FORMAT TONE PROSE_DENSITY EXPANSION_MODE; do
+for _p in output-language:OUTPUT_LANGUAGE citation-format:CITATION_FORMAT tone:TONE prose-density:PROSE_DENSITY expansion-mode:EXPANSION_MODE; do
+  _cid="${_p%%:*}"; token="${_p#*:}"
   if grep -q "| \`${token}\` |" "$COMPOSER"; then
-    green "PASS: wiki-composer: ${token} parameter row present (live writer-quality input)"
+    green "PASS: compose-contract-72-parameter-row-present-live-${_cid} wiki-composer: ${token} parameter row present (live writer-quality input)"
   else
-    red "FAIL: wiki-composer: ${token} parameter row missing (expected as a live input)"
+    red "FAIL: compose-contract-72-parameter-row-present-live-${_cid} wiki-composer: ${token} parameter row missing (expected as a live input)"
     errors=$((errors + 1))
   fi
 done
-for token in EXPANSION_NOTES STORY_ARC_ID; do
+for _p in expansion-notes:EXPANSION_NOTES story-arc-id:STORY_ARC_ID; do
+  _cid="${_p%%:*}"; token="${_p#*:}"
   if grep -q "| \`${token}\` |" "$COMPOSER"; then
-    red "FAIL: wiki-composer: ${token} parameter row present (deferred surface — no expansion loop / no arcs)"
+    red "FAIL: compose-contract-73-no-parameter-row-deferred-${_cid} wiki-composer: ${token} parameter row present (deferred surface — no expansion loop / no arcs)"
     errors=$((errors + 1))
   else
-    green "PASS: wiki-composer: no ${token} parameter row (deferred)"
+    green "PASS: compose-contract-73-no-parameter-row-deferred-${_cid} wiki-composer: no ${token} parameter row (deferred)"
   fi
 done
 # #309 P2: the executive-density discipline (BLUF + Pyramid + one citation per
 # claim) must be present, and the agent must stay single-pass (no re-dispatch).
-assert_grep 'BLUF' "$COMPOSER" "wiki-composer: executive density applies BLUF (#309 P2.1)"
-assert_grep 'Pyramid' "$COMPOSER" "wiki-composer: executive density applies the Pyramid Principle (#309 P2.1)"
-assert_grep 'One citation per claim\|one citation per claim' "$COMPOSER" "wiki-composer: executive density is one-citation-per-claim (#309 P2.1)"
-assert_grep 'writing-tones.md' "$COMPOSER" "wiki-composer: TONE references the writing-tones catalog (#309 P2.3)"
-assert_grep 'chicago' "$COMPOSER" "wiki-composer: CITATION_FORMAT renders chicago end-to-end (#309 P2.2)"
+assert_grep 'BLUF' "$COMPOSER" "compose-contract-74-executive-density-applies-bluf wiki-composer: executive density applies BLUF (#309 P2.1)"
+assert_grep 'Pyramid' "$COMPOSER" "compose-contract-75-executive-density-applies-pyramid wiki-composer: executive density applies the Pyramid Principle (#309 P2.1)"
+assert_grep 'One citation per claim\|one citation per claim' "$COMPOSER" "compose-contract-76-executive-density-one-citation wiki-composer: executive density is one-citation-per-claim (#309 P2.1)"
+assert_grep 'writing-tones.md' "$COMPOSER" "compose-contract-77-tone-references-writing-tones wiki-composer: TONE references the writing-tones catalog (#309 P2.3)"
+assert_grep 'chicago' "$COMPOSER" "compose-contract-78-citation-format-renders-chicago wiki-composer: CITATION_FORMAT renders chicago end-to-end (#309 P2.2)"
 # Single-pass invariant must survive the density knob — no re-dispatch loop.
-assert_grep 'does NOT re-dispatch\|never loops\|NEVER loop\|single pass\|Single pass\|single-pass' "$COMPOSER" "wiki-composer: stays single-pass under prose_density (#309 P2 — advisory floor/ceiling, no loop)"
+assert_grep 'does NOT re-dispatch\|never loops\|NEVER loop\|single pass\|Single pass\|single-pass' "$COMPOSER" "compose-contract-79-stays-single-pass-prose wiki-composer: stays single-pass under prose_density (#309 P2 — advisory floor/ceiling, no loop)"
 # #300 inline-citation convention: numbered [N] inline, wikilinks confined to
 # the reference list (never in prose), numbered in first-appearance order.
-assert_grep 'first-appearance order' "$COMPOSER" "wiki-composer: numbers [N] in first-appearance order (#300)"
-assert_grep '\[\[N\]\]' "$COMPOSER" "wiki-composer: forbids the Obsidian-colliding [[N]] form (#300)"
-assert_grep 'reference list, never in prose' "$COMPOSER" "wiki-composer: wikilinks confined to the reference list, not prose (#300)"
-assert_grep 'OUTPUT_LANGUAGE' "$COMPOSER" "wiki-composer: honours OUTPUT_LANGUAGE for output + headings (#300)"
+assert_grep 'first-appearance order' "$COMPOSER" "compose-contract-80-numbers-n-first-appearance wiki-composer: numbers [N] in first-appearance order (#300)"
+assert_grep '\[\[N\]\]' "$COMPOSER" "compose-contract-81-forbids-obsidian-colliding-n wiki-composer: forbids the Obsidian-colliding [[N]] form (#300)"
+assert_grep 'reference list, never in prose' "$COMPOSER" "compose-contract-82-wikilinks-confined-reference-list wiki-composer: wikilinks confined to the reference list, not prose (#300)"
+assert_grep 'OUTPUT_LANGUAGE' "$COMPOSER" "compose-contract-83-honours-output-language-headings wiki-composer: honours OUTPUT_LANGUAGE for output + headings (#300)"
 # #385: distilled-page citation must be PREFERRED on ≥2-source convergence, and the
 # convergence trigger (backlinks[] / source_claim_refs[]) must be DISCOVERABLE — the
 # pre-#385 prompt told the composer those were "writer-side metadata you can ignore",
 # which is exactly the data that signals ≥2-source convergence, so dcl- citations
 # never fired. Assert the metadata is now read, the preference is explicit, and the
 # old ignore instruction is gone.
-assert_grep 'backlinks' "$COMPOSER" "wiki-composer: reads distilled-claim backlinks[] (the ≥2-source convergence signal, #385)"
-assert_grep 'source_claim_refs' "$COMPOSER" "wiki-composer: reads source_claim_refs[] to count distinct backing sources (#385)"
-assert_grep 'dcl-NNN' "$COMPOSER" "wiki-composer: cites a distilled page via its dcl-NNN claim_id (#344/#385)"
-assert_grep '≥2 distinct backlinks\|≥2 distinct sources\|≥2 sources converge' "$COMPOSER" "wiki-composer: ≥2-source convergence is the distilled-citation trigger (#385)"
-assert_grep 'PREFER\|prefer the\|prefer a\|prefer ONE\|prefer one' "$COMPOSER" "wiki-composer: PREFERS a distilled-page citation over stacking source markers on convergence (#385)"
-assert_not_grep 'writer-side metadata you can ignore' "$COMPOSER" "wiki-composer: no longer tells the composer to IGNORE the convergence metadata (#385 root cause)"
+assert_grep 'backlinks' "$COMPOSER" "compose-contract-84-reads-distilled-claim-backlinks wiki-composer: reads distilled-claim backlinks[] (the ≥2-source convergence signal, #385)"
+assert_grep 'source_claim_refs' "$COMPOSER" "compose-contract-85-reads-source-claim-refs wiki-composer: reads source_claim_refs[] to count distinct backing sources (#385)"
+assert_grep 'dcl-NNN' "$COMPOSER" "compose-contract-86-cites-distilled-page-dcl wiki-composer: cites a distilled page via its dcl-NNN claim_id (#344/#385)"
+assert_grep '≥2 distinct backlinks\|≥2 distinct sources\|≥2 sources converge' "$COMPOSER" "compose-contract-87-2-source-convergence-distilled wiki-composer: ≥2-source convergence is the distilled-citation trigger (#385)"
+assert_grep 'PREFER\|prefer the\|prefer a\|prefer ONE\|prefer one' "$COMPOSER" "compose-contract-88-prefers-distilled-page-citation wiki-composer: PREFERS a distilled-page citation over stacking source markers on convergence (#385)"
+assert_not_grep 'writer-side metadata you can ignore' "$COMPOSER" "compose-contract-89-no-longer-tells-composer wiki-composer: no longer tells the composer to IGNORE the convergence metadata (#385 root cause)"
 # `aggregated-context.json` is cogni-research's input shape. The fork
 # header explains it was dropped; the composer must not READ it. The
 # read-input contract lives in Phase 0 — assert the workflow phase
 # doesn't mention it (the header HTML comment is exempt).
 if awk '/^### Phase 0/{p=1; next} /^### Phase/{p=0} p' "$COMPOSER" | grep -q 'aggregated-context.json'; then
-  red "FAIL: wiki-composer: Phase 0 reads aggregated-context.json (clean-break broken)"
+  red "FAIL: compose-contract-90-phase-0-does-not wiki-composer: Phase 0 reads aggregated-context.json (clean-break broken)"
   errors=$((errors + 1))
 else
-  green "PASS: wiki-composer: Phase 0 does NOT read aggregated-context.json (clean-break)"
+  green "PASS: compose-contract-90-phase-0-does-not wiki-composer: Phase 0 does NOT read aggregated-context.json (clean-break)"
 fi
 
 # Frontmatter tools: single-pass agent — must include Read/Write/Glob/Grep,
 # must NOT include Task (no sub-dispatch) or WebFetch (no re-fetch).
 COMPOSER_TOOLS_LINE=$(grep '^tools:' "$COMPOSER" || true)
-for required in '"Read"' '"Write"' '"Glob"' '"Grep"'; do
+for _p in read:'"Read"' write:'"Write"' glob:'"Glob"' grep:'"Grep"'; do
+  _cid="${_p%%:*}"; required="${_p#*:}"
   if echo "$COMPOSER_TOOLS_LINE" | grep -q "$required"; then
-    green "PASS: wiki-composer: frontmatter tools: includes $required"
+    green "PASS: compose-contract-91-frontmatter-tools-includes-${_cid} wiki-composer: frontmatter tools: includes $required"
   else
-    red "FAIL: wiki-composer: frontmatter tools: missing $required"
+    red "FAIL: compose-contract-91-frontmatter-tools-includes-${_cid} wiki-composer: frontmatter tools: missing $required"
     red "  got: $COMPOSER_TOOLS_LINE"
     errors=$((errors + 1))
   fi
 done
 if echo "$COMPOSER_TOOLS_LINE" | grep -qE 'WebFetch|"Task"'; then
-  red "FAIL: wiki-composer: frontmatter tools: must not include WebFetch or Task (single-pass, no sub-dispatch)"
+  red "FAIL: compose-contract-92-frontmatter-tools-no-webfetch wiki-composer: frontmatter tools: must not include WebFetch or Task (single-pass, no sub-dispatch)"
   red "  got: $COMPOSER_TOOLS_LINE"
   errors=$((errors + 1))
 else
-  green "PASS: wiki-composer: frontmatter tools: no WebFetch, no Task (single-pass, read-the-wiki only)"
+  green "PASS: compose-contract-92-frontmatter-tools-no-webfetch wiki-composer: frontmatter tools: no WebFetch, no Task (single-pass, read-the-wiki only)"
 fi
 
 # --- bounded coverage-gated expansion (Step 5.5) contract ----------------
@@ -262,95 +265,95 @@ fi
 # ONLY on a standard-density COVERAGE deficit (a sub-question with uncited ingested
 # evidence), never on a word count (the brevity-first retune). Guard the contract
 # surface so a path/flag/branch can't silently disappear.
-assert_grep 'no-expand' "$COMPOSE" "knowledge-compose: --no-expand opt-out flag present"
-assert_grep '5.5' "$COMPOSE" "knowledge-compose: Step 5.5 bounded coverage-gated expansion present"
-assert_grep 'EXPANSION_MODE=true' "$COMPOSE" "knowledge-compose: Step 5.5 re-dispatches with EXPANSION_MODE=true"
-assert_grep 'EXPAND_SECTIONS=' "$COMPOSE" "knowledge-compose: Step 5.5 threads EXPAND_SECTIONS into the re-dispatch"
+assert_grep 'no-expand' "$COMPOSE" "compose-contract-93-no-expand-opt-out knowledge-compose: --no-expand opt-out flag present"
+assert_grep '5.5' "$COMPOSE" "compose-contract-94-step-5-5-bounded-coverage knowledge-compose: Step 5.5 bounded coverage-gated expansion present"
+assert_grep 'EXPANSION_MODE=true' "$COMPOSE" "compose-contract-95-step-5-5-re-dispatches knowledge-compose: Step 5.5 re-dispatches with EXPANSION_MODE=true"
+assert_grep 'EXPAND_SECTIONS=' "$COMPOSE" "compose-contract-96-step-5-5-threads-expand knowledge-compose: Step 5.5 threads EXPAND_SECTIONS into the re-dispatch"
 # Coverage gate: the trigger is _knowledge_lib.coverage_report's uncited-evidence
 # set, NOT a word-floor ratio. Guard that word-floor framing did not survive and
 # the coverage surface is wired in.
-assert_grep 'coverage_report' "$COMPOSE" "knowledge-compose: Step 5.5 computes the deficit via _knowledge_lib.coverage_report"
-assert_grep 'uncited_evidence_sq_ids' "$COMPOSE" "knowledge-compose: Step 5.5 gate keys on uncited_evidence_sq_ids (coverage deficit)"
-assert_grep 'zero-cited' "$COMPOSE" "knowledge-compose: Step 5.5 selects sections covering a deficit/zero-cited sub-question"
-assert_not_grep 'TARGET_WORDS × 0.85\|TARGET_WORDS x 0.85' "$COMPOSE" "knowledge-compose: the word-floor 0.85 trigger is gone (coverage-gated now)"
-assert_not_grep 'WORD_DEFICIT' "$COMPOSE" "knowledge-compose: no WORD_DEFICIT word-framing param in the re-dispatch"
-assert_grep 'BASELINE_DRAFT_VERSION=' "$COMPOSE" "knowledge-compose: Step 5.5 threads BASELINE_DRAFT_VERSION"
-assert_grep 'ceiling_hit' "$COMPOSE" "knowledge-compose: Step 5.5 still skips when the composer reports ceiling_hit"
-assert_grep 'kept draft-vN' "$COMPOSE" "knowledge-compose: Step 5.5 fail-soft keeps draft-vN as latest"
+assert_grep 'coverage_report' "$COMPOSE" "compose-contract-97-step-5-5-computes-deficit knowledge-compose: Step 5.5 computes the deficit via _knowledge_lib.coverage_report"
+assert_grep 'uncited_evidence_sq_ids' "$COMPOSE" "compose-contract-98-step-5-5-gate-keys knowledge-compose: Step 5.5 gate keys on uncited_evidence_sq_ids (coverage deficit)"
+assert_grep 'zero-cited' "$COMPOSE" "compose-contract-99-step-5-5-selects-sections knowledge-compose: Step 5.5 selects sections covering a deficit/zero-cited sub-question"
+assert_not_grep 'TARGET_WORDS × 0.85\|TARGET_WORDS x 0.85' "$COMPOSE" "compose-contract-100-word-floor-0-85-trigger knowledge-compose: the word-floor 0.85 trigger is gone (coverage-gated now)"
+assert_not_grep 'WORD_DEFICIT' "$COMPOSE" "compose-contract-101-no-word-deficit-framing knowledge-compose: no WORD_DEFICIT word-framing param in the re-dispatch"
+assert_grep 'BASELINE_DRAFT_VERSION=' "$COMPOSE" "compose-contract-102-step-5-5-threads-baseline knowledge-compose: Step 5.5 threads BASELINE_DRAFT_VERSION"
+assert_grep 'ceiling_hit' "$COMPOSE" "compose-contract-103-step-5-5-skips-when knowledge-compose: Step 5.5 still skips when the composer reports ceiling_hit"
+assert_grep 'kept draft-vN' "$COMPOSE" "compose-contract-104-knowledge-compose-step-5-5-fail-soft-keeps-draft knowledge-compose: Step 5.5 fail-soft keeps draft-vN as latest"
 # Fail-soft must keep the canonical manifest consistent with vN: a successful N+1
 # build overwrites citation-manifest.json BEFORE Step 5 verify runs, so a
 # build-OK-but-verify-fail (or no-growth) outcome must snapshot vN's manifest
 # first and restore it — else verify/finalize read a stale manifest pointing at a
 # deleted draft-v(N+1).
-assert_grep 'citation-manifest.pre-expand' "$COMPOSE" "knowledge-compose: Step 5.5 snapshots the manifest before the expansion build (#384)"
-assert_grep 'manifest restored\|restore the snapshot\|restore the manifest' "$COMPOSE" "knowledge-compose: Step 5.5 restores the vN manifest on expansion failure (#384)"
+assert_grep 'citation-manifest.pre-expand' "$COMPOSE" "compose-contract-105-step-5-5-snapshots-manifest knowledge-compose: Step 5.5 snapshots the manifest before the expansion build (#384)"
+assert_grep 'manifest restored\|restore the snapshot\|restore the manifest' "$COMPOSE" "compose-contract-106-step-5-5-restores-vn knowledge-compose: Step 5.5 restores the vN manifest on expansion failure (#384)"
 # Accept check (load-bearing): keep v(N+1) only if the expansion ADDED A GROUNDED
 # CITATION — the F24 authoritative count must grow. Words alone never survive, so
 # the gate can never ship padding even if it over-fires.
-assert_grep 'citations_count<N+1> > citations_count<N>\|citations_count<N+1> ≤ citations_count<N>\|added at least one grounded citation\|added no new grounded citation' "$COMPOSE" "knowledge-compose: Step 5.5 keeps vN unless the expansion added a grounded citation (citation-count accept check)"
-assert_grep 'added no new citation — kept draft-vN' "$COMPOSE" "knowledge-compose: Step 5.5 fail-soft no-citation branch restores vN"
+assert_grep 'citations_count<N+1> > citations_count<N>\|citations_count<N+1> ≤ citations_count<N>\|added at least one grounded citation\|added no new grounded citation' "$COMPOSE" "compose-contract-107-step-5-5-keeps-vn knowledge-compose: Step 5.5 keeps vN unless the expansion added a grounded citation (citation-count accept check)"
+assert_grep 'added no new citation — kept draft-vN' "$COMPOSE" "compose-contract-108-knowledge-compose-step-5-5-fail-soft-no-citation knowledge-compose: Step 5.5 fail-soft no-citation branch restores vN"
 # Step 7 still measures DETERMINISTIC body words (reference list stripped) for the
 # executive over-ceiling warning, via the canonical _knowledge_lib.body_word_count
 # helper — the same surface wiki-reviewer's advisory Word-Count Gate counts.
-assert_grep 'body_word_count' "$COMPOSE" "knowledge-compose: Step 7 uses the canonical _knowledge_lib.body_word_count helper for the executive over-ceiling warning"
-assert_grep 'BODY_WORDS' "$COMPOSE" "knowledge-compose: Step 7 over-ceiling warning keys on the deterministic body-word count BODY_WORDS"
+assert_grep 'body_word_count' "$COMPOSE" "compose-contract-109-step-7-uses-canonical knowledge-compose: Step 7 uses the canonical _knowledge_lib.body_word_count helper for the executive over-ceiling warning"
+assert_grep 'BODY_WORDS' "$COMPOSE" "compose-contract-110-step-7-ceiling-warning knowledge-compose: Step 7 over-ceiling warning keys on the deterministic body-word count BODY_WORDS"
 # The cap is exactly ONE expansion — the skill must say so (defends against a
 # future edit re-introducing an unbounded loop).
-assert_grep 'capped at ONE\|capped at one\|cap = 1\|ONE bounded\|one bounded\|ONE expansion\|once in' "$COMPOSE" "knowledge-compose: Step 5.5 is capped at ONE expansion"
+assert_grep 'capped at ONE\|capped at one\|cap = 1\|ONE bounded\|one bounded\|ONE expansion\|once in' "$COMPOSE" "compose-contract-111-step-5-5-capped-one knowledge-compose: Step 5.5 is capped at ONE expansion"
 
 # Coverage-gated expansion under EXECUTIVE density (ceiling-guarded, zero-cited-only).
 # The Step 5.5 gate must no longer hard-skip every non-standard density; under
 # executive it proceeds behind a pre-expansion ceiling guard and a zero-cited-only
 # selector so it can never breach the target_words ceiling or pad an already-cited
 # section.
-assert_grep 'executive ceiling already met' "$COMPOSE" "knowledge-compose: Step 5.5 executive pre-expansion ceiling guard skip token"
-assert_grep 'neither .standard. nor .executive.\|neither \`standard\` nor \`executive\`' "$COMPOSE" "knowledge-compose: Step 5.5 density skip now only fires for a density that is neither standard nor executive"
-assert_grep 'density == "executive"' "$COMPOSE" "knowledge-compose: Step 5.5 EXPAND_SECTIONS selector branches on executive density"
-assert_grep 'compose-coverage.py expand-sections' "$COMPOSE" "knowledge-compose: Step 5.5 selector is offloaded to compose-coverage.py expand-sections"
-assert_grep '\-\-density "<PROSE_DENSITY>"' "$COMPOSE" "knowledge-compose: Step 5.5 selector threads the resolved PROSE_DENSITY into the section chooser (--density)"
-assert_grep 'zero-cited deficit sub-question\|zero-cited deficit sub-questions\|only a section that covers a zero-cited sq qualifies' "$COMPOSE" "knowledge-compose: Step 5.5 executive selects zero-cited deficit sub-questions only (never thin-but-cited)"
+assert_grep 'executive ceiling already met' "$COMPOSE" "compose-contract-112-step-5-5-executive-pre knowledge-compose: Step 5.5 executive pre-expansion ceiling guard skip token"
+assert_grep 'neither .standard. nor .executive.\|neither \`standard\` nor \`executive\`' "$COMPOSE" "compose-contract-113-step-5-5-density-skip knowledge-compose: Step 5.5 density skip now only fires for a density that is neither standard nor executive"
+assert_grep 'density == "executive"' "$COMPOSE" "compose-contract-114-step-5-5-expand-sections knowledge-compose: Step 5.5 EXPAND_SECTIONS selector branches on executive density"
+assert_grep 'compose-coverage.py expand-sections' "$COMPOSE" "compose-contract-115-step-5-5-selector-offloaded knowledge-compose: Step 5.5 selector is offloaded to compose-coverage.py expand-sections"
+assert_grep '\-\-density "<PROSE_DENSITY>"' "$COMPOSE" "compose-contract-116-step-5-5-selector-threads knowledge-compose: Step 5.5 selector threads the resolved PROSE_DENSITY into the section chooser (--density)"
+assert_grep 'zero-cited deficit sub-question\|zero-cited deficit sub-questions\|only a section that covers a zero-cited sq qualifies' "$COMPOSE" "compose-contract-117-step-5-5-executive-selects knowledge-compose: Step 5.5 executive selects zero-cited deficit sub-questions only (never thin-but-cited)"
 # wiki-composer must enforce the executive ceiling DURING the expansion pass, not
 # just trim afterward on the normal pass.
-assert_grep 'Executive ceiling stop during expansion\|stop deepening' "$COMPOSER" "wiki-composer: EXPANSION_MODE enforces the executive target_words ceiling during the expansion pass"
+assert_grep 'Executive ceiling stop during expansion\|stop deepening' "$COMPOSER" "compose-contract-118-expansion-mode-enforces-executive wiki-composer: EXPANSION_MODE enforces the executive target_words ceiling during the expansion pass"
 
 # wiki-composer must declare the EXPANSION_MODE input parameters + the ceiling_hit
 # return field. (The EXPANSION_MODE param-row presence is asserted in the live-token
 # loop above; here we check the companion params + the return contract.)
-assert_grep 'BASELINE_DRAFT_VERSION' "$COMPOSER" "wiki-composer: declares BASELINE_DRAFT_VERSION input (#384)"
-assert_grep 'EXPAND_SECTIONS' "$COMPOSER" "wiki-composer: declares EXPAND_SECTIONS input (#384)"
-assert_grep 'ceiling_hit' "$COMPOSER" "wiki-composer: reports ceiling_hit in the return JSON (#384)"
+assert_grep 'BASELINE_DRAFT_VERSION' "$COMPOSER" "compose-contract-119-declares-baseline-draft-version wiki-composer: declares BASELINE_DRAFT_VERSION input (#384)"
+assert_grep 'EXPAND_SECTIONS' "$COMPOSER" "compose-contract-120-declares-expand-sections-input wiki-composer: declares EXPAND_SECTIONS input (#384)"
+assert_grep 'ceiling_hit' "$COMPOSER" "compose-contract-121-reports-ceiling-hit-return wiki-composer: reports ceiling_hit in the return JSON (#384)"
 # Zero-network non-port: the expansion deepens from EXISTING wiki claims only —
 # it must say 'not yet cited' / 'not-yet-cited', and must NOT gain WebFetch/WebSearch
 # (the single-pass tools check above already forbids those; this asserts the prose).
-assert_grep 'not-yet-cited\|not yet cited' "$COMPOSER" "wiki-composer: expansion deepens from not-yet-cited wiki claims (zero-network non-port, #384)"
+assert_grep 'not-yet-cited\|not yet cited' "$COMPOSER" "compose-contract-122-expansion-deepens-not-yet wiki-composer: expansion deepens from not-yet-cited wiki claims (zero-network non-port, #384)"
 # Single-pass-per-dispatch invariant must survive: the agent never self-loops.
-assert_grep 'single pass per dispatch\|Single pass per dispatch\|single-pass per dispatch\|single pass: read baseline\|once in .EXPANSION_MODE.\|re-dispatch you exactly ONCE\|re-dispatch you ONCE\|re-dispatch you once' "$COMPOSER" "wiki-composer: stays single-pass per dispatch under EXPANSION_MODE (orchestrator drives the one re-dispatch, #384)"
+assert_grep 'single pass per dispatch\|Single pass per dispatch\|single-pass per dispatch\|single pass: read baseline\|once in .EXPANSION_MODE.\|re-dispatch you exactly ONCE\|re-dispatch you ONCE\|re-dispatch you once' "$COMPOSER" "compose-contract-123-stays-single-pass-dispatch wiki-composer: stays single-pass per dispatch under EXPANSION_MODE (orchestrator drives the one re-dispatch, #384)"
 
 # --- #432 Slice 2: question-node answer-claim citations (the #410 inverse) -
 # Slice 2 lifts the #410 framing-only guard: a question node carrying an
 # answer_claims: block (acl-NNN, synthesized by knowledge-distill Step 6.9) is
 # now citable on >=2-source convergence, exactly mirroring the distilled dcl-NNN
 # rule. Both the compose SKILL and the wiki-composer agent must document it.
-assert_grep 'wiki/questions' "$COMPOSE" "knowledge-compose: documents reading wiki/questions/*.md (#410/#432)"
-assert_grep 'answer_claims' "$COMPOSE" "knowledge-compose: question nodes carry a citable answer_claims surface (#432)"
-assert_grep 'acl-NNN\|acl-' "$COMPOSE" "knowledge-compose: names the acl-NNN answer-claim id (#432)"
-assert_grep 'wiki/questions' "$COMPOSER" "wiki-composer: Phase 0 reads wiki/questions/*.md (#410/#432)"
-assert_grep 'answer_claims' "$COMPOSER" "wiki-composer: reads the question node's answer_claims block (#432)"
-assert_grep 'acl-NNN' "$COMPOSER" "wiki-composer: cites a question node via its acl-NNN claim (#432)"
+assert_grep 'wiki/questions' "$COMPOSE" "compose-contract-124-documents-reading-wiki-questions knowledge-compose: documents reading wiki/questions/*.md (#410/#432)"
+assert_grep 'answer_claims' "$COMPOSE" "compose-contract-125-question-nodes-carry-citable knowledge-compose: question nodes carry a citable answer_claims surface (#432)"
+assert_grep 'acl-NNN\|acl-' "$COMPOSE" "compose-contract-126-names-acl-nnn-answer knowledge-compose: names the acl-NNN answer-claim id (#432)"
+assert_grep 'wiki/questions' "$COMPOSER" "compose-contract-127-phase-0-reads-wiki wiki-composer: Phase 0 reads wiki/questions/*.md (#410/#432)"
+assert_grep 'answer_claims' "$COMPOSER" "compose-contract-128-reads-question-node-s wiki-composer: reads the question node's answer_claims block (#432)"
+assert_grep 'acl-NNN' "$COMPOSER" "compose-contract-129-cites-question-node-acl wiki-composer: cites a question node via its acl-NNN claim (#432)"
 # The recorded wiki_slug MUST be bare (the verifier/verify-store resolve it against
 # the fixed wiki/questions/ dir; a directory-prefixed wiki_slug would mis-resolve to
 # wiki/questions/questions/<slug>.md and score unsupported). The [[questions/<slug>]]
 # reference-list wikilink stays prefixed — only the wiki_slug RECORD field is bare.
-assert_not_grep 'wiki_slug: questions/\|wiki_slug=questions/' "$COMPOSER" "wiki-composer: question-node wiki_slug record is BARE, not directory-prefixed (#434)"
+assert_not_grep 'wiki_slug: questions/\|wiki_slug=questions/' "$COMPOSER" "compose-contract-130-question-node-wiki-slug wiki-composer: question-node wiki_slug record is BARE, not directory-prefixed (#434)"
 # The >=2-backlink convergence preference must be explicit (PREFER the node).
-assert_grep 'Converged answer\|≥2 backlinks\|converged answer\|PREFER the question node' "$COMPOSER" "wiki-composer: PREFER the question node on >=2-source convergence (#432)"
+assert_grep 'Converged answer\|≥2 backlinks\|converged answer\|PREFER the question node' "$COMPOSER" "compose-contract-131-prefer-question-node-2 wiki-composer: PREFER the question node on >=2-source convergence (#432)"
 # The single-source / no-block anti-laundering guard must survive: a lone source
 # routed through the node would fake convergence — cite the SOURCE page instead.
-assert_grep 'launder' "$COMPOSER" "wiki-composer: anti-laundering guard on single-source answers (#432)"
-assert_grep 'framing-only\|framing AND\|framing only' "$COMPOSER" "wiki-composer: a claim-less question node stays framing-only (#432)"
+assert_grep 'launder' "$COMPOSER" "compose-contract-132-anti-laundering-guard-single wiki-composer: anti-laundering guard on single-source answers (#432)"
+assert_grep 'framing-only\|framing AND\|framing only' "$COMPOSER" "compose-contract-133-claim-less-question-node wiki-composer: a claim-less question node stays framing-only (#432)"
 # data.claim_kinds must document the new 'answer' kind + the acl= log/summary surface.
-assert_grep 'answer' "$COMPOSE" "knowledge-compose: claim_kinds documents the 'answer' kind (#432)"
-assert_grep 'acl=' "$COMPOSE" "knowledge-compose: wiki/log.md carries the acl= answer-citation rate (#432)"
+assert_grep 'answer' "$COMPOSE" "compose-contract-134-claim-kinds-documents-answer knowledge-compose: claim_kinds documents the 'answer' kind (#432)"
+assert_grep 'acl=' "$COMPOSE" "compose-contract-135-wiki-log-md-carries knowledge-compose: wiki/log.md carries the acl= answer-citation rate (#432)"
 
 # --- contradiction recency-survivor surfacing (channel a) ----------------
 # knowledge-compose threads the ingest-time contradiction-ingest.json into the
@@ -358,64 +361,64 @@ assert_grep 'acl=' "$COMPOSE" "knowledge-compose: wiki/log.md carries the acl= a
 # (resolution_coverage.resolved > 0), so the composer prefers the more-recent
 # survivor claim over a superseded loser claim for the same contested fact.
 # Pure surfacing — no citation-manifest schema change, no verifier change.
-assert_grep 'no-contradiction-surfacing' "$COMPOSE" "knowledge-compose: --no-contradiction-surfacing opt-out flag present"
-assert_grep 'contradiction-ingest.json' "$COMPOSE" "knowledge-compose: Step 3.5 reads the project's contradiction-ingest.json"
-assert_grep 'resolution_coverage' "$COMPOSE" "knowledge-compose: Step 3.5 gates the surfacing on resolution_coverage.resolved"
-assert_grep 'CONTRADICTION_INGEST_PATH' "$COMPOSE" "knowledge-compose: threads CONTRADICTION_INGEST_PATH into the composer dispatch"
+assert_grep 'no-contradiction-surfacing' "$COMPOSE" "compose-contract-136-no-contradiction-surfacing-opt knowledge-compose: --no-contradiction-surfacing opt-out flag present"
+assert_grep 'contradiction-ingest.json' "$COMPOSE" "compose-contract-137-step-3-5-reads-project knowledge-compose: Step 3.5 reads the project's contradiction-ingest.json"
+assert_grep 'resolution_coverage' "$COMPOSE" "compose-contract-138-step-3-5-gates-surfacing knowledge-compose: Step 3.5 gates the surfacing on resolution_coverage.resolved"
+assert_grep 'CONTRADICTION_INGEST_PATH' "$COMPOSE" "compose-contract-139-threads-contradiction-ingest-path knowledge-compose: threads CONTRADICTION_INGEST_PATH into the composer dispatch"
 # The param must thread into BOTH the Step 4 single dispatch AND the Step 5.5
 # EXPANSION_MODE re-dispatch, else an expanded draft silently loses surfacing.
 CIP_DISPATCHES=$(grep -c 'CONTRADICTION_INGEST_PATH=' "$COMPOSE" || true)
 if [ "${CIP_DISPATCHES:-0}" -ge 2 ]; then
-  green "PASS: knowledge-compose: CONTRADICTION_INGEST_PATH threaded into both the Step 4 and Step 5.5 dispatches ($CIP_DISPATCHES occurrences)"
+  green "PASS: compose-contract-140-contradiction-ingest-path-threaded knowledge-compose: CONTRADICTION_INGEST_PATH threaded into both the Step 4 and Step 5.5 dispatches ($CIP_DISPATCHES occurrences)"
 else
-  red "FAIL: knowledge-compose: CONTRADICTION_INGEST_PATH must thread into BOTH dispatches (Step 4 + Step 5.5); found $CIP_DISPATCHES"
+  red "FAIL: compose-contract-140-contradiction-ingest-path-threaded knowledge-compose: CONTRADICTION_INGEST_PATH must thread into BOTH dispatches (Step 4 + Step 5.5); found $CIP_DISPATCHES"
   errors=$((errors + 1))
 fi
 # wiki-composer: the param is a live input row, Phase 0 builds the recency map,
 # and Phase 2 prefers the survivor claim.
 if grep -q "| \`CONTRADICTION_INGEST_PATH\` |" "$COMPOSER"; then
-  green "PASS: wiki-composer: CONTRADICTION_INGEST_PATH parameter row present (live surfacing input)"
+  green "PASS: compose-contract-141-contradiction-ingest-path-parameter wiki-composer: CONTRADICTION_INGEST_PATH parameter row present (live surfacing input)"
 else
-  red "FAIL: wiki-composer: CONTRADICTION_INGEST_PATH parameter row missing (expected as a live input)"
+  red "FAIL: compose-contract-141-contradiction-ingest-path-parameter wiki-composer: CONTRADICTION_INGEST_PATH parameter row missing (expected as a live input)"
   errors=$((errors + 1))
 fi
-assert_grep 'recency-survivor map' "$COMPOSER" "wiki-composer: Phase 0 builds the recency-survivor map from contradiction findings"
-assert_grep 'survivor_claim_id' "$COMPOSER" "wiki-composer: keys the map on the loser, resolving the survivor via survivor_claim_id"
-assert_grep 'Prefer the recency survivor\|prefer citing the survivor\|prefer the survivor' "$COMPOSER" "wiki-composer: Phase 2 prefers the survivor claim over the superseded loser"
+assert_grep 'recency-survivor map' "$COMPOSER" "compose-contract-142-phase-0-builds-recency wiki-composer: Phase 0 builds the recency-survivor map from contradiction findings"
+assert_grep 'survivor_claim_id' "$COMPOSER" "compose-contract-143-keys-map-loser-resolving wiki-composer: keys the map on the loser, resolving the survivor via survivor_claim_id"
+assert_grep 'Prefer the recency survivor\|prefer citing the survivor\|prefer the survivor' "$COMPOSER" "compose-contract-144-phase-2-prefers-survivor wiki-composer: Phase 2 prefers the survivor claim over the superseded loser"
 # Pure surfacing: the map must NOT introduce a new citation-record field or claim type.
-assert_grep 'never how a citation is recorded\|never the citation-record shape\|no new record field' "$COMPOSER" "wiki-composer: surfacing changes only WHICH claim is cited, not the citation-record shape"
+assert_grep 'never how a citation is recorded\|never the citation-record shape\|no new record field' "$COMPOSER" "compose-contract-145-surfacing-changes-only-which wiki-composer: surfacing changes only WHICH claim is cited, not the citation-record shape"
 
 # --- mode-C acting gate (--contradiction-act + high-severity only) --------
 # Acting on the recency-survivor map (preferring the survivor over the loser)
 # is gated behind an explicit mode-C opt-in flag AND restricted to high-severity
 # contradictions only — the classification decision for the shipped slice.
-assert_grep 'contradiction-act' "$COMPOSE" "knowledge-compose: --contradiction-act mode-C opt-in flag present"
-assert_grep 'CONTRADICTION_ACT' "$COMPOSE" "knowledge-compose: resolves + threads the CONTRADICTION_ACT acting gate"
+assert_grep 'contradiction-act' "$COMPOSE" "compose-contract-146-contradiction-act-mode-c knowledge-compose: --contradiction-act mode-C opt-in flag present"
+assert_grep 'CONTRADICTION_ACT' "$COMPOSE" "compose-contract-147-resolves-threads-contradiction-act knowledge-compose: resolves + threads the CONTRADICTION_ACT acting gate"
 # CONTRADICTION_ACT must thread into BOTH the Step 4 dispatch AND the Step 5.5
 # EXPANSION_MODE re-dispatch, else an expanded draft silently re-enables acting.
 ACT_DISPATCHES=$(grep -c 'CONTRADICTION_ACT=' "$COMPOSE" || true)
 if [ "${ACT_DISPATCHES:-0}" -ge 2 ]; then
-  green "PASS: knowledge-compose: CONTRADICTION_ACT threaded into both the Step 4 and Step 5.5 dispatches ($ACT_DISPATCHES occurrences)"
+  green "PASS: compose-contract-148-contradiction-act-threaded-both knowledge-compose: CONTRADICTION_ACT threaded into both the Step 4 and Step 5.5 dispatches ($ACT_DISPATCHES occurrences)"
 else
-  red "FAIL: knowledge-compose: CONTRADICTION_ACT must thread into BOTH dispatches (Step 4 + Step 5.5); found $ACT_DISPATCHES"
+  red "FAIL: compose-contract-148-contradiction-act-threaded-both knowledge-compose: CONTRADICTION_ACT must thread into BOTH dispatches (Step 4 + Step 5.5); found $ACT_DISPATCHES"
   errors=$((errors + 1))
 fi
 # wiki-composer: the acting gate is a live input row, Phase 2 gates the
 # survivor-preference on it, and the acting map is high-severity-only.
 if grep -q "| \`CONTRADICTION_ACT\` |" "$COMPOSER"; then
-  green "PASS: wiki-composer: CONTRADICTION_ACT parameter row present (mode-C acting gate)"
+  green "PASS: compose-contract-149-contradiction-act-parameter-row wiki-composer: CONTRADICTION_ACT parameter row present (mode-C acting gate)"
 else
-  red "FAIL: wiki-composer: CONTRADICTION_ACT parameter row missing (expected as a live input)"
+  red "FAIL: compose-contract-149-contradiction-act-parameter-row wiki-composer: CONTRADICTION_ACT parameter row missing (expected as a live input)"
   errors=$((errors + 1))
 fi
-assert_grep 'CONTRADICTION_ACT' "$COMPOSER" "wiki-composer: Phase 2 gates the survivor-preference on CONTRADICTION_ACT (mode C)"
-assert_grep 'severity == "high"\|high-severity\|high severity' "$COMPOSER" "wiki-composer: the recency-survivor acting map is restricted to high-severity contradictions"
+assert_grep 'CONTRADICTION_ACT' "$COMPOSER" "compose-contract-150-phase-2-gates-survivor wiki-composer: Phase 2 gates the survivor-preference on CONTRADICTION_ACT (mode C)"
+assert_grep 'severity == "high"\|high-severity\|high severity' "$COMPOSER" "compose-contract-151-recency-survivor-acting-map wiki-composer: the recency-survivor acting map is restricted to high-severity contradictions"
 
 # --- Phase 5 contract token match ----------------------------------------
 # The inverted-pipeline.md Phase 5 contract names three reads and two
 # writes; the composer must mention all of them at least once.
 PIPELINE="$PLUGIN_ROOT/references/inverted-pipeline.md"
-assert_grep 'Phase 5 — `knowledge-compose`' "$PIPELINE" "inverted-pipeline.md: Phase 5 section header anchored"
+assert_grep 'Phase 5 — `knowledge-compose`' "$PIPELINE" "compose-contract-152-phase-5-section-header inverted-pipeline.md: Phase 5 section header anchored"
 
 if [ $errors -eq 0 ]; then
   green ""

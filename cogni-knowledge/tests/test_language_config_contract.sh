@@ -22,7 +22,7 @@ SCRIPT="$PLUGIN_ROOT/scripts/knowledge-binding.py"
 errors=0
 
 if [ ! -f "$SCRIPT" ]; then
-  red "FAIL: knowledge-binding.py not found at $SCRIPT"
+  red "FAIL: lang-config-00-knowledge-binding-py-not knowledge-binding.py not found at $SCRIPT"
   exit 1
 fi
 
@@ -64,9 +64,9 @@ assert 'output_language' not in b.get('curator_defaults', {}), 'must be a siblin
 assert 'prose_density' not in b.get('curator_defaults', {}), 'must be a sibling block'
 print('OK')
 " | grep -q OK; then
-  green "PASS: init with all flags writes research_defaults (market/language + 4 P2 knobs) + schema 0.1.5"
+  green "PASS: lang-config-01-init-all-flags-writes init with all flags writes research_defaults (market/language + 4 P2 knobs) + schema 0.1.5"
 else
-  red "FAIL: research_defaults not persisted from flags (or wrong schema/placement/knobs)"
+  red "FAIL: lang-config-01-init-all-flags-writes research_defaults not persisted from flags (or wrong schema/placement/knobs)"
   errors=$((errors + 1))
 fi
 
@@ -94,46 +94,46 @@ assert rd.get('citation_format') == 'ieee', rd
 assert rd.get('target_words') == 2000, rd  # concise-by-default: density executive + 2000-word ceiling
 print('OK')
 " | grep -q OK; then
-  green "PASS: init without flags falls back to full default research_defaults block (back-compat)"
+  green "PASS: lang-config-02-init-without-flags-falls init without flags falls back to full default research_defaults block (back-compat)"
 else
-  red "FAIL: default research_defaults block missing or wrong"
+  red "FAIL: lang-config-02-init-without-flags-falls default research_defaults block missing or wrong"
   errors=$((errors + 1))
 fi
 
 # --- 2. knowledge-setup SKILL.md contract -------------------------------
 SETUP="$PLUGIN_ROOT/skills/knowledge-setup/SKILL.md"
 if [ ! -f "$SETUP" ]; then
-  red "FAIL: skills/knowledge-setup/SKILL.md not found"
+  red "FAIL: lang-config-03-skills-knowledge-setup-skill skills/knowledge-setup/SKILL.md not found"
   exit 1
 fi
-assert_grep '2.5' "$SETUP" "knowledge-setup: has a Step 2.5 language-defaults block"
-assert_grep 'research_defaults' "$SETUP" "knowledge-setup: persists research_defaults"
-assert_grep 'default_output_language' "$SETUP" "knowledge-setup: derives language default from the market"
-assert_grep 'get-market-config.py' "$SETUP" "knowledge-setup: uses the canonical market-config helper"
-assert_grep 'output-language' "$SETUP" "knowledge-setup: passes output-language into binding init"
+assert_grep '2.5' "$SETUP" "lang-config-04-step-2-5-language-defaults knowledge-setup: has a Step 2.5 language-defaults block"
+assert_grep 'research_defaults' "$SETUP" "lang-config-05-persists-research-defaults knowledge-setup: persists research_defaults"
+assert_grep 'default_output_language' "$SETUP" "lang-config-06-derives-language-default-market knowledge-setup: derives language default from the market"
+assert_grep 'get-market-config.py' "$SETUP" "lang-config-07-uses-canonical-market-config knowledge-setup: uses the canonical market-config helper"
+assert_grep 'output-language' "$SETUP" "lang-config-08-passes-output-language-binding knowledge-setup: passes output-language into binding init"
 # #309 P2: the four writer-quality knobs are flag-or-default (not prompted) and
 # threaded into binding init.
-assert_grep 'prose-density' "$SETUP" "knowledge-setup: accepts --prose-density (flag-or-default; #309 P2)"
-assert_grep 'citation-format' "$SETUP" "knowledge-setup: accepts --citation-format (flag-or-default; #309 P2)"
-assert_grep 'flag-or-default' "$SETUP" "knowledge-setup: documents the writer-quality knobs as flag-or-default, not prompted (#309 P2)"
+assert_grep 'prose-density' "$SETUP" "lang-config-09-accepts-prose-density-flag knowledge-setup: accepts --prose-density (flag-or-default; #309 P2)"
+assert_grep 'citation-format' "$SETUP" "lang-config-10-accepts-citation-format-flag knowledge-setup: accepts --citation-format (flag-or-default; #309 P2)"
+assert_grep 'flag-or-default' "$SETUP" "lang-config-11-documents-writer-quality-knobs knowledge-setup: documents the writer-quality knobs as flag-or-default, not prompted (#309 P2)"
 
 # --- 3. knowledge-plan SKILL.md contract --------------------------------
 PLAN="$PLUGIN_ROOT/skills/knowledge-plan/SKILL.md"
 if [ ! -f "$PLAN" ]; then
-  red "FAIL: skills/knowledge-plan/SKILL.md not found"
+  red "FAIL: lang-config-12-skills-knowledge-plan-skill skills/knowledge-plan/SKILL.md not found"
   exit 1
 fi
-assert_grep '0.5' "$PLAN" "knowledge-plan: has a Step 0.5 market+language resolution block"
-assert_grep 'research_defaults' "$PLAN" "knowledge-plan: reads binding research_defaults as a fallback"
-assert_grep 'default_output_language' "$PLAN" "knowledge-plan: falls back to the market's registry language"
-assert_grep 'precedence' "$PLAN" "knowledge-plan: documents the resolution precedence"
+assert_grep '0.5' "$PLAN" "lang-config-13-step-0-5-market-language knowledge-plan: has a Step 0.5 market+language resolution block"
+assert_grep 'research_defaults' "$PLAN" "lang-config-14-reads-binding-research-defaults knowledge-plan: reads binding research_defaults as a fallback"
+assert_grep 'default_output_language' "$PLAN" "lang-config-15-falls-back-market-s knowledge-plan: falls back to the market's registry language"
+assert_grep 'precedence' "$PLAN" "lang-config-16-documents-resolution-precedence knowledge-plan: documents the resolution precedence"
 # The silent unconditional 'default en' must be gone from the param row.
-assert_not_grep 'Two-letter code, default .en' "$PLAN" "knowledge-plan: no silent unconditional 'default en'"
+assert_not_grep 'Two-letter code, default .en' "$PLAN" "lang-config-17-no-silent-unconditional-default knowledge-plan: no silent unconditional 'default en'"
 # #309 P2: Step 0.5 also resolves the four writer-quality knobs with the framing
 # suggestion as a new lowest-precedence tier.
-assert_grep 'prose_density' "$PLAN" "knowledge-plan: Step 0.5 resolves prose_density (#309 P2)"
-assert_grep 'framing suggestion' "$PLAN" "knowledge-plan: framing suggestion is a precedence tier in Step 0.5 (#309 P2)"
-assert_grep 'normalize_tone\|normalize_prose_density\|normalize_citation_format' "$PLAN" "knowledge-plan: references the _knowledge_lib normalizers (#309 P2)"
+assert_grep 'prose_density' "$PLAN" "lang-config-18-step-0-5-resolves-prose knowledge-plan: Step 0.5 resolves prose_density (#309 P2)"
+assert_grep 'framing suggestion' "$PLAN" "lang-config-19-framing-suggestion-precedence-tier knowledge-plan: framing suggestion is a precedence tier in Step 0.5 (#309 P2)"
+assert_grep 'normalize_tone\|normalize_prose_density\|normalize_citation_format' "$PLAN" "lang-config-20-references-knowledge-lib-normalizers knowledge-plan: references the _knowledge_lib normalizers (#309 P2)"
 
 if [ $errors -eq 0 ]; then
   green ""

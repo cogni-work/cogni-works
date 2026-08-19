@@ -44,7 +44,20 @@
 #
 # Liveness floors are INEQUALITIES pinned strictly below the values the real
 # tree carries today, so a new agent never turns the suite red, while a
-# collapsed scan population still does.
+# collapsed scan population still does. L4 floors the EXAMINED population of
+# the granted-name resolution for that reason and never an observation count —
+# see the G-series note below.
+#
+# The G series pins the granted-name completeness channel. It needs a fixture
+# case precisely BECAUSE it is non-failing: nothing else in CI reds if it rots,
+# the same argument already recorded for R6/R6a. G1a asserts both directions on
+# one fixture, since a one-directional case would still pass with the
+# membership test inverted. What the suite deliberately does NOT assert is how
+# many gaps the real tree carries: asserting zero would turn a non-failing
+# channel into a hard CI gate through the back door, and asserting some would
+# red the moment someone correctly widens the registry — which is the outcome
+# this channel exists to prompt. It would be a live assertion either way today,
+# since the real tree carries 9 gaps.
 #
 # Mutation recipe, transferred from the retired plugin-scoped suite so its
 # defect shape stays reproducible:
@@ -64,6 +77,29 @@
 # the grant and the arm fires (by_arm gains the entry); disable the arm outright
 # and the span counter drops to zero. Either way V7 reds, which is what stops
 # it from being a vacuous real-tree assertion.
+#
+# Mutation recipe for the granted-name completeness channel:
+#
+#   scripts/mutation-check.sh --root . \
+#     --file scripts/check-mcp-tool-grant.py \
+#     --expr 's/tool not in vocabulary/tool in ()/m' \
+#     --test 'bash tests/test_check_mcp_tool_grant.sh' --case G1a
+#
+# --expr is fed to `perl -0pi` — perl, never sed or ERE — which slurps the whole
+# file; this substitution carries no ^/$ anchor, so /m is belt-and-braces here
+# rather than load-bearing. The substitution is non-global, which is safe
+# because `tool not in vocabulary` occurs exactly once in the guard. That
+# uniqueness is why the membership test binds a local `vocabulary` on the
+# preceding line: testing `tool not in vocabulary_by_namespace[namespace]`
+# directly would still CONTAIN the anchor, and the rewrite would leave
+# `tool in ()_by_namespace[namespace]` — a SyntaxError reddening every case
+# rather than the one under test, which grades nothing. Never repeat the anchor
+# string in a neighbouring comment, for the same reason.
+#
+# Mutated, the membership test is constantly false and the observation is never
+# emitted, so G1a reds on its surfaced direction while the examined-population
+# counter — incremented BEFORE the test — keeps L4 green. That is what makes
+# the recipe grade the detection rather than the plumbing.
 #
 # Every assertion below is on an exit status, on a numeric shape, or on JSON
 # this repo's own guard emits. None reads the wording of a foreign tool's
@@ -158,12 +194,19 @@ write_registry() {
 REGEOF
 }
 
-# write_registry_pair <root> <ns-a> <ns-b> <shared-tool>
+# write_registry_pair <root> <ns-a> <ns-b> <shared-tool> [tools-a] [tools-b]
 #
 # Two registered servers whose provides_tools arrays SHARE a bare name. The real
 # registry has no such overlap (2 servers, 18 names, zero shared), so the
 # multi-owner rules are forward-looking; this fixture is the only place they can
 # be exercised, and V4/V4a must never be read as reproducing a live collision.
+#
+# The two arrays default to the shared name plus a private one, which is what
+# keeps the multi-owner cases carrying a vocabulary; V6b overrides the second
+# to exercise a per-server empty array. The defaults escape their inner quotes
+# because they are expanded inside an UNQUOTED heredoc: the bare form loses the
+# quotes to the shell and emits [shared, only_a], which is not JSON, so the
+# guard would raise and V4/V4a would silently flip to exit 2.
 write_registry_pair() {
   mkdir -p "$1/$(dirname "$REGISTRY_REL")"
   cat > "$1/$REGISTRY_REL" <<REGEOF
@@ -174,13 +217,13 @@ write_registry_pair() {
       "name": "mcp_$2",
       "desktop_config_key": "$2",
       "required_by": ["plug"],
-      "provides_tools": ["$4", "only_a"]
+      "provides_tools": ${5:-[\"$4\", \"only_a\"]}
     },
     "mcp_$3": {
       "name": "mcp_$3",
       "desktop_config_key": "$3",
       "required_by": ["plug"],
-      "provides_tools": ["$4", "only_b"]
+      "provides_tools": ${6:-[\"$4\", \"only_b\"]}
     }
   }
 }
@@ -429,7 +472,9 @@ run_guard "$R"
 check_eq "R6 a plugin listed in required_by that grants nothing is not a violation" "0" "$CODE"
 py_assert "R6a it is reported as a non-failing observation instead" "
 assert s['total'] == 0, v
-names = [(x['plugin'], x['namespace'], x['kind']) for x in o]
+# .get(): the observations channel now carries two kinds with different key
+# sets, and only this one has a single owning plugin.
+names = [(x.get('plugin'), x['namespace'], x['kind']) for x in o]
 assert ('ghost', 'demo', 'listed_without_grant') in names, names
 assert ('plug', 'demo', 'listed_without_grant') not in names, names
 "
@@ -518,6 +563,21 @@ assert d['success'] is False, d
 assert d['error'], d
 "
 
+# The per-server half of that floor. V6 above collapses the ONLY server, so the
+# union check catches it; here server A keeps a real array and only B is empty,
+# which is the state that stays green without the per-server raise. One agent
+# is necessary and sufficient: collect() calls discover() before load_registry,
+# so an agent-less root errors earlier (Z1) and never reaches the floor here.
+R="$(new_root pt_one_empty_vocab)"
+write_registry_pair "$R" "alpha" "beta" "shared_tool" '["shared_tool"]' '[]'
+write_agent "$R" "plug" "any" 'tools: ["mcp__alpha__shared_tool"]' 'Body text.'
+run_guard "$R"
+check_eq "V6b a single registered server with no provides_tools is an error, not a narrowed vocabulary" "2" "$CODE"
+py_assert "V6b1 the per-server gap is reported, not swallowed" "
+assert d['success'] is False, d
+assert d['error'], d
+"
+
 # The two arms cannot both report one call site: \b will not match a bare name
 # inside mcp__<ns>__<name>, because the preceding underscore is a word char.
 R="$(new_root pt_no_double)"
@@ -533,6 +593,45 @@ py_assert "V7 the real tree is clean on the provides_tools arm over a live span 
 assert 'provides_tools_body_name_ungranted' not in s['by_arm'], s['by_arm']
 assert s['provides_tools_code_span_names'] > 0, s
 " "$REPO_OUT"
+
+# --- G: grants outside their server's vocabulary ----------------------------
+
+# The completeness channel keys on GRANT tokens in frontmatter, not on code
+# spans, so it reaches names the third arm structurally cannot see. G1a asserts
+# both directions on one fixture because a one-directional case would pass with
+# the membership test inverted.
+R="$(new_root grant_vocab)"
+write_registry "$R" "mcp_demo" "demo" '["plug"]' '["do_thing"]'
+write_agent "$R" "plug" "any" 'tools: ["mcp__demo__do_thing", "mcp__demo__undeclared_thing"]' 'Body text with no call site.'
+run_guard "$R"
+check_eq "G1 a grant outside its server's provides_tools is not a violation" "0" "$CODE"
+py_assert "G1a a grant outside the vocabulary is surfaced, one inside is not" "
+gaps = [x for x in o if x['kind'] == 'granted_outside_vocabulary']
+named = [(x['namespace'], x['tool']) for x in gaps]
+assert ('demo', 'undeclared_thing') in named, named
+assert ('demo', 'do_thing') not in named, named
+# One record per gap, carrying the granting agents as evidence rather than
+# one record per granting agent.
+hit = [x for x in gaps if x['tool'] == 'undeclared_thing']
+assert len(hit) == 1, hit
+assert hit[0]['plugins'] == ['plug'], hit[0]
+assert hit[0]['files'] == ['plug/agents/any.md'], hit[0]
+assert s['total'] == 0, s['total']
+assert s['provides_tools_grant_names_resolved'] >= 2, s['provides_tools_grant_names_resolved']
+"
+
+# An unregistered namespace has no vocabulary to resolve against, so it must not
+# flood the channel. The kind-keyed assertion is load-bearing: `plug` grants
+# nothing on the demo namespace here, so the required_by loop DOES emit a
+# listed_without_grant observation, and that record carries no 'tool' key.
+R="$(new_root grant_vocab_unregistered)"
+write_agent "$R" "plug" "any" 'tools: ["mcp__somethingelse__go"]' 'Body text.'
+run_guard "$R"
+check_eq "G2 a grant outside the registry is not resolved against any vocabulary" "0" "$CODE"
+py_assert "G2a the unregistered grant is neither examined nor surfaced" "
+assert not any(x['kind'] == 'granted_outside_vocabulary' for x in o), o
+assert s['provides_tools_grant_names_resolved'] == 0, s['provides_tools_grant_names_resolved']
+"
 
 # --- Z: zero discovery is a failure ----------------------------------------
 
@@ -568,6 +667,17 @@ assert s['body_call_sites'] >= 10, s['body_call_sites']
 py_assert "L3 the provides_tools vocabulary and span population are still live" "
 assert s['provides_tools_vocabulary'] >= 10, s['provides_tools_vocabulary']
 assert s['provides_tools_code_span_names'] >= 20, s['provides_tools_code_span_names']
+" "$REPO_OUT"
+# Observed 55 when this floor was pinned (73 grant tokens, 18 of them on
+# unregistered namespaces). 35 is the largest multiple of 5 at or below 0.7x
+# observed, the band every floor above already occupies. This floors the
+# EXAMINED population deliberately, never an observation count: asserting the
+# real tree carries zero gaps would turn a non-failing channel into a hard CI
+# gate through the suite, and asserting it carries some would red the moment
+# the registry is correctly widened. Either way the arm stays non-vacuous,
+# because a collapsed resolution population still reds here.
+py_assert "L4 the granted-name resolution population is still live" "
+assert s['provides_tools_grant_names_resolved'] >= 35, s['provides_tools_grant_names_resolved']
 " "$REPO_OUT"
 
 printf '%s\n' "$failures failed"

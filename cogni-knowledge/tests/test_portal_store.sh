@@ -33,10 +33,23 @@ cleanup() { rm -rf "$WORKDIR"; }
 trap cleanup EXIT
 
 . "$(dirname "$0")/fixtures/test_helpers.sh"
-fail() { red "FAIL: $1"; printf -- '----- index.md -----\n'; cat "$INDEX" 2>/dev/null; exit 1; }
+errors=0
+# Counts instead of exiting, so a later case still reports when an earlier one reds.
+# MUST return 0: `fail` is the last command of each assert_* helper's failing branch,
+# so its status becomes that helper's status, and the helpers are called bare under
+# `set -e` -- a non-zero return would silently re-arm fail-fast at the first red case.
+# The trailing plain assignment guarantees status 0 -- never `((errors++))`, whose
+# value is the pre-increment 0 (status 1) on the first call.
+# The index dump is deferred to the summary: now that every case reports instead of
+# the run exiting at the first failure, dumping per call would repeat one fixture
+# once per red case and bury the FAIL: id lines this scheme exists to make greppable.
+fail() {
+  red "FAIL: $1"
+  errors=$((errors + 1))
+}
 
 if [ ! -f "$UPDATE" ]; then
-  red "FAIL: cogni-wiki wiki_index_update.py not found at $UPDATE (sibling checkout required)"
+  red "FAIL: portal-store-00-engine-present cogni-wiki wiki_index_update.py not found at $UPDATE (sibling checkout required)"
   exit 1
 fi
 
@@ -70,6 +83,12 @@ $HUMAN_LEADIN
 EOF
 
 has_line() { grep -qF "$1" "$INDEX"; }
+# One label argument feeds both arms, so a case's pass and fail ids can never diverge.
+# assert_rc is the status-taking sibling, for a case whose condition is a pipeline or
+# a heredoc that cannot be passed as an argument: capture the status, then label once.
+assert_line()    { if has_line "$1"; then green "PASS: $2"; else fail "$2"; fi; }
+assert_no_line() { if has_line "$1"; then fail "$2"; else green "PASS: $2"; fi; }
+assert_rc()      { if [ "$1" -eq 0 ];  then green "PASS: $2"; else fail "$2"; fi; }
 count_pat() { grep -cE "$1" "$INDEX" || true; }
 
 # === 1. refresh an engine-owned span; human + bullets survive ============
@@ -77,37 +96,43 @@ printf 'New engine framing for syntheses, run N.' | python3 "$UPDATE" \
   --wiki-root "$WIKI" --set-leadin --category "Syntheses" --leadin-file - \
   --refreshed-date 2026-06-05 >/dev/null
 
-has_line "New engine framing for syntheses, run N." \
-  || fail "1: refreshed engine span not present"
-has_line "Old engine framing for syntheses." \
-  && fail "1: old engine span lingered"
-has_line "refreshed:2026-06-05 bullets:2" || fail "1: stamp not refreshed"
-has_line "$HUMAN_LEADIN" || fail "1: human lead-in on ## Questions disturbed"
+assert_line "New engine framing for syntheses, run N." \
+  "portal-store-01-refreshed-span refreshed engine span present"
+assert_no_line "Old engine framing for syntheses." \
+  "portal-store-02-old-span-gone old engine span did not linger"
+assert_line "refreshed:2026-06-05 bullets:2" \
+  "portal-store-03-stamp-refreshed stamp refreshed"
+assert_line "$HUMAN_LEADIN" \
+  "portal-store-04-human-leadin-intact human lead-in on ## Questions undisturbed"
 for b in alpha-synthesis omega-synthesis q-one src-a src-b; do
-  has_line "[[$b]]" || fail "1: bullet [[$b]] lost during refresh"
+  assert_line "[[$b]]" "portal-store-05-bullet-$b bullet [[$b]] survived the refresh"
 done
-green "1: engine span refreshed; human lead-in + all bullets preserved"
 
 # === 2. set-leadin over a human lead-in is refused =======================
 R2=$(printf 'Engine tries to clutter.' | python3 "$UPDATE" \
   --wiki-root "$WIKI" --set-leadin --category "Questions" --leadin-file - 2>/dev/null)
+rc=0
 echo "$R2" | python3 -c '
 import json, sys
 d = json.load(sys.stdin)
 assert d["data"]["action"] == "skipped_human_leadin", d
 print("OK")
-' >/dev/null || fail "2: set-leadin over a human lead-in not refused"
-has_line "Engine tries to clutter." && fail "2: engine prose leaked into a human section"
-has_line "$HUMAN_LEADIN" || fail "2: human lead-in disturbed by a refused call"
-green "2: set-leadin refuses to clutter a human-owned lead-in"
+' >/dev/null || rc=1
+assert_rc "$rc" "portal-store-06-refusal-action set-leadin over a human lead-in refused"
+assert_no_line "Engine tries to clutter." \
+  "portal-store-07-no-engine-prose engine prose stayed out of a human section"
+assert_line "$HUMAN_LEADIN" \
+  "portal-store-08-human-leadin-preserved human lead-in survived a refused call"
 
 # === 3. insert on a no-lead-in bullets-only section ======================
 printf 'Engine framing for sources.' | python3 "$UPDATE" \
   --wiki-root "$WIKI" --set-leadin --category "Sources" --leadin-file - \
   --refreshed-date 2026-06-05 >/dev/null
-has_line "Engine framing for sources." || fail "3: span not inserted under ## Sources"
+assert_line "Engine framing for sources." \
+  "portal-store-09-span-inserted span inserted under ## Sources"
 # the span must precede the first bullet under ## Sources
-python3 - "$INDEX" <<'PY' || exit 1
+rc=0
+python3 - "$INDEX" <<'PY' || rc=1
 import sys
 lines = open(sys.argv[1], encoding="utf-8").read().splitlines()
 in_sec = False; seen_span = False
@@ -119,10 +144,11 @@ for ln in lines:
     if in_sec and "PORTAL-LEADIN:START" in ln:
         seen_span = True
     if in_sec and ln.startswith("- [[") and not seen_span:
-        print("FAIL: bullet precedes the inserted span under ## Sources"); sys.exit(1)
+        # No FAIL: prefix -- the shell wrapper owns this case's single result line.
+        print("bullet precedes the inserted span under ## Sources"); sys.exit(1)
 sys.exit(0 if seen_span else 1)
 PY
-green "3: span inserted above the bullets on a no-lead-in section"
+assert_rc "$rc" "portal-store-10-span-precedes-bullets span precedes the bullets under ## Sources"
 
 # === 4. overview narrative splice (upsert) round-trip ====================
 cat > "$OVERVIEW" <<'EOF'
@@ -133,6 +159,7 @@ cat > "$OVERVIEW" <<'EOF'
 - [2026-06-05] [[alpha-synthesis]] — first
 EOF
 
+rc=0
 OVERVIEW="$OVERVIEW" KNOWLEDGE_SCRIPTS="$KNOWLEDGE_SCRIPTS" python3 -c '
 import os, sys
 sys.path.insert(0, os.environ["KNOWLEDGE_SCRIPTS"])
@@ -152,7 +179,15 @@ assert "## Recent syntheses" in text2 and "[[alpha-synthesis]]" in text2, text2
 # idempotent: identical inner -> byte-identical text
 assert upsert_machine_block(text2, "OVERVIEW-NARRATIVE", "State of the wiki, run 2.") == text2
 print("OK")
-' >/dev/null || fail "4: overview narrative upsert round-trip failed"
-green "4: overview narrative splice inserts, replaces, preserves Recent syntheses, idempotent"
+' >/dev/null || rc=1
+assert_rc "$rc" "portal-store-11-overview-roundtrip overview narrative splice inserts, replaces, preserves Recent syntheses, idempotent"
 
-green "ALL TESTS PASS"
+if [ "$errors" -eq 0 ]; then
+  green "ALL TESTS PASS"
+  exit 0
+else
+  printf -- '----- index.md -----\n'
+  cat "$INDEX" 2>/dev/null || true
+  red "$errors test(s) failed"
+  exit 1
+fi

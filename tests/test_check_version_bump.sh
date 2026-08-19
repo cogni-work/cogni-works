@@ -5,22 +5,29 @@
 # version == its marketplace.json entry version) and a git-anchored TOUCH check
 # (pr mode: untouched vs the fork point / post-merge mode: strictly greater).
 # Cases:
-#   1. pr, plugin touched but version untouched -> clean, exit 0.
-#   2. pr, version touched -> version-touched, exit 1.
+#   1. pr, plugin touched but version untouched -> clean, exit 0.  [cvb01]
+#   2. pr, version touched -> version-touched, exit 1.  [cvb02]
 #   3. pr, stale-below-main -> CLEAN. The branch never touched the version but
 #      main advanced past it after the fork. This is the merge-base-anchoring
 #      regression test: a base-TIP anchor would false-flag this, and since main's
-#      version now advances on every merge it would false-flag most real PRs.
-#   4. pr, ^bump/ branch -> exempt, clean.
-#   5. post-merge, incremented -> clean, exit 0.
-#   6. post-merge, not incremented -> version-not-incremented, exit 1.
-#   7. post-merge, regressed -> version-regressed, exit 1.
-#   8. mirror drift -> version-mirror-desync in BOTH modes.
+#      version now advances on every merge it would false-flag most real PRs.  [cvb06]
+#   4. pr, ^bump/ branch -> exempt, clean.  [cvb07]
+#   5. post-merge, incremented -> clean, exit 0.  [cvb03]
+#   6. post-merge, not incremented -> version-not-incremented, exit 1.  [cvb04]
+#   7. post-merge, regressed -> version-regressed, exit 1.  [cvb05]
+#   8. mirror drift -> version-mirror-desync in BOTH modes.  [cvb08, cvb09]
 #   9. degraded (no origin/main) -> status degraded, exit 0 — and a mirror
-#      violation is STILL reported, proving the mirror half needs no git.
-#  10. Real tree -> clean (the repo is in sync today).
+#      violation is STILL reported, proving the mirror half needs no git.  [cvb10, cvb11]
+#  10. Real tree -> clean (the repo is in sync today).  [cvb12]
 #
 # bash 3.2 + stdlib python3 + git.
+#
+# Result-line ids: every emitted PASS:/FAIL: line carries a first-token id
+# (cvbNN), unique PER EMITTED LINE rather than per logical case, so
+# `mutation-check.sh --case <id>` addresses exactly one assertion. The id is
+# followed by a SPACE, never a colon abutting it — the harness matches the
+# case whole-token, so a colon-abutting id returns case_not_found. A new
+# assertion takes the next free id rather than renumbering its neighbours.
 
 set -eu
 
@@ -126,25 +133,25 @@ PY
 # --- case 1: touched, version untouched ------------------------------------
 R1="$WORK/r1"; make_repo "$R1"
 (cd "$R1" && echo x >> alpha/file.md && $GIT commit -aqm touch)
-check "case 1: pr, touched but version untouched -> clean" \
+check "cvb01-touched-version-untouched pr, touched but version untouched -> clean" \
   "$([ "$(run_gate "$R1")" = "0|ok|EMPTY" ] && echo 0 || echo 1)"
 
 # --- case 2: version touched ------------------------------------------------
 set_version "$R1" alpha 1.0.70 1.0.71 both
 (cd "$R1" && $GIT commit -aqm bump)
-check "case 2: pr, version touched -> version-touched, exit 1" \
+check "cvb02-version-touched pr, version touched -> version-touched, exit 1" \
   "$([ "$(run_gate "$R1")" = "1|ok|version-touched" ] && echo 0 || echo 1)"
 
 # --- case 5/6/7: post-merge polarity ----------------------------------------
-check "case 5: post-merge, incremented -> clean" \
+check "cvb03-postmerge-incremented post-merge, incremented -> clean" \
   "$([ "$(run_gate "$R1" --mode post-merge)" = "0|ok|EMPTY" ] && echo 0 || echo 1)"
 set_version "$R1" alpha 1.0.71 1.0.70 both
 (cd "$R1" && $GIT commit -aqm revert)
-check "case 6: post-merge, not incremented -> version-not-incremented" \
+check "cvb04-postmerge-not-incremented post-merge, not incremented -> version-not-incremented" \
   "$([ "$(run_gate "$R1" --mode post-merge)" = "1|ok|version-not-incremented" ] && echo 0 || echo 1)"
 set_version "$R1" alpha 1.0.70 1.0.69 both
 (cd "$R1" && $GIT commit -aqm regress)
-check "case 7: post-merge, regressed -> version-regressed" \
+check "cvb05-postmerge-regressed post-merge, regressed -> version-regressed" \
   "$([ "$(run_gate "$R1" --mode post-merge)" = "1|ok|version-regressed" ] && echo 0 || echo 1)"
 
 # --- case 3: stale-below-main (merge-base anchoring regression test) --------
@@ -160,7 +167,7 @@ BASE="$(cd "$R3" && $GIT rev-parse HEAD)"
 set_version "$R3" alpha 1.0.70 1.0.71 both
 (cd "$R3" && $GIT commit -aqm "bump(alpha): v1.0.71" \
    && $GIT update-ref refs/remotes/origin/main HEAD && $GIT checkout -q feature)
-check "case 3: pr, stale-below-main -> clean (merge-base anchored)" \
+check "cvb06-stale-below-main pr, stale-below-main -> clean (merge-base anchored)" \
   "$([ "$(run_gate "$R3")" = "0|ok|EMPTY" ] && echo 0 || echo 1)"
 
 # --- case 4: ^bump/ exemption ----------------------------------------------
@@ -168,7 +175,7 @@ R4="$WORK/r4"; make_repo "$R4"
 (cd "$R4" && $GIT checkout -q -b bump/auto-abc123 && echo x >> alpha/file.md)
 set_version "$R4" alpha 1.0.70 1.0.71 both
 (cd "$R4" && $GIT commit -aqm "bump(alpha)")
-check "case 4: pr, ^bump/ branch -> exempt, clean" \
+check "cvb07-bump-branch-exempt pr, ^bump/ branch -> exempt, clean" \
   "$([ "$(run_gate "$R4")" = "0|ok|EMPTY" ] && echo 0 || echo 1)"
 
 # --- case 8/9: mirror drift, and drift surviving the degraded path ----------
@@ -178,15 +185,15 @@ set_version "$R8" alpha 1.0.70 1.0.71 plugin-only
 # Bumping only plugin.json trips BOTH halves: the touch check sees the version
 # move vs the fork point, and the mirror check sees the pair disagree. Both are
 # correct and both must be reported.
-check "case 8: pr, mirror drift -> desync AND touched" \
+check "cvb08-mirror-drift-pr pr, mirror drift -> desync AND touched" \
   "$([ "$(run_gate "$R8")" = "1|ok|version-mirror-desync,version-touched" ] && echo 0 || echo 1)"
-check "case 8: post-merge, mirror drift also reported" \
+check "cvb09-mirror-drift-postmerge post-merge, mirror drift also reported" \
   "$(run_gate "$R8" --mode post-merge | grep -q 'version-mirror-desync' && echo 0 || echo 1)"
-check "case 9: degraded base ref -> status degraded, drift STILL reported" \
+check "cvb10-degraded-base-drift-reported degraded base ref -> status degraded, drift STILL reported" \
   "$([ "$(run_gate "$R8" --base-ref origin/nope)" = "1|degraded|version-mirror-desync" ] && echo 0 || echo 1)"
 
 R9="$WORK/r9"; make_repo "$R9"
-check "case 9: degraded base ref, tree in sync -> clean, exit 0" \
+check "cvb11-degraded-base-in-sync degraded base ref, tree in sync -> clean, exit 0" \
   "$([ "$(run_gate "$R9" --base-ref origin/nope)" = "0|degraded|EMPTY" ] && echo 0 || echo 1)"
 
 # --- case 10: the real tree -------------------------------------------------
@@ -195,7 +202,7 @@ python3 "$GATE" --root "$REPO_ROOT" > "$WORK/real.json" 2>/dev/null
 REAL_RC=$?
 set -e
 REAL_CLEAN="$(python3 -c "import json,sys;print(json.load(open(sys.argv[1]))['data']['clean'])" "$WORK/real.json")"
-check "case 10: real tree -> clean, exit 0" \
+check "cvb12-real-tree-clean real tree -> clean, exit 0" \
   "$([ "$REAL_RC" -eq 0 ] && [ "$REAL_CLEAN" = "True" ] && echo 0 || echo 1)"
 
 echo

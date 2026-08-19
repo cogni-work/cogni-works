@@ -29,6 +29,13 @@
 # unknown flag, which proves nothing about the load path.
 #
 # bash 3.2 + stdlib python3 only (+ git for the discover-mode exclusion case).
+#
+# Result-line ids: every emitted PASS:/FAIL: line carries a first-token id,
+# unique PER EMITTED LINE rather than per logical case, so
+# `mutation-check.sh --case <id>` addresses exactly one assertion. Cases 1-5
+# use `edNN`; the registry cases use `R<n><letter>`. The whole-token matching
+# rule the ids depend on is stated once, with the regex, above the registry
+# cases below. A new assertion takes the next free id, never a renumbering.
 
 set -eu
 
@@ -82,8 +89,8 @@ set +e
 OUT=$(python3 "$GUARD" --root "$WORK/clean" "cogni-demo/skills/demo/SKILL.md" 2>/dev/null)
 CODE=$?
 set -e
-check "bare-noun negative control exits 0" "$([ "$CODE" -eq 0 ] && echo 0 || echo 1)"
-assert_json "negative control reports zero violations" "$OUT" "
+check "ed01 bare-noun negative control exits 0" "$([ "$CODE" -eq 0 ] && echo 0 || echo 1)"
+assert_json "ed02 negative control reports zero violations" "$OUT" "
 import json,sys
 d=json.load(sys.stdin)
 assert d['success'] is True, d
@@ -103,8 +110,8 @@ set +e
 OUT=$(python3 "$GUARD" --root "$WORK/dirty" "cogni-bad/agents/bad.md" 2>/dev/null)
 CODE=$?
 set -e
-check "dispatch fixture exits 1" "$([ "$CODE" -eq 1 ] && echo 0 || echo 1)"
-assert_json "dispatch fixture names both tokens with correct file+line" "$OUT" "
+check "ed03 dispatch fixture exits 1" "$([ "$CODE" -eq 1 ] && echo 0 || echo 1)"
+assert_json "ed04 dispatch fixture names both tokens with correct file+line" "$OUT" "
 import json,sys
 d=json.load(sys.stdin)
 v=d['data']['violations']
@@ -128,8 +135,8 @@ set +e
 OUT=$(python3 "$GUARD" --root "$WORK/allow" "cogni-x/commands/c.md" 2>/dev/null)
 CODE=$?
 set -e
-check "inline-allow line exits 0" "$([ "$CODE" -eq 0 ] && echo 0 || echo 1)"
-assert_json "inline-allow suppresses the dispatch token" "$OUT" "
+check "ed05 inline-allow line exits 0" "$([ "$CODE" -eq 0 ] && echo 0 || echo 1)"
+assert_json "ed06 inline-allow suppresses the dispatch token" "$OUT" "
 import json,sys
 d=json.load(sys.stdin)
 assert d['data']['summary']['total']==0, d['data']['summary']
@@ -161,9 +168,9 @@ set +e
 OUT=$(python3 "$GUARD" --root "$EXC" 2>/dev/null)
 CODE=$?
 set -e
-check "discover-mode exclusions pass (cogni-knowledge/ + */wiki/ skipped)" \
+check "ed07 discover-mode exclusions pass (cogni-knowledge/ + */wiki/ skipped)" \
   "$([ "$CODE" -eq 0 ] && echo 0 || echo 1)"
-assert_json "exclusions report zero violations" "$OUT" "
+assert_json "ed08 exclusions report zero violations" "$OUT" "
 import json,sys
 d=json.load(sys.stdin)
 assert d['success'] is True, d
@@ -177,7 +184,7 @@ set +e
 python3 "$GUARD" >/dev/null 2>&1
 CODE=$?
 set -e
-check "real tree passes clean-zero" "$([ "$CODE" -eq 0 ] && echo 0 || echo 1)"
+check "ed09 real tree passes clean-zero" "$([ "$CODE" -eq 0 ] && echo 0 || echo 1)"
 
 # ===========================================================================
 # Registry-loading cases (R1-R6).
@@ -185,7 +192,7 @@ check "real tree passes clean-zero" "$([ "$CODE" -eq 0 ] && echo 0 || echo 1)"
 # Case labels below are `<id> <description>` — an id token followed by a SPACE,
 # never a colon abutting the id. The mutation harness matches
 # `^[[:space:]]*FAIL:[[:space:]]+<case>([[:space:]]|$)` (and the ok|PASS twin)
-# whole-token, so `--case R3` matches `FAIL: R3 empty ...` while `--case 'R3:'`
+# whole-token, so `--case R3a` matches `FAIL: R3a empty ...` while `--case 'R3a:'`
 # would match neither line and return case_not_found instead of a verdict.
 # ===========================================================================
 
@@ -241,9 +248,9 @@ PLANTED_REL="cogni-demo/agents/planted.md"
 # Also proves the default registry path follows __file__ and not --root: --root
 # points at REG_TREE, which has no registry, and the staged dir has none either.
 run_reg r1 NONE "$CLEAN_REL"
-check "R1 missing registry exits 2 (base exits 0 here)" \
+check "R1a missing registry exits 2 (base exits 0 here)" \
   "$([ "$CODE" -eq 2 ] && echo 0 || echo 1)"
-assert_json "R1 missing registry reports success:false and names the path" "$OUT" "
+assert_json "R1b missing registry reports success:false and names the path" "$OUT" "
 import json,sys
 d=json.load(sys.stdin)
 assert d['success'] is False, d
@@ -253,9 +260,9 @@ assert 'retired-plugins.json' in d['error'], d['error']
 
 # --- R2: malformed JSON -> exit 2 ------------------------------------------
 run_reg r2 '{"retired_prefixes": ["cogni-wiki",' "$CLEAN_REL"
-check "R2 malformed registry JSON exits 2 (base exits 0 here)" \
+check "R2a malformed registry JSON exits 2 (base exits 0 here)" \
   "$([ "$CODE" -eq 2 ] && echo 0 || echo 1)"
-assert_json "R2 malformed registry reports success:false with a non-empty error" "$OUT" "
+assert_json "R2b malformed registry reports success:false with a non-empty error" "$OUT" "
 import json,sys
 d=json.load(sys.stdin)
 assert d['success'] is False, d
@@ -264,9 +271,9 @@ assert d['error'], d
 
 # --- R3: empty prefix list -> exit 2 ---------------------------------------
 # Kept as its own case rather than folded into R4's table: the recorded mutation
-# recipe targets `--case R3`, which needs a separately-labelled line.
+# recipe targets `--case R3a`, which needs a separately-labelled line.
 run_reg r3 '{"retired_prefixes": []}' "$CLEAN_REL"
-check "R3 empty registry exits 2 and never 0 (base exits 0 here)" \
+check "R3a empty registry exits 2 and never 0 (base exits 0 here)" \
   "$([ "$CODE" -eq 2 ] && echo 0 || echo 1)"
 
 # --- R4: wrong type / non-string / blank / padded / colon-bearing -> exit 2 -
@@ -289,15 +296,15 @@ do
   run_reg "r4_$R4_N" "$BAD" "$CLEAN_REL"
   [ "$CODE" -eq 2 ] || R4_FAILED=1
 done
-check "R4 degenerate registry entries all exit 2 ($R4_N variants)" "$R4_FAILED"
+check "R4a degenerate registry entries all exit 2 ($R4_N variants)" "$R4_FAILED"
 
 # --- R5: a prefix added to the registry makes a planted dispatch fire -------
 # The data-driven proof: base's hardcoded regex knows nothing of cogni-demo.
 run_reg r5 '{"retired_prefixes": ["cogni-wiki", "cogni-research", "cogni-demo"]}' \
   "$PLANTED_REL"
-check "R5 registry-added prefix fires on a planted dispatch (exit 1)" \
+check "R5a registry-added prefix fires on a planted dispatch (exit 1)" \
   "$([ "$CODE" -eq 1 ] && echo 0 || echo 1)"
-assert_json "R5 registry-added prefix reports match cogni-demo: with file+line" "$OUT" "
+assert_json "R5b registry-added prefix reports match cogni-demo: with file+line" "$OUT" "
 import json,sys
 d=json.load(sys.stdin)
 v=d['data']['violations']
@@ -314,9 +321,9 @@ printf '%s' '{"retired_prefixes": ["cogni-wiki", "cogni-research"]}' \
   > "$WORK/r6/override.json"
 run_reg r6 '{"retired_prefixes": ["cogni-wiki", "cogni-research", "cogni-demo"]}' \
   "$PLANTED_REL" --registry "$WORK/r6/override.json"
-check "R6 --registry replaces the default set rather than unioning (exit 0)" \
+check "R6a --registry replaces the default set rather than unioning (exit 0)" \
   "$([ "$CODE" -eq 0 ] && echo 0 || echo 1)"
-assert_json "R6 override set reports zero violations on the planted file" "$OUT" "
+assert_json "R6b override set reports zero violations on the planted file" "$OUT" "
 import json,sys
 d=json.load(sys.stdin)
 assert d['success'] is True, d

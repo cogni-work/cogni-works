@@ -14,6 +14,13 @@
 #   6. Real repo at branch head -> exit 0.
 #
 # bash 3.2 + stdlib python3 only. No arguments, no network.
+#
+# Result-line ids: every emitted PASS:/FAIL: line carries a first-token id
+# (cpiNN), unique PER EMITTED LINE rather than per logical case, so
+# `mutation-check.sh --case <id>` addresses exactly one assertion. The id is
+# followed by a SPACE, never a colon abutting it — the harness matches the
+# case whole-token, so a colon-abutting id returns case_not_found. A new
+# assertion takes the next free id rather than renumbering its neighbours.
 
 set -eu
 
@@ -82,8 +89,8 @@ make_plugin "$CONSISTENT" cogni-alpha
 make_plugin "$CONSISTENT" cogni-beta
 make_marketplace "$CONSISTENT" cogni-alpha cogni-beta
 run_guard "$CONSISTENT"
-check "consistent inventory exits 0" "$([ "$CODE" -eq 0 ] && echo 0 || echo 1)"
-assert_json "consistent inventory reports zero violations" "$OUT" "
+check "cpi01 consistent inventory exits 0" "$([ "$CODE" -eq 0 ] && echo 0 || echo 1)"
+assert_json "cpi02 consistent inventory reports zero violations" "$OUT" "
 import json,sys
 d=json.load(sys.stdin)
 assert d['success'] is True, d
@@ -97,8 +104,8 @@ NODIR="$WORK/entry-without-dir"
 make_plugin "$NODIR" cogni-alpha
 make_marketplace "$NODIR" cogni-alpha cogni-ghost
 run_guard "$NODIR"
-check "marketplace entry with no directory exits non-zero" "$([ "$CODE" -eq 1 ] && echo 0 || echo 1)"
-assert_json "entry with no directory reports source-missing naming the plugin" "$OUT" "
+check "cpi03 marketplace entry with no directory exits non-zero" "$([ "$CODE" -eq 1 ] && echo 0 || echo 1)"
+assert_json "cpi04 entry with no directory reports source-missing naming the plugin" "$OUT" "
 import json,sys
 d=json.load(sys.stdin)
 assert d['success'] is False, d
@@ -114,8 +121,8 @@ make_plugin "$UNLISTED" cogni-alpha
 make_plugin "$UNLISTED" cogni-orphan
 make_marketplace "$UNLISTED" cogni-alpha
 run_guard "$UNLISTED"
-check "unlisted plugin directory exits non-zero" "$([ "$CODE" -eq 1 ] && echo 0 || echo 1)"
-assert_json "unlisted directory reports plugin-unlisted naming the directory" "$OUT" "
+check "cpi05 unlisted plugin directory exits non-zero" "$([ "$CODE" -eq 1 ] && echo 0 || echo 1)"
+assert_json "cpi06 unlisted directory reports plugin-unlisted naming the directory" "$OUT" "
 import json,sys
 d=json.load(sys.stdin)
 assert d['success'] is False, d
@@ -133,8 +140,8 @@ mkdir -p "$NESTED/.claude/worktrees/wt-1/cogni-stale/.claude-plugin"
 printf '{"name":"cogni-stale","version":"9.9.9"}\n' \
   > "$NESTED/.claude/worktrees/wt-1/cogni-stale/.claude-plugin/plugin.json"
 run_guard "$NESTED"
-check "stale manifest under .claude/worktrees is ignored" "$([ "$CODE" -eq 0 ] && echo 0 || echo 1)"
-assert_json "nested manifest does not register as a plugin directory" "$OUT" "
+check "cpi07 stale manifest under .claude/worktrees is ignored" "$([ "$CODE" -eq 0 ] && echo 0 || echo 1)"
+assert_json "cpi08 nested manifest does not register as a plugin directory" "$OUT" "
 import json,sys
 d=json.load(sys.stdin)
 assert d['success'] is True, d
@@ -147,8 +154,8 @@ make_plugin "$BROKEN" cogni-alpha
 mkdir -p "$BROKEN/.claude-plugin"
 printf '{ not json\n' > "$BROKEN/.claude-plugin/marketplace.json"
 run_guard "$BROKEN"
-check "malformed marketplace exits 2, not 1" "$([ "$CODE" -eq 2 ] && echo 0 || echo 1)"
-assert_json "malformed marketplace reports the error in the envelope" "$OUT" "
+check "cpi09 malformed marketplace exits 2, not 1" "$([ "$CODE" -eq 2 ] && echo 0 || echo 1)"
+assert_json "cpi10 malformed marketplace reports the error in the envelope" "$OUT" "
 import json,sys
 d=json.load(sys.stdin)
 assert d['success'] is False, d
@@ -157,8 +164,8 @@ assert d['error'], d
 
 # ---------------------------------------------------------------- case 6
 run_guard "$REPO_ROOT"
-check "real repo inventory is consistent" "$([ "$CODE" -eq 0 ] && echo 0 || echo 1)"
-assert_json "real repo: marketplace count equals directory count" "$OUT" "
+check "cpi11 real repo inventory is consistent" "$([ "$CODE" -eq 0 ] && echo 0 || echo 1)"
+assert_json "cpi12 real repo: marketplace count equals directory count" "$OUT" "
 import json,sys
 d=json.load(sys.stdin)
 assert d['success'] is True, d

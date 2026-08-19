@@ -651,9 +651,20 @@ check_eq "Z2 an unreadable registry is an error, not a skipped arm" "2" "$CODE"
 
 # --- L: liveness floors on the real tree -----------------------------------
 
+# Observed 101 agents discovered and 92 `tools:` declarations (68 bracketed,
+# 14 comma, 10 block) when these floors were pinned. The previous 100/90 sat
+# at 0.99/0.98 of observed, inside ordinary churn: every plugin here carries
+# at least 3 agents, so retiring any one of them dropped the population below
+# both floors and reddened this arm on a correct tree. 70 and 60 are the
+# largest multiples of 5 at or below 0.7x observed — the sizing rule the L4
+# floor below already records — and sit inside the 0.56x-0.82x span the other
+# floors occupy. The arm stays non-vacuous at that width: the largest
+# single-plugin agent population is 26 (17 of them declaring `tools:`) and the
+# largest single-plugin tools:-declaring population is 20, so a glob that
+# collapsed to one plugin — or to none — still reds.
 py_assert "L1 the scan population is still reaching agent files" "
-assert s['agents_discovered'] >= 100, s['agents_discovered']
-assert sum(s['tools_form_counts'].values()) >= 90, s['tools_form_counts']
+assert s['agents_discovered'] >= 70, s['agents_discovered']
+assert sum(s['tools_form_counts'].values()) >= 60, s['tools_form_counts']
 " "$REPO_OUT"
 # Floors re-derived after cogni-visual's retirement removed its render agents,
 # which carried most of the repo's mcp__excalidraw__*/mcp__pencil__* grants:

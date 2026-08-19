@@ -58,7 +58,10 @@ Usage
 
 Emits the repo-standard `{"success", "data", "error"}` envelope on stdout and
 human-readable progress on stderr, so the JSON stays machine-parseable when the
-two are redirected apart. Exits non-zero if any suite fails or times out.
+two are redirected apart. Exits non-zero if any suite fails, times out, or the
+discovery itself comes back empty. A `--filter` that narrows a real discovery
+down to nothing is an empty query rather than a broken one, so it exits 0 with
+`total: 0` — the floor is keyed on what discovery found, before any filtering.
 """
 
 import argparse
@@ -154,9 +157,10 @@ def main(argv):
         }, indent=2, ensure_ascii=False))
         return 2
 
-    suites = discover(root)
+    discovered = discover(root)
+    suites = discovered
     if args.filter:
-        suites = [s for s in suites if args.filter in s]
+        suites = [s for s in discovered if args.filter in s]
 
     if args.list:
         print(json.dumps({
@@ -166,13 +170,19 @@ def main(argv):
         }, indent=2, ensure_ascii=False))
         return 0
 
-    if not suites:
-        # An empty sweep is a discovery failure, not a pass: the repo always
-        # ships suites, so finding none means the globs stopped matching.
+    if not discovered:
+        # Two questions hide behind an empty list and only one of them is a
+        # defect, so the floor keys on the PRE-filter population. Finding
+        # nothing before filtering means the globs stopped matching — the repo
+        # always ships suites — and that stays a hard failure, including when a
+        # --filter was supplied, which is why the test is `discovered` and not
+        # `args.filter`. An empty POST-filter list is the other question: a
+        # query that legitimately matched nothing. It falls through to the
+        # reporting path below, which already emits a zero-suite success.
         print(json.dumps({
             "success": False,
             "data": {"root": root, "total": 0, "suites": []},
-            "error": "no test suites discovered — check --root and --filter",
+            "error": "no test suites discovered — check --root; the globs matched nothing",
         }, indent=2, ensure_ascii=False))
         print("FAIL: no test suites discovered under %s" % root, file=sys.stderr)
         return 1

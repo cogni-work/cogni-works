@@ -4,11 +4,15 @@
 # What is being pinned, and why each case earns its place:
 #
 #   * All THREE `tools:` frontmatter forms parse as granting. This is the
-#     load-bearing one. 15 agents declare tools as a YAML block list, and 6 of
-#     the 7 agents that carry a real body call site are among them — so a
-#     reader that only looks at the `tools:` LINE reports those 6 as false
-#     offenders and the guard is red on an otherwise-clean tree. B1 fails
-#     first if that regresses.
+#     load-bearing one.
+#     Measured when this note was pinned: 10 agents declare tools as a YAML
+#     block list (the guard re-derives that count every run as
+#     `summary.tools_form_counts.block`), and 3 of the 4 agents that carry a
+#     real body call site are among them — so a reader that only looks at the
+#     `tools:` LINE reports those 3 as false offenders and the guard is red on
+#     an otherwise-clean tree.
+#     The counts are a snapshot; the form stays load-bearing while any
+#     block-form agent carries a call site. B1 fails first if that regresses.
 #   * The provides_tools arm keys on a BACKTICK CODE SPAN, and V1/V2 are the
 #     both-directions pair that pins it: same body, same vocabulary, backticks
 #     the only difference. A matcher that ignored the span requirement passes

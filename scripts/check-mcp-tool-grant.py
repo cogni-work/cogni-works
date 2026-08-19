@@ -70,9 +70,39 @@ not judge. And a code span inside a DISCLAIMING sentence would read as affirmati
 narrow, but it is real. Finally, the vocabulary is only as complete as the
 registry: agents grant 26 distinct tool names across the two registered
 servers while `provides_tools[]` lists 18, so 9 granted names are outside this
-arm's reach. Widening them is a registry-accuracy judgement, deliberately not
-made here — the same class as the stale `required_by` entry the non-failing
-observation below already surfaces.
+arm's reach. That completeness question is now ANSWERED rather than deferred:
+each granted `mcp__<registered-ns>__<tool>` is resolved against its own
+server's `provides_tools[]`, and a name absent from it is surfaced as a
+`granted_outside_vocabulary` observation. Today that reports 9 gaps. Each is
+one record naming the gap once and carrying its granting agents as evidence,
+because the fix is one edit to the registry however many agents grant the name
+— emitting per agent would have restated one fact 17 times and pointed each
+copy at a file that is by construction not where the fix goes.
+
+It reports rather than fails, and that is the whole of the decision. A grant
+outside the vocabulary is a registry-accuracy fact, not an agent defect: the
+agent's grant is correct and the registry is behind it. Making it a hard arm
+would gate CI on a judgement about what two upstream servers really provide —
+a claim nothing in this repo can check — so it takes the same non-failing
+channel as the stale `required_by` entry below, which is the same class one
+field over. `success` is computed from findings alone, so neither channel can
+move the exit code.
+
+The empty-vocabulary floor is decided too, and separately. The union check in
+`load_registry` fires only when EVERY server loses its array; a per-server
+check now raises alongside it, because one server going empty — or a new one
+registered without an array — narrows both provides_tools channels for that
+server while `provides_tools_vocabulary` stays a healthy positive number and
+every case stays green. That is this guard's own failure class one layer down,
+so it raises rather than reporting: unlike a stale name, an absent array is not
+a judgement about upstream, it is a registry that cannot be read.
+
+Two residuals follow from those choices rather than being overlooked. The
+channel is non-failing by design, so a stale registry still waits on a human;
+what changed is that it can no longer wait unseen. And a grant of an
+UNREGISTERED namespace has no vocabulary to resolve against and is skipped by
+construction — 18 of the 73 grant tokens are in that class today, the same
+population the `required_by` arm already skips for the same reason.
 
 The namespace token class admits HYPHENS. Real namespaces here are spelled
 `claude-in-chrome`, and an `[A-Za-z0-9_]`-only class matches nothing at all in
@@ -109,7 +139,26 @@ REGISTRY_REL = os.path.join(
 
 # Namespace and tool segments both admit hyphens: `mcp__claude-in-chrome__navigate`
 # is a real token in this tree, and an underscore-only class matches none of it.
-MCP_TOKEN_RE = re.compile(r"mcp__([A-Za-z0-9_-]+?)__[A-Za-z0-9_-]+")
+# ONE grammar for the token, with both segments captured. Read it only through
+# the two readers below, never `findall` — with two groups `findall` yields
+# (namespace, tool) TUPLES, and a caller expecting flat strings would compare a
+# namespace against a set of tuples, making `namespace not in granted` always
+# true and `granted.intersection(owners)` never intersect: two arms turned into
+# false-positive generators with every case still green. The readers exist so
+# that hazard is stated once, here, instead of a second pattern carrying a
+# second copy of the character class — which is the drift that matters, since
+# this class is the one that already went blind to a whole namespace once.
+MCP_TOKEN_RE = re.compile(r"mcp__([A-Za-z0-9_-]+?)__([A-Za-z0-9_-]+)")
+
+
+def namespaces_in(text):
+    """Every namespace named by an mcp__ token in `text`, with repeats."""
+    return [match.group(1) for match in MCP_TOKEN_RE.finditer(text)]
+
+
+def grants_in(text):
+    """Every (namespace, tool) pair named by an mcp__ token in `text`."""
+    return [match.group(1, 2) for match in MCP_TOKEN_RE.finditer(text)]
 
 # The mechanical context requirement for the provides_tools arm: a registry bare
 # name counts only inside a backtick code span. The FENCED alternative is listed
@@ -223,6 +272,9 @@ def load_registry(root):
     # desktop_config_key mapping, so the arm keyed on it inherits the registry's
     # own naming rather than a second, drifting notion of a namespace.
     tool_owners = {}
+    # Registry keys whose server declares no vocabulary at all — invisible to
+    # the union floor below, which is why both floors exist (see the docstring).
+    vocabulary_gaps = []
     for key, entry in servers.items():
         if not isinstance(entry, dict):
             continue
@@ -231,14 +283,30 @@ def load_registry(root):
             "key": key,
             "required_by": [str(x) for x in (entry.get("required_by") or [])],
         }
-        for tool in entry.get("provides_tools") or []:
-            tool_owners.setdefault(str(tool), set()).add(namespace)
+        tools = [str(tool) for tool in entry.get("provides_tools") or []]
+        if not tools:
+            vocabulary_gaps.append(str(key))
+        by_namespace[namespace]["vocabulary"] = set(tools)
+        for tool in tools:
+            tool_owners.setdefault(tool, set()).add(namespace)
     if not tool_owners:
         raise RuntimeError(
             "MCP registry at %s declares no provides_tools for any server — an "
             "empty vocabulary would make the provides_tools arm vacuously "
             "green, which is the invisible-absence failure this guard closes"
             % path
+        )
+    # The per-server half of the same floor: the union check above is
+    # all-or-nothing, so on its own a single server going empty stays green.
+    # It raises rather than reporting because an absent array is not a
+    # judgement about upstream, it is a vocabulary that cannot be read.
+    if vocabulary_gaps:
+        raise RuntimeError(
+            "MCP registry at %s registers server(s) %s with no provides_tools "
+            "— a per-server empty vocabulary narrows the provides_tools arm "
+            "and the granted-name resolution for that server while the union "
+            "vocabulary stays non-empty, so it would pass unseen" % (
+                path, ", ".join(sorted(vocabulary_gaps)))
         )
     tool_owners = {name: sorted(owners) for name, owners in tool_owners.items()}
     return by_namespace, tool_owners
@@ -273,9 +341,12 @@ def collect(root):
             for name in sorted(tool_owners, key=lambda n: (-len(n), n))
         )
     )
-
     findings = []
     observations = []
+    # (namespace, tool) -> the (plugin, file) pairs granting it. Accumulated
+    # across the whole sweep, not per agent: the gap is one registry fact
+    # however many agents happen to grant the name.
+    outside = {}
     counters = {
         "agents_discovered": len(agents),
         "tools_form_counts": {"bracketed": 0, "comma": 0, "block": 0},
@@ -285,6 +356,14 @@ def collect(root):
         "skipped_no_tools": 0,
         "skipped_unregistered": 0,
         "provides_tools_vocabulary": len(tool_owners),
+        # The examined population for the granted-name resolution below: grant
+        # token INSTANCES (same semantics as grant_tokens, not distinct pairs)
+        # whose namespace is registered and therefore HAS a vocabulary to
+        # resolve against. Incremented before the membership test, so a
+        # mutation of that test collapses the reporting without collapsing the
+        # counter — the liveness floor keeps measuring what was examined rather
+        # than what was reported. Same reasoning as the post-skip counter below.
+        "provides_tools_grant_names_resolved": 0,
         # Counted POST-skip, unlike body_call_sites just above, which is counted
         # before it. The asymmetry is deliberate: this counter is the liveness
         # floor for what the arm actually judged, so folding in the agents it
@@ -306,7 +385,7 @@ def collect(root):
         fm_lines, body = split_frontmatter(text)
         tools_text, form, lineno = extract_tools(fm_lines)
 
-        body_tokens = MCP_TOKEN_RE.findall(body)
+        body_tokens = namespaces_in(body)
         counters["body_call_sites"] += len(body_tokens)
 
         if tools_text is None:
@@ -316,7 +395,7 @@ def collect(root):
             continue
 
         counters["tools_form_counts"][form] += 1
-        grant_tokens = MCP_TOKEN_RE.findall(tools_text)
+        grant_tokens = namespaces_in(tools_text)
         counters["grant_tokens"] += len(grant_tokens)
         granted = set(grant_tokens)
         plugin = rel.split(os.sep)[0]
@@ -352,6 +431,23 @@ def collect(root):
                     ),
                 })
 
+        # The completeness channel's per-agent half: resolve each granted
+        # tool against its OWN server's vocabulary. A name owned by a different
+        # server says nothing about this one, so the union is the wrong set.
+        # Only accumulation happens here — the finding is a registry fact, so
+        # it is emitted once per gap after the sweep, beside listed_without_grant.
+        for namespace, tool in grants_in(tools_text):
+            if namespace not in registry:
+                # An unregistered server has no vocabulary to judge against —
+                # the same semantic skip the required_by loop takes above, and
+                # deliberately not re-counted there: skipped_unregistered
+                # measures that loop's population, not this one's.
+                continue
+            counters["provides_tools_grant_names_resolved"] += 1
+            vocabulary = registry[namespace]["vocabulary"]
+            if tool not in vocabulary:
+                outside.setdefault((namespace, tool), set()).add((plugin, rel))
+
         # Third arm. It sits after the required_by loop, and therefore after the
         # no-`tools:`-key skip above, so an agent with unrestricted tools is
         # never judged here — the measured "0 offenders" figure is contingent on
@@ -386,6 +482,25 @@ def collect(root):
                     % (", ".join(names), namespace)
                 ),
             })
+
+    # Non-failing, and a REGISTRY fact rather than an agent one — one record
+    # per gap, granting agents carried as evidence (see the docstring).
+    for namespace, tool in sorted(outside):
+        holders = sorted(outside[(namespace, tool)])
+        observations.append({
+            "kind": "granted_outside_vocabulary",
+            "namespace": namespace,
+            "tool": tool,
+            "plugins": sorted({plugin for plugin, _ in holders}),
+            "files": [rel for _, rel in holders],
+            "detail": (
+                "%s grant mcp__%s__%s but registry server %s does not list %s "
+                "in provides_tools, so the name is outside the vocabulary "
+                "arm's reach" % (
+                    ", ".join(sorted({plugin for plugin, _ in holders})),
+                    namespace, tool, registry[namespace]["key"], tool)
+            ),
+        })
 
     # Non-failing: the arm asserts every GRANTING plugin is listed, not the
     # converse, so a listed plugin that grants nothing is reported for a human

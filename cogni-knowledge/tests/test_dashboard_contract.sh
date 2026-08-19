@@ -30,10 +30,13 @@ assert_grep '## Claim verification scope' "$DASH" "kdash-01-scope-heading §2 re
 assert_not_grep '## Claim verification heatmap' "$DASH" "kdash-02-heatmap-heading-gone dropped the old 'Claim verification heatmap' heading (#337)"
 
 # --- 2) The scope paragraph names the citation-consistent / zero-network --
-# semantics. The `.` accepts either spelling (hyphenated prose or the snake_case
-# enum), so this is the same match the former ERE alternation made -- its first
-# branch already spanned both -- now routed through the shared one-label helper.
-assert_grep 'citation.consistent' "$DASH" "kdash-03-citation-consistent accepts either the hyphenated or snake_case spelling of the verification semantics (#337)"
+# semantics (accept either the snake_case enum or the hyphenated prose form).
+if grep -qE 'citation.consistent|citation_consistent' "$DASH"; then
+  green "PASS: kdash-03-citation-consistent names citation-consistent verification semantics (#337)"
+else
+  red "FAIL: kdash-03-citation-consistent names citation-consistent verification semantics (#337)"
+  errors=$((errors + 1))
+fi
 assert_grep 'zero-network' "$DASH" "kdash-04-zero-network names the zero-network (no live-source re-check) cost win (#337)"
 
 # --- 3) The last-resweep cadence is read + surfaced ------------------------

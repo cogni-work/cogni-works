@@ -48,6 +48,84 @@ via `trap rm -rf "$WORK" EXIT`.
   script-level assertions.
 - Fixtures are minimal — only the files the test actually exercises.
 
+## Case ids on result lines
+
+The plain `PASS:`/`FAIL:` label above is what keeps a result line *parsable*.
+What makes one *addressable* is the token after it.
+
+The **case id is the first whitespace-delimited token following the label** —
+not the first token of the line. In `PASS: init bootstraps fetch-cache/
+directory` the id is `init`, and that is what `mutation-check.sh --case <id>`
+points at when it checks that a guard actually fires. That harness ships with
+the cogni-service managed-service tooling and lives outside this repo; the
+same-named `cogni-portfolio/scripts/mutation-check.sh` and
+`cogni-consult/scripts/mutation-check.sh` are different, bespoke scripts and are
+not this harness.
+
+Five rules follow from how it matches:
+
+1. **An id is unique within its suite.** Two cases sharing one id cannot be told
+   apart, so neither is addressable.
+
+2. **Extend a stem with a hyphenated discriminator; never re-use a bare stem.**
+   `test_binding_project_path.sh` shows the defect as it stands today — three
+   cases open with the bare stem `init`:
+
+   ```
+   PASS: init writes schema_version 0.1.5
+   PASS: init bootstraps fetch-cache/ directory
+   PASS: init writes curator_defaults; omits derivable/unused fields
+   ```
+
+   No `--case init` addresses any one of them. As `init-schema-version`,
+   `init-fetch-cache` and `init-curator-defaults` each becomes reachable while
+   the shared stem still groups them by eye. The same suite also collides
+   two-way on `append-project` and `legacy` — a class, not a one-off.
+
+3. **No trailing colon on an id, and nothing before the label.** The id is
+   right-anchored on whitespace-or-end-of-line, so a colon glued to it makes the
+   token `init-fetch-cache:`, and a recipe passing `--case init-fetch-cache`
+   gets `case_not_found` with no hint why. Only whitespace may precede the
+   label — the same reason the plain-emitter rule above exists.
+
+4. **Both arms of one case carry the same id.** The discriminator belongs in the
+   id, never only in the human-readable message:
+
+   ```sh
+   green "PASS: init-fetch-cache bootstraps the fetch-cache/ directory"
+   red   "FAIL: init-fetch-cache bootstraps the fetch-cache/ directory"
+   ```
+
+   Breaking this is worse than it looks. `test_binding_project_path.sh` pairs
+   `PASS: init writes schema_version 0.1.5` with `FAIL: schema_version expected
+   0.1.5, got ...` — different ids on the two arms. Under `--case init` a
+   genuine failure does not even report `case_not_found`: the two *other*
+   `PASS: init` lines still match the green pattern, so the run reads a real red
+   as **green** and the check silently proves nothing.
+
+5. **Verify uniqueness by running the suite — never by grepping call sites.** An
+   id is routinely built from a variable or emitted inside a loop, so the source
+   is not a census of what gets printed. Run it and group what came out:
+
+   ```sh
+   bash tests/test_binding_project_path.sh 2>&1 \
+     | awk '/^[ \t]*(PASS|ok|FAIL):[ \t]/ {print $2}' | sort | uniq -d
+   ```
+
+   Empty output is clean; anything printed is a collision. One limitation: a
+   passing run emits only the green arms, so once those are clean, pair each red
+   arm's id by reading the source.
+
+How the harness classifies a line, precisely: it matches the id as a **whole
+token** (so `--case P1` never matches a `P10` line), keys red on a `FAIL:` line
+and green on an `ok:` or `PASS:` line, and lets a red line win over a stray
+green. Matching neither is reported as `case_not_found` rather than guessed at.
+It reads output **lines**, never the suite's exit status — a suite exits
+non-zero when *any* case is red, which cannot say which one.
+
+These rules are about addressability alone; they hold whatever id vocabulary a
+suite adopts.
+
 ## Contract tests (SKILL.md)
 
 For pure LLM skills, regression coverage is **SKILL.md content invariants**

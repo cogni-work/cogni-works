@@ -31,6 +31,9 @@
 #   - both cogni-portfolio and cogni-workspace still carry the PreToolUse matcher
 #     mcp__excalidraw__.* — correct only while no plugin re-declares the server
 #   - the two copies of concept-mcp-server-map.md stay byte-identical
+#   - every hand-maintained mirror of a registry server's required_by names the
+#     same plugin set as the registry: the workspace-status probe table, that
+#     skill's mcp-registry.md relation line, and the install-mcp plan example
 #   - each glob-driven arm proved it had something to look at (liveness floor)
 #
 # The liveness floor is the load-bearing half of A1. "Zero .mcp.json files
@@ -38,8 +41,32 @@
 # without L1 proving the plugin glob matched real directories, A1 would pass
 # hardest exactly when the suite is most broken.
 #
+# A4-A6 widen the stated scope: this is no longer only a declaration-shape
+# guard, it also pins the prose copies of required_by to the registry. The
+# reason is the same one behind D1: a fact stored twice drifts one-sidedly and
+# nothing reports it. That is not hypothetical here. The cogni-visual
+# retirement updated the registry and left all three mirrors naming a retired
+# plugin, with every case in this suite still green.
+#
 # Deliberately NOT asserted: which servers the registry contains, or that any
-# server is installed. This is a declaration-shape guard, not an install check.
+# server is installed. This is still not an install check. Three more
+# exclusions are chosen rather than overlooked:
+#   - a server with no registry entry is never compared. claude-in-chrome is
+#     one (a manual Chrome-extension install), and it falls out because the
+#     arms iterate the REGISTRY and look the prose row up, not the reverse, so
+#     no exclusion list is needed to keep it out and none should be added.
+#   - the **Skills:** lines in mcp-registry.md carry a different relation
+#     (skill names, not plugin names) and have no registry counterpart.
+#   - the concept-mcp-server-map.md Plugins column is a fourth mirror of the
+#     same fact. It is correct today and is deliberately NOT compared here: D1
+#     asserts only that the two wiki copies stay byte-identical to each other,
+#     never that either agrees with the registry, so that agreement is an
+#     unguarded gap rather than something D1 already covers.
+#   - three further mirrors of the same fact are out of this suite's reach and
+#     tracked separately: the manage-workspace worked example, and the MCP
+#     tables in the repo-root README.md and CLAUDE.md. Guarding a repo-root
+#     doc from a plugin's suite is a scope call a human should make, and the
+#     README spells plugins as markdown links, which needs a different parse.
 #
 # Case-label shape follows test-wiki-tree-parity.sh: "PASS: <id> <label>" /
 # "FAIL: <id> <label>", ids letter-prefixed and never bare numerals, and never a
@@ -68,6 +95,27 @@
 # comes from M1 below, which mutates the TREE (adds a .mcp.json) rather than the
 # assertion — the only mutation that can distinguish "nothing is declared" from
 # "nothing was looked at".
+#
+# Mutation recipe (verifies A4 is a real comparison, not a vacuous one):
+#   bash "$HOME/.claude/plugins/marketplaces/managed-service/cogni-service/scripts/mutation-check.sh" \
+#     --root . \
+#     --file cogni-workspace/references/mcp-git-registry.json \
+#     --expr 's/"required_by": \["cogni-portfolio", "cogni-workspace"\]/"required_by": ["cogni-portfolio", "cogni-workspace", "cogni-marketing"]/' \
+#     --test 'bash cogni-workspace/tests/test-mcp-declaration-hygiene.sh' \
+#     --case A4
+# Verdict: guard_verified. The search literal occurs once (pencil's required_by
+# is a different pair) and the replacement appends a plugin before the closing
+# bracket, so the mutant cannot re-satisfy the pattern and stay green. The same
+# mutant also reds A5 and A6, which is expected (one registry edit desyncs all
+# three mirrors at once) and is not a reason for a second recipe. L4-L6 stay
+# green throughout, which is what separates a real comparison from a parser
+# that stopped seeing rows.
+#
+# The case ids A4/A5/A6 and L4-L6 are written out as static literals at their
+# pass()/fail() call sites, never built in a loop: the handoff preflight
+# literal-searches this source for the recipe's --case value with comment lines
+# excluded, so an interpolated id replays as case_not_found while the arm
+# itself works perfectly.
 
 set -u
 
@@ -79,6 +127,9 @@ REPO_ROOT="${MCP_HYGIENE_ROOT:-$(cd "$SCRIPT_DIR/../.." && pwd)}"
 REGISTRY_REL="cogni-workspace/references/mcp-git-registry.json"
 WIKI_PAGE_REL="wiki/wiki/pages/concept-mcp-server-map.md"
 BUNDLED_PAGE_REL="cogni-workspace/wiki/wiki/pages/concept-mcp-server-map.md"
+PROBE_TABLE_REL="cogni-workspace/skills/workspace-status/SKILL.md"
+RELATION_DOC_REL="cogni-workspace/skills/workspace-status/references/mcp-registry.md"
+INSTALL_EXAMPLE_REL="cogni-workspace/skills/install-mcp/SKILL.md"
 MATCHER='mcp__excalidraw__.*'
 
 PASSED=0
@@ -110,10 +161,18 @@ else
   printf '%s\n' "  matched $plugin_dirs cogni-* directories under $REPO_ROOT, expected at least 2"
 fi
 
-# One parse feeds both L2 and A2 — two copies of this heredoc drifted apart in
-# review (different guards, different redirections) before they were merged.
+# One parse feeds L2, A2 and the mirror arms A4-A6 — two copies of this heredoc
+# drifted apart in review (different guards, different redirections) before they
+# were merged, so the required_by comparison extends this block rather than
+# adding a second one. It always emits exactly eight lines in a fixed order,
+# because the bash side reads them positionally: server count, desktop key, then
+# a row count and a defect report for each of the three prose mirrors. Each
+# surface read is wrapped on its own, so one unreadable mirror reports count 0
+# instead of aborting the other two. The registry try/except is unchanged: a
+# registry that will not parse still emits only the first two lines, leaving the
+# six mirror reads empty, which the guards below normalise to -1 (fail closed).
 registry_read="$(python3 -c '
-import json, sys
+import json, re, sys
 try:
     reg = json.load(open(sys.argv[1]))
 except Exception:
@@ -121,10 +180,122 @@ except Exception:
 servers = reg.get("servers", {})
 print(len(servers))
 print(servers.get("mcp_excalidraw", {}).get("desktop_config_key", ""))
-' "$REPO_ROOT/$REGISTRY_REL" 2>/dev/null)"
-registry_servers="$(printf '%s\n' "$registry_read" | sed -n '1p')"
-desktop_key="$(printf '%s\n' "$registry_read" | sed -n '2p')"
+
+# One expectation list, built once and reused by all three surfaces. The config
+# key falls back to the server name, matching how scripts/check-mcp-tool-grant.py
+# normalises the same registry, so the repo keeps one notion of a namespace.
+wanted = []
+for name in sorted(servers):
+    meta = servers[name]
+    wanted.append((name,
+                   meta.get("desktop_config_key") or name,
+                   sorted(set(meta.get("required_by", [])))))
+
+def norm(text):
+    out = []
+    for tok in text.split(","):
+        tok = tok.strip().strip("`* ")
+        if tok:
+            out.append(tok)
+    return sorted(set(out))
+
+def parse_table(lines):
+    rows = {}
+    idx = -1
+    for ln in lines:
+        if not ln.strip().startswith("|"):
+            idx = -1
+            continue
+        cells = [c.strip() for c in ln.strip().strip("|").split("|")]
+        if idx < 0:
+            if "Needed by" in cells:
+                idx = cells.index("Needed by")
+            continue
+        if set("".join(cells)) <= set("-: "):
+            continue
+        if len(cells) <= idx:
+            continue
+        key = cells[0].strip("`* ")
+        if key:
+            rows[key] = cells[idx]
+    return rows
+
+def parse_sections(lines):
+    rows = {}
+    cur = None
+    for ln in lines:
+        if ln.startswith("### "):
+            cur = ln[4:].strip().split(" (")[0].strip()
+            continue
+        if cur is not None:
+            m = re.match(r"^- \*\*(?:Needed|Used) by:\*\*(.*)$", ln)
+            if m and cur not in rows:
+                rows[cur] = m.group(1)
+    return rows
+
+def parse_plan(lines):
+    rows = {}
+    for ln in lines:
+        head, sep, tail = ln.partition("needed by:")
+        if not sep:
+            continue
+        toks = head.split()
+        if toks and toks[0] not in rows:
+            rows[toks[0]] = tail
+    return rows
+
+def report(rows, by_name):
+    defects = []
+    for name, config_key, want in wanted:
+        key = name if by_name else config_key
+        if key not in rows:
+            defects.append("MISSING " + key)
+            continue
+        got = norm(rows[key])
+        if got != want:
+            defects.append("MISMATCH " + key + " expected=" + ",".join(want) + " found=" + ",".join(got))
+    return "; ".join(defects)
+
+for path, parse, by_name in ((sys.argv[2], parse_table, False),
+                             (sys.argv[3], parse_sections, False),
+                             (sys.argv[4], parse_plan, True)):
+    try:
+        rows = parse(open(path).read().splitlines())
+    except Exception:
+        rows = None
+    if rows is None:
+        print(0)
+        print("surface unreadable")
+    else:
+        print(len(rows))
+        print(report(rows, by_name))
+' "$REPO_ROOT/$REGISTRY_REL" "$REPO_ROOT/$PROBE_TABLE_REL" "$REPO_ROOT/$RELATION_DOC_REL" "$REPO_ROOT/$INSTALL_EXAMPLE_REL" 2>/dev/null)"
+# One pass over the eight lines instead of eight subshell+sed forks over a
+# string already in memory. A here-string keeps the loop in this shell, so the
+# assignments survive it; a pipe would not.
+registry_servers=""; desktop_key=""
+probe_rows=""; probe_defects=""
+relation_rows=""; relation_defects=""
+example_rows=""; example_defects=""
+mirror_line=0
+while IFS= read -r mirror_value; do
+  mirror_line=$((mirror_line + 1))
+  case "$mirror_line" in
+    1) registry_servers="$mirror_value" ;;
+    2) desktop_key="$mirror_value" ;;
+    3) probe_rows="$mirror_value" ;;
+    4) probe_defects="$mirror_value" ;;
+    5) relation_rows="$mirror_value" ;;
+    6) relation_defects="$mirror_value" ;;
+    7) example_rows="$mirror_value" ;;
+    8) example_defects="$mirror_value" ;;
+  esac
+done <<< "$registry_read"
+
 [ -n "$registry_servers" ] || registry_servers=-1
+[ -n "$probe_rows" ] || probe_rows=-1
+[ -n "$relation_rows" ] || relation_rows=-1
+[ -n "$example_rows" ] || example_rows=-1
 
 if [ "$registry_servers" -ge 1 ]; then
   pass "L2 registry parsed at least one server"
@@ -139,6 +310,41 @@ if [ "$matcher_files" -eq 2 ]; then
 else
   fail "L3 exactly two hooks.json carry the excalidraw matcher"
   printf '%s\n' "  found $matcher_files, expected 2 — the scan surface moved"
+fi
+
+# Liveness floors for the three required_by mirrors. A renamed path or a
+# restyled table yields zero parsed rows, which is also what a clean comparison
+# looks like from A4-A6 alone — so without these floors those arms would pass
+# hardest exactly when the parser had gone blind. The count is every row the
+# parser found, not just the registry-backed ones, which is what keeps "the
+# parser saw nothing" distinguishable from "this server has no row" (the latter
+# is a MISSING defect on the arm, not a floor failure).
+#
+# The threshold is two, matching L1, because the registry carries two servers:
+# a surface that parses down to a single row has lost at least one of them. A1
+# would also catch that as a MISSING defect, but it would read as a missing row
+# in the document rather than a parser that stopped seeing rows, which is the
+# distinction these floors exist to draw.
+
+if [ "$probe_rows" -ge 2 ]; then
+  pass "L4 workspace-status probe table parsed at least two rows"
+else
+  fail "L4 workspace-status probe table parsed at least two rows"
+  printf '%s\n' "  $PROBE_TABLE_REL yielded $probe_rows rows — the Needed by column moved or the file was renamed"
+fi
+
+if [ "$relation_rows" -ge 2 ]; then
+  pass "L5 mcp-registry relation lines parsed at least two servers"
+else
+  fail "L5 mcp-registry relation lines parsed at least two servers"
+  printf '%s\n' "  $RELATION_DOC_REL yielded $relation_rows sections — the ### heading or the Needed by/Used by line shape moved"
+fi
+
+if [ "$example_rows" -ge 2 ]; then
+  pass "L6 install-mcp plan example parsed at least two rows"
+else
+  fail "L6 install-mcp plan example parsed at least two rows"
+  printf '%s\n' "  $INSTALL_EXAMPLE_REL yielded $example_rows rows — the needed by: separator moved"
 fi
 
 # --- A1: no plugin ships an MCP declaration -------------------------------
@@ -183,6 +389,41 @@ else
   printf '%s\n' "  the matcher is correct only while no plugin re-declares the server"
 fi
 
+# --- A4/A5/A6: the required_by mirrors agree with the registry ------------
+# Each arm iterates the REGISTRY and looks the prose row up, never the reverse.
+# Plugin lists compare as sorted SETS, so ordering is free. The rationale for
+# the direction, the exclusions it buys, and the static-case-id rule are in the
+# header rather than repeated here.
+#
+# One thing worth restating at the call site, because it is the easiest to undo
+# by accident: the three arms are written out separately on purpose. Folding
+# them into a loop over their ids would replay as case_not_found at the handoff
+# preflight, which literal-searches this source for the recipe case id.
+
+if [ -z "$probe_defects" ]; then
+  pass "A4 workspace-status probe table matches registry required_by"
+else
+  fail "A4 workspace-status probe table matches registry required_by"
+  printf '%s\n' "  $probe_defects"
+  printf '%s\n' "  $REGISTRY_REL is the source of truth — correct $PROBE_TABLE_REL to match it, never the reverse"
+fi
+
+if [ -z "$relation_defects" ]; then
+  pass "A5 mcp-registry relation lines match registry required_by"
+else
+  fail "A5 mcp-registry relation lines match registry required_by"
+  printf '%s\n' "  $relation_defects"
+  printf '%s\n' "  $REGISTRY_REL is the source of truth — correct $RELATION_DOC_REL to match it, never the reverse"
+fi
+
+if [ -z "$example_defects" ]; then
+  pass "A6 install-mcp plan example matches registry required_by"
+else
+  fail "A6 install-mcp plan example matches registry required_by"
+  printf '%s\n' "  $example_defects"
+  printf '%s\n' "  $REGISTRY_REL is the source of truth — correct $INSTALL_EXAMPLE_REL to match it, never the reverse"
+fi
+
 # --- D1: the two wiki copies stay byte-identical --------------------------
 # No other suite covers this page: test-wiki-tree-parity.sh deliberately does
 # not assert tree equality, and test-layering-claim-reconciled.sh pins a
@@ -215,7 +456,10 @@ if [ -z "${MCP_HYGIENE_ROOT:-}" ]; then
              "cogni-portfolio/hooks/hooks.json" \
              "cogni-workspace/hooks/hooks.json" \
              "$WIKI_PAGE_REL" \
-             "$BUNDLED_PAGE_REL"; do
+             "$BUNDLED_PAGE_REL" \
+             "$PROBE_TABLE_REL" \
+             "$RELATION_DOC_REL" \
+             "$INSTALL_EXAMPLE_REL"; do
     mkdir -p "$mutant/$(dirname "$rel")"
     cp "$REPO_ROOT/$rel" "$mutant/$rel"
   done

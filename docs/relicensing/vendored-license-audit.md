@@ -41,13 +41,13 @@ determined license and an Apache-2.0-compatibility assessment.
 | Header scan | Grep of every vendored file for `Copyright` / `SPDX-License-Identifier` / `GPL` / `AGPL` / `LGPL` → **zero matches**. |
 | Apache-2.0 compatible? | ✅ Yes — first-party code, relicensable at will by the copyright holder. |
 
-### 2. `cogni-visual/references/cartographic-data/countries.geo.json`
+### 2. `cogni-workspace/references/cartographic-data/countries.geo.json`
 
 | Field | Finding |
 |---|---|
 | What it is | A low-resolution (1:110M, 180 countries, ~257 KB) world country-outline GeoJSON used by the `editorial-sketch` worker agent to draw accurate country outlines in editorial infographics. |
 | Origin | **Third-party, permissive.** Source: [johan/world.geo.json](https://github.com/johan/world.geo.json) (MIT License). Underlying data: [Natural Earth](https://www.naturalearthdata.com/), released into the **public domain**. |
-| Provenance record | `cogni-visual/references/cartographic-data/LICENSE.md` (in-tree). |
+| Provenance record | `cogni-workspace/references/cartographic-data/LICENSE.md` (in-tree). |
 | License | MIT (packaging) over public-domain source data. |
 | Copyleft? | **No.** MIT is a permissive license; public-domain data carries no license obligations at all. |
 | Attribution | Already satisfied in-tree by `cartographic-data/LICENSE.md`, which credits johan/world.geo.json (MIT) and Natural Earth. Natural Earth requires no attribution; the credit is a courtesy. |
@@ -85,7 +85,7 @@ obligations:
   `cogni-knowledge`, `cogni-marketing`, `cogni-narrative`, `cogni-portfolio`,
   `cogni-sales`, `cogni-trends`, `cogni-visual`, `cogni-workspace` (all
   AGPL-3.0-only)
-- `cogni-visual/references/cartographic-data/LICENSE.md` — the **only**
+- `cogni-workspace/references/cartographic-data/LICENSE.md` — the **only**
   third-party license file (MIT / public-domain, permissive).
 
 ## NOTICE stub decision
@@ -96,7 +96,7 @@ obligations:
   attribute.
 - The cartographic data is public-domain (no attribution required) and its MIT
   packaging is already attributed in-tree by
-  `cogni-visual/references/cartographic-data/LICENSE.md`.
+  `cogni-workspace/references/cartographic-data/LICENSE.md`.
 
 If a `NOTICE` file is later desired as a courtesy consolidation, it would restate
 the existing cartographic-data attribution — an optional polish, not a

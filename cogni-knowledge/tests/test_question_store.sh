@@ -127,25 +127,25 @@ echo "$OUT" | python3 -c 'import json,sys; d=json.load(sys.stdin); sys.exit(0 if
 # 1) sq-01 + sq-03 pages exist; sq-02 (no findings) does not.
 SQ1="$WIKI/wiki/questions/records-of-processing-scope.md"
 SQ3="$WIKI/wiki/questions/pflichten-fuer-risikoklassen.md"
-[ -f "$SQ1" ] && green "PASS: sq-01 question page written at slugified theme_label" \
-  || { red "FAIL: missing $SQ1"; errors=$((errors+1)); }
-[ -f "$SQ3" ] && green "PASS: sq-03 page uses transliterated slug (für->fuer)" \
-  || { red "FAIL: missing $SQ3"; errors=$((errors+1)); }
+[ -f "$SQ1" ] && green "PASS: sq-01-1 question page written at slugified theme_label" \
+  || { red "FAIL: sq-01-1 missing $SQ1"; errors=$((errors+1)); }
+[ -f "$SQ3" ] && green "PASS: sq-03-1 page uses transliterated slug (für->fuer)" \
+  || { red "FAIL: sq-03-1 missing $SQ3"; errors=$((errors+1)); }
 [ ! -f "$WIKI/wiki/questions/court-interpretation.md" ] \
-  && green "PASS: sq-02 (zero findings) wrote no page" \
-  || { red "FAIL: sq-02 page should not exist"; errors=$((errors+1)); }
+  && green "PASS: sq-02-1 (zero findings) wrote no page" \
+  || { red "FAIL: sq-02-1 page should not exist"; errors=$((errors+1)); }
 
-echo "$OUT" | grep -q '"sq-02"' && green "PASS: sq-02 reported in skipped_no_findings" \
-  || { red "FAIL: sq-02 not in skipped_no_findings"; errors=$((errors+1)); }
+echo "$OUT" | grep -q '"sq-02"' && green "PASS: sq-02-2 reported in skipped_no_findings" \
+  || { red "FAIL: sq-02-2 not in skipped_no_findings"; errors=$((errors+1)); }
 
 # 2) forward links + frontmatter
-assert_grep 'type: question' "$SQ1" "sq-01 page is type: question"
-assert_grep 'sub_question_id: sq-01' "$SQ1" "sq-01 page carries sub_question_id"
-assert_grep '## Findings' "$SQ1" "sq-01 page has ## Findings section"
+assert_grep 'type: question' "$SQ1" "sq-01-2 page is type: question"
+assert_grep 'sub_question_id: sq-01' "$SQ1" "sq-01-3 page carries sub_question_id"
+assert_grep '## Findings' "$SQ1" "sq-01-4 page has ## Findings section"
 # #931: the question page now emits an H1 + reader-facing type line (it had no body
 # H1 before). Assert the type line and that the order is H1 -> type line -> ## Findings.
-assert_grep '^Type: Question · raw$' "$SQ1" "sq-01 page: Type: Question · raw line"
-python3 - "$SQ1" <<'PY' && green "PASS: sq-01 page renders H1 then 'Type: Question · raw' then ## Findings" || { red "FAIL: question H1/type-line/findings order wrong"; errors=$((errors+1)); }
+assert_grep '^Type: Question · raw$' "$SQ1" "sq-01-5 page: Type: Question · raw line"
+python3 - "$SQ1" <<'PY' && green "PASS: sq-01-6 page renders H1 then 'Type: Question · raw' then ## Findings" || { red "FAIL: sq-01-6 question H1/type-line/findings order wrong"; errors=$((errors+1)); }
 import sys
 lines = [l for l in open(sys.argv[1], encoding="utf-8").read().splitlines()]
 h1 = next(i for i, l in enumerate(lines) if l.startswith("# "))
@@ -156,11 +156,11 @@ fnd = lines.index("## Findings")
 sys.exit(0 if h1 < typ < fnd else 1)
 PY
 # sq-01 is answered by records-scope (sq-01 ref) AND controller-obligations (sq-01+sq-03 ref)
-assert_grep '\[\[records-scope\]\]' "$SQ1" "sq-01 Findings links its source finding"
-assert_grep 'sources_answering: \[records-scope, controller-obligations\]' "$SQ1" "sq-01 sources_answering lists both findings in order"
+assert_grep '\[\[records-scope\]\]' "$SQ1" "sq-01-7 Findings links its source finding"
+assert_grep 'sources_answering: \[records-scope, controller-obligations\]' "$SQ1" "sq-01-8 sources_answering lists both findings in order"
 # sq-03 has two findings (controller-obligations via sq-03 ref + risk-classes)
-assert_grep '\[\[controller-obligations\]\]' "$SQ3" "sq-03 links shared finding controller-obligations"
-assert_grep '\[\[risk-classes\]\]' "$SQ3" "sq-03 links risk-classes finding"
+assert_grep '\[\[controller-obligations\]\]' "$SQ3" "sq-03-2 links shared finding controller-obligations"
+assert_grep '\[\[risk-classes\]\]' "$SQ3" "sq-03-3 links risk-classes finding"
 
 # ===== Idempotency: add a human ## Notes tail, re-run ========================
 printf '\n## Notes\n\nHuman annotation that must survive a re-run.\n' >> "$SQ1"
@@ -199,8 +199,8 @@ OUT3="$(emit)"
 assert_grep 'type: source' "$WIKI/wiki/sources/court-interpretation.md" \
   "pre-existing source page left untouched (still type: source)"
 [ ! -f "$WIKI/wiki/questions/court-interpretation.md" ] \
-  && green "PASS: did not write a question at the colliding bare slug" \
-  || { red "FAIL: question shadowed the source slug"; errors=$((errors+1)); }
+  && green "PASS: did-1 did not write a question at the colliding bare slug" \
+  || { red "FAIL: did-1 question shadowed the source slug"; errors=$((errors+1)); }
 
 # ===== Within-run collision: two DISTINCT sub-questions, identical slug ======
 # Two sub-questions whose theme_label slugifies to the same base must NOT
@@ -336,15 +336,15 @@ echo "$OUTL" | grep -q '"action": "merged"' \
   && green "PASS: variant theme_label lineage-merged into the existing node (action=merged)" \
   || { red "FAIL: variant did not merge into the lineage node"; echo "$OUTL"; errors=$((errors+1)); }
 [ ! -f "$WIKI/wiki/questions/scope-of-processing-records.md" ] \
-  && green "PASS: did NOT fork a second node for the variant theme_label" \
-  || { red "FAIL: variant forked a second question node"; errors=$((errors+1)); }
+  && green "PASS: did-2 did NOT fork a second node for the variant theme_label" \
+  || { red "FAIL: did-2 variant forked a second question node"; errors=$((errors+1)); }
 echo "$OUTL" | grep -q '"action": "lineage_reused"' \
   && green "PASS: theme_bindings[] records action=lineage_reused" \
   || { red "FAIL: no lineage_reused theme_binding emitted"; echo "$OUTL"; errors=$((errors+1)); }
 # created: preserved; human ## Notes tail survived; new finding unioned in.
-assert_grep 'created: 2025-12-01' "$WIKI/wiki/questions/$LSLUG.md" "lineage merge preserves created:"
-assert_grep 'Prior-run human note that must survive' "$WIKI/wiki/questions/$LSLUG.md" "lineage merge preserves human ## Notes tail"
-assert_grep '\[\[controller-obligations\]\]' "$WIKI/wiki/questions/$LSLUG.md" "lineage merge unions the new finding"
+assert_grep 'created: 2025-12-01' "$WIKI/wiki/questions/$LSLUG.md" "lineage-1 merge preserves created:"
+assert_grep 'Prior-run human note that must survive' "$WIKI/wiki/questions/$LSLUG.md" "lineage-2 merge preserves human ## Notes tail"
+assert_grep '\[\[controller-obligations\]\]' "$WIKI/wiki/questions/$LSLUG.md" "lineage-3 merge unions the new finding"
 
 # ===== Fail-soft binding read error (#426): degrade to slug-only success ======
 # A corrupt / unreadable --binding must NOT abort emit — lineage is an
@@ -362,14 +362,14 @@ OUTCB="$(python3 "$SCRIPT" emit \
   --ingest-manifest "$PROJ/.metadata/ingest-manifest.json" \
   --binding "$WORK/corrupt-binding.json")"
 echo "$OUTCB" | python3 -c 'import json,sys; d=json.load(sys.stdin); sys.exit(0 if d["success"] and d["data"].get("binding_skipped") else 1)' \
-  && green "PASS: corrupt --binding degrades to success + data.binding_skipped (no abort)" \
-  || { red "FAIL: corrupt --binding did not fail-soft"; echo "$OUTCB"; errors=$((errors+1)); }
+  && green "PASS: corrupt-1 --binding degrades to success + data.binding_skipped (no abort)" \
+  || { red "FAIL: corrupt-1 --binding did not fail-soft"; echo "$OUTCB"; errors=$((errors+1)); }
 # No lineage map -> the variant theme_label falls back to slugify(theme_label)
 # and writes its OWN node (it does NOT route into $LSLUG), proving the degrade
 # to slug-only accumulation actually changed behavior vs the lineage case.
 [ -f "$WIKI/wiki/questions/scope-of-processing-records.md" ] \
-  && green "PASS: corrupt --binding ran slug-only (variant got its own slug node, no lineage routing)" \
-  || { red "FAIL: corrupt --binding did not degrade to slug-only"; errors=$((errors+1)); }
+  && green "PASS: corrupt-2 --binding ran slug-only (variant got its own slug node, no lineage routing)" \
+  || { red "FAIL: corrupt-2 --binding did not degrade to slug-only"; errors=$((errors+1)); }
 
 # -- Unreadable-path arm (OSError) --
 OUTMB="$(python3 "$SCRIPT" emit \

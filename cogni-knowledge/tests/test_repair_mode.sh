@@ -107,15 +107,15 @@ cp "$WIKI/wiki/index.md" "$WORK/degraded-index.before"
 
 DRY="$WORK/dry.json"
 python3 "$SCRIPT" --wiki-root "$WIKI" --wiki-scripts-dir "$WSD" --repair > "$DRY"
-assert_grep '"success": true' "$DRY" "AC1 dry-run succeeds"
-assert_grep '"action": "dry_run"' "$DRY" "AC1 dry-run is the default (no --apply)"
-assert_grep '"reason": "repair_pending"' "$DRY" "AC1 dry-run reason is repair_pending"
-assert_grep 'ROOT-LINKS' "$DRY" "AC1 dry-run names the drifted ROOT-LINKS region"
-assert_grep 'root-index-proposed.md' "$DRY" "AC1 dry-run stages the proposed root MAP"
+assert_grep '"success": true' "$DRY" "AC1-1 dry-run succeeds"
+assert_grep '"action": "dry_run"' "$DRY" "AC1-2 dry-run is the default (no --apply)"
+assert_grep '"reason": "repair_pending"' "$DRY" "AC1-3 dry-run reason is repair_pending"
+assert_grep 'ROOT-LINKS' "$DRY" "AC1-4 dry-run names the drifted ROOT-LINKS region"
+assert_grep 'root-index-proposed.md' "$DRY" "AC1-5 dry-run stages the proposed root MAP"
 if cmp -s "$WIKI/wiki/index.md" "$WORK/degraded-index.before"; then
-  green "PASS: AC1 dry-run leaves the live index.md byte-identical"
+  green "PASS: AC1-6 dry-run leaves the live index.md byte-identical"
 else
-  red "FAIL: AC1 dry-run mutated the live index.md"
+  red "FAIL: AC1-6 dry-run mutated the live index.md"
   errors=$((errors + 1))
 fi
 
@@ -124,24 +124,24 @@ fi
 # ===========================================================================
 APPLY="$WORK/apply.json"
 python3 "$SCRIPT" --wiki-root "$WIKI" --wiki-scripts-dir "$WSD" --repair --apply > "$APPLY"
-assert_grep '"success": true' "$APPLY" "AC1 --apply succeeds"
-assert_grep '"action": "repaired"' "$APPLY" "AC1 --apply action is repaired"
+assert_grep '"success": true' "$APPLY" "AC1-7 --apply succeeds"
+assert_grep '"action": "repaired"' "$APPLY" "AC1-8 --apply action is repaired"
 assert_not_grep "$ROOT_LINKS_EMPTY" "$WIKI/wiki/index.md" \
-  "AC1 --apply replaced the empty ROOT-LINKS sentinel in the live index.md"
+  "AC1-9 --apply replaced the empty ROOT-LINKS sentinel in the live index.md"
 assert_grep 'Sources (1)' "$WIKI/wiki/index.md" \
-  "AC1 --apply populated the ROOT-LINKS span with the theme-scoped count-link"
+  "AC1-10 --apply populated the ROOT-LINKS span with the theme-scoped count-link"
 assert_grep 'curated-layout repair' "$WIKI/wiki/meta/log.md" \
-  "AC1 --apply appended a repair log line"
+  "AC1-11 --apply appended a repair log line"
 
 # ===========================================================================
 # AC2. Re-running health on the repaired base reports zero structural_drift
 # ===========================================================================
 HOUT="$WORK/health-after-repair.json"
 python3 "$HEALTH" --wiki-root "$WIKI" > "$HOUT"
-assert_grep '"success": true' "$HOUT" "AC2 health succeeds on the repaired base"
+assert_grep '"success": true' "$HOUT" "AC2-1 health succeeds on the repaired base"
 assert_not_grep 'structural_drift' "$HOUT" \
-  "AC2 repaired base fires no structural_drift"
-assert_grep '"errors": 0' "$HOUT" "AC2 repaired base has zero errors"
+  "AC2-2 repaired base fires no structural_drift"
+assert_grep '"errors": 0' "$HOUT" "AC2-3 repaired base has zero errors"
 
 # ===========================================================================
 # AC3. --repair on a clean curated base is a noop; a second --apply too
@@ -150,12 +150,12 @@ CLEAN="$WORK/clean"
 build_curated "$CLEAN" "0.0.9" "$REAL_OVERVIEW" "$POPULATED_LINKS"
 NOOP="$WORK/noop.json"
 python3 "$SCRIPT" --wiki-root "$CLEAN" --wiki-scripts-dir "$WSD" --repair > "$NOOP"
-assert_grep '"action": "noop"' "$NOOP" "AC3 clean base reaches action:noop"
-assert_grep '"reason": "no_drift_detected"' "$NOOP" "AC3 clean base reason is no_drift_detected"
+assert_grep '"action": "noop"' "$NOOP" "AC3-1 clean base reaches action:noop"
+assert_grep '"reason": "no_drift_detected"' "$NOOP" "AC3-2 clean base reason is no_drift_detected"
 
 NOOP2="$WORK/noop2.json"
 python3 "$SCRIPT" --wiki-root "$CLEAN" --wiki-scripts-dir "$WSD" --repair --apply > "$NOOP2"
-assert_grep '"action": "noop"' "$NOOP2" "AC3 second --apply on a clean base is a clean no-op"
+assert_grep '"action": "noop"' "$NOOP2" "AC3-3 second --apply on a clean base is a clean no-op"
 
 # ===========================================================================
 # lag. Schema-lag-only repair: 0.0.8 base with populated links bumps to 0.0.9
@@ -164,10 +164,10 @@ LAG="$WORK/lag"
 build_curated "$LAG" "0.0.8" "$REAL_OVERVIEW" "$POPULATED_LINKS"
 LAGOUT="$WORK/lag.json"
 python3 "$SCRIPT" --wiki-root "$LAG" --wiki-scripts-dir "$WSD" --repair --apply > "$LAGOUT"
-assert_grep '"action": "repaired"' "$LAGOUT" "lag --apply repairs the schema lag"
-assert_grep '"schema_after": "0.0.9"' "$LAGOUT" "lag --apply reports schema_after 0.0.9"
+assert_grep '"action": "repaired"' "$LAGOUT" "lag-1 --apply repairs the schema lag"
+assert_grep '"schema_after": "0.0.9"' "$LAGOUT" "lag-2 --apply reports schema_after 0.0.9"
 assert_grep '"schema_version": "0.0.9"' "$LAG/.cogni-wiki/config.json" \
-  "lag --apply bumped the on-disk schema_version to 0.0.9"
+  "lag-3 --apply bumped the on-disk schema_version to 0.0.9"
 
 # ===========================================================================
 # guard. A pre-0.0.8 base is refused (run --migrate first)
@@ -176,8 +176,8 @@ OLD="$WORK/old"
 build_curated "$OLD" "0.0.7" "$REAL_OVERVIEW" "$ROOT_LINKS_EMPTY"
 GUARD="$WORK/guard.json"
 python3 "$SCRIPT" --wiki-root "$OLD" --wiki-scripts-dir "$WSD" --repair > "$GUARD" || true
-assert_grep '"success": false' "$GUARD" "guard: pre-0.0.8 base is refused"
-assert_grep 'migrate' "$GUARD" "guard: refusal points at the full migration (--migrate)"
+assert_grep '"success": false' "$GUARD" "guard-1 pre-0.0.8 base is refused"
+assert_grep 'migrate' "$GUARD" "guard-2 refusal points at the full migration (--migrate)"
 
 # ---------------------------------------------------------------------------
 if [ "$errors" -eq 0 ]; then

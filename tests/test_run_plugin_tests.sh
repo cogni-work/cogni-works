@@ -20,6 +20,14 @@
 #      and success:false. This is the assertion that keeps the runner from
 #      reporting green if the globs ever stop matching — the same silent-zero
 #      class the CI job was written to end.
+#   9. A populated root whose --filter matches nothing -> an empty RESULT,
+#      not a broken discovery: exit 0, success:true, total 0, and no failure
+#      line on stderr. The floor is keyed on what discovery found BEFORE
+#      filtering, so a legitimate empty query is reported as one.
+#  10. An empty root still fails WITH a --filter supplied. This is the half
+#      that keeps case 9 honest: keying the floor on the filter's presence
+#      instead of on the pre-filter population would let broken globs pass
+#      under a filter -- the silent zero case 8 exists to prevent.
 #
 # Only case 7 touches the real tree, and it is --list only, so this suite never
 # recurses into the full sweep.
@@ -210,6 +218,56 @@ assert d['success'] is False, d
 assert d['data']['total']==0, d
 assert d['data']['suites']==[], d
 assert d['error'], 'a discovery failure must carry an explanatory error string'
+"
+
+# ---------------------------------------------------------------------------
+# Case 9 - a filter matching nothing over a POPULATED root is an empty query,
+# not a broken discovery. Reuses case 1's fixture (three suites, none matching
+# the filter) so the pre-filter population is genuinely non-empty. The stderr
+# capture lives directly under $WORK, outside every fixture root, so the runner
+# never discovers it.
+# ---------------------------------------------------------------------------
+ERR9="$WORK/err9"
+
+set +e
+OUT9="$(python3 "$RUNNER" --root "$FIX1" --filter cogni-nosuch 2>"$ERR9")"
+CODE9=$?
+set -e
+check "rpt14 populated root with a filter matching nothing exits 0" \
+  "$([ "$CODE9" -eq 0 ] && echo 0 || echo 1)"
+assert_json "rpt15 that run reports success:true, total 0, no suites, empty error" "$OUT9" "
+import json,sys
+d=json.load(sys.stdin)
+assert d['success'] is True, d
+assert d['data']['total']==0, d
+assert d['data']['suites']==[], d
+assert d['error']=='', 'an empty query is not a failure, so it carries no error string'
+"
+
+set +e
+grep -q '^FAIL:' "$ERR9"
+GREP9=$?
+set -e
+check "rpt16 that run emits no failure line on stderr" \
+  "$([ "$GREP9" -ne 0 ] && echo 0 || echo 1)"
+
+# ---------------------------------------------------------------------------
+# Case 10 - the floor survives a --filter. An empty root must still exit 1 even
+# when a filter is supplied, which is what pins the branch to the pre-filter
+# population rather than to the filter's presence.
+# ---------------------------------------------------------------------------
+set +e
+OUT10="$(python3 "$RUNNER" --root "$FIX8" --filter cogni-alpha 2>/dev/null)"
+CODE10=$?
+set -e
+check "rpt17 empty root exits 1 even when a filter is supplied" \
+  "$([ "$CODE10" -eq 1 ] && echo 0 || echo 1)"
+assert_json "rpt18 that run reports success:false, total 0, and a non-empty error" "$OUT10" "
+import json,sys
+d=json.load(sys.stdin)
+assert d['success'] is False, d
+assert d['data']['total']==0, d
+assert d['error'], 'broken discovery must carry an explanatory error string'
 "
 
 echo ""

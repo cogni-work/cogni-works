@@ -5,11 +5,13 @@
 # Fixtures are heredoc'd inline: no engagement corpus is committed anywhere in the repo,
 # so every case builds a minimal engagement in a temp directory.
 #
-# Coverage
-#   1  clean            correct short-vowel ss (dass, muss, Prozess, müssen, Schlüssel,
+# Coverage:
+#   1  clean-envelope / clean-zero-findings
+#                       correct short-vowel ss (dass, muss, Prozess, müssen, Schlüssel,
 #                       Ausschuss) reports nothing, as do the -weis compounds whose ss
 #                       straddles a morpheme boundary (Beweissicherung, Ausweisstelle)
-#   2  markdown-finding a Swiss form in scope/key-question.md carries path, line, form,
+#   2  drift-envelope / drift-count / markdown-finding-shape / markdown-finding-by-file
+#                       a Swiss form in scope/key-question.md carries path, line, form,
 #                       suggestion; the per-file breakdown matches the findings list
 #   3  stem-match       Messgrösse is reported from the bare Grösse entry (a whole-word
 #                       matcher would miss the issue's own headline example)
@@ -21,18 +23,27 @@
 #   8b escaped-json     \uXXXX-escaped JSON values are decoded before matching, so a
 #                       file written with ensure_ascii=True does not silently lose
 #                       every non-ASCII entry
-#   9  failure-paths    engagement_missing, not_a_directory, usage
-#  10  envelope-shape   exactly one stdout line per exit path; literal ß bytes, no escapes
+#   9  failure-paths-missing-engagement / failure-paths-not-a-directory /
+#      failure-paths-no-argument
+#                       engagement_missing, not_a_directory, usage
+#  10  envelope-shape-one-line / envelope-shape-literal-bytes /
+#      envelope-shape-error-empty
+#                       exactly one stdout line per exit path; literal ß bytes, no escapes
 #  11  read-only-flag   --fix is rejected as unexpected_argument
 #  12  read-only-tree   the fixture tree is byte-identical before and after a scan
 #  12b scoping          a sibling engagement's Swiss text contributes zero findings —
 #                       asserted on the stated sibling relationship, so a later refactor
 #                       to per-case mktemp -d fails here instead of silently ceasing to
 #                       test scoping at all
-#  12c unreadable-root  a root that cannot be read fails loud rather than reporting a
+#  12c fail-loud        a root that cannot be read fails loud rather than reporting a
 #                       clean corpus it never opened (skipped when running as root)
-#  13  goes-red         emptying the pair list, or anchoring the matcher whole-word,
+#  13  goes-red-empty-pairs / goes-red-anchored
+#                       emptying the pair list, or anchoring the matcher whole-word,
 #                       flips this suite's own detection cases red
+#
+# The emitted first token is the addressable id: each case emits the id shown
+# above as the first token of its result line, so --case names one line and
+# never a sibling.
 #
 # Usage: bash cogni-consult/tests/test_orthography_drift_scan.sh   (no args, no network)
 

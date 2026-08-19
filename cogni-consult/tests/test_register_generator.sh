@@ -7,15 +7,29 @@
 # the JSON envelope plus the on-disk assumptions.md.
 #
 # Coverage:
-#   1  fully-scoped   summary-table row AND anchored ## <slug> section per record,
+#   1  fully-scoped-envelope / fully-scoped-register-content
+#                     summary-table row AND anchored ## <slug> section per record,
 #                     each carrying value / provenance / source-lineage quad /
 #                     used_by[] backlinks (AC1)
-#   2  anchor-match   the ## <slug> heading equals id-minus-asm-prefix, i.e. the
+#   2  anchor-matches-resolver-link-target
+#                     the ## <slug> heading equals id-minus-asm-prefix, i.e. the
 #                     exact anchor resolve-assumptions.py --mode link points at
-#   3  empty          empty registry -> "No assumptions registered yet." + marker
-#   4  missing        no assumptions.json -> fail-soft empty register, success
-#   5  overwrite-guard hand-authored assumptions.md (no marker) -> refused
-#   6  regenerate     a marker-bearing assumptions.md is overwritten in place
+#   3  empty-envelope / empty-register-neutral-line / empty-register-marker
+#                     empty registry -> "No assumptions registered yet." + marker
+#   4  missing-registry-envelope / missing-registry-empty-register
+#                     no assumptions.json -> fail-soft empty register, success
+#   5  overwrite-guard-refuses-hand-authored / overwrite-guard-leaves-file-intact
+#                     hand-authored assumptions.md (no marker) -> refused
+#   6  regenerate-envelope / regenerate-overwrites-marked-register
+#                     a marker-bearing assumptions.md is overwritten in place
+#   7  robustness-envelope-clean / robustness-register-content
+#                     a null value, a non-dict citation, an absent name, a
+#                     pipe-bearing value and a non-dict list element all degrade
+#                     cleanly — no traceback, table cells stay escaped
+#
+# The emitted first token is the addressable id: each case emits the id shown
+# above as the first token of its result line, so --case names one line and
+# never a sibling.
 #
 # Usage: bash cogni-consult/tests/test_register_generator.sh
 # Exits non-zero on any assertion failure.

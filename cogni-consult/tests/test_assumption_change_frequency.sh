@@ -7,17 +7,26 @@
 # assert on the emitted envelope plus the mined change-frequency figures.
 #
 # Coverage:
-#   1  changed-literal     a literal edited across 3 commits reports edit_count 3
-#   2  window              window.start/end span the observed commit dates
+#   1  changed-literal-envelope / changed-literal-edit-count
+#                       a literal edited across 3 commits reports edit_count 3
+#   2  window-populated    window.start/end span the observed commit dates
 #   3  no-registry-dep     runs with no assumptions.json present (AC1)
-#   4  frozen-literal      a literal added once and never touched reports edit_count 1
+#   4  frozen-literal-edit-count
+#                       a literal added once and never touched reports edit_count 1
 #   5  code-fence-skipped  numbers inside a fenced code block are not counted
 #   6  subdir-recursion    nested action-fields/<field>/<deliverable>.md is mined
 #   7  frontmatter-skipped a number in the leading YAML frontmatter is not counted
 #   8  hr-not-frontmatter  a body `---` horizontal rule does not mask later literals
-#   9  empty-corpus        a corpus with no markdown -> success, zero literals
-#  10  not-a-git-repo      a non-git dir -> success:false, not_a_git_repo
-#  11  missing-corpus      a non-existent path -> success:false, corpus_missing
+#   9  empty-corpus-envelope / empty-corpus-zeroed
+#                       a corpus with no markdown -> success, zero literals
+#  10  not-a-git-repo-envelope
+#                       a non-git dir -> success:false, not_a_git_repo
+#  11  missing-corpus-envelope
+#                       a non-existent path -> success:false, corpus_missing
+#
+# The emitted first token is the addressable id: each case emits the id shown
+# above as the first token of its result line, so --case names one line and
+# never a sibling.
 #
 # Usage: bash cogni-consult/tests/test_assumption_change_frequency.sh
 # Exits non-zero on any assertion failure.

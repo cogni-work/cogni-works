@@ -18,18 +18,26 @@
 # the hook into other plugins' subagents at runtime.
 #
 # Coverage:
-#   1  declaration   exactly one SubagentStart entry, type `command` (required by
+#   1  declaration-shape / declaration-script
+#                    exactly one SubagentStart entry, type `command` (required by
 #                    Claude Code since 2.1.142), command file present + executable
-#   2  bare names    the matcher matches all four bare agent names
-#   3  qualified     the matcher matches all four `cogni-consult:`-qualified
+#   2  bare-<agent>  the matcher matches all four bare agent names
+#   3  qualified-<agent>
+#                    the matcher matches all four `cogni-consult:`-qualified
 #                    names — the form a plugin-supplied agent is dispatched under
-#   4  near-misses   the matcher is anchored at both ends, and a foreign
+#   4  anchoring / reject-foreign-qualification / reject-suffix-near-miss /
+#      reject-prefix-affix / reject-prefix-alone
+#                    the matcher is anchored at both ends, and a foreign
 #                    qualification, a suffix near-miss, a prefix affix and a bare
 #                    prefix are all rejected
-#   5  drift guard   the alternation and cogni-consult/agents/ agree in both
+#   5  drift         the alternation and cogni-consult/agents/ agree in both
 #                    directions
 #   6  envelope      the hook script emits a valid SubagentStart envelope whose
 #                    additionalContext carries the language block and the contract
+#
+# The emitted first token is the addressable id: each case emits the id shown
+# above — with its per-agent suffix substituted for <agent> — as the first token
+# of its result line, so --case names one line and never a sibling.
 #
 # Usage: bash cogni-consult/tests/test_subagent_start_hook.sh
 # Exits non-zero on any assertion failure.

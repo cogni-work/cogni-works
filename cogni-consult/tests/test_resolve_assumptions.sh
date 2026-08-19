@@ -7,41 +7,59 @@
 # runs the resolver, and asserts on the JSON envelope plus the on-disk state.
 #
 # Coverage:
-#   1  resolve-in-place    two occurrences of one id both replaced (AC1)
-#   2  dry-run             no --in-place -> resolved_text in envelope, file untouched
-#   3  unknown-id          all missing ids listed, exit 1, file untouched (AC2)
-#   4  malformed           uppercase/underscore {{asm:...}} variants fail loud
-#   5  nested-value        registry value embedding a placeholder fails post-substitution
-#   6  missing-value       entry without value / value null -> missing_assumption_value
-#   7  bad-id              id-less or malformed-id entry -> invalid_assumption_id
-#   8  duplicate-id        two entries sharing an id -> duplicate_assumption_id
-#   9  registry-missing    placeholders without assumptions.json -> registry_missing
-#  10  no-placeholders     placeholder-free file passes even without a registry
-#  11  used-by-first       --in-place records the citer in the id's used_by[]
-#  12  used-by-idempotent  re-resolving the same citer adds nothing, registry not rewritten
-#  13  used-by-dry-run     dry-run leaves assumptions.json byte-identical
-#  14  used-by-multi       a second citing file accumulates a second used_by[] entry
-#  15  used-by-write-failed  failed edge write -> used_by_write_failed envelope, target untouched
-#  16  provenance-marker   a typed entry renders value + link-safe (prov: t/s); untyped renders bare
-#  17  cap-exceeded        given/reviewed exceeds the 'stated' cap -> status_cap_exceeded, target untouched
-#  18  verified-evidence-gate  claim/verified needs a citation.claim_id resolving to a
+#   1  resolve-in-place-*    two occurrences of one id both replaced (AC1)
+#   2  dry-run-*             no --in-place -> resolved_text in envelope, file untouched
+#   3  unknown-id-*          all missing ids listed, exit 1, file untouched (AC2)
+#   4  malformed             uppercase/underscore {{asm:...}} variants fail loud
+#   5  nested-value-*        registry value embedding a placeholder fails post-substitution
+#   6  missing-value         entry without value / value null -> missing_assumption_value
+#   7  bad-id                id-less or malformed-id entry -> invalid_assumption_id
+#   8  duplicate-id          two entries sharing an id -> duplicate_assumption_id
+#   9  registry-missing      placeholders without assumptions.json -> registry_missing
+#  10  no-placeholders       placeholder-free file passes even without a registry
+#  11  used-by-first-*       --in-place records the citer in the id's used_by[]
+#  12  used-by-idempotent-*  re-resolving the same citer adds nothing, registry not rewritten
+#  13  used-by-dry-run-*     dry-run leaves assumptions.json byte-identical
+#  14  used-by-multi-*       a second citing file accumulates a second used_by[] entry
+#  15  used-by-write-failed-*  failed edge write -> used_by_write_failed envelope, target untouched
+#  16  provenance-marker-*   a typed entry renders value + link-safe (prov: t/s); untyped renders bare
+#  17  cap-exceeded-*        given/reviewed exceeds the 'stated' cap -> status_cap_exceeded, target untouched
+#  18  verified-*            claim/verified needs a citation.claim_id resolving to a
 #      verified ClaimRecord: absent -> verified_claim_id_missing, dangling ->
 #      claim_id_dangling, unverified record -> claim_not_verified, missing
 #      registry -> claims_registry_unreadable, genuine evidence -> renders
 #  19  incomplete-provenance  provenance_type without status -> incomplete_provenance
-#  20  marker-collision-safety  re-resolving marked output does not trip the leftover checks
-#  21  scoped-validation   a mis-typed UNCITED assumption does not block a brief citing a good one
-#  22  submit-propagate-roundtrip  submit-assumption-claim.py end-to-end: submit is
+#  20  marker-collision-safe  re-resolving marked output does not trip the leftover checks
+#  21  scoped-validation-*   a mis-typed UNCITED assumption does not block a brief citing a good one
+#  22  submit-* / re-submit-* / propagate-* / roundtrip-* / propagate-idempotent-* /
+#      propagate-null-citation-*
+#                            submit-assumption-claim.py end-to-end: submit is
 #      idempotent, propagate refuses an unverified record, then flips the
 #      assumption to verified once the ClaimRecord verifies (default layout)
-#  23  link-render-mode  --mode link substitutes {{asm:slug}} ->
+#  23  link-mode-* / default  --mode link substitutes {{asm:slug}} ->
 #      [[assumptions#<slug>|<value>]] with the (prov: type/status) marker intact,
 #      the leftover check stays clean (brackets can't trip the brace-only regex),
 #      and the default (value) mode is byte-for-byte unchanged
-#  24  resolve-propagate  submit-assumption-claim.py resolve-propagate: refuses a
+#  24  resolve-propagate-*   submit-assumption-claim.py resolve-propagate: refuses a
 #      still-verified (not resolved) or non-'corrected' ClaimRecord, then on a
 #      resolved+corrected record overwrites the assumption value, demotes status
 #      verified->reviewed, stamps citation.propagated_at, and re-runs as a no-op
+#  25  alt-source-*          an alternative_source resolution writes
+#      resolution.alternative_source_url/title onto the citation, leaves the value
+#      unchanged, demotes verified->reviewed, and re-runs byte-identically
+#  26  discarded-*           a discarded resolution unbinds citation.claim_id,
+#      retains the value the placeholder still needs, demotes verified->reviewed,
+#      and re-runs byte-identically
+#  27  resolve-propagate-fallback-* / -no-fallback-* / -empty-fallback-* /
+#      -explicit-empty-* / -fb-idem-*
+#                            with --corrected-value omitted the written value falls
+#      back verbatim to the record's resolution.corrected_statement; an explicitly
+#      empty value is honoured rather than treated as absent, and the fallback path
+#      re-runs idempotently
+#
+# The emitted first token is the addressable id: each case emits the id shown
+# above — with its per-assertion suffix substituted for the trailing `*` — as the
+# first token of its result line, so --case names one line and never a sibling.
 #
 # Usage: bash cogni-consult/tests/test_resolve_assumptions.sh
 # Exits non-zero on any assertion failure.

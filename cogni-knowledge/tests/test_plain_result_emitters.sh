@@ -158,8 +158,8 @@ done
 errors=$((errors + shape_errors))
 
 # Liveness floor — a broken glob must fail loudly rather than pass vacuously.
-# 78 files exercise the contract today (1 defines the emitters — the shared
-# helper — and 77 source it). The floor sits at 50 so either direction of drift
+# 79 files exercise the contract today (1 defines the emitters — the shared
+# helper — and 78 source it). The floor sits at 50 so either direction of drift
 # has room, and consolidating definers onto the helper cannot trip it.
 if [ "$exercisers" -lt 50 ]; then
   red "FAIL: only $exercisers file(s) exercising the emitter contract were found (expected at least 50) — the scan is not reaching them"

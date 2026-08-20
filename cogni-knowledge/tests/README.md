@@ -44,6 +44,11 @@ via `trap rm -rf "$WORK" EXIT`.
   wrapped in an escape sequence and never chosen by an environment probe.
   `test_plain_result_emitters.sh` holds this shape.
 - `assert_grep <pattern> <description>` for contract-level SKILL.md checks.
+- `assert_grep_f` / `assert_not_grep_f` are the fixed-string (`grep -qF`)
+  counterparts. Reach for them whenever the pattern is a literal carrying
+  `[`, `]`, `.` or `*` — a wikilink, a glob, a path. `assert_grep` reads such
+  a pattern as a regex, so it can report green against a file that does not
+  contain the string at all.
 - Real Python harness (inline `python3 - <<PY ... PY` heredoc) for
   script-level assertions.
 - Fixtures are minimal — only the files the test actually exercises.

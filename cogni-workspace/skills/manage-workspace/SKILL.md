@@ -253,7 +253,16 @@ bash ${CLAUDE_PLUGIN_ROOT}/scripts/generate-settings.sh \
   --update
 ```
 
-The `--update` flag preserves any custom env vars the user added manually.
+The `--update` flag preserves any custom env vars the user added manually. It
+also removes the per-plugin vars it generated for plugins that are no longer in
+the confirmed list: `COGNI_<NAME>_ROOT` and `COGNI_<NAME>_PLUGIN`, or
+`PLUGIN_<NAME>_ROOT` and `PLUGIN_<NAME>_PLUGIN` for a plugin outside the
+`cogni-` namespace. So deselecting a plugin at step 2 retires its wiring instead
+of leaving a var pointing at a directory that no longer exists.
+
+`PROJECT_AGENTS_OPS_ROOT`, `COGNI_WORKSPACE_ROOT` and
+`COGNI_WORKSPACE_PYTHON_VENV` are kept regardless of that list, since the
+workspace needs its own pointers even when `cogni-workspace` is deselected.
 
 ### 3.5. Refresh Optional Python Dependencies
 

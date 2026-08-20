@@ -4,7 +4,8 @@
 # --language takes an ISO 639-1 code. Codes with a natural-language name in
 # LANGUAGE_NAMES below also get the Claude Code "language" settings key; anything
 # else is reported as data.language_key_skipped and gets no key.
-# Optional: --update (preserve custom env vars)
+# Optional: --update (preserve custom env vars; drop generated ones for
+# plugins no longer in the list)
 
 set -euo pipefail
 
@@ -49,7 +50,7 @@ TARGET_ABS=$(cd "$TARGET_DIR" && pwd)
 
 # Generate all config files via single Python call
 python3 << PYEOF
-import json, os, sys
+import json, os, re, sys
 from datetime import datetime, timezone
 
 target = "$TARGET_ABS"
@@ -59,6 +60,16 @@ update_mode = $( [ "$UPDATE_MODE" = true ] && echo "True" || echo "False" )
 with open("$PLUGINS_TMPFILE") as f:
     plugins = json.load(f)
 
+# The generated namespace: every env key this script writes for a plugin has one
+# of these two shapes. The prune below keys on that derived namespace rather than
+# on a list of retired plugin names, because a name list encodes one historical
+# event, needs hand-maintaining, and says nothing about the next plugin removed.
+#
+# No ^/$ anchors: this Python body sits in an unquoted heredoc, where $ and
+# backticks are live. fullmatch() supplies the anchoring, so the pattern carries
+# no shell-live metacharacter at all.
+GENERATED_KEY = re.compile(r"((?:COGNI|PLUGIN)_.+)_(?:ROOT|PLUGIN)")
+
 # Build env vars
 env = {}
 env["PROJECT_AGENTS_OPS_ROOT"] = target
@@ -67,6 +78,13 @@ env["COGNI_WORKSPACE_ROOT"] = os.path.join(target, "cogni-workspace")
 # across all workspaces on this host, mirroring ~/.claude/mcp-servers/. This is
 # the exact path consumers re-exec under (e.g. cogni-knowledge pdf-extract.py).
 env["COGNI_WORKSPACE_PYTHON_VENV"] = os.path.expanduser(os.path.join("~", ".claude", "workspace-python-venv"))
+
+# Keyspace stems of the plugins in THIS run's set, accumulated from the same
+# root_var the loop already builds so there is no second name source to drift.
+# A stem is recorded per plugin, not per key written: a plugin supplied without
+# a path writes no _PLUGIN key this run, and its existing one must still count
+# as owned rather than read as stale.
+current_keyspaces = set()
 
 for p in plugins:
     name = p.get("name", "") if isinstance(p, dict) else p
@@ -82,20 +100,45 @@ for p in plugins:
         plugin_var = f"PLUGIN_{suffix}_PLUGIN"
 
     env[root_var] = os.path.join(target, name)
+    current_keyspaces.add(root_var[: -len("_ROOT")])
     if path:
         env[plugin_var] = path
 
 # Merge with existing settings if update mode. Read-modify-write the whole
 # document, not just "env": the file is the user's too (permissions, hooks,
 # outputStyle), and replacing it wholesale destroys anything we don't generate.
+#
+# Carrying every prior key over unconditionally is what kept a retired plugin's
+# vars alive forever, pointing at directories that no longer exist. Each prior
+# key now takes one of three arms:
+#
+#   1. regenerated this run  -> keep what this run computed
+#   2. ours, plugin now gone -> prune
+#   3. anything else         -> preserve untouched, value included
+#
+# Arm 1 is also what spares PROJECT_AGENTS_OPS_ROOT, COGNI_WORKSPACE_ROOT and
+# COGNI_WORKSPACE_PYTHON_VENV: they are assigned unconditionally above, so they
+# are already in env before any shape test runs. That identity check is required
+# rather than merely convenient - cogni-workspace reaches the loop as an ordinary
+# plugin, so COGNI_WORKSPACE_ROOT is a shape a real plugin genuinely produces, and
+# a shape-only rule would delete the workspace's own root pointer for anyone who
+# deselects cogni-workspace at the confirm step.
+#
+# Accepted residual: a hand-added key wearing the generated shape for an absent
+# plugin is pruned. That is the intent of keying on the namespace - it names
+# wiring this workspace no longer maintains.
 settings_path = os.path.join(target, ".claude", "settings.local.json")
 settings = {}
 if update_mode and os.path.isfile(settings_path):
     with open(settings_path) as f:
         settings = json.load(f)
     for k, v in settings.get("env", {}).items():
-        if k not in env:
-            env[k] = v
+        if k in env:
+            continue
+        m = GENERATED_KEY.fullmatch(k)
+        if m and m.group(1) not in current_keyspaces:
+            continue
+        env[k] = v
 
 settings["env"] = env
 

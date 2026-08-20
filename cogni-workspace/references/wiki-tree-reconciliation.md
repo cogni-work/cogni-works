@@ -248,6 +248,13 @@ cogni-consult does not have, so those were rewritten against the live model (act
 containers, a per-deliverable design-thinking loop, `consult-project.json`) rather than
 substituted. `cogni-wiki` had zero bare occurrences in the surface.
 
+The bundled-only pages Decision 4 holds now follow that same adopter mapping: the sweep that
+reconciled the intersection pages has since been applied to their bundled copies, so the two no
+longer disagree about who owns narrative and copywriting. That confirmed the parenthetical above by
+execution — `audit-copywriter` exists in neither `cogni-workspace/commands/` nor
+`cogni-workspace/skills/`, so it was dropped on `ecosystem-command-reference` rather than carried
+onto the adopter.
+
 **Five claims were false, not merely stale**, and were corrected as content: cogni-knowledge ships
 no `hooks/` (the four that do are cogni-consult, cogni-portfolio, cogni-visual, cogni-workspace);
 the "no `scripts/`" census named plugins whose code now lives in cogni-workspace, which has one —
@@ -271,8 +278,12 @@ positives on them.
 *Recorded, not executed. Carried out in issue #1402.*
 
 **Decision.** Neither promote these pages into the root tree nor delete them from the bundle.
-They stay exactly as they are, and are listed here so the state is deliberate rather than
-forgotten.
+They are listed here so the state is deliberate rather than forgotten.
+
+**What is held, and what is not.** Their **content** is a separate matter from the ruling,
+and it has since been swept: four of them carried bare names of plugins retired after this record
+was written, and leaving those in place would have meant promotion could only ever land red. The
+sweep touches the bundled copies only, so it decides nothing about promotion.
 
 | Page | Named entities resolved | Verdict | Proposal |
 |---|---|---|---|
@@ -282,20 +293,22 @@ forgotten.
 | `workflow-docs-pipeline` | 9 resolve, all in another marketplace | current | promote |
 | `workflow-full-onboarding` | 5/5 resolve | current | promote |
 | `workflow-research-to-report` | 7/7 resolve | current | promote |
-| `ecosystem-command-reference` | 18 resolve, 1 mislabelled, 2 stale | lightly stale | update, then promote |
+| `ecosystem-command-reference` | 18 resolve, previously 1 mislabelled + 2 stale, now settled | current | promote |
 
 **Why the ruling is reserved.** Accepting a page into the root tree is what makes
 `cogni-workspace:ask` serve it as a grounded answer. Promoting a stale page therefore does not
 degrade gracefully — it makes the assistant answer confidently and wrongly, which is worse than
 the dangling reference it would have fixed.
 
-**The one page that is stale, and how.** `ecosystem-command-reference` states that
-cogni-workspace ships no commands directory, lists 9 of its 11 skills, and counts
-`render-infographic-editorial` as a skill when it is a command. The first two are the
-cogni-help retirement seam: `troubleshoot` and `cogni-issues` moved into cogni-workspace and the
-page predates the move. Three table rows, not a rewrite.
+**The page that was stale, and how it was settled.** `ecosystem-command-reference` stated that
+cogni-workspace ships no commands directory, listed 9 of its then-11 skills, and counted
+`render-infographic-editorial` as a skill when it is a command. The first two were the cogni-help
+retirement seam: `troubleshoot` and `cogni-issues` moved into cogni-workspace and the page predated
+the move. All three are now fixed, and both lists are rebuilt from the live tree — 13 commands and 26
+skills, an arithmetic the sweep re-derives rather than trusts.
+The row above therefore reads `current`, and promotion no longer carries a stale-page cost.
 
-**Reversing it** — promoting all seven without the ruling — ships the stale page into the
+**Reversing it** — promoting all seven without the ruling — ships seven unruled pages into the
 grounded answer set.
 
 ## Decision 5 — dated records are history and are never rewritten
@@ -477,13 +490,24 @@ output that genuinely is generated; the case is stronger here, not merely identi
 **Revisit trigger:** if cogni-docs ever adds an `er-diagram` entry to its document-type routing
 table, this file becomes generated output and the guard question reopens on the terms above.
 
+## Observed, out of scope here
+
+Two current-state documents still assert an `11-plugin` roster: `cogni-workspace/wiki/wiki/pages/
+ecosystem-overview.md:13` and `wiki/wiki/index.md:9`. Neither is corrected here, and for different
+reasons. `ecosystem-overview` sits in the two-tree intersection, so a one-sided edit would break the
+byte-identity Decision 3 records across the shared pages. `wiki/index.md` is a tree-level page whose
+root twin lies outside this record's editable surface. Both belong to the repo-wide roster-count
+class already tracked against the root `CLAUDE.md`, not to the bundled-only sweep, so they are named
+here rather than re-filed.
+
 ## Deliberately left standing
 
 The two `log.md` copies and `lint-2026-04-20.md` are untouched, per Decision 5 — a future reader
 should not read them as misses. The two `entries_count` values remain different from each other,
 per Decision 1. The substantive residual remains 11 lines, per Decision 2 — and the two
 `wiki/index.md` copies remain different from each other, per Decision 3's group-C rule. None of the
-seven bundled-only pages is edited, promoted or deleted, per Decision 4. None of the four
+seven bundled-only pages is promoted or deleted, per Decision 4 — four have since had their
+**content** swept, which that decision's own section records. None of the four
 tree-level wiki files — `index.md` and `overview.md` in either tree — is edited either, per
 Decision 7: they were already clean when that decision was recorded, so the absence of edits there
 is the expected outcome and not a miss.
@@ -523,11 +547,22 @@ declared surface has two parts, and every page outside both is excluded by const
 by a list: the two-tree basename intersection of the page directories, where the one-sided pages
 fall out by symmetric difference; and a per-tree arm over the explicit `{index.md, overview.md}`
 tree-level set, ruled by Decision 7 and carrying its own named liveness floor. Only `log.md` is now
-outside both, by Decision 5. That distinction is what keeps the suite honest here, because those one-sided pages
-demonstrably still carry retired names — editing them to satisfy a guard would pre-decide the
-rulings Decisions 4 and 5 hold open. Three allowances are declared, each keyed to an exact token
-rather than a substring: plugins hosted in a different marketplace, the GitHub org token, and the
-preserved `cogni-claims/` store path, whose dispatch form is still caught. Each carries both halves
+outside both, by Decision 5. That distinction is what keeps the suite honest here: editing a page
+merely to satisfy a guard would pre-decide the rulings Decisions 4 and 5 hold open. The bundled-only
+pages have since been swept on their own merits, and a promotion probe now scans them against the
+live roster — so a residue reds today rather than the moment promotion lands. That probe **derives** the bundled-only set as the
+complement of the intersection it cannot reach, rather than naming pages — a literal list would go
+stale one page at a time, and the arm's floor only fires when every named page vanishes, so the
+narrowing would be silent. Five allowances are declared, each
+keyed to an exact token rather than a substring: plugins hosted in a different marketplace, the
+GitHub org token, the preserved `cogni-claims/` store path whose dispatch form is still caught, one
+frozen past-tense historical sentence (keyed to the token *plus* containment of the whole sentence,
+so the same name in a live framing still flags), and the skill names of live-roster plugins
+(derived at runtime from their skill directories, never written down, so a skill that stops
+shipping stops being blessed). That last one exists because the matcher cannot span a colon:
+`cogni-workspace:cogni-issues` tokenizes as a clean `cogni-workspace:` and then a bare
+`cogni-issues`, so writing the qualified form rescues nothing and the alternative would have been
+rewriting correct prose to satisfy a scanner. Each carries both halves
 of its case, so an allowance cannot quietly widen into an escape hatch. Two per-arm liveness floors —
 one on shared pages scanned, one on roster size — make a half-dead arm fail with a named error
 instead of reporting clean, which is the failure mode a guard over an already-clean surface is

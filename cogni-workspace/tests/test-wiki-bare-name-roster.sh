@@ -1025,7 +1025,7 @@ fi
 # B28 — promotion probe. The bundled-only pages are outside the intersection by
 # construction, so B1 cannot see them however clean it reports. This scans them
 # against the LIVE roster as if promotion had already happened, which pulls a
-# residue forward to today instead of surfacing it the moment #1402 lands.
+# residue forward to today instead of surfacing it the moment promotion lands.
 #
 # The page set is DERIVED, never listed: tree_only_basenames is the exact
 # complement of the shared_basenames the intersection arm uses, so a bundled-only

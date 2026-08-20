@@ -185,12 +185,12 @@ For every page whose spine is a `customer-narrative/*.md` file (`home`, `about`,
 | `corporate-visions` | Why Change → Why Now → Why You → Why Pay | problem-statement → stat-row → feature-alternating → cta |
 | `engagement-model` | Principles → Process → Partnership → Outcomes | feature-grid → timeline → feature-alternating → stat-row / cta |
 
-The element → block mapping is authoritative in `$CLAUDE_PLUGIN_ROOT/../cogni-visual/libraries/arc-taxonomy.md` (visual-type column). Read that file once per plan to confirm the mapping instead of duplicating it here.
+The element → block mapping is authoritative in `$CLAUDE_PLUGIN_ROOT/../cogni-workspace/libraries/arc-taxonomy.md` (visual-type column). Read that file once per plan to confirm the mapping instead of duplicating it here.
 
-The decomposition rules are defined in cogni-visual's story-to-web skill and referenced rather than duplicated here. Read once, apply per page:
+The decomposition rules are defined in cogni-workspace's story-to-web skill and referenced rather than duplicated here. Read once, apply per page:
 
-- Section taxonomy + decision tree: `$CLAUDE_PLUGIN_ROOT/../cogni-visual/skills/story-to-web/references/02-section-architecture.md` (decision tree lives around lines 145–187)
-- Copywriting rules (assertion headlines, number plays, bullet discipline): `$CLAUDE_PLUGIN_ROOT/../cogni-visual/skills/story-to-web/references/03-section-copywriting.md`
+- Section taxonomy + decision tree: `$CLAUDE_PLUGIN_ROOT/../cogni-workspace/skills/story-to-web/references/02-section-architecture.md` (see the "Section Type Decision Tree" heading)
+- Copywriting rules (assertion headlines, number plays, bullet discipline): `$CLAUDE_PLUGIN_ROOT/../cogni-workspace/skills/story-to-web/references/03-section-copywriting.md`
 
 For each narrative page, walk the markdown in order:
 

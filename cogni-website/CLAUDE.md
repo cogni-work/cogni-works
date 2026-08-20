@@ -45,7 +45,7 @@ The primary spine for every narrative page is the arc-structured markdown produc
 | `for/{market-slug}--{persona}.md` | `persona` (one per file) | `jtbd-portfolio` |
 | `approach.md` | `approach` | `engagement-model` |
 
-Any page entry in `website-plan.json` carrying an `arc_id` is rendered through the **Section Block Library** in `libraries/page-templates.md` — not the flat page-type template. `website-plan` step 6a walks the narrative and emits a structured `sections[]` array (hero, problem-statement, stat-row, feature-alternating, feature-grid, comparison, timeline, testimonial, text-block, cta). The ten existing block types cover all five arcs; no arc-specific renderers exist or are needed. The element → block mapping is authoritative in `cogni-visual/libraries/arc-taxonomy.md`.
+Any page entry in `website-plan.json` carrying an `arc_id` is rendered through the **Section Block Library** in `libraries/page-templates.md` — not the flat page-type template. `website-plan` step 6a walks the narrative and emits a structured `sections[]` array (hero, problem-statement, stat-row, feature-alternating, feature-grid, comparison, timeline, testimonial, text-block, cta). The ten existing block types cover all five arcs; no arc-specific renderers exist or are needed. The element → block mapping is authoritative in `cogni-workspace/libraries/arc-taxonomy.md`.
 
 **Deduplication discipline** (enforced upstream by the customer-narrative templates — do not break it in page planning):
 - Roadmap appears on `home` only.
@@ -59,11 +59,10 @@ Any page entry in `website-plan.json` carrying an `arc_id` is rendered through t
 | Plugin | Required | Purpose |
 |--------|----------|---------|
 | cogni-portfolio | Yes | Products, features, propositions, solutions, customer narratives |
-| cogni-workspace | Yes | Theme system (pick-theme skill, design-variables pattern) |
+| cogni-workspace | Yes | Theme system (pick-theme skill, design-variables pattern); arc taxonomy and story-to-web decomposition references (website-plan); image-prompt conventions (hero-renderer) |
 | cogni-marketing | No | Blog posts, articles, whitepapers |
 | cogni-trends | No | Trend reports, investment themes for insights page |
 | cogni-knowledge | No | Research syntheses for resources page |
-| cogni-visual | No | Arc taxonomy and story-to-web decomposition references (website-plan); image-prompt conventions (hero-renderer) |
 
 ## Output
 

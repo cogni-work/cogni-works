@@ -42,3 +42,45 @@ assert_not_grep() {
     green "PASS: $description"
   fi
 }
+
+# The fixed-string counterparts of the pair above.
+#
+# Reach for these whenever the pattern is a literal that carries regex
+# metacharacters — a wikilink, a glob, a file path, a JSON key, anything
+# containing [ ] . * ^ $ or a backslash. The BRE pair reads such a pattern as a
+# regex: `[[alpha-synthesis]]` parses as a bracket expression plus a trailing
+# literal ], so it matches any <one-of-those-chars>] sequence and the assertion
+# passes green against a file that does not contain the string at all.
+#
+# These match the pattern verbatim instead, so metacharacters carry no meaning.
+# Keep using the BRE pair when you actually want a regex — an anchored
+# '^# Concepts$', or an alternation written with \| .
+
+# assert_grep_f PATTERN FILE DESCRIPTION
+#   Fixed-string counterpart of assert_grep. Increments the caller's `errors`
+#   variable on failure.
+assert_grep_f() {
+  local pattern="$1" file="$2" description="$3"
+  if grep -qF -- "$pattern" "$file" 2>/dev/null; then
+    green "PASS: $description"
+  else
+    red "FAIL: $description"
+    red "  pattern (fixed): $pattern"
+    red "  file:            $file"
+    errors=$((errors + 1))
+  fi
+}
+
+# assert_not_grep_f PATTERN FILE DESCRIPTION
+#   Symmetric counterpart — fails if PATTERN is present as a literal.
+assert_not_grep_f() {
+  local pattern="$1" file="$2" description="$3"
+  if grep -qF -- "$pattern" "$file" 2>/dev/null; then
+    red "FAIL: $description"
+    red "  pattern (fixed, should NOT appear): $pattern"
+    red "  file: $file"
+    errors=$((errors + 1))
+  else
+    green "PASS: $description"
+  fi
+}

@@ -164,7 +164,10 @@ Route each hit to `references/known-issues.md`, which carries the full remedy:
   `.workspace-env.sh` exists and is sourced.
 - **GitHub CLI not authenticated**: Required for cogni-issues. Run `gh auth status`;
   when authentication is missing, guide the user through `gh auth login`.
-- **Missing node/npm**: Required for PPTX generation (cogni-visual).
+- **PPTX rendering skill unavailable**: `document-skills:pptx` renders the story-to-slides
+  brief and does not ship from this marketplace. Confirm the session provides it before
+  dispatching the `pptx` agent; otherwise take story-to-slides Step 11, "Guide User to
+  PPTX Rendering".
 
 ## Full Scan Mode
 

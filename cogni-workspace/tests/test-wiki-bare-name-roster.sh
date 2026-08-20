@@ -268,9 +268,10 @@ skill_names_from() {
   # Two-level glob, not `**`: bash 3.2 has no globstar (see the header).
   for d in "$root"/cogni-*/skills/cogni-*/; do
     # bash 3.2 has no nullglob, so an unmatched pattern survives LITERALLY.
-    # Without this guard the token `cogni-*` enters the allowed set, and the
-    # unquoted expansion in scan_file then pathname-expands it against the
-    # caller's CWD — making the blessed set depend on where the suite runs.
+    # Reject that token at the source. Nothing downstream would break if it got
+    # through — both consumers quote it into a case pattern (`*" $plug "*` below,
+    # `*" $tok "*` at Allowance 5), and quoting makes the `*` literal, so `cogni-*`
+    # matches nothing rather than everything. This buys a truthful set, not safety.
     [ -d "$d" ] || continue
     base="${d%/}"; base="${base##*/}"
     plug="${d%/skills/*}"; plug="${plug##*/}"

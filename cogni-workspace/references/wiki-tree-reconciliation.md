@@ -308,7 +308,7 @@ the move. All three are now fixed, and both lists are rebuilt from the live tree
 skills, an arithmetic the sweep re-derives rather than trusts.
 The row above therefore reads `current`, and promotion no longer carries a stale-page cost.
 
-**Reversing it** — promoting all seven without the ruling — ships the stale page into the
+**Reversing it** — promoting all seven without the ruling — ships seven unruled pages into the
 grounded answer set.
 
 ## Decision 5 — dated records are history and are never rewritten

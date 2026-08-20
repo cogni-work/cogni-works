@@ -254,7 +254,8 @@ Plugins:      WARNING  | 5 registered, 6 installed
 Environment:  WARNING  | 12 vars set, 2 broken
   Broken: COGNI_NARRATIVE_ROOT -> /path/does/not/exist
   Broken: COGNI_NARRATIVE_PLUGIN -> /path/does/not/exist
-  -> Run manage-workspace to refresh environment variables
+  -> Run manage-workspace to refresh environment variables (an update also
+     removes generated vars for plugins no longer installed)
 
 Themes:       WARNING  | 2 themes available, 1 tiered, 1 drift advisory
   cogni-work   workspace  tiered (1.0) | tokens, assets, components.web, components.deck

@@ -63,15 +63,15 @@ When a user reports a problem:
    every time — start with the most likely cause and expand if needed.
 
 3. **Report findings clearly** — state what's wrong, why, and how to fix it. Use
-   the format: Symptom → Cause → Fix, one finding per block, in the same shape
-   `references/known-issues.md` uses so a catalogued fix and a fresh diagnosis read
-   identically:
+   the format: Symptom → Cause → Fix, one finding per block, using the same field
+   labels `references/known-issues.md` uses so a catalogued fix and a fresh diagnosis
+   read identically:
 
-   > **Symptom**: `/render-html-slides` produces no output file.
-   >
-   > **Cause**: the theme named in the brief is not installed in this workspace.
-   >
-   > **Fix**: run `/pick-theme` to select an installed theme, then re-run.
+   **Symptom**: `/render-html-slides` produces no output file.
+
+   **Cause**: the theme named in the brief is not installed in this workspace.
+
+   **Fix**: run `/pick-theme` to select an installed theme, then re-run.
 
    Keep the three labels even when a field is short — a finding with no known cause
    says so under **Cause** rather than dropping the label, so every report has the
@@ -125,7 +125,7 @@ Many plugins require others to function. Check that dependencies are installed:
 | Plugin | Requires |
 |--------|----------|
 | cogni-marketing | cogni-trends, cogni-portfolio |
-| cogni-sales | cogni-portfolio, the `narrative` skill |
+| cogni-sales | cogni-portfolio, cogni-workspace (the `narrative` skill) |
 | cogni-consult | cogni-knowledge (required research spine) |
 
 Verify by checking if the required plugin directories exist in the marketplace.
@@ -149,11 +149,10 @@ find . -maxdepth 3 -type f \( -name 'diamond-project.json' -o -name 'consulting-
 ls .claude/cogni-teacher.local.md .claude/cogni-help.local.md 2>/dev/null
 ```
 
-For a retired plugin's engagement file, suggest keeping it as an inert local
-record rather than renaming it — nothing reads either name, and cogni-consult has
-no import path from them; the forward path is to scope a fresh engagement with
-`/cogni-consult:consult-setup`.
-For the course-progress files, suggest deletion — nothing reads them any more.
+Route either hit to `references/known-issues.md`, which carries the full remedy:
+"Leftover engagement file from a retired consulting plugin" for the engagement file,
+"Leftover course-progress file" for the course-progress files — delete the
+course-progress files, since nothing reads them any more.
 
 ### 6. Common Misconfigurations
 

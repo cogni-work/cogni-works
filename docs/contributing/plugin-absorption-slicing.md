@@ -40,6 +40,22 @@ surface after the deletion. Do not plan it that way. The **wiki** half of that s
 graded against the manifest, so it must merge *with* the deletion — see stage 3. Only the
 ungraded narrative surfaces can defer to stage 4.
 
+### Frozen records stage 4 must not patch
+
+Not every prose surface stage 4 touches is maintained. `docs/relicensing/vendored-license-audit.md`
+is a **frozen attestation** — it records the repository as of a stated audit date, so its
+findings are history rather than a live index. When an absorption moves an asset it names —
+a vendored tree, a data file, a per-plugin `LICENSE` — do not hand-patch the path inside it
+to keep the reference resolving. Repoint the repo-root `NOTICE`, which is the live
+third-party attribution surface, and leave the attestation as written. Editing a record to
+match the current tree destroys the one thing it is for, and it re-opens the question of
+which kind of document it is every time an absorption runs.
+
+Generalise it: any stage-4 surface that declares its own "as of" date is **out of scope for
+the stage**. The stage's licence is editorial correctness on surfaces that describe the tree
+now; a dated record does not describe the tree now, and correcting the live surface it points
+at is the fix.
+
 ## Per-stage size bound
 
 Target **400 changed lines per stage**. That figure is the review gate's advisory
@@ -178,3 +194,4 @@ single pull request.
 
 - [plugin-development.md](plugin-development.md) — how to build a plugin, and the conventions an adopted tree must still satisfy
 - [../architecture/plugin-anatomy.md](../architecture/plugin-anatomy.md) — every file type an absorption relocates
+- [../relicensing/vendored-license-audit.md](../relicensing/vendored-license-audit.md) — a frozen attestation stage 4 leaves alone; repoint the repo-root `NOTICE` instead

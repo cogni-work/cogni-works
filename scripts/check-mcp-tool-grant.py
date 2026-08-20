@@ -27,18 +27,18 @@ provisioned.
 Detection is an AFFIRMATIVE CALL SITE, not a prose match. A prose heuristic
 ("<server> MCP" appearing in the body) is sound only inside a plugin whose
 agents never talk about a server they deliberately do not use. Repo-wide it is
-not: several agents DISCLAIM a server in exactly that phrasing — cogni-visual
-and cogni-workspace both ship a `concept-diagram-svg` agent whose body says "no
-Excalidraw MCP", and cogni-knowledge's `source-curator` says "no
-claude-in-chrome MCP tools". Those sentences carry no `mcp__<ns>__<tool>`
-token, so requiring a literal token is what makes the guard safe at this scope.
-That reasoning held while the only affirmative signal was the token itself. It
-no longer does, and the evaluation of the alternative resolved to ADOPT. The
-registry already names each server's tools in `provides_tools[]`, so a body can
-be read affirmatively with NEITHER prose NOR a token, by asking whether it names
-one of those tools inside a backtick code span. That second arm lives below, and
-the plugin-scoped prose detector that formerly sat in cogni-website's own test
-directory is retired with it.
+not: two agents DISCLAIM a server in exactly that phrasing — cogni-workspace's
+`concept-diagram-svg` agent says "no Excalidraw MCP" in its body, and
+cogni-knowledge's `source-curator` says "no claude-in-chrome MCP tools". Those
+sentences carry no `mcp__<ns>__<tool>` token, so requiring a literal token is
+what makes the guard safe at this scope. That reasoning held while the only
+affirmative signal was the token itself. It no longer does, and the evaluation
+of the alternative resolved to ADOPT. The registry already names each server's
+tools in `provides_tools[]`, so a body can be read affirmatively with NEITHER
+prose NOR a token, by asking whether it names one of those tools inside a
+backtick code span. That second arm lives below, and the plugin-scoped prose
+detector that formerly sat in cogni-website's own test directory is retired
+with it.
 
 Measured when adopted: the registry registers 2 servers carrying 18 distinct
 bare names, with NO name owned by more than one server; of the 103 agents that
@@ -63,17 +63,25 @@ old heuristic plugin-scoped.
 Three residuals, stated rather than implied away. An agent that names a server
 in prose while naming NONE of its tools in a code span is outside both arms.
 The no-`tools:`-key skip is inherited here, and it is not hypothetical: the
-`storyboard` and `web` agents in cogni-visual and cogni-workspace declare no
-`tools:` key and together carry 22 in-span name hits this arm deliberately does
-not judge. And a code span inside a DISCLAIMING sentence would read as affirmative
-— that has no instance today, and the span requirement is what keeps the edge
-narrow, but it is real. Finally, the vocabulary is only as complete as the
-registry: agents grant 26 distinct tool names across the two registered
-servers while `provides_tools[]` lists 18, so 9 granted names are outside this
-arm's reach. That completeness question is now ANSWERED rather than deferred:
-each granted `mcp__<registered-ns>__<tool>` is resolved against its own
-server's `provides_tools[]`, and a name absent from it is surfaced as a
-`granted_outside_vocabulary` observation. Today that reports 9 gaps. Each is
+`storyboard` and `web` agents in cogni-workspace declare no `tools:` key, so
+they never reach this arm and their in-span registry names go unjudged.
+Measured when this residual was restated — counting the registry
+`provides_tools[]` bare names that `vocabulary_re` matches inside the body's
+`CODE_SPAN_RE` spans, DISTINCT per agent, the unit
+`summary.provides_tools_code_span_names` itself uses — `storyboard` carries 5
+and `web` carries 6. Unlike the block-form snapshot below, no `summary.*`
+counter re-derives these two: the skip returns before the arm that would have
+counted them, so the figure is hand-taken and goes stale silently. The
+residual stays real while either agent keeps a `tools:`-free frontmatter,
+whatever the count. And a code span inside a DISCLAIMING sentence would read
+as affirmative — that has no instance today, and the span requirement is what
+keeps the edge narrow, but it is real. Finally, the vocabulary is only as
+complete as the registry: agents grant 26 distinct tool names across the two
+registered servers while `provides_tools[]` lists 18, so 9 granted names are
+outside this arm's reach. That completeness question is now ANSWERED rather
+than deferred: each granted `mcp__<registered-ns>__<tool>` is resolved against
+its own server's `provides_tools[]`, and a name absent from it is surfaced as
+a `granted_outside_vocabulary` observation. Today that reports 9 gaps. Each is
 one record naming the gap once and carrying its granting agents as evidence,
 because the fix is one edit to the registry however many agents grant the name
 — emitting per agent would have restated one fact 17 times and pointed each

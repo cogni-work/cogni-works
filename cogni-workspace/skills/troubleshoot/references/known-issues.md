@@ -25,12 +25,13 @@ rm -f .claude/cogni-teacher.local.md .claude/cogni-help.local.md
 finds or resumes the engagement.
 
 **Cause**: Both names belong to retired plugins — cogni-diamond, renamed to
-cogni-consulting, then removed (source for both remains in git history). No surviving
+cogni-consulting, then retired (source for both remains in git history). No surviving
 skill reads either name.
 
 **Fix**: There is nothing to rename to. cogni-consult keeps its engagements at
 `cogni-consult/{engagement-slug}/consult-project.json` and has no import path from
-either legacy file, so keep the old file as an archive and scope a fresh engagement:
+either legacy file, so keep the old file as an inert local record and scope a fresh
+engagement:
 ```
 /cogni-consult:consult-setup
 ```

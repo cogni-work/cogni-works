@@ -22,38 +22,39 @@ errors=0
 PLAN="$PLUGIN_ROOT/skills/knowledge-plan/SKILL.md"
 FRAMING="$PLUGIN_ROOT/references/topic-framing.md"
 
-for f in "$PLAN" "$FRAMING"; do
+for _p in plan:"$PLAN" framing:"$FRAMING"; do
+  _cid="${_p%%:*}"; f="${_p#*:}"
   if [ ! -f "$f" ]; then
-    red "FAIL: required file not found: $f"
+    red "FAIL: prelim-search-00-required-file-not-found-${_cid} required file not found: $f"
     exit 1
   fi
 done
 
 # --- knowledge-plan: WebSearch enabled, scan is opt-in + fail-soft ---------
-assert_grep 'allowed-tools:.*WebSearch' "$PLAN" "knowledge-plan: allowed-tools includes WebSearch"
-assert_grep 'reliminary scoping scan' "$PLAN" "knowledge-plan: documents the preliminary scoping scan"
-assert_grep 'no-prelim-search' "$PLAN" "knowledge-plan: --no-prelim-search opt-out is documented"
-assert_grep '[Ff]ail-soft' "$PLAN" "knowledge-plan: the scan is fail-soft"
-assert_grep 'rides framing' "$PLAN" "knowledge-plan: the scan rides framing's engage decision (opt-in, no new decision point)"
+assert_grep 'allowed-tools:.*WebSearch' "$PLAN" "prelim-search-01-allowed-tools-includes-websearch knowledge-plan: allowed-tools includes WebSearch"
+assert_grep 'reliminary scoping scan' "$PLAN" "prelim-search-02-documents-preliminary-scoping-scan knowledge-plan: documents the preliminary scoping scan"
+assert_grep 'no-prelim-search' "$PLAN" "prelim-search-03-no-prelim-search-opt knowledge-plan: --no-prelim-search opt-out is documented"
+assert_grep '[Ff]ail-soft' "$PLAN" "prelim-search-04-scan-fail-soft knowledge-plan: the scan is fail-soft"
+assert_grep 'rides framing' "$PLAN" "prelim-search-05-scan-rides-framing-s knowledge-plan: the scan rides framing's engage decision (opt-in, no new decision point)"
 # The scan must not fire on the non-interactive paths — one stable phrase anchors
 # the whole "sharp topic / --no-framing / --dry-run" sentence (--no-prelim-search
 # is asserted separately above).
-assert_grep 'never runs on a sharp topic' "$PLAN" "knowledge-plan: the scan never fires on a sharp topic / --no-framing / --dry-run"
+assert_grep 'never runs on a sharp topic' "$PLAN" "prelim-search-06-scan-never-fires-sharp knowledge-plan: the scan never fires on a sharp topic / --no-framing / --dry-run"
 
 # --- the WebSearch loosening must NOT erode the WebFetch ban ---------------
 # Out of scope used to flatly forbid both; it now allows the opt-in scan but
 # keeps WebFetch forbidden outright.
-assert_not_grep 'Does NOT call WebSearch or WebFetch' "$PLAN" "knowledge-plan: the flat 'no WebSearch or WebFetch' forbiddance is replaced (scan is now allowed)"
+assert_not_grep 'Does NOT call WebSearch or WebFetch' "$PLAN" "prelim-search-07-flat-no-websearch-webfetch knowledge-plan: the flat 'no WebSearch or WebFetch' forbiddance is replaced (scan is now allowed)"
 # Match the semantic contract, not the markdown emphasis, so a reword that drops
 # the bold doesn't silently break the guard.
-assert_grep 'WebSearch.*by default' "$PLAN" "knowledge-plan: WebSearch is forbidden only by default (the scan is the exception)"
-assert_grep '[Nn]ever.*calls WebFetch' "$PLAN" "knowledge-plan: WebFetch is still forbidden outright"
+assert_grep 'WebSearch.*by default' "$PLAN" "prelim-search-08-websearch-forbidden-only-default knowledge-plan: WebSearch is forbidden only by default (the scan is the exception)"
+assert_grep '[Nn]ever.*calls WebFetch' "$PLAN" "prelim-search-09-webfetch-forbidden-outright knowledge-plan: WebFetch is still forbidden outright"
 
 # --- topic-framing playbook: the scan move is wired in ---------------------
-assert_grep 'Step 0.2b' "$FRAMING" "topic-framing: has the Step 0.2b preliminary scan move"
-assert_grep 'ground.*scan.*sharpen' "$FRAMING" "topic-framing: spine updated to ground → scan → sharpen"
-assert_grep '[Pp]reliminary scoping scan' "$FRAMING" "topic-framing: names the preliminary scoping scan"
-assert_grep 'no-prelim-search' "$FRAMING" "topic-framing: documents the --no-prelim-search opt-out"
+assert_grep 'Step 0.2b' "$FRAMING" "prelim-search-10-step-0-2-b-preliminary topic-framing: has the Step 0.2b preliminary scan move"
+assert_grep 'ground.*scan.*sharpen' "$FRAMING" "prelim-search-11-spine-updated-ground-scan topic-framing: spine updated to ground → scan → sharpen"
+assert_grep '[Pp]reliminary scoping scan' "$FRAMING" "prelim-search-12-names-preliminary-scoping-scan topic-framing: names the preliminary scoping scan"
+assert_grep 'no-prelim-search' "$FRAMING" "prelim-search-13-documents-no-prelim-search topic-framing: documents the --no-prelim-search opt-out"
 
 if [ $errors -eq 0 ]; then
   green ""

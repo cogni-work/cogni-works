@@ -217,11 +217,10 @@ cogni-website/
 | Plugin | Required | Purpose |
 |--------|----------|---------|
 | cogni-portfolio | Yes | Products, features, propositions, solutions, markets, customer narratives — core page content |
-| cogni-workspace | Yes | Theme selection (`pick-theme`) and design-variables pattern reference |
+| cogni-workspace | Yes | Theme selection (`pick-theme`) and design-variables pattern reference; arc taxonomy (element → block mapping) and story-to-web section-architecture and copywriting references read by website-plan; image-prompt conventions for the hero-renderer agent |
 | cogni-marketing | No | Blog posts, demand-generation articles, lead-generation landing pages |
 | cogni-trends | No | Trend report with investment themes for an Insights page |
 | cogni-knowledge | No | Research syntheses as whitepapers for a Resources page |
-| cogni-visual | No | Arc taxonomy (element → block mapping) and story-to-web section-architecture and copywriting references read by website-plan; image-prompt conventions for the hero-renderer agent |
 
 ## Custom development
 

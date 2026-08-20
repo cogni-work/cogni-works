@@ -166,9 +166,13 @@ def grants_in(text):
 # backticks with each other and mis-slice a fenced block into fragments.
 CODE_SPAN_RE = re.compile(r"```.*?```|`[^`\n]+`", re.S)
 
-# The single anchor for YAML block-list item lines. 15 agents declare `tools:`
-# this way, and 6 of the 7 agents carrying a real body call site are among them,
-# so a reader that misses this form reports those 6 as false offenders.
+# The single anchor for YAML block-list item lines.
+# Measured when this note was pinned: 10 agents declare `tools:` this way (the
+# guard re-derives that count every run as `summary.tools_form_counts.block`),
+# and 3 of the 4 agents carrying a real body call site are among them, so a
+# reader that misses this form reports those 3 as false offenders.
+# The counts are a snapshot; the form stays load-bearing while any block-form
+# agent carries a call site.
 # The indent is `\s*`, not `\s+`: a block list written flush-left under `tools:`
 # is valid YAML and the host accepts it, so requiring indentation would read
 # those grants as absent — the agent would silently drop out of the required_by

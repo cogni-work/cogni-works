@@ -31,7 +31,7 @@ SCRIPT="$PLUGIN_ROOT/scripts/synthesis-impact.py"
 . "$(dirname "$0")/fixtures/test_helpers.sh"
 
 if [ ! -f "$SCRIPT" ]; then
-  red "FAIL: synthesis-impact.py not found at $SCRIPT"
+  red "FAIL: syn-impact-01 synthesis-impact.py not found at $SCRIPT"
   exit 1
 fi
 
@@ -186,9 +186,9 @@ assert s['via_pages'] == ['src-a'], s
 assert rc[0]['synthesis_slug'] == 'syn-old', ('age-gap-desc sort', [x['synthesis_slug'] for x in rc])
 print('OK')
 " | grep -q OK; then
-  green "PASS: --related scan flags the older AND the same-day overlapping synthesis (same-day age_gap_days 0)"
+  green "PASS: syn-impact-02 --related scan flags the older AND the same-day overlapping synthesis (same-day age_gap_days 0)"
 else
-  red "FAIL: --related positive/negative set wrong"; errors=$((errors+1))
+  red "FAIL: syn-impact-02 --related positive/negative set wrong"; errors=$((errors+1))
 fi
 
 # 5. --min-confidence high with a concept-only neighborhood → empty (concept-mediated).
@@ -198,9 +198,9 @@ d = json.load(sys.stdin)
 assert d['data']['refresh_candidates'] == [], d['data']['refresh_candidates']
 print('OK')
 " | grep -q OK; then
-  green "PASS: --min-confidence high drops a concept/entity-mediated-only overlap"
+  green "PASS: syn-impact-03 --min-confidence high drops a concept/entity-mediated-only overlap"
 else
-  red "FAIL: --min-confidence high filtering wrong"; errors=$((errors+1))
+  red "FAIL: syn-impact-03 --min-confidence high filtering wrong"; errors=$((errors+1))
 fi
 
 # 5b. medium (default) keeps the concept-only overlap (still flags syn-old).
@@ -212,9 +212,9 @@ assert slugs == {'syn-old'}, slugs
 assert d['data']['refresh_candidates'][0]['confidence'] == 'medium', d['data']
 print('OK')
 " | grep -q OK; then
-  green "PASS: default (medium) keeps a concept-mediated overlap (confidence medium)"
+  green "PASS: syn-impact-04 default (medium) keeps a concept-mediated overlap (confidence medium)"
 else
-  red "FAIL: medium concept-mediated retention wrong"; errors=$((errors+1))
+  red "FAIL: syn-impact-04 medium concept-mediated retention wrong"; errors=$((errors+1))
 fi
 
 # 6. Self-compute neighborhood (no --related) agrees on the flagged set.
@@ -229,9 +229,9 @@ slugs = {c['synthesis_slug'] for c in d['data']['refresh_candidates']}
 assert slugs == {'syn-old', 'syn-sameday'}, ('self-compute agrees on flagged set (incl. same-day)', slugs)
 print('OK')
 " | grep -q OK; then
-  green "PASS: self-compute neighborhood self-excludes the new page and agrees on the flagged set"
+  green "PASS: syn-impact-05 self-compute neighborhood self-excludes the new page and agrees on the flagged set"
 else
-  red "FAIL: self-compute path wrong"; errors=$((errors+1))
+  red "FAIL: syn-impact-05 self-compute path wrong"; errors=$((errors+1))
 fi
 
 # 7. Fail-soft on an absent new page → success, empty candidates.
@@ -242,9 +242,9 @@ assert d['success'] is True, d
 assert d['data']['refresh_candidates'] == [], d['data']
 print('OK')
 " | grep -q OK; then
-  green "PASS: absent new page degrades fail-soft to empty candidates"
+  green "PASS: syn-impact-06 absent new page degrades fail-soft to empty candidates"
 else
-  red "FAIL: absent-new-page fail-soft wrong"; errors=$((errors+1))
+  red "FAIL: syn-impact-06 absent-new-page fail-soft wrong"; errors=$((errors+1))
 fi
 
 if [ "$errors" -eq 0 ]; then

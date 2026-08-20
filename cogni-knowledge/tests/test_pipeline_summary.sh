@@ -25,7 +25,7 @@ FETCH_CACHE="$PLUGIN_ROOT/scripts/fetch-cache.py"
 . "$(dirname "$0")/fixtures/test_helpers.sh"
 
 if [ ! -f "$SCRIPT" ]; then
-  red "FAIL: pipeline-summary.py not found at $SCRIPT"
+  red "FAIL: pipesum-01 pipeline-summary.py not found at $SCRIPT"
   exit 1
 fi
 
@@ -97,9 +97,9 @@ assert x['claims_attached'] == 9, x
 assert x['claims_deduped'] == 2, x
 print('OK')
 " | grep -q OK; then
-  green "PASS: project full — all manifest counts + distill counts + topic + phase_reached=verify"
+  green "PASS: pipesum-02 project full — all manifest counts + distill counts + topic + phase_reached=verify"
 else
-  red "FAIL: full-project summary wrong"
+  red "FAIL: pipesum-02 full-project summary wrong"
   red "  got: $FULL_OUT"
   errors=$((errors + 1))
 fi
@@ -114,9 +114,9 @@ assert c == {'verbatim':4,'paraphrase':28,'synthesis':2,'unsupported':3,'total':
 assert x['revision_round'] == 1, x
 print('OK')
 " | grep -q OK; then
-  green "PASS: project full — latest verify-v1.json counts win over v0"
+  green "PASS: pipesum-03 project full — latest verify-v1.json counts win over v0"
 else
-  red "FAIL: latest-verify selection wrong"
+  red "FAIL: pipesum-03 latest-verify selection wrong"
   red "  got: $FULL_OUT"
   errors=$((errors + 1))
 fi
@@ -132,9 +132,9 @@ assert 'verbatim' in c, 'verify_counts missing verbatim key (#337 dashboard depe
 assert 'paraphrase' in c, 'verify_counts missing paraphrase key (#337 dashboard dependency)'
 print('OK')
 " | grep -q OK; then
-  green "PASS: project full — verify_counts exposes stable 'verbatim' + 'paraphrase' keys (#337 dashboard dependency)"
+  green "PASS: pipesum-04 project full — verify_counts exposes stable 'verbatim' + 'paraphrase' keys (#337 dashboard dependency)"
 else
-  red "FAIL: verify_counts must expose 'verbatim' + 'paraphrase' keys for the dashboard (#337)"
+  red "FAIL: pipesum-04 verify_counts must expose 'verbatim' + 'paraphrase' keys for the dashboard (#337)"
   red "  got: $FULL_OUT"
   errors=$((errors + 1))
 fi
@@ -165,9 +165,9 @@ assert x['verify_counts']['total'] == 0, x
 assert x['phase_reached'] == 'fetch', x
 print('OK')
 " | grep -q OK; then
-  green "PASS: project partial — counts present phases, zeros downstream, phase_reached=fetch"
+  green "PASS: pipesum-05 project partial — counts present phases, zeros downstream, phase_reached=fetch"
 else
-  red "FAIL: partial-project summary wrong"
+  red "FAIL: pipesum-05 partial-project summary wrong"
   red "  got: $PARTIAL_OUT"
   errors=$((errors + 1))
 fi
@@ -188,9 +188,9 @@ assert x['verify_version'] is None, x
 assert x['phase_reached'] == 'none', x
 print('OK')
 " | grep -q OK; then
-  green "PASS: project missing — degrades to zeros + phase_reached=none (no crash)"
+  green "PASS: pipesum-06 project missing — degrades to zeros + phase_reached=none (no crash)"
 else
-  red "FAIL: missing-manifest degradation wrong"
+  red "FAIL: pipesum-06 missing-manifest degradation wrong"
   red "  got: $MISSING_OUT"
   errors=$((errors + 1))
 fi
@@ -214,9 +214,9 @@ import sys, json
 x = json.load(sys.stdin)['data']
 assert x['phase_reached'] == 'finalize', x
 " 2>/dev/null; then
-  green "PASS: project finalize — run-metrics finalize row lifts phase_reached to finalize (#842)"
+  green "PASS: pipesum-07 project finalize — run-metrics finalize row lifts phase_reached to finalize (#842)"
 else
-  red "FAIL: run-metrics finalize detection wrong"
+  red "FAIL: pipesum-07 run-metrics finalize detection wrong"
   red "  got: $LEDGER_OUT"
   errors=$((errors + 1))
 fi
@@ -239,9 +239,9 @@ import sys, json
 x = json.load(sys.stdin)['data']
 assert x['phase_reached'] == 'verify', x
 " 2>/dev/null; then
-  green "PASS: project finalize — run-metrics without a finalize row stays phase_reached=verify (no false positive) (#842)"
+  green "PASS: pipesum-08 project finalize — run-metrics without a finalize row stays phase_reached=verify (no false positive) (#842)"
 else
-  red "FAIL: run-metrics no-finalize-row false positive"
+  red "FAIL: pipesum-08 run-metrics no-finalize-row false positive"
   red "  got: $NF_OUT"
   errors=$((errors + 1))
 fi
@@ -278,9 +278,9 @@ import sys, json
 x = json.load(sys.stdin)['data']
 assert x['phase_reached'] == 'finalize', x
 " 2>/dev/null; then
-  green "PASS: project finalize — binding research_projects[] match lifts phase_reached to finalize via parent convention (#842)"
+  green "PASS: pipesum-09 project finalize — binding research_projects[] match lifts phase_reached to finalize via parent convention (#842)"
 else
-  red "FAIL: binding finalize detection wrong"
+  red "FAIL: pipesum-09 binding finalize detection wrong"
   red "  got: $BIND_OUT"
   errors=$((errors + 1))
 fi
@@ -292,9 +292,9 @@ import sys, json
 x = json.load(sys.stdin)['data']
 assert x['phase_reached'] == 'finalize', x
 " 2>/dev/null; then
-  green "PASS: project finalize — explicit --knowledge-root resolves the binding deposit (#842)"
+  green "PASS: pipesum-10 project finalize — explicit --knowledge-root resolves the binding deposit (#842)"
 else
-  red "FAIL: --knowledge-root override did not resolve finalize"
+  red "FAIL: pipesum-10 --knowledge-root override did not resolve finalize"
   red "  got: $BIND_OUT2"
   errors=$((errors + 1))
 fi
@@ -314,9 +314,9 @@ assert x['verdict'] == 'empty', x
 assert x['scope'] == 'knowledge-base-global', x
 print('OK')
 " | grep -q OK; then
-  green "PASS: cache-health — empty cache -> verdict=empty"
+  green "PASS: pipesum-11 cache-health — empty cache -> verdict=empty"
 else
-  red "FAIL: empty cache-health wrong"
+  red "FAIL: pipesum-11 empty cache-health wrong"
   red "  got: $EMPTY_OUT"
   errors=$((errors + 1))
 fi
@@ -340,9 +340,9 @@ assert x['negative_ratio'] == 0.0, x
 assert x['verdict'] == 'healthy', x
 print('OK')
 " | grep -q OK; then
-  green "PASS: cache-health — fresh ok entry -> verdict=healthy, negative_ratio=0"
+  green "PASS: pipesum-12 cache-health — fresh ok entry -> verdict=healthy, negative_ratio=0"
 else
-  red "FAIL: healthy cache-health wrong"
+  red "FAIL: pipesum-12 healthy cache-health wrong"
   red "  got: $HEALTHY_OUT"
   errors=$((errors + 1))
 fi
@@ -364,9 +364,9 @@ assert x['unavailable'] == 1, x
 assert x['negative_ratio'] == 0.5, x
 print('OK')
 " | grep -q OK; then
-  green "PASS: cache-health — negative_ratio = unavailable/entries"
+  green "PASS: pipesum-13 cache-health — negative_ratio = unavailable/entries"
 else
-  red "FAIL: negative_ratio wrong"
+  red "FAIL: pipesum-13 negative_ratio wrong"
   red "  got: $NEG_OUT"
   errors=$((errors + 1))
 fi
@@ -392,9 +392,9 @@ assert x['oldest_age_days'] is not None and x['oldest_age_days'] > x['max_age_da
 assert x['verdict'] == 'stale', x
 print('OK')
 " | grep -q OK; then
-  green "PASS: cache-health — backdated entry past max_age_days -> verdict=stale"
+  green "PASS: pipesum-14 cache-health — backdated entry past max_age_days -> verdict=stale"
 else
-  red "FAIL: stale cache-health wrong"
+  red "FAIL: pipesum-14 stale cache-health wrong"
   red "  got: $STALE_OUT"
   errors=$((errors + 1))
 fi
@@ -416,9 +416,9 @@ assert d['data']['phase_reached'] == 'plan', d['data']
 assert d['data']['verify_version'] is None, d['data']
 print('OK')
 " 2>/dev/null | grep -q OK; then
-  green "PASS: project — a directory-shaped manifest degrades gracefully (no crash)"
+  green "PASS: pipesum-15 project — a directory-shaped manifest degrades gracefully (no crash)"
 else
-  red "FAIL: directory-shaped manifest crashed or mis-summarized"
+  red "FAIL: pipesum-15 directory-shaped manifest crashed or mis-summarized"
   red "  got: $DIR_OUT"
   errors=$((errors + 1))
 fi
@@ -438,9 +438,9 @@ assert x['verify_counts']['paraphrase'] == 5, x     # real int preserved
 assert x['revision_round'] == 0, x                  # bool true -> 0
 print('OK')
 " | grep -q OK; then
-  green "PASS: project — boolean count values clamp to 0, real ints preserved"
+  green "PASS: pipesum-16 project — boolean count values clamp to 0, real ints preserved"
 else
-  red "FAIL: boolean-in-counts not clamped"
+  red "FAIL: pipesum-16 boolean-in-counts not clamped"
   red "  got: $BOOL_OUT"
   errors=$((errors + 1))
 fi
@@ -466,9 +466,9 @@ assert x['resolution_coverage'] == {'resolved':1,'contradictions':2,'pct':50.0},
 assert x['consistency_rate'] == {'syntheses_total':1,'syntheses_clean':1,'pct':100.0}, x['consistency_rate']
 print('OK')
 " | grep -q OK; then
-  green "PASS: project — contradiction-ingest + contradiction-finalize surface resolution_coverage + consistency_rate (#908)"
+  green "PASS: pipesum-17 project — contradiction-ingest + contradiction-finalize surface resolution_coverage + consistency_rate (#908)"
 else
-  red "FAIL: contradiction surfacing wrong"
+  red "FAIL: pipesum-17 contradiction surfacing wrong"
   red "  got: $CONTRA_OUT"
   errors=$((errors + 1))
 fi
@@ -481,9 +481,9 @@ assert x['resolution_coverage'] is None, x['resolution_coverage']
 assert x['consistency_rate'] is None, x['consistency_rate']
 print('OK')
 " | grep -q OK; then
-  green "PASS: project — absent contradiction files surface resolution_coverage/consistency_rate as null (fail-soft) (#908)"
+  green "PASS: pipesum-18 project — absent contradiction files surface resolution_coverage/consistency_rate as null (fail-soft) (#908)"
 else
-  red "FAIL: contradiction fail-soft (null) path wrong"
+  red "FAIL: pipesum-18 contradiction fail-soft (null) path wrong"
   errors=$((errors + 1))
 fi
 

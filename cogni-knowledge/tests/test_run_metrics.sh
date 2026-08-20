@@ -28,7 +28,7 @@ SCRIPT="$PLUGIN_ROOT/scripts/run-metrics.py"
 . "$(dirname "$0")/fixtures/test_helpers.sh"
 
 if [ ! -f "$SCRIPT" ]; then
-  red "FAIL: run-metrics.py not found at $SCRIPT"
+  red "FAIL: run-metrics-01 run-metrics.py not found at $SCRIPT"
   exit 1
 fi
 
@@ -55,9 +55,9 @@ assert r['agent_count'] == 3, r
 assert r['cost_estimate_usd'] == 0.132, r
 print('OK')
 " | grep -q OK; then
-  green "PASS: record computes elapsed_s from timestamps + stores fields"
+  green "PASS: run-metrics-02 record computes elapsed_s from timestamps + stores fields"
 else
-  red "FAIL: record timestamp/elapsed"; red "  got: $OUT"; errors=$((errors + 1))
+  red "FAIL: run-metrics-02 record timestamp/elapsed"; red "  got: $OUT"; errors=$((errors + 1))
 fi
 
 # --- 2. record honours explicit --elapsed-s ------------------------------
@@ -73,9 +73,9 @@ phases = [p['phase'] for p in d['phases']]
 assert phases == ['curate', 'plan'], phases   # append order preserved on disk
 print('OK')
 " | grep -q OK; then
-  green "PASS: record is append-only (both rows kept, on-disk insertion order)"
+  green "PASS: run-metrics-03 record is append-only (both rows kept, on-disk insertion order)"
 else
-  red "FAIL: append-only"; errors=$((errors + 1))
+  red "FAIL: run-metrics-03 append-only"; errors=$((errors + 1))
 fi
 
 # --- 4. report sums + orders by canonical pipeline order -----------------
@@ -92,9 +92,9 @@ assert ordered == ['plan', 'curate'], ordered   # canonical order, not insertion
 assert 'TOTAL' in d['rendered'], d['rendered']
 print('OK')
 " | grep -q OK; then
-  green "PASS: report sums totals + orders phases canonically (plan before curate)"
+  green "PASS: run-metrics-04 report sums totals + orders phases canonically (plan before curate)"
 else
-  red "FAIL: report totals/order"; red "  got: $REP"; errors=$((errors + 1))
+  red "FAIL: run-metrics-04 report totals/order"; red "  got: $REP"; errors=$((errors + 1))
 fi
 
 # --- 5. report on a project with no ledger (graceful) --------------------
@@ -109,9 +109,9 @@ assert d['data']['ledger_present'] is False, d
 assert d['data']['totals']['elapsed_s'] == 0, d
 print('OK')
 " | grep -q OK; then
-  green "PASS: report on no-ledger project degrades gracefully (success, ledger_present=false)"
+  green "PASS: run-metrics-05 report on no-ledger project degrades gracefully (success, ledger_present=false)"
 else
-  red "FAIL: no-ledger report"; red "  got: $OUT"; errors=$((errors + 1))
+  red "FAIL: run-metrics-05 no-ledger report"; red "  got: $OUT"; errors=$((errors + 1))
 fi
 
 # --- 6. record on a non-project path (no .metadata/) fails cleanly -------
@@ -122,9 +122,9 @@ d = json.load(sys.stdin)
 assert d['success'] is False, d
 print('OK')
 " | grep -q OK; then
-  green "PASS: record on a path with no .metadata/ returns success:false"
+  green "PASS: run-metrics-06 record on a path with no .metadata/ returns success:false"
 else
-  red "FAIL: non-project record should fail"; red "  got: $OUT"; errors=$((errors + 1))
+  red "FAIL: run-metrics-06 non-project record should fail"; red "  got: $OUT"; errors=$((errors + 1))
 fi
 
 # --- 7. max_agent_duration_ms: stored in the row + surfaced in report ----
@@ -149,9 +149,9 @@ assert 'max_agent_s' in d['rendered'], d['rendered']
 assert '42.0' in d['rendered'], d['rendered']
 print('OK')
 " | grep -q OK; then
-  green "PASS: record stores max_agent_duration_ms; report surfaces it (totals max + max_agent_s column); missing flag defaults 0"
+  green "PASS: run-metrics-07 record stores max_agent_duration_ms; report surfaces it (totals max + max_agent_s column); missing flag defaults 0"
 else
-  red "FAIL: max_agent_duration_ms record/report"; red "  got: $DREP"; errors=$((errors + 1))
+  red "FAIL: run-metrics-07 max_agent_duration_ms record/report"; red "  got: $DREP"; errors=$((errors + 1))
 fi
 
 if [ $errors -eq 0 ]; then

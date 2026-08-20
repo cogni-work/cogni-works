@@ -21,7 +21,7 @@ SCRIPTS_DIR="$PLUGIN_ROOT/scripts"
 . "$(dirname "$0")/fixtures/test_helpers.sh"
 
 if [ ! -f "$SCRIPTS_DIR/pdf-extract.py" ]; then
-  red "FAIL: pdf-extract.py not found at $SCRIPTS_DIR/pdf-extract.py"
+  red "FAIL: pdf-extract-01 pdf-extract.py not found at $SCRIPTS_DIR/pdf-extract.py"
   exit 1
 fi
 
@@ -187,10 +187,10 @@ grade() {
   esac
 }
 
-grade not_found_subprocess   "pdf-extract.py CLI — missing path returns success:false data.reason=not_found with an error (real subprocess, no pypdf needed)"
-grade venv_python_resolution "_venv_python — COGNI_WORKSPACE_PYTHON_VENV unset→None, set-but-no-bin/python→None, set-with-bin/python→that path (workspace-venv re-exec resolution)"
-grade main_envelope_mapping  "main() reason→envelope mapping — ok/no_text_layer/extract_failed/pypdf_unavailable, install hint on pypdf_unavailable (faked extract_pdf_text, host-independent)"
-grade normalize_pdf_body     "normalize_pdf_body_text — NFKC ligature fold + smart-quote/dash map + hyphenated-wrap rejoin + soft-wrap→space, paragraph breaks preserved (opt-in stored-body cleaner)"
+grade not_found_subprocess   "pdf-extract-02 pdf-extract.py CLI — missing path returns success:false data.reason=not_found with an error (real subprocess, no pypdf needed)"
+grade venv_python_resolution "pdf-extract-03 _venv_python — COGNI_WORKSPACE_PYTHON_VENV unset→None, set-but-no-bin/python→None, set-with-bin/python→that path (workspace-venv re-exec resolution)"
+grade main_envelope_mapping  "pdf-extract-04 main() reason→envelope mapping — ok/no_text_layer/extract_failed/pypdf_unavailable, install hint on pypdf_unavailable (faked extract_pdf_text, host-independent)"
+grade normalize_pdf_body     "pdf-extract-05 normalize_pdf_body_text — NFKC ligature fold + smart-quote/dash map + hyphenated-wrap rejoin + soft-wrap→space, paragraph breaks preserved (opt-in stored-body cleaner)"
 
 if [ $errors -gt 0 ]; then
   red "$errors case(s) failed."

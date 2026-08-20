@@ -32,10 +32,10 @@ WSD="$PLUGIN_ROOT/scripts/vendor/cogni-wiki/skills/wiki-ingest/scripts"
 . "$(dirname "$0")/fixtures/test_helpers.sh"
 
 if [ ! -f "$SCRIPT" ]; then
-  red "FAIL: overview_update.py not found at $SCRIPT"; exit 1
+  red "FAIL: overview-update-01 overview_update.py not found at $SCRIPT"; exit 1
 fi
 if [ ! -d "$WSD" ]; then
-  red "FAIL: cogni-wiki wiki-ingest scripts not found at $WSD"; exit 1
+  red "FAIL: overview-update-02 cogni-wiki wiki-ingest scripts not found at $WSD"; exit 1
 fi
 
 field() { python3 -c 'import sys,json;d=json.load(sys.stdin);print(eval("d"+sys.argv[1]))' "$1"; }
@@ -57,51 +57,51 @@ printf -- '# Overview\n\nA human-authored intro paragraph that must survive.\n' 
 OUT=$(python3 "$SCRIPT" recent-bullet --wiki-root "$WIKI" \
   --slug eu-ai-act --topic "EU AI Act for SMEs" --date 2026-06-05 \
   --wiki-scripts-dir "$WSD")
-[ "$(echo "$OUT" | field '["success"]')" = "True" ] && green "PASS: recent-bullet envelope success" || { red "FAIL: recent-bullet not success"; errors=$((errors+1)); }
-[ "$(echo "$OUT" | field '["data"]["changed"]')" = "True" ] && green "PASS: recent-bullet reports changed" || { red "FAIL: recent-bullet changed != True"; errors=$((errors+1)); }
-grep -q '^## Recent syntheses$' "$OVERVIEW" && green "PASS: Recent syntheses heading created" || { red "FAIL: heading missing"; errors=$((errors+1)); }
-grep -q -- '- \[2026-06-05\] \[\[eu-ai-act\]\] — EU AI Act for SMEs' "$OVERVIEW" && green "PASS: dated bullet written" || { red "FAIL: bullet missing"; errors=$((errors+1)); }
-grep -q 'human-authored intro paragraph' "$OVERVIEW" && green "PASS: human prose preserved" || { red "FAIL: human prose lost"; errors=$((errors+1)); }
+[ "$(echo "$OUT" | field '["success"]')" = "True" ] && green "PASS: overview-update-03 recent-bullet envelope success" || { red "FAIL: overview-update-03 recent-bullet not success"; errors=$((errors+1)); }
+[ "$(echo "$OUT" | field '["data"]["changed"]')" = "True" ] && green "PASS: overview-update-04 recent-bullet reports changed" || { red "FAIL: overview-update-04 recent-bullet changed != True"; errors=$((errors+1)); }
+grep -q '^## Recent syntheses$' "$OVERVIEW" && green "PASS: overview-update-05 Recent syntheses heading created" || { red "FAIL: overview-update-05 heading missing"; errors=$((errors+1)); }
+grep -q -- '- \[2026-06-05\] \[\[eu-ai-act\]\] — EU AI Act for SMEs' "$OVERVIEW" && green "PASS: overview-update-06 dated bullet written" || { red "FAIL: overview-update-06 bullet missing"; errors=$((errors+1)); }
+grep -q 'human-authored intro paragraph' "$OVERVIEW" && green "PASS: overview-update-07 human prose preserved" || { red "FAIL: overview-update-07 human prose lost"; errors=$((errors+1)); }
 
 # --- 1b. recent-bullet: idempotent dedup on re-run ---------------------------
 python3 "$SCRIPT" recent-bullet --wiki-root "$WIKI" \
   --slug eu-ai-act --topic "EU AI Act for SMEs" --date 2026-06-06 \
   --wiki-scripts-dir "$WSD" >/dev/null
 N_BULLETS=$(grep -c '\[\[eu-ai-act\]\]' "$OVERVIEW")
-[ "$N_BULLETS" = "1" ] && green "PASS: re-run dedups to exactly one slug bullet" || { red "FAIL: expected 1 bullet, got $N_BULLETS"; errors=$((errors+1)); }
+[ "$N_BULLETS" = "1" ] && green "PASS: overview-update-08 re-run dedups to exactly one slug bullet" || { red "FAIL: overview-update-08 expected 1 bullet, got $N_BULLETS"; errors=$((errors+1)); }
 N_HEAD=$(grep -c '^## Recent syntheses$' "$OVERVIEW")
-[ "$N_HEAD" = "1" ] && green "PASS: heading not duplicated on re-run" || { red "FAIL: heading count $N_HEAD"; errors=$((errors+1)); }
+[ "$N_HEAD" = "1" ] && green "PASS: overview-update-09 heading not duplicated on re-run" || { red "FAIL: overview-update-09 heading count $N_HEAD"; errors=$((errors+1)); }
 
 # A second distinct slug coexists (dedup is per-slug, not global).
 python3 "$SCRIPT" recent-bullet --wiki-root "$WIKI" \
   --slug data-act --topic "EU Data Act" --date 2026-06-06 \
   --wiki-scripts-dir "$WSD" >/dev/null
 grep -q '\[\[data-act\]\]' "$OVERVIEW" && grep -q '\[\[eu-ai-act\]\]' "$OVERVIEW" \
-  && green "PASS: a second slug bullet coexists" || { red "FAIL: second slug clobbered the first"; errors=$((errors+1)); }
+  && green "PASS: overview-update-10 a second slug bullet coexists" || { red "FAIL: overview-update-10 second slug clobbered the first"; errors=$((errors+1)); }
 
 # --- 2. narrative-splice: insert after H1, preserve bullets ------------------
 cp "$OVERVIEW" "$WORK/before-splice.md"
 printf -- '## State of the wiki\n\nThe base now spans AI-Act and Data-Act obligations.' > "$WORK/prose1.txt"
 OUT=$(python3 "$SCRIPT" narrative-splice --wiki-root "$WIKI" \
   --prose-file "$WORK/prose1.txt" --wiki-scripts-dir "$WSD")
-[ "$(echo "$OUT" | field '["success"]')" = "True" ] && green "PASS: narrative-splice envelope success" || { red "FAIL: narrative-splice not success"; errors=$((errors+1)); }
-grep -q 'MACHINE-OWNED:OVERVIEW-NARRATIVE:START' "$OVERVIEW" && green "PASS: OVERVIEW-NARRATIVE block inserted" || { red "FAIL: block missing"; errors=$((errors+1)); }
-grep -q 'The base now spans AI-Act' "$OVERVIEW" && green "PASS: narrative prose spliced" || { red "FAIL: prose missing"; errors=$((errors+1)); }
+[ "$(echo "$OUT" | field '["success"]')" = "True" ] && green "PASS: overview-update-11 narrative-splice envelope success" || { red "FAIL: overview-update-11 narrative-splice not success"; errors=$((errors+1)); }
+grep -q 'MACHINE-OWNED:OVERVIEW-NARRATIVE:START' "$OVERVIEW" && green "PASS: overview-update-12 OVERVIEW-NARRATIVE block inserted" || { red "FAIL: overview-update-12 block missing"; errors=$((errors+1)); }
+grep -q 'The base now spans AI-Act' "$OVERVIEW" && green "PASS: overview-update-13 narrative prose spliced" || { red "FAIL: overview-update-13 prose missing"; errors=$((errors+1)); }
 grep -q '\[\[eu-ai-act\]\]' "$OVERVIEW" && grep -q '\[\[data-act\]\]' "$OVERVIEW" \
-  && green "PASS: Recent-syntheses bullets preserved through splice" || { red "FAIL: bullets lost in splice"; errors=$((errors+1)); }
+  && green "PASS: overview-update-14 Recent-syntheses bullets preserved through splice" || { red "FAIL: overview-update-14 bullets lost in splice"; errors=$((errors+1)); }
 # Block sits after the H1.
 H1_LINE=$(grep -n '^# Overview$' "$OVERVIEW" | head -1 | cut -d: -f1)
 BLK_LINE=$(grep -n 'OVERVIEW-NARRATIVE:START' "$OVERVIEW" | head -1 | cut -d: -f1)
-[ "$BLK_LINE" -gt "$H1_LINE" ] && green "PASS: block sits after the H1" || { red "FAIL: block not after H1"; errors=$((errors+1)); }
+[ "$BLK_LINE" -gt "$H1_LINE" ] && green "PASS: overview-update-15 block sits after the H1" || { red "FAIL: overview-update-15 block not after H1"; errors=$((errors+1)); }
 
 # --- 2b. narrative-splice: replace inner only, byte-preserve the rest --------
 printf -- '## State of the wiki\n\nUpdated narrative after a third synthesis.' > "$WORK/prose2.txt"
 cp "$OVERVIEW" "$WORK/before-replace.md"
 python3 "$SCRIPT" narrative-splice --wiki-root "$WIKI" \
   --prose-file "$WORK/prose2.txt" --wiki-scripts-dir "$WSD" >/dev/null
-grep -q 'Updated narrative after a third synthesis' "$OVERVIEW" && green "PASS: splice replaced inner" || { red "FAIL: inner not replaced"; errors=$((errors+1)); }
+grep -q 'Updated narrative after a third synthesis' "$OVERVIEW" && green "PASS: overview-update-16 splice replaced inner" || { red "FAIL: overview-update-16 inner not replaced"; errors=$((errors+1)); }
 N_BLK=$(grep -c 'OVERVIEW-NARRATIVE:START' "$OVERVIEW")
-[ "$N_BLK" = "1" ] && green "PASS: exactly one OVERVIEW-NARRATIVE block (no duplication)" || { red "FAIL: block count $N_BLK"; errors=$((errors+1)); }
+[ "$N_BLK" = "1" ] && green "PASS: overview-update-17 exactly one OVERVIEW-NARRATIVE block (no duplication)" || { red "FAIL: overview-update-17 block count $N_BLK"; errors=$((errors+1)); }
 # Everything outside the block inner is byte-identical between before/after.
 mask() {
   python3 - "$1" <<'PY'
@@ -113,15 +113,15 @@ sys.stdout.write(t)
 PY
 }
 if diff <(mask "$WORK/before-replace.md") <(mask "$OVERVIEW") >/dev/null; then
-  green "PASS: replace-inner left all non-block bytes identical"
+  green "PASS: overview-update-18 replace-inner left all non-block bytes identical"
 else
-  red "FAIL: replace-inner changed bytes outside the block"; errors=$((errors+1))
+  red "FAIL: overview-update-18 replace-inner changed bytes outside the block"; errors=$((errors+1))
   diff <(mask "$WORK/before-replace.md") <(mask "$OVERVIEW") || true
 fi
 
 # --- 3. Atomicity: no stray temp files left behind --------------------------
 STRAY=$(find "$WIKI/wiki" -name '.overview.md.*.tmp' 2>/dev/null | wc -l | tr -d ' ')
-[ "$STRAY" = "0" ] && green "PASS: no stray .tmp temp files after writes (atomic)" || { red "FAIL: $STRAY stray temp files"; errors=$((errors+1)); }
+[ "$STRAY" = "0" ] && green "PASS: overview-update-19 no stray .tmp temp files after writes (atomic)" || { red "FAIL: overview-update-19 $STRAY stray temp files"; errors=$((errors+1)); }
 
 # --- 4. Fail-soft: missing wiki-scripts-dir → no partial write --------------
 cp "$OVERVIEW" "$WORK/before-fail.md"
@@ -131,16 +131,16 @@ OUT=$(python3 "$SCRIPT" recent-bullet --wiki-root "$WIKI" \
   --wiki-scripts-dir "$WORK/does-not-exist")
 RC=$?
 set -e
-[ "$RC" -ne 0 ] && green "PASS: missing wiki-scripts-dir returns non-zero exit" || { red "FAIL: expected non-zero exit"; errors=$((errors+1)); }
-[ "$(echo "$OUT" | field '["success"]')" = "False" ] && green "PASS: fail envelope success=false" || { red "FAIL: envelope not success=false"; errors=$((errors+1)); }
-grep -q 'should-not-write' "$OVERVIEW" && { red "FAIL: a failed run wrote partial content"; errors=$((errors+1)); } || green "PASS: failed run wrote nothing"
-diff "$WORK/before-fail.md" "$OVERVIEW" >/dev/null && green "PASS: overview.md byte-for-byte intact after fail" || { red "FAIL: overview.md mutated on a fail"; errors=$((errors+1)); }
+[ "$RC" -ne 0 ] && green "PASS: overview-update-20 missing wiki-scripts-dir returns non-zero exit" || { red "FAIL: overview-update-20 expected non-zero exit"; errors=$((errors+1)); }
+[ "$(echo "$OUT" | field '["success"]')" = "False" ] && green "PASS: overview-update-21 fail envelope success=false" || { red "FAIL: overview-update-21 envelope not success=false"; errors=$((errors+1)); }
+grep -q 'should-not-write' "$OVERVIEW" && { red "FAIL: overview-update-22 a failed run wrote partial content"; errors=$((errors+1)); } || green "PASS: overview-update-22 failed run wrote nothing"
+diff "$WORK/before-fail.md" "$OVERVIEW" >/dev/null && green "PASS: overview-update-23 overview.md byte-for-byte intact after fail" || { red "FAIL: overview-update-23 overview.md mutated on a fail"; errors=$((errors+1)); }
 
 # --- 5. Stdlib-only guard ----------------------------------------------------
 if grep -Eq '^[[:space:]]*(import|from)[[:space:]]+(requests|yaml|bs4|lxml)\b' "$SCRIPT"; then
-  red "FAIL: overview_update.py imports a non-stdlib dependency"; errors=$((errors+1))
+  red "FAIL: overview-update-24 overview_update.py imports a non-stdlib dependency"; errors=$((errors+1))
 else
-  green "PASS: overview_update.py is stdlib-only"
+  green "PASS: overview-update-24 overview_update.py is stdlib-only"
 fi
 
 if [ "$errors" -eq 0 ]; then

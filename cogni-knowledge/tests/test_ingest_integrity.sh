@@ -77,7 +77,7 @@ EOF
 OUT="$(python3 "$SCRIPT" sweep --wiki-root "$WIKI" --dispatch "$DISPATCH")"
 
 echo "$OUT" | python3 -c 'import json,sys; d=json.load(sys.stdin); sys.exit(0 if d["success"] else 1)' \
-  && green "PASS: sweep returns success" || { red "FAIL: sweep not success"; echo "$OUT"; errors=$((errors+1)); }
+  && green "PASS: ingest-integrity-01 sweep returns success" || { red "FAIL: ingest-integrity-01 sweep not success"; echo "$OUT"; errors=$((errors+1)); }
 
 # Use python to introspect the envelope deterministically.
 introspect() { echo "$OUT" | python3 -c "$1"; }
@@ -89,8 +89,8 @@ d=json.load(sys.stdin)["data"]
 assert d["checked"]==5, d["checked"]
 assert "clean-source" in d["ok"], d["ok"]
 assert "norm-source" in d["ok"], d["ok"]
-' && green "PASS: clean + normalized-URL pages report ok (checked=5)" \
-  || { red "FAIL: clean/norm not ok"; echo "$OUT"; errors=$((errors+1)); }
+' && green "PASS: ingest-integrity-02 clean + normalized-URL pages report ok (checked=5)" \
+  || { red "FAIL: ingest-integrity-02 clean/norm not ok"; echo "$OUT"; errors=$((errors+1)); }
 
 # 2) victim-source: both legs flagged, reason id_mismatch
 introspect '
@@ -102,8 +102,8 @@ assert e["id_ok"] is False and e["url_ok"] is False, e
 assert e["reason"]=="id_mismatch", e
 assert e["observed_id"]=="foreign-source", e
 assert e["observed_url"]=="https://europa.eu/foreign", e
-' && green "PASS: contaminated page flagged id_ok=false AND url_ok=false (id_mismatch)" \
-  || { red "FAIL: contamination not flagged correctly"; echo "$OUT"; errors=$((errors+1)); }
+' && green "PASS: ingest-integrity-03 contaminated page flagged id_ok=false AND url_ok=false (id_mismatch)" \
+  || { red "FAIL: ingest-integrity-03 contamination not flagged correctly"; echo "$OUT"; errors=$((errors+1)); }
 
 # 3) url-swap: id ok, url flagged, reason url_mismatch
 introspect '
@@ -113,8 +113,8 @@ v={x["slug"]:x for x in d["violations"]}
 e=v["url-swap"]
 assert e["id_ok"] is True and e["url_ok"] is False, e
 assert e["reason"]=="url_mismatch", e
-' && green "PASS: swapped sources URL flagged url_mismatch (id intact)" \
-  || { red "FAIL: url_mismatch not detected"; echo "$OUT"; errors=$((errors+1)); }
+' && green "PASS: ingest-integrity-04 swapped sources URL flagged url_mismatch (id intact)" \
+  || { red "FAIL: ingest-integrity-04 url_mismatch not detected"; echo "$OUT"; errors=$((errors+1)); }
 
 # 4) never-written: page_missing
 introspect '
@@ -123,8 +123,8 @@ d=json.load(sys.stdin)["data"]
 v={x["slug"]:x for x in d["violations"]}
 e=v["never-written"]
 assert e["reason"]=="page_missing", e
-' && green "PASS: undispatched-on-disk slug reported page_missing" \
-  || { red "FAIL: page_missing not detected"; echo "$OUT"; errors=$((errors+1)); }
+' && green "PASS: ingest-integrity-05 undispatched-on-disk slug reported page_missing" \
+  || { red "FAIL: ingest-integrity-05 page_missing not detected"; echo "$OUT"; errors=$((errors+1)); }
 
 # 5) norm-source NOT a violation (normalize_url absorbs slash/tracking diff)
 introspect '
@@ -132,8 +132,8 @@ import json,sys
 d=json.load(sys.stdin)["data"]
 slugs={x["slug"] for x in d["violations"]}
 assert "norm-source" not in slugs, slugs
-' && green "PASS: trailing-slash/tracking-param diff does not false-flag" \
-  || { red "FAIL: normalization false-flagged"; echo "$OUT"; errors=$((errors+1)); }
+' && green "PASS: ingest-integrity-06 trailing-slash/tracking-param diff does not false-flag" \
+  || { red "FAIL: ingest-integrity-06 normalization false-flagged"; echo "$OUT"; errors=$((errors+1)); }
 
 # 6) stdin dispatch (--dispatch -)
 OUT_STDIN="$(cat "$DISPATCH" | python3 "$SCRIPT" sweep --wiki-root "$WIKI" --dispatch -)"
@@ -142,8 +142,8 @@ import json,sys
 d=json.load(sys.stdin)
 assert d["success"], d
 assert d["data"]["checked"]==5, d["data"]["checked"]
-' && green "PASS: --dispatch - reads the table from stdin" \
-  || { red "FAIL: stdin dispatch broke"; echo "$OUT_STDIN"; errors=$((errors+1)); }
+' && green "PASS: ingest-integrity-07 --dispatch - reads the table from stdin" \
+  || { red "FAIL: ingest-integrity-07 stdin dispatch broke"; echo "$OUT_STDIN"; errors=$((errors+1)); }
 
 # --- content_hash leg (--knowledge-root, #421) -------------------------------
 # A separate knowledge-root with its own wiki + fetch-cache, exercising the
@@ -225,8 +225,8 @@ assert e["expected_content_hash"] != e["observed_content_hash"], e
 # cache miss: leg skips -> ok despite the foreign page hash
 assert "ch-nocache" in d["ok"], d
 assert "ch-nocache" not in v, v
-' && green "PASS: content_hash leg flags body-only mismatch, skips on cache miss, passes on match" \
-  || { red "FAIL: content_hash leg wrong"; echo "$OUT_CH"; errors=$((errors+1)); }
+' && green "PASS: ingest-integrity-08 content_hash leg flags body-only mismatch, skips on cache miss, passes on match" \
+  || { red "FAIL: ingest-integrity-08 content_hash leg wrong"; echo "$OUT_CH"; errors=$((errors+1)); }
 
 # 8) backwards compat: SAME wiki WITHOUT --knowledge-root -> content_hash ignored,
 #    so ch-bad is no longer a violation (zero violations across the three pages).
@@ -236,8 +236,8 @@ import json,sys
 d=json.load(sys.stdin)["data"]
 assert d["violations"]==[], d["violations"]
 assert set(d["ok"])=={"ch-good","ch-bad","ch-nocache"}, d["ok"]
-' && green "PASS: no --knowledge-root -> content_hash leg off (today behavior)" \
-  || { red "FAIL: backwards-compat broke"; echo "$OUT_NOKR"; errors=$((errors+1)); }
+' && green "PASS: ingest-integrity-09 no --knowledge-root -> content_hash leg off (today behavior)" \
+  || { red "FAIL: ingest-integrity-09 backwards-compat broke"; echo "$OUT_NOKR"; errors=$((errors+1)); }
 
 # --- excerpt-presence leg (--knowledge-root, grounding L1) --------------------
 # The claim-level variant: id + sources URL + content_hash all conform, but a
@@ -346,8 +346,8 @@ assert "ep-pdf" in d["ok"], d
 assert "ep-pdf" not in v, v
 # per-run aggregate: present 1(good)+0(bad)+1(partial)+1(pdf)=3 over 1+1+2+1=5 scored claims
 assert abs(d["excerpt_presence_rate"]-0.6)<1e-9, d["excerpt_presence_rate"]
-' && green "PASS: excerpt-presence leg flags absent/partial quotes, accepts PDF-normalized excerpts, skips on cache miss, reports per-run rate" \
-  || { red "FAIL: excerpt-presence leg wrong"; echo "$OUT_EP"; errors=$((errors+1)); }
+' && green "PASS: ingest-integrity-10 excerpt-presence leg flags absent/partial quotes, accepts PDF-normalized excerpts, skips on cache miss, reports per-run rate" \
+  || { red "FAIL: ingest-integrity-10 excerpt-presence leg wrong"; echo "$OUT_EP"; errors=$((errors+1)); }
 
 # 10) --excerpt-threshold lowers the bar: ep-partial (0.5) now passes, ep-bad (0.0) still fails
 OUT_EP_THR="$(python3 "$SCRIPT" sweep --wiki-root "$KR_WIKI" --knowledge-root "$KR" --excerpt-threshold 0.4 --dispatch "$EP_DISPATCH")"
@@ -359,8 +359,8 @@ assert "ep-partial" not in slugs, slugs        # 0.5 >= 0.4 now ok
 assert "ep-partial" in d["ok"], d
 assert "ep-bad" in slugs, slugs                # 0.0 < 0.4 still fails
 assert "ep-good" in d["ok"], d
-' && green "PASS: --excerpt-threshold tunes the gate (0.4 passes the 0.5 page, fails the 0.0 page)" \
-  || { red "FAIL: --excerpt-threshold not honored"; echo "$OUT_EP_THR"; errors=$((errors+1)); }
+' && green "PASS: ingest-integrity-11 --excerpt-threshold tunes the gate (0.4 passes the 0.5 page, fails the 0.0 page)" \
+  || { red "FAIL: ingest-integrity-11 --excerpt-threshold not honored"; echo "$OUT_EP_THR"; errors=$((errors+1)); }
 
 # 11) backwards compat: WITHOUT --knowledge-root the excerpt leg is off, so the
 #     ep pages (id+url match, no content_hash) report zero violations and a null rate.
@@ -371,8 +371,8 @@ d=json.load(sys.stdin)["data"]
 assert d["violations"]==[], d["violations"]
 assert set(d["ok"])=={"ep-good","ep-bad","ep-partial","ep-nocache","ep-pdf"}, d["ok"]
 assert d["excerpt_presence_rate"] is None, d["excerpt_presence_rate"]
-' && green "PASS: no --knowledge-root -> excerpt leg off, rate null (today behavior)" \
-  || { red "FAIL: excerpt backwards-compat broke"; echo "$OUT_EP_NOKR"; errors=$((errors+1)); }
+' && green "PASS: ingest-integrity-12 no --knowledge-root -> excerpt leg off, rate null (today behavior)" \
+  || { red "FAIL: ingest-integrity-12 excerpt backwards-compat broke"; echo "$OUT_EP_NOKR"; errors=$((errors+1)); }
 
 if [ "$errors" -eq 0 ]; then
   green "ALL TESTS PASS"

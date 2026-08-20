@@ -15,6 +15,19 @@
 red()   { printf '%s\n' "$1"; }
 green() { printf '%s\n' "$1"; }
 
+# case_slug VALUE
+#   Fold an arbitrary loop value into the [a-z0-9-] discriminator a case id
+#   admits: lowercase, every run of non-alnum collapsed to ONE hyphen, and
+#   leading/trailing hyphens trimmed. The trim is the load-bearing part — a
+#   scanned name like `_cycle_guard_lib.sh` otherwise mints
+#   `<slug>-NN--cycle-guard-lib-sh`, whose empty segment the recorded shape
+#   rejects. Such ids sit on fail-only arms, so running the suite green can
+#   never reveal the defect; one shared spelling is what keeps it from
+#   recurring per call site.
+case_slug() {
+  printf '%s' "$1" | tr 'A-Z' 'a-z' | sed 's/[^a-z0-9][^a-z0-9]*/-/g; s/^-//; s/-$//'
+}
+
 # assert_grep PATTERN FILE DESCRIPTION
 #   Increments the caller's `errors` variable on failure.
 assert_grep() {

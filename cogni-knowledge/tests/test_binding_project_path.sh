@@ -25,7 +25,7 @@ SCRIPT="$PLUGIN_ROOT/scripts/knowledge-binding.py"
 . "$(dirname "$0")/fixtures/test_helpers.sh"
 
 if [ ! -f "$SCRIPT" ]; then
-  red "FAIL: knowledge-binding.py not found at $SCRIPT"
+  red "FAIL: binding-path-01 knowledge-binding.py not found at $SCRIPT"
   exit 1
 fi
 
@@ -58,16 +58,16 @@ python3 "$SCRIPT" init \
 
 SCHEMA=$(python3 -c "import json; print(json.load(open('$KB/.cogni-knowledge/binding.json'))['schema_version'])")
 if [ "$SCHEMA" = "0.1.5" ]; then
-  green "PASS: init writes schema_version 0.1.5"
+  green "PASS: binding-path-02 init writes schema_version 0.1.5"
 else
-  red "FAIL: schema_version expected 0.1.5, got '$SCHEMA'"
+  red "FAIL: binding-path-02 schema_version expected 0.1.5, got '$SCHEMA'"
   errors=$((errors + 1))
 fi
 
 if [ -d "$KB/.cogni-knowledge/fetch-cache" ]; then
-  green "PASS: init bootstraps fetch-cache/ directory"
+  green "PASS: binding-path-03 init bootstraps fetch-cache/ directory"
 else
-  red "FAIL: fetch-cache/ not bootstrapped at $KB/.cogni-knowledge/fetch-cache"
+  red "FAIL: binding-path-03 fetch-cache/ not bootstrapped at $KB/.cogni-knowledge/fetch-cache"
   errors=$((errors + 1))
 fi
 
@@ -84,9 +84,9 @@ assert 'fetch_cache_dir' not in b, 'fetch_cache_dir should be derived, not store
 assert 'last_fetch_refresh' not in b, 'last_fetch_refresh has no producer yet — add when knowledge-fetch lands'
 print('OK')
 " | grep -q OK; then
-  green "PASS: init writes curator_defaults; omits derivable/unused fields"
+  green "PASS: binding-path-04 init writes curator_defaults; omits derivable/unused fields"
 else
-  red "FAIL: curator_defaults missing or wrong on init output"
+  red "FAIL: binding-path-04 curator_defaults missing or wrong on init output"
   errors=$((errors + 1))
 fi
 
@@ -106,9 +106,9 @@ print(b['research_projects'][0].get('project_path', ''))
 ")
 PROJ_RESOLVED=$(python3 -c "from pathlib import Path; print(Path('$PROJ').resolve())")
 if [ "$ENTRY_PROJECT_PATH" = "$PROJ_RESOLVED" ]; then
-  green "PASS: append-project --project-path writes resolved abs path"
+  green "PASS: binding-path-05 append-project --project-path writes resolved abs path"
 else
-  red "FAIL: expected '$PROJ_RESOLVED', got '$ENTRY_PROJECT_PATH'"
+  red "FAIL: binding-path-05 expected '$PROJ_RESOLVED', got '$ENTRY_PROJECT_PATH'"
   errors=$((errors + 1))
 fi
 
@@ -132,9 +132,9 @@ print('|'.join([entry.get('project_path', 'MISSING'), entry['report_path']]))
 ")
 EMPTY_PP="${ENTRY2%%|*}"
 if [ "$EMPTY_PP" = "" ]; then
-  green "PASS: append-project without --project-path writes empty string (legacy compat)"
+  green "PASS: binding-path-06 append-project without --project-path writes empty string (legacy compat)"
 else
-  red "FAIL: expected empty project_path, got '$EMPTY_PP'"
+  red "FAIL: binding-path-06 expected empty project_path, got '$EMPTY_PP'"
   errors=$((errors + 1))
 fi
 
@@ -176,9 +176,9 @@ assert b['schema_version'] == '0.0.1', b['schema_version']
 assert 'project_path' not in b['research_projects'][0], b['research_projects'][0]
 print('OK')
 " | grep -q OK; then
-  green "PASS: legacy 0.0.1 binding reads back without error and without project_path"
+  green "PASS: binding-path-07 legacy 0.0.1 binding reads back without error and without project_path"
 else
-  red "FAIL: legacy 0.0.1 binding read failed"
+  red "FAIL: binding-path-07 legacy 0.0.1 binding read failed"
   red "  got: $READ_OUT"
   errors=$((errors + 1))
 fi
@@ -222,9 +222,9 @@ assert b['research_projects'][0]['project_path'] == '/tmp/old-project-2', b['res
 assert 'fetch_cache_dir' not in b, list(b.keys())
 print('OK')
 " | grep -q OK; then
-  green "PASS: legacy 0.0.2 binding reads back without error and preserves project_path"
+  green "PASS: binding-path-08 legacy 0.0.2 binding reads back without error and preserves project_path"
 else
-  red "FAIL: legacy 0.0.2 binding read failed"
+  red "FAIL: binding-path-08 legacy 0.0.2 binding read failed"
   red "  got: $READ_OUT2"
   errors=$((errors + 1))
 fi

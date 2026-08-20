@@ -29,10 +29,10 @@ WSD="$PLUGIN_ROOT/scripts/vendor/cogni-wiki/skills/wiki-ingest/scripts"
 . "$(dirname "$0")/fixtures/test_helpers.sh"
 
 if [ ! -f "$SCRIPT" ]; then
-  red "FAIL: concept-store.py not found at $SCRIPT"; exit 1
+  red "FAIL: renarrate-01 concept-store.py not found at $SCRIPT"; exit 1
 fi
 if [ ! -d "$WSD" ]; then
-  red "FAIL: cogni-wiki wiki-ingest scripts not found at $WSD"; exit 1
+  red "FAIL: renarrate-02 cogni-wiki wiki-ingest scripts not found at $WSD"; exit 1
 fi
 
 WORK=$(mktemp -d)
@@ -60,7 +60,7 @@ EOF
 python3 "$SCRIPT" merge --records "$PROJ/.metadata/rec.txt" --wiki-root "$WIKI" \
   --project-path "$PROJ" --project-slug proj-1 --wiki-scripts-dir "$WSD" >/dev/null
 PAGE="$WIKI/wiki/concepts/high-risk-classification.md"
-[ -f "$PAGE" ] && green "PASS: setup — concept page merged" || { red "FAIL: setup page missing"; exit 1; }
+[ -f "$PAGE" ] && green "PASS: renarrate-03 setup — concept page merged" || { red "FAIL: renarrate-03 setup page missing"; exit 1; }
 # Pin a stale created/updated date so a bump is observable regardless of today.
 python3 - "$PAGE" <<'PY'
 import re,sys
@@ -94,11 +94,11 @@ EOF
 # --- 1. CHANGED --------------------------------------------------------------
 OUT=$(python3 "$SCRIPT" renarrate --records "$PROJ/.metadata/renarrate-records.txt" \
   --wiki-root "$WIKI" --wiki-scripts-dir "$WSD")
-[ "$(echo "$OUT" | field '["success"]')" = "True" ] && green "PASS: renarrate envelope success" || { red "FAIL: renarrate not success"; errors=$((errors+1)); }
-[ "$(echo "$OUT" | field '["data"]["n_renarrated"]')" = "1" ] && green "PASS: 1 page renarrated" || { red "FAIL: n_renarrated != 1"; errors=$((errors+1)); }
-[ "$(echo "$OUT" | field '["data"]["n_skipped"]')" = "2" ] && green "PASS: 2 pages skipped" || { red "FAIL: n_skipped != 2"; errors=$((errors+1)); }
-grep -q "the safety-component test" "$PAGE" && green "PASS: new prose written into SUMMARY" || { red "FAIL: new prose missing"; errors=$((errors+1)); }
-grep -q "updated: 2026-01-01" "$PAGE" && { red "FAIL: updated: not bumped"; errors=$((errors+1)); } || green "PASS: updated: bumped off the pinned date"
+[ "$(echo "$OUT" | field '["success"]')" = "True" ] && green "PASS: renarrate-04 renarrate envelope success" || { red "FAIL: renarrate-04 renarrate not success"; errors=$((errors+1)); }
+[ "$(echo "$OUT" | field '["data"]["n_renarrated"]')" = "1" ] && green "PASS: renarrate-05 1 page renarrated" || { red "FAIL: renarrate-05 n_renarrated != 1"; errors=$((errors+1)); }
+[ "$(echo "$OUT" | field '["data"]["n_skipped"]')" = "2" ] && green "PASS: renarrate-06 2 pages skipped" || { red "FAIL: renarrate-06 n_skipped != 2"; errors=$((errors+1)); }
+grep -q "the safety-component test" "$PAGE" && green "PASS: renarrate-07 new prose written into SUMMARY" || { red "FAIL: renarrate-07 new prose missing"; errors=$((errors+1)); }
+grep -q "updated: 2026-01-01" "$PAGE" && { red "FAIL: renarrate-08 updated: not bumped"; errors=$((errors+1)); } || green "PASS: renarrate-08 updated: bumped off the pinned date"
 
 # Other machine blocks + ## Notes tail must be byte-identical. Compare the page
 # with the SUMMARY block region and the frontmatter `updated:` scalar masked.
@@ -113,38 +113,38 @@ sys.stdout.write(t)
 PY
 }
 if diff <(mask "$WORK/before.md") <(mask "$PAGE") >/dev/null; then
-  green "PASS: all non-SUMMARY bytes (claims/related/sources/notes/frontmatter) identical"
+  green "PASS: renarrate-09 all non-SUMMARY bytes (claims/related/sources/notes/frontmatter) identical"
 else
-  red "FAIL: renarrate changed bytes outside the SUMMARY block"; errors=$((errors+1))
+  red "FAIL: renarrate-09 renarrate changed bytes outside the SUMMARY block"; errors=$((errors+1))
   diff <(mask "$WORK/before.md") <(mask "$PAGE") || true
 fi
 # Spot-check the human ## Notes region survived intact.
-grep -q "human-owned and preserved" "$PAGE" && green "PASS: ## Notes human region intact" || { red "FAIL: ## Notes region lost"; errors=$((errors+1)); }
+grep -q "human-owned and preserved" "$PAGE" && green "PASS: renarrate-10 ## Notes human region intact" || { red "FAIL: renarrate-10 ## Notes region lost"; errors=$((errors+1)); }
 
 # --- 2. IDEMPOTENT -----------------------------------------------------------
 cp "$PAGE" "$WORK/after1.md"
 OUT=$(python3 "$SCRIPT" renarrate --records "$PROJ/.metadata/renarrate-records.txt" \
   --wiki-root "$WIKI" --wiki-scripts-dir "$WSD")
-[ "$(echo "$OUT" | field '["data"]["n_unchanged"]')" = "1" ] && green "PASS: re-run reports unchanged" || { red "FAIL: re-run not unchanged"; errors=$((errors+1)); }
+[ "$(echo "$OUT" | field '["data"]["n_unchanged"]')" = "1" ] && green "PASS: renarrate-11 re-run reports unchanged" || { red "FAIL: renarrate-11 re-run not unchanged"; errors=$((errors+1)); }
 if diff "$WORK/after1.md" "$PAGE" >/dev/null; then
-  green "PASS: idempotent — byte-identical, no date churn"
+  green "PASS: renarrate-12 idempotent — byte-identical, no date churn"
 else
-  red "FAIL: idempotent re-narrate churned the page"; errors=$((errors+1))
+  red "FAIL: renarrate-12 idempotent re-narrate churned the page"; errors=$((errors+1))
 fi
 
 # --- 3 + 4. skips left targets untouched -------------------------------------
 SKIP_REASONS=$(echo "$OUT" | python3 -c 'import sys,json;d=json.load(sys.stdin);print(",".join(sorted(s["reason"] for s in d["data"]["skipped"])))')
-echo "$SKIP_REASONS" | grep -q "no_summary_sentinel" && green "PASS: no-sentinel page → no_summary_sentinel" || { red "FAIL: missing no_summary_sentinel"; errors=$((errors+1)); }
-echo "$SKIP_REASONS" | grep -q "page_not_found" && green "PASS: missing page → page_not_found" || { red "FAIL: missing page_not_found"; errors=$((errors+1)); }
+echo "$SKIP_REASONS" | grep -q "no_summary_sentinel" && green "PASS: renarrate-13 no-sentinel page → no_summary_sentinel" || { red "FAIL: renarrate-13 missing no_summary_sentinel"; errors=$((errors+1)); }
+echo "$SKIP_REASONS" | grep -q "page_not_found" && green "PASS: renarrate-14 missing page → page_not_found" || { red "FAIL: renarrate-14 missing page_not_found"; errors=$((errors+1)); }
 if diff "$WORK/hand-before.md" "$WIKI/wiki/entities/hand.md" >/dev/null; then
-  green "PASS: hand-authored page left untouched"
+  green "PASS: renarrate-15 hand-authored page left untouched"
 else
-  red "FAIL: hand-authored page was modified"; errors=$((errors+1))
+  red "FAIL: renarrate-15 hand-authored page was modified"; errors=$((errors+1))
 fi
 
 # --- 5. records_not_found is a clean failure (fail-soft caller continues) ----
 OUT=$(python3 "$SCRIPT" renarrate --records "$WORK/nope.txt" --wiki-root "$WIKI" --wiki-scripts-dir "$WSD" || true)
-echo "$OUT" | grep -q "records_not_found" && green "PASS: missing records file → records_not_found error" || { red "FAIL: no records_not_found error"; errors=$((errors+1)); }
+echo "$OUT" | grep -q "records_not_found" && green "PASS: renarrate-16 missing records file → records_not_found error" || { red "FAIL: renarrate-16 no records_not_found error"; errors=$((errors+1)); }
 
 if [ "$errors" -eq 0 ]; then
   green ""

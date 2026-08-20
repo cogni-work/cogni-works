@@ -30,7 +30,7 @@ SETUP="$PLUGIN_ROOT/skills/knowledge-setup/SKILL.md"
 errors=0
 
 if [ ! -f "$SETUP" ]; then
-  red "FAIL: skills/knowledge-setup/SKILL.md not found"
+  red "FAIL: setup-probe-01 skills/knowledge-setup/SKILL.md not found"
   exit 1
 fi
 
@@ -39,47 +39,47 @@ fi
 # Negative: the Step 0 hard gate is gone — no probe_plugin function, no
 # cogni-wiki probe invocation, no "requires cogni-wiki to be installed" abort.
 if grep -qE 'probe_plugin\(\) \{' "$SETUP"; then
-  red "FAIL: knowledge-setup still defines the cogni-wiki probe_plugin() gate (re-home removed it)"
+  red "FAIL: setup-probe-02 knowledge-setup still defines the cogni-wiki probe_plugin() gate (re-home removed it)"
   errors=$((errors + 1))
 else
-  green "PASS: knowledge-setup carries no probe_plugin() gate"
+  green "PASS: setup-probe-02 knowledge-setup carries no probe_plugin() gate"
 fi
 
 if grep -qE 'probe_plugin cogni-wiki wiki-setup' "$SETUP"; then
-  red "FAIL: knowledge-setup still invokes the cogni-wiki probe"
+  red "FAIL: setup-probe-03 knowledge-setup still invokes the cogni-wiki probe"
   errors=$((errors + 1))
 else
-  green "PASS: knowledge-setup does not probe cogni-wiki"
+  green "PASS: setup-probe-03 knowledge-setup does not probe cogni-wiki"
 fi
 
 if grep -qE 'requires .cogni-wiki. to be installed' "$SETUP"; then
-  red "FAIL: knowledge-setup still carries the 'requires cogni-wiki to be installed' abort"
+  red "FAIL: setup-probe-04 knowledge-setup still carries the 'requires cogni-wiki to be installed' abort"
   errors=$((errors + 1))
 else
-  green "PASS: knowledge-setup drops the 'requires cogni-wiki' hard gate"
+  green "PASS: setup-probe-04 knowledge-setup drops the 'requires cogni-wiki' hard gate"
 fi
 
 # Negative: no runtime cogni-wiki skill dispatch (the parity gate).
 if grep -qE 'Skill\("?cogni-wiki:' "$SETUP"; then
-  red "FAIL: knowledge-setup still dispatches a cogni-wiki skill:"
+  red "FAIL: setup-probe-05 knowledge-setup still dispatches a cogni-wiki skill:"
   grep -nE 'Skill\("?cogni-wiki:' "$SETUP"
   errors=$((errors + 1))
 else
-  green "PASS: knowledge-setup dispatches zero cogni-wiki skills"
+  green "PASS: setup-probe-05 knowledge-setup dispatches zero cogni-wiki skills"
 fi
 
 # Positive: the native scaffold is present (mkdir skeleton + config.json write).
 if grep -qE 'mkdir -p' "$SETUP" && grep -qF '.cogni-wiki/config.json' "$SETUP"; then
-  green "PASS: knowledge-setup scaffolds the wiki skeleton + config natively"
+  green "PASS: setup-probe-06 knowledge-setup scaffolds the wiki skeleton + config natively"
 else
-  red "FAIL: knowledge-setup is missing the native wiki scaffold (mkdir + .cogni-wiki/config.json)"
+  red "FAIL: setup-probe-06 knowledge-setup is missing the native wiki scaffold (mkdir + .cogni-wiki/config.json)"
   errors=$((errors + 1))
 fi
 
 if grep -qF '"schema_version": "0.0.7"' "$SETUP"; then
-  green "PASS: knowledge-setup seeds config schema_version 0.0.7 (Step 3.5 bumps to 0.0.9)"
+  green "PASS: setup-probe-07 knowledge-setup seeds config schema_version 0.0.7 (Step 3.5 bumps to 0.0.9)"
 else
-  red "FAIL: knowledge-setup config scaffold does not seed schema_version 0.0.7"
+  red "FAIL: setup-probe-07 knowledge-setup config scaffold does not seed schema_version 0.0.7"
   errors=$((errors + 1))
 fi
 

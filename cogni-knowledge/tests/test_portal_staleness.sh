@@ -27,7 +27,7 @@ SCRIPT="$PLUGIN_ROOT/scripts/pipeline-summary.py"
 . "$(dirname "$0")/fixtures/test_helpers.sh"
 
 if [ ! -f "$SCRIPT" ]; then
-  red "FAIL: pipeline-summary.py not found at $SCRIPT"; exit 1
+  red "FAIL: portal-stale-01 pipeline-summary.py not found at $SCRIPT"; exit 1
 fi
 
 field() { python3 -c 'import sys,json;d=json.load(sys.stdin);print(eval("d"+sys.argv[1]))' "$1"; }
@@ -68,23 +68,23 @@ EOF
 
 # --- 1 + 2 + 3: default threshold (2) on the mixed base -----------------------
 OUT=$(python3 "$SCRIPT" portal-staleness --wiki-root "$WIKI")
-[ "$(echo "$OUT" | field '["success"]')" = "True" ] && green "PASS: portal-staleness envelope success" || { red "FAIL: not success"; errors=$((errors+1)); }
-[ "$(echo "$OUT" | field '["data"]["stale_count"]')" = "1" ] && green "PASS: exactly one stale theme (AI Act, delta 3 > 2)" || { red "FAIL: stale_count != 1"; errors=$((errors+1)); }
-[ "$(echo "$OUT" | field '["data"]["stale_themes"][0]["theme"]')" = "AI Act" ] && green "PASS: stale theme is 'AI Act'" || { red "FAIL: wrong stale theme"; errors=$((errors+1)); }
-[ "$(echo "$OUT" | field '["data"]["stale_themes"][0]["stamped_bullets"]')" = "2" ] && green "PASS: stamped_bullets=2" || { red "FAIL: stamped_bullets wrong"; errors=$((errors+1)); }
-[ "$(echo "$OUT" | field '["data"]["stale_themes"][0]["live_bullets"]')" = "5" ] && green "PASS: live_bullets=5" || { red "FAIL: live_bullets wrong"; errors=$((errors+1)); }
-[ "$(echo "$OUT" | field '["data"]["stale_themes"][0]["delta"]')" = "3" ] && green "PASS: delta=3" || { red "FAIL: delta wrong"; errors=$((errors+1)); }
+[ "$(echo "$OUT" | field '["success"]')" = "True" ] && green "PASS: portal-stale-02 portal-staleness envelope success" || { red "FAIL: portal-stale-02 not success"; errors=$((errors+1)); }
+[ "$(echo "$OUT" | field '["data"]["stale_count"]')" = "1" ] && green "PASS: portal-stale-03 exactly one stale theme (AI Act, delta 3 > 2)" || { red "FAIL: portal-stale-03 stale_count != 1"; errors=$((errors+1)); }
+[ "$(echo "$OUT" | field '["data"]["stale_themes"][0]["theme"]')" = "AI Act" ] && green "PASS: portal-stale-04 stale theme is 'AI Act'" || { red "FAIL: portal-stale-04 wrong stale theme"; errors=$((errors+1)); }
+[ "$(echo "$OUT" | field '["data"]["stale_themes"][0]["stamped_bullets"]')" = "2" ] && green "PASS: portal-stale-05 stamped_bullets=2" || { red "FAIL: portal-stale-05 stamped_bullets wrong"; errors=$((errors+1)); }
+[ "$(echo "$OUT" | field '["data"]["stale_themes"][0]["live_bullets"]')" = "5" ] && green "PASS: portal-stale-06 live_bullets=5" || { red "FAIL: portal-stale-06 live_bullets wrong"; errors=$((errors+1)); }
+[ "$(echo "$OUT" | field '["data"]["stale_themes"][0]["delta"]')" = "3" ] && green "PASS: portal-stale-07 delta=3" || { red "FAIL: portal-stale-07 delta wrong"; errors=$((errors+1)); }
 # Data Act (delta 1) is within threshold → not flagged; Human-curated has no stamp → skipped.
-echo "$OUT" | grep -q "Data Act" && { red "FAIL: Data Act flagged despite within-threshold delta"; errors=$((errors+1)); } || green "PASS: within-threshold theme (Data Act) not flagged"
-echo "$OUT" | grep -q "Human-curated" && { red "FAIL: no-machine-lead-in theme flagged"; errors=$((errors+1)); } || green "PASS: no-machine-lead-in theme skipped"
+echo "$OUT" | grep -q "Data Act" && { red "FAIL: portal-stale-08 Data Act flagged despite within-threshold delta"; errors=$((errors+1)); } || green "PASS: portal-stale-08 within-threshold theme (Data Act) not flagged"
+echo "$OUT" | grep -q "Human-curated" && { red "FAIL: portal-stale-09 no-machine-lead-in theme flagged"; errors=$((errors+1)); } || green "PASS: portal-stale-09 no-machine-lead-in theme skipped"
 
 # --- 6: --threshold override --------------------------------------------------
 # threshold 0 → Data Act (delta 1 > 0) AND AI Act (delta 3 > 0) both flag.
 OUT0=$(python3 "$SCRIPT" portal-staleness --wiki-root "$WIKI" --threshold 0)
-[ "$(echo "$OUT0" | field '["data"]["stale_count"]')" = "2" ] && green "PASS: --threshold 0 flags both stamped themes" || { red "FAIL: threshold-0 stale_count != 2"; errors=$((errors+1)); }
+[ "$(echo "$OUT0" | field '["data"]["stale_count"]')" = "2" ] && green "PASS: portal-stale-10 --threshold 0 flags both stamped themes" || { red "FAIL: portal-stale-10 threshold-0 stale_count != 2"; errors=$((errors+1)); }
 # threshold 5 → nobody is stale (max delta is 3).
 OUT5=$(python3 "$SCRIPT" portal-staleness --wiki-root "$WIKI" --threshold 5)
-[ "$(echo "$OUT5" | field '["data"]["stale_count"]')" = "0" ] && green "PASS: --threshold 5 flags nothing (silent)" || { red "FAIL: threshold-5 stale_count != 0"; errors=$((errors+1)); }
+[ "$(echo "$OUT5" | field '["data"]["stale_count"]')" = "0" ] && green "PASS: portal-stale-11 --threshold 5 flags nothing (silent)" || { red "FAIL: portal-stale-11 threshold-5 stale_count != 0"; errors=$((errors+1)); }
 
 # --- 4: zero-drift base is silent ---------------------------------------------
 WIKI2="$WORK/wiki-clean"
@@ -100,13 +100,13 @@ Lead-in authored at the same moment the two bullets landed.
 - [[f-b]] — two
 EOF
 OUTC=$(python3 "$SCRIPT" portal-staleness --wiki-root "$WIKI2")
-[ "$(echo "$OUTC" | field '["data"]["stale_count"]')" = "0" ] && green "PASS: zero-drift base reports stale_count 0 (silent)" || { red "FAIL: zero-drift stale_count != 0"; errors=$((errors+1)); }
-[ "$(echo "$OUTC" | field '["data"]["stale_themes"]')" = "[]" ] && green "PASS: zero-drift stale_themes empty" || { red "FAIL: zero-drift list not empty"; errors=$((errors+1)); }
+[ "$(echo "$OUTC" | field '["data"]["stale_count"]')" = "0" ] && green "PASS: portal-stale-12 zero-drift base reports stale_count 0 (silent)" || { red "FAIL: portal-stale-12 zero-drift stale_count != 0"; errors=$((errors+1)); }
+[ "$(echo "$OUTC" | field '["data"]["stale_themes"]')" = "[]" ] && green "PASS: portal-stale-13 zero-drift stale_themes empty" || { red "FAIL: portal-stale-13 zero-drift list not empty"; errors=$((errors+1)); }
 
 # --- 5: missing index.md is fail-soft success ---------------------------------
 OUTM=$(python3 "$SCRIPT" portal-staleness --wiki-root "$WORK/does-not-exist")
-[ "$(echo "$OUTM" | field '["success"]')" = "True" ] && green "PASS: missing index.md is fail-soft success" || { red "FAIL: missing index not success"; errors=$((errors+1)); }
-[ "$(echo "$OUTM" | field '["data"]["stale_count"]')" = "0" ] && green "PASS: missing index.md stale_count 0" || { red "FAIL: missing index stale_count != 0"; errors=$((errors+1)); }
+[ "$(echo "$OUTM" | field '["success"]')" = "True" ] && green "PASS: portal-stale-14 missing index.md is fail-soft success" || { red "FAIL: portal-stale-14 missing index not success"; errors=$((errors+1)); }
+[ "$(echo "$OUTM" | field '["data"]["stale_count"]')" = "0" ] && green "PASS: portal-stale-15 missing index.md stale_count 0" || { red "FAIL: portal-stale-15 missing index stale_count != 0"; errors=$((errors+1)); }
 
 if [ "$errors" -eq 0 ]; then
   green "All portal-staleness tests passed."

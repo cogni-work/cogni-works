@@ -71,22 +71,22 @@ build_wiki "$WIKI" "0.0.8"
 CLEAN_OUT="$WORK/clean.json"
 python3 "$HEALTH" --wiki-root "$WIKI" > "$CLEAN_OUT"
 
-assert_grep '"success": true' "$CLEAN_OUT" "clean curated wiki: health succeeds"
+assert_grep '"success": true' "$CLEAN_OUT" "curated-layout-01 clean curated wiki: health succeeds"
 if grep -q 'curated_layout_violation' "$CLEAN_OUT"; then
-  red "FAIL: clean curated wiki raised curated_layout_violation"
+  red "FAIL: curated-layout-02 clean curated wiki raised curated_layout_violation"
   errors=$((errors + 1))
 else
-  green "PASS: clean curated wiki has no curated_layout_violation"
+  green "PASS: curated-layout-02 clean curated wiki has no curated_layout_violation"
 fi
 assert_grep '"entries_count_actual": 1' "$CLEAN_OUT" \
-  "sub-index excluded: entries_count_actual is 1 (the source page only)"
+  "curated-layout-03 sub-index excluded: entries_count_actual is 1 (the source page only)"
 if grep -q 'missing_subindex' "$CLEAN_OUT"; then
-  red "FAIL: clean wiki warned missing_subindex despite sources/index.md"
+  red "FAIL: curated-layout-04 clean wiki warned missing_subindex despite sources/index.md"
   errors=$((errors + 1))
 else
-  green "PASS: present sub-index raises no missing_subindex warning"
+  green "PASS: curated-layout-04 present sub-index raises no missing_subindex warning"
 fi
-assert_grep '"errors": 0' "$CLEAN_OUT" "clean curated wiki: zero errors"
+assert_grep '"errors": 0' "$CLEAN_OUT" "curated-layout-05 clean curated wiki: zero errors"
 
 # ---------------------------------------------------------------------------
 # 2. Flat-root control file + missing meta/ at schema >= 0.0.8
@@ -97,15 +97,15 @@ printf '# Context brief\n' > "$WIKI/wiki/context_brief.md"
 FLAT_OUT="$WORK/flatroot.json"
 python3 "$HEALTH" --wiki-root "$WIKI" > "$FLAT_OUT"
 assert_grep 'curated_layout_violation' "$FLAT_OUT" \
-  "flat-root context_brief.md fires curated_layout_violation"
+  "curated-layout-06 flat-root context_brief.md fires curated_layout_violation"
 assert_grep 'misplaced_control_files' "$FLAT_OUT" \
-  "violation message points at the lint fix class"
+  "curated-layout-07 violation message points at the lint fix class"
 
 rm -rf "$WIKI/wiki/meta"
 NOMETA_OUT="$WORK/nometa.json"
 python3 "$HEALTH" --wiki-root "$WIKI" > "$NOMETA_OUT"
 assert_grep 'wiki/meta/ missing' "$NOMETA_OUT" \
-  "missing wiki/meta/ fires curated_layout_violation"
+  "curated-layout-08 missing wiki/meta/ fires curated_layout_violation"
 
 # ---------------------------------------------------------------------------
 # 3. overview.md still carrying the narrative machine block
@@ -122,7 +122,7 @@ EOF
 NARR_OUT="$WORK/narrative.json"
 python3 "$HEALTH" --wiki-root "$WIKI" > "$NARR_OUT"
 assert_grep 'OVERVIEW-NARRATIVE' "$NARR_OUT" \
-  "unfolded overview narrative fires curated_layout_violation"
+  "curated-layout-09 unfolded overview narrative fires curated_layout_violation"
 
 # ---------------------------------------------------------------------------
 # 4. Sub-indexed type dir with pages but no index.md warns
@@ -133,7 +133,7 @@ rm "$WIKI/wiki/sources/index.md"
 NOSUB_OUT="$WORK/nosubindex.json"
 python3 "$HEALTH" --wiki-root "$WIKI" > "$NOSUB_OUT"
 assert_grep 'missing_subindex' "$NOSUB_OUT" \
-  "pages without a sub-index warn missing_subindex"
+  "curated-layout-10 pages without a sub-index warn missing_subindex"
 
 # ---------------------------------------------------------------------------
 # 5. Pre-0.0.8 base: curated assertions stay silent
@@ -145,10 +145,10 @@ printf '# Log\n' > "$WIKI/wiki/log.md"
 LEGACY_OUT="$WORK/legacy.json"
 python3 "$HEALTH" --wiki-root "$WIKI" > "$LEGACY_OUT"
 if grep -q 'curated_layout_violation\|missing_subindex' "$LEGACY_OUT"; then
-  red "FAIL: pre-0.0.8 base fired curated-layout findings (schema gate broken)"
+  red "FAIL: curated-layout-11 pre-0.0.8 base fired curated-layout findings (schema gate broken)"
   errors=$((errors + 1))
 else
-  green "PASS: pre-0.0.8 base fires no curated-layout findings"
+  green "PASS: curated-layout-11 pre-0.0.8 base fires no curated-layout findings"
 fi
 
 # ---------------------------------------------------------------------------

@@ -35,7 +35,7 @@ WSD="$PLUGIN_ROOT/scripts/vendor/cogni-wiki/skills/wiki-ingest/scripts"
 errors=0
 
 if [ ! -d "$WSD" ]; then
-  red "FAIL: vendored cogni-wiki wiki-ingest scripts not found at $WSD"
+  red "FAIL: migrate-layout-01 vendored cogni-wiki wiki-ingest scripts not found at $WSD"
   exit 1
 fi
 
@@ -105,22 +105,22 @@ cp "$WIKI/wiki/overview.md" "$WORK/overview.before"
 DRY_OUT="$WORK/dry.json"
 python3 "$SCRIPT" --wiki-root "$WIKI" --wiki-scripts-dir "$WSD" > "$DRY_OUT"
 
-assert_grep '"success": true' "$DRY_OUT" "dry-run succeeds"
-assert_grep '"action": "dry_run"' "$DRY_OUT" "dry-run is the default (no --apply)"
-assert_grep '"action": "would_fold"' "$DRY_OUT" "dry-run reports the overview fold"
-assert_grep 'root-index-proposed.md' "$DRY_OUT" "dry-run stages the proposed root MAP (content-diff surface)"
+assert_grep '"success": true' "$DRY_OUT" "migrate-layout-02 dry-run succeeds"
+assert_grep '"action": "dry_run"' "$DRY_OUT" "migrate-layout-03 dry-run is the default (no --apply)"
+assert_grep '"action": "would_fold"' "$DRY_OUT" "migrate-layout-04 dry-run reports the overview fold"
+assert_grep 'root-index-proposed.md' "$DRY_OUT" "migrate-layout-05 dry-run stages the proposed root MAP (content-diff surface)"
 
 if cmp -s "$WIKI/wiki/index.md" "$WORK/index.before" \
    && cmp -s "$WIKI/wiki/overview.md" "$WORK/overview.before" \
    && [ -f "$WIKI/wiki/log.md" ] && [ ! -e "$WIKI/wiki/meta/log.md" ]; then
-  green "PASS: dry-run leaves live files byte-identical and moves nothing"
+  green "PASS: migrate-layout-06 dry-run leaves live files byte-identical and moves nothing"
 else
-  red "FAIL: dry-run touched live files"
+  red "FAIL: migrate-layout-06 dry-run touched live files"
   errors=$((errors + 1))
 fi
 
 assert_grep '"schema_version": "0.0.7"' "$WIKI/.cogni-wiki/config.json" \
-  "dry-run does not bump schema_version"
+  "migrate-layout-07 dry-run does not bump schema_version"
 
 # ---------------------------------------------------------------------------
 # 2. --apply migrates the base
@@ -128,57 +128,59 @@ assert_grep '"schema_version": "0.0.7"' "$WIKI/.cogni-wiki/config.json" \
 APPLY_OUT="$WORK/apply.json"
 python3 "$SCRIPT" --wiki-root "$WIKI" --wiki-scripts-dir "$WSD" --apply > "$APPLY_OUT"
 
-assert_grep '"success": true' "$APPLY_OUT" "apply succeeds"
-assert_grep '"action": "migrated"' "$APPLY_OUT" "apply reports action=migrated"
+assert_grep '"success": true' "$APPLY_OUT" "migrate-layout-08 apply succeeds"
+assert_grep '"action": "migrated"' "$APPLY_OUT" "migrate-layout-09 apply reports action=migrated"
 
 for f in log.md context_brief.md open_questions.md; do
+  # Per-iteration discriminator (see case_slug in fixtures/test_helpers.sh).
+  fslug=$(case_slug "$f")
   if [ -f "$WIKI/wiki/meta/$f" ] && [ ! -e "$WIKI/wiki/$f" ]; then
-    green "PASS: $f relocated to wiki/meta/"
+    green "PASS: migrate-layout-10-$fslug $f relocated to wiki/meta/"
   else
-    red "FAIL: $f not relocated to wiki/meta/"
+    red "FAIL: migrate-layout-10-$fslug $f not relocated to wiki/meta/"
     errors=$((errors + 1))
   fi
 done
 
 assert_grep 'MACHINE-OWNED:OVERVIEW-NARRATIVE:START' "$WIKI/wiki/index.md" \
-  "overview narrative folded into index.md intro"
+  "migrate-layout-11 overview narrative folded into index.md intro"
 assert_grep 'EU AI regulation fundamentals' "$WIKI/wiki/index.md" \
-  "narrative inner text relocated verbatim"
+  "migrate-layout-12 narrative inner text relocated verbatim"
 
 if grep -q 'MACHINE-OWNED:OVERVIEW-NARRATIVE' "$WIKI/wiki/overview.md"; then
-  red "FAIL: overview.md still carries the narrative block after the fold"
+  red "FAIL: migrate-layout-13 overview.md still carries the narrative block after the fold"
   errors=$((errors + 1))
 else
-  green "PASS: overview.md narrative block retired"
+  green "PASS: migrate-layout-13 overview.md narrative block retired"
 fi
 assert_grep 'Recent syntheses' "$WIKI/wiki/overview.md" \
-  "overview.md keeps the ## Recent syntheses list (non-destructive)"
+  "migrate-layout-14 overview.md keeps the ## Recent syntheses list (non-destructive)"
 assert_grep 'some-synthesis' "$WIKI/wiki/overview.md" \
-  "overview.md keeps its synthesis bullet byte-for-byte"
+  "migrate-layout-15 overview.md keeps its synthesis bullet byte-for-byte"
 
 # Curated MAP shape: bullets dropped, count-link span present
 if grep -q -- '- \[\[eu-ai-act-scope\]\]' "$WIKI/wiki/index.md"; then
-  red "FAIL: per-page bullet survived on the curated root (should live in sub-index)"
+  red "FAIL: migrate-layout-16 per-page bullet survived on the curated root (should live in sub-index)"
   errors=$((errors + 1))
 else
-  green "PASS: per-page bullets dropped from the curated root"
+  green "PASS: migrate-layout-16 per-page bullets dropped from the curated root"
 fi
 assert_grep 'MACHINE-OWNED:ROOT-LINKS:START' "$WIKI/wiki/index.md" \
-  "curated root carries the ROOT-LINKS count span"
+  "migrate-layout-17 curated root carries the ROOT-LINKS count span"
 
 # 3. Addendum-B4: the human lead-in survives the split verbatim
 assert_grep 'Hand-written human lead-in that must survive the split verbatim.' \
-  "$WIKI/wiki/index.md" "human (non-sentineled) theme lead-in preserved verbatim"
+  "$WIKI/wiki/index.md" "migrate-layout-18 human (non-sentineled) theme lead-in preserved verbatim"
 
 # Sub-index rendered with the page bullet relocated there
 assert_grep 'eu-ai-act-scope' "$WIKI/wiki/sources/index.md" \
-  "sources sub-index carries the relocated page bullet"
+  "migrate-layout-19 sources sub-index carries the relocated page bullet"
 
 assert_grep '"schema_version": "0.0.8"' "$WIKI/.cogni-wiki/config.json" \
-  "schema_version bumped to 0.0.8"
+  "migrate-layout-20 schema_version bumped to 0.0.8"
 
 assert_grep 'migrate | curated layout' "$WIKI/wiki/meta/log.md" \
-  "migration logged to wiki/meta/log.md"
+  "migrate-layout-21 migration logged to wiki/meta/log.md"
 
 # ---------------------------------------------------------------------------
 # 4. Second --apply run is a clean no-op
@@ -187,14 +189,14 @@ cp "$WIKI/wiki/index.md" "$WORK/index.after"
 NOOP_OUT="$WORK/noop.json"
 python3 "$SCRIPT" --wiki-root "$WIKI" --wiki-scripts-dir "$WSD" --apply > "$NOOP_OUT"
 
-assert_grep '"success": true' "$NOOP_OUT" "second apply succeeds"
-assert_grep '"action": "noop"' "$NOOP_OUT" "second apply is a no-op"
-assert_grep '"reason": "already_migrated"' "$NOOP_OUT" "no-op reason is already_migrated"
+assert_grep '"success": true' "$NOOP_OUT" "migrate-layout-22 second apply succeeds"
+assert_grep '"action": "noop"' "$NOOP_OUT" "migrate-layout-23 second apply is a no-op"
+assert_grep '"reason": "already_migrated"' "$NOOP_OUT" "migrate-layout-24 no-op reason is already_migrated"
 
 if cmp -s "$WIKI/wiki/index.md" "$WORK/index.after"; then
-  green "PASS: second apply leaves the curated root byte-identical"
+  green "PASS: migrate-layout-25 second apply leaves the curated root byte-identical"
 else
-  red "FAIL: second apply changed the curated root"
+  red "FAIL: migrate-layout-25 second apply changed the curated root"
   errors=$((errors + 1))
 fi
 

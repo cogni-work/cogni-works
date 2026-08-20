@@ -34,14 +34,14 @@ errors=0
 
 REFRESH="$PLUGIN_ROOT/skills/knowledge-refresh/SKILL.md"
 if [ ! -f "$REFRESH" ]; then
-  red "FAIL: knowledge-refresh/SKILL.md not found"
+  red "FAIL: push-chain-01 knowledge-refresh/SKILL.md not found"
   exit 1
 fi
 
 # --- 1) Seven phase dispatches present ------------------------------------
 for phase in plan curate fetch ingest compose verify finalize; do
   assert_grep "Skill(\"cogni-knowledge:knowledge-${phase}\"" "$REFRESH" \
-    "push-mode dispatches knowledge-${phase}"
+    "push-chain-02-${phase} push-mode dispatches knowledge-${phase}"
 done
 
 # --- 2) Phases appear in pipeline order ------------------------------------
@@ -56,15 +56,15 @@ for phase in plan curate fetch ingest compose verify finalize; do
   fi
   if [ "$ln" -le "$prev" ]; then
     order_ok=0
-    red "FAIL: knowledge-${phase} dispatch (line $ln) is not after the previous phase (line $prev)"
+    red "FAIL: push-chain-03-${phase} knowledge-${phase} dispatch (line $ln) is not after the previous phase (line $prev)"
     break
   fi
   prev="$ln"
 done
 if [ "$order_ok" -eq 1 ]; then
-  green "PASS: the seven phase dispatches appear in plan→…→finalize order"
+  green "PASS: push-chain-04 the seven phase dispatches appear in plan→…→finalize order"
 else
-  red "FAIL: phase dispatches are out of order or missing"
+  red "FAIL: push-chain-04 phase dispatches are out of order or missing"
   errors=$((errors + 1))
 fi
 
@@ -74,9 +74,9 @@ fi
 # block on the human-direct apply-portal AskUserQuestion (#516).
 FINALIZE_DISPATCH=$(grep 'Skill("cogni-knowledge:knowledge-finalize"' "$REFRESH" || true)
 if echo "$FINALIZE_DISPATCH" | grep -q '\-\-no-portal-prompt'; then
-  green "PASS: push-mode finalize dispatch passes --no-portal-prompt (#516)"
+  green "PASS: push-chain-05 push-mode finalize dispatch passes --no-portal-prompt (#516)"
 else
-  red "FAIL: push-mode finalize dispatch must pass --no-portal-prompt (autonomous, never block on the portal confirm)"
+  red "FAIL: push-chain-05 push-mode finalize dispatch must pass --no-portal-prompt (autonomous, never block on the portal confirm)"
   red "  got: $FINALIZE_DISPATCH"
   errors=$((errors + 1))
 fi
@@ -86,35 +86,35 @@ fi
 # transitively reached cogni-research). That dispatch — and the cogni-research
 # pre-flight probe — must be fully gone.
 assert_not_grep 'knowledge-research' "$REFRESH" \
-  "no knowledge-research reference (legacy push dispatch removed)"
+  "push-chain-06 no knowledge-research reference (legacy push dispatch removed)"
 assert_not_grep 'probe_plugin cogni-research' "$REFRESH" \
-  "no cogni-research pre-flight probe (clean break)"
+  "push-chain-07 no cogni-research pre-flight probe (clean break)"
 if grep -qE 'Skill\("?cogni-research:' "$REFRESH" 2>/dev/null; then
-  red "FAIL: knowledge-refresh dispatches a cogni-research skill"
+  red "FAIL: push-chain-08 knowledge-refresh dispatches a cogni-research skill"
   grep -nE 'Skill\("?cogni-research:' "$REFRESH"
   errors=$((errors + 1))
 else
-  green "PASS: no Skill(\"cogni-research:\") dispatch"
+  green "PASS: push-chain-08 no Skill(\"cogni-research:\") dispatch"
 fi
 
 # --- 4) Pull-mode is removed; push-mode survives ---------------------------
-assert_not_grep '\-\-from-research' "$REFRESH" "pull-mode --from-research flag removed"
-assert_not_grep 'Skill("cogni-wiki:wiki-refresh"' "$REFRESH" "pull-mode wiki-refresh dispatch removed"
+assert_not_grep '\-\-from-research' "$REFRESH" "push-chain-09 pull-mode --from-research flag removed"
+assert_not_grep 'Skill("cogni-wiki:wiki-refresh"' "$REFRESH" "push-chain-10 pull-mode wiki-refresh dispatch removed"
 
 # --- 5) Push-mode lint is re-homed onto the vendored lint_wiki.py -----------
 # Push-mode no longer dispatches the cogni-wiki:wiki-lint SKILL; it runs the
 # vendored lint_wiki.py in-tree (resolved via resolve_wiki_scripts), so a
 # Karpathy base needs no cogni-wiki install for push-mode and the archival
 # parity grep-guard greens on this skill.
-assert_not_grep 'Skill("cogni-wiki:wiki-lint"' "$REFRESH" "push-mode no longer dispatches cogni-wiki:wiki-lint (re-homed to vendored lint_wiki.py)"
-assert_grep 'lint_wiki.py' "$REFRESH" "push-mode lints via the vendored lint_wiki.py"
+assert_not_grep 'Skill("cogni-wiki:wiki-lint"' "$REFRESH" "push-chain-11 push-mode no longer dispatches cogni-wiki:wiki-lint (re-homed to vendored lint_wiki.py)"
+assert_grep 'lint_wiki.py' "$REFRESH" "push-chain-12 push-mode lints via the vendored lint_wiki.py"
 
 # --- 6) Evidence-aware refresh candidates feed the topic menu --------------
 # Push-mode §1 reads binding.refresh_candidates[] (the evidence-aware signals
 # flagged at knowledge-ingest-source time) and merges them into the AskUserQuestion
 # topic menu alongside the time-based stale findings, labelled distinctly.
-assert_grep 'refresh_candidates' "$REFRESH" "push-mode reads binding.refresh_candidates[] into the topic menu"
-assert_grep 'newer evidence' "$REFRESH" "push-mode labels evidence-based candidates distinctly from time-based stale findings"
+assert_grep 'refresh_candidates' "$REFRESH" "push-chain-13 push-mode reads binding.refresh_candidates[] into the topic menu"
+assert_grep 'newer evidence' "$REFRESH" "push-chain-14 push-mode labels evidence-based candidates distinctly from time-based stale findings"
 
 if [ $errors -eq 0 ]; then
   green ""

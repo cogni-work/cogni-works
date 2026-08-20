@@ -26,7 +26,7 @@ SCRIPT="$PLUGIN_ROOT/scripts/fetch-cache.py"
 . "$(dirname "$0")/fixtures/test_helpers.sh"
 
 if [ ! -f "$SCRIPT" ]; then
-  red "FAIL: fetch-cache.py not found at $SCRIPT"
+  red "FAIL: fetch-cache-01 fetch-cache.py not found at $SCRIPT"
   exit 1
 fi
 
@@ -46,9 +46,9 @@ URL_GONE="https://example.org/gone"
 EXPECTED_KEY=$(python3 -c "import hashlib; print(hashlib.sha256('$URL1'.encode()).hexdigest())")
 GOT_KEY=$(python3 "$SCRIPT" key --url "$URL1" --bare)
 if [ "$GOT_KEY" = "$EXPECTED_KEY" ]; then
-  green "PASS: key --bare returns sha256(url) with no envelope"
+  green "PASS: fetch-cache-02 key --bare returns sha256(url) with no envelope"
 else
-  red "FAIL: expected '$EXPECTED_KEY', got '$GOT_KEY'"
+  red "FAIL: fetch-cache-02 expected '$EXPECTED_KEY', got '$GOT_KEY'"
   errors=$((errors + 1))
 fi
 
@@ -80,9 +80,9 @@ assert e.get('contamination_suspected') is False, e
 assert e.get('contamination_match', '') == '', e
 print('OK')
 " | grep -q OK; then
-  green "PASS: store + fetch round-trip preserves all fields incl. content_hash (clean body flags no contamination)"
+  green "PASS: fetch-cache-03 store + fetch round-trip preserves all fields incl. content_hash (clean body flags no contamination)"
 else
-  red "FAIL: round-trip mismatch"
+  red "FAIL: fetch-cache-03 round-trip mismatch"
   red "  got: $FETCH_OUT"
   errors=$((errors + 1))
 fi
@@ -108,9 +108,9 @@ assert d['data']['age_days'] > 30, d['data']
 assert d['data']['entry']['url'] == '$URL1', d['data']
 print('OK')
 " | grep -q OK; then
-  green "PASS: fetch --max-age-days flags stale entry with reason=stale"
+  green "PASS: fetch-cache-04 fetch --max-age-days flags stale entry with reason=stale"
 else
-  red "FAIL: stale-detection wrong"
+  red "FAIL: fetch-cache-04 stale-detection wrong"
   red "  got: $STALE_OUT"
   errors=$((errors + 1))
 fi
@@ -124,9 +124,9 @@ assert d['success'] is False, d
 assert d['data']['reason'] == 'miss', d['data']
 print('OK')
 " | grep -q OK; then
-  green "PASS: fetch on missing URL emits reason=miss"
+  green "PASS: fetch-cache-05 fetch on missing URL emits reason=miss"
 else
-  red "FAIL: miss-detection wrong"
+  red "FAIL: fetch-cache-05 miss-detection wrong"
   red "  got: $MISS_OUT"
   errors=$((errors + 1))
 fi
@@ -151,9 +151,9 @@ assert e['body'] == '', e
 assert e['content_hash'] == '', e
 print('OK')
 " | grep -q OK; then
-  green "PASS: negative-cache entry round-trips status + reason"
+  green "PASS: fetch-cache-06 negative-cache entry round-trips status + reason"
 else
-  red "FAIL: negative cache wrong"
+  red "FAIL: fetch-cache-06 negative cache wrong"
   red "  got: $GONE_OUT"
   errors=$((errors + 1))
 fi
@@ -173,9 +173,9 @@ assert d['success'] is False, d
 assert 'reason' in d['error'] and 'unavailable' in d['error'], d
 print('OK')
 " | grep -q OK; then
-  green "PASS: --status ok + --reason is rejected with a clear error"
+  green "PASS: fetch-cache-07 --status ok + --reason is rejected with a clear error"
 else
-  red "FAIL: --status ok + --reason was not rejected"
+  red "FAIL: fetch-cache-07 --status ok + --reason was not rejected"
   red "  got: $BAD_OK_REASON"
   errors=$((errors + 1))
 fi
@@ -193,9 +193,9 @@ assert d['success'] is False, d
 assert 'reason' in d['error'] and 'required' in d['error'], d
 print('OK')
 " | grep -q OK; then
-  green "PASS: --status unavailable without --reason is rejected with a clear error"
+  green "PASS: fetch-cache-08 --status unavailable without --reason is rejected with a clear error"
 else
-  red "FAIL: --status unavailable without --reason was not rejected"
+  red "FAIL: fetch-cache-08 --status unavailable without --reason was not rejected"
   red "  got: $BAD_UNAVAIL_NO_REASON"
   errors=$((errors + 1))
 fi
@@ -214,9 +214,9 @@ assert d['success'] is False, d
 assert 'closed vocabulary' in d['error'], d
 print('OK')
 " | grep -q OK; then
-  green "PASS: --reason outside VALID_REASONS is rejected with a closed-vocabulary error (catches typos)"
+  green "PASS: fetch-cache-09 --reason outside VALID_REASONS is rejected with a closed-vocabulary error (catches typos)"
 else
-  red "FAIL: --reason typo was not rejected"
+  red "FAIL: fetch-cache-09 --reason typo was not rejected"
   red "  got: $BAD_REASON"
   errors=$((errors + 1))
 fi
@@ -235,9 +235,9 @@ assert d['success'] is False, d
 assert 'url' in d['error'] and 'non-empty' in d['error'], d
 print('OK')
 " | grep -q OK; then
-  green "PASS: whitespace-only --url is rejected"
+  green "PASS: fetch-cache-10 whitespace-only --url is rejected"
 else
-  red "FAIL: whitespace --url was not rejected"
+  red "FAIL: fetch-cache-10 whitespace --url was not rejected"
   red "  got: $BAD_EMPTY_URL"
   errors=$((errors + 1))
 fi
@@ -260,9 +260,9 @@ assert d['success'] is False, d
 assert 'mutually exclusive' in d['error'], d
 print('OK')
 " | grep -q OK; then
-  green "PASS: --body and --body-file together is rejected"
+  green "PASS: fetch-cache-11 --body and --body-file together is rejected"
 else
-  red "FAIL: --body + --body-file together was not rejected"
+  red "FAIL: fetch-cache-11 --body + --body-file together was not rejected"
   red "  got: $BAD_BOTH_BODY"
   errors=$((errors + 1))
 fi
@@ -279,9 +279,9 @@ mal = [e for e in d['data']['evicted'] if e.get('reason') == 'malformed']
 assert len(mal) == 1, d['data']['evicted']
 print('OK')
 " | grep -q OK; then
-  green "PASS: dry-run reports malformed entry but does not unlink"
+  green "PASS: fetch-cache-12 dry-run reports malformed entry but does not unlink"
 else
-  red "FAIL: dry-run handling of malformed entry wrong (file removed=$([ ! -f "$MALFORMED_PATH" ] && echo yes || echo no))"
+  red "FAIL: fetch-cache-12 dry-run handling of malformed entry wrong (file removed=$([ ! -f "$MALFORMED_PATH" ] && echo yes || echo no))"
   red "  got: $DRY_MAL"
   errors=$((errors + 1))
 fi
@@ -293,9 +293,9 @@ mal = [e for e in d['data']['evicted'] if e.get('reason') == 'malformed']
 assert len(mal) == 1, d['data']['evicted']
 print('OK')
 " | grep -q OK; then
-  green "PASS: real evict unlinks malformed entry"
+  green "PASS: fetch-cache-13 real evict unlinks malformed entry"
 else
-  red "FAIL: real-evict handling of malformed entry wrong"
+  red "FAIL: fetch-cache-13 real-evict handling of malformed entry wrong"
   red "  got: $REAL_MAL"
   errors=$((errors + 1))
 fi
@@ -314,9 +314,9 @@ DRY_COUNT=$(echo "$DRY_OUT" | python3 -c "import sys, json; print(json.load(sys.
 ENTRIES_AFTER_DRY=$(ls "$KB/.cogni-knowledge/fetch-cache/" | wc -l | tr -d ' ')
 # URL1 was backdated -> should be evicted. URL_GONE + URL2 are fresh.
 if [ "$DRY_COUNT" = "1" ] && [ "$ENTRIES_AFTER_DRY" = "3" ]; then
-  green "PASS: evict --dry-run reports 1 evictee + keeps all 3 files on disk"
+  green "PASS: fetch-cache-14 evict --dry-run reports 1 evictee + keeps all 3 files on disk"
 else
-  red "FAIL: dry-run wrong (evicted_count=$DRY_COUNT, files-on-disk=$ENTRIES_AFTER_DRY)"
+  red "FAIL: fetch-cache-14 dry-run wrong (evicted_count=$DRY_COUNT, files-on-disk=$ENTRIES_AFTER_DRY)"
   red "  got: $DRY_OUT"
   errors=$((errors + 1))
 fi
@@ -326,9 +326,9 @@ REAL_OUT=$(python3 "$SCRIPT" evict --knowledge-root "$KB" --older-than-days 30)
 REAL_COUNT=$(echo "$REAL_OUT" | python3 -c "import sys, json; print(json.load(sys.stdin)['data']['evicted_count'])")
 ENTRIES_AFTER_REAL=$(ls "$KB/.cogni-knowledge/fetch-cache/" | wc -l | tr -d ' ')
 if [ "$REAL_COUNT" = "1" ] && [ "$ENTRIES_AFTER_REAL" = "2" ]; then
-  green "PASS: evict drops 1 stale, leaves 2 fresh entries"
+  green "PASS: fetch-cache-15 evict drops 1 stale, leaves 2 fresh entries"
 else
-  red "FAIL: evict wrong (evicted=$REAL_COUNT, remaining=$ENTRIES_AFTER_REAL)"
+  red "FAIL: fetch-cache-15 evict wrong (evicted=$REAL_COUNT, remaining=$ENTRIES_AFTER_REAL)"
   red "  got: $REAL_OUT"
   errors=$((errors + 1))
 fi
@@ -345,9 +345,9 @@ assert d['data']['unavailable'] == 1, d['data']
 assert d['data']['total_bytes'] > 0, d['data']
 print('OK')
 " | grep -q OK; then
-  green "PASS: stat reports 2 entries (1 ok, 1 unavailable) after evict"
+  green "PASS: fetch-cache-16 stat reports 2 entries (1 ok, 1 unavailable) after evict"
 else
-  red "FAIL: stat wrong"
+  red "FAIL: fetch-cache-16 stat wrong"
   red "  got: $STAT_OUT"
   errors=$((errors + 1))
 fi
@@ -359,9 +359,9 @@ fi
 KEY_RAW=$(python3 "$SCRIPT" key --url "https://Example.ORG/Article/?utm_source=x&ref=y" --bare)
 KEY_NORM=$(python3 "$SCRIPT" key --url "https://example.org/Article" --bare)
 if [ "$KEY_RAW" = "$KEY_NORM" ]; then
-  green "PASS: cache key normalizes scheme/host case, trailing slash, tracking params"
+  green "PASS: fetch-cache-17 cache key normalizes scheme/host case, trailing slash, tracking params"
 else
-  red "FAIL: cache keys diverge for semantically identical URLs"
+  red "FAIL: fetch-cache-17 cache keys diverge for semantically identical URLs"
   red "  raw  : $KEY_RAW"
   red "  norm : $KEY_NORM"
   errors=$((errors + 1))
@@ -386,9 +386,9 @@ assert d['success'] is True, d
 assert d['data']['entry']['body'] == 'the doc body', d
 print('OK')
 " | grep -q OK; then
-  green "PASS: store + fetch round-trip across equivalent URL forms"
+  green "PASS: fetch-cache-18 store + fetch round-trip across equivalent URL forms"
 else
-  red "FAIL: cross-form fetch missed the entry"
+  red "FAIL: fetch-cache-18 cross-form fetch missed the entry"
   red "  got: $FETCH_NORM"
   errors=$((errors + 1))
 fi
@@ -417,9 +417,9 @@ assert e['body'] == 'verbatim local interview note body', e
 assert e.get('reason') in (None, ''), e
 print('OK')
 " | grep -q OK; then
-  green "PASS: store + fetch round-trip for a direct (non-web) source"
+  green "PASS: fetch-cache-19 store + fetch round-trip for a direct (non-web) source"
 else
-  red "FAIL: direct-source round-trip mismatch"
+  red "FAIL: fetch-cache-19 direct-source round-trip mismatch"
   red "  got: $FETCH_DIRECT"
   errors=$((errors + 1))
 fi
@@ -448,9 +448,9 @@ assert e['body'] == 'verbatim full annex text with every enumerated clause', e
 assert e.get('reason') in (None, ''), e
 print('OK')
 " | grep -q OK; then
-  green "PASS: store + fetch round-trip for a webfetch_fulltext (primary-tier fuller-body) source"
+  green "PASS: fetch-cache-20 store + fetch round-trip for a webfetch_fulltext (primary-tier fuller-body) source"
 else
-  red "FAIL: webfetch_fulltext round-trip mismatch"
+  red "FAIL: fetch-cache-20 webfetch_fulltext round-trip mismatch"
   red "  got: $FETCH_FULLTEXT"
   errors=$((errors + 1))
 fi
@@ -478,9 +478,9 @@ assert d['data']['contamination_suspected'] is True, d['data']
 assert d['data']['contamination_match'], d['data']
 print('OK')
 " | grep -q OK; then
-  green "PASS: store envelope surfaces contamination_suspected + match on a pipeline-token body"
+  green "PASS: fetch-cache-21 store envelope surfaces contamination_suspected + match on a pipeline-token body"
 else
-  red "FAIL: store did not surface contamination flag"
+  red "FAIL: fetch-cache-21 store did not surface contamination flag"
   red "  got: $STORE_CONTAM"
   errors=$((errors + 1))
 fi
@@ -496,9 +496,9 @@ assert e['contamination_suspected'] is True, e
 assert e['contamination_match'], e
 print('OK')
 " | grep -q OK; then
-  green "PASS: contamination flag rides through fetch on data.entry (body still stored)"
+  green "PASS: fetch-cache-22 contamination flag rides through fetch on data.entry (body still stored)"
 else
-  red "FAIL: fetch did not carry the contamination flag"
+  red "FAIL: fetch-cache-22 fetch did not carry the contamination flag"
   red "  got: $FETCH_CONTAM"
   errors=$((errors + 1))
 fi
@@ -511,9 +511,9 @@ BAD_METHOD=$(python3 "$SCRIPT" store \
   --status ok \
   --body "x" 2>&1 || true)
 if echo "$BAD_METHOD" | grep -q "invalid choice: 'scrape'"; then
-  green "PASS: unknown --fetch-method is rejected (closed vocabulary held)"
+  green "PASS: fetch-cache-23 unknown --fetch-method is rejected (closed vocabulary held)"
 else
-  red "FAIL: unknown --fetch-method was not rejected"
+  red "FAIL: fetch-cache-23 unknown --fetch-method was not rejected"
   red "  got: $BAD_METHOD"
   errors=$((errors + 1))
 fi
@@ -533,9 +533,9 @@ UNBOUND_OUT=$(python3 "$SCRIPT" store \
 if echo "$UNBOUND_OUT" | grep -q '"success": false' \
    && echo "$UNBOUND_OUT" | grep -qF "$UNBOUND_ABS" \
    && [ ! -d "$KB_UNBOUND/.cogni-knowledge/fetch-cache" ]; then
-  green "PASS: store against an unbound root refuses, names the abs path, writes nothing"
+  green "PASS: fetch-cache-24 store against an unbound root refuses, names the abs path, writes nothing"
 else
-  red "FAIL: store against an unbound root did not refuse cleanly"
+  red "FAIL: fetch-cache-24 store against an unbound root did not refuse cleanly"
   red "  got: $UNBOUND_OUT"
   [ -d "$KB_UNBOUND/.cogni-knowledge/fetch-cache" ] && red "  stray fetch-cache tree was created at $KB_UNBOUND"
   errors=$((errors + 1))

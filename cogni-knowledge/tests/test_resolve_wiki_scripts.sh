@@ -53,26 +53,26 @@ extract_resolver() {
 # -----------------------------------------------------------------------------
 
 if [ ! -f "$RESOLVER_SNIPPET" ]; then
-  red "FAIL: shared resolver snippet not found: $RESOLVER_SNIPPET"; errors=$((errors + 1))
+  red "FAIL: resolve-wiki-01 shared resolver snippet not found: $RESOLVER_SNIPPET"; errors=$((errors + 1))
 elif ! grep -qE 'resolve_wiki_scripts\(\) \{' "$RESOLVER_SNIPPET"; then
-  red "FAIL: shared snippet missing resolve_wiki_scripts() definition"; errors=$((errors + 1))
+  red "FAIL: resolve-wiki-01 shared snippet missing resolve_wiki_scripts() definition"; errors=$((errors + 1))
 elif ! grep -qE 'sort -V' "$RESOLVER_SNIPPET"; then
-  red "FAIL: shared snippet resolver does not version-sort (sort -V) — F26 would regress"; errors=$((errors + 1))
+  red "FAIL: resolve-wiki-01 shared snippet resolver does not version-sort (sort -V) — F26 would regress"; errors=$((errors + 1))
 else
-  green "PASS: shared snippet carries the version-aware resolver (sort -V)"
+  green "PASS: resolve-wiki-01 shared snippet carries the version-aware resolver (sort -V)"
 fi
 
 for name in $SOURCING_SKILLS; do
   skill_file="$SKILLS_DIR/$name/SKILL.md"
   if [ ! -f "$skill_file" ]; then
-    red "FAIL: skill file not found: $skill_file"; errors=$((errors + 1)); continue
+    red "FAIL: resolve-wiki-02-$name skill file not found: $skill_file"; errors=$((errors + 1)); continue
   fi
   if grep -qE 'resolve_wiki_scripts\(\) \{' "$skill_file"; then
-    red "FAIL: $name still carries an inline resolve_wiki_scripts() definition (should source the snippet)"; errors=$((errors + 1))
+    red "FAIL: resolve-wiki-03-$name $name still carries an inline resolve_wiki_scripts() definition (should source the snippet)"; errors=$((errors + 1))
   elif ! grep -qF 'scripts/resolve-wiki-scripts.sh' "$skill_file"; then
-    red "FAIL: $name does not source the shared resolve-wiki-scripts.sh snippet"; errors=$((errors + 1))
+    red "FAIL: resolve-wiki-03-$name $name does not source the shared resolve-wiki-scripts.sh snippet"; errors=$((errors + 1))
   else
-    green "PASS: $name sources the shared snippet (no inline copy)"
+    green "PASS: resolve-wiki-03-$name $name sources the shared snippet (no inline copy)"
   fi
 done
 
@@ -84,7 +84,7 @@ done
 # behaviour cases below drive its body directly.
 INGEST_BODY=$(extract_resolver)
 if [ -z "$INGEST_BODY" ]; then
-  red "FAIL: could not read resolve_wiki_scripts() body from the shared snippet"
+  red "FAIL: resolve-wiki-04 could not read resolve_wiki_scripts() body from the shared snippet"
   errors=$((errors + 1))
 fi
 
@@ -118,13 +118,13 @@ run_resolve() {
 if OUT=$(run_resolve "$WORK/cache/cogni-knowledge/0.1.1"); then
   case "$OUT" in
     */cogni-wiki/0.0.45/skills/wiki-ingest/scripts)
-      green "PASS: multi-version cache resolves newest version (0.0.45), ignores main/latest" ;;
+      green "PASS: resolve-wiki-05 multi-version cache resolves newest version (0.0.45), ignores main/latest" ;;
     *)
-      red "FAIL: multi-version cache resolved the wrong dir (expected 0.0.45)"
+      red "FAIL: resolve-wiki-05 multi-version cache resolved the wrong dir (expected 0.0.45)"
       red "  got: $OUT"; errors=$((errors + 1)) ;;
   esac
 else
-  red "FAIL: multi-version cache resolver returned non-zero"; errors=$((errors + 1))
+  red "FAIL: resolve-wiki-05 multi-version cache resolver returned non-zero"; errors=$((errors + 1))
 fi
 
 # Case 2: dev-repo sibling -> the sibling path (short-circuits the glob). The
@@ -133,20 +133,20 @@ fi
 if OUT=$(run_resolve "$WORK/devrepo/cogni-knowledge"); then
   case "$OUT" in
     */../cogni-wiki/skills/wiki-ingest/scripts)
-      green "PASS: dev-repo sibling layout resolves the sibling scripts dir" ;;
+      green "PASS: resolve-wiki-06 dev-repo sibling layout resolves the sibling scripts dir" ;;
     *)
-      red "FAIL: dev-repo sibling resolved an unexpected path"
+      red "FAIL: resolve-wiki-06 dev-repo sibling resolved an unexpected path"
       red "  got: $OUT"; errors=$((errors + 1)) ;;
   esac
 else
-  red "FAIL: dev-repo sibling resolver returned non-zero"; errors=$((errors + 1))
+  red "FAIL: resolve-wiki-06 dev-repo sibling resolver returned non-zero"; errors=$((errors + 1))
 fi
 
 # Case 3: nothing installed -> non-zero exit.
 if run_resolve "$WORK/missing/cogni-knowledge" >/dev/null 2>&1; then
-  red "FAIL: resolver returned success with no cogni-wiki installed"; errors=$((errors + 1))
+  red "FAIL: resolve-wiki-07 resolver returned success with no cogni-wiki installed"; errors=$((errors + 1))
 else
-  green "PASS: resolver returns non-zero when cogni-wiki is absent"
+  green "PASS: resolve-wiki-07 resolver returns non-zero when cogni-wiki is absent"
 fi
 
 # -----------------------------------------------------------------------------
@@ -171,13 +171,13 @@ mkdir -p "$PART/cogni-wiki/skills/wiki-ingest/scripts"                          
 if OUT=$(run_resolve_ep "$PART/cogni-knowledge"); then
   case "$OUT" in
     */../cogni-wiki/skills/wiki-ingest/scripts)
-      green "PASS: partial vendor (dir, no entry-point) falls through to the complete sibling" ;;
+      green "PASS: resolve-wiki-08 partial vendor (dir, no entry-point) falls through to the complete sibling" ;;
     *)
-      red "FAIL: entry-point check resolved an unexpected path"
+      red "FAIL: resolve-wiki-08 entry-point check resolved an unexpected path"
       red "  got: $OUT"; errors=$((errors + 1)) ;;
   esac
 else
-  red "FAIL: entry-point resolver returned non-zero despite a complete sibling"; errors=$((errors + 1))
+  red "FAIL: resolve-wiki-08 entry-point resolver returned non-zero despite a complete sibling"; errors=$((errors + 1))
 fi
 
 # Case 5: complete vendor (dir + entry-point present) -> vendor wins.
@@ -187,12 +187,12 @@ mkdir -p "$COMPLETE/cogni-knowledge/scripts/vendor/cogni-wiki/skills/wiki-ingest
 if OUT=$(run_resolve_ep "$COMPLETE/cogni-knowledge"); then
   case "$OUT" in
     */scripts/vendor/cogni-wiki/skills/wiki-ingest/scripts)
-      green "PASS: complete vendor (dir + entry-point) wins the probe" ;;
+      green "PASS: resolve-wiki-09 complete vendor (dir + entry-point) wins the probe" ;;
     *)
-      red "FAIL: complete vendor did not win (got: $OUT)"; errors=$((errors + 1)) ;;
+      red "FAIL: resolve-wiki-09 complete vendor did not win (got: $OUT)"; errors=$((errors + 1)) ;;
   esac
 else
-  red "FAIL: complete-vendor resolver returned non-zero"; errors=$((errors + 1))
+  red "FAIL: resolve-wiki-09 complete-vendor resolver returned non-zero"; errors=$((errors + 1))
 fi
 
 # Case 6: vendor dir + sibling dir present but NEITHER carries the script ->
@@ -201,9 +201,9 @@ NONE="$WORK/partialnone"
 mkdir -p "$NONE/cogni-knowledge/scripts/vendor/cogni-wiki/skills/wiki-ingest/scripts"
 mkdir -p "$NONE/cogni-wiki/skills/wiki-ingest/scripts"
 if run_resolve_ep "$NONE/cogni-knowledge" >/dev/null 2>&1; then
-  red "FAIL: entry-point resolver returned success when no dir carries the script"; errors=$((errors + 1))
+  red "FAIL: resolve-wiki-10 entry-point resolver returned success when no dir carries the script"; errors=$((errors + 1))
 else
-  green "PASS: no dir carrying the entry-point -> resolver returns non-zero"
+  green "PASS: resolve-wiki-10 no dir carrying the entry-point -> resolver returns non-zero"
 fi
 
 # -----------------------------------------------------------------------------
@@ -222,13 +222,13 @@ cp "$RESOLVER_SNIPPET" "$UNSET_ROOT/scripts/resolve-wiki-scripts.sh"
 if OUT=$(env -u CLAUDE_PLUGIN_ROOT bash -c ". '$UNSET_ROOT/scripts/resolve-wiki-scripts.sh'; resolve_wiki_scripts wiki-ingest"); then
   case "$OUT" in
     */cogni-wiki/0.0.45/skills/wiki-ingest/scripts)
-      green "PASS: unset CLAUDE_PLUGIN_ROOT derives the root from the script's own location" ;;
+      green "PASS: resolve-wiki-11 unset CLAUDE_PLUGIN_ROOT derives the root from the script's own location" ;;
     *)
-      red "FAIL: unset-env fallback resolved the wrong dir"
+      red "FAIL: resolve-wiki-11 unset-env fallback resolved the wrong dir"
       red "  got: $OUT"; errors=$((errors + 1)) ;;
   esac
 else
-  red "FAIL: resolver returned non-zero with CLAUDE_PLUGIN_ROOT unset (fallback did not engage)"; errors=$((errors + 1))
+  red "FAIL: resolve-wiki-11 resolver returned non-zero with CLAUDE_PLUGIN_ROOT unset (fallback did not engage)"; errors=$((errors + 1))
 fi
 
 # Case 7b: the snippet must parse + resolve under the SYSTEM bash (macOS ships
@@ -239,16 +239,16 @@ if [ -x /bin/bash ]; then
   if OUT=$(env -u CLAUDE_PLUGIN_ROOT /bin/bash -c ". '$UNSET_ROOT/scripts/resolve-wiki-scripts.sh'; resolve_wiki_scripts wiki-ingest" 2>&1); then
     case "$OUT" in
       */cogni-wiki/0.0.45/skills/wiki-ingest/scripts)
-        green "PASS: system /bin/bash (3.2 on macOS) parses and resolves the snippet" ;;
+        green "PASS: resolve-wiki-12 system /bin/bash (3.2 on macOS) parses and resolves the snippet" ;;
       *)
-        red "FAIL: system /bin/bash run produced unexpected output"
+        red "FAIL: resolve-wiki-12 system /bin/bash run produced unexpected output"
         red "  got: $OUT"; errors=$((errors + 1)) ;;
     esac
   else
-    red "FAIL: system /bin/bash could not source/resolve the snippet (3.2 parser regression?): $OUT"; errors=$((errors + 1))
+    red "FAIL: resolve-wiki-12 system /bin/bash could not source/resolve the snippet (3.2 parser regression?): $OUT"; errors=$((errors + 1))
   fi
 else
-  green "PASS: /bin/bash not present on this host — system-bash case skipped"
+  green "PASS: resolve-wiki-12 /bin/bash not present on this host — system-bash case skipped"
 fi
 
 # Case 8: same shape under zsh — the originally-reported failure environment
@@ -257,16 +257,16 @@ if command -v zsh >/dev/null 2>&1; then
   if OUT=$(env -u CLAUDE_PLUGIN_ROOT zsh -c ". '$UNSET_ROOT/scripts/resolve-wiki-scripts.sh'; resolve_wiki_scripts wiki-ingest" 2>&1); then
     case "$OUT" in
       */cogni-wiki/0.0.45/skills/wiki-ingest/scripts)
-        green "PASS: zsh + unset CLAUDE_PLUGIN_ROOT resolves without aborting" ;;
+        green "PASS: resolve-wiki-13 zsh + unset CLAUDE_PLUGIN_ROOT resolves without aborting" ;;
       *)
-        red "FAIL: zsh unset-env run produced unexpected output"
+        red "FAIL: resolve-wiki-13 zsh unset-env run produced unexpected output"
         red "  got: $OUT"; errors=$((errors + 1)) ;;
     esac
   else
-    red "FAIL: zsh aborted with CLAUDE_PLUGIN_ROOT unset (the reported bug): $OUT"; errors=$((errors + 1))
+    red "FAIL: resolve-wiki-13 zsh aborted with CLAUDE_PLUGIN_ROOT unset (the reported bug): $OUT"; errors=$((errors + 1))
   fi
 else
-  green "PASS: zsh not available on this host — zsh case skipped (bash case 7 covers the fallback)"
+  green "PASS: resolve-wiki-13 zsh not available on this host — zsh case skipped (bash case 7 covers the fallback)"
 fi
 
 if [ $errors -gt 0 ]; then

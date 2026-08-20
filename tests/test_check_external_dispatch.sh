@@ -32,10 +32,19 @@
 #
 # Result-line ids: every emitted PASS:/FAIL: line carries a first-token id,
 # unique PER EMITTED LINE rather than per logical case, so
-# `mutation-check.sh --case <id>` addresses exactly one assertion. Cases 1-5
-# use `edNN`; the registry cases use `R<n><letter>`. The whole-token matching
-# rule the ids depend on is stated once, with the regex, above the registry
-# cases below. A new assertion takes the next free id, never a renumbering.
+# `mutation-check.sh --case <id>` addresses exactly one assertion. Every id in
+# this file is `edNN`: `ed01`-`ed09` for cases 1-5, `ed10`-`ed19` for the
+# registry cases R1-R6 (R1 -> ed10/ed11, R2 -> ed12/ed13, R3 -> ed14,
+# R4 -> ed15, R5 -> ed16/ed17, R6 -> ed18/ed19). `R1`-`R6` remain the names of
+# the LOGICAL case groups in the header notes and the section dividers below;
+# they are not ids and must never be emitted as one. Never introduce an
+# `R<n><letter>` id here: tests/test_check_mcp_tool_grant.sh already emits
+# `R1a`, `R2a`, `R3a`, `R4a` and `R6a` among its own result lines, so an
+# `R`-stemmed id in this file would be ambiguous in any harness run whose
+# `--test` captures both suites. The whole-token matching rule the ids depend
+# on is stated once, with the regex, above the registry cases below. A new
+# assertion takes the next free id — `ed20` onward — never a renumbering and
+# never an `R`-stemmed id.
 
 set -eu
 
@@ -187,12 +196,12 @@ set -e
 check "ed09 real tree passes clean-zero" "$([ "$CODE" -eq 0 ] && echo 0 || echo 1)"
 
 # ===========================================================================
-# Registry-loading cases (R1-R6).
+# Registry-loading cases (R1-R6; emitted ids ed10-ed19).
 #
 # Case labels below are `<id> <description>` — an id token followed by a SPACE,
 # never a colon abutting the id. The mutation harness matches
 # `^[[:space:]]*FAIL:[[:space:]]+<case>([[:space:]]|$)` (and the ok|PASS twin)
-# whole-token, so `--case R3a` matches `FAIL: R3a empty ...` while `--case 'R3a:'`
+# whole-token, so `--case ed14` matches `FAIL: ed14 empty ...` while `--case 'ed14:'`
 # would match neither line and return case_not_found instead of a verdict.
 # ===========================================================================
 
@@ -248,9 +257,9 @@ PLANTED_REL="cogni-demo/agents/planted.md"
 # Also proves the default registry path follows __file__ and not --root: --root
 # points at REG_TREE, which has no registry, and the staged dir has none either.
 run_reg r1 NONE "$CLEAN_REL"
-check "R1a missing registry exits 2 (base exits 0 here)" \
+check "ed10 missing registry exits 2 (base exits 0 here)" \
   "$([ "$CODE" -eq 2 ] && echo 0 || echo 1)"
-assert_json "R1b missing registry reports success:false and names the path" "$OUT" "
+assert_json "ed11 missing registry reports success:false and names the path" "$OUT" "
 import json,sys
 d=json.load(sys.stdin)
 assert d['success'] is False, d
@@ -260,9 +269,9 @@ assert 'retired-plugins.json' in d['error'], d['error']
 
 # --- R2: malformed JSON -> exit 2 ------------------------------------------
 run_reg r2 '{"retired_prefixes": ["cogni-wiki",' "$CLEAN_REL"
-check "R2a malformed registry JSON exits 2 (base exits 0 here)" \
+check "ed12 malformed registry JSON exits 2 (base exits 0 here)" \
   "$([ "$CODE" -eq 2 ] && echo 0 || echo 1)"
-assert_json "R2b malformed registry reports success:false with a non-empty error" "$OUT" "
+assert_json "ed13 malformed registry reports success:false with a non-empty error" "$OUT" "
 import json,sys
 d=json.load(sys.stdin)
 assert d['success'] is False, d
@@ -271,9 +280,9 @@ assert d['error'], d
 
 # --- R3: empty prefix list -> exit 2 ---------------------------------------
 # Kept as its own case rather than folded into R4's table: the recorded mutation
-# recipe targets `--case R3a`, which needs a separately-labelled line.
+# recipe targets `--case ed14`, which needs a separately-labelled line.
 run_reg r3 '{"retired_prefixes": []}' "$CLEAN_REL"
-check "R3a empty registry exits 2 and never 0 (base exits 0 here)" \
+check "ed14 empty registry exits 2 and never 0 (base exits 0 here)" \
   "$([ "$CODE" -eq 2 ] && echo 0 || echo 1)"
 
 # --- R4: wrong type / non-string / blank / padded / colon-bearing -> exit 2 -
@@ -296,15 +305,15 @@ do
   run_reg "r4_$R4_N" "$BAD" "$CLEAN_REL"
   [ "$CODE" -eq 2 ] || R4_FAILED=1
 done
-check "R4a degenerate registry entries all exit 2 ($R4_N variants)" "$R4_FAILED"
+check "ed15 degenerate registry entries all exit 2 ($R4_N variants)" "$R4_FAILED"
 
 # --- R5: a prefix added to the registry makes a planted dispatch fire -------
 # The data-driven proof: base's hardcoded regex knows nothing of cogni-demo.
 run_reg r5 '{"retired_prefixes": ["cogni-wiki", "cogni-research", "cogni-demo"]}' \
   "$PLANTED_REL"
-check "R5a registry-added prefix fires on a planted dispatch (exit 1)" \
+check "ed16 registry-added prefix fires on a planted dispatch (exit 1)" \
   "$([ "$CODE" -eq 1 ] && echo 0 || echo 1)"
-assert_json "R5b registry-added prefix reports match cogni-demo: with file+line" "$OUT" "
+assert_json "ed17 registry-added prefix reports match cogni-demo: with file+line" "$OUT" "
 import json,sys
 d=json.load(sys.stdin)
 v=d['data']['violations']
@@ -321,9 +330,9 @@ printf '%s' '{"retired_prefixes": ["cogni-wiki", "cogni-research"]}' \
   > "$WORK/r6/override.json"
 run_reg r6 '{"retired_prefixes": ["cogni-wiki", "cogni-research", "cogni-demo"]}' \
   "$PLANTED_REL" --registry "$WORK/r6/override.json"
-check "R6a --registry replaces the default set rather than unioning (exit 0)" \
+check "ed18 --registry replaces the default set rather than unioning (exit 0)" \
   "$([ "$CODE" -eq 0 ] && echo 0 || echo 1)"
-assert_json "R6b override set reports zero violations on the planted file" "$OUT" "
+assert_json "ed19 override set reports zero violations on the planted file" "$OUT" "
 import json,sys
 d=json.load(sys.stdin)
 assert d['success'] is True, d

@@ -67,11 +67,12 @@ When a user reports a problem:
    labels `references/known-issues.md` uses so a catalogued fix and a fresh diagnosis
    read identically:
 
-   **Symptom**: `/render-html-slides` produces no output file.
+   **Symptom**: a cogni-marketing skill reports that portfolio data cannot be found.
 
-   **Cause**: the theme named in the brief is not installed in this workspace.
+   **Cause**: cogni-marketing depends on cogni-portfolio, which has no entry in
+   `.claude-plugin/marketplace.json` for this workspace.
 
-   **Fix**: run `/pick-theme` to select an installed theme, then re-run.
+   **Fix**: install cogni-portfolio from the marketplace, then re-run.
 
    Keep the three labels even when a field is short — a finding with no known cause
    says so under **Cause** rather than dropping the label, so every report has the
@@ -149,10 +150,13 @@ find . -maxdepth 3 -type f \( -name 'diamond-project.json' -o -name 'consulting-
 ls .claude/cogni-teacher.local.md .claude/cogni-help.local.md 2>/dev/null
 ```
 
-Route either hit to `references/known-issues.md`, which carries the full remedy:
-"Leftover engagement file from a retired consulting plugin" for the engagement file,
-"Leftover course-progress file" for the course-progress files — delete the
-course-progress files, since nothing reads them any more.
+Route each hit to `references/known-issues.md`, which carries the full remedy:
+
+- Engagement file (`diamond-project.json`, `consulting-project.json`) — "Leftover
+  engagement file from a retired consulting plugin". Keep it as an inert local
+  record; there is no import path into cogni-consult.
+- Course-progress file (`cogni-teacher.local.md`, `cogni-help.local.md`) —
+  "Leftover course-progress file". Delete it; nothing reads it any more.
 
 ### 6. Common Misconfigurations
 

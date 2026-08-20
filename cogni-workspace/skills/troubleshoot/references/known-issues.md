@@ -65,13 +65,21 @@ diagnose what's missing.
 
 ---
 
-## PPTX generation fails with "pptxgenjs not found"
+## PPTX generation produces no .pptx file
 
-**Symptom**: `/render-slides` fails.
+**Symptom**: The story-to-slides workflow completes and writes its presentation brief,
+but no `.pptx` file is produced.
 
-**Cause**: PptxGenJS not installed globally.
+**Cause**: story-to-slides produces a presentation brief, not a deck — rendering that
+brief is a separate step, and the skill that performs it does not ship from this
+marketplace. The workflow's last step, "Guide User to PPTX Rendering" (Step 11),
+recommends a claude.ai chat with the Anthropic PPTX skill and notes that Claude Code
+can render via the `document-skills:pptx` skill instead; this plugin's `pptx` agent is
+the Claude Code-side wrapper that delegates to that skill.
 
-**Fix**:
-```bash
-npm install -g pptxgenjs
-```
+**Fix**: Take the claude.ai route — open a new chat there and attach the generated
+`presentation-brief.md` together with the `theme.md` it was built against, then ask for
+the presentation. To render inside Claude Code instead, confirm the
+`document-skills:pptx` skill is available in the current session before dispatching the
+`pptx` agent; when the session does not provide it, the claude.ai route is the
+supported path.

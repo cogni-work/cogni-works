@@ -85,7 +85,7 @@ Based on discovered content, propose a page list. Apply these rules:
 | `capability` | Per `customer-narrative/capabilities/*.md` found | `customer-narrative/capabilities/{feature-slug}.md` | `corporate-visions` | One page per capability narrative. Replaces `product-detail` for features that have a v2 narrative. |
 | `persona` | Per `customer-narrative/for/*.md` found | `customer-narrative/for/{market}--{persona}.md` | `jtbd-portfolio` | One page per persona narrative. Renamed from v1 `audience`. |
 | `approach` | If `customer-narrative/approach.md` present | `customer-narrative/approach.md` | `engagement-model` | Conditional on v2 narrative. Single page (How We Work / Unser Ansatz). |
-| `products` | ≥2 products | `products/*.json` | — | Always (even with 1 product). Acts as an index for capability pages. |
+| `products` | Always | `products/*.json` | — | Always — proposed even when exactly one product exists; it is the index for the capability and product-detail pages. `references/page-type-registry.md` is authoritative for inclusion — `products` sits in its `Always include` row. |
 | `product-detail` | Per product without a capability narrative | `products/{slug}.json` + features + propositions | — | Flat fallback when no `capabilities/{slug}.md` exists |
 | `solutions` | ≥1 solution | `solutions/*.json` | — | Conditional |
 | `blog-index` | Marketing content exists AND `include_blog: true` | Marketing `content/` tree | — | Conditional |
@@ -148,19 +148,30 @@ Iterate until the user confirms.
 
 Auto-generate navigation from the confirmed page list:
 
-**Header navigation rules:**
-- Products gets a dropdown with all product-detail pages as children
-- Blog, Case Studies, About are top-level links
-- CTA button always links to Contact
-- Maximum 5-6 top-level items (combine if needed)
+**Header navigation rules**, applied in this precedence order:
+
+1. **Produkte / Products** — dropdown over the `product-detail` pages (rule 2 may add a lone capability page here).
+2. **Leistungen / Capabilities** — dropdown with all `capability` pages when at least two exist (step 3). With exactly one, emit no dropdown and attach that page as a child of the Produkte dropdown — the products page already indexes capability pages (step 3).
+3. **Für Sie / For You** — dropdown with all `persona` pages when at least two exist. With exactly one, emit no dropdown and link it from the footer only, so a single page never claims a top-level slot.
+4. **Unser Ansatz / Approach** — top-level link whenever an `approach` page exists.
+5. **Blog** and **Fallstudien / Case Studies** — top-level links when those pages exist.
+6. **Über uns / About** — top-level, last before the CTA.
+7. **Lösungen / Solutions**, **Insights**, **Resources** and any `custom` page — top-level links when they exist and the cap allows, otherwise a footer column under the same demotion rule below.
+8. **CTA button** always links to Kontakt / Contact.
+
+Cap the header at 6 top-level items, excluding the CTA; 5 reads better where the page set allows it. When the rules above produce more than 6, demote in this order until the header fits — Fallstudien first, then Blog, then Unser Ansatz — into a footer column. Never drop a page to satisfy the cap: Produkte, the two narrative dropdowns and Über uns are never demoted, and pages carrying `footer_only: true` (step 7, legal pages) never count toward it.
 
 **Footer columns:**
-- Column 1: Products (all product detail links)
-- Column 2: Company (About, Contact, Blog, Case Studies)
+- Column 1: Produkte — the products index plus all product-detail links
+- Column 2: Leistungen — all capability pages, when any exist
+- Column 3: Für Sie — all persona pages, when any exist
+- Column 4: Unternehmen — Über uns, Kontakt, Unser Ansatz, Blog, Fallstudien
+
+Every page demoted from the header must appear in one of these columns.
 
 Present navigation for approval:
 
-> "Navigation: **Produkte** (mit Dropdown) | **Lösungen** | **Blog** | **Über uns** — CTA: **Kontakt aufnehmen**"
+> "Navigation: **Produkte** (mit Dropdown) | **Leistungen** (mit Dropdown) | **Für Sie** (mit Dropdown) | **Unser Ansatz** | **Über uns** — CTA: **Kontakt aufnehmen**"
 
 ### 6. Map Content to Pages
 
@@ -174,9 +185,9 @@ Use the page type definitions from `${CLAUDE_PLUGIN_ROOT}/libraries/page-templat
 
 ### 6a. Decompose Narrative Pages into Section Blocks
 
-For every page whose spine is a `customer-narrative/*.md` file (`home`, `about`, `capability`, `persona`, `approach` — any page entry that carries an `arc_id`), do not emit a flat list of generic template section names. Instead, decompose the narrative into an ordered sequence of **section blocks** using the story-to-web pattern. This produces scroll-driven reading experiences instead of entity-card dumps. The existing block_type library (hero, problem-statement, stat-row, feature-alternating, feature-grid, comparison, timeline, testimonial, text-block, cta) covers all five arcs — no new block types are required for `company-credo` or `engagement-model`.
+For every page whose spine is a `customer-narrative/*.md` file (`home`, `about`, `capability`, `persona`, `approach` — any page entry that carries an `arc_id`), do not emit a flat list of generic template section names. Instead, decompose the narrative into an ordered sequence of **section blocks** using the story-to-web pattern. This produces scroll-driven reading experiences instead of entity-card dumps. The existing block_type library (hero, problem-statement, stat-row, feature-alternating, feature-grid, comparison, timeline, testimonial, text-block, cta) covers all four arcs — no new block types are required for `company-credo` or `engagement-model`.
 
-**Arc-to-block hints** (use as a starting point; the decision tree in step 6a step 2 below still governs final block selection based on content shape):
+**Arc-to-block hints** (a starting point — the decision tree below selects the final block):
 
 | Arc | Element | Typical block |
 |---|---|---|
@@ -185,7 +196,9 @@ For every page whose spine is a `customer-narrative/*.md` file (`home`, `about`,
 | `corporate-visions` | Why Change → Why Now → Why You → Why Pay | problem-statement → stat-row → feature-alternating → cta |
 | `engagement-model` | Principles → Process → Partnership → Outcomes | feature-grid → timeline → feature-alternating → stat-row / cta |
 
-The element → block mapping is authoritative in `$CLAUDE_PLUGIN_ROOT/../cogni-workspace/libraries/arc-taxonomy.md` (visual-type column). Read that file once per plan to confirm the mapping instead of duplicating it here.
+`$CLAUDE_PLUGIN_ROOT/../cogni-workspace/libraries/arc-taxonomy.md` is authoritative for the **arc element names** — the ordered elements of each arc and their German labels, under its `## Arc Element Names` section. Read that file once per plan to confirm the element sequence and its localized labels instead of duplicating them here. That file maps each `arc_id` to a *visual arc type* for the rendering skills; it carries no element → block mapping.
+
+The element → block choice is this plugin's own. The hint table above is the short form; the fuller quick reference is the Section Block Library appendix in `${CLAUDE_PLUGIN_ROOT}/libraries/page-templates.md`. Either way the step 2 decision tree below governs the final block, because it types each section on actual content shape.
 
 The decomposition rules are defined in cogni-workspace's story-to-web skill and referenced rather than duplicated here. Read once, apply per page:
 

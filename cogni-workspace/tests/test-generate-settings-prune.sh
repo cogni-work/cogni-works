@@ -50,6 +50,7 @@ seed_ws() {
     "COGNI_VISUAL_ROOT": "/gone/cogni-visual",
     "COGNI_VISUAL_PLUGIN": "/gone/cogni-visual/plugin",
     "PLUGIN_LEGACY_ROOT": "/gone/legacy",
+    "PLUGIN_LEGACY_PLUGIN": "/gone/legacy/plugin",
     "COGNI_TRENDS_ROOT": "/stale/cogni-trends",
     "COGNI_KNOWLEDGE_PLUGIN": "/kept/knowledge/plugin",
     "MY_OWN_VAR": "keep-me-exactly"
@@ -90,8 +91,8 @@ assert_py "P1 retired plugin ROOT key pruned" "$WS" \
   '"COGNI_VISUAL_ROOT" not in env'
 assert_py "P2 retired plugin PLUGIN twin pruned" "$WS" \
   '"COGNI_VISUAL_PLUGIN" not in env'
-assert_py "P3 non-cogni PLUGIN_ namespace key pruned" "$WS" \
-  '"PLUGIN_LEGACY_ROOT" not in env'
+assert_py "P3 non-cogni PLUGIN_ namespace pair pruned" "$WS" \
+  '"PLUGIN_LEGACY_ROOT" not in env and "PLUGIN_LEGACY_PLUGIN" not in env'
 assert_py "P4 user key outside the namespace preserved with its value" "$WS" \
   'env.get("MY_OWN_VAR") == "keep-me-exactly"'
 assert_py "P5 live plugin ROOT key refreshed to the computed path" "$WS" \

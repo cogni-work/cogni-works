@@ -245,11 +245,11 @@ assert_not_grep "sources/index.md#ki-bussgelder)" "$IDX" "root-index-17-2b-4-anc
 # The producer-site _collapse normalizes it to "AI Liability", so the heading is
 # single-space and the anchor is the matching single-%20 fragment.
 assert_grep '^## AI Liability' "$IDX" "root-index-18-2c-1-double-space 2c-1 double-space theme heading collapsed to single space"
-assert_not_grep '^## AI  Liability' "$IDX" "root-index-19-2c-2-heading-does 2c-2 heading does NOT keep the double space (the drift)"
+assert_not_grep '^## AI  Liability' "$IDX" "root-index-19-2c-2-heading-space-collapsed 2c-2 heading does NOT keep the double space (the drift)"
 assert_grep "Sources (1)](sources/index.md#AI%20Liability)" "$IDX" "root-index-20-2c-3-count-link 2c-3 count-link anchors to the single-%20 fragment that matches the heading"
 # Regression: the heading↔anchor MUST agree — the drift would have rendered the
 # double-space heading while the anchor collapsed, landing the click at page top.
-assert_not_grep "sources/index.md#AI%20%20Liability)" "$IDX" "root-index-21-2c-4-anchor-un 2c-4 anchor is NOT the un-collapsed double-%20 form"
+assert_not_grep "sources/index.md#AI%20%20Liability)" "$IDX" "root-index-21-2c-4-anchor-space-collapsed 2c-4 anchor is NOT the un-collapsed double-%20 form"
 
 # === 3. no per-page source bullets remain on the root ===
 assert_not_grep '^- \[\[src-a\]\]' "$IDX" "root-index-22-3-1-per-page 3-1 per-page src-a bullet dropped from root"

@@ -205,11 +205,11 @@ echo "$WHEN_BLOCK" | grep -q 'Activity timeline from the base' \
   && green "PASS: perspectives-index-17-when-facet-renders-timeline When facet renders the timeline intro" \
   || { red "FAIL: perspectives-index-17-when-facet-renders-timeline When timeline intro missing"; errors=$((errors+1)); }
 echo "$WHEN_BLOCK" | grep -qF -- '- **2026-06** — [4 operations](log.md) (compose · finalize · ingest · verify)' \
-  && green "PASS: perspectives-index-18-when-timeline-groups-2026 When timeline groups 2026-06 by month with sorted op counts, linked to the activity log" \
-  || { red "FAIL: perspectives-index-18-when-timeline-groups-2026 2026-06 timeline row missing/incorrect"; errors=$((errors+1)); }
+  && green "PASS: perspectives-index-18-when-timeline-groups-june-plural When timeline groups 2026-06 by month with sorted op counts, linked to the activity log" \
+  || { red "FAIL: perspectives-index-18-when-timeline-groups-june-plural 2026-06 timeline row missing/incorrect"; errors=$((errors+1)); }
 echo "$WHEN_BLOCK" | grep -qF -- '- **2026-05** — [1 operation](log.md) (setup)' \
-  && green "PASS: perspectives-index-19-when-timeline-groups-2026 When timeline groups 2026-05 (singular 'operation'), linked to the activity log" \
-  || { red "FAIL: perspectives-index-19-when-timeline-groups-2026 2026-05 timeline row missing/incorrect"; errors=$((errors+1)); }
+  && green "PASS: perspectives-index-19-when-timeline-groups-may-singular When timeline groups 2026-05 (singular 'operation'), linked to the activity log" \
+  || { red "FAIL: perspectives-index-19-when-timeline-groups-may-singular 2026-05 timeline row missing/incorrect"; errors=$((errors+1)); }
 # Newest-first ordering: 2026-06 row must precede the 2026-05 row.
 echo "$WHEN_BLOCK" | grep -nE '2026-0[56]' | head -1 | grep -q '2026-06' \
   && green "PASS: perspectives-index-20-when-timeline-newest-month When timeline is newest-month-first" \

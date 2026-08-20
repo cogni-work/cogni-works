@@ -281,7 +281,7 @@ NEAR="$WIKI/wiki/concepts/annex-iii-risk-categories.md"
 echo "$OUT" | grep -q '"near_existing_total": 1' && green "PASS: concept-store-32-near-existing-total-counted near_existing_total counted (1)" || { red "FAIL: concept-store-32-near-existing-total-counted near_existing_total != 1"; errors=$((errors+1)); }
 # The per-concept envelope carries near_existing_slug with the existing match.
 echo "$OUT" | grep -q '"near_slug": "annex-iii-categories"' && green "PASS: concept-store-33-near-existing-slug-points near_existing_slug points at the cross-run match" || { red "FAIL: concept-store-33-near-existing-slug-points near_existing_slug not surfaced"; errors=$((errors+1)); }
-echo "$OUT" | grep -q '"near_type": "concept"' && green "PASS: concept-store-34-near-existing-slug-carries near_existing_slug carries the type" || { red "FAIL: concept-store-34-near-existing-slug-carries near_existing_slug type missing"; errors=$((errors+1)); }
+echo "$OUT" | grep -q '"near_type": "concept"' && green "PASS: concept-store-34-near-existing-slug-carries-type near_existing_slug carries the type" || { red "FAIL: concept-store-34-near-existing-slug-carries-type near_existing_slug type missing"; errors=$((errors+1)); }
 # Same-type near-match (concept→concept) is NOT a cross-type mis-type (#600).
 python3 -c 'import json,sys;d=json.loads(sys.argv[1])["data"];assert d["mistyped_total"]==0,d;assert d["near_existing_slugs"][0]["type_mismatch"] is False,d' "$OUT" && green "PASS: concept-store-35-same-type-near-match same-type near-match → type_mismatch False, mistyped_total 0 (#600 no false alarm)" || { red "FAIL: concept-store-35-same-type-near-match same-type near-match wrongly flagged as mis-typed"; errors=$((errors+1)); }
 # The schema bumped from 0.1.0 → 0.1.1 because the manifest gained two fields.
@@ -317,7 +317,7 @@ d=json.loads(sys.argv[1])["data"]
 assert d["mistyped_total"]>=1, d
 m=[s for s in d["near_existing_slugs"] if s.get("type_mismatch")]
 assert m and m[0]["near_type"]=="entity", d
-' "$OUT" && green "PASS: concept-store-39-600-cross-type-tripwire #600 cross-type tripwire flags new concept shadowing existing entity (type_mismatch + mistyped_total)" || { red "FAIL: concept-store-39-600-cross-type-tripwire #600 cross-type tripwire not flagged"; red "  got: $OUT"; errors=$((errors+1)); }
+' "$OUT" && green "PASS: concept-store-39-cross-type-tripwire #600 cross-type tripwire flags new concept shadowing existing entity (type_mismatch + mistyped_total)" || { red "FAIL: concept-store-39-cross-type-tripwire #600 cross-type tripwire not flagged"; red "  got: $OUT"; errors=$((errors+1)); }
 
 # --- 11. CLEAN-RUN BASELINE: no near match → empty tripwire ------------------
 # A title with no overlap against any existing concept/entity must yield

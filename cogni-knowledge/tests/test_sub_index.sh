@@ -403,7 +403,7 @@ done
 
 # --- 11. python3.9 floor -----------------------------------------------------
 assert_grep 'from __future__ import annotations' "$SCRIPT" \
-  "sub-index-26-sub-index-py-carries sub_index.py carries the py3.9 future-annotations import"
+  "sub-index-26-future-annotations-import sub_index.py carries the py3.9 future-annotations import"
 if python3 -c "import ast,sys; ast.parse(open(sys.argv[1],encoding='utf-8').read())" "$SCRIPT"; then
   green "PASS: sub-index-27-sub-index-py-parses sub_index.py parses cleanly (ast.parse)"
 else

@@ -31,7 +31,7 @@ WSD="$PLUGIN_ROOT/scripts/vendor/cogni-wiki/skills/wiki-ingest/scripts"
 errors=0
 
 if [ ! -d "$WSD" ]; then
-  red "FAIL: cogni-wiki wiki-ingest scripts not found at $WSD"
+  red "FAIL: migrate-question-index-00-wiki-scripts-present cogni-wiki wiki-ingest scripts not found at $WSD"
   exit 1
 fi
 
@@ -111,13 +111,13 @@ assert moved == {'records-of-processing-scope', 'high-risk-obligations'}, d
 skipped = {s['slug'] for s in d['data']['skipped']}
 assert 'legacy-no-theme' in skipped, d
 print('OK')
-" | grep -q OK && green "PASS: dry-run reports the two moves and skips the empty-theme node" \
-  || { red "FAIL: dry-run output assertion"; errors=$((errors + 1)); }
+" | grep -q OK && green "PASS: migrate-question-index-01-dry-run-reports-two dry-run reports the two moves and skips the empty-theme node" \
+  || { red "FAIL: migrate-question-index-01-dry-run-reports-two dry-run output assertion"; errors=$((errors + 1)); }
 
 if diff -q "$INDEX_BEFORE" "$WIKI/wiki/index.md" >/dev/null 2>&1; then
-  green "PASS: dry-run left index.md byte-identical"
+  green "PASS: migrate-question-index-02-dry-run-left-index dry-run left index.md byte-identical"
 else
-  red "FAIL: dry-run modified index.md"
+  red "FAIL: migrate-question-index-02-dry-run-left-index dry-run modified index.md"
   errors=$((errors + 1))
 fi
 
@@ -136,11 +136,11 @@ assert actions.get('high-risk-obligations') == 'moved', d
 skipped = {s['slug'] for s in d['data']['skipped']}
 assert 'legacy-no-theme' in skipped, d
 print('OK')
-" | grep -q OK && green "PASS: wet run reports both nodes moved, empty-theme node skipped" \
-  || { red "FAIL: wet-run output assertion"; errors=$((errors + 1)); }
+" | grep -q OK && green "PASS: migrate-question-index-03-wet-run-reports-both wet run reports both nodes moved, empty-theme node skipped" \
+  || { red "FAIL: migrate-question-index-03-wet-run-reports-both wet-run output assertion"; errors=$((errors + 1)); }
 
-assert_grep '## Compliance Scope' "$WIKI/wiki/index.md" "Compliance Scope heading created"
-assert_grep '## Risk Tiers' "$WIKI/wiki/index.md" "Risk Tiers heading created"
+assert_grep '## Compliance Scope' "$WIKI/wiki/index.md" "migrate-question-index-04-compliance-scope-heading-created Compliance Scope heading created"
+assert_grep '## Risk Tiers' "$WIKI/wiki/index.md" "migrate-question-index-05-risk-tiers-heading-created Risk Tiers heading created"
 
 # Each slug now sits under its theme_label heading, not under Research questions.
 LOC_RESULT=$(python3 - "$WIKI/wiki/index.md" <<'PY'
@@ -164,16 +164,16 @@ print("OK" if ok else f"BAD {loc}")
 PY
 )
 if [ "$LOC_RESULT" = "OK" ]; then
-  green "PASS: each slug sits under its theme_label heading, Sources untouched"
+  green "PASS: migrate-question-index-06-each-slug-sits-under each slug sits under its theme_label heading, Sources untouched"
 else
-  red "FAIL: heading placement wrong — $LOC_RESULT"
+  red "FAIL: migrate-question-index-06-each-slug-sits-under heading placement wrong — $LOC_RESULT"
   errors=$((errors + 1))
 fi
 
 # The flat Research questions heading is now empty and dropped.
-assert_not_grep '## Research questions' "$WIKI/wiki/index.md" "empty Research questions heading dropped"
+assert_not_grep '## Research questions' "$WIKI/wiki/index.md" "migrate-question-index-07-empty-research-questions-heading empty Research questions heading dropped"
 # The unrelated Sources bullet is untouched.
-assert_grep '\[\[some-source\]\]' "$WIKI/wiki/index.md" "unrelated Sources bullet preserved"
+assert_grep '\[\[some-source\]\]' "$WIKI/wiki/index.md" "migrate-question-index-08-unrelated-sources-bullet-preserved unrelated Sources bullet preserved"
 
 # ---------------------------------------------------------------------------
 # Test 3: idempotent re-run — every node is a noop, index unchanged
@@ -190,13 +190,13 @@ assert d['data']['moved'] == [], d
 noop = {n['slug'] for n in d['data']['noop']}
 assert noop == {'records-of-processing-scope', 'high-risk-obligations'}, d
 print('OK')
-" | grep -q OK && green "PASS: idempotent re-run reports both nodes as noop" \
-  || { red "FAIL: idempotent re-run assertion"; errors=$((errors + 1)); }
+" | grep -q OK && green "PASS: migrate-question-index-09-idempotent-re-run-reports idempotent re-run reports both nodes as noop" \
+  || { red "FAIL: migrate-question-index-09-idempotent-re-run-reports idempotent re-run assertion"; errors=$((errors + 1)); }
 
 if diff -q "$INDEX_AFTER_WET" "$WIKI/wiki/index.md" >/dev/null 2>&1; then
-  green "PASS: idempotent re-run left index.md unchanged"
+  green "PASS: migrate-question-index-10-idempotent-re-run-left idempotent re-run left index.md unchanged"
 else
-  red "FAIL: idempotent re-run modified index.md"
+  red "FAIL: migrate-question-index-10-idempotent-re-run-left idempotent re-run modified index.md"
   errors=$((errors + 1))
 fi
 
@@ -241,11 +241,11 @@ assert d['data']['dry_run'] is False, d
 actions = {m['slug']: m['action'] for m in d['data']['moved']}
 assert actions.get('records-of-processing-scope') == 'moved', d
 print('OK')
-" | grep -q OK && green "PASS: self-resolve (no --wiki-scripts-dir) probes the sibling checkout and relocates the node" \
-  || { red "FAIL: self-resolve output assertion (probe or move failed)"; errors=$((errors + 1)); }
+" | grep -q OK && green "PASS: migrate-question-index-11-self-resolve-wiki-scripts self-resolve (no --wiki-scripts-dir) probes the sibling checkout and relocates the node" \
+  || { red "FAIL: migrate-question-index-11-self-resolve-wiki-scripts self-resolve output assertion (probe or move failed)"; errors=$((errors + 1)); }
 
-assert_grep '## Compliance Scope' "$WIKI2/wiki/index.md" "self-resolve run created the theme_label heading"
-assert_not_grep '## Research questions' "$WIKI2/wiki/index.md" "self-resolve run dropped the empty flat heading"
+assert_grep '## Compliance Scope' "$WIKI2/wiki/index.md" "migrate-question-index-12-self-resolve-run-created self-resolve run created the theme_label heading"
+assert_not_grep '## Research questions' "$WIKI2/wiki/index.md" "migrate-question-index-13-self-resolve-run-dropped self-resolve run dropped the empty flat heading"
 
 # ---------------------------------------------------------------------------
 if [ "$errors" -eq 0 ]; then

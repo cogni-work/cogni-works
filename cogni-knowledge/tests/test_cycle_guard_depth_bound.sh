@@ -45,8 +45,10 @@ set -e
 
 errors=0
 if [ $RC -ne 0 ]; then
-  red "FAIL: expected exit 0 (clear with depth 0), got $RC"
+  red "FAIL: cycle-guard-depth-bound-01-exit-zero expected exit 0 (clear with depth 0), got $RC"
   errors=$((errors + 1))
+else
+  green "PASS: cycle-guard-depth-bound-01-exit-zero cycle-guard exits 0 when depth 0 bounds the walk"
 fi
 
 if ! echo "$OUT" | python3 -c "
@@ -60,10 +62,11 @@ assert data['direct_self_cycles'] == [], data['direct_self_cycles']
 assert data['max_depth'] == 0, data['max_depth']
 print('OK')
 " | grep -q OK; then
-  red "FAIL: output did not match clear-at-depth-0 contract"
+  red "FAIL: cycle-guard-depth-bound-02-depth-zero-contract output did not match clear-at-depth-0 contract"
   red "  got: $OUT"
   errors=$((errors + 1))
+else
+  green "PASS: cycle-guard-depth-bound-02-depth-zero-contract max-depth 0 disables transitive recursion (status: clear)"
 fi
 
 if [ $errors -gt 0 ]; then exit 1; fi
-green "PASS: --max-depth 0 disables transitive recursion (status: clear)"

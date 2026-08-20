@@ -48,8 +48,10 @@ set -e
 
 errors=0
 if [ $RC -ne 0 ]; then
-  red "FAIL: expected exit 0 (clear), got $RC"
+  red "FAIL: cycle-guard-clear-01-exit-zero expected exit 0 (clear), got $RC"
   errors=$((errors + 1))
+else
+  green "PASS: cycle-guard-clear-01-exit-zero cycle-guard exits 0 on a legitimate cross-project citation"
 fi
 
 if ! echo "$OUT" | python3 -c "
@@ -63,10 +65,11 @@ assert data['transitive_self_cycles'] == [], data['transitive_self_cycles']
 assert len(data['cross_lineage_overlap']) > 0, 'cross_lineage_overlap empty'
 print('OK')
 " | grep -q OK; then
-  red "FAIL: output did not match clear contract"
+  red "FAIL: cycle-guard-clear-02-clear-contract output did not match clear contract"
   red "  got: $OUT"
   errors=$((errors + 1))
+else
+  green "PASS: cycle-guard-clear-02-clear-contract legitimate cross-project citation reports status: clear with overlap recorded"
 fi
 
 if [ $errors -gt 0 ]; then exit 1; fi
-green "PASS: legitimate cross-project citation reports status: clear with overlap recorded"

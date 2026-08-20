@@ -55,8 +55,10 @@ RC_A=$?
 set -e
 
 if [ $RC_A -ne 0 ]; then
-  red "FAIL[A]: expected exit 0 (clear), got $RC_A"
+  red "FAIL: cycle-guard-distilled-01-a-exit-zero expected exit 0 (clear), got $RC_A"
   errors=$((errors + 1))
+else
+  green "PASS: cycle-guard-distilled-01-a-exit-zero scenario A exits 0 on a clear distilled-page citation"
 fi
 if ! echo "$OUT_A" | python3 -c "
 import sys, json
@@ -72,11 +74,11 @@ assert data['cited_distilled_pages'][0]['type'] == 'concept', data['cited_distil
 assert data['wiki_pages_cited_missing'] == [], data['wiki_pages_cited_missing']
 print('OK')
 " | grep -q OK; then
-  red "FAIL[A]: clear-with-distilled contract not met"
+  red "FAIL: cycle-guard-distilled-02-a-clear-contract clear-with-distilled contract not met"
   red "  got: $OUT_A"
   errors=$((errors + 1))
 else
-  green "PASS[A]: concept citation is clear; recorded in cited_distilled_pages, not missing"
+  green "PASS: cycle-guard-distilled-02-a-clear-contract concept citation is clear; recorded in cited_distilled_pages, not missing"
 fi
 
 # --- Scenario B: see-through cycle ------------------------------------------
@@ -103,9 +105,11 @@ RC_B=$?
 set -e
 
 if [ $RC_B -ne 1 ]; then
-  red "FAIL[B]: expected exit 1 (cycle_detected via see-through), got $RC_B"
+  red "FAIL: cycle-guard-distilled-03-b-exit-one expected exit 1 (cycle_detected via see-through), got $RC_B"
   red "  got: $OUT_B"
   errors=$((errors + 1))
+else
+  green "PASS: cycle-guard-distilled-03-b-exit-one scenario B exits 1 on a see-through cycle behind a concept citation"
 fi
 if ! echo "$OUT_B" | python3 -c "
 import sys, json
@@ -117,15 +121,15 @@ assert len(data['direct_self_cycles']) > 0, data['direct_self_cycles']
 assert data['direct_self_cycles'][0]['page'] == 'wiki/syntheses/prior-synth-of-a.md', data['direct_self_cycles']
 print('OK')
 " | grep -q OK; then
-  red "FAIL[B]: see-through cycle contract not met"
+  red "FAIL: cycle-guard-distilled-04-b-see-through-contract see-through cycle contract not met"
   red "  got: $OUT_B"
   errors=$((errors + 1))
 else
-  green "PASS[B]: see-through trace surfaces the direct cycle behind a concept citation"
+  green "PASS: cycle-guard-distilled-04-b-see-through-contract see-through trace surfaces the direct cycle behind a concept citation"
 fi
 
 if [ $errors -ne 0 ]; then
-  red "FAIL: $errors assertion(s) failed"
+  red "FAIL: cycle-guard-distilled-05-aggregate $errors assertion(s) failed"
   exit 1
 fi
-green "PASS: distilled-page citations handled (clear see-through + cycle detection)"
+green "PASS: cycle-guard-distilled-05-aggregate distilled-page citations handled (clear see-through + cycle detection)"

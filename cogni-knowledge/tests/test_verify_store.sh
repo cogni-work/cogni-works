@@ -32,7 +32,7 @@ SCRIPT="$PLUGIN_ROOT/scripts/verify-store.py"
 . "$(dirname "$0")/fixtures/test_helpers.sh"
 
 if [ ! -f "$SCRIPT" ]; then
-  red "FAIL: verify-store.py not found at $SCRIPT"
+  red "FAIL: verify-store-00-script-present verify-store.py not found at $SCRIPT"
   exit 1
 fi
 
@@ -70,9 +70,9 @@ counts = [s['citation_count'] for s in d['data']['shards']]
 assert counts == [2, 2, 1], counts
 print('OK')
 " | grep -q OK; then
-  green "PASS: shard splits 5 citations into 3 shards (2,2,1)"
+  green "PASS: verify-store-01-shard-splits-5-citations shard splits 5 citations into 3 shards (2,2,1)"
 else
-  red "FAIL: shard split shape wrong"
+  red "FAIL: verify-store-01-shard-splits-5-citations shard split shape wrong"
   red "  got: $SHARD_OUT"
   errors=$((errors + 1))
 fi
@@ -94,9 +94,9 @@ for f in shard_files:
 assert union_ids == ['cit-001','cit-002','cit-003','cit-004','cit-005'], union_ids
 PY
 then
-  green "PASS: shard files are valid manifests; id/draft_sentence preserved; union exact + no dup"
+  green "PASS: verify-store-02-shard-files-valid-manifests shard files are valid manifests; id/draft_sentence preserved; union exact + no dup"
 else
-  red "FAIL: shard file contents wrong"
+  red "FAIL: verify-store-02-shard-files-valid-manifests shard file contents wrong"
   errors=$((errors + 1))
 fi
 
@@ -104,9 +104,9 @@ fi
 SHARDS_ONE="$WORK/shards-one"
 ONE_OUT=$(python3 "$SCRIPT" shard --manifest "$MANIFEST" --draft-version 1 --shard-size 10 --out-dir "$SHARDS_ONE")
 if echo "$ONE_OUT" | python3 -c "import sys,json; d=json.load(sys.stdin); assert d['data']['shard_count']==1, d" 2>/dev/null; then
-  green "PASS: citations <= shard-size yields a single shard"
+  green "PASS: verify-store-03-citations-shard-size-yields citations <= shard-size yields a single shard"
 else
-  red "FAIL: expected single shard"
+  red "FAIL: verify-store-03-citations-shard-size-yields expected single shard"
   red "  got: $ONE_OUT"
   errors=$((errors + 1))
 fi
@@ -141,9 +141,9 @@ assert c['total'] == 5, c
 assert c['paraphrase'] == 2 and c['verbatim'] == 1 and c['synthesis'] == 1 and c['unsupported'] == 1, c
 print('OK')
 " | grep -q OK; then
-  green "PASS: merge recombines 3 fragments; counts recomputed; shards_merged reported"
+  green "PASS: verify-store-04-merge-recombines-3-fragments merge recombines 3 fragments; counts recomputed; shards_merged reported"
 else
-  red "FAIL: merge envelope wrong"
+  red "FAIL: verify-store-04-merge-recombines-3-fragments merge envelope wrong"
   red "  got: $MERGE_OUT"
   errors=$((errors + 1))
 fi
@@ -163,9 +163,9 @@ assert gm['grounded'] == 0 and gm['ungrounded'] == 0 and gm['unscored'] == 5, gm
 assert gm['grounding_rate'] is None, gm
 PY
 then
-  green "PASS: merged verify-v1.json — total==verified+deviations, draft_version/revision_round set, ids intact"
+  green "PASS: verify-store-05-merged-verify-v1-json merged verify-v1.json — total==verified+deviations, draft_version/revision_round set, ids intact"
 else
-  red "FAIL: merged verify-v1.json malformed"
+  red "FAIL: verify-store-05-merged-verify-v1-json merged verify-v1.json malformed"
   errors=$((errors + 1))
 fi
 
@@ -178,18 +178,18 @@ assert glob.glob("$SHARDS/verify-shard-*-v1.json") == [], glob.glob("$SHARDS/ver
 assert len(glob.glob("$SHARDS/shard-*-v1.json")) == 3
 PY
 then
-  green "PASS: re-shard clears stale verify-shard fragments for the version"
+  green "PASS: verify-store-06-re-shard-clears-stale re-shard clears stale verify-shard fragments for the version"
 else
-  red "FAIL: re-shard did not clear stale fragments"
+  red "FAIL: verify-store-06-re-shard-clears-stale re-shard did not clear stale fragments"
   errors=$((errors + 1))
 fi
 
 # 5a. Missing manifest → reject.
 OUT=$(python3 "$SCRIPT" shard --manifest "$WORK/nope.json" --draft-version 1 --shard-size 2 --out-dir "$WORK/x" 2>&1 || true)
 if echo "$OUT" | python3 -c "import sys,json; d=json.load(sys.stdin); assert d['success'] is False and 'exist' in d['error'].lower()" 2>/dev/null; then
-  green "PASS: missing manifest rejected"
+  green "PASS: verify-store-07-missing-manifest-rejected missing manifest rejected"
 else
-  red "FAIL: missing manifest not rejected"
+  red "FAIL: verify-store-07-missing-manifest-rejected missing manifest not rejected"
   red "  got: $OUT"
   errors=$((errors + 1))
 fi
@@ -199,9 +199,9 @@ BAD_SCHEMA="$WORK/bad-schema.json"
 echo '{"schema_version": "0.0.9", "draft_version": 1, "citations": []}' > "$BAD_SCHEMA"
 OUT=$(python3 "$SCRIPT" shard --manifest "$BAD_SCHEMA" --draft-version 1 --shard-size 2 --out-dir "$WORK/y" 2>&1 || true)
 if echo "$OUT" | python3 -c "import sys,json; d=json.load(sys.stdin); assert d['success'] is False and 'schema_version' in d['error']" 2>/dev/null; then
-  green "PASS: non-0.1.0 schema rejected"
+  green "PASS: verify-store-08-non-0-1-0 non-0.1.0 schema rejected"
 else
-  red "FAIL: non-0.1.0 schema not rejected"
+  red "FAIL: verify-store-08-non-0-1-0 non-0.1.0 schema not rejected"
   red "  got: $OUT"
   errors=$((errors + 1))
 fi
@@ -209,9 +209,9 @@ fi
 # 5c. draft_version mismatch → reject.
 OUT=$(python3 "$SCRIPT" shard --manifest "$MANIFEST" --draft-version 9 --shard-size 2 --out-dir "$WORK/z" 2>&1 || true)
 if echo "$OUT" | python3 -c "import sys,json; d=json.load(sys.stdin); assert d['success'] is False and 'draft_version' in d['error']" 2>/dev/null; then
-  green "PASS: draft_version mismatch rejected"
+  green "PASS: verify-store-09-draft-version-mismatch-rejected draft_version mismatch rejected"
 else
-  red "FAIL: draft_version mismatch not rejected"
+  red "FAIL: verify-store-09-draft-version-mismatch-rejected draft_version mismatch not rejected"
   red "  got: $OUT"
   errors=$((errors + 1))
 fi
@@ -221,9 +221,9 @@ EMPTY_DIR="$WORK/empty-shards"
 mkdir -p "$EMPTY_DIR"
 OUT=$(python3 "$SCRIPT" merge --shard-dir "$EMPTY_DIR" --draft-version 1 --revision-round 0 --out "$WORK/nope-v1.json" 2>&1 || true)
 if echo "$OUT" | python3 -c "import sys,json; d=json.load(sys.stdin); assert d['success'] is False and 'fragment' in d['error'].lower()" 2>/dev/null; then
-  green "PASS: merge with no fragments rejected"
+  green "PASS: verify-store-10-merge-fragments-rejected merge with no fragments rejected"
 else
-  red "FAIL: merge with no fragments not rejected"
+  red "FAIL: verify-store-10-merge-fragments-rejected merge with no fragments not rejected"
   red "  got: $OUT"
   errors=$((errors + 1))
 fi
@@ -243,9 +243,9 @@ cat > "$PRE028" <<'JSON'
 JSON
 OUT=$(python3 "$SCRIPT" shard --manifest "$PRE028" --draft-version 1 --shard-size 2 --out-dir "$WORK/pre028-out" 2>&1 || true)
 if echo "$OUT" | python3 -c "import sys,json; d=json.load(sys.stdin); assert d['success'] is False and 'v0.0.28' in d['error']" 2>/dev/null; then
-  green "PASS: pre-0.0.28 manifest (citation missing id/draft_sentence) rejected"
+  green "PASS: verify-store-11-pre-0-0-28 pre-0.0.28 manifest (citation missing id/draft_sentence) rejected"
 else
-  red "FAIL: pre-0.0.28 manifest not rejected"
+  red "FAIL: verify-store-11-pre-0-0-28 pre-0.0.28 manifest not rejected"
   red "  got: $OUT"
   errors=$((errors + 1))
 fi
@@ -276,9 +276,9 @@ frag_full_01='{"schema_version":"0.1.0","draft_version":1,"revision_round":0,"ve
 clear_frags; write_frag verify-shard-00-v1.json "$frag_full_00"
 OUT=$(python3 "$SCRIPT" merge --shard-dir "$MR" --draft-version 1 --revision-round 0 --out "$WORK/mr-a.json" 2>&1 || true)
 if echo "$OUT" | python3 -c "import sys,json; d=json.load(sys.stdin); assert d['success'] is False and 'of 4' in d['error']" 2>/dev/null; then
-  green "PASS: merge rejects a missing fragment (2 of 4 sharded citations)"
+  green "PASS: verify-store-12-merge-rejects-missing-fragment merge rejects a missing fragment (2 of 4 sharded citations)"
 else
-  red "FAIL: missing fragment not caught by completeness check"
+  red "FAIL: verify-store-12-merge-rejects-missing-fragment missing fragment not caught by completeness check"
   red "  got: $OUT"
   errors=$((errors + 1))
 fi
@@ -288,9 +288,9 @@ clear_frags; write_frag verify-shard-00-v1.json "$frag_full_00"; write_frag veri
 write_frag verify-shard-02-v1.json '{"schema_version":"0.1.0","draft_version":1,"revision_round":0,"verified":[{"id":"cit-001","verdict":"paraphrase"}],"deviations":[],"counts":{"total":1}}'
 OUT=$(python3 "$SCRIPT" merge --shard-dir "$MR" --draft-version 1 --revision-round 0 --out "$WORK/mr-b.json" 2>&1 || true)
 if echo "$OUT" | python3 -c "import sys,json; d=json.load(sys.stdin); assert d['success'] is False and 'duplicate' in d['error'].lower()" 2>/dev/null; then
-  green "PASS: merge rejects duplicate citation id across fragments"
+  green "PASS: verify-store-13-merge-rejects-duplicate-citation merge rejects duplicate citation id across fragments"
 else
-  red "FAIL: duplicate id not rejected"
+  red "FAIL: verify-store-13-merge-rejects-duplicate-citation duplicate id not rejected"
   red "  got: $OUT"
   errors=$((errors + 1))
 fi
@@ -300,9 +300,9 @@ clear_frags; write_frag verify-shard-01-v1.json "$frag_full_01"
 write_frag verify-shard-00-v1.json '{"schema_version":"0.1.0","draft_version":1,"revision_round":0,"verified":[{"id":"cit-001","verdict":"paraphrase"},{"id":"cit-002","verdict":"unsupported","reason":"x"}],"deviations":[],"counts":{"total":2}}'
 OUT=$(python3 "$SCRIPT" merge --shard-dir "$MR" --draft-version 1 --revision-round 0 --out "$WORK/mr-c.json" 2>&1 || true)
 if echo "$OUT" | python3 -c "import sys,json; d=json.load(sys.stdin); assert d['success'] is False and 'mis-filed' in d['error']" 2>/dev/null; then
-  green "PASS: merge rejects unsupported verdict mis-filed in verified[]"
+  green "PASS: verify-store-14-merge-rejects-unsupported-verdict merge rejects unsupported verdict mis-filed in verified[]"
 else
-  red "FAIL: mis-filed unsupported not rejected"
+  red "FAIL: verify-store-14-merge-rejects-unsupported-verdict mis-filed unsupported not rejected"
   red "  got: $OUT"
   errors=$((errors + 1))
 fi
@@ -311,9 +311,9 @@ fi
 clear_frags; write_frag verify-shard-00-v1.json "$frag_full_00"; write_frag verify-shard-01-v1.json '[1,2,3]'
 OUT=$(python3 "$SCRIPT" merge --shard-dir "$MR" --draft-version 1 --revision-round 0 --out "$WORK/mr-d.json" 2>&1 || true)
 if echo "$OUT" | python3 -c "import sys,json; d=json.load(sys.stdin); assert d['success'] is False and 'object' in d['error']" 2>/dev/null; then
-  green "PASS: merge returns an envelope (not a traceback) on a non-dict fragment"
+  green "PASS: verify-store-15-merge-returns-envelope-not-traceback merge returns an envelope (not a traceback) on a non-dict fragment"
 else
-  red "FAIL: non-dict fragment crashed instead of returning the envelope"
+  red "FAIL: verify-store-15-merge-returns-envelope-not-traceback non-dict fragment crashed instead of returning the envelope"
   red "  got: $OUT"
   errors=$((errors + 1))
 fi
@@ -323,9 +323,9 @@ NONDICT="$WORK/nondict-manifest.json"
 echo '[1,2,3]' > "$NONDICT"
 OUT=$(python3 "$SCRIPT" shard --manifest "$NONDICT" --draft-version 1 --shard-size 2 --out-dir "$WORK/nd" 2>&1 || true)
 if echo "$OUT" | python3 -c "import sys,json; d=json.load(sys.stdin); assert d['success'] is False and 'object' in d['error']" 2>/dev/null; then
-  green "PASS: shard returns an envelope (not a traceback) on a non-dict manifest"
+  green "PASS: verify-store-16-shard-returns-envelope-not-traceback shard returns an envelope (not a traceback) on a non-dict manifest"
 else
-  red "FAIL: non-dict manifest crashed instead of returning the envelope"
+  red "FAIL: verify-store-16-shard-returns-envelope-not-traceback non-dict manifest crashed instead of returning the envelope"
   red "  got: $OUT"
   errors=$((errors + 1))
 fi
@@ -353,9 +353,9 @@ for f in files:
 assert sorted(ids) == ['cit-002','cit-004'], ids
 PY
 then
-  green "PASS: shard --only-ids splits only the requested delta subset (#305)"
+  green "PASS: verify-store-17-shard-only-ids-splits shard --only-ids splits only the requested delta subset (#305)"
 else
-  red "FAIL: shard --only-ids did not restrict to the subset"
+  red "FAIL: verify-store-17-shard-only-ids-splits shard --only-ids did not restrict to the subset"
   red "  got: $OUT"
   errors=$((errors + 1))
 fi
@@ -421,9 +421,9 @@ assert d['success'] is True, d
 assert d['data']['matched_ids'] == ['cit-p1'], d['data']
 assert sorted(d['data']['remaining_ids']) == ['cit-p2', 'cit-p3'], d['data']
 " 2>/dev/null; then
-  green "PASS: prefilter matches the verbatim citation, falls through on cross-lang + unparseable (#305)"
+  green "PASS: verify-store-18-prefilter-matches-verbatim-citation prefilter matches the verbatim citation, falls through on cross-lang + unparseable (#305)"
 else
-  red "FAIL: prefilter match/remaining split wrong"
+  red "FAIL: verify-store-18-prefilter-matches-verbatim-citation prefilter match/remaining split wrong"
   red "  got: $OUT"
   errors=$((errors + 1))
 fi
@@ -436,9 +436,9 @@ e = frag['verified'][0]
 assert e['id'] == 'cit-p1' and e['verdict'] == 'verbatim', e
 PY
 then
-  green "PASS: prefilter fragment carries only verbatim verdicts, no deviations"
+  green "PASS: verify-store-19-prefilter-fragment-carries-only prefilter fragment carries only verbatim verdicts, no deviations"
 else
-  red "FAIL: prefilter fragment malformed"
+  red "FAIL: verify-store-19-prefilter-fragment-carries-only prefilter fragment malformed"
   errors=$((errors + 1))
 fi
 
@@ -459,9 +459,9 @@ assert sorted(d['data']['remaining_ids']) == ['cit-p1', 'cit-p2', 'cit-p3'], d['
 assert d['data']['remaining_count'] == 3, d['data']
 assert d['data'].get('skipped') == 'executive-density', d['data']
 " 2>/dev/null; then
-  green "PASS: prefilter --prose-density executive routes every citation to remaining (0 matched), bypassing the scan (#842)"
+  green "PASS: verify-store-20-prefilter-prose-density-executive prefilter --prose-density executive routes every citation to remaining (0 matched), bypassing the scan (#842)"
 else
-  red "FAIL: executive-density bypass did not route all citations to remaining"
+  red "FAIL: verify-store-20-prefilter-prose-density-executive executive-density bypass did not route all citations to remaining"
   red "  got: $OUT"
   errors=$((errors + 1))
 fi
@@ -473,9 +473,9 @@ assert frag['deviations'] == [], frag
 assert frag['counts']['total'] == 0 and frag['counts']['verbatim'] == 0, frag
 PY
 then
-  green "PASS: executive-density bypass writes a zeroed prefilter fragment (#842)"
+  green "PASS: verify-store-21-executive-density-bypass-writes executive-density bypass writes a zeroed prefilter fragment (#842)"
 else
-  red "FAIL: executive-density fragment not zeroed"
+  red "FAIL: verify-store-21-executive-density-bypass-writes executive-density fragment not zeroed"
   errors=$((errors + 1))
 fi
 
@@ -519,9 +519,9 @@ d = json.load(sys.stdin)
 assert d['success'] is True, d
 assert d['data']['matched_ids'] == ['cit-q1'], d['data']
 " 2>/dev/null; then
-  green "PASS: prefilter resolves a question-node answer_claims: (acl-NNN, text needle) → verbatim (#432)"
+  green "PASS: verify-store-22-prefilter-resolves-question-node prefilter resolves a question-node answer_claims: (acl-NNN, text needle) → verbatim (#432)"
 else
-  red "FAIL: question-family prefilter did not match"; red "  got: $OUT"; errors=$((errors + 1))
+  red "FAIL: verify-store-22-prefilter-resolves-question-node question-family prefilter did not match"; red "  got: $OUT"; errors=$((errors + 1))
 fi
 
 # 7b-fp. FALSE-POSITIVE GUARDS — the prefilter must NOT mark verbatim on a
@@ -577,9 +577,9 @@ assert d['success'] is True, d
 assert d['data']['matched_ids'] == ['cit-real'], 'only the whole-sentence in-draft match should be verbatim; got '+repr(d['data']['matched_ids'])
 assert sorted(d['data']['remaining_ids']) == ['cit-block','cit-qual','cit-short','cit-stale'], d['data']
 " 2>/dev/null; then
-  green "PASS: prefilter rejects block-scalar / short-needle / qualifier-wrapped / stale-sentence false positives (#305 review)"
+  green "PASS: verify-store-23-prefilter-rejects-block-scalar prefilter rejects block-scalar / short-needle / qualifier-wrapped / stale-sentence false positives (#305 review)"
 else
-  red "FAIL: prefilter false-positive guard regressed"
+  red "FAIL: verify-store-23-prefilter-rejects-block-scalar prefilter false-positive guard regressed"
   red "  got: $OUT"
   errors=$((errors + 1))
 fi
@@ -606,9 +606,9 @@ open(draft_path,"w",encoding="utf-8").write(sentence_nfc + "\n")
 PY
 OUT=$(python3 "$SCRIPT" prefilter --manifest "$WORK/nfc-manifest.json" --wiki-root "$NFCWIKI" --draft-version 1 --draft "$WORK/nfc-draft-v1.md" --out-dir "$WORK/nfc-sh")
 if echo "$OUT" | python3 -c "import sys,json; d=json.load(sys.stdin); assert d['data']['matched_ids']==['cit-de'], d['data']" 2>/dev/null; then
-  green "PASS: prefilter matches a verbatim non-ASCII citation across NFC/NFD composition (#305 review)"
+  green "PASS: verify-store-24-prefilter-matches-verbatim-non prefilter matches a verbatim non-ASCII citation across NFC/NFD composition (#305 review)"
 else
-  red "FAIL: prefilter NFC/NFD normalization missing"
+  red "FAIL: verify-store-24-prefilter-matches-verbatim-non prefilter NFC/NFD normalization missing"
   red "  got: $OUT"
   errors=$((errors + 1))
 fi
@@ -639,9 +639,9 @@ A system shall be considered high-risk under Annex III<sup>[1](https://x.eu/d)</
 EOF
 OUT=$(python3 "$SCRIPT" prefilter --manifest "$WORK/dup-manifest.json" --wiki-root "$DUPWIKI" --draft-version 1 --draft "$WORK/dup-draft-v1.md" --out-dir "$WORK/dup-sh")
 if echo "$OUT" | python3 -c "import sys,json; d=json.load(sys.stdin); assert d['data']['matched_ids']==[] and d['data']['remaining_ids']==['cit-dup'], d['data']" 2>/dev/null; then
-  green "PASS: prefilter treats a duplicate claim_id on a page as ambiguous → LLM fallthrough (#305 review)"
+  green "PASS: verify-store-25-prefilter-treats-duplicate-claim prefilter treats a duplicate claim_id on a page as ambiguous → LLM fallthrough (#305 review)"
 else
-  red "FAIL: prefilter duplicate-claim_id ambiguity not handled"
+  red "FAIL: verify-store-25-prefilter-treats-duplicate-claim prefilter duplicate-claim_id ambiguity not handled"
   red "  got: $OUT"
   errors=$((errors + 1))
 fi
@@ -723,9 +723,9 @@ assert ids == ['cit-d1', 'cit-d2'], ids
 assert all(e['verdict'] == 'verbatim' and e['method'] == 'prefilter-substring' for e in frag['verified']), frag
 PY
 then
-  green "PASS: prefilter fast-paths distilled-page citations across concepts/+entities/, falls through on qualifier + missing-claim (#362)"
+  green "PASS: verify-store-26-prefilter-fast-paths-distilled prefilter fast-paths distilled-page citations across concepts/+entities/, falls through on qualifier + missing-claim (#362)"
 else
-  red "FAIL: prefilter distilled-page fast-path regressed"
+  red "FAIL: verify-store-26-prefilter-fast-paths-distilled prefilter distilled-page fast-path regressed"
   red "  got: $OUT"
   errors=$((errors + 1))
 fi
@@ -767,9 +767,9 @@ AI systems referred to in Annex III shall be considered high-risk<sup>[1](https:
 EOF
 OUT=$(python3 "$SCRIPT" prefilter --manifest "$WORK/col-manifest.json" --wiki-root "$COLWIKI" --draft-version 1 --draft "$WORK/col-draft-v1.md" --out-dir "$WORK/col-sh")
 if echo "$OUT" | python3 -c "import sys,json; d=json.load(sys.stdin); assert d['data']['matched_ids']==[] and d['data']['remaining_ids']==['cit-col'], d['data']" 2>/dev/null; then
-  green "PASS: prefilter treats a cross-family slug collision as ambiguous → LLM fallthrough (#362 review)"
+  green "PASS: verify-store-27-prefilter-treats-cross-family prefilter treats a cross-family slug collision as ambiguous → LLM fallthrough (#362 review)"
 else
-  red "FAIL: prefilter cross-family slug-collision guard regressed"
+  red "FAIL: verify-store-27-prefilter-treats-cross-family prefilter cross-family slug-collision guard regressed"
   red "  got: $OUT"
   errors=$((errors + 1))
 fi
@@ -789,9 +789,9 @@ assert d['success'] is True, d
 c = d['data']['counts']
 assert c['total'] == 3 and c['verbatim'] == 1 and c['paraphrase'] == 1 and c['unsupported'] == 1, c
 " 2>/dev/null; then
-  green "PASS: merge --manifest unions prefilter + LLM fragments to the full manifest (#305)"
+  green "PASS: verify-store-28-merge-manifest-unions-prefilter merge --manifest unions prefilter + LLM fragments to the full manifest (#305)"
 else
-  red "FAIL: merge --manifest conservation wrong"
+  red "FAIL: verify-store-28-merge-manifest-unions-prefilter merge --manifest conservation wrong"
   red "  got: $OUT"
   errors=$((errors + 1))
 fi
@@ -801,9 +801,9 @@ fi
 #     reconcile it — this is exactly why --manifest is required for the new flow.
 OUT=$(python3 "$SCRIPT" merge --shard-dir "$PFSH" --draft-version 1 --revision-round 0 --out "$WORK/pf-nomani.json" 2>&1 || true)
 if echo "$OUT" | python3 -c "import sys,json; d=json.load(sys.stdin); assert d['success'] is False and 'of 2' in d['error']" 2>/dev/null; then
-  green "PASS: merge without --manifest rejects the prefilter+delta union (conservation needs the manifest)"
+  green "PASS: verify-store-29-merge-without-manifest-rejects merge without --manifest rejects the prefilter+delta union (conservation needs the manifest)"
 else
-  red "FAIL: merge without --manifest should fail conservation against the delta-only shard inputs"
+  red "FAIL: verify-store-29-merge-without-manifest-rejects merge without --manifest should fail conservation against the delta-only shard inputs"
   red "  got: $OUT"
   errors=$((errors + 1))
 fi
@@ -817,9 +817,9 @@ assert os.path.exists("$PFSH/verify-shard-prefilter-v1.json"), "prefilter fragme
 assert glob.glob("$PFSH/verify-shard-[0-9]*-v1.json") == [], "numbered fragments not cleared"
 PY
 then
-  green "PASS: reshard preserves the prefilter fragment, clears numbered fragments (#305)"
+  green "PASS: verify-store-30-reshard-preserves-prefilter-fragment reshard preserves the prefilter fragment, clears numbered fragments (#305)"
 else
-  red "FAIL: reshard fragment-cleanup scope wrong"
+  red "FAIL: verify-store-30-reshard-preserves-prefilter-fragment reshard fragment-cleanup scope wrong"
   errors=$((errors + 1))
 fi
 
@@ -861,9 +861,9 @@ ids = sorted(e['id'] for e in v['verified'] + v['deviations'])
 assert ids == ['cit-001','cit-002','cit-003'], ids
 PY
 then
-  green "PASS: merge --carry-forward-from re-scores the delta + carries untouched → complete (#305)"
+  green "PASS: verify-store-31-merge-carry-forward-from merge --carry-forward-from re-scores the delta + carries untouched → complete (#305)"
 else
-  red "FAIL: carry-forward merge wrong"
+  red "FAIL: verify-store-31-merge-carry-forward-from carry-forward merge wrong"
   red "  got: $OUT"
   errors=$((errors + 1))
 fi
@@ -877,9 +877,9 @@ cat > "$EMPTYSH/verify-shard-prefilter-v2.json" <<'EOF'
 EOF
 OUT=$(python3 "$SCRIPT" merge --shard-dir "$EMPTYSH" --draft-version 2 --revision-round 1 --manifest "$CFM" --carry-forward-from "$PREV" --out "$WORK/cf-empty-v2.json")
 if echo "$OUT" | python3 -c "import sys,json; d=json.load(sys.stdin); assert d['success'] is True and d['data']['counts']['total'] == 3, d" 2>/dev/null; then
-  green "PASS: empty-delta round rebuilds the full file by carry-forward alone (#305)"
+  green "PASS: verify-store-32-empty-delta-round-rebuilds empty-delta round rebuilds the full file by carry-forward alone (#305)"
 else
-  red "FAIL: empty-delta carry-forward wrong"
+  red "FAIL: verify-store-32-empty-delta-round-rebuilds empty-delta carry-forward wrong"
   red "  got: $OUT"
   errors=$((errors + 1))
 fi
@@ -887,9 +887,9 @@ fi
 # 7h. --carry-forward-from without --manifest → reject.
 OUT=$(python3 "$SCRIPT" merge --shard-dir "$CFSH" --draft-version 2 --revision-round 1 --carry-forward-from "$PREV" --out "$WORK/cf-bad.json" 2>&1 || true)
 if echo "$OUT" | python3 -c "import sys,json; d=json.load(sys.stdin); assert d['success'] is False and 'requires --manifest' in d['error']" 2>/dev/null; then
-  green "PASS: --carry-forward-from without --manifest rejected"
+  green "PASS: verify-store-33-carry-forward-from-without --carry-forward-from without --manifest rejected"
 else
-  red "FAIL: --carry-forward-from without --manifest not rejected"
+  red "FAIL: verify-store-33-carry-forward-from-without --carry-forward-from without --manifest not rejected"
   red "  got: $OUT"
   errors=$((errors + 1))
 fi
@@ -903,9 +903,9 @@ cat > "$PREV_GAP" <<'EOF'
 EOF
 OUT=$(python3 "$SCRIPT" merge --shard-dir "$CFSH" --draft-version 2 --revision-round 1 --manifest "$CFM" --carry-forward-from "$PREV_GAP" --out "$WORK/cf-gap.json" 2>&1 || true)
 if echo "$OUT" | python3 -c "import sys,json; d=json.load(sys.stdin); assert d['success'] is False and 'no prior verdict' in d['error']" 2>/dev/null; then
-  green "PASS: carry-forward rejects a manifest id with no prior verdict (forces full re-shard)"
+  green "PASS: verify-store-34-carry-forward-rejects-manifest carry-forward rejects a manifest id with no prior verdict (forces full re-shard)"
 else
-  red "FAIL: carry-forward did not reject a missing prior verdict"
+  red "FAIL: verify-store-34-carry-forward-rejects-manifest carry-forward did not reject a missing prior verdict"
   red "  got: $OUT"
   errors=$((errors + 1))
 fi
@@ -920,9 +920,9 @@ cat > "$DUPMAN" <<'EOF'
 EOF
 OUT=$(python3 "$SCRIPT" merge --shard-dir "$CFSH" --draft-version 2 --revision-round 1 --manifest "$DUPMAN" --carry-forward-from "$PREV" --out "$WORK/dupman-out.json" 2>&1 || true)
 if echo "$OUT" | python3 -c "import sys,json; d=json.load(sys.stdin); assert d['success'] is False and 'duplicate citation id' in d['error']" 2>/dev/null; then
-  green "PASS: merge rejects a manifest with duplicate citation ids (#305 review)"
+  green "PASS: verify-store-35-merge-rejects-manifest-duplicate merge rejects a manifest with duplicate citation ids (#305 review)"
 else
-  red "FAIL: merge did not reject a duplicate-id manifest"
+  red "FAIL: verify-store-35-merge-rejects-manifest-duplicate merge did not reject a duplicate-id manifest"
   red "  got: $OUT"
   errors=$((errors + 1))
 fi
@@ -936,9 +936,9 @@ cat > "$PREV_DUP" <<'EOF'
 EOF
 OUT=$(python3 "$SCRIPT" merge --shard-dir "$CFSH" --draft-version 2 --revision-round 1 --manifest "$CFM" --carry-forward-from "$PREV_DUP" --out "$WORK/cf-dup.json" 2>&1 || true)
 if echo "$OUT" | python3 -c "import sys,json; d=json.load(sys.stdin); assert d['success'] is False and 'duplicate citation id' in d['error']" 2>/dev/null; then
-  green "PASS: carry-forward rejects a prior file with duplicate citation ids (#305 review)"
+  green "PASS: verify-store-36-carry-forward-rejects-prior carry-forward rejects a prior file with duplicate citation ids (#305 review)"
 else
-  red "FAIL: carry-forward did not reject a duplicate-id prior file"
+  red "FAIL: verify-store-36-carry-forward-rejects-prior carry-forward did not reject a duplicate-id prior file"
   red "  got: $OUT"
   errors=$((errors + 1))
 fi
@@ -975,9 +975,9 @@ env = json.loads('''$OUT''')
 assert env["success"] is True and env["data"]["grounding_metrics"]["grounded"] == 3, env
 PY
 then
-  green "PASS: merge aggregates grounded → grounding_metrics rate 3/4 = 0.75 (grounding L3)"
+  green "PASS: verify-store-37-merge-aggregates-grounded-grounding merge aggregates grounded → grounding_metrics rate 3/4 = 0.75 (grounding L3)"
 else
-  red "FAIL: grounding_metrics aggregation wrong"
+  red "FAIL: verify-store-37-merge-aggregates-grounded-grounding grounding_metrics aggregation wrong"
   red "  got: $OUT"
   errors=$((errors + 1))
 fi

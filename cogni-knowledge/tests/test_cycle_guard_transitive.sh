@@ -54,8 +54,10 @@ set -e
 
 errors=0
 if [ $RC -ne 1 ]; then
-  red "FAIL: expected exit 1 (cycle_detected), got $RC"
+  red "FAIL: cycle-guard-transitive-01-exit-one expected exit 1 (cycle_detected), got $RC"
   errors=$((errors + 1))
+else
+  green "PASS: cycle-guard-transitive-01-exit-one cycle-guard exits 1 when a transitive self-cycle is present"
 fi
 
 if ! echo "$OUT" | python3 -c "
@@ -70,10 +72,11 @@ assert data['direct_self_cycles'] == [], data['direct_self_cycles']
 assert data['cycle_path'] == ['project-a', 'project-b', 'project-a'], data['cycle_path']
 print('OK')
 " | grep -q OK; then
-  red "FAIL: output did not match transitive-cycle contract"
+  red "FAIL: cycle-guard-transitive-02-transitive-contract output did not match transitive-cycle contract"
   red "  got: $OUT"
   errors=$((errors + 1))
+else
+  green "PASS: cycle-guard-transitive-02-transitive-contract transitive self-cycle detected with cycle_path [project-a, project-b, project-a]"
 fi
 
 if [ $errors -gt 0 ]; then exit 1; fi
-green "PASS: transitive self-cycle detected with cycle_path [project-a, project-b, project-a]"

@@ -40,8 +40,10 @@ set -e
 
 errors=0
 if [ $RC -ne 0 ]; then
-  red "FAIL: dry-run must exit 0 even on cycle, got $RC"
+  red "FAIL: cycle-guard-dry-run-01-exit-zero dry-run must exit 0 even on cycle, got $RC"
   errors=$((errors + 1))
+else
+  green "PASS: cycle-guard-dry-run-01-exit-zero dry-run exits 0 even on a cycle (report-don't-gate)"
 fi
 
 if ! echo "$OUT" | python3 -c "
@@ -53,10 +55,11 @@ assert data['status'] == 'cycle_detected', data['status']
 assert len(data['direct_self_cycles']) > 0, 'direct_self_cycles empty'
 print('OK')
 " | grep -q OK; then
-  red "FAIL: output did not match dry-run contract"
+  red "FAIL: cycle-guard-dry-run-02-dry-run-contract output did not match dry-run contract"
   red "  got: $OUT"
   errors=$((errors + 1))
+else
+  green "PASS: cycle-guard-dry-run-02-dry-run-contract dry-run reports cycle_detected with success=true"
 fi
 
 if [ $errors -gt 0 ]; then exit 1; fi
-green "PASS: --dry-run reports cycle_detected with success=true (report-don't-gate)"

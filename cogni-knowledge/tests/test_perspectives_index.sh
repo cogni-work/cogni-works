@@ -44,11 +44,11 @@ errors=0
 
 # --- 10. python3.9 floor (no _wikilib needed) --------------------------------
 grep -q 'from __future__ import annotations' "$PERSP_SCRIPT" \
-  && green "PASS: perspectives_index.py declares __future__ annotations (py3.9 floor)" \
-  || { red "FAIL: missing __future__ annotations import"; errors=$((errors+1)); }
+  && green "PASS: perspectives-index-01-perspectives-index-py-declares perspectives_index.py declares __future__ annotations (py3.9 floor)" \
+  || { red "FAIL: perspectives-index-01-perspectives-index-py-declares missing __future__ annotations import"; errors=$((errors+1)); }
 python3 -c "import ast,sys; ast.parse(open('$PERSP_SCRIPT').read())" \
-  && green "PASS: perspectives_index.py parses cleanly (ast.parse)" \
-  || { red "FAIL: perspectives_index.py does not parse"; errors=$((errors+1)); }
+  && green "PASS: perspectives-index-02-perspectives-index-py-parses perspectives_index.py parses cleanly (ast.parse)" \
+  || { red "FAIL: perspectives-index-02-perspectives-index-py-parses perspectives_index.py does not parse"; errors=$((errors+1)); }
 
 if [ ! -f "$WSD/_wikilib.py" ]; then
   red "SKIP: cogni-wiki _wikilib not found at $WSD (render needs _wiki_lock)"
@@ -123,27 +123,27 @@ PAGE="$WIKI/wiki/perspectives.md"
 # --- 1. render creates the page, envelope changed:true -----------------------
 OUT="$(python3 "$PERSP_SCRIPT" render --wiki-root "$WIKI" --wiki-scripts-dir "$WSD")"
 echo "$OUT" | grep -q '"changed": true' \
-  && green "PASS: render reports changed:true on first render" \
-  || { red "FAIL: render did not report changed:true"; errors=$((errors+1)); }
+  && green "PASS: perspectives-index-03-render-reports-changed-true render reports changed:true on first render" \
+  || { red "FAIL: perspectives-index-03-render-reports-changed-true render did not report changed:true"; errors=$((errors+1)); }
 [ -f "$PAGE" ] \
-  && green "PASS: render created wiki/perspectives.md" \
-  || { red "FAIL: wiki/perspectives.md not created"; errors=$((errors+1)); }
+  && green "PASS: perspectives-index-04-render-created-wiki-perspectives render created wiki/perspectives.md" \
+  || { red "FAIL: perspectives-index-04-render-created-wiki-perspectives wiki/perspectives.md not created"; errors=$((errors+1)); }
 
 # --- 2. H1 + ownership marker + intro ----------------------------------------
 grep -q '^# Perspectives$' "$PAGE" \
-  && green "PASS: page carries the # Perspectives H1" \
-  || { red "FAIL: missing # Perspectives H1"; errors=$((errors+1)); }
+  && green "PASS: perspectives-index-05-page-carries-perspectives-h1 page carries the # Perspectives H1" \
+  || { red "FAIL: perspectives-index-05-page-carries-perspectives-h1 missing # Perspectives H1"; errors=$((errors+1)); }
 grep -q 'MACHINE-OWNED:PERSPECTIVES-INDEX' "$PAGE" \
-  && green "PASS: page carries the PERSPECTIVES-INDEX ownership marker" \
-  || { red "FAIL: missing PERSPECTIVES-INDEX marker"; errors=$((errors+1)); }
+  && green "PASS: perspectives-index-06-page-carries-perspectives-index page carries the PERSPECTIVES-INDEX ownership marker" \
+  || { red "FAIL: perspectives-index-06-page-carries-perspectives-index missing PERSPECTIVES-INDEX marker"; errors=$((errors+1)); }
 
 # --- 2b. secondary-view labels (R10) + overview-stub signpost (R11) -----------
 grep -q 'Other views:' "$PAGE" \
-  && green "PASS: page carries the secondary-view labels line (R10)" \
-  || { red "FAIL: missing secondary-view labels line"; errors=$((errors+1)); }
+  && green "PASS: perspectives-index-07-page-carries-secondary-view page carries the secondary-view labels line (R10)" \
+  || { red "FAIL: perspectives-index-07-page-carries-secondary-view missing secondary-view labels line"; errors=$((errors+1)); }
 grep -q '\[Recent syntheses\](overview.md)' "$PAGE" \
-  && green "PASS: page signposts the overview stub — Recent syntheses (R11)" \
-  || { red "FAIL: missing overview.md (Recent syntheses) signpost"; errors=$((errors+1)); }
+  && green "PASS: perspectives-index-08-page-signposts-overview-stub page signposts the overview stub — Recent syntheses (R11)" \
+  || { red "FAIL: perspectives-index-08-page-signposts-overview-stub missing overview.md (Recent syntheses) signpost"; errors=$((errors+1)); }
 
 # --- 3. every facet renders its heading + PERSPECTIVES-FACET span -------------
 # Five facets now (the dead `How` facet was dropped).
@@ -154,16 +154,16 @@ for pair in "Who who" "What what" "Why why" "When when" "Where where"; do
   grep -q "MACHINE-OWNED:PERSPECTIVES-FACET:${slug}:START" "$PAGE" || { facet_ok=0; red "  missing FACET span ${slug}"; }
 done
 [ "$facet_ok" -eq 1 ] \
-  && green "PASS: all five 5W1H facets render heading + PERSPECTIVES-FACET span" \
-  || { red "FAIL: a facet heading or span is missing"; errors=$((errors+1)); }
+  && green "PASS: perspectives-index-09-all-five-5w1h-facets all five 5W1H facets render heading + PERSPECTIVES-FACET span" \
+  || { red "FAIL: perspectives-index-09-all-five-5w1h-facets a facet heading or span is missing"; errors=$((errors+1)); }
 
 # --- 3b. the dead How facet no longer renders --------------------------------
 grep -q '^## How$' "$PAGE" \
-  && { red "FAIL: the dropped How facet still renders"; errors=$((errors+1)); } \
-  || green "PASS: the dead How facet no longer renders (R9)"
+  && { red "FAIL: perspectives-index-10-dead-how-facet-no-longer-renders the dropped How facet still renders"; errors=$((errors+1)); } \
+  || green "PASS: perspectives-index-10-dead-how-facet-no-longer-renders the dead How facet no longer renders (R9)"
 grep -q 'MACHINE-OWNED:PERSPECTIVES-FACET:how:START' "$PAGE" \
-  && { red "FAIL: a How PERSPECTIVES-FACET span still renders"; errors=$((errors+1)); } \
-  || green "PASS: no How PERSPECTIVES-FACET span renders (R9)"
+  && { red "FAIL: perspectives-index-11-how-perspectives-facet-span a How PERSPECTIVES-FACET span still renders"; errors=$((errors+1)); } \
+  || green "PASS: perspectives-index-11-how-perspectives-facet-span no How PERSPECTIVES-FACET span renders (R9)"
 
 # --- 4. backed facets show count-links ---------------------------------------
 grep -q '\[People (1)\](people/index.md)' "$PAGE" \
@@ -172,8 +172,8 @@ grep -q '\[People (1)\](people/index.md)' "$PAGE" \
   && grep -q '\[Sources (1)\](sources/index.md)' "$PAGE" \
   && grep -q '\[Questions (1)\](questions/index.md)' "$PAGE" \
   && grep -q '\[Syntheses (1)\](syntheses/index.md)' "$PAGE" \
-  && green "PASS: backed facets (Who/What/Why) show count-links to the sub-indexes" \
-  || { red "FAIL: a backed-facet count-link is missing/incorrect"; errors=$((errors+1)); }
+  && green "PASS: perspectives-index-12-backed-facets-who-what backed facets (Who/What/Why) show count-links to the sub-indexes" \
+  || { red "FAIL: perspectives-index-12-backed-facets-who-what a backed-facet count-link is missing/incorrect"; errors=$((errors+1)); }
 
 # --- 5. no facet renders the generic honest-empty line in this fixture --------
 # How was dropped (it was the only generic-empty emitter); When carries the
@@ -182,52 +182,52 @@ grep -q '\[People (1)\](people/index.md)' "$PAGE" \
 # "_(no pages in this facet yet)_" line renders zero times here.
 EMPTY_COUNT="$(grep -c '_(no pages in this facet yet)_' "$PAGE" || true)"
 [ "$EMPTY_COUNT" -eq 0 ] \
-  && green "PASS: no generic honest-empty line renders (How dropped; When/Where backed)" \
-  || { red "FAIL: expected 0 generic honest-empty lines, got $EMPTY_COUNT"; errors=$((errors+1)); }
+  && green "PASS: perspectives-index-13-generic-honest-empty-line no generic honest-empty line renders (How dropped; When/Where backed)" \
+  || { red "FAIL: perspectives-index-13-generic-honest-empty-line expected 0 generic honest-empty lines, got $EMPTY_COUNT"; errors=$((errors+1)); }
 
 # --- 5c. Where (v1) groups source pages by their market: frontmatter ----------
 # Where is now the last facet (How dropped), so the block runs to EOF.
 WHERE_BLOCK="$(sed -n '/^## Where$/,$p' "$PAGE")"
 echo "$WHERE_BLOCK" | grep -q 'Sources grouped by the market' \
-  && green "PASS: Where facet renders the market-grouping intro" \
-  || { red "FAIL: Where grouping intro missing"; errors=$((errors+1)); }
+  && green "PASS: perspectives-index-14-where-facet-renders-market Where facet renders the market-grouping intro" \
+  || { red "FAIL: perspectives-index-14-where-facet-renders-market Where grouping intro missing"; errors=$((errors+1)); }
 echo "$WHERE_BLOCK" | grep -qF -- '- **dach** — [1 source](sources/index.md)' \
-  && green "PASS: Where groups the src-a source under its market (dach, singular), linked to the sources sub-index" \
-  || { red "FAIL: Where 'dach' grouping row missing/incorrect"; errors=$((errors+1)); }
+  && green "PASS: perspectives-index-15-where-groups-src-source Where groups the src-a source under its market (dach, singular), linked to the sources sub-index" \
+  || { red "FAIL: perspectives-index-15-where-groups-src-source Where 'dach' grouping row missing/incorrect"; errors=$((errors+1)); }
 echo "$WHERE_BLOCK" | grep -q '_(no pages in this facet yet)_' \
-  && { red "FAIL: Where facet wrongly rendered the honest-empty page line"; errors=$((errors+1)); } \
-  || green "PASS: Where facet does not render the honest-empty page line (it has a market grouping)"
+  && { red "FAIL: perspectives-index-16-where-facet-does-not-render Where facet wrongly rendered the honest-empty page line"; errors=$((errors+1)); } \
+  || green "PASS: perspectives-index-16-where-facet-does-not-render Where facet does not render the honest-empty page line (it has a market grouping)"
 
 # --- 5b. When (v1) renders a deterministic log-derived timeline ---------------
 # The When facet derives a month-grouped timeline (newest first) from wiki/log.md.
 WHEN_BLOCK="$(sed -n '/^## When$/,/^## Where$/p' "$PAGE")"
 echo "$WHEN_BLOCK" | grep -q 'Activity timeline from the base' \
-  && green "PASS: When facet renders the timeline intro" \
-  || { red "FAIL: When timeline intro missing"; errors=$((errors+1)); }
+  && green "PASS: perspectives-index-17-when-facet-renders-timeline When facet renders the timeline intro" \
+  || { red "FAIL: perspectives-index-17-when-facet-renders-timeline When timeline intro missing"; errors=$((errors+1)); }
 echo "$WHEN_BLOCK" | grep -qF -- '- **2026-06** — [4 operations](log.md) (compose · finalize · ingest · verify)' \
-  && green "PASS: When timeline groups 2026-06 by month with sorted op counts, linked to the activity log" \
-  || { red "FAIL: 2026-06 timeline row missing/incorrect"; errors=$((errors+1)); }
+  && green "PASS: perspectives-index-18-when-timeline-groups-june-plural When timeline groups 2026-06 by month with sorted op counts, linked to the activity log" \
+  || { red "FAIL: perspectives-index-18-when-timeline-groups-june-plural 2026-06 timeline row missing/incorrect"; errors=$((errors+1)); }
 echo "$WHEN_BLOCK" | grep -qF -- '- **2026-05** — [1 operation](log.md) (setup)' \
-  && green "PASS: When timeline groups 2026-05 (singular 'operation'), linked to the activity log" \
-  || { red "FAIL: 2026-05 timeline row missing/incorrect"; errors=$((errors+1)); }
+  && green "PASS: perspectives-index-19-when-timeline-groups-may-singular When timeline groups 2026-05 (singular 'operation'), linked to the activity log" \
+  || { red "FAIL: perspectives-index-19-when-timeline-groups-may-singular 2026-05 timeline row missing/incorrect"; errors=$((errors+1)); }
 # Newest-first ordering: 2026-06 row must precede the 2026-05 row.
 echo "$WHEN_BLOCK" | grep -nE '2026-0[56]' | head -1 | grep -q '2026-06' \
-  && green "PASS: When timeline is newest-month-first" \
-  || { red "FAIL: When timeline ordering is not newest-first"; errors=$((errors+1)); }
+  && green "PASS: perspectives-index-20-when-timeline-newest-month When timeline is newest-month-first" \
+  || { red "FAIL: perspectives-index-20-when-timeline-newest-month When timeline ordering is not newest-first"; errors=$((errors+1)); }
 # The When facet does NOT render the honest-empty page line (it has a timeline).
 echo "$WHEN_BLOCK" | grep -q '_(no pages in this facet yet)_' \
-  && { red "FAIL: When facet wrongly rendered the honest-empty page line"; errors=$((errors+1)); } \
-  || green "PASS: When facet does not render the honest-empty page line"
+  && { red "FAIL: perspectives-index-21-when-facet-does-not-render When facet wrongly rendered the honest-empty page line"; errors=$((errors+1)); } \
+  || green "PASS: perspectives-index-21-when-facet-does-not-render When facet does not render the honest-empty page line"
 
 # --- 6. byte-idempotent re-render --------------------------------------------
 BEFORE="$(cat "$PAGE")"
 OUT2="$(python3 "$PERSP_SCRIPT" render --wiki-root "$WIKI" --wiki-scripts-dir "$WSD")"
 echo "$OUT2" | grep -q '"changed": false' \
-  && green "PASS: re-render on unchanged wiki reports changed:false" \
-  || { red "FAIL: re-render was not idempotent (changed != false)"; errors=$((errors+1)); }
+  && green "PASS: perspectives-index-22-re-render-unchanged-wiki re-render on unchanged wiki reports changed:false" \
+  || { red "FAIL: perspectives-index-22-re-render-unchanged-wiki re-render was not idempotent (changed != false)"; errors=$((errors+1)); }
 [ "$BEFORE" = "$(cat "$PAGE")" ] \
-  && green "PASS: re-render left the page byte-identical" \
-  || { red "FAIL: re-render mutated the page"; errors=$((errors+1)); }
+  && green "PASS: perspectives-index-23-re-render-left-page re-render left the page byte-identical" \
+  || { red "FAIL: perspectives-index-23-re-render-left-page re-render mutated the page"; errors=$((errors+1)); }
 
 # --- 7. carry-forward a narrator-edited facet lead-in ------------------------
 python3 - "$PAGE" <<'PY'
@@ -242,18 +242,18 @@ open(p, "w").write(s)
 PY
 python3 "$PERSP_SCRIPT" render --wiki-root "$WIKI" --wiki-scripts-dir "$WSD" >/dev/null
 grep -q 'Narrated Who lead-in, authored by hand.' "$PAGE" \
-  && green "PASS: a narrated PERSPECTIVES-FACET lead-in survives a re-render" \
-  || { red "FAIL: narrated facet lead-in was clobbered"; errors=$((errors+1)); }
+  && green "PASS: perspectives-index-24-narrated-perspectives-facet-lead a narrated PERSPECTIVES-FACET lead-in survives a re-render" \
+  || { red "FAIL: perspectives-index-24-narrated-perspectives-facet-lead narrated facet lead-in was clobbered"; errors=$((errors+1)); }
 
 # --- 8. human-page skip (no marker) ------------------------------------------
 printf '# Hand-authored perspectives\n\nNothing machine-owned here.\n' > "$PAGE"
 OUT3="$(python3 "$PERSP_SCRIPT" render --wiki-root "$WIKI" --wiki-scripts-dir "$WSD")"
 echo "$OUT3" | grep -q '"skipped_human_page": true' \
-  && green "PASS: a hand-authored page (no marker) is skipped_human_page" \
-  || { red "FAIL: human page not skipped"; errors=$((errors+1)); }
+  && green "PASS: perspectives-index-25-hand-authored-page-marker a hand-authored page (no marker) is skipped_human_page" \
+  || { red "FAIL: perspectives-index-25-hand-authored-page-marker human page not skipped"; errors=$((errors+1)); }
 grep -q 'Hand-authored perspectives' "$PAGE" \
-  && green "PASS: the hand-authored page was preserved, not clobbered" \
-  || { red "FAIL: human page was clobbered"; errors=$((errors+1)); }
+  && green "PASS: perspectives-index-26-hand-authored-page-preserved the hand-authored page was preserved, not clobbered" \
+  || { red "FAIL: perspectives-index-26-hand-authored-page-preserved human page was clobbered"; errors=$((errors+1)); }
 
 # --- 9. stage writes the proposed file, never touches the live page ----------
 rm -f "$PAGE"
@@ -262,11 +262,11 @@ LIVE_BEFORE="$(cat "$PAGE")"
 OUT4="$(python3 "$PERSP_SCRIPT" stage --wiki-root "$WIKI")"
 echo "$OUT4" | grep -q '"subcommand": "stage"' \
   && [ -f "$WIKI/.cogni-wiki/perspectives-proposed.md" ] \
-  && green "PASS: stage wrote .cogni-wiki/perspectives-proposed.md" \
-  || { red "FAIL: stage did not write the proposed file"; errors=$((errors+1)); }
+  && green "PASS: perspectives-index-27-stage-wrote-cogni-wiki stage wrote .cogni-wiki/perspectives-proposed.md" \
+  || { red "FAIL: perspectives-index-27-stage-wrote-cogni-wiki stage did not write the proposed file"; errors=$((errors+1)); }
 [ "$LIVE_BEFORE" = "$(cat "$PAGE")" ] \
-  && green "PASS: stage left the live page untouched" \
-  || { red "FAIL: stage mutated the live page"; errors=$((errors+1)); }
+  && green "PASS: perspectives-index-28-stage-left-live-page stage left the live page untouched" \
+  || { red "FAIL: perspectives-index-28-stage-left-live-page stage mutated the live page"; errors=$((errors+1)); }
 
 # --- 10. When (v1) honest no-timeline fallback (absent log) -------------------
 # A wiki with no log.md must render the honest fallback, never a fabricated
@@ -285,20 +285,20 @@ NOLOG_WHEN="$(sed -n '/^## When$/,/^## Where$/p' "$NOLOG/wiki/perspectives.md")"
 # R9: thin When renders an honest signpost (names why it is empty + how it fills),
 # not a bare "no pages" line.
 echo "$NOLOG_WHEN" | grep -q 'When: no activity timeline yet' \
-  && green "PASS: When facet renders the honest no-timeline signpost when log.md is absent (R9)" \
-  || { red "FAIL: missing no-timeline signpost for an absent log.md"; errors=$((errors+1)); }
+  && green "PASS: perspectives-index-29-when-facet-renders-honest When facet renders the honest no-timeline signpost when log.md is absent (R9)" \
+  || { red "FAIL: perspectives-index-29-when-facet-renders-honest missing no-timeline signpost for an absent log.md"; errors=$((errors+1)); }
 echo "$NOLOG_WHEN" | grep -q 'Activity timeline from the base' \
-  && { red "FAIL: When fabricated a timeline intro with no log.md"; errors=$((errors+1)); } \
-  || green "PASS: When does not fabricate a timeline when log.md is absent"
+  && { red "FAIL: perspectives-index-30-when-does-not-fabricate-timeline When fabricated a timeline intro with no log.md"; errors=$((errors+1)); } \
+  || green "PASS: perspectives-index-30-when-does-not-fabricate-timeline When does not fabricate a timeline when log.md is absent"
 # R9: thin Where (no market-tagged sources in this fixture) renders its own honest
 # signpost, distinct from the generic "_(no pages in this facet yet)_" line.
 NOLOG_WHERE="$(sed -n '/^## Where$/,$p' "$NOLOG/wiki/perspectives.md")"
 echo "$NOLOG_WHERE" | grep -q 'Where: no market-tagged sources yet' \
-  && green "PASS: Where facet renders the honest thin-facet signpost when no source carries a market (R9)" \
-  || { red "FAIL: missing Where thin-facet signpost"; errors=$((errors+1)); }
+  && green "PASS: perspectives-index-31-where-facet-renders-honest Where facet renders the honest thin-facet signpost when no source carries a market (R9)" \
+  || { red "FAIL: perspectives-index-31-where-facet-renders-honest missing Where thin-facet signpost"; errors=$((errors+1)); }
 echo "$NOLOG_WHERE" | grep -q '_(no pages in this facet yet)_' \
-  && { red "FAIL: Where reused the generic honest-empty line instead of its signpost"; errors=$((errors+1)); } \
-  || green "PASS: Where uses its own signpost, not the generic honest-empty line (R9)"
+  && { red "FAIL: perspectives-index-32-where-uses-own-signpost Where reused the generic honest-empty line instead of its signpost"; errors=$((errors+1)); } \
+  || green "PASS: perspectives-index-32-where-uses-own-signpost Where uses its own signpost, not the generic honest-empty line (R9)"
 rm -rf "$NOLOG" 2>/dev/null || true
 
 if [ "$errors" -eq 0 ]; then

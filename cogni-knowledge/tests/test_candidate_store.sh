@@ -30,7 +30,7 @@ SCRIPT="$PLUGIN_ROOT/scripts/candidate-store.py"
 . "$(dirname "$0")/fixtures/test_helpers.sh"
 
 if [ ! -f "$SCRIPT" ]; then
-  red "FAIL: candidate-store.py not found at $SCRIPT"
+  red "FAIL: candidate-store-00-script-present candidate-store.py not found at $SCRIPT"
   exit 1
 fi
 
@@ -53,18 +53,18 @@ assert d['data']['created'] is False, d
 assert d['data']['candidates_count'] == 0, d
 print('OK')
 " | grep -q OK; then
-  green "PASS: init creates empty candidates.json and is idempotent"
+  green "PASS: candidate-store-01-init-idempotent init creates empty candidates.json and is idempotent"
 else
-  red "FAIL: init not idempotent"
+  red "FAIL: candidate-store-01-init-idempotent init not idempotent"
   red "  got: $INIT_AGAIN"
   errors=$((errors + 1))
 fi
 
 SCHEMA=$(python3 -c "import json; print(json.load(open('$PROJ/.metadata/candidates.json'))['schema_version'])")
 if [ "$SCHEMA" = "0.1.0" ]; then
-  green "PASS: init writes schema_version 0.1.0"
+  green "PASS: candidate-store-02-schema-version init writes schema_version 0.1.0"
 else
-  red "FAIL: schema_version expected 0.1.0, got '$SCHEMA'"
+  red "FAIL: candidate-store-02-schema-version schema_version expected 0.1.0, got '$SCHEMA'"
   errors=$((errors + 1))
 fi
 
@@ -116,9 +116,9 @@ assert prios['https://example.org/gdpr-art-30'] == 2, prios
 assert prios['https://acme.io/new-source'] == 3, prios
 PY
 then
-  green "PASS: append-batch dedup, score-win, ref-union, fetch_priority assignment"
+  green "PASS: candidate-store-03-append-batch-merge append-batch dedup, score-win, ref-union, fetch_priority assignment"
 else
-  red "FAIL: dedup/merge semantics broken"
+  red "FAIL: candidate-store-03-append-batch-merge dedup/merge semantics broken"
   errors=$((errors + 1))
 fi
 
@@ -158,9 +158,9 @@ expected = {f"https://race.test/c-{i}" for i in range(20)} | {f"https://race.tes
 assert urls == expected, urls.symmetric_difference(expected)
 PY
 then
-  green "PASS: concurrent append-batch — file lock preserves both batches' content"
+  green "PASS: candidate-store-04-concurrent-lock concurrent append-batch — file lock preserves both batches' content"
 else
-  red "FAIL: concurrent append lost data"
+  red "FAIL: candidate-store-04-concurrent-lock concurrent append lost data"
   errors=$((errors + 1))
 fi
 
@@ -169,9 +169,9 @@ BAD_BATCH="$WORK/bad-not-array.json"
 echo '{"not": "an array"}' > "$BAD_BATCH"
 OUT=$(python3 "$SCRIPT" append-batch --project-path "$PROJ" --batch-file "$BAD_BATCH" 2>&1 || true)
 if echo "$OUT" | python3 -c "import sys,json; d=json.load(sys.stdin); assert d['success'] is False and 'array' in d['error'].lower()" 2>/dev/null; then
-  green "PASS: non-array batch rejected"
+  green "PASS: candidate-store-05-non-array-rejected non-array batch rejected"
 else
-  red "FAIL: non-array batch not rejected"
+  red "FAIL: candidate-store-05-non-array-rejected non-array batch not rejected"
   red "  got: $OUT"
   errors=$((errors + 1))
 fi
@@ -181,9 +181,9 @@ BAD_URL="$WORK/bad-url.json"
 echo '[{"score": 0.5, "sub_question_refs": []}]' > "$BAD_URL"
 OUT=$(python3 "$SCRIPT" append-batch --project-path "$PROJ" --batch-file "$BAD_URL" 2>&1 || true)
 if echo "$OUT" | python3 -c "import sys,json; d=json.load(sys.stdin); assert d['success'] is False and 'url' in d['error'].lower()" 2>/dev/null; then
-  green "PASS: missing-url candidate rejected"
+  green "PASS: candidate-store-06-missing-url-rejected missing-url candidate rejected"
 else
-  red "FAIL: missing-url candidate not rejected"
+  red "FAIL: candidate-store-06-missing-url-rejected missing-url candidate not rejected"
   red "  got: $OUT"
   errors=$((errors + 1))
 fi
@@ -193,9 +193,9 @@ BAD_SCORE="$WORK/bad-score.json"
 echo '[{"url": "https://x.io/y", "score": 1.5, "sub_question_refs": []}]' > "$BAD_SCORE"
 OUT=$(python3 "$SCRIPT" append-batch --project-path "$PROJ" --batch-file "$BAD_SCORE" 2>&1 || true)
 if echo "$OUT" | python3 -c "import sys,json; d=json.load(sys.stdin); assert d['success'] is False and 'score' in d['error'].lower()" 2>/dev/null; then
-  green "PASS: out-of-range score rejected"
+  green "PASS: candidate-store-07-score-range-rejected out-of-range score rejected"
 else
-  red "FAIL: out-of-range score not rejected"
+  red "FAIL: candidate-store-07-score-range-rejected out-of-range score not rejected"
   red "  got: $OUT"
   errors=$((errors + 1))
 fi
@@ -229,9 +229,9 @@ assert c['score'] == 0.8, c  # higher score wins
 assert sorted(c['sub_question_refs']) == ['sq-1', 'sq-2'], c
 PY
 then
-  green "PASS: URL normalization collapses scheme-case, trailing slash, and tracking params"
+  green "PASS: candidate-store-08-url-normalization URL normalization collapses scheme-case, trailing slash, and tracking params"
 else
-  red "FAIL: URL normalization broken"
+  red "FAIL: candidate-store-08-url-normalization URL normalization broken"
   errors=$((errors + 1))
 fi
 
@@ -252,9 +252,9 @@ import sys, json
 d = json.load(sys.stdin)
 assert d['success'] is True and d['data']['added'] == 0 and d['data']['merged'] == 0, d
 "; then
-  green "PASS: empty batch short-circuits — no rewrite, added=merged=0"
+  green "PASS: candidate-store-09-empty-batch-shortcircuit empty batch short-circuits — no rewrite, added=merged=0"
 else
-  red "FAIL: empty batch triggered a rewrite or wrong envelope"
+  red "FAIL: candidate-store-09-empty-batch-shortcircuit empty batch triggered a rewrite or wrong envelope"
   red "  before: $BEFORE_MTIME, after: $AFTER_MTIME"
   red "  got:    $EMPTY_OUT"
   errors=$((errors + 1))
@@ -305,9 +305,9 @@ assert c['fetch']['cache_key'] == 'abc123', c     # carried from the lower-score
 assert sorted(c['sub_question_refs']) == ['sq-01', 'sq-02'], c  # refs still unioned
 PY
 then
-  green "PASS: fetch sub-object — ok fetch wins a cross-SQ dedup collision against a higher-score failed fetch"
+  green "PASS: candidate-store-10-fetch-dedup-preference fetch sub-object — ok fetch wins a cross-SQ dedup collision against a higher-score failed fetch"
 else
-  red "FAIL: fetch sub-object dedup preference broken"
+  red "FAIL: candidate-store-10-fetch-dedup-preference fetch sub-object dedup preference broken"
   errors=$((errors + 1))
 fi
 

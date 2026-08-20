@@ -42,8 +42,10 @@ set -e
 
 errors=0
 if [ $RC -ne 0 ]; then
-  red "FAIL: expected exit 0 (not_applicable), got $RC"
+  red "FAIL: cycle-guard-not-applicable-01-exit-zero expected exit 0 (not_applicable), got $RC"
   errors=$((errors + 1))
+else
+  green "PASS: cycle-guard-not-applicable-01-exit-zero cycle-guard exits 0 for a non-applicable report source"
 fi
 
 if ! echo "$OUT" | python3 -c "
@@ -56,10 +58,11 @@ assert data['wiki_pages_cited'] == [], data['wiki_pages_cited']
 assert data['direct_self_cycles'] == [], data['direct_self_cycles']
 print('OK')
 " | grep -q OK; then
-  red "FAIL: output did not match not_applicable contract"
+  red "FAIL: cycle-guard-not-applicable-02-not-applicable-contract output did not match not_applicable contract"
   red "  got: $OUT"
   errors=$((errors + 1))
+else
+  green "PASS: cycle-guard-not-applicable-02-not-applicable-contract report_source=web yields status: not_applicable, no walk"
 fi
 
 if [ $errors -gt 0 ]; then exit 1; fi
-green "PASS: report_source=web yields status: not_applicable, no walk"

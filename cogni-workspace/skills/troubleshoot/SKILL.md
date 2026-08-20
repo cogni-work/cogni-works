@@ -7,7 +7,11 @@ description: >-
   "plugin error", "skill not responding", "it doesn't work", "fix my setup",
   "diagnose this issue", "why isn't X working", or mentions any plugin malfunction.
   It also triggers when the user encounters unclear errors during plugin use — even
-  without an explicit troubleshooting request.
+  without an explicit troubleshooting request. Scope is plugin-level and cross-plugin
+  faults: plugin availability, skill-file integrity, cross-plugin dependencies, and
+  progress or state files. Workspace infrastructure — env vars, themes, settings, the
+  plugin registry, and MCP servers in the session — belongs to the sibling
+  workspace-status skill; route there instead.
 allowed-tools: Read, Bash, Glob, Grep
 ---
 
@@ -21,7 +25,7 @@ themes, settings). Troubleshoot focuses on plugin-level and cross-plugin problem
 
 Read the workspace language from `.workspace-config.json` in the workspace root
 (`language` field — `"en"` or `"de"`). Present diagnostic findings, explanations,
-and fix instructions in that language (Problem → Cause → Fix stays as a pattern,
+and fix instructions in that language (Symptom → Cause → Fix stays as a pattern,
 but the content within each section uses the workspace language).
 
 If the file is missing or unreadable, detect the user's language from their message.
@@ -32,6 +36,8 @@ Keep in English regardless of language setting:
 - Status values (`OK`, `WARN`, `FAIL`)
 - Error messages, stack traces, code snippets
 - Column headers in diagnostic tables
+- The `Symptom` / `Cause` / `Fix` field labels themselves — the label stays fixed so
+  the report shape is recognisable across languages; only its content is translated
 
 ## Scope Boundary
 
@@ -57,7 +63,19 @@ When a user reports a problem:
    every time — start with the most likely cause and expand if needed.
 
 3. **Report findings clearly** — state what's wrong, why, and how to fix it. Use
-   the format: Problem → Cause → Fix.
+   the format: Symptom → Cause → Fix, one finding per block, in the same shape
+   `references/known-issues.md` uses so a catalogued fix and a fresh diagnosis read
+   identically:
+
+   > **Symptom**: `/render-html-slides` produces no output file.
+   >
+   > **Cause**: the theme named in the brief is not installed in this workspace.
+   >
+   > **Fix**: run `/pick-theme` to select an installed theme, then re-run.
+
+   Keep the three labels even when a field is short — a finding with no known cause
+   says so under **Cause** rather than dropping the label, so every report has the
+   same three anchors to scan for.
 
 ## Diagnostic Checks
 
@@ -109,11 +127,12 @@ Many plugins require others to function. Check that dependencies are installed:
 | cogni-marketing | cogni-trends, cogni-portfolio |
 | cogni-sales | cogni-portfolio, the `narrative` skill |
 | cogni-consult | cogni-knowledge (required research spine) |
-| cogni-consulting (archived) | — (archived, no new dependencies) |
 
 Verify by checking if the required plugin directories exist in the marketplace.
 
-cogni-consulting was removed (its source remains in git history); route new consulting issues to cogni-consult.
+cogni-consulting was retired (its source remains in git history). It has no
+marketplace entry, so it is absent from the table above rather than listed as a
+dependency nothing can satisfy; route new consulting issues to cogni-consult.
 
 ### 5. Stale State Detection
 
@@ -130,9 +149,10 @@ find . -maxdepth 3 -type f \( -name 'diamond-project.json' -o -name 'consulting-
 ls .claude/cogni-teacher.local.md .claude/cogni-help.local.md 2>/dev/null
 ```
 
-For a retired plugin's engagement file, suggest archiving rather than renaming —
-nothing reads either name, and cogni-consult has no import path from them; the
-forward path is to scope a fresh engagement with `/cogni-consult:consult-setup`.
+For a retired plugin's engagement file, suggest keeping it as an inert local
+record rather than renaming it — nothing reads either name, and cogni-consult has
+no import path from them; the forward path is to scope a fresh engagement with
+`/cogni-consult:consult-setup`.
 For the course-progress files, suggest deletion — nothing reads them any more.
 
 ### 6. Common Misconfigurations

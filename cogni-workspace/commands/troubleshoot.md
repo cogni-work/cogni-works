@@ -19,7 +19,7 @@ Steps:
 1. Load the cogni-workspace troubleshoot skill for diagnostic checks and known issues
 2. If a plugin name is provided, run targeted checks (availability, integrity, dependencies)
 3. If no argument, run all checks and present a summary table
-4. For each issue found, report: Problem → Cause → Fix
+4. For each issue found, report: Symptom → Cause → Fix
 
 Infrastructure-level checks (env vars, themes, settings) belong to the sibling
 workspace-status skill, not here.

@@ -32,6 +32,8 @@ insight-wave/
 
 The repo-wide documentation-drift audit belongs at `docs/audit-report.md` — that is the single home for audit output, and it is replaced wholesale by a fresh `cogni-docs` audit run rather than hand-edited. A stale header there means the audit is due to be re-run, not patched by hand. `.claude-plugin/` holds the marketplace manifest and nothing else. An older drift report once sat at `.claude-plugin/doc-audit-report.md` and was removed rather than regenerated: nothing in this repo referenced or wrote that path, `docs/audit-report.md` supersedes it, and its plugin roster predated the current marketplace by several retirements. Do not add a report back under `.claude-plugin/`.
 
+Not all of `docs/` is regenerated, and one file there is neither generated nor maintained. `docs/relicensing/vendored-license-audit.md` is a **frozen attestation**: it records the repository as of its stated audit date, so its findings are history and are deliberately not reconciled against the current tree. Do not hand-patch paths, names or counts inside it when an absorption or a relocation moves an asset it names — update the repo-root `NOTICE`, which is the live third-party attribution surface, and leave the attestation as written. The absorption-side statement of the same rule lives in `docs/contributing/plugin-absorption-slicing.md`.
+
 ## Cross-Plugin Conventions
 
 ### Script Output Format

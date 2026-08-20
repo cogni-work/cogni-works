@@ -1,5 +1,23 @@
 # Vendored / incorporated code license audit
 
+**Status:** Frozen attestation, not a maintained index. Everything below records this
+repository **as of the audit date, 2026-07-10** — the day this record was committed. Its
+findings, inventories and decisions are point-in-time history: they stand as written, and
+they are deliberately **not** reconciled where the tree has since moved on. The relicense
+this audit cleared has since happened, a repo-root `NOTICE` now exists, and the plugin
+roster has changed — none of it corrected below, because correcting a record destroys the
+one thing a record is for. Read every claim here as what was true on 2026-07-10, never as
+a description of the tree today.
+
+**Live attribution surface:** the repo-root `NOTICE` file, not this document. When an
+absorption or a relocation moves an asset named here — a vendored tree, a data file, a
+per-plugin `LICENSE` — do not hand-patch the path, name or count inside this record to
+keep the reference resolving. Repoint `NOTICE` and leave the attestation as written. Four
+asset paths were repointed inside this file during a plugin absorption on 2026-08-19; they
+stay as they are rather than being reverted, and that is the last such patch. The forward
+convention is written up in
+[../contributing/plugin-absorption-slicing.md](../contributing/plugin-absorption-slicing.md).
+
 **Purpose:** Phase 1 (audit gate) of the AGPL-3.0 → Apache-2.0 relicense roadmap
 (epic #1059). This is the blocking legal gate before the LICENSE-text swap
 (#1056): it confirms that no incorporated third-party code carries a copyleft

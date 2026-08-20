@@ -25,7 +25,7 @@ SCRIPT="$PLUGIN_ROOT/scripts/contradiction-finalize-store.py"
 . "$(dirname "$0")/fixtures/test_helpers.sh"
 
 if [ ! -f "$SCRIPT" ]; then
-  red "FAIL: contradiction-finalize-store.py not found at $SCRIPT"
+  red "FAIL: contradiction-finalize-store-00-script-present contradiction-finalize-store.py not found at $SCRIPT"
   exit 1
 fi
 
@@ -48,9 +48,9 @@ assert d["resolution_coverage"] == {"resolved": 0, "contradictions": 0, "pct": 0
 assert d["output_language"] == "en", d["output_language"]
 PY
 then
-  green "PASS: init writes an empty canonical file (schema 0.1.0, zeroed rates)"
+  green "PASS: contradiction-finalize-store-01-init-shape init writes an empty canonical file (schema 0.1.0, zeroed rates)"
 else
-  red "FAIL: init canonical file shape wrong"
+  red "FAIL: contradiction-finalize-store-01-init-shape init canonical file shape wrong"
   errors=$((errors + 1))
 fi
 
@@ -88,9 +88,9 @@ assert s["synthesis_slug"] == "eu-ai-act-classification", s
 assert s["unresolved_high"] == 0 and s["clean"] is True, s
 PY
 then
-  green "PASS: record marks a resolved-high synthesis clean (pct=100, coverage=1/1)"
+  green "PASS: contradiction-finalize-store-02-record-clean-synthesis record marks a resolved-high synthesis clean (pct=100, coverage=1/1)"
 else
-  red "FAIL: record clean-synthesis shape wrong"
+  red "FAIL: contradiction-finalize-store-02-record-clean-synthesis record clean-synthesis shape wrong"
   errors=$((errors + 1))
 fi
 
@@ -124,9 +124,9 @@ rc = d["resolution_coverage"]
 assert rc["contradictions"] == 2 and rc["resolved"] == 0, rc
 PY
 then
-  green "PASS: record marks an unresolved-high synthesis not-clean (pct=0); medium ignored for cleanliness"
+  green "PASS: contradiction-finalize-store-03-record-unresolved-high record marks an unresolved-high synthesis not-clean (pct=0); medium ignored for cleanliness"
 else
-  red "FAIL: record unresolved-high shape wrong"
+  red "FAIL: contradiction-finalize-store-03-record-unresolved-high record unresolved-high shape wrong"
   errors=$((errors + 1))
 fi
 
@@ -151,9 +151,9 @@ assert d["syntheses"][0]["draft_version"] == 2, d["syntheses"]   # latest, not v
 assert d["consistency_rate"]["pct"] == 100.0, d["consistency_rate"]  # v2 has no findings -> clean
 PY
 then
-  green "PASS: record reads the latest contradictor-vN.json (v2 over v1)"
+  green "PASS: contradiction-finalize-store-04-latest-contradictor-version record reads the latest contradictor-vN.json (v2 over v1)"
 else
-  red "FAIL: record did not select the latest contradictor version"
+  red "FAIL: contradiction-finalize-store-04-latest-contradictor-version record did not select the latest contradictor version"
   errors=$((errors + 1))
 fi
 
@@ -169,13 +169,13 @@ assert d["consistency_rate"] == {"syntheses_total": 0, "syntheses_clean": 0, "pc
 assert d["syntheses"] == [], d["syntheses"]
 PY
   then
-    green "PASS: record is fail-soft on a missing contradictor (zeroed artifact, exit 0)"
+    green "PASS: contradiction-finalize-store-05-record-fail-soft record is fail-soft on a missing contradictor (zeroed artifact, exit 0)"
   else
-    red "FAIL: fail-soft artifact shape wrong"
+    red "FAIL: contradiction-finalize-store-05-record-fail-soft fail-soft artifact shape wrong"
     errors=$((errors + 1))
   fi
 else
-  red "FAIL: record exited non-zero on a missing contradictor (must be fail-soft)"
+  red "FAIL: contradiction-finalize-store-05-record-fail-soft record exited non-zero on a missing contradictor (must be fail-soft)"
   errors=$((errors + 1))
 fi
 
@@ -185,9 +185,9 @@ H1=$(python3 -c "import hashlib,sys;print(hashlib.sha256(open(sys.argv[1],'rb').
 python3 "$SCRIPT" record --project-path "$PROJ" --out "$OUT2" --output-language en >/dev/null
 H2=$(python3 -c "import hashlib,sys;print(hashlib.sha256(open(sys.argv[1],'rb').read()).hexdigest())" "$OUT2")
 if [ "$H1" = "$H2" ]; then
-  green "PASS: record is idempotent (byte-identical re-record)"
+  green "PASS: contradiction-finalize-store-06-record-idempotent record is idempotent (byte-identical re-record)"
 else
-  red "FAIL: record is not idempotent"
+  red "FAIL: contradiction-finalize-store-06-record-idempotent record is not idempotent"
   errors=$((errors + 1))
 fi
 

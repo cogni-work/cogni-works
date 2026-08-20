@@ -45,11 +45,11 @@ WSD="$PLUGIN_ROOT/scripts/vendor/cogni-wiki/skills/wiki-ingest/scripts"
 . "$(dirname "$0")/fixtures/test_helpers.sh"
 
 if [ ! -f "$SCRIPT" ]; then
-  red "FAIL: sub_index.py not found at $SCRIPT"
+  red "FAIL: sub-index-00-script-present sub_index.py not found at $SCRIPT"
   exit 1
 fi
 if [ ! -d "$WSD" ]; then
-  red "FAIL: cogni-wiki wiki-ingest scripts not found at $WSD (needed for _wiki_lock)"
+  red "FAIL: sub-index-00-wiki-scripts-present cogni-wiki wiki-ingest scripts not found at $WSD (needed for _wiki_lock)"
   exit 1
 fi
 
@@ -189,37 +189,37 @@ for T in $TYPES; do
 
   OUT=$(python3 "$SCRIPT" render --type "$T" --wiki-root "$WIKI" --wiki-scripts-dir "$WSD")
   if [ "$(echo "$OUT" | field '["success"]')" = "True" ] && [ -f "$IDX" ]; then
-    green "PASS[$T]: render creates wiki/$T/index.md"
+    green "PASS: sub-index-01-render-creates-wiki-index-$T render creates wiki/$T/index.md"
   else
-    red "FAIL[$T]: render did not create the index"; echo "$OUT"; errors=$((errors+1))
+    red "FAIL: sub-index-01-render-creates-wiki-index-$T render did not create the index"; echo "$OUT"; errors=$((errors+1))
   fi
   [ "$(echo "$OUT" | field '["data"]["changed"]')" = "True" ] \
-    && green "PASS[$T]: first render reports changed:true" \
-    || { red "FAIL[$T]: first render changed != true"; errors=$((errors+1)); }
+    && green "PASS: sub-index-02-first-render-reports-changed-$T first render reports changed:true" \
+    || { red "FAIL: sub-index-02-first-render-reports-changed-$T first render changed != true"; errors=$((errors+1)); }
 
-  assert_grep "MACHINE-OWNED:$U-INDEX" "$IDX" "[$T] page ownership marker"
+  assert_grep "MACHINE-OWNED:$U-INDEX" "$IDX" "sub-index-03-page-ownership-marker-$T [$T] page ownership marker"
   [ "$(bullet_section "$THEMED" "$IDX")" = "Regulatory Scope" ] \
-    && green "PASS[$T]: themed page -> Regulatory Scope" \
-    || { red "FAIL[$T]: $THEMED not under Regulatory Scope"; errors=$((errors+1)); }
+    && green "PASS: sub-index-04-themed-page-regulatory-scope-$T themed page -> Regulatory Scope" \
+    || { red "FAIL: sub-index-04-themed-page-regulatory-scope-$T $THEMED not under Regulatory Scope"; errors=$((errors+1)); }
   [ "$(bullet_section "$LOOSE" "$IDX")" = "Uncategorized" ] \
-    && green "PASS[$T]: loose page -> Uncategorized fallback" \
-    || { red "FAIL[$T]: $LOOSE not under Uncategorized"; errors=$((errors+1)); }
-  assert_grep "\[\[$THEMED\]\]" "$IDX" "[$T] themed bullet has [[slug]] wikilink"
+    && green "PASS: sub-index-05-loose-page-uncategorized-fallback-$T loose page -> Uncategorized fallback" \
+    || { red "FAIL: sub-index-05-loose-page-uncategorized-fallback-$T $LOOSE not under Uncategorized"; errors=$((errors+1)); }
+  assert_grep "\[\[$THEMED\]\]" "$IDX" "sub-index-06-themed-bullet-has-slug-$T [$T] themed bullet has [[slug]] wikilink"
   assert_grep "MACHINE-OWNED:$U-LEADIN:regulatory-scope:START" "$IDX" \
-    "[$T] Regulatory Scope lead-in sentinel span present"
+    "sub-index-07-regulatory-scope-lead-sentinel-$T [$T] Regulatory Scope lead-in sentinel span present"
   assert_grep "This theme groups the $T below" "$IDX" \
-    "[$T] fresh render uses the deterministic lead-in fallback"
+    "sub-index-08-fresh-render-uses-deterministic-$T [$T] fresh render uses the deterministic lead-in fallback"
 
   # BYTE-IDEMPOTENT re-render
   cp "$IDX" "$WORK/$T.before"
   OUT=$(python3 "$SCRIPT" render --type "$T" --wiki-root "$WIKI" --wiki-scripts-dir "$WSD")
   [ "$(echo "$OUT" | field '["data"]["changed"]')" = "False" ] \
-    && green "PASS[$T]: unchanged re-render reports changed:false" \
-    || { red "FAIL[$T]: idempotent re-render changed != false"; errors=$((errors+1)); }
+    && green "PASS: sub-index-09-unchanged-re-render-reports-$T unchanged re-render reports changed:false" \
+    || { red "FAIL: sub-index-09-unchanged-re-render-reports-$T idempotent re-render changed != false"; errors=$((errors+1)); }
   if cmp -s "$WORK/$T.before" "$IDX"; then
-    green "PASS[$T]: re-render is byte-identical (no stamp churn)"
+    green "PASS: sub-index-10-re-render-byte-identical-$T re-render is byte-identical (no stamp churn)"
   else
-    red "FAIL[$T]: re-render mutated the page"; errors=$((errors+1))
+    red "FAIL: sub-index-10-re-render-byte-identical-$T re-render mutated the page"; errors=$((errors+1))
   fi
 
   # stage (lock-free) writes the proposal, never touches the live page.
@@ -231,11 +231,11 @@ for T in $TYPES; do
   OUT=$(python3 "$SCRIPT" stage --type "$T" --wiki-root "$SWIKI")
   STAGED="$SWIKI/.cogni-wiki/$T-index-proposed.md"
   [ "$(echo "$OUT" | field '["success"]')" = "True" ] && [ -f "$STAGED" ] \
-    && green "PASS[$T]: stage writes the proposed page" \
-    || { red "FAIL[$T]: stage did not write the proposal"; echo "$OUT"; errors=$((errors+1)); }
+    && green "PASS: sub-index-11-stage-writes-proposed-page-$T stage writes the proposed page" \
+    || { red "FAIL: sub-index-11-stage-writes-proposed-page-$T stage did not write the proposal"; echo "$OUT"; errors=$((errors+1)); }
   [ ! -f "$SWIKI/wiki/$T/index.md" ] \
-    && green "PASS[$T]: stage does not touch the live page" \
-    || { red "FAIL[$T]: stage wrote the live page"; errors=$((errors+1)); }
+    && green "PASS: sub-index-12-stage-does-not-touch-live-$T stage does not touch the live page" \
+    || { red "FAIL: sub-index-12-stage-does-not-touch-live-$T stage wrote the live page"; errors=$((errors+1)); }
 done
 
 # --- 7. CARRY-FORWARD (sources type) -----------------------------------------
@@ -253,7 +253,7 @@ open(p, "w", encoding="utf-8").write(t)
 PY
 OUT=$(python3 "$SCRIPT" render --type sources --wiki-root "$WIKI" --wiki-scripts-dir "$WSD")
 assert_grep 'Authored framing: the primary sources' "$SIDX" \
-  "sources: authored lead-in carried forward across re-render (no clobber)"
+  "sub-index-13-sources-authored-lead-carried sources: authored lead-in carried forward across re-render (no clobber)"
 
 # --- 8. HUMAN-PAGE skip (questions type) -------------------------------------
 HWIKI="$WORK/human-wiki"
@@ -266,12 +266,12 @@ printf '# My hand-written question index\n\nNothing machine-owned here.\n' \
 cp "$HWIKI/wiki/questions/index.md" "$WORK/human.before"
 OUT=$(python3 "$SCRIPT" render --type questions --wiki-root "$HWIKI" --wiki-scripts-dir "$WSD")
 [ "$(echo "$OUT" | field '["data"]["skipped_human_page"]')" = "True" ] \
-  && green "PASS: human-authored questions index skipped (skipped_human_page)" \
-  || { red "FAIL: human page not skipped"; echo "$OUT"; errors=$((errors+1)); }
+  && green "PASS: sub-index-14-human-authored-questions-index human-authored questions index skipped (skipped_human_page)" \
+  || { red "FAIL: sub-index-14-human-authored-questions-index human page not skipped"; echo "$OUT"; errors=$((errors+1)); }
 if cmp -s "$WORK/human.before" "$HWIKI/wiki/questions/index.md"; then
-  green "PASS: human page left byte-untouched"
+  green "PASS: sub-index-15-human-page-left-byte human page left byte-untouched"
 else
-  red "FAIL: human page was modified"; errors=$((errors+1))
+  red "FAIL: sub-index-15-human-page-left-byte human page was modified"; errors=$((errors+1))
 fi
 
 # --- 9. FRONTMATTER MEMBERSHIP: curated root with NO per-page bullets ---------
@@ -322,11 +322,11 @@ EOF
 python3 "$SCRIPT" render --type sources  --wiki-root "$FMWIKI" --wiki-scripts-dir "$WSD" >/dev/null
 python3 "$SCRIPT" render --type concepts --wiki-root "$FMWIKI" --wiki-scripts-dir "$WSD" >/dev/null
 [ "$(bullet_section src-fm "$FMWIKI/wiki/sources/index.md")" = "Regulatory Scope" ] \
-  && green "PASS: source resolves theme from frontmatter (no root bullet)" \
-  || { red "FAIL: src-fm not under Regulatory Scope via frontmatter"; errors=$((errors+1)); }
+  && green "PASS: sub-index-16-source-resolves-theme-from source resolves theme from frontmatter (no root bullet)" \
+  || { red "FAIL: sub-index-16-source-resolves-theme-from src-fm not under Regulatory Scope via frontmatter"; errors=$((errors+1)); }
 [ "$(bullet_section con-fm "$FMWIKI/wiki/concepts/index.md")" = "Regulatory Scope" ] \
-  && green "PASS: distilled page resolves theme transitively via frontmatter source map" \
-  || { red "FAIL: con-fm not under Regulatory Scope via backing-source frontmatter"; errors=$((errors+1)); }
+  && green "PASS: sub-index-17-distilled-page-resolves-theme distilled page resolves theme transitively via frontmatter source map" \
+  || { red "FAIL: sub-index-17-distilled-page-resolves-theme con-fm not under Regulatory Scope via backing-source frontmatter"; errors=$((errors+1)); }
 
 # --- 9b. A1 false-filtering fix (#933): theme-label whitespace is normalized ---
 # A source whose theme_label carries a double internal space + trailing whitespace
@@ -350,19 +350,19 @@ python3 "$SCRIPT" render --type concepts --wiki-root "$FMWIKI" --wiki-scripts-di
 } > "$FMWIKI/wiki/sources/src-drift.md"
 python3 "$SCRIPT" render --type sources --wiki-root "$FMWIKI" --wiki-scripts-dir "$WSD" >/dev/null
 [ "$(bullet_section src-drift "$FMWIKI/wiki/sources/index.md")" = "AI Liability" ] \
-  && green "PASS: double-space theme_label collapsed to single-space heading (#933)" \
-  || { red "FAIL: src-drift heading not collapsed to 'AI Liability' (A1 drift)"; errors=$((errors+1)); }
+  && green "PASS: sub-index-18-double-space-theme-label double-space theme_label collapsed to single-space heading (#933)" \
+  || { red "FAIL: sub-index-18-double-space-theme-label src-drift heading not collapsed to 'AI Liability' (A1 drift)"; errors=$((errors+1)); }
 if grep -q '^## AI  Liability' "$FMWIKI/wiki/sources/index.md"; then
-  red "FAIL: sub-index heading kept the double space (the A1 drift, #933)"; errors=$((errors+1))
+  red "FAIL: sub-index-19-heading-does-not-keep-double-space sub-index heading kept the double space (the A1 drift, #933)"; errors=$((errors+1))
 else
-  green "PASS: sub-index heading does NOT keep the double space (#933)"
+  green "PASS: sub-index-19-heading-does-not-keep-double-space sub-index heading does NOT keep the double space (#933)"
 fi
 
 # --- 10. unknown type is a clean fail-soft error -----------------------------
 if python3 "$SCRIPT" stage --type bogus --wiki-root "$WIKI" >/dev/null 2>&1; then
-  red "FAIL: unknown --type did not error"; errors=$((errors+1))
+  red "FAIL: sub-index-20-unknown-type-rejected-argparse unknown --type did not error"; errors=$((errors+1))
 else
-  green "PASS: unknown --type rejected (argparse choices guard)"
+  green "PASS: sub-index-20-unknown-type-rejected-argparse unknown --type rejected (argparse choices guard)"
 fi
 
 # --- 10b. R6 instance-free legibility (the three distilled sub-indexes) -------
@@ -376,11 +376,11 @@ for T in concepts entities syntheses; do
     entities)  DEF="An entity is a named organization" ;;
     syntheses) DEF="A synthesis is a composed, verified report" ;;
   esac
-  assert_grep "$DEF" "$IDX" "[$T] renders an instance-free type-definition preamble"
+  assert_grep "$DEF" "$IDX" "sub-index-21-renders-instance-free-type-$T [$T] renders an instance-free type-definition preamble"
   DEFLINE=$(grep -F "$DEF" "$IDX" | head -1)
   case "$DEFLINE" in
-    *'[['*) red "FAIL: [$T] definition preamble carries a [[wikilink]] (not instance-free)"; errors=$((errors+1)) ;;
-    *)      green "PASS: [$T] definition preamble is instance-free (no [[wikilink]])" ;;
+    *'[['*) red "FAIL: sub-index-22-definition-preamble-instance-free-$T [$T] definition preamble carries a [[wikilink]] (not instance-free)"; errors=$((errors+1)) ;;
+    *)      green "PASS: sub-index-22-definition-preamble-instance-free-$T [$T] definition preamble is instance-free (no [[wikilink]])" ;;
   esac
 done
 
@@ -396,18 +396,18 @@ for T in $TYPES; do
     sources|questions)        STAGE="ingest" ;;
     syntheses)                STAGE="compose" ;;
   esac
-  assert_grep "stage: $STAGE" "$IDX" "[$T] population cue shows stage: $STAGE"
-  assert_grep "listed alphabetically by slug" "$IDX" "[$T] population cue shows the order flag"
-  assert_grep "2 pages · 2 themes" "$IDX" "[$T] population cue reflects the actual page/theme counts"
+  assert_grep "stage: $STAGE" "$IDX" "sub-index-23-population-cue-shows-stage-$T [$T] population cue shows stage: $STAGE"
+  assert_grep "listed alphabetically by slug" "$IDX" "sub-index-24-population-cue-shows-order-$T [$T] population cue shows the order flag"
+  assert_grep "2 pages · 2 themes" "$IDX" "sub-index-25-population-cue-reflects-actual-$T [$T] population cue reflects the actual page/theme counts"
 done
 
 # --- 11. python3.9 floor -----------------------------------------------------
 assert_grep 'from __future__ import annotations' "$SCRIPT" \
-  "sub_index.py carries the py3.9 future-annotations import"
+  "sub-index-26-sub-index-py-carries sub_index.py carries the py3.9 future-annotations import"
 if python3 -c "import ast,sys; ast.parse(open(sys.argv[1],encoding='utf-8').read())" "$SCRIPT"; then
-  green "PASS: sub_index.py parses cleanly (ast.parse)"
+  green "PASS: sub-index-27-sub-index-py-parses sub_index.py parses cleanly (ast.parse)"
 else
-  red "FAIL: sub_index.py has a syntax error"; errors=$((errors+1))
+  red "FAIL: sub-index-27-sub-index-py-parses sub_index.py has a syntax error"; errors=$((errors+1))
 fi
 
 # --- summary -----------------------------------------------------------------

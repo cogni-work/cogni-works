@@ -43,11 +43,11 @@ WSD="$PLUGIN_ROOT/scripts/vendor/cogni-wiki/skills/wiki-ingest/scripts"
 . "$(dirname "$0")/fixtures/test_helpers.sh"
 
 if [ ! -f "$SCRIPT" ]; then
-  red "FAIL: concepts_index.py not found at $SCRIPT"
+  red "FAIL: concepts-index-00-script-present concepts_index.py not found at $SCRIPT"
   exit 1
 fi
 if [ ! -d "$WSD" ]; then
-  red "FAIL: cogni-wiki wiki-ingest scripts not found at $WSD (needed for _wiki_lock)"
+  red "FAIL: concepts-index-00-wiki-scripts-present cogni-wiki wiki-ingest scripts not found at $WSD (needed for _wiki_lock)"
   exit 1
 fi
 
@@ -131,41 +131,41 @@ IDX="$WIKI/wiki/concepts/index.md"
 # --- 1. render creates the page ----------------------------------------------
 OUT=$(python3 "$SCRIPT" render --wiki-root "$WIKI" --wiki-scripts-dir "$WSD")
 if [ "$(echo "$OUT" | field '["success"]')" = "True" ] && [ -f "$IDX" ]; then
-  green "PASS: render creates wiki/concepts/index.md"
+  green "PASS: concepts-index-01-render-creates-wiki-concepts render creates wiki/concepts/index.md"
 else
-  red "FAIL: render did not create the index"; echo "$OUT"; errors=$((errors+1))
+  red "FAIL: concepts-index-01-render-creates-wiki-concepts render did not create the index"; echo "$OUT"; errors=$((errors+1))
 fi
 [ "$(echo "$OUT" | field '["data"]["changed"]')" = "True" ] \
-  && green "PASS: first render reports changed:true" \
-  || { red "FAIL: first render changed != true"; errors=$((errors+1)); }
-assert_grep '^# Concepts$' "$IDX" "page H1 '# Concepts'"
-assert_grep 'MACHINE-OWNED:CONCEPTS-INDEX' "$IDX" "page ownership marker"
-assert_grep 'Auto-generated concept map' "$IDX" "page intro line"
+  && green "PASS: concepts-index-02-first-render-reports-changed first render reports changed:true" \
+  || { red "FAIL: concepts-index-02-first-render-reports-changed first render changed != true"; errors=$((errors+1)); }
+assert_grep '^# Concepts$' "$IDX" "concepts-index-03-page-h1-concepts page H1 '# Concepts'"
+assert_grep 'MACHINE-OWNED:CONCEPTS-INDEX' "$IDX" "concepts-index-04-page-ownership-marker page ownership marker"
+assert_grep 'Auto-generated concept map' "$IDX" "concepts-index-05-page-intro-line page intro line"
 
 # --- 2. theme grouping (wiki-resident derivation) ----------------------------
 [ "$(bullet_section data-protection "$IDX")" = "Regulatory Scope" ] \
-  && green "PASS: unanimous concept -> Regulatory Scope" \
-  || { red "FAIL: data-protection not under Regulatory Scope"; errors=$((errors+1)); }
+  && green "PASS: concepts-index-06-unanimous-concept-regulatory-scope unanimous concept -> Regulatory Scope" \
+  || { red "FAIL: concepts-index-06-unanimous-concept-regulatory-scope data-protection not under Regulatory Scope"; errors=$((errors+1)); }
 [ "$(bullet_section penalties "$IDX")" = "Enforcement" ] \
-  && green "PASS: single-source concept -> Enforcement" \
-  || { red "FAIL: penalties not under Enforcement"; errors=$((errors+1)); }
+  && green "PASS: concepts-index-07-single-source-concept-enforcement single-source concept -> Enforcement" \
+  || { red "FAIL: concepts-index-07-single-source-concept-enforcement penalties not under Enforcement"; errors=$((errors+1)); }
 [ "$(bullet_section scope-vs-enforcement "$IDX")" = "Regulatory Scope" ] \
-  && green "PASS: mixed backing set -> MAJORITY (Regulatory Scope)" \
-  || { red "FAIL: majority theme resolution wrong"; errors=$((errors+1)); }
+  && green "PASS: concepts-index-08-mixed-backing-set-majority mixed backing set -> MAJORITY (Regulatory Scope)" \
+  || { red "FAIL: concepts-index-08-mixed-backing-set-majority majority theme resolution wrong"; errors=$((errors+1)); }
 [ "$(bullet_section loose-concept "$IDX")" = "Uncategorized" ] \
-  && green "PASS: no-resolvable-theme concept -> Uncategorized fallback" \
-  || { red "FAIL: loose-concept not under Uncategorized"; errors=$((errors+1)); }
+  && green "PASS: concepts-index-09-no-resolvable-theme-uncategorized no-resolvable-theme concept -> Uncategorized fallback" \
+  || { red "FAIL: concepts-index-09-no-resolvable-theme-uncategorized loose-concept not under Uncategorized"; errors=$((errors+1)); }
 
 # --- 3. summary + wikilink bullet --------------------------------------------
 assert_grep 'How personal data is protected under the regime. \[\[data-protection\]\]' \
-  "$IDX" "concept bullet renders summary + [[slug]] link"
-assert_grep '\[\[penalties\]\]' "$IDX" "penalties bullet has [[slug]] wikilink"
+  "$IDX" "concepts-index-10-concept-bullet-renders-summary concept bullet renders summary + [[slug]] link"
+assert_grep '\[\[penalties\]\]' "$IDX" "concepts-index-11-penalties-bullet-has-slug penalties bullet has [[slug]] wikilink"
 
 # --- 4. lead-in sentinel spans, placeholder on a fresh render ----------------
 assert_grep 'MACHINE-OWNED:CONCEPTS-LEADIN:regulatory-scope:START' \
-  "$IDX" "Regulatory Scope lead-in sentinel span present"
+  "$IDX" "concepts-index-12-regulatory-scope-lead-sentinel Regulatory Scope lead-in sentinel span present"
 assert_grep 'This theme groups the concepts below' \
-  "$IDX" "fresh render uses the deterministic lead-in fallback"
+  "$IDX" "concepts-index-13-fresh-render-uses-deterministic fresh render uses the deterministic lead-in fallback"
 
 # --- 5. CARRY-FORWARD: a narrator-authored lead-in survives a re-render -------
 python3 - "$IDX" "$SCRIPTS_DIR" <<'PY'
@@ -181,21 +181,21 @@ open(p, "w", encoding="utf-8").write(t)
 PY
 OUT=$(python3 "$SCRIPT" render --wiki-root "$WIKI" --wiki-scripts-dir "$WSD")
 assert_grep 'Authored framing: the legal boundaries' \
-  "$IDX" "authored lead-in carried forward across re-render (no clobber)"
+  "$IDX" "concepts-index-14-authored-lead-carried-forward authored lead-in carried forward across re-render (no clobber)"
 # The untouched Enforcement theme still shows the deterministic fallback.
 assert_grep 'This theme groups the concepts below' \
-  "$IDX" "untouched theme keeps the deterministic fallback after carry-forward"
+  "$IDX" "concepts-index-15-untouched-theme-keeps-deterministic untouched theme keeps the deterministic fallback after carry-forward"
 
 # --- 6. BYTE-IDEMPOTENT re-render --------------------------------------------
 cp "$IDX" "$WORK/idx.before"
 OUT=$(python3 "$SCRIPT" render --wiki-root "$WIKI" --wiki-scripts-dir "$WSD")
 [ "$(echo "$OUT" | field '["data"]["changed"]')" = "False" ] \
-  && green "PASS: unchanged re-render reports changed:false" \
-  || { red "FAIL: idempotent re-render changed != false"; errors=$((errors+1)); }
+  && green "PASS: concepts-index-16-unchanged-re-render-reports unchanged re-render reports changed:false" \
+  || { red "FAIL: concepts-index-16-unchanged-re-render-reports idempotent re-render changed != false"; errors=$((errors+1)); }
 if cmp -s "$WORK/idx.before" "$IDX"; then
-  green "PASS: re-render is byte-identical (no stamp churn)"
+  green "PASS: concepts-index-17-re-render-byte-identical re-render is byte-identical (no stamp churn)"
 else
-  red "FAIL: re-render mutated the page"; errors=$((errors+1))
+  red "FAIL: concepts-index-17-re-render-byte-identical re-render mutated the page"; errors=$((errors+1))
 fi
 
 # --- 7. HUMAN-PAGE skip ------------------------------------------------------
@@ -209,12 +209,12 @@ printf '# My hand-written concept map\n\nNothing machine-owned here.\n' \
 cp "$HWIKI/wiki/concepts/index.md" "$WORK/human.before"
 OUT=$(python3 "$SCRIPT" render --wiki-root "$HWIKI" --wiki-scripts-dir "$WSD")
 [ "$(echo "$OUT" | field '["data"]["skipped_human_page"]')" = "True" ] \
-  && green "PASS: human-authored index skipped (skipped_human_page)" \
-  || { red "FAIL: human page not skipped"; echo "$OUT"; errors=$((errors+1)); }
+  && green "PASS: concepts-index-18-human-authored-index-skipped human-authored index skipped (skipped_human_page)" \
+  || { red "FAIL: concepts-index-18-human-authored-index-skipped human page not skipped"; echo "$OUT"; errors=$((errors+1)); }
 if cmp -s "$WORK/human.before" "$HWIKI/wiki/concepts/index.md"; then
-  green "PASS: human page left byte-untouched"
+  green "PASS: concepts-index-19-human-page-left-byte human page left byte-untouched"
 else
-  red "FAIL: human page was modified"; errors=$((errors+1))
+  red "FAIL: concepts-index-19-human-page-left-byte human page was modified"; errors=$((errors+1))
 fi
 
 # --- 8. stage subcommand (lock-free) -----------------------------------------
@@ -226,22 +226,22 @@ cp "$WIKI/wiki/concepts/penalties.md" "$SWIKI/wiki/concepts/penalties.md"
 OUT=$(python3 "$SCRIPT" stage --wiki-root "$SWIKI")
 STAGED="$SWIKI/.cogni-wiki/concepts-index-proposed.md"
 [ "$(echo "$OUT" | field '["success"]')" = "True" ] && [ -f "$STAGED" ] \
-  && green "PASS: stage writes the proposed page" \
-  || { red "FAIL: stage did not write the proposal"; echo "$OUT"; errors=$((errors+1)); }
+  && green "PASS: concepts-index-20-stage-writes-proposed-page stage writes the proposed page" \
+  || { red "FAIL: concepts-index-20-stage-writes-proposed-page stage did not write the proposal"; echo "$OUT"; errors=$((errors+1)); }
 [ "$(echo "$OUT" | field '["data"]["would_change"]')" = "True" ] \
-  && green "PASS: stage reports would_change on a missing live page" \
-  || { red "FAIL: stage would_change != true"; errors=$((errors+1)); }
+  && green "PASS: concepts-index-21-stage-reports-would-change stage reports would_change on a missing live page" \
+  || { red "FAIL: concepts-index-21-stage-reports-would-change stage would_change != true"; errors=$((errors+1)); }
 [ ! -f "$SWIKI/wiki/concepts/index.md" ] \
-  && green "PASS: stage does not touch the live page" \
-  || { red "FAIL: stage wrote the live page"; errors=$((errors+1)); }
+  && green "PASS: concepts-index-22-stage-does-not-touch-live stage does not touch the live page" \
+  || { red "FAIL: concepts-index-22-stage-does-not-touch-live stage wrote the live page"; errors=$((errors+1)); }
 
 # --- 9. python3.9 floor ------------------------------------------------------
 assert_grep 'from __future__ import annotations' "$SCRIPT" \
-  "script carries the py3.9 future-annotations import"
+  "concepts-index-23-script-carries-py3-9 script carries the py3.9 future-annotations import"
 if python3 -c "import ast,sys; ast.parse(open(sys.argv[1],encoding='utf-8').read())" "$SCRIPT"; then
-  green "PASS: concepts_index.py parses cleanly (ast.parse)"
+  green "PASS: concepts-index-24-concepts-index-py-parses concepts_index.py parses cleanly (ast.parse)"
 else
-  red "FAIL: concepts_index.py has a syntax error"; errors=$((errors+1))
+  red "FAIL: concepts-index-24-concepts-index-py-parses concepts_index.py has a syntax error"; errors=$((errors+1))
 fi
 
 # --- summary -----------------------------------------------------------------

@@ -38,11 +38,11 @@ WSD="$PLUGIN_ROOT/scripts/vendor/cogni-wiki/skills/wiki-ingest/scripts"
 . "$(dirname "$0")/fixtures/test_helpers.sh"
 
 if [ ! -f "$DRIVER" ]; then
-  red "FAIL: backfill_concepts_index.py not found at $DRIVER"
+  red "FAIL: backfill-concepts-index-00-driver-present backfill_concepts_index.py not found at $DRIVER"
   exit 1
 fi
 if [ ! -d "$WSD" ]; then
-  red "FAIL: cogni-wiki wiki-ingest scripts not found at $WSD (needed for _wiki_lock)"
+  red "FAIL: backfill-concepts-index-00-wiki-scripts-present cogni-wiki wiki-ingest scripts not found at $WSD (needed for _wiki_lock)"
   exit 1
 fi
 
@@ -95,42 +95,42 @@ mk_concept "$WIKI" penalties "Penalties" \
 IDX="$WIKI/wiki/concepts/index.md"
 
 # --- 1. RENDER-CREATES: backfill an already-finalized base --------------------
-[ ! -f "$IDX" ] || { red "FAIL: precondition — index.md already exists"; errors=$((errors+1)); }
+[ ! -f "$IDX" ] || { red "FAIL: backfill-concepts-index-00-index-absent precondition — index.md already exists"; errors=$((errors+1)); }
 OUT=$(python3 "$DRIVER" --wiki-root "$WIKI" --wiki-scripts-dir "$WSD")
 if [ "$(echo "$OUT" | field '["success"]')" = "True" ] && [ -f "$IDX" ]; then
-  green "PASS: backfill creates wiki/concepts/index.md on a base with no prior outline"
+  green "PASS: backfill-concepts-index-01-backfill-creates-wiki-concepts backfill creates wiki/concepts/index.md on a base with no prior outline"
 else
-  red "FAIL: backfill did not create the index"; echo "$OUT"; errors=$((errors+1))
+  red "FAIL: backfill-concepts-index-01-backfill-creates-wiki-concepts backfill did not create the index"; echo "$OUT"; errors=$((errors+1))
 fi
 [ "$(echo "$OUT" | field '["data"]["action"]')" = "rendered" ] \
-  && green "PASS: first backfill reports action:rendered" \
-  || { red "FAIL: first backfill action != rendered"; echo "$OUT"; errors=$((errors+1)); }
+  && green "PASS: backfill-concepts-index-02-first-backfill-reports-action first backfill reports action:rendered" \
+  || { red "FAIL: backfill-concepts-index-02-first-backfill-reports-action first backfill action != rendered"; echo "$OUT"; errors=$((errors+1)); }
 [ "$(echo "$OUT" | field '["data"]["changed"]')" = "True" ] \
-  && green "PASS: first backfill reports changed:true" \
-  || { red "FAIL: first backfill changed != true"; errors=$((errors+1)); }
+  && green "PASS: backfill-concepts-index-03-first-backfill-reports-changed first backfill reports changed:true" \
+  || { red "FAIL: backfill-concepts-index-03-first-backfill-reports-changed first backfill changed != true"; errors=$((errors+1)); }
 [ "$(echo "$OUT" | field '["data"]["render_only"]')" = "True" ] \
-  && green "PASS: envelope flags render_only (structural-only outline)" \
-  || { red "FAIL: render_only flag missing"; errors=$((errors+1)); }
-assert_grep '^# Concepts$' "$IDX" "page H1 '# Concepts'"
-assert_grep 'MACHINE-OWNED:CONCEPTS-INDEX' "$IDX" "page ownership marker"
+  && green "PASS: backfill-concepts-index-04-envelope-flags-render-only envelope flags render_only (structural-only outline)" \
+  || { red "FAIL: backfill-concepts-index-04-envelope-flags-render-only render_only flag missing"; errors=$((errors+1)); }
+assert_grep '^# Concepts$' "$IDX" "backfill-concepts-index-05-page-h1-concepts page H1 '# Concepts'"
+assert_grep 'MACHINE-OWNED:CONCEPTS-INDEX' "$IDX" "backfill-concepts-index-06-page-ownership-marker page ownership marker"
 assert_grep 'MACHINE-OWNED:CONCEPTS-LEADIN:regulatory-scope:START' \
-  "$IDX" "Regulatory Scope lead-in sentinel span present"
+  "$IDX" "backfill-concepts-index-07-regulatory-scope-lead-sentinel Regulatory Scope lead-in sentinel span present"
 assert_grep 'This theme groups the concepts below' \
-  "$IDX" "fresh backfill uses the deterministic lead-in fallback (render-only, narration deferred)"
+  "$IDX" "backfill-concepts-index-08-fresh-backfill-uses-deterministic fresh backfill uses the deterministic lead-in fallback (render-only, narration deferred)"
 
 # --- 2. BYTE-IDEMPOTENT re-run -----------------------------------------------
 cp "$IDX" "$WORK/idx.before"
 OUT=$(python3 "$DRIVER" --wiki-root "$WIKI" --wiki-scripts-dir "$WSD")
 [ "$(echo "$OUT" | field '["data"]["action"]')" = "noop" ] \
-  && green "PASS: re-run on a built outline reports action:noop" \
-  || { red "FAIL: idempotent re-run action != noop"; echo "$OUT"; errors=$((errors+1)); }
+  && green "PASS: backfill-concepts-index-09-re-run-built-outline re-run on a built outline reports action:noop" \
+  || { red "FAIL: backfill-concepts-index-09-re-run-built-outline idempotent re-run action != noop"; echo "$OUT"; errors=$((errors+1)); }
 [ "$(echo "$OUT" | field '["data"]["changed"]')" = "False" ] \
-  && green "PASS: re-run reports changed:false" \
-  || { red "FAIL: idempotent re-run changed != false"; errors=$((errors+1)); }
+  && green "PASS: backfill-concepts-index-10-re-run-reports-changed re-run reports changed:false" \
+  || { red "FAIL: backfill-concepts-index-10-re-run-reports-changed idempotent re-run changed != false"; errors=$((errors+1)); }
 if cmp -s "$WORK/idx.before" "$IDX"; then
-  green "PASS: re-run is byte-identical (no stamp churn)"
+  green "PASS: backfill-concepts-index-11-re-run-byte-identical re-run is byte-identical (no stamp churn)"
 else
-  red "FAIL: re-run mutated the page"; errors=$((errors+1))
+  red "FAIL: backfill-concepts-index-11-re-run-byte-identical re-run mutated the page"; errors=$((errors+1))
 fi
 
 # --- 3. LEAD-IN PRESERVED across a re-run ------------------------------------
@@ -147,9 +147,9 @@ open(p, "w", encoding="utf-8").write(t)
 PY
 OUT=$(python3 "$DRIVER" --wiki-root "$WIKI" --wiki-scripts-dir "$WSD")
 assert_grep 'Authored framing: the legal boundaries' \
-  "$IDX" "narrator-authored lead-in carried forward across a backfill re-run (no clobber)"
+  "$IDX" "backfill-concepts-index-12-narrator-authored-lead-carried narrator-authored lead-in carried forward across a backfill re-run (no clobber)"
 assert_grep 'This theme groups the concepts below' \
-  "$IDX" "untouched theme keeps the deterministic fallback after carry-forward"
+  "$IDX" "backfill-concepts-index-13-untouched-theme-keeps-deterministic untouched theme keeps the deterministic fallback after carry-forward"
 
 # --- 4. EMPTY-CONCEPTS base -> noop ------------------------------------------
 EWIKI="$WORK/empty-wiki"
@@ -159,8 +159,8 @@ printf '# Knowledge Portal\n' > "$EWIKI/wiki/index.md"
 OUT=$(python3 "$DRIVER" --wiki-root "$EWIKI" --wiki-scripts-dir "$WSD")
 [ "$(echo "$OUT" | field '["success"]')" = "True" ] \
   && [ "$(echo "$OUT" | field '["data"]["action"]')" = "noop" ] \
-  && green "PASS: empty-concepts base is a clean action:noop (not an abort)" \
-  || { red "FAIL: empty-concepts base did not report success/noop"; echo "$OUT"; errors=$((errors+1)); }
+  && green "PASS: backfill-concepts-index-14-empty-concepts-base-clean empty-concepts base is a clean action:noop (not an abort)" \
+  || { red "FAIL: backfill-concepts-index-14-empty-concepts-base-clean empty-concepts base did not report success/noop"; echo "$OUT"; errors=$((errors+1)); }
 
 # --- 5. DRY-RUN probes without invoking the renderer -------------------------
 DWIKI="$WORK/dry-wiki"
@@ -171,18 +171,18 @@ mk_concept "$DWIKI" dp "Data Protection" "How data is protected." src-scope-a
 OUT=$(python3 "$DRIVER" --wiki-root "$DWIKI" --dry-run)
 [ "$(echo "$OUT" | field '["success"]')" = "True" ] \
   && [ "$(echo "$OUT" | field '["data"]["action"]')" = "would_render" ] \
-  && green "PASS: --dry-run on a base with concepts reports would_render" \
-  || { red "FAIL: --dry-run action != would_render"; echo "$OUT"; errors=$((errors+1)); }
+  && green "PASS: backfill-concepts-index-15-dry-run-base-concepts --dry-run on a base with concepts reports would_render" \
+  || { red "FAIL: backfill-concepts-index-15-dry-run-base-concepts --dry-run action != would_render"; echo "$OUT"; errors=$((errors+1)); }
 [ ! -f "$DWIKI/wiki/concepts/index.md" ] \
-  && green "PASS: --dry-run writes nothing (renderer not invoked)" \
-  || { red "FAIL: --dry-run wrote an index.md"; errors=$((errors+1)); }
+  && green "PASS: backfill-concepts-index-16-dry-run-writes-nothing --dry-run writes nothing (renderer not invoked)" \
+  || { red "FAIL: backfill-concepts-index-16-dry-run-writes-nothing --dry-run wrote an index.md"; errors=$((errors+1)); }
 
 # --- 6. python3.9 floor: __future__ import + ast.parse -----------------------
-assert_grep 'from __future__ import annotations' "$DRIVER" "driver carries __future__ annotations import"
+assert_grep 'from __future__ import annotations' "$DRIVER" "backfill-concepts-index-17-driver-carries-future-annotations driver carries __future__ annotations import"
 if python3 -c 'import ast,sys; ast.parse(open(sys.argv[1]).read())' "$DRIVER"; then
-  green "PASS: driver parses cleanly under ast.parse (python3.9 floor)"
+  green "PASS: backfill-concepts-index-18-driver-parses-cleanly-under driver parses cleanly under ast.parse (python3.9 floor)"
 else
-  red "FAIL: driver does not parse"; errors=$((errors+1))
+  red "FAIL: backfill-concepts-index-18-driver-parses-cleanly-under driver does not parse"; errors=$((errors+1))
 fi
 
 # --- summary -----------------------------------------------------------------

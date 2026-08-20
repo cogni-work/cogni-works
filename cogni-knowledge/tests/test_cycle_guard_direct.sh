@@ -44,8 +44,10 @@ set -e
 
 errors=0
 if [ $RC -ne 1 ]; then
-  red "FAIL: expected exit 1 (cycle_detected), got $RC"
+  red "FAIL: cycle-guard-direct-01-exit-one expected exit 1 (cycle_detected), got $RC"
   errors=$((errors + 1))
+else
+  green "PASS: cycle-guard-direct-01-exit-one cycle-guard exits 1 when a direct self-cycle is present"
 fi
 
 if ! echo "$OUT" | python3 -c "
@@ -58,10 +60,11 @@ assert len(data['direct_self_cycles']) > 0, 'direct_self_cycles empty'
 assert data['cycle_path'] == ['project-a', 'project-a'], f\"cycle_path={data['cycle_path']}\"
 print('OK')
 " | grep -q OK; then
-  red "FAIL: output did not match direct-cycle contract"
+  red "FAIL: cycle-guard-direct-02-direct-contract output did not match direct-cycle contract"
   red "  got: $OUT"
   errors=$((errors + 1))
+else
+  green "PASS: cycle-guard-direct-02-direct-contract direct self-cycle detected with cycle_path [project-a, project-a]"
 fi
 
 if [ $errors -gt 0 ]; then exit 1; fi
-green "PASS: direct self-cycle detected with cycle_path [project-a, project-a]"

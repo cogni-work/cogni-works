@@ -33,7 +33,7 @@ VERIFY="$PLUGIN_ROOT/scripts/verify-store.py"
 . "$(dirname "$0")/fixtures/test_helpers.sh"
 
 if [ ! -f "$SCRIPT" ]; then
-  red "FAIL: citation-store.py not found at $SCRIPT"
+  red "FAIL: citation-store-00-script-present citation-store.py not found at $SCRIPT"
   exit 1
 fi
 
@@ -95,9 +95,9 @@ d = json.load(sys.stdin)
 assert d['success'] is True, d
 assert d['data']['citations_count'] == 3, d
 " 2>/dev/null; then
-  green "PASS: build succeeds on quotes / German pair / backslash → citations_count 3"
+  green "PASS: citation-store-01-build-succeeds-quotes-german build succeeds on quotes / German pair / backslash → citations_count 3"
 else
-  red "FAIL: build envelope wrong"
+  red "FAIL: citation-store-01-build-succeeds-quotes-german build envelope wrong"
   red "  got: $OUT"
   errors=$((errors + 1))
 fi
@@ -122,9 +122,9 @@ assert cites[1]["claim_id"] is None, cites[1]
 assert cites[0]["claim_id"] == "clm-001" and cites[2]["claim_id"] == "clm-009", cites
 PY
 then
-  green "PASS: manifest json.loads clean; draft_sentence byte-equal; claim:null → JSON null"
+  green "PASS: citation-store-02-manifest-json-loads-clean manifest json.loads clean; draft_sentence byte-equal; claim:null → JSON null"
 else
-  red "FAIL: manifest content / round-trip wrong"
+  red "FAIL: citation-store-02-manifest-json-loads-clean manifest content / round-trip wrong"
   errors=$((errors + 1))
 fi
 
@@ -132,9 +132,9 @@ fi
 if python3 "$VERIFY" shard --manifest "$WORK/citation-manifest.json" \
      --draft-version 1 --shard-size 40 --out-dir "$WORK/verify-shards" \
    | python3 -c "import sys,json; d=json.load(sys.stdin); assert d['success'] is True and d['data']['citation_count']==3, d" 2>/dev/null; then
-  green "PASS: verify-store.py shard accepts the built manifest (downstream #325 path)"
+  green "PASS: citation-store-03-verify-store-py-shard verify-store.py shard accepts the built manifest (downstream #325 path)"
 else
-  red "FAIL: verify-store.py shard rejected the built manifest"
+  red "FAIL: citation-store-03-verify-store-py-shard verify-store.py shard rejected the built manifest"
   errors=$((errors + 1))
 fi
 
@@ -155,9 +155,9 @@ d = json.load(sys.stdin)
 assert d['success'] is False and d['error'] == 'write_failed', d
 assert d['data']['failed_check'] == 'sentence_not_in_draft' and d['data']['ids'] == ['cit-001'], d
 " 2>/dev/null && [ ! -f "$WORK/bad-manifest.json" ]; then
-  green "PASS: sentence-not-in-draft → write_failed, no manifest written"
+  green "PASS: citation-store-04-sentence-draft-write-failed sentence-not-in-draft → write_failed, no manifest written"
 else
-  red "FAIL: negative substring case wrong (or manifest leaked)"
+  red "FAIL: citation-store-04-sentence-draft-write-failed negative substring case wrong (or manifest leaked)"
   red "  got: $OUT"
   errors=$((errors + 1))
 fi
@@ -166,9 +166,9 @@ fi
 OUT=$(python3 "$SCRIPT" build --records "$WORK/nope.txt" --draft "$WORK/draft-v1.md" \
   --out "$WORK/x.json" --draft-version 1 2>&1 || true)
 if echo "$OUT" | python3 -c "import sys,json; d=json.load(sys.stdin); assert d['success'] is False and d['error']=='records_not_found', d" 2>/dev/null; then
-  green "PASS: missing records file rejected (records_not_found)"
+  green "PASS: citation-store-05-missing-records-file-rejected missing records file rejected (records_not_found)"
 else
-  red "FAIL: missing records file not rejected"
+  red "FAIL: citation-store-05-missing-records-file-rejected missing records file not rejected"
   red "  got: $OUT"
   errors=$((errors + 1))
 fi
@@ -177,9 +177,9 @@ fi
 OUT=$(python3 "$SCRIPT" build --records "$WORK/records.txt" --draft "$WORK/nope-draft.md" \
   --out "$WORK/y.json" --draft-version 1 2>&1 || true)
 if echo "$OUT" | python3 -c "import sys,json; d=json.load(sys.stdin); assert d['success'] is False and d['error']=='draft_not_found', d" 2>/dev/null; then
-  green "PASS: missing draft rejected (draft_not_found)"
+  green "PASS: citation-store-06-missing-draft-rejected-draft missing draft rejected (draft_not_found)"
 else
-  red "FAIL: missing draft not rejected"
+  red "FAIL: citation-store-06-missing-draft-rejected-draft missing draft not rejected"
   red "  got: $OUT"
   errors=$((errors + 1))
 fi
@@ -191,9 +191,9 @@ OUT=$(python3 "$SCRIPT" build --records "$WORK/empty-records.txt" --draft "$WORK
   --out "$WORK/empty-manifest.json" --draft-version 1)
 if echo "$OUT" | python3 -c "import sys,json; d=json.load(sys.stdin); assert d['success'] is True and d['data']['citations_count']==0, d" 2>/dev/null \
    && python3 -c "import json; m=json.load(open('$WORK/empty-manifest.json')); assert m['citations']==[] and m['schema_version']=='0.1.1', m" 2>/dev/null; then
-  green "PASS: empty records → valid empty manifest (success, count 0)"
+  green "PASS: citation-store-07-empty-records-valid-empty empty records → valid empty manifest (success, count 0)"
 else
-  red "FAIL: empty records did not yield a valid empty manifest"
+  red "FAIL: citation-store-07-empty-records-valid-empty empty records did not yield a valid empty manifest"
   red "  got: $OUT"
   errors=$((errors + 1))
 fi
@@ -218,9 +218,9 @@ d = json.load(sys.stdin)
 assert d['success'] is False and d['error'] == 'write_failed', d
 assert d['data']['failed_check'] == 'duplicate_id' and d['data']['ids'] == ['cit-001'], d
 " 2>/dev/null && [ ! -f "$WORK/dup-manifest.json" ]; then
-  green "PASS: duplicate citation id → write_failed, no manifest written"
+  green "PASS: citation-store-08-duplicate-citation-id-write duplicate citation id → write_failed, no manifest written"
 else
-  red "FAIL: duplicate id not rejected at the build gate"
+  red "FAIL: citation-store-08-duplicate-citation-id-write duplicate id not rejected at the build gate"
   red "  got: $OUT"
   errors=$((errors + 1))
 fi
@@ -242,9 +242,9 @@ d = json.load(sys.stdin)
 assert d['success'] is False and d['error'] == 'write_failed', d
 assert d['data']['failed_check'] == 'sentence_not_in_draft' and d['data']['ids'] == ['cit-001'], d
 " 2>/dev/null && [ ! -f "$WORK/nosent-manifest.json" ]; then
-  green "PASS: record with an empty/missing sentence → write_failed, no manifest"
+  green "PASS: citation-store-09-record-empty-missing-sentence record with an empty/missing sentence → write_failed, no manifest"
 else
-  red "FAIL: empty draft_sentence slipped past the substring check"
+  red "FAIL: citation-store-09-record-empty-missing-sentence empty draft_sentence slipped past the substring check"
   red "  got: $OUT"
   errors=$((errors + 1))
 fi
@@ -272,9 +272,9 @@ c = json.load(open('$WORK/alias-manifest.json'))['citations'][0]
 assert c['draft_position'] == '02:03' and c['wiki_slug'] == 'eu-ai-act-article-6', c
 assert c['claim_id'] == 'clm-001' and c['draft_sentence'].startswith('She said'), c
 " 2>/dev/null; then
-  green "PASS: parser accepts long-key aliases (draft_position/wiki_slug/claim_id/draft_sentence)"
+  green "PASS: citation-store-10-parser-accepts-long-key parser accepts long-key aliases (draft_position/wiki_slug/claim_id/draft_sentence)"
 else
-  red "FAIL: long-key aliases not accepted"
+  red "FAIL: citation-store-10-parser-accepts-long-key long-key aliases not accepted"
   red "  got: $OUT"
   errors=$((errors + 1))
 fi
@@ -303,9 +303,9 @@ c = json.load(open('$WORK/ls-manifest.json'))['citations'][0]
 exp = open('$WORK/ls-expected.txt', encoding='utf-8').read()
 assert c['draft_sentence'] == exp, ('truncated: ' + repr(c['draft_sentence']))
 " 2>/dev/null; then
-  green "PASS: U+2028 inside a sentence is preserved, not truncated (split on \\n only)"
+  green "PASS: citation-store-11-u-2028-inside-sentence U+2028 inside a sentence is preserved, not truncated (split on \\n only)"
 else
-  red "FAIL: sentence with a Unicode line separator was truncated"
+  red "FAIL: citation-store-11-u-2028-inside-sentence sentence with a Unicode line separator was truncated"
   red "  got: $OUT"
   errors=$((errors + 1))
 fi
@@ -331,9 +331,9 @@ d = json.load(sys.stdin)
 assert d['success'] is False and d['error'] == 'write_failed', d
 assert d['data']['failed_check'] == 'empty_id', d
 " 2>/dev/null && [ ! -f "$WORK/noid-manifest.json" ]; then
-  green "PASS: id-less record block → empty_id write_failed, not a silent drop"
+  green "PASS: citation-store-12-id-less-record-block id-less record block → empty_id write_failed, not a silent drop"
 else
-  red "FAIL: id-less record block was silently dropped or mis-handled"
+  red "FAIL: citation-store-12-id-less-record-block id-less record block was silently dropped or mis-handled"
   red "  got: $OUT"
   errors=$((errors + 1))
 fi
@@ -390,9 +390,9 @@ assert d['success'] is False and d['error'] == 'write_failed', d
 assert d['data']['failed_check'] == 'url_not_in_sources', d
 assert d['data']['urls'] == ['https://nis.de/nis-2-mindestmassnahmen-nach-30-bsig'], d
 " 2>/dev/null && [ ! -f "$WORK/url-manifest.json" ]; then
-  green "PASS: slug-derived inline URL → url_not_in_sources, no manifest (good URL not false-flagged)"
+  green "PASS: citation-store-13-slug-derived-inline-url slug-derived inline URL → url_not_in_sources, no manifest (good URL not false-flagged)"
 else
-  red "FAIL: --ingest-manifest gate did not flag the slug-derived URL (or false-flagged the good one)"
+  red "FAIL: citation-store-13-slug-derived-inline-url --ingest-manifest gate did not flag the slug-derived URL (or false-flagged the good one)"
   red "  got: $OUT"
   errors=$((errors + 1))
 fi
@@ -402,9 +402,9 @@ fi
 OUT=$(python3 "$SCRIPT" build --records "$WORK/url-records-ok.txt" --draft "$WORK/url-draft-ok.md" \
   --out "$WORK/url-manifest-ok.json" --draft-version 1 --ingest-manifest "$WORK/ingest.json")
 if echo "$OUT" | python3 -c "import sys,json; d=json.load(sys.stdin); assert d['success'] is True and d['data']['citations_count']==1, d" 2>/dev/null; then
-  green "PASS: all inline URLs in ingested set (trailing-slash normalized) → success"
+  green "PASS: citation-store-14-all-inline-urls-ingested all inline URLs in ingested set (trailing-slash normalized) → success"
 else
-  red "FAIL: positive --ingest-manifest case rejected"
+  red "FAIL: citation-store-14-all-inline-urls-ingested positive --ingest-manifest case rejected"
   red "  got: $OUT"
   errors=$((errors + 1))
 fi
@@ -418,9 +418,9 @@ OK_MISSING=$(python3 "$SCRIPT" build --records "$WORK/url-records.txt" --draft "
   --out "$WORK/url-fs2.json" --draft-version 1 --ingest-manifest "$WORK/does-not-exist.json" \
   | python3 -c "import sys,json; print(json.load(sys.stdin)['success'])" 2>/dev/null || true)
 if [ "$OK_EMPTY" = "True" ] && [ "$OK_MISSING" = "True" ]; then
-  green "PASS: empty / missing ingest-manifest → gate skipped, build succeeds (fail-soft)"
+  green "PASS: citation-store-15-empty-missing-ingest-manifest empty / missing ingest-manifest → gate skipped, build succeeds (fail-soft)"
 else
-  red "FAIL: fail-soft degenerate-input contract broken (empty=$OK_EMPTY missing=$OK_MISSING)"
+  red "FAIL: citation-store-15-empty-missing-ingest-manifest fail-soft degenerate-input contract broken (empty=$OK_EMPTY missing=$OK_MISSING)"
   errors=$((errors + 1))
 fi
 
@@ -429,9 +429,9 @@ fi
 OUT=$(python3 "$SCRIPT" build --records "$WORK/url-records.txt" --draft "$WORK/url-draft.md" \
   --out "$WORK/url-noflag.json" --draft-version 1)
 if echo "$OUT" | python3 -c "import sys,json; d=json.load(sys.stdin); assert d['success'] is True and d['data']['citations_count']==2, d" 2>/dev/null; then
-  green "PASS: no --ingest-manifest → URL gate is opt-in (slug-derived URL builds clean)"
+  green "PASS: citation-store-16-ingest-manifest-url-gate no --ingest-manifest → URL gate is opt-in (slug-derived URL builds clean)"
 else
-  red "FAIL: omitting --ingest-manifest unexpectedly ran the URL gate"
+  red "FAIL: citation-store-16-ingest-manifest-url-gate omitting --ingest-manifest unexpectedly ran the URL gate"
   red "  got: $OUT"
   errors=$((errors + 1))
 fi
@@ -489,9 +489,9 @@ assert d['data']['failed_check'] == 'url_slug_mismatch', d
 ids = [m['id'] for m in d['data']['mismatches']]
 assert ids == ['cit-001'], d
 " 2>/dev/null && [ ! -f "$WORK/misattr-manifest.json" ]; then
-  green "PASS: source-A text with source-B (real, ingested) URL → url_slug_mismatch, no manifest"
+  green "PASS: citation-store-17-source-text-source-b source-A text with source-B (real, ingested) URL → url_slug_mismatch, no manifest"
 else
-  red "FAIL: binding gate did not catch the real-but-mis-attributed URL"
+  red "FAIL: citation-store-17-source-text-source-b binding gate did not catch the real-but-mis-attributed URL"
   red "  got: $OUT"
   errors=$((errors + 1))
 fi
@@ -502,9 +502,9 @@ OUT=$(python3 "$SCRIPT" build --records "$WORK/bound-records.txt" --draft "$WORK
   --out "$WORK/bound-manifest.json" --draft-version 1 --ingest-manifest "$WORK/ingest-slug.json")
 if echo "$OUT" | python3 -c "import sys,json; d=json.load(sys.stdin); assert d['success'] is True and d['data']['citations_count']==1, d" 2>/dev/null \
    && python3 -c "import json,pathlib; m=json.loads(pathlib.Path('$WORK/bound-manifest.json').read_text()); assert m['citations'][0]['url']=='https://a.eu/page-a', m" 2>/dev/null; then
-  green "PASS: correctly-bound record (url == slug's ingested URL == marker) → success, url in manifest"
+  green "PASS: citation-store-18-correctly-bound-record-url correctly-bound record (url == slug's ingested URL == marker) → success, url in manifest"
 else
-  red "FAIL: correctly-bound record rejected (or url not persisted)"
+  red "FAIL: citation-store-18-correctly-bound-record-url correctly-bound record rejected (or url not persisted)"
   red "  got: $OUT"
   errors=$((errors + 1))
 fi
@@ -535,9 +535,9 @@ PY
 OUT=$(python3 "$SCRIPT" build --records "$WORK/noslug-records.txt" --draft "$WORK/noslug-draft.md" \
   --out "$WORK/noslug-manifest.json" --draft-version 1 --ingest-manifest "$WORK/ingest-noslug.json")
 if echo "$OUT" | python3 -c "import sys,json; d=json.load(sys.stdin); assert d['success'] is True and d['data']['citations_count']==1, d" 2>/dev/null; then
-  green "PASS: cited slug absent from ingest manifest → slug leg skipped, build succeeds"
+  green "PASS: citation-store-19-cited-slug-absent-from cited slug absent from ingest manifest → slug leg skipped, build succeeds"
 else
-  red "FAIL: binding gate false-positived on a slug with no ingest entry"
+  red "FAIL: citation-store-19-cited-slug-absent-from binding gate false-positived on a slug with no ingest entry"
   red "  got: $OUT"
   errors=$((errors + 1))
 fi
@@ -548,9 +548,9 @@ fi
 OUT=$(python3 "$SCRIPT" build --records "$WORK/url-records-ok.txt" --draft "$WORK/url-draft-ok.md" \
   --out "$WORK/legacy-bind.json" --draft-version 1 --ingest-manifest "$WORK/ingest.json")
 if echo "$OUT" | python3 -c "import sys,json; d=json.load(sys.stdin); assert d['success'] is True and d['data']['citations_count']==1, d" 2>/dev/null; then
-  green "PASS: legacy records without url: → binding gate skipped per-record (additive field)"
+  green "PASS: citation-store-20-legacy-records-without-url legacy records without url: → binding gate skipped per-record (additive field)"
 else
-  red "FAIL: legacy url-less records broke under the binding gate"
+  red "FAIL: citation-store-20-legacy-records-without-url legacy url-less records broke under the binding gate"
   red "  got: $OUT"
   errors=$((errors + 1))
 fi
@@ -584,9 +584,9 @@ assert d['success'] is False and d['error'] == 'write_failed', d
 assert d['data']['failed_check'] == 'url_slug_mismatch', d
 assert [m['id'] for m in d['data']['mismatches']] == ['cit-001'], d
 " 2>/dev/null && [ ! -f "$WORK/prose-manifest.json" ]; then
-  green "PASS: record.url absent from its own marker (slug leg clean) → prose leg fires alone"
+  green "PASS: citation-store-21-record-url-absent-from record.url absent from its own marker (slug leg clean) → prose leg fires alone"
 else
-  red "FAIL: prose-leg-only mismatch not caught (membership semantics regressed)"
+  red "FAIL: citation-store-21-record-url-absent-from prose-leg-only mismatch not caught (membership semantics regressed)"
   red "  got: $OUT"
   errors=$((errors + 1))
 fi
@@ -633,9 +633,9 @@ assert d['data']['citations_count'] == 4, d
 # Single dict-equality also pins the absence of an 'other' bucket.
 assert d['data']['claim_kinds'] == {'distilled': 1, 'source': 2, 'null': 1}, d
 " 2>/dev/null; then
-  green "PASS: build reports claim_kinds breakdown (distilled=1 source=2 null=1) — the #385 dcl- measurement"
+  green "PASS: citation-store-22-build-reports-claim-kinds build reports claim_kinds breakdown (distilled=1 source=2 null=1) — the #385 dcl- measurement"
 else
-  red "FAIL: claim_kinds breakdown wrong"
+  red "FAIL: citation-store-22-build-reports-claim-kinds claim_kinds breakdown wrong"
   red "  got: $OUT"
   errors=$((errors + 1))
 fi
@@ -688,9 +688,9 @@ assert d['data']['failed_check'] == 'url_not_in_sources', d
 assert d['data'].get('source') == 'draft_body', d
 assert d['data']['urls'] == ['https://b.eu/page-b-falsch-abgeleitet'], d
 " 2>/dev/null && [ ! -f "$WORK/stack-manifest.json" ]; then
-  green "PASS: stacked-citation slug-URL in body → url_not_in_sources (draft_body), pre-empts sentence_not_in_draft"
+  green "PASS: citation-store-23-stacked-citation-slug-url stacked-citation slug-URL in body → url_not_in_sources (draft_body), pre-empts sentence_not_in_draft"
 else
-  red "FAIL: #586 body-URL gate did not pre-empt sentence_not_in_draft on the stacked slug-URL"
+  red "FAIL: citation-store-23-stacked-citation-slug-url #586 body-URL gate did not pre-empt sentence_not_in_draft on the stacked slug-URL"
   red "  got: $OUT"
   errors=$((errors + 1))
 fi
@@ -700,9 +700,9 @@ fi
 OUT=$(python3 "$SCRIPT" build --records "$WORK/stack-records.txt" --draft "$WORK/stack-draft-ok.md" \
   --out "$WORK/stack-manifest-ok.json" --draft-version 1 --ingest-manifest "$WORK/ingest-stack.json")
 if echo "$OUT" | python3 -c "import sys,json; d=json.load(sys.stdin); assert d['success'] is True and d['data']['citations_count']==2, d" 2>/dev/null; then
-  green "PASS: clean stacked citation (both real ingested URLs) → success, no false url_not_in_sources"
+  green "PASS: citation-store-24-clean-stacked-citation-both clean stacked citation (both real ingested URLs) → success, no false url_not_in_sources"
 else
-  red "FAIL: clean stacked-citation positive path rejected"
+  red "FAIL: citation-store-24-clean-stacked-citation-both clean stacked-citation positive path rejected"
   red "  got: $OUT"
   errors=$((errors + 1))
 fi

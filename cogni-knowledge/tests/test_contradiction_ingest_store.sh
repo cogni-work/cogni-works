@@ -25,7 +25,7 @@ SCRIPT="$PLUGIN_ROOT/scripts/contradiction-ingest-store.py"
 . "$(dirname "$0")/fixtures/test_helpers.sh"
 
 if [ ! -f "$SCRIPT" ]; then
-  red "FAIL: contradiction-ingest-store.py not found at $SCRIPT"
+  red "FAIL: contradiction-ingest-store-00-script-present contradiction-ingest-store.py not found at $SCRIPT"
   exit 1
 fi
 
@@ -49,9 +49,9 @@ assert c == {"contradiction": 0, "unknown": 0, "total": 0, "high": 0, "medium": 
 assert d["output_language"] == "en", d["output_language"]
 PY
 then
-  green "PASS: init writes an empty canonical file (schema 0.1.0, zeroed counts)"
+  green "PASS: contradiction-ingest-store-01-init-shape init writes an empty canonical file (schema 0.1.0, zeroed counts)"
 else
-  red "FAIL: init canonical file shape wrong"
+  red "FAIL: contradiction-ingest-store-01-init-shape init canonical file shape wrong"
   errors=$((errors + 1))
 fi
 
@@ -115,9 +115,9 @@ assert g[0]["finding_count"] == 2 and g[1]["finding_count"] == 2, g
 assert g[1]["missing_pages"] == ["src-vanished"], g
 PY
 then
-  green "PASS: merge re-ids globally, recomputes aggregate counts, records groups_compared[], invariants hold"
+  green "PASS: contradiction-ingest-store-02-merge-reid-aggregate merge re-ids globally, recomputes aggregate counts, records groups_compared[], invariants hold"
 else
-  red "FAIL: merged canonical file wrong"
+  red "FAIL: contradiction-ingest-store-02-merge-reid-aggregate merged canonical file wrong"
   errors=$((errors + 1))
 fi
 
@@ -133,9 +133,9 @@ assert len(d["findings"]) == 4, len(d["findings"])
 assert [x["id"] for x in d["findings"]] == ["ctr-001", "ctr-002", "ctr-003", "ctr-004"]
 PY
 then
-  green "PASS: re-merge is idempotent (overwrites the canonical file)"
+  green "PASS: contradiction-ingest-store-03-remerge-idempotent re-merge is idempotent (overwrites the canonical file)"
 else
-  red "FAIL: re-merge not idempotent"
+  red "FAIL: contradiction-ingest-store-03-remerge-idempotent re-merge not idempotent"
   errors=$((errors + 1))
 fi
 
@@ -160,9 +160,9 @@ assert d["data"]["shards_merged"] == 2, d["data"]
 assert d["data"]["counts"]["total"] == 4, d["data"]
 PY
 then
-  green "PASS: merge skips a malformed / wrong-schema fragment fail-soft (records skipped_shards[])"
+  green "PASS: contradiction-ingest-store-04-malformed-shard-failsoft merge skips a malformed / wrong-schema fragment fail-soft (records skipped_shards[])"
 else
-  red "FAIL: fail-soft skip not handled"
+  red "FAIL: contradiction-ingest-store-04-malformed-shard-failsoft fail-soft skip not handled"
   errors=$((errors + 1))
 fi
 
@@ -202,9 +202,9 @@ assert c["total"] == c["contradiction"] + c["unknown"]
 assert c["contradiction"] == c["high"] + c["medium"] + c["low"]
 PY
 then
-  green "PASS: out-of-vocab finding dropped+recorded (skipped_findings[]), merge still writes the file"
+  green "PASS: contradiction-ingest-store-05-out-of-vocab-dropped out-of-vocab finding dropped+recorded (skipped_findings[]), merge still writes the file"
 else
-  red "FAIL: out-of-vocab finding not handled fail-soft"
+  red "FAIL: contradiction-ingest-store-05-out-of-vocab-dropped out-of-vocab finding not handled fail-soft"
   errors=$((errors + 1))
 fi
 
@@ -223,9 +223,9 @@ assert d["findings"] == [] and d["groups_compared"] == [], d
 assert d["counts"]["total"] == 0, d["counts"]
 PY
 then
-  green "PASS: zero matching shards merges to an empty canonical file (success)"
+  green "PASS: contradiction-ingest-store-06-zero-shard-merge zero matching shards merges to an empty canonical file (success)"
 else
-  red "FAIL: zero-shard merge not handled"
+  red "FAIL: contradiction-ingest-store-06-zero-shard-merge zero-shard merge not handled"
   errors=$((errors + 1))
 fi
 
@@ -270,9 +270,9 @@ assert cov == {"resolved": 1, "contradictions": 2, "pct": 50.0}, cov
 assert env["data"]["resolution_coverage"] == cov, env["data"].get("resolution_coverage")
 PY
 then
-  green "PASS: resolution{} survives merge verbatim (id-only re-write) + resolution_coverage reported"
+  green "PASS: contradiction-ingest-store-07-resolution-passthrough resolution{} survives merge verbatim (id-only re-write) + resolution_coverage reported"
 else
-  red "FAIL: resolution passthrough / coverage wrong"
+  red "FAIL: contradiction-ingest-store-07-resolution-passthrough resolution passthrough / coverage wrong"
   errors=$((errors + 1))
 fi
 

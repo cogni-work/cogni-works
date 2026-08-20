@@ -33,7 +33,7 @@ WSD="$PLUGIN_ROOT/scripts/vendor/cogni-wiki/skills/wiki-ingest/scripts"
 errors=0
 
 if [ ! -d "$WSD" ]; then
-  red "FAIL: cogni-wiki wiki-ingest scripts not found at $WSD"
+  red "FAIL: question-store-00-wiki-scripts-present cogni-wiki wiki-ingest scripts not found at $WSD"
   exit 1
 fi
 
@@ -117,35 +117,35 @@ emit() {
 # ===== Run 1 =================================================================
 OUT="$(emit)"
 echo "$OUT" | python3 -c 'import json,sys; d=json.load(sys.stdin); sys.exit(0 if d["success"] else 1)' \
-  && green "PASS: emit returns success" || { red "FAIL: emit not success"; echo "$OUT"; errors=$((errors+1)); }
+  && green "PASS: question-store-01-emit-returns-success emit returns success" || { red "FAIL: question-store-01-emit-returns-success emit not success"; echo "$OUT"; errors=$((errors+1)); }
 
 # 0) questions/ was created on demand by the first emit (not pre-made above).
 [ -d "$WIKI/wiki/questions" ] \
-  && green "PASS: wiki/questions/ created on demand by first emit" \
-  || { red "FAIL: wiki/questions/ not created on demand"; errors=$((errors+1)); }
+  && green "PASS: question-store-02-wiki-questions-created-demand wiki/questions/ created on demand by first emit" \
+  || { red "FAIL: question-store-02-wiki-questions-created-demand wiki/questions/ not created on demand"; errors=$((errors+1)); }
 
 # 1) sq-01 + sq-03 pages exist; sq-02 (no findings) does not.
 SQ1="$WIKI/wiki/questions/records-of-processing-scope.md"
 SQ3="$WIKI/wiki/questions/pflichten-fuer-risikoklassen.md"
-[ -f "$SQ1" ] && green "PASS: sq-01-1 question page written at slugified theme_label" \
-  || { red "FAIL: sq-01-1 missing $SQ1"; errors=$((errors+1)); }
-[ -f "$SQ3" ] && green "PASS: sq-03-1 page uses transliterated slug (für->fuer)" \
-  || { red "FAIL: sq-03-1 missing $SQ3"; errors=$((errors+1)); }
+[ -f "$SQ1" ] && green "PASS: question-store-03-sq-01-1-question sq-01-1 question page written at slugified theme_label" \
+  || { red "FAIL: question-store-03-sq-01-1-question sq-01-1 missing $SQ1"; errors=$((errors+1)); }
+[ -f "$SQ3" ] && green "PASS: question-store-04-sq-03-1-page sq-03-1 page uses transliterated slug (für->fuer)" \
+  || { red "FAIL: question-store-04-sq-03-1-page sq-03-1 missing $SQ3"; errors=$((errors+1)); }
 [ ! -f "$WIKI/wiki/questions/court-interpretation.md" ] \
-  && green "PASS: sq-02-1 (zero findings) wrote no page" \
-  || { red "FAIL: sq-02-1 page should not exist"; errors=$((errors+1)); }
+  && green "PASS: question-store-05-sq-02-1-zero sq-02-1 (zero findings) wrote no page" \
+  || { red "FAIL: question-store-05-sq-02-1-zero sq-02-1 page should not exist"; errors=$((errors+1)); }
 
-echo "$OUT" | grep -q '"sq-02"' && green "PASS: sq-02-2 reported in skipped_no_findings" \
-  || { red "FAIL: sq-02-2 not in skipped_no_findings"; errors=$((errors+1)); }
+echo "$OUT" | grep -q '"sq-02"' && green "PASS: question-store-06-sq-02-2-reported sq-02-2 reported in skipped_no_findings" \
+  || { red "FAIL: question-store-06-sq-02-2-reported sq-02-2 not in skipped_no_findings"; errors=$((errors+1)); }
 
 # 2) forward links + frontmatter
-assert_grep 'type: question' "$SQ1" "sq-01-2 page is type: question"
-assert_grep 'sub_question_id: sq-01' "$SQ1" "sq-01-3 page carries sub_question_id"
-assert_grep '## Findings' "$SQ1" "sq-01-4 page has ## Findings section"
+assert_grep 'type: question' "$SQ1" "question-store-07-sq-01-2-page sq-01-2 page is type: question"
+assert_grep 'sub_question_id: sq-01' "$SQ1" "question-store-08-sq-01-3-page sq-01-3 page carries sub_question_id"
+assert_grep '## Findings' "$SQ1" "question-store-09-sq-01-4-page sq-01-4 page has ## Findings section"
 # #931: the question page now emits an H1 + reader-facing type line (it had no body
 # H1 before). Assert the type line and that the order is H1 -> type line -> ## Findings.
-assert_grep '^Type: Question · raw$' "$SQ1" "sq-01-5 page: Type: Question · raw line"
-python3 - "$SQ1" <<'PY' && green "PASS: sq-01-6 page renders H1 then 'Type: Question · raw' then ## Findings" || { red "FAIL: sq-01-6 question H1/type-line/findings order wrong"; errors=$((errors+1)); }
+assert_grep '^Type: Question · raw$' "$SQ1" "question-store-10-sq-01-5-page sq-01-5 page: Type: Question · raw line"
+python3 - "$SQ1" <<'PY' && green "PASS: question-store-11-sq-01-6-page sq-01-6 page renders H1 then 'Type: Question · raw' then ## Findings" || { red "FAIL: question-store-11-sq-01-6-page sq-01-6 question H1/type-line/findings order wrong"; errors=$((errors+1)); }
 import sys
 lines = [l for l in open(sys.argv[1], encoding="utf-8").read().splitlines()]
 h1 = next(i for i, l in enumerate(lines) if l.startswith("# "))
@@ -156,22 +156,22 @@ fnd = lines.index("## Findings")
 sys.exit(0 if h1 < typ < fnd else 1)
 PY
 # sq-01 is answered by records-scope (sq-01 ref) AND controller-obligations (sq-01+sq-03 ref)
-assert_grep '\[\[records-scope\]\]' "$SQ1" "sq-01-7 Findings links its source finding"
-assert_grep 'sources_answering: \[records-scope, controller-obligations\]' "$SQ1" "sq-01-8 sources_answering lists both findings in order"
+assert_grep '\[\[records-scope\]\]' "$SQ1" "question-store-12-sq-01-7-findings sq-01-7 Findings links its source finding"
+assert_grep 'sources_answering: \[records-scope, controller-obligations\]' "$SQ1" "question-store-13-sq-01-8-sources sq-01-8 sources_answering lists both findings in order"
 # sq-03 has two findings (controller-obligations via sq-03 ref + risk-classes)
-assert_grep '\[\[controller-obligations\]\]' "$SQ3" "sq-03-2 links shared finding controller-obligations"
-assert_grep '\[\[risk-classes\]\]' "$SQ3" "sq-03-3 links risk-classes finding"
+assert_grep '\[\[controller-obligations\]\]' "$SQ3" "question-store-14-sq-03-2-links sq-03-2 links shared finding controller-obligations"
+assert_grep '\[\[risk-classes\]\]' "$SQ3" "question-store-15-sq-03-3-links sq-03-3 links risk-classes finding"
 
 # ===== Idempotency: add a human ## Notes tail, re-run ========================
 printf '\n## Notes\n\nHuman annotation that must survive a re-run.\n' >> "$SQ1"
 OUT2="$(emit)"
-echo "$OUT2" | grep -q '"action": "merged"' && green "PASS: re-run reports action=merged" \
-  || { red "FAIL: re-run did not merge"; echo "$OUT2"; errors=$((errors+1)); }
-assert_grep 'Human annotation that must survive' "$SQ1" "## Notes tail preserved across re-run"
+echo "$OUT2" | grep -q '"action": "merged"' && green "PASS: question-store-16-re-run-reports-action re-run reports action=merged" \
+  || { red "FAIL: question-store-16-re-run-reports-action re-run did not merge"; echo "$OUT2"; errors=$((errors+1)); }
+assert_grep 'Human annotation that must survive' "$SQ1" "question-store-17-notes-tail-preserved-across ## Notes tail preserved across re-run"
 # exactly one page per slug (no duplication)
 N=$(ls "$WIKI/wiki/questions/" | wc -l | tr -d ' ')
-[ "$N" = "2" ] && green "PASS: still exactly 2 question pages after re-run" \
-  || { red "FAIL: expected 2 question pages, found $N"; errors=$((errors+1)); }
+[ "$N" = "2" ] && green "PASS: question-store-18-still-exactly-2-question still exactly 2 question pages after re-run" \
+  || { red "FAIL: question-store-18-still-exactly-2-question expected 2 question pages, found $N"; errors=$((errors+1)); }
 
 # ===== Cross-type collision: a source page owns 'court-interpretation' =======
 # Give sq-02 a finding so it would now want the slug, but plant a same-slug source first.
@@ -194,13 +194,13 @@ cat > "$PROJ/.metadata/candidates.json" <<'EOF'
 EOF
 OUT3="$(emit)"
 [ -f "$WIKI/wiki/questions/court-interpretation-q.md" ] \
-  && green "PASS: cross-type collision disambiguated to court-interpretation-q" \
-  || { red "FAIL: expected court-interpretation-q.md"; echo "$OUT3"; errors=$((errors+1)); }
+  && green "PASS: question-store-19-cross-type-collision-disambiguated cross-type collision disambiguated to court-interpretation-q" \
+  || { red "FAIL: question-store-19-cross-type-collision-disambiguated expected court-interpretation-q.md"; echo "$OUT3"; errors=$((errors+1)); }
 assert_grep 'type: source' "$WIKI/wiki/sources/court-interpretation.md" \
-  "pre-existing source page left untouched (still type: source)"
+  "question-store-20-pre-existing-source-page pre-existing source page left untouched (still type: source)"
 [ ! -f "$WIKI/wiki/questions/court-interpretation.md" ] \
-  && green "PASS: did-1 did not write a question at the colliding bare slug" \
-  || { red "FAIL: did-1 question shadowed the source slug"; errors=$((errors+1)); }
+  && green "PASS: question-store-21-did-1-did-not-write did-1 did not write a question at the colliding bare slug" \
+  || { red "FAIL: question-store-21-did-1-did-not-write did-1 question shadowed the source slug"; errors=$((errors+1)); }
 
 # ===== Within-run collision: two DISTINCT sub-questions, identical slug ======
 # Two sub-questions whose theme_label slugifies to the same base must NOT
@@ -228,19 +228,19 @@ OUTC="$(emit)"
 DR1="$WIKI/wiki/questions/data-retention.md"
 DR2="$WIKI/wiki/questions/data-retention-q.md"
 { [ -f "$DR1" ] && [ -f "$DR2" ]; } \
-  && green "PASS: two same-slug sub-questions wrote two distinct pages (-q disambiguation)" \
-  || { red "FAIL: within-run collision did not split into two pages"; echo "$OUTC"; errors=$((errors+1)); }
+  && green "PASS: question-store-22-two-same-slug-sub two same-slug sub-questions wrote two distinct pages (-q disambiguation)" \
+  || { red "FAIL: question-store-22-two-same-slug-sub within-run collision did not split into two pages"; echo "$OUTC"; errors=$((errors+1)); }
 # Distinct sub_question_ids, not conflated onto the last writer.
 DR1ID="$(grep '^sub_question_id:' "$DR1" | awk '{print $2}')"
 DR2ID="$(grep '^sub_question_id:' "$DR2" | awk '{print $2}')"
 [ "$DR1ID" != "$DR2ID" ] \
-  && green "PASS: each page kept its own sub_question_id ($DR1ID / $DR2ID)" \
-  || { red "FAIL: sub_question_id conflated ($DR1ID == $DR2ID)"; errors=$((errors+1)); }
+  && green "PASS: question-store-23-each-page-kept-own each page kept its own sub_question_id ($DR1ID / $DR2ID)" \
+  || { red "FAIL: question-store-23-each-page-kept-own sub_question_id conflated ($DR1ID == $DR2ID)"; errors=$((errors+1)); }
 # No finding bleed: the base page links only its own source, not both.
 if grep -q '\[\[retain-a\]\]' "$DR1" && ! grep -q '\[\[retain-b\]\]' "$DR1"; then
-  green "PASS: base page lists only its own finding (no finding conflation)"
+  green "PASS: question-store-24-base-page-lists-only base page lists only its own finding (no finding conflation)"
 else
-  red "FAIL: findings conflated across the two same-slug sub-questions"; errors=$((errors+1))
+  red "FAIL: question-store-24-base-page-lists-only findings conflated across the two same-slug sub-questions"; errors=$((errors+1))
 fi
 
 # ===== Legacy plan: no theme_label -> sq-NN slug fallback ====================
@@ -255,8 +255,8 @@ cat > "$PROJ/.metadata/ingest-manifest.json" <<'EOF'
 EOF
 OUT4="$(emit)"
 [ -f "$WIKI/wiki/questions/sq-09.md" ] \
-  && green "PASS: legacy plan (no theme_label) falls back to sq-NN slug" \
-  || { red "FAIL: expected sq-09.md fallback"; echo "$OUT4"; errors=$((errors+1)); }
+  && green "PASS: question-store-25-legacy-plan-theme-label legacy plan (no theme_label) falls back to sq-NN slug" \
+  || { red "FAIL: question-store-25-legacy-plan-theme-label expected sq-09.md fallback"; echo "$OUT4"; errors=$((errors+1)); }
 
 # ===== Lineage match (#409): variant theme_label routes to existing node ======
 # A binding pre-seeded with a covered_theme whose theme_key == the norm key of
@@ -333,18 +333,18 @@ OUTL="$(python3 "$SCRIPT" emit \
   --binding "$LINKB")"
 # Routed to the EXISTING node (merge), did NOT create a scope-of-processing-records page.
 echo "$OUTL" | grep -q '"action": "merged"' \
-  && green "PASS: variant theme_label lineage-merged into the existing node (action=merged)" \
-  || { red "FAIL: variant did not merge into the lineage node"; echo "$OUTL"; errors=$((errors+1)); }
+  && green "PASS: question-store-26-variant-theme-label-lineage variant theme_label lineage-merged into the existing node (action=merged)" \
+  || { red "FAIL: question-store-26-variant-theme-label-lineage variant did not merge into the lineage node"; echo "$OUTL"; errors=$((errors+1)); }
 [ ! -f "$WIKI/wiki/questions/scope-of-processing-records.md" ] \
-  && green "PASS: did-2 did NOT fork a second node for the variant theme_label" \
-  || { red "FAIL: did-2 variant forked a second question node"; errors=$((errors+1)); }
+  && green "PASS: question-store-27-did-2-did-not-fork did-2 did NOT fork a second node for the variant theme_label" \
+  || { red "FAIL: question-store-27-did-2-did-not-fork did-2 variant forked a second question node"; errors=$((errors+1)); }
 echo "$OUTL" | grep -q '"action": "lineage_reused"' \
-  && green "PASS: theme_bindings[] records action=lineage_reused" \
-  || { red "FAIL: no lineage_reused theme_binding emitted"; echo "$OUTL"; errors=$((errors+1)); }
+  && green "PASS: question-store-28-theme-bindings-records-action theme_bindings[] records action=lineage_reused" \
+  || { red "FAIL: question-store-28-theme-bindings-records-action no lineage_reused theme_binding emitted"; echo "$OUTL"; errors=$((errors+1)); }
 # created: preserved; human ## Notes tail survived; new finding unioned in.
-assert_grep 'created: 2025-12-01' "$WIKI/wiki/questions/$LSLUG.md" "lineage-1 merge preserves created:"
-assert_grep 'Prior-run human note that must survive' "$WIKI/wiki/questions/$LSLUG.md" "lineage-2 merge preserves human ## Notes tail"
-assert_grep '\[\[controller-obligations\]\]' "$WIKI/wiki/questions/$LSLUG.md" "lineage-3 merge unions the new finding"
+assert_grep 'created: 2025-12-01' "$WIKI/wiki/questions/$LSLUG.md" "question-store-29-lineage-1-merge-preserves lineage-1 merge preserves created:"
+assert_grep 'Prior-run human note that must survive' "$WIKI/wiki/questions/$LSLUG.md" "question-store-30-lineage-2-merge-preserves lineage-2 merge preserves human ## Notes tail"
+assert_grep '\[\[controller-obligations\]\]' "$WIKI/wiki/questions/$LSLUG.md" "question-store-31-lineage-3-merge-unions lineage-3 merge unions the new finding"
 
 # ===== Fail-soft binding read error (#426): degrade to slug-only success ======
 # A corrupt / unreadable --binding must NOT abort emit — lineage is an
@@ -362,14 +362,14 @@ OUTCB="$(python3 "$SCRIPT" emit \
   --ingest-manifest "$PROJ/.metadata/ingest-manifest.json" \
   --binding "$WORK/corrupt-binding.json")"
 echo "$OUTCB" | python3 -c 'import json,sys; d=json.load(sys.stdin); sys.exit(0 if d["success"] and d["data"].get("binding_skipped") else 1)' \
-  && green "PASS: corrupt-1 --binding degrades to success + data.binding_skipped (no abort)" \
-  || { red "FAIL: corrupt-1 --binding did not fail-soft"; echo "$OUTCB"; errors=$((errors+1)); }
+  && green "PASS: question-store-32-corrupt-1-binding-degrades corrupt-1 --binding degrades to success + data.binding_skipped (no abort)" \
+  || { red "FAIL: question-store-32-corrupt-1-binding-degrades corrupt-1 --binding did not fail-soft"; echo "$OUTCB"; errors=$((errors+1)); }
 # No lineage map -> the variant theme_label falls back to slugify(theme_label)
 # and writes its OWN node (it does NOT route into $LSLUG), proving the degrade
 # to slug-only accumulation actually changed behavior vs the lineage case.
 [ -f "$WIKI/wiki/questions/scope-of-processing-records.md" ] \
-  && green "PASS: corrupt-2 --binding ran slug-only (variant got its own slug node, no lineage routing)" \
-  || { red "FAIL: corrupt-2 --binding did not degrade to slug-only"; errors=$((errors+1)); }
+  && green "PASS: question-store-33-corrupt-2-binding-ran corrupt-2 --binding ran slug-only (variant got its own slug node, no lineage routing)" \
+  || { red "FAIL: question-store-33-corrupt-2-binding-ran corrupt-2 --binding did not degrade to slug-only"; errors=$((errors+1)); }
 
 # -- Unreadable-path arm (OSError) --
 OUTMB="$(python3 "$SCRIPT" emit \
@@ -379,8 +379,8 @@ OUTMB="$(python3 "$SCRIPT" emit \
   --ingest-manifest "$PROJ/.metadata/ingest-manifest.json" \
   --binding "$WORK/does-not-exist.json")"
 echo "$OUTMB" | python3 -c 'import json,sys; d=json.load(sys.stdin); sys.exit(0 if d["success"] and d["data"].get("binding_skipped") else 1)' \
-  && green "PASS: missing --binding path degrades to success + data.binding_skipped (OSError arm)" \
-  || { red "FAIL: missing --binding path did not fail-soft"; echo "$OUTMB"; errors=$((errors+1)); }
+  && green "PASS: question-store-34-missing-binding-path-degrades missing --binding path degrades to success + data.binding_skipped (OSError arm)" \
+  || { red "FAIL: question-store-34-missing-binding-path-degrades missing --binding path did not fail-soft"; echo "$OUTMB"; errors=$((errors+1)); }
 
 # ===== Fail-soft structurally-invalid binding (#428): valid JSON, wrong shape =
 # A binding that PARSES as valid JSON but is the wrong shape for the lineage
@@ -399,8 +399,8 @@ OUTAB="$(python3 "$SCRIPT" emit \
   --ingest-manifest "$PROJ/.metadata/ingest-manifest.json" \
   --binding "$WORK/array-binding.json")"
 echo "$OUTAB" | python3 -c 'import json,sys; d=json.load(sys.stdin); sys.exit(0 if d["success"] and d["data"].get("binding_skipped") else 1)' \
-  && green "PASS: JSON-array --binding degrades to success + data.binding_skipped (not-a-dict)" \
-  || { red "FAIL: JSON-array --binding did not fail-soft"; echo "$OUTAB"; errors=$((errors+1)); }
+  && green "PASS: question-store-35-json-array-binding-degrades JSON-array --binding degrades to success + data.binding_skipped (not-a-dict)" \
+  || { red "FAIL: question-store-35-json-array-binding-degrades JSON-array --binding did not fail-soft"; echo "$OUTAB"; errors=$((errors+1)); }
 
 # -- topic_lineage: null arm (None.get(...) -> AttributeError pre-#428; the {}
 #    default only fires on an ABSENT key, so a present-but-null is unprotected) --
@@ -412,8 +412,8 @@ OUTTL="$(python3 "$SCRIPT" emit \
   --ingest-manifest "$PROJ/.metadata/ingest-manifest.json" \
   --binding "$WORK/null-tl-binding.json")"
 echo "$OUTTL" | python3 -c 'import json,sys; d=json.load(sys.stdin); sys.exit(0 if d["success"] and d["data"].get("binding_skipped") else 1)' \
-  && green "PASS: topic_lineage:null --binding degrades to success + data.binding_skipped" \
-  || { red "FAIL: topic_lineage:null --binding did not fail-soft"; echo "$OUTTL"; errors=$((errors+1)); }
+  && green "PASS: question-store-36-topic-lineage-null-binding topic_lineage:null --binding degrades to success + data.binding_skipped" \
+  || { red "FAIL: question-store-36-topic-lineage-null-binding topic_lineage:null --binding did not fail-soft"; echo "$OUTTL"; errors=$((errors+1)); }
 
 # ===== Backward compat: emit WITHOUT --binding still works (slug-only) ========
 OUTNB="$(python3 "$SCRIPT" emit \
@@ -422,8 +422,8 @@ OUTNB="$(python3 "$SCRIPT" emit \
   --candidates "$PROJ/.metadata/candidates.json" \
   --ingest-manifest "$PROJ/.metadata/ingest-manifest.json")"
 echo "$OUTNB" | python3 -c 'import json,sys; d=json.load(sys.stdin); sys.exit(0 if d["success"] and "theme_bindings" in d["data"] else 1)' \
-  && green "PASS: no-binding emit succeeds and still carries theme_bindings[] (back-compat)" \
-  || { red "FAIL: no-binding emit broke"; echo "$OUTNB"; errors=$((errors+1)); }
+  && green "PASS: question-store-37-no-binding-emit-succeeds no-binding emit succeeds and still carries theme_bindings[] (back-compat)" \
+  || { red "FAIL: question-store-37-no-binding-emit-succeeds no-binding emit broke"; echo "$OUTNB"; errors=$((errors+1)); }
 
 if [ "$errors" -eq 0 ]; then
   green "ALL TESTS PASS"

@@ -74,9 +74,9 @@ meta_wiki = work / "meta-only"
 (meta_wiki / "wiki" / "meta").mkdir(parents=True)
 (meta_wiki / "wiki" / "meta" / "log.md").write_text("# Log\n", encoding="utf-8")
 
-check("meta-only: resolver returns wiki/meta/log.md",
+check("cpflip-01 meta-only: resolver returns wiki/meta/log.md",
       kl.log_path(meta_wiki) == meta_wiki / "wiki" / "meta" / "log.md")
-check("meta-only: file absent from both layouts defaults to wiki/meta/",
+check("cpflip-02 meta-only: file absent from both layouts defaults to wiki/meta/",
       kl.context_brief_path(meta_wiki) == meta_wiki / "wiki" / "meta" / "context_brief.md")
 
 # --- 2. legacy-flat wiki (pre-migration) ------------------------------------
@@ -85,16 +85,16 @@ flat_wiki = work / "legacy-flat"
 (flat_wiki / "wiki" / "log.md").write_text("# Log\n", encoding="utf-8")
 (flat_wiki / "wiki" / "context_brief.md").write_text("brief", encoding="utf-8")
 
-check("legacy-flat: resolver keeps an existing flat log.md",
+check("cpflip-03 legacy-flat: resolver keeps an existing flat log.md",
       kl.log_path(flat_wiki) == flat_wiki / "wiki" / "log.md")
-check("legacy-flat: resolver keeps an existing flat context_brief.md",
+check("cpflip-04 legacy-flat: resolver keeps an existing flat context_brief.md",
       kl.context_brief_path(flat_wiki) == flat_wiki / "wiki" / "context_brief.md")
 
 # --- 3. resolver <-> vendored-helper agreement on log.md --------------------
 for fixture_name, wiki in (("meta-only", meta_wiki), ("legacy-flat", flat_wiki)):
     resolver_path = kl.log_path(wiki)
     for mod_name, fn in helpers.items():
-        check(f"{fixture_name}: {mod_name}._meta_first agrees with the resolver on log.md",
+        check(f"cpflip-05-{fixture_name}-{mod_name.replace('_', '-')} {fixture_name}: {mod_name}._meta_first agrees with the resolver on log.md",
               Path(fn(wiki, "log.md")) == resolver_path,
               f"(helper={fn(wiki, 'log.md')} resolver={resolver_path})")
 
@@ -105,7 +105,7 @@ for fixture_name, wiki in (("meta-only", meta_wiki), ("legacy-flat", flat_wiki))
     with open(target, "a", encoding="utf-8") as f:
         f.write(f"## [2026-01-01] queue | {fixture_name} marker\n")
     read_back = kl.log_path(wiki).read_text(encoding="utf-8")
-    check(f"{fixture_name}: a _meta_first append is visible through the resolver",
+    check(f"cpflip-06-{fixture_name} {fixture_name}: a _meta_first append is visible through the resolver",
           f"{fixture_name} marker" in read_back)
 
 sys.exit(1 if failures else 0)

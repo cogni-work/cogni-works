@@ -66,18 +66,18 @@ EOF
 # ---------------------------------------------------------------------------
 ALL_OUT="$WORK/all.json"
 python3 "$LINT" --wiki-root "$WIKI" --fix=all > "$ALL_OUT"
-assert_grep '"success": true' "$ALL_OUT" "lint --fix=all succeeds"
+assert_grep '"success": true' "$ALL_OUT" "misplaced-fix-01 lint --fix=all succeeds"
 if [ -f "$WIKI/wiki/context_brief.md" ]; then
-  green "PASS: --fix=all left the misplaced control file untouched (opt-in respected)"
+  green "PASS: misplaced-fix-02 --fix=all left the misplaced control file untouched (opt-in respected)"
 else
-  red "FAIL: --fix=all relocated the control file — opt-in exclusion broken"
+  red "FAIL: misplaced-fix-02 --fix=all relocated the control file — opt-in exclusion broken"
   errors=$((errors + 1))
 fi
 if grep -q 'misplaced_control_files' "$ALL_OUT"; then
-  red "FAIL: --fix=all emitted misplaced_control_files entries"
+  red "FAIL: misplaced-fix-03 --fix=all emitted misplaced_control_files entries"
   errors=$((errors + 1))
 else
-  green "PASS: --fix=all emitted no misplaced_control_files entries"
+  green "PASS: misplaced-fix-03 --fix=all emitted no misplaced_control_files entries"
 fi
 
 # ---------------------------------------------------------------------------
@@ -85,12 +85,12 @@ fi
 # ---------------------------------------------------------------------------
 DRY_OUT="$WORK/dry.json"
 python3 "$LINT" --wiki-root "$WIKI" --fix=misplaced_control_files --dry-run > "$DRY_OUT"
-assert_grep '"success": true' "$DRY_OUT" "dry-run fix succeeds"
-assert_grep 'misplaced_control_files' "$DRY_OUT" "dry-run reports the planned relocation"
+assert_grep '"success": true' "$DRY_OUT" "misplaced-fix-04 dry-run fix succeeds"
+assert_grep 'misplaced_control_files' "$DRY_OUT" "misplaced-fix-05 dry-run reports the planned relocation"
 if [ -f "$WIKI/wiki/context_brief.md" ] && [ ! -e "$WIKI/wiki/meta/context_brief.md" ]; then
-  green "PASS: dry-run moved nothing"
+  green "PASS: misplaced-fix-06 dry-run moved nothing"
 else
-  red "FAIL: dry-run moved files"
+  red "FAIL: misplaced-fix-06 dry-run moved files"
   errors=$((errors + 1))
 fi
 
@@ -99,39 +99,39 @@ fi
 # ---------------------------------------------------------------------------
 MIG_DRY="$WORK/mig-dry.json"
 python3 "$MIGRATE" --wiki-root "$WIKI" --wiki-scripts-dir "$WSD" > "$MIG_DRY"
-assert_grep '"action": "dry_run"' "$MIG_DRY" "migrate dry-run on misplaced 0.0.8 base"
+assert_grep '"action": "dry_run"' "$MIG_DRY" "misplaced-fix-07 migrate dry-run on misplaced 0.0.8 base"
 assert_grep '"reason": "relocate_pending"' "$MIG_DRY" \
-  "dry-run names the relocate-only path (not noop:already_migrated)"
+  "misplaced-fix-08 dry-run names the relocate-only path (not noop:already_migrated)"
 
 # ---------------------------------------------------------------------------
 # 4. Wet fix relocates; the whole chain is idempotent
 # ---------------------------------------------------------------------------
 WET_OUT="$WORK/wet.json"
 python3 "$LINT" --wiki-root "$WIKI" --fix=misplaced_control_files > "$WET_OUT"
-assert_grep '"success": true' "$WET_OUT" "wet fix succeeds"
-assert_grep '"applied": true' "$WET_OUT" "wet fix reports an applied relocation"
+assert_grep '"success": true' "$WET_OUT" "misplaced-fix-09 wet fix succeeds"
+assert_grep '"applied": true' "$WET_OUT" "misplaced-fix-10 wet fix reports an applied relocation"
 if [ -f "$WIKI/wiki/meta/context_brief.md" ] && [ ! -e "$WIKI/wiki/context_brief.md" ]; then
-  green "PASS: context_brief.md relocated into wiki/meta/"
+  green "PASS: misplaced-fix-11 context_brief.md relocated into wiki/meta/"
 else
-  red "FAIL: context_brief.md not relocated"
+  red "FAIL: misplaced-fix-11 context_brief.md not relocated"
   errors=$((errors + 1))
 fi
 assert_grep '"schema_version": "0.0.8"' "$WIKI/.cogni-wiki/config.json" \
-  "relocate-only path leaves schema_version untouched"
+  "misplaced-fix-12 relocate-only path leaves schema_version untouched"
 
 NOOP_OUT="$WORK/noop.json"
 python3 "$MIGRATE" --wiki-root "$WIKI" --wiki-scripts-dir "$WSD" --apply > "$NOOP_OUT"
-assert_grep '"action": "noop"' "$NOOP_OUT" "follow-up migrate run is a clean noop"
-assert_grep '"reason": "already_migrated"' "$NOOP_OUT" "noop reason is already_migrated"
+assert_grep '"action": "noop"' "$NOOP_OUT" "misplaced-fix-13 follow-up migrate run is a clean noop"
+assert_grep '"reason": "already_migrated"' "$NOOP_OUT" "misplaced-fix-14 noop reason is already_migrated"
 
 RERUN_OUT="$WORK/rerun.json"
 python3 "$LINT" --wiki-root "$WIKI" --fix=misplaced_control_files > "$RERUN_OUT"
-assert_grep '"success": true' "$RERUN_OUT" "second wet fix run succeeds"
+assert_grep '"success": true' "$RERUN_OUT" "misplaced-fix-15 second wet fix run succeeds"
 if grep -q '"applied": true' "$RERUN_OUT"; then
-  red "FAIL: second fix run re-applied a relocation (idempotency broken)"
+  red "FAIL: misplaced-fix-16 second fix run re-applied a relocation (idempotency broken)"
   errors=$((errors + 1))
 else
-  green "PASS: second fix run finds nothing to relocate (idempotent)"
+  green "PASS: misplaced-fix-16 second fix run finds nothing to relocate (idempotent)"
 fi
 
 # ---------------------------------------------------------------------------
@@ -147,13 +147,13 @@ printf '# meta copy\n' > "$CONF/wiki/meta/log.md"
 printf '# flat copy (reappeared)\n' > "$CONF/wiki/log.md"
 CONF_OUT="$WORK/conflict.json"
 python3 "$MIGRATE" --wiki-root "$CONF" --wiki-scripts-dir "$WSD" --apply --relocate-only > "$CONF_OUT" || true
-assert_grep '"success": false' "$CONF_OUT" "both-locations conflict surfaces as failure (not noop)"
-assert_grep '"action": "conflicts"' "$CONF_OUT" "conflict action named"
-assert_grep 'never auto-clobbered' "$CONF_OUT" "conflict error explains manual resolution"
+assert_grep '"success": false' "$CONF_OUT" "misplaced-fix-17 both-locations conflict surfaces as failure (not noop)"
+assert_grep '"action": "conflicts"' "$CONF_OUT" "misplaced-fix-18 conflict action named"
+assert_grep 'never auto-clobbered' "$CONF_OUT" "misplaced-fix-19 conflict error explains manual resolution"
 if [ -f "$CONF/wiki/log.md" ] && grep -q 'meta copy' "$CONF/wiki/meta/log.md"; then
-  green "PASS: neither conflict copy was touched"
+  green "PASS: misplaced-fix-20 neither conflict copy was touched"
 else
-  red "FAIL: conflict resolution clobbered a copy"
+  red "FAIL: misplaced-fix-20 conflict resolution clobbered a copy"
   errors=$((errors + 1))
 fi
 
@@ -176,14 +176,14 @@ Reappeared narrative.
 EOF
 NARR_OUT="$WORK/narr.json"
 python3 "$MIGRATE" --wiki-root "$NARR" --wiki-scripts-dir "$WSD" --apply > "$NARR_OUT"
-assert_grep '"action": "relocated"' "$NARR_OUT" "narrative repair runs the relocate-only path"
+assert_grep '"action": "relocated"' "$NARR_OUT" "misplaced-fix-21 narrative repair runs the relocate-only path"
 if grep -q 'MACHINE-OWNED:OVERVIEW-NARRATIVE' "$NARR/wiki/overview.md"; then
-  red "FAIL: overview narrative block not folded by the repair"
+  red "FAIL: misplaced-fix-22 overview narrative block not folded by the repair"
   errors=$((errors + 1))
 else
-  green "PASS: reappeared overview narrative folded into index.md"
+  green "PASS: misplaced-fix-22 reappeared overview narrative folded into index.md"
 fi
-assert_grep 'Reappeared narrative.' "$NARR/wiki/index.md" "narrative text landed in index.md"
+assert_grep 'Reappeared narrative.' "$NARR/wiki/index.md" "misplaced-fix-23 narrative text landed in index.md"
 
 # ---------------------------------------------------------------------------
 # 4d. Deleted wiki/meta/ is repairable (recreated, then noop)
@@ -196,16 +196,16 @@ EOF
 printf '# Meta Base\n' > "$META/wiki/index.md"
 META_OUT="$WORK/meta.json"
 python3 "$MIGRATE" --wiki-root "$META" --wiki-scripts-dir "$WSD" --apply > "$META_OUT"
-assert_grep '"action": "relocated"' "$META_OUT" "missing wiki/meta/ triggers the repair (not noop)"
+assert_grep '"action": "relocated"' "$META_OUT" "misplaced-fix-24 missing wiki/meta/ triggers the repair (not noop)"
 if [ -d "$META/wiki/meta" ]; then
-  green "PASS: wiki/meta/ recreated"
+  green "PASS: misplaced-fix-25 wiki/meta/ recreated"
 else
-  red "FAIL: wiki/meta/ not recreated"
+  red "FAIL: misplaced-fix-25 wiki/meta/ not recreated"
   errors=$((errors + 1))
 fi
 META2_OUT="$WORK/meta2.json"
 python3 "$MIGRATE" --wiki-root "$META" --wiki-scripts-dir "$WSD" --apply > "$META2_OUT"
-assert_grep '"action": "noop"' "$META2_OUT" "repaired meta base noops on re-run"
+assert_grep '"action": "noop"' "$META2_OUT" "misplaced-fix-26 repaired meta base noops on re-run"
 
 # ---------------------------------------------------------------------------
 # 5. --relocate-only refuses a pre-0.0.8 base (never the full migration)
@@ -219,13 +219,13 @@ printf '# Log\n' > "$LEGACY/wiki/log.md"
 REFUSE_OUT="$WORK/refuse.json"
 python3 "$MIGRATE" --wiki-root "$LEGACY" --wiki-scripts-dir "$WSD" --relocate-only --apply > "$REFUSE_OUT" || true
 assert_grep '"success": false' "$REFUSE_OUT" \
-  "--relocate-only refuses a pre-0.0.8 base"
+  "misplaced-fix-27 --relocate-only refuses a pre-0.0.8 base"
 assert_grep 'knowledge-index --migrate' "$REFUSE_OUT" \
-  "refusal points at the full-migration path"
+  "misplaced-fix-28 refusal points at the full-migration path"
 if [ -f "$LEGACY/wiki/log.md" ] && [ ! -e "$LEGACY/wiki/meta" ]; then
-  green "PASS: refused base left byte-identical (no partial migration)"
+  green "PASS: misplaced-fix-29 refused base left byte-identical (no partial migration)"
 else
-  red "FAIL: --relocate-only touched a pre-0.0.8 base"
+  red "FAIL: misplaced-fix-29 --relocate-only touched a pre-0.0.8 base"
   errors=$((errors + 1))
 fi
 

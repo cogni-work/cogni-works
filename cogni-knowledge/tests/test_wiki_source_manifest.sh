@@ -75,8 +75,8 @@ d = env["data"]
 assert d["ingested_count"] == 2, d
 assert d["source_pages_scanned"] == 2, d
 PY
-then green "PASS: wiki-source-manifest: build succeeds, 2 sources ingested"
-else red "FAIL: wiki-source-manifest: build envelope wrong"; errors=$((errors + 1)); cat "$TMP/err.txt"; fi
+then green "PASS: wsmanifest-01 build succeeds, 2 sources ingested"
+else red "FAIL: wsmanifest-01 build envelope wrong"; errors=$((errors + 1)); cat "$TMP/err.txt"; fi
 
 # 2. Manifest shape + per-source sub-question mapping is correct.
 if python3 - "$OUT" <<'PY'
@@ -99,8 +99,8 @@ for e in (ai, gd):
     assert e["url"].startswith("https://"), e
     assert e["claims_extracted"] == 1, e
 PY
-then green "PASS: wiki-source-manifest: maps each source to the current plan sub-question, correct ingested[] shape"
-else red "FAIL: wiki-source-manifest: manifest shape/mapping wrong"; errors=$((errors + 1)); fi
+then green "PASS: wsmanifest-02 maps each source to the current plan sub-question, correct ingested[] shape"
+else red "FAIL: wsmanifest-02 manifest shape/mapping wrong"; errors=$((errors + 1)); fi
 
 # 3. A plan whose sub-questions cover no source page yields ingested_count 0.
 cat > "$TMP/proj/.metadata/plan-novel.json" <<'EOF'
@@ -117,14 +117,14 @@ env = json.load(open(sys.argv[1]))
 assert env["success"] is True, env
 assert env["data"]["ingested_count"] == 0, env["data"]
 PY
-then green "PASS: wiki-source-manifest: a novel plan covering no source yields ingested_count 0 (caller abort signal)"
-else red "FAIL: wiki-source-manifest: novel-plan empty-result path wrong"; errors=$((errors + 1)); fi
+then green "PASS: wsmanifest-03 a novel plan covering no source yields ingested_count 0 (caller abort signal)"
+else red "FAIL: wsmanifest-03 novel-plan empty-result path wrong"; errors=$((errors + 1)); fi
 
 # 4. Error path: bad threshold rejected.
 if python3 "$SCRIPT" build --wiki-root "$TMP" --plan "$TMP/proj/.metadata/plan.json" --out "$TMP/x.json" --threshold 0 \
      | python3 -c "import json,sys; assert json.load(sys.stdin)['success'] is False" 2>/dev/null
-then green "PASS: wiki-source-manifest: rejects --threshold 0"
-else red "FAIL: wiki-source-manifest: did not reject --threshold 0"; errors=$((errors + 1)); fi
+then green "PASS: wsmanifest-04 rejects --threshold 0"
+else red "FAIL: wsmanifest-04 did not reject --threshold 0"; errors=$((errors + 1)); fi
 
 # 5. Interview pages are source-class: an interview note covering a current plan
 #    sub-question is mapped into the synthesized ingested[] (the wiki read-side
@@ -164,8 +164,8 @@ assert iv["sub_question_refs"] == ["sq-01"], iv
 assert iv["url"].startswith("file://"), iv
 assert iv["claims_extracted"] == 1, iv
 PY
-then green "PASS: wiki-source-manifest: an interview page is mapped into ingested[] (source-class read-side)"
-else red "FAIL: wiki-source-manifest: interview page not treated as source-class"; errors=$((errors + 1)); fi
+then green "PASS: wsmanifest-05 an interview page is mapped into ingested[] (source-class read-side)"
+else red "FAIL: wsmanifest-05 interview page not treated as source-class"; errors=$((errors + 1)); fi
 
 if [ "$errors" -eq 0 ]; then
   green "ALL PASS"

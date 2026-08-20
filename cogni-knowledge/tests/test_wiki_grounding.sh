@@ -103,12 +103,12 @@ for p in data['pages']:
 paths={p['page_path'] for p in data['pages']}
 assert 'wiki/syntheses/high-risk-obligations.md' in paths, f'bad synthesis path {paths}'
 "; then
-    green "PASS: rank envelope: success:true, 2 pages scanned, both pages covered, shape + syntheses path correct"
+    green "PASS: wgrounding-01 rank envelope: success:true, 2 pages scanned, both pages covered, shape + syntheses path correct"
   else
-    red "FAIL: rank envelope shape assertion failed"; errors=$((errors+1))
+    red "FAIL: wgrounding-01 rank envelope shape assertion failed"; errors=$((errors+1))
   fi
 else
-  red "FAIL: rank exited non-zero on a populated base"; errors=$((errors+1))
+  red "FAIL: wgrounding-01 rank exited non-zero on a populated base"; errors=$((errors+1))
 fi
 
 # --- Case 2: fail-soft on a fresh / missing base -----------------------------
@@ -124,12 +124,12 @@ assert data['pages_scanned'] == 0, f'expected 0 pages, got {data[\"pages_scanned
 assert data['coverage_verdict'] == 'uncovered', f'expected uncovered, got {data[\"coverage_verdict\"]}'
 assert data['pages'] == [], f'expected no pages, got {data[\"pages\"]}'
 "; then
-    green "PASS: fail-soft on a fresh base: success:true, 0 pages, uncovered (no regression)"
+    green "PASS: wgrounding-02 fail-soft on a fresh base: success:true, 0 pages, uncovered (no regression)"
   else
-    red "FAIL: fresh-base fail-soft assertion failed"; errors=$((errors+1))
+    red "FAIL: wgrounding-02 fresh-base fail-soft assertion failed"; errors=$((errors+1))
   fi
 else
-  red "FAIL: rank exited non-zero on a fresh base (should be fail-soft success)"; errors=$((errors+1))
+  red "FAIL: wgrounding-02 rank exited non-zero on a fresh base (should be fail-soft success)"; errors=$((errors+1))
 fi
 
 # --- Case 3: THE DE-DUPLICATION PROOF ----------------------------------------
@@ -150,9 +150,9 @@ assert ground['data']['coverage_verdict'] == sq['coverage_verdict'], \
 # Same covering set, in the same order, with the same per-page fields.
 assert g_pages == c_pages, f'covering set diverged:\n grounding={g_pages}\n coverage={c_pages}'
 "; then
-  green "PASS: de-duplication proof: wiki-grounding rank == wiki-coverage score for the same sub-question"
+  green "PASS: wgrounding-03 de-duplication proof: wiki-grounding rank == wiki-coverage score for the same sub-question"
 else
-  red "FAIL: wiki-grounding and wiki-coverage produced different covering sets — they are NOT one primitive"; errors=$((errors+1))
+  red "FAIL: wgrounding-03 wiki-grounding and wiki-coverage produced different covering sets — they are NOT one primitive"; errors=$((errors+1))
 fi
 
 # --- Case 5: person pages join the default walk ------------------------------
@@ -181,23 +181,23 @@ hit = any(p['slug'] == 'thierry-breton' and p['type'] == 'person' for p in pages
 path_ok = any(p.get('page_path') == 'wiki/people/thierry-breton.md' for p in pages)
 sys.exit(0 if (d['success'] and hit and path_ok) else 1)
 "; then
-  green "PASS: person page visible to rank (distilled_claims signal, wiki/people/ path)"
+  green "PASS: wgrounding-04 person page visible to rank (distilled_claims signal, wiki/people/ path)"
 else
-  red "FAIL: person page invisible to the grounding walk"
+  red "FAIL: wgrounding-04 person page invisible to the grounding walk"
   echo "$P_OUT" | head -30
   errors=$((errors+1))
 fi
 
 # --- Case 4: bad threshold rejected ------------------------------------------
 if python3 "$GROUNDING" rank --wiki-root "$WIKI" --question "$QUERY" --threshold 0 >/dev/null 2>&1; then
-  red "FAIL: --threshold 0 was accepted (must be rejected, exclusive lower bound)"; errors=$((errors+1))
+  red "FAIL: wgrounding-05 --threshold 0 was accepted (must be rejected, exclusive lower bound)"; errors=$((errors+1))
 else
-  green "PASS: --threshold 0 is rejected (exclusive lower bound)"
+  green "PASS: wgrounding-05 --threshold 0 is rejected (exclusive lower bound)"
 fi
 if python3 "$GROUNDING" rank --wiki-root "$WIKI" --question "$QUERY" --threshold 1.5 >/dev/null 2>&1; then
-  red "FAIL: --threshold 1.5 was accepted (must be rejected, >1)"; errors=$((errors+1))
+  red "FAIL: wgrounding-06 --threshold 1.5 was accepted (must be rejected, >1)"; errors=$((errors+1))
 else
-  green "PASS: out-of-range (>1) --threshold is rejected"
+  green "PASS: wgrounding-06 out-of-range (>1) --threshold is rejected"
 fi
 
 # --- Case 5: dual-level rank — byte-identical when off, source-lift when on ---
@@ -249,9 +249,9 @@ slugs={p['slug'] for p in d['pages']}
 # single-level: the source whose own tokens miss the query is NOT covering.
 sys.exit(0 if ('art16-provider-text' not in slugs and 'pflichten-risikoklasse' in slugs) else 1)
 "; then
-  green "PASS: dual-level OFF — citing source absent (single-level path unchanged)"
+  green "PASS: wgrounding-07 dual-level OFF — citing source absent (single-level path unchanged)"
 else
-  red "FAIL: single-level path surfaced the citing source without --dual-level"
+  red "FAIL: wgrounding-07 single-level path surfaced the citing source without --dual-level"
   echo "$BASE_OUT" | head -30; errors=$((errors+1))
 fi
 if echo "$DUAL_OUT" | python3 -c "
@@ -262,9 +262,9 @@ src=by.get('art16-provider-text')
 ok = src is not None and any(r.startswith('dual-level: cited by') for r in src['reasons'])
 sys.exit(0 if ok else 1)
 "; then
-  green "PASS: dual-level ON — citing source lifted into the ranked set (dual-level reason)"
+  green "PASS: wgrounding-08 dual-level ON — citing source lifted into the ranked set (dual-level reason)"
 else
-  red "FAIL: --dual-level did not lift the cited source"
+  red "FAIL: wgrounding-08 --dual-level did not lift the cited source"
   echo "$DUAL_OUT" | head -30; errors=$((errors+1))
 fi
 

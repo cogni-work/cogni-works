@@ -28,8 +28,8 @@ WSD="$PLUGIN_ROOT/scripts/vendor/cogni-wiki/skills/wiki-ingest/scripts"
 
 . "$(dirname "$0")/fixtures/test_helpers.sh"
 
-if [ ! -f "$SCRIPT" ]; then red "FAIL: question-store.py not found at $SCRIPT"; exit 1; fi
-if [ ! -d "$WSD" ]; then red "FAIL: cogni-wiki wiki-ingest scripts not found at $WSD"; exit 1; fi
+if [ ! -f "$SCRIPT" ]; then red "FAIL: answer-merge-01 question-store.py not found at $SCRIPT"; exit 1; fi
+if [ ! -d "$WSD" ]; then red "FAIL: answer-merge-02 cogni-wiki wiki-ingest scripts not found at $WSD"; exit 1; fi
 
 WORK=$(mktemp -d)
 trap 'rm -rf "$WORK"' EXIT
@@ -92,27 +92,27 @@ if [ "$(echo "$OUT" | field '["success"]')" = "True" ] \
    && echo "$PAGE" | grep -q "claim_id: acl-002" \
    && echo "$PAGE" | grep -q 'source_claim_refs: \["src-a#clm-003"\]' \
    && echo "$PAGE" | grep -q "updated: 2026-"; then
-  green "PASS: CREATE — answer_claims: block spliced with acl ids + provenance"
+  green "PASS: answer-merge-03 CREATE — answer_claims: block spliced with acl ids + provenance"
 else
-  red "FAIL: CREATE"; echo "$OUT"; errors=$((errors+1))
+  red "FAIL: answer-merge-03 CREATE"; echo "$OUT"; errors=$((errors+1))
 fi
 # Body (## Findings + ## Notes) byte-identical.
 if [ "$(body_of "$WIKI/wiki/questions/q-hr.md")" = "$BODY_BEFORE" ]; then
-  green "PASS: CREATE — ## Findings + ## Notes preserved byte-for-byte"
+  green "PASS: answer-merge-04 CREATE — ## Findings + ## Notes preserved byte-for-byte"
 else
-  red "FAIL: body changed on answer-merge"; errors=$((errors+1))
+  red "FAIL: answer-merge-04 body changed on answer-merge"; errors=$((errors+1))
 fi
 # updated: bumped past created: 2026-05-01.
-grep -q "^updated: 2026-05-01" "$WIKI/wiki/questions/q-hr.md" && { red "FAIL: updated not bumped"; errors=$((errors+1)); } || green "PASS: updated: bumped"
+grep -q "^updated: 2026-05-01" "$WIKI/wiki/questions/q-hr.md" && { red "FAIL: answer-merge-05 updated not bumped"; errors=$((errors+1)); } || green "PASS: answer-merge-05 updated: bumped"
 
 # --- 2. BYTE-STABLE re-run ---------------------------------------------------
 SNAP=$(cat "$WIKI/wiki/questions/q-hr.md")
 OUT=$(run "$PROJ/.metadata/rec1.txt")
 if [ "$(echo "$OUT" | field '["data"]["questions"][0]["action"]')" = "unchanged" ] \
    && [ "$(cat "$WIKI/wiki/questions/q-hr.md")" = "$SNAP" ]; then
-  green "PASS: re-run is unchanged + byte-identical (idempotent)"
+  green "PASS: answer-merge-06 re-run is unchanged + byte-identical (idempotent)"
 else
-  red "FAIL: re-run not idempotent"; echo "$OUT"; errors=$((errors+1))
+  red "FAIL: answer-merge-06 re-run not idempotent"; echo "$OUT"; errors=$((errors+1))
 fi
 
 # --- 3. CROSS-RUN compounding (provenance union + new claim) -----------------
@@ -128,14 +128,14 @@ if [ "$(echo "$OUT" | field '["data"]["questions"][0]["claims_deduped"]')" = "1"
    && [ "$(echo "$OUT" | field '["data"]["questions"][0]["claims_new"]')" = "1" ] \
    && echo "$PAGE" | grep -q 'backlinks: \["src-a", "src-c"\]' \
    && echo "$PAGE" | grep -q "claim_id: acl-003"; then
-  green "PASS: cross-run — same-text claim unions backlink (deduped=1), new claim appends acl-003"
+  green "PASS: answer-merge-07 cross-run — same-text claim unions backlink (deduped=1), new claim appends acl-003"
 else
-  red "FAIL: cross-run compounding"; echo "$OUT"; echo "$PAGE" | grep -A1 backlinks; errors=$((errors+1))
+  red "FAIL: answer-merge-07 cross-run compounding"; echo "$OUT"; echo "$PAGE" | grep -A1 backlinks; errors=$((errors+1))
 fi
 # No provenance ref dropped: src-a#clm-003 AND src-c#clm-050 both on acl-001.
 echo "$PAGE" | grep -q 'source_claim_refs: \["src-a#clm-003", "src-c#clm-050"\]' \
-  && green "PASS: cross-run — source_claim_refs unioned, none dropped" \
-  || { red "FAIL: provenance ref dropped/altered"; echo "$PAGE" | grep source_claim_refs; errors=$((errors+1)); }
+  && green "PASS: answer-merge-08 cross-run — source_claim_refs unioned, none dropped" \
+  || { red "FAIL: answer-merge-08 provenance ref dropped/altered"; echo "$PAGE" | grep source_claim_refs; errors=$((errors+1)); }
 
 # --- 4. FAIL-SAFE: near-but-distinct claim kept, not over-merged -------------
 write_q q-fs question ""
@@ -148,9 +148,9 @@ OUT=$(run "$PROJ/.metadata/recfs.txt")
 # Two distinct facts (12 vs 24, GPAI vs high-risk) → two claims, neither merged.
 if [ "$(echo "$OUT" | field '["data"]["questions"][0]["claims_new"]')" = "2" ] \
    && [ "$(echo "$OUT" | field '["data"]["questions"][0]["claims_deduped"]')" = "0" ]; then
-  green "PASS: fail-safe — near-but-distinct claims kept (2 new, 0 deduped)"
+  green "PASS: answer-merge-09 fail-safe — near-but-distinct claims kept (2 new, 0 deduped)"
 else
-  red "FAIL: fail-safe over-merge"; echo "$OUT"; errors=$((errors+1))
+  red "FAIL: answer-merge-09 fail-safe over-merge"; echo "$OUT"; errors=$((errors+1))
 fi
 
 # --- 5. TYPE guard: non-question page at the slug → skipped ------------------
@@ -164,9 +164,9 @@ OUT=$(run "$PROJ/.metadata/recnq.txt")
 if [ "$(echo "$OUT" | field '["data"]["questions"][0]["action"]')" = "skipped" ] \
    && [ "$(echo "$OUT" | field '["data"]["questions"][0]["reason"]')" = "not_a_question_page" ] \
    && [ "$(cat "$WIKI/wiki/questions/q-notq.md")" = "$SNAP" ]; then
-  green "PASS: type guard — non-question page skipped (not_a_question_page), untouched"
+  green "PASS: answer-merge-10 type guard — non-question page skipped (not_a_question_page), untouched"
 else
-  red "FAIL: type guard"; echo "$OUT"; errors=$((errors+1))
+  red "FAIL: answer-merge-10 type guard"; echo "$OUT"; errors=$((errors+1))
 fi
 
 # --- 6. FOUNDATION guard -----------------------------------------------------
@@ -179,9 +179,9 @@ EOF
 OUT=$(run "$PROJ/.metadata/recf.txt")
 if [ "$(echo "$OUT" | field '["data"]["questions"][0]["reason"]')" = "foundation_collision" ] \
    && [ "$(cat "$WIKI/wiki/questions/q-found.md")" = "$SNAP" ]; then
-  green "PASS: foundation guard — foundation:true question skipped, untouched"
+  green "PASS: answer-merge-11 foundation guard — foundation:true question skipped, untouched"
 else
-  red "FAIL: foundation guard"; echo "$OUT"; errors=$((errors+1))
+  red "FAIL: answer-merge-11 foundation guard"; echo "$OUT"; errors=$((errors+1))
 fi
 
 # --- 7. MALFORMED claim line counted, not lost -------------------------------
@@ -194,9 +194,9 @@ EOF
 OUT=$(run "$PROJ/.metadata/recmal.txt")
 if [ "$(echo "$OUT" | field '["data"]["claims_rejected_total"]')" = "1" ] \
    && [ "$(echo "$OUT" | field '["data"]["questions"][0]["claims_new"]')" = "1" ]; then
-  green "PASS: malformed claim line counted in claims_rejected_total, valid claim kept"
+  green "PASS: answer-merge-12 malformed claim line counted in claims_rejected_total, valid claim kept"
 else
-  red "FAIL: malformed-claim accounting"; echo "$OUT"; errors=$((errors+1))
+  red "FAIL: answer-merge-12 malformed-claim accounting"; echo "$OUT"; errors=$((errors+1))
 fi
 
 # --- 8. EMPTY-then-NONEMPTY: no empty block persisted, no duplicate key -------
@@ -211,9 +211,9 @@ OUT=$(run "$PROJ/.metadata/recempty.txt")
 if [ "$(echo "$OUT" | field '["data"]["questions"][0]["action"]')" = "unchanged" ] \
    && [ "$(echo "$OUT" | field '["data"]["questions"][0]["reason"]')" = "no_claims" ] \
    && ! grep -q "answer_claims" "$WIKI/wiki/questions/q-empty.md"; then
-  green "PASS: zero-claim question stays framing-only (no empty answer_claims: [] block)"
+  green "PASS: answer-merge-13 zero-claim question stays framing-only (no empty answer_claims: [] block)"
 else
-  red "FAIL: empty answer_claims block was persisted"; echo "$OUT"; errors=$((errors+1))
+  red "FAIL: answer-merge-13 empty answer_claims block was persisted"; echo "$OUT"; errors=$((errors+1))
 fi
 cat > "$PROJ/.metadata/recempty2.txt" <<'EOF'
 - question: q-empty
@@ -223,9 +223,9 @@ OUT=$(run "$PROJ/.metadata/recempty2.txt")
 # Exactly ONE top-level answer_claims key in the frontmatter (no duplicate fork).
 N_KEYS=$(python3 -c 'import re,sys;t=open(sys.argv[1],encoding="utf-8").read();fm=re.match(r"^---\n(.*?)\n---",t,re.S).group(1);print(sum(1 for l in fm.splitlines() if l.startswith("answer_claims")))' "$WIKI/wiki/questions/q-empty.md")
 if [ "$(echo "$OUT" | field '["data"]["questions"][0]["action"]')" = "created_block" ] && [ "$N_KEYS" = "1" ]; then
-  green "PASS: later real claim creates exactly one answer_claims key (no duplicate-key fork)"
+  green "PASS: answer-merge-14 later real claim creates exactly one answer_claims key (no duplicate-key fork)"
 else
-  red "FAIL: duplicate/again-empty answer_claims key (got $N_KEYS)"; echo "$OUT"; errors=$((errors+1))
+  red "FAIL: answer-merge-14 duplicate/again-empty answer_claims key (got $N_KEYS)"; echo "$OUT"; errors=$((errors+1))
 fi
 
 if [ $errors -gt 0 ]; then red "$errors case(s) failed."; exit 1; fi

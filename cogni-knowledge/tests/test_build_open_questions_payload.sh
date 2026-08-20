@@ -30,7 +30,7 @@ errors=0
 WORK=$(mktemp -d)
 trap 'rm -rf "$WORK"' EXIT
 
-[ -f "$HELPER" ] || { red "FAIL: $HELPER not found"; exit 1; }
+[ -f "$HELPER" ] || { red "FAIL: oqpayload-01 $HELPER not found"; exit 1; }
 
 # --- stubs -----------------------------------------------------------------
 LINT_OK="$WORK/lint_ok.py"
@@ -69,11 +69,11 @@ print('OK' if ($expr) else 'BAD')
 
 # a. lint + gaps
 OUT=$(python3 "$HELPER" --wiki-root "$WORK/w" --project "$PROJ" --wiki-lint "$LINT_OK")
-assert_env a "$OUT" "d['success'] and len(d['data']['warnings'])==2 and d['meta']['lint_findings']==1 and d['meta']['research_findings']==1 and any(w.get('id')=='sq:sq-01' for w in d['data']['warnings']) and any(w.get('page')=='pg' for w in d['data']['warnings'])" "a: lint + gaps merged into warnings"
+assert_env a "$OUT" "d['success'] and len(d['data']['warnings'])==2 and d['meta']['lint_findings']==1 and d['meta']['research_findings']==1 and any(w.get('id')=='sq:sq-01' for w in d['data']['warnings']) and any(w.get('page')=='pg' for w in d['data']['warnings'])" "oqpayload-02 lint + gaps merged into warnings"
 
 # b. lint only (no coverage manifest)
 OUT=$(python3 "$HELPER" --wiki-root "$WORK/w" --project "$EMPTY" --wiki-lint "$LINT_OK")
-assert_env b "$OUT" "d['success'] and d['meta']['research_findings']==0 and len(d['data']['warnings'])==1 and d['meta']['lint_findings']==1" "b: lint only, zero research findings"
+assert_env b "$OUT" "d['success'] and d['meta']['research_findings']==0 and len(d['data']['warnings'])==1 and d['meta']['lint_findings']==1" "oqpayload-03 lint only, zero research findings"
 
 # c. gaps only (lint stub fails → degraded, gaps still streamed)
 # Capture the exit code with `|| RC=$?` — under `set -e` a bare `OUT=$(...)`
@@ -82,21 +82,21 @@ assert_env b "$OUT" "d['success'] and d['meta']['research_findings']==0 and len(
 # even when lint fails, so this guards that contract for real.
 RC=0
 OUT=$(python3 "$HELPER" --wiki-root "$WORK/w" --project "$PROJ" --wiki-lint "$LINT_FAIL") || RC=$?
-assert_env c "$OUT" "d['success'] and d['meta']['research_findings']==1 and len(d['meta']['degraded'])>=1 and len(d['data']['warnings'])==1" "c: lint failure degraded, gaps still streamed"
-[ "$RC" = "0" ] || { red "FAIL: c exit code should be 0, got $RC"; errors=$((errors + 1)); }
+assert_env c "$OUT" "d['success'] and d['meta']['research_findings']==1 and len(d['meta']['degraded'])>=1 and len(d['data']['warnings'])==1" "oqpayload-04 lint failure degraded, gaps still streamed"
+[ "$RC" = "0" ] || { red "FAIL: oqpayload-05 exit code should be 0, got $RC"; errors=$((errors + 1)); }
 
 # d. both missing (lint fails + no coverage)
 OUT=$(python3 "$HELPER" --wiki-root "$WORK/w" --project "$EMPTY" --wiki-lint "$LINT_FAIL")
-assert_env d "$OUT" "d['success'] and d['meta']['lint_findings']==0 and d['meta']['research_findings']==0 and len(d['meta']['degraded'])>=1" "d: both missing → empty buckets, degraded, success true"
+assert_env d "$OUT" "d['success'] and d['meta']['lint_findings']==0 and d['meta']['research_findings']==0 and len(d['meta']['degraded'])>=1" "oqpayload-06 both missing → empty buckets, degraded, success true"
 
 # e. --no-research-gaps skips the coverage stream
 OUT=$(python3 "$HELPER" --wiki-root "$WORK/w" --project "$PROJ" --wiki-lint "$LINT_OK" --no-research-gaps)
-assert_env e "$OUT" "d['meta']['research_findings']==0 and len(d['data']['warnings'])==1" "e: --no-research-gaps skips gaps, keeps lint"
+assert_env e "$OUT" "d['meta']['research_findings']==0 and len(d['data']['warnings'])==1" "oqpayload-07 --no-research-gaps skips gaps, keeps lint"
 
 # f. --coverage-json reads the post-ingest finalize file (all covered) → 0 gaps,
 #    while the default curate file (case a) streamed 1. The #585 timing fix.
 OUT=$(python3 "$HELPER" --wiki-root "$WORK/w" --project "$PROJ" --wiki-lint "$LINT_OK" --coverage-json "wiki-coverage-finalize.json")
-assert_env f "$OUT" "d['success'] and d['meta']['research_findings']==0 and len(d['data']['warnings'])==1 and d['meta']['lint_findings']==1" "f: --coverage-json finalize re-score drops the false gap"
+assert_env f "$OUT" "d['success'] and d['meta']['research_findings']==0 and len(d['data']['warnings'])==1 and d['meta']['lint_findings']==1" "oqpayload-08 --coverage-json finalize re-score drops the false gap"
 
 if [ "$errors" -ne 0 ]; then
   red "FAILED: $errors assertion(s)"

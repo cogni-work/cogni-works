@@ -42,7 +42,7 @@
 # allowlist or baseline to compensate — widening it would have forced the very
 # exemption machinery the guard exists to avoid, to close a gap nothing is
 # failing on today. The accepted cost is that this coverage stays plugin-local
-# and is not discoverable from the repo root. The D1 floor below is what stops
+# and is not discoverable from the repo root. The plain-emit-07 floor below is what stops
 # it from being dropped silently: break the deeper arm of the discovery loop
 # and the only definer leaves the scanned population, while every sourcing file
 # still counts toward the liveness floor above.
@@ -71,9 +71,9 @@ EXPECTED='PASS: probe-green
 FAIL: probe-red'
 
 if [ "$CAPTURED" = "$EXPECTED" ]; then
-  green "PASS: helper emits plain result lines on stdout"
+  green "PASS: plain-emit-01 helper emits plain result lines on stdout"
 else
-  red "FAIL: helper did not emit the expected plain result lines"
+  red "FAIL: plain-emit-01 helper did not emit the expected plain result lines"
   red "  expected: $EXPECTED"
   red "  actual:   $CAPTURED"
   errors=$((errors + 1))
@@ -89,9 +89,9 @@ ESC_PAT="${BSL}033"
 CARRIERS="$(grep -rlF -- "$ESC_PAT" "$SCAN_ROOT" || true)"
 
 if [ -z "$CARRIERS" ]; then
-  green "PASS: no file under the scanned tree carries an escape literal"
+  green "PASS: plain-emit-02 no file under the scanned tree carries an escape literal"
 else
-  red "FAIL: escape literal still present under the scanned tree"
+  red "FAIL: plain-emit-02 escape literal still present under the scanned tree"
   echo "$CARRIERS" | sed 's/^/  /'
   errors=$((errors + 1))
 fi
@@ -126,7 +126,7 @@ for f in "$SCAN_ROOT"/*.sh "$SCAN_ROOT"/fixtures/*.sh; do
   definers=$((definers + 1))
   exercisers=$((exercisers + 1))
 
-  # Tally definers found under the deeper segment separately — the D1 floor
+  # Tally definers found under the deeper segment separately — the plain-emit-07 floor
   # below keys on this, not on the whole-population count.
   case "$f" in
     */fixtures/*) fixtures_definers=$((fixtures_definers + 1)) ;;
@@ -146,10 +146,10 @@ for f in "$SCAN_ROOT"/*.sh "$SCAN_ROOT"/fixtures/*.sh; do
   done <<<"$defs"
 
   if [ "$n_red" -ne 1 ] || [ "$n_green" -ne 1 ]; then
-    red "FAIL: $(basename "$f") defines red=$n_red green=$n_green (expected 1 each)"
+    red "FAIL: plain-emit-03-$(case_slug "$(basename "$f")") defines red=$n_red green=$n_green (expected 1 each)"
     shape_errors=$((shape_errors + 1))
   elif [ "$n_plain" -ne 2 ]; then
-    red "FAIL: $(basename "$f") emitter bodies are not both the plain printf form"
+    red "FAIL: plain-emit-04-$(case_slug "$(basename "$f")") emitter bodies are not both the plain printf form"
     printf '%s\n' "$defs" | sed 's/^/  /'
     shape_errors=$((shape_errors + 1))
   fi
@@ -162,10 +162,10 @@ errors=$((errors + shape_errors))
 # helper — and 78 source it). The floor sits at 50 so either direction of drift
 # has room, and consolidating definers onto the helper cannot trip it.
 if [ "$exercisers" -lt 50 ]; then
-  red "FAIL: only $exercisers file(s) exercising the emitter contract were found (expected at least 50) — the scan is not reaching them"
+  red "FAIL: plain-emit-05 only $exercisers file(s) exercising the emitter contract were found (expected at least 50) — the scan is not reaching them"
   errors=$((errors + 1))
 elif [ "$shape_errors" -eq 0 ]; then
-  green "PASS: $definers emitter-defining file(s) are paired and plain, of $exercisers exercising the contract"
+  green "PASS: plain-emit-06 emitter-defining files are paired and plain — $definers of $exercisers exercising the contract"
 fi
 
 # Coverage floor — the shared emitter helper must stay inside the scanned
@@ -181,10 +181,10 @@ fi
 # colon-abutted, so a mutation harness classifies this case instead of
 # reporting case_not_found.
 if [ "$fixtures_definers" -lt 1 ]; then
-  red "FAIL: D1 no emitter-defining file under the fixtures segment was scanned — the shared helper left the scanned population"
+  red "FAIL: plain-emit-07 no emitter-defining file under the fixtures segment was scanned — the shared helper left the scanned population"
   errors=$((errors + 1))
 else
-  green "PASS: D1 $fixtures_definers emitter-defining file(s) scanned under the fixtures segment, so shared-helper coverage holds"
+  green "PASS: plain-emit-07 $fixtures_definers emitter-defining file(s) scanned under the fixtures segment, so shared-helper coverage holds"
 fi
 
 echo

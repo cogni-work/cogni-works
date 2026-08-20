@@ -27,7 +27,7 @@ WIKI_SCRIPTS="$PLUGIN_ROOT/scripts/vendor/cogni-wiki/skills/wiki-ingest/scripts"
 . "$(dirname "$0")/fixtures/test_helpers.sh"
 
 if [ ! -f "$SCRIPT" ]; then
-  red "FAIL: contradiction-frontmatter-store.py not found at $SCRIPT"
+  red "FAIL: contra-res-01 contradiction-frontmatter-store.py not found at $SCRIPT"
   exit 1
 fi
 
@@ -195,22 +195,22 @@ EOF
 # --- 1. splice -----------------------------------------------------------
 OUT=$(python3 "$SCRIPT" splice --ingest "$INGEST" --wiki-root "$WIKI" --wiki-scripts-dir "$WIKI_SCRIPTS")
 echo "$OUT" | python3 -c "import json,sys; d=json.load(sys.stdin); sys.exit(0 if d.get('success') else 1)" \
-  && green "PASS: splice returned success" || { red "FAIL: splice did not succeed: $OUT"; errors=$((errors+1)); }
+  && green "PASS: contra-res-02 splice returned success" || { red "FAIL: contra-res-02 splice did not succeed: $OUT"; errors=$((errors+1)); }
 
-assert_grep "contradiction_resolutions:" "$WIKI/wiki/sources/src-a.md" "src-a gained contradiction_resolutions block (loser of ctr-001/ctr-002)"
-assert_grep "contradiction_resolutions:" "$WIKI/wiki/sources/src-b.md" "src-b gained contradiction_resolutions block (survivor of ctr-001/ctr-004)"
-assert_grep "contradiction_resolutions:" "$WIKI/wiki/questions/q-topic.md" "q-topic question node gained contradiction_resolutions block (survivor of ctr-002)"
+assert_grep "contradiction_resolutions:" "$WIKI/wiki/sources/src-a.md" "contra-res-03 src-a gained contradiction_resolutions block (loser of ctr-001/ctr-002)"
+assert_grep "contradiction_resolutions:" "$WIKI/wiki/sources/src-b.md" "contra-res-04 src-b gained contradiction_resolutions block (survivor of ctr-001/ctr-004)"
+assert_grep "contradiction_resolutions:" "$WIKI/wiki/questions/q-topic.md" "contra-res-05 q-topic question node gained contradiction_resolutions block (survivor of ctr-002)"
 
 # The survivor/loser pair + rationale are present on the loser page.
-assert_grep "survivor_claim_id: clm-005" "$WIKI/wiki/sources/src-a.md" "src-a records the survivor claim id"
-assert_grep "loser_claim_id: clm-002" "$WIKI/wiki/sources/src-a.md" "src-a records the loser claim id"
-assert_grep "ctr-001" "$WIKI/wiki/sources/src-a.md" "src-a records the finding id"
+assert_grep "survivor_claim_id: clm-005" "$WIKI/wiki/sources/src-a.md" "contra-res-06 src-a records the survivor claim id"
+assert_grep "loser_claim_id: clm-002" "$WIKI/wiki/sources/src-a.md" "contra-res-07 src-a records the loser claim id"
+assert_grep "ctr-001" "$WIKI/wiki/sources/src-a.md" "contra-res-08 src-a records the finding id"
 
 # --- 2. additive — existing keys + body intact ---------------------------
-assert_grep "pre_extracted_claims:" "$WIKI/wiki/sources/src-a.md" "src-a still carries pre_extracted_claims (additive)"
-assert_grep "Body paragraph that must survive" "$WIKI/wiki/sources/src-a.md" "src-a body intact"
-assert_grep "answer_claims:" "$WIKI/wiki/questions/q-topic.md" "q-topic still carries answer_claims (additive)"
-assert_grep "Human note that must survive" "$WIKI/wiki/questions/q-topic.md" "q-topic ## Notes tail intact"
+assert_grep "pre_extracted_claims:" "$WIKI/wiki/sources/src-a.md" "contra-res-09 src-a still carries pre_extracted_claims (additive)"
+assert_grep "Body paragraph that must survive" "$WIKI/wiki/sources/src-a.md" "contra-res-10 src-a body intact"
+assert_grep "answer_claims:" "$WIKI/wiki/questions/q-topic.md" "contra-res-11 q-topic still carries answer_claims (additive)"
+assert_grep "Human note that must survive" "$WIKI/wiki/questions/q-topic.md" "contra-res-12 q-topic ## Notes tail intact"
 
 # --- 3. round-trip through the read-side parser ---------------------------
 RT=$(KL="$PLUGIN_ROOT/scripts" PAGE="$WIKI/wiki/sources/src-a.md" python3 -c "
@@ -231,20 +231,20 @@ ok = (
 )
 print('OK' if ok else 'BAD:%r' % entries)
 ")
-[ "$RT" = "OK" ] && green "PASS: parse_contradiction_resolutions round-trips the survivor/loser pair" \
-  || { red "FAIL: round-trip parser mismatch: $RT"; errors=$((errors+1)); }
+[ "$RT" = "OK" ] && green "PASS: contra-res-13 parse_contradiction_resolutions round-trips the survivor/loser pair" \
+  || { red "FAIL: contra-res-13 round-trip parser mismatch: $RT"; errors=$((errors+1)); }
 
 # --- 4. distilled loser out of scope -------------------------------------
-[ ! -f "$WIKI/wiki/concepts/concept-x.md" ] && green "PASS: distilled (dcl-) loser page is out of scope (not created)" \
-  || { red "FAIL: a concepts/ page was unexpectedly created"; errors=$((errors+1)); }
+[ ! -f "$WIKI/wiki/concepts/concept-x.md" ] && green "PASS: contra-res-14 distilled (dcl-) loser page is out of scope (not created)" \
+  || { red "FAIL: contra-res-14 a concepts/ page was unexpectedly created"; errors=$((errors+1)); }
 
 # --- 5. idempotent re-run ------------------------------------------------
 cp "$WIKI/wiki/sources/src-a.md" "$WORK/src-a.afterfirst"
 python3 "$SCRIPT" splice --ingest "$INGEST" --wiki-root "$WIKI" --wiki-scripts-dir "$WIKI_SCRIPTS" >/dev/null
 if diff -q "$WORK/src-a.afterfirst" "$WIKI/wiki/sources/src-a.md" >/dev/null; then
-  green "PASS: re-run is idempotent (byte-identical)"
+  green "PASS: contra-res-15 re-run is idempotent (byte-identical)"
 else
-  red "FAIL: re-run changed the page (not idempotent)"; errors=$((errors+1))
+  red "FAIL: contra-res-15 re-run changed the page (not idempotent)"; errors=$((errors+1))
 fi
 
 # --- 6. fail-soft: missing ingest, empty findings, null survivor ----------
@@ -254,13 +254,13 @@ cp "$WIKI/wiki/sources/src-c.md" "$WORK/src-c.pristine"
 
 MISS=$(python3 "$SCRIPT" splice --ingest "$WORK/does-not-exist.json" --wiki-root "$WIKI" --wiki-scripts-dir "$WIKI_SCRIPTS")
 echo "$MISS" | python3 -c "import json,sys; d=json.load(sys.stdin); sys.exit(0 if d.get('success') and d['data'].get('pages_annotated')==0 else 1)" \
-  && green "PASS: missing ingest JSON is a fail-soft no-op" || { red "FAIL: missing ingest not a clean no-op: $MISS"; errors=$((errors+1)); }
+  && green "PASS: contra-res-16 missing ingest JSON is a fail-soft no-op" || { red "FAIL: contra-res-16 missing ingest not a clean no-op: $MISS"; errors=$((errors+1)); }
 
 EMPTY="$WORK/empty-ingest.json"
 echo '{"schema_version":"0.1.0","findings":[],"counts":{},"resolution_coverage":{"resolved":0}}' > "$EMPTY"
 E=$(python3 "$SCRIPT" splice --ingest "$EMPTY" --wiki-root "$WIKI" --wiki-scripts-dir "$WIKI_SCRIPTS")
 echo "$E" | python3 -c "import json,sys; d=json.load(sys.stdin); sys.exit(0 if d.get('success') and d['data'].get('pages_annotated')==0 else 1)" \
-  && green "PASS: empty findings is a fail-soft no-op" || { red "FAIL: empty findings not a clean no-op: $E"; errors=$((errors+1)); }
+  && green "PASS: contra-res-17 empty findings is a fail-soft no-op" || { red "FAIL: contra-res-17 empty findings not a clean no-op: $E"; errors=$((errors+1)); }
 
 # A null-survivor-only finding writes nothing.
 NULLONLY="$WORK/null-ingest.json"
@@ -269,11 +269,11 @@ cat > "$NULLONLY" <<'EOF'
 EOF
 python3 "$SCRIPT" splice --ingest "$NULLONLY" --wiki-root "$WIKI" --wiki-scripts-dir "$WIKI_SCRIPTS" >/dev/null
 if diff -q "$WORK/src-c.pristine" "$WIKI/wiki/sources/src-c.md" >/dev/null; then
-  green "PASS: null-survivor finding is skipped (page untouched)"
+  green "PASS: contra-res-18 null-survivor finding is skipped (page untouched)"
 else
-  red "FAIL: null-survivor finding altered a page"; errors=$((errors+1))
+  red "FAIL: contra-res-18 null-survivor finding altered a page"; errors=$((errors+1))
 fi
-assert_not_grep "contradiction_resolutions:" "$WIKI/wiki/sources/src-c.md" "src-c never gained a block (null survivor skipped)"
+assert_not_grep "contradiction_resolutions:" "$WIKI/wiki/sources/src-c.md" "contra-res-19 src-c never gained a block (null survivor skipped)"
 
 # --- summary -------------------------------------------------------------
 if [ "$errors" -eq 0 ]; then

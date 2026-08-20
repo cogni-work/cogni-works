@@ -32,7 +32,7 @@ SCRIPT="$PLUGIN_ROOT/scripts/knowledge-binding.py"
 . "$(dirname "$0")/fixtures/test_helpers.sh"
 
 if [ ! -f "$SCRIPT" ]; then
-  red "FAIL: knowledge-binding.py not found at $SCRIPT"
+  red "FAIL: kbind-01 knowledge-binding.py not found at $SCRIPT"
   exit 1
 fi
 
@@ -63,9 +63,9 @@ assert b['topic_lineage']['open_themes'] == [], b['topic_lineage']
 assert b['refresh_candidates'] == [], b['refresh_candidates']
 print('OK')
 " | grep -q OK; then
-  green "PASS: init writes schema 0.1.5 + empty covered_themes[]/refresh_candidates[] + empty charter"
+  green "PASS: kbind-02 init writes schema 0.1.5 + empty covered_themes[]/refresh_candidates[] + empty charter"
 else
-  red "FAIL: init schema/covered_themes/charter wrong"; errors=$((errors+1))
+  red "FAIL: kbind-02 init schema/covered_themes/charter wrong"; errors=$((errors+1))
 fi
 
 # 1b. init with charter + open-themes flags — charter populated, framed_at set,
@@ -90,9 +90,9 @@ assert c['framed_at'], c  # stamped when any field is non-empty
 assert b['topic_lineage']['open_themes'] == ['high-risk systems', 'conformity assessment', 'GPAI'], b['topic_lineage']
 print('OK')
 " | grep -q OK; then
-  green "PASS: init --charter-* / --open-themes populate charter + open_themes[]"
+  green "PASS: kbind-03 init --charter-* / --open-themes populate charter + open_themes[]"
 else
-  red "FAIL: charter/open-themes flags not honoured"; errors=$((errors+1))
+  red "FAIL: kbind-03 charter/open-themes flags not honoured"; errors=$((errors+1))
 fi
 
 # 2. upsert-themes — append a fresh theme (bare array form, via stdin).
@@ -109,9 +109,9 @@ assert e['labels'] == ['Records of Processing Scope'], e
 assert e['first_seen'] == e['last_seen'], e
 print('OK')
 " | grep -q OK; then
-  green "PASS: upsert-themes appends a fresh entry (first_seen==last_seen, labels seeded)"
+  green "PASS: kbind-04 upsert-themes appends a fresh entry (first_seen==last_seen, labels seeded)"
 else
-  red "FAIL: append entry wrong"; errors=$((errors+1))
+  red "FAIL: kbind-04 append entry wrong"; errors=$((errors+1))
 fi
 
 # Freeze first_seen to a known-past date so the bump is observable.
@@ -132,8 +132,8 @@ cat > "$RECS" <<'EOF'
 EOF
 OUT3="$(python3 "$SCRIPT" upsert-themes --knowledge-root "$KB" --records "$RECS")"
 echo "$OUT3" | grep -q '"themes_updated": 1' \
-  && green "PASS: upsert-themes reports themes_updated=1 (envelope form accepted)" \
-  || { red "FAIL: themes_updated!=1 or envelope rejected"; echo "$OUT3"; errors=$((errors+1)); }
+  && green "PASS: kbind-05 upsert-themes reports themes_updated=1 (envelope form accepted)" \
+  || { red "FAIL: kbind-05 themes_updated!=1 or envelope rejected"; echo "$OUT3"; errors=$((errors+1)); }
 if python3 -c "
 import json
 ct = json.load(open('$BINDING'))['topic_lineage']['covered_themes']
@@ -145,9 +145,9 @@ assert e['last_seen'] != '2025-01-01', ('last_seen must bump', e)
 assert e['question_slug'] == 'records-of-processing-scope-v2', ('question_slug refreshes', e)
 print('OK')
 " | grep -q OK; then
-  green "PASS: re-upsert unions labels[], bumps last_seen, freezes first_seen, refreshes question_slug"
+  green "PASS: kbind-06 re-upsert unions labels[], bumps last_seen, freezes first_seen, refreshes question_slug"
 else
-  red "FAIL: update semantics wrong"; errors=$((errors+1))
+  red "FAIL: kbind-06 update semantics wrong"; errors=$((errors+1))
 fi
 
 # 5. Malformed record (missing question_slug) is skipped, block intact.
@@ -159,9 +159,9 @@ ct = json.load(open('$BINDING'))['topic_lineage']['covered_themes']
 assert len(ct) == 1, ('malformed record must not append', ct)
 print('OK')
 " | grep -q OK; then
-  green "PASS: malformed record (no question_slug) skipped, block uncorrupted"
+  green "PASS: kbind-07 malformed record (no question_slug) skipped, block uncorrupted"
 else
-  red "FAIL: malformed record corrupted the block"; errors=$((errors+1))
+  red "FAIL: kbind-07 malformed record corrupted the block"; errors=$((errors+1))
 fi
 
 # -----------------------------------------------------------------------------
@@ -203,9 +203,9 @@ assert b['research_projects'] == [], b['research_projects']
 assert b['topic_lineage']['covered_themes'] == [], b['topic_lineage']
 print('OK')
 " | grep -q OK; then
-  green "PASS: set-charter partial update changes one field, leaves others + re-stamps framed_at"
+  green "PASS: kbind-08 set-charter partial update changes one field, leaves others + re-stamps framed_at"
 else
-  red "FAIL: set-charter partial update wrong"; errors=$((errors+1))
+  red "FAIL: kbind-08 set-charter partial update wrong"; errors=$((errors+1))
 fi
 
 # 7. --open-themes unions (no clobber, no dupes, order preserved); an
@@ -226,9 +226,9 @@ assert ot == ['high-risk systems', 'GPAI', 'conformity assessment'], ('union, or
 assert b['charter']['framed_at'] == '2025-02-02', ('open-themes-only must NOT re-stamp', b['charter'])
 print('OK')
 " | grep -q OK; then
-  green "PASS: set-charter --open-themes unions (no dup, order kept), no framed_at re-stamp"
+  green "PASS: kbind-09 set-charter --open-themes unions (no dup, order kept), no framed_at re-stamp"
 else
-  red "FAIL: set-charter open-themes union wrong"; errors=$((errors+1))
+  red "FAIL: kbind-09 set-charter open-themes union wrong"; errors=$((errors+1))
 fi
 
 # 8. Pre-0.1.4 fail-soft — delete the charter block, set-charter recreates a
@@ -256,30 +256,30 @@ assert c['framed_at'], ('framed_at stamped', c)
 assert b['topic_lineage']['open_themes'] == ['data sharing'], b['topic_lineage']
 print('OK')
 " | grep -q OK; then
-  green "PASS: set-charter on a pre-0.1.4 binding recreates a complete charter fail-soft"
+  green "PASS: kbind-10 set-charter on a pre-0.1.4 binding recreates a complete charter fail-soft"
 else
-  red "FAIL: set-charter pre-0.1.4 fail-soft wrong"; errors=$((errors+1))
+  red "FAIL: kbind-10 set-charter pre-0.1.4 fail-soft wrong"; errors=$((errors+1))
 fi
 
 # 9. No field flags → success:false, no silent no-op.
 OUT9="$(python3 "$SCRIPT" set-charter --knowledge-root "$KBS" 2>&1 || true)"
 echo "$OUT9" | grep -q '"success": false' \
-  && green "PASS: set-charter with no field flags returns success:false" \
-  || { red "FAIL: set-charter no-flags should fail"; echo "$OUT9"; errors=$((errors+1)); }
+  && green "PASS: kbind-11 set-charter with no field flags returns success:false" \
+  || { red "FAIL: kbind-11 set-charter no-flags should fail"; echo "$OUT9"; errors=$((errors+1)); }
 
 # 10. Missing binding → clean success:false envelope (not a traceback).
 KBM="$WORK/kbm"; mkdir -p "$KBM"
 OUT10="$(python3 "$SCRIPT" set-charter --knowledge-root "$KBM" --charter-domain 'X' 2>&1 || true)"
 echo "$OUT10" | grep -q '"success": false' \
-  && green "PASS: set-charter on a missing binding returns a clean success:false envelope" \
-  || { red "FAIL: set-charter missing binding should fail cleanly"; echo "$OUT10"; errors=$((errors+1)); }
+  && green "PASS: kbind-12 set-charter on a missing binding returns a clean success:false envelope" \
+  || { red "FAIL: kbind-12 set-charter missing binding should fail cleanly"; echo "$OUT10"; errors=$((errors+1)); }
 
 # 11. --knowledge-slug mismatch → refuse.
 OUT11="$(python3 "$SCRIPT" set-charter --knowledge-root "$KBS" \
   --knowledge-slug wrong-slug --charter-domain 'X' 2>&1 || true)"
 echo "$OUT11" | grep -q 'knowledge_slug mismatch' \
-  && green "PASS: set-charter refuses on --knowledge-slug mismatch" \
-  || { red "FAIL: set-charter slug-mismatch guard wrong"; echo "$OUT11"; errors=$((errors+1)); }
+  && green "PASS: kbind-13 set-charter refuses on --knowledge-slug mismatch" \
+  || { red "FAIL: kbind-13 set-charter slug-mismatch guard wrong"; echo "$OUT11"; errors=$((errors+1)); }
 
 # 12. Clearing the last steering field must NOT re-stamp framed_at — mirrors
 #     init's invariant (framed_at stamped only when a steering field is
@@ -309,9 +309,9 @@ assert c['domain'] == '', ('domain must clear', c)
 assert c['framed_at'] == '2025-03-03', ('clearing the last field must NOT re-stamp', c)
 print('OK')
 " | grep -q OK; then
-  green "PASS: set-charter clearing the last steering field does not re-stamp framed_at"
+  green "PASS: kbind-14 set-charter clearing the last steering field does not re-stamp framed_at"
 else
-  red "FAIL: set-charter clearing case re-stamped framed_at"; errors=$((errors+1))
+  red "FAIL: kbind-14 set-charter clearing case re-stamped framed_at"; errors=$((errors+1))
 fi
 
 # 12b. A subsequent non-empty re-steer DOES re-stamp (the common path stays).
@@ -325,9 +325,9 @@ assert c['domain'] == 'EU AI Act high-risk', c
 assert c['framed_at'] != '2025-03-03', ('a non-empty re-steer must re-stamp', c)
 print('OK')
 " | grep -q OK; then
-  green "PASS: set-charter non-empty re-steer still re-stamps framed_at"
+  green "PASS: kbind-15 set-charter non-empty re-steer still re-stamps framed_at"
 else
-  red "FAIL: set-charter non-empty re-steer failed to re-stamp"; errors=$((errors+1))
+  red "FAIL: kbind-15 set-charter non-empty re-steer failed to re-stamp"; errors=$((errors+1))
 fi
 
 # --- themes subcommand (#450): open MINUS covered at read time -------------
@@ -369,9 +369,9 @@ assert d['covered'] == [{'label': 'High-Risk AI Systems', 'question_slug': 'high
 assert d['open_total'] == 3 and d['covered_total'] == 1, (d['open_total'], d['covered_total'])
 print('OK')
 " | grep -q OK; then
-  green "PASS: themes hides a researched seed (open MINUS covered via theme_norm_key), keeps the rest"
+  green "PASS: kbind-16 themes hides a researched seed (open MINUS covered via theme_norm_key), keeps the rest"
 else
-  red "FAIL: themes open/covered partition wrong"; echo "$OUTT"; errors=$((errors+1))
+  red "FAIL: kbind-16 themes open/covered partition wrong"; echo "$OUTT"; errors=$((errors+1))
 fi
 
 # themes does NOT mutate the stored backlog (display-only, approach (a)).
@@ -381,9 +381,9 @@ b = json.load(open('$BINDT'))
 assert b['topic_lineage']['open_themes'] == ['high-risk systems', 'conformity assessment', 'GPAI'], b['topic_lineage']['open_themes']
 print('OK')
 " | grep -q OK; then
-  green "PASS: themes leaves the stored open_themes[] untouched (non-destructive)"
+  green "PASS: kbind-17 themes leaves the stored open_themes[] untouched (non-destructive)"
 else
-  red "FAIL: themes mutated open_themes[]"; errors=$((errors+1))
+  red "FAIL: kbind-17 themes mutated open_themes[]"; errors=$((errors+1))
 fi
 
 # (d-fallback) covered[] with an empty labels[] falls back to question_slug.
@@ -402,9 +402,9 @@ cov = json.load(sys.stdin)['data']['covered']
 assert {'label': 'some-slug', 'question_slug': 'some-slug'} in cov, cov
 print('OK')
 " | grep -q OK; then
-  green "PASS: themes covered[] falls back to question_slug when labels[] is empty"
+  green "PASS: kbind-18 themes covered[] falls back to question_slug when labels[] is empty"
 else
-  red "FAIL: covered[] labels[0]/question_slug fallback wrong"; errors=$((errors+1))
+  red "FAIL: kbind-18 covered[] labels[0]/question_slug fallback wrong"; errors=$((errors+1))
 fi
 
 # (c) an empty / whitespace open entry never hides (an empty key matches nothing).
@@ -419,16 +419,21 @@ assert d['open_active'] == ['  ', ''], d['open_active']
 assert d['open_covered'] == [], d['open_covered']
 print('OK')
 " | grep -q OK; then
-  green "PASS: themes keeps empty/whitespace open entries visible (empty key never hides)"
+  green "PASS: kbind-19 themes keeps empty/whitespace open entries visible (empty key never hides)"
 else
-  red "FAIL: empty-key open entry wrongly hidden"; errors=$((errors+1))
+  red "FAIL: kbind-19 empty-key open entry wrongly hidden"; errors=$((errors+1))
 fi
 
 # (e) a structurally-wrong topic_lineage degrades fail-soft to empty partitions.
 KBF="$WORK/kbf"; mkdir -p "$KBF/.cogni-knowledge"
-for SHAPE in '{"topic_lineage": [], "schema_version": "0.1.4"}' \
-             '{"topic_lineage": null, "schema_version": "0.1.4"}' \
-             '{"schema_version": "0.1.0"}'; do
+# Each entry is `<id-slug>#<json>`: a bare "$SHAPE" in the label leaves all
+# three iterations sharing one first token. Both expansions below anchor on the
+# FIRST '#', so a '#' inside a payload is harmless.
+for ENTRY in 'lineage-array#{"topic_lineage": [], "schema_version": "0.1.4"}' \
+             'lineage-null#{"topic_lineage": null, "schema_version": "0.1.4"}' \
+             'no-lineage#{"schema_version": "0.1.0"}'; do
+  SHAPE_SLUG="${ENTRY%%#*}"
+  SHAPE="${ENTRY#*#}"
   printf '%s' "$SHAPE" > "$KBF/.cogni-knowledge/binding.json"
   if python3 "$SCRIPT" themes --knowledge-root "$KBF" | python3 -c "
 import json, sys
@@ -438,9 +443,9 @@ d = o['data']
 assert d['open_active'] == [] and d['open_covered'] == [] and d['covered'] == [], d
 print('OK')
 " | grep -q OK; then
-    green "PASS: themes fail-soft on structurally-wrong binding ($SHAPE)"
+    green "PASS: kbind-20-$SHAPE_SLUG themes fail-soft on structurally-wrong binding ($SHAPE)"
   else
-    red "FAIL: themes did not degrade fail-soft for $SHAPE"; errors=$((errors+1))
+    red "FAIL: kbind-20-$SHAPE_SLUG themes did not degrade fail-soft for $SHAPE"; errors=$((errors+1))
   fi
 done
 
@@ -471,9 +476,9 @@ assert e['via_pages'] == ['src-x'], e
 assert e['status'] == 'open', e
 print('OK')
 " | grep -q OK; then
-  green "PASS: add-refresh-candidates appends a fresh candidate"
+  green "PASS: kbind-21 add-refresh-candidates appends a fresh candidate"
 else
-  red "FAIL: add-refresh-candidates append wrong"; errors=$((errors+1))
+  red "FAIL: kbind-21 add-refresh-candidates append wrong"; errors=$((errors+1))
 fi
 
 # 10. add again (same slug, new trigger + new via page) — dedup by synthesis_slug,
@@ -490,9 +495,9 @@ assert e['triggered_by_source'] == ['src-new', 'src-two'], ('union triggers', e)
 assert e['via_pages'] == ['concept-y', 'src-x'], ('union via_pages sorted', e)
 print('OK')
 " | grep -q OK; then
-  green "PASS: add-refresh-candidates dedups + unions on a repeat trigger (full envelope accepted)"
+  green "PASS: kbind-22 add-refresh-candidates dedups + unions on a repeat trigger (full envelope accepted)"
 else
-  red "FAIL: add-refresh-candidates dedup/union wrong"; errors=$((errors+1))
+  red "FAIL: kbind-22 add-refresh-candidates dedup/union wrong"; errors=$((errors+1))
 fi
 
 # 11. resolve (hit) — removes the matching entry.
@@ -507,9 +512,9 @@ b = j.load(open('$BINDING_R'))
 assert b['refresh_candidates'] == [], b['refresh_candidates']
 print('OK')
 " | grep -q OK; then
-  green "PASS: resolve-refresh-candidate removes the matching entry"
+  green "PASS: kbind-23 resolve-refresh-candidate removes the matching entry"
 else
-  red "FAIL: resolve-refresh-candidate remove wrong"; errors=$((errors+1))
+  red "FAIL: kbind-23 resolve-refresh-candidate remove wrong"; errors=$((errors+1))
 fi
 
 # 12. resolve (miss) — no-op success, count unchanged.
@@ -520,9 +525,9 @@ assert o['success'] is True, o
 assert o['data']['removed'] == 0, o['data']
 print('OK')
 " | grep -q OK; then
-  green "PASS: resolve-refresh-candidate no-ops on a missing slug"
+  green "PASS: kbind-24 resolve-refresh-candidate no-ops on a missing slug"
 else
-  red "FAIL: resolve-refresh-candidate no-op wrong"; errors=$((errors+1))
+  red "FAIL: kbind-24 resolve-refresh-candidate no-op wrong"; errors=$((errors+1))
 fi
 
 # 12b. resolve by citation overlap (--cites) — clears an entry whose via_pages[]
@@ -542,9 +547,9 @@ b = j.load(open('$BINDING_R'))
 assert b['refresh_candidates'] == [], b['refresh_candidates']
 print('OK')
 " | grep -q OK; then
-  green "PASS: resolve-refresh-candidate clears by via_pages[] overlap under a divergent slug (--cites)"
+  green "PASS: kbind-25 resolve-refresh-candidate clears by via_pages[] overlap under a divergent slug (--cites)"
 else
-  red "FAIL: resolve-refresh-candidate --cites overlap clear wrong"; errors=$((errors+1))
+  red "FAIL: kbind-25 resolve-refresh-candidate --cites overlap clear wrong"; errors=$((errors+1))
 fi
 
 # 12c. --cites with no overlap is a no-op — an unrelated candidate is preserved
@@ -561,9 +566,9 @@ b = j.load(open('$BINDING_R'))
 assert len(b['refresh_candidates']) == 1, b['refresh_candidates']
 print('OK')
 " | grep -q OK; then
-  green "PASS: resolve-refresh-candidate --cites with no overlap is a no-op"
+  green "PASS: kbind-26 resolve-refresh-candidate --cites with no overlap is a no-op"
 else
-  red "FAIL: resolve-refresh-candidate --cites no-overlap no-op wrong"; errors=$((errors+1))
+  red "FAIL: kbind-26 resolve-refresh-candidate --cites no-overlap no-op wrong"; errors=$((errors+1))
 fi
 
 # 13. Legacy pre-0.1.5 fall-through — a binding with NO refresh_candidates key:
@@ -583,9 +588,9 @@ b = json.load(open('$KBL/.cogni-knowledge/binding.json'))
 assert b['refresh_candidates'][0]['synthesis_slug'] == 'syn-z', b
 print('OK')
 " | grep -q OK; then
-  green "PASS: refresh-candidate writers fall through on a pre-0.1.5 binding"
+  green "PASS: kbind-27 refresh-candidate writers fall through on a pre-0.1.5 binding"
 else
-  red "FAIL: pre-0.1.5 fall-through wrong"; errors=$((errors+1))
+  red "FAIL: kbind-27 pre-0.1.5 fall-through wrong"; errors=$((errors+1))
 fi
 
 if [ "$errors" -eq 0 ]; then

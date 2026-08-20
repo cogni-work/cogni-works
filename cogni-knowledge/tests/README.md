@@ -59,22 +59,24 @@ The plain `PASS:`/`FAIL:` label above is what keeps a result line *parsable*.
 What makes one *addressable* is the token after it.
 
 The **case id is the first whitespace-delimited token following the label** —
-not the first token of the line. In `PASS: init bootstraps fetch-cache/
-directory` the id is `init`, and that is what `mutation-check.sh --case <id>`
-points at when it checks that a guard actually fires. That harness ships with
-the cogni-service managed-service tooling and lives outside this repo; the
+not the first token of the line. In `PASS: binding-path-03 init bootstraps
+fetch-cache/ directory` the id is `binding-path-03`, and that is what
+`mutation-check.sh --case <id>` points at when it checks that a guard actually
+fires. That harness ships with the cogni-service managed-service tooling and
+lives outside this repo; the
 same-named `cogni-portfolio/scripts/mutation-check.sh` and
 `cogni-consult/scripts/mutation-check.sh` are different, bespoke scripts and are
 not this harness.
 
-Five rules follow from how it matches:
+Six rules follow from how it matches:
 
 1. **An id is unique within its suite.** Two cases sharing one id cannot be told
    apart, so neither is addressable.
 
 2. **Extend a stem with a hyphenated discriminator; never re-use a bare stem.**
-   `test_binding_project_path.sh` shows the defect as it stands today — three
-   cases open with the bare stem `init`:
+   `test_binding_project_path.sh` used to show the defect — three cases opened
+   with the bare stem `init`, and it also collided two-way on `append-project`
+   and on `legacy`, a class rather than a one-off:
 
    ```
    PASS: init writes schema_version 0.1.5
@@ -82,33 +84,52 @@ Five rules follow from how it matches:
    PASS: init writes curator_defaults; omits derivable/unused fields
    ```
 
-   No `--case init` addresses any one of them. As `init-schema-version`,
-   `init-fetch-cache` and `init-curator-defaults` each becomes reachable while
-   the shared stem still groups them by eye. The same suite also collides
-   two-way on `append-project` and `legacy` — a class, not a one-off.
+   No `--case init` addressed any one of them. It now ships as:
 
-3. **No trailing colon on an id, and nothing before the label.** The id is
+   ```
+   PASS: binding-path-02 init writes schema_version 0.1.5
+   PASS: binding-path-03 init bootstraps fetch-cache/ directory
+   PASS: binding-path-04 init writes curator_defaults; omits derivable/unused fields
+   ```
+
+   Each is reachable, and the shared `binding-path` stem still groups them by
+   eye. Note the id is `<suite-slug>-<NN>`, not a bare descriptive stem like
+   `init-fetch-cache`: the recorded scheme in `cogni-knowledge/CLAUDE.md` keys
+   the stem to the *suite* so two suites can never claim the same one.
+
+3. **`NN` is an allocation counter, not a position.** Ids happen to run in
+   source order today because each suite was converted in one pass. When you add
+   a case, take the next unused number for that suite and leave every existing
+   id alone — never renumber to keep the sequence contiguous. A renumber
+   silently repoints every later id at a different case, so a `--case` recorded
+   in an older PR body re-runs against a guard it was never written for and
+   still reports green. Running the suite cannot detect this: uniqueness still
+   holds. Gaps are expected and harmless.
+
+4. **No trailing colon on an id, and nothing before the label.** The id is
    right-anchored on whitespace-or-end-of-line, so a colon glued to it makes the
-   token `init-fetch-cache:`, and a recipe passing `--case init-fetch-cache`
+   token `binding-path-03:`, and a recipe passing `--case binding-path-03`
    gets `case_not_found` with no hint why. Only whitespace may precede the
    label — the same reason the plain-emitter rule above exists.
 
-4. **Both arms of one case carry the same id.** The discriminator belongs in the
+5. **Both arms of one case carry the same id.** The discriminator belongs in the
    id, never only in the human-readable message:
 
    ```sh
-   green "PASS: init-fetch-cache bootstraps the fetch-cache/ directory"
-   red   "FAIL: init-fetch-cache bootstraps the fetch-cache/ directory"
+   green "PASS: binding-path-03 bootstraps the fetch-cache/ directory"
+   red   "FAIL: binding-path-03 bootstraps the fetch-cache/ directory"
    ```
 
-   Breaking this is worse than it looks. `test_binding_project_path.sh` pairs
-   `PASS: init writes schema_version 0.1.5` with `FAIL: schema_version expected
-   0.1.5, got ...` — different ids on the two arms. Under `--case init` a
-   genuine failure does not even report `case_not_found`: the two *other*
-   `PASS: init` lines still match the green pattern, so the run reads a real red
-   as **green** and the check silently proves nothing.
+   Breaking this is worse than it looks. `test_binding_project_path.sh` used to
+   pair `PASS: init writes schema_version 0.1.5` with `FAIL: schema_version
+   expected 0.1.5, got ...` — different ids on the two arms. Under `--case init`
+   a genuine failure did not even report `case_not_found`: the two *other*
+   `PASS: init` lines still matched the green pattern, so the run read a real red
+   as **green** and the check silently proved nothing. Both arms now carry
+   `binding-path-02`, so the red is addressable. Only the *id* has to match —
+   each arm keeps its own prose, so the fail arm still reports what it got.
 
-5. **Verify uniqueness by running the suite — never by grepping call sites.** An
+6. **Verify uniqueness by running the suite — never by grepping call sites.** An
    id is routinely built from a variable or emitted inside a loop, so the source
    is not a census of what gets printed. Run it and group what came out:
 

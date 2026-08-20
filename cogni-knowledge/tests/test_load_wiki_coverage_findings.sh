@@ -141,12 +141,12 @@ check() { # $1 = tag, $2 = description
   fi
 }
 
-check missing "missing wiki-coverage.json → []"
-check covered "all-covered manifest → []"
-check mixed   "mixed verdicts → ordered sq: findings + bare ids from plan"
-check noplan  "missing plan.json → bare-fallback message"
-check unsafe  "regex-unsafe sq_id dropped, safe id kept"
-check override "coverage_name override reads finalize file (#585): default→gap, override→[]"
+check missing "load-wcov-01 missing wiki-coverage.json → []"
+check covered "load-wcov-02 all-covered manifest → []"
+check mixed   "load-wcov-03 mixed verdicts → ordered sq: findings + bare ids from plan"
+check noplan  "load-wcov-04 missing plan.json → bare-fallback message"
+check unsafe  "load-wcov-05 regex-unsafe sq_id dropped, safe id kept"
+check override "load-wcov-06 coverage_name override reads finalize file (#585): default→gap, override→[]"
 
 if [ "$errors" -ne 0 ]; then
   red "FAILED: $errors assertion(s)"

@@ -106,10 +106,10 @@ OUT=$("$EVAL" eval --wiki-root "$WIKI" 2>/dev/null) || true
 echo "$OUT" > "$WORK/eval-out.json"
 
 # 1. Envelope shape.
-assert_grep '"success": true' "$WORK/eval-out.json" "eval emits success:true envelope"
-assert_grep '"aggregate"'     "$WORK/eval-out.json" "data carries an aggregate block"
-assert_grep '"per_query"'     "$WORK/eval-out.json" "data carries a per_query block"
-assert_grep '"mrr"'           "$WORK/eval-out.json" "aggregate reports mrr"
+assert_grep '"success": true' "$WORK/eval-out.json" "retrieval-eval-01 eval emits success:true envelope"
+assert_grep '"aggregate"'     "$WORK/eval-out.json" "retrieval-eval-02 data carries an aggregate block"
+assert_grep '"per_query"'     "$WORK/eval-out.json" "retrieval-eval-03 data carries a per_query block"
+assert_grep '"mrr"'           "$WORK/eval-out.json" "retrieval-eval-04 aggregate reports mrr"
 
 # Pull the computed metrics out with python for exact-value assertions.
 python3 - "$WORK/eval-out.json" <<'PY' > "$WORK/metrics.txt" 2>/dev/null || true
@@ -132,47 +132,47 @@ print("nm_rr", nm["reciprocal_rank"])
 PY
 
 # 2. Exact-match query: rank 1, hit@1.
-assert_grep '^hr_rank 1$' "$WORK/metrics.txt" "exact-match query ranks its ground-truth page at 1"
-assert_grep '^hr_h1 1$'   "$WORK/metrics.txt" "exact-match query scores hit@1"
+assert_grep '^hr_rank 1$' "$WORK/metrics.txt" "retrieval-eval-05 exact-match query ranks its ground-truth page at 1"
+assert_grep '^hr_h1 1$'   "$WORK/metrics.txt" "retrieval-eval-06 exact-match query scores hit@1"
 
 # 3. No-match query: no relevant page in passing set, RR 0.
-assert_grep '^nm_rank None$' "$WORK/metrics.txt" "no-match query finds no relevant page"
-assert_grep '^nm_h1 0$'      "$WORK/metrics.txt" "no-match query scores hit@1==0"
-assert_grep '^nm_rr 0.0$'    "$WORK/metrics.txt" "no-match query scores reciprocal_rank==0.0"
+assert_grep '^nm_rank None$' "$WORK/metrics.txt" "retrieval-eval-07 no-match query finds no relevant page"
+assert_grep '^nm_h1 0$'      "$WORK/metrics.txt" "retrieval-eval-08 no-match query scores hit@1==0"
+assert_grep '^nm_rr 0.0$'    "$WORK/metrics.txt" "retrieval-eval-09 no-match query scores reciprocal_rank==0.0"
 
 # 4. Aggregate over the two queries.
-assert_grep '^n_queries 2$' "$WORK/metrics.txt" "two queries seeded from question nodes"
-assert_grep '^hit_at_1 0.5$' "$WORK/metrics.txt" "aggregate hit@1 == 0.5"
-assert_grep '^hit_at_5 0.5$' "$WORK/metrics.txt" "aggregate hit@5 == 0.5"
-assert_grep '^mrr 0.5$'      "$WORK/metrics.txt" "aggregate MRR == 0.5"
+assert_grep '^n_queries 2$' "$WORK/metrics.txt" "retrieval-eval-10 two queries seeded from question nodes"
+assert_grep '^hit_at_1 0.5$' "$WORK/metrics.txt" "retrieval-eval-11 aggregate hit@1 == 0.5"
+assert_grep '^hit_at_5 0.5$' "$WORK/metrics.txt" "retrieval-eval-12 aggregate hit@5 == 0.5"
+assert_grep '^mrr 0.5$'      "$WORK/metrics.txt" "retrieval-eval-13 aggregate MRR == 0.5"
 
 # 5. Seeding wrote a versioned labelled set + a results file under .cogni-knowledge/.
 if [ -f "$WIKI/.cogni-knowledge/retrieval-eval-set.json" ]; then
-  green "PASS: labelled set seeded to .cogni-knowledge/retrieval-eval-set.json"
+  green "PASS: retrieval-eval-14 labelled set seeded to .cogni-knowledge/retrieval-eval-set.json"
 else
-  red "FAIL: labelled set was not written under .cogni-knowledge/"
+  red "FAIL: retrieval-eval-14 labelled set was not written under .cogni-knowledge/"
   errors=$((errors + 1))
 fi
 if [ -f "$WIKI/.cogni-knowledge/retrieval-eval.json" ]; then
-  green "PASS: run results persisted to .cogni-knowledge/retrieval-eval.json"
+  green "PASS: retrieval-eval-15 run results persisted to .cogni-knowledge/retrieval-eval.json"
 else
-  red "FAIL: run results were not persisted under .cogni-knowledge/"
+  red "FAIL: retrieval-eval-15 run results were not persisted under .cogni-knowledge/"
   errors=$((errors + 1))
 fi
 
 # 6. READ-ONLY invariant: wiki/ tree unchanged.
 WIKI_HASH_AFTER=$(find "$WIKI/wiki" -type f -exec shasum {} \; | sort | shasum)
 if [ "$WIKI_HASH_BEFORE" = "$WIKI_HASH_AFTER" ]; then
-  green "PASS: wiki/ tree byte-unchanged after eval (read-only invariant holds)"
+  green "PASS: retrieval-eval-16 wiki/ tree byte-unchanged after eval (read-only invariant holds)"
 else
-  red "FAIL: wiki/ tree changed during eval — harness is not read-only"
+  red "FAIL: retrieval-eval-16 wiki/ tree changed during eval — harness is not read-only"
   errors=$((errors + 1))
 fi
 
 # --- bad-threshold rejection ----------------------------------------------
 BAD=$("$EVAL" eval --wiki-root "$WIKI" --threshold 0 2>/dev/null) || true
 echo "$BAD" > "$WORK/bad.json"
-assert_grep '"success": false' "$WORK/bad.json" "threshold 0 is rejected (exclusive lower bound)"
+assert_grep '"success": false' "$WORK/bad.json" "retrieval-eval-17 threshold 0 is rejected (exclusive lower bound)"
 
 # --- #885 dual-level: measurable hit@k / MRR gain over the baseline ---------
 # A base whose answering source's own tokens miss the German thematic query, but
@@ -230,9 +230,9 @@ dual = json.load(open('$WORK/dual_on.json'))['data']['aggregate']
 ok = base['hit_at_5'] == 0.0 and dual['hit_at_5'] == 1.0 and dual['mrr'] > base['mrr']
 sys.exit(0 if ok else 1)
 "; then
-  green "PASS: --dual-level yields a measurable hit@5 / MRR gain over the single-level baseline"
+  green "PASS: retrieval-eval-18 --dual-level yields a measurable hit@5 / MRR gain over the single-level baseline"
 else
-  red "FAIL: --dual-level did not improve hit@5 / MRR"
+  red "FAIL: retrieval-eval-18 --dual-level did not improve hit@5 / MRR"
   head -20 "$WORK/dual_base.json" "$WORK/dual_on.json"
   errors=$((errors + 1))
 fi

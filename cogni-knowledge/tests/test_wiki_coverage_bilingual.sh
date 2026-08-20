@@ -193,10 +193,10 @@ cat > "$WORK/plan.json" <<'JSON'
 }
 JSON
 
-run_score_ok "german-base" "$WIKI" "$WORK/plan.json"
+run_score_ok "bilingual-cov-01 german-base" "$WIKI" "$WORK/plan.json"
 
 # --- Case 1: German covering page surfaced; unrelated page excluded ----------
-check "penalties SQ: Art-99 page surfaced (covered/partial), generic oversight page excluded" "$OUT" <<'PY'
+check "bilingual-cov-02 penalties SQ: Art-99 page surfaced (covered/partial), generic oversight page excluded" "$OUT" <<'PY'
 import os, json
 d = json.loads(os.environ["PAYLOAD"])
 sq = {s["sq_id"]: s for s in d["data"]["sub_questions"]}
@@ -210,7 +210,7 @@ print("OK")
 PY
 
 # --- Case 2: a lone article-number anchor clears the matched-weight floor ----
-check "anchor SQ: a lone article-number anchor (71) alone is enough to cover the Art-71 page" "$OUT" <<'PY'
+check "bilingual-cov-03 anchor SQ: a lone article-number anchor (71) alone is enough to cover the Art-71 page" "$OUT" <<'PY'
 import os, json
 d = json.loads(os.environ["PAYLOAD"])
 sq = {s["sq_id"]: s for s in d["data"]["sub_questions"]}
@@ -224,7 +224,7 @@ print("OK")
 PY
 
 # --- Case 3: an all-boilerplate sub-question stays uncovered ------------------
-check "boilerplate SQ: a sub-question made only of denylisted terms -> uncovered" "$OUT" <<'PY'
+check "bilingual-cov-04 boilerplate SQ: a sub-question made only of denylisted terms -> uncovered" "$OUT" <<'PY'
 import os, json
 d = json.loads(os.environ["PAYLOAD"])
 sq = {s["sq_id"]: s for s in d["data"]["sub_questions"]}
@@ -234,7 +234,7 @@ print("OK")
 PY
 
 # --- Case 4: a genuinely-novel sub-question stays uncovered (absent topic) ----
-check "novel GPAI SQ: Art 51/52 absent from the base -> uncovered (nothing to match)" "$OUT" <<'PY'
+check "bilingual-cov-05 novel GPAI SQ: Art 51/52 absent from the base -> uncovered (nothing to match)" "$OUT" <<'PY'
 import os, json
 d = json.loads(os.environ["PAYLOAD"])
 sq = {s["sq_id"]: s for s in d["data"]["sub_questions"]}
@@ -248,7 +248,7 @@ PY
 # NOT MIN_MATCHED_WEIGHT (1.0). This is the case that would FLIP to `partial`
 # if the floor were dropped, so it actually exercises the floor (unlike the
 # absent-topic Case 4, which matches nothing at all).
-check "floor near-miss: a single weak compound hit clears the ratio but not the floor -> uncovered" "$OUT" <<'PY'
+check "bilingual-cov-06 floor near-miss: a single weak compound hit clears the ratio but not the floor -> uncovered" "$OUT" <<'PY'
 import os, json
 d = json.loads(os.environ["PAYLOAD"])
 sq = {s["sq_id"]: s for s in d["data"]["sub_questions"]}
@@ -257,7 +257,7 @@ print("OK")
 PY
 
 # --- Case 5: RANKING — the right page tops the governance SQ ------------------
-check "governance SQ: Art-71 page ranks ABOVE the generic oversight page (defect-5 ranking fix)" "$OUT" <<'PY'
+check "bilingual-cov-07 governance SQ: Art-71 page ranks ABOVE the generic oversight page (defect-5 ranking fix)" "$OUT" <<'PY'
 import os, json
 d = json.loads(os.environ["PAYLOAD"])
 sq = {s["sq_id"]: s for s in d["data"]["sub_questions"]}
@@ -283,7 +283,7 @@ PY
 # `uncovered`. Remove that one line and these compounds match (weight ~2.0) and
 # the SQ flips to `covered` — so this case actually drives the guard branch
 # (not a trivial zero-overlap pass).
-check "boilerplate-head guard: compounds sharing only a denylisted stem do NOT cover" "$OUT" <<'PY'
+check "bilingual-cov-08 boilerplate-head guard: compounds sharing only a denylisted stem do NOT cover" "$OUT" <<'PY'
 import os, json
 d = json.loads(os.environ["PAYLOAD"])
 sq = {s["sq_id"]: s for s in d["data"]["sub_questions"]}
@@ -300,7 +300,7 @@ PY
 # _sq_tokens and this flips to `partial` — it matched `article-71-governance`
 # (overlap 0.4) via the leaked `database, governance, high, risk` — so this case
 # actually drives the fix (not a trivial zero-overlap pass).
-check "search_guidance leak (#331): a novel SQ with leaking English guidance stays uncovered" "$OUT" <<'PY'
+check "bilingual-cov-09 search_guidance leak (#331): a novel SQ with leaking English guidance stays uncovered" "$OUT" <<'PY'
 import os, json
 d = json.loads(os.environ["PAYLOAD"])
 sq = {s["sq_id"]: s for s in d["data"]["sub_questions"]}
@@ -331,8 +331,8 @@ cat > "$WIKI1/wiki/index.md" <<'MD'
 ### Sanktionen
 - [[article-99-penalties]] — Artikel 99 regelt das dreistufige Bußgeldsystem mit Bußgeldrahmen.
 MD
-run_score_ok "one-page-german" "$WIKI1" "$WORK/plan.json"
-check "one-page German base: the penalties SQ is exactly 'partial' (single covering page)" "$OUT" <<'PY'
+run_score_ok "bilingual-cov-10 one-page-german" "$WIKI1" "$WORK/plan.json"
+check "bilingual-cov-11 one-page German base: the penalties SQ is exactly 'partial' (single covering page)" "$OUT" <<'PY'
 import os, json
 d = json.loads(os.environ["PAYLOAD"])
 sq = {s["sq_id"]: s for s in d["data"]["sub_questions"]}
@@ -374,8 +374,8 @@ cat > "$WORK/plan-nfd.json" <<'JSON'
    "theme_label": "Geltungsbereich", "search_guidance": "Anwendungsbereich Artikel 2"}
 ]}
 JSON
-run_score_ok "nfd-no-fabricated-anchor" "$WIKI2" "$WORK/plan-nfd.json"
-check "NFD folding: a '½' in claim text does NOT fabricate a '2' anchor that covers an 'Artikel 2' SQ" "$OUT" <<'PY'
+run_score_ok "bilingual-cov-12 nfd-no-fabricated-anchor" "$WIKI2" "$WORK/plan-nfd.json"
+check "bilingual-cov-13 NFD folding: a '½' in claim text does NOT fabricate a '2' anchor that covers an 'Artikel 2' SQ" "$OUT" <<'PY'
 import os, json
 d = json.loads(os.environ["PAYLOAD"])
 sq = {s["sq_id"]: s for s in d["data"]["sub_questions"]}
@@ -507,8 +507,8 @@ cat > "$WORK/plan-cn1.json" <<'JSON'
 ]}
 JSON
 
-run_score_ok "concept-and-entity-pages-cover-distinct-SQs" "$WIKI3" "$WORK/plan-cn1.json"
-check "CN-1: concept AND entity distilled pages each cover their integrative SQ (covered_pages[].type 'concept'+'entity')" "$OUT" <<'PY'
+run_score_ok "bilingual-cov-14 concept-and-entity-pages-cover-distinct-SQs" "$WIKI3" "$WORK/plan-cn1.json"
+check "bilingual-cov-15 CN-1: concept AND entity distilled pages each cover their integrative SQ (covered_pages[].type 'concept'+'entity')" "$OUT" <<'PY'
 import os, json
 d = json.loads(os.environ["PAYLOAD"])
 sq = {s["sq_id"]: s for s in d["data"]["sub_questions"]}
@@ -552,8 +552,8 @@ cat > "$WORK/plan-cn2.json" <<'JSON'
    "theme_label": "Geltungsbereich", "search_guidance": "Anwendungsbereich"}
 ]}
 JSON
-run_score_ok "empty-distilled-claims-no-false-cover" "$WIKI4" "$WORK/plan-cn2.json"
-check "CN-2: an empty distilled_claims:[] block does NOT fabricate coverage" "$OUT" <<'PY'
+run_score_ok "bilingual-cov-16 empty-distilled-claims-no-false-cover" "$WIKI4" "$WORK/plan-cn2.json"
+check "bilingual-cov-17 CN-2: an empty distilled_claims:[] block does NOT fabricate coverage" "$OUT" <<'PY'
 import os, json
 d = json.loads(os.environ["PAYLOAD"])
 sq = {s["sq_id"]: s for s in d["data"]["sub_questions"]}

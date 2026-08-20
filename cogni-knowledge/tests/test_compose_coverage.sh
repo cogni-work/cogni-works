@@ -17,7 +17,7 @@ SCRIPT="$PLUGIN_ROOT/scripts/compose-coverage.py"
 . "$(dirname "$0")/fixtures/test_helpers.sh"
 
 if [ ! -f "$SCRIPT" ]; then
-  red "FAIL: compose-coverage.py not found at $SCRIPT"
+  red "FAIL: compose-cov-01 compose-coverage.py not found at $SCRIPT"
   exit 1
 fi
 
@@ -69,18 +69,18 @@ assert d["uncited_evidence_sq_ids"] == ["sq-01", "sq-02", "sq-03"], d
 assert d["zero_cited_sq_ids"] == ["sq-02", "sq-03"], d
 print("OK")
 ' 2>&1 || true)
-emit "$RES" "coverage-deficit — raw JSON with uncited_evidence_sq_ids + zero_cited_sq_ids (src-b/src-c uncited; sq-02/sq-03 zero-cited)"
+emit "$RES" "compose-cov-02 coverage-deficit — raw JSON with uncited_evidence_sq_ids + zero_cited_sq_ids (src-b/src-c uncited; sq-02/sq-03 zero-cited)"
 
 # --- expand-sections: density-aware bare comma-list ----------------------------
 EXP_STD=$(python3 "$SCRIPT" expand-sections --outline "$WORK/outline.json" \
   --coverage-json "$DEFICIT" --density standard)
-[ "$EXP_STD" = "0,1" ] && emit OK "expand-sections (standard) — thin sq-01 + zero-cited sq-02 → '0,1'" \
-  || emit "got: '$EXP_STD' want '0,1'" "expand-sections (standard) — thin sq-01 + zero-cited sq-02 → '0,1'"
+[ "$EXP_STD" = "0,1" ] && emit OK "compose-cov-03 expand-sections (standard) — thin sq-01 + zero-cited sq-02 → '0,1'" \
+  || emit "got: '$EXP_STD' want '0,1'" "compose-cov-03 expand-sections (standard) — thin sq-01 + zero-cited sq-02 → '0,1'"
 
 EXP_EXEC=$(python3 "$SCRIPT" expand-sections --outline "$WORK/outline.json" \
   --coverage-json "$DEFICIT" --density executive)
-[ "$EXP_EXEC" = "1" ] && emit OK "expand-sections (executive) — only zero-cited sq-02 qualifies → '1' (thin-but-cited sq-01 dropped)" \
-  || emit "got: '$EXP_EXEC' want '1'" "expand-sections (executive) — only zero-cited sq-02 qualifies → '1' (thin-but-cited sq-01 dropped)"
+[ "$EXP_EXEC" = "1" ] && emit OK "compose-cov-04 expand-sections (executive) — only zero-cited sq-02 qualifies → '1' (thin-but-cited sq-01 dropped)" \
+  || emit "got: '$EXP_EXEC' want '1'" "compose-cov-04 expand-sections (executive) — only zero-cited sq-02 qualifies → '1' (thin-but-cited sq-01 dropped)"
 
 # --- per-sq-coverage: header + per-sub-question lines ---------------------------
 PSQ=$(python3 "$SCRIPT" per-sq-coverage --plan "$WORK/plan.json" \
@@ -94,19 +94,19 @@ assert "  sq-02: 0/1 ingested sources cited" in lines, lines
 assert "  sq-03: 0/1 ingested sources cited" in lines, lines
 print("OK")
 ' 2>&1 || true)
-emit "$RES" "per-sq-coverage — header + per-sub-question cited/available lines"
+emit "$RES" "compose-cov-05 per-sq-coverage — header + per-sub-question cited/available lines"
 
 # --- fail-soft: coverage-deficit on a missing file prints nothing, exits 1 -----
 OUT=$(python3 "$SCRIPT" coverage-deficit --plan "$WORK/nope.json" \
   --ingest "$WORK/ingest.json" --citation "$WORK/citation.json" 2>/dev/null && echo "RC0" || echo "RC1")
-[ "$OUT" = "RC1" ] && emit OK "coverage-deficit — fail-soft: missing file → no stdout, exit 1 (SKILL treats empty as 'no deficit, skip')" \
-  || emit "got: '$OUT'" "coverage-deficit — fail-soft: missing file → no stdout, exit 1"
+[ "$OUT" = "RC1" ] && emit OK "compose-cov-06 coverage-deficit — fail-soft: missing file → no stdout, exit 1 (SKILL treats empty as 'no deficit, skip')" \
+  || emit "got: '$OUT'" "compose-cov-06 coverage-deficit — fail-soft: missing file → no stdout, exit 1"
 
 # --- fail-soft: per-sq-coverage on a missing file prints nothing, exits 0 ------
 PSQ_ERR=$(python3 "$SCRIPT" per-sq-coverage --plan "$WORK/nope.json" \
   --ingest "$WORK/ingest.json" --citation "$WORK/citation.json" 2>/dev/null; echo "rc=$?")
-[ "$PSQ_ERR" = "rc=0" ] && emit OK "per-sq-coverage — fail-soft: missing file → no stdout, exit 0 (SKILL wraps it 2>/dev/null || true)" \
-  || emit "got: '$PSQ_ERR'" "per-sq-coverage — fail-soft: missing file → no stdout, exit 0"
+[ "$PSQ_ERR" = "rc=0" ] && emit OK "compose-cov-07 per-sq-coverage — fail-soft: missing file → no stdout, exit 0 (SKILL wraps it 2>/dev/null || true)" \
+  || emit "got: '$PSQ_ERR'" "compose-cov-07 per-sq-coverage — fail-soft: missing file → no stdout, exit 0"
 
 if [ $errors -gt 0 ]; then
   red "$errors case(s) failed."

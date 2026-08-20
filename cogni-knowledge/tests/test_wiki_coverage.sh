@@ -64,7 +64,7 @@ run_score() {  # run_score <wiki-root> <plan> [extra args...]
 run_score_ok() {  # run_score_ok <label> <wiki-root> <plan> [extra args...]
   local label="$1"; shift
   if ! OUT=$(run_score "$@"); then
-    red "FAIL: $label — wiki-coverage.py exited non-zero on a VALID plan"
+    red "FAIL: wcov-01 $label — wiki-coverage.py exited non-zero on a VALID plan"
     errors=$((errors + 1))
     OUT='{}'
   fi
@@ -87,7 +87,7 @@ check() {  # check <description> <json-envelope>  (program via heredoc on stdin)
 
 # --- Case 1: empty wiki -> all uncovered, success:true --------------------
 run_score_ok "empty-wiki" "$WIKI" "$WORK/plan.json"
-check "empty wiki: success:true, all sub-questions uncovered, 0 pages scanned" "$OUT" <<'PY'
+check "wcov-02 empty wiki: success:true, all sub-questions uncovered, 0 pages scanned" "$OUT" <<'PY'
 import os, json
 d = json.loads(os.environ["PAYLOAD"])
 assert d["success"] is True, "success should be true on a fresh base"
@@ -104,7 +104,7 @@ PY
 NOWIKI="$WORK/nowiki"
 mkdir -p "$NOWIKI"
 run_score_ok "missing-wiki-dir" "$NOWIKI" "$WORK/plan.json"
-check "missing wiki/ dir: success:true, 0 pages, all uncovered (no crash)" "$OUT" <<'PY'
+check "wcov-03 missing wiki/ dir: success:true, 0 pages, all uncovered (no crash)" "$OUT" <<'PY'
 import os, json
 d = json.loads(os.environ["PAYLOAD"])
 assert d["success"] is True, d
@@ -144,7 +144,7 @@ MD
 
 # --- Case 2 + 3: sq-01 covered (>=2 pages), correct page_paths incl. syntheses ---
 run_score_ok "seeded-wiki" "$WIKI" "$WORK/plan.json"
-check "seeded wiki: sq-01 covered with both pages + correct page_paths (incl. wiki/syntheses/)" "$OUT" <<'PY'
+check "wcov-04 seeded wiki: sq-01 covered with both pages + correct page_paths (incl. wiki/syntheses/)" "$OUT" <<'PY'
 import os, json
 d = json.loads(os.environ["PAYLOAD"])
 assert d["data"]["pages_scanned"] == 2, d["data"]["pages_scanned"]
@@ -184,7 +184,7 @@ cat > "$WIKI1/wiki/index.md" <<'MD'
 - [[ai-act-article-6]] — Article 6 defines the high-risk AI system classification criteria and scope.
 MD
 run_score_ok "one-page-wiki" "$WIKI1" "$WORK/plan.json"
-check "one covering page: sq-01 verdict is exactly 'partial' (not covered, not uncovered)" "$OUT" <<'PY'
+check "wcov-05 one covering page: sq-01 verdict is exactly 'partial' (not covered, not uncovered)" "$OUT" <<'PY'
 import os, json
 d = json.loads(os.environ["PAYLOAD"])
 sq = {s["sq_id"]: s for s in d["data"]["sub_questions"]}
@@ -209,7 +209,7 @@ tags: [source]
 # body only, no frontmatter title
 MD
 run_score_ok "title-less-page" "$WIKI2" "$WORK/plan.json"
-check "title-less page: slug fallback still surfaces it for sq-01 (not invisible)" "$OUT" <<'PY'
+check "wcov-06 title-less page: slug fallback still surfaces it for sq-01 (not invisible)" "$OUT" <<'PY'
 import os, json
 d = json.loads(os.environ["PAYLOAD"])
 sq = {s["sq_id"]: s for s in d["data"]["sub_questions"]}
@@ -222,7 +222,7 @@ PY
 # --- Case 5: threshold boundary -------------------------------------------
 # A very high threshold should drop every page back to uncovered.
 run_score_ok "threshold-0.99" "$WIKI" "$WORK/plan.json" --threshold 0.99
-check "threshold 0.99: nothing clears -> sq-01 uncovered" "$OUT" <<'PY'
+check "wcov-07 threshold 0.99: nothing clears -> sq-01 uncovered" "$OUT" <<'PY'
 import os, json
 d = json.loads(os.environ["PAYLOAD"])
 sq = {s["sq_id"]: s for s in d["data"]["sub_questions"]}
@@ -232,7 +232,7 @@ PY
 
 # A very low (but positive) threshold should let at least one page through.
 run_score_ok "threshold-0.01" "$WIKI" "$WORK/plan.json" --threshold 0.01
-check "threshold 0.01: sq-01 has covering pages" "$OUT" <<'PY'
+check "wcov-08 threshold 0.01: sq-01 has covering pages" "$OUT" <<'PY'
 import os, json
 d = json.loads(os.environ["PAYLOAD"])
 sq = {s["sq_id"]: s for s in d["data"]["sub_questions"]}
@@ -243,28 +243,28 @@ PY
 
 # An out-of-range threshold is rejected.
 if python3 "$SCRIPT" score --wiki-root "$WIKI" --plan "$WORK/plan.json" --threshold 1.5 >/dev/null 2>&1; then
-  red "FAIL: --threshold 1.5 should be rejected"
+  red "FAIL: wcov-09 --threshold 1.5 should be rejected"
   errors=$((errors + 1))
 else
-  green "PASS: out-of-range (>1) --threshold is rejected"
+  green "PASS: wcov-09 out-of-range (>1) --threshold is rejected"
 fi
 
 # --threshold 0 is meaningless (jaccard 0.0 >= 0.0 would cover everything) and
 # must be rejected by the exclusive lower bound.
 if python3 "$SCRIPT" score --wiki-root "$WIKI" --plan "$WORK/plan.json" --threshold 0 >/dev/null 2>&1; then
-  red "FAIL: --threshold 0 should be rejected (would cover every page with zero overlap)"
+  red "FAIL: wcov-10 --threshold 0 should be rejected (would cover every page with zero overlap)"
   errors=$((errors + 1))
 else
-  green "PASS: --threshold 0 is rejected (exclusive lower bound)"
+  green "PASS: wcov-10 --threshold 0 is rejected (exclusive lower bound)"
 fi
 
 # --- Case 5: malformed plan.json -> clean success:false -------------------
 printf '%s' '{bad json' > "$WORK/bad-plan.json"
 if OUT=$(run_score "$WIKI" "$WORK/bad-plan.json" 2>/dev/null); then
-  red "FAIL: malformed plan.json should exit non-zero"
+  red "FAIL: wcov-11 malformed plan.json should exit non-zero"
   errors=$((errors + 1))
 else
-  check "malformed plan.json: success:false with an error message" "$OUT" <<'PY'
+  check "wcov-11 malformed plan.json: success:false with an error message" "$OUT" <<'PY'
 import os, json
 d = json.loads(os.environ["PAYLOAD"])
 assert d["success"] is False, d
@@ -276,10 +276,10 @@ fi
 # A plan with no sub_questions[] list is also a clean failure.
 printf '%s' '{"schema_version":"0.1.0"}' > "$WORK/no-sq.json"
 if OUT=$(run_score "$WIKI" "$WORK/no-sq.json" 2>/dev/null); then
-  red "FAIL: plan without sub_questions[] should exit non-zero"
+  red "FAIL: wcov-12 plan without sub_questions[] should exit non-zero"
   errors=$((errors + 1))
 else
-  check "plan without sub_questions[]: success:false" "$OUT" <<'PY'
+  check "wcov-12 plan without sub_questions[]: success:false" "$OUT" <<'PY'
 import os, json
 d = json.loads(os.environ["PAYLOAD"])
 assert d["success"] is False, d

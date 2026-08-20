@@ -45,7 +45,7 @@ The primary spine for every narrative page is the arc-structured markdown produc
 | `for/{market-slug}--{persona}.md` | `persona` (one per file) | `jtbd-portfolio` |
 | `approach.md` | `approach` | `engagement-model` |
 
-Any page entry in `website-plan.json` carrying an `arc_id` is rendered through the **Section Block Library** in `libraries/page-templates.md` — not the flat page-type template. `website-plan` step 6a walks the narrative and emits a structured `sections[]` array (hero, problem-statement, stat-row, feature-alternating, feature-grid, comparison, timeline, testimonial, text-block, cta). The ten existing block types cover all five arcs; no arc-specific renderers exist or are needed. The element → block mapping is authoritative in `cogni-workspace/libraries/arc-taxonomy.md`.
+Any page entry in `website-plan.json` carrying an `arc_id` is rendered through the **Section Block Library** in `libraries/page-templates.md` — not the flat page-type template. `website-plan` step 6a walks the narrative and emits a structured `sections[]` array (hero, problem-statement, stat-row, feature-alternating, feature-grid, comparison, timeline, testimonial, text-block, cta). The ten existing block types cover all four arcs; no arc-specific renderers exist or are needed. `cogni-workspace/libraries/arc-taxonomy.md` is authoritative for the arc **element names**; the element → block mapping is this plugin's own, in the Section Block Library in `libraries/page-templates.md`.
 
 **Deduplication discipline** (enforced upstream by the customer-narrative templates — do not break it in page planning):
 - Roadmap appears on `home` only.

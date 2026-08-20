@@ -4,7 +4,7 @@ title: "Workflow: Documentation Pipeline (cogni-docs, maintainer)"
 type: summary
 tags: [workflow, docs-pipeline, cogni-docs, internal, maintainer, documentation]
 created: 2026-08-13
-updated: 2026-08-13
+updated: 2026-08-20
 sources:
   - https://github.com/cogni-work/insight-wave/blob/main/docs/contributing/plugin-development.md
 status: stable
@@ -13,7 +13,7 @@ related: [concept-canonical-workflow-ids, concept-readme-convention, ecosystem-o
 
 An operational pipeline, not a user-facing one — the sequence a maintainer runs to document the monorepo or repair drifted plugin documentation. It carries no canonical workflow ID and no `docs/workflows/` companion; see [[concept-canonical-workflow-ids]] for why that distinction is enforced.
 
-cogni-docs is hosted in a different marketplace from the eleven plugins this wiki otherwise covers, so it has no plugin page here.
+cogni-docs is hosted in a different marketplace from the eight plugins this wiki otherwise covers, so it has no plugin page here.
 
 ## Pipeline
 
@@ -46,7 +46,7 @@ Plugin READMEs that match what is actually on disk, manifests whose descriptions
 
 **3 — Sync.** `doc-sync`. Unifies descriptions across README, `plugin.json` and `marketplace.json`. README is canonical; the two manifests are derived. Skip when the audit reported no alignment drift.
 
-**4 — Power messaging.** `doc-power`. Drafts messaging for the hand-written sections — title, problem table, identity, benefits — on plugins the audit flagged WEAK. Shows side-by-side comparisons and never overwrites without approval. `--polish` brings in cogni-copywriting.
+**4 — Power messaging.** `doc-power`. Drafts messaging for the hand-written sections — title, problem table, identity, benefits — on plugins the audit flagged WEAK. Shows side-by-side comparisons and never overwrites without approval. `--polish` brings in `cogni-workspace:copywriter`.
 
 **5 — Developer guide.** `doc-claude`. Writes CLAUDE.md — architecture, component inventory, design principles, data model — for complex plugins only. The audit flags which ones qualify; simple plugins do not need one.
 

@@ -4,7 +4,7 @@ title: "Command reference: how each plugin is invoked"
 type: summary
 tags: [ecosystem, commands, skills, cheatsheet, quick-reference, invocation]
 created: 2026-08-13
-updated: 2026-08-13
+updated: 2026-08-20
 sources:
   - https://github.com/cogni-work/insight-wave/blob/main/docs/ecosystem-overview.md
 status: stable
@@ -17,15 +17,13 @@ The quick-reference answer to "what are the commands for cogni-X" — the cheats
 
 Skills are the primary surface across the ecosystem. A skill is invoked by name — `cogni-trends:trend-scout`, or simply by describing the task, since each skill's description carries its own trigger phrases. Slash commands are a thin optional wrapper that only some plugins ship.
 
-Five of the eleven plugins ship **no** commands directory at all: cogni-knowledge, cogni-consult, cogni-trends, cogni-portfolio and cogni-website are skill-invoked entirely. Expecting a slash command for those is the most common source of "the command does not exist" confusion. See [[arch-plugin-anatomy]] for how the two surfaces sit on disk.
+Five of the eight plugins ship **no** commands directory at all: cogni-knowledge, cogni-consult, cogni-trends, cogni-portfolio and cogni-website are skill-invoked entirely. Expecting a slash command for those is the most common source of "the command does not exist" confusion. See [[arch-plugin-anatomy]] for how the two surfaces sit on disk.
 
 ## Slash commands, by plugin
 
 | Plugin | Slash commands |
 |---|---|
-| cogni-workspace | `/claims`, `/troubleshoot`, `/enrich-report`, `/render-html-slides`, `/render-infographic`, `/render-infographic-editorial`, `/render-infographic-handdrawn`, `/review-brief` |
-| cogni-narrative | `/narrative`, `/narrative-adapt`, `/narrative-review` |
-| cogni-copywriting | `/copywrite`, `/review-doc` |
+| cogni-workspace | `/claims`, `/troubleshoot`, `/enrich-report`, `/render-html-slides`, `/render-infographic`, `/render-infographic-editorial`, `/render-infographic-handdrawn`, `/review-brief`, `/narrative`, `/narrative-adapt`, `/narrative-review`, `/copywrite`, `/review-doc` |
 | cogni-marketing | `/abm`, `/campaign`, `/content-calendar`, `/content-strategy`, `/demand-gen`, `/lead-gen`, `/marketing-dashboard`, `/marketing-resume`, `/marketing-setup`, `/sales-enablement`, `/thought-leadership` |
 | cogni-sales | `/why-change` |
 | cogni-knowledge, cogni-consult, cogni-trends, cogni-portfolio, cogni-website | none — skill-invoked |
@@ -36,11 +34,7 @@ Five of the eleven plugins ship **no** commands directory at all: cogni-knowledg
 
 **cogni-consult** — `consult-setup`, `consult-scope`, `consult-action-fields`, `consult-design-thinking`, `consult-personas`, `consult-project-plan`, `consult-publish`, `consult-dashboard`, `consult-resume`
 
-**cogni-narrative** — `narrative`, `narrative-adapt`, `narrative-review`
-
-**cogni-copywriting** — `copywriter`, `copy-reader`, `copy-json`, `audit-copywriter`
-
-**cogni-workspace** — `manage-workspace`, `workspace-status`, `workspace-dashboard`, `pick-theme`, `manage-themes`, `manage-markets`, `audit-region-sources`, `install-mcp`, `ask`, `claims`, `claim-entity`, `cogni-issues`, `troubleshoot`, `story-to-slides`, `story-to-web`, `story-to-storyboard`, `story-to-infographic`, `render-html-slides`, `render-infographic-editorial`, `enrich-report`, `review-brief`
+**cogni-workspace** — `manage-workspace`, `workspace-status`, `workspace-dashboard`, `pick-theme`, `manage-themes`, `manage-markets`, `audit-region-sources`, `install-mcp`, `ask`, `claims`, `claim-entity`, `cogni-issues`, `troubleshoot`, `story-to-slides`, `story-to-web`, `story-to-storyboard`, `story-to-infographic`, `render-html-slides`, `enrich-report`, `review-brief`, `narrative`, `narrative-adapt`, `narrative-review`, `copywriter`, `copy-reader`, `copy-json`
 
 **cogni-trends** — `trend-scout`, `trend-research`, `trend-synthesis`, `trend-booklet`, `value-modeler`, `verify-trend-report`, `trends-catalog`, `trends-dashboard`, `trends-resume`
 

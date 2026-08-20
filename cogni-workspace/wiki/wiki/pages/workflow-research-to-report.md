@@ -4,7 +4,7 @@ title: "Workflow: Research to Report (knowledge → narrative → visual)"
 type: summary
 tags: [workflow, research-to-report, knowledge, narrative, visual, claims]
 created: 2026-08-13
-updated: 2026-08-13
+updated: 2026-08-20
 sources:
   - https://github.com/cogni-work/insight-wave/blob/main/docs/workflows/research-to-report.md
 status: stable
@@ -18,9 +18,9 @@ Original research turned into a presentation — the pipeline an analyst runs to
 ```
 cogni-knowledge (plan → curate → fetch → ingest → distill → compose → verify → finalize)
    ↓ cited synthesis, deposited into the bound wiki
-cogni-narrative (story arc shaping)
+cogni-workspace:narrative (story arc shaping)
    ↓ executive narrative
-cogni-workspace (brief → rendered deck)
+cogni-workspace:story-to-slides → render-html-slides (brief → rendered deck)
    ↓ slides
 ```
 

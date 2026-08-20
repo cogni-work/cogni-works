@@ -72,8 +72,17 @@
 # `id:` or a wikilink is also a resolver concern, so the rename has to leave the
 # tree-parity guard green rather than trade one red for another.
 #
-# The three declared allowances, and why each is token-exact
-# ---------------------------------------------------------
+# The promotion probe (B28) reaches the bundled-only pages, which the
+# intersection surface cannot see. It DERIVES that set as the complement of the
+# same shared_basenames the intersection arm uses, so no page is named anywhere
+# and the two sets cannot drift apart. That is deliberate: a literal list would
+# have been the exclusion class this paragraph forbids wearing the opposite
+# sign. Do not be tempted back to one — the arm's `total -eq 0` floor fires only
+# when EVERY named page vanishes, so a list going stale one page at a time would
+# narrow coverage silently, with every case still green.
+#
+# The five declared allowances, and why each is token-exact
+# --------------------------------------------------------
 #   - Plugins hosted in a DIFFERENT marketplace are live, not retired, and are
 #     legitimately absent from this repo's manifest. They are named in
 #     EXTRA_ALLOWED.
@@ -88,6 +97,37 @@
 #     the allowance is keyed to that one token plus a slash — NOT to a blanket
 #     "any name followed by a slash", which would also exempt a path naming a
 #     genuinely retired plugin.
+#   - One PAST-TENSE HISTORICAL FRAMING names a retired plugin as removed. The
+#     sentence is accurate, asserts no live data flow, and is the kind of
+#     statement a roster sweep must not "fix". The allowance is keyed to one
+#     token plus CONTAINMENT of one complete frozen sentence — never the token
+#     alone, which would bless every future live-assertion use of that name,
+#     and never the page path, which is the exclusion shape forbidden above.
+#     It is line-scoped: re-wrapping the paragraph that carries the sentence
+#     re-reds the page. That is the intended conservative failure — a reflow is
+#     an invitation to re-affirm the framing, not to keep blessing it silently.
+#   - A SKILL of a live roster plugin can share the `cogni-` prefix, and the
+#     matcher cannot span a colon: `cogni-workspace:cogni-issues` tokenizes as
+#     `cogni-workspace:` (clean on the roster arm) and then a BARE
+#     `cogni-issues`, so writing the qualified form does not rescue it. The
+#     allowance is DERIVED at runtime from the skill directories of plugins on
+#     the live roster — never written down — in the same spirit as
+#     `roster_from`: a skill that stops shipping stops being blessed with no
+#     edit here. Restricting it to roster plugins is what stops a retired
+#     plugin's leftover skill tree from blessing anything.
+#
+# Allowance 5 blesses exactly ONE token across both real trees today,
+# `cogni-issues`, and that is what keeps the two pages naming it clean WITHOUT a
+# content edit — one of them writes the correctly qualified
+# `cogni-workspace:cogni-issues`, which the tokenizer splits anyway. Rewriting
+# correct prose to satisfy a scanner is the wrong direction. If someone later
+# "fixes" those pages, B28 goes vacuous rather than red, which is why B26 owns
+# the allowance's green half on a fixture of its own.
+#
+# Residual, named rather than papered over: a skill deliberately named after a
+# retired plugin would be blessed. Nothing in the tree is — the domain-prefix
+# convention makes it an anomaly — and closing it mechanically would need
+# exactly the retired-name list this suite refuses to keep.
 #
 # The red halves of the org-token and store-path cases are exercised by fixtures
 # only: no bare org token and no colon form of the store name exists in either
@@ -133,6 +173,26 @@
 # to contain, so a page retirement or a sweep could remove it with every case
 # still green.
 #
+# For the historical-framing allowance, drive it at the constant too, but at the
+# SENTENCE rather than the token: emptying HISTORICAL_SENTENCE turns the
+# containment test into a tautology, which widens the allowance from one frozen
+# sentence to the whole token. B25 — the red half, a live present-tense framing
+# of the same name on a fixture of its own — stops flagging and goes RED. B24,
+# B28, B1 and B22 all stay GREEN, and naming them individually matters because
+# they do not move together: B24 and B28 still satisfy a tautological
+# containment, and neither real-tree case scans a page carrying that token at
+# all. That asymmetry is the point — it shows the sentence scope is
+# load-bearing rather than decorative. The constant must stay double-quoted at
+# column 0 for the expression to bite; a single-quoted or indented definition
+# makes it a no-op and the harness reports `expr_no_op` rather than a verdict.
+#
+# For the skill-name allowance, drive it at the derivation, not a constant:
+# there is nothing written down to edit. Widening `skill_names_from`'s roster
+# membership test to accept any plugin directory reds B27, whose second arm
+# plants a skill under an off-roster plugin precisely to prove the restriction
+# is load-bearing. B26 stays GREEN (its skill sits under a roster plugin either
+# way), and so do B1, B22 and B28.
+#
 # Portability: bash 3.2 (stock macOS /bin/bash) — no associative arrays, no
 # mapfile/readarray, no case-modifying expansions, no globstar. Stdlib only:
 # bash, coreutils, and python3 for JSON. No network.
@@ -154,6 +214,13 @@ fail() { echo "FAIL: $1"; failures=$((failures + 1)); }
 
 # Plugins that legitimately live outside this repo's marketplace. See the header.
 EXTRA_ALLOWED="cogni-docs cogni-service"
+
+# The one past-tense historical framing that names a retired plugin as removed;
+# see the header for why it is keyed to the sentence and not the token. Both
+# must stay double-quoted at column 0 — the mutation recipe drives
+# HISTORICAL_SENTENCE by that exact shape.
+HISTORICAL_TOKEN="cogni-consulting"
+HISTORICAL_SENTENCE="This replaces the former Double Diamond playbook — the cogni-consulting plugin was removed and its source lives only in git history."
 
 # The GitHub organisation token, and the preserved on-disk store directory.
 # Each is allowed ONLY as the exact token followed by a slash. See the header.
@@ -192,6 +259,32 @@ print(" ".join(p["name"] for p in data["plugins"]))
   echo " $names "
 }
 
+# skill_names_from <repo_root> <roster> -> space-padded skill basenames.
+# DERIVED, never written down: the skill directories of plugins on the LIVE
+# roster. See the header for why the roster restriction is load-bearing; B27's
+# second arm is what proves it.
+skill_names_from() {
+  local root="$1" roster="$2" out="" d plug base
+  # Two-level glob, not `**`: bash 3.2 has no globstar (see the header).
+  for d in "$root"/cogni-*/skills/cogni-*/; do
+    # bash 3.2 has no nullglob, so an unmatched pattern survives LITERALLY.
+    # Without this guard the token `cogni-*` enters the allowed set, and the
+    # unquoted expansion in scan_file then pathname-expands it against the
+    # caller's CWD — making the blessed set depend on where the suite runs.
+    [ -d "$d" ] || continue
+    base="${d%/}"; base="${base##*/}"
+    plug="${d%/skills/*}"; plug="${plug##*/}"
+    # `roster` arrives space-padded, so this is the same declarative membership
+    # test scan_tree uses for `shared` — not a loop that could drift from it.
+    case "$roster" in
+      *" $plug "*) ;;
+      *) continue ;;
+    esac
+    out="$out$base "
+  done
+  echo " $out"
+}
+
 # shared_basenames <dirA> <dirB> -> space-padded basenames present in BOTH.
 # What keeps the top-level index / log / overview pages out of THIS surface is
 # the SCAN ROOT: they sit one level above `pages/`, so no glob rooted here can
@@ -211,19 +304,41 @@ shared_basenames() {
   echo " $out"
 }
 
-# scan_file <file> <label> <roster> -> 0 clean, 1 when it emitted any offender.
-# The three declared allowances live HERE and nowhere else, so the intersection
+# tree_only_basenames <dirA> <dirB> -> space-padded basenames present in dirB
+# but NOT in dirA — the exact complement of shared_basenames, so the two cannot
+# drift apart. This is the bundled-only set: the pages Decision 4 holds out of
+# the root tree, which the intersection surface can never reach.
+tree_only_basenames() {
+  local a="$1" b="$2" f base out=""
+  for f in "$b"/*.md; do
+    [ -e "$f" ] || continue
+    base="${f##*/}"
+    [ -f "$a/$base" ] && continue
+    out="$out$base "
+  done
+  echo " $out"
+}
+
+# scan_file <file> <label> <roster> [skills] -> 0 clean, 1 when it emitted any offender.
+# The five declared allowances live HERE and nowhere else, so the intersection
 # arm and the tree-level arm cannot silently diverge on what they bless.
 scan_file() {
-  local f="$1" label="$2" roster="$3"
+  local f="$1" label="$2" roster="$3" skills="${4-}"
   local base="${f##*/}"
-  local offenders=0 hit tok dl p matched
+  local offenders=0 hit tok dl p matched lineno hline
 
   # Capture the token together with the one delimiter that can follow it, so
   # the path form and the dispatch form are distinguishable. The character
   # class is greedy, which is what keeps a longer off-roster name from being
   # truncated into a shorter allowed one.
-  for hit in $(grep -oE 'cogni-[a-z0-9-]+[/:]?' "$f" 2>/dev/null || true); do
+  # `-n` prefixes each hit with `N:`. A line number never contains a colon and
+  # the delimiter is at most one TRAILING character, so `12:cogni-workspace:`
+  # and `12:cogni-work/` both round-trip through these two expansions. Splitting
+  # here, before the delimiter case below, leaves every downstream comparison
+  # working on exactly the token it did before the line number existed.
+  for hit in $(grep -noE 'cogni-[a-z0-9-]+[/:]?' "$f" 2>/dev/null || true); do
+    lineno="${hit%%:*}"
+    hit="${hit#*:}"
     case "$hit" in
       */) tok="${hit%/}"; dl="/" ;;
       *:) tok="${hit%:}"; dl=":" ;;
@@ -247,6 +362,27 @@ scan_file() {
       done
     fi
 
+    # Allowance 4 — the past-tense historical framing. Keyed to one token AND
+    # containment of one complete frozen sentence, so it blesses that sentence
+    # and nothing else: the same name in a live framing still flags. The line is
+    # fetched only on the unmatched path for this one token, so the hot loop is
+    # unchanged. Containment, not equality — the carrier line is a whole
+    # paragraph whose second sentence is the frozen one.
+    if [ "$matched" -eq 0 ] && [ "$tok" = "$HISTORICAL_TOKEN" ]; then
+      hline="$(sed -n "${lineno}p" "$f" 2>/dev/null)"
+      case "$hline" in
+        *"$HISTORICAL_SENTENCE"*) matched=1 ;;
+      esac
+    fi
+
+    # Allowance 5 — a skill name of a live-roster plugin. Equality against the
+    # derived set, for any delimiter: the matcher cannot span a colon, so the
+    # qualified `cogni-workspace:cogni-issues` still arrives here as a BARE
+    # second token and writing the qualified form does not rescue it.
+    if [ "$matched" -eq 0 ]; then
+      case "$skills" in *" $tok "*) matched=1 ;; esac
+    fi
+
     if [ "$matched" -eq 0 ]; then
       echo "OFF-ROSTER [$label] $base: $tok"
       offenders=$((offenders + 1))
@@ -259,7 +395,7 @@ scan_file() {
 
 # scan_tree <pages_dir> <label> <roster> <shared> -> 0 clean, 1 otherwise.
 scan_tree() {
-  local dir="$1" label="$2" roster="$3" shared="$4"
+  local dir="$1" label="$2" roster="$3" shared="$4" skills="${5-}"
   local offenders=0 total=0
   local f base
 
@@ -288,7 +424,7 @@ scan_tree() {
       *) continue ;;
     esac
     total=$((total + 1))
-    scan_file "$f" "$label" "$roster" || offenders=$((offenders + 1))
+    scan_file "$f" "$label" "$roster" "$skills" || offenders=$((offenders + 1))
   done
 
   # Pages-scanned liveness floor. Without it, an arm pointed at a missing or
@@ -311,7 +447,7 @@ scan_tree() {
 # watch. Called once per tree, each copy is graded against the roster on its own
 # terms and neither is ever compared to the other.
 scan_tree_level() {
-  local dir="$1" label="$2" roster="$3"
+  local dir="$1" label="$2" roster="$3" skills="${4-}"
   local offenders=0 total=0
   local base f
 
@@ -328,7 +464,7 @@ scan_tree_level() {
     f="$dir/$base"
     [ -f "$f" ] || continue
     total=$((total + 1))
-    scan_file "$f" "$label" "$roster" || offenders=$((offenders + 1))
+    scan_file "$f" "$label" "$roster" "$skills" || offenders=$((offenders + 1))
   done
 
   # Pages-scanned liveness floor. This single branch also covers a missing
@@ -352,11 +488,13 @@ scan_repo() {
   local root_pages="$root/wiki/wiki/pages"
   local ws_pages="$root/cogni-workspace/wiki/wiki/pages"
   roster="$(roster_from "$root/.claude-plugin/marketplace.json")" || return 1
+  local skills
+  skills="$(skill_names_from "$root" "$roster")"
   shared="$(shared_basenames "$root_pages" "$ws_pages")"
-  scan_tree "$root_pages" "root" "$roster" "$shared" || rc=1
-  scan_tree "$ws_pages" "workspace" "$roster" "$shared" || rc=1
-  scan_tree_level "$root/wiki/wiki" "root-toplevel" "$roster" || rc=1
-  scan_tree_level "$root/cogni-workspace/wiki/wiki" "workspace-toplevel" "$roster" || rc=1
+  scan_tree "$root_pages" "root" "$roster" "$shared" "$skills" || rc=1
+  scan_tree "$ws_pages" "workspace" "$roster" "$shared" "$skills" || rc=1
+  scan_tree_level "$root/wiki/wiki" "root-toplevel" "$roster" "$skills" || rc=1
+  scan_tree_level "$root/cogni-workspace/wiki/wiki" "workspace-toplevel" "$roster" "$skills" || rc=1
   return "$rc"
 }
 
@@ -368,8 +506,8 @@ RC=0
 OUT=""
 
 run_scan_repo() { OUT="$(scan_repo "$1" 2>&1)"; RC=$?; }
-run_scan_tree() { OUT="$(scan_tree "$1" "$2" "$3" "$4" 2>&1)"; RC=$?; }
-run_scan_tree_level() { OUT="$(scan_tree_level "$1" "$2" "$3" 2>&1)"; RC=$?; }
+run_scan_tree() { OUT="$(scan_tree "$1" "$2" "$3" "$4" "${5-}" 2>&1)"; RC=$?; }
+run_scan_tree_level() { OUT="$(scan_tree_level "$1" "$2" "$3" "${4-}" 2>&1)"; RC=$?; }
 
 assert_rc() { # <expected-rc>
   [ "$RC" -eq "$1" ] && return 0
@@ -464,6 +602,13 @@ mk_fixture_repo() {
 mk_toplevel_both() {
   mk_body "$1/wiki/wiki/$2" "$3"
   mk_body "$1/cogni-workspace/wiki/wiki/$2" "$3"
+}
+
+# mk_skill_dir <root> <plugin> <skill> — plant a skill directory so
+# skill_names_from can derive its basename. The derivation globs directories, so
+# no file is written.
+mk_skill_dir() {
+  mkdir -p "$1/$2/skills/$3"
 }
 
 # mk_both <root> <basename> <body> — write the same body into both trees.
@@ -815,6 +960,89 @@ if assert_rc 0 \
   pass "B23 the store path form alone is allowed and emits no offender line"
 else
   fail "B23 the store path form alone is allowed and emits no offender line"
+fi
+
+# B24 — historical-framing allowance, GREEN half. The frozen sentence sits
+# inside a longer paragraph, which is why the gate is containment: an equality
+# test against the line would never fire on the real page either.
+R24="$TMPROOT/b24"; mk_fixture_repo "$R24"
+mk_both "$R24" "workflow-consulting-engagement.md" \
+  "A structured consulting engagement whose research compounds. $HISTORICAL_SENTENCE"
+run_scan_repo "$R24"
+if assert_rc 0 \
+   && assert_out_lacks "workflow-consulting-engagement.md: cogni-consulting"; then
+  pass "B24 the frozen historical framing is allowed and emits no offender line"
+else
+  fail "B24 the frozen historical framing is allowed and emits no offender line"
+fi
+
+# B25 — historical-framing allowance, RED half, and the mutation-recipe target.
+# The SAME token in a live present-tense framing must still flag, or the
+# allowance is a hatch that blesses the name everywhere.
+R25="$TMPROOT/b25"; mk_fixture_repo "$R25"
+mk_both "$R25" "concept-live-framing.md" \
+  "Run the cogni-consulting plugin to scope the engagement."
+run_scan_repo "$R25"
+if assert_rc 1 \
+   && assert_out_has "OFF-ROSTER [root] concept-live-framing.md: cogni-consulting"; then
+  pass "B25 the same retired name in a live framing is still flagged"
+else
+  fail "B25 the same retired name in a live framing is still flagged"
+fi
+
+# B26 — skill-name allowance, GREEN half. Both the qualified and the bare form
+# must pass: the matcher cannot span a colon, so the qualified form arrives as a
+# bare second token and writing it qualified rescues nothing on its own.
+R26="$TMPROOT/b26"; mk_fixture_repo "$R26"
+mk_skill_dir "$R26" "cogni-workspace" "cogni-issues"
+mk_both "$R26" "workflow-onboarding.md" \
+  "Use cogni-workspace:cogni-issues to file problems, or the cogni-issues skill directly."
+run_scan_repo "$R26"
+if assert_rc 0 \
+   && assert_out_lacks "workflow-onboarding.md: cogni-issues"; then
+  pass "B26 a skill name of a live roster plugin is allowed in both forms"
+else
+  fail "B26 a skill name of a live roster plugin is allowed in both forms"
+fi
+
+# B27 — skill-name allowance, RED half, two arms. Arm 1: a name with no skill
+# directory still flags, so the allowance is derived rather than blanket. Arm 2:
+# a skill directory under a plugin ABSENT from the roster blesses nothing, which
+# is what stops a retired plugin's leftover skill tree from exempting itself.
+R27="$TMPROOT/b27"; mk_fixture_repo "$R27"
+mk_skill_dir "$R27" "cogni-retired" "cogni-ghost"
+mk_both "$R27" "concept-unknown-skill.md" \
+  "See cogni-nonesuch and cogni-ghost for details."
+run_scan_repo "$R27"
+if assert_rc 1 \
+   && assert_out_has "OFF-ROSTER [root] concept-unknown-skill.md: cogni-nonesuch" \
+   && assert_out_has "OFF-ROSTER [root] concept-unknown-skill.md: cogni-ghost"; then
+  pass "B27 an unknown name flags and an off-roster plugin skill blesses nothing"
+else
+  fail "B27 an unknown name flags and an off-roster plugin skill blesses nothing"
+fi
+
+# B28 — promotion probe. The bundled-only pages are outside the intersection by
+# construction, so B1 cannot see them however clean it reports. This scans them
+# against the LIVE roster as if promotion had already happened, which pulls a
+# residue forward to today instead of surfacing it the moment #1402 lands.
+#
+# The page set is DERIVED, never listed: tree_only_basenames is the exact
+# complement of the shared_basenames the intersection arm uses, so a bundled-only
+# page added tomorrow is probed without anyone remembering to edit this case —
+# and a page that is promoted or renamed leaves the set on its own. A literal
+# list would have gone stale silently in both directions, because the arm's
+# `total -eq 0` floor only fires when EVERY named page vanishes, not when one
+# does.
+ROSTER28="$ROSTER22"
+BUNDLED28="$(tree_only_basenames "$REPO_ROOT/wiki/wiki/pages" \
+  "$REPO_ROOT/cogni-workspace/wiki/wiki/pages")"
+run_scan_tree "$REPO_ROOT/cogni-workspace/wiki/wiki/pages" "held-promotion-probe" \
+  "$ROSTER28" "$BUNDLED28" "$(skill_names_from "$REPO_ROOT" "$ROSTER28")"
+if assert_rc 0; then
+  pass "B28 the held bundled-only pages are clean against the live roster"
+else
+  fail "B28 the held bundled-only pages are clean against the live roster"
 fi
 
 # ---------------------------------------------------------------------------

@@ -1,17 +1,16 @@
 ---
 name: troubleshoot
 description: >-
-  This skill diagnoses and fixes common issues with insight-wave plugins. It should
-  be used whenever the user reports something broken, a skill not working, an error
-  from a plugin, needs debugging help, or says things like "something is wrong",
-  "plugin error", "skill not responding", "it doesn't work", "fix my setup",
-  "diagnose this issue", "why isn't X working", or mentions any plugin malfunction.
-  It also triggers when the user encounters unclear errors during plugin use — even
-  without an explicit troubleshooting request. Scope is plugin-level and cross-plugin
-  faults: plugin availability, skill-file integrity, cross-plugin dependencies, and
-  progress or state files. Workspace infrastructure — env vars, themes, settings, the
-  plugin registry, and MCP servers in the session — belongs to the sibling
-  workspace-status skill; route there instead.
+  This skill diagnoses and fixes plugin-level and cross-plugin faults in insight-wave
+  plugins: plugin availability, skill-file integrity, cross-plugin dependencies, and
+  progress or state files. Workspace infrastructure — env vars, themes, settings,
+  the plugin registry, and MCP servers in the session — belongs to the sibling
+  workspace-status skill; route there instead. It should be used whenever the user
+  reports something broken, a skill not working, an error from a plugin, needs
+  debugging help, or says things like "something is wrong", "plugin error",
+  "skill not responding", "fix my setup", or "why isn't X working". It also triggers
+  when the user encounters unclear errors during plugin use — even without an
+  explicit troubleshooting request.
 allowed-tools: Read, Bash, Glob, Grep
 ---
 

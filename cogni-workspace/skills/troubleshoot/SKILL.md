@@ -46,7 +46,7 @@ Keep in English regardless of language setting:
 | Skill file validation | Theme installation and config |
 | Cross-plugin dependency checks | Plugin discovery/registry |
 | Progress/state file health | Session hooks and lifecycle |
-| Stale state from renames | Dependency tool versions (node, gh, etc.) |
+| Stale state from renames | Dependency tool versions (jq, python3, curl, git, bc) |
 
 If the issue is clearly infrastructure (missing env var, broken theme), suggest
 the user run `/workspace-status` instead.
@@ -169,8 +169,9 @@ and `/manage-workspace`'s to repair.
   to diagnose and `/manage-workspace` to repair; `references/known-issues.md` carries
   the entry "Missing COGNI_WORKSPACE_ROOT".
 - **GitHub CLI not authenticated** — the cogni-issues skill fails with an
-  authentication or login error. Route to `references/known-issues.md`, which carries
-  the remedy under "GitHub not logged in".
+  authentication or login error. `gh` sits outside workspace-status's dependency
+  probe (see the Scope Boundary above), so `references/known-issues.md` stays its
+  documented owner — route there for the remedy under "GitHub not logged in".
 - **PPTX rendering skill unavailable**: `document-skills:pptx` renders the story-to-slides
   brief and does not ship from this marketplace. Confirm the session provides it before
   dispatching the `pptx` agent; otherwise take story-to-slides Step 11, "Guide User to

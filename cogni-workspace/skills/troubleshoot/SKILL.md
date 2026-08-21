@@ -159,10 +159,18 @@ Route each hit to `references/known-issues.md`, which carries the full remedy:
 
 ### 6. Common Misconfigurations
 
-- **Missing COGNI_WORKSPACE_ROOT**: Many plugins need this env var. Check
-  `.workspace-env.sh` exists and is sourced.
-- **GitHub CLI not authenticated**: Required for cogni-issues. Run `gh auth status`;
-  when authentication is missing, guide the user through `gh auth login`.
+Recognition patterns, not checks this skill runs — name the symptom, then route. Per
+the Scope Boundary above, workspace infrastructure is `workspace-status`'s to verify
+and `/manage-workspace`'s to repair.
+
+- **Missing COGNI_WORKSPACE_ROOT** — a plugin reports that shared resources (themes,
+  env vars) are unavailable, typically because the workspace was never initialized or
+  `.workspace-env.sh` is not sourced by the session hook. Route to `/workspace-status`
+  to diagnose and `/manage-workspace` to repair; `references/known-issues.md` carries
+  the entry "Missing COGNI_WORKSPACE_ROOT".
+- **GitHub CLI not authenticated** — the cogni-issues skill fails with an
+  authentication or login error. Route to `references/known-issues.md`, which carries
+  the remedy under "GitHub not logged in".
 - **PPTX rendering skill unavailable**: `document-skills:pptx` renders the story-to-slides
   brief and does not ship from this marketplace. Confirm the session provides it before
   dispatching the `pptx` agent; otherwise take story-to-slides Step 11, "Guide User to
@@ -179,7 +187,10 @@ summary table:
 | Plugin integrity | OK/WARN/FAIL | Any missing SKILL.md files |
 | State files | OK/WARN/FAIL | Any corrupted or stale files |
 | Dependencies | OK/WARN/FAIL | Any missing cross-plugin deps |
-| Environment | OK/WARN/FAIL | Key env vars and tools |
+| Environment | OK/WARN/FAIL | Observed only — route to `/workspace-status` |
+
+The Environment row is a routing signal, not a check this skill performs — report
+what the session already shows and hand the diagnosis to `/workspace-status`.
 
 ## Reference
 

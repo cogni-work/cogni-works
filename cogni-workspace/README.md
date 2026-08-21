@@ -175,7 +175,7 @@ State lives in two layers that other plugins consume. Configuration (env vars, t
 | `check-skill-names.sh` | script | Validates skill directory names against plugin.json manifest for consistency |
 | `check-workspace-python-deps.sh` | script | Fail-soft health check for optional Python packages in the workspace venv; reports per-package importability (`success` stays true) |
 | `discover-plugins.sh` | script | Scans marketplace cache for installed cogni-x plugins, returns JSON inventory |
-| `generate-settings.sh` | script | Generates settings files; supports `--update` to preserve custom env vars |
+| `generate-settings.sh` | script | Generates settings files; `--update` preserves custom env vars and prunes the ones it generated for plugins no longer in the list |
 | `install-mcp.sh` | script | Installs a git-based MCP server into `~/.claude/mcp-servers/` (clone, build, wrapper); outputs JSON with install and wrapper paths |
 | `install-workspace-deps.sh` | script | Provisions optional Python packages from `python-deps-registry.json` into an isolated venv at `~/.claude/workspace-python-venv/`; idempotent, `--force` reinstalls, JSON envelope |
 | `patch-desktop-config.py` | script | Merges git-installed MCP servers into the user's Claude Code (`~/.claude.json`) or Claude Desktop config from `mcp-git-registry.json`, preserving existing entries |

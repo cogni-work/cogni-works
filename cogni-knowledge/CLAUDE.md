@@ -241,7 +241,7 @@ Every result line a suite emits is addressed by its **first token**, so that tok
 - **Per line, not per case.** Uniqueness is a property of each **emitted result line**, not of the conceptual case. A block that can emit two failing lines needs two ids, even when its narrative calls them one case.
 - **Verification.** Check uniqueness by **running** the suite and grouping the emitted first tokens — never by grepping call sites. A grep cannot see a label interpolated at runtime, a line emitted from Python inside a heredoc, or a branch that did not run, and it counts commented-out call sites that never emit at all.
 
-A suite adopts the shape as its labels are written or converted; suites still carrying the old namespace-prefix labels are converted plugin-wide by a separate rollout.
+A suite adopts the shape as its labels are written or converted.
 
 ## Roadmap & shipped phases
 

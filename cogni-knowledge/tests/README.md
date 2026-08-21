@@ -43,7 +43,10 @@ via `trap rm -rf "$WORK" EXIT`.
   them, so a `PASS:`/`FAIL:` label stays machine-parsable — plain, never
   wrapped in an escape sequence and never chosen by an environment probe.
   `test_plain_result_emitters.sh` holds this shape.
-- `assert_grep <pattern> <description>` for contract-level SKILL.md checks.
+- `assert_grep <pattern> <file> <description>` for contract-level SKILL.md
+  checks. `assert_not_grep <pattern> <file> <description>` is its inverted
+  counterpart — same three arguments, but it fails when the pattern IS
+  present.
 - `assert_grep_f` / `assert_not_grep_f` are the fixed-string (`grep -qF`)
   counterparts. Reach for them whenever the pattern is a literal carrying
   `[`, `]`, `.` or `*` — a wikilink, a glob, a path. `assert_grep` reads such

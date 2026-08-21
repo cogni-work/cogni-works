@@ -164,8 +164,19 @@ errors=$((errors + shape_errors))
 if [ "$exercisers" -lt 50 ]; then
   red "FAIL: plain-emit-05 only $exercisers file(s) exercising the emitter contract were found (expected at least 50) — the scan is not reaching them"
   errors=$((errors + 1))
-elif [ "$shape_errors" -eq 0 ]; then
+else
+  green "PASS: plain-emit-05 $exercisers file(s) exercise the emitter contract (floor 50), so the scan is reaching them"
+fi
+
+# plain-emit-06 gates on shape_errors alone rather than chaining off the exercisers
+# floor. As an elif, the state (exercisers >= 50, shape_errors > 0) emitted neither
+# arm, so --case plain-emit-06 could never observe this case go red. The FAIL arm
+# below deliberately does NOT increment errors: the errors=$((errors + shape_errors))
+# fold above already counted them, and counting again would change the failure tally.
+if [ "$shape_errors" -eq 0 ]; then
   green "PASS: plain-emit-06 emitter-defining files are paired and plain — $definers of $exercisers exercising the contract"
+else
+  red "FAIL: plain-emit-06 $shape_errors emitter-defining file(s) are not paired or not plain — see the plain-emit-03/plain-emit-04 lines above"
 fi
 
 # Coverage floor — the shared emitter helper must stay inside the scanned

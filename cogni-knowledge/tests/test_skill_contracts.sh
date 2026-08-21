@@ -267,15 +267,25 @@ DISTILL="$PLUGIN_ROOT/skills/knowledge-distill/SKILL.md"
 DISTILLER="$PLUGIN_ROOT/agents/concept-distiller.md"
 REVIEWER="$PLUGIN_ROOT/agents/wiki-reviewer.md"
 
+_cr_dispatch_hits=0
+_cr_dispatch_detail=""
 for _p in plan:"$PLAN" curate:"$CURATE" fetch:"$FETCH" curator:"$CURATOR" fetcher:"$FETCHER" ingest:"$INGEST" ingester:"$INGESTER" claim-extractor:"$CLAIM_EXTRACTOR" compose:"$COMPOSE" composer:"$COMPOSER" verify:"$VERIFY" verifier:"$VERIFIER" revisor:"$REVISOR" finalize:"$FINALIZE" distill:"$DISTILL" distiller:"$DISTILLER" reviewer:"$REVIEWER"; do
   _cid="${_p%%:*}"; f="${_p#*:}"
   [ -f "$f" ] || continue
   if grep -qE 'Skill\("?(cogni-research:|cogni-workspace:claim)' "$f" 2>/dev/null; then
-    red "FAIL: skill-contracts-82-dispatches-cogni-research-workspace-${_cid} clean-break: $f dispatches a cogni-research/cogni-workspace-claims skill"
-    grep -nE 'Skill\("?(cogni-research:|cogni-workspace:claim)' "$f"
-    errors=$((errors + 1))
+    _cr_dispatch_detail="$_cr_dispatch_detail
+${_cid} ($f):
+$(grep -nE 'Skill\("?(cogni-research:|cogni-workspace:claim)' "$f")"
+    errors=$((errors + 1)); _cr_dispatch_hits=$((_cr_dispatch_hits + 1))
   fi
 done
+
+if [ "$_cr_dispatch_hits" -eq 0 ]; then
+  green "PASS: skill-contracts-82-dispatches-cogni-research-workspace clean-break: no scanned file dispatches a cogni-research/cogni-workspace-claims skill"
+else
+  red "FAIL: skill-contracts-82-dispatches-cogni-research-workspace clean-break: $_cr_dispatch_hits scanned file(s) dispatch a cogni-research/cogni-workspace-claims skill:"
+  printf '%s\n' "$_cr_dispatch_detail" | sed '/^$/d' | sed 's/^/    /'
+fi
 
 # cogni-wiki extension — applies to the v0.0.20 ingest surface, the
 # v0.0.22 compose surface, the v0.0.23 verify surface, and the v0.1.13
@@ -285,18 +295,37 @@ done
 # _wikilib._wiki_lock — an import, not a skill dispatch; knowledge-compose
 # only reads the wiki; the composer/verifier/revisor are read-only against
 # wiki/*; the concept-distiller is read+write-records only, no skill dispatch).
+_wiki_dispatch_hits=0
+_wiki_dispatch_detail=""
 for _p in ingest:"$INGEST" ingester:"$INGESTER" claim-extractor:"$CLAIM_EXTRACTOR" compose:"$COMPOSE" composer:"$COMPOSER" verify:"$VERIFY" verifier:"$VERIFIER" revisor:"$REVISOR" finalize:"$FINALIZE" distill:"$DISTILL" distiller:"$DISTILLER" reviewer:"$REVIEWER" setup:"$SETUP"; do
   _cid="${_p%%:*}"; f="${_p#*:}"
   [ -f "$f" ] || continue
   if grep -qE 'Skill\("?cogni-wiki:' "$f" 2>/dev/null; then
-    red "FAIL: skill-contracts-83-dispatches-cogni-wiki-skill-${_cid} clean-break: $f dispatches a cogni-wiki skill (M6 contract: call helper scripts directly)"
-    grep -nE 'Skill\("?cogni-wiki:' "$f"
-    errors=$((errors + 1))
+    _wiki_dispatch_detail="$_wiki_dispatch_detail
+${_cid} ($f):
+$(grep -nE 'Skill\("?cogni-wiki:' "$f")"
+    errors=$((errors + 1)); _wiki_dispatch_hits=$((_wiki_dispatch_hits + 1))
   fi
 done
 
-if [ $errors -eq 0 ]; then
+if [ "$_wiki_dispatch_hits" -eq 0 ]; then
+  green "PASS: skill-contracts-83-dispatches-cogni-wiki-skill clean-break: no scanned file dispatches a cogni-wiki skill (M6 contract: call helper scripts directly)"
+else
+  red "FAIL: skill-contracts-83-dispatches-cogni-wiki-skill clean-break: $_wiki_dispatch_hits scanned file(s) dispatch a cogni-wiki skill (M6 contract: call helper scripts directly):"
+  printf '%s\n' "$_wiki_dispatch_detail" | sed '/^$/d' | sed 's/^/    /'
+fi
+
+# skill-contracts-84 gates on this case's own predicate — the two dispatch
+# counters above — not on the suite-wide $errors counter it used to read.
+# That counter is incremented by several unrelated earlier checks, so any one of
+# them silenced this case and --case skill-contracts-84-clean-break-no-cogni
+# reported case_not_found instead of a verdict. The FAIL arm deliberately does
+# NOT increment errors: the loops above already counted each offending file.
+_clean_break_hits=$((_cr_dispatch_hits + _wiki_dispatch_hits))
+if [ "$_clean_break_hits" -eq 0 ]; then
   green "PASS: skill-contracts-84-clean-break-no-cogni clean-break — no cogni-research/cogni-workspace-claims/cogni-wiki skill dispatch in new files"
+else
+  red "FAIL: skill-contracts-84-clean-break-no-cogni clean-break — $_clean_break_hits file(s) dispatch a cogni-research/cogni-workspace-claims/cogni-wiki skill (see the skill-contracts-82/83 lines above)"
 fi
 
 # --- wiki-verifier agent honesty bullets ---------------------------------

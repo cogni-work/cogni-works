@@ -6,10 +6,10 @@ description: >
   turning any completed .md report into themed HTML with Chart.js charts, an
   infographic header, sidebar navigation, and inline SVG concept diagrams — or
   exporting it to PDF or DOCX. Trigger for any already-written report needing
-  visual enrichment, format conversion, or presentable output: adding charts or
-  diagrams, making a report look presentable, generating an HTML version, or
-  exporting it as PDF or Word. Also trigger for German equivalents (Bericht
-  visualisieren, als PDF exportieren, Diagramme hinzufuegen). The key signal: the
+  visual enrichment, format conversion, or presentable output: "adding charts or
+  diagrams", "making a report look presentable", "generating an HTML version", or
+  "exporting it as PDF or Word". Also trigger for German equivalents ("Bericht
+  visualisieren", "als PDF exportieren", "Diagramme hinzufuegen"). The key signal: the
   user already has a finished report and wants it visual or exported — this skill
   post-processes existing content, it never creates new reports from
   scratch (that is cogni-trends or upstream research), never creates slides (that

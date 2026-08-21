@@ -36,6 +36,10 @@
 #   - every YAML scalar style in the tree (>-, |, "...", '...') yields the same
 #     phrases, with the scalar's own delimiters unwrapped first
 #   - the real cogni-workspace tree is clean
+#   - every skill in the real tree contributes at least one phrase to the
+#     extractor, so a description that advertises its triggers as unquoted
+#     prose, or in single quotes inside a double-quoted scalar, is invisible
+#     to this guard and fails the coverage floor
 #   - an empty or missing skills directory fails rather than reporting clean
 #
 # Scoped to one plugin on purpose. The obvious generalization — scan every
@@ -341,6 +345,59 @@ if [ "$c8_ok" -eq 1 ]; then
   pass "C8 an empty or missing skills tree fails rather than reporting clean"
 else
   fail "C8 an empty or missing skills tree fails rather than reporting clean"
+fi
+
+# ---------------------------------------------------------------------------
+# C9 — the coverage floor. A description that advertises its triggers as
+# unquoted prose, or as single-quoted spans inside a double-quoted scalar,
+# contributes ZERO phrases: it cannot collide with anything, so C1 stays green
+# no matter what it claims. That is not hypothetical — it is how a real
+# collision once sat in this tree behind a green suite.
+#
+# This case asserts CONTRIBUTION to the real extractor, never the presence of
+# quote characters. A shape test looking for a quote would pass a skill whose
+# only double quotes are the scalar's own delimiters, and would pass one whose
+# triggers are single-quoted — both of which contribute nothing. That test
+# would be green on precisely the defect it exists to catch.
+#
+# Each skill is probed through emit_phrases itself, one at a time, so there is
+# no roster to keep in sync with the extractor's own name key, and no
+# per-skill exemption list — the thing this suite's design rejects. Pointing
+# this case at a broken extractor turns it red, exactly as C1-C8 do.
+#
+# Single-quoted spans are deliberately NOT harvested, and the fix for a
+# single-quoted description is to migrate it rather than to widen the regex.
+# A boundary-aware widening is possible and mints no garbage, so that is not
+# the objection: the objection is that it only reaches descriptions that quote
+# SOMETHING. Measured over the six skills this floor first caught, widening
+# rescued three; the other three advertised their triggers as unquoted prose,
+# so no pattern over any quote character reaches them. Widening therefore buys
+# a second quoting convention and still leaves half the work undone. It also
+# harvests what an author would not: a word-mention ("the word 'adapt'") and a
+# span whose trailing comma sits inside the quotes. Punctuation and mentions
+# are for an author to adjudicate, not a regex.
+# ---------------------------------------------------------------------------
+c9_scanned=0
+c9_missing=""
+for c9_dir in "$WS_ROOT"/skills/*/; do
+  [ -f "$c9_dir/SKILL.md" ] || continue
+  c9_trimmed="${c9_dir%/}"
+  c9_name="${c9_trimmed##*/}"
+  c9_scanned=$((c9_scanned + 1))
+  c9_probe="$TMPROOT/c9/$c9_name/skills"
+  mkdir -p "$c9_probe/$c9_name"
+  cp "$c9_dir/SKILL.md" "$c9_probe/$c9_name/SKILL.md"
+  if [ -z "$(emit_phrases "$c9_probe" 2>/dev/null)" ]; then
+    c9_missing="$c9_missing $c9_name"
+  fi
+done
+# c9_scanned > 0 is the anti-vacuity clause, mirroring C8: a glob that matched
+# nothing must fail this case, not pass it on an empty loop.
+if [ "$c9_scanned" -gt 0 ] && [ -z "$c9_missing" ]; then
+  pass "C9 every real cogni-workspace skill contributes at least one trigger phrase"
+else
+  echo "     skills contributing zero phrases:$c9_missing (scanned $c9_scanned)"
+  fail "C9 every real cogni-workspace skill contributes at least one trigger phrase"
 fi
 
 # ---------------------------------------------------------------------------

@@ -77,7 +77,7 @@ This section is **read-only**. `audit-region-sources` is the dedicated coverage 
 - Environment vars: read `.claude/settings.local.json` `env` object, count how many resolve to existing paths
 - Plugins: count from Section 2
 - Themes: count from Section 3
-- Dependencies: invoke `<workspace-root>/cogni-workspace/scripts/check-dependencies.sh` and parse the JSON envelope (`data.required[]` and `data.optional[]`)
+- Dependencies: invoke `<workspace-root>/cogni-workspace/scripts/check-dependencies.sh` and partition `data.dependencies[]` (one entry per tool: `{name, available, required, version}`) on each entry's own `required` flag; `data.missing_required` / `data.missing_optional` carry the same misses as integers
 - MCPs: count from Section 4
 
 **Output**: one row per check. Each row: green/yellow/red dot, check name, one-line summary (e.g., "12 vars set, 0 missing"), and a "Run `/cogni-workspace:workspace-status` for details" pointer at the section foot.

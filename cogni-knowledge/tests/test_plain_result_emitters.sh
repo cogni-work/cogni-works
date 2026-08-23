@@ -109,6 +109,13 @@ fixtures_definers=0
 exercisers=0
 shape_errors=0
 
+# Offender text for plain-emit-03 / plain-emit-04. The loop accumulates; both
+# cases are emitted once, after it closes, under a fixed id. Initialized here
+# because `set -u` is on and the post-loop arms read these whether or not the
+# loop ever appended to them.
+pair_offenders=""
+plain_offenders=""
+
 for f in "$SCAN_ROOT"/*.sh "$SCAN_ROOT"/fixtures/*.sh; do
   [ -f "$f" ] || continue
 
@@ -145,17 +152,56 @@ for f in "$SCAN_ROOT"/*.sh "$SCAN_ROOT"/fixtures/*.sh; do
     esac
   done <<<"$defs"
 
+  # Accumulate only — the emission for both cases happens after the loop. The
+  # predicates and both shape_errors bumps are unchanged, so the fold below
+  # stays arithmetically identical. The file name moves into the message text,
+  # since the id no longer carries it. `${f##*/}` rather than $(basename "$f")
+  # because the name is now interpolated into an ASSIGNMENT: an assignment
+  # takes its exit status from the substitution, so under `set -e` a failing
+  # one would abort the run, where the `red "…"` argument it replaced would
+  # not have. Parameter expansion also forks nothing.
   if [ "$n_red" -ne 1 ] || [ "$n_green" -ne 1 ]; then
-    red "FAIL: plain-emit-03-$(case_slug "$(basename "$f")") defines red=$n_red green=$n_green (expected 1 each)"
+    pair_offenders="$pair_offenders${f##*/} defines red=$n_red green=$n_green (expected 1 each)
+"
     shape_errors=$((shape_errors + 1))
   elif [ "$n_plain" -ne 2 ]; then
-    red "FAIL: plain-emit-04-$(case_slug "$(basename "$f")") emitter bodies are not both the plain printf form"
-    printf '%s\n' "$defs" | sed 's/^/  /'
+    plain_offenders="$plain_offenders${f##*/}
+$defs
+"
     shape_errors=$((shape_errors + 1))
   fi
 done
 
 errors=$((errors + shape_errors))
+
+# plain-emit-03 / plain-emit-04 are emitted here, once, rather than per file
+# inside the loop. In the loop each id had to carry a per-file discriminator to
+# stay unique per emitted line, and the if/elif had no else — so neither id
+# could ever print a green line, and a harness aimed at either read a clean run
+# as case_not_found instead of a verdict. A fixed id only becomes safe once the
+# emission leaves the loop, which is why this is a relocation and not a suffix
+# strip. The id stays the second whitespace-separated token, never colon-abutted.
+#
+# Like the plain-emit-06 block below, neither FAIL arm increments errors: the
+# errors=$((errors + shape_errors)) fold above already counted every offending
+# file, and counting again would change the failure tally.
+if [ -z "$pair_offenders" ]; then
+  green "PASS: plain-emit-03 every emitter-defining file defines exactly one red and one green"
+else
+  red "FAIL: plain-emit-03 emitter-defining file(s) do not define exactly one red and one green:"
+  printf '%s' "$pair_offenders" | sed 's/^/  /'
+fi
+
+# Scoped to the files that cleared the pairing check: the elif above means a
+# pairing offender never reaches the n_plain check, so an unqualified "every
+# emitter body is plain" claim would be false on exactly the run where
+# plain-emit-03 is red.
+if [ -z "$plain_offenders" ]; then
+  green "PASS: plain-emit-04 both emitter bodies are the plain printf form in every file that cleared the pairing check above"
+else
+  red "FAIL: plain-emit-04 emitter-defining file(s) clearing the pairing check have bodies that are not both the plain printf form:"
+  printf '%s' "$plain_offenders" | sed 's/^/  /'
+fi
 
 # Liveness floor — a broken glob must fail loudly rather than pass vacuously.
 # 79 files exercise the contract today (1 defines the emitters — the shared

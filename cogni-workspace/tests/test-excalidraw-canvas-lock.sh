@@ -537,6 +537,8 @@ test_stale_lock_survives_divergent_stat() {
     if [ "$n_chains" != "2" ]; then
       fail test_stale_lock_survives_divergent_stat-chain-count-$hslug "expected 2 stat chains in $h, found $n_chains"
       continue
+    else
+      pass test_stale_lock_survives_divergent_stat-chain-count-$hslug "2 stat chains in $h"
     fi
     bad=0
     # Fed by a heredoc, never a pipe: a pipeline runs the loop in a subshell
@@ -626,6 +628,8 @@ test_hook_copies_are_identical() {
     if [ ! -s "$f" ]; then
       fail test_hook_copies_are_identical-surface-$(path_slug "$f") "missing or empty: $f"
       return
+    else
+      pass test_hook_copies_are_identical-surface-$(path_slug "$f") "present and non-empty: $f"
     fi
   done
 
@@ -665,6 +669,8 @@ test_release_is_trapped_for_signals() {
     if [ "$traps" != "1" ]; then
       fail test_release_is_trapped_for_signals-trap-count-$hslug "expected exactly 1 trap line in $h, got $traps"
       continue
+    else
+      pass test_release_is_trapped_for_signals-trap-count-$hslug "exactly 1 trap line in $h"
     fi
 
     trapline="$(printf '%s\n' "$code" | grep -E '^[[:space:]]*trap ')"

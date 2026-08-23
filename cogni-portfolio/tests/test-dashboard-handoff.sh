@@ -325,6 +325,8 @@ test_open_browser_optin() {
   fi
   if grep -qF 'default: true' "$AGENT"; then
     fail test_open_browser_optin-no-default-true "agent contract still documents 'default: true' somewhere"
+  else
+    pass test_open_browser_optin-no-default-true "agent contract documents no 'default: true'"
   fi
 
   # Half 2 — the call-site surface. Three globs: agents/, skills/*/SKILL.md and
@@ -340,6 +342,8 @@ test_open_browser_optin() {
   if [ "$scanned" -eq 0 ]; then
     fail test_open_browser_optin-scan-surface "scanned no files; scan surface is broken"
     return
+  else
+    pass test_open_browser_optin-scan-surface "scanned $scanned files"
   fi
 
   # A dispatch line mentions the agent by name. The agent's own contract file is
@@ -358,6 +362,8 @@ test_open_browser_optin() {
   if [ "$dispatch_count" -eq 0 ]; then
     fail test_open_browser_optin-dispatch-surface "found no dashboard-refresher dispatch lines; scan surface is broken"
     return
+  else
+    pass test_open_browser_optin-dispatch-surface "found $dispatch_count dashboard-refresher dispatch lines"
   fi
 
   # Intent-scoped: require the flag only where the surrounding prose promises to

@@ -95,7 +95,11 @@ mk_concept "$WIKI" penalties "Penalties" \
 IDX="$WIKI/wiki/concepts/index.md"
 
 # --- 1. RENDER-CREATES: backfill an already-finalized base --------------------
-[ ! -f "$IDX" ] || { red "FAIL: backfill-concepts-index-00-index-absent precondition — index.md already exists"; errors=$((errors+1)); }
+if [ ! -f "$IDX" ]; then
+  green "PASS: backfill-concepts-index-00-index-absent precondition — index.md absent as required"
+else
+  red "FAIL: backfill-concepts-index-00-index-absent precondition — index.md already exists"; errors=$((errors+1))
+fi
 OUT=$(python3 "$DRIVER" --wiki-root "$WIKI" --wiki-scripts-dir "$WSD")
 if [ "$(echo "$OUT" | field '["success"]')" = "True" ] && [ -f "$IDX" ]; then
   green "PASS: backfill-concepts-index-01-backfill-creates-wiki-concepts backfill creates wiki/concepts/index.md on a base with no prior outline"

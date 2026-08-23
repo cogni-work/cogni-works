@@ -83,7 +83,11 @@ assert_env b "$OUT" "d['success'] and d['meta']['research_findings']==0 and len(
 RC=0
 OUT=$(python3 "$HELPER" --wiki-root "$WORK/w" --project "$PROJ" --wiki-lint "$LINT_FAIL") || RC=$?
 assert_env c "$OUT" "d['success'] and d['meta']['research_findings']==1 and len(d['meta']['degraded'])>=1 and len(d['data']['warnings'])==1" "oqpayload-04 lint failure degraded, gaps still streamed"
-[ "$RC" = "0" ] || { red "FAIL: oqpayload-05 exit code should be 0, got $RC"; errors=$((errors + 1)); }
+if [ "$RC" = "0" ]; then
+  green "PASS: oqpayload-05 exit code is 0"
+else
+  red "FAIL: oqpayload-05 exit code should be 0, got $RC"; errors=$((errors + 1))
+fi
 
 # d. both missing (lint fails + no coverage)
 OUT=$(python3 "$HELPER" --wiki-root "$WORK/w" --project "$EMPTY" --wiki-lint "$LINT_FAIL")

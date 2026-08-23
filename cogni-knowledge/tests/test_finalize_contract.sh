@@ -497,6 +497,8 @@ if [ $RC -ne 0 ]; then
   red "FAIL: finalize-192-v0-1-0-clear-case-expected v0.1.0 clear case — expected exit 0, got $RC"
   red "  output: $OUT"
   errors=$((errors + 1))
+else
+  green "PASS: finalize-192-v0-1-0-clear-case-expected v0.1.0 clear case — exited 0 as expected"
 fi
 
 if ! echo "$OUT" | python3 -c "
@@ -547,6 +549,8 @@ if [ $RC2 -ne 1 ]; then
   red "FAIL: finalize-194-v0-1-0-self-cycle-case v0.1.0 self-cycle case — expected exit 1 (cycle_detected), got $RC2"
   red "  output: $OUT2"
   errors=$((errors + 1))
+else
+  green "PASS: finalize-194-v0-1-0-self-cycle-case v0.1.0 self-cycle case — exited 1 as expected"
 fi
 
 if ! echo "$OUT2" | python3 -c "
@@ -592,6 +596,8 @@ if [ $RC3 -ne 1 ]; then
   red "FAIL: finalize-196-corrupt-manifest-case-expected corrupt-manifest case — expected exit 1, got $RC3"
   red "  output: $OUT3"
   errors=$((errors + 1))
+else
+  green "PASS: finalize-196-corrupt-manifest-case-expected corrupt-manifest case — exited 1 as expected"
 fi
 
 if ! echo "$OUT3" | python3 -c "

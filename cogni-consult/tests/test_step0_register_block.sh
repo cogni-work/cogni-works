@@ -181,6 +181,7 @@ EOF
 if [ ! -f "$OWNER" ]; then
   fail "owner-present-file" "user-facing-output.md not found at $OWNER"
 else
+  pass "owner-present-file" "user-facing-output.md present at $OWNER"
   # Positional id, as above — reordering these needles renumbers the cases.
   j=0
   for needle in '## (f) Tool-call descriptions' '6 words' 'Discover cogni-consult engagements'; do

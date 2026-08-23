@@ -308,6 +308,8 @@ REVISOR_BODY=$(awk 'BEGIN{p=0} /^-->[[:space:]]*$/{p=1; next} p' "$REVISOR")
 if [ -z "$REVISOR_BODY" ]; then
   red "FAIL: verify-contract-103-awk-body-filter-returned revisor: awk body filter returned empty — '-->' close marker missing or has unexpected suffix"
   errors=$((errors + 1))
+else
+  green "PASS: verify-contract-103-awk-body-filter-returned revisor: awk body filter returned a non-empty body"
 fi
 for _p in citation-density:'citation_density' cross-references-emitted:'cross_references_emitted' placed-evidence-ledger:'placed-evidence ledger' create-entity-sh:'scripts/create-entity.sh' source-mode-evidence-gathering:'Source-Mode Evidence Gathering'; do
   _cid="${_p%%:*}"; token="${_p#*:}"

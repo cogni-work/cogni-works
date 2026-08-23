@@ -21,13 +21,25 @@ COMPOSER="$PLUGIN_ROOT/agents/wiki-composer.md"
 COMPOSE="$PLUGIN_ROOT/skills/knowledge-compose/SKILL.md"
 REVIEWER="$PLUGIN_ROOT/agents/wiki-reviewer.md"
 
+# Collect then pair: emitting per iteration gives the case an id that can only
+# ever print red, so `--case prose-density-00` could never be verified. Accumulate
+# inside the loop and emit one fixed-id if/else after it closes — the
+# plain-emit-03 model in test_plain_result_emitters.sh.
+_missing_required=""
 for _p in composer:"$COMPOSER" compose:"$COMPOSE" reviewer:"$REVIEWER"; do
   _cid="${_p%%:*}"; f="${_p#*:}"
   if [ ! -f "$f" ]; then
-    red "FAIL: prose-density-00-required-file-not-found-${_cid} required file not found: $f"
-    exit 1
+    _missing_required="${_missing_required}${_cid}: $f
+"
   fi
 done
+if [ -z "$_missing_required" ]; then
+  green "PASS: prose-density-00 every required file is present"
+else
+  red "FAIL: prose-density-00 required file(s) not found:"
+  printf '%s' "$_missing_required" | sed 's/^/    /'
+  exit 1
+fi
 
 # --- composer: standard soft-budget vs executive ceiling, single pass ----
 # Brevity-first retune: standard treats TARGET_WORDS as a soft UPPER BUDGET (not a

@@ -142,8 +142,11 @@ Seven rules follow from how it matches:
    ```
 
    Empty output is clean; anything printed is a collision. One limitation: a
-   passing run emits only the green arms, so once those are clean, pair each red
-   arm's id by reading the source.
+   passing run emits only the green arms, so this census sees only half the
+   picture. Pairing the red arms is no longer a hand-read —
+   `scripts/check-case-id-pairing.py` (rule 7) does it mechanically. Uniqueness
+   still needs the run above: two cases sharing one id is not statically
+   decidable, and the pairing guard makes no claim about it.
 
 7. **Both arms of a case must be reachable, and each is gated only on that
    case's own predicate.** Rule 5 gives the two arms one id; this one keeps both
@@ -170,6 +173,25 @@ Seven rules follow from how it matches:
    Force each branch — a fixture, or an argument-driven scan root that makes the
    red arm fire — or point `mutation-check.sh --case <id>` at it and let the
    reverted guard do the forcing.
+
+   This rule is now enforced mechanically. `scripts/check-case-id-pairing.py`
+   (CI job "Case-id pairing guard") flags a `FAIL: <id>` emission with no
+   reachable same-id green arm in the same file, across `tests/*.sh` and
+   `*/tests/*.sh`. Two things about it are worth knowing before you read a
+   finding. Its **exemption keys on scope, not on abort**: a fail-only arm is
+   exempt only when it aborts *and* sits at script scope, so the aborting
+   preflight described just above stays exempt while the same shape inside a
+   loop or a function is a finding. That is deliberately weaker than this
+   rule's own qualification — the straight-line aborting preflights that ship
+   today (counted on every run as `script_scope_aborts_exempt`) would all
+   become findings under a stricter reading, so whether this rule's sentence
+   should narrow or those preflights should gain twins is an open question,
+   not something the guard settled. And its detection has a
+   **stated recall floor** — out-of-glob sourced helpers such as
+   `fixtures/test_helpers.sh`, ids that are entirely an expansion, heredoc
+   bodies, and labels not in command position are all knowingly out of reach.
+   The guard's module docstring is the single source for both; this rule points
+   at it rather than restating it.
 
 How the harness classifies a line, precisely: it matches the id as a **whole
 token** (so `--case P1` never matches a `P10` line), keys red on a `FAIL:` line

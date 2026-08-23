@@ -56,7 +56,10 @@ for phase in plan curate fetch ingest compose verify finalize; do
   fi
   if [ "$ln" -le "$prev" ]; then
     order_ok=0
-    red "FAIL: push-chain-03-${phase} knowledge-${phase} dispatch (line $ln) is not after the previous phase (line $prev)"
+    # Unlabelled detail under push-chain-04, which already pairs this property
+    # after the loop. A case id here could never print green — the loop only
+    # reaches this branch when the order is wrong.
+    printf '%s\n' "  ordering: knowledge-${phase} dispatch (line $ln) is not after the previous phase (line $prev)"
     break
   fi
   prev="$ln"

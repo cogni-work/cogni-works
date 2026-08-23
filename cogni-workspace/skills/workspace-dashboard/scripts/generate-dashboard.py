@@ -674,16 +674,19 @@ def _check_dependencies(workspace_root):
         if proc.returncode != 0 or not proc.stdout.strip():
             return ("warning", "check-dependencies.sh failed")
         payload = json.loads(proc.stdout)
-        data = payload.get("data", {})
-        required = data.get("required", {}) or {}
-        optional = data.get("optional", {}) or {}
-        req_ok = sum(1 for v in required.values() if v.get("available"))
-        req_total = len(required)
-        opt_ok = sum(1 for v in optional.values() if v.get("available"))
-        opt_total = len(optional)
+        data = payload.get("data", {}) if isinstance(payload, dict) else {}
+        deps = data.get("dependencies") if isinstance(data, dict) else None
+        entries = [d for d in deps if isinstance(d, dict)] if isinstance(deps, list) else []
+        if not entries:
+            return ("warning", "check-dependencies.sh reported no dependencies")
+        required = [d for d in entries if d.get("required")]
+        optional = [d for d in entries if not d.get("required")]
+        req_total, opt_total = len(required), len(optional)
+        req_ok = sum(1 for d in required if d.get("available"))
+        opt_ok = sum(1 for d in optional if d.get("available"))
         label = "ok" if req_ok == req_total else "danger"
         return (label, f"{req_ok}/{req_total} required, {opt_ok}/{opt_total} optional")
-    except (subprocess.SubprocessError, json.JSONDecodeError, OSError):
+    except (subprocess.SubprocessError, json.JSONDecodeError, AttributeError, TypeError, OSError):
         return ("warning", "check-dependencies.sh errored")
 
 

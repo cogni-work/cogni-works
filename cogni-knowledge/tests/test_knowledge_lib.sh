@@ -28,12 +28,40 @@ SCRIPTS_DIR="$PLUGIN_ROOT/scripts"
 
 . "$(dirname "$0")/fixtures/test_helpers.sh"
 
+# Missing-script text for klib-01. The loop accumulates; the case is emitted
+# once, after it closes, under a fixed id. Initialized here because `set -u` is
+# on and the post-loop arms read it whether or not the loop ever appended to it.
+missing_scripts=""
+
 for f in _knowledge_lib.py candidate-store.py fetch-cache.py; do
   if [ ! -f "$SCRIPTS_DIR/$f" ]; then
-    red "FAIL: klib-01-$(case_slug "$f") $f not found at $SCRIPTS_DIR/$f"
-    exit 1
+    missing_scripts="$missing_scripts$f not found at $SCRIPTS_DIR/$f
+"
   fi
 done
+
+# klib-01 is emitted here, once, rather than per file inside the loop. In the
+# loop the id had to carry a per-file case_slug discriminator to stay unique per
+# emitted line, and the arm was fail-only with no else — so the id could never
+# print a green line, and a harness aimed at it read a clean run as
+# case_not_found instead of a verdict. A fixed id only becomes safe once the
+# emission leaves the loop, which is why this is a relocation and not a suffix
+# strip. The id stays the second whitespace-separated token, never colon-abutted.
+#
+# grade() below is the mechanism every other case in this file uses, and is
+# deliberately NOT reused here: it grades a tagged line out of $OUT from the
+# python subprocess this precondition must run BEFORE (that subprocess imports
+# the very scripts checked here), it folds into `errors`, which is not
+# initialized until just above it, and it is non-fatal — where this check must
+# abort. The exit stays fatal; it now reports every missing script rather than
+# only the first.
+if [ -z "$missing_scripts" ]; then
+  green "PASS: klib-01 all three library scripts present under $SCRIPTS_DIR"
+else
+  red "FAIL: klib-01 library script(s) missing under $SCRIPTS_DIR:"
+  printf '%s' "$missing_scripts" | sed 's/^/  /'
+  exit 1
+fi
 
 WORK=$(mktemp -d)
 trap 'rm -rf "$WORK"' EXIT

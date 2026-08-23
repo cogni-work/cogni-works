@@ -71,7 +71,7 @@ same-named `cogni-portfolio/scripts/mutation-check.sh` and
 `cogni-consult/scripts/mutation-check.sh` are different, bespoke scripts and are
 not this harness.
 
-Six rules follow from how it matches:
+Seven rules follow from how it matches:
 
 1. **An id is unique within its suite.** Two cases sharing one id cannot be told
    apart, so neither is addressable.
@@ -144,6 +144,32 @@ Six rules follow from how it matches:
    Empty output is clean; anything printed is a collision. One limitation: a
    passing run emits only the green arms, so once those are clean, pair each red
    arm's id by reading the source.
+
+7. **Both arms of a case must be reachable, and each is gated only on that
+   case's own predicate.** Rule 5 gives the two arms one id; this one keeps both
+   of them printable. An arm the case's own predicate cannot reach is
+   addressable in name only — `--case <id>` reports `case_not_found` instead of
+   a verdict, and the guard it was meant to check proves nothing. Three shapes
+   recur here. The plainest is a fail-only check with no `else`, which can never
+   print green. The second chains a case onto a *different* case's condition
+   with `elif`, so the branch is evaluated only when that earlier condition took
+   the other path, and the state satisfying both prints neither arm. The third
+   gates a PASS on a suite-wide accumulator such as the shared `errors` counter,
+   which unrelated earlier checks increment — any one of them silences this
+   case. For a multi-file scan, collect then pair: accumulate offenders into one
+   variable during the loop, then gate a single same-id `if`/`else` on that
+   variable after the loop closes (`plain-emit-03` in
+   `test_plain_result_emitters.sh` is the resident model). The one legitimate
+   single arm is a preflight guard with no green state worth reporting — a
+   not-found check that aborts, where execution does not continue so a PASS
+   could never print. Aborting alone does not earn the exemption: a preflight
+   whose subject can legitimately be intact still owes a PASS twin, as `klib-01`
+   in `test_knowledge_lib.sh` shows, pairing one with a fatal `exit`.
+
+   Reachability is invisible in a green run: only the arms that fired appear.
+   Force each branch — a fixture, or an argument-driven scan root that makes the
+   red arm fire — or point `mutation-check.sh --case <id>` at it and let the
+   reverted guard do the forcing.
 
 How the harness classifies a line, precisely: it matches the id as a **whole
 token** (so `--case P1` never matches a `P10` line), keys red on a `FAIL:` line

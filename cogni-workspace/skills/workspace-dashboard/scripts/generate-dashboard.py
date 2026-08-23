@@ -506,11 +506,17 @@ def load_mcp_registry(workspace_root):
 
 
 def mcp_install_status(server):
-    """Heuristic: check whether the MCP appears installed locally."""
+    """Heuristic: check whether the MCP appears installed locally.
+
+    The git-type probe resolves the install directory from the registry `name`,
+    never `desktop_config_key`. Which key governs which artifact, and why the
+    installer is authoritative for the directory, is stated once in
+    skills/workspace-status/SKILL.md section "6. MCP Servers".
+    """
     server_type = server.get("type", "")
-    desktop_key = server.get("desktop_config_key", "")
     if server_type == "git":
-        candidate = os.path.expanduser(f"~/.claude/mcp-servers/{desktop_key}/start.sh")
+        name = server.get("name", "")
+        candidate = os.path.join(_mcp_base_dir(), name, "start.sh")
         return ("installed" if os.path.isfile(candidate) else "missing", candidate)
     if server_type == "native":
         platforms = server.get("platforms", {})
@@ -520,6 +526,23 @@ def mcp_install_status(server):
             return ("installed", cmd)
         return ("manual", cmd)
     return ("unknown", "")
+
+
+def _mcp_base_dir():
+    """Base directory holding installed git-type MCP servers.
+
+    Reuses the CLAUDE_MCP_DIR spelling install-mcp.sh already reads, so a test
+    can point the installer and this probe at one fixture tree without touching
+    $HOME. `or`, not a bare default, so an EMPTY value falls back exactly like
+    install-mcp.sh's ${CLAUDE_MCP_DIR:-...} rather than resolving to an empty
+    base — pinned by the empty-value case in tests/test-dashboard-mcp-counts.sh,
+    since the bare-default form passes every other case.
+
+    Not yet universal: patch-desktop-config.py reads the same variable with a
+    bare default and so does NOT fall back on empty (tracked in #1588), and
+    hooks/ensure-excalidraw-canvas.sh uses its own EXCALIDRAW_MCP_DIR spelling.
+    """
+    return os.environ.get("CLAUDE_MCP_DIR") or os.path.expanduser("~/.claude/mcp-servers")
 
 
 def _command_on_path(cmd):

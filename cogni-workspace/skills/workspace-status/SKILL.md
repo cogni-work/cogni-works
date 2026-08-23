@@ -197,6 +197,11 @@ means it is not available. The **Install** column decides how a missing server i
   - the **install directory** — `$HOME/.claude/mcp-servers/mcp_excalidraw/start.sh`, named
     for the registry **server name**, not the config key
 
+    This is the canonical statement of the key-to-directory rule: the dashboard install
+    probe, `skills/workspace-dashboard/references/dashboard-sections.md` and
+    `skills/install-mcp` all point here rather than restating it. `$CLAUDE_MCP_DIR`, when
+    set to a non-empty value, replaces the `$HOME/.claude/mcp-servers` base.
+
   | Config entry (this host) | `start.sh` | State | Advise |
   |---|---|---|---|
   | absent | absent | never installed | route to `/cogni-workspace:install-mcp` |

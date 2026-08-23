@@ -133,6 +133,11 @@ bash "${CLAUDE_PLUGIN_ROOT}/scripts/install-mcp.sh" \
   $WRAPPER_ARG
 ```
 
+`--name` becomes the directory the server is installed into, under `$CLAUDE_MCP_DIR`.
+Which registry key belongs here, how it differs from the one naming the host config
+entry, and what base `$CLAUDE_MCP_DIR` falls back to, are all stated once in
+`${CLAUDE_PLUGIN_ROOT}/skills/workspace-status/SKILL.md` section "6. MCP Servers".
+
 The script outputs JSON. On success, `data.action` is `installed` (fresh clone),
 `updated` (a `--force` refetch), `rebuilt` (already cloned but unbuilt, so the build
 reran) or `skipped` (already built). A failure carries no `action` at all — it reports

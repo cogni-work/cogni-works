@@ -19,12 +19,14 @@
 # falsifier of the "0/0 forever" defect.
 #
 # SHAPE ONLY, NEVER HOST AVAILABILITY -- the same discipline as D9 in the sibling suite
-# test-dashboard-dependency-counts.sh. No case may depend on what is installed under
-# ~/.claude/mcp-servers. That is host-dependent, and on this repo's own live registry it is
-# also currently WRONG for an unrelated and separately-filed reason: an entry declares a
-# desktop_config_key that does not match its installed directory name, so a present server
-# reports `missing`. Fixtures therefore use entries whose status is deterministic on every
-# host: type "native" with no `platforms` key resolves to "manual", and type "git" with a
+# test-dashboard-dependency-counts.sh. No case may depend on what is installed under the
+# real ~/.claude/mcp-servers. That is host-dependent, so this suite exports CLAUDE_MCP_DIR to
+# an empty fixture tree under $TMPROOT before any case runs: the probe resolves its base from
+# that variable (the same spelling install-mcp.sh and patch-desktop-config.py honour), so no
+# case can reach the developer's live install directory and determinism is STRUCTURAL rather
+# than a naming convention. A case needing a populated base overrides the export explicitly
+# and restores it afterwards. Fixtures otherwise use entries whose status is deterministic on
+# every host: type "native" with no `platforms` key resolves to "manual", and type "git" with a
 # key that cannot exist resolves to "missing".
 #
 # Cases drive the PRODUCTION read path -- resolve_mcp_servers(root) against a real on-disk
@@ -50,6 +52,13 @@ SECTIONS="$WS_ROOT/skills/workspace-dashboard/references/dashboard-sections.md"
 TMPROOT="$(mktemp -d)"
 trap 'rm -rf "$TMPROOT"' EXIT
 
+# Every case probes an EMPTY fixture base by default, so no present or future case can read
+# the developer's live ~/.claude/mcp-servers. Cases that need a populated base export over
+# this and restore it immediately after their assertion.
+MCP_EMPTY="$TMPROOT/mcp-empty"
+mkdir -p "$MCP_EMPTY"
+export CLAUDE_MCP_DIR="$MCP_EMPTY"
+
 failures=0
 pass() { printf 'PASS: %s\n' "$1"; }
 fail() { printf 'FAIL: %s\n' "$1"; failures=$((failures + 1)); }
@@ -65,6 +74,17 @@ new_root() {
     printf '%s' "$2" > "$root/cogni-workspace/references/mcp-git-registry.json"
   fi
   printf '%s' "$root"
+}
+
+# new_mcp_base <name> <relpath-to-start.sh> -- build a temp MCP base directory containing
+# exactly one installed wrapper at <relpath>, and echo the base. Used by the cases that pin
+# which directory name the probe resolves; the file is touched, never executed.
+new_mcp_base() {
+  local name="$1" rel="$2"
+  local base="$TMPROOT/mcp-$name"
+  mkdir -p "$base/$(dirname "$rel")"
+  touch "$base/$rel"
+  printf '%s' "$base"
 }
 
 # assert_mcp "<label>" "<root>" "<python expr, True to pass>" -- the renderer is bound as `r`,
@@ -216,11 +236,68 @@ assert_resolve "M13 the repo's own registry is still a shape this reader accepts
 
 # --- M14: a registry whose servers are all absent still reports a real total. --
 # The direct analogue of the sibling's D2 and the strongest falsifier of "0/0 forever": a
-# reader rendering a constant 0/0 fails here on the TOTAL, not merely on the label. type "git"
-# with a key that cannot exist resolves to "missing" on every host, so this is deterministic.
-M14ROOT="$(new_root m14 '{"servers":{"alpha":{"type":"git","desktop_config_key":"zz-not-installed-alpha"},"beta":{"type":"git","desktop_config_key":"zz-not-installed-beta"}}}')"
+# reader rendering a constant 0/0 fails here on the TOTAL, not merely on the label. These
+# entries declare no name, so the probe falls back to their map keys and looks for alpha/ and
+# beta/ under the exported empty fixture base -- determinism comes from that base, not from
+# the spelling of the keys.
+M14ROOT="$(new_root m14 '{"servers":{"alpha":{"type":"git"},"beta":{"type":"git"}}}')"
 assert_mcp "M14 a fully-uninstalled registry reports a truthful two-server total" "$M14ROOT" \
   'status == "ok" and row["label"] != "ok" and row["summary"] == "0/2 installed"'
+
+# --- M15: the install directory is keyed on the registry name, not the config key. -------
+# The positive falsifier, and RED AT BASE: the base probe read desktop_config_key AND
+# hardcoded the real ~/.claude/mcp-servers, so it resolved to a path outside this fixture
+# entirely and reported the server "missing". The fixture declares a name that DIFFERS from
+# its desktop_config_key and installs the wrapper under the name only, so the two keys cannot
+# both be right. The hint is asserted by exact equality, never a substring: "fixture/start.sh"
+# is a substring of the name-keyed form and a containment check would pass against the wrong
+# path.
+M15BASE="$(new_mcp_base m15 mcp_fixture/start.sh)"
+M15ROOT="$(new_root m15 '{"servers":{"mcp_fixture":{"type":"git","name":"mcp_fixture","desktop_config_key":"fixture"}}}')"
+export CLAUDE_MCP_DIR="$M15BASE"
+assert_mcp "M15 a git server installs under its registry name, not its config key" "$M15ROOT" \
+  'status == "ok" and row["summary"] == "1/1 installed" and servers[0]["install_status"] == "installed" and servers[0]["install_hint"] == r.os.path.join(r.os.environ["CLAUDE_MCP_DIR"], "mcp_fixture", "start.sh")'
+export CLAUDE_MCP_DIR="$MCP_EMPTY"
+
+# --- M16: a directory named for the config key alone is NOT installed. -------------------
+# The negative twin of M15, and the reason M15 alone is insufficient: a fix that probes BOTH
+# <name>/ and <desktop_config_key>/ and accepts either would satisfy M15 while reintroducing a
+# false "installed". This base carries ONLY the config-key directory and no mcp_fixture/ at
+# all, so an either-path reader reports "installed" here and goes red. It needs its own base
+# AND its own root -- reusing M15's would leave mcp_fixture/start.sh present and the case
+# would assert nothing.
+M16BASE="$(new_mcp_base m16 fixture/start.sh)"
+M16ROOT="$(new_root m16 '{"servers":{"mcp_fixture":{"type":"git","name":"mcp_fixture","desktop_config_key":"fixture"}}}')"
+export CLAUDE_MCP_DIR="$M16BASE"
+assert_mcp "M16 a directory named for the config key alone does not count as installed" "$M16ROOT" \
+  'status == "ok" and row["label"] != "ok" and row["summary"] == "0/1 installed" and servers[0]["install_status"] == "missing"'
+export CLAUDE_MCP_DIR="$MCP_EMPTY"
+
+# --- M17: the sections reference documents the derivation the code actually uses. --------
+# The documentation twin, in the M11 style: two operands over the same file, both falsifiable
+# at base (the name form was absent, the desktop_config_key form present on the install-status
+# line). Without the negative operand a stale sentence could survive alongside a new one.
+if grep -qF 'mcp-servers/<name>/start.sh' "$SECTIONS" \
+   && ! grep -qF 'mcp-servers/<desktop_config_key>' "$SECTIONS"; then
+  pass "M17 the sections reference keys the install directory on the server name"
+else
+  fail "M17 the sections reference keys the install directory on the server name"
+  printf '%s\n' "  the install-status bullet must name <name>, not <desktop_config_key>"
+fi
+
+# --- M18: an EMPTY CLAUDE_MCP_DIR falls back to the default base. -----------------------
+# Without this case nothing distinguishes the probe's `or` form from a bare
+# os.environ.get(VAR, default): every other case exports a NON-empty base, so both spellings
+# are green across the suite and a future "consistency" tidy-up to the bare-default form --
+# the spelling patch-desktop-config.py still uses -- would silently reintroduce an empty base.
+# SHAPE ONLY: this asserts the derived PATH, never that anything is installed there. The name
+# cannot exist on any host, so the status is "missing" everywhere and the case turns purely on
+# where the probe decided to look.
+M18ROOT="$(new_root m18 '{"servers":{"zz-not-installed-fallback":{"type":"git"}}}')"
+export CLAUDE_MCP_DIR=""
+assert_mcp "M18 an empty CLAUDE_MCP_DIR falls back to the default base, not an empty one" "$M18ROOT" \
+  'servers[0]["install_hint"] == r.os.path.join(r.os.path.expanduser("~/.claude/mcp-servers"), "zz-not-installed-fallback", "start.sh")'
+export CLAUDE_MCP_DIR="$MCP_EMPTY"
 
 echo
 if [ "$failures" -eq 0 ]; then

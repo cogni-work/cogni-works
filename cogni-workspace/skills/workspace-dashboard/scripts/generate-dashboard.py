@@ -538,9 +538,8 @@ def _mcp_base_dir():
     base — pinned by the empty-value case in tests/test-dashboard-mcp-counts.sh,
     since the bare-default form passes every other case.
 
-    Not yet universal: patch-desktop-config.py reads the same variable with a
-    bare default and so does NOT fall back on empty (tracked in #1588), and
-    hooks/ensure-excalidraw-canvas.sh uses its own EXCALIDRAW_MCP_DIR spelling.
+    hooks/ensure-excalidraw-canvas.sh uses its own EXCALIDRAW_MCP_DIR spelling --
+    a separate variable, not this one.
     """
     return os.environ.get("CLAUDE_MCP_DIR") or os.path.expanduser("~/.claude/mcp-servers")
 

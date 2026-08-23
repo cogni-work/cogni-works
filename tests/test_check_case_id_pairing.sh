@@ -124,10 +124,12 @@ fi
 DIRTY
 run_guard "$WORK/p1"
 check_eq "P1 an unpaired direct-literal FAIL arm is flagged" "1" "$CODE"
-py_assert "P1b the finding names the offending id and arm" "
+py_assert "P1b the finding names the offending id, arm, file and line" "
 ids = [x['case_id'] for x in v]
 assert ids == ['only-red-01'], ids
 assert v[0]['arm'] == 'unpaired_fail_id', v[0]['arm']
+assert v[0]['file'].endswith('tests/dirty.sh'), v[0]['file']
+assert isinstance(v[0]['line'], int) and v[0]['line'] > 0, v[0]['line']
 "
 
 # --- P2: an unpaired single-arm-helper CALL SITE is flagged -----------------

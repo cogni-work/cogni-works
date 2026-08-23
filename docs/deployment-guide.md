@@ -136,17 +136,15 @@ Plugins give Claude the tools to do insight-wave work — building portfolios, w
 
    **What you'll see:** a confirmation message that the marketplace was added.
 
-2. **Install the core plugins you need.** Start with these three:
+2. **Install the core plugin.** Start with cogni-workspace — it carries the shared workspace, themes, and MCP setup the other plugins build on:
 
    ```
    /plugin install cogni-workspace@insight-wave
-   /plugin install cogni-portfolio@insight-wave
-   /plugin install cogni-visual@insight-wave
    ```
 
-   Paste them one at a time, waiting for each to finish. Each install takes 5–15 seconds.
+   Paste it and wait for it to finish. The install takes 5–15 seconds.
 
-3. **Browse everything available** by pasting `/plugin` and pressing Enter — a menu shows every plugin in the marketplace with a short description. Install others as you need them (cogni-sales, cogni-trends, cogni-knowledge, cogni-consult, cogni-workspace, cogni-marketing, cogni-website).
+3. **Browse everything available** by pasting `/plugin` and pressing Enter — a menu shows every plugin in the marketplace with a short description. Install others as you need them (cogni-knowledge, cogni-consult, cogni-trends, cogni-portfolio, cogni-marketing, cogni-sales, cogni-website).
 
 4. **If this doesn't work:** the most common cause is that Claude Code lost its internet connection. Close and reopen the terminal, then re-run `/plugin marketplace add`. If the marketplace URL says "not reachable," ask your IT team to allowlist `github.com` and `raw.githubusercontent.com`.
 

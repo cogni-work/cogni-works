@@ -74,8 +74,16 @@ def get_cli_config_path() -> Path:
 
 
 def resolve_wrapper_path(server_name: str) -> str | None:
-    """Find the installed wrapper script for a git-based MCP server."""
-    mcp_base = os.environ.get("CLAUDE_MCP_DIR", str(Path.home() / ".claude" / "mcp-servers"))
+    """Find the installed wrapper script for a git-based MCP server.
+
+    `or`, not a bare default: a bare default fires only on an UNSET override, so an
+    empty one resolves to a cwd-relative wrapper that never exists -- and the caller
+    below turns an unresolvable wrapper into a git server silently omitted from the
+    written config. No trimming, so a whitespace-only override is honoured verbatim.
+    The override rule itself is stated canonically in
+    skills/workspace-status/SKILL.md section "6. MCP Servers".
+    """
+    mcp_base = os.environ.get("CLAUDE_MCP_DIR") or str(Path.home() / ".claude" / "mcp-servers")
     wrapper = Path(mcp_base) / server_name / "start.sh"
     if wrapper.exists():
         return str(wrapper)

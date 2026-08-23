@@ -288,8 +288,9 @@ fi
 # --- M18: an EMPTY CLAUDE_MCP_DIR falls back to the default base. -----------------------
 # Without this case nothing distinguishes the probe's `or` form from a bare
 # os.environ.get(VAR, default): every other case exports a NON-empty base, so both spellings
-# are green across the suite and a future "consistency" tidy-up to the bare-default form --
-# the spelling patch-desktop-config.py still uses -- would silently reintroduce an empty base.
+# are green across the suite and a future "consistency" tidy-up to the bare-default form
+# would silently reintroduce an empty base. The sibling reader patch-desktop-config.py is
+# pinned the same way by tests/test-patch-desktop-config-mcp-base.sh.
 # SHAPE ONLY: this asserts the derived PATH, never that anything is installed there. The name
 # cannot exist on any host, so the status is "missing" everywhere and the case turns purely on
 # where the probe decided to look.

@@ -45,6 +45,7 @@ Per-section reference for `workspace-dashboard`: data source, helper(s) reused, 
 **Data source**:
 - `<workspace-root>/cogni-workspace/references/mcp-git-registry.json` — declares each server (`type`, `repo`, `desktop_config_key`, `provides_tools[]`, `required_by[]`, platform-specific paths for native servers)
 - Install status check: existence of `~/.claude/mcp-servers/<desktop_config_key>/start.sh` for git-based servers; existence of the platform-specific binary path for native servers
+- Required shape: a top-level `servers` object whose values are themselves objects. A registry that parses but does not match it — root not an object, `servers` absent or not an object, or any entry not an object — is **unreadable**. This section then falls back to the same placeholder a missing registry gets, because either way there are no cards to draw; the Health Snapshot row is where the two are told apart.
 
 **Output**: card per server. Status pill (Installed / Missing / Manual). Type pill (git / native). Required-by chips (one per consuming plugin). For git-based: repo URL truncated. For native: platform path.
 
@@ -78,7 +79,7 @@ This section is **read-only**. `audit-region-sources` is the dedicated coverage 
 - Plugins: count from Section 2
 - Themes: count from Section 3
 - Dependencies: invoke `<workspace-root>/cogni-workspace/scripts/check-dependencies.sh` and partition `data.dependencies[]` (one entry per tool: `{name, available, required, version}`) on each entry's own `required` flag; `data.missing_required` / `data.missing_optional` carry the same misses as integers
-- MCPs: count from Section 4
+- MCPs: read the `servers` object from `<workspace-root>/cogni-workspace/references/mcp-git-registry.json` and partition its entries on each entry's own resolved install status. The row renders exactly one of four summaries: `registry not found` (file absent, unparseable, or a literal JSON null), `registry unreadable` (parses, but not the required shape above), `no servers configured` (`servers` present and empty), or `<installed>/<total> installed[, <n> manual]`. All three zero-server states are non-`ok`, so the row can never report a green `0/0` — a count comparison both sides satisfy at zero is not evidence of health.
 
 **Output**: one row per check. Each row: green/yellow/red dot, check name, one-line summary (e.g., "12 vars set, 0 missing"), and a "Run `/cogni-workspace:workspace-status` for details" pointer at the section foot.
 
@@ -90,6 +91,7 @@ The dashboard intentionally does **not** re-implement the diagnostic depth of `w
 - **`discover-plugins.sh` fails**: fall back to glob mode and add a yellow note in Section 7's Plugins line.
 - **Theme parsing fails**: render the card with a "unparseable theme" badge and skip swatches.
 - **MCP registry missing**: skip Section 4 entirely with a placeholder note.
+- **MCP registry shape drift**: a registry that parses but does not match the required shape renders Section 4's placeholder and a non-`ok` Health Snapshot row naming which state it is. The run still exits 0 and still writes the HTML, per the rule below — a malformed registry must degrade, never abort before the page exists.
 - **Missing market catalogs**: render the matrix with empty columns for the missing plugins.
 
 In every failure mode the script must still produce *some* HTML — never error out without writing the file. The user's first question after a failure should be answerable by opening the dashboard.

@@ -531,6 +531,54 @@ def _command_on_path(cmd):
     return False
 
 
+# Every registry state that is not a countable list of servers. Kept beside the resolver
+# that produces the statuses so the two cannot drift apart.
+MCP_NON_OK_SUMMARY = {
+    "missing": "registry not found",
+    "malformed": "registry unreadable",
+    "empty": "no servers configured",
+}
+
+
+def resolve_mcp_servers(workspace_root):
+    """Resolve the MCP registry into dashboard rows plus a status naming what was found.
+
+    Returns (servers, status) with status one of "missing" / "malformed" / "empty" / "ok".
+    The states themselves are documented in references/dashboard-sections.md; three
+    properties here are contracts a caller must not break:
+
+    - The "missing" test is an IDENTITY test, never a truthiness test. A falsy-but-present
+      body (`[]`, `""`, `0`, `false`) is malformed, not absent, and reporting it as absent
+      is the same class of bug this function exists to close.
+    - "malformed" returns None (not []) for the server list, so `render_mcp`'s existing
+      two branches stay correct without change.
+    - One bad entry makes the whole registry malformed rather than being skipped. A partial
+      count read from a file the reader does not understand is the failure being fixed, so
+      degrading loudly beats reporting a subset as if it were the whole.
+    """
+    registry = load_mcp_registry(workspace_root)
+    if registry is None:
+        return (None, "missing")
+    if not isinstance(registry, dict):
+        return (None, "malformed")
+    declared = registry.get("servers")
+    if not isinstance(declared, dict):
+        return (None, "malformed")
+    if not declared:
+        return ([], "empty")
+    servers = []
+    for key, server in declared.items():
+        if not isinstance(server, dict):
+            return (None, "malformed")
+        entry = dict(server)
+        entry["name"] = entry.get("name", key)
+        status, hint = mcp_install_status(entry)
+        entry["install_status"] = status
+        entry["install_hint"] = hint
+        servers.append(entry)
+    return (servers, "ok")
+
+
 # ---------------------------------------------------------------------------
 # Markets matrix
 # ---------------------------------------------------------------------------
@@ -609,7 +657,7 @@ def load_hooks(workspace_root):
 # Health snapshot
 # ---------------------------------------------------------------------------
 
-def health_snapshot(workspace_root, foundation, plugins, themes, mcp_servers):
+def health_snapshot(workspace_root, foundation, plugins, themes, mcp_servers, mcp_status):
     """Build a 6-row snapshot mirroring workspace-status categories."""
     found_required_ok = all(f["exists"] for f in foundation if f["required"])
     foundation_label = (
@@ -644,16 +692,23 @@ def health_snapshot(workspace_root, foundation, plugins, themes, mcp_servers):
 
     deps_label, deps_summary = _check_dependencies(workspace_root)
 
-    mcp_summary = ""
-    if mcp_servers is None:
+    # Keyed on the registry status, never on the server count. A count comparison is what
+    # reported a green row for a registry the dashboard could not read: with nothing to count,
+    # `installed + manual == total` is `0 == 0` and holds forever. The count arm below is
+    # therefore reachable only on "ok" WITH entries, so an empty list or a status this
+    # function does not recognize degrades instead of falling through to a count.
+    if mcp_status in MCP_NON_OK_SUMMARY:
         mcp_label = "warning"
-        mcp_summary = "registry not found"
-    else:
+        mcp_summary = MCP_NON_OK_SUMMARY[mcp_status]
+    elif mcp_status == "ok" and mcp_servers:
         installed = sum(1 for s in mcp_servers if s.get("install_status") == "installed")
         total = len(mcp_servers)
         manual = sum(1 for s in mcp_servers if s.get("install_status") == "manual")
         mcp_label = "ok" if installed + manual == total else "warning"
         mcp_summary = f"{installed}/{total} installed" + (f", {manual} manual" if manual else "")
+    else:
+        mcp_label = "warning"
+        mcp_summary = MCP_NON_OK_SUMMARY["malformed"]
 
     return [
         {"name": "Foundation", "label": foundation_label, "summary": foundation_summary},
@@ -1236,22 +1291,12 @@ def main():
     plugins = discover_plugins(workspace_root, mode)
     themes = discover_themes(workspace_root)
 
-    registry = load_mcp_registry(workspace_root)
-    mcp_servers = None
-    if registry:
-        mcp_servers = []
-        for key, server in registry.get("servers", {}).items():
-            entry = dict(server)
-            entry["name"] = entry.get("name", key)
-            status, hint = mcp_install_status(entry)
-            entry["install_status"] = status
-            entry["install_hint"] = hint
-            mcp_servers.append(entry)
+    mcp_servers, mcp_status = resolve_mcp_servers(workspace_root)
 
     markets_meta, market_sets, market_files = load_market_matrix(workspace_root)
     hooks_rows = load_hooks(workspace_root)
     snapshot = health_snapshot(workspace_root, foundation_files(workspace_root),
-                               plugins, themes, mcp_servers)
+                               plugins, themes, mcp_servers, mcp_status)
 
     html_doc = render_html(
         workspace_root=workspace_root,

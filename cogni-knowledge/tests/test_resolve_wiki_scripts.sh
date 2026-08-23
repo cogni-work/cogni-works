@@ -66,6 +66,8 @@ for name in $SOURCING_SKILLS; do
   skill_file="$SKILLS_DIR/$name/SKILL.md"
   if [ ! -f "$skill_file" ]; then
     red "FAIL: resolve-wiki-02-$name skill file not found: $skill_file"; errors=$((errors + 1)); continue
+  else
+    green "PASS: resolve-wiki-02-$name skill file present: $skill_file"
   fi
   if grep -qE 'resolve_wiki_scripts\(\) \{' "$skill_file"; then
     red "FAIL: resolve-wiki-03-$name $name still carries an inline resolve_wiki_scripts() definition (should source the snippet)"; errors=$((errors + 1))
@@ -86,6 +88,8 @@ INGEST_BODY=$(extract_resolver)
 if [ -z "$INGEST_BODY" ]; then
   red "FAIL: resolve-wiki-04 could not read resolve_wiki_scripts() body from the shared snippet"
   errors=$((errors + 1))
+else
+  green "PASS: resolve-wiki-04 read the resolve_wiki_scripts() body from the shared snippet"
 fi
 
 WORK=$(mktemp -d)

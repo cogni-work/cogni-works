@@ -74,7 +74,9 @@ run_score() {  # run_score <wiki-root> <plan> [extra args...]
 
 run_score_ok() {  # run_score_ok <label> <wiki-root> <plan> [extra args...]
   local label="$1"; shift
-  if ! OUT=$(run_score "$@"); then
+  if OUT=$(run_score "$@"); then
+    green "PASS: $label — wiki-coverage.py exited 0 on a VALID plan"
+  else
     red "FAIL: $label — wiki-coverage.py exited non-zero on a VALID plan"
     errors=$((errors + 1))
     OUT='{}'

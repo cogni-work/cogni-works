@@ -124,6 +124,7 @@ if [ ! -f "$WSM" ]; then
   red "FAIL: compose-contract-41-scripts-wiki-source-manifest scripts/wiki-source-manifest.py not found"
   errors=$((errors + 1))
 else
+  green "PASS: compose-contract-41-scripts-wiki-source-manifest scripts/wiki-source-manifest.py present"
   assert_grep 'def build' "$WSM" "compose-contract-42-build wiki-source-manifest: has a build()"
   assert_grep 'wiki-grounding.py' "$WSM" "compose-contract-43-loads-shared-wiki-grounding wiki-source-manifest: loads the shared wiki-grounding primitive by path"
   assert_grep 'rank_pages' "$WSM" "compose-contract-44-ranks-source-pages-sub wiki-source-manifest: ranks source pages per sub-question via rank_pages"

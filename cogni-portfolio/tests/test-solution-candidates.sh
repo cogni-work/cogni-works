@@ -77,8 +77,8 @@ test_ingest_registers_candidates() {
   local reg="$tmp/research/solution-candidates.json"
   local n; n="$(candidate_count "$reg")"
   # RED when the Solutions block yields 0 candidates and the layer stays empty.
-  if [ "$n" -ge 2 ]; then pass "registers >=2 candidates (got $n)"; else
-    fail "expected >=2 candidates from a filled Solutions block, got $n"; fi
+  if [ "$n" -ge 2 ]; then pass "solcand-01 registers >=2 candidates (got $n)"; else
+    fail "solcand-01 registers >=2 candidates from a filled Solutions block, got $n"; fi
 }
 
 test_candidate_status_marker() {

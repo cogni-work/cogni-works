@@ -354,6 +354,8 @@ for f in "$QUERY" "$DASHBOARD" "$RESUME"; do
     red "FAIL: skill-contracts-88-skill-md-not-found-${name} $name/SKILL.md not found"
     errors=$((errors + 1))
     continue
+  else
+    green "PASS: skill-contracts-88-skill-md-not-found-${name} $name/SKILL.md present"
   fi
   assert_not_grep 'probe_plugin cogni-research' "$f" "skill-contracts-89-does-not-probe-cogni-${name} $name: does NOT probe cogni-research (clean break)"
   assert_grep 'probe_plugin cogni-wiki' "$f" "skill-contracts-90-probes-cogni-wiki-${name} $name: still probes cogni-wiki"
@@ -403,6 +405,7 @@ assert_grep 'health.py' "$RESUME" "skill-contracts-101-invokes-vendored-health-p
 # cogni-wiki install for push-mode and the archival parity grep-guard greens.
 REFRESH="$PLUGIN_ROOT/skills/knowledge-refresh/SKILL.md"
 if [ -f "$REFRESH" ]; then
+  green "PASS: skill-contracts-105-knowledge-refresh-skill-md knowledge-refresh/SKILL.md present"
   assert_not_grep 'probe_plugin cogni-research' "$REFRESH" "skill-contracts-102-knowledge-refresh-does-not knowledge-refresh: does NOT probe cogni-research (clean break)"
   assert_not_grep 'probe_plugin cogni-wiki' "$REFRESH" "skill-contracts-103-no-longer-probes-cogni knowledge-refresh: no longer probes the cogni-wiki plugin (push-mode re-homed onto the vendored lint_wiki.py)"
   assert_grep 'resolve_wiki_scripts wiki-lint lint_wiki.py' "$REFRESH" "skill-contracts-104-push-mode-resolves-vendored knowledge-refresh: push-mode resolves the vendored wiki-lint scripts"

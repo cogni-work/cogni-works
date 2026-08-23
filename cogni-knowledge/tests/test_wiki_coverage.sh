@@ -63,7 +63,9 @@ run_score() {  # run_score <wiki-root> <plan> [extra args...]
 # assignment (which would skip every later case with no diagnostic).
 run_score_ok() {  # run_score_ok <label> <wiki-root> <plan> [extra args...]
   local label="$1"; shift
-  if ! OUT=$(run_score "$@"); then
+  if OUT=$(run_score "$@"); then
+    green "PASS: wcov-01 $label — wiki-coverage.py exited 0 on a VALID plan"
+  else
     red "FAIL: wcov-01 $label — wiki-coverage.py exited non-zero on a VALID plan"
     errors=$((errors + 1))
     OUT='{}'
@@ -264,7 +266,8 @@ if OUT=$(run_score "$WIKI" "$WORK/bad-plan.json" 2>/dev/null); then
   red "FAIL: wcov-11 malformed plan.json should exit non-zero"
   errors=$((errors + 1))
 else
-  check "wcov-11 malformed plan.json: success:false with an error message" "$OUT" <<'PY'
+  green "PASS: wcov-11 the invalid plan exited non-zero as required"
+  check "wcov-11b malformed plan.json: success:false with an error message" "$OUT" <<'PY'
 import os, json
 d = json.loads(os.environ["PAYLOAD"])
 assert d["success"] is False, d
@@ -279,7 +282,8 @@ if OUT=$(run_score "$WIKI" "$WORK/no-sq.json" 2>/dev/null); then
   red "FAIL: wcov-12 plan without sub_questions[] should exit non-zero"
   errors=$((errors + 1))
 else
-  check "wcov-12 plan without sub_questions[]: success:false" "$OUT" <<'PY'
+  green "PASS: wcov-12 the invalid plan exited non-zero as required"
+  check "wcov-12b plan without sub_questions[]: success:false" "$OUT" <<'PY'
 import os, json
 d = json.loads(os.environ["PAYLOAD"])
 assert d["success"] is False, d

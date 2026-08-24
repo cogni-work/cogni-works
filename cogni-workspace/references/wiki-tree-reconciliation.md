@@ -196,7 +196,8 @@ for the same reason in reverse: it links `[[lint-2026-04-20]]`, a root-only page
 
 Measured at execution, the two copies differed on **four** description/intro lines, not the five
 recorded here. Three resolved root-wins: the `### Skills` and `### Agents` preambles (the bundle
-asserted "across all 11 plugins", which the nine-plugin marketplace roster contradicts) and the
+asserted "across all 11 plugins", which the marketplace roster contradicts — it registered
+nine plugins when this reconciliation ran and registers eight today) and the
 `skill-cogni-portfolio-propositions` bullet (the bundle still carried the terse stub, matching the
 stub page group A replaced).
 

@@ -19,11 +19,13 @@ rubric: it is what makes a flagged finding credible.
   this" section below restates the five moves, the anti-pattern map, and the
   severity policy — this map is self-contained and re-sweepable without
   cogni-service installed.
-- **Scope:** all 9 plugins in this repo's marketplace — cogni-consult,
+- **Scope:** all 8 plugins in this repo's marketplace — cogni-consult,
   cogni-knowledge, cogni-marketing, cogni-portfolio, cogni-sales, cogni-trends,
-  cogni-visual, cogni-website, cogni-workspace. The loops formerly surveyed under
+  cogni-website, cogni-workspace. The loops formerly surveyed under
   cogni-narrative and cogni-copywriting are now cogni-workspace skills and are
-  listed under it.
+  listed under it. cogni-visual has since been absorbed into cogni-workspace as
+  well; loops 7 and 8 below are still recorded under their pre-absorption
+  `cogni-visual/` source paths.
 - **Nature:** read-only. This map is a data artifact; it changes no loop and
   proposes no specific code edits. Any targeted hardening of a flagged loop is
   a further, evidence-gated concern — decided from this baseline, not

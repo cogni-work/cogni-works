@@ -1,6 +1,6 @@
 # insight-wave
 
-Open-source plugins for consulting, sales, and marketing on [Claude Code](https://claude.ai/code). 12 Apache-2.0 plugins that automate the research-heavy, methodology-driven work behind B2B deliverables — trend scouting, portfolio positioning, sales pitches, content creation, visual production, website generation, knowledge management, and source verification.
+Open-source plugins for consulting, sales, and marketing on [Claude Code](https://claude.ai/code). 8 Apache-2.0 plugins that automate the research-heavy, methodology-driven work behind B2B deliverables — trend scouting, portfolio positioning, sales pitches, content creation, visual production, website generation, knowledge management, and source verification.
 
 Each plugin implements an established framework (Corporate Visions, Double Diamond, TIPS, IS/DOES/MEANS) rather than general-purpose text generation. Outputs include inline citations, structured data models, and quality gates. Every deliverable follows a reproducible methodology you can inspect and override.
 
@@ -11,7 +11,7 @@ Each plugin implements an established framework (Corporate Visions, Double Diamo
 
 ## What the plugins do
 
-9 plugins organized around nine capability areas. Each area handles a distinct part of the consulting-to-delivery workflow; plugins within an area share data formats and can be used independently or together.
+8 plugins organized around nine capability areas. Each area handles a distinct part of the consulting-to-delivery workflow; plugins within an area share data formats and can be used independently or together.
 
 ### Knowledge Management
 
@@ -63,11 +63,11 @@ Each plugin implements an established framework (Corporate Visions, Double Diamo
 
 ### Visual Production
 
-[cogni-visual](cogni-visual/README.md) transforms narratives into visual formats: slide decks (11 layout types), scrollable web narratives, printed poster storyboards, and single-page infographics. Skills generate structured briefs; agents render them into .pptx, .excalidraw, .pen, or .html files. All visuals inherit brand identity from your workspace theme.
+A [cogni-workspace](cogni-workspace/README.md) capability (not a separate plugin): the `story-to-slides`, `story-to-infographic`, `story-to-storyboard` and `story-to-web` skills transform narratives into visual formats: slide decks (11 layout types), scrollable web narratives, printed poster storyboards, and single-page infographics. Skills generate structured briefs; agents render them into .pptx, .excalidraw, .pen, or .html files. All visuals inherit brand identity from your workspace theme.
 
 > "Create a slide deck from the sales presentation, then enrich the trend report with charts and diagrams"
 
-→ [Plugin guide](docs/plugin-guide/cogni-visual.md)
+→ [Plugin guide](docs/plugin-guide/cogni-workspace.md)
 
 ### Website Generation
 
@@ -181,7 +181,7 @@ The workplace combines Claude Code with [Obsidian](https://obsidian.md/) for per
 ```
 insight-wave/
 ├── .claude-plugin/
-│   └── marketplace.json                    # Marketplace manifest (9 plugins)
+│   └── marketplace.json                    # Marketplace manifest (8 plugins)
 ├── docs/                                   # User documentation
 │   ├── getting-started.md                  # Forwarder → workflows/install-to-infographic.md
 │   ├── ecosystem-overview.md               # Plugin landscape and data flow
@@ -195,7 +195,6 @@ insight-wave/
 ├── cogni-portfolio/                        # Portfolio messaging & planning
 ├── cogni-sales/                            # B2B sales pitch generation
 ├── cogni-trends/                           # Trend scouting & reporting
-├── cogni-visual/                           # Visual deliverables
 ├── cogni-website/                          # Multi-page customer websites
 ├── cogni-workspace/                        # Workspace orchestrator
 ├── cogni-portfolio-evals/                  # Eval harness (not a marketplace plugin)
@@ -221,11 +220,10 @@ Plugins follow the [Claude Code plugin standard](https://code.claude.com/docs/en
 | [cogni-portfolio](cogni-portfolio/README.md) | Portfolio | 21 | 20 | IS/DOES/MEANS portfolio positioning with eight industry taxonomies, competitive analysis, and market sizing |
 | [cogni-marketing](cogni-marketing/README.md) | Content | 11 | 3 | B2B marketing content engine — 16 formats across thought leadership, demand gen, lead gen, sales enablement, ABM |
 | [cogni-sales](cogni-sales/README.md) | Sales | 1 | 4 | Corporate Visions Why Change pitch generation for named customers or market segments |
-| [cogni-visual](cogni-visual/README.md) | Visual | 7 | 19 | Slide decks, infographics, web narratives, poster storyboards, and report enrichment from narratives |
 | [cogni-website](cogni-website/README.md) | Website | 6 | 3 | Multi-page customer websites from portfolio, marketing, and research content with shared navigation and theming |
-| [cogni-workspace](cogni-workspace/README.md) | Platform | 19 | 7 | Shared foundation — env vars, MCP installation, theme management, plugin discovery, workspace health, Obsidian integration, bundled wiki, claim verification, story-arc narrative and executive copywriting |
+| [cogni-workspace](cogni-workspace/README.md) | Platform | 19 | 7 | Shared foundation — env vars, MCP installation, theme management, plugin discovery, workspace health, Obsidian integration, bundled wiki, claim verification, story-arc narrative, executive copywriting, and slide/infographic/storyboard/web rendering |
 
-**104 skills, 88 agents** across the 9 active plugins.
+**97 skills, 69 agents** across the 8 active plugins.
 
 See [Cross-Plugin Data Flow](docs/er-diagram.md) for how data flows between plugins, or browse the [full documentation](docs/ecosystem-overview.md).
 

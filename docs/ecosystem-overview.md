@@ -1,6 +1,6 @@
 # Ecosystem Overview
 
-insight-wave is a monorepo of 11 Claude Code plugins that cover the full consulting and B2B content pipeline: from raw research through strategy, content production, visual delivery, and website generation. This document describes how the plugins are organized, how data moves between them, and what infrastructure they share.
+insight-wave is a monorepo of 8 Claude Code plugins that cover the full consulting and B2B content pipeline: from raw research through strategy, content production, visual delivery, and website generation. This document describes how the plugins are organized, how data moves between them, and what infrastructure they share.
 
 For the canonical plugin descriptions, see the individual README files. For step-by-step workflows, see [docs/workflows/](workflows/).
 
@@ -8,7 +8,7 @@ For the canonical plugin descriptions, see the individual README files. For step
 
 ## Plugin Landscape
 
-The 9 plugins are grouped by the role they play in a typical engagement — the same set the root [`marketplace.json`](../.claude-plugin/marketplace.json) enumerates.
+The 8 plugins are grouped by the role they play in a typical engagement — the same set the root [`marketplace.json`](../.claude-plugin/marketplace.json) enumerates.
 
 ### Workspace Infrastructure
 
@@ -51,7 +51,7 @@ See the [Consulting Engagement workflow](workflows/consulting-engagement.md) for
 
 | Plugin | What it does |
 |--------|-------------|
-| [cogni-visual](../cogni-visual/README.md) | Converts polished narratives and structured data into presentation briefs, slide decks, scrollable web narratives, poster storyboards, and single-page infographics. Supports Excalidraw, Pencil MCP, PPTX, and HTML rendering. |
+| [cogni-workspace](../cogni-workspace/README.md) — `story-to-*` | Converts polished narratives and structured data into presentation briefs, slide decks, scrollable web narratives, poster storyboards, and single-page infographics. Supports Excalidraw, Pencil MCP, PPTX, and HTML rendering. |
 
 ### Website Generation
 

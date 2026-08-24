@@ -52,7 +52,8 @@ derived against, when the repo-root `.claude-plugin/marketplace.json` registered
 them. Rows are kept as the historical record of why each plugin scored as it did;
 they are not re-scored as plugins retire, so read the table against the
 absorption-status ledger below rather than as a current roster. `cogni-claims` has since been absorbed
-into cogni-workspace, leaving 11 registered plugins. A further top-level directory,
+into cogni-workspace; the marketplace now registers 8 plugins — read the
+absorption-status ledger below for the current state. A further top-level directory,
 `cogni-portfolio-evals/`, ships no `.claude-plugin/plugin.json` — it is an eval
 harness, not a plugin, and is correctly outside this table.
 

@@ -120,6 +120,31 @@ check_eq "D1b the violation names the offending surface and line" "NOTICE:4" \
 check_eq "D1c the violation is attributed to the assertion_field arm" "assertion_field" \
   "$(json_expr "$LAST_JSON" "d['data']['violations'][0]['arm']")"
 
+# --- N1: the real NOTICE shape — assertion field at the live nesting depth ---
+# D1 proves the assertion_field carrier, but at a shallower path than the claims
+# that actually went stale. NOTICE:18/:23 are Location:/See: values pointing two
+# levels deep (plugin/references/<asset-dir>/file). This pins that exact
+# carrier-and-depth pairing, so the guard is shown watching the shape of the
+# defect it was written for rather than a convenient approximation of it.
+N1="$WORK/n1"
+mk_repo "$N1"
+mkdir -p "$N1/cogni-thing/references/cartographic-data"
+printf '%s\n' 'x' > "$N1/cogni-thing/references/cartographic-data/present.geo.json"
+cat > "$N1/NOTICE" <<'FIXTURE'
+insight-wave fixture
+
+* Cartographic country-outline data
+  Location: cogni-thing/references/cartographic-data/absent.geo.json
+  See: cogni-thing/references/cartographic-data/LICENSE.md
+FIXTURE
+stage "$N1"
+run_guard "$N1"
+check_eq "N1 a deep references/ assertion claim that does not resolve is a violation" "1" "$LAST_RC"
+check_eq "N1b both deep assertion claims are reported, not just the first" "2" \
+  "$(json_expr "$LAST_JSON" "d['data']['summary']['total']")"
+check_eq "N1c both are attributed to the assertion_field arm" "True" \
+  "$(json_expr "$LAST_JSON" "all(v['arm'] == 'assertion_field' for v in d['data']['violations'])")"
+
 # --- D2: a claim differing only in CASE is still a violation -----------------
 # Pins tracked-index resolution against os.path.exists, which passes on a
 # case-insensitive filesystem and would make this case green for the wrong

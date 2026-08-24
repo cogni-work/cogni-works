@@ -14,10 +14,11 @@ construction, because the only signal was a human reading the file.
 SCOPE DECISION
 --------------
 The unit is the LIVE ATTRIBUTION SURFACE class — the files this repo maintains
-as a *current* record of third-party material. Discovery is five non-recursive
-patterns: the SURFACE_NAMES class crossed with the SURFACE_LOCATIONS class
-below, which are the single definition of the unit and the only place it is
-written down.
+as a *current* record of third-party material. Discovery is the SURFACE_NAMES
+class crossed with the SURFACE_LOCATIONS class below — those two tuples are the
+single definition of the unit and the only place it is written down. No count is
+quoted here on purpose: a number in prose drifts the moment a name or a location
+is added, and the tuples are two lines away.
 
 Both alternatives considered when this guard was scoped are rejected, and the
 reasons are recorded here rather than in a pull-request body that disappears:
@@ -37,8 +38,8 @@ reasons are recorded here rather than in a pull-request body that disappears:
     by CONTENT, not excluded by NAME, so the day one of them gains a `See:` line
     it is already covered with nothing to edit.
 
-HOW A FUTURE SURFACE ENTERS SCOPE. By being placed at one of the five stated
-locations — the naming convention IS the registration mechanism, so a new
+HOW A FUTURE SURFACE ENTERS SCOPE. By being placed at one of the SURFACE_LOCATIONS
+under one of the SURFACE_NAMES — the naming convention IS the registration mechanism, so a new
 plugin's `LICENSE`, or a new vendored `*/references/<asset>/LICENSE.md`, is
 covered the moment it lands. A surface that cannot fit the convention enters by
 adding a discovery pattern here TOGETHER WITH a suite case. There is no

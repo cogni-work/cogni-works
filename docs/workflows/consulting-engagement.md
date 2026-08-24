@@ -35,8 +35,7 @@ The core difference from the classic approach:
 |-------------|-----|
 | cogni-consult installed | Orchestrates the engagement lifecycle |
 | cogni-knowledge installed | Required — the research spine bound at setup |
-| cogni-workspace / document-skills installed (optional) | Deliverable export when a deliverable names an export route |
-| cogni-workspace installed (optional) | Cross-session engagement discovery |
+| cogni-workspace / document-skills installed (optional) | Cross-session engagement discovery; also deliverable export when a deliverable names an export route |
 | Web access enabled | cogni-knowledge runs web research during the inverted pipeline |
 
 cogni-consult is standalone as an orchestrator. cogni-knowledge is the one required integration — without it, the compounding-research promise cannot be delivered.

@@ -1,6 +1,6 @@
 # Content Pipeline
 
-**Pipeline**: cogni-marketing (setup + content generation) → the `narrative` skill (story arc shaping, long-form only) → the `copywriter` skill (polish) → cogni-workspace (slides / web)
+**Pipeline**: cogni-marketing (setup + content generation) → the `narrative` skill (story arc shaping, long-form only) → the `copywriter` skill (polish) → the `story-to-slides` / `story-to-web` skills (slides / web)
 **Duration**: 2–6 hours for a complete content batch, depending on format count and polish depth
 **End deliverable**: A multi-channel marketing content package — polished articles, battle cards, email nurtures, and optionally a slide deck or web narrative
 
@@ -9,7 +9,7 @@ graph LR
     A[marketing-setup] -->|content-strategy.json| B[content generation]
     B -->|raw content pieces| N[the `narrative` skill]
     N -->|arc-shaped long-form| C[the `copywriter` skill]
-    C -->|polished content| D[cogni-workspace]
+    C -->|polished content| D[the `story-to-slides` / `story-to-web` skills]
     D -->|slides / web| E[Deliverable]
 ```
 

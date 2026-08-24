@@ -1,6 +1,6 @@
 # Trends to Solutions
 
-**Pipeline**: cogni-trends (trend-scout + value-modeler) → optional cogni-portfolio (trends-bridge) → cogni-visual (story-to-slides / enrich-report)
+**Pipeline**: cogni-trends (trend-scout + value-modeler) → optional cogni-portfolio (trends-bridge) → cogni-workspace (story-to-slides / enrich-report)
 **Duration**: 4–8 hours for a complete trends-to-solutions analysis
 **End deliverable**: Ranked solution blueprints with visual deliverables (slide deck or enriched HTML report)
 
@@ -32,7 +32,7 @@ This workflow is suited to strategy and advisory work where clients need to unde
 | Requirement | Why |
 |-------------|-----|
 | cogni-trends installed | Runs trend scouting and value modeling |
-| cogni-visual installed | Renders visual deliverables (slides, enriched reports) |
+| cogni-workspace installed | Renders visual deliverables (slides, enriched reports) |
 | Web access enabled | cogni-trends dispatches 32+ bilingual web searches |
 | cogni-portfolio installed (optional) | Required for Scenario B; enables product-anchored solution blueprints and the trends-bridge backflow |
 | cogni-portfolio project (optional) | Required for Scenario B; carries the products, features, and propositions that anchor blueprints |
@@ -154,7 +154,7 @@ This closes the loop: trend signals become portfolio mutations the team can buil
 
 ### Step 4: Produce Visual Deliverables (shared)
 
-Use cogni-visual to present the solution landscape visually. Both options work for either scenario; the underlying value-model JSON is the same shape.
+Use cogni-workspace to present the solution landscape visually. Both options work for either scenario; the underlying value-model JSON is the same shape.
 
 **Option A — Slide deck**: Run `story-to-slides` on a narrative derived from the value-modeler output to create an executive presentation.
 
@@ -193,7 +193,7 @@ Create a slide deck from the automotive investment themes narrative
 
 - [cogni-trends plugin guide](../plugin-guide/cogni-trends.md)
 - [cogni-portfolio plugin guide](../plugin-guide/cogni-portfolio.md) — see the `trends-bridge` section for authoritative reference on the bridge operations
-- [cogni-visual plugin guide](../plugin-guide/cogni-visual.md)
+- [cogni-workspace plugin guide](../plugin-guide/cogni-workspace.md)
 - [Consulting Engagement workflow](./consulting-engagement.md) — this pipeline runs inside the Discover and Develop phases
 - [Content Pipeline workflow](./content-pipeline.md) — trends output feeds marketing content generation
 - [Portfolio to Pitch workflow](./portfolio-to-pitch.md) — the portfolio side; pairs naturally with Scenario B

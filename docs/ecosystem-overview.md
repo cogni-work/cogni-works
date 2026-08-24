@@ -8,50 +8,59 @@ For the canonical plugin descriptions, see the individual README files. For step
 
 ## Plugin Landscape
 
-The 8 plugins are grouped by the role they play in a typical engagement — the same set the root [`marketplace.json`](../.claude-plugin/marketplace.json) enumerates.
+The 8 plugins — the same set the root [`marketplace.json`](../.claude-plugin/marketplace.json) enumerates — are grouped into eight capability areas: one horizontal area (cogni-workspace, the shared workspace layer every other plugin builds on) and seven verticals, one per business-domain plugin, each keeping its own project lifecycle.
 
 ### Workspace Infrastructure
 
 | Plugin | What it does |
 |--------|-------------|
 | [cogni-workspace](../cogni-workspace/README.md) | Initializes the shared workspace: environment variables, plugin discovery, theme management, and Obsidian vault integration. The vertical business plugins consume the shared state it owns; each keeps its own project lifecycle. |
+| [cogni-workspace](../cogni-workspace/README.md) — `narrative` | Transforms research reports and structured content into executive narratives using 11 story arc frameworks and 8 narrative techniques. Includes a TIPS-native arc for trend panoramas, a theme-thesis arc for investment narratives, and a JTBD portfolio arc for buyer-job-centric portfolio narratives. |
+| [cogni-workspace](../cogni-workspace/README.md) — `copywriter` | Polishes documents using messaging frameworks (BLUF, Pyramid, SCQA, STAR, PSB, FAB, Inverted Pyramid). Runs parallel stakeholder persona reviews, readability optimization and JSON field polishing; the arc contract against the `narrative` skill is now asserted by `test-arc-reference-sync.sh` rather than audited by a skill. Translate-then-polish across DE/EN/FR/IT/PL/NL/ES. |
+| [cogni-workspace](../cogni-workspace/README.md) — `story-to-*` | Converts polished narratives and structured data into presentation briefs, slide decks, scrollable web narratives, poster storyboards, and single-page infographics. Supports Excalidraw, Pencil MCP, PPTX, and HTML rendering. |
+| [cogni-workspace](../cogni-workspace/README.md) — `claims` | Verifies sourced claims against their cited URLs, detecting misquotations, unsupported conclusions, and selective omissions. Runs as a review loop inside cogni-knowledge and is callable standalone on any document with citations. |
 
 Run `/manage-workspace` once per project directory before using any other plugin.
 
-Claim verification is a cogni-workspace capability, not a separate plugin: the `claims` skill verifies sourced claims against their cited URLs, detecting misquotations, unsupported conclusions, and selective omissions. It runs as a review loop inside cogni-knowledge and is callable standalone on any document with citations.
-
-### Research and Analysis
+### Knowledge Management
 
 | Plugin | What it does |
 |--------|-------------|
-| [cogni-trends](../cogni-trends/README.md) | Scouts industry trends using the Smarter Service Trendradar framework and bridges them to portfolio solutions via the TIPS content framework (Trends, Implications, Possibilities, Solutions). Produces CxO-ready trend reports with investment theme modeling. Bilingual (local + EN) research against per-market institutional authority sources across DACH/DE, FR, IT, ES, NL, PL plus UK/US. |
 | [cogni-knowledge](../cogni-knowledge/README.md) | Wiki-first research that compounds across runs. Binds each project to its own wiki knowledge base (the Karpathy-style engine is vendored in) so future runs read what prior runs filed before hitting the web. Inverted pipeline (plan → curate → fetch → ingest → distill → compose → verify → finalize) with zero-network, citation-consistent claim verification. See the [deep dive](plugin-guide/cogni-knowledge.md). |
 
 See [Research to Report workflow](workflows/research-to-report.md) for how research output moves downstream.
 
-### Strategy and Portfolio
+### Consulting Orchestration
+
+| Plugin | What it does |
+|--------|-------------|
+| [cogni-consult](../cogni-consult/README.md) | Orchestrates consulting engagements: action fields as the work-breakdown structure, a design-thinking loop per deliverable, acting stakeholder personas, and one cogni-knowledge base per engagement as the compounding research spine. See the [deep dive](plugin-guide/cogni-consult.md). |
+
+See the [Consulting Engagement workflow](workflows/consulting-engagement.md) for how cogni-consult coordinates the other plugins.
+
+### Trend Intelligence
+
+| Plugin | What it does |
+|--------|-------------|
+| [cogni-trends](../cogni-trends/README.md) | Scouts industry trends using the Smarter Service Trendradar framework and bridges them to portfolio solutions via the TIPS content framework (Trends, Implications, Possibilities, Solutions). Produces CxO-ready trend reports with investment theme modeling. Bilingual (local + EN) research against per-market institutional authority sources across DACH/DE, FR, IT, ES, NL, PL plus UK/US. |
+
+### Portfolio Messaging
 
 | Plugin | What it does |
 |--------|-------------|
 | [cogni-portfolio](../cogni-portfolio/README.md) | Structures product and service messaging using the IS/DOES/MEANS framework. Features are market-independent (IS). Advantages (DOES) and benefits (MEANS) are market-specific. Includes TAM/SAM/SOM sizing, competitor analysis, Lean Canvas bootstrapping, and eight industry taxonomies. |
-| [cogni-consult](../cogni-consult/README.md) | Orchestrates consulting engagements: action fields as the work-breakdown structure, a design-thinking loop per deliverable, acting stakeholder personas, and one cogni-knowledge base per engagement as the compounding research spine. See the [deep dive](plugin-guide/cogni-consult.md). |
-
-See the [Consulting Engagement workflow](workflows/consulting-engagement.md) for how cogni-consult coordinates the other plugins.
 
 ### Content Production
 
 | Plugin | What it does |
 |--------|-------------|
-| [cogni-workspace](../cogni-workspace/README.md) — `narrative` | Transforms research reports and structured content into executive narratives using 11 story arc frameworks and 8 narrative techniques. Includes a TIPS-native arc for trend panoramas, a theme-thesis arc for investment narratives, and a JTBD portfolio arc for buyer-job-centric portfolio narratives. |
-| [cogni-workspace](../cogni-workspace/README.md) — `copywriter` | Polishes documents using messaging frameworks (BLUF, Pyramid, SCQA, STAR, PSB, FAB, Inverted Pyramid). Runs parallel stakeholder persona reviews, readability optimization and JSON field polishing; the arc contract against the `narrative` skill is now asserted by `test-arc-reference-sync.sh` rather than audited by a skill. Translate-then-polish across DE/EN/FR/IT/PL/NL/ES. |
 | [cogni-marketing](../cogni-marketing/README.md) | Bridges cogni-trends strategic themes and cogni-portfolio propositions into channel-ready content across 16 formats — thought leadership, demand generation, lead generation, sales enablement, and ABM. Configurable brand voice; market-aware content across European and US/UK targets. |
-| [cogni-sales](../cogni-sales/README.md) | Generates B2B sales pitches using the Corporate Visions Why Change methodology. Supports named customer deals (deal-specific) and reusable segment pitches. Builds on cogni-portfolio data with optional TIPS strategic enrichment. Multilingual EN/DE/PT-BR. |
 
-### Visual Delivery
+### Sales Pitches
 
 | Plugin | What it does |
 |--------|-------------|
-| [cogni-workspace](../cogni-workspace/README.md) — `story-to-*` | Converts polished narratives and structured data into presentation briefs, slide decks, scrollable web narratives, poster storyboards, and single-page infographics. Supports Excalidraw, Pencil MCP, PPTX, and HTML rendering. |
+| [cogni-sales](../cogni-sales/README.md) | Generates B2B sales pitches using the Corporate Visions Why Change methodology. Supports named customer deals (deal-specific) and reusable segment pitches. Builds on cogni-portfolio data with optional TIPS strategic enrichment. Multilingual EN/DE/PT-BR. |
 
 ### Website Generation
 

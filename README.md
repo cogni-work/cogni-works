@@ -11,7 +11,25 @@ Each plugin implements an established framework (Corporate Visions, Double Diamo
 
 ## What the plugins do
 
-8 plugins organized around nine capability areas. Each area handles a distinct part of the consulting-to-delivery workflow; plugins within an area share data formats and can be used independently or together.
+8 plugins organized around eight capability areas: one horizontal area — cogni-workspace, the shared workspace layer every other plugin builds on — and seven vertical areas, one per business-domain plugin, each keeping its own project lifecycle. Plugins share data formats and can be used independently or together.
+
+### Workspace Infrastructure
+
+[cogni-workspace](cogni-workspace/README.md) is the horizontal layer every other plugin builds on. It manages the shared foundation — environment variables, MCP server installation, theme management, plugin discovery, and workspace health. Runs dependency checks, discovers installed plugins, and generates shared settings. Includes Obsidian vault integration for browsable knowledge management. 19 skills and 7 agents.
+
+> "Initialize my insight-wave workspace and check plugin health"
+
+**Rendering.** The `story-to-slides`, `story-to-infographic`, `story-to-storyboard` and `story-to-web` skills transform narratives into visual formats: slide decks (11 layout types), scrollable web narratives, printed poster storyboards, and single-page infographics. Skills generate structured briefs; agents render them into .pptx, .excalidraw, .pen, or .html files. All visuals inherit brand identity from your workspace theme.
+
+> "Create a slide deck from the sales presentation, then enrich the trend report with charts and diagrams"
+
+**Narrative and executive copy.** The `narrative` skill transforms structured content into executive narratives using 11 story arc frameworks with quality scoring (0-100, A-F grades), and the `copywriter` skill polishes any document for executive readability using 7 messaging frameworks (BLUF, Pyramid, SCQA, STAR, PSB, FAB, Inverted Pyramid) with 5 parallel stakeholder personas to catch blind spots.
+
+**Source verification.** The `claims` skill verifies whether sourced claims match what their cited sources actually say — catching misquotations, unsupported conclusions, selective omissions, and stale data. Other plugins register claims during generation; cogni-workspace fetches each source and flags deviations for your review.
+
+> "Verify all claims in the trend report against their cited sources"
+
+→ [Plugin guide](docs/plugin-guide/cogni-workspace.md) · [Getting started](docs/workflows/install-to-infographic.md)
 
 ### Knowledge Management
 
@@ -47,7 +65,7 @@ Each plugin implements an established framework (Corporate Visions, Double Diamo
 
 ### Content Production
 
-[cogni-marketing](cogni-marketing/README.md) bridges portfolio propositions and trend themes into channel-ready content across 16 formats — blogs, LinkedIn articles, whitepapers, battle cards, email nurtures, video scripts, and more. A 3D content matrix (market x GTM path x content type) tracks coverage gaps. Narrative shaping and executive polish now live in [cogni-workspace](cogni-workspace/README.md): its `narrative` skill transforms structured content into executive narratives using 11 story arc frameworks with quality scoring (0-100, A-F grades), and its `copywriter` skill polishes any document for executive readability using 7 messaging frameworks (BLUF, Pyramid, SCQA, STAR, PSB, FAB, Inverted Pyramid) with 5 parallel stakeholder personas to catch blind spots. Together with cogni-marketing: 17 skills and 8 agents.
+[cogni-marketing](cogni-marketing/README.md) bridges portfolio propositions and trend themes into channel-ready content across 16 formats — blogs, LinkedIn articles, whitepapers, battle cards, email nurtures, video scripts, and more. A 3D content matrix (market x GTM path x content type) tracks coverage gaps. 11 skills and 3 agents.
 
 > "Generate thought leadership content for the AI automation theme across LinkedIn and blog formats"
 
@@ -61,14 +79,6 @@ Each plugin implements an established framework (Corporate Visions, Double Diamo
 
 → [Plugin guide](docs/plugin-guide/cogni-sales.md) · [Portfolio to Pitch workflow](docs/workflows/portfolio-to-pitch.md)
 
-### Visual Production
-
-A [cogni-workspace](cogni-workspace/README.md) capability (not a separate plugin): the `story-to-slides`, `story-to-infographic`, `story-to-storyboard` and `story-to-web` skills transform narratives into visual formats: slide decks (11 layout types), scrollable web narratives, printed poster storyboards, and single-page infographics. Skills generate structured briefs; agents render them into .pptx, .excalidraw, .pen, or .html files. All visuals inherit brand identity from your workspace theme.
-
-> "Create a slide deck from the sales presentation, then enrich the trend report with charts and diagrams"
-
-→ [Plugin guide](docs/plugin-guide/cogni-workspace.md)
-
 ### Website Generation
 
 [cogni-website](cogni-website/README.md) assembles multi-page customer websites from portfolio, marketing, trend, and research content produced by other plugins — outputting a deployable static site with shared navigation, theming, and responsive HTML. Service pages update in minutes as your portfolio model changes, staying consistent with your messaging and SEO-optimized. 6 skills and 3 agents.
@@ -76,24 +86,6 @@ A [cogni-workspace](cogni-workspace/README.md) capability (not a separate plugin
 > "Build a customer website from our portfolio and marketing content with a Pencil-rendered hero"
 
 → [Plugin guide](docs/plugin-guide/cogni-website.md) · [Portfolio to Website workflow](docs/workflows/portfolio-to-website.md)
-
-### Platform & Quality
-
-#### Workspace Foundation
-
-[cogni-workspace](cogni-workspace/README.md) manages the shared foundation — environment variables, MCP server installation, theme management, plugin discovery, and workspace health. Runs dependency checks, discovers installed plugins, and generates shared settings. Includes Obsidian vault integration for browsable knowledge management, and owns the cross-plugin claim-verification gate (see Source Verification below), plus story-arc narrative composition and executive copywriting. 19 skills and 7 agents.
-
-> "Initialize my insight-wave workspace and check plugin health"
-
-→ [Plugin guide](docs/plugin-guide/cogni-workspace.md) · [Getting started](docs/workflows/install-to-infographic.md)
-
-#### Source Verification
-
-A cogni-workspace capability (not a separate plugin): the `claims` skill verifies whether sourced claims match what their cited sources actually say — catching misquotations, unsupported conclusions, selective omissions, and stale data. Other plugins register claims during generation; cogni-workspace fetches each source and flags deviations for your review.
-
-> "Verify all claims in the trend report against their cited sources"
-
-→ [Plugin guide](docs/plugin-guide/cogni-workspace.md)
 
 Beyond the open-source plugins, cogni-works offers consulting services — plugin engineering for domain-specific workflows, managed deployment, and a partner certification program — through [cogni-work.ai](https://cogni-work.ai). Whether you run a consulting practice, a sales organization, or a marketing team, the site shows how these capabilities translate into managed workflows and onboarding for your team.
 
@@ -214,14 +206,14 @@ Plugins follow the [Claude Code plugin standard](https://code.claude.com/docs/en
 
 | Plugin | Capability | Skills | Agents | What it does |
 |--------|-----------|--------|--------|--------------|
-| [cogni-knowledge](cogni-knowledge/README.md) | Platform | 21 | 16 | Wiki-first research orchestrator — binds its own vendored wiki base to N research projects so findings compound across runs via a zero-network inverted pipeline |
-| [cogni-consult](cogni-consult/README.md) | Consulting | 9 | 4 | Action-fields-WBS consulting orchestrator with per-deliverable design thinking and acting stakeholder personas |
+| [cogni-knowledge](cogni-knowledge/README.md) | Knowledge Management | 21 | 16 | Wiki-first research orchestrator — binds its own vendored wiki base to N research projects so findings compound across runs via a zero-network inverted pipeline |
+| [cogni-consult](cogni-consult/README.md) | Consulting Orchestration | 9 | 4 | Action-fields-WBS consulting orchestrator with per-deliverable design thinking and acting stakeholder personas |
 | [cogni-trends](cogni-trends/README.md) | Trend Intelligence | 9 | 12 | TIPS trend scouting with bilingual DE/EN research, investment theme modeling, and reusable industry catalogs |
-| [cogni-portfolio](cogni-portfolio/README.md) | Portfolio | 21 | 20 | IS/DOES/MEANS portfolio positioning with eight industry taxonomies, competitive analysis, and market sizing |
-| [cogni-marketing](cogni-marketing/README.md) | Content | 11 | 3 | B2B marketing content engine — 16 formats across thought leadership, demand gen, lead gen, sales enablement, ABM |
-| [cogni-sales](cogni-sales/README.md) | Sales | 1 | 4 | Corporate Visions Why Change pitch generation for named customers or market segments |
-| [cogni-website](cogni-website/README.md) | Website | 6 | 3 | Multi-page customer websites from portfolio, marketing, and research content with shared navigation and theming |
-| [cogni-workspace](cogni-workspace/README.md) | Platform | 19 | 7 | Shared foundation — env vars, MCP installation, theme management, plugin discovery, workspace health, Obsidian integration, bundled wiki, claim verification, story-arc narrative, executive copywriting, and slide/infographic/storyboard/web rendering |
+| [cogni-portfolio](cogni-portfolio/README.md) | Portfolio Messaging | 21 | 20 | IS/DOES/MEANS portfolio positioning with eight industry taxonomies, competitive analysis, and market sizing |
+| [cogni-marketing](cogni-marketing/README.md) | Content Production | 11 | 3 | B2B marketing content engine — 16 formats across thought leadership, demand gen, lead gen, sales enablement, ABM |
+| [cogni-sales](cogni-sales/README.md) | Sales Pitches | 1 | 4 | Corporate Visions Why Change pitch generation for named customers or market segments |
+| [cogni-website](cogni-website/README.md) | Website Generation | 6 | 3 | Multi-page customer websites from portfolio, marketing, and research content with shared navigation and theming |
+| [cogni-workspace](cogni-workspace/README.md) | Workspace Infrastructure | 19 | 7 | Shared foundation — env vars, MCP installation, theme management, plugin discovery, workspace health, Obsidian integration, bundled wiki, claim verification, story-arc narrative, executive copywriting, and slide/infographic/storyboard/web rendering |
 
 **97 skills, 69 agents** across the 8 active plugins.
 

@@ -277,7 +277,7 @@ One recommendation, not a menu. On confirmation, `consult-resume` dispatches the
 | Multilingual engagement | Set `language` at setup | DACH or other non-English stakeholder audiences |
 | Add a field mid-engagement | `consult-action-fields` add-field operation | Scope expands after an early deliverable reveals a gap |
 | Persona-first | Define and enrich personas before deliverable work begins | Client stakeholder landscape is complex and well-known |
-| Research report as a deliverable | Route through cogni-knowledge as the `producing_route` | The deliverable is a standalone research report rather than a consulting artifact |
+| Research report as a deliverable | Name `knowledge-run` as the `producing_route` in the deliverable manifest | The deliverable is a standalone research report rather than a consulting artifact |
 
 ## Common Pitfalls
 

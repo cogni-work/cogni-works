@@ -35,8 +35,7 @@ The core difference from the classic approach:
 |-------------|-----|
 | cogni-consult installed | Orchestrates the engagement lifecycle |
 | cogni-knowledge installed | Required — the research spine bound at setup |
-| cogni-visual / document-skills installed (optional) | Deliverable export when a deliverable names an export route |
-| cogni-workspace installed (optional) | Cross-session engagement discovery |
+| cogni-workspace / document-skills installed (optional) | Cross-session engagement discovery; also deliverable export when a deliverable names an export route |
 | Web access enabled | cogni-knowledge runs web research during the inverted pipeline |
 
 cogni-consult is standalone as an orchestrator. cogni-knowledge is the one required integration — without it, the compounding-research promise cannot be delivered.
@@ -274,7 +273,7 @@ One recommendation, not a menu. On confirmation, `consult-resume` dispatches the
 |-----------|---------------|-------------|
 | Single-field engagement | Derive one action field in scoping | Narrowly scoped advisory work |
 | Research-heavy engagement | Run `knowledge-ingest` with source documents before starting deliverables | Engagement topics with known prior art (reports, PDFs) |
-| Export a deliverable as slides | Name `cogni-visual` as the `producing_route` in the deliverable manifest | Deliverable is a client-facing presentation |
+| Export a deliverable as slides | Name `story-to-slides` as the `producing_route` in the deliverable manifest | Deliverable is a client-facing presentation |
 | Multilingual engagement | Set `language` at setup | DACH or other non-English stakeholder audiences |
 | Add a field mid-engagement | `consult-action-fields` add-field operation | Scope expands after an early deliverable reveals a gap |
 | Persona-first | Define and enrich personas before deliverable work begins | Client stakeholder landscape is complex and well-known |

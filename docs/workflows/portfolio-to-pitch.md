@@ -209,7 +209,7 @@ Render the mid-market SaaS pitch as a slide deck
 Create a scrollable web version of the DACH manufacturing pitch
 ```
 
-These dispatch to `/story-to-slides` or `/story-to-web` inside cogni-visual, inheriting your workspace theme.
+These dispatch to `/story-to-slides` or `/story-to-web` inside cogni-workspace, inheriting your workspace theme.
 
 ### Optional — stakeholder visuals (shared)
 

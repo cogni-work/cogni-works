@@ -1,6 +1,6 @@
 # Content Pipeline
 
-**Pipeline**: cogni-marketing (setup + content generation) → the `narrative` skill (story arc shaping, long-form only) → the `copywriter` skill (polish) → cogni-visual (slides / web)
+**Pipeline**: cogni-marketing (setup + content generation) → the `narrative` skill (story arc shaping, long-form only) → the `copywriter` skill (polish) → the `story-to-slides` / `story-to-web` skills (slides / web)
 **Duration**: 2–6 hours for a complete content batch, depending on format count and polish depth
 **End deliverable**: A multi-channel marketing content package — polished articles, battle cards, email nurtures, and optionally a slide deck or web narrative
 
@@ -9,7 +9,7 @@ graph LR
     A[marketing-setup] -->|content-strategy.json| B[content generation]
     B -->|raw content pieces| N[the `narrative` skill]
     N -->|arc-shaped long-form| C[the `copywriter` skill]
-    C -->|polished content| D[cogni-visual]
+    C -->|polished content| D[the `story-to-slides` / `story-to-web` skills]
     D -->|slides / web| E[Deliverable]
 ```
 
@@ -35,7 +35,7 @@ All content is sourced — each piece references the TIPS claims and portfolio p
 | cogni-trends installed | Provides strategic themes (Handlungsfelder) |
 | the `narrative` skill installed (optional) | Shapes long-form content with a story arc before polishing; required for thought-leadership / whitepaper / keynote formats |
 | the `copywriter` skill installed | Polishes generated content; reads `arc_id` frontmatter from narrative output for arc-aware polishing |
-| cogni-visual installed (optional) | Renders content to slides or web |
+| cogni-workspace installed (optional) | Renders content to slides or web |
 | Portfolio project initialized | cogni-marketing reads from cogni-portfolio |
 | TIPS project available (optional) | Required for strategy-connected content; generic themes are used otherwise |
 
@@ -165,7 +165,7 @@ This runs 5 parallel reader personas (executive, technical, legal, marketing, en
 
 ### Step 5: Render to Visual Formats (Optional)
 
-Long-form polished content (whitepapers, thought leadership articles) can be rendered into slide decks or scrollable web narratives via cogni-visual.
+Long-form polished content (whitepapers, thought leadership articles) can be rendered into slide decks or scrollable web narratives via cogni-workspace.
 
 **For a slide deck:**
 
@@ -185,7 +185,7 @@ Turn the managed services thought leadership article into a scrollable web page
 Create a slide deck summarizing the full content batch for the DACH enterprise campaign
 ```
 
-cogni-visual reads the polished narrative, detects the story arc, maps content to slide layouts with assertion headlines and number plays, and produces a PPTX file via `document-skills:pptx`.
+cogni-workspace reads the polished narrative, detects the story arc, maps content to slide layouts with assertion headlines and number plays, and produces a PPTX file via `document-skills:pptx`.
 
 ## Organizing a Multi-Channel Campaign
 
@@ -229,8 +229,7 @@ Monitor coverage and progress via the dashboard:
 ## Related Guides
 
 - [cogni-marketing plugin guide](../plugin-guide/cogni-marketing.md)
-- [cogni-workspace plugin guide](../plugin-guide/cogni-workspace.md) — the `narrative` and `copywriter` skills
-- [cogni-visual plugin guide](../plugin-guide/cogni-visual.md)
+- [cogni-workspace plugin guide](../plugin-guide/cogni-workspace.md) — the `narrative`, `copywriter`, `story-to-slides`, and `story-to-web` skills
 - [cogni-portfolio plugin guide](../plugin-guide/cogni-portfolio.md)
 - [cogni-trends plugin guide](../plugin-guide/cogni-trends.md)
 - [Trends to Solutions workflow](./trends-to-solutions.md) — produces the TIPS themes that feed marketing content

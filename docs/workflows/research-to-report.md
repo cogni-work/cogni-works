@@ -1,6 +1,6 @@
 # Research to Report
 
-**Pipeline**: cogni-knowledge → cogni-workspace (optional) → the `copywriter` skill → cogni-visual
+**Pipeline**: cogni-knowledge → cogni-workspace (optional) → the `copywriter` skill → the `story-to-infographic` / `enrich-report` skills
 **Duration**: 10 min – 4 hours (all options) depending on research depth, claims volume, and visual enrichment
 **End deliverable**: A verified, polished research report as themed HTML with data visualizations — plus an optional one-page infographic
 
@@ -8,7 +8,7 @@
 graph LR
     A[cogni-knowledge] -->|synthesis + cited sources| B[cogni-workspace]
     B -->|live-source re-check| C[the `copywriter` skill]
-    C -->|polished report| D[cogni-visual]
+    C -->|polished report| D[the `story-to-infographic` / `enrich-report` skills]
     D -->|infographic + enriched HTML| E[Deliverables]
 ```
 
@@ -20,8 +20,8 @@ A research report where every citation has been checked against its cited source
 - A structured synthesis with inline citations and a source registry, verified **zero-network** against each cited source's extracted claims (cogni-knowledge)
 - An optional **live-source re-check** that flags misquotations, unsupported conclusions, and stale data against the live source URLs (cogni-workspace, via `knowledge-refresh --resweep`)
 - An executive-polished document with strong structure, active voice, and readability scoring (the `copywriter` skill)
-- A single-page infographic distilling the 3–5 key data points (cogni-visual / story-to-infographic)
-- A themed HTML report with Chart.js visualizations, concept diagrams, and sidebar navigation (cogni-visual / enrich-report)
+- A single-page infographic distilling the 3–5 key data points (cogni-workspace / story-to-infographic)
+- A themed HTML report with Chart.js visualizations, concept diagrams, and sidebar navigation (cogni-workspace / enrich-report)
 
 This is the chain to use when the report will be read by decision-makers or shared externally and both accuracy and visual impact matter.
 
@@ -31,8 +31,7 @@ This is the chain to use when the report will be read by decision-makers or shar
 |-------------|-----|
 | cogni-knowledge installed | Wiki-first research orchestrator (vendors the Karpathy wiki engine) |
 | the `copywriter` skill installed | Applies messaging frameworks and readability polish |
-| cogni-visual installed | Produces infographic and enriched HTML |
-| cogni-workspace installed (optional) | Live-source re-check of cited claims via resweep |
+| cogni-workspace installed | Produces the infographic and enriched HTML (story-to-infographic, enrich-report); also the optional live-source re-check of cited claims via resweep |
 | Web access enabled | cogni-knowledge dispatches parallel web researchers during curate/fetch |
 
 ## Step-by-Step
@@ -167,7 +166,7 @@ This runs 5 parallel stakeholder personas (executive, technical, legal, marketin
 
 ### Step 4: Create an Infographic (Optional)
 
-Distill the polished report into a single-page visual summary using cogni-visual's story-to-infographic skill. This extracts the 3–5 most impactful data points and produces an infographic brief that auto-renders into a visual.
+Distill the polished report into a single-page visual summary using cogni-workspace's story-to-infographic skill. This extracts the 3–5 most impactful data points and produces an infographic brief that auto-renders into a visual.
 
 **Command**: `/story-to-infographic` or describe what you want
 
@@ -253,7 +252,5 @@ This matches the consulting deliverable pattern: executive one-pager up front, d
 ## Related Guides
 
 - [cogni-knowledge plugin guide](../plugin-guide/cogni-knowledge.md)
-- [cogni-workspace plugin guide](../plugin-guide/cogni-workspace.md)
-- [cogni-workspace plugin guide](../plugin-guide/cogni-workspace.md) — the `narrative` and `copywriter` skills
-- [cogni-visual plugin guide](../plugin-guide/cogni-visual.md)
+- [cogni-workspace plugin guide](../plugin-guide/cogni-workspace.md) — the `narrative`, `copywriter`, `story-to-infographic`, and `enrich-report` skills
 - [Consulting Engagement workflow](./consulting-engagement.md) — this pipeline runs inside a deliverable's design-thinking loop

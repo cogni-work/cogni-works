@@ -192,7 +192,7 @@ def repo_root_default():
 
 
 def discover(root):
-    """Five non-recursive globs, relative and sorted — see the module docstring."""
+    """Non-recursive globs over DISCOVERY_PATTERNS, relative and sorted — see the module docstring."""
     found = set()
     for pattern in DISCOVERY_PATTERNS:
         for abs_path in glob.glob(os.path.join(root, pattern)):

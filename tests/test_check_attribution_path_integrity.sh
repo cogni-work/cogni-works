@@ -41,6 +41,19 @@
 #     --expr 's/CODE_SPAN_RE\.finditer\(line\)/[]/m' \
 #     --test 'bash tests/test_check_attribution_path_integrity.sh' --case S1
 #
+# Mutation recipe — the deepest (per-skill) location pattern:
+#
+#   scripts/mutation-check.sh --root . \
+#     --file scripts/check-attribution-path-integrity.py \
+#     --expr 's/\n    os\.path\.join\("\*", "skills", "\*", "references", "\*", ""\),//m' \
+#     --test 'bash tests/test_check_attribution_path_integrity.sh' --case K1
+#
+# The mutation drops the fourth SURFACE_LOCATIONS entry, so no glob reaches a
+# surface at the per-skill references/ depth. K1's fixture surface is then never
+# discovered and K1 goes RED, GREEN again on restore. Before K1 existed this
+# mutation reded nothing at all — the suite reported `0 failed` with the pattern
+# deleted, which is precisely the vacuity this recipe now forecloses.
+#
 # Mutation recipe — zero-discovery is an error, not a clean zero:
 #
 #   scripts/mutation-check.sh --root . \
@@ -183,10 +196,46 @@ check_eq "L1 the real tree discovers a live surface population" "True" \
 check_eq "L1b the real tree examines a live claim population" "True" \
   "$(json_expr "$REAL_JSON" "d['data']['summary']['claims_examined'] >= 2")"
 # The floors above are met by the NOTICE/LICENSE surfaces alone, so neither can
-# see the deepest location pattern collapse. This pins it directly: the only
-# surface reached by a references/ location must still be discovered.
-check_eq "L1c the deepest location pattern still reaches its surface" "True" \
+# see a references/ location pattern collapse. This pins the PLUGIN-LEVEL one
+# (`*/references/*/`): the only real-tree surface it reaches must still be
+# discovered. It deliberately does NOT pin the deeper per-skill pattern — no
+# real-tree surface sits at that depth, so an `any('/references/' ...)` read is
+# satisfied by this pattern's own surface and would grade the deeper one
+# vacuously. K1 below carries that one on a fixture instead.
+check_eq "L1c the plugin-level references/ location pattern still reaches its surface" "True" \
   "$(json_expr "$REAL_JSON" "any('/references/' in s for s in d['data']['surfaces'])")"
+
+# --- K1: the deepest (per-skill) location pattern, on a fixture -------------
+# The real tree has no surface at `*/skills/*/references/*/`, so no assertion
+# over REAL_JSON can falsify that pattern — deleting it from SURFACE_LOCATIONS
+# leaves every real-tree case green. This fixture builds a surface at exactly
+# that depth and asserts the guard both DISCOVERS it and SCANS it.
+#
+# The fixture also carries a root NOTICE, so the tree is never zero-discovery.
+# That matters: without it, deleting the pattern would empty the surface set and
+# trip the zero-discovery error arm (exit 2), and this case would red for that
+# reason rather than for the pattern it is written to pin. With the NOTICE
+# present, deleting the pattern leaves a clean exit 0 with the deep surface
+# simply unseen — so K1/K1b red on the pattern itself.
+K1="$WORK/k1"
+mk_repo "$K1"
+mkdir -p "$K1/cogni-thing/skills/thing-skill/references/asset"
+printf '%s\n' 'x' > "$K1/cogni-thing/skills/thing-skill/references/asset/present.txt"
+printf '%s\n' 'insight-wave fixture' > "$K1/NOTICE"
+cat > "$K1/cogni-thing/skills/thing-skill/references/asset/LICENSE.md" <<'FIXTURE'
+insight-wave fixture
+
+* Bundled asset licence
+  Location: cogni-thing/skills/thing-skill/references/asset/absent.txt
+FIXTURE
+stage "$K1"
+run_guard "$K1"
+check_eq "K1 a surface at the per-skill references/ depth is discovered" "True" \
+  "$(json_expr "$LAST_JSON" "'cogni-thing/skills/thing-skill/references/asset/LICENSE.md' in d['data']['surfaces']")"
+check_eq "K1b its non-resolving claim is reported, so the surface is scanned and not merely listed" "1" \
+  "$LAST_RC"
+check_eq "K1c the violation names that surface" "cogni-thing/skills/thing-skill/references/asset/LICENSE.md" \
+  "$(json_expr "$LAST_JSON" "d['data']['violations'][0]['file']")"
 
 # --- X1/X2/X3: non-subjects are excluded by class, not by literal -----------
 X="$WORK/x"

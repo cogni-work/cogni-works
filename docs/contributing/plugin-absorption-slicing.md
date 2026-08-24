@@ -56,6 +56,19 @@ the stage**. The stage's licence is editorial correctness on surfaces that descr
 now; a dated record does not describe the tree now, and correcting the live surface it points
 at is the fix.
 
+**This is mechanically enforced.** `scripts/check-attribution-path-integrity.py` asserts that every
+repo-relative path a *live* attribution surface claims resolves in the tracked index, and it is a
+blocking CI gate. The dated records this section protects are outside what it scans — not by a
+filename exception, but because the surface class it derives never descends into a documentation
+tree, which is the class rule stated just above applied mechanically. So the guard can never be the
+reason someone patches a frozen attestation: it reports gaps and never repairs them, and the remedy
+for a red build is the one this section already prescribes — repoint the live surface at the path
+the asset now occupies.
+
+The guard's own module docstring is the authority of record for which surfaces are in the class,
+where a new one has to live to be picked up automatically, and what it deliberately does not
+detect. That is not restated here, so the two cannot drift.
+
 ## Per-stage size bound
 
 Target **400 changed lines per stage**. That figure is the review gate's advisory

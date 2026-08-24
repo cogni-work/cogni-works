@@ -177,3 +177,19 @@ jobs:
         run: |
           set -euo pipefail
           python3 scripts/check-mcp-tool-grant.py
+
+  attribution-path-guard:
+    name: Attribution path guard (every path a live attribution surface claims resolves)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        # Default shallow checkout is sufficient: the guard reads the tracked
+        # index at this commit via `git ls-files`, not git history. Do NOT copy
+        # version-bump-gate's fetch-depth: 0 — that is load-bearing only for its
+        # merge-base anchor.
+
+      - name: Assert every path claimed by a live attribution surface resolves
+        run: |
+          set -euo pipefail
+          python3 scripts/check-attribution-path-integrity.py

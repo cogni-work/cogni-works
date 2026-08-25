@@ -114,7 +114,7 @@ deliverables in manifest order:
 | portfolio-fit | — (keine Deliverables geplant) | | | |
 | go-to-market | ⚠ field.json nicht lesbar (siehe Warnungen) | | | |
 
-Route: gtm-onepager · cogni-visual
+Route: gtm-onepager · narrative-adapt
 ```
 
 That is a German session. `Deliverable` and `Framework` are the same token in
@@ -128,7 +128,7 @@ cased per `references/user-facing-output.md` (c) note 4. A `complete` or
 `Route` is not a column: when a deliverable's `producing_route` differs from
 the default `consult-design-thinking`, note it beneath the table, never a
 sixth cell: `Route: <deliverable> · <producing_route>`, e.g.
-`Route: gtm-onepager · cogni-visual`.
+`Route: gtm-onepager · narrative-adapt`.
 
 An English session renders the same table: header
 `| Action field | Deliverable | Status | Framework | Persona review |`, values
@@ -194,8 +194,9 @@ field's `field.json` once, appending all agreed entries, each shaped:
 
 `producing_route` names the skill that will produce the deliverable —
 default `consult-design-thinking`; use another route only when the
-consultant names one (e.g. a direct `cogni-visual` export of an existing
-artifact). `persona_review` tracks the acting-persona challenge pass:
+consultant names one (e.g. a direct `narrative-adapt` one-pager built
+from an existing artifact). `persona_review` tracks the acting-persona
+challenge pass:
 `pending` → `in-progress` → `complete`. Both fields are manifest metadata —
 recommend the route, never dispatch it from here. `chosen_framework` records
 the deliverable's structuring framework and is selected per
@@ -241,10 +242,9 @@ Two skips keep the auto-wire safe and silent:
   silently — there is no gate target.
 
 The auto-wired edge is the same `{action_field, deliverable}` coordinate as any
-other dependency below (no new schema, no new field type — a field is a solution
-field positionally, by its slug), and it is covered by the same `validate`
-mandate at the end of this step — run the validator once after planning, not a
-second time for the auto-wire.
+other dependency below (no new schema, no new field type), and it is covered by
+the same `validate` mandate at the end of this step — run the validator once
+after planning, not a second time for the auto-wire.
 
 Write the auto-wired edge once, when the solution field's deliverables are first
 planned. On a re-run over an already-planned solution field, if a deliverable
@@ -290,11 +290,11 @@ declarations. Do not close the session with an unresolved `validate` failure
 when dependencies were declared this session.
 
 When planning surfaces a research-heavy deliverable, note that its evidence
-will run through the engagement's bound knowledge base per
-`$CLAUDE_PLUGIN_ROOT/references/research-routing.md`, with syntheses landing
-in this field's `research/` directory
-(`action-fields/<field-slug>/research/<topic-slug>.md`) — the producing
-route reads them from there.
+runs through the engagement's bound knowledge base per
+`$CLAUDE_PLUGIN_ROOT/references/research-routing.md` — never raw web search —
+with syntheses landing in this field's `research/` directory
+(`action-fields/<field-slug>/research/<topic-slug>.md`), which the producing
+route reads.
 
 Removing or renaming a deliverable is also an `Edit` of `field.json` — but
 never silently drop an entry whose `state` is not `pending`; started work is
@@ -391,7 +391,5 @@ markdown artifact lands under the field directory either way.
   survive; root `updated` changes only when `action_fields[]` itself does.
 - **Slug discipline**: `action_fields[]` holds kebab-case slug strings only —
   `engagement-status.sh` rejects non-string entries as malformed.
-- **Research routing**: deliverable research always runs through the
-  engagement's bound knowledge base per
-  `$CLAUDE_PLUGIN_ROOT/references/research-routing.md` — never raw web
-  search; this skill plans the work, the producing route runs the research.
+- **Research routing**: this skill plans the work; the producing route runs
+  the research through the bound knowledge base (step 4).

@@ -155,8 +155,7 @@ cogni-sales/
 |--------|----------|---------|
 | cogni-portfolio | Yes | Products, features, propositions, solutions, markets, competitors, customers |
 | cogni-trends | No | TIPS strategic theme enrichment — value-modeler themes, regulatory timelines, gap analysis |
-| cogni-workspace | Yes | Corporate Visions story arc patterns from the `narrative` skill; source verification via `cogni-workspace:claims`; executive polish on final deliverables via `copywriter` |
-| cogni-visual | No | PPTX generation from sales presentation |
+| cogni-workspace | Yes | Corporate Visions story arc patterns from the `narrative` skill; source verification via `cogni-workspace:claims`; executive polish on final deliverables via `copywriter`; slide/PPTX generation from the sales presentation via `story-to-slides` |
 
 ## Contributing
 

@@ -232,8 +232,7 @@ cogni-consult/
 | Plugin | Required | Purpose |
 |--------|----------|---------|
 | cogni-knowledge | Yes | Bound once at setup (`plugin_refs.knowledge_base`) — the research spine every deliverable's evidence routes through |
-| cogni-workspace | No | Cross-session engagement discovery (`discover-projects.sh` delegates to its helper); `pick-theme` themes the `consult-dashboard` HTML (falls back to a built-in theme); consult-design-thinking routes the claims-correction cascade, and `submit-assumption-claim.py` submits assumption claims to `cogni-workspace:claims` for verification; consult-publish runs an optional `copywriter` polish pass before brief handoff |
-| cogni-visual / document-skills | No | Deliverable export (slides, documents) when a deliverable names an export route |
+| cogni-workspace | No | Cross-session engagement discovery (`discover-projects.sh` delegates to its helper); `pick-theme` themes the `consult-dashboard` HTML (falls back to a built-in theme); consult-design-thinking routes the claims-correction cascade, and `submit-assumption-claim.py` submits assumption claims to `cogni-workspace:claims` for verification; consult-publish runs an optional `copywriter` polish pass before brief handoff; opt-in local-render fallback for publish deliverables (`cogni-workspace:enrich-report` / `cogni-workspace:story-to-infographic`) — the standard `consult-publish` path builds every format as a consult-native brief and hands it to Claude Design to render, so no plugin sits on the standard export route |
 
 cogni-consult is standalone as an orchestrator — it structures the engagement, the WBS, and the design-thinking loops on its own. cogni-knowledge is the one required integration: without it, deliverable research has no compounding base.
 

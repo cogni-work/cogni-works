@@ -24,7 +24,7 @@ graph LR
     subgraph Output["Output Layer"]
         NA[cogni-workspace narrative<br/>arc-driven narratives]
         CW[cogni-workspace copywriter<br/>polished documents]
-        VI[cogni-visual<br/>slides, web, storyboard<br/>infographic, enrich-report]
+        RN[cogni-workspace rendering<br/>slides, web, storyboard<br/>infographic, enrich-report]
         SA[cogni-sales<br/>pitches, proposals]
         MK[cogni-marketing<br/>content, campaigns<br/>calendars]
     end
@@ -34,10 +34,10 @@ graph LR
     DM -->|dispatches discover/develop| TI
     DM -->|dispatches discover/develop/deliver| PF
     DM -->|dispatches define/deliver| CL
-    DM -->|dispatches export| VI
+    DM -->|dispatches export| RN
 
     %% Shared workspace → consumers
-    WS -.->|themes| VI
+    WS -.->|themes| RN
     WS -.->|env vars| PF
     WS -.->|env vars| TI
 
@@ -57,13 +57,13 @@ graph LR
 
     %% TIPS → Output
     TI -->|themes, Handlungsfelder| MK
-    TI -->|value-modeler output| VI
+    TI -->|value-modeler output| RN
 
     %% Narrative pipeline
     NA -->|arc output| CW
     NA -->|arc patterns| SA
-    NA -->|narratives| VI
-    CW -->|polished content| VI
+    NA -->|narratives| RN
+    CW -->|polished content| RN
 
     %% Teacher (standalone, not shown — teaches all plugins)
 ```
@@ -78,11 +78,11 @@ graph LR
 | **cogni-workspace** | ClaimRecord, DeviationRecord, ResolutionRecord | JSON in `cogni-claims/` directory | Receives claims from all data-layer plugins. Status: unverified → verified/deviated → resolved |
 | **cogni-sales** | PitchLog, BuyingCenter, PhaseDeliverable (research.json + narrative.md) | JSON + Markdown per phase | Consumes portfolio propositions + narrative arc patterns. Registers claims |
 | **cogni-marketing** | MarketingProject, ContentStrategy, ContentPiece, Campaign, Calendar | JSON + Markdown with YAML frontmatter | Consumes portfolio propositions + TIPS themes. 16 content formats |
-| **cogni-workspace** (`narrative`) | Narrative (arc_id, sections, techniques) | Markdown with YAML frontmatter | Consumed by Visual, the `copywriter` skill, and Sales via `arc_id` frontmatter |
+| **cogni-workspace** (`narrative`) | Narrative (arc_id, sections, techniques) | Markdown with YAML frontmatter | Consumed by the rendering skills, the `copywriter` skill, and Sales via `arc_id` frontmatter |
 | **cogni-workspace** (`copywriter`) | (no persistent entities) | In-place document modification | Detects `arc_id` frontmatter for arc-aware polishing |
-| **cogni-visual** | Brief (YAML frontmatter + Markdown body) | Per-deliverable brief files | Reads theme from cogni-workspace. Reads narrative via `arc_id` |
+| **cogni-workspace** (rendering) | Brief (YAML frontmatter + Markdown body) | Per-deliverable brief files | Reads the active theme. Reads narrative via `arc_id` |
 | **cogni-workspace** | Theme, WorkspaceConfig, VaultConfig, TerminalProfile | Markdown (theme.md) + JSON (settings, `.obsidian/` configs) | Theme files consumed by all visual plugins. Env vars consumed by all plugins. Obsidian browsing layer for all plugin outputs |
-| **cogni-consult** | Engagement (consult-project.json), ActionField (field.json), Deliverable state, Persona, ExecutionLog, MethodLog, DecisionLog | JSON state files + Obsidian-browsable Markdown deliverables in `action-fields/{field}/` | Binds one cogni-knowledge base per engagement as the research spine; deliverables feed the `narrative` skill, cogni-visual, cogni-sales |
+| **cogni-consult** | Engagement (consult-project.json), ActionField (field.json), Deliverable state, Persona, ExecutionLog, MethodLog, DecisionLog | JSON state files + Obsidian-browsable Markdown deliverables in `action-fields/{field}/` | Binds one cogni-knowledge base per engagement as the research spine; deliverables feed the `narrative` skill, cogni-workspace rendering, cogni-sales |
 
 ## Cross-Plugin Bridge Files
 

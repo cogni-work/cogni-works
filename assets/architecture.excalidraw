@@ -580,7 +580,7 @@
       "version": 1
     },
     {
-      "id": "feature-claude-platform-cogni-tools",
+      "id": "feature-cogni-workspace",
       "type": "rectangle",
       "x": 80,
       "y": 820,
@@ -601,11 +601,11 @@
       "version": 1
     },
     {
-      "id": "feature-label-claude-platform-cogni-tools",
+      "id": "feature-label-cogni-workspace",
       "type": "text",
       "x": 92,
       "y": 828,
-      "width": 218.765625,
+      "width": 127.15625,
       "height": 18.4,
       "backgroundColor": "transparent",
       "strokeColor": "#1e293b",
@@ -613,7 +613,7 @@
       "strokeStyle": "solid",
       "roughness": 0,
       "opacity": 100,
-      "text": "Claude Platform & Cogni-Tools",
+      "text": "Cogni-Workspace",
       "fontSize": 16,
       "fontFamily": 2,
       "groupIds": [],
@@ -625,11 +625,11 @@
       "version": 1
     },
     {
-      "id": "feature-purpose-claude-platform-cogni-tools",
+      "id": "feature-purpose-cogni-workspace",
       "type": "text",
       "x": 92,
       "y": 850,
-      "width": 251.19140625,
+      "width": 468.240234375,
       "height": 13.799999999999999,
       "backgroundColor": "transparent",
       "strokeColor": "#64748b",
@@ -637,9 +637,9 @@
       "strokeStyle": "solid",
       "roughness": 0,
       "opacity": 100,
-      "text": "Platform infrastructure for all plugin workflows",
+      "text": "Shared foundation \u2014 wiki, claims, narrative, copywriting, and slide/infographic rendering",
       "label": {
-        "text": "Platform infrastructure for all plugin workflows"
+        "text": "Shared foundation \u2014 wiki, claims, narrative, copywriting, and slide/infographic rendering"
       },
       "fontSize": 12,
       "fontFamily": 2,

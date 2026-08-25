@@ -10,7 +10,7 @@ For the canonical IS/DOES/MEANS positioning of this plugin, see the [cogni-knowl
 
 cogni-knowledge solves a gap that every other deep-research tool leaves open: where do the findings go after the report ships? `research-report` produces a document and loses the underlying knowledge to context history. cogni-knowledge inverts that posture — a research run binds to a named knowledge base, deposits its verified synthesis into a persistent wiki, and the next run reads from that wiki before going to the web.
 
-The plugin is a thin orchestrator over `cogni-wiki`. It owns exactly one new artifact — a `binding.json` manifest that records "this wiki is the knowledge base for topic area X, and these research projects have contributed to it." All other state lives upstream: wiki pages in `cogni-wiki`, fetch bodies in the content-addressed fetch-cache, research project files in `cogni-research-<slug>/`.
+The plugin is a thin orchestrator over a **vendored wiki engine** (`scripts/vendor/cogni-wiki/`). It owns exactly one new artifact — a `binding.json` manifest that records "this wiki is the knowledge base for topic area X, and these research projects have contributed to it." All other state lives in the wiki tree and its sidecars: wiki pages under `wiki/`, fetch bodies in the content-addressed fetch-cache, research project files in `cogni-research-<slug>/`.
 
 The v0.1.0 inverted pipeline (Phases 1–7: plan → curate → fetch → ingest → compose → verify → finalize) forks dedicated agents locally and runs zero-network claim verification. The runtime path is 0% cogni-research — the bound wiki is the only evidence source for composition, verification, and finalization. A legacy v0.0.x chain that delegated to cogni-research is archived under `_archive/`.
 
@@ -41,7 +41,7 @@ The loop closes at Phase 7: every `knowledge-compose` run reads `wiki/syntheses/
 
 `.cogni-knowledge/binding.json` is the only new state this plugin owns. It sits as a sibling to the wiki's `.cogni-wiki/config.json` and records:
 
-- which cogni-wiki is the substrate (`wiki_path`)
+- which wiki tree is the substrate (`wiki_path`)
 - which research projects have been deposited (`research_projects[]`)
 - topic lineage — covered themes and open themes (`topic_lineage`)
 - curator defaults — score threshold, max candidates per sub-question, fetch-cache max age (`curator_defaults`)
@@ -50,7 +50,7 @@ Every skill that needs to know "where is the wiki?" or "what has been deposited?
 
 ### Wiki-First vs. One-Shot Research
 
-One-shot tools (cogni-research in standalone mode, OpenAI Deep Research, Perplexity Spaces) produce a report and stop. Every subsequent run on a related topic starts from zero web.
+One-shot tools (OpenAI Deep Research, Perplexity Spaces, and this plugin's own `knowledge-compose` run in isolation) produce a report and stop. Every subsequent run on a related topic starts from zero web.
 
 Wiki-first means: run research on EU AI Act Article 6 today; tomorrow's run on foundation-model obligations reads what you already filed — source pages, pre-extracted claims, and the synthesized `wiki/syntheses/<slug>.md` deposit — before issuing a single new web search. Knowledge gets denser with every project.
 
@@ -60,7 +60,7 @@ Wiki-first means: run research on EU AI Act Article 6 today; tomorrow's run on f
 
 ### The Delegation Contract
 
-cogni-knowledge adds no logic that already exists upstream. `knowledge-setup` does not re-implement `wiki-setup` — it only handles the `binding.json` half. `knowledge-query` does not re-implement search — it resolves the wiki path from `binding.json` and delegates to `cogni-wiki:wiki-query`. If you find yourself writing a new agent or duplicating a cogni-wiki script, the right answer is almost always to push the change upstream and re-delegate. See `cogni-knowledge/references/delegation-contract.md`.
+cogni-knowledge adds no logic that already exists in the vendored engine. `knowledge-setup` does not re-implement the wiki skeleton beyond the `binding.json` half. `knowledge-query` does not re-implement search — it resolves the wiki path from `binding.json` and runs the vendored ranking engine. If you find yourself writing a new agent or duplicating a vendored script, the right answer is almost always to call the vendored engine instead. See `cogni-knowledge/references/delegation-contract.md`.
 
 ---
 
@@ -101,7 +101,7 @@ Status skill and session entry point. Reads `binding.json` and computes the wiki
 
 ### knowledge-setup
 
-Bootstraps a knowledge base. Dispatches `cogni-wiki:wiki-setup` to create the wiki if it does not exist, then writes `binding.json`. The only setup work this skill does beyond wiki creation is initializing the binding manifest; all wiki structure is owned by cogni-wiki.
+Bootstraps a knowledge base. Scaffolds the wiki skeleton **natively on the vendored engine** if it does not exist — it dispatches no external setup skill — then writes `binding.json`. The only setup work beyond wiki creation is initializing the binding manifest; wiki structure is owned by the vendored engine.
 
 ### knowledge-run
 
@@ -197,16 +197,15 @@ Read-only structural health check — page/link/schema integrity plus entries-co
 
 | Plugin | What is consumed |
 |--------|-----------------|
-| cogni-wiki | The wiki engine. `knowledge-setup` dispatches `cogni-wiki:wiki-setup` to create a base. The read/render/lint/health paths (`knowledge-query`, `knowledge-dashboard`, `knowledge-resume`, `knowledge-lint`, `knowledge-health`) run **natively on the vendored engine** — they no longer dispatch `cogni-wiki` skills, so a standalone base works with no `cogni-wiki` plugin installed |
 | cogni-workspace | Optional — `get-market-config.py` for bilingual, per-market authority search when a market is configured |
 
-cogni-wiki provides the engine (vendored into `cogni-knowledge/scripts/`); `cogni-wiki:wiki-setup` is dispatched at base-creation time and `cogni-wiki:wiki-update` on a diff-before-write collision. cogni-workspace is optional — without it, search falls back to unlocalized defaults.
+cogni-knowledge has **no required plugin dependency**. The wiki engine is vendored under `cogni-knowledge/scripts/vendor/cogni-wiki/` and resolved vendored-first, so setup, ingest, query, dashboard, lint and health all run natively — the whole inverted pipeline works on a machine with nothing else installed. cogni-workspace is optional: without it, search falls back to unlocalized defaults.
 
-cogni-research is not a runtime dependency of the v0.1.0 inverted pipeline. The archived v0.0.x chain under `_archive/` delegated to it; it remains available as a sibling plugin for one-shot reports. (The one-shot research pipeline was provided by the now-archived cogni-research, whose web-research stage cogni-knowledge has since absorbed.)
+Two capabilities that were once separate plugins are now part of this one. The web-research stage was absorbed here when the standalone one-shot research plugin was retired, and the wiki engine was vendored here when the wiki plugin was retired; neither is a runtime dependency today. The archived v0.0.x chain under `_archive/` still delegates to the old research plugin and is not part of the v0.1.0 pipeline.
 
 ### Downstream (what cogni-knowledge produces)
 
-cogni-knowledge deposits into the bound cogni-wiki. Everything it writes — source pages (`wiki/sources/<slug>.md`), synthesis pages (`wiki/syntheses/<slug>.md`), log entries, and index updates — is owned by the wiki and browsable via Obsidian or any Markdown reader. The wiki itself is queried directly via `knowledge-query`.
+cogni-knowledge deposits into the bound wiki. Everything it writes — source pages (`wiki/sources/<slug>.md`), synthesis pages (`wiki/syntheses/<slug>.md`), log entries, and index updates — is owned by the wiki and browsable via Obsidian or any Markdown reader. The wiki itself is queried directly via `knowledge-query`.
 
 ---
 
@@ -307,7 +306,7 @@ The fetch-cache lives at `<knowledge-root>/.cogni-knowledge/fetch-cache/<sha256>
 
 ## Extending This Plugin
 
-The delegation contract is the primary constraint on extension: no logic that already exists in cogni-wiki or cogni-research should be duplicated here. If a new capability belongs to wiki structure, file it upstream in cogni-wiki. If it belongs to web research patterns, file it upstream in cogni-research.
+The delegation contract is the primary constraint on extension: no logic that already exists in the vendored engine should be duplicated here. If a new capability belongs to wiki structure, add it to the vendored engine under `scripts/vendor/cogni-wiki/` and call it; if it belongs to web research patterns, add it to this plugin's own agents under `agents/`. Both trees are now maintained here — there is no upstream plugin to file against.
 
 What does belong here:
 

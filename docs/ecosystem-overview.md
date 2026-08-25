@@ -91,7 +91,7 @@ cogni-workspace (copywriter)
   → consumes: narrative output (auto-activated by arc_id frontmatter)
   → produces: polished document
 
-cogni-visual
+cogni-workspace (story-to-slides / story-to-web / story-to-storyboard / story-to-infographic)
   → consumes: polished narrative
   → produces: slide deck / journey map / web narrative / poster
 ```
@@ -137,7 +137,7 @@ cogni-consult (action-fields WBS)
   Per deliverable  → design-thinking loop (empathize→define→ideate→prototype→test)
                      research via the engagement's bound cogni-knowledge base
   Quality          → acting stakeholder personas challenge each deliverable
-  Hand-off         → deliverables feed the narrative skill, cogni-visual, cogni-sales
+  Hand-off         → deliverables feed the narrative and story-to-slides skills, cogni-sales
 ```
 
 For the entity-level diagram see [er-diagram.md](er-diagram.md).
@@ -150,7 +150,7 @@ All plugins depend on cogni-workspace for three shared concerns:
 
 **Environment variables.** `manage-workspace` generates `.claude/settings.local.json`, which Claude Code auto-injects at session start. Plugins resolve sibling plugin paths via these variables rather than hardcoding paths.
 
-**Theme management.** Visual plugins (cogni-visual, cogni-marketing, cogni-website) call the `pick-theme` skill from cogni-workspace to resolve a brand theme. Themes live in `{workspace}/cogni-workspace/themes/` and are shared across all plugins that produce HTML or visual output.
+**Theme management.** Visual-output plugins (cogni-marketing, cogni-website) call the `pick-theme` skill from cogni-workspace to resolve a brand theme, as do cogni-workspace's own rendering skills. Themes live in `{workspace}/cogni-workspace/themes/` and are shared across all plugins that produce HTML or visual output.
 
 **Session hooks.** cogni-workspace installs an `on-session-start.sh` hook that sources workspace environment variables and validates plugin availability each time a Claude Code session opens.
 
@@ -320,11 +320,11 @@ Seven end-to-end workflow guides document the cross-plugin pipelines:
 | Workflow | Pipeline | End deliverable |
 |----------|----------|-----------------|
 | [Research to Report](workflows/research-to-report.md) | cogni-knowledge → cogni-workspace (claims → copywriter) | Verified, polished research report |
-| [Portfolio to Pitch](workflows/portfolio-to-pitch.md) | cogni-portfolio → cogni-sales → cogni-visual | Sales presentation with slides |
+| [Portfolio to Pitch](workflows/portfolio-to-pitch.md) | cogni-portfolio → cogni-sales → cogni-workspace (story-to-slides) | Sales presentation with slides |
 | [Portfolio to Website](workflows/portfolio-to-website.md) | cogni-portfolio → cogni-workspace → cogni-website | Deployable multi-page customer website |
-| [Trends to Solutions](workflows/trends-to-solutions.md) | cogni-trends → cogni-portfolio (bridge) → cogni-visual | Ranked solutions with visual deliverables |
+| [Trends to Solutions](workflows/trends-to-solutions.md) | cogni-trends → cogni-portfolio (bridge) → cogni-workspace (story-to-slides / enrich-report) | Ranked solutions with visual deliverables |
 | [Consulting Engagement](workflows/consulting-engagement.md) | cogni-consult → cogni-knowledge (+ persona-gated deliverables) | Full consulting deliverable package |
-| [Content Pipeline](workflows/content-pipeline.md) | cogni-marketing → cogni-workspace → cogni-visual | Multi-channel marketing content |
+| [Content Pipeline](workflows/content-pipeline.md) | cogni-marketing → cogni-workspace (copywriter → story-to-slides / story-to-web) | Multi-channel marketing content |
 
 ---
 

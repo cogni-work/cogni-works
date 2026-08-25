@@ -187,7 +187,7 @@ cogni-marketing/
 |--------|----------|---------|
 | cogni-portfolio | Yes | Products, propositions, markets, competitors, solutions |
 | cogni-trends | Yes | Strategic themes (Handlungsfelder), trend data, claims |
-| cogni-visual | No | Slide decks and visual assets from content briefs |
+| cogni-workspace | No | Slide decks and visual assets from content briefs via `story-to-slides` / `story-to-web` |
 
 ## Contributing
 

@@ -217,11 +217,10 @@ cogni-portfolio/
 
 | Plugin | Required | Purpose |
 |--------|----------|---------|
-| cogni-visual | No | Pitch output consumable by story-to-slides, story-to-web, and story-to-storyboard |
 | cogni-marketing | No | Customer narratives from portfolio-communicate are auto-discovered by marketing-setup for voice/messaging enrichment |
 | cogni-trends | No | Bidirectional TIPS integration via trends-bridge |
 | cogni-knowledge | No | Pitch arcs (technology-futures, strategic-foresight, trend-panorama, theme-thesis) in portfolio-communicate draw on cogni-knowledge research syntheses for evidence |
-| cogni-workspace | No | Theme selection for portfolio-dashboard via pick-theme; claim verification for research-backed assertions via portfolio-verify; the `narrative` skill's arc definitions shape the pitch use case, and `copywriter` audience tuning drives acronym-expansion depth |
+| cogni-workspace | No | Theme selection for portfolio-dashboard via pick-theme; claim verification for research-backed assertions via portfolio-verify; the `narrative` skill's arc definitions shape the pitch use case, and `copywriter` audience tuning drives acronym-expansion depth; pitch output consumable by `story-to-slides`, `story-to-web`, and `story-to-storyboard` |
 | cogni-sales | No | Downstream consumer — why-change pitch builds on portfolio features and propositions |
 | document-skills | No | Document ingestion (docx, pptx, xlsx, pdf) via portfolio-ingest; XLSX export via portfolio-communicate |
 

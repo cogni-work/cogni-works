@@ -23,9 +23,9 @@ rubric: it is what makes a flagged finding credible.
   cogni-knowledge, cogni-marketing, cogni-portfolio, cogni-sales, cogni-trends,
   cogni-website, cogni-workspace. The loops formerly surveyed under
   cogni-narrative and cogni-copywriting are now cogni-workspace skills and are
-  listed under it. The rendering loops now owned by cogni-workspace — loops 7
-  and 8 below — are recorded under their current `cogni-workspace/` source
-  paths.
+  listed under it. cogni-visual has since been absorbed into cogni-workspace as
+  well; loops 7 and 8 below have been re-pointed to their current
+  `cogni-workspace/` source paths.
 - **Nature:** read-only. This map is a data artifact; it changes no loop and
   proposes no specific code edits. Any targeted hardening of a flagged loop is
   a further, evidence-gated concern — decided from this baseline, not

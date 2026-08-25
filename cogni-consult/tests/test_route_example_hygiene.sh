@@ -10,12 +10,15 @@
 # colon: `PASS: goes-red: ...` would match neither pattern, and a recipe
 # recorded against this suite would return case_not_found instead of a verdict.
 #
-# Which mutation reddens which case:
+# Which mutation reddens which case. The recorded recipe in the pull request
+# drives the second one; the retired name it substitutes is deliberately not
+# spelled here, so this file introduces no new mention of a retired plugin.
 #   route-examples-found         deleting both `Route:` example lines
-#   route-example-slug-resolves  s/narrative-adapt/cogni-visual/g  (the recorded recipe)
-#   route-example-non-default    s/narrative-adapt/consult-design-thinking/g
+#   route-example-slug-resolves  rewriting the route token to any prefix listed
+#                                in scripts/retired-plugins.json (the recorded recipe)
+#   route-example-non-default    rewriting the route token to consult-design-thinking
 #   route-example-parity         changing the route token at one site only
-#   no-retired-plugin-name       reintroducing any prefix from retired-plugins.json
+#   no-retired-plugin-name       planting any retired prefix in a skill body
 #
 # RELATIONSHIP TO scripts/check-external-dispatch.py. That repo-level guard reads
 # the SAME registry and already scans this subject file, so this suite is not a

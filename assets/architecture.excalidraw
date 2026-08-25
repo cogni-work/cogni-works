@@ -436,7 +436,7 @@
       "version": 1
     },
     {
-      "id": "feature-cogni-consulting",
+      "id": "feature-cogni-consult",
       "type": "rectangle",
       "x": 80,
       "y": 684,
@@ -457,11 +457,11 @@
       "version": 1
     },
     {
-      "id": "feature-label-cogni-consulting",
+      "id": "feature-label-cogni-consult",
       "type": "text",
       "x": 92,
       "y": 692,
-      "width": 122.734375,
+      "width": 101.3828125,
       "height": 18.4,
       "backgroundColor": "transparent",
       "strokeColor": "#1e293b",
@@ -481,11 +481,11 @@
       "version": 1
     },
     {
-      "id": "feature-purpose-cogni-consulting",
+      "id": "feature-purpose-cogni-consult",
       "type": "text",
       "x": 92,
       "y": 714,
-      "width": 288.158203125,
+      "width": 263.478515625,
       "height": 13.799999999999999,
       "backgroundColor": "transparent",
       "strokeColor": "#64748b",
@@ -508,7 +508,7 @@
       "version": 1
     },
     {
-      "id": "feature-cogni-research",
+      "id": "feature-cogni-knowledge",
       "type": "rectangle",
       "x": 80,
       "y": 752,
@@ -529,11 +529,11 @@
       "version": 1
     },
     {
-      "id": "feature-label-cogni-research",
+      "id": "feature-label-cogni-knowledge",
       "type": "text",
       "x": 92,
       "y": 760,
-      "width": 115.609375,
+      "width": 126.3046875,
       "height": 18.4,
       "backgroundColor": "transparent",
       "strokeColor": "#1e293b",
@@ -553,11 +553,11 @@
       "version": 1
     },
     {
-      "id": "feature-purpose-cogni-research",
+      "id": "feature-purpose-cogni-knowledge",
       "type": "text",
       "x": 92,
       "y": 782,
-      "width": 288.134765625,
+      "width": 250.083984375,
       "height": 13.799999999999999,
       "backgroundColor": "transparent",
       "strokeColor": "#64748b",

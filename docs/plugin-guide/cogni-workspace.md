@@ -299,6 +299,39 @@ Two modes matter beyond ordinary polish:
 
 Commands: `/copywrite`, `/review-doc`.
 
+### `story-to-slides` — Turn a narrative into a presentation brief
+
+Absorbed from the retired cogni-visual plugin. Reads a narrative that already carries a story arc and re-architects its argument into slide-level messages: pyramid communication, one message per slide, assertion headlines, and speaker notes. The output is `presentation-brief.md`, written by default to `{source_dir}/cogni-visual/presentation-brief.md` and capped at `max_slides` (default 15), so a long narrative is consolidated rather than transcribed. The density rule is that the slide carries the anchor and the speaker notes carry the detail — content that exceeds a layout's physical capacity moves to the notes instead of being force-fit on the slide.
+
+The skill *creates* the brief; it does not render PowerPoint. Rendering is a separate step it guides you to at the end: attach the brief and the theme file in a claude.ai chat with the Anthropic PPTX skill (currently the recommended path), or render inside Claude Code via the `document-skills:pptx` skill, which cogni-workspace's own `pptx` *agent* wraps. There is no `pptx` skill in this plugin. Briefs carry no color fields — the renderer reads the theme directly.
+
+No slash command of its own — ask for a deck from a narrative, or invoke the skill by name.
+
+### `story-to-web` — Turn a narrative into a scrollable web brief
+
+Absorbed from the retired cogni-visual plugin. Decomposes a narrative into a scroll-driven section architecture and writes `web-brief.md`, by default to `{source_dir}/cogni-visual/web-brief.md`: a selected visual style guide, one message per section, assertion headlines, scroll-optimized copy, image prompts, and a CTA proposal (`conversion_goal` defaults to `consultation`, `max_sections` to 10). Sections alternate light and dark so each message lands before the next begins.
+
+As with `story-to-slides`, this is the briefing half only: the `web` agent renders the brief via Pencil MCP into a `.pen` file and then exports a self-contained HTML page from it, and the brief itself contains no color fields. It does not produce slides (`story-to-slides`), print storyboard posters (`story-to-storyboard`), or polished prose (`copywriter`).
+
+No slash command of its own — ask for a web narrative or a landing page built from a narrative document.
+
+### `story-to-infographic` — Distill a narrative into a single-page infographic
+
+Absorbed from the retired cogni-visual plugin. Extracts the three to five most impactful data points from a narrative, selects a layout, and writes `infographic-brief.md` (default `{source_dir}/cogni-visual/infographic-brief.md`) with content blocks under strict word limits plus icon prompts. The brief routes to one of two rendering families, picked by `style_preset`:
+
+- **Hand-drawn** — the `sketchnote` and `whiteboard` presets, rendered through `/render-infographic-handdrawn` into an `.excalidraw` scene.
+- **Editorial** — the `economist`, `editorial`, `data-viz` and `corporate` presets, rendered through `/render-infographic-editorial` into a `.pen` file.
+
+`/render-infographic` is the universal entry point: it reads the brief's `style_preset` and routes to the right family. Unlike the two skills above, this one renders by default — after writing the brief it auto-dispatches `/render-infographic` (pass `render: false` to produce the brief only). One constraint to respect: both hand-drawn render agents share a single Excalidraw MCP canvas, so hand-drawn renders must be serialized and never dispatched in parallel. Pencil-rendered editorial briefs are file-backed and can run alongside one Excalidraw render safely.
+
+### `enrich-report` — Turn a finished report into a visual deliverable
+
+Absorbed from the retired cogni-visual plugin. Post-processes an *already-written* markdown report into a self-contained themed HTML rendition — it never authors a new report from scratch, never creates slides, and never rewrites prose (that is `copywriter`). The layout follows the consulting-deliverable pattern: the report's executive summary, then a full-width editorial infographic distilled from the whole report, then the report body with sidebar navigation and sparse inline Chart.js charts and SVG concept diagrams. The infographic is where the data visualization concentrates; the body stays prose unless a visual genuinely aids a specific passage.
+
+One run always produces both HTML layouts: a scroll version at `{source_dir}/output/{stem}-enriched.html` and a paginated flipbook alongside it as `{stem}-enriched-flipbook.html`. On request via `formats`, PDF is derived from that HTML while DOCX is converted from the original markdown to keep the document structure clean. The source markdown is never touched, and a validation gate enforces preservation — the HTML must retain at least 80% of the source word count, with H2 and citation counts matching.
+
+Commands: `/enrich-report`.
+
 ---
 
 ## Integration Points

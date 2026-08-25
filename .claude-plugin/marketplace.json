@@ -69,7 +69,7 @@
     {
       "name": "cogni-trends",
       "source": "./cogni-trends",
-      "version": "0.6.19",
+      "version": "0.6.20",
       "maturity": "preview",
       "description": "Strategic trend scouting and TIPS reporting pipeline. Combines the Smarter Service Trendradar (4 dimensions) with TIPS (Trends, Implications, Possibilities, Solutions): trend-scout → value-modeler → trend-research → trend-synthesis and/or trend-booklet → verify-trend-report. Evidence-backed CxO reports and reusable industry catalogs across DE/FR/IT/PL/NL/ES + US/UK.",
       "keywords": [
@@ -93,7 +93,7 @@
     {
       "name": "cogni-portfolio",
       "source": "./cogni-portfolio",
-      "version": "0.9.87",
+      "version": "0.9.88",
       "maturity": "preview",
       "description": "Portfolio messaging and proposition planning for SMEs using the IS/DOES/MEANS (FAB) framework — market-specific value propositions with competitive analysis, customer profiling, and export-ready deliverables across eight pluggable industry taxonomies and first-class market coverage spanning DACH/EU, UK/US, LATAM (MX/BR), and China (CN).",
       "keywords": [
@@ -110,7 +110,7 @@
     {
       "name": "cogni-marketing",
       "source": "./cogni-marketing",
-      "version": "0.0.9",
+      "version": "0.0.10",
       "maturity": "incubating",
       "description": "B2B marketing content engine bridging cogni-trends strategic themes (GTM paths) and cogni-portfolio propositions into channel-ready content. Supports thought leadership, demand generation, lead generation, sales enablement, and ABM across markets with configurable brand voice. Bilingual DE/EN.",
       "keywords": [
@@ -130,7 +130,7 @@
     {
       "name": "cogni-sales",
       "source": "./cogni-sales",
-      "version": "0.4.7",
+      "version": "0.4.8",
       "maturity": "preview",
       "description": "B2B sales pitch generation using Corporate Visions Why Change methodology. Creates sales presentations and proposals for named customers (deal-specific) or market segments (reusable). Builds on cogni-portfolio data with optional TIPS strategic enrichment. Multilingual EN / DE / PT-BR.",
       "keywords": [

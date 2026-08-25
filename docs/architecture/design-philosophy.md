@@ -34,7 +34,7 @@ Each side stores a path to the other. The bridge skill resolves the reference at
 
 ## Progressive Disclosure
 
-Skills and agents load reference material only at the step that needs it. This pattern appears in cogni-visual, cogni-portfolio, cogni-knowledge, and cogni-consult consistently.
+Skills and agents load reference material only at the step that needs it. This pattern appears in cogni-workspace, cogni-portfolio, cogni-knowledge, and cogni-consult consistently.
 
 The motivation is context window management. A research report skill that loaded every reference file at startup would fill its context before the user's first sub-question was answered. Instead, each phase of the pipeline loads only what that phase requires:
 
@@ -43,7 +43,7 @@ The motivation is context window management. A research report skill that loaded
 - Phase 3: load the writer's style reference only when writing begins
 - Phase 4: load the reviewer's checklist only when reviewing begins
 
-cogni-visual's CLAUDE.md describes this directly: "Reference files are read only at the step that needs them, not all at once."
+The rule is simple: reference files are read only at the step that needs them, not all at once.
 
 The same principle applies to entity data. cogni-portfolio's `portfolio.json` is a lightweight manifest that stores entity counts and status flags — the full entity content lives in subdirectories and is read only when a skill actively works on that entity type. Browsing portfolio status costs almost nothing; deep research on a single feature loads only that feature's files.
 
@@ -72,14 +72,14 @@ cogni-workspace's claims engine uses UUID-v4 slugs (`claim-550e8400-...`) rather
 
 ## Brief-Based Rendering
 
-cogni-visual separates content specification from rendering. The pipeline has three stages:
+cogni-workspace's rendering skills separate content specification from rendering. The pipeline has three stages:
 
 ```
-cogni-workspace (narrative → copywriter) → cogni-visual
+cogni-workspace (narrative → copywriter) → cogni-workspace (rendering)
 (compose)         (polish)            (visualize)
 ```
 
-Between the compose/polish phase and the render phase, cogni-visual inserts a brief: a structured Markdown file with YAML frontmatter that describes what to render without describing how to render it.
+Between the compose/polish phase and the render phase, the rendering skills insert a brief: a structured Markdown file with YAML frontmatter that describes what to render without describing how to render it.
 
 A presentation brief lists slides with headlines, body copy, and CTA proposals. It does not specify colors, fonts, layout coordinates, or element types. An infographic brief lists content blocks with block types, headlines, and data points. It does not specify element composition or spatial relationships — those decisions belong to the rendering agents.
 
@@ -89,7 +89,7 @@ This separation has two practical benefits:
 
 2. The rendering agents can evolve independently. When rendering pipelines upgrade, existing briefs remain valid because brief formats make no assumptions about rendering technique.
 
-cogni-visual's CLAUDE.md: "Briefs are YAML frontmatter + Markdown. Frontmatter holds metadata (type, version, theme, arc_type, arc_id, confidence_score). Body holds the content specification."
+The brief contract: briefs are YAML frontmatter + Markdown. Frontmatter holds metadata (type, version, theme, arc_type, arc_id, confidence_score). Body holds the content specification.
 
 
 ---

@@ -35,7 +35,7 @@ A fully featured plugin looks like this:
 └── README.md                    # User-facing introduction
 ```
 
-Not every plugin uses every directory. cogni-marketing and cogni-website have no `scripts/` directory. cogni-visual has a `libraries/` directory (shared reference material loaded by multiple agents) rather than per-skill `references/` subdirectories.
+Not every plugin uses every directory. cogni-marketing and cogni-website have no `scripts/` directory. cogni-workspace has a `libraries/` directory (shared reference material loaded by multiple agents) alongside its per-skill `references/` subdirectories.
 
 ---
 

@@ -116,9 +116,17 @@ If the diagnostic finds issues, each finding comes with a specific fix. Infrastr
 
 ---
 
+### `workspace-dashboard` — The workspace in a browser
+
+Generates a self-contained HTML dashboard of the whole workspace configuration — installed plugins with their versions, resolved environment variables, registered themes, Obsidian integration state, and MCP server status — in one scrollable page. `workspace-status` answers "is anything broken?" on the terminal; this answers "what does my workspace actually look like?" in a form you can scan or hand to someone else.
+
+```
+/workspace-dashboard
+```
+
 ### `manage-themes` — Theme extraction and management
 
-Themes are markdown files that describe a visual identity — colors, typography, and design principles. All visual plugins (cogni-visual, document-skills) read from the same theme directory, so setting a theme here propagates to every plugin output.
+Themes are markdown files that describe a visual identity — colors, typography, and design principles. Every rendering surface — this plugin's own `story-to-*` and `enrich-report` skills, cogni-website, and `document-skills` — reads from the same theme directory, so setting a theme here propagates to every plugin output.
 
 Eight operations are available:
 
@@ -193,6 +201,19 @@ Answers questions about the insight-wave ecosystem — plugins, skills, agents, 
 ```
 
 First lookup before grepping source files — faster and doesn't pull plugin internals into your context.
+
+---
+
+### `cogni-issues` — File and track plugin issues on GitHub
+
+Files bugs, feature requests, change requests and questions against any marketplace plugin through the authenticated GitHub CLI, and lists or inspects the issues already open. It deduplicates before filing — an incoming report is checked against open issues so the same defect does not get filed twice — and routes each issue to the repository that actually owns the named plugin.
+
+```
+/cogni-issues file a bug against cogni-portfolio: portfolio-scan drops the taxonomy
+/cogni-issues list open issues for cogni-trends
+```
+
+Requires an authenticated `gh` CLI. Without it the skill reports the gap rather than failing silently.
 
 ---
 
@@ -307,6 +328,12 @@ The skill *creates* the brief; it does not render PowerPoint. Rendering is a sep
 
 No slash command of its own — ask for a deck from a narrative, or invoke the skill by name.
 
+### `render-html-slides` — Render a presentation brief as HTML slides
+
+The no-PowerPoint rendering path for any `presentation-brief.md` that `story-to-slides` produced. Turns the brief into a **self-contained HTML deck** — one file, themed from the workspace theme, with keyboard navigation, a speaker-notes toggle, and Mermaid diagram support. After the first render it opens an interactive refinement loop: a text-only correction is edited straight into the HTML, while a structural change re-renders just the affected slide instead of the whole deck.
+
+Reach for this instead of the PPTX path when the deck will be presented from a browser, shared as a single file, or iterated on quickly. The `html-slides` agent wraps the same skill for autonomous callers.
+
 ### `story-to-web` — Turn a narrative into a scrollable web brief
 
 Absorbed from the retired cogni-visual plugin. Decomposes a narrative into a scroll-driven section architecture and writes `web-brief.md`, by default to `{source_dir}/cogni-visual/web-brief.md`: a selected visual style guide, one message per section, assertion headlines, scroll-optimized copy, image prompts, and a CTA proposal (`conversion_goal` defaults to `consultation`, `max_sections` to 10). Sections alternate light and dark so each message lands before the next begins.
@@ -323,6 +350,16 @@ Absorbed from the retired cogni-visual plugin. Extracts the three to five most i
 - **Editorial** — the `economist`, `editorial`, `data-viz` and `corporate` presets, rendered through `/render-infographic-editorial` into a `.pen` file.
 
 `/render-infographic` is the universal entry point: it reads the brief's `style_preset` and routes to the right family. Unlike the two skills above, this one renders by default — after writing the brief it auto-dispatches `/render-infographic` (pass `render: false` to produce the brief only). One constraint to respect: both hand-drawn render agents share a single Excalidraw MCP canvas, so hand-drawn renders must be serialized and never dispatched in parallel. Pencil-rendered editorial briefs are file-backed and can run alongside one Excalidraw render safely.
+
+### `review-brief` — Stakeholder review of a visual brief before rendering
+
+Reviews any brief the `story-to-*` skills produce — presentation, web, storyboard, or infographic — from three stakeholder perspectives: design quality, audience experience, and usability. Returns a structured verdict (accept / revise / reject) with prioritized improvements.
+
+The point is where it sits in the pipeline: rendering is the expensive step, so catching a weak brief here costs one review instead of a full render-and-redo. Run it after a brief is generated, or after you have hand-edited one, before handing it to the PPTX, Excalidraw, or Pencil pipeline.
+
+```
+/review-brief
+```
 
 ### `enrich-report` — Turn a finished report into a visual deliverable
 
@@ -345,7 +382,7 @@ cogni-workspace has no required plugin dependencies. Its scope is horizontal: th
 | Plugin / skill | What it reads from the workspace |
 |---------------|----------------------------------|
 | All cogni-x plugins | `.workspace-env.sh` — sourced at session start via the hook |
-| cogni-visual | Themes via `pick-theme` |
+| cogni-website | Themes via `pick-theme`; `design-variables.json` derived from the picked theme |
 | document-skills | Themes via `pick-theme`; output style templates |
 | cogni-consult | `discover-plugins.sh` results — to know which plugins are available for dispatch |
 

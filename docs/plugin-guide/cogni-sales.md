@@ -26,7 +26,7 @@ For each phase, a dedicated researcher agent (running on Claude Opus) conducts w
 - **cogni-portfolio** (required) — provides products, features, propositions, solutions, markets, competitors, and customer profiles
 - **the `narrative` skill** (required) — provides the Corporate Visions story arc definition that the researcher agent reads and follows
 - Web access enabled — the researcher agent conducts live web research for each phase
-- Optional: cogni-trends (TIPS strategic theme enrichment), cogni-workspace (source verification), the `copywriter` skill (executive polish), cogni-visual (PPTX generation)
+- Optional: cogni-trends (TIPS strategic theme enrichment), cogni-workspace (source verification via `claims`, executive polish via the `copywriter` skill, PPTX and slide rendering via `story-to-slides` / `render-html-slides`)
 
 ---
 
@@ -188,7 +188,7 @@ Aliases: `/pitch`, `/sales-pitch`, `/segment-pitch` all invoke the same skill.
 | Plugin | How it uses cogni-sales output |
 |--------|-------------------------------|
 | the `copywriter` skill | Polishes `sales-presentation.md` and `sales-proposal.md` for executive voice before distribution |
-| cogni-visual | Renders `sales-presentation.md` into a PPTX slide deck or HTML presentation |
+| cogni-workspace | Renders `sales-presentation.md` into a PPTX slide deck (`pptx`) or an HTML presentation (`render-html-slides`), via `story-to-slides` |
 | cogni-marketing | ABM content for named accounts often reuses Why Change and Why Now evidence from a customer-mode pitch |
 
 ---
@@ -203,7 +203,7 @@ For a new opportunity with a named account:
 2. Review and steer each phase as it completes (four review points)
 3. After synthesis: review `output/sales-presentation.md` and `output/sales-proposal.md`
 4. Optional: `/copywrite output/sales-presentation.md` (the `copywriter` skill) for executive polish
-5. Optional: use cogni-visual to render into a PPTX
+5. Optional: `/cogni-workspace:story-to-slides output/sales-presentation.md`, then render to PPTX
 
 ### Building a reusable segment pitch
 
@@ -222,7 +222,7 @@ When a session ends before synthesis is complete:
 2. Confirm the resume summary: "Phases 1 and 2 complete. Resuming from Why You."
 3. The remaining phases run as normal
 
-See [../workflows/portfolio-to-pitch.md](../workflows/portfolio-to-pitch.md) for the full portfolio-to-pitch-to-deck pipeline including cogni-visual rendering.
+See [../workflows/portfolio-to-pitch.md](../workflows/portfolio-to-pitch.md) for the full portfolio-to-pitch-to-deck pipeline including cogni-workspace rendering.
 
 ---
 

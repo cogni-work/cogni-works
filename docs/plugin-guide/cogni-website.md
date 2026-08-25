@@ -26,7 +26,7 @@ Set up cogni-portfolio before starting. The richer your portfolio — especially
 
 ## Getting Started
 
-The typical workflow runs four skills in sequence:
+The typical workflow runs five skills in sequence:
 
 ### Step 1 — Set up the project
 
@@ -44,7 +44,15 @@ The skill scans the workspace for all available content sources, validates that 
 
 The skill reads your actual content files (not just entity counts) to understand what pages are warranted. It proposes a full page list — home, about, products, solutions, blog, case studies, insights, resources, contact — with content-to-section mappings and a navigation structure. You confirm or adjust before any HTML is generated.
 
-### Step 3 — Build all pages
+### Step 3 — Generate the legal pages
+
+```
+/website-legal
+```
+
+The skill captures the legal entity, responsible person, register entry, VAT ID, and data-protection contact, then renders the pages your jurisdiction requires — Impressum, Datenschutzerklärung and Cookie-Hinweis for DE, AT or CH, or the Legal Notice / Privacy Policy / Cookies set for the EU — from reviewable boilerplate templates, and wires them into the footer legal column. Run it before the build so the footer links resolve on every generated page. The output is boilerplate for review, not legal advice.
+
+### Step 4 — Build all pages
 
 ```
 /website-build
@@ -52,7 +60,7 @@ The skill reads your actual content files (not just entity counts) to understand
 
 Build runs in three stages: first the site-assembler generates shared CSS and navigation partials; then (optionally) the hero-renderer creates an AI-illustrated homepage hero using Pencil MCP; then page-generator agents run in parallel — one per page — each reading source content, applying the correct HTML template, and writing the output file.
 
-### Step 4 — Preview
+### Step 5 — Preview
 
 ```
 /website-preview
@@ -87,6 +95,7 @@ If a session ends partway through, resume detects the current phase from existin
 |-------|-------------|
 | `website-setup` | Discover content sources, validate requirements, select theme, write `website-project.json` |
 | `website-plan` | Deep-scan content, propose page structure and navigation, write `website-plan.json` |
+| `website-legal` | Generate jurisdiction-specific legal pages (DE/AT/CH/EU) and wire them into the footer |
 | `website-build` | Orchestrate CSS generation, hero rendering, and parallel page generation |
 | `website-preview` | Validate file completeness and internal links; open site in browser |
 | `website-resume` | Detect current phase, check for source changes, route to the correct next skill |

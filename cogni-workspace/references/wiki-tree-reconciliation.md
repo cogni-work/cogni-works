@@ -493,13 +493,20 @@ table, this file becomes generated output and the guard question reopens on the 
 
 ## Observed, out of scope here
 
-Two current-state documents still assert an `11-plugin` roster: `cogni-workspace/wiki/wiki/pages/
-ecosystem-overview.md:13` and `wiki/wiki/index.md:9`. Neither is corrected here, and for different
-reasons. `ecosystem-overview` sits in the two-tree intersection, so a one-sided edit would break the
-byte-identity Decision 3 records across the shared pages. `wiki/index.md` is a tree-level page whose
-root twin lies outside this record's editable surface. Both belong to the repo-wide roster-count
-class already tracked against the root `CLAUDE.md`, not to the bundled-only sweep, so they are named
-here rather than re-filed.
+Four current-state documents asserted an `11-plugin` roster, not the two this section first named.
+The original pair cited one copy of each page and not its twin — the bundled
+`ecosystem-overview.md:13` and the root `index.md:9` — leaving the root `ecosystem-overview` copy
+and the bundled `index.md` copy unrecorded. None of the four was corrected by this record's own
+sweep, for the reasons given at the time: `ecosystem-overview` sits in the two-tree intersection,
+so a one-sided edit would break the byte-identity Decision 3 records across the shared pages, and
+`index.md` is a tree-level page whose root twin lay outside this record's editable surface.
+
+The class is now closed. All four sites were re-derived to `8-plugin` against
+`.claude-plugin/marketplace.json` in one change that edits both trees symmetrically, so the
+`ecosystem-overview` pair stays byte-identical and the substantive residual stays at the 11 lines
+Decision 2 records. The two `index.md` copies are edited on both sides and still differ from each
+other, so Decision 3's group-C divergence is preserved. The statement in the next section that no
+tree-level file is edited describes this record's own sweep, not every later change.
 
 ## Deliberately left standing
 

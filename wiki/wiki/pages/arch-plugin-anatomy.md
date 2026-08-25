@@ -29,7 +29,7 @@ How insight-wave plugins are structured on disk. Every plugin follows the same s
 └── README.md                     User-facing introduction
 ```
 
-Not every plugin uses every directory. cogni-marketing has no `scripts/`, only four plugins ship `hooks/`, cogni-workspace has `libraries/` alongside per-skill `references/`.
+Not every plugin uses every directory. cogni-marketing has no `scripts/`, only cogni-consult, cogni-portfolio and cogni-workspace ship `hooks/`, cogni-workspace has `libraries/` alongside per-skill `references/`.
 
 ## The four file kinds
 

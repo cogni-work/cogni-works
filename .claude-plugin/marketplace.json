@@ -93,7 +93,7 @@
     {
       "name": "cogni-portfolio",
       "source": "./cogni-portfolio",
-      "version": "0.9.88",
+      "version": "0.9.89",
       "maturity": "preview",
       "description": "Portfolio messaging and proposition planning for SMEs using the IS/DOES/MEANS (FAB) framework — market-specific value propositions with competitive analysis, customer profiling, and export-ready deliverables across eight pluggable industry taxonomies and first-class market coverage spanning DACH/EU, UK/US, LATAM (MX/BR), and China (CN).",
       "keywords": [
@@ -130,7 +130,7 @@
     {
       "name": "cogni-sales",
       "source": "./cogni-sales",
-      "version": "0.4.8",
+      "version": "0.4.9",
       "maturity": "preview",
       "description": "B2B sales pitch generation using Corporate Visions Why Change methodology. Creates sales presentations and proposals for named customers (deal-specific) or market segments (reusable). Builds on cogni-portfolio data with optional TIPS strategic enrichment. Multilingual EN / DE / PT-BR.",
       "keywords": [

@@ -233,11 +233,21 @@ scan_bodies="$({
   [ -f "$PLUGIN_DIR/CLAUDE.md" ] && printf '%s\n' "$PLUGIN_DIR/CLAUDE.md"
 } 2>/dev/null | sort)"
 
-# A newly covered surface that has silently vanished must not read as success:
-# the scan would narrow back toward the pre-widening subject and still print
-# PASS. Each arm below names the missing surface. They stay in ONE if/elif chain
-# so the case still emits exactly one result line per run.
+# A surface that has silently vanished must not read as success: the scan would
+# narrow back toward a smaller subject and still print PASS. Each arm below names
+# the missing surface. They stay in ONE if/elif chain so the case still emits
+# exactly one result line per run.
+#
+# The skills/ arm covers the ORIGINAL subject and is not optional bookkeeping.
+# Before the widening, an absent skills/ tree was caught by a dedicated
+# `-z "$skill_bodies"` test; once the subject grew, a bare emptiness test on the
+# whole set only fires when EVERY surface is empty, so an absent skills/ tree
+# would be absorbed by the other three and pass silently. It is tested against
+# the assembled subject rather than with another find, so it cannot drift from
+# what is actually scanned.
 missing_surface=""
+printf '%s\n' "$scan_bodies" | grep -q '/skills/.*/SKILL\.md$' \
+  || missing_surface="$missing_surface skills/**/SKILL.md"
 [ -f "$PLUGIN_DIR/README.md" ] || missing_surface="$missing_surface README.md"
 [ -f "$PLUGIN_DIR/CLAUDE.md" ] || missing_surface="$missing_surface CLAUDE.md"
 [ -d "$PLUGIN_DIR/references" ] || missing_surface="$missing_surface references/"
@@ -245,7 +255,7 @@ missing_surface=""
 if [ -z "$retired_prefixes" ]; then
   fail "no-retired-plugin-name" "no usable retired_prefixes[] readable from $RETIRED (vacuous scan)"
 elif [ -n "$missing_surface" ]; then
-  fail "no-retired-plugin-name" "scanned surface(s) absent under $PLUGIN_DIR:$missing_surface (vacuous scan of a newly covered surface)"
+  fail "no-retired-plugin-name" "scanned surface(s) absent under $PLUGIN_DIR:$missing_surface (vacuous scan — the subject would silently narrow)"
 elif [ -z "$scan_bodies" ]; then
   fail "no-retired-plugin-name" "no scannable body found under $PLUGIN_DIR ($scan_desc) (vacuous scan)"
 else

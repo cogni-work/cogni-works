@@ -10,15 +10,17 @@
 # colon: `PASS: goes-red: ...` would match neither pattern, and a recipe
 # recorded against this suite would return case_not_found instead of a verdict.
 #
-# Which mutation reddens which case. The recorded recipe in the pull request
-# drives the second one; the retired name it substitutes is deliberately not
+# Which mutation reddens which case. Two recipes are recorded in the pull
+# request — one drives the second case, one drives the fifth against the
+# plugin-root README.md; the retired names they substitute are deliberately not
 # spelled here, so this file introduces no new mention of a retired plugin.
 #   route-examples-found         deleting both `Route:` example lines
 #   route-example-slug-resolves  rewriting the route token to any prefix listed
 #                                in scripts/retired-plugins.json (the recorded recipe)
 #   route-example-non-default    rewriting the route token to consult-design-thinking
 #   route-example-parity         changing the route token at one site only
-#   no-retired-plugin-name       planting any retired prefix in a skill body
+#   no-retired-plugin-name       planting any retired prefix in any scanned body
+#                                (the recorded README recipe)
 #
 # RELATIONSHIP TO scripts/check-external-dispatch.py. That repo-level guard reads
 # the SAME registry and already scans this subject file, so this suite is not a
@@ -30,6 +32,19 @@
 # as a route" and "retired plugin name used as a directory" only exists near the
 # site, which is why this half of the property is guarded per-plugin here rather
 # than repo-wide there.
+#
+# DIRECTORY-VS-DISPATCH CARVE-OUT. Case 5 keeps the BARE-NAME match; the colon
+# anchor above cannot be reused here. The README row this case exists to catch
+# named a retired plugin in a Dependencies table with no colon at all, so a
+# colon-anchored match would be permanently green against exactly the content
+# the case guards — vacuous, and unfalsifiable by the recorded recipe. What is
+# excluded instead is an occurrence immediately followed by `/`: that is what a
+# filesystem path looks like, and a directory that happens to be named after a
+# retired plugin is not a route. The carve-out is load-bearing rather than
+# decorative — two sites in the scanned subject exercise it, the
+# `<prefix>/claims.json` path mentions in CLAUDE.md and in
+# references/publish-routing.md — so the case is green with it and red without
+# it, which is what the second recorded recipe falsifies.
 #
 # THE PREFIX FILTER MIRRORS THAT GUARD'S load_registry CONTRACT deliberately.
 # A colon-bearing entry would pass a bare truthiness filter and then be handed to
@@ -57,7 +72,24 @@
 #
 # SCOPE OF EACH CASE. Cases 1-4 pin the `Route:` note, which is defined in one
 # file, so they key on that file. Case 5's predicate is plugin-wide — a retired
-# name is wrong in any skill body — so it scans every skill in the plugin.
+# name is wrong in any authored prose the plugin ships — so it scans an
+# ENUMERATED subject: every `skills/**/SKILL.md`, the plugin-root `README.md`
+# and `CLAUDE.md`, and every `references/**/*.md`.
+#
+# What that subject leaves out, and why it is enumerated rather than globbed.
+# `scripts/` and `tests/` are excluded because no lexical carve-out clears them
+# on a CORRECT tree: one retired prefix is also a live workspace directory name,
+# and after the trailing-slash carve-out 11 legitimate occurrences across three
+# files still match — 8 of the form `mkdir -p "$VAR/<prefix>"`, where the path
+# separator precedes the name and the line ends right after it; 2 that assemble
+# the path across string-literal boundaries via `os.path.join`, so no separator
+# sits adjacent in the source at all; and 1 bare mention in a comment. Including
+# those trees would make the case permanently red against a correct tree, which
+# is the failure this enumeration exists to avoid. `agents/` and
+# `output-styles/` are authored prose too and are simply not covered yet.
+# A whole-tree glob over `$PLUGIN_DIR` is also deliberately avoided: engagement
+# directories live under `$PLUGIN_DIR/{slug}/`, so a glob would scan a user's
+# own engagement content as if it were plugin source.
 #
 # Each case below is gated only on its OWN predicate and emits exactly one
 # result line per run, so every `FAIL` arm has a reachable same-id green twin
@@ -166,7 +198,8 @@ else
 fi
 
 # --- case 5: no-retired-plugin-name ------------------------------------------
-# No retired plugin prefix may appear in any skill body in this plugin, in a
+# No retired plugin prefix may appear in any scanned body in this plugin — skill
+# bodies, the plugin-root README.md and CLAUDE.md, and references/**/*.md — in a
 # Route: note or in prose. An unreadable, empty, or malformed registry fails
 # rather than passing silently.
 retired_prefixes="$(python3 -c '
@@ -187,22 +220,47 @@ for prefix in prefixes:
     print(prefix)
 ' "$RETIRED" 2>/dev/null || true)"
 
-skill_bodies="$(find "$PLUGIN_DIR/skills" -name SKILL.md -type f 2>/dev/null | sort)"
+# Every path derives from $PLUGIN_DIR, never a hardcoded one, so --root (above)
+# still redirects the whole subject. Keep this list and $scan_desc below in step.
+# The suite runs under `set -u` only — there is no `set -e` and no pipefail — so
+# a find over a missing directory is inert here; do not add `set -e` without
+# revisiting this.
+scan_desc='skills/**/SKILL.md, README.md, CLAUDE.md, references/**/*.md'
+scan_bodies="$({
+  find "$PLUGIN_DIR/skills" -name SKILL.md -type f
+  find "$PLUGIN_DIR/references" -name '*.md' -type f
+  [ -f "$PLUGIN_DIR/README.md" ] && printf '%s\n' "$PLUGIN_DIR/README.md"
+  [ -f "$PLUGIN_DIR/CLAUDE.md" ] && printf '%s\n' "$PLUGIN_DIR/CLAUDE.md"
+} 2>/dev/null | sort)"
+
+# A newly covered surface that has silently vanished must not read as success:
+# the scan would narrow back toward the pre-widening subject and still print
+# PASS. Each arm below names the missing surface. They stay in ONE if/elif chain
+# so the case still emits exactly one result line per run.
+missing_surface=""
+[ -f "$PLUGIN_DIR/README.md" ] || missing_surface="$missing_surface README.md"
+[ -f "$PLUGIN_DIR/CLAUDE.md" ] || missing_surface="$missing_surface CLAUDE.md"
+[ -d "$PLUGIN_DIR/references" ] || missing_surface="$missing_surface references/"
 
 if [ -z "$retired_prefixes" ]; then
   fail "no-retired-plugin-name" "no usable retired_prefixes[] readable from $RETIRED (vacuous scan)"
-elif [ -z "$skill_bodies" ]; then
-  fail "no-retired-plugin-name" "no SKILL.md found under $PLUGIN_DIR/skills (vacuous scan)"
+elif [ -n "$missing_surface" ]; then
+  fail "no-retired-plugin-name" "scanned surface(s) absent under $PLUGIN_DIR:$missing_surface (vacuous scan of a newly covered surface)"
+elif [ -z "$scan_bodies" ]; then
+  fail "no-retired-plugin-name" "no scannable body found under $PLUGIN_DIR ($scan_desc) (vacuous scan)"
 else
   present=""
   for prefix in $retired_prefixes; do
-    hits="$(printf '%s\n' "$skill_bodies" | while IFS= read -r body; do
-      grep -l -- "$prefix" "$body" 2>/dev/null || true
-    done)"
+    # Bare-name match minus the directory-path carve-out: an occurrence
+    # immediately followed by `/` is a filesystem path, not a route. See
+    # DIRECTORY-VS-DISPATCH CARVE-OUT in the header for why the colon anchor
+    # scripts/check-external-dispatch.py uses cannot be reused here.
+    hits="$(printf '%s\n' "$scan_bodies" | tr '\n' '\0' \
+      | xargs -0 grep -lE -- "$prefix"'([^/]|$)' 2>/dev/null || true)"
     [ -n "$hits" ] && present="$present $prefix"
   done
   if [ -n "$present" ]; then
-    fail "no-retired-plugin-name" "retired plugin prefix(es) present in a $PLUGIN_DIR skill body:$present"
+    fail "no-retired-plugin-name" "retired plugin prefix(es) present in a $PLUGIN_DIR scanned body ($scan_desc):$present"
   else
     pass "no-retired-plugin-name"
   fi

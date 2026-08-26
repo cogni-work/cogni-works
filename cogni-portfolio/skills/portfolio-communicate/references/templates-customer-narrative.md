@@ -79,7 +79,7 @@ source_entities:
 ---
 ```
 
-**Why `arc_id` in frontmatter matters.** `cogni-visual`'s `story-to-web` auto-detects the arc from frontmatter and applies arc-specific section labels and section-type heuristics without further user input. Pages without `arc_id` would force story-to-web to fall back to `corporate-visions` defaults, which is wrong for every scope in this use case except `capability`. Always populate it.
+**Why `arc_id` in frontmatter matters.** `cogni-workspace`'s `story-to-web` auto-detects the arc from frontmatter and applies arc-specific section labels and section-type heuristics without further user input. Pages without `arc_id` would force story-to-web to fall back to `corporate-visions` defaults, which is wrong for every scope in this use case except `capability`. Always populate it.
 
 ---
 

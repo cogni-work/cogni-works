@@ -6,7 +6,7 @@ Output templates for the `pitch` use case. Transforms portfolio entities into ar
 **Audience**: Executives, decision-makers, conference audiences, board members
 **Voice**: Company presents to audience. Persuasive, evidence-backed, arc-driven. Not documentation — a presentation narrative designed to be spoken, not read at a desk.
 
-**What makes this different from customer-narrative**: Customer narratives are documentation — structured for self-paced reading. Pitch narratives are arc-driven stories — structured for presentation delivery with a governing thought, rhetorical progression, and a call to action. The key technical difference: pitch output includes `arc_id` in frontmatter, making it directly consumable by the cogni-visual pipeline without an intermediate `/narrative` transformation.
+**What makes this different from customer-narrative**: Customer narratives are documentation — structured for self-paced reading. Pitch narratives are arc-driven stories — structured for presentation delivery with a governing thought, rhetorical progression, and a call to action. The key technical difference: pitch output includes `arc_id` in frontmatter, making it directly consumable by the cogni-workspace pipeline without an intermediate `/narrative` transformation.
 
 **What makes this different from why-change (cogni-sales)**: Why-change does extensive web research per customer or segment and produces deal-specific sales pitches. Pitch narratives use only existing portfolio data — no web research, no deal context. They are reusable presentation foundations that can be refined later with why-change's research depth.
 

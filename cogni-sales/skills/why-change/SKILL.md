@@ -416,7 +416,7 @@ Claims registered: {N} — run `/claims verify` to validate sources.
 
 Optional next steps:
   - `/copywrite sales-presentation.md` — polish with the `copywriter` skill
-  - `/pptx create sales-presentation.md` — generate slide deck via cogni-visual
+  - `/render-html-slides presentation-brief.md` — generate the slide deck from a brief built with the `story-to-slides` skill
 ```
 
 **Segment mode:**
@@ -436,7 +436,7 @@ To create a customer-specific pitch based on this template, run `/why-change` in
 
 Optional next steps:
   - `/copywrite sales-presentation.md` — polish with the `copywriter` skill
-  - `/pptx create sales-presentation.md` — generate slide deck via cogni-visual
+  - `/render-html-slides presentation-brief.md` — generate the slide deck from a brief built with the `story-to-slides` skill
 ```
 
 ---

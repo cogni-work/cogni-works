@@ -289,7 +289,7 @@ Use this when you have a completed trend report and need to transform it into vi
 
 1. `/trend-synthesis` — compose the trend report from research evidence and claims
 2. the `narrative` skill `/narrative` — transform the report into an arc-driven narrative
-3. cogni-workspace `/story-to-slides` — create a slide deck from the narrative
+3. cogni-workspace `story-to-slides` — create a slide deck from the narrative
 4. cogni-workspace `/claims` — verify the claims registry
 
 ---

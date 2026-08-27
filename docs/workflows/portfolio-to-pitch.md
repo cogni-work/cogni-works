@@ -2,7 +2,7 @@
 
 **Pipeline**: cogni-portfolio (end-to-end) — setup → foundation → commercial layer → messaging → pitch
 **Duration**: 2–5 hours for a first pitch; longer if the foundation work is new
-**End deliverable**: `output/communicate/pitch/{market-slug}.md` — an arc-structured presentation narrative produced by `/portfolio-communicate`, ready to render with `/story-to-slides` or `/story-to-web`
+**End deliverable**: `output/communicate/pitch/{market-slug}.md` — an arc-structured presentation narrative produced by `/portfolio-communicate`, ready to render with `story-to-slides` or `story-to-web`
 
 ```mermaid
 graph LR
@@ -26,7 +26,7 @@ Along the way you produce:
 - **Foundation** — products, features, (optionally) a lean-canvas import, (optionally) a discovered inventory from `/portfolio-ingest` and `/portfolio-scan`
 - **Commercial layer** — markets with TAM/SAM/SOM, ICPs and buyer personas per market
 - **Messaging** — IS/DOES/MEANS propositions per Feature × Market, sharpened with competitor battle cards and (optionally) solution blueprints with pricing tiers
-- **Pitch** — `output/communicate/pitch/{market-slug}.md` (arc-structured, `arc_id` in frontmatter). Optionally render visually with `/story-to-slides`, `/story-to-web`, or `/story-to-storyboard`
+- **Pitch** — `output/communicate/pitch/{market-slug}.md` (arc-structured, `arc_id` in frontmatter). Optionally render visually with `story-to-slides`, `story-to-web`, or `story-to-storyboard`
 - **Optional visuals** — `/portfolio-dashboard` (interactive HTML) and `/portfolio-architecture` (Excalidraw product-feature map)
 
 ## Prerequisites
@@ -209,7 +209,7 @@ Render the mid-market SaaS pitch as a slide deck
 Create a scrollable web version of the DACH manufacturing pitch
 ```
 
-These dispatch to `/story-to-slides` or `/story-to-web` inside cogni-workspace, inheriting your workspace theme.
+These dispatch to `story-to-slides` or `story-to-web` inside cogni-workspace, inheriting your workspace theme.
 
 ### Optional — stakeholder visuals (shared)
 

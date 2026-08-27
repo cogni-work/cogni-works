@@ -168,12 +168,12 @@ This runs 5 parallel stakeholder personas (executive, technical, legal, marketin
 
 Distill the polished report into a single-page visual summary using cogni-workspace's story-to-infographic skill. This extracts the 3–5 most impactful data points and produces an infographic brief that auto-renders into a visual.
 
-**Command**: `/story-to-infographic` or describe what you want
+**Command**: `story-to-infographic` or describe what you want
 
 **Example prompts:**
 
 ```
-/story-to-infographic
+Create an infographic from my research report
 ```
 
 ```

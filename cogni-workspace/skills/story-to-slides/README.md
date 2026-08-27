@@ -31,25 +31,15 @@ Transform any narrative with a story arc into an optimized YAML-based presentati
 
 ### Basic Usage
 
-```bash
-# Single narrative file with default theme (smarter-service)
-/story-to-slides source_path=/path/to/narrative.md language=en
+Dispatch `story-to-slides` with `source_path` (and optionally `theme`, `language`, `arc_type`):
 
-# Project directory (reads all .md files)
-/story-to-slides source_path=/path/to/proposal/ theme=smarter-service language=en
+- Single narrative file, default theme (smarter-service): `source_path=/path/to/narrative.md language=en`
+- Project directory (reads all `.md` files): `source_path=/path/to/proposal/ theme=smarter-service language=en`
+- With a specific theme (created via `pick-theme`): `source_path=/path/to/proposal/ theme=cogni-work language=en`
+- Custom client theme: `source_path=/path/to/proposal/ theme=acme-corp language=de`
+- Why Change project (auto-detected or explicit): `source_path=/path/to/proposals/customer-slug/ arc_type=why-change`
 
-# With a specific theme (created via /grab-theme)
-/story-to-slides source_path=/path/to/proposal/ theme=cogni-work language=en
-
-# Custom client theme
-/story-to-slides source_path=/path/to/proposal/ theme=acme-corp language=de
-
-# Why Change project (auto-detected or explicit)
-/story-to-slides source_path=/path/to/proposals/customer-slug/ arc_type=why-change
-
-# From why-change-work Phase 5 synthesis (automatic invocation)
-/why-change-work  # Automatically invokes story-to-slides in Phase 5
-```
+`why-change-work` Phase 5 synthesis invokes `story-to-slides` automatically.
 
 ### Parameters
 

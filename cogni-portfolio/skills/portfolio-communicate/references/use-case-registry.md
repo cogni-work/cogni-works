@@ -21,7 +21,7 @@ Available communication use cases for portfolio content. Each use case defines a
 
 **Scopes:**
 
-Each scope produces a main component of a portfolio-driven website, driven by a specific story arc from `the `narrative` skill`. Each output file includes `arc_id` in frontmatter so it is directly consumable by `/story-to-web` without an intermediate `/narrative` pass.
+Each scope produces a main component of a portfolio-driven website, driven by a specific story arc from the `narrative` skill. Each output file includes `arc_id` in frontmatter so it is directly consumable by `story-to-web` without an intermediate `/narrative` pass.
 
 | Scope | Output file | Component | Arc |
 |-------|------------|-----------|-----|
@@ -93,7 +93,7 @@ Each scope produces a main component of a portfolio-driven website, driven by a 
 
 **Key differentiator**: Pitch output includes `arc_id` in frontmatter — this makes it directly consumable by story-to-slides, story-to-web, and story-to-storyboard without an intermediate `/narrative` step. Default arc: `jtbd-portfolio`.
 
-**Downstream pipeline:** `/narrative-review` → `/copywrite` → `/story-to-slides`, `/story-to-web`, `/story-to-storyboard`
+**Downstream pipeline:** `/narrative-review` → `/copywrite` → `story-to-slides`, `story-to-web`, `story-to-storyboard`
 
 ---
 
@@ -214,7 +214,7 @@ Users can define reusable custom use cases by saving them to `communicate-use-ca
         ]
       },
       "output_path": "output/communicate/investor/",
-      "downstream": "Polish with /copywrite, then /story-to-slides for pitch deck"
+      "downstream": "Polish with /copywrite, then story-to-slides for pitch deck"
     }
   ]
 }

@@ -72,7 +72,7 @@ If the request is ambiguous, present options:
 
 > "What do you want to use the portfolio content for?"
 > - **Pitch narrative** — arc-structured presentation narrative, ready for story-to-slides (company presents to audience)
-> - **Customer narratives (portfolio-driven website)** — Home, About, Capability, Persona, How-We-Work pages, each arc-structured and ready for `/story-to-web` (company speaks to buyer via web)
+> - **Customer narratives (portfolio-driven website)** — Home, About, Capability, Persona, How-We-Work pages, each arc-structured and ready for `story-to-web` (company speaks to buyer via web)
 > - **Proposals** — per-proposition sales proposals for specific Feature × Market pairs
 > - **Marketing briefs** — market content packages with sizing, buyer profile, messaging themes
 > - **Portfolio workbook** — XLSX spreadsheet with all portfolio data for analysis
@@ -362,8 +362,8 @@ For **customer-narrative**:
 - **Score quality**: "Run `/narrative-review` on any generated file to score against its arc's quality gates (each file already carries `arc_id` in frontmatter)"
 - **Polish prose**: "Run `/copywrite` on any generated file to polish for executive readability while preserving arc structure"
 - **Visual formats** (direct — no intermediate `/narrative` step needed, because each file already carries `arc_id`):
-  - `/story-to-web` → scrollable web page (one per file, or an indexed multi-page site)
-  - `/story-to-slides` → PowerPoint version of any page
+  - `story-to-web` → scrollable web page (one per file, or an indexed multi-page site)
+  - `story-to-slides` → PowerPoint version of any page
   - `/enrich-report` → themed HTML with concept diagrams (value flows, relationship maps) and interactive charts
 - **Marketing content** (if cogni-marketing installed): "These customer narratives are automatically discovered by `/marketing-setup` and used as voice/messaging enrichment when generating marketing content — ensuring consistency between how the website speaks to buyers and how your marketing speaks to the same audience"
 
@@ -371,9 +371,9 @@ For **pitch**:
 - **Score quality**: "Run `/narrative-review` to score against the arc's quality gates"
 - **Polish prose**: "Run `/copywrite` to polish for executive readability while preserving arc structure"
 - **Visual formats** (direct — no intermediate step needed):
-  - `/story-to-slides` → PowerPoint presentation
-  - `/story-to-web` → scrollable landing page
-  - `/story-to-storyboard` → multi-poster print storyboard
+  - `story-to-slides` → PowerPoint presentation
+  - `story-to-web` → scrollable landing page
+  - `story-to-storyboard` → multi-poster print storyboard
   - `/enrich-report` → themed HTML with concept diagrams and data charts
 - **Deepen**: "Run `/why-change` to add web research, customer-specific context, and TIPS enrichment for a deal-ready version"
 

@@ -89,7 +89,7 @@ $WS_ROOT/skills/claim-entity|cogni-claims:
 $WS_ROOT/agents/claim-verifier.md|cogni-claims:
 $WS_ROOT/agents/source-inspector.md|cogni-claims:
 $WS_ROOT/skills/narrative|cogni-narrative:
-$WS_ROOT/skills/narrative-adapt|cogni-narrative:
+$WS_ROOT/commands/narrative-adapt.md|cogni-narrative:
 $WS_ROOT/skills/narrative-review|cogni-narrative:
 $WS_ROOT/agents/narrative-writer.md|cogni-narrative:
 $WS_ROOT/agents/narrative-reviewer.md|cogni-narrative:

@@ -190,15 +190,9 @@ Backs up the config before any write; rolls back in one command if an install br
 
 ---
 
-### `ask` — Query the bundled insight-wave wiki
+### The bundled insight-wave wiki
 
-Answers questions about the insight-wave ecosystem — plugins, skills, agents, architecture, cross-cutting conventions — by reading the vendor-curated wiki bundled at `${CLAUDE_PLUGIN_ROOT}/wiki/`, not from model memory. Reads that bundled wiki directly so answers are grounded and cited with `[[wikilinks]]`; if the wiki has no page on the topic, the skill says so rather than guessing.
-
-```
-/ask how does claims propagation work across plugins?
-/ask which plugin generates IS/DOES/MEANS messaging?
-/ask what's the difference between the `narrative` skill and the `copywriter` skill?
-```
+A vendor-curated wiki ships bundled at `${CLAUDE_PLUGIN_ROOT}/wiki/`, covering plugins, skills, agents, architecture and cross-cutting conventions, plus the command cheatsheet, the plugin-selection guide and the workflow walkthroughs. Read it directly, starting from its index at `${CLAUDE_PLUGIN_ROOT}/wiki/wiki/index.md`; pages cite each other with `[[wikilinks]]` and each carries a `**Source**` line back to the canonical file on GitHub.
 
 First lookup before grepping source files — faster and doesn't pull plugin internals into your context.
 

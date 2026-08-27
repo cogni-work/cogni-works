@@ -30,7 +30,7 @@ The horizontal layer of the insight-wave marketplace — it owns the shared work
 | `cogni-workspace:pick-theme` | Standard theme picker called by every visual plugin — see [[concept-theme-inheritance]] |
 | `cogni-workspace:workspace-status` | Diagnose workspace health |
 
-(Also bundled: `cogni-workspace:ask` — the wiki query wrapper that points at this plugin's bundled insight-wave wiki.)
+(Also bundled: the insight-wave wiki itself — read it directly, starting from this tree's own `index.md`.)
 
 ## What it owns
 
@@ -38,7 +38,7 @@ The horizontal layer of the insight-wave marketplace — it owns the shared work
 - **MCP servers** — excalidraw, claude-in-chrome, pencil; managed via the [[concept-mcp-server-map]]
 - **Env vars and settings** — shared configuration across all insight-wave plugins
 - **Obsidian vault integration** — projects can be browsed in Obsidian natively because all entity outputs are markdown with YAML frontmatter (see [[concept-data-model-patterns]])
-- **insight-wave wiki** — bundled at `cogni-workspace/wiki/`, lands in the plugin cache on install, queryable via `cogni-workspace:ask` (this is the wiki you're reading)
+- **insight-wave wiki** — bundled at `cogni-workspace/wiki/`, lands in the plugin cache on install, read directly from its own `index.md` (this is the wiki you're reading)
 
 ## Integration
 

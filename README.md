@@ -15,7 +15,7 @@ Each plugin implements an established framework (Corporate Visions, Double Diamo
 
 ### Workspace Infrastructure
 
-[cogni-workspace](cogni-workspace/README.md) is the horizontal layer every other plugin builds on. It manages the shared foundation — environment variables, MCP server installation, theme management, plugin discovery, and workspace health. Runs dependency checks, discovers installed plugins, and generates shared settings. Includes Obsidian vault integration for browsable knowledge management. 26 skills and 26 agents.
+[cogni-workspace](cogni-workspace/README.md) is the horizontal layer every other plugin builds on. It manages the shared foundation — environment variables, MCP server installation, theme management, plugin discovery, and workspace health. Runs dependency checks, discovers installed plugins, and generates shared settings. Includes Obsidian vault integration for browsable knowledge management. 25 skills and 26 agents.
 
 > "Initialize my insight-wave workspace and check plugin health"
 
@@ -213,9 +213,9 @@ Plugins follow the [Claude Code plugin standard](https://code.claude.com/docs/en
 | [cogni-marketing](cogni-marketing/README.md) | Content Production | 11 | 3 | B2B marketing content engine — 16 formats across thought leadership, demand gen, lead gen, sales enablement, ABM |
 | [cogni-sales](cogni-sales/README.md) | Sales Pitches | 1 | 4 | Corporate Visions Why Change pitch generation for named customers or market segments |
 | [cogni-website](cogni-website/README.md) | Website Generation | 6 | 3 | Multi-page customer websites from portfolio, marketing, and research content with shared navigation and theming |
-| [cogni-workspace](cogni-workspace/README.md) | Workspace Infrastructure | 26 | 26 | Shared foundation — env vars, MCP installation, theme management, plugin discovery, workspace health, Obsidian integration, bundled wiki, claim verification, story-arc narrative, executive copywriting, and slide/infographic/storyboard/web rendering |
+| [cogni-workspace](cogni-workspace/README.md) | Workspace Infrastructure | 25 | 26 | Shared foundation — env vars, MCP installation, theme management, plugin discovery, workspace health, Obsidian integration, bundled wiki, claim verification, story-arc narrative, executive copywriting, and slide/infographic/storyboard/web rendering |
 
-**104 skills, 88 agents** across the 8 active plugins.
+**103 skills, 88 agents** across the 8 active plugins.
 
 See [Cross-Plugin Data Flow](docs/er-diagram.md) for how data flows between plugins, or browse the [full documentation](docs/ecosystem-overview.md).
 
@@ -225,11 +225,9 @@ Workflow guides: [Install to Infographic](docs/workflows/install-to-infographic.
 
 A vendor-curated reference wiki ships at [`wiki/`](wiki/) with grounded, citable answers about the ecosystem — plugins, skills, agents, architecture, conventions, workflows, and cross-cutting concepts. Built on the Karpathy-style wiki engine (now vendored into [`cogni-knowledge`](cogni-knowledge/README.md)): every answer cites specific wiki pages, never draws from model memory, and links back to the canonical source on GitHub.
 
-**From a marketplace install:** the wiki ships bundled inside `cogni-workspace`. Once cogni-workspace is installed, ask via the wrapper skill:
+**From a clone of this repo:** start at [`wiki/index.md`](wiki/wiki/index.md) — point Claude at that index and it reads the pages it needs, citing each one.
 
-```
-/cogni-workspace:ask "How does claims propagation work?"
-```
+**From a marketplace install:** the same wiki ships bundled inside `cogni-workspace` and lands in the plugin cache on install; start at that bundle's own `wiki/index.md`.
 
 Plugin updates refresh the bundled wiki automatically — no separate update step needed. Users who want their own personal, mutable knowledge base should run `cogni-knowledge:knowledge-setup` to create one of their own.
 

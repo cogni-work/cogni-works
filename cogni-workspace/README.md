@@ -32,7 +32,7 @@ cogni-workspace is the ecosystem's infrastructure-as-plugin layer: a dedicated p
 5. **Diagnose** workspace health — five-tier report (foundation, env vars, plugin registry, themes, dependencies)
 6. **Install MCP servers** — clone and build git-based MCP servers, detect native app MCPs, and write the server into your own MCP config (`~/.claude.json` for Claude Code, `claude_desktop_config.json` for Claude Desktop) so rendering plugins find their tools without manual JSON editing
 7. **Obsidian integration** — scaffold `.obsidian/` vault or incrementally update terminal profiles, handled as sub-steps of manage-workspace
-8. **Ask the bundled wiki** — `ask` reads a vendor-curated insight-wave reference wiki bundled at `wiki/` (self-contained index-first grounded read) so users can ask grounded questions about plugins, skills, agents, architecture, and conventions without grepping source files
+8. **Bundled reference wiki** — a vendor-curated insight-wave reference wiki ships at `wiki/`; read it directly, starting from its `wiki/index.md`, for grounded pages on plugins, skills, agents, architecture and conventions, plus the command cheatsheet (`ecosystem-command-reference`), the plugin-selection guide (`ecosystem-plugin-selection`) and the workflow walkthroughs (`workflow-*`)
 9. **File and track issues** — `cogni-issues` uses the authenticated GitHub CLI to consult, deduplicate, create, list, and inspect plugin issues with atomic labels
 10. **Troubleshoot plugin failures** — `troubleshoot` diagnoses plugin integrity, cross-plugin dependencies, stale state, and common setup errors through `/troubleshoot`
 11. **Verify claims against their cited sources** — `claims` runs the six-mode claim-verification lifecycle (submit, verify, dashboard, inspect, resolve, cobrowse) that cogni-trends, cogni-portfolio, cogni-consult and cogni-knowledge submit sourced assertions to; `claim-entity` is the cross-plugin data contract those plugins write against
@@ -95,8 +95,7 @@ Or describe what you want:
 - "What's the status of my workspace?"
 - "Import the theme from this Claude Design bundle"
 - "Update my workspace after installing new plugins"
-- "Ask the wiki: how does claims propagation work?"
-- "Ask the wiki: which plugin generates IS/DOES/MEANS messaging?"
+- "Read the bundled wiki index at `wiki/index.md` and tell me which plugin generates IS/DOES/MEANS messaging"
 
 ## Try it
 
@@ -137,7 +136,6 @@ State lives in two layers that other plugins consume. Configuration (env vars, t
 | `pick-theme` | skill | Centralized theme picker — discovers themes, presents interactive selection, returns path |
 | `workspace-status` | skill | Five-tier diagnostic: foundation, env vars, plugin registry, themes, dependencies |
 | `install-mcp` | skill | End-to-end MCP server installation — clone and build git-based MCPs, configure native app MCPs, and write the server into the user's own config (`~/.claude.json` or `claude_desktop_config.json`) |
-| `ask` | skill | Answer questions about the insight-wave ecosystem by reading the bundled wiki — grounded, cited, never from memory |
 | `manage-markets` | skill | Write path for the canonical supported-markets registry — show status and add markets (codes, locales, authorities) |
 | `audit-region-sources` | skill | Read-only sibling of manage-markets — audit per-plugin region-source overlays against the canonical registry for orphans and drift |
 | `workspace-dashboard` | skill | Interactive HTML dashboard of workspace foundation, env vars, plugin registry, themes, and dependencies |
@@ -217,8 +215,7 @@ State lives in two layers that other plugins consume. Configuration (env vars, t
 ```
 cogni-workspace/
 ├── .claude-plugin/plugin.json    Plugin manifest
-├── skills/                       26 workspace and visual-rendering skills
-│   ├── ask/                      Query the bundled insight-wave wiki for grounded answers
+├── skills/                       25 workspace and visual-rendering skills
 │   ├── audit-region-sources/     Audit per-plugin region-source overlays against the registry
 │   ├── claim-entity/             Cross-plugin ClaimEntity data contract and store layout
 │   ├── claims/                   Claim-verification lifecycle (+ scripts/claims-store.sh)
@@ -256,7 +253,7 @@ cogni-workspace/
 │   ├── enrich-report.md          Registers /enrich-report
 │   ├── review-brief.md           Registers /review-brief
 │   └── troubleshoot.md           Registers /troubleshoot
-├── wiki/                         Bundled vendor-curated insight-wave reference wiki (read by ask)
+├── wiki/                         Bundled vendor-curated insight-wave reference wiki (read directly; start at wiki/index.md)
 │   ├── .cogni-wiki/              Wiki config + lockfile
 │   ├── SCHEMA.md                 Wiki page schema
 │   └── wiki/                     LLM-maintained pages, index, log, overview
@@ -306,7 +303,7 @@ cogni-workspace/
 | cogni-portfolio | No | install-mcp references cogni-portfolio as a consumer of excalidraw MCP in the installation plan |
 | claude-in-chrome | No | The `claims` skill's cobrowse mode and `workspace-status`' MCP health check use the Chrome extension; claim verification degrades to WebFetch without it |
 | cogni-trends | No | audit-region-sources and manage-markets read the trends region-authority overlay when auditing market coverage |
-| cogni-knowledge | No | ask, workspace-status, and manage-workspace route knowledge-base questions to knowledge-setup / knowledge-query |
+| cogni-knowledge | No | workspace-status and manage-workspace route knowledge-base questions to knowledge-setup / knowledge-query |
 
 ## Contributing
 

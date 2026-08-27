@@ -47,7 +47,7 @@ A configured workspace, a working mental map of the ecosystem, and at least one 
 
 Start with install-to-infographic: it is the shortest chain that still crosses three plugins, and the artifact doubles as a smoke test that the workspace is configured correctly. Each canonical ID has a matching tutorial at `docs/workflows/<id>.md` — read it alongside the template. Check plugin prerequisites before starting a pipeline. `consulting-engagement` is the capstone.
 
-**4 — Practice.** Reinforce with real work rather than more reading. Pick a small project in your own domain; use `cogni-workspace:ask` to find the right plugins, see how they chain, and get a command refresher ([[ecosystem-command-reference]]), and `cogni-workspace:cogni-issues` to file problems you hit.
+**4 — Practice.** Reinforce with real work rather than more reading. Pick a small project in your own domain; read [[ecosystem-plugin-selection]] to find the right plugins and see how they chain, and [[ecosystem-command-reference]] for a command refresher, and `cogni-workspace:cogni-issues` to file problems you hit.
 
 ## Common pitfalls
 

@@ -406,7 +406,7 @@ After generating a pitch narrative, suggest:
 1. **Score quality**: `/narrative-review` — scores against the arc's quality gates (structural compliance, evidence density, technique application)
 2. **Polish prose**: `/copywrite` — applies executive readability standards while preserving arc structure
 3. **Visualize**:
-   - `/story-to-slides` → PowerPoint presentation via PPTX skill
-   - `/story-to-web` → scrollable landing page via Pencil MCP
-   - `/story-to-storyboard` → multi-poster print storyboard via Pencil MCP
+   - `story-to-slides` → PowerPoint presentation via PPTX skill
+   - `story-to-web` → scrollable landing page via Pencil MCP
+   - `story-to-storyboard` → multi-poster print storyboard via Pencil MCP
 4. **Deepen** (if needed): `/why-change` — adds web research, customer-specific context, and TIPS enrichment for a deal-ready version

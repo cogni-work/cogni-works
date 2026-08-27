@@ -105,16 +105,16 @@ Set up a visual theme so every visual output — infographics, slides, websites 
 
 ## Step 4: Render Your First Infographic
 
-Turn a short narrative into a one-page infographic via `/story-to-infographic`. This skill produces an infographic-brief.md first, then renders it in one of two style families: hand-drawn (via Excalidraw MCP) or editorial (via Pencil MCP). Running one of each doubles as a live check that both MCPs are wired up.
+Turn a short narrative into a one-page infographic via `story-to-infographic`. This skill produces an infographic-brief.md first, then renders it in one of two style families: hand-drawn (via Excalidraw MCP) or editorial (via Pencil MCP). Running one of each doubles as a live check that both MCPs are wired up.
 
 Start with the sample narrative below — it's a self-contained paragraph you can paste into the chat exactly as-is:
 
 > In 2025, our services team delivered 47 projects across 12 industries. Roughly half touched AI transformation — a three-fold jump from 2024. Client NPS climbed to 68, and 84% of engagements led to follow-on work. The shift: clients now ask us to redesign workflows, not just ship software.
 
-With that narrative in the chat, run the hand-drawn preset first:
+With that narrative in the chat, ask for the hand-drawn preset first:
 
 ```
-/story-to-infographic --style=sketchnote
+Render this narrative as a hand-drawn sketchnote infographic
 ```
 
 This produces an infographic-brief, then renders it via **Excalidraw MCP** into an `.excalidraw` file you can open in the Excalidraw editor. You should see a one-page visual summary of the narrative with hand-drawn styling.
@@ -122,7 +122,7 @@ This produces an infographic-brief, then renders it via **Excalidraw MCP** into 
 Now try the editorial preset:
 
 ```
-/story-to-infographic --style=economist
+Render this narrative as an editorial-style infographic
 ```
 
 Same narrative, but this time rendered via **Pencil MCP** into a `.pen` file — a clean editorial data page in the style of The Economist. Open it in the Pencil editor to compare.

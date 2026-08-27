@@ -414,7 +414,7 @@ All references are organized in progressive disclosure tiers. Start with `refere
 When polishing a research report (detected by project directory containing `project-config.json` or `00-sub-questions/`), include this guidance after the quality metrics:
 
 > **Next: Visual pipeline**
-> 1. `/story-to-infographic` + `/render-infographic` — Infographic header (Pencil, 10-step validated)
+> 1. `story-to-infographic` + `/render-infographic` — Infographic header (Pencil, 10-step validated)
 > 2. `/enrich-report` — Themed HTML with charts (reuses infographic from step 1)
 >
 > Running story-to-infographic first gives enrich-report a validated, Pencil-rendered header instead of its simplified inline fallback.

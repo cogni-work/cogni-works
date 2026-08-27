@@ -61,7 +61,7 @@ These MCPs are not written by install-mcp and require user action.
 - **Type:** Chrome extension (manual install)
 - **Requires:** Claude-in-Chrome extension installed in Chrome and active
 - **Probe tool:** `mcp__claude-in-chrome__tabs_context_mcp`
-- **Skills:** claims (cobrowse verification), cogni-issues (GitHub automation), manage-themes (website extraction), website-preview (browser review)
+- **Skills:** claims (cobrowse verification), cogni-issues (GitHub automation), website-preview (browser review)
 - **Troubleshooting:**
   - If not available: install the Claude-in-Chrome extension in Chrome
   - The extension controls the user's visible Chrome browser — not headless

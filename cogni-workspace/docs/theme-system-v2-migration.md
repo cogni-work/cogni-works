@@ -115,7 +115,7 @@ The schema reserves the `templates/` directory and the `tiers.templates` manifes
 
 Land the manifest after the tier directories exist. Each tier you populated gets a corresponding entry; tiers you skipped are simply absent.
 
-**Minimum manifest** (just opted in to v2, no tiers populated yet — what Operations 3–6 of `manage-themes` emit by default):
+**Minimum manifest** (just opted in to v2, no tiers populated yet — what Operations 5–6 of `manage-themes` emit by default):
 
 ```json
 {

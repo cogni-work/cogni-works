@@ -26,7 +26,7 @@ cogni-workspace is the ecosystem's infrastructure-as-plugin layer: a dedicated p
 ## What it does
 
 1. **Manage workspace** — initialize or update a workspace with auto-detection, dependency checks, plugin discovery, preference gathering, settings generation, backup and rollback → `references/supported-markets-registry.json` → doc-generate, doc-power, doc-hub, doc-readme-root, doc-audit
-2. **Manage themes** — extract from websites (via Chrome), PPTX files, or presets; audit for contrast and harmony; author tiered theme systems (tokens → assets → components → templates) per Theme System v2 (see [migration guide](docs/theme-system-v2-migration.md)); apply to downstream skills
+2. **Manage themes** — import a Claude Design bundle or create from presets; audit harmony and script-checked WCAG contrast; author tiered theme systems (tokens → assets → components → templates) per Theme System v2 (see [migration guide](docs/theme-system-v2-migration.md)); apply to downstream skills
 3. **Pick themes** — centralized theme picker used by all visual plugins
 4. **Discover plugins** — scan installed cogni-x plugins, detect versions, compute env var names
 5. **Diagnose** workspace health — five-tier report (foundation, env vars, plugin registry, themes, dependencies)
@@ -93,7 +93,7 @@ Or describe what you want:
 
 - "Initialize a insight-wave workspace here"
 - "What's the status of my workspace?"
-- "Extract a theme from this website"
+- "Import the theme from this Claude Design bundle"
 - "Update my workspace after installing new plugins"
 - "Ask the wiki: how does claims propagation work?"
 - "Ask the wiki: which plugin generates IS/DOES/MEANS messaging?"
@@ -133,7 +133,7 @@ State lives in two layers that other plugins consume. Configuration (env vars, t
 | Component | Type | What it does |
 |-----------|------|--------------|
 | `manage-workspace` | skill | Initialize or update workspace — auto-detects mode, dependencies, discovery, preferences, settings, themes, backup and rollback |
-| `manage-themes` | skill | 9 theme operations: recommend, list, grab from website, grab from PPTX, create from preset, audit, author deep theme system, generate showcase, apply |
+| `manage-themes` | skill | 8 theme operations: recommend, list, create from preset, audit (script-checked WCAG contrast), author deep theme system, generate showcase, apply, import from Claude Design bundle |
 | `pick-theme` | skill | Centralized theme picker — discovers themes, presents interactive selection, returns path |
 | `workspace-status` | skill | Five-tier diagnostic: foundation, env vars, plugin registry, themes, dependencies |
 | `install-mcp` | skill | End-to-end MCP server installation — clone and build git-based MCPs, configure native app MCPs, and write the server into the user's own config (`~/.claude.json` or `claude_desktop_config.json`) |
@@ -316,9 +316,9 @@ Contributions welcome — theme templates, platform support, diagnostic checks, 
 
 | ID | Issue | Severity | Affected Skills | Workaround |
 |----|-------|----------|----------------|------------|
-| KI-001 | Chrome native messaging host conflict between Cowork and Claude Code | S2-major | `/manage-themes` (website extraction) | Toggle native host configs by renaming the `.json` file for the unused product and restarting Chrome. See [Known Issues Registry](../docs/known-issues.md#ki-001) for detailed steps. |
+| KI-001 | Chrome native messaging host conflict between Cowork and Claude Code | S2-major | `/claims` (cobrowse), `/cogni-issues` (browser filing) | Toggle native host configs by renaming the `.json` file for the unused product and restarting Chrome. See [Known Issues Registry](../docs/known-issues.md#ki-001) for detailed steps. |
 
-> When both Claude Desktop (Cowork) and Claude Code are installed, their competing native messaging host configurations cause browser automation tools to silently vanish. The `/manage-themes` skill's live website extraction mode falls back to manual theme specification until the conflict is resolved.
+> When both Claude Desktop (Cowork) and Claude Code are installed, their competing native messaging host configurations cause browser automation tools to silently vanish. `/claims` cobrowse verification falls back to web fetch, and `/cogni-issues` browser filing falls back to the `gh` CLI, until the conflict is resolved.
 
 ## Custom development
 

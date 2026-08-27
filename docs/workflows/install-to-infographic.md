@@ -1,6 +1,6 @@
 # From Install to Infographic
 
-Your first-run workflow with insight-wave — the step-3 capstone of the [root README install sequence](../../README.md#install). Starting from an installed, authenticated Claude Code, you add the insight-wave marketplace, set up your workspace, extract a theme from your company website, and render your first infographic. Along the way you verify that Pencil MCP and Excalidraw MCP are wired up — so later visual work doesn't stall on a missing dependency.
+Your first-run workflow with insight-wave — the step-3 capstone of the [root README install sequence](../../README.md#install). Starting from an installed, authenticated Claude Code, you add the insight-wave marketplace, set up your workspace, set up your first theme, and render your first infographic. Along the way you verify that Pencil MCP and Excalidraw MCP are wired up — so later visual work doesn't stall on a missing dependency.
 
 ## Prerequisites
 
@@ -69,29 +69,39 @@ This creates your workspace folder structure and walks you through initial setti
 /install-mcp
 ```
 
-Accept the defaults. When it finishes you should have Pencil MCP, Excalidraw MCP, and claude-in-chrome MCP installed — Step 3 uses claude-in-chrome to read your company website, and Step 4 uses both Pencil and Excalidraw to render infographics.
+Accept the defaults. When it finishes you should have Pencil MCP, Excalidraw MCP, and claude-in-chrome MCP installed — Step 4 uses both Pencil and Excalidraw to render infographics, and claude-in-chrome backs the `claims` and `cogni-issues` skills, which are outside this workflow.
 
 **What success looks like:** `/workspace-status` reports all MCPs as green, and your workspace directory exists on disk.
 
 ## Step 3: Build Your First Theme
 
-Extract a visual theme from your company website so every visual output — infographics, slides, websites — automatically uses your colors, fonts, and logo. The rest of this workflow will use this theme.
+Set up a visual theme so every visual output — infographics, slides, websites — automatically uses your colors, fonts, and logo. The rest of this workflow will use this theme.
 
-```
-/manage-themes extract https://your-company.com
-```
+1. **If you have a Claude Design bundle**, import it. This is the recommended path: you author the design system in [Claude Design](https://claude.ai/design), export a handoff bundle, and the skill materialises it as a complete tiered theme.
 
-Replace `your-company.com` with your actual website. The skill reads the live site via claude-in-chrome MCP, extracts the color palette and typography, and stores a new theme in your workspace themes directory.
+   ```
+   /manage-themes
+   ```
 
-When it finishes, browse and set your new theme as the default:
+   Give it your bundle URL (`https://api.anthropic.com/v1/design/h/<hash>`) when it asks. The importer writes the tokens, component primitives, and brand assets into your workspace themes directory in one step.
 
-```
-/pick-theme
-```
+2. **If you don't have a bundle yet**, start from a preset instead. Ask for one in the same skill:
 
-**What success looks like:** `/pick-theme` lists your company theme in the available themes, the palette swatches match your website, and you can select it as the default.
+   ```
+   Create a theme from a preset
+   ```
 
-**If this step fails:** the most common cause is claude-in-chrome MCP not running. Re-run `/install-mcp` or see the [cogni-workspace plugin guide](../plugin-guide/cogni-workspace.md) for manual setup. If the site is behind a login wall, `/manage-themes` also accepts a PowerPoint template or a preset — see the skill docs for alternatives.
+   You pick from the available presets, and the skill stores the result as a theme you can deepen or replace later.
+
+3. **Browse and set your new theme as the default:**
+
+   ```
+   /pick-theme
+   ```
+
+**What success looks like:** `/pick-theme` lists your new theme in the available themes, the palette swatches match what you imported or picked, and you can select it as the default.
+
+**If this step fails:** for the bundle path, the usual cause is an expired or mistyped bundle URL — re-export from Claude Design (re-exporting produces a new URL) and try again. For the preset path, no MCP server is involved — if the skill cannot reach your workspace themes directory, re-run `/workspace-status` to see which tier is failing, then `/manage-workspace` to repair it.
 
 ## Step 4: Render Your First Infographic
 
@@ -117,7 +127,7 @@ Now try the editorial preset:
 
 Same narrative, but this time rendered via **Pencil MCP** into a `.pen` file — a clean editorial data page in the style of The Economist. Open it in the Pencil editor to compare.
 
-**What success looks like:** two infographics side by side, both themed with your company colors from Step 3, one sketchnote and one editorial.
+**What success looks like:** two infographics side by side, both themed with your Step 3 theme, one sketchnote and one editorial.
 
 ### Troubleshooting
 

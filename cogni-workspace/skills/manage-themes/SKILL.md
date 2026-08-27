@@ -203,9 +203,9 @@ A non-zero exit means the theme is not shippable; fix the failure before declari
 
 ### 8. Generate Theme Showcase
 
-After creating, extracting, or improving a theme, offer to generate an interactive React showcase component that demonstrates every design token in context — colors, typography, buttons, cards, tables, forms, status badges, KPI panels, pricing layouts, and navigation patterns.
+After creating, importing, or improving a theme, offer to generate an interactive React showcase component that demonstrates every design token in context — colors, typography, buttons, cards, tables, forms, status badges, KPI panels, pricing layouts, and navigation patterns.
 
-**When to offer**: After any successful theme creation, deepening, or update (Operations 5–7), ask the user: *"Want me to generate a theme showcase component so you can see all the tokens in action?"*
+**When to offer**: After any successful theme creation, deepening, update, or bundle import (Operations 5–7 and 10), ask the user: *"Want me to generate a theme showcase component so you can see all the tokens in action?"*
 
 **Workflow**:
 

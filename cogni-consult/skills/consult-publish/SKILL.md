@@ -126,7 +126,7 @@ execution summary, so read the reference for each route before dispatching:
 one route the skill builds itself rather than dispatching. Consult deliverables
 are framework-shaped (Pyramid / SCQA / MECE), not arc-shaped, so this path does
 **not** dispatch `cogni-workspace:story-to-slides` / `story-to-web` and does **not**
-re-narrate through `the `narrative` skill` — arc-ifying a framework-shaped deliverable
+re-narrate through the `narrative` skill — arc-ifying a framework-shaped deliverable
 weakens its executive register. Derive the outline directly from the
 deliverable's own structure: an ordered list of `{section_title, section_body}`
 entries with citations preserved — Pyramid answer / governing thought → the

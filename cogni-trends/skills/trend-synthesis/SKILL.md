@@ -537,7 +537,7 @@ catalog, dashboard).
 
 **Pipeline:** `trend-scout → value-modeler → trend-research → trend-synthesis → verify-trend-report`
 
-**Optional cross-plugin:** `the `narrative` skill` smarter-service arc — theme-case writer + dimension composer guidance (graceful fallback if absent). The Storytelling Spine in this SKILL.md is self-contained; the `narrative` skill arc-definition is supplementary, not required.
+**Optional cross-plugin:** the `narrative` skill smarter-service arc — theme-case writer + dimension composer guidance (graceful fallback if absent). The Storytelling Spine in this SKILL.md is self-contained; the `narrative` skill arc-definition is supplementary, not required.
 
 **Downstream (via `/verify-trend-report`):** claim verification (`cogni-workspace:claims`), cross-theme structural review, post-verification revision, executive polish (`cogni-workspace:copywriter`), themed HTML (`cogni-workspace:enrich-report`)
 

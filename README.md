@@ -153,7 +153,7 @@ Some plugins extend their capabilities through external [MCP servers](https://do
 | MCP Server | Used by | What it enables | Install |
 |------------|---------|-----------------|---------|
 | excalidraw | [cogni-portfolio](cogni-portfolio/README.md), [cogni-workspace](cogni-workspace/README.md) | Diagram rendering (infographics, concept diagrams, solution architecture, report enrichment) | Auto-installed by `manage-workspace` from [yctimlin/mcp_excalidraw](https://github.com/yctimlin/mcp_excalidraw) (git clone + build). Includes React canvas on localhost:3000. |
-| claude-in-chrome | [cogni-website](cogni-website/README.md), [cogni-workspace](cogni-workspace/README.md) | Browser automation — claim verification, website preview, theme extraction | Manual — install [Chrome extension](https://code.claude.com/docs/en/chrome) |
+| claude-in-chrome | [cogni-website](cogni-website/README.md), [cogni-workspace](cogni-workspace/README.md) | Browser automation — claim verification, website preview | Manual — install [Chrome extension](https://code.claude.com/docs/en/chrome) |
 | pencil | [cogni-website](cogni-website/README.md), [cogni-workspace](cogni-workspace/README.md) | Web narrative, storyboard, and poster rendering; homepage hero generation | Manual — open [Pencil](https://docs.pencil.dev/getting-started/installation) desktop app |
 
 Plugins that don't use MCP servers work without them — only install what you need.

@@ -2,8 +2,7 @@
 name: manage-themes
 description: >-
   Create, audit, improve, and apply visual design themes for the workspace —
-  sourced from Claude Design bundles, live websites, PowerPoint templates, or
-  presets. Audits cover contrast and accessibility, palette harmony, typography
+  sourced from Claude Design bundles or presets. Audits cover contrast and accessibility, palette harmony, typography
   pairing, and completeness. Use this skill whenever the user mentions themes,
   brand colors, visual identity, or extracting styles, wants a consistent
   look-and-feel across outputs, or wants to review, fix, choose, or build a
@@ -15,7 +14,7 @@ description: >-
   "visual standards", "author tokens", "build a tiered theme system", "deepen a
   theme", and "match the cogni-work pattern". Also triggers on a Claude Design
   bundle URL (api.anthropic.com/v1/design/h/...).
-allowed-tools: Read, Write, Edit, Glob, Grep, Bash, WebSearch, Skill
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Skill
 ---
 
 # Manage Themes
@@ -58,7 +57,7 @@ When the user asks for theme advice — e.g., "what theme for my brand?", "help 
 
 **Discovery questions** (ask only what's needed, skip what you can infer from context):
 
-1. **Existing assets?** — "Do you have a website, PowerPoint template, or brand guidelines (colors/fonts) I can work from?"
+1. **Existing assets?** — "Do you have a website, PowerPoint template, or brand guidelines (colors/fonts) I can use as a starting point?"
 2. **Industry & audience** — "What's the domain (fintech, healthcare, creative agency, etc.) and who sees these outputs?"
 3. **Mood & tone** — "Any adjectives that describe the feel you're after? (e.g., bold & modern, calm & trustworthy, playful)"
 
@@ -67,8 +66,7 @@ When the user asks for theme advice — e.g., "what theme for my brand?", "help 
 | User has... | Action |
 |---|---|
 | A Claude Design bundle URL (`api.anthropic.com/v1/design/h/<hash>`) | → **Operation 10** (Import from Claude Design Bundle) — the recommended authoring path; ships tokens, components, and assets in one re-syncable step |
-| A website URL | → **Operation 10** (Import from Claude Design Bundle) — mock the site in Claude Design, then import the bundle |
-| A PPTX template | → **Operation 10** (Import from Claude Design Bundle) — recreate the template in Claude Design, then import the bundle |
+| A website URL or a PPTX template | → **Operation 10** (Import from Claude Design Bundle) — recreate the source in Claude Design, then import the bundle |
 | Specific colors/fonts but no file | → Create a custom theme.md directly from their inputs, following the template |
 | Nothing concrete, just a description | → **Operation 5** (Create from Preset) — recommend 2-3 theme-factory presets that match their mood/industry, let them pick or blend |
 | An existing workspace theme that's close | → **Operation 6** (Audit/Improve) — review it and suggest targeted tweaks |
@@ -117,9 +115,10 @@ Name the keys with the roles the script pairs on — `background`, `surface`, `t
 
 - Report `data.pairs[]` as it stands — each entry carries `ratio`, `threshold`, `passes_aa_normal` (4.5:1) and `passes_aa_large` (3:1). Do not recompute or round any of them.
 - Treat `passes: false` as the below-AA flag, and `data.failures` as the list to raise. A failing pair is a finding, not an error — the run still exits 0.
-- Offer `suggested_hex` verbatim as the replacement value. The script has already re-verified it against the threshold, so never substitute a hex of your own.
+- Offer `suggested_hex` verbatim as the replacement value. The script has already re-verified it against the threshold, so never substitute a hex of your own. When `suggested_hex` is `null`, the script could not clear the threshold from that hue in either lightness direction — say so plainly, ask the user for a different colour or a different surface to pair it against, and re-run the script on whatever they choose so the ratio stays measured.
 - When `data.evaluated` is 0, no pair could be formed — and the two causes need opposite fixes. Read `data.roles` first: if the colours came through under names outside the vocabulary above, remap the keys and re-run. Only when `data.unparsed` lists them (present, but not `#rrggbb`) is the palette genuinely unusable and worth asking the user about.
 - To grade a pair the defaults miss, name it: `--pair text:background` at 4.5:1, or `--large-pair accent:surface` at 3:1.
+- On `success: false` the run produced no verdicts at all. Read `error`, fix the cause it names, and re-run. Never report a contrast verdict from a failed run.
 
 **Palette Harmony**
 - Check whether the palette follows a recognizable color scheme (complementary, analogous, triadic, split-complementary)
@@ -150,7 +149,7 @@ When a theme outgrows the single-file `theme.md` and the user wants structured a
 
 **When to offer**: After a successful Operation 5 (ask: *"Want to deepen this into a tiered theme system?"*), or when the user explicitly asks to "build a deep theme", "author tokens", "make this brand a system", or "match the cogni-work pattern". The end-to-end walkthrough — when to migrate, what to keep, tier-by-tier authoring, manifest examples, validation, rollback, common pitfalls — lives at [`cogni-workspace/docs/theme-system-v2-migration.md`](../../docs/theme-system-v2-migration.md). Read that guide first when promoting a tier-0 theme; this operation is the in-skill entry point, the guide is the authoritative how-to.
 
-**Reference implementation**: `themes/cogni-work/` is the canonical Phase-2 pilot. Read its `manifest.json` and `tokens/` layout before authoring any new tiered theme — that file shape is the contract every downstream consumer expects.
+**Reference implementation**: `themes/cogni-work/` is the canonical tiered theme. Read its `manifest.json` and `tokens/` layout before authoring any new tiered theme — that file shape is the contract every downstream consumer expects.
 
 **The four tiers** — populate in this order; each tier is independently optional, but tokens is the foundation:
 
@@ -163,9 +162,9 @@ When a theme outgrows the single-file `theme.md` and the user wants structured a
 
 2. **Tier 2 — Assets** (`assets/`). Brand-bound static files — logos (SVG preferred), reference fonts, sample documents, hero imagery. Flat layout is fine; nested directories are allowed where the asset family naturally groups (e.g., `assets/logos/`).
 
-3. **Tier 3 — Components** (`components/`). Portable HTML primitives that downstream skills can copy-on-use (per RFC open question 2 resolution: copy-on-use is the default, opt-in live-theme is reserved). JSX is allowed but optional; HTML is the contract per RFC open question 3 resolution. Each component is one file; reference the theme's tokens via CSS custom properties (e.g., `var(--colors-primary)`) so consumers inherit the active palette without rewriting markup.
+3. **Tier 3 — Components** (`components/`). Portable HTML primitives that downstream skills can copy-on-use — copy-on-use is the default, and an opt-in live-theme binding is reserved rather than implemented. JSX is allowed but optional; HTML is the contract. Both rules are settled in [`cogni-workspace/docs/theme-system-v2-migration.md`](../../docs/theme-system-v2-migration.md). Each component is one file; reference the theme's tokens via CSS custom properties (e.g., `var(--colors-primary)`) so consumers inherit the active palette without rewriting markup.
 
-4. **Tier 4 — Templates** (`templates/`). Voice-and-copy scaffolds — IS/DOES/MEANS messaging templates, headline patterns, CTA wording. Out of scope for Phase 2 (deferred to Phase 3 per RFC open question 5); the directory is reserved but most themes will not populate it yet.
+4. **Tier 4 — Templates** (`templates/`). Voice-and-copy scaffolds — IS/DOES/MEANS messaging templates, headline patterns, CTA wording. Deferred — the directory is reserved but most themes will not populate it yet; see [`cogni-workspace/docs/theme-system-v2-migration.md`](../../docs/theme-system-v2-migration.md).
 
 **Manifest update**: Each tier you populate gets a corresponding entry in `manifest.json`. The `tiers` map is the contract — `discover-themes` and downstream consumers route exclusively through it:
 
@@ -268,7 +267,7 @@ The recommended authoring path for tiered themes under Theme System v2. The user
 
 **Mapping details**: The bundle → theme materialisation rules (which preview files become components, how `colors_and_type.css` projects into the six canonical token JSON files, which bundle directories are ignored) live in `cogni-workspace/references/claude-design-bundle-mapping.md`. Edits to that mapping doc are the right place to extend or constrain importer behaviour; the script reads its rules from there as the source of truth.
 
-**Cogni-work canary status**: The first cogni-work bundle export (2026-04-25) omits a structured `## Voice & Copy Guidelines` section. Under the auto-inject policy the importer materialises the bundle successfully, inserting a clearly-tagged stub before `## Source`; the result passes Phase D of `verify-theme-backcompat.sh`. To replace the stub with real voice content, re-author the bundle in Claude Design with a structured voice section and re-import with `--allow-overwrite`.
+**Cogni-work canary status**: The first cogni-work bundle export (2026-04-25) omits a structured `## Voice & Copy Guidelines` section, so the auto-inject policy in Prerequisites applies — the import succeeds with a clearly-tagged stub inserted before `## Source`, and the result passes Phase D of `verify-theme-backcompat.sh`. Replacing that stub with real voice content follows the same re-author-and-re-import remedy stated there.
 
 ## Theme File Format
 
@@ -279,7 +278,7 @@ Follow the template at `{themes-dir}/_template/theme.md`. Key sections:
 - **Typography**: Header, Body, Mono fonts with fallbacks
 - **Design Principles**: 3-8 rules for visual consistency
 - **Best Used For**: Target contexts
-- **Source**: Origin (URL, PPTX file, preset name) and extraction date
+- **Source**: Origin (Claude Design bundle URL, preset name) and import date
 
 ## Starter Manifest
 
@@ -309,7 +308,7 @@ Theme directories use kebab-case slugs derived from the brand/source name:
 - `digital-x` (from DIGITAL X brand)
 - `cogni-work` (from cogni-work.ai)
 - `ocean-depths` (from theme-factory preset)
-- `client-acme` (from client website)
+- `client-acme` (from client brand name)
 
 ## Additional Resources
 

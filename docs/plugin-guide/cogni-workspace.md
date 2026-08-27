@@ -124,7 +124,7 @@ Generates a self-contained HTML dashboard of the whole workspace configuration �
 /workspace-dashboard
 ```
 
-### `manage-themes` — Theme extraction and management
+### `manage-themes` — Theme creation and management
 
 Themes are markdown files that describe a visual identity — colors, typography, and design principles. Every rendering surface — this plugin's own `story-to-*` and `enrich-report` skills, cogni-website, and `document-skills` — reads from the same theme directory, so setting a theme here propagates to every plugin output.
 
@@ -134,22 +134,22 @@ Eight operations are available:
 |-----------|-------------|
 | `recommend` | Suggests themes based on your industry or audience description |
 | `list` | Shows all available themes in the workspace |
-| `grab from website` | Extracts colors and typography from a live URL using Chrome |
-| `grab from PPTX` | Extracts a theme from an existing PowerPoint template |
 | `create from preset` | Builds a theme from a named preset (e.g., corporate, minimal, vibrant) |
 | `audit` | Checks a theme for contrast ratios, color harmony, and completeness |
+| `author deep theme system` | Deepens a theme into a tiered Theme System v2 directory (tokens, primitives, assets) |
 | `generate showcase` | Renders a visual sample of how a theme looks applied to real content |
 | `apply` | Registers a theme as the workspace default |
+| `import from Claude Design bundle` | Materialises a Claude Design handoff bundle into a complete tiered theme |
 
 ```
 /manage-themes
 ```
 
 ```
-Extract a theme from our company website and apply it to the workspace
+Import the theme from this Claude Design bundle and apply it to the workspace
 ```
 
-The `grab from website` operation uses Chrome browser automation to read the live site — it captures computed styles, not just source HTML.
+The `import from Claude Design bundle` operation is the recommended authoring path: the bundle is the upstream truth and the local theme directory is its materialised mirror. Re-running the importer against the *same* bundle URL is a no-op; a re-export produces a new URL and re-materialises the theme, which needs `--allow-overwrite`. The `audit` operation reads its contrast verdicts out of `check-contrast.py` rather than estimating them, so an accessibility finding is always a measured ratio.
 
 ---
 
@@ -395,7 +395,7 @@ cogni-workspace has no required plugin dependencies. Its scope is horizontal: th
 1. Install insight-wave plugins from the marketplace
 2. Run `/manage-workspace` in your project directory — answer the language and integration questions
 3. Run `/workspace-status` to confirm all five tiers are green
-4. Run `/manage-themes` to extract your brand theme from your website or a PPTX template
+4. Run `/manage-themes` to import your Claude Design bundle or start from a preset
 5. Obsidian integration is offered during `/manage-workspace` if you indicate Obsidian use
 
 Total time: 10–15 minutes. After this, all installed plugins can resolve themes, env vars, and plugin paths without additional configuration.
@@ -436,9 +436,9 @@ When you move a workspace to a different path, absolute paths stored in `.worksp
 
 ## Known Issues
 
-**Chrome native messaging host conflict (KI-001):** When both Claude Desktop (Cowork) and Claude Code are installed, the `manage-themes` skill's live website theme extraction feature — which uses Chrome browser automation to capture computed styles from a URL — may not work. The Chrome extension connects to one native host and ignores the other, causing browser automation tools to silently vanish.
+**Chrome native messaging host conflict (KI-001):** When both Claude Desktop (Cowork) and Claude Code are installed, the Chrome extension connects to one native host and ignores the other, causing browser automation tools to silently vanish. In this plugin that affects the `claims` skill's source cobrowsing (which falls back to web fetch only) and `cogni-issues` browser-based issue filing (which must use the `gh` CLI instead).
 
-**Workaround:** Toggle native messaging host configs by renaming the `.json` file for the unused product in `~/Library/Application Support/Google/Chrome/NativeMessagingHosts/` and restarting Chrome. Alternatively, extract themes from a PPTX template or create one from a preset — these paths do not require browser automation. See the [Known Issues Registry](../../cogni-docs/references/known-issues.md) for detailed steps.
+**Workaround:** Toggle native messaging host configs by renaming the `.json` file for the unused product in `~/Library/Application Support/Google/Chrome/NativeMessagingHosts/` and restarting Chrome. See the [Known Issues Registry](../known-issues.md) for detailed steps.
 
 ---
 

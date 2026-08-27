@@ -40,7 +40,8 @@ AA_LARGE = 3.0
 HEX_RE = re.compile(r"^#?([0-9A-Fa-f]{6})$")
 
 # Role families used to derive the default pair set. Only roles actually
-# present in the palette are paired; the rest are reported under "skipped".
+# present in the palette are paired; a role outside these families is never
+# evaluated.
 NORMAL_TEXT_ROLES = ("text", "text-muted", "textmuted", "muted", "foreground", "fg")
 LARGE_UI_ROLES = ("primary", "secondary", "accent", "border", "link", "success",
                   "warning", "error", "info")

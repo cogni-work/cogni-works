@@ -152,7 +152,7 @@ Sources: [Discover and install plugins](https://code.claude.com/docs/en/discover
 
 ### Turn on MCP servers
 
-MCP servers are small helper programs that let Claude see your files, your email, and your design tools. Insight-wave needs three of them: **Pencil** (for editorial infographics), **Excalidraw** (for hand-drawn diagrams and sketchnotes), and **claude-in-chrome** (for reading live websites during research and theme extraction). Cogni-workspace has a one-shot command that installs all three.
+MCP servers are small helper programs that let Claude see your files, your email, and your design tools. Insight-wave needs three of them: **Pencil** (for editorial infographics), **Excalidraw** (for hand-drawn diagrams and sketchnotes), and **claude-in-chrome** (for reading live websites during research). Cogni-workspace has a one-shot command that installs all three.
 
 1. **Run the cogni-workspace installer** (paste in the terminal):
 

@@ -20,6 +20,19 @@ A below-AA pair is a finding, not an error -- ``success`` stays true. False is
 reserved for operational failure: an unreadable file, malformed JSON, or a
 pair naming a role the palette does not define.
 
+Nothing the palette supplies is dropped quietly. ``data.unparsed`` holds the
+roles present but not spelled ``#rrggbb``; ``data.unclassified`` holds the
+roles that parse fine but fall outside the vocabulary above, so they form no
+default pair. Both are reported on every run. A caller that reads only
+``data.evaluated`` would otherwise be told a partial audit was a clean one --
+the exact false-confidence shape this script exists to remove.
+
+Every pair also carries ``fg_luminance`` and ``bg_luminance``, the WCAG
+relative luminances the ratio is computed from. They are reported as evidence,
+never as a filter: this script pairs every foreground role with every surface
+role, and only the theme itself knows which of those pairings it intends. No
+pair is suppressed on the script's own guess about intent.
+
 Usage:
     python3 check-contrast.py <palette.json>
     python3 check-contrast.py <palette.json> --pair text:background
@@ -39,13 +52,48 @@ AA_LARGE = 3.0
 
 HEX_RE = re.compile(r"^#?([0-9A-Fa-f]{6})$")
 
-# Role families used to derive the default pair set. Only roles actually
-# present in the palette are paired; a role outside these families is never
-# evaluated.
-NORMAL_TEXT_ROLES = ("text", "text-muted", "textmuted", "muted", "foreground", "fg")
-LARGE_UI_ROLES = ("primary", "secondary", "accent", "border", "link", "success",
-                  "warning", "error", "info")
-SURFACE_ROLES = ("background", "bg", "surface", "canvas", "card")
+# Role families used to derive the default pair set. The vocabulary tracks the
+# role names this repo's themes actually carry -- ``themes/_template/theme.md``
+# and every ``design-variables`` artifact spell the status colour ``danger``,
+# never ``error``. A role the palette defines and this vocabulary does not
+# classify is still reported, under ``data.unclassified``, so a mis-keyed or
+# custom role can never leave the audit quietly partial.
+#
+# One role per line in LARGE_UI_ROLES: the mutation harness anchors on a
+# single-line literal, and a tuple wrapped mid-role is not anchorable.
+NORMAL_TEXT_ROLES = (
+    "text",
+    "text-light",
+    "text-muted",
+    "textmuted",
+    "muted",
+    "foreground",
+    "fg",
+)
+LARGE_UI_ROLES = (
+    "primary",
+    "secondary",
+    "accent",
+    "accent-dark",
+    "accent-muted",
+    "border",
+    "link",
+    "success",
+    "warning",
+    "danger",
+    "info",
+)
+SURFACE_ROLES = (
+    "background",
+    "bg",
+    "surface",
+    "surface-2",
+    "surface-dark",
+    "canvas",
+    "card",
+)
+
+CLASSIFIED_ROLES = frozenset(NORMAL_TEXT_ROLES + LARGE_UI_ROLES + SURFACE_ROLES)
 
 
 # ---------------------------------------------------------------------------
@@ -129,6 +177,8 @@ def evaluate_pair(fg_role, bg_role, fg_value, bg_value, threshold):
         "background": bg_role,
         "fg_hex": fg_value,
         "bg_hex": bg_value,
+        "fg_luminance": round(relative_luminance(fg_rgb), 4),
+        "bg_luminance": round(relative_luminance(bg_rgb), 4),
         "ratio": round(ratio, 4),
         "threshold": threshold,
         "passes": ratio >= threshold,
@@ -228,6 +278,7 @@ def main() -> int:
         "palette": str(path),
         "roles": sorted(usable),
         "unparsed": unparsed,
+        "unclassified": sorted(set(usable) - CLASSIFIED_ROLES),
         "pairs": pairs,
         "evaluated": len(pairs),
         "failures": failures,

@@ -23,6 +23,22 @@
 # passes_aa_normal true and cc07 goes RED. This is the cogni-service harness,
 # not the different scripts/mutation-check.sh that cogni-consult and
 # cogni-portfolio each ship; the repo root has no such script.
+#
+# Second recipe, for the role-vocabulary arm (the discriminator is
+# cc22-danger-is-evaluated):
+#
+#   bash "$HOME/.claude/plugins/marketplaces/managed-service/cogni-service/scripts/mutation-check.sh" \
+#     --root . \
+#     --file cogni-workspace/scripts/check-contrast.py \
+#     --expr 's{^    "danger",\n}{}m' \
+#     --test 'bash cogni-workspace/tests/test-check-contrast.sh' \
+#     --case cc22-danger-is-evaluated
+#
+# Dropping the canonical status role from LARGE_UI_ROLES restores the exact
+# defect this suite exists to pin: danger parses as valid hex, so it reaches
+# neither the pair set nor data.unparsed, and the audit reports clean with the
+# status colour ungraded. One role per line in the vocabulary tuples is what
+# makes that a single-line, single-occurrence anchor.
 
 set -u
 
@@ -260,6 +276,55 @@ else
   fail "cc21-below-aa-is-a-finding-not-an-error"
   echo "  a failing contrast pair must not make the run exit non-zero"
 fi
+
+echo "=== I. role vocabulary and the no-silent-drop contract ==="
+# The vocabulary has to track the role names this repo's themes actually carry.
+# A role the palette defines but the vocabulary does not classify forms no
+# default pair, parses as valid hex so it never reaches data.unparsed, and
+# leaves data.evaluated non-zero -- so without data.unclassified a partial
+# audit is indistinguishable from a clean one.
+
+STATUS="$(palette status '{"danger":"#D32F2F","bg":"#FAFAF8","text":"#111111"}')"
+assert_eq "cc22-danger-is-evaluated" "True" \
+  "$(field "$STATUS" "'danger' in [p['foreground'] for p in data['pairs']]")"
+
+CUSTOM="$(palette custom '{"brand-blurple":"#5865F2","bg":"#FFFFFF","text":"#111111"}')"
+assert_eq "cc23-unknown-role-surfaces" "(True, False)" \
+  "$(field "$CUSTOM" "('brand-blurple' in data['unclassified'], 'brand-blurple' in [p['foreground'] for p in data['pairs']])")"
+
+# 'error' was in the vocabulary and in no theme artifact in this repo; 'danger'
+# is the canonical status role. Pin the removal so it cannot drift back.
+PHANTOM="$(palette phantom '{"error":"#D32F2F","bg":"#FFFFFF"}')"
+assert_eq "cc24-error-is-not-a-role" "True" \
+  "$(field "$PHANTOM" "'error' in data['unclassified']")"
+
+# The regression pin: every role of the repo's own shipped theme must classify.
+# A role added to that palette without reconciling the vocabulary reds this.
+CANONICAL="$WS_ROOT/themes/cogni-work/tokens/colors.json"
+if [ -f "$CANONICAL" ]; then
+  LEFTOVER="$(field "$CANONICAL" "data['unclassified']")"
+  if [ "$LEFTOVER" = "[]" ]; then
+    pass "cc25-canonical-theme-fully-classified"
+  else
+    fail "cc25-canonical-theme-fully-classified"
+    printf '  shipped theme carries roles the vocabulary does not classify: %s\n' "$LEFTOVER"
+  fi
+else
+  fail "cc25-canonical-theme-fully-classified"
+  printf '  expected the shipped theme palette at %s\n' "$CANONICAL"
+fi
+
+echo "=== J. luminance is reported, never used to filter ==="
+
+assert_eq "cc26-pair-carries-luminances" "(1.0, 0.0)" \
+  "$(field "$WHITE_ON_BLACK" "(data['pairs'][0]['fg_luminance'], data['pairs'][0]['bg_luminance'])" --pair fg:bg)"
+
+# Dark text on a dark surface is a pairing the theme does not intend, but the
+# script does not know that and must not guess: the pair is still evaluated and
+# still reported as a failure. Judging intent belongs to the caller.
+SAME_POLARITY="$(palette samepolarity '{"text":"#111111","surface-dark":"#111111"}')"
+assert_eq "cc27-same-polarity-failure-is-reported" "True" \
+  "$(field "$SAME_POLARITY" "'text on surface-dark' in data['failures']")"
 
 echo
 if [ "$failures" -eq 0 ]; then

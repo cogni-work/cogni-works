@@ -69,7 +69,7 @@ This creates your workspace folder structure and walks you through initial setti
 /install-mcp
 ```
 
-Accept the defaults. When it finishes you should have Pencil MCP, Excalidraw MCP, and claude-in-chrome MCP installed — Step 4 uses both Pencil and Excalidraw to render infographics, and claude-in-chrome backs the `claims` and `cogni-issues` skills you will meet later.
+Accept the defaults. When it finishes you should have Pencil MCP, Excalidraw MCP, and claude-in-chrome MCP installed — Step 4 uses both Pencil and Excalidraw to render infographics, and claude-in-chrome backs the `claims` and `cogni-issues` skills, which are outside this workflow.
 
 **What success looks like:** `/workspace-status` reports all MCPs as green, and your workspace directory exists on disk.
 

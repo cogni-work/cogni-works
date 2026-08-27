@@ -146,7 +146,7 @@ Name the keys with the roles the script pairs on — `background`, `surface`, `t
 
 ### 7. Author a Deep Theme System
 
-When a theme outgrows the single-file `theme.md` and the user wants structured authoring — variable swap-out by downstream skills, component primitives, voice/copy templates — promote the theme to a **tiered** layout per Theme System v2 (RFC #124). This operation is opt-in: tier-0 themes (`theme.md` only, no manifest) remain valid forever.
+When a theme outgrows the single-file `theme.md` and the user wants structured authoring — variable swap-out by downstream skills, component primitives, voice/copy templates — promote the theme to a **tiered** layout per Theme System v2. This operation is opt-in: tier-0 themes (`theme.md` only, no manifest) remain valid forever.
 
 **When to offer**: After a successful Operation 5 (ask: *"Want to deepen this into a tiered theme system?"*), or when the user explicitly asks to "build a deep theme", "author tokens", "make this brand a system", or "match the cogni-work pattern". The end-to-end walkthrough — when to migrate, what to keep, tier-by-tier authoring, manifest examples, validation, rollback, common pitfalls — lives at [`cogni-workspace/docs/theme-system-v2-migration.md`](../../docs/theme-system-v2-migration.md). Read that guide first when promoting a tier-0 theme; this operation is the in-skill entry point, the guide is the authoritative how-to.
 
@@ -242,7 +242,7 @@ The theme.md content is the single source of truth — always read it fresh rath
 
 ### 10. Import from Claude Design Bundle
 
-The recommended authoring path for tiered themes (Theme System v2, RFC #132 Phase 3). The user authors a complete design system in Claude Design (claude.ai/design) — tokens, components, assets, and theme.md prose — then exports a handoff bundle at `https://api.anthropic.com/v1/design/h/<hash>`. This operation materialises the bundle into a Theme System v2 theme directory in one re-syncable step.
+The recommended authoring path for tiered themes under Theme System v2. The user authors a complete design system in Claude Design (claude.ai/design) — tokens, components, assets, and theme.md prose — then exports a handoff bundle at `https://api.anthropic.com/v1/design/h/<hash>`. This operation materialises the bundle into a Theme System v2 theme directory in one re-syncable step.
 
 **Why this replaced the live website and PPTX extraction paths**: Claude Design is the authoring tool; this operation is the importer. The bundle ships a complete tiered theme — tokens (canonical JSON + generated CSS), HTML component primitives, deck primitives, and brand assets — that older operations could only produce piecemeal at tier-0. Re-running the importer is idempotent: the bundle is the upstream truth, the local theme directory is the materialised mirror.
 

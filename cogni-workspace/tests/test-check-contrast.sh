@@ -39,6 +39,21 @@
 # neither the pair set nor data.unparsed, and the audit reports clean with the
 # status colour ungraded. One role per line in the vocabulary tuples is what
 # makes that a single-line, single-occurrence anchor.
+#
+# Third recipe, for the narrow --pair arm (the discriminator is
+# cc28-unclassified-survives-the-pair-path):
+#
+#   bash "$HOME/.claude/plugins/marketplaces/managed-service/cogni-service/scripts/mutation-check.sh" \
+#     --root . \
+#     --file cogni-workspace/scripts/check-contrast.py \
+#     --expr 's{"unclassified": sorted\(set\(usable\) - CLASSIFIED_ROLES\)}{"unclassified": [] if requested else sorted(set(usable) - CLASSIFIED_ROLES)}' \
+#     --test 'bash cogni-workspace/tests/test-check-contrast.sh' \
+#     --case cc28-unclassified-survives-the-pair-path
+#
+# The mutant computes data.unclassified in a full-palette-only branch, which is
+# exactly the refactor the emission property is meant to survive. cc22-cc25 all
+# stay GREEN under it, because every one of them runs the default route where
+# requested is empty -- which is why the narrow path needed a case of its own.
 
 set -u
 
@@ -313,6 +328,31 @@ else
   fail "cc25-canonical-theme-fully-classified"
   printf '  expected the shipped theme palette at %s\n' "$CANONICAL"
 fi
+
+# The property above must hold on the narrow --pair path too, not just the
+# default full-palette route every case so far has taken. The asserted role is
+# deliberately NOT the one being graded: asserting on the graded role would be
+# satisfiable by the request itself rather than by unconditional emission.
+# data['evaluated'] is co-asserted, and indexed directly rather than via .get,
+# so a run that formed no pair at all cannot read as a pass.
+assert_eq "cc28-unclassified-survives-the-pair-path" "(True, 1)" \
+  "$(field "$CUSTOM" "('brand-blurple' in data.get('unclassified', []), data['evaluated'])" --pair text:bg)"
+
+# Two spellings that normalise onto one role: the survivor is reported, and so
+# is every key it supersedes. Ids cc28-cc30 land here rather than after section
+# J's cc26/cc27 to keep them beside the contract they pin -- the pairing guard
+# matches red ids against a set of green ids and mutation-check.sh anchors on
+# the printed label, so neither reads file order. Do not renumber.
+COLLIDE="$(palette collide '{"Text":"#111111","text":"#EEEEEE","bg":"#FFFFFF","Brand X":"#5865F2","brand x":"#NOTHEX"}')"
+
+assert_eq "cc29-normalisation-collision-is-surfaced" "[('text', 'text', '#EEEEEE', 'Text'), ('brand x', 'brand x', '#NOTHEX', 'Brand X')]" \
+  "$(field "$COLLIDE" "[(c['role'], c['superseded_key'], c['superseded_value'], c['kept_key']) for c in data['collisions']]")"
+
+# The cross-dict shape: 'Brand X' parses, 'brand x' does not. Before the group
+# pass the role appeared in BOTH buckets at once, so the envelope contradicted
+# itself. One group now assigns to exactly one dict.
+assert_eq "cc30-usable-and-unparsed-are-disjoint" "(True, False)" \
+  "$(field "$COLLIDE" "('brand x' in data['roles'], 'brand x' in data['unparsed'])")"
 
 echo "=== J. luminance is reported, never used to filter ==="
 

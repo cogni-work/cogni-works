@@ -1,10 +1,17 @@
 ---
 library_id: web-layouts
-version: 1.0.0
+version: 1.1.0
 created: 2026-02-26
 ---
 
 # Web Narrative Layout Library
+
+**Schema version: 1.1** — web-brief.md documents should declare `version: "1.1"` in
+their frontmatter. In v1.1 visual style resolves from the brief's selected theme — the
+design tokens in its `theme.md`, optionally enriched with Theme System v2 component
+primitives — instead of from a separately selected style guide. Pre-v1.1 briefs remain
+readable: a `style_guide:` field on a brief is IGNORED, not an error, and style resolves
+from `theme_path` instead.
 
 Section type schemas, typography scale, spacing system, theme-to-variable mapping, and section theming rules for scrollable landing-page-style .pen files rendered via Pencil MCP.
 
@@ -476,7 +483,7 @@ When the web agent renders a brief via Pencil MCP:
 
 1. **Open document at explicit file path** (NOT `open_document("new")`) for G() image support
 2. **Set design tokens** via `set_variables` mapping theme.md to `--` prefixed variable names (referenced as `$--` in fills)
-3. **Load style guide** via `get_style_guide` using the brief's `style_guide` name
+3. **Resolve visual style from the theme** — read the design tokens in the `theme.md` at the brief's `theme_path`; optionally enrich via `scripts/load-theme-component.py --surface web`, treating a `status: "miss"` at exit 0 as normal control flow and falling back to this library's defaults
 4. **Load guidelines** via `get_guidelines("landing-page")` for Pencil landing page patterns
 5. **Create page container** at 1440px wide, vertical layout, `fit_content(2000)`
 6. **Render header** as first child

@@ -57,8 +57,8 @@ Run every check in the layer. For each check that fails:
 
 - `[C]` `type` field is `"web-brief"`
   - If this fails, the renderer will not recognize the file. Fix: set `type: web-brief`
-- `[C]` `version` field is `"1.0"`
-  - If this fails, the renderer may apply wrong parsing rules. Fix: set `version: "1.0"`
+- `[C]` `version` field is `"1.1"` (`"1.0"` is accepted as legacy)
+  - If this fails, the renderer may apply wrong parsing rules. Fix: set `version: "1.1"` — briefs already carrying `version: "1.0"` remain valid
 - `[W]` `theme` field references a valid theme ID
   - If this fails, the renderer will use fallback colors (generic blue). Fix: verify theme ID exists in `/cogni-workspace/themes/{id}/`
 - `[C]` `theme_path` points to an existing theme.md
@@ -69,8 +69,6 @@ Run every check in the layer. For each check that fails:
   - If this fails, the generation metadata will be incomplete. Fix: distill to one sentence with a verb
 - `[W]` `arc_type` is a valid arc type (`why-change`, `problem-solution`, `journey`, `argument`, `report`)
   - If this fails, the metadata is inaccurate. Fix: re-analyze the narrative and assign the correct arc type
-- `[W]` `style_guide` is a non-empty string
-  - If this fails, the renderer cannot load visual direction. Fix: set to the style guide name selected in Step 3
 - `[W]` `conversion_goal` is a valid goal (`consultation`, `demo`, `download`, `trial`, `contact`, `calculate`)
   - If this fails, CTA copy will not match the goal. Fix: set to one of the six valid values
 - `[C]` `sections` count matches actual section count
@@ -93,7 +91,7 @@ For each section, verify:
 - `[C]` Type-specific required fields present (see table below)
   - If this fails, the renderer will produce an incomplete section layout. Fix: add the missing fields per the table
 - `[C]` No color fields present (`fill`, `color`, `background`, `textColor`)
-  - If this fails, hardcoded colors will conflict with theme tokens. Fix: remove all color fields; the renderer decides colors from theme + style guide
+  - If this fails, hardcoded colors will conflict with theme tokens. Fix: remove all color fields; the renderer decides colors from the theme tokens
 
 ### Header/Footer Checks
 
@@ -204,7 +202,7 @@ For each section, verify:
 
 - `[W]` All image prompts share a consistent style suffix
   - **How to detect:** Extract the `Style:` line from each image prompt. They should all match.
-  - If this fails, images will have inconsistent aesthetics. Fix: standardize the `Style:` suffix across all prompts to match the style guide.
+  - If this fails, images will have inconsistent aesthetics. Fix: standardize the `Style:` suffix across all prompts to match the theme's art direction.
 - `[C]` All image prompts include "No text, no people"
   - If this fails, AI may generate text overlays or human figures that conflict with the layout. Fix: append "No text, no people." to every image prompt.
 - `[W]` Image dimensions match section type requirements
@@ -281,13 +279,12 @@ The following example demonstrates the validation process on a brief excerpt wit
 ```yaml
 ---
 type: web-brief
-version: "1.0"
+version: "1.1"
 theme: smarter-service
 theme_path: "/cogni-workspace/themes/smarter-service/theme.md"
 language: "de"
 governing_thought: "Predictive Maintenance revolutioniert die Fertigung."
 arc_type: "why-change"
-style_guide: "Corporate Tech"
 conversion_goal: "consultation"
 sections: 5
 confidence_score: 0.85

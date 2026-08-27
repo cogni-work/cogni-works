@@ -13,10 +13,9 @@ Verify the brief structure matches the expected format.
 ### Frontmatter Checks
 
 - [ ] `type` field is `"storyboard-brief"`
-- [ ] `version` field is `"2.0"`
+- [ ] `version` field is `"2.1"` (`"2.0"` is accepted as legacy)
 - [ ] `theme` field references a valid theme ID
 - [ ] `theme_path` points to an existing theme.md
-- [ ] `style_guide` field contains a style guide name
 - [ ] `poster_size` is one of: A0, A1, A2, A3
 - [ ] `poster_count` is 3-5
 - [ ] `language` is "en" or "de"

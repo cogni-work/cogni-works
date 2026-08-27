@@ -64,10 +64,10 @@ images_dir = "{brief_dir}/images"
 
 ### Step 1: Parse Brief Content
 
-1. Parse YAML frontmatter for page configuration (theme_path, style_guide, arc_type, conversion_goal, customer, provider, language, governing_thought)
+1. Parse YAML frontmatter for page configuration (theme_path, arc_type, conversion_goal, customer, provider, language, governing_thought)
 2. Extract header and footer specifications
 3. Extract all section specifications (type, section_theme, arc_role, headline, body, stats, bullets, image_prompt, cta)
-4. Note the `style_guide` name and `theme_path`
+4. Note the `theme_path`
 5. **Read theme.md** from the `theme_path` specified in frontmatter. Extract font families, weights, and color values. If theme unavailable, use fallbacks from web-layouts.md.
 6. Store parsed data for .pen rendering (Steps 2-8). HTML generation (Step 9) reads directly from the rendered .pen file.
 
@@ -100,12 +100,10 @@ Call `set_variables` with the **Variable Name** column (no `$`). All subsequent 
 
 The resolved hex values are retrieved from the .pen file in Step 9 via `get_variables` — no need to store them here.
 
-### Step 3: Load Style Guide + Guidelines
+### Step 3: Load Guidelines
 
-1. Call `get_style_guide(name="{style_guide}")` to load the visual direction
-2. Call `get_guidelines("landing-page")` to load Pencil landing page patterns
-3. Use the style guide for composition and imagery decisions
-4. Use guidelines for structural best practices
+1. Call `get_guidelines("landing-page")` to load Pencil landing page patterns
+2. Use guidelines for structural best practices. Composition and imagery decisions come from the theme design tokens set in Step 2 — typography, color roles, and imagery direction read from the `theme.md` at `theme_path`.
 
 ### Step 4: Create Page Container
 
@@ -561,7 +559,6 @@ Write `{brief_dir}/web-render-manifest.json` with metadata for downstream consum
   "arc_type": "{arc_type}",
   "arc_id": "{arc_id}",
   "theme_path": "{theme_path}",
-  "style_guide": "{style_guide}",
   "governing_thought": "{governing_thought}",
   "primary_cta": {
     "text": "{primary_cta_text}",
@@ -634,7 +631,6 @@ When rendering, map `section_theme` to actual fill values:
 - DO NOT skip sections or reorder them
 - MUST generate ALL image prompts specified in the brief
 - MUST use design tokens from set_variables (not hardcoded colors)
-- MUST load the specified style guide for visual direction
 - Return JSON-only response (no prose)
 
 ## Image Generation Strategy
@@ -652,7 +648,6 @@ When rendering, map `section_theme` to actual fill values:
 | Brief not found | Return error JSON |
 | Pencil MCP unavailable | Return error JSON with tool status |
 | Image generation fails | Continue without image, note in response |
-| Style guide not found | Render without style guide, use theme only |
 | set_variables fails | Use hardcoded fallback values |
 | Section rendering fails | Skip section, log error, continue |
 | HTML generation fails | Return success JSON without html_path, add "html_error" field |

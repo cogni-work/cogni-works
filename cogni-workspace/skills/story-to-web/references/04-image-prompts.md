@@ -47,11 +47,11 @@ Map the section's arc role to a visual approach:
 | proof | Abstract visualization of results or transformation | Upward graph, connected network, before/after states |
 | roadmap | Process or pathway visualization | Converging paths, stepping stones, timeline flow |
 
-### Step 3: Align with the Style Guide
+### Step 3: Align with the Theme
 
-Check the brief's `style_guide` field. Every image prompt must end with a `Style:` suffix that reflects the selected guide's aesthetic. Common mappings:
+Read the resolved theme's art-direction tokens — the palette, mood and visual register recorded in its `theme.md`. Every image prompt must end with a `Style:` suffix that reflects those tokens. Common mappings:
 
-| Style Guide Aesthetic | Style Suffix |
+| Theme Aesthetic | Style Suffix |
 |----------------------|-------------|
 | Corporate / professional | `Style: professional stock photography, corporate technology.` |
 | Bold / dark / high-contrast | `Style: dramatic lighting, high contrast, cinematic.` |
@@ -59,7 +59,7 @@ Check the brief's `style_guide` field. Every image prompt must end with a `Style
 | Minimal / clean / data-driven | `Style: clean minimal composition, muted tones, modern.` |
 | Industrial / engineering | `Style: industrial photography, precision engineering, technical.` |
 
-If the style guide does not map cleanly, default to `Style: professional stock photography, modern, clean.`
+If the theme's tokens do not map cleanly, default to `Style: professional stock photography, modern, clean.`
 
 ### Step 4: Compose the Prompt
 
@@ -68,7 +68,7 @@ Assemble the prompt using the appropriate formula (hero or feature). Verify:
 - [ ] Single dominant subject (not a list of unrelated objects)
 - [ ] "No text, no people" included
 - [ ] Aspect ratio or format specified
-- [ ] Style suffix matches the brief's style guide
+- [ ] Style suffix matches the theme's art direction
 - [ ] Color temperature matches other prompts in this brief (all warm OR all cool)
 
 ---
@@ -90,7 +90,7 @@ The hero section uses a full-width background image with a dark overlay:
 Professional {photograph/illustration} of {subject relevant to narrative},
 {key visual elements}, {lighting/mood}. Wide panoramic shot.
 No text, no people. 16:9 aspect ratio.
-Style: {style_guide aesthetic}.
+Style: {theme art-direction tokens}.
 ```
 
 **Example:**
@@ -105,7 +105,7 @@ Style: professional stock photography, corporate technology.
 **Key rules:**
 - Always specify "No text, no people" to avoid rendering issues
 - Match the industry context from the narrative
-- Reference the style guide aesthetic for consistency
+- Reference the theme's aesthetic for consistency
 - Wide format (panoramic, 16:9 minimum)
 
 ---
@@ -126,7 +126,7 @@ Feature-alternating sections use side-by-side images:
 {Close-up/Detail/Abstract} {photograph/illustration} of {specific subject},
 {key visual detail}, {mood/lighting}.
 {Format}. No text, no people.
-Style: {style_guide aesthetic}.
+Style: {theme art-direction tokens}.
 ```
 
 **Rules:**
@@ -205,14 +205,13 @@ type: hero
 arc_role: hook
 headline: "Predictive Maintenance macht Ihre Fertigung unaufhaltsam"
 subline: "Senken Sie ungeplante Stillstände um 73%..."
-style_guide: "Corporate Tech"
 ```
 
 **Step 1 — Section message:** The hero introduces a manufacturing predictive maintenance narrative. The core subject is a modern production environment with smart technology. The emotional register is aspirational (promise of transformation).
 
 **Step 2 — Visual approach:** Hero/hook calls for an aspirational wide shot of the industry environment. The visual anchor is a smart factory floor — the physical space where the transformation happens.
 
-**Step 3 — Style alignment:** "Corporate Tech" maps to professional stock photography with corporate technology aesthetic. Color temperature: cool (blue ambient lighting fits both the tech theme and the guide).
+**Step 3 — Style alignment:** The theme's art-direction tokens read corporate and technological, mapping to professional stock photography. Color temperature: cool (blue ambient lighting fits both the tech subject and the theme).
 
 **Step 4 — Compose and verify:**
 
@@ -224,7 +223,7 @@ wide panoramic shot. No text, no people. 16:9 aspect ratio.
 Style: professional stock photography, corporate technology.
 ```
 
-Verification: Single subject (factory floor). "No text, no people" present. Wide format specified. Style suffix matches guide. Cool color temperature (blue) — consistent with other prompts in this brief.
+Verification: Single subject (factory floor). "No text, no people" present. Wide format specified. Style suffix matches the theme. Cool color temperature (blue) — consistent with other prompts in this brief.
 
 **Stock vs AI decision:** Cannot describe in 2-3 keywords (need specific composition with sensor nodes, lighting, overlays). Use `"ai"`.
 
@@ -238,14 +237,13 @@ type: feature-alternating
 arc_role: solution
 headline: "Remote Patient Monitoring reduziert Klinikbesuche um 40%"
 body: "Wearable-Sensoren übermitteln Vitalwerte in Echtzeit an das Ärzteteam..."
-style_guide: "Clean Medical"
 ```
 
 **Step 1 — Section message:** This feature section describes remote patient monitoring technology. Core subject: medical wearable sensors transmitting data. Emotional register: capability and precision (solution role).
 
 **Step 2 — Visual approach:** Solution sections need a detail shot of the technology. Visual anchor: a medical wearable device — the specific technology being described.
 
-**Step 3 — Style alignment:** "Clean Medical" maps to clean minimal composition with clinical tones. Color temperature: cool/neutral (white, light blue, clinical).
+**Step 3 — Style alignment:** The theme's art-direction tokens read clean and minimal with clinical tones. Color temperature: cool/neutral (white, light blue, clinical).
 
 **Step 4 — Compose and verify:**
 
@@ -257,7 +255,7 @@ Square format. No text, no people.
 Style: clean minimal composition, clinical, modern healthcare.
 ```
 
-Verification: Single subject (wearable device). "No text, no people" present. Square format specified. Style suffix matches guide. Cool/neutral temperature — consistent with other healthcare prompts.
+Verification: Single subject (wearable device). "No text, no people" present. Square format specified. Style suffix matches the theme. Cool/neutral temperature — consistent with other healthcare prompts.
 
 **Stock vs AI decision:** Specific medical device with particular composition and lighting needs. Cannot reduce to 2-3 stock keywords. Use `"ai"`.
 
@@ -271,14 +269,13 @@ type: feature-alternating
 arc_role: evidence
 headline: "Automatisierte Compliance spart 12.000 Arbeitsstunden pro Jahr"
 body: "KI-gestützte Regelprüfung scannt Transaktionen in Echtzeit..."
-style_guide: "Corporate Finance"
 ```
 
 **Step 1 — Section message:** This feature section presents automated compliance as evidence. Core subject: automated transaction scanning. Emotional register: efficiency and reliability (evidence role).
 
 **Step 2 — Visual approach:** Evidence sections call for abstract visualization of results. Visual anchor: flowing data streams being organized and filtered — representing the automated scanning process.
 
-**Step 3 — Style alignment:** "Corporate Finance" maps to professional, conservative, data-driven aesthetic. Color temperature: cool (dark blues, greens — financial sector palette).
+**Step 3 — Style alignment:** The theme's art-direction tokens read professional, conservative and data-driven. Color temperature: cool (dark blues, greens — financial sector palette).
 
 **Step 4 — Compose and verify:**
 
@@ -291,7 +288,7 @@ Square format. No text, no people.
 Style: professional corporate finance, data-driven, conservative.
 ```
 
-Verification: Single subject (data filtering process). "No text, no people" present. Square format specified. Style suffix matches guide. Cool temperature (blues, greens) — consistent.
+Verification: Single subject (data filtering process). "No text, no people" present. Square format specified. Style suffix matches the theme. Cool temperature (blues, greens) — consistent.
 
 **Stock vs AI decision:** Abstract concept (data flowing through a compliance framework). No real-world photographic equivalent. Use `"ai"`.
 
@@ -411,7 +408,7 @@ After generating all image prompts for a brief, run this verification pass. For 
 FOR each image_prompt in the brief:
   1. STYLE SUFFIX — Does this prompt end with the same Style: line
      as all other prompts in this brief?
-     IF NO: Standardize to the brief's style guide aesthetic.
+     IF NO: Standardize to the theme's art-direction tokens.
 
   2. COLOR TEMPERATURE — Does this prompt use the same temperature
      family (warm OR cool) as all other prompts?

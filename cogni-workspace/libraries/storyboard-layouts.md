@@ -1,10 +1,17 @@
 ---
 library_id: storyboard-layouts
-version: 2.0.0
+version: 2.1.0
 created: 2026-02-27
 ---
 
 # Storyboard Layout Library
+
+**Schema version: 2.1** — storyboard-brief.md documents should declare `version: "2.1"`
+in their frontmatter. In v2.1 visual style resolves from the brief's selected theme — the
+design tokens in its `theme.md`, optionally enriched with Theme System v2 component
+primitives — instead of from a separately selected style guide. Pre-v2.1 briefs remain
+readable: a `style_guide:` field on a brief is IGNORED, not an error, and style resolves
+from `theme_path` instead.
 
 Poster composition model, section stacking rules, portrait layout adaptations, dimension system, canvas arrangement, and print constraints for multi-poster storyboards rendered via Pencil MCP.
 
@@ -280,7 +287,7 @@ When the storyboard agent renders a brief via Pencil MCP:
 
 1. **Open document at explicit file path** (NOT `open_document("new")`) — ensures images directory exists for G() calls
 2. **Set design tokens** via `set_variables` mapping theme.md to `--` prefixed variable names (same 14 variables as web)
-3. **Load style guide** via `get_style_guide` using the brief's `style_guide` name
+3. **Resolve visual style from the theme** — read the design tokens in the `theme.md` at the brief's `theme_path`; optionally enrich via `scripts/load-theme-component.py --surface deck`, treating a `status: "miss"` at exit 0 as normal control flow and falling back to this library's defaults
 4. **Load guidelines** via `get_guidelines("design-system")` for composition patterns
 5. **Read BOTH** this file AND `web-layouts.md` for section type schemas
 6. **Create each poster** as a root-level frame at computed x position (print dimensions)

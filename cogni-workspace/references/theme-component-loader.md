@@ -46,7 +46,7 @@ The loader's miss reasons are intent-revealing strings, not enums — they exist
 
 - `tier-0 theme (no manifest.json)` — the theme has not opted into Theme System v2. Use the inline template.
 - `manifest has no tiers map` — manifest exists but is malformed in a way the validator should have caught. Use the inline template.
-- `theme has no components tier` — manifest declares `tiers.tokens` only (the current state of `cogni-work`). Use the inline template.
+- `theme has no components tier` — manifest declares a tokens tier only, with no `tiers.components`. Use the inline template.
 - `surface 'X' not declared in tiers.components` — the components tier exists but doesn't expose this surface. Use the inline template.
 - `component file not found: <path>` — the surface declares a path but the file is missing on disk. Use the inline template.
 - `theme directory not found: <path>` — the slug doesn't exist under `themes/`. Use the inline template.

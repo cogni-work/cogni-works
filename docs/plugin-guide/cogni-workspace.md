@@ -336,7 +336,7 @@ Reach for this instead of the PPTX path when the deck will be presented from a b
 
 ### `story-to-web` — Turn a narrative into a scrollable web brief
 
-Absorbed from the retired cogni-visual plugin. Decomposes a narrative into a scroll-driven section architecture and writes `web-brief.md`, by default to `{source_dir}/cogni-visual/web-brief.md`: a selected visual style guide, one message per section, assertion headlines, scroll-optimized copy, image prompts, and a CTA proposal (`conversion_goal` defaults to `consultation`, `max_sections` to 10). Sections alternate light and dark so each message lands before the next begins.
+Absorbed from the retired cogni-visual plugin. Decomposes a narrative into a scroll-driven section architecture and writes `web-brief.md`, by default to `{source_dir}/cogni-visual/web-brief.md`: one message per section, assertion headlines, scroll-optimized copy, image prompts, and a CTA proposal (`conversion_goal` defaults to `consultation`, `max_sections` to 10). Sections alternate light and dark so each message lands before the next begins.
 
 As with `story-to-slides`, this is the briefing half only: the `web` agent renders the brief via Pencil MCP into a `.pen` file and then exports a self-contained HTML page from it, and the brief itself contains no color fields. It does not produce slides (`story-to-slides`), print storyboard posters (`story-to-storyboard`), or polished prose (`copywriter`).
 

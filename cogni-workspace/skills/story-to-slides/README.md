@@ -35,7 +35,7 @@ Dispatch `story-to-slides` with `source_path` (and optionally `theme`, `language
 
 - Single narrative file, default theme (smarter-service): `source_path=/path/to/narrative.md language=en`
 - Project directory (reads all `.md` files): `source_path=/path/to/proposal/ theme=smarter-service language=en`
-- With a specific theme (created via `pick-theme`): `source_path=/path/to/proposal/ theme=cogni-work language=en`
+- With a specific theme (created via `grab-theme`): `source_path=/path/to/proposal/ theme=cogni-work language=en`
 - Custom client theme: `source_path=/path/to/proposal/ theme=acme-corp language=de`
 - Why Change project (auto-detected or explicit): `source_path=/path/to/proposals/customer-slug/ arc_type=why-change`
 

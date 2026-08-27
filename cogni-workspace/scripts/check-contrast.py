@@ -21,11 +21,23 @@ reserved for operational failure: an unreadable file, malformed JSON, or a
 pair naming a role the palette does not define.
 
 Nothing the palette supplies is dropped quietly. ``data.unparsed`` holds the
-roles present but not spelled ``#rrggbb``; ``data.unclassified`` holds the
+roles no spelling of which parsed as ``#rrggbb``; ``data.unclassified`` holds the
 roles that parse fine but fall outside the vocabulary above, so they form no
-default pair. Both are reported on every run. A caller that reads only
+default pair; ``data.collisions`` names the superseded spellings. All three
+are reported on every run. A caller that reads only
 ``data.evaluated`` would otherwise be told a partial audit was a clean one --
 the exact false-confidence shape this script exists to remove.
+
+Role keys are normalised with ``strip().lower()``, so two spellings can collapse
+onto one role. A normalised key lands in exactly one of ``data.roles`` and
+``data.unparsed``, never both. Within a collided group the survivor is the first
+entry in source order whose value parses as ``#rrggbb``, or the first entry when
+none does -- so the survivor is not simply the earliest spelling, and which value
+survives remains a function of key order in the file. The remedy is to
+de-duplicate the source palette rather than to trust the survivor. What the group
+does not do is lose an entry silently: every spelling the survivor supersedes is
+named in ``data.collisions``, with the value it carried and the ``kept_key`` that
+beat it.
 
 Every pair also carries ``fg_luminance`` and ``bg_luminance``, the WCAG
 relative luminances the ratio is computed from. They are reported as evidence,
@@ -239,14 +251,29 @@ def main() -> int:
     if not isinstance(raw, dict):
         return emit(False, None, "palette must be a JSON object of role -> hex colour")
 
+    grouped = {}
+    for role, value in raw.items():
+        grouped.setdefault(str(role).strip().lower(), []).append((role, value))
+
     usable = {}
     unparsed = {}
-    for role, value in raw.items():
-        key = str(role).strip().lower()
-        if parse_hex(value) is None:
-            unparsed[key] = value
+    collisions = []
+    for key, entries in grouped.items():
+        winner = next((i for i, (_r, v) in enumerate(entries)
+                       if parse_hex(v) is not None), None)
+        kept = 0 if winner is None else winner
+        kept_role, kept_value = entries[kept]
+        for role, value in entries[:kept] + entries[kept + 1:]:
+            collisions.append({
+                "role": key,
+                "superseded_key": str(role),
+                "superseded_value": value,
+                "kept_key": str(kept_role),
+            })
+        if winner is None:
+            unparsed[key] = kept_value
         else:
-            usable[key] = value.strip() if isinstance(value, str) else value
+            usable[key] = kept_value.strip()
 
     requested = []
     try:
@@ -278,6 +305,7 @@ def main() -> int:
         "palette": str(path),
         "roles": sorted(usable),
         "unparsed": unparsed,
+        "collisions": collisions,
         "unclassified": sorted(set(usable) - CLASSIFIED_ROLES),
         "pairs": pairs,
         "evaluated": len(pairs),

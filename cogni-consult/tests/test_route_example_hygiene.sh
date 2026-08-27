@@ -12,7 +12,7 @@
 #
 # Which mutation reddens which case. Two recipes are recorded in the pull
 # request — one drives the second case, one drives the fifth against the
-# plugin-root README.md; the retired names they substitute are deliberately not
+# output-styles body; the retired names they substitute are deliberately not
 # spelled here, so this file introduces no new mention of a retired plugin.
 #   route-examples-found         deleting both `Route:` example lines
 #   route-example-slug-resolves  rewriting the route token to any prefix listed
@@ -20,7 +20,7 @@
 #   route-example-non-default    rewriting the route token to consult-design-thinking
 #   route-example-parity         changing the route token at one site only
 #   no-retired-plugin-name       planting any retired prefix in any scanned body
-#                                (the recorded README recipe)
+#                                (the recorded output-styles recipe)
 #
 # RELATIONSHIP TO scripts/check-external-dispatch.py. That repo-level guard reads
 # the SAME registry and already scans this subject file, so this suite is not a
@@ -74,7 +74,8 @@
 # file, so they key on that file. Case 5's predicate is plugin-wide — a retired
 # name is wrong in any authored prose the plugin ships — so it scans an
 # ENUMERATED subject: every `skills/**/SKILL.md`, the plugin-root `README.md`
-# and `CLAUDE.md`, and every `references/**/*.md`.
+# and `CLAUDE.md`, every `references/**/*.md`, every `agents/**/*.md`, and every
+# `output-styles/**/*.md`.
 #
 # What that subject leaves out, and why it is enumerated rather than globbed.
 # `scripts/` and `tests/` are excluded because no lexical carve-out clears them
@@ -86,7 +87,8 @@
 # sits adjacent in the source at all; and 1 bare mention in a comment. Including
 # those trees would make the case permanently red against a correct tree, which
 # is the failure this enumeration exists to avoid. `agents/` and
-# `output-styles/` are authored prose too and are simply not covered yet.
+# `output-styles/` are authored prose too, and are covered: both were added to
+# the subject once they were measured clean under the same bare-name predicate.
 # A whole-tree glob over `$PLUGIN_DIR` is also deliberately avoided: engagement
 # directories live under `$PLUGIN_DIR/{slug}/`, so a glob would scan a user's
 # own engagement content as if it were plugin source.
@@ -199,9 +201,9 @@ fi
 
 # --- case 5: no-retired-plugin-name ------------------------------------------
 # No retired plugin prefix may appear in any scanned body in this plugin — skill
-# bodies, the plugin-root README.md and CLAUDE.md, and references/**/*.md — in a
-# Route: note or in prose. An unreadable, empty, or malformed registry fails
-# rather than passing silently.
+# bodies, the plugin-root README.md and CLAUDE.md, references/**/*.md,
+# agents/**/*.md and output-styles/**/*.md — in a Route: note or in prose. An
+# unreadable, empty, or malformed registry fails rather than passing silently.
 retired_prefixes="$(python3 -c '
 import json, sys
 with open(sys.argv[1], encoding="utf-8") as fh:
@@ -228,10 +230,12 @@ for prefix in prefixes:
 # The suite runs under `set -u` only — there is no `set -e` and no pipefail — so
 # a find over a missing directory is inert here; do not add `set -e` without
 # revisiting this.
-scan_desc='skills/**/SKILL.md, README.md, CLAUDE.md, references/**/*.md'
+scan_desc='skills/**/SKILL.md, README.md, CLAUDE.md, references/**/*.md, agents/**/*.md, output-styles/**/*.md'
 scan_bodies="$({
   find "$PLUGIN_DIR/skills" -name SKILL.md -type f
   find "$PLUGIN_DIR/references" -name '*.md' -type f
+  find "$PLUGIN_DIR/agents" -name '*.md' -type f
+  find "$PLUGIN_DIR/output-styles" -name '*.md' -type f
   [ -f "$PLUGIN_DIR/README.md" ] && printf '%s\n' "$PLUGIN_DIR/README.md"
   [ -f "$PLUGIN_DIR/CLAUDE.md" ] && printf '%s\n' "$PLUGIN_DIR/CLAUDE.md"
 } 2>/dev/null | sort)"
@@ -245,15 +249,16 @@ scan_bodies="$({
 # Before the widening, an absent skills/ tree was caught by a dedicated
 # `-z "$skill_bodies"` test; once the subject grew, a bare emptiness test on the
 # whole set only fires when EVERY surface is empty, so an absent skills/ tree
-# would be absorbed by the other three and pass silently.
+# would be absorbed by the others and pass silently.
 #
-# BOTH directory-glob arms — skills/ and references/ — are tested against the
-# ASSEMBLED SUBJECT ($scan_bodies), never with a second find and never with a
-# bare `-d`. A `-d` test asks whether the directory exists, which is a strictly
-# weaker question than whether the scan actually reaches anything inside it: a
-# directory left in place but emptied of its .md files passes `-d` while
-# contributing nothing to the subject, so the surface silently narrows and the
-# case still prints PASS. Testing the subject cannot drift from what is scanned.
+# EVERY directory-glob arm — skills/, references/, agents/, output-styles/ — is
+# tested against the ASSEMBLED SUBJECT ($scan_bodies), never with a second find
+# and never with a bare `-d`. A `-d` test asks whether the directory exists,
+# which is a strictly weaker question than whether the scan actually reaches
+# anything inside it: a directory left in place but emptied of its .md files
+# passes `-d` while contributing nothing to the subject, so the surface silently
+# narrows and the case still prints PASS. Testing the subject cannot drift from
+# what is scanned.
 #
 # The README.md and CLAUDE.md arms are deliberately NOT of that shape and need
 # no conversion: each is a single file gated on `-f`, the identical test the
@@ -266,6 +271,10 @@ printf '%s\n' "$scan_bodies" | grep -q '/skills/.*/SKILL\.md$' \
 [ -f "$PLUGIN_DIR/CLAUDE.md" ] || missing_surface="$missing_surface CLAUDE.md"
 printf '%s\n' "$scan_bodies" | grep -q '/references/.*\.md$' \
   || missing_surface="$missing_surface references/**/*.md"
+printf '%s\n' "$scan_bodies" | grep -q '/agents/.*\.md$' \
+  || missing_surface="$missing_surface agents/**/*.md"
+printf '%s\n' "$scan_bodies" | grep -q '/output-styles/.*\.md$' \
+  || missing_surface="$missing_surface output-styles/**/*.md"
 
 if [ -z "$retired_prefixes" ]; then
   fail "no-retired-plugin-name" "no usable retired_prefixes[] readable from $RETIRED (vacuous scan)"

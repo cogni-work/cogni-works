@@ -21,11 +21,11 @@ allowed-tools: Read, Write, Edit, Bash, Grep, Glob, TodoWrite, AskUserQuestion, 
 
 ## Purpose
 
-Read any narrative document with an existing story arc and produce an optimized storyboard brief that the Pencil MCP renderer can turn into a sequence of portrait poster storyboards. You are a **print storytelling architect**: analyze the narrative's argument structure, select a visual style guide, map arc stations to posters, decompose each poster into stacked web sections, and generate print-optimized copy and image prompts.
+Read any narrative document with an existing story arc and produce an optimized storyboard brief that the Pencil MCP renderer can turn into a sequence of portrait poster storyboards. You are a **print storytelling architect**: analyze the narrative's argument structure, resolve the visual style from the selected theme, map arc stations to posters, decompose each poster into stacked web sections, and generate print-optimized copy and image prompts.
 
 A storyboard is a physical walkthrough medium — each poster represents one arc station (Why Change, Why Now, Why You, Why Pay) containing 1-3 rich web section types stacked vertically. Posters reuse the same 10 section types as web narratives but paginate them into exactly 3-5 portrait DIN A posters. There are NO separate title or summary bookend posters — the first poster starts with a hero section and the last poster ends with a CTA section.
 
-The brief describes WHAT each poster contains and which section types to use. All visual decisions (colors, fonts, spacing) are delegated to the Pencil renderer via the theme and style guide. Briefs contain no color fields.
+The brief describes WHAT each poster contains and which section types to use. All visual decisions (colors, fonts, spacing) are delegated to the Pencil renderer via the theme. Briefs contain no color fields.
 
 ## Parameters
 
@@ -40,7 +40,7 @@ The brief describes WHAT each poster contains and which section types to use. Al
 | `poster_size` | `A1` | DIN format: A0, A1, A2, A3 (portrait only) |
 | `max_posters` | `4` | Maximum poster count (3-5) |
 | `conversion_goal` | `consultation` | CTA type: consultation, demo, download, trial, contact, calculate |
-| `style_guide` | `auto` | Pre-selected style guide name. When provided, skip selection. |
+| `style_guide` | `auto` | **Deprecated — accepted and ignored.** Visual style resolves from the selected theme (Step 3). Passing a value is never an error. |
 | `industry` | `auto` | Industry context for image prompts and tag selection |
 | `arc_type` | `auto` | Story arc hint: why-change, problem-solution, journey, argument, report |
 | `arc_id` | from frontmatter | Narrative arc ID from the `narrative` skill. Mapped to visual `arc_type` in Step 1. |
@@ -83,7 +83,7 @@ This rule governs generated output copy only — headlines, body text, section l
 
 ### No Color Fields
 
-Briefs contain ZERO visual fields: no `Background:`, `Text-Color:`, `Icon-Color:`. The Pencil renderer reads the theme and style guide directly.
+Briefs contain ZERO visual fields: no `Background:`, `Text-Color:`, `Icon-Color:`. The Pencil renderer reads the theme directly.
 
 ---
 
@@ -114,7 +114,7 @@ Set `source_dir` = parent directory of selected `source_path`.
 
 ### TodoWrite Initialization
 
-Before reading content, initialize TodoWrite with workflow steps: Parse parameters, Read narrative, Select style guide, Map arc stations to posters, Decompose into sections, Write section copy, Propose CTAs, Poster preview, Validate, Write brief.
+Before reading content, initialize TodoWrite with workflow steps: Parse parameters, Read narrative, Resolve visual style, Map arc stations to posters, Decompose into sections, Write section copy, Propose CTAs, Poster preview, Validate, Stakeholder review, Write brief.
 
 ### Execution Protocol
 
@@ -160,23 +160,37 @@ Read all source files. Extract governing thought (single sentence).
 
 ---
 
-### Step 3: Select Style Guide (INTERACTIVE)
+### Step 3: Resolve Visual Style from Theme
 
-> **WHY:** The style guide determines the visual personality of every poster — typography weight, illustration approach, color usage patterns. Selecting it before decomposition ensures consistent design language.
+> **WHY:** The theme resolved in Step 1 already carries every visual decision a poster needs — typography weight, illustration approach, color usage patterns. Reading style from it keeps one source of truth and removes a selection step that has no backing tool.
 
-**Read reference:** `$CLAUDE_PLUGIN_ROOT/skills/story-to-web/references/01-style-guide-selection.md`
+**Read reference:** `$CLAUDE_PLUGIN_ROOT/references/theme-component-loader.md`
 
-If `style_guide` parameter provided (not `auto`): skip selection, use directly.
+A `style_guide` value on an inbound brief or parameter is accepted and ignored — never an error, so legacy briefs and callers that still pass it run unchanged.
 
-Otherwise:
-1. Call Pencil MCP `get_style_guide_tags()` to retrieve available tags
-2. Select 5-10 tags based on theme, tone, industry, arc type. Always include `"website"` first (storyboards reuse web visual system). Reject `mobile-*` guides.
-3. Call Pencil MCP `get_style_guide(tags)` to retrieve candidates
-4. Score candidates using weighted algorithm in reference file
+Step 1 stored the absolute path to the selected `theme.md`. Read its design tokens directly — that is the authoritative style source for every poster.
 
-If interactive: present top 2-3 via AskUserQuestion (score + 1-sentence why). On empty response, auto-select top.
+**Derive both probe inputs from that path.** Step 1 stores the theme path alone — no slug, no themes directory — so compute them here:
+- `theme_slug` = the theme directory's own name, i.e. `basename(dirname(theme_path))`
+- `themes_dir` = `dirname(dirname(theme_path))`
 
-**Output:** Selected style guide name.
+(Passing `--themes-dir` explicitly is the first-ranked source in `theme-component-loader.md` §Themes-dir resolution, so this derived value wins over the `$COGNI_WORKSPACE_ROOT/themes` and walk-up fallbacks the loader would otherwise try.)
+
+**Optional tier enrichment.** A theme may additionally expose Theme System v2 component primitives. Probe for one with all four required flags:
+
+```bash
+python3 $CLAUDE_PLUGIN_ROOT/scripts/load-theme-component.py \
+    --themes-dir <themes_dir> \
+    --theme-slug <theme_slug> \
+    --surface web \
+    --component <component-name>
+```
+
+Probe per section type you are about to render — pass the section type name (`hero`, `stat-row`, `cta`, …) as `--component`. If no component name is in hand, skip the probe; the fallback below is already a complete style source. Use `--surface web` — storyboards reuse the web visual system. Tiers come only from this probe, never from a theme-resolution return value.
+
+**Tier-0 / miss path.** A theme with no `manifest.json` emits no `tiers` key at all, and the probe returns `status: "miss"` at exit 0. Treat a miss as normal control flow: fall back to the `theme.md` tokens plus the `libraries/storyboard-layouts.md` and `libraries/web-layouts.md` defaults and continue, rather than blocking or prompting — a tier-0 theme is a supported configuration, not a failure.
+
+**Output:** Resolved style source — the theme's `theme.md` design tokens, plus any component primitives the tier probe returned.
 
 ---
 
@@ -277,7 +291,7 @@ First, output the poster plan table as a regular message:
 | 1/N | {label} | 2 | hero (dark) + problem-statement (light) |
 | ... | ... | ... | ... |
 
-Size: {poster_size} portrait | Posters: {count} | Style: {style_guide} | Arc: {arc_id or arc_type}
+Size: {poster_size} portrait | Posters: {count} | Arc: {arc_id or arc_type}
 SELF-CHECK: Total posters = {count}. Must be 3-5.
 ```
 
@@ -342,7 +356,7 @@ Write the review verdict to `{output_dir}/storyboard-brief.review.json`.
 Generate the final brief with YAML frontmatter and poster specifications following `EXAMPLE_STORYBOARD_BRIEF.md` format. Write using Write tool.
 
 **Final checks:**
-- YAML frontmatter complete (type, version, theme, style_guide, poster_size, arc_id)
+- YAML frontmatter complete (type, version, theme, poster_size, arc_id)
 - Each poster has poster_label, sequence "N/M", and 1-3 sections
 - First poster starts with hero, last ends with cta
 - All section types have required fields per web-layouts.md
@@ -359,7 +373,7 @@ Generate the final brief with YAML frontmatter and poster specifications followi
 
 | Reference | Step | Purpose |
 |-----------|------|---------|
-| **story-to-web/01-style-guide-selection.md** | 3 | Tag scoring algorithm, theme-to-tag mapping |
+| **theme-component-loader.md** (plugin root) | 3 | Tier probe envelope, miss-is-normal control flow, themes-dir resolution |
 | **01-poster-architecture.md** | 4 | Arc-to-poster mapping, section stacking, poster templates |
 | **story-to-web/02-section-architecture.md** | 5 | Section type decision tree, decomposition rules |
 | **02-poster-copywriting.md** | 6 | Print headline rules, body constraints, number plays |

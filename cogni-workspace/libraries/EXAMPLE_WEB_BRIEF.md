@@ -1,6 +1,6 @@
 ---
 type: web-brief
-version: "1.0"
+version: "1.1"
 theme: smarter-service
 theme_path: "/cogni-workspace/themes/smarter-service/theme.md"
 customer: "Maschinenbau-Mittelstand Deutschland"
@@ -11,13 +11,11 @@ arc_type: "why-change"
 arc_id: "industry-transformation"
 governing_thought: "Predictive Maintenance senkt ungeplante Stillstände um 73% und macht den Maschinenbau fit für die nächste Dekade."
 confidence_score: 0.89
-style_guide: "Corporate Tech"
 conversion_goal: "consultation"
 sections: 8
 transformation_notes: |
   Story-to-web transformation.
   Theme: smarter-service. Arc: why-change.
-  Style guide: Corporate Tech (tags: corporate, technology, blue, dark-hero, modern).
   8 sections, 89% avg confidence.
   4 number plays, 8 headlines optimized.
 ---
@@ -289,7 +287,6 @@ conversion_goal: "consultation"
 **Governing Thought:** Predictive Maintenance senkt ungeplante Stillstände um 73% und macht den Maschinenbau fit für die nächste Dekade.
 
 **Web Architecture:**
-- Style guide: Corporate Tech
 - Sections: 8 | Conversion goal: consultation
 - Section types: hero, problem-statement, stat-row, feature-alternating (x2), comparison, timeline, cta
 

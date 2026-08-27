@@ -7,8 +7,8 @@ description: >
   "single-page narrative", "Webseite aus Bericht", "Landingpage erstellen",
   "Web-Narrative", "scrollbare Webseite",
   "create a web page from report", or wants to convert prose into a scroll-driven
-  section architecture with design tokens and auto-layout. Also trigger for style guide
-  selection, section type mapping, and hero/CTA optimization, in English or German.
+  section architecture with design tokens and auto-layout. Also trigger for section type
+  mapping and hero/CTA optimization, in English or German.
   Produces a web-brief.md. Important: this skill CREATES the brief from a narrative
   source — it does NOT render an existing brief (use web agent for that), does NOT
   create slides (use story-to-slides), does NOT create print storyboard posters
@@ -20,7 +20,7 @@ allowed-tools: Read, Write, Edit, Bash, Grep, Glob, AskUserQuestion, Agent, Skil
 
 ## Purpose
 
-Read any narrative document with an existing story arc and produce an optimized web-brief that the Pencil MCP renderer can turn into a scrollable landing-page-style .pen file. You are a **web storytelling architect**: analyze the narrative's argument structure, select a visual style guide, decompose the story into web sections, and generate copy and image prompts for each section.
+Read any narrative document with an existing story arc and produce an optimized web-brief that the Pencil MCP renderer can turn into a scrollable landing-page-style .pen file. You are a **web storytelling architect**: analyze the narrative's argument structure, resolve the visual style from the selected theme, decompose the story into web sections, and generate copy and image prompts for each section.
 
 A web narrative is not a slide deck pasted into a tall page. It is a scroll-driven reading experience where each section has ONE clear message, supported by visual hierarchy that guides the reader toward a conversion action. Sections alternate between light and dark to create visual rhythm. This matters because walls of undifferentiated text lose readers within seconds — alternating visual weight creates natural pause points that let each message land before the next begins.
 
@@ -44,7 +44,7 @@ The brief describes WHAT each section says and which section type to use. The Pe
 | `output_path` | `{source_dir}/cogni-visual/web-brief.md` | Brief output location |
 | `conversion_goal` | `consultation` | CTA type: consultation, demo, download, trial, contact, calculate |
 | `max_sections` | `10` | Maximum section count (forces consolidation if narrative is long) |
-| `style_guide` | `auto` | Pre-selected style guide name. When provided, skip selection. |
+| `style_guide` | `auto` | **Deprecated — accepted and ignored.** Visual style resolves from the selected theme (Step 4). Passing a value is never an error. |
 | `arc_type` | `auto` | Story arc hint: why-change, problem-solution, journey, argument, report |
 | `arc_id` | from frontmatter | Narrative arc ID from the `narrative` skill. Mapped to visual `arc_type` in Step 1. |
 | `arc_definition_path` | none | Path to arc definition file — element names become `section_label` values. |
@@ -215,23 +215,35 @@ Build Audience Model: Rich mode (from `audience_context`, `buyer_appendix_path`,
 
 ---
 
-### Step 4: Select Style Guide (INTERACTIVE)
+### Step 4: Resolve Visual Style from Theme
 
-> The style guide determines every section's visual personality. Selecting it before decomposition ensures consistent design language.
+> Visual style comes from the theme selected in Step 1, not from a separate style-guide catalogue. Resolving it from the theme keeps one source of truth for design tokens and removes a selection step that has no backing tool.
 
-**Read reference:** `references/01-style-guide-selection.md`
+**Read reference:** `$CLAUDE_PLUGIN_ROOT/references/theme-component-loader.md`
 
-If `style_guide` parameter provided (not `auto`): skip selection, use directly.
+A `style_guide` value on an inbound brief or parameter is accepted and ignored — never an error, so legacy briefs and callers that still pass it run unchanged.
 
-Otherwise:
-1. Call Pencil MCP `get_style_guide_tags()` to retrieve available tags
-2. Select 5-10 tags based on theme, tone, industry, arc type
-3. Call Pencil MCP `get_style_guide(tags)` to retrieve candidates
-4. Score candidates using weighted algorithm in reference file
+Step 1 already resolved the theme and stored `theme_path`, `theme_name`, and `theme_slug`. Read the design tokens — typography, spacing, color roles, imagery direction — directly from that `theme.md`. It is the authoritative style source for every section.
 
-If interactive: present top 2-3 via AskUserQuestion (score + 1-sentence why). On empty response, auto-select top.
+**Optional tier enrichment.** A theme may additionally expose Theme System v2 component primitives. Probe for one with all four required flags:
 
-**Output:** Selected style guide name.
+```bash
+python3 $CLAUDE_PLUGIN_ROOT/scripts/load-theme-component.py \
+    --themes-dir <abs-themes-dir> \
+    --theme-slug <theme_slug> \
+    --surface web \
+    --component <component-name>
+```
+
+Probe per section type you are about to render — pass the section type name (`hero`, `feature-alternating`, `stat-row`, `cta`, …) as `--component`. If no component name is in hand, skip the probe: the `theme.md` tokens plus the `libraries/web-layouts.md` defaults are already a complete style source, and that is the same terminal state the miss path below describes.
+
+Derive `themes_dir` explicitly, because `pick-theme` yields a slug but no themes directory: `themes_dir` = `dirname(dirname(theme_path))`. Passing `--themes-dir` explicitly is the first-ranked source in `theme-component-loader.md` §Themes-dir resolution, so this derived value wins over the `$COGNI_WORKSPACE_ROOT/themes` and walk-up fallbacks the loader would otherwise try — which is what you want here, since the slug `pick-theme` returned is only guaranteed to exist under the directory that produced it.
+
+Tiers come only from this probe. `pick-theme` returns exactly `theme_path`, `theme_name`, and `theme_slug` — never a `tiers` map — so never read tiers off its return contract.
+
+**Tier-0 / miss path.** A theme with no `manifest.json` emits no `tiers` key at all, and the probe returns `status: "miss"` at exit 0. Treat a miss as normal control flow: fall back to the `theme.md` tokens plus the `libraries/web-layouts.md` defaults and continue, rather than blocking or prompting — a tier-0 theme is a supported configuration, not a failure.
+
+**Output:** Resolved style source — the theme's `theme.md` design tokens, plus the contents of any component file the probe resolved (the loader returns a `path`, never bytes: open the returned `path` to read the primitive).
 
 ---
 
@@ -318,7 +330,7 @@ First, output the section plan table as a regular message:
 | 2 | problem-statement | light | {headline} | problem | {label} |
 | ... | ... | ... | ... | ... | ... |
 
-Style guide: {name} | Sections: {count} | Arc: {arc_id or arc_type} | CTA: {cta_text}
+Sections: {count} | Arc: {arc_id or arc_type} | CTA: {cta_text}
 ```
 
 Then present via AskUserQuestion (Approve/Adjust). On empty response, treat as approval.
@@ -401,7 +413,7 @@ Write the review verdict to `{output_dir}/web-brief.review.json`.
 Generate the final brief with YAML frontmatter and section specifications following `EXAMPLE_WEB_BRIEF.md` format. Write using Write tool.
 
 **Final checks:**
-- YAML frontmatter complete (type, version, theme, theme_path, style_guide, conversion_goal, arc_id if available, confidence_score as average of per-section scores)
+- YAML frontmatter complete (type, version, theme, theme_path, conversion_goal, arc_id if available, confidence_score as average of per-section scores)
 - Header and footer sections present
 - All sections specified with type, section_theme, arc_role, headline, confidence
 - First section is hero (dark), last content section is CTA (accent)
@@ -445,7 +457,7 @@ Both paths must be absolute — never use `~`, `$HOME`, `$CLAUDE_PLUGIN_ROOT`, o
 | Reference | Step | Purpose |
 |-----------|------|---------|
 | **02-audience-model.md** (from story-to-slides) | 3 | Audience Model construction (Rich/Lean mode) |
-| **01-style-guide-selection.md** | 4 | Tag scoring algorithm, theme-to-tag mapping |
+| **theme-component-loader.md** (plugin root) | 4 | Tier probe envelope, miss-is-normal control flow, themes-dir resolution |
 | **02-section-architecture.md** | 2, 5 | Arc-to-section mapping, decomposition rules, section_theme alternation |
 | **03-section-copywriting.md** | 6 | Web headline hierarchy, CTA copy patterns, number plays |
 | **04-image-prompts.md** | 6 | Web image formats, hero bg+overlay pattern, stock vs AI guidance |

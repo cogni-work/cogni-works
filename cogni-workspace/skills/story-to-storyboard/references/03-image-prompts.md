@@ -89,7 +89,7 @@ Style: print resolution, high detail. No text, no people.
 
 ## Art Style Consistency
 
-All image prompts within a storyboard share the same visual style. The style is driven by the selected **style guide** (not a manual `art_style` parameter). The style guide's aesthetic direction determines illustration approach.
+All image prompts within a storyboard share the same visual style. The style is driven by the selected **theme**'s art-direction tokens (not a manual `art_style` parameter). Those tokens — palette, mood, and visual register from the theme's `theme.md` — determine the illustration approach.
 
 When generating prompts, maintain consistency by:
 1. Using the same level of detail across all images

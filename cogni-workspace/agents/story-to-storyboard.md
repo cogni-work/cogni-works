@@ -35,7 +35,7 @@ Your ENTIRE response to the orchestrator must be:
 **Example valid response:**
 
 ```
-{"ok":true,"posters":4,"conf":0.88,"arc":"why-change","size":"A1","style":"Corporate Edge"}
+{"ok":true,"posters":4,"conf":0.88,"arc":"why-change","size":"A1"}
 ```
 
 ## Input Requirements
@@ -51,7 +51,6 @@ Your ENTIRE response to the orchestrator must be:
 | arc_definition_path | No | none | Path to arc definition file for element-based arc labels |
 | max_posters | No | 4 | Maximum poster count (3-5) |
 | poster_size | No | A1 | DIN format: A0, A1, A2, A3 |
-| style_guide | No | auto | Pre-selected style guide name (skip interactive selection) |
 | conversion_goal | No | consultation | CTA type: consultation, demo, download, trial, contact, calculate |
 | interactive | No | false | Always false for agent invocation (agents must not interact with users) |
 | customer_name | No | from metadata | Customer organization name |
@@ -73,7 +72,7 @@ Your ENTIRE response to the orchestrator must be:
 <example>
 <invoke name="Skill">
   <parameter name="skill">cogni-workspace:story-to-storyboard</parameter>
-  <parameter name="args">source_path={{source_path}} output_path={{output_path}} theme={{theme}} language={{language}} arc_type={{arc_type}} arc_id={{arc_id}} arc_definition_path={{arc_definition_path}} max_posters={{max_posters}} poster_size={{poster_size}} style_guide={{style_guide}} conversion_goal={{conversion_goal}} customer_name={{customer_name}} provider_name={{provider_name}} interactive=false</parameter>
+  <parameter name="args">source_path={{source_path}} output_path={{output_path}} theme={{theme}} language={{language}} arc_type={{arc_type}} arc_id={{arc_id}} arc_definition_path={{arc_definition_path}} max_posters={{max_posters}} poster_size={{poster_size}} conversion_goal={{conversion_goal}} customer_name={{customer_name}} provider_name={{provider_name}} interactive=false</parameter>
 </invoke>
 </example>
 
@@ -96,7 +95,6 @@ brief_path="${output_path:-$(dirname "${source_path}")/cogni-visual/storyboard-b
 confidence_score=$(grep "^confidence_score:" "${brief_path}" | awk '{print $2}')
 arc_type=$(grep "^arc_type:" "${brief_path}" | awk '{print $2}')
 poster_count=$(grep "^poster_count:" "${brief_path}" | awk '{print $2}')
-style_guide=$(grep "^style_guide:" "${brief_path}" | awk '{print $2}')
 ```
 
 ### Phase 4: Return Minimal JSON Response
@@ -104,7 +102,7 @@ style_guide=$(grep "^style_guide:" "${brief_path}" | awk '{print $2}')
 **Success:**
 
 ```json
-{"ok":true,"posters":{N},"conf":{0.XX},"arc":"{type}","size":"{poster_size}","style":"{style_guide}"}
+{"ok":true,"posters":{N},"conf":{0.XX},"arc":"{type}","size":"{poster_size}"}
 ```
 
 **Error:**

@@ -49,7 +49,7 @@ images_dir = "{output_dir}/images"
 2. Parse YAML frontmatter for configuration:
    - `poster_size`, `poster_count`, `poster_gap` (default 200)
    - `base_width`, `base_height`, `print_width`, `print_height`, `scale_factor`
-   - `style_guide`, `arc_type`, `industry`
+   - `arc_type`, `industry`
 3. Extract all poster specifications (poster_label, sequence, sections, height_allocation)
 4. **Read theme.md** from the `theme_path` specified in frontmatter. Extract `header_font`, `header_weight`, `body_font` from the theme's typography section. If unavailable, fall back to `header_font: "Inter"`, `header_weight: "Bold"`, `body_font: "Inter"`.
 5. **Read storyboard-layouts.md** from `$CLAUDE_PLUGIN_ROOT/libraries/storyboard-layouts.md` for dimension system, portrait adaptations, and typography scale.
@@ -83,7 +83,7 @@ Map theme.md to Pencil MCP design tokens using `set_variables`:
 
 1. **Open document at explicit file path** using `open_document("{output_path}")` — NOT `open_document("new")`. File-backed doc required for G() image generation. (output_path resolved in "Output Path Resolution" section above.)
 2. The `mkdir -p` for images/ was already run during Output Path Resolution.
-3. Load style guide: `get_style_guide(name="{style_guide}")` from brief frontmatter
+3. Resolve visual style from the theme: read the design tokens in the `theme.md` at the brief's `theme_path` (already read in Step 1) — typography, color roles, and imagery direction
 4. Load design guidelines: `get_guidelines("design-system")`
 
 ### Step 4: Render Each Poster

@@ -35,7 +35,7 @@ Your ENTIRE response to the orchestrator must be:
 **Example valid response:**
 
 ```
-{"ok":true,"sections":8,"conf":0.89,"arc":"why-change","style":"Corporate Tech","goal":"consultation"}
+{"ok":true,"sections":8,"conf":0.89,"arc":"why-change","goal":"consultation"}
 ```
 
 ## Input Requirements
@@ -50,7 +50,6 @@ Your ENTIRE response to the orchestrator must be:
 | arc_definition_path | No | none | Path to the `narrative` skill arc definition file for element-based section labels |
 | max_sections | No | 10 | Maximum section count |
 | conversion_goal | No | consultation | CTA type |
-| style_guide | No | auto | Pre-selected style guide name |
 | customer_name | No | from metadata | Customer organization name |
 | provider_name | No | from metadata | Provider organization name |
 | governing_thought | No | auto-extracted | Pre-computed governing thought |
@@ -74,7 +73,7 @@ Your ENTIRE response to the orchestrator must be:
 <example>
 <invoke name="Skill">
   <parameter name="skill">cogni-workspace:story-to-web</parameter>
-  <parameter name="args">source_path={{source_path}} output_path={{output_path}} theme={{theme}} language={{language}} arc_type={{arc_type}} arc_id={{arc_id}} arc_definition_path={{arc_definition_path}} max_sections={{max_sections}} conversion_goal={{conversion_goal}} style_guide={{style_guide}} customer_name={{customer_name}} provider_name={{provider_name}} audience_context={{audience_context}} interactive=false</parameter>
+  <parameter name="args">source_path={{source_path}} output_path={{output_path}} theme={{theme}} language={{language}} arc_type={{arc_type}} arc_id={{arc_id}} arc_definition_path={{arc_definition_path}} max_sections={{max_sections}} conversion_goal={{conversion_goal}} customer_name={{customer_name}} provider_name={{provider_name}} audience_context={{audience_context}} interactive=false</parameter>
 </invoke>
 </example>
 
@@ -96,7 +95,6 @@ brief_path="${output_path:-$(dirname "${source_path}")/cogni-visual/web-brief.md
 
 confidence_score=$(grep "^confidence_score:" "${brief_path}" | awk '{print $2}')
 arc_type=$(grep "^arc_type:" "${brief_path}" | awk '{print $2}')
-style_guide=$(grep "^style_guide:" "${brief_path}" | awk '{print $2}')
 ```
 
 ### Phase 4: Return Minimal JSON Response
@@ -104,7 +102,7 @@ style_guide=$(grep "^style_guide:" "${brief_path}" | awk '{print $2}')
 **Success:**
 
 ```json
-{"ok":true,"sections":{N},"conf":{0.XX},"arc":"{type}","style":"{style_guide}","goal":"{conversion_goal}"}
+{"ok":true,"sections":{N},"conf":{0.XX},"arc":"{type}","goal":"{conversion_goal}"}
 ```
 
 **Error:**

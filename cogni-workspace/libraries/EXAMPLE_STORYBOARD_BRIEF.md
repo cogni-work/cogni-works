@@ -1,9 +1,8 @@
 ---
 type: storyboard-brief
-version: "2.0"
+version: "2.1"
 theme: smarter-service
 theme_path: "/cogni-workspace/themes/smarter-service/theme.md"
-style_guide: "Corporate Tech"
 customer: "Müller Werkzeugmaschinen GmbH"
 provider: "SmartFactory Solutions"
 language: "de"
@@ -23,8 +22,8 @@ print_width: 3508
 print_height: 4961
 scale_factor: 2.437
 transformation_notes: |
-  Story-to-storyboard v2.0 transformation.
-  Theme: smarter-service. Style guide: Corporate Tech.
+  Story-to-storyboard v2.1 transformation.
+  Theme: smarter-service.
   Arc: why-change (industry-transformation).
   4 posters, each with 2 stacked web sections.
   Portrait only. Base resolution: 1440x2036.
@@ -301,7 +300,6 @@ conversion_goal: "consultation"
 **Storyboard Architecture:**
 - Poster size: A1 portrait (3508 x 4961 px print, 1440 x 2036 px base)
 - Posters: 4 (each with 2 stacked web sections)
-- Style guide: Corporate Tech
 - Industry: maschinenbau
 
 **Poster Composition:**

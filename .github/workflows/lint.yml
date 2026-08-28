@@ -193,3 +193,19 @@ jobs:
         run: |
           set -euo pipefail
           python3 scripts/check-attribution-path-integrity.py
+
+  readme-inventory-sync-guard:
+    name: README inventory-sync guard (root README counts match live directories)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        # Default shallow checkout is sufficient: the guard globs the working
+        # tree at this commit and reads one file, not git history. Do NOT copy
+        # version-bump-gate's fetch-depth: 0 — that is load-bearing only for its
+        # merge-base anchor.
+
+      - name: Assert every root README plugin count matches its live directory count
+        run: |
+          set -euo pipefail
+          python3 scripts/check-readme-inventory-sync.py

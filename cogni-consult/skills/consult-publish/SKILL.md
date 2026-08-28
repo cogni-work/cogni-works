@@ -93,7 +93,7 @@ lineage entry (step 5), so a second format never overwrites the first.
 ### 3. Optional voice polish
 
 The brief text may be polished with `cogni-workspace:copywriter` before
-handoff. This is optional and graceful-degrading — **if `the `copywriter` skill` is
+handoff. This is optional and graceful-degrading — **if the `copywriter` skill is
 not installed, skip it with a one-line note**; the route still produces a valid
 brief.
 
@@ -156,7 +156,7 @@ render, so the run never requires a renderer at all. `cogni-workspace:enrich-rep
 `story-to-infographic` remain available only as an explicit opt-in local-render
 fallback (they render locally and apply a cogni-workspace theme, which the
 brief-only contract otherwise avoids) — they are no longer the standard path.
-When `the `copywriter` skill` is absent, the optional polish step is skipped. Either
+When the `copywriter` skill is absent, the optional polish step is skipped. Either
 way the run still produces a valid brief.
 
 ### 4.5 Resolve assumption placeholders (mandatory)
@@ -236,7 +236,7 @@ If multiple formats were produced in this session, list each brief path.
 - **No render dependency.** Every format builds a consult-native brief, so the
   standard path never renders and never dispatches a renderer —
   `cogni-workspace:enrich-report` / `story-to-infographic` remain an opt-in
-  local-render fallback only. When `the `copywriter` skill` is absent the optional
+  local-render fallback only. When the `copywriter` skill is absent the optional
   polish step is skipped. Either way the run still produces a valid brief — a
   missing downstream plugin degrades the output, it never fails the run.
 - **Assumption resolution is fail-loud, not graceful-degrading.** The step-4.5

@@ -385,7 +385,7 @@ The user can re-enter this skill later to pick a different path; downstream skil
 | Verification returns FAIL | Present failed claims interactively in Phase 3. Do not auto-correct. |
 | Reviewer returns `revise` but no priorities | Treat as `accept` (defensive — cogni-trends reviewer rarely emits this state) |
 | Revisor validation fails | Surface specific failure to the user; do not auto-rerun. Backup at `.tips-trend-report-pre-revision-v{N}.md` is canonical. |
-| `the `copywriter` skill` not installed | Phase 5 menu skips the polish option silently |
+| the `copywriter` skill not installed | Phase 5 menu skips the polish option silently |
 | `cogni-workspace:enrich-report` not available | Phase 5 menu skips the visualize option silently |
 
 ## Integration

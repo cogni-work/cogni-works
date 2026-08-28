@@ -14,9 +14,9 @@ Transform input markdown files into a structured executive narrative using one o
 - Generating an insight summary from a set of markdown files
 
 **Not for:**
-- Editing existing narratives (use copywriter skill)
+- Polishing or rewriting arbitrary business documents (use copywriter skill) -- `--format` here is narrower: it derives an executive-brief / talking-points / one-pager from a finished arc narrative, keeping its 4 arc element headings intact
 - Creating slides from narratives (use story-to-slides skill)
-- Raw research or data collection (use deeper-research skills)
+- Raw research or data collection (use the cogni-knowledge research pipeline)
 
 ---
 
@@ -39,6 +39,8 @@ Transform input markdown files into a structured executive narrative using one o
 ---
 
 ## Output
+
+This section describes generation mode. When `--format` is set, both the output file and the JSON summary take a different shape -- see Derivative Formats below.
 
 A single markdown file (`insight-summary.md` by default):
 
@@ -108,6 +110,8 @@ Citation  --->  Setup  --->  Arc      --->  Pattern   --->   Transformation --> 
 Bridge          & Load       Selection      Loading          (arc-specific)
 (conditional)
 ```
+
+When `--format` is set this pipeline does not run at all -- the skill adapts an existing narrative instead; jump to Derivative Formats below.
 
 The quality of each phase depends on the previous one. In particular, Phases 3 and 4 require reading reference files before doing anything -- the arc patterns and narrative techniques are what differentiate a good narrative from a generic summary. Skipping those reads is the single biggest cause of poor output.
 
@@ -302,6 +306,22 @@ Workflow: load the source narrative → extract its 4 arc elements and key numbe
 - **Executive Brief** — citations preserved and renumbered sequentially, 8-12 total.
 - **Talking Points** — no inline citations, Key Numbers section present, no bullet over 25 words.
 - **One-Pager** — metrics table has exactly 4 rows, Next Steps has 3 items, word count is at or above 400.
+
+**JSON summary returned on completion (derivative mode):**
+
+```json
+{
+  "success": true,
+  "source_path": "insight-summary.md",
+  "output_path": "executive-brief.md",
+  "format": "executive-brief",
+  "arc_id": "corporate-visions",
+  "word_count": 420,
+  "language": "en"
+}
+```
+
+`source_path` and `format` echo the invocation; `arc_id` and `language` carry over from the source narrative's frontmatter. For `talking-points`, `word_count` reports the bullet bodies rather than a prose total. On failure the shape is the canonical error JSON with `phase` set to `"Derivative"`, which is how the Error Handling table labels this track's two failure rows.
 
 ---
 

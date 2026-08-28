@@ -37,8 +37,8 @@ If `--format` is missing, present the available formats to the user for selectio
 
 ## Execution
 
-1. Load the `cogni-workspace:narrative` skill using the Skill tool, passing `source_path` and `--format` plus the remaining parsed parameters mapped onto that skill's names: `--output`/`-o` becomes `--output-path`, `--lang`/`--language` becomes `--language`
-2. Follow the skill's Derivative Formats workflow (`references/derivative-formats.md`) with the parsed parameters
+1. Load the `cogni-workspace:narrative` skill using the Skill tool, passing `--format` plus the remaining parsed parameters mapped onto that skill's names: the positional `source_path` becomes `--source-path`, `--output`/`-o` becomes `--output-path`, `--lang`/`--language` becomes `--language`
+2. Follow the skill's Derivative Formats workflow (`${CLAUDE_PLUGIN_ROOT}/skills/narrative/references/derivative-formats.md`) with the parsed parameters
 3. Present the output summary to the user after completion
 
 ## Examples

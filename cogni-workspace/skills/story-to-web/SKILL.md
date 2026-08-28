@@ -519,7 +519,7 @@ Replace `{absolute_path_to_storyboard_brief}` with the `output_path` resolved in
 | **04-image-prompts.md** | 6 | Web image formats, hero bg+overlay pattern, stock vs AI guidance |
 | **05-validation.md** | 9 | *(`mode=web`)* Four-layer validation framework |
 | **print/01-poster-architecture.md** | 5b | *(`mode=storyboard`)* Arc-station-to-poster mapping, poster templates, poster-count decision tree |
-| **print/02-poster-copywriting.md** | 6 | *(`mode=storyboard`)* Print-vs-web copy overrides, poster governing-headline rules |
+| **print/02-poster-copywriting.md** | 6, 8 | *(`mode=storyboard`)* Print-vs-web copy overrides, poster governing-headline rules |
 | **print/03-image-prompts.md** | 6 | *(`mode=storyboard`)* Print-resolution prompt suffix, max-2-images rule, poster image sizing |
 | **print/04-validation.md** | 9 | *(`mode=storyboard`)* Replaces 05-validation.md — all four layers against the storyboard schema, plus print-specific checks and poster font-size minimums |
 | **cta-taxonomy.md** (library) | 6b | CTA types, urgency levels, arc-to-CTA heuristics |
@@ -532,5 +532,5 @@ Replace `{absolute_path_to_storyboard_brief}` with the `output_path` resolved in
 | **web-layouts.md** | 1 | Section type schemas, typography scale, spacing, theme-to-variable mapping |
 | **cta-taxonomy.md** | 6b | CTA types, urgency, arc-to-CTA heuristics |
 | **EXAMPLE_WEB_BRIEF.md** | 1 | *(`mode=web`)* Output format reference |
-| **storyboard-layouts.md** | 5b | *(`mode=storyboard`)* DIN A0-A3 dimensions, 3-zone poster model, height allocation, portrait adaptations, `poster_x` canvas arrangement |
-| **EXAMPLE_STORYBOARD_BRIEF.md** | 10 | *(`mode=storyboard`)* Output format reference — the contract the `storyboard` agent parses |
+| **storyboard-layouts.md** | 4, 5b | *(`mode=storyboard`)* DIN A0-A3 dimensions, 3-zone poster model, height allocation, portrait adaptations, `poster_x` canvas arrangement |
+| **EXAMPLE_STORYBOARD_BRIEF.md** | 1, 10 | *(`mode=storyboard`)* Output format reference — the contract the `storyboard` agent parses |

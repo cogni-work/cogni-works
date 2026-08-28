@@ -26,7 +26,7 @@ The horizontal layer of the insight-wave marketplace — it owns the shared work
 |-------|---------|
 | `cogni-workspace:manage-workspace` | Initialize or update an insight-wave workspace; the entry point everyone runs first |
 | `cogni-workspace:install-mcp` | End-to-end MCP server installation (clone, build, configure, patch Claude Desktop) |
-| `cogni-workspace:manage-themes` | Extract themes from live websites (claude-in-chrome), PowerPoint templates, or presets |
+| `cogni-workspace:manage-themes` | Create, audit, improve, and apply themes — sourced from Claude Design bundles or presets |
 | `cogni-workspace:pick-theme` | Standard theme picker called by every visual plugin — see [[concept-theme-inheritance]] |
 | `cogni-workspace:workspace-status` | Diagnose workspace health |
 
@@ -34,7 +34,7 @@ The horizontal layer of the insight-wave marketplace — it owns the shared work
 
 ## What it owns
 
-- **Themes** — extracted, imported, or selected; consumed by all visual plugins through the design-variables CSS pattern
+- **Themes** — imported from a Claude Design bundle or selected from a preset; consumed by all visual plugins through the design-variables CSS pattern
 - **MCP servers** — excalidraw, claude-in-chrome, pencil; managed via the [[concept-mcp-server-map]]
 - **Env vars and settings** — shared configuration across all insight-wave plugins
 - **Obsidian vault integration** — projects can be browsed in Obsidian natively because all entity outputs are markdown with YAML frontmatter (see [[concept-data-model-patterns]])

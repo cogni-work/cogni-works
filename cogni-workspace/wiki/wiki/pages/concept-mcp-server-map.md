@@ -17,7 +17,7 @@ Three MCP servers ship with the insight-wave marketplace, mapped to the plugins 
 | Server | Plugins | Purpose |
 |--------|---------|---------|
 | **excalidraw** | cogni-workspace, cogni-portfolio | Diagram rendering — infographics, concept diagrams, architecture diagrams |
-| **claude-in-chrome** | cogni-website, cogni-workspace | Browser automation — verification, preview, theme extraction |
+| **claude-in-chrome** | cogni-website, cogni-workspace | Browser automation — preview validation, source-URL fetching for claim verification |
 | **pencil** | cogni-workspace, cogni-website | Web narrative, storyboard, poster, hero rendering |
 
 ## Installation
@@ -31,7 +31,7 @@ No plugin carries a `.mcp.json` — a checked-in declaration claims the server e
 ## What each does
 
 - **excalidraw** — programmatic creation, manipulation, and export of Excalidraw scenes. cogni-workspace uses it for hand-drawn rendering (sketchnote, whiteboard styles); cogni-portfolio uses it for portfolio architecture diagrams.
-- **claude-in-chrome** — Chrome browser automation. cogni-website uses it for preview validation; cogni-workspace uses it for theme extraction from live sites and to fetch and inspect source URLs during claim verification.
+- **claude-in-chrome** — Chrome browser automation. cogni-website uses it for preview validation; cogni-workspace uses it to fetch and inspect source URLs during claim verification.
 - **pencil** — programmatic design system generation in `.pen` files. cogni-workspace uses it for editorial infographic rendering (Economist style); cogni-website uses it for hero section rendering and full-page composition.
 
 ## Why MCP and not direct Claude tools

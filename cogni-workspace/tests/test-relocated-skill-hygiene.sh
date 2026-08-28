@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 # Relocated-skill hygiene guard for the skills and agents cogni-workspace adopted
 # from retired plugins: cogni-issues and troubleshoot (from cogni-help), claims
-# and claim-entity (from cogni-claims), narrative / narrative-adapt /
-# narrative-review plus three agents (from cogni-narrative), and copywriter /
-# copy-json / copy-reader plus two agents (from cogni-copywriting).
+# and claim-entity (from cogni-claims), narrative and narrative-review plus three
+# agents (from cogni-narrative; the adopted narrative-adapt skill was later folded
+# into narrative, leaving its command and agent as the surviving entry points), and
+# copywriter / copy-json / copy-reader plus two agents (from cogni-copywriting).
 #
 # A spec's tree may be a DIRECTORY or a single FILE. Adopted agents land as bare
 # files under agents/, and the earlier directory-only form silently left every
@@ -73,7 +74,7 @@ REPO_ROOT="$(cd "$HERE/../.." && pwd)"
 # a retired plugin's colon-form token legitimately — this file's own spec table most
 # of all, where the literal is the guard's matching data rather than a dispatch.
 # (The consumer surfaces that used to sit on that list — verify-theme-backcompat.sh,
-# skills/manage-themes, skills/narrative, skills/narrative-adapt — were repointed at
+# skills/manage-themes and skills/narrative — were repointed at
 # the consumer stage of the cogni-visual absorption; the file-level specs stand on
 # the shared-destination argument alone, not on those files.)
 # commands/ qualifies as directory-level: every file in it arrived by adoption
@@ -89,7 +90,7 @@ $WS_ROOT/skills/claim-entity|cogni-claims:
 $WS_ROOT/agents/claim-verifier.md|cogni-claims:
 $WS_ROOT/agents/source-inspector.md|cogni-claims:
 $WS_ROOT/skills/narrative|cogni-narrative:
-$WS_ROOT/skills/narrative-adapt|cogni-narrative:
+$WS_ROOT/commands/narrative-adapt.md|cogni-narrative:
 $WS_ROOT/skills/narrative-review|cogni-narrative:
 $WS_ROOT/agents/narrative-writer.md|cogni-narrative:
 $WS_ROOT/agents/narrative-reviewer.md|cogni-narrative:

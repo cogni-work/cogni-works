@@ -1,6 +1,6 @@
 ---
 name: narrative
-description: "Transform structured content into compelling executive narratives using story arc frameworks. Use this skill whenever the user asks to \"create a narrative\", \"write a narrative\", \"transform content into a story arc\", apply a specific arc framework (corporate visions, technology futures, competitive intelligence, strategic foresight, industry transformation, trend panorama), \"generate an insight summary\", or \"summarize research findings as a narrative\". Also trigger when other plugins need arc-driven narrative generation, when the user mentions \"TIPS trend narratives\", or when they have research output they want turned into an executive-readable story. Even if the user just says \"make this readable for executives\" or \"turn these findings into something presentable\", this skill is the right choice."
+description: "Transform structured content into compelling executive narratives using story arc frameworks. Use this skill whenever the user asks to \"create a narrative\", \"write a narrative\", \"transform content into a story arc\", apply a specific arc framework (corporate visions, technology futures, competitive intelligence, strategic foresight, industry transformation, trend panorama), \"generate an insight summary\", or \"summarize research findings as a narrative\". Also trigger when other plugins need arc-driven narrative generation, when the user mentions \"TIPS trend narratives\", or when they have research output they want turned into an executive-readable story. Even if the user just says \"make this readable for executives\" or \"turn these findings into something presentable\", this skill is the right choice. Also handles derivative formats via --format: \"condense narrative\", \"create executive brief\", \"generate talking points\", \"make a one-pager\"."
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion
 ---
 
@@ -14,9 +14,9 @@ Transform input markdown files into a structured executive narrative using one o
 - Generating an insight summary from a set of markdown files
 
 **Not for:**
-- Editing existing narratives (use copywriter skill)
+- Polishing or rewriting arbitrary business documents (use copywriter skill) -- `--format` here is narrower: it derives an executive-brief / talking-points / one-pager from a finished arc narrative, keeping its 4 arc element headings intact
 - Creating slides from narratives (use story-to-slides skill)
-- Raw research or data collection (use deeper-research skills)
+- Raw research or data collection (use the cogni-knowledge research pipeline)
 
 ---
 
@@ -27,10 +27,11 @@ Transform input markdown files into a structured executive narrative using one o
 | `--source-path` | Yes | Directory containing input `.md` files, or path to a single `.md` file |
 | `--arc-id` | No | Explicit arc selection; overrides auto-detection |
 | `--language` | No | Output language: `en` (default) or `de`. Fallback chain: explicit parameter > project metadata > workspace preference (`.workspace-config.json`) > content detection > `en` |
-| `--output-path` | No | Output file path; defaults to `insight-summary.md` in source directory |
+| `--output-path` | No | Output file path; defaults to `insight-summary.md` in source directory. When `--format` is set, the default is `{format}.md` in the source directory instead — see the `--format` row |
 | `--project-path` | No | Research/knowledge project root; enables arc inheritance from the project's `.metadata/` (`plan.json` for a cogni-knowledge project, or `project-config.json` for an older project layout — Phase 1 step 8) and loading entity data beyond source path. When omitted, Phase 1 step 8 probes `<source-path>/..` and `<source-path>/../..` to auto-detect the project root |
 | `--research-question` | No | Original research question for narrative hook framing |
 | `--target-length` | No | Target total word count as a single number (e.g., `2500`). System applies +/-15% band to derive the acceptable range. Default: `1675` (yields ~1,424-1,926 words). Recommended: 800-4,000 — outside this range, arc rhetorical structure may not scale well |
+| `--format` | No | Derivative mode. One of `executive-brief`, `talking-points`, `one-pager`. When set, `--source-path` is a single finished narrative `.md` file, the generation pipeline (Phases 0.5-6) is skipped, and the Derivative Formats section below runs instead. Output defaults to `{source-dir}/{format}.md` |
 | `--content-map` | No | YAML map of content category keys to file/directory paths for additional context |
 
 **Content map keys:** `executive_summary`, `dimension_syntheses`, `trends_summary`, `trend_entities`, `megatrends_summary`, `megatrend_entities`, `domain_concepts`, `research_hub`, `initial_question`
@@ -38,6 +39,8 @@ Transform input markdown files into a structured executive narrative using one o
 ---
 
 ## Output
+
+This section describes generation mode. When `--format` is set, both the output file and the JSON summary take a different shape -- see Derivative Formats below.
 
 A single markdown file (`insight-summary.md` by default):
 
@@ -107,6 +110,8 @@ Citation  --->  Setup  --->  Arc      --->  Pattern   --->   Transformation --> 
 Bridge          & Load       Selection      Loading          (arc-specific)
 (conditional)
 ```
+
+When `--format` is set this pipeline does not run at all -- the skill adapts an existing narrative instead; jump to Derivative Formats below.
 
 The quality of each phase depends on the previous one. In particular, Phases 3 and 4 require reading reference files before doing anything -- the arc patterns and narrative techniques are what differentiate a good narrative from a generic summary. Skipping those reads is the single biggest cause of poor output.
 
@@ -280,6 +285,46 @@ If any gate fails, fix the specific issue and re-validate all gates (fixes can b
 
 ---
 
+## Derivative Formats (`--format`)
+
+When `--format` is set, this skill adapts an **existing** narrative into a derivative rather than generating a new one: skip Phases 0.5-6, and **read `references/derivative-formats.md` in full** — it carries the per-format templates, word budgets, exact-count structures and condensation strategies this section only summarises.
+
+| Format | Word target | Channel | Key feature |
+|--------|-------------|---------|-------------|
+| Executive Brief | 300-500 | Email, Slack | Condensed arc with citations preserved |
+| Talking Points | N/A (bullets) | Presentations, calls | Answer-first bullets, no citations |
+| One-Pager | 400-600 | Print, handout | Metrics table + next steps |
+
+Workflow: load the source narrative → extract its 4 arc elements and key numbers → transform per the reference file's template for the requested format → validate against the gates below → write to the output path.
+
+**Why arc structure is preserved in every format:** Downstream tools (story-to-slides, story-to-storyboard, story-to-web) parse the 4 arc elements to create matching visual segments. Renaming headers, reordering elements, or merging sections breaks this pipeline. Each format keeps all 4 `##` headers in their original order with the exact arc element names from the source. This is the derivative-side counterpart of the generation-side rule in Phase 4 ("Why exactly 4 sections matters").
+
+**Why fidelity matters:** Derivatives condense -- they never embellish. Adding information that wasn't in the source narrative would break the evidence chain back to the original research. Every claim in the derivative should be traceable to the source. This is especially important for quantitative claims: if a number appears in the derivative, it appeared in the source.
+
+**Format-specific gates:**
+
+- **Executive Brief** — citations preserved and renumbered sequentially, 8-12 total.
+- **Talking Points** — no inline citations, Key Numbers section present, no bullet over 25 words.
+- **One-Pager** — metrics table has exactly 4 rows, Next Steps has 3 items, word count is at or above 400.
+
+**JSON summary returned on completion (derivative mode):**
+
+```json
+{
+  "success": true,
+  "source_path": "insight-summary.md",
+  "output_path": "executive-brief.md",
+  "format": "executive-brief",
+  "arc_id": "corporate-visions",
+  "word_count": 420,
+  "language": "en"
+}
+```
+
+`source_path` and `format` echo the invocation; `arc_id` and `language` carry over from the source narrative's frontmatter. For `talking-points`, `word_count` reports the bullet bodies rather than a prose total. On failure the shape is the canonical error JSON with `phase` set to `"Derivative"`, which is how the Error Handling table labels this track's two failure rows.
+
+---
+
 ## Available Story Arcs
 
 | Arc ID | Elements | Best For |
@@ -362,6 +407,8 @@ On any unrecoverable failure, return error JSON:
 | 3 | Arc pattern files missing | Halt with missing file list |
 | 4 | Transformation fails | Halt with error JSON |
 | 5 | Validation fails | Report failures, fix, re-validate |
+| Derivative | Unknown `--format` value | Halt with the three valid formats listed |
+| Derivative | `--source-path` is not a single finished narrative `.md` file | Halt with error |
 
 ---
 
@@ -375,3 +422,4 @@ On any unrecoverable failure, return error JSON:
 | `references/phase-workflows/phase-4b-synthesis-{arc_id}.md` | Arc-specific transformation workflow | Phase 4 |
 | `references/phase-workflows/shared-steps.md` | Entity counting, output template, validation, write steps | Phase 4 (via phase-4b) |
 | `references/language-templates.md` | Localized headers for en/de | Phase 4 (if `de`) |
+| `references/derivative-formats.md` | Per-format templates, word budgets, exact-count structures, condensation strategies | Derivative Formats (when `--format` is set) |

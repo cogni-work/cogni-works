@@ -1,4 +1,4 @@
-# Format Templates
+# Derivative Format Templates
 
 Detailed guidelines and edge cases for each derivative format.
 

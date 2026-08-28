@@ -14,3 +14,16 @@ which means narrowing `tools:` to `Skill` alone removes capability, not privileg
 
 An editor who trims the list to what the agent body appears to use directly will break the agent:
 the missing tools are exercised by the skill running inside it, not by the body's own prose.
+
+## narrative-adapter
+
+`tools:` covers what `skills/narrative/SKILL.md` needs in its `--format` derivative mode, not what the
+agent body writes itself. The body says "DO NOT write files directly" and "your only responsibility is
+parameter relay" — both are true of the *body*, and neither licenses trimming the grant: the Skill tool
+runs `narrative` in this agent's own context, and that skill's final derivative-mode act is writing the
+output file. Dropping `Write` would make every dispatch fail at the write; dropping `Bash` would remove
+the skill's own word-count and validation steps.
+
+This was raised as a least-privilege finding on PR #1672 and declined on that basis. The `tools:` line is
+byte-identical at base and HEAD, so it is pre-existing rather than introduced — but the reason it should
+stay is the one above, not its age.

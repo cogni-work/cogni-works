@@ -20,7 +20,7 @@ Evaluate an existing narrative markdown file against the `narrative` skill quali
 **Not for:**
 - Generating new narratives (use `cogni-workspace:narrative` skill instead)
 - Editing or rewriting narratives (use copywriter skill instead)
-- Adapting narratives to other formats (use `cogni-workspace:narrative-adapt` skill instead)
+- Adapting narratives to other formats (use the `cogni-workspace:narrative` skill with `--format` instead)
 
 ---
 

@@ -12,8 +12,8 @@ description: >
   hand-drawn (sketchnote, whiteboard) via /render-infographic-handdrawn, editorial (economist,
   editorial, data-viz, corporate) via /render-infographic-editorial.
   It does NOT render an existing brief (use /render-infographic), create slides
-  (story-to-slides), a scrollable web page (story-to-web), a storyboard
-  (story-to-storyboard), or enrich a report with inline visuals (enrich-report).
+  (story-to-slides), a scrollable web page or printed-poster
+  storyboard (story-to-web), or enrich a report with inline visuals (enrich-report).
 allowed-tools: Read, Write, Edit, Bash, Grep, Glob, AskUserQuestion, Agent, Skill
 ---
 

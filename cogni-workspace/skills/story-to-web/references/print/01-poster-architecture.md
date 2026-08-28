@@ -107,7 +107,7 @@ Section themes can differ within a poster. Follow these rules:
 
 ## Section Type Selection per Poster
 
-Use the **web section type decision tree** (from `story-to-web/references/02-section-architecture.md`) to select section types. The same logic applies, but adapted for poster context:
+Use the **web section type decision tree** (from `../02-section-architecture.md`) to select section types. The same logic applies, but adapted for poster context:
 
 ### Decision Tree (Poster-Adapted)
 

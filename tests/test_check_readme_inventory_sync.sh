@@ -180,6 +180,39 @@ io.open(p, "w", encoding="utf-8").write(s.replace(old, new))
 PY
 }
 
+# readme_count <sed-ERE-script> — the count root README.md currently claims at
+# one anchor, derived at run time rather than restated here as a literal. A
+# restated count goes stale the moment the inventory moves, and because mutate()
+# asserts under `set -eu` a stale literal ABORTS the suite rather than failing
+# one case: the run then looks green-ish while every case after it silently
+# never ran. Returns non-zero — never aborts — unless the anchor resolves to
+# exactly one all-digit value, so an unresolvable anchor stays a case-local
+# failure that its caller grades.
+readme_count() {
+  local vals count
+  vals=$(sed -nE "$1" "$REPO_ROOT/README.md" 2>/dev/null || true)
+  count=$(printf '%s\n' "$vals" | grep -c '^[0-9][0-9]*$' || true)
+  [ "$count" -eq 1 ] || return 1
+  printf '%s' "$vals"
+}
+
+# revert_claim <file> <sed-ERE-script> <prefix> <suffix> — derive N from the
+# live root README.md, then rewrite "<prefix>N<suffix>" to "<prefix>N+1<suffix>"
+# in <file>. Returns non-zero without aborting when the anchor cannot be derived
+# or does not appear exactly once; uniqueness itself stays enforced downstream
+# by mutate()'s own count(old) == 1 assertion. The set +e / set -e wrapper is
+# the whole point: it converts a stale anchor from a suite abort into a status
+# its call site folds into that case's own predicate.
+revert_claim() {
+  local file="$1" script="$2" prefix="$3" suffix="$4" n rc
+  n=$(readme_count "$script") || return 1
+  set +e
+  mutate "$file" "$prefix$n$suffix" "$prefix$((n + 1))$suffix"
+  rc=$?
+  set -e
+  return "$rc"
+}
+
 # ---------------------------------------------------------------- case 1
 CONSISTENT="$WORK/consistent"
 consistent_fixture "$CONSISTENT"
@@ -387,10 +420,17 @@ assert d['data']['rollup_present'] is True, d['data']
 # ---------------------------------------------------------------- case 13
 # The three real claim sites, reverted one at a time. Each must redden on its
 # own: a guard that only notices one of them leaves the other two drifting.
+# Each from-side is DERIVED from root README.md at run time — the same premise
+# the guard under test enforces on that file, applied to its own suite. An
+# anchor that will not resolve fails its own case here and lets the cases after
+# it run, rather than aborting the suite and taking ris22-ris29 with it.
 REAL_PROSE=$(real_scratch real-prose-reverted)
-mutate "$REAL_PROSE/README.md" "management. 24 skills and 26 agents." "management. 25 skills and 26 agents."
+ANCHOR_OK=0
+revert_claim "$REAL_PROSE/README.md" \
+  's/.*management\. ([0-9]+) skills and 26 agents\..*/\1/p' \
+  'management. ' ' skills and 26 agents.' || ANCHOR_OK=1
 run_guard "$REAL_PROSE"
-check "ris21 real README with the workspace prose count reverted exits 1" "$([ "$CODE" -eq 1 ] && echo 0 || echo 1)"
+check "ris21 real README with the workspace prose count reverted exits 1" "$([ "$ANCHOR_OK" -eq 0 ] && [ "$CODE" -eq 1 ] && echo 0 || echo 1)"
 assert_json "ris22 reverted prose reports prose-count-mismatch naming cogni-workspace" "$OUT" "
 import json,sys
 d=json.load(sys.stdin)
@@ -400,14 +440,20 @@ assert v[0]['plugin']=='cogni-workspace', v
 "
 
 REAL_TABLE=$(real_scratch real-table-reverted)
-mutate "$REAL_TABLE/README.md" "| Workspace Infrastructure | 24 | 26 |" "| Workspace Infrastructure | 25 | 26 |"
+ANCHOR_OK=0
+revert_claim "$REAL_TABLE/README.md" \
+  's/.*\| Workspace Infrastructure \| ([0-9]+) \| 26 \|.*/\1/p' \
+  '| Workspace Infrastructure | ' ' | 26 |' || ANCHOR_OK=1
 run_guard "$REAL_TABLE"
-check "ris23 real README with the workspace table cell reverted exits 1" "$([ "$CODE" -eq 1 ] && echo 0 || echo 1)"
+check "ris23 real README with the workspace table cell reverted exits 1" "$([ "$ANCHOR_OK" -eq 0 ] && [ "$CODE" -eq 1 ] && echo 0 || echo 1)"
 
 REAL_ROLLUP=$(real_scratch real-rollup-reverted)
-mutate "$REAL_ROLLUP/README.md" "**102 skills, 88 agents**" "**103 skills, 88 agents**"
+ANCHOR_OK=0
+revert_claim "$REAL_ROLLUP/README.md" \
+  's/.*\*\*([0-9]+) skills, 88 agents\*\*.*/\1/p' \
+  '**' ' skills, 88 agents**' || ANCHOR_OK=1
 run_guard "$REAL_ROLLUP"
-check "ris24 real README with the roll-up total reverted exits 1" "$([ "$CODE" -eq 1 ] && echo 0 || echo 1)"
+check "ris24 real README with the roll-up total reverted exits 1" "$([ "$ANCHOR_OK" -eq 0 ] && [ "$CODE" -eq 1 ] && echo 0 || echo 1)"
 
 # ---------------------------------------------------------------- case 14
 # The singular arm against the real tree: one plugin's claim reads

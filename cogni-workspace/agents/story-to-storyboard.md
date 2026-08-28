@@ -7,11 +7,11 @@ color: green
 
 # Story-to-Storyboard Agent
 
-Execute storyboard brief generation from any narrative by delegating to the story-to-storyboard skill and returning a concise summary of results. This agent acts as a thin wrapper that validates parameters and relays execution to the specialized skill.
+Execute storyboard brief generation from any narrative by delegating to the story-to-web skill in storyboard mode and returning a concise summary of results. This agent acts as a thin wrapper that validates parameters and relays execution to the specialized skill.
 
 ## Mission
 
-Orchestrate narrative-to-storyboard transformation by invoking the story-to-storyboard skill and returning a compact JSON response.
+Orchestrate narrative-to-storyboard transformation by invoking the story-to-web skill in storyboard mode and returning a compact JSON response.
 
 ## When to Use
 
@@ -71,8 +71,8 @@ Your ENTIRE response to the orchestrator must be:
 
 <example>
 <invoke name="Skill">
-  <parameter name="skill">cogni-workspace:story-to-storyboard</parameter>
-  <parameter name="args">source_path={{source_path}} output_path={{output_path}} theme={{theme}} language={{language}} arc_type={{arc_type}} arc_id={{arc_id}} arc_definition_path={{arc_definition_path}} max_posters={{max_posters}} poster_size={{poster_size}} conversion_goal={{conversion_goal}} customer_name={{customer_name}} provider_name={{provider_name}} interactive=false</parameter>
+  <parameter name="skill">cogni-workspace:story-to-web</parameter>
+  <parameter name="args">source_path={{source_path}} output_path={{output_path}} theme={{theme}} language={{language}} arc_type={{arc_type}} arc_id={{arc_id}} arc_definition_path={{arc_definition_path}} max_posters={{max_posters}} poster_size={{poster_size}} conversion_goal={{conversion_goal}} customer_name={{customer_name}} provider_name={{provider_name}} interactive=false mode=storyboard</parameter>
 </invoke>
 </example>
 

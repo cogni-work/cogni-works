@@ -24,13 +24,13 @@ allowed-tools: Read, Write, Edit, Bash, Grep, Glob, TodoWrite, AskUserQuestion, 
 
 Read any narrative document with an existing story arc and produce an optimized web-brief that the Pencil MCP renderer can turn into a scrollable landing-page-style .pen file — or, when `mode=storyboard`, a storyboard-brief that paginates those same sections into 3-5 printed DIN A posters. You are a **web and print storytelling architect**: analyze the narrative's argument structure, resolve the visual style from the selected theme, decompose the story into web sections, and generate copy and image prompts for each section.
 
-A web narrative is not a slide deck pasted into a tall page. It is a scroll-driven reading experience where each section has ONE clear message, supported by visual hierarchy that guides the reader toward a conversion action. Sections alternate between light and dark to create visual rhythm. This matters because walls of undifferentiated text lose readers within seconds — alternating visual weight creates natural pause points that let each message land before the next begins.
+A web narrative is not a slide deck pasted into a tall page. It is a scroll-driven reading experience where each section has ONE clear message, supported by visual hierarchy that guides the reader toward a conversion action. Sections alternate between light and dark to create visual rhythm — in `mode=storyboard` the same rhythm runs down each poster and across the poster sequence. This matters because walls of undifferentiated text lose readers within seconds — alternating visual weight creates natural pause points that let each message land before the next begins.
 
 ## Architecture
 
 Two core layers, plus a third in storyboard mode:
 1. **Story Arc Analysis** — read narrative, identify argument structure, extract governing thought, build audience model, map section roles
-2. **Section Specification + Web Copywriting** — section type selection, assertion headlines, scroll-optimized copy, image prompts, CTA proposals, visual rhythm enforcement
+2. **Section Specification + Copywriting** — section type selection, assertion headlines, scroll-optimized copy, image prompts, CTA proposals, visual rhythm enforcement
 3. **Poster Pagination** (`mode=storyboard` only) — group sections into arc-station posters, allocate stacked section heights, and resolve DIN poster geometry from `storyboard-layouts.md` (Step 5b)
 
 The brief describes WHAT each section says and which section type to use. The Pencil renderer owns all visual decisions (colors, fonts, spacing) by reading the theme directly — briefs contain no color fields.
@@ -42,9 +42,9 @@ The brief describes WHAT each section says and which section type to use. The Pe
 | `source_path` | auto-discovered | Narrative file or directory. When omitted with `interactive=true`, Step 0 searches nearby. |
 | `theme` | interactive | Absolute path to theme.md, or omit to trigger `cogni-workspace:pick-theme` interactive selection. |
 | `language` | `en` | Language code (en/de) |
-| `title` | auto-detected | Web page title (extracted from narrative if not provided) |
+| `title` | auto-detected | Brief title — the web page title, or the poster-set title in `mode=storyboard` (extracted from narrative if not provided) |
 | `customer_name` / `provider_name` | from metadata | Organization names |
-| `output_path` | `{source_dir}/cogni-visual/web-brief.md` | Brief output location |
+| `output_path` | `{source_dir}/cogni-visual/web-brief.md` | Brief output location. In `mode=storyboard` the default filename is `storyboard-brief.md` instead. |
 | `conversion_goal` | `consultation` | CTA type: consultation, demo, download, trial, contact, calculate |
 | `max_sections` | `10` | Maximum section count (forces consolidation if narrative is long). Governs decomposition in both modes. |
 | `mode` | `web` | Output mode. `web` emits a scrollable `web-brief.md`; `storyboard` paginates the same sections into printed posters and emits a `storyboard-brief.md`. |
@@ -180,7 +180,7 @@ If pick-theme is unavailable (e.g., cogni-workspace not installed), fall back to
 
 **Provider/customer resolution:** Extract `provider_name` and `customer_name` from source metadata. If not found in the source file's frontmatter, search parent and sibling directories for files with `provider:` or `customer:` fields (e.g., sales-presentation.md, pitch-log.json). If still not found, leave empty — never default to the theme name.
 
-**Load libraries:** `web-layouts.md`, `EXAMPLE_WEB_BRIEF.md`, `cta-taxonomy.md`, `arc-taxonomy.md` (if arc_id set), theme.md.
+**Load libraries:** `web-layouts.md`, `EXAMPLE_WEB_BRIEF.md` (in `mode=storyboard`, `EXAMPLE_STORYBOARD_BRIEF.md` instead — the format exemplar must match the brief being written), `cta-taxonomy.md`, `arc-taxonomy.md` (if arc_id set), theme.md.
 
 ---
 
@@ -211,7 +211,7 @@ When caller provides `governing_thought`/`section_roles`: validate against narra
 
 Build Audience Model: Rich mode (from `audience_context`, `buyer_appendix_path`, or pitch-log.json) or Lean mode (inferred from narrative). Identify primary decision-maker, priorities, objections.
 
-**Web-specific usage** (differs from slides):
+**Brief-specific usage** (differs from slides):
 - **Section ordering:** Decision-maker priorities surface earlier in the reading sequence — the scroll in `mode=web`, the poster walkthrough in `mode=storyboard`
 - **Headline framing:** Technical audience = precise language; executive = business impact language
 - **CTA urgency calibration:** Known champion -> higher urgency; known blockers -> address objections before CTA
@@ -241,13 +241,15 @@ python3 $CLAUDE_PLUGIN_ROOT/scripts/load-theme-component.py \
     --component <component-name>
 ```
 
+**`mode=storyboard` only:** pass `--surface deck`. That is the surface the `storyboard` renderer itself probes (`libraries/storyboard-layouts.md` § Pencil MCP Rendering Notes, item 3), so brief-time and render-time enrichment resolve the same component set; leaving `web` here would pull web primitives into a print brief on any theme that declares both surfaces.
+
 Probe per section type you are about to render — pass the section type name (`hero`, `feature-alternating`, `stat-row`, `cta`, …) as `--component`. If no component name is in hand, skip the probe and take the Tier-0 / miss path below; it lands on the same complete style source.
 
 Derive `themes_dir` explicitly, because `pick-theme` yields a slug but no themes directory: `themes_dir` = `dirname(dirname(theme_path))`. Passing `--themes-dir` explicitly is the first-ranked source in `theme-component-loader.md` §Themes-dir resolution, so this derived value wins over the `$COGNI_WORKSPACE_ROOT/themes` and walk-up fallbacks the loader would otherwise try — which is what you want here, since the slug `pick-theme` returned is only guaranteed to exist under the directory that produced it.
 
 Tiers come only from this probe. `pick-theme` returns exactly `theme_path`, `theme_name`, and `theme_slug` — never a `tiers` map — so never read tiers off its return contract.
 
-**Tier-0 / miss path.** A theme with no `manifest.json` emits no `tiers` key at all, and the probe returns `status: "miss"` at exit 0. Treat a miss as normal control flow: fall back to the `theme.md` tokens plus the `libraries/web-layouts.md` defaults and continue, rather than blocking or prompting — a tier-0 theme is a supported configuration, not a failure.
+**Tier-0 / miss path.** A theme with no `manifest.json` emits no `tiers` key at all, and the probe returns `status: "miss"` at exit 0. Treat a miss as normal control flow: fall back to the `theme.md` tokens plus the `libraries/web-layouts.md` defaults and continue — in `mode=storyboard`, the `libraries/storyboard-layouts.md` defaults, plus `web-layouts.md` for the shared section-type schemas, rather than blocking or prompting — a tier-0 theme is a supported configuration, not a failure.
 
 **Output:** Resolved style source — the theme's `theme.md` design tokens, plus the contents of any component file the probe resolved (the loader returns a `path`, never bytes: open the returned `path` to read the primitive).
 
@@ -296,7 +298,7 @@ The reference's poster-count constraints and prohibited patterns bind here rathe
 
 ### Step 6: Write Section Copy & Image Prompts
 
-> Web copy must work in a scroll context where readers decide within 2 seconds whether to keep scrolling or bounce.
+> Web copy must work in a scroll context where readers decide within 2 seconds whether to keep scrolling or bounce; in `mode=storyboard` the same copy is read at 1-2m from a printed poster, so it must land without a scroll to reward it.
 
 **Read references:**
 - `references/03-section-copywriting.md`
@@ -318,7 +320,7 @@ For each section, generate:
 
 ### Step 6b: Propose CTAs (INTERACTIVE)
 
-> Without explicit CTAs, the reader scrolls to the bottom and leaves. CTAs convert attention into action.
+> Without explicit CTAs, the reader scrolls to the bottom and leaves — or, on a poster wall, walks past with no action to take. CTAs convert attention into action.
 
 **Entry gate:** Verify Step 6 outputs — all sections have assertion headlines, copy, and image prompts.
 
@@ -343,7 +345,9 @@ If interactive: present CTA plan via AskUserQuestion (Approve/Adjust, with prima
 
 ### Step 7: Section Preview Checkpoint (INTERACTIVE)
 
-> The section plan is the last structural checkpoint before final validation. Catching errors here is cheaper than fixing the full brief.
+> The section plan is the last structural checkpoint before final validation. Catching errors here is cheaper than fixing the full brief. In `mode=storyboard` the unit being approved is the poster, so the table must show the pagination Step 5b decided — otherwise the reader approves a section list and gets a poster set.
+
+**`mode=storyboard` only:** prefix the section table with a poster plan — one row per poster carrying `Poster | Label | Sections | Section Types`, a `Size: {poster_size} portrait | Posters: {count}` footer, and a `SELF-CHECK: Total posters = {count}. Must be 3-5.` line — so the approve/adjust gate below covers the pagination and not only the section list.
 
 If interactive:
 
@@ -391,7 +395,7 @@ footer:
 
 > Self-assessment is unreliable without explicit measurement. The four-layer gate forces honest evaluation.
 
-**Read reference:** `references/05-validation.md`
+**Read reference:** `references/05-validation.md`  *(`mode=web`)*
 
 Four layers — stop on first failure, fix, re-check:
 
@@ -400,7 +404,7 @@ Four layers — stop on first failure, fix, re-check:
 3. **Visual coherence** — section theme alternation, feature position alternation, image consistency
 4. **Content integrity** — all narrative sections represented, language consistency
 
-**`mode=storyboard` only:** additionally apply `references/print/04-validation.md` for the print checks — poster count within 3-5, per-section minimum heights, poster font-size minimums, safe-area margins, and contiguous poster sequence numbering.
+**`mode=storyboard` only:** read `references/print/04-validation.md` **instead of** `05-validation.md`, not in addition to it. It restates all four layers against the storyboard-brief schema and then adds a fifth print group — poster count within 3-5, per-section minimum heights, poster font-size minimums, safe-area margins, and contiguous poster sequence numbering. The substitution is load-bearing, not tidiness: `05-validation.md` asserts at CRITICAL that `type` is `web-brief`, that `version` is `1.1`, and that header and footer blocks are present. A correct storyboard brief is `type: storyboard-brief`, `version: "2.1"`, and — per Step 8 — has no header or footer at all, so running the web layers over it fails four CRITICAL checks on a sound artifact, and that framework's repair phase would "fix" them by rewriting the brief into web shape, destroying the very contract Step 10 calls authoritative.
 
 ---
 
@@ -513,11 +517,11 @@ Replace `{absolute_path_to_storyboard_brief}` with the `output_path` resolved in
 | **02-section-architecture.md** | 2, 5 | Arc-to-section mapping, decomposition rules, section_theme alternation |
 | **03-section-copywriting.md** | 6 | Web headline hierarchy, CTA copy patterns, number plays |
 | **04-image-prompts.md** | 6 | Web image formats, hero bg+overlay pattern, stock vs AI guidance |
-| **05-validation.md** | 9 | Four-layer validation framework |
+| **05-validation.md** | 9 | *(`mode=web`)* Four-layer validation framework |
 | **print/01-poster-architecture.md** | 5b | *(`mode=storyboard`)* Arc-station-to-poster mapping, poster templates, poster-count decision tree |
 | **print/02-poster-copywriting.md** | 6 | *(`mode=storyboard`)* Print-vs-web copy overrides, poster governing-headline rules |
 | **print/03-image-prompts.md** | 6 | *(`mode=storyboard`)* Print-resolution prompt suffix, max-2-images rule, poster image sizing |
-| **print/04-validation.md** | 9 | *(`mode=storyboard`)* Print-specific checks and poster font-size minimums |
+| **print/04-validation.md** | 9 | *(`mode=storyboard`)* Replaces 05-validation.md — all four layers against the storyboard schema, plus print-specific checks and poster font-size minimums |
 | **cta-taxonomy.md** (library) | 6b | CTA types, urgency levels, arc-to-CTA heuristics |
 
 ### Libraries (loaded as needed)
@@ -527,6 +531,6 @@ Replace `{absolute_path_to_storyboard_brief}` with the `output_path` resolved in
 | **arc-taxonomy.md** | 1 | Arc ID -> visual arc type mapping, element names |
 | **web-layouts.md** | 1 | Section type schemas, typography scale, spacing, theme-to-variable mapping |
 | **cta-taxonomy.md** | 6b | CTA types, urgency, arc-to-CTA heuristics |
-| **EXAMPLE_WEB_BRIEF.md** | 1 | Output format reference |
+| **EXAMPLE_WEB_BRIEF.md** | 1 | *(`mode=web`)* Output format reference |
 | **storyboard-layouts.md** | 5b | *(`mode=storyboard`)* DIN A0-A3 dimensions, 3-zone poster model, height allocation, portrait adaptations, `poster_x` canvas arrangement |
 | **EXAMPLE_STORYBOARD_BRIEF.md** | 10 | *(`mode=storyboard`)* Output format reference — the contract the `storyboard` agent parses |

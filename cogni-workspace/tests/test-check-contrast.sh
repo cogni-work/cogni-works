@@ -55,7 +55,7 @@
 # stay GREEN under it, because every one of them runs the default route where
 # requested is empty -- which is why the narrow path needed a case of its own.
 #
-# Fourth recipe, for the unreachable-threshold arm (the discriminator is
+# Fourth recipe, for the null-suggestion arm (the discriminator is
 # cc31-null-suggestion-is-present-and-null):
 #
 #   bash "$HOME/.claude/plugins/marketplaces/managed-service/cogni-service/scripts/mutation-check.sh" \
@@ -65,7 +65,7 @@
 #     --test 'bash cogni-workspace/tests/test-check-contrast.sh' \
 #     --case cc31-null-suggestion-is-present-and-null
 #
-# The mutant turns the no-direction-clears branch into a constant return, so the
+# The mutant turns the null-suggestion branch into a constant return, so the
 # discriminator reads (True, '#000000', 1) instead of (True, None, 1). The anchor
 # is single-occurrence: check-contrast.py carries three `return None`, and only
 # suggest_hex's is four-space indented -- parse_hex's two are eight-space, which
@@ -261,8 +261,17 @@ fi
 assert_eq "cc15-passing-pair-has-no-suggestion" "None" \
   "$(field "$ABOVE_45" "data['pairs'][0].get('suggested_hex')" --pair fg:bg)"
 
-# When neither lightness direction clears the threshold from the foreground's
-# hue, suggest_hex returns None and the failing pair carries suggested_hex: null.
+# suggest_hex returns None here, but NOT because the hue is unreachable. The -1
+# walk genuinely never clears -- best 4.4883 at #030303. The +1 walk DOES clear
+# unsnapped at lightness 0.99 (ratio 4.5084) and is rejected only by the module's
+# own snapped re-verification: #FCFCFC re-scores 4.4910, below 4.5. Both true
+# endpoints would clear (#000000 = 4.5578, #FFFFFF = 4.6075) and are never
+# evaluated, because the accumulating `candidate_lightness += direction * step`
+# terminates at -3.1e-17 and 1.0000000000000007, so the range guard breaks one
+# step short of pure black and pure white. The None is the conjunction of those
+# two facts, so a walk refactor that lands exactly on 0.0/1.0 will legitimately
+# turn this case red -- review that as an intentional behaviour change, not a
+# broken fixture. The endpoint miss itself is tracked separately as issue 1684.
 NULL_SUGGESTION="$(palette nullsuggestion '{"fg":"#333333","bg":"#757575"}')"
 
 assert_ratio "cc31-null-suggestion-ratio" "2.7422" \

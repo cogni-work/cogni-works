@@ -8,13 +8,13 @@ description: >
   "single-page narrative", "Webseite aus Bericht", "Landingpage erstellen",
   "Web-Narrative", "scrollbare Webseite",
   "create a web page from report", or, for print output, "storyboard", "Druckposter",
+  "poster series", "print posters from narrative", "Poster erstellen",
   or wants to convert prose into a scroll-driven
   section architecture with design tokens and auto-layout. Also trigger for section type
   mapping, hero/CTA optimization and poster pagination, in English or German.
-  Produces a web-brief.md, or a storyboard-brief.md in storyboard mode. Important: this
-  skill CREATES the brief from a narrative source — it does NOT render an existing brief
-  (use the web or storyboard agent), does NOT create slides (use story-to-slides), and
-  does NOT polish prose (use cogni-workspace:copywriter).
+  Produces a web-brief.md, or a storyboard-brief.md in storyboard mode. Important: this skill
+  CREATES briefs from a narrative source — not rendering (use the web or storyboard
+  agent), not slides (story-to-slides), not prose polish (copywriter).
 allowed-tools: Read, Write, Edit, Bash, Grep, Glob, TodoWrite, AskUserQuestion, Agent, Skill
 ---
 
@@ -22,15 +22,16 @@ allowed-tools: Read, Write, Edit, Bash, Grep, Glob, TodoWrite, AskUserQuestion, 
 
 ## Purpose
 
-Read any narrative document with an existing story arc and produce an optimized web-brief that the Pencil MCP renderer can turn into a scrollable landing-page-style .pen file. You are a **web storytelling architect**: analyze the narrative's argument structure, resolve the visual style from the selected theme, decompose the story into web sections, and generate copy and image prompts for each section.
+Read any narrative document with an existing story arc and produce an optimized web-brief that the Pencil MCP renderer can turn into a scrollable landing-page-style .pen file — or, when `mode=storyboard`, a storyboard-brief that paginates those same sections into 3-5 printed DIN A posters. You are a **web and print storytelling architect**: analyze the narrative's argument structure, resolve the visual style from the selected theme, decompose the story into web sections, and generate copy and image prompts for each section.
 
 A web narrative is not a slide deck pasted into a tall page. It is a scroll-driven reading experience where each section has ONE clear message, supported by visual hierarchy that guides the reader toward a conversion action. Sections alternate between light and dark to create visual rhythm. This matters because walls of undifferentiated text lose readers within seconds — alternating visual weight creates natural pause points that let each message land before the next begins.
 
 ## Architecture
 
-Two-layer intelligence:
+Two core layers, plus a third in storyboard mode:
 1. **Story Arc Analysis** — read narrative, identify argument structure, extract governing thought, build audience model, map section roles
 2. **Section Specification + Web Copywriting** — section type selection, assertion headlines, scroll-optimized copy, image prompts, CTA proposals, visual rhythm enforcement
+3. **Poster Pagination** (`mode=storyboard` only) — group sections into arc-station posters, allocate stacked section heights, and resolve DIN poster geometry from `storyboard-layouts.md` (Step 5b)
 
 The brief describes WHAT each section says and which section type to use. The Pencil renderer owns all visual decisions (colors, fonts, spacing) by reading the theme directly — briefs contain no color fields.
 
@@ -211,7 +212,7 @@ When caller provides `governing_thought`/`section_roles`: validate against narra
 Build Audience Model: Rich mode (from `audience_context`, `buyer_appendix_path`, or pitch-log.json) or Lean mode (inferred from narrative). Identify primary decision-maker, priorities, objections.
 
 **Web-specific usage** (differs from slides):
-- **Section ordering:** Decision-maker priorities surface earlier in scroll sequence
+- **Section ordering:** Decision-maker priorities surface earlier in the reading sequence — the scroll in `mode=web`, the poster walkthrough in `mode=storyboard`
 - **Headline framing:** Technical audience = precise language; executive = business impact language
 - **CTA urgency calibration:** Known champion -> higher urgency; known blockers -> address objections before CTA
 - **Body text depth:** Expert audience = fewer words, more data; general audience = more context
@@ -240,7 +241,7 @@ python3 $CLAUDE_PLUGIN_ROOT/scripts/load-theme-component.py \
     --component <component-name>
 ```
 
-Probe per section type you are about to render — pass the section type name (`hero`, `feature-alternating`, `stat-row`, `cta`, …) as `--component`. If no component name is in hand, skip the probe: the `theme.md` tokens plus the `libraries/web-layouts.md` defaults are already a complete style source, and that is the same terminal state the miss path below describes.
+Probe per section type you are about to render — pass the section type name (`hero`, `feature-alternating`, `stat-row`, `cta`, …) as `--component`. If no component name is in hand, skip the probe and take the Tier-0 / miss path below; it lands on the same complete style source.
 
 Derive `themes_dir` explicitly, because `pick-theme` yields a slug but no themes directory: `themes_dir` = `dirname(dirname(theme_path))`. Passing `--themes-dir` explicitly is the first-ranked source in `theme-component-loader.md` §Themes-dir resolution, so this derived value wins over the `$COGNI_WORKSPACE_ROOT/themes` and walk-up fallbacks the loader would otherwise try — which is what you want here, since the slug `pick-theme` returned is only guaranteed to exist under the directory that produced it.
 
@@ -282,13 +283,14 @@ For each section:
 
 **Read reference:** `references/print/01-poster-architecture.md`
 
-1. **Poster count from narrative length**, then cap at `max_posters`: under 800 words -> 3, 800-1500 -> 4, over 1500 -> 5.
+1. **Poster count from narrative length**, then cap at `max_posters` — take the word-count thresholds and the 3-5 bound from the reference's poster-count decision tree.
 2. **Map arc stations to posters** using the poster templates in the reference.
-3. **Stack 1-3 sections per poster** and allocate heights from the ratio tables in `$CLAUDE_PLUGIN_ROOT/libraries/storyboard-layouts.md`: 1 section -> 100%, 2 -> 50/50 or 55/45, 3 -> 40/30/30 or 35/35/30. Apply that library's portrait adaptations (stat-row -> 2x2 grid, feature-alternating -> vertical stack, timeline -> vertical steps).
+3. **Stack 1-3 sections per poster**, taking the height splits, the split-ratio selection rules and the portrait adaptations from `$CLAUDE_PLUGIN_ROOT/libraries/storyboard-layouts.md` — the same library item 4 reads for geometry, and the authoritative home for all three. `references/print/01-poster-architecture.md` restates them for readers arriving from the poster templates.
+4. **Resolve poster geometry from `poster_size`.** Read the scale-factor table in `$CLAUDE_PLUGIN_ROOT/libraries/storyboard-layouts.md` (A0-A3, portrait only): that row gives `print_width`, `print_height` and `scale_factor`. `base_width` / `base_height` are the fixed design resolution 1440 x 2036, and `poster_gap` defaults to that library's base gap of 200px. With `poster_size` and the `poster_count` from item 1, these are exactly the eight frontmatter fields Step 10 writes.
 
-Hard constraints — 3-5 posters, never more than 5; no separate title or summary posters; the first poster opens on `hero` and the last closes on `cta`; merge related stations if decomposition yields more than 5.
+The reference's poster-count constraints and prohibited patterns bind here rather than advise: a title-only or summary-only poster spends a whole station on nothing the reader can act on, so the first poster opens on `hero`, the last closes on `cta`, and related stations merge instead of the count ever exceeding 5.
 
-**Content checkpoint:** State poster count, the station-to-poster mapping, and the height split per poster.
+**Content checkpoint:** State poster count, the station-to-poster mapping, the height split per poster, and the resolved poster geometry.
 
 ---
 
@@ -299,7 +301,7 @@ Hard constraints — 3-5 posters, never more than 5; no separate title or summar
 **Read references:**
 - `references/03-section-copywriting.md`
 - `references/04-image-prompts.md`
-- **`mode=storyboard` only**, layered as overrides on the two above: `references/print/02-poster-copywriting.md` and `references/print/03-image-prompts.md`. In storyboard mode every image prompt ends with the suffix `print resolution, high detail`, and no poster carries more than 2 images.
+- **`mode=storyboard` only**, layered as overrides on the two above: `references/print/02-poster-copywriting.md` and `references/print/03-image-prompts.md`. Take the print image-prompt suffix verbatim from `03-image-prompts.md`, along with its per-poster image cap — a paraphrased suffix fails Step 9's image-consistency check.
 
 For each section, generate:
 
@@ -326,10 +328,12 @@ For each section, generate:
 2. Per section: assign `cta.text` (max 50 chars, imperative verb), `cta.type` (explore/evaluate/commit/share), `cta.urgency` (low/medium/high)
 3. Build `cta_summary`: 3-5 proposals, `primary_cta` = highest-urgency commit CTA matching `conversion_goal`
 
-**Web-specific CTA rendering:**
+**Web-specific CTA rendering** (`mode=web` only):
 - `commit` CTAs -> rendered as buttons in hero and CTA sections
 - `evaluate` CTAs -> rendered as secondary buttons or highlighted links
 - `explore` and `share` CTAs -> rendered as text links within section copy
+
+**`mode=storyboard`:** a printed poster has no interactive affordances, so CTA type drives placement and prominence rather than a control — the `commit` CTA becomes the `cta` section text on the closing poster, and lower-commitment CTAs stay inside section copy. Carry `cta.text` / `cta.type` / `cta.urgency` through unchanged; `EXAMPLE_STORYBOARD_BRIEF.md` shows the resulting shape.
 
 If interactive: present CTA plan via AskUserQuestion (Approve/Adjust, with primary_cta in question text). On empty response, treat as approval.
 
@@ -361,9 +365,11 @@ If not interactive: skip this checkpoint.
 
 ---
 
-### Step 8: Generate Header & Footer Content
+### Step 8: Generate Header & Footer Content (`mode=web` only)
 
 > Header and footer provide the page's navigation frame and brand presence.
+
+**`mode=storyboard`:** skip this step. A storyboard brief has no page-level header or footer — `EXAMPLE_STORYBOARD_BRIEF.md` defines no such fields. Each poster instead carries its own header strip, built from the `sequence` and poster label resolved in Step 5b under the governing-headline rules in `references/print/02-poster-copywriting.md`.
 
 Generate header and footer content based on metadata:
 
@@ -400,7 +406,7 @@ Four layers — stop on first failure, fix, re-check:
 
 ### Step 9b: Stakeholder Review (when `stakeholder_review=true`)
 
-> Structural validation catches schema and formatting issues, but cannot tell whether the web brief will create an effective scroll experience — whether the opening hooks visitors, whether CTAs are placed at motivation peaks, or whether the content converts. The brief-review-assessor evaluates from UX designer, audience, and content strategist perspectives.
+> Structural validation catches schema and formatting issues, but cannot tell whether the web brief will create an effective scroll experience — whether the opening hooks visitors, whether CTAs are placed at motivation peaks, or whether the content converts. In `mode=storyboard` the same question is a print one — whether a poster reads at arm's length, whether the station sequence survives a physical walkthrough, and whether any single poster is overloaded. The brief-review-assessor evaluates from the perspective trio matching the `brief_type` it is given.
 
 **Skip this step** if `stakeholder_review=false`.
 
@@ -410,6 +416,8 @@ Launch the `brief-review-assessor` agent with:
 - `source_narrative`: the narrative path from Step 0
 - `audience_context`: if provided
 - `round`: 1
+
+**`mode=storyboard` only:** pass `brief_type`: `storyboard` instead — the assessor then loads the Print Designer (30%) / Target Audience (40%) / Exhibition Presenter (30%) trio from `libraries/brief-review-perspectives.md` rather than the web trio (see `agents/brief-review-assessor.md`).
 
 **On accept (all perspectives ≥85):** Proceed to Step 10.
 
@@ -422,11 +430,11 @@ Launch the `brief-review-assessor` agent with:
 
 **On reject:** Surface the verdict to the user via AskUserQuestion and let them decide whether to proceed, edit manually, or abandon.
 
-Write the review verdict to `{output_dir}/web-brief.review.json`.
+Write the review verdict alongside the brief, deriving its name from the resolved `output_path` — replace the trailing `.md` with `.review.json`. The defaults yield `web-brief.review.json` and `storyboard-brief.review.json`, and a caller-supplied `output_path` keeps its own stem, so the verdict always sits beside the brief it grades and is named after it.
 
 ---
 
-### Step 10: Write web-brief.md
+### Step 10: Write the Brief
 
 > The output path convention keeps briefs in `cogni-visual/` to prevent clutter.
 
@@ -436,11 +444,11 @@ Write the review verdict to `{output_dir}/web-brief.review.json`.
 
 Generate the final brief with YAML frontmatter and section specifications following `EXAMPLE_WEB_BRIEF.md` format. Write using Write tool.
 
-**`mode=storyboard` only:** follow `$CLAUDE_PLUGIN_ROOT/libraries/EXAMPLE_STORYBOARD_BRIEF.md` instead — its frontmatter and body schema are the contract the `storyboard` agent parses, so reproduce both exactly rather than adapting the web shape. Frontmatter carries `poster_size`, `poster_count`, `poster_gap`, `base_width`, `base_height`, `print_width`, `print_height` and `scale_factor` alongside the shared theme/arc fields; the body is one `## Poster N` block per poster, each holding its 1-3 stacked section YAML blocks with `section_theme` and `height_percent`.
+**`mode=storyboard` only:** follow `$CLAUDE_PLUGIN_ROOT/libraries/EXAMPLE_STORYBOARD_BRIEF.md` instead — its frontmatter and body schema are the contract the `storyboard` agent parses, so reproduce both exactly rather than adapting the web shape. Frontmatter carries the eight poster-geometry fields resolved in Step 5b alongside the shared theme/arc fields — carry them through unchanged rather than recomputing them here; the body is one `## Poster N` block per poster, each holding its 1-3 stacked section YAML blocks with `section_theme` and `height_percent`.
 
 **Final checks:**
 - YAML frontmatter complete (type, version, theme, theme_path, conversion_goal, arc_id if available, confidence_score as average of per-section scores)
-- Header and footer sections present
+- Header and footer sections present (`mode=web` only)
 - All sections specified with type, section_theme, arc_role, headline, confidence
 - First section is hero (dark), last content section is CTA (accent)
 - Image prompts present for hero and feature-alternating sections
@@ -450,9 +458,9 @@ Generate the final brief with YAML frontmatter and section specifications follow
 
 ---
 
-### Step 11: Generate Web Rendering Prompt
+### Step 11: Generate Rendering Prompt
 
-> The user needs a ready-to-use prompt for a fresh Claude chat with the web agent. Absolute paths make it self-contained.
+> The user needs a ready-to-use prompt for a fresh Claude chat with the renderer agent — the web agent, or the storyboard agent in print mode. Absolute paths make it self-contained.
 
 After the brief is written and validated, **append** a rendering prompt section to the end of web-brief.md (after Generation Metadata), then also print it to the conversation so the user can copy it directly.
 
@@ -473,6 +481,24 @@ Copy this prompt into a new Claude chat to render the web narrative:
 Replace `{absolute_path_to_web_brief}` with the resolved `output_path` and `{absolute_path_to_theme_md}` with the `theme_path` from Step 1.
 
 Both paths must be absolute — never use `~`, `$HOME`, `$CLAUDE_PLUGIN_ROOT`, or relative paths, because the receiving Claude session has no access to variables from this session.
+
+**`mode=storyboard` only:** append the prompt to the end of `storyboard-brief.md` instead, and name the print renderer:
+
+```markdown
+---
+
+## Rendering Prompt
+
+Copy this prompt into a new Claude chat to render the posters:
+
+> Please render a print storyboard using:
+> - Storyboard brief: {absolute_path_to_storyboard_brief}
+> - Theme: {absolute_path_to_theme_md}
+>
+> Use the `storyboard` agent; it writes a multi-poster .pen file next to the brief.
+```
+
+Replace `{absolute_path_to_storyboard_brief}` with the `output_path` resolved in Step 10. The same absolute-path rule applies.
 
 ---
 
@@ -502,5 +528,5 @@ Both paths must be absolute — never use `~`, `$HOME`, `$CLAUDE_PLUGIN_ROOT`, o
 | **web-layouts.md** | 1 | Section type schemas, typography scale, spacing, theme-to-variable mapping |
 | **cta-taxonomy.md** | 6b | CTA types, urgency, arc-to-CTA heuristics |
 | **EXAMPLE_WEB_BRIEF.md** | 1 | Output format reference |
-| **storyboard-layouts.md** | 1, 5b | *(`mode=storyboard`)* DIN A0-A3 dimensions, 3-zone poster model, height allocation, portrait adaptations, `poster_x` canvas arrangement |
+| **storyboard-layouts.md** | 5b | *(`mode=storyboard`)* DIN A0-A3 dimensions, 3-zone poster model, height allocation, portrait adaptations, `poster_x` canvas arrangement |
 | **EXAMPLE_STORYBOARD_BRIEF.md** | 10 | *(`mode=storyboard`)* Output format reference — the contract the `storyboard` agent parses |

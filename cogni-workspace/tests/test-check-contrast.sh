@@ -54,6 +54,25 @@
 # exactly the refactor the emission property is meant to survive. cc22-cc25 all
 # stay GREEN under it, because every one of them runs the default route where
 # requested is empty -- which is why the narrow path needed a case of its own.
+#
+# Fourth recipe, for the unreachable-threshold arm (the discriminator is
+# cc31-null-suggestion-is-present-and-null):
+#
+#   bash "$HOME/.claude/plugins/marketplaces/managed-service/cogni-service/scripts/mutation-check.sh" \
+#     --root . \
+#     --file cogni-workspace/scripts/check-contrast.py \
+#     --expr 's{^    return None$}{    return "#000000"}m' \
+#     --test 'bash cogni-workspace/tests/test-check-contrast.sh' \
+#     --case cc31-null-suggestion-is-present-and-null
+#
+# The mutant turns the no-direction-clears branch into a constant return, so the
+# discriminator reads (True, '#000000', 1) instead of (True, None, 1). The anchor
+# is single-occurrence: check-contrast.py carries three `return None`, and only
+# suggest_hex's is four-space indented -- parse_hex's two are eight-space, which
+# the `^    ` anchor excludes. cc13/cc14 stay GREEN under the mutant because the
+# BELOW_45 fixture's walk returns early and never reaches the mutated line, and
+# cc15 stays GREEN because a passing pair never calls suggest_hex at all -- which
+# is why this arm needed a case of its own.
 
 set -u
 
@@ -241,6 +260,30 @@ fi
 
 assert_eq "cc15-passing-pair-has-no-suggestion" "None" \
   "$(field "$ABOVE_45" "data['pairs'][0].get('suggested_hex')" --pair fg:bg)"
+
+# When neither lightness direction clears the threshold from the foreground's
+# hue, suggest_hex returns None and the failing pair carries suggested_hex: null.
+NULL_SUGGESTION="$(palette nullsuggestion '{"fg":"#333333","bg":"#757575"}')"
+
+assert_ratio "cc31-null-suggestion-ratio" "2.7422" \
+  "$(field "$NULL_SUGGESTION" "data['pairs'][0]['ratio']" --pair fg:bg)"
+
+# Present-and-null, NOT the absent key cc15 pins: evaluate_pair sets
+# suggested_hex only when the pair fails, so a bare .get() renders both states
+# as None and would grade vacuously -- the membership test is the discriminator.
+# data['evaluated'] is co-asserted as in cc28.
+assert_eq "cc31-null-suggestion-is-present-and-null" "(True, None, 1)" \
+  "$(field "$NULL_SUGGESTION" "('suggested_hex' in data['pairs'][0], data['pairs'][0]['suggested_hex'], data['evaluated'])" --pair fg:bg)"
+
+# A null suggestion is data, not an error. This deliberately bypasses field(),
+# which reads payload.get('data') and DISCARDS payload['success'] -- same
+# inline-python idiom as cc17, keeping --pair fg:bg so all three assertions
+# grade the same invocation.
+assert_eq "cc31-null-suggestion-envelope-succeeds" "(True, True)" \
+  "$(python3 "$SCRIPT" "$NULL_SUGGESTION" --pair fg:bg 2>/dev/null | python3 -c "
+import json, sys
+payload = json.load(sys.stdin)
+print((payload['success'], 'fg on bg' in payload['data']['failures']))" 2>/dev/null)"
 
 echo "=== G. palette handling ==="
 

@@ -84,7 +84,7 @@ This plugin is part of the [insight-wave ecosystem](../docs/ecosystem-overview.m
 /manage-workspace  # initialize or update a workspace
 /workspace-status  # check health
 /pick-theme        # select a theme interactively
-/manage-themes     # extract, create, audit, or apply themes
+/manage-themes     # import, create, audit, or apply themes
 /troubleshoot      # diagnose plugin and cross-plugin failures
 /cogni-workspace:cogni-issues  # file or inspect GitHub issues
 ```

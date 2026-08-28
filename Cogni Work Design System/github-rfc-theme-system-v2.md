@@ -4,6 +4,7 @@
 > **Type:** Architecture proposal
 > **Pilot:** `themes/cogni-work/` (companion design system already exists; ready to drop in as reference implementation)
 > **Related:** [Issue: Deepen the `cogni-work` theme] — Phase 1 of this two-phase migration; lands additive content into the existing `theme.md` format and is fully backwards-compatible.
+> **Superseded in part (2026-08-28):** `manage-themes` Operations 3 (Grab Theme from Website) and 4 (Grab from PPTX) were retired in favour of Operation 10 (Import from Claude Design Bundle) — see `cogni-workspace/skills/manage-themes/SKILL.md` § Operations. Operation numbers in the Phase 2 list, the impact table, and the authoring recommendations below are as written at authoring time and are kept unchanged as a record of what this RFC proposed. Only the tier-0 authoring paragraph under "Authoring themes" is corrected below, because it describes today's workflow in the present tense.
 
 ---
 
@@ -262,7 +263,7 @@ In other words, the work is largely done. Approving this RFC means **moving** co
 
 The theme directory is the contract. How you produce its contents is up to you.
 
-**For tier-0 themes** (palette + fonts + voice prose), `manage-themes` in Claude Code remains the recommended path. Its website-extraction (Operation #3), PPTX-extraction (Operation #4), and preset-blending (Operation #5) operations produce excellent `theme.md` files in minutes. No change to today's workflow.
+**For tier-0 themes** (palette + fonts + voice prose), `manage-themes` in Claude Code remains the recommended path. Its Claude Design bundle import (Operation #10) and preset-blending (Operation #5) operations produce excellent `theme.md` files in minutes. No change to today's workflow.
 
 **For tier-1 themes** (+ structured tokens), `manage-themes` will be extended to emit `tokens/*.json` alongside `theme.md`. Hand-authoring is also straightforward — token JSON is human-readable, and a designer with a Figma tokens export or a CSS variables file can produce it directly.
 

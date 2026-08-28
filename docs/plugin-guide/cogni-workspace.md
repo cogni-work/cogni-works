@@ -332,7 +332,7 @@ Reach for this instead of the PPTX path when the deck will be presented from a b
 
 Absorbed from the retired cogni-visual plugin. Decomposes a narrative into a scroll-driven section architecture and writes `web-brief.md`, by default to `{source_dir}/cogni-visual/web-brief.md`: one message per section, assertion headlines, scroll-optimized copy, image prompts, and a CTA proposal (`conversion_goal` defaults to `consultation`, `max_sections` to 10). Sections alternate light and dark so each message lands before the next begins.
 
-As with `story-to-slides`, this is the briefing half only: the `web` agent renders the brief via Pencil MCP into a `.pen` file and then exports a self-contained HTML page from it, and the brief itself contains no color fields. It does not produce slides (`story-to-slides`), print storyboard posters (`story-to-storyboard`), or polished prose (`copywriter`).
+As with `story-to-slides`, this is the briefing half only: the `web` agent renders the brief via Pencil MCP into a `.pen` file and then exports a self-contained HTML page from it, and the brief itself contains no color fields. It also produces print storyboard posters: `mode=storyboard` paginates the same narrative into 3-5 DIN A posters and writes `storyboard-brief.md`, which the `storyboard` agent renders. It does not produce slides (`story-to-slides`) or polished prose (`copywriter`).
 
 No slash command of its own — ask for a web narrative or a landing page built from a narrative document.
 

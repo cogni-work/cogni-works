@@ -214,7 +214,7 @@ This file contains detailed sub-steps, extended thinking prompts, and quality ga
 
 #### Why exactly 4 sections matters
 
-The output uses exactly 4 `##` section headers matching the selected arc's element names. This isn't arbitrary -- downstream visualization tools (story-to-slides, story-to-storyboard, story-to-web) parse these 4 elements to create matching visual segments. Creative renaming or adding extra sections breaks this pipeline. See `references/language-templates.md` section "Insight Summary (Arc Element Headers)" for the exact header text per arc and language.
+The output uses exactly 4 `##` section headers matching the selected arc's element names. This isn't arbitrary -- downstream visualization tools (story-to-slides, story-to-web in web or storyboard mode) parse these 4 elements to create matching visual segments. Creative renaming or adding extra sections breaks this pipeline. See `references/language-templates.md` section "Insight Summary (Arc Element Headers)" for the exact header text per arc and language.
 
 #### Summary workflow (when no arc-specific file exists)
 
@@ -297,7 +297,7 @@ When `--format` is set, this skill adapts an **existing** narrative into a deriv
 
 Workflow: load the source narrative → extract its 4 arc elements and key numbers → transform per the reference file's template for the requested format → validate against the gates below → write to the output path.
 
-**Why arc structure is preserved in every format:** Downstream tools (story-to-slides, story-to-storyboard, story-to-web) parse the 4 arc elements to create matching visual segments. Renaming headers, reordering elements, or merging sections breaks this pipeline. Each format keeps all 4 `##` headers in their original order with the exact arc element names from the source. This is the derivative-side counterpart of the generation-side rule in Phase 4 ("Why exactly 4 sections matters").
+**Why arc structure is preserved in every format:** Downstream tools (story-to-slides, story-to-web in web or storyboard mode) parse the 4 arc elements to create matching visual segments. Renaming headers, reordering elements, or merging sections breaks this pipeline. Each format keeps all 4 `##` headers in their original order with the exact arc element names from the source. This is the derivative-side counterpart of the generation-side rule in Phase 4 ("Why exactly 4 sections matters").
 
 **Why fidelity matters:** Derivatives condense -- they never embellish. Adding information that wasn't in the source narrative would break the evidence chain back to the original research. Every claim in the derivative should be traceable to the source. This is especially important for quantitative claims: if a number appears in the derivative, it appeared in the source.
 

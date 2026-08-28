@@ -389,7 +389,6 @@ VISUAL_CONSUMERS=(
   "cogni-workspace:enrich-report"
   "cogni-workspace:story-to-infographic"
   "cogni-workspace:story-to-slides"
-  "cogni-workspace:story-to-storyboard"
   "cogni-workspace:story-to-web"
   "cogni-portfolio:portfolio-dashboard"
   "cogni-website:website-build"

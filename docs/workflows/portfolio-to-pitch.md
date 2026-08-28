@@ -26,7 +26,7 @@ Along the way you produce:
 - **Foundation** — products, features, (optionally) a lean-canvas import, (optionally) a discovered inventory from `/portfolio-ingest` and `/portfolio-scan`
 - **Commercial layer** — markets with TAM/SAM/SOM, ICPs and buyer personas per market
 - **Messaging** — IS/DOES/MEANS propositions per Feature × Market, sharpened with competitor battle cards and (optionally) solution blueprints with pricing tiers
-- **Pitch** — `output/communicate/pitch/{market-slug}.md` (arc-structured, `arc_id` in frontmatter). Optionally render visually with `story-to-slides`, `story-to-web`, or `story-to-storyboard`
+- **Pitch** — `output/communicate/pitch/{market-slug}.md` (arc-structured, `arc_id` in frontmatter). Optionally render visually with `story-to-slides`, or `story-to-web` (scrollable web narrative, or printed posters in `mode=storyboard`)
 - **Optional visuals** — `/portfolio-dashboard` (interactive HTML) and `/portfolio-architecture` (Excalidraw product-feature map)
 
 ## Prerequisites

@@ -2,9 +2,9 @@
 
 ## Purpose
 
-Define patterns for generating print-resolution AI image prompts for storyboard poster sections. Storyboards reuse web image patterns (from `story-to-web/references/04-image-prompts.md`) with print-specific adaptations. Images must work at A1 print scale.
+Define patterns for generating print-resolution AI image prompts for storyboard poster sections. Storyboards reuse web image patterns (from `../04-image-prompts.md`) with print-specific adaptations. Images must work at A1 print scale.
 
-**Key principle:** The skill reads `story-to-web/references/04-image-prompts.md` for base web image patterns. This file defines ONLY the print-specific overrides.
+**Key principle:** The skill reads `../04-image-prompts.md` for base web image patterns. This file defines ONLY the print-specific overrides.
 
 ---
 

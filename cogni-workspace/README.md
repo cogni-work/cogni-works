@@ -180,15 +180,14 @@ State lives in two layers that other plugins consume. Configuration (env vars, t
 | `update-obsidian.sh` | script | Merges profiles, fixes WSL paths, removes deprecated profiles, copies scripts |
 | `portability-utils.sh` | script | Cross-platform utilities (macOS, Linux, WSL, Git Bash) |
 | `story-to-slides` | skill | Turn a narrative with a story arc into a presentation brief |
-| `story-to-web` | skill | Turn a narrative with a story arc into a scrollable web-narrative brief |
-| `story-to-storyboard` | skill | Turn a narrative with a story arc into a printed-poster storyboard brief |
+| `story-to-web` | skill | Turn a narrative with a story arc into a scrollable web-narrative brief, or a printed-poster storyboard brief in `mode=storyboard` |
 | `story-to-infographic` | skill | Distil a narrative into a single-page infographic brief |
 | `render-html-slides` | skill | Render a presentation brief into self-contained HTML slides with speaker notes |
 | `enrich-report` | skill | Turn a markdown report into a themed HTML deliverable with charts and inline SVG diagrams |
 | `review-brief` | skill | Score a visual brief from three stakeholder perspectives before rendering |
 | `story-to-slides` | agent | Drive the story-to-slides skill as an autonomous subprocess |
 | `story-to-web` | agent | Drive the story-to-web skill as an autonomous subprocess |
-| `story-to-storyboard` | agent | Drive the story-to-storyboard skill as an autonomous subprocess |
+| `story-to-storyboard` | agent | Drive story-to-web's storyboard mode as an autonomous subprocess |
 | `story-to-infographic` | agent | Drive the story-to-infographic skill as an autonomous subprocess |
 | `html-slides` | agent | Render a presentation brief into HTML slides, returning statistics |
 | `pptx` | agent | Create, edit and analyse PowerPoint presentations |
@@ -214,7 +213,7 @@ State lives in two layers that other plugins consume. Configuration (env vars, t
 ```
 cogni-workspace/
 ├── .claude-plugin/plugin.json    Plugin manifest
-├── skills/                       24 workspace and visual-rendering skills
+├── skills/                       23 workspace and visual-rendering skills
 │   ├── audit-region-sources/     Audit per-plugin region-source overlays against the registry
 │   ├── claim-entity/             Cross-plugin ClaimEntity data contract and store layout
 │   ├── claims/                   Claim-verification lifecycle (+ scripts/claims-store.sh)
@@ -229,8 +228,7 @@ cogni-workspace/
 │   ├── review-brief/             Score a visual brief from three stakeholder perspectives
 │   ├── story-to-infographic/     Narrative -> single-page infographic brief
 │   ├── story-to-slides/          Narrative -> presentation brief
-│   ├── story-to-storyboard/      Narrative -> printed-poster storyboard brief
-│   ├── story-to-web/             Narrative -> scrollable web-narrative brief
+│   ├── story-to-web/             Narrative -> scrollable web-narrative or printed-poster brief
 │   ├── troubleshoot/             Diagnose plugin and cross-plugin failures
 │   ├── workspace-dashboard/      Interactive HTML workspace status dashboard
 │   └── workspace-status/

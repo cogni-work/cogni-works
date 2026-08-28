@@ -105,7 +105,6 @@ $WS_ROOT/skills/render-html-slides|cogni-visual:
 $WS_ROOT/skills/review-brief|cogni-visual:
 $WS_ROOT/skills/story-to-infographic|cogni-visual:
 $WS_ROOT/skills/story-to-slides|cogni-visual:
-$WS_ROOT/skills/story-to-storyboard|cogni-visual:
 $WS_ROOT/skills/story-to-web|cogni-visual:
 $WS_ROOT/libraries|cogni-visual:
 $WS_ROOT/references/cartographic-data|cogni-visual:

@@ -1,19 +1,21 @@
 ---
 name: story-to-web
 description: >
-  Transform any narrative into an optimized scrollable web narrative brief that the web agent
-  renders via Pencil MCP into a .pen file. Use this skill whenever the user mentions
+  Transform any narrative into an optimized brief that Pencil MCP renders: a scrollable web
+  narrative by default, or 3-5 printed DIN A posters in storyboard mode. Use this skill
+  whenever the user mentions
   "web narrative", "landing page from narrative", "scrollable web page", "web story",
   "single-page narrative", "Webseite aus Bericht", "Landingpage erstellen",
   "Web-Narrative", "scrollbare Webseite",
-  "create a web page from report", or wants to convert prose into a scroll-driven
+  "create a web page from report", or, for print output, "storyboard", "Druckposter",
+  or wants to convert prose into a scroll-driven
   section architecture with design tokens and auto-layout. Also trigger for section type
-  mapping and hero/CTA optimization, in English or German.
-  Produces a web-brief.md. Important: this skill CREATES the brief from a narrative
-  source — it does NOT render an existing brief (use web agent for that), does NOT
-  create slides (use story-to-slides), does NOT create print storyboard posters
-  (use story-to-storyboard), and does NOT polish prose (use cogni-workspace:copywriter).
-allowed-tools: Read, Write, Edit, Bash, Grep, Glob, AskUserQuestion, Agent, Skill
+  mapping, hero/CTA optimization and poster pagination, in English or German.
+  Produces a web-brief.md, or a storyboard-brief.md in storyboard mode. Important: this
+  skill CREATES the brief from a narrative source — it does NOT render an existing brief
+  (use the web or storyboard agent), does NOT create slides (use story-to-slides), and
+  does NOT polish prose (use cogni-workspace:copywriter).
+allowed-tools: Read, Write, Edit, Bash, Grep, Glob, TodoWrite, AskUserQuestion, Agent, Skill
 ---
 
 # Story-to-Web Skill
@@ -43,7 +45,10 @@ The brief describes WHAT each section says and which section type to use. The Pe
 | `customer_name` / `provider_name` | from metadata | Organization names |
 | `output_path` | `{source_dir}/cogni-visual/web-brief.md` | Brief output location |
 | `conversion_goal` | `consultation` | CTA type: consultation, demo, download, trial, contact, calculate |
-| `max_sections` | `10` | Maximum section count (forces consolidation if narrative is long) |
+| `max_sections` | `10` | Maximum section count (forces consolidation if narrative is long). Governs decomposition in both modes. |
+| `mode` | `web` | Output mode. `web` emits a scrollable `web-brief.md`; `storyboard` paginates the same sections into printed posters and emits a `storyboard-brief.md`. |
+| `poster_size` | `A1` | **`mode=storyboard` only.** DIN A0-A3, portrait. Dimensions and scale factor resolve from `storyboard-layouts.md`. |
+| `max_posters` | `4` | **`mode=storyboard` only.** Poster count cap, range 3-5. |
 | `style_guide` | `auto` | **Deprecated — accepted and ignored.** Visual style resolves from the selected theme (Step 4). Passing a value is never an error. |
 | `arc_type` | `auto` | Story arc hint: why-change, problem-solution, journey, argument, report |
 | `arc_id` | from frontmatter | Narrative arc ID from the `narrative` skill. Mapped to visual `arc_type` in Step 1. |
@@ -271,6 +276,22 @@ For each section:
 
 ---
 
+### Step 5b: Paginate Sections into Posters (`mode=storyboard` only)
+
+> A poster is one arc station holding 1-3 stacked sections. Skip this step entirely when `mode=web`.
+
+**Read reference:** `references/print/01-poster-architecture.md`
+
+1. **Poster count from narrative length**, then cap at `max_posters`: under 800 words -> 3, 800-1500 -> 4, over 1500 -> 5.
+2. **Map arc stations to posters** using the poster templates in the reference.
+3. **Stack 1-3 sections per poster** and allocate heights from the ratio tables in `$CLAUDE_PLUGIN_ROOT/libraries/storyboard-layouts.md`: 1 section -> 100%, 2 -> 50/50 or 55/45, 3 -> 40/30/30 or 35/35/30. Apply that library's portrait adaptations (stat-row -> 2x2 grid, feature-alternating -> vertical stack, timeline -> vertical steps).
+
+Hard constraints — 3-5 posters, never more than 5; no separate title or summary posters; the first poster opens on `hero` and the last closes on `cta`; merge related stations if decomposition yields more than 5.
+
+**Content checkpoint:** State poster count, the station-to-poster mapping, and the height split per poster.
+
+---
+
 ### Step 6: Write Section Copy & Image Prompts
 
 > Web copy must work in a scroll context where readers decide within 2 seconds whether to keep scrolling or bounce.
@@ -278,6 +299,7 @@ For each section:
 **Read references:**
 - `references/03-section-copywriting.md`
 - `references/04-image-prompts.md`
+- **`mode=storyboard` only**, layered as overrides on the two above: `references/print/02-poster-copywriting.md` and `references/print/03-image-prompts.md`. In storyboard mode every image prompt ends with the suffix `print resolution, high detail`, and no poster carries more than 2 images.
 
 For each section, generate:
 
@@ -372,6 +394,8 @@ Four layers — stop on first failure, fix, re-check:
 3. **Visual coherence** — section theme alternation, feature position alternation, image consistency
 4. **Content integrity** — all narrative sections represented, language consistency
 
+**`mode=storyboard` only:** additionally apply `references/print/04-validation.md` for the print checks — poster count within 3-5, per-section minimum heights, poster font-size minimums, safe-area margins, and contiguous poster sequence numbering.
+
 ---
 
 ### Step 9b: Stakeholder Review (when `stakeholder_review=true`)
@@ -408,9 +432,11 @@ Write the review verdict to `{output_dir}/web-brief.review.json`.
 
 **Output path resolution** (run via Bash before writing):
 - If `output_path` explicit: `mkdir -p "$(dirname "${output_path}")"`
-- Otherwise: set `output_path = {source_dir}/cogni-visual/web-brief.md` and `mkdir -p "{source_dir}/cogni-visual"`
+- Otherwise: set `output_path = {source_dir}/cogni-visual/web-brief.md` and `mkdir -p "{source_dir}/cogni-visual"` — in `mode=storyboard` the default filename is `storyboard-brief.md` instead.
 
 Generate the final brief with YAML frontmatter and section specifications following `EXAMPLE_WEB_BRIEF.md` format. Write using Write tool.
+
+**`mode=storyboard` only:** follow `$CLAUDE_PLUGIN_ROOT/libraries/EXAMPLE_STORYBOARD_BRIEF.md` instead — its frontmatter and body schema are the contract the `storyboard` agent parses, so reproduce both exactly rather than adapting the web shape. Frontmatter carries `poster_size`, `poster_count`, `poster_gap`, `base_width`, `base_height`, `print_width`, `print_height` and `scale_factor` alongside the shared theme/arc fields; the body is one `## Poster N` block per poster, each holding its 1-3 stacked section YAML blocks with `section_theme` and `height_percent`.
 
 **Final checks:**
 - YAML frontmatter complete (type, version, theme, theme_path, conversion_goal, arc_id if available, confidence_score as average of per-section scores)
@@ -462,6 +488,10 @@ Both paths must be absolute — never use `~`, `$HOME`, `$CLAUDE_PLUGIN_ROOT`, o
 | **03-section-copywriting.md** | 6 | Web headline hierarchy, CTA copy patterns, number plays |
 | **04-image-prompts.md** | 6 | Web image formats, hero bg+overlay pattern, stock vs AI guidance |
 | **05-validation.md** | 9 | Four-layer validation framework |
+| **print/01-poster-architecture.md** | 5b | *(`mode=storyboard`)* Arc-station-to-poster mapping, poster templates, poster-count decision tree |
+| **print/02-poster-copywriting.md** | 6 | *(`mode=storyboard`)* Print-vs-web copy overrides, poster governing-headline rules |
+| **print/03-image-prompts.md** | 6 | *(`mode=storyboard`)* Print-resolution prompt suffix, max-2-images rule, poster image sizing |
+| **print/04-validation.md** | 9 | *(`mode=storyboard`)* Print-specific checks and poster font-size minimums |
 | **cta-taxonomy.md** (library) | 6b | CTA types, urgency levels, arc-to-CTA heuristics |
 
 ### Libraries (loaded as needed)
@@ -472,3 +502,5 @@ Both paths must be absolute — never use `~`, `$HOME`, `$CLAUDE_PLUGIN_ROOT`, o
 | **web-layouts.md** | 1 | Section type schemas, typography scale, spacing, theme-to-variable mapping |
 | **cta-taxonomy.md** | 6b | CTA types, urgency, arc-to-CTA heuristics |
 | **EXAMPLE_WEB_BRIEF.md** | 1 | Output format reference |
+| **storyboard-layouts.md** | 1, 5b | *(`mode=storyboard`)* DIN A0-A3 dimensions, 3-zone poster model, height allocation, portrait adaptations, `poster_x` canvas arrangement |
+| **EXAMPLE_STORYBOARD_BRIEF.md** | 10 | *(`mode=storyboard`)* Output format reference — the contract the `storyboard` agent parses |

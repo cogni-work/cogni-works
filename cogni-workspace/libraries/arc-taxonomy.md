@@ -5,7 +5,6 @@ purpose: "Single source of truth for arc_id → arc_type mapping and arc element
 consumers:
   - story-to-slides (Step 1)
   - story-to-web (Step 1)
-  - story-to-storyboard (Step 1)
   - story-to-infographic (Step 1)
 ---
 

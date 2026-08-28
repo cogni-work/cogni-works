@@ -91,7 +91,7 @@ cogni-workspace (copywriter)
   → consumes: narrative output (auto-activated by arc_id frontmatter)
   → produces: polished document
 
-cogni-workspace (story-to-slides / story-to-web / story-to-storyboard / story-to-infographic)
+cogni-workspace (story-to-slides / story-to-web / story-to-infographic)
   → consumes: polished narrative
   → produces: slide deck / journey map / web narrative / poster
 ```

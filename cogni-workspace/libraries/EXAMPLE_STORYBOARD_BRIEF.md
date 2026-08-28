@@ -22,7 +22,7 @@ print_width: 3508
 print_height: 4961
 scale_factor: 2.437
 transformation_notes: |
-  Story-to-storyboard v2.1 transformation.
+  Story-to-web print (storyboard mode) v2.1 transformation.
   Theme: smarter-service.
   Arc: why-change (industry-transformation).
   4 posters, each with 2 stacked web sections.

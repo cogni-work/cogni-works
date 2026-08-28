@@ -16,10 +16,10 @@ Read a storyboard-brief.md, execute Pencil MCP operations to create a complete m
 ## When to Use
 
 - User has a storyboard-brief.md and wants to render it
-- After story-to-storyboard skill has produced a brief
+- After story-to-web (storyboard mode) has produced a brief
 - User asks to "render the storyboard", "create the poster .pen file", "design the storyboard posters"
 
-**Not for:** Creating briefs from narratives (use story-to-storyboard skill)
+**Not for:** Creating briefs from narratives (use story-to-web in storyboard mode)
 
 ## Input Requirements
 

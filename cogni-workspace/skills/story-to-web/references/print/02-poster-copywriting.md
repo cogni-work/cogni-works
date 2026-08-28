@@ -2,9 +2,9 @@
 
 ## Purpose
 
-Define copywriting rules for storyboard poster text. Storyboard posters reuse web copywriting conventions (from `story-to-web/references/03-section-copywriting.md`) with print-specific adaptations. Each poster is viewed from 1-2 meters at executive walkthroughs.
+Define copywriting rules for storyboard poster text. Storyboard posters reuse web copywriting conventions (from `../03-section-copywriting.md`) with print-specific adaptations. Each poster is viewed from 1-2 meters at executive walkthroughs.
 
-**Key principle:** The skill reads `story-to-web/references/03-section-copywriting.md` for base web copywriting rules. This file defines ONLY the print-specific overrides and additions.
+**Key principle:** The skill reads `../03-section-copywriting.md` for base web copywriting rules. This file defines ONLY the print-specific overrides and additions.
 
 ---
 

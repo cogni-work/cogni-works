@@ -24,7 +24,7 @@ jobs:
           python3 scripts/check-breadcrumbs.py
 
   external-dispatch-guard:
-    name: External-dispatch guard (zero retired-engine dispatches)
+    name: External-dispatch guard (retired-prefix and unresolved-target arms)
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -35,7 +35,7 @@ jobs:
       # Keep this name free of ": " — an unquoted YAML plain scalar containing a
       # colon-space makes the whole workflow unparseable, which silently takes
       # every job in this file offline rather than failing one step.
-      - name: Assert zero retired-plugin dispatches in live surfaces (registry scripts/retired-plugins.json)
+      - name: Assert zero retired-plugin dispatches and zero unresolved dispatch targets in live surfaces (registry scripts/retired-plugins.json)
         run: |
           set -euo pipefail
           python3 scripts/check-external-dispatch.py

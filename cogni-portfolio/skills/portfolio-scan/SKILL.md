@@ -35,7 +35,7 @@ setup → ingest (docs) → features (refine) → products (organize) → propos
 
 ## Prerequisites
 
-A cogni-portfolio project must exist for this company. If `cogni-portfolio/{slug}/portfolio.json` does not exist, instruct the user to run `cogni-portfolio:setup` first.
+A cogni-portfolio project must exist for this company. If `cogni-portfolio/{slug}/portfolio.json` does not exist, instruct the user to run `cogni-portfolio:portfolio-setup` first.
 
 **Setup integration:** This skill is typically invoked from `portfolio-setup` Step 5.5 when a company URL and taxonomy template are available. It also works standalone after setup. When invoked from setup, Phase 0 prerequisites are already satisfied.
 
@@ -117,7 +117,7 @@ The `company.products` array in `portfolio.json` (if present) provides initial o
    mkdir -p "${PROJECT_PATH}/research/.metadata"
    ```
 
-**If no portfolio project exists:** Stop and tell the user: "No portfolio project found for {company}. Run `cogni-portfolio:setup` first to create the project structure."
+**If no portfolio project exists:** Stop and tell the user: "No portfolio project found for {company}. Run `cogni-portfolio:portfolio-setup` first to create the project structure."
 
 ---
 
@@ -347,7 +347,7 @@ Write portfolio metadata to `research/.metadata/scan-output.json`:
   "company_name": "{COMPANY_NAME}",
   "company_slug": "{COMPANY_SLUG}",
   "created": "{ISO_TIMESTAMP}",
-  "skill": "cogni-portfolio:scan",
+  "skill": "cogni-portfolio:portfolio-scan",
   "template_type": "{TEMPLATE_TYPE}",
   "consolidation_mode": "{CONSOLIDATION_MODE}",
   "output_file": "research/{COMPANY_SLUG}-portfolio.md",

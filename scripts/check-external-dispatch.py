@@ -38,8 +38,30 @@ Two scoping choices, stated because the sibling guard next door made the opposit
     the colon. A retired *skill* on a live plugin (`cogni-x:some-skill`) therefore
     cannot be expressed, and the loader rejects the colon-bearing entry a maintainer
     would reach for rather than silently compiling `cogni-x::`, which would match
-    nothing. Widening to full dispatch tokens is a ~10-line change to `load_registry`
-    (validate the shape instead of manufacturing it) if that case ever arrives.
+    nothing. That case is now covered by the SECOND arm below rather than by
+    widening this registry.
+
+TWO ARMS. Every violation carries an `arm` key naming which one produced it, and
+each arm prints its own remediation — the retired arm's advice is nonsense for a
+live-plugin dangling slug, and vice versa.
+
+  1. **retired-prefix** — the registry-driven arm above. Unchanged.
+  2. **unresolved-target** — reports a `<live-plugin>:<slug>` token whose slug
+     names no `*/skills/<slug>/SKILL.md` and no `*/agents/<slug>.md` anywhere in
+     the tree under test. The live-plugin set is derived at run time from that
+     tree's `.claude-plugin/marketplace.json` `plugins[]`, never hardcoded, so
+     adding a plugin needs no edit here. Resolution is deliberately GLOBAL rather
+     than per-plugin: a slug that resolves under any listed plugin resolves for
+     every prefix. Tightening that to a per-plugin pair is a real strengthening
+     and a separate decision. The `commands/` namespace is deliberately NOT part
+     of the predicate — a command is a user-facing entry point, not a dispatch
+     target — so a token resolving only to `*/commands/<slug>.md` is reported.
+
+     Absent manifest DEGRADES (the arm does not run, and the JSON says so via
+     `data.scanned`); a manifest that is present but unreadable or malformed is a
+     hard exit 2. Absence is a tree that never had the arm's input; corruption is
+     a broken input, and quietly treating the two alike is how a guard reports a
+     clean zero over nothing.
 
 Scope — the surfaces a running session actually dispatches FROM:
 
@@ -84,7 +106,7 @@ semantically to drop the `plugin:skill` token (drop the colon) — exactly the
 discipline the Maintainer-breadcrumb guard uses.
 
 stdlib only; runs under any python3. Exit 0 = clean (zero dispatches),
-1 = dispatch(es) found, 2 = script error.
+1 = dispatch(es) found in either arm, 2 = script error.
 """
 
 import argparse
@@ -115,8 +137,19 @@ EXCLUDE_TOPLEVEL = ("wiki/", "docs/")
 # scanning a foreign tree still reads our own retired set). Override: --registry.
 REGISTRY_BASENAME = "retired-plugins.json"
 
-# Per-line escape hatch for a genuine non-dispatch prose mention.
+# Per-line escape hatch for a genuine non-dispatch prose mention. It suppresses
+# the whole line, and therefore BOTH arms.
 ALLOW_MARKER = "external-dispatch-guard:allow"
+
+# Marketplace manifest, resolved UNDER --root — unlike REGISTRY_BASENAME above,
+# which is anchored on this script. The retired arm asks "what have WE retired";
+# the unresolved-target arm asks "what does THIS tree ship", so it must read the
+# tree under test.
+MARKETPLACE_REL = os.path.join(".claude-plugin", "marketplace.json")
+
+# Arm labels, carried on every violation so a finding is attributable.
+ARM_RETIRED = "retired-prefix"
+ARM_UNRESOLVED = "unresolved-target"
 
 
 def load_registry(path):
@@ -172,6 +205,91 @@ def compile_dispatch_re(prefixes):
         r"\b(?:" + "|".join(re.escape(p) for p in prefixes) + r"):")
 
 
+def load_live_plugins(root):
+    """Return (entries, degraded_reason) for the marketplace under `root`.
+
+    `entries` is a list of (name, dir_rel). An ABSENT manifest degrades — the
+    caller reports the degrade in `data.scanned` and skips the arm — because a
+    tree with no marketplace (every synthetic fixture, any foreign checkout) is
+    not a tree with a broken marketplace. A manifest that IS present but cannot
+    be read or is the wrong shape raises RuntimeError, i.e. exit 2, mirroring the
+    anti-vacuity stance `load_registry` takes: a corrupt input must never read as
+    a clean pass.
+    """
+    path = os.path.join(root, MARKETPLACE_REL)
+    if not os.path.isfile(path):
+        return [], "no-marketplace-manifest"
+    try:
+        with open(path, "r", encoding="utf-8") as fh:
+            data = json.load(fh)
+    except (OSError, ValueError) as exc:
+        raise RuntimeError("marketplace manifest {} is unreadable or not valid "
+                           "JSON: {}".format(path, exc))
+    if not isinstance(data, dict):
+        raise RuntimeError(
+            "marketplace manifest {} must be a JSON object".format(path))
+    plugins = data.get("plugins")
+    if not isinstance(plugins, list):
+        raise RuntimeError("marketplace manifest {} must carry a 'plugins' "
+                           "list".format(path))
+    entries = []
+    for item in plugins:
+        if not isinstance(item, dict):
+            continue
+        name = item.get("name")
+        if not isinstance(name, str) or not name.strip():
+            continue
+        source = item.get("source")
+        if isinstance(source, str) and source.strip():
+            rel = source.strip()
+            if rel.startswith("./"):
+                rel = rel[2:]
+        else:
+            rel = name
+        entries.append((name, rel))
+    if not entries:
+        return [], "no-named-plugins-in-manifest"
+    return entries, ""
+
+
+def build_target_index(root, plugin_dirs):
+    """Return the set of slugs that resolve to a skill or an agent.
+
+    Deliberately plain filesystem calls rather than `git ls-files`: the synthetic
+    fixture trees are not git repos, and a git-backed index would come back empty
+    there and make every assertion over them vacuously green.
+    """
+    slugs = set()
+    for rel in plugin_dirs:
+        skills_dir = os.path.join(root, rel, "skills")
+        if os.path.isdir(skills_dir):
+            for entry in os.listdir(skills_dir):
+                if os.path.isfile(os.path.join(skills_dir, entry, "SKILL.md")):
+                    slugs.add(entry)
+        agents_dir = os.path.join(root, rel, "agents")
+        if os.path.isdir(agents_dir):
+            for entry in os.listdir(agents_dir):
+                if entry.endswith(".md") and os.path.isfile(
+                        os.path.join(agents_dir, entry)):
+                    slugs.add(entry[:-3])
+    return slugs
+
+
+def compile_target_re(live_names):
+    r"""Compile `(?:name|…):(slug)` over the live plugin names, or None.
+
+    Names are alternated LONGEST-FIRST so a listed name that is a prefix of
+    another cannot shadow it. At least one slug character is required, so a bare
+    `plugin:` in prose is not a target hit — that shape belongs to the retired
+    arm, which matches the colon alone.
+    """
+    if not live_names:
+        return None
+    ordered = sorted(live_names, key=lambda n: (-len(n), n))
+    return re.compile(
+        r"\b(?:" + "|".join(re.escape(n) for n in ordered) + r"):([a-z][a-z0-9-]*)")
+
+
 def discover_files(root):
     """Tracked live-dispatch surfaces, relative to root, via git ls-files."""
     try:
@@ -195,28 +313,58 @@ def discover_files(root):
     return files
 
 
-def scan_file(abs_path, rel_path, dispatch_re):
-    """Yield violation dicts for one file."""
+def scan_file(abs_path, rel_path, dispatch_re, target_re, resolvable):
+    """Return (violations, tokens_examined) for one file.
+
+    Returns a list rather than yielding: the caller has to sum `tokens_examined`
+    across files, and a generator makes that count meaningless until drained.
+    """
     try:
         with open(abs_path, "r", encoding="utf-8") as fh:
             lines = fh.readlines()
     except (OSError, UnicodeDecodeError) as exc:
         raise RuntimeError("cannot read {}: {}".format(rel_path, exc))
+    found = []
+    tokens_examined = 0
     for lineno, raw in enumerate(lines, start=1):
         line = raw.rstrip("\n")
         if ALLOW_MARKER in line:
             continue
         for m in dispatch_re.finditer(line):
-            yield {
+            found.append({
                 "file": rel_path,
                 "line": lineno,
                 "match": m.group(0),
+                "arm": ARM_RETIRED,
                 "context": line.strip()[:140],
-            }
+            })
+        if target_re is None:
+            continue
+        for m in target_re.finditer(line):
+            tokens_examined += 1
+            slug = m.group(1)
+            # Mutation-recipe invariant: keep the next line exactly as written, on
+            # ONE physical line, and do not repeat its text anywhere else in this
+            # file — the recorded recipe rewrites the FIRST match only (perl -0pi,
+            # no /g), so a second occurrence would mutate the wrong site and report
+            # this arm as decorative.
+            if slug in resolvable:
+                continue
+            found.append({
+                "file": rel_path,
+                "line": lineno,
+                "match": m.group(0),
+                "target": slug,
+                "arm": ARM_UNRESOLVED,
+                "context": line.strip()[:140],
+            })
+    return found, tokens_examined
 
 
-def collect(root, explicit_files, dispatch_re):
+def collect(root, explicit_files, dispatch_re, target_re, resolvable):
     occ = []
+    files_scanned = 0
+    tokens_examined = 0
     if explicit_files:
         pairs = []
         for f in explicit_files:
@@ -229,8 +377,11 @@ def collect(root, explicit_files, dispatch_re):
     else:
         pairs = [(os.path.join(root, rel), rel) for rel in discover_files(root)]
     for abs_path, rel in pairs:
-        occ.extend(scan_file(abs_path, rel, dispatch_re))
-    return occ
+        found, seen = scan_file(abs_path, rel, dispatch_re, target_re, resolvable)
+        occ.extend(found)
+        files_scanned += 1
+        tokens_examined += seen
+    return occ, files_scanned, tokens_examined
 
 
 def main(argv):
@@ -254,7 +405,16 @@ def main(argv):
 
     try:
         retired = load_registry(registry_path)
-        violations = collect(root, args.files, compile_dispatch_re(retired))
+        live_entries, degraded_reason = load_live_plugins(root)
+        # Subtract the retired set from the live set so the two arms partition the
+        # token space: a name that is somehow both listed and retired is judged by
+        # the retired arm alone and can never be reported twice.
+        retired_set = set(retired)
+        live_entries = [(n, d) for (n, d) in live_entries if n not in retired_set]
+        resolvable = build_target_index(root, [d for (_, d) in live_entries])
+        target_re = compile_target_re([n for (n, _) in live_entries])
+        violations, files_scanned, tokens_examined = collect(
+            root, args.files, compile_dispatch_re(retired), target_re, resolvable)
     except RuntimeError as exc:
         print(json.dumps({"success": False, "data": {}, "error": str(exc)}))
         return 2
@@ -273,17 +433,37 @@ def main(argv):
                 "by_plugin": by_plugin,
                 "files_affected": len(sorted({o["file"] for o in violations})),
             },
+            "scanned": {
+                "files": files_scanned,
+                "tokens": tokens_examined,
+                "live_plugins": len(live_entries),
+                "resolvable_targets": len(resolvable),
+                "unresolved_target_arm": target_re is not None,
+                "degraded_reason": degraded_reason,
+            },
         },
         "error": "",
     }
     print(json.dumps(result, indent=2, ensure_ascii=False))
 
-    if violations:
+    if degraded_reason:
+        print("\nNOTE: unresolved-target arm did not run ({}) — resolved 0 live "
+              "plugins from {}".format(
+                  degraded_reason, os.path.join(root, MARKETPLACE_REL)),
+              file=sys.stderr)
+
+    retired_hits = [o for o in violations if o["arm"] == ARM_RETIRED]
+    unresolved_hits = [o for o in violations if o["arm"] == ARM_UNRESOLVED]
+
+    # Each arm prints its own block. Sharing one would hand an operator the other
+    # arm's remedy — "cut over to the vendored cogni-knowledge surface" says
+    # nothing useful about a live plugin naming a skill that does not exist.
+    if retired_hits:
         print("\nFAIL: {} live {} dispatch(es) found "
               "in live-dispatch surfaces:".format(
-                  len(violations), "/".join(p + ":" for p in retired)),
+                  len(retired_hits), "/".join(p + ":" for p in retired)),
               file=sys.stderr)
-        for o in violations:
+        for o in retired_hits:
             print("  {}:{}: {}  ->  {}".format(
                 o["file"], o["line"], o["match"], o["context"]), file=sys.stderr)
         print("\nFix: cut the caller over to the vendored cogni-knowledge "
@@ -291,6 +471,23 @@ def main(argv):
               "it to drop the `plugin:skill` token (drop the colon), or mark the "
               "line with `# external-dispatch-guard:allow` and a rationale.",
               file=sys.stderr)
+
+    if unresolved_hits:
+        print("\nFAIL: {} unresolved-target dispatch(es) found — a live plugin "
+              "prefix naming a skill or agent that does not exist:".format(
+                  len(unresolved_hits)), file=sys.stderr)
+        for o in unresolved_hits:
+            print("  {}:{}: {}  ->  {}".format(
+                o["file"], o["line"], o["match"], o["context"]), file=sys.stderr)
+        print("\nFix: repoint the token at a target that exists — the directory "
+              "name under */skills/ or the file basename under */agents/ — since "
+              "the prefix is live and only the slug is dead. If the line is prose "
+              "about a target that is genuinely gone, drop the colon so it stops "
+              "being dispatch-shaped, or mark the line with "
+              "`# external-dispatch-guard:allow` and a rationale.",
+              file=sys.stderr)
+
+    if violations:
         return 1
     return 0
 

@@ -339,6 +339,254 @@ assert d['success'] is True, d
 assert d['data']['summary']['total']==0, d['data']['summary']
 "
 
+# ===========================================================================
+# Unresolved-target arm (ed20-ed33). The retired-prefix arm above is driven by
+# scripts/retired-plugins.json; this second arm is driven by the marketplace
+# manifest of the tree under --root, and reports a <live-plugin>:<slug> token
+# whose slug names no */skills/<slug>/SKILL.md and no */agents/<slug>.md.
+# ===========================================================================
+
+# --- livetree: two listed plugins, one resolvable skill, one resolvable agent,
+# --- and a caller naming one target that does not exist.
+LT="$WORK/livetree"
+mkdir -p "$LT/.claude-plugin" "$LT/cogni-alpha/skills/alpha-run" \
+         "$LT/cogni-alpha/agents" "$LT/cogni-beta/agents"
+printf '%s' '{"plugins":[{"name":"cogni-alpha","source":"./cogni-alpha"},{"name":"cogni-beta","source":"./cogni-beta"}]}' \
+  > "$LT/.claude-plugin/marketplace.json"
+printf -- '---\nname: alpha-run\n---\nA resolvable skill target.\n' \
+  > "$LT/cogni-alpha/skills/alpha-run/SKILL.md"
+printf -- '---\nname: beta-helper\n---\nA resolvable agent target.\n' \
+  > "$LT/cogni-beta/agents/beta-helper.md"
+printf -- '---\nname: caller\n---\nDispatches cogni-beta:no-such-thing for the missing step.\nThen cogni-alpha:alpha-run and cogni-beta:beta-helper, both of which resolve.\n' \
+  > "$LT/cogni-alpha/agents/caller.md"
+printf -- '---\nname: marked\n---\nHistorical: cogni-beta:also-missing was the old entry point.  <!-- external-dispatch-guard:allow -->\n' \
+  > "$LT/cogni-alpha/agents/marked.md"
+printf -- '---\nname: retired\n---\nDispatches cogni-wiki:wiki-query for the base.\n' \
+  > "$LT/cogni-alpha/agents/retired.md"
+
+set +e
+OUT=$(python3 "$GUARD" --root "$LT" "cogni-alpha/agents/caller.md" 2>/dev/null)
+CODE=$?
+set -e
+check "ed20 unresolvable live-plugin dispatch exits 1" \
+  "$([ "$CODE" -eq 1 ] && echo 0 || echo 1)"
+
+assert_json "ed21 unresolved-target violation names file line match and target" "$OUT" "
+import json,sys
+d=json.load(sys.stdin)
+v=d['data']['violations']
+assert d['success'] is False, d
+assert d['data']['summary']['total']==1, d['data']['summary']
+o=v[0]
+assert o['file']=='cogni-alpha/agents/caller.md', o
+assert o['line']==4, o
+assert o['match']=='cogni-beta:no-such-thing', o
+assert o['target']=='no-such-thing', o
+"
+
+# ed22 is the recorded mutation-recipe case. It asserts the arm PRODUCED a
+# finding, so neutering the resolvability test (every slug looks resolvable,
+# the arm empties) turns this line red. A case asserting a clean zero would
+# stay green under that mutation and prove nothing.
+assert_json "ed22 the finding is attributed to the unresolved-target arm" "$OUT" "
+import json,sys
+d=json.load(sys.stdin)
+arms=[o['arm'] for o in d['data']['violations']]
+assert 'unresolved-target' in arms, arms
+"
+
+assert_json "ed23 a dispatch resolving to a skill directory is not reported" "$OUT" "
+import json,sys
+d=json.load(sys.stdin)
+m=[o['match'] for o in d['data']['violations']]
+assert 'cogni-alpha:alpha-run' not in m, m
+"
+
+assert_json "ed24 a dispatch resolving to an agent file is not reported" "$OUT" "
+import json,sys
+d=json.load(sys.stdin)
+m=[o['match'] for o in d['data']['violations']]
+assert 'cogni-beta:beta-helper' not in m, m
+"
+
+# --- livetree2: identical shape, every dispatch resolvable (negative control).
+LT2="$WORK/livetree2"
+mkdir -p "$LT2/.claude-plugin" "$LT2/cogni-alpha/skills/alpha-run" \
+         "$LT2/cogni-alpha/agents" "$LT2/cogni-beta/agents"
+cp "$LT/.claude-plugin/marketplace.json" "$LT2/.claude-plugin/marketplace.json"
+cp "$LT/cogni-alpha/skills/alpha-run/SKILL.md" "$LT2/cogni-alpha/skills/alpha-run/SKILL.md"
+cp "$LT/cogni-beta/agents/beta-helper.md" "$LT2/cogni-beta/agents/beta-helper.md"
+printf -- '---\nname: caller\n---\nDispatches cogni-alpha:alpha-run and cogni-beta:beta-helper only.\n' \
+  > "$LT2/cogni-alpha/agents/caller.md"
+
+set +e
+OUT=$(python3 "$GUARD" --root "$LT2" "cogni-alpha/agents/caller.md" 2>/dev/null)
+CODE=$?
+printf '%s' "$OUT" | python3 -c "
+import json,sys
+d=json.load(sys.stdin)
+assert d['success'] is True, d
+assert d['data']['summary']['total']==0, d['data']['summary']
+"
+JCODE=$?
+set -e
+check "ed25 an all-resolvable tree exits 0 with zero violations" \
+  "$([ "$CODE" -eq 0 ] && [ "$JCODE" -eq 0 ] && echo 0 || echo 1)"
+
+set +e
+OUT=$(python3 "$GUARD" --root "$LT" "cogni-alpha/agents/retired.md" 2>/dev/null)
+CODE=$?
+set -e
+assert_json "ed26 a retired-prefix dispatch is still reported by its own arm" "$OUT" "
+import json,sys
+d=json.load(sys.stdin)
+v=d['data']['violations']
+assert d['data']['summary']['total']==1, d['data']['summary']
+assert v[0]['arm']=='retired-prefix', v[0]
+assert v[0]['match']=='cogni-wiki:', v[0]
+"
+
+# --- ed27: the two arms partition the token space. A name that is BOTH
+# --- marketplace-listed and registry-retired is adjudicated by the retired arm
+# --- alone, never counted twice. The real tree cannot exercise this: its
+# --- retired set and its marketplace names are already disjoint.
+printf '%s' '{"retired_prefixes": ["cogni-wiki", "cogni-alpha"]}' > "$WORK/overlap.json"
+set +e
+OUT=$(python3 "$GUARD" --root "$LT" --registry "$WORK/overlap.json" \
+      "cogni-alpha/agents/caller.md" 2>/dev/null)
+CODE=$?
+set -e
+assert_json "ed27 an overlapping name is judged by the retired arm alone" "$OUT" "
+import json,sys
+d=json.load(sys.stdin)
+v=d['data']['violations']
+alpha=[o for o in v if o['match'].startswith('cogni-alpha')]
+assert len(alpha)==1, alpha
+assert alpha[0]['arm']=='retired-prefix', alpha[0]
+assert not [o for o in v if o['arm']=='unresolved-target' and o['match'].startswith('cogni-alpha')], v
+"
+
+# --- ed28: an ABSENT manifest degrades explicitly. It must never read as a
+# --- clean pass that silently examined nothing.
+set +e
+OUT=$(python3 "$GUARD" --root "$WORK/clean" "cogni-demo/skills/demo/SKILL.md" 2>/dev/null)
+CODE=$?
+printf '%s' "$OUT" | python3 -c "
+import json,sys
+d=json.load(sys.stdin)
+s=d['data']['scanned']
+assert s['degraded_reason']=='no-marketplace-manifest', s
+assert s['unresolved_target_arm'] is False, s
+assert s['live_plugins']==0, s
+"
+JCODE=$?
+set -e
+check "ed28 an absent marketplace manifest degrades and says so" \
+  "$([ "$CODE" -eq 0 ] && [ "$JCODE" -eq 0 ] && echo 0 || echo 1)"
+
+# --- ed29: a manifest that is PRESENT but malformed is a hard error, not a
+# --- degrade. Absence is a tree without the input; corruption is a broken one.
+BMF="$WORK/badmanifest"
+mkdir -p "$BMF/.claude-plugin" "$BMF/cogni-alpha/agents"
+printf '%s' '{"plugins": [' > "$BMF/.claude-plugin/marketplace.json"
+printf -- '---\nname: c\n---\nDispatches cogni-alpha:whatever here.\n' \
+  > "$BMF/cogni-alpha/agents/c.md"
+set +e
+OUT=$(python3 "$GUARD" --root "$BMF" "cogni-alpha/agents/c.md" 2>/dev/null)
+CODE=$?
+printf '%s' "$OUT" | python3 -c "
+import json,sys
+d=json.load(sys.stdin)
+assert d['success'] is False, d
+assert d['error'], d
+assert 'marketplace' in d['error'], d['error']
+"
+JCODE=$?
+set -e
+check "ed29 a malformed marketplace manifest exits 2 and never 0" \
+  "$([ "$CODE" -eq 2 ] && [ "$JCODE" -eq 0 ] && echo 0 || echo 1)"
+
+set +e
+OUT=$(python3 "$GUARD" --root "$LT" "cogni-alpha/agents/caller.md" 2>/dev/null)
+CODE=$?
+set -e
+assert_json "ed30 the scanned block reports a non-zero examined count" "$OUT" "
+import json,sys
+d=json.load(sys.stdin)
+s=d['data']['scanned']
+for k in ('files','tokens','live_plugins','resolvable_targets'):
+    assert isinstance(s[k], int), (k, s)
+assert isinstance(s['unresolved_target_arm'], bool), s
+assert isinstance(s['degraded_reason'], str), s
+assert s['files']>0 and s['tokens']>0, s
+# 5 = alpha-run (skill) + beta-helper, caller, marked, retired (agents).
+# The caller files are themselves agents, so they resolve too — that is the
+# index doing exactly what it claims, not an over-count.
+assert s['live_plugins']==2 and s['resolvable_targets']==5, s
+"
+
+# --- ed31: the discover-mode exclusions cover the new arm too. This fixture
+# --- puts the unresolvable token under */wiki/ on a path that the
+# --- */skills/*/SKILL.md pathspec DOES match (a git glob's * crosses /), so the
+# --- file is genuinely discovered and then suppressed by the segment rule.
+LXC="$WORK/livexc"
+mkdir -p "$LXC/.claude-plugin"
+git -C "$LXC" init -q 2>/dev/null || { mkdir -p "$LXC"; git -C "$LXC" init -q; }
+git -C "$LXC" config user.email t@t.test
+git -C "$LXC" config user.name test
+mkdir -p "$LXC/cogni-knowledge/skills/k" "$LXC/cogni-foo/wiki/skills/w" "$LXC/cogni-foo/skills/s"
+printf '%s' '{"plugins":[{"name":"cogni-knowledge","source":"./cogni-knowledge"},{"name":"cogni-foo","source":"./cogni-foo"}]}' \
+  > "$LXC/.claude-plugin/marketplace.json"
+printf -- '---\nname: k\n---\nHistory: this named cogni-foo:no-such-thing once.\n' \
+  > "$LXC/cogni-knowledge/skills/k/SKILL.md"
+printf -- '---\nname: w\n---\nMirror page quoting cogni-foo:no-such-thing verbatim.\n' \
+  > "$LXC/cogni-foo/wiki/skills/w/SKILL.md"
+printf -- '---\nname: s\n---\nDispatches cogni-foo:s only, which resolves.\n' \
+  > "$LXC/cogni-foo/skills/s/SKILL.md"
+git -C "$LXC" add -A >/dev/null 2>&1
+git -C "$LXC" commit -qm init >/dev/null 2>&1
+
+set +e
+OUT=$(python3 "$GUARD" --root "$LXC" 2>/dev/null)
+CODE=$?
+printf '%s' "$OUT" | python3 -c "
+import json,sys
+d=json.load(sys.stdin)
+assert d['data']['summary']['total']==0, d['data']['violations']
+assert d['data']['scanned']['files']>0, d['data']['scanned']
+"
+JCODE=$?
+set -e
+check "ed31 discover-mode exclusions cover the unresolved-target arm" \
+  "$([ "$CODE" -eq 0 ] && [ "$JCODE" -eq 0 ] && echo 0 || echo 1)"
+
+set +e
+OUT=$(python3 "$GUARD" --root "$LT" "cogni-alpha/agents/caller.md" 2>/dev/null)
+CODE=$?
+set -e
+assert_json "ed32 the summary block keeps exactly its original keys" "$OUT" "
+import json,sys
+d=json.load(sys.stdin)
+assert set(d['data']['summary'])=={'total','by_plugin','files_affected'}, sorted(d['data']['summary'])
+assert 'scanned' in d['data'], sorted(d['data'])
+"
+
+# --- ed33: the per-line escape hatch suppresses the new arm as well. It is
+# --- read before either arm runs, so a marked line is invisible to both.
+set +e
+OUT=$(python3 "$GUARD" --root "$LT" "cogni-alpha/agents/marked.md" 2>/dev/null)
+CODE=$?
+printf '%s' "$OUT" | python3 -c "
+import json,sys
+d=json.load(sys.stdin)
+assert d['success'] is True, d
+assert d['data']['summary']['total']==0, d['data']['summary']
+"
+JCODE=$?
+set -e
+check "ed33 the allow marker suppresses an unresolved-target finding" \
+  "$([ "$CODE" -eq 0 ] && [ "$JCODE" -eq 0 ] && echo 0 || echo 1)"
+
 echo ""
 if [ "$FAILED" -eq 0 ]; then
   green "All external-dispatch-guard tests passed."

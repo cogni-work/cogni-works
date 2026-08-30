@@ -172,6 +172,8 @@ PROHIBITED PATTERNS:
     that is not a content poster with 1-3 stacked web sections
 ```
 
+**Reachability of the 5-poster branch.** At the default `max_posters` of 4 the `> 1500` word-count branch never fires — the `Never exceed max_posters parameter` constraint above clamps the result to 4 posters. It is reachable only when the caller explicitly passes `max_posters=5`. Treat 5 posters as opt-in, never the automatic outcome of a long narrative.
+
 ---
 
 ## Arc Label Assignment

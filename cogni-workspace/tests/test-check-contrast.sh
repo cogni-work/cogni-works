@@ -330,10 +330,12 @@ assert_ratio "cc31-endpoint-suggestion-ratio" "2.7422" \
 # Present-and-BLACK, NOT the absent key cc15 pins: evaluate_pair sets
 # suggested_hex only when the pair fails, so post-fix a bare .get() would already
 # discriminate here -- '#000000' present against None absent. The membership test
-# is co-asserted anyway so that an evaluate_pair regression which stops emitting
-# the key names itself (False in the tuple) rather than surfacing as an
-# empty capture: field() indexes directly, so a missing key raises KeyError and
-# prints nothing. data['evaluated'] is co-asserted as in cc28.
+# adds no failure mode of its own: it shares a tuple with a direct index, so an
+# evaluate_pair regression that stops emitting the key raises KeyError there
+# first and both halves redden together as an empty capture -- the membership
+# half's False can never actually print. It is kept as the explicit present-side
+# statement of the contract cc15 pins from the absent side.
+# data['evaluated'] is co-asserted as in cc28.
 assert_eq "cc31-endpoint-suggestion-is-present-and-black" "(True, '#000000', 1)" \
   "$(field "$NULL_SUGGESTION" "('suggested_hex' in data['pairs'][0], data['pairs'][0]['suggested_hex'], data['evaluated'])" --pair fg:bg)"
 

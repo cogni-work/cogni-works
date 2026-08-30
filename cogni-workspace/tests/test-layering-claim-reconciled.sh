@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
-# Layering-claim guard: no surface may reassert that cogni-workspace is the
-# foundation layer every other plugin depends on.
+# Retired-claim guard. Two subjects, one scanner: no surface may reassert that
+# cogni-workspace is the foundation layer every other plugin depends on, and no
+# surface may reassert the retired live-website / PowerPoint theme-extraction
+# paths that Operation 10 replaced.
 #
 # Why this exists. references/absorption-roadmap.md Decision 1 replaced the
 # LAYERING claim (cogni-workspace is the layer everything depends on) with a
@@ -15,11 +17,12 @@
 # reintroduce the claim silently.
 #
 # Contract under test:
-#   - none of the FORBIDDEN literals appears anywhere outside the excluded paths
+#   - none of the FORBIDDEN_ALL literals appears anywhere outside the excluded
+#     paths — that is the layering-claim set and the retired theme-extraction set
 #   - every one of those literals is actually caught when present (no dead config)
 #   - a literal under an excluded path is NOT flagged
-#   - the eight pages this reconciliation touched are byte-identical across the
-#     two wiki trees
+#   - each page on the PAGE_PARITY allowlist is byte-identical across the two
+#     wiki trees
 #   - a scan pointed at a missing or empty tree fails rather than reporting clean
 #
 # Literals, not a regex over "foundation". `foundation` alone has many legitimate
@@ -34,14 +37,41 @@
 # vacuous. They are retained here anyway, and case L2 plants each one in a
 # fixture, so the scanner is proven to catch each phrase.
 #
-# What L2 does and does not prove. L2 reads the literals from FORBIDDEN, plants
-# each in a fixture, and scans with FORBIDDEN — so it proves the SCANNER catches
-# a planted phrase, but it cannot detect a literal being *reworded*: a
-# substitution changes the planted text and the needle together, leaving L2
-# green. The count floor below is what protects the set — dropping an entry takes
-# l2_n under the floor and turns L2 red. Do not read L2 as a regression guard
-# against editing a literal's wording; for a mutation that a change can actually
-# flip, target the parity checker (see L4).
+# The retired theme-extraction subject. references/absorption-roadmap.md retired
+# the live-website and PPTX theme-extraction operations in favour of Operation 10
+# (the Claude Design bundle importer), and a later sweep removed every surviving
+# claim from both wiki trees, cogni-workspace/README.md and the theme-system RFC.
+# Nothing stopped the class returning, so FORBIDDEN_EXTRACTION carries it here
+# under the same scanner. Each of its four literals was measured ZERO-hit
+# repo-wide over tracked files on the post-sweep tree, outside the excluded paths
+# below — so each is a claim about this repo's current state, matching the
+# measurement convention the layering literals follow.
+#
+# REJECTED / NOT SCANNED — two candidates were measured and deliberately left
+# out, because each still hits live, correct prose in
+# cogni-workspace/skills/manage-themes/SKILL.md. They are recorded here so a
+# later editor does not re-propose them, and they are cited by quoted text
+# rather than line number, the same way the phrase-level survivors further down
+# are cited. "PowerPoint template"
+# survives in the live Operation-10 discovery question, "Do you have a website,
+# PowerPoint template, or brand guidelines (colors/fonts) I can use as a starting
+# point?". "PPTX extraction" survives in TWO places, not one: the sentence
+# documenting the retirement itself, "The live-website and PPTX extraction paths
+# that once held 3 and 4 were retired in favour of Operation 10", and the
+# rationale heading "Why this replaced the live website and PPTX extraction
+# paths". Scanning either would turn L1 red on correct prose.
+#
+# What L2 does and does not prove. L2 reads the literals from FORBIDDEN_ALL,
+# plants each in a fixture, and scans with FORBIDDEN_ALL — so it proves the
+# SCANNER catches a planted phrase, but it cannot detect a literal being
+# *reworded*: a substitution changes the planted text and the needle together,
+# leaving L2 green. The count floor below is what protects BOTH sets — it is
+# sized to the union (14 layering + 4 extraction = 18), so dropping an entry from
+# either constant takes l2_n under the floor and turns L2 red. The floor is a
+# hardcoded numeral on purpose: a count derived from the constants it guards
+# would move with the deletion it is meant to catch and could never fire.
+# Do not read L2 as a regression guard against editing a literal's wording; for
+# a mutation that a change can actually flip, target the parity checker (see L4).
 #
 # Phrase-level survivors. These lines keep foundation vocabulary on purpose and
 # must NOT be caught. Each says something about the workspace *state* other
@@ -112,11 +142,11 @@
 # one does not), and scripts/release-bundle-wiki.sh states that drift between
 # releases is acceptable. A tree-wide diff would be red on arrival and would
 # pressure someone into running that rsync --delete sync, which sweeps unrelated
-# drift. Naming the eight pages this change touched keeps the assertion true and
-# useful at the same time. Four are the layering-claim pages; the other four are
-# the group-B workflow pages back-ported bundle -> root, pinned here so the
-# sections that once existed only in the bundle cannot drift back out of the
-# root tree unnoticed.
+# drift. Naming an explicit allowlist of pages keeps the assertion true and
+# useful at the same time. One group is the layering-claim pages; another is the
+# group-B workflow pages back-ported bundle -> root, pinned here so the sections
+# that once existed only in the bundle cannot drift back out of the root tree
+# unnoticed; later entries each carry their own reason below.
 #
 # Case-label shape matches test-wiki-namespace-sync.sh on purpose: "PASS: <case>"
 # / "FAIL: <case>", because the cogni-service mutation harness classifies a case
@@ -155,6 +185,23 @@ cogni-workspace is the shared foundation
 foundation: cogni-workspace
 span four tiers'
 
+# Phrases that assert the retired live-website / PowerPoint theme-extraction
+# paths. Same matching rules as FORBIDDEN: one per line, case-insensitive fixed
+# strings, never regexes. Kept a separate constant from the layering set above
+# because it is a different subject with its own measurement record.
+FORBIDDEN_EXTRACTION='extract mode
+theme extraction
+from live websites
+extracted from live'
+
+# The union both literal readers consume, and the only value the scanner reads.
+# The newline below is a real one, as in the constants above: "\n" inside double
+# quotes is not a newline to bash, and that spelling fuses the last layering
+# literal to the first extraction literal into one entry matching nothing —
+# silently dropping a live literal and taking l2_n to 17.
+FORBIDDEN_ALL="$FORBIDDEN
+$FORBIDDEN_EXTRACTION"
+
 # Repo-relative path fragments exempt from the scan. See the header for why each
 # one is here.
 #
@@ -189,6 +236,15 @@ cogni-workspace/libraries/svg-patterns.md
 # here pins the two copies to each other. The roster-derived scan does not reach it
 # either: that bullet named a MANIFEST, not a plugin, so a roster of plugin names
 # never sees it.
+#
+# concept-theme-inheritance.md and skill-cogni-workspace-manage-themes.md join
+# with the theme-extraction sweep. Both were edited in both trees by that sweep,
+# both are the most prose-heavy of the pages it touched, and until now neither
+# had a byte-identity arm anywhere: no other file under cogni-workspace/tests/
+# names either page, and the one sibling that does pin a wiki page pins a
+# different one. Both pairs are byte-identical as they are added, so a green run
+# is not evidence they are guarded — mutating one copy is what shows the entry
+# has teeth.
 PAGE_PARITY='plugin-cogni-workspace.md
 workflow-install-to-infographic.md
 arch-er-diagram.md
@@ -198,7 +254,9 @@ workflow-content-pipeline.md
 workflow-portfolio-to-pitch.md
 workflow-trends-to-solutions.md
 plugin-cogni-portfolio.md
-concept-slug-based-lookups.md'
+concept-slug-based-lookups.md
+concept-theme-inheritance.md
+skill-cogni-workspace-manage-themes.md'
 
 # ---------------------------------------------------------------------------
 # The checkers. Fixture cases and the real-repo cases drive these same two
@@ -269,14 +327,14 @@ scan_literals() {
 $(grep_hits "$root" "$lit")
 EOF
   done <<EOF
-$FORBIDDEN
+$FORBIDDEN_ALL
 EOF
 
   # Liveness floor: a scan that examined no literals is not evidence of a clean
   # tree, it is evidence of a broken constant. Same half-dead-arm failure
   # test-wiki-namespace-sync.sh guards with its own empty-tree case.
   if [ "$scanned" -eq 0 ]; then
-    echo "ERROR [$label] no literals scanned — FORBIDDEN is empty"
+    echo "ERROR [$label] no literals scanned — FORBIDDEN_ALL is empty"
     return 1
   fi
   [ "$offenders" -eq 0 ]
@@ -351,10 +409,10 @@ while IFS= read -r lit; do
   run_scan "$TMPROOT/l2/$l2_n" "planted"
   assert_rc 1 && assert_out_has "docs/page.md" || l2_ok=0
 done <<EOF
-$FORBIDDEN
+$FORBIDDEN_ALL
 EOF
-if [ "$l2_n" -lt 14 ]; then
-  echo "  expected at least 14 literals, found $l2_n"
+if [ "$l2_n" -lt 18 ]; then
+  echo "  expected at least 18 literals, found $l2_n"
   l2_ok=0
 fi
 if [ "$l2_ok" -eq 1 ]; then

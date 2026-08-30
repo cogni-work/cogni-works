@@ -74,15 +74,17 @@
 # alone no longer discriminates, though it still excludes parse_hex's two at
 # :129/:132, which are eight-space. The discriminator has to be a DIRECT call
 # (cc33), because the arm is no longer reachable through the palette CLI at all:
-# both thresholds it exposes sit below sqrt(21) (see section F). cc13/cc14 stay
+# both thresholds it exposes sit below sqrt(21) (derived in suggest_hex's own
+# docstring). cc13/cc14 stay
 # GREEN because the BELOW_45 walk returns early, cc15 stays GREEN because a
 # passing pair never calls suggest_hex, and cc31 now stays GREEN too -- post-fix
 # it returns from the endpoint branch and never reaches the mutated line. cc33
 # is the only case that reads it, which is why the arm needed a direct-call case
 # of its own.
 #
-# Fifth recipe, for the endpoint evaluation itself (the discriminator is
-# cc31-endpoint-suggestion-is-present-and-black):
+# Fifth recipe, for the endpoint evaluation itself. It has TWO discriminators,
+# cc31-endpoint-suggestion-is-present-and-black and cc32-white-endpoint-is-suggested;
+# run it once per --case:
 #
 #   bash "$HOME/.claude/plugins/marketplaces/managed-service/cogni-service/scripts/mutation-check.sh" \
 #     --root . \
@@ -97,6 +99,16 @@
 # `to_hex(endpoint)` is inside `parse_hex(to_hex(endpoint))`, which the
 # `return ` prefix excludes. `pass` is a valid statement in that block, so the
 # mutant stays syntactically valid.
+#
+# The SECOND discriminator is what keeps cc32 honest, and it is why cc32's
+# threshold needs no prose warning about the walk's step. cc32 is only
+# meaningful if the endpoint branch is what answers it; were the stepped walk
+# ever to clear 21.0 by itself, cc32 would go vacuously green and no assertion
+# in this file would notice. Under this mutant the endpoint branch cannot
+# answer, so a still-green cc32 IS the vacuity report. Run it whenever `step`
+# in suggest_hex changes:
+#
+#     ... --case cc32-white-endpoint-is-suggested
 
 set -u
 
@@ -285,43 +297,25 @@ fi
 assert_eq "cc15-passing-pair-has-no-suggestion" "None" \
   "$(field "$ABOVE_45" "data['pairs'][0].get('suggested_hex')" --pair fg:bg)"
 
-# This pair fails 4.5 (ratio 2.7422) and its clearing shade is an ENDPOINT.
-# suggest_hex used to return None here, and not because the hue was unreachable:
-# the -1 walk never cleared (best 4.4883 UNSNAPPED near #030303, which itself
-# re-scores 4.4762 once snapped), and the +1 walk cleared unsnapped at lightness
-# 0.99 (4.5084) only to be rejected by the module's own snapped re-verification
-# (#FCFCFC re-scores 4.4910). Both true endpoints clear -- #000000 = 4.5578,
-# #FFFFFF = 4.6075 -- but the accumulating `candidate_lightness += direction *
-# step` terminates at -3.1e-17 and 1.0000000000000007, so the range guard broke
-# one step short of pure black and pure white and neither was ever scored.
-# Scoring the endpoints is what turned this case from present-and-null into
-# present-and-black; the pre-fix fixture comment pre-declared that red as an
-# intentional behaviour change.
+# This pair fails 4.5 (ratio 2.7422) and its clearing shade is an ENDPOINT --
+# which is the whole reason it is the fixture for cc31. suggest_hex used to
+# return None here, and not because the hue was unreachable: the accumulating
+# `candidate_lightness += direction * step` terminates at -3.1e-17 and
+# 1.0000000000000007, so the range guard broke one step short of pure black and
+# pure white and neither endpoint was ever scored. Scoring them is what turned
+# this case from present-and-null into present-and-black; the pre-fix fixture
+# comment pre-declared that red as an intentional behaviour change.
 #
-# Two consequences worth recording here, because this block is where they are
-# observable.
+# Deliberately NOT restated here: why the None arm survives, and how often the
+# fix changes an answer that already existed. The first is derived in
+# suggest_hex's own docstring (the ratio_black * ratio_white == 21 identity and
+# the sqrt(21) bound it implies) and pinned by cc33; read it there rather than
+# from a second copy. The second is a whole-input-space measurement that nothing
+# in this suite executes, so it belongs to the change's own record -- the pull
+# request for issue 1684 carries the sweep -- not to a comment that would go
+# stale the next time the walk changes. Every claim kept in this block is one
+# the adjacent assertion, or a mutation recipe in the header, actually runs.
 #
-# (1) Direction tie-break. -1 is scored before +1, so the black endpoint now
-#     wins a tie it used to lose by never being reached. Over the same
-#     46,656-pair sweep the issue itself used -- 6 levels per channel,
-#     {0,51,102,153,204,255}, 216 colours, all ordered fg/bg pairs -- 21 pairs
-#     go None -> a hex at 4.5 (0 at 3.0), reproducing the issue's own count,
-#     and a further 194 of 38,594 below-AA pairs at 4.5 (0.503%) plus 300 of
-#     31,652 at 3.0 (0.948%) that ALREADY had a suggestion now get a different
-#     one -- always becoming #000000, displacing a near-white shade at 4.5
-#     (e.g. fg #050505 on bg #757575 goes #FFFFFF -> #000000) and a
-#     mid-lightness one at 3.0 (lowest observed #B2B300, L=0.351). Every such
-#     answer is still re-verified after snapping, so what changed is which of
-#     two clearing shades is offered, not whether it clears. BELOW_45 (cc13/cc14) is
-#     unaffected: #747474 before and after.
-#
-# (2) Reachability of the None arm. For any background the two endpoint ratios
-#     multiply to 21 in exact arithmetic -- ((L+0.05)/0.05) * (1.05/(L+0.05)) --
-#     so the larger is always at least sqrt(21) ~= 4.583. Both thresholds this
-#     CLI exposes (AA_NORMAL 4.5, AA_LARGE 3.0) sit below that, so no palette
-#     run can reach the arm. It is NOT dead code: threshold is a parameter, and
-#     a value strictly above ~4.583 still reaches it, which is what cc33 pins.
-#     Strictly above -- at exactly sqrt(21) the `>=` comparison still clears.
 # NULL_SUGGESTION and the nullsuggestion slug keep their names on purpose: this
 # fg/bg pair IS the None-arm pair, the one cc33 drives at threshold 21.0 to reach
 # the arm. Renaming it for the 4.5 answer below would sever that cc31-cc33 link
@@ -353,13 +347,9 @@ import json, sys
 payload = json.load(sys.stdin)
 print((payload['success'], 'fg on bg' in payload['data']['failures']))" 2>/dev/null)"
 
-# cc32/cc33 need a DIRECT call, for two DIFFERENT reasons. cc33's None arm is
-# not observable through a palette run at all, for the reason recorded in
-# section F above. cc32's white endpoint is a weaker case: a palette witness for
-# it IS constructible (see the measured example below), and the direct call is
-# chosen for legibility -- one pair, one threshold, no dependence on which grid
-# the witness was drawn from. Loading the module by path is safe --
-# check-contrast.py guards its entry point behind __main__ --
+# cc32 and cc33 call suggest_hex directly rather than through the palette CLI,
+# because both need a threshold the CLI does not expose. Loading the module by
+# path is safe -- check-contrast.py guards its entry point behind __main__ --
 # and uses the same spec_from_file_location idiom as test-sanitize-theme.sh. The
 # verdict still routes through assert_eq, so each case emits a paired PASS/FAIL
 # id for scripts/check-case-id-pairing.py rather than a one-armed fail.
@@ -373,27 +363,16 @@ print(mod.suggest_hex(mod.parse_hex(sys.argv[2]), mod.parse_hex(sys.argv[3]), fl
 PYX
 }
 
-# The L=1.0 endpoint IS decisive at the CLI thresholds -- neither endpoint is
-# privileged. By section F (2) whichever one fails, the other necessarily clears.
-# CLEARING and WINNING are different questions, and only the second is rare:
-# over the same 46,656-pair grid white CLEARS for 12,600 of 38,594 failing pairs
-# at 4.5 (32.6%) and 17,032 of 31,652 at 3.0 (53.8%), but white is the ANSWER for
-# only 9 at 4.5 (0.023%), all nine sharing the background #3366FF, and for none
-# at 3.0 -- because the -1 walk and the black endpoint are both scored first.
-# fg #000033 on bg #3366FF at 4.5 is one of those nine: it answers #FFFFFF with
-# black scoring 4.4853 and FAILING where white scores 4.682, and the walk's 99
-# candidates peak at a snapped 4.4998 (#FAFAFF), so a plain palette run on that
-# pair does isolate the endpoint -- the witness exists. This case uses a direct
-# call anyway, because one pair at one threshold is easier to read than a grid
-# lookup: against a BLACK background only pure white reaches 21.0, and the
-# walk's best snapped candidate there is 20.4689 at #FCFCFC (measured), so a
-# threshold of 21.0 isolates the exact endpoint and nothing else. That window is
-# MEASURED AT THE WALK'S CURRENT 0.01 STEP, not derived, and it is sensitive to
-# it: at a step of 0.001 the walk itself snaps to #FFFFFF and scores 21.0
-# (measured), which would satisfy this
-# threshold WITHOUT reaching the endpoint branch and make the case vacuous.
-# Changing the step means re-deriving this threshold. Pre-fix this returned None,
-# so the case is genuinely red at base rather than vacuously green.
+# The L=1.0 endpoint gets a case of its own so neither endpoint is left unpinned.
+# 21.0 is chosen because against a BLACK background only pure white reaches it:
+# the walk's best snapped candidate there measures 20.4689 at #FCFCFC, so the
+# isolating window is (20.4689, 21.0]. That window is MEASURED AT THE WALK'S
+# CURRENT 0.01 STEP, not derived, so changing `step` in suggest_hex means
+# re-deriving it -- and the header's fifth mutation recipe run with
+# --case cc32-white-endpoint-is-suggested is what reports it if you don't: under
+# that mutant the endpoint branch cannot answer, so a cc32 that stays green is a
+# cc32 the walk has started answering by itself. Pre-fix this returned None, so
+# the case is genuinely red at base rather than vacuously green.
 assert_eq "cc32-white-endpoint-is-suggested" "#FFFFFF" \
   "$(suggest_call '#333333' '#000000' 21.0)"
 

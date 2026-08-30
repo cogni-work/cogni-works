@@ -356,10 +356,9 @@ print((payload['success'], 'fg on bg' in payload['data']['failures']))" 2>/dev/n
 # cc32/cc33 need a DIRECT call, for two DIFFERENT reasons. cc33's None arm is
 # not observable through a palette run at all, for the reason recorded in
 # section F above. cc32's white endpoint is a weaker case: a palette witness for
-# it IS constructible (see the measured example below), but the direct call at
-# 21.0 is preferred because its isolating window is derived rather than
-# empirical, so it survives a change to the walk's step size that would silently
-# retire a witness pair. Loading the module by path is safe --
+# it IS constructible (see the measured example below), and the direct call is
+# chosen for legibility -- one pair, one threshold, no dependence on which grid
+# the witness was drawn from. Loading the module by path is safe --
 # check-contrast.py guards its entry point behind __main__ --
 # and uses the same spec_from_file_location idiom as test-sanitize-theme.sh. The
 # verdict still routes through assert_eq, so each case emits a paired PASS/FAIL
@@ -382,13 +381,16 @@ PYX
 # 4.5 is one of those nine: it answers #FFFFFF with black scoring 4.4853 and
 # FAILING where white scores 4.682, and the walk's 99 candidates peak at a
 # snapped 4.4998 (#FAFAFF), so a plain palette run on that pair does isolate the
-# endpoint -- the witness exists. The direct call is preferred for stability
-# rather than for reach: against a BLACK background only pure white reaches 21.0,
-# and the walk's best snapped candidate there is 20.4689 at #FCFCFC (measured),
-# so a threshold of 21.0 isolates the exact endpoint and nothing else -- a window
-# derived from the ratio identity, not from one surviving pair on one grid.
-# Pre-fix this returned None, so the case is genuinely red at base rather than
-# vacuously green.
+# endpoint -- the witness exists. This case uses a direct call anyway, because
+# one pair at one threshold is easier to read than a grid lookup: against a BLACK
+# background only pure white reaches 21.0, and the walk's best snapped candidate
+# there is 20.4689 at #FCFCFC (measured), so a threshold of 21.0 isolates the
+# exact endpoint and nothing else. That window is MEASURED AT THE WALK'S CURRENT
+# 0.01 STEP, not derived, and it is sensitive to it: at a step of 0.001 the walk
+# itself snaps to #FFFFFF and scores 21.0 (measured), which would satisfy this
+# threshold WITHOUT reaching the endpoint branch and make the case vacuous.
+# Changing the step means re-deriving this threshold. Pre-fix this returned None,
+# so the case is genuinely red at base rather than vacuously green.
 assert_eq "cc32-white-endpoint-is-suggested" "#FFFFFF" \
   "$(suggest_call '#333333' '#000000' 21.0)"
 

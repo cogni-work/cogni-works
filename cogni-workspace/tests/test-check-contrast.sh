@@ -66,16 +66,20 @@
 #     --case cc33-null-arm-is-reachable-above-sqrt21
 #
 # The mutant turns the null arm into a constant return, so the discriminator
-# reads '#000000' instead of None. The anchor is single-occurrence:
-# check-contrast.py carries three `return None`, and only suggest_hex's is
-# four-space indented -- parse_hex's two are eight-space, which the `^    `
-# anchor excludes. The discriminator has to be a DIRECT call (cc33), because the
-# arm is no longer reachable through the palette CLI at all: both thresholds it
-# exposes sit below sqrt(21) (see section F). cc13/cc14 stay GREEN because the
-# BELOW_45 walk returns early, cc15 stays GREEN because a passing pair never
-# calls suggest_hex, and cc31 now stays GREEN too -- post-fix it returns from the
-# endpoint branch and never reaches the mutated line. cc33 is the only case that
-# reads it, which is why the arm needed a direct-call case of its own.
+# reads '#000000' instead of None. The anchor is single-occurrence, and it is
+# the `$` that makes it so: `^    return None` matches TWO lines -- the
+# docstring's closing words at :172 (`    return None.`) and suggest_hex's arm
+# at :208 -- while `^    return None$` matches one, the trailing period
+# excluding the docstring (`grep -cE '^    return None$'` returns 1). Indentation
+# alone no longer discriminates, though it still excludes parse_hex's two at
+# :129/:132, which are eight-space. The discriminator has to be a DIRECT call
+# (cc33), because the arm is no longer reachable through the palette CLI at all:
+# both thresholds it exposes sit below sqrt(21) (see section F). cc13/cc14 stay
+# GREEN because the BELOW_45 walk returns early, cc15 stays GREEN because a
+# passing pair never calls suggest_hex, and cc31 now stays GREEN too -- post-fix
+# it returns from the endpoint branch and never reaches the mutated line. cc33
+# is the only case that reads it, which is why the arm needed a direct-call case
+# of its own.
 #
 # Fifth recipe, for the endpoint evaluation itself (the discriminator is
 # cc31-endpoint-suggestion-is-present-and-black):
@@ -349,10 +353,13 @@ import json, sys
 payload = json.load(sys.stdin)
 print((payload['success'], 'fg on bg' in payload['data']['failures']))" 2>/dev/null)"
 
-# cc32/cc33 need a DIRECT call: the None arm's reachability is not observable
-# through a palette run at all, for the reason recorded in section F above, and
-# the white endpoint's decisiveness -- though observable there -- cannot be
-# ISOLATED from the stepped walk by one. Loading the module by path is safe --
+# cc32/cc33 need a DIRECT call, for two DIFFERENT reasons. cc33's None arm is
+# not observable through a palette run at all, for the reason recorded in
+# section F above. cc32's white endpoint is a weaker case: a palette witness for
+# it IS constructible (see the measured example below), but the direct call at
+# 21.0 is preferred because its isolating window is derived rather than
+# empirical, so it survives a change to the walk's step size that would silently
+# retire a witness pair. Loading the module by path is safe --
 # check-contrast.py guards its entry point behind __main__ --
 # and uses the same spec_from_file_location idiom as test-sanitize-theme.sh. The
 # verdict still routes through assert_eq, so each case emits a paired PASS/FAIL
@@ -369,14 +376,19 @@ PYX
 
 # The L=1.0 endpoint IS decisive at the CLI thresholds -- neither endpoint is
 # privileged. By section F (2) whichever one fails, the other necessarily clears,
-# and it is often white that does: fg #000033 on bg #3366FF at 4.5 answers
-# #FFFFFF, black scoring 4.4853 and FAILING where white scores 4.682. What a
-# palette run cannot do is ISOLATE that endpoint from the stepped walk preceding
-# it. A direct call can: against a BLACK background only pure white reaches 21.0,
+# and white is the one that clears rarely: over the same 46,656-pair grid, at
+# 4.5 nine of 38,594 failing pairs answer #FFFFFF (0.023%), all nine sharing the
+# background #3366FF, and at 3.0 none of 31,652 do. fg #000033 on bg #3366FF at
+# 4.5 is one of those nine: it answers #FFFFFF with black scoring 4.4853 and
+# FAILING where white scores 4.682, and the walk's 99 candidates peak at a
+# snapped 4.4998 (#FAFAFF), so a plain palette run on that pair does isolate the
+# endpoint -- the witness exists. The direct call is preferred for stability
+# rather than for reach: against a BLACK background only pure white reaches 21.0,
 # and the walk's best snapped candidate there is 20.4689 at #FCFCFC (measured),
-# so a threshold of 21.0 isolates the exact endpoint and nothing else. Pre-fix
-# this returned None, so the case is genuinely red at base rather than vacuously
-# green.
+# so a threshold of 21.0 isolates the exact endpoint and nothing else -- a window
+# derived from the ratio identity, not from one surviving pair on one grid.
+# Pre-fix this returned None, so the case is genuinely red at base rather than
+# vacuously green.
 assert_eq "cc32-white-endpoint-is-suggested" "#FFFFFF" \
   "$(suggest_call '#333333' '#000000' 21.0)"
 

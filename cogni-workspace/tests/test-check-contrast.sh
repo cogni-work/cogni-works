@@ -304,10 +304,11 @@ assert_eq "cc15-passing-pair-has-no-suggestion" "None" \
 #     go None -> a hex at 4.5 (0 at 3.0), reproducing the issue's own count,
 #     and a further 194 of 38,594 below-AA pairs at 4.5 (0.503%) plus 300 of
 #     31,652 at 3.0 (0.948%) that ALREADY had a suggestion now get a different
-#     one -- always a near-white shade becoming #000000, e.g. fg #050505 on
-#     bg #757575 at 4.5 goes #FFFFFF -> #000000. Every such answer is still
-#     re-verified after snapping, so what changed is which of two clearing
-#     shades is offered, not whether it clears. BELOW_45 (cc13/cc14) is
+#     one -- always becoming #000000, displacing a near-white shade at 4.5
+#     (e.g. fg #050505 on bg #757575 goes #FFFFFF -> #000000) and a
+#     mid-lightness one at 3.0 (lowest observed #B2B300, L=0.351). Every such
+#     answer is still re-verified after snapping, so what changed is which of
+#     two clearing shades is offered, not whether it clears. BELOW_45 (cc13/cc14) is
 #     unaffected: #747474 before and after.
 #
 # (2) Reachability of the None arm. For any background the two endpoint ratios
@@ -329,10 +330,10 @@ assert_ratio "cc31-endpoint-suggestion-ratio" "2.7422" \
 # Present-and-BLACK, NOT the absent key cc15 pins: evaluate_pair sets
 # suggested_hex only when the pair fails, so post-fix a bare .get() would already
 # discriminate here -- '#000000' present against None absent. The membership test
-# is co-asserted anyway because it is the half that stays red under an
-# evaluate_pair regression that stops emitting the key at all: .get() would go
-# quiet-None, and the hex half alone could not tell that from a suggest_hex
-# change. data['evaluated'] is co-asserted as in cc28.
+# is co-asserted anyway so that an evaluate_pair regression which stops emitting
+# the key names itself (False in the tuple) rather than surfacing as an
+# empty capture: field() indexes directly, so a missing key raises KeyError and
+# prints nothing. data['evaluated'] is co-asserted as in cc28.
 assert_eq "cc31-endpoint-suggestion-is-present-and-black" "(True, '#000000', 1)" \
   "$(field "$NULL_SUGGESTION" "('suggested_hex' in data['pairs'][0], data['pairs'][0]['suggested_hex'], data['evaluated'])" --pair fg:bg)"
 
@@ -346,10 +347,11 @@ import json, sys
 payload = json.load(sys.stdin)
 print((payload['success'], 'fg on bg' in payload['data']['failures']))" 2>/dev/null)"
 
-# cc32/cc33 need a DIRECT call: neither the white endpoint's decisiveness nor
-# the None arm's reachability is observable through a palette run, for the
-# reason recorded in section F above. Loading the module
-# by path is safe -- check-contrast.py guards its entry point behind __main__ --
+# cc32/cc33 need a DIRECT call: the None arm's reachability is not observable
+# through a palette run at all, for the reason recorded in section F above, and
+# the white endpoint's decisiveness -- though observable there -- cannot be
+# ISOLATED from the stepped walk by one. Loading the module by path is safe --
+# check-contrast.py guards its entry point behind __main__ --
 # and uses the same spec_from_file_location idiom as test-sanitize-theme.sh. The
 # verdict still routes through assert_eq, so each case emits a paired PASS/FAIL
 # id for scripts/check-case-id-pairing.py rather than a one-armed fail.
@@ -363,12 +365,16 @@ print(mod.suggest_hex(mod.parse_hex(sys.argv[2]), mod.parse_hex(sys.argv[3]), fl
 PYX
 }
 
-# The L=1.0 endpoint is not decisive at either CLI threshold -- black already
-# clears whenever white barely does, since the two ratios multiply to 21. Against
-# a BLACK background only pure white reaches 21.0, and the stepped walk's best
-# snapped candidate there is 20.4689 at #FCFCFC (measured), so a threshold of
-# 21.0 isolates the exact endpoint and nothing else. Pre-fix this returned None,
-# so the case is genuinely red at base rather than vacuously green.
+# The L=1.0 endpoint IS decisive at the CLI thresholds -- neither endpoint is
+# privileged. By section F (2) whichever one fails, the other necessarily clears,
+# and it is often white that does: fg #000033 on bg #3366FF at 4.5 answers
+# #FFFFFF, black scoring 4.4853 and FAILING where white scores 4.682. What a
+# palette run cannot do is ISOLATE that endpoint from the stepped walk preceding
+# it. A direct call can: against a BLACK background only pure white reaches 21.0,
+# and the walk's best snapped candidate there is 20.4689 at #FCFCFC (measured),
+# so a threshold of 21.0 isolates the exact endpoint and nothing else. Pre-fix
+# this returned None, so the case is genuinely red at base rather than vacuously
+# green.
 assert_eq "cc32-white-endpoint-is-suggested" "#FFFFFF" \
   "$(suggest_call '#333333' '#000000' 21.0)"
 

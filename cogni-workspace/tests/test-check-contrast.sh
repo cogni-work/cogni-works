@@ -374,20 +374,23 @@ PYX
 }
 
 # The L=1.0 endpoint IS decisive at the CLI thresholds -- neither endpoint is
-# privileged. By section F (2) whichever one fails, the other necessarily clears,
-# and white is the one that clears rarely: over the same 46,656-pair grid, at
-# 4.5 nine of 38,594 failing pairs answer #FFFFFF (0.023%), all nine sharing the
-# background #3366FF, and at 3.0 none of 31,652 do. fg #000033 on bg #3366FF at
-# 4.5 is one of those nine: it answers #FFFFFF with black scoring 4.4853 and
-# FAILING where white scores 4.682, and the walk's 99 candidates peak at a
-# snapped 4.4998 (#FAFAFF), so a plain palette run on that pair does isolate the
-# endpoint -- the witness exists. This case uses a direct call anyway, because
-# one pair at one threshold is easier to read than a grid lookup: against a BLACK
-# background only pure white reaches 21.0, and the walk's best snapped candidate
-# there is 20.4689 at #FCFCFC (measured), so a threshold of 21.0 isolates the
-# exact endpoint and nothing else. That window is MEASURED AT THE WALK'S CURRENT
-# 0.01 STEP, not derived, and it is sensitive to it: at a step of 0.001 the walk
-# itself snaps to #FFFFFF and scores 21.0 (measured), which would satisfy this
+# privileged. By section F (2) whichever one fails, the other necessarily clears.
+# CLEARING and WINNING are different questions, and only the second is rare:
+# over the same 46,656-pair grid white CLEARS for 12,600 of 38,594 failing pairs
+# at 4.5 (32.6%) and 17,032 of 31,652 at 3.0 (53.8%), but white is the ANSWER for
+# only 9 at 4.5 (0.023%), all nine sharing the background #3366FF, and for none
+# at 3.0 -- because the -1 walk and the black endpoint are both scored first.
+# fg #000033 on bg #3366FF at 4.5 is one of those nine: it answers #FFFFFF with
+# black scoring 4.4853 and FAILING where white scores 4.682, and the walk's 99
+# candidates peak at a snapped 4.4998 (#FAFAFF), so a plain palette run on that
+# pair does isolate the endpoint -- the witness exists. This case uses a direct
+# call anyway, because one pair at one threshold is easier to read than a grid
+# lookup: against a BLACK background only pure white reaches 21.0, and the
+# walk's best snapped candidate there is 20.4689 at #FCFCFC (measured), so a
+# threshold of 21.0 isolates the exact endpoint and nothing else. That window is
+# MEASURED AT THE WALK'S CURRENT 0.01 STEP, not derived, and it is sensitive to
+# it: at a step of 0.001 the walk itself snaps to #FFFFFF and scores 21.0
+# (measured), which would satisfy this
 # threshold WITHOUT reaching the endpoint branch and make the case vacuous.
 # Changing the step means re-deriving this threshold. Pre-fix this returned None,
 # so the case is genuinely red at base rather than vacuously green.

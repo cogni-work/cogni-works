@@ -34,7 +34,7 @@ cogni-workspace is the ecosystem's infrastructure-as-plugin layer: a dedicated p
 7. **Obsidian integration** — scaffold `.obsidian/` vault or incrementally update terminal profiles, handled as sub-steps of manage-workspace
 8. **Bundled reference wiki** — a vendor-curated insight-wave reference wiki ships at `wiki/`; read it directly, starting from its `wiki/index.md`, for grounded pages on plugins, skills, agents, architecture and conventions, plus the command cheatsheet (`ecosystem-command-reference`), the plugin-selection guide (`ecosystem-plugin-selection`) and the workflow walkthroughs (`workflow-*`)
 9. **File and track issues** — `cogni-issues` uses the authenticated GitHub CLI to consult, deduplicate, create, list, and inspect plugin issues with atomic labels
-10. **Troubleshoot plugin failures** — `troubleshoot` diagnoses plugin integrity, cross-plugin dependencies, stale state, and common setup errors through `/troubleshoot`
+10. **Troubleshoot plugin failures** — `workspace-status`'s plugin-level tier diagnoses plugin integrity, cross-plugin dependencies, stale state, and common setup errors; reachable through `/troubleshoot`
 11. **Verify claims against their cited sources** — `claims` runs the six-mode claim-verification lifecycle (submit, verify, dashboard, inspect, resolve, cobrowse) that cogni-trends, cogni-portfolio, cogni-consult and cogni-knowledge submit sourced assertions to; `claim-entity` is the cross-plugin data contract those plugins write against
 12. **Shape content into an executive narrative** — `narrative` transforms structured input using one of 11 story arc frameworks and, with `--format`, condenses an existing narrative into executive briefs, talking points or one-pagers, and `narrative-review` scores the result against quality gates (0–100, A–F)
 13. **Polish documents for executive readability** — `copywriter` applies seven messaging frameworks (BLUF, Pyramid, SCQA, STAR, PSB, FAB, Inverted Pyramid) with arc-aware preservation and EN/DE-pivot translation across seven languages; `copy-reader` runs parallel stakeholder personas over a document; `copy-json` polishes text fields inside JSON
@@ -140,7 +140,6 @@ State lives in two layers that other plugins consume. Configuration (env vars, t
 | `audit-region-sources` | skill | Read-only sibling of manage-markets — audit per-plugin region-source overlays against the canonical registry for orphans and drift |
 | `workspace-dashboard` | skill | Interactive HTML dashboard of workspace foundation, env vars, plugin registry, themes, and dependencies |
 | `cogni-issues` | skill | File, deduplicate, list, and inspect plugin issues through the authenticated GitHub CLI |
-| `troubleshoot` | skill | Diagnose plugin integrity, cross-plugin dependencies, stale state, and common setup failures |
 | `claims` | skill | Six-mode claim-verification lifecycle — submit, verify, dashboard, inspect, resolve, cobrowse |
 | `claim-entity` | skill | Cross-plugin ClaimEntity data contract — record shapes, claim types, severity levels, on-disk `cogni-claims/` store layout |
 | `claim-verifier` | agent | Fetches one source URL and verifies every claim against it, returning deviation analysis as strict JSON |
@@ -213,7 +212,7 @@ State lives in two layers that other plugins consume. Configuration (env vars, t
 ```
 cogni-workspace/
 ├── .claude-plugin/plugin.json    Plugin manifest
-├── skills/                       23 workspace and visual-rendering skills
+├── skills/                       22 workspace and visual-rendering skills
 │   ├── audit-region-sources/     Audit per-plugin region-source overlays against the registry
 │   ├── claim-entity/             Cross-plugin ClaimEntity data contract and store layout
 │   ├── claims/                   Claim-verification lifecycle (+ scripts/claims-store.sh)
@@ -229,7 +228,6 @@ cogni-workspace/
 │   ├── story-to-infographic/     Narrative -> single-page infographic brief
 │   ├── story-to-slides/          Narrative -> presentation brief
 │   ├── story-to-web/             Narrative -> scrollable web-narrative or printed-poster brief
-│   ├── troubleshoot/             Diagnose plugin and cross-plugin failures
 │   ├── workspace-dashboard/      Interactive HTML workspace status dashboard
 │   └── workspace-status/
 │                                  narrative, narrative-review, copywriter,

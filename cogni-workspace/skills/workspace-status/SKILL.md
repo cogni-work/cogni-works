@@ -1,12 +1,23 @@
 ---
 name: workspace-status
-description: "Diagnose and report on the health of an insight-wave workspace. Use this skill whenever the user mentions workspace status, health, or diagnostics — including \"check workspace\", \"is my workspace ok\", something broke, \"diagnose workspace\", \"verify workspace\", or any situation where understanding the workspace state would help resolve a problem. Even if the user doesn't explicitly say status, trigger this skill when they describe symptoms that suggest a misconfigured workspace (missing env vars, plugins not found in the workspace registry, themes not loading, an MCP server not available in the session). Scope is workspace infrastructure; plugin-level and cross-plugin faults — plugin availability, skill-file integrity, cross-plugin dependencies, and progress or state files — belong to the sibling troubleshoot skill; route there instead."
+description: >-
+  Diagnose and report on the health of an insight-wave workspace and the plugins installed in
+  it — one surface for both workspace infrastructure and plugin-level faults. Use this skill
+  whenever the user mentions workspace status, health, or diagnostics — including "check
+  workspace", "is my workspace ok", "diagnose workspace", "verify workspace" — or reports
+  something broken at the plugin level: "something is wrong", "plugin error", "skill not
+  responding", "fix my setup", or "why isn't X working". It covers workspace infrastructure
+  (env vars, themes, settings, the plugin registry, MCP servers in the session) and plugin-
+  level and cross-plugin faults (plugin availability, skill-file integrity, cross-plugin
+  dependencies, progress and state files, stale state left by retirements). Trigger it even
+  without an explicit request when the user describes symptoms of a misconfigured workspace or
+  hits an unclear error during plugin use.
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion, Skill, ToolSearch
 ---
 
 # Workspace Status
 
-Diagnose the health of an insight-wave workspace by checking its foundation files, environment variables, plugin registry, themes, dependencies, and MCP servers. The goal is to give the user a clear picture of what's working and what needs attention, with actionable fixes for every issue found.
+Diagnose the health of an insight-wave workspace and of the plugins installed in it — its foundation files, environment variables, plugin registry, themes, dependencies, MCP servers, and the plugin-level and cross-plugin faults that stop a skill working. This is the single diagnostic surface for both: there is no separate skill to route to. The goal is to give the user a clear picture of what's working and what needs attention, with actionable fixes for every issue found.
 
 ## Locating the Workspace
 
@@ -17,9 +28,47 @@ Find the workspace using this priority:
 
 If no `.workspace-config.json` exists at the resolved path, stop and tell the user no workspace was found. Suggest they run `manage-workspace` to create one and explain briefly what a workspace provides (centralized config, plugin discovery, shared themes).
 
+## Language
+
+Read the workspace language from `.workspace-config.json` in the workspace root
+(`language` field — `"en"` or `"de"`). Present findings, explanations, and fix
+instructions in that language.
+
+If the file is missing or unreadable, detect the user's language from their message.
+If still unclear, default to English.
+
+Keep in English regardless of language setting:
+- Plugin names, command names, file paths
+- Status values (`OK`, `WARN`, `FAIL`)
+- Error messages, stack traces, code snippets
+- Column headers in diagnostic tables
+- The `Symptom` / `Cause` / `Fix` field labels themselves — the label stays fixed so
+  the report shape is recognisable across languages; only its content is translated
+
+## Reporting Findings
+
+State what is wrong, why, and how to fix it, in the format Symptom → Cause → Fix,
+one finding per block, using the same field labels
+`${CLAUDE_PLUGIN_ROOT}/skills/workspace-status/references/known-issues.md` uses so a catalogued fix and a fresh diagnosis read
+identically:
+
+**Symptom**: a cogni-marketing skill reports that portfolio data cannot be found.
+
+**Cause**: cogni-marketing depends on cogni-portfolio, which has no entry in
+`.claude-plugin/marketplace.json` for this workspace.
+
+**Fix**: install cogni-portfolio from the marketplace, then re-run.
+
+Keep the three labels even when a field is short — a finding with no known cause
+says so under **Cause** rather than dropping the label, so every report has the
+same three anchors to scan for.
+
+The consolidated `## Status Report` below is the per-run summary; this shape is for
+the individual findings that expand under it.
+
 ## Running the Checks
 
-Run all seven checks, then present a single consolidated report. The checks are ordered by dependency — foundation must exist before environment makes sense, environment must be correct before plugins can be verified.
+Run all eight checks, then present a single consolidated report. The checks are ordered by dependency — foundation must exist before environment makes sense, environment must be correct before plugins can be verified.
 
 ### 1. Foundation
 
@@ -231,6 +280,28 @@ means it is not available. The **Install** column decides how a missing server i
 Only check MCPs for plugins that are actually installed (cross-reference with the plugin
 registry from Check 3).
 
+### 7. Plugin-Level Diagnostics
+
+The plugin-level tier. Checks 1-6 establish that the workspace itself is sound;
+this one establishes that the plugins installed in it are. Six probes, each
+detailed in
+`${CLAUDE_PLUGIN_ROOT}/skills/workspace-status/references/plugin-diagnostics.md`:
+
+| Probe | Establishes |
+|-------|-------------|
+| 7a Plugin availability | every marketplace entry has a source directory with a valid `plugin.json` |
+| 7b Skill-file integrity | every `skills/*/SKILL.md` exists and its frontmatter parses |
+| 7c Progress/state file health | `.claude/*.local.md` frontmatter is well-formed and not stale |
+| 7d Cross-plugin dependencies | every plugin a plugin requires is present in the marketplace |
+| 7e Stale state from retirements | no orphaned engagement or course-progress file lingers |
+| 7f Common misconfigurations | recognition patterns routed to the known-issues catalogue |
+
+Run the probes the user's symptom points at rather than all six every time — start
+with the most likely cause and expand if needed. When no symptom narrows it — a bare
+"check my workspace" — run 7a, 7b and 7d: they are the cheap roster-level probes whose
+failures explain the widest range of later faults. When the request is a bare full
+scan, run everything; see `## Full Scan Mode` below.
+
 ## Status Report
 
 Present results as a compact summary. Use OK / WARNING / CRITICAL status per category:
@@ -281,7 +352,33 @@ MCP Servers:  WARNING  | 1/3 loaded (2 manual)
 
 Every issue should end with a concrete next step — either a skill to run (`manage-workspace`, `manage-themes`) or a command to execute.
 
+## Full Scan Mode
+
+When the user asks for a full diagnostic with no narrower target — including via the
+`/troubleshoot` command, which enters here — run every check and present this summary
+table alongside the status report above:
+
+| Check | Status | Details |
+|-------|--------|---------|
+| Marketplace | OK/WARN/FAIL | N plugins registered |
+| Plugin integrity | OK/WARN/FAIL | Any missing SKILL.md files |
+| State files | OK/WARN/FAIL | Any corrupted or stale files |
+| Cross-plugin dependencies | OK/WARN/FAIL | Any missing cross-plugin deps |
+| Environment | OK/WARN/FAIL | N vars set, N broken, N missing |
+
+Every row is a check this skill performs. Marketplace, plugin integrity, state files
+and cross-plugin dependencies come from check 7's probes; the Environment row reports
+check 2's result directly. The external-tool dependencies of check 5 are reported in
+the status report above, not in this table — the two use the word "dependencies" for
+different things.
+
 ## Quick vs Detailed Mode
 
 - **Quick** (default): the compact summary above, expanding only categories with issues
 - **Detailed**: expand all categories regardless of status — show every file path, every env var value, every theme name, every dependency version. Use this when the user explicitly asks for details, runs a diagnosis, or says something like "show me everything"
+
+## Reference
+
+- `${CLAUDE_PLUGIN_ROOT}/skills/workspace-status/references/plugin-diagnostics.md` — the procedures behind check 7's six probes
+- `${CLAUDE_PLUGIN_ROOT}/skills/workspace-status/references/known-issues.md` — a maintained catalogue of known symptoms and their fixes
+- `${CLAUDE_PLUGIN_ROOT}/skills/workspace-status/references/mcp-registry.md` — the ecosystem MCP list read by check 6

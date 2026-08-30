@@ -112,7 +112,7 @@ Run when something is not working and you are not sure whether it is a plugin is
 What's the status of my workspace?
 ```
 
-If the diagnostic finds issues, each finding comes with a specific fix. Infrastructure-level problems (env vars, settings) are workspace concerns; plugin-level problems (broken skills, missing references) are handled by cogni-workspace's own `troubleshoot` skill.
+If the diagnostic finds issues, each finding comes with a specific fix. Infrastructure-level problems (env vars, settings) and plugin-level problems (broken skills, missing references) are both `workspace-status`'s — checks 1-6 cover the workspace, check 7 covers the plugins installed in it.
 
 ---
 
@@ -421,7 +421,7 @@ When you move a workspace to a different path, absolute paths stored in `.worksp
 | A plugin cannot find `.workspace-env.sh` | The session hook did not run, or the workspace was not initialized | Run `/workspace-status`; if the foundation tier fails, re-run `/manage-workspace` |
 | `jq: command not found` in script output | `jq` is not installed | Install via your package manager: `brew install jq` (macOS), `apt install jq` (Debian/Ubuntu) |
 | Themes directory exists but visual plugin uses wrong colors | Plugin is reading a stale theme path | Run `/pick-theme` to re-select the theme; the selection updates the workspace default |
-| `workspace-status` passes but a plugin skill still fails | The failure is at plugin level, not workspace level | Run cogni-workspace's `/troubleshoot` for plugin-level diagnostics |
+| A workspace-infrastructure check passes but a plugin skill still fails | The failure is at plugin level, not workspace level | Run cogni-workspace's `/troubleshoot` for the plugin-level tier (check 7) |
 | Obsidian terminal profile shows a doubled path (WSL) | WSL path duplication in the profile arguments | Run `/manage-workspace` — the update flow fixes doubled paths and stale args |
 | `/manage-workspace` succeeds but a newly installed plugin is not discovered | The plugin was installed after initialization | Run `/manage-workspace` to re-scan and register the new plugin |
 | German umlaut characters break workspace initialization | Shell locale not set for UTF-8 | Set `LANG=de_DE.UTF-8` before running init; the script includes umlaut support from v0.2+ |

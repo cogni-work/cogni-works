@@ -9,6 +9,10 @@ computed from the filesystem at run time:
      Agents cells;
   3. the roll-up sentence under the same table — `**N skills, M agents** across
      the K active plugins.`
+  4. the three **bare plugin-count** claims — the lede sentence before the first
+     H2, the section intro under "## What the plugins do", and the
+     marketplace-manifest comment inside the fenced tree diagram — each bound to
+     the size of the live plugin universe.
 
 The motivating defect: a plugin's skill was retired and the root README's count
 claim was not swept with it, in three linked places at once, with nothing in CI
@@ -21,7 +25,7 @@ grep encodes one historical retirement, needs a hand-maintained list of stale
 values, and says nothing about the next skill added or removed. Binding the
 claim to a live directory count is a durable invariant — it catches this failure
 class and every future one, in both directions, without being told any numbers.
-No expected count appears anywhere in this file.
+No expected count — skills, agents or plugins — appears anywhere in this file.
 
 **Subject is the root README alone.** Per-plugin `*/README.md` files are never
 opened. They carry their own counts, owned by their own plugin; asserting over
@@ -56,6 +60,39 @@ sentence lands here as `prose-claim-missing`. That is the guard working — the
 claim is gone, not merely wrong — but the fix is to teach the generator to emit
 counts derived from the same directories this guard reads, not to loosen the
 guard. It already computes them and does not emit them.
+
+**The fence decision is deliberate, not incidental.** Claim 4's three sites do
+not share a region, so each one states whether a fenced code block is in or out
+rather than leaving it to whichever lines a scan happens to reach. The tree
+claim is read **only** inside a fenced block; the lede and intro claims **only**
+outside one. Neither half is decorative: without the in-fence rule the tree
+claim is unreachable, since its region is a code block under a heading this
+guard anchors nothing else on; without the out-of-fence rule an example README
+pasted into a fenced block inside the prose section contributes a second match
+and the intro site degrades to `plugin-count-ambiguous` instead of a claim.
+
+**The noun discriminates, not the digit.** That same fenced tree lists other
+parenthesised counts — a guides count and a workflows count — and one of them
+carries the very digit the plugin count carries today. A `(N <word>)` shape
+would bind whichever came first and would redden a plugin-count gate on a
+workflow-count edit, so the tree pattern is anchored on the literal noun
+`plugins`. A future line added inside that fence with a coincidental digit is
+excluded by construction rather than by luck.
+
+**Claim 4 compares against the same universe claim 3 does.** Both read
+`len(counts)` — the plugins the manifest lists *and* whose `source` normalises
+to a directory this guard can count — never `len(plugins)`. The two can diverge
+the day a manifest entry carries an unusable `source`, and two arms asserting
+over one quantity from two different bases would contradict each other on
+exactly that day, for a reason no reader of either message could see.
+
+**Absence is a violation, per site.** Each of the three sites reports its own
+`plugin-count-missing` when its claim cannot be found, so renaming the prose
+around a claim fails loudly instead of silently discovering nothing. The
+`no-claims-discovered` floor below deliberately keeps its original subject — the
+per-plugin and roll-up claims — because a per-site missing violation is already
+strictly louder than the floor, and folding these sites into it would stop a
+README carrying no claim at all from reporting the floor it exists to report.
 
 stdlib only; runs under any python3. Exit 0 = clean, 1 = violations,
 2 = script error.
@@ -98,6 +135,40 @@ ROLLUP_RE = re.compile(
 )
 
 HEADING_RE = re.compile(r"^## ")
+
+# The bare plugin-count claims (claim 4). Read as running prose, so the count
+# may be separated from the noun by one qualifier word — "8 Apache-2.0 plugins"
+# reads the same claim as "8 plugins".
+#
+# The negative lookbehind is load-bearing rather than defensive: a version-like
+# qualifier ends in a digit, so without it "Apache-2.0 plugins" offers its own
+# trailing "0" as a count and a claim whose number was *deleted* reads as a
+# claim of zero — a mismatch against a live universe instead of the missing
+# claim it actually is. Anchoring the digit to a non-word, non-dot, non-hyphen
+# boundary refuses that reading whatever the scan order.
+BARE_PLUGIN_COUNT_RE = re.compile(
+    r"(?<![\w.-])(\d+)\s+(?:[A-Za-z][A-Za-z0-9.+-]*\s+)?plugins\b"
+)
+
+# The tree-diagram claim is a parenthesised count in a directory comment. The
+# noun is inside the pattern on purpose — see "The noun discriminates" above.
+TREE_PLUGIN_COUNT_RE = re.compile(r"\((\d+)\s+plugins\)")
+
+FENCE_RE = re.compile(r"^\s*```")
+
+# Each site declares its region kind, its pattern and its fence polarity in one
+# row, and the roster the comparison loop walks is derived from the same rows.
+# Stating the roster twice is what would let a fourth site be collected and
+# reported while never being compared against anything — a claim that looks
+# bound and asserts nothing, which is the failure class this whole guard exists
+# to remove.
+PLUGIN_COUNT_SPEC = (
+    ("lede", "before-first-h2", BARE_PLUGIN_COUNT_RE, False),
+    ("intro", "prose-section", BARE_PLUGIN_COUNT_RE, False),
+    ("tree", "whole-file", TREE_PLUGIN_COUNT_RE, True),
+)
+
+PLUGIN_COUNT_SITES = tuple(spec[0] for spec in PLUGIN_COUNT_SPEC)
 
 
 def read_marketplace(root):
@@ -173,10 +244,102 @@ def section_bounds(lines, heading):
             break
     if start is None:
         return None
-    for j in range(start, len(lines)):
-        if HEADING_RE.match(lines[j]):
-            return (start, j)
-    return (start, len(lines))
+    return (start, next_h2(lines, start))
+
+
+def next_h2(lines, start):
+    """Index of the first H2 at or after `start`, else len(lines).
+
+    Both boundary rules in this file resolve through here: where an anchored
+    section ends, and where the lede region — which has no heading of its own —
+    stops. Falling off to len(lines) means an unterminated section runs to the
+    end of the file, which is what the text does too.
+    """
+    for i in range(start, len(lines)):
+        if HEADING_RE.match(lines[i]):
+            return i
+    return len(lines)
+
+
+def fence_flags(lines):
+    """Return a per-line list of bools: True when the line is inside a fence.
+
+    The delimiter lines themselves are outside. An unterminated fence leaves
+    every line after it flagged inside, which is the honest reading — the
+    remaining text really is inside an open code block.
+    """
+    flags = []
+    inside = False
+    for line in lines:
+        if FENCE_RE.match(line):
+            flags.append(False)
+            inside = not inside
+        else:
+            flags.append(inside)
+    return flags
+
+
+def plugin_count_region(kind, lines, prose_bounds):
+    """Resolve a site's region kind to the line indices it covers.
+
+    Each kind is a boundary rule, not a hand-shaped scope: `before-first-h2`
+    stops where the first heading starts, `prose-section` is the anchored
+    section's own body, and `whole-file` is every line (the fence polarity is
+    what narrows it). An absent anchoring section yields an empty region, so the
+    site reports as missing through the ordinary path rather than needing a
+    branch of its own — the `section-missing` for that heading is already
+    emitted once by the caller, and a second one would double-report it.
+
+    The lede region degrades honestly rather than gracefully: demote every H2 in
+    the file and it widens to the whole README, which then carries several bare
+    counts and the site reports `plugin-count-ambiguous`. That is a loud
+    failure, not a discovered claim — the point is that no shape of this region
+    is silently empty.
+    """
+    if kind == "before-first-h2":
+        return range(0, next_h2(lines, 0))
+    if kind == "prose-section":
+        return range(*prose_bounds) if prose_bounds is not None else range(0)
+    return range(0, len(lines))
+
+
+def collect_plugin_counts(lines, prose_bounds, violations):
+    """Bare plugin-count claims (claim 4), keyed by site.
+
+    Returns `(claims, unusable)` — the sites whose claim resolved, and the sites
+    that carried more than one candidate. Two numbers in one region cannot both
+    be the claim, so an ambiguous site yields no claim and a
+    `plugin-count-ambiguous` violation instead of binding whichever the scan
+    reached first. It is reported separately from a missing site because the two
+    call for opposite fixes: one region has too many candidates, the other none.
+    """
+    claims = {}
+    unusable = set()
+    fenced = fence_flags(lines)
+
+    for site, kind, pattern, want_fenced in PLUGIN_COUNT_SPEC:
+        found = []
+        for idx in plugin_count_region(kind, lines, prose_bounds):
+            if fenced[idx] != want_fenced:
+                continue
+            match = pattern.search(lines[idx])
+            if match:
+                found.append((int(match.group(1)), idx + 1))
+        if not found:
+            continue
+        if len(found) > 1:
+            unusable.add(site)
+            violations.append({
+                "code": "plugin-count-ambiguous",
+                "plugin": None,
+                "site": site,
+                "line": found[0][1],
+                "detail": "the {} region carries {} plugin-count phrases; cannot "
+                          "tell which is the claim".format(site, len(found)),
+            })
+            continue
+        claims[site] = {"count": found[0][0], "line": found[0][1]}
+    return claims, unusable
 
 
 def collect_prose(lines, bounds, known, violations):
@@ -387,6 +550,34 @@ def collect(root):
                 "detail": "no roll-up total found under {!r}".format(TABLE_SECTION),
             })
 
+    plugin_counts, unusable_sites = collect_plugin_counts(
+        lines, prose_bounds, violations)
+    for site in PLUGIN_COUNT_SITES:
+        claim = plugin_counts.get(site)
+        if claim is None:
+            if site in unusable_sites:
+                # Already reported as ambiguous. Adding "missing" on top would
+                # send the reader at the opposite fix — restore a claim that is
+                # in fact there twice.
+                continue
+            violations.append({
+                "code": "plugin-count-missing",
+                "plugin": None,
+                "site": site,
+                "line": None,
+                "detail": "no plugin-count claim found at the {} site".format(site),
+            })
+            continue
+        if claim["count"] != len(counts):
+            violations.append({
+                "code": "plugin-count-mismatch",
+                "plugin": None,
+                "site": site,
+                "line": claim["line"],
+                "detail": "{} claims {} plugins but the marketplace universe holds "
+                          "{}".format(site, claim["count"], len(counts)),
+            })
+
     # Zero discovery is a failure, never a clean zero: a guard that found nothing
     # to check must not report the tree as consistent.
     if not prose and not table and not rollup_present:
@@ -404,6 +595,7 @@ def collect(root):
         "prose_claims": len(prose),
         "table_claims": len(table),
         "rollup_present": rollup_present,
+        "plugin_count_claims": plugin_counts,
         "live_counts": counts,
         "violations": violations,
     }
@@ -436,7 +628,9 @@ def main(argv):
         print("\nFAIL: {} root-README inventory violation(s):".format(len(violations)),
               file=sys.stderr)
         for v in violations:
-            print("  [{}] {}  ({})".format(v["code"], v["plugin"] or "-", v["detail"]),
+            # A plugin-count violation names no plugin; its subject is the site.
+            subject = v["plugin"] or v.get("site") or "-"
+            print("  [{}] {}  ({})".format(v["code"], subject, v["detail"]),
                   file=sys.stderr)
         print("\nFix: every count the root README states is derived from a directory, "
               "not maintained by hand. A skill or agent added or retired must update "
@@ -448,7 +642,13 @@ def main(argv):
               "For `prose-claim-missing` the claim sentence itself is gone or "
               "rephrased — it is matched sentence-finally as `N skills and M agents.`, "
               "singular forms included, on a line opening with that plugin's own "
-              "markdown link.",
+              "markdown link. A `plugin-count-mismatch`, `plugin-count-missing` or "
+              "`plugin-count-ambiguous` finding is the separate bare-plugin-count "
+              "binding: its subject is the claim site (`lede`, `intro` or `tree`) "
+              "rather than a plugin, so the finding already names which of the three "
+              "drifted — a plugin added or removed must sweep all three alongside the "
+              "roll-up, and a `missing` finding means that site's prose was renamed "
+              "rather than its number changed.",
               file=sys.stderr)
         return 1
     return 0

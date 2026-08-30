@@ -43,7 +43,7 @@ assert_grep 'TONE=' "$COMPOSE" "compose-contract-12-threads-tone-wiki-composer k
 assert_grep 'PROSE_DENSITY=' "$COMPOSE" "compose-contract-13-threads-prose-density-wiki knowledge-compose: threads PROSE_DENSITY into the wiki-composer dispatch (#309 P2.1)"
 assert_grep 'CITATION_FORMAT=' "$COMPOSE" "compose-contract-14-threads-citation-format-now knowledge-compose: threads CITATION_FORMAT (now live) into the wiki-composer dispatch (#309 P2.2)"
 assert_grep 'Over ceiling' "$COMPOSE" "compose-contract-15-executive-density-ceiling-warning knowledge-compose: executive-density over-ceiling warning (#309 P2.4)"
-assert_grep 'probe_plugin cogni-wiki' "$COMPOSE" "compose-contract-16-probes-cogni-wiki-clean knowledge-compose: probes cogni-wiki (clean-break)"
+assert_not_grep 'probe_plugin' "$COMPOSE" "compose-contract-16-no-install-only-wiki-probe knowledge-compose: no install-only cogni-wiki probe (wiki existence is gated by the .cogni-wiki/config.json + wiki/ checks)"
 assert_grep 'RESUME_FROM_OUTLINE' "$COMPOSE" "compose-contract-17-f11-passes-resume-outline knowledge-compose: F11 — passes RESUME_FROM_OUTLINE to composer"
 assert_grep 'writer-outline-v' "$COMPOSE" "compose-contract-18-f11-detects-writer-outline knowledge-compose: F11 — detects writer-outline-vN.json for recovery"
 assert_grep 'wiki/log.md' "$COMPOSE" "compose-contract-19-appends-wiki-log-md knowledge-compose: appends to wiki/log.md"

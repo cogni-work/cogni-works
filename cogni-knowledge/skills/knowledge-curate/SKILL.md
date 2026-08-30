@@ -35,21 +35,7 @@ Read `${CLAUDE_PLUGIN_ROOT}/references/inverted-pipeline.md` §"Phase 2 — `kno
 
 ### 0. Pre-flight
 
-**Required plugins.** Probe only `cogni-wiki` (clean-break — no cogni-research dispatch):
-
-```
-probe_plugin() {
-  local plugin="$1" skill="$2"
-  test -f "${CLAUDE_PLUGIN_ROOT}/../${plugin}/skills/${skill}/SKILL.md" && return 0
-  for d in "${CLAUDE_PLUGIN_ROOT}/../../${plugin}/"*/skills/"${skill}"/SKILL.md; do
-    [ -f "$d" ] && return 0
-  done
-  return 1
-}
-probe_plugin cogni-wiki wiki-setup && WIKI_OK=yes || WIKI_OK=no
-```
-
-If `WIKI_OK=no`, abort with the standard missing-plugin message.
+**No wiki engine required.** cogni-knowledge bundles its wiki engine under `scripts/vendor/cogni-wiki/`, resolved vendored-first by every wiki-touching step, and this skill resolves none of it directly — Step 0.5's coverage check runs cogni-knowledge's own `scripts/wiki-coverage.py`. There is no `cogni-wiki` plugin install to probe and no hard dependency to abort on (clean-break — no cogni-research dispatch either). The binding read below is the gate: it aborts on `success: false` and yields `wiki_path` as `WIKI_ROOT`.
 
 **Binding + plan.** Resolve `knowledge_root` (same logic as `knowledge-plan`). Read the binding:
 

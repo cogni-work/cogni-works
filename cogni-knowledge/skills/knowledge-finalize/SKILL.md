@@ -47,6 +47,8 @@ Read `${CLAUDE_PLUGIN_ROOT}/references/inverted-pipeline.md` §"Phase 7 — `kno
 
 ## Parameters
 
+Every `--no-*` / `--apply-*` flag defaults OFF, so the step it names runs (staging, where a choice-point exists). Each `--no-*` is a narrow opt-out and nothing more: the synthesis still deposits and every other step still runs. The rows below therefore note only what a flag suppresses and how it differs from its siblings.
+
 | Parameter | Required | Description |
 |-----------|----------|-------------|
 | `--knowledge-slug` | Yes | Slug of the bound knowledge base. |
@@ -55,38 +57,53 @@ Read `${CLAUDE_PLUGIN_ROOT}/references/inverted-pipeline.md` §"Phase 7 — `kno
 | `--synthesis-slug` | No | Override the auto-derived synthesis slug (default: `_knowledge_lib.slugify(plan.topic)`). |
 | `--overwrite` | No | Replace an existing `wiki/syntheses/<slug>.md`. Default: refuse. |
 | `--dry-run` | No | Print the resolved inputs (WIKI_ROOT, DRAFT_VERSION, SYNTHESIS_SLUG, citation count) without writing anything or dispatching cycle-guard. |
-| `--no-contradictor` | No | Skip the Step 10.6 contradiction tripwire **entirely** (both the synthesis-vs-cited comparison and the synthesis-vs-prior-syntheses comparison). Default: OFF (tripwire runs). Pass this as cheap insurance against false-positive flooding when sustained `medium`/`low` noise is dominant in real runs; the synthesis is still deposited and the Step 10.5 conformance gate still runs. |
-| `--no-prior-syntheses` | No | Narrow the Step 10.6 tripwire to the cited-evidence comparison only — pass an empty `PRIOR_SYNTHESIS_SLUGS` so the synthesis-vs-cited comparison still runs while the synthesis-vs-prior-syntheses comparison is suppressed. Default: OFF (prior syntheses are compared). Unlike `--no-contradictor` this does not skip the agent; the cited-evidence findings still flow. Useful when a base has many prior syntheses and the prior-comparison noise dominates. |
-| `--no-reviewer` | No | Skip the Step 10.7 structural-quality review. Default: OFF (reviewer runs). Pass to suppress the advisory structural score on a run where you only want the deposit + conformance gate; the synthesis is still deposited and every other step still runs. Mirrors `--no-contradictor`. |
-| `--no-open-questions` | No | Skip the Step 10.5 sub-step 5 `rebuild_open_questions.py` refresh. Default: OFF (rebuild runs). Pass when investigating a rebuild bug or running a no-side-effect finalize; the synthesis still lands and the rest of the Step 10.5 gate still runs. Mirrors `--no-contradictor`. |
-| `--no-research-gaps` | No | Narrow the Step 10.5 sub-step 5 rebuild to lint findings only — skip streaming this project's research-time gaps (`research_uncovered` / `research_partial`) into `open_questions.md`. Default: OFF (gaps stream). Unlike `--no-open-questions` this does **not** skip the sub-step; the seven existing lint classes still reconcile. Also skips the sub-step 5 post-ingest coverage re-score (the gap stream is dropped, so the re-score would be wasted work). The Step 10 `sqs=` log-line suffix is unaffected. Useful for debugging the payload-builder path. |
-| `--no-question-links` | No | Skip the Step 4.7 `synthesis→question` forward links (and therefore the Step 10.5 reverse backfill into each question page's `## See also`). Default: OFF (links emitted). Pass to deposit a synthesis with no `## Research questions` section — e.g. against a base whose question nodes are mid-refactor. The synthesis still deposits and every other step still runs. Mirrors `--no-contradictor`. |
+| `--no-contradictor` | No | Skip the Step 10.6 contradiction tripwire **entirely** (both the synthesis-vs-cited and the synthesis-vs-prior-syntheses comparison). Cheap insurance against false-positive flooding when sustained `medium`/`low` noise dominates real runs. |
+| `--no-prior-syntheses` | No | Narrow the Step 10.6 tripwire to the cited-evidence comparison only — pass an empty `PRIOR_SYNTHESIS_SLUGS` so the synthesis-vs-cited comparison still runs while the synthesis-vs-prior-syntheses comparison is suppressed. Unlike `--no-contradictor` this does not skip the agent; the cited-evidence findings still flow. Useful when a base has many prior syntheses and the prior-comparison noise dominates. |
+| `--no-reviewer` | No | Skip the Step 10.7 structural-quality review — suppresses the advisory structural score on a run that only wants the deposit + conformance gate. |
+| `--no-open-questions` | No | Skip the Step 10.5 sub-step 5 `rebuild_open_questions.py` refresh — for investigating a rebuild bug or running a no-side-effect finalize. |
+| `--no-research-gaps` | No | Narrow the Step 10.5 sub-step 5 rebuild to lint findings only — skip streaming this project's research-time gaps (`research_uncovered` / `research_partial`) into `open_questions.md`. Unlike `--no-open-questions` this does **not** skip the sub-step; the seven existing lint classes still reconcile. Also skips the sub-step 5 post-ingest coverage re-score (the gap stream is dropped, so the re-score would be wasted work). The Step 10 `sqs=` log-line suffix is unaffected. |
+| `--no-question-links` | No | Skip the Step 4.7 `synthesis→question` forward links (and therefore the Step 10.5 reverse backfill into each question page's `## See also`) — deposits a synthesis with no `## Research questions` section, e.g. against a base whose question nodes are mid-refactor. |
 | `--apply-portal` | No | **Apply** the Step 10.5 sub-step 3.5 curated-portal refresh (auto-refresh, option 4b) instead of staging it: write the engine-owned per-theme lead-ins to `wiki/index.md` (via `wiki_index_update.py --set-leadin`) and splice the overview narrative into the `wiki/index.md` intro (via `overview_update.py narrative-splice --target-file index.md`; the curated-root layout retired `wiki/overview.md` as the narrative home). Alias: `--refresh-portal`. Default: OFF — finalize **stages** a proposed diff to `<wiki>/.cogni-wiki/portal-proposed.md` and leaves the live portal untouched. Human (non-sentineled) lead-ins are never touched in either mode. See `references/portal-shape-decision.md`. |
-| `--no-portal` | No | Skip the Step 10.5 sub-step 3.5 curated-portal refresh **entirely** — no portal-narrator dispatch, no staging, no apply. Default: OFF (the refresh runs, staging by default). The synthesis still deposits and every other step still runs. Mirrors `--no-contradictor`. |
+| `--no-portal` | No | Skip the Step 10.5 sub-step 3.5 curated-portal refresh **entirely** — no portal-narrator dispatch, no staging, no apply. |
 | `--no-portal-prompt` | No | Suppress the Step 10.5 sub-step 3.5 **interactive apply-portal confirm** so finalize stages the proposed diff silently instead of asking. Default: OFF — a human-direct run with a non-empty refresh set is asked whether to apply now. The autonomous `knowledge-refresh --mode push` loop passes this flag (the `--no-cobrowse` parallel) so it never blocks on the prompt. No effect under `--apply-portal` (applies regardless) or `--no-portal`/`--dry-run` (no refresh runs). |
 | `--apply-concepts` | No | **Apply** the Step 10.5 sub-step 3.6 concepts-outline refresh instead of staging it: splice the engine-owned per-theme lead-ins into `wiki/concepts/index.md` (via `concepts_index.py render` + a locked `CONCEPTS-LEADIN:<theme>` span splice). Alias: `--refresh-concepts`. Default: OFF — finalize **stages** a proposed diff to `<wiki>/.cogni-wiki/concepts-index-proposed.md` and leaves the live concepts outline untouched. Human (non-sentineled) `wiki/concepts/index.md` pages are never touched in either mode. |
-| `--no-concepts` | No | Skip the Step 10.5 sub-step 3.6 concepts-outline refresh **entirely** — no concepts-outliner dispatch, no staging, no apply. Default: OFF (the refresh runs, staging by default). The synthesis still deposits and every other step still runs. Mirrors `--no-portal`. |
+| `--no-concepts` | No | Skip the Step 10.5 sub-step 3.6 concepts-outline refresh **entirely** — no concepts-outliner dispatch, no staging, no apply. |
 | `--no-concepts-prompt` | No | Suppress the Step 10.5 sub-step 3.6 **interactive apply-concepts confirm** so finalize stages the proposed diff silently instead of asking. Default: OFF — a human-direct run with a non-empty refresh set is asked whether to apply now. The autonomous `knowledge-refresh --mode push` loop passes this flag (the `--no-portal-prompt` parallel) so it never blocks on the prompt. No effect under `--apply-concepts` (applies regardless) or `--no-concepts`/`--dry-run` (no refresh runs). |
 
 ## Workflow
 
 ### 0. Pre-flight
 
-**Required plugins.** Probe only `cogni-wiki` (clean-break — no cogni-research, no cogni-claims):
+**Required engine.** This skill runs on the **vendored** wiki-ingest engine — cogni-knowledge ships a byte-identical copy in-tree under `scripts/vendor/cogni-wiki/`, so a bound base works without cogni-wiki installed. The `cogni-wiki` install is only a fallback layout. Probe both so the skill aborts cleanly here rather than failing mid-skill:
 
 ```
-probe_plugin() {
-  local plugin="$1" skill="$2"
-  test -f "${CLAUDE_PLUGIN_ROOT}/../${plugin}/skills/${skill}/SKILL.md" && return 0
-  for d in "${CLAUDE_PLUGIN_ROOT}/../../${plugin}/"*/skills/"${skill}"/SKILL.md; do
-    [ -f "$d" ] && return 0
-  done
-  return 1
-}
-probe_plugin cogni-wiki wiki-setup && WIKI_OK=yes || WIKI_OK=no
+# vendored-first: the in-tree wiki-ingest scripts are self-contained
+test -d "${CLAUDE_PLUGIN_ROOT}/scripts/vendor/cogni-wiki/skills/wiki-ingest/scripts" && WIKI_OK=yes || WIKI_OK=no
+
+# fallback: an installed cogni-wiki sibling / marketplace cache (legacy layout)
+if [ "$WIKI_OK" = "no" ]; then
+  probe_plugin() {
+    local plugin="$1" skill="$2"
+    test -f "${CLAUDE_PLUGIN_ROOT}/../${plugin}/skills/${skill}/SKILL.md" && return 0
+    for d in "${CLAUDE_PLUGIN_ROOT}/../../${plugin}/"*/skills/"${skill}"/SKILL.md; do
+      [ -f "$d" ] && return 0
+    done
+    return 1
+  }
+  probe_plugin cogni-wiki wiki-setup && WIKI_OK=yes || WIKI_OK=no
+fi
 ```
 
-If `WIKI_OK=no`, abort with the standard missing-plugin message.
+If `WIKI_OK` is `no`, abort:
+
+> cogni-knowledge's vendored wiki-ingest scripts are missing and no `cogni-wiki`
+> install was found. Reinstall cogni-knowledge, then retry.
+
+The **vendored** branch probes `wiki-ingest` because Steps 7/8/10 resolve it first and the
+`wiki-lint` and `wiki-health` scripts import `_wikilib` relatively from `wiki-ingest/scripts`; the
+install fallback probes `wiki-setup` only as a presence marker for a legacy cogni-wiki layout. This
+probe is the early-abort gate only — the three `resolve_wiki_scripts` calls below remain the
+authoritative resolvers for all three engines; keep the two vendored-first precedences in sync.
 
 **Resolve the cogni-wiki script dirs.** Same probe shape, parameterised by the
 skill subdir, so Steps 7/8/10 can call `wiki_index_update.py` / `config_bump.py` /
@@ -474,6 +491,8 @@ fi
 
 The inverted pipeline writes the wiki via forked agents + direct script calls, so cogni-wiki's `wiki-health` / `wiki-lint` never run as a gate. This step closes that: it backfills the deterministic link/frontmatter fixes, asserts the base is structurally clean, and rebuilds `context_brief.md` last so it reflects the post-gate state. It runs after the deposit + index are on disk, so the gate sees the final page set.
 
+**Gate-wide fail-soft posture.** Every sub-step below is a post-deposit refresh, so nothing here ever rolls back the synthesis: the synthesis page, index entry, `entries_count` bump, `binding.json` append, and `wiki/log.md` line are already on disk when the gate opens, as is every sub-step preceding the one that failed. Each write site is lock-wrapped (cogni-wiki's shared `_wiki_lock` at `<WIKI_ROOT>/.cogni-wiki/.lock`) + atomic (`_knowledge_lib.atomic_write_text`) and writes only on a byte diff, so a forced failure leaves no partial page. These scripts return an error envelope rather than raising (a missing wiki-scripts dir, a `_wikilib` import failure, a non-wiki `--wiki-root`), so treat a non-zero result as a warning surfaced loudly in Step 11 — never an abort, never a rollback. Each sub-step below restates only what is specific to it.
+
 1. **Deterministic lint fixes — de-orphan + reconcile.**
    ```
    python3 "$WIKI_LINT_SCRIPTS/lint_wiki.py" \
@@ -630,13 +649,11 @@ The inverted pipeline writes the wiki via forked agents + direct script calls, s
 
      The portal-narrator emits an unchanged lead-in/overview verbatim, so a re-apply with no new bullets no-ops the splice (no stamp/date churn — `--set-leadin` returns `action: noop`, `narrative-splice` reports `changed: false` and writes nothing because `upsert_machine_block` returns identical text), matching `renarrate` semantics.
 
-   **Fail-soft posture (explicit).** Sub-step 3.5 is a portal refresh. A narrator failure, a parse error, or a `--set-leadin` per-theme failure **never rolls back the synthesis** — the synthesis page, index entry, `entries_count` bump, `binding.json` append, `wiki/log.md` line, and sub-steps 1–3 are all already on disk. Surface failures loudly in Step 11 and continue. The `--set-leadin` index write and the `index.md` intro narrative splice are **both** locked + atomic (`_wiki_lock` + `atomic_write` / `atomic_write_text` via `overview_update.py narrative-splice --target-file index.md`), so a forced failure leaves no partial write on either page.
-
-   **Step 11** surfaces, on STAGE: `Portal: <N> lead-ins + overview proposed — review <WIKI_ROOT>/.cogni-wiki/portal-proposed.md, apply with --apply-portal`; on STAGE **with the first-authoring carve-out fired**: `✓ Portal: overview narrative authored (first finalize); <N> lead-in(s) proposed — review <WIKI_ROOT>/.cogni-wiki/portal-proposed.md, apply with --apply-portal`; on APPLY: `✓ Portal: <N> lead-ins refreshed + overview spliced`; on either skip, the corresponding skip message; on a fail-soft error, `⚠ portal refresh FAILED — <reason>; synthesis on disk`.
+   **Fail-soft** per the gate-wide posture: a narrator failure, a parse error, or a per-theme `--set-leadin` failure surfaces in Step 11 (which owns every portal summary line) and continues. Both write sites — the `--set-leadin` index write and the `index.md` intro narrative splice via `overview_update.py narrative-splice --target-file index.md` — are locked + atomic.
 
 3.5.1. **Render the curated root MAP (`wiki/index.md`).** Re-render the root portal as a curated progressive-disclosure MAP via `root_index.py render` — an overview-narrative intro plus one `## <theme>` section per real theme, each carrying its `PORTAL-LEADIN`/human lead-in forward verbatim and a single count-link line to the per-type sub-indexes (`Sources (40) · Concepts (12) · …`), with the per-page `- [[slug]]` bullets **dropped** (they live in the sub-indexes now). This is the **structural** curation of the root, distinct from sub-step 3.5's lead-in *narration*: it runs **unconditionally** (gated only by `--dry-run`, like the rest of finalize — **not** by `--no-portal`, which governs narration), so a default (STAGE) finalize still curates the root while the lead-in prose stays staged.
 
-   Run it **after** sub-step 3.5 (so a just-applied `PORTAL-LEADIN` span / `OVERVIEW-NARRATIVE` fold is carried into the MAP) and after Step 7's `wiki_index_update.py` (whose freshly-filed bullets this render drops). The renderer keeps the vendored `wiki_index_update.py` byte-identical (Option A) and is **idempotent + byte-stable** under the Step 10.5 sub-step-1 `lint --fix=all` reflow/collapse passes — the curated MAP carries no `- [[slug]]` bullets to re-sort and unique `##` headings to merge, so it is a fixpoint (a resume re-render is a no-op). Per-theme counts come from `sub_index.py`'s shared theme assignment, so they can never drift from the sub-indexes they link to. **Fail-soft** — a render error never rolls back the synthesis (already on disk from Steps 6–8); surface it in Step 11 and continue.
+   Run it **after** sub-step 3.5 (so a just-applied `PORTAL-LEADIN` span / `OVERVIEW-NARRATIVE` fold is carried into the MAP) and after Step 7's `wiki_index_update.py` (whose freshly-filed bullets this render drops). The renderer keeps the vendored `wiki_index_update.py` byte-identical (Option A) and is **idempotent + byte-stable** under the Step 10.5 sub-step-1 `lint --fix=all` reflow/collapse passes — the curated MAP carries no `- [[slug]]` bullets to re-sort and unique `##` headings to merge, so it is a fixpoint (a resume re-render is a no-op). Per-theme counts come from `sub_index.py`'s shared theme assignment, so they can never drift from the sub-indexes they link to. **Fail-soft** per the gate-wide posture.
 
    ```
    python3 "${CLAUDE_PLUGIN_ROOT}/scripts/root_index.py" render \
@@ -701,9 +718,7 @@ The inverted pipeline writes the wiki via forked agents + direct script calls, s
 
      `render` (re)assembles `wiki/concepts/index.md` under cogni-wiki's `_wiki_lock` + `_knowledge_lib.atomic_write_text`, carrying every existing lead-in forward and seeding a `MACHINE-OWNED:CONCEPTS-LEADIN:<theme-slug>` placeholder span for any theme that lacks one — so after this call every refresh-set theme has a span to splice into. Then, in an inline `python3` that imports `_wiki_lock` from `_wikilib` (resolved via `$WIKI_INGEST_SCRIPTS`, the `concept-store.py` posture) and acquires it, read the rendered page and for each narrated theme replace its span inner via `_knowledge_lib.upsert_machine_block(text, "CONCEPTS-LEADIN:<slugify(theme)>", prose)`, then `_knowledge_lib.atomic_write_text` the result. A theme whose prose is unchanged upserts identical text → no write churn (the renarrate no-op contract). The next finalize's `render` carries the spliced prose forward verbatim.
 
-   **Fail-soft posture (explicit).** Sub-step 3.6 is a concepts-outline refresh. A renderer failure, a narrator no-show, a parse error, or a per-theme splice failure **never rolls back the synthesis** — the synthesis page, index entry, `entries_count` bump, `binding.json` append, `wiki/log.md` line, and sub-steps 1–3.5 are all already on disk. Surface failures loudly in Step 11 and continue. The `render` re-assembly and the span splice are **both** locked + atomic (`_wiki_lock` + `atomic_write_text`), so a forced failure leaves no partial write on the concepts page.
-
-   **Step 11** surfaces, on STAGE: `Concepts: <N> lead-ins proposed — review <WIKI_ROOT>/.cogni-wiki/concepts-index-proposed.md, apply with --apply-concepts`; on APPLY: `✓ Concepts: <N> lead-ins refreshed`; on either skip, the corresponding skip message; on a fail-soft error, `⚠ concepts refresh FAILED — <reason>; synthesis on disk`.
+   **Fail-soft** per the gate-wide posture: a renderer failure, a narrator no-show, a parse error, or a per-theme splice failure surfaces in Step 11 (which owns every concepts summary line) and continues. Both the `render` re-assembly and the span splice are locked + atomic.
 
 3.7. **Render the syntheses sub-index (`wiki/syntheses/index.md`).** Re-render the machine-owned `wiki/syntheses/index.md` so the curated syntheses sub-index reflects the synthesis just deposited this run. This is the syntheses sibling of the `knowledge-ingest` Step 4 sources render and Step 4.5.6 questions render — the same generic deterministic renderer `knowledge-setup` seeds at bootstrap, distinct from sub-step 3.6's dedicated `concepts_index.py` lead-in refresh. The generic renderer groups each synthesis under the theme of its cited sources (`theme_via_backing_sources`, with an `Uncategorized` fallback) and reads section order from `wiki/index.md`'s `## <theme>` headings; it carries any narrator-authored `MACHINE-OWNED:SYNTHESES-LEADIN:<theme>` lead-in forward verbatim (no clobber). Run it **after** Step 7's `wiki_index_update.py` (which filed the synthesis under `## Syntheses`) — guaranteed here, since Step 10.5 runs after Steps 6/7/8.
 
@@ -720,7 +735,7 @@ The inverted pipeline writes the wiki via forked agents + direct script calls, s
        --lang "${OUTPUT_LANGUAGE:-en}"
    ```
 
-   **Fail-soft posture (explicit).** Sub-step 3.7 is a sub-index render. A renderer failure **never rolls back the synthesis** — the synthesis page, index entry, `entries_count` bump, `binding.json` append, `wiki/log.md` line, and sub-steps 1–3.6 are all already on disk. The render is lock-wrapped (`_wiki_lock`) + atomic (`atomic_write_text`) at its own write site and writes only when the proposed text differs byte-for-byte, so a forced failure leaves no partial page. `sub_index.py` is itself fail-soft (a missing wiki-scripts dir, a `_wikilib` import failure, or a non-wiki `--wiki-root` returns an error envelope rather than raising), so treat a non-zero result as a surfaced warning, never an abort. Surface the outcome in Step 11 and continue to sub-step 3.8.
+   **Fail-soft** per the gate-wide posture: surface a renderer failure in Step 11 and continue to sub-step 3.8.
 
 3.8. **Render the 5W1H perspectives overlay (`wiki/perspectives.md`).** Re-render the machine-owned `wiki/perspectives.md` — the derived overlay that re-projects the canonical type-first layout by perspective (Who/What/Why backed by the surviving types; When/Where/How render honestly empty) WITHOUT changing the canonical layout. It is the cross-type sibling of the per-type sub-index renders above; its counts come from the same `sub_index.theme_counts` assignment, so the overlay can never drift from the sub-indexes. Run it **after** the per-type renders (sub-step 3.7 and the `knowledge-ingest`/distill renders that filed this run's pages) so the counts it reads are current.
 
@@ -732,9 +747,7 @@ The inverted pipeline writes the wiki via forked agents + direct script calls, s
        --wiki-scripts-dir "$WIKI_INGEST_SCRIPTS"
    ```
 
-   **Fail-soft posture (explicit).** Same posture as sub-step 3.7: a renderer failure **never rolls back the synthesis** (every prior write is already on disk). The render is lock-wrapped (`_wiki_lock`) + atomic (`atomic_write_text`) and writes only on a byte diff; `perspectives_index.py` returns an error envelope rather than raising on a missing wiki-scripts dir / `_wikilib` import failure / non-wiki `--wiki-root`, so treat a non-zero result as a surfaced warning, never an abort. A non-empty hand-authored `wiki/perspectives.md` (no `MACHINE-OWNED:PERSPECTIVES-INDEX` marker) is skipped (`skipped_human_page`), never clobbered. Surface the outcome in Step 11 and continue to sub-step 4.
-
-   **Step 11** surfaces, on a change: `✓ Perspectives overlay rendered (wiki/perspectives.md)`; on a no-op: `Perspectives overlay: already current (no change)`; on a skipped human page: `Perspectives overlay: skipped (hand-authored page)`; on a fail-soft error: `⚠ perspectives overlay render FAILED — <reason>; synthesis on disk`.
+   **Fail-soft** per the gate-wide posture: surface a renderer failure in Step 11 (which owns every perspectives summary line) and continue to sub-step 4. A non-empty hand-authored `wiki/perspectives.md` (no `MACHINE-OWNED:PERSPECTIVES-INDEX` marker) is skipped (`skipped_human_page`), never clobbered.
 
 4. **Rebuild `context_brief.md` (last).**
    ```
@@ -813,7 +826,7 @@ The inverted pipeline writes the wiki via forked agents + direct script calls, s
 
    **Close-attribution.** `finalize` is one of `rebuild_open_questions.py`'s `CLOSING_OPS` (`update`, `ingest`, `re-ingest`, `synthesis`, `finalize`). Since the post-ingest re-score (above), a sub-question this run **actually covered** scores `covered` and so is **absent** from the incoming stream — it is never deposited as a `- [ ] \`sq:<sq_id>\`` gap in the first place (the prior design opened then credit-closed it across two dispatches, surfacing every covered sub-question as a transient open gap and polluting the closed list with never-genuine items). Only a sub-question the pipeline **genuinely failed to cover** post-ingest streams as an open gap. The credit-close mechanism still attributes correctly for any genuine gap that a *later* run covers: `reconcile` closes an old open item the moment it leaves the incoming stream (`old` − `incoming`), and `attribute_close` scans `wiki/log.md` for the bare `<sq_id>` inside a finalize line's `sqs=` suffix to render `- [x] ~~\`sq:<sq_id>\` — …~~ — closed <date> by finalize`. The Step 10 `sqs=` suffix therefore deliberately keeps reading the **curate-time** `wiki-coverage.json` (via `gap_sq_ids_from_coverage`'s default) — it must name the curate-gaps that flipped to covered so their eventual close is attributed to finalize; pointing it at the post-ingest file would name still-uncovered sub-questions (which never close) and miss the covered ones. No second `wiki/log.md` line is written here (the Step 10 line is already on disk). A revisor pass that drops a sub-question's coverage is self-correcting — a later curate/finalize re-opens the gap per `reconcile`'s re-appearing-key semantics.
 
-   **Fail-soft posture (explicit).** Sub-step 5 is a backlog refresh. A non-zero exit, malformed envelope, or `_wiki_lock` contention **never rolls back the synthesis** — the synthesis page, index entry, `entries_count` bump, `binding.json` append, `wiki/log.md` line, and sub-steps 1–4 are all already on disk. The summary surfaces the failure loudly so the operator can run `cogni-wiki:wiki-lint` manually; the next finalize dispatch reconciles. (Verbatim mirror of cogni-wiki Step 8.5's failure-isolation contract; matches Step 10.6's posture.)
+   **Fail-soft** per the gate-wide posture: a non-zero exit, a malformed envelope, or `_wiki_lock` contention surfaces loudly in Step 11 so the operator can run `cogni-wiki:wiki-lint` manually; the next finalize dispatch reconciles. (Verbatim mirror of cogni-wiki Step 8.5's failure-isolation contract.)
 
    **Concurrency note.** `rebuild_open_questions.py` wraps the parse + reconcile + render + atomic write in `_wikilib._wiki_lock(wiki_root)`, so a concurrent `cogni-wiki:wiki-lint` dispatch from another session serialises rather than corrupts — the two dispatches converge on the on-disk lint findings only (which is the contract).
 

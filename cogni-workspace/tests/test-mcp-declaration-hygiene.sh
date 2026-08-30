@@ -426,8 +426,8 @@ fi
 
 # --- D1: the two wiki copies stay byte-identical --------------------------
 # No other suite covers this page: test-wiki-tree-parity.sh deliberately does
-# not assert tree equality, and test-layering-claim-reconciled.sh pins a
-# four-page allowlist this page is not on.
+# not assert tree equality, and test-layering-claim-reconciled.sh pins a named
+# allowlist this page is not on.
 
 if [ -f "$REPO_ROOT/$WIKI_PAGE_REL" ] && [ -f "$REPO_ROOT/$BUNDLED_PAGE_REL" ]; then
   if cmp -s "$REPO_ROOT/$WIKI_PAGE_REL" "$REPO_ROOT/$BUNDLED_PAGE_REL"; then

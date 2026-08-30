@@ -18,8 +18,36 @@
 #      all, both exit non-zero rather than reporting a clean zero.
 #   7. Real repo at branch head -> exit 0, and each of the three real claim
 #      sites reverted independently -> exit 1.
+#   8. The bare plugin-count arm: all three sites discovered on a clean fixture,
+#      and each drifting independently reports which one moved. One aggregated
+#      case could not tell them apart, which is what the site discriminator is
+#      for.
+#   9. Both halves of the fence decision. The identical tree line UNFENCED is
+#      not the tree claim; a fenced example inside the prose section is not a
+#      second intro claim. Drop either filter and one of the two reddens.
+#  10. The noun discriminates, not the digit: the same fence carries a guides
+#      count, so a loosened `(N <word>)` pattern reddens the clean fixture.
+#  11. The roll-up's own plugin count stays bound exactly once. It matches the
+#      bare pattern too and is kept out of reach only by region scoping.
+#  12. A prose rename reports a missing claim rather than passing, and a claim
+#      whose COUNT is deleted while its version-like qualifier remains reports
+#      missing rather than a count of zero — the one shape that grades the bare
+#      pattern's negative lookbehind.
 #
 # bash 3.2 + stdlib python3 only. No arguments, no network.
+#
+# Mutation recipe — replay to confirm the bare arm's comparison has teeth:
+#
+#   scripts/mutation-check.sh --root . \
+#     --file scripts/check-readme-inventory-sync.py \
+#     --expr 's/claim\["count"\] != len\(counts\)/False/m' \
+#     --test 'bash tests/test_check_readme_inventory_sync.sh' --case ris31
+#
+# That literal appears exactly once in the guard and is never echoed in its
+# docstring, its comments or a detail string — the expression is non-global
+# under `perl -0pi`, so an earlier copy would absorb the substitution, leave the
+# executable comparison intact, and grade nothing while still reporting a clean
+# rewrite.
 #
 # Result-line ids: every emitted PASS:/FAIL: line carries a first-token id
 # (risNN), unique PER EMITTED LINE rather than per logical case, so
@@ -95,9 +123,39 @@ make_marketplace() {
   } > "$root/.claude-plugin/marketplace.json"
 }
 
-# begin_readme <fixture-root>
+# begin_readme <fixture-root> <nplugins>
+#
+# Emits the lede region (everything before the first H2) carrying the lede
+# plugin-count claim, then the prose heading and the intro plugin-count claim.
+# Both are required for a fixture to be a VALID README under the bare-count arm:
+# absence of a site is a violation, so a fixture omitting them would report a
+# plugin-count-missing rather than the clean run its case asserts. The count is
+# passed in rather than defaulted, so each fixture states its own universe size
+# and no literal is shared between a fixture's manifest and its README.
 begin_readme() {
-  printf '# Fixture\n\n## What the plugins do\n\n' > "$1/README.md"
+  {
+    printf '# Fixture\n\n'
+    printf 'Open-source things. %s Apache-2.0 plugins that automate the work.\n\n' "$2"
+    printf '## What the plugins do\n\n'
+    printf '%s plugins organized around capability areas.\n\n' "$2"
+  } > "$1/README.md"
+}
+
+# add_tree <fixture-root> <nplugins> — the fenced tree-diagram region carrying
+# the third claim site, plus a same-fence decoy whose noun differs. The decoy is
+# baked into every green fixture on purpose: it is what makes those cases assert
+# that the tree pattern discriminates on the noun rather than on the digit, so
+# a pattern loosened to `(N <word>)` reddens them instead of passing.
+add_tree() {
+  {
+    printf '## How it works\n\n'
+    printf '```\n'
+    printf 'fixture/\n'
+    printf '|-- .claude-plugin/\n'
+    printf '|   `-- marketplace.json   # Marketplace manifest (%s plugins)\n' "$2"
+    printf '|-- docs/                  # Deep dives (9 guides)\n'
+    printf '```\n\n'
+  } >> "$1/README.md"
 }
 
 # add_prose <fixture-root> <name> <skills-phrase> <agents-phrase> [lead-in]
@@ -141,9 +199,10 @@ consistent_fixture() {
   make_plugin "$root" cogni-alpha 3 2
   make_plugin "$root" cogni-beta 1 1
   make_marketplace "$root" cogni-alpha cogni-beta
-  begin_readme "$root"
+  begin_readme "$root" 2
   add_prose "$root" cogni-alpha "3 skills" "2 agents"
   add_prose "$root" cogni-beta "1 skill" "1 agent"
+  add_tree "$root" 2
   begin_table "$root"
   add_row "$root" cogni-alpha 3 2
   add_row "$root" cogni-beta 1 1
@@ -298,8 +357,9 @@ assert v[0]['plugin'] is None, v
 MIDSENT="$WORK/mid-sentence"
 make_plugin "$MIDSENT" cogni-alpha 3 2
 make_marketplace "$MIDSENT" cogni-alpha
-begin_readme "$MIDSENT"
+begin_readme "$MIDSENT" 1
 add_prose "$MIDSENT" cogni-alpha "3 skills" "2 agents" "9 skills handle the whole lifecycle. "
+add_tree "$MIDSENT" 1
 begin_table "$MIDSENT"
 add_row "$MIDSENT" cogni-alpha 3 2
 add_rollup "$MIDSENT" 3 2 1
@@ -317,8 +377,9 @@ assert amb==[], amb
 NOAGENTS="$WORK/no-agents-dir"
 make_plugin "$NOAGENTS" cogni-alpha 2 0
 make_marketplace "$NOAGENTS" cogni-alpha
-begin_readme "$NOAGENTS"
+begin_readme "$NOAGENTS" 1
 add_prose "$NOAGENTS" cogni-alpha "2 skills" "0 agents"
+add_tree "$NOAGENTS" 1
 begin_table "$NOAGENTS"
 add_row "$NOAGENTS" cogni-alpha 2 0
 add_rollup "$NOAGENTS" 2 0 1
@@ -352,7 +413,7 @@ assert d['data']['files_scanned']==['README.md'], d['data']['files_scanned']
 NOCLAIMS="$WORK/no-claims"
 make_plugin "$NOCLAIMS" cogni-alpha 3 2
 make_marketplace "$NOCLAIMS" cogni-alpha
-begin_readme "$NOCLAIMS"
+begin_readme "$NOCLAIMS" 1
 printf 'Prose with no count claim at all.\n\n' >> "$NOCLAIMS/README.md"
 begin_table "$NOCLAIMS"
 run_guard "$NOCLAIMS"
@@ -386,9 +447,10 @@ REORDERED="$WORK/reordered"
 make_plugin "$REORDERED" cogni-alpha 3 2
 make_plugin "$REORDERED" cogni-beta 1 1
 make_marketplace "$REORDERED" cogni-alpha cogni-beta
-begin_readme "$REORDERED"
+begin_readme "$REORDERED" 2
 add_prose "$REORDERED" cogni-alpha "3 skills" "2 agents"
 add_prose "$REORDERED" cogni-beta "1 skill" "1 agent"
+add_tree "$REORDERED" 2
 begin_table "$REORDERED"
 add_row "$REORDERED" cogni-beta 1 1
 add_row "$REORDERED" cogni-alpha 3 2
@@ -502,7 +564,7 @@ assert len(v)==1, d['data']['violations']
 NO_HEADER="$WORK/table-header-unrecognized"
 make_plugin "$NO_HEADER" cogni-alpha 3 2
 make_marketplace "$NO_HEADER" cogni-alpha
-begin_readme "$NO_HEADER"
+begin_readme "$NO_HEADER" 1
 add_prose "$NO_HEADER" cogni-alpha "3 skills" "2 agents"
 {
   printf '## Plugins at a glance\n\n'
@@ -528,8 +590,9 @@ assert unparsable==[], unparsable
 SHIFTED="$WORK/table-columns-shifted"
 make_plugin "$SHIFTED" cogni-alpha 3 2
 make_marketplace "$SHIFTED" cogni-alpha
-begin_readme "$SHIFTED"
+begin_readme "$SHIFTED" 1
 add_prose "$SHIFTED" cogni-alpha "3 skills" "2 agents"
+add_tree "$SHIFTED" 1
 {
   printf '## Plugins at a glance\n\n'
   printf '| Plugin | Capability | Maturity | Skills | Agents | What it does |\n'
@@ -539,6 +602,260 @@ add_prose "$SHIFTED" cogni-alpha "3 skills" "2 agents"
 add_rollup "$SHIFTED" 3 2 1
 run_guard "$SHIFTED"
 check "ris29 a count column shifted by an inserted column is still read correctly" "$([ "$CODE" -eq 0 ] && echo 0 || echo 1)"
+
+# --------------------------------------------------------------- case 18
+# The bare plugin-count arm: three sites, three regions. ris30 pins that all
+# three are discovered on a clean fixture AND that the same-fence decoy is not
+# read — the tree claim must come back as the plugin count, never the guides
+# count that shares its fence and its shape.
+run_guard "$CONSISTENT"
+assert_json "ris30 the three bare plugin-count sites are discovered and the same-fence decoy is not" "$OUT" "
+import json,sys
+d=json.load(sys.stdin)
+assert d['success'] is True, d
+c=d['data']['plugin_count_claims']
+assert sorted(c)==['intro','lede','tree'], c
+assert [c[k]['count'] for k in ('lede','intro','tree')]==[2,2,2], c
+assert all(isinstance(c[k]['line'],int) for k in c), c
+"
+
+# ris31-ris36: each of the three sites drifts INDEPENDENTLY and the guard names
+# which one. One aggregated case could not distinguish them, which is the whole
+# point of the site discriminator.
+BARE_LEDE="$WORK/bare-lede"
+consistent_fixture "$BARE_LEDE"
+mutate "$BARE_LEDE/README.md" ". 2 Apache-2.0 plugins that automate" ". 3 Apache-2.0 plugins that automate"
+run_guard "$BARE_LEDE"
+check "ris31 a drifted lede plugin count exits 1" "$([ "$CODE" -eq 1 ] && echo 0 || echo 1)"
+assert_json "ris32 the drifted lede count reports plugin-count-mismatch naming the lede site" "$OUT" "
+import json,sys
+d=json.load(sys.stdin)
+v=[x for x in d['data']['violations'] if x['code']=='plugin-count-mismatch']
+assert len(v)==1, d['data']['violations']
+assert v[0]['site']=='lede', v
+assert isinstance(v[0]['line'],int), v
+"
+
+BARE_INTRO="$WORK/bare-intro"
+consistent_fixture "$BARE_INTRO"
+mutate "$BARE_INTRO/README.md" "2 plugins organized around" "3 plugins organized around"
+run_guard "$BARE_INTRO"
+check "ris33 a drifted intro plugin count exits 1" "$([ "$CODE" -eq 1 ] && echo 0 || echo 1)"
+assert_json "ris34 the drifted intro count reports plugin-count-mismatch naming the intro site" "$OUT" "
+import json,sys
+d=json.load(sys.stdin)
+v=[x for x in d['data']['violations'] if x['code']=='plugin-count-mismatch']
+assert len(v)==1, d['data']['violations']
+assert v[0]['site']=='intro', v
+assert isinstance(v[0]['line'],int), v
+"
+
+BARE_TREE="$WORK/bare-tree"
+consistent_fixture "$BARE_TREE"
+mutate "$BARE_TREE/README.md" "Marketplace manifest (2 plugins)" "Marketplace manifest (3 plugins)"
+run_guard "$BARE_TREE"
+check "ris35 a drifted tree plugin count exits 1" "$([ "$CODE" -eq 1 ] && echo 0 || echo 1)"
+assert_json "ris36 the drifted tree count reports plugin-count-mismatch naming the tree site" "$OUT" "
+import json,sys
+d=json.load(sys.stdin)
+v=[x for x in d['data']['violations'] if x['code']=='plugin-count-mismatch']
+assert len(v)==1, d['data']['violations']
+assert v[0]['site']=='tree', v
+assert isinstance(v[0]['line'],int), v
+"
+
+# ris37: a prose RENAME around a claim cannot silently disarm the site. The
+# number is untouched and still correct; only the noun moved.
+BARE_RENAMED="$WORK/bare-renamed"
+consistent_fixture "$BARE_RENAMED"
+mutate "$BARE_RENAMED/README.md" "2 Apache-2.0 plugins that automate" "2 Apache-2.0 extensions that automate"
+run_guard "$BARE_RENAMED"
+assert_json "ris37 renaming the lede noun reports plugin-count-missing rather than passing" "$OUT" "
+import json,sys
+d=json.load(sys.stdin)
+assert d['success'] is False, d
+v=[x for x in d['data']['violations'] if x['code']=='plugin-count-missing']
+assert len(v)==1, d['data']['violations']
+assert v[0]['site']=='lede', v
+"
+
+# ris38: the in-fence half of the fence decision. The identical tree line,
+# unfenced, is NOT the tree claim — so a guard that dropped the fence filter
+# and scanned every line would find it here and this case would redden.
+NOFENCE="$WORK/tree-unfenced"
+make_plugin "$NOFENCE" cogni-alpha 3 2
+make_marketplace "$NOFENCE" cogni-alpha
+begin_readme "$NOFENCE" 1
+add_prose "$NOFENCE" cogni-alpha "3 skills" "2 agents"
+{
+  printf '## How it works\n\n'
+  printf 'fixture/\n'
+  printf '|   `-- marketplace.json   # Marketplace manifest (1 plugins)\n\n'
+} >> "$NOFENCE/README.md"
+begin_table "$NOFENCE"
+add_row "$NOFENCE" cogni-alpha 3 2
+add_rollup "$NOFENCE" 3 2 1
+run_guard "$NOFENCE"
+assert_json "ris38 an unfenced tree line is not the tree claim" "$OUT" "
+import json,sys
+d=json.load(sys.stdin)
+miss=[x for x in d['data']['violations'] if x['code']=='plugin-count-missing']
+assert len(miss)==1, d['data']['violations']
+assert miss[0]['site']=='tree', miss
+mism=[x for x in d['data']['violations'] if x['code']=='plugin-count-mismatch']
+assert mism==[], mism
+"
+
+# ris39: the out-of-fence half of the same decision. A fenced example carrying a
+# second bare count sits INSIDE the prose section — placement is load-bearing,
+# because a fence under its own H2 would fall outside the prose bounds and be
+# skipped by region scoping, grading the fence filter not at all. Here, drop the
+# unfenced filter and the region carries two matches, so the intro site degrades
+# to plugin-count-ambiguous and this case reddens.
+FENCED_EXAMPLE="$WORK/fenced-example"
+make_plugin "$FENCED_EXAMPLE" cogni-alpha 3 2
+make_plugin "$FENCED_EXAMPLE" cogni-beta 1 1
+make_marketplace "$FENCED_EXAMPLE" cogni-alpha cogni-beta
+begin_readme "$FENCED_EXAMPLE" 2
+add_prose "$FENCED_EXAMPLE" cogni-alpha "3 skills" "2 agents"
+{
+  printf '```\n'
+  printf 'Example README: 5 plugins organized around capability areas.\n'
+  printf '```\n\n'
+} >> "$FENCED_EXAMPLE/README.md"
+add_prose "$FENCED_EXAMPLE" cogni-beta "1 skill" "1 agent"
+add_tree "$FENCED_EXAMPLE" 2
+begin_table "$FENCED_EXAMPLE"
+add_row "$FENCED_EXAMPLE" cogni-alpha 3 2
+add_row "$FENCED_EXAMPLE" cogni-beta 1 1
+add_rollup "$FENCED_EXAMPLE" 4 3 2
+run_guard "$FENCED_EXAMPLE"
+assert_json "ris39 a fenced example inside the prose section is not a second intro claim" "$OUT" "
+import json,sys
+d=json.load(sys.stdin)
+assert d['success'] is True, d
+c=d['data']['plugin_count_claims']
+assert c['intro']['count']==2, c
+amb=[x for x in d['data']['violations'] if x['code']=='plugin-count-ambiguous']
+assert amb==[], amb
+"
+
+# ris40: the roll-up's own plugin count stays bound EXACTLY ONCE. It matches the
+# bare pattern too, and is kept out of reach only by region scoping — so a new
+# arm that widened its regions would report the same drift twice.
+DOUBLE_BIND="$WORK/double-bind"
+consistent_fixture "$DOUBLE_BIND"
+mutate "$DOUBLE_BIND/README.md" "across the 2 active plugins" "across the 3 active plugins"
+run_guard "$DOUBLE_BIND"
+assert_json "ris40 a drifted roll-up plugin count is reported once, by the roll-up arm alone" "$OUT" "
+import json,sys
+d=json.load(sys.stdin)
+r=[x for x in d['data']['violations'] if x['code']=='rollup-plugin-count-mismatch']
+assert len(r)==1, d['data']['violations']
+p=[x for x in d['data']['violations'] if x['code'].startswith('plugin-count-')]
+assert p==[], p
+"
+
+# ris41: the arm's basis is the same universe the roll-up arm compares against —
+# the plugins whose source normalises to a countable directory, not every entry
+# the manifest lists. This fixture is the day the two differ: keyed off
+# len(plugins) instead, every bare site would report a mismatch here.
+UNUSABLE_SRC="$WORK/unusable-source"
+make_plugin "$UNUSABLE_SRC" cogni-alpha 3 2
+mkdir -p "$UNUSABLE_SRC/.claude-plugin"
+{
+  printf '{\n  "name": "fixture",\n  "plugins": [\n'
+  printf '    {"name": "cogni-alpha", "source": "./cogni-alpha", "version": "0.0.1"},\n'
+  printf '    {"name": "cogni-beta", "source": "/absolute/cogni-beta", "version": "0.0.1"}\n'
+  printf '  ]\n}\n'
+} > "$UNUSABLE_SRC/.claude-plugin/marketplace.json"
+begin_readme "$UNUSABLE_SRC" 1
+add_prose "$UNUSABLE_SRC" cogni-alpha "3 skills" "2 agents"
+add_tree "$UNUSABLE_SRC" 1
+begin_table "$UNUSABLE_SRC"
+add_row "$UNUSABLE_SRC" cogni-alpha 3 2
+add_rollup "$UNUSABLE_SRC" 3 2 1
+run_guard "$UNUSABLE_SRC"
+assert_json "ris41 the bare arm counts the same universe the roll-up arm does" "$OUT" "
+import json,sys
+d=json.load(sys.stdin)
+assert d['success'] is True, d
+assert d['data']['plugins_enumerated']==1, d['data']
+c=d['data']['plugin_count_claims']
+assert [c[k]['count'] for k in ('lede','intro','tree')]==[1,1,1], c
+"
+
+# ris42-ris44: the three REAL claim sites, reverted independently against a
+# scratch copy, each count derived at run time. A restated literal here would go
+# stale the day the plugin roster moves and abort the suite.
+REAL_LEDE=$(real_scratch real-bare-lede)
+ANCHOR_OK=0
+revert_claim "$REAL_LEDE/README.md" 's/.*\. ([0-9]+) Apache-2.0 plugins that automate.*/\1/p' \
+  '. ' ' Apache-2.0 plugins that automate' || ANCHOR_OK=1
+run_guard "$REAL_LEDE"
+check "ris42 real README with the lede plugin count reverted exits 1" "$([ "$ANCHOR_OK" -eq 0 ] && [ "$CODE" -eq 1 ] && echo 0 || echo 1)"
+
+REAL_INTRO=$(real_scratch real-bare-intro)
+ANCHOR_OK=0
+revert_claim "$REAL_INTRO/README.md" 's/^([0-9]+) plugins organized around.*/\1/p' \
+  '' ' plugins organized around' || ANCHOR_OK=1
+run_guard "$REAL_INTRO"
+check "ris43 real README with the intro plugin count reverted exits 1" "$([ "$ANCHOR_OK" -eq 0 ] && [ "$CODE" -eq 1 ] && echo 0 || echo 1)"
+
+REAL_TREE=$(real_scratch real-bare-tree)
+ANCHOR_OK=0
+revert_claim "$REAL_TREE/README.md" 's/.*Marketplace manifest \(([0-9]+) plugins\).*/\1/p' \
+  'Marketplace manifest (' ' plugins)' || ANCHOR_OK=1
+run_guard "$REAL_TREE"
+check "ris44 real README with the fenced tree plugin count reverted exits 1" "$([ "$ANCHOR_OK" -eq 0 ] && [ "$CODE" -eq 1 ] && echo 0 || echo 1)"
+
+# ris45: the real README carries all three sites, each at the live universe size.
+run_guard "$REAL_CLEAN"
+assert_json "ris45 the real README carries all three bare sites at the live plugin count" "$OUT" "
+import json,sys
+d=json.load(sys.stdin)
+assert d['success'] is True, d
+n=d['data']['plugins_enumerated']
+c=d['data']['plugin_count_claims']
+assert sorted(c)==['intro','lede','tree'], c
+assert [c[k]['count'] for k in c]==[n,n,n], (c,n)
+"
+
+# ris46: the count is DELETED while its qualifier and noun remain. This is the
+# only shape that grades the bare pattern's negative lookbehind: without it the
+# trailing digit of the version-like qualifier is read as the count, so the site
+# reports a mismatch against a claim of zero instead of the missing claim it is.
+COUNTLESS="$WORK/bare-countless"
+consistent_fixture "$COUNTLESS"
+mutate "$COUNTLESS/README.md" "Open-source things. 2 Apache-2.0 plugins" "Open-source things. Apache-2.0 plugins"
+run_guard "$COUNTLESS"
+assert_json "ris46 a lede claim whose count is deleted reports missing, never a count of zero" "$OUT" "
+import json,sys
+d=json.load(sys.stdin)
+miss=[x for x in d['data']['violations'] if x['code']=='plugin-count-missing']
+assert len(miss)==1, d['data']['violations']
+assert miss[0]['site']=='lede', miss
+mism=[x for x in d['data']['violations'] if x['code']=='plugin-count-mismatch']
+assert mism==[], mism
+"
+
+# ris47: a site carrying TWO candidates is ambiguous, and ambiguous ALONE. The
+# two findings call for opposite fixes — one region has too many candidates, the
+# other none — so reporting both would send the reader at the wrong edit.
+AMBIG="$WORK/bare-ambiguous"
+consistent_fixture "$AMBIG"
+mutate "$AMBIG/README.md" "2 plugins organized around capability areas." \
+  $'2 plugins organized around capability areas.\n\nA second sentence claims 2 plugins outright.'
+run_guard "$AMBIG"
+assert_json "ris47 an ambiguous site is reported as ambiguous alone, never also as missing" "$OUT" "
+import json,sys
+d=json.load(sys.stdin)
+amb=[x for x in d['data']['violations'] if x['code']=='plugin-count-ambiguous']
+assert len(amb)==1, d['data']['violations']
+assert amb[0]['site']=='intro', amb
+miss=[x for x in d['data']['violations'] if x['code']=='plugin-count-missing']
+assert miss==[], miss
+"
 
 echo
 if [ "$FAILED" -eq 0 ]; then

@@ -46,7 +46,7 @@ The brief describes WHAT each section says and which section type to use. The Pe
 | `customer_name` / `provider_name` | from metadata | Organization names |
 | `output_path` | `{source_dir}/cogni-visual/web-brief.md` | Brief output location. In `mode=storyboard` the default filename is `storyboard-brief.md` instead. |
 | `conversion_goal` | `consultation` | CTA type: consultation, demo, download, trial, contact, calculate |
-| `max_sections` | `10` | Maximum section count (forces consolidation if narrative is long). Governs decomposition in both modes. |
+| `max_sections` | `10` | Maximum section count (forces consolidation if narrative is long). Governs decomposition in both modes; in `mode=storyboard` poster capacity (`poster_count` x 3) can bind tighter — see Step 5b. |
 | `mode` | `web` | Output mode. `web` emits a scrollable `web-brief.md`; `storyboard` paginates the same sections into printed posters and emits a `storyboard-brief.md`. |
 | `poster_size` | `A1` | **`mode=storyboard` only.** DIN A0-A3, portrait. Dimensions and scale factor resolve from `storyboard-layouts.md`. |
 | `max_posters` | `4` | **`mode=storyboard` only.** Poster count cap, range 3-5. |
@@ -285,14 +285,16 @@ For each section:
 
 **Read reference:** `references/print/01-poster-architecture.md`
 
-1. **Poster count from narrative length**, then cap at `max_posters` — take the word-count thresholds and the 3-5 bound from the reference's poster-count decision tree.
+1. **Poster count from narrative length**, then cap at `max_posters` — take the word-count thresholds and the 3-5 bound from the reference's poster-count decision tree. Then resolve section capacity (`poster_count` x 3) per the capacity note below before mapping stations in item 2.
 2. **Map arc stations to posters** using the poster templates in the reference.
 3. **Stack 1-3 sections per poster**, taking the height splits, the split-ratio selection rules and the portrait adaptations from `$CLAUDE_PLUGIN_ROOT/libraries/storyboard-layouts.md` — the same library item 4 reads for geometry, and the authoritative home for all three. `references/print/01-poster-architecture.md` restates them for readers arriving from the poster templates.
 4. **Resolve poster geometry from `poster_size`.** Read the scale-factor table in `$CLAUDE_PLUGIN_ROOT/libraries/storyboard-layouts.md` (A0-A3, portrait only): that row gives `print_width`, `print_height` and `scale_factor`. `base_width` / `base_height` are the fixed design resolution 1440 x 2036, and `poster_gap` defaults to that library's base gap of 200px. With `poster_size` and the `poster_count` from item 1, these are exactly the eight frontmatter fields Step 10 writes.
 
+**Section capacity — `poster_count` x 3 — is the binding cap here, not `max_sections`.** Resolve it before item 2's station mapping: Step 5 caps the raw section count at `max_sections`, which can exceed capacity whenever the resolved poster count sits at the low end of the 3-5 bound. When `section_count` exceeds `poster_count` x 3, re-run the too-many-sections reduction in `references/02-section-architecture.md` (§ Step 4: Enforce Section Count -> Too Many Sections (> 10)) with `poster_count` x 3 as the target in place of `max_sections`, including in that block's own validation checkpoint. Adding posters is not an alternative — item 1's count is final.
+
 The reference's poster-count constraints and prohibited patterns bind here rather than advise: a title-only or summary-only poster spends a whole station on nothing the reader can act on, so the first poster opens on `hero`, the last closes on `cta`, and related stations merge instead of the count ever exceeding 5.
 
-**Content checkpoint:** State poster count, the station-to-poster mapping, the height split per poster, and the resolved poster geometry.
+**Content checkpoint:** State poster count, the station-to-poster mapping, the height split per poster, and the resolved poster geometry, and confirm `section_count` is at most `poster_count` x 3.
 
 ---
 
@@ -450,8 +452,10 @@ Generate the final brief with YAML frontmatter and section specifications follow
 
 **`mode=storyboard` only:** follow `$CLAUDE_PLUGIN_ROOT/libraries/EXAMPLE_STORYBOARD_BRIEF.md` instead — its frontmatter and body schema are the contract the `storyboard` agent parses, so reproduce both exactly rather than adapting the web shape. Frontmatter carries the eight poster-geometry fields resolved in Step 5b alongside the shared theme/arc fields — carry them through unchanged rather than recomputing them here; the body is one `## Poster N` block per poster, each holding its 1-3 stacked section YAML blocks with `section_theme` and `height_percent`.
 
+**`industry` provenance.** `industry` is not a caller parameter — it is inferred from the narrative's own content (sector language, customer and process vocabulary), the inference `references/04-image-prompts.md` § Prompt Consistency Rules item 3 already requires of every image prompt. Record the inferred value in the storyboard brief's `industry` frontmatter field so the `storyboard` agent and the print image prompts read one consistent value; in `mode=web` the inference stays implicit in the image prompts and `EXAMPLE_WEB_BRIEF.md` writes no such frontmatter field.
+
 **Final checks:**
-- YAML frontmatter complete (type, version, theme, theme_path, conversion_goal, arc_id if available, confidence_score as average of per-section scores)
+- YAML frontmatter complete (type, version, theme, theme_path, conversion_goal, arc_id if available, confidence_score as average of per-section scores; plus `industry` in `mode=storyboard`)
 - Header and footer sections present (`mode=web` only)
 - All sections specified with type, section_theme, arc_role, headline, confidence
 - First section is hero (dark), last content section is CTA (accent)
@@ -522,7 +526,6 @@ Replace `{absolute_path_to_storyboard_brief}` with the `output_path` resolved in
 | **print/02-poster-copywriting.md** | 6, 8 | *(`mode=storyboard`)* Print-vs-web copy overrides, poster governing-headline rules |
 | **print/03-image-prompts.md** | 6 | *(`mode=storyboard`)* Print-resolution prompt suffix, max-2-images rule, poster image sizing |
 | **print/04-validation.md** | 9 | *(`mode=storyboard`)* Replaces 05-validation.md — all four layers against the storyboard schema, plus print-specific checks and poster font-size minimums |
-| **cta-taxonomy.md** (library) | 6b | CTA types, urgency levels, arc-to-CTA heuristics |
 
 ### Libraries (loaded as needed)
 

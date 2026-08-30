@@ -55,24 +55,60 @@
 # stay GREEN under it, because every one of them runs the default route where
 # requested is empty -- which is why the narrow path needed a case of its own.
 #
-# Fourth recipe, for the null-suggestion arm (the discriminator is
-# cc31-null-suggestion-is-present-and-null):
+# Fourth recipe, for the null arm (the discriminator is
+# cc33-null-arm-is-reachable-above-sqrt21):
 #
 #   bash "$HOME/.claude/plugins/marketplaces/managed-service/cogni-service/scripts/mutation-check.sh" \
 #     --root . \
 #     --file cogni-workspace/scripts/check-contrast.py \
 #     --expr 's{^    return None$}{    return "#000000"}m' \
 #     --test 'bash cogni-workspace/tests/test-check-contrast.sh' \
-#     --case cc31-null-suggestion-is-present-and-null
+#     --case cc33-null-arm-is-reachable-above-sqrt21
 #
-# The mutant turns the null-suggestion branch into a constant return, so the
-# discriminator reads (True, '#000000', 1) instead of (True, None, 1). The anchor
-# is single-occurrence: check-contrast.py carries three `return None`, and only
-# suggest_hex's is four-space indented -- parse_hex's two are eight-space, which
-# the `^    ` anchor excludes. cc13/cc14 stay GREEN under the mutant because the
-# BELOW_45 fixture's walk returns early and never reaches the mutated line, and
-# cc15 stays GREEN because a passing pair never calls suggest_hex at all -- which
-# is why this arm needed a case of its own.
+# The mutant turns the null arm into a constant return, so the discriminator
+# reads '#000000' instead of None. The anchor is single-occurrence, and it is
+# the `$` that makes it so: `^    return None` matches TWO lines -- the
+# docstring's closing words at :172 (`    return None.`) and suggest_hex's arm
+# at :208 -- while `^    return None$` matches one, the trailing period
+# excluding the docstring (`grep -cE '^    return None$'` returns 1). Indentation
+# alone no longer discriminates, though it still excludes parse_hex's two at
+# :129/:132, which are eight-space. The discriminator has to be a DIRECT call
+# (cc33), because the arm is no longer reachable through the palette CLI at all:
+# both thresholds it exposes sit below sqrt(21) (derived in suggest_hex's own
+# docstring). cc13/cc14 stay
+# GREEN because the BELOW_45 walk returns early, cc15 stays GREEN because a
+# passing pair never calls suggest_hex, and cc31 now stays GREEN too -- post-fix
+# it returns from the endpoint branch and never reaches the mutated line. cc33
+# is the only case that reads it, which is why the arm needed a direct-call case
+# of its own.
+#
+# Fifth recipe, for the endpoint evaluation itself. It has TWO discriminators,
+# cc31-endpoint-suggestion-is-present-and-black and cc32-white-endpoint-is-suggested;
+# run it once per --case:
+#
+#   bash "$HOME/.claude/plugins/marketplaces/managed-service/cogni-service/scripts/mutation-check.sh" \
+#     --root . \
+#     --file cogni-workspace/scripts/check-contrast.py \
+#     --expr 's{return to_hex\(endpoint\)}{pass}' \
+#     --test 'bash cogni-workspace/tests/test-check-contrast.sh' \
+#     --case cc31-endpoint-suggestion-is-present-and-black
+#
+# The mutant scores the endpoint but never returns it, which is exactly the
+# pre-fix behaviour, so the witness falls back to None and cc31 reads
+# (True, None, 1). The anchor is single-occurrence: the only other
+# `to_hex(endpoint)` is inside `parse_hex(to_hex(endpoint))`, which the
+# `return ` prefix excludes. `pass` is a valid statement in that block, so the
+# mutant stays syntactically valid.
+#
+# The SECOND discriminator is what keeps cc32 honest, and it is why cc32's
+# threshold needs no prose warning about the walk's step. cc32 is only
+# meaningful if the endpoint branch is what answers it; were the stepped walk
+# ever to clear 21.0 by itself, cc32 would go vacuously green and no assertion
+# in this file would notice. Under this mutant the endpoint branch cannot
+# answer, so a still-green cc32 IS the vacuity report. Run it whenever `step`
+# in suggest_hex changes:
+#
+#     ... --case cc32-white-endpoint-is-suggested
 
 set -u
 
@@ -261,38 +297,93 @@ fi
 assert_eq "cc15-passing-pair-has-no-suggestion" "None" \
   "$(field "$ABOVE_45" "data['pairs'][0].get('suggested_hex')" --pair fg:bg)"
 
-# suggest_hex returns None here, but NOT because the hue is unreachable. The -1
-# walk genuinely never clears -- best 4.4883 at #030303. The +1 walk DOES clear
-# unsnapped at lightness 0.99 (ratio 4.5084) and is rejected only by the module's
-# own snapped re-verification: #FCFCFC re-scores 4.4910, below 4.5. Both true
-# endpoints would clear (#000000 = 4.5578, #FFFFFF = 4.6075) and are never
-# evaluated, because the accumulating `candidate_lightness += direction * step`
-# terminates at -3.1e-17 and 1.0000000000000007, so the range guard breaks one
-# step short of pure black and pure white. The None is the conjunction of those
-# two facts, so a walk refactor that lands exactly on 0.0/1.0 will legitimately
-# turn this case red -- review that as an intentional behaviour change, not a
-# broken fixture. The endpoint miss itself is tracked separately as issue 1684.
+# This pair fails 4.5 (ratio 2.7422) and its clearing shade is an ENDPOINT --
+# which is the whole reason it is the fixture for cc31. suggest_hex used to
+# return None here, and not because the hue was unreachable: the accumulating
+# `candidate_lightness += direction * step` terminates at -3.1e-17 and
+# 1.0000000000000007, so the range guard broke one step short of pure black and
+# pure white and neither endpoint was ever scored. Scoring them is what turned
+# this case from present-and-null into present-and-black; the pre-fix fixture
+# comment pre-declared that red as an intentional behaviour change.
+#
+# Deliberately NOT restated here: why the None arm survives, and how often the
+# fix changes an answer that already existed. The first is derived in
+# suggest_hex's own docstring (the ratio_black * ratio_white == 21 identity and
+# the sqrt(21) bound it implies) and pinned by cc33; read it there rather than
+# from a second copy. The second is a whole-input-space measurement that nothing
+# in this suite executes, so it belongs to the change's own record -- the pull
+# request for issue 1684 carries the sweep -- not to a comment that would go
+# stale the next time the walk changes. Every claim kept in this block is one
+# the adjacent assertion, or a mutation recipe in the header, actually runs.
+#
+# NULL_SUGGESTION and the nullsuggestion slug keep their names on purpose: this
+# fg/bg pair IS the None-arm pair, the one cc33 drives at threshold 21.0 to reach
+# the arm. Renaming it for the 4.5 answer below would sever that cc31-cc33 link
+# and retire the token a later concept-grep would search the arm by.
 NULL_SUGGESTION="$(palette nullsuggestion '{"fg":"#333333","bg":"#757575"}')"
 
-assert_ratio "cc31-null-suggestion-ratio" "2.7422" \
+assert_ratio "cc31-endpoint-suggestion-ratio" "2.7422" \
   "$(field "$NULL_SUGGESTION" "data['pairs'][0]['ratio']" --pair fg:bg)"
 
-# Present-and-null, NOT the absent key cc15 pins: evaluate_pair sets
-# suggested_hex only when the pair fails, so a bare .get() renders both states
-# as None and would grade vacuously -- the membership test is the discriminator.
+# Present-and-BLACK, NOT the absent key cc15 pins: evaluate_pair sets
+# suggested_hex only when the pair fails, so post-fix a bare .get() would already
+# discriminate here -- '#000000' present against None absent. The membership test
+# adds no failure mode of its own: it shares a tuple with a direct index, so an
+# evaluate_pair regression that stops emitting the key raises KeyError there
+# first and both halves redden together as an empty capture -- the membership
+# half's False can never actually print. It is kept as the explicit present-side
+# statement of the contract cc15 pins from the absent side.
 # data['evaluated'] is co-asserted as in cc28.
-assert_eq "cc31-null-suggestion-is-present-and-null" "(True, None, 1)" \
+assert_eq "cc31-endpoint-suggestion-is-present-and-black" "(True, '#000000', 1)" \
   "$(field "$NULL_SUGGESTION" "('suggested_hex' in data['pairs'][0], data['pairs'][0]['suggested_hex'], data['evaluated'])" --pair fg:bg)"
 
-# A null suggestion is data, not an error. This deliberately bypasses field(),
+# A failing pair with a suggestion is data, not an error. This deliberately bypasses field(),
 # which reads payload.get('data') and DISCARDS payload['success'] -- same
 # inline-python idiom as cc17, keeping --pair fg:bg so all three assertions
 # grade the same invocation.
-assert_eq "cc31-null-suggestion-envelope-succeeds" "(True, True)" \
+assert_eq "cc31-endpoint-suggestion-envelope-succeeds" "(True, True)" \
   "$(python3 "$SCRIPT" "$NULL_SUGGESTION" --pair fg:bg 2>/dev/null | python3 -c "
 import json, sys
 payload = json.load(sys.stdin)
 print((payload['success'], 'fg on bg' in payload['data']['failures']))" 2>/dev/null)"
+
+# cc32 and cc33 call suggest_hex directly rather than through the palette CLI,
+# because both need a threshold the CLI does not expose. Loading the module by
+# path is safe -- check-contrast.py guards its entry point behind __main__ --
+# and uses the same spec_from_file_location idiom as test-sanitize-theme.sh. The
+# verdict still routes through assert_eq, so each case emits a paired PASS/FAIL
+# id for scripts/check-case-id-pairing.py rather than a one-armed fail.
+suggest_call() {
+  python3 - "$SCRIPT" "$1" "$2" "$3" <<'PYX' 2>/dev/null
+import importlib.util, sys
+spec = importlib.util.spec_from_file_location("cc", sys.argv[1])
+mod = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(mod)
+print(mod.suggest_hex(mod.parse_hex(sys.argv[2]), mod.parse_hex(sys.argv[3]), float(sys.argv[4])))
+PYX
+}
+
+# The L=1.0 endpoint gets a case of its own so neither endpoint is left unpinned.
+# 21.0 is chosen because against a BLACK background only pure white reaches it:
+# the walk's best snapped candidate there measures 20.4689 at #FCFCFC, so the
+# isolating window is (20.4689, 21.0]. That window is MEASURED AT THE WALK'S
+# CURRENT 0.01 STEP, not derived, so changing `step` in suggest_hex means
+# re-deriving it -- and the header's fifth mutation recipe run with
+# --case cc32-white-endpoint-is-suggested is what reports it if you don't: under
+# that mutant the endpoint branch cannot answer, so a cc32 that stays green is a
+# cc32 the walk has started answering by itself. Pre-fix this returned None, so
+# the case is genuinely red at base rather than vacuously green.
+assert_eq "cc32-white-endpoint-is-suggested" "#FFFFFF" \
+  "$(suggest_call '#333333' '#000000' 21.0)"
+
+# The None arm is still reachable, so retiring it would have removed live code.
+# Against #757575 the endpoints score 4.5578 and 4.6075, both far below 21, so
+# the arm is genuinely reached. This case is green at base AND post-fix by
+# design: it pins the arm's continued reachability, not the endpoint fix, and its
+# teeth come from the fourth mutation recipe above rather than from this
+# assertion flipping.
+assert_eq "cc33-null-arm-is-reachable-above-sqrt21" "None" \
+  "$(suggest_call '#333333' '#757575' 21.0)"
 
 echo "=== G. palette handling ==="
 

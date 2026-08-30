@@ -156,8 +156,20 @@ def to_hex(rgb):
 def suggest_hex(fg_rgb, bg_rgb, threshold):
     """Walk the foreground's lightness at constant hue until it clears threshold.
 
-    Returns a hex string this module has itself re-verified against threshold,
-    or None when neither direction reaches it.
+    Each direction's exact endpoint -- L=0.0 for -1, L=1.0 for +1 -- is scored
+    once that direction's stepped walk is exhausted, so pure black and pure
+    white are always candidates. Returns a hex string this module has itself
+    re-verified against threshold after snapping.
+
+    None is returned only when neither the walk nor either endpoint clears. In
+    exact arithmetic the two endpoint ratios multiply to a constant for any
+    background -- ratio_black * ratio_white = ((L_bg + 0.05) / 0.05) *
+    (1.05 / (L_bg + 0.05)) = 1.05 / 0.05 = 21 -- so the larger of the two is
+    always at least sqrt(21) ~= 4.583. Both AA_NORMAL (4.5) and AA_LARGE (3.0)
+    sit below that bound, so a run driven through this module's CLI cannot
+    reach the None arm. threshold is a caller-supplied parameter, though: a
+    value strictly above ~4.583 -- a future WCAG AAA 7:1, say -- can still
+    return None.
     """
     hue, lightness, saturation = colorsys.rgb_to_hls(*fg_rgb)
     for direction in (-1, 1):
@@ -172,6 +184,27 @@ def suggest_hex(fg_rgb, bg_rgb, threshold):
                 snapped = parse_hex(to_hex(candidate))
                 if snapped and contrast_ratio(snapped, bg_rgb) >= threshold:
                     return to_hex(candidate)
+        # The accumulating walk terminates at -3.1e-17 / 1.0000000000000007
+        # rather than on the bound, so it never scores the endpoint itself.
+        # Score it here, after that direction is exhausted, which preserves the
+        # existing try order: a pair the walk already answers keeps the shade
+        # the walk found for it.
+        #
+        # The snap-and-re-verify below mirrors the walk deliberately and is NOT
+        # a redundant identity: hls_to_rgb(hue, 1.0, saturation) is not exactly
+        # (1, 1, 1) for every saturation -- at saturation 0.13 it comes back as
+        # (0.9999999999999999, 1.0, 1.0) -- so the endpoint candidate is not a
+        # constant and snapping it can move it. Do not "simplify" either check
+        # away on the assumption that it cannot.
+        endpoint_lightness = 0.0 if direction < 0 else 1.0
+        endpoint = colorsys.hls_to_rgb(hue, endpoint_lightness, saturation)
+        if contrast_ratio(endpoint, bg_rgb) >= threshold:
+            snapped = parse_hex(to_hex(endpoint))
+            if snapped and contrast_ratio(snapped, bg_rgb) >= threshold:
+                return to_hex(endpoint)
+    # Not dead code. Unreachable at both thresholds this CLI exposes, and
+    # reachable only STRICTLY above ~4.583 -- at exactly sqrt(21) the >=
+    # comparison still clears. Derivation in the docstring; cc33 pins it.
     return None
 
 

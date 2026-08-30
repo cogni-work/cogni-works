@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Relocated-skill hygiene guard for the skills and agents cogni-workspace adopted
-# from retired plugins: cogni-issues and troubleshoot (from cogni-help), claims
+# from retired plugins: cogni-issues (from cogni-help), the troubleshoot material
+# cogni-help contributed, now carried by workspace-status as its plugin-level tier, claims
 # and claim-entity (from cogni-claims), narrative and narrative-review plus three
 # agents (from cogni-narrative; the adopted narrative-adapt skill was later folded
 # into narrative, leaving its command and agent as the surviving entry points), and
@@ -84,7 +85,7 @@ REPO_ROOT="$(cd "$HERE/../.." && pwd)"
 # `find` over a regular file yields that file, so bare-file specs walk fine.
 TREE_SPECS="
 $WS_ROOT/skills/cogni-issues|cogni-help:
-$WS_ROOT/skills/troubleshoot|cogni-help:
+$WS_ROOT/skills/workspace-status|cogni-help:
 $WS_ROOT/skills/claims|cogni-claims:
 $WS_ROOT/skills/claim-entity|cogni-claims:
 $WS_ROOT/agents/claim-verifier.md|cogni-claims:
@@ -157,11 +158,12 @@ fail() { echo "FAIL: $1"; failures=$((failures + 1)); }
 # with no migration path — so a bare-name check would be red on arrival against
 # content the absorption is required to preserve.
 #
-# The same reasoning already applied to cogni-help: references/known-issues.md
-# documents the cogni-teacher -> cogni-help progress-file rename, and the
-# troubleshoot evals assert exactly that diagnosis. Those are prose about another
-# plugin, not a dispatch surface. The qualified form is the one that would break
-# at runtime.
+# The same reasoning already applied to cogni-help: the known-issues.md catalogue
+# documents the cogni-teacher -> cogni-help progress-file rename, and the evals
+# assert exactly that diagnosis. Both now live under skills/workspace-status/,
+# which is why that tree is the cogni-help arm's subject. Those are prose about
+# another plugin, not a dispatch surface. The qualified form is the one that
+# would break at runtime.
 #
 # P1 stays ONE aggregated case across all trees rather than splitting per tree,
 # so a mutation recipe resolving `--case P1` keeps matching a single label.

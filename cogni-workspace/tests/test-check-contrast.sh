@@ -317,19 +317,26 @@ assert_eq "cc15-passing-pair-has-no-suggestion" "None" \
 #     run can reach the arm. It is NOT dead code: threshold is a parameter, and
 #     a value strictly above ~4.583 still reaches it, which is what cc33 pins.
 #     Strictly above -- at exactly sqrt(21) the `>=` comparison still clears.
+# NULL_SUGGESTION and the nullsuggestion slug keep their names on purpose: this
+# fg/bg pair IS the None-arm pair, the one cc33 drives at threshold 21.0 to reach
+# the arm. Renaming it for the 4.5 answer below would sever that cc31-cc33 link
+# and retire the token a later concept-grep would search the arm by.
 NULL_SUGGESTION="$(palette nullsuggestion '{"fg":"#333333","bg":"#757575"}')"
 
 assert_ratio "cc31-endpoint-suggestion-ratio" "2.7422" \
   "$(field "$NULL_SUGGESTION" "data['pairs'][0]['ratio']" --pair fg:bg)"
 
-# Present-and-null, NOT the absent key cc15 pins: evaluate_pair sets
-# suggested_hex only when the pair fails, so a bare .get() renders both states
-# as None and would grade vacuously -- the membership test is the discriminator.
-# data['evaluated'] is co-asserted as in cc28.
+# Present-and-BLACK, NOT the absent key cc15 pins: evaluate_pair sets
+# suggested_hex only when the pair fails, so post-fix a bare .get() would already
+# discriminate here -- '#000000' present against None absent. The membership test
+# is co-asserted anyway because it is the half that stays red under an
+# evaluate_pair regression that stops emitting the key at all: .get() would go
+# quiet-None, and the hex half alone could not tell that from a suggest_hex
+# change. data['evaluated'] is co-asserted as in cc28.
 assert_eq "cc31-endpoint-suggestion-is-present-and-black" "(True, '#000000', 1)" \
   "$(field "$NULL_SUGGESTION" "('suggested_hex' in data['pairs'][0], data['pairs'][0]['suggested_hex'], data['evaluated'])" --pair fg:bg)"
 
-# A null suggestion is data, not an error. This deliberately bypasses field(),
+# A failing pair with a suggestion is data, not an error. This deliberately bypasses field(),
 # which reads payload.get('data') and DISCARDS payload['success'] -- same
 # inline-python idiom as cc17, keeping --pair fg:bg so all three assertions
 # grade the same invocation.

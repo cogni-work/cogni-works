@@ -168,8 +168,8 @@ def suggest_hex(fg_rgb, bg_rgb, threshold):
     always at least sqrt(21) ~= 4.583. Both AA_NORMAL (4.5) and AA_LARGE (3.0)
     sit below that bound, so a run driven through this module's CLI cannot
     reach the None arm. threshold is a caller-supplied parameter, though: a
-    value strictly above ~4.583 -- a future WCAG AAA 7:1, say -- still
-    returns None.
+    value strictly above ~4.583 -- a future WCAG AAA 7:1, say -- can still
+    return None.
     """
     hue, lightness, saturation = colorsys.rgb_to_hls(*fg_rgb)
     for direction in (-1, 1):

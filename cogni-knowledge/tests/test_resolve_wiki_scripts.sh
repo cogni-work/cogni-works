@@ -1,28 +1,36 @@
 #!/usr/bin/env bash
-# test_resolve_wiki_scripts.sh - behaviour test for F26.
+# test_resolve_wiki_scripts.sh - behaviour test for the shared wiki-engine resolver.
 #
-# F26: resolve_wiki_scripts() (in knowledge-ingest + knowledge-finalize; named
-# resolve_wiki_ingest_scripts() before Slice 16 generalized it to take a skill
-# arg so finalize can also locate wiki-lint / wiki-health for the conformance
-# gate) must pick the NEWEST cached cogni-wiki version, not the lexically-first
-# glob match. On a multi-version dev cache the old code returned 0.0.16
-# (lexically smallest) instead of the installed 0.0.45; the 0.0.16 helpers
-# predate the per-type-dir + `type: source` schema. The fix sorts the glob with
-# `sort -V` and takes the last entry, considering ONLY numeric version dirs (a
-# stray non-numeric dir like `main` would otherwise sort ABOVE every real
-# version).
+# Resolution is VENDORED-ONLY. cogni-knowledge ships the engine in-tree under
+# scripts/vendor/cogni-wiki/; the plugin that tree was copied from is retired
+# (absent from .claude-plugin/marketplace.json, registered in
+# scripts/retired-plugins.json), so there is no external engine source. The
+# former sibling-checkout and marketplace-cache probe branches were removed:
+# resolving a stale, unversioned external copy would silently run an engine
+# older than the plugin that called it, which is worse than failing loudly
+# against the versioned copy that ships here.
 #
-# The resolver now lives in ONE shared snippet (scripts/resolve-wiki-scripts.sh)
+# Cases 05/06/08 below are the standing ANTI-REGRESSION guard for that removal.
+# They keep the external-layout fixtures on purpose and assert the resolver
+# REFUSES them. Do not read them as support for a fallback — they exist to prove
+# one cannot come back. (Before the removal these same fixtures asserted the
+# opposite: F26's `sort -V` cache ranking and the sibling short-circuit. Both
+# branches, and the ranking rule with them, are gone.)
+#
+# The resolver lives in ONE shared snippet (scripts/resolve-wiki-scripts.sh)
 # that every knowledge-* flow sources — there is no inline copy to drift. This
-# test asserts the shared snippet defines the version-aware resolver, that every
-# expected flow sources it (and carries no inline definition), and drives the
-# snippet body directly through the behaviour cases below.
+# test asserts the shared snippet defines the resolver, that every expected flow
+# sources it (and carries no inline definition), and drives the snippet body
+# directly through the behaviour cases below.
 #
 # Cases (against the shared snippet body):
-#   1. multi-version cache (+ a stray `main`/`latest` dir) -> returns 0.0.45,
-#      never the non-numeric dir
-#   2. dev-repo sibling -> returns the sibling (short-circuits the glob)
-#   3. nothing installed -> returns non-zero
+#   1. external marketplace-cache layout only        -> non-zero (refused)
+#   2. external dev-repo sibling layout only         -> non-zero (refused)
+#   3. nothing installed                             -> non-zero
+#   4. partial vendor beside a COMPLETE sibling      -> non-zero (no fallthrough)
+#   5. complete vendor                               -> the vendored dir wins
+#   6. CLAUDE_PLUGIN_ROOT unset                      -> root derived from the
+#      snippet's own sourced location (bash, system /bin/bash 3.2, zsh)
 #
 # bash 3.2 + stdlib only.
 
@@ -56,10 +64,10 @@ if [ ! -f "$RESOLVER_SNIPPET" ]; then
   red "FAIL: resolve-wiki-01 shared resolver snippet not found: $RESOLVER_SNIPPET"; errors=$((errors + 1))
 elif ! grep -qE 'resolve_wiki_scripts\(\) \{' "$RESOLVER_SNIPPET"; then
   red "FAIL: resolve-wiki-01 shared snippet missing resolve_wiki_scripts() definition"; errors=$((errors + 1))
-elif ! grep -qE 'sort -V' "$RESOLVER_SNIPPET"; then
-  red "FAIL: resolve-wiki-01 shared snippet resolver does not version-sort (sort -V) — F26 would regress"; errors=$((errors + 1))
+elif grep -qE '\.\./cogni-wiki|sort -V' "$RESOLVER_SNIPPET"; then
+  red "FAIL: resolve-wiki-01 shared snippet carries an external cogni-wiki probe (sibling path or version-ranking glob) — resolution must be vendored-only"; errors=$((errors + 1))
 else
-  green "PASS: resolve-wiki-01 shared snippet carries the version-aware resolver (sort -V)"
+  green "PASS: resolve-wiki-01 shared snippet defines a vendored-only resolver with no external cogni-wiki probe"
 fi
 
 for name in $SOURCING_SKILLS; do
@@ -117,48 +125,41 @@ run_resolve() {
   CLAUDE_PLUGIN_ROOT="$1" bash -c "$RESOLVE_BODY"
 }
 
-# Case 1: multi-version cache + stray non-numeric dirs -> newest VERSION (0.0.45),
-# never `main`/`latest` (which sort -V would otherwise rank highest).
-if OUT=$(run_resolve "$WORK/cache/cogni-knowledge/0.1.1"); then
-  case "$OUT" in
-    */cogni-wiki/0.0.45/skills/wiki-ingest/scripts)
-      green "PASS: resolve-wiki-05 multi-version cache resolves newest version (0.0.45), ignores main/latest" ;;
-    *)
-      red "FAIL: resolve-wiki-05 multi-version cache resolved the wrong dir (expected 0.0.45)"
-      red "  got: $OUT"; errors=$((errors + 1)) ;;
-  esac
+# Case 1 (INVERTED — anti-regression): an external marketplace-cache layout,
+# multi-version and complete, must be REFUSED. Before the removal this asserted
+# F26's `sort -V` ranking picked 0.0.45; a stale cached engine is now never
+# preferable to failing loudly against the versioned vendored copy.
+if OUT=$(run_resolve "$WORK/cache/cogni-knowledge/0.1.1" 2>&1); then
+  red "FAIL: resolve-wiki-05 external marketplace-cache layout resolved — the removed cache probe is back"
+  red "  got: $OUT"; errors=$((errors + 1))
 else
-  red "FAIL: resolve-wiki-05 multi-version cache resolver returned non-zero"; errors=$((errors + 1))
+  green "PASS: resolve-wiki-05 external marketplace-cache layout is refused (vendored-only)"
 fi
 
-# Case 2: dev-repo sibling -> the sibling path (short-circuits the glob). The
-# resolver echoes $sib unnormalized (<CPR>/../cogni-wiki/...); that `/../cogni-wiki/`
-# form uniquely identifies the sibling branch (the cache branch has no `..`).
-if OUT=$(run_resolve "$WORK/devrepo/cogni-knowledge"); then
-  case "$OUT" in
-    */../cogni-wiki/skills/wiki-ingest/scripts)
-      green "PASS: resolve-wiki-06 dev-repo sibling layout resolves the sibling scripts dir" ;;
-    *)
-      red "FAIL: resolve-wiki-06 dev-repo sibling resolved an unexpected path"
-      red "  got: $OUT"; errors=$((errors + 1)) ;;
-  esac
+# Case 2 (INVERTED — anti-regression): an external dev-repo sibling layout
+# (<CPR>/../cogni-wiki/skills/...) must be REFUSED. Before the removal this
+# asserted the sibling branch won and short-circuited the cache glob.
+if OUT=$(run_resolve "$WORK/devrepo/cogni-knowledge" 2>&1); then
+  red "FAIL: resolve-wiki-06 external dev-repo sibling layout resolved — the removed sibling probe is back"
+  red "  got: $OUT"; errors=$((errors + 1))
 else
-  red "FAIL: resolve-wiki-06 dev-repo sibling resolver returned non-zero"; errors=$((errors + 1))
+  green "PASS: resolve-wiki-06 external dev-repo sibling layout is refused (vendored-only)"
 fi
 
 # Case 3: nothing installed -> non-zero exit.
 if run_resolve "$WORK/missing/cogni-knowledge" >/dev/null 2>&1; then
-  red "FAIL: resolve-wiki-07 resolver returned success with no cogni-wiki installed"; errors=$((errors + 1))
+  red "FAIL: resolve-wiki-07 resolver returned success with no vendored engine present"; errors=$((errors + 1))
 else
-  green "PASS: resolve-wiki-07 resolver returns non-zero when cogni-wiki is absent"
+  green "PASS: resolve-wiki-07 resolver returns non-zero when the vendored engine is absent"
 fi
 
 # -----------------------------------------------------------------------------
-# Part 3: entry-point existence (#536). With the optional 2nd arg, a probe
-#         branch wins ONLY when the expected entry-point script is present in
-#         the resolved dir, so a partial vendor (dir present, script absent)
-#         falls through to the working fallback. Drives the SAME extracted
-#         ingest body, now with the two-arg form.
+# Part 3: entry-point existence — the VENDOR INTEGRITY guard. With the optional
+#         2nd arg the probe wins ONLY when the expected entry-point script is
+#         present, so a partial vendor (dir copied, script missed) is caught here
+#         rather than surfacing as a missing-script error deep in a run. With no
+#         fallback branch left this is the ONLY probe hardening, so it is
+#         load-bearing. Drives the SAME extracted ingest body, two-arg form.
 # -----------------------------------------------------------------------------
 
 RESOLVE_BODY_EP="$INGEST_BODY
@@ -166,22 +167,20 @@ if resolve_wiki_scripts wiki-ingest backlink_audit.py; then exit 0; else exit 1;
 
 run_resolve_ep() { CLAUDE_PLUGIN_ROOT="$1" bash -c "$RESOLVE_BODY_EP"; }
 
-# Case 4: partial vendor (vendored dir present but backlink_audit.py ABSENT)
-# next to a COMPLETE sibling (dir + script) -> the sibling wins.
+# Case 4 (INVERTED — anti-regression): a partial vendor (dir present,
+# backlink_audit.py ABSENT) next to a COMPLETE external sibling must return
+# non-zero. Before the removal the sibling won here. Now a broken vendor fails
+# loudly rather than silently handing the run a stale external engine — this is
+# the case that proves the entry-point guard did NOT survive as a fallthrough.
 PART="$WORK/partial"
 mkdir -p "$PART/cogni-knowledge/scripts/vendor/cogni-wiki/skills/wiki-ingest/scripts"  # vendor: no script
 mkdir -p "$PART/cogni-wiki/skills/wiki-ingest/scripts"                                  # sibling...
 : > "$PART/cogni-wiki/skills/wiki-ingest/scripts/backlink_audit.py"                     # ...with the script
-if OUT=$(run_resolve_ep "$PART/cogni-knowledge"); then
-  case "$OUT" in
-    */../cogni-wiki/skills/wiki-ingest/scripts)
-      green "PASS: resolve-wiki-08 partial vendor (dir, no entry-point) falls through to the complete sibling" ;;
-    *)
-      red "FAIL: resolve-wiki-08 entry-point check resolved an unexpected path"
-      red "  got: $OUT"; errors=$((errors + 1)) ;;
-  esac
+if OUT=$(run_resolve_ep "$PART/cogni-knowledge" 2>&1); then
+  red "FAIL: resolve-wiki-08 partial vendor fell through to the external sibling — the removed fallthrough is back"
+  red "  got: $OUT"; errors=$((errors + 1))
 else
-  red "FAIL: resolve-wiki-08 entry-point resolver returned non-zero despite a complete sibling"; errors=$((errors + 1))
+  green "PASS: resolve-wiki-08 partial vendor beside a complete external sibling returns non-zero (no fallthrough)"
 fi
 
 # Case 5: complete vendor (dir + entry-point present) -> vendor wins.
@@ -212,27 +211,32 @@ fi
 
 # -----------------------------------------------------------------------------
 # Part 4: unset CLAUDE_PLUGIN_ROOT — the resolver derives the plugin root from
-#         its own sourced location instead of expanding a glob rooted at an
-#         empty prefix (which zsh aborts on with `no matches found`). The
-#         snippet must be sourced BY FILE PATH here: a `bash -c` inlined body
-#         (Parts 2-3) has an empty BASH_SOURCE, which would mask the fallback.
+#         its own sourced location (_RESOLVE_WIKI_SCRIPTS_ROOT, captured at
+#         SOURCE time from BASH_SOURCE[0]:-$0). Nested-skill Bash blocks do not
+#         inherit the env var, so this derivation is load-bearing and survives
+#         the fallback removal untouched. The snippet must be sourced BY FILE
+#         PATH here: a `bash -c` inlined body (Parts 2-3) has an empty
+#         BASH_SOURCE, which would mask the derivation.
+#
+#         The fixture is a VENDORED tree under the derived root. It used to be a
+#         marketplace-cache layout, which no longer resolves at all.
 # -----------------------------------------------------------------------------
 
-UNSET_ROOT="$WORK/cache/cogni-knowledge/0.1.1"
-mkdir -p "$UNSET_ROOT/scripts"
+UNSET_ROOT="$WORK/unset-root/cogni-knowledge"
+mkdir -p "$UNSET_ROOT/scripts/vendor/cogni-wiki/skills/wiki-ingest/scripts"
 cp "$RESOLVER_SNIPPET" "$UNSET_ROOT/scripts/resolve-wiki-scripts.sh"
 
-# Case 7: bash, CLAUDE_PLUGIN_ROOT unset -> source-location root, newest cache wins.
+# Case 7: bash, CLAUDE_PLUGIN_ROOT unset -> source-location root, vendored dir.
 if OUT=$(env -u CLAUDE_PLUGIN_ROOT bash -c ". '$UNSET_ROOT/scripts/resolve-wiki-scripts.sh'; resolve_wiki_scripts wiki-ingest"); then
   case "$OUT" in
-    */cogni-wiki/0.0.45/skills/wiki-ingest/scripts)
+    */scripts/vendor/cogni-wiki/skills/wiki-ingest/scripts)
       green "PASS: resolve-wiki-11 unset CLAUDE_PLUGIN_ROOT derives the root from the script's own location" ;;
     *)
-      red "FAIL: resolve-wiki-11 unset-env fallback resolved the wrong dir"
+      red "FAIL: resolve-wiki-11 unset-env run resolved the wrong dir"
       red "  got: $OUT"; errors=$((errors + 1)) ;;
   esac
 else
-  red "FAIL: resolve-wiki-11 resolver returned non-zero with CLAUDE_PLUGIN_ROOT unset (fallback did not engage)"; errors=$((errors + 1))
+  red "FAIL: resolve-wiki-11 resolver returned non-zero with CLAUDE_PLUGIN_ROOT unset (source-location derivation did not engage)"; errors=$((errors + 1))
 fi
 
 # Case 7b: the snippet must parse + resolve under the SYSTEM bash (macOS ships
@@ -242,7 +246,7 @@ fi
 if [ -x /bin/bash ]; then
   if OUT=$(env -u CLAUDE_PLUGIN_ROOT /bin/bash -c ". '$UNSET_ROOT/scripts/resolve-wiki-scripts.sh'; resolve_wiki_scripts wiki-ingest" 2>&1); then
     case "$OUT" in
-      */cogni-wiki/0.0.45/skills/wiki-ingest/scripts)
+      */scripts/vendor/cogni-wiki/skills/wiki-ingest/scripts)
         green "PASS: resolve-wiki-12 system /bin/bash (3.2 on macOS) parses and resolves the snippet" ;;
       *)
         red "FAIL: resolve-wiki-12 system /bin/bash run produced unexpected output"
@@ -260,7 +264,7 @@ fi
 if command -v zsh >/dev/null 2>&1; then
   if OUT=$(env -u CLAUDE_PLUGIN_ROOT zsh -c ". '$UNSET_ROOT/scripts/resolve-wiki-scripts.sh'; resolve_wiki_scripts wiki-ingest" 2>&1); then
     case "$OUT" in
-      */cogni-wiki/0.0.45/skills/wiki-ingest/scripts)
+      */scripts/vendor/cogni-wiki/skills/wiki-ingest/scripts)
         green "PASS: resolve-wiki-13 zsh + unset CLAUDE_PLUGIN_ROOT resolves without aborting" ;;
       *)
         red "FAIL: resolve-wiki-13 zsh unset-env run produced unexpected output"
@@ -270,7 +274,7 @@ if command -v zsh >/dev/null 2>&1; then
     red "FAIL: resolve-wiki-13 zsh aborted with CLAUDE_PLUGIN_ROOT unset (the reported bug): $OUT"; errors=$((errors + 1))
   fi
 else
-  green "PASS: resolve-wiki-13 zsh not available on this host — zsh case skipped (bash case 7 covers the fallback)"
+  green "PASS: resolve-wiki-13 zsh not available on this host — zsh case skipped (bash case 7 covers the derivation)"
 fi
 
 if [ $errors -gt 0 ]; then

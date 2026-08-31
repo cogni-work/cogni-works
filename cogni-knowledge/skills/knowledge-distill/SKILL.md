@@ -40,39 +40,26 @@ Read `${CLAUDE_PLUGIN_ROOT}/references/inverted-pipeline.md` §"Phase 4.5 — `k
 
 ### 0. Pre-flight
 
-**Required engine.** This skill runs the distill pass on the **vendored** wiki-ingest engine — cogni-knowledge ships a byte-identical copy in-tree under `scripts/vendor/cogni-wiki/`, so a bound base is distillable without cogni-wiki installed. The `cogni-wiki` install is only a fallback layout. Probe both so the skill degrades cleanly here rather than failing mid-skill:
+**Required engine.** This skill runs the distill pass on the **vendored** wiki-ingest engine — cogni-knowledge ships a byte-identical copy in-tree under `scripts/vendor/cogni-wiki/`, so a bound base is distillable without cogni-wiki installed. Probe it so the skill degrades cleanly here rather than failing mid-skill:
 
 ```
 # vendored-first: the in-tree wiki-ingest scripts are self-contained
 test -d "${CLAUDE_PLUGIN_ROOT}/scripts/vendor/cogni-wiki/skills/wiki-ingest/scripts" && WIKI_OK=yes || WIKI_OK=no
-
-# fallback: an installed cogni-wiki sibling / marketplace cache (legacy layout)
-if [ "$WIKI_OK" = "no" ]; then
-  probe_plugin() {
-    local plugin="$1" skill="$2"
-    test -f "${CLAUDE_PLUGIN_ROOT}/../${plugin}/skills/${skill}/SKILL.md" && return 0
-    for d in "${CLAUDE_PLUGIN_ROOT}/../../${plugin}/"*/skills/"${skill}"/SKILL.md; do
-      [ -f "$d" ] && return 0
-    done
-    return 1
-  }
-  probe_plugin cogni-wiki wiki-ingest && WIKI_OK=yes || WIKI_OK=no
-fi
 ```
 
 If `WIKI_OK` is `no`, warn and exit cleanly (distill is optional — do not block the
 pipeline):
 
-> cogni-knowledge's vendored wiki-ingest scripts are missing and no `cogni-wiki`
-> install was found. Skipping distill; reinstall cogni-knowledge to enable it.
+> cogni-knowledge's vendored wiki-ingest scripts are missing.
+> Skipping distill; reinstall cogni-knowledge to enable it.
 
-This probe is the early-abort gate only — Step 0's `resolve_wiki_scripts` is the authoritative resolver for the actual `backlink_audit.py` path; keep the two vendored-first precedences in sync.
+This probe is the early-abort gate only — Step 0's `resolve_wiki_scripts` is the authoritative resolver for the actual `backlink_audit.py` path; keep the two vendored probes in sync.
 
 **Resolve the cogni-wiki script dir.** Use the SAME `resolve_wiki_scripts` helper `knowledge-ingest` / `knowledge-finalize` use (shared byte-for-byte) — it picks the newest numeric version dir. `concept-store.py merge` needs this dir for `_wiki_lock` / `is_foundation_page` / `parse_frontmatter`, and Step 6 needs `backlink_audit.py` / `wiki_index_update.py` / `config_bump.py`:
 
 ```
 . "${CLAUDE_PLUGIN_ROOT}/scripts/resolve-wiki-scripts.sh"
-WIKI_INGEST_SCRIPTS=$(resolve_wiki_scripts wiki-ingest backlink_audit.py) || { echo "⚠ cogni-wiki wiki-ingest scripts not found — skipping distill (optional)"; exit 0; }
+WIKI_INGEST_SCRIPTS=$(resolve_wiki_scripts wiki-ingest backlink_audit.py) || { echo "⚠ cogni-knowledge's vendored wiki-ingest scripts are missing (reinstall cogni-knowledge) — skipping distill (optional)"; exit 0; }
 ```
 
 **Binding + wiki root.** Resolve `knowledge_root` (same logic as `knowledge-ingest`). Read the binding via `knowledge-binding.py read --knowledge-root <knowledge_root>`. On `success: false` → warn + exit cleanly. Parse `data.binding.wiki_path` as `WIKI_ROOT`; confirm `<WIKI_ROOT>/.cogni-wiki/config.json` and `<WIKI_ROOT>/wiki/` exist and are writeable.
@@ -408,7 +395,7 @@ Resolve the cogni-wiki `wiki-lint` scripts dir with the SAME `resolve_wiki_scrip
 
 ```
 . "${CLAUDE_PLUGIN_ROOT}/scripts/resolve-wiki-scripts.sh"
-WIKI_LINT_SCRIPTS=$(resolve_wiki_scripts wiki-lint lint_wiki.py) || { echo "⚠ cogni-wiki wiki-lint scripts not found — skipping the bounded de-orphan gate (run knowledge-finalize or knowledge-lint to reconcile)"; WIKI_LINT_SCRIPTS=""; }
+WIKI_LINT_SCRIPTS=$(resolve_wiki_scripts wiki-lint lint_wiki.py) || { echo "⚠ cogni-knowledge's vendored wiki-lint scripts are missing (reinstall cogni-knowledge) — skipping the bounded de-orphan gate (run knowledge-finalize or knowledge-lint to reconcile)"; WIKI_LINT_SCRIPTS=""; }
 ```
 
 When resolved, run the single bounded fix class. It mirrors every distilled page's `## Sources` `[[<source-slug>]]` edge back onto the source (and onto any cited `wiki/questions/<slug>.md` node), giving each page this phase wrote an inbound link. It is idempotent — a no-op on an already-clean base — and writes nothing else (`--fix=all`'s other four classes stay in finalize):

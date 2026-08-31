@@ -50,7 +50,10 @@ assert_grep 'derived_from_research:' "$FIN" "finalize-07-stamps-derived-research
 assert_grep 'draft_revision_round:' "$FIN" "finalize-08-records-draft-revision-round knowledge-finalize: records draft_revision_round (informational audit)"
 assert_grep 'cycle-guard.py' "$FIN" "finalize-09-dispatches-cycle-guard-py knowledge-finalize: dispatches cycle-guard.py"
 assert_grep '## References' "$FIN" "finalize-10-auto-generates-references-section knowledge-finalize: auto-generates ## References section"
-assert_grep 'probe_plugin cogni-wiki' "$FIN" "finalize-11-probes-cogni-wiki-clean knowledge-finalize: probes cogni-wiki (clean-break)"
+# cogni-wiki is retired: the pre-flight gates on the VENDORED engine only. The
+# paired not-grep is the anti-regression half — an external probe must not return.
+assert_grep 'scripts/vendor/cogni-wiki/skills/wiki-ingest/scripts' "$FIN" "finalize-11-probes-vendored-engine knowledge-finalize: pre-flight gates on the vendored wiki-ingest engine"
+assert_not_grep 'probe_plugin cogni-wiki' "$FIN" "finalize-11b-no-external-cogni-wiki-probe knowledge-finalize: carries no external cogni-wiki fallback probe (vendored-only)"
 assert_grep 'resolve_wiki_scripts wiki-ingest' "$FIN" "finalize-12-resolves-wiki-ingest-scripts knowledge-finalize: resolves WIKI_INGEST_SCRIPTS via generalized resolver"
 assert_grep 'wiki_index_update.py' "$FIN" "finalize-13-calls-cogni-wiki-index knowledge-finalize: calls cogni-wiki wiki_index_update.py at script level"
 assert_grep 'config_bump.py' "$FIN" "finalize-14-calls-cogni-wiki-config knowledge-finalize: calls cogni-wiki config_bump.py at script level"

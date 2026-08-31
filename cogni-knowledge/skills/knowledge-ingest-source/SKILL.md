@@ -100,7 +100,7 @@ copy first, sibling/cache fallback), so this skill's Step 5 post-write lockstep
 
 ```
 . "${CLAUDE_PLUGIN_ROOT}/scripts/resolve-wiki-scripts.sh"
-WIKI_INGEST_SCRIPTS=$(resolve_wiki_scripts wiki-ingest backlink_audit.py) || abort "cogni-wiki wiki-ingest scripts not found"
+WIKI_INGEST_SCRIPTS=$(resolve_wiki_scripts wiki-ingest backlink_audit.py) || abort "cogni-knowledge's vendored wiki-ingest scripts are missing. Reinstall cogni-knowledge, then retry."
 ```
 
 The vendored `convert_to_md.py` (local-file → markdown normalization) and

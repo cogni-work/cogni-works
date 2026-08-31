@@ -100,7 +100,7 @@ relocate into the sub-indexes). The migrator never re-implements the split.
    ```bash
    . "${CLAUDE_PLUGIN_ROOT}/scripts/resolve-wiki-scripts.sh"
    WIKI_INGEST_SCRIPTS=$(resolve_wiki_scripts wiki-ingest config_bump.py) \
-     || abort "cogni-wiki wiki-ingest scripts not found (vendored copy missing)"
+     || abort "cogni-knowledge's vendored wiki-ingest scripts are missing. Reinstall cogni-knowledge, then retry."
    ```
 
 ### 2a. Rebuild mode (default)

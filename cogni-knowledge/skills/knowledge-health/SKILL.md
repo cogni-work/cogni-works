@@ -39,32 +39,19 @@ Read `${CLAUDE_PLUGIN_ROOT}/references/delegation-contract.md` once at the start
 
 ### 0. Pre-flight
 
-**Required engine.** This skill computes the health verdict on the **vendored** wiki-health engine — cogni-knowledge ships a byte-identical copy in-tree under `scripts/vendor/cogni-wiki/`, so a bound base shows its health without cogni-wiki installed. The `cogni-wiki` install is only a fallback layout. Probe both so the skill aborts cleanly here rather than failing mid-skill:
+**Required engine.** This skill computes the health verdict on the **vendored** wiki-health engine — cogni-knowledge ships a byte-identical copy in-tree under `scripts/vendor/cogni-wiki/`, so a bound base shows its health without cogni-wiki installed. Probe it so the skill aborts cleanly here rather than failing mid-skill:
 
 ```
 # vendored-first: the in-tree wiki-health scripts are self-contained
 test -d "${CLAUDE_PLUGIN_ROOT}/scripts/vendor/cogni-wiki/skills/wiki-health/scripts" && WIKI_OK=yes || WIKI_OK=no
-
-# fallback: an installed cogni-wiki sibling / marketplace cache (legacy layout)
-if [ "$WIKI_OK" = "no" ]; then
-  probe_plugin() {
-    local plugin="$1" skill="$2"
-    test -f "${CLAUDE_PLUGIN_ROOT}/../${plugin}/skills/${skill}/SKILL.md" && return 0
-    for d in "${CLAUDE_PLUGIN_ROOT}/../../${plugin}/"*/skills/"${skill}"/SKILL.md; do
-      [ -f "$d" ] && return 0
-    done
-    return 1
-  }
-  probe_plugin cogni-wiki wiki-setup && WIKI_OK=yes || WIKI_OK=no
-fi
 ```
 
 If `WIKI_OK` is `no`, abort:
 
-> cogni-knowledge's vendored wiki-health scripts are missing and no `cogni-wiki`
-> install was found. Reinstall cogni-knowledge, then retry.
+> cogni-knowledge's vendored wiki-health scripts are missing.
+> Reinstall cogni-knowledge, then retry.
 
-This probe is the early-abort gate only — Step 2's `resolve_wiki_scripts` is the authoritative resolver for the actual `health.py` path; keep the two vendored-first precedences in sync.
+This probe is the early-abort gate only — Step 2's `resolve_wiki_scripts` is the authoritative resolver for the actual `health.py` path; keep the two vendored probes in sync.
 
 ### 1. Resolve the knowledge root and read the binding
 
@@ -90,7 +77,7 @@ Resolve the vendored `wiki-health` scripts dir vendored-first (the same `resolve
 ```bash
 . "${CLAUDE_PLUGIN_ROOT}/scripts/resolve-wiki-scripts.sh"
 WIKI_HEALTH_SCRIPTS=$(resolve_wiki_scripts wiki-health health.py) \
-  || abort "cogni-wiki wiki-health scripts not found (vendored copy missing)"
+  || abort "cogni-knowledge's vendored wiki-health scripts are missing. Reinstall cogni-knowledge, then retry."
 ```
 
 Run the vendored `health.py` against the bound wiki (it resolves `_wikilib` itself; fully read-only — JSON to stdout, no file writes):

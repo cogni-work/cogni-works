@@ -2424,83 +2424,44 @@ def load_wiki_coverage_findings(project_path, coverage_name: str = "wiki-coverag
     return out
 
 
-# A dotted-numeric version dir name, e.g. `0.1.74` — mirrors the shell probe's
-# `case "$ver" in ''|*[!0-9.]*) continue` numeric guard so a branch/`main`
-# checkout dir never outranks a real semver. Slightly stricter than the shell
-# case (rejects empty/leading/trailing/doubled `.` segments too), which only
-# matters for malformed dirs and lets the sort key skip an empty-segment guard.
-_NUMERIC_VERSION_RE = re.compile(r"^[0-9]+(\.[0-9]+)*$")
-
-
-def resolve_wiki_scripts(skill: str, base_dir: "Path | None" = None, expected_script: "str | None" = None) -> Path:
-    """Locate `cogni-wiki/skills/<skill>/scripts/`, the single Python definition
-    of the shell `resolve_wiki_scripts <skill>` probe in the knowledge-* SKILLs.
+def resolve_wiki_scripts(skill: str, expected_script: "str | None" = None) -> Path:
+    """Locate the vendored `wiki/skills/<skill>/scripts/` dir — the single Python
+    definition of the shell `resolve_wiki_scripts <skill>` probe in the knowledge-*
+    SKILLs.
 
     Generalises the per-skill wiki-scripts lookup so a standalone, operator-run
     Python driver (e.g. migrate-question-index.py) self-resolves the dir without
-    carrying its own copy of the ranking rule. The locked-writer scripts
+    carrying its own copy of the rule. The locked-writer scripts
     (question-store.py, concept-store.py) deliberately keep requiring
     `--wiki-scripts-dir` from the orchestrator and never call this.
 
-    Probe order (highest-priority first):
-      0. Vendored copy — `<this-file's dir>/vendor/cogni-wiki/skills/<skill>/scripts`,
-         the byte-identical engine cogni-knowledge ships in-tree (Phase 7). Probed
-         first so the plugin is self-contained; the external probes below are the
-         fallback that keeps both plugins installable until cogni-wiki is archived.
-         Gated to the production path (base_dir is None) so the base_dir test seam
-         still exercises the versioned-cache ranking branch hermetically.
-      1. Sibling checkout — `<repo-root>/cogni-wiki/skills/<skill>/scripts`,
-         where <repo-root> is two levels up from this file
-         (scripts/ -> cogni-knowledge/ -> <repo-root>).
-      2. Versioned-cache install — newest NUMERIC version dir matching
-         `<repo-root>/../cogni-wiki/*/skills/<skill>/scripts` (a non-numeric
-         dir name — a branch/`main` checkout — never outranks a real semver).
+    Resolution is VENDORED-ONLY: `<this file's dir>/vendor/cogni-wiki/skills/
+    <skill>/scripts`, the engine cogni-knowledge ships in-tree, and nothing else.
+    The plugin that tree was copied from is retired — absent from
+    `.claude-plugin/marketplace.json` and registered in
+    `scripts/retired-plugins.json` — so an external sibling checkout or
+    marketplace-cache install can only be a stale, unversioned copy. Resolving one
+    would silently run an engine older than the plugin that called it, which is
+    worse than failing loudly against the versioned copy that ships here. The
+    former sibling and versioned-cache branches, and the `base_dir` test seam that
+    existed solely to exercise the cache-ranking branch, are removed. Do not
+    reintroduce them.
 
-    `base_dir` is a TEST-ONLY injection seam: when None (the production default)
-    <repo-root> is derived from this file's location, so every real caller is
-    byte-identical to the no-arg form; a test passes an explicit synthetic root
-    to exercise the versioned-cache ranking branch hermetically (the real
-    sibling checkout would otherwise short-circuit branch 1 in the monorepo).
-    The base_dir seam also bypasses branch 0 (the vendored copy lives next to the
-    real file, not under a synthetic root).
+    `expected_script`, when given, hardens the probe: the directory wins only when
+    it BOTH exists AND contains that entry-point file. This is the VENDOR
+    INTEGRITY guard — it catches a partial/botched vendor (the dir is present but
+    the needed script was never copied) here, rather than letting it surface later
+    as a FileNotFoundError on the missing script. With no fallback branch left it
+    is the only such guard, so it is load-bearing. None (the default) preserves the
+    historic dir-only behaviour byte-for-byte.
 
-    `expected_script`, when given, hardens every probe branch: a directory wins
-    only when it BOTH exists AND contains that entry-point file. This stops a
-    partial/botched vendor (the dir is present but the needed script was never
-    copied) from short-circuiting the working sibling/cache fallback and
-    surfacing later as a FileNotFoundError on the missing script. None (the
-    default) preserves the historic dir-only behaviour byte-for-byte.
-
-    Raises FileNotFoundError when neither branch resolves.
+    Raises FileNotFoundError when the vendored copy does not resolve.
     """
-    def _has_entrypoint(d: "Path") -> bool:
-        return expected_script is None or (d / expected_script).is_file()
-
-    if base_dir is None:
-        vendored = Path(__file__).resolve().parent / "vendor" / "cogni-wiki" / "skills" / skill / "scripts"
-        if vendored.is_dir() and _has_entrypoint(vendored):
-            return vendored
-
-    repo_root = Path(base_dir) if base_dir is not None else Path(__file__).resolve().parents[2]
-    sib = repo_root / "cogni-wiki" / "skills" / skill / "scripts"
-    if sib.is_dir() and _has_entrypoint(sib):
-        return sib
-
-    candidates: "list[tuple[tuple[int, ...], Path]]" = []
-    for d in (repo_root.parent / "cogni-wiki").glob(f"*/skills/{skill}/scripts"):
-        if not d.is_dir():
-            continue
-        if not _has_entrypoint(d):
-            continue
-        ver = d.parents[2].name  # the <semver> segment
-        if _NUMERIC_VERSION_RE.match(ver):
-            # Sort key: `0.0.9 < 0.0.16`. The regex guarantees every segment is a
-            # non-empty digit run, so no empty-segment filter is needed.
-            candidates.append((tuple(int(p) for p in ver.split(".")), d))
-    if candidates:
-        return max(candidates)[1]
+    vendored = Path(__file__).resolve().parent / "vendor" / "cogni-wiki" / "skills" / skill / "scripts"
+    if vendored.is_dir() and (expected_script is None or (vendored / expected_script).is_file()):
+        return vendored
 
     raise FileNotFoundError(
-        f"cogni-wiki {skill} scripts not found — install cogni-wiki, run "
-        f"from inside the monorepo, or pass --wiki-scripts-dir"
+        f"cogni-knowledge's vendored {skill} scripts are missing. "
+        f"Reinstall cogni-knowledge, or pass --wiki-scripts-dir"
     )

@@ -1,7 +1,7 @@
 ---
 name: narrative-reviewer
 description: |
-  Review and score narrative files against story arc quality gates. Produces a structured scorecard with pass/warn/fail per gate, overall score, and improvement suggestions.
+  Review and score narrative files against story arc quality gates. Produces a structured scorecard with a pass/warn/fail verdict per gate and improvement suggestions.
 
   Use this agent proactively after narrative generation to review quality, or when a user asks to review, score, or audit an existing narrative — including re-scoring one after edits to compare it against an earlier run.
 
@@ -45,14 +45,14 @@ You will receive:
 ## Constraints
 
 - **DO NOT** modify the narrative file -- review is read-only
-- **DO NOT** fabricate quality scores -- the skill measures objectively
+- **DO NOT** fabricate quality verdicts -- the skill measures objectively
 - **DO NOT** apply your own quality criteria -- use only the skill's gates and rubric
 - **DO NOT** write the scorecard yourself -- the skill handles output writing
 - Your only responsibility is parameter relay and skill invocation
 
 ## Output
 
-Return the JSON summary produced by the narrative-review skill. Do not modify or augment it.
+Return whichever JSON summary the narrative-review skill produces -- success or failure -- unmodified and unaugmented; never fabricate one.
 
 On success, the skill returns:
 
@@ -61,8 +61,6 @@ On success, the skill returns:
   "success": true,
   "source_path": "insight-summary.md",
   "arc_id": "corporate-visions",
-  "overall_score": 82,
-  "grade": "B",
   "gates": {
     "structural": "pass",
     "critical": "pass",
@@ -86,5 +84,3 @@ On failure, the skill returns:
   "error": "Description of what went wrong"
 }
 ```
-
-Return whichever JSON the skill produces. Do not fabricate success/failure responses.

@@ -1,6 +1,12 @@
 ---
 name: story-to-web
-description: Transform any narrative with a story arc into a scrollable web narrative brief.
+description: >
+  Use this agent when a narrative that already has a story arc must become a scrollable
+  web-narrative brief. Typical triggers include turning a strategy document, research
+  report, or sales narrative into a landing-page-style web page; producing single-page
+  visual storytelling in landing-page format; and smoke-testing the narrative
+  transformation before the web agent renders it. See "When to Use" in the agent body for
+  the full scenario list.
 model: opus
 color: blue
 ---

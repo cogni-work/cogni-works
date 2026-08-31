@@ -3,6 +3,8 @@ name: storyboard
 description: Render a storyboard-brief.md into a multi-poster .pen file using Pencil MCP.
 model: opus
 color: blue
+tools: Read, Bash, mcp__pencil__open_document, mcp__pencil__set_variables, mcp__pencil__get_guidelines, mcp__pencil__batch_design, mcp__pencil__get_screenshot, mcp__pencil__snapshot_layout
+
 ---
 
 # Storyboard Renderer Agent

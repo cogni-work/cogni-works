@@ -1,6 +1,11 @@
 ---
 name: story-to-slides
-description: Transform any narrative with a story arc into an optimized presentation brief.
+description: >
+  Use this agent when a narrative that already has a story arc must become an optimized
+  presentation brief. Typical triggers include the why-change-work orchestrator invoking
+  it for Phase 5 Step 4 (Synthesis); turning a research report, strategy document, or
+  project update into a slide brief; and smoke-testing the narrative transformation before
+  batch processing. See "When to Use" in the agent body for the full scenario list.
 model: opus
 color: green
 ---

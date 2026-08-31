@@ -14,7 +14,7 @@ allowed-tools:
 
 # /narrative-review Command
 
-Score an existing narrative markdown file against the narrative skill's quality gates. Produces a scorecard with pass/warn/fail per gate, overall score (0-100), and top 3 improvement suggestions.
+Score an existing narrative markdown file against the narrative skill's quality gates. Produces a scorecard with pass/warn/fail per gate and top 3 improvement suggestions.
 
 ## Argument Parsing
 

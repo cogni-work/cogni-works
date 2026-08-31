@@ -150,7 +150,7 @@ The two recognized-but-never-emitted values exist because this engine is a web-s
 
 Absorbed from cogni-narrative and cogni-copywriting when both were retired. These are now the only copies. Both were stateless file-in/file-out transformers with no project lifecycle of their own, which is what put them on the infrastructure side of the cut-line rule at the top of this file.
 
-- `narrative` transforms structured input into an executive narrative using one of 11 story arcs and, with `--format`, condenses an existing narrative into executive briefs, talking points or one-pagers; `narrative-review` scores the result against quality gates (0–100, A–F). Agents: `narrative-writer`, `narrative-reviewer`, `narrative-adapter`
+- `narrative` transforms structured input into an executive narrative using one of 11 story arcs and, with `--format`, condenses an existing narrative into executive briefs, talking points or one-pagers; `narrative-review` scores the result against quality gates, returning a pass/warn/fail verdict per gate. Agents: `narrative-writer`, `narrative-reviewer`, `narrative-adapter`
 - `copywriter` polishes documents with 7 messaging frameworks (BLUF, Pyramid, SCQA, STAR, PSB, FAB, Inverted Pyramid), arc-aware preservation, and EN/DE-pivot translation across seven languages; `copy-reader` runs parallel stakeholder personas; `copy-json` polishes text fields inside JSON. Agents: `copywriter`, `reader`
 - `commands/{narrative,narrative-review,narrative-adapt,copywrite,review-doc}.md` register the five slash commands
 

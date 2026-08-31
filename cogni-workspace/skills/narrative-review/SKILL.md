@@ -1,6 +1,6 @@
 ---
 name: narrative-review
-description: "Score and review existing narrative files against story arc quality gates. This skill should be used when the user asks to \"review a narrative\", \"score a narrative\", \"check narrative quality\", \"validate narrative\", \"audit narrative\", \"grade a narrative\", \"evaluate narrative quality\", \"narrative scorecard\", \"rate my narrative\", \"run quality gates on a narrative\", or when the narrative-reviewer agent evaluates a generated narrative."
+description: "Review existing narrative files against story arc quality gates, returning a pass/warn/fail verdict per gate. This skill should be used when the user asks to \"review a narrative\", \"score a narrative\", \"check narrative quality\", \"validate narrative\", \"audit narrative\", \"grade a narrative\", \"evaluate narrative quality\", \"narrative scorecard\", \"rate my narrative\", \"run quality gates on a narrative\", or when the narrative-reviewer agent evaluates a generated narrative."
 allowed-tools: Read, Write, Edit, Glob, Grep
 ---
 
@@ -8,14 +8,14 @@ allowed-tools: Read, Write, Edit, Glob, Grep
 
 ## Purpose
 
-Evaluate an existing narrative markdown file against the `narrative` skill quality gates. Produce a structured scorecard with pass/warn/fail per gate, an overall score (0-100), and the top 3 actionable improvement suggestions.
+Evaluate an existing narrative markdown file against the `narrative` skill quality gates. Produce a structured review report with a `pass`/`warn`/`fail` verdict per gate, the criterion-level verdicts behind each one, and the top 3 actionable improvement suggestions.
 
 ## When to Use
 
 - Review a narrative after generation to assess quality
 - Audit an existing insight summary for arc compliance
 - Compare narrative quality before and after edits
-- Score narratives for quality tracking across projects
+- Track per-gate verdicts for quality tracking across projects
 
 **Not for:**
 - Generating new narratives (use `cogni-workspace:narrative` skill instead)
@@ -48,8 +48,6 @@ Two outputs:
   "success": true,
   "source_path": "insight-summary.md",
   "arc_id": "corporate-visions",
-  "overall_score": 82,
-  "grade": "B",
   "gates": {
     "structural": "pass",
     "critical": "pass",
@@ -65,15 +63,20 @@ Two outputs:
 }
 ```
 
-### Grading Scale
+### Verdict Vocabulary
 
-| Score | Grade | Meaning |
-|-------|-------|---------|
-| 90-100 | A | Publication-ready, all gates pass |
-| 80-89 | B | Strong, minor improvements possible |
-| 70-79 | C | Acceptable, several improvements needed |
-| 60-69 | D | Below standard, significant rework needed |
-| 0-59 | F | Fails critical gates, major rework required |
+Every criterion resolves to one of three verdicts, and every gate derives its status from
+the criteria it contains. There is no composite figure and no letter grade -- the workflow
+computes neither, so it reports neither.
+
+| Level | Verdict | Meaning |
+|-------|---------|---------|
+| Criterion | `met` | The criterion's target condition holds |
+| Criterion | `partial` | An intermediate band defined by the rubric holds |
+| Criterion | `unmet` | The criterion's failing band holds |
+
+Gate status is derived from those criterion verdicts by the rule in
+[references/scoring-rubric.md](references/scoring-rubric.md) §Evaluation Principles.
 
 ---
 
@@ -103,16 +106,16 @@ Evaluate the narrative against each gate category. Use the scoring rubric in [re
 
 **Gate evaluation order (matches narrative skill Phase 5):**
 
-1. **Structural Gate** (30 points max)
-2. **Critical Gate** (25 points max)
-3. **Evidence Gate** (25 points max)
-4. **Structure Gate** (10 points max)
-5. **Language Gate** (10 points max)
+1. **Structural Gate**
+2. **Critical Gate**
+3. **Evidence Gate**
+4. **Structure Gate**
+5. **Language Gate**
 
 For each gate:
-- Count specific pass/fail criteria
-- Assign points based on rubric
-- Determine gate status: `pass` / `warn` / `fail`
+- Assign each criterion `met` / `partial` / `unmet` per the rubric
+- Derive gate status from those criterion verdicts using the rubric's gate-status rule
+- Record the gate status: `pass` / `warn` / `fail`
 
 ### Step 4: Generate Scorecard
 
@@ -123,27 +126,24 @@ Write `narrative-review.md` to the same directory as the source file:
 type: narrative-review
 source: "{source filename}"
 arc_id: "{arc_id}"
-overall_score: {0-100}
-grade: "{A-F}"
 date_reviewed: "{ISO 8601}"
 ---
 
 # Narrative Review: {source filename}
 
-**Arc:** {arc_display_name} | **Score:** {score}/100 ({grade}) | **Language:** {language}
+**Arc:** {arc_display_name} | **Language:** {language}
 
 ---
 
 ## Gate Results
 
-| Gate | Status | Score | Details |
-|------|--------|-------|---------|
-| Structural | {pass/warn/fail} | {x}/30 | {summary} |
-| Critical | {pass/warn/fail} | {x}/25 | {summary} |
-| Evidence | {pass/warn/fail} | {x}/25 | {summary} |
-| Structure | {pass/warn/fail} | {x}/10 | {summary} |
-| Language | {pass/warn/fail} | {x}/10 | {summary} |
-| **Total** | | **{total}/100** | |
+| Gate | Status | Criteria | Details |
+|------|--------|----------|---------|
+| Structural | {pass/warn/fail} | {n met, n partial, n unmet} | {summary} |
+| Critical | {pass/warn/fail} | {n met, n partial, n unmet} | {summary} |
+| Evidence | {pass/warn/fail} | {n met, n partial, n unmet} | {summary} |
+| Structure | {pass/warn/fail} | {n met, n partial, n unmet} | {summary} |
+| Language | {pass/warn/fail} | {n met, n partial, n unmet} | {summary} |
 
 ---
 
@@ -157,23 +157,23 @@ date_reviewed: "{ISO 8601}"
 
 ## Detailed Analysis
 
-### Structural Gate ({x}/30)
+### Structural Gate ({pass/warn/fail})
 
 {Detailed findings for each structural criterion}
 
-### Critical Gate ({x}/25)
+### Critical Gate ({pass/warn/fail})
 
 {Detailed findings for each critical criterion}
 
-### Evidence Gate ({x}/25)
+### Evidence Gate ({pass/warn/fail})
 
 {Detailed findings for each evidence criterion}
 
-### Structure Gate ({x}/10)
+### Structure Gate ({pass/warn/fail})
 
 {Detailed findings for each structure criterion}
 
-### Language Gate ({x}/10)
+### Language Gate ({pass/warn/fail})
 
 {Detailed findings for each language criterion}
 ```
@@ -186,9 +186,9 @@ Return the JSON summary (see Output section above).
 
 ## Gate Evaluation Details
 
-For detailed scoring criteria per gate -- including partial credit rules, counting methods, and edge cases -- load [references/scoring-rubric.md](references/scoring-rubric.md).
+For the per-criterion verdict bands per gate -- including counting methods and edge cases -- load [references/scoring-rubric.md](references/scoring-rubric.md).
 
-**Gate summary:** Structural (30 pts) | Critical (25 pts) | Evidence (25 pts) | Structure (10 pts) | Language (10 pts)
+**Gate summary:** each of Structural, Critical, Evidence, Structure and Language returns `pass`, `warn` or `fail`, derived from its own criterion verdicts by the one rule the rubric states.
 
 ---
 
@@ -196,7 +196,8 @@ For detailed scoring criteria per gate -- including partial credit rules, counti
 
 - DO NOT modify the narrative file -- this is a read-only review
 - DO NOT fabricate or assume quality issues -- only report what is measurably found
-- ALWAYS compute expected word ranges from arc proportions x target length for scoring
+- DO NOT emit a composite score, a letter grade or a per-gate point total -- the workflow computes none of them
+- ALWAYS compute expected word ranges from arc proportions x target length for the word-count criteria
 - ALWAYS check against the language-specific header names
 
 ---
@@ -205,7 +206,7 @@ For detailed scoring criteria per gate -- including partial credit rules, counti
 
 | File | Purpose | Load When |
 |------|---------|-----------|
-| `references/scoring-rubric.md` | Detailed scoring weights and edge cases | Step 3 |
+| `references/scoring-rubric.md` | Criterion verdict bands and edge cases | Step 3 |
 
 **Cross-skill dependencies** (files owned by the `narrative` skill):
 

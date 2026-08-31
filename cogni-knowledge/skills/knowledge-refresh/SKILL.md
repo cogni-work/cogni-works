@@ -51,18 +51,7 @@ If `--mode` is missing and `--resweep` was not passed, default to push-mode — 
 - **Push-mode will run** when `--resweep` was **not** passed (push is the default), or when `--mode push` was given explicitly (the `--mode push --resweep` compose case). It runs the **vendored** `wiki-lint` script in-tree + this plugin's own phase skills → resolve the vendored `wiki-lint` scripts.
 - **Resweep will run** whenever `--resweep` was passed. It runs the **vendored** `wiki-claims-resweep` scripts in-tree and dispatches `cogni-workspace:claims` → probe the vendored scripts + `cogni-workspace`.
 
-So a `--resweep`-only invocation (no `--mode`) probes **only** the vendored scripts + `cogni-workspace`, never `cogni-wiki`. Abort cleanly rather than letting a downstream `Skill` dispatch fail with an opaque error. The `probe_plugin` helper handles both the dev-repo sibling layout (`../<plugin>/skills/...`) and the marketplace cache layout (`../../<plugin>/<version>/skills/...`):
-
-```
-probe_plugin() {
-  local plugin="$1" skill="$2"
-  test -f "${CLAUDE_PLUGIN_ROOT}/../${plugin}/skills/${skill}/SKILL.md" && return 0
-  for d in "${CLAUDE_PLUGIN_ROOT}/../../${plugin}/"*/skills/"${skill}"/SKILL.md; do
-    [ -f "$d" ] && return 0
-  done
-  return 1
-}
-```
+So a `--resweep`-only invocation (no `--mode`) probes **only** the vendored scripts + `cogni-workspace`, never `cogni-wiki`. Abort cleanly rather than letting a downstream `Skill` dispatch fail with an opaque error.
 
 **When push-mode will run** (per the decision above), resolve the vendored `wiki-lint` script — push-mode runs `lint_wiki.py` in-tree and dispatches **no** `cogni-wiki:` skill. Resolve it **vendored-first via the same `resolve_wiki_scripts` mechanism** §1 + §2 use, so the pre-flight guard and the §1 invocation share one resolution order + entry-point check:
 
@@ -72,19 +61,27 @@ WIKI_LINT_SCRIPTS=$(resolve_wiki_scripts wiki-lint lint_wiki.py) \
   && WIKI_LINT_SCRIPTS_OK=yes || WIKI_LINT_SCRIPTS_OK=no
 ```
 
-Capture `WIKI_LINT_SCRIPTS` for reuse in §1 step 1 (it resolves the same directory there, so resolving once here keeps the pre-flight guard and the §1 invocation in lockstep — exactly as the resweep block below shares `RESWEEP_SCRIPTS` with §2). Note `lint_wiki.py` imports the vendored `_wikilib.py` from its sibling `wiki-ingest/scripts/` dir, so the entry-point check assumes the full vendored tree (both `wiki-lint/` and `wiki-ingest/scripts/_wikilib.py`) is present — the same sibling-import posture `knowledge-finalize` Step 10.5 already relies on.
+Capture `WIKI_LINT_SCRIPTS` for reuse in §1 step 1 (it resolves the same directory there, so resolving once here keeps the pre-flight guard and the §1 invocation in lockstep). Note `lint_wiki.py` imports the vendored `_wikilib.py` from its sibling `wiki-ingest/scripts/` dir, so the entry-point check assumes the full vendored tree (both `wiki-lint/` and `wiki-ingest/scripts/_wikilib.py`) is present — the same sibling-import posture `knowledge-finalize` Step 10.5 already relies on.
 
 If `WIKI_LINT_SCRIPTS_OK` is `no`, abort with the missing-vendored-scripts message:
 
 > Push-mode requires the vendored `wiki-lint` script (`lint_wiki.py`), which is missing from this install.
 > Reinstall/upgrade cogni-knowledge via the marketplace, then retry.
 
-**When `--resweep` was passed**, the live-source re-check runs the **vendored** `wiki-claims-resweep` scripts in-tree (no `cogni-wiki` dispatch) and dispatches `cogni-workspace:claims`. Resolve the vendored scripts **vendored-first via the same `resolve_wiki_scripts` mechanism §2 uses** — one resolution order + one entry-point existence check shared between the pre-flight guard and the §2 invocation (do not duplicate it as a bare `test -d`, which would not check the entry-point or honour the fallback layout) — and probe `cogni-workspace:claims`:
+**When `--resweep` was passed**, the live-source re-check runs the **vendored** `wiki-claims-resweep` scripts in-tree (no `cogni-wiki` dispatch) and dispatches `cogni-workspace:claims`. Resolve the vendored scripts **vendored-first via the same `resolve_wiki_scripts` mechanism §2 uses** — one resolution order + one entry-point existence check shared between the pre-flight guard and the §2 invocation (do not duplicate it as a bare `test -d`, which would not check the entry-point or honour the fallback layout) — and probe `cogni-workspace:claims`. The `probe_plugin` helper handles both the dev-repo sibling layout (`../<plugin>/skills/...`) and the marketplace cache layout (`../../<plugin>/<version>/skills/...`), and is defined here, immediately before its sole invocation:
 
 ```
 source "${CLAUDE_PLUGIN_ROOT}/scripts/resolve-wiki-scripts.sh"
 RESWEEP_SCRIPTS=$(resolve_wiki_scripts wiki-claims-resweep extract_page_claims.py) \
   && RESWEEP_SCRIPTS_OK=yes || RESWEEP_SCRIPTS_OK=no
+probe_plugin() {
+  local plugin="$1" skill="$2"
+  test -f "${CLAUDE_PLUGIN_ROOT}/../${plugin}/skills/${skill}/SKILL.md" && return 0
+  for d in "${CLAUDE_PLUGIN_ROOT}/../../${plugin}/"*/skills/"${skill}"/SKILL.md; do
+    [ -f "$d" ] && return 0
+  done
+  return 1
+}
 probe_plugin cogni-workspace claims && CLAIMS_OK=yes || CLAIMS_OK=no
 ```
 
@@ -125,7 +122,7 @@ Then continue with the binding-resolution checks:
    ```
    python3 "$WIKI_LINT_SCRIPTS/lint_wiki.py" --wiki-root <wiki_path>
    ```
-   Capture stdout as `LINT_JSON`. This is a read-only pass — it writes **no** `wiki/audits/lint-*.md` file and **no** `wiki/log.md` line; the stale findings come back in-process on stdout. (Re-homed off the `cogni-wiki:wiki-lint` skill dispatch so push-mode needs no `cogni-wiki` install — the staleness check is a sibling-plugin script, not a skill dispatch.)
+   Capture stdout as `LINT_JSON`. This is a read-only pass — it writes **no** `wiki/audits/lint-*.md` file and **no** `wiki/log.md` line; the stale findings come back in-process on stdout. (Re-homed off the `cogni-wiki:wiki-lint` skill dispatch so push-mode needs no `cogni-wiki` install.)
 
 2. **Parse stale findings + evidence-aware refresh candidates.** Two inputs feed the refresh menu:
    - **Time-based (stale).** From `LINT_JSON`, keep the `data.warnings[]` entries whose `class` is `stale_page` or `stale_draft`; each carries a `page` field (the slug) + a `message`. Collect the slug for each. For the step-3 selection label, read each stale page's title from its resolved wiki page's `title:` frontmatter (the warning dict carries the slug, not the title).
@@ -192,7 +189,7 @@ The per-topic loop fails soft: a topic that dies mid-chain leaves valid manifest
 
 ### 2. Resweep — native inline orchestration (opt-in)
 
-Runs **only when `--resweep` is passed** — after push completes (if `--mode push` was given), or **alone** when `--resweep` carries no `--mode`. It re-verifies the bound wiki's cited claims against **live** source URLs, the one thing the zero-network per-run pipeline structurally never does. Never auto-dispatched — the operator must pass the flag, so every finalize/verify/dashboard run stays zero-network and fast.
+Runs **only when `--resweep` is passed** — after push completes (if `--mode push` was given), or **alone** when `--resweep` carries no `--mode`. It re-verifies the bound wiki's cited claims against **live** source URLs, the one thing the zero-network per-run pipeline structurally never does. Never auto-dispatched, so every finalize/verify/dashboard run stays zero-network and fast.
 
 This is an **inline orchestration over the vendored `wiki-claims-resweep` scripts plus the claims engine** — there is **no** `cogni-wiki:` dispatch. The two vendored scripts are deterministic plumbing (claim extraction + plan-materialize/aggregate); the live-source re-verification (WebFetch + LLM-compare against the live page) is the job of `cogni-workspace:claims`. The vendored script directory was already resolved **vendored-first** in the Step 0 pre-flight (`RESWEEP_SCRIPTS`, via `resolve_wiki_scripts wiki-claims-resweep extract_page_claims.py`, exactly as `knowledge-dashboard`/`knowledge-resume` do); reuse that value here. If you are entering §2 without the pre-flight value in hand (e.g. a manual re-entry), re-resolve it identically — `resolve_wiki_scripts` is idempotent:
 

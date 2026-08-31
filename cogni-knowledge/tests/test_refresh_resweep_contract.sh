@@ -16,7 +16,7 @@
 # public --resweep* flags unchanged. The vendored scripts are resolved
 # vendored-first via resolve_wiki_scripts(), mirroring knowledge-dashboard.
 #
-# bash 3.2 + grep only.
+# bash 3.2 + grep + awk.
 
 set -eu
 
@@ -84,6 +84,38 @@ assert_not_grep 'Skill("cogni-wiki:wiki-lint"' "$REFRESH" "refresh-resweep-24-pu
 assert_grep 'lint_wiki.py' "$REFRESH" "refresh-resweep-25-push-mode-lints-vendored knowledge-refresh: push-mode still lints (vendored lint_wiki.py in-tree)"
 assert_not_grep 'Skill("cogni-wiki:wiki-refresh"' "$REFRESH" "refresh-resweep-26-pull-mode-wiki-refresh knowledge-refresh: pull-mode wiki-refresh dispatch removed"
 assert_not_grep 'from-research' "$REFRESH" "refresh-resweep-27-research-flag-removed-pull knowledge-refresh: --from-research flag removed with pull-mode"
+
+# --- 9) probe_plugin definition and call share one fenced block -------------
+# A flat assert_grep on the invocation literal is not enough: it stays green when
+# `probe_plugin()` is defined in a DIFFERENT fenced block than the one calling it,
+# which is the standalone-exit-127 defect this guards. The predicate is
+# BIDIRECTIONAL, so it also rejects the duplicate-definition shortcut: a block
+# that calls without defining is FAIL-NODEF, one that defines without calling is
+# FAIL-ORPHANDEF.
+fence_scope_result=$(awk '
+  /^```/ {
+    if (inf) {
+      if (hascall) { sawcall = 1; if (!hasdef) nodef = 1 }
+      else if (hasdef) orphan = 1
+    }
+    inf = !inf; hasdef = 0; hascall = 0; next
+  }
+  inf && /probe_plugin\(\)[ \t]*\{/ { hasdef = 1 }
+  inf && /probe_plugin[ \t]+[A-Za-z]/ { hascall = 1 }
+  END {
+    if (!sawcall)    print "FAIL-NOBLOCK"
+    else if (nodef)  print "FAIL-NODEF"
+    else if (orphan) print "FAIL-ORPHANDEF"
+    else             print "PASS"
+  }
+' "$REFRESH") || true
+
+if [ "$fence_scope_result" = "PASS" ]; then
+  green "PASS: refresh-resweep-28-probe-plugin-fence-scoped knowledge-refresh: probe_plugin is defined in the same fenced block that calls it"
+else
+  red "FAIL: refresh-resweep-28-probe-plugin-fence-scoped knowledge-refresh: probe_plugin definition/call are not fence-co-located ($fence_scope_result)"
+  errors=$((errors + 1))
+fi
 
 if [ $errors -eq 0 ]; then
   green ""

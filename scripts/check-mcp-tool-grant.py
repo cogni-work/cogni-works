@@ -63,16 +63,16 @@ old heuristic plugin-scoped.
 Three residuals, stated rather than implied away. An agent that names a server
 in prose while naming NONE of its tools in a code span is outside both arms.
 The no-`tools:`-key skip is inherited here, and it is not hypothetical: the
-`storyboard` and `web` agents in cogni-workspace declare no `tools:` key, so
-they never reach this arm and their in-span registry names go unjudged.
+`web` agent in cogni-workspace declares no `tools:` key, so it never reaches
+this arm and its in-span registry names go unjudged.
 Measured when this residual was restated — counting the registry
 `provides_tools[]` bare names that `vocabulary_re` matches inside the body's
 `CODE_SPAN_RE` spans, DISTINCT per agent, the unit
-`summary.provides_tools_code_span_names` itself uses — `storyboard` carries 5
-and `web` carries 6. Unlike the block-form snapshot below, no `summary.*`
-counter re-derives these two: the skip returns before the arm that would have
-counted them, so the figure is hand-taken and goes stale silently. The
-residual stays real while either agent keeps a `tools:`-free frontmatter,
+`summary.provides_tools_code_span_names` itself uses — `web` carries 6.
+Unlike the block-form snapshot below, no `summary.*`
+counter re-derives it: the skip returns before the arm that would have
+counted it, so the figure is hand-taken and goes stale silently. The
+residual stays real while `web` keeps a `tools:`-free frontmatter,
 whatever the count. And a code span inside a DISCLAIMING sentence would read
 as affirmative — that has no instance today, and the span requirement is what
 keeps the edge narrow, but it is real. Finally, the vocabulary is only as
@@ -84,8 +84,8 @@ its own server's `provides_tools[]`, and a name absent from it is surfaced as
 a `granted_outside_vocabulary` observation. Today that reports 9 gaps. Each is
 one record naming the gap once and carrying its granting agents as evidence,
 because the fix is one edit to the registry however many agents grant the name
-— emitting per agent would have restated one fact 17 times and pointed each
-copy at a file that is by construction not where the fix goes.
+— emitting per agent would have restated one fact once per granting agent and
+pointed each copy at a file that is by construction not where the fix goes.
 
 It reports rather than fails, and that is the whole of the decision. A grant
 outside the vocabulary is a registry-accuracy fact, not an agent defect: the
@@ -109,8 +109,9 @@ Two residuals follow from those choices rather than being overlooked. The
 channel is non-failing by design, so a stale registry still waits on a human;
 what changed is that it can no longer wait unseen. And a grant of an
 UNREGISTERED namespace has no vocabulary to resolve against and is skipped by
-construction — 18 of the 73 grant tokens are in that class today, the same
-population the `required_by` arm already skips for the same reason.
+construction — 18 grant tokens are in that class today, against the
+`summary.grant_tokens` total the guard re-derives every run, and they are the
+same population the `required_by` arm already skips for the same reason.
 
 The namespace token class admits HYPHENS. Real namespaces here are spelled
 `claude-in-chrome`, and an `[A-Za-z0-9_]`-only class matches nothing at all in

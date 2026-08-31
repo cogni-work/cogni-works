@@ -1,8 +1,16 @@
 ---
 name: story-to-storyboard
-description: Transform any narrative with a story arc into a storyboard brief for printed posters.
+description: >
+  Use this agent when a narrative that already has a story arc must become a storyboard
+  brief for a printed poster series. Typical triggers include turning a strategy document,
+  project story, or sales narrative into a print poster walkthrough; preparing physical
+  walkthrough material for an executive presentation; and smoke-testing the narrative
+  transformation before the storyboard agent renders it. See "When to Use" in the agent
+  body for the full scenario list.
 model: opus
 color: green
+tools: Skill, Bash
+
 ---
 
 # Story-to-Storyboard Agent

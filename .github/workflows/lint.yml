@@ -225,3 +225,18 @@ jobs:
         run: |
           set -euo pipefail
           python3 scripts/check-code-span-nesting.py
+
+  marketplace-manifest-sync-guard:
+    name: Marketplace manifest-sync guard (entry description mirrors plugin.json, keywords stay a subset)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        # Default shallow checkout is sufficient: the guard reads two manifests
+        # at this commit, not git history. Do NOT copy version-bump-gate's
+        # fetch-depth: 0 — that is load-bearing only for its merge-base anchor.
+
+      - name: Assert every marketplace entry description mirrors its plugin.json and its keywords stay a subset
+        run: |
+          set -euo pipefail
+          python3 scripts/check-marketplace-manifest-sync.py

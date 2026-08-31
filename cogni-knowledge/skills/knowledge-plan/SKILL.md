@@ -45,23 +45,7 @@ If `--topic` is missing, ask the user once with AskUserQuestion. Do not invent a
 
 ### 0. Pre-flight
 
-**Required plugins.** Probe only `cogni-wiki` — the inverted pipeline does NOT dispatch cogni-research skills or agents (clean-break commitment, per `references/inverted-pipeline.md` §"What is no longer in the runtime path"). Probe handles both layouts:
-
-```
-probe_plugin() {
-  local plugin="$1" skill="$2"
-  test -f "${CLAUDE_PLUGIN_ROOT}/../${plugin}/skills/${skill}/SKILL.md" && return 0
-  for d in "${CLAUDE_PLUGIN_ROOT}/../../${plugin}/"*/skills/"${skill}"/SKILL.md; do
-    [ -f "$d" ] && return 0
-  done
-  return 1
-}
-probe_plugin cogni-wiki wiki-setup && WIKI_OK=yes || WIKI_OK=no
-```
-
-If `WIKI_OK=no`, abort:
-
-> cogni-knowledge requires `cogni-wiki` to be installed. Install via the marketplace, then retry.
+**No wiki engine required.** cogni-knowledge bundles its wiki engine: the vendored copy under `scripts/vendor/cogni-wiki/` is resolved vendored-first by every wiki-touching step. This phase resolves no wiki engine and writes no wiki page — it decomposes the topic into `<project>/.metadata/plan.json` and nothing else — so there is no `cogni-wiki` plugin install to probe and no hard dependency to abort on. The inverted pipeline also does NOT dispatch cogni-research skills or agents (clean-break commitment, per `references/inverted-pipeline.md` §"What is no longer in the runtime path"). Proceed directly to the binding.
 
 **Binding.** Resolve `knowledge_root`:
 1. If `--knowledge-root` is set, use it.

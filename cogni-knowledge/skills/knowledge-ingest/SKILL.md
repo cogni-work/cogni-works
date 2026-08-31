@@ -38,21 +38,32 @@ Read `${CLAUDE_PLUGIN_ROOT}/references/inverted-pipeline.md` §"Phase 4 — `kno
 
 ### 0. Pre-flight
 
-**Required plugins.** Probe only `cogni-wiki` (clean-break):
+**Required engine.** This skill runs on the **vendored** wiki-ingest engine — cogni-knowledge ships a byte-identical copy in-tree under `scripts/vendor/cogni-wiki/`, so a bound base works without cogni-wiki installed. The `cogni-wiki` install is only a fallback layout. Probe both so the skill aborts cleanly here rather than failing mid-skill:
 
 ```
-probe_plugin() {
-  local plugin="$1" skill="$2"
-  test -f "${CLAUDE_PLUGIN_ROOT}/../${plugin}/skills/${skill}/SKILL.md" && return 0
-  for d in "${CLAUDE_PLUGIN_ROOT}/../../${plugin}/"*/skills/"${skill}"/SKILL.md; do
-    [ -f "$d" ] && return 0
-  done
-  return 1
-}
-probe_plugin cogni-wiki wiki-ingest && WIKI_OK=yes || WIKI_OK=no
+# vendored-first: the in-tree wiki-ingest scripts are self-contained
+test -d "${CLAUDE_PLUGIN_ROOT}/scripts/vendor/cogni-wiki/skills/wiki-ingest/scripts" && WIKI_OK=yes || WIKI_OK=no
+
+# fallback: an installed cogni-wiki sibling / marketplace cache (legacy layout)
+if [ "$WIKI_OK" = "no" ]; then
+  probe_plugin() {
+    local plugin="$1" skill="$2"
+    test -f "${CLAUDE_PLUGIN_ROOT}/../${plugin}/skills/${skill}/SKILL.md" && return 0
+    for d in "${CLAUDE_PLUGIN_ROOT}/../../${plugin}/"*/skills/"${skill}"/SKILL.md; do
+      [ -f "$d" ] && return 0
+    done
+    return 1
+  }
+  probe_plugin cogni-wiki wiki-ingest && WIKI_OK=yes || WIKI_OK=no
+fi
 ```
 
-If `WIKI_OK=no`, abort with the standard missing-plugin message.
+If `WIKI_OK` is `no`, abort:
+
+> cogni-knowledge's vendored wiki-ingest scripts are missing and no `cogni-wiki`
+> install was found. Reinstall cogni-knowledge, then retry.
+
+This probe is the early-abort gate only — Step 0's `resolve_wiki_scripts` is the authoritative resolver for the actual `backlink_audit.py` path; keep the two vendored-first precedences in sync.
 
 **Resolve the cogni-wiki script dir.** Source the shared `resolve_wiki_scripts` probe (one snippet, sourced by every knowledge-* flow) and call it with the `wiki-ingest` subdir — find `cogni-wiki/skills/wiki-ingest/scripts/` so Step 4 below can call `backlink_audit.py` and `wiki_index_update.py` directly:
 
@@ -96,7 +107,7 @@ Read `<project_path>/.metadata/plan.json` and build a `theme_label` map keyed by
    print(slugify(os.environ["CANDIDATE_TITLE"]) or "")
    '
    ```
-   If the result is empty (title was non-alnum / whitespace / missing) **or the whole slug does not match the anchored guard `^[a-z0-9][a-z0-9-]{0,79}$`** (a full-string match: a lowercase-alnum lead + ≤79 more `[a-z0-9-]`, i.e. ≤80 chars total — e.g. `slugify()` was bypassed and the hand-derived slug ran past the cap or carried an illegal character), fall back to `src-<first-12-of-sha256(normalize_url(URL))>` via `python3 ${CLAUDE_PLUGIN_ROOT}/scripts/fetch-cache.py key --url <URL> --bare` (take the first 12 hex chars; the `src-<hash>` form is lowercase hex after the `src-` prefix and ≤16 chars long, so it satisfies both legs of the guard — the `[a-z0-9-]` charset and the ≤80-char cap). The ingester does NOT re-derive — it only sanity-checks the slug against that same anchored full-string guard `^[a-z0-9][a-z0-9-]{0,79}$` and hard-aborts (`reason: invalid_slug`, dropping the source) on a mismatch, so any slug that fails it must be repaired here, before dispatch. `slugify()` lives in `_knowledge_lib.py` alongside `normalize_url` and the `atomic_write*` helpers — single source of truth.
+   If the result is empty (title was non-alnum / whitespace / missing) **or the whole slug does not match the anchored guard `^[a-z0-9][a-z0-9-]{0,79}$`** (full-string: a lowercase-alnum lead + ≤79 more `[a-z0-9-]`, i.e. ≤80 chars — e.g. `slugify()` was bypassed and the hand-derived slug ran past the cap or carried an illegal character), fall back to `src-<first-12-of-sha256(normalize_url(URL))>` via `python3 ${CLAUDE_PLUGIN_ROOT}/scripts/fetch-cache.py key --url <URL> --bare` (first 12 hex chars; that form is ≤16 chars of lowercase hex after the `src-` prefix, so it satisfies both legs of the guard). The ingester does NOT re-derive — it only sanity-checks the slug against that same guard and hard-aborts (`reason: invalid_slug`, dropping the source) on a mismatch, so any slug that fails it must be repaired here, before dispatch. `slugify()` lives in `_knowledge_lib.py` alongside `normalize_url` and the `atomic_write*` helpers — single source of truth.
 3. **Skip already-ingested.** Read `ingest-manifest.json` (if it exists) and drop any `fetched[]` entry whose URL appears in `ingested[]` already. This is the re-run no-op contract: a second `knowledge-ingest` run on the same project should not re-dispatch `source-ingester` / `claim-extractor` for sources already on the wiki. The agent-side slug-collision check (`agents/source-ingester.md` Phase 3) is defence-in-depth for the cross-process race; the orchestrator-side skip is what saves cost on the common re-run path.
 4. **Dedupe by slug within this run.** If two not-yet-ingested URLs map to the same slug (rare; URL dedup should have caught it upstream), keep the first occurrence and surface the collision as a non-blocking warning. Continue.
 5. Split into batches of size `--batch-size` (default 25). Each batch dispatches as **one wave** (Step 3), so a run with ≤ `--batch-size` sources is a single wave — one barrier, not many. The default 25 is calibrated so a wave of 25/26 ingesters runs clean; see `references/fan-out-concurrency.md`.
@@ -123,7 +134,7 @@ For each batch:
 
 1. Per-source batch output paths: `<project_path>/.metadata/.ingest.batch.<NNN>.<NN>.json` (batch index + per-source index inside the batch).
 
-1b. **Persist the authoritative dispatch table for this batch** to `<project_path>/.metadata/.ingest.dispatch.<NNN>.json` as a JSON array `[{"slug": "<Step 1.2 slug>", "url": "<fetch-manifest URL>"}, ...]`, **ordered by the same per-source index `<NN>` as the batch output paths in step 1** (so dispatch entry `i` and the batch-result file `.ingest.batch.<NNN>.<i>.json` describe the same source), built from the orchestrator's own Step 1.2 slug map + fetch-manifest URL — **at dispatch time, before any agent returns**. This is the ground truth the Step 3.5 sweep verifies against: it is written from what was *dispatched*, independent of what the agents *return* (an agent-returned slug/url can itself be cross-contaminated, so it cannot be trusted as the reference). Each ingester resolves its `SLUG`/`URL` strictly from its dispatch parameters; this record captures that pairing so a post-wave check can prove the on-disk page kept it.
+1b. **Persist the authoritative dispatch table for this batch** to `<project_path>/.metadata/.ingest.dispatch.<NNN>.json` as a JSON array `[{"slug": "<Step 1.2 slug>", "url": "<fetch-manifest URL>"}, ...]`, **ordered by the same per-source index `<NN>` as the batch output paths in step 1** (so dispatch entry `i` and the batch-result file `.ingest.batch.<NNN>.<i>.json` describe the same source), built from the orchestrator's own Step 1.2 slug map + fetch-manifest URL — **at dispatch time, before any agent returns**. This is the ground truth the Step 3.5 sweep verifies against — written from what was *dispatched*, never from what the agents *return* (an agent-returned slug/url can itself be cross-contaminated). Each ingester resolves its `SLUG`/`URL` strictly from its dispatch parameters; this record captures that pairing so a post-wave check can prove the on-disk page kept it.
 
 2. Dispatch via the `Task` tool (matches the upstream `knowledge-curate` / `knowledge-fetch` agent-dispatch convention):
    ```
@@ -142,9 +153,9 @@ For each batch:
 
    `source-ingester` lives at `${CLAUDE_PLUGIN_ROOT}/agents/source-ingester.md` — dispatched via `Task`, not `Skill`.
 
-   Resolve `THEME_LABEL` the **same way Step 4.2 resolves `--category`** (this source's `sub_question_refs[0]` → Step 0 `theme_label` map; omit / pass empty on a legacy plan with no `theme_label`). The ingester writes it into the page's `theme_label:` frontmatter — the authoritative, frontmatter-resident membership signal `sub_index.py` reads to group the source under its theme (so a curated root index no longer needs per-page bullets to carry membership), kept consistent with the `## <theme_label>` heading Step 4.2 files its index bullet under.
+   Resolve `THEME_LABEL` the **same way Step 4.2 resolves `--category`** (this source's `sub_question_refs[0]` → Step 0 `theme_label` map; empty on a legacy plan with no `theme_label`). The ingester writes it as the page's `theme_label:` frontmatter — the membership signal `sub_index.py` groups by, kept consistent with the `## <theme_label>` heading Step 4.2 files its index bullet under.
 
-   `MARKET` is the **run-level** market (`plan.json::market`, read once in Step 0 — one value for the whole run, e.g. `dach`), passed identically to every ingester in the batch. The ingester writes it into the page's `market:` frontmatter — the geography sibling of `theme_label:` that the perspectives overlay's Where facet groups by. Pass empty on a legacy plan with no `market`; the field is then dropped and the page simply does not appear in the Where grouping.
+   `MARKET` is the **run-level** value read once in Step 0 (`plan.json::market`, e.g. `dach`), passed identically to every ingester in the batch. The ingester writes it as the page's `market:` frontmatter. Pass empty on a legacy plan with no `market`; the field is then dropped and the page joins no Where grouping.
 
 3. **One wave per batch.** Issue all sources in the batch (`--batch-size`, default 25) as `source-ingester` dispatches in a **single message with multiple tool calls** so they fan out in one wave. Claude Code self-throttles the actual concurrency inside a single-message fan-out — dispatches beyond its internal ceiling queue and run as slots free, but all of them complete and return — so a wave of 25 is safe (the calibration is in Step 1.5 and `references/fan-out-concurrency.md`). The per-batch barrier is **not** a concurrency limiter; it exists only so the Step 3.4 merge stays incremental and re-runnable (a crashed wave re-runs from `ingested[]`). This mirrors the `knowledge-curate` one-wave precedent. Per-source contention is structurally impossible inside Step 3: each ingester writes a unique `wiki/sources/<slug>.md` (Step 1.2 + 1.4 guarantee slug uniqueness within the run) and its own per-source batch JSON (unique path). The cogni-wiki helpers (`wiki_index_update.py`, `backlink_audit.py`) only run in Step 4 after all ingesters in this batch have returned. Across batches, the Step 3.4 merge runs once per batch.
 
@@ -180,7 +191,7 @@ For each batch:
 
 The ingesters fan out in one single-message wave (Step 3.3). That wave is where two `source-ingester` dispatches can cross-talk: the agent handling source A composes its page from source B's fetched body + frontmatter, so A's on-disk `wiki/sources/<A-slug>.md` ends up carrying B's `id:`, `sources:` URL, claims, and body. This is non-deterministic LLM attention cross-talk — not a code path — so it cannot be prompted away. The in-agent pre-write assertion (`source-ingester` Phase 3) stops most of it before disk; this sweep is the deterministic, load-bearing backstop the LLM cannot defeat. It runs **per batch**, immediately after the Step 3.4 merge, so a contaminated page is caught **before** Step 4 indexes/backlinks it and before Step 4's orchestrator builds question nodes from it (and therefore before compose/verify ever see it).
 
-1. **Build the sweep input.** Take this batch's persisted dispatch table (`<project_path>/.metadata/.ingest.dispatch.<NNN>.json`) and keep dispatch entry `i` **iff its per-source batch-result file `.ingest.batch.<NNN>.<i>.json` reported `ok: true`** — pair the two **by per-source index `i`, never by the agent-returned `url`/`slug`**. The index is orchestrator-owned (Step 3.1b ordered the dispatch table by the same `<NN>` the orchestrator assigned to each `BATCH_OUTPUT_PATH`), so it is contamination-proof. Filtering by URL membership in `ingested[]` would be wrong: `ingested[].url` comes from the agent's batch JSON, the exact field cross-talk corrupts — a contaminated source that echoes a sibling's URL would have its own real slug filtered *out* of the sweep input and escape detection, defeating the whole point of verifying against the dispatch record. Excluding only the `ok: false` indices (a legitimately-skipped source — `cache_miss` etc. — wrote no page) avoids a false `page_missing` without trusting any agent-populated field.
+1. **Build the sweep input.** Take this batch's persisted dispatch table (`<project_path>/.metadata/.ingest.dispatch.<NNN>.json`) and keep dispatch entry `i` **iff its per-source batch-result file `.ingest.batch.<NNN>.<i>.json` reported `ok: true`** — pair the two **by per-source index `i`, never by the agent-returned `url`/`slug`**. The index is orchestrator-owned (Step 3.1b ordered the dispatch table by the same `<NN>` the orchestrator assigned to each `BATCH_OUTPUT_PATH`), so it is contamination-proof. Do **not** filter by URL membership in `ingested[]`: that URL comes from the agent's batch JSON — the exact field cross-talk corrupts — so a contaminated source echoing a sibling's URL would have its own real slug filtered *out* of the sweep input and escape detection. Excluding only the `ok: false` indices (a legitimately-skipped source — `cache_miss` etc. — wrote no page) avoids a false `page_missing` without trusting any agent-populated field.
 
 2. **Run the sweep** against the authoritative dispatch record (the filtered table), piping it on stdin:
    ```
@@ -201,24 +212,20 @@ The ingesters fan out in one single-message wave (Step 3.3). That wave is where 
 
 ### 4. Per-new-slug wiki integration (first-party orchestrator)
 
-The deterministic downstream of ingest — applying curated backlinks, the per-slug
-thematic index rows, the `entries_count` bumps, the question-node emission + reverse
-links, the theme-lineage record, and the two sub-index renders — runs as **one
-first-party orchestrator call**, not a model-managed shell loop. The orchestrator
-(`scripts/knowledge-ingest-postprocess.py`) batches the existing vendored
-subprocess calls from one parent; each child still takes `_wiki_lock` in its own
-process and runs serially — **no deadlock, no vendored-engine edit** (the
-acquire-once-then-shell-out shape is NOT used). It owns env-var passing internally
-(slugs + summaries are read from `ingest-manifest.json`, never interpolated into a
-command line) and computes `n_new` / `n_new_q` authoritatively in one place
-(`action == "inserted"` only), removing the two fragility footguns the model loop
-carried. The post-processing script budget is small (≈2.2s across ~21 slugs); the
-dominant per-slug cost is the LLM backlink **curation** in Step 4.1 below, which
-stays here in `SKILL.md` by design and cannot move into a stdlib script.
-
-The orchestrator produces **byte-identical wiki output** vs the prior per-slug shell
-loop on the same inputs — the same vendored scripts, in the same order, with the
-same arguments.
+The deterministic downstream of ingest — curated backlinks, the per-slug thematic
+index rows, the `entries_count` bumps, the question-node emission + reverse links,
+the theme-lineage record, and the two sub-index renders — runs as **one first-party
+orchestrator call** (`scripts/knowledge-ingest-postprocess.py`), not a model-managed
+shell loop. It batches the vendored subprocess calls from one parent; each child
+still takes `_wiki_lock` in its own process and runs serially — **no deadlock, no
+vendored-engine edit** (the acquire-once-then-shell-out shape is NOT used). It reads
+slugs + summaries from `ingest-manifest.json` rather than interpolating them into a
+command line, and computes `n_new` / `n_new_q` authoritatively in one place
+(`action == "inserted"` only). Its own script budget is small (≈2.2s across ~21
+slugs); the dominant per-slug cost is the LLM backlink **curation** in Step 4.1
+below, which stays here in `SKILL.md` by design and cannot move into a stdlib script.
+Output is **byte-identical** to the prior per-slug shell loop on the same inputs —
+same vendored scripts, same order, same arguments.
 
 #### 4.1. Per-new-slug backlink audit + curation (stays in `SKILL.md` — LLM-mediated)
 
@@ -332,7 +339,7 @@ Score the sources ingested this run against the related pages the base already h
 - **PRIOR-PEERS** = `sources_answering[] − NEW` — the prior-run source pages.
 - **PEER_SLUGS** = PRIOR-PEERS **plus the question node's own slug** (`slug`) — the full set the agent compares NEW against. The question node carries citable `answer_claims:` only on run 2+ (after a prior distill); the agent resolves it if present and contributes nothing if not.
 
-A group **qualifies** when `len(NEW) ≥ 2` **OR** (`len(NEW) ≥ 1` AND there is ≥1 PRIOR-PEER) — i.e. there is at least one real claim-vs-claim pair to score. The question node is **always** passed in `PEER_SLUGS` (so its `answer_claims:` are used when present) but does **NOT** count toward this threshold: `answer_claims:` only exist when prior answering sources exist, so a claim-bearing question node always co-occurs with a qualifying PRIOR-PEER — excluding the node from the count loses no real comparison while avoiding a wasted dispatch on a first run, where a single-new-source sub-question would otherwise dispatch an agent that can only no-op (1 NEW vs a claim-less node → 0 pairs). Cap PRIOR-PEERS at 20 (truncate the prior-run source list, keeping the question node; surface the truncation in the Step 6 summary). Drop groups that do not qualify.
+A group **qualifies** when `len(NEW) ≥ 2` **OR** (`len(NEW) ≥ 1` AND there is ≥1 PRIOR-PEER) — i.e. there is at least one real claim-vs-claim pair to score. The question node is **always** passed in `PEER_SLUGS` (so its `answer_claims:` are used when present) but does **NOT** count toward this threshold: `answer_claims:` exist only when prior answering sources do, so a claim-bearing node always co-occurs with a qualifying PRIOR-PEER — excluding it from the count loses no real comparison while avoiding a wasted first-run dispatch that could only no-op (1 NEW vs a claim-less node → 0 pairs). Cap PRIOR-PEERS at 20 (truncate the prior-run source list, keeping the question node; surface the truncation in the Step 6 summary). Drop groups that do not qualify.
 
 **4.6.2. Dispatch (one fan-out wave).** Dispatch one `source-contradictor` per qualifying group in a **single-message fan-out wave** (the Step 3 fan-out precedent), threading per group: `WIKI_ROOT`, `PROJECT_PATH`, `QUESTION_SLUG=<slug>`, `NEW_SOURCE_SLUGS=<csv of NEW>`, `PEER_SLUGS=<csv of PEER, may be empty>`, `OUTPUT_LANGUAGE=<plan.output_language>`, and `OUT_PATH=<project_path>/.metadata/.contradiction-ingest.<slug>.json`. Each agent scores each NEW claim against each PEER claim and each other NEW claim, writing its own per-group fragment.
 
@@ -412,14 +419,14 @@ python3 "${CLAUDE_PLUGIN_ROOT}/scripts/run-metrics.py" record \
     --max-agent-duration-ms <MAX_DURATION_MS — the slowest source-ingester duration from Step 3.4>
 ```
 
-`--cost-usd` is now the **measured** ingest spend (each ingester self-reports a `cost_estimate` that bundles its `claim-extractor` sub-call), not an orchestrator estimate; `--max-agent-duration-ms` lets `run-metrics.py report` show the serial tail directly (`serial_tail ≈ elapsed_s − max_agent_duration_ms/1000`). **Scope note:** `MAX_DURATION_MS` reflects the `source-ingester` wave only (the dominant ingest cost — the only agents that self-report `duration_ms`), while `--agent-count` is the full dispatch count **including** any Step 4.6 `source-contradictor`s; so on a run with a slow contradictor wave the recorded `max_agent_duration_ms` is a lower bound on the slowest agent, and the derived serial tail is correspondingly an upper bound. Fail-soft — a record failure never blocks the phase. Full contract: `${CLAUDE_PLUGIN_ROOT}/references/run-metrics-wiring.md`.
+`--cost-usd` is now the **measured** ingest spend (each ingester self-reports a `cost_estimate` that bundles its `claim-extractor` sub-call), not an orchestrator estimate; `--max-agent-duration-ms` lets `run-metrics.py report` show the serial tail directly (`serial_tail ≈ elapsed_s − max_agent_duration_ms/1000`). **Scope note:** `MAX_DURATION_MS` covers the `source-ingester` wave only (the dominant ingest cost — the only agents that self-report `duration_ms`), while `--agent-count` is the full dispatch count **including** any Step 4.6 `source-contradictor`s — so on a run with a slow contradictor wave the recorded `max_agent_duration_ms` is a lower bound and the derived serial tail an upper bound. Fail-soft — a record failure never blocks the phase. Full contract: `${CLAUDE_PLUGIN_ROOT}/references/run-metrics-wiring.md`.
 
 ## Edge cases
 
 - **Re-ingest of an existing project.** `ingest-manifest.json` already exists; the orchestrator skips entries already in `ingested[]` (URL-keyed). Manual cleanup (delete page + remove from manifest) is the path to force a re-ingest of a specific URL.
 - **Cache file gone missing between fetch and ingest.** Surface in `skipped[]` with `reason: cache_miss` and continue. The user can re-run `knowledge-fetch` to repopulate.
 - **Slug collision across batches.** Step 1.3 dedupes before dispatch; defence-in-depth check inside `source-ingester` refuses to overwrite an existing page. Surfaces as `reason: slug_collision` in `skipped[]`.
-- **Cross-contaminated page (ingest-wave attention cross-talk).** A page that lands on disk carrying another source's `id:` / `sources:` URL (one `source-ingester` composed its page from a sibling's fetched body in the same fan-out wave) is caught by the Step 3.5 sweep against the dispatch record, moved to `<project_path>/.metadata/quarantine/<slug>.md`, dropped from `ingested[]`, and recorded in `skipped[]` with `reason: integrity_mismatch`. The freed slug + the URL's absence from `ingested[]` leave it re-dispatchable — a plain `knowledge-ingest` re-run re-ingests it. The quarantined file is kept (not deleted) for inspection.
+- **Cross-contaminated page (ingest-wave attention cross-talk).** A page that lands on disk carrying another source's `id:` / `sources:` URL is handled entirely by the Step 3.5 sweep — quarantined (file kept for inspection), dropped from `ingested[]`, recorded in `skipped[]` with `reason: integrity_mismatch`, and left re-dispatchable by a plain `knowledge-ingest` re-run.
 - **First ingest into an empty wiki.** `wiki/index.md` may exist with only the wiki-setup header + the `## Categories` / `_No pages yet…_` seed placeholder. The first `wiki_index_update.py` call creates the first `## <theme_label>` category and sheds the seed placeholder; subsequent calls append. On a brand-new base the backlink apply step has few or no sibling pages to link from — that's expected; the synthesis (finalize) and later ingests fill the graph in.
 - **Wiki schema with `type: source` / `type: question` not yet allowlisted.** A current cogni-wiki `_wikilib.PAGE_TYPE_DIRS` includes `"source": "sources"` and `"question": "questions"`; older wikis hard-fail in `wiki-health` until upgraded. The skill does not auto-migrate; surface the error and direct the user to upgrade cogni-wiki. `question-store.py` `mkdir -p`'s `wiki/questions/` on demand.
 - **Step 4 (question-node) legacy plan with no `theme_label`.** `question-store.py` falls back to the `sq-NN` slug, and the Step 4.3 question index category falls back to `## Research questions` **only when `theme_label` is absent** for that sub-question (otherwise the question files under its `## <theme_label>` heading alongside its answering sources), so a pre-`theme_label` plan still produces well-named question nodes under one coherent question section.

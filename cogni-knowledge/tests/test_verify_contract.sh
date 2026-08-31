@@ -74,7 +74,7 @@ assert_grep '\-\-draft "' "$VERIFY" "verify-contract-24-passes-draft-prefilter-s
 # Review fix: shard runs every round (even on empty remaining) so stale numbered
 # fragments from an interrupted prior attempt are cleared before merge.
 assert_grep 'even when .*remaining_ids.* is empty' "$VERIFY" "verify-contract-25-runs-shard-every-round knowledge-verify: runs shard every round to clear stale fragments (review)"
-assert_grep 'probe_plugin cogni-wiki' "$VERIFY" "verify-contract-26-probes-cogni-wiki-clean knowledge-verify: probes cogni-wiki (clean-break)"
+assert_not_grep 'probe_plugin' "$VERIFY" "verify-contract-26-no-install-only-wiki-probe knowledge-verify: no install-only cogni-wiki probe (the verifier calls no cogni-wiki skill; wiki existence is gated directly)"
 assert_grep 'wiki/log.md' "$VERIFY" "verify-contract-27-appends-wiki-log-md knowledge-verify: appends to wiki/log.md"
 assert_grep 'control-path.py" log' "$VERIFY" "verify-contract-28-resolves-log-path-control knowledge-verify: resolves the log path via control-path.py (no hardcoded wiki/log.md write target)"
 # Match the actual log-line shape (`## [DATE] verify | project=...`) rather

@@ -8,8 +8,8 @@
 # disappearing from the contract. They do NOT assert LLM behaviour.
 #
 # Covers:
-#   - knowledge-plan: writes plan.json schema 0.1.0, probes only cogni-wiki,
-#     does not append binding.
+#   - knowledge-plan: writes plan.json schema 0.1.0, carries no cogni-wiki
+#     install probe, does not append binding.
 #   - knowledge-curate: reads plan.json, dispatches source-curator (forwarding
 #     KNOWLEDGE_ROOT/MAX_AGE_DAYS for the Phase-4 fetch, Option B #292), merges
 #     through candidate-store.py append-batch, reads curator_defaults from
@@ -63,7 +63,7 @@ assert_grep 'reliminary scoping scan' "$PLAN" "skill-contracts-12-documents-prel
 # references/ + the PR/commit). Guards against maintenance provenance leaking
 # into the executed prompt.
 assert_not_grep '#[0-9]' "$PLAN" "skill-contracts-13-no-nnn-issue-ref knowledge-plan: no #NNN issue-ref breadcrumbs in the executed prompt"
-assert_grep 'probe_plugin cogni-wiki wiki-setup' "$PLAN" "skill-contracts-14-knowledge-plan-probes-cogni knowledge-plan: probes cogni-wiki"
+assert_not_grep 'probe_plugin' "$PLAN" "skill-contracts-14-knowledge-plan-no-install-probe knowledge-plan: carries no cogni-wiki install probe (the wiki engine is vendored; this phase resolves none)"
 assert_grep 'knowledge-finalize' "$PLAN" "skill-contracts-15-defers-binding-append-m9 knowledge-plan: defers binding append to M9 knowledge-finalize"
 assert_not_grep 'probe_plugin cogni-research' "$PLAN" "skill-contracts-16-knowledge-plan-does-not knowledge-plan: does NOT probe cogni-research (clean break)"
 # Slice 16 (#307): each sub-question carries a theme_label (the thematic index

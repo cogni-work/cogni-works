@@ -38,21 +38,7 @@ Read `${CLAUDE_PLUGIN_ROOT}/references/inverted-pipeline.md` §"Phase 3 — `kno
 
 ### 0. Pre-flight
 
-**Required plugins.** Probe only `cogni-wiki` (clean-break):
-
-```
-probe_plugin() {
-  local plugin="$1" skill="$2"
-  test -f "${CLAUDE_PLUGIN_ROOT}/../${plugin}/skills/${skill}/SKILL.md" && return 0
-  for d in "${CLAUDE_PLUGIN_ROOT}/../../${plugin}/"*/skills/"${skill}"/SKILL.md; do
-    [ -f "$d" ] && return 0
-  done
-  return 1
-}
-probe_plugin cogni-wiki wiki-setup && WIKI_OK=yes || WIKI_OK=no
-```
-
-Abort with the standard missing-plugin message on `no`.
+**No wiki engine required.** This skill resolves no wiki engine and touches no path under the bound `wiki/` tree — it works from `candidates.json`, `fetch-manifest.json` and the fetch cache. cogni-knowledge bundles its wiki engine under `scripts/vendor/cogni-wiki/` for the phases that do need it, so there is no `cogni-wiki` plugin install to probe and no hard dependency to abort on (clean-break — no cogni-research dispatch either).
 
 **Binding + candidates.** Resolve `knowledge_root`. Read the binding (`knowledge-binding.py read`) and parse `curator_defaults.fetch_cache_max_age_days` (default 30 if absent — legacy bindings).
 

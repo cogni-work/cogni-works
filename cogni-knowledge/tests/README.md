@@ -232,7 +232,7 @@ and the legacy-plan `sq-NN` slug fallback.
 
 ## Maintenance note
 
-Grep patterns assert exact layout (e.g. `| `--bare` | No |` for parameter
+Grep patterns assert exact layout (e.g. ``| `--bare` | No |`` for parameter
 tables). Cosmetic reformats — column swap, extra column, switching from
 `|`-pipe tables to a different structure — will trip these tests even when
 the underlying contract is unchanged. When reformatting any covered

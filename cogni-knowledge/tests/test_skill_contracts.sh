@@ -338,12 +338,11 @@ assert_grep 'knowledge-refresh --resweep' "$VERIFIER" "skill-contracts-86-names-
 # original load-bearing zero-network assertion.
 assert_grep 'Does NOT WebFetch or WebSearch' "$VERIFIER" "skill-contracts-87-retains-does-not-webfetch wiki-verifier: retains the 'Does NOT WebFetch or WebSearch' invariant (#337 must not erode it)"
 
-# --- Read-side skills: cogni-research probe drop (M10a, v0.0.25) ----------
-# query / dashboard / resume dispatch ONLY cogni-wiki. The v0.1.0 clean break
-# (decision-1) makes cogni-research 0% of the runtime path, so these skills
-# must probe cogni-wiki only — otherwise an uninstalled cogni-research (after
-# M11 archives the legacy skills) would brick read-only status surfaces. Each
-# must also wire the new pipeline-summary.py reader.
+# --- Read-side skills: engine probe posture ------------------------------
+# query / dashboard / resume must probe neither cogni-research (v0.1.0 clean
+# break) nor an external cogni-wiki (retired — the engine is vendored in-tree,
+# and a stale external copy is never preferable to failing loudly). Each must
+# gate on the VENDORED engine and wire the pipeline-summary.py reader.
 QUERY="$PLUGIN_ROOT/skills/knowledge-query/SKILL.md"
 DASHBOARD="$PLUGIN_ROOT/skills/knowledge-dashboard/SKILL.md"
 RESUME="$PLUGIN_ROOT/skills/knowledge-resume/SKILL.md"
@@ -358,14 +357,15 @@ for f in "$QUERY" "$DASHBOARD" "$RESUME"; do
     green "PASS: skill-contracts-88-skill-md-not-found-${name} $name/SKILL.md present"
   fi
   assert_not_grep 'probe_plugin cogni-research' "$f" "skill-contracts-89-does-not-probe-cogni-${name} $name: does NOT probe cogni-research (clean break)"
-  assert_grep 'probe_plugin cogni-wiki' "$f" "skill-contracts-90-probes-cogni-wiki-${name} $name: still probes cogni-wiki"
+  assert_grep 'scripts/vendor/cogni-wiki/skills' "$f" "skill-contracts-90-probes-vendored-engine-${name} $name: gates on the vendored wiki engine"
+  assert_not_grep 'probe_plugin cogni-wiki' "$f" "skill-contracts-90b-no-external-cogni-wiki-probe-${name} $name: carries no external cogni-wiki fallback probe (vendored-only)"
   assert_grep 'pipeline-summary.py' "$f" "skill-contracts-91-wired-pipeline-summary-py-${name} $name: wired to pipeline-summary.py reader"
 done
 
 # knowledge-query is the shallow rung: it reads + synthesizes natively on the
 # vendored wiki-grounding primitive and no longer dispatches cogni-wiki:wiki-query.
-# (It keeps the cogni-wiki probe above as the graceful-degradation fallback layout
-# and the pipeline-summary.py footer.)
+# (It keeps the vendored engine gate above and the pipeline-summary.py footer;
+# there is no external cogni-wiki fallback.)
 assert_not_grep 'Skill("cogni-wiki:wiki-query' "$QUERY" "skill-contracts-92-knowledge-query-no-longer knowledge-query: no longer dispatches cogni-wiki:wiki-query (native shallow rung on the vendored engine)"
 assert_grep 'wiki-grounding.py' "$QUERY" "skill-contracts-93-consumes-shared-wiki-grounding knowledge-query: consumes the shared wiki-grounding primitive directly"
 
@@ -384,15 +384,15 @@ fi
 
 # knowledge-dashboard renders natively on the vendored render_dashboard.py /
 # build_graph.py and no longer dispatches cogni-wiki:wiki-dashboard (FMO Phase 8
-# d2 re-home). It keeps the cogni-wiki probe above as the vendored-first /
-# graceful-degradation fallback layout and the pipeline-summary.py overlay reads.
+# d2 re-home). It keeps the vendored engine gate above and the
+# pipeline-summary.py overlay reads; there is no external cogni-wiki fallback.
 assert_not_grep 'Skill("cogni-wiki:wiki-dashboard' "$DASHBOARD" "skill-contracts-98-knowledge-dashboard-no-longer knowledge-dashboard: no longer dispatches cogni-wiki:wiki-dashboard (native render on the vendored engine)"
 assert_grep 'render_dashboard.py' "$DASHBOARD" "skill-contracts-99-invokes-vendored-render-dashboard knowledge-dashboard: invokes the vendored render_dashboard.py directly"
 
 # knowledge-resume computes the wiki health verdict natively on the vendored
 # health.py and no longer dispatches cogni-wiki:wiki-resume (FMO Phase 8 d2
-# re-home). It keeps the cogni-wiki probe above as the vendored-first /
-# graceful-degradation fallback layout and the pipeline-summary.py reads.
+# re-home). It keeps the vendored engine gate above and the pipeline-summary.py
+# reads; there is no external cogni-wiki fallback.
 assert_not_grep 'Skill("cogni-wiki:wiki-resume' "$RESUME" "skill-contracts-100-knowledge-resume-no-longer knowledge-resume: no longer dispatches cogni-wiki:wiki-resume (native health verdict on the vendored engine)"
 assert_grep 'health.py' "$RESUME" "skill-contracts-101-invokes-vendored-health-py knowledge-resume: invokes the vendored health.py directly"
 

@@ -33,32 +33,19 @@ Read `${CLAUDE_PLUGIN_ROOT}/references/delegation-contract.md` once at the start
 
 ### 0. Pre-flight
 
-**Required engine.** This skill computes the wiki health verdict on the **vendored** wiki-health engine — cogni-knowledge ships a byte-identical copy in-tree under `scripts/vendor/cogni-wiki/`, so a bound base shows its resume status without cogni-wiki installed and this skill no longer dispatches `cogni-wiki:wiki-resume`, mirroring the native posture of `knowledge-dashboard` and `knowledge-query`. It reads the inverted-pipeline manifests via `pipeline-summary.py` and never reaches cogni-research. The `cogni-wiki` install is only a fallback layout. Probe both so the skill aborts cleanly here rather than failing mid-skill:
+**Required engine.** This skill computes the wiki health verdict on the **vendored** wiki-health engine — cogni-knowledge ships a byte-identical copy in-tree under `scripts/vendor/cogni-wiki/`, so a bound base shows its resume status without cogni-wiki installed and this skill no longer dispatches `cogni-wiki:wiki-resume`, mirroring the native posture of `knowledge-dashboard` and `knowledge-query`. It reads the inverted-pipeline manifests via `pipeline-summary.py` and never reaches cogni-research. Probe it so the skill aborts cleanly here rather than failing mid-skill:
 
 ```
 # vendored-first: the in-tree wiki-health scripts are self-contained
 test -d "${CLAUDE_PLUGIN_ROOT}/scripts/vendor/cogni-wiki/skills/wiki-health/scripts" && WIKI_OK=yes || WIKI_OK=no
-
-# fallback: an installed cogni-wiki sibling / marketplace cache (legacy layout)
-if [ "$WIKI_OK" = "no" ]; then
-  probe_plugin() {
-    local plugin="$1" skill="$2"
-    test -f "${CLAUDE_PLUGIN_ROOT}/../${plugin}/skills/${skill}/SKILL.md" && return 0
-    for d in "${CLAUDE_PLUGIN_ROOT}/../../${plugin}/"*/skills/"${skill}"/SKILL.md; do
-      [ -f "$d" ] && return 0
-    done
-    return 1
-  }
-  probe_plugin cogni-wiki wiki-setup && WIKI_OK=yes || WIKI_OK=no
-fi
 ```
 
 If `WIKI_OK` is `no`, abort:
 
-> cogni-knowledge's vendored wiki-health scripts are missing and no `cogni-wiki`
-> install was found. Reinstall cogni-knowledge, then retry.
+> cogni-knowledge's vendored wiki-health scripts are missing.
+> Reinstall cogni-knowledge, then retry.
 
-Resume is read-only with respect to disk; the vendored-first probe gives the user the same clean signal every other `knowledge-*` read/render skill emits. This probe is the early-abort gate only — Step 2's `resolve_wiki_scripts` is the authoritative resolver for the actual `health.py` path; keep the two vendored-first precedences in sync.
+Resume is read-only with respect to disk; the vendored probe gives the user the same clean signal every other `knowledge-*` read/render skill emits. This probe is the early-abort gate only — Step 2's `resolve_wiki_scripts` is the authoritative resolver for the actual `health.py` path; keep the two vendored probes in sync.
 
 ### 0.5. Discovery — resolve the target base (no clear target → present bases + offer a new one)
 
@@ -132,7 +119,7 @@ Resolve the vendored `wiki-health` scripts dir vendored-first (the same `resolve
 ```bash
 . "${CLAUDE_PLUGIN_ROOT}/scripts/resolve-wiki-scripts.sh"
 WIKI_HEALTH_SCRIPTS=$(resolve_wiki_scripts wiki-health health.py) \
-  || abort "cogni-wiki wiki-health scripts not found (vendored copy missing)"
+  || abort "cogni-knowledge's vendored wiki-health scripts are missing. Reinstall cogni-knowledge, then retry."
 ```
 
 **2a. Health verdict.** Run the vendored `health.py` against the bound wiki (it resolves `_wikilib` itself; read-only apart from the health-check log line it appends — the same side effect the old dispatch produced):

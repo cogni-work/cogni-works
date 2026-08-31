@@ -43,7 +43,9 @@ assert_grep 'knowledge-binding.py read' "$SRC" "khealth-03-reads-binding-knowled
 # Vendored-first engine resolution.
 assert_grep 'resolve_wiki_scripts' "$SRC" "khealth-04-resolves-wiki-health-script knowledge-health: resolves the wiki-health script dir via the resolve_wiki_scripts probe"
 assert_grep 'scripts/vendor/cogni-wiki/skills/wiki-health/scripts' "$SRC" "khealth-05-names-vendored-first-wiki knowledge-health: names the vendored-first wiki-health path"
-assert_grep '[Pp]robe.*cogni-wiki' "$SRC" "khealth-06-keeps-cogni-wiki-fallback knowledge-health: keeps the cogni-wiki fallback probe"
+# cogni-wiki is retired, so there is no external engine source. The vendored
+# path assertion above is the positive half; this is the anti-regression half.
+assert_not_grep 'probe_plugin cogni-wiki' "$SRC" "khealth-06-no-external-cogni-wiki-probe knowledge-health: carries no external cogni-wiki fallback probe (vendored-only)"
 
 # Invokes the vendored health engine directly.
 assert_grep 'health.py' "$SRC" "khealth-07-names-vendored-health-py knowledge-health: names the vendored health.py engine"

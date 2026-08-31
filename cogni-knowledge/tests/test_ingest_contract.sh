@@ -52,7 +52,10 @@ assert_grep 'backlink_audit.py' "$INGEST" "ingest-contract-06-calls-backlink-aud
 assert_grep 'wiki_index_update.py' "$INGEST" "ingest-contract-07-calls-wiki-index-update knowledge-ingest: calls wiki_index_update.py directly (clean-break)"
 assert_grep 'wiki/log.md' "$INGEST" "ingest-contract-08-appends-wiki-log-md knowledge-ingest: appends to wiki/log.md"
 assert_grep 'control-path.py" log' "$INGEST" "ingest-contract-09-resolves-log-path-control knowledge-ingest: resolves the log path via control-path.py (no hardcoded wiki/log.md write target)"
-assert_grep 'probe_plugin cogni-wiki' "$INGEST" "ingest-contract-10-probes-cogni-wiki knowledge-ingest: probes cogni-wiki"
+# cogni-wiki is retired: the pre-flight gates on the VENDORED engine only. The
+# paired not-grep is the anti-regression half — an external probe must not return.
+assert_grep 'scripts/vendor/cogni-wiki/skills/wiki-ingest/scripts' "$INGEST" "ingest-contract-10-probes-vendored-engine knowledge-ingest: pre-flight gates on the vendored wiki-ingest engine"
+assert_not_grep 'probe_plugin cogni-wiki' "$INGEST" "ingest-contract-10b-no-external-cogni-wiki-probe knowledge-ingest: carries no external cogni-wiki fallback probe (vendored-only)"
 assert_grep 'Task' "$INGEST" "ingest-contract-11-task-listed-allowed-tools knowledge-ingest: Task listed in allowed-tools"
 # #302 (Slice 14): Step 4 bumps entries_count by the count of NEWLY-INDEXED
 # source pages via config_bump.py --delta <n_new>, gated on the index update's

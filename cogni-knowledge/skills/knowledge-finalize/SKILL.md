@@ -74,36 +74,22 @@ Every `--no-*` / `--apply-*` flag defaults OFF, so the step it names runs (stagi
 
 ### 0. Pre-flight
 
-**Required engine.** This skill runs on the **vendored** wiki-ingest engine — cogni-knowledge ships a byte-identical copy in-tree under `scripts/vendor/cogni-wiki/`, so a bound base works without cogni-wiki installed. The `cogni-wiki` install is only a fallback layout. Probe both so the skill aborts cleanly here rather than failing mid-skill:
+**Required engine.** This skill runs on the **vendored** wiki-ingest engine — cogni-knowledge ships a byte-identical copy in-tree under `scripts/vendor/cogni-wiki/`, so a bound base works without cogni-wiki installed. Probe it so the skill aborts cleanly here rather than failing mid-skill:
 
 ```
 # vendored-first: the in-tree wiki-ingest scripts are self-contained
 test -d "${CLAUDE_PLUGIN_ROOT}/scripts/vendor/cogni-wiki/skills/wiki-ingest/scripts" && WIKI_OK=yes || WIKI_OK=no
-
-# fallback: an installed cogni-wiki sibling / marketplace cache (legacy layout)
-if [ "$WIKI_OK" = "no" ]; then
-  probe_plugin() {
-    local plugin="$1" skill="$2"
-    test -f "${CLAUDE_PLUGIN_ROOT}/../${plugin}/skills/${skill}/SKILL.md" && return 0
-    for d in "${CLAUDE_PLUGIN_ROOT}/../../${plugin}/"*/skills/"${skill}"/SKILL.md; do
-      [ -f "$d" ] && return 0
-    done
-    return 1
-  }
-  probe_plugin cogni-wiki wiki-setup && WIKI_OK=yes || WIKI_OK=no
-fi
 ```
 
 If `WIKI_OK` is `no`, abort:
 
-> cogni-knowledge's vendored wiki-ingest scripts are missing and no `cogni-wiki`
-> install was found. Reinstall cogni-knowledge, then retry.
+> cogni-knowledge's vendored wiki-ingest scripts are missing.
+> Reinstall cogni-knowledge, then retry.
 
-The **vendored** branch probes `wiki-ingest` because Steps 7/8/10 resolve it first and the
-`wiki-lint` and `wiki-health` scripts import `_wikilib` relatively from `wiki-ingest/scripts`; the
-install fallback probes `wiki-setup` only as a presence marker for a legacy cogni-wiki layout. This
+The probe gates on `wiki-ingest` because Steps 7/8/10 resolve it first and the
+`wiki-lint` and `wiki-health` scripts import `_wikilib` relatively from `wiki-ingest/scripts`. This
 probe is the early-abort gate only — the three `resolve_wiki_scripts` calls below remain the
-authoritative resolvers for all three engines; keep the two vendored-first precedences in sync.
+authoritative resolvers for all three engines; keep the two vendored probes in sync.
 
 **Resolve the cogni-wiki script dirs.** Same probe shape, parameterised by the
 skill subdir, so Steps 7/8/10 can call `wiki_index_update.py` / `config_bump.py` /
@@ -114,9 +100,9 @@ dir keeps those imports intact:
 
 ```
 . "${CLAUDE_PLUGIN_ROOT}/scripts/resolve-wiki-scripts.sh"
-WIKI_INGEST_SCRIPTS=$(resolve_wiki_scripts wiki-ingest backlink_audit.py) || abort "cogni-wiki wiki-ingest scripts not found"
-WIKI_LINT_SCRIPTS=$(resolve_wiki_scripts wiki-lint lint_wiki.py)   || abort "cogni-wiki wiki-lint scripts not found"
-WIKI_HEALTH_SCRIPTS=$(resolve_wiki_scripts wiki-health health.py) || abort "cogni-wiki wiki-health scripts not found"
+WIKI_INGEST_SCRIPTS=$(resolve_wiki_scripts wiki-ingest backlink_audit.py) || abort "cogni-knowledge's vendored wiki-ingest scripts are missing. Reinstall cogni-knowledge, then retry."
+WIKI_LINT_SCRIPTS=$(resolve_wiki_scripts wiki-lint lint_wiki.py)   || abort "cogni-knowledge's vendored wiki-lint scripts are missing. Reinstall cogni-knowledge, then retry."
+WIKI_HEALTH_SCRIPTS=$(resolve_wiki_scripts wiki-health health.py) || abort "cogni-knowledge's vendored wiki-health scripts are missing. Reinstall cogni-knowledge, then retry."
 ```
 
 **Binding + wiki root.** Resolve `knowledge_root` (same logic as `knowledge-verify`). Read the binding:

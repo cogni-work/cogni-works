@@ -39,30 +39,17 @@ Read `${CLAUDE_PLUGIN_ROOT}/references/delegation-contract.md` once per session 
 
 ### 0. Pre-flight
 
-**Required engine.** This skill resolves the wiki-dashboard scripts **vendored-first** — cogni-knowledge ships a byte-identical copy of the engine in-tree under `scripts/vendor/cogni-wiki/`, so a bound base renders its dashboard without cogni-wiki installed and this skill no longer dispatches `cogni-wiki:wiki-dashboard`. The `cogni-wiki` install is only a fallback layout. Probe both so the skill aborts cleanly here rather than failing mid-render:
+**Required engine.** This skill resolves the wiki-dashboard scripts **vendored-first** — cogni-knowledge ships a byte-identical copy of the engine in-tree under `scripts/vendor/cogni-wiki/`, so a bound base renders its dashboard without cogni-wiki installed and this skill no longer dispatches `cogni-wiki:wiki-dashboard`. Probe it so the skill aborts cleanly here rather than failing mid-render:
 
 ```
 # vendored-first: the in-tree dashboard scripts are self-contained
 test -d "${CLAUDE_PLUGIN_ROOT}/scripts/vendor/cogni-wiki/skills/wiki-dashboard/scripts" && WIKI_OK=yes || WIKI_OK=no
-
-# fallback: an installed cogni-wiki sibling / marketplace cache (legacy layout)
-if [ "$WIKI_OK" = "no" ]; then
-  probe_plugin() {
-    local plugin="$1" skill="$2"
-    test -f "${CLAUDE_PLUGIN_ROOT}/../${plugin}/skills/${skill}/SKILL.md" && return 0
-    for d in "${CLAUDE_PLUGIN_ROOT}/../../${plugin}/"*/skills/"${skill}"/SKILL.md; do
-      [ -f "$d" ] && return 0
-    done
-    return 1
-  }
-  probe_plugin cogni-wiki wiki-setup && WIKI_OK=yes || WIKI_OK=no
-fi
 ```
 
 If `WIKI_OK` is `no`, abort:
 
-> cogni-knowledge's vendored wiki-dashboard scripts are missing and no `cogni-wiki`
-> install was found. Reinstall cogni-knowledge, then retry.
+> cogni-knowledge's vendored wiki-dashboard scripts are missing.
+> Reinstall cogni-knowledge, then retry.
 
 Then continue with the binding-resolution checks:
 
@@ -95,7 +82,7 @@ Resolve the vendored `wiki-dashboard` scripts dir vendored-first (the same `reso
 ```bash
 . "${CLAUDE_PLUGIN_ROOT}/scripts/resolve-wiki-scripts.sh"
 WIKI_DASHBOARD_SCRIPTS=$(resolve_wiki_scripts wiki-dashboard render_dashboard.py) \
-  || abort "cogni-wiki wiki-dashboard scripts not found (vendored copy missing)"
+  || abort "cogni-knowledge's vendored wiki-dashboard scripts are missing. Reinstall cogni-knowledge, then retry."
 ```
 
 **1a. Render the dashboard HTML.** `render_dashboard.py` takes `--wiki-root` (required; defaults `--output` to `<wiki_path>/wiki-dashboard.html`) and resolves `_wikilib` itself (no `--wiki-scripts-dir` needed):

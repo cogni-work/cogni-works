@@ -44,7 +44,9 @@ assert_grep 'knowledge-binding.py read' "$SRC" "lint-03-reads-binding-knowledge-
 # Vendored-first engine resolution.
 assert_grep 'resolve_wiki_scripts' "$SRC" "lint-04-resolves-wiki-lint-script knowledge-lint: resolves the wiki-lint script dir via the resolve_wiki_scripts probe"
 assert_grep 'scripts/vendor/cogni-wiki/skills/wiki-lint/scripts' "$SRC" "lint-05-names-vendored-first-wiki knowledge-lint: names the vendored-first wiki-lint path"
-assert_grep '[Pp]robe.*cogni-wiki' "$SRC" "lint-06-keeps-cogni-wiki-fallback knowledge-lint: keeps the cogni-wiki fallback probe"
+# cogni-wiki is retired, so there is no external engine source. The vendored
+# path assertion above is the positive half; this is the anti-regression half.
+assert_not_grep 'probe_plugin cogni-wiki' "$SRC" "lint-06-no-external-cogni-wiki-probe knowledge-lint: carries no external cogni-wiki fallback probe (vendored-only)"
 
 # Invokes the vendored lint engine and exposes its CLI surface.
 assert_grep 'lint_wiki.py' "$SRC" "lint-07-names-vendored-lint-wiki knowledge-lint: names the vendored lint_wiki.py engine"

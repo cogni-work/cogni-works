@@ -42,7 +42,9 @@ assert_grep 'knowledge-binding.py read' "$SRC" "prefill-02-reads-binding-knowled
 # Vendored-first engine resolution.
 assert_grep 'resolve_wiki_scripts' "$SRC" "prefill-03-resolves-wiki-prefill-script knowledge-prefill: resolves the wiki-prefill script dir via the resolve_wiki_scripts probe"
 assert_grep 'scripts/vendor/cogni-wiki/skills/wiki-prefill/scripts' "$SRC" "prefill-04-names-vendored-first-wiki knowledge-prefill: names the vendored-first wiki-prefill path"
-assert_grep '[Pp]robe.*cogni-wiki' "$SRC" "prefill-05-keeps-cogni-wiki-fallback knowledge-prefill: keeps the cogni-wiki fallback probe"
+# cogni-wiki is retired, so there is no external engine source. The vendored
+# path assertion above is the positive half; this is the anti-regression half.
+assert_not_grep 'probe_plugin cogni-wiki' "$SRC" "prefill-05-no-external-cogni-wiki-probe knowledge-prefill: carries no external cogni-wiki fallback probe (vendored-only)"
 
 # Invokes the vendored prefill engine and exposes its CLI surface.
 assert_grep 'prefill_foundations.py' "$SRC" "prefill-06-names-vendored-prefill-foundations knowledge-prefill: names the vendored prefill_foundations.py engine"

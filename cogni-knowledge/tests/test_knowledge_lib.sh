@@ -1099,63 +1099,54 @@ def assert_extract_page_frontmatter():
 
 
 def assert_resolve_wiki_scripts():
-    # The single Python definition of the wiki-scripts resolve probe (#488),
-    # shared by the standalone migrate-question-index.py driver so it is no
-    # longer a second independent copy of the bash ranking rule.
-    # Negative case (hermetic, always on): an unknown skill matches neither the
-    # sibling checkout nor any versioned-cache dir → FileNotFoundError, and the
-    # message carries the skill name + the --wiki-scripts-dir escape hatch.
+    # The single Python definition of the wiki-scripts resolve probe, shared by
+    # the standalone operator drivers so they are not a second independent copy
+    # of the bash rule. Resolution is VENDORED-ONLY: cogni-wiki is retired, so
+    # the former sibling-checkout and versioned-cache branches (and the base_dir
+    # seam that existed solely to exercise the cache-ranking branch) are gone.
+    # Negative case (hermetic, always on): an unknown skill has no vendored dir
+    # -> FileNotFoundError naming the skill + the --wiki-scripts-dir escape hatch.
     try:
         kl.resolve_wiki_scripts("__nonexistent_skill__")
         assert False, "expected FileNotFoundError for an unknown skill"
     except FileNotFoundError as exc:
         assert "__nonexistent_skill__" in str(exc), str(exc)
         assert "--wiki-scripts-dir" in str(exc), str(exc)
-    # Real-layout case: vendored-first (Phase 7). In-tree, cogni-knowledge ships
-    # a byte-identical copy of the engine under scripts/vendor/, which the
-    # production (base_dir=None) probe returns BEFORE the external cogni-wiki
-    # sibling. Assert the vendored dir when present; fall back to the sibling
-    # only on a partial checkout that lacks the vendored copy.
-    repo_root = scripts.parent.parent  # scripts/ -> cogni-knowledge/ -> repo-root
+        # The message must not offer an external cogni-wiki as a remedy.
+        assert "install cogni-wiki" not in str(exc).lower(), str(exc)
+
+    # Real-layout case: the vendored dir, and nothing else, resolves.
     vendored = scripts / "vendor" / "cogni-wiki" / "skills" / "wiki-ingest" / "scripts"
-    sib = repo_root / "cogni-wiki" / "skills" / "wiki-ingest" / "scripts"
-    if vendored.is_dir():
-        got = kl.resolve_wiki_scripts("wiki-ingest")
-        assert got.resolve() == vendored.resolve(), f"got={got!r} expected vendored={vendored!r}"
-    elif sib.is_dir():
-        got = kl.resolve_wiki_scripts("wiki-ingest")
-        assert got.resolve() == sib.resolve(), f"got={got!r} expected sibling={sib!r}"
-    # Versioned-cache ranking branch (hermetic, via the base_dir test seam):
-    # no sibling checkout under <base> forces fall-through to branch 2, where
-    # the NEWEST numeric version dir must win and a non-numeric `main` checkout
-    # must be excluded by _NUMERIC_VERSION_RE — the branch the real-layout case
-    # above can never reach (the live sibling short-circuits branch 1).
-    base = work / "wiki-version-fixture" / "insight-wave"  # synthetic <repo-root>
-    cache = base.parent / "cogni-wiki"  # <repo-root>.parent/cogni-wiki/*/skills/...
-    for ver in ("0.0.9", "0.0.16", "0.1.2", "main"):
-        (cache / ver / "skills" / "wiki-ingest" / "scripts").mkdir(parents=True, exist_ok=True)
-    # No <base>/cogni-wiki/skills/wiki-ingest/scripts → branch 1 misses.
-    assert not (base / "cogni-wiki" / "skills" / "wiki-ingest" / "scripts").exists()
-    got = kl.resolve_wiki_scripts("wiki-ingest", base_dir=base)
-    expected = cache / "0.1.2" / "skills" / "wiki-ingest" / "scripts"
-    assert got.resolve() == expected.resolve(), f"version ranking: got={got!r} expected={expected!r}"
-    assert got.parents[2].name == "0.1.2", f"non-numeric 'main' must not win: {got!r}"
-    # #536 entry-point existence: with expected_script set, a cache dir that
-    # lacks the script is skipped — so a partial cache falls through to the
-    # newest version that DOES carry it. The newest (0.1.2) has no script here;
-    # only 0.0.16 gets one, so it must win despite being older.
-    (cache / "0.0.16" / "skills" / "wiki-ingest" / "scripts" / "wiki_index_update.py").write_text("# stub\n")
-    got_ep = kl.resolve_wiki_scripts("wiki-ingest", base_dir=base, expected_script="wiki_index_update.py")
-    expected_ep = cache / "0.0.16" / "skills" / "wiki-ingest" / "scripts"
-    assert got_ep.resolve() == expected_ep.resolve(), f"entry-point skip: got={got_ep!r} expected={expected_ep!r}"
-    # expected_script=None preserves the historic dir-only behaviour: 0.1.2 wins.
-    got_none = kl.resolve_wiki_scripts("wiki-ingest", base_dir=base, expected_script=None)
-    assert got_none.parents[2].name == "0.1.2", f"dir-only (None) must still pick 0.1.2: {got_none!r}"
-    # No cache dir carries the named entry-point -> FileNotFoundError (the
-    # partial vendor no longer masks the missing script).
+    assert vendored.is_dir(), f"vendored engine missing on disk: {vendored!r}"
+    got = kl.resolve_wiki_scripts("wiki-ingest")
+    assert got.resolve() == vendored.resolve(), f"got={got!r} expected vendored={vendored!r}"
+
+    # The base_dir seam is GONE — passing it must be a TypeError, not a silently
+    # accepted no-op. This is the anti-regression guard: were the seam (and the
+    # external branches it existed for) reintroduced, this call would succeed.
     try:
-        kl.resolve_wiki_scripts("wiki-ingest", base_dir=base, expected_script="__no_such_script__.py")
-        assert False, "expected FileNotFoundError when no cache dir carries the entry-point"
+        kl.resolve_wiki_scripts("wiki-ingest", base_dir=work)  # type: ignore[call-arg]
+        assert False, "base_dir seam must not exist (external probe branches removed)"
+    except TypeError:
+        pass
+
+    # No external-layout FIXTURE is built here, deliberately. The resolver keys
+    # on Path(__file__), so a fixture under `work` is unreachable by any code
+    # path — a restored sibling branch would probe the REAL repo root and never
+    # look at it, making such an assertion vacuous (it would pass whether or not
+    # the branch came back). The reachable, discriminating checks are the
+    # base_dir TypeError above and the source-level scan in
+    # test_knowledge_wiki_probe.sh case 12, which parses this function and
+    # asserts no sibling/cache branch is present in its executable code.
+
+    # expected_script is the VENDOR INTEGRITY guard and is now the only probe
+    # hardening left: a real entry point resolves, a missing one raises rather
+    # than returning a dir whose script would blow up later.
+    got_ep = kl.resolve_wiki_scripts("wiki-ingest", expected_script="_wikilib.py")
+    assert got_ep.resolve() == vendored.resolve(), f"entry-point present: got={got_ep!r}"
+    try:
+        kl.resolve_wiki_scripts("wiki-ingest", expected_script="__no_such_script__.py")
+        assert False, "expected FileNotFoundError when the vendored dir lacks the entry-point"
     except FileNotFoundError as exc:
         assert "wiki-ingest" in str(exc), str(exc)
 
@@ -1388,7 +1379,7 @@ grade digit_anchor_tokens     "klib-36 digit_anchor_tokens — Artikel/Article 9
 grade parse_crossmerge_records "klib-37 parse_crossmerge_records — merge: slug|survivor|absorbed, whitespace strip, wrong-arity/empty-field dropped, comments, CRLF, ''→[] (#345)"
 grade writer_quality_normalizers "klib-38 writer-quality normalizers (#309 P2) — normalize_tone/prose_density/citation_format/target_words + CITATION_FAMILY, valid passthrough, unknown→safe default, wikilink→ieee"
 grade extract_page_frontmatter "klib-39 ingest-integrity frontmatter parsers (#413/#421) — extract_page_id_and_url id+sources, extract_page_content_hash quoted/unquoted-comment/absent/no-frontmatter→'' (shared by sweep + Phase-3 guard)"
-grade resolve_wiki_scripts    "klib-40 resolve_wiki_scripts (#488) — single Python SSOT for the wiki-scripts probe (sibling checkout, else newest numeric version dir); unknown skill→FileNotFoundError naming the skill + --wiki-scripts-dir; real sibling layout resolves to the in-repo dir"
+grade resolve_wiki_scripts    "klib-40 resolve_wiki_scripts — single Python SSOT for the wiki-scripts probe, VENDORED-ONLY (cogni-wiki retired): the in-tree vendored dir resolves; an external sibling/versioned-cache layout never does; the base_dir seam is gone (TypeError); expected_script is the surviving vendor-integrity guard; unknown skill→FileNotFoundError naming the skill + --wiki-scripts-dir and offering no cogni-wiki remedy"
 grade load_pypdf              "klib-41 load_pypdf (#583) — fail-soft optional import: returns None (absent) or a module with PdfReader (present), never raises, stable verdict across calls"
 grade extract_pdf_text        "klib-42 extract_pdf_text (#583) — reason vocabulary (ok/pypdf_unavailable/no_text_layer/extract_failed) via injected fake pypdf, min_chars gate boundary, per-page exception skip, page count reported"
 

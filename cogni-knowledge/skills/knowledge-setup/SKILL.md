@@ -177,7 +177,7 @@ no script dir, so resolve it here, mirroring `knowledge-finalize` Step 0):
 ```
 . "${CLAUDE_PLUGIN_ROOT}/scripts/resolve-wiki-scripts.sh"
 WIKI_INGEST_SCRIPTS=$(resolve_wiki_scripts wiki-ingest config_bump.py) \
-  || abort "cogni-wiki wiki-ingest scripts not found"
+  || abort "cogni-knowledge's vendored wiki-ingest scripts are missing. Reinstall cogni-knowledge, then retry."
 ```
 
 **(a) Seed the six per-type sub-index stubs via the canonical renderer.** Call

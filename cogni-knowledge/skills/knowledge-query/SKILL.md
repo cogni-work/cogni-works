@@ -57,31 +57,18 @@ If `--question` is missing, ask the user once via `AskUserQuestion` (single free
 **Required engine.** This skill resolves the wiki engine **vendored-first** —
 cogni-knowledge ships a byte-identical copy of the engine in-tree under
 `scripts/vendor/cogni-wiki/`, so a bound base is queryable without cogni-wiki
-installed. The `cogni-wiki` install is only a fallback layout. Probe both so the
+installed. Probe it so the
 skill aborts cleanly here rather than failing mid-read:
 
 ```
 # vendored-first: the in-tree engine is self-contained
 test -d "${CLAUDE_PLUGIN_ROOT}/scripts/vendor/cogni-wiki/skills/wiki-ingest/scripts" && WIKI_OK=yes || WIKI_OK=no
-
-# fallback: an installed cogni-wiki sibling / marketplace cache (legacy layout)
-if [ "$WIKI_OK" = "no" ]; then
-  probe_plugin() {
-    local plugin="$1" skill="$2"
-    test -f "${CLAUDE_PLUGIN_ROOT}/../${plugin}/skills/${skill}/SKILL.md" && return 0
-    for d in "${CLAUDE_PLUGIN_ROOT}/../../${plugin}/"*/skills/"${skill}"/SKILL.md; do
-      [ -f "$d" ] && return 0
-    done
-    return 1
-  }
-  probe_plugin cogni-wiki wiki-setup && WIKI_OK=yes || WIKI_OK=no
-fi
 ```
 
 If `WIKI_OK` is `no`, abort:
 
-> cogni-knowledge's vendored wiki engine is missing and no `cogni-wiki`
-> install was found. Reinstall cogni-knowledge, then retry.
+> cogni-knowledge's vendored wiki engine is missing.
+> Reinstall cogni-knowledge, then retry.
 
 Then continue with the binding-resolution checks:
 
@@ -206,7 +193,7 @@ do (the deposit reuses the already-vendored helpers — never a new script):
 ```
 . "${CLAUDE_PLUGIN_ROOT}/scripts/resolve-wiki-scripts.sh"
 WIKI_INGEST_SCRIPTS=$(resolve_wiki_scripts wiki-ingest backlink_audit.py) \
-  || { echo "cogni-wiki wiki-ingest scripts not found — cannot --file-back"; exit 1; }
+  || { echo "cogni-knowledge's vendored wiki-ingest scripts are missing (reinstall cogni-knowledge) — cannot --file-back"; exit 1; }
 ```
 
 `WIKI_ROOT` is the `wiki_path` already resolved in Step 0; confirm

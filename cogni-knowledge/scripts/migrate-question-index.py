@@ -31,9 +31,9 @@ aborting the whole run.
 move — the locked script's own `--dry-run` applies only to `--reflow-only`, not
 to move mode, so the driver cannot delegate the dry run downstream.
 
-The cogni-wiki scripts dir is self-resolved by a Python port of the
-`knowledge-ingest` probe (sibling checkout first, else newest numeric version
-dir under a versioned-cache install). `--wiki-scripts-dir` overrides the probe
+The wiki scripts dir is self-resolved by a Python port of the `knowledge-ingest`
+probe, which is vendored-only (cogni-wiki is retired, so there is no external
+engine source). `--wiki-scripts-dir` overrides the probe
 (used by the test for a hermetic in-repo path).
 
 All output uses the insight-wave script envelope:

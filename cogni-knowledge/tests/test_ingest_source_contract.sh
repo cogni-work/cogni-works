@@ -49,7 +49,10 @@ assert_not_grep 'reads .*fetch-manifest.json' "$SRC" "ingest-source-03-does-not-
 
 # Binding + wiki-root resolution, same pre-flight as knowledge-ingest.
 assert_grep 'knowledge-binding.py read' "$SRC" "ingest-source-04-reads-binding-knowledge-py knowledge-ingest-source: reads the binding via knowledge-binding.py"
-assert_grep '[Pp]robe.*cogni-wiki' "$SRC" "ingest-source-05-probes-cogni-wiki knowledge-ingest-source: probes cogni-wiki"
+# cogni-wiki is retired, so there is no external engine to probe. The positive
+# half pins the vendored resolver call; the not-grep is the anti-regression half.
+assert_grep 'resolve_wiki_scripts wiki-ingest' "$SRC" "ingest-source-05-resolves-vendored-engine knowledge-ingest-source: resolves the vendored wiki-ingest engine"
+assert_not_grep 'probe_plugin cogni-wiki' "$SRC" "ingest-source-05b-no-external-cogni-wiki-probe knowledge-ingest-source: carries no external cogni-wiki fallback probe (vendored-only)"
 assert_grep 'resolve_wiki_scripts' "$SRC" "ingest-source-06-resolves-wiki-ingest-script knowledge-ingest-source: resolves the wiki-ingest script dir via the resolve_wiki_scripts probe"
 
 # Cache population — fetch-cache.py store with the required flags.

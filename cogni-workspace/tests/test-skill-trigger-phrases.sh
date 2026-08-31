@@ -41,6 +41,9 @@
 #     prose, or in single quotes inside a double-quoted scalar, is invisible
 #     to this guard and fails the coverage floor
 #   - an empty or missing skills directory fails rather than reporting clean
+#   - a phrase the retirement record marks as claimed, that no live skill
+#     yields, fails as an orphan; and a phrase it marks as retired, that a live
+#     skill DOES yield, fails as a stale record
 #
 # Scoped to one plugin on purpose. The obvious generalization — scan every
 # plugin at once — is wrong here: `cogni-portfolio:markets` and
@@ -49,6 +52,28 @@
 # disambiguates by plugin. Only phrases competing INSIDE one plugin's skill set
 # are unambiguously a defect. A cross-plugin version of this check would need a
 # hand-maintained exemption list, which is the thing this design rejects.
+#
+# That rejection stands, and C10's retirement record is not an instance of it.
+# The discriminator is the direction of effect, not the fact of being a file.
+# An exemption list makes the guard QUIETER: every row removes a finding, and a
+# guard that is quiet because it stopped looking is worse than no guard. C10's
+# record makes it LOUDER: every row adds a way to go red, and the record itself
+# is checked in both directions against the live extractor, so a row that stops
+# being true reddens rather than silently persisting. It is also scoped to
+# retirement EVENTS rather than to skills — its population is closed by history
+# and it enumerates no live skill except as an owner attribution C10 verifies —
+# so it needs no syncing with the extractor's name key as skills come and go.
+# The in-repo precedent is references/wiki-tree-reconciliation.md and its
+# enforcement arm tests/test-wiki-tree-parity.sh: a one-sided page with no
+# recorded decision turns that suite red, and the documented fix is to record
+# the decision rather than route around the guard.
+#
+# The record is needed at all because absence is not derivable from this tree.
+# Collision detection folds the live surface with `sort | uniq -d`, which can
+# only see a phrase claimed by two skills; a phrase claimed by NONE leaves no
+# trace here to fold. When a skill is deleted its phrases vanish from the tree
+# entirely, so nothing the extractor can read remembers that they were ever
+# routed. Only an enumerated record can carry that.
 #
 # The extractor takes the description block as everything from `description:` up
 # to the next top-level frontmatter key. Both YAML block styles in the tree
@@ -365,6 +390,11 @@ fi
 # per-skill exemption list — the thing this suite's design rejects. Pointing
 # this case at a broken extractor turns it red, exactly as C1-C8 do.
 #
+# That claim is about C9 specifically, and stays true of it: C9 enumerates
+# nothing, because it derives its population from the live tree on every run.
+# C10 below deliberately does carry a record; the header states why, and why it
+# is not the roster this design rejects.
+#
 # Single-quoted spans are deliberately NOT harvested, and the fix for a
 # single-quoted description is to migrate it rather than to widen the regex.
 # A boundary-aware widening is possible and mints no garbage, so that is not
@@ -398,6 +428,140 @@ if [ "$c9_scanned" -gt 0 ] && [ -z "$c9_missing" ]; then
 else
   echo "     skills contributing zero phrases:$c9_missing (scanned $c9_scanned)"
   fail "C9 every real cogni-workspace skill contributes at least one trigger phrase"
+fi
+
+# ---------------------------------------------------------------------------
+# C10 — the orphan direction. C1/C2 detect a phrase claimed by TWO skills;
+# nothing detected one claimed by NONE, because `sort | uniq -d` over the live
+# surface cannot see what is not there. A retirement can therefore delete
+# routing coverage with every case green — which is what happened to six
+# phrases of the folded story-to-storyboard skill, caught only by a human
+# reviewer.
+#
+# The record at references/retired-trigger-phrases.tsv supplies the population
+# the tree cannot. This case cross-checks it against the live extractor in both
+# directions, so the record cannot quietly go stale in either:
+#
+#   claimed, not yielded  -> ORPHAN        (the routing loss this case exists for)
+#   claimed, wrong owner  -> MISATTRIBUTED (the record names a skill that does not claim it)
+#   retired, yielded      -> STALE RECORD  (a retired phrase came back)
+#
+# The live side comes from emit_phrases itself — never a second parser — so
+# pointing this case at a broken extractor turns it red exactly as C1-C9 do.
+# Row hygiene is enforced here too: four fields, a known status, a NON-EMPTY
+# reason, and a key already in the extractor's normal form. The reason check is
+# what stops the record degrading into a bare list nobody has to justify.
+#
+# bash-3.2 portable: flat temp files plus sort/comm/awk, no associative arrays.
+# ---------------------------------------------------------------------------
+c10_ok=1
+C10_LEDGER="$WS_ROOT/references/retired-trigger-phrases.tsv"
+mkdir -p "$TMPROOT/c10"
+
+if [ ! -f "$C10_LEDGER" ] || [ ! -r "$C10_LEDGER" ]; then
+  echo "     retirement record missing or unreadable: $C10_LEDGER"
+  c10_ok=0
+else
+  # Strip comments and blank lines. Everything below reads this.
+  grep -v '^[[:space:]]*#' "$C10_LEDGER" | grep -v '^[[:space:]]*$' > "$TMPROOT/c10/rows" || true
+
+  # One pass for all three counts. `rows` is carried for the diagnostic only —
+  # rows == 0 implies both status counts are 0, so it is never the deciding arm.
+  read -r c10_rows c10_claimed_n c10_retired_n <<EOF
+$(awk -F'\t' '{n++} $2 == "claimed" {c++} $2 == "retired" {r++} END {print n+0, c+0, r+0}' "$TMPROOT/c10/rows")
+EOF
+
+  # Anti-vacuity floor, mirroring C8/C9: an empty or single-status record must
+  # fail rather than pass on an empty loop. Without this, truncating the file
+  # would make every direction below iterate over nothing and report clean.
+  if [ "$c10_claimed_n" -eq 0 ] || [ "$c10_retired_n" -eq 0 ]; then
+    echo "     record is vacuous: rows=$c10_rows claimed=$c10_claimed_n retired=$c10_retired_n (each must be > 0)"
+    c10_ok=0
+  fi
+
+  # Row hygiene. A malformed row is reported, never skipped — skipping one
+  # would let a typo silently drop a phrase out of both directions.
+  # The key check is ASCII-gated on purpose. awk's tolower is byte-wise, while
+  # the extractor normalizes in python, whose lower() folds non-ASCII too — so
+  # on a non-ASCII key the two disagree, this check would call it already-normal,
+  # and the row would then never join the live set. That loses a direction
+  # SILENTLY, which is the failure class C10 exists to close. Rejecting the
+  # non-ASCII key outright keeps one normal form without a second parser.
+  c10_bad=$(awk -F'\t' '
+    NF != 4                                  { print "  field-count " NF " (want 4): " $0; next }
+    $2 != "claimed" && $2 != "retired"        { print "  unknown status \"" $2 "\": " $0; next }
+    $2 == "retired" && $3 != "-"              { print "  retired row must have owner \"-\", got \"" $3 "\": " $0; next }
+    { r = $4; gsub(/^[ \t]+|[ \t]+$/, "", r) }
+    r == ""                                   { print "  empty reason: " $0; next }
+    $1 ~ /[^\x20-\x7e]/                       { print "  key has a non-ASCII byte, so awk and the extractor would normalize it differently: " $0; next }
+    {
+      k = tolower($1)
+      gsub(/^[ \t]+|[ \t]+$/, "", k)
+      gsub(/[ \t]+/, " ", k)
+      if (k != $1) print "  key not in normal form (want \"" k "\"): " $0
+    }
+  ' "$TMPROOT/c10/rows")
+  if [ -n "$c10_bad" ]; then
+    echo "     malformed record rows:"
+    echo "$c10_bad"
+    c10_ok=0
+  fi
+
+  # The live side, from the suite's own extractor. A non-zero rc is red: an
+  # extractor that could not read the tree is not evidence the tree agrees.
+  if emit_phrases "$WS_ROOT/skills" > "$TMPROOT/c10/raw" 2>"$TMPROOT/c10/raw.err"; then
+    cut -f1 "$TMPROOT/c10/raw" | sort -u > "$TMPROOT/c10/live"
+
+    awk -F'\t' '$2 == "claimed" { print $1 }' "$TMPROOT/c10/rows" | sort -u > "$TMPROOT/c10/claimed"
+    awk -F'\t' '$2 == "retired" { print $1 }' "$TMPROOT/c10/rows" | sort -u > "$TMPROOT/c10/retired"
+
+    # Direction A — recorded claimed, yielded by nobody. The orphan.
+    c10_orphans=$(comm -23 "$TMPROOT/c10/claimed" "$TMPROOT/c10/live")
+    if [ -n "$c10_orphans" ]; then
+      echo "$c10_orphans" | while IFS= read -r phrase; do
+        [ -z "$phrase" ] && continue
+        owner=$(awk -F'\t' -v p="$phrase" '$1 == p { print $3 }' "$TMPROOT/c10/rows")
+        echo "     ORPHAN \"$phrase\" recorded as claimed by $owner but yielded by no live skill"
+      done
+      c10_ok=0
+    fi
+
+    # Direction B — recorded retired, yielded after all. A stale record.
+    c10_stale=$(comm -12 "$TMPROOT/c10/retired" "$TMPROOT/c10/live")
+    if [ -n "$c10_stale" ]; then
+      echo "$c10_stale" | while IFS= read -r phrase; do
+        [ -z "$phrase" ] && continue
+        owners=$(awk -F'\t' -v p="$phrase" '$1 == p { print $2 }' "$TMPROOT/c10/raw" | sort -u | tr '\n' ' ')
+        echo "     STALE RECORD \"$phrase\" recorded retired but claimed by: $owners"
+      done
+      c10_ok=0
+    fi
+
+    # Direction C — owner attribution. A claimed row must name the skill the
+    # extractor actually attributes the phrase to. Gated on the phrase being
+    # live at all: without that guard an orphan satisfies this condition too and
+    # reports twice, the second time with a message that is false about the
+    # state ("not yielded under that name" implies it is yielded under another).
+    c10_mis=$(awk -F'\t' '
+      NR == FNR             { live[$1 "\t" $2] = 1; phrase[$1] = 1; next }
+      $2 == "claimed" && ($1 in phrase) {
+        if (!(($1 "\t" $3) in live)) print "     MISATTRIBUTED \"" $1 "\" recorded as claimed by " $3 " but not yielded under that name"
+      }
+    ' "$TMPROOT/c10/raw" "$TMPROOT/c10/rows")
+    if [ -n "$c10_mis" ]; then
+      echo "$c10_mis"
+      c10_ok=0
+    fi
+  else
+    echo "     emit_phrases failed over $WS_ROOT/skills: $(cat "$TMPROOT/c10/raw.err")"
+    c10_ok=0
+  fi
+fi
+
+if [ "$c10_ok" -eq 1 ]; then
+  pass "C10 the retirement record and the live tree agree in both directions"
+else
+  fail "C10 the retirement record and the live tree agree in both directions"
 fi
 
 # ---------------------------------------------------------------------------

@@ -1,0 +1,51 @@
+# Retired trigger phrases — an append-only record of phrases that a deleted skill once advertised.
+#
+# Why this file exists. The collision guard next to it (tests/test-skill-trigger-phrases.sh) folds
+# the live claim surface with `sort | uniq -d`, so it sees a phrase claimed by TWO skills and is
+# structurally blind to one claimed by NONE. When a skill is deleted, its phrases leave no trace in
+# the tree at all — so "which phrases ought to be claimed" is not derivable from the tree, and only
+# an enumerated record can express it. Case C10 reads this file and cross-checks it against the live
+# extractor in both directions.
+#
+# Why this is not the roster that suite rejects. The suite rejects a per-skill EXEMPTION list: one
+# that must track the extractor's own name key, enumerates live skills, and makes findings
+# disappear. This is the opposite object. It is scoped to retirement events rather than to skills,
+# its population is closed by history, it names no live skill except as an owner attribution that
+# C10 verifies, and every row only ever ADDS a way for the suite to go red. The in-repo precedent is
+# references/wiki-tree-reconciliation.md and its enforcement arm tests/test-wiki-tree-parity.sh,
+# where a one-sided page with no recorded decision turns the suite red and the documented fix is to
+# record the decision rather than route around the guard.
+#
+# Schema — four tab-separated fields, no trailing spaces:
+#   phrase_key  status            owner              reason
+#   phrase_key  the extractor's normal form: trimmed, internal whitespace collapsed to single
+#               spaces, lowercased. C10 re-derives this and rejects a row whose key is not already
+#               normalized, so the comm-join against the live set cannot silently miss.
+#   status      claimed | retired
+#   owner       the live skill that claims it (status=claimed), or - (status=retired)
+#   reason      non-empty, author-written. C10 reddens on an empty reason, so a row cannot be added
+#               without saying why.
+#
+# Provenance: the story-to-storyboard to story-to-web fold. That skill advertised eleven phrases.
+# The fold absorbed two, a later revision re-claimed three more, and the remaining six were left
+# claimed by nobody. All eleven are recorded below.
+#
+# Budget snapshot, measured once rather than restated per row. At the time these six were retired,
+# story-to-web's resolved description was 1006 of the 1024-char platform cap — 18 characters of
+# headroom, not enough for one phrase plus its quoting and comma. Measured with check-frontmatter's
+# own resolve_description (the value the gate tests), not a YAML parser, which counts one more.
+# Nothing re-measures this line, so treat it as a dated observation: re-measure before relying on
+# it. The per-row reasons below deliberately carry only durable rationale.
+#
+# phrase_key	status	owner	reason
+storyboard	claimed	story-to-web	Absorbed by the fold; story-to-web serves print output in storyboard mode.
+druckposter	claimed	story-to-web	Absorbed by the fold; the German entry point to the same storyboard mode.
+poster series	claimed	story-to-web	Re-claimed after the fold, using headroom reclaimed by compressing the description.
+print posters from narrative	claimed	story-to-web	Re-claimed after the fold, in the same compression pass.
+poster erstellen	claimed	story-to-web	Re-claimed after the fold, in the same compression pass.
+storyboard aus bericht	retired	-	Retired, not re-claimed: no headroom in the absorbing description (see the budget snapshot above), and the German claim "Druckposter" already routes report-to-poster intent.
+posterpraesentation	retired	-	Retired, not re-claimed: no headroom in the absorbing description, and the surviving "Druckposter" plus "Poster erstellen" carry the German poster intent.
+poster fuer workshop	retired	-	Retired, not re-claimed: a usage-context variant rather than a distinct capability; "Poster erstellen" already routes it.
+poster walkthrough	retired	-	Retired, not re-claimed: survives as body prose in story-to-web and as unquoted prose in the story-to-storyboard agent, neither of which the extractor reads as a claim; "poster series" carries the intent.
+create poster storyboard	retired	-	Retired, not re-claimed: a compound of two phrases story-to-web already claims separately, "storyboard" and "poster series".
+physical walkthrough posters	retired	-	Retired, not re-claimed: the physical-output nuance is carried by "print posters from narrative".

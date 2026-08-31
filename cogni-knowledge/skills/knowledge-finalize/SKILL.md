@@ -86,9 +86,8 @@ If `WIKI_OK` is `no`, abort:
 > cogni-knowledge's vendored wiki-ingest scripts are missing.
 > Reinstall cogni-knowledge, then retry.
 
-The **vendored** branch probes `wiki-ingest` because Steps 7/8/10 resolve it first and the
-`wiki-lint` and `wiki-health` scripts import `_wikilib` relatively from `wiki-ingest/scripts`; the
-install fallback probes `wiki-setup` only as a presence marker for a legacy cogni-wiki layout. This
+The probe gates on `wiki-ingest` because Steps 7/8/10 resolve it first and the
+`wiki-lint` and `wiki-health` scripts import `_wikilib` relatively from `wiki-ingest/scripts`. This
 probe is the early-abort gate only — the three `resolve_wiki_scripts` calls below remain the
 authoritative resolvers for all three engines; keep the two vendored probes in sync.
 

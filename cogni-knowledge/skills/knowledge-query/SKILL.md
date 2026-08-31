@@ -193,7 +193,7 @@ do (the deposit reuses the already-vendored helpers — never a new script):
 ```
 . "${CLAUDE_PLUGIN_ROOT}/scripts/resolve-wiki-scripts.sh"
 WIKI_INGEST_SCRIPTS=$(resolve_wiki_scripts wiki-ingest backlink_audit.py) \
-  || { echo "cogni-wiki wiki-ingest scripts not found — cannot --file-back"; exit 1; }
+  || { echo "cogni-knowledge's vendored wiki-ingest scripts are missing (reinstall cogni-knowledge) — cannot --file-back"; exit 1; }
 ```
 
 `WIKI_ROOT` is the `wiki_path` already resolved in Step 0; confirm

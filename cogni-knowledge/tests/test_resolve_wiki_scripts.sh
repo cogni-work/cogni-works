@@ -55,16 +55,22 @@ extract_resolver() {
 }
 
 # -----------------------------------------------------------------------------
-# Part 1: contract — the shared snippet defines the version-aware resolver
-#         (sort -V), and every knowledge-* flow sources it rather than carrying
-#         an inline copy (the de-duplication invariant: one source of truth).
+# Part 1: contract — the shared snippet defines a VENDORED-ONLY resolver, and
+#         every knowledge-* flow sources it rather than carrying an inline copy
+#         (the de-duplication invariant: one source of truth).
+#
+#         Comments are stripped before the external-probe scan: the snippet
+#         documents the removal in a "do not reintroduce a sibling or
+#         marketplace-cache probe" warning, so a raw scan would red the moment
+#         that warning was made concrete. Case 12 of
+#         test_knowledge_wiki_probe.sh strips for the same reason.
 # -----------------------------------------------------------------------------
 
 if [ ! -f "$RESOLVER_SNIPPET" ]; then
   red "FAIL: resolve-wiki-01 shared resolver snippet not found: $RESOLVER_SNIPPET"; errors=$((errors + 1))
 elif ! grep -qE 'resolve_wiki_scripts\(\) \{' "$RESOLVER_SNIPPET"; then
   red "FAIL: resolve-wiki-01 shared snippet missing resolve_wiki_scripts() definition"; errors=$((errors + 1))
-elif grep -qE '\.\./cogni-wiki|sort -V' "$RESOLVER_SNIPPET"; then
+elif sed 's/#.*//' "$RESOLVER_SNIPPET" | grep -qE '\.\./cogni-wiki|sort -V'; then
   red "FAIL: resolve-wiki-01 shared snippet carries an external cogni-wiki probe (sibling path or version-ranking glob) — resolution must be vendored-only"; errors=$((errors + 1))
 else
   green "PASS: resolve-wiki-01 shared snippet defines a vendored-only resolver with no external cogni-wiki probe"
@@ -283,4 +289,4 @@ if [ $errors -gt 0 ]; then
 fi
 
 green ""
-green "F26 resolve_wiki_scripts version-sort contract and behaviour all pass."
+green "resolve_wiki_scripts vendored-only contract and behaviour all pass."

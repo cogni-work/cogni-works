@@ -92,9 +92,10 @@ primitives end-to-end. Still deferred to follow-ups:
 
 ### 0. Pre-flight
 
-**Required plugin + script dir.** Probe `cogni-wiki` and resolve the
-`wiki-ingest` script dir exactly as `knowledge-ingest` Step 0 does (vendored
-copy first, sibling/cache fallback), so this skill's Step 5 post-write lockstep
+**Required engine + script dir.** Resolve the vendored `wiki-ingest` script dir
+exactly as `knowledge-ingest` Step 0 does (vendored-only — `cogni-wiki` is
+retired, so there is no external engine source to fall back to), so this skill's
+Step 5 post-write lockstep
 (mirroring `knowledge-ingest`'s Step 4) can call `backlink_audit.py` /
 `wiki_index_update.py` / `config_bump.py`:
 

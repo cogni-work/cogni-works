@@ -2,8 +2,11 @@
 
 This tree is a **verbatim, byte-for-byte mirror** of the cogni-wiki runtime engine
 that cogni-knowledge depends on. It exists so cogni-knowledge is self-contained on
-the wiki engine — `resolve_wiki_scripts()` resolves this vendored copy first, and
-the external cogni-wiki install is only a fallback.
+the wiki engine — `resolve_wiki_scripts()` resolves this vendored copy and nothing
+else. cogni-wiki is retired (absent from `.claude-plugin/marketplace.json`, listed
+in `scripts/retired-plugins.json`), so there is no external engine source: an
+external install would only ever be a stale, unversioned copy, and resolving one
+would silently run an engine older than the plugin that called it.
 
 ## What is here
 

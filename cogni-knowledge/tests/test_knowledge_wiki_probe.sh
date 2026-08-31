@@ -205,11 +205,18 @@ fi
 # This is the mutation-addressable case for that contract: revert any one site
 # to the bare `abort "cogni-wiki <engine> scripts not found"` shape and it reds.
 
+# The scan is on the MESSAGE TEXT, not on the emitter: an earlier form keyed on
+# `abort "cogni-wiki ` / `⚠ cogni-wiki ` and so walked straight past an
+# `echo "cogni-wiki wiki-ingest scripts not found …"` in knowledge-query's
+# --file-back path. Any emitted line naming cogni-wiki immediately before a
+# wiki-<engine> or `wiki engine` is naming it as the missing artifact.
 bare_msg=""
 for f in "$SKILLS"/*/SKILL.md; do
-  if grep -qE '(abort "cogni-wiki |⚠ cogni-wiki )' "$f"; then
-    bare_msg="$bare_msg $(basename "$(dirname "$f")")"
-  fi
+  hits=$(grep -nE '^[[:space:]]*(>|.*(abort|echo|⚠))' "$f" \
+         | grep -E 'cogni-wiki (wiki-[a-z-]+|wiki engine)' | cut -d: -f1 || true)
+  for n in $hits; do
+    bare_msg="$bare_msg $(basename "$(dirname "$f")"):${n}"
+  done
 done
 if [ -n "$bare_msg" ]; then
   red "FAIL: knowledge-wiki-probe-10-no-bare-cogni-wiki-message an abort/warn names the retired cogni-wiki as the missing artifact in:$bare_msg"
@@ -233,11 +240,20 @@ fi
 # the pointer too would demand a remedy be restated at every mention.
 no_remedy=""
 for f in "$SKILLS"/*/SKILL.md; do
-  hits=$(grep -nE '^\s*(>|.*abort "|.*echo ")' "$f" | grep -F "scripts are missing" | cut -d: -f1 || true)
+  # Match the FAULT, not one phrasing of it: an earlier form grepped the literal
+  # "scripts are missing" and so missed knowledge-query's "wiki engine is
+  # missing" and knowledge-refresh's "which is missing from this install" /
+  # "scripts not found". Scoped to wiki-engine faults so knowledge-curate's
+  # cogni-workspace `get-market-config.py not found` (a live plugin, with its
+  # own remedy) is not swept in.
+  hits=$(grep -nE '^[[:space:]]*(>|.*abort "|.*echo ")' "$f" \
+         | grep -E '(wiki-[a-z-]+|wiki engine)' \
+         | grep -E '(is|are) missing|not found' | cut -d: -f1 || true)
   for n in $hits; do
     window=$(sed -n "${n},$((n + 1))p" "$f")
     case "$window" in
       *[Rr]einstall\ cogni-knowledge*) ;;
+      *[Rr]einstall/upgrade\ cogni-knowledge*) ;;
       *) no_remedy="$no_remedy $(basename "$(dirname "$f")"):${n}" ;;
     esac
   done

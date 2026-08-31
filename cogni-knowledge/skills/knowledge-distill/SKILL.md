@@ -55,7 +55,7 @@ pipeline):
 
 This probe is the early-abort gate only — Step 0's `resolve_wiki_scripts` is the authoritative resolver for the actual `backlink_audit.py` path; keep the two vendored probes in sync.
 
-**Resolve the cogni-wiki script dir.** Use the SAME `resolve_wiki_scripts` helper `knowledge-ingest` / `knowledge-finalize` use (shared byte-for-byte) — it picks the newest numeric version dir. `concept-store.py merge` needs this dir for `_wiki_lock` / `is_foundation_page` / `parse_frontmatter`, and Step 6 needs `backlink_audit.py` / `wiki_index_update.py` / `config_bump.py`:
+**Resolve the vendored wiki script dir.** Use the SAME `resolve_wiki_scripts` helper `knowledge-ingest` / `knowledge-finalize` use (shared byte-for-byte) — it resolves the in-tree vendored engine and nothing else. `concept-store.py merge` needs this dir for `_wiki_lock` / `is_foundation_page` / `parse_frontmatter`, and Step 6 needs `backlink_audit.py` / `wiki_index_update.py` / `config_bump.py`:
 
 ```
 . "${CLAUDE_PLUGIN_ROOT}/scripts/resolve-wiki-scripts.sh"

@@ -1130,21 +1130,14 @@ def assert_resolve_wiki_scripts():
     except TypeError:
         pass
 
-    # An external sibling / versioned-cache layout must NOT resolve. Build both
-    # shapes around a synthetic plugin root and assert the resolver ignores them:
-    # a stale external copy is never preferable to failing loudly.
-    ext = work / "external-cogni-wiki-fixture"
-    (ext / "cogni-knowledge" / "scripts").mkdir(parents=True, exist_ok=True)
-    (ext / "cogni-wiki" / "skills" / "wiki-ingest" / "scripts").mkdir(parents=True, exist_ok=True)
-    for ver in ("0.0.9", "0.0.16", "0.1.2"):
-        (ext.parent / "cogni-wiki" / ver / "skills" / "wiki-ingest" / "scripts").mkdir(
-            parents=True, exist_ok=True)
-    # The resolver keys on _knowledge_lib's OWN location, so the fixture can only
-    # ever be reached through a removed branch. Resolution must still be the
-    # in-tree vendored dir, never anything under the fixture.
-    got_ext = kl.resolve_wiki_scripts("wiki-ingest")
-    assert got_ext.resolve() == vendored.resolve(), f"external layout leaked in: {got_ext!r}"
-    assert str(ext) not in str(got_ext.resolve()), f"external layout leaked in: {got_ext!r}"
+    # No external-layout FIXTURE is built here, deliberately. The resolver keys
+    # on Path(__file__), so a fixture under `work` is unreachable by any code
+    # path — a restored sibling branch would probe the REAL repo root and never
+    # look at it, making such an assertion vacuous (it would pass whether or not
+    # the branch came back). The reachable, discriminating checks are the
+    # base_dir TypeError above and the source-level scan in
+    # test_knowledge_wiki_probe.sh case 12, which parses this function and
+    # asserts no sibling/cache branch is present in its executable code.
 
     # expected_script is the VENDOR INTEGRITY guard and is now the only probe
     # hardening left: a real entry point resolves, a missing one raises rather

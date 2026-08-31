@@ -91,9 +91,9 @@ Each scope produces a main component of a portfolio-driven website, driven by a 
 | `overview` | `pitch/portfolio-overview.md` | Portfolio-wide narrative for investors, board, or keynotes |
 | `all` | All of the above | Overview + one narrative per market (ordered by priority) |
 
-**Key differentiator**: Pitch output includes `arc_id` in frontmatter — this makes it directly consumable by story-to-slides, story-to-web, and story-to-storyboard without an intermediate `/narrative` step. Default arc: `jtbd-portfolio`.
+**Key differentiator**: Pitch output includes `arc_id` in frontmatter — this makes it directly consumable by story-to-slides and story-to-web (including its `mode=storyboard` print storyboards) without an intermediate `/narrative` step. Default arc: `jtbd-portfolio`.
 
-**Downstream pipeline:** `/narrative-review` → `/copywrite` → `story-to-slides`, `story-to-web`, `story-to-storyboard`
+**Downstream pipeline:** `/narrative-review` → `/copywrite` → `story-to-slides`, `story-to-web` (`mode=storyboard` for print storyboards)
 
 ---
 

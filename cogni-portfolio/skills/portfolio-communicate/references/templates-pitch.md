@@ -1,6 +1,6 @@
 # Templates: Pitch Narrative
 
-Output templates for the `pitch` use case. Transforms portfolio entities into arc-structured presentation narratives that the `narrative` skill downstream tools (story-to-slides, story-to-web, story-to-storyboard) can consume directly.
+Output templates for the `pitch` use case. Transforms portfolio entities into arc-structured presentation narratives that the `narrative` skill downstream tools (story-to-slides, story-to-web — including its `mode=storyboard` print storyboard) can consume directly.
 
 **Use case**: `pitch`
 **Audience**: Executives, decision-makers, conference audiences, board members
@@ -407,6 +407,5 @@ After generating a pitch narrative, suggest:
 2. **Polish prose**: `/copywrite` — applies executive readability standards while preserving arc structure
 3. **Visualize**:
    - `story-to-slides` → PowerPoint presentation via PPTX skill
-   - `story-to-web` → scrollable landing page via Pencil MCP
-   - `story-to-storyboard` → multi-poster print storyboard via Pencil MCP
+   - `story-to-web` → scrollable landing page via Pencil MCP, or multi-poster print storyboard with `mode=storyboard`
 4. **Deepen** (if needed): `/why-change` — adds web research, customer-specific context, and TIPS enrichment for a deal-ready version

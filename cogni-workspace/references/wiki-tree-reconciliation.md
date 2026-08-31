@@ -296,10 +296,10 @@ sweep touches the bundled copies only, so it decides nothing about promotion.
 | `workflow-research-to-report` | 7/7 resolve | current | promote |
 | `ecosystem-command-reference` | 18 resolve, previously 1 mislabelled + 2 stale, now settled | current | promote |
 
-**Why the ruling is reserved.** Accepting a page into the root tree is what makes
-`cogni-workspace:ask` serve it as a grounded answer. Promoting a stale page therefore does not
-degrade gracefully — it makes the assistant answer confidently and wrongly, which is worse than
-the dangling reference it would have fixed.
+**Why the ruling is reserved.** Accepting a page into the root tree is what puts it in the grounded
+answer set — the pages `wiki/index.md` catalogues and Claude reads directly when answering.
+Promoting a stale page therefore does not degrade gracefully — it makes the assistant answer
+confidently and wrongly, which is worse than the dangling reference it would have fixed.
 
 **The page that was stale, and how it was settled.** `ecosystem-command-reference` stated that
 cogni-workspace ships no commands directory, listed 9 of its then-11 skills, and counted

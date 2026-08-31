@@ -2,12 +2,13 @@
 # Wiki namespace-sync guard: no bundled wiki page may name a plugin that no
 # longer exists.
 #
-# Why this exists. `cogni-workspace:ask` answers only from the bundled wiki and
+# Why this exists. The bundled wiki is read directly — a reader points Claude
+# at its `wiki/index.md`, and the answer draws only on the pages it lists and
 # cites every claim with a [[wikilink]]. That contract is only as good as the
 # wiki's freshness, and nothing else enforces it — scripts/check-external-dispatch.py
 # deliberately excludes both wiki trees (EXCLUDE_SEGMENTS / EXCLUDE_TOPLEVEL),
 # because a wiki mirror may legitimately quote a retired dispatch as page content.
-# So a plugin can be absorbed or archived, its pages linger, and `ask` keeps
+# So a plugin can be absorbed or archived, its pages linger, and answers keep
 # citing them confidently. This suite is the wiki-side check that closes that gap.
 #
 # Contract under test:
@@ -31,7 +32,7 @@
 # either tree, so requiring the reverse direction would be red on arrival, and the
 # only ways to green it are authoring the missing pages or keeping an exemption
 # list — the very hand-maintained list this design rejects. A stale page makes
-# `ask` answer wrongly; a missing page only makes it answer less. Guarding the
+# the assistant answer wrongly; a missing page only makes it answer less. Guarding the
 # wrong-answer direction first is the intended sequencing.
 #
 # Namespace matching is boundary-aware, and that is load-bearing. A page stem

@@ -174,9 +174,11 @@ PLUGIN_COUNT_SITES = tuple(spec[0] for spec in PLUGIN_COUNT_SPEC)
 def read_marketplace(root):
     """Return plugins[] from the repo marketplace manifest.
 
-    The same reader `check-plugin-inventory.py` carries; the two are deliberate
-    copies, since no guard in this directory imports another. If the manifest's
-    shape ever changes, both need the fix.
+    Deliberately duplicated in every guard here that reads the manifest, since
+    no guard in this directory imports another. If the manifest's shape ever
+    changes, each copy needs the fix. Deliberately not counted: a stated number
+    of copies goes stale the next time a guard is added, which is the drift this
+    file exists to catch elsewhere.
     """
     path = os.path.join(root, MARKETPLACE)
     if not os.path.isfile(path):

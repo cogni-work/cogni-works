@@ -209,3 +209,19 @@ jobs:
         run: |
           set -euo pipefail
           python3 scripts/check-readme-inventory-sync.py
+
+  code-span-nesting-guard:
+    name: Code-span nesting guard (no single-backtick span enclosing another)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        # Default shallow checkout is sufficient: the guard reads the tracked
+        # index at this commit via `git ls-files`, not git history. Do NOT copy
+        # version-bump-gate's fetch-depth: 0 — that is load-bearing only for its
+        # merge-base anchor.
+
+      - name: Assert no markdown file nests a code span inside another code span
+        run: |
+          set -euo pipefail
+          python3 scripts/check-code-span-nesting.py

@@ -194,10 +194,16 @@ Runs **only when `--resweep` is passed** — after push completes (if `--mode pu
 This is an **inline orchestration over the vendored `wiki-claims-resweep` scripts plus the claims engine** — there is **no** `cogni-wiki:` dispatch. The two vendored scripts are deterministic plumbing (claim extraction + plan-materialize/aggregate); the live-source re-verification (WebFetch + LLM-compare against the live page) is the job of `cogni-workspace:claims`. The vendored script directory was already resolved **vendored-first** in the Step 0 pre-flight (`RESWEEP_SCRIPTS`, via `resolve_wiki_scripts wiki-claims-resweep extract_page_claims.py`, exactly as `knowledge-dashboard`/`knowledge-resume` do); reuse that value here. If you are entering §2 without the pre-flight value in hand (e.g. a manual re-entry), re-resolve it identically — `resolve_wiki_scripts` is idempotent:
 
 ```
+source "${CLAUDE_PLUGIN_ROOT}/scripts/resolve-wiki-scripts.sh"
 # reuse $RESWEEP_SCRIPTS from Step 0; or re-resolve identically if not set:
 : "${RESWEEP_SCRIPTS:=$(resolve_wiki_scripts wiki-claims-resweep extract_page_claims.py)}"
-[ -n "$RESWEEP_SCRIPTS" ] || abort "vendored wiki-claims-resweep scripts not found — reinstall cogni-knowledge"
+[ -n "$RESWEEP_SCRIPTS" ] && RESWEEP_SCRIPTS_OK=yes || RESWEEP_SCRIPTS_OK=no
 ```
+
+If `RESWEEP_SCRIPTS_OK` is `no`, abort with the missing-vendored-scripts message:
+
+> --resweep requires the vendored `wiki-claims-resweep` scripts, which are missing from this install.
+> Reinstall/upgrade cogni-knowledge via the marketplace, then retry. (Push-mode does not need them; drop --resweep to run without the live-source re-check.)
 
 **After a partial push (`--mode push --resweep` where ≥ 1 topic failed mid-chain):** the resweep still runs. Push-mode is fail-soft per topic, and a topic that crashed *before* `knowledge-finalize` deposited **no** `wiki/syntheses/<slug>.md` page — so there is nothing on disk for the resweep to scan, and it cannot surface phantom deviations on a partially-deposited topic. The resweep therefore covers only the syntheses that actually landed; failed topics are simply absent. No special skip logic needed.
 

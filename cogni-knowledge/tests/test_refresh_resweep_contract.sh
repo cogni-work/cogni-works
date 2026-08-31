@@ -117,6 +117,36 @@ else
   errors=$((errors + 1))
 fi
 
+# --- 10) resolve_wiki_scripts call and its source line share one fenced block --
+# The sibling property to case 9, for the helper that is SOURCED rather than
+# defined inline. A flat assert_grep is not enough: this file carries source
+# lines in the Step 0 fences, so a file-wide grep stays green while a LATER
+# fence calls the resolver with no source line of its own -- the standalone
+# exit-127 false abort. The predicate is ONE-directional: a fence that calls
+# without sourcing is FAIL-NOSOURCE, but a fence that sources without calling is
+# exempt (a redundant source carries no standalone hazard, unlike case 9's
+# orphan definition). The call detector keys on the UNDERSCORE spelling so the
+# hyphenated resolve-wiki-scripts.sh filename on the source line cannot make a
+# sourcing fence trivially satisfy itself, and FAIL-NOCALL fires if no fence
+# calls the resolver at all, so a rename cannot silently retire this guard.
+source_scope_result=$(awk '
+  /^[ \t]*```/ { inf = !inf; hassource = 0; next }
+  inf && /^[ \t]*(\.|source)[ \t]+.*resolve-wiki-scripts\.sh/ { hassource = 1; next }
+  inf && /resolve_wiki_scripts[ \t]/ { sawcall = 1; if (!hassource) nosrc = 1 }
+  END {
+    if (!sawcall)   print "FAIL-NOCALL"
+    else if (nosrc) print "FAIL-NOSOURCE"
+    else            print "PASS"
+  }
+' "$REFRESH") || true
+
+if [ "$source_scope_result" = "PASS" ]; then
+  green "PASS: refresh-resweep-29-resolve-wiki-scripts-fence-scoped knowledge-refresh: every fence calling resolve_wiki_scripts sources resolve-wiki-scripts.sh first"
+else
+  red "FAIL: refresh-resweep-29-resolve-wiki-scripts-fence-scoped knowledge-refresh: a fence calls resolve_wiki_scripts without sourcing resolve-wiki-scripts.sh first ($source_scope_result)"
+  errors=$((errors + 1))
+fi
+
 if [ $errors -eq 0 ]; then
   green ""
   green "ALL PASS"

@@ -1,8 +1,16 @@
 ---
 name: web
-description: Render a web-brief.md into a .pen file and self-contained HTML page using Pencil MCP.
+description: >
+  Use this agent when a completed web-brief.md must be rendered into a scrollable landing-page
+  .pen file and exported as a self-contained HTML page via Pencil MCP. Typical triggers include
+  the story-to-web skill having just produced a brief; a user asking to "render the web
+  narrative", "create the .pen file" or "design the landing page"; and a downstream consumer
+  needing the exported HTML for embedding, such as an export-html-report landing page. Not for
+  creating a brief from a narrative — use the story-to-web skill for that. See "When to Use" in
+  the agent body for the full scenario list.
 model: opus
 color: cyan
+tools: Read, Write, Bash, mcp__pencil__open_document, mcp__pencil__set_variables, mcp__pencil__get_variables, mcp__pencil__get_guidelines, mcp__pencil__batch_design, mcp__pencil__batch_get, mcp__pencil__get_screenshot, mcp__pencil__snapshot_layout
 ---
 
 # Web Renderer Agent

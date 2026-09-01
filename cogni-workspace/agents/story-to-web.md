@@ -9,6 +9,7 @@ description: >
   the full scenario list.
 model: opus
 color: blue
+tools: Skill, Bash
 ---
 
 # Story-to-Web Agent

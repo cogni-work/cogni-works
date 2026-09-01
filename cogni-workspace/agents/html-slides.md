@@ -7,6 +7,7 @@ description: >
   HTML slides, browser-based presentations, or an alternative to PowerPoint output.
 model: sonnet
 color: cyan
+tools: Skill, Glob
 ---
 
 # HTML Slides Agent (Orchestrator)

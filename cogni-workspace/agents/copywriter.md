@@ -2,7 +2,14 @@
 name: copywriter
 model: opus
 color: blue
-description: Polish markdown documents for executive readability using McKinsey Pyramid Principle and messaging frameworks.
+description: >
+  Use this agent when an existing markdown document must be polished for executive readability
+  rather than written from scratch. Typical triggers include the /copywrite command dispatching a
+  file for a full pass or a scoped one (structure-only, tone-only, formatting-only or compress); a
+  sales-mode rewrite that adds Power Positions; and a translate-then-polish pass when TARGET_LANG
+  is set. Not for persona Q&A critique — use reader — and not for generating new narrative prose —
+  use narrative-writer. See "When to Use" in the agent body for the full scenario list.
+tools: Skill, Glob
 ---
 
 # Copywriter Agent (Orchestrator)
@@ -25,6 +32,15 @@ Invoke the copywriter skill to polish a markdown document and return ONLY JSON t
 - `QUALITY_TARGETS`: Custom targets (optional)
 
 **Output:** JSON only (no prose)
+
+## When to Use
+
+- The `/copywrite` command dispatches a markdown file for polishing
+- A scoped pass is wanted — `SCOPE` of `structure-only`, `tone-only`, `formatting-only` or `compress`
+- A sales-mode rewrite is wanted — `MODE=sales`, which enables Power Positions (IS-DOES-MEANS)
+- `TARGET_LANG` is set, so the document is translated and then polished in two passes
+
+**Not for:** Persona Q&A critique (use reader) or generating new narrative prose (use narrative-writer)
 
 ## Constraints
 

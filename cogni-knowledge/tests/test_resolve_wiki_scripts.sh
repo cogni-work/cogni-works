@@ -18,10 +18,11 @@
 # branches, and the ranking rule with them, are gone.)
 #
 # The resolver lives in ONE shared snippet (scripts/resolve-wiki-scripts.sh)
-# that every knowledge-* flow sources — there is no inline copy to drift. This
-# test asserts the shared snippet defines the resolver, that every expected flow
-# sources it (and carries no inline definition), and drives the snippet body
-# directly through the behaviour cases below.
+# that the knowledge-* flows source — there is no inline copy to drift. This
+# test asserts the shared snippet defines the resolver; DERIVES the set of flows
+# that call it by scanning skills/*/SKILL.md, rather than reading a list kept by
+# hand; asserts per FENCE that a calling fence sources the snippet first; and
+# drives the snippet body directly through the behaviour cases below.
 #
 # Cases (against the shared snippet body):
 #   1. external marketplace-cache layout only        -> non-zero (refused)
@@ -37,12 +38,10 @@
 set -eu
 
 PLUGIN_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-SKILLS_DIR="$PLUGIN_ROOT/skills"
+# The scan root is overridable so the resolve-wiki-14 liveness arm is reachable:
+# point it at an empty dir and the derived set is empty, which must go RED.
+SKILLS_DIR="${RESOLVE_WIKI_SKILLS_DIR:-$PLUGIN_ROOT/skills}"
 RESOLVER_SNIPPET="$PLUGIN_ROOT/scripts/resolve-wiki-scripts.sh"
-
-# Every knowledge-* flow that needs the probe now SOURCES the shared snippet
-# instead of carrying an inline copy. These are the flows expected to source it.
-SOURCING_SKILLS="knowledge-ingest knowledge-finalize knowledge-dashboard knowledge-health knowledge-lint knowledge-resume knowledge-ingest-source knowledge-query"
 
 . "$(dirname "$0")/fixtures/test_helpers.sh"
 
@@ -56,7 +55,7 @@ extract_resolver() {
 
 # -----------------------------------------------------------------------------
 # Part 1: contract — the shared snippet defines a VENDORED-ONLY resolver, and
-#         every knowledge-* flow sources it rather than carrying an inline copy
+#         every DERIVED call site sources it rather than carrying an inline copy
 #         (the de-duplication invariant: one source of truth).
 #
 #         Comments are stripped before the external-probe scan: the snippet
@@ -76,28 +75,120 @@ else
   green "PASS: resolve-wiki-01 shared snippet defines a vendored-only resolver with no external cogni-wiki probe"
 fi
 
-for name in $SOURCING_SKILLS; do
-  skill_file="$SKILLS_DIR/$name/SKILL.md"
-  if [ ! -f "$skill_file" ]; then
-    red "FAIL: resolve-wiki-02-$name skill file not found: $skill_file"; errors=$((errors + 1)); continue
-  else
-    green "PASS: resolve-wiki-02-$name skill file present: $skill_file"
+# The graded population is DERIVED from the tree, never enumerated here: every
+# skills/*/SKILL.md is scanned, and a skill enters the set by calling
+# resolve_wiki_scripts inside a fenced block. A newly-calling skill is therefore
+# graded on its first run with no edit to this file — the hand-maintained list
+# this replaced had drifted to 8 names while 13 skills called the resolver.
+#
+# The sourcing decision is per FENCE, not per file. A source line only vouches
+# for the fence it sits in, so a file that sources in one fence and calls in
+# another is an offender — that whole-file read is what let a broken fence pass.
+# Three details are load-bearing:
+#   - the fence opener tolerates leading whitespace, because a fence nested under
+#     a numbered step is indented (knowledge-index indents its resolver fence);
+#   - the call detector keys on the UNDERSCORE spelling resolve_wiki_scripts,
+#     while the source line names the HYPHENATED resolve-wiki-scripts.sh, so a
+#     sourcing line can never satisfy itself as its own call site;
+#   - nothing outside a fence is inspected, so a backtick-quoted mention in a
+#     prose sentence is not graded as a call.
+#
+# Per tests/README.md rule 7 this is collect-then-pair: offenders accumulate
+# across the loop and a single same-id if/else fires after it closes. Emitting
+# per-file would collide knowledge-refresh's three calling fences (and
+# knowledge-distill's two) onto one id.
+
+scanned_count=0
+calling_count=0
+nosrc_offenders=""
+inline_def_offenders=""
+uncovered_offenders=""
+
+for skill_file in "$SKILLS_DIR"/*/SKILL.md; do
+  [ -f "$skill_file" ] || continue
+  skill_dir=${skill_file%/SKILL.md}
+  name=${skill_dir##*/}
+  scanned_count=$((scanned_count + 1))
+
+  # The fence-scoped pass. It emits only BARE records — never a PASS:/FAIL:
+  # label — so every result line in this suite still originates at a red/green
+  # call and stays visible to scripts/check-case-id-pairing.py:
+  #   CALL  <skill>                    once per file that has any fenced call
+  #   NOSRC <skill>:<fence-open-line>  once per calling fence with no earlier
+  #                                    in-fence source of the shared snippet
+  scan=$(awk -v skill="$name" '
+    /^[ \t]*```/ {
+      inf = !inf
+      if (inf) { hassource = 0; reported = 0; fl = NR }
+      next
+    }
+    inf && /^[ \t]*(\.|source)[ \t]+.*resolve-wiki-scripts\.sh/ { hassource = 1; next }
+    inf && /resolve_wiki_scripts/ {
+      calls = 1
+      if (!hassource && !reported) { reported = 1; print "NOSRC " skill ":" fl }
+    }
+    END { if (calls) print "CALL " skill }
+  ' "$skill_file")
+
+  file_calls=no
+  case "$scan" in *"CALL $name"*) file_calls=yes ;; esac
+  if [ "$file_calls" = yes ]; then
+    calling_count=$((calling_count + 1))
   fi
+
+  # Appending the empty string is a no-op, so this needs no emptiness guard.
+  nosrc_offenders="$nosrc_offenders$(printf '%s\n' "$scan" | sed -n 's/^NOSRC /  /p' | tr '\n' ' ')"
+
   if grep -qE 'resolve_wiki_scripts\(\) \{' "$skill_file"; then
-    red "FAIL: resolve-wiki-03-$name $name still carries an inline resolve_wiki_scripts() definition (should source the snippet)"; errors=$((errors + 1))
-  elif ! grep -qF 'scripts/resolve-wiki-scripts.sh' "$skill_file"; then
-    red "FAIL: resolve-wiki-03-$name $name does not source the shared resolve-wiki-scripts.sh snippet"; errors=$((errors + 1))
-  else
-    green "PASS: resolve-wiki-03-$name $name sources the shared snippet (no inline copy)"
+    inline_def_offenders="$inline_def_offenders $name"
+  fi
+
+  # A file that names the resolver but yields no derived call site is graded by
+  # nothing — the silent-shrink failure a derived population can still suffer.
+  if [ "$file_calls" = no ] && grep -q 'resolve_wiki_scripts' "$skill_file"; then
+    uncovered_offenders="$uncovered_offenders $name"
   fi
 done
+
+# A scan that discovers nothing exits green while grading nothing, which is the
+# same green-and-dead shape this suite exists to prevent. This is a pure vacuity
+# check against ZERO, deliberately not a minimum count: a floor would be the
+# hand-maintained census this file just deleted, compressed into one number, and
+# would red a legitimate consolidation that is not a defect. The anti-shrink
+# direction is resolve-wiki-17's job, and it keys off the tree rather than a
+# literal.
+if [ "$scanned_count" -eq 0 ]; then
+  red "FAIL: resolve-wiki-14 no SKILL.md found under $SKILLS_DIR — the scan graded nothing"; errors=$((errors + 1))
+elif [ "$calling_count" -eq 0 ]; then
+  red "FAIL: resolve-wiki-14 scanned $scanned_count SKILL.md file(s) but derived no call site at all — the scan is broken, not the tree"; errors=$((errors + 1))
+else
+  green "PASS: resolve-wiki-14 derived $calling_count calling skill(s) from $scanned_count SKILL.md file(s)"
+fi
+
+if [ -n "$nosrc_offenders" ]; then
+  red "FAIL: resolve-wiki-15 fence(s) call resolve_wiki_scripts with no source of resolve-wiki-scripts.sh earlier in that same fence (skill:fence-open-line):$nosrc_offenders"; errors=$((errors + 1))
+else
+  green "PASS: resolve-wiki-15 every derived calling fence sources the shared snippet earlier in that same fence"
+fi
+
+if [ -n "$inline_def_offenders" ]; then
+  red "FAIL: resolve-wiki-16 skill(s) still carry an inline resolve_wiki_scripts() definition instead of sourcing the snippet:$inline_def_offenders"; errors=$((errors + 1))
+else
+  green "PASS: resolve-wiki-16 no skill carries an inline resolve_wiki_scripts() definition"
+fi
+
+if [ -n "$uncovered_offenders" ]; then
+  red "FAIL: resolve-wiki-17 skill(s) name resolve_wiki_scripts but contributed no derived call site, so they are graded by nothing:$uncovered_offenders"; errors=$((errors + 1))
+else
+  green "PASS: resolve-wiki-17 every skill naming resolve_wiki_scripts contributes at least one derived fenced call site"
+fi
 
 # -----------------------------------------------------------------------------
 # Part 2: behaviour — run the shared snippet body against synthetic layouts.
 # -----------------------------------------------------------------------------
 
-# The shared snippet is the single source of truth all 8 flows source, so the
-# behaviour cases below drive its body directly.
+# The shared snippet is the single source of truth every derived call site
+# sources, so the behaviour cases below drive its body directly.
 INGEST_BODY=$(extract_resolver)
 if [ -z "$INGEST_BODY" ]; then
   red "FAIL: resolve-wiki-04 could not read resolve_wiki_scripts() body from the shared snippet"

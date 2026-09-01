@@ -1,6 +1,12 @@
 ---
 name: storyboard
-description: Render a storyboard-brief.md into a multi-poster .pen file using Pencil MCP.
+description: >
+  Use this agent when a completed storyboard-brief.md must be rendered into a multi-poster .pen
+  file for print via Pencil MCP. Typical triggers include story-to-web running in storyboard mode
+  having just produced a brief; a user asking to "render the storyboard", "create the poster .pen
+  file" or "design the storyboard posters"; and re-rendering the poster series after a brief
+  revision. Not for creating a brief from a narrative — use story-to-web in storyboard mode for
+  that. See "When to Use" in the agent body for the full scenario list.
 model: opus
 color: blue
 tools: Read, Bash, mcp__pencil__open_document, mcp__pencil__set_variables, mcp__pencil__get_guidelines, mcp__pencil__batch_design, mcp__pencil__get_screenshot, mcp__pencil__snapshot_layout

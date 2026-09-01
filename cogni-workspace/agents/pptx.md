@@ -1,8 +1,16 @@
 ---
 name: pptx
-description: Create, edit, and analyze PowerPoint presentations. Delegates to document-skills:pptx skill for html2pptx conversion, template-based creation, XML editing, and content extraction.
+description: >
+  Use this agent when a finished presentation-brief.md must be rendered into a .pptx deliverable
+  inside Claude Code. Typical triggers include story-to-slides having just produced a brief plus a
+  theme.md with PowerPoint output wanted; converting an existing brief and theme pair into a deck
+  at a given OUTPUT_PATH; and rendering locally rather than through the claude.ai fallback path.
+  Delegates to the document-skills:pptx skill for html2pptx conversion, template-based creation,
+  XML editing and content extraction. Not for HTML slide output — use html-slides. See "When to
+  Use" in the agent body for the full scenario list.
 model: sonnet
 color: cyan
+tools: Skill, Glob
 ---
 
 # PPTX Agent (Orchestrator)
@@ -20,6 +28,14 @@ Invoke the pptx skill to create a presentation from a brief and return ONLY JSON
 - `OUTPUT_PATH`: Full file path where the final `.pptx` must be delivered (required)
 
 **Output:** JSON only (no prose)
+
+## When to Use
+
+- story-to-slides has produced a `presentation-brief.md` plus a `theme.md` and PowerPoint output is wanted
+- An existing brief and theme pair must become a `.pptx` at a given `OUTPUT_PATH`
+- Rendering happens inside Claude Code rather than through the claude.ai fallback path
+
+**Not for:** HTML slide output (use html-slides)
 
 ## Constraints
 

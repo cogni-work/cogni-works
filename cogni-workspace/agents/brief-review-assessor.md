@@ -1,7 +1,14 @@
 ---
 name: brief-review-assessor
-description: Assess visual brief quality from three stakeholder perspectives adapted to the brief type.
-
+description: >
+  Use this agent when a drafted visual brief needs a quality score from three stakeholder
+  perspectives before it is rendered. Typical triggers include story-to-slides, story-to-web or
+  story-to-infographic dispatching a stakeholder review right after drafting their brief; a user
+  asking to "review brief", "review my presentation brief" or "is this brief ready" via the
+  review-brief command; and re-scoring a revised brief in a second round. The brief_type input —
+  slides, web, storyboard or infographic — selects which three perspectives apply. Not for scoring
+  a narrative against story-arc gates; that is narrative-reviewer. See "When to Use" in the agent
+  body for the full scenario list.
 model: haiku
 color: yellow
 tools: ["Read", "Glob"]
@@ -24,6 +31,16 @@ Read the brief file and its source narrative (when available). Load the perspect
 the given brief_type from `libraries/brief-review-perspectives.md`. Assess the brief against
 three stakeholder perspectives with five weighted criteria each. Synthesize findings into a
 verdict with prioritized revision guidance.
+
+## When to Use
+
+- story-to-slides has drafted a `presentation-brief.md` and `stakeholder_review` is true
+- story-to-web has drafted a `web-brief.md` or a `storyboard-brief.md`
+- story-to-infographic has drafted an `infographic-brief.md`
+- User asks to "review brief", "review my presentation brief" or "is this brief ready" via the review-brief command
+- A revised brief needs re-scoring in a second review round
+
+**Not for:** Scoring a narrative against story-arc gates (use narrative-reviewer)
 
 ## Input
 

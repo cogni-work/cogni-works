@@ -8,6 +8,7 @@ description: >
   batch processing. See "When to Use" in the agent body for the full scenario list.
 model: opus
 color: green
+tools: Skill, Bash
 ---
 
 # Story-to-Slides Agent

@@ -36,7 +36,7 @@ Read `${CLAUDE_PLUGIN_ROOT}/references/inverted-pipeline.md` §"Phase 2 — `kno
 
 ### 0. Pre-flight
 
-**No wiki engine required.** cogni-knowledge bundles its wiki engine under `scripts/vendor/cogni-wiki/`, resolved vendored-first by every wiki-touching step, and this skill resolves none of it directly — Step 0.5's coverage check runs cogni-knowledge's own `scripts/wiki-coverage.py`. There is no `cogni-wiki` plugin install to probe and no hard dependency to abort on (clean-break — no cogni-research dispatch either). The binding read below is the gate, together with the `.cogni-wiki/config.json` and `wiki/` existence checks that follow it: it aborts on `success: false` and yields `wiki_path` as `WIKI_ROOT`.
+**No wiki engine required.** cogni-knowledge bundles its wiki engine under `scripts/vendor/cogni-wiki/`, resolved vendored-first by every wiki-touching step, and this skill resolves none of it directly — Step 0.5's coverage check runs cogni-knowledge's own `scripts/wiki-coverage.py`. There is no `cogni-wiki` plugin install to probe and no hard dependency to abort on (clean-break — no cogni-research dispatch either). The binding read below is the gate, together with the `.cogni-wiki/config.json` and `wiki/` existence checks that follow it.
 
 **Binding + plan.** Resolve `knowledge_root` (same logic as `knowledge-plan`). Read the binding:
 

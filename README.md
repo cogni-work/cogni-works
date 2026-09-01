@@ -177,8 +177,8 @@ insight-wave/
 ├── docs/                                   # User documentation
 │   ├── getting-started.md                  # Forwarder → workflows/install-to-infographic.md
 │   ├── ecosystem-overview.md               # Plugin landscape and data flow
-│   ├── plugin-guide/                       # Per-plugin deep dives (9 guides)
-│   ├── workflows/                          # Cross-plugin pipeline guides (8 workflows)
+│   ├── plugin-guide/                       # Per-plugin deep dives (8 guides)
+│   ├── workflows/                          # Cross-plugin pipeline guides (7 workflows)
 │   ├── architecture/                       # Design philosophy, plugin anatomy, ER diagram
 │   └── contributing/                       # Plugin development guide
 ├── cogni-consult/                          # Action-fields-WBS consulting orchestrator

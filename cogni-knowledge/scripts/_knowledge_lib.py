@@ -534,9 +534,9 @@ VALID_TONES = frozenset({
     "narrative", "optimistic", "simple", "casual", "executive",
 })
 
-# Prose-density modes (references/absorption-roadmap.md #309 P2; mirrors
-# cogni-research writer.md). `standard` treats target_words as a floor;
-# `executive` as a ceiling with BLUF + Pyramid + one-citation-per-claim.
+# Prose-density modes (#309 P2; mirrors cogni-research writer.md).
+# `standard` treats target_words as a floor; `executive` as a ceiling with
+# BLUF + Pyramid + one-citation-per-claim.
 VALID_PROSE_DENSITIES = frozenset({"standard", "executive"})
 
 # Citation formats from references/citation-formats.md. `ieee` / `chicago` are

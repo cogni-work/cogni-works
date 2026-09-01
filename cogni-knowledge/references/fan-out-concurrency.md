@@ -5,7 +5,7 @@ that sits alongside the other fan-out phases. This is the reasoned answer to #32
 existing #311 live data, not a fresh benchmark.
 
 The single live data point this rests on: the #311 German bake-in run dispatched **67 ingesters as two
-waves of 25/26 with no issue** (`references/alpha-findings.md` F30/#323). ~25 concurrent ran clean.
+waves of 25/26 with no issue** (alpha finding F30, tracked in #323). ~25 concurrent ran clean.
 
 ## 1. The Claude Code concurrent-subagent ceiling
 

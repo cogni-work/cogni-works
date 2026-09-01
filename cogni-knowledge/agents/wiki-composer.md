@@ -10,8 +10,7 @@ tools: ["Read", "Write", "Glob", "Grep"]
 Forked from cogni-research/agents/writer.md. Point-in-time copy; drift
 acceptable per `cogni-knowledge/references/inverted-pipeline.md`
 ("What is no longer in the runtime path"). Reshape rationale + the full
-deferral list live in the plugin CHANGELOG and `references/absorption-roadmap.md`
-— not duplicated here.
+deferral list live in the plugin CHANGELOG — not duplicated here.
 -->
 
 # Wiki Composer Agent (inverted pipeline, Phase 5)

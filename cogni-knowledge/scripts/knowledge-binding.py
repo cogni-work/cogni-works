@@ -47,7 +47,7 @@ from _knowledge_lib import theme_norm_key  # noqa: E402
 # additive bump that added curator_defaults on top of v0.0.2's project_path.
 # The bump to 0.1.0 landed at v0.1.0 M12 alongside plugin.json so the two
 # version surfaces re-align there (no field change — a deliberate milestone
-# re-alignment per references/absorption-roadmap.md M12). 0.1.1 added
+# re-alignment at M12). 0.1.1 added
 # research_defaults (knowledge-base-level market + output_language inherited by
 # knowledge-plan; #309 P1.2-rest). 0.1.2 widened research_defaults with the four
 # writer-quality knobs (prose_density, tone, citation_format, target_words;

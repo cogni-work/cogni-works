@@ -499,7 +499,6 @@ Fail-soft — a record failure never blocks the phase. Full contract: `${CLAUDE_
 
 - `${CLAUDE_PLUGIN_ROOT}/references/inverted-pipeline.md` — Phase 6 contract (max-2-iterations cap, zero-network invariant)
 - `${CLAUDE_PLUGIN_ROOT}/references/claim-at-ingest.md` — verdict definitions (verbatim / paraphrase / unsupported)
-- `${CLAUDE_PLUGIN_ROOT}/references/absorption-roadmap.md` — deferrals (cross-page substitute, multilingual, arcs)
 - `${CLAUDE_PLUGIN_ROOT}/agents/wiki-verifier.md` — dispatched agent (verifier; sharded via `CITATIONS_PATH` / `VERIFY_OUT_PATH`)
 - `${CLAUDE_PLUGIN_ROOT}/agents/revisor.md` — dispatched agent (revisor fork; repoint-before-drop)
 - `${CLAUDE_PLUGIN_ROOT}/scripts/verify-store.py --help` — `shard` / `prefilter` / `merge` fan-out plumbing (incremental re-verify via `shard --only-ids` + `merge --manifest --carry-forward-from`)

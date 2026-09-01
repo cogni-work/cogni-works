@@ -463,7 +463,6 @@ Fail-soft — a record failure never blocks the phase. Full contract: `${CLAUDE_
 - `${CLAUDE_PLUGIN_ROOT}/references/claim-at-ingest.md` — claim shape on the wiki page
 - `${CLAUDE_PLUGIN_ROOT}/references/writing-tones.md` — the `TONE` catalog threaded to the composer
 - `${CLAUDE_PLUGIN_ROOT}/references/citation-formats.md` — the `CITATION_FORMAT` menu (ieee/chicago wired)
-- `${CLAUDE_PLUGIN_ROOT}/references/absorption-roadmap.md` — remaining deferrals (story arcs, author-date citation rendering, expansion loops)
 - `${CLAUDE_PLUGIN_ROOT}/agents/wiki-composer.md` — dispatched agent
 - `${CLAUDE_PLUGIN_ROOT}/scripts/citation-store.py --help` — builds + self-checks citation-manifest.json
 - `${CLAUDE_PLUGIN_ROOT}/scripts/knowledge-binding.py --help`

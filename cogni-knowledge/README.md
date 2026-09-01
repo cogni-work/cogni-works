@@ -43,7 +43,7 @@ A self-contained, wiki-first research engine built on two pillars: compounding �
 14. **Refresh-synthesis** one existing synthesis from a newly-landed source — fold the new source into its existing evidence base (never thinning it) and re-compose, verify, and finalize
 15. **Index** the bound base — rebuild the curated root index and per-type sub-indexes on demand, or migrate an existing old-structure wiki to the curated layout
 
-See `references/absorption-roadmap.md` for the inverted-pipeline design. The plugin is on the Released 1.x line, with concise-by-default `executive` output the resting state; the older `knowledge-research` / `knowledge-report` chain lives in `_archive/` — see `_archive/README.md`.
+See `references/inverted-pipeline.md` for the inverted-pipeline design. The plugin is on the Released 1.x line, with concise-by-default `executive` output the resting state; the older `knowledge-research` / `knowledge-report` chain lives in `_archive/` — see `_archive/README.md`.
 
 ## What it means for you
 

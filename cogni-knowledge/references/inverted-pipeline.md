@@ -286,4 +286,3 @@ Deposit the verified draft as `wiki/syntheses/<slug>.md` (frontmatter `type: syn
 
 - `fetch-cache-design.md` — content-addressing, eviction policy, freshness window
 - `claim-at-ingest.md` — why claims are pre-extracted from source bodies, not from drafts
-- `absorption-roadmap.md` — how this fits the broader v0.1.0 / v1.0.0 sequence

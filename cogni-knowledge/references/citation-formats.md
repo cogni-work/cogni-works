@@ -36,7 +36,7 @@ The only difference from IEEE is the entry *string* (author-last-name-first + fu
 
 ### APA / MLA / Harvard (staged — author-date family)
 
-These use an author-date **inline** shape — `([Author, Year](url))` (APA), `([Author](url))` (MLA), `([Author Year](url))` (Harvard) — and an alphabetical, un-numbered reference list. That inline shape has no `[N]`, so it is **not compatible** with the current numbered pipeline: `knowledge-finalize`'s `renumber_inline_citations` pass and the `<sup>[N]` scans in `wiki-verifier` / `wiki-reviewer` / `revisor` all assume numbered markers. Until those are made citation-family-aware (the named P2 follow-up — see `references/absorption-roadmap.md`), selecting `apa` / `mla` / `harvard` is accepted and persisted but the composer renders the **numbered** form. No data is lost; the choice is remembered for when author-date rendering ships.
+These use an author-date **inline** shape — `([Author, Year](url))` (APA), `([Author](url))` (MLA), `([Author Year](url))` (Harvard) — and an alphabetical, un-numbered reference list. That inline shape has no `[N]`, so it is **not compatible** with the current numbered pipeline: `knowledge-finalize`'s `renumber_inline_citations` pass and the `<sup>[N]` scans in `wiki-verifier` / `wiki-reviewer` / `revisor` all assume numbered markers. Until those are made citation-family-aware, selecting `apa` / `mla` / `harvard` is accepted and persisted but the composer renders the **numbered** form. No data is lost; the choice is remembered for when author-date rendering ships.
 
 ## Hard rule: inline citations must be clickable
 

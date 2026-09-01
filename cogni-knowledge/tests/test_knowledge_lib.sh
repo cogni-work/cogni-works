@@ -1337,6 +1337,146 @@ def assert_extract_pdf_text():
         kl.load_pypdf = orig
 
 
+def assert_citation_family_dispatch():
+    # The numbered family.
+    assert kl.citation_family("ieee") == "numbered"
+    assert kl.citation_family("chicago") == "numbered"
+    # The author-date family.
+    assert kl.citation_family("apa") == "author_date"
+    assert kl.citation_family("mla") == "author_date"
+    assert kl.citation_family("harvard") == "author_date"
+    # Normalization is inherited from normalize_citation_format, so case and
+    # surrounding whitespace do not change the family.
+    assert kl.citation_family("APA") == "author_date"
+    assert kl.citation_family("  Harvard  ") == "author_date"
+    # The deprecated `wikilink` alias routes to ieee, hence numbered.
+    assert kl.citation_family("wikilink") == "numbered"
+    # TOTAL: every value the format field can carry degrades to the family the
+    # pipeline actually renders, rather than raising at a call site. A bare
+    # CITATION_FAMILY[fmt] subscript would KeyError on each of these.
+    for degenerate in ("bibtex", "", None):
+        assert kl.citation_family(degenerate) == "numbered", degenerate
+
+
+def assert_strip_author_date_citation_markers():
+    # All three author-date shapes strip with NO residue — asserted by full-string
+    # equality, so a stray paren or a surviving year would fail.
+    apa = "AI is regulated ([Doe, 2024](https://x.eu/c)). Next."
+    assert kl.strip_author_date_citation_markers(apa) == "AI is regulated . Next.", \
+        kl.strip_author_date_citation_markers(apa)
+    mla = "AI is regulated ([Doe](https://x.eu/c))."
+    assert kl.strip_author_date_citation_markers(mla) == "AI is regulated ."
+    harvard = "AI is regulated ([Doe 2024](https://x.eu/c))."
+    assert kl.strip_author_date_citation_markers(harvard) == "AI is regulated ."
+    # Multiple markers in one sentence.
+    two = "A ([Doe, 2024](https://a.org/x)) and B ([Roe, 2023](https://b.org/y))."
+    assert kl.strip_author_date_citation_markers(two) == "A  and B ."
+    # No-op when absent.
+    assert kl.strip_author_date_citation_markers("plain text") == "plain text"
+    assert kl.strip_author_date_citation_markers("") == ""
+    # Scheme-anchored: an ordinary parenthesized markdown link is prose, not a
+    # citation, and must survive untouched.
+    prose = "As noted (see [the annex](#section-3)) the rule applies."
+    assert kl.strip_author_date_citation_markers(prose) == prose, \
+        kl.strip_author_date_citation_markers(prose)
+    # The [[N]] wikilink anti-pattern can never match (label class excludes []).
+    wl = "A ([[2]](https://a.org/x))."
+    assert kl.strip_author_date_citation_markers(wl) == wl, \
+        kl.strip_author_date_citation_markers(wl)
+    # The family-aware dispatcher BRANCHES rather than applying both patterns:
+    # under a numbered format an author-date marker SURVIVES, and the result is
+    # byte-identical to the existing numbered strip.
+    assert kl.strip_citation_markers(apa, "ieee") == kl.strip_inline_citation_markers(apa)
+    assert "([Doe, 2024](https://x.eu/c))" in kl.strip_citation_markers(apa, "ieee")
+    assert kl.strip_citation_markers(apa, "apa") == "AI is regulated . Next."
+    # ... and conversely a numbered marker survives under an author-date format.
+    numbered = "AI is regulated<sup>[3](https://x.eu/c)</sup>."
+    assert kl.strip_citation_markers(numbered, "ieee") == "AI is regulated."
+    assert kl.strip_citation_markers(numbered, "apa") == numbered
+
+
+def assert_extract_author_date_citation_urls():
+    # Appearance order across two http markers.
+    text = "A ([Doe, 2024](https://a.org/x)). B ([Roe, 2023](https://b.org/y))."
+    assert kl.extract_author_date_citation_urls(text) == \
+        ["https://a.org/x", "https://b.org/y"], kl.extract_author_date_citation_urls(text)
+    # file:// is first-class.
+    f = "C ([Doe, 2024](file:///abs/p.pdf))."
+    assert kl.extract_author_date_citation_urls(f) == ["file:///abs/p.pdf"], \
+        kl.extract_author_date_citation_urls(f)
+    # An UNBRACKETED file:// path with a literal space is captured whole, not
+    # truncated at the space ([^)] rather than \S).
+    fs = "D ([Doe, 2024](file:///abs/V8 Data.pdf))."
+    assert kl.extract_author_date_citation_urls(fs) == ["file:///abs/V8 Data.pdf"], \
+        kl.extract_author_date_citation_urls(fs)
+    # The angle-bracketed destination form.
+    fb = "E ([Doe, 2024](<file:///abs/V8 Data.pdf>))."
+    assert kl.extract_author_date_citation_urls(fb) == ["file:///abs/V8 Data.pdf"], \
+        kl.extract_author_date_citation_urls(fb)
+    # Mixed file + http in one sentence yields BOTH, in order.
+    mixed = "F ([Doe, 2024](file:///abs/p.pdf)) and ([Roe, 2023](https://w.org/z))."
+    assert kl.extract_author_date_citation_urls(mixed) == \
+        ["file:///abs/p.pdf", "https://w.org/z"], kl.extract_author_date_citation_urls(mixed)
+    # A marker carrying no URL, and empty text, contribute nothing.
+    assert kl.extract_author_date_citation_urls("G ([Doe, 2024]).") == []
+    assert kl.extract_author_date_citation_urls("") == []
+    # Scheme-anchored: an ordinary parenthesized markdown link yields no URL.
+    assert kl.extract_author_date_citation_urls("(see [the annex](#section-3))") == []
+    # The family-aware dispatcher branches.
+    assert kl.extract_citation_urls(text, "apa") == ["https://a.org/x", "https://b.org/y"]
+    assert kl.extract_citation_urls(text, "ieee") == []
+    numbered = "A<sup>[1](https://a.org/x)</sup>."
+    assert kl.extract_citation_urls(numbered, "ieee") == \
+        kl.extract_inline_citation_urls(numbered) == ["https://a.org/x"]
+    assert kl.extract_citation_urls(numbered, "apa") == []
+
+
+def assert_build_author_date_reference_list():
+    # Insertion order deliberately differs from alphabetical order, and `roe` is
+    # cited twice under two different renderings of the SAME source — so a dedup
+    # keyed on the rendered string (rather than source identity) would keep both.
+    entries = [
+        {"slug": "roe", "author": "Roe, Jane", "rendered": "Roe, Jane (2023). Later."},
+        {"slug": "doe", "author": "J. Doe", "rendered": "Doe, J. (2019). Earlier."},
+        {"slug": "roe", "author": "Roe, Jane", "rendered": "Roe, Jane (2023). DUPLICATE."},
+        {"slug": "acme", "author": "Acme Corp", "rendered": "Acme Corp (2020). Mid."},
+    ]
+    out = kl.build_author_date_reference_list(entries)
+    # Exactly one entry per distinct source, in surname order (Corp < Doe < Roe),
+    # asserted by full-list equality — not membership, not length.
+    assert out == [
+        "Acme Corp (2020). Mid.",
+        "Doe, J. (2019). Earlier.",
+        "Roe, Jane (2023). Later.",
+    ], out
+    # Un-numbered: no **[N]** prefix and no [[N]] wikilink shape.
+    for line in out:
+        assert "**[" not in line and "[[" not in line, line
+
+    # Degenerate authors: the ("", "") resolve_author_year returns for a page it
+    # cannot read, and a surname-less `publisher:` surrogate. Neither may raise,
+    # and empty sorts LAST as a block rather than leading the list.
+    degenerate = [
+        {"slug": "blank", "author": "", "rendered": "BLANK"},
+        {"slug": "surrogate", "author": "europa.eu", "rendered": "SURROGATE"},
+        {"slug": "doe", "author": "J. Doe", "rendered": "DOE"},
+    ]
+    assert kl.build_author_date_reference_list(degenerate) == \
+        ["DOE", "SURROGATE", "BLANK"], kl.build_author_date_reference_list(degenerate)
+    # Deterministic when two sources share one author (slug tiebreak).
+    tied = [
+        {"slug": "z", "author": "Doe, J", "rendered": "Z"},
+        {"slug": "a", "author": "Doe, J", "rendered": "A"},
+    ]
+    assert kl.build_author_date_reference_list(tied) == ["A", "Z"]
+    # Empty input.
+    assert kl.build_author_date_reference_list([]) == []
+    assert kl.build_author_date_reference_list(None) == []
+    # The sort key itself is total and non-raising over every degenerate form.
+    for bad in ("", None, "   ", "europa.eu"):
+        kl.author_surname_sort_key(bad)
+
+
 check("parse_synthesis_sources", assert_parse_synthesis_sources)
 check("frontmatter_scalar", assert_frontmatter_scalar)
 check("tokenization_primitives", assert_tokenization_primitives)
@@ -1381,6 +1521,10 @@ check("resolve_wiki_scripts", assert_resolve_wiki_scripts)
 check("load_pypdf", assert_load_pypdf)
 check("extract_pdf_text", assert_extract_pdf_text)
 check("resolve_author_year", assert_resolve_author_year)
+check("citation_family_dispatch", assert_citation_family_dispatch)
+check("strip_author_date_citation_markers", assert_strip_author_date_citation_markers)
+check("extract_author_date_citation_urls", assert_extract_author_date_citation_urls)
+check("build_author_date_reference_list", assert_build_author_date_reference_list)
 PY
 )
 
@@ -1440,6 +1584,10 @@ grade resolve_wiki_scripts    "klib-40 resolve_wiki_scripts — single Python SS
 grade load_pypdf              "klib-41 load_pypdf (#583) — fail-soft optional import: returns None (absent) or a module with PdfReader (present), never raises, stable verdict across calls"
 grade extract_pdf_text        "klib-42 extract_pdf_text (#583) — reason vocabulary (ok/pypdf_unavailable/no_text_layer/extract_failed) via injected fake pypdf, min_chars gate boundary, per-page exception skip, page count reported"
 grade resolve_author_year     "klib-43 resolve_author_year — explicit author:/published_date: beat the publisher:/fetched_at: surrogates; a legacy page carrying only the surrogates still resolves non-empty on both legs; neither/no-frontmatter/degenerate -> ('',''), never raises"
+grade citation_family_dispatch "klib-44 citation_family (#1748) — the first functional reader of CITATION_FAMILY: ieee/chicago→numbered, apa/mla/harvard→author_date, case/whitespace-insensitive, wikilink alias→numbered, and unknown/''/None→numbered rather than KeyError"
+grade strip_author_date_citation_markers "klib-45 strip_author_date_citation_markers (#1748) — APA/MLA/Harvard markers removed with no residue, multiple per sentence, no-op when absent; scheme-anchored so ordinary parenthesized prose links and the [[N]] anti-pattern survive; strip_citation_markers BRANCHES (author-date marker survives under ieee, numbered marker survives under apa)"
+grade extract_author_date_citation_urls "klib-46 extract_author_date_citation_urls (#1748) — the edge set klib-11 pins, transposed: appearance order, file:// first-class, unbracketed file:// with a literal space captured whole, angle-bracketed form, mixed file+http both in order, URL-less marker and ''→[]; scheme-anchored; extract_citation_urls dispatches per family"
+grade build_author_date_reference_list "klib-47 build_author_date_reference_list (#1748) — dedup by SOURCE identity not rendered string, alphabetical by surname across 'Last, First' and 'First Last', un-numbered (no **[N]**/[[N]]), ('','')+surname-less publisher surrogate sort last without raising, slug tiebreak, empty/None→[]"
 
 if [ $errors -gt 0 ]; then
   red "$errors case(s) failed."

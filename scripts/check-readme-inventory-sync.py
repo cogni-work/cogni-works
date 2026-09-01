@@ -13,6 +13,9 @@ computed from the filesystem at run time:
      H2, the section intro under "## What the plugins do", and the
      marketplace-manifest comment inside the fenced tree diagram — each bound to
      the size of the live plugin universe.
+  5. the two **directory-count** claims inside that same fenced tree diagram —
+     the per-plugin guide count and the cross-plugin workflow count — each bound
+     to the live `*.md` population of the directory its own line names.
 
 The motivating defect: a plugin's skill was retired and the root README's count
 claim was not swept with it, in three linked places at once, with nothing in CI
@@ -25,7 +28,8 @@ grep encodes one historical retirement, needs a hand-maintained list of stale
 values, and says nothing about the next skill added or removed. Binding the
 claim to a live directory count is a durable invariant — it catches this failure
 class and every future one, in both directions, without being told any numbers.
-No expected count — skills, agents or plugins — appears anywhere in this file.
+No expected count — skills, agents, plugins, guides or workflows — appears
+anywhere in this file.
 
 **Subject is the root README alone.** Per-plugin `*/README.md` files are never
 opened. They carry their own counts, owned by their own plugin; asserting over
@@ -71,13 +75,27 @@ guard anchors nothing else on; without the out-of-fence rule an example README
 pasted into a fenced block inside the prose section contributes a second match
 and the intro site degrades to `plugin-count-ambiguous` instead of a claim.
 
-**The noun discriminates, not the digit.** That same fenced tree lists other
-parenthesised counts — a guides count and a workflows count — and one of them
-carries the very digit the plugin count carries today. A `(N <word>)` shape
-would bind whichever came first and would redden a plugin-count gate on a
-workflow-count edit, so the tree pattern is anchored on the literal noun
-`plugins`. A future line added inside that fence with a coincidental digit is
-excluded by construction rather than by luck.
+**The noun discriminates, not the digit.** That same fenced tree carries three
+parenthesised counts — plugins, guides and workflows — and two of them can hold
+the same digit at once. A `(N <word>)` shape would bind whichever came first and
+would redden a plugin-count gate on a workflow-count edit, so each pattern is
+anchored on its own literal noun. Every one of the three is now a claim in its
+own right rather than a bystander: claim 4 binds `plugins` to the plugin
+universe, claim 5 binds `guides` and `workflows` to their own directories. The
+rule that keeps them apart is unchanged and is now three-way load-bearing — a
+future line added inside that fence with a coincidental digit is excluded by
+construction rather than by luck.
+
+**Claim 5 compares against its own directory, not the plugin universe.** The
+guides count and the plugin count coincide whenever every plugin has a guide, so
+grading a guides claim against `len(counts)` would pass on that coincidence and
+misattribute on the day it breaks — a finding naming the wrong subject is worse
+than none, because it sends the reader at the wrong edit. Each claim-5 site
+therefore carries its own backing directory in its spec row and is compared
+against a live listing of it. When that directory is absent the site reports
+`dir-basis-missing` rather than a mismatch against a live count of zero: an
+absent basis un-binds the claim, and reporting "the directory holds 0" would let
+a `(0 guides)` claim pass green against a directory that does not exist.
 
 **Claim 4 compares against the same universe claim 3 does.** Both read
 `len(counts)` — the plugins the manifest lists *and* whose `source` normalises
@@ -86,9 +104,10 @@ the day a manifest entry carries an unusable `source`, and two arms asserting
 over one quantity from two different bases would contradict each other on
 exactly that day, for a reason no reader of either message could see.
 
-**Absence is a violation, per site.** Each of the three sites reports its own
-`plugin-count-missing` when its claim cannot be found, so renaming the prose
-around a claim fails loudly instead of silently discovering nothing. The
+**Absence is a violation, per site.** Each of claim 4's three sites reports its
+own `plugin-count-missing` when its claim cannot be found, and each of claim 5's
+two sites its own `dir-count-missing`, so renaming the prose around a claim fails
+loudly instead of silently discovering nothing. The
 `no-claims-discovered` floor below deliberately keeps its original subject — the
 per-plugin and roll-up claims — because a per-site missing violation is already
 strictly louder than the floor, and folding these sites into it would stop a
@@ -154,6 +173,13 @@ BARE_PLUGIN_COUNT_RE = re.compile(
 # noun is inside the pattern on purpose — see "The noun discriminates" above.
 TREE_PLUGIN_COUNT_RE = re.compile(r"\((\d+)\s+plugins\)")
 
+# The two directory-count claims share that shape and that reasoning; each names
+# its own noun for the same reason the plugin pattern names its own. Plural-only
+# is deliberate: a singular claim reports `dir-count-missing`, which is loud,
+# rather than being matched and bound to a count it does not state.
+TREE_GUIDES_COUNT_RE = re.compile(r"\((\d+)\s+guides\)")
+TREE_WORKFLOWS_COUNT_RE = re.compile(r"\((\d+)\s+workflows\)")
+
 FENCE_RE = re.compile(r"^\s*```")
 
 # Each site declares its region kind, its pattern and its fence polarity in one
@@ -169,6 +195,24 @@ PLUGIN_COUNT_SPEC = (
 )
 
 PLUGIN_COUNT_SITES = tuple(spec[0] for spec in PLUGIN_COUNT_SPEC)
+
+# Claim 5's rows carry one field the bare arm's do not — the repo-relative
+# directory the site's claim is bound to. Both the roster the comparison loop
+# walks and the basis it compares against are derived from these same rows, for
+# the reason stated above: a roster stated twice is what lets a site be collected
+# and reported while asserting nothing.
+DIR_COUNT_SPEC = (
+    ("tree-guides", "whole-file", TREE_GUIDES_COUNT_RE, True,
+     os.path.join("docs", "plugin-guide")),
+    ("tree-workflows", "whole-file", TREE_WORKFLOWS_COUNT_RE, True,
+     os.path.join("docs", "workflows")),
+)
+
+# No `_SITES` twin of PLUGIN_COUNT_SITES here on purpose: the comparison loop
+# below iterates these rows directly, so it needs the basis alongside the site
+# and a derived roster would be a second copy rather than the single source the
+# comment above requires. A positional `spec[4]` lookup would also rebind
+# silently to the wrong column the day a field is inserted mid-row.
 
 
 def read_marketplace(root):
@@ -281,7 +325,7 @@ def fence_flags(lines):
     return flags
 
 
-def plugin_count_region(kind, lines, prose_bounds):
+def count_region(kind, lines, prose_bounds):
     """Resolve a site's region kind to the line indices it covers.
 
     Each kind is a boundary rule, not a hand-shaped scope: `before-first-h2`
@@ -321,7 +365,7 @@ def collect_plugin_counts(lines, prose_bounds, violations):
 
     for site, kind, pattern, want_fenced in PLUGIN_COUNT_SPEC:
         found = []
-        for idx in plugin_count_region(kind, lines, prose_bounds):
+        for idx in count_region(kind, lines, prose_bounds):
             if fenced[idx] != want_fenced:
                 continue
             match = pattern.search(lines[idx])
@@ -337,6 +381,62 @@ def collect_plugin_counts(lines, prose_bounds, violations):
                 "site": site,
                 "line": found[0][1],
                 "detail": "the {} region carries {} plugin-count phrases; cannot "
+                          "tell which is the claim".format(site, len(found)),
+            })
+            continue
+        claims[site] = {"count": found[0][0], "line": found[0][1]}
+    return claims, unusable
+
+
+def live_dir_count(absdir):
+    """Live `*.md` population of one documented directory.
+
+    The basis for a claim-5 site. It reads a directory listing rather than a
+    manifest because the claim names a directory: binding it to anything else
+    would assert over a quantity its own line does not state. It takes the
+    resolved directory rather than `(root, reldir)` so its caller, which must
+    already test that path for existence, joins it once.
+    """
+    return len(glob.glob(os.path.join(absdir, "*.md")))
+
+
+def collect_dir_counts(lines, prose_bounds, violations):
+    """Directory-count claims (claim 5), keyed by site.
+
+    The claim-4 collector's twin. The finding half genuinely is the same
+    algorithm, so a shared collector parameterised by spec and code prefix is a
+    live alternative; it is not taken here because the two arms' spec rows carry
+    different arities and each arm's ambiguity message names its own claim
+    vocabulary, and collapsing them would trade both for one fewer copy. The
+    ambiguity RULE is what must not drift between them: a site with two
+    candidates yields no claim in either arm, and a change to one is a change
+    owed to the other. Returns `(claims, unusable)` on the same contract — two
+    numbers in one region cannot both be the claim, so an ambiguous site yields
+    no claim and a `dir-count-ambiguous` violation instead of binding whichever
+    the scan reached first.
+    """
+    claims = {}
+    unusable = set()
+    fenced = fence_flags(lines)
+
+    for site, kind, pattern, want_fenced, _reldir in DIR_COUNT_SPEC:
+        found = []
+        for idx in count_region(kind, lines, prose_bounds):
+            if fenced[idx] != want_fenced:
+                continue
+            match = pattern.search(lines[idx])
+            if match:
+                found.append((int(match.group(1)), idx + 1))
+        if not found:
+            continue
+        if len(found) > 1:
+            unusable.add(site)
+            violations.append({
+                "code": "dir-count-ambiguous",
+                "plugin": None,
+                "site": site,
+                "line": found[0][1],
+                "detail": "the {} region carries {} matching count phrases; cannot "
                           "tell which is the claim".format(site, len(found)),
             })
             continue
@@ -580,6 +680,52 @@ def collect(root):
                           "{}".format(site, claim["count"], len(counts)),
             })
 
+    dir_counts, unusable_dirs = collect_dir_counts(
+        lines, prose_bounds, violations)
+    live_dir_counts = {}
+    for site, _kind, _pattern, _want_fenced, reldir in DIR_COUNT_SPEC:
+        claim = dir_counts.get(site)
+        if claim is None:
+            if site in unusable_dirs:
+                # Suppressed for the same reason the bare arm suppresses its
+                # own: "missing" on top of "ambiguous" sends the reader at the
+                # opposite fix — restore a claim that is in fact there twice.
+                continue
+            violations.append({
+                "code": "dir-count-missing",
+                "plugin": None,
+                "site": site,
+                "line": None,
+                "detail": "no directory-count claim found at the {} site".format(site),
+            })
+            continue
+        absdir = os.path.join(root, reldir)
+        if not os.path.isdir(absdir):
+            # The basis, not the claim, is what is gone. Falling through to the
+            # comparison would grade the claim against a live count of zero,
+            # which passes a `(0 ...)` claim against a directory that does not
+            # exist and misreports every other claim as a drift.
+            violations.append({
+                "code": "dir-basis-missing",
+                "plugin": None,
+                "site": site,
+                "line": claim["line"],
+                "detail": "the {} claim is bound to {}, which does not exist; the "
+                          "claim asserts nothing until it does".format(site, reldir),
+            })
+            continue
+        live_dir = live_dir_count(absdir)
+        live_dir_counts[site] = live_dir
+        if claim["count"] != live_dir:
+            violations.append({
+                "code": "dir-count-mismatch",
+                "plugin": None,
+                "site": site,
+                "line": claim["line"],
+                "detail": "{} claims {} but {} holds {}".format(
+                    site, claim["count"], reldir, live_dir),
+            })
+
     # Zero discovery is a failure, never a clean zero: a guard that found nothing
     # to check must not report the tree as consistent.
     if not prose and not table and not rollup_present:
@@ -598,7 +744,9 @@ def collect(root):
         "table_claims": len(table),
         "rollup_present": rollup_present,
         "plugin_count_claims": plugin_counts,
+        "dir_count_claims": dir_counts,
         "live_counts": counts,
+        "live_dir_counts": live_dir_counts,
         "violations": violations,
     }
     return violations, data
@@ -650,7 +798,15 @@ def main(argv):
               "rather than a plugin, so the finding already names which of the three "
               "drifted — a plugin added or removed must sweep all three alongside the "
               "roll-up, and a `missing` finding means that site's prose was renamed "
-              "rather than its number changed.",
+              "rather than its number changed. A `dir-count-mismatch`, "
+              "`dir-count-missing`, `dir-count-ambiguous` or `dir-basis-missing` "
+              "finding is the directory-count binding over the other two counts in "
+              "that same fenced tree: its subject is the claim site (`tree-guides` "
+              "or `tree-workflows`) and its basis is a listing of the `docs/` "
+              "directory that site's own line names, never the plugin universe. "
+              "`dir-count-missing` means the claim line was renamed or removed; "
+              "`dir-basis-missing` means the backing directory itself is gone, so "
+              "the claim is un-bound rather than merely wrong.",
               file=sys.stderr)
         return 1
     return 0

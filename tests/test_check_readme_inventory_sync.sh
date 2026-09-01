@@ -26,13 +26,26 @@
 #      not the tree claim; a fenced example inside the prose section is not a
 #      second intro claim. Drop either filter and one of the two reddens.
 #  10. The noun discriminates, not the digit: the same fence carries a guides
-#      count, so a loosened `(N <word>)` pattern reddens the clean fixture.
+#      count and a workflows count, so a loosened `(N <word>)` pattern reddens
+#      the clean fixture. Both decoys are now live-bound claims in their own
+#      right (family 13) and their counts still differ from the fixture's plugin
+#      count, so the property this family grades survives that promotion rather
+#      than being absorbed by it.
 #  11. The roll-up's own plugin count stays bound exactly once. It matches the
 #      bare pattern too and is kept out of reach only by region scoping.
 #  12. A prose rename reports a missing claim rather than passing, and a claim
 #      whose COUNT is deleted while its version-like qualifier remains reports
 #      missing rather than a count of zero — the one shape that grades the bare
 #      pattern's negative lookbehind.
+#  13. The directory-count arm: each of the two sites drifting independently
+#      reports which one moved, a removed claim line reports missing, and the
+#      clean fixture discovers both at their live directory counts. Its basis is
+#      a docs/ listing, not the plugin universe — a distinction the guides site
+#      can only grade on a fixture whose guide count DIFFERS from its plugin
+#      count, since the two coincide the moment every plugin has a guide.
+#  14. An absent backing directory reports `dir-basis-missing`, not a mismatch
+#      against a live count of zero. Without that arm a `(0 guides)` claim
+#      passes green against a directory that does not exist.
 #
 # bash 3.2 + stdlib python3 only. No arguments, no network.
 #
@@ -48,6 +61,19 @@
 # under `perl -0pi`, so an earlier copy would absorb the substitution, leave the
 # executable comparison intact, and grade nothing while still reporting a clean
 # rewrite.
+#
+# Mutation recipe — replay to confirm the directory-count arm's comparison has
+# teeth:
+#
+#   scripts/mutation-check.sh --root . \
+#     --file scripts/check-readme-inventory-sync.py \
+#     --expr 's/claim\["count"\] != live_dir/False/m' \
+#     --test 'bash tests/test_check_readme_inventory_sync.sh' --case ris48
+#
+# Same uniqueness dependency as the recipe above, and verified the same way:
+# `claim["count"] != live_dir` appears exactly once in the guard, and the
+# mismatch detail interpolates `claim["count"]` and `live_dir` as separate
+# .format() arguments rather than echoing that expression.
 #
 # Result-line ids: every emitted PASS:/FAIL: line carries a first-token id
 # (risNN), unique PER EMITTED LINE rather than per logical case, so
@@ -142,18 +168,37 @@ begin_readme() {
 }
 
 # add_tree <fixture-root> <nplugins> — the fenced tree-diagram region carrying
-# the third claim site, plus a same-fence decoy whose noun differs. The decoy is
-# baked into every green fixture on purpose: it is what makes those cases assert
-# that the tree pattern discriminates on the noun rather than on the digit, so
-# a pattern loosened to `(N <word>)` reddens them instead of passing.
+# the third plugin-count claim site, plus the two same-fence counts whose nouns
+# differ. Those two are baked into every green fixture on purpose: they are what
+# make those cases assert that the tree pattern discriminates on the noun rather
+# than on the digit, so a pattern loosened to `(N <word>)` reddens them instead
+# of passing. They are now live-bound claims in their own right, so the helper
+# also MATERIALISES the directories they name — a fixture stating a count it
+# cannot back is exactly the un-bound claim this guard exists to remove, and
+# creating them here keeps the invariant local to the one helper that states it.
+# 9 and 5 are chosen to differ from each other and from every call site's plugin
+# count (1 or 2), so the noun-discrimination property survives and the guides
+# site cannot pass by coincidence against the plugin universe.
 add_tree() {
+  local i=1
+  mkdir -p "$1/docs/plugin-guide" "$1/docs/workflows"
+  while [ "$i" -le 9 ]; do
+    printf 'guide %s\n' "$i" > "$1/docs/plugin-guide/guide-$i.md"
+    i=$((i + 1))
+  done
+  i=1
+  while [ "$i" -le 5 ]; do
+    printf 'workflow %s\n' "$i" > "$1/docs/workflows/workflow-$i.md"
+    i=$((i + 1))
+  done
   {
     printf '## How it works\n\n'
     printf '```\n'
     printf 'fixture/\n'
     printf '|-- .claude-plugin/\n'
     printf '|   `-- marketplace.json   # Marketplace manifest (%s plugins)\n' "$2"
-    printf '|-- docs/                  # Deep dives (9 guides)\n'
+    printf '|-- docs/plugin-guide/     # Deep dives (9 guides)\n'
+    printf '|-- docs/workflows/        # Pipeline guides (5 workflows)\n'
     printf '```\n\n'
   } >> "$1/README.md"
 }
@@ -219,6 +264,10 @@ real_scratch() {
   mkdir -p "$dest"
   cp "$REPO_ROOT/README.md" "$dest/README.md"
   ln -s "$REPO_ROOT/.claude-plugin" "$dest/.claude-plugin"
+  # docs/ is symlinked for the same reason the plugin directories are: the
+  # copied README states counts over it, and a scratch root without it grades
+  # every directory-count claim as un-bound instead of grading the claim.
+  ln -s "$REPO_ROOT/docs" "$dest/docs"
   for d in "$REPO_ROOT"/cogni-*; do
     [ -d "$d" ] || continue
     ln -s "$d" "$dest/$(basename "$d")"
@@ -855,6 +904,143 @@ assert len(amb)==1, d['data']['violations']
 assert amb[0]['site']=='intro', amb
 miss=[x for x in d['data']['violations'] if x['code']=='plugin-count-missing']
 assert miss==[], miss
+"
+
+# --------------------------------------------------------------- case 13
+# The directory-count arm. Each site drifts independently, so a finding names
+# which claim moved rather than that "a count" moved.
+DIR_GUIDES="$WORK/dir-guides-drift"
+consistent_fixture "$DIR_GUIDES"
+mutate "$DIR_GUIDES/README.md" "# Deep dives (9 guides)" "# Deep dives (8 guides)"
+run_guard "$DIR_GUIDES"
+check "ris48 a drifted guides count in the tree fence exits 1" "$([ "$CODE" -eq 1 ] && echo 0 || echo 1)"
+assert_json "ris49 the drifted guides count reports dir-count-mismatch naming tree-guides" "$OUT" "
+import json,sys
+d=json.load(sys.stdin)
+mism=[x for x in d['data']['violations'] if x['code']=='dir-count-mismatch']
+assert len(mism)==1, d['data']['violations']
+assert mism[0]['site']=='tree-guides', mism
+assert mism[0]['line']is not None, mism
+p=[x for x in d['data']['violations'] if x['code'].startswith('plugin-count-')]
+assert p==[], p
+"
+
+DIR_WORKFLOWS="$WORK/dir-workflows-drift"
+consistent_fixture "$DIR_WORKFLOWS"
+mutate "$DIR_WORKFLOWS/README.md" "# Pipeline guides (5 workflows)" "# Pipeline guides (6 workflows)"
+run_guard "$DIR_WORKFLOWS"
+check "ris50 a drifted workflows count in the tree fence exits 1" "$([ "$CODE" -eq 1 ] && echo 0 || echo 1)"
+assert_json "ris51 the drifted workflows count reports dir-count-mismatch naming tree-workflows" "$OUT" "
+import json,sys
+d=json.load(sys.stdin)
+mism=[x for x in d['data']['violations'] if x['code']=='dir-count-mismatch']
+assert len(mism)==1, d['data']['violations']
+assert mism[0]['site']=='tree-workflows', mism
+p=[x for x in d['data']['violations'] if x['code'].startswith('plugin-count-')]
+assert p==[], p
+"
+
+# A removed claim line is missing, never a mismatch: the two call for opposite
+# fixes, exactly as the bare arm's own pair does.
+DIR_GUIDES_GONE="$WORK/dir-guides-missing"
+consistent_fixture "$DIR_GUIDES_GONE"
+mutate "$DIR_GUIDES_GONE/README.md" $'|-- docs/plugin-guide/     # Deep dives (9 guides)\n' ""
+run_guard "$DIR_GUIDES_GONE"
+assert_json "ris52 a removed guides claim reports dir-count-missing naming tree-guides, never a mismatch" "$OUT" "
+import json,sys
+d=json.load(sys.stdin)
+miss=[x for x in d['data']['violations'] if x['code']=='dir-count-missing']
+assert len(miss)==1, d['data']['violations']
+assert miss[0]['site']=='tree-guides', miss
+mism=[x for x in d['data']['violations'] if x['code']=='dir-count-mismatch']
+assert mism==[], mism
+"
+
+DIR_WF_GONE="$WORK/dir-workflows-missing"
+consistent_fixture "$DIR_WF_GONE"
+mutate "$DIR_WF_GONE/README.md" $'|-- docs/workflows/        # Pipeline guides (5 workflows)\n' ""
+run_guard "$DIR_WF_GONE"
+assert_json "ris53 a removed workflows claim reports dir-count-missing naming tree-workflows, never a mismatch" "$OUT" "
+import json,sys
+d=json.load(sys.stdin)
+miss=[x for x in d['data']['violations'] if x['code']=='dir-count-missing']
+assert len(miss)==1, d['data']['violations']
+assert miss[0]['site']=='tree-workflows', miss
+mism=[x for x in d['data']['violations'] if x['code']=='dir-count-mismatch']
+assert mism==[], mism
+"
+
+# The clean fixture discovers BOTH sites at their live directory counts. The
+# fixture's plugin count is 2 while its guides count is 9, so a binding to the
+# plugin universe rather than to the directory fails this case rather than
+# passing on the coincidence the real README currently offers.
+DIR_CLEAN="$WORK/dir-clean"
+consistent_fixture "$DIR_CLEAN"
+run_guard "$DIR_CLEAN"
+assert_json "ris54 the clean fixture discovers both directory sites at their live directory counts" "$OUT" "
+import json,sys
+d=json.load(sys.stdin)
+assert d['success'] is True, d
+c=d['data']['dir_count_claims']
+assert sorted(c)==['tree-guides','tree-workflows'], c
+assert c['tree-guides']['count']==9, c
+assert c['tree-workflows']['count']==5, c
+live=d['data']['live_dir_counts']
+assert live=={'tree-guides':9,'tree-workflows':5}, live
+assert d['data']['plugins_enumerated']==2, d['data']
+assert d['data']['files_scanned']==['README.md'], d['data']
+"
+
+# The real README, against the real directories. Counts are read back from the
+# guard rather than restated, so this case cannot go stale the day docs/ moves.
+REAL_DIR=$(real_scratch real-dir-counts)
+run_guard "$REAL_DIR"
+assert_json "ris55 the real README carries both directory sites at their live directory counts" "$OUT" "
+import json,sys
+d=json.load(sys.stdin)
+assert d['success'] is True, d
+c=d['data']['dir_count_claims']
+assert sorted(c)==['tree-guides','tree-workflows'], c
+live=d['data']['live_dir_counts']
+assert c['tree-guides']['count']==live['tree-guides'], (c,live)
+assert c['tree-workflows']['count']==live['tree-workflows'], (c,live)
+"
+
+# Each real site reverted independently. The from-side is DERIVED at run time by
+# revert_claim, never restated as a literal that would go stale.
+REAL_GUIDES=$(real_scratch real-dir-guides)
+ANCHOR_OK=0
+revert_claim "$REAL_GUIDES/README.md" 's/.*Per-plugin deep dives \(([0-9]+) guides\).*/\1/p' \
+  'Per-plugin deep dives (' ' guides)' || ANCHOR_OK=1
+run_guard "$REAL_GUIDES"
+check "ris56 real README with the guides count reverted exits 1" "$([ "$ANCHOR_OK" -eq 0 ] && [ "$CODE" -eq 1 ] && echo 0 || echo 1)"
+
+REAL_WF=$(real_scratch real-dir-workflows)
+ANCHOR_OK=0
+revert_claim "$REAL_WF/README.md" 's/.*Cross-plugin pipeline guides \(([0-9]+) workflows\).*/\1/p' \
+  'Cross-plugin pipeline guides (' ' workflows)' || ANCHOR_OK=1
+run_guard "$REAL_WF"
+check "ris57 real README with the workflows count reverted exits 1" "$([ "$ANCHOR_OK" -eq 0 ] && [ "$CODE" -eq 1 ] && echo 0 || echo 1)"
+
+# --------------------------------------------------------------- case 14
+# An absent BASIS is not a drifted claim. Without this arm the claim is graded
+# against a live count of zero, so the fixture below — whose claim is rewritten
+# to (0 guides) — exits 0 and the site asserts nothing. That is what makes this
+# case discriminate rather than merely cover.
+DIR_BASIS="$WORK/dir-basis-missing"
+consistent_fixture "$DIR_BASIS"
+mutate "$DIR_BASIS/README.md" "# Deep dives (9 guides)" "# Deep dives (0 guides)"
+rm -rf "$DIR_BASIS/docs/plugin-guide"
+run_guard "$DIR_BASIS"
+assert_json "ris58 an absent backing directory reports dir-basis-missing, never a mismatch against zero" "$OUT" "
+import json,sys
+d=json.load(sys.stdin)
+basis=[x for x in d['data']['violations'] if x['code']=='dir-basis-missing']
+assert len(basis)==1, d['data']['violations']
+assert basis[0]['site']=='tree-guides', basis
+mism=[x for x in d['data']['violations'] if x['code']=='dir-count-mismatch']
+assert mism==[], mism
+assert 'tree-guides' not in d['data']['live_dir_counts'], d['data']['live_dir_counts']
 "
 
 echo

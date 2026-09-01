@@ -205,7 +205,7 @@ jobs:
         # version-bump-gate's fetch-depth: 0 — that is load-bearing only for its
         # merge-base anchor.
 
-      - name: Assert every root README plugin count matches its live directory count
+      - name: Assert every root README inventory count matches its live directory count
         run: |
           set -euo pipefail
           python3 scripts/check-readme-inventory-sync.py

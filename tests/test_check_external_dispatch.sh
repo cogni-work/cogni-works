@@ -35,7 +35,9 @@
 # `mutation-check.sh --case <id>` addresses exactly one assertion. Every id in
 # this file is `edNN`: `ed01`-`ed09` for cases 1-5, `ed10`-`ed19` for the
 # registry cases R1-R6 (R1 -> ed10/ed11, R2 -> ed12/ed13, R3 -> ed14,
-# R4 -> ed15, R5 -> ed16/ed17, R6 -> ed18/ed19). `R1`-`R6` remain the names of
+# R4 -> ed15, R5 -> ed16/ed17, R6 -> ed18/ed19), `ed20`-`ed33` for the
+# unresolved-target arm and `ed34`-`ed36` for its per-plugin pair binding.
+# `R1`-`R6` remain the names of
 # the LOGICAL case groups in the header notes and the section dividers below;
 # they are not ids and must never be emitted as one. Never introduce an
 # `R<n><letter>` id here: tests/test_check_mcp_tool_grant.sh already emits
@@ -43,8 +45,23 @@
 # `R`-stemmed id in this file would be ambiguous in any harness run whose
 # `--test` captures both suites. The whole-token matching rule the ids depend
 # on is stated once, with the regex, above the registry cases below. A new
-# assertion takes the next free id — `ed20` onward — never a renumbering and
+# assertion takes the next free id — `ed37` onward — never a renumbering and
 # never an `R`-stemmed id.
+#
+# Mutation recipe (proves the per-plugin pair binding is load-bearing):
+#   scripts/mutation-check.sh --root . \
+#     --file scripts/check-external-dispatch.py \
+#     --expr 's/if slug in resolvable\.get\(plugin, \(\)\):/if any(slug in owned for owned in resolvable.values()):/' \
+#     --test 'bash tests/test_check_external_dispatch.sh' --case ed34
+#
+# The replacement restores GLOBAL resolution — valid Python, and `resolvable` is
+# a scan_file parameter so `.values()` is in scope — so the wrong-owner token in
+# livetree3 resolves again, `summary.total` drops to 0 and ed34 goes red. No /m
+# is needed: the pattern carries no ^ or $ anchor. The substitution is
+# non-global, which is safe only while that gate literal occurs exactly once in
+# the guard — an invariant the guard's own comment above the line states.
+# ed22 CANNOT carry this recipe: its token `cogni-beta:no-such-thing` resolves
+# under no plugin, so it stays green when the binding is loosened back.
 
 set -eu
 
@@ -340,10 +357,12 @@ assert d['data']['summary']['total']==0, d['data']['summary']
 "
 
 # ===========================================================================
-# Unresolved-target arm (ed20-ed33). The retired-prefix arm above is driven by
+# Unresolved-target arm (ed20-ed36). The retired-prefix arm above is driven by
 # scripts/retired-plugins.json; this second arm is driven by the marketplace
 # manifest of the tree under --root, and reports a <live-plugin>:<slug> token
-# whose slug names no */skills/<slug>/SKILL.md and no */agents/<slug>.md.
+# whose slug names no skills/<slug>/SKILL.md and no agents/<slug>.md UNDER THE
+# PLUGIN ITS OWN PREFIX NAMES — the plugin and the slug resolve as a pair, so a
+# real slug owned by a different listed plugin is reported (ed34-ed36).
 # ===========================================================================
 
 # --- livetree: two listed plugins, one resolvable skill, one resolvable agent,
@@ -586,6 +605,56 @@ JCODE=$?
 set -e
 check "ed33 the allow marker suppresses an unresolved-target finding" \
   "$([ "$CODE" -eq 0 ] && [ "$JCODE" -eq 0 ] && echo 0 || echo 1)"
+
+# --- ed34/ed35: the arm resolves the PLUGIN and the SLUG as a pair. A token
+# --- naming a real slug owned by a DIFFERENT listed plugin is a cross-plugin
+# --- miswire and must be reported, even though the slug exists in the tree.
+# --- Deliberately its own tree, never $LT: ed21 hard-asserts summary.total==1
+# --- and ed30 hard-asserts live_plugins==2 / resolvable_targets==5 against $LT,
+# --- so planting a target there would flip two verdicts this change must keep.
+LT3="$WORK/livetree3"
+mkdir -p "$LT3/.claude-plugin" "$LT3/cogni-beta/skills/beta-only" \
+         "$LT3/cogni-alpha/agents"
+printf '%s' '{"plugins":[{"name":"cogni-alpha","source":"./cogni-alpha"},{"name":"cogni-beta","source":"./cogni-beta"}]}' \
+  > "$LT3/.claude-plugin/marketplace.json"
+printf -- '---\nname: beta-only\n---\nA skill owned by cogni-beta and by nobody else.\n' \
+  > "$LT3/cogni-beta/skills/beta-only/SKILL.md"
+printf -- '---\nname: xcaller\n---\nDispatches cogni-alpha:beta-only, whose slug cogni-beta owns.\nThen cogni-beta:beta-only and cogni-alpha:xcaller, both correctly paired.\n' \
+  > "$LT3/cogni-alpha/agents/xcaller.md"
+
+set +e
+OUT=$(python3 "$GUARD" --root "$LT3" "cogni-alpha/agents/xcaller.md" 2>/dev/null)
+CODE=$?
+set -e
+# ed34 is the recorded mutation-recipe case for the pair binding (see the recipe
+# in this file's header). It asserts the arm PRODUCED the cross-plugin finding,
+# so loosening the gate back to a global lookup empties the arm and reds it.
+assert_json "ed34 a slug owned by another listed plugin is reported as unresolved" "$OUT" "
+import json,sys
+d=json.load(sys.stdin)
+assert d['success'] is False, d
+assert d['data']['summary']['total']==1, d['data']['summary']
+o=d['data']['violations'][0]
+assert o['file']=='cogni-alpha/agents/xcaller.md', o
+assert o['line']==4, o
+assert o['match']=='cogni-alpha:beta-only', o
+assert o['target']=='beta-only', o
+assert o['arm']=='unresolved-target', o
+"
+check "ed35 the cross-plugin miswire exits 1" \
+  "$([ "$CODE" -eq 1 ] && echo 0 || echo 1)"
+# Attribution control: the redness above is the mis-pairing, not a broken tree.
+assert_json "ed36 correctly paired tokens in the same tree are examined and cleared" "$OUT" "
+import json,sys
+d=json.load(sys.stdin)
+# All three tokens must be COUNTED — that is what separates 'the paired tokens
+# resolved' from 'the regex stopped matching them', which the absence checks
+# below cannot tell apart on their own.
+assert d['data']['scanned']['tokens']==3, d['data']['scanned']
+matches=[o['match'] for o in d['data']['violations']]
+assert 'cogni-beta:beta-only' not in matches, matches
+assert 'cogni-alpha:xcaller' not in matches, matches
+"
 
 echo ""
 if [ "$FAILED" -eq 0 ]; then

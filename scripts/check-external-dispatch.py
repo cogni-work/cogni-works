@@ -47,15 +47,16 @@ live-plugin dangling slug, and vice versa.
 
   1. **retired-prefix** — the registry-driven arm above. Unchanged.
   2. **unresolved-target** — reports a `<live-plugin>:<slug>` token whose slug
-     names no `*/skills/<slug>/SKILL.md` and no `*/agents/<slug>.md` anywhere in
-     the tree under test. The live-plugin set is derived at run time from that
-     tree's `.claude-plugin/marketplace.json` `plugins[]`, never hardcoded, so
-     adding a plugin needs no edit here. Resolution is deliberately GLOBAL rather
-     than per-plugin: a slug that resolves under any listed plugin resolves for
-     every prefix. Tightening that to a per-plugin pair is a real strengthening
-     and a separate decision. The `commands/` namespace is deliberately NOT part
-     of the predicate — a command is a user-facing entry point, not a dispatch
-     target — so a token resolving only to `*/commands/<slug>.md` is reported.
+     names no `skills/<slug>/SKILL.md` and no `agents/<slug>.md` under the
+     plugin its own prefix names. The live-plugin set is derived at run time from
+     that tree's `.claude-plugin/marketplace.json` `plugins[]`, never hardcoded,
+     so adding a plugin needs no edit here. Resolution binds the PAIR, not the
+     slug alone: a slug that resolves under one listed plugin does NOT thereby
+     resolve for every prefix, so a token naming a real slug owned by a DIFFERENT
+     listed plugin is reported as a cross-plugin miswire. The `commands/`
+     namespace is deliberately NOT part of the predicate — a command is a
+     user-facing entry point, not a dispatch target — so a token resolving only
+     to `*/commands/<slug>.md` is reported.
 
      Absent manifest DEGRADES (the arm does not run, and the JSON says so via
      `data.scanned`); a manifest that is present but unreadable or malformed is a
@@ -252,15 +253,20 @@ def load_live_plugins(root):
     return entries, ""
 
 
-def build_target_index(root, plugin_dirs):
-    """Return the set of slugs that resolve to a skill or an agent.
+def build_target_index(root, plugin_entries):
+    """Return {plugin name: set of slugs that plugin owns}.
+
+    Keyed on the marketplace `name` and populated from that entry's own `source`
+    dir, so the arm can resolve a token's plugin and slug as a PAIR. Two entries
+    sharing a name union rather than clobber.
 
     Deliberately plain filesystem calls rather than `git ls-files`: the synthetic
     fixture trees are not git repos, and a git-backed index would come back empty
     there and make every assertion over them vacuously green.
     """
-    slugs = set()
-    for rel in plugin_dirs:
+    owned = {}
+    for name, rel in plugin_entries:
+        slugs = owned.setdefault(name, set())
         skills_dir = os.path.join(root, rel, "skills")
         if os.path.isdir(skills_dir):
             for entry in os.listdir(skills_dir):
@@ -272,11 +278,15 @@ def build_target_index(root, plugin_dirs):
                 if entry.endswith(".md") and os.path.isfile(
                         os.path.join(agents_dir, entry)):
                     slugs.add(entry[:-3])
-    return slugs
+    return owned
 
 
 def compile_target_re(live_names):
-    r"""Compile `(?:name|…):(slug)` over the live plugin names, or None.
+    r"""Compile `(name|…):(slug)` over the live plugin names, or None.
+
+    Group 1 is the plugin the token names and group 2 its slug: the arm resolves
+    the two as a pair, so the matched prefix has to survive the match rather than
+    being discarded by a non-capturing group.
 
     Names are alternated LONGEST-FIRST so a listed name that is a prefix of
     another cannot shadow it. At least one slug character is required, so a bare
@@ -287,7 +297,7 @@ def compile_target_re(live_names):
         return None
     ordered = sorted(live_names, key=lambda n: (-len(n), n))
     return re.compile(
-        r"\b(?:" + "|".join(re.escape(n) for n in ordered) + r"):([a-z][a-z0-9-]*)")
+        r"\b(" + "|".join(re.escape(n) for n in ordered) + r"):([a-z][a-z0-9-]*)")
 
 
 def discover_files(root):
@@ -342,13 +352,14 @@ def scan_file(abs_path, rel_path, dispatch_re, target_re, resolvable):
             continue
         for m in target_re.finditer(line):
             tokens_examined += 1
-            slug = m.group(1)
+            plugin = m.group(1)
+            slug = m.group(2)
             # Mutation-recipe invariant: keep the next line exactly as written, on
             # ONE physical line, and do not repeat its text anywhere else in this
             # file — the recorded recipe rewrites the FIRST match only (perl -0pi,
             # no /g), so a second occurrence would mutate the wrong site and report
             # this arm as decorative.
-            if slug in resolvable:
+            if slug in resolvable.get(plugin, ()):
                 continue
             found.append({
                 "file": rel_path,
@@ -411,7 +422,7 @@ def main(argv):
         # the retired arm alone and can never be reported twice.
         retired_set = set(retired)
         live_entries = [(n, d) for (n, d) in live_entries if n not in retired_set]
-        resolvable = build_target_index(root, [d for (_, d) in live_entries])
+        resolvable = build_target_index(root, live_entries)
         target_re = compile_target_re([n for (n, _) in live_entries])
         violations, files_scanned, tokens_examined = collect(
             root, args.files, compile_dispatch_re(retired), target_re, resolvable)
@@ -423,6 +434,10 @@ def main(argv):
     for o in violations:
         plugin = o["file"].split("/", 1)[0]
         by_plugin[plugin] = by_plugin.get(plugin, 0) + 1
+
+    # Distinct slugs across every plugin's set. `resolvable` is keyed by plugin
+    # now, so a bare len() on it would silently degenerate into a plugin count.
+    resolvable_target_count = len({s for slugs in resolvable.values() for s in slugs})
 
     result = {
         "success": not violations,
@@ -437,7 +452,7 @@ def main(argv):
                 "files": files_scanned,
                 "tokens": tokens_examined,
                 "live_plugins": len(live_entries),
-                "resolvable_targets": len(resolvable),
+                "resolvable_targets": resolvable_target_count,
                 "unresolved_target_arm": target_re is not None,
                 "degraded_reason": degraded_reason,
             },
@@ -474,16 +489,22 @@ def main(argv):
 
     if unresolved_hits:
         print("\nFAIL: {} unresolved-target dispatch(es) found — a live plugin "
-              "prefix naming a skill or agent that does not exist:".format(
+              "prefix naming a skill or agent that plugin does not own:".format(
                   len(unresolved_hits)), file=sys.stderr)
         for o in unresolved_hits:
-            print("  {}:{}: {}  ->  {}".format(
-                o["file"], o["line"], o["match"], o["context"]), file=sys.stderr)
-        print("\nFix: repoint the token at a target that exists — the directory "
-              "name under */skills/ or the file basename under */agents/ — since "
-              "the prefix is live and only the slug is dead. If the line is prose "
-              "about a target that is genuinely gone, drop the colon so it stops "
-              "being dispatch-shaped, or mark the line with "
+            owners = sorted(
+                n for n, slugs in resolvable.items() if o["target"] in slugs)
+            note = "  [owned by: {}]".format(", ".join(owners)) if owners else ""
+            print("  {}:{}: {}  ->  {}{}".format(
+                o["file"], o["line"], o["match"], o["context"], note),
+                file=sys.stderr)
+        print("\nFix: where a hit is annotated `[owned by: ...]` the slug is real "
+              "but the PREFIX names the wrong plugin — repoint the prefix at that "
+              "owner. Otherwise the slug names nothing anywhere: repoint it at a "
+              "target this plugin owns — the directory name under its skills/ or "
+              "the file basename under its agents/. If the line is prose about a "
+              "target that is genuinely gone, drop the colon so it stops being "
+              "dispatch-shaped, or mark the line with "
               "`# external-dispatch-guard:allow` and a rationale.",
               file=sys.stderr)
 

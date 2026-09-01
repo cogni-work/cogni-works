@@ -19,6 +19,7 @@ Read `${CLAUDE_PLUGIN_ROOT}/references/inverted-pipeline.md` §"Phase 2 — `kno
 
 - No `plan.json` exists at `<project_path>/.metadata/` — offer `knowledge-plan` first.
 - No `binding.json` exists at the resolved knowledge root — offer `knowledge-setup` first.
+- `binding.wiki_path` does not resolve to a directory containing `.cogni-wiki/config.json` — the binding is stale.
 
 ## Parameters
 
@@ -35,7 +36,7 @@ Read `${CLAUDE_PLUGIN_ROOT}/references/inverted-pipeline.md` §"Phase 2 — `kno
 
 ### 0. Pre-flight
 
-**No wiki engine required.** cogni-knowledge bundles its wiki engine under `scripts/vendor/cogni-wiki/`, resolved vendored-first by every wiki-touching step, and this skill resolves none of it directly — Step 0.5's coverage check runs cogni-knowledge's own `scripts/wiki-coverage.py`. There is no `cogni-wiki` plugin install to probe and no hard dependency to abort on (clean-break — no cogni-research dispatch either). The binding read below is the gate: it aborts on `success: false` and yields `wiki_path` as `WIKI_ROOT`.
+**No wiki engine required.** cogni-knowledge bundles its wiki engine under `scripts/vendor/cogni-wiki/`, resolved vendored-first by every wiki-touching step, and this skill resolves none of it directly — Step 0.5's coverage check runs cogni-knowledge's own `scripts/wiki-coverage.py`. There is no `cogni-wiki` plugin install to probe and no hard dependency to abort on (clean-break — no cogni-research dispatch either). The binding read below is the gate, together with the `.cogni-wiki/config.json` and `wiki/` existence checks that follow it.
 
 **Binding + plan.** Resolve `knowledge_root` (same logic as `knowledge-plan`). Read the binding:
 
@@ -45,6 +46,8 @@ python3 ${CLAUDE_PLUGIN_ROOT}/scripts/knowledge-binding.py read \
 ```
 
 On `success: false` → abort, offer `knowledge-setup`. On success, capture `data.binding.wiki_path` (the bound wiki root) and `data.binding.curator_defaults` — `wiki_path` is threaded as `WIKI_ROOT` (Steps 0.5 + 3); `curator_defaults` is read in Step 1.
+
+Confirm `<WIKI_ROOT>/.cogni-wiki/config.json` exists; abort otherwise. Confirm `<WIKI_ROOT>/wiki/` exists. On either miss the binding is stale — abort and offer `knowledge-setup`, the same remedy as the `success: false` abort above.
 
 Read `<project_path>/.metadata/plan.json`. Parse `topic`, `market`, `output_language`, `sub_questions[]`. If `--sub-question-ids` was passed, filter to that subset (reject ids not present).
 

@@ -122,6 +122,8 @@ assert_grep 'wiki-coverage.json' "$CURATE" "skill-contracts-38-writes-coverage-m
 assert_grep 'WIKI_COVERAGE_PATH=' "$CURATE" "skill-contracts-39-forwards-wiki-coverage-path knowledge-curate: forwards WIKI_COVERAGE_PATH to source-curator (#309)"
 assert_grep 'WIKI_ROOT=' "$CURATE" "skill-contracts-40-forwards-wiki-root-source knowledge-curate: forwards WIKI_ROOT to source-curator (#309)"
 assert_grep 'fail-soft' "$CURATE" "skill-contracts-41-coverage-pre-check-fail knowledge-curate: coverage pre-check is fail-soft, not a hard abort (#309)"
+# Sibling parity: curate threads WIKI_ROOT but did not confirm the bound wiki exists (#1707).
+assert_grep_f 'Confirm `<WIKI_ROOT>/.cogni-wiki/config.json` exists; abort otherwise. Confirm `<WIKI_ROOT>/wiki/` exists.' "$CURATE" "skill-contracts-113-curate-preflight-confirms-wiki-exists knowledge-curate: pre-flight confirms the bound wiki exists before Step 0.5 (#1707)"
 
 # --- knowledge-fetch SKILL.md --------------------------------------------
 FETCH="$PLUGIN_ROOT/skills/knowledge-fetch/SKILL.md"

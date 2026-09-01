@@ -23,6 +23,7 @@
 #   - a literal under an excluded path is NOT flagged
 #   - each page on the PAGE_PARITY allowlist is byte-identical across the two
 #     wiki trees
+#   - the PAGE_PARITY allowlist has not shrunk below its recorded size
 #   - a scan pointed at a missing or empty tree fails rather than reporting clean
 #
 # Literals, not a regex over "foundation". `foundation` alone has many legitimate
@@ -72,6 +73,14 @@
 # would move with the deletion it is meant to catch and could never fire.
 # Do not read L2 as a regression guard against editing a literal's wording; for
 # a mutation that a change can actually flip, target the parity checker (see L4).
+#
+# The parity allowlist has the same floor, for the same reason. PAGE_PARITY is
+# guarded by a hardcoded count in L10, because the per-page byte-identity arms
+# cannot supply one: L4 and L5 build their fixtures by walking PAGE_PARITY
+# itself, L7 runs against the real repo, and check_parity's only cardinality
+# assertion fires at zero rather than at a floor — so all three stay green when
+# an entry is dropped. Adding a page means raising that numeral in the same
+# commit; the note on the constant itself says so at the point of use.
 #
 # Phrase-level survivors. These lines keep foundation vocabulary on purpose and
 # must NOT be caught. Each says something about the workspace *state* other
@@ -245,6 +254,11 @@ cogni-workspace/libraries/svg-patterns.md
 # different one. Both pairs are byte-identical as they are added, so a green run
 # is not evidence they are guarded — mutating one copy is what shows the entry
 # has teeth.
+#
+# Raise the floor in lockstep. L10 pins this list's size to a hardcoded numeral.
+# Adding a page here without raising that numeral leaves the new entry — and
+# every entry added after it — unprotected against silent removal, which is the
+# class L10 exists to close.
 PAGE_PARITY='plugin-cogni-workspace.md
 workflow-install-to-infographic.md
 arch-er-diagram.md
@@ -592,6 +606,39 @@ if [ "$l9_ok" -eq 1 ]; then
   pass "L9 no manifest is exempt — every .claude-plugin manifest is scanned"
 else
   fail "L9 no manifest is exempt — every .claude-plugin manifest is scanned"
+fi
+
+# ---------------------------------------------------------------------------
+# L10 — the PAGE_PARITY allowlist has not shrunk. The parity arms above prove
+# each page ON the list is byte-identical across the trees; the count floor
+# below is what stops an entry being dropped unnoticed. See the header on why
+# that floor is a hardcoded numeral, and the note on the constant for what it
+# obliges of whoever adds a page.
+#
+# Why a standalone case rather than a floor inside check_parity. Were the floor
+# sited there, a dropped entry would make the checker return 1 to every caller —
+# so L5 and L7, which both expect rc 0, would go red reporting a cardinality
+# loss as parity drift, while L4, which already expects rc 1, would stay green.
+# The loss would surface on two cases it has nothing to do with and stay
+# invisible in the one case whose label says "differs". A standalone case reds
+# only itself.
+# ---------------------------------------------------------------------------
+l10_ok=1
+l10_n=0
+while IFS= read -r page; do
+  [ -n "$page" ] || continue
+  l10_n=$((l10_n + 1))
+done <<EOF
+$PAGE_PARITY
+EOF
+if [ "$l10_n" -lt 12 ]; then
+  echo "  expected at least 12 pinned pages, found $l10_n"
+  l10_ok=0
+fi
+if [ "$l10_ok" -eq 1 ]; then
+  pass "L10 the PAGE_PARITY allowlist has not shrunk"
+else
+  fail "L10 the PAGE_PARITY allowlist has not shrunk"
 fi
 
 # ---------------------------------------------------------------------------

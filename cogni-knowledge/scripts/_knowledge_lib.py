@@ -590,6 +590,19 @@ def normalize_citation_format(value: str | None) -> str:
     return _normalize_choice(value, VALID_CITATION_FORMATS, "ieee")
 
 
+def citation_family(value: str | None) -> str:
+    """The citation family — `numbered` or `author_date` — a citation format
+    belongs to. Callers dispatch on this rather than re-deriving the mapping.
+
+    Total by construction: `normalize_citation_format` never raises and always
+    returns a member of VALID_CITATION_FORMATS, every one of which is a key of
+    CITATION_FAMILY, so the lookup cannot KeyError. Unknown, empty and None all
+    normalize to `ieee` and therefore resolve to `numbered` — the family the
+    pipeline actually renders — and the deprecated `wikilink` alias follows the
+    same route."""
+    return CITATION_FAMILY[normalize_citation_format(value)]
+
+
 def normalize_target_words(value, default: int = 2000) -> int:
     """Coerce a target-word value to a positive int; non-positive/unparseable →
     `default`. Tolerates a string from a flag or a number from a binding/plan."""
@@ -657,6 +670,80 @@ def extract_inline_citation_urls(text: str) -> list[str]:
     if not text:
         return []
     return [a or b for a, b in _INLINE_CITATION_URL_RE.findall(text)]
+
+
+# --- author-date counterparts -------------------------------------------------
+# The author-date families (apa/mla/harvard) carry no `[N]`, so every numbered
+# primitive above returns nothing useful for them. These are the counterparts,
+# added beside the numbered ones rather than replacing them: the numbered regexes
+# encode edge behaviour `verify-store.py` and `citation-store.py` depend on, and a
+# single widened pattern would put that at risk to save one function.
+#
+# The inline shapes are `([Author, Year](url))` (APA), `([Author](url))` (MLA) and
+# `([Author Year](url))` (Harvard) — one parenthesized markdown link, so all three
+# are the same shape and one pattern covers them. Two properties are load-bearing:
+#
+#   * The destination is SCHEME-ANCHORED (`https?`/`file`), exactly as the numbered
+#     pattern is. Without it, `([Author, Year](url))` is indistinguishable from
+#     ordinary parenthesized prose like `(see [the annex](#section-3))`, which a
+#     scheme-agnostic pattern would strip out of a draft as if it were a citation.
+#   * The label class is `[^\[\]]+`, which excludes `[` and `]`, so the `[[N]]`
+#     wikilink anti-pattern (references/citation-formats.md:45) can never match.
+#
+# The destination alternation mirrors `_INLINE_CITATION_URL_RE` edge-for-edge: the
+# angle-bracketed `(<url>)` branch FIRST so a URL legitimately containing `)` is
+# not truncated at that inner `)`, the unbracketed branch second; `file:` a
+# first-class scheme; and `[^>]`/`[^)]` rather than `\S` so a `file://` path with a
+# literal space is captured whole.
+_AUTHOR_DATE_CITATION_URL_RE = re.compile(
+    r"\(\[[^\[\]]+\]\((?:<((?:https?|file)://[^>]+)>|((?:https?|file)://[^)]+?))\)\)"
+)
+
+# Stripping and extracting share ONE pattern, deliberately. What counts as an
+# author-date marker must be a single definition: a second pattern differing only
+# in its capture groups would have to be kept byte-identical by hand, and a
+# one-sided edge fix would leave strip and extract disagreeing about what a marker
+# is — with each unit case exercising only one of the two, nothing would catch it.
+# `.sub()` with a literal empty replacement never dereferences groups, so the
+# capturing form serves both. The alias is what the strip reads under.
+_AUTHOR_DATE_MARKER_RE = _AUTHOR_DATE_CITATION_URL_RE
+
+
+def strip_author_date_citation_markers(text: str) -> str:
+    """Remove every inline `([Author, Year](url))` marker, leaving the surrounding
+    prose. The author-date counterpart of `strip_inline_citation_markers`; a
+    parenthesized markdown link whose destination is not http(s)/file is ordinary
+    prose and is left alone."""
+    return _AUTHOR_DATE_MARKER_RE.sub("", text)
+
+
+def extract_author_date_citation_urls(text: str) -> list[str]:
+    """Every http(s) or file:// URL inside an `([Author, Year](url))` inline marker
+    in `text`, in appearance order (raw). The author-date counterpart of
+    `extract_inline_citation_urls`, over the edge set the pattern above documents."""
+    if not text:
+        return []
+    return [a or b for a, b in _AUTHOR_DATE_CITATION_URL_RE.findall(text)]
+
+
+def strip_citation_markers(text: str, citation_format: str | None = None) -> str:
+    """Remove inline citation markers of whichever family `citation_format`
+    belongs to, dispatched through `citation_family`.
+
+    The `numbered` branch delegates to `strip_inline_citation_markers` unchanged,
+    so an author-date marker deliberately SURVIVES under a numbered format."""
+    if citation_family(citation_format) == "author_date":
+        return strip_author_date_citation_markers(text)
+    return strip_inline_citation_markers(text)
+
+
+def extract_citation_urls(text: str, citation_format: str | None = None) -> list[str]:
+    """Inline citation URLs of whichever family `citation_format` belongs to,
+    dispatched through `citation_family`. The `numbered` branch delegates to
+    `extract_inline_citation_urls` unchanged."""
+    if citation_family(citation_format) == "author_date":
+        return extract_author_date_citation_urls(text)
+    return extract_inline_citation_urls(text)
 
 
 def first_url(fm_value: str) -> str:
@@ -859,6 +946,59 @@ def renumber_inline_citations(body: str) -> str:
             lambda m: "<sup>[" + str(remap[int(m.group(1))]) + "]", body
         )
     return body
+
+
+def author_surname_sort_key(author: str | None) -> tuple[int, str]:
+    """Sort key for an author-date reference entry: surname, casefolded.
+
+    Surname derivation, first hit wins: the text before the first comma (the
+    `Last, First` form), else the last whitespace-delimited token (`First Last`),
+    else the whole value. A single-token value such as the `publisher:` surrogate
+    `europa.eu` that `resolve_author_year` falls back to has no surname to split
+    out, so it sorts under itself.
+
+    TOTAL and non-raising by construction, which is the point: `resolve_author_year`
+    returns `("", "")` for a page it cannot read rather than signalling, so an
+    empty author reaches this key on the ordinary path. The leading int is a
+    presence flag — 0 for a real surname, 1 for an empty one — so empty authors
+    sort LAST as a block instead of leading the list, and the ordering stays
+    deterministic rather than depending on input order."""
+    surname = str(author or "").strip()
+    if "," in surname:
+        surname = surname.split(",", 1)[0].strip()
+    elif " " in surname:
+        surname = surname.rsplit(None, 1)[-1].strip()
+    return (1, "") if not surname else (0, surname.casefold())
+
+
+def build_author_date_reference_list(entries) -> list[str]:
+    """The author-date reference list: deduped by source, sorted alphabetically by
+    author surname, UN-numbered.
+
+    The author-date counterpart of the numbered family's reference pass — and a
+    genuinely new one: `renumber_inline_citations` only remaps the body's inline
+    markers and builds no list at all. `references/citation-formats.md:39` specifies
+    "an alphabetical, un-numbered reference list" for these families, so entries
+    carry no `**[N]**` prefix.
+
+    Each entry is a mapping carrying `rendered` (the bibliography line) plus the
+    identity to dedup on — `slug`, falling back to `url`. Dedup is by that source
+    identity, never by the rendered string: two renderings of one source must
+    collapse to one entry, and a rendered-string key would silently keep both.
+    First occurrence of a source wins. Ties beyond the surname key fall back to the
+    source key, so the order is total even when two sources share an author."""
+    by_source = {}
+    for entry in entries or []:
+        # setdefault keeps the FIRST occurrence of a source and spells the
+        # identity rule once — the same key the tiebreak below sorts on, so the
+        # two can never drift apart into a dedup partition the ordering disagrees
+        # with. Insertion order is irrelevant: the sort below is total.
+        by_source.setdefault(str(entry.get("slug") or entry.get("url") or ""), entry)
+    ordered = sorted(
+        by_source.items(),
+        key=lambda kv: (author_surname_sort_key(kv[1].get("author")), kv[0]),
+    )
+    return [str(entry.get("rendered") or "") for _, entry in ordered]
 
 
 # --- pre_extracted_claims block-list parser (used by verify-store.py prefilter) -

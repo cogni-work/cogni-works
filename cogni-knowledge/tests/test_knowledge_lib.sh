@@ -1098,6 +1098,62 @@ def assert_extract_page_frontmatter():
     assert kl.extract_page_content_hash("# just a body\n") == ""
 
 
+def assert_resolve_author_year():
+    explicit = (
+        "---\n"
+        "id: p\n"
+        'author: "J. Doe"\n'
+        'published_date: "2019-04-01"\n'
+        'publisher: "europa.eu"\n'
+        'fetched_at: "2024-03-15T10:00:00Z"\n'
+        "---\n"
+        "# body\n"
+    )
+    # Explicit frontmatter beats the surrogate on BOTH legs (publisher/fetched_at
+    # deliberately disagree with the explicit values).
+    assert kl.resolve_author_year(explicit) == ("J. Doe", "2019")
+
+    legacy = (
+        "---\n"
+        "id: p\n"
+        'publisher: "europa.eu"\n'
+        'fetched_at: "2024-03-15T10:00:00Z"\n'
+        "---\n"
+        "# body\n"
+    )
+    # A page ingested before either key existed still resolves non-empty on both
+    # legs — the no-migration guarantee. Removing the publisher surrogate leg
+    # reddens exactly here.
+    got = kl.resolve_author_year(legacy)
+    assert got == ("europa.eu", "2024"), got
+    assert got[0] and got[1], "legacy page must resolve non-empty on both legs"
+
+    mixed = (
+        "---\n"
+        "id: p\n"
+        'author: "J. Doe"\n'
+        'publisher: "europa.eu"\n'
+        'fetched_at: "2024-03-15T10:00:00Z"\n'
+        "---\n"
+        "# body\n"
+    )
+    assert kl.resolve_author_year(mixed) == ("J. Doe", "2024")
+
+    assert kl.resolve_author_year("---\nid: p\n---\n# body\n") == ("", "")
+    assert kl.resolve_author_year("# just a body\n") == ("", "")
+
+    # check() catches only AssertionError, so an unguarded raise here would kill
+    # the shared python subprocess and blank every klib case at once.
+    for degenerate in (None, "", 42):
+        try:
+            probe = kl.resolve_author_year(degenerate)
+        except Exception as exc:
+            raise AssertionError(
+                f"resolve_author_year raised on {degenerate!r}: {exc!r}"
+            )
+        assert probe == ("", ""), probe
+
+
 def assert_resolve_wiki_scripts():
     # The single Python definition of the wiki-scripts resolve probe, shared by
     # the standalone operator drivers so they are not a second independent copy
@@ -1324,6 +1380,7 @@ check("extract_page_frontmatter", assert_extract_page_frontmatter)
 check("resolve_wiki_scripts", assert_resolve_wiki_scripts)
 check("load_pypdf", assert_load_pypdf)
 check("extract_pdf_text", assert_extract_pdf_text)
+check("resolve_author_year", assert_resolve_author_year)
 PY
 )
 
@@ -1382,6 +1439,7 @@ grade extract_page_frontmatter "klib-39 ingest-integrity frontmatter parsers (#4
 grade resolve_wiki_scripts    "klib-40 resolve_wiki_scripts — single Python SSOT for the wiki-scripts probe, VENDORED-ONLY (cogni-wiki retired): the in-tree vendored dir resolves; an external sibling/versioned-cache layout never does; the base_dir seam is gone (TypeError); expected_script is the surviving vendor-integrity guard; unknown skill→FileNotFoundError naming the skill + --wiki-scripts-dir and offering no cogni-wiki remedy"
 grade load_pypdf              "klib-41 load_pypdf (#583) — fail-soft optional import: returns None (absent) or a module with PdfReader (present), never raises, stable verdict across calls"
 grade extract_pdf_text        "klib-42 extract_pdf_text (#583) — reason vocabulary (ok/pypdf_unavailable/no_text_layer/extract_failed) via injected fake pypdf, min_chars gate boundary, per-page exception skip, page count reported"
+grade resolve_author_year     "klib-43 resolve_author_year — explicit author:/published_date: beat the publisher:/fetched_at: surrogates; a legacy page carrying only the surrogates still resolves non-empty on both legs; neither/no-frontmatter/degenerate -> ('',''), never raises"
 
 if [ $errors -gt 0 ]; then
   red "$errors case(s) failed."

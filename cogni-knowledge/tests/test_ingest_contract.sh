@@ -208,6 +208,15 @@ assert_grep 'theme_label:' "$INGESTER" "ingest-contract-73-emits-theme-label-fro
 # perspectives overlay's Where facet can group it by market.
 assert_grep 'MARKET' "$INGESTER" "ingest-contract-74-gained-additive-market-param source-ingester: gained the additive MARKET param (Where facet)"
 assert_grep 'market:' "$INGESTER" "ingest-contract-75-emits-market-frontmatter-where source-ingester: emits market: frontmatter from MARKET (Where facet)"
+
+# Optional author / publication-date metadata in the Phase-3 page template.
+# Bound to the QUOTED TEMPLATE PLACEHOLDERS (fixed-string), not the bare key, so
+# reverting the template edit reddens these even though the rules bullets below
+# also spell the key names in prose.
+assert_grep_f 'author: "<AUTHOR>"' "$INGESTER" "ingest-contract-121-template-emits-optional-author source-ingester: Phase-3 template emits the OPTIONAL author: key"
+assert_grep_f 'published_date: "<PUBLISHED_DATE>"' "$INGESTER" "ingest-contract-122-template-emits-optional-published-date source-ingester: Phase-3 template emits the OPTIONAL published_date: key"
+assert_grep 'Emit `author:` only when' "$INGESTER" "ingest-contract-123-rules-mark-author-optional source-ingester: YAML frontmatter rules mark author: optional (drop the line otherwise)"
+assert_grep 'Emit `published_date:` only when' "$INGESTER" "ingest-contract-124-rules-mark-published-date-optional source-ingester: YAML frontmatter rules mark published_date: optional (drop the line otherwise)"
 assert_grep 'atomic_write_text' "$INGESTER" "ingest-contract-76-writes-knowledge-lib-atomic source-ingester: writes via _knowledge_lib.atomic_write_text"
 # #421: the Phase-3 pre-write guard threads CONTENT_HASH so the in-agent leg
 # mirrors the orchestrator sweep — guard it so the agent leg can't be silently dropped.

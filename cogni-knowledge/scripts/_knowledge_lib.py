@@ -1223,6 +1223,46 @@ def frontmatter_scalar(page_text: str, key: str) -> str:
     return ""
 
 
+_YEAR_PREFIX_RE = re.compile(r"\d{4}")
+
+
+def resolve_author_year(page_text: str) -> tuple[str, str]:
+    """Resolve an ``(author, year)`` tuple for a wiki page, with legacy surrogates.
+
+    Takes the raw page TEXT, not a parsed mapping — matching every other
+    frontmatter reader in this module (``extract_page_id_and_url``,
+    ``extract_page_content_hash``, ``frontmatter_scalar``). There is no
+    frontmatter-to-mapping parser here, so a mapping parameter would have no
+    caller.
+
+    Explicit frontmatter always wins over the surrogate:
+
+    * author — explicit ``author:``, else the ``publisher:`` surrogate.
+    * year   — the leading four digits of explicit ``published_date:``, else of
+      the ``fetched_at:`` surrogate.
+
+    Never raises, never prompts, does no I/O. Returns ``("", "")`` for input it
+    cannot read rather than signalling, so a caller skips the leg instead of
+    failing. A page ingested before ``author:``/``published_date:`` existed
+    still resolves non-empty on both legs as long as it carries ``publisher:``
+    and ``fetched_at:``, which is what lets an already-populated base keep
+    working with no migration step.
+    """
+    if not page_text or not isinstance(page_text, str):
+        return ("", "")
+
+    author = frontmatter_scalar(page_text, "author")
+    if not author:
+        author = frontmatter_scalar(page_text, "publisher")
+
+    raw_date = frontmatter_scalar(page_text, "published_date")
+    if not raw_date:
+        raw_date = frontmatter_scalar(page_text, "fetched_at")
+
+    match = _YEAR_PREFIX_RE.match(raw_date) if raw_date else None
+    return (author, match.group(0) if match else "")
+
+
 def parse_distilled_claims(page_text: str) -> list[dict]:
     """Extract `[{text}, …]` from a wiki page's `distilled_claims:` frontmatter
     block (concept/entity pages, written by concept-store.py). Only `text` is

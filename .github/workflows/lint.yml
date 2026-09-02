@@ -115,6 +115,15 @@ jobs:
 
       - name: Assert every deleted skill's trigger phrases are accounted for
         run: |
+          # `set +e` FIRST, and it is load-bearing. GitHub runs a `run:` block as
+          # `bash -e {0}`, and `set -uo pipefail` does NOT clear an inherited -e.
+          # Without this the step aborts on the capture line below the moment the
+          # guard exits non-zero, so the envelope, the violation list and the
+          # FIX_HINTS block never reach the log and an author who trips the gate
+          # sees a bare red with no remedy — on a guard whose entire remedial
+          # surface is that stderr. The failing exit is preserved regardless: the
+          # step ends with an explicit `exit "$rc"`.
+          set +e
           set -uo pipefail
           python3 scripts/check-retirement-ledger.py > retirement-gate.json 2> retirement-gate.err
           rc=$?

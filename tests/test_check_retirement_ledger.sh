@@ -44,6 +44,11 @@
 #  12. one deletion of each kind in one branch -> the observation and the
 #      violation co-report, and the violation count counts only the violation.
 #      [retirement-ledger-12-mixed-violation-kinds]
+#  13. the skill is retired by `git mv`-ing its SKILL.md out of skills/ rather
+#      than removing it -> still a deletion the ledger must account for. Without
+#      --no-renames git reports R, the D filter sees nothing, and the guard exits
+#      0 announcing "no skill deletion" while the phrases are gone.
+#      [retirement-ledger-13-move-out-of-skills-is-a-retirement]
 #
 # bash 3.2 + stdlib python3 + git. No network.
 #
@@ -368,6 +373,24 @@ write_no_frontmatter_skill "$R" gamma
 GOT="$(run_gate "$R")"
 check "retirement-ledger-12-mixed-violation-kinds an observation and a violation co-report without either moving the other's count (got: $GOT)" \
   "$([ "$GOT" = "1|ok|retirement-row-missing|2|base-blob-unparseable" ] && echo 0 || echo 1)"
+
+# ---------------------------------------------------------------------------
+# 13. the retirement is carried out by MOVING the SKILL.md out of skills/ rather
+#     than removing it -- archiving it, an ordinary workflow. Rename detection is
+#     on by default since git 2.9, so without --no-renames git pairs the delete
+#     with the add, reports R, and the guard's --diff-filter=D query returns
+#     NOTHING: it announces "no skill deletion in this branch" and exits 0 while
+#     the phrases left the live set and the record together. Case 1 cannot catch
+#     this -- it deletes with `git rm`, which is reported D either way -- so this
+#     is a genuine second route into the same fail-open, not a restatement.
+R="$WORK/c13"; make_repo "$R"
+mkdir -p "$R/cogni-workspace/references/archive"
+(cd "$R" && $GIT mv "$SKILLS/alpha/SKILL.md" \
+   cogni-workspace/references/archive/alpha-SKILL.md \
+   && $GIT commit -qm "archive alpha instead of deleting it")
+GOT="$(run_gate "$R")"
+check "retirement-ledger-13-move-out-of-skills-is-a-retirement archiving a skill by git mv is still a deletion the ledger must account for (got: $GOT)" \
+  "$([ "$GOT" = "1|ok|retirement-row-missing|2|EMPTY" ] && echo 0 || echo 1)"
 
 # ---------------------------------------------------------------------------
 if [ "$FAILED" -gt 0 ]; then

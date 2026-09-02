@@ -332,8 +332,19 @@ def main():
 
     # Deletions, fork-point relative. `--diff-filter=D` must stay one unsplit
     # token in this argument list — it is what scopes the guard to retirements.
+    #
+    # `--no-renames` is equally load-bearing, and for a reason the D filter alone
+    # does not cover: rename detection has been on by default since git 2.9, so a
+    # retirement carried out by MOVING a SKILL.md out of `skills/` — archiving it
+    # rather than removing it, an ordinary workflow — is paired as R and never
+    # reported as a D at all. The guard then finds no deletion, reports "nothing
+    # to account for" and exits 0 while the phrases left the live set and the
+    # record together. That is the same fail-open this guard exists to close,
+    # reached by a different route, so the flag is part of the subject definition
+    # rather than a tuning knob. Turning it off does not narrow the guard; it
+    # blinds it.
     rc, diff_out, diff_err = git(repo_root, "diff", "--name-only",
-                                 "--diff-filter=D",
+                                 "--no-renames", "--diff-filter=D",
                                  "{}...HEAD".format(base_ref))
     if rc != 0:
         render(data, "could not diff against '{}': {}".format(

@@ -34,6 +34,12 @@
 #      quote hunt. [retirement-ledger-09-block-scalar]
 #  10. --emit-phrases spawns no git subprocess, so C11 cannot redden the shallow
 #      plugin-test-suites job. [retirement-ledger-10-emit-phrases-no-git]
+#  11. the deleted skill could not be PARSED at the merge base -- no frontmatter
+#      block (arm a), and a block with no `description:` key (arm b). Both must
+#      raise base-blob-unparseable and exit 1, never a silent zero-phrase skip
+#      that reports clean. [retirement-ledger-11-unparseable-base-blob]
+#  12. one deletion of each kind in one branch -> both codes report together.
+#      [retirement-ledger-12-mixed-violation-kinds]
 #
 # bash 3.2 + stdlib python3 + git. No network.
 #
@@ -116,6 +122,37 @@ description: >-
 ---
 
 # $name
+EOF
+}
+
+# The two helpers below write the two shapes the extractor cannot read a
+# description out of. They hit SEPARATE returns in phrases_from_skill_text, so
+# both are needed; one helper taking a mode flag would let a typo at a call site
+# silently write the other fixture and grade one path twice.
+
+# write_no_frontmatter_skill <root> <dir> — no frontmatter block at all.
+write_no_frontmatter_skill() {
+  local root="$1" dir="$2"
+  mkdir -p "$root/$SKILLS/$dir"
+  cat > "$root/$SKILLS/$dir/SKILL.md" <<EOF
+# $dir
+
+No frontmatter block at all.
+EOF
+}
+
+# write_no_description_skill <root> <dir> — a well-formed block, no
+# \`description:\` key.
+write_no_description_skill() {
+  local root="$1" dir="$2"
+  mkdir -p "$root/$SKILLS/$dir"
+  cat > "$root/$SKILLS/$dir/SKILL.md" <<EOF
+---
+name: $dir
+allowed-tools: [Read]
+---
+
+# $dir
 EOF
 }
 
@@ -275,6 +312,43 @@ EP_LINES="$(printf '%s\n' "$EP_OUT" | grep -c . || true)"
 EP_ERR_LINES="$(grep -c . "$WORK/c10.err" || true)"
 check "retirement-ledger-10-emit-phrases-no-git parity mode runs outside a git repo, silent on stderr (rc=$EP_RC lines=$EP_LINES err=$EP_ERR_LINES)" \
   "$([ "$EP_RC" -eq 0 ] && [ "$EP_LINES" -eq 2 ] && [ "$EP_ERR_LINES" -eq 0 ] && echo 0 || echo 1)"
+
+# ---------------------------------------------------------------------------
+# 11. the deleted skill cannot be PARSED at the merge base. Before the sentinel,
+#     phrases_from_skill_text returned ([], name) from both silent arms, so the
+#     loop recorded phrases: 0, raised no violation, and the run exited 0 with
+#     stderr claiming "every trigger phrase accounted for" -- the guard
+#     asserting full accounting for a file it never parsed. Both arms carry the
+#     SAME id from one argument, so neither can report green alone.
+UNPARSEABLE_RC=0
+UNPARSEABLE_GOT=""
+for ARM in write_no_frontmatter_skill write_no_description_skill; do
+  R="$WORK/c11-$ARM"; make_repo "$R"
+  "$ARM" "$R" alpha
+  (cd "$R" && $GIT add -A && $GIT commit -qm "alpha becomes unparseable" \
+     && $GIT update-ref refs/remotes/origin/main HEAD)
+  (cd "$R" && $GIT rm -rq "$SKILLS/alpha" && $GIT commit -qm "retire alpha")
+  GOT="$(run_gate "$R")"
+  UNPARSEABLE_GOT="$UNPARSEABLE_GOT ${ARM#write_}=$GOT"
+  [ "$GOT" = "1|ok|base-blob-unparseable|1" ] || UNPARSEABLE_RC=1
+done
+check "retirement-ledger-11-unparseable-base-blob an unreadable base-side frontmatter is a violation, not a silent zero (both arms:$UNPARSEABLE_GOT)" \
+  "$UNPARSEABLE_RC"
+
+# ---------------------------------------------------------------------------
+# 12. one deletion of each kind in ONE branch -> BOTH violation codes, count 2.
+#     Cases 1-11 each yield a single code, so nothing else pins that the two
+#     classes co-report; a summary path that handled only one shape would stay
+#     green across the whole suite and break on the first real mixed retirement.
+R="$WORK/c12"; make_repo "$R"
+write_no_frontmatter_skill "$R" gamma
+(cd "$R" && $GIT add -A && $GIT commit -qm "add unparseable gamma" \
+   && $GIT update-ref refs/remotes/origin/main HEAD)
+(cd "$R" && $GIT rm -rq "$SKILLS/alpha" "$SKILLS/gamma" \
+   && $GIT commit -qm "retire alpha and gamma")
+GOT="$(run_gate "$R")"
+check "retirement-ledger-12-mixed-violation-kinds an unparseable and an unaccounted deletion both report (got: $GOT)" \
+  "$([ "$GOT" = "1|ok|base-blob-unparseable,retirement-row-missing|3" ] && echo 0 || echo 1)"
 
 # ---------------------------------------------------------------------------
 if [ "$FAILED" -gt 0 ]; then

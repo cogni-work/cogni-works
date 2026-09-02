@@ -65,6 +65,17 @@ precisely the direction this guard exists to close. Case C11 in that suite pins 
 two together by diffing this script's `--emit-phrases` output against
 `emit_phrases` over the real tree.
 
+UNPARSEABLE IS NOT EMPTY. `phrases_from_skill_text` returns the `UNPARSEABLE`
+sentinel for its keys when it could not parse the file at all — no frontmatter
+block, or a block with no `description:` key — and a list, possibly empty, only
+when it parsed. Collapsing the two is the invisibility class this guard exists
+to close: an empty answer from a failed parse is indistinguishable from a
+genuine empty, and every caller reading it as "nothing to check" goes green on
+the failure. Each call site states its own decision inline; this paragraph
+deliberately does not enumerate them, so it cannot drift out of step with one.
+The sentinel is a truthy object rather than `None` on purpose — see its
+definition.
+
 Usage: check-retirement-ledger.py [--root PATH] [--base-ref REF]
        check-retirement-ledger.py --emit-phrases SKILLS_DIR
 
@@ -94,6 +105,14 @@ METRIC_VERSION = "1"
 SKILL_PATH_RE = re.compile(r"^" + re.escape(SKILLS_REL) + r"/[^/]+/SKILL\.md$")
 
 
+# Returned in place of a key list when a SKILL.md could not be parsed at all.
+# Deliberately TRUTHY, unlike `None`: the one silent way back into the class this
+# guard closes is a new consumer writing `if keys:` before iterating. Against a
+# falsy sentinel that reads as "nothing to check" and skips; against this one it
+# falls through to iteration and raises TypeError at once.
+UNPARSEABLE = object()
+
+
 def git(repo_root, *args):
     """Run a git command in repo_root. Returns (exit_code, stdout, stderr)."""
     proc = subprocess.run(
@@ -105,19 +124,25 @@ def git(repo_root, *args):
 def phrases_from_skill_text(text, fallback_name):
     """Phrases + skill name from one SKILL.md's text.
 
+    Returns `(keys, name)`. `keys` is a list when the file parsed — possibly
+    the empty list, meaning it parsed and advertised no quoted phrase — and the
+    `UNPARSEABLE` sentinel when it could not be parsed at all: no frontmatter
+    block, or a block carrying no `description:` key. Callers must distinguish
+    the two; see UNPARSEABLE IS NOT EMPTY in the module docstring.
+
     Byte-for-byte the normal form of `emit_phrases`. Every step here is load
     bearing; see EXTRACTOR PARITY in the module docstring.
     """
     m = re.match(r"^---\n(.*?)\n---\n", text, re.S)
     if not m:
-        return [], fallback_name
+        return UNPARSEABLE, fallback_name
     fm = m.group(1)
     nm = re.search(r"^name:[ \t]*(\S+)", fm, re.M)
     name = nm.group(1) if nm else fallback_name
     # description: through the next TOP-LEVEL key (column 0), or end of block.
     dm = re.search(r"^description:.*?(?=^[A-Za-z_][A-Za-z0-9_-]*:|\Z)", fm, re.M | re.S)
     if not dm:
-        return [], name
+        return UNPARSEABLE, name
     body = re.sub(r"^description:[ \t]*", "", dm.group(0), count=1)
     # Unwrap the YAML scalar BEFORE hunting for quoted phrases: on a
     # double-quoted scalar the outer quotes are syntax, not a trigger phrase.
@@ -167,6 +192,11 @@ def emit_phrases(skills_dir):
         found_any = False
         for keys, name in iter_skills(skills_dir):
             found_any = True
+            if keys is UNPARSEABLE:
+                # The suite copy counts the file as found and then `continue`s
+                # past an unparseable one. Mirror that exactly: parity mode's
+                # whole job is to be byte-identical to it.
+                continue
             for key in keys:
                 print("%s\t%s" % (key, name))
     except OSError:
@@ -175,9 +205,15 @@ def emit_phrases(skills_dir):
 
 
 def live_phrase_keys(skills_dir):
-    """Every phrase key a live skill yields at HEAD."""
+    """Every phrase key a live skill yields at HEAD.
+
+    An unparseable live skill contributes nothing. That is the safe direction:
+    this set is what EXCUSES a retired phrase, so omitting a file can only make
+    the guard demand more, never less.
+    """
     try:
-        return {key for keys, _name in iter_skills(skills_dir) for key in keys}
+        return {key for keys, _name in iter_skills(skills_dir)
+                if keys is not UNPARSEABLE for key in keys}
     except OSError:
         return set()
 
@@ -316,29 +352,62 @@ def main():
                 path, (blob_err or "").strip()[:200]))
             return 2
         keys, name = phrases_from_skill_text(blob, path.split("/")[-2])
-        data["deleted_skills"].append({"path": path, "skill": name,
-                                       "phrases": len(keys)})
+        # `phrases` is null when the blob did not parse, for the same reason the
+        # ledger-missing arm uses null: never computed is a different fact from
+        # "this skill advertised none".
+        data["deleted_skills"].append(
+            {"path": path, "skill": name,
+             "phrases": None if keys is UNPARSEABLE else len(keys)})
+        if keys is UNPARSEABLE:
+            # A blob we could not PARSE is a phrase set we cannot check, exactly
+            # like a blob we could not READ a few lines above.
+            violations.append({"check": "base-blob-unparseable",
+                               "skill": name, "path": path, "phrase": None,
+                               "detail": "no parseable frontmatter description "
+                                         "block at the merge base, so the "
+                                         "trigger phrases it advertised are "
+                                         "unknowable"})
+            continue
         for key in keys:
             if key not in accounted:
                 violations.append({"check": "retirement-row-missing",
-                                   "skill": name, "path": path,
-                                   "phrase": key})
+                                   "skill": name, "path": path, "phrase": key,
+                                   "detail": "trigger phrase \"%s\" is claimed "
+                                             "by no surviving skill and carried "
+                                             "by no ledger row" % key})
 
     data["violations"] = violations
     render(data)
 
     if violations:
+        # Every violation carries `detail`, so this pass never branches on which
+        # keys a given check happens to have. Only the remedies differ, below.
+        checks = {v["check"] for v in violations}
         sys.stderr.write(
-            "retirement-ledger gate: %d unaccounted trigger phrase(s) from %d "
-            "deleted skill(s).\n" % (len(violations), len(deleted)))
+            "retirement-ledger gate: %d violation(s) from %d deleted "
+            "skill(s).\n" % (len(violations), len(deleted)))
         for v in violations:
-            sys.stderr.write("  %s: \"%s\"\n" % (v["skill"], v["phrase"]))
-        sys.stderr.write(
-            "FIX_HINTS: for each phrase above, either re-claim it in a surviving "
-            "skill's frontmatter description, or add a row to %s as\n"
-            "  <phrase_key>\\tretired\\t-\\t<non-empty reason>\n"
-            "The key is the extractor's normal form: trimmed, internal "
-            "whitespace collapsed to single spaces, lowercased.\n" % LEDGER_REL)
+            sys.stderr.write("  %s: %s\n" % (v["skill"], v["detail"]))
+        if "retirement-row-missing" in checks:
+            sys.stderr.write(
+                "FIX_HINTS: for each unaccounted phrase above, either re-claim "
+                "it in a surviving skill's frontmatter description, or add a "
+                "row to %s as\n"
+                "  <phrase_key>\\tretired\\t-\\t<non-empty reason>\n"
+                "The key is the extractor's normal form: trimmed, internal "
+                "whitespace collapsed to single spaces, lowercased.\n"
+                % LEDGER_REL)
+        if "base-blob-unparseable" in checks:
+            # No remedy can edit the merge-base blob, so do not prescribe one.
+            # Either the deletion is abandoned, or a human vouches for the set.
+            sys.stderr.write(
+                "FIX_HINTS: the merge-base content of the file(s) above is "
+                "fixed and cannot be re-parsed by any commit on this branch, "
+                "so the phrase set they advertised is unknowable rather than "
+                "merely unrecorded. Either restore the file at HEAD (which "
+                "abandons the retirement), or establish the retired phrases by "
+                "hand — read the blob with `git show <merge-base>:<path>` — and "
+                "record each one in %s with a non-empty reason.\n" % LEDGER_REL)
         return 1
 
     sys.stderr.write("retirement-ledger gate: %d deleted skill(s), every "

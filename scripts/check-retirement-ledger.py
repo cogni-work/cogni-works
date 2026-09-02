@@ -380,14 +380,16 @@ def main():
     render(data)
 
     if violations:
-        # Every violation carries `detail`, so this pass never branches on which
-        # keys a given check happens to have. Only the remedies differ, below.
+        # Every violation carries `detail`, and `skill` is read through .get so
+        # this pass never branches on which keys a given check happens to have
+        # — `ledger-missing` carries no `skill`. Only the remedies differ, below.
         checks = {v["check"] for v in violations}
         sys.stderr.write(
             "retirement-ledger gate: %d violation(s) from %d deleted "
             "skill(s).\n" % (len(violations), len(deleted)))
         for v in violations:
-            sys.stderr.write("  %s: %s\n" % (v["skill"], v["detail"]))
+            sys.stderr.write("  %s: %s\n"
+                             % (v.get("skill") or v["path"], v["detail"]))
         if "retirement-row-missing" in checks:
             sys.stderr.write(
                 "FIX_HINTS: for each unaccounted phrase above, either re-claim "
@@ -398,16 +400,20 @@ def main():
                 "whitespace collapsed to single spaces, lowercased.\n"
                 % LEDGER_REL)
         if "base-blob-unparseable" in checks:
-            # No remedy can edit the merge-base blob, so do not prescribe one.
-            # Either the deletion is abandoned, or a human vouches for the set.
+            # State only the remedy that actually clears this arm. A ledger row
+            # does NOT: the violation is appended above before `accounted` is
+            # consulted, so recording rows leaves the check failing. Naming an
+            # inert remedy is the "unfixable rather than merely wrong" failure
+            # THE LEDGER IS READ FROM THE HEAD SIDE rules out, one arm over.
             sys.stderr.write(
                 "FIX_HINTS: the merge-base content of the file(s) above is "
-                "fixed and cannot be re-parsed by any commit on this branch, "
-                "so the phrase set they advertised is unknowable rather than "
-                "merely unrecorded. Either restore the file at HEAD (which "
-                "abandons the retirement), or establish the retired phrases by "
-                "hand — read the blob with `git show <merge-base>:<path>` — and "
-                "record each one in %s with a non-empty reason.\n" % LEDGER_REL)
+                "fixed, so the phrase set they advertised is unknowable rather "
+                "than merely unrecorded — and a %s row will NOT clear this "
+                "check. Restore the file at HEAD, which abandons the "
+                "retirement; then retire it in a follow-up commit that gives "
+                "it a frontmatter `description:` block first, so its phrases "
+                "become readable and the ordinary ledger remedy applies.\n"
+                % LEDGER_REL)
         return 1
 
     sys.stderr.write("retirement-ledger gate: %d deleted skill(s), every "

@@ -35,10 +35,14 @@
 #  10. --emit-phrases spawns no git subprocess, so C11 cannot redden the shallow
 #      plugin-test-suites job. [retirement-ledger-10-emit-phrases-no-git]
 #  11. the deleted skill could not be PARSED at the merge base -- no frontmatter
-#      block (arm a), and a block with no `description:` key (arm b). Both must
-#      raise base-blob-unparseable and exit 1, never a silent zero-phrase skip
-#      that reports clean. [retirement-ledger-11-unparseable-base-blob]
-#  12. one deletion of each kind in one branch -> both codes report together.
+#      block (arm a), and a block with no `description:` key (arm b). Both are
+#      recorded as a base-blob-unparseable OBSERVATION and neither moves the
+#      exit code: such a file was not a loadable skill, so it advertised no
+#      trigger phrase and its deletion loses no claim surface. Recording it is
+#      what keeps the exit-0 summary from claiming accounting it never did.
+#      [retirement-ledger-11-unparseable-base-blob]
+#  12. one deletion of each kind in one branch -> the observation and the
+#      violation co-report, and the violation count counts only the violation.
 #      [retirement-ledger-12-mixed-violation-kinds]
 #
 # bash 3.2 + stdlib python3 + git. No network.
@@ -180,7 +184,14 @@ make_repo() {
      && $GIT update-ref refs/remotes/origin/main HEAD)
 }
 
-# run_gate <root> [args...] -> "<exit>|<status>|<comma-separated checks>|<count>"
+# run_gate <root> [args...] ->
+#   "<exit>|<status>|<violation checks>|<count>|<observation checks>"
+#
+# The trailing observation field is asserted by EVERY case, not just the ones
+# that expect an observation, so a stray observation on a case that should carry
+# none is a red rather than an unnoticed pass. `count` and the exit code are
+# derived from violations alone — an observation must never move either, which
+# is precisely what the clean-exit cases below pin.
 run_gate() {
   local root="$1"; shift
   local out rc
@@ -192,7 +203,8 @@ run_gate() {
 import json, sys
 d = json.load(sys.stdin)["data"] or {}
 codes = ",".join(sorted({v["check"] for v in d.get("violations", [])})) or "EMPTY"
-print("%s|%s|%s" % (d.get("status"), codes, d.get("count")))
+obs = ",".join(sorted({o["check"] for o in d.get("observations", [])})) or "EMPTY"
+print("%s|%s|%s|%s" % (d.get("status"), codes, d.get("count"), obs))
 ')"
 }
 
@@ -202,7 +214,7 @@ R="$WORK/c1"; make_repo "$R"
 (cd "$R" && $GIT rm -rq "$SKILLS/alpha" && $GIT commit -qm "retire alpha")
 GOT="$(run_gate "$R")"
 check "retirement-ledger-01-missing-row a deleted skill with no ledger row fails (got: $GOT)" \
-  "$([ "$GOT" = "1|ok|retirement-row-missing|2" ] && echo 0 || echo 1)"
+  "$([ "$GOT" = "1|ok|retirement-row-missing|2|EMPTY" ] && echo 0 || echo 1)"
 
 # ---------------------------------------------------------------------------
 # 2. delete a skill, record every phrase retired with a reason.
@@ -215,7 +227,7 @@ write_ledger "$R" \
 (cd "$R" && $GIT add -A && $GIT commit -qm "retire alpha, record rows")
 GOT="$(run_gate "$R")"
 check "retirement-ledger-02-recorded-retired a recorded retirement passes (got: $GOT)" \
-  "$([ "$GOT" = "0|ok|EMPTY|0" ] && echo 0 || echo 1)"
+  "$([ "$GOT" = "0|ok|EMPTY|0|EMPTY" ] && echo 0 || echo 1)"
 
 # ---------------------------------------------------------------------------
 # 3. delete a skill whose phrases a SURVIVING skill re-quotes.
@@ -225,7 +237,7 @@ write_skill "$R" beta beta "beta one" "alpha one" "alpha two"
 (cd "$R" && $GIT add -A && $GIT commit -qm "fold alpha into beta")
 GOT="$(run_gate "$R")"
 check "retirement-ledger-03-reclaimed-by-survivor a re-claimed phrase needs no row (got: $GOT)" \
-  "$([ "$GOT" = "0|ok|EMPTY|0" ] && echo 0 || echo 1)"
+  "$([ "$GOT" = "0|ok|EMPTY|0|EMPTY" ] && echo 0 || echo 1)"
 
 # ---------------------------------------------------------------------------
 # 4. a branch that deletes no skill at all — the overwhelmingly normal case.
@@ -233,7 +245,7 @@ R="$WORK/c4"; make_repo "$R"
 (cd "$R" && printf 'docs\n' > README.md && $GIT add -A && $GIT commit -qm docs)
 GOT="$(run_gate "$R")"
 check "retirement-ledger-04-no-deletion a branch deleting no skill passes (got: $GOT)" \
-  "$([ "$GOT" = "0|ok|EMPTY|0" ] && echo 0 || echo 1)"
+  "$([ "$GOT" = "0|ok|EMPTY|0|EMPTY" ] && echo 0 || echo 1)"
 
 # ---------------------------------------------------------------------------
 # 5. no refs/remotes/origin/main -> degraded, exit 0 (never a block).
@@ -242,7 +254,7 @@ R="$WORK/c5"; make_repo "$R"
    && $GIT update-ref -d refs/remotes/origin/main)
 GOT="$(run_gate "$R")"
 check "retirement-ledger-05-degraded-no-origin an unresolvable base ref degrades to exit 0 (got: $GOT)" \
-  "$([ "$GOT" = "0|degraded|EMPTY|0" ] && echo 0 || echo 1)"
+  "$([ "$GOT" = "0|degraded|EMPTY|0|EMPTY" ] && echo 0 || echo 1)"
 
 # ---------------------------------------------------------------------------
 # 6. main advanced past the fork and deleted a skill of its own; this branch
@@ -256,7 +268,7 @@ R="$WORK/c6"; make_repo "$R"
    && $GIT checkout -q feature)
 GOT="$(run_gate "$R")"
 check "retirement-ledger-06-merge-base-anchoring main's own later deletion is not the branch's (got: $GOT)" \
-  "$([ "$GOT" = "0|ok|EMPTY|0" ] && echo 0 || echo 1)"
+  "$([ "$GOT" = "0|ok|EMPTY|0|EMPTY" ] && echo 0 || echo 1)"
 
 # ---------------------------------------------------------------------------
 # 7. two phrases, exactly one recorded -> exactly ONE violation.
@@ -268,7 +280,7 @@ write_ledger "$R" \
 (cd "$R" && $GIT add -A && $GIT commit -qm "retire alpha, record one of two")
 GOT="$(run_gate "$R")"
 check "retirement-ledger-07-partial-accounting one unrecorded phrase of two is one violation (got: $GOT)" \
-  "$([ "$GOT" = "1|ok|retirement-row-missing|1" ] && echo 0 || echo 1)"
+  "$([ "$GOT" = "1|ok|retirement-row-missing|1|EMPTY" ] && echo 0 || echo 1)"
 
 # ---------------------------------------------------------------------------
 # 8. rows exist for both phrases but one reason is empty -> still a violation.
@@ -281,7 +293,7 @@ write_ledger "$R" \
 (cd "$R" && $GIT add -A && $GIT commit -qm "retire alpha, one reason blank")
 GOT="$(run_gate "$R")"
 check "retirement-ledger-08-empty-reason an empty-reason row does not account for its phrase (got: $GOT)" \
-  "$([ "$GOT" = "1|ok|retirement-row-missing|1" ] && echo 0 || echo 1)"
+  "$([ "$GOT" = "1|ok|retirement-row-missing|1|EMPTY" ] && echo 0 || echo 1)"
 
 # ---------------------------------------------------------------------------
 # 9. the deleted skill used a `>-` block scalar. If the unwrap did not run
@@ -294,7 +306,7 @@ write_block_skill "$R" gamma gamma "gamma one" "gamma two"
 (cd "$R" && $GIT rm -rq "$SKILLS/gamma" && $GIT commit -qm "retire gamma")
 GOT="$(run_gate "$R")"
 check "retirement-ledger-09-block-scalar a block-scalar description still yields its phrases (got: $GOT)" \
-  "$([ "$GOT" = "1|ok|retirement-row-missing|2" ] && echo 0 || echo 1)"
+  "$([ "$GOT" = "1|ok|retirement-row-missing|2|EMPTY" ] && echo 0 || echo 1)"
 
 # ---------------------------------------------------------------------------
 # 10. --emit-phrases must spawn no git subprocess: C11 calls it from a suite
@@ -314,12 +326,15 @@ check "retirement-ledger-10-emit-phrases-no-git parity mode runs outside a git r
   "$([ "$EP_RC" -eq 0 ] && [ "$EP_LINES" -eq 2 ] && [ "$EP_ERR_LINES" -eq 0 ] && echo 0 || echo 1)"
 
 # ---------------------------------------------------------------------------
-# 11. the deleted skill cannot be PARSED at the merge base. Before the sentinel,
-#     phrases_from_skill_text returned ([], name) from both silent arms, so the
-#     loop recorded phrases: 0, raised no violation, and the run exited 0 with
-#     stderr claiming "every trigger phrase accounted for" -- the guard
-#     asserting full accounting for a file it never parsed. Both arms carry the
-#     SAME id from one argument, so neither can report green alone.
+# 11. the deleted skill cannot be PARSED at the merge base -> an OBSERVATION
+#     that does not move the exit code, never a violation. Two distinct things
+#     are pinned at once and the case is worthless without both: the observation
+#     IS recorded (against the pre-sentinel gate the field is empty, because the
+#     silent ([], name) return left nothing to record), AND exit stays 0 with
+#     count 0 (against a gate that raises a violation here, the exit is 1). So
+#     the arm reddens in both directions — under-reporting and over-blocking.
+#     Both fixture arms carry the SAME id from one argument, so neither can
+#     report green alone.
 UNPARSEABLE_RC=0
 UNPARSEABLE_GOT=""
 for ARM in write_no_frontmatter_skill write_no_description_skill; do
@@ -330,16 +345,20 @@ for ARM in write_no_frontmatter_skill write_no_description_skill; do
   (cd "$R" && $GIT rm -rq "$SKILLS/alpha" && $GIT commit -qm "retire alpha")
   GOT="$(run_gate "$R")"
   UNPARSEABLE_GOT="$UNPARSEABLE_GOT ${ARM#write_}=$GOT"
-  [ "$GOT" = "1|ok|base-blob-unparseable|1" ] || UNPARSEABLE_RC=1
+  [ "$GOT" = "0|ok|EMPTY|0|base-blob-unparseable" ] || UNPARSEABLE_RC=1
 done
-check "retirement-ledger-11-unparseable-base-blob an unreadable base-side frontmatter is a violation, not a silent zero (both arms:$UNPARSEABLE_GOT)" \
+check "retirement-ledger-11-unparseable-base-blob an unparseable base blob is a recorded observation that does not gate the exit (both arms:$UNPARSEABLE_GOT)" \
   "$UNPARSEABLE_RC"
 
 # ---------------------------------------------------------------------------
-# 12. one deletion of each kind in ONE branch -> BOTH violation codes, count 2.
-#     Cases 1-11 each yield a single code, so nothing else pins that the two
-#     classes co-report; a summary path that handled only one shape would stay
-#     green across the whole suite and break on the first real mixed retirement.
+# 12. one deletion of each kind in ONE branch: the two channels must co-report
+#     WITHOUT contaminating each other. The unparseable gamma lands in
+#     observations while alpha's two unaccounted phrases stay violations, so the
+#     exit is 1 and count is 2 -- driven by alpha ALONE. That is the load-bearing
+#     number: were the observation folded back into the violation list the count
+#     would read 3, and were the observation channel dropped on a mixed run it
+#     would read EMPTY. Cases 1-11 each exercise a single channel, so nothing
+#     else pins the interaction.
 R="$WORK/c12"; make_repo "$R"
 write_no_frontmatter_skill "$R" gamma
 (cd "$R" && $GIT add -A && $GIT commit -qm "add unparseable gamma" \
@@ -347,8 +366,8 @@ write_no_frontmatter_skill "$R" gamma
 (cd "$R" && $GIT rm -rq "$SKILLS/alpha" "$SKILLS/gamma" \
    && $GIT commit -qm "retire alpha and gamma")
 GOT="$(run_gate "$R")"
-check "retirement-ledger-12-mixed-violation-kinds an unparseable and an unaccounted deletion both report (got: $GOT)" \
-  "$([ "$GOT" = "1|ok|base-blob-unparseable,retirement-row-missing|3" ] && echo 0 || echo 1)"
+check "retirement-ledger-12-mixed-violation-kinds an observation and a violation co-report without either moving the other's count (got: $GOT)" \
+  "$([ "$GOT" = "1|ok|retirement-row-missing|2|base-blob-unparseable" ] && echo 0 || echo 1)"
 
 # ---------------------------------------------------------------------------
 if [ "$FAILED" -gt 0 ]; then

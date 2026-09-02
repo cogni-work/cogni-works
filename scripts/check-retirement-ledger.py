@@ -76,12 +76,38 @@ deliberately does not enumerate them, so it cannot drift out of step with one.
 The sentinel is a truthy object rather than `None` on purpose — see its
 definition.
 
+AN UNPARSEABLE BASE BLOB IS AN OBSERVATION, NOT A VIOLATION, AND DELIBERATELY NOT
+THE SIBLING OF THE UNREADABLE ONE. The two look alike and are different facts. A
+blob `git show` cannot READ is an environment fault whose consequence is unknown,
+so it stays a script error, exit 2. A blob we can read but cannot PARSE is
+determinate: a `SKILL.md` with no frontmatter `description:` block is not
+loadable as a skill at all, so it advertised no trigger phrase and its deletion
+removes no claim surface. There is nothing to account for.
+
+Nor could a demand be discharged if one were made. The base-side blob is history:
+nothing a branch commits changes its own merge base, so no edit on the branch
+under review can make an unparseable blob parse. A remedy would have to land on
+`main` first and be inherited by a later fork — which is not a fix for the PR in
+front of the author. That is the "unfixable rather than merely wrong" failure THE
+LEDGER IS READ FROM THE HEAD SIDE rules out, and it is why this arm carries no
+`FIX_HINTS`: an observation asks nothing, so it needs no remedy.
+
+What the observation DOES fix is the honesty of the clean path. The gate used to
+print "every trigger phrase accounted for" over files it had never parsed. That
+claim, not a missing obligation, was the real defect. The exit-0 summary now
+partitions its counts, so it is exactly as strong as the evidence behind it.
+
+Same channel discipline as `scripts/check-mcp-tool-grant.py`, for the same
+reason: a finding the subject cannot act on is surfaced without moving the exit
+code, because a gate that cannot be satisfied is worse than no gate.
+
 Usage: check-retirement-ledger.py [--root PATH] [--base-ref REF]
        check-retirement-ledger.py --emit-phrases SKILLS_DIR
 
   RETIREMENT_LEDGER_BASE_REF  overrides --base-ref (default: origin/main).
 
-Envelope on stdout, human summary on stderr.
+Envelope on stdout, human summary on stderr. `violations[]` gates the exit code;
+`observations[]` never does.
 Exit 0 clean or degraded, 1 violations, 2 script error.
 
 Stdlib only; runs under any python3.
@@ -280,7 +306,7 @@ def main():
                 or DEFAULT_BASE_REF)
 
     data = {
-        "status": "ok", "violations": [],
+        "status": "ok", "violations": [], "observations": [],
         "base_ref": base_ref, "merge_base": None, "deleted_skills": [],
         "metric_version": METRIC_VERSION,
     }
@@ -342,6 +368,7 @@ def main():
         | ledger_phrase_keys(str(ledger_path))
 
     violations = []
+    observations = []
     for path in deleted:
         rc, blob, blob_err = git(repo_root, "show",
                                  "{}:{}".format(merge_base, path))
@@ -359,14 +386,25 @@ def main():
             {"path": path, "skill": name,
              "phrases": None if keys is UNPARSEABLE else len(keys)})
         if keys is UNPARSEABLE:
-            # A blob we could not PARSE is a phrase set we cannot check, exactly
-            # like a blob we could not READ a few lines above.
-            violations.append({"check": "base-blob-unparseable",
-                               "skill": name, "path": path, "phrase": None,
-                               "detail": "no parseable frontmatter description "
-                                         "block at the merge base, so the "
-                                         "trigger phrases it advertised are "
-                                         "unknowable"})
+            # An OBSERVATION, never a violation — and deliberately not treated
+            # like the unreadable-blob arm above it. Those two are different
+            # facts. A blob we could not READ is an environment fault of unknown
+            # consequence. A blob we could not PARSE is determinate: no
+            # frontmatter description block means the file was never loadable as
+            # a skill, so it advertised no trigger phrase and its deletion loses
+            # no claim surface. There is nothing for the author to account for,
+            # and no edit that could discharge it either — the merge-base blob
+            # is history, so a demand here would be unsatisfiable rather than
+            # merely strict. Recording it keeps the exit-0 summary honest, which
+            # was the real defect: the gate used to claim full accounting for a
+            # file it never parsed.
+            observations.append({"check": "base-blob-unparseable",
+                                 "skill": name, "path": path,
+                                 "detail": "no parseable frontmatter description "
+                                           "block at the merge base, so no "
+                                           "trigger-phrase set was derived; a "
+                                           "file in this shape was not a "
+                                           "loadable skill and advertised none"})
             continue
         for key in keys:
             if key not in accounted:
@@ -377,7 +415,14 @@ def main():
                                              "by no ledger row" % key})
 
     data["violations"] = violations
+    data["observations"] = observations
     render(data)
+
+    # Observations print on BOTH the failing and the clean path, before the
+    # verdict line either way, so the unparseable count is never absent from the
+    # summary a reader acts on.
+    for o in observations:
+        sys.stderr.write("  note  %s: %s\n" % (o["skill"], o["detail"]))
 
     if violations:
         # Every violation carries `detail`, and `skill` is read through .get so
@@ -399,25 +444,28 @@ def main():
                 "The key is the extractor's normal form: trimmed, internal "
                 "whitespace collapsed to single spaces, lowercased.\n"
                 % LEDGER_REL)
-        if "base-blob-unparseable" in checks:
-            # State only the remedy that actually clears this arm. A ledger row
-            # does NOT: the violation is appended above before `accounted` is
-            # consulted, so recording rows leaves the check failing. Naming an
-            # inert remedy is the "unfixable rather than merely wrong" failure
-            # THE LEDGER IS READ FROM THE HEAD SIDE rules out, one arm over.
-            sys.stderr.write(
-                "FIX_HINTS: the merge-base content of the file(s) above is "
-                "fixed, so the phrase set they advertised is unknowable rather "
-                "than merely unrecorded — and a %s row will NOT clear this "
-                "check. Restore the file at HEAD, which abandons the "
-                "retirement; then retire it in a follow-up commit that gives "
-                "it a frontmatter `description:` block first, so its phrases "
-                "become readable and the ordinary ledger remedy applies.\n"
-                % LEDGER_REL)
+        # No FIX_HINTS arm for `base-blob-unparseable`, deliberately: it is no
+        # longer a violation, so it can never be in `checks` here. There was
+        # never an executable remedy to name — nothing a branch commits changes
+        # its own merge base — and three review cycles were spent re-wording one
+        # that did not exist. An observation asks nothing of the author, so it
+        # needs no hint.
         return 1
 
-    sys.stderr.write("retirement-ledger gate: %d deleted skill(s), every "
-                     "trigger phrase accounted for.\n" % len(deleted))
+    # NEVER "every trigger phrase accounted for" unconditionally. That line was
+    # the original defect: it asserted full accounting over files the gate had
+    # not parsed. The counts below are partitioned, so the claim is exactly as
+    # strong as the evidence.
+    checked = len(deleted) - len(observations)
+    if observations:
+        sys.stderr.write(
+            "retirement-ledger gate: %d deleted skill(s) — %d with every "
+            "trigger phrase accounted for, %d unparseable at the merge base "
+            "(no phrase set derived; not a loadable skill, so none was "
+            "advertised).\n" % (len(deleted), checked, len(observations)))
+    else:
+        sys.stderr.write("retirement-ledger gate: %d deleted skill(s), every "
+                         "trigger phrase accounted for.\n" % len(deleted))
     return 0
 
 

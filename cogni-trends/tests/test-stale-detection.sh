@@ -86,10 +86,24 @@ PYEOF
 
 # ---------------------------------------------------------------------------
 # Shared fixture builder — produces a project workspace that has reached
-# "complete" phase: scout-output with 4 candidates (one per dimension/horizon
-# slot the script checks), value-model with one investment theme, and a
-# tips-trend-report.md file (the /trend-synthesis artifact). The hash anchor
-# is then computed and embedded.
+# "complete" phase: scout-output with 2 candidates, a value-model with one
+# investment theme, and a tips-trend-report.md file (the /trend-synthesis
+# artifact). The hash anchor is then computed and embedded.
+#
+# Two candidates is a deliberate minimum, not a balanced pool: the distribution
+# check (project-status.sh:1008-1016) walks 4 dimensions x 3 horizons and wants
+# 5 candidates in every one of those 12 slots, so a run against this fixture
+# reports 12 distribution_imbalance entries (plus one low_confidence) inside
+# stale_warnings. Every case here filters that array on type == "stale_report",
+# so those entries are inert to the assertions. Case 2 appends a third candidate
+# itself, after this builder returns — the builder never writes t-003.
+#
+# The phase is load-bearing. execution.workflow_state is "report-complete",
+# which project-status.sh:509-510 maps to phase "complete". The phase chain
+# tests exact string equality, so a value it does not match falls through to the
+# terminal else at :511-512 and silently resolves to "scouting" instead. The pin
+# below Case 1's build asserts the emitted phase so that regression fails loudly
+# rather than leaving the cases here asserting over another phase's next_actions.
 # ---------------------------------------------------------------------------
 build_project() {
   local proj="$1"
@@ -115,7 +129,7 @@ EOF
       {"id": "t-002", "title": "Second trend", "dimension": "neue-horizonte",  "horizon": "plan", "source": "training"}
     ]
   },
-  "execution": {"workflow_state": "candidates_agreed"}
+  "execution": {"workflow_state": "report-complete"}
 }
 EOF
 
@@ -181,6 +195,20 @@ ok()   { printf 'PASS: %s\n' "$1"; }
 # ---------------------------------------------------------------------------
 P1="$TMPROOT/case1-mirroring"
 build_project "$P1"
+
+# Anti-vacuity pin — the shared fixture must actually reach "complete". Every
+# case here builds its workspace with build_project(), so a fixture that
+# silently stops reaching that phase would leave the cases below asserting over
+# some other phase's next_actions instead of failing. project-status.sh writes
+# nothing, so this extra read-only run cannot disturb the mtime ordering Case 1
+# establishes immediately below it. Precedent: tests/test-project-status.sh,
+# case project-status-01-complete-phase.
+FIXTURE_PHASE="$(run_health "$P1" | python3 -c 'import json,sys; print(json.load(sys.stdin).get("phase"))')"
+if [ "$FIXTURE_PHASE" = "complete" ]; then
+  ok "stale-detection-04-fixture-phase — shared fixture reached phase=complete"
+else
+  fail "stale-detection-04-fixture-phase — shared fixture reached phase=$FIXTURE_PHASE (expected complete)"
+fi
 sleep 1
 touch "$P1/.metadata/trend-scout-output.json"
 
